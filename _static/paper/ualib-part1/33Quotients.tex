@@ -11,21 +11,21 @@ In the \ualibhtml{Relations.Discrete} module we defined types for representing a
 % \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 % \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
 % \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-% \AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSpace{}%
+% \AgdaBound{𝓦}\AgdaSpace{}%
 % \AgdaSymbol{:}\AgdaSpace{}%
 % \AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
 % \AgdaKeyword{where}\<%
 % \\
 % %
 % \\[\AgdaEmptyExtraSkip]%
-% \>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaFunction{reflexive}\AgdaSpace{}%
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaFunction{Refl}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{Rel}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
@@ -36,11 +36,10 @@ In the \ualibhtml{Relations.Discrete} module we defined types for representing a
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 %
-\>[1]\AgdaFunction{reflexive}\AgdaSpace{}%
+\>[1]\AgdaFunction{Refl}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{∀\{}\AgdaBound{x}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{≈}}\AgdaSpace{}%
@@ -49,8 +48,13 @@ In the \ualibhtml{Relations.Discrete} module we defined types for representing a
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[1]\AgdaFunction{symmetric}\AgdaSpace{}%
+\>[1]\AgdaFunction{Symm}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{Rel}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
@@ -61,12 +65,10 @@ In the \ualibhtml{Relations.Discrete} module we defined types for representing a
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 %
-\>[1]\AgdaFunction{symmetric}\AgdaSpace{}%
+\>[1]\AgdaFunction{Symm}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
+\AgdaSymbol{∀\{}\AgdaBound{x}\AgdaSymbol{\}\{}\AgdaBound{y}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{≈}}\AgdaSpace{}%
@@ -79,8 +81,13 @@ In the \ualibhtml{Relations.Discrete} module we defined types for representing a
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[1]\AgdaFunction{antisymmetric}\AgdaSpace{}%
+\>[1]\AgdaFunction{Antisymm}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{Rel}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
@@ -91,12 +98,10 @@ In the \ualibhtml{Relations.Discrete} module we defined types for representing a
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 %
-\>[1]\AgdaFunction{antisymmetric}\AgdaSpace{}%
+\>[1]\AgdaFunction{Antisymm}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
+\AgdaSymbol{∀\{}\AgdaBound{x}\AgdaSymbol{\}\{}\AgdaBound{y}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{≈}}\AgdaSpace{}%
@@ -113,8 +118,13 @@ In the \ualibhtml{Relations.Discrete} module we defined types for representing a
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[1]\AgdaFunction{transitive}\AgdaSpace{}%
+\>[1]\AgdaFunction{Trans}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{Rel}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
@@ -125,13 +135,10 @@ In the \ualibhtml{Relations.Discrete} module we defined types for representing a
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 %
-\>[1]\AgdaFunction{transitive}\AgdaSpace{}%
+\>[1]\AgdaFunction{Trans}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
-\AgdaBound{z}\AgdaSpace{}%
+\AgdaSymbol{∀\{}\AgdaBound{x}\AgdaSymbol{\}\{}\AgdaBound{y}\AgdaSymbol{\}\{}\AgdaBound{z}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{≈}}\AgdaSpace{}%
@@ -149,30 +156,27 @@ In the \ualibhtml{Relations.Discrete} module we defined types for representing a
 Here is a \defn{uniqueness-of-proofs} principle defined in \typtop.
 \ccpad
 \begin{code}%
-% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
-% \AgdaModule{hide-is-subsingleton-valued}\AgdaSpace{}%
-% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaBound{𝓦}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-% \AgdaSymbol{\}}\AgdaSpace{}%
-% \AgdaKeyword{where}\<%
-% \\
-% %
-% \\[\AgdaEmptyExtraSkip]%
-% \>[0][@{}l@{\AgdaIndent{0}}]%
+\>[0]\AgdaKeyword{module}\AgdaSpace{}%
+\AgdaModule{hide-is-subsingleton-valued}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{is-subsingleton-valued}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{Rel}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaGeneralizable{𝓦}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaGeneralizable{𝓦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 %
@@ -187,6 +191,15 @@ Here is a \defn{uniqueness-of-proofs} principle defined in \typtop.
 \AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{≈}}\AgdaSpace{}%
 \AgdaBound{y}\AgdaSymbol{)}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaKeyword{import}\AgdaSpace{}%
+\AgdaModule{MGS-Quotient}\AgdaSpace{}%
+\AgdaKeyword{using}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{is-subsingleton-valued}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaKeyword{public}\<%
 \end{code}
 \ccpad
 Thus, if \ab R \as : \af{Rel} \ab A \ab 𝓦, then \AgdaFunction{is-subsingleton-valued} \ab R asserts that for each pair \ab x \ab y \as : \ab A there is \emph{at most one proof} of \ab R \ab x \ab y. In the section on \emph{Truncation} below (\S~\ref{sec:trunc-sets-prop}) we introduce a number of similar but more general types to represent uniqueness-of-proofs principles for relations of arbitrary arity, over arbitrary types.
@@ -202,51 +215,13 @@ Thus, if \ab R \as : \af{Rel} \ab A \ab 𝓦, then \AgdaFunction{is-subsingleton
 A binary relation is called a \defn{preorder} if it is reflexive and transitive. An \defn{equivalence relation} is a symmetric preorder. Here are the types we use to represent these concepts in the \ualib.
 \ccpad
 \begin{code}%
-% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
-% \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaBound{𝓦}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-% \AgdaSymbol{\}}\AgdaSpace{}%
-% \AgdaKeyword{where}\<%
-% \\
-% %
-% \\[\AgdaEmptyExtraSkip]%
-% \>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaFunction{is-preorder}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Rel}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-%
-\>[1]\AgdaFunction{is-preorder}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{is-subsingleton-valued}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{×}}\AgdaSpace{}%
-\AgdaFunction{reflexive}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{×}}\AgdaSpace{}%
-\AgdaFunction{transitive}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
+\>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaKeyword{record}\AgdaSpace{}%
-\AgdaRecord{IsEquivalence}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaRecord{IsPreorder}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}(}\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Rel}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
@@ -259,148 +234,316 @@ A binary relation is called a \defn{preorder} if it is reflexive and transitive.
 \AgdaKeyword{where}\<%
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaKeyword{field}\<%
-\\
-\>[2][@{}l@{\AgdaIndent{0}}]%
-\>[3]\AgdaField{rfl}%
-\>[9]\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{reflexive}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\<%
-\\
-%
-\>[3]\AgdaField{sym}%
-\>[9]\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{symmetric}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\<%
-\\
-%
-\>[3]\AgdaField{trans}\AgdaSpace{}%
+\>[2]\AgdaKeyword{field}\AgdaSpace{}%
+\AgdaField{rfl}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{transitive}\AgdaSpace{}%
+\AgdaFunction{Refl}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaField{trans}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Trans}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[1]\AgdaFunction{is-equivalence}\AgdaSpace{}%
+\>[1]\AgdaFunction{Preorder}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Rel}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 %
-\>[1]\AgdaFunction{is-equivalence}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
+\>[1]\AgdaFunction{Preorder}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{is-preorder}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{×}}\AgdaSpace{}%
-\AgdaFunction{symmetric}\AgdaSpace{}%
+\AgdaFunction{Σ}\AgdaSpace{}%
+\AgdaBound{R}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
+\AgdaFunction{Rel}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
+\AgdaRecord{IsPreorder}\AgdaSpace{}%
+\AgdaBound{R}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[1]\AgdaKeyword{record}\AgdaSpace{}%
+\AgdaRecord{IsEquivalence}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}(}\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Rel}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+\>[1][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaKeyword{field}\AgdaSpace{}%
+\AgdaField{rfl}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Refl}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaField{sym}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Symm}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaField{trans}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Trans}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[1]\AgdaFunction{Equivalence}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+%
+\>[1]\AgdaFunction{Equivalence}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{Σ}\AgdaSpace{}%
+\AgdaBound{R}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
+\AgdaFunction{Rel}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
+\AgdaRecord{IsEquivalence}\AgdaSpace{}%
+\AgdaBound{R}\<%
 \end{code}
 \scpad
 
 An easy first example of an equivalence relation is the kernel of any function. Here is how we prove that the kernel of a function is, indeed, an equivalence relation on the domain of the function.
 \ccpad
 \begin{code}%
-% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
-% \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaBound{𝓦}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{B}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaBound{𝓦}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
-% \AgdaKeyword{where}\<%
-% \\
-% %
-% \\[\AgdaEmptyExtraSkip]%
-% \>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaFunction{map-kernel-IsEquivalence}\AgdaSpace{}%
+\>[0][@{}l@{\AgdaIndent{1}}]%
+\>[1]\AgdaFunction{ker-IsEquivalence}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{B}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}(}\AgdaBound{f}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{B}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaRecord{IsEquivalence}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{ker}\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{ker}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSymbol{)}\<%
 \\
 %
-\>[1]\AgdaFunction{map-kernel-IsEquivalence}\AgdaSpace{}%
+\>[1]\AgdaFunction{ker-IsEquivalence}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaKeyword{record}%
-\>[235I]\AgdaSymbol{\{}\AgdaSpace{}%
+\AgdaKeyword{record}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaSpace{}%
 \AgdaField{rfl}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{λ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaInductiveConstructor{refl}\<%
-\\
-\>[.][@{}l@{}]\<[235I]%
-\>[37]\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSymbol{;}\AgdaSpace{}%
 \AgdaField{sym}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
-\AgdaBound{x₁}\AgdaSpace{}%
+\AgdaBound{z}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{≡-sym}\AgdaSymbol{\{}\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{x₁}\<%
-\\
-%
-\>[37]\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaFunction{≡-sym}\AgdaSpace{}%
+\AgdaBound{z}\AgdaSpace{}%
+\AgdaSymbol{;}\AgdaSpace{}%
 \AgdaField{trans}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
-\AgdaBound{z}\AgdaSpace{}%
-\AgdaBound{x₁}\AgdaSpace{}%
-\AgdaBound{x₂}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaBound{q}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{≡-trans}\AgdaSpace{}%
-\AgdaBound{x₁}\AgdaSpace{}%
-\AgdaBound{x₂}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaBound{q}\AgdaSpace{}%
 \AgdaSymbol{\}}\<%
 \end{code}
+
+\subsubsection{Truncated preorders and equivalences}\label{truncated-preorders-and-equivalences}
+
+Using the \af{is-subsingleton-valued} type defined earlier, we can define the type of preorders and equivalences that have ``unique identity proofs'' as follows.
+\ccpad
+\begin{code}%
+\>[0][@{}l@{\AgdaIndent{1}}]%
+\>[1]\AgdaComment{-- truncated preorder type}\<%
+\\
+%
+\>[1]\AgdaKeyword{record}\AgdaSpace{}%
+\AgdaRecord{IsPreord}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}(}\AgdaBound{R}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Rel}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+\>[1][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaKeyword{field}%
+\>[306I]\AgdaField{is-preorder}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaRecord{IsPreorder}\AgdaSpace{}%
+\AgdaBound{R}\<%
+\\
+\>[.][@{}l@{}]\<[306I]%
+\>[8]\AgdaField{is-truncated}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{is-subsingleton-valued}\AgdaSpace{}%
+\AgdaBound{R}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[1]\AgdaFunction{Preord}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+%
+\>[1]\AgdaFunction{Preord}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{Σ}\AgdaSpace{}%
+\AgdaBound{R}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
+\AgdaFunction{Rel}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
+\AgdaRecord{IsPreord}\AgdaSpace{}%
+\AgdaBound{R}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[1]\AgdaComment{-- truncated equivalence relation type}\<%
+\\
+%
+\>[1]\AgdaKeyword{record}\AgdaSpace{}%
+\AgdaRecord{IsEqv}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}(}\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Rel}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+\>[1][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaKeyword{field}%
+\>[350I]\AgdaField{is-equivalence}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaRecord{IsEquivalence}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\<%
+\\
+\>[.][@{}l@{}]\<[350I]%
+\>[8]\AgdaField{is-truncated}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{is-subsingleton-valued}\AgdaSpace{}%
+\AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[1]\AgdaFunction{Eqv}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+%
+\>[1]\AgdaFunction{Eqv}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{Σ}\AgdaSpace{}%
+\AgdaBound{R}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
+\AgdaFunction{Rel}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
+\AgdaRecord{IsEqv}\AgdaSpace{}%
+\AgdaBound{R}\<%
+\end{code}
+
+
+
 
 \subsubsection{Equivalence classes (blocks)}\label{equivalence-classes-1}
 
 If \ab R is an equivalence relation on \ab A, then for each \abt{𝑎}{A}, there is an \defn{equivalence class} (or \defn{equivalence block}) containing \ab 𝑎, which we denote and define by \af{[} \ab 𝑎 \af{]} \ab R \as{:=} \as{\{}\abt{x}{A}~|~\ab R~\ab x~\ab 𝑏\as{\}}. %We call this the \ab R-\defn{block containing} \ab 𝑎.
 \ccpad
 \begin{code}%
-% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
-% \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaBound{𝓦}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-% \AgdaSymbol{\}}\AgdaSpace{}%
-% \AgdaKeyword{where}\<%
-% \\
-% %
-% \\[\AgdaEmptyExtraSkip]%
-% \>[0][@{}l@{\AgdaIndent{0}}]%
+\>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaOperator{\AgdaFunction{[\AgdaUnderscore{}]\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{Rel}\AgdaSpace{}%
@@ -428,13 +571,17 @@ If \ab R is an equivalence relation on \ab A, then for each \abt{𝑎}{A}, there
 Thus, \ab{x} \af ∈ \as{[} \ab a \as{]} \ab R if and only if \ab{R} \ab a \ab x. We often refer to \af{[} \ab 𝑎 \af{]} \ab R as the \emph{R-block containing} \ab 𝑎, and we represent the collection of all such \ab R-blocks by the following type.
 \ccpad
 \begin{code}%
+\>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{𝒞}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{R}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}(}\AgdaBound{R}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Rel}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{Pred}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
@@ -447,14 +594,14 @@ Thus, \ab{x} \af ∈ \as{[} \ab a \as{]} \ab R if and only if \ab{R} \ab a \ab x
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 %
-\>[1]\AgdaFunction{𝒞}%
-\>[4]\AgdaSymbol{\{}\AgdaBound{R}\AgdaSymbol{\}}\AgdaSpace{}%
+\>[1]\AgdaFunction{𝒞}\AgdaSpace{}%
+\AgdaBound{R}\AgdaSpace{}%
 \AgdaBound{C}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{Σ}\AgdaSpace{}%
 \AgdaBound{a}\AgdaSpace{}%
 \AgdaFunction{꞉}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaFunction{,}\AgdaSpace{}%
 \AgdaBound{C}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
@@ -465,23 +612,13 @@ Thus, \ab{x} \af ∈ \as{[} \ab a \as{]} \ab R if and only if \ab{R} \ab a \ab x
 \AgdaBound{R}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-If \ab{R} is an equivalence relation on \ab{A}, then the \defn{quotient} of \ab{A} modulo \ab{R}, denoted by
-\ab{A} \aof / \ab R, is defined as the collection \as{\{}\af{[} \ab 𝑎 \af{]} \ab R \as{∣}  \abt{𝑎}{A}\as{\}} of all \ab R-blocks of \ab A.
+If \ab{R} is an equivalence relation on \ab{A}, then the \defn{quotient} of \ab{A} modulo \ab{R} is denoted by
+\ab{A} \aof / \ab R and defined as the collection \as{\{}\af{[} \ab 𝑎 \af{]} \ab R \as{∣}  \abt{𝑎}{A}\as{\}} of all \ab R-blocks of \ab A.
 
 There are a few ways we could represent the quotient with respect to a relation as a type, but we find the following to be the most useful.
 \ccpad
 \begin{code}%
-% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
-% \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaBound{𝓦}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-% \AgdaKeyword{where}\<%
-% \\
-% %
-% \\[\AgdaEmptyExtraSkip]%
-% \>[0][@{}l@{\AgdaIndent{0}}]%
+\>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}/\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
@@ -510,34 +647,23 @@ There are a few ways we could represent the quotient with respect to a relation 
 \AgdaFunction{꞉}\AgdaSpace{}%
 \AgdaFunction{Pred}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaFunction{,}%
 \>[27]\AgdaFunction{𝒞}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaArgument{R}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{R}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{R}\AgdaSpace{}%
 \AgdaBound{C}\<%
 \end{code}
 \ccpad
 We use the following type to represent an \ab R-block with a designated representative.
 \ccpad
 \begin{code}%
-% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
-% \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaBound{𝓦}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
-% \AgdaKeyword{where}\<%
-% \\
-% %
-% \\[\AgdaEmptyExtraSkip]%
-% \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaOperator{\AgdaFunction{⟪\AgdaUnderscore{}⟫}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{R}\AgdaSpace{}%
@@ -570,9 +696,13 @@ This serves as a kind of \emph{introduction rule}.  Dually, the next type provid
 \textbf{Unicode Hint}. Type \af ⌜ and \af ⌝ as \texttt{\textbackslash{}cul} and \texttt{\textbackslash{}cur} in \agdamode.}
 \ccpad
 \begin{code}%
+\>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaOperator{\AgdaFunction{⌜\AgdaUnderscore{}⌝}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{R}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{R}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Rel}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
@@ -581,28 +711,34 @@ This serves as a kind of \emph{introduction rule}.  Dually, the next type provid
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{/}}\AgdaSpace{}%
 \AgdaBound{R}%
-\>[30]\AgdaSymbol{→}\AgdaSpace{}%
+\>[39]\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{A}\<%
 \\
 %
-% \\[\AgdaEmptyExtraSkip]%
+\\[\AgdaEmptyExtraSkip]%
 %
 \>[1]\AgdaOperator{\AgdaFunction{⌜}}\AgdaSpace{}%
-\AgdaBound{𝕔}\AgdaSpace{}%
+\AgdaBound{𝒄}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⌝}}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{fst}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
-\AgdaBound{𝕔}\AgdaSpace{}%
+\AgdaBound{𝒄}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\<%
 \end{code}
 \ccpad
 Later we will need the following tools for working with the quotient types defined above.
 \ccpad
 \begin{code}%
-\>[1]\AgdaFunction{/-subset}\AgdaSpace{}%
+\>[0]\AgdaKeyword{module}\AgdaSpace{}%
+\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{x}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{x}\AgdaSpace{}%
 \AgdaBound{y}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSymbol{\}\{}\AgdaBound{R}\AgdaSpace{}%
@@ -610,7 +746,17 @@ Later we will need the following tools for working with the quotient types defin
 \AgdaFunction{Rel}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaModule{IsEquivalence}\<%
+\\
+%
+\>[1]\AgdaFunction{/-subset}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaRecord{IsEquivalence}\AgdaSpace{}%
 \AgdaBound{R}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -618,19 +764,18 @@ Later we will need the following tools for working with the quotient types defin
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaBound{y}\AgdaSpace{}%
 \AgdaSymbol{→}%
-\>[64]\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
+\>[39]\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
 \AgdaBound{R}%
-\>[73]\AgdaOperator{\AgdaFunction{⊆}}%
-\>[76]\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
+\>[48]\AgdaOperator{\AgdaFunction{⊆}}%
+\>[51]\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
 \AgdaBound{y}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
 \AgdaBound{R}\<%
 \\
 %
 \>[1]\AgdaFunction{/-subset}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{x}\AgdaSymbol{\}\{}\AgdaBound{y}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{Req}\AgdaSpace{}%
 \AgdaBound{Rxy}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{z}\AgdaSymbol{\}}\AgdaSpace{}%
@@ -638,13 +783,8 @@ Later we will need the following tools for working with the quotient types defin
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaField{trans}\AgdaSpace{}%
 \AgdaBound{Req}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaBound{z}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaField{sym}\AgdaSpace{}%
-\AgdaBound{Req}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
+\AgdaSymbol{((}\AgdaField{sym}\AgdaSpace{}%
+\AgdaBound{Req}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{Rxy}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{Rxz}\<%
 \\
@@ -653,15 +793,6 @@ Later we will need the following tools for working with the quotient types defin
 %
 \>[1]\AgdaFunction{/-supset}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{x}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSymbol{\}\{}\AgdaBound{R}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Rel}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaRecord{IsEquivalence}\AgdaSpace{}%
 \AgdaBound{R}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -669,7 +800,7 @@ Later we will need the following tools for working with the quotient types defin
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaBound{y}\AgdaSpace{}%
 \AgdaSymbol{→}%
-\>[64]\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
+\>[39]\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
 \AgdaBound{y}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
 \AgdaBound{R}\AgdaSpace{}%
@@ -681,7 +812,6 @@ Later we will need the following tools for working with the quotient types defin
 \\
 %
 \>[1]\AgdaFunction{/-supset}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{x}\AgdaSymbol{\}\{}\AgdaBound{y}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{Req}\AgdaSpace{}%
 \AgdaBound{Rxy}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{z}\AgdaSymbol{\}}\AgdaSpace{}%
@@ -689,9 +819,6 @@ Later we will need the following tools for working with the quotient types defin
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaField{trans}\AgdaSpace{}%
 \AgdaBound{Req}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
-\AgdaBound{z}\AgdaSpace{}%
 \AgdaBound{Rxy}\AgdaSpace{}%
 \AgdaBound{Ryz}\<%
 \\
@@ -700,15 +827,6 @@ Later we will need the following tools for working with the quotient types defin
 %
 \>[1]\AgdaFunction{/-≐}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{x}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSymbol{\}\{}\AgdaBound{R}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Rel}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaRecord{IsEquivalence}\AgdaSpace{}%
 \AgdaBound{R}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -716,12 +834,12 @@ Later we will need the following tools for working with the quotient types defin
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaBound{y}\AgdaSpace{}%
 \AgdaSymbol{→}%
-\>[60]\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
+\>[34]\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
 \AgdaBound{R}%
-\>[69]\AgdaOperator{\AgdaFunction{≐}}%
-\>[72]\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
+\>[43]\AgdaOperator{\AgdaFunction{≐}}%
+\>[46]\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
 \AgdaBound{y}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
 \AgdaBound{R}\<%

@@ -30,18 +30,6 @@ Let `𝓤 : Universe` be a universe and `A : 𝓤 ̇` a type.  In [Relations.Dis
 
 module _ {𝓤 𝓦 : Universe} where
 
- reflexive : {A : 𝓤 ̇} → Rel A 𝓦 → 𝓤 ⊔ 𝓦 ̇
- reflexive _≈_ = ∀ x → x ≈ x
-
- symmetric : {A : 𝓤 ̇} → Rel A 𝓦 → 𝓤 ⊔ 𝓦 ̇
- symmetric _≈_ = ∀ x y → x ≈ y → y ≈ x
-
- antisymmetric : {A : 𝓤 ̇} → Rel A 𝓦 → 𝓤 ⊔ 𝓦 ̇
- antisymmetric _≈_ = ∀ x y → x ≈ y → y ≈ x → x ≡ y
-
- transitive : {A : 𝓤 ̇} → Rel A 𝓦 → 𝓤 ⊔ 𝓦 ̇
- transitive _≈_ = ∀ x y z → x ≈ y → y ≈ z → x ≈ z
-
  Refl : {A : 𝓤 ̇} → Rel A 𝓦 → 𝓤 ⊔ 𝓦 ̇
  Refl _≈_ = ∀{x} → x ≈ x
 
@@ -127,7 +115,6 @@ Using the `is-subsingleton-valued` type defined earlier, we can define the type 
 
  Eqv : (A : 𝓤 ̇) → 𝓤 ⊔ 𝓦 ⁺ ̇
  Eqv A = Σ R ꞉ Rel A 𝓦 , IsEqv R
-
 
 \end{code}
 
