@@ -140,44 +140,41 @@ Thus, `x ∈ [ a ] R` if and only if `R a x`, as desired.  We often refer to `[ 
 
 module _ {𝓤 𝓦 : Universe} where
 
- record IsBlock {A : 𝓤 ̇}(R : Rel A 𝓦)(C : Pred A 𝓦) : 𝓤 ⊔ 𝓦 ⁺ ̇ where
-  constructor mkblk
-  field reps : Σ a ꞉ A , C ≡ [ a ] R
-
- Block : {A : 𝓤 ̇}(R : Rel A 𝓦) → 𝓤 ⊔ 𝓦 ⁺ ̇
- Block {A} R = Σ C ꞉ Pred A 𝓦 , IsBlock R C
+ IsBlock : {A : 𝓤 ̇}(C : Pred A 𝓦){R : Rel A 𝓦} → 𝓤 ⊔ 𝓦 ⁺ ̇
+ IsBlock {A} C {R} = Σ a ꞉ A , C ≡ [ a ] R
 
 \end{code}
 
-Thus, a `Block` of `R` is a pair `(C , p)` consisting of a predicate `C` and a proof `p : IsBlock R C` such that `reps p` is a dependent pair `(a , q)`, with ` a : A` and such that `q` is a proof of `C ≡ [ a ] R`.
+Thus, a a block of `R` is a pair `(C , p)` consisting of a predicate `C` and a proof `p : IsBlock R C` such that `reps p` is a dependent pair `(a , q)`, with ` a : A` and such that `q` is a proof of `C ≡ [ a ] R`.
 
-If `R` is an equivalence relation on `A`, then the *quotient* of `A` modulo `R` is denoted by `A / R` and is defined to be the collection `{[ 𝑎 ] R ∣  𝑎 : A}` of all `R`-blocks.  There are a few ways we could represent the quotient with respect to a relation as a type, but we find the following to be the most useful.
+If `R` is an equivalence relation on `A`, then the *quotient* of `A` modulo `R` is denoted by `A / R` and is defined to be the collection `{[ 𝑎 ] R ∣  𝑎 : A}` of all `R`-blocks.
 
 \begin{code}
 
  _/_ : (A : 𝓤 ̇ ) → Rel A 𝓦 → 𝓤 ⊔ (𝓦 ⁺) ̇
- A / R = Σ C ꞉ Pred A _ , IsBlock R C
+ A / R = Σ C ꞉ Pred A 𝓦 , IsBlock C {R}
 
  infix -1 _/_
+
 \end{code}
 
 We use the following type to represent an `R`-block with a designated representative.
 
 \begin{code}
 
- ⟪_⟫ : {A : 𝓤 ̇} → A → {R : Rel A 𝓦} → Block R
- ⟪ a ⟫ {R} = [ a ] R , mkblk (a , refl)
+ ⟪_⟫ : {A : 𝓤 ̇} → A → {R : Rel A 𝓦} → A / R
+ ⟪ a ⟫ {R} = [ a ] R , (a  , refl)
 
  infix 60 ⟪_⟫
 
 \end{code}
 
-This serves as a kind of *introduction rule*.  Dually, the next type provides an *elimination rule*.<sup>[1](Relations.Quotients.html#fn1)</sup>
+This serves as a kind of *introduction rule*.  Dually, the next type provides an *elimination rule*. Here `C` is a predicate and `p` is a proof of `C ≡ [ a ] R`.<sup>[1](Relations.Quotients.html#fn1)</sup>
 
 \begin{code}
 
- ⌜_⌝ : {A : 𝓤 ̇}{R : Rel A 𝓦} → A / R  → A
- ⌜ _ , mkblk(a , _) ⌝ = a
+ ⌞_⌟ : {A : 𝓤 ̇}{R : Rel A 𝓦} → A / R  → A
+ ⌞ C , (a , p) ⌟ = a
 
 \end{code}
 
@@ -199,11 +196,11 @@ module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{x y : A}{R : Rel A 𝓦} where
 
 \end{code}
 
-(An example application of `/-=̇` is the `class-extensionality` lemma in the [Relations.Truncation] module.)
+(An example application of `/-≐` is the `class-extensionality` lemma in the [Relations.Truncation] module.)
 
 --------------------------------------
 
-<sup>1</sup><span class="footnote" id="fn1">**Unicode Hints**. Type `⌜` and `⌝` as `\cul` and `\cur` in [agda2-mode][].</span>
+<sup>1</sup><span class="footnote" id="fn1">**Unicode Hints** ([agda2-mode][]). `\cl ↝ ⌞`; `\clr ↝ ⌟`.</span>
 
 
 <br>

@@ -47,18 +47,6 @@ The `𝔉` that we have just defined is called the **free algebra over** `𝒦` 
 
 Here we represent `𝔉` as a type in Agda by first constructing the congruence `ψ(𝒦, 𝑻 𝑋)` described above.
 
-We assume two ambient universes `𝓤` and `𝓧`, as well as a type `X : 𝓧 ̇`. As usual, this is accomplished with the `module` directive.
-
-\begin{code}
-
-
--- NOTATION (universe aliases for convenience and readability).
--- 𝓕 𝓕⁺  : Universe
--- 𝓕 = ov 𝓤
--- 𝓕⁺ = (ov 𝓤) ⁺    -- (this will be the level of the relatively free algebra)
-
-\end{code}
-
 We first construct the congruence relation `ψCon`, modulo which `𝑻 X` yields the relatively free algebra, `𝔉 𝒦 X := 𝑻 X ╱ ψCon`. We start by letting `ψ` be the collection of identities `(p, q)` satisfied by all subalgebras of algebras in `𝒦`.
 
 \begin{code}
@@ -161,16 +149,17 @@ We denote by `ℭ` the product of all subalgebras of algebras in `𝒦`, and by 
 
 Here, `⨅-hom-co` (defined in [Homomorphisms.Basic](Homomorphisms.Basic.html#product-homomorphisms)) takes the term algebra `𝑻 X`, a family `{𝔄s : I → Algebra 𝓤 𝑆}` of `𝑆`-algebras, and a family `hom𝔄 : ∀ i → hom (𝑻 X) (𝔄s i)` of homomorphisms and constructs the natural homomorphism `homℭ` from `𝑻 X` to the product `ℭ := ⨅ 𝔄`.  The homomorphism `homℭ : hom (𝑻 X) (⨅ ℭ)` is natural in the sense that the `i`-th component of the image of `𝑡 : Term X` under `homℭ` is the image `∣ hom𝔄 i ∣ 𝑡` of 𝑡 under the i-th homomorphism `hom𝔄 i`.
 
+
+
+
+
 #### <a id="F-in-classproduct">𝔽 ≤  ⨅ S(𝒦)</a>
-Now we come to a step in the Agda formalization of Birkhoff's theorem that is highly nontrivial. We must prove that the free algebra embeds in the product ℭ of all subalgebras of algebras in the class `𝒦`.  This is really the only stage in the proof of Birkhoff's theorem that requires the truncation assumption that `ℭ` be a set.  We will also need to assume several (ten, to be honest) local function extensionality postulates and, as a result, the next submodule will begin with a long and unattractive list of such postulates.  Earlier versions of the library used just a single *global* function extensionality postulate at the start of most modules, but we have since decided to exchange that elegant but crude option for greater precision and transparency.
+Now we come to a step in the Agda formalization of Birkhoff's theorem that is highly nontrivial. We must prove that the free algebra embeds in the product ℭ of all subalgebras of algebras in the class `𝒦`.  This is really the only stage in the proof of Birkhoff's theorem that requires the truncation assumption that `ℭ` be a set.  We will also need to assume several (ten, to be honest) local function extensionality postulates and, as a result, the next submodule will take as given the parameter `fe : DFunExt`.  This allows us to postulate local function extensionality when and where we need it in the proof. For example, if we want to assume function extensionality at universes 𝓥 and 𝓤, we simply apply `fe` to those universes. (Earlier versions of the library used just a single *global* function extensionality postulate at the start of most modules, but we have since decided to exchange that elegant but crude option for greater precision and transparency.)
 
 \begin{code}
 
 module HSPTheorem {fe : DFunExt} {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓕} where
 
- -- {fe𝓤𝓤 : dfunext 𝓤 𝓤}  {fe𝓕𝓤 : dfunext 𝓕 𝓤}   {fe𝓤𝓕⁺ : dfunext 𝓤 𝓕⁺} {fe𝓕⁺𝓤 : dfunext 𝓕⁺ 𝓤}
- -- {fe𝓕𝓕 : dfunext 𝓕 𝓕}  {fe𝓕𝓕⁺ : funext 𝓕 𝓕⁺}  {fe𝓕⁺𝓕⁺ : dfunext 𝓕⁺ 𝓕⁺}
- -- {fe𝓥𝓤 : dfunext 𝓥 𝓤}  {fe𝓥𝓕 : dfunext 𝓥 𝓕}   {fe𝓥𝓕⁺ : dfunext 𝓥 𝓕⁺}
  open class-products-with-maps {𝓤}{X}{fe 𝓕 𝓤}{fe 𝓕⁺ 𝓕⁺}{fe 𝓕 𝓕} 𝒦
 
 \end{code}
@@ -355,11 +344,11 @@ Finally we come to one of the main theorems of this module; it asserts that ever
 
  free-quot-subalg-ℭ : dfunext 𝓥 (ov 𝓤 ) → prop-ext (ov 𝓤) (ov 𝓤) → is-set ∣ ℭ ∣
   →                   is-subsingleton-valued ⟨ kercon (fe 𝓥 𝓕) ℭ homℭ ⟩
-  →                   (∀ C → is-subsingleton (IsBlock ⟨ kercon (fe 𝓥 𝓕) ℭ homℭ ⟩ C))
+  →                   (∀ C → is-subsingleton (IsBlock C))
                       --------------------------------------------------------
   →                   (((𝑻 X) [ ℭ ]/ker homℭ){fe 𝓥 𝓕}) ≤ ℭ
 
- free-quot-subalg-ℭ fe pe UIPc URPk UIPb = FirstHomColly (𝑻 X) ℭ homℭ pe fe UIPc URPk UIPb
+ free-quot-subalg-ℭ fe pe UIPc URPk UIPb = FirstHomCorollary (𝑻 X) ℭ homℭ pe fe UIPc URPk UIPb
 
 
  module _ -- extensionality assumptions:
@@ -369,7 +358,7 @@ Finally we come to one of the main theorems of this module; it asserts that ever
           -- truncation assumptions:
           (Cset : is-set ∣ ℭ ∣)
           (ssR : is-subsingleton-valued ⟨ kercon (fe 𝓥 𝓕) ℭ homℭ ⟩)
-          (ssC : ∀ C → is-subsingleton (IsBlock ⟨ kercon (fe 𝓥 𝓕) ℭ homℭ ⟩ C))
+          (ssC : ∀ C → is-subsingleton (IsBlock C))
 
   where
 

@@ -228,7 +228,6 @@ Given an algebra `𝑨` and a congruence `θ`, the *canonical projection* is a m
 \begin{code}
 
 module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} where
- open IsBlock
 
  πepi : (θ : Congruence{𝓦} 𝑨) → epi 𝑨 (𝑨 ╱ θ)
  πepi θ = cπ , cπ-is-hom , cπ-is-epic where
@@ -240,7 +239,7 @@ module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} where
   cπ-is-hom _ _ = refl
 
   cπ-is-epic : Epic cπ
-  cπ-is-epic (_ , mkblk (a , refl)) =  Image_∋_.im a
+  cπ-is-epic (C , (a , refl)) =  Image_∋_.im a
 
 \end{code}
 

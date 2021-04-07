@@ -19,6 +19,8 @@ module Relations.Truncation where
 
 open import Relations.Quotients public
 
+open import MGS-MLTT using (_⇔_) public
+
 \end{code}
 
 #### <a id="truncation">Truncation</a>
@@ -70,12 +72,9 @@ We will use `is-embedding`, `is-set`, and `to-Σ-≡` in the next subsection to 
 
 #### <a id="injective-functions-are-set-embeddings">Injective functions are set embeddings</a>
 
-Before moving on to define [propositions](Overture.Truncation.html#propositions), we discharge an obligation we mentioned but left unfulfilled in the [embeddings](Overture.Inverses.html#embeddings) section of the [Overture.Inverses][] module.  Recall, we described and imported the `is-embedding` type, and we remarked that an embedding is not simply a monic function.  However, if we assume that the codomain is truncated so as to have unique identity proofs (i.e., is a set), then we can prove that any monic function into that codomain will be an embedding.  On the other hand, embeddings are always monic, so we will end up with an equivalence.  To prepare for this, we define a type `_⟺_` with which to represent such equivalences.
+Before moving on to define [propositions](Overture.Truncation.html#propositions), we discharge an obligation we mentioned but left unfulfilled in the [embeddings](Overture.Inverses.html#embeddings) section of the [Overture.Inverses][] module.  Recall, we described and imported the `is-embedding` type, and we remarked that an embedding is not simply a monic function.  However, if we assume that the codomain is truncated so as to have unique identity proofs (i.e., is a set), then we can prove that any monic function into that codomain will be an embedding.  On the other hand, embeddings are always monic, so we will end up with an equivalence.
 
 \begin{code}
-
-_⟺_ : {𝓤 𝓦 : Universe} → 𝓤 ̇ → 𝓦 ̇ → 𝓤 ⊔ 𝓦 ̇
-A ⟺ B = (A → B) × (B → A)
 
 module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇} where
 
@@ -103,7 +102,7 @@ Embeddings are always monic, so we conclude that when a function's codomain is a
 
 \begin{code}
 
- embedding-iff-monic|sets : (f : A → B) → is-set B → is-embedding f ⟺ Monic f
+ embedding-iff-monic|sets : (f : A → B) → is-set B → is-embedding f ⇔ Monic f
  embedding-iff-monic|sets f Bset = (embedding-is-monic f), (monic-is-embedding|sets f Bset)
 
 \end{code}
@@ -121,8 +120,6 @@ module _ {𝓤 : Universe} where
  Pred₁ A 𝓦 = Σ P ꞉ (Pred A 𝓦) , ∀ x → is-subsingleton (P x)
 
 \end{code}
-
-Recall that `Pred A 𝓦` is simply the function type `A → 𝓦 ̇` , so `Pred₁` is definitionally equal to `Σ P ꞉ (A → 𝓦 ̇) , ∀ x → is-subsingleton (P x)`.
 
 The principle of *proposition extensionality* asserts that logically equivalent propositions are equivalent.  That is, if we have `P Q : Pred₁` and `∣ P ∣ ⊆ ∣ Q ∣` and `∣ Q ∣ ⊆ ∣ P ∣`, then `P ≡ Q`.  This is formalized as follows (cf. Escardó's discussion of [Propositional extensionality and the powerset](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#250227)).
 
@@ -158,7 +155,7 @@ Pred₂ A 𝓦 = Σ R ꞉ (Rel A 𝓦) , is-subsingleton-valued R
 
 Recall, `is-subsingleton-valued` is simply defined as
 
-`is-subsingleton-valued R = ∀ x y → is-subsingleton (R x y)
+`is-subsingleton-valued R = ∀ x y → is-subsingleton (R x y)`
 
 which is the assertion that for all `x` `y` there is at most one proof that `x` and `y` are `R`-related. We will generalize this from binary to arbitrary (i.e., continuous and dependent) relations below (see `IsContProp` and `IsDepProp`).
 
@@ -190,14 +187,14 @@ module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{R : Rel A 𝓦} where
   PQ = (prop-ext' pe (α , β))
 
 
- to-subtype-⟪⟫ : (∀ C → is-subsingleton (IsBlock R C))
-  →              {C D : Pred A 𝓦}{c : IsBlock R C}{d : IsBlock R D}
+ to-subtype-⟪⟫ : (∀ C → is-subsingleton (IsBlock C {R}))
+  →              {C D : Pred A 𝓦}{c : IsBlock C {R}}{d : IsBlock D {R}}
   →              C ≡ D  →  (C , c) ≡ (D , d)
 
- to-subtype-⟪⟫ ssA {C}{D}{c}{d} CD = to-Σ-≡ (CD , ssA D (transport (IsBlock R) CD c) d)
+ to-subtype-⟪⟫ ssA {C}{D}{c}{d} CD = to-Σ-≡ (CD , ssA D (transport (λ B → IsBlock B) CD c) d)
 
 
- class-extensionality' : prop-ext 𝓤 𝓦 → (∀ C → is-subsingleton (IsBlock R C))
+ class-extensionality' : prop-ext 𝓤 𝓦 → (∀ C → is-subsingleton (IsBlock C {R}))
   →                      IsEqv R → {u v : A} → R u v  →  ⟪ u ⟫ ≡ ⟪ v ⟫
 
  class-extensionality' pe ssA Reqv Ruv = to-subtype-⟪⟫ ssA (class-extensionality pe Reqv Ruv)

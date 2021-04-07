@@ -22,10 +22,7 @@ open import Relations.Truncation public
 \end{code}
 
 
-
-#### <a id="operation-type">Operation type</a>
-
-We define the type of *operations* as follows.
+In the [Relations.Continuous][] module we defined the type of *operations* on a domain of some type. Since nothing else (besides the operation type) is needed in other [UALib][] modules, we redefine the operation type here.  The semantics of this type is explained below.
 
 \begin{code}
 
@@ -36,13 +33,6 @@ Op I A = (I → A) → A
 \end{code}
 
 The type `Op` encodes the arity of an operation as an arbitrary type `I : 𝓥 ̇`, which gives us a very general way to represent an operation as a function type with domain `I → A` (the type of "tuples") and codomain `A`. For example, the `I`-*ary projection operations* on `A` are represented as inhabitants of the type `Op I A` as follows.
-
-\begin{code}
-
-π : {I : 𝓥 ̇ } {A : 𝓤 ̇ } → I → Op I A
-π i x = x i
-
-\end{code}
 
 
 #### <a id="signature-type">Signature type</a>

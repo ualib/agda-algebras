@@ -57,14 +57,14 @@ module _ {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 �
  -- truncation assumptions:
     (UIPc : is-set ∣ 𝑩 ∣)
     (URPk : ∀ a x → is-subsingleton (⟨ kercon fe 𝑩 h ⟩ a x))
-    (UIPb : ∀ C → is-subsingleton (IsBlock ⟨ kercon fe 𝑩 h ⟩ C))
+    (UIPb : ∀ C → is-subsingleton (IsBlock C))
  where
 
  open first-hom-thm {𝓤}{𝓦} 𝑨 𝑩 h pe fe UIPc URPk UIPb
 
- FirstHomColly : ((𝑨 [ 𝑩 ]/ker h) {fe}) IsSubalgebraOf 𝑩
+ FirstHomCorollary : ((𝑨 [ 𝑩 ]/ker h) {fe}) IsSubalgebraOf 𝑩
 
- FirstHomColly = ϕhom , ϕemb
+ FirstHomCorollary = ϕhom , ϕemb
   where
   ϕhom : hom ((𝑨 [ 𝑩 ]/ker h) {fe}) 𝑩
   ϕhom = ∣ FirstHomomorphismTheorem ∣ 
@@ -85,11 +85,11 @@ module _ {𝓤 𝓦 : Universe}(X : 𝓧 ̇)(𝑩 : Algebra 𝓦 𝑆)(h : hom (
                     --truncation assumptions:
   →                   is-set ∣ 𝑩 ∣
   →                   is-subsingleton-valued ⟨ kercon fe 𝑩 h ⟩
-  →                   (∀ C → is-subsingleton (IsBlock ⟨ kercon fe 𝑩 h ⟩ C))
+  →                   (∀ C → is-subsingleton (IsBlock C))
                     ----------------------------------------------------
   →                 (((𝑻 X) [ 𝑩 ]/ker h) {fe}) IsSubalgebraOf 𝑩
 
- free-quot-subalg pe fe UIPc URPk UIPb = FirstHomColly{𝓤 = (ov 𝓧)} (𝑻 X) 𝑩 h pe fe UIPc URPk UIPb
+ free-quot-subalg pe fe UIPc URPk UIPb = FirstHomCorollary{𝓤 = (ov 𝓧)} (𝑻 X) 𝑩 h pe fe UIPc URPk UIPb
 
 \end{code}
 

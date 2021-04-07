@@ -35,7 +35,6 @@ open import Universes using (Universe; _̇)
 module Varieties.EquationalLogic {𝑆 : Signature 𝓞 𝓥}{𝓧 : Universe}{X : 𝓧 ̇} where
 
 open import Subalgebras.Subalgebras{𝑆 = 𝑆} hiding (Universe; _̇) public
-open import MGS-MLTT using (_⇔_) public
 open import MGS-Embeddings using (embeddings-are-lc) public
 
 

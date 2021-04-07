@@ -99,7 +99,7 @@ module _ {𝓘 : Universe} {I : 𝓘 ̇}{A : 𝓤 ̇} where
 
  open Lift
 
- Lift-op : ((I → A) → A) → (𝓦 : Universe) → ((I → Lift{𝓦} A) → Lift {𝓦} A)
+ Lift-op : Op I A → (𝓦 : Universe) → Op I (Lift{𝓦} A)
  Lift-op f 𝓦 = λ x → lift (f (λ i → lower (x i)))
 
 module _ {𝑆 : Signature 𝓞 𝓥}  where
@@ -137,48 +137,25 @@ In other terms, `∀ 𝑓 → (𝑓 ̂ 𝑨) |: R`. The formal definition of thi
 
 \end{code}
 
-Recall, the `compatible-fun` type was defined in [Relations.Discrete][] module.
+Recall, the `|:` type was defined in [Relations.Discrete][] module.
 
 
 
----------------------------------------
 
+#### <a id="compatibility-of-continuous-relations">Compatibility of continuous relations<sup>[★](Algebras.Algebras.html#fn0)</sup></a>
 
-
-#### <a id="compatibility-of-continuous-relations">Compatibility of continuous relations*</a>
-
-This section presents the `continuous-compatibility` submodule of the [Algebras.Algebras][] module.<sup>[*](Algebras.Algebras.html#fn0)</sup>
-
-
-Next we define a type that represents *compatibility of a continuous relation* with all operations of an algebra. We start by defining compatibility of a continuous relations with a single operation.
+In the [Relations.Continuous][] module, we defined a function called `cont-compatible-op` to represent the assertion that a given continuous relation is compatible with a given operation. With that, it is easy to define a function, which we call `cont-compatible`, representing compatibility of a continuous relation with all operations of an algebra.  Similarly, we define the analogous `dep-compatible` function for the (even more general) type of *dependent relations*.
 
 \begin{code}
 
-module continuous-compatibility {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra 𝓤 𝑆} {I : 𝓥 ̇} where
+module continuous-compatibility {𝓤 𝓦 : Universe}{𝑆 : Signature 𝓞 𝓥} where
+ open import Relations.Continuous using (ContRel; DepRel; cont-compatible-op; dep-compatible-op)
 
- open import Relations.Continuous using (ContRel; eval-cont-rel; cont-compatible-fun)
+ cont-compatible : {I : 𝓥 ̇}(𝑨 : Algebra 𝓤 𝑆) → ContRel I ∣ 𝑨 ∣ 𝓦 → 𝓞 ⊔ 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
+ cont-compatible 𝑨 R = Π 𝑓 ꞉ ∣ 𝑆 ∣ , cont-compatible-op (𝑓 ̂ 𝑨) R
 
-
- cont-compatible-op : ∣ 𝑆 ∣ → ContRel I ∣ 𝑨 ∣ 𝓦 → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
- cont-compatible-op 𝑓 R = cont-compatible-fun (𝑓 ̂ 𝑨) R
-
-\end{code}
-
-In case it helps the reader understand `con-compatible-op`, we redefine it explicitly without the help of `con-compatible-fun`.
-
-\begin{code}
-
- cont-compatible-op' : ∣ 𝑆 ∣ → ContRel I ∣ 𝑨 ∣ 𝓦 → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
- cont-compatible-op' 𝑓 R = Π 𝒂 ꞉ (I → ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣) , (eval-cont-rel R 𝒂 → R λ i → (𝑓 ̂ 𝑨)(𝒂 i))
-
-\end{code}
-
-With `cont-compatible-op` in hand, it is a trivial matter to define a type that represents *compatibility of a continuous relation with an algebra*.
-
-\begin{code}
-
- cont-compatible : ContRel I ∣ 𝑨 ∣ 𝓦 → 𝓞 ⊔ 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
- cont-compatible R = Π 𝑓 ꞉ ∣ 𝑆 ∣ , cont-compatible-op 𝑓 R
+ dep-compatible : {I : 𝓥 ̇}(𝒜 : I → Algebra 𝓤 𝑆) → DepRel I (λ i → ∣ 𝒜  i ∣) 𝓦 → 𝓞 ⊔ 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
+ dep-compatible 𝒜 R = Π 𝑓 ꞉ ∣ 𝑆 ∣ , dep-compatible-op (λ i → 𝑓 ̂ (𝒜 i)) R
 
 \end{code}
 
@@ -186,7 +163,7 @@ With `cont-compatible-op` in hand, it is a trivial matter to define a type that 
 
 --------------------------------------
 
-<sup>[*]</sup><span class="footnote" id="fn0"> Sections marked with an asterisk include new types that are more abstract and general (and frankly more interesting) than the ones presented in other sections.  Consequently, such sections expect a higher degree of sophistication and/or effort from the reader/user. Moreover, the types defined in starred sections are used in only a few other places in the [Agda UALib][], so they may be safely skimmed over or skipped.</span>
+<sup>★</sup><span class="footnote" id="fn0"> Sections marked with an asterisk include new types that are more abstract and general (and frankly more interesting) than the ones presented in other sections.  Consequently, such sections expect a higher degree of sophistication and/or effort from the reader/user. Moreover, the types defined in starred sections are used in only a few other places in the [Agda UALib][], so they may be safely skimmed over or skipped.</span>
 
 <sup>[1]</sup><span class="footnote" id="fn1"> In classical universal algebra, the domain of an algebra `𝑨` is usualled called the "universe" of `𝑨`.  We avoid this terminology and reserve universe for use in defining the type hierarchy. (See the [Agda Universes](Overture.Preliminaries.html#agda-universes)</a> section of the [Overture.Preliminaries][] module.</span>
 
@@ -198,3 +175,11 @@ With `cont-compatible-op` in hand, it is a trivial matter to define a type that 
 
 
 {% include UALib.Links.md %}
+
+
+<!-- In case it helps the reader understand `con-compatible-op`, we redefine it explicitly without the help of `con-compatible-fun`.
+
+ cont-compatible-op' : ∣ 𝑆 ∣ → ContRel I ∣ 𝑨 ∣ 𝓦 → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
+ cont-compatible-op' 𝑓 R = Π 𝒂 ꞉ (I → ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣) , (eval-cont-rel R 𝒂 → R λ i → (𝑓 ̂ 𝑨)(𝒂 i))
+
+-->

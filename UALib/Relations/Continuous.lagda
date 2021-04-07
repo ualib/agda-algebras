@@ -5,7 +5,7 @@ date : 2021-02-28
 author: William DeMeo
 ---
 
-### <a id="continuous-relations">Continuous Relations*</a>
+### <a id="general-relations">General Relations*</a>
 
 This is the [Relations.Continuous][] module of the [Agda Universal Algebra Library][].<sup>[*](Relations.Continuous.html#fn0)</sup>
 
@@ -30,6 +30,13 @@ To be more concrete, given an arbitrary family `A : I → 𝓤 ̇` of types, we 
 
 We refer to such relations as *dependent continuous relations* (or *dependent relations* for short) because the definition of a type that represents them requires depedent types.  The `DepRel` type that we define [below](Relations.Continuous.html#dependent-relations) manifests this completely general notion of relation.
 
+
+
+
+
+
+
+
 #### <a id="continuous-relations">Continuous relations</a>
 
 We now define the type `ContRel` which represents predicates of arbitrary arity over a single type `A`. We call this the type of *continuous relations*.
@@ -44,9 +51,31 @@ ContRel I A 𝓦 = (I → A) → 𝓦 ̇
 \end{code}
 
 
-<!-- #### <a id="compatibility-with-continuous-relations">Compatibility with continuous relations</a> -->
+#### <a id="operation-type">Operation type</a>
 
-Next we present types that are useful for asserting and proving facts about *compatibility* of functions with continuous relations.  The first is an *evaluation* function which "lifts" an `I`-ary relation to an `(I → J)`-ary relation. The lifted relation will relate an `I`-tuple of `J`-tuples when the "`I`-slices" (or "rows") of the `J`-tuples belong to the original relation.
+In the next subsection, we will define types that are useful for asserting and proving facts about *compatibility* of *operations* with continuous relations, but first we need a general type with which to represent operations.  Here is the definition, which we justify below.
+
+\begin{code}
+
+--The type of operations
+Op : 𝓥 ̇ → 𝓤 ̇ → 𝓤 ⊔ 𝓥 ̇
+Op I A = (I → A) → A
+
+\end{code}
+
+The type `Op` encodes the arity of an operation as an arbitrary type `I : 𝓥 ̇`, which gives us a very general way to represent an operation as a function type with domain `I → A` (the type of "tuples") and codomain `A`. For example, the `I`-*ary projection operations* on `A` are represented as inhabitants of the type `Op I A` as follows.
+
+\begin{code}
+
+π : {I : 𝓥 ̇ } {A : 𝓤 ̇ } → I → Op I A
+π i x = x i
+
+\end{code}
+
+
+#### <a id="compatibility-with-continuous-relations">Compatibility with continuous relations</a>
+
+The first is an *evaluation* function which "lifts" an `I`-ary relation to an `(I → J)`-ary relation. The lifted relation will relate an `I`-tuple of `J`-tuples when the "`I`-slices" (or "rows") of the `J`-tuples belong to the original relation.
 
 \begin{code}
 
@@ -55,8 +84,8 @@ module _ {I J : 𝓥 ̇} {A : 𝓤 ̇} where
  eval-cont-rel : ContRel I A 𝓦 → (I → J → A) → 𝓥 ⊔ 𝓦 ̇
  eval-cont-rel R 𝒶 = Π j ꞉ J , R λ i → 𝒶 i j
 
- cont-compatible-fun : ((J → A) → A) → ContRel I A 𝓦 → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
- cont-compatible-fun 𝑓 R  = Π 𝒶 ꞉ (I → J → A) , (eval-cont-rel R 𝒶 → R λ i → (𝑓 (𝒶 i)))
+ cont-compatible-op : Op J A → ContRel I A 𝓦 → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ cont-compatible-op 𝑓 R  = Π 𝒶 ꞉ (I → J → A) , (eval-cont-rel R 𝒶 → R λ i → (𝑓 (𝒶 i)))
 
 \end{code}
 
@@ -70,9 +99,7 @@ To readers who find the syntax of the last two definitions nauseating, we recomm
 𝒶 i J      𝒶 k J
 ```
 
-Now `eval-cont-rel R 𝒶` is defined by `∀ j → R (λ i → 𝒶 i j)` which represents the assertion that each row of the `I` columns shown above belongs to the original relation `R`. Finally, `cont-compatible-fun` takes a `J`-ary operation `𝑓 : (J → A) → A` and an `I`-tuple `𝒶 : I → J → A` of `J`-tuples, and determines whether the `I`-tuple `λ i → 𝑓 (𝑎 i)` belongs to `R`.
-
-<!-- Finally, digest all the types involved in these definitions and note how nicely they align (as they must if type-checking is to succeed!).  For example, `𝒶 : I → (J → A)` is precisely the type on which the relation `eval-cont-rel R` is defined. -->
+Now `eval-cont-rel R 𝒶` is defined by `∀ j → R (λ i → 𝒶 i j)` which represents the assertion that each row of the `I` columns shown above belongs to the original relation `R`. Finally, `cont-compatible-op` takes a `J`-ary operation `𝑓 : Op J A` and an `I`-tuple `𝒶 : I → J → A` of `J`-tuples, and determines whether the `I`-tuple `λ i → 𝑓 (𝑎 i)` belongs to `R`.
 
 
 #### <a id="dependent-relations">Dependent relations</a>
@@ -88,9 +115,7 @@ DepRel I 𝒜 𝓦 = Π 𝒜 → 𝓦 ̇
 
 We call `DepRel` the type of *dependent relations*.
 
-#### <a id="compatibility-with-dependent-relations">Compatibility with dependent relations</a>
-
-Above we saw lifts of continuous relations and what it means for such relations to be compatible with functions. We conclude this module by defining the (only slightly more complicated) lift of dependent relations, and the type that represents compatibility of an operation with a dependent relation.
+Above we saw lifts of continuous relations and what it means for such relations to be compatible with operations. We conclude this module by defining the (only slightly more complicated) lift of dependent relations, and the type that represents compatibility of a dependent relation with an operation.
 
 \begin{code}
 
@@ -99,20 +124,16 @@ module _ {I J : 𝓥 ̇} {𝒜 : I → 𝓤 ̇} where
  eval-dep-rel : DepRel I 𝒜 𝓦 → (∀ i → (J → 𝒜 i)) → 𝓥 ⊔ 𝓦 ̇
  eval-dep-rel R 𝒶 = ∀ j → R (λ i → (𝒶 i) j)
 
- -- equivalent definition using Π notation
- eval-dep-rel' : DepRel I 𝒜 𝓦 → (Π i ꞉ I , (J → 𝒜 i)) → 𝓥 ⊔ 𝓦 ̇
- eval-dep-rel' R 𝒶 = Π j ꞉ J , R (λ i → (𝒶 i) j)
-
- dep-compatible-fun : (∀ i → (J → 𝒜 i) → 𝒜 i) → DepRel I 𝒜 𝓦 → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
- dep-compatible-fun 𝑓 R  = ∀ 𝒶 → (eval-dep-rel R) 𝒶 → R λ i → (𝑓 i)(𝒶 i)
+ dep-compatible-op : (∀ i → Op J (𝒜 i)) → DepRel I 𝒜 𝓦 → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ dep-compatible-op 𝑓 R  = ∀ 𝒶 → (eval-dep-rel R) 𝒶 → R λ i → (𝑓 i)(𝒶 i)
 
  -- equivalent definition using Π notation
- dep-compatible-fun' : (Π i ꞉ I , ((J → 𝒜 i) → 𝒜 i)) → DepRel I 𝒜 𝓦 → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
- dep-compatible-fun' 𝑓 R  =  Π 𝒶 ꞉ (Π i ꞉ I , (J → 𝒜 i)) , ((eval-dep-rel R) 𝒶 → R λ i → (𝑓 i)(𝒶 i))
+ dep-compatible'-op : (Π i ꞉ I , Op J (𝒜 i)) → DepRel I 𝒜 𝓦 → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ dep-compatible'-op 𝑓 R  =  Π 𝒶 ꞉ (Π i ꞉ I , (J → 𝒜 i)) , ((eval-dep-rel R) 𝒶 → R λ i → (𝑓 i)(𝒶 i))
 
 \end{code}
 
-In the definition of `dep-compatible-fun`, we let Agda infer the type of `𝒶`, which is `Π i ꞉ I , (J → 𝒜 i)` in this case.
+<!-- In the definition of `dep-compatible`, we let Agda infer the type of `𝒶`, which is `Π i ꞉ I , (J → 𝒜 i)` in this case. -->
 
 
 --------------------------------------
