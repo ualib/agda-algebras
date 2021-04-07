@@ -354,8 +354,8 @@ Finally we come to one of the main theorems of this module; it asserts that ever
  open Congruence
 
  free-quot-subalg-ℭ : dfunext 𝓥 (ov 𝓤 ) → prop-ext (ov 𝓤) (ov 𝓤) → is-set ∣ ℭ ∣
-  →                   (∀ p q → is-subsingleton (⟨ kercon (fe 𝓥 𝓕) ℭ homℭ ⟩ p q ))
-  →                   (∀ C → is-subsingleton (𝒞 ⟨ kercon (fe 𝓥 𝓕) ℭ homℭ ⟩ C))
+  →                   is-subsingleton-valued ⟨ kercon (fe 𝓥 𝓕) ℭ homℭ ⟩
+  →                   (∀ C → is-subsingleton (IsBlock ⟨ kercon (fe 𝓥 𝓕) ℭ homℭ ⟩ C))
                       --------------------------------------------------------
   →                   (((𝑻 X) [ ℭ ]/ker homℭ){fe 𝓥 𝓕}) ≤ ℭ
 
@@ -368,8 +368,8 @@ Finally we come to one of the main theorems of this module; it asserts that ever
 
           -- truncation assumptions:
           (Cset : is-set ∣ ℭ ∣)
-          (ssR : ∀ p q → is-subsingleton (⟨ kercon (fe 𝓥 𝓕) ℭ homℭ ⟩ p q))
-          (ssC : ∀ C → is-subsingleton (𝒞 ⟨ kercon (fe 𝓥 𝓕) ℭ homℭ ⟩ C))
+          (ssR : is-subsingleton-valued ⟨ kercon (fe 𝓥 𝓕) ℭ homℭ ⟩)
+          (ssC : ∀ C → is-subsingleton (IsBlock ⟨ kercon (fe 𝓥 𝓕) ℭ homℭ ⟩ C))
 
   where
 

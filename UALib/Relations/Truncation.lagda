@@ -147,20 +147,20 @@ module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇} where
 Thus, for truncated predicates `P` and `Q`, if `prop-ext` holds, then `(P ⊆ Q) × (Q ⊆ P) → P ≡ Q`, which is a useful extensionality principle.
 
 
-The foregoing easily generalizes to binary relations.  If `R` is a binary relation such that there is at most one way to prove that a given pair of elements is `R`-related, then we call `R` a *binary proposition*. As above, we use [Type Topology][]'s `is-subsingleton` type to impose this truncation assumption on a binary relation.<sup>[4](Relations.Truncation.html#fn4)</sup>
+The foregoing easily generalizes to binary relations.  If `R` is a binary relation such that there is at most one way to prove that a given pair of elements is `R`-related, then we call `R` a *binary proposition*. As above, we use [Type Topology][]'s `is-subsingleton-valued` type to impose this truncation assumption on a binary relation.<sup>[4](Relations.Truncation.html#fn4)</sup>
 
 \begin{code}
 
 Pred₂ : {𝓤 : Universe} → 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓦 ⁺ ̇
-Pred₂ A 𝓦 = Σ R ꞉ (Rel A 𝓦) , ∀ x y → is-subsingleton (R x y)
+Pred₂ A 𝓦 = Σ R ꞉ (Rel A 𝓦) , is-subsingleton-valued R
 
 \end{code}
 
-To be clear, the type `Rel A 𝓦` is simply the function type `A → A → 𝓦 ̇`, so
+Recall, `is-subsingleton-valued` is simply defined as
 
-`Pred₂ A 𝓦 = Σ R ꞉ (A → A → 𝓦 ̇) , ∀ x y → is-subsingleton (R x y)`.
+`is-subsingleton-valued R = ∀ x y → is-subsingleton (R x y)
 
-
+which is the assertion that for all `x` `y` there is at most one proof that `x` and `y` are `R`-related. We will generalize this from binary to arbitrary (i.e., continuous and dependent) relations below (see `IsContProp` and `IsDepProp`).
 
 #### <a id="quotient-extensionality">Quotient extensionality</a>
 
@@ -190,40 +190,41 @@ module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{R : Rel A 𝓦} where
   PQ = (prop-ext' pe (α , β))
 
 
- to-subtype-⟪⟫ : (∀ C → is-subsingleton (𝒞 R C))
-  →              {C D : Pred A 𝓦}{c : 𝒞 R C}{d : 𝒞 R D}
+ to-subtype-⟪⟫ : (∀ C → is-subsingleton (IsBlock R C))
+  →              {C D : Pred A 𝓦}{c : IsBlock R C}{d : IsBlock R D}
   →              C ≡ D  →  (C , c) ≡ (D , d)
 
- to-subtype-⟪⟫ ssA {C}{D}{c}{d} CD = to-Σ-≡ (CD , ssA D (transport (𝒞 R)  CD c) d)
+ to-subtype-⟪⟫ ssA {C}{D}{c}{d} CD = to-Σ-≡ (CD , ssA D (transport (IsBlock R) CD c) d)
 
 
- class-extensionality' : prop-ext 𝓤 𝓦 → (∀ C → is-subsingleton (𝒞 R C))
+ class-extensionality' : prop-ext 𝓤 𝓦 → (∀ C → is-subsingleton (IsBlock R C))
   →                      IsEqv R → {u v : A} → R u v  →  ⟪ u ⟫ ≡ ⟪ v ⟫
 
  class-extensionality' pe ssA Reqv Ruv = to-subtype-⟪⟫ ssA (class-extensionality pe Reqv Ruv)
-
-
 
 \end{code}
 
 
 ----------------------------
 
-#### <a id="continuous-propositions">Continuous propositions*</a>
+#### <a id="general-propositions">General propositions*</a>
 
-This section presents the `continuous-propositions` submodule of the [Relations.Truncation][] module.<sup>[*](Relations.Truncation.html#fn0)</sup>
+This section presents the `general-propositions` submodule of the [Relations.Truncation][] module.<sup>[*](Relations.Truncation.html#fn0)</sup>
 
 
 Recall, we defined a type called `ContRel` in the [Relations.Continuous][] module to represent relations of arbitrary arity. Naturally, we define the corresponding truncated types, the inhabitants of which we will call *continuous propositions*.
 
 \begin{code}
 
-module continuous-propositions {I : 𝓥 ̇} where
+module general-propositions {𝓤 : Universe}{I : 𝓥 ̇} where
 
  open import Relations.Continuous using (ContRel; DepRel)
 
+ IsContProp : {A : 𝓤 ̇}{𝓦 : Universe} → ContRel I A 𝓦  → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ IsContProp {A = A} P = Π 𝑎 ꞉ (I → A) , is-subsingleton (P 𝑎)
+
  ContProp : 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ⁺ ̇
- ContProp A 𝓦 = Σ P ꞉ (ContRel I A 𝓦) , ∀ 𝑎 → is-subsingleton (P 𝑎)
+ ContProp A 𝓦 = Σ P ꞉ (ContRel I A 𝓦) , IsContProp P
 
  cont-prop-ext : 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ⁺ ̇
  cont-prop-ext A 𝓦 = {P Q : ContProp A 𝓦 } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
@@ -234,10 +235,8 @@ To see the point of this, suppose `cont-prop-ext A 𝓦` holds. Then we can prov
 
 \begin{code}
 
- module _ (A : 𝓤 ̇)(𝓦 : Universe) where
-
-  cont-prop-ext' : cont-prop-ext A 𝓦 → {P Q : ContProp A 𝓦} → ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
-  cont-prop-ext' pe hyp = pe  ∣ hyp ∣  ∥ hyp ∥
+ cont-prop-ext' : {A : 𝓤 ̇}{𝓦 : Universe} → cont-prop-ext A 𝓦 → {P Q : ContProp A 𝓦} → ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
+ cont-prop-ext' pe hyp = pe  ∣ hyp ∣  ∥ hyp ∥
 
 \end{code}
 
@@ -245,8 +244,11 @@ While we're at it, we might as well take the abstraction one step further and de
 
 \begin{code}
 
+ IsDepProp : {I : 𝓥 ̇}{𝒜 : I → 𝓤 ̇}{𝓦 : Universe} → DepRel I 𝒜 𝓦  → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ IsDepProp {I = I} {𝒜} P = Π 𝑎 ꞉ Π 𝒜 , is-subsingleton (P 𝑎)
+
  DepProp : (I → 𝓤 ̇) → (𝓦 : Universe) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ⁺ ̇
- DepProp 𝒜 𝓦 = Σ P ꞉ (DepRel I 𝒜 𝓦) , ∀ 𝑎 → is-subsingleton (P 𝑎)
+ DepProp 𝒜 𝓦 = Σ P ꞉ (DepRel I 𝒜 𝓦) , IsDepProp P
 
  dep-prop-ext : (I → 𝓤 ̇) → (𝓦 : Universe) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ⁺ ̇
  dep-prop-ext 𝒜 𝓦 = {P Q : DepProp 𝒜 𝓦} → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
@@ -292,15 +294,3 @@ Applying the extensionality principle for dependent continuous relations is no h
 {% include UALib.Links.md %}
 
 
-<!-- UNUSED
-
-Equivalently, using Pi types, as follows.
-
-
- class-extensionality'' : prop-ext 𝓤 𝓦
-  →                       (Π C ꞉ _ , is-subsingleton (𝒞 ∣ 𝑹 ∣ C)) → IsEquivalence ∣ 𝑹 ∣
-  →                       Π u ꞉ A , Π v ꞉ A , (∣ 𝑹 ∣ u v → ⟪ u ⟫ ≡ ⟪ v ⟫)
-
- class-extensionality'' pe ssA Reqv u v Ruv = class-extensionality' pe ssA Reqv Ruv
-
--->

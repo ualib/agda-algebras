@@ -153,15 +153,15 @@ In the \ualibhtml{Relations.Discrete} module we defined types for representing a
 \AgdaBound{z}\<%
 \end{code}
 \ccpad
-Here is a \defn{uniqueness-of-proofs} principle defined in \typtop.
+Here is a type from \typtop that expresses \defn{proof-irrelevance} for binary relations.
 \ccpad
 \begin{code}%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{hide-is-subsingleton-valued}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
+% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
+% \AgdaModule{hide-is-subsingleton-valued}\AgdaSpace{}%
+% \AgdaKeyword{where}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
 \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{is-subsingleton-valued}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -191,18 +191,18 @@ Here is a \defn{uniqueness-of-proofs} principle defined in \typtop.
 \AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{≈}}\AgdaSpace{}%
 \AgdaBound{y}\AgdaSymbol{)}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{MGS-Quotient}\AgdaSpace{}%
-\AgdaKeyword{using}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{is-subsingleton-valued}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaKeyword{public}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% \>[0]\AgdaKeyword{open}\AgdaSpace{}%
+% \AgdaKeyword{import}\AgdaSpace{}%
+% \AgdaModule{MGS-Quotient}\AgdaSpace{}%
+% \AgdaKeyword{using}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaFunction{is-subsingleton-valued}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaKeyword{public}\<%
 \end{code}
 \ccpad
-Thus, if \ab R \as : \af{Rel} \ab A \ab 𝓦, then \AgdaFunction{is-subsingleton-valued} \ab R asserts that for each pair \ab x \ab y \as : \ab A there is \emph{at most one proof} of \ab R \ab x \ab y. In the section on \emph{Truncation} below (\S~\ref{sec:trunc-sets-prop}) we introduce a number of similar but more general types to represent uniqueness-of-proofs principles for relations of arbitrary arity, over arbitrary types.
+Thus, if \ab R \as : \af{Rel} \ab A \ab 𝓦, then \AgdaFunction{is-subsingleton-valued} \ab R asserts that for each pair \ab x \ab y \as : \ab A there is \emph{at most one proof} of \ab R \ab x \ab y. In the section on \emph{Truncation} below (\S~\ref{sec:trunc-sets-prop}) we introduce a number of similar but more general types to represent \emph{uniqueness-of-proofs} principles for relations of arbitrary arity, over arbitrary types.
 
 
 

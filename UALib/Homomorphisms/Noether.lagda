@@ -52,7 +52,7 @@ module first-hom-thm {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Alg
  -- truncation assumptions:
     (UIPc : is-set ∣ 𝑩 ∣)
     (URPk : is-subsingleton-valued ⟨ kercon fe 𝑩 h ⟩)
-    (UIPb : ∀ C → is-subsingleton (𝒞 ⟨ kercon fe 𝑩 h ⟩ C))
+    (UIPb : ∀ C → is-subsingleton (IsBlock ⟨ kercon fe 𝑩 h ⟩ C))
  where
 
  FirstHomomorphismTheorem :
@@ -75,7 +75,8 @@ module first-hom-thm {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Alg
              (𝑓 ̂ 𝑩) (λ x → φ (𝒂 x))             ∎
 
   φmon : Monic φ
-  φmon (.(⟨ θ ⟩ u) , u , refl) (.(⟨ θ ⟩ v) , v , refl) φuv = class-extensionality' pe UIPb ξ φuv
+--  φmon (.(⟨ θ ⟩ u) , u , refl) (.(⟨ θ ⟩ v) , v , refl) φuv = class-extensionality' pe UIPb ξ φuv
+  φmon (_ , mkblk(u , refl)) (_ , mkblk(v , refl)) φuv = class-extensionality' pe UIPb ξ φuv
 
   φcom : ∣ h ∣ ≡ φ ∘ ∣ πker 𝑩 h {fe} ∣
   φcom = refl
@@ -122,15 +123,15 @@ Now we prove that the homomorphism `φ`, whose existence is guaranteed by `First
 
 module _ {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) where
 
- NoetherHomUnique : (fe : dfunext 𝓥 𝓦)(f g : hom ((𝑨 [ 𝑩 ]/ker h){fe}) 𝑩)
+ NoetherHomUnique : {fe : dfunext 𝓥 𝓦}(f g : hom ((𝑨 [ 𝑩 ]/ker h){fe}) 𝑩)
   →                 ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩 h {fe} ∣ → ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker 𝑩 h {fe} ∣
                     -------------------------------------------------------------------------
   →                 ∀ a  →  ∣ f ∣ a ≡ ∣ g ∣ a
 
- NoetherHomUnique fe f g hfk hgk (.(⟨ kercon fe 𝑩 h ⟩ a) , a , refl) =
-  ∣ f ∣ (⟨ kercon fe 𝑩 h ⟩ a , a , refl) ≡⟨ cong-app(hfk ⁻¹)a ⟩
+ NoetherHomUnique f g hfk hgk (_ , mkblk(a , refl)) =
+  ∣ f ∣ (_ , mkblk(a , refl)) ≡⟨ cong-app(hfk ⁻¹)a ⟩
   ∣ h ∣ a                                ≡⟨ cong-app(hgk)a ⟩
-  ∣ g ∣ (⟨ kercon fe 𝑩 h ⟩ a , a , refl) ∎
+  ∣ g ∣ (_ , mkblk(a , refl)) ∎
 
 \end{code}
 
@@ -138,12 +139,12 @@ If, in addition, we postulate extensionality of functions defined on the domain 
 
 \begin{code}
 
- fe-NoetherHomUnique : funext (𝓤 ⊔ 𝓦 ⁺) 𝓦 → (fe : dfunext 𝓥 𝓦)(f g : hom((𝑨 [ 𝑩 ]/ker h){fe})𝑩)
+ fe-NoetherHomUnique : {fuww : funext (𝓤 ⊔ 𝓦 ⁺) 𝓦}{fe : dfunext 𝓥 𝓦}(f g : hom((𝑨 [ 𝑩 ]/ker h){fe})𝑩)
   →                    ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩 h {fe} ∣ → ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker 𝑩 h {fe} ∣
                        -------------------------------------------------------------------------
   →                    ∣ f ∣ ≡ ∣ g ∣
 
- fe-NoetherHomUnique fuww fe f g hfk hgk = fuww (NoetherHomUnique fe f g hfk hgk)
+ fe-NoetherHomUnique {fuww}{fe} f g hfk hgk = fuww (NoetherHomUnique{fe} f g hfk hgk)
 
 \end{code}
 
@@ -151,12 +152,12 @@ The proof of `NoetherHomUnique` goes through for the special case of epimorphism
 
 \begin{code}
 
- NoetherIsoUnique : (fe : dfunext 𝓥 𝓦)(f g : epi ((𝑨 [ 𝑩 ]/ker h){fe}) 𝑩)
+ NoetherIsoUnique : {fe : dfunext 𝓥 𝓦}(f g : epi ((𝑨 [ 𝑩 ]/ker h){fe}) 𝑩)
   →                 ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩 h{fe} ∣ → ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker 𝑩 h{fe} ∣
                     ---------------------------------------------------------------------
   →                 ∀ a → ∣ f ∣ a ≡ ∣ g ∣ a
 
- NoetherIsoUnique fe f g hfk hgk = NoetherHomUnique fe (epi-to-hom 𝑩 f) (epi-to-hom 𝑩 g) hfk hgk
+ NoetherIsoUnique {fe} f g hfk hgk = NoetherHomUnique {fe}(epi-to-hom 𝑩 f) (epi-to-hom 𝑩 g) hfk hgk
 
 \end{code}
 

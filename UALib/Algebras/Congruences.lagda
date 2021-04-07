@@ -96,12 +96,13 @@ In many areas of abstract mathematics the *quotient* of an algebra `𝑨` with r
 
 module _ {𝓤 𝓦 : Universe} where
  open Congruence
+ open IsBlock
 
  _╱_ : (𝑨 : Algebra 𝓤 𝑆) → Congruence{𝓦} 𝑨 → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
 
- 𝑨 ╱ θ = ( ∣ 𝑨 ∣ / ⟨ θ ⟩ ) ,                     -- the domain of the quotient algebra
+ 𝑨 ╱ θ = ( ∣ 𝑨 ∣ / ⟨ θ ⟩ ) ,                               -- the domain of the quotient algebra
 
-         λ 𝑓 𝒂 → ⟪(𝑓 ̂ 𝑨) (λ i → ∣ ∥ 𝒂 i ∥ ∣)⟫  -- the basic operations of the quotient algebra
+         λ 𝑓 𝒂 → ⟪ (𝑓 ̂ 𝑨) ( λ i →  ∣  reps ∥ 𝒂 i ∥  ∣ ) ⟫  -- the basic operations of the quotient algebra
 
 \end{code}
 

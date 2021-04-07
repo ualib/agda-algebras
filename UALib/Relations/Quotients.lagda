@@ -133,21 +133,30 @@ If R is an equivalence relation on A, then for each `𝑎 : A`, there is an *equ
 
 \end{code}
 
-Thus, `x ∈ [ a ] R` if and only if `R a x`, as desired.  We often refer to [ 𝑎 ] R as the *R-block containing* 𝑎, and we represent the collection of all such `R`-blocks by the following type.
+
+Thus, `x ∈ [ a ] R` if and only if `R a x`, as desired.  We often refer to `[ 𝑎 ] R` as the `R`-*block containing* `𝑎`. We represent an `R`-blocks by the collection of its members, as follows.
 
 \begin{code}
 
- 𝒞 : {A : 𝓤 ̇}(R : Rel A 𝓦) → Pred A 𝓦 → (𝓤 ⊔ 𝓦 ⁺) ̇
- 𝒞 R C = Σ a ꞉ _ , C ≡ ( [ a ] R)
+module _ {𝓤 𝓦 : Universe} where
+
+ record IsBlock {A : 𝓤 ̇}(R : Rel A 𝓦)(C : Pred A 𝓦) : 𝓤 ⊔ 𝓦 ⁺ ̇ where
+  constructor mkblk
+  field reps : Σ a ꞉ A , C ≡ [ a ] R
+
+ Block : {A : 𝓤 ̇}(R : Rel A 𝓦) → 𝓤 ⊔ 𝓦 ⁺ ̇
+ Block {A} R = Σ C ꞉ Pred A 𝓦 , IsBlock R C
 
 \end{code}
+
+Thus, a `Block` of `R` is a pair `(C , p)` consisting of a predicate `C` and a proof `p : IsBlock R C` such that `reps p` is a dependent pair `(a , q)`, with ` a : A` and such that `q` is a proof of `C ≡ [ a ] R`.
 
 If `R` is an equivalence relation on `A`, then the *quotient* of `A` modulo `R` is denoted by `A / R` and is defined to be the collection `{[ 𝑎 ] R ∣  𝑎 : A}` of all `R`-blocks.  There are a few ways we could represent the quotient with respect to a relation as a type, but we find the following to be the most useful.
 
 \begin{code}
 
  _/_ : (A : 𝓤 ̇ ) → Rel A 𝓦 → 𝓤 ⊔ (𝓦 ⁺) ̇
- A / R = Σ C ꞉ Pred A _ ,  𝒞 R C
+ A / R = Σ C ꞉ Pred A _ , IsBlock R C
 
  infix -1 _/_
 \end{code}
@@ -156,8 +165,8 @@ We use the following type to represent an `R`-block with a designated representa
 
 \begin{code}
 
- ⟪_⟫ : {A : 𝓤 ̇} → A → {R : Rel A 𝓦} → A / R
- ⟪ a ⟫ {R} = ([ a ] R , a , refl)
+ ⟪_⟫ : {A : 𝓤 ̇} → A → {R : Rel A 𝓦} → Block R
+ ⟪ a ⟫ {R} = [ a ] R , mkblk (a , refl)
 
  infix 60 ⟪_⟫
 
@@ -168,8 +177,7 @@ This serves as a kind of *introduction rule*.  Dually, the next type provides an
 \begin{code}
 
  ⌜_⌝ : {A : 𝓤 ̇}{R : Rel A 𝓦} → A / R  → A
-
- ⌜ 𝒄 ⌝ = fst ∥ 𝒄 ∥
+ ⌜ _ , mkblk(a , _) ⌝ = a
 
 \end{code}
 

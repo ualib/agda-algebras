@@ -57,7 +57,7 @@ module _ {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 �
  -- truncation assumptions:
     (UIPc : is-set ∣ 𝑩 ∣)
     (URPk : ∀ a x → is-subsingleton (⟨ kercon fe 𝑩 h ⟩ a x))
-    (UIPb : ∀ C → is-subsingleton (𝒞 ⟨ kercon fe 𝑩 h ⟩ C))
+    (UIPb : ∀ C → is-subsingleton (IsBlock ⟨ kercon fe 𝑩 h ⟩ C))
  where
 
  open first-hom-thm {𝓤}{𝓦} 𝑨 𝑩 h pe fe UIPc URPk UIPb
@@ -84,8 +84,8 @@ module _ {𝓤 𝓦 : Universe}(X : 𝓧 ̇)(𝑩 : Algebra 𝓦 𝑆)(h : hom (
                       prop-ext (ov 𝓧) 𝓦 → (fe : dfunext 𝓥 𝓦)
                     --truncation assumptions:
   →                   is-set ∣ 𝑩 ∣
-  →                   (∀ p q → is-subsingleton (⟨ kercon fe 𝑩 h ⟩ p q))
-  →                   (∀ C → is-subsingleton (𝒞 ⟨ kercon fe 𝑩 h ⟩ C))
+  →                   is-subsingleton-valued ⟨ kercon fe 𝑩 h ⟩
+  →                   (∀ C → is-subsingleton (IsBlock ⟨ kercon fe 𝑩 h ⟩ C))
                     ----------------------------------------------------
   →                 (((𝑻 X) [ 𝑩 ]/ker h) {fe}) IsSubalgebraOf 𝑩
 
