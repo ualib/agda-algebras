@@ -446,6 +446,21 @@ note          = {Source code: \href{https://gitlab.com/ualib/ualib.gitlab.io}{ht
   HOWPUBLISHED = {{G}it{H}ub.com},
   URL = {https://github.com/ericfinster/higher-alg}
 }
+@InProceedings{Fiore:2020,
+author="Fiore, Marcelo P.
+and Pitts, Andrew M.
+and Steenkamp, S. C.",
+editor="Goubault-Larrecq, Jean
+and K{\"o}nig, Barbara",
+title="Constructing Infinitary Quotient-Inductive Types",
+booktitle="Foundations of Software Science and Computation Structures",
+year="2020",
+publisher="Springer International Publishing",
+address="Cham",
+pages="257--276",
+abstract="This paper introduces an expressive class of quotient-inductive types, called QW-types. We show that in dependent type theory with uniqueness of identity proofs, even the infinitary case of QW-types can be encoded using the combination of inductive-inductive definitions involving strictly positive occurrences of Hofmann-style quotient types, and Abel's size types. The latter, which provide a convenient constructive abstraction of what classically would be accomplished with transfinite ordinals, are used to prove termination of the recursive definitions of the elimination and computation properties of our encoding of QW-types. The development is formalized using the Agda theorem prover.",
+isbn="978-3-030-45231-5"
+}
 @ARTICLE {Freese:2017,
   AUTHOR = {Freese, Ralph and McKenzie, Ralph},
   TITLE = {Maltsev families of varieties closed under join or Maltsev product},
@@ -523,7 +538,17 @@ note          = {Source code: \href{https://gitlab.com/ualib/ualib.gitlab.io}{ht
   MRNUMBER = {2678065},
   DOI = {10.1137/090775646},
 }
-  @Comment URL = {http://dx.doi.org/10.1137/090775646}
+@misc{Li:2015,
+           month = {July},
+           title = {Quotient types in type theory},
+          author = {Nuo Li},
+            year = {2015},
+        keywords = {Type Theory, Quotient Types, Homotopy Type Theory},
+             url = {http://eprints.nottingham.ac.uk/28941/},
+        abstract = {Martin-Lof's intuitionistic type theory (Type Theory) is a formal system that serves not only as a foundation of constructive mathematics but also as a dependently typed programming language. Dependent types are types that depend on values of other types. Type Theory is based on the Curry-Howard isomorphism which relates computer programs with mathematical proofs so that we can do computer-aided formal reasoning and write certified programs in programming languages like Agda, Epigram etc. Martin Lof proposed two variants of Type Theory which are differentiated by the treatment of equality. In Intensional Type Theory, propositional equality defined by identity types does not imply definitional equality, and type checking is decidable. In Extensional Type Theory, propositional equality is identified with definitional equality which makes type checking undecidable. Because of the good computational properties, Intensional Type Theory is more popular, however it lacks some important extensional concepts such as functional extensionality and quotient types.
+This thesis is about quotient types. A quotient type is a new type whose equality is redefined by a given equivalence relation. However, in the usual formulation of Intensional Type Theory, there is no type former to create a quotient. We also lose canonicity if we add quotient types into Intensional Type Theory as axioms. In this thesis, we first investigate the expected syntax of quotient types and explain it with categorical notions. For quotients which can be represented as a setoid as well as defined as a set without a quotient type former, we propose to define an algebraic structure of quotients called definable quotients. It relates the setoid interpretation and the set definition via a normalisation function which returns a normal form (canonical choice) for each equivalence class. It can be seen as a simulation of quotient types and it helps theorem proving because we can benefit from both representations. However this approach cannot be used for all quotients. It seems that we cannot define a normalisation function for some quotients in Type Theory, e.g. Cauchy reals and finite multisets. Quotient types are indeed essential for formalisation of mathematics and reasoning of programs. Then we consider some models of Type Theory where types are interpreted as structured objects such as setoids, groupoids or weak omega-groupoids. In these models equalities are internalised into types which means that it is possible to redefine equalities. We present an implementation of Altenkirch's setoid model and show that quotient types can be defined within this model. We also describe a new extension of Martin-Lof type theory called Homotopy Type Theory where types are interpreted as weak omega-groupoids. It can be seen as a generalisation of the groupoid model which makes extensional concepts including quotient types available. We also introduce a syntactic encoding of weak omega-groupoids which can be seen as a first step towards building a weak omega-groupoids model in Intensional Type Theory. All of these implementations were performed in the dependently typed programming language Agda which is based on intensional Martin-Lof type theory.}
+}
+@Comment URL = {http://dx.doi.org/10.1137/090775646}
 @ARTICLE {Maltsev:1954,
   TITLE = {On the general theory of algebraic systems},
   AUTHOR = {Mal'tsev, Anatolii Ivanovich},
