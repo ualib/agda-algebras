@@ -64,18 +64,31 @@ In the [Relations.Truncation][] module we introduce a number of similar but more
 
 #### <a id="equivalence-classes">Equivalence relations</a>
 
-A binary relation is called a *preorder* if it is reflexive and transitive. An *equivalence relation* is a symmetric preorder.
+A binary relation is called a *preorder* if it is reflexive and transitive.
 
 
 \begin{code}
 
 module _ {𝓤 𝓦 : Universe} where
-
  record IsPreorder {A : 𝓤 ̇}(_≈_ : Rel A 𝓦) : 𝓤 ⊔ 𝓦 ̇ where
   field rfl : Refl _≈_; trans : Trans _≈_
 
+\end{code}
+
+We represent the type of preorders as the following `Σ` type.
+
+\begin{code}
+
  Preorder : 𝓤 ̇ → 𝓤 ⊔ 𝓦 ⁺ ̇
  Preorder A = Σ R ꞉ Rel A 𝓦 , IsPreorder R
+
+\end{code}
+
+In this way, if we have `P : Preorder A`, then `∣ P ∣` will be the binary relation over `A` and `∥ P ∥` will be a proof of `Ispreorder ∣ P ∣`; that is, a proof that `∣ P ∣` is reflexive and transitive.
+
+An *equivalence relation* is a symmetric preorder, so we could define such relations in terms of `IsPreorder`, but it will make proofs less confusing if we define `IsEquivalence` directly, as follows.
+
+\begin{code}
 
  record IsEquivalence {A : 𝓤 ̇}(_≈_ : Rel A 𝓦) : 𝓤 ⊔ 𝓦 ̇ where
   field rfl : Refl _≈_; sym : Symm _≈_; trans : Trans _≈_
@@ -100,7 +113,6 @@ Using the `is-subsingleton-valued` type defined earlier, we can define the type 
 
 \begin{code}
 
- -- truncated preorder type
  record IsPreord {A : 𝓤 ̇}(R : Rel A 𝓦) : 𝓤 ⊔ 𝓦 ̇ where
   field is-preorder : IsPreorder R
         is-truncated : is-subsingleton-valued R
@@ -108,7 +120,6 @@ Using the `is-subsingleton-valued` type defined earlier, we can define the type 
  Preord : 𝓤 ̇ → 𝓤 ⊔ 𝓦 ⁺ ̇
  Preord A = Σ R ꞉ Rel A 𝓦 , IsPreord R
 
- -- truncated equivalence relation type
  record IsEqv {A : 𝓤 ̇}(_≈_ : Rel A 𝓦) : 𝓤 ⊔ 𝓦 ̇ where
   field is-equivalence : IsEquivalence _≈_
         is-truncated : is-subsingleton-valued _≈_

@@ -272,7 +272,6 @@ It turns out that the homomorphism so defined is equivalent to `hom𝔽`.
   (𝑓 ̂ 𝔽)(λ i → ∣ hom𝔽 ∣ (𝒕 i))  ≡⟨ (∥ hom𝔽 ∥ 𝑓 𝒕)⁻¹ ⟩
   ∣ hom𝔽 ∣ (node 𝑓 𝒕)           ∎
 
-
 \end{code}
 
 We need a three more lemmas before we are ready to tackle our main goal.
