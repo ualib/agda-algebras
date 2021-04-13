@@ -169,7 +169,7 @@ module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{R : Rel A 𝓦} where
  open IsEqv
 
  class-extensionality : prop-ext 𝓤 𝓦 → IsEqv R → {u v : A}
-  →                     R u v  →  [ u ] R ≡ [ v ] R
+  →                     R u v  →  u ⁄ R ≡ v ⁄ R
 
  class-extensionality pe Req {u}{v} Ruv = ap fst PQ
   where
@@ -177,27 +177,27 @@ module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{R : Rel A 𝓦} where
   P = (λ a → R u a) , (λ a → is-truncated Req u a)
   Q = (λ a → R v a) , (λ a → is-truncated Req v a)
 
-  α : [ u ] R ⊆ [ v ] R
-  α ua = fst (/-≐ (is-equivalence Req) Ruv) ua
+  α : u ⁄ R ⊆ v ⁄ R
+  α ua = fst (⁄-≐ (is-equivalence Req) Ruv) ua
 
-  β : [ v ] R ⊆ [ u ] R
-  β va = snd (/-≐ (is-equivalence Req) Ruv) va
+  β : v ⁄ R ⊆ u ⁄ R
+  β va = snd (⁄-≐ (is-equivalence Req) Ruv) va
 
   PQ : P ≡ Q
   PQ = (prop-ext' pe (α , β))
 
 
- to-subtype-⟪⟫ : (∀ C → is-subsingleton (IsBlock C {R}))
+ to-subtype-≀ : (∀ C → is-subsingleton (IsBlock C {R}))
   →              {C D : Pred A 𝓦}{c : IsBlock C {R}}{d : IsBlock D {R}}
   →              C ≡ D  →  (C , c) ≡ (D , d)
 
- to-subtype-⟪⟫ ssA {C}{D}{c}{d} CD = to-Σ-≡ (CD , ssA D (transport (λ B → IsBlock B) CD c) d)
+ to-subtype-≀ ssR {C}{D}{c}{d} CD = to-Σ-≡ (CD , ssR D (transport (λ B → IsBlock B) CD c) d)
 
 
  class-extensionality' : prop-ext 𝓤 𝓦 → (∀ C → is-subsingleton (IsBlock C {R}))
-  →                      IsEqv R → {u v : A} → R u v  →  ⟪ u ⟫ ≡ ⟪ v ⟫
+  →                      IsEqv R → {u v : A} → R u v  →  u ≀ R ≡ v ≀ R
 
- class-extensionality' pe ssA Reqv Ruv = to-subtype-⟪⟫ ssA (class-extensionality pe Reqv Ruv)
+ class-extensionality' pe ssR Reqv Ruv = to-subtype-≀ ssR (class-extensionality pe Reqv Ruv)
 
 \end{code}
 

@@ -22,7 +22,7 @@ To be sure we understand what this means, let $:=$ denote the relation with resp
 % \end{flushright}
 % \end{quote}
 
-The datatype used in the \ualib to represent definitional equality is imported from the \am{Identity-Type} module of \typtop, but apart from superficial syntactic differences, it is equivalent to the identity type used in all other Agda libraries we know of.  We repeat the definition here for easy reference.
+The datatype used in the \ualib to represent definitional equality is imported from the \am{Identity-Type} module of \typtop, but apart from superficial syntactic differences, it is equivalent to the standard \emph{Paulin-Mohring style identity type} found in most other Agda libraries.  We repeat the definition here for easy reference.
 \ccpad
 \begin{code}%
 % \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -80,38 +80,14 @@ The datatype used in the \ualib to represent definitional equality is imported f
 Whenever we need to complete a proof by simply asserting that \ab{x} is \defn{definitionally equal} to itself, we invoke \aic{refl}. If we need to make explicit the implicit argument \ab x, then we use \aic{refl}~\{\ab x~=~\ab x\}.
 
 \paragraph*{Assumed module contexts}
-Before proceeding, a word about a special convention we adopt in the sequel is in order. To reduce reader strain, we will often omit easily inferred typing judgments which would normally appear in the list of parameters of a module or at the start of a type definition, and we sometimes make an announcement like the following (which applies to the present section):
+Before proceeding, a word about a special convention we adopt in the sequel is in order. To reduce reader strain, we often omit easily inferred typing judgments which would normally appear in the list of parameters of a module or at the start of a type definition, though we sometimes make an announcement like the following (which applies to the present section):
 \context{\{\ab{𝓤}~\as :~\ap{Universe}\} \{\ab{A}~\as :~\ab 𝓤\af ̇\}}
-\paragraph*{Definitional equality is an equivalence}
-The relation \ad{≡} just defined is naturally an equivalence relation, and the formal proof of this fact is trivial. Indeed, we don't need to prove reflexivity, since that is the defining property of \ad{≡}, and the proofs of symmetry and transitivity are also immediate.
+which means that all code in the current section is to be interpreted as occurring inside such an anonymous module, where the given typing judgments are taken for granted.
+
+\paragraph*{Identity is an equivalence}
+The relation \ad{≡} just defined is naturally an equivalence relation, and the formal proof of this fact is trivial. Indeed, we don't need to prove reflexivity, since that is the defining property of \ad{≡}, and the proofs of symmetry and transitivity are immediate.
 \ccpad
 \begin{code}%
-\>[1]\AgdaFunction{≡-symmetric}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{x}\<%
-\\
-%
-\>[1]\AgdaFunction{≡-symmetric}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaInductiveConstructor{refl}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{refl}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
 \>[1]\AgdaFunction{≡-sym}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{x}\AgdaSpace{}%
@@ -129,39 +105,6 @@ The relation \ad{≡} just defined is naturally an equivalence relation, and the
 \\
 %
 \>[1]\AgdaFunction{≡-sym}\AgdaSpace{}%
-\AgdaInductiveConstructor{refl}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{refl}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{≡-transitive}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
-\AgdaBound{z}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{z}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{z}\<%
-\\
-%
-\>[1]\AgdaFunction{≡-transitive}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaInductiveConstructor{refl}\AgdaSpace{}%
 \AgdaInductiveConstructor{refl}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{refl}\<%
@@ -197,8 +140,6 @@ The relation \ad{≡} just defined is naturally an equivalence relation, and the
 \AgdaInductiveConstructor{refl}\<%
 \end{code}
 \ccpad
-The only difference between \af{≡-symmetric} and \af{≡-sym} (resp., \af{≡-transitive} and \af{≡-trans}) is that \af{≡-sym} (resp., \af{≡-trans}) has fewer explicit arguments, which is sometimes convenient.
-
 We prove that \ad ≡ obeys the substitution rule (subst) in the next section (see \af{ap}~\S\ref{transport}), but first we define some syntactic sugar that will make it easier to apply symmetry and transitivity of \ad ≡ in proofs.\footnote{%
 \textbf{Unicode Hints} (\agdamode): \texttt{\textbackslash{}\^{}-\textbackslash{}\^{}1} ↝ \af{⁻¹}; \texttt{\textbackslash{}Mii\textbackslash{}Mid} ↝ \af{𝑖𝑑}; \texttt{\textbackslash{}.}↝ \af{∙}. In general, for information about a character, place the cursor on the character and type \texttt{M-x\ describe-char} (or \texttt{M-x\ h\ d\ c}).}
 \ccpad

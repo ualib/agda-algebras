@@ -22,23 +22,9 @@ open import Relations.Truncation public
 \end{code}
 
 
-In the [Relations.Continuous][] module we defined the type of *operations* on a domain of some type. Since nothing else (besides the operation type) is needed in other [UALib][] modules, we redefine the operation type here.  The semantics of this type is explained below.
-
-\begin{code}
-
---The type of operations
-Op : 𝓥 ̇ → 𝓤 ̇ → 𝓤 ⊔ 𝓥 ̇
-Op I A = (I → A) → A
-
-\end{code}
-
-The type `Op` encodes the arity of an operation as an arbitrary type `I : 𝓥 ̇`, which gives us a very general way to represent an operation as a function type with domain `I → A` (the type of "tuples") and codomain `A`. For example, the `I`-*ary projection operations* on `A` are represented as inhabitants of the type `Op I A` as follows.
-
-
 #### <a id="signature-type">Signature type</a>
 
 We define the signature of an algebraic structure in Agda like this.
-
 
 \begin{code}
 
@@ -47,7 +33,7 @@ Signature 𝓞 𝓥 = Σ F ꞉ 𝓞 ̇ , (F → 𝓥 ̇)
 
 \end{code}
 
-As mentioned in the [Relations.Continuous][] module, 𝓞 will always denote the universe of *operation symbol* types, while 𝓥 is the universe of *arity* types.
+As mentioned in the [Relations.Discrete][] module, 𝓞 will always denote the universe of *operation symbol* types, while 𝓥 is the universe of *arity* types.
 
 In the [Overture][] module we defined special syntax for the first and second projections---namely, ∣\_∣ and ∥\_∥, resp. Consequently, if `𝑆 : Signature 𝓞 𝓥` is a signature, then ∣ 𝑆 ∣ denotes the set of operation symbols, and ∥ 𝑆 ∥ denotes the arity function. If 𝑓 : ∣ 𝑆 ∣ is an operation symbol in the signature 𝑆, then ∥ 𝑆 ∥ 𝑓 is the arity of 𝑓.
 

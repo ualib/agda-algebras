@@ -215,6 +215,16 @@ Thus, if \ab R \as : \af{Rel} \ab A \ab 𝓦, then \AgdaFunction{is-subsingleton
 A binary relation is called a \defn{preorder} if it is reflexive and transitive. An \defn{equivalence relation} is a symmetric preorder. Here are the types we use to represent these concepts in the \ualib.
 \ccpad
 \begin{code}%
+% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
+% \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaBound{𝓦}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaKeyword{where}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
 \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaKeyword{record}\AgdaSpace{}%
 \AgdaRecord{IsPreorder}\AgdaSpace{}%
@@ -249,10 +259,8 @@ A binary relation is called a \defn{preorder} if it is reflexive and transitive.
 %
 \>[1]\AgdaFunction{Preorder}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
@@ -314,10 +322,8 @@ A binary relation is called a \defn{preorder} if it is reflexive and transitive.
 %
 \>[1]\AgdaFunction{Equivalence}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
@@ -397,10 +403,6 @@ An easy first example of an equivalence relation is the kernel of any function. 
 Using the \af{is-subsingleton-valued} type defined earlier, we can define the type of preorders and equivalences that have ``unique identity proofs'' as follows.
 \ccpad
 \begin{code}%
-\>[0][@{}l@{\AgdaIndent{1}}]%
-\>[1]\AgdaComment{-- truncated preorder type}\<%
-\\
-%
 \>[1]\AgdaKeyword{record}\AgdaSpace{}%
 \AgdaRecord{IsPreord}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
@@ -420,12 +422,12 @@ Using the \af{is-subsingleton-valued} type defined earlier, we can define the ty
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaKeyword{field}%
-\>[306I]\AgdaField{is-preorder}\AgdaSpace{}%
+\>[302I]\AgdaField{is-preorder}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaRecord{IsPreorder}\AgdaSpace{}%
 \AgdaBound{R}\<%
 \\
-\>[.][@{}l@{}]\<[306I]%
+\>[.][@{}l@{}]\<[302I]%
 \>[8]\AgdaField{is-truncated}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{is-subsingleton-valued}\AgdaSpace{}%
@@ -436,10 +438,8 @@ Using the \af{is-subsingleton-valued} type defined earlier, we can define the ty
 %
 \>[1]\AgdaFunction{Preord}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
@@ -464,9 +464,6 @@ Using the \af{is-subsingleton-valued} type defined earlier, we can define the ty
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[1]\AgdaComment{-- truncated equivalence relation type}\<%
-\\
-%
 \>[1]\AgdaKeyword{record}\AgdaSpace{}%
 \AgdaRecord{IsEqv}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
@@ -486,12 +483,12 @@ Using the \af{is-subsingleton-valued} type defined earlier, we can define the ty
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaKeyword{field}%
-\>[350I]\AgdaField{is-equivalence}\AgdaSpace{}%
+\>[344I]\AgdaField{is-equivalence}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaRecord{IsEquivalence}\AgdaSpace{}%
 \AgdaOperator{\AgdaBound{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\<%
 \\
-\>[.][@{}l@{}]\<[350I]%
+\>[.][@{}l@{}]\<[344I]%
 \>[8]\AgdaField{is-truncated}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{is-subsingleton-valued}\AgdaSpace{}%
@@ -502,10 +499,8 @@ Using the \af{is-subsingleton-valued} type defined earlier, we can define the ty
 %
 \>[1]\AgdaFunction{Eqv}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
@@ -533,7 +528,7 @@ Using the \af{is-subsingleton-valued} type defined earlier, we can define the ty
 
 \subsubsection{Equivalence classes (blocks)}\label{equivalence-classes-1}
 
-If \ab R is an equivalence relation on \ab A, then for each \abt{𝑎}{A}, there is an \defn{equivalence class} (or \defn{equivalence block}) containing \ab 𝑎, which we denote and define by \af{[} \ab 𝑎 \af{]} \ab R \as{:=} \as{\{}\abt{x}{A}~|~\ab R~\ab x~\ab 𝑏\as{\}}. %We call this the \ab R-\defn{block containing} \ab 𝑎.
+Let \ab R be an equivalence relation on \ab A. Then for each \abt{𝑎}{A} there is an \defn{equivalence class} that contains \ab 𝑎 which we denote and define by \af{[} \ab 𝑎 \af{]} \ab R \as{:=} \as{\{}\abt{x}{A}~|~\ab R~\ab x~\ab 𝑎\as{\}}. We call this the \ab R-\defn{block containing} \ab 𝑎.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -568,56 +563,68 @@ If \ab R is an equivalence relation on \ab A, then for each \abt{𝑎}{A}, there
 \AgdaBound{x}\<%
 \end{code}
 \ccpad
-Thus, \ab{x} \af ∈ \as{[} \ab a \as{]} \ab R if and only if \ab{R} \ab a \ab x. We often refer to \af{[} \ab 𝑎 \af{]} \ab R as the \emph{R-block containing} \ab 𝑎, and we represent the collection of all such \ab R-blocks by the following type.
+Thus, \ab{x} \af ∈ \as{[} \ab a \as{]} \ab R if and only if \ab{R} \ab a \ab x. % We often refer to \af{[} \ab 𝑎 \af{]} \ab R as the \emph{R-block containing} \ab 𝑎, and w
+The members of the \ab R-block containing \ab a as a predicate \ab C satisfying \af{IsBlock}~\ab C, where the latter is defined as follows.
 \ccpad
 \begin{code}%
-\>[0][@{}l@{\AgdaIndent{1}}]%
-\>[1]\AgdaFunction{𝒞}\AgdaSpace{}%
+% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
+% \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaBound{𝓦}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaKeyword{where}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaFunction{IsBlock}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}(}\AgdaBound{R}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}(}\AgdaBound{C}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Pred}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSymbol{)\{}\AgdaBound{R}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Rel}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{Pred}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 %
-\>[1]\AgdaFunction{𝒞}\AgdaSpace{}%
-\AgdaBound{R}\AgdaSpace{}%
+\>[1]\AgdaFunction{IsBlock}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{C}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{R}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{Σ}\AgdaSpace{}%
 \AgdaBound{a}\AgdaSpace{}%
 \AgdaFunction{꞉}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
 \AgdaFunction{,}\AgdaSpace{}%
 \AgdaBound{C}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
 \AgdaBound{a}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
-\AgdaBound{R}\AgdaSymbol{)}\<%
+\AgdaBound{R}\<%
 \end{code}
 \ccpad
-If \ab{R} is an equivalence relation on \ab{A}, then the \defn{quotient} of \ab{A} modulo \ab{R} is denoted by
-\ab{A} \aof / \ab R and defined as the collection \as{\{}\af{[} \ab 𝑎 \af{]} \ab R \as{∣}  \abt{𝑎}{A}\as{\}} of all \ab R-blocks of \ab A.
+That is, \ab C is the \emph{R-block containing} \ab 𝑎 provided there exists a pair (\ab a , \ab p)~\as :~\af{IsBlock}~\ab R~\ab C where \ab p is a proof of \ab C~\ad ≡~\af [~\ab a~\af ]~\ab R.
 
-There are a few ways we could represent the quotient with respect to a relation as a type, but we find the following to be the most useful.
-\ccpad
+If \ab{R} is an equivalence relation on \ab{A}, then the \defn{quotient} of \ab{A} modulo \ab{R} is denoted by
+\ab{A} \aof / \ab R and defined as the collection \as{\{}\af{[} \ab 𝑎 \af{]} \ab R \as{∣}  \abt{𝑎}{A}\as{\}} of all \ab R-blocks of \ab A. We represent the quotient by the following type.
 \begin{code}%
+% \>[0]\<%
+% \\
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}/\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -647,16 +654,24 @@ There are a few ways we could represent the quotient with respect to a relation 
 \AgdaFunction{꞉}\AgdaSpace{}%
 \AgdaFunction{Pred}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaFunction{,}%
-\>[27]\AgdaFunction{𝒞}\AgdaSpace{}%
-\AgdaBound{R}\AgdaSpace{}%
-\AgdaBound{C}\<%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
+\AgdaFunction{IsBlock}\AgdaSpace{}%
+\AgdaBound{C}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{R}\AgdaSymbol{\}}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% %
+% \>[1]\AgdaKeyword{infix}\AgdaSpace{}%
+% \AgdaNumber{-1}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{\AgdaUnderscore{}/\AgdaUnderscore{}}}\<%
 \end{code}
 \ccpad
 We use the following type to represent an \ab R-block with a designated representative.
 \ccpad
 \begin{code}%
+\>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaOperator{\AgdaFunction{⟪\AgdaUnderscore{}⟫}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
@@ -682,13 +697,13 @@ We use the following type to represent an \ab R-block with a designated represen
 \AgdaOperator{\AgdaFunction{⟫}}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{R}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
 \AgdaBound{a}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
 \AgdaBound{R}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{a}%
+\>[27]\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaInductiveConstructor{refl}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
@@ -697,7 +712,7 @@ This serves as a kind of \emph{introduction rule}.  Dually, the next type provid
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
-\>[1]\AgdaOperator{\AgdaFunction{⌜\AgdaUnderscore{}⌝}}\AgdaSpace{}%
+\>[1]\AgdaOperator{\AgdaFunction{⌞\AgdaUnderscore{}⌟}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -715,16 +730,15 @@ This serves as a kind of \emph{introduction rule}.  Dually, the next type provid
 \AgdaBound{A}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaOperator{\AgdaFunction{⌜}}\AgdaSpace{}%
-\AgdaBound{𝒄}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⌝}}\AgdaSpace{}%
+\>[1]\AgdaOperator{\AgdaFunction{⌞}}\AgdaSpace{}%
+\AgdaBound{C}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{a}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⌟}}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{fst}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
-\AgdaBound{𝒄}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∥}}\<%
+\AgdaBound{a}\<%
 \end{code}
 \ccpad
 Later we will need the following tools for working with the quotient types defined above.

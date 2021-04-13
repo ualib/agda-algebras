@@ -269,11 +269,30 @@ infixr 4 _=[_]⇒_
 \end{code}
 
 
-#### <a id="compatibility-of-binary-relations">Compatibility of binary relations</a>
+#### <a id="operation-type">Operation type and compatibility</a>
 
-Before discussing general and dependent relations, we pause to define some types that are useful for asserting and proving facts about *compatibility* of functions with binary relations.
+**Notation**. For consistency and readability, throughout the [UALib][] we reserve two universe variables for special purposes.  The first of these is 𝓞 which shall be reserved for types that represent *operation symbols* (see [Algebras.Signatures][]). The second is 𝓥 which we reserve for types representing *arities* of relations or operations.
 
-First, let us review the informal definition of compatibility. Suppose `A` and `I` are types and let `𝑓 : (I → A) → A` and `R : Rel A 𝓦` be an `I`-ary operation and a binary relation on `A`, respectively. We say `𝑓` and `R` are *compatible* and we write `𝑓 |: R` just in case `∀ u v : I → A`,
+In the next subsection, we will define types that are useful for asserting and proving facts about *compatibility* of *operations* with relations, but first we need a general type with which to represent operations.  Here is the definition, which we justify below.
+
+\begin{code}
+
+--The type of operations
+Op : 𝓥 ̇ → 𝓤 ̇ → 𝓤 ⊔ 𝓥 ̇
+Op I A = (I → A) → A
+
+\end{code}
+
+The type `Op` encodes the arity of an operation as an arbitrary type `I : 𝓥 ̇`, which gives us a very general way to represent an operation as a function type with domain `I → A` (the type of "tuples") and codomain `A`. For example, the `I`-*ary projection operations* on `A` are represented as inhabitants of the type `Op I A` as follows.
+
+\begin{code}
+
+π : {I : 𝓥 ̇ } {A : 𝓤 ̇ } → I → Op I A
+π i x = x i
+
+\end{code}
+
+Now suppose `A` and `I` are types and let `𝑓 : Op I` and `R : Rel A 𝓦` be an `I`-ary operation and a binary relation on `A`, respectively. We say `𝑓` and `R` are *compatible* and we write `𝑓 |: R` just in case `∀ u v : I → A`,
 
 &nbsp;&nbsp; `Π i ꞉ I , R (u i) (v i)` &nbsp; `→` &nbsp; `R (f u) (f v)`.<sup>[6](Relations.Discrete#fn6)</sup>
 
@@ -284,7 +303,7 @@ Here is how we implement this in the [UALib][].
 eval-rel : {A : 𝓤 ̇}{I : 𝓥 ̇} → Rel A 𝓦 → Rel (I → A)(𝓥 ⊔ 𝓦)
 eval-rel R u v = Π i ꞉ _ , R (u i) (v i)
 
-_|:_ : {A : 𝓤 ̇}{I : 𝓥 ̇} → ((I → A) → A) → Rel A 𝓦 → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
+_|:_ : {A : 𝓤 ̇}{I : 𝓥 ̇} → Op I A → Rel A 𝓦 → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
 f |: R  = (eval-rel R) =[ f ]⇒ R
 
 \end{code}
@@ -295,7 +314,7 @@ In case it helps the reader, we note that instead of using the slick implication
 
 \begin{code}
 
-compatible-fun : {A : 𝓤 ̇}{I : 𝓥 ̇} → (f : (I → A) → A)(R : Rel A 𝓦) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
+compatible-fun : {A : 𝓤 ̇}{I : 𝓥 ̇} → (f : Op I A)(R : Rel A 𝓦) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
 compatible-fun f R  = ∀ u v → (eval-rel R) u v → R (f u) (f v)
 
 \end{code}

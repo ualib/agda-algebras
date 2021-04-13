@@ -874,49 +874,99 @@ These combine to give a nice, general implication operation.
 \AgdaBound{g}\AgdaSymbol{)}\<%
 \end{code}
 
-\paragraph*{Compatibility of functions and binary relations}%\label{compatibility-of-functions-and-binary-relations}
+\paragraph*{Operation type and compatibility}%\label{compatibility-of-functions-and-binary-relations}
 
-Before discussing general and dependent relations, we pause to define some types that are useful for asserting and proving facts about \emph{compatibility} of functions with binary relations. 
+\textbf{Notation}. For consistency and readability, throughout the \ualib we reserve two universe variables for special purposes.  The first of these is \ab 𝓞 which shall be reserved for types that represent \defn{operation symbols} (see \ualibhtml{Algebras.Signatures}). The second is \ab 𝓥 which we reserve for types representing \defn{arities} of relations or operations.
 
-First, let us review the informal definition of compatibility. Suppose \ab{A} and \ab{I} are types and fix \ab{𝑓}~\as :~(\ab I~\as →~\ab A)~\as →~\ab A and \ab{R}~\as :~\af{Rel}~\ab A~\ab 𝓦 (an \ab{I}-ary operation and a binary relation on \ab{A}, respectively). We say that \ab{𝑓} and \ab{R} are \emph{compatible} and we write\footnote{The symbol \af{\textbar{}:} denoting compatibility comes from Cliff Bergman's universal algebra textbook~\cite{Bergman:2012}.} \ab{𝑓}~\af{\textbar{}:}~\ab R just in case \as{∀}~\ab u~\ab v~\as :~\ab I~\as →~\ab A,\\[-8pt]
+Below we will define types that are useful for asserting and proving facts about \defn{compatibility} of operations and relations, but first we need a general type with which to represent operations.  Here is the definition, which we justify below.
+\ccpad
+\begin{code}
+\>[0]\AgdaComment{--The type of operations}\<%
+\\
+\>[0]\AgdaFunction{Op}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaGeneralizable{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+\>[0]\AgdaFunction{Op}\AgdaSpace{}%
+\AgdaBound{I}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{I}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{A}\<%
+\end{code}
+\ccpad
+The definition of \af{Op} codifies the arity of an operation as an arbitrary type \ab I~\as :~\ab 𝓥\af ̇, which gives us a very general way to represent an operation as a function type with domain \ab I~\as →~\ab A (the type of ``\ab I-tuples'') and codomain \ab A. For example, the \ab I-\defn{ary projection operations} on \ab A are represented as inhabitants of the type \af{Op}~\ab I~\ab A as follows.
+\ccpad
+\begin{code}
+\>[0]\AgdaFunction{π}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{I}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{I}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Op}\AgdaSpace{}%
+\AgdaBound{I}\AgdaSpace{}%
+\AgdaBound{A}\<%
+\\
+\>[0]\AgdaFunction{π}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{i}\<%
+\end{code}
+\scpad
+% Before discussing general and dependent relations, we pause to define some types that are useful for asserting and proving facts about \emph{compatibility} of functions with binary relations. 
+
+Let us review the informal definition of compatibility. Suppose \ab{A} and \ab{I} are types and fix \ab{𝑓}~\as :~\AgdaFunction{Op}~\AgdaBound{I}~\AgdaBound{A} and \ab{R}~\as :~\af{Rel}~\ab A~\ab 𝓦 (an \ab{I}-ary operation and a binary relation on \ab{A}, respectively). We say that \ab{𝑓} and \ab{R} are \emph{compatible} and we write\footnote{The symbol \af{\textbar{}:} denoting compatibility comes from Cliff Bergman's universal algebra textbook~\cite{Bergman:2012}.} \ab{𝑓}~\af{\textbar{}:}~\ab R just in case \as{∀}~\ab u~\ab v~\as :~\ab I~\as →~\ab A,\\[-8pt]
 
 \ad{Π}~\ab i~\as ꞉ \ab I \af , \ab R (\ab u \ab i) (\ab v \ab i) ~ \as{→} ~ \ab{R} (\ab f \ab u) (\ab f \ab v).\\[4pt]
-Here is how we implement this in the \ualib.
+To implement this in Agda, we first define a function \af{eval-rel} which ``lifts'' a binary relation to the corresponding \ab{I}-ary relation, and we use this to define the function \AgdaFunction{|:} representing \defn{compatibility of an \ab{I}-ary operation with a binary relation}.
 \ccpad
 \begin{code}%
-% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
-% \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaBound{𝓥}\AgdaSpace{}%
-% \AgdaBound{𝓦}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{I}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaBound{𝓥}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
-% \AgdaKeyword{where}\<%
-% \\
-% %
-% \\[\AgdaEmptyExtraSkip]%
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaFunction{eval-rel}\AgdaSpace{}%
+\>[0]\AgdaFunction{eval-rel}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{I}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{Rel}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaGeneralizable{𝓦}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{Rel}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{I}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSymbol{)(}\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSymbol{)(}\AgdaGeneralizable{𝓥}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSymbol{)}\<%
+\AgdaGeneralizable{𝓦}\AgdaSymbol{)}\<%
 \\
-%
-\>[1]\AgdaFunction{eval-rel}\AgdaSpace{}%
+\>[0]\AgdaFunction{eval-rel}\AgdaSpace{}%
 \AgdaBound{R}\AgdaSpace{}%
 \AgdaBound{u}\AgdaSpace{}%
 \AgdaBound{v}\AgdaSpace{}%
@@ -924,7 +974,7 @@ Here is how we implement this in the \ualib.
 \AgdaFunction{Π}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSpace{}%
 \AgdaFunction{꞉}\AgdaSpace{}%
-\AgdaBound{I}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaFunction{,}\AgdaSpace{}%
 \AgdaBound{R}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{u}\AgdaSpace{}%
@@ -934,31 +984,35 @@ Here is how we implement this in the \ualib.
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}|:\AgdaUnderscore{}}}\AgdaSpace{}%
+\>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}|:\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{((}\AgdaBound{I}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{I}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaFunction{Op}\AgdaSpace{}%
+\AgdaBound{I}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{Rel}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaGeneralizable{𝓦}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaGeneralizable{𝓥}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaGeneralizable{𝓦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
-%
-\>[1]\AgdaBound{f}\AgdaSpace{}%
+\>[0]\AgdaBound{f}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{|:}}\AgdaSpace{}%
 \AgdaBound{R}%
-\>[9]\AgdaSymbol{=}\AgdaSpace{}%
+\>[8]\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{eval-rel}\AgdaSpace{}%
 \AgdaBound{R}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{=[}}\AgdaSpace{}%
@@ -967,7 +1021,6 @@ Here is how we implement this in the \ualib.
 \AgdaBound{R}\<%
 \end{code}
 \ccpad
-The function \af{eval-rel} ``lifts'' a binary relation to the corresponding \ab{I}-ary relation.
 % \footnote{Initially we called the first function
 % \af{lift-rel} because it ``lifts'' a binary relation on \ab A to a binary relation on tuples of type \ab I~\as →~\ab A. However, we renamed it \af{eval-rel} to avoid confusion with the universe level \AgdaRecord{Lift} type defined in the \ualibhtml{Overture.Lifts} module, or with \af{free-lift} (\ualibhtml{Terms.Basic}) which lifts a map defined on generators to a map on the thing being generated. Also, o
 % (Here we silently added the type \ab I~\as :~\ab 𝓥\af ̇, representing \emph{relation arity}, to the context; we will have more to say about relation arities in the next section (\S\ref{sec:continuous-relations}).)

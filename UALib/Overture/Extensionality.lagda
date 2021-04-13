@@ -44,10 +44,10 @@ As explained above, a natural notion of function equality is defined as follows:
 
 \begin{code}
 
-module hide-∼ where
+module hide-∼ {A : 𝓤 ̇ } where
 
- _∼_ : {A : 𝓤 ̇ } {B : A → 𝓦 ̇ } → Π B → Π B → 𝓤 ⊔ 𝓦 ̇
- f ∼ g = ∀ x → f x ≡ g x
+ _∼_ : {B : A → 𝓦 ̇ } → Π B → Π B → 𝓤 ⊔ 𝓦 ̇
+ f ∼ g = Π x ꞉ A , f x ≡ g x
 
  infix 0 _∼_
 
@@ -55,23 +55,14 @@ open import MGS-MLTT using (_∼_) public
 
 \end{code}
 
-*Function extensionality* is the principle that point-wise equal functions are *definitionally* equal. In other terms, function extensionality asserts that for all functions `f` and `g` we have `f ∼ g → f ≡ g`. In the [Type Topology][] library the type that represents this principle is `funext`, which is defined as follows. (Again, we present it here inside a hidden submodule, and import the original definition below.)
+*Function extensionality* is the principle that point-wise equal functions are *definitionally* equal; that is, for all functions `f` and `g` we have `f ∼ g → f ≡ g`. In type theory this principle is represented by the types `funext` (for nondependent functions) and `dfunext` (for dependent functions)~(\cite[\S2.9]{HoTT}).  For example, the latter is defined as follows.
 
 \begin{code}
 
 module hide-funext where
 
- funext : ∀ 𝓤 𝓦  → 𝓤 ⁺ ⊔ 𝓦 ⁺ ̇
- funext 𝓤 𝓦 = {A : 𝓤 ̇ } {B : 𝓦 ̇ } {f g : A → B} → f ∼ g → f ≡ g
-
-\end{code}
-
-Similarly, extensionality for *dependent* function types is defined as follows.
-
-\begin{code}
-
  dfunext : ∀ 𝓤 𝓦 → 𝓤 ⁺ ⊔ 𝓦 ⁺ ̇
- dfunext 𝓤 𝓦 = {A : 𝓤 ̇ }{B : A → 𝓦 ̇ }{f g : ∀(x : A) → B x} →  f ∼ g  →  f ≡ g
+ dfunext 𝓤 𝓦 = {A : 𝓤 ̇ }{B : A → 𝓦 ̇ }{f g : Π x ꞉ A , B x} →  f ∼ g  →  f ≡ g
 
 \end{code}
 
@@ -94,53 +85,25 @@ Note that this import directive does not impose any function extensionality assu
 
 #### <a id="global-function-extensionality">Global function extensionality</a>
 
-Previous versions of the [UALib][] made heavy use of a *global function extensionality principle*. This asserts that function extensionality holds at all universe levels.  Agda is capable of expressing types representing global principles as the language has a special universe level for such types.  Escardó denote this universe by 𝓤ω (which is an alias for Agda's `Setω` universe).<sup>[3](Overture.Extensionality.html#fn3)</sup> The types `global-funext` and `global-dfunext` defined in the [Type Topology][] library are the following.
+Previous versions of the [UALib][] made heavy use of a *global function extensionality principle*. This asserts that function extensionality holds at all universe levels.
+However, we decided to remove all instances of global function extensionality from the latest version of the library and limit ourselves to local applications of the principle. This has the advantage of making transparent precisely how and where the library depends on function extensionality. The price we pay for this precision is a library that is littered with extensionality postulates.<sup>[4](Overture.Extensionality.html#fn4)</sup>
+
+The next type defines the converse of function extensionality (cf. `cong-app` in [Overture.Equality][] and (2.9.2) in the [HoTT Book][]).
 
 \begin{code}
 
-module hide-global-funext where
-
- global-funext : 𝓤ω
- global-funext = ∀  {𝓤 𝓥} → funext 𝓤 𝓥
-
- global-dfunext : 𝓤ω
- global-dfunext = ∀ {𝓤 𝓥} → dfunext 𝓤 𝓥
+happly : {A : 𝓤 ̇ }{B : A → 𝓦 ̇ }{f g : Π B} → f ≡ g → f ∼ g
+happly refl _ = refl
 
 \end{code}
 
 
-**ATTENTION!** (backward incompatibility)  
-We have decided to remove from the latest version of the [UALib][] all instances of global function extensionality and limit ourselves to local applications of the principle.  This has the advantage of making transparent precisely how and where the library depends on function extensionality.  (It also prepares the way for moving to a univalence-based version of the library that we plan to undertake very soon.)  The price we pay for this precision is a library that is littered with many function extensionality postulates. We will try to clean this up in the near future (but ultimately we will probably remove all of these postulates in favor of *univalence*).
-
-
-
-The next two types define the converse of function extensionality.
-
-\begin{code}
-
-extfun : {A : 𝓤 ̇}{B : 𝓦 ̇}{f g : A → B} → f ≡ g  →  f ∼ g
-extfun refl _ = refl
-
-\end{code}
-
-Here is the analogue for dependent function types (cf. `cong-app` in [Overture.equality][]).
-
-\begin{code}
-
-extdfun : {A : 𝓤 ̇ }{B : A → 𝓦 ̇ }(f g : Π B) → f ≡ g → f ∼ g
-extdfun _ _ refl _ = refl
-
-\end{code}
-
-
-Though it may seem obvious to some readers, we wish to emphasize the important conceptual distinction between two different forms of type definitions by comparing the definitions of `funext` and `extfun`.
-
-In the definition of `funext`, the codomain is a parameterized type, namely, `𝓤 ⁺ ⊔ 𝓥 ⁺ ̇`, and the right-hand side of the defining equation of `funext` is an assertion (which may or may not hold). In the definition of `extfun`, the codomain is an assertion, namely, `f ∼ g`, and the right-hand side of the defining equation is a proof of this assertion. As such, `extfun` defines a *proof object*; it *proves* (or *inhabits the type that represents*) the proposition asserting that definitionally equivalent functions are pointwise equal. In contrast, `funext` is a type, and we may or may not wish to postulate an inhabitant of this type. That is, we could postulate that function extensionality holds by assuming we have a witness, say, `fe : funext 𝓤 𝓥`, but as noted above the existence of such a witness cannot be proved in [MLTT][].
+Though it may seem obvious to some readers, we wish to emphasize the important conceptual distinction between two different forms of type definitions by comparing the definitions of `dfunext` and `happly`. In the definition of `dfunext`, the codomain is a parameterized type, namely, `𝓤 ⁺ ⊔ 𝓥 ⁺ ̇`, and the right-hand side of the defining equation of `dfunext` is an assertion (which may or may not hold). In the definition of `happly`, the codomain is an assertion, namely, `f ∼ g`, and the right-hand side of the defining equation is a proof of this assertion. As such, `happly` defines a *proof object*; it *proves* (or *inhabits the type that represents*) the proposition asserting that definitionally equivalent functions are pointwise equal. In contrast, `dfunext` is a type, and we may or may not wish to postulate an inhabitant of this type. That is, we could postulate that function extensionality holds by assuming we have a witness, say, `fe : dfunext 𝓤 𝓥`, but as noted above the existence of such a witness cannot be proved in [MLTT][].
 
 
 #### <a id="alternative-extensionality-type">Alternative extensionality type</a>
 
-Finally, a useful alternative for expressing dependent function extensionality, which is essentially equivalent to `dfunext`, is to assert that the `extdfun` function is actually an *equivalence*.  This requires a few more definitions from the `MGS-Equivalences` module of the [Type Topology][] library, which we now describe in a hidden module. (We will import the original definitions below, but, as above, we exhibit them here for pedagogical reasons and to keep the presentation relatively self-contained.)
+Finally, a useful alternative for expressing dependent function extensionality, which is essentially equivalent to `dfunext`, is to assert that the `happly` function is actually an *equivalence*.  This requires a few more definitions from the `MGS-Equivalences` module of the [Type Topology][] library, which we now describe in a hidden module. (We will import the original definitions below, but, as above, we exhibit them here for pedagogical reasons and to keep the presentation relatively self-contained.)
 
 First, a type is a *singleton* if it has exactly one inhabitant and a *subsingleton* if it has *at most* one inhabitant.  Representing these concepts are the following types (whose original definitions we import from the `MGS-Basic-UF` module of [Type Topology][]).
 
@@ -182,7 +145,7 @@ A function is called an *equivalence* if all of its fibers are singletons.
 
 \end{code}
 
-We are finally ready to fulfill our promise of a type that provides an alternative means of postulating function extensionality.<sup>[4](Overture.Extensionality.html#fn4)</sup>
+We are finally ready to fulfill our promise of a type that provides an alternative means of postulating function extensionality.
 
 \begin{code}
 
@@ -191,7 +154,7 @@ open import MGS-Equivalences using (fiber; is-equiv) public
 module hide-hfunext where
 
  hfunext :  ∀ 𝓤 𝓦 → (𝓤 ⊔ 𝓦)⁺ ̇
- hfunext 𝓤 𝓦 = {A : 𝓤 ̇}{B : A → 𝓦 ̇} (f g : Π B) → is-equiv (extdfun f g)
+ hfunext 𝓤 𝓦 = {A : 𝓤 ̇}{B : A → 𝓦 ̇} (f g : Π B) → is-equiv (happly{f = f}{g})
 
 open import MGS-FunExt-from-Univalence using (hfunext) public
 
@@ -205,7 +168,8 @@ open import MGS-FunExt-from-Univalence using (hfunext) public
 
 <sup>3</sup> <span class="footnote" id="fn3"> For more details about the `𝓤ω` type see the [universe-levels section](https://agda.readthedocs.io/en/latest/language/universe-levels.html#expressions-of-kind-set) of [agda.readthedocs.io](https://agda.readthedocs.io).
 
-<sup>4</sup><span class="footnote" id="fn4">  In earlier version of the [UALib][] we defined the type `hfunext` (using another name for it) before realizing that an equivalent type was already defined in the [Type Topology][] library.  For consistency and for the benefit of anyone who might already be familiar with the latter, as well as to correctly assign credit for the original definition, we import the function `hfunext` from the [Type Topology][] library immediately after giving its definition.</span>
+<sup>4</sup><span class="footnote" id="fn4">Eventually we will probably remove these postulates in favor of an alternative approach to extensionality; e.g., *univalence* and/or Cubical Agda.
+</span>
 
 <br>
 <br>

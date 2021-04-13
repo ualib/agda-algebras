@@ -3,6 +3,9 @@
 %%% mode: latex
 %%% TeX-engine: 'xetex
 %%% End:
+Assume the following typing judgments: \{\ab 𝓤 \ab 𝓦 \as : \ap{Universe}\}\{\ab A \as : \ab 𝓤\af ̇\}\{\ab B \as : \ab 𝓦\af ̇\}.
+
+
 \noindent We begin by defining an inductive type that represents the \defn{inverse image} of a function.
 \ccpad
 \begin{code}%
@@ -382,10 +385,8 @@ The right-inverse of \ab f is obtained by applying \af{EpicInv} to \ab f along w
 % \end{code}
 %
 %We can now express the assertion that \af{EpicInv} \ab f does, indeed, give the right-inverse of \ab f.  
-Note that the next proof requires function extensionality, which we postulate in the module declaration.
-\ccpad
-\begin{code}
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
+Note that the next proof requires function extensionality, which we postulate a module declaration like this:
+\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
@@ -401,11 +402,13 @@ Note that the next proof requires function extensionality, which we postulate in
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0][@{}l@{\AgdaIndent{0}}]%
+\AgdaKeyword{where}%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+\ccpad
+\begin{code}
+% \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{EpicInvIsRightInv}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
@@ -449,28 +452,9 @@ Note that the next proof requires function extensionality, which we postulate in
 % \subsubsection{Monics (injective functions)\protect\footnotemark}\label{injective-functions}
 % \contextfn{uwab}{\{\ab 𝓤 \ab 𝓦 \as : \ap{Universe}\}\{\ab A \as : \ab 𝓤\af ̇\}\{\ab B \as : \ab 𝓦\af ̇\}}
 
-We say that a function \ab g \as : \ab A \as → \ab B is \defn{monic} (or \defn{injective}) if it does not map distinct elements to a common point. The following type manifests this property.
-% As above, we usually omit easily inferred typing judgments like \ab{A} \as{:} \ab{𝓤}\af ̇ and \ab{B} 
-% \as{:} \ab{𝓦}\af ̇.
+We say that a function \ab g \as : \ab A \as → \ab B is \defn{monic} (or \defn{injective}) if it does not map distinct elements to a common point. The following types manifest this property and prove that monic functions have left-inverses.
 \ccpad
 \begin{code}%
-% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
-% \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaBound{𝓦}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{B}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaBound{𝓦}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
-% \AgdaKeyword{where}\<%
-% \\
-% %
-% \\[\AgdaEmptyExtraSkip]%
-% \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{Monic}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{g}\AgdaSpace{}%
@@ -502,9 +486,9 @@ We say that a function \ab g \as : \ab A \as → \ab B is \defn{monic} (or \defn
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaBound{a₂}\<%
 \end{code}
-\ccpad
-We obtain the left-inverse by applying the function \af{MonicInv} to \ab g and a proof that \ab g is monic.
-\ccpad
+\scpad
+% We obtain the left-inverse by applying the function \af{MonicInv} to \ab g and a proof that \ab g is monic.
+% \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{MonicInv}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -541,9 +525,9 @@ We obtain the left-inverse by applying the function \af{MonicInv} to \ab g and a
 \AgdaBound{f}\AgdaSpace{}%
 \AgdaBound{imfb}\<%
 \end{code}
-\ccpad
-The function defined by \af{MonicInv} \ab f \ab{fM} is a left-inverse of \ab f, and the proof is trivial.
-\ccpad
+\scpad
+% The function defined by \af{MonicInv} \ab f \ab{fM} is a left-inverse of \ab f, and the proof is trivial.
+% \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{MonicInvIsLeftInv}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -674,13 +658,12 @@ Finally, embeddings are monic; from a proof \ab p \as : \af{is-embedding} \ab f 
 \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{))}\AgdaSpace{}%
 \AgdaFunction{fx}\AgdaSpace{}%
-\AgdaFunction{fy}\AgdaSymbol{)}\<%
+\AgdaFunction{fy}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaKeyword{where}\<%
-\\
-%
 \>[2]\AgdaFunction{fx}\AgdaSpace{}%
+\AgdaFunction{fy}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{fiber}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
@@ -694,17 +677,17 @@ Finally, embeddings are monic; from a proof \ab p \as : \af{is-embedding} \ab f 
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaInductiveConstructor{refl}\<%
 \\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[2]\AgdaFunction{fy}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{fiber}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSymbol{)}\<%
-\\
-%
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% %
+% \>[2]\AgdaFunction{fy}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaFunction{fiber}\AgdaSpace{}%
+% \AgdaBound{f}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+% \AgdaBound{x}\AgdaSymbol{)}\<%
+% \\
+% %
 \>[2]\AgdaFunction{fy}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{y}\AgdaSpace{}%

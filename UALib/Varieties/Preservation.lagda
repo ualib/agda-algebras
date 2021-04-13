@@ -56,7 +56,7 @@ module _ {fe : DFunExt} {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
   γ : 𝑩 ⟦ p ⟧  ≡ 𝑩 ⟦ q ⟧
   γ = (fe 𝓾𝔁 𝓤) λ 𝒃 → (𝑩 ⟦ p ⟧) 𝒃             ≡⟨ (ap (𝑩 ⟦ p ⟧) (ζ 𝒃))⁻¹ ⟩
                 (𝑩 ⟦ p ⟧)(ϕ ∘(preim 𝒃)) ≡⟨(comm-hom-term (fe 𝓥 𝓤) 𝑩(ϕ , ϕhom) p(preim 𝒃))⁻¹ ⟩
-                ϕ((𝑨 ⟦ p ⟧)(preim 𝒃))   ≡⟨ ap ϕ (extfun β (preim 𝒃)) ⟩
+                ϕ((𝑨 ⟦ p ⟧)(preim 𝒃))   ≡⟨ ap ϕ (happly β (preim 𝒃)) ⟩
                 ϕ((𝑨 ⟦ q ⟧)(preim 𝒃))   ≡⟨ comm-hom-term (fe 𝓥 𝓤) 𝑩 (ϕ , ϕhom) q (preim 𝒃) ⟩
                 (𝑩 ⟦ q ⟧)(ϕ ∘(preim 𝒃)) ≡⟨ ap (𝑩 ⟦ q ⟧) (ζ 𝒃) ⟩
                 (𝑩 ⟦ q ⟧) 𝒃             ∎
@@ -186,7 +186,7 @@ Finally, we prove the analogous preservation lemmas for the closure operator `V`
   γ : (𝑩 ⟦ p ⟧) ≡ (𝑩 ⟦ q ⟧)
   γ = (fe 𝓾𝔁 𝓤) λ 𝒃 → (𝑩 ⟦ p ⟧) 𝒃      ≡⟨ (ap (𝑩 ⟦ p ⟧) (ζ 𝒃))⁻¹ ⟩
                 (𝑩 ⟦ p ⟧)(ϕ ∘(preim 𝒃)) ≡⟨(comm-hom-term (fe 𝓥 𝓤) 𝑩(ϕ , ϕh) p(preim 𝒃))⁻¹ ⟩
-                ϕ ((𝑨 ⟦ p ⟧)(preim 𝒃))  ≡⟨ ap ϕ (extfun IH (preim 𝒃)) ⟩
+                ϕ ((𝑨 ⟦ p ⟧)(preim 𝒃))  ≡⟨ ap ϕ (happly IH (preim 𝒃)) ⟩
                 ϕ ((𝑨 ⟦ q ⟧)(preim 𝒃))  ≡⟨ comm-hom-term (fe 𝓥 𝓤) 𝑩 (ϕ , ϕh) q (preim 𝒃) ⟩
                 (𝑩 ⟦ q ⟧)(ϕ ∘(preim 𝒃)) ≡⟨ ap (𝑩 ⟦ q ⟧) (ζ 𝒃) ⟩
                 (𝑩 ⟦ q ⟧) 𝒃             ∎
@@ -248,7 +248,7 @@ Finally, we prove the analogous preservation lemmas for the closure operator `V`
    γ : 𝑩 ⟦ p ⟧ ≡ 𝑩 ⟦ q ⟧
    γ = (fe (𝓧 ⊔ 𝓕⁺) 𝓕⁺) λ 𝒃 → (𝑩 ⟦ p ⟧) 𝒃  ≡⟨ (ap (𝑩 ⟦ p ⟧) (ζ 𝒃))⁻¹  ⟩
                  (𝑩 ⟦ p ⟧) (ϕ ∘ (preim 𝒃)) ≡⟨(comm-hom-term (fe 𝓥 𝓕⁺) 𝑩 (ϕ , ϕh) p (preim 𝒃))⁻¹ ⟩
-                 ϕ((𝑨 ⟦ p ⟧)(preim 𝒃))     ≡⟨ ap ϕ (extfun IH (preim 𝒃))⟩
+                 ϕ((𝑨 ⟦ p ⟧)(preim 𝒃))     ≡⟨ ap ϕ (happly IH (preim 𝒃))⟩
                  ϕ((𝑨 ⟦ q ⟧)(preim 𝒃))     ≡⟨ comm-hom-term (fe 𝓥 𝓕⁺) 𝑩 (ϕ , ϕh) q (preim 𝒃)⟩
                  (𝑩 ⟦ q ⟧)(ϕ ∘ (preim 𝒃))  ≡⟨ ap (𝑩 ⟦ q ⟧) (ζ 𝒃)⟩
                  (𝑩 ⟦ q ⟧) 𝒃               ∎

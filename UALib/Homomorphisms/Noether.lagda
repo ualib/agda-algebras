@@ -109,11 +109,11 @@ Below we will prove that the homomorphism `φ`, whose existence we just proved, 
    a : ∣ 𝑨 ∣
    a = EpicInv ∣ h ∣ hE b
 
-   bfa : b ≡ fmap ⟪ a ⟫
+   bfa : b ≡ fmap (a ≀ ker ∣ h ∣)
    bfa = (cong-app (EpicInvIsRightInv {fe = fev} ∣ h ∣ hE) b)⁻¹
 
    γ : Image fmap ∋ b
-   γ = Image_∋_.eq b ⟪ a ⟫ bfa
+   γ = Image_∋_.eq b (a ≀ ker ∣ h ∣) bfa
 
 \end{code}
 

@@ -109,13 +109,11 @@ Next we present types that are useful for asserting and proving facts about the 
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[1]\AgdaFunction{cont-compatible-fun}\AgdaSpace{}%
+\>[1]\AgdaFunction{cont-compatible-op}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{((}\AgdaBound{J}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaFunction{Op}\AgdaSpace{}%
+\AgdaBound{J}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{ContRel}\AgdaSpace{}%
 \AgdaBound{I}\AgdaSpace{}%
@@ -130,10 +128,10 @@ Next we present types that are useful for asserting and proving facts about the 
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 %
-\>[1]\AgdaFunction{cont-compatible-fun}\AgdaSpace{}%
+\>[1]\AgdaFunction{cont-compatible-op}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaBound{R}%
-\>[26]\AgdaSymbol{=}\AgdaSpace{}%
+\>[25]\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{Π}\AgdaSpace{}%
 \AgdaBound{𝒶}\AgdaSpace{}%
 \AgdaFunction{꞉}\AgdaSpace{}%
@@ -159,9 +157,9 @@ Next we present types that are useful for asserting and proving facts about the 
 % In the definition of \af{cont-compatible-fun}, we let Agda infer the type \ab{I}
 % \as → (\ab J \as → \ab A) of \ab{𝒶}.
 To readers who find the syntax of the last two definitions nauseating, we recommend focusing on the semantics. First, internalize the fact that \ab 𝒶~\as :~\ab I~\as →~\ab J~\as →~\ab A denotes an \ab{I}-tuple of \ab{J}-tuples of inhabitants of \ab{A}. Next, recall that a continuous relation \ab{R} represents a certain collection of \ab{I}-tuples. Specifically, if \ab x~\as :~\ab I~\as →~\ab A is an \ab{I}-tuple, then \ab{R}~\ab x denotes the assertion that ``\ab{x} belongs to \ab{R}'' or ``\ab{x} satisfies \ab{R}.''  For each continuous relation \ab{R}, the type \af{eval-cont-rel}~\ab R represents a certain collection of \ab{I}-tuples of \ab{J}-tuples, namely, the tuples \ab{𝒶}~\as :~\ab I~\as →~\ab J~\as →~\ab A for which \af{eval-cont-rel}~\ab R~\ab 𝒶 holds. For simplicity, pretend that \ab{J} is a finite set, say, \{1, 2, ...,~\ab J\}, so that we can write down a couple of the \ab{J}-tuples as columns. For example, here are the \ab i-th and \ab k-th columns (for some \ab i~\ab k~\as :~\ab I).
-% ~
-% \vskip-10mm
-% ~
+~
+\vskip-6mm
+~
 \begin{center}
 \begin{tabular}{rll}
 \ab 𝒶 \ab i 1 & \ab 𝒶 \ab k 1 & \\
@@ -175,7 +173,7 @@ To readers who find the syntax of the last two definitions nauseating, we recomm
 % \vskip-5mm
 % ~
 Now \af{eval-cont-rel}~\ab R~\ab 𝒶 is defined by \as{∀}~\ab j~\as →~\ab R~(\as λ~\ab i~\as →~(\ab 𝒶~\ab i)~\ab j) which represents the assertion that each row of the \ab{I} columns shown above %(which evidently is an \ab{I}-tuple)
- belongs to the original relation \ab{R}. Finally, \af{cont-compatible-fun} takes a \ab{J}-ary operation on \ab{A}, say, \ab 𝑓~\as :~(\ab J~\as →~\ab A)~\as →~\ab A, and an \ab I-tuple \ab{𝒶}~\ab i~\as :~\ab J~\as →~\ab A of \ab{J}-tuples, and determines whether the \ab I-tuple \as λ~\ab i~\as →~\ab 𝑓~(\ab 𝒶~\ab i) belongs to \ab R.
+belongs to the original relation \ab{R}. Finally, \af{cont-compatible-op} takes a \ab{J}-ary operation on \ab{A}, say, \ab 𝑓~\as :~\AgdaFunction{Op}~\AgdaBound{J}~\AgdaBound{A}, and an \ab I-tuple \ab{𝒶}~\ab i~\as :~\ab J~\as →~\ab A of \ab{J}-tuples, and determines whether the \ab I-tuple \as λ~\ab i~\as →~\ab 𝑓~(\ab 𝒶~\ab i) belongs to \ab R.
 % Finally, digest all the types involved in these definitions and note how nicely they align (as they must if type-checking is to succeed!). For example, \ab 𝒶~\as :~\ab I~\as →~\ab J~\as →~\ab A is precisely the type on which the relation \af{eval-cont-rel}~\ab R is defined.
 
 \subsubsection{Dependent relations}\label{dependent-relations}
@@ -189,12 +187,14 @@ Heuristically, think of the inhabitants of the following type as relations from 
 \AgdaSymbol{(}\AgdaBound{I}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaGeneralizable{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)(}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{I}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{I}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaGeneralizable{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)(}\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPostulate{Universe}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -208,11 +208,11 @@ Heuristically, think of the inhabitants of the following type as relations from 
 \\
 \>[0]\AgdaFunction{DepRel}\AgdaSpace{}%
 \AgdaBound{I}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{𝒜}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{Π}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{𝒜}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\<%
@@ -222,26 +222,27 @@ We call \af{DepRel} the type of \defn{dependent relations}.
 
 % \subsubsection{Compatibility with dependent relations}\label{compatibility-with-dependent-relations}
 
-Above we saw lifts of continuous relations and what it means for such relations to be compatible with functions. We conclude this module by defining the (only slightly more complicated) lift of dependent relations, and the type that represents compatibility of a tuple of operations with a dependent relation.
+Above we saw lifts of continuous relations and what it means for such relations to be compatible with functions. We conclude this module by defining the (only slightly more complicated) lift of dependent relations, and the type that represents compatibility of a tuple of operations with a dependent relation. Here we assume \ab I~\ab J~\as :~\AgdaGeneralizable{𝓥}\AgdaOperator{\AgdaFunction{̇}}
+and \ab 𝒜~\as :~\ab I~\as →~\AgdaGeneralizable{𝓤}\AgdaOperator{\AgdaFunction{̇}}.
 \ccpad
 \begin{code}%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{I}\AgdaSpace{}%
-\AgdaBound{J}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaGeneralizable{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝒜}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{I}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaGeneralizable{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
+% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
+% \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{I}\AgdaSpace{}%
+% \AgdaBound{J}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaGeneralizable{𝓥}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{𝒜}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaBound{I}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaGeneralizable{𝓤}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaKeyword{where}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
 \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{eval-dep-rel}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -253,10 +254,10 @@ Above we saw lifts of continuous relations and what it means for such relations 
 \AgdaSymbol{(∀}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{J}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{J}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝒜}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSymbol{))}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝓥}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
@@ -269,9 +270,7 @@ Above we saw lifts of continuous relations and what it means for such relations 
 \AgdaBound{𝒶}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{j}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{J}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{j}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{R}\AgdaSpace{}%
 \AgdaSymbol{(λ}\AgdaSpace{}%
@@ -284,18 +283,15 @@ Above we saw lifts of continuous relations and what it means for such relations 
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[1]\AgdaFunction{dep-compatible-fun}\AgdaSpace{}%
+\>[1]\AgdaFunction{dep-compatible-op}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(∀}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{J}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝒜}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝒜}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaFunction{Op}\AgdaSpace{}%
+\AgdaBound{J}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝒜}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSymbol{))}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{DepRel}\AgdaSpace{}%
 \AgdaBound{I}\AgdaSpace{}%
@@ -310,10 +306,10 @@ Above we saw lifts of continuous relations and what it means for such relations 
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 %
-\>[1]\AgdaFunction{dep-compatible-fun}\AgdaSpace{}%
+\>[1]\AgdaFunction{dep-compatible-op}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaBound{R}%
-\>[25]\AgdaSymbol{=}\AgdaSpace{}%
+\>[24]\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{∀}\AgdaSpace{}%
 \AgdaBound{𝒶}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -328,12 +324,73 @@ Above we saw lifts of continuous relations and what it means for such relations 
 \AgdaSymbol{(}\AgdaBound{𝑓}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSymbol{)(}\AgdaBound{𝒶}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSymbol{)}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% %
+% \>[1]\AgdaComment{-- equivalent definition using Π notation}\<%
+% \\
+% %
+% \>[1]\AgdaFunction{dep-compatible'-op}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaFunction{Π}\AgdaSpace{}%
+% \AgdaBound{i}\AgdaSpace{}%
+% \AgdaFunction{꞉}\AgdaSpace{}%
+% \AgdaBound{I}\AgdaSpace{}%
+% \AgdaFunction{,}\AgdaSpace{}%
+% \AgdaFunction{Op}\AgdaSpace{}%
+% \AgdaBound{J}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaBound{𝒜}\AgdaSpace{}%
+% \AgdaBound{i}\AgdaSymbol{))}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaFunction{DepRel}\AgdaSpace{}%
+% \AgdaBound{I}\AgdaSpace{}%
+% \AgdaBound{𝒜}\AgdaSpace{}%
+% \AgdaGeneralizable{𝓦}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaBound{𝓥}\AgdaSpace{}%
+% \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+% \AgdaGeneralizable{𝓦}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\<%
+% \\
+% %
+% \>[1]\AgdaFunction{dep-compatible'-op}\AgdaSpace{}%
+% \AgdaBound{𝑓}\AgdaSpace{}%
+% \AgdaBound{R}%
+% \>[25]\AgdaSymbol{=}%
+% \>[28]\AgdaFunction{Π}\AgdaSpace{}%
+% \AgdaBound{𝒶}\AgdaSpace{}%
+% \AgdaFunction{꞉}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaFunction{Π}\AgdaSpace{}%
+% \AgdaBound{i}\AgdaSpace{}%
+% \AgdaFunction{꞉}\AgdaSpace{}%
+% \AgdaBound{I}\AgdaSpace{}%
+% \AgdaFunction{,}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaBound{J}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaBound{𝒜}\AgdaSpace{}%
+% \AgdaBound{i}\AgdaSymbol{))}\AgdaSpace{}%
+% \AgdaFunction{,}\AgdaSpace{}%
+% \AgdaSymbol{((}\AgdaFunction{eval-dep-rel}\AgdaSpace{}%
+% \AgdaBound{R}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaBound{𝒶}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaBound{R}\AgdaSpace{}%
+% \AgdaSymbol{λ}\AgdaSpace{}%
+% \AgdaBound{i}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaBound{𝑓}\AgdaSpace{}%
+% \AgdaBound{i}\AgdaSymbol{)(}\AgdaBound{𝒶}\AgdaSpace{}%
+% \AgdaBound{i}\AgdaSymbol{))}\<%
 \end{code}
 \ccpad
-In the definition of \af{dep-compatible-fun}, we let Agda infer the type of \ab{𝒶}, which is \af Π~\ab i~\af ꞉~\ab I~\af ,~(\ab J~\as →~\ab 𝒜~\ab i) in this case; equivalently, \AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{J}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝒜}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSymbol{)}.
+where we let Agda infer that the type of \ab{𝒶} is \af Π~\ab i~\af ꞉~\ab I~\af ,~(\ab J~\as →~\ab 𝒜~\ab i).
+% ; equivalently, \AgdaSymbol{∀}\AgdaSpace{}%
+% \AgdaBound{i}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaBound{J}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaBound{𝒜}\AgdaSpace{}%
+% \AgdaBound{i}\AgdaSymbol{)}.

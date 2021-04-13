@@ -60,53 +60,54 @@ As explained above, a natural notion of function equality is defined as follows:
 \AgdaBound{x}\<%
 \end{code}
 \ccpad
-\defn{Function extensionality} is the principle that pointwise equal functions are \defn{definitionally equal}; that is, \(\forall\ f\ g\ (f ∼ g → f ≡ g)\). In type theory we represent this principle by \af{funext} (for nondependent functions) and \af{dfunext} (for dependent functions), which are defined as follows.
+\defn{Function extensionality} is the principle that pointwise equal functions are \defn{definitionally equal}; that is, \(\forall\ f\ g\ (f ∼ g → f ≡ g)\). In type theory this principle is represented by the types \af{funext} (for nondependent functions) and \af{dfunext} (for dependent functions)~(\cite[\S2.9]{HoTT}).
+For example, the latter is defined as follows.
 \ccpad
 \begin{code}%
-\>[1]\AgdaFunction{funext}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓦}%
-\>[17]\AgdaSymbol{→}\AgdaSpace{}%
-\as (\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}\as )\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-%
-\>[1]\AgdaFunction{funext}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{B}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{g}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{B}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∼}}\AgdaSpace{}%
-\AgdaBound{g}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{g}\<%
-\end{code}
-\scpad
-\begin{code}%
+% \>[1]\AgdaFunction{funext}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaSymbol{∀}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaBound{𝓦}%
+% \>[17]\AgdaSymbol{→}\AgdaSpace{}%
+% \as (\AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+% \AgdaBound{𝓦}\as )\AgdaSpace{}%
+% \AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\<%
+% \\
+% %
+% \>[1]\AgdaFunction{funext}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaBound{𝓦}\AgdaSpace{}%
+% \AgdaSymbol{=}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+% \AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{B}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaBound{𝓦}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+% \AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{f}\AgdaSpace{}%
+% \AgdaBound{g}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaBound{A}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaBound{B}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaBound{f}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{∼}}\AgdaSpace{}%
+% \AgdaBound{g}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaBound{f}\AgdaSpace{}%
+% \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+% \AgdaBound{g}\<%
+% \end{code}
+% \scpad
+% \begin{code}%
 \>[1]\AgdaFunction{dfunext}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{∀}\AgdaSpace{}%
@@ -157,92 +158,86 @@ In informal settings, this so-called \emph{point-wise equality of functions} is 
 asserts that two functions are ``equal.''\footnote{In fact, if one assumes the \emph{univalence axiom} of Homotopy Type Theory~\cite{HoTT}, then point-wise equality of functions is equivalent to definitional equality of functions. See the section \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#funextfromua}{``Function extensionality from univalence''} of~\cite{MHE}.} However, it is important to keep in mind the following fact: \textit{function extensionality is known to be neither provable nor disprovable in Martin-Löf type theory. It is an independent statement}.~\cite{MHE}
 
 
+Previous versions of the \ualib made heavy use of a \defn{global function extensionality principle} which asserts that function extensionality holds at all universe levels.
+% Agda is capable of expressing types representing global principles as the language has a special universe level for such types.  
+% Escardó denote this universe by \apr{𝓤ω} (which is an alias for Agda's \apr{Setω} universe).\footnote{More details about the \ad{𝓤ω} type are available at
+% \href{https://agda.readthedocs.io/en/latest/language/universe-levels.html\#expressions-of-kind-set}{agda.readthedocs.io}.}
+% %
+% The types \af{global-funext} and \af{global-dfunext} are defined in \typtop as follows.
+% \ccpad
+% \begin{code}%
+% \>[1]\AgdaFunction{global-funext}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaPrimitive{𝓤ω}\<%
+% \\
+% %
+% \>[1]\AgdaFunction{global-funext}\AgdaSpace{}%
+% \AgdaSymbol{=}\AgdaSpace{}%
+% \AgdaSymbol{∀}%
+% \>[20]\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaBound{𝓥}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaFunction{funext}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaBound{𝓥}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% %
+% \>[1]\AgdaFunction{global-dfunext}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaPrimitive{𝓤ω}\<%
+% \\
+% %
+% \>[1]\AgdaFunction{global-dfunext}\AgdaSpace{}%
+% \AgdaSymbol{=}\AgdaSpace{}%
+% \AgdaSymbol{∀}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaBound{𝓥}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaFunction{dfunext}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaBound{𝓥}\<%
+% \end{code}
+% \ccpad
+However, we decided to remove all instances of global function extensionality from the latest version of the \ualib and limit ourselves to local applications of the principle. This has the advantage of making transparent precisely how and where the library depends on function extensionality. The price we pay for this precision is a library that is littered with extensionality postulates.\footnote{Eventually we will probably remove these postulates in favor of an alternative approach to extensionality; e.g., \emph{univalence} and/or Cubical Agda.}
 
-
-
-
-\subsubsection{Global function extensionality}\label{sec:glob-funct-extens}
-Previous versions of the \ualib made heavy use of a \defn{global function extensionality principle}. This asserts that function extensionality holds at all universe levels.  Agda is capable of expressing types representing global principles as the language has a special universe level for such types.  Escardó denote this universe by \apr{𝓤ω} (which is an alias for Agda's \apr{Setω} universe).\footnote{More details about the \ad{𝓤ω} type are available at
-\href{https://agda.readthedocs.io/en/latest/language/universe-levels.html\#expressions-of-kind-set}{agda.readthedocs.io}.}
-
-The types \af{global-funext} and \af{global-dfunext} are defined in \typtop as follows.
+The next type defines a converse of function extensionality for dependent function types (cf. \af{cong-app} in \ualibhtml{Overture.Equality} and~\cite[(2.9.2)]{HoTT}).
 \ccpad
 \begin{code}%
-\>[1]\AgdaFunction{global-funext}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPrimitive{𝓤ω}\<%
-\\
-%
-\>[1]\AgdaFunction{global-funext}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{∀}%
-\>[20]\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{funext}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓥}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{global-dfunext}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPrimitive{𝓤ω}\<%
-\\
-%
-\>[1]\AgdaFunction{global-dfunext}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{dfunext}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓥}\<%
-\end{code}
-\ccpad
-We have decided to remove from the latest version of the \ualib all instances of global function extensionality and limit ourselves to local applications of the principle. This has the advantage of making transparent precisely how and where the library depends on function extensionality.  (It also prepares the way for moving to a univalence-based version of the library that we plan to undertake very soon.)  The price we pay for this precision is a library that is littered with many function extensionality postulates. We will try to clean this up in the near future (but ultimately we will probably remove all of these postulates in favor of \emph{univalence}).
-
-
-
-
-The next two types define the converse of function extensionality.
-\ccpad
-\begin{code}%
-\>[1]\AgdaFunction{extfun}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{B}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{f}\AgdaSpace{}%
-\AgdaBound{g}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{B}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{g}%
-\>[51]\AgdaSymbol{→}%
-\>[54]\AgdaBound{f}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∼}}\AgdaSpace{}%
-\AgdaBound{g}\<%
-\\
-%
-\>[1]\AgdaFunction{extfun}\AgdaSpace{}%
-\AgdaInductiveConstructor{refl}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{refl}\<%
-\end{code}
-\scpad
-\begin{code}%
-\>[1]\AgdaFunction{extdfun}\AgdaSpace{}%
+% \>[1]\AgdaFunction{extfun}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{B}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaBound{𝓦}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{f}\AgdaSpace{}%
+% \AgdaBound{g}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaBound{A}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaBound{B}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaBound{f}\AgdaSpace{}%
+% \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+% \AgdaBound{g}%
+% \>[51]\AgdaSymbol{→}%
+% \>[54]\AgdaBound{f}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{∼}}\AgdaSpace{}%
+% \AgdaBound{g}\<%
+% \\
+% %
+% \>[1]\AgdaFunction{extfun}\AgdaSpace{}%
+% \AgdaInductiveConstructor{refl}\AgdaSpace{}%
+% \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
+% \AgdaSymbol{=}\AgdaSpace{}%
+% \AgdaInductiveConstructor{refl}\<%
+% \end{code}
+% \scpad
+% \begin{code}%
+\>[1]\AgdaFunction{happly}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -269,7 +264,7 @@ The next two types define the converse of function extensionality.
 \AgdaBound{g}\<%
 \\
 %
-\>[1]\AgdaFunction{extdfun}\AgdaSpace{}%
+\>[1]\AgdaFunction{happly}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaInductiveConstructor{refl}\AgdaSpace{}%
@@ -277,14 +272,11 @@ The next two types define the converse of function extensionality.
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{refl}\<%
 \end{code}
-\scpad
+\ccpad
+Though it may seem obvious to some readers, we wish to emphasize the important conceptual distinction between two different forms of type definitions by comparing the definitions of \af{dfunext} and \af{happly}. In the definition of \af{dfunext}, the codomain is a parameterized type, namely, \ab 𝓤\af ⁺~\apr ⊔~\ab 𝓥\af ⁺\af ̇, and the right-hand side of the defining equation of \af{dfunext} is an assertion (which may or may not hold). In the definition of \af{happly}, the codomain is an assertion, namely, \ab f \af ∼ \ab g, and the right-hand side of the defining equation is a proof of this assertion. As such, \af{happly} is a \defn{proof object}; it \emph{proves} (or \emph{inhabits the type that represents}) the proposition asserting that definitionally equivalent functions are pointwise equal. In contrast, \af{dfunext} is a type, and we may or may not wish to postulate an inhabitant of this type. That is, we could postulate that function extensionality holds by assuming we have a witness, say, \ab{fe}~\as :~\af{dfunext}~\ab 𝓤~\ab 𝓥, but as noted above the existence of such a witness cannot be proved in \mltt.
 
-Though it may seem obvious to some readers, we wish to emphasize the important conceptual distinction between two flavors of type definition.  We do so by comparing the definitions of \af{funext} and \af{extfun}.
-
-In the definition of \af{funext}, the codomain is a parameterized type, namely, \ab 𝓤\af ⁺~\apr ⊔~\ab 𝓥\af ⁺\af ̇, and the right-hand side of the defining equation of \af{funext} is an assertion (which may or may not hold). In the definition of \af{extfun}, the codomain is an assertion, namely, \ab f \af ∼ \ab g, and the right-hand side of the defining equation is a proof of this assertion. As such, \af{extfun} is a \defn{proof object}; it \emph{proves} (or \emph{inhabits the type that represents}) the proposition asserting that definitionally equivalent functions are pointwise equal. In contrast, \af{funext} is a type, and we may or may not wish to postulate an inhabitant of this type. That is, we could postulate that function extensionality holds by assuming we have a witness, say, \ab{fe}~\as :~\af{funext}~\ab 𝓤~\ab 𝓥, but as noted above the existence of such a witness cannot be proved in \mltt.
-
-\subsubsection{An alternative extensionality type}\label{alternative-extensionality-type}
-Finally, a useful alternative for expressing dependent function extensionality, which is essentially equivalent to \af{dfunext}, is to assert that \af{extdfun} is actually an \emph{equivalence} in a sense that we now describe. This requires a few definitions from the \am{MGS-Equivalences} module of \typtop. First, a type is a \defn{singleton} if it has exactly one inhabitant and a \defn{subsingleton} if it has at most one inhabitant.
+% \subsubsection{An alternative extensionality type}\label{alternative-extensionality-type}
+Finally, a useful alternative for expressing dependent function extensionality, which is essentially equivalent to \af{dfunext}, is to assert that \af{happly} is actually an \emph{equivalence} in a sense that we now describe. This requires a few definitions from the \am{MGS-Equivalences} module of \typtop. First, a type is a \defn{singleton} if it has exactly one inhabitant and a \defn{subsingleton} if it has at most one inhabitant.
  % These properties are represented in the \typetopology library by the following type.
 \ccpad
 \begin{code}%
@@ -479,7 +471,7 @@ Finally we are ready to fulfill the promise of a type that provides an alternati
 \AgdaBound{B}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{is-equiv}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{extdfun}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{happly}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
 \AgdaBound{g}\AgdaSymbol{)}\<%
 \end{code}

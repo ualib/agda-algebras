@@ -65,7 +65,7 @@ lower∼lift = refl
 
 \end{code}
 
-The proofs are trivial. Nonetheless, in due time we'll come across a few holes these lemmas can fill.
+The proofs are trivial. Nonetheless, we'll come across some holes these lemmas can fill.
 
 ---------------
 

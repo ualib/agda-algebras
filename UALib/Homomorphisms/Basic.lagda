@@ -233,7 +233,7 @@ module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} where
  πepi θ = cπ , cπ-is-hom , cπ-is-epic where
 
   cπ : ∣ 𝑨 ∣ → ∣ 𝑨 ╱ θ ∣
-  cπ a = ⟪ a ⟫{⟨ θ ⟩}
+  cπ a = a ≀ ⟨ θ ⟩
 
   cπ-is-hom : is-homomorphism 𝑨 (𝑨 ╱ θ) cπ
   cπ-is-hom _ _ = refl
@@ -269,7 +269,7 @@ The kernel of the canonical projection of `𝑨` onto `𝑨 / θ` is equal to `�
  ker-in-con : {fe : dfunext 𝓥 (𝓤 ⊔ (𝓦 ⁺))}(θ : Congruence{𝓦} 𝑨)
   →           ∀ {x}{y} → ⟨ kercon fe (𝑨 ╱ θ) (πhom θ ) ⟩ x y →  ⟨ θ ⟩ x y
 
- ker-in-con θ hyp = ╱-≡ θ hyp
+ ker-in-con θ hyp = /-≡ θ hyp
 
 \end{code}
 

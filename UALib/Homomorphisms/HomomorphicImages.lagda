@@ -100,7 +100,7 @@ module _ {𝓧 𝓨 : Universe} where
   β = ap (λ - → lift (∣ h ∣ ( - a))) (lower∼lift {𝓦} )
 
   η : y ≡ ∣ lh ∣ (lift a)
-  η = y               ≡⟨ (extfun lift∼lower) y ⟩
+  η = y               ≡⟨ (happly lift∼lower) y ⟩
       lift (lower y)  ≡⟨ ap lift (InvIsInv ∣ h ∣ ζ)⁻¹ ⟩
       lift (∣ h ∣ a)  ≡⟨ β ⟩
       ∣ lh ∣ (lift a) ∎

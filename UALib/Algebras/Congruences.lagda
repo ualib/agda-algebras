@@ -101,7 +101,7 @@ module _ {𝓤 𝓦 : Universe} where
 
  𝑨 ╱ θ = ( ∣ 𝑨 ∣ / ⟨ θ ⟩ ) ,                               -- the domain of the quotient algebra
 
-         λ 𝑓 𝒂 → ⟪ (𝑓 ̂ 𝑨) ( λ i →  fst ∥ 𝒂 i ∥ ) ⟫  -- the basic operations of the quotient algebra
+         λ 𝑓 𝒂 → (𝑓 ̂ 𝑨)(λ i →  fst ∥ 𝒂 i ∥) ≀ ⟨ θ ⟩  -- the basic operations of the quotient algebra
 
 \end{code}
 
@@ -131,8 +131,8 @@ Finally, the following elimination rule is sometimes useful.
 
 module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} where
 
- ╱-≡ : (θ : Congruence{𝓦} 𝑨){u v : ∣ 𝑨 ∣} → ⟪ u ⟫{⟨ θ ⟩} ≡ ⟪ v ⟫ → ⟨ θ ⟩ u v
- ╱-≡ θ refl = IsEquivalence.rfl (is-equivalence θ)
+ /-≡ : (θ : Congruence{𝓦} 𝑨){u v : ∣ 𝑨 ∣} → u ≀ ⟨ θ ⟩ ≡ v ≀ ⟨ θ ⟩ → ⟨ θ ⟩ u v
+ /-≡ θ refl = IsEquivalence.rfl (is-equivalence θ)
 
 \end{code}
 

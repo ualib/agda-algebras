@@ -41,8 +41,6 @@ We refer to such relations as *dependent continuous relations* (or *dependent re
 
 We now define the type `ContRel` which represents predicates of arbitrary arity over a single type `A`. We call this the type of *continuous relations*.
 
-**Notation**. For consistency and readability, throughout the [UALib][] we reserve two universe variables for special purposes.  The first of these is 𝓞 which shall be reserved for types that represent *operation symbols* (see [Algebras.Signatures][]). The second is 𝓥 which we reserve for types representing *arities* of relations or operations.
-
 \begin{code}
 
 ContRel : 𝓥 ̇ → 𝓤 ̇ → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
@@ -51,31 +49,11 @@ ContRel I A 𝓦 = (I → A) → 𝓦 ̇
 \end{code}
 
 
-#### <a id="operation-type">Operation type</a>
-
-In the next subsection, we will define types that are useful for asserting and proving facts about *compatibility* of *operations* with continuous relations, but first we need a general type with which to represent operations.  Here is the definition, which we justify below.
-
-\begin{code}
-
---The type of operations
-Op : 𝓥 ̇ → 𝓤 ̇ → 𝓤 ⊔ 𝓥 ̇
-Op I A = (I → A) → A
-
-\end{code}
-
-The type `Op` encodes the arity of an operation as an arbitrary type `I : 𝓥 ̇`, which gives us a very general way to represent an operation as a function type with domain `I → A` (the type of "tuples") and codomain `A`. For example, the `I`-*ary projection operations* on `A` are represented as inhabitants of the type `Op I A` as follows.
-
-\begin{code}
-
-π : {I : 𝓥 ̇ } {A : 𝓤 ̇ } → I → Op I A
-π i x = x i
-
-\end{code}
 
 
 #### <a id="compatibility-with-continuous-relations">Compatibility with continuous relations</a>
 
-The first is an *evaluation* function which "lifts" an `I`-ary relation to an `(I → J)`-ary relation. The lifted relation will relate an `I`-tuple of `J`-tuples when the "`I`-slices" (or "rows") of the `J`-tuples belong to the original relation.
+We now define some functions that make it easy to assert that a given operation is compatible with a given relation.  The first is an *evaluation* function which "lifts" an `I`-ary relation to an `(I → J)`-ary relation. The lifted relation will relate an `I`-tuple of `J`-tuples when the "`I`-slices" (or "rows") of the `J`-tuples belong to the original relation.
 
 \begin{code}
 

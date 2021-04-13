@@ -198,7 +198,7 @@ As mentioned above, the initial version of the [Agda UALib][] used the free alge
 \begin{code}
 
  𝔽 : Algebra 𝓕⁺ 𝑆
- 𝔽 = ((𝑻 X) [ ℭ ]/ker homℭ){fe 𝓥 𝓕}
+ 𝔽 = ((𝑻 X) [ ℭ ]/ker homℭ){fe 𝓥 𝓕} -- LEFT OFF HERE
 
  epi𝔽 : epi (𝑻 X) 𝔽
  epi𝔽 = πker ℭ homℭ {fe 𝓥 𝓕}
@@ -215,7 +215,7 @@ We will need the following facts relating `homℭ`, `hom𝔽`, `and ψ`.
 
 \begin{code}
 
- ψlemma0 : ∀ p q → (∣ homℭ ∣ p ≡ ∣ homℭ ∣ q) → (p , q) ∈ ψ 𝒦
+ ψlemma0 : ∀ p q →  ∣ homℭ ∣ p ≡ ∣ homℭ ∣ q  → (p , q) ∈ ψ 𝒦
  ψlemma0 p q phomℭq 𝑨 sA h = cong-app phomℭq (𝑨 , sA , h)
 
  ψlemma0-ap : {𝑨 : Algebra 𝓤 𝑆}{h : X → ∣ 𝑨 ∣} → 𝑨 ∈ S{𝓤}{𝓤} 𝒦
@@ -250,8 +250,10 @@ Next we define the lift of the natural embedding from `X` into 𝔽. We denote t
 
 \begin{code}
 
+ open Congruence
+
  X↪𝔽 : X → ∣ 𝔽 ∣
- X↪𝔽 x = ⟪ ℊ x ⟫
+ X↪𝔽 x = ℊ x ≀ ⟨ kercon (fe 𝓥 𝓕) ℭ homℭ ⟩
 
  𝔑 : hom (𝑻 X) 𝔽
  𝔑 = lift-hom 𝔽 X↪𝔽
@@ -399,7 +401,7 @@ We do *not* assert that for an arbitrary type `X` such surjective maps exist.  I
       Apq = pqlem2 p q x
       γ : ∣ φ ∣ p ≡ ∣ φ ∣ q
       γ = ∣ φ ∣ p          ≡⟨ (free-lift-interp (fe 𝓥 𝓕⁺) 𝑨 η p)⁻¹ ⟩
-          (𝑨 ⟦ p ⟧) η      ≡⟨ extfun (pqlem2 p q x) η  ⟩
+          (𝑨 ⟦ p ⟧) η      ≡⟨ happly (pqlem2 p q x) η  ⟩
           (𝑨 ⟦ q ⟧) η      ≡⟨ free-lift-interp (fe 𝓥 𝓕⁺) 𝑨 η q ⟩
           ∣ φ ∣ q          ∎
 

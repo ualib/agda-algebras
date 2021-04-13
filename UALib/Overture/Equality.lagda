@@ -36,11 +36,11 @@ To be sure we understand what this means, let `:=` denote the relation with resp
 
 ```agda
     {A : 𝓤 ̇} {B : A → 𝓦 ̇} {x y : A}   x ≡ y
-    ------------------------------------------
+    ------------------------------------------ (subst)
                 B x ≡ B y
 ```
 
-The datatype we use to represent definitional equality is imported from the Identity-Type module of the [Type Topology][] library, but apart from superficial syntactic differences, it is equivalent to the identity type used in all other Agda libraries we know of.  We repeat the definition here for easy reference.
+The datatype we use to represent definitional equality is imported from the Identity-Type module of the [Type Topology][] library, but apart from superficial syntactic differences, it is equivalent to the standard *Paulin-Mohring style identity type* found in most other Agda libraries.  We repeat the definition here for easy reference.
 
 \begin{code}
 
@@ -58,21 +58,13 @@ Of course `≡` is an equivalence relation and the formal proof of this fact is 
 
 \begin{code}
 
-≡-symmetric : {A : 𝓤 ̇}(x y : A) → x ≡ y → y ≡ x
-≡-symmetric _ _ refl = refl
-
 ≡-sym : {A : 𝓤 ̇}{x y : A} → x ≡ y → y ≡ x
 ≡-sym refl = refl
-
-≡-transitive : {A : 𝓤 ̇}(x y z : A) → x ≡ y → y ≡ z → x ≡ z
-≡-transitive _ _ _ refl refl = refl
 
 ≡-trans : {A : 𝓤 ̇}{x y z : A} → x ≡ y → y ≡ z → x ≡ z
 ≡-trans refl refl = refl
 
 \end{code}
-
-The only difference between `≡-symmetric` and `≡-sym` (respectively, `≡-transitive` and `≡-trans`) is that the latter has fewer explicit arguments, which is sometimes convenient.
 
 We prove that `≡` obeys the substitution rule (subst) in the next subsection (see the definition of `ap` below), but first we define some syntactic sugar that will make it easier to apply symmetry and transitivity of `≡` in proofs.<sup>[3](Overture.Equality.html#fn3)</sup>
 
