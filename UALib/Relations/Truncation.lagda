@@ -165,13 +165,13 @@ We need a (subsingleton) identity type for congruence classes over sets so that 
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{R : Rel A 𝓦} where
+module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇} where
  open IsEqv
 
- class-extensionality : prop-ext 𝓤 𝓦 → IsEqv R → {u v : A}
+ class-extensionality : prop-ext 𝓤 𝓦 → ((R , Req) : Eqv A){u v : A}
   →                     R u v  →  u ⁄ R ≡ v ⁄ R
 
- class-extensionality pe Req {u}{v} Ruv = ap fst PQ
+ class-extensionality pe (R , Req){u}{v} Ruv = ap fst PQ
   where
   P Q : Pred₁ A 𝓦
   P = (λ a → R u a) , (λ a → is-truncated Req u a)
@@ -187,17 +187,18 @@ module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{R : Rel A 𝓦} where
   PQ = (prop-ext' pe (α , β))
 
 
- to-subtype-≀ : (∀ C → is-subsingleton (IsBlock C {R}))
-  →              {C D : Pred A 𝓦}{c : IsBlock C {R}}{d : IsBlock D {R}}
-  →              C ≡ D  →  (C , c) ≡ (D , d)
+ to-subtype-≀ : {(R , Req) : Eqv A} → (∀ C → is-subsingleton (IsBlock C {R}))
+  →             {C D : Pred A 𝓦}{c : IsBlock C {R}}{d : IsBlock D {R}}
+  →             C ≡ D  →  (C , c) ≡ (D , d)
 
  to-subtype-≀ ssR {C}{D}{c}{d} CD = to-Σ-≡ (CD , ssR D (transport (λ B → IsBlock B) CD c) d)
 
 
- class-extensionality' : prop-ext 𝓤 𝓦 → (∀ C → is-subsingleton (IsBlock C {R}))
-  →                      IsEqv R → {u v : A} → R u v  →  u ≀ R ≡ v ≀ R
+ class-extensionality' : prop-ext 𝓤 𝓦 → {(R , Req) : Eqv A}
+  →                      (∀ C → is-subsingleton (IsBlock C {R}))
+  →                      {u v : A} → R u v  →  u ≀ R ≡ v ≀ R
 
- class-extensionality' pe ssR Reqv Ruv = to-subtype-≀ ssR (class-extensionality pe Reqv Ruv)
+ class-extensionality' pe {(R , Req)} ssR Ruv = to-subtype-≀ {R , Req} ssR (class-extensionality pe (R , Req) Ruv)
 
 \end{code}
 

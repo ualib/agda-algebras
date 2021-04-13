@@ -75,8 +75,7 @@ module first-hom-thm {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Alg
              (𝑓 ̂ 𝑩) (λ x → φ (𝒂 x))             ∎
 
   φmon : Monic φ
---  φmon (.(⟨ θ ⟩ u) , u , refl) (.(⟨ θ ⟩ v) , v , refl) φuv = class-extensionality' pe UIPb ξ φuv
-  φmon (_ , (u , refl)) (_ , (v , refl)) φuv = class-extensionality' pe UIPb ξ φuv
+  φmon (_ , (u , refl)) (_ , (v , refl)) φuv = class-extensionality' pe {⟨ θ ⟩ , ξ} UIPb  φuv
 
   φcom : ∣ h ∣ ≡ φ ∘ ∣ πker 𝑩 h {fe} ∣
   φcom = refl

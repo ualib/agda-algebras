@@ -64,41 +64,30 @@ In the [Relations.Truncation][] module we introduce a number of similar but more
 
 #### <a id="equivalence-classes">Equivalence relations</a>
 
-A binary relation is called a *preorder* if it is reflexive and transitive.
-
+A binary relation is called a *preorder* if it is reflexive and transitive. An *equivalence relation* is a symmetric preorder. We define the property of being an equivalence relation as the following record type.
 
 \begin{code}
 
 module _ {𝓤 𝓦 : Universe} where
- record IsPreorder {A : 𝓤 ̇}(_≈_ : Rel A 𝓦) : 𝓤 ⊔ 𝓦 ̇ where
-  field rfl : Refl _≈_; trans : Trans _≈_
+
+ record IsEquivalence {A : 𝓤 ̇}(R : Rel A 𝓦) : 𝓤 ⊔ 𝓦 ̇ where
+  field rfl : Refl R ; sym : Symm R ; trans : Trans R
 
 \end{code}
 
-We represent the type of preorders as the following `Σ` type.
+And we define the type of equivalence relations over a given type `A` as follows.
 
 \begin{code}
-
- Preorder : 𝓤 ̇ → 𝓤 ⊔ 𝓦 ⁺ ̇
- Preorder A = Σ R ꞉ Rel A 𝓦 , IsPreorder R
-
-\end{code}
-
-In this way, if we have `P : Preorder A`, then `∣ P ∣` will be the binary relation over `A` and `∥ P ∥` will be a proof of `Ispreorder ∣ P ∣`; that is, a proof that `∣ P ∣` is reflexive and transitive.
-
-An *equivalence relation* is a symmetric preorder, so we could define such relations in terms of `IsPreorder`, but it will make proofs less confusing if we define `IsEquivalence` directly, as follows.
-
-\begin{code}
-
- record IsEquivalence {A : 𝓤 ̇}(_≈_ : Rel A 𝓦) : 𝓤 ⊔ 𝓦 ̇ where
-  field rfl : Refl _≈_; sym : Symm _≈_; trans : Trans _≈_
 
  Equivalence : 𝓤 ̇ → 𝓤 ⊔ 𝓦 ⁺ ̇
  Equivalence A = Σ R ꞉ Rel A 𝓦 , IsEquivalence R
 
 \end{code}
 
-An easy first example of an equivalence relation is the kernel of any function.
+Thus, if we have `(R ,  p) : Equivalence A`, then `R` denotes a binary relation over `A` and `p` is of record type `IsEquivalence R` with fields containing the three proofs showing that `R` is an equivalence relation.
+
+
+An easy first example of an equivalence relation is the kernel of any function. We prove that such a kernel is an equivalence relation on the domain of the function as follows.
 
 \begin{code}
 
@@ -107,22 +96,15 @@ An easy first example of an equivalence relation is the kernel of any function.
 
 \end{code}
 
-#### Truncated preorders and equivalences
+#### Truncated equivalence relations
 
-Using the `is-subsingleton-valued` type defined earlier, we can define the type of preorders and equivalences that have "unique identity proofs" as follows.
+Using the `is-subsingleton-valued` type defined earlier, we define the type of equivalence relations that have "unique membership proofs," as follows.
 
 \begin{code}
 
- record IsPreord {A : 𝓤 ̇}(R : Rel A 𝓦) : 𝓤 ⊔ 𝓦 ̇ where
-  field is-preorder : IsPreorder R
+ record IsEqv {A : 𝓤 ̇}(R : Rel A 𝓦) : 𝓤 ⊔ 𝓦 ̇ where
+  field is-equivalence : IsEquivalence R
         is-truncated : is-subsingleton-valued R
-
- Preord : 𝓤 ̇ → 𝓤 ⊔ 𝓦 ⁺ ̇
- Preord A = Σ R ꞉ Rel A 𝓦 , IsPreord R
-
- record IsEqv {A : 𝓤 ̇}(_≈_ : Rel A 𝓦) : 𝓤 ⊔ 𝓦 ̇ where
-  field is-equivalence : IsEquivalence _≈_
-        is-truncated : is-subsingleton-valued _≈_
 
  Eqv : 𝓤 ̇ → 𝓤 ⊔ 𝓦 ⁺ ̇
  Eqv A = Σ R ꞉ Rel A 𝓦 , IsEqv R
@@ -230,3 +212,11 @@ module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{x y : A}{R : Rel A 𝓦} where
 {% include UALib.Links.md %}
 
 
+<!-- We represent the property of being a preorder using a record type as follows.
+module _ {𝓤 𝓦 : Universe} where
+ record IsPreorder {A : 𝓤 ̇}(R : Rel A 𝓦) : 𝓤 ⊔ 𝓦 ̇ where
+  field rfl : Refl R ; trans : Trans R
+We define the type preorders as follows.
+ Preorder : 𝓤 ̇ → 𝓤 ⊔ 𝓦 ⁺ ̇
+ Preorder A = Σ R ꞉ Rel A 𝓦 , IsPreorder R
+-->
