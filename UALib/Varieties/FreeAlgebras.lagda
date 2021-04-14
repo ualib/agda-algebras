@@ -253,7 +253,7 @@ Next we define the lift of the natural embedding from `X` into 𝔽. We denote t
  open Congruence
 
  X↪𝔽 : X → ∣ 𝔽 ∣
- X↪𝔽 x = ℊ x ≀ ⟨ kercon (fe 𝓥 𝓕) ℭ homℭ ⟩
+ X↪𝔽 x = ⟪ ℊ x ⟫ -- (the implicit relation here is  ⟨ kercon (fe 𝓥 𝓕) ℭ homℭ ⟩ )
 
  𝔑 : hom (𝑻 X) 𝔽
  𝔑 = lift-hom 𝔽 X↪𝔽

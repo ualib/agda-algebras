@@ -96,53 +96,36 @@ An easy first example of an equivalence relation is the kernel of any function. 
 
 \end{code}
 
-#### Truncated equivalence relations
-
-Using the `is-subsingleton-valued` type defined earlier, we define the type of equivalence relations that have "unique membership proofs," as follows.
-
-\begin{code}
-
- record IsEqv {A : 𝓤 ̇}(R : Rel A 𝓦) : 𝓤 ⊔ 𝓦 ̇ where
-  field is-equivalence : IsEquivalence R
-        is-truncated : is-subsingleton-valued R
-
- Eqv : 𝓤 ̇ → 𝓤 ⊔ 𝓦 ⁺ ̇
- Eqv A = Σ R ꞉ Rel A 𝓦 , IsEqv R
-
-\end{code}
-
-
-
 #### <a id="equivalence-classes">Equivalence classes (blocks)</a>
 
-If R is an equivalence relation on A, then for each `u : A`, there is an *equivalence class* (or *equivalence block*) containing `u`, which we denote and define by `u ⁄ R` := all `v : A` such that `R u v`.<sup>[1](Relations.Quotients.html#fn1)</sup>
+If R is an equivalence relation on A, then for each `u : A`, there is an *equivalence class* (or *equivalence block*) containing `u`, which we denote and define by `[ u ] {R}` := all `v : A` such that `R u v`.
 
 \begin{code}
 
- _⁄_ : {A : 𝓤 ̇} → A → Rel A 𝓦 → Pred A 𝓦
- u ⁄ R = R u
+ [_] : {A : 𝓤 ̇} → A → {R : Rel A 𝓦} → Pred A 𝓦
+ [ u ]{R} = R u
 
- infix 60 _⁄_
+ infix 60 [_]
 
 \end{code}
 
 
-Thus, `v ∈ u ⁄ R` if and only if `R u v`, as desired.  We often refer to `u ⁄ R` as the `R`-*block containing* `u`.
+Thus, `v ∈ [ u ]` if and only if `R u v`, as desired.  We often refer to `[ u ]` as the `R`-*block containing* `u`.
 
-A predicate `C` over `A` is an `R`-block if and only if `C ≡ u ⁄ R` for some `u : A`.  We represent this characterization of an `R`-block as follows.
+A predicate `C` over `A` is an `R`-block if and only if `C ≡ [ u ]` for some `u : A`.  We represent this characterization of an `R`-block as follows.
 
 \begin{code}
 
 module _ {𝓤 𝓦 : Universe} where
 
  IsBlock : {A : 𝓤 ̇}(C : Pred A 𝓦){R : Rel A 𝓦} → 𝓤 ⊔ 𝓦 ⁺ ̇
- IsBlock {A} C {R} = Σ u ꞉ A , C ≡ u ⁄ R
+ IsBlock {A} C {R} = Σ u ꞉ A , C ≡ [ u ] {R}
 
 \end{code}
 
-Thus, a proof of the assertion `IsBlock C` is a dependent pair `(u , p)`, with ` u : A` and `p` is a proof of `C ≡ u ⁄ R`.
+Thus, a proof of the assertion `IsBlock C` is a dependent pair `(u , p)`, with ` u : A` and `p` is a proof of `C ≡ [ u ] {R}`.
 
-If `R` is an equivalence relation on `A`, then the *quotient* of `A` modulo `R` is denoted by `A / R` and is defined to be the collection `{u ⁄ R ∣  y : A}` of all `R`-blocks.
+If `R` is an equivalence relation on `A`, then the *quotient* of `A` modulo `R` is denoted by `A / R` and is defined to be the collection `{[ u ] ∣  y : A}` of all `R`-blocks.
 
 \begin{code}
 
@@ -159,12 +142,12 @@ The following serves as a kind of *introduction rule*.
 
 \begin{code}
 
- _≀_ : {A : 𝓤 ̇} → A → (R : Rel A 𝓦) → A / R
- a ≀ R = a ⁄ R , (a  , refl)
+ ⟪_⟫ : {A : 𝓤 ̇} → A → {R : Rel A 𝓦} → A / R
+ ⟪ a ⟫{R} = [ a ]{R} , (a  , refl)
 
 \end{code}
 
-Dually, the next type provides an *elimination rule*. Here `C` is a predicate and `p` is a proof of `C ≡ [ a ] R`.<sup>[2](Relations.Quotients.html#fn2)</sup>
+Dually, the next type provides an *elimination rule*. Here `C` is a predicate and `p` is a proof of `C ≡ [ a ] R`.<sup>[1](Relations.Quotients.html#fn1)</sup>
 
 \begin{code}
 
@@ -180,26 +163,23 @@ Later we will need the following tools for working with the quotient types defin
 module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{x y : A}{R : Rel A 𝓦} where
 
  open IsEquivalence
- ⁄-subset : IsEquivalence R → R x y →  x ⁄ R  ⊆  y ⁄ R
- ⁄-subset Req Rxy {z} Rxz = (trans Req) ((sym Req) Rxy) Rxz
+ /-subset : IsEquivalence R → R x y →  [ x ]{R} ⊆  [ y ]{R}
+ /-subset Req Rxy {z} Rxz = (trans Req) ((sym Req) Rxy) Rxz
 
- ⁄-supset : IsEquivalence R → R x y →  y ⁄ R ⊆ x ⁄ R
- ⁄-supset Req Rxy {z} Ryz = (trans Req) Rxy Ryz
+ /-supset : IsEquivalence R → R x y →  [ y ]{R} ⊆ [ x ]{R}
+ /-supset Req Rxy {z} Ryz = (trans Req) Rxy Ryz
 
- ⁄-≐ : IsEquivalence R → R x y →  x ⁄ R  ≐  y ⁄ R
- ⁄-≐ Req Rxy = ⁄-subset Req Rxy , ⁄-supset Req Rxy
+ /-≐ : IsEquivalence R → R x y →  [ x ]{R} ≐ [ y ]{R}
+ /-≐ Req Rxy = /-subset Req Rxy , /-supset Req Rxy
 
 \end{code}
 
-(An example application of `⁄-≐` is the `class-extensionality` lemma in the [Relations.Truncation] module.)
+(An example application of `/-≐` is the `class-extensionality` lemma in the [Relations.Truncation] module.)
 
 --------------------------------------
 
 
-
-<sup>1</sup><span class="footnote" id="fn1">**Unicode Hints** ([agda2-mode][]). `\textfractionsolidus` ↝ `⁄`; `\eq9` ↝ `≀`.</span>
-
-<sup>2</sup><span class="footnote" id="fn2">**Unicode Hints** ([agda2-mode][]). `\cl ↝ ⌞`; `\clr ↝ ⌟`.</span>
+<sup>1</sup><span class="footnote" id="fn1">**Unicode Hints** ([agda2-mode][]). `\cl ↝ ⌞`; `\clr ↝ ⌟`.</span>
 
 
 <br>

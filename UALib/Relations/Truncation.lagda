@@ -144,7 +144,9 @@ module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇} where
 Thus, for truncated predicates `P` and `Q`, if `prop-ext` holds, then `(P ⊆ Q) × (Q ⊆ P) → P ≡ Q`, which is a useful extensionality principle.
 
 
-The foregoing easily generalizes to binary relations.  If `R` is a binary relation such that there is at most one way to prove that a given pair of elements is `R`-related, then we call `R` a *binary proposition*. As above, we use [Type Topology][]'s `is-subsingleton-valued` type to impose this truncation assumption on a binary relation.<sup>[4](Relations.Truncation.html#fn4)</sup>
+#### Truncated equivalence relations
+
+The foregoing easily generalizes to binary relations in general and equivalence relations in particular.  If `R` is a binary relation such that there is at most one way to prove that a given pair of elements is `R`-related, then we call `R` a *binary proposition*. As above, we use [Type Topology][]'s `is-subsingleton-valued` type to impose this truncation assumption on a binary relation.<sup>[4](Relations.Truncation.html#fn4)</sup>
 
 \begin{code}
 
@@ -157,7 +159,24 @@ Recall, `is-subsingleton-valued` is simply defined as
 
 `is-subsingleton-valued R = ∀ x y → is-subsingleton (R x y)`
 
-which is the assertion that for all `x` `y` there is at most one proof that `x` and `y` are `R`-related. We will generalize this from binary to arbitrary (i.e., continuous and dependent) relations below (see `IsContProp` and `IsDepProp`).
+which is the assertion that for all `x` `y` there is at most one proof that `x` and `y` are `R`-related.  In this sense, we might call this a "uniqueness-of-membership-proofs" principle.  We generalize this principle from binary to arbitrary (i.e., continuous and dependent) relations below (see `IsContProp` and `IsDepProp`).
+
+The type of equivalence relations that have unique membership proofs is defined as follows.
+
+\begin{code}
+
+module _ {𝓤 𝓦 : Universe} where
+
+ record IsEqv {A : 𝓤 ̇}(R : Rel A 𝓦) : 𝓤 ⊔ 𝓦 ̇ where
+  field is-equivalence : IsEquivalence R
+        is-truncated : is-subsingleton-valued R
+
+ Eqv : 𝓤 ̇ → 𝓤 ⊔ 𝓦 ⁺ ̇
+ Eqv A = Σ R ꞉ Rel A 𝓦 , IsEqv R
+
+\end{code}
+
+
 
 #### <a id="quotient-extensionality">Quotient extensionality</a>
 
@@ -168,37 +187,37 @@ We need a (subsingleton) identity type for congruence classes over sets so that 
 module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇} where
  open IsEqv
 
- class-extensionality : prop-ext 𝓤 𝓦 → ((R , Req) : Eqv A){u v : A}
-  →                     R u v  →  u ⁄ R ≡ v ⁄ R
+ block-ext : prop-ext 𝓤 𝓦 → ((R , Req) : Eqv A){u v : A}
+  →                     R u v  →  [ u ]{R} ≡ [ v ]{R}
 
- class-extensionality pe (R , Req){u}{v} Ruv = ap fst PQ
+ block-ext pe (R , Req){u}{v} Ruv = ap fst PQ
   where
   P Q : Pred₁ A 𝓦
   P = (λ a → R u a) , (λ a → is-truncated Req u a)
   Q = (λ a → R v a) , (λ a → is-truncated Req v a)
 
-  α : u ⁄ R ⊆ v ⁄ R
-  α ua = fst (⁄-≐ (is-equivalence Req) Ruv) ua
+  α : [ u ]{R} ⊆ [ v ]{R}
+  α ua = fst (/-≐ (is-equivalence Req) Ruv) ua
 
-  β : v ⁄ R ⊆ u ⁄ R
-  β va = snd (⁄-≐ (is-equivalence Req) Ruv) va
+  β : [ v ]{R} ⊆ [ u ]{R}
+  β va = snd (/-≐ (is-equivalence Req) Ruv) va
 
   PQ : P ≡ Q
   PQ = (prop-ext' pe (α , β))
 
 
- to-subtype-≀ : {(R , Req) : Eqv A} → (∀ C → is-subsingleton (IsBlock C {R}))
+ to-subtype-⟪⟫ : {(R , Req) : Eqv A} → (∀ C → is-subsingleton (IsBlock C {R}))
   →             {C D : Pred A 𝓦}{c : IsBlock C {R}}{d : IsBlock D {R}}
   →             C ≡ D  →  (C , c) ≡ (D , d)
 
- to-subtype-≀ ssR {C}{D}{c}{d} CD = to-Σ-≡ (CD , ssR D (transport (λ B → IsBlock B) CD c) d)
+ to-subtype-⟪⟫ ssR {C}{D}{c}{d} CD = to-Σ-≡ (CD , ssR D (transport (λ B → IsBlock B) CD c) d)
 
 
- class-extensionality' : prop-ext 𝓤 𝓦 → {(R , Req) : Eqv A}
+ prop-block-ext : prop-ext 𝓤 𝓦 → {(R , Req) : Eqv A}
   →                      (∀ C → is-subsingleton (IsBlock C {R}))
-  →                      {u v : A} → R u v  →  u ≀ R ≡ v ≀ R
+  →                      {u v : A} → R u v  →  ⟪ u ⟫ ≡ ⟪ v ⟫
 
- class-extensionality' pe {(R , Req)} ssR Ruv = to-subtype-≀ {R , Req} ssR (class-extensionality pe (R , Req) Ruv)
+ prop-block-ext pe {(R , Req)} ssR Ruv = to-subtype-⟪⟫ {R , Req} ssR (block-ext pe (R , Req) Ruv)
 
 \end{code}
 

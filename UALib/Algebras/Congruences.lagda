@@ -101,7 +101,7 @@ module _ {𝓤 𝓦 : Universe} where
 
  𝑨 ╱ θ = ( ∣ 𝑨 ∣ / ⟨ θ ⟩ ) ,                               -- the domain of the quotient algebra
 
-         λ 𝑓 𝒂 → (𝑓 ̂ 𝑨)(λ i →  fst ∥ 𝒂 i ∥) ≀ ⟨ θ ⟩  -- the basic operations of the quotient algebra
+         λ 𝑓 𝒂 → ⟪ (𝑓 ̂ 𝑨)(λ i →  fst ∥ 𝒂 i ∥) ⟫ --  ⟨ θ ⟩  -- the basic operations of the quotient algebra
 
 \end{code}
 
@@ -119,8 +119,8 @@ From this we easily obtain the zero congruence of `𝑨 ╱ θ` by applying the 
 
 \begin{code}
 
- ⟪𝟎⟫_╱_ : (𝑨 : Algebra 𝓤 𝑆)(θ : Congruence{𝓦} 𝑨){fe : funext 𝓥 (𝓤 ⊔ 𝓦 ⁺)} → Congruence (𝑨 ╱ θ)
- (⟪𝟎⟫ 𝑨 ╱ θ) {fe} = Δ fe
+ 𝟘[_╱_] : (𝑨 : Algebra 𝓤 𝑆)(θ : Congruence{𝓦} 𝑨){fe : funext 𝓥 (𝓤 ⊔ 𝓦 ⁺)} → Congruence (𝑨 ╱ θ)
+ 𝟘[ 𝑨 ╱ θ ] {fe} = Δ fe
 
 \end{code}
 
@@ -131,7 +131,7 @@ Finally, the following elimination rule is sometimes useful.
 
 module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} where
 
- /-≡ : (θ : Congruence{𝓦} 𝑨){u v : ∣ 𝑨 ∣} → u ≀ ⟨ θ ⟩ ≡ v ≀ ⟨ θ ⟩ → ⟨ θ ⟩ u v
+ /-≡ : (θ : Congruence{𝓦} 𝑨){u v : ∣ 𝑨 ∣} → ⟪ u ⟫ {⟨ θ ⟩} ≡ ⟪ v ⟫ → ⟨ θ ⟩ u v
  /-≡ θ refl = IsEquivalence.rfl (is-equivalence θ)
 
 \end{code}

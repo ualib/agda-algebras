@@ -75,7 +75,7 @@ module first-hom-thm {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Alg
              (𝑓 ̂ 𝑩) (λ x → φ (𝒂 x))             ∎
 
   φmon : Monic φ
-  φmon (_ , (u , refl)) (_ , (v , refl)) φuv = class-extensionality' pe {⟨ θ ⟩ , ξ} UIPb  φuv
+  φmon (_ , (u , refl)) (_ , (v , refl)) φuv = prop-block-ext pe {⟨ θ ⟩ , ξ} UIPb  φuv
 
   φcom : ∣ h ∣ ≡ φ ∘ ∣ πker 𝑩 h {fe} ∣
   φcom = refl
@@ -108,11 +108,11 @@ Below we will prove that the homomorphism `φ`, whose existence we just proved, 
    a : ∣ 𝑨 ∣
    a = EpicInv ∣ h ∣ hE b
 
-   bfa : b ≡ fmap (a ≀ ker ∣ h ∣)
+   bfa : b ≡ fmap ⟪ a ⟫
    bfa = (cong-app (EpicInvIsRightInv {fe = fev} ∣ h ∣ hE) b)⁻¹
 
    γ : Image fmap ∋ b
-   γ = Image_∋_.eq b (a ≀ ker ∣ h ∣) bfa
+   γ = Image_∋_.eq b ⟪ a ⟫ bfa
 
 \end{code}
 
