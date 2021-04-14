@@ -78,9 +78,9 @@ Before moving on to define [propositions](Overture.Truncation.html#propositions)
 
 module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇} where
 
- monic-is-embedding|sets : (f : A → B) → is-set B → Monic f → is-embedding f
+ monic-is-embedding|Set : (f : A → B) → is-set B → Monic f → is-embedding f
 
- monic-is-embedding|sets f Bset fmon b (u , fu≡b) (v , fv≡b) = γ
+ monic-is-embedding|Set f Bset fmon b (u , fu≡b) (v , fv≡b) = γ
   where
   fuv : f u ≡ f v
   fuv = ≡-trans fu≡b (fv≡b ⁻¹)
@@ -96,14 +96,14 @@ module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇} where
 
 \end{code}
 
-In stating the previous result, we introduce a new convention to which we will try to adhere. If the antecedent of a theorem includes the assumption that one of the types involved is a set, then we add to the name of the theorem the suffix `|sets`, which calls to mind the standard mathematical notation for the restriction of a function to a subset of its domain.
+In stating the previous result, we introduce a new convention to which we will try to adhere. If the antecedent of a theorem includes the assumption that one of the types involved is a *set* (in the sense defined above), then we add to the name of the theorem the suffix `|Set`, which calls to mind the standard mathematical notation for the restriction of a function.
 
 Embeddings are always monic, so we conclude that when a function's codomain is a set, then that function is an embedding if and only if it is monic.
 
 \begin{code}
 
- embedding-iff-monic|sets : (f : A → B) → is-set B → is-embedding f ⇔ Monic f
- embedding-iff-monic|sets f Bset = (embedding-is-monic f), (monic-is-embedding|sets f Bset)
+ embedding-iff-monic|Set : (f : A → B) → is-set B → is-embedding f ⇔ Monic f
+ embedding-iff-monic|Set f Bset = (embedding-is-monic f), (monic-is-embedding|Set f Bset)
 
 \end{code}
 
@@ -206,18 +206,18 @@ module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇} where
   PQ = (prop-ext' pe (α , β))
 
 
- to-subtype-⟪⟫ : {(R , Req) : Eqv A} → (∀ C → is-subsingleton (IsBlock C {R}))
+ to-subtype|Set : {(R , Req) : Eqv A} → (∀ C → is-subsingleton (IsBlock C {R}))
   →             {C D : Pred A 𝓦}{c : IsBlock C {R}}{d : IsBlock D {R}}
   →             C ≡ D  →  (C , c) ≡ (D , d)
 
- to-subtype-⟪⟫ ssR {C}{D}{c}{d} CD = to-Σ-≡ (CD , ssR D (transport (λ B → IsBlock B) CD c) d)
+ to-subtype|Set ssR {C}{D}{c}{d} CD = to-Σ-≡ (CD , ssR D (transport (λ B → IsBlock B) CD c) d)
 
 
- prop-block-ext : prop-ext 𝓤 𝓦 → {(R , Req) : Eqv A}
+ block-ext|Set : prop-ext 𝓤 𝓦 → {(R , Req) : Eqv A}
   →                      (∀ C → is-subsingleton (IsBlock C {R}))
   →                      {u v : A} → R u v  →  ⟪ u ⟫ ≡ ⟪ v ⟫
 
- prop-block-ext pe {(R , Req)} ssR Ruv = to-subtype-⟪⟫ {R , Req} ssR (block-ext pe (R , Req) Ruv)
+ block-ext|Set pe {(R , Req)} ssR Ruv = to-subtype|Set {R , Req} ssR (block-ext pe (R , Req) Ruv)
 
 \end{code}
 

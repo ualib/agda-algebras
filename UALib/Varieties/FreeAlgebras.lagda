@@ -21,8 +21,6 @@ open import MGS-Subsingleton-Theorems using (Universe; _̇)
 module Varieties.FreeAlgebras {𝑆 : Signature 𝓞 𝓥} {𝓤 : Universe}{X : 𝓤 ̇} where
 
 open import Varieties.Preservation {𝑆 = 𝑆}{𝓤}{𝓤}{X} public
--- open import UF-FunExt using (FunExt) public
-
 
 \end{code}
 
@@ -45,9 +43,8 @@ The `𝔉` that we have just defined is called the **free algebra over** `𝒦` 
 
 #### <a id="the-free-algebra-in-agda">The free algebra in Agda</a>
 
-Here we represent `𝔉` as a type in Agda by first constructing the congruence `ψ(𝒦, 𝑻 𝑋)` described above.
-
-We first construct the congruence relation `ψCon`, modulo which `𝑻 X` yields the relatively free algebra, `𝔉 𝒦 X := 𝑻 X ╱ ψCon`. We start by letting `ψ` be the collection of identities `(p, q)` satisfied by all subalgebras of algebras in `𝒦`.
+Before we attempt to represent the free algebra in Agda we construct the congruence `ψ(𝒦, 𝑻 𝑋)` described above.
+First, we represent the congruence relation `ψCon`, modulo which `𝑻 X` yields the relatively free algebra, `𝔉 𝒦 X := 𝑻 X ╱ ψCon`.  We let `ψ` be the collection of identities `(p, q)` satisfied by all subalgebras of algebras in `𝒦`.
 
 \begin{code}
 
@@ -103,26 +100,6 @@ We have collected all the pieces necessary to express the collection of identiti
 \end{code}
 
 
-Finally, we are ready to define the type representing the relatively free algebra in Agda.  We denote this type by 𝔉 and define it as the quotient `𝑻 X ╱ (ψCon 𝒦)`.
-
-\begin{code}
-
-module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (ov 𝓤)}{fe : dfunext 𝓥 𝓤} where
-
- 𝔉 : Algebra 𝓕⁺ 𝑆
- 𝔉 =  𝑻 X ╱ (ψCon 𝒦 {fe})
-
-\end{code}
-
-The domain of `𝔉` is `∣ 𝔉 ∣ = ∣ 𝑻 X ∣ / ⟨ ψCon 𝒦 ⟩`, which is equal to
-
-`Σ C ꞉ _ ,  Σ p ꞉ ∣ 𝑻 X ∣ ,  C ≡ ( [ p ] ⟨ ψCon 𝒦 ⟩ )`.
-
-This Sigma type denotes the set `{ C : ∃ p ∈ ∣ 𝑻 X ∣ , C ≡ [ p ] ⟨ ψCon 𝒦 ⟩ }` of `⟨ ψCon 𝒦 ⟩`-classses of terms, as desired.
-
-We left the type of `C` implicit (using the underscore symbol) for readability.  Since `C` denotes a particular class of the congruence relation `ψCon 𝒦` of `𝑻 X`, and since congruence classes are subsets of the domain of the underlying algebra, the type of `C` is a predicate on the type of terms; specifically, `C : Pred ∣ 𝑻 X ∣ (𝓧 ⊔ 𝓕)`.
-
-
 
 
 
@@ -133,11 +110,11 @@ We left the type of `C` implicit (using the underscore symbol) for readability. 
 
 #### <a id="hsp-theorem">HSP Theorem</a>
 
-This section presents a formal proof of the Birkhoff HSP theorem.<sup>[2](Varieties.FreeAlgebras.html#fn2)</sup>
+This section presents a formal proof of the Birkhoff HSP theorem.
 
 To complete the proof of Birkhoff's HSP theorem, it remains to show that every algebra 𝑨 that belongs to `Mod X (Th (V 𝒦))`---i.e., every algebra that models the equations in `Th (V 𝒦)`---belongs to `V 𝒦`.  This will prove that `V 𝒦` is an equational class.  (The converse, that every equational class is a variety was already proved; see the remarks at the end of this module.)
 
-We accomplish this goal by constructing an algebra `𝔽` with the following properties:<sup>[3](Varieties.FreeAlgebras.html#fn3)</sup>
+We accomplish this goal by constructing an algebra `𝔽` with the following properties:
 
 1. `𝔽 ∈ V 𝒦` and
 
@@ -158,7 +135,7 @@ Now we come to a step in the Agda formalization of Birkhoff's theorem that is hi
 
 \begin{code}
 
-module HSPTheorem {fe : DFunExt} {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓕} where
+module _ {fe : DFunExt} {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓕} where
 
  open class-products-with-maps {𝓤}{X}{fe 𝓕 𝓤}{fe 𝓕⁺ 𝓕⁺}{fe 𝓕 𝓕} 𝒦
 
@@ -191,14 +168,16 @@ Observe that the inhabitants of `ℭ` are maps from `ℑs` to `{𝔄s i : i ∈ 
 \end{code}
 
 
-#### <a id="the-new-free-algebra">The new free algebra</a>
+#### <a id="the-free-algebra">The free algebra</a>
 
-As mentioned above, the initial version of the [Agda UALib][] used the free algebra `𝔉` developed above.  However, our new, more direct proof uses the algebra `𝔽`, which we now define, along with the natural epimorphism `epi𝔽 : epi (𝑻 X) 𝔽` from `𝑻 X` to `𝔽`.<sup>[4](Varieties.FreeAlgebras.html#fn4)</sup>
+As mentioned above, the initial version of the [Agda UALib][] used the free algebra `𝔉` developed above.  However, our new, more direct proof uses the algebra `𝔽`, which we now define, along with the natural epimorphism `epi𝔽 : epi (𝑻 X) 𝔽` from `𝑻 X` to `𝔽`.
+
+We now define the algebra `𝔽`, which plays the role of the free algebra, along with the natural epimorphism `epi𝔽 : epi (𝑻 X) 𝔽` from `𝑻 X` to `𝔽`.
 
 \begin{code}
 
  𝔽 : Algebra 𝓕⁺ 𝑆
- 𝔽 = ((𝑻 X) [ ℭ ]/ker homℭ){fe 𝓥 𝓕} -- LEFT OFF HERE
+ 𝔽 = ((𝑻 X) [ ℭ ]/ker homℭ){fe 𝓥 𝓕}
 
  epi𝔽 : epi (𝑻 X) 𝔽
  epi𝔽 = πker ℭ homℭ {fe 𝓥 𝓕}
@@ -331,6 +310,48 @@ With these results in hand, it is now trivial to prove the main theorem of this 
 
 \end{code}
 
+\begin{code}
+
+ 𝕍𝒦 : Pred (Algebra 𝓕⁺ 𝑆) (𝓕⁺ ⁺)
+ 𝕍𝒦 = V{𝓤}{𝓕⁺} 𝒦
+
+ kernel-in-theory : kernel ∣ hom𝔽 ∣ ⊆ Th (V 𝒦)
+ kernel-in-theory {p , q} pKq = (class-ids-⇒ {fe = fe} p q (class-models-kernel p q pKq))
+
+ _↠_ : 𝓤 ̇ → Algebra 𝓕⁺ 𝑆 → 𝓕⁺ ̇
+ X ↠ 𝑨 = Σ h ꞉ (X → ∣ 𝑨 ∣) , Epic h
+
+ 𝔽-ModTh-epi : (𝑨 : Algebra 𝓕⁺ 𝑆) → (X ↠ 𝑨) → 𝑨 ∈ Mod (Th 𝕍𝒦) → epi 𝔽 𝑨
+ 𝔽-ModTh-epi 𝑨 (η , ηE) AinMTV = γ
+  where
+  φ : hom (𝑻 X) 𝑨
+  φ = lift-hom 𝑨 η
+
+  φE : Epic ∣ φ ∣
+  φE = lift-of-epi-is-epi ηE
+
+  pqlem2 : ∀ p q → (p , q) ∈ kernel ∣ hom𝔽 ∣ → 𝑨 ⊧ p ≈ q
+  pqlem2 p q hyp = AinMTV p q (kernel-in-theory hyp)
+
+  kerincl : kernel ∣ hom𝔽 ∣ ⊆ kernel ∣ φ ∣
+  kerincl {p , q} x = γ
+   where
+   Apq : 𝑨 ⊧ p ≈ q
+   Apq = pqlem2 p q x
+   γ : ∣ φ ∣ p ≡ ∣ φ ∣ q
+   γ = ∣ φ ∣ p          ≡⟨ (free-lift-interp (fe 𝓥 𝓕⁺) 𝑨 η p)⁻¹ ⟩
+       (𝑨 ⟦ p ⟧) η      ≡⟨ happly (pqlem2 p q x) η  ⟩
+       (𝑨 ⟦ q ⟧) η      ≡⟨ free-lift-interp (fe 𝓥 𝓕⁺) 𝑨 η q ⟩
+       ∣ φ ∣ q          ∎
+
+  γ : epi 𝔽 𝑨
+  γ = fst (HomFactorEpi (fe 𝓕 𝓕⁺)(fe 𝓕⁺ 𝓕⁺)(fe 𝓕⁺ 𝓕⁺) 𝑨 φ hom𝔽 kerincl hom𝔽-is-epic φE)
+
+\end{code}
+
+
+
+
 
 #### <a id="the-homomorphic-images-of-F">The homomorphic images of 𝔽</a>
 
@@ -338,37 +359,18 @@ Finally we come to one of the main theorems of this module; it asserts that ever
 
 \begin{code}
 
- kernel-in-theory : kernel ∣ hom𝔽 ∣ ⊆ Th (V 𝒦)
- kernel-in-theory {p , q} pKq = (class-ids-⇒ {fe = fe} p q (class-models-kernel p q pKq))
-
- open Congruence
-
- free-quot-subalg-ℭ : dfunext 𝓥 (ov 𝓤 ) → prop-ext (ov 𝓤) (ov 𝓤) → is-set ∣ ℭ ∣
-  →                   is-subsingleton-valued ⟨ kercon (fe 𝓥 𝓕) ℭ homℭ ⟩
-  →                   (∀ C → is-subsingleton (IsBlock C))
-                      --------------------------------------------------------
-  →                   (((𝑻 X) [ ℭ ]/ker homℭ){fe 𝓥 𝓕}) ≤ ℭ
-
- free-quot-subalg-ℭ fe pe UIPc URPk UIPb = FirstHomCorollary (𝑻 X) ℭ homℭ pe fe UIPc URPk UIPb
-
-
- module _ -- extensionality assumptions:
-          (hfe : hfunext (ov 𝓤)(ov 𝓤))
+ module _ -- prop extensionality assumption:
           (pe : prop-ext (ov 𝓤)(ov 𝓤))
 
           -- truncation assumptions:
-          (Cset : is-set ∣ ℭ ∣)
-          (ssR : is-subsingleton-valued ⟨ kercon (fe 𝓥 𝓕) ℭ homℭ ⟩)
-          (ssC : ∀ C → is-subsingleton (IsBlock C))
+          (UIPcod : is-set ∣ ℭ ∣)
+          (UMPker : is-subsingleton-valued ⟨ kercon (fe 𝓥 𝓕) ℭ homℭ ⟩)
+          (UMPblk : ∀ C → is-subsingleton (IsBlock C))
 
   where
 
-  𝔽≤ℭ : (((𝑻 X) [ ℭ ]/ker homℭ){fe 𝓥 𝓕}) ≤ ℭ
-  𝔽≤ℭ = free-quot-subalg-ℭ (fe 𝓥 𝓕) pe Cset ssR ssC
-
-  𝕍𝒦 : Pred (Algebra 𝓕⁺ 𝑆) (𝓕⁺ ⁺)
-  𝕍𝒦 = V{𝓤}{𝓕⁺} 𝒦
-
+  𝔽≤ℭ|Set : (((𝑻 X) [ ℭ ]/ker homℭ){fe 𝓥 𝓕}) ≤ ℭ
+  𝔽≤ℭ|Set = FirstHomCorollary|Set (𝑻 X) ℭ homℭ pe (fe 𝓥 (ov 𝓤)) UIPcod UMPker UMPblk
 
 \end{code}
 
@@ -378,34 +380,6 @@ We do *not* assert that for an arbitrary type `X` such surjective maps exist.  I
 
 \begin{code}
 
-  _↠_ : 𝓤 ̇ → Algebra 𝓕⁺ 𝑆 → 𝓕⁺ ̇
-  X ↠ 𝑨 = Σ h ꞉ (X → ∣ 𝑨 ∣) , Epic h
-
-  𝔽-ModTh-epi : (𝑨 : Algebra 𝓕⁺ 𝑆) → (X ↠ 𝑨) → 𝑨 ∈ Mod (Th 𝕍𝒦) → epi 𝔽 𝑨
-  𝔽-ModTh-epi 𝑨 (η , ηE) AinMTV = γ
-   where
-    φ : hom (𝑻 X) 𝑨
-    φ = lift-hom 𝑨 η
-
-    φE : Epic ∣ φ ∣
-    φE = lift-of-epi-is-epi ηE
-
-    pqlem2 : ∀ p q → (p , q) ∈ kernel ∣ hom𝔽 ∣ → 𝑨 ⊧ p ≈ q
-    pqlem2 p q hyp = AinMTV p q (kernel-in-theory hyp)
-
-    kerincl : kernel ∣ hom𝔽 ∣ ⊆ kernel ∣ φ ∣
-    kerincl {p , q} x = γ
-     where
-      Apq : 𝑨 ⊧ p ≈ q
-      Apq = pqlem2 p q x
-      γ : ∣ φ ∣ p ≡ ∣ φ ∣ q
-      γ = ∣ φ ∣ p          ≡⟨ (free-lift-interp (fe 𝓥 𝓕⁺) 𝑨 η p)⁻¹ ⟩
-          (𝑨 ⟦ p ⟧) η      ≡⟨ happly (pqlem2 p q x) η  ⟩
-          (𝑨 ⟦ q ⟧) η      ≡⟨ free-lift-interp (fe 𝓥 𝓕⁺) 𝑨 η q ⟩
-          ∣ φ ∣ q          ∎
-
-    γ : epi 𝔽 𝑨
-    γ = fst (HomFactorEpi (fe 𝓕 𝓕⁺)(fe 𝓕⁺ 𝓕⁺)(fe 𝓕⁺ 𝓕⁺) 𝑨 φ hom𝔽 kerincl hom𝔽-is-epic φE)
 
 \end{code}
 
@@ -417,11 +391,11 @@ With this result in hand, along with what we proved earlier---namely, `PS(𝒦) 
 
   open Vlift {𝓤}{fe 𝓕 𝓤}{fe 𝓕⁺ 𝓕⁺}{fe 𝓕 𝓕}{𝒦}
 
-  𝔽∈SP : 𝔽 ∈ (S{𝓕}{𝓕⁺} (P{𝓤}{𝓕} 𝒦))
-  𝔽∈SP = ssub (class-prod-s-∈-sp hfe) 𝔽≤ℭ
+  𝔽∈SP|Set : hfunext (ov 𝓤)(ov 𝓤) → 𝔽 ∈ (S{𝓕}{𝓕⁺} (P{𝓤}{𝓕} 𝒦))
+  𝔽∈SP|Set hfe = ssub (class-prod-s-∈-sp hfe) 𝔽≤ℭ|Set
 
-  𝔽∈𝕍 : 𝔽 ∈ V 𝒦
-  𝔽∈𝕍 = SP⊆V' 𝔽∈SP
+  𝔽∈𝕍|Set : hfunext (ov 𝓤)(ov 𝓤) → 𝔽 ∈ V 𝒦
+  𝔽∈𝕍|Set hfe = SP⊆V' (𝔽∈SP|Set hfe)
 
 \end{code}
 
@@ -431,12 +405,12 @@ Now that we have all of the necessary ingredients, it is all but trivial to comb
 
 \begin{code}
 
-  birkhoff : (∀ 𝑨 → X ↠ 𝑨) → Mod (Th (V 𝒦)) ⊆ V 𝒦
+  Birkhoff|Set : hfunext (ov 𝓤)(ov 𝓤) → (∀ 𝑨 → X ↠ 𝑨) → Mod (Th (V 𝒦)) ⊆ V 𝒦
 
-  birkhoff 𝕏 {𝑨} α = γ
+  Birkhoff|Set hfe 𝕏 {𝑨} α = γ
    where
-    γ : 𝑨 ∈ (V 𝒦)
-    γ = vhimg 𝔽∈𝕍 ((𝑨 , 𝔽-ModTh-epi 𝑨 (𝕏 𝑨) α ) , ≅-refl)
+   γ : 𝑨 ∈ (V 𝒦)
+   γ = vhimg (𝔽∈𝕍|Set hfe) ((𝑨 , 𝔽-ModTh-epi 𝑨 (𝕏 𝑨) α ) , ≅-refl)
 
 \end{code}
 
@@ -444,8 +418,8 @@ The converse inclusion, `V 𝒦 ⊆ Mod X (Th (V 𝒦))`, is a simple consequenc
 
 \begin{code}
 
-  birkhoff' : V{𝓤}{𝓕} 𝒦 ⊆ Mod (Th (V 𝒦))
-  birkhoff' α p q pThq = pThq α
+  Birkhoff-converse : V{𝓤}{𝓕} 𝒦 ⊆ Mod (Th (V 𝒦))
+  Birkhoff-converse α p q pThq = pThq α
 
 \end{code}
 
@@ -459,13 +433,8 @@ From these it follows that every equational class is a variety. Thus, our formal
 
 ----------------------------
 
+
 <sup>1</sup><span class="footnote" id="fn1"> Since `X` is not a subset of `𝔉`, technically it doesn't make sense to say "`X` generates `𝔉`." But as long as 𝒦 contains a nontrivial algebra, we will have `ψ(𝒦, 𝑻 𝑋) ∩ X² ≠ ∅`, and we can identify `X` with `X / ψ(𝒦, 𝑻 X)` which does belong to 𝔉.</span>
-
-<sup>2</sup><span class="footnote" id="fn2"> In the previous version of the [UALib][] this section was part of a module called HSPTheorem module.</span>
-
-<sup>3</sup><span class="footnote" id="fn3"> In earlier versions of the [Agda UALib][], the free algebra 𝔉 developed above played the role of the algebra 𝔽 with properties 1 and 2.  However, we found a more direct path to the proof using the algebra `𝔽 := (𝑻 X) [ ℭ ]/ker homℭ`.</span>
-
-<sup>4</sup><span class="footnote" id="fn4"> It might be an instructive exercise to prove that `𝔽` is, in fact, isomorphic to the algebra `𝔉` that we defined earlier.</span>
 
 <br>
 <br>
@@ -475,3 +444,44 @@ From these it follows that every equational class is a variety. Thus, our formal
 <span style="float:right;">[Varieties ↑](Varieties.html)</span>
 
 {% include UALib.Links.md %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+
+<sup>2</sup><span class="footnote" id="fn2"> In the previous version of the [UALib][] this section was part of a module called HSPTheorem module.</span>
+
+<sup>3</sup><span class="footnote" id="fn3"> In earlier versions of the [Agda UALib][], the free algebra 𝔉 developed above played the role of the algebra 𝔽 with properties 1 and 2.  However, we found a more direct path to the proof using the algebra `𝔽 := (𝑻 X) [ ℭ ]/ker homℭ`.</span>
+
+<sup>4</sup><span class="footnote" id="fn4"> It might be an instructive exercise to prove that `𝔽` is, in fact, isomorphic to the algebra `𝔉` that we defined earlier.</span>
+
+
+
+
+
+Finally, we are ready to define the type representing the relatively free algebra in Agda.  We denote this type by 𝔉 and define it as the quotient `𝑻 X ╱ (ψCon 𝒦)`.
+
+module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (ov 𝓤)}{fe : dfunext 𝓥 𝓤} where
+
+ 𝔉 : Algebra 𝓕⁺ 𝑆
+ 𝔉 =  𝑻 X ╱ (ψCon 𝒦 {fe})
+
+The domain of `𝔉` is `∣ 𝔉 ∣ = ∣ 𝑻 X ∣ / ⟨ ψCon 𝒦 ⟩`, which is equal to
+
+`Σ C ꞉ _ ,  Σ p ꞉ ∣ 𝑻 X ∣ ,  C ≡ ( [ p ] ⟨ ψCon 𝒦 ⟩ )`.
+
+This Sigma type denotes the set `{ C : ∃ p ∈ ∣ 𝑻 X ∣ , C ≡ [ p ] ⟨ ψCon 𝒦 ⟩ }` of `⟨ ψCon 𝒦 ⟩`-classses of terms, as desired.
+
+We left the type of `C` implicit (using the underscore symbol) for readability.  Since `C` denotes a particular class of the congruence relation `ψCon 𝒦` of `𝑻 X`, and since congruence classes are subsets of the domain of the underlying algebra, the type of `C` is a predicate on the type of terms; specifically, `C : Pred ∣ 𝑻 X ∣ (𝓧 ⊔ 𝓕)`.
+-->
+

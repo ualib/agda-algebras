@@ -503,7 +503,7 @@ which is the assertion that for all \ab x~\ab y there is at most one proof that 
 
 \subsubsection{Quotient extensionality}\label{quotient-extensionality}
 
-We need a (subsingleton) identity type for congruence classes over sets so that we can equate two classes even when they are presented using different representatives. Proposition extensionality is precisely what we need to accomplish this. We now define a type called \af{class-extensionality} that will play a crucial role later (e.g., in the formal proof of Birkhoff's HSP theorem).\footnote{Previous proofs of the \af{class-extensionality'} theorem required \emph{function extensionality} (\S\ref{function-extensionality}); however, as the proof given here makes clear, this is unnecessary.}
+We need a (subsingleton) identity type for congruence classes over sets so that we can equate two classes even when they are presented using different representatives. Proposition extensionality is precisely what we need to accomplish this. We now define a type called \af{block-ext} that will play a crucial role later (e.g., in the formal proof of Birkhoff's HSP theorem).
 \ccpad
 \begin{code}%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -528,7 +528,7 @@ We need a (subsingleton) identity type for congruence classes over sets so that 
 %
 % \\[\AgdaEmptyExtraSkip]%
 %
-\>[1]\AgdaFunction{class-extensionality}\AgdaSpace{}%
+\>[1]\AgdaFunction{block-ext}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{prop-ext}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
@@ -564,7 +564,7 @@ We need a (subsingleton) identity type for congruence classes over sets so that 
 %
 % \\[\AgdaEmptyExtraSkip]%
 %
-\>[1]\AgdaFunction{class-extensionality}\AgdaSpace{}%
+\>[1]\AgdaFunction{block-ext}\AgdaSpace{}%
 \AgdaBound{pe}\AgdaSpace{}%
 \AgdaBound{Req}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{u}\AgdaSymbol{\}\{}\AgdaBound{v}\AgdaSymbol{\}}\AgdaSpace{}%
@@ -763,7 +763,7 @@ We need a (subsingleton) identity type for congruence classes over sets so that 
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[1]\AgdaFunction{class-extensionality'}\AgdaSpace{}%
+\>[1]\AgdaFunction{prop-block-ext}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \>[397I]\AgdaFunction{prop-ext}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
@@ -803,7 +803,7 @@ We need a (subsingleton) identity type for congruence classes over sets so that 
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[1]\AgdaFunction{class-extensionality'}\AgdaSpace{}%
+\>[1]\AgdaFunction{prop-block-ext}\AgdaSpace{}%
 \AgdaBound{pe}\AgdaSpace{}%
 \AgdaBound{ssA}\AgdaSpace{}%
 \AgdaBound{Reqv}\AgdaSpace{}%
@@ -811,7 +811,7 @@ We need a (subsingleton) identity type for congruence classes over sets so that 
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{to-subtype-⟪⟫}\AgdaSpace{}%
 \AgdaBound{ssA}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{class-extensionality}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{block-ext}\AgdaSpace{}%
 \AgdaBound{pe}\AgdaSpace{}%
 \AgdaBound{Reqv}\AgdaSpace{}%
 \AgdaBound{Ruv}\AgdaSymbol{)}\<%

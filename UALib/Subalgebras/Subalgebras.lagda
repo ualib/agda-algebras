@@ -60,17 +60,17 @@ module _ {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 �
     (UIPb : ∀ C → is-subsingleton (IsBlock C))
  where
 
- open first-hom-thm {𝓤}{𝓦} 𝑨 𝑩 h pe fe UIPc URPk UIPb
+ open first-hom-thm|Set {𝓤}{𝓦} 𝑨 𝑩 h pe fe UIPc URPk UIPb
 
- FirstHomCorollary : ((𝑨 [ 𝑩 ]/ker h) {fe}) IsSubalgebraOf 𝑩
+ FirstHomCorollary|Set : ((𝑨 [ 𝑩 ]/ker h) {fe}) IsSubalgebraOf 𝑩
 
- FirstHomCorollary = ϕhom , ϕemb
+ FirstHomCorollary|Set = ϕhom , ϕemb
   where
   ϕhom : hom ((𝑨 [ 𝑩 ]/ker h) {fe}) 𝑩
-  ϕhom = ∣ FirstHomomorphismTheorem ∣ 
+  ϕhom = ∣ FirstHomTheorem|Set ∣ 
 
   ϕemb : is-embedding ∣ ϕhom ∣
-  ϕemb = ∥ snd ∥ FirstHomomorphismTheorem ∥ ∥
+  ϕemb = ∥ snd ∥ FirstHomTheorem|Set ∥ ∥
 
 \end{code}
 
@@ -89,7 +89,8 @@ module _ {𝓤 𝓦 : Universe}(X : 𝓧 ̇)(𝑩 : Algebra 𝓦 𝑆)(h : hom (
                     ----------------------------------------------------
   →                 (((𝑻 X) [ 𝑩 ]/ker h) {fe}) IsSubalgebraOf 𝑩
 
- free-quot-subalg pe fe UIPc URPk UIPb = FirstHomCorollary{𝓤 = (ov 𝓧)} (𝑻 X) 𝑩 h pe fe UIPc URPk UIPb
+ free-quot-subalg pe fe UIPc URPk UIPb =
+  FirstHomCorollary|Set{𝓤 = ov 𝓧}(𝑻 X) 𝑩 h pe fe UIPc URPk UIPb
 
 \end{code}
 

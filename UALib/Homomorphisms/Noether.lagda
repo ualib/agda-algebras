@@ -45,7 +45,7 @@ Without further ado, we present our formalization of the first homomorphism theo
 
 open Congruence
 
-module first-hom-thm {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
+module first-hom-thm|Set {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
  -- extensionality assumptions:
     (pe : prop-ext 𝓤 𝓦)(fe : dfunext 𝓥 𝓦)
 
@@ -55,10 +55,10 @@ module first-hom-thm {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Alg
     (UIPb : ∀ C → is-subsingleton (IsBlock C))
  where
 
- FirstHomomorphismTheorem :
+ FirstHomTheorem|Set :
   Σ φ ꞉ hom ((𝑨 [ 𝑩 ]/ker h) {fe}) 𝑩 , (∣ h ∣ ≡ ∣ φ ∣ ∘ ∣ πker 𝑩 h {fe} ∣) × Monic ∣ φ ∣ × is-embedding ∣ φ ∣
 
- FirstHomomorphismTheorem = (φ , φhom) , φcom , φmon , φemb
+ FirstHomTheorem|Set = (φ , φhom) , φcom , φmon , φemb
   where
   θ : Congruence 𝑨
   θ = kercon fe 𝑩 h
@@ -75,27 +75,27 @@ module first-hom-thm {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Alg
              (𝑓 ̂ 𝑩) (λ x → φ (𝒂 x))             ∎
 
   φmon : Monic φ
-  φmon (_ , (u , refl)) (_ , (v , refl)) φuv = prop-block-ext pe {⟨ θ ⟩ , ξ} UIPb  φuv
+  φmon (_ , (u , refl)) (_ , (v , refl)) φuv = block-ext|Set pe {⟨ θ ⟩ , ξ} UIPb  φuv
 
   φcom : ∣ h ∣ ≡ φ ∘ ∣ πker 𝑩 h {fe} ∣
   φcom = refl
 
   φemb : is-embedding φ
-  φemb = monic-is-embedding|sets φ UIPc φmon
+  φemb = monic-is-embedding|Set φ UIPc φmon
 
 \end{code}
 
-Below we will prove that the homomorphism `φ`, whose existence we just proved, is unique (see `NoetherHomUnique`), but first we show that if we add to the hypotheses of the first homomorphism theorem the assumption that `h` is surjective, then we obtain the so-called *first isomorphism theorem*.  Naturally, we let `FirstHomomorphismTheorem` do most of the work. (Note that the proof also requires an additional local function extensionality postulate.)
+Below we will prove that the homomorphism `φ`, whose existence we just proved, is unique (see `NoetherHomUnique`), but first we show that if we add to the hypotheses of the first homomorphism theorem the assumption that `h` is surjective, then we obtain the so-called *first isomorphism theorem*.  Naturally, we let `FirstHomTheorem|Set` do most of the work. (Note that the proof also requires an additional local function extensionality postulate.)
 
 \begin{code}
 
- FirstIsomorphismTheorem : dfunext 𝓦 𝓦 → Epic ∣ h ∣
+ FirstIsoTheorem|Set : dfunext 𝓦 𝓦 → Epic ∣ h ∣
 
   → Σ f ꞉ epi((𝑨 [ 𝑩 ]/ker h){fe}) 𝑩 , (∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩 h {fe} ∣) × Monic ∣ f ∣ × is-embedding ∣ f ∣
 
- FirstIsomorphismTheorem fev hE = (fmap , fhom , fepic) , refl , fst(snd ∥ FHT ∥) , snd(snd ∥ FHT ∥)
+ FirstIsoTheorem|Set fev hE = (fmap , fhom , fepic) , refl , fst(snd ∥ FHT ∥) , snd(snd ∥ FHT ∥)
   where
-  FHT = FirstHomomorphismTheorem  -- (φ , φhom) , φcom , φmon , φemb
+  FHT = FirstHomTheorem|Set  -- (φ , φhom) , φcom , φmon , φemb
 
   fmap : ∣ (𝑨 [ 𝑩 ]/ker h){fe} ∣ → ∣ 𝑩 ∣
   fmap = fst ∣ FHT ∣
