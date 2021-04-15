@@ -94,8 +94,8 @@ We have collected all the pieces necessary to express the collection of identiti
 
 \begin{code}
 
-ψCon : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓕){fe : dfunext 𝓥 𝓤} → Congruence (𝑻 X)
-ψCon 𝒦 {fe} = mkcon (ψRel 𝒦) ψIsEquivalence (ψcompatible 𝒦 {fe})
+ψCon : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓕){fe : dfunext 𝓥 𝓤} → Con (𝑻 X)
+ψCon 𝒦 {fe} = (ψRel 𝒦) , mkcon ψIsEquivalence (ψcompatible 𝒦 {fe})
 
 \end{code}
 
@@ -180,7 +180,7 @@ We now define the algebra `𝔽`, which plays the role of the free algebra, alon
  𝔽 = ((𝑻 X) [ ℭ ]/ker homℭ){fe 𝓥 𝓕}
 
  epi𝔽 : epi (𝑻 X) 𝔽
- epi𝔽 = πker ℭ homℭ {fe 𝓥 𝓕}
+ epi𝔽 = πker ℭ {fe 𝓥 𝓕} homℭ
 
  hom𝔽 : hom (𝑻 X) 𝔽
  hom𝔽 = epi-to-hom 𝔽 epi𝔽
@@ -203,7 +203,7 @@ We will need the following facts relating `homℭ`, `hom𝔽`, `and ψ`.
  ψlemma0-ap {𝑨}{h} skA {p , q} x = γ where
 
    ν : ∣ homℭ ∣ p ≡ ∣ homℭ ∣ q
-   ν = ker-in-con {ov 𝓤}{ov 𝓤}{𝑻 X}{fe 𝓥 𝓕⁺}(kercon (fe 𝓥 𝓕) ℭ homℭ) {p}{q} x
+   ν = ker-in-con {ov 𝓤}{ov 𝓤}{fe 𝓥 𝓕⁺}{𝑻 X}(kercon ℭ {fe 𝓥 𝓕} homℭ) {p}{q} x
 
    γ : (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
    γ = ((ψlemma0 p q) ν) 𝑨 skA h
@@ -229,7 +229,7 @@ Next we define the lift of the natural embedding from `X` into 𝔽. We denote t
 
 \begin{code}
 
- open Congruence
+ open IsCongruence
 
  X↪𝔽 : X → ∣ 𝔽 ∣
  X↪𝔽 x = ⟪ ℊ x ⟫ -- (the implicit relation here is  ⟨ kercon (fe 𝓥 𝓕) ℭ homℭ ⟩ )
@@ -364,13 +364,13 @@ Finally we come to one of the main theorems of this module; it asserts that ever
 
           -- truncation assumptions:
           (UIPcod : is-set ∣ ℭ ∣)
-          (UMPker : is-subsingleton-valued ⟨ kercon (fe 𝓥 𝓕) ℭ homℭ ⟩)
           (UMPblk : ∀ C → is-subsingleton (IsBlock C))
+          (UMPker : is-subsingleton-valued ∣ kercon ℭ {fe 𝓥 𝓕} homℭ ∣)
 
   where
 
   𝔽≤ℭ|Set : (((𝑻 X) [ ℭ ]/ker homℭ){fe 𝓥 𝓕}) ≤ ℭ
-  𝔽≤ℭ|Set = FirstHomCorollary|Set (𝑻 X) ℭ homℭ pe (fe 𝓥 (ov 𝓤)) UIPcod UMPker UMPblk
+  𝔽≤ℭ|Set = FirstHomCorollary|Set (𝑻 X) ℭ homℭ pe (fe 𝓥 (ov 𝓤)) UIPcod UMPblk UMPker
 
 \end{code}
 

@@ -48,49 +48,44 @@ We take this opportunity to prove an important lemma that makes use of the `IsSu
 
 \begin{code}
 
-open Congruence
+-- open Congruence
 
 module _ {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
- -- extensionality assumptions:
-    (pe : prop-ext 𝓤 𝓦)(fe : dfunext 𝓥 𝓦)
+         -- extensionality assumptions:
+         (pe : prop-ext 𝓤 𝓦)(fe : dfunext 𝓥 𝓦)
 
- -- truncation assumptions:
-    (UIPc : is-set ∣ 𝑩 ∣)
-    (URPk : ∀ a x → is-subsingleton (⟨ kercon fe 𝑩 h ⟩ a x))
-    (UIPb : ∀ C → is-subsingleton (IsBlock C))
- where
+         -- truncation assumptions:
+         (UIPcod : is-set ∣ 𝑩 ∣)
+         (UMPblk : ∀ C → is-subsingleton (IsBlock C))
+         (UMPker : is-subsingleton-valued ∣ kercon 𝑩 {fe} h ∣) where
 
- open first-hom-thm|Set {𝓤}{𝓦} 𝑨 𝑩 h pe fe UIPc URPk UIPb
-
- FirstHomCorollary|Set : ((𝑨 [ 𝑩 ]/ker h) {fe}) IsSubalgebraOf 𝑩
-
+ FirstHomCorollary|Set : (𝑨 [ 𝑩 ]/ker h){fe} IsSubalgebraOf 𝑩
  FirstHomCorollary|Set = ϕhom , ϕemb
   where
+  hh = FirstHomTheorem|Set 𝑨 𝑩 h pe fe UIPcod UMPker UMPblk
   ϕhom : hom ((𝑨 [ 𝑩 ]/ker h) {fe}) 𝑩
-  ϕhom = ∣ FirstHomTheorem|Set ∣ 
+  ϕhom = ∣ hh ∣
 
   ϕemb : is-embedding ∣ ϕhom ∣
-  ϕemb = ∥ snd ∥ FirstHomTheorem|Set ∥ ∥
+  ϕemb = ∥ snd ∥ hh ∥ ∥
 
 \end{code}
 
-One special case to which we will apply this is where the algebra `𝑨` is the term algebra `𝑻 X`. We formalize this special case here so that it's readily available when we need it later.
+If we apply the foregoing theorem to the special case in which the `𝑨` is term algebra `𝑻 X`, we obtain the following result which will be useful later.
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe}(X : 𝓧 ̇)(𝑩 : Algebra 𝓦 𝑆)(h : hom (𝑻 X) 𝑩) where
+module _ {𝓤 𝓦 𝓧 : Universe}(X : 𝓧 ̇)(𝑩 : Algebra 𝓦 𝑆)(h : hom (𝑻 X) 𝑩)
+        -- extensionality assumptions:
+         (pe : prop-ext (ov 𝓧) 𝓦)(fe : dfunext 𝓥 𝓦)
 
- free-quot-subalg : --extensionality assumptions:
-                      prop-ext (ov 𝓧) 𝓦 → (fe : dfunext 𝓥 𝓦)
-                    --truncation assumptions:
-  →                   is-set ∣ 𝑩 ∣
-  →                   is-subsingleton-valued ⟨ kercon fe 𝑩 h ⟩
-  →                   (∀ C → is-subsingleton (IsBlock C))
-                    ----------------------------------------------------
-  →                 (((𝑻 X) [ 𝑩 ]/ker h) {fe}) IsSubalgebraOf 𝑩
+         -- truncation assumptions:
+         (UIPcod : is-set ∣ 𝑩 ∣)
+         (UMPblk : ∀ C → is-subsingleton (IsBlock C))
+         (UMPker : is-subsingleton-valued ∣ kercon 𝑩 {fe} h ∣) where
 
- free-quot-subalg pe fe UIPc URPk UIPb =
-  FirstHomCorollary|Set{𝓤 = ov 𝓧}(𝑻 X) 𝑩 h pe fe UIPc URPk UIPb
+ free-quot-subalg : ((𝑻 X) [ 𝑩 ]/ker h){fe} IsSubalgebraOf 𝑩
+ free-quot-subalg = FirstHomCorollary|Set{𝓤 = ov 𝓧}(𝑻 X) 𝑩 h pe fe UIPcod UMPblk UMPker
 
 \end{code}
 

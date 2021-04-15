@@ -172,13 +172,10 @@ The kernel of a homomorphism is a congruence relation and conversely for every c
 
 \begin{code}
 
+module _ {𝓤 𝓦 : Universe} where
 
-open Congruence
-
-module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} where
-
- homker-compatible : dfunext 𝓥 𝓦 → (𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) → compatible 𝑨 (ker ∣ h ∣)
- homker-compatible fe 𝑩 h f {u}{v} Kerhab = γ
+ homker-compatible : dfunext 𝓥 𝓦 → {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) → compatible 𝑨 (ker ∣ h ∣)
+ homker-compatible fe {𝑨} 𝑩 h f {u}{v} Kerhab = γ
   where
   γ : ∣ h ∣ ((f ̂ 𝑨) u)  ≡ ∣ h ∣ ((f ̂ 𝑨) v)
   γ = ∣ h ∣ ((f ̂ 𝑨) u)  ≡⟨ ∥ h ∥ f u ⟩
@@ -186,18 +183,14 @@ module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} where
       (f ̂ 𝑩)(∣ h ∣ ∘ v) ≡⟨ (∥ h ∥ f v)⁻¹ ⟩
       ∣ h ∣ ((f ̂ 𝑨) v)  ∎
 
-
- homker-equivalence : (𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) → IsEquivalence (ker ∣ h ∣)
- homker-equivalence 𝑩  h = ker-IsEquivalence ∣ h ∣
-
 \end{code}
 
 It is convenient to define a function that takes a homomorphism and constructs a congruence from its kernel.  We call this function `kercon`.
 
 \begin{code}
 
- kercon : dfunext 𝓥 𝓦 → (𝑩 : Algebra 𝓦 𝑆) → hom 𝑨 𝑩 → Congruence 𝑨
- kercon fe 𝑩 h = mkcon (ker ∣ h ∣)(homker-equivalence 𝑩 h)(homker-compatible fe 𝑩 h)
+ kercon : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆){fe : dfunext 𝓥 𝓦} → hom 𝑨 𝑩 → Con{𝓦} 𝑨
+ kercon {𝑨} 𝑩 {fe} h = ker ∣ h ∣ , mkcon (ker-IsEquivalence ∣ h ∣)(homker-compatible fe 𝑩 h)
 
 \end{code}
 
@@ -205,13 +198,12 @@ With this congruence we construct the corresponding quotient, along with some sy
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe} where -- where
+ kerquo : dfunext 𝓥 𝓦 → {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆} → hom 𝑨 𝑩 → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
+ kerquo fe {𝑨}{𝑩} h = 𝑨 ╱ (kercon 𝑩 {fe} h)
 
- kerquo : {fe : dfunext 𝓥 𝓦}(𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆} → hom 𝑨 𝑩 → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
- kerquo {fe} 𝑨 {𝑩} h = 𝑨 ╱ (kercon fe 𝑩 h)
 
  _[_]/ker_ : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩){fe : dfunext 𝓥 𝓦} → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
- (𝑨 [ 𝑩 ]/ker h) {fe} = kerquo {fe} 𝑨 {𝑩} h
+ (𝑨 [ 𝑩 ]/ker h){fe} = kerquo fe {𝑨}{𝑩} h
 
  infix 60 _[_]/ker_
 
@@ -227,10 +219,10 @@ Given an algebra `𝑨` and a congruence `θ`, the *canonical projection* is a m
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} where
 
- πepi : (θ : Congruence{𝓦} 𝑨) → epi 𝑨 (𝑨 ╱ θ)
- πepi θ = cπ , cπ-is-hom , cπ-is-epic where
+
+ πepi : {𝑨 : Algebra 𝓤 𝑆}(θ : Con{𝓦} 𝑨) → epi 𝑨 (𝑨 ╱ θ)
+ πepi {𝑨} θ = cπ , cπ-is-hom , cπ-is-epic where
 
   cπ : ∣ 𝑨 ∣ → ∣ 𝑨 ╱ θ ∣
   cπ a = ⟪ a ⟫
@@ -247,27 +239,30 @@ In may happen that we don't care about the surjectivity of `πepi`, in which cas
 
 \begin{code}
 
- πhom : (θ : Congruence{𝓦} 𝑨) → hom 𝑨 (𝑨 ╱ θ)
- πhom θ = epi-to-hom (𝑨 ╱ θ) (πepi θ)
+ πhom : {𝑨 : Algebra 𝓤 𝑆}(θ : Con{𝓦} 𝑨) → hom 𝑨 (𝑨 ╱ θ)
+ πhom {𝑨} θ = epi-to-hom (𝑨 ╱ θ) (πepi θ)
 
 \end{code}
+
 
 We combine the foregoing to define a function that takes 𝑆-algebras `𝑨` and `𝑩`, and a homomorphism `h : hom 𝑨 𝑩` and returns the canonical epimorphism from `𝑨` onto `𝑨 [ 𝑩 ]/ker h`. (Recall, the latter is the special notation we defined above for the quotient of `𝑨` modulo the kernel of `h`.)
 
 \begin{code}
 
- πker : (𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩){fe : dfunext 𝓥 𝓦}  →  epi 𝑨 ((𝑨 [ 𝑩 ]/ker h) {fe})
- πker 𝑩 h {fe}  = πepi (kercon fe 𝑩 h)
+ πker : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆){fe : dfunext 𝓥 𝓦}(h : hom 𝑨 𝑩) →  epi 𝑨 ((𝑨 [ 𝑩 ]/ker h){fe})
+ πker {𝑨} 𝑩 {fe} h = πepi (kercon {𝑨} 𝑩 {fe} h)
 
 \end{code}
-
 
 The kernel of the canonical projection of `𝑨` onto `𝑨 / θ` is equal to `θ`, but since equality of inhabitants of certain types (like `Congruence` or `Rel`) can be a tricky business, we settle for proving the containment `𝑨 / θ ⊆ θ`. Of the two containments, this is the easier one to prove; luckily it is also the one we need later.
 
 \begin{code}
 
- ker-in-con : {fe : dfunext 𝓥 (𝓤 ⊔ (𝓦 ⁺))}(θ : Congruence{𝓦} 𝑨)
-  →           ∀ {x}{y} → ⟨ kercon fe (𝑨 ╱ θ) (πhom θ ) ⟩ x y →  ⟨ θ ⟩ x y
+module _ {𝓤 𝓦 : Universe} where
+ open IsCongruence
+
+ ker-in-con : {fe : dfunext 𝓥 (𝓤 ⊔ 𝓦 ⁺)}{𝑨 : Algebra 𝓤 𝑆}(θ : Con{𝓦} 𝑨)
+  →           ∀ {x}{y} → ∣ kercon (𝑨 ╱ θ){fe} (πhom θ) ∣ x y →  ∣ θ ∣ x y
 
  ker-in-con θ hyp = /-≡ θ hyp
 

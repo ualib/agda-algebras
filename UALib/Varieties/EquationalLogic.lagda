@@ -91,6 +91,7 @@ The binary relation ⊧ would be practically useless if it were not an *algebrai
 
 \begin{code}
 
+
 DFunExt : 𝓤ω
 DFunExt = (𝓤 𝓥 : Universe) → dfunext 𝓤 𝓥
 

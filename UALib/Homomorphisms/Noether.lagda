@@ -30,12 +30,13 @@ Informally, the theorem states that every homomorphism from `𝑨` to `𝑩` (`�
 
 Our formal proof of this theorem will require function extensionality as well as a couple of truncation assumptions. The function extensionality postulate (`fe`) will be clear enough.  As for truncation, proving that `φ` is monic will require the following postulates:<sup>[1](Homomorphisms.Noether.html#fn1)</sup>
 
-+ *Uniqueness of (kernel) Relation Proofs* (`URPk`): the kernel of `h` inhabits the type `Pred₂` of *binary propositions* so there is at most one proof that a given pair belongs to the kernel relation;
-+ *Uniqueness of (block) Identity Proofs* (`UIPb`): given any pair of blocks of the kernel there is at most one proof that the given blocks are equal;
++ *Uniqueness of (codomain) Identity Proofs* (`UIPcod`): the codomain `∣ 𝑩 ∣` is a *set*, that is, has unique identity proofs.
++ *Uniqueness of (block) Membership Proofs* (`UMPblk`): given any pair of blocks of the kernel there is at most one proof that the given blocks are equal;
 
 And proving that `φ` is an embedding requires
 
-+ *Uniqueness of (codomain) Identity Proofs* (`UIPc`): the codomain `∣ 𝑩 ∣` is a *set*, that is, has unique identity proofs.
++ *Uniqueness of (kernel) Membership Proofs* (`UMPker`): the kernel of `h` inhabits the type `Pred₂` of *binary propositions* so there is at most one proof that a given pair belongs to the kernel relation;
+
 
 Note that the classical, informal statement of the theorem does not demand that `φ` be an embedding (in our sense of having subsingleton fibers), and if we left this out of the consequent of the formal theorem statement below, then we could omit from the antecedent the assumption that ∣ 𝑩 ∣ is a set.
 
@@ -43,30 +44,28 @@ Without further ado, we present our formalization of the first homomorphism theo
 
 \begin{code}
 
-open Congruence
 
-module first-hom-thm|Set {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
- -- extensionality assumptions:
-    (pe : prop-ext 𝓤 𝓦)(fe : dfunext 𝓥 𝓦)
+module _ {𝓤 𝓦 : Universe} where
 
- -- truncation assumptions:
-    (UIPc : is-set ∣ 𝑩 ∣)
-    (URPk : is-subsingleton-valued ⟨ kercon fe 𝑩 h ⟩)
-    (UIPb : ∀ C → is-subsingleton (IsBlock C))
- where
+ FirstHomTheorem|Set : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
+                       -- extensionality assumptions:
+                       (pe : prop-ext 𝓤 𝓦)(fe : dfunext 𝓥 𝓦)
 
- FirstHomTheorem|Set :
-  Σ φ ꞉ hom ((𝑨 [ 𝑩 ]/ker h) {fe}) 𝑩 , (∣ h ∣ ≡ ∣ φ ∣ ∘ ∣ πker 𝑩 h {fe} ∣) × Monic ∣ φ ∣ × is-embedding ∣ φ ∣
+                       -- truncation assumptions:
+                       (UIPcod : is-set ∣ 𝑩 ∣)
+                       (UMPker : is-subsingleton-valued ∣ kercon 𝑩 {fe} h ∣)
+                       (UMPblk : ∀ C → is-subsingleton (IsBlock C {∣ kercon 𝑩 {fe} h ∣}))
 
- FirstHomTheorem|Set = (φ , φhom) , φcom , φmon , φemb
+  → Σ φ ꞉ (hom ((𝑨 [ 𝑩 ]/ker h){fe}) 𝑩) , (∣ h ∣ ≡ ∣ φ ∣ ∘ ∣ πker 𝑩 {fe} h ∣) × Monic ∣ φ ∣ × is-embedding ∣ φ ∣
+
+ FirstHomTheorem|Set 𝑨 𝑩 h pe fe UIPcod UMPker UMPblk = (φ , φhom) , φcom , φmon , φemb
   where
-  θ : Congruence 𝑨
-  θ = kercon fe 𝑩 h
+  θ : Con{𝓦} 𝑨
+  θ = kercon 𝑩 {fe} h
+  ξ : IsEqv ∣ θ ∣
+  ξ = record {is-equivalence = IsCongruence.is-equivalence ∥ θ ∥ ; is-truncated = UMPker}
 
-  ξ : IsEqv ⟨ θ ⟩
-  ξ = record {is-equivalence = is-equivalence  θ ; is-truncated = URPk}
-
-  φ : ∣ (𝑨 [ 𝑩 ]/ker h) {fe} ∣ → ∣ 𝑩 ∣
+  φ : ∣ (𝑨 [ 𝑩 ]/ker h){fe} ∣ → ∣ 𝑩 ∣
   φ a = ∣ h ∣ ⌞ a ⌟
 
   φhom : is-homomorphism ((𝑨 [ 𝑩 ]/ker h){fe}) 𝑩 φ
@@ -75,13 +74,13 @@ module first-hom-thm|Set {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(𝑩 :
              (𝑓 ̂ 𝑩) (λ x → φ (𝒂 x))             ∎
 
   φmon : Monic φ
-  φmon (_ , (u , refl)) (_ , (v , refl)) φuv = block-ext|Set pe {⟨ θ ⟩ , ξ} UIPb  φuv
+  φmon (_ , (u , refl)) (_ , (v , refl)) φuv = block-ext|Set pe {∣ θ ∣ , ξ} UMPblk  φuv
 
-  φcom : ∣ h ∣ ≡ φ ∘ ∣ πker 𝑩 h {fe} ∣
+  φcom : ∣ h ∣ ≡ φ ∘ ∣ πker 𝑩{fe} h ∣
   φcom = refl
 
   φemb : is-embedding φ
-  φemb = monic-is-embedding|Set φ UIPc φmon
+  φemb = monic-is-embedding|Set φ UIPcod φmon
 
 \end{code}
 
@@ -89,15 +88,30 @@ Below we will prove that the homomorphism `φ`, whose existence we just proved, 
 
 \begin{code}
 
- FirstIsoTheorem|Set : dfunext 𝓦 𝓦 → Epic ∣ h ∣
+ -- FirstIsoTheorem|Set : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
+          -- extensionality assumptions:
+ FirstIsoTheorem|Set : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
+ -- extensionality assumptions:
+    (pe : prop-ext 𝓤 𝓦)(fe : dfunext 𝓥 𝓦) (feww : dfunext 𝓦 𝓦)
 
-  → Σ f ꞉ epi((𝑨 [ 𝑩 ]/ker h){fe}) 𝑩 , (∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩 h {fe} ∣) × Monic ∣ f ∣ × is-embedding ∣ f ∣
+ -- truncation assumptions:
+    (UIPcod : is-set ∣ 𝑩 ∣)
+    (UMPker : is-subsingleton-valued ∣ kercon 𝑩 {fe} h ∣)
+    (UMPblk : ∀ C → is-subsingleton (IsBlock C {∣ kercon 𝑩 {fe} h ∣}))
+    --       {pe : prop-ext 𝓤 𝓦}{fe : funext 𝓥 𝓦}
 
- FirstIsoTheorem|Set fev hE = (fmap , fhom , fepic) , refl , fst(snd ∥ FHT ∥) , snd(snd ∥ FHT ∥)
+          -- truncation assumptions:
+          -- (UIPcod : is-set ∣ 𝑩 ∣)
+          -- (UMPblk : ∀ C → is-subsingleton (IsBlock C))
+--          (UMPker : is-subsingleton-valued ∣ kercon 𝑩 h ∣)
+  → Epic ∣ h ∣
+  → Σ f ꞉ epi ((𝑨 [ 𝑩 ]/ker h) {fe}) 𝑩 , (∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩 {fe} h ∣) × Monic ∣ f ∣ × is-embedding ∣ f ∣
+
+ FirstIsoTheorem|Set 𝑨 𝑩 h pe fe feww UIPcod UMPker UMPblk hE = (fmap , fhom , fepic) , refl , fst(snd ∥ FHT ∥) , snd(snd ∥ FHT ∥)
   where
-  FHT = FirstHomTheorem|Set  -- (φ , φhom) , φcom , φmon , φemb
+  FHT = FirstHomTheorem|Set 𝑨 𝑩 h pe fe UIPcod UMPker UMPblk  -- (φ , φhom) , φcom , φmon , φemb
 
-  fmap : ∣ (𝑨 [ 𝑩 ]/ker h){fe} ∣ → ∣ 𝑩 ∣
+  fmap : ∣ (𝑨 [ 𝑩 ]/ker h) {fe} ∣ → ∣ 𝑩 ∣
   fmap = fst ∣ FHT ∣
 
   fhom : is-homomorphism ((𝑨 [ 𝑩 ]/ker h){fe}) 𝑩 fmap
@@ -109,7 +123,7 @@ Below we will prove that the homomorphism `φ`, whose existence we just proved, 
    a = EpicInv ∣ h ∣ hE b
 
    bfa : b ≡ fmap ⟪ a ⟫
-   bfa = (cong-app (EpicInvIsRightInv {fe = fev} ∣ h ∣ hE) b)⁻¹
+   bfa = (cong-app (EpicInvIsRightInv {fe = feww} ∣ h ∣ hE) b)⁻¹
 
    γ : Image fmap ∋ b
    γ = Image_∋_.eq b ⟪ a ⟫ bfa
@@ -120,10 +134,10 @@ Now we prove that the homomorphism `φ`, whose existence is guaranteed by `First
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) where
+module _ {𝓤 𝓦 : Universe}{fe : dfunext 𝓥 𝓦}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) where
 
- NoetherHomUnique : {fe : dfunext 𝓥 𝓦}(f g : hom ((𝑨 [ 𝑩 ]/ker h){fe}) 𝑩)
-  →                 ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩 h {fe} ∣ → ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker 𝑩 h {fe} ∣
+ NoetherHomUnique : (f g : hom ((𝑨 [ 𝑩 ]/ker h) {fe}) 𝑩)
+  →                 ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩 {fe} h ∣ → ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker 𝑩{fe} h ∣
                     -------------------------------------------------------------------------
   →                 ∀ a  →  ∣ f ∣ a ≡ ∣ g ∣ a
 
@@ -138,12 +152,12 @@ If, in addition, we postulate extensionality of functions defined on the domain 
 
 \begin{code}
 
- fe-NoetherHomUnique : {fuww : funext (𝓤 ⊔ 𝓦 ⁺) 𝓦}{fe : dfunext 𝓥 𝓦}(f g : hom((𝑨 [ 𝑩 ]/ker h){fe})𝑩)
-  →                    ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩 h {fe} ∣ → ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker 𝑩 h {fe} ∣
+ fe-NoetherHomUnique : {fuww : funext (𝓤 ⊔ 𝓦 ⁺) 𝓦}(f g : hom ((𝑨 [ 𝑩 ]/ker h){fe}) 𝑩)
+  →                    ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩{fe} h ∣ → ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker 𝑩{fe} h ∣
                        -------------------------------------------------------------------------
   →                    ∣ f ∣ ≡ ∣ g ∣
 
- fe-NoetherHomUnique {fuww}{fe} f g hfk hgk = fuww (NoetherHomUnique{fe} f g hfk hgk)
+ fe-NoetherHomUnique {fuww} f g hfk hgk = fuww (NoetherHomUnique f g hfk hgk)
 
 \end{code}
 
@@ -151,12 +165,12 @@ The proof of `NoetherHomUnique` goes through for the special case of epimorphism
 
 \begin{code}
 
- NoetherIsoUnique : {fe : dfunext 𝓥 𝓦}(f g : epi ((𝑨 [ 𝑩 ]/ker h){fe}) 𝑩)
-  →                 ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩 h{fe} ∣ → ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker 𝑩 h{fe} ∣
+ NoetherIsoUnique : (f g : epi ((𝑨 [ 𝑩 ]/ker h){fe}) 𝑩)
+  →                 ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩{fe} h ∣ → ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker 𝑩 {fe} h ∣
                     ---------------------------------------------------------------------
   →                 ∀ a → ∣ f ∣ a ≡ ∣ g ∣ a
 
- NoetherIsoUnique {fe} f g hfk hgk = NoetherHomUnique {fe}(epi-to-hom 𝑩 f) (epi-to-hom 𝑩 g) hfk hgk
+ NoetherIsoUnique f g hfk hgk = NoetherHomUnique (epi-to-hom 𝑩 f) (epi-to-hom 𝑩 g) hfk hgk
 
 \end{code}
 

@@ -24,36 +24,31 @@ A *congruence relation* of an algebra `𝑨` is defined to be an equivalence rel
 
 \begin{code}
 
-Con : (𝑨 : Algebra 𝓤 𝑆) → ov 𝓤 ̇
-Con {𝓤} 𝑨 = Σ θ ꞉ ( Rel ∣ 𝑨 ∣ 𝓤 ) , IsEquivalence θ × compatible 𝑨 θ
+module _ {𝓦 𝓤 : Universe} where
 
-record Congruence {𝓦 𝓤 : Universe}(𝑨 : Algebra 𝓤 𝑆) : ov 𝓦 ⊔ 𝓤 ̇  where
- constructor mkcon
- field
-  ⟨_⟩ : Rel ∣ 𝑨 ∣ 𝓦
-  is-equivalence : IsEquivalence ⟨_⟩
-  is-compatible : compatible 𝑨 ⟨_⟩
+ record IsCongruence (𝑨 : Algebra 𝓤 𝑆)(θ : Rel ∣ 𝑨 ∣ 𝓦) : ov 𝓦 ⊔ 𝓤 ̇  where
+  constructor mkcon
+  field
+   is-equivalence : IsEquivalence θ
+   is-compatible : compatible 𝑨 θ
 
-open Congruence
+ Con : (𝑨 : Algebra 𝓤 𝑆) → 𝓤 ⊔ ov 𝓦 ̇
+ Con 𝑨 = Σ θ ꞉ ( Rel ∣ 𝑨 ∣ 𝓦 ) , IsCongruence 𝑨 θ
+
 
 \end{code}
 
-Each of these types captures the informal notion of congruence, and the only real difference between them is that `Congruence` includes the extra universe parameter `𝓦` to accommodate more general underlying relations.   Otherwise, the two definitions are equivalent in the sense that each implies the other, as we now prove.
+Each of these types captures what it means to be a congruence and they are equivalent in the sense that each clearly implies the other. One implication is the "uncurry" operation and the other is the second projection.
 
 \begin{code}
 
-module _ {𝑨 : Algebra 𝓤 𝑆} where
+ IsCongruence→Con : {𝑨 : Algebra 𝓤 𝑆}(θ : Rel ∣ 𝑨 ∣ 𝓦) → IsCongruence 𝑨 θ → Con 𝑨
+ IsCongruence→Con θ p = θ , p
 
- Con→Congruence : Con 𝑨 → Congruence{𝓤} 𝑨
- Con→Congruence θ = mkcon ∣ θ ∣ (fst ∥ θ ∥) (snd ∥ θ ∥)
-
- open Congruence
-
- Congruence→Con : Congruence{𝓤} 𝑨 →  Con 𝑨
- Congruence→Con θ = ⟨ θ ⟩ , is-equivalence θ , is-compatible θ
+ Con→IsCongruence : {𝑨 : Algebra 𝓤 𝑆} → ((θ , _) : Con 𝑨) → IsCongruence 𝑨 θ
+ Con→IsCongruence θ = ∥ θ ∥
 
 \end{code}
-
 
 #### <a id="example">Example</a>
 We defined the zero relation `𝟎-rel` in the [Relations.Discrete][] module.  We now build the *trivial congruence*, which has `𝟎-rel` as its underlying relation. Observe that `𝟎-rel` is equivalent to the identity relation `≡` and these are obviously both equivalences. In fact, we already proved this of `≡` in the [Overture.Equality][] module, so we simply apply the corresponding proofs.
@@ -81,8 +76,11 @@ Finally, we have the ingredients need to construct the zero congruence of any al
 
 \begin{code}
 
-Δ : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 𝑆} → Congruence 𝑨
-Δ fe = mkcon 𝟎 𝟎-IsEquivalence (𝟎-compatible fe)
+Δ : (𝑨 : Algebra 𝓤 𝑆){fe : funext 𝓥 𝓤} → IsCongruence 𝑨 𝟎
+Δ 𝑨 {fe} = mkcon 𝟎-IsEquivalence (𝟎-compatible fe)
+
+𝟘 : (𝑨 : Algebra 𝓤 𝑆){fe : funext 𝓥 𝓤} → Con{𝓤} 𝑨
+𝟘 𝑨 {fe} = IsCongruence→Con 𝟎 (Δ 𝑨 {fe})
 
 \end{code}
 
@@ -95,13 +93,12 @@ In many areas of abstract mathematics the *quotient* of an algebra `𝑨` with r
 \begin{code}
 
 module _ {𝓤 𝓦 : Universe} where
- open Congruence
 
- _╱_ : (𝑨 : Algebra 𝓤 𝑆) → Congruence{𝓦} 𝑨 → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
+ _╱_ : (𝑨 : Algebra 𝓤 𝑆) → Con{𝓦} 𝑨 → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
 
- 𝑨 ╱ θ = ( ∣ 𝑨 ∣ / ⟨ θ ⟩ ) ,                               -- the domain of the quotient algebra
+ 𝑨 ╱ θ = (∣ 𝑨 ∣ / ∣ θ ∣)  ,                               -- the domain of the quotient algebra
 
-         λ 𝑓 𝒂 → ⟪ (𝑓 ̂ 𝑨)(λ i →  fst ∥ 𝒂 i ∥) ⟫ --  ⟨ θ ⟩  -- the basic operations of the quotient algebra
+         λ 𝑓 𝒂 → ⟪ (𝑓 ̂ 𝑨)(λ i →  fst ∥ 𝒂 i ∥) ⟫           -- the basic operations of the quotient algebra
 
 \end{code}
 
@@ -110,8 +107,8 @@ module _ {𝓤 𝓦 : Universe} where
 \begin{code}
 
 
- 𝟎[_╱_] : (𝑨 : Algebra 𝓤 𝑆)(θ : Congruence{𝓦} 𝑨) → Rel (∣ 𝑨 ∣ / ⟨ θ ⟩)(𝓤 ⊔ 𝓦 ⁺)
- 𝟎[ 𝑨 ╱ θ ] = λ u v → u ≡ v
+ 𝟘[_╱_] : (𝑨 : Algebra 𝓤 𝑆)(θ : Con {𝓦} 𝑨) → Rel (∣ 𝑨 ∣ / ∣ θ ∣)(𝓤 ⊔ 𝓦 ⁺)
+ 𝟘[ 𝑨 ╱ θ ] = λ u v → u ≡ v
 
 \end{code}
 
@@ -119,8 +116,8 @@ From this we easily obtain the zero congruence of `𝑨 ╱ θ` by applying the 
 
 \begin{code}
 
- 𝟘[_╱_] : (𝑨 : Algebra 𝓤 𝑆)(θ : Congruence{𝓦} 𝑨){fe : funext 𝓥 (𝓤 ⊔ 𝓦 ⁺)} → Congruence (𝑨 ╱ θ)
- 𝟘[ 𝑨 ╱ θ ] {fe} = Δ fe
+ 𝟎[_╱_] : (𝑨 : Algebra 𝓤 𝑆)(θ : Con{𝓦} 𝑨){fe : funext 𝓥 (𝓤 ⊔ 𝓦 ⁺)} → Con (𝑨 ╱ θ)
+ 𝟎[ 𝑨 ╱ θ ] {fe} = 𝟘[ 𝑨 ╱ θ ] , Δ (𝑨 ╱ θ) {fe}
 
 \end{code}
 
@@ -130,9 +127,10 @@ Finally, the following elimination rule is sometimes useful.
 \begin{code}
 
 module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} where
+ open IsCongruence
 
- /-≡ : (θ : Congruence{𝓦} 𝑨){u v : ∣ 𝑨 ∣} → ⟪ u ⟫ {⟨ θ ⟩} ≡ ⟪ v ⟫ → ⟨ θ ⟩ u v
- /-≡ θ refl = IsEquivalence.rfl (is-equivalence θ)
+ /-≡ : (θ : Con{𝓦} 𝑨){u v : ∣ 𝑨 ∣} → ⟪ u ⟫ {∣ θ ∣} ≡ ⟪ v ⟫ → ∣ θ ∣ u v
+ /-≡ θ refl = IsEquivalence.rfl (is-equivalence ∥ θ ∥)
 
 \end{code}
 
@@ -149,3 +147,4 @@ module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} where
 <span style="float:right;">[Homomorphisms →](Homomorphisms.html)</span>
 
 {% include UALib.Links.md %}
+

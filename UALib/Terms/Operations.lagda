@@ -241,26 +241,18 @@ To conclude this module, we prove that every term is compatible with every congr
 
 \begin{code}
 
-open Congruence
 
-module _ {𝓤 : Universe}{X : 𝓤 ̇} where
+module _ {𝓦 𝓤 : Universe}{X : 𝓤 ̇} where
 
- _∣:_ : {𝑨 : Algebra 𝓤 𝑆}(t : Term X)(θ : Con 𝑨)
+ open IsCongruence
+
+ _∣:_ : {𝑨 : Algebra 𝓤 𝑆}(t : Term X)(θ : Con{𝓦} 𝑨)
         -----------------------------------------
   →     (𝑨 ⟦ t ⟧) |: ∣ θ ∣
 
  ((ℊ x) ∣: θ) p = p x
 
- ((node 𝑓 𝑡) ∣: θ) p = snd ∥ θ ∥ 𝑓 λ x → ((𝑡 x) ∣: θ) p
-
- -- _∣:_ : {𝑨 : Algebra 𝓤 𝑆}(t : Term X)(θ : Con 𝑨)
- --        -----------------------------------------
- --  →     (t ̇ 𝑨) |: ∣ θ ∣
-
- -- ((ℊ x) ∣: θ) p = p x
-
- -- ((node 𝑓 𝑡) ∣: θ) p = snd ∥ θ ∥ 𝑓 λ x → ((𝑡 x) ∣: θ) p
-
+ ((node 𝑓 𝑡) ∣: θ) p = (is-compatible ∥ θ ∥) 𝑓 λ x → ((𝑡 x) ∣: θ) p
 
 \end{code}
 
@@ -268,21 +260,21 @@ For the sake of comparison, here is the analogous theorem using `compatible-fun`
 
 \begin{code}
 
- compatible-term : {𝑨 : Algebra 𝓤 𝑆}(t : Term X)(θ : Con 𝑨)
+ compatible-term : {𝑨 : Algebra 𝓤 𝑆}(t : Term X)(θ : Con{𝓦} 𝑨)
                    -----------------------------------------
   →                compatible-fun (𝑨 ⟦ t ⟧) ∣ θ ∣
 
  compatible-term (ℊ x) θ p = λ y z → z x
 
- compatible-term (node 𝑓 𝑡) θ u v p = snd ∥ θ ∥ 𝑓 λ x → ((compatible-term (𝑡 x) θ) u v) p
+ compatible-term (node 𝑓 𝑡) θ u v p = (is-compatible ∥ θ ∥) 𝑓 λ x → ((compatible-term (𝑡 x) θ) u v) p
 
- compatible-term' : {𝑨 : Algebra 𝓤 𝑆}(t : Term X)(θ : Con 𝑨)
+ compatible-term' : {𝑨 : Algebra 𝓤 𝑆}(t : Term X)(θ : Con{𝓦} 𝑨)
                    -----------------------------------------
   →                compatible-fun (t ̇ 𝑨) ∣ θ ∣
 
  compatible-term' (ℊ x) θ p = λ y z → z x
 
- compatible-term' (node 𝑓 𝑡) θ u v p = snd ∥ θ ∥ 𝑓 λ x → ((compatible-term' (𝑡 x) θ) u v) p
+ compatible-term' (node 𝑓 𝑡) θ u v p = (is-compatible ∥ θ ∥) 𝑓 λ x → ((compatible-term' (𝑡 x) θ) u v) p
 
 
 \end{code}
