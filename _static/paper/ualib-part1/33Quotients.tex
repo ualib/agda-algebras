@@ -330,79 +330,15 @@ An easy first example of an equivalence relation is the kernel of any function. 
 \AgdaSymbol{\}}\<%
 \end{code}
 
-\paragraph*{Truncated equivalence relations}%\label{truncated-preorders-and-equivalences}
-Using the \af{is-subsingleton-valued} type defined earlier, we define the type of equivalence relations that have ``unique membership proofs,'' as follows.
-\ccpad
-\begin{code}%
-\>[1]\AgdaKeyword{record}\AgdaSpace{}%
-\AgdaRecord{IsEqv}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}(}\AgdaOperator{\AgdaBound{R}}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Rel}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-\>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaKeyword{field}%
-\>[344I]\AgdaField{is-equivalence}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaRecord{IsEquivalence}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{R}}\<%
-\\
-\>[.][@{}l@{}]\<[344I]%
-\>[8]\AgdaField{is-truncated}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{is-subsingleton-valued}\AgdaSpace{}%
-\AgdaOperator{\AgdaBound{R}}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{Eqv}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-%
-\>[1]\AgdaFunction{Eqv}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{Σ}\AgdaSpace{}%
-\AgdaBound{R}\AgdaSpace{}%
-\AgdaFunction{꞉}\AgdaSpace{}%
-\AgdaFunction{Rel}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaFunction{,}\AgdaSpace{}%
-\AgdaRecord{IsEqv}\AgdaSpace{}%
-\AgdaBound{R}\<%
-\end{code}
-
-
 
 
 \subsubsection{Equivalence classes (blocks)}\label{equivalence-classes-1}
 
-Let \ab R be an equivalence relation on \ab A. Then for each \abt{𝑎}{A} there is an \defn{equivalence class} that contains \ab 𝑎 which we denote and define by \af{[} \ab 𝑎 \af{]} \ab R \as{:=} \as{\{}\abt{x}{A}~|~\ab R~\ab x~\ab 𝑎\as{\}}. We call this the \ab R-\defn{block containing} \ab 𝑎.
+If \ab R is an equivalence relation on \ab A, then for each \ab u~\as :~\ab A, there is an \defn{equivalence class} (or \defn{equivalence block}, or \ab R-\defn{block}) containing \ab u, which we denote by \af [~\ab u~\af ]~\as :=~\{\ab v~\as :~\ab A~|~\ab R~\ab u~\ab v\}.  We call this the \ab R-\defn{block containing} \ab 𝑎.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
-\>[1]\AgdaOperator{\AgdaFunction{[\AgdaUnderscore{}]\AgdaUnderscore{}}}\AgdaSpace{}%
+\>[1]\AgdaOperator{\AgdaFunction{[\AgdaUnderscore{}]}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -411,9 +347,11 @@ Let \ab R be an equivalence relation on \ab A. Then for each \abt{𝑎}{A} there
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{R}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Rel}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{Pred}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
@@ -421,32 +359,18 @@ Let \ab R be an equivalence relation on \ab A. Then for each \abt{𝑎}{A} there
 \\
 %
 \>[1]\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
-\AgdaBound{𝑎}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
-\AgdaBound{R}\AgdaSpace{}%
+\AgdaBound{u}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{]}}\AgdaSymbol{\{}\AgdaBound{R}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{λ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{R}\AgdaSpace{}%
-\AgdaBound{𝑎}\AgdaSpace{}%
-\AgdaBound{x}\<%
+\AgdaBound{u}\<%
 \end{code}
 \ccpad
-Thus, \ab{x} \af ∈ \as{[} \ab a \as{]} \ab R if and only if \ab{R} \ab a \ab x. % We often refer to \af{[} \ab 𝑎 \af{]} \ab R as the \emph{R-block containing} \ab 𝑎, and w
-The members of the \ab R-block containing \ab a as a predicate \ab C satisfying \af{IsBlock}~\ab C, where the latter is defined as follows.
+Thus, \ab v~\as ∈~\af [~\ab u~\af ] if and only if \ab R~\ab u~\ab v, as desired.  We often refer to \af [~\ab u~\af ] as the \ab R-\defn{block containing} \ab u.
+
+A predicate \ab C over \ab A is an \ab R-block if and only if \ab C~\ad ≡~\af [~\ab u~\af ] for some \ab u~\as :~\ab A.  We represent this characterization of an \ab R-block as follows.
 \ccpad
 \begin{code}%
-% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
-% \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaBound{𝓦}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-% \AgdaKeyword{where}\<%
-% \\
-% %
-% \\[\AgdaEmptyExtraSkip]%
 \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{IsBlock}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -488,10 +412,10 @@ The members of the \ab R-block containing \ab a as a predicate \ab C satisfying 
 \AgdaBound{R}\<%
 \end{code}
 \ccpad
-That is, \ab C is the \emph{R-block containing} \ab 𝑎 provided there exists a pair (\ab a , \ab p)~\as :~\af{IsBlock}~\ab R~\ab C where \ab p is a proof of \ab C~\ad ≡~\af [~\ab a~\af ]~\ab R.
+Thus, a proof of the assertion \af{IsBlock} \ab C is a dependent pair (\ab u , \ab p), with \ab u~\as :~\ab A and \ab p is a proof of \ab C~\ad ≡~\af [~\ab u~\af ]\{\ab R\}.
 
-If \ab{R} is an equivalence relation on \ab{A}, then the \defn{quotient} of \ab{A} modulo \ab{R} is denoted by
-\ab{A} \aof / \ab R and defined as the collection \as{\{}\af{[} \ab 𝑎 \af{]} \ab R \as{∣}  \abt{𝑎}{A}\as{\}} of all \ab R-blocks of \ab A. We represent the quotient by the following type.
+If \ab R is an equivalence relation on \ab A, then the \defn{quotient of} \ab A \textit{modulo} \ab R is denoted by \ab A~\af /~\ab R and is defined to be the collection \{\af [~\ab u~\af ]~∣~\ab y~\as :~\ab A\} of all \ab R-blocks.
+\ccpad
 \begin{code}%
 % \>[0]\<%
 % \\

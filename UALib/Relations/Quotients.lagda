@@ -98,7 +98,7 @@ An easy first example of an equivalence relation is the kernel of any function. 
 
 #### <a id="equivalence-classes">Equivalence classes (blocks)</a>
 
-If R is an equivalence relation on A, then for each `u : A`, there is an *equivalence class* (or *equivalence block*) containing `u`, which we denote and define by `[ u ] {R}` := all `v : A` such that `R u v`.
+If `R` is an equivalence relation on `A`, then for each `u : A`, there is an *equivalence class* (or *equivalence block*, or `R`-*block*) containing `u`, which we denote and define by `[ u ] := {v : A | R u v}`.
 
 \begin{code}
 
@@ -123,9 +123,9 @@ module _ {𝓤 𝓦 : Universe} where
 
 \end{code}
 
-Thus, a proof of the assertion `IsBlock C` is a dependent pair `(u , p)`, with ` u : A` and `p` is a proof of `C ≡ [ u ] {R}`.
+Thus, a proof of `IsBlock C` is a pair `(u , p)`, with `u : A` and `p` is a proof of `C ≡ [ u ] {R}`.
 
-If `R` is an equivalence relation on `A`, then the *quotient* of `A` modulo `R` is denoted by `A / R` and is defined to be the collection `{[ u ] ∣  y : A}` of all `R`-blocks.
+If `R` is an equivalence relation on `A`, then the *quotient* of `A` modulo `R` is denoted by `A / R` and is defined to be the collection `{[ u ] ∣  y : A}` of all `R`-blocks.<sup>[1](Relations.Quotients.html#fn1)</sup>
 
 \begin{code}
 
@@ -136,9 +136,7 @@ If `R` is an equivalence relation on `A`, then the *quotient* of `A` modulo `R` 
 
 \end{code}
 
-Thus, a block of `R` is a pair `(C , p)` consisting of a predicate `C` and a proof `p : IsBlock C`.
-
-The following serves as a kind of *introduction rule*.
+We use the following type to represent an \ab R-block with a designated representative.
 
 \begin{code}
 
@@ -147,16 +145,18 @@ The following serves as a kind of *introduction rule*.
 
 \end{code}
 
-Dually, the next type provides an *elimination rule*. Here `C` is a predicate and `p` is a proof of `C ≡ [ a ] R`.<sup>[1](Relations.Quotients.html#fn1)</sup>
+Dually, the next type provides an *elimination rule*.<sup>[2](Relations.Quotients.html#fn2)</sup>
 
 \begin{code}
 
  ⌞_⌟ : {A : 𝓤 ̇}{R : Rel A 𝓦} → A / R  → A
- ⌞ _ , a , _ ⌟ = a
+ ⌞ C , a , p ⌟ = a
 
 \end{code}
 
-Later we will need the following tools for working with the quotient types defined above.
+Here `C` is a predicate and `p` is a proof of `C ≡ [ a ] R`.
+
+Later we will use the following subset inclusions and pseudo-equality when working with the quotient types defined above.
 
 \begin{code}
 
