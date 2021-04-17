@@ -37,7 +37,7 @@ NAMES="UALib
        Varieties/FreeAlgebras"
 
 for f in $NAMES; do
-     echo "Checking $f.lagda";
+     echo "Type-checking $f.lagda";
      agda --latex $f.lagda;
      mv latex/$f.{tex,md};
      pandoc --latex-engine=xelatex -f markdown -t latex latex/$f.md -o latex/$f.tex;
