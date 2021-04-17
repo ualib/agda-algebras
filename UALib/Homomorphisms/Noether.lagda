@@ -74,7 +74,7 @@ module _ {𝓤 𝓦 : Universe} where
              (𝑓 ̂ 𝑩) (λ x → φ (𝒂 x))             ∎
 
   φmon : Monic φ
-  φmon (_ , (u , refl)) (_ , (v , refl)) φuv = block-ext|Set pe {∣ θ ∣ , ξ} UMPblk  φuv
+  φmon (_ , (u , refl)) (_ , (v , refl)) φuv = block-ext|Set pe ξ UMPblk  φuv
 
   φcom : ∣ h ∣ ≡ φ ∘ ∣ πker 𝑩{fe} h ∣
   φcom = refl
