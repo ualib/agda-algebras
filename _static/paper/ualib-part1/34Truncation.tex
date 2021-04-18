@@ -314,152 +314,28 @@ Embeddings are always monic, so we conclude that when a function's codomain is a
 
 \newcommand\proptype{\href{https://agda.readthedocs.io/en/v2.6.1.3/language/prop.html}{\af{Prop}}\xspace}
 
-\subsubsection{Propositions}\label{propositions}
+\subsubsection{Propositions and truncated equivalences}\label{propositions}
 
-Sometimes we will want to assume that a type \ab{A} is a \emph{set}. As we just learned, this means there is at most one proof that two inhabitants of \ab{A} are the same. Analogously, for predicates on \ab{A}, we may wish to assume that there is at most one proof that an inhabitant of \ab{X} satisfies the given predicate. If a unary predicate satisfies this condition, then we call it a \defn{unary proposition}. We now define a type that captures this concept.\footnote{\agda now has a type called \proptype, though we have never tried to use it. It likely provides at least some of the functionality we develop here, however, our preference is to assume only a minimal \mltt foundation and build up the types we need ourselves. For details about \proptype, consult the official documentation at \url{https://agda.readthedocs.io/en/v2.6.1.3/language/prop.html}.}
+Sometimes we will want to assume that a type \ab{A} is a \emph{set}. As we just learned, this means there is at most one proof that two inhabitants of \ab{A} are the same. Analogously, for predicates on \ab{A}, we may wish to assume that there is at most one proof that an inhabitant of \ab{X} satisfies the given predicate. If a unary predicate satisfies this condition, then we call it a \defn{unary proposition}. We could represent this concept in type theory by the following Sigma type: `Σ P ꞉ (Pred A 𝓦) , ∀ x → is-subsingleton (P x)`. However, as we will not have occasion to use this type, we omit the formal definition.
+
+The principle of \defn{proposition extensionality} asserts that logically equivalent propositions are equivalent.  That is, if \ab P and \ab Q are propositions such that \ab P~\af ⊆~\ab Q and \ab Q~\af ⊆~\ab P, then \ab P~\ad ≡~\ab Q`.
+
+For our purposes, it will suffice to formalize this notion for general predicates, rather than for (truncated) propositions, as follows.\footnote{\agda now has a type called \proptype, though we have never tried to use it. It likely provides at least some of the functionality we develop here, however, our preference is to assume only a minimal \mltt foundation and build up the types we need ourselves. For details about \proptype, consult the official documentation at \url{https://agda.readthedocs.io/en/v2.6.1.3/language/prop.html}.}
 \ccpad
 \begin{code}%
-\>[1]\AgdaFunction{Pred₁}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-%
-\>[1]\AgdaFunction{Pred₁}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{Σ}\AgdaSpace{}%
-\AgdaBound{P}\AgdaSpace{}%
-\AgdaFunction{꞉}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{Pred}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaFunction{,}\AgdaSpace{}%
-\AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{is-subsingleton}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{P}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSymbol{)}\<%
 \end{code}
 \scpad
-
-The principle of \defn{proposition extensionality} asserts that logically equivalent propositions are equivalent. That is, if we have \ab{P Q} \as : \af{Pred₁} and \af{∣} \ab P \af{∣} \af ⊆ \af ∣ \ab Q \af ∣ and
-\af{∣} \ab Q \af ∣ \af ⊆ \af ∣ \ab P \af ∣, then \ab{P} \aod ≡ \ab Q. This is formalized
-as follows.\footnote{cf.~\cite{MHE}, specifically the section on \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#250227}{``Prop extensionality and the powerset''}.}
-\ccpad
-\begin{code}%
-\>[0]\AgdaFunction{prop-ext}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-\>[0]\AgdaFunction{prop-ext}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{P}\AgdaSpace{}%
-\AgdaBound{Q}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Pred₁}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{P}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊆}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{Q}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{Q}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊆}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{P}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{P}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{Q}\<%
+\begin{code}
 \end{code}
 \ccpad
-Recall, we defined the relation \af{≐} for predicates as follows: \ab{P} \af{≐} \ab Q \as = (\ab P \af ⊆ \ab Q) \af × (\ab Q \af ⊆ \ab P). Therefore, if we postulate \af{prop-ext} \ab 𝓤 \ab 𝓦 and \ab{P} \af{≐} \ab Q, then \ab{P} \aod ≡ \ab Q obviously follows. Nonetheless, let us record this observation, assuming the context includes \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}.
-\ccpad
-\begin{code}%
-\>[1]\AgdaFunction{prop-ext'}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{prop-ext}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{P}\AgdaSpace{}%
-\AgdaBound{Q}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Pred₁}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{P}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{≐}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{Q}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{P}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{Q}\<%
-\\
-%
-\>[1]\AgdaFunction{prop-ext'}\AgdaSpace{}%
-\AgdaBound{pe}\AgdaSpace{}%
-\AgdaBound{hyp}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{pe}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{fst}\AgdaSpace{}%
-\AgdaBound{hyp}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{snd}\AgdaSpace{}%
-\AgdaBound{hyp}\AgdaSymbol{)}\<%
-\end{code}
-\scpad
-
-The foregoing easily generalizes to binary relations.  If \ab{R} is a binary relation such that there is at most one way to prove that a given pair of elements is \ab{R}-related, then we call \ab{R} a \defn{binary proposition}. As above, we use the \af{is-subsingleton} type of \typtop to impose this truncation assumption on a binary relation.\footnote{%
+The foregoing easily generalizes to binary relations in general and equivalence
+relations in particular.  If \ab R is a binary relation such that there is at
+most one way to prove that a given pair of elements is \ab R-related, then we call
+\ab R a \defn{binary proposition}. As above, we use \typtop's
+\af{is-subsingleton-valued} type to impose this truncation assumption on a
+binary relation.\footnote{%
 This is another example of \emph{proof-irrelevance}. Indeed, if \ab{R} is a binary proposition and we
-have two proofs of \ab{R} \ab x \ab y, then we can assume that the proofs are indistinguishable or that any distinctions are irrelevant.}
+have two proofs of \ab{R} \ab x \ab y, then the proofs are indistinguishable.}
 \ccpad
 \begin{code}%
 \>[0]\AgdaFunction{Pred₂}\AgdaSpace{}%
@@ -496,325 +372,100 @@ have two proofs of \ab{R} \ab x \ab y, then we can assume that the proofs are in
 \AgdaBound{R}\<%
 \end{code}
 \ccpad
-Recall, \af{is-subsingleton-valued} is simply defined as\\[-10pt]
+Recall, \af{is-subsingleton-valued} is defined as\\[-10pt]
 
 \af{is-subsingleton-valued} \ab R = \as ∀~\ab x~\ab y~\as →~\af{is-subsingleton}~(\ab R~\ab x~\ab y)\\[4pt]
-which is the assertion that for all \ab x~\ab y there is at most one proof that \ab x and \ab y are \ab R-related. We will generalize this from binary to arbitrary (i.e., continuous and dependent) relations below (see \af{IsContProp} and \af{IsDepProp}).
+which is the assertion that for all \ab x~\ab y there is at most one proof that
+\ab x and \ab y are \ab R-related. 
+We call this the \defn{uniqueness-of-membership-proofs} (UMP) property.  The
+types \af{IsContProp} and \af{IsDepProp} defined below generalize this concept
+from binary to arbitrary (continuous and dependent) relations.
 
-\subsubsection{Quotient extensionality}\label{quotient-extensionality}
-
-We need a (subsingleton) identity type for congruence classes over sets so that we can equate two classes even when they are presented using different representatives. Proposition extensionality is precisely what we need to accomplish this. We now define a type called \af{block-ext} that will play a crucial role later (e.g., in the formal proof of Birkhoff's HSP theorem).
+We define a \defn{truncated equivalence} to be an equivalence relation that has unique membership proofs, and we use the following types to represent such relations.
 \ccpad
 \begin{code}%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
+% \>[0]\<%
+% \\
+% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
+% \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaBound{𝓦}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaKeyword{where}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaKeyword{record}\AgdaSpace{}%
+\AgdaRecord{IsEqv}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{R}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}(}\AgdaBound{R}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Rel}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaKeyword{where}\<%
 \\
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaModule{IsEqv}\<%
+\>[1][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaKeyword{field}%
+\>[369I]\AgdaField{is-equivalence}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaRecord{IsEquivalence}\AgdaSpace{}%
+\AgdaBound{R}\<%
+\\
+\>[.][@{}l@{}]\<[369I]%
+\>[8]\AgdaField{is-truncated}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{is-subsingleton-valued}\AgdaSpace{}%
+\AgdaBound{R}\<%
 \\
 %
-% \\[\AgdaEmptyExtraSkip]%
+\\[\AgdaEmptyExtraSkip]%
 %
-\>[1]\AgdaFunction{block-ext}\AgdaSpace{}%
+\>[1]\AgdaFunction{Eqv}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{prop-ext}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+%
+\>[1]\AgdaFunction{Eqv}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{Σ}\AgdaSpace{}%
+\AgdaBound{R}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
+\AgdaFunction{Rel}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
 \AgdaRecord{IsEqv}\AgdaSpace{}%
-\AgdaBound{R}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{u}\AgdaSpace{}%
-\AgdaBound{v}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSymbol{\}}\AgdaSpace{}%
-% \<%
-% \\
-% \>[1][@{}l@{\AgdaIndent{0}}]%
-% \>[2]
-\AgdaSymbol{→}\AgdaSpace{}%
-% \>[24]
-\AgdaBound{R}\AgdaSpace{}%
-\AgdaBound{u}\AgdaSpace{}%
-\AgdaBound{v}%
-\>[31]\AgdaSymbol{→}%
-\>[34]\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
-\AgdaBound{u}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
-\AgdaBound{R}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
-\AgdaBound{v}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
 \AgdaBound{R}\<%
-\\
-%
-% \\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{block-ext}\AgdaSpace{}%
-\AgdaBound{pe}\AgdaSpace{}%
-\AgdaBound{Req}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{u}\AgdaSymbol{\}\{}\AgdaBound{v}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{Ruv}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{ap}\AgdaSpace{}%
-\AgdaFunction{fst}\AgdaSpace{}%
-\AgdaFunction{PQ}\<%
-\\
-\>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaKeyword{where}\<%
-\\
-%
-\>[2]\AgdaFunction{P}\AgdaSpace{}%
-\AgdaFunction{Q}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Pred₁}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓦}\<%
-\\
-%
-\>[2]\AgdaFunction{P}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(λ}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{R}\AgdaSpace{}%
-\AgdaBound{u}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaSymbol{(λ}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaField{is-truncated}\AgdaSpace{}%
-\AgdaBound{Req}\AgdaSpace{}%
-\AgdaBound{u}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSymbol{)}\<%
-\\
-%
-\>[2]\AgdaFunction{Q}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(λ}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{R}\AgdaSpace{}%
-\AgdaBound{v}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaSymbol{(λ}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaField{is-truncated}\AgdaSpace{}%
-\AgdaBound{Req}\AgdaSpace{}%
-\AgdaBound{v}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSymbol{)}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[2]\AgdaFunction{α}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
-\AgdaBound{u}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
-\AgdaBound{R}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊆}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
-\AgdaBound{v}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
-\AgdaBound{R}\<%
-\\
-%
-\>[2]\AgdaFunction{α}\AgdaSpace{}%
-\AgdaBound{ua}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{fst}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{/-≐}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaField{is-equivalence}\AgdaSpace{}%
-\AgdaBound{Req}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{Ruv}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{ua}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[2]\AgdaFunction{β}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
-\AgdaBound{v}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
-\AgdaBound{R}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊆}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
-\AgdaBound{u}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
-\AgdaBound{R}\<%
-\\
-%
-\>[2]\AgdaFunction{β}\AgdaSpace{}%
-\AgdaBound{va}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{snd}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{/-≐}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaField{is-equivalence}\AgdaSpace{}%
-\AgdaBound{Req}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{Ruv}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{va}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[2]\AgdaFunction{PQ}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{P}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaFunction{Q}\<%
-\\
-%
-\>[2]\AgdaFunction{PQ}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{prop-ext'}\AgdaSpace{}%
-\AgdaBound{pe}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{α}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaFunction{β}\AgdaSymbol{))}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{to-subtype-⟪⟫}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\>[111I]\AgdaSymbol{(∀}\AgdaSpace{}%
-\AgdaBound{C}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{is-subsingleton}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaRecord{IsBlock}\AgdaSpace{}%
-\AgdaBound{R}\AgdaSpace{}%
-\AgdaBound{C}\AgdaSymbol{))}\<%
-\\
-\>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaSymbol{→}%
-\AgdaTab{111}%
-\>[17]\AgdaSymbol{\{}\AgdaBound{C}\AgdaSpace{}%
-\AgdaBound{D}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Pred}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSymbol{\}\{}\AgdaBound{c}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaRecord{IsBlock}\AgdaSpace{}%
-\AgdaBound{R}\AgdaSpace{}%
-\AgdaBound{C}\AgdaSymbol{\}\{}\AgdaBound{d}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaRecord{IsBlock}\AgdaSpace{}%
-\AgdaBound{R}\AgdaSpace{}%
-\AgdaBound{D}\AgdaSymbol{\}}\<%
-\\
-%
-\>[2]\AgdaSymbol{→}%
-\>[17]\AgdaBound{C}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{D}%
-\>[24]\AgdaSymbol{→}%
-\>[27]\AgdaSymbol{(}\AgdaBound{C}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaBound{c}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{D}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaBound{d}\AgdaSymbol{)}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{to-subtype-⟪⟫}\AgdaSpace{}%
-\AgdaBound{ssA}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{C}\AgdaSymbol{\}\{}\AgdaBound{D}\AgdaSymbol{\}\{}\AgdaBound{c}\AgdaSymbol{\}\{}\AgdaBound{d}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{CD}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{to-Σ-≡}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{CD}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaBound{ssA}\AgdaSpace{}%
-\AgdaBound{D}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{transport}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaRecord{IsBlock}\AgdaSpace{}%
-\AgdaBound{R}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{CD}\AgdaSpace{}%
-\AgdaBound{c}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{d}\AgdaSymbol{)}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{block-ext|Set}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\>[397I]\AgdaFunction{prop-ext}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(∀}\AgdaSpace{}%
-\AgdaBound{C}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{is-subsingleton}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaRecord{IsBlock}\AgdaSpace{}%
-\AgdaBound{R}\AgdaSpace{}%
-\AgdaBound{C}\AgdaSymbol{))}\<%
-\\
-\>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaSymbol{→}%
-\AgdaTab{397}%
-\>[25]\AgdaRecord{IsEqv}\AgdaSpace{}%
-\AgdaBound{R}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{u}\AgdaSpace{}%
-\AgdaBound{v}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{R}\AgdaSpace{}%
-\AgdaBound{u}\AgdaSpace{}%
-\AgdaBound{v}%
-\>[54]\AgdaSymbol{→}%
-\>[57]\AgdaOperator{\AgdaFunction{⟪}}\AgdaSpace{}%
-\AgdaBound{u}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟫}}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟪}}\AgdaSpace{}%
-\AgdaBound{v}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⟫}}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{block-ext|Set}\AgdaSpace{}%
-\AgdaBound{pe}\AgdaSpace{}%
-\AgdaBound{ssA}\AgdaSpace{}%
-\AgdaBound{Reqv}\AgdaSpace{}%
-\AgdaBound{Ruv}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{to-subtype-⟪⟫}\AgdaSpace{}%
-\AgdaBound{ssA}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{block-ext}\AgdaSpace{}%
-\AgdaBound{pe}\AgdaSpace{}%
-\AgdaBound{Reqv}\AgdaSpace{}%
-\AgdaBound{Ruv}\AgdaSymbol{)}\<%
+\end{code}
+
+
+\subsubsection{Quotient extensionality}\label{quotient-extensionality}
+
+We need a (subsingleton) identity type for congruence classes over sets so that
+we can equate two classes even when they are presented using different
+representatives. Proposition extensionality is precisely what we need to
+accomplish this. We now define a type called \af{block-ext|Set} that plays a key
+role in later proofs (e.g., in the formalization of Birkhoff's HSP theorem).
+\ccpad
+\begin{code}%
 \end{code}
 
 
