@@ -122,7 +122,7 @@ pred-ext 𝓤 𝓦 = ∀ {A : 𝓤 ̇}{P Q : Pred A 𝓦 } → P ⊆ Q → Q ⊆
 
 #### <a id="quotient-extensionality">Quotient extensionality</a>
 
-We need an identity type for congruence classes over sets so that we can equate two classes even when they are presented using different representatives.  This requires two postulates: (1) *predicate extensionality* (captured above by the `pred-ext` type) and (2) *block truncation* (or "quotient class truncation") which we now define.
+We need an identity type for congruence classes (blocks) over sets so that two different presentations of the same block (e.g., using different representatives) may be identified.  This requires two postulates: (1) *predicate extensionality* (captured above by the `pred-ext` type) and (2) *block truncation* (or "quotient class truncation") which we now define.
 
 Recall, `IsBlock` was defined in the [Relations.Quotients][] module as follows:
 
@@ -140,7 +140,7 @@ blk-uip {𝓦} A R = ∀ (C : Pred A 𝓦) → is-subsingleton (IsBlock C {R})
 
 \end{code}
 
-We now use `pred-ext` and `blk-uip` to define a type called `block-ext|uip` which will play a key role later (e.g., to prove one of the lemmas needed in our formalization of Birkhoff's theorem).
+We now use `pred-ext` and `blk-uip` to define a type called `block-ext|uip` which we require for the proof of the First Homomorphism Theorem presented in [Homomorphisms.Noether][].
 
 \begin{code}
 
@@ -149,15 +149,13 @@ module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{R : Rel A 𝓦} where
  block-ext : pred-ext 𝓤 𝓦 → IsEquivalence R → {u v : A} → R u v → [ u ]{R} ≡ [ v ]{R}
  block-ext pe Req {u}{v} Ruv = pe (/-subset Req Ruv) (/-supset Req Ruv)
 
- to-subtype|uip : blk-uip A R → {C D : Pred A 𝓦}{c : IsBlock C {R}}{d : IsBlock D {R}}
-  →               C ≡ D  →  (C , c) ≡ (D , d)
-
+ to-subtype|uip :
+  blk-uip A R → {C D : Pred A 𝓦}{c : IsBlock C {R}}{d : IsBlock D {R}} → C ≡ D → (C , c) ≡ (D , d)
  to-subtype|uip buip {C}{D}{c}{d}CD = to-Σ-≡(CD , buip D(transport(λ B → IsBlock B)CD c)d)
 
 
- block-ext|uip : pred-ext 𝓤 𝓦 → blk-uip A R → IsEquivalence R
-  →              {u v : A} → R u v  →  ⟪ u ⟫ ≡ ⟪ v ⟫
-
+ block-ext|uip :
+  pred-ext 𝓤 𝓦 → blk-uip A R → IsEquivalence R → {u v : A} → R u v  →  ⟪ u ⟫ ≡ ⟪ v ⟫
  block-ext|uip pe buip Req Ruv = to-subtype|uip buip (block-ext pe Req Ruv)
 
 \end{code}
