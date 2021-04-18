@@ -363,13 +363,13 @@ Finally we come to one of the main theorems of this module; it asserts that ever
           (pe : pred-ext (ov 𝓤)(ov 𝓤))
 
           -- truncation assumptions:
-          (UIP : is-set ∣ ℭ ∣)
-          (UBP : ubp (Term X) ∣ kercon ℭ {fe 𝓥 𝓕} homℭ ∣)
+          (Cset : is-set ∣ ℭ ∣)
+          (Keruip : blk-uip (Term X) ∣ kercon ℭ {fe 𝓥 𝓕} homℭ ∣)
 
   where
 
-  𝔽≤ℭ|Set : (((𝑻 X) [ ℭ ]/ker homℭ){fe 𝓥 𝓕}) ≤ ℭ
-  𝔽≤ℭ|Set = FirstHomCorollary|Set (𝑻 X) ℭ homℭ pe (fe 𝓥 (ov 𝓤)) UIP UBP
+  𝔽≤ℭ : (((𝑻 X) [ ℭ ]/ker homℭ){fe 𝓥 𝓕}) ≤ ℭ
+  𝔽≤ℭ = FirstHomCorollary|Set (𝑻 X) ℭ homℭ pe (fe 𝓥 (ov 𝓤)) Cset Keruip
 
 \end{code}
 
@@ -390,11 +390,11 @@ With this result in hand, along with what we proved earlier---namely, `PS(𝒦) 
 
   open Vlift {𝓤}{fe 𝓕 𝓤}{fe 𝓕⁺ 𝓕⁺}{fe 𝓕 𝓕}{𝒦}
 
-  𝔽∈SP|Set : hfunext (ov 𝓤)(ov 𝓤) → 𝔽 ∈ (S{𝓕}{𝓕⁺} (P{𝓤}{𝓕} 𝒦))
-  𝔽∈SP|Set hfe = ssub (class-prod-s-∈-sp hfe) 𝔽≤ℭ|Set
+  𝔽∈SP : hfunext (ov 𝓤)(ov 𝓤) → 𝔽 ∈ (S{𝓕}{𝓕⁺} (P{𝓤}{𝓕} 𝒦))
+  𝔽∈SP hfe = ssub (class-prod-s-∈-sp hfe) 𝔽≤ℭ
 
-  𝔽∈𝕍|Set : hfunext (ov 𝓤)(ov 𝓤) → 𝔽 ∈ V 𝒦
-  𝔽∈𝕍|Set hfe = SP⊆V' (𝔽∈SP|Set hfe)
+  𝔽∈𝕍 : hfunext (ov 𝓤)(ov 𝓤) → 𝔽 ∈ V 𝒦
+  𝔽∈𝕍 hfe = SP⊆V' (𝔽∈SP hfe)
 
 \end{code}
 
@@ -404,12 +404,12 @@ Now that we have all of the necessary ingredients, it is all but trivial to comb
 
 \begin{code}
 
-  Birkhoff|Set : hfunext (ov 𝓤)(ov 𝓤) → (∀ 𝑨 → X ↠ 𝑨) → Mod (Th (V 𝒦)) ⊆ V 𝒦
+  Birkhoff : hfunext (ov 𝓤)(ov 𝓤) → (∀ 𝑨 → X ↠ 𝑨) → Mod (Th (V 𝒦)) ⊆ V 𝒦
 
-  Birkhoff|Set hfe 𝕏 {𝑨} α = γ
+  Birkhoff hfe 𝕏 {𝑨} α = γ
    where
    γ : 𝑨 ∈ (V 𝒦)
-   γ = vhimg (𝔽∈𝕍|Set hfe) ((𝑨 , 𝔽-ModTh-epi 𝑨 (𝕏 𝑨) α ) , ≅-refl)
+   γ = vhimg (𝔽∈𝕍 hfe) ((𝑨 , 𝔽-ModTh-epi 𝑨 (𝕏 𝑨) α ) , ≅-refl)
 
 \end{code}
 

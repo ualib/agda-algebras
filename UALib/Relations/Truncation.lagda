@@ -131,16 +131,16 @@ Recall, `IsBlock` was defined in the [Relations.Quotients][] module as follows:
  IsBlock {A} C {R} = Σ u ꞉ A , C ≡ [ u ] {R}
 ```
 
-We will need to assume that for each predicate `C : Pred A 𝓦` there is at most one proof of `IsBlock C`. We call this proof-irrelevance principle "uniqueness of block proofs" (ubp), and define it as follows.
+We will need to assume that for each predicate `C : Pred A 𝓦` there is at most one proof of `IsBlock C`. We call this proof-irrelevance principle "uniqueness of block identity proofs", and define it as follows.
 
 \begin{code}
 
-ubp : {𝓦 𝓤 : Universe}(A : 𝓤 ̇)(R : Rel A 𝓦 ) → 𝓤 ⊔ 𝓦 ⁺ ̇
-ubp {𝓦} A R = ∀ (C : Pred A 𝓦) → is-subsingleton (IsBlock C {R})
+blk-uip : {𝓦 𝓤 : Universe}(A : 𝓤 ̇)(R : Rel A 𝓦 ) → 𝓤 ⊔ 𝓦 ⁺ ̇
+blk-uip {𝓦} A R = ∀ (C : Pred A 𝓦) → is-subsingleton (IsBlock C {R})
 
 \end{code}
 
-We now use `pred-ext` and `block-trunc` to define a type called `block-ext|Set` which will play a key role later (e.g., to prove one of the lemmas needed in our formalization of Birkhoff's theorem).
+We now use `pred-ext` and `blk-uip` to define a type called `block-ext|uip` which will play a key role later (e.g., to prove one of the lemmas needed in our formalization of Birkhoff's theorem).
 
 \begin{code}
 
@@ -149,16 +149,16 @@ module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{R : Rel A 𝓦} where
  block-ext : pred-ext 𝓤 𝓦 → IsEquivalence R → {u v : A} → R u v → [ u ]{R} ≡ [ v ]{R}
  block-ext pe Req {u}{v} Ruv = pe (/-subset Req Ruv) (/-supset Req Ruv)
 
- to-subtype|Set : ubp A R → {C D : Pred A 𝓦}{c : IsBlock C {R}}{d : IsBlock D {R}}
+ to-subtype|uip : blk-uip A R → {C D : Pred A 𝓦}{c : IsBlock C {R}}{d : IsBlock D {R}}
   →               C ≡ D  →  (C , c) ≡ (D , d)
 
- to-subtype|Set bt {C}{D}{c}{d}CD = to-Σ-≡(CD , bt D(transport(λ B → IsBlock B)CD c)d)
+ to-subtype|uip buip {C}{D}{c}{d}CD = to-Σ-≡(CD , buip D(transport(λ B → IsBlock B)CD c)d)
 
 
- block-ext|Set : pred-ext 𝓤 𝓦 → ubp A R → IsEquivalence R
+ block-ext|uip : pred-ext 𝓤 𝓦 → blk-uip A R → IsEquivalence R
   →              {u v : A} → R u v  →  ⟪ u ⟫ ≡ ⟪ v ⟫
 
- block-ext|Set pe bt Req Ruv = to-subtype|Set bt (block-ext pe Req Ruv)
+ block-ext|uip pe buip Req Ruv = to-subtype|uip buip (block-ext pe Req Ruv)
 
 \end{code}
 
@@ -193,7 +193,9 @@ To see the point of this, suppose `cont-prop-ext A 𝓦` holds. Then we can prov
 
 \begin{code}
 
- cont-prop-ext' : {A : 𝓤 ̇}{𝓦 : Universe} → cont-prop-ext A 𝓦 → {P Q : ContProp A 𝓦} → ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
+ cont-prop-ext' : {A : 𝓤 ̇}{𝓦 : Universe} → cont-prop-ext A 𝓦 → {P Q : ContProp A 𝓦}
+  →               ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
+
  cont-prop-ext' pe hyp = pe  ∣ hyp ∣  ∥ hyp ∥
 
 \end{code}
@@ -228,7 +230,7 @@ Applying the extensionality principle for dependent continuous relations is no h
 
 -----------------------------------
 
-<sup>*</sup><span class="footnote" id="fn0"> Sections marked with an asterisk include new types that are more abstract and general (and frankly more interesting) than the ones presented in other sections.  Consequently, such sections demand a higher degree of sophistication and/or effort from the user. Moreover, the types defined in starred sections are used in only a few other places in the [Agda UALib][], so they may be safely skimmed over or skipped.</span>
+<sup>*</sup><span class="footnote" id="fn0"> Sections marked with an asterisk include new types that are more abstract and general than some of the types defined in other sections. As yet these general types are not used elsewhere in the [UALib][], so sections marked * may be safely skimmed or skipped.</span>
 
 <sup>1</sup><span class="footnote" id="fn1"> As [Escardó][] explains, "at this point, with the definition of these notions, we are entering the realm of univalent mathematics, but not yet needing the univalence axiom."</span>
 
@@ -245,6 +247,19 @@ Applying the extensionality principle for dependent continuous relations is no h
 
 
 {% include UALib.Links.md %}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 <!-- NO LONGER USED STUFF

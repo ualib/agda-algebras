@@ -55,14 +55,14 @@ module _ {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 �
          (pe : pred-ext 𝓤 𝓦)(fe : dfunext 𝓥 𝓦)
 
          -- truncation assumptions:
-         (UIP : is-set ∣ 𝑩 ∣)
-         (UBP : ubp ∣ 𝑨 ∣ ∣ kercon 𝑩 {fe} h ∣)
+         (Bset : is-set ∣ 𝑩 ∣)
+         (buip : blk-uip ∣ 𝑨 ∣ ∣ kercon 𝑩 {fe} h ∣)
          where
 
  FirstHomCorollary|Set : (𝑨 [ 𝑩 ]/ker h){fe} IsSubalgebraOf 𝑩
  FirstHomCorollary|Set = ϕhom , ϕemb
   where
-  hh = FirstHomTheorem|Set 𝑨 𝑩 h pe fe UIP UBP
+  hh = FirstHomTheorem|Set 𝑨 𝑩 h pe fe Bset buip
   ϕhom : hom ((𝑨 [ 𝑩 ]/ker h) {fe}) 𝑩
   ϕhom = ∣ hh ∣
 
@@ -80,12 +80,12 @@ module _ {𝓤 𝓦 𝓧 : Universe}(X : 𝓧 ̇)(𝑩 : Algebra 𝓦 𝑆)(h : 
          (pe : pred-ext (ov 𝓧) 𝓦)(fe : dfunext 𝓥 𝓦)
 
          -- truncation assumptions:
-         (UIP : is-set ∣ 𝑩 ∣)
-         (UBP : ubp (Term X) ∣ kercon 𝑩 {fe} h ∣)
+         (Bset : is-set ∣ 𝑩 ∣)
+         (buip : blk-uip (Term X) ∣ kercon 𝑩 {fe} h ∣)
          where
 
  free-quot-subalg : ((𝑻 X) [ 𝑩 ]/ker h){fe} IsSubalgebraOf 𝑩
- free-quot-subalg = FirstHomCorollary|Set{𝓤 = ov 𝓧}(𝑻 X) 𝑩 h pe fe UIP UBP
+ free-quot-subalg = FirstHomCorollary|Set{𝓤 = ov 𝓧}(𝑻 X) 𝑩 h pe fe Bset buip
 
 \end{code}
 

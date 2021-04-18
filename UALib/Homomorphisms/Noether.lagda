@@ -54,11 +54,11 @@ module _ {𝓤 𝓦 : Universe} where
 
                        -- truncation assumptions:
   →                       is-set ∣ 𝑩 ∣
-  →                       ubp ∣ 𝑨 ∣ ∣ kercon 𝑩 {fe} h ∣
+  →                       blk-uip ∣ 𝑨 ∣ ∣ kercon 𝑩 {fe} h ∣
 
   → Σ φ ꞉ (hom ((𝑨 [ 𝑩 ]/ker h){fe}) 𝑩) , (∣ h ∣ ≡ ∣ φ ∣ ∘ ∣ πker 𝑩 {fe} h ∣) × Monic ∣ φ ∣ × is-embedding ∣ φ ∣
 
- FirstHomTheorem|Set 𝑨 𝑩 h pe fe UIP UBP = (φ , φhom) , φcom , φmon , φemb
+ FirstHomTheorem|Set 𝑨 𝑩 h pe fe Bset buip = (φ , φhom) , φcom , φmon , φemb
   where
   θ : Con{𝓦} 𝑨
   θ = kercon 𝑩 {fe} h
@@ -74,13 +74,13 @@ module _ {𝓤 𝓦 : Universe} where
              (𝑓 ̂ 𝑩) (λ x → φ (𝒂 x))             ∎
 
   φmon : Monic φ
-  φmon (_ , (u , refl)) (_ , (v , refl)) φuv = block-ext|Set pe UBP ξ φuv
+  φmon (_ , (u , refl)) (_ , (v , refl)) φuv = block-ext|uip pe buip ξ φuv
 
   φcom : ∣ h ∣ ≡ φ ∘ ∣ πker 𝑩{fe} h ∣
   φcom = refl
 
   φemb : is-embedding φ
-  φemb = monic-is-embedding|Set φ UIP φmon
+  φemb = monic-is-embedding|Set φ Bset φmon
 
 \end{code}
 
@@ -96,14 +96,14 @@ Below we will prove that the homomorphism `φ`, whose existence we just proved, 
 
                        -- truncation assumptions:
   →                       is-set ∣ 𝑩 ∣
-  →                       ubp ∣ 𝑨 ∣ ∣ kercon 𝑩{fe}h ∣
+  →                       blk-uip ∣ 𝑨 ∣ ∣ kercon 𝑩{fe}h ∣
 
   → Epic ∣ h ∣
   → Σ f ꞉ epi ((𝑨 [ 𝑩 ]/ker h){fe}) 𝑩 , (∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩{fe}h ∣) × Monic ∣ f ∣ × is-embedding ∣ f ∣
 
- FirstIsoTheorem|Set 𝑨 𝑩 h pe fe feww UIP UBP hE = (fmap , fhom , fepic) , refl , (snd ∥ FHT ∥)
+ FirstIsoTheorem|Set 𝑨 𝑩 h pe fe feww Bset buip hE = (fmap , fhom , fepic) , refl , (snd ∥ FHT ∥)
   where
-  FHT = FirstHomTheorem|Set 𝑨 𝑩 h pe fe UIP UBP  -- (φ , φhom) , φcom , φmon , φemb
+  FHT = FirstHomTheorem|Set 𝑨 𝑩 h pe fe Bset buip  -- (φ , φhom) , φcom , φmon , φemb
 
   fmap : ∣ (𝑨 [ 𝑩 ]/ker h) {fe} ∣ → ∣ 𝑩 ∣
   fmap = fst ∣ FHT ∣
