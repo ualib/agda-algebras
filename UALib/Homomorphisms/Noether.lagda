@@ -49,21 +49,21 @@ module _ {𝓤 𝓦 : Universe} where
 
  FirstHomTheorem|Set : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
                        -- extensionality assumptions:
-                       (pe : prop-ext 𝓤 𝓦)(fe : dfunext 𝓥 𝓦)
+  →                       pred-ext 𝓤 𝓦
+  →                       (fe : dfunext 𝓥 𝓦)
 
                        -- truncation assumptions:
-                       (UIPcod : is-set ∣ 𝑩 ∣)
-                       (UMPker : is-subsingleton-valued ∣ kercon 𝑩 {fe} h ∣)
-                       (UMPblk : ∀ C → is-subsingleton (IsBlock C {∣ kercon 𝑩 {fe} h ∣}))
+  →                       is-set ∣ 𝑩 ∣
+  →                       ubp ∣ 𝑨 ∣ ∣ kercon 𝑩 {fe} h ∣
 
   → Σ φ ꞉ (hom ((𝑨 [ 𝑩 ]/ker h){fe}) 𝑩) , (∣ h ∣ ≡ ∣ φ ∣ ∘ ∣ πker 𝑩 {fe} h ∣) × Monic ∣ φ ∣ × is-embedding ∣ φ ∣
 
- FirstHomTheorem|Set 𝑨 𝑩 h pe fe UIPcod UMPker UMPblk = (φ , φhom) , φcom , φmon , φemb
+ FirstHomTheorem|Set 𝑨 𝑩 h pe fe UIP UBP = (φ , φhom) , φcom , φmon , φemb
   where
   θ : Con{𝓦} 𝑨
   θ = kercon 𝑩 {fe} h
-  ξ : IsEqv ∣ θ ∣
-  ξ = record {is-equivalence = IsCongruence.is-equivalence ∥ θ ∥ ; is-truncated = UMPker}
+  ξ : IsEquivalence ∣ θ ∣
+  ξ = IsCongruence.is-equivalence ∥ θ ∥
 
   φ : ∣ (𝑨 [ 𝑩 ]/ker h){fe} ∣ → ∣ 𝑩 ∣
   φ a = ∣ h ∣ ⌞ a ⌟
@@ -74,13 +74,13 @@ module _ {𝓤 𝓦 : Universe} where
              (𝑓 ̂ 𝑩) (λ x → φ (𝒂 x))             ∎
 
   φmon : Monic φ
-  φmon (_ , (u , refl)) (_ , (v , refl)) φuv = block-ext|Set pe ξ UMPblk  φuv
+  φmon (_ , (u , refl)) (_ , (v , refl)) φuv = block-ext|Set pe UBP ξ φuv
 
   φcom : ∣ h ∣ ≡ φ ∘ ∣ πker 𝑩{fe} h ∣
   φcom = refl
 
   φemb : is-embedding φ
-  φemb = monic-is-embedding|Set φ UIPcod φmon
+  φemb = monic-is-embedding|Set φ UIP φmon
 
 \end{code}
 
@@ -88,28 +88,22 @@ Below we will prove that the homomorphism `φ`, whose existence we just proved, 
 
 \begin{code}
 
- -- FirstIsoTheorem|Set : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
-          -- extensionality assumptions:
  FirstIsoTheorem|Set : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
- -- extensionality assumptions:
-    (pe : prop-ext 𝓤 𝓦)(fe : dfunext 𝓥 𝓦) (feww : dfunext 𝓦 𝓦)
+                       -- extensionality assumptions:
+  →                       pred-ext 𝓤 𝓦
+  →                       (fe : dfunext 𝓥 𝓦)
+  →                       dfunext 𝓦 𝓦
 
- -- truncation assumptions:
-    (UIPcod : is-set ∣ 𝑩 ∣)
-    (UMPker : is-subsingleton-valued ∣ kercon 𝑩 {fe} h ∣)
-    (UMPblk : ∀ C → is-subsingleton (IsBlock C {∣ kercon 𝑩 {fe} h ∣}))
-    --       {pe : prop-ext 𝓤 𝓦}{fe : funext 𝓥 𝓦}
+                       -- truncation assumptions:
+  →                       is-set ∣ 𝑩 ∣
+  →                       ubp ∣ 𝑨 ∣ ∣ kercon 𝑩{fe}h ∣
 
-          -- truncation assumptions:
-          -- (UIPcod : is-set ∣ 𝑩 ∣)
-          -- (UMPblk : ∀ C → is-subsingleton (IsBlock C))
---          (UMPker : is-subsingleton-valued ∣ kercon 𝑩 h ∣)
   → Epic ∣ h ∣
-  → Σ f ꞉ epi ((𝑨 [ 𝑩 ]/ker h) {fe}) 𝑩 , (∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩 {fe} h ∣) × Monic ∣ f ∣ × is-embedding ∣ f ∣
+  → Σ f ꞉ epi ((𝑨 [ 𝑩 ]/ker h){fe}) 𝑩 , (∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩{fe}h ∣) × Monic ∣ f ∣ × is-embedding ∣ f ∣
 
- FirstIsoTheorem|Set 𝑨 𝑩 h pe fe feww UIPcod UMPker UMPblk hE = (fmap , fhom , fepic) , refl , fst(snd ∥ FHT ∥) , snd(snd ∥ FHT ∥)
+ FirstIsoTheorem|Set 𝑨 𝑩 h pe fe feww UIP UBP hE = (fmap , fhom , fepic) , refl , (snd ∥ FHT ∥)
   where
-  FHT = FirstHomTheorem|Set 𝑨 𝑩 h pe fe UIPcod UMPker UMPblk  -- (φ , φhom) , φcom , φmon , φemb
+  FHT = FirstHomTheorem|Set 𝑨 𝑩 h pe fe UIP UBP  -- (φ , φhom) , φcom , φmon , φemb
 
   fmap : ∣ (𝑨 [ 𝑩 ]/ker h) {fe} ∣ → ∣ 𝑩 ∣
   fmap = fst ∣ FHT ∣
@@ -138,13 +132,11 @@ module _ {𝓤 𝓦 : Universe}{fe : dfunext 𝓥 𝓦}(𝑨 : Algebra 𝓤 𝑆
 
  NoetherHomUnique : (f g : hom ((𝑨 [ 𝑩 ]/ker h) {fe}) 𝑩)
   →                 ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩 {fe} h ∣ → ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker 𝑩{fe} h ∣
-                    -------------------------------------------------------------------------
   →                 ∀ a  →  ∣ f ∣ a ≡ ∣ g ∣ a
 
- NoetherHomUnique f g hfk hgk (_ , (a , refl)) =
-  ∣ f ∣ (_ , (a , refl)) ≡⟨ cong-app(hfk ⁻¹)a ⟩
-  ∣ h ∣ a                                ≡⟨ cong-app(hgk)a ⟩
-  ∣ g ∣ (_ , (a , refl)) ∎
+ NoetherHomUnique f g hfk hgk (_ , (a , refl)) = ∣ f ∣ (_ , (a , refl)) ≡⟨ cong-app(hfk ⁻¹)a ⟩
+                                                 ∣ h ∣ a                ≡⟨ cong-app(hgk)a ⟩
+                                                 ∣ g ∣ (_ , (a , refl)) ∎
 
 \end{code}
 
@@ -153,9 +145,7 @@ If, in addition, we postulate extensionality of functions defined on the domain 
 \begin{code}
 
  fe-NoetherHomUnique : {fuww : funext (𝓤 ⊔ 𝓦 ⁺) 𝓦}(f g : hom ((𝑨 [ 𝑩 ]/ker h){fe}) 𝑩)
-  →                    ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩{fe} h ∣ → ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker 𝑩{fe} h ∣
-                       -------------------------------------------------------------------------
-  →                    ∣ f ∣ ≡ ∣ g ∣
+  →  ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩{fe} h ∣  →  ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker 𝑩{fe} h ∣  →  ∣ f ∣ ≡ ∣ g ∣
 
  fe-NoetherHomUnique {fuww} f g hfk hgk = fuww (NoetherHomUnique f g hfk hgk)
 
@@ -167,7 +157,6 @@ The proof of `NoetherHomUnique` goes through for the special case of epimorphism
 
  NoetherIsoUnique : (f g : epi ((𝑨 [ 𝑩 ]/ker h){fe}) 𝑩)
   →                 ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩{fe} h ∣ → ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker 𝑩 {fe} h ∣
-                    ---------------------------------------------------------------------
   →                 ∀ a → ∣ f ∣ a ≡ ∣ g ∣ a
 
  NoetherIsoUnique f g hfk hgk = NoetherHomUnique (epi-to-hom 𝑩 f) (epi-to-hom 𝑩 g) hfk hgk

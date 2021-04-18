@@ -108,77 +108,57 @@ Embeddings are always monic, so we conclude that when a function's codomain is a
 \end{code}
 
 
-#### <a id="propositions">Propositions and truncated equivalences</a>
+#### <a id="propositions">Predicate extensionality</a>
 
-Sometimes we will want to assume that a type `A` is a *set*. As we just learned, this means there is at most one proof that two inhabitants of `A` are the same.  Analogously, for predicates on `A`, we may wish to assume that there is at most one proof that an inhabitant of `A` satisfies the given predicate.  If a unary predicate satisfies this condition, then we call it a (unary) *proposition*.  We could represent this concept in type theory by the following Sigma type: `Σ P ꞉ (Pred A 𝓦) , ∀ x → is-subsingleton (P x)`. However, as we will not have occasion to use this type, we omit the formal definition.
-
-The principle of *proposition extensionality* asserts that logically equivalent propositions are equivalent.  That is, if `P` and `Q` are propositions and if `P ⊆ Q` and `Q ⊆ P`, then `P ≡ Q`.
-
-For our purposes, it will suffice to formalize this notion for general predicates, rather than for (truncated) propositions. We do so as follows.
+The principle of *proposition extensionality* asserts that logically equivalent propositions are equivalent.  That is, if `P` and `Q` are propositions and if `P ⊆ Q` and `Q ⊆ P`, then `P ≡ Q`. For our purposes, it will suffice to formalize this notion for general predicates, rather than for propositions (i.e., truncated predicates).   As such, we call the next type `pred-ext` (instead of, say, `prop-ext`).
 
 \begin{code}
 
-prop-ext : (𝓤 𝓦 : Universe) → (𝓤 ⊔ 𝓦) ⁺ ̇
-prop-ext 𝓤 𝓦 = ∀ {A : 𝓤 ̇}{P Q : Pred A 𝓦 } → P ⊆ Q → Q ⊆ P → P ≡ Q
-\end{code}
-
-
-The foregoing easily generalizes to binary relations and, in particular, equivalence relations.  Indeed, if `R` is a binary relation on `A` and for each pair `x y : A` there is at most one proof of `R x y`, then we call `R` a *binary proposition*. We use [Type Topology][]'s `is-subsingleton-valued` type to impose this truncation assumption on a binary relation.<sup>[3](Relations.Truncation.html#fn3)</sup>
-
-\begin{code}
-
-Pred₂ : {𝓤 : Universe} → 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓦 ⁺ ̇
-Pred₂ A 𝓦 = Σ R ꞉ (Rel A 𝓦) , is-subsingleton-valued R
-
-\end{code}
-
-Recall, `is-subsingleton-valued` is simply defined as
-
-`is-subsingleton-valued R = ∀ x y → is-subsingleton (R x y)`
-
-which is the assertion that for all `x` `y` there is at most one proof of `R x y`.  We call this the *uniqueness-of-membership-proofs* (UMP) property.  The functions `IsContProp` and `IsDepProp`, defined below, generalize this concept from binary to arbitrary (continuous and dependent) relations.
-
-We define a *truncated equivalence* to be an equivalence relation that has unique membership proofs; the following types represent such relations.
-
-\begin{code}
-
-module _ {𝓤 𝓦 : Universe} where
-
- record IsEqv {A : 𝓤 ̇}(R : Rel A 𝓦) : 𝓤 ⊔ 𝓦 ̇ where
-  field is-equivalence : IsEquivalence R
-        is-truncated : is-subsingleton-valued R
-
- Eqv : 𝓤 ̇ → 𝓤 ⊔ 𝓦 ⁺ ̇
- Eqv A = Σ R ꞉ Rel A 𝓦 , IsEqv R
-
+pred-ext : (𝓤 𝓦 : Universe) → (𝓤 ⊔ 𝓦) ⁺ ̇
+pred-ext 𝓤 𝓦 = ∀ {A : 𝓤 ̇}{P Q : Pred A 𝓦 } → P ⊆ Q → Q ⊆ P → P ≡ Q
 \end{code}
 
 
 
 #### <a id="quotient-extensionality">Quotient extensionality</a>
 
-We need a (subsingleton) identity type for congruence classes over sets so that we can equate two classes even when they are presented using different representatives.  Proposition extensionality is precisely what we need to accomplish this. We now define a type called `block-ext|Set` that plays a key role in later proofs (e.g., in the formalization of Birkhoff's HSP theorem).
+We need an identity type for congruence classes over sets so that we can equate two classes even when they are presented using different representatives.  This requires two postulates: (1) *predicate extensionality* (captured above by the `pred-ext` type) and (2) *block truncation* (or "quotient class truncation") which we now define.
+
+Recall, `IsBlock` was defined in the [Relations.Quotients][] module as follows:
+
+```
+ IsBlock : {A : 𝓤 ̇}(C : Pred A 𝓦){R : Rel A 𝓦} → 𝓤 ⊔ 𝓦 ⁺ ̇
+ IsBlock {A} C {R} = Σ u ꞉ A , C ≡ [ u ] {R}
+```
+
+We will need to assume that for each predicate `C : Pred A 𝓦` there is at most one proof of `IsBlock C`. We call this proof-irrelevance principle "uniqueness of block proofs" (ubp), and define it as follows.
+
+\begin{code}
+
+ubp : {𝓦 𝓤 : Universe}(A : 𝓤 ̇)(R : Rel A 𝓦 ) → 𝓤 ⊔ 𝓦 ⁺ ̇
+ubp {𝓦} A R = ∀ (C : Pred A 𝓦) → is-subsingleton (IsBlock C {R})
+
+\end{code}
+
+We now use `pred-ext` and `block-trunc` to define a type called `block-ext|Set` which will play a key role later (e.g., to prove one of the lemmas needed in our formalization of Birkhoff's theorem).
 
 \begin{code}
 
 module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{R : Rel A 𝓦} where
- open IsEqv
 
- block-ext : prop-ext 𝓤 𝓦 → IsEqv R → {u v : A} → R u v → [ u ]{R} ≡ [ v ]{R}
- block-ext pe Req {u}{v} Ruv =
-  pe (/-subset (is-equivalence Req) Ruv) (/-supset (is-equivalence Req) Ruv)
+ block-ext : pred-ext 𝓤 𝓦 → IsEquivalence R → {u v : A} → R u v → [ u ]{R} ≡ [ v ]{R}
+ block-ext pe Req {u}{v} Ruv = pe (/-subset Req Ruv) (/-supset Req Ruv)
 
- to-subtype|Set : (∀ C → is-subsingleton (IsBlock C {R}))
-  →               {C D : Pred A 𝓦}{c : IsBlock C {R}}{d : IsBlock D {R}}
+ to-subtype|Set : ubp A R → {C D : Pred A 𝓦}{c : IsBlock C {R}}{d : IsBlock D {R}}
   →               C ≡ D  →  (C , c) ≡ (D , d)
 
- to-subtype|Set ssR{C}{D}{c}{d}CD = to-Σ-≡(CD , ssR D(transport(λ B → IsBlock B)CD c)d)
+ to-subtype|Set bt {C}{D}{c}{d}CD = to-Σ-≡(CD , bt D(transport(λ B → IsBlock B)CD c)d)
 
 
- block-ext|Set : prop-ext 𝓤 𝓦 → IsEqv R → (∀ C → is-subsingleton(IsBlock C{R}))
+ block-ext|Set : pred-ext 𝓤 𝓦 → ubp A R → IsEquivalence R
   →              {u v : A} → R u v  →  ⟪ u ⟫ ≡ ⟪ v ⟫
 
- block-ext|Set pe Req ssR Ruv = to-subtype|Set ssR (block-ext pe Req Ruv)
+ block-ext|Set pe bt Req Ruv = to-subtype|Set bt (block-ext pe Req Ruv)
 
 \end{code}
 
@@ -266,7 +246,9 @@ Applying the extensionality principle for dependent continuous relations is no h
 
 {% include UALib.Links.md %}
 
-<!--
+
+<!-- NO LONGER USED STUFF
+
 Recall, we defined the relation `_≐_` for predicates as follows: `P ≐ Q = (P ⊆ Q) × (Q ⊆ P)`.  Therefore, if we postulate `prop-ext 𝓤 𝓦` and `P ≐ Q`, then `P ≡ Q` obviously follows. Nonetheless, let us record this observation.
 <sup>3</sup><span class="footnote" id="fn3"> [Agda][] now has a type called [Prop](https://agda.readthedocs.io/en/v2.6.1.3/language/prop.html), but we have never tried to use it. It likely provides at least some of the functionality we develop here, however, our preference is to assume only a minimal MLTT foundation and build up the types we need ourselves. For details about [Prop](https://agda.readthedocs.io/en/v2.6.1.3/language/prop.html), consult the official documentation at [agda.readthedocs.io/en/v2.6.1.3/language/prop.html](https://agda.readthedocs.io/en/v2.6.1.3/language/prop.html)</span>
 
@@ -280,6 +262,34 @@ Thus, for truncated predicates `P` and `Q`, if `prop-ext` holds, then `(P ⊆ Q)
 
 prop-ext₁ : (𝓤 𝓦 : Universe) → (𝓤 ⊔ 𝓦) ⁺ ̇
 prop-ext₁ 𝓤 𝓦 = ∀ {A : 𝓤 ̇}{P Q : Pred₁ A 𝓦 } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
+
+The foregoing easily generalizes to binary relations and, in particular, equivalence relations.  Indeed, if `R` is a binary relation on `A` and for each pair `x y : A` there is at most one proof of `R x y`, then we call `R` a *binary proposition*. We use [Type Topology][]'s `is-subsingleton-valued` type to impose this truncation assumption on a binary relation.<sup>[3](Relations.Truncation.html#fn3)</sup>
+
+Pred₂ : {𝓤 : Universe} → 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓦 ⁺ ̇
+Pred₂ A 𝓦 = Σ R ꞉ (Rel A 𝓦) , is-subsingleton-valued R
+
+Recall, `is-subsingleton-valued` is simply defined as
+
+`is-subsingleton-valued R = ∀ x y → is-subsingleton (R x y)`
+
+which is the assertion that for all `x` `y` there is at most one proof of `R x y`.  We call this the *uniqueness-of-membership-proofs* (UMP) property.  The functions `IsContProp` and `IsDepProp`, defined below, generalize this concept from binary to arbitrary (continuous and dependent) relations.
+
+Sometimes we will want to assume that a type `A` is a *set*. As we just learned, this means there is at most one proof that two inhabitants of `A` are the same.  Analogously, for predicates on `A`, we may wish to assume that there is at most one proof that an inhabitant of `A` satisfies the given predicate.  If a unary predicate satisfies this condition, then we call it a (unary) *proposition*.  We could represent this concept in type theory by the following Sigma type: `Σ P ꞉ (Pred A 𝓦) , ∀ x → is-subsingleton (P x)`. However, as we will not have occasion to use this type, we omit the formal definition.
+
+
+
+We define a *truncated equivalence* to be an equivalence relation that has unique membership proofs; the following types represent such relations.
+
+module _ {𝓤 𝓦 : Universe} where
+
+ record IsEqv {A : 𝓤 ̇}(R : Rel A 𝓦) : 𝓤 ⊔ 𝓦 ̇ where
+  field equiv : IsEquivalence R
+        ump : is-subsingleton-valued R  -- "uniqueness of membership proofs" (ump)
+
+ Eqv : 𝓤 ̇ → 𝓤 ⊔ 𝓦 ⁺ ̇
+ Eqv A = Σ R ꞉ Rel A 𝓦 , IsEqv R
+
+
 -->
 
 

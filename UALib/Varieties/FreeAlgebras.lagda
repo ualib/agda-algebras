@@ -360,17 +360,16 @@ Finally we come to one of the main theorems of this module; it asserts that ever
 \begin{code}
 
  module _ -- prop extensionality assumption:
-          (pe : prop-ext (ov 𝓤)(ov 𝓤))
+          (pe : pred-ext (ov 𝓤)(ov 𝓤))
 
           -- truncation assumptions:
-          (UIPcod : is-set ∣ ℭ ∣)
-          (UMPblk : ∀ C → is-subsingleton (IsBlock C))
-          (UMPker : is-subsingleton-valued ∣ kercon ℭ {fe 𝓥 𝓕} homℭ ∣)
+          (UIP : is-set ∣ ℭ ∣)
+          (UBP : ubp (Term X) ∣ kercon ℭ {fe 𝓥 𝓕} homℭ ∣)
 
   where
 
   𝔽≤ℭ|Set : (((𝑻 X) [ ℭ ]/ker homℭ){fe 𝓥 𝓕}) ≤ ℭ
-  𝔽≤ℭ|Set = FirstHomCorollary|Set (𝑻 X) ℭ homℭ pe (fe 𝓥 (ov 𝓤)) UIPcod UMPblk UMPker
+  𝔽≤ℭ|Set = FirstHomCorollary|Set (𝑻 X) ℭ homℭ pe (fe 𝓥 (ov 𝓤)) UIP UBP
 
 \end{code}
 
