@@ -3,9 +3,8 @@
 %%% mode: latex
 %%% TeX-engine: 'xetex
 %%% End:
-\subsubsection{The Algebra type}\label{algebra-types}
-
-For a fixed signature \ab{𝑆} \as : \af{Signature} \ab 𝓞 \ab 𝓥 and universe \ab 𝓤, we define the type of \defn{algebras in the signature} \ab 𝑆 (or \ab 𝑆-\defn{algebras}) and with \defn{domain} (or \defn{carrier} or \defn{universe}) \abt{𝐴}{𝓤} as follows.
+% \subsubsection{The Algebra type}\label{algebra-types}
+For a fixed signature \ab{𝑆} \as : \af{Signature} \ab 𝓞 \ab 𝓥 and universe \ab 𝓤, we define the type of \defn{algebras in the signature} \ab 𝑆 (or \ab 𝑆-\defn{algebras}) with \defn{domain} (or \defn{carrier} or \defn{universe}) \abt{𝐴}{𝓤} as follows.
 \ccpad
 \begin{code}%
 \>[0]\AgdaFunction{Algebra}\AgdaSpace{}%
@@ -57,7 +56,7 @@ For a fixed signature \ab{𝑆} \as : \af{Signature} \ab 𝓞 \ab 𝓥 and unive
 \>[50]\AgdaComment{-- the basic operations}\<%
 \end{code}
 \ccpad
-To be precise, we might call an inhabitant of this type a ``∞-algebra'' because its domain can be an arbitrary type, say, \abt{A}{𝓤} and need not be truncated at some level. (In particular, \ab{A} need not be a \emph{set}; see the discussion of sets in~\S\ref{sec:sets}.) We could then take this opportunity to define the type of ``0-algebras'' (algebras whose domains are sets), which may be closer to what most of us think of when doing informal universal algebra. However, we have found that we only need to assume the domains of our algebras are sets in a few places in the \ualib, so it seems preferable to work with general (∞-)algebras throughout and then assume \emph{uniqueness of identity proofs} explicitly and only where needed.
+To be more precise, we might call an inhabitant of this type an ``∞-algebra'' because its domain can be an arbitrary type, say, \abt{A}{𝓤} and need not be truncated at some level. (In particular, \ab{A} need not be a \emph{set}; see the discussion of sets in~\S\ref{sec:sets}.) We could then proceed to define the type of ``0-algebras'' as algebras whose domains are sets (which may be closer to what most of us have in mind when doing informal universal algebra). However, we have found that the domains of our algebras need to be sets in just a few places in the \ualib, and it seems preferable to work with general (∞-)algebras throughout and then assume \emph{uniqueness of identity proofs} (uip) explicitly and only where needed.  This makes any dependence on uip more transparent (which is also the reason \AgdaPragma{--without-K} appears at the top of every module in the \ualib).
 
 \subsubsection{Algebras as record types}\label{algebras-as-record-types}
 
@@ -116,73 +115,56 @@ Some people prefer to represent algebraic structures in type theory using record
 \AgdaField{univ}\<%
 \end{code}
 \ccpad
-This representation of algebras as inhabitants of a record type is equivalent to the representation using Sigma types in the sense that a bi-implication between the two representations is obvious.
-\ccpad
-\begin{code}%
-% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
-% \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-% \AgdaSymbol{\{}\AgdaBound{𝑆}\AgdaSpace{}%
+This representation of algebras as inhabitants of a record type is equivalent to the representation using Sigma types in the sense that there is a bi-implication between the two representations. The proofs are immediate, so we omit them (see the \ualibhtml{Algebras.Algebras} module for details).
+% \ccpad
+% \begin{code}%
+% \>[1]\AgdaFunction{algebra→Algebra}\AgdaSpace{}%
 % \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaFunction{Signature}\AgdaSpace{}%
-% \AgdaGeneralizable{𝓞}\AgdaSpace{}%
-% \AgdaGeneralizable{𝓥}\AgdaSymbol{\}}\AgdaSpace{}%
-% \AgdaKeyword{where}\<%
+% \AgdaRecord{algebra}\AgdaSpace{}%
+% \AgdaGeneralizable{𝓤}\AgdaSpace{}%
+% \AgdaBound{𝑆}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaFunction{Algebra}\AgdaSpace{}%
+% \AgdaGeneralizable{𝓤}\AgdaSpace{}%
+% \AgdaBound{𝑆}\<%
+% \\
+% %
+% \>[1]\AgdaFunction{algebra→Algebra}\AgdaSpace{}%
+% \AgdaBound{𝑨}\AgdaSpace{}%
+% \AgdaSymbol{=}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaField{univ}\AgdaSpace{}%
+% \AgdaBound{𝑨}\AgdaSpace{}%
+% \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+% \AgdaField{op}\AgdaSpace{}%
+% \AgdaBound{𝑨}\AgdaSymbol{)}\<%
 % \\
 % %
 % \\[\AgdaEmptyExtraSkip]%
-% \>[0][@{}l@{\AgdaIndent{0}}]%
-% \>[1]\AgdaKeyword{open}\AgdaSpace{}%
-% \AgdaModule{algebra}\<%
+% %
+% \>[1]\AgdaFunction{Algebra→algebra}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaFunction{Algebra}\AgdaSpace{}%
+% \AgdaGeneralizable{𝓤}\AgdaSpace{}%
+% \AgdaBound{𝑆}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaRecord{algebra}\AgdaSpace{}%
+% \AgdaGeneralizable{𝓤}\AgdaSpace{}%
+% \AgdaBound{𝑆}\<%
 % \\
 % %
-% \\[\AgdaEmptyExtraSkip]%
-% %
-\>[1]\AgdaFunction{algebra→Algebra}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaRecord{algebra}\AgdaSpace{}%
-\AgdaGeneralizable{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaGeneralizable{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\<%
-\\
-%
-\>[1]\AgdaFunction{algebra→Algebra}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaField{univ}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaField{op}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSymbol{)}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{Algebra→algebra}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaGeneralizable{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaRecord{algebra}\AgdaSpace{}%
-\AgdaGeneralizable{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\<%
-\\
-%
-\>[1]\AgdaFunction{Algebra→algebra}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{mkalg}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∥}}\<%
-\end{code}
-\ccpad
+% \>[1]\AgdaFunction{Algebra→algebra}\AgdaSpace{}%
+% \AgdaBound{𝑨}\AgdaSpace{}%
+% \AgdaSymbol{=}\AgdaSpace{}%
+% \AgdaInductiveConstructor{mkalg}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+% \AgdaBound{𝑨}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+% \AgdaBound{𝑨}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{∥}}\<%
+% \end{code}
+% \ccpad
+
 In developing the more advanced modules of the \agdaualib, we have used the Sigma type representation of algebras exclusively, though we occasionally use record types to represent other basic objects (congruences, subalgebras, and others).
 
 \subsubsection{Operation interpretation syntax}\label{operation-interpretation-syntax}
@@ -480,12 +462,12 @@ Recall, in \S\ref{sec:lifts-altern-univ} we described a common difficulty one en
 \AgdaBound{𝓦}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-What makes the types just defined useful for resolving type level errors is the nice properties they possess. Indeed, the \ualib contains formal proofs of the following facts.
+What makes the \AgdaFunction{Lift-alg} type so useful for resolving type level errors is the nice properties it possesses. Indeed, the \ualib contains formal proofs of the following facts.
 \begin{itemize}
-\item \ar{Lift} is a homomorphism.
-\item \ar{Lift} is an algebraic invariant; that is, an algebra is isomorphic to its lift.
-\item \ar{Lift} of a subalgebra is again a subalgebra.
-\item \ar{Lift} preserves identities.
+\item \af{Lift-alg} is a homomorphism (see \href{https://ualib.gitlab.io/Homomorphisms.Basic.html#exmples-of-homomorphisms}{Homomorphisms.Basic.html}).
+\item \af{Lift-alg} is an algebraic invariant; that is, an algebra is isomorphic to its lift (see \href{https://ualib.gitlab.io/Homomorphisms.Isomorphisms.html#lift-is-an-algebraic-invariant}{Homomorphisms.Isomorphisms.html}).
+\item \af{Lift-alg} of a subalgebra is again a subalgebra (see \href{https://ualib.gitlab.io/Subalgebras.Subalgebras.html#lifts-of-subalgebras}{Subalgebras.Subalgebras.html}).
+\item \af{Lift-alg} preserves identities (see \href{https://ualib.gitlab.io/Varieties.EquationalLogic.html#lift-invariance}{Varieties.EquationalLogic.html}).
 \end{itemize}
 % Our experience has shown \af{lift-alg} to be a perfectly adequate tool for resolving any universe level unification errors that arise when working with the \af{Algebra} type in Agda. We will see some examples of its effectiveness later.
 % 's noncumulative hierarchy of type universes.

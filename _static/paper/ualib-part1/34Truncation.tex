@@ -712,9 +712,9 @@ We now use \af{pred-ext} and \af{blk-uip} to define a type called \af{block-ext\
 \end{code}
 
 \subsubsection{General propositions*\protect\cref{starred}}\label{sec:general-props}
-In this final subsection of our presentation of relations in type theory, we offer a few interesting new types to complement the types we defined in the module \ualibhtml{Relations.Continuous} (\S\ref{sec:continuous-relations}).  We should point out however that (so far) no other modules of the library depend on the types defined here. Therefore, the reader may safely skip to Section~\ref{sec:algebra-types} without fear that this will lead to confusion at some point later on.
+In this final subsection of our presentation of relations in type theory, we offer a few interesting new types to complement those defined in the \ualibhtml{Relations.Continuous} module (\S\ref{sec:continuous-relations}).  (So far no other modules of the \ualib depend on the types defined in this subsection, so the reader may safely skip to Section~\ref{sec:algebra-types}.) % without fear that this will lead to confusion at some point later on.
 
-We defined a type called \af{DepRel} (in \S\ref{continuous-relation-types}) to represent relations of arbitrary arity over an arbitrary collection of sorts. Here we introduce a new type of \emph{truncated dependent relations}, the inhabitants of which we call \defn{dependent propositions}. (Assume the context includes \AgdaBound{𝓤}\AgdaSpace{}%
+Earlier (in \S\ref{continuous-relation-types}) we defined the \af{DepRel} type to represent relations of arbitrary arity over an arbitrary collection of sorts. Here we introduce a new type of \emph{truncated dependent relations}, the inhabitants of which we call \defn{dependent propositions}. (Assume the context includes \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPostulate{Universe} and \AgdaBound{I}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
