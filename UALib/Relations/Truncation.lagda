@@ -128,6 +128,7 @@ blk-uip {𝓦} A R = ∀ (C : Pred A 𝓦) → is-subsingleton (IsBlock C {R})
 
 \end{code}
 
+It might seem unreasonable to postulate that there is at most one inhabitant of `IsBlock C`, since equivalence classes typically have multiple members, any one of which could serve as a class representative.  However, postulating `blk-uip A R` is tantamount to collapsing each `R`-block to a single point, and this is indeed the correct semantic interpretation of the elements of the quotient `A / R`.
 
 ----------------------------
 
