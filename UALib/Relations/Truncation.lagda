@@ -123,7 +123,7 @@ Embeddings are always monic, so we conclude that when a function's codomain is a
 <br>
 
 [← Relations.Quotients](Relations.Quotients.html)
-<span style="float:right;">[Relations.RelExtensionality →](Relations.RelExtensionality.html)</span>
+<span style="float:right;">[Relations.Extensionality →](Relations.Extensionality.html)</span>
 
 
 {% include UALib.Links.md %}

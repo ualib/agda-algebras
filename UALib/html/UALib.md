@@ -96,9 +96,9 @@ We hope the library will be useful to mathematicians and computer scientists who
 - [Relation and Quotient Types](Relations.html)
   - [Discrete Relations](Relations.Discrete.html)
   - [Continuous Relations](Relations.Continuous.html)
-  - [Equivalence Relations and Quotients](Relations.Quotients.html)
+  - [Quotients](Relations.Quotients.html)
   - [Truncation](Relations.Truncation.html)
-  - [Relation Extensionality](Relations.RelExtensionality.html)
+  - [Relation Extensionality](Relations.Extensionality.html)
 
 - [Algebra Types](Algebras.html)
   - [Operations and Signatures](Algebras.Signatures.html)

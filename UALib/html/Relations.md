@@ -20,7 +20,7 @@ This is the [UALib.Relations][] module of the [Agda Universal Algebra Library][]
 <a id="431" class="Keyword">open</a> <a id="436" class="Keyword">import</a> <a id="443" href="Relations.Continuous.html" class="Module">Relations.Continuous</a>
 <a id="464" class="Keyword">open</a> <a id="469" class="Keyword">import</a> <a id="476" href="Relations.Quotients.html" class="Module">Relations.Quotients</a>
 <a id="496" class="Keyword">open</a> <a id="501" class="Keyword">import</a> <a id="508" href="Relations.Truncation.html" class="Module">Relations.Truncation</a>
-<a id="529" class="Keyword">open</a> <a id="534" class="Keyword">import</a> <a id="541" href="Relations.RelExtensionality.html" class="Module">Relations.RelExtensionality</a>
+<a id="529" class="Keyword">open</a> <a id="534" class="Keyword">import</a> <a id="541" href="Relations.Extensionality.html" class="Module">Relations.Extensionality</a>
 
 </pre>
 

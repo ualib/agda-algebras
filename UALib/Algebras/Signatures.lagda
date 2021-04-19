@@ -17,7 +17,7 @@ open import Universes using (𝓤₀)
 
 module Algebras.Signatures where
 
-open import Relations.RelExtensionality public
+open import Relations.Extensionality public
 
 \end{code}
 

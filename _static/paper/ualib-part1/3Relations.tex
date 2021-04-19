@@ -6,7 +6,8 @@
 \section{Relation Types}\label{sec:relat-quot-types}
 We now present the \agdaualib's \ualibhtml{Relations} module and its submodules. In \S\ref{sec:discrete-relations} we define types that represent \emph{unary} and \emph{binary relations}, which we refer to as ``discrete relations'' to contrast them with the (``continuous'') \emph{general} and \emph{dependent relations} that we introduce in \S\ref{sec:continuous-relations}. We call the latter ``continuous relations'' because they can have arbitrary arity (general relations) and they can be defined over arbitrary families of types (dependent relations).
 
-\subsection{Discrete relations: predicates, axiom of extensionality, compatibility}\label{sec:discrete-relations}
+\subsection{Discrete relations}\label{sec:discrete-relations}
+% : predicates, axiom of extensionality, compatibility
 \firstsentence{Relations}{Discrete}
 % \context{%
 % \{\ab 𝓤 \ab 𝓦 \ab 𝓧 \ab 𝓨 \ab 𝓩 \as : \AgdaPostulate{Universe}\}%
@@ -17,8 +18,9 @@ We now present the \agdaualib's \ualibhtml{Relations} module and its submodules.
 \input{31Discrete}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Continuous relations: arbitrary-sorted relations of arbitrary arity*\protect\footnotemark}\label{sec:continuous-relations}\footnotetext{\label{starred}%
+\subsection{Continuous relations*\protect\footnotemark}\label{sec:continuous-relations}\footnotetext{\label{starred}%
 Sections marked with an asterisk include new types that are more abstract and general than those presented elsewhere, but they are used only very rarely in other parts of the \ualib. Therefore, the sections marked * may be safely skimmed or skipped when first encountering them.}
+% : arbitrary-sorted relations of arbitrary arity
 \firstsentencefull{Relations}{Continuous}
 % \context{%
 % \{\ab 𝓤 \ab 𝓥 \ab 𝓦 \as : \AgdaPostulate{Universe}\}%
@@ -28,10 +30,17 @@ Sections marked with an asterisk include new types that are more abstract and ge
 \input{32Continuous}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Quotients: equivalences, class representatives, quotient types}\label{sec:equiv-relat-quot}\firstsentence{Relations}{Quotients}
+\subsection{Quotients}\label{sec:equiv-relat-quot}\firstsentence{Relations}{Quotients}
 % \context{\{\ab 𝓤 𝓦 \as : \AgdaPostulate{Universe}\}\{\ab A \as : \ab 𝓤\AgdaOperator{\AgdaFunction{̇}}\}}
+%: equivalences, class representatives, quotient types
 \input{33Quotients}
 
-\subsection{Truncation: continuous propositions, quotient extensionality}\label{sec:trunc-sets-prop}
+\subsection{Truncation and unique identity proofs}\label{sec:trunc-sets-prop}
+%: continuous propositions, quotient extensionality
 \firstsentence{Relations}{Truncation}
 \input{34Truncation}
+
+\subsection{Relation extensionality}\label{sec:relation-extensionality}
+%: continuous propositions, quotient extensionality
+\firstsentence{Relations}{Extensionality}
+\input{35Extensionality}

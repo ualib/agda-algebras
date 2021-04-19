@@ -40,7 +40,7 @@ NAMES="UALib
        Relations.Continuous
        Relations.Quotients
        Relations.Truncation
-       Relations.RelExtensionality
+       Relations.Extensionality
        Algebras
        Algebras.Signatures
        Algebras.Algebras

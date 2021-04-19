@@ -5,15 +5,15 @@ date : 2021-02-23
 author: William DeMeo
 ---
 
-### <a id="extensionality">Extensionality</a>
+### <a id="relation-extensionality">Relation Extensionality</a>
 
-This section presents the [Relations.RelExtensionality][] module of the [Agda Universal Algebra Library][].
+This section presents the [Relations.Extensionality][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Relations.RelExtensionality where
+module Relations.Extensionality where
 
 open import Relations.Truncation public
 
@@ -126,3 +126,4 @@ While we're at it, we might as well take the abstraction one step further and de
 <span style="float:right;">[Algebras →](Algebras.html)</span>
 
 
+{% include UALib.Links.md %}
