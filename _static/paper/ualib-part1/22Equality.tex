@@ -85,7 +85,7 @@ Before proceeding, a word about a special convention we adopt in the sequel is i
 \context{\{\ab{𝓤}~\as :~\ap{Universe}\} \{\ab{A}~\as :~\ab 𝓤\af ̇\}}
 which means that all code in the current section is to be interpreted as occurring inside such an anonymous module, where the given typing judgments are taken for granted.
 
-\paragraph*{Identity is an equivalence}
+\paragraph*{Identity is an equivalence relation}
 The relation \ad{≡} just defined is naturally an equivalence relation, and the formal proof of this fact is trivial. Indeed, we don't need to prove reflexivity, since that is the defining property of \ad{≡}, and the proofs of symmetry and transitivity are immediate.
 \ccpad
 \begin{code}%
@@ -141,7 +141,7 @@ The relation \ad{≡} just defined is naturally an equivalence relation, and the
 \AgdaInductiveConstructor{refl}\<%
 \end{code}
 \ccpad
-We prove that \ad ≡ obeys the substitution rule (subst) in the next section (see \af{ap}~\S\ref{transport}), but first we define some syntactic sugar that will make it easier to apply symmetry and transitivity of \ad ≡ in proofs.\footnote{%
+We prove that \ad ≡ obeys the substitution rule (subst) in the next subsection (see \af{ap}), but first we define some syntactic sugar that will make it easier to apply symmetry and transitivity of \ad ≡ in proofs.\footnote{%
 \textbf{Unicode Hints} (\agdamode): \texttt{\textbackslash{}\^{}-\textbackslash{}\^{}1} ↝ \af{⁻¹}; \texttt{\textbackslash{}Mii\textbackslash{}Mid} ↝ \af{𝑖𝑑}; \texttt{\textbackslash{}.}↝ \af{∙}. In general, for information about a character, place the cursor on the character and type \texttt{M-x\ describe-char} (or \texttt{M-x\ h\ d\ c}).}
 \ccpad
 \begin{code}
@@ -232,7 +232,7 @@ If we have a proof \ab p \as :~\ab x \aod ≡ \ab y, and we need a proof of \ab 
 % \AgdaKeyword{public}\<%
 \end{code}
 
-\subsubsection*{Transport} %\label{transport}
+\subsubsection*{Transport (substitution)} %\label{transport}
 
 Alonzo Church characterized equality by declaring two things equal if and only if no property (predicate) can distinguish them (see \cite{Church:1940}). In other terms, \ab x and \ab y are equal if and only if for all \ab{P} we have \ab{P} \ab x \as → \ab P \ab y. One direction of this implication is sometimes called \emph{substitution} or \emph{transport} or \emph{transport along an identity}. It asserts the following: if two objects are equal and one of them satisfies a given predicate, then so does the other. A type representing this notion is defined, along with the (polymorphic) identity function, in the \am{MGS-MLTT} module of \typtop as follows.\footnote{Including every line of code of the \agdaualib in this paper would result in an unbearable reading experience. We include all significant sections of code from the first 13 modules, but we omit lines indicating that redundant definitions of functions (e.g., \af{transport} and \af{ap}) occur inside named ``hidden'' modules. We also omit lines importing the original definitions of such duplicate definitions from \typtop library.}
 \ccpad

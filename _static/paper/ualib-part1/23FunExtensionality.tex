@@ -14,7 +14,7 @@ We can probably all agree that the functions \(f\) and \(g\) above, while not sy
 
 In the examples above, it is common to say that the two functions are \href{https://en.wikipedia.org/wiki/Extensionality}{\defn{extensionally equal}}, since they produce the same \emph{external} output when given the same input, but they are not \href{https://en.wikipedia.org/wiki/Intension}{\defn{intensionally equal}}, since their \emph{internal} definitions differ. In the next subsection we describe types that manifest this idea of \emph{extensional equality of functions}, or \emph{function extensionality}.\footnote{Most of these types are already defined in \typtop, so the \ualib imports the definitions from there; as usual, we redefine some of these types here for the purpose of explication.}
 
-\subsubsection*{Function extensionality} %\label{sec:defin-funct-extens}
+\subsubsection*{Types for postulating function extensionality} %\label{sec:defin-funct-extens}
 
 As explained above, a natural notion of function equality is defined as follows: \(f\) and \(g\) are said to be \emph{pointwise equal} provided \(∀ x → f x ≡ g x\). Here is how this is expressed in type theory (e.g., in \typtop).
 \ccpad
@@ -61,7 +61,9 @@ As explained above, a natural notion of function equality is defined as follows:
 \end{code}
 \ccpad
 \defn{Function extensionality} is the principle that pointwise equal functions are \defn{definitionally equal}; that is, \(\forall\ f\ g\ (f ∼ g → f ≡ g)\). In type theory this principle is represented by the types \af{funext} (for nondependent functions) and \af{dfunext} (for dependent functions)~(\cite[\S2.9]{HoTT}).
-For example, the latter is defined as follows.
+For example, the latter is defined as follows.\footnote{%
+Previous versions of the \ualib made heavy use of a \defn{global function extensionality principle} which asserts that function extensionality holds at all universe levels.
+However, we removed all instances of global function extensionality in favor of local applications of the principle. This makes transparent precisely how and where the library depends on function extensionality. The price we pay for this precision is a proliferation of extensionality postulates. Eventually we will likely be able to remove these postulates with other approach to extensionality; e.g., \emph{univalence} and/or Cubical Agda.}
 \ccpad
 \begin{code}%
 % \>[1]\AgdaFunction{funext}\AgdaSpace{}%
@@ -155,10 +157,7 @@ For example, the latter is defined as follows.
 \end{code}
 \ccpad
 In informal settings, this so-called \emph{point-wise equality of functions} is typically what one means when one
-asserts that two functions are ``equal.''\footnote{In fact, if one assumes the \emph{univalence axiom} of Homotopy Type Theory~\cite{HoTT}, then point-wise equality of functions is equivalent to definitional equality of functions. See the section \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#funextfromua}{``Function extensionality from univalence''} of~\cite{MHE}.} However, it is important to keep in mind the following fact: \textit{function extensionality is known to be neither provable nor disprovable in Martin-Löf type theory. It is an independent statement}.~\cite{MHE}
-
-
-Previous versions of the \ualib made heavy use of a \defn{global function extensionality principle} which asserts that function extensionality holds at all universe levels.
+asserts that two functions are ``equal.''\footnote{In fact, if one assumes the \emph{univalence axiom} of Homotopy Type Theory~\cite{HoTT}, then point-wise equality of functions is equivalent to definitional equality of functions. See the section \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#funextfromua}{``Function extensionality from univalence''} of~\cite{MHE}.} However, it is important to keep in mind the following fact: \textit{function extensionality is known to be neither provable nor disprovable in Martin-Löf type theory. It is an independent statement.}.~\cite{MHE}
 % Agda is capable of expressing types representing global principles as the language has a special universe level for such types.  
 % Escardó denote this universe by \apr{𝓤ω} (which is an alias for Agda's \apr{Setω} universe).\footnote{More details about the \ad{𝓤ω} type are available at
 % \href{https://agda.readthedocs.io/en/latest/language/universe-levels.html\#expressions-of-kind-set}{agda.readthedocs.io}.}
@@ -200,7 +199,6 @@ Previous versions of the \ualib made heavy use of a \defn{global function extens
 % \AgdaBound{𝓥}\<%
 % \end{code}
 % \ccpad
-However, we decided to remove all instances of global function extensionality from the latest version of the \ualib and limit ourselves to local applications of the principle. This has the advantage of making transparent precisely how and where the library depends on function extensionality. The price we pay for this precision is a library that is littered with extensionality postulates.\footnote{Eventually we will probably remove these postulates in favor of an alternative approach to extensionality; e.g., \emph{univalence} and/or Cubical Agda.}
 
 The next type defines a converse of function extensionality for dependent function types (cf. \af{cong-app} in \ualibhtml{Overture.Equality} and~\cite[(2.9.2)]{HoTT}).
 \ccpad

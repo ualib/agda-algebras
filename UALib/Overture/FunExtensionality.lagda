@@ -55,7 +55,7 @@ open import MGS-MLTT using (_∼_) public
 
 \end{code}
 
-*Function extensionality* is the principle that point-wise equal functions are *definitionally* equal; that is, for all functions `f` and `g` we have `f ∼ g → f ≡ g`. In type theory this principle is represented by the types `funext` (for nondependent functions) and `dfunext` (for dependent functions)~(\cite[\S2.9]{HoTT}).  For example, the latter is defined as follows.
+*Function extensionality* is the principle that point-wise equal functions are *definitionally* equal; that is, for all functions `f` and `g` we have `f ∼ g → f ≡ g`. In type theory this principle is represented by the types `funext` (for nondependent functions) and `dfunext` (for dependent functions)~(\cite[\S2.9]{HoTT}).  For example, the latter is defined as follows.<sup>[2](Overture.Extensionality.html#fn2)</sup>
 
 \begin{code}
 
@@ -66,7 +66,7 @@ module hide-funext where
 
 \end{code}
 
-In most informal settings at least, this so-called *point-wise equality of functions* is typically what one means when one asserts that two functions are "equal."<sup>[2](Overture.Extensionality.html#fn2)</sup>
+In most informal settings at least, this so-called *point-wise equality of functions* is typically what one means when one asserts that two functions are "equal."<sup>[3](Overture.Extensionality.html#fn3)</sup>
 However, it is important to keep in mind the following fact (see <a href="https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#funextfromua">Escardó's notes</a>):
 
 *Function extensionality is known to be neither provable nor disprovable in Martin-Löf type theory. It is an independent statement*.
@@ -83,10 +83,6 @@ open import MGS-FunExt-from-Univalence using (funext; dfunext) public
 Note that this import directive does not impose any function extensionality assumptions.  It merely makes the types available in case we want to impose such assumptions.
 
 
-#### <a id="global-function-extensionality">Global function extensionality</a>
-
-Previous versions of the [UALib][] made heavy use of a *global function extensionality principle*. This asserts that function extensionality holds at all universe levels.
-However, we decided to remove all instances of global function extensionality from the latest version of the library and limit ourselves to local applications of the principle. This has the advantage of making transparent precisely how and where the library depends on function extensionality. The price we pay for this precision is a library that is littered with extensionality postulates.<sup>[4](Overture.Extensionality.html#fn4)</sup>
 
 The next type defines the converse of function extensionality (cf. `cong-app` in [Overture.Equality][] and (2.9.2) in the [HoTT Book][]).
 
@@ -164,12 +160,12 @@ open import MGS-FunExt-from-Univalence using (hfunext) public
 
 <sup>1</sup> <span class="footnote" id="fn1"> Most of these types are already defined by in the [Type Topology][] library, so the [UALib][] imports the definitions from there; as usual, we redefine some of these types, inside hidden modules, for the purpose of explication.</span>
 
-<sup>2</sup> <span class="footnote" id="fn2"> Moreover, if one assumes the [univalence axiom][] of [Homotopy Type Theory][], then point-wise equality of functions is equivalent to definitional equality of functions. (See [Function extensionality from univalence](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#funextfromua).)</span>
 
-<sup>3</sup> <span class="footnote" id="fn3"> For more details about the `𝓤ω` type see the [universe-levels section](https://agda.readthedocs.io/en/latest/language/universe-levels.html#expressions-of-kind-set) of [agda.readthedocs.io](https://agda.readthedocs.io).
+<sup>2</sup> <span class="footnote" id="fn2"> Previous versions of the [UALib][] made heavy use of a *global function extensionality principle*. This asserts that function extensionality holds at all universe levels.
+However, we decided to remove all instances of global function extensionality from the latest version of the library and limit ourselves to local applications of the principle. This has the advantage of making transparent precisely how and where the library depends on function extensionality. The price we pay for this precision is a library that is littered with extensionality postulates. Eventually we will probably remove these postulates in favor of an alternative approach to extensionality; e.g., *univalence* and/or Cubical Agda.
 
-<sup>4</sup><span class="footnote" id="fn4">Eventually we will probably remove these postulates in favor of an alternative approach to extensionality; e.g., *univalence* and/or Cubical Agda.
-</span>
+<sup>3</sup> <span class="footnote" id="fn3"> Moreover, if one assumes the [univalence axiom][] of [Homotopy Type Theory][], then point-wise equality of functions is equivalent to definitional equality of functions. (See [Function extensionality from univalence](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#funextfromua).)</span>
+
 
 <br>
 <br>
@@ -182,6 +178,8 @@ open import MGS-FunExt-from-Univalence using (hfunext) public
 
 
 <!-- unused stuff
+
+<sup>3</sup> <span class="footnote" id="fn3"> For more details about the `𝓤ω` type see the [universe-levels section](https://agda.readthedocs.io/en/latest/language/universe-levels.html#expressions-of-kind-set) of [agda.readthedocs.io](https://agda.readthedocs.io).
 
 
 extensionality-lemma : {𝓘 𝓤 𝓥 𝓣 : Universe}{I : 𝓘 ̇ }{X : 𝓤 ̇ }{A : I → 𝓥 ̇ }

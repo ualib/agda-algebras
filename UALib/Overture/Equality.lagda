@@ -54,7 +54,11 @@ open import Identity-Type renaming (_≡_ to infix 0 _≡_) public
 
 Whenever we need to complete a proof by simply asserting that `x` is definitionally equal to itself, we invoke `refl`.  If we need to make explicit the implicit argument `x`, then we use `refl {x = x}`.
 
-Of course `≡` is an equivalence relation and the formal proof of this fact is trivial. We don't need to prove reflexivity since it is the defining property of `≡`.  Here are the (trivial) proofs of symmetry and transitivity of `≡`.
+
+
+#### <a id="identity-is-an-equivalence-relation">Identity is an equivalence relation</a>
+
+The `≡` type just defined is an equivalence relation and the formal proof of this fact is trivial. We don't need to prove reflexivity since it is the defining property of `≡`.  Here are the (trivial) proofs of symmetry and transitivity of `≡`.
 
 \begin{code}
 
@@ -94,7 +98,7 @@ open import MGS-MLTT using (_⁻¹; _∙_) public
 
 \end{code}
 
-#### <a id="transport">Transport</a>
+#### <a id="transport">Transport (substitution)</a>
 
 Alonzo Church characterized equality by declaring two things equal iff no property (predicate) can distinguish them.<sup>[4](Overture.Equality.html#fn4)</sup>  In other terms, `x` and `y` are equal iff for all `P` we have `P x → P y`.  One direction of this implication is sometimes called *substitution* or *transport* or *transport along an identity*.  It asserts that *if* two objects are equal and one of them satisfies a predicate, then so does the other. A type representing this notion is defined in the `MGS-MLTT` module of the [Type Topology][] library as follows.<sup>[3](Preliminaries.Equality.html#fn3)</sup>
 
