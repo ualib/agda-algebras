@@ -51,7 +51,7 @@ Each of these types captures what it means to be a congruence and they are equiv
 \end{code}
 
 #### <a id="example">Example</a>
-We defined the zero relation `𝟎-rel` in the [Relations.Discrete][] module.  We now build the *trivial congruence*, which has `𝟎-rel` as its underlying relation. Observe that `𝟎-rel` is equivalent to the identity relation `≡` and these are obviously both equivalences. In fact, we already proved this of `≡` in the [Overture.Equality][] module, so we simply apply the corresponding proofs.
+We defined the zero relation `𝟎` in the [Relations.Discrete][] module.  We now build the *trivial congruence*, which has `𝟎` as its underlying relation. Observe that `𝟎` is equivalent to the identity relation `≡` and these are obviously both equivalences. In fact, we already proved this of `≡` in the [Overture.Equality][] module, so we simply apply the corresponding proofs.
 
 \begin{code}
 

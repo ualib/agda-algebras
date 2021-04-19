@@ -58,7 +58,7 @@ For a fixed signature \ab{𝑆} \as : \af{Signature} \ab 𝓞 \ab 𝓥 and unive
 \ccpad
 To be more precise, we might call an inhabitant of this type an ``∞-algebra'' because its domain can be an arbitrary type, say, \abt{A}{𝓤} and need not be truncated at some level. (In particular, \ab{A} need not be a \emph{set}; see the discussion of sets in~\S~\ref{sec:trunc-sets-prop}.) We could then proceed to define the type of ``0-algebras'' as algebras whose domains are sets (which may be closer to what most of us have in mind when doing informal universal algebra). However, we have found that the domains of our algebras need to be sets in just a few places in the \ualib, and it seems preferable to work with general (∞-)algebras throughout and then assume \emph{uniqueness of identity proofs} (uip) explicitly and only where needed.  This makes any dependence on uip more transparent (which is also the reason \AgdaPragma{--without-K} appears at the top of every module in the \ualib).
 
-\subsubsection{Algebras as record types}\label{algebras-as-record-types}
+\paragraph*{Algebras as record types} %\label{algebras-as-record-types}
 
 Some people prefer to represent algebraic structures in type theory using records, and for those folks we offer the following (equivalent) definition.
 \ccpad
@@ -167,7 +167,9 @@ This representation of algebras as inhabitants of a record type is equivalent to
 
 In developing the more advanced modules of the \agdaualib, we have used the Sigma type representation of algebras exclusively, though we occasionally use record types to represent other basic objects (congruences, subalgebras, and others).
 
-\subsubsection{Operation interpretation syntax}\label{operation-interpretation-syntax}
+
+
+\paragraph*{Operation interpretation syntax}\label{operation-interpretation-syntax}
 
 We now define a convenient shorthand for the interpretation of an operation symbol. This looks more similar to the standard notation one finds in the literature as compared to the double bar notation we started with, so we will use this new notation almost exclusively in the remaining modules of the \ualib.
 \ccpad
@@ -216,7 +218,7 @@ We now define a convenient shorthand for the interpretation of an operation symb
 \ccpad
 Thus, if \ab{𝑓} \as : \af ∣ \ab 𝑆 \af ∣ is an operation symbol in the signature \ab{𝑆} and if \ab{𝑎} \as : \af ∥ \ab 𝑆 \af ∥ \ab 𝑓 \as → \af ∣ \ab 𝑨 \af ∣ is a tuple of the same arity, then (\ab{𝑓} \af ̂ \ab 𝑨) \ab 𝑎 denotes the operation \ab{𝑓} interpreted in \ab{𝑨} and evaluated at \ab{𝑎}.
 
-% \subsubsection{Arbitrarily many variable symbols}\label{arbitrarily-many-variable-symbols}
+% \paragraph*{Arbitrarily many variable symbols}\label{arbitrarily-many-variable-symbols}
 
 % We sometimes want to assume that we have at our disposal an arbitrary collection \ab X of variable symbols such that, for every algebra \ab 𝑨, no matter the type of its domain, we have a surjective map \ab{h} \as : \ab X \as → \af ∣ \ab 𝑨 \af ∣ from variables onto the domain of \ab 𝑨. We may use the following definition to express this assumption when we need it.
 % \ccpad
@@ -298,7 +300,7 @@ Thus, if \ab{𝑓} \as : \af ∣ \ab 𝑆 \af ∣ is an operation symbol in the 
 
 
 
-\subsubsection{Lifts of algebras}\label{lifts-of-algebras}
+\paragraph*{Lifts of algebras}\label{lifts-of-algebras}
 
 Recall, in \S\ref{sec:lifts-altern-univ} we described a common difficulty one encounters when working with a noncumulative universe hierarchy. We made a promise to provide some domain-specific level lifting and lowering methods. Here we fulfill this promise by supplying a couple of bespoke tools designed specifically for our operation and algebra types.
 \ccpad
@@ -472,7 +474,7 @@ See \href{https://ualib.gitlab.io/Varieties.EquationalLogic.html\#lift-invarianc
 
 
 
-\subsubsection{Compatibility}\label{compatibility-of-binary-relations}
+\paragraph*{Compatibility}\label{compatibility-of-binary-relations}
 
 We now define the function \af{compatible} so that, if \ab{𝑨} is an algebra and \ab{R} a binary relation, then \af{compatible} \ab 𝑨 \ab R will denote the assertion that \ab{R} is \emph{compatible} with all basic operations of \ab{𝑨}; that is, for every operation symbol \ab{𝑓} \as : \af ∣ \ab 𝑆 \af ∣ and all pairs \ab u \ab v~\as :~\af{∥} \ab 𝑆 \af{∥} \ab 𝑓 \as → \af ∣ \ab 𝑨 \af ∣ of tuples from the domain of \ab 𝑨, the following implication holds:\\[-8pt]
 
@@ -657,7 +659,7 @@ type of dependent relations.
 \end{code}
 
 
-% \subsubsection{Compatibility of continuous relations*\protect\cref{starred}}\label{compatibility-of-continuous-relations}
+% \paragraph*{Compatibility of continuous relations*\protect\cref{starred}}\label{compatibility-of-continuous-relations}
 
 % Similarly, a type representing \emph{compatibility of a continuous relation} with a single operation of an algebra is defined using \AgdaFunction{cont-compatible-fun}~(\S\ref{continuous-relation-types}).
 % \ccpad
