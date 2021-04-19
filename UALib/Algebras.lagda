@@ -30,7 +30,7 @@ open import Algebras.Congruences
 
 -------------------------------------
 
-[← Relations.Truncation](Relations.Truncation.html)
+[← Relations.Extensionality](Relations.Extensionality.html)
 <span style="float:right;">[Algebras.Signatures →](Algebras.Signatures.html)</span>
 
 {% include UALib.Links.md %}

@@ -19,9 +19,9 @@ The source code for this module comprises the (literate) [Agda][] program that w
 
 <a id="593" class="Keyword">open</a> <a id="598" class="Keyword">import</a> <a id="605" href="Overture.Preliminaries.html" class="Module">Overture.Preliminaries</a>
 <a id="628" class="Keyword">open</a> <a id="633" class="Keyword">import</a> <a id="640" href="Overture.Equality.html" class="Module">Overture.Equality</a>
-<a id="658" class="Keyword">open</a> <a id="663" class="Keyword">import</a> <a id="670" href="Overture.Extensionality.html" class="Module">Overture.Extensionality</a>
-<a id="694" class="Keyword">open</a> <a id="699" class="Keyword">import</a> <a id="706" href="Overture.Inverses.html" class="Module">Overture.Inverses</a>
-<a id="724" class="Keyword">open</a> <a id="729" class="Keyword">import</a> <a id="736" href="Overture.Lifts.html" class="Module">Overture.Lifts</a>
+<a id="658" class="Keyword">open</a> <a id="663" class="Keyword">import</a> <a id="670" href="Overture.FunExtensionality.html" class="Module">Overture.FunExtensionality</a>
+<a id="697" class="Keyword">open</a> <a id="702" class="Keyword">import</a> <a id="709" href="Overture.Inverses.html" class="Module">Overture.Inverses</a>
+<a id="727" class="Keyword">open</a> <a id="732" class="Keyword">import</a> <a id="739" href="Overture.Lifts.html" class="Module">Overture.Lifts</a>
 
 </pre>
 

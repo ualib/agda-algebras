@@ -6,13 +6,14 @@ NAMES="UALib
        Overture/Preliminaries
        Overture/Equality
        Overture/Inverses
-       Overture/Extensionality
+       Overture/FunExtensionality
        Overture/Lifts
        Relations
        Relations/Discrete
        Relations/Continuous
        Relations/Quotients
        Relations/Truncation
+       Relations/RelExtensionality
        Algebras
        Algebras/Signatures
        Algebras/Algebras

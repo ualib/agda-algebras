@@ -314,6 +314,153 @@ Embeddings are always monic, so we conclude that when a function's codomain is a
 
 \newcommand\proptype{\href{https://agda.readthedocs.io/en/v2.6.1.3/language/prop.html}{\af{Prop}}\xspace}
 
+\begin{comment}
+\paragraph*{The axiom of extensionality} %\label{sec:axiom-ext}
+In type theory everything is represented as a type and, as we have just seen, this includes subsets.  Equality of types is a nontrivial matter, and thus so is equality of subsets when represented as unary predicates.  Fortunately, it is straightforward to write down a type that represents what it typically means in informal mathematics to say that two subsets are (extensionally) equal---namely, they contain the same elements. In the \ualib we denote this type by \af{≐} and define it as follows.\footnote{\label{uhints}%
+  \textbf{Unicode Hints}. In \agdamode, \texttt{\textbackslash{}.=} ↝ \af{≐}, \texttt{\textbackslash{}u+} ↝ \af{⊎}, \texttt{\textbackslash{}b0} ↝ \af 𝟘, \texttt{\textbackslash{}B0} ↝ \af 𝟎, \texttt{\textbackslash{}b1} ↝ \af 𝟙, \texttt{\textbackslash{}B1} ↝ \af 𝟏.}
+\ccpad
+\begin{code}
+\>[1]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}≐\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Pred}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Pred}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{𝓩}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓩}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+%
+\>[1]\AgdaBound{P}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≐}}\AgdaSpace{}%
+\AgdaBound{Q}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{P}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊆}}\AgdaSpace{}%
+\AgdaBound{Q}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{×}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{Q}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊆}}\AgdaSpace{}%
+\AgdaBound{P}\AgdaSymbol{)}\<%
+\end{code}
+\ccpad
+A proof of \ab P \aof{≐} Q is a pair (\ab p , \ab q) where \ab p~\as :~\ab P~\aof ⊆~\ab Q and \ab q :~\ab Q~\aof ⊆~\ab P are proofs of the first and second inclusions, respectively. If \ab P and \ab Q are definitionally equal (i.e., \ab P \aod ≡ \ab Q), then both \ab P~\aof ⊆~\ab Q and \ab Q~\aof ⊆~\ab P hold, so \ab P \aof ≐ \ab Q also holds, as we now confirm.
+\ccpad
+\begin{code}%
+\>[0]\AgdaFunction{Pred-≡}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaBound{𝓦}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}
+\AgdaSymbol{\{}\AgdaBound{P}\AgdaSpace{}%
+\AgdaBound{Q}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Pred}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{P}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaBound{Q}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{P}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≐}}\AgdaSpace{}%
+\AgdaBound{Q}\<%
+\\
+\>[0]\AgdaFunction{Pred-≡}\AgdaSpace{}%
+\AgdaInductiveConstructor{refl}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{z}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{z}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{z}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{z}\AgdaSymbol{)}\<%
+\end{code}
+\ccpad
+The converse is not provable in \mltt. However, we can postulate that it holds as an axiom if we wish.  This is called the \defn{axiom of extensionality} and a type that represents it is the following.
+\ccpad
+\begin{code}%
+\>[0]\AgdaFunction{ext-axiom}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}%
+\>[53]\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+\>[0]\AgdaFunction{ext-axiom}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{P}\AgdaSpace{}%
+\AgdaBound{Q}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Pred}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{P}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≐}}\AgdaSpace{}%
+\AgdaBound{Q}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{P}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+\AgdaBound{Q}\<%
+\end{code}
+\ccpad
+Note that \af{ext-axiom} does not itself postulate the axiom of extensionality; it merely says what it is.  If we want to postulate the axiom, we must assume we have an inhabitant (or ``witness'') of the type. We could do this in Agda in a number of ways, but probably the easiest is to simply add the witness as a parameter to a module, like so.\footnote{Agda also has a \ak{postulate} mechanism that we could use, but this would require omitting the \AgdaPragma{--safe} pragma from the \ak{OPTIONS} directive at the start of the module.}
+\ccpad
+\begin{code}
+\>[0]\AgdaKeyword{module}\AgdaSpace{}%
+\AgdaModule{ext-axiom-postulated}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{ea}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{ext-axiom}\AgdaSpace{}%
+\AgdaBound{A}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\end{code}
+\ccpad
+Other notions of extensionality come up often in the \ualib; see, for example, \S\ref{function-extensionality} and \S\ref{sec:trunc-sets-prop}.
+
+\end{comment}
+
+
+
 \subsubsection{Predicate extensionality}\label{propositions}
 
 The principle of \defn{proposition extensionality} asserts that logically equivalent propositions are equivalent.  That is, if \ab P and \ab Q are propositions such that \ab P~\af ⊆~\ab Q and \ab Q~\af ⊆~\ab P, then \ab P~\ad ≡~\ab Q. For our purposes, it will suffice to formalize this principle for general predicates, rather than propositions (i.e., truncated predicates). The following definition codifies the extensionality principle we require.
@@ -714,7 +861,7 @@ We now use \af{pred-ext} and \af{blk-uip} to define a type called \af{block-ext\
 \subsubsection{General propositions*\protect\cref{starred}}\label{sec:general-props}
 In this final subsection of our presentation of relations in type theory, we offer a few interesting new types to complement those defined in the \ualibhtml{Relations.Continuous} module (\S\ref{sec:continuous-relations}).  (So far no other modules of the \ualib depend on the types defined in this subsection, so the reader may safely skip to Section~\ref{sec:algebra-types}.) % without fear that this will lead to confusion at some point later on.
 
-Earlier (in \S\ref{continuous-relation-types}) we defined the \af{DepRel} type to represent relations of arbitrary arity over an arbitrary collection of sorts. Here we introduce a new type of \emph{truncated dependent relations}, the inhabitants of which we call \defn{dependent propositions}. (Assume the context includes \AgdaBound{𝓤}\AgdaSpace{}%
+Earlier (in \S\ref{sec:continuous-relations}) we defined the \af{DepRel} type to represent relations of arbitrary arity over an arbitrary collection of sorts. Here we introduce a new type of \emph{truncated dependent relations}, the inhabitants of which we call \defn{dependent propositions}. (Assume the context includes \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPostulate{Universe} and \AgdaBound{I}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%

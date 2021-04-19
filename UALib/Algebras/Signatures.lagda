@@ -17,7 +17,7 @@ open import Universes using (𝓤₀)
 
 module Algebras.Signatures where
 
-open import Relations.Truncation public
+open import Relations.RelExtensionality public
 
 \end{code}
 

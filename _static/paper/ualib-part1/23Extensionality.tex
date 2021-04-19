@@ -3,7 +3,7 @@
 %%% mode: latex
 %%% TeX-engine: 'xetex
 %%% End:
-\subsubsection{Background and motivation}\label{background-and-motivation}
+% \subsubsection{Background and motivation}\label{background-and-motivation}
 This brief introduction to \emph{function extensionality} is intended for novices. Those already familiar with the concept might wish to skip to the next subsection.
 
 What does it mean to say that two functions \(f\ g \colon X → Y\) are equal? Suppose $f$ and \(g\) are defined on \(X = ℤ\) (the integers) as follows: \(f x := x + 2\) and \(g x := ((2 * x) - 8)/2 + 6\). Should we call \(f\) and \(g\) equal?  Are they the ``same'' function?  What does that even mean?
@@ -14,7 +14,7 @@ We can probably all agree that the functions \(f\) and \(g\) above, while not sy
 
 In the examples above, it is common to say that the two functions are \href{https://en.wikipedia.org/wiki/Extensionality}{\defn{extensionally equal}}, since they produce the same \emph{external} output when given the same input, but they are not \href{https://en.wikipedia.org/wiki/Intension}{\defn{intensionally equal}}, since their \emph{internal} definitions differ. In the next subsection we describe types that manifest this idea of \emph{extensional equality of functions}, or \emph{function extensionality}.\footnote{Most of these types are already defined in \typtop, so the \ualib imports the definitions from there; as usual, we redefine some of these types here for the purpose of explication.}
 
-\subsubsection{Definition of function extensionality}\label{sec:defin-funct-extens}
+\subsubsection*{Function extensionality} %\label{sec:defin-funct-extens}
 
 As explained above, a natural notion of function equality is defined as follows: \(f\) and \(g\) are said to be \emph{pointwise equal} provided \(∀ x → f x ≡ g x\). Here is how this is expressed in type theory (e.g., in \typtop).
 \ccpad

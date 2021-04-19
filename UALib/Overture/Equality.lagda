@@ -157,7 +157,7 @@ cong-app refl _ = refl
 <br>
 
 [← Overture.Preliminaries ](Overture.Preliminaries.html)
-<span style="float:right;">[Overture.Extensionality →](Overture.Extensionality.html)</span>
+<span style="float:right;">[Overture.FunExtensionality →](Overture.FunExtensionality.html)</span>
 
 {% include UALib.Links.md %}
 

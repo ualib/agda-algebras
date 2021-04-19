@@ -19,7 +19,7 @@ module Overture where
 
 open import Overture.Preliminaries
 open import Overture.Equality
-open import Overture.Extensionality
+open import Overture.FunExtensionality
 open import Overture.Inverses
 open import Overture.Lifts
 

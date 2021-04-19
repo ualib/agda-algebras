@@ -157,7 +157,7 @@ Here's a useful variation of `ap` that we borrow from the `Relation/Binary/Core.
 <br>
 
 [← Overture.Preliminaries ](Overture.Preliminaries.html)
-<span style="float:right;">[Overture.Extensionality →](Overture.Extensionality.html)</span>
+<span style="float:right;">[Overture.FunExtensionality →](Overture.FunExtensionality.html)</span>
 
 {% include UALib.Links.md %}
 

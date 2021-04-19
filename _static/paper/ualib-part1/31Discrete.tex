@@ -3,11 +3,10 @@
 %%% mode: latex
 %%% TeX-engine: 'xetex
 %%% End:
-\subsubsection{Unary relations}
+\paragraph*{Unary relations}
 
-In set theory, given two sets \ab A and \ab P, we say that \ab P is a \defn{subset} of \ab A, and we write \ab P \af ⊆ \ab A, just in case \as ∀~\ab x~(\ab x~\af ∈~\ab P~\as →~\ab x~\af ∈~\ab A). We need a mechanism for representing this notion in Agda. A typical approach is to use a \emph{predicate} type, denoted by \af{Pred}.
-
-Given two universes \ab 𝓤 \ab 𝓦 and a type \ab A~\as :~\ab 𝓤\af ̇, the type \af{Pred}~\ab A~\ab 𝓦 represents \emph{properties} that inhabitants of \ab A may or may not satisfy.  We write \ab P~\as :~\af{Pred}~\ab A~\ab 𝓤 to represent the semantic concept of the collection of inhabitants of \ab A that satisfy (or belong to) \ab P. Here is the definition.\footnote{\label{relunary}cf.~\texttt{Relation/Unary.agda} in the \agdastdlib.}
+In set theory, given two sets \ab A and \ab P, we say that \ab P is a \defn{subset} of \ab A, and we write \ab P \af ⊆ \ab A, just in case \as ∀~\ab x~(\ab x~\af ∈~\ab P~\as →~\ab x~\af ∈~\ab A). We need a mechanism for representing this notion in Agda. A typical approach is to use a \emph{unary predicate} type which we will denote by \af{Pred} and define as follows.  Given two universes \ab 𝓤 \ab 𝓦 and a type \ab A~\as :~\ab 𝓤\af ̇, the type \af{Pred}~\ab A~\ab 𝓦 represents \emph{properties} that inhabitants of \ab A may or may not satisfy.  We write \ab P~\as :~\af{Pred}~\ab A~\ab 𝓤 to represent the % semantic concept of the 
+collection of inhabitants of \ab A that satisfy (or belong to) \ab P. Here is the definition.\footnote{\label{relunary}cf.~\texttt{Relation/Unary.agda} in the \agdastdlib.}
 \ccpad
 \begin{code}%
 \>[0]\AgdaFunction{Pred}\AgdaSpace{}%
@@ -39,15 +38,21 @@ Given two universes \ab 𝓤 \ab 𝓦 and a type \ab A~\as :~\ab 𝓤\af ̇, the
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \end{code}
 \ccpad
+This is a general unary predicate type, but by taking the codomain to be \af{Bool} = \{0, 1\}, we obtain the usual interpretation of set membership; that is,
+% \footnote{The type \af 𝟚 is defined in the \AgdaModule{MGS-MLTT} module of \typtop.}  
+for \ab P~\as :~\af{Pred}~\ab A~\af{Bool} and for each \abt{x}{A}, we would interpret \ab P~\ab x~\ad ≡ 0 to mean \ab x ∉ \ab A, and \ab P~\ab x~\ad ≡ 1 to mean \ab x ∈ \ab A.
+
+
 % To reiterate, given a type \ab A \as : \ab 𝓤\af ̇, we think of \af{Pred} \ab A \ab 𝓦 as the type of a property that inhabitants of \ab A may or may not satisfy. If \ab P \as : \af{Pred} \ab A \ab 𝓦, then we view \ab P as a collection of inhabitants of type \ab A that ``satisfy property \ab P,'' or that ``belong to the subset \ab P of \ab A.''
-Later we consider predicates over the class of algebras in a given signature. In the \ualibhtml{Algebras} module we will define the type \af{Algebra} \ab 𝓤 \ab 𝑆 of \ab 𝑆-algebras with domain type \ab 𝓤\af ̇, and the type \af{Pred} (\af{Algebra} \ab 𝓤 \ab 𝑆) \ab 𝓦 will represent classes of \ab 𝑆-algebras with certain properties.
+% Later we consider predicates over the class of algebras in a given signature. In the \ualibhtml{Algebras} module we will define the type \af{Algebra} \ab 𝓤 \ab 𝑆 of \ab 𝑆-algebras with domain type \ab 𝓤\af ̇, and the type \af{Pred} (\af{Algebra} \ab 𝓤 \ab 𝑆) \ab 𝓦 will represent classes of \ab 𝑆-algebras with certain properties.
 
 
 
 
 
-\subsubsection{Membership and inclusion relations}\label{membership-and-inclusion-relations}
-Like the \agdastdlib, the \ualib includes types that represent the \emph{element inclusion} and \emph{subset inclusion} relations from set theory. For example, given a predicate \af P, we may represent that  ``\ab x belongs to \af P'' or that ``\ab x has property \af{P},'' by writing either \ab x \af ∈ \af P or \af P \ab x.  The definition of \af ∈ is standard. Nonetheless, here it is.\cref{relunary}
+%\subsubsection{Membership and inclusion relations}\label{membership-and-inclusion-relations}
+% Like the \agdastdlib, t
+The \ualib includes types that represent the \emph{element inclusion} and \emph{subset inclusion} relations from set theory. For example, given a predicate \af P, we may represent that  ``\ab x belongs to \af P'' or that ``\ab x has property \af{P},'' by writing either \ab x \af ∈ \af P or \af P \ab x.  The definition of \af ∈ is standard, as is the definition of \af{⊆} for the \defn{subset} relation; nonetheless, here they are.\cref{relunary}
 \ccpad
 \begin{code}%
 \>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}∈\AgdaUnderscore{}}}\AgdaSpace{}%
@@ -68,9 +73,7 @@ Like the \agdastdlib, the \ualib includes types that represent the \emph{element
 \AgdaBound{P}\AgdaSpace{}%
 \AgdaBound{x}\<%
 \end{code}
-\ccpad
-The \defn{subset} relation is denoted, as usual, with the \af{⊆} symbol and is defined as follows.\cref{relunary}
-\ccpad
+\scpad
 \begin{code}%
 \>[1]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}⊆\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -106,151 +109,11 @@ The \defn{subset} relation is denoted, as usual, with the \af{⊆} symbol and is
 \AgdaBound{Q}\<%
 \end{code}
 
-\subsubsection{The axiom of extensionality}\label{sec:axiom-ext}
-In type theory everything is represented as a type and, as we have just seen, this includes subsets.  Equality of types is a nontrivial matter, and thus so is equality of subsets when represented as unary predicates.  Fortunately, it is straightforward to write down a type that represents what it typically means in informal mathematics to say that two subsets are (extensionally) equal---namely, they contain the same elements. In the \ualib we denote this type by \af{≐} and define it as follows.\footnote{\label{uhints}%
-  \textbf{Unicode Hints}. In \agdamode, \texttt{\textbackslash{}.=} ↝ \af{≐}, \texttt{\textbackslash{}u+} ↝ \af{⊎}, \texttt{\textbackslash{}b0} ↝ \af 𝟘, \texttt{\textbackslash{}B0} ↝ \af 𝟎, \texttt{\textbackslash{}b1} ↝ \af 𝟙, \texttt{\textbackslash{}B1} ↝ \af 𝟏.}
-\ccpad
-\begin{code}
-\>[1]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}≐\AgdaUnderscore{}}}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Pred}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{Pred}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓩}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓩}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-%
-\>[1]\AgdaBound{P}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{≐}}\AgdaSpace{}%
-\AgdaBound{Q}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{P}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊆}}\AgdaSpace{}%
-\AgdaBound{Q}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{×}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{Q}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊆}}\AgdaSpace{}%
-\AgdaBound{P}\AgdaSymbol{)}\<%
-\end{code}
-\ccpad
-A proof of \ab P \aof{≐} Q is a pair (\ab p , \ab q) where \ab p~\as :~\ab P~\aof ⊆~\ab Q and \ab q :~\ab Q~\aof ⊆~\ab P are proofs of the first and second inclusions, respectively. If \ab P and \ab Q are definitionally equal (i.e., \ab P \aod ≡ \ab Q), then both \ab P~\aof ⊆~\ab Q and \ab Q~\aof ⊆~\ab P hold, so \ab P \aof ≐ \ab Q also holds, as we now confirm.
-\ccpad
-\begin{code}%
-\>[0]\AgdaFunction{Pred-≡}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaBound{𝓦}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{̇}}
-\AgdaSymbol{\{}\AgdaBound{P}\AgdaSpace{}%
-\AgdaBound{Q}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Pred}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{P}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{Q}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{P}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{≐}}\AgdaSpace{}%
-\AgdaBound{Q}\<%
-\\
-\>[0]\AgdaFunction{Pred-≡}\AgdaSpace{}%
-\AgdaInductiveConstructor{refl}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(λ}\AgdaSpace{}%
-\AgdaBound{z}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{z}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaSymbol{(λ}\AgdaSpace{}%
-\AgdaBound{z}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{z}\AgdaSymbol{)}\<%
-\end{code}
-\ccpad
-The converse is not provable in \mltt. However, we can postulate that it holds as an axiom if we wish.  This is called the \defn{axiom of extensionality} and a type that represents it is the following.
-\ccpad
-\begin{code}%
-\>[0]\AgdaFunction{ext-axiom}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-% \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}%
-\>[53]\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-\>[0]\AgdaFunction{ext-axiom}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{∀}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{P}\AgdaSpace{}%
-\AgdaBound{Q}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Pred}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{P}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{≐}}\AgdaSpace{}%
-\AgdaBound{Q}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{P}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{Q}\<%
-\end{code}
-\ccpad
-Note that \af{ext-axiom} does not itself postulate the axiom of extensionality; it merely says what it is.  If we want to postulate the axiom, we must assume we have an inhabitant (or ``witness'') of the type. We could do this in Agda in a number of ways, but probably the easiest is to simply add the witness as a parameter to a module, like so.\footnote{Agda also has a \ak{postulate} mechanism that we could use, but this would require omitting the \AgdaPragma{--safe} pragma from the \ak{OPTIONS} directive at the start of the module.}
-\ccpad
-\begin{code}
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{ext-axiom-postulated}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{ea}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{ext-axiom}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\end{code}
-\ccpad
-Other notions of extensionality come up often in the \ualib; see, for example, \S\ref{function-extensionality} and \S\ref{sec:trunc-sets-prop}.
 
 \paragraph*{Predicates toolbox}
-Here is a small collection of tools that will come in handy later. The first is an inductive type that represents \defn{disjoint union}.\cref{uhints}
-\ccpad
+Here is a small collection of tools that will come in handy later. The first is an inductive type that represents \defn{disjoint union}.\footnote{\label{uhints}%
+  \textbf{Unicode Hints}. In \agdamode, \texttt{\textbackslash{}u+} ↝ \af{⊎}, \texttt{\textbackslash{}b0} ↝ \af 𝟘, \texttt{\textbackslash{}B0} ↝ \af 𝟎.}
+\ccpad % \texttt{\textbackslash{}.=} ↝ \af{≐}, , \texttt{\textbackslash{}b1} ↝ \af 𝟙, \texttt{\textbackslash{}B1} ↝ \af 𝟏
 \begin{code}
 \>[0]\AgdaKeyword{data}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}⊎\AgdaUnderscore{}}}\AgdaSpace{}%
@@ -411,7 +274,7 @@ The empty type is an inductive type with no constructors; that is, \AgdaKeyword{
 \AgdaDatatype{𝟘}\<%
 \end{code}
 \ccpad
-Before closing our little predicates toolbox, let's add to it a type that provides a natural way to encode \defn{singletons}.
+We close our little predicates toolbox with a natural way to encode \defn{singletons}.
 \ccpad
 \begin{code}
 \>[0]\AgdaOperator{\AgdaFunction{｛\AgdaUnderscore{}｝}}\AgdaSpace{}%
@@ -441,7 +304,7 @@ Before closing our little predicates toolbox, let's add to it a type that provid
 
 
 
-\subsubsection{Binary Relations}\label{sec:binary-relations}
+\paragraph*{Binary Relations} %\label{sec:binary-relations}
 In set theory, a binary relation on a set \ab{A} is simply a subset of the Cartesian product \ab A × \ab A. As such, we could model such a relation as a (unary) predicate over the product type \ab A \af × \ab A, or as an inhabitant of the function type \ab A \as → \ab A \as → \ab 𝓦\af ̇ (for some universe \ab 𝓦).  Note, however, this is not the same as a unary predicate over the function type \ab A \as → \ab A since the latter has type  (\ab A~\as →~\ab A)~\as →~\ab 𝓦\af ̇, while a binary relation should have type \ab A~\as →~(\ab A~\as →~\ab 𝓦\af ̇). 
 % \footnote{Note that a binary relation from \ab A to \ab B is not simply a unary predicate over the type \ab A~\as →~\ab B.  The binary relation has type \ab A~\as →~(\ab B~\as →~\ab 𝓩\af ̇) whereas a unary predicate over \ab A~\as →~\ab B has type (\ab A~\as →~\ab B)~\as →~\ab 𝓩\af ̇.}
 
@@ -511,7 +374,7 @@ A generalization of the notion of binary relation is a \emph{relation from} \ab{
 \end{code}
 
 \paragraph*{The kernel of a function}
-The \defn{kernel} of a function \ab f \as : \ab A \AgdaSymbol{→} \ab B is defined informally by \{(\ab x , \ab y) ∈ \ab A × \ab A : \ab f \ab x = \ab f \ab y\}. This can be represented in type theory in a number of ways, each of which may be useful in a particular context. For example, we could define the kernel to be an inhabitant of a (binary) relation type, a (unary) predicate type, a (curried) Sigma type, or an (uncurried) Sigma type. The alternatives are defined in the \ualib as follows.
+The \defn{kernel} of a function \ab f \as : \ab A \AgdaSymbol{→} \ab B is defined informally by \{(\ab x , \ab y) ∈ \ab A × \ab A : \ab f \ab x = \ab f \ab y\}. This can be represented in type theory in a number of ways, each of which may be useful in a particular context. For example, we could define the kernel to be an inhabitant of a (binary) relation type, a (unary) predicate type, a (curried) Sigma type, or an (uncurried) Sigma type. Since the first two alternatives are the ones we use thoughout the \ualib, we present them here.
 \ccpad
 \begin{code}%
 \>[1]\AgdaFunction{ker}\AgdaSpace{}%
@@ -563,73 +426,73 @@ The \defn{kernel} of a function \ab f \as : \ab A \AgdaSymbol{→} \ab B is defi
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 \AgdaBound{g}\AgdaSpace{}%
 \AgdaBound{y}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{ker-sigma}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{B}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-%
-\>[1]\AgdaFunction{ker-sigma}\AgdaSpace{}%
-\AgdaBound{g}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{Σ}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaFunction{꞉}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaFunction{,}\AgdaSpace{}%
-\AgdaFunction{Σ}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
-\AgdaFunction{꞉}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaFunction{,}\AgdaSpace{}%
-\AgdaBound{g}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{g}\AgdaSpace{}%
-\AgdaBound{y}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{ker-sigma'}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{B}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-%
-\>[1]\AgdaFunction{ker-sigma'}\AgdaSpace{}%
-\AgdaBound{g}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{Σ}\AgdaSpace{}%
-\AgdaBound{(x}\AgdaSpace{}%
-\AgdaBound{,}\AgdaSpace{}%
-\AgdaBound{y)}\AgdaSpace{}%
-\AgdaFunction{꞉}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{×}}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaFunction{,}\AgdaSpace{}%
-\AgdaBound{g}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaBound{g}\AgdaSpace{}%
-\AgdaBound{y}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% %
+% \>[1]\AgdaFunction{ker-sigma}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaBound{B}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+% \AgdaBound{𝓦}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\<%
+% \\
+% %
+% \>[1]\AgdaFunction{ker-sigma}\AgdaSpace{}%
+% \AgdaBound{g}\AgdaSpace{}%
+% \AgdaSymbol{=}\AgdaSpace{}%
+% \AgdaFunction{Σ}\AgdaSpace{}%
+% \AgdaBound{x}\AgdaSpace{}%
+% \AgdaFunction{꞉}\AgdaSpace{}%
+% \AgdaBound{A}\AgdaSpace{}%
+% \AgdaFunction{,}\AgdaSpace{}%
+% \AgdaFunction{Σ}\AgdaSpace{}%
+% \AgdaBound{y}\AgdaSpace{}%
+% \AgdaFunction{꞉}\AgdaSpace{}%
+% \AgdaBound{A}\AgdaSpace{}%
+% \AgdaFunction{,}\AgdaSpace{}%
+% \AgdaBound{g}\AgdaSpace{}%
+% \AgdaBound{x}\AgdaSpace{}%
+% \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+% \AgdaBound{g}\AgdaSpace{}%
+% \AgdaBound{y}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% %
+% \>[1]\AgdaFunction{ker-sigma'}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaBound{B}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+% \AgdaBound{𝓦}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\<%
+% \\
+% %
+% \>[1]\AgdaFunction{ker-sigma'}\AgdaSpace{}%
+% \AgdaBound{g}\AgdaSpace{}%
+% \AgdaSymbol{=}\AgdaSpace{}%
+% \AgdaFunction{Σ}\AgdaSpace{}%
+% \AgdaBound{(x}\AgdaSpace{}%
+% \AgdaBound{,}\AgdaSpace{}%
+% \AgdaBound{y)}\AgdaSpace{}%
+% \AgdaFunction{꞉}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{×}}\AgdaSpace{}%
+% \AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaFunction{,}\AgdaSpace{}%
+% \AgdaBound{g}\AgdaSpace{}%
+% \AgdaBound{x}\AgdaSpace{}%
+% \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
+% \AgdaBound{g}\AgdaSpace{}%
+% \AgdaBound{y}\<%
 \end{code}
 \ccpad
 Similarly, the \defn{identity relation} (which is equivalent to the kernel of an injective function) can be represented by a number of different types. Here we only show the representation that we use later to construct the zero congruence. The notation we use here is close to that of conventional algebra notation, where $0_A$ is used to denote the identity relation $\{(x, y) \in A \times A : x = y\}$.\cref{uhints}
@@ -720,41 +583,32 @@ Similarly, the \defn{identity relation} (which is equivalent to the kernel of an
 % \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
 % \AgdaBound{y}\<%
 \end{code}
-\ccpad
-Finally, the \defn{total relation} over \ab A, which in set theory is the full Cartesian product \ab A~\af ×~\ab A, can be represented using the one-element type from the \am{Unit-Type} module of \typtop as follows.\cref{uhints}$^, $\footnote{%
-The one-element type is an inductive type with a single constructor, denoted \AgdaInductiveConstructor{⋆}, as follows: \AgdaKeyword{data}\AgdaSpace{}%
-\AgdaDatatype{𝟙}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaKeyword{where}\AgdaSpace{}\AgdaInductiveConstructor{⋆}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaDatatype{𝟙}.}
-\ccpad
-\begin{code}%
-% \>[1]\AgdaKeyword{open}\AgdaSpace{}%
-% \AgdaKeyword{import}\AgdaSpace{}%
-% \AgdaModule{Unit-Type}\AgdaSpace{}%
-% \AgdaKeyword{using}\AgdaSpace{}%
-% \AgdaSymbol{(}\AgdaFunction{𝟙}\AgdaSymbol{)}\<%
+% \ccpad
+% Finally, the \defn{total relation} over \ab A, which in set theory is the full Cartesian product \ab A~\af ×~\ab A, can be represented using the one-element type from the \am{Unit-Type} module of \typtop as follows.\cref{uhints}$^, $\footnote{%
+% The one-element type is an inductive type with a single constructor, denoted \AgdaInductiveConstructor{⋆}, as follows: \AgdaKeyword{data}\AgdaSpace{}%
+% \AgdaDatatype{𝟙}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+% \AgdaKeyword{where}\AgdaSpace{}\AgdaInductiveConstructor{⋆}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaDatatype{𝟙}.}
+% \ccpad
+% \begin{code}%
+% \>[1]\AgdaFunction{𝟏}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaFunction{Rel}\AgdaSpace{}%
+% \AgdaBound{A}\AgdaSpace{}%
+% \AgdaPrimitive{𝓤₀}\<%
 % \\
 % %
-% \\[\AgdaEmptyExtraSkip]%
-% %
-\>[1]\AgdaFunction{𝟏}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Rel}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaPrimitive{𝓤₀}\<%
-\\
-%
-\>[1]\AgdaFunction{𝟏}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
-\AgdaBound{b}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{𝟙}\<%
-\end{code}
+% \>[1]\AgdaFunction{𝟏}\AgdaSpace{}%
+% \AgdaBound{a}\AgdaSpace{}%
+% \AgdaBound{b}\AgdaSpace{}%
+% \AgdaSymbol{=}\AgdaSpace{}%
+% \AgdaFunction{𝟙}\<%
+% \end{code}
 
 
 \paragraph*{The implication relation\protect\footnotemark}
@@ -881,8 +735,8 @@ These combine to give a nice, general implication operation.
 Below we will define types that are useful for asserting and proving facts about \defn{compatibility} of operations and relations, but first we need a general type with which to represent operations.  Here is the definition, which we justify below.
 \ccpad
 \begin{code}
-\>[0]\AgdaComment{--The type of operations}\<%
-\\
+% \>[0]\AgdaComment{--The type of operations}\<%
+% \\
 \>[0]\AgdaFunction{Op}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaGeneralizable{𝓥}\AgdaSpace{}%

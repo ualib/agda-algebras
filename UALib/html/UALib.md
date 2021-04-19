@@ -89,7 +89,7 @@ We hope the library will be useful to mathematicians and computer scientists who
 - [Overture](Overture.html)
   - [Preliminaries](Overture.Preliminaries.html)
   - [Equality](Overture.Equality.html)
-  - [Function Extensionality](Overture.Extensionality.html)
+  - [Function Extensionality](Overture.FunExtensionality.html)
   - [Inverses](Overture.Inverses.html)
   - [Agda's Universe Hierarchy](Overture.Lifts.html)
 
@@ -97,7 +97,8 @@ We hope the library will be useful to mathematicians and computer scientists who
   - [Discrete Relations](Relations.Discrete.html)
   - [Continuous Relations](Relations.Continuous.html)
   - [Equivalence Relations and Quotients](Relations.Quotients.html)
-  - [Truncation and Proposition Extensionality](Relations.Truncation.html)
+  - [Truncation](Relations.Truncation.html)
+  - [Relation Extensionality](Relations.RelExtensionality.html)
 
 - [Algebra Types](Algebras.html)
   - [Operations and Signatures](Algebras.Signatures.html)

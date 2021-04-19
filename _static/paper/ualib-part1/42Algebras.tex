@@ -462,13 +462,8 @@ Recall, in \S\ref{sec:lifts-altern-univ} we described a common difficulty one en
 \AgdaBound{𝓦}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-What makes the \AgdaFunction{Lift-alg} type so useful for resolving type level errors is the nice properties it possesses. Indeed, the \ualib contains formal proofs of the following facts.
-\begin{itemize}
-\item \af{Lift-alg} is a homomorphism (see \href{https://ualib.gitlab.io/Homomorphisms.Basic.html#exmples-of-homomorphisms}{Homomorphisms.Basic.html}).
-\item \af{Lift-alg} is an algebraic invariant; that is, an algebra is isomorphic to its lift (see \href{https://ualib.gitlab.io/Homomorphisms.Isomorphisms.html#lift-is-an-algebraic-invariant}{Homomorphisms.Isomorphisms.html}).
-\item \af{Lift-alg} of a subalgebra is again a subalgebra (see \href{https://ualib.gitlab.io/Subalgebras.Subalgebras.html#lifts-of-subalgebras}{Subalgebras.Subalgebras.html}).
-\item \af{Lift-alg} preserves identities (see \href{https://ualib.gitlab.io/Varieties.EquationalLogic.html#lift-invariance}{Varieties.EquationalLogic.html}).
-\end{itemize}
+What makes the \AgdaFunction{Lift-alg} type so useful for resolving type level errors is the nice properties it possesses. Indeed, in the \ualib we prove that \af{Lift-alg} preserves term identities and is a \emph{homomorphism}, an \emph{algebraic invariant}, and a \emph{sublagebraic invariant}.\footnote{%
+See \href{https://ualib.gitlab.io/Varieties.EquationalLogic.html\#lift-invariance}{EquationalLogic.html}, \href{https://ualib.gitlab.io/Homomorphisms.Basic.html\#exmples-of-homomorphisms}{Homomorphisms.Basic.html}, \href{https://ualib.gitlab.io/Homomorphisms.Isomorphisms.html\#lift-is-an-algebraic-invariant}{Isomorphisms.html}, and \href{https://ualib.gitlab.io/Subalgebras.Subalgebras.html\#lifts-of-subalgebras}{Subalgebras.html}, resp.}
 % Our experience has shown \af{lift-alg} to be a perfectly adequate tool for resolving any universe level unification errors that arise when working with the \af{Algebra} type in Agda. We will see some examples of its effectiveness later.
 % 's noncumulative hierarchy of type universes.
 
@@ -477,14 +472,14 @@ What makes the \AgdaFunction{Lift-alg} type so useful for resolving type level e
 
 
 
-\subsubsection{Compatibility of binary relations}\label{compatibility-of-binary-relations}
+\subsubsection{Compatibility}\label{compatibility-of-binary-relations}
 
 We now define the function \af{compatible} so that, if \ab{𝑨} is an algebra and \ab{R} a binary relation, then \af{compatible} \ab 𝑨 \ab R will denote the assertion that \ab{R} is \emph{compatible} with all basic operations of \ab{𝑨}; that is, for every operation symbol \ab{𝑓} \as : \af ∣ \ab 𝑆 \af ∣ and all pairs \ab u \ab v~\as :~\af{∥} \ab 𝑆 \af{∥} \ab 𝑓 \as → \af ∣ \ab 𝑨 \af ∣ of tuples from the domain of \ab 𝑨, the following implication holds:\\[-8pt]
 
 (\af Π(\ab i \af ꞉ \ab I)~\af ,~\ab{R} (\ab u \ab i) (\ab v \ab i)) \hskip2mm \as →  \hskip2mm \ab{R} ((\ab 𝑓 \af ̂ \ab 𝑨) \ab u) ((\ab 𝑓 \af ̂ \ab 𝑨) \ab v).\\[4pt]
 % ; in symbols,\\[-8pt]
 % (\af Π \ab i \af ꞉ \ab I \af , \ab R (\ab u \ab i) (\ab u \ab i)) \hskip2mm \as →  \hskip2mm \ab R ((\ab 𝑓 \af ̂ \ab 𝑨) \ab u) ((\ab 𝑓 \af ̂ \ab 𝑨) \ab v).\\[4pt]
-Using the relation |: (defined in \S~\ref{sec:binary-relations}) this implication is expressed compactly as (\ab 𝑓~\af ̂~\ab 𝑨)~\af{|:}~\ab R; whence, the following definition.
+Using the relation |: (defined in \S\ref{sec:discrete-relations}) this implication is expressed compactly as (\ab 𝑓~\af ̂~\ab 𝑨)~\af{|:}~\ab R, yielding a compact representation of compatibility of algebraic operations and binary relations.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -525,57 +520,55 @@ Using the relation |: (defined in \S~\ref{sec:binary-relations}) this implicatio
 \AgdaFunction{|:}\AgdaSpace{}%
 \AgdaBound{R}\<%
 \end{code}
+\scpad
+% \paragraph*{Compatibility of continuous relations★}
 
-\subsubsection{Compatibility of continuous relations*\protect\cref{starred}}\label{compatibility-of-continuous-relations}
-
-Next we define a type that represents \emph{compatibility of a continuous relation} with all operations of an algebra. Fist, we define compatibility with a single operation using \AgdaFunction{cont-compatible-fun} (defined in \S\ref{continuous-relation-types}).
+In the \ualibhtml{Relations.Continuous} module we defined a function called \af{cont-compatible-op} to represent the assertion that a given continuous relation is compatible with a given operation. With that, it is easy to define a function, which we call \af{cont-compatible}, representing compatibility of a continuous relation with all operations of an algebra. Similarly, we define the analogous \af{dep-compatible} function for the (even more general)
+type of dependent relations.
 \ccpad
 \begin{code}%
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaFunction{cont-compatible-op}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{ContRel}\AgdaSpace{}%
-\AgdaBound{I}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaGeneralizable{𝓦}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaGeneralizable{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-%
-\>[1]\AgdaFunction{cont-compatible-op}\AgdaSpace{}%
-\AgdaBound{𝑓}\AgdaSpace{}%
-\AgdaBound{R}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{cont-compatible-fun}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝑓}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaBound{R}\<%
-\end{code}
-\ccpad
-Whence, \emph{compatibility of a continuous relation with an algebra} is defined as follows.
-\ccpad
-\begin{code}%
-\>[0][@{}l@{\AgdaIndent{1}}]%
+% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
+% \AgdaModule{continuous-compatibility}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaBound{𝓦}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{𝑆}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaFunction{Signature}\AgdaSpace{}%
+% \AgdaGeneralizable{𝓞}\AgdaSpace{}%
+% \AgdaGeneralizable{𝓥}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaKeyword{where}\<%
+% \\
+% \>[0][@{}l@{\AgdaIndent{0}}]%
+% \>[1]\AgdaKeyword{open}\AgdaSpace{}%
+% \AgdaKeyword{import}\AgdaSpace{}%
+% \AgdaModule{Relations.Continuous}\AgdaSpace{}%
+% \AgdaKeyword{using}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaFunction{ContRel}\AgdaSymbol{;}\AgdaSpace{}%
+% \AgdaFunction{DepRel}\AgdaSymbol{;}\AgdaSpace{}%
+% \AgdaFunction{cont-compatible-op}\AgdaSymbol{;}\AgdaSpace{}%
+% \AgdaFunction{dep-compatible-op}\AgdaSymbol{)}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% %
 \>[1]\AgdaFunction{cont-compatible}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{I}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}(}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{ContRel}\AgdaSpace{}%
 \AgdaBound{I}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaGeneralizable{𝓦}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝓞}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
@@ -583,11 +576,12 @@ Whence, \emph{compatibility of a continuous relation with an algebra} is defined
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
 \AgdaBound{𝓥}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaGeneralizable{𝓦}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \\
 %
 \>[1]\AgdaFunction{cont-compatible}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{R}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{Π}\AgdaSpace{}%
@@ -598,8 +592,145 @@ Whence, \emph{compatibility of a continuous relation with an algebra} is defined
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaFunction{,}\AgdaSpace{}%
 \AgdaFunction{cont-compatible-op}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝑓}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{R}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[1]\AgdaFunction{dep-compatible}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{I}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}(}\AgdaBound{𝒜}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{I}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Algebra}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{DepRel}\AgdaSpace{}%
+\AgdaBound{I}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝒜}%
+\>[72]\AgdaBound{i}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓞}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+%
+\>[1]\AgdaFunction{dep-compatible}\AgdaSpace{}%
+\AgdaBound{𝒜}\AgdaSpace{}%
+\AgdaBound{R}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{Π}\AgdaSpace{}%
 \AgdaBound{𝑓}\AgdaSpace{}%
+\AgdaFunction{꞉}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaFunction{,}\AgdaSpace{}%
+\AgdaFunction{dep-compatible-op}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝑓}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝒜}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSymbol{))}\AgdaSpace{}%
 \AgdaBound{R}\<%
 \end{code}
+
+
+% \subsubsection{Compatibility of continuous relations*\protect\cref{starred}}\label{compatibility-of-continuous-relations}
+
+% Similarly, a type representing \emph{compatibility of a continuous relation} with a single operation of an algebra is defined using \AgdaFunction{cont-compatible-fun}~(\S\ref{continuous-relation-types}).
+% \ccpad
+% \begin{code}%
+% % \>[0][@{}l@{\AgdaIndent{0}}]%
+% \>[1]\AgdaFunction{cont-compatible-op}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+% \AgdaBound{𝑆}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaFunction{ContRel}\AgdaSpace{}%
+% \AgdaBound{I}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+% \AgdaBound{𝑨}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+% \AgdaGeneralizable{𝓦}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+% \AgdaBound{𝓥}\AgdaSpace{}%
+% \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+% \AgdaGeneralizable{𝓦}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\<%
+% \\
+% %
+% \>[1]\AgdaFunction{cont-compatible-op}\AgdaSpace{}%
+% \AgdaBound{𝑓}\AgdaSpace{}%
+% \AgdaBound{R}\AgdaSpace{}%
+% \AgdaSymbol{=}\AgdaSpace{}%
+% \AgdaFunction{cont-compatible-fun}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaBound{𝑓}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̂}}\AgdaSpace{}%
+% \AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaBound{R}\<%
+% \end{code}
+% \ccpad
+% Whence, we obtain a type representing \emph{compatibility of a continuous relation with an algebra}.
+% \ccpad
+% \begin{code}%
+% \>[0][@{}l@{\AgdaIndent{1}}]%
+% \>[1]\AgdaFunction{cont-compatible}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaFunction{ContRel}\AgdaSpace{}%
+% \AgdaBound{I}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+% \AgdaBound{𝑨}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+% \AgdaGeneralizable{𝓦}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaBound{𝓞}\AgdaSpace{}%
+% \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+% \AgdaBound{𝓥}\AgdaSpace{}%
+% \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+% \AgdaGeneralizable{𝓦}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\<%
+% \\
+% %
+% \>[1]\AgdaFunction{cont-compatible}\AgdaSpace{}%
+% \AgdaBound{R}\AgdaSpace{}%
+% \AgdaSymbol{=}\AgdaSpace{}%
+% \AgdaFunction{Π}\AgdaSpace{}%
+% \AgdaBound{𝑓}\AgdaSpace{}%
+% \AgdaFunction{꞉}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+% \AgdaBound{𝑆}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+% \AgdaFunction{,}\AgdaSpace{}%
+% \AgdaFunction{cont-compatible-op}\AgdaSpace{}%
+% \AgdaBound{𝑓}\AgdaSpace{}%
+% \AgdaBound{R}\<%
+% \end{code}
 % \protect\hypertarget{fn2}{}{2 This voilates the ``don't repeat yourself'' (dry) principle of programming, but it might make it easier for readers to see what's going on. (In the {[}UALib{]}{[}{]} we try to put transparency before elegance.)}
 

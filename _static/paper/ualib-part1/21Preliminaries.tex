@@ -5,7 +5,7 @@
 %%% End:
 Here we define or import the basic types of \defn{Martin-Löf type theory} (\mltt).  Although this is standard stuff, we take this opportunity to highlight aspects of the \ualib syntax that may differ from that of ``standard Agda.''
 
-\subsubsection{Logical foundations}\label{sec:logical-foundations}
+\subsubsection*{Logical foundations} % \label{sec:logical-foundations}
 % Mainly for the benefit of readers who are not yet proficient in Agda or type theory, we briefly describe the type theoretic foundations of the \ualib. 
 The \agdaualib is based on a type theory that is the same or very close to the one on which on which Martín Escardó's \typetopology (\typtop) Agda library is based. We don't discuss \mltt in great detail here because there are already nice and freely available resources covering the theory. (See, for example, the section \href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#mlttinagda}{A spartan Martin-Löf type theory} of the lecture notes by Escard\'o~\cite{MHE}, the \href{https://ncatlab.org/nlab/show/Martin-L\%C3\%B6f+dependent+type+theory}{ncatlab entry on Martin-Löf dependent type theory}, or the HoTT Book~\cite{HoTT}.)
 
@@ -43,7 +43,7 @@ These options control certain foundational assumptions that Agda makes when type
 Throughout this paper we take assumptions 1--3 for granted without mentioning them explicitly.
 
 
-\subsubsection{Agda Modules}\label{sec:agda-modules}
+\paragraph*{Agda Modules} %\label{sec:agda-modules}
 The \ak{OPTIONS} pragma is usually followed by the start of a module.  For example, the \ualibhtml{Overture.Preliminaries} module begins with the following line.
 \ccpad
 \begin{code}%
@@ -69,7 +69,7 @@ Such a module is called \emph{anonymous} because an underscore appears in place 
 
 
 
-\subsubsection{Universes in Agda}\label{universes}
+\paragraph*{Universes in Agda} %\label{universes}
 
 For the very small amount of background we require about the notion of \emph{type universe} (or \emph{level}), we refer the reader to the brief \href{https://agda.readthedocs.io/en/v2.6.1.3/language/universe-levels.html}{section
 on universe-levels} in the \href{https://agda.readthedocs.io/en/v2.6.1.3/language/universe-levels.html}{Agda
@@ -129,7 +129,7 @@ a bit confusing, especially to newcomers.
 There will be many occasions calling for a type living in a universe at the level that is the least upper bound of two universe levels, say, \ab 𝓤 and \ab 𝓥. The universe level \ab 𝓤~\apr ⊔~\ab 𝓥\af denotes this least upper bound. Here \apr ⊔ is an Agda primitive designed for precisely this purpose.
 
 
-\subsubsection{Dependent types}\label{sec:dependent-types}
+\subsubsection*{Dependent types} %\label{sec:dependent-types}
 
 \newcommand\FstUnder{\AgdaOperator{\AgdaFunction{∣\AgdaUnderscore{}∣}}\xspace}
 \newcommand\SndUnder{\AgdaOperator{\AgdaFunction{∥\AgdaUnderscore{}∥}}\xspace}

@@ -30,7 +30,7 @@ A popular way to represent algebraic structures in type theory is with record ty
 
 -------------------------------------
 
-[← Relations.Truncation](Relations.Truncation.html)
+[← Relations.Extensionality](Relations.Extensionality.html)
 <span style="float:right;">[Algebras.Signatures →](Algebras.Signatures.html)</span>
 
 {% include UALib.Links.md %}

@@ -148,13 +148,13 @@ In the [Relations.Continuous][] module, we defined a function called `cont-compa
 
 \begin{code}
 
-module continuous-compatibility {𝓤 𝓦 : Universe}{𝑆 : Signature 𝓞 𝓥} where
+module _ {𝓤 𝓦 : Universe} {I : 𝓥 ̇} {𝑆 : Signature 𝓞 𝓥} where
  open import Relations.Continuous using (ContRel; DepRel; cont-compatible-op; dep-compatible-op)
 
- cont-compatible : {I : 𝓥 ̇}(𝑨 : Algebra 𝓤 𝑆) → ContRel I ∣ 𝑨 ∣ 𝓦 → 𝓞 ⊔ 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
+ cont-compatible : (𝑨 : Algebra 𝓤 𝑆) → ContRel I ∣ 𝑨 ∣ 𝓦 → 𝓞 ⊔ 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
  cont-compatible 𝑨 R = Π 𝑓 ꞉ ∣ 𝑆 ∣ , cont-compatible-op (𝑓 ̂ 𝑨) R
 
- dep-compatible : {I : 𝓥 ̇}(𝒜 : I → Algebra 𝓤 𝑆) → DepRel I (λ i → ∣ 𝒜  i ∣) 𝓦 → 𝓞 ⊔ 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
+ dep-compatible : (𝒜 : I → Algebra 𝓤 𝑆) → DepRel I (λ i → ∣ 𝒜  i ∣) 𝓦 → 𝓞 ⊔ 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
  dep-compatible 𝒜 R = Π 𝑓 ꞉ ∣ 𝑆 ∣ , dep-compatible-op (λ i → 𝑓 ̂ (𝒜 i)) R
 
 \end{code}

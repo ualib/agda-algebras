@@ -3,8 +3,8 @@
 %%% mode: latex
 %%% TeX-engine: 'xetex
 %%% End:
-\subsubsection{Properties of binary relations}
-\label{props-of-bin-rels}
+% \paragraph*{Properties of binary relations}
+%\label{props-of-bin-rels}
 In the \ualibhtml{Relations.Discrete} module we defined types for representing and reasoning about binary relations on \ab A. In this module we will define types for binary relations that have special properties. The most important special properties of relations are the ones we now define.
 \ccpad
 \begin{code}%
@@ -210,8 +210,7 @@ Thus, if \ab R \as : \af{Rel} \ab A \ab 𝓦, then \AgdaFunction{is-subsingleton
 
 
 
-\subsubsection{Equivalence relations}\label{equivalence-classes}
-
+\paragraph*{Equivalence relations} %\label{equivalence-classes}
 A binary relation is called a \defn{preorder} if it is reflexive and transitive, and an \defn{equivalence relation} is a symmetric preorder. We represent the property of being an equivalence relation by the following record type.
 \ccpad
 \begin{code}%
@@ -332,7 +331,7 @@ An easy first example of an equivalence relation is the kernel of any function. 
 
 
 
-\subsubsection{Equivalence classes (blocks)}\label{equivalence-classes-1}
+\paragraph*{Equivalence classes (blocks)} %\label{equivalence-classes-1}
 
 If \ab R is an equivalence relation on \ab A, then for each \ab u~\as :~\ab A, there is an \defn{equivalence class} (or \defn{equivalence block}, or \ab R-\defn{block}) containing \ab u, which we denote by \af [~\ab u~\af ]~\as :=~\{\ab v~\as :~\ab A~|~\ab R~\ab u~\ab v\}.  We call this the \ab R-\defn{block containing} \ab 𝑎.
 \ccpad

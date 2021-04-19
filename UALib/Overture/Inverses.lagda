@@ -15,7 +15,7 @@ This is the [Overture.Inverses][] module of the [Agda Universal Algebra Library]
 
 module Overture.Inverses where
 
-open import Overture.Extensionality public
+open import Overture.FunExtensionality public
 
 open import MGS-Embeddings
  using (equivs-are-embeddings; invertible; invertibles-are-equivs) public
@@ -219,7 +219,7 @@ Finally, embeddings are monic; from a proof `p : is-embedding f` that `f` is an 
 
 <p></p>
 
-[← Overture.Extensionality](Overture.Extensionality.html)
+[← Overture.FunExtensionality](Overture.FunExtensionality.html)
 <span style="float:right;">[Overture.Lifts →](Overture.Lifts.html)</span>
 
 

@@ -1,6 +1,6 @@
 ---
 layout: default
-title : Overture.Extensionality module (Agda Universal Algebra Library)
+title : Overture.FunctionExtensionality module (Agda Universal Algebra Library)
 date : 2021-01-12
 author: William DeMeo
 ---
@@ -14,7 +14,7 @@ This is the [Overture.Extensionality][] module of the [Agda Universal Algebra Li
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Overture.Extensionality where
+module Overture.FunExtensionality where
 
 open import Overture.Equality public
 
@@ -38,7 +38,7 @@ In the examples above, it is common to say that the two functions are [extension
 
 In this module, we describe types that manifest this notion of *extensional equality of functions*, or *function extensionality*.<sup>[1](Overture.Extensionality.html#fn1)</sup>
 
-#### <a id="definition-of-function-extensionality">Definition of function extensionality</a>
+#### <a id="function-extensionality-types">Function extensionality types</a>
 
 As explained above, a natural notion of function equality is defined as follows:  `f` and `g` are said to be *point-wise equal* provided `∀ x → f x ≡ g x`.  Here is how this is expressed in type theory (e.g., in the [Type Topology][] library).
 

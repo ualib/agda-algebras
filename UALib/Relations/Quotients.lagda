@@ -169,8 +169,8 @@ module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{x y : A}{R : Rel A 𝓦} where
  /-supset : IsEquivalence R → R x y →  [ y ]{R} ⊆ [ x ]{R}
  /-supset Req Rxy {z} Ryz = (trans Req) Rxy Ryz
 
- /-≐ : IsEquivalence R → R x y →  [ x ]{R} ≐ [ y ]{R}
- /-≐ Req Rxy = /-subset Req Rxy , /-supset Req Rxy
+ -- /-≐ : IsEquivalence R → R x y →  [ x ]{R} ≐ [ y ]{R}
+ -- /-≐ Req Rxy = /-subset Req Rxy , /-supset Req Rxy
 
 \end{code}
 

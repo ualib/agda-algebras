@@ -20,6 +20,7 @@ open import Relations.Discrete
 open import Relations.Continuous
 open import Relations.Quotients
 open import Relations.Truncation
+open import Relations.RelExtensionality
 
 \end{code}
 

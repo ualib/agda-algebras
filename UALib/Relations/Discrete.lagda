@@ -61,46 +61,6 @@ infix 4 _⊆_
 
 \end{code}
 
-#### <a id="the-extensionality-axiom">The axiom of extensionality</a>
-
-In type theory everything is represented as a type and, as we have just seen, this includes subsets.  Equality of types is a nontrivial matter, and thus so is equality of subsets when represented as unary predicates.  Fortunately, it is straightforward to write down the type that represents what we typically means in informal mathematics for two subsets to be equal. In the [UALib][] we denote this type by `≐` and define it as follows.<sup>[2](Relations.Discrete.html#fn2)</sup>
-
-\begin{code}
-
-_≐_ : {A : 𝓤 ̇ } → Pred A 𝓦 → Pred A 𝓩 → 𝓤 ⊔ 𝓦 ⊔ 𝓩 ̇
-P ≐ Q = (P ⊆ Q) × (Q ⊆ P)
-
-infix 4 _≐_
-
-\end{code}
-
-Thus, a proof of `P ≐ Q` is a pair `(p , q)` where where `p : P ⊆ Q` and `q : Q ⊆ P` are proofs of the first and second inclusions, respectively. If `P` and `Q` are definitionally equal (i.e., `P ≡ Q`), then both `P ⊆ Q` and `Q ⊆ P` hold, so `P ≐ Q` also holds, as we now confirm.
-
-\begin{code}
-
-Pred-≡ : {A : 𝓤 ̇}{P Q : Pred A 𝓦} → P ≡ Q → P ≐ Q
-Pred-≡ refl = (λ z → z) , (λ z → z)
-
-\end{code}
-
-The converse is not provable in [MLTT][]. However, we can postulate that it holds as an axiom if we wish.  This is called the *axiom of extensionality* and a type that represents it is the following.
-
-\begin{code}
-
-ext-axiom : 𝓤 ̇ → (𝓦 : Universe) →  𝓤 ⊔ 𝓦 ⁺ ̇
-ext-axiom A 𝓦 = ∀ (P Q : Pred A 𝓦) → P ≐ Q → P ≡ Q
-
-\end{code}
-
-Note that the type `ext-axiom` does not itself postulate the axiom of extensionality.  It merely says what it is.  If we want to postulate it, we must assume we have a witness, or inhabitant of the type. We could do this in Agda in a number of ways, but probably the easiest is to simply add the witness as a parameter to a module, like so.<sup>[3](Relations.Discrete#fn3)</sup>
-
-\begin{code}
-
-module ext-axiom-postulated {A : 𝓤 ̇} {ea : ext-axiom A 𝓦} where
-
-\end{code}
-
-Other notions of extensionality come up often in the [UALib][]; see, for example, [Overture.extensionality][] or [Relations.Truncation][].
 
 
 
@@ -346,3 +306,32 @@ However, this is a rare case in which the more elegant syntax used to define `|:
 {% include UALib.Links.md %}
 
 
+
+
+
+<!--
+
+#### <a id="the-extensionality-axiom">The axiom of extensionality</a>
+
+In type theory everything is represented as a type and, as we have just seen, this includes subsets.  Equality of types is a nontrivial matter, and thus so is equality of subsets when represented as unary predicates.  Fortunately, it is straightforward to write down the type that represents what we typically means in informal mathematics for two subsets to be equal. In the [UALib][] we denote this type by `≐` and define it as follows.<sup>[2](Relations.Discrete.html#fn2)</sup>
+
+_≐_ : {A : 𝓤 ̇ } → Pred A 𝓦 → Pred A 𝓩 → 𝓤 ⊔ 𝓦 ⊔ 𝓩 ̇
+P ≐ Q = (P ⊆ Q) × (Q ⊆ P)
+
+infix 4 _≐_
+
+Thus, a proof of `P ≐ Q` is a pair `(p , q)` where where `p : P ⊆ Q` and `q : Q ⊆ P` are proofs of the first and second inclusions, respectively. If `P` and `Q` are definitionally equal (i.e., `P ≡ Q`), then both `P ⊆ Q` and `Q ⊆ P` hold, so `P ≐ Q` also holds, as we now confirm.
+
+Pred-≡ : {A : 𝓤 ̇}{P Q : Pred A 𝓦} → P ≡ Q → P ≐ Q
+Pred-≡ refl = (λ z → z) , (λ z → z)
+
+The converse is not provable in [MLTT][]. However, we can postulate that it holds as an axiom if we wish.  This is called the *axiom of extensionality* and a type that represents it is the following.
+ext-axiom : 𝓤 ̇ → (𝓦 : Universe) →  𝓤 ⊔ 𝓦 ⁺ ̇
+ext-axiom A 𝓦 = ∀ (P Q : Pred A 𝓦) → P ≐ Q → P ≡ Q
+
+Note that the type `ext-axiom` does not itself postulate the axiom of extensionality.  It merely says what it is.  If we want to postulate it, we must assume we have a witness, or inhabitant of the type. We could do this in Agda in a number of ways, but probably the easiest is to simply add the witness as a parameter to a module, like so.<sup>[3](Relations.Discrete#fn3)</sup>
+
+module ext-axiom-postulated {A : 𝓤 ̇} {ea : ext-axiom A 𝓦} where
+
+Other notions of extensionality come up often in the [UALib][]; see, for example, [Overture.extensionality][] or [Relations.Truncation][].
+-->
