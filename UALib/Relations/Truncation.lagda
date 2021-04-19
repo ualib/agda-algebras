@@ -108,9 +108,45 @@ Embeddings are always monic, so we conclude that when a function's codomain is a
 \end{code}
 
 
+----------------------------
+
+#### <a id="general-propositions">General propositions*</a>
+
+This section defines more general truncated predicates which we call *continuous propositions* and *dependent propositions*. Recall, above (in the [Relations.Continuous][] module) we defined types called `ContRel` and `DepRel` to represent relations of arbitrary arity over arbitrary collections of sorts.
+
+Naturally, we define the corresponding *truncated continuous relation type* and *truncated dependent relation type*, the inhabitants of which we will call *continuous propositions* and *dependent propositions*, respectively.
+
+\begin{code}
+
+module _ {𝓤 : Universe}{I : 𝓥 ̇} where
+
+ open import Relations.Continuous using (ContRel; DepRel)
+
+ IsContProp : {A : 𝓤 ̇}{𝓦 : Universe} → ContRel I A 𝓦  → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ IsContProp {A = A} P = Π 𝑎 ꞉ (I → A) , is-subsingleton (P 𝑎)
+
+ ContProp : 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ⁺ ̇
+ ContProp A 𝓦 = Σ P ꞉ (ContRel I A 𝓦) , IsContProp P
+
+ cont-prop-ext : 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ⁺ ̇
+ cont-prop-ext A 𝓦 = {P Q : ContProp A 𝓦 } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
+
+ IsDepProp : {I : 𝓥 ̇}{𝒜 : I → 𝓤 ̇}{𝓦 : Universe} → DepRel I 𝒜 𝓦  → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ IsDepProp {I = I} {𝒜} P = Π 𝑎 ꞉ Π 𝒜 , is-subsingleton (P 𝑎)
+
+ DepProp : (I → 𝓤 ̇) → (𝓦 : Universe) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ⁺ ̇
+ DepProp 𝒜 𝓦 = Σ P ꞉ (DepRel I 𝒜 𝓦) , IsDepProp P
+
+ dep-prop-ext : (I → 𝓤 ̇) → (𝓦 : Universe) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ⁺ ̇
+ dep-prop-ext 𝒜 𝓦 = {P Q : DepProp 𝒜 𝓦} → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
+
+\end{code}
 
 
 -----------------------------------
+
+<sup>*</sup><span class="footnote" id="fn0"> Sections marked with an asterisk include new types that are more abstract and general than some of the types defined in other sections. As yet these general types are not used elsewhere in the [UALib][], so sections marked * may be safely skimmed or skipped.</span>
+
 
 <sup>1</sup><span class="footnote" id="fn1"> As [Escardó][] explains, "at this point, with the definition of these notions, we are entering the realm of univalent mathematics, but not yet needing the univalence axiom."</span>
 

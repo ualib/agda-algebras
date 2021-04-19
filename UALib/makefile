@@ -53,13 +53,14 @@ UALIBDOTS=UALib \
           Overture.Preliminaries \
           Overture.Equality \
           Overture.Inverses \
-          Overture.Extensionality \
+          Overture.FunExtensionality \
           Overture.Lifts \
           Relations \
           Relations.Discrete \
           Relations.Continuous \
           Relations.Quotients \
           Relations.Truncation \
+          Relations.Extensionality \
           Algebras \
           Algebras.Signatures \
           Algebras.Algebras \
@@ -89,13 +90,14 @@ UALIB=UALib \
       Overture/Preliminaries \
       Overture/Equality \
       Overture/Inverses \
-      Overture/Extensionality \
+      Overture/FunExtensionality \
       Overture/Lifts \
       Relations \
       Relations/Discrete \
       Relations/Continuous \
       Relations/Quotients \
       Relations/Truncation \
+      Relations/Extensionality \
       Algebras \
       Algebras/Signatures \
       Algebras/Algebras \

@@ -32,12 +32,7 @@ We refer to such relations as *dependent continuous relations* (or *dependent re
 
 
 
-
-
-
-
-
-#### <a id="continuous-relations">Continuous relations</a>
+#### <a id="continuous-and-dependent-relations">Continuous and dependent relations</a>
 
 We now define the type `ContRel` which represents predicates of arbitrary arity over a single type `A`. We call this the type of *continuous relations*.<sup>[1](Relations.Continuous.html#fn1)</sup>)
 
@@ -48,10 +43,20 @@ ContRel I A 𝓦 = (I → A) → 𝓦 ̇
 
 \end{code}
 
+We now exploit the full power of dependent types to define a completely general relation type.  Specifically, we let the tuples inhabit a dependent function type `𝒜 : I → 𝓤 ̇`, where the codomain may depend upon the input coordinate `i : I` of the domain. Heuristically, think of the inhabitants of the following type as relations from `𝒜 i` to `𝒜 j` to `𝒜 k` to …. (This is only an heuristic since \ab I can represent an uncountable collection.\cref{uncountable}.<sup>[2](Relations.Continuous.html#fn2)</sup>)
+
+\begin{code}
+
+DepRel : (I : 𝓥 ̇) → (I → 𝓤 ̇) → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
+DepRel I 𝒜 𝓦 = Π 𝒜 → 𝓦 ̇
+
+\end{code}
+
+We call `DepRel` the type of *dependent relations*.
 
 
 
-#### <a id="compatibility-with-continuous-relations">Compatibility with continuous relations</a>
+#### <a id="compatibility-with-general-relations">Compatibility with general relations</a>
 
 We now define some functions that make it easy to assert that a given operation is compatible with a given relation.  The first is an *evaluation* function which "lifts" an `I`-ary relation to an `(I → J)`-ary relation. The lifted relation will relate an `I`-tuple of `J`-tuples when the "`I`-slices" (or "rows") of the `J`-tuples belong to the original relation.
 
@@ -79,19 +84,6 @@ To readers who find the syntax of the last two definitions nauseating, we recomm
 
 Now `eval-cont-rel R 𝒶` is defined by `∀ j → R (λ i → 𝒶 i j)` which represents the assertion that each row of the `I` columns shown above belongs to the original relation `R`. Finally, `cont-compatible-op` takes a `J`-ary operation `𝑓 : Op J A` and an `I`-tuple `𝒶 : I → J → A` of `J`-tuples, and determines whether the `I`-tuple `λ i → 𝑓 (𝑎 i)` belongs to `R`.
 
-
-#### <a id="dependent-relations">Dependent relations</a>
-
-In this section we exploit the power of dependent types to define a completely general relation type.  Specifically, we let the tuples inhabit a dependent function type `𝒜 : I → 𝓤 ̇`, where the codomain may depend upon the input coordinate `i : I` of the domain. Heuristically, think of the inhabitants of the following type as relations from `𝒜 i` to `𝒜 j` to `𝒜 k` to …. (This is only an heuristic since \ab I can represent an uncountable collection.\cref{uncountable}.<sup>[2](Relations.Continuous.html#fn2)</sup>)
-
-\begin{code}
-
-DepRel : (I : 𝓥 ̇) → (I → 𝓤 ̇) → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
-DepRel I 𝒜 𝓦 = Π 𝒜 → 𝓦 ̇
-
-\end{code}
-
-We call `DepRel` the type of *dependent relations*.
 
 Above we saw lifts of continuous relations and what it means for such relations to be compatible with operations. We conclude this module by defining the (only slightly more complicated) lift of dependent relations, and the type that represents compatibility of a dependent relation with an operation.
 
@@ -129,3 +121,30 @@ module _ {I J : 𝓥 ̇} {𝒜 : I → 𝓤 ̇} where
 <span style="float:right;">[Relations.Quotients →](Relations.Quotients.html)</span>
 
 {% include UALib.Links.md %}
+
+
+
+<!--
+
+UNNECESSARY.  The ∈ and ⊆  relations defined for Pred are polymorphic and they work just fine
+for the general relation types.
+
+
+
+Just as we did for unary predicates, we can define inclusion relations for our new general relation types.
+
+_∈C_ : {I : 𝓥 ̇}{A : 𝓤 ̇} → (I → A) → ContRel I A 𝓦 → 𝓦 ̇
+x ∈C R = R x
+
+_⊆C_ : {I : 𝓥 ̇}{A : 𝓤 ̇ } → ContRel I A 𝓦 → ContRel I A 𝓩 → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⊔ 𝓩 ̇
+P ⊆C Q = ∀ {x} → x ∈C P → x ∈C Q
+
+_∈D_ : {I : 𝓥 ̇}{𝒜 : I → 𝓤 ̇} → Π 𝒜 → DepRel I 𝒜 𝓦 → 𝓦 ̇
+x ∈D R = R x
+
+_⊆D_ : {I : 𝓥 ̇}{𝒜 : I → 𝓤 ̇ } → DepRel I 𝒜 𝓦 → DepRel I 𝒜 𝓩 → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⊔ 𝓩 ̇
+P ⊆D Q = ∀ {x} → x ∈D P → x ∈D Q
+
+infix 4 _⊆C_ _⊆D_
+
+-->

@@ -15,11 +15,11 @@ This section presents the [Relations.Quotients][] module of the [Agda Universal 
 
 module Relations.Quotients where
 
-open import Relations.Discrete public
+open import Relations.Continuous public
 
 \end{code}
 
-**N.B.**. We import [Relations.Discrete][] since we don't yet need any of the types defined in the [Relations.Continuous][] module.
+<!-- **N.B.**. We import [Relations.Discrete][] since we don't yet need any of the types defined in the [Relations.Continuous][] module. -->
 
 
 #### <a id="properties-of-binary-relations">Properties of binary relations</a>
