@@ -163,7 +163,7 @@
 [Overture.Preliminaries]: Overture.Preliminaries.html
 [Overture.Equality]: Overture.Equality.html
 [Overture.Inverses]: Overture.Inverses.html
-[Overture.Extensionality]: Overture.Extensionality.html
+[Overture.FunExtensionality]: Overture.FunExtensionality.html
 [Overture.Lifts]: Overture.Lifts.html
 
 [Relations]: Relations.html
@@ -171,6 +171,7 @@
 [Relations.Continuous]: Relations.Continuous.html
 [Relations.Quotients]: Relations.Quotients.html
 [Relations.Truncation]: Relations.Truncation.html
+[Relations.Extensionality]: Relations.Extensionality.html
 
 [Algebras]: Algebras.html
 [Algebras.Signatures]: Algebras.Signatures.html

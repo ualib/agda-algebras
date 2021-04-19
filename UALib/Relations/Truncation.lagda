@@ -108,6 +108,25 @@ Embeddings are always monic, so we conclude that when a function's codomain is a
 \end{code}
 
 
+#### <a id="equivalence-class-truncation">Equivalence class truncation</a>
+
+Recall, `IsBlock` was defined in the [Relations.Quotients][] module as follows:
+
+```
+ IsBlock : {A : 𝓤 ̇}(C : Pred A 𝓦){R : Rel A 𝓦} → 𝓤 ⊔ 𝓦 ⁺ ̇
+ IsBlock {A} C {R} = Σ u ꞉ A , C ≡ [ u ] {R}
+```
+
+In the next module ([Relations.Extensionality][]) we will define a *quotient extensionality* principle that will require a form of unique identity proofs---specifically, we will assume that for each predicate `C : Pred A 𝓦` there is at most one proof of `IsBlock C`. We call this proof-irrelevance principle "uniqueness of block identity proofs", and define it as follows.
+
+\begin{code}
+
+blk-uip : {𝓦 𝓤 : Universe}(A : 𝓤 ̇)(R : Rel A 𝓦 ) → 𝓤 ⊔ 𝓦 ⁺ ̇
+blk-uip {𝓦} A R = ∀ (C : Pred A 𝓦) → is-subsingleton (IsBlock C {R})
+
+\end{code}
+
+
 ----------------------------
 
 #### <a id="general-propositions">General propositions*</a>
