@@ -5,7 +5,7 @@ date : 2021-02-28
 author: William DeMeo
 ---
 
-### <a id="general-relations">General Relations*</a>
+### <a id="continuous-relations">Continuous Relations*</a>
 
 This is the [Relations.Continuous][] module of the [Agda Universal Algebra Library][].<sup>[*](Relations.Continuous.html#fn0)</sup>
 

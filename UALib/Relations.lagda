@@ -9,6 +9,9 @@ author: William DeMeo
 
 This is the [UALib.Relations][] module of the [Agda Universal Algebra Library][].
 
+In [Relations.Discrete][] we define types that represent *unary* and *binary relations*, which we refer to as "discrete relations" to contrast them with the ("continuous") *general* and *dependent relations* that we introduce in [Relations.Continuous][]. We call the latter "continuous relations" because they can have arbitrary arity (general relations) and they can be defined over arbitrary families of types (dependent relations).
+
+
 \begin{code}[hide]
 {-# OPTIONS --without-K --exact-split --safe #-}
 \end{code}
@@ -23,6 +26,7 @@ open import Relations.Truncation
 open import Relations.Extensionality
 
 \end{code}
+
 
 -------------------------------------
 

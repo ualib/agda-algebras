@@ -1,6 +1,6 @@
 ---
 layout: default
-title : Overture.FunctionExtensionality module (Agda Universal Algebra Library)
+title : Overture.FunExtensionality module (Agda Universal Algebra Library)
 date : 2021-01-12
 author: William DeMeo
 ---
@@ -8,7 +8,7 @@ author: William DeMeo
 
 ### <a id="extensionality">Function Extensionality</a>
 
-This is the [Overture.Extensionality][] module of the [Agda Universal Algebra Library][].
+This is the [Overture.FunExtensionality][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
@@ -19,8 +19,6 @@ module Overture.FunExtensionality where
 open import Overture.Equality public
 
 \end{code}
-
-#### <a id="background-and-motivation">Background and motivation</a>
 
 This introduction is intended for novices.  Those already familiar with function extensionality may wish to skip to <a href="function-extensionality">the next subsection</a>.
 
@@ -97,7 +95,7 @@ happly refl _ = refl
 Though it may seem obvious to some readers, we wish to emphasize the important conceptual distinction between two different forms of type definitions by comparing the definitions of `dfunext` and `happly`. In the definition of `dfunext`, the codomain is a parameterized type, namely, `𝓤 ⁺ ⊔ 𝓥 ⁺ ̇`, and the right-hand side of the defining equation of `dfunext` is an assertion (which may or may not hold). In the definition of `happly`, the codomain is an assertion, namely, `f ∼ g`, and the right-hand side of the defining equation is a proof of this assertion. As such, `happly` defines a *proof object*; it *proves* (or *inhabits the type that represents*) the proposition asserting that definitionally equivalent functions are pointwise equal. In contrast, `dfunext` is a type, and we may or may not wish to postulate an inhabitant of this type. That is, we could postulate that function extensionality holds by assuming we have a witness, say, `fe : dfunext 𝓤 𝓥`, but as noted above the existence of such a witness cannot be proved in [MLTT][].
 
 
-#### <a id="alternative-extensionality-type">Alternative extensionality type</a>
+#### <a id="alternative-extensionality-type">An alternative way to express function extensionality</a>
 
 Finally, a useful alternative for expressing dependent function extensionality, which is essentially equivalent to `dfunext`, is to assert that the `happly` function is actually an *equivalence*.  This requires a few more definitions from the `MGS-Equivalences` module of the [Type Topology][] library, which we now describe in a hidden module. (We will import the original definitions below, but, as above, we exhibit them here for pedagogical reasons and to keep the presentation relatively self-contained.)
 
