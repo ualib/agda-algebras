@@ -131,7 +131,7 @@ It will be convenient to have a function that takes an inhabitant of `mon` (or `
 
 
 
-#### <a id="equalizers-in-agda">Equalizers in Agda</a>
+#### <a id="equalizers-in-agda">Equalizers</a>
 
 Recall, the equalizer of two functions (resp., homomorphisms) `g h : A → B` is the subset of `A` on which the values of the functions `g` and `h` agree.  We define the equalizer of functions and homomorphisms in Agda as follows.
 
@@ -166,7 +166,7 @@ We will define subuniverses in the [Subalgebras.Subuniverses] module, but we not
 The typing judgments for the arguments that we left implicit are `𝑓 : ∣ 𝑆 ∣` and `𝑎 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣`.
 
 
-#### <a id="kernels-of-homomorphisms">Kernels of Homomorphisms</a>
+#### <a id="kernels-of-homomorphisms">Kernels of homomorphisms</a>
 
 The kernel of a homomorphism is a congruence relation and conversely for every congruence relation θ, there exists a homomorphism with kernel θ (namely, that canonical projection onto the quotient modulo θ).
 
@@ -317,7 +317,7 @@ The foregoing generalizes easily to the case in which the domain is also a produ
 
 
 
-#### <a id="projection-homomorphisms">Projection homomorphisms</a>
+#### <a id="projections-out-of-products">Projection out of products</a>
 
 Later we will need a proof of the fact that projecting out of a product algebra onto one of its factors is a homomorphism.
 
@@ -337,7 +337,7 @@ module _ {𝓘 𝓦 : Universe} where
 
 \end{code}
 
-Of course, we could prove a more general result involving projections onto multiple factors, but so far the single-factor result has sufficed.
+We could prove a more general result involving projections onto multiple factors, but so far the single-factor result has sufficed.
 
 
 

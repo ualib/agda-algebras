@@ -5,7 +5,7 @@ date : 2021-02-23
 author: William DeMeo
 ---
 
-### <a id="truncation">Truncation, Sets, Propositions</a>
+### <a id="truncation">Truncation</a>
 
 This section presents the [Relations.Truncation][] module of the [Agda Universal Algebra Library][].
 
@@ -23,7 +23,7 @@ open import MGS-MLTT using (_⇔_) public
 
 \end{code}
 
-#### <a id="truncation">Truncation</a>
+#### <a id="uniqueness-of-identity-proofs">Uniqueness of identity proofs</a>
 
 In general, we may have many inhabitants of a given type, hence (via Curry-Howard) many proofs of a given proposition. For instance, suppose we have a type `A` and an identity relation `_≡₀_` on `A` so that, given two inhabitants of `A`, say, `a b : A`, we can form the type `a ≡₀ b`. Suppose `p` and `q` inhabit the type `a ≡₀ b`; that is, `p` and `q` are proofs of `a ≡₀ b`, in which case we write `p q : a ≡₀ b`. We might then wonder whether and in what sense are the two proofs `p` and `q` the equivalent.
 
@@ -33,6 +33,8 @@ If such a proof exists for all `p q : a ≡₀ b`, then the proof of `a ≡₀ b
 the types `A` and `≡₀`, this is sometimes called <a id="uniqueness-of-identity-proofs">*uniqueness of identity proofs*</a> (uip).
 
 Now, perhaps we have two proofs, say, `r s : p ≡₁ q` that the proofs `p` and `q` are equivalent. Then of course we wonder whether `r ≡₂ s` has a proof!  But at some level we may decide that the potential to distinguish two proofs of an identity in a meaningful way (so-called *proof-relevance*) is not useful or desirable.  At that point, say, at level `k`, we would be naturally inclined to assume that there is at most one proof of any identity of the form `p ≡ₖ q`.  This is called [truncation](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#truncation) (at level `k`).
+
+#### <a id="sets">Sets</a>
 
 In [homotopy type theory](https://homotopytypetheory.org), a type `A` with an identity relation `≡₀` is called a *set* (or *0-groupoid*) if for every pair `x y : A` there is at most one proof of `x ≡₀ y`. In other words, the type `A`, along with it's equality type `≡₀`, form a *set* if for all `x y : A` there is at most one proof of `x ≡₀ y`.
 

@@ -5,7 +5,7 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-### <a id="basic-definitions">Basic definitions</a>
+### <a id="basic-definitions">Basic Definitions</a>
 
 This section presents the [Terms.Basic][] module of the [Agda Universal Algebra Library][].
 

@@ -5,8 +5,8 @@
 %%% End:
 Here we discuss \defn{truncation} and \defn{h-sets} (which we just call \defn{sets}). We first give a brief discussion of standard notions of \emph{truncation} from a viewpoint that seems useful for formalizing mathematics in Agda.\footnote{Readers wishing to learn more about truncation may wish to consult~\cite[\S34]{MHE},~\cite{Brunerie:2012}, or~\cite[\S7.1]{HoTT}.}
 
-\subsubsection{Background and motivation}\label{truncation}
-This brief introduction to \emph{truncation} is intended for novices. Those already familiar with the concept might wish to skip to the next subsection.
+\subsubsection{Uniqueness of identity proofs}\label{sec:uniq-ident-proofs}
+This brief introduction is intended for novices; those already familiar with the concept of \emph{truncation} and \emph{uniqueness of identity proofs} may want to skip to the next subsection.
 
 In general, we may have multiple inhabitants of a given type, hence (via Curry-Howard) multiple proofs of a given proposition. For instance, suppose we have a type \ab{X} and an identity relation \aod{\_≡₀\_} on \ab{X} so that, given two inhabitants of \ab{X}, say, \ab{a} \ab b \as : \ab X, we can form the type \ab{a} \aod{≡₀} \ab b. Suppose \ab{p} and \ab{q} inhabit the type \ab{a} \aod{≡₀} \ab b; that is, \ab{p} and \ab{q} are proofs of \ab{a} \aod{≡₀} \ab b, in which case we write \ab{p} \ab q \as : \ab a \aod{≡₀} \ab b. We might then wonder whether the two proofs \ab{p} and \ab{q} are equivalent.
 

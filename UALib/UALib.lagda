@@ -107,7 +107,7 @@ open import Varieties
   - [Congruence Relations](Algebras.Congruences.html)
 
 - [Homomorphism Types](Homomorphisms.html)
-  - [Basic definitions](Homomorphisms.Basic.html)
+  - [Basic Definitions](Homomorphisms.Basic.html)
   - [Homomorphism Theorems](Homomorphisms.Noether.html)
   - [Isomorphisms](Homomorphisms.Isomorphisms.html)
   - [Homomorphic Images](Homomorphisms.HomomorphicImages.html)
