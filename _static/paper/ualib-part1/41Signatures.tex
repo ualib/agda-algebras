@@ -4,76 +4,64 @@
 %%% TeX-engine: 'xetex
 %%% End:
 % \subsubsection{Operation type}\label{operation-type}
-We begin by defining the type of \defn{operations} as follows.
-\ccpad
-\begin{code}%
-% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
-% \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+% We begin by defining the type of \defn{operations} as follows.
+% \ccpad
+% \begin{code}%
+% \>[0][@{}l@{\AgdaIndent{0}}]%
+% \>[1]\AgdaFunction{Op}\AgdaSpace{}%
 % \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaPostulate{Universe}\AgdaSymbol{\}}\AgdaSpace{}%
-% \AgdaKeyword{where}\<%
+% \AgdaGeneralizable{𝓥}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+% \AgdaGeneralizable{𝓥}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\<%
 % \\
 % %
-% \\[\AgdaEmptyExtraSkip]%
-\>[0][@{}l@{\AgdaIndent{0}}]%
-% \>[1]\AgdaComment{--The type of operations}\<%
+% \>[1]\AgdaFunction{Op}\AgdaSpace{}%
+% \AgdaBound{I}\AgdaSpace{}%
+% \AgdaBound{A}\AgdaSpace{}%
+% \AgdaSymbol{=}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaBound{I}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaBound{A}\<%
+% \end{code}
+% \ccpad
+% The type \af{Op} encodes the arity of an operation as an arbitrary type \abt{I}{𝓥}, which gives us a very general way to represent an operation as a function type with domain \ab I \as → \ab A (the type of ``tuples'') and codomain \ab{A}. For example, the \ab{I}-\defn{ary projection operations} on \ab{A} can be codified as inhabitants of the type \af{Op} \ab I \af A in the following way.
+% \ccpad
+% \begin{code}%
+% \>[0]\AgdaFunction{π}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{I}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaGeneralizable{𝓥}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}%
+% \AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaGeneralizable{𝓤}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+% \AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaBound{I}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaFunction{Op}\AgdaSpace{}%
+% \AgdaBound{I}\AgdaSpace{}%
+% \AgdaBound{A}\<%
 % \\
-% %
-\>[1]\AgdaFunction{Op}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaGeneralizable{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaGeneralizable{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-%
-\>[1]\AgdaFunction{Op}\AgdaSpace{}%
-\AgdaBound{I}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{I}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{A}\<%
-\end{code}
-\ccpad
-The type \af{Op} encodes the arity of an operation as an arbitrary type \abt{I}{𝓥}, which gives us a very general way to represent an operation as a function type with domain \ab I \as → \ab A (the type of ``tuples'') and codomain \ab{A}. For example, the \ab{I}-\defn{ary projection operations} on \ab{A} can be codified as inhabitants of the type \af{Op} \ab I \af A in the following way.
-\ccpad
-\begin{code}%
-\>[0]\AgdaFunction{π}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{I}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaGeneralizable{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{A}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaGeneralizable{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{I}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{Op}\AgdaSpace{}%
-\AgdaBound{I}\AgdaSpace{}%
-\AgdaBound{A}\<%
-\\
-\>[0]\AgdaFunction{π}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaBound{i}\<%
-\end{code}
+% \>[0]\AgdaFunction{π}\AgdaSpace{}%
+% \AgdaBound{i}\AgdaSpace{}%
+% \AgdaBound{x}\AgdaSpace{}%
+% \AgdaSymbol{=}\AgdaSpace{}%
+% \AgdaBound{x}\AgdaSpace{}%
+% \AgdaBound{i}\<%
+% \end{code}
 
 % \subsubsection{Signature type}\label{signature-type}
 
@@ -109,7 +97,7 @@ We define the signature of an algebraic structure in Agda like this.
 \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)}\<%
 \end{code}
 \ccpad
-As mentioned in \S\ref{sec:continuous-relations}, in the \ualib the symbol 𝓞 always denotes the universe of \emph{operation symbol} types, while 𝓥 is always the universe of \emph{arity} types.
+As mentioned in \S\ref{sec:discrete-relations}, the symbol 𝓞 always denotes the universe of \emph{operation symbol} types, while 𝓥 is always the universe of \emph{arity} types.
 
 In \S\ref{preliminaries} we defined special syntax for the first and second projections---namely, \af ∣\au\af ∣ and \af{∥}\au\af{∥}, respectively. Consequently, if \ab 𝑆 \as : \af{Signature} \ab 𝓞 \ab 𝓥 is a signature, then \af ∣~\ab 𝑆~\af ∣ denotes the set of operation symbols, and \af{∥}~\ab 𝑆~\af{∥} denotes the arity function. If \ab 𝑓 \as : \af ∣~\ab 𝑆~\af ∣ is an operation symbol in the signature \ab 𝑆, then \af{∥}~\ab 𝑆~\af{∥} \ab 𝑓 is the arity of \ab 𝑓.
 
@@ -168,5 +156,5 @@ Here is how we could define the signature for \defn{monoids} as an inhabitant of
 \AgdaSymbol{\}}\<%
 \end{code}
 \ccpad
-As expected, the signature for a monoid consists of two operation symbols, \aic{e} and \aic{·}, and a function
+Thus, the signature for a monoid consists of two operation symbols, \aic{e} and \aic{·}, and a function
 \as λ \as{\{} \aic e \as → \af 𝟘 \as ; \aic · \as → \af 𝟚 \as{\}} which maps \aic{e} to the empty type \af 𝟘 (since \aic{e} is the nullary identity) and maps \aic{·} to the two element type \af 𝟚 (since \aic{·} is binary).\footnote{The types \af 𝟘 and \af 𝟚 are defined in the \AgdaModule{MGS-MLTT} module of \typtop.}

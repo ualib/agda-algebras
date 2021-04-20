@@ -22,7 +22,9 @@ open import Algebras.Signatures public
 
 #### <a id="algebra-types">Algebra types</a>
 
-Recall, the type `Signature 𝓞 𝓥` was defined in the [Algebras.Signatures][] module as the dependent pair type `Σ F ꞉ 𝓞 ̇ , (F → 𝓥 ̇)`. For a fixed signature `𝑆 : Signature 𝓞 𝓥` and universe `𝓤`, we define the type of *algebras in the signature* 𝑆 (or 𝑆-*algebras*) and with *domain* (or *carrier*) `𝐴 : 𝓤 ̇` &nbsp as follows.<sup>[1](Algebras.Algebras.html#fn1)</sup>
+Recall, the type `Signature 𝓞 𝓥` was defined in the [Algebras.Signatures][] module as the dependent pair type `Σ F ꞉ 𝓞 ̇ , (F → 𝓥 ̇)`, and the type \af{Op} of operation symbols was defined in [Relations.Discrete][] as the function type `Op I A = (I → A) → A`.
+
+For a fixed signature `𝑆 : Signature 𝓞 𝓥` and universe `𝓤`, we define the type of *algebras in the signature* 𝑆 (or 𝑆-*algebras*) and with *domain* (or *carrier*) of type `𝓤 ̇` as follows.<sup>[1](Algebras.Algebras.html#fn1)</sup>
 
 \begin{code}
 
@@ -124,11 +126,13 @@ What makes the `Lift-alg` type so useful for resolving type level errors involvi
 
 #### <a id="compatibility-of-binary-relations">Compatibility of binary relations</a>
 
-If `𝑨` is an algebra and `R` a binary relation, then `compatible 𝑨 R` will represents the assertion that `R` is *compatible* with all basic operations of `𝑨`. Recall (from [Relations.Discrete][]) that informally this means for every operation symbol `𝑓 : ∣ 𝑆 ∣` and all pairs `u v : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣` of tuples from the domain of 𝑨, the following implication holds:
+We now define the function `compatible` so that, if `𝑨` is an algebra and `R` a binary relation, then `compatible 𝑨 R` will represents the assertion that `R` is *compatible* with all basic operations of `𝑨`.
+<!-- Recall (from [Relations.Discrete][]) that informally this means for every operation symbol `𝑓 : ∣ 𝑆 ∣` and all pairs `u v : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣` of tuples from the domain of 𝑨, the following implication holds:
 
 &nbsp;&nbsp; `(Π i ꞉ I , R (u i) (u i))` &nbsp;&nbsp;  `→`  &nbsp;&nbsp; `R ((𝑓 ̂ 𝑨) u) ((𝑓 ̂ 𝑨) v)`.
 
-In other terms, `∀ 𝑓 → (𝑓 ̂ 𝑨) |: R`. The formal definition of this notion of compatibility is immediate since all the work is done by the relation `|:` (which we already defined in [Relations.Discrete][]).
+In other terms, `∀ 𝑓 → (𝑓 ̂ 𝑨) |: R`. -->
+The formal definition is immediate since all the work is done by the relation `|:` (which we already defined in [Relations.Discrete][]).
 
 \begin{code}
 

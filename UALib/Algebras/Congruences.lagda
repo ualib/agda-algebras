@@ -20,7 +20,9 @@ open import Algebras.Products {𝑆 = 𝑆} public
 
 \end{code}
 
-A *congruence relation* of an algebra `𝑨` is defined to be an equivalence relation that is compatible with the basic operations of `𝑨`.  This concept can be represented in a number of alternative but equivalent ways.  Informally, a relation is a congruence if and only if it is both an equivalence relation on the domain of `𝑨` and a subalgebra of the square of `𝑨`.  Formally, we represent a congruence as an inhabitant of either a the Sigma type `Con` or the record type `Congruence`, which we now define.
+A *congruence relation* of an algebra `𝑨` is defined to be an equivalence relation that is compatible with the basic operations of `𝑨`.  This concept can be represented in a number of alternative but equivalent ways.
+<!-- Informally, a relation is a congruence of `𝑨` provided it is both an equivalence relation on the domain of `𝑨` and a subalgebra of the square `𝑨 × 𝑨`.  The latter simply means that a congruence must be compatible with all operations of the algebra. -->
+Formally, we define a record type (`IsCongruence`) to represent the property of being a congruence, and we define a Sigma type (`Con`) to represent the type of congruences of a given algebra.
 
 \begin{code}
 
@@ -37,7 +39,7 @@ module _ {𝓦 𝓤 : Universe} where
 
 \end{code}
 
-Each of these types captures what it means to be a congruence and they are equivalent in the sense that each clearly implies the other. One implication is the "uncurry" operation and the other is the second projection.
+Each of these types captures what it means to be a congruence and they are equivalent in the sense that each implies the other. One implication is the "uncurry" operation and the other is the second projection.
 
 \begin{code}
 
@@ -50,7 +52,7 @@ Each of these types captures what it means to be a congruence and they are equiv
 \end{code}
 
 #### <a id="example">Example</a>
-We defined the zero relation `𝟎` in the [Relations.Discrete][] module.  We now build the *trivial congruence*, which has `𝟎` as its underlying relation. Observe that `𝟎` is equivalent to the identity relation `≡` and these are obviously both equivalences. In fact, we already proved this of `≡` in the [Overture.Equality][] module, so we simply apply the corresponding proofs.
+We defined the *zero relation* `𝟎` in the [Relations.Discrete][] module.  We now build the *trivial congruence*, which has `𝟎` as its underlying relation. Observe that `𝟎` is equivalent to the identity relation `≡` and these are obviously both equivalence relations. In fact, we already proved this of `≡` in the [Overture.Equality][] module, so we simply apply the corresponding proofs.
 
 \begin{code}
 
@@ -97,7 +99,7 @@ module _ {𝓤 𝓦 : Universe} where
 
  𝑨 ╱ θ = (∣ 𝑨 ∣ / ∣ θ ∣)  ,                               -- the domain of the quotient algebra
 
-         λ 𝑓 𝒂 → ⟪ (𝑓 ̂ 𝑨)(λ i →  fst ∥ 𝒂 i ∥) ⟫           -- the basic operations of the quotient algebra
+         λ 𝑓 𝑎 → ⟪ (𝑓 ̂ 𝑨)(λ i →  fst ∥ 𝑎 i ∥) ⟫           -- the basic operations of the quotient algebra
 
 \end{code}
 

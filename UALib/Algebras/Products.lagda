@@ -58,7 +58,7 @@ The type just defined is the one that will be used throughout the [UALib][] when
 
 
 
-**Notation**. Given a signature `𝑆 : Signature 𝓞 𝓥`, the type `Algebra 𝓤 𝑆` has universe `𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺`.  Such types occur so often in the [UALib][] that we define the following shorthand for their universes.
+**Notation**. Given a signature `𝑆 : Signature 𝓞 𝓥`, the type `Algebra 𝓤 𝑆` has type `𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇`.  Such types occur so often in the [UALib][] that we define the following shorthand for their universes.
 
 \begin{code}
 
@@ -73,11 +73,11 @@ ov 𝓤 = 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺
 
 An arbitrary class `𝒦` of algebras is represented as a predicate over the type `Algebra 𝓤 𝑆`, for some universe level `𝓤` and signature `𝑆`. That is, `𝒦 : Pred (Algebra 𝓤 𝑆) 𝓦`, for some type `𝓦`. Later we will formally state and prove that the product of all subalgebras of algebras in `𝒦` belongs to the class `SP(𝒦)` of subalgebras of products of algebras in `𝒦`. That is, `⨅ S(𝒦) ∈ SP(𝒦 )`. This turns out to be a nontrivial exercise.
 
-To begin, we need to define types that represent products over arbitrary (nonindexed) families such as `𝒦` or `S(𝒦)`. Observe that `Π 𝒦` is definitely *not* what we want.  To see why, recall that `Pred (Algebra 𝓤 𝑆) 𝓦`, is just an alias for the function type `Algebra 𝓤 𝑆 → 𝓦 ̇`. We interpret the latter semantically by taking `𝒦 𝑨` (and `𝑨 ∈ 𝒦`) to denote the assertion that `𝒦 𝑨` belongs to `𝒦`. Therefore, by definition, we have
+To begin, we need to define types that represent products over arbitrary (nonindexed) families such as `𝒦` or `S(𝒦)`. Observe that `Π 𝒦` is certainly not what we want.  For recall that `Pred (Algebra 𝓤 𝑆) 𝓦` is just an alias for the function type `Algebra 𝓤 𝑆 → 𝓦 ̇`, and the semantics of the latter takes `𝒦 𝑨` (and `𝑨 ∈ 𝒦`) to mean that `𝑨` belongs to the class `𝒦`. Thus, by definition,
 
-`Π 𝒦 = Π 𝑨 ꞉ (Algebra 𝓤 𝑆) , 𝒦 𝑨` &nbsp; &nbsp; `=` &nbsp; &nbsp; `Π 𝑨 ꞉ (Algebra 𝓤 𝑆) , 𝑨 ∈ 𝒦`.
+`Π 𝒦 = Π 𝑨 ꞉ (Algebra 𝓤 𝑆) , 𝒦 𝑨` &nbsp; &nbsp; `=` &nbsp; &nbsp; `∀ (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ∈ 𝒦`,
 
-Semantically, this is the assertion that *every algebra of type* `Algebra 𝓤 𝑆` *belongs to* `𝒦`, and this bears little resemblance to the product of algebras that we seek.
+which asserts that every inhabitant of the type `Algebra 𝓤 𝑆` belongs to `𝒦`.  Evidently this is not the product algebra that we seek.
 
 What we need is a type that serves to index the class `𝒦`, and a function `𝔄` that maps an index to the inhabitant of `𝒦` at that index. But `𝒦` is a predicate (of type `(Algebra 𝓤 𝑆) → 𝓦 ̇`) and the type `Algebra 𝓤 𝑆` seems rather nebulous in that there is no natural indexing class with which to "enumerate" all inhabitants of `Algebra 𝓤 𝑆` belonging to `𝒦`.<sup>[1](Algebras.Product.html#fn1)</sup>
 
@@ -116,7 +116,7 @@ If `p : 𝑨 ∈ 𝒦`, we view the pair `(𝑨 , p) ∈ ℑ` as an *index* over
 
 -----------------------
 
-<sup>1</sup><span class="footnote" id="fn1"> If you haven't already seen this before, give it some thought and see if the correct type comes to you organically.</span>
+<sup>1</sup><span class="footnote" id="fn1"> If you haven't seen this before, give it some thought and see if the correct type comes to you organically.</span>
 
 <sup>2</sup><span class="footnote" id="fn2"> **Unicode Hints**. Some of our types are denoted with with Gothic ("mathfrak") symbols. To produce them in [agda2-mode][], type `\Mf` followed by a letter. For example, `\MfI` ↝ `ℑ`.</span>
 
