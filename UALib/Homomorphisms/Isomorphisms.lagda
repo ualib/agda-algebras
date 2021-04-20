@@ -90,8 +90,7 @@ open Lift
 module _ {𝓤 𝓦 : Universe} where
 
  Lift-≅ : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ≅ (Lift-alg 𝑨 𝓦)
- Lift-≅ {𝑨} = 𝓁𝒾𝒻𝓉 , 𝓁ℴ𝓌ℯ𝓇 𝑨 , happly lift∼lower , happly (lower∼lift{𝓦})
-
+ Lift-≅ {𝑨} = 𝓁𝒾𝒻𝓉 , (𝓁ℴ𝓌ℯ𝓇{𝓤}{𝓦}{𝑨}) , happly lift∼lower , happly (lower∼lift{𝓦})
 
  Lift-hom : (𝓧 : Universe)(𝓨 : Universe){𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆)
   →             hom 𝑨 𝑩  →  hom (Lift-alg 𝑨 𝓧) (Lift-alg 𝑩 𝓨)

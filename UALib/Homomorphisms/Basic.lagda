@@ -18,7 +18,7 @@ open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
 module Homomorphisms.Basic {𝑆 : Signature 𝓞 𝓥} where
 
 open import Algebras.Congruences{𝑆 = 𝑆} public
-open import MGS-MLTT using (_≡⟨_⟩_; _∎) public
+open import MGS-MLTT using (_≡⟨_⟩_; _∎; id) public
 
 \end{code}
 
@@ -61,11 +61,8 @@ Let's look at a few examples of homomorphisms. These examples are actually quite
 
 module _ {𝓤 : Universe} where
 
- id-is-hom : {𝑨 : Algebra 𝓤 𝑆} → is-homomorphism 𝑨 𝑨 (𝑖𝑑 ∣ 𝑨 ∣)
- id-is-hom _ _ = refl
-
  𝒾𝒹 : (A : Algebra 𝓤 𝑆) → hom A A
- 𝒾𝒹 _ = (λ x → x) , id-is-hom
+ 𝒾𝒹 _ = id , λ 𝑓 𝑎 → refl
 
 \end{code}
 
@@ -75,17 +72,11 @@ Next, `lift` and `lower`, defined in the [Overture.Lifts][] module, are (the map
 
  open Lift
 
- Lift-is-hom : {𝑨 : Algebra 𝓤 𝑆}{𝓦 : Universe} → is-homomorphism 𝑨 (Lift-alg 𝑨 𝓦) lift
- Lift-is-hom _ _ = refl
+ 𝓁𝒾𝒻𝓉 : {𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} → hom 𝑨 (Lift-alg 𝑨 𝓦)
+ 𝓁𝒾𝒻𝓉 = lift , λ 𝑓 𝑎 → refl
 
- 𝓁𝒾𝒻𝓉 : {𝑨 : Algebra 𝓤 𝑆}{𝓦 : Universe} → hom 𝑨 (Lift-alg 𝑨 𝓦)
- 𝓁𝒾𝒻𝓉 = (lift , Lift-is-hom)
-
- lower-is-hom : {𝑨 : Algebra 𝓤 𝑆}{𝓦 : Universe} → is-homomorphism (Lift-alg 𝑨 𝓦) 𝑨 lower
- lower-is-hom _ _ = refl
-
- 𝓁ℴ𝓌ℯ𝓇 : (𝑨 : Algebra 𝓤 𝑆){𝓦 : Universe} → hom (Lift-alg 𝑨 𝓦) 𝑨
- 𝓁ℴ𝓌ℯ𝓇 𝑨 = (lower , lower-is-hom{𝑨})
+ 𝓁ℴ𝓌ℯ𝓇 : {𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} → hom (Lift-alg 𝑨 𝓦) 𝑨
+ 𝓁ℴ𝓌ℯ𝓇 = lower , λ 𝑓 𝑎 → refl
 
 \end{code}
 
@@ -140,13 +131,10 @@ The kernel of a homomorphism is a congruence relation and conversely for every c
 module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} where
 
  homker-compatible : dfunext 𝓥 𝓦 → (𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) → compatible 𝑨 (ker ∣ h ∣)
- homker-compatible fe 𝑩 h f {u}{v} Kerhab = γ
-  where
-  γ : ∣ h ∣ ((f ̂ 𝑨) u)  ≡ ∣ h ∣ ((f ̂ 𝑨) v)
-  γ = ∣ h ∣ ((f ̂ 𝑨) u)  ≡⟨ ∥ h ∥ f u ⟩
-      (f ̂ 𝑩)(∣ h ∣ ∘ u) ≡⟨ ap (f ̂ 𝑩)(fe λ x → Kerhab x) ⟩
-      (f ̂ 𝑩)(∣ h ∣ ∘ v) ≡⟨ (∥ h ∥ f v)⁻¹ ⟩
-      ∣ h ∣ ((f ̂ 𝑨) v)  ∎
+ homker-compatible fe 𝑩 h f {u}{v} Kerhab = ∣ h ∣ ((f ̂ 𝑨) u)   ≡⟨ ∥ h ∥ f u ⟩
+                                            (f ̂ 𝑩)(∣ h ∣ ∘ u)  ≡⟨ ap (f ̂ 𝑩)(fe λ x → Kerhab x) ⟩
+                                            (f ̂ 𝑩)(∣ h ∣ ∘ v)  ≡⟨ (∥ h ∥ f v)⁻¹ ⟩
+                                            ∣ h ∣ ((f ̂ 𝑨) v)   ∎
 
 \end{code}
 
@@ -186,15 +174,8 @@ Given an algebra `𝑨` and a congruence `θ`, the *canonical projection* is a m
 
 module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} where
  πepi : (θ : Con{𝓦} 𝑨) → epi 𝑨 (𝑨 ╱ θ)
- πepi θ = cπ , cπ-is-hom , cπ-is-epic where
-
-  cπ : ∣ 𝑨 ∣ → ∣ 𝑨 ╱ θ ∣
-  cπ a = ⟪ a ⟫
-
-  cπ-is-hom : is-homomorphism 𝑨 (𝑨 ╱ θ) cπ
-  cπ-is-hom _ _ = refl
-
-  cπ-is-epic : Epic cπ
+ πepi θ = (λ a → ⟪ a ⟫) , (λ _ _ → refl) , cπ-is-epic  where
+  cπ-is-epic : Epic (λ a → ⟪ a ⟫)
   cπ-is-epic (C , (a , refl)) =  Image_∋_.im a
 
 \end{code}
@@ -213,7 +194,7 @@ We combine the foregoing to define a function that takes 𝑆-algebras `𝑨` an
 
 \begin{code}
 
- πker : (𝑩 : Algebra 𝓦 𝑆){fe : dfunext 𝓥 𝓦}(h : hom 𝑨 𝑩) →  epi 𝑨 ((𝑨 [ 𝑩 ]/ker h){fe})
+ πker : (𝑩 : Algebra 𝓦 𝑆){fe : dfunext 𝓥 𝓦}(h : hom 𝑨 𝑩) → epi 𝑨 ((𝑨 [ 𝑩 ]/ker h){fe})
  πker 𝑩 {fe} h = πepi (kercon 𝑩 {fe} h)
 
 \end{code}
@@ -241,18 +222,10 @@ If in addition we have a family `𝒽 : (i : I) → hom 𝑨 (ℬ i)` of homomor
 
 \begin{code}
 
-module _ {𝓤 𝓘 𝓦 : Universe} {fe : dfunext 𝓘 𝓦} where
+module _ {𝓘 𝓦 : Universe}{I : 𝓘 ̇}(ℬ : I → Algebra 𝓦 𝑆) where
 
- ⨅-hom-co : {𝑨 : Algebra 𝓤 𝑆}{I : 𝓘 ̇}(ℬ : I → Algebra 𝓦 𝑆)
-  →         Π i ꞉ I , hom 𝑨 (ℬ i)  →  hom 𝑨 (⨅ ℬ)
-
- ⨅-hom-co {𝑨} ℬ 𝒽 = ϕ , ϕhom
-  where
-  ϕ : ∣ 𝑨 ∣ → ∣ ⨅ ℬ ∣
-  ϕ a = λ i → ∣ 𝒽 i ∣ a
-
-  ϕhom : is-homomorphism 𝑨 (⨅ ℬ) ϕ
-  ϕhom 𝑓 𝒶 = fe λ i → ∥ 𝒽 i ∥ 𝑓 𝒶
+ ⨅-hom-co : dfunext 𝓘 𝓦 → {𝓤 : Universe}(𝑨 : Algebra 𝓤 𝑆) → Π i ꞉ I , hom 𝑨 (ℬ i) → hom 𝑨 (⨅ ℬ)
+ ⨅-hom-co fe 𝑨 𝒽 = (λ a i → ∣ 𝒽 i ∣ a) , (λ 𝑓 𝒶 → fe λ i → ∥ 𝒽 i ∥ 𝑓 𝒶)
 
 \end{code}
 
@@ -265,16 +238,8 @@ The foregoing generalizes easily to the case in which the domain is also a produ
 
 \begin{code}
 
- ⨅-hom : {I : 𝓘 ̇}(𝒜 : I → Algebra 𝓤 𝑆)(ℬ : I → Algebra 𝓦 𝑆)
-  →      Π i ꞉ I , hom (𝒜 i)(ℬ i)  →  hom (⨅ 𝒜)(⨅ ℬ)
-
- ⨅-hom 𝒜 ℬ 𝒽 = ϕ , ϕhom
-  where
-  ϕ : ∣ ⨅ 𝒜 ∣ → ∣ ⨅ ℬ ∣
-  ϕ = λ x i → ∣ 𝒽 i ∣ (x i)
-
-  ϕhom : is-homomorphism (⨅ 𝒜) (⨅ ℬ) ϕ
-  ϕhom 𝑓 𝒶 = fe λ i → ∥ 𝒽 i ∥ 𝑓 (λ x → 𝒶 x i)
+ ⨅-hom : dfunext 𝓘 𝓦 → {𝓤 : Universe}(𝒜 : I → Algebra 𝓤 𝑆) → Π i ꞉ I , hom (𝒜 i)(ℬ i) → hom (⨅ 𝒜)(⨅ ℬ)
+ ⨅-hom fe 𝒜 𝒽 = (λ x i → ∣ 𝒽 i ∣ (x i)) , (λ 𝑓 𝒶 → fe λ i → ∥ 𝒽 i ∥ 𝑓 (λ x → 𝒶 x i))
 
 \end{code}
 
@@ -286,17 +251,8 @@ Later we will need a proof of the fact that projecting out of a product algebra 
 
 \begin{code}
 
-module _ {𝓘 𝓦 : Universe} where
-
- ⨅-projection-hom : {I : 𝓘 ̇}(ℬ : I → Algebra 𝓦 𝑆) → Π i ꞉ I , hom (⨅ ℬ) (ℬ i)
-
- ⨅-projection-hom ℬ = λ i → 𝒽 i , 𝒽hom i
-  where
-  𝒽 : ∀ i → ∣ ⨅ ℬ ∣ → ∣ ℬ i ∣
-  𝒽 i = λ x → x i
-
-  𝒽hom : ∀ i → is-homomorphism (⨅ ℬ) (ℬ i) (𝒽 i)
-  𝒽hom _ _ _ = refl
+ ⨅-projection-hom : Π i ꞉ I , hom (⨅ ℬ) (ℬ i)
+ ⨅-projection-hom = λ x → (λ z → z x) , λ _ _ → refl
 
 \end{code}
 

@@ -151,19 +151,12 @@ We begin by constructing `ℭ`, using the techniques described in the section on
 
 \end{code}
 
-Observe that the inhabitants of `ℭ` are maps from `ℑs` to `{𝔄s i : i ∈ ℑs}`.
+Observe that the inhabitants of `ℭ` are maps from `ℑs` to `{𝔄s i : i ∈ ℑs}`.  A homomorphism from `𝑻 X` to `ℭ` is obtained as follows.
 
 \begin{code}
 
- -- NOTATION.
- 𝔄h : (i : ℑ) → X → ∣ 𝔄 i ∣
- 𝔄h = λ (i : ℑ) → snd ∥ i ∥
-
- hom𝔄 : ∀ i → hom (𝑻 X) (𝔄 i)
- hom𝔄 i = lift-hom (𝔄 i) (𝔄h i)
-
  homℭ : hom (𝑻 X) ℭ
- homℭ = ⨅-hom-co {fe = fe 𝓕 𝓤} 𝔄 hom𝔄
+ homℭ = ⨅-hom-co 𝔄 (fe 𝓕 𝓤)(𝑻 X) λ i → lift-hom (𝔄 i)(snd ∥ i ∥)
 
 \end{code}
 
@@ -267,11 +260,8 @@ We need a three more lemmas before we are ready to tackle our main goal.
    h' = ∘-hom (𝑻 X) 𝑨 𝔑 f
    φ = lift-hom 𝑨 h
 
-   f𝔑≡φ : ∀ x → (∣ f ∣ ∘ ∣ 𝔑 ∣)(ℊ x) ≡ ∣ φ ∣(ℊ x)
-   f𝔑≡φ x = refl
-
    h≡φ : ∀ t → (∣ f ∣ ∘ ∣ 𝔑 ∣) t ≡ ∣ φ ∣ t
-   h≡φ t = free-unique (fe 𝓥 𝓤) 𝑨 h' φ f𝔑≡φ t
+   h≡φ t = free-unique (fe 𝓥 𝓤) 𝑨 h' φ (λ x → refl) t
 
    γ : ∣ φ ∣ p ≡ ∣ φ ∣ q
    γ = ∣ φ ∣ p             ≡⟨ (h≡φ p)⁻¹ ⟩
@@ -289,13 +279,10 @@ We need a three more lemmas before we are ready to tackle our main goal.
 
  ψlemma3 : ∀ p q → (p , q) ∈ ψ 𝒦 → 𝒦 ⊧ p ≋ q
  ψlemma3 p q pψq {𝑨} kA = γ
-  where
-   skA : 𝑨 ∈ S 𝒦
-   skA = siso (sbase kA) (≅-sym Lift-≅)
-
+   where
    γ : 𝑨 ⟦ p ⟧ ≡ 𝑨 ⟦ q ⟧
-   γ = fe 𝓤 𝓤 λ h → (𝑨 ⟦ p ⟧) h       ≡⟨ free-lift-interp (fe 𝓥 𝓤) 𝑨 h p ⟩
-                 (free-lift 𝑨 h) p ≡⟨ pψq 𝑨 skA h ⟩
+   γ = fe 𝓤 𝓤 λ h → (𝑨 ⟦ p ⟧) h    ≡⟨ free-lift-interp (fe 𝓥 𝓤) 𝑨 h p ⟩
+                 (free-lift 𝑨 h) p ≡⟨ pψq 𝑨 (siso (sbase kA) (≅-sym Lift-≅)) h ⟩
                  (free-lift 𝑨 h) q ≡⟨ (free-lift-interp (fe 𝓥 𝓤) 𝑨 h q)⁻¹  ⟩
                  (𝑨 ⟦ q ⟧) h       ∎
 
@@ -306,7 +293,7 @@ With these results in hand, it is now trivial to prove the main theorem of this 
 \begin{code}
 
  class-models-kernel : ∀ p q → (p , q) ∈ kernel ∣ hom𝔽 ∣ → 𝒦 ⊧ p ≋ q
- class-models-kernel  p q hyp = ψlemma3 p q (ψlemma2 hyp)
+ class-models-kernel p q hyp = ψlemma3 p q (ψlemma2 hyp)
 
 \end{code}
 
@@ -334,15 +321,10 @@ With these results in hand, it is now trivial to prove the main theorem of this 
   pqlem2 p q hyp = AinMTV p q (kernel-in-theory hyp)
 
   kerincl : kernel ∣ hom𝔽 ∣ ⊆ kernel ∣ φ ∣
-  kerincl {p , q} x = γ
-   where
-   Apq : 𝑨 ⊧ p ≈ q
-   Apq = pqlem2 p q x
-   γ : ∣ φ ∣ p ≡ ∣ φ ∣ q
-   γ = ∣ φ ∣ p          ≡⟨ (free-lift-interp (fe 𝓥 𝓕⁺) 𝑨 η p)⁻¹ ⟩
-       (𝑨 ⟦ p ⟧) η      ≡⟨ happly (pqlem2 p q x) η  ⟩
-       (𝑨 ⟦ q ⟧) η      ≡⟨ free-lift-interp (fe 𝓥 𝓕⁺) 𝑨 η q ⟩
-       ∣ φ ∣ q          ∎
+  kerincl {p , q} x = ∣ φ ∣ p      ≡⟨ (free-lift-interp (fe 𝓥 𝓕⁺) 𝑨 η p)⁻¹ ⟩
+                      (𝑨 ⟦ p ⟧) η  ≡⟨ happly (pqlem2 p q x) η  ⟩
+                      (𝑨 ⟦ q ⟧) η  ≡⟨ free-lift-interp (fe 𝓥 𝓕⁺) 𝑨 η q ⟩
+                      ∣ φ ∣ q      ∎
 
   γ : epi 𝔽 𝑨
   γ = fst (HomFactorEpi (fe 𝓕 𝓕⁺)(fe 𝓕⁺ 𝓕⁺)(fe 𝓕⁺ 𝓕⁺) 𝑨 φ hom𝔽 kerincl hom𝔽-is-epic φE)

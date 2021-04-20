@@ -37,7 +37,7 @@ open import MGS-Subsingleton-Theorems using (Π-is-subsingleton)
 
 open import MGS-Embeddings using (embedding-gives-ap-is-equiv; pr₁-embedding;
  lr-implication; rl-implication; inverse; ×-is-subsingleton; _≃_; _●_;
- logically-equivalent-subsingletons-are-equivalent; id)
+ logically-equivalent-subsingletons-are-equivalent)
 
 
 

@@ -137,7 +137,7 @@ First we show that the subalgebra relation is a *preorder*; i.e., it is a reflex
 \begin{code}
 
 ≤-reflexive : (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ≤ 𝑨
-≤-reflexive 𝑨 = (𝑖𝑑 ∣ 𝑨 ∣ , id-is-hom) , id-is-embedding
+≤-reflexive 𝑨 = (𝑖𝑑 ∣ 𝑨 ∣ , λ 𝑓 𝑎 → refl) , id-is-embedding
 
 ≤-refl : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ≤ 𝑨
 ≤-refl {𝑨 = 𝑨} = ≤-reflexive 𝑨
