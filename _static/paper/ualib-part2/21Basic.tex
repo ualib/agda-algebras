@@ -823,23 +823,31 @@ We will define subuniverses in the \ualibhtml{Algebras.Subuniverses} module, but
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
 \subsubsection*{Kernels of homomorphisms} %\label{kernels-of-homomorphisms}
-The \defn{kernel} of a homomorphism is a congruence relation and conversely for every congruence relation \ab θ, there exists a homomorphism with kernel \ab θ (namely, that canonical projection onto the quotient modulo \ab θ).
-\ccpad
-\begin{code}%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+The \defn{kernel} of a homomorphism is a congruence relation and conversely for every congruence relation \ab θ, there exists a homomorphism with kernel \ab θ (namely, that canonical projection onto the quotient modulo \ab θ). For the next three definitions, assume the context includes
+\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Universe}\AgdaSymbol{\}\{}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaFunction{Universe} and \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
+\AgdaBound{𝑆}.)
+\ccpad
+\begin{code}%
+% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
+% \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaBound{𝓦}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaFunction{Universe}\AgdaSymbol{\}\{}\AgdaBound{𝑨}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaFunction{Algebra}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaBound{𝑆}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaKeyword{where}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
 \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{homker-compatible}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -1018,12 +1026,10 @@ With this we define the corresponding quotient, along with some syntactic sugar 
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{fe}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{h}\AgdaSymbol{)}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}[\AgdaUnderscore{}]/ker\AgdaUnderscore{}}}\AgdaSpace{}%
+\end{code}
+\scpad
+\begin{code}
+\>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}[\AgdaUnderscore{}]/ker\AgdaUnderscore{}∣\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -1033,39 +1039,35 @@ With this we define the corresponding quotient, along with some syntactic sugar 
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
 \AgdaGeneralizable{𝓦}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSymbol{)(}\AgdaBound{h}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝑆}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{hom}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaBound{𝑩}\AgdaSymbol{)\{}\AgdaBound{fe}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝑩}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{dfunext}\AgdaSpace{}%
 \AgdaBound{𝓥}\AgdaSpace{}%
-\AgdaGeneralizable{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaGeneralizable{𝓦}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{Algebra}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaGeneralizable{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
-\AgdaGeneralizable{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⁺}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaUnderscore{}\AgdaSpace{}% -- \AgdaSymbol{(}\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{⊔}}\AgdaSpace{}%
+% \AgdaGeneralizable{𝓦}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{⁺}}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{𝑆}\<%
 \\
-\>[0]\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
+\>[0]\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]/ker}}\AgdaSpace{}%
-\AgdaBound{h}\AgdaSymbol{)\{}\AgdaBound{fe}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{h}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{fe}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{kerquo}\AgdaSpace{}%
 \AgdaBound{fe}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{𝑩}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{h}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaKeyword{infix}\AgdaSpace{}%
-\AgdaNumber{60}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}[\AgdaUnderscore{}]/ker\AgdaUnderscore{}}}\<%
 \end{code}
 \ccpad
 Thus, given \ab h \as : \af{hom} \ab 𝑨 \ab 𝑩 we can construct the quotient of \ab 𝑨 modulo the kernel of \ab h with the shorthand \ab 𝑨 \af [ 𝑩 \af{]/ker} \ab h.
@@ -1194,11 +1196,13 @@ We combine the foregoing to define a function that takes \ab 𝑆-algebras \ab{�
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{epi}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaSymbol{((}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]/ker}}\AgdaSpace{}%
-\AgdaBound{h}\AgdaSymbol{)\{}\AgdaBound{fe}\AgdaSymbol{\})}\<%
+\AgdaBound{h}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+\AgdaBound{fe}\AgdaSymbol{)}\<%
 \\
 %
 \>[1]\AgdaFunction{πker}\AgdaSpace{}%

@@ -56,7 +56,7 @@ module _ {𝓤 𝓦 : Universe} where
   →                       is-set ∣ 𝑩 ∣
   →                       blk-uip ∣ 𝑨 ∣ ∣ kercon 𝑩 {fe} h ∣
 
-  → Σ φ ꞉ (hom ((𝑨 [ 𝑩 ]/ker h){fe}) 𝑩) , (∣ h ∣ ≡ ∣ φ ∣ ∘ ∣ πker 𝑩 {fe} h ∣) × Monic ∣ φ ∣ × is-embedding ∣ φ ∣
+  → Σ φ ꞉ (hom (𝑨 [ 𝑩 ]/ker h ↾ fe) 𝑩) , (∣ h ∣ ≡ ∣ φ ∣ ∘ ∣ πker 𝑩 {fe} h ∣) × Monic ∣ φ ∣ × is-embedding ∣ φ ∣
 
  FirstHomTheorem|Set 𝑨 𝑩 h pe fe Bset buip = (φ , φhom) , φcom , φmon , φemb
   where
@@ -65,10 +65,10 @@ module _ {𝓤 𝓦 : Universe} where
   ξ : IsEquivalence ∣ θ ∣
   ξ = IsCongruence.is-equivalence ∥ θ ∥
 
-  φ : ∣ (𝑨 [ 𝑩 ]/ker h){fe} ∣ → ∣ 𝑩 ∣
+  φ : ∣ (𝑨 [ 𝑩 ]/ker h ↾ fe) ∣ → ∣ 𝑩 ∣
   φ a = ∣ h ∣ ⌞ a ⌟
 
-  φhom : is-homomorphism ((𝑨 [ 𝑩 ]/ker h){fe}) 𝑩 φ
+  φhom : is-homomorphism (𝑨 [ 𝑩 ]/ker h ↾ fe) 𝑩 φ
   φhom 𝑓 𝒂 =  ∣ h ∣ ( (𝑓 ̂ 𝑨) (λ x → ⌞ 𝒂 x ⌟) ) ≡⟨ ∥ h ∥ 𝑓 (λ x → ⌞ 𝒂 x ⌟)  ⟩
              (𝑓 ̂ 𝑩) (∣ h ∣ ∘ (λ x → ⌞ 𝒂 x ⌟)) ≡⟨ ap (𝑓 ̂ 𝑩) (fe λ x → refl) ⟩
              (𝑓 ̂ 𝑩) (λ x → φ (𝒂 x))             ∎
@@ -99,16 +99,16 @@ Below we will prove that the homomorphism `φ`, whose existence we just proved, 
   →                       blk-uip ∣ 𝑨 ∣ ∣ kercon 𝑩{fe}h ∣
 
   → Epic ∣ h ∣
-  → Σ f ꞉ epi ((𝑨 [ 𝑩 ]/ker h){fe}) 𝑩 , (∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩{fe}h ∣) × Monic ∣ f ∣ × is-embedding ∣ f ∣
+  → Σ f ꞉ epi (𝑨 [ 𝑩 ]/ker h ↾ fe) 𝑩 , (∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩{fe}h ∣) × Monic ∣ f ∣ × is-embedding ∣ f ∣
 
  FirstIsoTheorem|Set 𝑨 𝑩 h pe fe feww Bset buip hE = (fmap , fhom , fepic) , refl , (snd ∥ FHT ∥)
   where
   FHT = FirstHomTheorem|Set 𝑨 𝑩 h pe fe Bset buip  -- (φ , φhom) , φcom , φmon , φemb
 
-  fmap : ∣ (𝑨 [ 𝑩 ]/ker h) {fe} ∣ → ∣ 𝑩 ∣
+  fmap : ∣ 𝑨 [ 𝑩 ]/ker h ↾ fe ∣ → ∣ 𝑩 ∣
   fmap = fst ∣ FHT ∣
 
-  fhom : is-homomorphism ((𝑨 [ 𝑩 ]/ker h){fe}) 𝑩 fmap
+  fhom : is-homomorphism (𝑨 [ 𝑩 ]/ker h ↾ fe) 𝑩 fmap
   fhom = snd ∣ FHT ∣
 
   fepic : Epic fmap
@@ -130,7 +130,7 @@ Now we prove that the homomorphism `φ`, whose existence is guaranteed by `First
 
 module _ {𝓤 𝓦 : Universe}{fe : dfunext 𝓥 𝓦}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) where
 
- NoetherHomUnique : (f g : hom ((𝑨 [ 𝑩 ]/ker h) {fe}) 𝑩)
+ NoetherHomUnique : (f g : hom (𝑨 [ 𝑩 ]/ker h ↾ fe) 𝑩)
   →                 ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩 {fe} h ∣ → ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker 𝑩{fe} h ∣
   →                 ∀ a  →  ∣ f ∣ a ≡ ∣ g ∣ a
 
@@ -144,7 +144,7 @@ If, in addition, we postulate extensionality of functions defined on the domain 
 
 \begin{code}
 
- fe-NoetherHomUnique : {fuww : funext (𝓤 ⊔ 𝓦 ⁺) 𝓦}(f g : hom ((𝑨 [ 𝑩 ]/ker h){fe}) 𝑩)
+ fe-NoetherHomUnique : {fuww : funext (𝓤 ⊔ 𝓦 ⁺) 𝓦}(f g : hom (𝑨 [ 𝑩 ]/ker h ↾ fe) 𝑩)
   →  ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩{fe} h ∣  →  ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker 𝑩{fe} h ∣  →  ∣ f ∣ ≡ ∣ g ∣
 
  fe-NoetherHomUnique {fuww} f g hfk hgk = fuww (NoetherHomUnique f g hfk hgk)
@@ -155,7 +155,7 @@ The proof of `NoetherHomUnique` goes through for the special case of epimorphism
 
 \begin{code}
 
- NoetherIsoUnique : (f g : epi ((𝑨 [ 𝑩 ]/ker h){fe}) 𝑩)
+ NoetherIsoUnique : (f g : epi (𝑨 [ 𝑩 ]/ker h ↾ fe) 𝑩)
   →                 ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker 𝑩{fe} h ∣ → ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker 𝑩 {fe} h ∣
   →                 ∀ a → ∣ f ∣ a ≡ ∣ g ∣ a
 

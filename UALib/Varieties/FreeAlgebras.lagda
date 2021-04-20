@@ -170,7 +170,7 @@ We now define the algebra `𝔽`, which plays the role of the free algebra, alon
 \begin{code}
 
  𝔽 : Algebra 𝓕⁺ 𝑆
- 𝔽 = ((𝑻 X) [ ℭ ]/ker homℭ){fe 𝓥 𝓕}
+ 𝔽 = (𝑻 X) [ ℭ ]/ker homℭ ↾ fe 𝓥 𝓕
 
  epi𝔽 : epi (𝑻 X) 𝔽
  epi𝔽 = πker ℭ {fe 𝓥 𝓕} homℭ
@@ -350,7 +350,7 @@ Finally we come to one of the main theorems of this module; it asserts that ever
 
   where
 
-  𝔽≤ℭ : (((𝑻 X) [ ℭ ]/ker homℭ){fe 𝓥 𝓕}) ≤ ℭ
+  𝔽≤ℭ : ((𝑻 X) [ ℭ ]/ker homℭ ↾ fe 𝓥 𝓕) ≤ ℭ
   𝔽≤ℭ = FirstHomCorollary|Set (𝑻 X) ℭ homℭ pe (fe 𝓥 (ov 𝓤)) Cset Keruip
 
 \end{code}

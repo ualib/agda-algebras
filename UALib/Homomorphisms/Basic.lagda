@@ -155,14 +155,14 @@ With this congruence we construct the corresponding quotient, along with some sy
  kerquo fe {𝑩} h = 𝑨 ╱ (kercon 𝑩 {fe} h)
 
 
-_[_]/ker_ : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩){fe : dfunext 𝓥 𝓦} → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
-(𝑨 [ 𝑩 ]/ker h){fe} = kerquo fe {𝑩} h
+_[_]/ker_↾_ : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → hom 𝑨 𝑩 → dfunext 𝓥 𝓦 → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
+𝑨 [ 𝑩 ]/ker h ↾ fe = kerquo fe {𝑩} h
 
-infix 60 _[_]/ker_
+infix 60 _[_]/ker_↾_
 
 \end{code}
 
-Thus, given `h : hom 𝑨 𝑩`, we can construct the quotient of `𝑨` modulo the kernel of `h`, and the syntax for this quotient in the [UALib][] is `𝑨 [ 𝑩 ]/ker h`.
+Thus, given `h : hom 𝑨 𝑩`, we can construct the quotient of `𝑨` modulo the kernel of `h`, and the syntax for this quotient in the [UALib][] is `𝑨 [ 𝑩 ]/ker h ↾ fe`.
 
 
 
@@ -194,7 +194,7 @@ We combine the foregoing to define a function that takes 𝑆-algebras `𝑨` an
 
 \begin{code}
 
- πker : (𝑩 : Algebra 𝓦 𝑆){fe : dfunext 𝓥 𝓦}(h : hom 𝑨 𝑩) → epi 𝑨 ((𝑨 [ 𝑩 ]/ker h){fe})
+ πker : (𝑩 : Algebra 𝓦 𝑆){fe : dfunext 𝓥 𝓦}(h : hom 𝑨 𝑩) → epi 𝑨 (𝑨 [ 𝑩 ]/ker h ↾ fe)
  πker 𝑩 {fe} h = πepi (kercon 𝑩 {fe} h)
 
 \end{code}
