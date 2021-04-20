@@ -28,9 +28,8 @@ module _ {𝓦 𝓤 : Universe} where
 
  record IsCongruence (𝑨 : Algebra 𝓤 𝑆)(θ : Rel ∣ 𝑨 ∣ 𝓦) : ov 𝓦 ⊔ 𝓤 ̇  where
   constructor mkcon
-  field
-   is-equivalence : IsEquivalence θ
-   is-compatible : compatible 𝑨 θ
+  field       is-equivalence : IsEquivalence θ
+              is-compatible  : compatible 𝑨 θ
 
  Con : (𝑨 : Algebra 𝓤 𝑆) → 𝓤 ⊔ ov 𝓦 ̇
  Con 𝑨 = Σ θ ꞉ ( Rel ∣ 𝑨 ∣ 𝓦 ) , IsCongruence 𝑨 θ

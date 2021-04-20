@@ -3,7 +3,7 @@
 %%% mode: latex
 %%% TeX-engine: 'xetex
 %%% End:
-% \subsubsection{Motivation}\label{sec:motivation-1}
+\subsubsection*{Motivation} %\label{sec:motivation-1}
 In set theory, an \ab n-ary relation on a set \ab{A} is a subset of the \ab n-fold product \ab{A} \ad × \as ⋯ \ad × \ab A. We could try to model these as predicates over a product type representing \ab{A} \ad × \as ⋯ \ad × \ab A, or as relations of type \ab{A} \as → \ab A \as → \as ⋯ \as → \ab A \as → \ab 𝓦\af ̇ (for some universe \ab 𝓦). To implement such types requires knowing the arity in advance, and then form an \ab n-fold product or \ab n-fold arrow. It turns out to be both easier and more general if we define an arity type \ab{I}~\as :~\ab 𝓥\af ̇ , and define the type representing \ab{I}-ary relations on \ab{A} as the function type (\ab{I} \as → \ab A) \as → \ab 𝓦\af ̇. Then, if we happen to be interested in \ab n-ary relations for some natural number \ab{n}, we could take \ab{I} to be the \ab n-element type \ad{Fin}~\ab n,~\cite{agda-fin}.
 
 Below we will define \af{ContRel} to be the type (\ab{I}~\as →~\ab A)~\as →~\ab 𝓦\af ̇ and we will call this the type of \defn{continuous relations}. This generalizes the discrete relations we defined in \ualibhtml{Relations.Discrete} (unary, binary, etc.) since continuous relations can be of arbitrary arity.  They are not completely general, however, since they are defined over a single type. Said another way, these are ``single-sorted'' relations. We will remove this limitation when we define the type of \emph{dependent continuous relations}. Just as \af{Rel} \ab A \ab 𝓦 was the single-sorted special case of the multisorted \af{REL} \ab A \ab B \ab 𝓦 type, so too will \af{ContRel} \ab I \ab A \ab 𝓦 be the single-sorted version of dependent continuous relations. The latter will represent relations that not only have arbitrary arities, but also are defined over arbitrary families of types.
@@ -11,10 +11,12 @@ Below we will define \af{ContRel} to be the type (\ab{I}~\as →~\ab A)~\as →~
 To be more concrete, given an arbitrary family \ab{A}~\as :~\ab I~\as →~\ab 𝓤\af ̇ of types, we may have a relation from \ab{A}~\ab i to \ab{A}~\ab j to \ab{A}~\ab k to $\ldots$, where the collection represented by the indexing type \ab I might not even be enumerable.\footnote{\label{uncountable}Because the collection represented by the indexing type \ab I might not even be enumerable, technically speaking, instead of ``\ab{A} \ab i to \ab{A} \ab j to \ab{A} \ab k to $\ldots$,'' we should have written something like ``$\mathsf{\af{TO}}$ (\abt{i}{I}) , \ab{A} \ab i.''}
 We will refer to such relations as \defn{dependent continuous relations} (or \defn{dependent relations}) because the definition of a type that represents them requires dependent types. The \af{DepRel} type that we define below manifests this completely general notion of relation.
 
-\paragraph*{Continuous relation type} %\label{continuous-relation-types}
+\subsubsection*{Continuous and dependent relation types} %\label{continuous-relation-types}
 
-We now define the type \af{ContRel} which represents predicates of arbitrary arity over a single type \ab{A}. We call this the type of \defn{continuous relations}.\footnote{%
-For consistency and readability, throughout the \ualib we reserve two universe variables for special purposes: 𝓞 is reserved for types representing \emph{operation symbols}; 𝓥 is reserved for types representing \emph{arities} of relations or operations (see \ualibhtml{Algebras.Signatures}).}
+Here we define the types \af{ContRel} and \af{DepRel}. The first of these represents predicates of arbitrary arity over a single type \ab{A}; we call these \defn{continuous relations}.\footnote{%
+For consistency and readability, throughout the \ualib we reserve two universe variables for special purposes: 𝓞 is reserved for types representing \emph{operation symbols}; 𝓥 is reserved for types representing \emph{arities} of
+relations or operations (see \ualibhtml{Algebras.Signatures}).}
+To define the type \af{DepRel} of \defn{dependent relations}, we exploit the full power of dependent types to provide a completely general relation type.
 \ccpad
 \begin{code}%
 \>[0]\AgdaFunction{ContRel}\AgdaSpace{}%
@@ -49,9 +51,50 @@ For consistency and readability, throughout the \ualib we reserve two universe v
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{̇}}\<%
 \end{code}
+\scpad
+\begin{code}%
+\>[0]\AgdaFunction{DepRel}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{I}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaGeneralizable{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{I}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Universe}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaGeneralizable{𝓥}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaGeneralizable{𝓤}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\\
+\>[0]\AgdaFunction{DepRel}\AgdaSpace{}%
+\AgdaBound{I}\AgdaSpace{}%
+\AgdaBound{𝒜}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{Π}\AgdaSpace{}%
+\AgdaBound{𝒜}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝓦}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}}\<%
+\end{code}
 \ccpad
-% \subsubsection{Compatibility with continuous relations}\label{compatibility-with-continuous-relations}
-Next we present types that are useful for asserting and proving facts about the compatibility of functions with continuous relations. The first is an \defn{evaluation} function which ``lifts'' an \ab I-ary relation to an (\ab I~\as →~\ab J)-ary relation. The lifted relation will relate an \ab I-tuple of \ab J-tuples when the ``\ab I-slices'' (or ``rows'') of the \ab J-tuples belong to the original relation. The second definition is a type that represents compatibility of an operation with a continuous relation. (We'll dissect these definitions below.)
+Here, the tuples of a relation of type \af{DepRel}~\ab I~\ab 𝒜~\ab 𝓦 will inhabit the dependent function type \ab 𝒜~\as :~\ab I~\as →~\ab 𝓤\af ̇, where the codomain may depend on the input coordinate \ab i~\as :~\ab I of the domain. Heuristically, we can think of an inhabitant of \af{DepRel}~\ab I~\ab 𝒜~\ab 𝓦 as a relation from \ab 𝒜~\ab i to \ab 𝒜~\ab j to \ab 𝒜~\ab k to …. (This is only a rough heuristic since \ab I could denote an uncountable collection.\cref{uncountable}
+
+
+
+\paragraph*{Compatibility with general relations}
+It will be helpful to have functions that make it easy to assert that a given operation is compatibile with a given relation. The following functions serve this purpose.
 \ccpad
 \begin{code}%
 % \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -154,9 +197,13 @@ Next we present types that are useful for asserting and proving facts about the 
 \AgdaBound{i}\AgdaSymbol{)))}\<%
 \end{code}
 \ccpad
+ The first of these is an \defn{evaluation} function which ``lifts'' an \ab I-ary relation to an (\ab I~\as →~\ab J)-ary relation. The lifted relation will relate an \ab I-tuple of \ab J-tuples when the ``\ab I-slices'' (or ``rows'') of the \ab J-tuples belong to the original relation. The second definition denotes compatibility of an operation with a continuous relation.
 % In the definition of \af{cont-compatible-fun}, we let Agda infer the type \ab{I}
 % \as → (\ab J \as → \ab A) of \ab{𝒶}.
-To readers who find the syntax of the last two definitions nauseating, we recommend focusing on the semantics. First, internalize the fact that \ab 𝒶~\as :~\ab I~\as →~\ab J~\as →~\ab A denotes an \ab{I}-tuple of \ab{J}-tuples of inhabitants of \ab{A}. Next, recall that a continuous relation \ab{R} represents a certain collection of \ab{I}-tuples. Specifically, if \ab x~\as :~\ab I~\as →~\ab A is an \ab{I}-tuple, then \ab{R}~\ab x denotes the assertion that ``\ab{x} belongs to \ab{R}'' or ``\ab{x} satisfies \ab{R}.''  For each continuous relation \ab{R}, the type \af{eval-cont-rel}~\ab R represents a certain collection of \ab{I}-tuples of \ab{J}-tuples, namely, the tuples \ab{𝒶}~\as :~\ab I~\as →~\ab J~\as →~\ab A for which \af{eval-cont-rel}~\ab R~\ab 𝒶 holds. For simplicity, pretend that \ab{J} is a finite set, say, \{1, 2, ...,~\ab J\}, so that we can write down a couple of the \ab{J}-tuples as columns. For example, here are the \ab i-th and \ab k-th columns (for some \ab i~\ab k~\as :~\ab I).
+
+Readers who find the syntax of the last two definitions nauseating might be helped by an explication of the semantics of these definitions.  First, internalize the fact that \ab 𝒶~\as :~\ab I~\as →~\ab J~\as →~\ab A denotes an \ab{I}-tuple of \ab{J}-tuples of inhabitants of \ab{A}. Next, recall that a continuous relation \ab{R} denotes a certain collection of \ab{I}-tuples (if \ab x~\as :~\ab I~\as →~\ab A, then \ab{R}~\ab x asserts that \ab{x} ``belongs to'' or ``satisfies'' \ab{R}).  For such \ab{R}, the type \af{eval-cont-rel}~\ab R represents a certain collection of \ab{I}-tuples of \ab{J}-tuples, namely, the tuples \ab{𝒶}~\as :~\ab I~\as →~\ab J~\as →~\ab A for which \af{eval-cont-rel}~\ab R~\ab 𝒶 holds.
+
+For simplicity, pretend for a moment that \ab{J} is a finite set, say, \{1, 2, ...,~\ab J\}, so that we can write down a couple of the \ab{J}-tuples as columns. For example, here are the \ab i-th and \ab k-th columns (for some \ab i~\ab k~\as :~\ab I).
 ~
 \vskip-6mm
 ~
@@ -171,56 +218,14 @@ To readers who find the syntax of the last two definitions nauseating, we recomm
 % ~
 % \vskip-5mm
 % ~
-Now \af{eval-cont-rel}~\ab R~\ab 𝒶 is defined by \as{∀}~\ab j~\as →~\ab R~(\as λ~\ab i~\as →~(\ab 𝒶~\ab i)~\ab j) which represents the assertion that each row of the \ab{I} columns shown above %(which evidently is an \ab{I}-tuple)
+Now \af{eval-cont-rel}~\ab R~\ab 𝒶 is defined by \as{∀}~\ab j~\as →~\ab R~(\as λ~\ab i~\as →~(\ab 𝒶~\ab i)~\ab j) which asserts that each row of the \ab{I} columns shown above %(which evidently is an \ab{I}-tuple)
 belongs to the original relation \ab{R}. Finally, \af{cont-compatible-op} takes a \ab{J}-ary operation on \ab{A}, say, \ab 𝑓~\as :~\AgdaFunction{Op}~\AgdaBound{J}~\AgdaBound{A}, and an \ab I-tuple \ab{𝒶}~\ab i~\as :~\ab J~\as →~\ab A of \ab{J}-tuples, and determines whether the \ab I-tuple \as λ~\ab i~\as →~\ab 𝑓~(\ab 𝒶~\ab i) belongs to \ab R.
 % Finally, digest all the types involved in these definitions and note how nicely they align (as they must if type-checking is to succeed!). For example, \ab 𝒶~\as :~\ab I~\as →~\ab J~\as →~\ab A is precisely the type on which the relation \af{eval-cont-rel}~\ab R is defined.
 
-\paragraph*{Dependent relation type} %\label{dependent-relations}
-In this section we exploit the power of dependent types to define a completely general relation type. Specifically, we let the tuples inhabit a dependent function type, where the codomain may depend upon the input coordinate \ab i \as : \ab I of the domain. 
-Heuristically, think of the inhabitants of the following type as relations from \ab{A} \ab{i} to \ab{A} \ab{j} to \ab{A} \ab{k} to …. (This is only an heuristic since \ab I can represent an uncountable collection.\cref{uncountable})
-\ccpad
-\begin{code}%
-\>[0]\AgdaFunction{DepRel}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{I}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaGeneralizable{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{I}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaGeneralizable{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaGeneralizable{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaGeneralizable{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-\>[0]\AgdaFunction{DepRel}\AgdaSpace{}%
-\AgdaBound{I}\AgdaSpace{}%
-\AgdaBound{𝒜}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{Π}\AgdaSpace{}%
-\AgdaBound{𝒜}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\end{code}
-\ccpad
-We call \af{DepRel} the type of \defn{dependent relations}.
 
 % \subsubsection{Compatibility with dependent relations}\label{compatibility-with-dependent-relations}
 
-Above we saw lifts of continuous relations and what it means for such relations to be compatible with functions. We conclude this module by defining the (only slightly more complicated) lift of dependent relations, and the type that represents compatibility of a tuple of operations with a dependent relation. Here we assume \ab I~\ab J~\as :~\AgdaGeneralizable{𝓥}\AgdaOperator{\AgdaFunction{̇}}
+We conclude this section by defining the (only slightly more complicated) lift of dependent relations, and the type that represents compatibility of a tuple of operations with a dependent relation. Here we assume \ab I~\ab J~\as :~\AgdaGeneralizable{𝓥}\AgdaOperator{\AgdaFunction{̇}}
 and \ab 𝒜~\as :~\ab I~\as →~\AgdaGeneralizable{𝓤}\AgdaOperator{\AgdaFunction{̇}}.
 \ccpad
 \begin{code}%

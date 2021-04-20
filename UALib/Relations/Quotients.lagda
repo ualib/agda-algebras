@@ -22,7 +22,7 @@ open import Relations.Continuous public
 <!-- **N.B.**. We import [Relations.Discrete][] since we don't yet need any of the types defined in the [Relations.Continuous][] module. -->
 
 
-#### <a id="properties-of-binary-relations">Properties of binary relations</a>
+#### <a id="equivalence-classes">Equivalence relations</a>
 
 Let `𝓤 : Universe` be a universe and `A : 𝓤 ̇` a type.  In [Relations.Discrete][] we defined a type representing a binary relation on A.  In this module we will define types for binary relations that have special properties. The most important special properties of relations are the ones we now define.
 
@@ -62,8 +62,6 @@ Thus, if `R : Rel A 𝓦`, then `is-subsingleton-valued R` is the assertion that
 In the [Relations.Truncation][] module we introduce a number of similar but more general types used in the [Agda UALib][] to represent *uniqueness-of-proofs principles* for relations of arbitrary arity over arbitrary types.
 
 
-#### <a id="equivalence-classes">Equivalence relations</a>
-
 A binary relation is called a *preorder* if it is reflexive and transitive. An *equivalence relation* is a symmetric preorder. We define the property of being an equivalence relation as the following record type.
 
 \begin{code}
@@ -86,8 +84,7 @@ And we define the type of equivalence relations over a given type `A` as follows
 
 Thus, if we have `(R ,  p) : Equivalence A`, then `R` denotes a binary relation over `A` and `p` is of record type `IsEquivalence R` with fields containing the three proofs showing that `R` is an equivalence relation.
 
-
-An easy first example of an equivalence relation is the kernel of any function. We prove that such a kernel is an equivalence relation on the domain of the function as follows.
+A prominent example of an equivalence relation is the kernel of any function.
 
 \begin{code}
 
@@ -98,7 +95,7 @@ An easy first example of an equivalence relation is the kernel of any function. 
 
 #### <a id="equivalence-classes">Equivalence classes (blocks)</a>
 
-If `R` is an equivalence relation on `A`, then for each `u : A`, there is an *equivalence class* (or *equivalence block*, or `R`-*block*) containing `u`, which we denote and define by `[ u ] := {v : A | R u v}`.
+If `R` is an equivalence relation on `A`, then for each `u : A` there is an *equivalence class* (or *equivalence block*, or `R`-*block*) containing `u`, which we denote and define by `[ u ] := {v : A | R u v}`.
 
 \begin{code}
 
@@ -156,7 +153,7 @@ Dually, the next type provides an *elimination rule*.<sup>[2](Relations.Quotient
 
 Here `C` is a predicate and `p` is a proof of `C ≡ [ a ] R`.
 
-Later we will use the following subset inclusions and pseudo-equality when working with the quotient types defined above.
+It will be convenient to have the following subset inclusion lemmas on hand when working with quotient types.
 
 \begin{code}
 
@@ -169,12 +166,9 @@ module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{x y : A}{R : Rel A 𝓦} where
  /-supset : IsEquivalence R → R x y →  [ y ]{R} ⊆ [ x ]{R}
  /-supset Req Rxy {z} Ryz = (trans Req) Rxy Ryz
 
- -- /-≐ : IsEquivalence R → R x y →  [ x ]{R} ≐ [ y ]{R}
- -- /-≐ Req Rxy = /-subset Req Rxy , /-supset Req Rxy
-
 \end{code}
 
-(An example application of `/-≐` is the `class-extensionality` lemma in the [Relations.Truncation] module.)
+An example application of these is the `block-ext` type in the [Relations.Extensionality] module.
 
 --------------------------------------
 

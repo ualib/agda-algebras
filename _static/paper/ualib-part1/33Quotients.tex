@@ -3,8 +3,9 @@
 %%% mode: latex
 %%% TeX-engine: 'xetex
 %%% End:
-% \paragraph*{Properties of binary relations}
+% \subsection*{Properties of binary relations}
 %\label{props-of-bin-rels}
+\subsubsection*{Equivalence relations} %\label{equivalence-classes}
 In the \ualibhtml{Relations.Discrete} module we defined types for representing and reasoning about binary relations on \ab A. In this module we will define types for binary relations that have special properties. The most important special properties of relations are the ones we now define.
 \ccpad
 \begin{code}%
@@ -210,7 +211,6 @@ Thus, if \ab R \as : \af{Rel} \ab A \ab 𝓦, then \AgdaFunction{is-subsingleton
 
 
 
-\paragraph*{Equivalence relations} %\label{equivalence-classes}
 A binary relation is called a \defn{preorder} if it is reflexive and transitive, and an \defn{equivalence relation} is a symmetric preorder. We represent the property of being an equivalence relation by the following record type.
 \ccpad
 \begin{code}%
@@ -278,7 +278,8 @@ The type of equivalence relations is then defined as follows.
 \ccpad
 Thus, if we have (\ab R , \ab p)~\as :~\af{Equivalence}~\ab A, then \ab R denotes a binary relation over \ab A and \ab p is of record type \AgdaRecord{IsEquivalence} \ab R whose fields contain the three proofs required to show that \ab R is an equivalence relation.
 
-An easy first example of an equivalence relation is the kernel of any function. We prove that such a kernel is an equivalence relation on the domain of the function as follows.
+A prominent example of an equivalence relation is the kernel of any function.
+ % We prove that such a kernel is an equivalence relation on the domain of the function as follows.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -331,9 +332,9 @@ An easy first example of an equivalence relation is the kernel of any function. 
 
 
 
-\paragraph*{Equivalence classes (blocks)} %\label{equivalence-classes-1}
+\subsubsection*{Quotients} %\label{equivalence-classes-1}
 
-If \ab R is an equivalence relation on \ab A, then for each \ab u~\as :~\ab A, there is an \defn{equivalence class} (or \defn{equivalence block}, or \ab R-\defn{block}) containing \ab u, which we denote by \af [~\ab u~\af ]~\as :=~\{\ab v~\as :~\ab A~|~\ab R~\ab u~\ab v\}.  We call this the \ab R-\defn{block containing} \ab 𝑎.
+If \ab R is an equivalence relation on \ab A, then for each \ab u~\as :~\ab A there is an \defn{equivalence class} (or \defn{equivalence block}, or \ab R-\defn{block}) containing \ab u, which we denote by \af [~\ab u~\af ]~\as :=~\{\ab v~\as :~\ab A~|~\ab R~\ab u~\ab v\}.  We call this the \ab R-\defn{block containing} \ab 𝑎.
 \ccpad
 \begin{code}%
 \>[0][@{}l@{\AgdaIndent{1}}]%
@@ -366,7 +367,6 @@ If \ab R is an equivalence relation on \ab A, then for each \ab u~\as :~\ab A, t
 \end{code}
 \ccpad
 Thus, \ab v~\as ∈~\af [~\ab u~\af ] if and only if \ab R~\ab u~\ab v, as desired.  We often refer to \af [~\ab u~\af ] as the \ab R-\defn{block containing} \ab u.
-
 A predicate \ab C over \ab A is an \ab R-block if and only if \ab C~\ad ≡~\af [~\ab u~\af ] for some \ab u~\as :~\ab A.  We represent this characterization of an \ab R-block as follows.
 \ccpad
 \begin{code}%
@@ -534,34 +534,57 @@ This serves as a kind of \emph{introduction rule}.  Dually, the next type provid
 \AgdaBound{a}\<%
 \end{code}
 \ccpad
-Later we will need the following tools for working with the quotient types defined above.
-\ccpad
-\begin{code}%
-\>[0]\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+It will be convenient to have the following subset inclusion lemmas on hand when
+working with quotient types. (Assume a context including
+\AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaBound{𝓦}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
+\AgdaPostulate{Universe},
+% \AgdaSymbol{\}\{}
+\AgdaBound{A}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{x}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{̇}},
+% \AgdaSymbol{\}\{}
+\AgdaBound{x}\AgdaSpace{}%
 \AgdaBound{y}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{A}\AgdaSymbol{\}\{}\AgdaBound{R}\AgdaSpace{}%
+\AgdaBound{A},
+% \AgdaSymbol{\}\{}
+and
+\AgdaBound{R}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Rel}\AgdaSpace{}%
 \AgdaBound{A}\AgdaSpace{}%
-\AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
+\AgdaBound{𝓦}.)
+\ccpad
+\begin{code}%
+% \>[0]\AgdaKeyword{module}\AgdaSpace{}%
+% \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaBound{𝓦}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{A}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\{}\AgdaBound{x}\AgdaSpace{}%
+% \AgdaBound{y}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaBound{A}\AgdaSymbol{\}\{}\AgdaBound{R}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaFunction{Rel}\AgdaSpace{}%
+% \AgdaBound{A}\AgdaSpace{}%
+% \AgdaBound{𝓦}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaKeyword{where}\<%
+% \\
 %
-\\[\AgdaEmptyExtraSkip]%
+% \\[\AgdaEmptyExtraSkip]%
+% \>[0][@{}l@{\AgdaIndent{0}}]%
+% \>[1]\AgdaKeyword{open}\AgdaSpace{}%
+% \AgdaModule{IsEquivalence}\<%
+% \\
+% %
 \>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaModule{IsEquivalence}\<%
-\\
-%
 \>[1]\AgdaFunction{/-subset}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaRecord{IsEquivalence}\AgdaSpace{}%
@@ -628,39 +651,41 @@ Later we will need the following tools for working with the quotient types defin
 \AgdaBound{Req}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{Rxy}\AgdaSpace{}%
 \AgdaBound{Ryz}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{/-≐}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaRecord{IsEquivalence}\AgdaSpace{}%
-\AgdaBound{R}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaBound{R}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
-\AgdaSymbol{→}%
-\>[34]\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
-\AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
-\AgdaBound{R}%
-\>[43]\AgdaOperator{\AgdaFunction{≐}}%
-\>[46]\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
-\AgdaBound{y}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
-\AgdaBound{R}\<%
-\\
-%
-\>[1]\AgdaFunction{/-≐}\AgdaSpace{}%
-\AgdaBound{Req}\AgdaSpace{}%
-\AgdaBound{Rxy}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{/-subset}\AgdaSpace{}%
-\AgdaBound{Req}\AgdaSpace{}%
-\AgdaBound{Rxy}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaFunction{/-supset}\AgdaSpace{}%
-\AgdaBound{Req}\AgdaSpace{}%
-\AgdaBound{Rxy}\<%
+% \\
+% %
+% \\[\AgdaEmptyExtraSkip]%
+% %
+% \>[1]\AgdaFunction{/-≐}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaRecord{IsEquivalence}\AgdaSpace{}%
+% \AgdaBound{R}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaBound{R}\AgdaSpace{}%
+% \AgdaBound{x}\AgdaSpace{}%
+% \AgdaBound{y}\AgdaSpace{}%
+% \AgdaSymbol{→}%
+% \>[34]\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
+% \AgdaBound{x}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
+% \AgdaBound{R}%
+% \>[43]\AgdaOperator{\AgdaFunction{≐}}%
+% \>[46]\AgdaOperator{\AgdaFunction{[}}\AgdaSpace{}%
+% \AgdaBound{y}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
+% \AgdaBound{R}\<%
+% \\
+% %
+% \>[1]\AgdaFunction{/-≐}\AgdaSpace{}%
+% \AgdaBound{Req}\AgdaSpace{}%
+% \AgdaBound{Rxy}\AgdaSpace{}%
+% \AgdaSymbol{=}\AgdaSpace{}%
+% \AgdaFunction{/-subset}\AgdaSpace{}%
+% \AgdaBound{Req}\AgdaSpace{}%
+% \AgdaBound{Rxy}\AgdaSpace{}%
+% \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+% \AgdaFunction{/-supset}\AgdaSpace{}%
+% \AgdaBound{Req}\AgdaSpace{}%
+% \AgdaBound{Rxy}\<%
 \end{code}
+\ccpad
+An example application of these is the \af{block-ext} type in the \ualibhtml{Relations.Extensionality} module.

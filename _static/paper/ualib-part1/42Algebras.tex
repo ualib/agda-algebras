@@ -474,7 +474,7 @@ See \href{https://ualib.gitlab.io/Varieties.EquationalLogic.html\#lift-invarianc
 
 
 
-\paragraph*{Compatibility}\label{compatibility-of-binary-relations}
+\paragraph*{Compatibility of binary relations}\label{compatibility-of-binary-relations}
 
 We now define the function \af{compatible} so that, if \ab{𝑨} is an algebra and \ab{R} a binary relation, then \af{compatible} \ab 𝑨 \ab R will denote the assertion that \ab{R} is \emph{compatible} with all basic operations of \ab{𝑨}; that is, for every operation symbol \ab{𝑓} \as : \af ∣ \ab 𝑆 \af ∣ and all pairs \ab u \ab v~\as :~\af{∥} \ab 𝑆 \af{∥} \ab 𝑓 \as → \af ∣ \ab 𝑨 \af ∣ of tuples from the domain of \ab 𝑨, the following implication holds:\\[-8pt]
 
@@ -522,8 +522,8 @@ Using the relation |: (defined in \S\ref{sec:discrete-relations}) this implicati
 \AgdaFunction{|:}\AgdaSpace{}%
 \AgdaBound{R}\<%
 \end{code}
-\scpad
-% \paragraph*{Compatibility of continuous relations★}
+
+\paragraph*{Compatibility of continuous relations*\protect\cref{starred}}
 
 In the \ualibhtml{Relations.Continuous} module we defined a function called \af{cont-compatible-op} to represent the assertion that a given continuous relation is compatible with a given operation. With that, it is easy to define a function, which we call \af{cont-compatible}, representing compatibility of a continuous relation with all operations of an algebra. Similarly, we define the analogous \af{dep-compatible} function for the (even more general)
 type of dependent relations.

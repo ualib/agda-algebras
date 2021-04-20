@@ -9,7 +9,10 @@ author: William DeMeo
 
 This section presents the [Relations.Truncation][] module of the [Agda Universal Algebra Library][].
 
-Here we discuss *truncation* and *h-sets* (which we just call *sets*).  We first give a brief discussion of standard notions of trunction, and then we describe a viewpoint which seems useful for formalizing mathematics in Agda. Readers wishing to learn more about truncation and proof-relevant mathematics should consult other sources, such as [Section 34](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#truncation) and [35](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#resizing) of [Martín Escardó's notes][], or [Guillaume Brunerie, Truncations and truncated higher inductive types](https://homotopytypetheory.org/2012/09/16/truncations-and-truncated-higher-inductive-types/), or Section 7.1 of the [HoTT book][].
+We start with a brief discussion of standard notions of *truncation*, *h-sets* (which we just call *sets*), and the *uniqueness of identity types* principle.
+We then prove that a monic function into a *set* is an embedding. The section concludes with a *uniqueness of identity proofs* principle for blocks of equivalence relations.
+
+Readers who want to learn more about "proof-relevant mathematics" and other concepts mentioned in this module may wish to consult other sources, such as [Section 34](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#truncation) and [35](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#resizing) of [Martín Escardó's notes][], or [Guillaume Brunerie, Truncations and truncated higher inductive types](https://homotopytypetheory.org/2012/09/16/truncations-and-truncated-higher-inductive-types/), or Section 7.1 of the [HoTT book][].
 
 \begin{code}
 
@@ -25,6 +28,8 @@ open import MGS-MLTT using (_⇔_) public
 
 #### <a id="uniqueness-of-identity-proofs">Uniqueness of identity proofs</a>
 
+This brief introduction is intended for novices; those already familiar with the concept of *truncation* and *uniqueness of identity proofs* may want to skip to the next subsection.
+
 In general, we may have many inhabitants of a given type, hence (via Curry-Howard) many proofs of a given proposition. For instance, suppose we have a type `A` and an identity relation `_≡₀_` on `A` so that, given two inhabitants of `A`, say, `a b : A`, we can form the type `a ≡₀ b`. Suppose `p` and `q` inhabit the type `a ≡₀ b`; that is, `p` and `q` are proofs of `a ≡₀ b`, in which case we write `p q : a ≡₀ b`. We might then wonder whether and in what sense are the two proofs `p` and `q` the equivalent.
 
 We are asking about an identity type on the identity type `≡₀`, and whether there is some inhabitant,
@@ -38,7 +43,7 @@ Now, perhaps we have two proofs, say, `r s : p ≡₁ q` that the proofs `p` and
 
 In [homotopy type theory](https://homotopytypetheory.org), a type `A` with an identity relation `≡₀` is called a *set* (or *0-groupoid*) if for every pair `x y : A` there is at most one proof of `x ≡₀ y`. In other words, the type `A`, along with it's equality type `≡₀`, form a *set* if for all `x y : A` there is at most one proof of `x ≡₀ y`.
 
-This notion is formalized in the [Type Topology][] library using the types `is-set` which is defined using the `is-subsingleton` type that we saw earlier ([Overture.Inverses][]) as follows.<sup>[1](Relations.Truncation.html#fn1)</sup>.
+This notion is formalized in the [Type Topology][] library, using the `is-subsingleton` type that we saw earlier ([Overture.Inverses][]), as follows.<sup>[1](Relations.Truncation.html#fn1)</sup>.
 
 \begin{code}
 
@@ -57,12 +62,9 @@ We will also need the function [to-Σ-≡](https://www.cs.bham.ac.uk/~mhe/HoTT-U
 
 \begin{code}
 
-module hide-to-Σ-≡ {𝓤 𝓦 : Universe} where
+module hide-to-Σ-≡ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : A → 𝓦 ̇} where
 
- to-Σ-≡ : {A : 𝓤 ̇ } {B : A → 𝓦 ̇ } {σ τ : Σ B}
-  →       Σ p ꞉ ∣ σ ∣ ≡ ∣ τ ∣ , (transport B p ∥ σ ∥) ≡ ∥ τ ∥
-  →       σ ≡ τ
-
+ to-Σ-≡ : {σ τ : Σ B} → Σ p ꞉ ∣ σ ∣ ≡ ∣ τ ∣ , (transport B p ∥ σ ∥) ≡ ∥ τ ∥ → σ ≡ τ
  to-Σ-≡ (refl {x = x} , refl {x = a}) = refl {x = (x , a)}
 
 open import MGS-Embeddings using (to-Σ-≡) public

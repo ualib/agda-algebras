@@ -34,31 +34,28 @@ We refer to such relations as *dependent continuous relations* (or *dependent re
 
 #### <a id="continuous-and-dependent-relations">Continuous and dependent relations</a>
 
-We now define the type `ContRel` which represents predicates of arbitrary arity over a single type `A`. We call this the type of *continuous relations*.<sup>[1](Relations.Continuous.html#fn1)</sup>)
+Here we define the types `ContRel` and `DepRel`. The first of these represents predicates of arbitrary arity over a single type `A`; we call these *continuous relations*.<sup>[1](Relations.Continuous.html#fn1)</sup>
+To define `DepRel`, the type of *dependent relations*, we exploit the full power of dependent types and provide a completely general relation type.
 
 \begin{code}
 
 ContRel : 𝓥 ̇ → 𝓤 ̇ → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
 ContRel I A 𝓦 = (I → A) → 𝓦 ̇
 
-\end{code}
-
-We now exploit the full power of dependent types to define a completely general relation type.  Specifically, we let the tuples inhabit a dependent function type `𝒜 : I → 𝓤 ̇`, where the codomain may depend upon the input coordinate `i : I` of the domain. Heuristically, think of the inhabitants of the following type as relations from `𝒜 i` to `𝒜 j` to `𝒜 k` to …. (This is only an heuristic since \ab I can represent an uncountable collection.\cref{uncountable}.<sup>[2](Relations.Continuous.html#fn2)</sup>)
-
-\begin{code}
-
 DepRel : (I : 𝓥 ̇) → (I → 𝓤 ̇) → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
 DepRel I 𝒜 𝓦 = Π 𝒜 → 𝓦 ̇
 
 \end{code}
 
-We call `DepRel` the type of *dependent relations*.
+Here, the tuples of a relation of type `DepRel I 𝒜 𝓦` will inhabit the dependent function type `𝒜 : I → 𝓤 ̇` (where the codomain may depend on the input coordinate `i : I` of the domain). Heuristically, we can think of an inhabitant of type `DepRel I 𝒜 𝓦` as a relation from `𝒜 i` to `𝒜 j` to `𝒜 k` to …. (This is only a rough heuristic since `I` could denote an uncountable collection.<sup>[2](Relations.Continuous.html#fn2)</sup>)
+
+
 
 
 
 #### <a id="compatibility-with-general-relations">Compatibility with general relations</a>
 
-We now define some functions that make it easy to assert that a given operation is compatible with a given relation.  The first is an *evaluation* function which "lifts" an `I`-ary relation to an `(I → J)`-ary relation. The lifted relation will relate an `I`-tuple of `J`-tuples when the "`I`-slices" (or "rows") of the `J`-tuples belong to the original relation.
+It will be helpful to have some functions that make it easy to assert that a given operation is compatible with a given relation.  The following functions serve this purpose.
 
 \begin{code}
 
@@ -72,7 +69,11 @@ module _ {I J : 𝓥 ̇} {A : 𝓤 ̇} where
 
 \end{code}
 
-To readers who find the syntax of the last two definitions nauseating, we recommend focusing on the semantics. First, internalize the fact that `𝒶 : I → J → A` denotes an `I`-tuple of `J`-tuples of inhabitants of `A`. Next, recall that a continuous relation `R` represents a certain collection of `I`-tuples. Specifically, if `x : I → A` is an `I`-tuple, then `R x` denotes the assertion that "`x` belongs to `R`" or "`x` satisfies `R`."  For each continuous relation `R`, the type `eval-cont-rel R` represents a certain collection of `I`-tuples of `J`-tuples, namely, the tuples `𝒶 : I → J → A` for which `eval-cont-rel R 𝒶` holds. For simplicity, pretend that `J` is a finite set, say, `{1, 2, ..., J}`, so that we can write down a couple of the `J`-tuples as columns. For example, here are the i-th and k-th columns (for some `i k : I`).
+The first of these is an *evaluation* function which "lifts" an `I`-ary relation to an `(I → J)`-ary relation. The lifted relation will relate an `I`-tuple of `J`-tuples when the "`I`-slices" (or "rows") of the `J`-tuples belong to the original relation. The second definition denotes compatibility of an operation with a continuous relation.
+
+Readers who find the syntax of the last two definitions nauseating might be helped by an explication of the semantics of these deifnitions. First, internalize the fact that `𝒶 : I → J → A` denotes an `I`-tuple of `J`-tuples of inhabitants of `A`. Next, recall that a continuous relation `R` denotes a certain collection of `I`-tuples (if `x : I → A`, then `R x` asserts that `x` "belongs to" or "satisfies" `R`).  For such `R`, the type `eval-cont-rel R` represents a certain collection of `I`-tuples of `J`-tuples, namely, the tuples `𝒶 : I → J → A` for which `eval-cont-rel R 𝒶` holds.
+
+For simplicity, pretend for a moment that `J` is a finite set, say, `{1, 2, ..., J}`, so that we can write down a couple of the `J`-tuples as columns. For example, here are the i-th and k-th columns (for some `i k : I`).
 
 ```
 𝒶 i 1      𝒶 k 1
@@ -82,7 +83,7 @@ To readers who find the syntax of the last two definitions nauseating, we recomm
 𝒶 i J      𝒶 k J
 ```
 
-Now `eval-cont-rel R 𝒶` is defined by `∀ j → R (λ i → 𝒶 i j)` which represents the assertion that each row of the `I` columns shown above belongs to the original relation `R`. Finally, `cont-compatible-op` takes a `J`-ary operation `𝑓 : Op J A` and an `I`-tuple `𝒶 : I → J → A` of `J`-tuples, and determines whether the `I`-tuple `λ i → 𝑓 (𝑎 i)` belongs to `R`.
+Now `eval-cont-rel R 𝒶` is defined by `∀ j → R (λ i → 𝒶 i j)` which asserts that each row of the `I` columns shown above belongs to the original relation `R`. Finally, `cont-compatible-op` takes a `J`-ary operation `𝑓 : Op J A` and an `I`-tuple `𝒶 : I → J → A` of `J`-tuples, and determines whether the `I`-tuple `λ i → 𝑓 (𝑎 i)` belongs to `R`.
 
 
 Above we saw lifts of continuous relations and what it means for such relations to be compatible with operations. We conclude this module by defining the (only slightly more complicated) lift of dependent relations, and the type that represents compatibility of a dependent relation with an operation.
