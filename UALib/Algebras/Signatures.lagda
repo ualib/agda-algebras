@@ -46,8 +46,7 @@ Here is how we could define the signature for monoids as a member of the type `S
 \begin{code}
 
 data monoid-op {𝓞 : Universe} : 𝓞 ̇ where
- e : monoid-op
- · : monoid-op
+ e : monoid-op; · : monoid-op
 
 open import MGS-MLTT using (𝟘; 𝟚)
 

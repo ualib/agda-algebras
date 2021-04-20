@@ -12,8 +12,6 @@ This is the [Algebras.Products][] module of the [Agda Universal Algebra Library]
 
 Notice that we begin this module by assuming a signature `𝑆 : Signature 𝓞 𝓥` which is then present and available throughout the module.
 
-**NOTATION**.  From now on, the remaining modules of the [UALib][] will assume universes 𝓞 and 𝓥, and a fixed signature type `𝑆 : Signature 𝓞 𝓥`.
-
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -26,7 +24,9 @@ open import Algebras.Algebras hiding (𝓞; 𝓥) public
 
 \end{code}
 
-We must import the `Signature` type from the [Algebras.Signatures][] module first, before the `module` line, so that we may use it to declare the signature `𝑆` as a parameter of the [Algebras.Products][] module.
+From now on, the modules of the [UALib][] will assume a fixed signature `𝑆 : Signature 𝓞 𝓥`.  Notice that we have to import the `Signature` type from [Algebras.Signatures][] before the `module` line so that we may declare the signature `𝑆` as a parameter of the [Algebras.Products][] module.
+
+Recall the informal definition of a *product* of `𝑆`-algebras. Given a type `I : 𝓘 ̇` and a family `𝒜 : I → Algebra 𝓤 𝑆`, the *product* `⨅ 𝒜` is the algebra whose domain is the Cartesian product `Π 𝑖 ꞉ I , ∣ 𝒜 𝑖 ∣` of the domains of the algebras in `𝒜`, and whose operations are defined as follows: if `𝑓` is a `J`-ary operation symbol and if `𝑎 : Π 𝑖 ꞉ I , J → 𝒜 𝑖` is an `I`-tuple of `J`-tuples such that `𝑎 𝑖` is a `J`-tuple of elements of `𝒜 𝑖` (for each `𝑖`), then `(𝑓 ̂ ⨅ 𝒜) 𝑎 := (i : I) → (𝑓 ̂ 𝒜 i)(𝑎 i)`.
 
 In the [UALib][] a *product of* 𝑆-*algebras* is represented by the following type.
 
@@ -97,7 +97,7 @@ Taking the product over the index type `ℑ` requires a function that maps an in
 \begin{code}
 
  𝔄 : ℑ → Algebra 𝓤 𝑆
- 𝔄 = λ (i : ℑ) → ∣ i ∣
+ 𝔄 i = ∣ i ∣
 
 \end{code}
 

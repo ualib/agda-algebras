@@ -58,114 +58,66 @@ For a fixed signature \ab{𝑆} \as : \af{Signature} \ab 𝓞 \ab 𝓥 and unive
 \ccpad
 To be more precise, we might call an inhabitant of this type an ``∞-algebra'' because its domain can be an arbitrary type, say, \abt{A}{𝓤} and need not be truncated at some level. (In particular, \ab{A} need not be a \emph{set}; see the discussion of sets in~\S~\ref{sec:trunc-sets-prop}.) We could then proceed to define the type of ``0-algebras'' as algebras whose domains are sets (which may be closer to what most of us have in mind when doing informal universal algebra). However, we have found that the domains of our algebras need to be sets in just a few places in the \ualib, and it seems preferable to work with general (∞-)algebras throughout and then assume \emph{uniqueness of identity proofs} (uip) explicitly and only where needed.  This makes any dependence on uip more transparent (which is also the reason \AgdaPragma{--without-K} appears at the top of every module in the \ualib).
 
-\paragraph*{Algebras as record types} %\label{algebras-as-record-types}
+% \paragraph*{Algebras as record types} %\label{algebras-as-record-types}
 
-Some people prefer to represent algebraic structures in type theory using records, and for those folks we offer the following (equivalent) definition.
-\ccpad
-\begin{code}%
-\>[0]\AgdaKeyword{record}\AgdaSpace{}%
-\AgdaRecord{algebra}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Universe}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝑆}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Signature}\AgdaSpace{}%
-\AgdaGeneralizable{𝓞}\AgdaSpace{}%
-\AgdaGeneralizable{𝓥}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓞}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
-\AgdaKeyword{where}\<%
-\\
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaKeyword{constructor}\AgdaSpace{}%
-\AgdaInductiveConstructor{mkalg}\<%
-\\
-%
-\>[1]\AgdaKeyword{field}\<%
-\\
-\>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaField{univ}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaBound{𝓤}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{̇}}\<%
-\\
-%
-\>[2]\AgdaField{op}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaSymbol{((}\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
-\AgdaBound{𝑆}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
-\AgdaBound{f}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaField{univ}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaField{univ}\<%
-\end{code}
-\ccpad
-This representation of algebras as inhabitants of a record type is equivalent to the representation using Sigma types in the sense that there is a bi-implication between the two representations. The proofs are immediate, so we omit them (see the \ualibhtml{Algebras.Algebras} module for details).
+% Some people prefer to represent algebraic structures in type theory using records, and for those folks we offer the following (equivalent) definition.
 % \ccpad
 % \begin{code}%
-% \>[1]\AgdaFunction{algebra→Algebra}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
+% \>[0]\AgdaKeyword{record}\AgdaSpace{}%
 % \AgdaRecord{algebra}\AgdaSpace{}%
-% \AgdaGeneralizable{𝓤}\AgdaSpace{}%
-% \AgdaBound{𝑆}\AgdaSpace{}%
-% \AgdaSymbol{→}\AgdaSpace{}%
-% \AgdaFunction{Algebra}\AgdaSpace{}%
-% \AgdaGeneralizable{𝓤}\AgdaSpace{}%
-% \AgdaBound{𝑆}\<%
-% \\
-% %
-% \>[1]\AgdaFunction{algebra→Algebra}\AgdaSpace{}%
-% \AgdaBound{𝑨}\AgdaSpace{}%
-% \AgdaSymbol{=}\AgdaSpace{}%
-% \AgdaSymbol{(}\AgdaField{univ}\AgdaSpace{}%
-% \AgdaBound{𝑨}\AgdaSpace{}%
-% \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-% \AgdaField{op}\AgdaSpace{}%
-% \AgdaBound{𝑨}\AgdaSymbol{)}\<%
-% \\
-% %
-% \\[\AgdaEmptyExtraSkip]%
-% %
-% \>[1]\AgdaFunction{Algebra→algebra}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaBound{𝓤}\AgdaSpace{}%
 % \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaFunction{Algebra}\AgdaSpace{}%
-% \AgdaGeneralizable{𝓤}\AgdaSpace{}%
-% \AgdaBound{𝑆}\AgdaSpace{}%
-% \AgdaSymbol{→}\AgdaSpace{}%
-% \AgdaRecord{algebra}\AgdaSpace{}%
-% \AgdaGeneralizable{𝓤}\AgdaSpace{}%
-% \AgdaBound{𝑆}\<%
+% \AgdaPostulate{Universe}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaBound{𝑆}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaFunction{Signature}\AgdaSpace{}%
+% \AgdaGeneralizable{𝓞}\AgdaSpace{}%
+% \AgdaGeneralizable{𝓥}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaBound{𝓞}\AgdaSpace{}%
+% \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+% \AgdaBound{𝓥}\AgdaSpace{}%
+% \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaOperator{\AgdaPrimitive{⁺}}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\AgdaSpace{}%
+% \AgdaKeyword{where}\<%
+% \\
+% \>[0][@{}l@{\AgdaIndent{0}}]%
+% \>[1]\AgdaKeyword{constructor}\AgdaSpace{}%
+% \AgdaInductiveConstructor{mkalg}\<%
 % \\
 % %
-% \>[1]\AgdaFunction{Algebra→algebra}\AgdaSpace{}%
-% \AgdaBound{𝑨}\AgdaSpace{}%
-% \AgdaSymbol{=}\AgdaSpace{}%
-% \AgdaInductiveConstructor{mkalg}\AgdaSpace{}%
+% \>[1]\AgdaKeyword{field}\<%
+% \\
+% \>[1][@{}l@{\AgdaIndent{0}}]%
+% \>[2]\AgdaField{univ}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaBound{𝓤}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{̇}}\<%
+% \\
+% %
+% \>[2]\AgdaField{op}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
 % \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-% \AgdaBound{𝑨}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
+% \AgdaBound{𝑆}\AgdaSpace{}%
+% \AgdaOperator{\AgdaFunction{∣}}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaSymbol{((}\AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
+% \AgdaBound{𝑆}\AgdaSpace{}%
 % \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
-% \AgdaBound{𝑨}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{∥}}\<%
+% \AgdaBound{f}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaField{univ}\AgdaSymbol{)}\AgdaSpace{}%
+% \AgdaSymbol{→}\AgdaSpace{}%
+% \AgdaField{univ}\<%
 % \end{code}
 % \ccpad
+% This representation of algebras as inhabitants of a record type is equivalent to the representation using Sigma types in the sense that there is a bi-implication between the two representations. The proofs are immediate, so we omit them (see the \ualibhtml{Algebras.Algebras} module for details).
 
-In developing the more advanced modules of the \agdaualib, we have used the Sigma type representation of algebras exclusively, though we occasionally use record types to represent other basic objects (congruences, subalgebras, and others).
+% In developing the more advanced modules of the \agdaualib, we have used the Sigma type representation of algebras exclusively, though we occasionally use record types to represent other basic objects (congruences, subalgebras, and others).
 
 
 

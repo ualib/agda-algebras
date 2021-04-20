@@ -3,15 +3,15 @@
 %%% mode: latex
 %%% TeX-engine: 'xetex
 %%% End:
-We assume a fixed signature \ab{𝑆} \as : \af{Signature} \ab 𝓞 \ab 𝓥 throughout the module by starting with the line
-\AgdaKeyword{module}\AgdaSpace{}%
-\AgdaModule{Algebras.Products}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{𝑆}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Signature}\AgdaSpace{}%
-\AgdaGeneralizable{𝓞}\AgdaSpace{}%
-\AgdaGeneralizable{𝓥}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaKeyword{where}.%
+% We assume a fixed signature \ab{𝑆} \as : \af{Signature} \ab 𝓞 \ab 𝓥 throughout the module by starting with the line
+% \AgdaKeyword{module}\AgdaSpace{}%
+% \AgdaModule{Algebras.Products}\AgdaSpace{}%
+% \AgdaSymbol{\{}\AgdaBound{𝑆}\AgdaSpace{}%
+% \AgdaSymbol{:}\AgdaSpace{}%
+% \AgdaFunction{Signature}\AgdaSpace{}%
+% \AgdaGeneralizable{𝓞}\AgdaSpace{}%
+% \AgdaGeneralizable{𝓥}\AgdaSymbol{\}}\AgdaSpace{}%
+% \AgdaKeyword{where}.%
 % We begin this module by assuming a signature \ab{𝑆} \as : \af{Signature} \ab 𝓞 \ab 𝓥 which is then present and available throughout the module.  Because of this, in contrast to descriptions of previous modules, we present the first few lines of the \ualibhtml{Algebras.Products} module in full.
 % \ccpad
 % \begin{code}%
@@ -55,7 +55,6 @@ We assume a fixed signature \ab{𝑆} \as : \af{Signature} \ab 𝓞 \ab 𝓥 thr
 % \end{code}
 % \ccpad
 % Notice that we must import the \af{Signature} type from \ualibhtml{Algebras.Signatures} first so that we can use it to declare the signature \AgdaBound{𝑆} as a parameter of the \ualibhtml{Algebras.Products} module.
-
 % \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 % \AgdaModule{Algebras.Products}\AgdaSpace{}%
 % \AgdaSymbol{\{}\AgdaBound{𝑆}\AgdaSpace{}%
@@ -66,7 +65,8 @@ We assume a fixed signature \ab{𝑆} \as : \af{Signature} \ab 𝓞 \ab 𝓥 thr
 % \AgdaKeyword{where}\<%
 % \end{code}
 
-In the \ualib the \defn{product of} \ab 𝑆-\defn{algebras} is represented by the following type.\footnote{Alternative equivalent notation for the domain of the product is \as ∀~\ab i~\as →~\af ∣~\ab 𝒜~\ab i~\af ∣.}
+Recall the informal definition of a \defn{product} of a family of \ab 𝑆-algebras. Given a type \ab I~\as :~\ab 𝓘\af ̇ and a family \ab 𝒜~\as :~\ab I~\as →~\ab{Algebra}~\ab 𝓤~\ab 𝑆, the \defn{product} \af ⨅~\ab 𝒜 is the algebra whose domain is the Cartesian product \af Π~\ab 𝑖~\as ꞉~\ab I~\af ,~\af ∣~\ab 𝒜~\ab 𝑖~\af ∣ of the domains of the algebras in \ab 𝒜, and the operation symbols are interpreted point-wise in the following sense: if \ab 𝑓 is a \ab J-ary operation symbol and if \ab 𝑎~\as :~\af Π~\ab 𝑖~\as ꞉~\ab I~\af ,~\ab J~\as →~\ab 𝒜~\ab 𝑖 gives, for each \ab 𝑖~\as :~\ab I, a \ab J-tuple of elements of \ab 𝒜~\ab 𝑖, then we define (\ab 𝑓~\af ̂~\af ⨅~\ab 𝒜)~\ab 𝑎 := (\ab i~\as :~\ab I)~\as → (\ab 𝑓~\af ̂~\ab 𝒜~\ab i)(\ab 𝑎~\ab i). We now define a type that codifies this informal definition of product algebra.
+% \footnote{Alternative equivalent notation for the domain of the product is \as ∀~\ab i~\as →~\af ∣~\ab 𝒜~\ab i~\af ∣.}
 \ccpad
 \begin{code}%
 % \>[0]\AgdaKeyword{module}\AgdaSpace{}%
@@ -138,26 +138,17 @@ In the \ualib the \defn{product of} \ab 𝑆-\defn{algebras} is represented by t
 \>[43]\AgdaComment{-- basic operations of the product algebra}\<%
 \end{code}
 \ccpad
-The type just defined is the one we use whenever the product of an indexed collection of algebras (of type \af{Algebra}) is required.  However, for the sake of completeness, here is how one could define a type representing the product of algebras inhabiting the record type \AgdaRecord{algebra}.
+% The type just defined is the one we use whenever the product of a collection of
+% algebras (of type \af{Algebra}) is required.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% COMMENTED OUT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{comment}
+However, for the sake of completeness, here is how one could define a type representing the product of algebras inhabiting the record type \AgdaRecord{algebra}.
 \ccpad
 \begin{code}%
-% %
-% \\[\AgdaEmptyExtraSkip]%
-% \>[0]\AgdaComment{-- product for algebras of record type}\<%
-% \\
 \>[0][@{}l@{\AgdaIndent{0}}]%
-% \>[1]\AgdaKeyword{open}\AgdaSpace{}%
-% \AgdaModule{algebra}\<%
-% \\
 \>[1]\AgdaFunction{⨅'}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaSymbol{\{}\AgdaBound{𝓤}\AgdaSpace{}%
-% \AgdaBound{𝓘}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaPostulate{Universe}\AgdaSymbol{\}\{}\AgdaBound{I}\AgdaSpace{}%
-% \AgdaSymbol{:}\AgdaSpace{}%
-% \AgdaBound{𝓘}\AgdaSpace{}%
-% \AgdaOperator{\AgdaFunction{̇}}\AgdaSymbol{\}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝒜}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{I}\AgdaSpace{}%
@@ -172,8 +163,6 @@ The type just defined is the one we use whenever the product of an indexed colle
 \AgdaBound{𝓤}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{𝑆}\<%
 \\
-%
-% \\[\AgdaEmptyExtraSkip]%
 \>[1]\AgdaFunction{⨅'}\AgdaSpace{}%
 \AgdaBound{𝒜}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
@@ -189,7 +178,6 @@ The type just defined is the one we use whenever the product of an indexed colle
 \AgdaBound{i}\AgdaSymbol{)}\AgdaSpace{}\AgdaSymbol{;}%
 \>[55]\AgdaComment{-- domain}\<%
 \\
-%\AgdaTab{100}%\>[.][@{}l@{}]\<[100I]%
 \>[100I][@{}l@{\AgdaIndent{0}}]%
 \>[15]\AgdaField{op}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
@@ -209,11 +197,11 @@ The type just defined is the one we use whenever the product of an indexed colle
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSpace{}\AgdaSymbol{\}}%
 \>[55]\AgdaComment{-- basic operations}\<%
-% \\
-% \>[10]\AgdaSymbol{\}}\<%
 \end{code}
 \ccpad
-% \textbf{Notation}. Given a signature \ab 𝑆 : \af{Signature} \ab 𝓞 \ab 𝓥 the type \af{Algebra} \ab 𝓤 \ab 𝑆 has universe 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺`.  Such types occur so often in the [UALib][] that it is worthwhile to define the following shorthand for their universes.
+\end{comment}
+%% END COMMENTED OUT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Before going further, let us agree on another convenient notational convention, which is used in many of the later modules of the \ualib. Given a signature \ab{𝑆}~\as :~\af{Signature}~\ab 𝓞~\ab 𝓥, the type \af{Algebra}~\ab 𝓤~\ab 𝑆 has universe level \ab{𝓞}~\ap ⊔~\ab 𝓥~\ap ⊔~\ab 𝓤~\af ⁺, and the \ab{𝓞} \ap ⊔ \ab 𝓥 part remains fixed since \ab{𝓞} and \ab 𝓥 always denote the universe levels of operation and arity types, respectively. Such levels occur so often in the \ualib that we define the following shorthand for their universes: \AgdaFunction{ov}\AgdaSpace{}%
 \AgdaBound{𝓤}\AgdaSpace{}%
 \AgdaSymbol{:=}\AgdaSpace{}%
