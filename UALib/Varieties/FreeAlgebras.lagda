@@ -202,11 +202,11 @@ We will need the following facts relating `homℭ`, `hom𝔽`, `and ψ`.
 
  ψlemma0-ap {𝑨}{h} skA {p , q} x = γ where
 
-   ν : ∣ homℭ ∣ p ≡ ∣ homℭ ∣ q
-   ν = ker-in-con {ov 𝓤}{ov 𝓤}{fe 𝓥 𝓕⁺}{𝑻 X}(kercon ℭ {fe 𝓥 𝓕} homℭ) {p}{q} x
+  ν : ∣ homℭ ∣ p ≡ ∣ homℭ ∣ q
+  ν = ker-in-con {ov 𝓤}{ov 𝓤}{𝑻 X}{fe 𝓥 𝓕⁺}(kercon ℭ {fe 𝓥 𝓕} homℭ) {p}{q} x
 
-   γ : (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
-   γ = ((ψlemma0 p q) ν) 𝑨 skA h
+  γ : (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
+  γ = ((ψlemma0 p q) ν) 𝑨 skA h
 
 
 \end{code}

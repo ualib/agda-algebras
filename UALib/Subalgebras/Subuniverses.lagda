@@ -60,17 +60,6 @@ Next we define a type to represent a single subuniverse of an algebra. If `𝑨`
 
 \end{code}
 
-As an example application, here is a formal proof that the equalizer of two
-homomorphisms with domain `𝑨` is a subuniverse of `𝑨`.
-
-\begin{code}
-
- 𝐸hom-is-subuniverse : dfunext 𝓥 𝓦 → {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆)(g h : hom 𝑨 𝑩)
-  →                    Subuniverse {𝑨 = 𝑨}
-
- 𝐸hom-is-subuniverse fe 𝑩 g h = mksub (𝐸hom 𝑩 g h) λ 𝑓 a x → 𝐸hom-closed fe 𝑩 g h 𝑓 a x
-
-\end{code}
 
 #### <a id="subuniverse-generation">Subuniverse Generation</a>
 
@@ -280,3 +269,17 @@ and, under these assumptions, we prove `∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂) ≡ ∣ 
 
 
 {% include UALib.Links.md %}
+
+
+<!--
+
+As an example application, here is a formal proof that the equalizer of two
+homomorphisms with domain `𝑨` is a subuniverse of `𝑨`.
+
+
+ 𝐸hom-is-subuniverse : dfunext 𝓥 𝓦 → {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆)(g h : hom 𝑨 𝑩)
+  →                    Subuniverse {𝑨 = 𝑨}
+
+ 𝐸hom-is-subuniverse fe 𝑩 g h = mksub (𝐸hom 𝑩 g h) λ 𝑓 a x → 𝐸hom-closed fe 𝑩 g h 𝑓 a x
+
+-->

@@ -24,7 +24,7 @@ open import MGS-MLTT using (_≡⟨_⟩_; _∎) public
 
 #### <a id="homomorphisms">Homomorphisms</a>
 
-If `𝑨` and `𝑩` are `𝑆`-algebras, then a *homomorphism* is a function `ℎ : ∣ 𝑨 ∣ → ∣ 𝑩 ∣` from the domain of `𝑨` to the domain of `𝑩` that is *compatible* (or *commutes*) with all of the basic operations of the signature; that is, for all operation symbols `𝑓 : ∣ 𝑆 ∣` and tuples `𝑎 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣` of `𝑨`, the following holds:<sup>[1](Homomorphisms.Basic.html#fn1)</sup>
+If `𝑨` and `𝑩` are `𝑆`-algebras, then a *homomorphism* from `𝑨` to `𝑩` is a function `ℎ : ∣ 𝑨 ∣ → ∣ 𝑩 ∣` from the domain of `𝑨` to the domain of `𝑩` that is *compatible* (or *commutes*) with all of the basic operations of the signature; that is, for all operation symbols `𝑓 : ∣ 𝑆 ∣` and tuples `𝑎 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣` of `𝑨`, the following holds:<sup>[1](Homomorphisms.Basic.html#fn1)</sup>
 
 `h ((𝑓 ̂ 𝑨) 𝑎) ≡ (𝑓 ̂ 𝑩) (h ∘ 𝑎)`.
 
@@ -39,9 +39,9 @@ module _ {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 �
 
 \end{code}
 
-Note the appearance of the shorthand `∀ 𝑎` in the definition of `compatible-op-map`.  We can get away with this in place of `(𝑎 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣) → ⋯` (or `Π 𝑎 ꞉ (∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣) , …` ) since Agda is able to infer that the `𝑎` here must be a tuple on `∣ 𝑨 ∣` of "length" `∥ 𝑆 ∥ 𝑓` (the arity of `𝑓`).
+Agda infers from the shorthand `∀ 𝑎` that `𝑎` has type `∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣` since it must be a tuple on `∣ 𝑨 ∣` of "length" `∥ 𝑆 ∥ 𝑓` (the arity of `𝑓`).
 
-We now define the type `hom 𝑨 𝑩` of homomorphisms from `𝑨` to `𝑩` by first defining the property `is-homomorphism`.
+We now define the type `hom 𝑨 𝑩` of homomorphisms from `𝑨` to `𝑩` by first defining the type `is-homomorphism` which represents the property of being a homomorphism.
 
 \begin{code}
 
@@ -55,9 +55,7 @@ We now define the type `hom 𝑨 𝑩` of homomorphisms from `𝑨` to `𝑩` by
 
 #### <a id="exmples-of-homomorphisms">Examples of homomorphisms</a>
 
-Let's look at a few examples of homomorphisms. We begin with some very special cases in which the function in question commutes with the basic operations of *all* algebras and so, no matter the algebras involved, is always a homomorphism (trivially).
-
-The most obvious example of a homomorphism is the identity map, which is proved to be a homomorphism as follows.
+Let's look at a few examples of homomorphisms. These examples are actually quite special in that the function in question commutes with the basic operations of *all* algebras and so, no matter the algebras involved, is always a homomorphism (trivially). We begin with the identity map, which is proved to be (the underlying map of) a homomorphism as follows.
 
 \begin{code}
 
@@ -131,39 +129,6 @@ It will be convenient to have a function that takes an inhabitant of `mon` (or `
 
 
 
-#### <a id="equalizers-in-agda">Equalizers</a>
-
-Recall, the equalizer of two functions (resp., homomorphisms) `g h : A → B` is the subset of `A` on which the values of the functions `g` and `h` agree.  We define the equalizer of functions and homomorphisms in Agda as follows.
-
-\begin{code}
-
-module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} where
-
- 𝐸 : (𝑩 : Algebra 𝓦 𝑆) → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Pred ∣ 𝑨 ∣ 𝓦
- 𝐸 _ g h x = g x ≡ h x
-
- 𝐸hom : (𝑩 : Algebra 𝓦 𝑆) → hom 𝑨 𝑩 → hom 𝑨 𝑩 → Pred ∣ 𝑨 ∣ 𝓦
- 𝐸hom _ g h x = ∣ g ∣ x ≡ ∣ h ∣ x
-
-\end{code}
-
-We will define subuniverses in the [Subalgebras.Subuniverses] module, but we note here that the equalizer of homomorphisms from `𝑨` to `𝑩` will turn out to be subuniverse of `𝑨`.  Indeed, this is easily proved as follows.
-
-\begin{code}
-
- 𝐸hom-closed : dfunext 𝓥 𝓦 → (𝑩 : Algebra 𝓦 𝑆)(g h : hom 𝑨 𝑩)
-   →           ∀ 𝑓 a  →  Π x ꞉ ∥ 𝑆 ∥ 𝑓 , (a x ∈ 𝐸hom 𝑩 g h)
-               ----------------------------------------------
-   →           ∣ g ∣ ((𝑓 ̂ 𝑨) a) ≡ ∣ h ∣ ((𝑓 ̂ 𝑨) a)
-
- 𝐸hom-closed fe 𝑩 g h 𝑓 a p = ∣ g ∣ ((𝑓 ̂ 𝑨) a)   ≡⟨ ∥ g ∥ 𝑓 a ⟩
-                              (𝑓 ̂ 𝑩)(∣ g ∣ ∘ a)  ≡⟨ ap (𝑓 ̂ 𝑩)(fe p) ⟩
-                              (𝑓 ̂ 𝑩)(∣ h ∣ ∘ a)  ≡⟨ (∥ h ∥ 𝑓 a)⁻¹ ⟩
-                              ∣ h ∣ ((𝑓 ̂ 𝑨) a)   ∎
-
-\end{code}
-
-The typing judgments for the arguments that we left implicit are `𝑓 : ∣ 𝑆 ∣` and `𝑎 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣`.
 
 
 #### <a id="kernels-of-homomorphisms">Kernels of homomorphisms</a>
@@ -172,10 +137,10 @@ The kernel of a homomorphism is a congruence relation and conversely for every c
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe} where
+module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} where
 
- homker-compatible : dfunext 𝓥 𝓦 → {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) → compatible 𝑨 (ker ∣ h ∣)
- homker-compatible fe {𝑨} 𝑩 h f {u}{v} Kerhab = γ
+ homker-compatible : dfunext 𝓥 𝓦 → (𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) → compatible 𝑨 (ker ∣ h ∣)
+ homker-compatible fe 𝑩 h f {u}{v} Kerhab = γ
   where
   γ : ∣ h ∣ ((f ̂ 𝑨) u)  ≡ ∣ h ∣ ((f ̂ 𝑨) v)
   γ = ∣ h ∣ ((f ̂ 𝑨) u)  ≡⟨ ∥ h ∥ f u ⟩
@@ -189,8 +154,8 @@ It is convenient to define a function that takes a homomorphism and constructs a
 
 \begin{code}
 
- kercon : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆){fe : dfunext 𝓥 𝓦} → hom 𝑨 𝑩 → Con{𝓦} 𝑨
- kercon {𝑨} 𝑩 {fe} h = ker ∣ h ∣ , mkcon (ker-IsEquivalence ∣ h ∣)(homker-compatible fe 𝑩 h)
+ kercon : (𝑩 : Algebra 𝓦 𝑆){fe : dfunext 𝓥 𝓦} → hom 𝑨 𝑩 → Con{𝓦} 𝑨
+ kercon 𝑩 {fe} h = ker ∣ h ∣ , mkcon (ker-IsEquivalence ∣ h ∣)(homker-compatible fe 𝑩 h)
 
 \end{code}
 
@@ -198,14 +163,14 @@ With this congruence we construct the corresponding quotient, along with some sy
 
 \begin{code}
 
- kerquo : dfunext 𝓥 𝓦 → {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆} → hom 𝑨 𝑩 → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
- kerquo fe {𝑨}{𝑩} h = 𝑨 ╱ (kercon 𝑩 {fe} h)
+ kerquo : dfunext 𝓥 𝓦 → {𝑩 : Algebra 𝓦 𝑆} → hom 𝑨 𝑩 → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
+ kerquo fe {𝑩} h = 𝑨 ╱ (kercon 𝑩 {fe} h)
 
 
- _[_]/ker_ : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩){fe : dfunext 𝓥 𝓦} → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
- (𝑨 [ 𝑩 ]/ker h){fe} = kerquo fe {𝑨}{𝑩} h
+_[_]/ker_ : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩){fe : dfunext 𝓥 𝓦} → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
+(𝑨 [ 𝑩 ]/ker h){fe} = kerquo fe {𝑩} h
 
- infix 60 _[_]/ker_
+infix 60 _[_]/ker_
 
 \end{code}
 
@@ -219,10 +184,9 @@ Given an algebra `𝑨` and a congruence `θ`, the *canonical projection* is a m
 
 \begin{code}
 
-
-
- πepi : {𝑨 : Algebra 𝓤 𝑆}(θ : Con{𝓦} 𝑨) → epi 𝑨 (𝑨 ╱ θ)
- πepi {𝑨} θ = cπ , cπ-is-hom , cπ-is-epic where
+module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} where
+ πepi : (θ : Con{𝓦} 𝑨) → epi 𝑨 (𝑨 ╱ θ)
+ πepi θ = cπ , cπ-is-hom , cπ-is-epic where
 
   cπ : ∣ 𝑨 ∣ → ∣ 𝑨 ╱ θ ∣
   cπ a = ⟪ a ⟫
@@ -239,8 +203,8 @@ In may happen that we don't care about the surjectivity of `πepi`, in which cas
 
 \begin{code}
 
- πhom : {𝑨 : Algebra 𝓤 𝑆}(θ : Con{𝓦} 𝑨) → hom 𝑨 (𝑨 ╱ θ)
- πhom {𝑨} θ = epi-to-hom (𝑨 ╱ θ) (πepi θ)
+ πhom : (θ : Con{𝓦} 𝑨) → hom 𝑨 (𝑨 ╱ θ)
+ πhom θ = epi-to-hom (𝑨 ╱ θ) (πepi θ)
 
 \end{code}
 
@@ -249,8 +213,8 @@ We combine the foregoing to define a function that takes 𝑆-algebras `𝑨` an
 
 \begin{code}
 
- πker : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆){fe : dfunext 𝓥 𝓦}(h : hom 𝑨 𝑩) →  epi 𝑨 ((𝑨 [ 𝑩 ]/ker h){fe})
- πker {𝑨} 𝑩 {fe} h = πepi (kercon {𝑨} 𝑩 {fe} h)
+ πker : (𝑩 : Algebra 𝓦 𝑆){fe : dfunext 𝓥 𝓦}(h : hom 𝑨 𝑩) →  epi 𝑨 ((𝑨 [ 𝑩 ]/ker h){fe})
+ πker 𝑩 {fe} h = πepi (kercon 𝑩 {fe} h)
 
 \end{code}
 
@@ -258,10 +222,9 @@ The kernel of the canonical projection of `𝑨` onto `𝑨 / θ` is equal to `�
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe} where
  open IsCongruence
 
- ker-in-con : {fe : dfunext 𝓥 (𝓤 ⊔ 𝓦 ⁺)}{𝑨 : Algebra 𝓤 𝑆}(θ : Con{𝓦} 𝑨)
+ ker-in-con : {fe : dfunext 𝓥 (𝓤 ⊔ 𝓦 ⁺)}(θ : Con{𝓦} 𝑨)
   →           ∀ {x}{y} → ∣ kercon (𝑨 ╱ θ){fe} (πhom θ) ∣ x y →  ∣ θ ∣ x y
 
  ker-in-con θ hyp = /-≡ θ hyp
@@ -378,3 +341,35 @@ con-in-ker 𝑨 θ x y hyp = γ
 
 <!-- The definition of homomorphism in the [Agda UALib][] is an *extensional* one; that is, the homomorphism condition holds pointwise. Generally speaking, we say that two functions 𝑓 𝑔 : X → Y are extensionally equal iff they are pointwise equal, that is, for all x : X we have 𝑓 x ≡ 𝑔 x. -->
 
+
+
+
+<!--
+
+#### <a id="equalizers-in-agda">Equalizers</a>
+
+Recall, the equalizer of two functions (resp., homomorphisms) `g h : A → B` is the subset of `A` on which the values of the functions `g` and `h` agree.  We define the equalizer of functions and homomorphisms in Agda as follows.
+
+module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} where
+
+ 𝐸 : (𝑩 : Algebra 𝓦 𝑆) → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Pred ∣ 𝑨 ∣ 𝓦
+ 𝐸 _ g h x = g x ≡ h x
+
+ 𝐸hom : (𝑩 : Algebra 𝓦 𝑆) → hom 𝑨 𝑩 → hom 𝑨 𝑩 → Pred ∣ 𝑨 ∣ 𝓦
+ 𝐸hom _ g h x = ∣ g ∣ x ≡ ∣ h ∣ x
+
+We will define subuniverses in the [Subalgebras.Subuniverses] module, but we note here that the equalizer of homomorphisms from `𝑨` to `𝑩` will turn out to be subuniverse of `𝑨`.  Indeed, this is easily proved as follows.
+
+ 𝐸hom-closed : dfunext 𝓥 𝓦 → (𝑩 : Algebra 𝓦 𝑆)(g h : hom 𝑨 𝑩)
+   →           ∀ 𝑓 a  →  Π x ꞉ ∥ 𝑆 ∥ 𝑓 , (a x ∈ 𝐸hom 𝑩 g h)
+               ----------------------------------------------
+   →           ∣ g ∣ ((𝑓 ̂ 𝑨) a) ≡ ∣ h ∣ ((𝑓 ̂ 𝑨) a)
+
+ 𝐸hom-closed fe 𝑩 g h 𝑓 a p = ∣ g ∣ ((𝑓 ̂ 𝑨) a)   ≡⟨ ∥ g ∥ 𝑓 a ⟩
+                              (𝑓 ̂ 𝑩)(∣ g ∣ ∘ a)  ≡⟨ ap (𝑓 ̂ 𝑩)(fe p) ⟩
+                              (𝑓 ̂ 𝑩)(∣ h ∣ ∘ a)  ≡⟨ (∥ h ∥ 𝑓 a)⁻¹ ⟩
+                              ∣ h ∣ ((𝑓 ̂ 𝑨) a)   ∎
+
+
+The typing judgments for the arguments that we left implicit are `𝑓 : ∣ 𝑆 ∣` and `𝑎 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣`.
+-->
