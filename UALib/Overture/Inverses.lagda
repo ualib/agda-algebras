@@ -26,9 +26,9 @@ We begin by defining an inductive type that represents the semantic concept of *
 
 \begin{code}
 
-module _ {A : 𝓤 ̇ }{B : 𝓦 ̇ } where
+module _ {A : Set 𝓤 }{B : Set 𝓦 } where
 
- data Image_∋_ (f : A → B) : B → 𝓤 ⊔ 𝓦 ̇
+ data Image_∋_ (f : A → B) : B → Set (𝓤 ⊔ 𝓦)
   where
   im : (x : A) → Image f ∋ f x
   eq : (b : B) → (a : A) → b ≡ f a → Image f ∋ b
@@ -74,7 +74,7 @@ An epic (or surjective) function from `A` to `B` is as an inhabitant of the `Epi
 
 \begin{code}
 
- Epic : (A → B) →  𝓤 ⊔ 𝓦 ̇
+ Epic : (A → B) →  Set (𝓤 ⊔ 𝓦)
  Epic f = ∀ y → Image f ∋ y
 
 \end{code}
@@ -91,7 +91,7 @@ The right-inverse of `f` is obtained by applying `EpicInv` to `f` and a proof of
 
 \begin{code}
 
-module hide-∘ {A : 𝓤 ̇}{B : 𝓦 ̇}{C : B → 𝓦 ̇ } where
+module hide-∘ {A : Set 𝓤}{B : Set 𝓦}{C : B → Set 𝓦 } where
 
  _∘_ : Π C → (f : A → B) → (x : A) → C (f x)
  g ∘ f = λ x → g (f x)
@@ -104,7 +104,7 @@ Note that the next proof requires function extensionality, which we postulate in
 
 \begin{code}
 
-module _ {fe : funext 𝓦 𝓦}{A : 𝓤 ̇}{B : 𝓦 ̇} where
+module _ {fe : funext 𝓦 𝓦}{A : Set 𝓤}{B : Set 𝓦} where
 
  EpicInvIsRightInv : (f : A → B)(fE : Epic f) → f ∘ (EpicInv f fE) ≡ 𝑖𝑑 B
  EpicInvIsRightInv f fE = fe (λ x → InvIsInv f (fE x))
@@ -115,7 +115,7 @@ We can also prove the following composition law for epics.
 
 \begin{code}
 
- epic-factor : {C : 𝓩 ̇}(f : A → B)(g : A → C)(h : C → B)
+ epic-factor : {C : Set 𝓩}(f : A → B)(g : A → C)(h : C → B)
   →            f ≡ h ∘ g → Epic f → Epic h
 
  epic-factor f g h compId fe y = γ
@@ -145,9 +145,9 @@ We say that a function `f : A → B` is *monic* (or *injective*) if it does not 
 
 \begin{code}
 
-module _ {A : 𝓤 ̇}{B : 𝓦 ̇} where
+module _ {A : Set 𝓤}{B : Set 𝓦} where
 
- Monic : (f : A → B) → 𝓤 ⊔ 𝓦 ̇
+ Monic : (f : A → B) → Set (𝓤 ⊔ 𝓦)
  Monic f = ∀ x y → f x ≡ f y → x ≡ y
 
 \end{code}
@@ -179,9 +179,9 @@ The function defined by `MonicInv f fM` is the left-inverse of `f`.
 The `is-embedding` type is defined in the [Type Topology][] library in the following way.
 
 \begin{code}
-module hide-is-embedding{A : 𝓤 ̇}{B : 𝓦 ̇} where
+module hide-is-embedding{A : Set 𝓤}{B : Set 𝓦} where
 
- is-embedding : (A → B) → 𝓤 ⊔ 𝓦 ̇
+ is-embedding : (A → B) → Set (𝓤 ⊔ 𝓦)
  is-embedding f = ∀ b → is-subsingleton (fiber f b)
 
 open import MGS-Embeddings using (is-embedding) public
@@ -194,26 +194,12 @@ Finding a proof that a function is an embedding isn't always easy, but one path 
 
 \begin{code}
 
-module _ {A : 𝓤 ̇}{B : 𝓦 ̇} where
+module _ {A : Set 𝓤}{B : Set 𝓦} where
 
  invertibles-are-embeddings : (f : A → B) → invertible f → is-embedding f
  invertibles-are-embeddings f fi = equivs-are-embeddings f (invertibles-are-equivs f fi)
 
 \end{code}
-
-Finally, embeddings are monic; from a proof `p : is-embedding f` that `f` is an embedding we can construct a proof of `Monic f`.  We confirm this as follows.
-
-\begin{code}
-
- embedding-is-monic : (f : A → B) → is-embedding f → Monic f
- embedding-is-monic f femb x y fxfy = ap pr₁ ((femb (f x)) fx fy)
-  where
-  fx fy : fiber f (f x)
-  fx = x , refl
-  fy = y , (fxfy ⁻¹)
-
-\end{code}
-
 
 -------------------------------------
 
@@ -226,6 +212,24 @@ Finally, embeddings are monic; from a proof `p : is-embedding f` that `f` is an 
 {% include UALib.Links.md %}
 
 
-<!-- 
+<!--  NO LONGER USED STUFF
+
 This is the first point at which [truncation](UALib.Preface.html#truncation) comes into play.  An [embedding](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#embeddings) is defined in the [Type Topology][] library, using the `is-subsingleton` type [described earlier](Overture.Extensionality.html#alternative-extensionality-type), as follows.
+
+
+
+
+
+Finally, embeddings are monic; from a proof `p : is-embedding f` that `f` is an embedding we can construct a proof of `Monic f`.  We confirm this as follows.
+
+
+ -- embedding-is-monic : (f : A → B) → is-embedding f → Monic f
+ -- embedding-is-monic f femb x y fxfy = {!!} -- ap ∣ (femb (f x)) fx fy ∣
+  -- where
+  -- fx fy : fiber f (f x)
+  -- fx = x , refl
+  -- fy = y , (fxfy ⁻¹)
+
+
+
 -->

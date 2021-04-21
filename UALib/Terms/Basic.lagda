@@ -15,11 +15,12 @@ The theoretical background that begins each subsection below is based on Cliff B
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
+module Terms.Basic where
 
-module Terms.Basic {𝑆 : Signature 𝓞 𝓥} where
+open import Homomorphisms.HomomorphicImages public
 
-open import Homomorphisms.HomomorphicImages{𝑆 = 𝑆} public
+module terms {𝑆 : Signature 𝓞 𝓥} where
+ open hom-images {𝑆 = 𝑆} public
 
 \end{code}
 
@@ -41,11 +42,11 @@ The definition of `Term X` is recursive, indicating that an inductive type could
 
 \begin{code}
 
-data Term {𝓧 : Universe}(X : 𝓧 ̇ ) : ov 𝓧 ̇  where
-  generator : X → Term X
+ data Term {𝓧 : Level}(X : Set 𝓧 ) : Set(ov 𝓧)  where
+  ℊ : X → Term X    -- (ℊ for "generator")
   node : (f : ∣ 𝑆 ∣)(𝑡 : ∥ 𝑆 ∥ f → Term X) → Term X
 
-open Term
+ open Term public
 
 \end{code}
 
@@ -68,8 +69,8 @@ In [Agda][] the term algebra can be defined as simply as one could hope.
 
 \begin{code}
 
-𝑻 : {𝓧 : Universe}(X : 𝓧 ̇ ) → Algebra (ov 𝓧) 𝑆
-𝑻 X = Term X , node
+ 𝑻 : {𝓧 : Level}(X : Set 𝓧 ) → Algebra (ov 𝓧) 𝑆
+ 𝑻 X = Term X , node
 
 \end{code}
 
@@ -86,13 +87,11 @@ We now prove this in [Agda][], starting with the fact that every map from `X` to
 
 \begin{code}
 
-module _ {𝓤 𝓧 : Universe}{X : 𝓧 ̇ } where
+ module _ {𝓤 𝓧 : Level}{X : Set 𝓧 } where
 
- free-lift : (𝑨 : Algebra 𝓤 𝑆)(h : X → ∣ 𝑨 ∣) → ∣ 𝑻 X ∣ → ∣ 𝑨 ∣
-
- free-lift _ h (generator x) = h x
-
- free-lift 𝑨 h (node f 𝑡) = (f ̂ 𝑨) (λ i → free-lift 𝑨 h (𝑡 i))
+  free-lift : (𝑨 : Algebra 𝓤 𝑆)(h : X → ∣ 𝑨 ∣) → ∣ 𝑻 X ∣ → ∣ 𝑨 ∣
+  free-lift _ h (ℊ x) = h x
+  free-lift 𝑨 h (node f 𝑡) = (f ̂ 𝑨) (λ i → free-lift 𝑨 h (𝑡 i))
 
 \end{code}
 
@@ -107,9 +106,9 @@ The free lift so defined is a homomorphism by construction. Indeed, here is the 
 
 \begin{code}
 
- lift-hom : (𝑨 : Algebra 𝓤 𝑆) → (X → ∣ 𝑨 ∣) → hom (𝑻 X) 𝑨
+  lift-hom : (𝑨 : Algebra 𝓤 𝑆) → (X → ∣ 𝑨 ∣) → hom (𝑻 X) 𝑨
 
- lift-hom 𝑨 h = free-lift 𝑨 h , λ f a → ap (f ̂ 𝑨) refl
+  lift-hom 𝑨 h = free-lift 𝑨 h , λ f a → ap (f ̂ 𝑨) refl
 
 \end{code}
 
@@ -117,42 +116,42 @@ Finally, we prove that the homomorphism is unique.  This requires `funext 𝓥 �
 
 \begin{code}
 
- free-unique : funext 𝓥 𝓤 → (𝑨 : Algebra 𝓤 𝑆)(g h : hom (𝑻 X) 𝑨)
-  →            (∀ x → ∣ g ∣ (generator x) ≡ ∣ h ∣ (generator x))
-               ----------------------------------------------------
-  →            ∀ (t : Term X) →  ∣ g ∣ t ≡ ∣ h ∣ t
+  free-unique : funext 𝓥 𝓤 → (𝑨 : Algebra 𝓤 𝑆)(g h : hom (𝑻 X) 𝑨)
+   →            (∀ x → ∣ g ∣ (ℊ x) ≡ ∣ h ∣ (ℊ x))
+                ----------------------------------------------------
+   →            ∀ (t : Term X) →  ∣ g ∣ t ≡ ∣ h ∣ t
 
- free-unique _ _ _ _ p (generator x) = p x
+  free-unique _ _ _ _ p (ℊ x) = p x
 
- free-unique fe 𝑨 g h p (node 𝑓 𝑡) = ∣ g ∣ (node 𝑓 𝑡)  ≡⟨ ∥ g ∥ 𝑓 𝑡 ⟩
-                                    (𝑓 ̂ 𝑨)(∣ g ∣ ∘ 𝑡)  ≡⟨ α ⟩
-                                    (𝑓 ̂ 𝑨)(∣ h ∣ ∘ 𝑡)  ≡⟨ (∥ h ∥ 𝑓 𝑡)⁻¹ ⟩
-                                    ∣ h ∣ (node 𝑓 𝑡)   ∎
-  where
-  α : (𝑓 ̂ 𝑨) (∣ g ∣ ∘ 𝑡) ≡ (𝑓 ̂ 𝑨) (∣ h ∣ ∘ 𝑡)
-  α = ap (𝑓 ̂ 𝑨) (fe λ i → free-unique fe 𝑨 g h p (𝑡 i))
+  free-unique fe 𝑨 g h p (node 𝑓 𝑡) = ∣ g ∣ (node 𝑓 𝑡)  ≡⟨ ∥ g ∥ 𝑓 𝑡 ⟩
+                                     (𝑓 ̂ 𝑨)(∣ g ∣ ∘ 𝑡)  ≡⟨ α ⟩
+                                     (𝑓 ̂ 𝑨)(∣ h ∣ ∘ 𝑡)  ≡⟨ (∥ h ∥ 𝑓 𝑡)⁻¹ ⟩
+                                     ∣ h ∣ (node 𝑓 𝑡)   ∎
+   where
+   α : (𝑓 ̂ 𝑨) (∣ g ∣ ∘ 𝑡) ≡ (𝑓 ̂ 𝑨) (∣ h ∣ ∘ 𝑡)
+   α = ap (𝑓 ̂ 𝑨) (fe λ i → free-unique fe 𝑨 g h p (𝑡 i))
 
 \end{code}
 
-Let's account for what we have proved thus far about the term algebra.  If we postulate a type `X : 𝓧 ̇` (representing an arbitrary collection of variable symbols) such that for each `𝑆`-algebra `𝑨` there is a map from `X` to the domain of `𝑨`, then it follows that for every `𝑆`-algebra `𝑨` there is a homomorphism from `𝑻 X` to `∣ 𝑨 ∣` that "agrees with the original map on `X`," by which we mean that for all `x : X` the lift evaluated at `generator x` is equal to the original function evaluated at `x`.
+Let's account for what we have proved thus far about the term algebra.  If we postulate a type `X : 𝓧 ̇` (representing an arbitrary collection of variable symbols) such that for each `𝑆`-algebra `𝑨` there is a map from `X` to the domain of `𝑨`, then it follows that for every `𝑆`-algebra `𝑨` there is a homomorphism from `𝑻 X` to `∣ 𝑨 ∣` that "agrees with the original map on `X`," by which we mean that for all `x : X` the lift evaluated at `ℊ x` is equal to the original function evaluated at `x`.
 
 If we further assume that each of the mappings from `X` to `∣ 𝑨 ∣` is *surjective*, then the homomorphisms constructed with `free-lift` and `lift-hom` are *epimorphisms*, as we now prove.
 
 \begin{code}
 
- lift-of-epi-is-epi : {𝑨 : Algebra 𝓤 𝑆}{h₀ : X → ∣ 𝑨 ∣}
-                      ---------------------------------
-  →                   Epic h₀ → Epic ∣ lift-hom 𝑨 h₀ ∣
+  lift-of-epi-is-epi : {𝑨 : Algebra 𝓤 𝑆}{h₀ : X → ∣ 𝑨 ∣}
+                       ---------------------------------
+   →                   Epic h₀ → Epic ∣ lift-hom 𝑨 h₀ ∣
 
- lift-of-epi-is-epi {𝑨}{h₀} hE y = γ
-  where
-  h₀⁻¹y = Inv h₀ (hE y)
+  lift-of-epi-is-epi {𝑨}{h₀} hE y = γ
+   where
+   h₀⁻¹y = Inv h₀ (hE y)
 
-  η : y ≡ ∣ lift-hom 𝑨 h₀ ∣ (generator h₀⁻¹y)
-  η = (InvIsInv h₀ (hE y))⁻¹
+   η : y ≡ ∣ lift-hom 𝑨 h₀ ∣ (ℊ h₀⁻¹y)
+   η = (InvIsInv h₀ (hE y))⁻¹
 
-  γ : Image ∣ lift-hom 𝑨 h₀ ∣ ∋ y
-  γ = eq y (generator h₀⁻¹y) η
+   γ : Image ∣ lift-hom 𝑨 h₀ ∣ ∋ y
+   γ = eq y (ℊ h₀⁻¹y) η
 
 \end{code}
 

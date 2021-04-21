@@ -13,12 +13,13 @@ The [Subalgebras.Subalgebras][] module of the [Agda Universal Algebra Library][]
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
+module Subalgebras.Subalgebras where
 
-module Subalgebras.Subalgebras {𝑆 : Signature 𝓞 𝓥} where
-
-open import Subalgebras.Subuniverses {𝑆 = 𝑆} public
+open import Subalgebras.Subuniverses public
 open import MGS-Embeddings using (∘-embedding; id-is-embedding) public
+
+module subalgebras {𝑆 : Signature 𝓞 𝓥} where
+ open subuniverses {𝑆 = 𝑆} public
 
 \end{code}
 
@@ -29,11 +30,11 @@ Given algebras `𝑨 : Algebra 𝓤 𝑆` and `𝑩 : Algebra 𝓦 𝑆`, we say
 
 \begin{code}
 
-_IsSubalgebraOf_ : {𝓦 𝓤 : Universe}(𝑩 : Algebra 𝓦 𝑆)(𝑨 : Algebra 𝓤 𝑆) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
-𝑩 IsSubalgebraOf 𝑨 = Σ h ꞉ hom 𝑩 𝑨 , is-embedding ∣ h ∣
+ _IsSubalgebraOf_ : {𝓦 𝓤 : Level}(𝑩 : Algebra 𝓦 𝑆)(𝑨 : Algebra 𝓤 𝑆) → Set(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
+ 𝑩 IsSubalgebraOf 𝑨 = Σ h ꞉ hom 𝑩 𝑨 , is-embedding ∣ h ∣
 
-Subalgebra : {𝓦 𝓤 : Universe} → Algebra 𝓤 𝑆 → ov 𝓦 ⊔ 𝓤 ̇
-Subalgebra {𝓦} 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓦 𝑆) , 𝑩 IsSubalgebraOf 𝑨
+ Subalgebra : {𝓦 𝓤 : Level} → Algebra 𝓤 𝑆 → Set(ov 𝓦 ⊔ 𝓤)
+ Subalgebra {𝓦} 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓦 𝑆) , 𝑩 IsSubalgebraOf 𝑨
 
 \end{code}
 
@@ -48,26 +49,24 @@ We take this opportunity to prove an important lemma that makes use of the `IsSu
 
 \begin{code}
 
--- open Congruence
+ module _ {𝓤 𝓦 : Level}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
+          -- extensionality assumptions:
+          (pe : pred-ext 𝓤 𝓦)(fe : dfunext 𝓥 𝓦)
 
-module _ {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
-         -- extensionality assumptions:
-         (pe : pred-ext 𝓤 𝓦)(fe : dfunext 𝓥 𝓦)
+          -- truncation assumptions:
+          (Bset : is-set ∣ 𝑩 ∣)
+          (buip : blk-uip ∣ 𝑨 ∣ ∣ kercon 𝑩 {fe} h ∣)
+          where
 
-         -- truncation assumptions:
-         (Bset : is-set ∣ 𝑩 ∣)
-         (buip : blk-uip ∣ 𝑨 ∣ ∣ kercon 𝑩 {fe} h ∣)
-         where
+  FirstHomCorollary|Set : (𝑨 [ 𝑩 ]/ker h ↾ fe) IsSubalgebraOf 𝑩
+  FirstHomCorollary|Set = ϕhom , ϕemb
+   where
+   hh = FirstHomTheorem|Set 𝑨 𝑩 h pe fe Bset buip
+   ϕhom : hom (𝑨 [ 𝑩 ]/ker h ↾ fe) 𝑩
+   ϕhom = ∣ hh ∣
 
- FirstHomCorollary|Set : (𝑨 [ 𝑩 ]/ker h ↾ fe) IsSubalgebraOf 𝑩
- FirstHomCorollary|Set = ϕhom , ϕemb
-  where
-  hh = FirstHomTheorem|Set 𝑨 𝑩 h pe fe Bset buip
-  ϕhom : hom (𝑨 [ 𝑩 ]/ker h ↾ fe) 𝑩
-  ϕhom = ∣ hh ∣
-
-  ϕemb : is-embedding ∣ ϕhom ∣
-  ϕemb = ∥ snd ∥ hh ∥ ∥
+   ϕemb : is-embedding ∣ ϕhom ∣
+   ϕemb = ∥ snd ∥ hh ∥ ∥
 
 \end{code}
 
@@ -75,17 +74,17 @@ If we apply the foregoing theorem to the special case in which the `𝑨` is ter
 
 \begin{code}
 
-module _ {𝓤 𝓦 𝓧 : Universe}(X : 𝓧 ̇)(𝑩 : Algebra 𝓦 𝑆)(h : hom (𝑻 X) 𝑩)
-        -- extensionality assumptions:
-         (pe : pred-ext (ov 𝓧) 𝓦)(fe : dfunext 𝓥 𝓦)
+ module _ {𝓤 𝓦 𝓧 : Level}(X : Set 𝓧)(𝑩 : Algebra 𝓦 𝑆)(h : hom (𝑻 X) 𝑩)
+         -- extensionality assumptions:
+          (pe : pred-ext (ov 𝓧) 𝓦)(fe : dfunext 𝓥 𝓦)
 
-         -- truncation assumptions:
-         (Bset : is-set ∣ 𝑩 ∣)
-         (buip : blk-uip (Term X) ∣ kercon 𝑩 {fe} h ∣)
-         where
+          -- truncation assumptions:
+          (Bset : is-set ∣ 𝑩 ∣)
+          (buip : blk-uip (Term X) ∣ kercon 𝑩 {fe} h ∣)
+          where
 
- free-quot-subalg : ((𝑻 X) [ 𝑩 ]/ker h ↾ fe) IsSubalgebraOf 𝑩
- free-quot-subalg = FirstHomCorollary|Set{𝓤 = ov 𝓧}(𝑻 X) 𝑩 h pe fe Bset buip
+  free-quot-subalg : ((𝑻 X) [ 𝑩 ]/ker h ↾ fe) IsSubalgebraOf 𝑩
+  free-quot-subalg = FirstHomCorollary|Set{𝓤 = ov 𝓧}(𝑻 X) 𝑩 h pe fe Bset buip
 
 \end{code}
 
@@ -93,8 +92,8 @@ module _ {𝓤 𝓦 𝓧 : Universe}(X : 𝓧 ̇)(𝑩 : Algebra 𝓦 𝑆)(h : 
 
 \begin{code}
 
-_≤_ : {𝓦 𝓤 : Universe} → Algebra 𝓦 𝑆 → Algebra 𝓤 𝑆 → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
-𝑩 ≤ 𝑨 = 𝑩 IsSubalgebraOf 𝑨
+ _≤_ : {𝓦 𝓤 : Level} → Algebra 𝓦 𝑆 → Algebra 𝓤 𝑆 → Set(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
+ 𝑩 ≤ 𝑨 = 𝑩 IsSubalgebraOf 𝑨
 
 \end{code}
 
@@ -109,10 +108,10 @@ Suppose `𝒦 : Pred (Algebra 𝓤 𝑆) 𝓩` denotes a class of `𝑆`-algebra
 
 \begin{code}
 
-module _ {𝓦 𝓤 𝓩 : Universe} where
+ module _ {𝓦 𝓤 𝓩 : Level} where
 
- _IsSubalgebraOfClass_ : Algebra 𝓦 𝑆 → Pred (Algebra 𝓤 𝑆) 𝓩 → ov (𝓤 ⊔ 𝓦) ⊔ 𝓩 ̇
- 𝑩 IsSubalgebraOfClass 𝒦 = Σ 𝑨 ꞉ Algebra 𝓤 𝑆 , Σ sa ꞉ Subalgebra{𝓦} 𝑨 , (𝑨 ∈ 𝒦) × (𝑩 ≅ ∣ sa ∣)
+  _IsSubalgebraOfClass_ : Algebra 𝓦 𝑆 → Pred (Algebra 𝓤 𝑆) 𝓩 → Set(ov (𝓤 ⊔ 𝓦) ⊔ 𝓩)
+  𝑩 IsSubalgebraOfClass 𝒦 = Σ 𝑨 ꞉ Algebra 𝓤 𝑆 , Σ sa ꞉ Subalgebra{𝓦} 𝑨 , (𝑨 ∈ 𝒦) × (𝑩 ≅ ∣ sa ∣)
 
 \end{code}
 
@@ -120,8 +119,8 @@ Using this type, we express the collection of all subalgebras of algebras in a c
 
 \begin{code}
 
-SubalgebraOfClass : {𝓦 𝓤 : Universe} → Pred (Algebra 𝓤 𝑆)(ov 𝓤) → ov (𝓤 ⊔ 𝓦) ̇
-SubalgebraOfClass {𝓦} 𝒦 = Σ 𝑩 ꞉ Algebra 𝓦 𝑆 , 𝑩 IsSubalgebraOfClass 𝒦
+ SubalgebraOfClass : {𝓦 𝓤 : Level} → Pred (Algebra 𝓤 𝑆)(ov 𝓤) → Set(ov (𝓤 ⊔ 𝓦))
+ SubalgebraOfClass {𝓦} 𝒦 = Σ 𝑩 ꞉ Algebra 𝓦 𝑆 , 𝑩 IsSubalgebraOfClass 𝒦
 
 \end{code}
 
@@ -136,20 +135,20 @@ First we show that the subalgebra relation is a *preorder*; i.e., it is a reflex
 
 \begin{code}
 
-≤-reflexive : (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ≤ 𝑨
-≤-reflexive 𝑨 = (𝑖𝑑 ∣ 𝑨 ∣ , λ 𝑓 𝑎 → refl) , id-is-embedding
+ ≤-reflexive : (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ≤ 𝑨
+ ≤-reflexive 𝑨 = (𝑖𝑑 ∣ 𝑨 ∣ , λ 𝑓 𝑎 → refl) , id-is-embedding
 
-≤-refl : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ≤ 𝑨
-≤-refl {𝑨 = 𝑨} = ≤-reflexive 𝑨
+ ≤-refl : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ≤ 𝑨
+ ≤-refl {𝑨 = 𝑨} = ≤-reflexive 𝑨
 
 
-≤-transitivity : (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
- →               𝑪 ≤ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
+ ≤-transitivity : (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
+  →               𝑪 ≤ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
 
-≤-transitivity 𝑨 𝑩 𝑪 CB BA = (∘-hom 𝑪 𝑨 ∣ CB ∣ ∣ BA ∣) , ∘-embedding ∥ BA ∥ ∥ CB ∥
+ ≤-transitivity 𝑨 𝑩 𝑪 CB BA = (∘-hom 𝑪 𝑨 ∣ CB ∣ ∣ BA ∣) , ∘-embedding ∥ BA ∥ ∥ CB ∥
 
-≤-trans : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆} → 𝑪 ≤ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
-≤-trans 𝑨 {𝑩}{𝑪} = ≤-transitivity 𝑨 𝑩 𝑪
+ ≤-trans : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆} → 𝑪 ≤ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
+ ≤-trans 𝑨 {𝑩}{𝑪} = ≤-transitivity 𝑨 𝑩 𝑪
 
 \end{code}
 
@@ -157,39 +156,39 @@ Next we prove that if two algebras are isomorphic and one of them is a subalgebr
 
 \begin{code}
 
-≤-iso : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆}
- →      𝑪 ≅ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
+ ≤-iso : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆}
+  →      𝑪 ≅ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
 
-≤-iso 𝑨 {𝑩} {𝑪} CB BA = (g ∘ f , gfhom) , gfemb
- where
-  f : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
-  f = fst ∣ CB ∣
-  g : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
-  g = fst ∣ BA ∣
+ ≤-iso 𝑨 {𝑩} {𝑪} CB BA = (g ∘ f , gfhom) , gfemb
+  where
+   f : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
+   f = fst ∣ CB ∣
+   g : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
+   g = fst ∣ BA ∣
 
-  gfemb : is-embedding (g ∘ f)
-  gfemb = ∘-embedding (∥ BA ∥) (iso→embedding CB)
+   gfemb : is-embedding (g ∘ f)
+   gfemb = ∘-embedding (∥ BA ∥) (iso→embedding CB)
 
-  gfhom : is-homomorphism 𝑪 𝑨 (g ∘ f)
-  gfhom = ∘-is-hom 𝑪 𝑨 {f}{g} (snd ∣ CB ∣) (snd ∣ BA ∣)
-
-
-≤-trans-≅ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
- →          𝑨 ≤ 𝑩 → 𝑨 ≅ 𝑪 → 𝑪 ≤ 𝑩
-
-≤-trans-≅ 𝑨 {𝑩} 𝑪 A≤B B≅C = ≤-iso 𝑩 (≅-sym B≅C) A≤B -- 𝑨 𝑪 A≤B (sym-≅ B≅C)
+   gfhom : is-homomorphism 𝑪 𝑨 (g ∘ f)
+   gfhom = ∘-is-hom 𝑪 𝑨 {f}{g} (snd ∣ CB ∣) (snd ∣ BA ∣)
 
 
-≤-TRANS-≅ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
- →          𝑨 ≤ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤ 𝑪
+ ≤-trans-≅ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
+  →          𝑨 ≤ 𝑩 → 𝑨 ≅ 𝑪 → 𝑪 ≤ 𝑩
 
-≤-TRANS-≅ 𝑨 𝑪 A≤B B≅C = (∘-hom 𝑨 𝑪 ∣ A≤B ∣ ∣ B≅C ∣) , ∘-embedding (iso→embedding B≅C)(∥ A≤B ∥)
+ ≤-trans-≅ 𝑨 {𝑩} 𝑪 A≤B B≅C = ≤-iso 𝑩 (≅-sym B≅C) A≤B -- 𝑨 𝑪 A≤B (sym-≅ B≅C)
 
 
-≤-mono : (𝑩 : Algebra 𝓦 𝑆){𝒦 𝒦' : Pred (Algebra 𝓤 𝑆) 𝓩}
- →       𝒦 ⊆ 𝒦' → 𝑩 IsSubalgebraOfClass 𝒦 → 𝑩 IsSubalgebraOfClass 𝒦'
+ ≤-TRANS-≅ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
+  →          𝑨 ≤ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤ 𝑪
 
-≤-mono 𝑩 KK' KB = ∣ KB ∣ , fst ∥ KB ∥ , KK' (∣ snd ∥ KB ∥ ∣) , ∥ (snd ∥ KB ∥) ∥
+ ≤-TRANS-≅ 𝑨 𝑪 A≤B B≅C = (∘-hom 𝑨 𝑪 ∣ A≤B ∣ ∣ B≅C ∣) , ∘-embedding (iso→embedding B≅C)(∥ A≤B ∥)
+
+
+ ≤-mono : (𝑩 : Algebra 𝓦 𝑆){𝒦 𝒦' : Pred (Algebra 𝓤 𝑆) 𝓩}
+  →       𝒦 ⊆ 𝒦' → 𝑩 IsSubalgebraOfClass 𝒦 → 𝑩 IsSubalgebraOfClass 𝒦'
+
+ ≤-mono 𝑩 KK' KB = ∣ KB ∣ , fst ∥ KB ∥ , KK' (∣ snd ∥ KB ∥ ∣) , ∥ (snd ∥ KB ∥) ∥
 
 \end{code}
 
@@ -199,30 +198,30 @@ Next we prove that if two algebras are isomorphic and one of them is a subalgebr
 
 \begin{code}
 
-module _ {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}{𝑩 : Algebra 𝓤 𝑆} where
+ module _ {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}{𝑩 : Algebra 𝓤 𝑆} where
 
- Lift-is-sub : 𝑩 IsSubalgebraOfClass 𝒦 → (Lift-alg 𝑩 𝓤) IsSubalgebraOfClass 𝒦
- Lift-is-sub (𝑨 , (sa , (KA , B≅sa))) = 𝑨 , sa , KA , ≅-trans (≅-sym Lift-≅) B≅sa
-
-
-Lift-≤ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝓩 : Universe} → 𝑩 ≤ 𝑨 → Lift-alg 𝑩 𝓩 ≤ 𝑨
-Lift-≤ 𝑨 B≤A = ≤-iso 𝑨 (≅-sym Lift-≅) B≤A
-
-≤-Lift : (𝑨 : Algebra 𝓧 𝑆){𝓩 : Universe}{𝑩 : Algebra 𝓨 𝑆} → 𝑩 ≤ 𝑨 → 𝑩 ≤ Lift-alg 𝑨 𝓩
-≤-Lift 𝑨 {𝓩} {𝑩} B≤A = ≤-TRANS-≅ 𝑩 {𝑨} (Lift-alg 𝑨 𝓩) B≤A Lift-≅
+  Lift-is-sub : 𝑩 IsSubalgebraOfClass 𝒦 → (Lift-alg 𝑩 𝓤) IsSubalgebraOfClass 𝒦
+  Lift-is-sub (𝑨 , (sa , (KA , B≅sa))) = 𝑨 , sa , KA , ≅-trans (≅-sym Lift-≅) B≅sa
 
 
-module _ {𝓧 𝓨 𝓩 𝓦 : Universe} where
+ Lift-≤ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝓩 : Level} → 𝑩 ≤ 𝑨 → Lift-alg 𝑩 𝓩 ≤ 𝑨
+ Lift-≤ 𝑨 B≤A = ≤-iso 𝑨 (≅-sym Lift-≅) B≤A
 
- Lift-≤-Lift : {𝑨 : Algebra 𝓧 𝑆}(𝑩 : Algebra 𝓨 𝑆) → 𝑨 ≤ 𝑩 → Lift-alg 𝑨 𝓩 ≤ Lift-alg 𝑩 𝓦
- Lift-≤-Lift {𝑨} 𝑩 A≤B = ≤-trans (Lift-alg 𝑩 𝓦) (≤-trans 𝑩 lAA A≤B) B≤lB
-   where
+ ≤-Lift : (𝑨 : Algebra 𝓧 𝑆){𝓩 : Level}{𝑩 : Algebra 𝓨 𝑆} → 𝑩 ≤ 𝑨 → 𝑩 ≤ Lift-alg 𝑨 𝓩
+ ≤-Lift 𝑨 {𝓩} {𝑩} B≤A = ≤-TRANS-≅ 𝑩 {𝑨} (Lift-alg 𝑨 𝓩) B≤A Lift-≅
 
-   lAA : (Lift-alg 𝑨 𝓩) ≤ 𝑨
-   lAA = Lift-≤ 𝑨 {𝑨} ≤-refl
 
-   B≤lB : 𝑩 ≤ Lift-alg 𝑩 𝓦
-   B≤lB = ≤-Lift 𝑩 ≤-refl
+ module _ {𝓧 𝓨 𝓩 𝓦 : Level} where
+
+  Lift-≤-Lift : {𝑨 : Algebra 𝓧 𝑆}(𝑩 : Algebra 𝓨 𝑆) → 𝑨 ≤ 𝑩 → Lift-alg 𝑨 𝓩 ≤ Lift-alg 𝑩 𝓦
+  Lift-≤-Lift {𝑨} 𝑩 A≤B = ≤-trans (Lift-alg 𝑩 𝓦) (≤-trans 𝑩 lAA A≤B) B≤lB
+    where
+
+    lAA : (Lift-alg 𝑨 𝓩) ≤ 𝑨
+    lAA = Lift-≤ 𝑨 {𝑨} ≤-refl
+
+    B≤lB : 𝑩 ≤ Lift-alg 𝑩 𝓦
+    B≤lB = ≤-Lift 𝑩 ≤-refl
 
 \end{code}
 

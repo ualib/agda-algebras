@@ -23,15 +23,12 @@ This module can be safely skipped, or even left out of the Agda Universal Algebr
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
 open import MGS-Subsingleton-Theorems using (global-dfunext)
 
-module Subalgebras.Univalent {𝑆 : Signature 𝓞 𝓥}{gfe : global-dfunext} where
+module Subalgebras.Univalent {gfe : global-dfunext} where
 
--- Public imports (inherited by modules importing this one)
-open import Subalgebras.Subalgebras {𝑆 = 𝑆} public
 
--- Private imports (only visible in the current module)
+open import Subalgebras.Subalgebras public
 open import MGS-Subsingleton-Theorems using (Univalence)
 open import MGS-Subsingleton-Theorems using (Π-is-subsingleton)
 
@@ -41,16 +38,17 @@ open import MGS-Embeddings using (embedding-gives-ap-is-equiv; pr₁-embedding;
 
 
 
+module mhe_subgroup_general {𝓦 : Level}{𝑆 : Signature 𝓞 𝓥}{𝑨 : Algebra 𝓦 𝑆}(ua : Univalence) where
 
-module mhe_subgroup_generalization {𝓦 : Universe} {𝑨 : Algebra 𝓦 𝑆} (ua : Univalence) where
+ open subalgebras {𝑆 = 𝑆} public
 
  open import MGS-Powerset renaming (_∈_ to _∈₀_; _⊆_ to _⊆₀_; ∈-is-subsingleton to ∈₀-is-subsingleton)
   using (𝓟; equiv-to-subsingleton; powersets-are-sets'; subset-extensionality'; propext; _holds; Ω)
 
- op-closed : (∣ 𝑨 ∣ → 𝓦 ̇) → 𝓞 ⊔ 𝓥 ⊔ 𝓦 ̇
+ op-closed : (∣ 𝑨 ∣ → Set 𝓦) → Set(𝓞 ⊔ 𝓥 ⊔ 𝓦)
  op-closed B = (f : ∣ 𝑆 ∣)(a : ∥ 𝑆 ∥ f → ∣ 𝑨 ∣) → ((i : ∥ 𝑆 ∥ f) → B (a i)) → B ((f ̂ 𝑨) a)
 
- subuniverse : 𝓞 ⊔ 𝓥 ⊔ 𝓦 ⁺ ̇
+ subuniverse : Set(ov 𝓦)
  subuniverse = Σ B ꞉ (𝓟 ∣ 𝑨 ∣) , op-closed ( _∈₀ B)
 
 

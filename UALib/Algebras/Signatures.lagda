@@ -28,8 +28,8 @@ We define the signature of an algebraic structure in Agda like this.
 
 \begin{code}
 
-Signature : (𝓞 𝓥 : Universe) → (𝓞 ⊔ 𝓥) ⁺ ̇
-Signature 𝓞 𝓥 = Σ F ꞉ 𝓞 ̇ , (F → 𝓥 ̇)
+Signature : (𝓞 𝓥 : Level) → Set (lsuc (𝓞 ⊔ 𝓥))
+Signature 𝓞 𝓥 = Σ F ꞉ Set 𝓞 , (F → Set 𝓥)
 
 \end{code}
 
@@ -45,7 +45,7 @@ Here is how we could define the signature for monoids as a member of the type `S
 
 \begin{code}
 
-data monoid-op {𝓞 : Universe} : 𝓞 ̇ where
+data monoid-op {𝓞 : Level} : Set 𝓞 where
  e : monoid-op; · : monoid-op
 
 open import MGS-MLTT using (𝟘; 𝟚)

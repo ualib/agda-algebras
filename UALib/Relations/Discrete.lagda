@@ -27,8 +27,8 @@ Given two universes `𝓤 𝓦` and a type `A : 𝓤 ̇`, the type `Pred A 𝓦`
 
 \begin{code}
 
-Pred : 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓦 ⁺ ̇
-Pred A 𝓦 = A → 𝓦 ̇
+Pred : Set 𝓤 → (𝓦 : Level) → Set(𝓤 ⊔ lsuc 𝓦)
+Pred A 𝓦 = A → Set 𝓦
 
 \end{code}
 
@@ -41,7 +41,7 @@ Like the [Agda Standard Library][], the [UALib][] includes types that represent 
 
 \begin{code}
 
-_∈_ : {A : 𝓤 ̇} → A → Pred A 𝓦 → 𝓦 ̇
+_∈_ : {A : Set 𝓤} → A → Pred A 𝓦 → Set 𝓦
 x ∈ P = P x
 
 \end{code}
@@ -50,7 +50,7 @@ The "subset" relation is denoted, as usual, with the `⊆` symbol.<sup>[1](Relat
 
 \begin{code}
 
-_⊆_ : {A : 𝓤 ̇ } → Pred A 𝓦 → Pred A 𝓩 → 𝓤 ⊔ 𝓦 ⊔ 𝓩 ̇
+_⊆_ : {A : Set 𝓤 } → Pred A 𝓦 → Pred A 𝓩 → Set (𝓤 ⊔ 𝓦 ⊔ 𝓩)
 P ⊆ Q = ∀ {x} → x ∈ P → x ∈ Q
 
 infix 4 _⊆_
@@ -68,7 +68,7 @@ Here is a small collection of tools that will come in handy later. The first is 
 \begin{code}
 infixr 1 _⊎_ _∪_
 
-data _⊎_ (A : 𝓤 ̇) (B : 𝓦 ̇) : 𝓤 ⊔ 𝓦 ̇ where
+data _⊎_ (A : Set 𝓤) (B : Set 𝓦) : Set (𝓤 ⊔ 𝓦) where
  inj₁ : (x : A) → A ⊎ B
  inj₂ : (y : B) → A ⊎ B
 
@@ -78,7 +78,7 @@ And this can be used to represent *union*, as follows.
 
 \begin{code}
 
-_∪_ : {A : 𝓤 ̇} → Pred A 𝓦 → Pred A 𝓩 → Pred A (𝓦 ⊔ 𝓩)
+_∪_ : {A : Set 𝓤} → Pred A 𝓦 → Pred A 𝓩 → Pred A (𝓦 ⊔ 𝓩)
 P ∪ Q = λ x → x ∈ P ⊎ x ∈ Q
 
 
@@ -88,7 +88,7 @@ Next we define convenient notation for asserting that the image of a function (t
 
 \begin{code}
 
-Im_⊆_ : {A : 𝓤 ̇}{B : 𝓦 ̇} → (A → B) → Pred B 𝓩 → 𝓤 ⊔ 𝓩 ̇
+Im_⊆_ : {A : Set 𝓤}{B : Set 𝓦} → (A → B) → Pred B 𝓩 → Set (𝓤 ⊔ 𝓩)
 Im f ⊆ S = ∀ x → f x ∈ S
 
 \end{code}
@@ -100,7 +100,7 @@ The *empty set* is naturally represented by the *empty type*, `𝟘`.<sup>[2](Re
 
 open import Empty-Type using (𝟘)
 
-∅ : {A : 𝓤 ̇} → Pred A 𝓤₀
+∅ : {A : Set 𝓤} → Pred A lzero
 ∅ _ = 𝟘
 
 \end{code}
@@ -110,7 +110,7 @@ Before closing our little predicates toolbox, let's insert a type that provides 
 
 \begin{code}
 
-｛_｝ : {A : 𝓤 ̇} → A → Pred A _
+｛_｝ : {A : Set 𝓤} → A → Pred A 𝓤
 ｛ x ｝ = x ≡_
 
 \end{code}
@@ -127,8 +127,8 @@ A generalization of the notion of binary relation is a *relation from* `A` *to* 
 
 \begin{code}
 
-REL : 𝓤 ̇ → 𝓦 ̇ → (𝓩 : Universe) → 𝓤 ⊔ 𝓦 ⊔ 𝓩 ⁺ ̇
-REL A B 𝓩 = A → B → 𝓩 ̇
+REL : Set 𝓤 → Set 𝓦 → (𝓩 : Level) → Set (𝓤 ⊔ 𝓦 ⊔ lsuc 𝓩)
+REL A B 𝓩 = A → B → Set 𝓩
 
 \end{code}
 
@@ -136,7 +136,7 @@ In the special case, where `𝓦 ≡ 𝓤` and `B ≡ A`, we have
 
 \begin{code}
 
-Rel : 𝓤 ̇ → (𝓩 : Universe) → 𝓤 ⊔ 𝓩 ⁺ ̇
+Rel : Set 𝓤 → (𝓩 : Level) → Set (𝓤 ⊔ lsuc 𝓩)
 Rel A 𝓩 = REL A A 𝓩
 
 \end{code}
@@ -149,7 +149,7 @@ The *kernel* of `f : A → B` is defined informally by `{(x , y) ∈ A × A : f 
 
 \begin{code}
 
-module _ {A : 𝓤 ̇}{B : 𝓦 ̇} where
+module _ {A : Set 𝓤}{B : Set 𝓦} where
 
  ker : (A → B) → Rel A 𝓦
  ker g x y = g x ≡ g y
@@ -157,10 +157,10 @@ module _ {A : 𝓤 ̇}{B : 𝓦 ̇} where
  kernel : (A → B) → Pred (A × A) 𝓦
  kernel g (x , y) = g x ≡ g y
 
- ker-sigma : (A → B) → 𝓤 ⊔ 𝓦 ̇
+ ker-sigma : (A → B) → Set(𝓤 ⊔ 𝓦)
  ker-sigma g = Σ x ꞉ A , Σ y ꞉ A , g x ≡ g y
 
- ker-sigma' : (A → B) → 𝓤 ⊔ 𝓦 ̇
+ ker-sigma' : (A → B) → Set(𝓤 ⊔ 𝓦)
  ker-sigma' g = Σ (x , y) ꞉ (A × A) , g x ≡ g y
 
 \end{code}
@@ -170,7 +170,7 @@ Similarly, the *identity relation* (which is equivalent to the kernel of an inje
 
 \begin{code}
 
-module _ {A : 𝓤 ̇ } where
+module _ {A : Set 𝓤 } where
 
  𝟎 : Rel A 𝓤
  𝟎 x y = x ≡ y
@@ -178,10 +178,10 @@ module _ {A : 𝓤 ̇ } where
  𝟎-pred : Pred (A × A) 𝓤
  𝟎-pred (x , y) = x ≡ y
 
- 𝟎-sigma : 𝓤 ̇
+ 𝟎-sigma : Set 𝓤
  𝟎-sigma = Σ x ꞉ A , Σ y ꞉ A , x ≡ y
 
- 𝟎-sigma' : 𝓤 ̇
+ 𝟎-sigma' : Set 𝓤
  𝟎-sigma' = Σ (x , y) ꞉ (A × A) , x ≡ y
 
 \end{code}
@@ -192,7 +192,7 @@ The *total relation* over `A`, which in set theory is the full Cartesian product
 
  open import Unit-Type using (𝟙)
 
- 𝟏 : Rel A 𝓤₀
+ 𝟏 : Rel A lzero
  𝟏 a b = 𝟙
 \end{code}
 
@@ -204,10 +204,10 @@ We define the following types representing *implication* for binary relations. (
 
 \begin{code}
 
-_on_ : {A : 𝓤 ̇}{B : 𝓦 ̇}{C : 𝓩 ̇} → (B → B → C) → (A → B) → (A → A → C)
+_on_ : {A : Set 𝓤}{B : Set 𝓦}{C : Set 𝓩} → (B → B → C) → (A → B) → (A → A → C)
 R on g = λ x y → R (g x) (g y)
 
-_⇒_ : {A : 𝓤 ̇}{B : 𝓦 ̇} → REL A B 𝓧 → REL A B 𝓨 → 𝓤 ⊔ 𝓦 ⊔ 𝓧 ⊔ 𝓨 ̇
+_⇒_ : {A : Set 𝓤}{B : Set 𝓦} → REL A B 𝓧 → REL A B 𝓨 → Set(𝓤 ⊔ 𝓦 ⊔ 𝓧 ⊔ 𝓨)
 P ⇒ Q = ∀ {i j} → P i j → Q i j
 
 infixr 4 _⇒_
@@ -218,7 +218,7 @@ The `_on_` and `_⇒_` types combine to give a nice, general implication operati
 
 \begin{code}
 
-_=[_]⇒_ : {A : 𝓤 ̇}{B : 𝓦 ̇} → Rel A 𝓧 → (A → B) → Rel B 𝓨 → 𝓤 ⊔ 𝓧 ⊔ 𝓨 ̇
+_=[_]⇒_ : {A : Set 𝓤}{B : Set 𝓦} → Rel A 𝓧 → (A → B) → Rel B 𝓨 → Set(𝓤 ⊔ 𝓧 ⊔ 𝓨)
 P =[ g ]⇒ Q = P ⇒ (Q on g)
 
 infixr 4 _=[_]⇒_
@@ -235,7 +235,7 @@ In the next subsection, we will define types that are useful for asserting and p
 \begin{code}
 
 --The type of operations
-Op : 𝓥 ̇ → 𝓤 ̇ → 𝓤 ⊔ 𝓥 ̇
+Op : Set 𝓥 → Set 𝓤 → Set(𝓤 ⊔ 𝓥)
 Op I A = (I → A) → A
 
 \end{code}
@@ -244,7 +244,7 @@ The type `Op` encodes the arity of an operation as an arbitrary type `I : 𝓥 �
 
 \begin{code}
 
-π : {I : 𝓥 ̇ } {A : 𝓤 ̇ } → I → Op I A
+π : {I : Set 𝓥 } {A : Set 𝓤 } → I → Op I A
 π i x = x i
 
 \end{code}
@@ -257,10 +257,10 @@ Here is how we implement this in the [UALib][].
 
 \begin{code}
 
-eval-rel : {A : 𝓤 ̇}{I : 𝓥 ̇} → Rel A 𝓦 → Rel (I → A)(𝓥 ⊔ 𝓦)
+eval-rel : {A : Set 𝓤}{I : Set 𝓥} → Rel A 𝓦 → Rel (I → A)(𝓥 ⊔ 𝓦)
 eval-rel R u v = Π i ꞉ _ , R (u i) (v i)
 
-_|:_ : {A : 𝓤 ̇}{I : 𝓥 ̇} → Op I A → Rel A 𝓦 → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
+_|:_ : {A : Set 𝓤}{I : Set 𝓥} → Op I A → Rel A 𝓦 → Set(𝓤 ⊔ 𝓥 ⊔ 𝓦)
 f |: R  = (eval-rel R) =[ f ]⇒ R
 
 \end{code}
@@ -271,7 +271,7 @@ In case it helps the reader, we note that instead of using the slick implication
 
 \begin{code}
 
-compatible-fun : {A : 𝓤 ̇}{I : 𝓥 ̇} → (f : Op I A)(R : Rel A 𝓦) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
+compatible-fun : {A : Set 𝓤}{I : Set 𝓥} → (f : Op I A)(R : Rel A 𝓦) → Set(𝓤 ⊔ 𝓥 ⊔ 𝓦)
 compatible-fun f R  = ∀ u v → (eval-rel R) u v → R (f u) (f v)
 
 \end{code}

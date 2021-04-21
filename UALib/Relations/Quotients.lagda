@@ -28,18 +28,18 @@ Let `𝓤 : Universe` be a universe and `A : 𝓤 ̇` a type.  In [Relations.Dis
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe} where
+module _ {𝓤 𝓦 : Level} where
 
- Refl : {A : 𝓤 ̇} → Rel A 𝓦 → 𝓤 ⊔ 𝓦 ̇
+ Refl : {A : Set 𝓤} → Rel A 𝓦 → Set(𝓤 ⊔ 𝓦)
  Refl _≈_ = ∀{x} → x ≈ x
 
- Symm : {A : 𝓤 ̇} → Rel A 𝓦 → 𝓤 ⊔ 𝓦 ̇
+ Symm : {A : Set 𝓤} → Rel A 𝓦 → Set(𝓤 ⊔ 𝓦)
  Symm _≈_ = ∀{x}{y} → x ≈ y → y ≈ x
 
- Antisymm : {A : 𝓤 ̇} → Rel A 𝓦 → 𝓤 ⊔ 𝓦 ̇
+ Antisymm : {A : Set 𝓤} → Rel A 𝓦 → Set(𝓤 ⊔ 𝓦)
  Antisymm _≈_ = ∀{x}{y} → x ≈ y → y ≈ x → x ≡ y
 
- Trans : {A : 𝓤 ̇} → Rel A 𝓦 → 𝓤 ⊔ 𝓦 ̇
+ Trans : {A : Set 𝓤} → Rel A 𝓦 → Set(𝓤 ⊔ 𝓦)
  Trans _≈_ = ∀{x}{y}{z} → x ≈ y → y ≈ z → x ≈ z
 
 \end{code}
@@ -50,7 +50,7 @@ The [Type Topology][] library defines the following *uniqueness-of-proofs* princ
 
 module hide-is-subsingleton-valued where
 
- is-subsingleton-valued : {A : 𝓤 ̇} → Rel A 𝓦 → 𝓤 ⊔ 𝓦 ̇
+ is-subsingleton-valued : {A : Set 𝓤} → Rel A 𝓦 → Set(𝓤 ⊔ 𝓦)
  is-subsingleton-valued  _≈_ = ∀ x y → is-subsingleton (x ≈ y)
 
 open import MGS-Quotient using (is-subsingleton-valued) public
@@ -66,9 +66,9 @@ A binary relation is called a *preorder* if it is reflexive and transitive. An *
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe} where
+module _ {𝓤 𝓦 : Level} where
 
- record IsEquivalence {A : 𝓤 ̇}(R : Rel A 𝓦) : 𝓤 ⊔ 𝓦 ̇ where
+ record IsEquivalence {A : Set 𝓤}(R : Rel A 𝓦) : Set(𝓤 ⊔ 𝓦) where
   field rfl : Refl R ; sym : Symm R ; trans : Trans R
 
 \end{code}
@@ -77,7 +77,7 @@ And we define the type of equivalence relations over a given type `A` as follows
 
 \begin{code}
 
- Equivalence : 𝓤 ̇ → 𝓤 ⊔ 𝓦 ⁺ ̇
+ Equivalence : Set 𝓤 → Set(𝓤 ⊔ lsuc 𝓦)
  Equivalence A = Σ R ꞉ Rel A 𝓦 , IsEquivalence R
 
 \end{code}
@@ -88,7 +88,7 @@ A prominent example of an equivalence relation is the kernel of any function.
 
 \begin{code}
 
- ker-IsEquivalence : {A : 𝓤 ̇}{B : 𝓦 ̇}(f : A → B) → IsEquivalence (ker f)
+ ker-IsEquivalence : {A : Set 𝓤}{B : Set 𝓦}(f : A → B) → IsEquivalence (ker f)
  ker-IsEquivalence f = record { rfl = refl; sym = λ z → ≡-sym z ; trans = λ p q → ≡-trans p q }
 
 \end{code}
@@ -99,7 +99,7 @@ If `R` is an equivalence relation on `A`, then for each `u : A` there is an *equ
 
 \begin{code}
 
- [_] : {A : 𝓤 ̇} → A → {R : Rel A 𝓦} → Pred A 𝓦
+ [_] : {A : Set 𝓤} → A → {R : Rel A 𝓦} → Pred A 𝓦
  [ u ]{R} = R u
 
  infix 60 [_]
@@ -113,10 +113,10 @@ A predicate `C` over `A` is an `R`-block if and only if `C ≡ [ u ]` for some `
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe} where
+module _ {𝓤 𝓦 : Level} where
 
- IsBlock : {A : 𝓤 ̇}(C : Pred A 𝓦){R : Rel A 𝓦} → 𝓤 ⊔ 𝓦 ⁺ ̇
- IsBlock {A} C {R} = Σ u ꞉ A , C ≡ [ u ] {R}
+ IsBlock : {A : Set 𝓤}(C : Pred A 𝓦){R : Rel A 𝓦} → Set(𝓤 ⊔ lsuc 𝓦)
+ IsBlock {A} C {R} = Σ u ꞉ A , C ≡ [ u ]{R}
 
 \end{code}
 
@@ -126,7 +126,7 @@ If `R` is an equivalence relation on `A`, then the *quotient* of `A` modulo `R` 
 
 \begin{code}
 
- _/_ : (A : 𝓤 ̇ ) → Rel A 𝓦 → 𝓤 ⊔ (𝓦 ⁺) ̇
+ _/_ : (A : Set 𝓤 ) → Rel A 𝓦 → Set(𝓤 ⊔ lsuc 𝓦)
  A / R = Σ C ꞉ Pred A 𝓦 , IsBlock C {R}
 
  infix -1 _/_
@@ -137,7 +137,7 @@ We use the following type to represent an \ab R-block with a designated represen
 
 \begin{code}
 
- ⟪_⟫ : {A : 𝓤 ̇} → A → {R : Rel A 𝓦} → A / R
+ ⟪_⟫ : {A : Set 𝓤} → A → {R : Rel A 𝓦} → A / R
  ⟪ a ⟫{R} = [ a ]{R} , (a  , refl)
 
 \end{code}
@@ -146,7 +146,7 @@ Dually, the next type provides an *elimination rule*.<sup>[2](Relations.Quotient
 
 \begin{code}
 
- ⌞_⌟ : {A : 𝓤 ̇}{R : Rel A 𝓦} → A / R  → A
+ ⌞_⌟ : {A : Set 𝓤}{R : Rel A 𝓦} → A / R  → A
  ⌞ C , a , p ⌟ = a
 
 \end{code}
@@ -157,7 +157,7 @@ It will be convenient to have the following subset inclusion lemmas on hand when
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{x y : A}{R : Rel A 𝓦} where
+module _ {𝓤 𝓦 : Level}{A : Set 𝓤}{x y : A}{R : Rel A 𝓦} where
 
  open IsEquivalence
  /-subset : IsEquivalence R → R x y →  [ x ]{R} ⊆  [ y ]{R}
@@ -187,7 +187,7 @@ An example application of these is the `block-ext` type in the [Relations.Extens
 
 
 <!-- We represent the property of being a preorder using a record type as follows.
-module _ {𝓤 𝓦 : Universe} where
+module _ {𝓤 𝓦 : Level} where
  record IsPreorder {A : 𝓤 ̇}(R : Rel A 𝓦) : 𝓤 ⊔ 𝓦 ̇ where
   field rfl : Refl R ; trans : Trans R
 We define the type preorders as follows.

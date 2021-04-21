@@ -28,9 +28,9 @@ For a fixed signature `𝑆 : Signature 𝓞 𝓥` and universe `𝓤`, we defin
 
 \begin{code}
 
-Algebra : (𝓤 : Universe)(𝑆 : Signature 𝓞 𝓥) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⁺ ̇
+Algebra : (𝓤 : Level)(𝑆 : Signature 𝓞 𝓥) → Set (𝓞 ⊔ 𝓥 ⊔ lsuc 𝓤)
 
-Algebra 𝓤 𝑆 = Σ A ꞉ 𝓤 ̇ ,                     -- the domain
+Algebra 𝓤 𝑆 = Σ A ꞉ Set 𝓤 ,                     -- the domain
               Π f ꞉ ∣ 𝑆 ∣ , Op (∥ 𝑆 ∥ f) A    -- the basic operations
 
 \end{code}
@@ -47,10 +47,10 @@ Some people prefer to represent algebraic structures in type theory using record
 
 \begin{code}
 
-record algebra (𝓤 : Universe) (𝑆 : Signature 𝓞 𝓥) : (𝓞 ⊔ 𝓥 ⊔ 𝓤) ⁺ ̇ where
+record algebra (𝓤 : Level) (𝑆 : Signature 𝓞 𝓥) : Set(lsuc(𝓞 ⊔ 𝓥 ⊔ 𝓤)) where
  constructor mkalg
  field
-  univ : 𝓤 ̇
+  univ : Set 𝓤
   op : (f : ∣ 𝑆 ∣) → ((∥ 𝑆 ∥ f) → univ) → univ
 
 
@@ -97,21 +97,21 @@ Recall, in the [section on level lifting and lowering](Overture.Lifts.html#level
 \begin{code}
 
 
-module _ {𝓘 : Universe} {I : 𝓘 ̇}{A : 𝓤 ̇} where
+module _ {𝓘 : Level} {I : Set 𝓘}{A : Set 𝓤} where
 
  open Lift
 
- Lift-op : Op I A → (𝓦 : Universe) → Op I (Lift{𝓦} A)
+ Lift-op : Op I A → (𝓦 : Level) → Op I (Lift{𝓦} A)
  Lift-op f 𝓦 = λ x → lift (f (λ i → lower (x i)))
 
 module _ {𝑆 : Signature 𝓞 𝓥}  where
 
- Lift-alg : Algebra 𝓤 𝑆 → (𝓦 : Universe) → Algebra (𝓤 ⊔ 𝓦) 𝑆
+ Lift-alg : Algebra 𝓤 𝑆 → (𝓦 : Level) → Algebra (𝓤 ⊔ 𝓦) 𝑆
  Lift-alg 𝑨 𝓦 = Lift ∣ 𝑨 ∣ , (λ (𝑓 : ∣ 𝑆 ∣) → Lift-op (𝑓 ̂ 𝑨) 𝓦)
 
  open algebra
 
- Lift-alg-record-type : algebra 𝓤 𝑆 → (𝓦 : Universe) → algebra (𝓤 ⊔ 𝓦) 𝑆
+ Lift-alg-record-type : algebra 𝓤 𝑆 → (𝓦 : Level) → algebra (𝓤 ⊔ 𝓦) 𝑆
  Lift-alg-record-type 𝑨 𝓦 = mkalg (Lift (univ 𝑨)) (λ (f : ∣ 𝑆 ∣) → Lift-op ((op 𝑨) f) 𝓦)
 
 \end{code}
@@ -136,7 +136,7 @@ The formal definition is immediate since all the work is done by the relation `|
 
 \begin{code}
 
- compatible : (𝑨 : Algebra 𝓤 𝑆) → Rel ∣ 𝑨 ∣ 𝓦 → 𝓞 ⊔ 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
+ compatible : (𝑨 : Algebra 𝓤 𝑆) → Rel ∣ 𝑨 ∣ 𝓦 → Set(𝓞 ⊔ 𝓤 ⊔ 𝓥 ⊔ 𝓦)
  compatible  𝑨 R = ∀ 𝑓 → (𝑓 ̂ 𝑨) |: R
 
 \end{code}
@@ -152,13 +152,13 @@ In the [Relations.Continuous][] module, we defined a function called `cont-compa
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe} {I : 𝓥 ̇} {𝑆 : Signature 𝓞 𝓥} where
+module _ {𝓤 𝓦 : Level} {I : Set 𝓥} {𝑆 : Signature 𝓞 𝓥} where
  open import Relations.Continuous using (ContRel; DepRel; cont-compatible-op; dep-compatible-op)
 
- cont-compatible : (𝑨 : Algebra 𝓤 𝑆) → ContRel I ∣ 𝑨 ∣ 𝓦 → 𝓞 ⊔ 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
+ cont-compatible : (𝑨 : Algebra 𝓤 𝑆) → ContRel I ∣ 𝑨 ∣ 𝓦 → Set(𝓞 ⊔ 𝓤 ⊔ 𝓥 ⊔ 𝓦)
  cont-compatible 𝑨 R = Π 𝑓 ꞉ ∣ 𝑆 ∣ , cont-compatible-op (𝑓 ̂ 𝑨) R
 
- dep-compatible : (𝒜 : I → Algebra 𝓤 𝑆) → DepRel I (λ i → ∣ 𝒜  i ∣) 𝓦 → 𝓞 ⊔ 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
+ dep-compatible : (𝒜 : I → Algebra 𝓤 𝑆) → DepRel I (λ i → ∣ 𝒜  i ∣) 𝓦 → Set(𝓞 ⊔ 𝓤 ⊔ 𝓥 ⊔ 𝓦)
  dep-compatible 𝒜 R = Π 𝑓 ꞉ ∣ 𝑆 ∣ , dep-compatible-op (λ i → 𝑓 ̂ (𝒜 i)) R
 
 \end{code}

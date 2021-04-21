@@ -42,9 +42,9 @@ As explained above, a natural notion of function equality is defined as follows:
 
 \begin{code}
 
-module hide-∼ {A : 𝓤 ̇ } where
+module hide-∼ {A : Set 𝓤 } where
 
- _∼_ : {B : A → 𝓦 ̇ } → Π B → Π B → 𝓤 ⊔ 𝓦 ̇
+ _∼_ : {B : A → Set 𝓦 } → Π B → Π B → Set (𝓤 ⊔ 𝓦)
  f ∼ g = Π x ꞉ A , f x ≡ g x
 
  infix 0 _∼_
@@ -59,8 +59,8 @@ open import MGS-MLTT using (_∼_) public
 
 module hide-funext where
 
- dfunext : ∀ 𝓤 𝓦 → 𝓤 ⁺ ⊔ 𝓦 ⁺ ̇
- dfunext 𝓤 𝓦 = {A : 𝓤 ̇ }{B : A → 𝓦 ̇ }{f g : Π x ꞉ A , B x} →  f ∼ g  →  f ≡ g
+ dfunext : ∀ 𝓤 𝓦 → Set (lsuc (𝓤 ⊔ 𝓦))
+ dfunext 𝓤 𝓦 = {A : Set 𝓤 }{B : A → Set 𝓦 }{f g : Π x ꞉ A , B x} →  f ∼ g  →  f ≡ g
 
 \end{code}
 
@@ -86,7 +86,7 @@ The next type defines the converse of function extensionality (cf. `cong-app` in
 
 \begin{code}
 
-happly : {A : 𝓤 ̇ }{B : A → 𝓦 ̇ }{f g : Π B} → f ≡ g → f ∼ g
+happly : {A : Set 𝓤 }{B : A → Set 𝓦 }{f g : Π B} → f ≡ g → f ∼ g
 happly refl _ = refl
 
 \end{code}
@@ -103,15 +103,15 @@ First, a type is a *singleton* if it has exactly one inhabitant and a *subsingle
 
 \begin{code}
 
-module hide-tt-defs {𝓤 : Universe} where
+module hide-tt-defs {𝓤 : Level} where
 
- is-center : (A : 𝓤 ̇ ) → A → 𝓤 ̇
+ is-center : (A : Set 𝓤 ) → A → Set 𝓤
  is-center A c = (x : A) → c ≡ x
 
- is-singleton : 𝓤 ̇ → 𝓤 ̇
+ is-singleton : Set 𝓤 → Set 𝓤
  is-singleton A = Σ c ꞉ A , is-center A c
 
- is-subsingleton : 𝓤 ̇ → 𝓤 ̇
+ is-subsingleton : Set 𝓤 → Set 𝓤
  is-subsingleton A = (x y : A) → x ≡ y
 
 open import MGS-Basic-UF using (is-center; is-singleton; is-subsingleton) public
@@ -123,10 +123,10 @@ Next, we consider the type `is-equiv` which is used to assert that a function is
 
 \begin{code}
 
-module hide-tt-defs' {𝓤 𝓦 : Universe} where
+module hide-tt-defs' {𝓤 𝓦 : Level} where
 
- fiber : {A : 𝓤 ̇ } {B : 𝓦 ̇ } (f : A → B) → B → 𝓤 ⊔ 𝓦 ̇
- fiber {A} f y = Σ x ꞉ A , f x ≡ y
+ fiber : {A : Set 𝓤 } {B : Set 𝓦 } (f : A → B) → B → Set (𝓤 ⊔ 𝓦)
+ fiber {A} f y = Σ x ꞉ A , (f x ≡ y)
 
 \end{code}
 
@@ -134,7 +134,7 @@ A function is called an *equivalence* if all of its fibers are singletons.
 
 \begin{code}
 
- is-equiv : {A : 𝓤 ̇ } {B : 𝓦 ̇ } → (A → B) → 𝓤 ⊔ 𝓦 ̇
+ is-equiv : {A : Set 𝓤 } {B : Set 𝓦 } → (A → B) → Set (𝓤 ⊔ 𝓦)
  is-equiv f = ∀ y → is-singleton (fiber f y)
 
 \end{code}
@@ -147,8 +147,8 @@ open import MGS-Equivalences using (fiber; is-equiv) public
 
 module hide-hfunext where
 
- hfunext :  ∀ 𝓤 𝓦 → (𝓤 ⊔ 𝓦)⁺ ̇
- hfunext 𝓤 𝓦 = {A : 𝓤 ̇}{B : A → 𝓦 ̇} (f g : Π B) → is-equiv (happly{f = f}{g})
+ hfunext :  ∀ 𝓤 𝓦 → Set (lsuc (𝓤 ⊔ 𝓦))
+ hfunext 𝓤 𝓦 = {A : Set 𝓤}{B : A → Set 𝓦} (f g : Π B) → is-equiv (happly{f = f}{g})
 
 open import MGS-FunExt-from-Univalence using (hfunext) public
 

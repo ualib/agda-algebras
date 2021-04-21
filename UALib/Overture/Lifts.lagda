@@ -46,7 +46,7 @@ The general `Lift` record type that we now describe makes these situations easie
 
 \begin{code}
 
-record Lift {𝓦 𝓤 : Universe} (A : 𝓤 ̇) : 𝓤 ⊔ 𝓦 ̇  where
+record Lift {𝓦 𝓤 : Level} (A : Set 𝓤) : Set (𝓤 ⊔ 𝓦) where
  constructor lift
  field lower : A
 open Lift
@@ -57,10 +57,10 @@ The point of having a ramified hierarchy of universes is to avoid Russell's para
 
 \begin{code}
 
-lift∼lower : {𝓦 𝓤 : Universe}{A : 𝓤 ̇} → lift ∘ lower ≡ 𝑖𝑑 (Lift{𝓦} A)
+lift∼lower : ∀ {𝓦 𝓤}{A : Set 𝓤} → lift ∘ lower ≡ 𝑖𝑑 (Lift{𝓦} A)
 lift∼lower = refl
 
-lower∼lift : {𝓦 𝓤 : Universe}{A : 𝓤 ̇} → lower{𝓦}{𝓤} ∘ lift ≡ 𝑖𝑑 A
+lower∼lift : {𝓦 𝓤 : Level}{A : Set 𝓤} → lower{𝓦}{𝓤} ∘ lift ≡ 𝑖𝑑 A
 lower∼lift = refl
 
 \end{code}

@@ -39,11 +39,11 @@ To define `DepRel`, the type of *dependent relations*, we exploit the full power
 
 \begin{code}
 
-ContRel : 𝓥 ̇ → 𝓤 ̇ → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
-ContRel I A 𝓦 = (I → A) → 𝓦 ̇
+ContRel : Set 𝓥 → Set 𝓤 → (𝓦 : Level) → Set(𝓤 ⊔ 𝓥 ⊔ lsuc 𝓦)
+ContRel I A 𝓦 = (I → A) → Set 𝓦
 
-DepRel : (I : 𝓥 ̇) → (I → 𝓤 ̇) → (𝓦 : Universe) → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
-DepRel I 𝒜 𝓦 = Π 𝒜 → 𝓦 ̇
+DepRel : (I : Set 𝓥) → (I → Set 𝓤) → (𝓦 : Level) → Set(𝓤 ⊔ 𝓥 ⊔ lsuc 𝓦)
+DepRel I 𝒜 𝓦 = Π 𝒜 → Set 𝓦
 
 \end{code}
 
@@ -59,12 +59,12 @@ It will be helpful to have some functions that make it easy to assert that a giv
 
 \begin{code}
 
-module _ {I J : 𝓥 ̇} {A : 𝓤 ̇} where
+module _ {I J : Set 𝓥} {A : Set 𝓤} where
 
- eval-cont-rel : ContRel I A 𝓦 → (I → J → A) → 𝓥 ⊔ 𝓦 ̇
+ eval-cont-rel : ContRel I A 𝓦 → (I → J → A) → Set(𝓥 ⊔ 𝓦)
  eval-cont-rel R 𝒶 = Π j ꞉ J , R λ i → 𝒶 i j
 
- cont-compatible-op : Op J A → ContRel I A 𝓦 → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ cont-compatible-op : Op J A → ContRel I A 𝓦 → Set(𝓥 ⊔ 𝓤 ⊔ 𝓦)
  cont-compatible-op 𝑓 R  = Π 𝒶 ꞉ (I → J → A) , (eval-cont-rel R 𝒶 → R λ i → (𝑓 (𝒶 i)))
 
 \end{code}
@@ -90,16 +90,16 @@ Above we saw lifts of continuous relations and what it means for such relations 
 
 \begin{code}
 
-module _ {I J : 𝓥 ̇} {𝒜 : I → 𝓤 ̇} where
+module _ {I J : Set 𝓥} {𝒜 : I → Set 𝓤} where
 
- eval-dep-rel : DepRel I 𝒜 𝓦 → (∀ i → (J → 𝒜 i)) → 𝓥 ⊔ 𝓦 ̇
+ eval-dep-rel : DepRel I 𝒜 𝓦 → (∀ i → (J → 𝒜 i)) → Set(𝓥 ⊔ 𝓦)
  eval-dep-rel R 𝒶 = ∀ j → R (λ i → (𝒶 i) j)
 
- dep-compatible-op : (∀ i → Op J (𝒜 i)) → DepRel I 𝒜 𝓦 → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ dep-compatible-op : (∀ i → Op J (𝒜 i)) → DepRel I 𝒜 𝓦 → Set(𝓥 ⊔ 𝓤 ⊔ 𝓦)
  dep-compatible-op 𝑓 R  = ∀ 𝒶 → (eval-dep-rel R) 𝒶 → R λ i → (𝑓 i)(𝒶 i)
 
  -- equivalent definition using Π notation
- dep-compatible'-op : (Π i ꞉ I , Op J (𝒜 i)) → DepRel I 𝒜 𝓦 → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ dep-compatible'-op : (Π i ꞉ I , Op J (𝒜 i)) → DepRel I 𝒜 𝓦 → Set(𝓥 ⊔ 𝓤 ⊔ 𝓦)
  dep-compatible'-op 𝑓 R  =  Π 𝒶 ꞉ (Π i ꞉ I , (J → 𝒜 i)) , ((eval-dep-rel R) 𝒶 → R λ i → (𝑓 i)(𝒶 i))
 
 \end{code}

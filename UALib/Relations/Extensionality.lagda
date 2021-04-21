@@ -24,8 +24,8 @@ The principle of *proposition extensionality* asserts that logically equivalent 
 
 \begin{code}
 
-pred-ext : (𝓤 𝓦 : Universe) → (𝓤 ⊔ 𝓦) ⁺ ̇
-pred-ext 𝓤 𝓦 = ∀ {A : 𝓤 ̇}{P Q : Pred A 𝓦 } → P ⊆ Q → Q ⊆ P → P ≡ Q
+pred-ext : (𝓤 𝓦 : Level) → Set (lsuc (𝓤 ⊔ 𝓦))
+pred-ext 𝓤 𝓦 = ∀ {A : Set 𝓤}{P Q : Pred A 𝓦 } → P ⊆ Q → Q ⊆ P → P ≡ Q
 
 \end{code}
 
@@ -39,7 +39,7 @@ We need an identity type for congruence classes (blocks) over sets so that two d
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{R : Rel A 𝓦} where
+module _ {𝓤 𝓦 : Level}{A : Set 𝓤}{R : Rel A 𝓦} where
 
  block-ext : pred-ext 𝓤 𝓦 → IsEquivalence R → {u v : A} → R u v → [ u ]{R} ≡ [ v ]{R}
  block-ext pe Req {u}{v} Ruv = pe (/-subset Req Ruv) (/-supset Req Ruv)
@@ -72,11 +72,11 @@ We could also define *relation extensionality* principles which generalize the p
 
 \begin{code}
 
-cont-rel-ext : (𝓤 𝓥 𝓦 : Universe) → (𝓤 ⊔ 𝓥 ⊔ 𝓦) ⁺ ̇
-cont-rel-ext 𝓤 𝓥 𝓦 = ∀ {I : 𝓥 ̇}{A : 𝓤 ̇}{P Q : ContRel I A 𝓦 } → P ⊆ Q → Q ⊆ P → P ≡ Q
+cont-rel-ext : (𝓤 𝓥 𝓦 : Level) → Set (lsuc (𝓤 ⊔ 𝓥 ⊔ 𝓦))
+cont-rel-ext 𝓤 𝓥 𝓦 = ∀ {I : Set 𝓥}{A : Set 𝓤}{P Q : ContRel I A 𝓦 } → P ⊆ Q → Q ⊆ P → P ≡ Q
 
-dep-rel-ext : (𝓤 𝓥 𝓦 : Universe) → (𝓤 ⊔ 𝓥 ⊔ 𝓦) ⁺ ̇
-dep-rel-ext 𝓤 𝓥 𝓦 = ∀ {I : 𝓥 ̇}{𝒜 : I → 𝓤 ̇}{P Q : DepRel I 𝒜 𝓦 } → P ⊆ Q → Q ⊆ P → P ≡ Q
+dep-rel-ext : (𝓤 𝓥 𝓦 : Level) → Set (lsuc (𝓤 ⊔ 𝓥 ⊔ 𝓦))
+dep-rel-ext 𝓤 𝓥 𝓦 = ∀ {I : Set 𝓥}{𝒜 : I → Set 𝓤}{P Q : DepRel I 𝒜 𝓦 } → P ⊆ Q → Q ⊆ P → P ≡ Q
 
 \end{code}
 
@@ -94,10 +94,10 @@ These types are not used in other modules of the [UALib][] and we pose the same 
 
 <!-- NOT USED
 
-pred→prop : {𝓤 𝓦 : Universe}{A : 𝓤 ̇} → Pred A 𝓦 → Pred A 𝓦
+pred→prop : {𝓤 𝓦 : Level}{A : 𝓤 ̇} → Pred A 𝓦 → Pred A 𝓦
 pred→prop P = λ x → P x → 𝟙
 
-pred-ext→uip : {𝓤 𝓦 : Universe}{A : 𝓤 ̇} → pred-ext 𝓤 𝓦  → (P : Pred A 𝓦) → ∀ x → is-subsingleton (P x)
+pred-ext→uip : {𝓤 𝓦 : Level}{A : 𝓤 ̇} → pred-ext 𝓤 𝓦  → (P : Pred A 𝓦) → ∀ x → is-subsingleton (P x)
 pred-ext→uip {𝓤}{𝓦}{A} pe P x p q = {!γ!}
  where
   P' : Pred A 𝓦

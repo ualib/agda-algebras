@@ -46,7 +46,7 @@ The datatype we use to represent definitional equality is imported from the Iden
 
 module hide-refl where
 
- data _≡_ {A : 𝓤 ̇} : A → A → 𝓤 ̇ where refl : {x : A} → x ≡ x
+ data _≡_ {A : Set 𝓤} : A → A → Set 𝓤 where refl : {x : A} → x ≡ x
 
 open import Identity-Type renaming (_≡_ to infix 0 _≡_) public
 
@@ -62,10 +62,10 @@ The `≡` type just defined is an equivalence relation and the formal proof of t
 
 \begin{code}
 
-≡-sym : {A : 𝓤 ̇}{x y : A} → x ≡ y → y ≡ x
+≡-sym : {A : Set 𝓤}{x y : A} → x ≡ y → y ≡ x
 ≡-sym refl = refl
 
-≡-trans : {A : 𝓤 ̇}{x y z : A} → x ≡ y → y ≡ z → x ≡ z
+≡-trans : {A : Set 𝓤}{x y z : A} → x ≡ y → y ≡ z → x ≡ z
 ≡-trans refl refl = refl
 
 \end{code}
@@ -74,7 +74,7 @@ We prove that `≡` obeys the substitution rule (subst) in the next subsection (
 
 \begin{code}
 
-module hide-sym-trans {A : 𝓤 ̇} where
+module hide-sym-trans {A : Set 𝓤} where
 
  _⁻¹ : {x y : A} → x ≡ y → y ≡ x
  p ⁻¹ = ≡-sym p
@@ -106,10 +106,10 @@ Alonzo Church characterized equality by declaring two things equal iff no proper
 
 module hide-id-transport where
 
- 𝑖𝑑 : (A : 𝓤 ̇ ) → A → A
+ 𝑖𝑑 : (A : Set 𝓤 ) → A → A
  𝑖𝑑 A = λ x → x
 
- transport : {A : 𝓤 ̇}(B : A → 𝓦 ̇){x y : A} → x ≡ y → B x → B y
+ transport : {A : Set 𝓤}(B : A → Set 𝓦){x y : A} → x ≡ y → B x → B y
  transport B (refl {x = x}) = 𝑖𝑑 (B x)
 
 open import MGS-MLTT using (𝑖𝑑; transport) public
@@ -122,7 +122,7 @@ A function is well defined if and only if it maps equivalent elements to a singl
 
 \begin{code}
 
-module hide-ap {A : 𝓤 ̇}{B : 𝓦 ̇} where
+module hide-ap {A : Set 𝓤}{B : Set 𝓦} where
 
  ap : (f : A → B){x y : A} → x ≡ y → f x ≡ f y
  ap f {x} p = transport (λ - → f x ≡ f -) p (refl {x = f x})
@@ -135,7 +135,7 @@ Here's a useful variation of `ap` that we borrow from the `Relation/Binary/Core.
 
 \begin{code}
 
-cong-app : {A : 𝓤 ̇}{B : A → 𝓦 ̇}{f g : Π B} → f ≡ g → ∀ x → f x ≡ g x
+cong-app : {A : Set 𝓤}{B : A → Set 𝓦}{f g : Π B} → f ≡ g → ∀ x → f x ≡ g x
 cong-app refl _ = refl
 
 \end{code}

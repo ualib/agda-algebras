@@ -79,38 +79,30 @@ Throughout we use many of the nice tools that [Martín Escardó][] has developed
 
 \begin{code}
 
-open import Universes public
+-- open import Universes public
+open import Agda.Primitive public
+  using (_⊔_         -- ) renaming (
+        ; lzero      --   to 𝓤₀
+        ; lsuc       --   to _⁺
+        ; Level      --   to Universe
+        ; Setω)       --   to 𝓤ω
+                     --  )
 
+-- Would might switch to using Type instead of Set using this alias.
+Type : (𝓤 : Level) → Set (lsuc 𝓤)
+Type 𝓤 = Set 𝓤
 \end{code}
 
-Since we use the `public` directive, the `Universes` module will be available to all modules that import the present module ([Overture.Preliminaries][]). This module declares symbols used to denote universes.  As mentioned, we adopt Escardó's convention of denoting universes by capital calligraphic letters, and most of the ones we use are already declared in the `Universes` module; those that are not are declared as follows.
+We adopt Escardó's convention of denoting universe levels by capital calligraphic letters.
 
 \begin{code}
 
-variable 𝓞 𝓧 𝓨 𝓩 : Universe
+variable
+ 𝓞 𝓠 𝓡 𝓢 𝓣 𝓤 𝓥 𝓦 𝓧 𝓨 𝓩 : Level
 
 \end{code}
 
-The `Universes` module also provides alternative syntax for the primitive operations on universes that Agda supports.  The ` ̇` operator maps a universe level `𝓤` to the type `Set 𝓤`, and the latter has type `Set (lsuc 𝓤)`. The primitive Agda level `lzero` is renamed `𝓤₀`, so `𝓤₀ ̇` is an alias for `Set lzero`. Thus, `𝓤 ̇` is simply an alias for `Set 𝓤`, and we have the typing judgment `Set 𝓤 : Set (lsuc 𝓤)`. Finally, `Set (lsuc lzero)` is denoted by `Set 𝓤₀ ⁺` which we (and [Escardó][]) denote by `𝓤₀ ⁺ ̇`.
-
-The following dictionary translates between standard Agda syntax and Type Topology/UALib notation.
-
-```agda
-Agda              Type Topology/UALib
-====              ===================
-Level             Universe
-lzero             𝓤₀
-𝓤 : Level         𝓤 : Universe
-Set lzero         𝓤₀ ̇
-Set 𝓤             𝓤 ̇
-lsuc lzero        𝓤₀ ⁺
-lsuc 𝓤            𝓤 ⁺
-Set (lsuc lzero)  𝓤₀ ⁺ ̇
-Set (lsuc 𝓤)      𝓤 ⁺ ̇
-Setω              𝓤ω
-```
-
-To justify the introduction of this somewhat nonstandard notation for universe levels, [Escardó][] points out that the Agda library uses `Level` for universes (so what we write as `𝓤 ̇` is written `Set 𝓤` in standard Agda), but in univalent mathematics the types in `𝓤 ̇` need not be sets, so the standard Agda notation can be misleading.
+Since we use the `public` directive, the things we import from the `Agda.Primitive` module will be available to all modules that import the present module ([Overture.Preliminaries][]).
 
 There will be many occasions calling for a type living in the universe that is the least upper bound of two universes, say, `𝓤 ̇` and `𝓥 ̇` . The universe `𝓤 ⊔ 𝓥 ̇` denotes this least upper bound. Here `𝓤 ⊔ 𝓥̇ ` is used to denote the universe level corresponding to the least upper bound of the levels `𝓤` and `𝓥`, where the `_⊔_` is an Agda primitive designed for precisely this purpose.
 
@@ -119,13 +111,13 @@ There will be many occasions calling for a type living in the universe that is t
 
 Given universes 𝓤 and 𝓥, a type `A : 𝓤 ̇`, and a type family `B : A → 𝓥 ̇`, the *Sigma type* (or *dependent pair type*), denoted by `Σ(x ꞉ A), B x`, generalizes the Cartesian product `A × B` by allowing the type `B x` of the second argument of the ordered pair `(x , y)` to depend on the value `x` of the first.  That is, an inhabitant of the type `Σ(x ꞉ A), B x` is a pair `(x , y)` such that `x : A` and `y : B x`.
 
-The dependent product type is defined in the [Type Topology][] library. For pedagogical purposes we repeat this definition here (inside a "hidden module" so that it doesn't conflict with the [Type Topology][] definition that we import and use.)<sup>[3](Overture.Equality.html#fn3)</sup>
+The dependent product type is defined in other libraries (e.g., the [Agda Standard Library][] and the [Type Topology][] library). For pedagogical purposes we repeat this definition here.
 
 \begin{code}
 
 module hide-sigma where
 
- record Σ {𝓤 𝓥} {A : 𝓤 ̇ } (B : A → 𝓥 ̇ ) : 𝓤 ⊔ 𝓥 ̇  where
+ record Σ {𝓤 𝓥} {A : Set 𝓤 } (B : A → Set 𝓥 ) : Set(𝓤 ⊔ 𝓥)  where
   constructor _,_
   field
    pr₁ : A
@@ -139,7 +131,7 @@ Agda's default syntax for this type is `Σ A (λ x → B)`, but we prefer the no
 
 \begin{code}
 
- -Σ : {𝓤 𝓥 : Universe} (A : 𝓤 ̇ ) (B : A → 𝓥 ̇ ) → 𝓤 ⊔ 𝓥 ̇
+ -Σ : {𝓤 𝓥 : Level} (A : Set 𝓤 ) (B : A → Set 𝓥 ) → Set(𝓤 ⊔ 𝓥)
  -Σ A B = Σ B
 
  syntax -Σ A (λ x → B) = Σ x ꞉ A , B
@@ -152,7 +144,7 @@ A special case of the Sigma type is the one in which the type `B` doesn't depend
 
 \begin{code}
 
- _×_ : 𝓤 ̇ → 𝓥 ̇ → 𝓤 ⊔ 𝓥 ̇
+ _×_ : Set 𝓤 → Set 𝓥 → Set (𝓤 ⊔ 𝓥)
  A × B = Σ x ꞉ A , B
 
 \end{code}
@@ -163,12 +155,12 @@ Given universes `𝓤` and `𝓥`, a type `X : 𝓤 ̇`, and a type family `Y : 
 
 \begin{code}
 
-module hide-pi {𝓤 𝓦 : Universe} where
+module hide-pi {𝓤 𝓦 : Level} where
 
- Π : {A : 𝓤 ̇ } (B : A → 𝓦 ̇ ) → 𝓤 ⊔ 𝓦 ̇
+ Π : {A : Set 𝓤 } (B : A → Set 𝓦 ) → Set (𝓤 ⊔ 𝓦)
  Π {A} B = (x : A) → B x
 
- -Π : (A : 𝓤 ̇ )(B : A → 𝓦 ̇ ) → 𝓤 ⊔ 𝓦 ̇
+ -Π : (A : Set 𝓤 )(B : A → Set 𝓦 ) → Set(𝓤 ⊔ 𝓦)
  -Π A B = Π B
 
  infixr -1 -Π
@@ -197,7 +189,7 @@ The definition of `Σ` (and thus, of `×`) includes the fields `pr₁` and `pr�
 
 \begin{code}
 
-module _ {𝓤 : Universe}{A : 𝓤 ̇ }{B : A → 𝓥 ̇} where
+module _ {A : Set 𝓤 }{B : A → Set 𝓥} where
 
  ∣_∣ fst : Σ B → A
  ∣ x , y ∣ = x
@@ -209,7 +201,7 @@ module _ {𝓤 : Universe}{A : 𝓤 ̇ }{B : A → 𝓥 ̇} where
 
 \end{code}
 
-Here we put the definitions inside an *anonymous module*, which starts with the `module` keyword followed by an underscore (instead of a module name). The purpose is simply to move the postulated typing judgments---the "parameters" of the module (e.g., `𝓤 : Universe`)---out of the way so they don't obfuscate the definitions inside the module.
+Here we put the definitions inside an *anonymous module*, which starts with the `module` keyword followed by an underscore (instead of a module name). The purpose is simply to move the postulated typing judgments---the "parameters" of the module (e.g., `A : Set 𝓤`)---out of the way so they don't obfuscate the definitions inside the module.
 
 Also note that multiple inhabitants of a single type (e.g., `∣_∣` and `fst`) may be declared on the same line.
 
@@ -232,7 +224,11 @@ Also note that multiple inhabitants of a single type (e.g., `∣_∣` and `fst`)
 
 {% include UALib.Links.md %}
 
-<!--
+
+
+
+
+<!--  NO LONGER USED STUFF ----------------------------------------------------------------------------------------
 
 <sup>3</sup><span class="footnote" id="fn3">We have made a concerted effort to avoid duplicating types that are already provided elsewhere, such as the [Type Topology][] library.  We occasionally repeat the definitions of such types for pedagogical purposes, but we almost always import and work with the original definitions in order to make the sources known and to credit the original authors.</span>
 
@@ -256,4 +252,38 @@ a-function-outside-the-submodule a = a
 ```
 
 Actually, for illustration purposes, the example we gave here is not one that Agda would normally accept.  The problem is that the last function above is outside the submodule in which the variable 𝓤 is declared to have type `Universe`.  Therefore, Agda would complain that 𝓤 is not in scope. We tend to avoid such scope problems by declaring frequently used variable names, like 𝓤, 𝓥, 𝓦, etc., in advance so they are always in scope.
+
+
+
+This module declares symbols used to denote universes.
+, and most of the ones we use are already declared in the `Universes` module; those that are not are declared as follows.
+
+The `Universes` module also provides alternative syntax for the primitive operations on universes that Agda supports.  The ` ̇` operator maps a universe level `𝓤` to the type `Set 𝓤`, and the latter has type `Set (lsuc 𝓤)`. The primitive Agda level `lzero` is renamed `𝓤₀`, so `𝓤₀ ̇` is an alias for `Set lzero`. Thus, `𝓤 ̇` is simply an alias for `Set 𝓤`, and we have the typing judgment `Set 𝓤 : Set (lsuc 𝓤)`. Finally, `Set (lsuc lzero)` is denoted by `Set 𝓤₀ ⁺` which we (and [Escardó][]) denote by `𝓤₀ ⁺ ̇`.
+
+The following dictionary translates between standard Agda syntax and Type Topology/UALib notation.
+
+```agda
+Agda              Type Topology/UALib
+====              ===================
+Level             Universe
+lzero             𝓤₀
+𝓤 : Level         𝓤 : Universe
+Set lzero         𝓤₀ ̇
+Set 𝓤             𝓤 ̇
+lsuc lzero        𝓤₀ ⁺
+lsuc 𝓤            𝓤 ⁺
+Set (lsuc lzero)  𝓤₀ ⁺ ̇
+Set (lsuc 𝓤)      𝓤 ⁺ ̇
+Setω              𝓤ω
+```
+
+To justify the introduction of this somewhat nonstandard notation for universe levels, [Escardó][] points out that the Agda library uses `Level` for universes (so what we write as `𝓤 ̇` is written `Set 𝓤` in standard Agda), but in univalent mathematics the types in `𝓤 ̇` need not be sets, so the standard Agda notation can be misleading.
+
+
+
+
+
 -->
+
+
+

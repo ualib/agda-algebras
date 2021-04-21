@@ -13,12 +13,13 @@ This section describes the [Homomorphisms.Basic] module of the [Agda Universal A
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
+module Homomorphisms.Basic where
 
-module Homomorphisms.Basic {𝑆 : Signature 𝓞 𝓥} where
-
-open import Algebras.Congruences{𝑆 = 𝑆} public
+open import Algebras.Congruences public
 open import MGS-MLTT using (_≡⟨_⟩_; _∎; id) public
+
+module homomorphisms {𝑆 : Signature 𝓞 𝓥} where
+ open congruences {𝑆 = 𝑆} public
 
 \end{code}
 
@@ -32,10 +33,10 @@ To formalize this concept, we first define a type representing the assertion tha
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) where
+ module _ {𝓤 𝓦 : Level}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) where
 
- compatible-op-map : ∣ 𝑆 ∣ → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ̇
- compatible-op-map 𝑓 h = ∀ 𝑎 → h ((𝑓 ̂ 𝑨) 𝑎) ≡ (𝑓 ̂ 𝑩) (h ∘ 𝑎)
+  compatible-op-map : ∣ 𝑆 ∣ → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Set(𝓤 ⊔ 𝓥 ⊔ 𝓦)
+  compatible-op-map 𝑓 h = ∀ 𝑎 → h ((𝑓 ̂ 𝑨) 𝑎) ≡ (𝑓 ̂ 𝑩) (h ∘ 𝑎)
 
 \end{code}
 
@@ -45,11 +46,11 @@ We now define the type `hom 𝑨 𝑩` of homomorphisms from `𝑨` to `𝑩` by
 
 \begin{code}
 
- is-homomorphism : (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
- is-homomorphism g = ∀ 𝑓  →  compatible-op-map 𝑓 g
+  is-homomorphism : (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Set(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
+  is-homomorphism g = ∀ 𝑓  →  compatible-op-map 𝑓 g
 
- hom : 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
- hom = Σ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣ ) , is-homomorphism g
+  hom : Set(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
+  hom = Σ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣ ) , is-homomorphism g
 
 \end{code}
 
@@ -59,10 +60,10 @@ Let's look at a few examples of homomorphisms. These examples are actually quite
 
 \begin{code}
 
-module _ {𝓤 : Universe} where
+ module _ {𝓤 : Level} where
 
- 𝒾𝒹 : (A : Algebra 𝓤 𝑆) → hom A A
- 𝒾𝒹 _ = id , λ 𝑓 𝑎 → refl
+  𝒾𝒹 : (A : Algebra 𝓤 𝑆) → hom A A
+  𝒾𝒹 _ = id , λ 𝑓 𝑎 → refl
 
 \end{code}
 
@@ -70,13 +71,13 @@ Next, `lift` and `lower`, defined in the [Overture.Lifts][] module, are (the map
 
 \begin{code}
 
- open Lift
+  open Lift
 
- 𝓁𝒾𝒻𝓉 : {𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} → hom 𝑨 (Lift-alg 𝑨 𝓦)
- 𝓁𝒾𝒻𝓉 = lift , λ 𝑓 𝑎 → refl
+  𝓁𝒾𝒻𝓉 : {𝓦 : Level}{𝑨 : Algebra 𝓤 𝑆} → hom 𝑨 (Lift-alg 𝑨 𝓦)
+  𝓁𝒾𝒻𝓉 = lift , λ 𝑓 𝑎 → refl
 
- 𝓁ℴ𝓌ℯ𝓇 : {𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} → hom (Lift-alg 𝑨 𝓦) 𝑨
- 𝓁ℴ𝓌ℯ𝓇 = lower , λ 𝑓 𝑎 → refl
+  𝓁ℴ𝓌ℯ𝓇 : {𝓦 : Level}{𝑨 : Algebra 𝓤 𝑆} → hom (Lift-alg 𝑨 𝓦) 𝑨
+  𝓁ℴ𝓌ℯ𝓇 = lower , λ 𝑓 𝑎 → refl
 
 \end{code}
 
@@ -89,19 +90,19 @@ A *monomorphism* is an injective homomorphism and an *epimorphism* is a surjecti
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe} where
+ module _ {𝓤 𝓦 : Level} where
 
- is-monomorphism : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
- is-monomorphism 𝑨 𝑩 g = is-homomorphism 𝑨 𝑩 g × Monic g
+  is-monomorphism : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Set(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
+  is-monomorphism 𝑨 𝑩 g = is-homomorphism 𝑨 𝑩 g × Monic g
 
- mon : Algebra 𝓤 𝑆 → Algebra 𝓦 𝑆  → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
- mon 𝑨 𝑩 = Σ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) , is-monomorphism 𝑨 𝑩 g
+  mon : Algebra 𝓤 𝑆 → Algebra 𝓦 𝑆  → Set(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
+  mon 𝑨 𝑩 = Σ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) , is-monomorphism 𝑨 𝑩 g
 
- is-epimorphism : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
- is-epimorphism 𝑨 𝑩 g = is-homomorphism 𝑨 𝑩 g × Epic g
+  is-epimorphism : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Set(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
+  is-epimorphism 𝑨 𝑩 g = is-homomorphism 𝑨 𝑩 g × Epic g
 
- epi : Algebra 𝓤 𝑆 → Algebra 𝓦 𝑆  → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
- epi 𝑨 𝑩 = Σ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) , is-epimorphism 𝑨 𝑩 g
+  epi : Algebra 𝓤 𝑆 → Algebra 𝓦 𝑆  → Set(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
+  epi 𝑨 𝑩 = Σ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) , is-epimorphism 𝑨 𝑩 g
 
 \end{code}
 
@@ -109,11 +110,11 @@ It will be convenient to have a function that takes an inhabitant of `mon` (or `
 
 \begin{code}
 
- mon-to-hom : (𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆} → mon 𝑨 𝑩 → hom 𝑨 𝑩
- mon-to-hom 𝑨 ϕ = ∣ ϕ ∣ , fst ∥ ϕ ∥
+  mon-to-hom : (𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆} → mon 𝑨 𝑩 → hom 𝑨 𝑩
+  mon-to-hom 𝑨 ϕ = ∣ ϕ ∣ , fst ∥ ϕ ∥
 
- epi-to-hom : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆) → epi 𝑨 𝑩 → hom 𝑨 𝑩
- epi-to-hom _ ϕ = ∣ ϕ ∣ , fst ∥ ϕ ∥
+  epi-to-hom : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆) → epi 𝑨 𝑩 → hom 𝑨 𝑩
+  epi-to-hom _ ϕ = ∣ ϕ ∣ , fst ∥ ϕ ∥
 
 \end{code}
 
@@ -128,13 +129,13 @@ The kernel of a homomorphism is a congruence relation and conversely for every c
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} where
+ module _ {𝓤 𝓦 : Level}{𝑨 : Algebra 𝓤 𝑆} where
 
- homker-compatible : dfunext 𝓥 𝓦 → (𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) → compatible 𝑨 (ker ∣ h ∣)
- homker-compatible fe 𝑩 h f {u}{v} Kerhab = ∣ h ∣ ((f ̂ 𝑨) u)   ≡⟨ ∥ h ∥ f u ⟩
-                                            (f ̂ 𝑩)(∣ h ∣ ∘ u)  ≡⟨ ap (f ̂ 𝑩)(fe λ x → Kerhab x) ⟩
-                                            (f ̂ 𝑩)(∣ h ∣ ∘ v)  ≡⟨ (∥ h ∥ f v)⁻¹ ⟩
-                                            ∣ h ∣ ((f ̂ 𝑨) v)   ∎
+  homker-compatible : dfunext 𝓥 𝓦 → (𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) → compatible 𝑨 (ker ∣ h ∣)
+  homker-compatible fe 𝑩 h f {u}{v} Kerhab = ∣ h ∣ ((f ̂ 𝑨) u)   ≡⟨ ∥ h ∥ f u ⟩
+                                             (f ̂ 𝑩)(∣ h ∣ ∘ u)  ≡⟨ ap (f ̂ 𝑩)(fe λ x → Kerhab x) ⟩
+                                             (f ̂ 𝑩)(∣ h ∣ ∘ v)  ≡⟨ (∥ h ∥ f v)⁻¹ ⟩
+                                             ∣ h ∣ ((f ̂ 𝑨) v)   ∎
 
 \end{code}
 
@@ -142,8 +143,8 @@ It is convenient to define a function that takes a homomorphism and constructs a
 
 \begin{code}
 
- kercon : (𝑩 : Algebra 𝓦 𝑆){fe : dfunext 𝓥 𝓦} → hom 𝑨 𝑩 → Con{𝓦} 𝑨
- kercon 𝑩 {fe} h = ker ∣ h ∣ , mkcon (ker-IsEquivalence ∣ h ∣)(homker-compatible fe 𝑩 h)
+  kercon : (𝑩 : Algebra 𝓦 𝑆){fe : dfunext 𝓥 𝓦} → hom 𝑨 𝑩 → Con{𝓦} 𝑨
+  kercon 𝑩 {fe} h = ker ∣ h ∣ , mkcon (ker-IsEquivalence ∣ h ∣)(homker-compatible fe 𝑩 h)
 
 \end{code}
 
@@ -151,14 +152,14 @@ With this congruence we construct the corresponding quotient, along with some sy
 
 \begin{code}
 
- kerquo : dfunext 𝓥 𝓦 → {𝑩 : Algebra 𝓦 𝑆} → hom 𝑨 𝑩 → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
- kerquo fe {𝑩} h = 𝑨 ╱ (kercon 𝑩 {fe} h)
+  kerquo : dfunext 𝓥 𝓦 → {𝑩 : Algebra 𝓦 𝑆} → hom 𝑨 𝑩 → Algebra (𝓤 ⊔ lsuc 𝓦) 𝑆
+  kerquo fe {𝑩} h = 𝑨 ╱ (kercon 𝑩 {fe} h)
 
 
-_[_]/ker_↾_ : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → hom 𝑨 𝑩 → dfunext 𝓥 𝓦 → Algebra (𝓤 ⊔ 𝓦 ⁺) 𝑆
-𝑨 [ 𝑩 ]/ker h ↾ fe = kerquo fe {𝑩} h
+ _[_]/ker_↾_ : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → hom 𝑨 𝑩 → dfunext 𝓥 𝓦 → Algebra (𝓤 ⊔ lsuc 𝓦) 𝑆
+ 𝑨 [ 𝑩 ]/ker h ↾ fe = kerquo fe {𝑩} h
 
-infix 60 _[_]/ker_↾_
+ infix 60 _[_]/ker_↾_
 
 \end{code}
 
@@ -172,11 +173,11 @@ Given an algebra `𝑨` and a congruence `θ`, the *canonical projection* is a m
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} where
- πepi : (θ : Con{𝓦} 𝑨) → epi 𝑨 (𝑨 ╱ θ)
- πepi θ = (λ a → ⟪ a ⟫) , (λ _ _ → refl) , cπ-is-epic  where
-  cπ-is-epic : Epic (λ a → ⟪ a ⟫)
-  cπ-is-epic (C , (a , refl)) =  Image_∋_.im a
+ module _ {𝓤 𝓦 : Level}{𝑨 : Algebra 𝓤 𝑆} where
+  πepi : (θ : Con{𝓦} 𝑨) → epi 𝑨 (𝑨 ╱ θ)
+  πepi θ = (λ a → ⟪ a ⟫) , (λ _ _ → refl) , cπ-is-epic  where
+   cπ-is-epic : Epic (λ a → ⟪ a ⟫)
+   cπ-is-epic (C , (a , refl)) =  Image_∋_.im a
 
 \end{code}
 
@@ -184,8 +185,8 @@ In may happen that we don't care about the surjectivity of `πepi`, in which cas
 
 \begin{code}
 
- πhom : (θ : Con{𝓦} 𝑨) → hom 𝑨 (𝑨 ╱ θ)
- πhom θ = epi-to-hom (𝑨 ╱ θ) (πepi θ)
+  πhom : (θ : Con{𝓦} 𝑨) → hom 𝑨 (𝑨 ╱ θ)
+  πhom θ = epi-to-hom (𝑨 ╱ θ) (πepi θ)
 
 \end{code}
 
@@ -194,8 +195,8 @@ We combine the foregoing to define a function that takes 𝑆-algebras `𝑨` an
 
 \begin{code}
 
- πker : (𝑩 : Algebra 𝓦 𝑆){fe : dfunext 𝓥 𝓦}(h : hom 𝑨 𝑩) → epi 𝑨 (𝑨 [ 𝑩 ]/ker h ↾ fe)
- πker 𝑩 {fe} h = πepi (kercon 𝑩 {fe} h)
+  πker : (𝑩 : Algebra 𝓦 𝑆){fe : dfunext 𝓥 𝓦}(h : hom 𝑨 𝑩) → epi 𝑨 (𝑨 [ 𝑩 ]/ker h ↾ fe)
+  πker 𝑩 {fe} h = πepi (kercon 𝑩 {fe} h)
 
 \end{code}
 
@@ -203,12 +204,12 @@ The kernel of the canonical projection of `𝑨` onto `𝑨 / θ` is equal to `�
 
 \begin{code}
 
- open IsCongruence
+  open IsCongruence
 
- ker-in-con : {fe : dfunext 𝓥 (𝓤 ⊔ 𝓦 ⁺)}(θ : Con{𝓦} 𝑨)
-  →           ∀ {x}{y} → ∣ kercon (𝑨 ╱ θ){fe} (πhom θ) ∣ x y →  ∣ θ ∣ x y
+  ker-in-con : {fe : dfunext 𝓥 (𝓤 ⊔ lsuc 𝓦)}(θ : Con{𝓦} 𝑨)
+   →           ∀ {x}{y} → ∣ kercon (𝑨 ╱ θ){fe} (πhom θ) ∣ x y →  ∣ θ ∣ x y
 
- ker-in-con θ hyp = /-≡ θ hyp
+  ker-in-con θ hyp = /-≡ θ hyp
 
 \end{code}
 
@@ -222,10 +223,10 @@ If in addition we have a family `𝒽 : (i : I) → hom 𝑨 (ℬ i)` of homomor
 
 \begin{code}
 
-module _ {𝓘 𝓦 : Universe}{I : 𝓘 ̇}(ℬ : I → Algebra 𝓦 𝑆) where
+ module _ {𝓘 𝓦 : Level}{I : Set 𝓘}(ℬ : I → Algebra 𝓦 𝑆) where
 
- ⨅-hom-co : dfunext 𝓘 𝓦 → {𝓤 : Universe}(𝑨 : Algebra 𝓤 𝑆) → Π i ꞉ I , hom 𝑨 (ℬ i) → hom 𝑨 (⨅ ℬ)
- ⨅-hom-co fe 𝑨 𝒽 = (λ a i → ∣ 𝒽 i ∣ a) , (λ 𝑓 𝒶 → fe λ i → ∥ 𝒽 i ∥ 𝑓 𝒶)
+  ⨅-hom-co : dfunext 𝓘 𝓦 → {𝓤 : Level}(𝑨 : Algebra 𝓤 𝑆) → Π i ꞉ I , hom 𝑨 (ℬ i) → hom 𝑨 (⨅ ℬ)
+  ⨅-hom-co fe 𝑨 𝒽 = (λ a i → ∣ 𝒽 i ∣ a) , (λ 𝑓 𝒶 → fe λ i → ∥ 𝒽 i ∥ 𝑓 𝒶)
 
 \end{code}
 
@@ -238,8 +239,8 @@ The foregoing generalizes easily to the case in which the domain is also a produ
 
 \begin{code}
 
- ⨅-hom : dfunext 𝓘 𝓦 → {𝓤 : Universe}(𝒜 : I → Algebra 𝓤 𝑆) → Π i ꞉ I , hom (𝒜 i)(ℬ i) → hom (⨅ 𝒜)(⨅ ℬ)
- ⨅-hom fe 𝒜 𝒽 = (λ x i → ∣ 𝒽 i ∣ (x i)) , (λ 𝑓 𝒶 → fe λ i → ∥ 𝒽 i ∥ 𝑓 (λ x → 𝒶 x i))
+  ⨅-hom : dfunext 𝓘 𝓦 → {𝓤 : Level}(𝒜 : I → Algebra 𝓤 𝑆) → Π i ꞉ I , hom (𝒜 i)(ℬ i) → hom (⨅ 𝒜)(⨅ ℬ)
+  ⨅-hom fe 𝒜 𝒽 = (λ x i → ∣ 𝒽 i ∣ (x i)) , (λ 𝑓 𝒶 → fe λ i → ∥ 𝒽 i ∥ 𝑓 (λ x → 𝒶 x i))
 
 \end{code}
 
@@ -251,8 +252,8 @@ Later we will need a proof of the fact that projecting out of a product algebra 
 
 \begin{code}
 
- ⨅-projection-hom : Π i ꞉ I , hom (⨅ ℬ) (ℬ i)
- ⨅-projection-hom = λ x → (λ z → z x) , λ _ _ → refl
+  ⨅-projection-hom : Π i ꞉ I , hom (⨅ ℬ) (ℬ i)
+  ⨅-projection-hom = λ x → (λ z → z x) , λ _ _ → refl
 
 \end{code}
 
@@ -277,9 +278,24 @@ Recall, `h ∘ 𝒂` is the tuple whose i-th component is `h (𝒂 i)`.</span>
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!--
 θ is contained in the kernel of the canonical projection onto 𝑨 / θ.
-con-in-ker : {𝓤 𝓦 : Universe}(𝑨 : Algebra 𝓤 𝑆) (θ : Congruence{𝓤}{𝓦} 𝑨)
+con-in-ker : {𝓤 𝓦 : Level}(𝑨 : Algebra 𝓤 𝑆) (θ : Congruence{𝓤}{𝓦} 𝑨)
  → ∀ x y → (⟨ θ ⟩ x y) → (⟨ (kercon 𝑨 {𝑨 ╱ θ} (canonical-hom{𝓤}{𝓦} 𝑨 θ)) ⟩ x y)
 con-in-ker 𝑨 θ x y hyp = γ
  where
@@ -306,7 +322,7 @@ con-in-ker 𝑨 θ x y hyp = γ
 
 Recall, the equalizer of two functions (resp., homomorphisms) `g h : A → B` is the subset of `A` on which the values of the functions `g` and `h` agree.  We define the equalizer of functions and homomorphisms in Agda as follows.
 
-module _ {𝓤 𝓦 : Universe}{𝑨 : Algebra 𝓤 𝑆} where
+module _ {𝓤 𝓦 : Level}{𝑨 : Algebra 𝓤 𝑆} where
 
  𝐸 : (𝑩 : Algebra 𝓦 𝑆) → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Pred ∣ 𝑨 ∣ 𝓦
  𝐸 _ g h x = g x ≡ h x

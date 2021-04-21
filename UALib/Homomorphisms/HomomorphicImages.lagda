@@ -13,12 +13,12 @@ This section describes the [Homomorphisms.HomomorphicImages][] module of the [Ag
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
+module Homomorphisms.HomomorphicImages where
 
-module Homomorphisms.HomomorphicImages {𝑆 : Signature 𝓞 𝓥} where
+open import Homomorphisms.Isomorphisms public
 
-open import Homomorphisms.Isomorphisms{𝑆 = 𝑆} public
-
+module hom-images {𝑆 : Signature 𝓞 𝓥} where
+ open isomorphisms {𝑆 = 𝑆} public
 \end{code}
 
 
@@ -28,13 +28,13 @@ We begin with what seems, for our purposes, the most useful way to represent the
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe} where
+ module _ {𝓤 𝓦 : Level} where
 
- HomImage : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆)(ϕ : hom 𝑨 𝑩) → ∣ 𝑩 ∣ → 𝓤 ⊔ 𝓦 ̇
- HomImage 𝑩 ϕ = λ b → Image ∣ ϕ ∣ ∋ b
+  HomImage : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆)(ϕ : hom 𝑨 𝑩) → ∣ 𝑩 ∣ → Set(𝓤 ⊔ 𝓦)
+  HomImage 𝑩 ϕ = λ b → Image ∣ ϕ ∣ ∋ b
 
- HomImagesOf : Algebra 𝓤 𝑆 → 𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦 ⁺ ̇
- HomImagesOf 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓦 𝑆) , Σ ϕ ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) , is-homomorphism 𝑨 𝑩 ϕ × Epic ϕ
+  HomImagesOf : Algebra 𝓤 𝑆 → Set(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ lsuc 𝓦)
+  HomImagesOf 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓦 𝑆) , Σ ϕ ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) , is-homomorphism 𝑨 𝑩 ϕ × Epic ϕ
 
 \end{code}
 
@@ -44,8 +44,8 @@ Since we take the class of homomorphic images of an algebra to be closed under i
 
 \begin{code}
 
- _is-hom-image-of_ : (𝑩 : Algebra 𝓦 𝑆)(𝑨 : Algebra 𝓤 𝑆) → ov 𝓦 ⊔ 𝓤 ̇
- 𝑩 is-hom-image-of 𝑨 = Σ 𝑪ϕ ꞉ (HomImagesOf 𝑨) , ∣ 𝑪ϕ ∣ ≅ 𝑩
+  _is-hom-image-of_ : (𝑩 : Algebra 𝓦 𝑆)(𝑨 : Algebra 𝓤 𝑆) → Set(ov 𝓦 ⊔ 𝓤)
+  𝑩 is-hom-image-of 𝑨 = Σ 𝑪ϕ ꞉ (HomImagesOf 𝑨) , ∣ 𝑪ϕ ∣ ≅ 𝑩
 
 \end{code}
 
@@ -56,13 +56,13 @@ Given a class `𝒦` of `𝑆`-algebras, we need a type that expresses the asser
 
 \begin{code}
 
-module _ {𝓤 : Universe} where
+ module _ {𝓤 : Level} where
 
- _is-hom-image-of-class_ : Algebra 𝓤 𝑆 → Pred (Algebra 𝓤 𝑆)(𝓤 ⁺) → ov 𝓤 ̇
- 𝑩 is-hom-image-of-class 𝓚 = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , (𝑨 ∈ 𝓚) × (𝑩 is-hom-image-of 𝑨)
+  _is-hom-image-of-class_ : Algebra 𝓤 𝑆 → Pred (Algebra 𝓤 𝑆)(lsuc 𝓤) → Set(ov 𝓤)
+  𝑩 is-hom-image-of-class 𝓚 = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , (𝑨 ∈ 𝓚) × (𝑩 is-hom-image-of 𝑨)
 
- HomImagesOfClass : Pred (Algebra 𝓤 𝑆) (𝓤 ⁺) → ov 𝓤 ̇
- HomImagesOfClass 𝓚 = Σ 𝑩 ꞉ (Algebra 𝓤 𝑆) , (𝑩 is-hom-image-of-class 𝓚)
+  HomImagesOfClass : Pred (Algebra 𝓤 𝑆) (lsuc 𝓤) → Set(ov 𝓤)
+  HomImagesOfClass 𝓚 = Σ 𝑩 ꞉ (Algebra 𝓤 𝑆) , (𝑩 is-hom-image-of-class 𝓚)
 
 \end{code}
 
@@ -76,50 +76,50 @@ The first states and proves the simple fact that the lift of an epimorphism is a
 
 \begin{code}
 
-open Lift
+ open Lift
 
-module _ {𝓧 𝓨 : Universe} where
+ module _ {𝓧 𝓨 : Level} where
 
- lift-of-alg-epic-is-epic : (𝓩 : Universe){𝓦 : Universe}
-                            {𝑨 : Algebra 𝓧 𝑆}(𝑩 : Algebra 𝓨 𝑆)(h : hom 𝑨 𝑩)
-                            -----------------------------------------------
-  →                         Epic ∣ h ∣  →  Epic ∣ Lift-hom 𝓩 𝓦 𝑩 h ∣
+  lift-of-alg-epic-is-epic : (𝓩 : Level){𝓦 : Level}
+                             {𝑨 : Algebra 𝓧 𝑆}(𝑩 : Algebra 𝓨 𝑆)(h : hom 𝑨 𝑩)
+                             -----------------------------------------------
+   →                         Epic ∣ h ∣  →  Epic ∣ Lift-hom 𝓩 𝓦 𝑩 h ∣
 
- lift-of-alg-epic-is-epic 𝓩 {𝓦} {𝑨} 𝑩 h hepi y = eq y (lift a) η
-  where
-  lh : hom (Lift-alg 𝑨 𝓩) (Lift-alg 𝑩 𝓦)
-  lh = Lift-hom 𝓩 𝓦 𝑩 h
-
-  ζ : Image ∣ h ∣ ∋ (lower y)
-  ζ = hepi (lower y)
-
-  a : ∣ 𝑨 ∣
-  a = Inv ∣ h ∣ ζ
-
-  β : lift (∣ h ∣ a) ≡ (lift ∘ ∣ h ∣ ∘ lower{𝓦}) (lift a)
-  β = ap (λ - → lift (∣ h ∣ ( - a))) (lower∼lift {𝓦} )
-
-  η : y ≡ ∣ lh ∣ (lift a)
-  η = y               ≡⟨ (happly lift∼lower) y ⟩
-      lift (lower y)  ≡⟨ ap lift (InvIsInv ∣ h ∣ ζ)⁻¹ ⟩
-      lift (∣ h ∣ a)  ≡⟨ β ⟩
-      ∣ lh ∣ (lift a) ∎
-
-
- Lift-alg-hom-image : {𝓩 𝓦 : Universe}
-                      {𝑨 : Algebra 𝓧 𝑆}{𝑩 : Algebra 𝓨 𝑆}
-  →                   𝑩 is-hom-image-of 𝑨
-                      -----------------------------------------------
-  →                   (Lift-alg 𝑩 𝓦) is-hom-image-of (Lift-alg 𝑨 𝓩)
-
- Lift-alg-hom-image {𝓩}{𝓦}{𝑨}{𝑩} ((𝑪 , ϕ , ϕhom , ϕepic) , C≅B) =
-  (Lift-alg 𝑪 𝓦 , ∣ lϕ ∣ , ∥ lϕ ∥ , lϕepic) , Lift-alg-iso C≅B
+  lift-of-alg-epic-is-epic 𝓩 {𝓦} {𝑨} 𝑩 h hepi y = eq y (lift a) η
    where
-   lϕ : hom (Lift-alg 𝑨 𝓩) (Lift-alg 𝑪 𝓦)
-   lϕ = (Lift-hom 𝓩 𝓦 𝑪) (ϕ , ϕhom)
+   lh : hom (Lift-alg 𝑨 𝓩) (Lift-alg 𝑩 𝓦)
+   lh = Lift-hom 𝓩 𝓦 𝑩 h
 
-   lϕepic : Epic ∣ lϕ ∣
-   lϕepic = lift-of-alg-epic-is-epic 𝓩 𝑪 (ϕ , ϕhom) ϕepic
+   ζ : Image ∣ h ∣ ∋ (lower y)
+   ζ = hepi (lower y)
+
+   a : ∣ 𝑨 ∣
+   a = Inv ∣ h ∣ ζ
+
+   β : lift (∣ h ∣ a) ≡ (lift ∘ ∣ h ∣ ∘ lower{𝓦}) (lift a)
+   β = ap (λ - → lift (∣ h ∣ ( - a))) (lower∼lift {𝓦} )
+
+   η : y ≡ ∣ lh ∣ (lift a)
+   η = y               ≡⟨ (happly lift∼lower) y ⟩
+       lift (lower y)  ≡⟨ ap lift (InvIsInv ∣ h ∣ ζ)⁻¹ ⟩
+       lift (∣ h ∣ a)  ≡⟨ β ⟩
+       ∣ lh ∣ (lift a) ∎
+
+
+  Lift-alg-hom-image : {𝓩 𝓦 : Level}
+                       {𝑨 : Algebra 𝓧 𝑆}{𝑩 : Algebra 𝓨 𝑆}
+   →                   𝑩 is-hom-image-of 𝑨
+                       -----------------------------------------------
+   →                   (Lift-alg 𝑩 𝓦) is-hom-image-of (Lift-alg 𝑨 𝓩)
+
+  Lift-alg-hom-image {𝓩}{𝓦}{𝑨}{𝑩} ((𝑪 , ϕ , ϕhom , ϕepic) , C≅B) =
+   (Lift-alg 𝑪 𝓦 , ∣ lϕ ∣ , ∥ lϕ ∥ , lϕepic) , Lift-alg-iso C≅B
+    where
+    lϕ : hom (Lift-alg 𝑨 𝓩) (Lift-alg 𝑪 𝓦)
+    lϕ = (Lift-hom 𝓩 𝓦 𝑪) (ϕ , ϕhom)
+
+    lϕepic : Epic ∣ lϕ ∣
+    lϕepic = lift-of-alg-epic-is-epic 𝓩 𝑪 (ϕ , ϕhom) ϕepic
 
 \end{code}
 

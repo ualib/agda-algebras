@@ -47,9 +47,9 @@ This notion is formalized in the [Type Topology][] library, using the `is-subsin
 
 \begin{code}
 
-module hide-is-set {𝓤 : Universe} where
+module hide-is-set {𝓤 : Level} where
 
- is-set : 𝓤 ̇ → 𝓤 ̇
+ is-set : Set 𝓤 → Set 𝓤
  is-set A = (x y : A) → is-subsingleton (x ≡ y)
 
 open import MGS-Embeddings using (is-set) public
@@ -62,10 +62,10 @@ We will also need the function [to-Σ-≡](https://www.cs.bham.ac.uk/~mhe/HoTT-U
 
 \begin{code}
 
-module hide-to-Σ-≡ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : A → 𝓦 ̇} where
+module hide-to-Σ-≡ {𝓤 𝓦 : Level}{A : Set 𝓤}{B : A → Set 𝓦} where
 
- to-Σ-≡ : {σ τ : Σ B} → Σ p ꞉ ∣ σ ∣ ≡ ∣ τ ∣ , (transport B p ∥ σ ∥) ≡ ∥ τ ∥ → σ ≡ τ
- to-Σ-≡ (refl {x = x} , refl {x = a}) = refl {x = (x , a)}
+ to-Σ-≡ : {σ τ : Σ B} → Σ p ꞉ ∣ σ ∣ ≡ ∣ τ ∣ , transport B p ∥ σ ∥ ≡ ∥ τ ∥ → σ ≡ τ
+ to-Σ-≡ (refl , refl) = refl
 
 open import MGS-Embeddings using (to-Σ-≡) public
 
@@ -80,7 +80,7 @@ Before moving on to define [propositions](Overture.Truncation.html#propositions)
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇} where
+module _ {𝓤 𝓦 : Level}{A : Set 𝓤}{B : Set 𝓦} where
 
  monic-is-embedding|Set : (f : A → B) → is-set B → Monic f → is-embedding f
 
@@ -92,7 +92,7 @@ module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇} where
   uv : u ≡ v
   uv = fmon u v fuv
 
-  arg1 : Σ p ꞉ (u ≡ v) , (transport (λ a → f a ≡ b) p fu≡b) ≡ fv≡b
+  arg1 : Σ p ꞉ u ≡ v , transport (λ a → f a ≡ b) p fu≡b ≡ fv≡b
   arg1 = uv , Bset (f v) b (transport (λ a → f a ≡ b) uv fu≡b) fv≡b
 
   γ : u , fu≡b ≡ v , fv≡b
@@ -101,15 +101,6 @@ module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇}{B : 𝓦 ̇} where
 \end{code}
 
 In stating the previous result, we introduce a new convention to which we will try to adhere. If the antecedent of a theorem includes the assumption that one of the types involved is a *set* (in the sense defined above), then we add to the name of the theorem the suffix `|Set`, which calls to mind the standard mathematical notation for the restriction of a function.
-
-Embeddings are always monic, so we conclude that when a function's codomain is a set, then that function is an embedding if and only if it is monic.
-
-\begin{code}
-
- embedding-iff-monic|Set : (f : A → B) → is-set B → is-embedding f ⇔ Monic f
- embedding-iff-monic|Set f Bset = (embedding-is-monic f), (monic-is-embedding|Set f Bset)
-
-\end{code}
 
 
 #### <a id="equivalence-class-truncation">Equivalence class truncation</a>
@@ -125,7 +116,7 @@ In the next module ([Relations.Extensionality][]) we will define a *quotient ext
 
 \begin{code}
 
-blk-uip : {𝓦 𝓤 : Universe}(A : 𝓤 ̇)(R : Rel A 𝓦 ) → 𝓤 ⊔ 𝓦 ⁺ ̇
+blk-uip : {𝓦 𝓤 : Level}(A : Set 𝓤)(R : Rel A 𝓦 ) → Set(𝓤 ⊔ lsuc 𝓦)
 blk-uip {𝓦} A R = ∀ (C : Pred A 𝓦) → is-subsingleton (IsBlock C {R})
 
 \end{code}
@@ -142,26 +133,26 @@ Naturally, we define the corresponding *truncated continuous relation type* and 
 
 \begin{code}
 
-module _ {𝓤 : Universe}{I : 𝓥 ̇} where
+module _ {𝓤 : Level}{I : Set 𝓥} where
 
  open import Relations.Continuous using (ContRel; DepRel)
 
- IsContProp : {A : 𝓤 ̇}{𝓦 : Universe} → ContRel I A 𝓦  → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ IsContProp : {A : Set 𝓤}{𝓦 : Level} → ContRel I A 𝓦  → Set(𝓥 ⊔ 𝓤 ⊔ 𝓦)
  IsContProp {A = A} P = Π 𝑎 ꞉ (I → A) , is-subsingleton (P 𝑎)
 
- ContProp : 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ⁺ ̇
- ContProp A 𝓦 = Σ P ꞉ (ContRel I A 𝓦) , IsContProp P
+ ContProp : Set 𝓤 → (𝓦 : Level) → Set(𝓤 ⊔ 𝓥 ⊔ lsuc 𝓦)
+ ContProp A 𝓦 = Σ P ꞉ ContRel I A 𝓦 , IsContProp P
 
- cont-prop-ext : 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ⁺ ̇
+ cont-prop-ext : Set 𝓤 → (𝓦 : Level) → Set(𝓤 ⊔ 𝓥 ⊔ lsuc 𝓦)
  cont-prop-ext A 𝓦 = {P Q : ContProp A 𝓦 } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
 
- IsDepProp : {I : 𝓥 ̇}{𝒜 : I → 𝓤 ̇}{𝓦 : Universe} → DepRel I 𝒜 𝓦  → 𝓥 ⊔ 𝓤 ⊔ 𝓦 ̇
+ IsDepProp : {I : Set 𝓥}{𝒜 : I → Set 𝓤}{𝓦 : Level} → DepRel I 𝒜 𝓦  → Set(𝓥 ⊔ 𝓤 ⊔ 𝓦)
  IsDepProp {I = I} {𝒜} P = Π 𝑎 ꞉ Π 𝒜 , is-subsingleton (P 𝑎)
 
- DepProp : (I → 𝓤 ̇) → (𝓦 : Universe) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ⁺ ̇
- DepProp 𝒜 𝓦 = Σ P ꞉ (DepRel I 𝒜 𝓦) , IsDepProp P
+ DepProp : (I → Set 𝓤) → (𝓦 : Level) → Set(𝓤 ⊔ 𝓥 ⊔ lsuc 𝓦)
+ DepProp 𝒜 𝓦 = Σ P ꞉ DepRel I 𝒜 𝓦 , IsDepProp P
 
- dep-prop-ext : (I → 𝓤 ̇) → (𝓦 : Universe) → 𝓤 ⊔ 𝓥 ⊔ 𝓦 ⁺ ̇
+ dep-prop-ext : (I → Set 𝓤) → (𝓦 : Level) → Set(𝓤 ⊔ 𝓥 ⊔ lsuc 𝓦)
  dep-prop-ext 𝒜 𝓦 = {P Q : DepProp 𝒜 𝓦} → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
 
 \end{code}
@@ -208,19 +199,19 @@ Recall, we defined the relation `_≐_` for predicates as follows: `P ≐ Q = (P
 <sup>3</sup><span class="footnote" id="fn3"> [Agda][] now has a type called [Prop](https://agda.readthedocs.io/en/v2.6.1.3/language/prop.html), but we have never tried to use it. It likely provides at least some of the functionality we develop here, however, our preference is to assume only a minimal MLTT foundation and build up the types we need ourselves. For details about [Prop](https://agda.readthedocs.io/en/v2.6.1.3/language/prop.html), consult the official documentation at [agda.readthedocs.io/en/v2.6.1.3/language/prop.html](https://agda.readthedocs.io/en/v2.6.1.3/language/prop.html)</span>
 
 
-module _ {𝓤 𝓦 : Universe}{A : 𝓤 ̇} where
+module _ {𝓤 𝓦 : Level}{A : 𝓤 ̇} where
 
  prop-ext' : prop-ext 𝓤 𝓦 → {P Q : Pred₁ A 𝓦} → ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
  prop-ext' pe hyp = pe (fst hyp) (snd hyp)
 
 Thus, for truncated predicates `P` and `Q`, if `prop-ext` holds, then `(P ⊆ Q) × (Q ⊆ P) → P ≡ Q`, which is a useful extensionality principle.
 
-prop-ext₁ : (𝓤 𝓦 : Universe) → (𝓤 ⊔ 𝓦) ⁺ ̇
+prop-ext₁ : (𝓤 𝓦 : Level) → (𝓤 ⊔ 𝓦) ⁺ ̇
 prop-ext₁ 𝓤 𝓦 = ∀ {A : 𝓤 ̇}{P Q : Pred₁ A 𝓦 } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
 
 The foregoing easily generalizes to binary relations and, in particular, equivalence relations.  Indeed, if `R` is a binary relation on `A` and for each pair `x y : A` there is at most one proof of `R x y`, then we call `R` a *binary proposition*. We use [Type Topology][]'s `is-subsingleton-valued` type to impose this truncation assumption on a binary relation.<sup>[3](Relations.Truncation.html#fn3)</sup>
 
-Pred₂ : {𝓤 : Universe} → 𝓤 ̇ → (𝓦 : Universe) → 𝓤 ⊔ 𝓦 ⁺ ̇
+Pred₂ : {𝓤 : Level} → 𝓤 ̇ → (𝓦 : Level) → 𝓤 ⊔ 𝓦 ⁺ ̇
 Pred₂ A 𝓦 = Σ R ꞉ (Rel A 𝓦) , is-subsingleton-valued R
 
 Recall, `is-subsingleton-valued` is simply defined as
@@ -235,7 +226,7 @@ Sometimes we will want to assume that a type `A` is a *set*. As we just learned,
 
 We define a *truncated equivalence* to be an equivalence relation that has unique membership proofs; the following types represent such relations.
 
-module _ {𝓤 𝓦 : Universe} where
+module _ {𝓤 𝓦 : Level} where
 
  record IsEqv {A : 𝓤 ̇}(R : Rel A 𝓦) : 𝓤 ⊔ 𝓦 ̇ where
   field equiv : IsEquivalence R
@@ -247,7 +238,7 @@ module _ {𝓤 𝓦 : Universe} where
 
 To see the point of this, suppose `cont-prop-ext A 𝓦` holds. Then we can prove that logically equivalent continuous propositions of type `ContProp A 𝓦` are equivalent. In other words, under the stated hypotheses, we obtain a useful extensionality lemma for continuous propositions.
 
- cont-prop-ext' : {A : 𝓤 ̇}{𝓦 : Universe} → cont-prop-ext A 𝓦 → {P Q : ContProp A 𝓦}
+ cont-prop-ext' : {A : 𝓤 ̇}{𝓦 : Level} → cont-prop-ext A 𝓦 → {P Q : ContProp A 𝓦}
   →               ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
 
  cont-prop-ext' pe hyp = pe  ∣ hyp ∣  ∥ hyp ∥
@@ -255,10 +246,19 @@ To see the point of this, suppose `cont-prop-ext A 𝓦` holds. Then we can prov
 Applying the extensionality principle for dependent continuous relations is no harder than applying the special cases of this principle defined earlier.
 
 
- module _ (𝒜 : I → 𝓤 ̇)(𝓦 : Universe) where
+ module _ (𝒜 : I → 𝓤 ̇)(𝓦 : Level) where
 
   dep-prop-ext' : dep-prop-ext 𝒜 𝓦 → {P Q : DepProp 𝒜 𝓦} → ∣ P ∣ ≐ ∣ Q ∣ → P ≡ Q
   dep-prop-ext' pe hyp = pe  ∣ hyp ∣  ∥ hyp ∥
+
+
+
+Embeddings are always monic, so we conclude that when a function's codomain is a set, then that function is an embedding if and only if it is monic.
+
+ embedding-iff-monic|Set : (f : A → B) → is-set B → is-embedding f ⇔ Monic f
+ embedding-iff-monic|Set f Bset = (embedding-is-monic f), (monic-is-embedding|Set f Bset)
+
+
 
 
 
