@@ -1,3 +1,0 @@
-name: UALib
-depend: typetopology standard-library
-include: . UALib Prelude UALib/Relations UALib/Prelude UALib/Relations UALib/Algebras UALib/Homomorphisms UALib/Terms UALib/Subalgebras UALib/Varieties UALib/Birkhoff

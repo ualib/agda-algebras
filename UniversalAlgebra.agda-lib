@@ -1,0 +1,3 @@
+name: UniversalAlgebra
+depend: typetopology standard-library
+include: . UniversalAlgebra UniversalAlgebra/Preface UniversalAlgebra/Relations UniversalAlgebra/Overture UniversalAlgebra/Relations UniversalAlgebra/Algebras UniversalAlgebra/Homomorphisms UniversalAlgebra/Terms UniversalAlgebra/Subalgebras UniversalAlgebra/Varieties
