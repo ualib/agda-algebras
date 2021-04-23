@@ -30,10 +30,10 @@ Given algebras `𝑨 : Algebra 𝓤 𝑆` and `𝑩 : Algebra 𝓦 𝑆`, we say
 
 \begin{code}
 
- _IsSubalgebraOf_ : {𝓦 𝓤 : Level}(𝑩 : Algebra 𝓦 𝑆)(𝑨 : Algebra 𝓤 𝑆) → Set(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
+ _IsSubalgebraOf_ : {𝓦 𝓤 : Level}(𝑩 : Algebra 𝓦 𝑆)(𝑨 : Algebra 𝓤 𝑆) → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
  𝑩 IsSubalgebraOf 𝑨 = Σ h ꞉ hom 𝑩 𝑨 , is-embedding ∣ h ∣
 
- Subalgebra : {𝓦 𝓤 : Level} → Algebra 𝓤 𝑆 → Set(ov 𝓦 ⊔ 𝓤)
+ Subalgebra : {𝓦 𝓤 : Level} → Algebra 𝓤 𝑆 → Type(ov 𝓦 ⊔ 𝓤)
  Subalgebra {𝓦} 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓦 𝑆) , 𝑩 IsSubalgebraOf 𝑨
 
 \end{code}
@@ -49,7 +49,7 @@ We take this opportunity to prove an important lemma that makes use of the `IsSu
 
 \begin{code}
 
- module _ {𝓤 𝓦 : Level}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
+ module _ (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
           -- extensionality assumptions:
           (pe : pred-ext 𝓤 𝓦)(fe : dfunext 𝓥 𝓦)
 
@@ -74,8 +74,8 @@ If we apply the foregoing theorem to the special case in which the `𝑨` is ter
 
 \begin{code}
 
- module _ {𝓤 𝓦 𝓧 : Level}(X : Set 𝓧)(𝑩 : Algebra 𝓦 𝑆)(h : hom (𝑻 X) 𝑩)
-         -- extensionality assumptions:
+ module _ (X : Type 𝓧)(𝑩 : Algebra 𝓦 𝑆)(h : hom (𝑻 X) 𝑩)
+          -- extensionality assumptions:
           (pe : pred-ext (ov 𝓧) 𝓦)(fe : dfunext 𝓥 𝓦)
 
           -- truncation assumptions:
@@ -92,7 +92,7 @@ If we apply the foregoing theorem to the special case in which the `𝑨` is ter
 
 \begin{code}
 
- _≤_ : {𝓦 𝓤 : Level} → Algebra 𝓦 𝑆 → Algebra 𝓤 𝑆 → Set(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
+ _≤_ : Algebra 𝓦 𝑆 → Algebra 𝓤 𝑆 → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
  𝑩 ≤ 𝑨 = 𝑩 IsSubalgebraOf 𝑨
 
 \end{code}
@@ -102,7 +102,7 @@ From now on we will use `𝑩 ≤ 𝑨` to express the assertion that `𝑩` is 
 
 #### <a id="subalgebras-of-a-class">Subalgebras of a class</a>
 
-One of our goals is to formally express and prove properties of classes of algebraic structures.  Fixing a signature `𝑆` and a universe `𝓤`, we represent classes of `𝑆`-algebras with domains of type `𝓤 ̇` as predicates over the `Algebra 𝓤 𝑆` type. In the syntax of the [UALib][], such predicates inhabit the type `Pred (Algebra 𝓤 𝑆) 𝓩`, for some universe 𝓩.
+One of our goals is to formally express and prove properties of classes of algebraic structures.  Fixing a signature `𝑆` and a universe `𝓤`, we represent classes of `𝑆`-algebras with domains of type `Type 𝓤` as predicates over the `Algebra 𝓤 𝑆` type. In the syntax of the [UniversalAlgebra][] library, such predicates inhabit the type `Pred (Algebra 𝓤 𝑆) 𝓩`, for some universe 𝓩.
 
 Suppose `𝒦 : Pred (Algebra 𝓤 𝑆) 𝓩` denotes a class of `𝑆`-algebras and `𝑩 : Algebra 𝓦 𝑆` denotes an arbitrary `𝑆`-algebra. Then we might wish to consider the assertion that `𝑩` is a subalgebra of an algebra in the class `𝒦`.  The next type we define allows us to express this assertion as `𝑩 IsSubalgebraOfClass 𝒦`.
 
@@ -110,7 +110,7 @@ Suppose `𝒦 : Pred (Algebra 𝓤 𝑆) 𝓩` denotes a class of `𝑆`-algebra
 
  module _ {𝓦 𝓤 𝓩 : Level} where
 
-  _IsSubalgebraOfClass_ : Algebra 𝓦 𝑆 → Pred (Algebra 𝓤 𝑆) 𝓩 → Set(ov (𝓤 ⊔ 𝓦) ⊔ 𝓩)
+  _IsSubalgebraOfClass_ : Algebra 𝓦 𝑆 → Pred (Algebra 𝓤 𝑆) 𝓩 → Type(ov (𝓤 ⊔ 𝓦) ⊔ 𝓩)
   𝑩 IsSubalgebraOfClass 𝒦 = Σ 𝑨 ꞉ Algebra 𝓤 𝑆 , Σ sa ꞉ Subalgebra{𝓦} 𝑨 , (𝑨 ∈ 𝒦) × (𝑩 ≅ ∣ sa ∣)
 
 \end{code}
@@ -119,7 +119,7 @@ Using this type, we express the collection of all subalgebras of algebras in a c
 
 \begin{code}
 
- SubalgebraOfClass : {𝓦 𝓤 : Level} → Pred (Algebra 𝓤 𝑆)(ov 𝓤) → Set(ov (𝓤 ⊔ 𝓦))
+ SubalgebraOfClass : {𝓦 𝓤 : Level} → Pred (Algebra 𝓤 𝑆)(ov 𝓤) → Type(ov (𝓤 ⊔ 𝓦))
  SubalgebraOfClass {𝓦} 𝒦 = Σ 𝑩 ꞉ Algebra 𝓦 𝑆 , 𝑩 IsSubalgebraOfClass 𝒦
 
 \end{code}
@@ -129,7 +129,7 @@ Using this type, we express the collection of all subalgebras of algebras in a c
 
 #### <a id="subalgebra-lemmas">Subalgebra lemmas</a>
 
-We conclude this module by proving a number of useful facts about subalgebras. Some of the formal statements below may appear to be redundant, and indeed they are to some extent. However, each one differs slightly from the next, if only with respect to the explicitness or implicitness of their arguments.  The aim is to make it as convenient as possible to apply the lemmas in different situations.  (We're in the [UALib][] utility closet now; elegance is not the priority.)
+We conclude this module by proving a number of useful facts about subalgebras. Some of the formal statements below may appear to be redundant, and indeed they are to some extent. However, each one differs slightly from the next, if only with respect to the explicitness or implicitness of their arguments.  The aim is to make it as convenient as possible to apply the lemmas in different situations.  (We're in the [UniversalAlgebra][] utility closet now; elegance is not the priority.)
 
 First we show that the subalgebra relation is a *preorder*; i.e., it is a reflexive, transitive binary relation.<sup>[2](Subalgebras.Subalgebras.html#fn2)</sup>
 
@@ -228,9 +228,9 @@ Next we prove that if two algebras are isomorphic and one of them is a subalgebr
 
 ---------------------------------
 
-<sup>1</sup> <span class="footnote" id="fn1">An alternative which could end up being simpler and easier to work with would be to proclaim that `𝑩` is a subalgebra of `𝑨` iff there is a *monic* homomorphism from `𝐵` into `𝑨`. In preparation for the next major release of the [UALib][], we will investigate the consequences of taking that path instead of the stricter embedding requirement we chose for the definition of the type `IsSubalgebraOf`.</span>
+<sup>1</sup> <span class="footnote" id="fn1">An alternative which could end up being simpler and easier to work with would be to proclaim that `𝑩` is a subalgebra of `𝑨` iff there is a *monic* homomorphism from `𝐵` into `𝑨`. In preparation for the next major release of the [UniversalAlgebra][] library, we will investigate the consequences of taking that path instead of the stricter embedding requirement we chose for the definition of the type `IsSubalgebraOf`.</span>
 
-<sup>2</sup> <span class="footnote" id="fn2"> Recall, in the [Relations.Quotients][] module, we defined *preorder* for binary relation types. Here, however, we will content ourselves with merely proving reflexivity and transitivity of the subalgebra relation `_≤_`, without worry about first defining it as an inhabitant of an honest-to-goodness binary relation type, of the sort introduced in the [Relations.Discrete][] module. Perhaps we will address this matter in a future release of the [UALib][].</span>
+<sup>2</sup> <span class="footnote" id="fn2"> Recall, in the [Relations.Quotients][] module, we defined *preorder* for binary relation types. Here, however, we will content ourselves with merely proving reflexivity and transitivity of the subalgebra relation `_≤_`, without worry about first defining it as an inhabitant of an honest-to-goodness binary relation type, of the sort introduced in the [Relations.Discrete][] module. Perhaps we will address this matter in a future release of the [UniversalAlgebra][] library.</span>
 
 <br>
 <br>
