@@ -164,16 +164,6 @@ To conclude this module, we prove that every term is compatible with every congr
 
 \end{code}
 
-For the sake of comparison, here is the analogous theorem using `compatible-fun`.
-
-\begin{code}
-
-  compatible-term : {𝑨 : Algebra 𝓤 𝑆}(t : Term X)(θ : Con{𝓦} 𝑨) → compatible-fun (𝑨 ⟦ t ⟧) ∣ θ ∣
-  compatible-term (ℊ x) θ p = λ y z → z x
-  compatible-term (node 𝑓 𝑡) θ u v p = (is-compatible ∥ θ ∥) 𝑓 λ x → ((compatible-term (𝑡 x) θ) u v) p
-
-\end{code}
-
 --------------------------------------
 
 <sup>1</sup><span class="footnote" id="fn1">We plan to resolve this before the next major release of the [Agda UALib][].</span>
@@ -186,3 +176,21 @@ For the sake of comparison, here is the analogous theorem using `compatible-fun`
 
 {% include UALib.Links.md %}
 
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- For the sake of comparison, here is the analogous theorem using `compatible-fun`.
+
+--   compatible-term : {𝑨 : Algebra 𝓤 𝑆}(t : Term X)(θ : Con{𝓦} 𝑨) → compatible-op (𝑨 ⟦ t ⟧) ∣ θ ∣
+--   compatible-term (ℊ x) θ p = λ y z → z x
+--   compatible-term (node 𝑓 𝑡) θ u v p = (is-compatible ∥ θ ∥) 𝑓 λ x → ((compatible-op (𝑡 x) θ) u v) p
+-->

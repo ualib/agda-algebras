@@ -56,29 +56,80 @@ module _ {A : Type 𝓤}{R : Rel A 𝓦} where
 
 \end{code}
 
--------
 
-#### <a id="question-prop-vs-pred-extensionality">Question: prop vs pred extensionality</a>
 
-Is predicate extensionality stronger than proposition extensionality?  That is, does `pred-ext 𝓤 𝓦` imply the following?
+#### <a id="strongly-well-defined-operations">Strongly well-defined operations</a>
 
-```
-  ∀(A : Type 𝓤)(P : Pred A 𝓦)(x : A)(p q : P x) → p ≡ q
-```
+We now describe an extensionality principle that is weaker than function extensionality, but still (probably) not provable in [MLTT][]. (We address this and other questions  below.)  We call this the principle *strong well-definedness of operations*. We will encounter situations in which this weaker extensionality principle suffices as a substitute for function extensionality.
 
-We could also define *relation extensionality* principles which generalize the predicate extensionality principle (`pred-ext`) defined above
+Suppose we have a function whose domain is a function type, say, `I → A`.  For example, inhabitants of the type `Op` defined above are such functions.  (Recall, the domain of inhabitants of type `Op I A := (I → A) → A` is `I → A`.)
+
+Of course, operations of type `Op I A` are well-defined in the sense that equal inputs result in equal outputs.
 
 \begin{code}
 
-cont-rel-ext : (𝓤 𝓥 𝓦 : Level) → Type (lsuc (𝓤 ⊔ 𝓥 ⊔ 𝓦))
-cont-rel-ext 𝓤 𝓥 𝓦 = ∀ {I : Type 𝓥}{A : Type 𝓤}{P Q : ContRel I A 𝓦 } → P ⊆ Q → Q ⊆ P → P ≡ Q
-
-dep-rel-ext : (𝓤 𝓥 𝓦 : Level) → Type (lsuc (𝓤 ⊔ 𝓥 ⊔ 𝓦))
-dep-rel-ext 𝓤 𝓥 𝓦 = ∀ {I : Type 𝓥}{𝒜 : I → Type 𝓤}{P Q : DepRel I 𝒜 𝓦 } → P ⊆ Q → Q ⊆ P → P ≡ Q
+welldef : {A : Type 𝓤}{I : Type 𝓥}(f : Op I A) → ∀ u v → u ≡ v → f u ≡ f v
+welldef f u v refl = refl
 
 \end{code}
 
-These types are not used in other modules of the [UniversalAlgebra][] library and we pose the same question about them as the one above.  That is, we ask whether these general relation extensionality principles are stonger than proposition extensionality.
+A stronger form of well-definedness of operations is to suppose that point-wise equal inputs lead to the same output.  In other terms, we could suppose that  for all `f : Op I A`, we have `f u ≡ f v` whenever `∀ i → u i ≡ v i` holds.  We call this formalize this notation in the following type.
+
+\begin{code}
+
+swelldef : (𝓥 𝓤 : Level) → Type (lsuc (𝓤 ⊔ 𝓥))
+swelldef 𝓥 𝓤 = ∀ {A : Type 𝓤}{I : Type 𝓥}(f : Op I A)(u v : I → A) → (∀ i → u i ≡ v i) → f u ≡ f v
+
+funext→swelldef : {𝓤 𝓥 : Level} → dfunext 𝓥 𝓤 → swelldef 𝓥 𝓤
+funext→swelldef fe f u v ptweq = γ
+ where
+ uv : u ≡ v
+ uv = fe ptweq
+ γ : f u ≡ f v
+ γ = welldef f u v uv
+
+\end{code}
+
+
+-----------------------------
+
+#### <a id="general-relation-extensionality">General relation extensionality*</a>
+
+We define the following *relation extensionality* principles which generalize the predicate extensionality principle (`pred-ext`) defined above.
+
+\begin{code}
+
+cont-relext : (𝓤 𝓥 𝓦 : Level) → Type (lsuc (𝓤 ⊔ 𝓥 ⊔ 𝓦))
+cont-relext 𝓤 𝓥 𝓦 = ∀ {I : Type 𝓥}{A : Type 𝓤}{P Q : ContRel I A 𝓦 } → P ⊆ Q → Q ⊆ P → P ≡ Q
+
+dep-relext : (𝓤 𝓥 𝓦 : Level) → Type (lsuc (𝓤 ⊔ 𝓥 ⊔ 𝓦))
+dep-relext 𝓤 𝓥 𝓦 = ∀ {I : Type 𝓥}{𝒜 : I → Type 𝓤}{P Q : DepRel I 𝒜 𝓦 } → P ⊆ Q → Q ⊆ P → P ≡ Q
+
+\end{code}
+
+These types are not used in other modules of the [UniversalAlgebra][] library.
+
+
+-------
+
+#### <a id="open-questions-about-extensionality">Open questions about strength and provability of extensionality principles</a>
+
+Here are some questions about extensionaity for future consideration.
+
+**Questions about strong vs weak well-definedness**.
+
+1. Is strong well-definedness of operations (`swelldef`) provable in [MLTT][]?
+
+2. Is strong well-definedness of operations strictly weaker than function extensionality?
+
+
+**Questions about prop vs pred extensionality**.
+
+1. Is predicate extensionality (`pred-ext`) at least as strong as proposition extensionality?  That is, does `pred-ext 𝓤 𝓦` imply
+
+   `∀(A : Type 𝓤)(P : Pred A 𝓦)(x : A)(p q : P x) → p ≡ q` ?
+
+2. Are the relation extensionality principles `cont-relext` and `dep-relext` at least as strong as proposition extensionality?
 
 ---------------------------------------
 

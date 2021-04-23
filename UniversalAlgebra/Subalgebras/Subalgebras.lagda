@@ -51,18 +51,18 @@ We take this opportunity to prove an important lemma that makes use of the `IsSu
 
  module _ (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
           -- extensionality assumptions:
-          (pe : pred-ext 𝓤 𝓦)(fe : dfunext 𝓥 𝓦)
+          (pe : pred-ext 𝓤 𝓦)(fe : swelldef 𝓥 𝓦)
 
           -- truncation assumptions:
           (Bset : is-set ∣ 𝑩 ∣)
-          (buip : blk-uip ∣ 𝑨 ∣ ∣ kercon 𝑩 {fe} h ∣)
+          (buip : blk-uip ∣ 𝑨 ∣ ∣ kercon fe {𝑩} h ∣)
           where
 
-  FirstHomCorollary|Set : (𝑨 [ 𝑩 ]/ker h ↾ fe) IsSubalgebraOf 𝑩
+  FirstHomCorollary|Set : (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) IsSubalgebraOf 𝑩
   FirstHomCorollary|Set = ϕhom , ϕemb
    where
    hh = FirstHomTheorem|Set 𝑨 𝑩 h pe fe Bset buip
-   ϕhom : hom (𝑨 [ 𝑩 ]/ker h ↾ fe) 𝑩
+   ϕhom : hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩
    ϕhom = ∣ hh ∣
 
    ϕemb : is-embedding ∣ ϕhom ∣
@@ -76,14 +76,14 @@ If we apply the foregoing theorem to the special case in which the `𝑨` is ter
 
  module _ (X : Type 𝓧)(𝑩 : Algebra 𝓦 𝑆)(h : hom (𝑻 X) 𝑩)
           -- extensionality assumptions:
-          (pe : pred-ext (ov 𝓧) 𝓦)(fe : dfunext 𝓥 𝓦)
+          (pe : pred-ext (ov 𝓧) 𝓦)(fe : swelldef 𝓥 𝓦)
 
           -- truncation assumptions:
           (Bset : is-set ∣ 𝑩 ∣)
-          (buip : blk-uip (Term X) ∣ kercon 𝑩 {fe} h ∣)
+          (buip : blk-uip (Term X) ∣ kercon fe {𝑩} h ∣)
           where
 
-  free-quot-subalg : ((𝑻 X) [ 𝑩 ]/ker h ↾ fe) IsSubalgebraOf 𝑩
+  free-quot-subalg : (ker[ 𝑻 X ⇒ 𝑩 ] h ↾ fe) IsSubalgebraOf 𝑩
   free-quot-subalg = FirstHomCorollary|Set{𝓤 = ov 𝓧}(𝑻 X) 𝑩 h pe fe Bset buip
 
 \end{code}

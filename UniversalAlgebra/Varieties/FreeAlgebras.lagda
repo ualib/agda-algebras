@@ -135,7 +135,7 @@ First, we represent the congruence relation `ψCon`, modulo which `𝑻 X` yield
 
  \begin{code}
 
- module _ {fe : DFunExt} {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓕} where
+ module _ {fe : DFunExt}{wd+ : swelldef 𝓥 𝓕⁺} {wd : swelldef 𝓥 𝓕} {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓕} where
 
   open class-products-with-maps {𝓤 = 𝓤}{X}{fe 𝓕 𝓤}{fe 𝓕⁺ 𝓕⁺}{fe 𝓕 𝓕} 𝒦
 
@@ -170,10 +170,10 @@ Observe that the inhabitants of `ℭ` are maps from `ℑ'` to `{𝔄' i : i ∈ 
  \begin{code}
 
   𝔽 : Algebra 𝓕⁺ 𝑆
-  𝔽 = (𝑻 X) [ ℭ ]/ker homℭ ↾ fe 𝓥 𝓕
+  𝔽 = ker[ 𝑻 X ⇒ ℭ ] homℭ ↾ wd 
 
   epi𝔽 : epi (𝑻 X) 𝔽
-  epi𝔽 = πker ℭ {fe 𝓥 𝓕} homℭ
+  epi𝔽 = πker wd {ℭ} homℭ
 
   hom𝔽 : hom (𝑻 X) 𝔽
   hom𝔽 = epi-to-hom 𝔽 epi𝔽
@@ -196,7 +196,9 @@ Observe that the inhabitants of `ℭ` are maps from `ℑ'` to `{𝔄' i : i ∈ 
   ψlemma0-ap {𝑨}{h} skA {p , q} x = γ where
 
    ν : ∣ homℭ ∣ p ≡ ∣ homℭ ∣ q
-   ν = ker-in-con {ov 𝓤}{ov 𝓤}{𝑻 X}{fe 𝓥 𝓕⁺}(kercon ℭ {fe 𝓥 𝓕} homℭ) {p}{q} x
+   ν = ker-in-con {ov 𝓤}{ov 𝓤}{𝑻 X}{wd+}(kercon wd {ℭ} homℭ) {p}{q} x   -- fe 𝓥 𝓕⁺  {fe 𝓥 𝓕}
+  -- ker-in-con : {wd : swelldef 𝓥 (𝓤 ⊔ lsuc 𝓦)}(θ : Con{𝓦} 𝑨)
+  --  →           ∀ {x}{y} → ∣ kercon wd {𝑨 ╱ θ} (πhom θ) ∣ x y →  ∣ θ ∣ x y
 
    γ : (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
    γ = ((ψlemma0 p q) ν) 𝑨 skA h
@@ -341,17 +343,12 @@ Observe that the inhabitants of `ℭ` are maps from `ℑ'` to `{𝔄' i : i ∈ 
 
  \begin{code}
 
-  module _ -- prop extensionality assumption:
-           (pe : pred-ext (ov 𝓤)(ov 𝓤))
-
-           -- truncation assumptions:
-           (Cset : is-set ∣ ℭ ∣)
-           (Keruip : blk-uip (Term X) ∣ kercon ℭ {fe 𝓥 𝓕} homℭ ∣)
-
+  module _ (pe : pred-ext (ov 𝓤)(ov 𝓤))(wd : swelldef 𝓥 𝓕)                      -- extensionality assumptions
+           (Cset : is-set ∣ ℭ ∣)(kuip : blk-uip(Term X)∣ kercon wd{ℭ}homℭ ∣) -- truncation assumptions
    where
 
-   𝔽≤ℭ : ((𝑻 X) [ ℭ ]/ker homℭ ↾ fe 𝓥 𝓕) ≤ ℭ
-   𝔽≤ℭ = FirstHomCorollary|Set (𝑻 X) ℭ homℭ pe (fe 𝓥 (ov 𝓤)) Cset Keruip
+   𝔽≤ℭ : (ker[ 𝑻 X ⇒ ℭ ] homℭ ↾ wd) ≤ ℭ
+   𝔽≤ℭ = FirstHomCorollary|Set (𝑻 X) ℭ homℭ pe wd Cset kuip
 
  \end{code}
 

@@ -1,10 +1,10 @@
 # ualib.gitlab.io
 
-The [Agda Universal Algebra Library](https://ualib.gitlab.io/) ([UniversalAlgebra](https://ualib.gitlab.io/)) is a library of types and programs (theorems and proofs) that formalizes the foundations of universal algebra in dependent type theory using the [Agda](https://wiki.portal.chalmers.se/agda/pmwiki.php) proof assistant language.
+The [Agda Universal Algebra Library](https://ualib.gitlab.io/) (hereinafter [UniversalAlgebra](https://ualib.gitlab.io/)) is a library of types and programs (theorems and proofs) that formalizes the foundations of universal algebra in dependent type theory using the [Agda](https://wiki.portal.chalmers.se/agda/pmwiki.php) proof assistant language.
 
-This is the main repository for the Agda UniversalAlgebra. Below are instructions for getting the UniversalAlgebra installed on your machine.  I hope that these steps work for you; they work on my Ubuntu 18.04 machine, but I haven't tested them on a fresh distro, or any other OS, so... 
+This is the main repository for the Agda UniversalAlgebra. Below are instructions for installing the [UniversalAlgebra][] library.  These steps are known to work on Ubuntu 18.04, but we haven't tested them with other distributions or operating systems.
 
-...in any case, please [email me](mailto:williamdemeo@gmail.com) if you have trouble.
+If problems arise when attempting to follow these steps, please [email the developers](mailto:williamdemeo@gmail.com) or creating a [new issue][] on the website that hosts the [ualib][] git repositories is hosted.
 
 ---------------------------
 

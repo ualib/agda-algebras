@@ -154,6 +154,8 @@ open import MGS-FunExt-from-Univalence using (hfunext) public
 
 \end{code}
 
+
+
 ------------------------------------
 
 <sup>1</sup> <span class="footnote" id="fn1"> Most of these types are already defined by in the [Type Topology][] library, so the [UniversalAlgebra][] library imports the definitions from there; as usual, we redefine some of these types, inside hidden modules, for the purpose of explication.</span>

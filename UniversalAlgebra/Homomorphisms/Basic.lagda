@@ -127,20 +127,23 @@ The kernel of a homomorphism is a congruence relation and conversely for every c
 
  module _ {𝓤 𝓦 : Level}{𝑨 : Algebra 𝓤 𝑆} where
 
-  homker-compatible : dfunext 𝓥 𝓦 → (𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) → compatible 𝑨 (ker ∣ h ∣)
-  homker-compatible fe 𝑩 h f {u}{v} Kerhab = ∣ h ∣ ((f ̂ 𝑨) u)   ≡⟨ ∥ h ∥ f u ⟩
-                                             (f ̂ 𝑩)(∣ h ∣ ∘ u)  ≡⟨ ap (f ̂ 𝑩)(fe λ x → Kerhab x) ⟩
-                                             (f ̂ 𝑩)(∣ h ∣ ∘ v)  ≡⟨ (∥ h ∥ f v)⁻¹ ⟩
-                                             ∣ h ∣ ((f ̂ 𝑨) v)   ∎
+  homker-comp : swelldef 𝓥 𝓦 → {𝑩 : Algebra 𝓦 𝑆}(h : hom 𝑨 𝑩) → compatible 𝑨 (ker ∣ h ∣)
+  homker-comp wd {𝑩} h f {u}{v} kuv = ∣ h ∣((f ̂ 𝑨) u)   ≡⟨ ∥ h ∥ f u ⟩
+                                      (f ̂ 𝑩)(∣ h ∣ ∘ u) ≡⟨ wd(f ̂ 𝑩)(∣ h ∣ ∘ u)(∣ h ∣ ∘ v)kuv ⟩
+                                      (f ̂ 𝑩)(∣ h ∣ ∘ v) ≡⟨ (∥ h ∥ f v)⁻¹ ⟩
+                                      ∣ h ∣((f ̂ 𝑨) v)   ∎
+
 
 \end{code}
+
+(Notice, it is here that the `swelldef` postulate comes into play, and because it is needed to prove `homker-comp`, it is postulated by all the lemmas below that depend upon `homker-comp`.)
 
 It is convenient to define a function that takes a homomorphism and constructs a congruence from its kernel.  We call this function `kercon`.
 
 \begin{code}
 
-  kercon : (𝑩 : Algebra 𝓦 𝑆){fe : dfunext 𝓥 𝓦} → hom 𝑨 𝑩 → Con{𝓦} 𝑨
-  kercon 𝑩 {fe} h = ker ∣ h ∣ , mkcon (ker-IsEquivalence ∣ h ∣)(homker-compatible fe 𝑩 h)
+  kercon : swelldef 𝓥 𝓦 → {𝑩 : Algebra 𝓦 𝑆} → hom 𝑨 𝑩 → Con{𝓦} 𝑨
+  kercon wd {𝑩} h = ker ∣ h ∣ , mkcon (ker-IsEquivalence ∣ h ∣)(homker-comp wd {𝑩} h)
 
 \end{code}
 
@@ -148,14 +151,12 @@ With this congruence we construct the corresponding quotient, along with some sy
 
 \begin{code}
 
-  kerquo : dfunext 𝓥 𝓦 → {𝑩 : Algebra 𝓦 𝑆} → hom 𝑨 𝑩 → Algebra (𝓤 ⊔ lsuc 𝓦) 𝑆
-  kerquo fe {𝑩} h = 𝑨 ╱ (kercon 𝑩 {fe} h)
+  kerquo : swelldef 𝓥 𝓦 → {𝑩 : Algebra 𝓦 𝑆} → hom 𝑨 𝑩 → Algebra (𝓤 ⊔ lsuc 𝓦) 𝑆
+  kerquo wd {𝑩} h = 𝑨 ╱ (kercon wd {𝑩} h)
 
 
- _[_]/ker_↾_ : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → hom 𝑨 𝑩 → dfunext 𝓥 𝓦 → Algebra (𝓤 ⊔ lsuc 𝓦) 𝑆
- 𝑨 [ 𝑩 ]/ker h ↾ fe = kerquo fe {𝑩} h
-
- infix 60 _[_]/ker_↾_
+ ker[_⇒_]_↾_ : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → hom 𝑨 𝑩 → swelldef 𝓥 𝓦 → Algebra (𝓤 ⊔ lsuc 𝓦) 𝑆
+ ker[ 𝑨 ⇒ 𝑩 ] h ↾ wd = kerquo wd {𝑩} h
 
 \end{code}
 
@@ -191,8 +192,8 @@ We combine the foregoing to define a function that takes 𝑆-algebras `𝑨` an
 
 \begin{code}
 
-  πker : (𝑩 : Algebra 𝓦 𝑆){fe : dfunext 𝓥 𝓦}(h : hom 𝑨 𝑩) → epi 𝑨 (𝑨 [ 𝑩 ]/ker h ↾ fe)
-  πker 𝑩 {fe} h = πepi (kercon 𝑩 {fe} h)
+  πker : (wd : swelldef 𝓥 𝓦){𝑩 : Algebra 𝓦 𝑆}(h : hom 𝑨 𝑩) → epi 𝑨 (ker[ 𝑨 ⇒ 𝑩 ] h ↾ wd)
+  πker wd {𝑩} h = πepi (kercon wd {𝑩} h)
 
 \end{code}
 
@@ -202,8 +203,8 @@ The kernel of the canonical projection of `𝑨` onto `𝑨 / θ` is equal to `�
 
   open IsCongruence
 
-  ker-in-con : {fe : dfunext 𝓥 (𝓤 ⊔ lsuc 𝓦)}(θ : Con{𝓦} 𝑨)
-   →           ∀ {x}{y} → ∣ kercon (𝑨 ╱ θ){fe} (πhom θ) ∣ x y →  ∣ θ ∣ x y
+  ker-in-con : {wd : swelldef 𝓥 (𝓤 ⊔ lsuc 𝓦)}(θ : Con{𝓦} 𝑨)
+   →           ∀ {x}{y} → ∣ kercon wd {𝑨 ╱ θ} (πhom θ) ∣ x y →  ∣ θ ∣ x y
 
   ker-in-con θ hyp = /-≡ θ hyp
 

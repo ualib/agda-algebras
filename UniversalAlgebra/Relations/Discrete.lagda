@@ -271,8 +271,8 @@ In case it helps the reader, we note that instead of using the slick implication
 
 \begin{code}
 
-compatible-fun : {A : Type 𝓤}{I : Type 𝓥} → (f : Op I A)(R : Rel A 𝓦) → Type(𝓤 ⊔ 𝓥 ⊔ 𝓦)
-compatible-fun f R  = ∀ u v → (eval-rel R) u v → R (f u) (f v)
+compatible-op : {A : Type 𝓤}{I : Type 𝓥} → (f : Op I A)(R : Rel A 𝓦) → Type(𝓤 ⊔ 𝓥 ⊔ 𝓦)
+compatible-op f R  = ∀ u v → (eval-rel R) u v → R (f u) (f v)
 
 \end{code}
 
