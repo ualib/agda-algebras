@@ -181,6 +181,7 @@ Thanks also to
 [Andrej Bauer](http://www.andrej.com/index.html), 
 [Clifford Bergman](https://orion.math.iastate.edu/cbergman/), 
 [Venanzio Capretta](https://www.duplavis.com/venanzio/), 
+[Jacques Carette](http://www.cas.mcmaster.ca/~carette/),
 [Martin Escardo](https://www.cs.bham.ac.uk/~mhe), 
 [Ralph Freese](https://math.hawaii.edu/~ralph/), 
 [Bill Lampe](https://math.hawaii.edu/wordpress/people/william/), 
@@ -193,7 +194,7 @@ for helpful discussions, corrections, advice, inspiration and encouragement.
 
 ### Attributions and citations
 
-Most of the mathematical results that formalized in the [UAlib](https://ualib.gitlab.io) are already well known.
+Most (if not all) of the mathematical results that formalized in the [UniversalAlgebra](https://ualib.gitlab.io) are library already well known.
 
 Regarding the Agda source code in the [Agda UniversalAlgebra](https://gitlab.com/ualib/ualib.gitlab.io/), this is mainly due to the author with one major caveat: we benefited greatly from, and the library depends upon, the lecture notes on [Univalent Foundations and Homotopy Type Theory](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/index.html) and the [Type Topology](https://github.com/martinescardo/TypeTopology) Agda Library by [Martin Hötzel Escardo](https://www.cs.bham.ac.uk/~mhe).  The author is indebted to Martin for making his library and notes available and for teaching a course on type theory in Agda at the [Midlands Graduate School in the Foundations of Computing Science](http://events.cs.bham.ac.uk/mgs2019/) in Birmingham in 2019.
 
