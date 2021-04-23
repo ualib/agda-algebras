@@ -1,15 +1,8 @@
 # ualib.gitlab.io
 
-**Author**. [William DeMeo](https://williamdemeo.gitlab.io)
+The [Agda Universal Algebra Library](https://ualib.gitlab.io/) ([UniversalAlgebra](https://ualib.gitlab.io/)) is a library of types and programs (theorems and proofs) that formalizes the foundations of universal algebra in dependent type theory using the [Agda](https://wiki.portal.chalmers.se/agda/pmwiki.php) proof assistant language.
 
-**Affiliation**. [Department of Algebra](https://www.mff.cuni.cz/en/ka), [Charles University in Prague](https://cuni.cz/UKEN-1.html)
-
-**PDF documentation**. [ualib-part1.pdf](https://gitlab.com/ualib/ualib.gitlab.io/blob/master/ualib-part1.pdf), [ualib-part2.pdf](https://gitlab.com/ualib/ualib.gitlab.io/blob/master/ualib-part2.pdf)   
-(ualib-part3.pdf coming soon!)
-
-**Abstract**. The [Agda Universal Algebra Library](https://ualib.gitlab.io/) ([UALib](https://ualib.gitlab.io/)) is a library of types and programs (theorems and proofs) that formalizes the foundations of universal algebra in dependent type theory using the [Agda](https://wiki.portal.chalmers.se/agda/pmwiki.php) proof assistant language.
-
-This is the main repository for the Agda UALib. Below are instructions for getting the UALib installed on your machine.  I hope that these steps work for you; they work on my Ubuntu 18.04 machine, but I haven't tested them on a fresh distro, or any other OS, so... 
+This is the main repository for the Agda UniversalAlgebra. Below are instructions for getting the UniversalAlgebra installed on your machine.  I hope that these steps work for you; they work on my Ubuntu 18.04 machine, but I haven't tested them on a fresh distro, or any other OS, so... 
 
 ...in any case, please [email me](mailto:williamdemeo@gmail.com) if you have trouble.
 
@@ -17,7 +10,7 @@ This is the main repository for the Agda UALib. Below are instructions for getti
 
 ## Introduction
 
-This repository contains the source code, as well as files that generate [documentation](https://ualib.gitlab.io/), for the [Agda Universal Algebra Library](https://gitlab.com/ualib/ualib.gitlab.io), aka [Agda UALib](https://gitlab.com/ualib/ualib.gitlab.io).
+This repository contains the source code, as well as files that generate [documentation](https://ualib.gitlab.io/), for the [Agda Universal Algebra Library](https://gitlab.com/ualib/ualib.gitlab.io), aka [Agda UniversalAlgebra](https://gitlab.com/ualib/ualib.gitlab.io).
 
 The docs are served at [ualib.org](https://ualib.gitlab.io/), and are automatically generated from the .lagda files using the script [generate-md](https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/generate-md). See the section on [Generating the documentation](#generating-the-documentation) below.
 
@@ -33,7 +26,7 @@ Be sure you have [Agda](https://wiki.portal.chalmers.se/agda/pmwiki.php), [Emacs
 
 -----------------------------
 
-## Download the UALib
+## Download the UniversalAlgebra
 
 [Clone](https://docs.gitlab.com/ee/gitlab-basics/command-line-commands.html) the repository to your local machine using **ONE** of the following alternative commands:
 
@@ -48,9 +41,9 @@ git clone https://gitlab.com/ualib/ualib.gitlab.io.git
 git clone git@gitlab.com:ualib/ualib.gitlab.io.git
 ```
 
-This creates a directory on your local machine called `ualib.gitlab.io`. The UALib source code files reside in subdirectories of `ualib.gitlab.io/UALib` and have the `.lagda` extension.
+This creates a directory on your local machine called `ualib.gitlab.io`. The UniversalAlgebra source code files reside in subdirectories of `ualib.gitlab.io/UniversalAlgebra` and have the `.lagda` extension.
 
-Having installed Agda and cloned the `ualib.gitlab.io` repository, you should now be able to work with the source code contained in the .lagda files, such as UALib.lagda or any of it submodules. For example, you might start by loading the file [UALib/Prelude/Preliminaries.lagda](https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Prelude/Preliminaries.lagda) into Emacs and check that Agda can type-check that file using the command `C-c C-l`.
+Having installed Agda and cloned the `ualib.gitlab.io` repository, you should now be able to work with the source code contained in the .lagda files, such as UniversalAlgebra.lagda or any of it submodules. For example, you might start by loading the file [UniversalAlgebra/Prelude/Preliminaries.lagda](https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UniversalAlgebra/Prelude/Preliminaries.lagda) into Emacs and check that Agda can type-check that file using the command `C-c C-l`.
 
 Other Emacs keybindings are described in the [emacs-mode.html#keybindings](https://agda.readthedocs.io/en/v2.6.1.1/tools/emacs-mode.html#keybindings) section of the [Agda docs](https://agda.readthedocs.io).
 
@@ -72,7 +65,7 @@ The following assumes you already have a [gitlab](https://gitlab.com/) or [githu
 
 4. [Commit](https://docs.gitlab.com/ee/gitlab-basics/start-using-git.html#add-and-commit-local-changes) your changes to your local repository and then [Push](https://docs.gitlab.com/ee/gitlab-basics/start-using-git.html#send-changes-to-gitlabcom) your changes to your remote fork residing in your gitlab account.
 
-5. [Submit a merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html) to alert the UALib team members that you would like your proposed changes to be reviewed and integrated into the official Agda UALib repository.
+5. [Submit a merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html) to alert the UniversalAlgebra team members that you would like your proposed changes to be reviewed and integrated into the official Agda UniversalAlgebra repository.
 
 
 ### Keeping your fork up-to-date
@@ -143,7 +136,7 @@ To generate the html documentation pages and serve them locally you will need bu
 The html pages are generated by Agda with the following command:
 
 ```
-agda --html --html-highlight=code UALib.lagda
+agda --html --html-highlight=code UniversalAlgebra.lagda
 ```
 
 This generates a set of markdown files that are then converted to html by jekyll with the command
@@ -152,10 +145,10 @@ This generates a set of markdown files that are then converted to html by jekyll
 bundle exec jekyll build
 ```
 
-In practice, we use the script `generate-md`, *inside the UALib directory*, to process the `.lagda` files and put the resulting markdown output in the right place, and then using the script `jekyll-serve` to invoke the following commands
+In practice, we use the script `generate-md`, *inside the UniversalAlgebra directory*, to process the `.lagda` files and put the resulting markdown output in the right place, and then using the script `jekyll-serve` to invoke the following commands
 
 ```
-cp html/UALib.md index.md
+cp html/UniversalAlgebra.md index.md
 cp html/*.html html/*.md .
 bundle install --path vendor
 bundle exec jekyll serve --watch --incremental
@@ -167,7 +160,7 @@ This causes jekyll to serve the web pages locally so we can inspect them by poin
 
 ## Troubleshooting
 
-Please [email William](mailto:williamdemeo@gmail.com) if you have any questions or problems using the UALib.
+Please [email William](mailto:williamdemeo@gmail.com) if you have any questions or problems using the UniversalAlgebra.
 
 Comments, questions, or suggestions may also be submitted by creating a [new issue](https://gitlab.com/ualib/ualib.gitlab.io/issues/new).
 
@@ -175,7 +168,7 @@ Comments, questions, or suggestions may also be submitted by creating a [new iss
 
 ## Acknowledgements
 
-A great source of information and inspiration for the Agda UALib is [Marin Escardo's lecture notes on HoTT/UF in Agda](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/index.html).
+A great source of information and inspiration for the Agda UniversalAlgebra is [Marin Escardo's lecture notes on HoTT/UF in Agda](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/index.html).
 
 See also Martin's [HoTT/UF github repository](https://github.com/martinescardo/HoTT-UF-Agda-Lecture-Notes) and [Type Topology github repository](https://github.com/martinescardo/TypeTopology).
 
@@ -202,7 +195,7 @@ for helpful discussions, corrections, advice, inspiration and encouragement.
 
 Most of the mathematical results that formalized in the [UAlib](https://ualib.gitlab.io) are already well known.
 
-Regarding the Agda source code in the [Agda UALib](https://gitlab.com/ualib/ualib.gitlab.io/), this is mainly due to the author with one major caveat: we benefited greatly from, and the library depends upon, the lecture notes on [Univalent Foundations and Homotopy Type Theory](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/index.html) and the [Type Topology](https://github.com/martinescardo/TypeTopology) Agda Library by [Martin Hötzel Escardo](https://www.cs.bham.ac.uk/~mhe).  The author is indebted to Martin for making his library and notes available and for teaching a course on type theory in Agda at the [Midlands Graduate School in the Foundations of Computing Science](http://events.cs.bham.ac.uk/mgs2019/) in Birmingham in 2019.
+Regarding the Agda source code in the [Agda UniversalAlgebra](https://gitlab.com/ualib/ualib.gitlab.io/), this is mainly due to the author with one major caveat: we benefited greatly from, and the library depends upon, the lecture notes on [Univalent Foundations and Homotopy Type Theory](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/index.html) and the [Type Topology](https://github.com/martinescardo/TypeTopology) Agda Library by [Martin Hötzel Escardo](https://www.cs.bham.ac.uk/~mhe).  The author is indebted to Martin for making his library and notes available and for teaching a course on type theory in Agda at the [Midlands Graduate School in the Foundations of Computing Science](http://events.cs.bham.ac.uk/mgs2019/) in Birmingham in 2019.
 
 -------------------------------
 
@@ -210,9 +203,9 @@ Regarding the Agda source code in the [Agda UALib](https://gitlab.com/ualib/uali
 
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">The Agda Universal Algebra Library</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="https://williamdemeo.gitlab.io/" property="cc:attributionName" rel="cc:attributionURL">William DeMeo</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.<br />Based on a work at <a xmlns:dct="http://purl.org/dc/terms/" href="https://gitlab.com/ualib/ualib.gitlab.io" rel="dct:source">https://gitlab.com/ualib/ualib.gitlab.io</a>.
 
-### Citing the Agda UALib
+### Citing the Agda UniversalAlgebra
 
-If you use the Agda UALib or wish to refer to it or its documentation in a publication or on a web page, please use the following BibTeX data:
+If you use the Agda UniversalAlgebra or wish to refer to it or its documentation in a publication or on a web page, please use the following BibTeX data:
 
 ```bibtex
 @article{DeMeo:2021,
@@ -231,4 +224,10 @@ If you use the Agda UALib or wish to refer to it or its documentation in a publi
  bibsource     = {dblp computer science bibliography, https://dblp.org}
 }
 ```
+
+----------------
+
+**Author**. [William DeMeo](https://williamdemeo.gitlab.io)
+
+**Affiliation**. [Department of Algebra](https://www.mff.cuni.cz/en/ka), [Charles University in Prague](https://cuni.cz/UKEN-1.html)
 
