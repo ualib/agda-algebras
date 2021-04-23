@@ -17,7 +17,7 @@ module Varieties.Varieties where
 
 open import Varieties.EquationalLogic public
 
-module varieties {𝑆 : Signature 𝓞 𝓥}{X : Set 𝓧} where
+module varieties {𝑆 : Signature 𝓞 𝓥}{X : Type 𝓧} where
  open equational-logic {𝑆 = 𝑆}{X = X} public
 
 \end{code}
@@ -84,8 +84,8 @@ We define the inductive type `H` to represent classes of algebras that include a
   pbase  : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → Lift-alg 𝑨 𝓦 ∈ P 𝒦
   pliftu : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ P{𝓤}{𝓤} 𝒦 → Lift-alg 𝑨 𝓦 ∈ P 𝒦
   pliftw : {𝑨 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑨 ∈ P{𝓤}{𝓦} 𝒦 → Lift-alg 𝑨 (𝓤 ⊔ 𝓦) ∈ P 𝒦
-  produ  : {I : Set 𝓦 }{𝒜 : I → Algebra 𝓤 𝑆} → (∀ i → (𝒜 i) ∈ P{𝓤}{𝓤} 𝒦) → ⨅ 𝒜 ∈ P 𝒦
-  prodw  : {I : Set 𝓦 }{𝒜 : I → Algebra _ 𝑆} → (∀ i → (𝒜 i) ∈ P{𝓤}{𝓦} 𝒦) → ⨅ 𝒜 ∈ P 𝒦
+  produ  : {I : Type 𝓦 }{𝒜 : I → Algebra 𝓤 𝑆} → (∀ i → (𝒜 i) ∈ P{𝓤}{𝓤} 𝒦) → ⨅ 𝒜 ∈ P 𝒦
+  prodw  : {I : Type 𝓦 }{𝒜 : I → Algebra _ 𝑆} → (∀ i → (𝒜 i) ∈ P{𝓤}{𝓦} 𝒦) → ⨅ 𝒜 ∈ P 𝒦
   pisou  : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra _ 𝑆} → 𝑨 ∈ P{𝓤}{𝓤} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ P 𝒦
   pisow  : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ P{𝓤}{𝓦} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ P 𝒦
 
@@ -109,8 +109,8 @@ We define the inductive type `H` to represent classes of algebras that include a
   vhimg  : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓦} 𝒦 → 𝑩 is-hom-image-of 𝑨 → 𝑩 ∈ V 𝒦
   vssub  : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓤} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ V 𝒦
   vssubw : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓦} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ V 𝒦
-  vprodu : {I : Set 𝓦}{𝒜 : I → Algebra 𝓤 𝑆} → (∀ i → (𝒜 i) ∈ V{𝓤}{𝓤} 𝒦) → ⨅ 𝒜 ∈ V 𝒦
-  vprodw : {I : Set 𝓦}{𝒜 : I → Algebra _ 𝑆} → (∀ i → (𝒜 i) ∈ V{𝓤}{𝓦} 𝒦) → ⨅ 𝒜 ∈ V 𝒦
+  vprodu : {I : Type 𝓦}{𝒜 : I → Algebra 𝓤 𝑆} → (∀ i → (𝒜 i) ∈ V{𝓤}{𝓤} 𝒦) → ⨅ 𝒜 ∈ V 𝒦
+  vprodw : {I : Type 𝓦}{𝒜 : I → Algebra _ 𝑆} → (∀ i → (𝒜 i) ∈ V{𝓤}{𝓦} 𝒦) → ⨅ 𝒜 ∈ V 𝒦
   visou  : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓤} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ V 𝒦
   visow  : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓦} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ V 𝒦
 
@@ -122,10 +122,10 @@ We define the inductive type `H` to represent classes of algebras that include a
 
  \begin{code}
 
- is-variety : {𝓤 : Level}(𝒱 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)) → Set(ov 𝓤)
+ is-variety : {𝓤 : Level}(𝒱 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)) → Type(ov 𝓤)
  is-variety{𝓤} 𝒱 = V{𝓤}{𝓤} 𝒱 ⊆ 𝒱
 
- variety : (𝓤 : Level) → Set(lsuc (𝓞 ⊔ 𝓥 ⊔ (lsuc 𝓤)))
+ variety : (𝓤 : Level) → Type(lsuc (𝓞 ⊔ 𝓥 ⊔ (lsuc 𝓤)))
  variety 𝓤 = Σ 𝒱 ꞉ (Pred (Algebra 𝓤 𝑆)(ov 𝓤)) , is-variety 𝒱
 
  \end{code}
@@ -344,12 +344,15 @@ We define the inductive type `H` to represent classes of algebras that include a
 
  module _ {𝒦 : Pred(Algebra 𝓤 𝑆)(ov 𝓤)} where
 
-  lemPS⊆SP : hfunext 𝓦 𝓤 → dfunext 𝓦 𝓤 → {I : Set 𝓦}{ℬ : I → Algebra 𝓤 𝑆}
+  lemPS⊆SP : hfunext 𝓦 𝓤 → dfunext 𝓦 𝓤 → {I : Type 𝓦}{ℬ : I → Algebra 𝓤 𝑆}
    →         (∀ i → (ℬ i) IsSubalgebraOfClass 𝒦)
              -------------------------------------
    →         ⨅ ℬ IsSubalgebraOfClass (P{𝓤}{𝓦} 𝒦)
 
-  lemPS⊆SP hfe𝓦𝓤 fe𝓦𝓤 {I}{ℬ} B≤K = ⨅ 𝒜 , (⨅ SA , ⨅SA≤⨅𝒜) , ξ , (⨅≅ {fe𝓘𝓤 = fe𝓦𝓤}{fe𝓘𝓦 = fe𝓦𝓤} B≅SA)
+ -- module _ {𝓘 : Level}{I : Type 𝓘}{fiu : dfunext 𝓘 𝓤}{fiw : dfunext 𝓘 𝓦} where
+ --  ⨅≅ : {𝒜 : I → Algebra 𝓤 𝑆}{ℬ : I → Algebra 𝓦 𝑆} → Π i ꞉ I , 𝒜 i ≅ ℬ i → ⨅ 𝒜 ≅ ⨅ ℬ
+
+  lemPS⊆SP hwu fwu {I}{ℬ} B≤K = ⨅ 𝒜 , (⨅ SA , ⨅SA≤⨅𝒜) , ξ , (⨅≅ {fiu = fwu}{fiw = fwu} B≅SA)
    where
    𝒜 : I → Algebra 𝓤 𝑆
    𝒜 = λ i → ∣ B≤K i ∣
@@ -369,9 +372,9 @@ We define the inductive type `H` to represent classes of algebras that include a
    α : ∣ ⨅ SA ∣ → ∣ ⨅ 𝒜 ∣
    α = λ x i → (h i) (x i)
    β : is-homomorphism (⨅ SA) (⨅ 𝒜) α
-   β = λ 𝑓 𝒂 → fe𝓦𝓤 λ i → (snd ∣ SA≤𝒜 i ∣) 𝑓 (λ x → 𝒂 x i)
+   β = λ 𝑓 𝒂 → fwu λ i → (snd ∣ SA≤𝒜 i ∣) 𝑓 (λ x → 𝒂 x i)
    γ : is-embedding α
-   γ = embedding-lift hfe𝓦𝓤 hfe𝓦𝓤 {I}{SA}{𝒜}h(λ i → ∥ SA≤𝒜 i ∥)
+   γ = embedding-lift hwu hwu {I}{SA}{𝒜}h(λ i → ∥ SA≤𝒜 i ∥)
 
    ⨅SA≤⨅𝒜 : ⨅ SA ≤ ⨅ 𝒜
    ⨅SA≤⨅𝒜 = (α , β) , γ
@@ -481,7 +484,7 @@ We define the inductive type `H` to represent classes of algebras that include a
   VlA (vssubw{𝑨}{𝑩} x B≤A) = vssubw (VlA x) (Lift-≤-Lift 𝑨 B≤A)
   VlA (vprodu{I}{𝒜} x) = visow (vprodw vlA) (≅-sym B≅A)
    where
-   𝑰 : Set (lsuc (ov 𝓤))
+   𝑰 : Type (lsuc (ov 𝓤))
    𝑰 = Lift I
 
    lA : 𝑰 → Algebra (lsuc (ov 𝓤)) 𝑆
@@ -499,7 +502,7 @@ We define the inductive type `H` to represent classes of algebras that include a
 
   VlA (vprodw{I}{𝒜} x) = visow (vprodw vlA) (≅-sym B≅A)
    where
-   𝑰 : Set (lsuc (ov 𝓤))
+   𝑰 : Type (lsuc (ov 𝓤))
    𝑰 = Lift I
 
    lA : 𝑰 → Algebra (lsuc (ov 𝓤)) 𝑆
@@ -549,28 +552,28 @@ We define the inductive type `H` to represent classes of algebras that include a
 
  #### <a id="S-in-SP">⨅ S(𝒦) ∈ SP(𝒦)</a>
 
- Finally, we prove a result that plays an important role, e.g., in the formal proof of Birkhoff's Theorem. As we saw in [Algebras.Products][], the (informal) product `⨅ S(𝒦)` of all subalgebras of algebras in 𝒦 is implemented (formally) in the [UALib][] as `⨅ 𝔄 S(𝒦)`. Our goal is to prove that this product belongs to `SP(𝒦)`. We do so by first proving that the product belongs to `PS(𝒦)` and then applying the `PS⊆SP` lemma.
+ Finally, we prove a result that plays an important role, e.g., in the formal proof of Birkhoff's Theorem. As we saw in [Algebras.Products][], the (informal) product `⨅ S(𝒦)` of all subalgebras of algebras in 𝒦 is implemented (formally) in the [UniversalAlgebra][] library as `⨅ 𝔄 S(𝒦)`. Our goal is to prove that this product belongs to `SP(𝒦)`. We do so by first proving that the product belongs to `PS(𝒦)` and then applying the `PS⊆SP` lemma.
 
  Before doing so, we need to redefine the class product so that each factor comes with a map from the type `X` of variable symbols into that factor.  We will explain the reason for this below.
 
  \begin{code}
 
  module class-products-with-maps
-  {X : Set 𝓤}
+  {X : Type 𝓤}
   {fe𝓕𝓤 : dfunext (ov 𝓤) 𝓤}
   {fe₁ : dfunext ((ov 𝓤) ⊔ (lsuc (ov 𝓤))) (lsuc (ov 𝓤))}
   {fe₂ : dfunext (ov 𝓤) (ov 𝓤)}
   (𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤))
   where
 
-  ℑ' : Set (ov 𝓤)
+  ℑ' : Type (ov 𝓤)
   ℑ' = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , (𝑨 ∈ S{𝓤}{𝓤} 𝒦) × (X → ∣ 𝑨 ∣)
 
  \end{code}
  Notice that the second component of this dependent pair type is  `(𝑨 ∈ 𝒦) × (X → ∣ 𝑨 ∣)`. In previous versions of the [UALib][] this second component was simply `𝑨 ∈ 𝒦`, until we realized that adding the type `X → ∣ 𝑨 ∣` is quite useful. Later we will see exactly why, but for now suffice it to say that a map of type `X → ∣ 𝑨 ∣` may be viewed abstractly as an *ambient context*, or more concretely, as an assignment of *values* in `∣ 𝑨 ∣` to *variable symbols* in `X`.  When computing with or reasoning about products, while we don't want to rigidly impose a context in advance, want do want to lay our hands on whatever context is ultimately assumed.  Including the "context map" inside the index type `ℑ` of the product turns out to be a convenient way to achieve this flexibility.
 
 
- Taking the product over the index type ℑ requires a function that maps an index `i : ℑ` to the corresponding algebra.  Each `i : ℑ` is a triple, say, `(𝑨 , p , h)`, where `𝑨 : Algebra 𝓤 𝑆`, `p : 𝑨 ∈ 𝒦`, and `h : X → ∣ 𝑨 ∣`, so the function mapping an index to the corresponding algebra is simply the first projection.
+ Taking the product over the index type `ℑ` requires a function that maps an index `i : ℑ` to the corresponding algebra.  Each `i : ℑ` is a triple, say, `(𝑨 , p , h)`, where `𝑨 : Algebra 𝓤 𝑆`, `p : 𝑨 ∈ 𝒦`, and `h : X → ∣ 𝑨 ∣`, so the function mapping an index to the corresponding algebra is simply the first projection.
 
  \begin{code}
 
@@ -593,7 +596,7 @@ We define the inductive type `H` to represent classes of algebras that include a
  \begin{code}
 
   class-prod-s-∈-ps : class-product' ∈ P{ov 𝓤}{ov 𝓤}(S 𝒦)
-  class-prod-s-∈-ps = pisou psPllA (⨅≅ {fe𝓘𝓤 = fe₂}{fe𝓘𝓦 = fe𝓕𝓤} llA≅A)
+  class-prod-s-∈-ps = pisou psPllA (⨅≅ {fiu = fe₂}{fiw = fe𝓕𝓤} llA≅A)
 
    where
    lA llA : ℑ' → Algebra (ov 𝓤) 𝑆

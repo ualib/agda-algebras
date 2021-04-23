@@ -21,7 +21,7 @@ We also prove some closure and invariance properties of ⊧.  In particular, we 
 
 
 
-**Notation**. In the [Agda UALib][], because a class of structures has a different type than a single structure, we must use a slightly different syntax to avoid overloading the relations ⊧ and ≈. As a reasonable alternative to what we would normally express informally as 𝒦 ⊧ 𝑝 ≈ 𝑞, we have settled on 𝒦 ⊧ p ≋ q to denote this relation.  To reiterate, if 𝒦 is a class of 𝑆-algebras, we write 𝒦 ⊧ 𝑝 ≋ 𝑞 if every 𝑨 ∈ 𝒦 satisfies 𝑨 ⊧ 𝑝 ≈ 𝑞.
+**Notation**. In the [Agda UniversalAlgebra][] library, because a class of structures has a different type than a single structure, we must use a slightly different syntax to avoid overloading the relations ⊧ and ≈. As a reasonable alternative to what we would normally express informally as 𝒦 ⊧ 𝑝 ≈ 𝑞, we have settled on 𝒦 ⊧ p ≋ q to denote this relation.  To reiterate, if 𝒦 is a class of 𝑆-algebras, we write 𝒦 ⊧ 𝑝 ≋ 𝑞 if every 𝑨 ∈ 𝒦 satisfies 𝑨 ⊧ 𝑝 ≈ 𝑞.
 
 **Unicode Hints**. To produce the symbols ≈, ⊧, and ≋ in [agda2-mode][], type `\~~`, `\models`, and `\~~~`, respectively.
 
@@ -35,16 +35,8 @@ open import Subalgebras.Subalgebras public
 open import MGS-Embeddings using (embeddings-are-lc) public
 
 
-module equational-logic {𝑆 : Signature 𝓞 𝓥}{X : Set 𝓧} where
+module equational-logic {𝑆 : Signature 𝓞 𝓥}{X : Type 𝓧} where
  open subalgebras {𝑆 = 𝑆} public
--- open import Algebras.Signatures using (Signature; 𝓞; 𝓥)
--- open import Universes using (Universe; _̇)
-
--- module Varieties.EquationalLogic {𝑆 : Signature 𝓞 𝓥}{𝓧 : Universe}{X : 𝓧 ̇} where
-
--- open import Subalgebras.Subalgebras{𝑆 = 𝑆} hiding (Universe; _̇) public
--- open import MGS-Embeddings using (embeddings-are-lc) public
-
 
 \end{code}
 
@@ -56,39 +48,38 @@ We define the binary "models" relation ⊧ using infix syntax so that we may wri
 \begin{code}
 
  module _ {𝓤 : Level} where
-  _⊧_≈_ : Algebra 𝓤 𝑆 → Term X → Term X → Set(𝓤 ⊔ 𝓧)
+  _⊧_≈_ : Algebra 𝓤 𝑆 → Term X → Term X → Type(𝓤 ⊔ 𝓧)
   𝑨 ⊧ p ≈ q = 𝑨 ⟦ p ⟧ ≡ 𝑨 ⟦ q ⟧
 
-  _⊧_≋_ : Pred(Algebra 𝓤 𝑆)(ov 𝓤) → Term X → Term X → Set(𝓧 ⊔ ov 𝓤)
+  _⊧_≋_ : Pred(Algebra 𝓤 𝑆)(ov 𝓤) → Term X → Term X → Type(𝓧 ⊔ ov 𝓤)
   𝒦 ⊧ p ≋ q = {𝑨 : Algebra _ 𝑆} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
 
- \end{code}
+\end{code}
 
- ##### <a id="semantics-of-⊧">Syntax and semantics of ⊧</a>
- The expression `𝑨 ⊧ 𝑝 ≈ 𝑞` represents the assertion that the identity `p ≈ q` holds when interpreted in the algebra 𝑨; syntactically, `𝑝 ̇ 𝑨 ≡ 𝑞 ̇ 𝑨`.  It should be emphasized that the expression  `𝑝 ̇ 𝑨 ≡ 𝑞 ̇ 𝑨` is interpreted computationally as an *extensional equality*, by which we mean that for each *assignment function*  `𝒂 :  X → ∣ 𝑨 ∣`, assigning values in the domain of `𝑨` to the variable symbols in `X`, we have `(𝑝 ̇ 𝑨) 𝒂 ≡ (𝑞 ̇ 𝑨) 𝒂`.
-
-
+##### <a id="semantics-of-⊧">Syntax and semantics of ⊧</a>
+The expression `𝑨 ⊧ p ≈ q` represents the assertion that the identity `p ≈ q` holds when interpreted in the algebra `𝑨`; syntactically, `𝑨 ⟦ p ⟧ ≡ 𝑨 ⟦ q ⟧`.  It should be emphasized that the expression  `𝑨 ⟦ p ⟧ ≡ 𝑨 ⟦ q ⟧` interpreted computationally as an *extensional equality*, by which we mean that for each *assignment function*  `𝒂 :  X → ∣ 𝑨 ∣`, assigning values in the domain of `𝑨` to the variable symbols in `X`, we have `⟦ p ⟧ 𝑨 𝒂 ≡ ⟦ q ⟧  𝑨 𝒂`.
 
 
- #### <a id="equational-theories-and-classes">Equational theories and models</a>
 
- Here we define a type `Th` so that, if 𝒦 denotes a class of algebras, then `Th 𝒦` represents the set of identities modeled by all members of 𝒦.
+#### <a id="equational-theories-and-classes">Equational theories and models</a>
 
- \begin{code}
+Here we define a type `Th` so that, if 𝒦 denotes a class of algebras, then `Th 𝒦` represents the set of identities modeled by all members of 𝒦.
 
-  Th : Pred (Algebra 𝓤 𝑆)(ov 𝓤) → Pred(Term X × Term X)(𝓧 ⊔ ov 𝓤)
-  Th 𝒦 = λ (p , q) → 𝒦 ⊧ p ≋ q
+\begin{code}
 
- \end{code}
+ Th : Pred (Algebra 𝓤 𝑆)(ov 𝓤) → Pred(Term X × Term X)(𝓧 ⊔ ov 𝓤)
+ Th 𝒦 = λ (p , q) → 𝒦 ⊧ p ≋ q
 
- If ℰ denotes a set of identities, then the class of algebras satisfying all identities in ℰ is represented by `Mod ℰ`, which we define in the following natural way.
+\end{code}
 
- \begin{code}
+If `ℰ` denotes a set of identities, then the class of algebras satisfying all identities in ℰ is represented by `Mod ℰ`, which we define in the following natural way.
 
-  Mod : Pred(Term X × Term X)(𝓧 ⊔ ov 𝓤) → Pred(Algebra 𝓤 𝑆)(ov (𝓧 ⊔ 𝓤))
-  Mod ℰ = λ 𝑨 → ∀ p q → (p , q) ∈ ℰ → 𝑨 ⊧ p ≈ q
+\begin{code}
 
- \end{code}
+ Mod : Pred(Term X × Term X)(𝓧 ⊔ ov 𝓤) → Pred(Algebra 𝓤 𝑆)(ov (𝓧 ⊔ 𝓤))
+ Mod ℰ = λ 𝑨 → ∀ p q → (p , q) ∈ ℰ → 𝑨 ⊧ p ≈ q
+
+\end{code}
 
 
 
@@ -119,14 +110,14 @@ We define the binary "models" relation ⊧ using infix syntax so that we may wri
 
  \end{code}
 
- As the proof makes clear, we show 𝑩 ⊧ p ≈ q by showing that p ̇ 𝑩 ≡ q ̇ 𝑩 holds *extensionally*, that is, `∀ x, (𝑩 ⟦ p ⟧) x ≡ (q ̇ 𝑩) x`.
+ As the proof makes clear, we show 𝑩 ⊧ p ≈ q by showing that `𝑩 ⟦ p ⟧ ≡ 𝑩 ⟦ q ⟧ holds *extensionally*, that is, `∀ x, 𝑩 ⟦ p ⟧ x ≡ 𝑩 ⟦q ⟧ x`.
 
- #### <a id="lift-invariance">Lift-invariance of ⊧</a>
- The ⊧ relation is also invariant under the algebraic lift and lower operations.
+#### <a id="lift-invariance">Lift-invariance of ⊧</a>
+The ⊧ relation is also invariant under the algebraic lift and lower operations.
 
- \begin{code}
+\begin{code}
 
- module _ {𝓤 𝓦 : Level}{𝑨 : Algebra 𝓤 𝑆} where
+ module _ {𝑨 : Algebra 𝓤 𝑆} where
 
   ⊧-Lift-invar : DFunExt → (p q : Term X) → 𝑨 ⊧ p ≈ q → Lift-alg 𝑨 𝓦 ⊧ p ≈ q
   ⊧-Lift-invar fe p q Apq = ⊧-I-invar fe (Lift-alg 𝑨 _) p q Apq Lift-≅
@@ -134,21 +125,19 @@ We define the binary "models" relation ⊧ using infix syntax so that we may wri
   ⊧-lower-invar : DFunExt → (p q : Term X) → Lift-alg 𝑨 𝓦 ⊧ p ≈ q  →  𝑨 ⊧ p ≈ q
   ⊧-lower-invar fe p q lApq = ⊧-I-invar fe 𝑨 p q lApq (≅-sym Lift-≅)
 
- \end{code}
+\end{code}
 
 
 
 
 
- #### <a id="subalgebraic-invariance">Subalgebraic invariance of ⊧</a>
+#### <a id="subalgebraic-invariance">Subalgebraic invariance of ⊧</a>
 
- Identities modeled by an algebra 𝑨 are also modeled by every subalgebra of 𝑨, which fact can be formalized as follows.
+Identities modeled by an algebra `𝑨` are also modeled by every subalgebra of `𝑨`, which fact can be formalized as follows.
 
- \begin{code}
+\begin{code}
 
- module _ {𝓤 𝓦 : Level}
-          -- (fwxw : dfunext (𝓦 ⊔ 𝓧) 𝓦)(fvu : dfunext 𝓥 𝓤)
-  where
+ module _ {𝓤 𝓦 : Level} where
 
   ⊧-S-invar : DFunExt → {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆){p q : Term X}
    →          𝑨 ⊧ p ≈ q  →  𝑩 ≤ 𝑨  →  𝑩 ⊧ p ≈ q
@@ -189,7 +178,7 @@ We define the binary "models" relation ⊧ using infix syntax so that we may wri
 
  \begin{code}
 
- module _ {𝓤 𝓦 : Level}(I : Set 𝓦)(𝒜 : I → Algebra 𝓤 𝑆) where
+ module _ {𝓤 𝓦 : Level}(I : Type 𝓦)(𝒜 : I → Algebra 𝓤 𝑆) where
 
   ⊧-P-invar : DFunExt → {p q : Term X} → (∀ i → 𝒜 i ⊧ p ≈ q) → ⨅ 𝒜 ⊧ p ≈ q
   ⊧-P-invar fe {p}{q} 𝒜pq = γ
@@ -200,11 +189,11 @@ We define the binary "models" relation ⊧ using infix syntax so that we may wri
         (λ i → (𝒜 i ⟦ q ⟧)(λ x → (a x)i)) ≡⟨ (interp-prod (fe 𝓥 (𝓤 ⊔ 𝓦)) q 𝒜 a)⁻¹ ⟩
         (⨅ 𝒜 ⟦ q ⟧) a                     ∎
 
- \end{code}
+\end{code}
 
- An identity satisfied by all algebras in a class is also satisfied by the product of algebras in the class.
+An identity satisfied by all algebras in a class is also satisfied by the product of algebras in the class.
 
- \begin{code}
+\begin{code}
 
   ⊧-P-class-invar : DFunExt → {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}{p q : Term X}
    →                𝒦 ⊧ p ≋ q → (∀ i → 𝒜 i ∈ 𝒦) → ⨅ 𝒜 ⊧ p ≈ q
@@ -217,20 +206,18 @@ We define the binary "models" relation ⊧ using infix syntax so that we may wri
 
  \begin{code}
 
-  ⊧-P-lift-invar : DFunExt → {p q : Term X}
-   →               (∀ i → (Lift-alg (𝒜 i) 𝓦) ⊧ p ≈ q)  →  ⨅ 𝒜 ⊧ p ≈ q
-
+  ⊧-P-lift-invar : DFunExt → {p q : Term X} → (∀ i → Lift-alg (𝒜 i) 𝓦 ⊧ p ≈ q)  →  ⨅ 𝒜 ⊧ p ≈ q
   ⊧-P-lift-invar fe {p}{q} α = ⊧-P-invar fe {p}{q}Aipq
     where
      Aipq : ∀ i → (𝒜 i) ⊧ p ≈ q
      Aipq i = ⊧-lower-invar fe p q (α i) --  (≅-sym Lift-≅)
 
- \end{code}
+\end{code}
 
 
- #### <a id="homomorphisc-invariance">Homomorphic invariance of ⊧</a>
+#### <a id="homomorphisc-invariance">Homomorphic invariance of ⊧</a>
 
- If an algebra 𝑨 models an identity p ≈ q, then the pair (p , q) belongs to the kernel of every homomorphism φ : hom (𝑻 X) 𝑨 from the term algebra to 𝑨; that is, every homomorphism from 𝑻 X to 𝑨 maps p and q to the same element of 𝑨.
+If an algebra 𝑨 models an identity p ≈ q, then the pair (p , q) belongs to the kernel of every homomorphism φ : hom (𝑻 X) 𝑨 from the term algebra to 𝑨; that is, every homomorphism from 𝑻 X to 𝑨 maps p and q to the same element of 𝑨.
 
  \begin{code}
 
@@ -238,20 +225,22 @@ We define the binary "models" relation ⊧ using infix syntax so that we may wri
 
   ⊧-H-invar : DFunExt → {p q : Term X}(φ : hom (𝑻 X) 𝑨) → 𝑨 ⊧ p ≈ q  →  ∣ φ ∣ p ≡ ∣ φ ∣ q
 
-  ⊧-H-invar fe {p}{q} φ β = ∣ φ ∣ p      ≡⟨ ap ∣ φ ∣ (term-agreement {fe = (fe 𝓥 (ov 𝓧))} p) ⟩
+  ⊧-H-invar fe {p}{q} φ β = ∣ φ ∣ p      ≡⟨ ap ∣ φ ∣ (term-agreement (fe 𝓥 (ov 𝓧)) p) ⟩
                   ∣ φ ∣((𝑻 X ⟦ p ⟧) ℊ)   ≡⟨ (comm-hom-term (fe 𝓥 𝓤) 𝑨 φ p ℊ ) ⟩
                   (𝑨 ⟦ p ⟧) (∣ φ ∣ ∘ ℊ)  ≡⟨ happly β (∣ φ ∣ ∘ ℊ ) ⟩
                   (𝑨 ⟦ q ⟧) (∣ φ ∣ ∘ ℊ)  ≡⟨ (comm-hom-term (fe 𝓥 𝓤) 𝑨 φ q ℊ )⁻¹ ⟩
-                  ∣ φ ∣ ((𝑻 X ⟦ q ⟧) ℊ)  ≡⟨(ap ∣ φ ∣ (term-agreement {fe = (fe 𝓥 (ov 𝓧))} q))⁻¹ ⟩
+                  ∣ φ ∣ ((𝑻 X ⟦ q ⟧) ℊ)  ≡⟨(ap ∣ φ ∣ (term-agreement (fe 𝓥 (ov 𝓧)) q))⁻¹ ⟩
                   ∣ φ ∣ q                ∎
 
- \end{code}
+\end{code}
 
- More generally, an identity is satisfied by all algebras in a class if and only if that identity is invariant under all homomorphisms from the term algebra `𝑻 X` into algebras of the class. More precisely, if `𝒦` is a class of `𝑆`-algebras and `𝑝`, `𝑞` terms in the language of `𝑆`, then,
+More generally, an identity is satisfied by all algebras in a class if and only if that identity is invariant under all homomorphisms from the term algebra `𝑻 X` into algebras of the class. More precisely, if `𝒦` is a class of `𝑆`-algebras and `𝑝`, `𝑞` terms in the language of `𝑆`, then,
 
- `𝒦 ⊧ p ≈ q  ⇔  ∀ 𝑨 ∈ 𝒦,  ∀ φ : hom (𝑻 X) 𝑨,  φ ∘ (𝑝 ̇ (𝑻 X)) = φ ∘ (𝑞 ̇ (𝑻 X))`.
+```
+  𝒦 ⊧ p ≈ q  ⇔  ∀ 𝑨 ∈ 𝒦,  ∀ φ : hom (𝑻 X) 𝑨,  φ ∘ (𝑻 X)⟦ p ⟧ = φ ∘ (𝑻 X)⟦ q ⟧.
+```
 
- \begin{code}
+\begin{code}
 
  module _ {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}  where
 

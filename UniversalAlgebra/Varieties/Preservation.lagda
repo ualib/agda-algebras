@@ -18,7 +18,7 @@ module Varieties.Preservation  where
 
 open import Varieties.Varieties public
 
-module preservation {𝑆 : Signature 𝓞 𝓥} {𝓤 𝓧 : Level }{X : Set 𝓧} where
+module preservation {𝑆 : Signature 𝓞 𝓥} {𝓤 𝓧 : Level }{X : Type 𝓧} where
  open varieties {𝑆 = 𝑆}{X = X} public
 
  𝓕 𝓕⁺ 𝓾𝔁 : Level

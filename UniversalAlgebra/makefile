@@ -2,7 +2,7 @@ TOP = ..
 
 include $(TOP)/mk/paths.mk
 
-default: UALib
+default: UniversalAlgebra
 
 AGDA = agda --html --html-highlight=code
 
@@ -47,7 +47,7 @@ MGS=Empty-Type \
     Unit-Type \
     Universes
 
-UALIBDOTS=UALib \
+UALIBDOTS=UniversalAlgebra \
           Preface \
           Overture \
           Overture.Preliminaries \
@@ -62,8 +62,7 @@ UALIBDOTS=UALib \
           Relations.Truncation \
           Relations.Extensionality \
           Algebras \
-          Algebras.Signatures \
-          Algebras.Algebras \
+          Algebras.Basic \
           Algebras.Products \
           Algebras.Congruences \
           Homomorphisms \
@@ -99,8 +98,7 @@ UALIB=UALib \
       Relations/Truncation \
       Relations/Extensionality \
       Algebras \
-      Algebras/Signatures \
-      Algebras/Algebras \
+      Algebras/Basic \
       Algebras/Products \
       Algebras/Congruences \
       Homomorphisms \
@@ -126,17 +124,17 @@ MODULE_NAMES := Preface Overture Relations Algebras Homomorphisms Terms Subalgeb
 
 UALib : $(HTML_DIR)/UALib.md
 
-$(HTML_DIR)/UALib.md: $(HTML_DIR)/UALib.tex
+$(HTML_DIR)/UniversalAlgebra.md: $(HTML_DIR)/UniversalAlgebra.tex
 	cp $< $@
 	for f in $(UALIBDOTS); do cp $(HTML_DIR)/$$f.tex $(HTML_DIR)/$$f.md; done
 	for f in $(AGDADATA); do rm $(HTML_DIR)/$$f.html; done
 
-$(HTML_DIR)/UALib.tex: UALib.lagda $(MODULE_NAMES)
-	$(AGDA) UALib.lagda
+$(HTML_DIR)/UniversalAlgebra.tex: UniversalAlgebra.lagda $(MODULE_NAMES)
+	$(AGDA) UniversalAlgebra.lagda
 
 
 # To make the raw .tex source files, do `make tex`
-tex: UALib.lagda $(MODULE_NAMES)
+tex: UniversalAlgebra.lagda $(MODULE_NAMES)
 	for f in $(UALIB); do \
       echo "Checking $$f.lagda"; \
       agda --latex $$f.lagda; \
@@ -162,16 +160,3 @@ Subalgebras: $(wildcard Subalgebras/*.lagda)
 
 Varieties: $(wildcard Varieties/*.lagda)
 
-
-
-# #### Varieties #################################################3
-# DEPS := $(NAME)
-# NAME := Varieties
-# LAGDA := $(wildcard $(NAME)/*.lagda)
-# MD := $(addprefix $(HTML_DIR)/,$(subst /,.,$(LAGDA:.lagda=.md)))
-# TEX := $(addprefix $(HTML_DIR)/,$(subst /,.,$(LAGDA:.lagda=.tex)))
-# $(NAME): $(MD) $(DEPS)
-# $(MD): %.md: %.tex
-# 	cp $< $@
-# $(TEX): $(LAGDA)
-# 	for f in $(LAGDA); do $(AGDA) $$f; done

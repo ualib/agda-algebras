@@ -1,13 +1,13 @@
 ---
 layout: default
-title : UALib.Varieties.FreeAlgebras module (Agda Universal Algebra Library)
+title : Varieties.FreeAlgebras module (Agda Universal Algebra Library)
 date : 2021-03-01
 author: William DeMeo
 ---
 
 ## <a id="free-algebras-and-birkhoffs-theorem">Free Algebras and Birkhoff's Theorem</a>
 
-This section presents the [UALib.Varieties.FreeAlgebras][] module of the [Agda Universal Algebra Library][].
+This section presents the [Varieties.FreeAlgebras][] module of the [Agda Universal Algebra Library][].
 
 First we will define the relatively free algebra in a variety, which is the "freest" algebra among (universal for) those algebras that model all identities holding in the variety. Then we give a formal proof of Birkhoff's theorem which says that a variety is an equational class. In other terms, a class `𝒦` of algebras is closed under the operators `H`, `S`, and `P` if and only if 𝒦 is the class of algebras that satisfy some set of identities.
 
@@ -16,11 +16,10 @@ First we will define the relatively free algebra in a variety, which is the "fre
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 module Varieties.FreeAlgebras where
- --{𝑆 : Signature 𝓞 𝓥} {𝓤 : Universe}{X : 𝓤 ̇}
 
 open import Varieties.Preservation public
 
-module free-algebras {𝑆 : Signature 𝓞 𝓥} {𝓤 : Level }{X : Set 𝓤} where
+module free-algebras {𝑆 : Signature 𝓞 𝓥} {𝓤 : Level }{X : Type 𝓤} where
  open preservation {𝑆 = 𝑆}{𝓤}{𝓤}{X} public
 
 \end{code}
@@ -150,21 +149,21 @@ First, we represent the congruence relation `ψCon`, modulo which `𝑻 X` yield
   ℭ : Algebra 𝓕 𝑆
   ℭ = ⨅ 𝔄'
 
- \end{code}
+\end{code}
 
- Observe that the inhabitants of `ℭ` are maps from `ℑ'` to `{𝔄' i : i ∈ ℑ'}`.  A homomorphism from `𝑻 X` to `ℭ` is obtained as follows.
+Observe that the inhabitants of `ℭ` are maps from `ℑ'` to `{𝔄' i : i ∈ ℑ'}`.  A homomorphism from `𝑻 X` to `ℭ` is obtained as follows.
 
- \begin{code}
+\begin{code}
 
   homℭ : hom (𝑻 X) ℭ
   homℭ = ⨅-hom-co 𝔄' (fe 𝓕 𝓤){𝓕}(𝑻 X) λ i → lift-hom (𝔄' i)(snd ∥ i ∥)
 
- \end{code}
+\end{code}
 
 
- #### <a id="the-free-algebra">The free algebra</a>
+#### <a id="the-free-algebra">The free algebra</a>
 
- As mentioned above, the initial version of the [Agda UALib][] used the free algebra `𝔉` developed above.  However, our new, more direct proof uses the algebra `𝔽`, which we now define, along with the natural epimorphism `epi𝔽 : epi (𝑻 X) 𝔽` from `𝑻 X` to `𝔽`.
+ As mentioned above, the initial version of the [Agda UniversalAlgebra][] used the free algebra `𝔉` developed above.  However, our new, more direct proof uses the algebra `𝔽`, which we now define, along with the natural epimorphism `epi𝔽 : epi (𝑻 X) 𝔽` from `𝑻 X` to `𝔽`.
 
  We now define the algebra `𝔽`, which plays the role of the free algebra, along with the natural epimorphism `epi𝔽 : epi (𝑻 X) 𝔽` from `𝑻 X` to `𝔽`.
 
@@ -306,7 +305,7 @@ First, we represent the congruence relation `ψCon`, modulo which `𝑻 X` yield
   kernel-in-theory : kernel ∣ hom𝔽 ∣ ⊆ Th (V 𝒦)
   kernel-in-theory {p , q} pKq = (class-ids-⇒ {fe = fe} p q (class-models-kernel p q pKq))
 
-  _↠_ : Set 𝓤 → Algebra 𝓕⁺ 𝑆 → Set 𝓕⁺
+  _↠_ : Type 𝓤 → Algebra 𝓕⁺ 𝑆 → Type 𝓕⁺
   X ↠ 𝑨 = Σ h ꞉ (X → ∣ 𝑨 ∣) , Epic h
 
   𝔽-ModTh-epi : (𝑨 : Algebra 𝓕⁺ 𝑆) → (X ↠ 𝑨) → 𝑨 ∈ Mod (Th 𝕍𝒦) → epi 𝔽 𝑨
@@ -316,7 +315,7 @@ First, we represent the congruence relation `ψCon`, modulo which `𝑻 X` yield
    φ = lift-hom 𝑨 η
 
    φE : Epic ∣ φ ∣
-   φE = lift-of-epi-is-epi ηE
+   φE = lift-of-epi-is-epi 𝑨 ηE
 
    pqlem2 : ∀ p q → (p , q) ∈ kernel ∣ hom𝔽 ∣ → 𝑨 ⊧ p ≈ q
    pqlem2 p q hyp = AinMTV p q (kernel-in-theory hyp)
@@ -407,9 +406,9 @@ First, we represent the congruence relation `ψCon`, modulo which `𝑻 X` yield
 
 We have thus proved that every variety is an equational class.  Readers familiar with the classical formulation of the Birkhoff HSP theorem, as an "if and only if" result, might worry that we haven't completed the proof.  But recall that in the [Varieties.Preservation][] module we proved the following identity preservation lemmas:
 
-* [(H-id1)](https://ualib.gitlab.io/UALib.Varieties.Preservation.html#964) 𝒦 ⊧ p ≋ q → H 𝒦 ⊧ p ≋ q
-* [(S-id1)](https://ualib.gitlab.io/UALib.Varieties.Preservation.html#2592) 𝒦 ⊧ p ≋ q → S 𝒦 ⊧ p ≋ q
-* [(P-id1)](https://ualib.gitlab.io/UALib.Varieties.Preservation.html#4111) 𝒦 ⊧ p ≋ q → P 𝒦 ⊧ p ≋ q
+* `𝒦 ⊧ p ≋ q → H 𝒦 ⊧ p ≋ q`
+* `𝒦 ⊧ p ≋ q → S 𝒦 ⊧ p ≋ q`
+* `𝒦 ⊧ p ≋ q → P 𝒦 ⊧ p ≋ q`
 
 From these it follows that every equational class is a variety. Thus, our formal proof of Birkhoff's theorem is complete.
 
@@ -431,39 +430,4 @@ From these it follows that every equational class is a variety. Thus, our formal
 
 
 
-
-
-
-
-
-
-
-
-<!--
-
-<sup>2</sup><span class="footnote" id="fn2"> In the previous version of the [UALib][] this section was part of a module called HSPTheorem module.</span>
-
-<sup>3</sup><span class="footnote" id="fn3"> In earlier versions of the [Agda UALib][], the free algebra 𝔉 developed above played the role of the algebra 𝔽 with properties 1 and 2.  However, we found a more direct path to the proof using the algebra `𝔽 := (𝑻 X) [ ℭ ]/ker homℭ`.</span>
-
-<sup>4</sup><span class="footnote" id="fn4"> It might be an instructive exercise to prove that `𝔽` is, in fact, isomorphic to the algebra `𝔉` that we defined earlier.</span>
-
-
-
-
-
-Finally, we are ready to define the type representing the relatively free algebra in Agda.  We denote this type by 𝔉 and define it as the quotient `𝑻 X ╱ (ψCon 𝒦)`.
-
-module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (ov 𝓤)}{fe : dfunext 𝓥 𝓤} where
-
- 𝔉 : Algebra 𝓕⁺ 𝑆
- 𝔉 =  𝑻 X ╱ (ψCon 𝒦 {fe})
-
-The domain of `𝔉` is `∣ 𝔉 ∣ = ∣ 𝑻 X ∣ / ⟨ ψCon 𝒦 ⟩`, which is equal to
-
-`Σ C ꞉ _ ,  Σ p ꞉ ∣ 𝑻 X ∣ ,  C ≡ ( [ p ] ⟨ ψCon 𝒦 ⟩ )`.
-
-This Sigma type denotes the set `{ C : ∃ p ∈ ∣ 𝑻 X ∣ , C ≡ [ p ] ⟨ ψCon 𝒦 ⟩ }` of `⟨ ψCon 𝒦 ⟩`-classses of terms, as desired.
-
-We left the type of `C` implicit (using the underscore symbol) for readability.  Since `C` denotes a particular class of the congruence relation `ψCon 𝒦` of `𝑻 X`, and since congruence classes are subsets of the domain of the underlying algebra, the type of `C` is a predicate on the type of terms; specifically, `C : Pred ∣ 𝑻 X ∣ (𝓧 ⊔ 𝓕)`.
--->
 

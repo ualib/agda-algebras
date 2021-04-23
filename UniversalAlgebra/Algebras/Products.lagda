@@ -16,7 +16,7 @@ This is the [Algebras.Products][] module of the [Agda Universal Algebra Library]
 
 module Algebras.Products where
 
-open import Algebras.Algebras public
+open import Algebras.Basic public
 
 module products {𝑆 : Signature 𝓞 𝓥} where
 
@@ -115,7 +115,7 @@ If `p : 𝑨 ∈ 𝒦`, we view the pair `(𝑨 , p) ∈ ℑ` as an *index* over
 
 <sup>2</sup><span class="footnote" id="fn2"> **Unicode Hints**. Some of our types are denoted with with Gothic ("mathfrak") symbols. To produce them in [agda2-mode][], type `\Mf` followed by a letter. For example, `\MfI` ↝ `ℑ`.</span>
 
-[← Algebras.Algebras](Algebras.Algebras.html)
+[← Algebras.Basic](Algebras.Basic.html)
 <span style="float:right;">[Algebras.Congruences →](Algebras.Congruences.html)</span>
 
 {% include UALib.Links.md %}

@@ -1,8 +1,8 @@
 #!/bin/bash
 
-agda --html --html-highlight=code UALib.lagda
+agda --html --html-highlight=code UniversalAlgebra.lagda
 
-cp html/UALib.tex html/index.md
+cp html/UniversalAlgebra.tex html/index.md
 
 # NAMES="Empty-Type
 #        Identity-Type
@@ -42,8 +42,7 @@ NAMES="UALib
        Relations.Truncation
        Relations.Extensionality
        Algebras
-       Algebras.Signatures
-       Algebras.Algebras
+       Algebras.Basic
        Algebras.Products
        Algebras.Congruences
        Homomorphisms

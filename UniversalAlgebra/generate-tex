@@ -1,6 +1,6 @@
 #!/bin/bash
 
-NAMES="UALib
+NAMES="UniversalAlgebra
        Preface
        Overture
        Overture/Preliminaries
@@ -15,8 +15,7 @@ NAMES="UALib
        Relations/Truncation
        Relations/Extensionality
        Algebras
-       Algebras/Signatures
-       Algebras/Algebras
+       Algebras/Basic
        Algebras/Products
        Algebras/Congruences
        Homomorphisms

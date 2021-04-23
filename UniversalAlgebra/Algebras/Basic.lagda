@@ -1,19 +1,19 @@
 ---
 layout: default
-title : Algebras.Algebras module (Agda Universal Algebra Library)
-date : 2021-01-12
+title : Algebras.Basic module (Agda Universal Algebra Library)
+date : 2021-04-23
 author: William DeMeo
 ---
 
-### <a id="algebras">Algebras</a>
+### <a id="algebras">Basic Definitions</a>
 
-This section presents the [Algebras.Algebras][] module of the [Agda Universal Algebra Library][].
+This section presents the [Algebras.Basic][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Algebras.Algebras where
+module Algebras.Basic where
 
 open import Relations.Extensionality public
 

@@ -4,7 +4,10 @@
 [Agda Standard Library]: https://agda.github.io/agda-stdlib/
 [Agda Tools]: https://agda.readthedocs.io/en/v2.6.1.3/tools/
 [Agda Tutorial]: https://people.inf.elte.hu/pgj/agda/tutorial/Index.html
-[Agda Universal Algebra Library]: https://gitlab.com/ualib/ualib.gitlab.io/
+[Agda Universal Algebra Library]: https://ualib.gitlab.io
+[Agda UniversalAlgebra]: https://ualib.gitlab.io
+[UniversalAlgebra]: https://ualib.gitlab.io
+[UniversalAlgebra repository]: https://gitlab.com/ualib/ualib.gitlab.io/
 [Agda UALib]: https://gitlab.com/ualib/ualib.gitlab.io/
 [Agda User's Manual]: https://agda.readthedocs.io/en/v2.6.1.3/
 [Agda Wiki]: https://wiki.portal.chalmers.se/agda/pmwiki.php
@@ -128,10 +131,6 @@
 [Type Theory and Formal Proof]: https://www.cambridge.org/vi/academic/subjects/computer-science/programming-languages-and-applied-logic/type-theory-and-formal-proof-introduction
 [Type Topology]: https://github.com/martinescardo/TypeTopology
 
-[ualib]: https://gitlab.com/ualib/ualib.gitlab.io
-[UALib]: https://gitlab.com/ualib/ualib.gitlab.io
-[ualib/ualib.gitlab.io]: https://gitlab.com/ualib/ualib.gitlab.io
-
 [Course on Univalent Foundations]: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes
 [Univalent Foundations with Agda]: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes
 [Univalent Foundations and Homotopy Type Theory]: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes
@@ -174,8 +173,7 @@
 [Relations.Extensionality]: Relations.Extensionality.html
 
 [Algebras]: Algebras.html
-[Algebras.Signatures]: Algebras.Signatures.html
-[Algebras.Algebras]: Algebras.Algebras.html
+[Algebras.Basic]: Algebras.Basic.html
 [Algebras.Products]: Algebras.Products.html
 [Algebras.Congruences]: Algebras.Congruences.html
 
@@ -201,65 +199,65 @@
 [Varieties.Preservation]: Varieties.Preservation.html
 [Varieties.FreeAlgebras]: Varieties.FreeAlgebras.html
 
-[UALib.Preface]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Preface.lagda
+<!-- [UALib.Preface]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Preface.lagda -->
 
-[UALib.Overture]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Overture.lagda
-[UALib.Overture module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Overture.lagda
-[UALib.Overture.Preliminaries]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Overture/Preliminaries.lagda
-[UALib.Overture.Equality]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Overture/Equality.lagda
-[UALib.Overture.Inverses]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Overture/Inverses.lagda
-[UALib.Overture.Extensionality]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Overture/Extensionality.lagda
-[UALib.Overture.Lifts]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Overture/Lifts.lagda
+<!-- [UALib.Overture]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Overture.lagda -->
+<!-- [UALib.Overture module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Overture.lagda -->
+<!-- [UALib.Overture.Preliminaries]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Overture/Preliminaries.lagda -->
+<!-- [UALib.Overture.Equality]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Overture/Equality.lagda -->
+<!-- [UALib.Overture.Inverses]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Overture/Inverses.lagda -->
+<!-- [UALib.Overture.Extensionality]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Overture/Extensionality.lagda -->
+<!-- [UALib.Overture.Lifts]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Overture/Lifts.lagda -->
 
-[UALib.Algebras]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras.lagda
-[UALib.Algebras module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras.lagda
-[UALib.Algebras.Signatures]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras/Signatures.lagda
-[UALib.Algebras.Algebras]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras/Algebras.lagda
-[UALib.Algebras.Products]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras/Products.lagda
-[UALib.Algebras.Congruences]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras/Congruences.lagda
+<!-- [UALib.Algebras]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras.lagda -->
+<!-- [UALib.Algebras module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras.lagda -->
+<!-- [UALib.Algebras.Signatures]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras/Signatures.lagda -->
+<!-- [UALib.Algebras.Algebras]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras/Algebras.lagda -->
+<!-- [UALib.Algebras.Products]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras/Products.lagda -->
+<!-- [UALib.Algebras.Congruences]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras/Congruences.lagda -->
 
-[UALib.Relations module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations.lagda
-[UALib.Relations]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations.lagda
-[UALib.Relations.Discrete]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations/Discrete.lagda
-[UALib.Relations.Continuous]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations/Continuous.lagda
-[UALib.Relations.Quotients]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations/Quotients.lagda
-[UALib.Relations.Truncation]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations/Truncation.lagda
+<!-- [UALib.Relations module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations.lagda -->
+<!-- [UALib.Relations]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations.lagda -->
+<!-- [UALib.Relations.Discrete]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations/Discrete.lagda -->
+<!-- [UALib.Relations.Continuous]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations/Continuous.lagda -->
+<!-- [UALib.Relations.Quotients]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations/Quotients.lagda -->
+<!-- [UALib.Relations.Truncation]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations/Truncation.lagda -->
 
-[UALib.Homomorphisms.Basic module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/Basic.lagda
-[UALib.Homomorphisms.Noether module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/Noether.lagda
-[UALib.Homomorphisms.Isomorphisms module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/Isomorphisms.lagda
-[UALib.Homomorphisms.HomomorphicImages module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/HomomorphicImages.lagda
+<!-- [UALib.Homomorphisms.Basic module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/Basic.lagda -->
+<!-- [UALib.Homomorphisms.Noether module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/Noether.lagda -->
+<!-- [UALib.Homomorphisms.Isomorphisms module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/Isomorphisms.lagda -->
+<!-- [UALib.Homomorphisms.HomomorphicImages module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/HomomorphicImages.lagda -->
 
-[UALib.Homomorphisms module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms.lagda
-[UALib.Homomorphisms]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms.lagda
-[UALib.Homomorphisms.Basic]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/Basic.lagda
-[UALib.Homomorphisms.Noether]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/Noether.lagda
-[UALib.Homomorphisms.Isomorphisms]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/Isomorphisms.lagda
-[UALib.Homomorphisms.HomomorphicImages]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/HomomorphicImages.lagda
+<!-- [UALib.Homomorphisms module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms.lagda -->
+<!-- [UALib.Homomorphisms]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms.lagda -->
+<!-- [UALib.Homomorphisms.Basic]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/Basic.lagda -->
+<!-- [UALib.Homomorphisms.Noether]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/Noether.lagda -->
+<!-- [UALib.Homomorphisms.Isomorphisms]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/Isomorphisms.lagda -->
+<!-- [UALib.Homomorphisms.HomomorphicImages]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/HomomorphicImages.lagda -->
 
-[UALib.Terms module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Terms.lagda
-[UALib.Terms]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Terms.lagda
-[UALib.Terms.Basic]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Terms/Basic.lagda
-[UALib.Terms.Operations]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Terms/Operations.lagda
+<!-- [UALib.Terms module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Terms.lagda -->
+<!-- [UALib.Terms]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Terms.lagda -->
+<!-- [UALib.Terms.Basic]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Terms/Basic.lagda -->
+<!-- [UALib.Terms.Operations]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Terms/Operations.lagda -->
 
-[UALib.Subalgebras module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras.lagda
-[UALib.Subalgebras]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras.lagda
-[UALib.Subalgebras.Subuniverses]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras/Subuniverses.lagda
-[UALib.Subalgebras.Properties]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras/Properties.lagda
-[UALib.Subalgebras.Homomorphisms]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras/Homomorphisms.lagda
-[UALib.Subalgebras.Subalgebras]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras/Subalgebras.lagda
-[UALib.Subalgebras.Univalent]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras/Univalent.lagda
+<!-- [UALib.Subalgebras module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras.lagda -->
+<!-- [UALib.Subalgebras]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras.lagda -->
+<!-- [UALib.Subalgebras.Subuniverses]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras/Subuniverses.lagda -->
+<!-- [UALib.Subalgebras.Properties]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras/Properties.lagda -->
+<!-- [UALib.Subalgebras.Homomorphisms]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras/Homomorphisms.lagda -->
+<!-- [UALib.Subalgebras.Subalgebras]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras/Subalgebras.lagda -->
+<!-- [UALib.Subalgebras.Univalent]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras/Univalent.lagda -->
 
-[UALib.Varieties]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties.lagda
-[UALib.Varieties module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties.lagda
-[UALib.Varieties.EquationalLogic]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties/EquationalLogic.lagda
-[UALib.Varieties.Varieties]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties/Varieties.lagda
-[UALib.Varieties.Preservation]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties/Preservation.lagda
-[UALib.Varieties.FreeAlgebras]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties/FreeAlgebras.lagda
-[univalence axiom]: https://ncatlab.org/nlab/show/univalence+axiom
+<!-- [UALib.Varieties]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties.lagda -->
+<!-- [UALib.Varieties module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties.lagda -->
+<!-- [UALib.Varieties.EquationalLogic]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties/EquationalLogic.lagda -->
+<!-- [UALib.Varieties.Varieties]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties/Varieties.lagda -->
+<!-- [UALib.Varieties.Preservation]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties/Preservation.lagda -->
+<!-- [UALib.Varieties.FreeAlgebras]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties/FreeAlgebras.lagda -->
+<!-- [univalence axiom]: https://ncatlab.org/nlab/show/univalence+axiom -->
 
-[Appendix]: Appendix.html
-[Appendix.Imports]: Appendix.Imports.html
+<!-- [Appendix]: Appendix.html -->
+<!-- [Appendix.Imports]: Appendix.Imports.html -->
 
 
 <!--
