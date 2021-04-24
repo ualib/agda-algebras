@@ -123,6 +123,14 @@ Here are some questions about extensionaity for future consideration.
 2. Is strong well-definedness of operations strictly weaker than function extensionality?
 
 
+**Answers**.
+
+1. No (see answer to 2)
+
+2. No, they're equivalent.
+
+
+
 **Questions about prop vs pred extensionality**.
 
 1. Is predicate extensionality (`pred-ext`) at least as strong as proposition extensionality?  That is, does `pred-ext 𝓤 𝓦` imply
@@ -130,6 +138,7 @@ Here are some questions about extensionaity for future consideration.
    `∀(A : Type 𝓤)(P : Pred A 𝓦)(x : A)(p q : P x) → p ≡ q` ?
 
 2. Are the relation extensionality principles `cont-relext` and `dep-relext` at least as strong as proposition extensionality?
+
 
 ---------------------------------------
 
