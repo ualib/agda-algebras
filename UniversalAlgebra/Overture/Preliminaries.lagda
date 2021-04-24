@@ -69,7 +69,7 @@ Here we import the basic primitive operations we need for working with Agda's ty
 
 \begin{code}
 
-open import Agda.Primitive public using (_⊔_; lzero; lsuc; Level; Setω)
+open import Agda.Primitive using (_⊔_; lzero; lsuc; Level; Setω) public
 
 \end{code}
 

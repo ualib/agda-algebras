@@ -21,7 +21,7 @@ A popular way to represent algebraic structures in type theory is with record ty
 
 module Algebras where
 
-open import Algebras.Algebras public
+open import Algebras.Basic public
 open import Algebras.Products public
 open import Algebras.Congruences
 

@@ -19,11 +19,11 @@ In [Relations.Discrete][] we define types that represent *unary* and *binary rel
 \begin{code}
 module Relations where
 
-open import Relations.Discrete
-open import Relations.Continuous
-open import Relations.Quotients
-open import Relations.Truncation
-open import Relations.Extensionality
+open import Relations.Discrete public
+open import Relations.Continuous public
+open import Relations.Quotients public
+open import Relations.Truncation public
+open import Relations.Extensionality public
 
 \end{code}
 
