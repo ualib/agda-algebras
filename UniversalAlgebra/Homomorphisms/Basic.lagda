@@ -97,7 +97,7 @@ A *monomorphism* is an injective homomorphism and an *epimorphism* is a surjecti
  is-epimorphism 𝑨 𝑩 g = is-homomorphism 𝑨 𝑩 g × IsSurjective g
 
  epi : Algebra 𝓤 𝑆 → Algebra 𝓦 𝑆  → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
- epi 𝑨 𝑩 = Σ[ g ∈ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ] is-epimorphism 𝑨 𝑩 g
+ epi 𝑨 𝑩 = Σ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) , is-epimorphism 𝑨 𝑩 g
 
 \end{code}
 
