@@ -43,7 +43,7 @@ ContRel : Type 𝓥 → Type 𝓤 → (𝓦 : Level) → Type(𝓤 ⊔ 𝓥 ⊔ 
 ContRel I A 𝓦 = (I → A) → Type 𝓦
 
 DepRel : (I : Type 𝓥) → (I → Type 𝓤) → (𝓦 : Level) → Type(𝓤 ⊔ 𝓥 ⊔ lsuc 𝓦)
-DepRel I 𝒜 𝓦 = Π 𝒜 → Type 𝓦
+DepRel I 𝒜 𝓦 = ((i : I) → 𝒜 i) → Type 𝓦
 
 \end{code}
 
@@ -62,10 +62,10 @@ It will be helpful to have some functions that make it easy to assert that a giv
 module _ {I J : Type 𝓥} {A : Type 𝓤} where
 
  eval-cont-rel : ContRel I A 𝓦 → (I → J → A) → Type(𝓥 ⊔ 𝓦)
- eval-cont-rel R 𝒶 = Π j ꞉ J , R λ i → 𝒶 i j
+ eval-cont-rel R 𝒶 = ∀ (j : J) → R λ i → 𝒶 i j
 
  cont-compatible-op : Op J A → ContRel I A 𝓦 → Type(𝓥 ⊔ 𝓤 ⊔ 𝓦)
- cont-compatible-op 𝑓 R  = Π 𝒶 ꞉ (I → J → A) , (eval-cont-rel R 𝒶 → R λ i → (𝑓 (𝒶 i)))
+ cont-compatible-op 𝑓 R  = ∀ (𝒶 : (I → J → A)) → (eval-cont-rel R 𝒶 → R λ i → (𝑓 (𝒶 i)))
 
 \end{code}
 

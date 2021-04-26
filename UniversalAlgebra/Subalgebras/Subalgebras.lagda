@@ -16,7 +16,7 @@ The [Subalgebras.Subalgebras][] module of the [Agda Universal Algebra Library][]
 module Subalgebras.Subalgebras where
 
 open import Subalgebras.Subuniverses public
-open import MGS-Embeddings using (∘-embedding; id-is-embedding) public
+-- open import MGS-Embeddings using (∘-embedding; id-is-embedding) public
 
 module subalgebras {𝑆 : Signature 𝓞 𝓥} where
  open subuniverses {𝑆 = 𝑆} public
@@ -31,7 +31,8 @@ Given algebras `𝑨 : Algebra 𝓤 𝑆` and `𝑩 : Algebra 𝓦 𝑆`, we say
 \begin{code}
 
  _IsSubalgebraOf_ : {𝓦 𝓤 : Level}(𝑩 : Algebra 𝓦 𝑆)(𝑨 : Algebra 𝓤 𝑆) → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
- 𝑩 IsSubalgebraOf 𝑨 = Σ h ꞉ hom 𝑩 𝑨 , is-embedding ∣ h ∣
+ -- 𝑩 IsSubalgebraOf 𝑨 = Σ h ꞉ hom 𝑩 𝑨 , is-embedding ∣ h ∣
+ 𝑩 IsSubalgebraOf 𝑨 = Σ h ꞉ hom 𝑩 𝑨 , IsInjective ∣ h ∣
 
  Subalgebra : {𝓦 𝓤 : Level} → Algebra 𝓤 𝑆 → Type(ov 𝓦 ⊔ 𝓤)
  Subalgebra {𝓦} 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓦 𝑆) , 𝑩 IsSubalgebraOf 𝑨
@@ -59,14 +60,14 @@ We take this opportunity to prove an important lemma that makes use of the `IsSu
           where
 
   FirstHomCorollary|Set : (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) IsSubalgebraOf 𝑩
-  FirstHomCorollary|Set = ϕhom , ϕemb
+  FirstHomCorollary|Set = ϕhom , ϕinj
    where
    hh = FirstHomTheorem|Set 𝑨 𝑩 h pe fe Bset buip
    ϕhom : hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩
    ϕhom = ∣ hh ∣
 
-   ϕemb : is-embedding ∣ ϕhom ∣
-   ϕemb = ∥ snd ∥ hh ∥ ∥
+   ϕinj : IsInjective ∣ ϕhom ∣
+   ϕinj = ∣ snd ∥ hh ∥ ∣
 
 \end{code}
 
@@ -136,7 +137,7 @@ First we show that the subalgebra relation is a *preorder*; i.e., it is a reflex
 \begin{code}
 
  ≤-reflexive : (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ≤ 𝑨
- ≤-reflexive 𝑨 = (𝑖𝑑 ∣ 𝑨 ∣ , λ 𝑓 𝑎 → refl) , id-is-embedding
+ ≤-reflexive 𝑨 = (𝑖𝑑 ∣ 𝑨 ∣ , λ 𝑓 𝑎 → refl) , id-is-injective
 
  ≤-refl : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ≤ 𝑨
  ≤-refl {𝑨 = 𝑨} = ≤-reflexive 𝑨
@@ -145,7 +146,10 @@ First we show that the subalgebra relation is a *preorder*; i.e., it is a reflex
  ≤-transitivity : (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
   →               𝑪 ≤ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
 
- ≤-transitivity 𝑨 𝑩 𝑪 CB BA = (∘-hom 𝑪 𝑨 ∣ CB ∣ ∣ BA ∣) , ∘-embedding ∥ BA ∥ ∥ CB ∥
+ ≤-transitivity 𝑨 𝑩 𝑪 CB BA = (∘-hom 𝑪 𝑨 ∣ CB ∣ ∣ BA ∣) , γ
+  where
+   γ : IsInjective ∣ (∘-hom 𝑪 𝑨 ∣ CB ∣ ∣ BA ∣) ∣
+   γ = ∘-injective ∥ CB ∥ ∥ BA ∥
 
  ≤-trans : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆} → 𝑪 ≤ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
  ≤-trans 𝑨 {𝑩}{𝑪} = ≤-transitivity 𝑨 𝑩 𝑪
@@ -156,18 +160,26 @@ Next we prove that if two algebras are isomorphic and one of them is a subalgebr
 
 \begin{code}
 
+ iso→injective : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}
+  →              ((f , _ , _ , _) : 𝑨 ≅ 𝑩) → IsInjective ∣ f ∣
+ iso→injective {𝑨 = 𝑨} (f , g , f∼g , g∼f) {x}{y} fxfy =
+  x                  ≡⟨ (g∼f x)⁻¹ ⟩
+  (∣ g ∣ ∘ ∣ f ∣) x  ≡⟨ cong ∣ g ∣ fxfy ⟩
+  (∣ g ∣ ∘ ∣ f ∣) y  ≡⟨ g∼f y ⟩
+  y                  ∎
+
  ≤-iso : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆}
   →      𝑪 ≅ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
 
- ≤-iso 𝑨 {𝑩} {𝑪} CB BA = (g ∘ f , gfhom) , gfemb
+ ≤-iso 𝑨 {𝑩} {𝑪} CB BA = (g ∘ f , gfhom) , gfinj
   where
    f : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
    f = fst ∣ CB ∣
    g : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
    g = fst ∣ BA ∣
 
-   gfemb : is-embedding (g ∘ f)
-   gfemb = ∘-embedding (∥ BA ∥) (iso→embedding CB)
+   gfinj : IsInjective (g ∘ f)
+   gfinj = ∘-injective (iso→injective CB)(∥ BA ∥)
 
    gfhom : is-homomorphism 𝑪 𝑨 (g ∘ f)
    gfhom = ∘-is-hom 𝑪 𝑨 {f}{g} (snd ∣ CB ∣) (snd ∣ BA ∣)
@@ -176,13 +188,15 @@ Next we prove that if two algebras are isomorphic and one of them is a subalgebr
  ≤-trans-≅ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
   →          𝑨 ≤ 𝑩 → 𝑨 ≅ 𝑪 → 𝑪 ≤ 𝑩
 
- ≤-trans-≅ 𝑨 {𝑩} 𝑪 A≤B B≅C = ≤-iso 𝑩 (≅-sym B≅C) A≤B -- 𝑨 𝑪 A≤B (sym-≅ B≅C)
+ ≤-trans-≅ 𝑨 {𝑩} 𝑪 A≤B B≅C = ≤-iso 𝑩 (≅-sym B≅C) A≤B
 
 
  ≤-TRANS-≅ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
   →          𝑨 ≤ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤ 𝑪
-
- ≤-TRANS-≅ 𝑨 𝑪 A≤B B≅C = (∘-hom 𝑨 𝑪 ∣ A≤B ∣ ∣ B≅C ∣) , ∘-embedding (iso→embedding B≅C)(∥ A≤B ∥)
+ ≤-TRANS-≅ 𝑨 𝑪 A≤B B≅C = (∘-hom 𝑨 𝑪 ∣ A≤B ∣ ∣ B≅C ∣) , γ
+  where
+  γ : IsInjective ∣ (∘-hom 𝑨 𝑪 ∣ A≤B ∣ ∣ B≅C ∣) ∣
+  γ = ∘-injective (∥ A≤B ∥)(iso→injective B≅C)
 
 
  ≤-mono : (𝑩 : Algebra 𝓦 𝑆){𝒦 𝒦' : Pred (Algebra 𝓤 𝑆) 𝓩}

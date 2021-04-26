@@ -27,59 +27,51 @@ Given two universes `𝓤 𝓦` and a type `A : Type 𝓤`, the type `Pred A �
 
 \begin{code}
 
-Pred : Type 𝓤 → (𝓦 : Level) → Type(𝓤 ⊔ lsuc 𝓦)
-Pred A 𝓦 = A → Type 𝓦
+module hide-Pred where
+
+ Pred : Type 𝓤 → (𝓦 : Level) → Type(𝓤 ⊔ lsuc 𝓦)
+ Pred A 𝓦 = A → Type 𝓦
+
+open import Relation.Unary using (Pred) public
 
 \end{code}
 
 Later we consider predicates over the class of algebras in a given signature.  In the [Algebras][] module we will define the type `Algebra 𝓤 𝑆` of `𝑆`-algebras with domain type `Type 𝓤`, and the type `Pred (Algebra 𝓤 𝑆) 𝓤`, will represent classes of `𝑆`-algebras with certain properties.
 
 
-#### <a id="membership-and-inclusion-relations">Membership and inclusion relations</a>
+#### <a id="membership-and-inclusion-relations">Membership, inclusion, and unions</a>
 
-Like the [Agda Standard Library][], the [UniversalAlgebra][] library includes types that represent the *element inclusion* and *subset inclusion* relations from set theory. For example, given a predicate `P`, we may represent that  "`x` belongs to `P`" or that "`x` has property `P`," by writing either `x ∈ P` or `P x`.  The definition of `∈` is standard. Nonetheless, here it is.<sup>[1](Relations.Discrete.html#fn1)</sup>
+The [UniversalAlgebra][] imports types that represent the *element inclusion* and *subset inclusion* relations from the [Agda Standard Library][]. For example, given a predicate `P`, we may represent that  "`x` belongs to `P`" or that "`x` has property `P`," by writing either `x ∈ P` or `P x`.  The "subset" relation is denoted, as usual, by the `⊆` symbol. The definitions of `∈` and `⊆`is standard. Nonetheless, we show them here inside a hidden module and them import the original definitions from the [Agda Standard Library][].<sup>[1](Relations.Discrete.html#fn1)</sup>
 
 \begin{code}
 
-_∈_ : {A : Type 𝓤} → A → Pred A 𝓦 → Type 𝓦
-x ∈ P = P x
+module hide-unary where
+
+ _∈_ : {A : Type 𝓤} → A → Pred A 𝓦 → Type 𝓦
+ x ∈ P = P x
+
+ _⊆_ : {A : Type 𝓤 } → Pred A 𝓦 → Pred A 𝓩 → Type (𝓤 ⊔ 𝓦 ⊔ 𝓩)
+ P ⊆ Q = ∀ {x} → x ∈ P → x ∈ Q
+
+ infix 4 _⊆_
 
 \end{code}
 
-The "subset" relation is denoted, as usual, with the `⊆` symbol.<sup>[1](Relations.Discrete.html#fn1)</sup>
+Unions are represented using the following inductive type.<sup>[2](Relations.Discrete#fn2)</sup>
 
 \begin{code}
 
-_⊆_ : {A : Type 𝓤 } → Pred A 𝓦 → Pred A 𝓩 → Type (𝓤 ⊔ 𝓦 ⊔ 𝓩)
-P ⊆ Q = ∀ {x} → x ∈ P → x ∈ Q
+ data _⊎_ (A : Type 𝓤) (B : Type 𝓦) : Type (𝓤 ⊔ 𝓦) where
+  inj₁ : (x : A) → A ⊎ B
+  inj₂ : (y : B) → A ⊎ B
 
-infix 4 _⊆_
+ infixr 1 _⊎_ _∪_
 
+ _∪_ : {A : Type 𝓤} → Pred A 𝓦 → Pred A 𝓩 → Pred A (𝓦 ⊔ 𝓩)
+ P ∪ Q = λ x → x ∈ P ⊎ x ∈ Q
 
-\end{code}
-
-
-
-
-#### <a id="predicates-toolbox">Predicates toolbox</a>
-
-Here is a small collection of tools that will come in handy later. The first is an inductive type representing *disjoint union*.<sup>[2](Relations.Discrete#fn2)</sup>
-
-\begin{code}
-infixr 1 _⊎_ _∪_
-
-data _⊎_ (A : Type 𝓤) (B : Type 𝓦) : Type (𝓤 ⊔ 𝓦) where
- inj₁ : (x : A) → A ⊎ B
- inj₂ : (y : B) → A ⊎ B
-
-\end{code}
-
-And this can be used to represent *union*, as follows.
-
-\begin{code}
-
-_∪_ : {A : Type 𝓤} → Pred A 𝓦 → Pred A 𝓩 → Pred A (𝓦 ⊔ 𝓩)
-P ∪ Q = λ x → x ∈ P ⊎ x ∈ Q
+open import Data.Sum.Base using (_⊎_) public
+open import Relation.Unary using (_∪_; _∈_; _⊆_) public
 
 
 \end{code}
@@ -98,11 +90,12 @@ The *empty set* is naturally represented by the *empty type*, `𝟘`.<sup>[2](Re
 
 \begin{code}
 
-open import Empty-Type using (𝟘)
+module hide-emptyset where
 
-∅ : {A : Type 𝓤} → Pred A lzero
-∅ _ = 𝟘
+ ∅ : {A : Type 𝓤} → Pred A lzero
+ ∅ = λ _ → ⊥
 
+open import Relation.Unary using (∅) public
 \end{code}
 
 
@@ -127,8 +120,9 @@ A generalization of the notion of binary relation is a *relation from* `A` *to* 
 
 \begin{code}
 
-REL : Type 𝓤 → Type 𝓦 → (𝓩 : Level) → Type (𝓤 ⊔ 𝓦 ⊔ lsuc 𝓩)
-REL A B 𝓩 = A → B → Type 𝓩
+module hide-rel where
+ REL : Type 𝓤 → Type 𝓦 → (𝓩 : Level) → Type (𝓤 ⊔ 𝓦 ⊔ lsuc 𝓩)
+ REL A B 𝓩 = A → B → Type 𝓩
 
 \end{code}
 
@@ -136,8 +130,10 @@ In the special case, where `𝓦 ≡ 𝓤` and `B ≡ A`, we have
 
 \begin{code}
 
-Rel : Type 𝓤 → (𝓩 : Level) → Type (𝓤 ⊔ lsuc 𝓩)
-Rel A 𝓩 = REL A A 𝓩
+ Rel : Type 𝓤 → (𝓩 : Level) → Type (𝓤 ⊔ lsuc 𝓩)
+ Rel A 𝓩 = REL A A 𝓩
+
+open import Relation.Binary.Core using (REL; Rel) public
 
 \end{code}
 
@@ -182,35 +178,27 @@ module _ {A : Type 𝓤 } where
  𝟎-sigma = Σ x ꞉ A , Σ y ꞉ A , x ≡ y
 
  𝟎-sigma' : Type 𝓤
- 𝟎-sigma' = Σ (x , y) ꞉ (A × A) , x ≡ y
+ 𝟎-sigma' = Σ (x , y) ꞉ A × A , x ≡ y
 
-\end{code}
-
-The *total relation* over `A`, which in set theory is the full Cartesian product `A × A`, could be represented using the one-element type from the `Unit-Type` module of [Type Topology][], as follows.
-
-\begin{code}
-
- open import Unit-Type using (𝟙)
-
- 𝟏 : Rel A lzero
- 𝟏 a b = 𝟙
 \end{code}
 
 
 
 #### <a id="implication">Implication</a>
 
-We define the following types representing *implication* for binary relations. (These are borrowed from the [Agda Standard Library][]; we merely translate them into [Type Topology][]/[UniversalAlgebra][] notation.)
+The [Agda Standard Library][] defines the following types representing *implication* for binary relations. We define them here in a hidden module and import the original definitions below.
 
 \begin{code}
 
-_on_ : {A : Type 𝓤}{B : Type 𝓦}{C : Type 𝓩} → (B → B → C) → (A → B) → (A → A → C)
-R on g = λ x y → R (g x) (g y)
+module hide-on-imp where
 
-_⇒_ : {A : Type 𝓤}{B : Type 𝓦} → REL A B 𝓧 → REL A B 𝓨 → Type(𝓤 ⊔ 𝓦 ⊔ 𝓧 ⊔ 𝓨)
-P ⇒ Q = ∀ {i j} → P i j → Q i j
+ _on_ : {A : Type 𝓤}{B : Type 𝓦}{C : Type 𝓩} → (B → B → C) → (A → B) → (A → A → C)
+ R on g = λ x y → R (g x) (g y)
 
-infixr 4 _⇒_
+ _⇒_ : {A : Type 𝓤}{B : Type 𝓦} → REL A B 𝓧 → REL A B 𝓨 → Type(𝓤 ⊔ 𝓦 ⊔ 𝓧 ⊔ 𝓨)
+ P ⇒ Q = ∀ {i j} → P i j → Q i j
+
+ infixr 4 _⇒_
 
 \end{code}
 
@@ -218,10 +206,13 @@ The `_on_` and `_⇒_` types combine to give a nice, general implication operati
 
 \begin{code}
 
-_=[_]⇒_ : {A : Type 𝓤}{B : Type 𝓦} → Rel A 𝓧 → (A → B) → Rel B 𝓨 → Type(𝓤 ⊔ 𝓧 ⊔ 𝓨)
-P =[ g ]⇒ Q = P ⇒ (Q on g)
+ _=[_]⇒_ : {A : Type 𝓤}{B : Type 𝓦} → Rel A 𝓧 → (A → B) → Rel B 𝓨 → Type(𝓤 ⊔ 𝓧 ⊔ 𝓨)
+ P =[ g ]⇒ Q = P ⇒ (Q on g)
 
-infixr 4 _=[_]⇒_
+ infixr 4 _=[_]⇒_
+
+open import Relation.Binary.Core using (_⇒_;_=[_]⇒_) public
+
 
 \end{code}
 
@@ -258,7 +249,7 @@ Here is how we implement this in the [UniversalAlgebra][] library.
 \begin{code}
 
 eval-rel : {A : Type 𝓤}{I : Type 𝓥} → Rel A 𝓦 → Rel (I → A)(𝓥 ⊔ 𝓦)
-eval-rel R u v = Π i ꞉ _ , R (u i) (v i)
+eval-rel R u v = ∀ i → R (u i) (v i)
 
 _|:_ : {A : Type 𝓤}{I : Type 𝓥} → Op I A → Rel A 𝓦 → Type(𝓤 ⊔ 𝓥 ⊔ 𝓦)
 f |: R  = (eval-rel R) =[ f ]⇒ R
@@ -304,3 +295,11 @@ However, this is a rare case in which the more elegant syntax used to define `|:
 
 
 
+<!-- UNUSED STUFF
+
+The *total relation* over `A`, which in set theory is the full Cartesian product `A × A`, could be represented using the one-element type from the `Unit-Type` module of [Type Topology][], as follows.
+
+ open import Unit-Type using (𝟙)
+ 𝟏 : Rel A lzero
+ 𝟏 a b = 𝟙
+-->

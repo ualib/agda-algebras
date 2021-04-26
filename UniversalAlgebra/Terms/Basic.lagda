@@ -106,7 +106,7 @@ The free lift so defined is a homomorphism by construction. Indeed, here is the 
 \begin{code}
 
  lift-hom : (𝑨 : Algebra 𝓤 𝑆) → (X → ∣ 𝑨 ∣) → hom (𝑻 X) 𝑨
- lift-hom 𝑨 h = free-lift 𝑨 h , λ f a → ap (f ̂ 𝑨) refl
+ lift-hom 𝑨 h = free-lift 𝑨 h , λ f a → cong (f ̂ 𝑨) refl
 
 \end{code}
 
@@ -127,7 +127,7 @@ Finally, we prove that the homomorphism is unique.  This requires `funext 𝓥 �
                                    ∣ h ∣ (node 𝑓 𝑡)   ∎
   where
   α : (𝑓 ̂ 𝑨) (∣ g ∣ ∘ 𝑡) ≡ (𝑓 ̂ 𝑨) (∣ h ∣ ∘ 𝑡)
-  α = ap (𝑓 ̂ 𝑨) (fe λ i → free-unique fe 𝑨 g h p (𝑡 i))
+  α = cong (𝑓 ̂ 𝑨) (fe λ i → free-unique fe 𝑨 g h p (𝑡 i))
 
 \end{code}
 
@@ -137,7 +137,8 @@ If we further assume that each of the mappings from `X` to `∣ 𝑨 ∣` is *su
 
 \begin{code}
 
- lift-of-epi-is-epi : (𝑨 : Algebra 𝓤 𝑆){h₀ : X → ∣ 𝑨 ∣} → Epic h₀ → Epic ∣ lift-hom 𝑨 h₀ ∣
+ lift-of-epi-is-epi : (𝑨 : Algebra 𝓤 𝑆){h₀ : X → ∣ 𝑨 ∣}
+  →                   IsSurjective h₀ → IsSurjective ∣ lift-hom 𝑨 h₀ ∣
  lift-of-epi-is-epi 𝑨 {h₀} hE y = γ
   where
   h₀⁻¹y = Inv h₀ (hE y)

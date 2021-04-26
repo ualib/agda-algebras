@@ -49,10 +49,13 @@ The general `Lift` record type that we now describe makes these situations easie
 
 \begin{code}
 
-record Lift {𝓦 𝓤 : Level} (A : Type 𝓤) : Type (𝓤 ⊔ 𝓦) where
- constructor lift
- field lower : A
-open Lift
+module hide-lift where
+
+ record Lift {𝓦 𝓤 : Level} (A : Type 𝓤) : Type (𝓤 ⊔ 𝓦) where
+  constructor lift
+  field lower : A
+
+open import Level public
 
 \end{code}
 
@@ -60,10 +63,10 @@ The point of having a ramified hierarchy of universes is to avoid Russell's para
 
 \begin{code}
 
-lift∼lower : ∀ {𝓦 𝓤}{A : Type 𝓤} → lift ∘ lower ≡ 𝑖𝑑 (Lift{𝓦} A)
+lift∼lower : ∀ {𝓤 𝓦}{A : Type 𝓤} → lift ∘ lower ≡ 𝑖𝑑 (Lift 𝓦 A)
 lift∼lower = refl
 
-lower∼lift : {𝓦 𝓤 : Level}{A : Type 𝓤} → lower{𝓦}{𝓤} ∘ lift ≡ 𝑖𝑑 A
+lower∼lift : {𝓤 𝓦 : Level}{A : Type 𝓤} → lower {𝓤}{𝓦}(lift {𝓤}{𝓦}(λ x → x)) ≡ 𝑖𝑑 A
 lower∼lift = refl
 
 \end{code}

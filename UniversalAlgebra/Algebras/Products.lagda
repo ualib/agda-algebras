@@ -32,7 +32,7 @@ In [UniversalAlgebra][] a *product of* `𝑆`-*algebras* is represented by the f
 
  ⨅ : {𝓘 : Level}{I : Type 𝓘 }(𝒜 : I → Algebra 𝓤 𝑆 ) → Algebra (𝓘 ⊔ 𝓤) 𝑆
 
- ⨅{I = I} 𝒜 = (Π i ꞉ I , ∣ 𝒜 i ∣) ,            -- domain of the product algebra
+ ⨅{I = I} 𝒜 = (∀ (i : I) →  ∣ 𝒜 i ∣) ,            -- domain of the product algebra
               λ 𝑓 𝑎 i → (𝑓 ̂ 𝒜 i) λ x → 𝑎 x i   -- basic operations of the product algebra
 
 \end{code}
@@ -83,7 +83,7 @@ The solution is to essentially take `𝒦` itself to be the indexing type, at le
 
  module _ {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
   ℑ : Type (ov 𝓤)
-  ℑ = Σ 𝑨 ꞉ (Algebra _ 𝑆) , (𝑨 ∈ 𝒦)
+  ℑ = Σ[ 𝑨 ∈ Algebra _ 𝑆 ] (𝑨 ∈ 𝒦)
 
 \end{code}
 

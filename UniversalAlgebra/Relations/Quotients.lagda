@@ -27,6 +27,7 @@ Let `𝓤 : Universe` be a universe and `A : Type 𝓤` a type.  In [Relations.D
 
 \begin{code}
 
+
 Refl : {A : Type 𝓤} → Rel A 𝓦 → Type(𝓤 ⊔ 𝓦)
 Refl _≈_ = ∀{x} → x ≈ x
 
@@ -45,12 +46,10 @@ The [Type Topology][] library defines the following *uniqueness-of-proofs* princ
 
 \begin{code}
 
-module hide-is-subsingleton-valued where
+is-prop-valued : {A : Type 𝓤} → Rel A 𝓦 → Type(𝓤 ⊔ 𝓦)
+is-prop-valued  _≈_ = ∀ x y → is-prop (x ≈ y)
 
- is-subsingleton-valued : {A : Type 𝓤} → Rel A 𝓦 → Type(𝓤 ⊔ 𝓦)
- is-subsingleton-valued  _≈_ = ∀ x y → is-subsingleton (x ≈ y)
-
-open import MGS-Quotient using (is-subsingleton-valued) public
+-- open import MGS-Quotient using (is-subsingleton-valued) public
 
 \end{code}
 
@@ -59,21 +58,24 @@ Thus, if `R : Rel A 𝓦`, then `is-subsingleton-valued R` is the assertion that
 In the [Relations.Truncation][] module we introduce a number of similar but more general types used in the [UniversalAlgebra][] library to represent *uniqueness-of-proofs principles* for relations of arbitrary arity over arbitrary types.
 
 
-A binary relation is called a *preorder* if it is reflexive and transitive. An *equivalence relation* is a symmetric preorder. We define the property of being an equivalence relation as the following record type.
+A binary relation is called a *preorder* if it is reflexive and transitive. An *equivalence relation* is a symmetric preorder. The property of being an equivalence relation is represented in the [Agda Standard Library][] by a record type called `IsEquivalence`, which is similar to the one we define here.
 
 \begin{code}
 
-record IsEquivalence {A : Type 𝓤}(R : Rel A 𝓦) : Type(𝓤 ⊔ 𝓦) where
- field rfl : Refl R ; sym : Symm R ; trans : Trans R
+-- record IsEquivalence {A : Type 𝓤}(R : Rel A 𝓦) : Type(𝓤 ⊔ 𝓦) where
+--  field rfl : Refl R ; symm : Symm R ; trns : Trans R
 
+ -- reflexive : _≡_ ⇒ _≈_
+ -- reflexive P.refl = refl
+open import Relation.Binary using (IsEquivalence) public
 \end{code}
 
 And we define the type of equivalence relations over a given type `A` as follows.
 
 \begin{code}
 
-Equivalence : Type 𝓤 → Type(𝓤 ⊔ lsuc 𝓦)
-Equivalence {𝓤}{𝓦} A = Σ R ꞉ Rel A 𝓦 , IsEquivalence R
+-- Equivalence : Type 𝓤 → Type(𝓤 ⊔ lsuc 𝓦)
+-- Equivalence {𝓤}{𝓦} A = Σ R ꞉ Rel A 𝓦 , IsEquivalence R
 
 \end{code}
 
@@ -84,7 +86,7 @@ A prominent example of an equivalence relation is the kernel of any function.
 \begin{code}
 
 ker-IsEquivalence : {A : Type 𝓤}{B : Type 𝓦}(f : A → B) → IsEquivalence (ker f)
-ker-IsEquivalence f = record { rfl = refl; sym = λ z → ≡-sym z ; trans = λ p q → ≡-trans p q }
+ker-IsEquivalence f = record { refl = refl ; sym = λ x → sym x ; trans = λ x y → trans x y }
 
 \end{code}
 
@@ -122,7 +124,7 @@ If `R` is an equivalence relation on `A`, then the *quotient* of `A` modulo `R` 
 module _ {𝓤 𝓦 : Level} where
 
  _/_ : (A : Type 𝓤 ) → Rel A 𝓦 → Type(𝓤 ⊔ lsuc 𝓦)
- A / R = Σ C ꞉ Pred A 𝓦 , IsBlock C {R}
+ A / R = Σ[ C ∈ Pred A 𝓦 ] IsBlock C {R}
 
  infix -1 _/_
 
@@ -156,10 +158,10 @@ private variable A : Type 𝓤 ; x y : A ; R : Rel A 𝓦
 open IsEquivalence
 
 /-subset : IsEquivalence R → R x y →  [ x ]{R} ⊆  [ y ]{R}
-/-subset Req Rxy {z} Rxz = (trans Req) ((sym Req) Rxy) Rxz
+/-subset Req Rxy {z} Rxz = IsEquivalence.trans Req (IsEquivalence.sym Req Rxy) Rxz
 
 /-supset : IsEquivalence R → R x y →  [ y ]{R} ⊆ [ x ]{R}
-/-supset Req Rxy {z} Ryz = (trans Req) Rxy Ryz
+/-supset Req Rxy {z} Ryz = IsEquivalence.trans Req Rxy Ryz
 
 \end{code}
 

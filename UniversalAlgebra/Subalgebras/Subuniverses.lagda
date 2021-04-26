@@ -34,15 +34,6 @@ We first show how to represent in [Agda][] the collection of subuniverses of an 
 
 \end{code}
 
-Here's one way to construct an algebra out of a subuniverse.
-
-\begin{code}
-
- SubunivAlg : (𝑨 : Algebra 𝓤 𝑆)(B : Pred ∣ 𝑨 ∣ 𝓦) → B ∈ Subuniverses 𝑨 → Algebra (𝓤 ⊔ 𝓦) 𝑆
- SubunivAlg 𝑨 B B∈SubA = Σ B , λ 𝑓 𝑏 → (𝑓 ̂ 𝑨)(fst ∘ 𝑏) , B∈SubA 𝑓 (fst ∘ 𝑏)(snd ∘ 𝑏)
-
-\end{code}
-
 
 
 #### <a id="subuniverses-as-records">Subuniverses as records</a>
@@ -197,21 +188,21 @@ Now that we have developed the machinery of subuniverse generation, we can prove
 
 \begin{code}
 
- hom-image-is-sub : dfunext 𝓥 𝓦 → {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}(ϕ : hom 𝑨 𝑩)
-  →                 HomImage 𝑩 ϕ ∈ Subuniverses 𝑩
+ -- hom-image-is-sub : funext 𝓥 𝓦 → {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}(ϕ : hom 𝑨 𝑩)
+ --  →                 ∣ HomImages 𝑨 ∣ ∈ Subuniverses 𝑩
 
- hom-image-is-sub fe {𝑨}{𝑩} ϕ 𝑓 b Imfb = eq ((𝑓 ̂ 𝑩) b) ((𝑓 ̂ 𝑨) ar) γ
-   where
-   ar : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣
-   ar = λ x → Inv ∣ ϕ ∣ (Imfb x)
+ -- hom-image-is-sub fe {𝑨}{𝑩} ϕ 𝑓 b Imfb = eq ((𝑓 ̂ 𝑩) b) ((𝑓 ̂ 𝑨) ar) γ
+ --   where
+ --   ar : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣
+ --   ar = λ x → Inv ∣ ϕ ∣ (Imfb x)
 
-   ζ : ∣ ϕ ∣ ∘ ar ≡ b
-   ζ = fe (λ x → InvIsInv ∣ ϕ ∣ (Imfb x))
+ --   ζ : ∣ ϕ ∣ ∘ ar ≡ b
+ --   ζ = fe (λ x → InvIsInv ∣ ϕ ∣ (Imfb x))
 
-   γ : (𝑓 ̂ 𝑩) b ≡ ∣ ϕ ∣ ((𝑓 ̂ 𝑨) ar)
-   γ = (𝑓 ̂ 𝑩) b            ≡⟨ ap (𝑓 ̂ 𝑩)(ζ ⁻¹) ⟩
-       (𝑓 ̂ 𝑩) (∣ ϕ ∣ ∘ ar) ≡⟨(∥ ϕ ∥ 𝑓 ar)⁻¹ ⟩
-       ∣ ϕ ∣ ((𝑓 ̂ 𝑨) ar)   ∎
+ --   γ : (𝑓 ̂ 𝑩) b ≡ ∣ ϕ ∣ ((𝑓 ̂ 𝑨) ar)
+ --   γ = (𝑓 ̂ 𝑩) b            ≡⟨ cong (𝑓 ̂ 𝑩)(ζ ⁻¹) ⟩
+ --       (𝑓 ̂ 𝑩) (∣ ϕ ∣ ∘ ar) ≡⟨(∥ ϕ ∥ 𝑓 ar)⁻¹ ⟩
+ --       ∣ ϕ ∣ ((𝑓 ̂ 𝑨) ar)   ∎
 
 \end{code}
 
@@ -229,7 +220,7 @@ Next we prove the important fact that homomorphisms are uniquely determined by t
  hom-unique _ _ _ _ α a (var x) = α a x
 
  hom-unique fe {𝑨}{𝑩} X g h α fa (app 𝑓 𝒂 β) = ∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂)   ≡⟨ ∥ g ∥ 𝑓 𝒂 ⟩
-                                               (𝑓 ̂ 𝑩)(∣ g ∣ ∘ 𝒂 ) ≡⟨ ap (𝑓 ̂ 𝑩)(fe IH) ⟩
+                                               (𝑓 ̂ 𝑩)(∣ g ∣ ∘ 𝒂 ) ≡⟨ cong (𝑓 ̂ 𝑩)(fe IH) ⟩
                                                (𝑓 ̂ 𝑩)(∣ h ∣ ∘ 𝒂)  ≡⟨ ( ∥ h ∥ 𝑓 𝒂 )⁻¹ ⟩
                                                ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂 )  ∎
   where IH = λ x → hom-unique fe {𝑨}{𝑩} X g h α (𝒂 x) (β x)
