@@ -82,8 +82,8 @@ Recall, we defined the type `Signature 𝓞 𝓥` above as the dependent pair ty
 \begin{code}
 
 Algebra : (𝓤 : Level)(𝑆 : Signature 𝓞 𝓥) → Type (𝓞 ⊔ 𝓥 ⊔ lsuc 𝓤)
-Algebra 𝓤 𝑆 = Σ A ꞉ Type 𝓤 ,                   -- the domain
-              Π f ꞉ ∣ 𝑆 ∣ , Op (∥ 𝑆 ∥ f) A    -- the basic operations
+Algebra 𝓤 𝑆 = Σ[ A ∈ Type 𝓤 ]                   -- the domain
+              ∀ (f : ∣ 𝑆 ∣) → Op (∥ 𝑆 ∥ f) A    -- the basic operations
 
 \end{code}
 
@@ -91,6 +91,16 @@ It would be more precise to refer to inhabitants of this type as ∞-*algebras* 
 
 We might take this opportunity to define the type of 0-*algebras*, that is, algebras whose domains are sets, which is probably closer to what most of us think of when doing informal universal algebra.  However, below we will only need to know that the domains of certain algebras are sets in a few places in the [UniversalAlgebra][] library, so it seems preferable to work with general (∞-)algebras throughout and then explicitly postulate [uniquness of identity proofs](Relations.Truncation.html#uniqueness-of-identity-proofs) when and only when necessary.
 
+##### <a id="the-universe-level-of-an-algebra">The universe level of an algebra</a>
+
+Occasionally we will be given an algebra and we just need to know the universe level of its domain. The following utility function provides this.
+
+\begin{code}
+
+level-of-alg : {𝑆 : Signature 𝓞 𝓥} → Algebra 𝓤 𝑆 → Level
+level-of-alg {𝓤 = 𝓤} _ = 𝓤
+
+\end{code}
 
 
 ##### <a id="algebras-as-record-types">Algebras as record types</a>
@@ -151,16 +161,16 @@ Recall, in the [section on level lifting and lowering](Overture.Lifts.html#level
 
 open Lift
 
-Lift-op : {𝓘 : Level}{I : Type 𝓘}{A : Type 𝓤} → Op I A → (𝓦 : Level) → Op I (Lift{𝓦} A)
+Lift-op : {𝓘 : Level}{I : Type 𝓘}{A : Type 𝓤} → Op I A → (𝓦 : Level) → Op I (Lift 𝓦 A)
 Lift-op f 𝓦 = λ x → lift (f (λ i → lower (x i)))
 
 Lift-alg : {𝑆 : Signature 𝓞 𝓥} → Algebra 𝓤 𝑆 → (𝓦 : Level) → Algebra (𝓤 ⊔ 𝓦) 𝑆
-Lift-alg {𝑆 = 𝑆} 𝑨 𝓦 = Lift ∣ 𝑨 ∣ , (λ (𝑓 : ∣ 𝑆 ∣) → Lift-op (𝑓 ̂ 𝑨) 𝓦)
+Lift-alg {𝑆 = 𝑆} 𝑨 𝓦 = Lift 𝓦 ∣ 𝑨 ∣ , (λ (𝑓 : ∣ 𝑆 ∣) → Lift-op (𝑓 ̂ 𝑨) 𝓦)
 
 open algebra
 
 Lift-alg-record-type : {𝑆 : Signature 𝓞 𝓥} → algebra 𝓤 𝑆 → (𝓦 : Level) → algebra (𝓤 ⊔ 𝓦) 𝑆
-Lift-alg-record-type {𝑆 = 𝑆} 𝑨 𝓦 = mkalg (Lift (univ 𝑨)) (λ (f : ∣ 𝑆 ∣) → Lift-op ((op 𝑨) f) 𝓦)
+Lift-alg-record-type {𝑆 = 𝑆} 𝑨 𝓦 = mkalg (Lift 𝓦 (univ 𝑨)) (λ (f : ∣ 𝑆 ∣) → Lift-op ((op 𝑨) f) 𝓦)
 
 \end{code}
 
@@ -197,10 +207,10 @@ In the [Relations.Continuous][] module, we defined a function called `cont-compa
 module _ {I : Type 𝓥} {𝑆 : Signature 𝓞 𝓥} where
 
  cont-compatible : (𝑨 : Algebra 𝓤 𝑆) → ContRel I ∣ 𝑨 ∣ 𝓦 → Type(𝓞 ⊔ 𝓤 ⊔ 𝓥 ⊔ 𝓦)
- cont-compatible 𝑨 R = Π 𝑓 ꞉ ∣ 𝑆 ∣ , cont-compatible-op (𝑓 ̂ 𝑨) R
+ cont-compatible 𝑨 R = ∀ (𝑓 : ∣ 𝑆 ∣ ) →  cont-compatible-op (𝑓 ̂ 𝑨) R
 
  dep-compatible : (𝒜 : I → Algebra 𝓤 𝑆) → DepRel I (λ i → ∣ 𝒜  i ∣) 𝓦 → Type(𝓞 ⊔ 𝓤 ⊔ 𝓥 ⊔ 𝓦)
- dep-compatible 𝒜 R = Π 𝑓 ꞉ ∣ 𝑆 ∣ , dep-compatible-op (λ i → 𝑓 ̂ (𝒜 i)) R
+ dep-compatible 𝒜 R = ∀ ( 𝑓 : ∣ 𝑆 ∣ ) →  dep-compatible-op (λ i → 𝑓 ̂ (𝒜 i)) R
 
 \end{code}
 

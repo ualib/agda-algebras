@@ -32,8 +32,6 @@ We also prove some closure and invariance properties of ⊧.  In particular, we 
 module Varieties.EquationalLogic where
 
 open import Subalgebras.Subalgebras public
-open import MGS-Embeddings using (embeddings-are-lc) public
-
 
 module equational-logic {𝑆 : Signature 𝓞 𝓥}{X : Type 𝓧} where
  open subalgebras {𝑆 = 𝑆} public
@@ -92,7 +90,7 @@ If `ℰ` denotes a set of identities, then the class of algebras satisfying all 
 
 
  DFunExt : Setω
- DFunExt = (𝓤 𝓥 : Level) → dfunext 𝓤 𝓥
+ DFunExt = (𝓤 𝓥 : Level) → funext 𝓤 𝓥
 
  module _ {𝓤 𝓦 : Level}{𝑨 : Algebra 𝓤 𝑆} where
 
@@ -101,11 +99,11 @@ If `ℰ` denotes a set of identities, then the class of algebras satisfying all 
 
   ⊧-I-invar fe 𝑩 p q Apq (f , g , f∼g , g∼f) = (fe (𝓧 ⊔ 𝓦) 𝓦) λ x →
    (𝑩 ⟦ p ⟧) x                      ≡⟨ refl ⟩
-   (𝑩 ⟦ p ⟧) (∣ 𝒾𝒹 𝑩 ∣ ∘ x)         ≡⟨ ap (𝑩 ⟦ p ⟧) ((fe 𝓧 𝓦) λ i → ((f∼g)(x i))⁻¹)⟩
+   (𝑩 ⟦ p ⟧) (∣ 𝒾𝒹 𝑩 ∣ ∘ x)         ≡⟨ cong (𝑩 ⟦ p ⟧) ((fe 𝓧 𝓦) λ i → ((f∼g)(x i))⁻¹)⟩
    (𝑩 ⟦ p ⟧) ((∣ f ∣ ∘ ∣ g ∣) ∘ x)  ≡⟨ (comm-hom-term (fe 𝓥 𝓦) 𝑩 f p (∣ g ∣ ∘ x))⁻¹ ⟩
-   ∣ f ∣ ((𝑨 ⟦ p ⟧) (∣ g ∣ ∘ x))    ≡⟨ ap (λ - → ∣ f ∣ (- (∣ g ∣ ∘ x))) Apq ⟩
+   ∣ f ∣ ((𝑨 ⟦ p ⟧) (∣ g ∣ ∘ x))    ≡⟨ cong (λ - → ∣ f ∣ (- (∣ g ∣ ∘ x))) Apq ⟩
    ∣ f ∣ ((𝑨 ⟦ q ⟧) (∣ g ∣ ∘ x))    ≡⟨ comm-hom-term (fe 𝓥 𝓦) 𝑩 f q (∣ g ∣ ∘ x) ⟩
-   (𝑩 ⟦ q ⟧) ((∣ f ∣ ∘ ∣ g ∣) ∘  x) ≡⟨ ap (𝑩 ⟦ q ⟧) ((fe 𝓧 𝓦) λ i → (f∼g) (x i)) ⟩
+   (𝑩 ⟦ q ⟧) ((∣ f ∣ ∘ ∣ g ∣) ∘  x) ≡⟨ cong (𝑩 ⟦ q ⟧) ((fe 𝓧 𝓦) λ i → (f∼g) (x i)) ⟩
    (𝑩 ⟦ q ⟧) x                      ∎
 
  \end{code}
@@ -141,14 +139,14 @@ Identities modeled by an algebra `𝑨` are also modeled by every subalgebra of 
 
   ⊧-S-invar : DFunExt → {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆){p q : Term X}
    →          𝑨 ⊧ p ≈ q  →  𝑩 ≤ 𝑨  →  𝑩 ⊧ p ≈ q
-  ⊧-S-invar fe {𝑨} 𝑩 {p}{q} Apq B≤A = (fe (𝓧 ⊔ 𝓦) 𝓦) λ b → (embeddings-are-lc ∣ h ∣ ∥ B≤A ∥) (ξ b)
+  ⊧-S-invar fe {𝑨} 𝑩 {p}{q} Apq B≤A = (fe (𝓧 ⊔ 𝓦) 𝓦) λ b → (∥ B≤A ∥) (ξ b)
    where
    h : hom 𝑩 𝑨
    h = ∣ B≤A ∣
 
    ξ : ∀ b → ∣ h ∣ ((𝑩 ⟦ p ⟧) b) ≡ ∣ h ∣ ((𝑩 ⟦ q ⟧) b)
    ξ b = ∣ h ∣((𝑩 ⟦ p ⟧) b)   ≡⟨ comm-hom-term (fe 𝓥 𝓤) 𝑨 h p b ⟩
-         (𝑨 ⟦ p ⟧)(∣ h ∣ ∘ b) ≡⟨ happly Apq (∣ h ∣ ∘ b) ⟩
+         (𝑨 ⟦ p ⟧)(∣ h ∣ ∘ b) ≡⟨ cong-app Apq (∣ h ∣ ∘ b) ⟩
          (𝑨 ⟦ q ⟧)(∣ h ∣ ∘ b) ≡⟨ (comm-hom-term (fe 𝓥 𝓤) 𝑨 h q b)⁻¹ ⟩
          ∣ h ∣((𝑩 ⟦ q ⟧) b)   ∎
 
@@ -160,12 +158,12 @@ Identities modeled by an algebra `𝑨` are also modeled by every subalgebra of 
 
   ⊧-S-class-invar : DFunExt → {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}(p q : Term X)
    →                𝒦 ⊧ p ≋ q → (𝑩 : SubalgebraOfClass{𝓦} 𝒦) → ∣ 𝑩 ∣ ⊧ p ≈ q
-  ⊧-S-class-invar fe p q Kpq (𝑩 , 𝑨 , SA , (ka , BisSA)) = ⊧-S-invar fe 𝑩 {p}{q}((Kpq ka)) (h , hem)
+  ⊧-S-class-invar fe p q Kpq (𝑩 , 𝑨 , SA , (ka , BisSA)) = ⊧-S-invar fe 𝑩 {p}{q}((Kpq ka)) (h , hinj)
     where
     h : hom 𝑩 𝑨
     h = ∘-hom 𝑩 𝑨 (∣ BisSA ∣) ∣ snd SA ∣
-    hem : is-embedding ∣ h ∣
-    hem = ∘-embedding (∥ snd SA ∥) (iso→embedding BisSA)
+    hinj : IsInjective ∣ h ∣
+    hinj = ∘-injective (iso→injective BisSA) ∥ snd SA ∥
  \end{code}
 
 
@@ -225,11 +223,11 @@ If an algebra 𝑨 models an identity p ≈ q, then the pair (p , q) belongs to 
 
   ⊧-H-invar : DFunExt → {p q : Term X}(φ : hom (𝑻 X) 𝑨) → 𝑨 ⊧ p ≈ q  →  ∣ φ ∣ p ≡ ∣ φ ∣ q
 
-  ⊧-H-invar fe {p}{q} φ β = ∣ φ ∣ p      ≡⟨ ap ∣ φ ∣ (term-agreement (fe 𝓥 (ov 𝓧)) p) ⟩
+  ⊧-H-invar fe {p}{q} φ β = ∣ φ ∣ p      ≡⟨ cong ∣ φ ∣ (term-agreement (fe 𝓥 (ov 𝓧)) p) ⟩
                   ∣ φ ∣((𝑻 X ⟦ p ⟧) ℊ)   ≡⟨ (comm-hom-term (fe 𝓥 𝓤) 𝑨 φ p ℊ ) ⟩
-                  (𝑨 ⟦ p ⟧) (∣ φ ∣ ∘ ℊ)  ≡⟨ happly β (∣ φ ∣ ∘ ℊ ) ⟩
+                  (𝑨 ⟦ p ⟧) (∣ φ ∣ ∘ ℊ)  ≡⟨ cong-app β (∣ φ ∣ ∘ ℊ ) ⟩
                   (𝑨 ⟦ q ⟧) (∣ φ ∣ ∘ ℊ)  ≡⟨ (comm-hom-term (fe 𝓥 𝓤) 𝑨 φ q ℊ )⁻¹ ⟩
-                  ∣ φ ∣ ((𝑻 X ⟦ q ⟧) ℊ)  ≡⟨(ap ∣ φ ∣ (term-agreement (fe 𝓥 (ov 𝓧)) q))⁻¹ ⟩
+                  ∣ φ ∣ ((𝑻 X ⟦ q ⟧) ℊ)  ≡⟨(cong ∣ φ ∣ (term-agreement (fe 𝓥 (ov 𝓧)) q))⁻¹ ⟩
                   ∣ φ ∣ q                ∎
 
 \end{code}
@@ -251,7 +249,7 @@ More generally, an identity is satisfied by all algebras in a class if and only 
    where
     ξ : ∀(𝒂 : X → ∣ 𝑻 X ∣ ) → ∣ φ ∣ ((𝑻 X ⟦ p ⟧) 𝒂) ≡ ∣ φ ∣ ((𝑻 X ⟦ q ⟧) 𝒂)
     ξ 𝒂 = ∣ φ ∣ ((𝑻 X ⟦ p ⟧) 𝒂)  ≡⟨ comm-hom-term (fe 𝓥 𝓤) 𝑨 φ p 𝒂 ⟩
-          (𝑨 ⟦ p ⟧)(∣ φ ∣ ∘ 𝒂)   ≡⟨ happly (α ka) (∣ φ ∣ ∘ 𝒂) ⟩
+          (𝑨 ⟦ p ⟧)(∣ φ ∣ ∘ 𝒂)   ≡⟨ cong-app (α ka) (∣ φ ∣ ∘ 𝒂) ⟩
           (𝑨 ⟦ q ⟧)(∣ φ ∣ ∘ 𝒂)   ≡⟨ (comm-hom-term (fe 𝓥 𝓤) 𝑨 φ q 𝒂)⁻¹ ⟩
           ∣ φ ∣ ((𝑻 X ⟦ q ⟧) 𝒂)  ∎
 
@@ -272,8 +270,10 @@ More generally, an identity is satisfied by all algebras in a class if and only 
                 (𝑨 ⟦ q ⟧)(∣ φ 𝒂 ∣ ∘ ℊ)     ∎
 
 
-  ⊧-H : DFunExt → {p q : Term X} → 𝒦 ⊧ p ≋ q ⇔ (∀ 𝑨 φ → 𝑨 ∈ 𝒦 → ∣ φ ∣ ∘ (𝑻 X ⟦ p ⟧) ≡ ∣ φ ∣ ∘(𝑻 X ⟦ q ⟧))
-  ⊧-H fe {p}{q} = ⊧-H-class-invar fe {p}{q} , ⊧-H-class-coinvar fe {p}{q} 
+  -- open import Relation.Binary.Core using (_⇔_)
+
+  -- ⊧-H : DFunExt → {p q : Term X} → 𝒦 ⊧ p ≋ q ⇔ (∀ 𝑨 φ → 𝑨 ∈ 𝒦 → ∣ φ ∣ ∘ (𝑻 X ⟦ p ⟧) ≡ ∣ φ ∣ ∘(𝑻 X ⟦ q ⟧))
+  -- ⊧-H fe {p}{q} = ⊧-H-class-invar fe {p}{q} , ⊧-H-class-coinvar fe {p}{q} 
 
 \end{code}
 

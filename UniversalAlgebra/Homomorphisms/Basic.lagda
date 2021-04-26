@@ -16,7 +16,6 @@ This section describes the [Homomorphisms.Basic] module of the [Agda Universal A
 module Homomorphisms.Basic where
 
 open import Algebras.Congruences public
-open import MGS-MLTT using (_≡⟨_⟩_; _∎; id) public
 
 module homomorphisms {𝑆 : Signature 𝓞 𝓥} where
  open congruences {𝑆 = 𝑆} public
@@ -50,7 +49,7 @@ We now define the type `hom 𝑨 𝑩` of homomorphisms from `𝑨` to `𝑩` by
   is-homomorphism g = ∀ 𝑓  →  compatible-op-map 𝑓 g
 
   hom : Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
-  hom = Σ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣ ) , is-homomorphism g
+  hom = Σ[ g ∈ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ] is-homomorphism g
 
 \end{code}
 
@@ -89,13 +88,13 @@ A *monomorphism* is an injective homomorphism and an *epimorphism* is a surjecti
 \begin{code}
 
  is-monomorphism : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
- is-monomorphism 𝑨 𝑩 g = is-homomorphism 𝑨 𝑩 g × Monic g
+ is-monomorphism 𝑨 𝑩 g = is-homomorphism 𝑨 𝑩 g × IsInjective g
 
  mon : Algebra 𝓤 𝑆 → Algebra 𝓦 𝑆  → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
- mon 𝑨 𝑩 = Σ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) , is-monomorphism 𝑨 𝑩 g
+ mon 𝑨 𝑩 = Σ[ g ∈ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ] is-monomorphism 𝑨 𝑩 g
 
  is-epimorphism : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
- is-epimorphism 𝑨 𝑩 g = is-homomorphism 𝑨 𝑩 g × Epic g
+ is-epimorphism 𝑨 𝑩 g = is-homomorphism 𝑨 𝑩 g × IsSurjective g
 
  epi : Algebra 𝓤 𝑆 → Algebra 𝓦 𝑆  → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
  epi 𝑨 𝑩 = Σ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) , is-epimorphism 𝑨 𝑩 g
@@ -173,7 +172,7 @@ Given an algebra `𝑨` and a congruence `θ`, the *canonical projection* is a m
  module _ {𝓤 𝓦 : Level}{𝑨 : Algebra 𝓤 𝑆} where
   πepi : (θ : Con{𝓦} 𝑨) → epi 𝑨 (𝑨 ╱ θ)
   πepi θ = (λ a → ⟪ a ⟫) , (λ _ _ → refl) , cπ-is-epic  where
-   cπ-is-epic : Epic (λ a → ⟪ a ⟫)
+   cπ-is-epic : IsSurjective (λ a → ⟪ a ⟫)
    cπ-is-epic (C , (a , refl)) =  Image_∋_.im a
 
 \end{code}
@@ -222,7 +221,7 @@ If in addition we have a family `𝒽 : (i : I) → hom 𝑨 (ℬ i)` of homomor
 
  module _ {𝓘 𝓦 : Level}{I : Type 𝓘}(ℬ : I → Algebra 𝓦 𝑆) where
 
-  ⨅-hom-co : dfunext 𝓘 𝓦 → {𝓤 : Level}(𝑨 : Algebra 𝓤 𝑆) → Π i ꞉ I , hom 𝑨 (ℬ i) → hom 𝑨 (⨅ ℬ)
+  ⨅-hom-co : funext 𝓘 𝓦 → {𝓤 : Level}(𝑨 : Algebra 𝓤 𝑆) → (∀(i : I) → hom 𝑨 (ℬ i)) → hom 𝑨 (⨅ ℬ)
   ⨅-hom-co fe 𝑨 𝒽 = (λ a i → ∣ 𝒽 i ∣ a) , (λ 𝑓 𝒶 → fe λ i → ∥ 𝒽 i ∥ 𝑓 𝒶)
 
 \end{code}
@@ -236,7 +235,7 @@ The foregoing generalizes easily to the case in which the domain is also a produ
 
 \begin{code}
 
-  ⨅-hom : dfunext 𝓘 𝓦 → {𝓤 : Level}(𝒜 : I → Algebra 𝓤 𝑆) → Π i ꞉ I , hom (𝒜 i)(ℬ i) → hom (⨅ 𝒜)(⨅ ℬ)
+  ⨅-hom : funext 𝓘 𝓦 → {𝓤 : Level}(𝒜 : I → Algebra 𝓤 𝑆) → (∀(i : I) →  hom (𝒜 i)(ℬ i)) → hom (⨅ 𝒜)(⨅ ℬ)
   ⨅-hom fe 𝒜 𝒽 = (λ x i → ∣ 𝒽 i ∣ (x i)) , (λ 𝑓 𝒶 → fe λ i → ∥ 𝒽 i ∥ 𝑓 (λ x → 𝒶 x i))
 
 \end{code}
@@ -249,7 +248,7 @@ Later we will need a proof of the fact that projecting out of a product algebra 
 
 \begin{code}
 
-  ⨅-projection-hom : Π i ꞉ I , hom (⨅ ℬ) (ℬ i)
+  ⨅-projection-hom : ∀ (i : I ) →  hom (⨅ ℬ) (ℬ i)
   ⨅-projection-hom = λ x → (λ z → z x) , λ _ _ → refl
 
 \end{code}

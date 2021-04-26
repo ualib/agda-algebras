@@ -22,8 +22,6 @@ module Relations.Truncation where
 
 open import Relations.Quotients public
 
-open import MGS-MLTT using (_⇔_) public
-
 \end{code}
 
 #### <a id="uniqueness-of-identity-proofs">Uniqueness of identity proofs</a>
@@ -46,12 +44,16 @@ This notion is formalized in the [Type Topology][] library, using the `is-subsin
 
 \begin{code}
 
-module hide-is-set where
+-- module hide-is-set where
 
- is-set : Type 𝓤 → Type 𝓤
- is-set A = (x y : A) → is-subsingleton (x ≡ y)
+is-set : Type 𝓤 → Type 𝓤
+is-set A = is-prop-valued{A = A} _≡_
+-- (x y : A) → is-prop (x ≡ y)
 
-open import MGS-Embeddings using (is-set) public
+-- is-prop-valued : {A : Type 𝓤} → Rel A 𝓦 → Type(𝓤 ⊔ 𝓦)
+-- is-prop-valued  _≈_ = ∀ x y → is-prop (x ≈ y)
+
+-- open import MGS-Embeddings using (is-set) public
 
 \end{code}
 
@@ -61,12 +63,12 @@ We will also need the function [to-Σ-≡](https://www.cs.bham.ac.uk/~mhe/HoTT-U
 
 \begin{code}
 
-module hide-to-Σ-≡ {A : Type 𝓤}{B : A → Type 𝓦} where
+module _ {A : Type 𝓤}{B : A → Type 𝓦} where
 
- to-Σ-≡ : {σ τ : Σ B} → Σ p ꞉ ∣ σ ∣ ≡ ∣ τ ∣ , transport B p ∥ σ ∥ ≡ ∥ τ ∥ → σ ≡ τ
+ to-Σ-≡ : {σ τ : Σ x ꞉ A , B x} → (Σ p ꞉ (fst σ ≡ fst τ) , subst B p ∥ σ ∥ ≡ ∥ τ ∥) → σ ≡ τ
  to-Σ-≡ (refl , refl) = refl
 
-open import MGS-Embeddings using (to-Σ-≡) public
+-- open import MGS-Embeddings using (to-Σ-≡) public
 
 \end{code}
 
@@ -81,17 +83,17 @@ Before moving on to define [propositions](Overture.Truncation.html#propositions)
 
 private variable A : Type 𝓤 ; B : Type 𝓦
 
-monic-is-embedding|Set : (f : A → B) → is-set B → Monic f → is-embedding f
+monic-is-embedding|Set : (f : A → B) → is-set B → IsInjective f → is-embedding f
 monic-is-embedding|Set f Bset fmon b (u , fu≡b) (v , fv≡b) = γ
  where
  fuv : f u ≡ f v
- fuv = ≡-trans fu≡b (fv≡b ⁻¹)
+ fuv = trans fu≡b (fv≡b ⁻¹)
 
  uv : u ≡ v
- uv = fmon u v fuv
+ uv = fmon fuv
 
- arg1 : Σ p ꞉ u ≡ v , transport (λ a → f a ≡ b) p fu≡b ≡ fv≡b
- arg1 = uv , Bset (f v) b (transport (λ a → f a ≡ b) uv fu≡b) fv≡b
+ arg1 : Σ p ꞉ u ≡ v , subst (λ a → f a ≡ b) p fu≡b ≡ fv≡b
+ arg1 = uv , Bset (f v) b (subst (λ a → f a ≡ b) uv fu≡b) fv≡b
 
  γ : u , fu≡b ≡ v , fv≡b
  γ = to-Σ-≡ arg1
@@ -115,7 +117,7 @@ In the next module ([Relations.Extensionality][]) we will define a *quotient ext
 \begin{code}
 
 blk-uip : (A : Type 𝓤)(R : Rel A 𝓦 ) → Type(𝓤 ⊔ lsuc 𝓦)
-blk-uip {𝓤}{𝓦} A R = ∀ (C : Pred A 𝓦) → is-subsingleton (IsBlock C {R})
+blk-uip {𝓤}{𝓦} A R = ∀ (C : Pred A 𝓦) → is-prop (IsBlock C {R})
 
 \end{code}
 
@@ -134,19 +136,19 @@ Naturally, we define the corresponding *truncated continuous relation type* and 
 module _ {I : Type 𝓥} where
 
  IsContProp : (A : Type 𝓤) → ContRel I A 𝓦  → Type(𝓥 ⊔ 𝓤 ⊔ 𝓦)
- IsContProp A P = Π 𝑎 ꞉ (I → A) , is-subsingleton (P 𝑎)
+ IsContProp A P = ∀ (𝑎 : (I → A)) → is-prop (P 𝑎)
 
  ContProp : Type 𝓤 → (𝓦 : Level) → Type(𝓤 ⊔ 𝓥 ⊔ lsuc 𝓦)
- ContProp A 𝓦 = Σ P ꞉ ContRel I A 𝓦 , IsContProp A P
+ ContProp A 𝓦 = Σ[ P ∈ ContRel I A 𝓦 ] IsContProp A P
 
  cont-prop-ext : Type 𝓤 → (𝓦 : Level) → Type(𝓤 ⊔ 𝓥 ⊔ lsuc 𝓦)
  cont-prop-ext A 𝓦 = {P Q : ContProp A 𝓦 } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
 
  IsDepProp : (𝒜 : I → Type 𝓤) → DepRel I 𝒜 𝓦  → Type(𝓥 ⊔ 𝓤 ⊔ 𝓦)
- IsDepProp 𝒜 P = Π 𝑎 ꞉ Π 𝒜 , is-subsingleton (P 𝑎)
+ IsDepProp 𝒜 P = ∀ (𝑎 : ((i : I) → 𝒜 i)) → is-prop (P 𝑎)
 
  DepProp : (I → Type 𝓤) → (𝓦 : Level) → Type(𝓤 ⊔ 𝓥 ⊔ lsuc 𝓦)
- DepProp 𝒜 𝓦 = Σ P ꞉ DepRel I 𝒜 𝓦 , IsDepProp 𝒜 P
+ DepProp 𝒜 𝓦 = Σ[ P ∈ DepRel I 𝒜 𝓦 ] IsDepProp 𝒜 P
 
  dep-prop-ext : (I → Type 𝓤) → (𝓦 : Level) → Type(𝓤 ⊔ 𝓥 ⊔ lsuc 𝓦)
  dep-prop-ext 𝒜 𝓦 = {P Q : DepProp 𝒜 𝓦} → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q

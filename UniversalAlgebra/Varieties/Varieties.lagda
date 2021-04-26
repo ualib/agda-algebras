@@ -48,11 +48,18 @@ We define the inductive type `H` to represent classes of algebras that include a
   where
   hbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → Lift-alg 𝑨 𝓦 ∈ H 𝒦
   hlift : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ H{𝓤}{𝓤} 𝒦 → Lift-alg 𝑨 𝓦 ∈ H 𝒦
-  hhimg : {𝑨 𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑨 ∈ H{𝓤}{𝓦} 𝒦 → 𝑩 is-hom-image-of 𝑨 → 𝑩 ∈ H 𝒦
+--  hhimg : {𝑨 𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑨 ∈ H{𝓤}{𝓦} 𝒦 → 𝑩 is-hom-image-of 𝑨 → 𝑩 ∈ H 𝒦
+  hhimg : {𝑨 𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑨 ∈ H{𝓤}{𝓦} 𝒦 → ((𝑩 , _) : HomImages 𝑨) → 𝑩 ∈ H 𝒦
   hiso  : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑨 ∈ H{𝓤}{𝓤} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ H 𝒦
 
  \end{code}
 
+
+ -- IsHomImage : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆) → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
+ -- IsHomImage {𝑨 = 𝑨} 𝑩 = Σ φ ꞉ hom 𝑨 𝑩 , IsSurjective ∣ φ ∣ -- λ b → Image ∣ ϕ ∣ ∋ b
+
+ -- HomImages : Algebra 𝓤 𝑆 → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ lsuc 𝓦)
+ -- HomImages {𝓦 = 𝓦}𝑨 = Σ 𝑩 ꞉ Algebra 𝓦 𝑆 , IsHomImage{𝑨 = 𝑨} 𝑩 -- Σ ϕ ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) , is-homomorphism 𝑨 𝑩 ϕ × Epic ϕ
 
 
  #### <a id="subalgebraic-closure">Subalgebraic closure</a>
@@ -106,7 +113,8 @@ We define the inductive type `H` to represent classes of algebras that include a
   vbase  : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → Lift-alg 𝑨 𝓦 ∈ V 𝒦
   vlift  : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ V{𝓤}{𝓤} 𝒦 → Lift-alg 𝑨 𝓦 ∈ V 𝒦
   vliftw : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓦} 𝒦 → Lift-alg 𝑨 (𝓤 ⊔ 𝓦) ∈ V 𝒦
-  vhimg  : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓦} 𝒦 → 𝑩 is-hom-image-of 𝑨 → 𝑩 ∈ V 𝒦
+  -- vhimg  : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓦} 𝒦 → 𝑩 is-hom-image-of 𝑨 → 𝑩 ∈ V 𝒦
+  vhimg  : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓦} 𝒦 → ((𝑩 , _) : HomImages 𝑨) → 𝑩 ∈ V 𝒦
   vssub  : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓤} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ V 𝒦
   vssubw : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓦} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ V 𝒦
   vprodu : {I : Type 𝓦}{𝒜 : I → Algebra 𝓤 𝑆} → (∀ i → (𝒜 i) ∈ V{𝓤}{𝓤} 𝒦) → ⨅ 𝒜 ∈ V 𝒦
@@ -344,7 +352,7 @@ We define the inductive type `H` to represent classes of algebras that include a
 
  module _ {𝒦 : Pred(Algebra 𝓤 𝑆)(ov 𝓤)} where
 
-  lemPS⊆SP : hfunext 𝓦 𝓤 → dfunext 𝓦 𝓤 → {I : Type 𝓦}{ℬ : I → Algebra 𝓤 𝑆}
+  lemPS⊆SP : hfunext 𝓦 𝓤 → funext 𝓦 𝓤 → {I : Type 𝓦}{ℬ : I → Algebra 𝓤 𝑆}
    →         (∀ i → (ℬ i) IsSubalgebraOfClass 𝒦)
              -------------------------------------
    →         ⨅ ℬ IsSubalgebraOfClass (P{𝓤}{𝓦} 𝒦)
@@ -369,12 +377,17 @@ We define the inductive type `H` to represent classes of algebras that include a
    h : ∀ i → ∣ SA i ∣ → ∣ 𝒜 i ∣
    h = λ i → fst ∣ SA≤𝒜 i ∣
 
+   hinj : ∀ i → IsInjective (h i)
+   hinj = λ i → snd (snd ∣ ∥ B≤K i ∥ ∣)
+
    α : ∣ ⨅ SA ∣ → ∣ ⨅ 𝒜 ∣
    α = λ x i → (h i) (x i)
    β : is-homomorphism (⨅ SA) (⨅ 𝒜) α
    β = λ 𝑓 𝒂 → fwu λ i → (snd ∣ SA≤𝒜 i ∣) 𝑓 (λ x → 𝒂 x i)
-   γ : is-embedding α
-   γ = embedding-lift hwu hwu {I}{SA}{𝒜}h(λ i → ∥ SA≤𝒜 i ∥)
+   -- γ : is-embedding α
+   -- γ = embedding-lift hwu hwu {I}{SA}{𝒜}h(λ i → ∥ SA≤𝒜 i ∥)
+   γ : IsInjective α
+   γ αxαy = fwu λ i → (hinj i)(cong-app αxαy i)
 
    ⨅SA≤⨅𝒜 : ⨅ SA ≤ ⨅ 𝒜
    ⨅SA≤⨅𝒜 = (α , β) , γ
@@ -393,7 +406,7 @@ We define the inductive type `H` to represent classes of algebras that include a
 
  \begin{code}
 
- module _ {fovu : dfunext (ov 𝓤) (ov 𝓤)}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
+ module _ {fovu : funext (ov 𝓤) (ov 𝓤)}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
 
   PS⊆SP : -- extensionality assumptions:
              hfunext (ov 𝓤)(ov 𝓤)
@@ -466,26 +479,27 @@ We define the inductive type `H` to represent classes of algebras that include a
 
  open Lift
 
- module Vlift {fe₀ : dfunext (ov 𝓤) 𝓤}
-          {fe₁ : dfunext ((ov 𝓤) ⊔ (lsuc (ov 𝓤))) (lsuc (ov 𝓤))}
-          {fe₂ : dfunext (ov 𝓤) (ov 𝓤)}
+ module Vlift {fe₀ : funext (ov 𝓤) 𝓤}
+          {fe₁ : funext ((ov 𝓤) ⊔ (lsuc (ov 𝓤))) (lsuc (ov 𝓤))}
+          {fe₂ : funext (ov 𝓤) (ov 𝓤)}
           {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
 
   VlA : {𝑨 : Algebra (ov 𝓤) 𝑆} → 𝑨 ∈ V{𝓤}{ov 𝓤} 𝒦
    →    Lift-alg 𝑨 (lsuc (ov 𝓤)) ∈ V{𝓤}{lsuc (ov 𝓤)} 𝒦
---   →    Lift-alg 𝑨 (ov 𝓤 ⁺) ∈ V{𝓤}{ov 𝓤 ⁺} 𝒦
-
   VlA (vbase{𝑨} x) = visow (vbase x) (Lift-alg-associative 𝑨)
   VlA (vlift{𝑨} x) = visow (vlift x) (Lift-alg-associative 𝑨)
   VlA (vliftw{𝑨} x) = visow (VlA x) (Lift-alg-associative 𝑨)
-  VlA (vhimg{𝑨}{𝑩} x hB) = vhimg (VlA x) (Lift-alg-hom-image hB)
+
+  VlA (vhimg{𝑨}{𝑩} x hB) =
+   vhimg{𝑩 = Lift-alg 𝑩 (lsuc (ov 𝓤))}
+    (VlA x) ((Lift-alg ∣ hB ∣ (lsuc (ov 𝓤))) , (Lift-alg-hom-image {𝑩 = ∣ hB ∣} ∥ hB ∥))
+
   VlA (vssub{𝑨}{𝑩} x B≤A) = vssubw (vlift{𝓦 = (lsuc (ov 𝓤))} x) (Lift-≤-Lift 𝑨 B≤A)
---  VlA (vssub{𝑨}{𝑩} x B≤A) = vssubw (vlift{𝓦 = (ov 𝓤 ⁺)} x) (Lift-≤-Lift 𝑨 B≤A)
   VlA (vssubw{𝑨}{𝑩} x B≤A) = vssubw (VlA x) (Lift-≤-Lift 𝑨 B≤A)
   VlA (vprodu{I}{𝒜} x) = visow (vprodw vlA) (≅-sym B≅A)
    where
    𝑰 : Type (lsuc (ov 𝓤))
-   𝑰 = Lift I
+   𝑰 = Lift (lsuc (ov 𝓤)) I
 
    lA : 𝑰 → Algebra (lsuc (ov 𝓤)) 𝑆
    lA i = Lift-alg (𝒜 (lower i)) (lsuc (ov 𝓤))
@@ -503,7 +517,7 @@ We define the inductive type `H` to represent classes of algebras that include a
   VlA (vprodw{I}{𝒜} x) = visow (vprodw vlA) (≅-sym B≅A)
    where
    𝑰 : Type (lsuc (ov 𝓤))
-   𝑰 = Lift I
+   𝑰 = Lift (lsuc (ov 𝓤)) I
 
    lA : 𝑰 → Algebra (lsuc (ov 𝓤)) 𝑆
    lA i = Lift-alg (𝒜 (lower i)) (lsuc (ov 𝓤))
@@ -560,9 +574,9 @@ We define the inductive type `H` to represent classes of algebras that include a
 
  module class-products-with-maps
   {X : Type 𝓤}
-  {fe𝓕𝓤 : dfunext (ov 𝓤) 𝓤}
-  {fe₁ : dfunext ((ov 𝓤) ⊔ (lsuc (ov 𝓤))) (lsuc (ov 𝓤))}
-  {fe₂ : dfunext (ov 𝓤) (ov 𝓤)}
+  {fe𝓕𝓤 : funext (ov 𝓤) 𝓤}
+  {fe₁ : funext ((ov 𝓤) ⊔ (lsuc (ov 𝓤))) (lsuc (ov 𝓤))}
+  {fe₂ : funext (ov 𝓤) (ov 𝓤)}
   (𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤))
   where
 

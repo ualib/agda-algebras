@@ -34,7 +34,7 @@ module congruences {𝑆 : Signature 𝓞 𝓥} where
                is-compatible  : compatible 𝑨 θ
 
   Con : (𝑨 : Algebra 𝓤 𝑆) → Type(𝓤 ⊔ ov 𝓦)
-  Con 𝑨 = Σ θ ꞉ ( Rel ∣ 𝑨 ∣ 𝓦 ) , IsCongruence 𝑨 θ
+  Con 𝑨 = Σ[ θ ∈ ( Rel ∣ 𝑨 ∣ 𝓦 ) ] IsCongruence 𝑨 θ
 
 \end{code}
 
@@ -56,7 +56,7 @@ We defined the *zero relation* `𝟎` in the [Relations.Discrete][] module.  We 
 \begin{code}
 
  𝟎-IsEquivalence : {A : Type 𝓤} →  IsEquivalence {A = A} 𝟎
- 𝟎-IsEquivalence = record {rfl = refl; sym = ≡-sym; trans = ≡-trans}
+ 𝟎-IsEquivalence = record { refl = refl ; sym = sym; trans = trans }
 
 \end{code}
 
@@ -65,10 +65,10 @@ Next we formally record another obvious fact---that `𝟎-rel` is compatible wit
 \begin{code}
 
  𝟎-compatible-op : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 𝑆} (𝑓 : ∣ 𝑆 ∣) → (𝑓 ̂ 𝑨) |: 𝟎
- 𝟎-compatible-op fe {𝑨} 𝑓 {i}{j} ptws0  = ap (𝑓 ̂ 𝑨) (fe ptws0)
+ 𝟎-compatible-op fe {𝑨} 𝑓 {i}{j} ptws0  = cong (𝑓 ̂ 𝑨) (fe ptws0)
 
- -- 𝟎-compatible : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 𝑆} → compatible 𝑨 𝟎
- -- 𝟎-compatible fe {𝑨} = {!!} -- λ 𝑓 args → 𝟎-compatible-op fe {𝑨} 𝑓 args
+ 𝟎-compatible : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 𝑆} → compatible 𝑨 𝟎
+ 𝟎-compatible fe {𝑨} = λ 𝑓 x → 𝟎-compatible-op fe {𝑨} 𝑓 x
 
 \end{code}
 
@@ -76,11 +76,11 @@ Finally, we have the ingredients need to construct the zero congruence of any al
 
 \begin{code}
 
- -- Δ : (𝑨 : Algebra 𝓤 𝑆){fe : funext 𝓥 𝓤} → IsCongruence 𝑨 𝟎
- -- Δ 𝑨 {fe} = mkcon 𝟎-IsEquivalence (𝟎-compatible fe)
+ Δ : (𝑨 : Algebra 𝓤 𝑆){fe : funext 𝓥 𝓤} → IsCongruence 𝑨 𝟎
+ Δ 𝑨 {fe} = mkcon 𝟎-IsEquivalence (𝟎-compatible fe)
 
- -- 𝟘 : (𝑨 : Algebra 𝓤 𝑆){fe : funext 𝓥 𝓤} → Con{𝓤} 𝑨
- -- 𝟘 𝑨 {fe} = IsCongruence→Con 𝟎 (Δ 𝑨 {fe})
+ 𝟘 : (𝑨 : Algebra 𝓤 𝑆){fe : funext 𝓥 𝓤} → Con{𝓤} 𝑨
+ 𝟘 𝑨 {fe} = IsCongruence→Con 𝟎 (Δ 𝑨 {fe})
 
 \end{code}
 
@@ -113,8 +113,8 @@ From this we easily obtain the zero congruence of `𝑨 ╱ θ` by applying the 
 
 \begin{code}
 
- -- 𝟎[_╱_] : (𝑨 : Algebra 𝓤 𝑆)(θ : Con{𝓦} 𝑨){fe : funext 𝓥 (𝓤 ⊔ lsuc 𝓦)} → Con (𝑨 ╱ θ)
- -- 𝟎[ 𝑨 ╱ θ ] {fe} = 𝟘[ 𝑨 ╱ θ ] , Δ (𝑨 ╱ θ) {fe}
+ 𝟎[_╱_] : (𝑨 : Algebra 𝓤 𝑆)(θ : Con{𝓦} 𝑨){fe : funext 𝓥 (𝓤 ⊔ lsuc 𝓦)} → Con (𝑨 ╱ θ)
+ 𝟎[ 𝑨 ╱ θ ] {fe} = 𝟘[ 𝑨 ╱ θ ] , Δ (𝑨 ╱ θ) {fe}
 
 \end{code}
 
@@ -126,7 +126,7 @@ Finally, the following elimination rule is sometimes
  open IsCongruence
 
  /-≡ : {𝑨 : Algebra 𝓤 𝑆}(θ : Con{𝓦} 𝑨){u v : ∣ 𝑨 ∣} → ⟪ u ⟫ {∣ θ ∣} ≡ ⟪ v ⟫ → ∣ θ ∣ u v
- /-≡ θ refl = IsEquivalence.rfl (is-equivalence ∥ θ ∥)
+ /-≡ θ refl = IsEquivalence.refl (is-equivalence ∥ θ ∥)
 
 \end{code}
 

@@ -51,7 +51,7 @@ Without further ado, we present our formalization of the first homomorphism theo
       (pe : pred-ext 𝓤 𝓦)(fe : swelldef 𝓥 𝓦)                              -- extensionality assumptions
       (Bset : is-set ∣ 𝑩 ∣)(buip : blk-uip ∣ 𝑨 ∣ ∣ kercon fe {𝑩} h ∣)     -- truncation assumptions
       -----------------------------------------------------------------------------------------------------------
-  →   Σ φ ꞉ hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩 , (∣ h ∣ ≡ ∣ φ ∣ ∘ ∣ πker fe{𝑩}h ∣) × Monic ∣ φ ∣ × is-embedding ∣ φ ∣
+  →   Σ[ φ ∈ hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩 ] (∣ h ∣ ≡ ∣ φ ∣ ∘ ∣ πker fe{𝑩}h ∣) × IsInjective ∣ φ ∣ × is-embedding ∣ φ ∣
 
  FirstHomTheorem|Set 𝑨 𝑩 h pe fe Bset buip = (φ , φhom) , refl , φmon , φemb
   where
@@ -65,11 +65,11 @@ Without further ado, we present our formalization of the first homomorphism theo
 
    φhom : is-homomorphism (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩 φ
    φhom 𝑓 a =  ∣ h ∣ ( (𝑓 ̂ 𝑨) (λ x → ⌞ a x ⌟) ) ≡⟨ ∥ h ∥ 𝑓 (λ x → ⌞ a x ⌟)  ⟩
-              (𝑓 ̂ 𝑩) (∣ h ∣ ∘ (λ x → ⌞ a x ⌟))  ≡⟨ ap (𝑓 ̂ 𝑩) refl ⟩
+              (𝑓 ̂ 𝑩) (∣ h ∣ ∘ (λ x → ⌞ a x ⌟))  ≡⟨ cong (𝑓 ̂ 𝑩) refl ⟩
               (𝑓 ̂ 𝑩) (λ x → φ (a x))            ∎
 
-   φmon : Monic φ
-   φmon (_ , (u , refl)) (_ , (v , refl)) φuv = block-ext|uip pe buip ξ φuv
+   φmon : IsInjective φ
+   φmon {_ , (u , refl)} {_ , (v , refl)} φuv = block-ext|uip pe buip ξ φuv
 
    φemb : is-embedding φ
    φemb = monic-is-embedding|Set φ Bset φmon
@@ -83,11 +83,11 @@ Below we will prove that the homomorphism `φ`, whose existence we just proved, 
  FirstIsoTheorem|Set :
 
       (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
-      (pe : pred-ext 𝓤 𝓦)(fe : swelldef 𝓥 𝓦)(fww : dfunext 𝓦 𝓦)       -- extensionality assumptions
+      (pe : pred-ext 𝓤 𝓦)(fe : swelldef 𝓥 𝓦)(fww : funext 𝓦 𝓦)       -- extensionality assumptions
       (Bset : is-set ∣ 𝑩 ∣)(buip : blk-uip ∣ 𝑨 ∣ ∣ kercon fe{𝑩}h ∣)  -- truncation assumptions
-  →   Epic ∣ h ∣
+  →   IsSurjective ∣ h ∣
       -----------------------------------------------------------------------------------------------------------
-  →   Σ f ꞉ epi (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩 , (∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣) × Monic ∣ f ∣ × is-embedding ∣ f ∣
+  →   Σ f ꞉ epi (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩  , (∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣) × IsInjective ∣ f ∣ × is-embedding ∣ f ∣
 
  FirstIsoTheorem|Set 𝑨 𝑩 h pe fe fww Bset buip hE = (fmap , fhom , fepic) , refl , (snd ∥ FHT ∥)
   where
@@ -99,10 +99,10 @@ Below we will prove that the homomorphism `φ`, whose existence we just proved, 
   fhom : is-homomorphism (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩 fmap
   fhom = snd ∣ FHT ∣
 
-  fepic : Epic fmap
+  fepic : IsSurjective fmap
   fepic b = γ where
    a : ∣ 𝑨 ∣
-   a = EpicInv ∣ h ∣ hE b
+   a = SurjInv ∣ h ∣ hE b
 
    bfa : b ≡ fmap ⟪ a ⟫
    bfa = (cong-app (EpicInvIsRightInv {fe = fww} ∣ h ∣ hE) b)⁻¹
@@ -167,7 +167,7 @@ The composition of homomorphisms is again a homomorphism.  We formalize this in 
   ∘-hom (g , ghom) (h , hhom) = h ∘ g , γ where
 
    γ : ∀ 𝑓 a → (h ∘ g)((𝑓 ̂ 𝑨) a) ≡ (𝑓 ̂ 𝑪)(h ∘ g ∘ a)
-   γ 𝑓 a = (h ∘ g)((𝑓 ̂ 𝑨) a)     ≡⟨ ap h ( ghom 𝑓 a ) ⟩
+   γ 𝑓 a = (h ∘ g)((𝑓 ̂ 𝑨) a)     ≡⟨ cong h ( ghom 𝑓 a ) ⟩
            h ((𝑓 ̂ 𝑩)(g ∘ a))     ≡⟨ hhom 𝑓 ( g ∘ a ) ⟩
            (𝑓 ̂ 𝑪)(h ∘ g ∘ a)     ∎
 
@@ -200,14 +200,14 @@ If `α : hom 𝑨 𝑩`, `β : hom 𝑨 𝑪`, `β` is surjective, and `ker β �
  module _ {𝑨 : Algebra 𝓧 𝑆}{𝑪 : Algebra 𝓩 𝑆} where
 
   HomFactor : funext 𝓧 𝓨 → funext 𝓩 𝓩 → (𝑩 : Algebra 𝓨 𝑆)(α : hom 𝑨 𝑩)(β : hom 𝑨 𝑪)
-   →          kernel ∣ β ∣ ⊆ kernel ∣ α ∣ → Epic ∣ β ∣
+   →          kernel ∣ β ∣ ⊆ kernel ∣ α ∣ → IsSurjective ∣ β ∣
               -------------------------------------------
    →          Σ φ ꞉ (hom 𝑪 𝑩) , ∣ α ∣ ≡ ∣ φ ∣ ∘ ∣ β ∣
 
   HomFactor fxy fzz 𝑩 α β Kβα βE = (φ , φIsHomCB) , αφβ
    where
    βInv : ∣ 𝑪 ∣ → ∣ 𝑨 ∣
-   βInv = EpicInv ∣ β ∣ βE
+   βInv = SurjInv ∣ β ∣ βE
 
    η : ∣ β ∣ ∘ βInv ≡ 𝑖𝑑 ∣ 𝑪 ∣
    η = EpicInvIsRightInv{fe = fzz} ∣ β ∣ βE
@@ -222,8 +222,8 @@ If `α : hom 𝑨 𝑩`, `β : hom 𝑨 𝑪`, `β` is surjective, and `ker β �
    αφβ = fxy λ x → Kβα (ξ x)
 
    φIsHomCB : ∀ 𝑓 c → φ ((𝑓 ̂ 𝑪) c) ≡ ((𝑓 ̂ 𝑩)(φ ∘ c))
-   φIsHomCB 𝑓 c = φ ((𝑓 ̂ 𝑪) c)                    ≡⟨ ap(φ ∘(𝑓 ̂ 𝑪))(ap (λ - → - ∘ c)η ⁻¹)⟩
-                  φ ((𝑓 ̂ 𝑪)(∣ β ∣ ∘(βInv ∘ c)))   ≡⟨ ap φ (∥ β ∥ 𝑓 (βInv ∘ c))⁻¹ ⟩
+   φIsHomCB 𝑓 c = φ ((𝑓 ̂ 𝑪) c)                    ≡⟨ cong(φ ∘(𝑓 ̂ 𝑪))(cong (λ - → - ∘ c)η ⁻¹)⟩
+                  φ ((𝑓 ̂ 𝑪)(∣ β ∣ ∘(βInv ∘ c)))   ≡⟨ cong φ (∥ β ∥ 𝑓 (βInv ∘ c))⁻¹ ⟩
                   φ (∣ β ∣((𝑓 ̂ 𝑨)(βInv ∘ c)))     ≡⟨ cong-app(αφβ ⁻¹)((𝑓 ̂ 𝑨)(βInv ∘ c))⟩
                   ∣ α ∣((𝑓 ̂ 𝑨)(βInv ∘ c))         ≡⟨ ∥ α ∥ 𝑓 (βInv ∘ c) ⟩
                   (𝑓 ̂ 𝑩)(λ x → ∣ α ∣(βInv (c x))) ∎
@@ -236,9 +236,9 @@ If, in addition to the hypotheses of the last theorem, we assume α is epic, the
 
   HomFactorEpi : funext 𝓧 𝓨 → funext 𝓩 𝓩 → funext 𝓨 𝓨
    →             (𝑩 : Algebra 𝓨 𝑆)(α : hom 𝑨 𝑩)(β : hom 𝑨 𝑪)
-   →             kernel ∣ β ∣ ⊆ kernel ∣ α ∣ → Epic ∣ β ∣ → Epic ∣ α ∣
+   →             kernel ∣ β ∣ ⊆ kernel ∣ α ∣ → IsSurjective ∣ β ∣ → IsSurjective ∣ α ∣
                  ----------------------------------------------------------
-   →             Σ φ ꞉ (epi 𝑪 𝑩) , ∣ α ∣ ≡ ∣ φ ∣ ∘ ∣ β ∣
+   →             Σ φ ꞉ epi 𝑪 𝑩 , ∣ α ∣ ≡ ∣ φ ∣ ∘ ∣ β ∣
 
   HomFactorEpi fxy fzz fyy 𝑩 α β kerincl βe αe = (fst ∣ φF ∣ ,(snd ∣ φF ∣ , φE)), ∥ φF ∥
    where
@@ -246,9 +246,9 @@ If, in addition to the hypotheses of the last theorem, we assume α is epic, the
    φF = HomFactor fxy fzz 𝑩 α β kerincl βe
 
    φ : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
-   φ = ∣ α ∣ ∘ (EpicInv ∣ β ∣ βe)
+   φ = ∣ α ∣ ∘ (SurjInv ∣ β ∣ βe)
 
-   φE : Epic φ
+   φE : IsSurjective φ
    φE = epic-factor {fe = fyy} ∣ α ∣ ∣ β ∣ φ ∥ φF ∥ αe
 
 \end{code}

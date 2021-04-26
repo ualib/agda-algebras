@@ -70,7 +70,7 @@ First, we represent the congruence relation `ψCon`, modulo which `𝑻 X` yield
 
  \begin{code}
 
- ψcompatible : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓕){fe : dfunext 𝓥 𝓤} → compatible (𝑻 X)(ψRel 𝒦)
+ ψcompatible : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓕){fe : funext 𝓥 𝓤} → compatible (𝑻 X)(ψRel 𝒦)
  ψcompatible 𝒦{fe} 𝑓 {p} {q} ψpq 𝑨 sA h = γ
   where
    φ : hom (𝑻 X) 𝑨
@@ -79,22 +79,21 @@ First, we represent the congruence relation `ψCon`, modulo which `𝑻 X` yield
    γ : ∣ φ ∣ ((𝑓 ̂ 𝑻 X) p) ≡ ∣ φ ∣ ((𝑓 ̂ 𝑻 X) q)
 
    γ = ∣ φ ∣ ((𝑓 ̂ 𝑻 X) p)  ≡⟨ ∥ φ ∥ 𝑓 p ⟩
-       (𝑓 ̂ 𝑨) (∣ φ ∣ ∘ p)  ≡⟨ ap(𝑓 ̂ 𝑨)(fe λ x → (ψpq x) 𝑨 sA h) ⟩
+       (𝑓 ̂ 𝑨) (∣ φ ∣ ∘ p)  ≡⟨ cong(𝑓 ̂ 𝑨)(fe λ x → (ψpq x) 𝑨 sA h) ⟩
        (𝑓 ̂ 𝑨) (∣ φ ∣ ∘ q)  ≡⟨ (∥ φ ∥ 𝑓 q)⁻¹ ⟩
        ∣ φ ∣ ((𝑓 ̂ 𝑻 X) q)  ∎
 
  ψIsEquivalence : {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓕 } → IsEquivalence (ψRel 𝒦)
- ψIsEquivalence = record { rfl = λ 𝑨 sA h → refl
-                         ; sym = λ pψq 𝑨 sA h → (pψq 𝑨 sA h)⁻¹
-                         ; trans = λ pψq qψr 𝑨 sA h → (pψq 𝑨 sA h) ∙ (qψr 𝑨 sA h)}
-
+ ψIsEquivalence = record { refl = λ 𝑨 sA h → refl
+                         ; sym = λ x 𝑨 sA h → (x 𝑨 sA h)⁻¹
+                         ; trans = λ pψq qψr 𝑨 sA h → (pψq 𝑨 sA h) ∙ (qψr 𝑨 sA h) }
  \end{code}
 
  We have collected all the pieces necessary to express the collection of identities satisfied by all subalgebras of algebras in the class as a congruence relation of the term algebra. We call this congruence `ψCon` and define it using the Congruence constructor `mkcon`.
 
  \begin{code}
 
- ψCon : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓕){fe : dfunext 𝓥 𝓤} → Con (𝑻 X)
+ ψCon : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓕){fe : funext 𝓥 𝓤} → Con (𝑻 X)
  ψCon 𝒦 {fe} = (ψRel 𝒦) , mkcon ψIsEquivalence (ψcompatible 𝒦 {fe})
 
  \end{code}
@@ -178,7 +177,7 @@ Observe that the inhabitants of `ℭ` are maps from `ℑ'` to `{𝔄' i : i ∈ 
   hom𝔽 : hom (𝑻 X) 𝔽
   hom𝔽 = epi-to-hom 𝔽 epi𝔽
 
-  hom𝔽-is-epic : Epic ∣ hom𝔽 ∣
+  hom𝔽-is-epic : IsSurjective ∣ hom𝔽 ∣
   hom𝔽-is-epic = snd ∥ epi𝔽 ∥
 
  \end{code}
@@ -242,7 +241,7 @@ Observe that the inhabitants of `ℭ` are maps from `ℑ'` to `{𝔄' i : i ∈ 
   hom𝔽-is-lift-hom (ℊ x) = refl
   hom𝔽-is-lift-hom (node 𝑓 𝒕) =
    ∣ 𝔑 ∣ (node 𝑓 𝒕)              ≡⟨ ∥ 𝔑 ∥ 𝑓 𝒕 ⟩
-   (𝑓 ̂ 𝔽)(λ i → ∣ 𝔑 ∣(𝒕 i))      ≡⟨ ap(𝑓 ̂ 𝔽)(fe 𝓥 𝓕⁺ (λ x → hom𝔽-is-lift-hom(𝒕 x))) ⟩
+   (𝑓 ̂ 𝔽)(λ i → ∣ 𝔑 ∣(𝒕 i))      ≡⟨ cong(𝑓 ̂ 𝔽)(fe 𝓥 𝓕⁺ (λ x → hom𝔽-is-lift-hom(𝒕 x))) ⟩
    (𝑓 ̂ 𝔽)(λ i → ∣ hom𝔽 ∣ (𝒕 i))  ≡⟨ (∥ hom𝔽 ∥ 𝑓 𝒕)⁻¹ ⟩
    ∣ hom𝔽 ∣ (node 𝑓 𝒕)           ∎
 
@@ -267,7 +266,7 @@ Observe that the inhabitants of `ℭ` are maps from `ℑ'` to `{𝔄' i : i ∈ 
 
     γ : ∣ φ ∣ p ≡ ∣ φ ∣ q
     γ = ∣ φ ∣ p             ≡⟨ (h≡φ p)⁻¹ ⟩
-        ∣ f ∣ ( ∣ 𝔑 ∣ p )   ≡⟨ ap ∣ f ∣ 𝔑pq ⟩
+        ∣ f ∣ ( ∣ 𝔑 ∣ p )   ≡⟨ cong ∣ f ∣ 𝔑pq ⟩
         ∣ f ∣ ( ∣ 𝔑 ∣ q )   ≡⟨ h≡φ q ⟩
         ∣ φ ∣ q             ∎
 
@@ -308,7 +307,7 @@ Observe that the inhabitants of `ℭ` are maps from `ℑ'` to `{𝔄' i : i ∈ 
   kernel-in-theory {p , q} pKq = (class-ids-⇒ {fe = fe} p q (class-models-kernel p q pKq))
 
   _↠_ : Type 𝓤 → Algebra 𝓕⁺ 𝑆 → Type 𝓕⁺
-  X ↠ 𝑨 = Σ h ꞉ (X → ∣ 𝑨 ∣) , Epic h
+  X ↠ 𝑨 = Σ h ꞉ (X → ∣ 𝑨 ∣) , IsSurjective h
 
   𝔽-ModTh-epi : (𝑨 : Algebra 𝓕⁺ 𝑆) → (X ↠ 𝑨) → 𝑨 ∈ Mod (Th 𝕍𝒦) → epi 𝔽 𝑨
   𝔽-ModTh-epi 𝑨 (η , ηE) AinMTV = γ
@@ -316,7 +315,7 @@ Observe that the inhabitants of `ℭ` are maps from `ℑ'` to `{𝔄' i : i ∈ 
    φ : hom (𝑻 X) 𝑨
    φ = lift-hom 𝑨 η
 
-   φE : Epic ∣ φ ∣
+   φE : IsSurjective ∣ φ ∣
    φE = lift-of-epi-is-epi 𝑨 ηE
 
    pqlem2 : ∀ p q → (p , q) ∈ kernel ∣ hom𝔽 ∣ → 𝑨 ⊧ p ≈ q
@@ -324,7 +323,7 @@ Observe that the inhabitants of `ℭ` are maps from `ℑ'` to `{𝔄' i : i ∈ 
 
    kerincl : kernel ∣ hom𝔽 ∣ ⊆ kernel ∣ φ ∣
    kerincl {p , q} x = ∣ φ ∣ p      ≡⟨ (free-lift-interp (fe 𝓥 𝓕⁺) 𝑨 η p)⁻¹ ⟩
-                       (𝑨 ⟦ p ⟧) η  ≡⟨ happly (pqlem2 p q x) η  ⟩
+                       (𝑨 ⟦ p ⟧) η  ≡⟨ cong-app (pqlem2 p q x) η  ⟩
                        (𝑨 ⟦ q ⟧) η  ≡⟨ free-lift-interp (fe 𝓥 𝓕⁺) 𝑨 η q ⟩
                        ∣ φ ∣ q      ∎
 
@@ -385,10 +384,10 @@ Observe that the inhabitants of `ℭ` are maps from `ℑ'` to `{𝔄' i : i ∈ 
 
    Birkhoff : hfunext (ov 𝓤)(ov 𝓤) → (∀ 𝑨 → X ↠ 𝑨) → Mod (Th (V 𝒦)) ⊆ V 𝒦
 
-   Birkhoff hfe 𝕏 {𝑨} α = γ
+   Birkhoff hfe 𝕏 {𝑨} α = vhimg{𝑩 = 𝑨} (𝔽∈𝕍 hfe) (𝑨 , epi-to-hom 𝑨 φE , snd ∥ φE ∥)
     where
-    γ : 𝑨 ∈ (V 𝒦)
-    γ = vhimg (𝔽∈𝕍 hfe) ((𝑨 , 𝔽-ModTh-epi 𝑨 (𝕏 𝑨) α ) , ≅-refl)
+    φE : epi 𝔽 𝑨
+    φE = 𝔽-ModTh-epi 𝑨 (𝕏 𝑨) α
 
  \end{code}
 

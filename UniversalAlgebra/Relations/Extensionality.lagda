@@ -16,7 +16,6 @@ This section presents the [Relations.Extensionality][] module of the [Agda Unive
 module Relations.Extensionality where
 
 open import Relations.Truncation public
-open import MGS-MLTT using (𝟙) public
 
 \end{code}
 
@@ -48,7 +47,7 @@ module _ {A : Type 𝓤}{R : Rel A 𝓦} where
  to-subtype|uip : blk-uip A R → {C D : Pred A 𝓦}{c : IsBlock C {R}}{d : IsBlock D {R}}
   →               C ≡ D → (C , c) ≡ (D , d)
 
- to-subtype|uip buip {C}{D}{c}{d}CD = to-Σ-≡(CD , buip D(transport(λ B → IsBlock B)CD c)d)
+ to-subtype|uip buip {C}{D}{c}{d}CD = to-Σ-≡(CD , buip D(subst(λ B → IsBlock B)CD c)d)
 
 
  block-ext|uip : pred-ext 𝓤 𝓦 → blk-uip A R → IsEquivalence R → ∀{u}{v} → R u v → ⟪ u ⟫ ≡ ⟪ v ⟫
@@ -80,7 +79,7 @@ A stronger form of well-definedness of operations is to suppose that point-wise 
 swelldef : (𝓥 𝓤 : Level) → Type (lsuc (𝓤 ⊔ 𝓥))
 swelldef 𝓥 𝓤 = ∀ {A : Type 𝓤}{I : Type 𝓥}(f : Op I A)(u v : I → A) → (∀ i → u i ≡ v i) → f u ≡ f v
 
-funext→swelldef : {𝓤 𝓥 : Level} → dfunext 𝓥 𝓤 → swelldef 𝓥 𝓤
+funext→swelldef : {𝓤 𝓥 : Level} → funext 𝓥 𝓤 → swelldef 𝓥 𝓤
 funext→swelldef fe f u v ptweq = γ
  where
  uv : u ≡ v

@@ -45,10 +45,8 @@ The datatype we use to represent the identity relation is imported from the Iden
 \begin{code}
 
 module hide-refl where
-
  data _≡_ {A : Type 𝓤} : A → A → Type 𝓤 where refl : {x : A} → x ≡ x
-
-open import Identity-Type renaming (_≡_ to infix 0 _≡_) public
+open import Agda.Builtin.Equality renaming (_≡_ to infix 0 _≡_) public
 
 \end{code}
 
@@ -61,12 +59,14 @@ Whenever we need to complete a proof by simply asserting that `x` is definitiona
 The `≡` type just defined is an equivalence relation and the formal proof of this fact is trivial. We don't need to prove reflexivity since it is the defining property of `≡`.  Here are the (trivial) proofs of symmetry and transitivity of `≡`.
 
 \begin{code}
+module hide-sym-trans {A : Type 𝓤} where
+ sym : {x y : A} → x ≡ y → y ≡ x
+ sym refl = refl
 
-≡-sym : {A : Type 𝓤}{x y : A} → x ≡ y → y ≡ x
-≡-sym refl = refl
+ trans : {A : Type 𝓤}{x y z : A} → x ≡ y → y ≡ z → x ≡ z
+ trans refl refl = refl
 
-≡-trans : {A : Type 𝓤}{x y z : A} → x ≡ y → y ≡ z → x ≡ z
-≡-trans refl refl = refl
+open import Relation.Binary.PropositionalEquality.Core using (sym; trans) public
 
 \end{code}
 
@@ -74,72 +74,71 @@ We prove that `≡` obeys the substitution rule (subst) in the next subsection (
 
 \begin{code}
 
-module hide-sym-trans {A : Type 𝓤} where
+_⁻¹ : {A : Type 𝓤} {x y : A} → x ≡ y → y ≡ x
+p ⁻¹ = sym p
 
- _⁻¹ : {x y : A} → x ≡ y → y ≡ x
- p ⁻¹ = ≡-sym p
-
-\end{code}
-
-If we have a proof `p : x ≡ y`, and we need a proof of `y ≡ x`, then instead of `≡-sym p` we can use the more intuitive `p ⁻¹` . Similarly, the following syntactic sugar makes abundant appeals to transitivity easier to stomach.
-
-\begin{code}
-
- _∙_ : {x y z : A} → x ≡ y → y ≡ z → x ≡ z
- p ∙ q = ≡-trans p q
+infix  40 _⁻¹
 
 \end{code}
 
-As usual, we import the original definitions from the [Type Topology][] library.
+If we have a proof `p : x ≡ y`, and we need a proof of `y ≡ x`, then instead of `≡-sym p` we can use the more intuitive `p ⁻¹`. Similarly, the following syntactic sugar makes abundant appeals to transitivity easier to stomach.
 
 \begin{code}
 
-open import MGS-MLTT using (_⁻¹; _∙_) public
+_∙_ : {A : Type 𝓤}{x y z : A} → x ≡ y → y ≡ z → x ≡ z
+p ∙ q = trans p q
+
+_≡⟨_⟩_ : {A : Type 𝓤} (x : A) {y z : A} → x ≡ y → y ≡ z → x ≡ z
+x ≡⟨ p ⟩ q = p ∙ q
+
+_∎ : {X : Type 𝓤} (x : X) → x ≡ x
+x ∎ = refl
+
+infixl 30 _∙_
+infixr  0 _≡⟨_⟩_
+infix   1 _∎
 
 \end{code}
 
 #### <a id="transport">Transport (substitution)</a>
 
-Alonzo Church characterized equality by declaring two things equal iff no property (predicate) can distinguish them.<sup>[4](Overture.Equality.html#fn4)</sup>  In other terms, `x` and `y` are equal iff for all `P` we have `P x → P y`.  One direction of this implication is sometimes called *substitution* or *transport* or *transport along an identity*.  It asserts that *if* two objects are equal and one of them satisfies a predicate, then so does the other. A type representing this notion is defined in the `MGS-MLTT` module of the [Type Topology][] library as follows.<sup>[3](Preliminaries.Equality.html#fn3)</sup>
+Alonzo Church characterized equality by declaring two things equal iff no property (predicate) can distinguish them.<sup>[4](Overture.Equality.html#fn4)</sup>  In other terms, `x` and `y` are equal iff for all `P` we have `P x → P y`.  One direction of this implication is sometimes called *substitution* (`subst`) or *transport along an identity*.  It asserts that if two objects are equal and one of them satisfies a predicate, then so does the other. A type representing this notion is defined in the `Relation.Binary.PropositionalEquality.Core` module of the [Agda Standard Library][] library as follows.
 
 \begin{code}
 
-module hide-id-transport where
-
- 𝑖𝑑 : (A : Type 𝓤 ) → A → A
- 𝑖𝑑 A = λ x → x
-
- transport : {A : Type 𝓤}(B : A → Type 𝓦){x y : A} → x ≡ y → B x → B y
- transport B (refl {x = x}) = 𝑖𝑑 (B x)
-
-open import MGS-MLTT using (𝑖𝑑; transport) public
+module hide-transport where
+ subst : {A : Type 𝓤}(B : A → Type 𝓦){x y : A} → x ≡ y → B x → B y
+ subst B {x} refl = λ x → x
 
 \end{code}
 
-As usual, we display definitions of existing types (here, `𝑖𝑑` and `transport`) in a hidden module and then imported their original definition from [Type Topology][].
-
-A function is well defined if and only if it maps equivalent elements to a single element and we often use this nature of functions in Agda proofs.  If we have a function `f : X → Y`, two elements `a b : X` of the domain, and an identity proof `p : a ≡ b`, then we obtain a proof of `f a ≡ f b` by simply applying the `ap` function like so, `ap f p : f a ≡ f b`. Escardó defines `ap` in the [Type Topology][] library as follows.
+A function is well defined if and only if it maps equivalent elements to a single element and we often use this nature of functions in Agda proofs.  The `cong` map, defined in the  Relation.Binary.PropositionalEquality.Core module of the [Agda Standard Library][], captures this well-definedness property as follows.
 
 \begin{code}
 
-module hide-ap {A : Type 𝓤}{B : Type 𝓦} where
-
- ap : (f : A → B){x y : A} → x ≡ y → f x ≡ f y
- ap f {x} p = transport (λ - → f x ≡ f -) p (refl {x = f x})
-
-open import MGS-MLTT using (ap) public
+module hide-cong {A : Type 𝓤}{B : Type 𝓦} where
+ cong : ∀ (f : A → B) {x y} → x ≡ y → f x ≡ f y
+ cong f refl = refl
 
 \end{code}
 
-Here's a useful variation of `ap` that we borrow from the `Relation/Binary/Core.agda` module of the [Agda Standard Library][] (transcribed into TypeTopology/UniversalAlgebra notation of course).
+Thus, if we have a function `f : X → Y`, two elements `a b : X` of the domain, and an identity proof `p : a ≡ b`, then we obtain a proof of `f a ≡ f b` by simply applying the `cong` function like so, `cong f p : f a ≡ f b`.
+
+Similarly, if we have two equivalent dependent functions---say, `f g : (x : A) → B x` such that `f ≡ g`---then `f x ≡ g x` holds for all `x : A`.  This property is captured by the `cong-app` function defined in the `Relation.Binary.PropositionalEquality.Core` module of the [Agda Standard Library][] as follows.
+
+module hide-cong-app {A : Type 𝓤}{B : A → Type 𝓦}  where
+ cong-app : {f g : (x : A) → B x} → f ≡ g → (x : A) → f x ≡ g x
+ cong-app refl x = refl
+
+\end{code}
+
+As usual, we display definitions of existing types (here `subst`, `cong`, and `cong-app`) in a hidden module and then imported their original definition from the [Agda Standard Library][], like so.
 
 \begin{code}
 
-cong-app : {A : Type 𝓤}{B : A → Type 𝓦}{f g : Π B} → f ≡ g → ∀ x → f x ≡ g x
-cong-app refl _ = refl
+open import Relation.Binary.PropositionalEquality.Core using (subst; cong; cong-app) public
 
 \end{code}
-
 
 
 
@@ -165,4 +164,11 @@ cong-app refl _ = refl
 
 {% include UALib.Links.md %}
 
+
+<!-- NO LONGER USED STUFF
+
+𝑖𝑑 : (A : Type 𝓤 ) → A → A
+𝑖𝑑 A = λ x → x
+
+-->
 

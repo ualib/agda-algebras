@@ -28,26 +28,16 @@ We begin with what seems, for our purposes, the most useful way to represent the
 
 \begin{code}
 
- module _ {𝓤 𝓦 : Level} where
+ IsHomImage : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆) → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
+ IsHomImage {𝑨 = 𝑨} 𝑩 = Σ φ ꞉ hom 𝑨 𝑩 , IsSurjective ∣ φ ∣ -- λ b → Image ∣ ϕ ∣ ∋ b
 
-  HomImage : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆)(ϕ : hom 𝑨 𝑩) → ∣ 𝑩 ∣ → Type(𝓤 ⊔ 𝓦)
-  HomImage 𝑩 ϕ = λ b → Image ∣ ϕ ∣ ∋ b
-
-  HomImagesOf : Algebra 𝓤 𝑆 → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ lsuc 𝓦)
-  HomImagesOf 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓦 𝑆) , Σ ϕ ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) , is-homomorphism 𝑨 𝑩 ϕ × Epic ϕ
+ HomImages : Algebra 𝓤 𝑆 → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ lsuc 𝓦)
+ HomImages {𝓦 = 𝓦}𝑨 = Σ 𝑩 ꞉ Algebra 𝓦 𝑆 , IsHomImage{𝑨 = 𝑨} 𝑩 -- Σ ϕ ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) , is-homomorphism 𝑨 𝑩 ϕ × Epic ϕ
 
 \end{code}
 
-These types should be self-explanatory, but just to be sure, let's describe the Sigma type appearing in the second definition. Given an `𝑆`-algebra `𝑨 : Algebra 𝓤 𝑆`, the type `HomImagesOf 𝑨` denotes the class of algebras `𝑩 : Algebra 𝓦 𝑆` with a map `φ : ∣ 𝑨 ∣ → ∣ 𝑩 ∣` such that `φ` is a surjective homomorphism.
+These types should be self-explanatory, but just to be sure, let's describe the Sigma type appearing in the second definition. Given an `𝑆`-algebra `𝑨 : Algebra 𝓤 𝑆`, the type `HomImages 𝑨` denotes the class of algebras `𝑩 : Algebra 𝓦 𝑆` with a map `φ : ∣ 𝑨 ∣ → ∣ 𝑩 ∣` such that `φ` is a surjective homomorphism.
 
-Since we take the class of homomorphic images of an algebra to be closed under isomorphism, we consider `𝑩` to be a homomorphic image of `𝑨` if there exists an algebra `𝑪` which is a homomorphic image of `𝑨` and isomorphic to `𝑩`. The following type expresses this.
-
-\begin{code}
-
-  _is-hom-image-of_ : (𝑩 : Algebra 𝓦 𝑆)(𝑨 : Algebra 𝓤 𝑆) → Type(ov 𝓦 ⊔ 𝓤)
-  𝑩 is-hom-image-of 𝑨 = Σ 𝑪ϕ ꞉ (HomImagesOf 𝑨) , ∣ 𝑪ϕ ∣ ≅ 𝑩
-
-\end{code}
 
 
 #### <a id="images-of-a-class-of-algebras">Images of a class of algebras</a>
@@ -58,11 +48,11 @@ Given a class `𝒦` of `𝑆`-algebras, we need a type that expresses the asser
 
  module _ {𝓤 : Level} where
 
-  _is-hom-image-of-class_ : Algebra 𝓤 𝑆 → Pred (Algebra 𝓤 𝑆)(lsuc 𝓤) → Type(ov 𝓤)
-  𝑩 is-hom-image-of-class 𝓚 = Σ 𝑨 ꞉ (Algebra 𝓤 𝑆) , (𝑨 ∈ 𝓚) × (𝑩 is-hom-image-of 𝑨)
+  IsHomImageOfClass : {𝒦 : Pred (Algebra 𝓤 𝑆)(lsuc 𝓤)} → Algebra 𝓤 𝑆 → Type(ov 𝓤)
+  IsHomImageOfClass {𝒦 = 𝒦} 𝑩 = Σ 𝑨 ꞉ Algebra 𝓤 𝑆 , (𝑨 ∈ 𝒦) × (IsHomImage {𝑨 = 𝑨} 𝑩)
 
-  HomImagesOfClass : Pred (Algebra 𝓤 𝑆) (lsuc 𝓤) → Type(ov 𝓤)
-  HomImagesOfClass 𝓚 = Σ 𝑩 ꞉ (Algebra 𝓤 𝑆) , (𝑩 is-hom-image-of-class 𝓚)
+  HomImageOfClass : Pred (Algebra 𝓤 𝑆) (lsuc 𝓤) → Type(ov 𝓤)
+  HomImageOfClass 𝒦 = Σ 𝑩 ꞉ Algebra 𝓤 𝑆 , IsHomImageOfClass{𝒦} 𝑩
 
 \end{code}
 
@@ -75,13 +65,12 @@ Here are some tools that have been useful (e.g., in the road to the proof of Bir
 \begin{code}
 
  open Lift
+ Lift-epi-is-epi : {𝓩 𝓦 : Level}{𝑨 : Algebra 𝓧 𝑆}
+                   (𝑩 : Algebra 𝓨 𝑆)(h : hom 𝑨 𝑩)
+                   ----------------------------------------------------------
+  →                IsSurjective ∣ h ∣ → IsSurjective ∣ Lift-hom 𝓩 𝓦 𝑩 h ∣
 
- lift-of-alg-epic-is-epic : {𝓩 𝓦 : Level}
-                            {𝑨 : Algebra 𝓧 𝑆}(𝑩 : Algebra 𝓨 𝑆)(h : hom 𝑨 𝑩)
-                            -----------------------------------------------
-  →                         Epic ∣ h ∣  →  Epic ∣ Lift-hom 𝓩 𝓦 𝑩 h ∣
-
- lift-of-alg-epic-is-epic {𝓩 = 𝓩} {𝓦} {𝑨} 𝑩 h hepi y = eq y (lift a) η
+ Lift-epi-is-epi {𝓩 = 𝓩} {𝓦} {𝑨} 𝑩 h hepi y = eq y (lift a) η
    where
    lh : hom (Lift-alg 𝑨 𝓩) (Lift-alg 𝑩 𝓦)
    lh = Lift-hom 𝓩 𝓦 𝑩 h
@@ -92,30 +81,29 @@ Here are some tools that have been useful (e.g., in the road to the proof of Bir
    a : ∣ 𝑨 ∣
    a = Inv ∣ h ∣ ζ
 
-   β : lift (∣ h ∣ a) ≡ (lift ∘ ∣ h ∣ ∘ lower{𝓦}) (lift a)
-   β = ap (λ - → lift (∣ h ∣ ( - a))) (lower∼lift {𝓦} )
+   β : lift (∣ h ∣ a) ≡ ∣ Lift-hom 𝓩 𝓦 𝑩 h ∣ (lift a)
+   β = cong (λ - → lift (∣ h ∣ (- a))) (lower∼lift {level-of-alg 𝑨}{𝓦})
 
    η : y ≡ ∣ lh ∣ (lift a)
-   η = y               ≡⟨ (happly lift∼lower) y ⟩
-       lift (lower y)  ≡⟨ ap lift (InvIsInv ∣ h ∣ ζ)⁻¹ ⟩
+   η = y               ≡⟨ (cong-app lift∼lower) y ⟩
+       lift (lower y)  ≡⟨ cong lift (InvIsInv ∣ h ∣ ζ)⁻¹ ⟩
        lift (∣ h ∣ a)  ≡⟨ β ⟩
        ∣ lh ∣ (lift a) ∎
 
 
- Lift-alg-hom-image : {𝓩 𝓦 : Level}
-                      {𝑨 : Algebra 𝓧 𝑆}{𝑩 : Algebra 𝓨 𝑆}
-  →                   𝑩 is-hom-image-of 𝑨
-                      -----------------------------------------------
-  →                   (Lift-alg 𝑩 𝓦) is-hom-image-of (Lift-alg 𝑨 𝓩)
+ Lift-alg-hom-image : {𝓩 𝓦 : Level}{𝑨 : Algebra 𝓧 𝑆}{𝑩 : Algebra 𝓨 𝑆}
+  →                   IsHomImage {𝑨 = 𝑨} 𝑩
+  →                   IsHomImage {𝑨 = Lift-alg 𝑨 𝓩} (Lift-alg 𝑩 𝓦)
 
- Lift-alg-hom-image {𝓩 = 𝓩}{𝓦}{𝑨}{𝑩} ((𝑪 , ϕ , ϕhom , ϕepic) , C≅B) =
-   (Lift-alg 𝑪 𝓦 , ∣ lϕ ∣ , ∥ lϕ ∥ , lϕepic) , Lift-alg-iso C≅B
-    where
-    lϕ : hom (Lift-alg 𝑨 𝓩) (Lift-alg 𝑪 𝓦)
-    lϕ = (Lift-hom 𝓩 𝓦 𝑪) (ϕ , ϕhom)
+ Lift-alg-hom-image {𝓩 = 𝓩}{𝓦}{𝑨}{𝑩} ((φ , φhom) , φepic) = γ
+  where
+  lφ : hom (Lift-alg 𝑨 𝓩) (Lift-alg 𝑩 𝓦)
+  lφ = (Lift-hom 𝓩 𝓦 𝑩) (φ , φhom)
 
-    lϕepic : Epic ∣ lϕ ∣
-    lϕepic = lift-of-alg-epic-is-epic {𝓩 = 𝓩} 𝑪 (ϕ , ϕhom) ϕepic
+  lφepic : IsSurjective ∣ lφ ∣
+  lφepic = Lift-epi-is-epi {𝓩 = 𝓩} 𝑩 (φ , φhom) φepic
+  γ : IsHomImage (Lift-alg 𝑩 𝓦)
+  γ = lφ , lφepic
 
 \end{code}
 
