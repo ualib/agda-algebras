@@ -48,19 +48,10 @@ We define the inductive type `H` to represent classes of algebras that include a
   where
   hbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → Lift-alg 𝑨 𝓦 ∈ H 𝒦
   hlift : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ H{𝓤}{𝓤} 𝒦 → Lift-alg 𝑨 𝓦 ∈ H 𝒦
---  hhimg : {𝑨 𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑨 ∈ H{𝓤}{𝓦} 𝒦 → 𝑩 is-hom-image-of 𝑨 → 𝑩 ∈ H 𝒦
   hhimg : {𝑨 𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑨 ∈ H{𝓤}{𝓦} 𝒦 → ((𝑩 , _) : HomImages 𝑨) → 𝑩 ∈ H 𝒦
   hiso  : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑨 ∈ H{𝓤}{𝓤} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ H 𝒦
 
  \end{code}
-
-
- -- IsHomImage : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆) → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
- -- IsHomImage {𝑨 = 𝑨} 𝑩 = Σ φ ꞉ hom 𝑨 𝑩 , IsSurjective ∣ φ ∣ -- λ b → Image ∣ ϕ ∣ ∋ b
-
- -- HomImages : Algebra 𝓤 𝑆 → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ lsuc 𝓦)
- -- HomImages {𝓦 = 𝓦}𝑨 = Σ 𝑩 ꞉ Algebra 𝓦 𝑆 , IsHomImage{𝑨 = 𝑨} 𝑩 -- Σ ϕ ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) , is-homomorphism 𝑨 𝑩 ϕ × Epic ϕ
-
 
  #### <a id="subalgebraic-closure">Subalgebraic closure</a>
 
@@ -113,7 +104,6 @@ We define the inductive type `H` to represent classes of algebras that include a
   vbase  : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → Lift-alg 𝑨 𝓦 ∈ V 𝒦
   vlift  : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ V{𝓤}{𝓤} 𝒦 → Lift-alg 𝑨 𝓦 ∈ V 𝒦
   vliftw : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓦} 𝒦 → Lift-alg 𝑨 (𝓤 ⊔ 𝓦) ∈ V 𝒦
-  -- vhimg  : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓦} 𝒦 → 𝑩 is-hom-image-of 𝑨 → 𝑩 ∈ V 𝒦
   vhimg  : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓦} 𝒦 → ((𝑩 , _) : HomImages 𝑨) → 𝑩 ∈ V 𝒦
   vssub  : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓤} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ V 𝒦
   vssubw : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓦} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ V 𝒦
@@ -268,7 +258,6 @@ We define the inductive type `H` to represent classes of algebras that include a
 
   Lift-alg-subP : {𝑩 : Algebra 𝓤 𝑆}
    →              𝑩 IsSubalgebraOfClass (P{𝓤}{𝓤} 𝒦)
-                  -------------------------------------------------
    →              (Lift-alg 𝑩 𝓦) IsSubalgebraOfClass (P{𝓤}{𝓦} 𝒦)
 
   Lift-alg-subP {𝑩}(𝑨 , (𝑪 , C≤A) , pA , B≅C ) =
@@ -354,11 +343,7 @@ We define the inductive type `H` to represent classes of algebras that include a
 
   lemPS⊆SP : hfunext 𝓦 𝓤 → funext 𝓦 𝓤 → {I : Type 𝓦}{ℬ : I → Algebra 𝓤 𝑆}
    →         (∀ i → (ℬ i) IsSubalgebraOfClass 𝒦)
-             -------------------------------------
    →         ⨅ ℬ IsSubalgebraOfClass (P{𝓤}{𝓦} 𝒦)
-
- -- module _ {𝓘 : Level}{I : Type 𝓘}{fiu : dfunext 𝓘 𝓤}{fiw : dfunext 𝓘 𝓦} where
- --  ⨅≅ : {𝒜 : I → Algebra 𝓤 𝑆}{ℬ : I → Algebra 𝓦 𝑆} → Π i ꞉ I , 𝒜 i ≅ ℬ i → ⨅ 𝒜 ≅ ⨅ ℬ
 
   lemPS⊆SP hwu fwu {I}{ℬ} B≤K = ⨅ 𝒜 , (⨅ SA , ⨅SA≤⨅𝒜) , ξ , (⨅≅ {fiu = fwu}{fiw = fwu} B≅SA)
    where
@@ -384,8 +369,6 @@ We define the inductive type `H` to represent classes of algebras that include a
    α = λ x i → (h i) (x i)
    β : is-homomorphism (⨅ SA) (⨅ 𝒜) α
    β = λ 𝑓 𝒂 → fwu λ i → (snd ∣ SA≤𝒜 i ∣) 𝑓 (λ x → 𝒂 x i)
-   -- γ : is-embedding α
-   -- γ = embedding-lift hwu hwu {I}{SA}{𝒜}h(λ i → ∥ SA≤𝒜 i ∥)
    γ : IsInjective α
    γ αxαy = fwu λ i → (hinj i)(cong-app αxαy i)
 
@@ -541,8 +524,6 @@ We define the inductive type `H` to represent classes of algebras that include a
  Above we proved that `SP(𝒦) ⊆ V(𝒦)`, and we did so under fairly general assumptions about the universe level parameters.  Unfortunately, this is sometimes not quite general enough, so we now prove the inclusion again for the specific universe parameters that align with subsequent applications of this result.
 
  \begin{code}
-
- -- module _ {𝒦 : Pred (Algebra 𝓤 𝑆) (ov 𝓤)} where
 
   SP⊆V' : S{ov 𝓤}{lsuc (ov 𝓤)} (P{𝓤}{ov 𝓤} 𝒦) ⊆ V 𝒦
 

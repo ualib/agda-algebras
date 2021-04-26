@@ -270,11 +270,6 @@ More generally, an identity is satisfied by all algebras in a class if and only 
                 (𝑨 ⟦ q ⟧)(∣ φ 𝒂 ∣ ∘ ℊ)     ∎
 
 
-  -- open import Relation.Binary.Core using (_⇔_)
-
-  -- ⊧-H : DFunExt → {p q : Term X} → 𝒦 ⊧ p ≋ q ⇔ (∀ 𝑨 φ → 𝑨 ∈ 𝒦 → ∣ φ ∣ ∘ (𝑻 X ⟦ p ⟧) ≡ ∣ φ ∣ ∘(𝑻 X ⟦ q ⟧))
-  -- ⊧-H fe {p}{q} = ⊧-H-class-invar fe {p}{q} , ⊧-H-class-coinvar fe {p}{q} 
-
 \end{code}
 
 
@@ -287,3 +282,15 @@ More generally, an identity is satisfied by all algebras in a class if and only 
 
 {% include UALib.Links.md %}
 
+
+
+
+<!--
+
+  -- open import Relation.Binary.Core using (_⇔_)
+
+  -- ⊧-H : DFunExt → {p q : Term X} → 𝒦 ⊧ p ≋ q ⇔ (∀ 𝑨 φ → 𝑨 ∈ 𝒦 → ∣ φ ∣ ∘ (𝑻 X ⟦ p ⟧) ≡ ∣ φ ∣ ∘(𝑻 X ⟦ q ⟧))
+  -- ⊧-H fe {p}{q} = ⊧-H-class-invar fe {p}{q} , ⊧-H-class-coinvar fe {p}{q}
+
+
+-->
