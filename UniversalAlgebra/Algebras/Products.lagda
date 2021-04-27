@@ -71,7 +71,9 @@ An arbitrary class `𝒦` of algebras is represented as a predicate over the typ
 
 To begin, we need to define types that represent products over arbitrary (nonindexed) families such as `𝒦` or `S(𝒦)`. Observe that `Π 𝒦` is certainly not what we want.  For recall that `Pred (Algebra 𝓤 𝑆) 𝓦` is just an alias for the function type `Algebra 𝓤 𝑆 → Type 𝓦`, and the semantics of the latter takes `𝒦 𝑨` (and `𝑨 ∈ 𝒦`) to mean that `𝑨` belongs to the class `𝒦`. Thus, by definition,
 
-`Π 𝒦 = Π 𝑨 ꞉ (Algebra 𝓤 𝑆) , 𝒦 𝑨` &nbsp; &nbsp; `=` &nbsp; &nbsp; `∀ (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ∈ 𝒦`,
+```agda
+  Π 𝒦   :=   Π 𝑨 ꞉ (Algebra 𝓤 𝑆) , 𝒦 𝑨   :=   ∀ (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ∈ 𝒦,
+```
 
 which asserts that every inhabitant of the type `Algebra 𝓤 𝑆` belongs to `𝒦`.  Evidently this is not the product algebra that we seek.
 
@@ -83,7 +85,7 @@ The solution is to essentially take `𝒦` itself to be the indexing type, at le
 
  module _ {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
   ℑ : Type (ov 𝓤)
-  ℑ = Σ[ 𝑨 ∈ Algebra _ 𝑆 ] (𝑨 ∈ 𝒦)
+  ℑ = Σ 𝑨 ꞉ Algebra 𝓤 𝑆 , 𝑨 ∈ 𝒦
 
 \end{code}
 

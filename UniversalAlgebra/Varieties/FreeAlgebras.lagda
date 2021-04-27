@@ -102,55 +102,48 @@ First, we represent the congruence relation `ψCon`, modulo which `𝑻 X` yield
 
 
 
- -----------------------------
+#### <a id="hsp-theorem">HSP Theorem</a>
 
+This section presents a formal proof of the Birkhoff HSP theorem.
 
+To complete the proof of Birkhoff's HSP theorem, it remains to show that `Mod X (Th (V 𝒦))` is contained in `V 𝒦`; that is, every algebra that models the equations in `Th (V 𝒦)` belongs to `V 𝒦`.  This will prove that `V 𝒦` is an equational class.  (The converse, that every equational class is a variety was already proved; see the remarks at the end of this module.)
 
+We accomplish this goal by constructing an algebra `𝔽` with the following properties:
 
- #### <a id="hsp-theorem">HSP Theorem</a>
+1. `𝔽 ∈ V 𝒦` and
 
- This section presents a formal proof of the Birkhoff HSP theorem.
+2. Every `𝑨 ∈ Mod X (Th (V 𝒦))` is a homomorphic image of `𝔽`.
 
- To complete the proof of Birkhoff's HSP theorem, it remains to show that every algebra 𝑨 that belongs to `Mod X (Th (V 𝒦))`---i.e., every algebra that models the equations in `Th (V 𝒦)`---belongs to `V 𝒦`.  This will prove that `V 𝒦` is an equational class.  (The converse, that every equational class is a variety was already proved; see the remarks at the end of this module.)
+We denote by `ℭ` the product of all subalgebras of algebras in `𝒦`, and by `homℭ` the homomorphism from `𝑻 X` to `ℭ` defined as follows: `homℭ := ⨅-hom-co (𝑻 X) 𝔄s hom𝔄`.
 
- We accomplish this goal by constructing an algebra `𝔽` with the following properties:
-
- 1. `𝔽 ∈ V 𝒦` and
-
- 2. Every `𝑨 ∈ Mod X (Th (V 𝒦))` is a homomorphic image of `𝔽`.
-
- We denote by `ℭ` the product of all subalgebras of algebras in `𝒦`, and by `homℭ` the homomorphism from `𝑻 X` to `ℭ` defined as follows:
-
- `homℭ := ⨅-hom-co (𝑻 X) 𝔄s hom𝔄`.
-
- Here, `⨅-hom-co` (defined in [Homomorphisms.Basic](Homomorphisms.Basic.html#product-homomorphisms)) takes the term algebra `𝑻 X`, a family `{𝔄s : I → Algebra 𝓤 𝑆}` of `𝑆`-algebras, and a family `hom𝔄 : ∀ i → hom (𝑻 X) (𝔄s i)` of homomorphisms and constructs the natural homomorphism `homℭ` from `𝑻 X` to the product `ℭ := ⨅ 𝔄`.  The homomorphism `homℭ : hom (𝑻 X) (⨅ ℭ)` is natural in the sense that the `i`-th component of the image of `𝑡 : Term X` under `homℭ` is the image `∣ hom𝔄 i ∣ 𝑡` of 𝑡 under the i-th homomorphism `hom𝔄 i`.
+Here, `⨅-hom-co` (defined in [Homomorphisms.Basic](Homomorphisms.Basic.html#product-homomorphisms)) takes the term algebra `𝑻 X`, a family `{𝔄s : I → Algebra 𝓤 𝑆}` of `𝑆`-algebras, and a family `hom𝔄 : ∀ i → hom (𝑻 X) (𝔄s i)` of homomorphisms and constructs the natural homomorphism `homℭ` from `𝑻 X` to the product `ℭ := ⨅ 𝔄`.  The homomorphism `homℭ : hom (𝑻 X) (⨅ ℭ)` is natural in the sense that the `i`-th component of the image of `𝑡 : Term X` under `homℭ` is the image `∣ hom𝔄 i ∣ 𝑡` of 𝑡 under the i-th homomorphism `hom𝔄 i`.
 
 
 
 
 
- #### <a id="F-in-classproduct">𝔽 ≤  ⨅ S(𝒦)</a>
- Now we come to a step in the Agda formalization of Birkhoff's theorem that is highly nontrivial. We must prove that the free algebra embeds in the product ℭ of all subalgebras of algebras in the class `𝒦`.  This is really the only stage in the proof of Birkhoff's theorem that requires the truncation assumption that `ℭ` be a set.  We will also need to assume several (ten, to be honest) local function extensionality postulates and, as a result, the next submodule will take as given the parameter `fe : DFunExt`.  This allows us to postulate local function extensionality when and where we need it in the proof. For example, if we want to assume function extensionality at universes 𝓥 and 𝓤, we simply apply `fe` to those universes. (Earlier versions of the library used just a single *global* function extensionality postulate at the start of most modules, but we have since decided to exchange that elegant but crude option for greater precision and transparency.)
+#### <a id="F-in-classproduct">𝔽 ≤  ⨅ S(𝒦)</a>
+Now we come to a step in the Agda formalization of Birkhoff's theorem that is highly nontrivial. We must prove that the free algebra embeds in the product ℭ of all subalgebras of algebras in the class `𝒦`.  This is really the only stage in the proof of Birkhoff's theorem that requires the truncation assumption that `ℭ` be a *set* (that is, `ℭ` has the [UIP][] property).  We will also need to assume several local function extensionality postulates and, as a result, the next submodule will take as given the parameter `fe : DFunExt`.  This allows us to postulate local function extensionality when and where we need it in the proof. For example, if we want to assume function extensionality at universe levels 𝓥 and 𝓤, we simply apply `fe` to those universes: `fe 𝓥 𝓤`. (Earlier versions of the library used just a single *global* function extensionality postulate at the start of most modules, but we have since decided to exchange that elegant but crude option for greater precision and transparency.)
 
- \begin{code}
+\begin{code}
 
  module _ {fe : DFunExt}{wd+ : swelldef 𝓥 𝓕⁺} {wd : swelldef 𝓥 𝓕} {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓕} where
 
   open class-products-with-maps {𝓤 = 𝓤}{X}{fe 𝓕 𝓤}{fe 𝓕⁺ 𝓕⁺}{fe 𝓕 𝓕} 𝒦
 
- \end{code}
+\end{code}
 
- We begin by constructing `ℭ`, using the techniques described in the section on <a href="https://ualib.gitlab.io/Varieties.Varieties.html#products-of-classes">products of classes</a>.
+We begin by constructing `ℭ`, using the techniques described in the section on <a href="https://ualib.gitlab.io/Varieties.Varieties.html#products-of-classes">products of classes</a>.
 
- \begin{code}
+\begin{code}
 
   -- ℭ is the product of all subalgebras of algebras in 𝒦.
   ℭ : Algebra 𝓕 𝑆
-  ℭ = ⨅ 𝔄'
+  ℭ = ⨅ 𝔄' -- {𝓤 = 𝓤}{𝒦 = 𝒦})
 
 \end{code}
 
-Observe that the inhabitants of `ℭ` are maps from `ℑ'` to `{𝔄' i : i ∈ ℑ'}`.  A homomorphism from `𝑻 X` to `ℭ` is obtained as follows.
+Observe that the inhabitants of `ℭ` are maps from `ℑ` to `{𝔄 i : i ∈ ℑ}`.  A homomorphism from `𝑻 X` to `ℭ` is obtained as follows.
 
 \begin{code}
 
@@ -195,9 +188,7 @@ Observe that the inhabitants of `ℭ` are maps from `ℑ'` to `{𝔄' i : i ∈ 
   ψlemma0-ap {𝑨}{h} skA {p , q} x = γ where
 
    ν : ∣ homℭ ∣ p ≡ ∣ homℭ ∣ q
-   ν = ker-in-con {ov 𝓤}{ov 𝓤}{𝑻 X}{wd+}(kercon wd {ℭ} homℭ) {p}{q} x   -- fe 𝓥 𝓕⁺  {fe 𝓥 𝓕}
-  -- ker-in-con : {wd : swelldef 𝓥 (𝓤 ⊔ lsuc 𝓦)}(θ : Con{𝓦} 𝑨)
-  --  →           ∀ {x}{y} → ∣ kercon wd {𝑨 ╱ θ} (πhom θ) ∣ x y →  ∣ θ ∣ x y
+   ν = ker-in-con {ov 𝓤}{ov 𝓤}{𝑻 X}{wd+}(kercon wd {ℭ} homℭ) {p}{q} x
 
    γ : (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
    γ = ((ψlemma0 p q) ν) 𝑨 skA h
@@ -295,10 +286,6 @@ Observe that the inhabitants of `ℭ` are maps from `ℑ'` to `{𝔄' i : i ∈ 
 
   class-models-kernel : ∀ p q → (p , q) ∈ kernel ∣ hom𝔽 ∣ → 𝒦 ⊧ p ≋ q
   class-models-kernel p q hyp = ψlemma3 p q (ψlemma2 hyp)
-
- \end{code}
-
- \begin{code}
 
   𝕍𝒦 : Pred (Algebra 𝓕⁺ 𝑆) (lsuc 𝓕⁺)
   𝕍𝒦 = V{𝓤}{𝓕⁺} 𝒦

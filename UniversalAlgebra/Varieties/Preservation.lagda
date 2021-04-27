@@ -174,7 +174,7 @@ First we prove that the closure operator H is compatible with identities that ho
   V-id1 p q α (vlift{𝑨} x) = ⊧-Lift-invar  fe p q ((V-id1 p q α) x)
   V-id1 p q α (vliftw{𝑨} x) = ⊧-Lift-invar fe p q ((V-id1 p q α) x)
 
-  V-id1 p q α (vhimg{𝑨}{𝑪}VA (𝑩 , ((φ , φh) , φE))) = γ -- ((𝑩 , ϕ , (ϕh , ϕE)) , B≅C)) = ⊧-I-invar fe 𝑪 p q γ B≅C
+  V-id1 p q α (vhimg{𝑨}{𝑪}VA (𝑩 , ((φ , φh) , φE))) = γ
    where
    IH : 𝑨 ⊧ p ≈ q
    IH = V-id1 p q α VA
@@ -206,7 +206,7 @@ First we prove that the closure operator H is compatible with identities that ho
     γ {𝑩} (inj₂ y) = Asinglepq y
 
   V-id1 p q α ( vssubw {𝑨}{𝑩} VA B≤A ) =
-   ⊧-S-class-invar fe p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , _⊎_.inj₂ refl , ≅-refl)
+   ⊧-S-class-invar fe p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ refl , ≅-refl)
     where
     IH : 𝑨 ⊧ p ≈ q
     IH = V-id1 p q α VA
@@ -273,10 +273,6 @@ First we prove that the closure operator H is compatible with identities that ho
   class-ids-⇐ : (p q : ∣ 𝑻 X ∣) → (p , q) ∈ Th 𝒱 →  𝒦 ⊧ p ≋ q
   class-ids-⇐ p q Thpq {𝑨} KA = ⊧-lower-invar fe p q (Thpq (vbase KA))
 
-
-  -- class-identities : (p q : ∣ 𝑻 X ∣) → 𝒦 ⊧ p ≋ q  ⇔  ((p , q) ∈ Th 𝒱)
-  -- class-identities p q = class-ids-⇒ p q , class-ids-⇐ p q
-
  \end{code}
 
 
@@ -299,3 +295,13 @@ First we prove that the closure operator H is compatible with identities that ho
 
 {% include UALib.Links.md %}
 
+
+
+
+
+<!-- UNUSED STUFF
+
+class-identities : (p q : ∣ 𝑻 X ∣) → 𝒦 ⊧ p ≋ q  ⇔  ((p , q) ∈ Th 𝒱)
+class-identities p q = class-ids-⇒ p q , class-ids-⇐ p q
+
+-->
