@@ -13,6 +13,9 @@ This section presents the [Algebras.Basic][] module of the [Agda Universal Algeb
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
+open import Data.Empty using (⊥)
+open import Agda.Builtin.Bool
+
 module Algebras.Basic where
 
 open import Relations.Extensionality public
@@ -54,10 +57,8 @@ In the [Overture][] module we defined special syntax for the first and second pr
 data monoid-op {𝓞 : Level} : Type 𝓞 where
  e : monoid-op; · : monoid-op
 
-open import MGS-MLTT using (𝟘; 𝟚)
-
 monoid-sig : Signature 𝓞 lzero
-monoid-sig = monoid-op , λ { e → 𝟘; · → 𝟚 }
+monoid-sig = monoid-op , λ { e → ⊥; · → Bool }
 
 \end{code}
 

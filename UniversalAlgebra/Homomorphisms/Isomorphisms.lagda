@@ -17,7 +17,6 @@ Here we formalize the informal notion of isomorphism between algebraic structure
 module Homomorphisms.Isomorphisms where
 
 open import Homomorphisms.Noether public
-open import MGS-Embeddings using (Nat; NatΠ; NatΠ-is-embedding) public
 
 
 module isomorphisms {𝑆 : Signature 𝓞 𝓥} where
