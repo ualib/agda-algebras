@@ -109,7 +109,6 @@ open import Varieties
 - [Subalgebra Types](Subalgebras.html)
   - [Subuniverses](Subalgebras.Subuniverses.html)
   - [Subalgebras](Subalgebras.Subalgebras)
-  - [Univalent Subalgebras](Subalgebras.Univalent.html)
 
 - [Equations and Varieties](Varieties.html)
   - [Model Theory and Equational Logic](Varieties.EquationalLogic.html)
