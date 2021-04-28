@@ -14,11 +14,17 @@ This is the [Algebras.Products][] module of the [Agda Universal Algebra Library]
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Algebras.Products where
+-- Imports from the Agda (Builtin) and the Agda Standard Library
+open import Level renaming (suc to lsuc; zero to lzero)
+open import Data.Product using (_,_; Σ; _×_)
+open import Relation.Unary using (Pred; _∈_)
 
-open import Algebras.Basic public
+-- Imports from the Agda Universal Algebra Library
+open import Overture.Preliminaries using (Type; 𝓘; 𝓞; 𝓤; 𝓥; 𝓦; Π; -Π; -Σ; _≡⟨_⟩_; _∎; _⁻¹; 𝑖𝑑; ∣_∣; ∥_∥)
+open import Algebras.Basic
 
-module products {𝑆 : Signature 𝓞 𝓥} where
+
+module Algebras.Products {𝑆 : Signature 𝓞 𝓥} where
 
 \end{code}
 
@@ -30,10 +36,10 @@ In [UniversalAlgebra][] a *product of* `𝑆`-*algebras* is represented by the f
 
 \begin{code}
 
- ⨅ : {𝓘 : Level}{I : Type 𝓘 }(𝒜 : I → Algebra 𝓤 𝑆 ) → Algebra (𝓘 ⊔ 𝓤) 𝑆
+ ⨅ : {I : Type 𝓘 }(𝒜 : I → Algebra 𝓤 𝑆 ) → Algebra (𝓘 ⊔ 𝓤) 𝑆
 
- ⨅{I = I} 𝒜 = (∀ (i : I) →  ∣ 𝒜 i ∣) ,            -- domain of the product algebra
-              λ 𝑓 𝑎 i → (𝑓 ̂ 𝒜 i) λ x → 𝑎 x i   -- basic operations of the product algebra
+ ⨅ 𝒜 = ( Π[ i ꞉ _ ] ∣ 𝒜 i ∣ ) ,         -- domain of the product algebra
+       λ 𝑓 𝑎 i → (𝑓 ̂ 𝒜 i) λ x → 𝑎 x i   -- basic operations of the product algebra
 
 \end{code}
 
@@ -45,10 +51,10 @@ The type just defined is the one that will be used throughout the [UniversalAlge
 
  open algebra
 
- ⨅' : {𝓘 : Level}{I : Type 𝓘 }(𝒜 : I → algebra 𝓤 𝑆) → algebra (𝓘 ⊔ 𝓤) 𝑆
+ ⨅' : {I : Type 𝓘 }(𝒜 : I → algebra 𝓤 𝑆) → algebra (𝓘 ⊔ 𝓤) 𝑆
 
- ⨅' 𝒜 = record { univ = ∀ i → univ (𝒜 i) ;                 -- domain
-                 op = λ 𝑓 𝑎 i → (op (𝒜 i)) 𝑓 λ x → 𝑎 x i } -- basic operations
+ ⨅' 𝒜 = record { univ = Π[ i ꞉ _ ] univ (𝒜 i) ;                 -- domain
+                  op = λ 𝑓 𝑎 i → (op (𝒜 i)) 𝑓 λ x → 𝑎 x i } -- basic operations
 
 \end{code}
 
@@ -85,7 +91,7 @@ The solution is to essentially take `𝒦` itself to be the indexing type, at le
 
  module _ {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
   ℑ : Type (ov 𝓤)
-  ℑ = Σ 𝑨 ꞉ Algebra 𝓤 𝑆 , 𝑨 ∈ 𝒦
+  ℑ = Σ[ 𝑨 ꞉ Algebra 𝓤 𝑆 ] 𝑨 ∈ 𝒦
 
 \end{code}
 

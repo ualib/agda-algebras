@@ -60,6 +60,29 @@ We hope the library will be useful to mathematicians and computer scientists who
 
 module UniversalAlgebra where
 
+-- Imports from Agda (builtin/primitive) and the Agda Standard Library
+open import Agda.Builtin.Bool
+open import Agda.Builtin.Equality using (_≡_; refl)
+open import Agda.Primitive using (_⊔_; lzero; lsuc; Level)
+open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
+open import Level renaming (suc to lsuc; zero to lzero)
+open import Data.Empty using (⊥)
+open import Data.Product using (_,_; Σ; Σ-syntax; _×_)
+open import Data.Sum.Base using (_⊎_) public
+open import Function.Related
+open import Relation.Binary using (Rel; IsEquivalence)
+open import Relation.Binary.PropositionalEquality.Core using (sym; trans; subst; cong; cong-app)
+open import Relation.Unary using (Pred; ∅; _∪_; _∈_; _⊆_)
+
+-- open import Overture.Preliminaries using (Type; 𝓞; 𝓤; 𝓥; 𝓦; Π; -Π; -Σ; _≡⟨_⟩_; _∎; _⁻¹; 𝑖𝑑; ∣_∣; ∥_∥)
+-- open import Relations.Continuous using (ContRel; DepRel; cont-compatible-op; dep-compatible-op)
+-- open import Relations.Discrete using (Op; _|:_)
+-- open import Relations.Quotients using ([_]; /-subset; /-supset; IsBlock; ⟪_⟫)
+-- open import Relations.Truncation using (blk-uip; to-Σ-≡)
+-- open import Algebras.Products using (ov)
+
+-- open import Relations.Extensionality
+
 open import Preface
 open import Overture
 open import Relations
@@ -79,10 +102,7 @@ open import Varieties
 
 - [Overture](Overture.html)
   - [Preliminaries](Overture.Preliminaries.html)
-  - [Equality](Overture.Equality.html)
-  - [Function Extensionality](Overture.FunExtensionality.html)
   - [Inverses](Overture.Inverses.html)
-  - [Agda's Universe Hierarchy](Overture.Lifts.html)
 
 - [Relation and Quotient Types](Relations.html)
   - [Discrete Relations](Relations.Discrete.html)

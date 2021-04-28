@@ -18,10 +18,7 @@ The source code for this module comprises the (literate) [Agda][] program that w
 module Overture where
 
 open import Overture.Preliminaries
-open import Overture.Equality
-open import Overture.FunExtensionality
 open import Overture.Inverses
-open import Overture.Lifts
 
 \end{code}
 

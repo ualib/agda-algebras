@@ -13,9 +13,18 @@ This section presents the [Relations.Quotients][] module of the [Agda Universal 
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Relations.Quotients where
+open import Agda.Builtin.Equality using (_≡_; refl)
+open import Agda.Primitive using (_⊔_; lzero; lsuc; Level)
+open import Data.Product  using (_,_; Σ; Σ-syntax; _×_)
+open import Relation.Binary using (Rel; IsEquivalence)
+open import Relation.Binary.PropositionalEquality using (sym; trans)
+open import Relation.Unary using (Pred; _⊆_)
 
-open import Relations.Continuous public
+open import Overture.Preliminaries using (Type; 𝓤; 𝓥; 𝓦; -Σ)
+open import Relations.Discrete using (ker)
+
+
+module Relations.Quotients where
 
 \end{code}
 
@@ -42,42 +51,9 @@ Trans _≈_ = ∀{x}{y}{z} → x ≈ y → y ≈ z → x ≈ z
 
 \end{code}
 
-The [Type Topology][] library defines the following *uniqueness-of-proofs* principle for binary relations.
-
-\begin{code}
-
-is-prop-valued : {A : Type 𝓤} → Rel A 𝓦 → Type(𝓤 ⊔ 𝓦)
-is-prop-valued  _≈_ = ∀ x y → is-prop (x ≈ y)
-
--- open import MGS-Quotient using (is-subsingleton-valued) public
-
-\end{code}
-
-Thus, if `R : Rel A 𝓦`, then `is-subsingleton-valued R` is the assertion that for each pair `x y : A` there can be at most one proof that `R x y` holds.
-
-In the [Relations.Truncation][] module we introduce a number of similar but more general types used in the [UniversalAlgebra][] library to represent *uniqueness-of-proofs principles* for relations of arbitrary arity over arbitrary types.
-
 
 A binary relation is called a *preorder* if it is reflexive and transitive. An *equivalence relation* is a symmetric preorder. The property of being an equivalence relation is represented in the [Agda Standard Library][] by a record type called `IsEquivalence`, which is similar to the one we define here.
 
-\begin{code}
-
--- record IsEquivalence {A : Type 𝓤}(R : Rel A 𝓦) : Type(𝓤 ⊔ 𝓦) where
---  field rfl : Refl R ; symm : Symm R ; trns : Trans R
-
- -- reflexive : _≡_ ⇒ _≈_
- -- reflexive P.refl = refl
-open import Relation.Binary using (IsEquivalence) public
-\end{code}
-
-And we define the type of equivalence relations over a given type `A` as follows.
-
-\begin{code}
-
--- Equivalence : Type 𝓤 → Type(𝓤 ⊔ lsuc 𝓦)
--- Equivalence {𝓤}{𝓦} A = Σ R ꞉ Rel A 𝓦 , IsEquivalence R
-
-\end{code}
 
 Thus, if we have `(R ,  p) : Equivalence A`, then `R` denotes a binary relation over `A` and `p` is of record type `IsEquivalence R` with fields containing the three proofs showing that `R` is an equivalence relation.
 
@@ -111,7 +87,7 @@ A predicate `C` over `A` is an `R`-block if and only if `C ≡ [ u ]` for some `
 \begin{code}
 
 IsBlock : {A : Type 𝓤}(C : Pred A 𝓦){R : Rel A 𝓦} → Type(𝓤 ⊔ lsuc 𝓦)
-IsBlock {A = A} C {R} = Σ u ꞉ A , C ≡ [ u ]{R}
+IsBlock {A = A} C {R} = Σ[ u ꞉ A ] C ≡ [ u ]{R}
 
 \end{code}
 
@@ -124,7 +100,7 @@ If `R` is an equivalence relation on `A`, then the *quotient* of `A` modulo `R` 
 module _ {𝓤 𝓦 : Level} where
 
  _/_ : (A : Type 𝓤 ) → Rel A 𝓦 → Type(𝓤 ⊔ lsuc 𝓦)
- A / R = Σ[ C ∈ Pred A 𝓦 ] IsBlock C {R}
+ A / R = Σ[ C ꞉ Pred A 𝓦 ] IsBlock C {R}
 
  infix -1 _/_
 

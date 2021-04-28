@@ -13,12 +13,28 @@ This section describes the [Homomorphisms.HomomorphicImages][] module of the [Ag
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Homomorphisms.HomomorphicImages where
+-- Imports from Agda (builtin/primitive) and the Agda Standard Library
+open import Agda.Builtin.Equality using (_≡_; refl)
+open import Data.Product using (_,_; Σ; _×_)
+open import Level renaming (suc to lsuc; zero to lzero)
+open import Relation.Binary.PropositionalEquality.Core using (cong; cong-app)
+open import Relation.Unary using (Pred; ∅; _∪_; _∈_; _⊆_)
 
-open import Homomorphisms.Isomorphisms public
+-- Imports from the Agda Universal Algebra Library
+open import Algebras.Basic
+open import Overture.Preliminaries
+ using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; Π; -Π; -Σ; _≡⟨_⟩_; _∎; _⁻¹; 𝑖𝑑; ∣_∣; ∥_∥; lower∼lift; lift∼lower)
+open import Overture.Inverses using (IsSurjective; Image_∋_; Inv; InvIsInv; eq)
 
-module hom-images {𝑆 : Signature 𝓞 𝓥} where
- open isomorphisms {𝑆 = 𝑆} public
+
+
+module Homomorphisms.HomomorphicImages {𝑆 : Signature 𝓞 𝓥} where
+
+open import Algebras.Products{𝑆 = 𝑆} using (ov)
+open import Homomorphisms.Basic {𝑆 = 𝑆} using (hom; 𝓁𝒾𝒻𝓉; 𝓁ℴ𝓌ℯ𝓇)
+open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using (Lift-hom)
+
+
 \end{code}
 
 
@@ -28,11 +44,11 @@ We begin with what seems, for our purposes, the most useful way to represent the
 
 \begin{code}
 
- IsHomImage : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆) → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
- IsHomImage {𝑨 = 𝑨} 𝑩 = Σ φ ꞉ hom 𝑨 𝑩 , IsSurjective ∣ φ ∣ -- λ b → Image ∣ ϕ ∣ ∋ b
+IsHomImage : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆) → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
+IsHomImage {𝑨 = 𝑨} 𝑩 = Σ[ φ ꞉ hom 𝑨 𝑩 ] IsSurjective ∣ φ ∣ -- λ b → Image ∣ ϕ ∣ ∋ b
 
- HomImages : Algebra 𝓤 𝑆 → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ lsuc 𝓦)
- HomImages {𝓦 = 𝓦}𝑨 = Σ 𝑩 ꞉ Algebra 𝓦 𝑆 , IsHomImage{𝑨 = 𝑨} 𝑩 -- Σ ϕ ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) , is-homomorphism 𝑨 𝑩 ϕ × Epic ϕ
+HomImages : Algebra 𝓤 𝑆 → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ lsuc 𝓦)
+HomImages {𝓦 = 𝓦}𝑨 = Σ[ 𝑩 ꞉ Algebra 𝓦 𝑆 ] IsHomImage{𝑨 = 𝑨} 𝑩
 
 \end{code}
 
@@ -46,13 +62,13 @@ Given a class `𝒦` of `𝑆`-algebras, we need a type that expresses the asser
 
 \begin{code}
 
- module _ {𝓤 : Level} where
+module _ {𝓤 : Level} where
 
-  IsHomImageOfClass : {𝒦 : Pred (Algebra 𝓤 𝑆)(lsuc 𝓤)} → Algebra 𝓤 𝑆 → Type(ov 𝓤)
-  IsHomImageOfClass {𝒦 = 𝒦} 𝑩 = Σ 𝑨 ꞉ Algebra 𝓤 𝑆 , (𝑨 ∈ 𝒦) × (IsHomImage {𝑨 = 𝑨} 𝑩)
+ IsHomImageOfClass : {𝒦 : Pred (Algebra 𝓤 𝑆)(lsuc 𝓤)} → Algebra 𝓤 𝑆 → Type(ov 𝓤)
+ IsHomImageOfClass {𝒦 = 𝒦} 𝑩 = Σ[ 𝑨 ꞉ Algebra 𝓤 𝑆 ] ((𝑨 ∈ 𝒦) × (IsHomImage {𝑨 = 𝑨} 𝑩))
 
-  HomImageOfClass : Pred (Algebra 𝓤 𝑆) (lsuc 𝓤) → Type(ov 𝓤)
-  HomImageOfClass 𝒦 = Σ 𝑩 ꞉ Algebra 𝓤 𝑆 , IsHomImageOfClass{𝒦} 𝑩
+ HomImageOfClass : Pred (Algebra 𝓤 𝑆) (lsuc 𝓤) → Type(ov 𝓤)
+ HomImageOfClass 𝒦 = Σ[ 𝑩 ꞉ Algebra 𝓤 𝑆 ] IsHomImageOfClass{𝒦} 𝑩
 
 \end{code}
 
@@ -64,14 +80,14 @@ Here are some tools that have been useful (e.g., in the road to the proof of Bir
 
 \begin{code}
 
- open Lift
- Lift-epi-is-epi : {𝓩 𝓦 : Level}{𝑨 : Algebra 𝓧 𝑆}
-                   (𝑩 : Algebra 𝓨 𝑆)(h : hom 𝑨 𝑩)
-                   ----------------------------------------------------------
-  →                IsSurjective ∣ h ∣ → IsSurjective ∣ Lift-hom 𝓩 𝓦 𝑩 h ∣
+open Lift
+Lift-epi-is-epi : {𝓩 𝓦 : Level}{𝑨 : Algebra 𝓧 𝑆}
+                  (𝑩 : Algebra 𝓨 𝑆)(h : hom 𝑨 𝑩)
+                  ----------------------------------------------------------
+ →                IsSurjective ∣ h ∣ → IsSurjective ∣ Lift-hom 𝓩 𝓦 𝑩 h ∣
 
- Lift-epi-is-epi {𝓩 = 𝓩} {𝓦} {𝑨} 𝑩 h hepi y = eq y (lift a) η
-   where
+Lift-epi-is-epi {𝓩 = 𝓩} {𝓦} {𝑨} 𝑩 h hepi y = eq y (lift a) η
+  where
    lh : hom (Lift-alg 𝑨 𝓩) (Lift-alg 𝑩 𝓦)
    lh = Lift-hom 𝓩 𝓦 𝑩 h
 
@@ -91,12 +107,12 @@ Here are some tools that have been useful (e.g., in the road to the proof of Bir
        ∣ lh ∣ (lift a) ∎
 
 
- Lift-alg-hom-image : {𝓩 𝓦 : Level}{𝑨 : Algebra 𝓧 𝑆}{𝑩 : Algebra 𝓨 𝑆}
-  →                   IsHomImage {𝑨 = 𝑨} 𝑩
-  →                   IsHomImage {𝑨 = Lift-alg 𝑨 𝓩} (Lift-alg 𝑩 𝓦)
+Lift-alg-hom-image : {𝓩 𝓦 : Level}{𝑨 : Algebra 𝓧 𝑆}{𝑩 : Algebra 𝓨 𝑆}
+ →                   IsHomImage {𝑨 = 𝑨} 𝑩
+ →                   IsHomImage {𝑨 = Lift-alg 𝑨 𝓩} (Lift-alg 𝑩 𝓦)
 
- Lift-alg-hom-image {𝓩 = 𝓩}{𝓦}{𝑨}{𝑩} ((φ , φhom) , φepic) = γ
-  where
+Lift-alg-hom-image {𝓩 = 𝓩}{𝓦}{𝑨}{𝑩} ((φ , φhom) , φepic) = γ
+ where
   lφ : hom (Lift-alg 𝑨 𝓩) (Lift-alg 𝑩 𝓦)
   lφ = (Lift-hom 𝓩 𝓦 𝑩) (φ , φhom)
 

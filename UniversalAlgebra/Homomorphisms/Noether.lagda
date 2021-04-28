@@ -12,14 +12,30 @@ This chapter presents the [Homomorphisms.Noether][] module of the [Agda Universa
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
+-- Imports from the Agda (Builtin) and the Agda Standard Library
+open import Agda.Builtin.Equality using (_≡_; refl)
+open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
+open import Level renaming (suc to lsuc; zero to lzero)
+open import Data.Product using (_,_; Σ; _×_; Σ-syntax)
+open import Function.Base  using (_∘_; id)
+open import Relation.Binary using (Rel; IsEquivalence)
+open import Relation.Binary.PropositionalEquality.Core using (sym; trans; cong; cong-app)
+open import Relation.Unary using (_⊆_)
 
-module Homomorphisms.Noether where
+-- Imports from the Agda Universal Algebra Library
+open import Algebras.Basic
+open import Overture.Preliminaries using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; 𝓩; Π; -Π; -Σ; _≡⟨_⟩_; _∎; _⁻¹; ∣_∣; ∥_∥; fst; snd; 𝑖𝑑)
+open import Overture.Inverses using (IsInjective; IsSurjective; Image_∋_; SurjInv)
+open import Relations.Discrete using (ker; kernel)
+open import Relations.Quotients using (ker-IsEquivalence; _/_; ⟪_⟫; ⌞_⌟)
+open import Relations.Truncation using (is-set; blk-uip; is-embedding; monic-is-embedding|Set)
+open import Relations.Extensionality using (swelldef;  block-ext|uip; pred-ext; SurjInvIsRightInv; epic-factor)
 
-open import Homomorphisms.Basic public
 
+module Homomorphisms.Noether {𝑆 : Signature 𝓞 𝓥} where
 
-module noether {𝑆 : Signature 𝓞 𝓥} where
- open homomorphisms {𝑆 = 𝑆} public
+open import Algebras.Congruences{𝑆 = 𝑆} using (Con; IsCongruence)
+open import Homomorphisms.Basic {𝑆 = 𝑆} using (hom; kercon; ker[_⇒_]_↾_; πker; is-homomorphism; epi; epi-to-hom)
 
 \end{code}
 
@@ -45,34 +61,34 @@ Without further ado, we present our formalization of the first homomorphism theo
 \begin{code}
 
 
- FirstHomTheorem|Set :
+FirstHomTheorem|Set :
 
-      (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
-      (pe : pred-ext 𝓤 𝓦)(fe : swelldef 𝓥 𝓦)                              -- extensionality assumptions
-      (Bset : is-set ∣ 𝑩 ∣)(buip : blk-uip ∣ 𝑨 ∣ ∣ kercon fe {𝑩} h ∣)     -- truncation assumptions
-      -----------------------------------------------------------------------------------------------------------
-  →   Σ[ φ ∈ hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩 ] (∣ h ∣ ≡ ∣ φ ∣ ∘ ∣ πker fe{𝑩}h ∣) × IsInjective ∣ φ ∣ × is-embedding ∣ φ ∣
+    (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
+    (pe : pred-ext 𝓤 𝓦)(fe : swelldef 𝓥 𝓦)                              -- extensionality assumptions
+    (Bset : is-set ∣ 𝑩 ∣)(buip : blk-uip ∣ 𝑨 ∣ ∣ kercon fe {𝑩} h ∣)     -- truncation assumptions
+    -----------------------------------------------------------------------------------------------------------
+ →  Σ[ φ ꞉ hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩  ] ((∣ h ∣ ≡ ∣ φ ∣ ∘ ∣ πker fe{𝑩}h ∣) × IsInjective ∣ φ ∣ × is-embedding ∣ φ ∣)
 
- FirstHomTheorem|Set 𝑨 𝑩 h pe fe Bset buip = (φ , φhom) , refl , φmon , φemb
-  where
-   θ : Con 𝑨
-   θ = kercon fe{𝑩} h
-   ξ : IsEquivalence ∣ θ ∣
-   ξ = IsCongruence.is-equivalence ∥ θ ∥
+FirstHomTheorem|Set 𝑨 𝑩 h pe fe Bset buip = (φ , φhom) , refl , φmon , φemb
+ where
+  θ : Con 𝑨
+  θ = kercon fe{𝑩} h
+  ξ : IsEquivalence ∣ θ ∣
+  ξ = IsCongruence.is-equivalence ∥ θ ∥
 
-   φ : ∣ (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) ∣ → ∣ 𝑩 ∣
-   φ a = ∣ h ∣ ⌞ a ⌟
+  φ : ∣ (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) ∣ → ∣ 𝑩 ∣
+  φ a = ∣ h ∣ ⌞ a ⌟
 
-   φhom : is-homomorphism (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩 φ
-   φhom 𝑓 a =  ∣ h ∣ ( (𝑓 ̂ 𝑨) (λ x → ⌞ a x ⌟) ) ≡⟨ ∥ h ∥ 𝑓 (λ x → ⌞ a x ⌟)  ⟩
-              (𝑓 ̂ 𝑩) (∣ h ∣ ∘ (λ x → ⌞ a x ⌟))  ≡⟨ cong (𝑓 ̂ 𝑩) refl ⟩
-              (𝑓 ̂ 𝑩) (λ x → φ (a x))            ∎
+  φhom : is-homomorphism (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩 φ
+  φhom 𝑓 a = ∣ h ∣ ( (𝑓 ̂ 𝑨) (λ x → ⌞ a x ⌟) ) ≡⟨ ∥ h ∥ 𝑓 (λ x → ⌞ a x ⌟)  ⟩
+             (𝑓 ̂ 𝑩) (∣ h ∣ ∘ (λ x → ⌞ a x ⌟))  ≡⟨ cong (𝑓 ̂ 𝑩) refl ⟩
+             (𝑓 ̂ 𝑩) (λ x → φ (a x))            ∎
 
-   φmon : IsInjective φ
-   φmon {_ , (u , refl)} {_ , (v , refl)} φuv = block-ext|uip pe buip ξ φuv
+  φmon : IsInjective φ
+  φmon {_ , (u , refl)} {_ , (v , refl)} φuv = block-ext|uip pe buip ξ φuv
 
-   φemb : is-embedding φ
-   φemb = monic-is-embedding|Set φ Bset φmon
+  φemb : is-embedding φ
+  φemb = monic-is-embedding|Set φ Bset φmon
 
 \end{code}
 
@@ -80,17 +96,17 @@ Below we will prove that the homomorphism `φ`, whose existence we just proved, 
 
 \begin{code}
 
- FirstIsoTheorem|Set :
+FirstIsoTheorem|Set :
 
-      (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
-      (pe : pred-ext 𝓤 𝓦)(fe : swelldef 𝓥 𝓦)(fww : funext 𝓦 𝓦)       -- extensionality assumptions
-      (Bset : is-set ∣ 𝑩 ∣)(buip : blk-uip ∣ 𝑨 ∣ ∣ kercon fe{𝑩}h ∣)  -- truncation assumptions
-  →   IsSurjective ∣ h ∣
-      -----------------------------------------------------------------------------------------------------------
-  →   Σ f ꞉ epi (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩  , (∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣) × IsInjective ∣ f ∣ × is-embedding ∣ f ∣
+     (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
+     (pe : pred-ext 𝓤 𝓦)(fe : swelldef 𝓥 𝓦)(fww : funext 𝓦 𝓦)       -- extensionality assumptions
+     (Bset : is-set ∣ 𝑩 ∣)(buip : blk-uip ∣ 𝑨 ∣ ∣ kercon fe{𝑩}h ∣)  -- truncation assumptions
+ →   IsSurjective ∣ h ∣
+     -----------------------------------------------------------------------------------------------------------
+ →   Σ[ f ∈ (epi (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩)] (∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣) × IsInjective ∣ f ∣ × is-embedding ∣ f ∣
 
- FirstIsoTheorem|Set 𝑨 𝑩 h pe fe fww Bset buip hE = (fmap , fhom , fepic) , refl , (snd ∥ FHT ∥)
-  where
+FirstIsoTheorem|Set 𝑨 𝑩 h pe fe fww Bset buip hE = (fmap , fhom , fepic) , refl , (snd ∥ FHT ∥)
+ where
   FHT = FirstHomTheorem|Set 𝑨 𝑩 h pe fe Bset buip
 
   fmap : ∣ ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe ∣ → ∣ 𝑩 ∣
@@ -105,7 +121,7 @@ Below we will prove that the homomorphism `φ`, whose existence we just proved, 
    a = SurjInv ∣ h ∣ hE b
 
    bfa : b ≡ fmap ⟪ a ⟫
-   bfa = (cong-app (EpicInvIsRightInv {fe = fww} ∣ h ∣ hE) b)⁻¹
+   bfa = (cong-app (SurjInvIsRightInv {fe = fww} ∣ h ∣ hE) b)⁻¹
 
    γ : Image fmap ∋ b
    γ = Image_∋_.eq b ⟪ a ⟫ bfa
@@ -116,15 +132,15 @@ Now we prove that the homomorphism `φ`, whose existence is guaranteed by `First
 
 \begin{code}
 
- module _ {fe : swelldef 𝓥 𝓦}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) where
+module _ {fe : swelldef 𝓥 𝓦}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩) where
 
-  NoetherHomUnique : (f g : hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩)
-   →                 ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣ → ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker fe{𝑩}h ∣
-   →                 ∀ a  →  ∣ f ∣ a ≡ ∣ g ∣ a
+ NoetherHomUnique : (f g : hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩)
+  →                 ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣ → ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker fe{𝑩}h ∣
+  →                 ∀ a  →  ∣ f ∣ a ≡ ∣ g ∣ a
 
-  NoetherHomUnique f g hfk hgk (_ , (a , refl)) = ∣ f ∣ (_ , (a , refl)) ≡⟨ cong-app(hfk ⁻¹)a ⟩
-                                                  ∣ h ∣ a                ≡⟨ cong-app(hgk)a ⟩
-                                                  ∣ g ∣ (_ , (a , refl)) ∎
+ NoetherHomUnique f g hfk hgk (_ , (a , refl)) = ∣ f ∣ (_ , (a , refl)) ≡⟨ cong-app(hfk ⁻¹)a ⟩
+                                                 ∣ h ∣ a                ≡⟨ cong-app(hgk)a ⟩
+                                                 ∣ g ∣ (_ , (a , refl)) ∎
 
 \end{code}
 
@@ -132,10 +148,10 @@ If, in addition, we postulate extensionality of functions defined on the domain 
 
 \begin{code}
 
-  fe-NoetherHomUnique : {fuww : funext (𝓤 ⊔ lsuc 𝓦) 𝓦}(f g : hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩)
-   →  ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣  →  ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker fe{𝑩}h ∣  →  ∣ f ∣ ≡ ∣ g ∣
+ fe-NoetherHomUnique : {fuww : funext (𝓤 ⊔ lsuc 𝓦) 𝓦}(f g : hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩)
+  →  ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣  →  ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker fe{𝑩}h ∣  →  ∣ f ∣ ≡ ∣ g ∣
 
-  fe-NoetherHomUnique {fuww} f g hfk hgk = fuww (NoetherHomUnique f g hfk hgk)
+ fe-NoetherHomUnique {fuww} f g hfk hgk = fuww (NoetherHomUnique f g hfk hgk)
 
 \end{code}
 
@@ -143,40 +159,17 @@ The proof of `NoetherHomUnique` goes through for the special case of epimorphism
 
 \begin{code}
 
-  NoetherIsoUnique : (f g : epi (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩)
-   →                 ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣ → ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker fe{𝑩}h ∣
-   →                 ∀ a → ∣ f ∣ a ≡ ∣ g ∣ a
+ NoetherIsoUnique : (f g : epi (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩)
+  →                 ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣ → ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker fe{𝑩}h ∣
+  →                 ∀ a → ∣ f ∣ a ≡ ∣ g ∣ a
 
-  NoetherIsoUnique f g hfk hgk = NoetherHomUnique (epi-to-hom 𝑩 f) (epi-to-hom 𝑩 g) hfk hgk
-
-\end{code}
-
-
-
-
-
-#### <a id="homomorphism-composition">Homomorphism composition</a>
-
-The composition of homomorphisms is again a homomorphism.  We formalize this in a number of alternative ways.
-
-\begin{code}
-
- module _ (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆) where
-
-  ∘-hom : hom 𝑨 𝑩  →  hom 𝑩 𝑪  →  hom 𝑨 𝑪
-  ∘-hom (g , ghom) (h , hhom) = h ∘ g , γ where
-
-   γ : ∀ 𝑓 a → (h ∘ g)((𝑓 ̂ 𝑨) a) ≡ (𝑓 ̂ 𝑪)(h ∘ g ∘ a)
-   γ 𝑓 a = (h ∘ g)((𝑓 ̂ 𝑨) a)     ≡⟨ cong h ( ghom 𝑓 a ) ⟩
-           h ((𝑓 ̂ 𝑩)(g ∘ a))     ≡⟨ hhom 𝑓 ( g ∘ a ) ⟩
-           (𝑓 ̂ 𝑪)(h ∘ g ∘ a)     ∎
-
-
-  ∘-is-hom : {f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣}{g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣}
-   →         is-homomorphism 𝑨 𝑩 f → is-homomorphism 𝑩 𝑪 g → is-homomorphism 𝑨 𝑪 (g ∘ f)
-  ∘-is-hom {f} {g} fhom ghom = ∥ ∘-hom (f , fhom) (g , ghom) ∥
+ NoetherIsoUnique f g hfk hgk = NoetherHomUnique (epi-to-hom 𝑩 f) (epi-to-hom 𝑩 g) hfk hgk
 
 \end{code}
+
+
+
+
 
 
 
@@ -197,20 +190,20 @@ If `α : hom 𝑨 𝑩`, `β : hom 𝑨 𝑪`, `β` is surjective, and `ker β �
 
 \begin{code}
 
- module _ {𝑨 : Algebra 𝓧 𝑆}{𝑪 : Algebra 𝓩 𝑆} where
+module _ {𝑨 : Algebra 𝓧 𝑆}{𝑪 : Algebra 𝓩 𝑆} where
 
-  HomFactor : funext 𝓧 𝓨 → funext 𝓩 𝓩 → (𝑩 : Algebra 𝓨 𝑆)(α : hom 𝑨 𝑩)(β : hom 𝑨 𝑪)
-   →          kernel ∣ β ∣ ⊆ kernel ∣ α ∣ → IsSurjective ∣ β ∣
-              -------------------------------------------
-   →          Σ φ ꞉ (hom 𝑪 𝑩) , ∣ α ∣ ≡ ∣ φ ∣ ∘ ∣ β ∣
+ HomFactor : funext 𝓧 𝓨 → funext 𝓩 𝓩 → (𝑩 : Algebra 𝓨 𝑆)(α : hom 𝑨 𝑩)(β : hom 𝑨 𝑪)
+  →          kernel ∣ β ∣ ⊆ kernel ∣ α ∣ → IsSurjective ∣ β ∣
+             -------------------------------------------
+  →          Σ[ φ ∈ (hom 𝑪 𝑩)] ∣ α ∣ ≡ ∣ φ ∣ ∘ ∣ β ∣
 
-  HomFactor fxy fzz 𝑩 α β Kβα βE = (φ , φIsHomCB) , αφβ
-   where
+ HomFactor fxy fzz 𝑩 α β Kβα βE = (φ , φIsHomCB) , αφβ
+  where
    βInv : ∣ 𝑪 ∣ → ∣ 𝑨 ∣
    βInv = SurjInv ∣ β ∣ βE
 
    η : ∣ β ∣ ∘ βInv ≡ 𝑖𝑑 ∣ 𝑪 ∣
-   η = EpicInvIsRightInv{fe = fzz} ∣ β ∣ βE
+   η = SurjInvIsRightInv{fe = fzz} ∣ β ∣ βE
 
    φ : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
    φ = ∣ α ∣ ∘ βInv
@@ -234,15 +227,15 @@ If, in addition to the hypotheses of the last theorem, we assume α is epic, the
 
 \begin{code}
 
-  HomFactorEpi : funext 𝓧 𝓨 → funext 𝓩 𝓩 → funext 𝓨 𝓨
-   →             (𝑩 : Algebra 𝓨 𝑆)(α : hom 𝑨 𝑩)(β : hom 𝑨 𝑪)
-   →             kernel ∣ β ∣ ⊆ kernel ∣ α ∣ → IsSurjective ∣ β ∣ → IsSurjective ∣ α ∣
-                 ----------------------------------------------------------
-   →             Σ φ ꞉ epi 𝑪 𝑩 , ∣ α ∣ ≡ ∣ φ ∣ ∘ ∣ β ∣
+ HomFactorEpi : funext 𝓧 𝓨 → funext 𝓩 𝓩 → funext 𝓨 𝓨
+  →             (𝑩 : Algebra 𝓨 𝑆)(α : hom 𝑨 𝑩)(β : hom 𝑨 𝑪)
+  →             kernel ∣ β ∣ ⊆ kernel ∣ α ∣ → IsSurjective ∣ β ∣ → IsSurjective ∣ α ∣
+                ----------------------------------------------------------
+  →             Σ[ φ ∈ epi 𝑪 𝑩 ] ∣ α ∣ ≡ ∣ φ ∣ ∘ ∣ β ∣
 
-  HomFactorEpi fxy fzz fyy 𝑩 α β kerincl βe αe = (fst ∣ φF ∣ ,(snd ∣ φF ∣ , φE)), ∥ φF ∥
-   where
-   φF : Σ φ ꞉ hom 𝑪 𝑩 , ∣ α ∣ ≡ ∣ φ ∣ ∘ ∣ β ∣
+ HomFactorEpi fxy fzz fyy 𝑩 α β kerincl βe αe = (fst ∣ φF ∣ ,(snd ∣ φF ∣ , φE)), ∥ φF ∥
+  where
+   φF : Σ[ φ ∈ hom 𝑪 𝑩 ] ∣ α ∣ ≡ ∣ φ ∣ ∘ ∣ β ∣
    φF = HomFactor fxy fzz 𝑩 α β kerincl βe
 
    φ : ∣ 𝑪 ∣ → ∣ 𝑩 ∣

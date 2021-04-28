@@ -13,9 +13,13 @@ This is the [Relations.Continuous][] module of the [Agda Universal Algebra Libra
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
+open import Agda.Primitive using (_⊔_; lzero; lsuc; Level)
+open import Agda.Builtin.Equality renaming (_≡_ to infix 0 _≡_)
+open import Overture.Preliminaries using (Type; 𝓤; 𝓥; 𝓦)
+open import Relations.Discrete using (Op)
+
 module Relations.Continuous where
 
-open import Relations.Discrete public
 
 \end{code}
 
