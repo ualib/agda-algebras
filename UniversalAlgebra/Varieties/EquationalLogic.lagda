@@ -41,9 +41,8 @@ open import Relation.Unary using (⋂; _∈_; Pred; _⊆_)
 
 -- Imports from the Agda Universal Algebra Library
 open import Algebras.Basic
-open import Overture.Preliminaries
- using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; Π; -Π; -Σ; _≡⟨_⟩_; _∎; _∙_;_⁻¹; ∣_∣; ∥_∥; snd)
 open import Overture.Inverses using (IsInjective; ∘-injective)
+open import Overture.Preliminaries using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; Π; -Π; -Σ; _≡⟨_⟩_; _∎; _∙_;_⁻¹; ∣_∣; ∥_∥; snd)
 open import Relations.Discrete using (Im_⊆_)
 open import Relations.Extensionality using (DFunExt)
 
@@ -56,8 +55,10 @@ open import Subalgebras.Subalgebras{𝑆 = 𝑆} using (_≤_; SubalgebraOfClass
 open import Algebras.Products{𝑆 = 𝑆} using (ov; ⨅)
 open import Homomorphisms.Basic {𝑆 = 𝑆} using (hom; 𝒾𝒹; ∘-hom)
 open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using (_≅_; Lift-≅; ≅-sym )
-open import Terms.Basic {𝑆 = 𝑆} using (Term; ℊ; node; 𝑻; lift-hom)
+open import Terms.Basic {𝑆 = 𝑆} using (Term; 𝑻; lift-hom)
 open import Terms.Operations {𝑆 = 𝑆} using (_⟦_⟧; comm-hom-term; interp-prod; term-agreement)
+
+open Term
 
 \end{code}
 
@@ -196,7 +197,7 @@ module _ {𝓤 𝓦 : Level} {X : Type 𝓧} where
 
  \begin{code}
 
-module _ {X : Type 𝓧}{I : Type 𝓦}(𝒜 : I → Algebra 𝓤 𝑆) where
+module _ {I : Type 𝓦}(𝒜 : I → Algebra 𝓤 𝑆){X : Type 𝓧} where
 
  ⊧-P-invar : DFunExt → {p q : Term X} → (∀ i → 𝒜 i ⊧ p ≈ q) → ⨅ 𝒜 ⊧ p ≈ q
  ⊧-P-invar fe {p}{q} 𝒜pq = γ

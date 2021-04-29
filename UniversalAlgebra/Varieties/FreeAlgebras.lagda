@@ -15,12 +15,50 @@ First we will define the relatively free algebra in a variety, which is the "fre
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Varieties.FreeAlgebras where
+-- Imports from Agda (builtin/primitive) and the Agda Standard Library
+open import Agda.Builtin.Equality using (_≡_; refl)
+open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
+open import Data.Product using (_,_; Σ; _×_)
+open import Data.Sum.Base using (_⊎_)
+open import Function.Base  using (_∘_)
+open import Level renaming (suc to lsuc; zero to lzero)
+open import Relation.Binary using (Rel; IsEquivalence)
+open import Relation.Binary.PropositionalEquality.Core using (cong; cong-app)
+open import Relation.Unary using (Pred; _∈_; _⊆_)
 
-open import Varieties.Preservation public
+-- Imports from the Agda Universal Algebra Library
+open import Algebras.Basic
+open import Overture.Preliminaries
+ using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; Π; -Π; -Σ; _≡⟨_⟩_; _∎; _∙_;_⁻¹; ∣_∣; ∥_∥; snd; fst)
+open import Overture.Inverses using (Inv; InvIsInv; IsSurjective)
+open import Relations.Quotients using (⟪_⟫)
+open import Relations.Extensionality using (DFunExt; swelldef; pred-ext)
+open import Relations.Discrete using (kernel)
+open import Relations.Truncation using (is-set; blk-uip; hfunext)
 
-module free-algebras {𝑆 : Signature 𝓞 𝓥} {𝓤 : Level }{X : Type 𝓤} where
- open preservation {𝑆 = 𝑆}{𝓤}{𝓤}{X} public
+
+module Varieties.FreeAlgebras {𝑆 : Signature 𝓞 𝓥}{𝓤 : Level} where
+
+
+open import Algebras.Congruences{𝑆 = 𝑆} using (Con; IsCongruence; mkcon)
+open import Algebras.Products{𝑆 = 𝑆} using (ov; ⨅)
+open import Subalgebras.Subalgebras{𝑆 = 𝑆} using (_≤_; FirstHomCorollary|Set)
+open import Homomorphisms.Basic{𝑆 = 𝑆} using (hom; ∘-hom; ⨅-hom-co; ker[_⇒_]_↾_; epi; πker; epi-to-hom; ker-in-con; kercon)
+open import Homomorphisms.Noether using (HomFactor; HomFactorEpi)
+open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using (_≅_; ≅-refl; ≅-sym; Lift-≅)
+open import Terms.Basic {𝑆 = 𝑆} using (Term; 𝑻; lift-hom; free-lift; free-unique; lift-of-epi-is-epi)
+open import Terms.Operations {𝑆 = 𝑆} using (_⟦_⟧; comm-hom-term; free-lift-interp)
+open import Varieties.EquationalLogic{𝑆 = 𝑆} using (_⊧_≋_; _⊧_≈_; Th; Mod)
+open import Varieties.Preservation {𝑆 = 𝑆}{𝓤 = 𝓤}
+open import Varieties.Varieties {𝑆 = 𝑆}
+
+open Term
+
+\end{code}
+
+
+
+
 
 \end{code}
 
@@ -46,57 +84,59 @@ The `𝔉` that we have just defined is called the **free algebra over** `𝒦` 
 Before we attempt to represent the free algebra in Agda we construct the congruence `ψ(𝒦, 𝑻 𝑋)` described above.
 First, we represent the congruence relation `ψCon`, modulo which `𝑻 X` yields the relatively free algebra, `𝔉 𝒦 X := 𝑻 X ╱ ψCon`.  We let `ψ` be the collection of identities `(p, q)` satisfied by all subalgebras of algebras in `𝒦`.
 
- \begin{code}
+\begin{code}
+
+module _ {X : Type 𝓤} where
 
  ψ : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓕) → Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) 𝓕
  ψ 𝒦 (p , q) = ∀(𝑨 : Algebra 𝓤 𝑆)(sA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦)(h : X → ∣ 𝑨 ∣ )
-                  →  (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
+                 →  (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
 
- \end{code}
+\end{code}
 
- We convert the predicate ψ into a relation by [currying](https://en.wikipedia.org/wiki/Currying).
+We convert the predicate ψ into a relation by [currying](https://en.wikipedia.org/wiki/Currying).
 
- \begin{code}
+\begin{code}
 
  ψRel : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓕) → Rel ∣ 𝑻 X ∣ 𝓕
  ψRel 𝒦 p q = ψ 𝒦 (p , q)
 
- \end{code}
+\end{code}
 
- To express `ψRel` as a congruence of the term algebra `𝑻 X`, we must prove that
+To express `ψRel` as a congruence of the term algebra `𝑻 X`, we must prove that
 
- 1. `ψRel` is compatible with the operations of `𝑻 X` (which are jsut the terms themselves) and
- 2. `ψRel` it is an equivalence relation.
+1. `ψRel` is compatible with the operations of `𝑻 X` (which are jsut the terms themselves) and
+2. `ψRel` it is an equivalence relation.
 
- \begin{code}
+\begin{code}
 
  ψcompatible : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓕){fe : funext 𝓥 𝓤} → compatible (𝑻 X)(ψRel 𝒦)
  ψcompatible 𝒦{fe} 𝑓 {p} {q} ψpq 𝑨 sA h = γ
   where
-   φ : hom (𝑻 X) 𝑨
-   φ = lift-hom 𝑨 h
+  φ : hom (𝑻 X) 𝑨
+  φ = lift-hom 𝑨 h
 
-   γ : ∣ φ ∣ ((𝑓 ̂ 𝑻 X) p) ≡ ∣ φ ∣ ((𝑓 ̂ 𝑻 X) q)
+  γ : ∣ φ ∣ ((𝑓 ̂ 𝑻 X) p) ≡ ∣ φ ∣ ((𝑓 ̂ 𝑻 X) q)
 
-   γ = ∣ φ ∣ ((𝑓 ̂ 𝑻 X) p)  ≡⟨ ∥ φ ∥ 𝑓 p ⟩
-       (𝑓 ̂ 𝑨) (∣ φ ∣ ∘ p)  ≡⟨ cong(𝑓 ̂ 𝑨)(fe λ x → (ψpq x) 𝑨 sA h) ⟩
-       (𝑓 ̂ 𝑨) (∣ φ ∣ ∘ q)  ≡⟨ (∥ φ ∥ 𝑓 q)⁻¹ ⟩
-       ∣ φ ∣ ((𝑓 ̂ 𝑻 X) q)  ∎
+  γ = ∣ φ ∣ ((𝑓 ̂ 𝑻 X) p)  ≡⟨ ∥ φ ∥ 𝑓 p ⟩
+      (𝑓 ̂ 𝑨) (∣ φ ∣ ∘ p)  ≡⟨ cong(𝑓 ̂ 𝑨)(fe λ x → (ψpq x) 𝑨 sA h) ⟩
+      (𝑓 ̂ 𝑨) (∣ φ ∣ ∘ q)  ≡⟨ (∥ φ ∥ 𝑓 q)⁻¹ ⟩
+      ∣ φ ∣ ((𝑓 ̂ 𝑻 X) q)  ∎
 
  ψIsEquivalence : {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓕 } → IsEquivalence (ψRel 𝒦)
  ψIsEquivalence = record { refl = λ 𝑨 sA h → refl
                          ; sym = λ x 𝑨 sA h → (x 𝑨 sA h)⁻¹
                          ; trans = λ pψq qψr 𝑨 sA h → (pψq 𝑨 sA h) ∙ (qψr 𝑨 sA h) }
- \end{code}
+\end{code}
 
- We have collected all the pieces necessary to express the collection of identities satisfied by all subalgebras of algebras in the class as a congruence relation of the term algebra. We call this congruence `ψCon` and define it using the Congruence constructor `mkcon`.
+We have collected all the pieces necessary to express the collection of identities satisfied by all subalgebras of algebras in the class as a congruence relation of the term algebra. We call this congruence `ψCon` and define it using the Congruence constructor `mkcon`.
 
- \begin{code}
+\begin{code}
 
  ψCon : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓕){fe : funext 𝓥 𝓤} → Con (𝑻 X)
  ψCon 𝒦 {fe} = (ψRel 𝒦) , mkcon ψIsEquivalence (ψcompatible 𝒦 {fe})
 
- \end{code}
+\end{code}
 
 
 
@@ -127,9 +167,9 @@ Now we come to a step in the Agda formalization of Birkhoff's theorem that is hi
 
 \begin{code}
 
- module _ {fe : DFunExt}{wd+ : swelldef 𝓥 𝓕⁺} {wd : swelldef 𝓥 𝓕} {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓕} where
+module _ {fe : DFunExt}{wd+ : swelldef 𝓥 𝓕⁺} {wd : swelldef 𝓥 𝓕}{X : Type 𝓤} {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓕} where
 
-  open class-products-with-maps {𝓤 = 𝓤}{X}{fe 𝓕 𝓤}{fe 𝓕⁺ 𝓕⁺}{fe 𝓕 𝓕} 𝒦
+ open class-products-with-maps {𝓤 = 𝓤}{X}{fe 𝓕 𝓤}{fe 𝓕⁺ 𝓕⁺}{fe 𝓕 𝓕} 𝒦
 
 \end{code}
 
@@ -138,8 +178,8 @@ We begin by constructing `ℭ`, using the techniques described in the section on
 \begin{code}
 
   -- ℭ is the product of all subalgebras of algebras in 𝒦.
-  ℭ : Algebra 𝓕 𝑆
-  ℭ = ⨅ 𝔄' -- {𝓤 = 𝓤}{𝒦 = 𝒦})
+ ℭ : Algebra 𝓕 𝑆
+ ℭ = ⨅ 𝔄' -- {𝓤 = 𝓤}{𝒦 = 𝒦})
 
 \end{code}
 
@@ -147,8 +187,8 @@ Observe that the inhabitants of `ℭ` are maps from `ℑ` to `{𝔄 i : i ∈ �
 
 \begin{code}
 
-  homℭ : hom (𝑻 X) ℭ
-  homℭ = ⨅-hom-co 𝔄' (fe 𝓕 𝓤){𝓕}(𝑻 X) λ i → lift-hom (𝔄' i)(snd ∥ i ∥)
+ homℭ : hom (𝑻 X) ℭ
+ homℭ = ⨅-hom-co 𝔄' (fe 𝓕 𝓤){𝓕}(𝑻 X) λ i → lift-hom (𝔄' i)(snd ∥ i ∥)
 
 \end{code}
 
@@ -159,233 +199,233 @@ Observe that the inhabitants of `ℭ` are maps from `ℑ` to `{𝔄 i : i ∈ �
 
  We now define the algebra `𝔽`, which plays the role of the free algebra, along with the natural epimorphism `epi𝔽 : epi (𝑻 X) 𝔽` from `𝑻 X` to `𝔽`.
 
- \begin{code}
+\begin{code}
 
-  𝔽 : Algebra 𝓕⁺ 𝑆
-  𝔽 = ker[ 𝑻 X ⇒ ℭ ] homℭ ↾ wd 
+ 𝔽 : Algebra 𝓕⁺ 𝑆
+ 𝔽 = ker[ 𝑻 X ⇒ ℭ ] homℭ ↾ wd 
 
-  epi𝔽 : epi (𝑻 X) 𝔽
-  epi𝔽 = πker wd {ℭ} homℭ
+ epi𝔽 : epi (𝑻 X) 𝔽
+ epi𝔽 = πker wd {ℭ} homℭ
 
-  hom𝔽 : hom (𝑻 X) 𝔽
-  hom𝔽 = epi-to-hom 𝔽 epi𝔽
+ hom𝔽 : hom (𝑻 X) 𝔽
+ hom𝔽 = epi-to-hom 𝔽 epi𝔽
 
-  hom𝔽-is-epic : IsSurjective ∣ hom𝔽 ∣
-  hom𝔽-is-epic = snd ∥ epi𝔽 ∥
+ hom𝔽-is-epic : IsSurjective ∣ hom𝔽 ∣
+ hom𝔽-is-epic = snd ∥ epi𝔽 ∥
 
- \end{code}
+\end{code}
 
- We will need the following facts relating `homℭ`, `hom𝔽`, `and ψ`.
+We will need the following facts relating `homℭ`, `hom𝔽`, `and ψ`.
 
- \begin{code}
+\begin{code}
 
-  ψlemma0 : ∀ p q →  ∣ homℭ ∣ p ≡ ∣ homℭ ∣ q  → (p , q) ∈ ψ 𝒦
-  ψlemma0 p q phomℭq 𝑨 sA h = cong-app phomℭq (𝑨 , sA , h)
+ ψlemma0 : ∀ p q →  ∣ homℭ ∣ p ≡ ∣ homℭ ∣ q  → (p , q) ∈ ψ 𝒦
+ ψlemma0 p q phomℭq 𝑨 sA h = cong-app phomℭq (𝑨 , sA , h)
 
-  ψlemma0-ap : {𝑨 : Algebra 𝓤 𝑆}{h : X → ∣ 𝑨 ∣} → 𝑨 ∈ S{𝓤}{𝓤} 𝒦
-   →           kernel ∣ hom𝔽 ∣ ⊆ kernel (free-lift 𝑨 h)
+ ψlemma0-ap : {𝑨 : Algebra 𝓤 𝑆}{h : X → ∣ 𝑨 ∣} → 𝑨 ∈ S{𝓤}{𝓤} 𝒦
+  →           kernel ∣ hom𝔽 ∣ ⊆ kernel (free-lift 𝑨 h)
 
-  ψlemma0-ap {𝑨}{h} skA {p , q} x = γ where
+ ψlemma0-ap {𝑨}{h} skA {p , q} x = γ where
 
-   ν : ∣ homℭ ∣ p ≡ ∣ homℭ ∣ q
-   ν = ker-in-con {ov 𝓤}{ov 𝓤}{𝑻 X}{wd+}(kercon wd {ℭ} homℭ) {p}{q} x
+  ν : ∣ homℭ ∣ p ≡ ∣ homℭ ∣ q
+  ν = ker-in-con {ov 𝓤}{ov 𝓤}{𝑻 X}{wd+}(kercon wd {ℭ} homℭ) {p}{q} x
 
-   γ : (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
-   γ = ((ψlemma0 p q) ν) 𝑨 skA h
-
-
- \end{code}
-
- We now use `ψlemma0-ap` to prove that every map `h : X → ∣ 𝑨 ∣`, from `X` to a subalgebra `𝑨 ∈ S 𝒦` of `𝒦`, lifts to a homomorphism from `𝔽` to `𝑨`.
-
- \begin{code}
-
-  𝔽-lift-hom : (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → (X → ∣ 𝑨 ∣) → hom 𝔽 𝑨
-  𝔽-lift-hom 𝑨 skA h = fst(HomFactor (fe 𝓕 𝓤)(fe 𝓕⁺ 𝓕⁺) 𝑨 (lift-hom 𝑨 h) hom𝔽 (ψlemma0-ap skA) hom𝔽-is-epic)
-
- \end{code}
+  γ : (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
+  γ = ((ψlemma0 p q) ν) 𝑨 skA h
 
 
- #### <a id="k-models-psi">𝒦 models ψ</a>
+\end{code}
 
- The goal of this subsection is to prove that `𝒦` models `ψ 𝒦`. In other terms, for all pairs `(p , q) ∈ Term X × Term X` of terms, if `(p , q) ∈ ψ 𝒦`, then `𝒦 ⊧ p ≋ q`.
+We now use `ψlemma0-ap` to prove that every map `h : X → ∣ 𝑨 ∣`, from `X` to a subalgebra `𝑨 ∈ S 𝒦` of `𝒦`, lifts to a homomorphism from `𝔽` to `𝑨`.
 
- Next we define the lift of the natural embedding from `X` into 𝔽. We denote this homomorphism by `𝔑 : hom (𝑻 X) 𝔽` and define it as follows.
+\begin{code}
 
- \begin{code}
+ 𝔽-lift-hom : (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → (X → ∣ 𝑨 ∣) → hom 𝔽 𝑨
+ 𝔽-lift-hom 𝑨 skA h = fst(HomFactor (fe 𝓕 𝓤)(fe 𝓕⁺ 𝓕⁺) 𝑨 (lift-hom 𝑨 h) hom𝔽 (ψlemma0-ap skA) hom𝔽-is-epic)
 
-  open IsCongruence
+\end{code}
 
-  X↪𝔽 : X → ∣ 𝔽 ∣
-  X↪𝔽 x = ⟪ ℊ x ⟫ -- (the implicit relation here is  ⟨ kercon (fe 𝓥 𝓕) ℭ homℭ ⟩ )
 
-  𝔑 : hom (𝑻 X) 𝔽
-  𝔑 = lift-hom 𝔽 X↪𝔽
+#### <a id="k-models-psi">𝒦 models ψ</a>
 
- \end{code}
+The goal of this subsection is to prove that `𝒦` models `ψ 𝒦`. In other terms, for all pairs `(p , q) ∈ Term X × Term X` of terms, if `(p , q) ∈ ψ 𝒦`, then `𝒦 ⊧ p ≋ q`.
 
- It turns out that the homomorphism so defined is equivalent to `hom𝔽`.
+Next we define the lift of the natural embedding from `X` into 𝔽. We denote this homomorphism by `𝔑 : hom (𝑻 X) 𝔽` and define it as follows.
 
- \begin{code}
+\begin{code}
 
-  hom𝔽-is-lift-hom : ∀ p → ∣ 𝔑 ∣ p ≡ ∣ hom𝔽 ∣ p
-  hom𝔽-is-lift-hom (ℊ x) = refl
-  hom𝔽-is-lift-hom (node 𝑓 𝒕) =
-   ∣ 𝔑 ∣ (node 𝑓 𝒕)              ≡⟨ ∥ 𝔑 ∥ 𝑓 𝒕 ⟩
-   (𝑓 ̂ 𝔽)(λ i → ∣ 𝔑 ∣(𝒕 i))      ≡⟨ cong(𝑓 ̂ 𝔽)(fe 𝓥 𝓕⁺ (λ x → hom𝔽-is-lift-hom(𝒕 x))) ⟩
-   (𝑓 ̂ 𝔽)(λ i → ∣ hom𝔽 ∣ (𝒕 i))  ≡⟨ (∥ hom𝔽 ∥ 𝑓 𝒕)⁻¹ ⟩
-   ∣ hom𝔽 ∣ (node 𝑓 𝒕)           ∎
+ open IsCongruence
 
- \end{code}
+ X↪𝔽 : X → ∣ 𝔽 ∣
+ X↪𝔽 x = ⟪ ℊ x ⟫ -- (the implicit relation here is  ⟨ kercon (fe 𝓥 𝓕) ℭ homℭ ⟩ )
 
- We need a three more lemmas before we are ready to tackle our main goal.
+ 𝔑 : hom (𝑻 X) 𝔽
+ 𝔑 = lift-hom 𝔽 X↪𝔽
 
- \begin{code}
+\end{code}
 
-  ψlemma1 : kernel ∣ 𝔑 ∣ ⊆ ψ 𝒦
-  ψlemma1 {p , q} 𝔑pq 𝑨 sA h = γ
+It turns out that the homomorphism so defined is equivalent to `hom𝔽`.
+
+\begin{code}
+
+ hom𝔽-is-lift-hom : ∀ p → ∣ 𝔑 ∣ p ≡ ∣ hom𝔽 ∣ p
+ hom𝔽-is-lift-hom (ℊ x) = refl
+ hom𝔽-is-lift-hom (node 𝑓 𝒕) =
+  ∣ 𝔑 ∣ (node 𝑓 𝒕)              ≡⟨ ∥ 𝔑 ∥ 𝑓 𝒕 ⟩
+  (𝑓 ̂ 𝔽)(λ i → ∣ 𝔑 ∣(𝒕 i))      ≡⟨ cong(𝑓 ̂ 𝔽)(fe 𝓥 𝓕⁺ (λ x → hom𝔽-is-lift-hom(𝒕 x))) ⟩
+  (𝑓 ̂ 𝔽)(λ i → ∣ hom𝔽 ∣ (𝒕 i))  ≡⟨ (∥ hom𝔽 ∥ 𝑓 𝒕)⁻¹ ⟩
+  ∣ hom𝔽 ∣ (node 𝑓 𝒕)           ∎
+
+\end{code}
+
+We need a three more lemmas before we are ready to tackle our main goal.
+
+\begin{code}
+
+ ψlemma1 : kernel ∣ 𝔑 ∣ ⊆ ψ 𝒦
+ ψlemma1 {p , q} 𝔑pq 𝑨 sA h = γ
+  where
+   f : hom 𝔽 𝑨
+   f = 𝔽-lift-hom 𝑨 sA h
+
+   h' φ : hom (𝑻 X) 𝑨
+   h' = ∘-hom (𝑻 X) 𝑨 𝔑 f
+   φ = lift-hom 𝑨 h
+
+   h≡φ : ∀ t → (∣ f ∣ ∘ ∣ 𝔑 ∣) t ≡ ∣ φ ∣ t
+   h≡φ t = free-unique (fe 𝓥 𝓤) 𝑨 h' φ (λ x → refl) t
+
+   γ : ∣ φ ∣ p ≡ ∣ φ ∣ q
+   γ = ∣ φ ∣ p             ≡⟨ (h≡φ p)⁻¹ ⟩
+       ∣ f ∣ ( ∣ 𝔑 ∣ p )   ≡⟨ cong ∣ f ∣ 𝔑pq ⟩
+       ∣ f ∣ ( ∣ 𝔑 ∣ q )   ≡⟨ h≡φ q ⟩
+       ∣ φ ∣ q             ∎
+
+
+ ψlemma2 : kernel ∣ hom𝔽 ∣ ⊆ ψ 𝒦
+ ψlemma2 {p , q} hyp = ψlemma1 {p , q} γ
    where
-    f : hom 𝔽 𝑨
-    f = 𝔽-lift-hom 𝑨 sA h
-
-    h' φ : hom (𝑻 X) 𝑨
-    h' = ∘-hom (𝑻 X) 𝑨 𝔑 f
-    φ = lift-hom 𝑨 h
-
-    h≡φ : ∀ t → (∣ f ∣ ∘ ∣ 𝔑 ∣) t ≡ ∣ φ ∣ t
-    h≡φ t = free-unique (fe 𝓥 𝓤) 𝑨 h' φ (λ x → refl) t
-
-    γ : ∣ φ ∣ p ≡ ∣ φ ∣ q
-    γ = ∣ φ ∣ p             ≡⟨ (h≡φ p)⁻¹ ⟩
-        ∣ f ∣ ( ∣ 𝔑 ∣ p )   ≡⟨ cong ∣ f ∣ 𝔑pq ⟩
-        ∣ f ∣ ( ∣ 𝔑 ∣ q )   ≡⟨ h≡φ q ⟩
-        ∣ φ ∣ q             ∎
+    γ : (free-lift 𝔽 X↪𝔽) p ≡ (free-lift 𝔽 X↪𝔽) q
+    γ = (hom𝔽-is-lift-hom p) ∙ hyp ∙ (hom𝔽-is-lift-hom q)⁻¹
 
 
-  ψlemma2 : kernel ∣ hom𝔽 ∣ ⊆ ψ 𝒦
-  ψlemma2 {p , q} hyp = ψlemma1 {p , q} γ
-    where
-     γ : (free-lift 𝔽 X↪𝔽) p ≡ (free-lift 𝔽 X↪𝔽) q
-     γ = (hom𝔽-is-lift-hom p) ∙ hyp ∙ (hom𝔽-is-lift-hom q)⁻¹
-
-
-  ψlemma3 : ∀ p q → (p , q) ∈ ψ 𝒦 → 𝒦 ⊧ p ≋ q
-  ψlemma3 p q pψq {𝑨} kA = γ
-    where
-    γ : 𝑨 ⟦ p ⟧ ≡ 𝑨 ⟦ q ⟧
-    γ = fe 𝓤 𝓤 λ h → (𝑨 ⟦ p ⟧) h    ≡⟨ free-lift-interp (fe 𝓥 𝓤) 𝑨 h p ⟩
-                  (free-lift 𝑨 h) p ≡⟨ pψq 𝑨 (siso (sbase kA) (≅-sym Lift-≅)) h ⟩
-                  (free-lift 𝑨 h) q ≡⟨ (free-lift-interp (fe 𝓥 𝓤) 𝑨 h q)⁻¹  ⟩
-                  (𝑨 ⟦ q ⟧) h       ∎
-
- \end{code}
-
- With these results in hand, it is now trivial to prove the main theorem of this subsection.
-
- \begin{code}
-
-  class-models-kernel : ∀ p q → (p , q) ∈ kernel ∣ hom𝔽 ∣ → 𝒦 ⊧ p ≋ q
-  class-models-kernel p q hyp = ψlemma3 p q (ψlemma2 hyp)
-
-  𝕍𝒦 : Pred (Algebra 𝓕⁺ 𝑆) (lsuc 𝓕⁺)
-  𝕍𝒦 = V{𝓤}{𝓕⁺} 𝒦
-
-  kernel-in-theory : kernel ∣ hom𝔽 ∣ ⊆ Th (V 𝒦)
-  kernel-in-theory {p , q} pKq = (class-ids-⇒ {fe = fe} p q (class-models-kernel p q pKq))
-
-  _↠_ : Type 𝓤 → Algebra 𝓕⁺ 𝑆 → Type 𝓕⁺
-  X ↠ 𝑨 = Σ h ꞉ (X → ∣ 𝑨 ∣) , IsSurjective h
-
-  𝔽-ModTh-epi : (𝑨 : Algebra 𝓕⁺ 𝑆) → (X ↠ 𝑨) → 𝑨 ∈ Mod (Th 𝕍𝒦) → epi 𝔽 𝑨
-  𝔽-ModTh-epi 𝑨 (η , ηE) AinMTV = γ
+ ψlemma3 : ∀ p q → (p , q) ∈ ψ{X = X} 𝒦 → 𝒦 ⊧ p ≋ q
+ ψlemma3 p q pψq {𝑨} kA = γ
    where
-   φ : hom (𝑻 X) 𝑨
-   φ = lift-hom 𝑨 η
+   γ : 𝑨 ⟦ p ⟧ ≡ 𝑨 ⟦ q ⟧
+   γ = fe 𝓤 𝓤 λ h → (𝑨 ⟦ p ⟧) h    ≡⟨ free-lift-interp (fe 𝓥 𝓤) 𝑨 h p ⟩
+                 (free-lift 𝑨 h) p ≡⟨ pψq 𝑨 (siso (sbase kA) (≅-sym Lift-≅)) h ⟩
+                 (free-lift 𝑨 h) q ≡⟨ (free-lift-interp (fe 𝓥 𝓤) 𝑨 h q)⁻¹  ⟩
+                 (𝑨 ⟦ q ⟧) h       ∎
 
-   φE : IsSurjective ∣ φ ∣
-   φE = lift-of-epi-is-epi 𝑨 ηE
+\end{code}
 
-   pqlem2 : ∀ p q → (p , q) ∈ kernel ∣ hom𝔽 ∣ → 𝑨 ⊧ p ≈ q
-   pqlem2 p q hyp = AinMTV p q (kernel-in-theory hyp)
+With these results in hand, it is now trivial to prove the main theorem of this subsection.
 
-   kerincl : kernel ∣ hom𝔽 ∣ ⊆ kernel ∣ φ ∣
-   kerincl {p , q} x = ∣ φ ∣ p      ≡⟨ (free-lift-interp (fe 𝓥 𝓕⁺) 𝑨 η p)⁻¹ ⟩
-                       (𝑨 ⟦ p ⟧) η  ≡⟨ cong-app (pqlem2 p q x) η  ⟩
-                       (𝑨 ⟦ q ⟧) η  ≡⟨ free-lift-interp (fe 𝓥 𝓕⁺) 𝑨 η q ⟩
-                       ∣ φ ∣ q      ∎
+\begin{code}
 
-   γ : epi 𝔽 𝑨
-   γ = fst (HomFactorEpi (fe 𝓕 𝓕⁺)(fe 𝓕⁺ 𝓕⁺)(fe 𝓕⁺ 𝓕⁺) 𝑨 φ hom𝔽 kerincl hom𝔽-is-epic φE)
+ class-models-kernel : ∀ p q → (p , q) ∈ kernel ∣ hom𝔽 ∣ → 𝒦 ⊧ p ≋ q
+ class-models-kernel p q hyp = ψlemma3 p q (ψlemma2 hyp)
 
- \end{code}
+ 𝕍𝒦 : Pred (Algebra 𝓕⁺ 𝑆) (lsuc 𝓕⁺)
+ 𝕍𝒦 = V{𝓤}{𝓕⁺} 𝒦
+
+ kernel-in-theory : kernel ∣ hom𝔽 ∣ ⊆ Th (V 𝒦)
+ kernel-in-theory {p , q} pKq = (class-ids-⇒ {fe = fe} p q (class-models-kernel p q pKq))
+
+ _↠_ : Type 𝓤 → Algebra 𝓕⁺ 𝑆 → Type 𝓕⁺
+ X ↠ 𝑨 = Σ[ h ꞉ (X → ∣ 𝑨 ∣) ] IsSurjective h
+
+ 𝔽-ModTh-epi : (𝑨 : Algebra 𝓕⁺ 𝑆) → (X ↠ 𝑨) → 𝑨 ∈ Mod (Th 𝕍𝒦) → epi 𝔽 𝑨
+ 𝔽-ModTh-epi 𝑨 (η , ηE) AinMTV = γ
+  where
+  φ : hom (𝑻 X) 𝑨
+  φ = lift-hom 𝑨 η
+
+  φE : IsSurjective ∣ φ ∣
+  φE = lift-of-epi-is-epi 𝑨 ηE
+
+  pqlem2 : ∀ p q → (p , q) ∈ kernel ∣ hom𝔽 ∣ → 𝑨 ⊧ p ≈ q
+  pqlem2 p q hyp = AinMTV p q (kernel-in-theory hyp)
+
+  kerincl : kernel ∣ hom𝔽 ∣ ⊆ kernel ∣ φ ∣
+  kerincl {p , q} x = ∣ φ ∣ p      ≡⟨ (free-lift-interp (fe 𝓥 𝓕⁺) 𝑨 η p)⁻¹ ⟩
+                      (𝑨 ⟦ p ⟧) η  ≡⟨ cong-app (pqlem2 p q x) η  ⟩
+                      (𝑨 ⟦ q ⟧) η  ≡⟨ free-lift-interp (fe 𝓥 𝓕⁺) 𝑨 η q ⟩
+                      ∣ φ ∣ q      ∎
+
+  γ : epi 𝔽 𝑨
+  γ = fst (HomFactorEpi (fe 𝓕 𝓕⁺)(fe 𝓕⁺ 𝓕⁺)(fe 𝓕⁺ 𝓕⁺) 𝑨 φ hom𝔽 kerincl hom𝔽-is-epic φE)
+
+\end{code}
 
 
 
 
 
- #### <a id="the-homomorphic-images-of-F">The homomorphic images of 𝔽</a>
+#### <a id="the-homomorphic-images-of-F">The homomorphic images of 𝔽</a>
 
- Finally we come to one of the main theorems of this module; it asserts that every algebra in `Mod X (Th 𝕍𝒦)` is a homomorphic image of 𝔽.  We prove this below as the function (or proof object) `𝔽-ModTh-epi`.  Before that, we prove two auxiliary lemmas.
+Finally we come to one of the main theorems of this module; it asserts that every algebra in `Mod X (Th 𝕍𝒦)` is a homomorphic image of 𝔽.  We prove this below as the function (or proof object) `𝔽-ModTh-epi`.  Before that, we prove two auxiliary lemmas.
 
- \begin{code}
+\begin{code}
 
-  module _ (pe : pred-ext (ov 𝓤)(ov 𝓤))(wd : swelldef 𝓥 𝓕)                      -- extensionality assumptions
-           (Cset : is-set ∣ ℭ ∣)(kuip : blk-uip(Term X)∣ kercon wd{ℭ}homℭ ∣) -- truncation assumptions
+ module _ (pe : pred-ext (ov 𝓤)(ov 𝓤))(wd : swelldef 𝓥 𝓕)                      -- extensionality assumptions
+          (Cset : is-set ∣ ℭ ∣)(kuip : blk-uip(Term X)∣ kercon wd{ℭ}homℭ ∣) -- truncation assumptions
+  where
+
+  𝔽≤ℭ : (ker[ 𝑻 X ⇒ ℭ ] homℭ ↾ wd) ≤ ℭ
+  𝔽≤ℭ = FirstHomCorollary|Set (𝑻 X) ℭ homℭ pe wd Cset kuip
+
+\end{code}
+
+The last piece we need to prove that every model of `Th 𝕍𝒦` is a homomorphic image of `𝔽` is a crucial assumption that is taken for granted throughout informal universal algebra---namely, that our collection `X` of variable symbols is arbitrarily large and that we have an *environment* which interprets the variable symbols in every algebra under consideration. In other terms, an environment provides, for every algebra `𝑨`, a surjective mapping `η : X → ∣ 𝑨 ∣` from `X` onto the domain of `𝑨`.
+
+We do *not* assert that for an arbitrary type `X` such surjective maps exist.  Indeed, our `X` must is quite special to have this property.  Later, we will construct such an `X`, but for now we simply postulate its existence. Note that this assumption that an environment exists is only required in the proof of the theorem `𝔽-ModTh-epi`.
+
+\begin{code}
+
+
+\end{code}
+
+#### <a id="F-in-VK">𝔽 ∈ V(𝒦)</a>
+
+With this result in hand, along with what we proved earlier---namely, `PS(𝒦) ⊆ SP(𝒦) ⊆ HSP(𝒦) ≡ V 𝒦`---it is not hard to show that `𝔽` belongs to `V 𝒦`.
+
+\begin{code}
+
+  open Vlift {𝓤}{fe 𝓕 𝓤}{fe 𝓕⁺ 𝓕⁺}{fe 𝓕 𝓕}{𝒦}
+
+  𝔽∈SP : hfunext (ov 𝓤)(ov 𝓤) → 𝔽 ∈ (S{𝓕}{𝓕⁺} (P{𝓤}{𝓕} 𝒦))
+  𝔽∈SP hfe = ssub (class-prod-s-∈-sp hfe) 𝔽≤ℭ
+
+  𝔽∈𝕍 : hfunext (ov 𝓤)(ov 𝓤) → 𝔽 ∈ V 𝒦
+  𝔽∈𝕍 hfe = SP⊆V' (𝔽∈SP hfe)
+
+\end{code}
+
+#### <a id="the-hsp-theorem"> The HSP Theorem</a>
+
+Now that we have all of the necessary ingredients, it is all but trivial to combine them to prove Birkhoff's HSP theorem. (Note that since the proof enlists the help of the `𝔽-ModTh-epi` theorem, we must assume an environment exists, which is manifested in the premise `∀ 𝑨 → X ↠ 𝑨`.
+
+\begin{code}
+
+  Birkhoff : hfunext (ov 𝓤)(ov 𝓤) → (∀ 𝑨 → X ↠ 𝑨) → Mod (Th (V 𝒦)) ⊆ V 𝒦
+
+  Birkhoff hfe 𝕏 {𝑨} α = vhimg{𝑩 = 𝑨} (𝔽∈𝕍 hfe) (𝑨 , epi-to-hom 𝑨 φE , snd ∥ φE ∥)
    where
+   φE : epi 𝔽 𝑨
+   φE = 𝔽-ModTh-epi 𝑨 (𝕏 𝑨) α
 
-   𝔽≤ℭ : (ker[ 𝑻 X ⇒ ℭ ] homℭ ↾ wd) ≤ ℭ
-   𝔽≤ℭ = FirstHomCorollary|Set (𝑻 X) ℭ homℭ pe wd Cset kuip
+\end{code}
 
- \end{code}
+The converse inclusion, `V 𝒦 ⊆ Mod X (Th (V 𝒦))`, is a simple consequence of the fact that `Mod Th` is a closure operator. Nonetheless, completeness demands that we formalize this inclusion as well, however trivial the proof.
 
- The last piece we need to prove that every model of `Th 𝕍𝒦` is a homomorphic image of `𝔽` is a crucial assumption that is taken for granted throughout informal universal algebra---namely, that our collection `X` of variable symbols is arbitrarily large and that we have an *environment* which interprets the variable symbols in every algebra under consideration. In other terms, an environment provides, for every algebra `𝑨`, a surjective mapping `η : X → ∣ 𝑨 ∣` from `X` onto the domain of `𝑨`.
+\begin{code}
 
- We do *not* assert that for an arbitrary type `X` such surjective maps exist.  Indeed, our `X` must is quite special to have this property.  Later, we will construct such an `X`, but for now we simply postulate its existence. Note that this assumption that an environment exists is only required in the proof of the theorem `𝔽-ModTh-epi`.
+  Birkhoff-converse : V{𝓤}{𝓕} 𝒦 ⊆ Mod{𝓧 = 𝓤}{X = X} (Th (V 𝒦))
+  Birkhoff-converse α p q pThq = pThq α
 
- \begin{code}
-
-
- \end{code}
-
- #### <a id="F-in-VK">𝔽 ∈ V(𝒦)</a>
-
- With this result in hand, along with what we proved earlier---namely, `PS(𝒦) ⊆ SP(𝒦) ⊆ HSP(𝒦) ≡ V 𝒦`---it is not hard to show that `𝔽` belongs to `V 𝒦`.
-
- \begin{code}
-
-   open Vlift {𝓤}{fe 𝓕 𝓤}{fe 𝓕⁺ 𝓕⁺}{fe 𝓕 𝓕}{𝒦}
-
-   𝔽∈SP : hfunext (ov 𝓤)(ov 𝓤) → 𝔽 ∈ (S{𝓕}{𝓕⁺} (P{𝓤}{𝓕} 𝒦))
-   𝔽∈SP hfe = ssub (class-prod-s-∈-sp hfe) 𝔽≤ℭ
-
-   𝔽∈𝕍 : hfunext (ov 𝓤)(ov 𝓤) → 𝔽 ∈ V 𝒦
-   𝔽∈𝕍 hfe = SP⊆V' (𝔽∈SP hfe)
-
- \end{code}
-
- #### <a id="the-hsp-theorem"> The HSP Theorem</a>
-
- Now that we have all of the necessary ingredients, it is all but trivial to combine them to prove Birkhoff's HSP theorem. (Note that since the proof enlists the help of the `𝔽-ModTh-epi` theorem, we must assume an environment exists, which is manifested in the premise `∀ 𝑨 → X ↠ 𝑨`.
-
- \begin{code}
-
-   Birkhoff : hfunext (ov 𝓤)(ov 𝓤) → (∀ 𝑨 → X ↠ 𝑨) → Mod (Th (V 𝒦)) ⊆ V 𝒦
-
-   Birkhoff hfe 𝕏 {𝑨} α = vhimg{𝑩 = 𝑨} (𝔽∈𝕍 hfe) (𝑨 , epi-to-hom 𝑨 φE , snd ∥ φE ∥)
-    where
-    φE : epi 𝔽 𝑨
-    φE = 𝔽-ModTh-epi 𝑨 (𝕏 𝑨) α
-
- \end{code}
-
- The converse inclusion, `V 𝒦 ⊆ Mod X (Th (V 𝒦))`, is a simple consequence of the fact that `Mod Th` is a closure operator. Nonetheless, completeness demands that we formalize this inclusion as well, however trivial the proof.
-
- \begin{code}
-
-   Birkhoff-converse : V{𝓤}{𝓕} 𝒦 ⊆ Mod (Th (V 𝒦))
-   Birkhoff-converse α p q pThq = pThq α
-
- \end{code}
+\end{code}
 
 We have thus proved that every variety is an equational class.  Readers familiar with the classical formulation of the Birkhoff HSP theorem, as an "if and only if" result, might worry that we haven't completed the proof.  But recall that in the [Varieties.Preservation][] module we proved the following identity preservation lemmas:
 
