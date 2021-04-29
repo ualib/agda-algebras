@@ -14,9 +14,15 @@ This is the [Overture.FunExtensionality][] module of the [Agda Universal Algebra
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Overture.FunExtensionality where
 
-open import Overture.Equality public
+-- Imports from the Agda (Builtin) and the Agda Standard Library
+open import Agda.Primitive using (_⊔_; lzero; lsuc; Level; Setω)
+open import Agda.Builtin.Equality renaming (_≡_ to infix 50 _≡_)
+
+-- Imports from the Agda Universal Algebra Library
+open import Overture.Preliminaries using (Type; 𝓤; 𝓥; 𝓦; Π)
+
+module Overture.FunExtensionality where
 
 \end{code}
 
@@ -45,7 +51,7 @@ As explained above, a natural notion of function equality is defined as follows:
 _∼_ : {X : Type 𝓤 } {A : X → Type 𝓥 } → Π A → Π A → Type (𝓤 ⊔ 𝓥)
 f ∼ g = ∀ x → f x ≡ g x
 
-infix 0 _∼_
+infix 8 _∼_
 
 \end{code}
 
@@ -71,59 +77,6 @@ However, it is important to keep in mind the following fact (see <a href="https:
 
 *Function extensionality is known to be neither provable nor disprovable in Martin-Löf type theory. It is an independent statement*.
 
-
-#### <a id="alternative-extensionality-type">An alternative way to express function extensionality</a>
-
-Finally, a useful alternative for expressing dependent function extensionality, which is essentially equivalent to `dfunext`, is to assert that the `happly` function is actually an *equivalence*.  This requires a few more definitions from the `MGS-Equivalences` module of the [Type Topology][] library, which we now describe in a hidden module. (We will import the original definitions below, but, as above, we exhibit them here for pedagogical reasons and to keep the presentation relatively self-contained.)
-
-First, a type is a *singleton* if it has exactly one inhabitant and a *subsingleton* if it has *at most* one inhabitant.  Representing these concepts are the following types (whose original definitions we import from the `MGS-Basic-UF` module of [Type Topology][]).
-
-\begin{code}
-
-is-center : (A : Type 𝓤 ) → A → Type 𝓤
-is-center A c = Π x ꞉ A , c ≡ x
-
-is-singleton : Type 𝓤 → Type 𝓤
-is-singleton A = Σ c ꞉ A , is-center A c
-
-is-prop : Type 𝓤 → Type 𝓤
-is-prop A = (x y : A) → x ≡ y
-
--- open import MGS-Basic-UF using (is-center; is-singleton; is-subsingleton) public
-
-singleton-is-prop : {𝓤 : Level}(X : Type 𝓤) → is-singleton X → is-prop X
-singleton-is-prop X (c , φ) x y = x ≡⟨ (φ x)⁻¹ ⟩ c ≡⟨ φ y ⟩ y ∎
-
-
-\end{code}
-
-
-Next, we consider the type `is-equiv` which is used to assert that a function is an equivalence in a sense that we now describe. First we need the concept of a [fiber](https://ncatlab.org/nlab/show/fiber) of a function. In the [Type Topology][] library, `fiber` is defined as a Sigma type whose inhabitants represent inverse images of points in the codomain of the given function.
-
-\begin{code}
-
-fiber : {A : Type 𝓤 } {B : Type 𝓦 } (f : A → B) → B → Type (𝓤 ⊔ 𝓦)
-fiber {𝓤}{𝓦}{A} f y = Σ x ꞉ A , f x ≡ y
-
-\end{code}
-
-A function is called an *equivalence* if all of its fibers are singletons.
-
-\begin{code}
-
-is-equiv : {A : Type 𝓤 } {B : Type 𝓦 } → (A → B) → Type (𝓤 ⊔ 𝓦)
-is-equiv f = ∀ y → is-singleton (fiber f y)
-
-\end{code}
-
-We are finally ready to fulfill our promise of a type that provides an alternative means of postulating function extensionality.
-
-\begin{code}
-
-hfunext :  ∀ 𝓤 𝓦 → Type (lsuc (𝓤 ⊔ 𝓦))
-hfunext 𝓤 𝓦 = {A : Type 𝓤}{B : A → Type 𝓦} (f g : (x : A) → B x) → is-equiv (cong-app{f = f}{g})
-
-\end{code}
 
 
 

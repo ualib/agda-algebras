@@ -13,12 +13,28 @@ This section describes the [Homomorphisms.Basic] module of the [Agda Universal A
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Homomorphisms.Basic where
+-- Imports from the Agda (Builtin) and the Agda Standard Library
+open import Agda.Builtin.Equality using (_≡_; refl)
+open import Level renaming (suc to lsuc; zero to lzero)
+open import Data.Product using (_,_; Σ; _×_)
+open import Function.Base  using (_∘_; id)
+open import Relation.Binary using (Rel; IsEquivalence)
+open import Relation.Binary.PropositionalEquality.Core using (sym; trans; cong)
 
-open import Algebras.Congruences public
+-- Imports from the Agda Universal Algebra Library
+open import Algebras.Basic
+open import Overture.Preliminaries using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; 𝓩; Π; -Π; -Σ; _≡⟨_⟩_; _∎; _⁻¹; ∣_∣; ∥_∥; fst)
+open import Overture.Inverses using (IsInjective; IsSurjective; Image_∋_)
+open import Overture.FunExtensionality using (funext)
+open import Relations.Discrete using (ker) -- 𝟎; _|:_)
+open import Relations.Extensionality using (swelldef)
+open import Relations.Quotients using (ker-IsEquivalence; _/_; ⟪_⟫)
 
-module homomorphisms {𝑆 : Signature 𝓞 𝓥} where
- open congruences {𝑆 = 𝑆} public
+module Homomorphisms.Basic {𝑆 : Signature 𝓞 𝓥} where
+
+open import Algebras.Congruences{𝑆 = 𝑆} using (Con; IsCongruence; mkcon; _╱_; /-≡)
+open import Algebras.Products{𝑆 = 𝑆} using (⨅)
+open IsCongruence
 
 \end{code}
 
@@ -32,10 +48,10 @@ To formalize this concept, we first define a type representing the assertion tha
 
 \begin{code}
 
- module _ (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) where
+module _ (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) where
 
-  compatible-op-map : ∣ 𝑆 ∣ → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Type(𝓤 ⊔ 𝓥 ⊔ 𝓦)
-  compatible-op-map 𝑓 h = ∀ 𝑎 → h ((𝑓 ̂ 𝑨) 𝑎) ≡ (𝑓 ̂ 𝑩) (h ∘ 𝑎)
+ compatible-op-map : ∣ 𝑆 ∣ → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Type(𝓤 ⊔ 𝓥 ⊔ 𝓦)
+ compatible-op-map 𝑓 h = ∀ 𝑎 → h ((𝑓 ̂ 𝑨) 𝑎) ≡ (𝑓 ̂ 𝑩) (h ∘ 𝑎)
 
 \end{code}
 
@@ -45,13 +61,39 @@ We now define the type `hom 𝑨 𝑩` of homomorphisms from `𝑨` to `𝑩` by
 
 \begin{code}
 
-  is-homomorphism : (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
-  is-homomorphism g = ∀ 𝑓  →  compatible-op-map 𝑓 g
+ is-homomorphism : (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
+ is-homomorphism g = ∀ 𝑓  →  compatible-op-map 𝑓 g
 
-  hom : Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
-  hom = Σ[ g ∈ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ] is-homomorphism g
+ hom : Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
+ hom = Σ[ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ] is-homomorphism g
 
 \end{code}
+
+
+#### <a id="homomorphism-composition">Homomorphism composition</a>
+
+The composition of homomorphisms is again a homomorphism.  We formalize this in a number of alternative ways.
+
+\begin{code}
+
+module _ (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆) where
+
+  ∘-hom : hom 𝑨 𝑩  →  hom 𝑩 𝑪  →  hom 𝑨 𝑪
+  ∘-hom (g , ghom) (h , hhom) = h ∘ g , γ where
+
+   γ : ∀ 𝑓 a → (h ∘ g)((𝑓 ̂ 𝑨) a) ≡ (𝑓 ̂ 𝑪)(h ∘ g ∘ a)
+   γ 𝑓 a = (h ∘ g)((𝑓 ̂ 𝑨) a)     ≡⟨ cong h ( ghom 𝑓 a ) ⟩
+           h ((𝑓 ̂ 𝑩)(g ∘ a))     ≡⟨ hhom 𝑓 ( g ∘ a ) ⟩
+           (𝑓 ̂ 𝑪)(h ∘ g ∘ a)     ∎
+
+
+  ∘-is-hom : {f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣}{g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣}
+   →         is-homomorphism 𝑨 𝑩 f → is-homomorphism 𝑩 𝑪 g → is-homomorphism 𝑨 𝑪 (g ∘ f)
+  ∘-is-hom {f} {g} fhom ghom = ∥ ∘-hom (f , fhom) (g , ghom) ∥
+
+\end{code}
+
+
 
 #### <a id="exmples-of-homomorphisms">Examples of homomorphisms</a>
 
@@ -59,8 +101,8 @@ Let's look at a few examples of homomorphisms. These examples are actually quite
 
 \begin{code}
 
- 𝒾𝒹 : (𝑨 : Algebra 𝓤 𝑆) → hom 𝑨 𝑨
- 𝒾𝒹 _ = id , λ 𝑓 𝑎 → refl
+𝒾𝒹 : (𝑨 : Algebra 𝓤 𝑆) → hom 𝑨 𝑨
+𝒾𝒹 _ = id , λ 𝑓 𝑎 → refl
 
 \end{code}
 
@@ -68,13 +110,13 @@ Next, `lift` and `lower`, defined in the [Overture.Lifts][] module, are (the map
 
 \begin{code}
 
- open Lift
+open Lift
 
- 𝓁𝒾𝒻𝓉 : {𝓦 : Level}{𝑨 : Algebra 𝓤 𝑆} → hom 𝑨 (Lift-alg 𝑨 𝓦)
- 𝓁𝒾𝒻𝓉 = lift , λ 𝑓 𝑎 → refl
+𝓁𝒾𝒻𝓉 : {𝓦 : Level}{𝑨 : Algebra 𝓤 𝑆} → hom 𝑨 (Lift-alg 𝑨 𝓦)
+𝓁𝒾𝒻𝓉 = lift , λ 𝑓 𝑎 → refl
 
- 𝓁ℴ𝓌ℯ𝓇 : {𝓦 : Level}{𝑨 : Algebra 𝓤 𝑆} → hom (Lift-alg 𝑨 𝓦) 𝑨
- 𝓁ℴ𝓌ℯ𝓇 = lower , λ 𝑓 𝑎 → refl
+𝓁ℴ𝓌ℯ𝓇 : {𝓦 : Level}{𝑨 : Algebra 𝓤 𝑆} → hom (Lift-alg 𝑨 𝓦) 𝑨
+𝓁ℴ𝓌ℯ𝓇 = lower , λ 𝑓 𝑎 → refl
 
 \end{code}
 
@@ -87,17 +129,17 @@ A *monomorphism* is an injective homomorphism and an *epimorphism* is a surjecti
 
 \begin{code}
 
- is-monomorphism : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
- is-monomorphism 𝑨 𝑩 g = is-homomorphism 𝑨 𝑩 g × IsInjective g
+is-monomorphism : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
+is-monomorphism 𝑨 𝑩 g = is-homomorphism 𝑨 𝑩 g × IsInjective g
 
- mon : Algebra 𝓤 𝑆 → Algebra 𝓦 𝑆  → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
- mon 𝑨 𝑩 = Σ[ g ∈ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ] is-monomorphism 𝑨 𝑩 g
+mon : Algebra 𝓤 𝑆 → Algebra 𝓦 𝑆  → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
+mon 𝑨 𝑩 = Σ[ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ] is-monomorphism 𝑨 𝑩 g
 
- is-epimorphism : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
- is-epimorphism 𝑨 𝑩 g = is-homomorphism 𝑨 𝑩 g × IsSurjective g
+is-epimorphism : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
+is-epimorphism 𝑨 𝑩 g = is-homomorphism 𝑨 𝑩 g × IsSurjective g
 
- epi : Algebra 𝓤 𝑆 → Algebra 𝓦 𝑆  → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
- epi 𝑨 𝑩 = Σ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) , is-epimorphism 𝑨 𝑩 g
+epi : Algebra 𝓤 𝑆 → Algebra 𝓦 𝑆  → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
+epi 𝑨 𝑩 = Σ[ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ] is-epimorphism 𝑨 𝑩 g
 
 \end{code}
 
@@ -105,11 +147,11 @@ It will be convenient to have a function that takes an inhabitant of `mon` (or `
 
 \begin{code}
 
- mon-to-hom : (𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆} → mon 𝑨 𝑩 → hom 𝑨 𝑩
- mon-to-hom 𝑨 ϕ = ∣ ϕ ∣ , fst ∥ ϕ ∥
+mon-to-hom : (𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆} → mon 𝑨 𝑩 → hom 𝑨 𝑩
+mon-to-hom 𝑨 ϕ = ∣ ϕ ∣ , fst ∥ ϕ ∥
 
- epi-to-hom : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆) → epi 𝑨 𝑩 → hom 𝑨 𝑩
- epi-to-hom _ ϕ = ∣ ϕ ∣ , fst ∥ ϕ ∥
+epi-to-hom : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆) → epi 𝑨 𝑩 → hom 𝑨 𝑩
+epi-to-hom _ ϕ = ∣ ϕ ∣ , fst ∥ ϕ ∥
 
 \end{code}
 
@@ -124,13 +166,13 @@ The kernel of a homomorphism is a congruence relation and conversely for every c
 
 \begin{code}
 
- module _ {𝓤 𝓦 : Level}{𝑨 : Algebra 𝓤 𝑆} where
+module _ {𝓤 𝓦 : Level}{𝑨 : Algebra 𝓤 𝑆} where
 
-  homker-comp : swelldef 𝓥 𝓦 → {𝑩 : Algebra 𝓦 𝑆}(h : hom 𝑨 𝑩) → compatible 𝑨 (ker ∣ h ∣)
-  homker-comp wd {𝑩} h f {u}{v} kuv = ∣ h ∣((f ̂ 𝑨) u)   ≡⟨ ∥ h ∥ f u ⟩
-                                      (f ̂ 𝑩)(∣ h ∣ ∘ u) ≡⟨ wd(f ̂ 𝑩)(∣ h ∣ ∘ u)(∣ h ∣ ∘ v)kuv ⟩
-                                      (f ̂ 𝑩)(∣ h ∣ ∘ v) ≡⟨ (∥ h ∥ f v)⁻¹ ⟩
-                                      ∣ h ∣((f ̂ 𝑨) v)   ∎
+ homker-comp : swelldef 𝓥 𝓦 → {𝑩 : Algebra 𝓦 𝑆}(h : hom 𝑨 𝑩) → compatible 𝑨 (ker ∣ h ∣)
+ homker-comp wd {𝑩} h f {u}{v} kuv = ∣ h ∣((f ̂ 𝑨) u)   ≡⟨ ∥ h ∥ f u ⟩
+                                     (f ̂ 𝑩)(∣ h ∣ ∘ u) ≡⟨ wd(f ̂ 𝑩)(∣ h ∣ ∘ u)(∣ h ∣ ∘ v)kuv ⟩
+                                     (f ̂ 𝑩)(∣ h ∣ ∘ v) ≡⟨ (∥ h ∥ f v)⁻¹ ⟩
+                                     ∣ h ∣((f ̂ 𝑨) v)   ∎
 
 
 \end{code}
@@ -141,8 +183,8 @@ It is convenient to define a function that takes a homomorphism and constructs a
 
 \begin{code}
 
-  kercon : swelldef 𝓥 𝓦 → {𝑩 : Algebra 𝓦 𝑆} → hom 𝑨 𝑩 → Con{𝓦} 𝑨
-  kercon wd {𝑩} h = ker ∣ h ∣ , mkcon (ker-IsEquivalence ∣ h ∣)(homker-comp wd {𝑩} h)
+ kercon : swelldef 𝓥 𝓦 → {𝑩 : Algebra 𝓦 𝑆} → hom 𝑨 𝑩 → Con{𝓤}{𝓦} 𝑨
+ kercon wd {𝑩} h = ker ∣ h ∣ , mkcon (ker-IsEquivalence ∣ h ∣)(homker-comp wd {𝑩} h)
 
 \end{code}
 
@@ -150,12 +192,12 @@ With this congruence we construct the corresponding quotient, along with some sy
 
 \begin{code}
 
-  kerquo : swelldef 𝓥 𝓦 → {𝑩 : Algebra 𝓦 𝑆} → hom 𝑨 𝑩 → Algebra (𝓤 ⊔ lsuc 𝓦) 𝑆
-  kerquo wd {𝑩} h = 𝑨 ╱ (kercon wd {𝑩} h)
+ kerquo : swelldef 𝓥 𝓦 → {𝑩 : Algebra 𝓦 𝑆} → hom 𝑨 𝑩 → Algebra (𝓤 ⊔ lsuc 𝓦) 𝑆
+ kerquo wd {𝑩} h = 𝑨 ╱ (kercon wd {𝑩} h)
 
 
- ker[_⇒_]_↾_ : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → hom 𝑨 𝑩 → swelldef 𝓥 𝓦 → Algebra (𝓤 ⊔ lsuc 𝓦) 𝑆
- ker[ 𝑨 ⇒ 𝑩 ] h ↾ wd = kerquo wd {𝑩} h
+ker[_⇒_]_↾_ : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → hom 𝑨 𝑩 → swelldef 𝓥 𝓦 → Algebra (𝓤 ⊔ lsuc 𝓦) 𝑆
+ker[ 𝑨 ⇒ 𝑩 ] h ↾ wd = kerquo wd {𝑩} h
 
 \end{code}
 
@@ -169,11 +211,11 @@ Given an algebra `𝑨` and a congruence `θ`, the *canonical projection* is a m
 
 \begin{code}
 
- module _ {𝓤 𝓦 : Level}{𝑨 : Algebra 𝓤 𝑆} where
-  πepi : (θ : Con{𝓦} 𝑨) → epi 𝑨 (𝑨 ╱ θ)
-  πepi θ = (λ a → ⟪ a ⟫) , (λ _ _ → refl) , cπ-is-epic  where
-   cπ-is-epic : IsSurjective (λ a → ⟪ a ⟫)
-   cπ-is-epic (C , (a , refl)) =  Image_∋_.im a
+module _ {𝓤 𝓦 : Level}{𝑨 : Algebra 𝓤 𝑆} where
+ πepi : (θ : Con{𝓤}{𝓦} 𝑨) → epi 𝑨 (𝑨 ╱ θ)
+ πepi θ = (λ a → ⟪ a ⟫) , (λ _ _ → refl) , cπ-is-epic  where
+  cπ-is-epic : IsSurjective (λ a → ⟪ a ⟫)
+  cπ-is-epic (C , (a , refl)) =  Image_∋_.im a
 
 \end{code}
 
@@ -181,8 +223,8 @@ In may happen that we don't care about the surjectivity of `πepi`, in which cas
 
 \begin{code}
 
-  πhom : (θ : Con{𝓦} 𝑨) → hom 𝑨 (𝑨 ╱ θ)
-  πhom θ = epi-to-hom (𝑨 ╱ θ) (πepi θ)
+ πhom : (θ : Con{𝓤}{𝓦} 𝑨) → hom 𝑨 (𝑨 ╱ θ)
+ πhom θ = epi-to-hom (𝑨 ╱ θ) (πepi θ)
 
 \end{code}
 
@@ -191,8 +233,8 @@ We combine the foregoing to define a function that takes 𝑆-algebras `𝑨` an
 
 \begin{code}
 
-  πker : (wd : swelldef 𝓥 𝓦){𝑩 : Algebra 𝓦 𝑆}(h : hom 𝑨 𝑩) → epi 𝑨 (ker[ 𝑨 ⇒ 𝑩 ] h ↾ wd)
-  πker wd {𝑩} h = πepi (kercon wd {𝑩} h)
+ πker : (wd : swelldef 𝓥 𝓦){𝑩 : Algebra 𝓦 𝑆}(h : hom 𝑨 𝑩) → epi 𝑨 (ker[ 𝑨 ⇒ 𝑩 ] h ↾ wd)
+ πker wd {𝑩} h = πepi (kercon wd {𝑩} h)
 
 \end{code}
 
@@ -200,12 +242,12 @@ The kernel of the canonical projection of `𝑨` onto `𝑨 / θ` is equal to `�
 
 \begin{code}
 
-  open IsCongruence
+ open IsCongruence
 
-  ker-in-con : {wd : swelldef 𝓥 (𝓤 ⊔ lsuc 𝓦)}(θ : Con{𝓦} 𝑨)
-   →           ∀ {x}{y} → ∣ kercon wd {𝑨 ╱ θ} (πhom θ) ∣ x y →  ∣ θ ∣ x y
+ ker-in-con : {wd : swelldef 𝓥 (𝓤 ⊔ lsuc 𝓦)}(θ : Con 𝑨)
+  →           ∀ {x}{y} → ∣ kercon wd {𝑨 ╱ θ} (πhom θ) ∣ x y →  ∣ θ ∣ x y
 
-  ker-in-con θ hyp = /-≡ θ hyp
+ ker-in-con θ hyp = /-≡ θ hyp
 
 \end{code}
 
@@ -219,10 +261,10 @@ If in addition we have a family `𝒽 : (i : I) → hom 𝑨 (ℬ i)` of homomor
 
 \begin{code}
 
- module _ {𝓘 𝓦 : Level}{I : Type 𝓘}(ℬ : I → Algebra 𝓦 𝑆) where
+module _ {𝓘 𝓦 : Level}{I : Type 𝓘}(ℬ : I → Algebra 𝓦 𝑆) where
 
-  ⨅-hom-co : funext 𝓘 𝓦 → {𝓤 : Level}(𝑨 : Algebra 𝓤 𝑆) → (∀(i : I) → hom 𝑨 (ℬ i)) → hom 𝑨 (⨅ ℬ)
-  ⨅-hom-co fe 𝑨 𝒽 = (λ a i → ∣ 𝒽 i ∣ a) , (λ 𝑓 𝒶 → fe λ i → ∥ 𝒽 i ∥ 𝑓 𝒶)
+ ⨅-hom-co : funext 𝓘 𝓦 → {𝓤 : Level}(𝑨 : Algebra 𝓤 𝑆) → (∀(i : I) → hom 𝑨 (ℬ i)) → hom 𝑨 (⨅ ℬ)
+ ⨅-hom-co fe 𝑨 𝒽 = (λ a i → ∣ 𝒽 i ∣ a) , (λ 𝑓 𝒶 → fe λ i → ∥ 𝒽 i ∥ 𝑓 𝒶)
 
 \end{code}
 
@@ -235,8 +277,8 @@ The foregoing generalizes easily to the case in which the domain is also a produ
 
 \begin{code}
 
-  ⨅-hom : funext 𝓘 𝓦 → {𝓤 : Level}(𝒜 : I → Algebra 𝓤 𝑆) → (∀(i : I) →  hom (𝒜 i)(ℬ i)) → hom (⨅ 𝒜)(⨅ ℬ)
-  ⨅-hom fe 𝒜 𝒽 = (λ x i → ∣ 𝒽 i ∣ (x i)) , (λ 𝑓 𝒶 → fe λ i → ∥ 𝒽 i ∥ 𝑓 (λ x → 𝒶 x i))
+ ⨅-hom : funext 𝓘 𝓦 → {𝓤 : Level}(𝒜 : I → Algebra 𝓤 𝑆) → Π[ i ꞉ I ] hom (𝒜 i)(ℬ i) → hom (⨅ 𝒜)(⨅ ℬ)
+ ⨅-hom fe 𝒜 𝒽 = (λ x i → ∣ 𝒽 i ∣ (x i)) , (λ 𝑓 𝒶 → fe λ i → ∥ 𝒽 i ∥ 𝑓 (λ x → 𝒶 x i))
 
 \end{code}
 
@@ -248,8 +290,8 @@ Later we will need a proof of the fact that projecting out of a product algebra 
 
 \begin{code}
 
-  ⨅-projection-hom : ∀ (i : I ) →  hom (⨅ ℬ) (ℬ i)
-  ⨅-projection-hom = λ x → (λ z → z x) , λ _ _ → refl
+ ⨅-projection-hom : Π[ i ꞉ I ] hom (⨅ ℬ) (ℬ i)
+ ⨅-projection-hom = λ x → (λ z → z x) , λ _ _ → refl
 
 \end{code}
 

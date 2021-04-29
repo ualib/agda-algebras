@@ -13,12 +13,20 @@ This section presents the [Algebras.Basic][] module of the [Agda Universal Algeb
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
+-- Imports from the Agda (Builtin) and the Agda Standard Library
 open import Data.Empty using (⊥)
 open import Agda.Builtin.Bool
+open import Level renaming (suc to lsuc; zero to lzero)
+open import Data.Product renaming (_,_ to infixr 50 _,_) using (Σ; _×_)
+open import Relation.Binary using (Rel)
+
+-- Imports from the Agda Universal Algebra Library
+open import Overture.Preliminaries using (Type; 𝓞; 𝓤; 𝓥; 𝓦; -Σ; ∣_∣; ∥_∥)
+open import Relations.Continuous using (ContRel; DepRel; cont-compatible-op; dep-compatible-op)
+open import Relations.Discrete using (Op; _|:_)
 
 module Algebras.Basic where
 
-open import Relations.Extensionality public
 
 \end{code}
 
@@ -41,7 +49,7 @@ In the [UniversalAlgebra][] library we represent the *signature* of an algebraic
 \begin{code}
 
 Signature : (𝓞 𝓥 : Level) → Type (lsuc (𝓞 ⊔ 𝓥))
-Signature 𝓞 𝓥 = Σ F ꞉ Type 𝓞 , (F → Type 𝓥)
+Signature 𝓞 𝓥 = Σ[ F ꞉ Type 𝓞 ] (F → Type 𝓥)
 
 \end{code}
 
@@ -83,7 +91,7 @@ Recall, we defined the type `Signature 𝓞 𝓥` above as the dependent pair ty
 \begin{code}
 
 Algebra : (𝓤 : Level)(𝑆 : Signature 𝓞 𝓥) → Type (𝓞 ⊔ 𝓥 ⊔ lsuc 𝓤)
-Algebra 𝓤 𝑆 = Σ[ A ∈ Type 𝓤 ]                   -- the domain
+Algebra 𝓤 𝑆 = Σ[ A ꞉ Type 𝓤 ]                   -- the domain
               ∀ (f : ∣ 𝑆 ∣) → Op (∥ 𝑆 ∥ f) A    -- the basic operations
 
 \end{code}

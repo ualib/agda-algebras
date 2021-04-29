@@ -15,12 +15,26 @@ The theoretical background that begins each subsection below is based on Cliff B
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Terms.Basic where
+-- Imports from Agda (builtin/primitive) and the Agda Standard Library
+open import Agda.Builtin.Equality using (_≡_; refl)
+open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
+open import Data.Product using (_,_; Σ; _×_)
+open import Function.Base  using (_∘_)
+open import Level renaming (suc to lsuc; zero to lzero)
+open import Relation.Binary.PropositionalEquality.Core using (cong)
+open import Relation.Unary using (Pred)
 
-open import Homomorphisms.HomomorphicImages public
+-- Imports from the Agda Universal Algebra Library
+open import Algebras.Basic
+open import Overture.Preliminaries
+ using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; Π; -Π; -Σ; _≡⟨_⟩_; _∎; _⁻¹; 𝑖𝑑; ∣_∣; ∥_∥)
+open import Overture.Inverses using (IsSurjective; Image_∋_; Inv; InvIsInv; eq)
 
-module terms {𝑆 : Signature 𝓞 𝓥} where
- open hom-images {𝑆 = 𝑆} public
+
+module Terms.Basic {𝑆 : Signature 𝓞 𝓥} where
+
+open import Algebras.Products{𝑆 = 𝑆} using (ov)
+open import Homomorphisms.Basic {𝑆 = 𝑆} using (hom) -- ; 𝓁𝒾𝒻𝓉; 𝓁ℴ𝓌ℯ𝓇)
 
 \end{code}
 
@@ -42,11 +56,11 @@ The definition of `Term X` is recursive, indicating that an inductive type could
 
 \begin{code}
 
- data Term (X : Type 𝓧 ) : Type(ov 𝓧)  where
-  ℊ : X → Term X    -- (ℊ for "generator")
-  node : (f : ∣ 𝑆 ∣)(𝑡 : ∥ 𝑆 ∥ f → Term X) → Term X
+data Term (X : Type 𝓧 ) : Type(ov 𝓧)  where
+ ℊ : X → Term X    -- (ℊ for "generator")
+ node : (f : ∣ 𝑆 ∣)(𝑡 : ∥ 𝑆 ∥ f → Term X) → Term X
 
- open Term public
+open Term public
 
 \end{code}
 
@@ -68,8 +82,8 @@ In [Agda][] the term algebra can be defined as simply as one could hope.
 
 \begin{code}
 
- 𝑻 : (X : Type 𝓧 ) → Algebra (ov 𝓧) 𝑆
- 𝑻 X = Term X , node
+𝑻 : (X : Type 𝓧 ) → Algebra (ov 𝓧) 𝑆
+𝑻 X = Term X , node
 
 \end{code}
 
@@ -86,11 +100,11 @@ We now prove this in [Agda][], starting with the fact that every map from `X` to
 
 \begin{code}
 
- private variable X : Type 𝓧
+private variable X : Type 𝓧
 
- free-lift : (𝑨 : Algebra 𝓤 𝑆)(h : X → ∣ 𝑨 ∣) → ∣ 𝑻 X ∣ → ∣ 𝑨 ∣
- free-lift _ h (ℊ x) = h x
- free-lift 𝑨 h (node f 𝑡) = (f ̂ 𝑨) (λ i → free-lift 𝑨 h (𝑡 i))
+free-lift : (𝑨 : Algebra 𝓤 𝑆)(h : X → ∣ 𝑨 ∣) → ∣ 𝑻 X ∣ → ∣ 𝑨 ∣
+free-lift _ h (ℊ x) = h x
+free-lift 𝑨 h (node f 𝑡) = (f ̂ 𝑨) (λ i → free-lift 𝑨 h (𝑡 i))
 
 \end{code}
 
@@ -105,8 +119,8 @@ The free lift so defined is a homomorphism by construction. Indeed, here is the 
 
 \begin{code}
 
- lift-hom : (𝑨 : Algebra 𝓤 𝑆) → (X → ∣ 𝑨 ∣) → hom (𝑻 X) 𝑨
- lift-hom 𝑨 h = free-lift 𝑨 h , λ f a → cong (f ̂ 𝑨) refl
+lift-hom : (𝑨 : Algebra 𝓤 𝑆) → (X → ∣ 𝑨 ∣) → hom (𝑻 X) 𝑨
+lift-hom 𝑨 h = free-lift 𝑨 h , λ f a → cong (f ̂ 𝑨) refl
 
 \end{code}
 
@@ -114,20 +128,19 @@ Finally, we prove that the homomorphism is unique.  This requires `funext 𝓥 �
 
 \begin{code}
 
- free-unique : funext 𝓥 𝓤 → (𝑨 : Algebra 𝓤 𝑆)(g h : hom (𝑻 X) 𝑨)
-  →            (∀ x → ∣ g ∣ (ℊ x) ≡ ∣ h ∣ (ℊ x))
-               ----------------------------------------------------
-  →            ∀ (t : Term X) →  ∣ g ∣ t ≡ ∣ h ∣ t
+free-unique : funext 𝓥 𝓤 → (𝑨 : Algebra 𝓤 𝑆)(g h : hom (𝑻 X) 𝑨)
+ →            (∀ x → ∣ g ∣ (ℊ x) ≡ ∣ h ∣ (ℊ x))
+              ----------------------------------------
+ →            ∀ (t : Term X) →  ∣ g ∣ t ≡ ∣ h ∣ t
 
- free-unique _ _ _ _ p (ℊ x) = p x
-
- free-unique fe 𝑨 g h p (node 𝑓 𝑡) = ∣ g ∣ (node 𝑓 𝑡)  ≡⟨ ∥ g ∥ 𝑓 𝑡 ⟩
+free-unique _ _ _ _ p (ℊ x) = p x
+free-unique fe 𝑨 g h p (node 𝑓 𝑡) = ∣ g ∣ (node 𝑓 𝑡)  ≡⟨ ∥ g ∥ 𝑓 𝑡 ⟩
                                    (𝑓 ̂ 𝑨)(∣ g ∣ ∘ 𝑡)  ≡⟨ α ⟩
                                    (𝑓 ̂ 𝑨)(∣ h ∣ ∘ 𝑡)  ≡⟨ (∥ h ∥ 𝑓 𝑡)⁻¹ ⟩
                                    ∣ h ∣ (node 𝑓 𝑡)   ∎
-  where
-  α : (𝑓 ̂ 𝑨) (∣ g ∣ ∘ 𝑡) ≡ (𝑓 ̂ 𝑨) (∣ h ∣ ∘ 𝑡)
-  α = cong (𝑓 ̂ 𝑨) (fe λ i → free-unique fe 𝑨 g h p (𝑡 i))
+ where
+ α : (𝑓 ̂ 𝑨) (∣ g ∣ ∘ 𝑡) ≡ (𝑓 ̂ 𝑨) (∣ h ∣ ∘ 𝑡)
+ α = cong (𝑓 ̂ 𝑨) (fe λ i → free-unique fe 𝑨 g h p (𝑡 i))
 
 \end{code}
 
@@ -137,17 +150,17 @@ If we further assume that each of the mappings from `X` to `∣ 𝑨 ∣` is *su
 
 \begin{code}
 
- lift-of-epi-is-epi : (𝑨 : Algebra 𝓤 𝑆){h₀ : X → ∣ 𝑨 ∣}
-  →                   IsSurjective h₀ → IsSurjective ∣ lift-hom 𝑨 h₀ ∣
- lift-of-epi-is-epi 𝑨 {h₀} hE y = γ
-  where
-  h₀⁻¹y = Inv h₀ (hE y)
+lift-of-epi-is-epi : (𝑨 : Algebra 𝓤 𝑆){h₀ : X → ∣ 𝑨 ∣}
+ →                   IsSurjective h₀ → IsSurjective ∣ lift-hom 𝑨 h₀ ∣
+lift-of-epi-is-epi 𝑨 {h₀} hE y = γ
+ where
+ h₀⁻¹y = Inv h₀ (hE y)
 
-  η : y ≡ ∣ lift-hom 𝑨 h₀ ∣ (ℊ h₀⁻¹y)
-  η = (InvIsInv h₀ (hE y))⁻¹
+ η : y ≡ ∣ lift-hom 𝑨 h₀ ∣ (ℊ h₀⁻¹y)
+ η = (InvIsInv h₀ (hE y))⁻¹
 
-  γ : Image ∣ lift-hom 𝑨 h₀ ∣ ∋ y
-  γ = eq y (ℊ h₀⁻¹y) η
+ γ : Image ∣ lift-hom 𝑨 h₀ ∣ ∋ y
+ γ = eq y (ℊ h₀⁻¹y) η
 
 \end{code}
 

@@ -13,13 +13,31 @@ The [Subalgebras.Subalgebras][] module of the [Agda Universal Algebra Library][]
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Subalgebras.Subalgebras where
+-- Imports from Agda (builtin/primitive) and the Agda Standard Library
+open import Agda.Builtin.Equality using (_≡_; refl)
+open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
+open import Data.Product using (_,_; Σ; _×_)
+open import Function.Base  using (_∘_)
+open import Level renaming (suc to lsuc; zero to lzero)
+open import Relation.Binary.PropositionalEquality.Core using (cong)
+open import Relation.Unary using (_∈_; Pred; _⊆_)
 
-open import Subalgebras.Subuniverses public
--- open import MGS-Embeddings using (∘-embedding; id-is-embedding) public
+-- Imports from the Agda Universal Algebra Library
+open import Algebras.Basic
+open import Relations.Extensionality using (pred-ext; swelldef)
+open import Relations.Truncation using (is-set; blk-uip)
+open import Overture.Inverses using (IsInjective; id-is-injective; ∘-injective)
+open import Overture.Preliminaries
+ using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; 𝓩; Π; -Π; -Σ; _≡⟨_⟩_; _∎; _∙_;_⁻¹; ∣_∣; ∥_∥; snd; 𝑖𝑑; fst)
 
-module subalgebras {𝑆 : Signature 𝓞 𝓥} where
- open subuniverses {𝑆 = 𝑆} public
+
+module Subalgebras.Subalgebras {𝑆 : Signature 𝓞 𝓥} where
+
+open import Algebras.Products{𝑆 = 𝑆} using (ov)
+open import Homomorphisms.Basic {𝑆 = 𝑆} using (hom; kercon; ker[_⇒_]_↾_; ∘-hom; is-homomorphism; ∘-is-hom)
+open import Homomorphisms.Noether using (FirstHomTheorem|Set)
+open import Homomorphisms.Isomorphisms using (_≅_; ≅-sym; ≅-trans; Lift-≅)
+open import Terms.Basic {𝑆 = 𝑆} using (Term; ℊ; node; 𝑻)
 
 \end{code}
 
@@ -30,12 +48,11 @@ Given algebras `𝑨 : Algebra 𝓤 𝑆` and `𝑩 : Algebra 𝓦 𝑆`, we say
 
 \begin{code}
 
- _IsSubalgebraOf_ : {𝓦 𝓤 : Level}(𝑩 : Algebra 𝓦 𝑆)(𝑨 : Algebra 𝓤 𝑆) → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
- -- 𝑩 IsSubalgebraOf 𝑨 = Σ h ꞉ hom 𝑩 𝑨 , is-embedding ∣ h ∣
- 𝑩 IsSubalgebraOf 𝑨 = Σ h ꞉ hom 𝑩 𝑨 , IsInjective ∣ h ∣
+_IsSubalgebraOf_ : {𝓦 𝓤 : Level}(𝑩 : Algebra 𝓦 𝑆)(𝑨 : Algebra 𝓤 𝑆) → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
+𝑩 IsSubalgebraOf 𝑨 = Σ[ h ꞉ hom 𝑩 𝑨 ] IsInjective ∣ h ∣
 
- Subalgebra : {𝓦 𝓤 : Level} → Algebra 𝓤 𝑆 → Type(ov 𝓦 ⊔ 𝓤)
- Subalgebra {𝓦} 𝑨 = Σ 𝑩 ꞉ (Algebra 𝓦 𝑆) , 𝑩 IsSubalgebraOf 𝑨
+Subalgebra : {𝓦 𝓤 : Level} → Algebra 𝓤 𝑆 → Type(ov 𝓦 ⊔ 𝓤)
+Subalgebra {𝓦} 𝑨 = Σ[ 𝑩 ꞉ (Algebra 𝓦 𝑆) ] 𝑩 IsSubalgebraOf 𝑨
 
 \end{code}
 
@@ -50,18 +67,18 @@ We take this opportunity to prove an important lemma that makes use of the `IsSu
 
 \begin{code}
 
- module _ (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
-          -- extensionality assumptions:
-          (pe : pred-ext 𝓤 𝓦)(fe : swelldef 𝓥 𝓦)
+module _ (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
+         -- extensionality assumptions:
+         (pe : pred-ext 𝓤 𝓦)(fe : swelldef 𝓥 𝓦)
 
-          -- truncation assumptions:
-          (Bset : is-set ∣ 𝑩 ∣)
-          (buip : blk-uip ∣ 𝑨 ∣ ∣ kercon fe {𝑩} h ∣)
-          where
+         -- truncation assumptions:
+         (Bset : is-set ∣ 𝑩 ∣)
+         (buip : blk-uip ∣ 𝑨 ∣ ∣ kercon fe {𝑩} h ∣)
+         where
 
-  FirstHomCorollary|Set : (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) IsSubalgebraOf 𝑩
-  FirstHomCorollary|Set = ϕhom , ϕinj
-   where
+ FirstHomCorollary|Set : (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) IsSubalgebraOf 𝑩
+ FirstHomCorollary|Set = ϕhom , ϕinj
+  where
    hh = FirstHomTheorem|Set 𝑨 𝑩 h pe fe Bset buip
    ϕhom : hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩
    ϕhom = ∣ hh ∣
@@ -75,17 +92,17 @@ If we apply the foregoing theorem to the special case in which the `𝑨` is ter
 
 \begin{code}
 
- module _ (X : Type 𝓧)(𝑩 : Algebra 𝓦 𝑆)(h : hom (𝑻 X) 𝑩)
-          -- extensionality assumptions:
-          (pe : pred-ext (ov 𝓧) 𝓦)(fe : swelldef 𝓥 𝓦)
+module _ (X : Type 𝓧)(𝑩 : Algebra 𝓦 𝑆)(h : hom (𝑻 X) 𝑩)
+         -- extensionality assumptions:
+         (pe : pred-ext (ov 𝓧) 𝓦)(fe : swelldef 𝓥 𝓦)
 
-          -- truncation assumptions:
-          (Bset : is-set ∣ 𝑩 ∣)
-          (buip : blk-uip (Term X) ∣ kercon fe {𝑩} h ∣)
-          where
+         -- truncation assumptions:
+         (Bset : is-set ∣ 𝑩 ∣)
+         (buip : blk-uip (Term X) ∣ kercon fe {𝑩} h ∣)
+         where
 
-  free-quot-subalg : (ker[ 𝑻 X ⇒ 𝑩 ] h ↾ fe) IsSubalgebraOf 𝑩
-  free-quot-subalg = FirstHomCorollary|Set{𝓤 = ov 𝓧}(𝑻 X) 𝑩 h pe fe Bset buip
+ free-quot-subalg : (ker[ 𝑻 X ⇒ 𝑩 ] h ↾ fe) IsSubalgebraOf 𝑩
+ free-quot-subalg = FirstHomCorollary|Set{𝓤 = ov 𝓧}(𝑻 X) 𝑩 h pe fe Bset buip
 
 \end{code}
 
@@ -93,8 +110,8 @@ If we apply the foregoing theorem to the special case in which the `𝑨` is ter
 
 \begin{code}
 
- _≤_ : Algebra 𝓦 𝑆 → Algebra 𝓤 𝑆 → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
- 𝑩 ≤ 𝑨 = 𝑩 IsSubalgebraOf 𝑨
+_≤_ : Algebra 𝓦 𝑆 → Algebra 𝓤 𝑆 → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
+𝑩 ≤ 𝑨 = 𝑩 IsSubalgebraOf 𝑨
 
 \end{code}
 
@@ -109,10 +126,10 @@ Suppose `𝒦 : Pred (Algebra 𝓤 𝑆) 𝓩` denotes a class of `𝑆`-algebra
 
 \begin{code}
 
- module _ {𝓦 𝓤 𝓩 : Level} where
+module _ {𝓦 𝓤 𝓩 : Level} where
 
-  _IsSubalgebraOfClass_ : Algebra 𝓦 𝑆 → Pred (Algebra 𝓤 𝑆) 𝓩 → Type(ov (𝓤 ⊔ 𝓦) ⊔ 𝓩)
-  𝑩 IsSubalgebraOfClass 𝒦 = Σ 𝑨 ꞉ Algebra 𝓤 𝑆 , Σ sa ꞉ Subalgebra{𝓦} 𝑨 , (𝑨 ∈ 𝒦) × (𝑩 ≅ ∣ sa ∣)
+ _IsSubalgebraOfClass_ : Algebra 𝓦 𝑆 → Pred (Algebra 𝓤 𝑆) 𝓩 → Type(ov (𝓤 ⊔ 𝓦) ⊔ 𝓩)
+ 𝑩 IsSubalgebraOfClass 𝒦 = Σ[ 𝑨 ꞉ Algebra 𝓤 𝑆 ] Σ[ sa ꞉ Subalgebra{𝓦} 𝑨 ] ((𝑨 ∈ 𝒦) × (𝑩 ≅ ∣ sa ∣))
 
 \end{code}
 
@@ -120,8 +137,8 @@ Using this type, we express the collection of all subalgebras of algebras in a c
 
 \begin{code}
 
- SubalgebraOfClass : {𝓦 𝓤 : Level} → Pred (Algebra 𝓤 𝑆)(ov 𝓤) → Type(ov (𝓤 ⊔ 𝓦))
- SubalgebraOfClass {𝓦} 𝒦 = Σ 𝑩 ꞉ Algebra 𝓦 𝑆 , 𝑩 IsSubalgebraOfClass 𝒦
+SubalgebraOfClass : {𝓦 𝓤 : Level} → Pred (Algebra 𝓤 𝑆)(ov 𝓤) → Type(ov (𝓤 ⊔ 𝓦))
+SubalgebraOfClass {𝓦} 𝒦 = Σ[ 𝑩 ꞉ Algebra 𝓦 𝑆 ] 𝑩 IsSubalgebraOfClass 𝒦
 
 \end{code}
 
@@ -136,23 +153,23 @@ First we show that the subalgebra relation is a *preorder*; i.e., it is a reflex
 
 \begin{code}
 
- ≤-reflexive : (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ≤ 𝑨
- ≤-reflexive 𝑨 = (𝑖𝑑 ∣ 𝑨 ∣ , λ 𝑓 𝑎 → refl) , id-is-injective
+≤-reflexive : (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ≤ 𝑨
+≤-reflexive 𝑨 = (𝑖𝑑 ∣ 𝑨 ∣ , λ 𝑓 𝑎 → refl) , id-is-injective
 
- ≤-refl : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ≤ 𝑨
- ≤-refl {𝑨 = 𝑨} = ≤-reflexive 𝑨
+≤-refl : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ≤ 𝑨
+≤-refl {𝑨 = 𝑨} = ≤-reflexive 𝑨
 
 
- ≤-transitivity : (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
-  →               𝑪 ≤ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
+≤-transitivity : (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
+ →               𝑪 ≤ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
 
- ≤-transitivity 𝑨 𝑩 𝑪 CB BA = (∘-hom 𝑪 𝑨 ∣ CB ∣ ∣ BA ∣) , γ
-  where
-   γ : IsInjective ∣ (∘-hom 𝑪 𝑨 ∣ CB ∣ ∣ BA ∣) ∣
-   γ = ∘-injective ∥ CB ∥ ∥ BA ∥
+≤-transitivity 𝑨 𝑩 𝑪 CB BA = (∘-hom 𝑪 𝑨 ∣ CB ∣ ∣ BA ∣) , γ
+ where
+  γ : IsInjective ∣ (∘-hom 𝑪 𝑨 ∣ CB ∣ ∣ BA ∣) ∣
+  γ = ∘-injective ∥ CB ∥ ∥ BA ∥
 
- ≤-trans : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆} → 𝑪 ≤ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
- ≤-trans 𝑨 {𝑩}{𝑪} = ≤-transitivity 𝑨 𝑩 𝑪
+≤-trans : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆} → 𝑪 ≤ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
+≤-trans 𝑨 {𝑩}{𝑪} = ≤-transitivity 𝑨 𝑩 𝑪
 
 \end{code}
 
@@ -160,49 +177,49 @@ Next we prove that if two algebras are isomorphic and one of them is a subalgebr
 
 \begin{code}
 
- iso→injective : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}
-  →              ((f , _ , _ , _) : 𝑨 ≅ 𝑩) → IsInjective ∣ f ∣
- iso→injective {𝑨 = 𝑨} (f , g , f∼g , g∼f) {x}{y} fxfy =
-  x                  ≡⟨ (g∼f x)⁻¹ ⟩
-  (∣ g ∣ ∘ ∣ f ∣) x  ≡⟨ cong ∣ g ∣ fxfy ⟩
-  (∣ g ∣ ∘ ∣ f ∣) y  ≡⟨ g∼f y ⟩
-  y                  ∎
+iso→injective : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}
+ →              ((f , _ , _ , _) : 𝑨 ≅ 𝑩) → IsInjective ∣ f ∣
+iso→injective {𝑨 = 𝑨} (f , g , f∼g , g∼f) {x}{y} fxfy =
+ x                  ≡⟨ (g∼f x)⁻¹ ⟩
+ (∣ g ∣ ∘ ∣ f ∣) x  ≡⟨ cong ∣ g ∣ fxfy ⟩
+ (∣ g ∣ ∘ ∣ f ∣) y  ≡⟨ g∼f y ⟩
+ y                  ∎
 
- ≤-iso : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆}
-  →      𝑪 ≅ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
+≤-iso : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆}
+ →      𝑪 ≅ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
 
- ≤-iso 𝑨 {𝑩} {𝑪} CB BA = (g ∘ f , gfhom) , gfinj
-  where
-   f : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
-   f = fst ∣ CB ∣
-   g : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
-   g = fst ∣ BA ∣
+≤-iso 𝑨 {𝑩} {𝑪} CB BA = (g ∘ f , gfhom) , gfinj
+ where
+  f : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
+  f = fst ∣ CB ∣
+  g : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
+  g = fst ∣ BA ∣
 
-   gfinj : IsInjective (g ∘ f)
-   gfinj = ∘-injective (iso→injective CB)(∥ BA ∥)
+  gfinj : IsInjective (g ∘ f)
+  gfinj = ∘-injective (iso→injective CB)(∥ BA ∥)
 
-   gfhom : is-homomorphism 𝑪 𝑨 (g ∘ f)
-   gfhom = ∘-is-hom 𝑪 𝑨 {f}{g} (snd ∣ CB ∣) (snd ∣ BA ∣)
-
-
- ≤-trans-≅ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
-  →          𝑨 ≤ 𝑩 → 𝑨 ≅ 𝑪 → 𝑪 ≤ 𝑩
-
- ≤-trans-≅ 𝑨 {𝑩} 𝑪 A≤B B≅C = ≤-iso 𝑩 (≅-sym B≅C) A≤B
+  gfhom : is-homomorphism 𝑪 𝑨 (g ∘ f)
+  gfhom = ∘-is-hom 𝑪 𝑨 {f}{g} (snd ∣ CB ∣) (snd ∣ BA ∣)
 
 
- ≤-TRANS-≅ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
-  →          𝑨 ≤ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤ 𝑪
- ≤-TRANS-≅ 𝑨 𝑪 A≤B B≅C = (∘-hom 𝑨 𝑪 ∣ A≤B ∣ ∣ B≅C ∣) , γ
-  where
-  γ : IsInjective ∣ (∘-hom 𝑨 𝑪 ∣ A≤B ∣ ∣ B≅C ∣) ∣
-  γ = ∘-injective (∥ A≤B ∥)(iso→injective B≅C)
+≤-trans-≅ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
+ →          𝑨 ≤ 𝑩 → 𝑨 ≅ 𝑪 → 𝑪 ≤ 𝑩
+
+≤-trans-≅ 𝑨 {𝑩} 𝑪 A≤B B≅C = ≤-iso 𝑩 (≅-sym B≅C) A≤B
 
 
- ≤-mono : (𝑩 : Algebra 𝓦 𝑆){𝒦 𝒦' : Pred (Algebra 𝓤 𝑆) 𝓩}
-  →       𝒦 ⊆ 𝒦' → 𝑩 IsSubalgebraOfClass 𝒦 → 𝑩 IsSubalgebraOfClass 𝒦'
+≤-TRANS-≅ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
+ →          𝑨 ≤ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤ 𝑪
+≤-TRANS-≅ 𝑨 𝑪 A≤B B≅C = (∘-hom 𝑨 𝑪 ∣ A≤B ∣ ∣ B≅C ∣) , γ
+ where
+ γ : IsInjective ∣ (∘-hom 𝑨 𝑪 ∣ A≤B ∣ ∣ B≅C ∣) ∣
+ γ = ∘-injective (∥ A≤B ∥)(iso→injective B≅C)
 
- ≤-mono 𝑩 KK' KB = ∣ KB ∣ , fst ∥ KB ∥ , KK' (∣ snd ∥ KB ∥ ∣) , ∥ (snd ∥ KB ∥) ∥
+
+≤-mono : (𝑩 : Algebra 𝓦 𝑆){𝒦 𝒦' : Pred (Algebra 𝓤 𝑆) 𝓩}
+ →       𝒦 ⊆ 𝒦' → 𝑩 IsSubalgebraOfClass 𝒦 → 𝑩 IsSubalgebraOfClass 𝒦'
+
+≤-mono 𝑩 KK' KB = ∣ KB ∣ , fst ∥ KB ∥ , KK' (∣ snd ∥ KB ∥ ∣) , ∥ (snd ∥ KB ∥) ∥
 
 \end{code}
 
@@ -212,30 +229,30 @@ Next we prove that if two algebras are isomorphic and one of them is a subalgebr
 
 \begin{code}
 
- module _ {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}{𝑩 : Algebra 𝓤 𝑆} where
+module _ {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}{𝑩 : Algebra 𝓤 𝑆} where
 
-  Lift-is-sub : 𝑩 IsSubalgebraOfClass 𝒦 → (Lift-alg 𝑩 𝓤) IsSubalgebraOfClass 𝒦
-  Lift-is-sub (𝑨 , (sa , (KA , B≅sa))) = 𝑨 , sa , KA , ≅-trans (≅-sym Lift-≅) B≅sa
-
-
- Lift-≤ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝓩 : Level} → 𝑩 ≤ 𝑨 → Lift-alg 𝑩 𝓩 ≤ 𝑨
- Lift-≤ 𝑨 B≤A = ≤-iso 𝑨 (≅-sym Lift-≅) B≤A
-
- ≤-Lift : (𝑨 : Algebra 𝓧 𝑆){𝓩 : Level}{𝑩 : Algebra 𝓨 𝑆} → 𝑩 ≤ 𝑨 → 𝑩 ≤ Lift-alg 𝑨 𝓩
- ≤-Lift 𝑨 {𝓩} {𝑩} B≤A = ≤-TRANS-≅ 𝑩 {𝑨} (Lift-alg 𝑨 𝓩) B≤A Lift-≅
+ Lift-is-sub : 𝑩 IsSubalgebraOfClass 𝒦 → (Lift-alg 𝑩 𝓤) IsSubalgebraOfClass 𝒦
+ Lift-is-sub (𝑨 , (sa , (KA , B≅sa))) = 𝑨 , sa , KA , ≅-trans (≅-sym Lift-≅) B≅sa
 
 
- module _ {𝓧 𝓨 𝓩 𝓦 : Level} where
+Lift-≤ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝓩 : Level} → 𝑩 ≤ 𝑨 → Lift-alg 𝑩 𝓩 ≤ 𝑨
+Lift-≤ 𝑨 B≤A = ≤-iso 𝑨 (≅-sym Lift-≅) B≤A
 
-  Lift-≤-Lift : {𝑨 : Algebra 𝓧 𝑆}(𝑩 : Algebra 𝓨 𝑆) → 𝑨 ≤ 𝑩 → Lift-alg 𝑨 𝓩 ≤ Lift-alg 𝑩 𝓦
-  Lift-≤-Lift {𝑨} 𝑩 A≤B = ≤-trans (Lift-alg 𝑩 𝓦) (≤-trans 𝑩 lAA A≤B) B≤lB
-    where
+≤-Lift : (𝑨 : Algebra 𝓧 𝑆){𝓩 : Level}{𝑩 : Algebra 𝓨 𝑆} → 𝑩 ≤ 𝑨 → 𝑩 ≤ Lift-alg 𝑨 𝓩
+≤-Lift 𝑨 {𝓩} {𝑩} B≤A = ≤-TRANS-≅ 𝑩 {𝑨} (Lift-alg 𝑨 𝓩) B≤A Lift-≅
 
-    lAA : (Lift-alg 𝑨 𝓩) ≤ 𝑨
-    lAA = Lift-≤ 𝑨 {𝑨} ≤-refl
 
-    B≤lB : 𝑩 ≤ Lift-alg 𝑩 𝓦
-    B≤lB = ≤-Lift 𝑩 ≤-refl
+module _ {𝓧 𝓨 𝓩 𝓦 : Level} where
+
+ Lift-≤-Lift : {𝑨 : Algebra 𝓧 𝑆}(𝑩 : Algebra 𝓨 𝑆) → 𝑨 ≤ 𝑩 → Lift-alg 𝑨 𝓩 ≤ Lift-alg 𝑩 𝓦
+ Lift-≤-Lift {𝑨} 𝑩 A≤B = ≤-trans (Lift-alg 𝑩 𝓦) (≤-trans 𝑩 lAA A≤B) B≤lB
+   where
+
+   lAA : (Lift-alg 𝑨 𝓩) ≤ 𝑨
+   lAA = Lift-≤ 𝑨 {𝑨} ≤-refl
+
+   B≤lB : 𝑩 ≤ Lift-alg 𝑩 𝓦
+   B≤lB = ≤-Lift 𝑩 ≤-refl
 
 \end{code}
 
@@ -250,7 +267,7 @@ Next we prove that if two algebras are isomorphic and one of them is a subalgebr
 <br>
 
 [← Subalgebras.Subuniverses](Subalgebras.Subuniverses.html)
-<span style="float:right;">[Subalgebras.Univalent →](Subalgebras.Univalent.html)</span>
+<span style="float:right;">[Varieties →](Varieties.html)</span>
 
 {% include UALib.Links.md %}
 
