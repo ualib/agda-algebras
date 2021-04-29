@@ -15,9 +15,10 @@ This section describes the [Homomorphisms.Basic] module of the [Agda Universal A
 
 -- Imports from the Agda (Builtin) and the Agda Standard Library
 open import Agda.Builtin.Equality using (_≡_; refl)
-open import Level renaming (suc to lsuc; zero to lzero)
+open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
 open import Data.Product using (_,_; Σ; _×_)
 open import Function.Base  using (_∘_; id)
+open import Level renaming (suc to lsuc; zero to lzero)
 open import Relation.Binary using (Rel; IsEquivalence)
 open import Relation.Binary.PropositionalEquality.Core using (sym; trans; cong)
 
@@ -25,7 +26,6 @@ open import Relation.Binary.PropositionalEquality.Core using (sym; trans; cong)
 open import Algebras.Basic
 open import Overture.Preliminaries using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; 𝓩; Π; -Π; -Σ; _≡⟨_⟩_; _∎; _⁻¹; ∣_∣; ∥_∥; fst)
 open import Overture.Inverses using (IsInjective; IsSurjective; Image_∋_)
-open import Overture.FunExtensionality using (funext)
 open import Relations.Discrete using (ker) -- 𝟎; _|:_)
 open import Relations.Extensionality using (swelldef)
 open import Relations.Quotients using (ker-IsEquivalence; _/_; ⟪_⟫)

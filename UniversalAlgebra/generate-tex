@@ -4,10 +4,7 @@ NAMES="UniversalAlgebra
        Preface
        Overture
        Overture/Preliminaries
-       Overture/Equality
        Overture/Inverses
-       Overture/FunExtensionality
-       Overture/Lifts
        Relations
        Relations/Discrete
        Relations/Continuous
