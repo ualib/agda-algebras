@@ -9,10 +9,7 @@
 [Preface]: Preface.html
 [Overture]: Overture.html
 [Overture.Preliminaries]: Overture.Preliminaries.html
-[Overture.Equality]: Overture.Equality.html
 [Overture.Inverses]: Overture.Inverses.html
-[Overture.FunExtensionality]: Overture.FunExtensionality.html
-[Overture.Lifts]: Overture.Lifts.html
 
 [Relations]: Relations.html
 [Relations.Discrete]: Relations.Discrete.html
@@ -47,30 +44,6 @@
 [Varieties section]: Varieties.Varieties.html
 [Varieties.Preservation]: Varieties.Preservation.html
 [Varieties.FreeAlgebras]: Varieties.FreeAlgebras.html
-
-<!-- OLD VERSION (gitlab) -->
-<!-- [git repository of the Agda UALib]: https://gitlab.com/ualib/ualib.gitlab.io/ -->
-<!-- [Relations module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations.lagda -->
-<!-- [Subalgebras module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras.lagda -->
-<!-- [Varieties module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties.lagda -->
-<!-- [Terms module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Terms.lagda -->
-<!-- [Issues]: https://gitlab.com/ualib/ualib.gitlab.io/-/issues -->
-<!-- [issue]: https://gitlab.com/ualib/ualib.gitlab.io/-/issues/new?issue%5Bassignee_id%5D=&issue%5Bmilestone_id%5D= -->
-<!-- [new issue]: https://gitlab.com/ualib/ualib.gitlab.io/-/issues/new?issue%5Bassignee_id%5D=&issue%5Bmilestone_id%5D= -->
-<!-- [Preface module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Preface.lagda -->
-<!-- [Overture.lagda]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Overture.lagda -->
-<!-- [Overture module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Overture.lagda -->
-<!-- [LICENSE]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/LICENSE -->
-<!-- [master]: https://gitlab.com/ualib/ualib.gitlab.io/tree/master -->
-<!-- [master branch]: https://gitlab.com/ualib/ualib.gitlab.io/tree/master -->
-<!-- [feature request]: https://gitlab.com/ualib/ualib.gitlab.io/-/issues/new?issue%5Bassignee_id%5D=&issue%5Bmilestone_id%5D= -->
-<!-- [merge requests]: https://gitlab.com/ualib/ualib.gitlab.io/-/merge_requests -->
-<!-- [merge request]: https://gitlab.com/ualib/ualib.gitlab.io/-/merge_requests/new -->
-<!-- [agda-ualib]: https://gitlab.com/ualib/ualib.gitlab.io -->
-<!-- [Agda UALib]: https://gitlab.com/ualib/ualib.gitlab.io/ -->
-<!-- [gitlab/ualib]: https://gitlab.com/ualib/ualib.gitlab.io/ -->
-<!-- [gitlab.com/ualib/ualib.gitlab.io]: https://gitlab.com/ualib/ualib.gitlab.io -->
-<!-- [Algebras module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras.lagda -->
 
 
 
