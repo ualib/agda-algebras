@@ -20,7 +20,7 @@ open import Axiom.Extensionality.Propositional renaming (Extensionality to funex
 open import Data.Product using (_,_; Σ; _×_)
 open import Function.Base  using (_∘_)
 open import Level renaming (suc to lsuc; zero to lzero)
-open import Relation.Binary.PropositionalEquality.Core using (cong; cong-app)
+open import Relation.Binary.PropositionalEquality.Core using (sym; trans; cong; cong-app)
 
 open import Algebras.Basic
 open import Overture.Preliminaries
@@ -41,7 +41,37 @@ Recall, `f ~ g` means f and g are *extensionally* (or pointwise) equal; i.e., `�
 \begin{code}
 
 _≅_ : {𝓤 𝓦 : Level}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
-𝑨 ≅ 𝑩 =  Σ[ f ꞉ (hom 𝑨 𝑩)] Σ[ g ꞉ hom 𝑩 𝑨 ] ((∣ f ∣ ∘ ∣ g ∣ ∼ ∣ 𝒾𝒹 𝑩 ∣) × (∣ g ∣ ∘ ∣ f ∣ ∼ ∣ 𝒾𝒹 𝑨 ∣))
+𝑨 ≅ 𝑩 =  Σ[ f ꞉ (hom 𝑨 𝑩)] Σ[ g ꞉ hom 𝑩 𝑨 ] ((∣ f ∣ ∘ ∣ g ∣ ≈ ∣ 𝒾𝒹 𝑩 ∣) × (∣ g ∣ ∘ ∣ f ∣ ≈ ∣ 𝒾𝒹 𝑨 ∣))
+
+
+domain : {A : Type 𝓤}{B : Type 𝓦} → (A → B) → Type 𝓤
+domain{A = A} f = A
+
+
+_≂_ : {𝓦 𝓧 : Level}{B : Type 𝓦}{C : Type 𝓧}(f g : B → C) → Setω
+f ≂ g = ∀{𝓤}{A : Type 𝓤} (h : A → domain f) → f ∘ h ≡ g ∘ h
+
+infix 8 _≂_
+
+≂lem1 : {A : Type 𝓤}{B : Type 𝓦}{C : Type 𝓧}(f g : B → C)(α β : A → B)
+ →      f ≂ g → α ≡ β → f ∘ α ≡ g ∘ β
+
+≂lem1 f g α .α f≂g refl = f≂g α
+
+≂refl : {B : Type 𝓦}{C : Type 𝓧}(f : B → C) → f ≂ f
+≂refl f = λ h → refl
+
+≂sym : {B : Type 𝓦}{C : Type 𝓧}(f g : B → C) → f ≂ g → g ≂ f
+≂sym f g f≂g = sym ∘ f≂g
+
+≂trans : {B : Type 𝓦}{C : Type 𝓧}(f g h : B → C) → f ≂ g → g ≂ h → f ≂ h
+≂trans f g h f≂g g≂h k = trans (f≂g k) (g≂h k)
+
+
+
+_≋_ : {𝓤 𝓦 : Level}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → Setω
+𝑨 ≋ 𝑩 =  Σω[ f ꞉ (hom 𝑨 𝑩)] Σω[ g ꞉ hom 𝑩 𝑨 ] ((∣ f ∣ ∘ ∣ g ∣ ≂ ∣ 𝒾𝒹 𝑩 ∣) ╳ (∣ g ∣ ∘ ∣ f ∣ ≂ ∣ 𝒾𝒹 𝑨 ∣))
+
 
 \end{code}
 
@@ -79,10 +109,10 @@ That is, two structures are **isomorphic** provided there are homomorphisms goin
   g : hom 𝑪 𝑨
   g = ∘-hom 𝑪 𝑨 g1 g2
 
-  α : ∣ f ∣ ∘ ∣ g ∣ ∼ ∣ 𝒾𝒹 𝑪 ∣
+  α : ∣ f ∣ ∘ ∣ g ∣ ≈ ∣ 𝒾𝒹 𝑪 ∣
   α x = (cong ∣ f2 ∣(∣ snd ∥ ab ∥ ∣ (∣ g1 ∣ x)))∙(∣ snd ∥ bc ∥ ∣) x
 
-  β : ∣ g ∣ ∘ ∣ f ∣ ∼ ∣ 𝒾𝒹 𝑨 ∣
+  β : ∣ g ∣ ∘ ∣ f ∣ ≈ ∣ 𝒾𝒹 𝑨 ∣
   β x = (cong ∣ g2 ∣(∥ snd ∥ bc ∥ ∥ (∣ f1 ∣ x)))∙(∥ snd ∥ ab ∥ ∥) x
 
 \end{code}
@@ -168,10 +198,10 @@ module _ {𝓘 : Level}{I : Type 𝓘}{fiu : funext 𝓘 𝓤}{fiw : funext 𝓘
    ψhom : is-homomorphism (⨅ ℬ) (⨅ 𝒜) ψ
    ψhom 𝑓 𝒃 = fiu (λ i → snd ∣ snd (AB i) ∣ 𝑓 (λ x → 𝒃 x i))
 
-   ϕ~ψ : ϕ ∘ ψ ∼ ∣ 𝒾𝒹 (⨅ ℬ) ∣
+   ϕ~ψ : ϕ ∘ ψ ≈ ∣ 𝒾𝒹 (⨅ ℬ) ∣
    ϕ~ψ 𝒃 = fiw λ i → fst ∥ snd (AB i) ∥ (𝒃 i)
 
-   ψ~ϕ : ψ ∘ ϕ ∼ ∣ 𝒾𝒹 (⨅ 𝒜) ∣
+   ψ~ϕ : ψ ∘ ϕ ≈ ∣ 𝒾𝒹 (⨅ 𝒜) ∣
    ψ~ϕ a = fiu λ i → snd ∥ snd (AB i) ∥ (a i)
 
    γ : ⨅ 𝒜 ≅ ⨅ ℬ
@@ -203,10 +233,10 @@ module _ {𝓘 : Level}{I : Type 𝓘}{fizw : funext (𝓘 ⊔ 𝓩) 𝓦}{fiu :
    ψhom : is-homomorphism (⨅ ℬ) (⨅ 𝒜) ψ
    ψhom 𝑓 𝒃 = fiu (λ i → (snd ∣ snd (AB i) ∣) 𝑓 (λ x → 𝒃 x (lift i)))
 
-   ϕ~ψ : ϕ ∘ ψ ∼ ∣ 𝒾𝒹 (⨅ ℬ) ∣
+   ϕ~ψ : ϕ ∘ ψ ≈ ∣ 𝒾𝒹 (⨅ ℬ) ∣
    ϕ~ψ 𝒃 = fizw λ i → fst ∥ snd (AB (lower i)) ∥ (𝒃 i)
 
-   ψ~ϕ : ψ ∘ ϕ ∼ ∣ 𝒾𝒹 (⨅ 𝒜) ∣
+   ψ~ϕ : ψ ∘ ϕ ≈ ∣ 𝒾𝒹 (⨅ 𝒜) ∣
    ψ~ϕ a = fiu λ i → snd ∥ snd (AB i) ∥ (a i)
 
    A≅B : ⨅ 𝒜 ≅ ⨅ ℬ

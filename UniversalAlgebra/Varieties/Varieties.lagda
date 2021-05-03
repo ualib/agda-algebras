@@ -35,7 +35,7 @@ open import Relations.Truncation using (hfunext)
 module Varieties.Varieties {𝑆 : Signature 𝓞 𝓥} where
 
 
-open import Algebras.Products{𝑆 = 𝑆} using (ov; ⨅; 𝔄; class-product)
+open import Algebras.Products{𝑆 = 𝑆} as PRODUCTS using (ov; ⨅)
 open import Homomorphisms.Basic{𝑆 = 𝑆} using (hom; 𝒾𝒹; ∘-hom; is-homomorphism)
 open import Homomorphisms.HomomorphicImages{𝑆 = 𝑆} using (HomImages; Lift-alg-hom-image)
 open import Homomorphisms.Isomorphisms{𝑆 = 𝑆} using (_≅_; ≅-sym; Lift-≅; ≅-trans; ≅-refl; Lift-alg-iso; ⨅≅; Lift-alg-associative; Lift-alg-⨅≅)
@@ -575,53 +575,24 @@ Before doing so, we need to redefine the class product so that each factor comes
 
 \begin{code}
 
-module class-products-with-maps
- {X : Type 𝓤}
+module class-product-inclusion
  {fe𝓕𝓤 : funext (ov 𝓤) 𝓤}
- {fe₁ : funext ((ov 𝓤) ⊔ (lsuc (ov 𝓤))) (lsuc (ov 𝓤))}
- {fe₂ : funext (ov 𝓤) (ov 𝓤)}
+ {fovu : funext (ov 𝓤) (ov 𝓤)}
  (𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤))
  where
 
- ℑ' : Type (ov 𝓤)
- ℑ' = Σ[ 𝑨 ꞉ (Algebra 𝓤 𝑆) ] ((𝑨 ∈ S{𝓤}{𝓤} 𝒦) × (X → ∣ 𝑨 ∣))
+ open PRODUCTS.class-product{𝒦 = S{𝓤}{𝓤} 𝒦}
 
-\end{code}
-Notice that the second component of this dependent pair type is  `(𝑨 ∈ 𝒦) × (X → ∣ 𝑨 ∣)`. In previous versions of the [UALib][] this second component was simply `𝑨 ∈ 𝒦`, until we realized that adding the type `X → ∣ 𝑨 ∣` is quite useful. Later we will see exactly why, but for now suffice it to say that a map of type `X → ∣ 𝑨 ∣` may be viewed abstractly as an *ambient context*, or more concretely, as an assignment of *values* in `∣ 𝑨 ∣` to *variable symbols* in `X`.  When computing with or reasoning about products, while we don't want to rigidly impose a context in advance, want do want to lay our hands on whatever context is ultimately assumed.  Including the "context map" inside the index type `ℑ` of the product turns out to be a convenient way to achieve this flexibility.
-
-
-Taking the product over the index type `ℑ` requires a function that maps an index `i : ℑ` to the corresponding algebra.  Each `i : ℑ` is a triple, say, `(𝑨 , p , h)`, where `𝑨 : Algebra 𝓤 𝑆`, `p : 𝑨 ∈ 𝒦`, and `h : X → ∣ 𝑨 ∣`, so the function mapping an index to the corresponding algebra is simply the first projection.
-
-\begin{code}
-
- 𝔄' : ℑ' → Algebra 𝓤 𝑆
- 𝔄' = λ (i : ℑ') → ∣ i ∣
-
-\end{code}
-
-Finally, we define `class-product` which represents the product of all members of 𝒦.
-
-\begin{code}
-
- class-product' : Algebra (ov 𝓤) 𝑆
- class-product' = ⨅ 𝔄'
-
-\end{code}
-
-If `p : 𝑨 ∈ 𝒦` and `h : X → ∣ 𝑨 ∣`, we view the triple `(𝑨 , p , h) ∈ ℑ` as an index over the class, and so we can think of `𝔄 (𝑨 , p , h)` (which is simply `𝑨`) as the projection of the product `⨅ 𝔄` onto the `(𝑨 , p, h)`-th component.
-
-\begin{code}
-
- class-prod-s-∈-ps : class-product' ∈ P{ov 𝓤}{ov 𝓤}(S 𝒦)
- class-prod-s-∈-ps = pisou psPllA (⨅≅ {fiu = fe₂}{fiw = fe𝓕𝓤} llA≅A)
+ class-prod-s-∈-ps : class-prod ∈ P{ov 𝓤}{ov 𝓤}(S 𝒦)
+ class-prod-s-∈-ps = pisou psPllA (⨅≅ {fiu = fovu}{fiw = fe𝓕𝓤} llA≅A)
 
   where
-  lA llA : ℑ' → Algebra (ov 𝓤) 𝑆
+  lA llA : ℑ → Algebra (ov 𝓤) 𝑆
   lA i =  Lift-alg (𝔄 i) (ov 𝓤)
   llA i = Lift-alg (lA i) (ov 𝓤)
 
   slA : ∀ i → (lA i) ∈ S 𝒦
-  slA i = siso (fst ∥ i ∥) Lift-≅
+  slA i = siso ∥ i ∥ Lift-≅
 
   psllA : ∀ i → (llA i) ∈ P (S 𝒦)
   psllA i = pbase (slA i)
@@ -629,7 +600,7 @@ If `p : 𝑨 ∈ 𝒦` and `h : X → ∣ 𝑨 ∣`, we view the triple `(𝑨 ,
   psPllA : ⨅ llA ∈ P (S 𝒦)
   psPllA = produ psllA
 
-  llA≅A : ∀ i → (llA i) ≅ (𝔄' i)
+  llA≅A : ∀ i → (llA i) ≅ (𝔄 i)
   llA≅A i = ≅-trans (≅-sym Lift-≅)(≅-sym Lift-≅)
 
 \end{code}
@@ -639,8 +610,8 @@ So, since `PS⊆SP`, we see that that the product of all subalgebras of a class 
 
 \begin{code}
 
- class-prod-s-∈-sp : hfunext (ov 𝓤) (ov 𝓤) → class-product ∈ S(P 𝒦)
- class-prod-s-∈-sp hfe = PS⊆SP {fovu = fe₂} hfe class-prod-s-∈-ps
+ class-prod-s-∈-sp : hfunext (ov 𝓤) (ov 𝓤) → class-prod ∈ S(P 𝒦)
+ class-prod-s-∈-sp hfe = PS⊆SP {fovu = fovu} hfe class-prod-s-∈-ps
 
 \end{code}
 

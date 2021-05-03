@@ -42,11 +42,9 @@ We hope the library will be useful to mathematicians and computer scientists who
 
 **Keywords and phrases**. Universal algebra, Equational logic, Martin-Löf Type Theory, Birkhoff’s HSP Theorem, Formalization of mathematics, Agda
 
-**Software Repository**. [https://gitlab.com/ualib/ualib.gitlab.io.git](https://gitlab.com/ualib/ualib.gitlab.io.git)
+**Software Repository**. [https://github.com/ualib/agda-algebras.git](https://github.com/ualib/agda-algebras.git)
 
-**PDF documentation**. [ualib-part1.pdf](ualib-part1.pdf), [ualib-part2.pdf](ualib-part2.pdf) (ualib-part3.pdf coming soon)
-
-**Citing this work**. To learn [how to cite the Agda UALib](Preface.html#how-to-cite-the-agda-ualib) and its documentation, follow [this link](Preface.html#how-to-cite-the-agda-ualib).
+**Citing this work**. To learn [how to cite the Agda UALib](https://ualib.gitlab.io/Preface.html#how-to-cite-the-agda-ualib) and its documentation, follow [this link](https://ualib.gitlab.io/Preface.html#how-to-cite-the-agda-ualib).
 
 **Contributors**. William DeMeo, Jacques Carette, Venanzio Capretta, Siva Somayyajula, Andreas Abel, Hyeyoung Shin.
 
@@ -60,7 +58,6 @@ We hope the library will be useful to mathematicians and computer scientists who
 
 module UniversalAlgebra where
 
--- Imports from Agda (builtin/primitive) and the Agda Standard Library
 open import Preface
 open import Overture
 open import Relations

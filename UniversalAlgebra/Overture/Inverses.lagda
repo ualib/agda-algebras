@@ -16,12 +16,11 @@ This is the [Overture.Inverses][] module of the [Agda Universal Algebra Library]
 -- Imports from the Agda (Builtin) and the Agda Standard Library
 open import Agda.Builtin.Equality using (_≡_; refl)
 open import Agda.Primitive using (_⊔_; lzero; lsuc; Level; Setω)
-open import Data.Product using (_,_; Σ; Σ-syntax; _×_)
+open import Data.Product using (_,_; Σ; _×_)
 open import Function.Base  using (_∘_; id)
-open import Relation.Binary.PropositionalEquality.Core using (subst; cong-app)
 
 -- Imports from the Agda Universal Algebra Library
-open import Overture.Preliminaries using (Type; 𝓤; 𝓥; 𝓦; 𝓩; _⁻¹; Π; -Π; -Σ; _≡⟨_⟩_; _∎; _∙_; 𝑖𝑑; _∼_)
+open import Overture.Preliminaries using (Type; 𝓤; 𝓥; 𝓦; 𝓩; _⁻¹; -Σ)
 
 
 module Overture.Inverses where
@@ -168,27 +167,5 @@ Thus, a right-inverse of `f` is obtained by applying `SurjInv` to `f` and a proo
 {% include UALib.Links.md %}
 
 
-
-
-
-
-
-<!--- NO LONGER USED
-
-The following are some useful lemmas lifted from the `MGS-Retracts` module of Escardó's [Type Topology][] library.
-
-has-section : {X : Type 𝓤 } {Y : Type 𝓦 } → (X → Y) → Type (𝓤 ⊔ 𝓦)
-has-section {𝓤}{𝓦}{X}{Y} r = Σ[ s ꞉ (Y → X) ] r ∘ s ∼ id
-
-_◁_ : Type 𝓤 → Type 𝓦 → Type (𝓤 ⊔ 𝓦)
-X ◁ Y = Σ[ r ꞉ (Y → X) ] has-section r
-
-subst-is-retraction : {X : Type 𝓤} (A : X → Type 𝓥) {x y : X} (p : x ≡ y)
-                        → subst A p ∘ subst A (p ⁻¹) ∼ 𝑖𝑑 (A y)
-subst-is-retraction A refl = λ x → refl
-
-subst-is-section : {X : Type 𝓤} (A : X → Type 𝓥) {x y : X} (p : x ≡ y)
- →                 subst A (p ⁻¹) ∘ subst A p ∼ 𝑖𝑑 (A x)
-subst-is-section A refl = λ x → refl
 
 

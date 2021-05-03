@@ -31,6 +31,7 @@ open import Overture.Preliminaries
 
 open import Algebras.Basic
 open import Relations.Discrete using (_|:_)
+open import Relations.Extensionality using (DFunExt; swelldef)
 
 
 
@@ -93,20 +94,20 @@ We claim that for all `p : Term X` there exists `q : Term X` and `𝔱 : X → �
 
 \begin{code}
 
-term-interp : {X : Type 𝓧} (𝑓 : ∣ 𝑆 ∣){𝑠 𝑡 : ∥ 𝑆 ∥ 𝑓 → Term X} → 𝑠 ≡ 𝑡 → node 𝑓 𝑠 ≡ (𝑓 ̂ 𝑻 X) 𝑡
-term-interp 𝑓 {𝑠}{𝑡} st = cong (node 𝑓) st
+term-interp : swelldef 𝓥 (ov 𝓧) → {X : Type 𝓧} (𝑓 : ∣ 𝑆 ∣){𝑠 𝑡 : ∥ 𝑆 ∥ 𝑓 → Term X} → (∀ i → 𝑠 i ≡ 𝑡 i) → node 𝑓 𝑠 ≡ (𝑓 ̂ 𝑻 X) 𝑡
+term-interp wd 𝑓 {𝑠}{𝑡} st = wd (node 𝑓) 𝑠 𝑡 st -- cong (node 𝑓) st
 
-term-gen : funext 𝓥 (ov 𝓧) → {X : Type 𝓧}(p : ∣ 𝑻 X ∣) → Σ[ q ꞉ ∣ 𝑻 X ∣ ] p ≡ (𝑻 X ⟦ q ⟧) ℊ
+term-gen : swelldef 𝓥 (ov 𝓧) → {X : Type 𝓧}(p : ∣ 𝑻 X ∣) → Σ[ q ꞉ ∣ 𝑻 X ∣ ] p ≡ (𝑻 X ⟦ q ⟧) ℊ
 term-gen _ (ℊ x) = (ℊ x) , refl
-term-gen fe (node 𝑓 𝑡) = node 𝑓 (λ i → ∣ term-gen fe (𝑡 i) ∣) , term-interp 𝑓 (fe λ i → ∥ term-gen fe (𝑡 i) ∥)
+term-gen wd (node 𝑓 t) = (node 𝑓 (λ i → ∣ term-gen wd (t i) ∣)) , term-interp wd 𝑓 λ i → ∥ term-gen wd (t i) ∥
 
-
-term-gen-agreement : (fe : funext 𝓥 (ov 𝓧)){X : Type 𝓧}(p : ∣ 𝑻 X ∣) → (𝑻 X ⟦ p ⟧) ℊ ≡ (𝑻 X ⟦ ∣ term-gen fe p ∣ ⟧) ℊ
+term-gen-agreement : (wd : swelldef 𝓥 (ov 𝓧)){X : Type 𝓧}(p : ∣ 𝑻 X ∣) → (𝑻 X ⟦ p ⟧) ℊ ≡ (𝑻 X ⟦ ∣ term-gen wd p ∣ ⟧) ℊ
 term-gen-agreement _ (ℊ x) = refl
-term-gen-agreement fe {X} (node f 𝑡) = cong (f ̂ 𝑻 X) (fe λ x → term-gen-agreement fe (𝑡 x))
+term-gen-agreement wd {X} (node f t) = wd (f ̂ 𝑻 X) (λ x → (𝑻 X ⟦ t x ⟧) ℊ)
+                                          (λ x → (𝑻 X ⟦ ∣ term-gen wd (t x) ∣ ⟧) ℊ) λ i → term-gen-agreement wd (t i)
 
-term-agreement : funext 𝓥 (ov 𝓧) → {X : Type 𝓧}(p : ∣ 𝑻 X ∣) → p ≡  (𝑻 X ⟦ p ⟧) ℊ
-term-agreement fvx {X} p = ∥ term-gen fvx p ∥ ∙ (term-gen-agreement fvx p)⁻¹
+term-agreement : swelldef 𝓥 (ov 𝓧) → {X : Type 𝓧}(p : ∣ 𝑻 X ∣) → p ≡  (𝑻 X ⟦ p ⟧) ℊ
+term-agreement wd {X} p = ∥ term-gen wd p ∥ ∙ (term-gen-agreement wd p)⁻¹
 
 \end{code}
 
@@ -116,31 +117,53 @@ term-agreement fvx {X} p = ∥ term-gen fvx p ∥ ∙ (term-gen-agreement fvx p)
 
 \begin{code}
 
-module _ {X : Type 𝓧 }{I : Type 𝓦} where
+module _ (wd : swelldef 𝓥 (𝓦 ⊔ 𝓤)){X : Type 𝓧 }{I : Type 𝓦} where
 
- interp-prod : funext 𝓥 (𝓤 ⊔ 𝓦) → (p : Term X)(𝒜 : I → Algebra 𝓤 𝑆)(𝑎 : X → ∀ i → ∣ 𝒜 i ∣)
+ interp-prod' : funext 𝓥 (𝓤 ⊔ 𝓦) → (p : Term X)(𝒜 : I → Algebra 𝓤 𝑆)(𝑎 : X → ∀ i → ∣ 𝒜 i ∣)
   →            (⨅ 𝒜 ⟦ p ⟧) 𝑎 ≡ λ i →  (𝒜 i ⟦ p ⟧) (λ j → 𝑎 j i)
 
- interp-prod _ (ℊ x₁) 𝒜 𝑎 = refl
+ interp-prod' _ (ℊ x₁) 𝒜 𝑎 = refl
 
- interp-prod fe (node 𝑓 𝑡) 𝒜 𝑎 = let IH = λ x → interp-prod fe (𝑡 x) 𝒜 𝑎
+ interp-prod' fe (node 𝑓 𝑡) 𝒜 𝑎 = let IH = λ x → interp-prod' fe (𝑡 x) 𝒜 𝑎
   in
   (𝑓 ̂ ⨅ 𝒜) (λ x → (⨅ 𝒜 ⟦ 𝑡 x ⟧) 𝑎)                     ≡⟨ cong (𝑓 ̂ ⨅ 𝒜)(fe IH) ⟩
   (𝑓 ̂ ⨅ 𝒜)(λ x → λ i →  (𝒜 i ⟦ 𝑡 x ⟧) λ j → 𝑎 j i)   ≡⟨ refl ⟩
   (λ i → (𝑓 ̂ 𝒜 i) (λ x → (𝒜 i ⟦ 𝑡 x ⟧) λ j → 𝑎 j i))  ∎
 
- -- inferred type: 𝑡 : X → ∣ ⨅ 𝒜 ∣
+ interp-prod : (p : Term X)(𝒜 : I → Algebra 𝓤 𝑆)(𝑎 : X → ∀ i → ∣ 𝒜 i ∣)
+  →            (⨅ 𝒜 ⟦ p ⟧) 𝑎 ≡ λ i →  (𝒜 i ⟦ p ⟧) (λ j → 𝑎 j i)
+
+ interp-prod (ℊ _) 𝒜 a = refl
+ interp-prod (node 𝑓 𝑡) 𝒜 a = wd ((𝑓 ̂ ⨅ 𝒜)) u v IH
+  where
+  u : ∀ x → ∣ ⨅ 𝒜 ∣
+  u = λ x → (⨅ 𝒜 ⟦ 𝑡 x ⟧) a
+  v : ∀ x i → ∣ 𝒜 i ∣
+  v = λ x i → (𝒜 i ⟦ 𝑡 x ⟧)(λ j → a j i)
+  IH : ∀ i → u i ≡ v i
+  IH = λ x → interp-prod (𝑡 x) 𝒜 a
+
  interp-prod2 : funext (𝓤 ⊔ 𝓦 ⊔ 𝓧) (𝓤 ⊔ 𝓦) → funext 𝓥 (𝓤 ⊔ 𝓦) → (p : Term X)(𝒜 : I → Algebra 𝓤 𝑆)
   →             ⨅ 𝒜 ⟦ p ⟧ ≡ (λ 𝑡 → (λ i → (𝒜 i ⟦ p ⟧) λ x → 𝑡 x i))
 
  interp-prod2 _ _ (ℊ x₁) 𝒜 = refl
 
  interp-prod2 fe fev (node f t) 𝒜 = fe λ (tup : X → ∣ ⨅ 𝒜 ∣) →
-  let IH = λ x → interp-prod fev (t x) 𝒜  in
+  let IH = λ x → interp-prod (t x) 𝒜  in
   let tA = λ z →  ⨅ 𝒜 ⟦ t z ⟧ in
   (f ̂ ⨅ 𝒜)(λ s → tA s tup)                          ≡⟨ cong(f ̂ ⨅ 𝒜)(fev λ x → IH x tup)⟩
-  (f ̂ ⨅ 𝒜)(λ s → λ j → (𝒜 j ⟦ t s ⟧) (λ ℓ → tup ℓ j))   ≡⟨ refl ⟩
-  (λ i → (f ̂ 𝒜 i)(λ s →  (𝒜 i ⟦ t s ⟧) (λ ℓ → tup ℓ i))) ∎
+  (f ̂ ⨅ 𝒜)(λ s → λ j → (𝒜 j ⟦ t s ⟧) (λ ℓ → tup ℓ j))  ∎
+
+ interp-prod2' : funext (𝓤 ⊔ 𝓦 ⊔ 𝓧) (𝓤 ⊔ 𝓦) → (p : Term X)(𝒜 : I → Algebra 𝓤 𝑆)
+  →             ⨅ 𝒜 ⟦ p ⟧ ≡ (λ 𝑡 i → (𝒜 i ⟦ p ⟧) λ x → 𝑡 x i)
+
+ interp-prod2' _ (ℊ x₁) 𝒜 = refl
+
+ interp-prod2' fe (node f t) 𝒜 = fe λ (tup : X → ∣ ⨅ 𝒜 ∣) →
+  wd (f ̂ ⨅ 𝒜) (λ z → tA z tup) (λ z x → (𝒜 x ⟦ t z ⟧) (λ z₁ → tup z₁ x)) (λ i → IH i tup)
+  where
+  IH = λ x → interp-prod (t x) 𝒜
+  tA = λ z →  ⨅ 𝒜 ⟦ t z ⟧
 
 \end{code}
 
@@ -153,17 +176,19 @@ We now prove two important facts about term operations.  The first of these, whi
 
 \begin{code}
 
-comm-hom-term : funext 𝓥 𝓦 → {𝑨 : Algebra 𝓤 𝑆} (𝑩 : Algebra 𝓦 𝑆)
+comm-hom-term : swelldef 𝓥 𝓦 → {𝑨 : Algebra 𝓤 𝑆} (𝑩 : Algebra 𝓦 𝑆)
                 (h : hom 𝑨 𝑩){X : Type 𝓧}(t : Term X) (a : X → ∣ 𝑨 ∣)
-                -----------------------------------------
+                ----------------------------------------------
   →             ∣ h ∣ ((𝑨 ⟦ t ⟧) a) ≡ (𝑩 ⟦ t ⟧) (∣ h ∣ ∘ a)
 
 comm-hom-term _ 𝑩 h (ℊ x) a = refl
-comm-hom-term fe {𝑨} 𝑩 h (node 𝑓 𝑡) a = ∣ h ∣((𝑓 ̂ 𝑨) λ i →  (𝑨 ⟦ 𝑡 i ⟧) a)    ≡⟨ i  ⟩
+comm-hom-term wd {𝑨} 𝑩 h (node 𝑓 𝑡) a = ∣ h ∣((𝑓 ̂ 𝑨) λ i →  (𝑨 ⟦ 𝑡 i ⟧) a)    ≡⟨ i  ⟩
                                          (𝑓 ̂ 𝑩)(λ i →  ∣ h ∣ ((𝑨 ⟦ 𝑡 i ⟧) a))  ≡⟨ ii ⟩
                                          (𝑓 ̂ 𝑩)(λ r → (𝑩 ⟦ 𝑡 r ⟧) (∣ h ∣ ∘ a)) ∎
- where i  = ∥ h ∥ 𝑓 λ r → (𝑨 ⟦ 𝑡 r ⟧) a
-       ii = cong (𝑓 ̂ 𝑩)(fe (λ i → comm-hom-term fe 𝑩 h (𝑡 i) a))
+ where i  = ∥ h ∥ 𝑓 λ i → (𝑨 ⟦ 𝑡 i ⟧) a
+       u = (λ j → ∣ h ∣ ((𝑨 ⟦ 𝑡 j ⟧) a))
+       v = (λ j → (𝑩 ⟦ 𝑡 j ⟧) (∣ h ∣ ∘ a))
+       ii = wd (𝑓 ̂ 𝑩) u v (λ i → comm-hom-term wd{𝑨} 𝑩 h (𝑡 i) a)
 
 \end{code}
 

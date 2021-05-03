@@ -31,7 +31,7 @@ open import Overture.Preliminaries using (Type; 𝓤; 𝓥; 𝓦; 𝓩; -Σ; Π;
 open import Overture.Inverses using (IsSurjective; SurjInv; InvIsInv; Image_∋_; eq)
 open import Relations.Continuous using (ContRel; DepRel)
 open import Relations.Discrete using (Op)
-open import Relations.Quotients using ([_]; /-subset; /-supset; IsBlock; ⟪_⟫)
+open import Relations.Quotients using ([_]; /-subset; /-supset; IsBlock; ⟪_⟫; 𝟎-is-smallest; kernel-lemma)
 open import Relations.Truncation using (blk-uip; to-Σ-≡)
 
 module Relations.Extensionality where
@@ -211,6 +211,13 @@ funext→swelldef fe f u v ptweq = γ
  uv = fe ptweq
  γ : f u ≡ f v
  γ = welldef f u v uv
+
+
+SwellDef : Setω
+SwellDef = (𝓤 𝓥 : Level) → swelldef 𝓤 𝓥
+
+0-smallest→swelldef : {𝓥 𝓤 : Level} → 𝟎-is-smallest → swelldef 𝓥 𝓤
+0-smallest→swelldef {𝓥}{𝓤} 0min {A}{I} = kernel-lemma 0min
 
 \end{code}
 
