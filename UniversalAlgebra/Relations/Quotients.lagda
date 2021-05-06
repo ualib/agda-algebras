@@ -49,6 +49,9 @@ Antisymm _≈_ = ∀{x}{y} → x ≈ y → y ≈ x → x ≡ y
 Trans : {A : Type 𝓤} → Rel A 𝓦 → Type(𝓤 ⊔ 𝓦)
 Trans _≈_ = ∀{x}{y}{z} → x ≈ y → y ≈ z → x ≈ z
 
+Equivalence : {𝓤 : Level} → Type 𝓤 → Type (lsuc 𝓤)
+Equivalence {𝓤} A = Σ[ r ꞉ Rel A 𝓤 ] IsEquivalence r
+
 \end{code}
 
 

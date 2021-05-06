@@ -17,19 +17,20 @@ open import Agda.Builtin.Equality using (_≡_; refl)
 open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
 open import Level renaming (suc to lsuc; zero to lzero)
 open import Data.Product using (_,_; Σ; _×_; Σ-syntax)
-open import Function.Base  using (_∘_; id)
+open import Function.Base  using (_∘_) -- ; id)
 open import Relation.Binary using (Rel; IsEquivalence)
 open import Relation.Binary.PropositionalEquality.Core using (sym; trans; cong; cong-app)
 open import Relation.Unary using (_⊆_)
 
 -- Imports from the Agda Universal Algebra Library
 open import Algebras.Basic
-open import Overture.Preliminaries using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; 𝓩; Π; -Π; -Σ; _≡⟨_⟩_; _∎; _⁻¹; ∣_∣; ∥_∥; fst; snd; 𝑖𝑑)
-open import Overture.Inverses using (IsInjective; IsSurjective; Image_∋_; SurjInv)
+open import Overture.Preliminaries
+-- using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; 𝓩; Π; -Π; -Σ; _≡⟨_⟩_; _∎; _⁻¹; ∣_∣; ∥_∥; fst; snd; 𝑖𝑑; _≈_)
+open import Overture.Inverses using (IsInjective; IsSurjective; Image_∋_; SurjInv; SurjInvIsRightInv≈)
 open import Relations.Discrete using (ker; kernel)
 open import Relations.Quotients using (ker-IsEquivalence; _/_; ⟪_⟫; ⌞_⌟)
 open import Relations.Truncation using (is-set; blk-uip; is-embedding; monic-is-embedding|Set)
-open import Relations.Extensionality using (swelldef;  block-ext|uip; pred-ext; SurjInvIsRightInv; epic-factor)
+open import Relations.Extensionality using (swelldef;  block-ext|uip; pred-ext; SurjInvIsRightInv; epic-factor; epic-factor≈)
 
 
 module Homomorphisms.Noether {𝑆 : Signature 𝓞 𝓥} where
@@ -205,6 +206,9 @@ module _ {𝑨 : Algebra 𝓧 𝑆}{𝑪 : Algebra 𝓩 𝑆} where
    η : ∣ β ∣ ∘ βInv ≡ 𝑖𝑑 ∣ 𝑪 ∣
    η = SurjInvIsRightInv{fe = fzz} ∣ β ∣ βE
 
+   η≈ : ∣ β ∣ ∘ βInv ≈ 𝑖𝑑 ∣ 𝑪 ∣
+   η≈ = SurjInvIsRightInv≈ ∣ β ∣ βE
+
    φ : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
    φ = ∣ α ∣ ∘ βInv
 
@@ -221,19 +225,48 @@ module _ {𝑨 : Algebra 𝓧 𝑆}{𝑪 : Algebra 𝓩 𝑆} where
                   ∣ α ∣((𝑓 ̂ 𝑨)(βInv ∘ c))         ≡⟨ ∥ α ∥ 𝑓 (βInv ∘ c) ⟩
                   (𝑓 ̂ 𝑩)(λ x → ∣ α ∣(βInv (c x))) ∎
 
+ HomFactor≈ : swelldef 𝓥 𝓩 → (𝑩 : Algebra 𝓨 𝑆)(α : hom 𝑨 𝑩)(β : hom 𝑨 𝑪)
+  →          kernel ∣ β ∣ ⊆ kernel ∣ α ∣ → IsSurjective ∣ β ∣
+             -------------------------------------------
+  →          Σ[ φ ∈ (hom 𝑪 𝑩)] ∣ α ∣ ≈ ∣ φ ∣ ∘ ∣ β ∣
+
+ HomFactor≈ wd 𝑩 α β Kβα βE = (φ , φIsHomCB) , αφβ≈
+  where
+   βInv : ∣ 𝑪 ∣ → ∣ 𝑨 ∣
+   βInv = SurjInv ∣ β ∣ βE
+
+   η≈ : 𝑖𝑑 ∣ 𝑪 ∣ ≈ ∣ β ∣ ∘ βInv
+   η≈ = sym ∘ (SurjInvIsRightInv≈ ∣ β ∣ βE)
+
+   φ : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
+   φ = ∣ α ∣ ∘ βInv
+
+   ξ≈ : ∣ β ∣ ≈ ∣ β ∣ ∘ (βInv ∘ ∣ β ∣)
+   ξ≈ a = η≈ (∣ β ∣ a)
+
+   αφβ≈ : ∣ α ∣ ≈ φ ∘ ∣ β ∣
+   αφβ≈ = λ x → Kβα (ξ≈ x)
+
+   φIsHomCB : ∀ 𝑓 c → φ ((𝑓 ̂ 𝑪) c) ≡ ((𝑓 ̂ 𝑩)(φ ∘ c))
+   φIsHomCB 𝑓 c = φ ((𝑓 ̂ 𝑪) c)             ≡⟨ cong φ (wd (𝑓 ̂ 𝑪) c ((∣ β ∣ ∘(βInv ∘ c))) (η≈ ∘ c)) ⟩
+                  φ ((𝑓 ̂ 𝑪)(∣ β ∣ ∘(βInv ∘ c)))   ≡⟨ cong φ (∥ β ∥ 𝑓 (βInv ∘ c))⁻¹ ⟩
+                  φ (∣ β ∣((𝑓 ̂ 𝑨)(βInv ∘ c)))     ≡⟨ (αφβ≈ ((𝑓 ̂ 𝑨)(βInv ∘ c)))⁻¹ ⟩
+                  ∣ α ∣((𝑓 ̂ 𝑨)(βInv ∘ c))         ≡⟨ ∥ α ∥ 𝑓 (βInv ∘ c) ⟩
+                  (𝑓 ̂ 𝑩)(λ x → ∣ α ∣(βInv (c x))) ∎
+
 \end{code}
 
 If, in addition to the hypotheses of the last theorem, we assume α is epic, then so is φ. (Note that the proof also requires an additional local function extensionality postulate, `funext 𝓨 𝓨`.)
 
 \begin{code}
 
- HomFactorEpi : funext 𝓧 𝓨 → funext 𝓩 𝓩 → funext 𝓨 𝓨
+ HomFactorEpi : funext 𝓧 𝓨 → funext 𝓩 𝓩
   →             (𝑩 : Algebra 𝓨 𝑆)(α : hom 𝑨 𝑩)(β : hom 𝑨 𝑪)
   →             kernel ∣ β ∣ ⊆ kernel ∣ α ∣ → IsSurjective ∣ β ∣ → IsSurjective ∣ α ∣
                 ----------------------------------------------------------
   →             Σ[ φ ∈ epi 𝑪 𝑩 ] ∣ α ∣ ≡ ∣ φ ∣ ∘ ∣ β ∣
 
- HomFactorEpi fxy fzz fyy 𝑩 α β kerincl βe αe = (fst ∣ φF ∣ ,(snd ∣ φF ∣ , φE)), ∥ φF ∥
+ HomFactorEpi fxy fzz 𝑩 α β kerincl βe αe = (fst ∣ φF ∣ ,(snd ∣ φF ∣ , φE)), ∥ φF ∥
   where
    φF : Σ[ φ ∈ hom 𝑪 𝑩 ] ∣ α ∣ ≡ ∣ φ ∣ ∘ ∣ β ∣
    φF = HomFactor fxy fzz 𝑩 α β kerincl βe
@@ -242,7 +275,28 @@ If, in addition to the hypotheses of the last theorem, we assume α is epic, the
    φ = ∣ α ∣ ∘ (SurjInv ∣ β ∣ βe)
 
    φE : IsSurjective φ
-   φE = epic-factor {fe = fyy} ∣ α ∣ ∣ β ∣ φ ∥ φF ∥ αe
+   φE = epic-factor≈ ∣ α ∣ ∣ β ∣ φ (cong-app ∥ φF ∥) αe
+\end{code}
+
+Here's a version that requires a weaker function extensionality postulate (swelldef) and has a weaker (point-wise) equality in its conclusion.
+
+\begin{code}
+
+ HomFactorEpi≈ : swelldef 𝓥 𝓩 → (𝑩 : Algebra 𝓨 𝑆)(α : hom 𝑨 𝑩)(β : hom 𝑨 𝑪)
+  →              kernel ∣ β ∣ ⊆ kernel ∣ α ∣ → IsSurjective ∣ β ∣ → IsSurjective ∣ α ∣
+                 ----------------------------------------------------------
+  →              Σ[ φ ∈ epi 𝑪 𝑩 ] ∣ α ∣ ≈ ∣ φ ∣ ∘ ∣ β ∣
+
+ HomFactorEpi≈ wd 𝑩 α β kerincl βE αE = (fst ∣ φF ∣ ,(snd ∣ φF ∣ , φE)), ∥ φF ∥
+  where
+   φF : Σ[ φ ∈ hom 𝑪 𝑩 ] ∣ α ∣ ≈ ∣ φ ∣ ∘ ∣ β ∣
+   φF = HomFactor≈ wd 𝑩 α β kerincl βE
+
+   φ : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
+   φ = ∣ α ∣ ∘ (SurjInv ∣ β ∣ βE)
+
+   φE : IsSurjective φ
+   φE = epic-factor≈ ∣ α ∣ ∣ β ∣ φ ∥ φF ∥ αE
 
 \end{code}
 

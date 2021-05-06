@@ -112,12 +112,12 @@ The binary relation ⊧ would be practically useless if it were not an *algebrai
 
 \begin{code}
 
-module _ (wd : SwellDef){𝓤 𝓦 : Level}{X : Type 𝓧}{𝑨 : Algebra 𝓤 𝑆} where
+module _ (wd : SwellDef){𝓤 𝓦 : Level}{X : Type 𝓧}{𝑨 : Algebra 𝓤 𝑆}
+         (𝑩 : Algebra 𝓦 𝑆)(p q : Term X) where
 
- ⊧-I-invar : (𝑩 : Algebra 𝓦 𝑆)(p q : Term X)
-  →          𝑨 ⊧ p ≈ q  →  𝑨 ≅ 𝑩  →  𝑩 ⊧ p ≈ q
+ ⊧-I-invar : 𝑨 ⊧ p ≈ q  →  𝑨 ≅ 𝑩  →  𝑩 ⊧ p ≈ q
 
- ⊧-I-invar 𝑩 p q Apq (f , g , f∼g , g∼f) x =
+ ⊧-I-invar Apq (f , g , f∼g , g∼f) x =
   (𝑩 ⟦ p ⟧) x                      ≡⟨ wd 𝓧 𝓦 (𝑩 ⟦ p ⟧) x (∣ f ∣ ∘ ∣ g ∣ ∘ x) (λ i → ( f∼g (x i))⁻¹) ⟩
   (𝑩 ⟦ p ⟧) ((∣ f ∣ ∘ ∣ g ∣) ∘ x)  ≡⟨ (comm-hom-term (wd 𝓥 𝓦) 𝑩 f p (∣ g ∣ ∘ x))⁻¹ ⟩
   ∣ f ∣ ((𝑨 ⟦ p ⟧) (∣ g ∣ ∘ x))    ≡⟨ cong ∣ f ∣ (Apq (∣ g ∣ ∘ x))  ⟩
@@ -130,11 +130,9 @@ We can prove the foregoing with two fewer applications of SwellDef if we use our
 
 \begin{code}
 
-module _ (wd : SwellDef){𝓤 𝓦 : Level}{X : Type 𝓧}{𝑨 : Algebra 𝓤 𝑆} where
- ⊧-I-invar' : (𝑩 : Algebra 𝓦 𝑆)(p q : Term X)
-  →          𝑨 ⊧ p ≈ q  →  𝑨 ≋ 𝑩  →  𝑩 ⊧ p ≈ q
+ ⊧-I-invar' : 𝑨 ⊧ p ≈ q  →  𝑨 ≋ 𝑩  →  𝑩 ⊧ p ≈ q
 
- ⊧-I-invar' 𝑩 p q Apq hyp x = γ
+ ⊧-I-invar' Apq hyp x = γ
   where
    f : hom 𝑨 𝑩
    f = fstω hyp
@@ -146,9 +144,7 @@ module _ (wd : SwellDef){𝓤 𝓦 : Level}{X : Type 𝓧}{𝑨 : Algebra 𝓤 �
    f≂g = FST (sndω (sndω hyp))
 
    ξ : x ≡ ∣ f ∣ ∘ ∣ g ∣ ∘ x
-   ξ = x ≡⟨ refl ⟩
-       ∣ 𝒾𝒹 𝑩 ∣ ∘ x ≡⟨ ≂sym (∣ f ∣ ∘ ∣ g ∣) ∣ 𝒾𝒹 𝑩 ∣ f≂g x ⟩
-       ∣ f ∣ ∘ ∣ g ∣ ∘ x ∎
+   ξ = x ≡⟨ ≂sym (∣ f ∣ ∘ ∣ g ∣) ∣ 𝒾𝒹 𝑩 ∣ f≂g x ⟩ ∣ f ∣ ∘ ∣ g ∣ ∘ x ∎
 
    γ : (𝑩 ⟦ p ⟧) x ≡ (𝑩 ⟦ q ⟧) x
    γ = (𝑩 ⟦ p ⟧) x                      ≡⟨ cong (𝑩 ⟦ p ⟧) ξ ⟩
@@ -224,22 +220,28 @@ module _ (wd : SwellDef){𝓤 𝓦 : Level}{X : Type 𝓧} where
 
 
 
- #### <a id="product-invariance">Product invariance of ⊧</a>
+#### <a id="product-invariance">Product invariance of ⊧</a>
 
- An identity satisfied by all algebras in an indexed collection is also satisfied by the product of algebras in that collection.
+Notice that the submodule in this section requires a **function extensionality** postulate `fe : DFunExt`, unlike the other submodules of the [Varieties.EquationalLogic][] module (which only require strong well-definedness of functions).
 
- \begin{code}
+An identity satisfied by all algebras in an indexed collection is also satisfied by the product of algebras in that collection.
 
-module _ (fe : DFunExt) (wd : SwellDef){I : Type 𝓦}(𝒜 : I → Algebra 𝓤 𝑆){X : Type 𝓧} where
+\begin{code}
+
+module _ (fe : DFunExt)(wd : SwellDef){I : Type 𝓦}(𝒜 : I → Algebra 𝓤 𝑆){X : Type 𝓧} where
 
  ⊧-P-invar : (p q : Term X) → (∀ i → 𝒜 i ⊧ p ≈ q) → ⨅ 𝒜 ⊧ p ≈ q
  ⊧-P-invar p q 𝒜pq a = γ
   where
+  -- This is where function extensionality is used.
+  ξ : (λ i → (𝒜 i ⟦ p ⟧) (λ x → (a x) i)) ≡ (λ i → (𝒜 i ⟦ q ⟧)  (λ x → (a x) i))
+  ξ = fe 𝓦 𝓤 λ i → 𝒜pq i (λ x → (a x) i)
+
   γ : (⨅ 𝒜 ⟦ p ⟧) a  ≡  (⨅ 𝒜 ⟦ q ⟧) a
-  γ = (⨅ 𝒜 ⟦ p ⟧) a      ≡⟨ interp-prod (wd 𝓥 (𝓦 ⊔ 𝓤)) p 𝒜 a ⟩ -- swelldef 𝓥 (𝓦 ⊔ 𝓤) → interp-prod (fe 𝓥 (𝓤 ⊔ 𝓦)) p 𝒜 a ⟩
-      (λ i → (𝒜 i ⟦ p ⟧)(λ x → (a x)i)) ≡⟨ (fe 𝓦 𝓤) (λ i → (𝒜pq i) (λ x → (a x) i)) ⟩
-      (λ i → (𝒜 i ⟦ q ⟧)(λ x → (a x)i)) ≡⟨ (interp-prod (wd 𝓥 (𝓦 ⊔ 𝓤)) q 𝒜 a)⁻¹ ⟩
-      (⨅ 𝒜 ⟦ q ⟧) a                     ∎
+  γ = (⨅ 𝒜 ⟦ p ⟧) a                      ≡⟨ interp-prod (wd 𝓥 (𝓦 ⊔ 𝓤)) p 𝒜 a ⟩
+      (λ i → (𝒜 i ⟦ p ⟧)(λ x → (a x)i))  ≡⟨ ξ ⟩
+      (λ i → (𝒜 i ⟦ q ⟧)(λ x → (a x)i))  ≡⟨ (interp-prod (wd 𝓥 (𝓦 ⊔ 𝓤)) q 𝒜 a)⁻¹ ⟩
+      (⨅ 𝒜 ⟦ q ⟧) a                      ∎
 
 \end{code}
 
@@ -277,12 +279,12 @@ module _ (wd : SwellDef){X : Type 𝓧}{𝑨 : Algebra 𝓤 𝑆} where
 
  ⊧-H-invar : {p q : Term X}(φ : hom (𝑻 X) 𝑨) → 𝑨 ⊧ p ≈ q  →  ∣ φ ∣ p ≡ ∣ φ ∣ q
 
- ⊧-H-invar {p}{q} φ β = ∣ φ ∣ p      ≡⟨ cong ∣ φ ∣ (term-agreement (wd 𝓥 (ov 𝓧)) p) ⟩
-                 ∣ φ ∣((𝑻 X ⟦ p ⟧) ℊ)   ≡⟨ (comm-hom-term (wd 𝓥 𝓤) 𝑨 φ p ℊ ) ⟩
-                 (𝑨 ⟦ p ⟧) (∣ φ ∣ ∘ ℊ)  ≡⟨ β (∣ φ ∣ ∘ ℊ ) ⟩
-                 (𝑨 ⟦ q ⟧) (∣ φ ∣ ∘ ℊ)  ≡⟨ (comm-hom-term (wd 𝓥 𝓤)  𝑨 φ q ℊ )⁻¹ ⟩
-                 ∣ φ ∣ ((𝑻 X ⟦ q ⟧) ℊ)  ≡⟨(cong ∣ φ ∣ (term-agreement (wd 𝓥 (ov 𝓧)) q))⁻¹ ⟩
-                 ∣ φ ∣ q                ∎
+ ⊧-H-invar {p}{q}φ β = ∣ φ ∣ p               ≡⟨ cong ∣ φ ∣(term-agreement(wd 𝓥 (ov 𝓧)) p)⟩
+                       ∣ φ ∣((𝑻 X ⟦ p ⟧) ℊ)  ≡⟨ comm-hom-term (wd 𝓥 𝓤) 𝑨 φ p ℊ ⟩
+                       (𝑨 ⟦ p ⟧) (∣ φ ∣ ∘ ℊ) ≡⟨ β (∣ φ ∣ ∘ ℊ ) ⟩
+                       (𝑨 ⟦ q ⟧) (∣ φ ∣ ∘ ℊ) ≡⟨ (comm-hom-term (wd 𝓥 𝓤)  𝑨 φ q ℊ )⁻¹ ⟩
+                       ∣ φ ∣ ((𝑻 X ⟦ q ⟧) ℊ) ≡⟨(cong ∣ φ ∣ (term-agreement (wd 𝓥 (ov 𝓧)) q))⁻¹ ⟩
+                       ∣ φ ∣ q               ∎
 
 \end{code}
 
@@ -294,7 +296,7 @@ More generally, an identity is satisfied by all algebras in a class if and only 
 
 \begin{code}
 
-module _ {wd : SwellDef}{X : Type 𝓧}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}  where
+module _ (wd : SwellDef){X : Type 𝓧}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}  where
 
  -- ⇒ (the "only if" direction)
  ⊧-H-class-invar : {p q : Term X}
@@ -338,13 +340,3 @@ module _ {wd : SwellDef}{X : Type 𝓧}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)
 
 
 
-
-<!--
-
-  -- open import Relation.Binary.Core using (_⇔_)
-
-  -- ⊧-H : DFunExt → {p q : Term X} → 𝒦 ⊧ p ≋ q ⇔ (∀ 𝑨 φ → 𝑨 ∈ 𝒦 → ∣ φ ∣ ∘ (𝑻 X ⟦ p ⟧) ≡ ∣ φ ∣ ∘(𝑻 X ⟦ q ⟧))
-  -- ⊧-H fe {p}{q} = ⊧-H-class-invar fe {p}{q} , ⊧-H-class-coinvar fe {p}{q}
-
-
--->

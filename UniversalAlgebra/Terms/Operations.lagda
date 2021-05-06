@@ -31,6 +31,7 @@ open import Overture.Preliminaries
 
 open import Algebras.Basic
 open import Relations.Discrete using (_|:_)
+open import Relations.Quotients using (Equivalence; _/_; ⟪_⟫)
 open import Relations.Extensionality using (DFunExt; swelldef)
 
 
@@ -60,17 +61,24 @@ _⟦_⟧ : (𝑨 : Algebra 𝓤 𝑆){X : Type 𝓧 } → Term X → (X → ∣ 
 𝑨 ⟦ ℊ x ⟧ = λ η → η x
 𝑨 ⟦ node 𝑓 𝑡 ⟧ = λ η → (𝑓 ̂ 𝑨) (λ i → (𝑨 ⟦ 𝑡 i ⟧) η)
 
+_⌜_⌝_ : {X : Type 𝓧 }(𝑨 : Algebra 𝓤 𝑆) → Term X → ((ρ , _) : Equivalence X) → (X / ρ → ∣ 𝑨 ∣) → ∣ 𝑨 ∣
+𝑨 ⌜ ℊ x ⌝ ρ = λ η → η ⟪ x ⟫
+𝑨 ⌜ node 𝑓 𝑡 ⌝ ρ = λ η → (𝑓 ̂ 𝑨) (λ i → (𝑨 ⌜ 𝑡 i ⌝ ρ) η)
+
+
 \end{code}
 
 It turns out that the intepretation of a term is the same as the `free-lift` (modulo argument order and assuming function extensionality).
 
 \begin{code}
 
-free-lift-interp : funext 𝓥 𝓤 → (𝑨 : Algebra 𝓤 𝑆){X : Type 𝓧 }(η : X → ∣ 𝑨 ∣)(p : Term X)
+free-lift-interp : swelldef 𝓥 𝓤 → (𝑨 : Algebra 𝓤 𝑆){X : Type 𝓧 }(η : X → ∣ 𝑨 ∣)(p : Term X)
  →                 (𝑨 ⟦ p ⟧) η ≡ (free-lift 𝑨 η) p
 
 free-lift-interp _ 𝑨 η (ℊ x) = refl
-free-lift-interp fe 𝑨 η (node 𝑓 𝑡) = cong (𝑓 ̂ 𝑨) (fe λ i → free-lift-interp fe 𝑨 η (𝑡 i))
+free-lift-interp wd 𝑨 η (node 𝑓 𝑡) = wd (𝑓 ̂ 𝑨) (λ z → (𝑨 ⟦ 𝑡 z ⟧) η)
+                                       ((free-lift 𝑨 η) ∘ 𝑡)((free-lift-interp wd 𝑨 η) ∘ 𝑡)
+
 
 \end{code}
 
@@ -115,23 +123,14 @@ term-agreement wd {X} p = ∥ term-gen wd p ∥ ∙ (term-gen-agreement wd p)⁻
 
 #### <a id="interpretation-of-terms-in-product-algebras">Interpretation of terms in product algebras</a>
 
+(Previously we proved the next theorem (`interp-prod`, about the interpretation of terms in a product) using function extensionality, but we were able to modify the proof to use the weaker postulate of *strong well-definedness of functions*.)
+
 \begin{code}
 
 module _ (wd : swelldef 𝓥 (𝓦 ⊔ 𝓤)){X : Type 𝓧 }{I : Type 𝓦} where
 
- interp-prod' : funext 𝓥 (𝓤 ⊔ 𝓦) → (p : Term X)(𝒜 : I → Algebra 𝓤 𝑆)(𝑎 : X → ∀ i → ∣ 𝒜 i ∣)
-  →            (⨅ 𝒜 ⟦ p ⟧) 𝑎 ≡ λ i →  (𝒜 i ⟦ p ⟧) (λ j → 𝑎 j i)
-
- interp-prod' _ (ℊ x₁) 𝒜 𝑎 = refl
-
- interp-prod' fe (node 𝑓 𝑡) 𝒜 𝑎 = let IH = λ x → interp-prod' fe (𝑡 x) 𝒜 𝑎
-  in
-  (𝑓 ̂ ⨅ 𝒜) (λ x → (⨅ 𝒜 ⟦ 𝑡 x ⟧) 𝑎)                     ≡⟨ cong (𝑓 ̂ ⨅ 𝒜)(fe IH) ⟩
-  (𝑓 ̂ ⨅ 𝒜)(λ x → λ i →  (𝒜 i ⟦ 𝑡 x ⟧) λ j → 𝑎 j i)   ≡⟨ refl ⟩
-  (λ i → (𝑓 ̂ 𝒜 i) (λ x → (𝒜 i ⟦ 𝑡 x ⟧) λ j → 𝑎 j i))  ∎
-
- interp-prod : (p : Term X)(𝒜 : I → Algebra 𝓤 𝑆)(𝑎 : X → ∀ i → ∣ 𝒜 i ∣)
-  →            (⨅ 𝒜 ⟦ p ⟧) 𝑎 ≡ λ i →  (𝒜 i ⟦ p ⟧) (λ j → 𝑎 j i)
+ interp-prod : (p : Term X)(𝒜 : I → Algebra 𝓤 𝑆)(a : X → Π[ i ꞉ I ] ∣ 𝒜 i ∣)
+  →            (⨅ 𝒜 ⟦ p ⟧) a ≡ λ i → (𝒜 i ⟦ p ⟧)(λ x → (a x) i)
 
  interp-prod (ℊ _) 𝒜 a = refl
  interp-prod (node 𝑓 𝑡) 𝒜 a = wd ((𝑓 ̂ ⨅ 𝒜)) u v IH
@@ -143,27 +142,17 @@ module _ (wd : swelldef 𝓥 (𝓦 ⊔ 𝓤)){X : Type 𝓧 }{I : Type 𝓦} whe
   IH : ∀ i → u i ≡ v i
   IH = λ x → interp-prod (𝑡 x) 𝒜 a
 
- interp-prod2 : funext (𝓤 ⊔ 𝓦 ⊔ 𝓧) (𝓤 ⊔ 𝓦) → funext 𝓥 (𝓤 ⊔ 𝓦) → (p : Term X)(𝒜 : I → Algebra 𝓤 𝑆)
-  →             ⨅ 𝒜 ⟦ p ⟧ ≡ (λ 𝑡 → (λ i → (𝒜 i ⟦ p ⟧) λ x → 𝑡 x i))
-
- interp-prod2 _ _ (ℊ x₁) 𝒜 = refl
-
- interp-prod2 fe fev (node f t) 𝒜 = fe λ (tup : X → ∣ ⨅ 𝒜 ∣) →
-  let IH = λ x → interp-prod (t x) 𝒜  in
-  let tA = λ z →  ⨅ 𝒜 ⟦ t z ⟧ in
-  (f ̂ ⨅ 𝒜)(λ s → tA s tup)                          ≡⟨ cong(f ̂ ⨅ 𝒜)(fev λ x → IH x tup)⟩
-  (f ̂ ⨅ 𝒜)(λ s → λ j → (𝒜 j ⟦ t s ⟧) (λ ℓ → tup ℓ j))  ∎
-
- interp-prod2' : funext (𝓤 ⊔ 𝓦 ⊔ 𝓧) (𝓤 ⊔ 𝓦) → (p : Term X)(𝒜 : I → Algebra 𝓤 𝑆)
-  →             ⨅ 𝒜 ⟦ p ⟧ ≡ (λ 𝑡 i → (𝒜 i ⟦ p ⟧) λ x → 𝑡 x i)
-
- interp-prod2' _ (ℊ x₁) 𝒜 = refl
-
- interp-prod2' fe (node f t) 𝒜 = fe λ (tup : X → ∣ ⨅ 𝒜 ∣) →
-  wd (f ̂ ⨅ 𝒜) (λ z → tA z tup) (λ z x → (𝒜 x ⟦ t z ⟧) (λ z₁ → tup z₁ x)) (λ i → IH i tup)
+ interp-prod2 : funext (𝓤 ⊔ 𝓦 ⊔ 𝓧) (𝓤 ⊔ 𝓦) → (p : Term X)(𝒜 : I → Algebra 𝓤 𝑆)
+  →             ⨅ 𝒜 ⟦ p ⟧ ≡ (λ a i → (𝒜 i ⟦ p ⟧) λ x → a x i)
+ interp-prod2 _ (ℊ x₁) 𝒜 = refl
+ interp-prod2 fe (node f t) 𝒜 = fe λ a → wd (f ̂ ⨅ 𝒜)(u a) (v a) (IH a)
   where
-  IH = λ x → interp-prod (t x) 𝒜
-  tA = λ z →  ⨅ 𝒜 ⟦ t z ⟧
+  u : ∀ a x → ∣ ⨅ 𝒜 ∣
+  u a = λ x → (⨅ 𝒜 ⟦ t x ⟧) a
+  v : ∀ (a : X → ∣ ⨅ 𝒜 ∣) → ∀ x i → ∣ 𝒜 i ∣
+  v a = λ x i → (𝒜 i ⟦ t x ⟧)(λ z → (a z) i)
+  IH : ∀ a x → (⨅ 𝒜 ⟦ t x ⟧) a ≡ λ i → (𝒜 i ⟦ t x ⟧)(λ z → (a z) i)
+  IH a = λ x → interp-prod (t x) 𝒜 a
 
 \end{code}
 
@@ -221,6 +210,7 @@ module _ {𝓤 𝓦 : Level}{X : Type 𝓤} where
 <span style="float:right;">[Subalgebras →](Subalgebras.html)</span>
 
 {% include UALib.Links.md %}
+
 
 
 

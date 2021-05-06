@@ -24,6 +24,7 @@ open import Relation.Binary.PropositionalEquality.Core using (sym; trans; cong; 
 
 open import Algebras.Basic
 open import Overture.Preliminaries
+open import Relations.Extensionality using (DFunExt)
 
 
 module Homomorphisms.Isomorphisms{𝑆 : Signature 𝓞 𝓥}  where
@@ -180,29 +181,30 @@ Products of isomorphic families of algebras are themselves isomorphic. The proof
 
 \begin{code}
 
-module _ {𝓘 : Level}{I : Type 𝓘}{fiu : funext 𝓘 𝓤}{fiw : funext 𝓘 𝓦} where
+module _ {𝓘 𝓤 𝓦 : Level}{I : Type 𝓘} where
 
-  ⨅≅ : {𝒜 : I → Algebra 𝓤 𝑆}{ℬ : I → Algebra 𝓦 𝑆} → (∀ (i : I) → 𝒜 i ≅ ℬ i) → ⨅ 𝒜 ≅ ⨅ ℬ
+  ⨅≅ : DFunExt → {𝒜 : I → Algebra 𝓤 𝑆}{ℬ : I → Algebra 𝓦 𝑆}
+   →   (∀ (i : I) → 𝒜 i ≅ ℬ i) → ⨅ 𝒜 ≅ ⨅ ℬ
 
-  ⨅≅ {𝒜}{ℬ} AB = γ
+  ⨅≅ fe {𝒜}{ℬ} AB = γ
    where
    ϕ : ∣ ⨅ 𝒜 ∣ → ∣ ⨅ ℬ ∣
    ϕ a i = ∣ fst (AB i) ∣ (a i)
 
    ϕhom : is-homomorphism (⨅ 𝒜) (⨅ ℬ) ϕ
-   ϕhom 𝑓 a = fiw (λ i → ∥ fst (AB i) ∥ 𝑓 (λ x → a x i))
+   ϕhom 𝑓 a = (fe 𝓘 𝓦) (λ i → ∥ fst (AB i) ∥ 𝑓 (λ x → a x i))
 
    ψ : ∣ ⨅ ℬ ∣ → ∣ ⨅ 𝒜 ∣
    ψ b i = ∣ fst ∥ AB i ∥ ∣ (b i)
 
    ψhom : is-homomorphism (⨅ ℬ) (⨅ 𝒜) ψ
-   ψhom 𝑓 𝒃 = fiu (λ i → snd ∣ snd (AB i) ∣ 𝑓 (λ x → 𝒃 x i))
+   ψhom 𝑓 𝒃 = (fe 𝓘 𝓤) (λ i → snd ∣ snd (AB i) ∣ 𝑓 (λ x → 𝒃 x i))
 
    ϕ~ψ : ϕ ∘ ψ ≈ ∣ 𝒾𝒹 (⨅ ℬ) ∣
-   ϕ~ψ 𝒃 = fiw λ i → fst ∥ snd (AB i) ∥ (𝒃 i)
+   ϕ~ψ 𝒃 = (fe 𝓘 𝓦) λ i → fst ∥ snd (AB i) ∥ (𝒃 i)
 
    ψ~ϕ : ψ ∘ ϕ ≈ ∣ 𝒾𝒹 (⨅ 𝒜) ∣
-   ψ~ϕ a = fiu λ i → snd ∥ snd (AB i) ∥ (a i)
+   ψ~ϕ a = (fe 𝓘 𝓤) λ i → snd ∥ snd (AB i) ∥ (a i)
 
    γ : ⨅ 𝒜 ≅ ⨅ ℬ
    γ = (ϕ , ϕhom) , ((ψ , ψhom) , ϕ~ψ , ψ~ϕ)
@@ -214,30 +216,30 @@ A nearly identical proof goes through for isomorphisms of lifted products (thoug
 
 \begin{code}
 
-module _ {𝓘 : Level}{I : Type 𝓘}{fizw : funext (𝓘 ⊔ 𝓩) 𝓦}{fiu : funext 𝓘 𝓤} where
+module _ {𝓘 𝓤 𝓦 𝓩 : Level}{I : Type 𝓘} where
 
-  Lift-alg-⨅≅ : {𝒜 : I → Algebra 𝓤 𝑆}{ℬ : (Lift 𝓩 I) → Algebra 𝓦 𝑆}
+  Lift-alg-⨅≅ : DFunExt → {𝒜 : I → Algebra 𝓤 𝑆}{ℬ : (Lift 𝓩 I) → Algebra 𝓦 𝑆}
    →            (∀ i → 𝒜 i ≅ ℬ (lift i)) → Lift-alg (⨅ 𝒜) 𝓩 ≅ ⨅ ℬ
 
-  Lift-alg-⨅≅ {𝒜}{ℬ} AB = γ
+  Lift-alg-⨅≅ fe {𝒜}{ℬ} AB = γ
    where
    ϕ : ∣ ⨅ 𝒜 ∣ → ∣ ⨅ ℬ ∣
    ϕ a i = ∣ fst (AB  (lower i)) ∣ (a (lower i))
 
    ϕhom : is-homomorphism (⨅ 𝒜) (⨅ ℬ) ϕ
-   ϕhom 𝑓 a = fizw (λ i → (∥ fst (AB (lower i)) ∥) 𝑓 (λ x → a x (lower i)))
+   ϕhom 𝑓 a = (fe (𝓘 ⊔ 𝓩) 𝓦) (λ i → (∥ fst (AB (lower i)) ∥) 𝑓 (λ x → a x (lower i)))
 
    ψ : ∣ ⨅ ℬ ∣ → ∣ ⨅ 𝒜 ∣
    ψ b i = ∣ fst ∥ AB i ∥ ∣ (b (lift i))
 
    ψhom : is-homomorphism (⨅ ℬ) (⨅ 𝒜) ψ
-   ψhom 𝑓 𝒃 = fiu (λ i → (snd ∣ snd (AB i) ∣) 𝑓 (λ x → 𝒃 x (lift i)))
+   ψhom 𝑓 𝒃 = (fe 𝓘 𝓤) (λ i → (snd ∣ snd (AB i) ∣) 𝑓 (λ x → 𝒃 x (lift i)))
 
    ϕ~ψ : ϕ ∘ ψ ≈ ∣ 𝒾𝒹 (⨅ ℬ) ∣
-   ϕ~ψ 𝒃 = fizw λ i → fst ∥ snd (AB (lower i)) ∥ (𝒃 i)
+   ϕ~ψ 𝒃 = (fe (𝓘 ⊔ 𝓩) 𝓦) λ i → fst ∥ snd (AB (lower i)) ∥ (𝒃 i)
 
    ψ~ϕ : ψ ∘ ϕ ≈ ∣ 𝒾𝒹 (⨅ 𝒜) ∣
-   ψ~ϕ a = fiu λ i → snd ∥ snd (AB i) ∥ (a i)
+   ψ~ϕ a = (fe 𝓘 𝓤) λ i → snd ∥ snd (AB i) ∥ (a i)
 
    A≅B : ⨅ 𝒜 ≅ ⨅ ℬ
    A≅B = (ϕ , ϕhom) , ((ψ , ψhom) , ϕ~ψ , ψ~ϕ)
