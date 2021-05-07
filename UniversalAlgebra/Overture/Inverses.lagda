@@ -85,9 +85,13 @@ module _ {A : Type 𝓤 }{B : Type 𝓦 } where
  Inv f {.(f a)} (im a) = a
  Inv f (eq _ a _) = a
 
- Inv' : (f : A → B)(b : B){imgb : Image f ∋ b}  →  A
+ Inv' : (f : A → B)(b : B){imfb : Image f ∋ b}  →  A
  Inv' f .(f x) {im x} = x
  Inv' f b {eq .b a x} = a
+
+ inv : (f : A → B)(b : B) → Image f ∋ b →  A
+ inv f .(f x) (im x) = x
+ inv f b (eq .b a x) = a
 
 \end{code}
 
@@ -98,6 +102,19 @@ We can prove that `Inv f` is the *right-inverse* of `f`, as follows.
  InvIsInv : (f : A → B){b : B}(q : Image f ∋ b) → f(Inv f q) ≡ b
  InvIsInv f {.(f a)} (im a) = refl
  InvIsInv f (eq _ _ p) = p ⁻¹
+
+ InvIsInv' : (f : A → B)(b : B){q : Image f ∋ b} → f(Inv' f b {q}) ≡ b
+ InvIsInv' f .(f a) {im a} = refl
+ InvIsInv' f b {eq _ _ p} = p ⁻¹
+
+ inv-is-inv : (f : A → B)(b : B)(q : Image f ∋ b) → f(inv f b q) ≡ b
+ inv-is-inv f .(f x) (im x) = refl
+ inv-is-inv f b (eq .b a x) = x ⁻¹
+
+ InvIsLeftInv : {f : A → B}{x : A} → (Inv f){f x}(im x) ≡ x
+ InvIsLeftInv = refl
+
+
 
 \end{code}
 
@@ -111,6 +128,7 @@ The inverse image of each point in the codomain of a function can be represented
 \end{code}
 
 Thus, for each point `b : B`, `InvImage f b` returns a (possibly empty) predicate on `A` which represents all points `a : A` such that `f a ≡ b`.
+
 
 
 
@@ -129,17 +147,17 @@ module _ {A : Type 𝓤}{B : Type 𝓦} where
  Injective : Type (𝓤 ⊔ 𝓦)
  Injective = Σ[ f ꞉ (A → B) ] IsInjective f
 
-\end{code}
-
-We can obtain a *left-inverse* of an injective function as follows.
-
-\begin{code}
-
  Range : (f : A → B) → Pred B (𝓤 ⊔ 𝓦)
  Range f b = ∃[ a ] f a ≡ b
 
- -- Range→Bool : (f : A → B) → B → Bool
- -- Range→Bool f b = ∃[ a ] f a ≡ b
+ data range (f : A → B) : Type (𝓤 ⊔ 𝓦)
+  where
+  rim : (x : A) → range f
+  req : (b : B) → ∃[ a ] f a ≡ b → range f
+
+
+ -- InjInv' : (f : A → B) → (range f) → A
+ -- InjInv' f = {!!}
 
  Image→Range : (f : A → B)(b : B) → Image f ∋ b → b ∈ Range f
  Image→Range f .(f x) (im x) = x , refl
@@ -148,12 +166,6 @@ We can obtain a *left-inverse* of an injective function as follows.
  Range→Image : (f : A → B)(b : B) → b ∈ Range f → Image f ∋ b
  Range→Image f b ranfb = eq b (fst ranfb) (snd ranfb ⁻¹)
 
-
- InjInv' : (f : A → B) → IsInjective f → (b : B) → Image f ∋ b → A
- InjInv' f finj = λ b imfb → Inv f imfb
-
- InjInv'' : (f : A → B) → IsInjective f → (b : B) → b ∈ Range f → A
- InjInv'' f finj = λ b → fst
 
 
  data Option {𝓤 : Level}(A : Type 𝓤) : Type 𝓤 where
@@ -180,16 +192,6 @@ If we have an injective function `f : A → B` and for all `b : B` the assertion
 
 
 
-
-We prove that the function defined by `InjInv f p` is indeed the left-inverse of `f` by
-applying the function `InjInv` to `g` and a proof that `g` is injective.
-
-\begin{code}
-
- InjInvIsLeftInv : {f : A → B}{fM : IsInjective f}{x : A} → (InjInv' f fM)(f x)(im x) ≡ x
- InjInvIsLeftInv = refl
-
-\end{code}
 
 Before moving on to discuss surjective functions, let us prove (the obvious facts) that the identity map is injective and that the composition of injectives is injective.
 
@@ -325,4 +327,9 @@ module _ {𝓤 𝓦 : Level}{A : Type 𝓤}{B : Type 𝓦} where
 
 
 
+
+<!-- We can obtain a *left-inverse* of an injective function as follows.
+
+iLinv : (f : A → B) → IsInjective f → (b : B) → Image f ∋ b → A
+iLinv f finj = λ b imfb → inv f b imfb -->
 

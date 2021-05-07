@@ -141,7 +141,12 @@ Fix an algebra `𝑨 ∈ S 𝒦`, let `𝔥₀ : X → ∣ 𝑨 ∣` be defined 
 
 (free-lift 𝑨 𝔥₀) p ≡ (free-lift 𝑨 𝔥₀) q  implies  (free-lift 𝑨 h) p  ≡ (free-lift 𝑨 h) q
 
+We need to prove that projection `𝔥 : X → ∣ 𝑨 ∣` of `X` onto component `𝑨` is "below" every map `h : X → ∣ 𝑨 ∣` in the sense that `kernel 𝔥 ⊆ kernel h`.
+  {- if h p ≢ h q  then  𝔥₀ p ≢ 𝔥₀ q -}
+Every `h : X → ∣ 𝑨 ∣` can be decomposed as `h = g ∘ 𝔥`, where `g : ∣ 𝑨 ∣ → ∣ 𝑨 ∣`.  Specifically, since `𝔥` is surjective, it has a right inverse 𝔥⁻¹, so `h ∘ 𝔥⁻¹ = g`.  Therefore, `h = (h ∘ 𝔥⁻¹) ∘ 𝔥`.
+
 \begin{code}
+
 
  module _ {𝑨 : Algebra 𝓤 𝑆}{skA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦} where
   𝔥₀ : X → ∣ 𝑨 ∣
@@ -151,63 +156,25 @@ Fix an algebra `𝑨 ∈ S 𝒦`, let `𝔥₀ : X → ∣ 𝑨 ∣` be defined 
   homℭker : Term X → Term X → Type 𝓤
   homℭker p q = (free-lift 𝑨 𝔥₀) p ≡ (free-lift 𝑨 𝔥₀) q
 
-  lemker : ∀ (h : X → ∣ 𝑨 ∣) → IsInjective 𝔥₀ → kernel 𝔥₀ ⊆ kernel h
-  lemker h hE {(p , q)} pKq = γ
+  lemker : ∀ (h : X → ∣ 𝑨 ∣) → kernel 𝔥₀ ⊆ kernel h
+  lemker h {(p , q)} pKq = γ
    where
    ξ : p (𝑨 , skA) ≡ q (𝑨 , skA)
    ξ = pKq
-   h₀Inv : ∣ 𝑨 ∣ → X
-   h₀Inv = {!!}
 
-   h₀Inv' : ∣ 𝑨 ∣ → X
-   h₀Inv' = {!!} -- InjInv 𝔥₀ hE
+   h₀Inv : (a : ∣ 𝑨 ∣) → Image 𝔥₀ ∋ a → X
+   h₀Inv .(x (𝑨 , skA)) (im x) = x
+   h₀Inv a (eq _ x _) = x
 
-   InvInv : ∀ x → x ≡ (𝔥₀ ∘ h₀Inv)  x
-   InvInv x = {!!} -- ((SurjInvIsRightInv≈ 𝔥₀ hE) x)⁻¹
+   ζ : ∀ x y a → (ahx : a ≡ 𝔥₀ x)(ahy : a ≡ 𝔥₀ y)
+    →  (h₀Inv (𝔥₀ x) (eq (𝔥₀ x) x refl)) ≡ (h₀Inv (𝔥₀ y) (eq (𝔥₀ y) y refl))
+   ζ x y a ahx ahy = {!!}
 
-   InvInv' : ∀ x → x ≡ (h₀Inv' ∘ 𝔥₀)  x
-   InvInv' x = {!InjInvIsLeftInv!}
-
-
-   ζ : ∀ x → h x ≡  (𝔥₀ ∘ h₀Inv ∘ h) x
-   ζ x = InvInv (h x)
+   --  eq : (b : B) → (a : A) → b ≡ f a → Image f ∋ b
 
    γ : h p ≡ h q
-   γ = h p                ≡⟨ ζ p ⟩
-       (𝔥₀ ∘ h₀Inv ∘ h) p ≡⟨ {!!} ⟩
-       (𝔥₀ ∘ h₀Inv ∘ h) q ≡⟨ (ζ q)⁻¹ ⟩
-       h q ∎
-
-   ζ' : ∀ x → h x ≡ (h ∘ h₀Inv ∘ 𝔥₀) x
-   ζ' x = cong h (InvInv' x) 
-
-   γ' : h p ≡ h q
-   γ' = h p                ≡⟨ ζ' p ⟩
-       (h ∘ h₀Inv ∘ 𝔥₀) p ≡⟨ cong (h ∘ h₀Inv) pKq ⟩
-       (h ∘ h₀Inv ∘ 𝔥₀) q ≡⟨ (ζ' q)⁻¹ ⟩
-       h q ∎
- 
-
- id-is-universal : (p q : Term X){𝑨 : Algebra 𝓤 𝑆}{skA : 𝑨 ∈ S 𝒦}
-  → homℭker{𝑨}{skA} p q → ∀(h : X → ∣ 𝑨 ∣) → (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
- id-is-universal (ℊ x) (ℊ y) {𝑨} {skA} phCq h = γ
-  where
-  γ : h x ≡ h y
-  γ = h x ≡⟨ {!!} ⟩ h y ∎
- id-is-universal (ℊ x) (node f t) {𝑨} {skA} phCq h = γ
-  where
-  γ : h x ≡ (f ̂ 𝑨) (λ i → free-lift 𝑨 h (t i))
-  γ = {!!}
- id-is-universal (node f t) (ℊ x) {𝑨} {skA} phCq h = γ
-  where
-  γ : (f ̂ 𝑨) (λ i → free-lift 𝑨 h (t i)) ≡ h x
-  γ = {!!}
- id-is-universal (node f s) (node g t) {𝑨} {skA} phCq h = γ
-  where
-  γ' : (f ̂ 𝑨)(λ i → free-lift 𝑨 h (s i)) ≡ (g ̂ 𝑨)(λ i → free-lift 𝑨 h (t i))
-  γ' = {!!} -- id-is-universal {!!} {!!} phCq h
-  γ : free-lift 𝑨 h (node f s) ≡ free-lift 𝑨 h (node g t)
-  γ = {!!}
+   γ = h (h₀Inv (𝔥₀ p) (eq (𝔥₀ p) p refl)) ≡⟨ cong h ((ζ p q (𝔥₀ q) (pKq ⁻¹) refl )) ⟩
+       h (h₀Inv (𝔥₀ q) (eq (𝔥₀ q) q refl)) ∎
 
 \end{code}
 
