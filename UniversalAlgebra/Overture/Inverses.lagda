@@ -14,7 +14,7 @@ This is the [Overture.Inverses][] module of the [Agda Universal Algebra Library]
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 -- Imports from the Agda (Builtin) and the Agda Standard Library
-open import Agda.Builtin.Bool
+open import Agda.Builtin.Bool using (true; false)
 open import Agda.Builtin.Equality using (_≡_; refl)
 open import Agda.Primitive using (_⊔_; lzero; lsuc; Level; Setω)
 open import Data.Product using (_,_; Σ; _×_; ∃; ∃-syntax)
@@ -54,6 +54,7 @@ Next we verify that the type behaves as we expect.
  ImageTransfer : (f : A → B)(b1 b2 : B) → Image f ∋ b1 → b1 ≡ b2 → Image f ∋ b2
  ImageTransfer f .(f x) b2 (im x) b1b2 = eq b2 x (b1b2 ⁻¹)
  ImageTransfer f b1 b2 (eq .b1 a x) b1b2 = eq b2 a (b1b2 ⁻¹ ∙ x)
+
 
 module _ {A : Type 𝓤 }{B : A → Type 𝓦 } where
 

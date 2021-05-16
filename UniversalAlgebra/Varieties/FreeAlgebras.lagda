@@ -46,7 +46,7 @@ open import Relation.Unary using (Pred; _∈_; _⊆_)
 open import Algebras.Basic
 open import Overture.Preliminaries
  using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; Π; -Π; -Σ; _≡⟨_⟩_; _∎; _∙_;_⁻¹; ∣_∣; ∥_∥; snd; fst; _≈_; id)
-open import Overture.Inverses using (Inv; InvIsInv; IsSurjective; Image_∋_; SurjInv; SurjInvIsRightInv≈; InjInvIsLeftInv; IsInjective; InjInv)
+open import Overture.Inverses using (Inv; InvIsInv; IsSurjective; Image_∋_; SurjInv; SurjInvIsRightInv≈; IsInjective; InjInv)
 open import Relations.Quotients using (⟪_⟫)
 open import Relations.Extensionality using (DFunExt; SwellDef; pred-ext; swelldef)
 open import Relations.Discrete using (kernel; ker)
@@ -383,15 +383,18 @@ We need a three more lemmas before we are ready to tackle our main goal.
   h≡φ : ∀ t → (∣ f ∣ ∘ ∣ 𝔑 ℎ ∣) t ≡ ∣ φ ∣ t
   h≡φ t = free-unique (fe 𝓥 𝓤) 𝑨 h' φ (λ x → refl) t
 
-  γ : 𝑨 ⟦ p ⟧ ≈ 𝑨 ⟦ q ⟧
-  γ a = (𝑨 ⟦ p ⟧) a ≡⟨ {!!} ⟩ (𝑨 ⟦ q ⟧) a ∎
-
   γ' : ∣ φ ∣ p ≡ ∣ φ ∣ q
   γ' = ∣ φ ∣ p             ≡⟨ (h≡φ p)⁻¹ ⟩
        ∣ f ∣ ( ∣ 𝔑 ℎ ∣ p )   ≡⟨ cong ∣ f ∣ 𝔑pq ⟩
        ∣ f ∣ ( ∣ 𝔑 ℎ ∣ q )   ≡⟨ h≡φ q ⟩
        ∣ φ ∣ q             ∎
 
+
+  γ : 𝑨 ⟦ p ⟧ ≈ 𝑨 ⟦ q ⟧
+  γ a = (𝑨 ⟦ p ⟧) a ≡⟨ free-lift-interp (wd 𝓥 𝓤) 𝑨 a p ⟩
+      (free-lift 𝑨 a) p  ≡⟨ {!!} ⟩
+      (free-lift 𝑨 a) q ≡⟨ (free-lift-interp (wd 𝓥 𝓤) 𝑨 a q)⁻¹ ⟩
+      (𝑨 ⟦ q ⟧) a        ∎
 
  ψlemma2 : (ℎ : X → ∣ ℭ ∣) → kernel ∣ hom𝔽 ℎ ∣ ⊆ ψ
  ψlemma2 ℎ {p , q} hyp = ψlemma1 ℎ {p , q} γ
