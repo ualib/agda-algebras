@@ -28,7 +28,7 @@ open import Relation.Binary.PropositionalEquality.Core using (trans; subst; cong
 open import Relation.Unary using (Pred; _⊆_)
 
 -- Imports from the Agda Universal Algebra Library
-open import Overture.Preliminaries using (Type; 𝓤; 𝓥; 𝓦; fst; Π; -Π;-Σ; ∣_∣; ∥_∥; _≡⟨_⟩_; _∎; _⁻¹; _∼_)
+open import Overture.Preliminaries using (Type; 𝓤; 𝓥; 𝓦; fst; Π; -Π;-Σ; ∣_∣; ∥_∥; _≡⟨_⟩_; _∎; _⁻¹; _≈_)
 open import Overture.Inverses using (IsInjective)
 open import Relations.Continuous using (ContRel; DepRel)
 open import Relations.Quotients using (IsBlock)
@@ -117,12 +117,6 @@ This notion is formalized in the [Type Topology][] library, using the `is-subsin
 
 is-set : Type 𝓤 → Type 𝓤
 is-set A = is-prop-valued{A = A} _≡_
--- (x y : A) → is-prop (x ≡ y)
-
--- is-prop-valued : {A : Type 𝓤} → Rel A 𝓦 → Type(𝓤 ⊔ 𝓦)
--- is-prop-valued  _≈_ = ∀ x y → is-prop (x ≈ y)
-
--- open import MGS-Embeddings using (is-set) public
 
 \end{code}
 
@@ -164,38 +158,10 @@ Finding a proof that a function is an embedding isn't always easy, but one appro
 
 module _ {A : Type 𝓤}{B : Type 𝓦} where
  invertible : (A → B) → Type (𝓤 ⊔ 𝓦)
- invertible f = Σ[ g ꞉ (B → A) ] ((g ∘ f ∼ id) × (f ∘ g ∼ id))
+ invertible f = Σ[ g ꞉ (B → A) ] ((g ∘ f ≈ id) × (f ∘ g ≈ id))
 
  equiv-is-embedding : (f : A → B) → is-equiv f → is-embedding f
  equiv-is-embedding f i y = singleton-is-prop (fiber f y) (i y)
-
--- open import MGS-Retracts using (_◁⟨_⟩_; _◀; Σ-retract; retract-of-singleton; singleton-type-center; singleton-type-centered)
-
- -- invertible-is-equiv : (f : A → B) → invertible f → is-equiv f
- -- invertible-is-equiv f (g , η , ε) b₀ = γ
- --  where
- --  s : (b : B) → f (g b) ≡ b₀ → b ≡ b₀
- --  s b = subst (_≡ b₀) (ε b)
- --  r : (b : B) → b ≡ b₀ → f (g b) ≡ b₀
- --  r b = subst (_≡ b₀) ((ε b)⁻¹)
-
- --  β : (b : B) → (f (g b) ≡ b₀) ◁ (b ≡ b₀)
- --  β b = (r b) , (s b) , subst-is-section (_≡ b₀) (ε b)
-
-  -- α : fiber f b₀ ◁ singleton-type b₀
-  -- α = (λ _ → g b₀ , ε b₀) , ((λ _ → b₀ , refl) , (λ x → {!!}))
-  -- (Σ a ꞉ A , (f a ≡ b₀))     ◁⟨ Σ-reindexing-retract g (f , η) ⟩
-  --      (Σ b ꞉ B , f (g b) ≡ b₀) ◁⟨ Σ-retract  β                   ⟩
-  --      (Σ b ꞉ B , b ≡ b₀)       ◀
-
-  -- γ : is-singleton (fiber f b₀)
-  -- γ = (g b₀ , ε b₀) , {!!}
-
-  -- γ : is-singleton (fiber f b₀)
-  -- γ = (g b₀ , ε b₀) , {!!}
-
- -- invertible-is-embedding : (f : A → B) → invertible f → is-embedding f
- -- invertible-is-embedding f fi = equiv-is-embedding f (invertible-is-equiv f fi)
 
 \end{code}
 

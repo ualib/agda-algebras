@@ -31,7 +31,7 @@ open import Overture.Inverses using (IsSurjective; Image_∋_; Inv; InvIsInv; eq
 module Homomorphisms.HomomorphicImages {𝑆 : Signature 𝓞 𝓥} where
 
 open import Algebras.Products{𝑆 = 𝑆} using (ov)
-open import Homomorphisms.Basic {𝑆 = 𝑆} using (hom; 𝓁𝒾𝒻𝓉; 𝓁ℴ𝓌ℯ𝓇)
+open import Homomorphisms.Basic {𝑆 = 𝑆} using (hom; 𝓁𝒾𝒻𝓉; 𝓁ℴ𝓌ℯ𝓇; epi; epi-to-hom; epi-is-surj)
 open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using (Lift-hom)
 
 
@@ -54,6 +54,17 @@ HomImages {𝓦 = 𝓦}𝑨 = Σ[ 𝑩 ꞉ Algebra 𝓦 𝑆 ] IsHomImage{𝑨 =
 
 These types should be self-explanatory, but just to be sure, let's describe the Sigma type appearing in the second definition. Given an `𝑆`-algebra `𝑨 : Algebra 𝓤 𝑆`, the type `HomImages 𝑨` denotes the class of algebras `𝑩 : Algebra 𝓦 𝑆` with a map `φ : ∣ 𝑨 ∣ → ∣ 𝑩 ∣` such that `φ` is a surjective homomorphism.
 
+The following functions are handy for translating an epimorphism `φ : epi 𝑨 𝑩` into a formal proof of the assertion that `𝑩` is a homomorphic image of `𝑨`.
+
+\begin{code}
+
+epi-to-IsHomImage : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆) → epi 𝑨 𝑩 → IsHomImage 𝑩
+epi-to-IsHomImage 𝑩 φ = epi-to-hom 𝑩 φ , epi-is-surj 𝑩 φ
+
+epi-to-HomImages : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆) → epi 𝑨 𝑩 → HomImages 𝑨
+epi-to-HomImages 𝑩 φ = (𝑩 , epi-to-IsHomImage 𝑩 φ)
+
+\end{code}
 
 
 #### <a id="images-of-a-class-of-algebras">Images of a class of algebras</a>

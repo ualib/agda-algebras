@@ -27,19 +27,21 @@ open import Algebras.Basic
 open import Overture.Inverses using (IsInjective)
 open import Overture.Preliminaries
  using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; Π; -Π; -Σ; _≡⟨_⟩_; _∎; _∙_;_⁻¹; ∣_∣; ∥_∥; snd; fst)
-open import Relations.Truncation using (hfunext)
-
+open import Relations.Extensionality using (DFunExt)
 
 
 
 module Varieties.Varieties {𝑆 : Signature 𝓞 𝓥} where
 
 
-open import Algebras.Products{𝑆 = 𝑆} using (ov; ⨅; 𝔄; class-product)
+
+open import Algebras.Products{𝑆 = 𝑆} as PRODUCTS using (ov; ⨅)
 open import Homomorphisms.Basic{𝑆 = 𝑆} using (hom; 𝒾𝒹; ∘-hom; is-homomorphism)
 open import Homomorphisms.HomomorphicImages{𝑆 = 𝑆} using (HomImages; Lift-alg-hom-image)
 open import Homomorphisms.Isomorphisms{𝑆 = 𝑆} using (_≅_; ≅-sym; Lift-≅; ≅-trans; ≅-refl; Lift-alg-iso; ⨅≅; Lift-alg-associative; Lift-alg-⨅≅)
 open import Subalgebras.Subalgebras{𝑆 = 𝑆} using (_≤_; _IsSubalgebraOfClass_; ≤-iso; ≤-refl; Subalgebra; ≤-TRANS-≅; ≤-trans; Lift-≤-Lift; ≤-Lift; _IsSubalgebraOf_)
+
+
 
 
 \end{code}
@@ -125,14 +127,15 @@ data V {𝓤 𝓦 : Level}(𝒦 : Pred(Algebra 𝓤 𝑆)(ov 𝓤)) : Pred(Algeb
  where
  vbase  : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → Lift-alg 𝑨 𝓦 ∈ V 𝒦
  vlift  : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ V{𝓤}{𝓤} 𝒦 → Lift-alg 𝑨 𝓦 ∈ V 𝒦
- vliftw : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓦} 𝒦 → Lift-alg 𝑨 (𝓤 ⊔ 𝓦) ∈ V 𝒦
- vhimg  : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓦} 𝒦 → ((𝑩 , _) : HomImages 𝑨) → 𝑩 ∈ V 𝒦
+ vliftw : {𝑨 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑨 ∈ V{𝓤}{𝓦} 𝒦 → Lift-alg 𝑨 (𝓤 ⊔ 𝓦) ∈ V 𝒦
+ vhimg  : {𝑨 : Algebra (𝓤 ⊔ 𝓦) 𝑆}{𝑩 : Algebra 𝓦 𝑆} → 𝑨 ∈ V{𝓤}{𝓦} 𝒦 → ((𝑩 , _) : HomImages 𝑨) → 𝑩 ∈ V 𝒦
+ -- vhimg  : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓦} 𝒦 → ((𝑩 , _) : HomImages 𝑨) → 𝑩 ∈ V 𝒦
  vssub  : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓤} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ V 𝒦
- vssubw : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓦} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ V 𝒦
+ vssubw : {𝑨 𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑨 ∈ V{𝓤}{𝓦} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ V 𝒦
  vprodu : {I : Type 𝓦}{𝒜 : I → Algebra 𝓤 𝑆} → (∀ i → (𝒜 i) ∈ V{𝓤}{𝓤} 𝒦) → ⨅ 𝒜 ∈ V 𝒦
- vprodw : {I : Type 𝓦}{𝒜 : I → Algebra _ 𝑆} → (∀ i → (𝒜 i) ∈ V{𝓤}{𝓦} 𝒦) → ⨅ 𝒜 ∈ V 𝒦
- visou  : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓤} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ V 𝒦
- visow  : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓦} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ V 𝒦
+ vprodw : {I : Type 𝓦}{𝒜 : I → Algebra (𝓤 ⊔ 𝓦) 𝑆} → (∀ i → (𝒜 i) ∈ V{𝓤}{𝓦} 𝒦) → ⨅ 𝒜 ∈ V 𝒦
+ visou  : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑨 ∈ V{𝓤}{𝓤} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ V 𝒦
+ visow  : {𝑨 𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑨 ∈ V{𝓤}{𝓦} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ V 𝒦
 
 \end{code}
 
@@ -160,7 +163,7 @@ First, `P` is a closure operator.  This is proved by checking that `P` is *monot
 
 \begin{code}
 
-P-mono : {𝓤 𝓦 : Level}{𝒦 𝒦' : Pred(Algebra 𝓤 𝑆)(ov 𝓤)}
+P-mono : {𝓤 𝓦 : Level}{𝒦 𝒦' : Pred(Algebra 𝓤 𝑆) (ov 𝓤)}
  →       𝒦 ⊆ 𝒦' → P{𝓤}{𝓦} 𝒦 ⊆ P{𝓤}{𝓦} 𝒦'
 
 P-mono kk' (pbase x)    = pbase (kk' x)
@@ -361,13 +364,13 @@ We need to formalize one more lemma before arriving the main objective of this s
 
 \begin{code}
 
-module _ {𝒦 : Pred(Algebra 𝓤 𝑆)(ov 𝓤)} where
+module _ {𝓤 𝓦 : Level}{𝒦 : Pred(Algebra 𝓤 𝑆)(ov 𝓤)} where
 
- lemPS⊆SP : hfunext 𝓦 𝓤 → funext 𝓦 𝓤 → {I : Type 𝓦}{ℬ : I → Algebra 𝓤 𝑆}
+ lemPS⊆SP : DFunExt → {I : Type 𝓦}{ℬ : I → Algebra 𝓤 𝑆}
   →         (∀ i → (ℬ i) IsSubalgebraOfClass 𝒦)
   →         ⨅ ℬ IsSubalgebraOfClass (P{𝓤}{𝓦} 𝒦)
 
- lemPS⊆SP hwu fwu {I}{ℬ} B≤K = ⨅ 𝒜 , (⨅ SA , ⨅SA≤⨅𝒜) , ξ , (⨅≅ {fiu = fwu}{fiw = fwu} B≅SA)
+ lemPS⊆SP fe {I}{ℬ} B≤K = ⨅ 𝒜 , (⨅ SA , ⨅SA≤⨅𝒜) , ξ , (⨅≅ fe B≅SA)
   where
   𝒜 : I → Algebra 𝓤 𝑆
   𝒜 = λ i → ∣ B≤K i ∣
@@ -390,9 +393,9 @@ module _ {𝒦 : Pred(Algebra 𝓤 𝑆)(ov 𝓤)} where
   α : ∣ ⨅ SA ∣ → ∣ ⨅ 𝒜 ∣
   α = λ x i → (h i) (x i)
   β : is-homomorphism (⨅ SA) (⨅ 𝒜) α
-  β = λ 𝑓 𝒂 → fwu λ i → (snd ∣ SA≤𝒜 i ∣) 𝑓 (λ x → 𝒂 x i)
+  β = λ 𝑓 𝒂 → (fe 𝓦 𝓤) λ i → (snd ∣ SA≤𝒜 i ∣) 𝑓 (λ x → 𝒂 x i)
   γ : IsInjective α
-  γ αxαy = fwu λ i → (hinj i)(cong-app αxαy i)
+  γ αxαy = (fe 𝓦 𝓤) λ i → (hinj i)(cong-app αxαy i)
 
   ⨅SA≤⨅𝒜 : ⨅ SA ≤ ⨅ 𝒜
   ⨅SA≤⨅𝒜 = (α , β) , γ
@@ -411,10 +414,10 @@ Finally, we are in a position to prove that a product of subalgebras of algebras
 
 \begin{code}
 
-module _ {fovu : funext (ov 𝓤) (ov 𝓤)}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
+module _ {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where -- {fovu : funext (ov 𝓤) (ov 𝓤)}
 
  PS⊆SP : -- extensionality assumptions:
-            hfunext (ov 𝓤)(ov 𝓤)
+         DFunExt
 
   →      P{ov 𝓤}{ov 𝓤} (S{𝓤}{ov 𝓤} 𝒦) ⊆ S{ov 𝓤}{ov 𝓤} (P{𝓤}{ov 𝓤} 𝒦)
 
@@ -423,27 +426,27 @@ module _ {fovu : funext (ov 𝓤) (ov 𝓤)}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 
  PS⊆SP _ (pbase{𝑩}(ssub{𝑨} sA B≤A)) = siso(ssub(S⊆SP(slift sA))(Lift-≤-Lift 𝑨 B≤A)) ≅-refl
  PS⊆SP _ (pbase {𝑩}(ssubw{𝑨} sA B≤A)) = ssub(slift(S⊆SP sA))(Lift-≤-Lift 𝑨 B≤A)
  PS⊆SP _ (pbase (siso{𝑨}{𝑩} x A≅B)) = siso (S⊆SP (slift x)) ( Lift-alg-iso A≅B )
- PS⊆SP hfe (pliftu x) = slift (PS⊆SP hfe x)
- PS⊆SP hfe (pliftw x) = slift (PS⊆SP hfe x)
+ PS⊆SP fe (pliftu x) = slift (PS⊆SP fe x)
+ PS⊆SP fe (pliftw x) = slift (PS⊆SP fe x)
 
- PS⊆SP hfe (produ{I}{𝒜} x) = (S-mono (P-idemp)) (subalgebra→S η)
+ PS⊆SP fe (produ{I}{𝒜} x) = (S-mono (P-idemp)) (subalgebra→S η)
   where
    ξ : (i : I) → (𝒜 i) IsSubalgebraOfClass (P{𝓤}{ov 𝓤} 𝒦)
-   ξ i = S→subalgebra (PS⊆SP hfe (x i))
+   ξ i = S→subalgebra (PS⊆SP fe (x i))
 
    η : ⨅ 𝒜 IsSubalgebraOfClass (P{ov 𝓤}{ov 𝓤} (P{𝓤}{ov 𝓤} 𝒦))
-   η = lemPS⊆SP hfe fovu {I} {𝒜} ξ
+   η = lemPS⊆SP fe {I} {𝒜} ξ
 
- PS⊆SP hfe (prodw{I}{𝒜} x) = (S-mono (P-idemp)) (subalgebra→S η)
+ PS⊆SP fe (prodw{I}{𝒜} x) = (S-mono (P-idemp)) (subalgebra→S η)
   where
    ξ : (i : I) → (𝒜 i) IsSubalgebraOfClass (P{𝓤}{ov 𝓤} 𝒦)
-   ξ i = S→subalgebra (PS⊆SP hfe (x i))
+   ξ i = S→subalgebra (PS⊆SP fe (x i))
 
    η : ⨅ 𝒜 IsSubalgebraOfClass (P{ov 𝓤}{ov 𝓤} (P{𝓤}{ov 𝓤} 𝒦))
-   η = lemPS⊆SP hfe fovu  {I} {𝒜} ξ
+   η = lemPS⊆SP fe {I} {𝒜} ξ
 
- PS⊆SP hfe (pisou{𝑨}{𝑩} pA A≅B) = siso (PS⊆SP hfe pA) A≅B
- PS⊆SP hfe (pisow{𝑨}{𝑩} pA A≅B) = siso (PS⊆SP hfe pA) A≅B
+ PS⊆SP fe (pisou{𝑨}{𝑩} pA A≅B) = siso (PS⊆SP fe pA) A≅B
+ PS⊆SP fe (pisow{𝑨}{𝑩} pA A≅B) = siso (PS⊆SP fe pA) A≅B
 
 \end{code}
 
@@ -484,24 +487,26 @@ As mentioned earlier, a technical hurdle that must be overcome when formalizing 
 
 open Lift
 
-module Vlift {fe₀ : funext (ov 𝓤) 𝓤}
-         {fe₁ : funext ((ov 𝓤) ⊔ (lsuc (ov 𝓤))) (lsuc (ov 𝓤))}
-         {fe₂ : funext (ov 𝓤) (ov 𝓤)}
-         {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
+module Vlift {𝓤 : Level}(𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)) where
+ -- NOTATION FOR COMMON UNIVERSE LEVELS --
+ 𝓕 𝓕⁺ : Level
+ 𝓕 = ov 𝓤
+ 𝓕⁺ = lsuc (ov 𝓤)    -- (this will be the level of the relatively free algebra)
 
- VlA : {𝑨 : Algebra (ov 𝓤) 𝑆} → 𝑨 ∈ V{𝓤}{ov 𝓤} 𝒦
-  →    Lift-alg 𝑨 (lsuc (ov 𝓤)) ∈ V{𝓤}{lsuc (ov 𝓤)} 𝒦
- VlA (vbase{𝑨} x) = visow (vbase x) (Lift-alg-associative 𝑨)
- VlA (vlift{𝑨} x) = visow (vlift x) (Lift-alg-associative 𝑨)
- VlA (vliftw{𝑨} x) = visow (VlA x) (Lift-alg-associative 𝑨)
 
- VlA (vhimg{𝑨}{𝑩} x hB) =
+ VlA : DFunExt → {𝑨 : Algebra 𝓕 𝑆} → 𝑨 ∈ V{𝓤}{𝓕} 𝒦
+  →    Lift-alg 𝑨 𝓕⁺ ∈ V{𝓤}{𝓕⁺} 𝒦
+ VlA _ (vbase{𝑨} x) = visow (vbase x) (Lift-alg-associative 𝑨)
+ VlA _ (vlift{𝑨} x) = visow (vlift x) (Lift-alg-associative 𝑨)
+ VlA fe (vliftw{𝑨} x) = visow (VlA fe x) (Lift-alg-associative 𝑨)
+
+ VlA fe (vhimg{𝑨}{𝑩} x hB) =
   vhimg{𝑩 = Lift-alg 𝑩 (lsuc (ov 𝓤))}
-   (VlA x) ((Lift-alg ∣ hB ∣ (lsuc (ov 𝓤))) , (Lift-alg-hom-image {𝑩 = ∣ hB ∣} ∥ hB ∥))
+   (VlA fe x) ((Lift-alg ∣ hB ∣ (lsuc (ov 𝓤))) , (Lift-alg-hom-image {𝑩 = ∣ hB ∣} ∥ hB ∥))
 
- VlA (vssub{𝑨}{𝑩} x B≤A) = vssubw (vlift{𝓦 = (lsuc (ov 𝓤))} x) (Lift-≤-Lift 𝑨 B≤A)
- VlA (vssubw{𝑨}{𝑩} x B≤A) = vssubw (VlA x) (Lift-≤-Lift 𝑨 B≤A)
- VlA (vprodu{I}{𝒜} x) = visow (vprodw vlA) (≅-sym B≅A)
+ VlA _ (vssub{𝑨}{𝑩} x B≤A) = vssubw (vlift{𝓦 = (lsuc (ov 𝓤))} x) (Lift-≤-Lift 𝑨 B≤A)
+ VlA fe (vssubw{𝑨}{𝑩} x B≤A) = vssubw (VlA fe x) (Lift-≤-Lift 𝑨 B≤A)
+ VlA fe (vprodu{I}{𝒜} x) = visow (vprodw vlA) (≅-sym B≅A)
   where
   𝑰 : Type (lsuc (ov 𝓤))
   𝑰 = Lift (lsuc (ov 𝓤)) I
@@ -516,10 +521,10 @@ module Vlift {fe₀ : funext (ov 𝓤) 𝓤}
   iso-components i = Lift-≅
 
   B≅A : Lift-alg (⨅ 𝒜) (lsuc (ov 𝓤)) ≅ ⨅ lA
-  B≅A = Lift-alg-⨅≅  {fizw = fe₁}{fiu = fe₀} iso-components
+  B≅A = Lift-alg-⨅≅  fe iso-components
 
 
- VlA (vprodw{I}{𝒜} x) = visow (vprodw vlA) (≅-sym B≅A)
+ VlA fe (vprodw{I}{𝒜} x) = visow (vprodw vlA) (≅-sym B≅A)
   where
   𝑰 : Type (lsuc (ov 𝓤))
   𝑰 = Lift (lsuc (ov 𝓤)) I
@@ -528,16 +533,16 @@ module Vlift {fe₀ : funext (ov 𝓤) 𝓤}
   lA i = Lift-alg (𝒜 (lower i)) (lsuc (ov 𝓤))
 
   vlA : ∀ i → (lA i) ∈ V{𝓤}{lsuc (ov 𝓤)} 𝒦
-  vlA i = VlA (x (lower i))
+  vlA i = VlA fe (x (lower i))
 
   iso-components : ∀ i → 𝒜 i ≅ lA (lift i)
   iso-components i = Lift-≅
 
   B≅A : Lift-alg (⨅ 𝒜) (lsuc (ov 𝓤)) ≅ ⨅ lA
-  B≅A = Lift-alg-⨅≅ {fizw = fe₁}{fiu = fe₂} iso-components
+  B≅A = Lift-alg-⨅≅ fe iso-components
 
- VlA (visou{𝑨}{𝑩} x A≅B) = visow (vlift x) (Lift-alg-iso A≅B)
- VlA (visow{𝑨}{𝑩} x A≅B) = visow (VlA x) (Lift-alg-iso A≅B)
+ VlA _ (visou{𝑨}{𝑩} x A≅B) = visow (vlift x) (Lift-alg-iso A≅B)
+ VlA fe (visow{𝑨}{𝑩} x A≅B) = visow (VlA fe x) (Lift-alg-iso A≅B)
 
 \end{code}
 
@@ -547,19 +552,19 @@ Above we proved that `SP(𝒦) ⊆ V(𝒦)`, and we did so under fairly general 
 
 \begin{code}
 
- SP⊆V' : S{ov 𝓤}{lsuc (ov 𝓤)} (P{𝓤}{ov 𝓤} 𝒦) ⊆ V 𝒦
+ SP⊆V' : DFunExt → S{ov 𝓤}{lsuc (ov 𝓤)} (P{𝓤}{ov 𝓤} 𝒦) ⊆ V 𝒦
 
- SP⊆V' (sbase{𝑨} x) = visow (VlA (SP⊆V (sbase x))) (≅-sym (Lift-alg-associative 𝑨))
- SP⊆V' (slift x) = VlA (SP⊆V x)
+ SP⊆V' fe (sbase{𝑨} x) = visow (VlA fe (SP⊆V (sbase x))) (≅-sym (Lift-alg-associative 𝑨))
+ SP⊆V' fe (slift x) = VlA fe (SP⊆V x)
 
- SP⊆V' (ssub{𝑨}{𝑩} spA B≤A) = vssubw (VlA (SP⊆V spA)) B≤lA
+ SP⊆V' fe (ssub{𝑨}{𝑩} spA B≤A) = vssubw (VlA fe (SP⊆V spA)) B≤lA
   where
    B≤lA : 𝑩 ≤ Lift-alg 𝑨 (lsuc (ov 𝓤))
    B≤lA = ≤-Lift 𝑨 B≤A
 
- SP⊆V' (ssubw spA B≤A) = vssubw (SP⊆V' spA) B≤A
+ SP⊆V' fe (ssubw spA B≤A) = vssubw (SP⊆V' fe spA) B≤A
 
- SP⊆V' (siso{𝑨}{𝑩} x A≅B) = visow (VlA (SP⊆V x)) γ
+ SP⊆V' fe (siso{𝑨}{𝑩} x A≅B) = visow (VlA fe (SP⊆V x)) γ
   where
    γ : Lift-alg 𝑨 (lsuc (ov 𝓤)) ≅ 𝑩
    γ = ≅-trans (≅-sym Lift-≅) A≅B
@@ -575,53 +580,22 @@ Before doing so, we need to redefine the class product so that each factor comes
 
 \begin{code}
 
-module class-products-with-maps
- {X : Type 𝓤}
- {fe𝓕𝓤 : funext (ov 𝓤) 𝓤}
- {fe₁ : funext ((ov 𝓤) ⊔ (lsuc (ov 𝓤))) (lsuc (ov 𝓤))}
- {fe₂ : funext (ov 𝓤) (ov 𝓤)}
+module class-product-inclusion
  (𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤))
  where
 
- ℑ' : Type (ov 𝓤)
- ℑ' = Σ[ 𝑨 ꞉ (Algebra 𝓤 𝑆) ] ((𝑨 ∈ S{𝓤}{𝓤} 𝒦) × (X → ∣ 𝑨 ∣))
+ open PRODUCTS.class-product{𝒦 = S{𝓤}{𝓤} 𝒦}
 
-\end{code}
-Notice that the second component of this dependent pair type is  `(𝑨 ∈ 𝒦) × (X → ∣ 𝑨 ∣)`. In previous versions of the [UALib][] this second component was simply `𝑨 ∈ 𝒦`, until we realized that adding the type `X → ∣ 𝑨 ∣` is quite useful. Later we will see exactly why, but for now suffice it to say that a map of type `X → ∣ 𝑨 ∣` may be viewed abstractly as an *ambient context*, or more concretely, as an assignment of *values* in `∣ 𝑨 ∣` to *variable symbols* in `X`.  When computing with or reasoning about products, while we don't want to rigidly impose a context in advance, want do want to lay our hands on whatever context is ultimately assumed.  Including the "context map" inside the index type `ℑ` of the product turns out to be a convenient way to achieve this flexibility.
-
-
-Taking the product over the index type `ℑ` requires a function that maps an index `i : ℑ` to the corresponding algebra.  Each `i : ℑ` is a triple, say, `(𝑨 , p , h)`, where `𝑨 : Algebra 𝓤 𝑆`, `p : 𝑨 ∈ 𝒦`, and `h : X → ∣ 𝑨 ∣`, so the function mapping an index to the corresponding algebra is simply the first projection.
-
-\begin{code}
-
- 𝔄' : ℑ' → Algebra 𝓤 𝑆
- 𝔄' = λ (i : ℑ') → ∣ i ∣
-
-\end{code}
-
-Finally, we define `class-product` which represents the product of all members of 𝒦.
-
-\begin{code}
-
- class-product' : Algebra (ov 𝓤) 𝑆
- class-product' = ⨅ 𝔄'
-
-\end{code}
-
-If `p : 𝑨 ∈ 𝒦` and `h : X → ∣ 𝑨 ∣`, we view the triple `(𝑨 , p , h) ∈ ℑ` as an index over the class, and so we can think of `𝔄 (𝑨 , p , h)` (which is simply `𝑨`) as the projection of the product `⨅ 𝔄` onto the `(𝑨 , p, h)`-th component.
-
-\begin{code}
-
- class-prod-s-∈-ps : class-product' ∈ P{ov 𝓤}{ov 𝓤}(S 𝒦)
- class-prod-s-∈-ps = pisou psPllA (⨅≅ {fiu = fe₂}{fiw = fe𝓕𝓤} llA≅A)
+ class-prod-s-∈-ps : DFunExt → class-prod ∈ P{ov 𝓤}{ov 𝓤}(S 𝒦)
+ class-prod-s-∈-ps fe = pisou psPllA (⨅≅ fe llA≅A)
 
   where
-  lA llA : ℑ' → Algebra (ov 𝓤) 𝑆
+  lA llA : ℑ → Algebra (ov 𝓤) 𝑆
   lA i =  Lift-alg (𝔄 i) (ov 𝓤)
   llA i = Lift-alg (lA i) (ov 𝓤)
 
   slA : ∀ i → (lA i) ∈ S 𝒦
-  slA i = siso (fst ∥ i ∥) Lift-≅
+  slA i = siso ∥ i ∥ Lift-≅
 
   psllA : ∀ i → (llA i) ∈ P (S 𝒦)
   psllA i = pbase (slA i)
@@ -629,7 +603,7 @@ If `p : 𝑨 ∈ 𝒦` and `h : X → ∣ 𝑨 ∣`, we view the triple `(𝑨 ,
   psPllA : ⨅ llA ∈ P (S 𝒦)
   psPllA = produ psllA
 
-  llA≅A : ∀ i → (llA i) ≅ (𝔄' i)
+  llA≅A : ∀ i → (llA i) ≅ (𝔄 i)
   llA≅A i = ≅-trans (≅-sym Lift-≅)(≅-sym Lift-≅)
 
 \end{code}
@@ -639,8 +613,8 @@ So, since `PS⊆SP`, we see that that the product of all subalgebras of a class 
 
 \begin{code}
 
- class-prod-s-∈-sp : hfunext (ov 𝓤) (ov 𝓤) → class-product ∈ S(P 𝒦)
- class-prod-s-∈-sp hfe = PS⊆SP {fovu = fe₂} hfe class-prod-s-∈-ps
+ class-prod-s-∈-sp : DFunExt → class-prod ∈ S(P 𝒦)
+ class-prod-s-∈-sp fe = PS⊆SP fe (class-prod-s-∈-ps fe)
 
 \end{code}
 

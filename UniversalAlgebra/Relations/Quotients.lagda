@@ -14,7 +14,7 @@ This section presents the [Relations.Quotients][] module of the [Agda Universal 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import Agda.Builtin.Equality using (_≡_; refl)
-open import Agda.Primitive using (_⊔_; lzero; lsuc; Level)
+open import Agda.Primitive using (_⊔_; lzero; lsuc; Level; Setω)
 open import Data.Product  using (_,_; Σ; Σ-syntax; _×_)
 open import Relation.Binary using (Rel; IsEquivalence)
 open import Relation.Binary.PropositionalEquality using (sym; trans)
@@ -49,6 +49,27 @@ Antisymm _≈_ = ∀{x}{y} → x ≈ y → y ≈ x → x ≡ y
 Trans : {A : Type 𝓤} → Rel A 𝓦 → Type(𝓤 ⊔ 𝓦)
 Trans _≈_ = ∀{x}{y}{z} → x ≈ y → y ≈ z → x ≈ z
 
+Equivalence : {𝓤 : Level} → Type 𝓤 → Type (lsuc 𝓤)
+Equivalence {𝓤} A = Σ[ r ꞉ Rel A 𝓤 ] IsEquivalence r
+
+\end{code}
+
+
+\begin{code}
+
+module _ {I : Type 𝓥} {A : Type 𝓤 } where
+
+ 𝟎 : Rel (I → A) (𝓥 ⊔ 𝓤)
+ 𝟎 x y = ∀ i → x i ≡ y i
+
+
+ 𝟎-IsEquivalence : IsEquivalence 𝟎
+ 𝟎-IsEquivalence = record { refl = λ i → refl ; sym = λ α i → sym (α i)  ; trans = λ α β ℓ → trans (α ℓ) (β ℓ) }
+
+𝟎-is-smallest : Setω
+𝟎-is-smallest = ∀{𝓥}{𝓤}{𝓦}{I : Type 𝓥}{A : Type 𝓤}(ρ : Rel (I → A) 𝓦) → IsEquivalence ρ → (x y : I → A) → 𝟎 x y → ρ x y
+
+
 \end{code}
 
 
@@ -63,6 +84,14 @@ A prominent example of an equivalence relation is the kernel of any function.
 
 ker-IsEquivalence : {A : Type 𝓤}{B : Type 𝓦}(f : A → B) → IsEquivalence (ker f)
 ker-IsEquivalence f = record { refl = refl ; sym = λ x → sym x ; trans = λ x y → trans x y }
+
+\end{code}
+
+\begin{code}
+
+kernel-lemma : {𝓥 𝓤 : Level} → 𝟎-is-smallest → {I : Type 𝓥}{A : Type 𝓤}(f : (I → A) → A)(x y : I → A)
+ →             (∀ i → x i ≡ y i) → (ker f) x y
+kernel-lemma {𝓥}{𝓤} 0min {I = I}{A = A} f x y hyp = 0min (ker f) (ker-IsEquivalence{𝓤 = (𝓥 ⊔ 𝓤)}{A = (I → A)} f) x y hyp
 
 \end{code}
 

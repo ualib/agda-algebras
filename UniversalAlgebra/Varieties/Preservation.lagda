@@ -27,11 +27,11 @@ open import Relation.Unary using (Pred; _∈_; _⊆_; ｛_｝; _∪_)
 open import Algebras.Basic
 open import Overture.Preliminaries
  using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; Π; -Π; -Σ; _≡⟨_⟩_; _∎; _∙_;_⁻¹; ∣_∣; ∥_∥; snd; fst)
-open import Overture.Inverses using (Inv; InvIsInv)
-open import Relations.Extensionality using (DFunExt)
+open import Overture.Inverses -- using (Inv; InvIsInv)
+open import Relations.Extensionality using (DFunExt; SwellDef)
 
 
-module Varieties.Preservation  {𝑆 : Signature 𝓞 𝓥}{𝓤 : Level} where
+module Varieties.Preservation  {𝑆 : Signature 𝓞 𝓥} where
 
 
 
@@ -39,6 +39,7 @@ open import Algebras.Products{𝑆 = 𝑆} using (ov)
 open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using (_≅_; ≅-refl)
 open import Terms.Basic {𝑆 = 𝑆} using (Term; 𝑻; lift-hom)
 open import Terms.Operations {𝑆 = 𝑆} using (_⟦_⟧; comm-hom-term)
+open import Subalgebras.Subalgebras {𝑆 = 𝑆} using (SubalgebraOfClass)
 open import Varieties.EquationalLogic{𝑆 = 𝑆}
  using (_⊧_≋_; _⊧_≈_; Th; ⊧-I-invar; ⊧-Lift-invar; ⊧-lower-invar; ⊧-S-invar; ⊧-S-class-invar; ⊧-P-lift-invar; ⊧-P-invar)
 open import Varieties.Varieties {𝑆 = 𝑆} using (H; S; P; V)
@@ -50,10 +51,6 @@ open V
 open Term
 open _⊎_
 
-𝓕 𝓕⁺ : Level
-𝓕 = ov 𝓤
-𝓕⁺ = lsuc (ov 𝓤)    -- (this will be the level of the relatively free algebra)
-
 \end{code}
 
 
@@ -64,32 +61,32 @@ First we prove that the closure operator H is compatible with identities that ho
 
 \begin{code}
 
-module _ {fe : DFunExt}{X : Type 𝓧} {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
+module _ (wd : SwellDef){X : Type 𝓧} {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
 
  H-id1 : (p q : Term X) → 𝒦 ⊧ p ≋ q → H{𝓦 = 𝓤} 𝒦 ⊧ p ≋ q
- H-id1 p q α (hbase x) = ⊧-Lift-invar fe p q (α x)
- H-id1 p q α (hlift{𝑨} x) = ⊧-Lift-invar fe p q (H-id1 p q α x)
+ H-id1 p q α (hbase x) = ⊧-Lift-invar wd p q (α x)
+ H-id1 p q α (hlift{𝑨} x) = ⊧-Lift-invar wd p q (H-id1 p q α x)
 
- H-id1 p q α (hhimg{𝑨}{𝑪} HA (𝑩 , ((φ , φhom) , φE))) = γ
+ H-id1 p q α (hhimg{𝑨}{𝑪} HA (𝑩 , ((φ , φh) , φE))) b = γ
   where
-  β : 𝑨 ⊧ p ≈ q
-  β = (H-id1 p q α) HA
+  IH : 𝑨 ⊧ p ≈ q
+  IH = (H-id1 p q α) HA
 
-  preim : ∀ 𝒃 x → ∣ 𝑨 ∣
-  preim 𝒃 x = Inv φ (φE (𝒃 x))
+  preim : X → ∣ 𝑨 ∣
+  preim x = Inv φ (φE (b x))
 
-  ζ : ∀ 𝒃 → φ ∘ (preim 𝒃) ≡ 𝒃
-  ζ 𝒃 = (fe 𝓧 𝓤) λ x → InvIsInv φ (φE (𝒃 x))
+  ζ : ∀ x → φ (preim x) ≡ b x
+  ζ x = InvIsInv φ (φE (b x))
 
-  γ : 𝑩 ⟦ p ⟧  ≡ 𝑩 ⟦ q ⟧
-  γ = (fe (𝓤 ⊔ 𝓧) 𝓤) λ 𝒃 → (𝑩 ⟦ p ⟧) 𝒃             ≡⟨ (cong (𝑩 ⟦ p ⟧) (ζ 𝒃))⁻¹ ⟩
-                (𝑩 ⟦ p ⟧)(φ ∘(preim 𝒃)) ≡⟨(comm-hom-term (fe 𝓥 𝓤) 𝑩(φ , φhom) p(preim 𝒃))⁻¹ ⟩
-                φ((𝑨 ⟦ p ⟧)(preim 𝒃))   ≡⟨ cong φ (cong-app β (preim 𝒃)) ⟩
-                φ((𝑨 ⟦ q ⟧)(preim 𝒃))   ≡⟨ comm-hom-term (fe 𝓥 𝓤) 𝑩 (φ , φhom) q (preim 𝒃) ⟩
-                (𝑩 ⟦ q ⟧)(φ ∘(preim 𝒃)) ≡⟨ cong (𝑩 ⟦ q ⟧) (ζ 𝒃) ⟩
-                (𝑩 ⟦ q ⟧) 𝒃             ∎
+  γ : (𝑩 ⟦ p ⟧) b ≡ (𝑩 ⟦ q ⟧) b
+  γ = (𝑩 ⟦ p ⟧) b          ≡⟨ wd 𝓧 𝓤 (𝑩 ⟦ p ⟧) b (φ ∘ preim )(λ i → (ζ i)⁻¹)⟩
+      (𝑩 ⟦ p ⟧)(φ ∘ preim) ≡⟨(comm-hom-term (wd 𝓥 𝓤) 𝑩 (φ , φh) p preim)⁻¹ ⟩
+      φ((𝑨 ⟦ p ⟧) preim)   ≡⟨ cong φ (IH preim) ⟩
+      φ((𝑨 ⟦ q ⟧) preim)   ≡⟨ comm-hom-term (wd 𝓥 𝓤) 𝑩 (φ , φh) q preim ⟩
+      (𝑩 ⟦ q ⟧)(φ ∘ preim) ≡⟨ wd 𝓧 𝓤 (𝑩 ⟦ q ⟧)(φ ∘ preim) b ζ ⟩
+      (𝑩 ⟦ q ⟧) b          ∎
 
- H-id1 p q α (hiso{𝑨}{𝑩} x x₁) = ⊧-I-invar fe 𝑩 p q (H-id1 p q α x) x₁
+ H-id1 p q α (hiso{𝑨}{𝑩} x x₁) = ⊧-I-invar wd 𝑩 p q (H-id1 p q α x) x₁
 
 \end{code}
 
@@ -97,9 +94,11 @@ The converse of the foregoing result is almost too obvious to bother with. Nonet
 
 \begin{code}
 
+module _ (wd : SwellDef){X : Type 𝓧} {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
+
  H-id2 : ∀ {𝓦} → (p q : Term X) → H{𝓦 = 𝓦} 𝒦 ⊧ p ≋ q → 𝒦 ⊧ p ≋ q
 
- H-id2 p q Hpq KA = ⊧-lower-invar fe p q (Hpq (hbase KA))
+ H-id2 p q Hpq KA = ⊧-lower-invar wd p q (Hpq (hbase KA))
 
 \end{code}
 
@@ -110,36 +109,37 @@ The converse of the foregoing result is almost too obvious to bother with. Nonet
 
  S-id1 : (p q : Term X) → 𝒦 ⊧ p ≋ q → S{𝓦 = 𝓤} 𝒦 ⊧ p ≋ q
 
- S-id1 p q α (sbase x) = ⊧-Lift-invar fe p q (α x)
- S-id1 p q α (slift x) = ⊧-Lift-invar fe p q ((S-id1 p q α) x)
+ S-id1 p q α (sbase x) = ⊧-Lift-invar wd p q (α x)
+ S-id1 p q α (slift x) = ⊧-Lift-invar wd p q ((S-id1 p q α) x)
 
- S-id1 p q α (ssub{𝑨}{𝑩} sA B≤A) =
-  ⊧-S-class-invar fe p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , _⊎_.inj₂ refl , ≅-refl)
-   where --Apply S-⊧ to the class 𝒦 ∪ ｛ 𝑨 ｝
-   β : 𝑨 ⊧ p ≈ q
-   β = S-id1 p q α sA
+ S-id1 p q α (ssub{𝑨}{𝑩} sA B≤A) = ⊧-S-class-invar wd p q γ ν
+  where --Apply S-⊧ to the class 𝒦 ∪ ｛ 𝑨 ｝
+  β : 𝑨 ⊧ p ≈ q
+  β = S-id1 p q α sA
 
-   Apq : ｛ 𝑨 ｝ ⊧ p ≋ q
-   Apq refl = β
+  Apq : ｛ 𝑨 ｝ ⊧ p ≋ q
+  Apq refl = β
 
-   γ : (𝒦 ∪ ｛ 𝑨 ｝) ⊧ p ≋ q
-   γ {𝑩} (inj₁ x) = α x
-   γ {𝑩} (inj₂ y) = Apq y
+  γ : (𝒦 ∪ ｛ 𝑨 ｝) ⊧ p ≋ q
+  γ {𝑩} (inj₁ x) = α x
+  γ {𝑩} (inj₂ y) = Apq y
 
- S-id1 p q α (ssubw{𝑨}{𝑩} sA B≤A) =
-  ⊧-S-class-invar fe p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ refl , ≅-refl)
-   where  --Apply S-⊧ to the class 𝒦 ∪ ｛ 𝑨 ｝
-   β : 𝑨 ⊧ p ≈ q
-   β = S-id1 p q α sA
+  ν : SubalgebraOfClass (λ z → (𝒦 ∪ ｛ 𝑨 ｝) (Data.Product.proj₁ z , Data.Product.proj₂ z))
+  ν = (𝑩 , 𝑨 , (𝑩 , B≤A) , _⊎_.inj₂ refl , ≅-refl)
 
-   Apq : ｛ 𝑨 ｝ ⊧ p ≋ q
-   Apq refl = β
+ S-id1 p q α (ssubw{𝑨}{𝑩} sA B≤A) = ⊧-S-class-invar wd p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ refl , ≅-refl)
+  where  --Apply S-⊧ to the class 𝒦 ∪ ｛ 𝑨 ｝
+  β : 𝑨 ⊧ p ≈ q
+  β = S-id1 p q α sA
 
-   γ : (𝒦 ∪ ｛ 𝑨 ｝) ⊧ p ≋ q
-   γ {𝑩} (inj₁ x) = α x
-   γ {𝑩} (inj₂ y) = Apq y
+  Apq : ｛ 𝑨 ｝ ⊧ p ≋ q
+  Apq refl = β
 
- S-id1 p q α (siso{𝑨}{𝑩} x x₁) = ⊧-I-invar fe 𝑩 p q (S-id1 p q α x) x₁
+  γ : (𝒦 ∪ ｛ 𝑨 ｝) ⊧ p ≋ q
+  γ {𝑩} (inj₁ x) = α x
+  γ {𝑩} (inj₂ y) = Apq y
+
+ S-id1 p q α (siso{𝑨}{𝑩} x x₁) = ⊧-I-invar wd 𝑩 p q (S-id1 p q α x) x₁
 
 \end{code}
 
@@ -149,33 +149,37 @@ Again, the obvious converse is barely worth the bits needed to formalize it.
 
  S-id2 : ∀{𝓦}(p q : Term X) → S{𝓦 = 𝓦}𝒦 ⊧ p ≋ q → 𝒦 ⊧ p ≋ q
 
- S-id2 p q Spq {𝑨} KA = ⊧-lower-invar fe p q (Spq (sbase KA))
+ S-id2 p q Spq {𝑨} KA = ⊧-lower-invar wd p q (Spq (sbase KA))
 
 \end{code}
 
 
 #### <a id="p-preserves-identities">P preserves identities</a>
 
+Notice that the submodule in this section requires a **function extensionality** postulate `DFunExt`, unlike the other submodules of the [Varieties.Preservation][] module (which, with one other exception, only require strong well-definedness of functions, `SwellDef`).
+
 \begin{code}
+
+module _ (fe : DFunExt) (wd : SwellDef){X : Type 𝓧} {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
 
  P-id1 : (p q : Term X) → 𝒦 ⊧ p ≋ q → P{𝓦 = 𝓤} 𝒦 ⊧ p ≋ q
 
- P-id1 p q α (pbase x) = ⊧-Lift-invar fe p q (α x)
- P-id1 p q α (pliftu x) = ⊧-Lift-invar fe p q ((P-id1 p q α) x)
- P-id1 p q α (pliftw x) = ⊧-Lift-invar fe p q ((P-id1 p q α) x)
+ P-id1 p q α (pbase x) = ⊧-Lift-invar wd p q (α x)
+ P-id1 p q α (pliftu x) = ⊧-Lift-invar wd p q ((P-id1 p q α) x)
+ P-id1 p q α (pliftw x) = ⊧-Lift-invar wd p q ((P-id1 p q α) x)
 
- P-id1 p q α (produ{I}{𝒜} x) = ⊧-P-lift-invar 𝒜  fe {p}{q} IH
+ P-id1 p q α (produ{I}{𝒜} x) = ⊧-P-lift-invar fe wd 𝒜  p q IH
   where
-  IH : ∀ i → (Lift-alg (𝒜 i) 𝓤) ⟦ p ⟧ ≡ (Lift-alg (𝒜 i) 𝓤) ⟦ q ⟧
-  IH i = ⊧-Lift-invar fe p q ((P-id1 p q α) (x i))
+  IH : ∀ i → (Lift-alg (𝒜 i) 𝓤) ⊧ p ≈ q
+  IH i = ⊧-Lift-invar wd  p q ((P-id1 p q α) (x i))
 
- P-id1 p q α (prodw{I}{𝒜} x) = ⊧-P-lift-invar 𝒜 fe {p}{q}IH
+ P-id1 p q α (prodw{I}{𝒜} x) = ⊧-P-lift-invar fe wd 𝒜  p q IH
   where
-  IH : ∀ i → Lift-alg (𝒜 i) 𝓤 ⟦ p ⟧ ≡ Lift-alg (𝒜 i) 𝓤 ⟦ q ⟧
-  IH i = ⊧-Lift-invar fe p q ((P-id1 p q α) (x i))
+  IH : ∀ i → (Lift-alg (𝒜 i) 𝓤) ⊧ p ≈ q
+  IH i = ⊧-Lift-invar wd  p q ((P-id1 p q α) (x i))
 
- P-id1 p q α (pisou{𝑨}{𝑩} x x₁) = ⊧-I-invar fe 𝑩 p q (P-id1 p q α x) x₁
- P-id1 p q α (pisow{𝑨}{𝑩} x x₁) = ⊧-I-invar fe 𝑩 p q (P-id1 p q α x) x₁
+ P-id1 p q α (pisou{𝑨}{𝑩} x y) = ⊧-I-invar wd 𝑩 p q (P-id1 p q α x) y
+ P-id1 p q α (pisow{𝑨}{𝑩} x y) = ⊧-I-invar wd 𝑩 p q (P-id1 p q α x) y
 
 \end{code}
 
@@ -183,8 +187,10 @@ Again, the obvious converse is barely worth the bits needed to formalize it.
 
 \begin{code}
 
+module _  (wd : SwellDef){X : Type 𝓧} {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
+
  P-id2 : ∀ {𝓦}(p q : Term X) → P{𝓦 = 𝓦} 𝒦 ⊧ p ≋ q → 𝒦 ⊧ p ≋ q
- P-id2 p q PKpq KA = ⊧-lower-invar fe p q (PKpq (pbase KA))
+ P-id2 p q PKpq KA = ⊧-lower-invar wd p q (PKpq (pbase KA))
 
 \end{code}
 
@@ -195,31 +201,33 @@ Finally, we prove the analogous preservation lemmas for the closure operator `V`
 
 \begin{code}
 
- V-id1 : (p q : Term X) → 𝒦 ⊧ p ≋ q → V{𝓦 = 𝓤} 𝒦 ⊧ p ≋ q
- V-id1 p q α (vbase x) = ⊧-Lift-invar fe p q (α x)
- V-id1 p q α (vlift{𝑨} x) = ⊧-Lift-invar  fe p q ((V-id1 p q α) x)
- V-id1 p q α (vliftw{𝑨} x) = ⊧-Lift-invar fe p q ((V-id1 p q α) x)
+module Vid (fe : DFunExt)(wd : SwellDef){𝓤 𝓧 : Level} {X : Type 𝓧} {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
 
- V-id1 p q α (vhimg{𝑨}{𝑪}VA (𝑩 , ((φ , φh) , φE))) = γ
+ V-id1 : (p q : Term X) → 𝒦 ⊧ p ≋ q → V{𝓦 = 𝓤} 𝒦 ⊧ p ≋ q
+ V-id1 p q α (vbase x) = ⊧-Lift-invar wd p q (α x)
+ V-id1 p q α (vlift{𝑨} x) = ⊧-Lift-invar wd p q ((V-id1 p q α) x)
+ V-id1 p q α (vliftw{𝑨} x) = ⊧-Lift-invar wd p q ((V-id1 p q α) x)
+
+ V-id1 p q α (vhimg{𝑨}{𝑪}VA (𝑩 , ((φ , φh) , φE))) b = γ
   where
   IH : 𝑨 ⊧ p ≈ q
   IH = V-id1 p q α VA
 
-  preim : ∀ 𝒃 (x : X) → ∣ 𝑨 ∣
-  preim 𝒃 x = (Inv φ (φE (𝒃 x)))
+  preim : X → ∣ 𝑨 ∣
+  preim x = Inv φ (φE (b x))
 
-  ζ : ∀ 𝒃 → φ ∘ (preim 𝒃) ≡ 𝒃
-  ζ 𝒃 = (fe 𝓧 𝓤) λ x → InvIsInv φ (φE (𝒃 x))
+  ζ : ∀ x → φ (preim x) ≡ b x
+  ζ x = InvIsInv φ (φE (b x))
 
-  γ : (𝑩 ⟦ p ⟧) ≡ (𝑩 ⟦ q ⟧)
-  γ = (fe (𝓤 ⊔ 𝓧) 𝓤) λ 𝒃 → (𝑩 ⟦ p ⟧) 𝒃      ≡⟨ (cong (𝑩 ⟦ p ⟧) (ζ 𝒃))⁻¹ ⟩
-                (𝑩 ⟦ p ⟧)(φ ∘(preim 𝒃)) ≡⟨(comm-hom-term (fe 𝓥 𝓤) 𝑩(φ , φh) p(preim 𝒃))⁻¹ ⟩
-                φ ((𝑨 ⟦ p ⟧)(preim 𝒃))  ≡⟨ cong φ (cong-app IH (preim 𝒃)) ⟩
-                φ ((𝑨 ⟦ q ⟧)(preim 𝒃))  ≡⟨ comm-hom-term (fe 𝓥 𝓤) 𝑩 (φ , φh) q (preim 𝒃) ⟩
-                (𝑩 ⟦ q ⟧)(φ ∘(preim 𝒃)) ≡⟨ cong (𝑩 ⟦ q ⟧) (ζ 𝒃) ⟩
-                (𝑩 ⟦ q ⟧) 𝒃             ∎
+  γ : (𝑩 ⟦ p ⟧) b ≡ (𝑩 ⟦ q ⟧) b
+  γ = (𝑩 ⟦ p ⟧) b          ≡⟨ wd 𝓧 𝓤 (𝑩 ⟦ p ⟧) b (φ ∘ preim )(λ i → (ζ i)⁻¹)⟩
+      (𝑩 ⟦ p ⟧)(φ ∘ preim) ≡⟨(comm-hom-term (wd 𝓥 𝓤) 𝑩 (φ , φh) p preim)⁻¹ ⟩
+      φ((𝑨 ⟦ p ⟧) preim)   ≡⟨ cong φ (IH preim) ⟩
+      φ((𝑨 ⟦ q ⟧) preim)   ≡⟨ comm-hom-term (wd 𝓥 𝓤) 𝑩 (φ , φh) q preim ⟩
+      (𝑩 ⟦ q ⟧)(φ ∘ preim) ≡⟨ wd 𝓧 𝓤 (𝑩 ⟦ q ⟧)(φ ∘ preim) b ζ ⟩
+      (𝑩 ⟦ q ⟧) b          ∎
 
- V-id1 p q α (vssub {𝑨}{𝑩} VA B≤A) = ⊧-S-class-invar fe p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ refl , ≅-refl)
+ V-id1 p q α (vssub {𝑨}{𝑩} VA B≤A) = ⊧-S-class-invar wd p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ refl , ≅-refl)
    where
    IH : 𝑨 ⊧ p ≈ q
    IH = V-id1 p q α VA
@@ -232,7 +240,7 @@ Finally, we prove the analogous preservation lemmas for the closure operator `V`
    γ {𝑩} (inj₂ y) = Asinglepq y
 
  V-id1 p q α ( vssubw {𝑨}{𝑩} VA B≤A ) =
-  ⊧-S-class-invar fe p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ refl , ≅-refl)
+  ⊧-S-class-invar wd p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ refl , ≅-refl)
    where
    IH : 𝑨 ⊧ p ≈ q
    IH = V-id1 p q α VA
@@ -244,41 +252,43 @@ Finally, we prove the analogous preservation lemmas for the closure operator `V`
    γ {𝑩} (inj₁ x) = α x
    γ {𝑩} (inj₂ y) = Asinglepq y
 
- V-id1 p q α (vprodu{I}{𝒜} V𝒜) = ⊧-P-invar 𝒜 fe {p}{q} λ i → V-id1 p q α (V𝒜 i)
- V-id1 p q α (vprodw{I}{𝒜} V𝒜) = ⊧-P-invar 𝒜 fe {p}{q} λ i → V-id1 p q α (V𝒜 i)
- V-id1 p q α (visou{𝑨}{𝑩} VA A≅B) = ⊧-I-invar fe 𝑩 p q (V-id1 p q α VA) A≅B
- V-id1 p q α (visow{𝑨}{𝑩} VA A≅B) = ⊧-I-invar fe 𝑩 p q (V-id1 p q α VA) A≅B
+ V-id1 p q α (vprodu{I}{𝒜} V𝒜) = ⊧-P-invar fe wd 𝒜  p q λ i → V-id1 p q α (V𝒜 i)
+ V-id1 p q α (vprodw{I}{𝒜} V𝒜) = ⊧-P-invar fe wd 𝒜  p q λ i → V-id1 p q α (V𝒜 i)
+ V-id1 p q α (visou{𝑨}{𝑩} VA A≅B) = ⊧-I-invar wd 𝑩 p q (V-id1 p q α VA) A≅B
+ V-id1 p q α (visow{𝑨}{𝑩} VA A≅B) = ⊧-I-invar wd 𝑩 p q (V-id1 p q α VA) A≅B
 
+module Vid' (fe : DFunExt)(wd : SwellDef){𝓤 𝓧 : Level} {X : Type 𝓧} {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
 
- V-id1' : (p q : Term X) → 𝒦 ⊧ p ≋ q → V{𝓦 = 𝓕⁺} 𝒦 ⊧ p ≋ q
- V-id1' p q α (vbase x) = ⊧-Lift-invar fe p q (α x)
- V-id1' p q α (vlift{𝑨} x) = ⊧-Lift-invar fe p q ((V-id1 p q α) x)
- V-id1' p q α (vliftw{𝑨} x) = ⊧-Lift-invar fe p q ((V-id1' p q α) x)
- V-id1' p q α (vhimg{𝑨}{𝑪} VA (𝑩 , ((φ , φh) , φE))) = γ
+ open Vid fe wd {𝓤}{𝓧}{X}{𝒦} public
+ V-id1' : {𝓦 : Level}(p q : Term X) → 𝒦 ⊧ p ≋ q → V{𝓦 = 𝓦} 𝒦 ⊧ p ≋ q
+ V-id1' p q α (vbase x) = ⊧-Lift-invar wd p q (α x)
+ V-id1' p q α (vlift{𝑨} x) = ⊧-Lift-invar wd p q ((V-id1 p q α) x)
+ V-id1' p q α (vliftw{𝑨} x) = ⊧-Lift-invar wd p q ((V-id1' p q α) x)
+ V-id1' {𝓦} p q α (vhimg{𝑨}{𝑪} VA (𝑩 , ((φ , φh) , φE))) b = γ
   where
   IH : 𝑨 ⊧ p ≈ q
   IH = V-id1' p q α VA
 
-  preim : ∀ 𝒃 x → ∣ 𝑨 ∣
-  preim 𝒃 x = (Inv φ (φE (𝒃 x)))
+  preim : X → ∣ 𝑨 ∣
+  preim x = Inv φ (φE (b x))
 
-  ζ : ∀ 𝒃 → φ ∘ (preim 𝒃) ≡ 𝒃
-  ζ 𝒃 = (fe 𝓧 𝓕⁺) λ x → InvIsInv φ (φE (𝒃 x))
+  ζ : ∀ x → φ (preim x) ≡ b x
+  ζ x = InvIsInv φ (φE (b x))
 
-  γ : 𝑩 ⟦ p ⟧ ≡ 𝑩 ⟦ q ⟧
-  γ = (fe (𝓧 ⊔ 𝓕⁺) 𝓕⁺) λ 𝒃 → (𝑩 ⟦ p ⟧) 𝒃  ≡⟨ (cong (𝑩 ⟦ p ⟧) (ζ 𝒃))⁻¹  ⟩
-   (𝑩 ⟦ p ⟧) (φ ∘ (preim 𝒃)) ≡⟨ (comm-hom-term (fe 𝓥 𝓕⁺) 𝑩 (φ , φh) p (preim 𝒃))⁻¹ ⟩
-                 φ((𝑨 ⟦ p ⟧) (preim 𝒃))     ≡⟨ cong φ (cong-app IH (preim 𝒃))⟩
-                 φ((𝑨 ⟦ q ⟧) (preim 𝒃))     ≡⟨ comm-hom-term (fe 𝓥 𝓕⁺) 𝑩 (φ , φh) q (preim 𝒃)⟩
-                 (𝑩 ⟦ q ⟧) (φ ∘ (preim 𝒃))  ≡⟨ cong (𝑩 ⟦ q ⟧) (ζ 𝒃)⟩
-                 (𝑩 ⟦ q ⟧) 𝒃               ∎
+  γ : (𝑩 ⟦ p ⟧) b ≡ (𝑩 ⟦ q ⟧) b
+  γ = (𝑩 ⟦ p ⟧) b          ≡⟨ wd 𝓧 (𝓤 ⊔ 𝓦) (𝑩 ⟦ p ⟧) b (φ ∘ preim )(λ i → (ζ i)⁻¹)⟩
+      (𝑩 ⟦ p ⟧)(φ ∘ preim) ≡⟨(comm-hom-term (wd 𝓥 (𝓤 ⊔ 𝓦)) 𝑩 (φ , φh) p preim)⁻¹ ⟩
+      φ((𝑨 ⟦ p ⟧) preim)   ≡⟨ cong φ (IH preim) ⟩
+      φ((𝑨 ⟦ q ⟧) preim)   ≡⟨ comm-hom-term (wd 𝓥 (𝓤 ⊔ 𝓦)) 𝑩 (φ , φh) q preim ⟩
+      (𝑩 ⟦ q ⟧)(φ ∘ preim) ≡⟨ wd 𝓧 (𝓤 ⊔ 𝓦) (𝑩 ⟦ q ⟧)(φ ∘ preim) b ζ ⟩
+      (𝑩 ⟦ q ⟧) b          ∎
 
- V-id1' p q α (vssub{𝑨}{𝑩} VA B≤A) = ⊧-S-invar fe 𝑩 {p}{q}(V-id1 p q α VA) B≤A
- V-id1' p q α (vssubw {𝑨}{𝑩} VA B≤A) = ⊧-S-invar fe 𝑩 {p}{q}(V-id1' p q α VA) B≤A
- V-id1' p q α (vprodu{I}{𝒜} V𝒜) = ⊧-P-invar 𝒜 fe {p}{q} λ i → V-id1 p q α (V𝒜 i)
- V-id1' p q α (vprodw{I}{𝒜} V𝒜) = ⊧-P-invar 𝒜 fe {p}{q} λ i → V-id1' p q α (V𝒜 i)
- V-id1' p q α (visou {𝑨}{𝑩} VA A≅B) = ⊧-I-invar fe 𝑩 p q (V-id1 p q α VA) A≅B
- V-id1' p q α (visow{𝑨}{𝑩} VA A≅B) = ⊧-I-invar fe 𝑩 p q (V-id1' p q α VA)A≅B
+ V-id1' p q α (vssub{𝑨}{𝑩} VA B≤A) = ⊧-S-invar wd 𝑩 {p}{q}(V-id1 p q α VA) B≤A
+ V-id1' p q α (vssubw {𝑨}{𝑩} VA B≤A) = ⊧-S-invar wd 𝑩 {p}{q}(V-id1' p q α VA) B≤A
+ V-id1' p q α (vprodu{I}{𝒜} V𝒜) = ⊧-P-invar fe wd 𝒜  p q λ i → V-id1 p q α (V𝒜 i)
+ V-id1' p q α (vprodw{I}{𝒜} V𝒜) = ⊧-P-invar fe wd 𝒜  p q λ i → V-id1' p q α (V𝒜 i)
+ V-id1' p q α (visou {𝑨}{𝑩} VA A≅B) = ⊧-I-invar wd 𝑩 p q (V-id1 p q α VA) A≅B
+ V-id1' p q α (visow{𝑨}{𝑩} VA A≅B) = ⊧-I-invar wd 𝑩 p q (V-id1' p q α VA)A≅B
 
 \end{code}
 
@@ -289,27 +299,38 @@ From `V-id1` it follows that if 𝒦 is a class of structures, then the set of i
 
 \begin{code}
 
- 𝒱 : Pred (Algebra (𝓕⁺) 𝑆) (lsuc 𝓕⁺)
- 𝒱 = V{𝓦 = 𝓕⁺} 𝒦
+module _ (fe : DFunExt)(wd : SwellDef){𝓤 𝓧 : Level} {X : Type 𝓧} {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
 
+ ovu lovu : Level
+ ovu = ov 𝓤
+ lovu = lsuc (ov 𝓤)
+ 𝕍 : Pred (Algebra lovu 𝑆) (lsuc lovu)
+ 𝕍 = V{𝓤}{lovu} 𝒦
+ 𝒱 : Pred (Algebra ovu 𝑆) lovu
+ 𝒱 = V{𝓦 = ovu} 𝒦
+
+ open Vid' fe wd {𝓤}{𝓧}{X}{𝒦} public
  class-ids-⇒ : (p q : ∣ 𝑻 X ∣) → 𝒦 ⊧ p ≋ q  →  (p , q) ∈ Th 𝒱
  class-ids-⇒ p q pKq VCloA = V-id1' p q pKq VCloA
 
+ class-ids : (p q : ∣ 𝑻 X ∣) → 𝒦 ⊧ p ≋ q  →  (p , q) ∈ Th 𝕍
+ class-ids p q pKq VCloA = V-id1' p q pKq VCloA
+
 
  class-ids-⇐ : (p q : ∣ 𝑻 X ∣) → (p , q) ∈ Th 𝒱 →  𝒦 ⊧ p ≋ q
- class-ids-⇐ p q Thpq {𝑨} KA = ⊧-lower-invar fe p q (Thpq (vbase KA))
+ class-ids-⇐ p q Thpq {𝑨} KA = ⊧-lower-invar wd p q (Thpq (vbase KA))
 
 \end{code}
 
 
-Once again, and for the last time, completeness dictates that we formalize the coverse of `V-id1`, however obvious it may be.
+Once again, for completeness we formalize the coverse of `V-id1`, however obvious it may be.
 
 \begin{code}
 
-module _ {𝓦 : Level}{X : Type 𝓧}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
+module _ (wd : SwellDef) {𝓦 : Level}{X : Type 𝓧}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
 
- V-id2 : DFunExt → (p q : Term X) → (V{𝓦 = 𝓦} 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
- V-id2 fe p q Vpq {𝑨} KA = ⊧-lower-invar fe p q (Vpq (vbase KA))
+ V-id2 : (p q : Term X) → (V{𝓦 = 𝓦} 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
+ V-id2 p q Vpq {𝑨} KA = ⊧-lower-invar wd p q (Vpq (vbase KA))
 
 \end{code}
 

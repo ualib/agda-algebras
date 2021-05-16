@@ -141,6 +141,51 @@ A × B = Σ[ x ꞉ A ] B
 ```
 
 
+The following types will also come in handy on occasion.
+
+\begin{code}
+
+record Σω {𝓤} (A : Type 𝓤) (B : A → Setω) : Setω where
+  constructor _⸲_
+  field
+    fstω : A
+    sndω : B fstω
+
+open Σω public
+
+infixr 4 _⸲_
+
+-Σω : ∀{𝓤}(A : Type 𝓤) (B : A → Setω) → Setω
+-Σω = Σω
+
+syntax -Σω A (λ x → B) = Σω[ x ꞉ A ] B    -- type \:4 to get ꞉
+
+infixr 3 -Σω
+
+record ΣΣ (A : Setω) (B : A → Setω) : Setω where
+  constructor _⹁_
+  field
+    FST : A
+    SND : B FST
+
+open ΣΣ public
+
+infixr 4 _⹁_
+
+-ΣΣ : (A : Setω) (B : A → Setω) → Setω
+-ΣΣ = ΣΣ
+
+syntax -ΣΣ A (λ x → B) = ΣΣ[ x ꞉ A ] B    -- type \:4 to get ꞉
+
+infixr 3 -ΣΣ
+
+infixr 2 _╳_
+
+_╳_ : ∀ (A : Setω) (B : Setω) → Setω
+A ╳ B = ΣΣ[ x ꞉ A ] B
+
+\end{code}
+
 #### <a id="dependent-function-type">Pi types (dependent functions)</a>
 
 Given universes `𝓤` and `𝓥`, a type `X : Type 𝓤`, and a type family `Y : X → Type 𝓥`, the *Pi type* (aka *dependent function type*) is denoted by `Π(x : X), Y x` and generalizes the function type `X → Y` by letting the type `Y x` of the codomain depend on the value `x` of the domain type. The dependent function type is defined in the [Type Topology][] in a standard way, but for the reader's benefit we repeat the definition here.
@@ -286,10 +331,10 @@ We conclude this module with a definition that conveniently represents te assert
 
 \begin{code}
 
-_∼_ : {X : Type 𝓤 } {A : X → Type 𝓥 } → Π A → Π A → Type (𝓤 ⊔ 𝓥)
-f ∼ g = ∀ x → f x ≡ g x
+_≈_ : {X : Type 𝓤 } {A : X → Type 𝓥 } → Π A → Π A → Type (𝓤 ⊔ 𝓥)
+f ≈ g = ∀ x → f x ≡ g x
 
-infix 8 _∼_
+infix 8 _≈_
 
 \end{code}
 

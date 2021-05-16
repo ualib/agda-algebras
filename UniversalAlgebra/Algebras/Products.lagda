@@ -89,7 +89,7 @@ The solution is to essentially take `𝒦` itself to be the indexing type, at le
 
 \begin{code}
 
- module _ {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
+ module class-product {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
   ℑ : Type (ov 𝓤)
   ℑ = Σ[ 𝑨 ꞉ Algebra 𝓤 𝑆 ] 𝑨 ∈ 𝒦
 
@@ -108,8 +108,8 @@ Finally, we define `class-product` which represents the product of all members o
 
 \begin{code}
 
-  class-product : Algebra (ov 𝓤) 𝑆
-  class-product = ⨅ 𝔄
+  class-prod : Algebra (ov 𝓤) 𝑆
+  class-prod = ⨅ 𝔄
 
 \end{code}
 

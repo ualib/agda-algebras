@@ -27,11 +27,11 @@ open import Function.Base  using (_∘_; id)
 
 
 -- Imports from the Agda Universal Algebra Library
-open import Overture.Preliminaries using (Type; 𝓤; 𝓥; 𝓦; 𝓩; -Σ; Π; 𝑖𝑑; _⁻¹; _∙_)
-open import Overture.Inverses using (IsSurjective; SurjInv; InvIsInv; Image_∋_; eq)
+open import Overture.Preliminaries using (Type; 𝓤; 𝓥; 𝓦; 𝓩; -Σ; Π; 𝑖𝑑; _⁻¹; _∙_; _≈_)
+open import Overture.Inverses using (IsSurjective; SurjInv; InvIsInv; Image_∋_; eq; SurjInvIsRightInv≈)
 open import Relations.Continuous using (ContRel; DepRel)
 open import Relations.Discrete using (Op)
-open import Relations.Quotients using ([_]; /-subset; /-supset; IsBlock; ⟪_⟫)
+open import Relations.Quotients using ([_]; /-subset; /-supset; IsBlock; ⟪_⟫; 𝟎-is-smallest; kernel-lemma)
 open import Relations.Truncation using (blk-uip; to-Σ-≡)
 
 module Relations.Extensionality where
@@ -117,16 +117,41 @@ We can also prove the following composition law for epics.
  epic-factor : {C : Type 𝓩}(f : A → B)(g : A → C)(h : C → B)
   →            f ≡ h ∘ g → IsSurjective f → IsSurjective h
 
- epic-factor f g h compId fe y = γ
+ epic-factor f g h compId fE y = γ
   where
    finv : B → A
-   finv = SurjInv f fe
+   finv = SurjInv f fE
 
    ζ : f (finv y) ≡ y
-   ζ = cong-app (SurjInvIsRightInv f fe) y
+   ζ = cong-app (SurjInvIsRightInv f fE) y
 
    η : (h ∘ g) (finv y) ≡ y
    η = (cong-app (compId ⁻¹)(finv y)) ∙ ζ
+
+   γ : Image h ∋ y
+   γ = eq y (g (finv y)) (η ⁻¹)
+
+\end{code}
+
+Here's a better version.  (It's better because it only requires point-wise equality in the hypothesis and doesn't require a function extensionality postulate.)
+
+\begin{code}
+
+module _ {A : Type 𝓤}{B : Type 𝓦} where
+
+ epic-factor≈ : {C : Type 𝓩}(f : A → B)(g : A → C)(h : C → B)
+  →            f ≈ h ∘ g → IsSurjective f → IsSurjective h
+
+ epic-factor≈ f g h comp≈ fE y = γ
+  where
+   finv : B → A
+   finv = SurjInv f fE
+
+   ζ : f (finv y) ≡ y
+   ζ = (SurjInvIsRightInv≈ f fE) y
+
+   η : (h ∘ g) (finv y) ≡ y
+   η = ((comp≈ (finv y)) ⁻¹) ∙ ζ
 
    γ : Image h ∋ y
    γ = eq y (g (finv y)) (η ⁻¹)
@@ -211,6 +236,13 @@ funext→swelldef fe f u v ptweq = γ
  uv = fe ptweq
  γ : f u ≡ f v
  γ = welldef f u v uv
+
+
+SwellDef : Setω
+SwellDef = (𝓤 𝓥 : Level) → swelldef 𝓤 𝓥
+
+0-smallest→swelldef : {𝓥 𝓤 : Level} → 𝟎-is-smallest → swelldef 𝓥 𝓤
+0-smallest→swelldef {𝓥}{𝓤} 0min {A}{I} = kernel-lemma 0min
 
 \end{code}
 
