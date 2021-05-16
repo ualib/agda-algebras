@@ -130,6 +130,9 @@ Observe that the inhabitants of `ℭ` are maps from `ℑ` to `{𝔄 i : i ∈ �
   h : X → ∣ ℭ ∣
   h = λ z → z
 
+ homℭ-id : (x : X) → ∣ homℭ ∣ (ℊ x) ≡ x
+ homℭ-id x = refl
+
  -- homℭ : hom 𝕋 ℭ
  -- homℭ = ⨅-hom-co 𝔄 (fe 𝓕 𝓤){𝓕⁺} 𝕋 λ i → lift-hom (𝔄 i) (proj i)
 
@@ -149,41 +152,34 @@ Every `h : X → ∣ 𝑨 ∣` can be decomposed as `h = g ∘ 𝔥`, where `g :
 
 
  module _ {𝑨 : Algebra 𝓤 𝑆}{skA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦} where
+
+  hlem : (h : X → ∣ 𝑨 ∣)(x : X) → h x ≡ h (∣ homℭ ∣ (ℊ x))
+  hlem h x = h x ≡⟨ cong h (homℭ-id x)⁻¹ ⟩ h (∣ homℭ ∣ (ℊ x)) ∎
+
+  hlem' : (h : X → ∣ 𝑨 ∣)(p : ∣ 𝕋 ∣) → (free-lift 𝑨 h) p ≡ h  (∣ homℭ ∣ p)
+  hlem' h (ℊ x) = refl
+  hlem' h (node f 𝑡) = free-lift 𝑨 h (node f 𝑡) ≡⟨ refl ⟩
+                       (f ̂ 𝑨) ((free-lift 𝑨 h) ∘ 𝑡) ≡⟨ γ ⟩
+                       (f ̂ 𝑨) (h ∘ (∣ homℭ ∣ ∘ 𝑡)) ≡⟨ {!!} ⟩
+                       h ((f ̂ ℭ) (∣ homℭ ∣ ∘ 𝑡)) ≡⟨ refl ⟩
+                       h (∣ homℭ ∣ (node f 𝑡)) ∎
+   where
+   γ : (f ̂ 𝑨) ((free-lift 𝑨 h) ∘ 𝑡) ≡ (f ̂ 𝑨) (h ∘ (∣ homℭ ∣ ∘ 𝑡))
+   γ = wd 𝓥 𝓤 (f ̂ 𝑨) ((free-lift 𝑨 h) ∘ 𝑡) (h ∘ (∣ homℭ ∣ ∘ 𝑡)) (λ i → hlem' h (𝑡 i))
+
+  hlem'' : (h : X → ∣ 𝑨 ∣)(p q : ∣ 𝕋 ∣)
+   →       ∣ homℭ ∣ p ≡ ∣ homℭ ∣ q → (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
+  hlem'' h p q hker = (free-lift 𝑨 h) p ≡⟨ hlem' h p ⟩
+                      h (∣ homℭ ∣ p) ≡⟨ cong h hker ⟩
+                      h (∣ homℭ ∣ q) ≡⟨ (hlem' h q)⁻¹ ⟩
+                      (free-lift 𝑨 h) q ∎
+
   𝔥₀ : X → ∣ 𝑨 ∣
   𝔥₀ x = x (𝑨 , skA)
 
-  open Image_∋_
-  homℭker : Term X → Term X → Type 𝓤
-  homℭker p q = (free-lift 𝑨 𝔥₀) p ≡ (free-lift 𝑨 𝔥₀) q
-
-  lemker : ∀ (h : X → ∣ 𝑨 ∣) → kernel 𝔥₀ ⊆ kernel h
-  lemker h {(x , y)} xKy = γ
-   where
-   ξ : x (𝑨 , skA) ≡ y (𝑨 , skA)
-   ξ = xKy
-
-   h₀Inv : (a : ∣ 𝑨 ∣) → Image 𝔥₀ ∋ a → X
-   h₀Inv .(x (𝑨 , skA)) (im x) = x
-   h₀Inv a (eq _ x _) = x
-
-   ζ : ∀ x y a → (ahx : a ≡ 𝔥₀ x)(ahy : a ≡ 𝔥₀ y)
-    →  (h₀Inv (𝔥₀ x) (eq (𝔥₀ x) x refl)) ≡ (h₀Inv (𝔥₀ y) (eq (𝔥₀ y) y refl))
-   ζ x y a ahx ahy = {!!}
-
-   --  eq : (b : B) → (a : A) → b ≡ f a → Image f ∋ b
-
-   γ : h x ≡ h y
-   γ = h (h₀Inv (𝔥₀ x) (eq (𝔥₀ x) x refl)) ≡⟨ cong h ((ζ x y (𝔥₀ y) (xKy ⁻¹) refl )) ⟩
-       h (h₀Inv (𝔥₀ y) (eq (𝔥₀ y) y refl)) ∎
-
-  lemker-ap : ∀ (h : X → ∣ 𝑨 ∣) → kernel (free-lift 𝑨 𝔥₀) ⊆ kernel (free-lift 𝑨 h)
-  lemker-ap h {p , q} pKq = γ
-   where
-   γ : (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
-   γ = (free-lift 𝑨 h) p ≡⟨ {!!} ⟩ (free-lift 𝑨 h) q ∎
 
   ψlem : ∀ p q → ∣ homℭ ∣ p ≡ ∣ homℭ ∣ q → (free-lift 𝑨 𝔥₀) p ≡ (free-lift 𝑨 𝔥₀) q
-  ψlem p q hyp = {!!}
+  ψlem = hlem'' 𝔥₀
 \end{code}
 
 
@@ -307,7 +303,7 @@ We will need the following facts relating `homℭ`, `hom𝔽`, `and ψ`.
  ψlemma0 p q phomℭq 𝑨 sA h = γ -- cong-app phomℭq (𝑨 , sA)
   where
   γ : (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
-  γ = (free-lift 𝑨 h) p  ≡⟨ lemker-ap{𝑨 = 𝑨}{sA} h {p , q} (ψlem{𝑨 = 𝑨}{sA} p q phomℭq) ⟩
+  γ = (free-lift 𝑨 h) p  ≡⟨ hlem''{𝑨 = 𝑨}{skA = sA} h p q phomℭq ⟩
       (free-lift 𝑨 h) q ∎
 
  ψlemma0-ap : {𝑨 : Algebra 𝓤 𝑆}{h : X → ∣ 𝑨 ∣}(skA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦)
