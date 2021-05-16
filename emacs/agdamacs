@@ -1,0 +1,4 @@
+#!/bin/bash
+# PATH=/home/williamdemeo/git/lab/wjd/UF-Agda_wjd/agda/.cabal-sandbox/bin/:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/williamdemeo/bin:/usr/bin:/usr/local/bin:/usr/local/sbin:/home/williamdemeo/git/hub/AGDA/agda/.cabal-sandbox/bin:$PATH
+#emacs --load /home/williamdemeo/git/lab/wjd/UF-Agda_wjd/.emacs $@
+emacs --load /home/williamdemeo/.emacs.d/.emacs $@
