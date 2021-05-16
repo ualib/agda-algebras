@@ -124,14 +124,14 @@ Observe that the inhabitants of `ℭ` are maps from `ℑ` to `{𝔄 i : i ∈ �
 
  -- homℭ : (X → ∣ ℭ ∣) → hom 𝕋 ℭ
  -- homℭ h = ⨅-hom-co 𝔄 (fe (ov 𝓤) 𝓤){𝓕⁺} 𝕋 λ i → lift-hom (𝔄 i) (λ x → (h x) i)
- homℭ' : hom 𝕋 ℭ
- homℭ' = ⨅-hom-co 𝔄 (fe (ov 𝓤) 𝓤){𝓕⁺} 𝕋 λ i → lift-hom (𝔄 i) (λ x → (h x) i)
+ homℭ : hom 𝕋 ℭ
+ homℭ = ⨅-hom-co 𝔄 (fe (ov 𝓤) 𝓤){𝓕⁺} 𝕋 λ i → lift-hom (𝔄 i) (λ x → (h x) i)
   where
   h : X → ∣ ℭ ∣
   h = λ z → z
 
- homℭ : hom 𝕋 ℭ
- homℭ = ⨅-hom-co 𝔄 (fe 𝓕 𝓤){𝓕⁺} 𝕋 λ i → lift-hom (𝔄 i) (proj i)
+ -- homℭ : hom 𝕋 ℭ
+ -- homℭ = ⨅-hom-co 𝔄 (fe 𝓕 𝓤){𝓕⁺} 𝕋 λ i → lift-hom (𝔄 i) (proj i)
 
 \end{code}
 
@@ -157,10 +157,10 @@ Every `h : X → ∣ 𝑨 ∣` can be decomposed as `h = g ∘ 𝔥`, where `g :
   homℭker p q = (free-lift 𝑨 𝔥₀) p ≡ (free-lift 𝑨 𝔥₀) q
 
   lemker : ∀ (h : X → ∣ 𝑨 ∣) → kernel 𝔥₀ ⊆ kernel h
-  lemker h {(p , q)} pKq = γ
+  lemker h {(x , y)} xKy = γ
    where
-   ξ : p (𝑨 , skA) ≡ q (𝑨 , skA)
-   ξ = pKq
+   ξ : x (𝑨 , skA) ≡ y (𝑨 , skA)
+   ξ = xKy
 
    h₀Inv : (a : ∣ 𝑨 ∣) → Image 𝔥₀ ∋ a → X
    h₀Inv .(x (𝑨 , skA)) (im x) = x
@@ -172,10 +172,18 @@ Every `h : X → ∣ 𝑨 ∣` can be decomposed as `h = g ∘ 𝔥`, where `g :
 
    --  eq : (b : B) → (a : A) → b ≡ f a → Image f ∋ b
 
-   γ : h p ≡ h q
-   γ = h (h₀Inv (𝔥₀ p) (eq (𝔥₀ p) p refl)) ≡⟨ cong h ((ζ p q (𝔥₀ q) (pKq ⁻¹) refl )) ⟩
-       h (h₀Inv (𝔥₀ q) (eq (𝔥₀ q) q refl)) ∎
+   γ : h x ≡ h y
+   γ = h (h₀Inv (𝔥₀ x) (eq (𝔥₀ x) x refl)) ≡⟨ cong h ((ζ x y (𝔥₀ y) (xKy ⁻¹) refl )) ⟩
+       h (h₀Inv (𝔥₀ y) (eq (𝔥₀ y) y refl)) ∎
 
+  lemker-ap : ∀ (h : X → ∣ 𝑨 ∣) → kernel (free-lift 𝑨 𝔥₀) ⊆ kernel (free-lift 𝑨 h)
+  lemker-ap h {p , q} pKq = γ
+   where
+   γ : (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
+   γ = (free-lift 𝑨 h) p ≡⟨ {!!} ⟩ (free-lift 𝑨 h) q ∎
+
+  ψlem : ∀ p q → ∣ homℭ ∣ p ≡ ∣ homℭ ∣ q → (free-lift 𝑨 𝔥₀) p ≡ (free-lift 𝑨 𝔥₀) q
+  ψlem p q hyp = {!!}
 \end{code}
 
 
@@ -188,17 +196,17 @@ Every `h : X → ∣ 𝑨 ∣` can be decomposed as `h = g ∘ 𝔥`, where `g :
 
 \begin{code}
 
- 𝔽 : (X → ∣ ℭ ∣) → Algebra 𝓕⁺ 𝑆
- 𝔽 h = ker[ 𝕋 ⇒ ℭ ] homℭ ↾ (wd 𝓥 𝓕)
+ 𝔽 : Algebra 𝓕⁺ 𝑆
+ 𝔽 = ker[ 𝕋 ⇒ ℭ ] homℭ ↾ (wd 𝓥 𝓕)
 
- epi𝔽 : (h : X → ∣ ℭ ∣) → epi 𝕋 (𝔽 h)
- epi𝔽 h = πker (wd 𝓥 𝓕) {ℭ} homℭ
+ epi𝔽 : epi 𝕋 𝔽
+ epi𝔽 = πker (wd 𝓥 𝓕) {ℭ} homℭ
 
- hom𝔽 : (h : X → ∣ ℭ ∣) → hom 𝕋 (𝔽 h)
- hom𝔽 h = epi-to-hom (𝔽 h) (epi𝔽 h)
+ hom𝔽 : hom 𝕋 𝔽
+ hom𝔽 = epi-to-hom 𝔽 epi𝔽
 
- hom𝔽-is-epic : (h : X → ∣ ℭ ∣) → IsSurjective ∣ hom𝔽  h ∣
- hom𝔽-is-epic h = snd ∥ epi𝔽 h ∥
+ hom𝔽-is-epic : IsSurjective ∣ hom𝔽 ∣
+ hom𝔽-is-epic = snd ∥ epi𝔽 ∥
 
 
 \end{code}
@@ -213,8 +221,11 @@ First, we represent the congruence relation `ψCon`, modulo which `𝑻 X` yield
 
 \begin{code}
 
- ψ : Pred (∣ 𝕋 ∣ × ∣ 𝕋 ∣) 𝓕
- ψ (p , q) = ∀(𝑨 : Algebra 𝓤 𝑆)(sA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦) →  𝑨 ⟦ p ⟧ ≈ 𝑨 ⟦ q ⟧
+ -- ψ : Pred (∣ 𝕋 ∣ × ∣ 𝕋 ∣) 𝓕
+ -- ψ (p , q) = ∀(𝑨 : Algebra 𝓤 𝑆)(sA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦) →  𝑨 ⟦ p ⟧ ≈ 𝑨 ⟦ q ⟧
+ ψ : Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) 𝓕
+ ψ (p , q) = ∀(𝑨 : Algebra 𝓤 𝑆)(sA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦)(h : X → ∣ 𝑨 ∣ )
+                 →  (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
 
 \end{code}
 
@@ -240,9 +251,12 @@ To express `ψRel` as a congruence of the term algebra `𝑻 X`, we must prove t
   φ : hom 𝕋 𝑨
   φ = lift-hom 𝑨 h
 
-  γ : (𝑓 ̂ 𝑨)(λ i → (𝑨 ⟦ p i ⟧) h) ≡ (𝑓 ̂ 𝑨)(λ i → (𝑨 ⟦ q i ⟧) h)
-  γ = wd 𝓥 𝓤 (𝑓 ̂ 𝑨) (λ i → (𝑨 ⟦ p i ⟧) h) (λ i → (𝑨 ⟦ q i ⟧) h) λ i → ψpq i 𝑨 sA h
+  γ : ∣ φ ∣ ((𝑓 ̂ 𝑻 X) p) ≡ ∣ φ ∣ ((𝑓 ̂ 𝑻 X) q)
 
+  γ = ∣ φ ∣ ((𝑓 ̂ 𝑻 X) p)  ≡⟨ ∥ φ ∥ 𝑓 p ⟩
+      (𝑓 ̂ 𝑨) (∣ φ ∣ ∘ p)  ≡⟨ wd 𝓥 𝓤 (𝑓 ̂ 𝑨) (∣ φ ∣ ∘ p) (∣ φ ∣ ∘ q) (λ x → (ψpq x) 𝑨 sA h) ⟩
+      (𝑓 ̂ 𝑨) (∣ φ ∣ ∘ q)  ≡⟨ (∥ φ ∥ 𝑓 q)⁻¹ ⟩
+      ∣ φ ∣ ((𝑓 ̂ 𝑻 X) q)  ∎
 
  ψIsEquivalence : IsEquivalence ψRel
  ψIsEquivalence = record { refl = λ 𝑨 sA h → refl
@@ -289,33 +303,23 @@ Now we come to a step in the Agda formalization of Birkhoff's theorem that is hi
 We will need the following facts relating `homℭ`, `hom𝔽`, `and ψ`.
 
 \begin{code}
-
  ψlemma0 : ∀ p q → ∣ homℭ ∣ p ≡ ∣ homℭ ∣ q → (p , q) ∈ ψ
  ψlemma0 p q phomℭq 𝑨 sA h = γ -- cong-app phomℭq (𝑨 , sA)
   where
-  γ : (𝑨 ⟦ p ⟧) h ≡ (𝑨 ⟦ q ⟧) h
-  γ = (𝑨 ⟦ p ⟧) h ≡⟨ free-lift-interp (wd 𝓥 𝓤) 𝑨 h p ⟩
-      (free-lift 𝑨 h) p  ≡⟨ {!!} ⟩ -- cong-app phomℭq ((𝑨 , sA)) ⟩
-      (free-lift 𝑨 h) q ≡⟨ (free-lift-interp (wd 𝓥 𝓤) 𝑨 h q)⁻¹ ⟩
-      (𝑨 ⟦ q ⟧) h        ∎
+  γ : (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
+  γ = (free-lift 𝑨 h) p  ≡⟨ lemker-ap{𝑨 = 𝑨}{sA} h {p , q} (ψlem{𝑨 = 𝑨}{sA} p q phomℭq) ⟩
+      (free-lift 𝑨 h) q ∎
 
- ψlemma0-ap : {𝑨 : Algebra 𝓤 𝑆}{h : X → ∣ ℭ ∣}(skA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦)
-  →           kernel ∣ hom𝔽 h ∣ ⊆ kernel (free-lift 𝑨 (project h (𝑨 , skA)))
+ ψlemma0-ap : {𝑨 : Algebra 𝓤 𝑆}{h : X → ∣ 𝑨 ∣}(skA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦)
+  →           kernel ∣ hom𝔽 ∣ ⊆ kernel (free-lift 𝑨 h)
 
  ψlemma0-ap {𝑨}{h} skA {p , q} x = γ where
 
   ν : ∣ homℭ ∣ p ≡ ∣ homℭ ∣ q
   ν = ker-in-con {𝑨 = 𝕋}{wd 𝓥 𝓕⁺}(kercon (wd 𝓥 𝓕) {ℭ} homℭ) {p}{q} x
-  ζ : ∀ 𝑨 sA h → (𝑨 ⟦ p ⟧) h ≡ (𝑨 ⟦ q ⟧) h
-  ζ = ψlemma0 p q ν
 
-  𝔥 : X → ∣ 𝑨 ∣
-  𝔥 = (project h (𝑨 , skA))
-  γ : (p , q) ∈ kernel (free-lift 𝑨 𝔥)
-  γ = (free-lift 𝑨 𝔥 p) ≡⟨ (free-lift-interp (wd 𝓥 𝓤) 𝑨 𝔥 p)⁻¹ ⟩
-      (𝑨 ⟦ p ⟧) 𝔥 ≡⟨ ζ 𝑨 skA 𝔥 ⟩
-      (𝑨 ⟦ q ⟧) 𝔥 ≡⟨ free-lift-interp (wd 𝓥 𝓤) 𝑨 𝔥 q ⟩
-      (free-lift 𝑨 𝔥 q) ∎
+  γ : (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
+  γ = ((ψlemma0 p q) ν) 𝑨 skA h
 
 
 \end{code}
@@ -324,9 +328,8 @@ We now use `ψlemma0-ap` to prove that every map `h : X → ∣ 𝑨 ∣`, from 
 
 \begin{code}
 
- 𝔽-lift-hom : (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → (h : X → ∣ ℭ ∣) → hom (𝔽 h) 𝑨
- 𝔽-lift-hom 𝑨 skA h = fst(HomFactor≈ (wd 𝓥 𝓕⁺) 𝑨 (lift-hom 𝑨 (project h (𝑨 , skA)))
-                                                (hom𝔽 h) (ψlemma0-ap skA) (hom𝔽-is-epic h))
+ 𝔽-lift-hom : (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → (h : X → ∣ 𝑨 ∣) → hom 𝔽 𝑨
+ 𝔽-lift-hom 𝑨 skA h = fst(HomFactor≈ (wd 𝓥 𝓕⁺) 𝑨 (lift-hom 𝑨 h) hom𝔽 (ψlemma0-ap skA) hom𝔽-is-epic)
 
 \end{code}
 
@@ -341,11 +344,11 @@ Next we define the lift of the natural embedding from `X` into 𝔽. We denote t
 
  open IsCongruence
 
- X↪𝔽 : (h : X → ∣ ℭ ∣) → X → ∣ 𝔽 h ∣
- X↪𝔽 h x = ⟪ ℊ x ⟫ -- (the implicit relation here is  ⟨ kercon (fe 𝓥 𝓕) ℭ homℭ ⟩ )
+ X↪𝔽 : X → ∣ 𝔽 ∣
+ X↪𝔽 x = ⟪ ℊ x ⟫
 
- 𝔑 : (h : X → ∣ ℭ ∣) → hom 𝕋 (𝔽 h)
- 𝔑 h = lift-hom (𝔽 h) (X↪𝔽 h)
+ 𝔑 : hom 𝕋 𝔽
+ 𝔑 = lift-hom 𝔽 X↪𝔽
 
 \end{code}
 
@@ -353,16 +356,16 @@ It turns out that the homomorphism so defined is equivalent to `hom𝔽`.
 
 \begin{code}
 
- hom𝔽-is-lift-hom : (h : X → ∣ ℭ ∣) → ∀ p → ∣ 𝔑 h ∣ p ≡ ∣ hom𝔽 h ∣ p
- hom𝔽-is-lift-hom h (ℊ x) = refl
- hom𝔽-is-lift-hom h (node 𝑓 t) =
-  ∣ 𝔑 h ∣ (node 𝑓 t)                  ≡⟨ ∥ 𝔑 h ∥ 𝑓 t ⟩
-  (𝑓 ̂ (𝔽 h))(λ i → ∣ 𝔑 h ∣(t i))     ≡⟨ wd 𝓥 𝓕⁺ (𝑓 ̂ (𝔽 h))(λ i → ∣ 𝔑 h ∣(t i))(λ i → ∣ hom𝔽 h ∣(t i)) ξ ⟩
-  (𝑓 ̂ (𝔽 h))(λ i → ∣ hom𝔽 h ∣ (t i)) ≡⟨ (∥ hom𝔽 h ∥ 𝑓 t)⁻¹ ⟩
-  ∣ hom𝔽 h ∣ (node 𝑓 t)           ∎
+ hom𝔽-is-lift-hom : ∀ p → ∣ 𝔑 ∣ p ≡ ∣ hom𝔽 ∣ p
+ hom𝔽-is-lift-hom  (ℊ x) = refl
+ hom𝔽-is-lift-hom  (node 𝑓 t) =
+  ∣ 𝔑 ∣ (node 𝑓 t)                  ≡⟨ ∥ 𝔑 ∥ 𝑓 t ⟩
+  (𝑓 ̂ 𝔽)(λ i → ∣ 𝔑 ∣(t i))     ≡⟨ wd 𝓥 𝓕⁺ (𝑓 ̂ 𝔽)(λ i → ∣ 𝔑 ∣(t i))(λ i → ∣ hom𝔽 ∣(t i)) ξ ⟩
+  (𝑓 ̂ 𝔽)(λ i → ∣ hom𝔽 ∣ (t i)) ≡⟨ (∥ hom𝔽 ∥ 𝑓 t)⁻¹ ⟩
+  ∣ hom𝔽 ∣ (node 𝑓 t)           ∎
   where
-  ξ : ∣ 𝔑 h ∣ ∘ t ≈ ∣ hom𝔽 h ∣ ∘ t
-  ξ = λ i → hom𝔽-is-lift-hom (λ z → z) (t i)
+  ξ : ∣ 𝔑 ∣ ∘ t ≈ ∣ hom𝔽 ∣ ∘ t
+  ξ = λ i → hom𝔽-is-lift-hom (t i)
 
 \end{code}
 
@@ -370,41 +373,50 @@ We need a three more lemmas before we are ready to tackle our main goal.
 
 \begin{code}
 
- ψlemma1 : (ℎ : X → ∣ ℭ ∣) → kernel ∣ 𝔑 ℎ ∣ ⊆ ψ
- ψlemma1 ℎ {p , q} 𝔑pq 𝑨 sA = γ
+ ψlemma1 : kernel ∣ 𝔑 ∣ ⊆ ψ
+ ψlemma1 {p , q} 𝔑pq 𝑨 sA h = γ'
   where
-  f : hom (𝔽 ℎ) 𝑨
-  f = 𝔽-lift-hom 𝑨 sA ℎ
+  f : hom 𝔽 𝑨
+  f = 𝔽-lift-hom 𝑨 sA h
 
   h' φ : hom 𝕋 𝑨
-  h' = ∘-hom 𝕋 𝑨 (𝔑 ℎ) f
-  φ = lift-hom 𝑨 (project ℎ (𝑨 , sA))
+  h' = ∘-hom 𝕋 𝑨 𝔑 f
+  φ = lift-hom 𝑨 h
 
-  h≡φ : ∀ t → (∣ f ∣ ∘ ∣ 𝔑 ℎ ∣) t ≡ ∣ φ ∣ t
+  h≡φ : ∀ t → (∣ f ∣ ∘ ∣ 𝔑 ∣) t ≡ ∣ φ ∣ t
   h≡φ t = free-unique (fe 𝓥 𝓤) 𝑨 h' φ (λ x → refl) t
 
   γ' : ∣ φ ∣ p ≡ ∣ φ ∣ q
   γ' = ∣ φ ∣ p             ≡⟨ (h≡φ p)⁻¹ ⟩
-       ∣ f ∣ ( ∣ 𝔑 ℎ ∣ p )   ≡⟨ cong ∣ f ∣ 𝔑pq ⟩
-       ∣ f ∣ ( ∣ 𝔑 ℎ ∣ q )   ≡⟨ h≡φ q ⟩
+       ∣ f ∣ ( ∣ 𝔑 ∣ p )   ≡⟨ cong ∣ f ∣ 𝔑pq ⟩
+       ∣ f ∣ ( ∣ 𝔑 ∣ q )   ≡⟨ h≡φ q ⟩
        ∣ φ ∣ q             ∎
 
 
-  γ : 𝑨 ⟦ p ⟧ ≈ 𝑨 ⟦ q ⟧
-  γ a = (𝑨 ⟦ p ⟧) a ≡⟨ free-lift-interp (wd 𝓥 𝓤) 𝑨 a p ⟩
-      (free-lift 𝑨 a) p  ≡⟨ {!!} ⟩
-      (free-lift 𝑨 a) q ≡⟨ (free-lift-interp (wd 𝓥 𝓤) 𝑨 a q)⁻¹ ⟩
-      (𝑨 ⟦ q ⟧) a        ∎
+  γ : (𝑨 ⟦ p ⟧) h ≡ (𝑨 ⟦ q ⟧) h
+  γ = (𝑨 ⟦ p ⟧) h ≡⟨ free-lift-interp (wd 𝓥 𝓤) 𝑨 h p ⟩
+      (free-lift 𝑨 h) p  ≡⟨ γ' ⟩
+      (free-lift 𝑨 h) q ≡⟨ (free-lift-interp (wd 𝓥 𝓤) 𝑨 h q)⁻¹ ⟩
+      (𝑨 ⟦ q ⟧) h        ∎
 
- ψlemma2 : (ℎ : X → ∣ ℭ ∣) → kernel ∣ hom𝔽 ℎ ∣ ⊆ ψ
- ψlemma2 ℎ {p , q} hyp = ψlemma1 ℎ {p , q} γ
+ ψlemma2 : kernel ∣ hom𝔽 ∣ ⊆ ψ
+ ψlemma2 {p , q} hyp = ψlemma1 {p , q} γ
    where
-    γ : (free-lift (𝔽 ℎ) (X↪𝔽 ℎ)) p ≡ (free-lift (𝔽 ℎ) (X↪𝔽 ℎ)) q
-    γ = (hom𝔽-is-lift-hom ℎ p) ∙ hyp ∙ (hom𝔽-is-lift-hom ℎ q)⁻¹
+    γ : (free-lift 𝔽 X↪𝔽) p ≡ (free-lift 𝔽 X↪𝔽) q
+    γ = (hom𝔽-is-lift-hom p) ∙ hyp ∙ (hom𝔽-is-lift-hom q)⁻¹
 
 
  ψlemma3 : ∀ p q → (p , q) ∈ ψ → 𝒦 ⊧ p ≋ q
- ψlemma3 p q pψq {𝑨} kA = pψq 𝑨 (siso (sbase kA) (≅-sym Lift-≅))
+ ψlemma3 p q pψq {𝑨} kA h =  γ
+  where
+  γ : (𝑨 ⟦ p ⟧) h ≡ (𝑨 ⟦ q ⟧) h
+  γ = (𝑨 ⟦ p ⟧) h    ≡⟨ free-lift-interp (wd 𝓥 𝓤) 𝑨 h p ⟩
+      (free-lift 𝑨 h) p ≡⟨ pψq 𝑨 (siso (sbase kA) (≅-sym Lift-≅)) h ⟩
+      (free-lift 𝑨 h) q ≡⟨ (free-lift-interp (wd 𝓥 𝓤) 𝑨 h q)⁻¹ ⟩
+      (𝑨 ⟦ q ⟧) h       ∎
+
+
+
 
 \end{code}
 
@@ -412,17 +424,17 @@ With these results in hand, it is now trivial to prove the main theorem of this 
 
 \begin{code}
 
- class-models-kernel :  (ℎ : X → ∣ ℭ ∣) → ∀ p q → (p , q) ∈ kernel ∣ hom𝔽 ℎ ∣ → 𝒦 ⊧ p ≋ q
- class-models-kernel ℎ p q hyp = ψlemma3 p q (ψlemma2 ℎ hyp)
+ class-models-kernel :  ∀ p q → (p , q) ∈ kernel ∣ hom𝔽 ∣ → 𝒦 ⊧ p ≋ q
+ class-models-kernel p q hyp = ψlemma3 p q (ψlemma2 hyp)
 
  𝕍𝒦 : Pred (Algebra 𝓕⁺ 𝑆) (lsuc 𝓕⁺)
  𝕍𝒦 = V{𝓤}{𝓕⁺} 𝒦
 
- kernel-in-theory : (ℎ : X → ∣ ℭ ∣) → kernel ∣ hom𝔽 ℎ ∣ ⊆ Th 𝕍𝒦
- kernel-in-theory ℎ {p , q} pKq {𝑨} = ξ
+ kernel-in-theory : kernel ∣ hom𝔽 ∣ ⊆ Th (V 𝒦)
+ kernel-in-theory {p , q} pKq {𝑨} = ξ
   where
   Kpq : 𝒦 ⊧ p ≋ q
-  Kpq kA₁ h₁ = class-models-kernel ℎ p q pKq kA₁ h₁
+  Kpq kA₁ h₁ = class-models-kernel p q pKq kA₁ h₁
 
   ξ : (p , q) ∈ Th 𝕍𝒦
   ξ = class-ids fe wd p q Kpq
@@ -430,28 +442,28 @@ With these results in hand, it is now trivial to prove the main theorem of this 
  X↠ : Algebra 𝓕⁺ 𝑆 → Type 𝓕⁺
  X↠ 𝑨 = Σ[ h ꞉ (X → ∣ 𝑨 ∣) ] IsSurjective h
 
- 𝔽-ModTh-epi : (h : X → ∣ ℭ ∣) → (𝑨 : Algebra 𝓕⁺ 𝑆) → (X↠ 𝑨) → 𝑨 ∈ Mod{𝓤 = 𝓕⁺}{X = X} (Th 𝕍𝒦) → epi (𝔽 h) 𝑨
- 𝔽-ModTh-epi h 𝑨 (η , ηE) AinMTV = γ
+ 𝔽-ModTh-epi : (𝑨 : Algebra 𝓕⁺ 𝑆) → (X↠ 𝑨) → 𝑨 ∈ Mod{𝓤 = 𝓕⁺}{X = X} (Th 𝕍𝒦) → epi 𝔽 𝑨
+ 𝔽-ModTh-epi 𝑨 (η , ηE) AinMTV = γ
   where
-  φ : hom (𝑻 X) 𝑨
+  φ : hom 𝕋 𝑨
   φ = lift-hom 𝑨 η
 
   φE : IsSurjective ∣ φ ∣
   φE = lift-of-epi-is-epi 𝑨 ηE
 
-  pqlem1 : ∀ p q → (p , q) ∈ kernel ∣ hom𝔽 h ∣ → (p , q) ∈ Th 𝕍𝒦
-  pqlem1 p q hyp = kernel-in-theory h hyp
+  pqlem1 : ∀ p q → (p , q) ∈ kernel ∣ hom𝔽 ∣ → (p , q) ∈ Th 𝕍𝒦
+  pqlem1 p q hyp = kernel-in-theory hyp
   pqlem2 : ∀ p q → (p , q) ∈ Th 𝕍𝒦 → 𝑨 ⊧ p ≈ q
   pqlem2 p q hyp x = AinMTV p q hyp x
 
-  kerincl : kernel ∣ hom𝔽 h ∣ ⊆ kernel ∣ φ ∣
+  kerincl : kernel ∣ hom𝔽 ∣ ⊆ kernel ∣ φ ∣
   kerincl {p , q} x = ∣ φ ∣ p      ≡⟨ (free-lift-interp (wd 𝓥 𝓕⁺) 𝑨 η p)⁻¹ ⟩
                       (𝑨 ⟦ p ⟧) η  ≡⟨ pqlem2 p q (pqlem1 p q x) η ⟩
                       (𝑨 ⟦ q ⟧) η  ≡⟨ free-lift-interp (wd 𝓥 𝓕⁺) 𝑨 η q ⟩
                       ∣ φ ∣ q      ∎
 
-  γ : epi (𝔽 h) 𝑨
-  γ = fst (HomFactorEpi≈ (wd 𝓥 𝓕⁺) 𝑨 φ (hom𝔽 h) kerincl (hom𝔽-is-epic h) φE)
+  γ : epi 𝔽 𝑨
+  γ = fst (HomFactorEpi≈ (wd 𝓥 𝓕⁺) 𝑨 φ hom𝔽 kerincl hom𝔽-is-epic φE)
 
 \end{code}
 
@@ -465,8 +477,7 @@ Finally we come to one of the main theorems of this module; it asserts that ever
 
 \begin{code}
 
- module _ (h : X → ∣ ℭ ∣)
-          (pe : pred-ext 𝓕⁺ 𝓕)(wd : SwellDef)                      -- extensionality assumptions
+ module _ (pe : pred-ext 𝓕⁺ 𝓕)(wd : SwellDef)                      -- extensionality assumptions
           (Cset : is-set ∣ ℭ ∣)(kuip : blk-uip(Term X)∣ kercon (wd 𝓥 𝓕){ℭ} homℭ ∣) -- truncation assumptions
   where
 
@@ -492,10 +503,10 @@ With this result in hand, along with what we proved earlier---namely, `PS(𝒦) 
 
 --   open Vlift 𝒦
 
-  𝔽∈SP : DFunExt → (𝔽 h) ∈ (S{𝓕}{𝓕⁺} (P{𝓤}{𝓕} 𝒦))
+  𝔽∈SP : DFunExt → 𝔽 ∈ (S{𝓕}{𝓕⁺} (P{𝓤}{𝓕} 𝒦))
   𝔽∈SP fe = ssub (class-prod-s-∈-sp fe) 𝔽≤ℭ
 
-  𝔽∈𝕍 : DFunExt → (𝔽 h) ∈ V 𝒦
+  𝔽∈𝕍 : DFunExt → 𝔽 ∈ V 𝒦
   𝔽∈𝕍 fe = SP⊆V' fe (𝔽∈SP fe)
 
 \end{code}
@@ -511,7 +522,7 @@ Now that we have all of the necessary ingredients, it is all but trivial to comb
   Birkhoff fe 𝕏 {𝑨} α = γ
    where
     ζ : IsHomImage 𝑨
-    ζ = epi-to-IsHomImage 𝑨 (𝔽-ModTh-epi (λ z → z) 𝑨 (𝕏 𝑨) α)
+    ζ = epi-to-IsHomImage 𝑨 (𝔽-ModTh-epi 𝑨 (𝕏 𝑨) α)
 
     γ : 𝑨 ∈ V 𝒦
     γ = vhimg{𝑩 = 𝑨} (𝔽∈𝕍 fe) (𝑨 , ζ)
