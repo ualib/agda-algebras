@@ -15,7 +15,7 @@ module Preface where
 
 \end{code}
 
-To support formalization in type theory of research level mathematics in universal algebra and related fields, we present the [Agda Universal Algebra Library][] ([gitlab/ualib][] ), a library for the [Agda][] proof assistant which contains statements and proofs of many foundational definitions and results from universal algebra. In particular, the library includes formal statements and proofs the First (Noether) Isomorphism Theorem and the Birkhoff HSP Theorem asserting that every variety is an equational class.
+To support formalization in type theory of research level mathematics in universal algebra and related fields, we present the [Agda Universal Algebra Library][], a library for the [Agda][] proof assistant which contains statements and proofs of many foundational definitions and results from universal algebra. In particular, the library includes formal statements and proofs the First (Noether) Isomorphism Theorem and the Birkhoff HSP Theorem asserting that every variety is an equational class.
 
 [Agda][] is a programming language and proof assistant, or "interactive theorem prover" (ITP), that not only supports dependent and inductive types, but also provides powerful *proof tactics* for proving things about the objects that inhabit these types.
 
@@ -42,59 +42,20 @@ To this end, our intermediate-term objectives include
 
 For our own mathematics research, we believe a proof assistant equipped with specialized libraries for universal algebra, as well as domain-specific tactics to automate proof idioms of our field, will be extremely useful. Thus, a secondary goal is to demonstrate (to ourselves and colleagues) the utility of such libraries and tactics for proving new theorems.
 
-
-
-
 ### <a id="Logical-foundations">Logical foundations</a>
 
-The [Agda UniversalAlgebra][] library is based on a minimal version of [Martin-Löf dependent type theory][] (MLTT) that is the same or very close to the type theory on which [Martín Escardó][]'s [Type Topology][] Agda library is based.  This is also the type theory that Escardó taught us in a short course on [Univalent Foundations of Mathematics with Agda][] at the [Midlands Graduate School in the Foundations of Computing Science][] at University of Birmingham in 2019.
-
-We won't go into great detail here because there are already other very nice resources available, such as the section [A spartan Martin-Löf type theory](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#mlttinagda) of the lecture notes by [Martín Escardó][] just mentioned, as well as the [ncatlab entry on Martin-Löf dependent type theory](https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory).
+The [Agda UniversalAlgebra][] library is based on a minimal version of [Martin-Löf dependent type theory][] (MLTT) as implemented in Agda. More details on this type theory can be read at [ncatlab entry on Martin-Löf dependent type theory](https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory).
 
 We will have much more to say about types and type theory as we progress. For now, suffice it to recall the handfull of objects that are assumed at the jumping-off point for MLTT: "primitive" **types** (𝟘, 𝟙, and ℕ, denoting the empty type, one-element type, and natural numbers), **type formers** (+, Π, Σ, Id, denoting binary sum, product, sum, and the identity type), and an infinite collection of **universes** (types of types) and universe variables to denote them (for which we will use upper-case caligraphic letters like 𝓤, 𝓥, 𝓦, etc., typically from the latter half of the English alphabet).
-
-
 
 
 ### <a id="intended-audience">Intended audience</a>
 
 This document describes the [UniversalAlgebra][] library in enough detail so that working mathematicians (and possibly some normal people, too) might be able to learn enough about Agda and its libraries to put them to use when creating, formalizing, and verifying new mathematics.
 
-While there are no strict prerequisites, we expect anyone with an interest in this work will have been motivated by prior exposure to universal algebra, as presented in, say, [Bergman (2012)][] or [McKenzie, McNulty, Taylor (2018)], or category theory, as presented in, say, [Riehl (2017)][] or [categorytheory.gitlab.io][].
+While there are no strict prerequisites, we expect anyone with an interest in this work will have been motivated by prior exposure to universal algebra, as presented in, say, [Bergman (2012)][] or [McKenzie, McNulty, Taylor (2018)], or category theory, as presented in, say, [Riehl (2017)][].
 
 Some prior exposure to [type theory][] and Agda would be helpful, but even without this background one might still be able to get something useful out of this by referring to one or more of the resources mentioned in the references section below to fill in gaps as needed.
-
-
-
-
-### <a id="installation">Installation</a>
-
-It is assumed that the reader of this documentation is actively experimenting with [Agda][] using [Emacs][] with the [agda2-mode][] extension installed.
-
-If you don't have [Agda][] and [agda2-mode][] installed, follow the directions on [the main Agda website][], and/or consult [Martín Escardó's installation instructions](https://github.com/martinescardo/HoTT-UF-Agda-Lecture-Notes/blob/master/INSTALL.md) or [our modified version of Escardó's instructions](https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/INSTALL_AGDA.md).
-
-The main repository for the [UAlib][] is [gitlab.com/ualib/ualib.gitlab.io][]. There are more installation instructions in the [README.md](https://gitlab.com/ualib/ualib.gitlab.io/README.md) file of the [UniversalAlgebra repository](https://github.com/ualib/agda-universal-algebra), but a summary of what's required is
-
-* [Emacs](https://www.gnu.org/software/emacs/)
-* [Agda][] 2.6.1
-* [agda2-mode][] (for emacs)
-* A cloned copy of the [ualib/agda-universal-algebra][] repository.
-
-Instructions for installing each of these are available in the [README.md](https://gitlab.com/ualib/agda-universal-algebra/README.md) file of the [UniversalAlgebra repository](https://github.com/ualib/agda-universal-algebra).
-
-If you already have `git` installed, a cloned copy of [ualib/agda-universal-algebra][] is obtained using **one** of the following alternative commands:
-
-```shell
-git clone https://gitlab.com/ualib/agda-universal-algebra.git
-```
-
-**or**, if you have a gitlab account with [ssh keys](https://docs.gitlab.com/ee/ssh/) configured, you could try
-
-```shell
-git clone git@gitlab.com:ualib/agda-universal-algebra.git
-```
-
-
 
 
 ### <a id="about-this-document">About this documentation</a>
@@ -202,5 +163,3 @@ Readers and users are encouraged to suggest improvements to the Agda [UniversalA
 
 
 {% include UALib.Links.md %}
-
-
