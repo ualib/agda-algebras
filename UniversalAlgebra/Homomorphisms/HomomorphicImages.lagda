@@ -17,13 +17,14 @@ This section describes the [Homomorphisms.HomomorphicImages][] module of the [Ag
 open import Agda.Builtin.Equality using (_≡_; refl)
 open import Data.Product using (_,_; Σ; _×_)
 open import Level renaming (suc to lsuc; zero to lzero)
-open import Relation.Binary.PropositionalEquality.Core using (cong; cong-app)
+open import Relation.Binary.PropositionalEquality.Core using (cong; cong-app; module ≡-Reasoning)
+open ≡-Reasoning
 open import Relation.Unary using (Pred; ∅; _∪_; _∈_; _⊆_)
 
 -- Imports from the Agda Universal Algebra Library
 open import Algebras.Basic
 open import Overture.Preliminaries
- using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; Π; -Π; -Σ; _≡⟨_⟩_; _∎; _⁻¹; 𝑖𝑑; ∣_∣; ∥_∥; lower∼lift; lift∼lower)
+ using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; Π; -Π; -Σ; _⁻¹; 𝑖𝑑; ∣_∣; ∥_∥; lower∼lift; lift∼lower)
 open import Overture.Inverses using (IsSurjective; Image_∋_; Inv; InvIsInv; eq)
 
 

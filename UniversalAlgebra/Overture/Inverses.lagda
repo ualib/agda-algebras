@@ -21,8 +21,7 @@ open import Function.Base  using (_∘_; id)
 open import Relation.Binary.PropositionalEquality.Core using (subst; cong-app)
 
 -- Imports from the Agda Universal Algebra Library
-open import Overture.Preliminaries using (Type; 𝓤; 𝓥; 𝓦; 𝓩; _⁻¹; Π; -Π; -Σ; _≡⟨_⟩_; _∎; _∙_; 𝑖𝑑; _∼_)
-
+open import Overture.Preliminaries using (Type; 𝓤; 𝓥; 𝓦; 𝓩; _⁻¹; Π; -Π; -Σ; _∙_; 𝑖𝑑; _∼_)
 
 module Overture.Inverses where
 
@@ -190,5 +189,3 @@ subst-is-retraction A refl = λ x → refl
 subst-is-section : {X : Type 𝓤} (A : X → Type 𝓥) {x y : X} (p : x ≡ y)
  →                 subst A (p ⁻¹) ∘ subst A p ∼ 𝑖𝑑 (A x)
 subst-is-section A refl = λ x → refl
-
-

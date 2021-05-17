@@ -11,9 +11,7 @@ This is the [Overture.Preliminaries][] module of the [Agda Universal Algebra Lib
 
 #### <a id="logical-foundations">Logical foundations</a>
 
-The [Agda Universal Algebra Library](https://github.com/ualib/agda-algebras) (or [agda-algebras](https://github.com/ualib/agda-algebras) for short) is based on a version of [Martin-Löf type theory (MLTT)](https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory), similar to the one on which on which Martín Escardó's [Type Topology Agda
-library](https://github.com/martinescardo/TypeTopology) is based. We don't discuss [MLTT](https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory) in great detail here because there are already good and freely available resources covering the theory. (See, for example, the section of [Escardó's notes](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes) on [A spartan Martin-Löf type theory](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#mlttinagda), or the [ncatlab entry on Martin-Löf dependent type theory](https://ncatlab.org/nlab/show/Martin-L\%C3\%B6f+dependent+type+theory), or the [HoTT book](https://homotopytypetheory.org/book/).)
-
+The [Agda Universal Algebra Library](https://github.com/ualib/agda-algebras) (or [agda-algebras](https://github.com/ualib/agda-algebras) for short) is based on a version of [Martin-Löf type theory (MLTT)](https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory). We don't discuss [MLTT](https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory) in great detail here because there are already good and freely available resources covering the theory. (See, for example, the section of [Escardó's notes](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes) on [A spartan Martin-Löf type theory](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#mlttinagda), or the [ncatlab entry on Martin-Löf dependent type theory](https://ncatlab.org/nlab/show/Martin-L\%C3\%B6f+dependent+type+theory), or the [HoTT book](https://homotopytypetheory.org/book/).)
 
 The objects and assumptions that form the foundation of [MLTT](https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory) are few. There are the *primitive types* (`𝟘`, `𝟙`, and `ℕ`, denoting the empty type, one-element type, and natural numbers), the *type formers* (`+`, `Π`, `Σ`, `Id`, denoting *binary sum*, *product*, *sum*, and the *identity* type). Each of these type formers is defined by a *type forming rule* which specifies how that type is constructed. Lastly, we have an infinite collection of *type universes* (types of types) and *universe variables* to denote them. Following Escardó, [agda-algebras][] denotes universe levels by upper-case calligraphic letters from the second half of the English alphabet; to be precise, these are `𝓞`, `𝓠`, `𝓡`, …, `𝓧`, `𝓨`, `𝓩`.<sup>[1](Overture.Preliminaries.html#fn1)</sup>
 
@@ -23,8 +21,6 @@ That's all. There are no further axioms or logical deduction (proof derivation) 
 To this foundation, we add certain *extensionality principles* when and were we need them.  These will be developed as we progress.  However, classical axioms such as the [*Axiom of Choice*](https://ncatlab.org/nlab/show/axiom+of+choice) or the [*Law of the Excluded Middle*](https://ncatlab.org/nlab/show/excluded+middle) are not needed and are not assumed anywhere in the library.  In this sense, all theorems and proofs in [agda-algebras][] are [*constructive*](https://ncatlab.org/nlab/show/constructive+mathematics) (according to [nlab's definition](https://ncatlab.org/nlab/show/constructive+mathematics)).
 
 A few specific instances (e.g., the proof of the Noether isomorphism theorems and Birkhoff's HSP theorem) require certain *truncation* assumptions. In such cases, the theory is not [predicative](https://ncatlab.org/nlab/show/predicative+mathematics) (according to [nlab's definition](https://ncatlab.org/nlab/show/predicative+mathematics)). These instances are always clearly identified.
-
-
 
 #### <a id="specifying-logical-foundations">Specifying logical foundations in Agda</a>
 
@@ -46,32 +42,28 @@ These options control certain foundational assumptions that Agda makes when type
 
 Note that if we wish to type-check a file that imports another file that still has some unmet proof obligations, we must replace the `--safe` flag with `--allow-unsolved-metas`, but this is never done in (publicly released versions of) [UniversalAlgebra][].
 
-
-
 #### <a id="agda-modules">Agda Modules</a>
 
-The `OPTIONS` pragma is usually followed by the start of a module.  For example, the [Overture.Preliminaries][] module begins with the following line.
+The `OPTIONS` pragma is usually followed by the start of a module.  For example, the [Overture.Preliminaries][] module begins with the following line, and then a list of imports of things used in th module.
 
 \begin{code}
-
+module Overture.Preliminaries where
 
 -- Imports from the Agda (Builtin) and the Agda Standard Library
 open import Agda.Builtin.Equality using (_≡_; refl)
-open import Data.Product using (_,_; Σ; Σ-syntax; _×_)
-open import Function using (_∘_)
+open import Data.Product using (_,_; Σ; Σ-syntax; _×_; proj₁; proj₂)
+open import Function.Base using (_∘_; id)
 open import Level renaming (suc to lsuc; zero to lzero)
 open import Relation.Binary.PropositionalEquality.Core using (sym; trans)
-
-module Overture.Preliminaries where
 
 \end{code}
 
 
 #### <a id="agda-universes">Agda Universes</a>
 
-Here we import the basic primitive operations we need for working with Agda's type universes. For the very small amount of background about *type universes* we require, we refer the reader to the brief [section on universe-levels](https://agda.readthedocs.io/en/v2.6.1.3/language/universe-levels.html) in the [Agda documentation](https://agda.readthedocs.io/en/v2.6.1.3/language/universe-levels.html).
+Here we import the basic primitive operations we need for working with Agda's type universes. For the very small amount of background about *type universes* we require, we refer the reader to the brief [section on universe-levels](https://agda.readthedocs.io/en/v2.6.1.3/language/universe-levels.html) in the Agda documentation.
 
-We prefer to use `Type` in place of Agda's `Set` since for us *set* will mean a very special kind of (truncated) type. (See [Relatoins.Truncation][]).
+We prefer to use `Type` in place of Agda's `Set` since for us *set* will mean a very special kind of (truncated) type. (See [Relations.Truncation][]).
 
 \begin{code}
 
@@ -89,26 +81,7 @@ variable
 
 \end{code}
 
-
-#### <a id="dependent-pair-type">Sigma types (dependent pairs)</a>
-
-Given universes 𝓤 and 𝓥, a type `A : Type 𝓤`, and a type family `B : A → Type 𝓥`, the *Sigma type* (or *dependent pair type*), denoted by `Σ[x ∈ A] B x`, generalizes the Cartesian product `A × B` by allowing the type `B x` of the second argument of the ordered pair `(x , y)` to depend on the value `x` of the first.  That is, an inhabitant of the type `Σ[x ∈ A] B x` is a pair `(x , y)` such that `x : A` and `y : B x`.
-
-For pedagogical reasons, we given the definition of the dependent product type here, but it is already defined in the `Data.Product` module of the [Agda Standard Library][], and we import it from there.
-
-```agda
- record Σ {𝓤 𝓥} {A : Type 𝓤 } (B : A → Type 𝓥 ) : Type(𝓤 ⊔ 𝓥)  where
-  constructor _,_
-  field
-   pr₁ : A
-   pr₂ : B pr₁
-
- infixr 4 _,_
-```
-
-
-\end{code}
-
+For the purposes of this library, we assume that the readers are familiar the basic parts of the Agda standard library above, and will not repeat all the definitions.
 
 Agda's default syntax for this type is `Σ A (λ x → B)`, but we prefer the notation `Σ x ꞉ A , B`, which is closer to the syntax in the preceding paragraph and the notation used in the [HoTT book][], for example. Fortunately, we can make the preferred syntax available; this is done in the [Type Topology][] library with the following type definition and `syntax` declaration.
 
@@ -132,18 +105,10 @@ Also, the standard library made an alternative notation for the dependent pair t
 **Warning!** The symbol `꞉` is not the same as `:`. Type the colon in `Σ x ꞉ A ⸲ B` as `\:4` in [agda2-mode][].
  above is obtained by typing `\:4` in [agda2-mode][].
 
-A special case of the Sigma type is the one in which the type `B` doesn't depend on `A`. This is the usual Cartesian product, defined in Agda as follows.
-
-
-```agda
-_×_ : Type 𝓤 → Type 𝓥 → Type (𝓤 ⊔ 𝓥)
-A × B = Σ[ x ꞉ A ] B
-```
-
 
 #### <a id="dependent-function-type">Pi types (dependent functions)</a>
 
-Given universes `𝓤` and `𝓥`, a type `X : Type 𝓤`, and a type family `Y : X → Type 𝓥`, the *Pi type* (aka *dependent function type*) is denoted by `Π(x : X), Y x` and generalizes the function type `X → Y` by letting the type `Y x` of the codomain depend on the value `x` of the domain type. The dependent function type is defined in the [Type Topology][] in a standard way, but for the reader's benefit we repeat the definition here.
+Given universes `𝓤` and `𝓥`, a type `X : Type 𝓤`, and a type family `Y : X → Type 𝓥`, the *Pi type* (aka *dependent function type*) is denoted by `Π(x : X), Y x` and generalizes the function type `X → Y` by letting the type `Y x` of the codomain depend on the value `x` of the domain type. It is sometimes convenient to be explicit about this.
 
 \begin{code}
 
@@ -160,29 +125,29 @@ To make the syntax for `Π` conform to the standard notation for *Pi types* (or 
 -Π A B = Π B
 
 infixr 3 -Π
-syntax -Π A (λ x → B) = Π[ x ꞉ A ] B  -- type \,3 to get ⸲
+syntax -Π A (λ x → B) = Π[ x ꞉ A ] B  -- type \,3 to get
 
 \end{code}
 
-**Warning!** The symbols ꞉ and ⸲ are not the same as : and ,. Type the colon (resp. comma) in `Π x ꞉ A ⸲ B` as `\:4` (resp `\,3`) in [agda2-mode][].
+**Warning!** The symbols ꞉ and ⸲are not the same as : and ,. Type the colon (resp. comma) in `Π x ꞉ A ⸲ B` as `\:4` (resp `\,3`) in [agda2-mode][].
 
 
 
 #### <a id="projection notation">Projection notation</a>
 
-The definition of `Σ` (and thus, of `×`) includes the fields `pr₁` and `pr₂` representing the first and second projections out of the product.  Sometimes we prefer to denote these projections by `∣_∣` and `∥_∥` respectively. However, for emphasis or readability we alternate between these and the following standard notations: `pr₁` and `fst` for the first projection, `pr₂` and `snd` for the second.  We define these alternative notations for projections out of pairs as follows.
+The definition of `Σ` (and thus, of `×`) includes the fields `proj₁` and `proj₂` representing the first and second projections out of the product.  Sometimes we prefer to denote these projections by `∣_∣` and `∥_∥` respectively. However, for emphasis or readability we alternate between these and the following standard notations: `proj₁` and `fst` for the first projection, `proj₂` and `snd` for the second.  We define these alternative notations for projections out of pairs as follows.
 
 \begin{code}
 
 module _ {A : Type 𝓤 }{B : A → Type 𝓥} where
 
  ∣_∣ fst : Σ[ x ∈ A ] B x → A
- ∣ x , y ∣ = x
- fst (x , y) = x
+ ∣_∣ = proj₁
+ fst = proj₁
 
  ∥_∥ snd : (z : Σ[ a ∈ A ] B a) → B ∣ z ∣
- ∥ x , y ∥ = y
- snd (x , y) = y
+ ∥_∥ = proj₂
+ snd = proj₂
 
  infix  40 ∣_∣
 \end{code}
@@ -190,9 +155,6 @@ module _ {A : Type 𝓤 }{B : A → Type 𝓥} where
 Here we put the definitions inside an *anonymous module*, which starts with the `module` keyword followed by an underscore (instead of a module name). The purpose is simply to move the postulated typing judgments---the "parameters" of the module (e.g., `A : Type 𝓤`)---out of the way so they don't obfuscate the definitions inside the module.
 
 Also note that multiple inhabitants of a single type (e.g., `∣_∣` and `fst`) may be declared on the same line.
-
-
-
 
 We prove that `≡` obeys the substitution rule (subst) in the next subsection (see the definition of `ap` below), but first we define some syntactic sugar that will make it easier to apply symmetry and transitivity of `≡` in proofs.<sup>[2](Overture.Equality.html#fn3)</sup>
 
@@ -205,30 +167,17 @@ infix  40 _⁻¹
 
 \end{code}
 
-If we have a proof `p : x ≡ y`, and we need a proof of `y ≡ x`, then instead of `≡-sym p` we can use the more intuitive `p ⁻¹`. Similarly, the following syntactic sugar makes abundant appeals to transitivity easier to stomach.
+If we have a proof `p : x ≡ y`, and we need a proof of `y ≡ x`, then instead of `sym p` we can use the more intuitive `p ⁻¹`. Similarly, the following syntactic sugar makes abundant appeals to transitivity easier to stomach.
 
 \begin{code}
 
 _∙_ : {A : Type 𝓤}{x y z : A} → x ≡ y → y ≡ z → x ≡ z
 p ∙ q = trans p q
 
-_≡⟨_⟩_ : {A : Type 𝓤} (x : A) {y z : A} → x ≡ y → y ≡ z → x ≡ z
-x ≡⟨ p ⟩ q = p ∙ q
-
-_∎ : {X : Type 𝓤} (x : X) → x ≡ x
-x ∎ = refl
-
-
 𝑖𝑑 : (A : Type 𝓤 ) → A → A
 𝑖𝑑 A = λ x → x
 
-id : {A : Type 𝓤} → A → A
-id x = x
-
 infixl 30 _∙_
-infixr  0 _≡⟨_⟩_
-infix   1 _∎
-
 \end{code}
 
 

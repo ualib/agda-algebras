@@ -23,13 +23,14 @@ open import Data.Sum.Base using (_⊎_)
 open import Function.Base  using (_∘_)
 open import Level renaming (suc to lsuc; zero to lzero)
 open import Relation.Binary using (Rel; IsEquivalence)
-open import Relation.Binary.PropositionalEquality.Core using (cong; cong-app)
+open import Relation.Binary.PropositionalEquality.Core using (cong; cong-app; module ≡-Reasoning)
+open ≡-Reasoning
 open import Relation.Unary using (Pred; _∈_; _⊆_)
 
 -- Imports from the Agda Universal Algebra Library
 open import Algebras.Basic
 open import Overture.Preliminaries
- using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; Π; -Π; -Σ; _≡⟨_⟩_; _∎; _∙_;_⁻¹; ∣_∣; ∥_∥; snd; fst)
+ using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; Π; -Π; -Σ; _∙_;_⁻¹; ∣_∣; ∥_∥; snd; fst)
 open import Overture.Inverses using (Inv; InvIsInv; IsSurjective)
 open import Relations.Quotients using (⟪_⟫)
 open import Relations.Extensionality using (DFunExt; swelldef; pred-ext)
@@ -202,7 +203,7 @@ Observe that the inhabitants of `ℭ` are maps from `ℑ` to `{𝔄 i : i ∈ �
 \begin{code}
 
  𝔽 : Algebra 𝓕⁺ 𝑆
- 𝔽 = ker[ 𝑻 X ⇒ ℭ ] homℭ ↾ wd 
+ 𝔽 = ker[ 𝑻 X ⇒ ℭ ] homℭ ↾ wd
 
  epi𝔽 : epi (𝑻 X) 𝔽
  epi𝔽 = πker wd {ℭ} homℭ
@@ -448,9 +449,3 @@ From these it follows that every equational class is a variety. Thus, our formal
 <span style="float:right;">[Varieties ↑](Varieties.html)</span>
 
 {% include UALib.Links.md %}
-
-
-
-
-
-

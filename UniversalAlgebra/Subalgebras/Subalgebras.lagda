@@ -19,7 +19,8 @@ open import Axiom.Extensionality.Propositional renaming (Extensionality to funex
 open import Data.Product using (_,_; Σ; _×_)
 open import Function.Base  using (_∘_)
 open import Level renaming (suc to lsuc; zero to lzero)
-open import Relation.Binary.PropositionalEquality.Core using (cong)
+open import Relation.Binary.PropositionalEquality.Core using (cong; module ≡-Reasoning)
+open ≡-Reasoning
 open import Relation.Unary using (_∈_; Pred; _⊆_)
 
 -- Imports from the Agda Universal Algebra Library
@@ -28,7 +29,7 @@ open import Relations.Extensionality using (pred-ext; swelldef)
 open import Relations.Truncation using (is-set; blk-uip)
 open import Overture.Inverses using (IsInjective; id-is-injective; ∘-injective)
 open import Overture.Preliminaries
- using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; 𝓩; Π; -Π; -Σ; _≡⟨_⟩_; _∎; _∙_;_⁻¹; ∣_∣; ∥_∥; snd; 𝑖𝑑; fst)
+ using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; 𝓩; Π; -Π; -Σ; _∙_;_⁻¹; ∣_∣; ∥_∥; snd; 𝑖𝑑; fst)
 
 
 module Subalgebras.Subalgebras {𝑆 : Signature 𝓞 𝓥} where
@@ -270,4 +271,3 @@ module _ {𝓧 𝓨 𝓩 𝓦 : Level} where
 <span style="float:right;">[Varieties →](Varieties.html)</span>
 
 {% include UALib.Links.md %}
-

@@ -20,11 +20,12 @@ open import Data.Product using (_,_; Σ; _×_)
 open import Function.Base  using (_∘_; id)
 open import Level renaming (suc to lsuc; zero to lzero)
 open import Relation.Binary using (Rel; IsEquivalence)
-open import Relation.Binary.PropositionalEquality.Core using (sym; trans; cong)
+open import Relation.Binary.PropositionalEquality.Core using (sym; trans; cong; module ≡-Reasoning)
+open ≡-Reasoning
 
 -- Imports from the Agda Universal Algebra Library
 open import Algebras.Basic
-open import Overture.Preliminaries using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; 𝓩; Π; -Π; -Σ; _≡⟨_⟩_; _∎; _⁻¹; ∣_∣; ∥_∥; fst)
+open import Overture.Preliminaries using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; 𝓩; Π; -Π; -Σ; _⁻¹; ∣_∣; ∥_∥; fst)
 open import Overture.Inverses using (IsInjective; IsSurjective; Image_∋_)
 open import Relations.Discrete using (ker) -- 𝟎; _|:_)
 open import Relations.Extensionality using (swelldef)
@@ -313,12 +314,3 @@ Recall, `h ∘ 𝒂` is the tuple whose i-th component is `h (𝒂 i)`.</span>
 <span style="float:right;">[Homomorphisms.Noether →](Homomorphisms.Noether.html)</span>
 
 {% include UALib.Links.md %}
-
-
-
-
-
-
-
-
-

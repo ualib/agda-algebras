@@ -36,13 +36,14 @@ open import Axiom.Extensionality.Propositional renaming (Extensionality to funex
 open import Data.Product using (_,_; Σ; _×_)
 open import Function.Base  using (_∘_)
 open import Level renaming (suc to lsuc; zero to lzero)
-open import Relation.Binary.PropositionalEquality.Core using (cong; cong-app)
+open import Relation.Binary.PropositionalEquality.Core using (cong; cong-app; module ≡-Reasoning)
+open ≡-Reasoning
 open import Relation.Unary using (⋂; _∈_; Pred; _⊆_)
 
 -- Imports from the Agda Universal Algebra Library
 open import Algebras.Basic
 open import Overture.Inverses using (IsInjective; ∘-injective)
-open import Overture.Preliminaries using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; Π; -Π; -Σ; _≡⟨_⟩_; _∎; _∙_;_⁻¹; ∣_∣; ∥_∥; snd)
+open import Overture.Preliminaries using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; Π; -Π; -Σ; _∙_;_⁻¹; ∣_∣; ∥_∥; snd)
 open import Relations.Discrete using (Im_⊆_)
 open import Relations.Extensionality using (DFunExt)
 
