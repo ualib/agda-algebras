@@ -27,7 +27,7 @@ module Overture.Inverses where
 
 \end{code}
 
-We begin by defining an inductive type that represents the semantic concept of *inverse image* of a function.
+We begin by defining an data type that represents the semantic concept of *inverse image* of a function.
 
 \begin{code}
 
@@ -35,17 +35,7 @@ module _ {A : Type 𝓤 }{B : Type 𝓦 } where
 
  data Image_∋_ (f : A → B) : B → Type (𝓤 ⊔ 𝓦)
   where
-  im : (x : A) → Image f ∋ f x
-  eq : (b : B) → (a : A) → b ≡ f a → Image f ∋ b
-
-\end{code}
-
-Next we verify that the type behaves as we expect.
-
-\begin{code}
-
- ImageIsImage : (f : A → B)(b : B)(a : A) → b ≡ f a → Image f ∋ b
- ImageIsImage f b a b≡fa = eq b a b≡fa
+  eq : {b : B} → (a : A) → b ≡ f a → Image f ∋ b
 
 \end{code}
 
@@ -54,8 +44,7 @@ An inhabitant of `Image f ∋ b` is a dependent pair `(a , p)`, where `a : A` an
 \begin{code}
 
  Inv : (f : A → B){b : B} → Image f ∋ b  →  A
- Inv f {.(f a)} (im a) = a
- Inv f (eq _ a _) = a
+ Inv f (eq a _) = a
 
 \end{code}
 
@@ -64,8 +53,7 @@ We can prove that `Inv f` is the *right-inverse* of `f`, as follows.
 \begin{code}
 
  InvIsInv : (f : A → B){b : B}(q : Image f ∋ b) → f(Inv f q) ≡ b
- InvIsInv f {.(f a)} (im a) = refl
- InvIsInv f (eq _ _ p) = p ⁻¹
+ InvIsInv f (eq _ p) = p ⁻¹
 
 \end{code}
 
@@ -86,24 +74,6 @@ module _ {A : Type 𝓤}{B : Type 𝓦} where
 
 \end{code}
 
-We can obtain a *left-inverse* of an injective function as follows.
-
-\begin{code}
-
- InjInv : (f : A → B) → IsInjective f → (b : B) → Image f ∋ b → A
- InjInv f _ = λ b imfb → Inv f imfb
-
-\end{code}
-
-We prove that the function defined by `InjInv f p` is indeed the left-inverse of `f` by
-applying the function `InjInv` to `g` and a proof that `g` is injective.
-
-\begin{code}
-
- InjInvIsLeftInv : {f : A → B}{fM : IsInjective f}{x : A} → (InjInv f fM)(f x)(im x) ≡ x
- InjInvIsLeftInv = refl
-
-\end{code}
 
 Before moving on to discuss surjective functions, let us prove (the obvious facts) that the identity map is injective and that the composition of injectives is injective.
 
@@ -118,9 +88,6 @@ id-is-injective = λ z → z
 ∘-injective finj ginj = λ z → finj (ginj z)
 
 \end{code}
-
-
-
 
 
 #### <a id="epics">Surjective functions</a>
@@ -150,12 +117,6 @@ With the next definition, we can represent a *right-inverse* of a surjective fun
 Thus, a right-inverse of `f` is obtained by applying `SurjInv` to `f` and a proof of `IsSurjective f`.  Later, we will prove that this does indeed give the right-inverse, but we postpone the proof since it requires function extensionality, a concept we take up in the [Relations.Extensionality][] module.
 
 
-
-
-
-
-
-
 -------------------------------------
 
 <p></p>
@@ -165,27 +126,3 @@ Thus, a right-inverse of `f` is obtained by applying `SurjInv` to `f` and a proo
 
 
 {% include UALib.Links.md %}
-
-
-
-
-
-
-
-<!--- NO LONGER USED
-
-The following are some useful lemmas lifted from the `MGS-Retracts` module of Escardó's [Type Topology][] library.
-
-has-section : {X : Type 𝓤 } {Y : Type 𝓦 } → (X → Y) → Type (𝓤 ⊔ 𝓦)
-has-section {𝓤}{𝓦}{X}{Y} r = Σ[ s ꞉ (Y → X) ] r ∘ s ∼ id
-
-_◁_ : Type 𝓤 → Type 𝓦 → Type (𝓤 ⊔ 𝓦)
-X ◁ Y = Σ[ r ꞉ (Y → X) ] has-section r
-
-subst-is-retraction : {X : Type 𝓤} (A : X → Type 𝓥) {x y : X} (p : x ≡ y)
-                        → subst A p ∘ subst A (p ⁻¹) ∼ 𝑖𝑑 (A y)
-subst-is-retraction A refl = λ x → refl
-
-subst-is-section : {X : Type 𝓤} (A : X → Type 𝓥) {x y : X} (p : x ≡ y)
- →                 subst A (p ⁻¹) ∘ subst A p ∼ 𝑖𝑑 (A x)
-subst-is-section A refl = λ x → refl

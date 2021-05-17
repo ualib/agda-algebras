@@ -125,7 +125,7 @@ FirstIsoTheorem|Set 𝑨 𝑩 h pe fe fww Bset buip hE = (fmap , fhom , fepic) ,
    bfa = (cong-app (SurjInvIsRightInv {fe = fww} ∣ h ∣ hE) b)⁻¹
 
    γ : Image fmap ∋ b
-   γ = Image_∋_.eq b ⟪ a ⟫ bfa
+   γ = Image_∋_.eq ⟪ a ⟫ bfa
 
 \end{code}
 
