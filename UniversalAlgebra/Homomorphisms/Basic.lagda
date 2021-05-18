@@ -219,8 +219,10 @@ module _ {𝓤 𝓦 : Level}{𝑨 : Algebra 𝓤 𝑆} where
   -- <<<<<<< Quotients
   -- cπ-is-epic (C , R-block a refl ) =  Image_∋_.im a
   -- =======
-  cπ-is-epic (C , (a , refl)) =  Image_∋_.eq a refl
+  -- cπ-is-epic (C , (a , refl)) =  Image_∋_.eq a refl
   -- >>>>>>> master
+  -- wjd: not sure how this conflict occurred, but the following line seems to resolve it.
+  cπ-is-epic (C , R-block a refl ) =  Image_∋_.eq a refl
 
 \end{code}
 
