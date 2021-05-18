@@ -29,7 +29,7 @@ open import Overture.Preliminaries using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; �
 open import Overture.Inverses using (IsInjective; IsSurjective; Image_∋_)
 open import Relations.Discrete using (ker) -- 𝟎; _|:_)
 open import Relations.Extensionality using (swelldef)
-open import Relations.Quotients using (ker-IsEquivalence; _/_; ⟪_⟫)
+open import Relations.Quotients using (ker-IsEquivalence; _/_; ⟪_⟫; R-block)
 
 module Homomorphisms.Basic {𝑆 : Signature 𝓞 𝓥} where
 
@@ -216,7 +216,11 @@ module _ {𝓤 𝓦 : Level}{𝑨 : Algebra 𝓤 𝑆} where
  πepi : (θ : Con{𝓤}{𝓦} 𝑨) → epi 𝑨 (𝑨 ╱ θ)
  πepi θ = (λ a → ⟪ a ⟫) , (λ _ _ → refl) , cπ-is-epic  where
   cπ-is-epic : IsSurjective (λ a → ⟪ a ⟫)
+  -- <<<<<<< Quotients
+  -- cπ-is-epic (C , R-block a refl ) =  Image_∋_.im a
+  -- =======
   cπ-is-epic (C , (a , refl)) =  Image_∋_.eq a refl
+  -- >>>>>>> master
 
 \end{code}
 

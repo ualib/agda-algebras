@@ -17,15 +17,16 @@ open import Agda.Builtin.Equality using (_≡_; refl)
 open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
 open import Level renaming (suc to lsuc; zero to lzero)
 open import Data.Product using (_,_; Σ; _×_)
+open import Data.Product.Properties
 open import Relation.Binary using (Rel; IsEquivalence)
 open import Relation.Unary using (Pred; _∈_)
-open import Relation.Binary.PropositionalEquality.Core using (sym; trans; cong)
+open import Relation.Binary.PropositionalEquality.Core using (sym; trans; cong; subst)
 
 -- Imports from the Agda Universal Algebra Library
 open import Algebras.Basic
 open import Overture.Preliminaries using (Type; 𝓘; 𝓞; 𝓤; 𝓥; 𝓦; Π; -Π; -Σ; ∣_∣; ∥_∥; fst)
 open import Relations.Discrete using (𝟎; _|:_)
-open import Relations.Quotients using (_/_; ⟪_⟫)
+open import Relations.Quotients using (_/_; ⟪_⟫; IsBlock)
 
 
 module Algebras.Congruences {𝑆 : Signature 𝓞 𝓥} where
@@ -105,8 +106,8 @@ In many areas of abstract mathematics the *quotient* of an algebra `𝑨` with r
 
 _╱_ : (𝑨 : Algebra 𝓤 𝑆) → Con{𝓤}{𝓦} 𝑨 → Algebra (𝓤 ⊔ lsuc 𝓦) 𝑆
 
-𝑨 ╱ θ = (∣ 𝑨 ∣ / ∣ θ ∣)  ,                               -- the domain of the quotient algebra
-        λ 𝑓 𝑎 → ⟪ (𝑓 ̂ 𝑨)(λ i →  fst ∥ 𝑎 i ∥) ⟫           -- the basic operations of the quotient algebra
+𝑨 ╱ θ = (∣ 𝑨 ∣ / ∣ θ ∣)  ,                                  -- the domain of the quotient algebra
+        λ 𝑓 𝑎 → ⟪ (𝑓 ̂ 𝑨)(λ i →  IsBlock.block-u ∥ 𝑎 i ∥) ⟫  -- the basic operations of the quotient algebra
 
 \end{code}
 
@@ -130,7 +131,8 @@ From this we easily obtain the zero congruence of `𝑨 ╱ θ` by applying the 
 \end{code}
 
 
-Finally, the following elimination rule is sometimes
+Finally, the following elimination rule is sometimes useful (but it 'cheats' a lot by baking in
+a large amount of extensionality that is miraculously true).
 
 \begin{code}
 
@@ -153,4 +155,3 @@ open IsCongruence
 <span style="float:right;">[Homomorphisms →](Homomorphisms.html)</span>
 
 {% include UALib.Links.md %}
-

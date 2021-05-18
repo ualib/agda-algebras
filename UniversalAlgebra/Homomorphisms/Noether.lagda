@@ -28,7 +28,7 @@ open import Algebras.Basic
 open import Overture.Preliminaries using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; 𝓩; Π; -Π; -Σ; _⁻¹; ∣_∣; ∥_∥; fst; snd; 𝑖𝑑)
 open import Overture.Inverses using (IsInjective; IsSurjective; Image_∋_; SurjInv)
 open import Relations.Discrete using (ker; kernel)
-open import Relations.Quotients using (ker-IsEquivalence; _/_; ⟪_⟫; ⌞_⌟)
+open import Relations.Quotients using (ker-IsEquivalence; _/_; ⟪_⟫; ⌞_⌟; R-block)
 open import Relations.Truncation using (is-set; blk-uip; is-embedding; monic-is-embedding|Set)
 open import Relations.Extensionality using (swelldef;  block-ext|uip; pred-ext; SurjInvIsRightInv; epic-factor)
 
@@ -86,7 +86,7 @@ FirstHomTheorem|Set 𝑨 𝑩 h pe fe Bset buip = (φ , φhom) , refl , φmon , 
              (𝑓 ̂ 𝑩) (λ x → φ (a x))            ∎
 
   φmon : IsInjective φ
-  φmon {_ , (u , refl)} {_ , (v , refl)} φuv = block-ext|uip pe buip ξ φuv
+  φmon {_ , R-block u refl} {_ , R-block v refl} φuv = block-ext|uip pe buip ξ φuv
 
   φemb : is-embedding φ
   φemb = monic-is-embedding|Set φ Bset φmon
@@ -139,9 +139,9 @@ module _ {fe : swelldef 𝓥 𝓦}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦
   →                 ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣ → ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker fe{𝑩}h ∣
   →                 ∀ a  →  ∣ f ∣ a ≡ ∣ g ∣ a
 
- NoetherHomUnique f g hfk hgk (_ , (a , refl)) = ∣ f ∣ (_ , (a , refl)) ≡⟨ cong-app(hfk ⁻¹)a ⟩
-                                                 ∣ h ∣ a                ≡⟨ cong-app(hgk)a ⟩
-                                                 ∣ g ∣ (_ , (a , refl)) ∎
+ NoetherHomUnique f g hfk hgk (_ , R-block a refl) = ∣ f ∣ (_ , R-block a refl) ≡⟨ cong-app(hfk ⁻¹)a ⟩
+                                                     ∣ h ∣ a                    ≡⟨ cong-app(hgk)a ⟩
+                                                     ∣ g ∣ (_ , R-block a refl) ∎
 
 \end{code}
 
