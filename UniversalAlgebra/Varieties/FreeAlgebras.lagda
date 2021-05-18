@@ -125,13 +125,26 @@ Observe that the inhabitants of `ℭ` are maps from `ℑ` to `{𝔄 i : i ∈ �
  -- homℭ : (X → ∣ ℭ ∣) → hom 𝕋 ℭ
  -- homℭ h = ⨅-hom-co 𝔄 (fe (ov 𝓤) 𝓤){𝓕⁺} 𝕋 λ i → lift-hom (𝔄 i) (λ x → (h x) i)
  homℭ : hom 𝕋 ℭ
- homℭ = ⨅-hom-co 𝔄 (fe (ov 𝓤) 𝓤){𝓕⁺} 𝕋 λ i → lift-hom (𝔄 i) (λ x → (h x) i)
-  where
-  h : X → ∣ ℭ ∣
-  h = λ z → z
+ homℭ = ⨅-hom-co 𝔄 (fe (ov 𝓤) 𝓤){𝓕⁺} 𝕋 λ i → lift-hom (𝔄 i) (λ x → x i)
+ -- ⨅-hom-co : funext 𝓘 𝓦 → {𝓤 : Level}(𝑨 : Algebra 𝓤 𝑆) → (∀(i : I) → hom 𝑨 (ℬ i)) → hom 𝑨 (⨅ ℬ)
+ -- ⨅-hom-co fe 𝑨 𝒽 = ((λ a i → ∣ 𝒽 i ∣ a)) , (λ 𝑓 𝒶 → fe λ i → ∥ 𝒽 i ∥ 𝑓 𝒶)
+ -- free-lift : (𝑨 : Algebra 𝓤 𝑆)(h : X → ∣ 𝑨 ∣) → ∣ 𝑻 X ∣ → ∣ 𝑨 ∣
+ -- free-lift _ h (ℊ x) = h x
+ -- free-lift 𝑨 h (node f 𝑡) = (f ̂ 𝑨) (λ i → free-lift 𝑨 h (𝑡 i))
 
  homℭ-id : (x : X) → ∣ homℭ ∣ (ℊ x) ≡ x
  homℭ-id x = refl
+
+ -- homℭmap : (X → ∣ ℭ ∣) → ∣ 𝕋 ∣ → X
+ -- homℭmap h = free-lift ℭ h
+ homℭmap : ∣ 𝕋 ∣ → X
+ homℭmap (ℊ x) = x
+ homℭmap (node f t) = (f ̂ ℭ) (homℭmap ∘ t)
+
+ homℭmapterm : ∣ 𝕋 ∣ → ∣ 𝕋 ∣
+ homℭmapterm (ℊ x) = ℊ x
+ homℭmapterm (node f t) = ℊ ((f ̂ ℭ) (homℭmap ∘ t))
+
 
  -- homℭ : hom 𝕋 ℭ
  -- homℭ = ⨅-hom-co 𝔄 (fe 𝓕 𝓤){𝓕⁺} 𝕋 λ i → lift-hom (𝔄 i) (proj i)
@@ -150,27 +163,42 @@ Every `h : X → ∣ 𝑨 ∣` can be decomposed as `h = g ∘ 𝔥`, where `g :
 
 \begin{code}
 
+ endolemma : {𝓧 : Level}(X : Type 𝓧)(f : ∣ 𝑆 ∣)(t : ∥ 𝑆 ∥ f → ∣ 𝑻 X ∣) → (free-lift (𝑻 X) (λ x → ℊ x)) ((f ̂ (𝑻 X)) t) ≡ ((f ̂ (𝑻 X)) ((free-lift (𝑻 X) (λ x → ℊ x)) ∘ t))
+ endolemma X f t = refl
 
  module _ {𝑨 : Algebra 𝓤 𝑆}{skA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦} where
 
   hlem : (h : X → ∣ 𝑨 ∣)(x : X) → h x ≡ h (∣ homℭ ∣ (ℊ x))
   hlem h x = h x ≡⟨ cong h (homℭ-id x)⁻¹ ⟩ h (∣ homℭ ∣ (ℊ x)) ∎
 
+  homℭlem : ∀ f t → ∣ homℭ ∣ ((f ̂ 𝕋) t) ≡ (f ̂ ℭ) (∣ homℭ ∣ ∘ t)
+  homℭlem f t = refl
+
   hlem' : (h : X → ∣ 𝑨 ∣)(p : ∣ 𝕋 ∣) → (free-lift 𝑨 h) p ≡ h  (∣ homℭ ∣ p)
-  hlem' h (ℊ x) = refl
-  hlem' h (node f 𝑡) = free-lift 𝑨 h (node f 𝑡) ≡⟨ refl ⟩
-                       (f ̂ 𝑨) ((free-lift 𝑨 h) ∘ 𝑡) ≡⟨ γ ⟩
-                       (f ̂ 𝑨) (h ∘ (∣ homℭ ∣ ∘ 𝑡)) ≡⟨ refl ⟩
-                       (f ̂ 𝑨) ((free-lift 𝑨 h) ∘ (ℊ ∘ (∣ homℭ ∣ ∘ 𝑡))) ≡⟨ refl ⟩
-                       (free-lift 𝑨 h) ((f ̂ 𝕋) (ℊ ∘ (∣ homℭ ∣ ∘ 𝑡))) ≡⟨ cong (free-lift 𝑨 h)ζ ⟩
-                       (free-lift 𝑨 h) (ℊ ((f ̂ ℭ) (∣ homℭ ∣ ∘ 𝑡))) ≡⟨ refl ⟩
-                       h ((f ̂ ℭ) (∣ homℭ ∣ ∘ 𝑡)) ≡⟨ refl ⟩
-                       h (∣ homℭ ∣ (node f 𝑡)) ∎
+  hlem' h p  = ξ p
    where
-   γ : (f ̂ 𝑨) ((free-lift 𝑨 h) ∘ 𝑡) ≡ (f ̂ 𝑨) (h ∘ (∣ homℭ ∣ ∘ 𝑡))
-   γ = wd 𝓥 𝓤 (f ̂ 𝑨) ((free-lift 𝑨 h) ∘ 𝑡) (h ∘ (∣ homℭ ∣ ∘ 𝑡)) (λ i → hlem' h (𝑡 i))
-   ζ : (f ̂ 𝕋) (ℊ ∘ (∣ homℭ ∣ ∘ 𝑡)) ≡ ℊ ((f ̂ ℭ) (∣ homℭ ∣ ∘ 𝑡))
-   ζ = {!!}
+   γ : ∀ f 𝒙 → (f ̂ 𝕋) (ℊ ∘ 𝒙) ≡ ℊ ((f ̂ ℭ) 𝒙)
+   γ f 𝒙 = (f ̂ 𝕋) (ℊ ∘ (λ j → (𝒙 j)))       ≡⟨ refl ⟩
+           (f ̂ 𝕋) (λ j → ℊ (λ i → (𝒙 j i))) ≡⟨ refl ⟩ --    { Final hole to complete the proof without
+           node f (λ j → ℊ (λ i → (𝒙 j i)))  ≡⟨ {!!} ⟩ -- <--{ postulating existence of a context
+           ℊ (λ i → (f ̂ 𝔄 i) λ j → 𝒙 j i)   ≡⟨ refl ⟩ --    { such that ∀ 𝑨 ∈ S 𝒦, ∃ h : X ↠ 𝑨.
+           ℊ ((f ̂ ℭ) 𝒙)                     ∎
+
+   ζ : ∀ f t → (f ̂ 𝕋) (λ x → ℊ (∣ homℭ ∣ (t x))) ≡ ℊ ((f ̂ ℭ) (λ x → ∣ homℭ ∣ (t x)))
+   ζ f t = (f ̂ 𝕋) (ℊ ∘ (∣ homℭ ∣ ∘ t)) ≡⟨ γ f (∣ homℭ ∣ ∘ t) ⟩
+           ℊ ((f ̂ ℭ) (∣ homℭ ∣ ∘ t)) ∎
+
+   ξ : ∀ p → (free-lift 𝑨 (h ∘ (λ x → x))) p ≡ (h ∘ ∣ homℭ ∣ ) p
+   ξ (ℊ x) = refl
+   ξ (node f t) = free-lift 𝑨 (h ∘ (λ x → x)) (node f t) ≡⟨ refl ⟩
+          (f ̂ 𝑨) ((free-lift 𝑨 (h ∘ (λ x → x))) ∘ t) ≡⟨ wd 𝓥 𝓤 (f ̂ 𝑨) ((free-lift 𝑨 (h ∘ (λ x → x))) ∘ t) ((h ∘ ∣ homℭ ∣) ∘ t) (λ i → ξ (t i)) ⟩
+          (f ̂ 𝑨) ((h ∘ ∣ homℭ ∣) ∘ t) ≡⟨ refl ⟩
+          (f ̂ 𝑨) ((free-lift 𝑨 h) ∘ (ℊ ∘ (∣ homℭ ∣ ∘ t))) ≡⟨ refl ⟩
+          (free-lift 𝑨 h) ((f ̂ 𝕋) (ℊ ∘ (∣ homℭ ∣ ∘ t))) ≡⟨ cong (free-lift 𝑨 h){(f ̂ 𝕋) (ℊ ∘ (∣ homℭ ∣ ∘ t))}{ℊ ((f ̂ ℭ) (∣ homℭ ∣ ∘ t))} (ζ f t) ⟩
+                  (free-lift 𝑨 h) (ℊ ((f ̂ ℭ) (∣ homℭ ∣ ∘ t))) ≡⟨ refl ⟩
+                  (h ∘ ∣ homℭ ∣) ((f ̂ 𝕋) t) ≡⟨ refl ⟩
+                  (h ∘ ∣ homℭ ∣) (node f t) ∎
+
 
   hlem'' : (h : X → ∣ 𝑨 ∣)(p q : ∣ 𝕋 ∣)
    →       ∣ homℭ ∣ p ≡ ∣ homℭ ∣ q → (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
@@ -178,13 +206,6 @@ Every `h : X → ∣ 𝑨 ∣` can be decomposed as `h = g ∘ 𝔥`, where `g :
                       h (∣ homℭ ∣ p) ≡⟨ cong h hker ⟩
                       h (∣ homℭ ∣ q) ≡⟨ (hlem' h q)⁻¹ ⟩
                       (free-lift 𝑨 h) q ∎
-
-  𝔥₀ : X → ∣ 𝑨 ∣
-  𝔥₀ x = x (𝑨 , skA)
-
-
-  ψlem : ∀ p q → ∣ homℭ ∣ p ≡ ∣ homℭ ∣ q → (free-lift 𝑨 𝔥₀) p ≡ (free-lift 𝑨 𝔥₀) q
-  ψlem = hlem'' 𝔥₀
 \end{code}
 
 
@@ -222,8 +243,6 @@ First, we represent the congruence relation `ψCon`, modulo which `𝑻 X` yield
 
 \begin{code}
 
- -- ψ : Pred (∣ 𝕋 ∣ × ∣ 𝕋 ∣) 𝓕
- -- ψ (p , q) = ∀(𝑨 : Algebra 𝓤 𝑆)(sA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦) →  𝑨 ⟦ p ⟧ ≈ 𝑨 ⟦ q ⟧
  ψ : Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) 𝓕
  ψ (p , q) = ∀(𝑨 : Algebra 𝓤 𝑆)(sA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦)(h : X → ∣ 𝑨 ∣ )
                  →  (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
