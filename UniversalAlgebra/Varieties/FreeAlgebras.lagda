@@ -202,7 +202,7 @@ Observe that the inhabitants of `ℭ` are maps from `ℑ` to `{𝔄 i : i ∈ �
 \begin{code}
 
  𝔽 : Algebra 𝓕⁺ 𝑆
- 𝔽 = ker[ 𝑻 X ⇒ ℭ ] homℭ ↾ wd 
+ 𝔽 = ker[ 𝑻 X ⇒ ℭ ] homℭ ↾ wd
 
  epi𝔽 : epi (𝑻 X) 𝔽
  epi𝔽 = πker wd {ℭ} homℭ
