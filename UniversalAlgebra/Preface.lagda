@@ -58,7 +58,9 @@ Some prior exposure to [type theory][] and Agda would be helpful, but even witho
 
 ### <a id="credits-and-acknowledgments">Credits and acknowledgments</a>
 
-The [agda-algebras][] library is developed and maintained by the *agda-algebras development team* which includes the following contributors:
+The [agda-algebras][] library is developed and maintained by the *Agda Algebras Development Team* which includes the contributors listed below.
+
+### The Agda Algebras Development Team
 
 [Venanzio Capretta][]  
 [Jacques Carette][]  
@@ -66,12 +68,11 @@ The [agda-algebras][] library is developed and maintained by the *agda-algebras 
 [Siva Somayyajula][]  
 [Hyeyoung Shin][]  
 
+### Acknowledgements and attributions
+
 We thank [Andreas Abel][], [Andrej Bauer][], [Clifford Bergman][], [Martín Escardó][], [Ralph Freese][], [Bill Lampe][], and [JB Nation][] for helpful discussions, corrections, advice, inspiration and encouragement.
 
-
-#### <a id="attributions-and-citations">Attributions and citations</a>
-
-Most of the mathematical results formalized in the [agda-algebras][] are well known. Regarding the source code in the [agda-algebras][] library, this is mainly due to the contributors mentioned above.
+Most of the mathematical results formalized in the [agda-algebras][] are well known. Regarding the source code in the [agda-algebras][] library, this is mainly due to the contributors listed above.
 
 
 ### <a id="references">References</a>
