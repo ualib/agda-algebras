@@ -24,11 +24,13 @@ open import Agda.Primitive using (_⊔_; lzero; lsuc; Level)
 open import Data.Product using (_,_; Σ; _×_)
 open import Function.Base using (_∘_; id)
 open import Relation.Binary using (Rel)
-open import Relation.Binary.PropositionalEquality.Core using (trans; subst; cong-app)
+open import Relation.Binary.PropositionalEquality.Core using (trans; subst; cong-app;
+  module ≡-Reasoning)
+open ≡-Reasoning
 open import Relation.Unary using (Pred; _⊆_)
 
 -- Imports from the Agda Universal Algebra Library
-open import Overture.Preliminaries using (Type; 𝓤; 𝓥; 𝓦; fst; Π; -Π;-Σ; ∣_∣; ∥_∥; _≡⟨_⟩_; _∎; _⁻¹; _∼_)
+open import Overture.Preliminaries using (Type; 𝓤; 𝓥; 𝓦; fst; Π; -Π;-Σ; ∣_∣; ∥_∥; _⁻¹; _∼_)
 open import Overture.Inverses using (IsInjective)
 open import Relations.Continuous using (ContRel; DepRel)
 open import Relations.Quotients using (IsBlock)
@@ -315,9 +317,3 @@ module _ {I : Type 𝓥} where
 
 
 {% include UALib.Links.md %}
-
-
-
-
-
-
