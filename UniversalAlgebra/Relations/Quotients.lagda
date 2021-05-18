@@ -23,7 +23,6 @@ open import Relation.Unary using (Pred; _⊆_)
 open import Overture.Preliminaries using (Type; 𝓤; 𝓥; 𝓦; -Σ)
 open import Relations.Discrete using (ker)
 
-
 module Relations.Quotients where
 
 \end{code}
@@ -32,28 +31,7 @@ module Relations.Quotients where
 
 #### <a id="equivalence-classes">Equivalence relations</a>
 
-Let `𝓤 : Universe` be a universe and `A : Type 𝓤` a type.  In [Relations.Discrete][] we defined a type representing a binary relation on A.  In this module we will define types for binary relations that have special properties. The most important special properties of relations are the ones we now define.
-
-\begin{code}
-
-
-Refl : {A : Type 𝓤} → Rel A 𝓦 → Type(𝓤 ⊔ 𝓦)
-Refl _≈_ = ∀{x} → x ≈ x
-
-Symm : {A : Type 𝓤} → Rel A 𝓦 → Type(𝓤 ⊔ 𝓦)
-Symm _≈_ = ∀{x}{y} → x ≈ y → y ≈ x
-
-Antisymm : {A : Type 𝓤} → Rel A 𝓦 → Type(𝓤 ⊔ 𝓦)
-Antisymm _≈_ = ∀{x}{y} → x ≈ y → y ≈ x → x ≡ y
-
-Trans : {A : Type 𝓤} → Rel A 𝓦 → Type(𝓤 ⊔ 𝓦)
-Trans _≈_ = ∀{x}{y}{z} → x ≈ y → y ≈ z → x ≈ z
-
-\end{code}
-
-
-A binary relation is called a *preorder* if it is reflexive and transitive. An *equivalence relation* is a symmetric preorder. The property of being an equivalence relation is represented in the [Agda Standard Library][] by a record type called `IsEquivalence`, which is similar to the one we define here.
-
+A binary relation is called a *preorder* if it is reflexive and transitive. An *equivalence relation* is a symmetric preorder. The property of being an equivalence relation is represented in the [Agda Standard Library][] by a record type called `IsEquivalence`.
 
 Thus, if we have `(R ,  p) : Equivalence A`, then `R` denotes a binary relation over `A` and `p` is of record type `IsEquivalence R` with fields containing the three proofs showing that `R` is an equivalence relation.
 
@@ -86,12 +64,13 @@ A predicate `C` over `A` is an `R`-block if and only if `C ≡ [ u ]` for some `
 
 \begin{code}
 
-IsBlock : {A : Type 𝓤}(C : Pred A 𝓦){R : Rel A 𝓦} → Type(𝓤 ⊔ lsuc 𝓦)
-IsBlock {A = A} C {R} = Σ[ u ꞉ A ] C ≡ [ u ]{R}
+record IsBlock {A : Type 𝓤}(C : Pred A 𝓦){R : Rel A 𝓦} : Type(𝓤 ⊔ lsuc 𝓦) where
+  constructor R-block
+  field
+    block-u : A
+    C≡[u] : C ≡ [ block-u ]{R}
 
 \end{code}
-
-Thus, a proof of `IsBlock C` is a pair `(u , p)`, with `u : A` and `p` is a proof of `C ≡ [ u ] {R}`.
 
 If `R` is an equivalence relation on `A`, then the *quotient* of `A` modulo `R` is denoted by `A / R` and is defined to be the collection `{[ u ] ∣  y : A}` of all `R`-blocks.<sup>[1](Relations.Quotients.html#fn1)</sup>
 
@@ -111,7 +90,7 @@ We use the following type to represent an \ab R-block with a designated represen
 \begin{code}
 
 ⟪_⟫ : {A : Type 𝓤} → A → {R : Rel A 𝓦} → A / R
-⟪ a ⟫{R} = [ a ]{R} , (a  , refl)
+⟪ a ⟫{R} = [ a ]{R} , R-block a refl
 
 \end{code}
 
@@ -120,7 +99,7 @@ Dually, the next type provides an *elimination rule*.<sup>[2](Relations.Quotient
 \begin{code}
 
 ⌞_⌟ : {A : Type 𝓤}{R : Rel A 𝓦} → A / R  → A
-⌞ C , a , p ⌟ = a
+⌞ _ , R-block a _ ⌟ = a
 
 \end{code}
 
@@ -157,4 +136,3 @@ An example application of these is the `block-ext` type in the [Relations.Extens
 <span style="float:right;">[Relations.Truncation →](Relations.Truncation.html)</span>
 
 {% include UALib.Links.md %}
-
