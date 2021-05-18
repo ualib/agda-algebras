@@ -1,13 +1,13 @@
 ---
 layout: default
-title : Overture.Preliminaries module (The Agda Universal Algebra Library)
+title : Overture.Preliminaries module
 date : 2021-01-13
-author: William DeMeo
+author: the agda-algebras development team
 ---
 
 ### <a id="preliminaries">Preliminaries</a>
 
-This is the [Overture.Preliminaries][] module of the [Agda Universal Algebra Library][].
+This is the [Overture.Preliminaries][] module of the [agda-algebras][].
 
 #### <a id="logical-foundations">Logical foundations</a>
 
@@ -40,11 +40,11 @@ These options control certain foundational assumptions that Agda makes when type
 
 * `safe` ensures that nothing is postulated outright---every non-MLTT axiom has to be an explicit assumption (e.g., an argument to a function or module); see also [this section](https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html#cmdoption-safe) of the [Agda Tools][] documentation and the [Safe Agda section](https://agda.readthedocs.io/en/v2.6.1/language/safe-agda.html#safe-agda) of the [Agda Language Reference][].
 
-Note that if we wish to type-check a file that imports another file that still has some unmet proof obligations, we must replace the `--safe` flag with `--allow-unsolved-metas`, but this is never done in (publicly released versions of) [UniversalAlgebra][].
+Note that if we wish to type-check a file that imports another file that still has some unmet proof obligations, we must replace the `--safe` flag with `--allow-unsolved-metas`, but this is never done in (publicly released versions of) the [agda-algebras][] library.
 
 #### <a id="agda-modules">Agda Modules</a>
 
-The `OPTIONS` pragma is usually followed by the start of a module.  For example, the [Overture.Preliminaries][] module begins with the following line, and then a list of imports of things used in th module.
+The `OPTIONS` pragma is usually followed by the start of a module.  For example, the [Overture.Preliminaries][] module begins with the following line, and then a list of imports of things used in the module.
 
 \begin{code}
 module Overture.Preliminaries where

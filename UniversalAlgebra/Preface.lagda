@@ -2,7 +2,7 @@
 layout: default
 title : Preface (The Agda Universal Algebra Library)
 date : 2021-01-14
-author: William DeMeo
+author: the agda-algebras development team
 ---
 
 ## <a id="preface">Preface</a>
@@ -15,17 +15,15 @@ module Preface where
 
 \end{code}
 
-To support formalization in type theory of research level mathematics in universal algebra and related fields, we present the [Agda Universal Algebra Library][], a library for the [Agda][] proof assistant which contains statements and proofs of many foundational definitions and results from universal algebra. In particular, the library includes formal statements and proofs the First (Noether) Isomorphism Theorem and the Birkhoff HSP Theorem asserting that every variety is an equational class.
-
-[Agda][] is a programming language and proof assistant, or "interactive theorem prover" (ITP), that not only supports dependent and inductive types, but also provides powerful *proof tactics* for proving things about the objects that inhabit these types.
+To support formalization in type theory of research level mathematics in universal algebra and related fields, we present the [Agda Universal Algebra Library](https://github.com/ualib/agda-algebras) (or [agda-algebras](https://github.com/ualib/agda-algebras) for short), a library for the [Agda][] proof assistant which contains definitions, theorems and proofs from the foundations of universal algebra. In particular, the library formalizes the First (Noether) Isomorphism Theorem and the Birkhoff HSP Theorem asserting that every variety is an equational class.
 
 ### <a id="vision-and-goals">Vision and Goals</a>
 
-The idea for the [UniversalAlgebra][] project originated with the observation that, on the one hand a number of basic and important constructs in universal algebra can be defined recursively, and theorems about them proved inductively, while on the other hand the *types* (of type theory---in particular, [dependent types][] and [inductive types][]) make possible elegant formal representations of recursively defined objects, and constructive (*computable*) proofs of their properties. These observations suggest that there is much to gain from implementing universal algebra in a language that facilitates working with dependent and inductive types.
+The idea for the [agda-algebras][] project originated with the observation that, on the one hand a number of basic and important constructs in universal algebra can be defined recursively, and theorems about them proved inductively, while on the other hand the *types* (of type theory---in particular, [dependent types][] and [inductive types][]) make possible elegant formal representations of recursively defined objects, and constructive (*computable*) proofs of their properties. These observations suggest that there is much to gain from implementing universal algebra in a language that facilitates working with dependent and inductive types.
 
 #### <a id="primary-goals">Primary Goals</a>
 
-The first goal of [UniversalAlgebra][] is to demonstrate that it is possible to express the foundations of universal algebra in type theory and to formalize (and formally verify) the foundations in the Agda programming language. We will formalize a substantial portion of the edifice on which our own mathematical research depends, and demonstrate that our research can also be expressed in type theory and formally implemented in such a way that we and other working mathematicians can understand and verify the results. The resulting library will also serve to educate our peers, and encourage and help them to formally verify their own mathematics research.
+The first goal of [agda-algebras][] is to demonstrate that it is possible to express the foundations of universal algebra in type theory and to formalize (and formally verify) the foundations in the Agda programming language. We will formalize a substantial portion of the edifice on which our own mathematical research depends, and demonstrate that our research can also be expressed in type theory and formally implemented in such a way that we and other working mathematicians can understand and verify the results. The resulting library will also serve to educate our peers, and encourage and help them to formally verify their own mathematics research.
 
 Our field is deep and wide and codifying all of its foundations may seem like a daunting task and a possibly risky investment of time and energy.  However, we believe our subject is well served by a new, modern, [constructive](https://ncatlab.org/nlab/show/constructive+mathematics) presentation of its foundations.  Our new presentation expresses the foundations of universal algebra in the language of type theory, and uses the Agda proof assistant to codify and formally verify everything.
 
@@ -33,88 +31,52 @@ Our field is deep and wide and codifying all of its foundations may seem like a 
 
 We wish to emphasize that our ultimate objective is not merely to translate existing results into a more modern and formal language.  Indeed, one important goal is to develop a system that is useful for conducting research in mathematics, and that is how we intend to use our library once we have achieved our immediate objective of implementing the basic foundational core of universal algebra in Agda.
 
-To this end, our intermediate-term objectives include
+To this end, our long-term objectives include
 
-+ developing domain specific "proof tactics" to express the idioms of universal algebra,
-+ incorporating automated proof search for universal algebra, and
-+ formalizing theorems emerging from our own mathematics research,
-+ documenting the resulting software libraries so they are usable by other working mathematicians.
++ domain specific types to express the idioms of universal algebra,
++ automated proof search for universal algebra, and
++ formalization of theorems discovered in our own (informal) mathematics research,
++ documentation of the resulting Agda library so it is usable by others.
 
-For our own mathematics research, we believe a proof assistant equipped with specialized libraries for universal algebra, as well as domain-specific tactics to automate proof idioms of our field, will be extremely useful. Thus, a secondary goal is to demonstrate (to ourselves and colleagues) the utility of such libraries and tactics for proving new theorems.
+For our own mathematics research, we believe a proof assistant like Agda, equipped with a specialized library for universal algebra is an extremely useful research tool. Thus, a secondary goal is to demonstrate (to ourselves and colleagues) the utility of such technologies for discovering new mathematics.
 
 ### <a id="Logical-foundations">Logical foundations</a>
 
 The [Agda UniversalAlgebra][] library is based on a minimal version of [Martin-Löf dependent type theory][] (MLTT) as implemented in Agda. More details on this type theory can be read at [ncatlab entry on Martin-Löf dependent type theory](https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory).
 
-We will have much more to say about types and type theory as we progress. For now, suffice it to recall the handfull of objects that are assumed at the jumping-off point for MLTT: "primitive" **types** (𝟘, 𝟙, and ℕ, denoting the empty type, one-element type, and natural numbers), **type formers** (+, Π, Σ, Id, denoting binary sum, product, sum, and the identity type), and an infinite collection of **universes** (types of types) and universe variables to denote them (for which we will use upper-case caligraphic letters like 𝓤, 𝓥, 𝓦, etc., typically from the latter half of the English alphabet).
-
 
 ### <a id="intended-audience">Intended audience</a>
 
-This document describes the [UniversalAlgebra][] library in enough detail so that working mathematicians (and possibly some normal people, too) might be able to learn enough about Agda and its libraries to put them to use when creating, formalizing, and verifying new mathematics.
+The comments and source code in the library should provide enough detail so that people familiar with functional programming and proof assistants can learn enough about Agda and its libraries to put them to use when creating, formalizing, and verifying mathematical theorems and proofs.
 
 While there are no strict prerequisites, we expect anyone with an interest in this work will have been motivated by prior exposure to universal algebra, as presented in, say, [Bergman (2012)][] or [McKenzie, McNulty, Taylor (2018)], or category theory, as presented in, say, [Riehl (2017)][].
 
 Some prior exposure to [type theory][] and Agda would be helpful, but even without this background one might still be able to get something useful out of this by referring to one or more of the resources mentioned in the references section below to fill in gaps as needed.
 
 
-### <a id="about-this-document">About this documentation</a>
-
-These pages are generated from a set of [literate](https://agda.readthedocs.io/en/latest/tools/literate-programming.html) Agda (.lagda) files, written in markdown, with the formal, verified, mathematical development appearing within `\\begin{code}...\\end{code}` blocks, and some mathematical discussions outside those blocks. The html pages are generated automatically by Agda with the command
-
-```
-agda --html --html-highlight=code UniversalAlgebra.lagda
-```
-
-This generates a set of markdown files that are then converted to html by jekyll with the command
-
-```shell
-bundle exec jekyll build
-```
-
-In practice, we use the script `UniversalAlgebra/generate-md`, to process the lagda files and put the resulting markdown output in the right place, and then we use the script `jekyll-serve` to invoke the following commands.
-
-```
-cp UniversalAlgebra/html/UniversalAlgebra.md index.md
-cp UniversalAlgebra/html/*.html UniversalAlgebra/html/*.md .
-bundle install --path vendor
-bundle exec jekyll serve --watch --incremental
-```
-
-This causes jekyll to serve the web pages locally so we can inspect them by pointing a browser to [127.0.0.1:4000](http://127.0.0.1:4000).
-
-LaTeX source files may be generated with a combination of `agda --latex` and `pandoc` commands. This can only be done one module at a time, but the script `generate-tex` is set up to process all modules in the library.  Typically, after each update of the library, we run the following at the command line from within the UniversalAlgebra subdirectory:
-
-```shell
-./generate-tex; ./generate-md
-```
-
-This type-checks all the modules, and generates html and latex documentation (in the `UniversalAlgebra/html` and `UniversalAlgebra/latex` subdirectories).
-
-**Warning!** Our `.lagda` source files make heavy use of unicode characters, both inside and outside code blocks. Therefore, the tex source files produced with the `agda --latex` command cannot be processed correctly with `pdflatex` (as far as we know). Instead, we use `xelatex` along with the `unixode` package. For examples, look in the subdirectories of the [_static/paper](https://gitlab.com/ualib/ualib.gitlab.io/-/tree/master/_static/paper) directory of the [ualib.gitlab.io](https://gitlab.com/ualib/ualib.gitlab.io`) repository.
-
-**XeLaTeX and arXiv**. xelatex has the major advantage of correctly processing and formatting unicode characters, but it has the major disadvantage of not being compatible with arXiv, and it seems there are no plans to support `xelatex` in the near future.  However, one can email the arXiv administrators and explain that `xelatex` is required to process the manuscript and (in my experience, at least) this will prompt a reply with permission to submit a precompiled pdf without the accompanying tex source code.
 
 
+### <a id="credits-and-acknowledgments">Credits and acknowledgments</a>
 
+The [agda-algebras][] library is developed and maintained by the *agda-algebras development team* which includes the following contributors:
 
-### <a id="acknowledgments">Acknowledgments</a>
+[Venanzio Capretta][]  
+[Jacques Carette][]  
+[William DeMeo][]  
+[Siva Somayyajula][]  
+[Hyeyoung Shin][]  
 
-The author wishes to thank [Siva Somayyajula][], who contributed to this project during its first year and helped get it off the ground. Thanks also to [Andreas Abel][], [Andrej Bauer][], [Clifford Bergman][], [Venanzio Capretta][], [Jacques Carette][], [Martín Escardó][], [Ralph Freese][], [Bill Lampe][], [JB Nation][], and [Hyeyoung Shin][] for helpful discussions, corrections, advice, inspiration and encouragement.
+We thank [Andreas Abel][], [Andrej Bauer][], [Clifford Bergman][], [Martín Escardó][], [Ralph Freese][], [Bill Lampe][], and [JB Nation][] for helpful discussions, corrections, advice, inspiration and encouragement.
 
 
 #### <a id="attributions-and-citations">Attributions and citations</a>
 
-Most of the mathematical results that formalized in the [UAlib][] are already well known.
-
-Regarding the source code in the [UniversalAlgebra][] library, this is mainly due to the contributors mentioned above with one major caveat: we benefited greatly from, and the library depends upon, the lecture notes on [Univalent Foundations and Homotopy Type Theory][] and the [Type Topology][] Agda Library by [Martín Hötzel Escardó][].  The author is indebted to Martín for making his library and notes available and for teaching a course on type theory in Agda at the [Midlands Graduate School in the Foundations of Computing Science][] in Birmingham in 2019.
-
-
+Most of the mathematical results formalized in the [agda-algebras][] are well known. Regarding the source code in the [agda-algebras][] library, this is mainly due to the contributors mentioned above.
 
 
 ### <a id="references">References</a>
 
-The following Agda documentation and tutorials helped inform and improve the [UAlib][], especially the first one in the list.
+The following Agda documentation and tutorials helped inform and improve the [agda-algebras][] library, especially the first one in the list.
 
 * Escardo, [Introduction to Univalent Foundations of Mathematics with Agda][]
 * Wadler, [Programming Language Foundations in Agda][]
@@ -151,7 +113,7 @@ See also: [dblp record](https://dblp.uni-trier.de/rec/journals/corr/abs-2101-101
 
 
 ### <a id="contributions-welcomed">Contributions welcomed</a>
-Readers and users are encouraged to suggest improvements to the Agda [UniversalAlgebra][] library and/or its documentation by submitting a [new issue][] or [merge request][] to [gitlab.com/ualib/ualib.gitlab.io/](https://gitlab.com/ualib/ualib.gitlab.io/).
+Readers and users are encouraged to suggest improvements to the Agda [agda-algebras][] library and/or its documentation by submitting a [new issue][] or [merge request][] to [github.com/ualib/agda-algebras/](https://github.com/ualib/agda-algebras).
 
 * Submit a new [issue][] or [feature request][].
 * Submit a new [merge request][].
@@ -163,3 +125,5 @@ Readers and users are encouraged to suggest improvements to the Agda [UniversalA
 
 
 {% include UALib.Links.md %}
+
+[agda-algebras]: https://github.com/ualib/agda-algebras
