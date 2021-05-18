@@ -19,12 +19,13 @@ open import Level renaming (suc to lsuc; zero to lzero)
 open import Data.Product using (_,_; Σ; _×_; Σ-syntax)
 open import Function.Base  using (_∘_; id)
 open import Relation.Binary using (Rel; IsEquivalence)
-open import Relation.Binary.PropositionalEquality.Core using (sym; trans; cong; cong-app)
+open import Relation.Binary.PropositionalEquality.Core using (sym; trans; cong; cong-app; module ≡-Reasoning)
+open ≡-Reasoning
 open import Relation.Unary using (_⊆_)
 
 -- Imports from the Agda Universal Algebra Library
 open import Algebras.Basic
-open import Overture.Preliminaries using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; 𝓩; Π; -Π; -Σ; _≡⟨_⟩_; _∎; _⁻¹; ∣_∣; ∥_∥; fst; snd; 𝑖𝑑)
+open import Overture.Preliminaries using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; 𝓩; Π; -Π; -Σ; _⁻¹; ∣_∣; ∥_∥; fst; snd; 𝑖𝑑)
 open import Overture.Inverses using (IsInjective; IsSurjective; Image_∋_; SurjInv)
 open import Relations.Discrete using (ker; kernel)
 open import Relations.Quotients using (ker-IsEquivalence; _/_; ⟪_⟫; ⌞_⌟; R-block)
@@ -124,7 +125,7 @@ FirstIsoTheorem|Set 𝑨 𝑩 h pe fe fww Bset buip hE = (fmap , fhom , fepic) ,
    bfa = (cong-app (SurjInvIsRightInv {fe = fww} ∣ h ∣ hE) b)⁻¹
 
    γ : Image fmap ∋ b
-   γ = Image_∋_.eq b ⟪ a ⟫ bfa
+   γ = Image_∋_.eq ⟪ a ⟫ bfa
 
 \end{code}
 
