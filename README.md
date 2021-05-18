@@ -1,7 +1,7 @@
 # agda-algebras
 
 This is a copy of the Agda Universal Algebra Library which depends the [Standard Library](https://github.com/agda/agda-stdlib) of the [Agda](https://wiki.portal.chalmers.se/agda/pmwiki.php) proof assistant language.
-It is currently under active reconstruction, and should be regarded as alpha software.  (The previous version of the Agda Universal Algebra Library, which was called UALib, was based on the [Type Topology](https://github.com/martinescardo/TypeTopology) library of Martín Escardó.
+It is currently under active reconstruction, and should be regarded as alpha software.  (The previous version of the Agda Universal Algebra Library, which was called UALib, was based on the [Type Topology](https://github.com/martinescardo/TypeTopology) library of [Martín Escardó][].
 
 If problems arise when attempting to follow these steps, please 
 [email the development team](mailto:williamdemeo@gmail.com) or create new issue on the
@@ -123,6 +123,7 @@ rel="dct:source">https://gitlab.com/ualib/ualib.gitlab.io</a>.
 [William DeMeo]: https://williamdemeo.gitlab.io/
 [Martín Escardó]: https://www.cs.bham.ac.uk/~mhe
 [Ralph Freese]: https://math.hawaii.edu/~ralph/
+[Bill Lampe]: https://math.hawaii.edu/wordpress/people/william/
 [Miklós Maróti]: http://www.math.u-szeged.hu/~mmaroti/
 [JB Nation]: http://www.math.hawaii.edu/~jb/
 [Hyeyoung Shin]: https://hyeyoungshin.github.io/
