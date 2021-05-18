@@ -19,21 +19,18 @@ open import Axiom.Extensionality.Propositional renaming (Extensionality to funex
 open import Data.Product using (_,_; Σ; _×_)
 open import Function.Base  using (_∘_)
 open import Level renaming (suc to lsuc; zero to lzero)
-open import Relation.Binary.PropositionalEquality.Core using (cong; cong-app)
+open import Relation.Binary.PropositionalEquality.Core using (cong; cong-app; module ≡-Reasoning)
+open ≡-Reasoning
 open import Relation.Unary using (⋂; _∈_; Pred; _⊆_)
 
 -- Imports from the Agda Universal Algebra Library
 open import Algebras.Basic
 open import Overture.Inverses using (IsInjective)
 open import Overture.Preliminaries
- using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; Π; -Π; -Σ; _≡⟨_⟩_; _∎; _∙_;_⁻¹; ∣_∣; ∥_∥; snd; fst)
+ using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; Π; -Π; -Σ; _∙_;_⁻¹; ∣_∣; ∥_∥; snd; fst)
 open import Relations.Truncation using (hfunext)
 
-
-
-
 module Varieties.Varieties {𝑆 : Signature 𝓞 𝓥} where
-
 
 open import Algebras.Products{𝑆 = 𝑆} using (ov; ⨅; 𝔄; class-product)
 open import Homomorphisms.Basic{𝑆 = 𝑆} using (hom; 𝒾𝒹; ∘-hom; is-homomorphism)
@@ -650,4 +647,3 @@ So, since `PS⊆SP`, we see that that the product of all subalgebras of a class 
 <span style="float:right;">[Varieties.Preservation →](Varieties.Preservation.html)</span>
 
 {% include UALib.Links.md %}
-

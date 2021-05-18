@@ -20,7 +20,7 @@ open import Data.Product using (_,_; Σ; _×_)
 open import Relation.Unary using (Pred; _∈_)
 
 -- Imports from the Agda Universal Algebra Library
-open import Overture.Preliminaries using (Type; 𝓘; 𝓞; 𝓤; 𝓥; 𝓦; Π; -Π; -Σ; _≡⟨_⟩_; _∎; _⁻¹; 𝑖𝑑; ∣_∣; ∥_∥)
+open import Overture.Preliminaries using (Type; 𝓘; 𝓞; 𝓤; 𝓥; 𝓦; Π; -Π; -Σ; _⁻¹; 𝑖𝑑; ∣_∣; ∥_∥)
 open import Algebras.Basic
 
 
@@ -127,4 +127,3 @@ If `p : 𝑨 ∈ 𝒦`, we view the pair `(𝑨 , p) ∈ ℑ` as an *index* over
 <span style="float:right;">[Algebras.Congruences →](Algebras.Congruences.html)</span>
 
 {% include UALib.Links.md %}
-

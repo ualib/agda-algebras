@@ -21,14 +21,15 @@ open import Axiom.Extensionality.Propositional renaming (Extensionality to funex
 open import Data.Product using (_,_; Σ; _×_)
 open import Function.Base  using (_∘_)
 open import Level renaming (suc to lsuc; zero to lzero)
-open import Relation.Binary.PropositionalEquality.Core using (cong)
+open import Relation.Binary.PropositionalEquality.Core using (cong; module ≡-Reasoning)
+open ≡-Reasoning
 open import Relation.Unary using (⋂; _∈_; Pred; _⊆_)
 
 -- Imports from the Agda Universal Algebra Library
 open import Algebras.Basic
 open import Relations.Discrete using (Im_⊆_)
 open import Overture.Preliminaries
- using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; Π; -Π; -Σ; _≡⟨_⟩_; _∎; _∙_;_⁻¹; ∣_∣; ∥_∥)
+ using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; Π; -Π; -Σ; _∙_;_⁻¹; ∣_∣; ∥_∥)
 
 
 
@@ -244,4 +245,3 @@ and, under these assumptions, we proved `∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂) ≡ ∣
 
 
 {% include UALib.Links.md %}
-

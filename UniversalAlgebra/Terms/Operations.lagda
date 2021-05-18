@@ -21,18 +21,17 @@ open import Axiom.Extensionality.Propositional renaming (Extensionality to funex
 open import Data.Product using (_,_; Σ; _×_)
 open import Function.Base  using (_∘_)
 open import Level renaming (suc to lsuc; zero to lzero)
-open import Relation.Binary.PropositionalEquality.Core using (cong)
+open import Relation.Binary.PropositionalEquality.Core using (cong; module ≡-Reasoning)
+open ≡-Reasoning
 open import Relation.Unary using (Pred)
 
 -- Imports from the Agda Universal Algebra Library
 open import Overture.Inverses using (IsSurjective; Image_∋_; Inv; InvIsInv; eq)
 open import Overture.Preliminaries
- using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; Π; -Π; -Σ; _≡⟨_⟩_; _∎; _∙_;_⁻¹; ∣_∣; ∥_∥)
+ using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; Π; -Π; -Σ; _∙_;_⁻¹; ∣_∣; ∥_∥)
 
 open import Algebras.Basic
 open import Relations.Discrete using (_|:_)
-
-
 
 module Terms.Operations {𝑆 : Signature 𝓞 𝓥} where
 
