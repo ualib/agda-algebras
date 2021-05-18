@@ -216,7 +216,7 @@ module _ {𝓤 𝓦 : Level}{𝑨 : Algebra 𝓤 𝑆} where
  πepi : (θ : Con{𝓤}{𝓦} 𝑨) → epi 𝑨 (𝑨 ╱ θ)
  πepi θ = (λ a → ⟪ a ⟫) , (λ _ _ → refl) , cπ-is-epic  where
   cπ-is-epic : IsSurjective (λ a → ⟪ a ⟫)
-  cπ-is-epic (C , (a , refl)) =  Image_∋_.im a
+  cπ-is-epic (C , (a , refl)) =  Image_∋_.eq a refl
 
 \end{code}
 

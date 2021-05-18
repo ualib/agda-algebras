@@ -161,7 +161,7 @@ lift-of-epi-is-epi 𝑨 {h₀} hE y = γ
  η = (InvIsInv h₀ (hE y))⁻¹
 
  γ : Image ∣ lift-hom 𝑨 h₀ ∣ ∋ y
- γ = eq y (ℊ h₀⁻¹y) η
+ γ = eq (ℊ h₀⁻¹y) η
 
 \end{code}
 

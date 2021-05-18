@@ -87,7 +87,7 @@ Lift-epi-is-epi : {𝓩 𝓦 : Level}{𝑨 : Algebra 𝓧 𝑆}
                   ----------------------------------------------------------
  →                IsSurjective ∣ h ∣ → IsSurjective ∣ Lift-hom 𝓩 𝓦 𝑩 h ∣
 
-Lift-epi-is-epi {𝓩 = 𝓩} {𝓦} {𝑨} 𝑩 h hepi y = eq y (lift a) η
+Lift-epi-is-epi {𝓩 = 𝓩} {𝓦} {𝑨} 𝑩 h hepi y = eq (lift a) η
   where
    lh : hom (Lift-alg 𝑨 𝓩) (Lift-alg 𝑩 𝓦)
    lh = Lift-hom 𝓩 𝓦 𝑩 h
