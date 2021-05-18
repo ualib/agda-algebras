@@ -18,6 +18,9 @@ open import Agda.Builtin.Equality using (_≡_; refl)
 open import Agda.Primitive using (_⊔_; lzero; lsuc; Level; Setω)
 open import Data.Product using (_,_; Σ; Σ-syntax; _×_)
 open import Function.Base  using (_∘_; id)
+import Function.Definitions as F -- for Injective
+open import Function.Bundles using (_↣_; mk↣)
+open import Function.Construct.Identity using (id-↣)
 open import Relation.Binary.PropositionalEquality.Core using (subst; cong-app)
 
 -- Imports from the Agda Universal Algebra Library
@@ -33,8 +36,7 @@ We begin by defining an data type that represents the semantic concept of *inver
 
 module _ {A : Type 𝓤 }{B : Type 𝓦 } where
 
- data Image_∋_ (f : A → B) : B → Type (𝓤 ⊔ 𝓦)
-  where
+ data Image_∋_ (f : A → B) : B → Type (𝓤 ⊔ 𝓦) where
   eq : {b : B} → (a : A) → b ≡ f a → Image f ∋ b
 
 \end{code}
@@ -60,28 +62,23 @@ We can prove that `Inv f` is the *right-inverse* of `f`, as follows.
 
 #### <a id="injective-functions">Injective functions</a>
 
-We say that a function `f : A → B` is *injective* (or *monic*) if it does not map two distinct elements of the domain to the same point in the codomain. The following types manifest this property.
+We say that a function `f : A → B` is *injective* (or *monic*) if it does not map two distinct elements of the domain to the same point in the codomain. The following type manifests this property.
 
 \begin{code}
 
 module _ {A : Type 𝓤}{B : Type 𝓦} where
 
  IsInjective : (A → B) → Type (𝓤 ⊔ 𝓦)
- IsInjective f = ∀ {x y} → f x ≡ f y → x ≡ y
-
- Injective : Type (𝓤 ⊔ 𝓦)
- Injective = Σ[ f ꞉ (A → B) ] IsInjective f
+ IsInjective f = F.Injective _≡_ _≡_ f
 
 \end{code}
 
-
 Before moving on to discuss surjective functions, let us prove (the obvious facts) that the identity map is injective and that the composition of injectives is injective.
-
 
 \begin{code}
 
-id-is-injective : {A : Type 𝓤} → IsInjective{A = A}{B = A} (λ x → x)
-id-is-injective = λ z → z
+id-is-injective : {A : Type 𝓤} → A ↣ A
+id-is-injective {A = A} = id-↣ A
 
 ∘-injective : {A : Type 𝓤}{B : Type 𝓦}{C : Type 𝓩}{f : A → B}{g : B → C}
  →            IsInjective f → IsInjective g → IsInjective (g ∘ f)

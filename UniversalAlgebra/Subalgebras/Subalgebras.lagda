@@ -18,6 +18,7 @@ open import Agda.Builtin.Equality using (_≡_; refl)
 open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
 open import Data.Product using (_,_; Σ; _×_)
 open import Function.Base  using (_∘_)
+open import Function.Bundles using (Injection)
 open import Level renaming (suc to lsuc; zero to lzero)
 open import Relation.Binary.PropositionalEquality.Core using (cong; module ≡-Reasoning)
 open ≡-Reasoning
@@ -155,7 +156,7 @@ First we show that the subalgebra relation is a *preorder*; i.e., it is a reflex
 \begin{code}
 
 ≤-reflexive : (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ≤ 𝑨
-≤-reflexive 𝑨 = (𝑖𝑑 ∣ 𝑨 ∣ , λ 𝑓 𝑎 → refl) , id-is-injective
+≤-reflexive 𝑨 = (𝑖𝑑 ∣ 𝑨 ∣ , λ 𝑓 𝑎 → refl) , Injection.injective id-is-injective
 
 ≤-refl : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ≤ 𝑨
 ≤-refl {𝑨 = 𝑨} = ≤-reflexive 𝑨
