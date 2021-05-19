@@ -1,19 +1,19 @@
 ---
 layout: default
-title : Overture.Inverses module (Agda Universal Algebra Library)
+title : Overture.Inverses module
 date : 2021-01-12
-author: William DeMeo
+author: the agda-algebras development team
 ---
 
 ### <a id="inverses">Inverses</a>
 
-This is the [Overture.Inverses][] module of the [Agda Universal Algebra Library][].
+This is the [Overture.Inverses][] module of the [agda-algebras][] library.
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
--- Imports from the Agda (Builtin) and the Agda Standard Library
+-- Imports from Agda (Builtin) and the Agda Standard Library
 open import Agda.Builtin.Equality using (_≡_; refl)
 open import Agda.Primitive using (_⊔_; lzero; lsuc; Level; Setω)
 open import Data.Product using (_,_; Σ; Σ-syntax; _×_)
@@ -23,7 +23,7 @@ open import Function.Bundles using (_↣_; mk↣)
 open import Function.Construct.Identity using (id-↣)
 open import Relation.Binary.PropositionalEquality.Core using (subst; cong-app)
 
--- Imports from the Agda Universal Algebra Library
+-- Imports from agda-algebras
 open import Overture.Preliminaries using (Type; 𝓤; 𝓥; 𝓦; 𝓩; _⁻¹; Π; -Π; -Σ; _∙_; 𝑖𝑑; _∼_)
 
 module Overture.Inverses where

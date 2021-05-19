@@ -101,6 +101,7 @@
 [Introduction to Univalent Foundations of Mathematics with Agda]: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/index.html
 [Univalent Foundations of Mathematics with Agda]: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/index.html
 
+[Jacques Carette]: http://www.cas.mcmaster.ca/~carette/
 [JB Nation]: http://www.math.hawaii.edu/~jb/
 [Jeremy Avigad]: http://www.andrew.cmu.edu/user/avigad/
 
