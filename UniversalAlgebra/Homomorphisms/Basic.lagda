@@ -16,7 +16,7 @@ This section describes the [Homomorphisms.Basic] module of the [Agda Universal A
 -- Imports from the Agda (Builtin) and the Agda Standard Library
 open import Agda.Builtin.Equality using (_≡_; refl)
 open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
-open import Data.Product using (_,_; Σ; _×_)
+open import Data.Product using (_,_; Σ; _×_; Σ-syntax)
 open import Function.Base  using (_∘_; id)
 open import Level renaming (suc to lsuc; zero to lzero)
 open import Relation.Binary using (Rel; IsEquivalence)
@@ -25,7 +25,7 @@ open ≡-Reasoning
 
 -- Imports from the Agda Universal Algebra Library
 open import Algebras.Basic
-open import Overture.Preliminaries using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; 𝓩; Π; -Π; -Σ; _⁻¹; ∣_∣; ∥_∥; fst)
+open import Overture.Preliminaries using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; 𝓩; _⁻¹; ∣_∣; ∥_∥; fst)
 open import Overture.Inverses using (IsInjective; IsSurjective; Image_∋_)
 open import Relations.Discrete using (ker) -- 𝟎; _|:_)
 open import Relations.Extensionality using (swelldef)
@@ -66,7 +66,7 @@ We now define the type `hom 𝑨 𝑩` of homomorphisms from `𝑨` to `𝑩` by
  is-homomorphism g = ∀ 𝑓  →  compatible-op-map 𝑓 g
 
  hom : Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
- hom = Σ[ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ] is-homomorphism g
+ hom = Σ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) is-homomorphism
 
 \end{code}
 
@@ -134,13 +134,13 @@ is-monomorphism : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → (∣ 
 is-monomorphism 𝑨 𝑩 g = is-homomorphism 𝑨 𝑩 g × IsInjective g
 
 mon : Algebra 𝓤 𝑆 → Algebra 𝓦 𝑆  → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
-mon 𝑨 𝑩 = Σ[ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ] is-monomorphism 𝑨 𝑩 g
+mon 𝑨 𝑩 = Σ[ g ∈ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ] is-monomorphism 𝑨 𝑩 g
 
 is-epimorphism : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
 is-epimorphism 𝑨 𝑩 g = is-homomorphism 𝑨 𝑩 g × IsSurjective g
 
 epi : Algebra 𝓤 𝑆 → Algebra 𝓦 𝑆  → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
-epi 𝑨 𝑩 = Σ[ g ꞉ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ] is-epimorphism 𝑨 𝑩 g
+epi 𝑨 𝑩 = Σ[ g ∈ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ] is-epimorphism 𝑨 𝑩 g
 
 \end{code}
 
@@ -284,7 +284,7 @@ The foregoing generalizes easily to the case in which the domain is also a produ
 
 \begin{code}
 
- ⨅-hom : funext 𝓘 𝓦 → {𝓤 : Level}(𝒜 : I → Algebra 𝓤 𝑆) → Π[ i ꞉ I ] hom (𝒜 i)(ℬ i) → hom (⨅ 𝒜)(⨅ ℬ)
+ ⨅-hom : funext 𝓘 𝓦 → {𝓤 : Level}(𝒜 : I → Algebra 𝓤 𝑆) → (∀ (i : I) → hom (𝒜 i) (ℬ i)) → hom (⨅ 𝒜)(⨅ ℬ)
  ⨅-hom fe 𝒜 𝒽 = (λ x i → ∣ 𝒽 i ∣ (x i)) , (λ 𝑓 𝒶 → fe λ i → ∥ 𝒽 i ∥ 𝑓 (λ x → 𝒶 x i))
 
 \end{code}
@@ -297,7 +297,7 @@ Later we will need a proof of the fact that projecting out of a product algebra 
 
 \begin{code}
 
- ⨅-projection-hom : Π[ i ꞉ I ] hom (⨅ ℬ) (ℬ i)
+ ⨅-projection-hom : (i : I) → hom (⨅ ℬ) (ℬ i)
  ⨅-projection-hom = λ x → (λ z → z x) , λ _ _ → refl
 
 \end{code}

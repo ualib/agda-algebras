@@ -27,7 +27,7 @@ open import Function.Base  using (_∘_; id)
 
 
 -- Imports from the Agda Universal Algebra Library
-open import Overture.Preliminaries using (Type; 𝓤; 𝓥; 𝓦; 𝓩; -Σ; Π; 𝑖𝑑; _⁻¹; _∙_)
+open import Overture.Preliminaries using (Type; 𝓤; 𝓥; 𝓦; 𝓩; 𝑖𝑑; _⁻¹; _∙_)
 open import Overture.Inverses using (IsSurjective; SurjInv; InvIsInv; Image_∋_; eq)
 open import Relations.Continuous using (ContRel; DepRel)
 open import Relations.Discrete using (Op)

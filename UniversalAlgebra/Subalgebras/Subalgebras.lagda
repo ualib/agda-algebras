@@ -16,7 +16,7 @@ The [Subalgebras.Subalgebras][] module of the [Agda Universal Algebra Library][]
 -- Imports from Agda (builtin/primitive) and the Agda Standard Library
 open import Agda.Builtin.Equality using (_≡_; refl)
 open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
-open import Data.Product using (_,_; Σ; _×_)
+open import Data.Product using (_,_; Σ; _×_; Σ-syntax)
 open import Function.Base  using (_∘_)
 open import Function.Bundles using (Injection)
 open import Level renaming (suc to lsuc; zero to lzero)
@@ -30,7 +30,7 @@ open import Relations.Extensionality using (pred-ext; swelldef)
 open import Relations.Truncation using (is-set; blk-uip)
 open import Overture.Inverses using (IsInjective; id-is-injective; ∘-injective)
 open import Overture.Preliminaries
- using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; 𝓩; Π; -Π; -Σ; _∙_;_⁻¹; ∣_∣; ∥_∥; snd; 𝑖𝑑; fst)
+ using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; 𝓩; _∙_;_⁻¹; ∣_∣; ∥_∥; snd; 𝑖𝑑; fst)
 
 
 module Subalgebras.Subalgebras {𝑆 : Signature 𝓞 𝓥} where
@@ -51,10 +51,10 @@ Given algebras `𝑨 : Algebra 𝓤 𝑆` and `𝑩 : Algebra 𝓦 𝑆`, we say
 \begin{code}
 
 _IsSubalgebraOf_ : {𝓦 𝓤 : Level}(𝑩 : Algebra 𝓦 𝑆)(𝑨 : Algebra 𝓤 𝑆) → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
-𝑩 IsSubalgebraOf 𝑨 = Σ[ h ꞉ hom 𝑩 𝑨 ] IsInjective ∣ h ∣
+𝑩 IsSubalgebraOf 𝑨 = Σ[ h ∈ hom 𝑩 𝑨 ] IsInjective ∣ h ∣
 
 Subalgebra : {𝓦 𝓤 : Level} → Algebra 𝓤 𝑆 → Type(ov 𝓦 ⊔ 𝓤)
-Subalgebra {𝓦} 𝑨 = Σ[ 𝑩 ꞉ (Algebra 𝓦 𝑆) ] 𝑩 IsSubalgebraOf 𝑨
+Subalgebra {𝓦} 𝑨 = Σ[ 𝑩 ∈ (Algebra 𝓦 𝑆) ] 𝑩 IsSubalgebraOf 𝑨
 
 \end{code}
 
@@ -131,7 +131,7 @@ Suppose `𝒦 : Pred (Algebra 𝓤 𝑆) 𝓩` denotes a class of `𝑆`-algebra
 module _ {𝓦 𝓤 𝓩 : Level} where
 
  _IsSubalgebraOfClass_ : Algebra 𝓦 𝑆 → Pred (Algebra 𝓤 𝑆) 𝓩 → Type(ov (𝓤 ⊔ 𝓦) ⊔ 𝓩)
- 𝑩 IsSubalgebraOfClass 𝒦 = Σ[ 𝑨 ꞉ Algebra 𝓤 𝑆 ] Σ[ sa ꞉ Subalgebra{𝓦} 𝑨 ] ((𝑨 ∈ 𝒦) × (𝑩 ≅ ∣ sa ∣))
+ 𝑩 IsSubalgebraOfClass 𝒦 = Σ[ 𝑨 ∈ Algebra 𝓤 𝑆 ] Σ[ sa ∈ Subalgebra{𝓦} 𝑨 ] ((𝑨 ∈ 𝒦) × (𝑩 ≅ ∣ sa ∣))
 
 \end{code}
 
@@ -140,12 +140,9 @@ Using this type, we express the collection of all subalgebras of algebras in a c
 \begin{code}
 
 SubalgebraOfClass : {𝓦 𝓤 : Level} → Pred (Algebra 𝓤 𝑆)(ov 𝓤) → Type(ov (𝓤 ⊔ 𝓦))
-SubalgebraOfClass {𝓦} 𝒦 = Σ[ 𝑩 ꞉ Algebra 𝓦 𝑆 ] 𝑩 IsSubalgebraOfClass 𝒦
+SubalgebraOfClass {𝓦} 𝒦 = Σ[ 𝑩 ∈ Algebra 𝓦 𝑆 ] 𝑩 IsSubalgebraOfClass 𝒦
 
 \end{code}
-
-
-
 
 #### <a id="subalgebra-lemmas">Subalgebra lemmas</a>
 

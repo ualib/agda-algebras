@@ -21,7 +21,7 @@ open import Data.Sum.Base using (_⊎_)
 open import Relation.Binary.Core using (REL; Rel; _⇒_;_=[_]⇒_)
 open import Relation.Unary using (∅; Pred; _∪_; _∈_; _⊆_; ｛_｝)
 
-open import Overture.Preliminaries using (Type; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; 𝓩; -Σ)
+open import Overture.Preliminaries using (Type; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; 𝓩)
 
 module Relations.Discrete where
 
@@ -52,7 +52,6 @@ module _ {A : Type 𝓤}{B : Type 𝓦} where
  kernel g (x , y) = g x ≡ g y
 
 \end{code}
-
 
 Similarly, the *identity relation* (which is equivalent to the kernel of an injective function) can be represented as follows.<sup>[2](Relations.Discrete#fn2)</sup>
 

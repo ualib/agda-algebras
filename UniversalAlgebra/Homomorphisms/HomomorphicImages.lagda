@@ -15,7 +15,7 @@ This section describes the [Homomorphisms.HomomorphicImages][] module of the [Ag
 
 -- Imports from Agda (builtin/primitive) and the Agda Standard Library
 open import Agda.Builtin.Equality using (_≡_; refl)
-open import Data.Product using (_,_; Σ; _×_)
+open import Data.Product using (_,_; Σ; _×_; Σ-syntax)
 open import Level renaming (suc to lsuc; zero to lzero)
 open import Relation.Binary.PropositionalEquality.Core using (cong; cong-app; module ≡-Reasoning)
 open ≡-Reasoning
@@ -24,10 +24,8 @@ open import Relation.Unary using (Pred; ∅; _∪_; _∈_; _⊆_)
 -- Imports from the Agda Universal Algebra Library
 open import Algebras.Basic
 open import Overture.Preliminaries
- using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; Π; -Π; -Σ; _⁻¹; 𝑖𝑑; ∣_∣; ∥_∥; lower∼lift; lift∼lower)
+ using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; _⁻¹; 𝑖𝑑; ∣_∣; ∥_∥; lower∼lift; lift∼lower)
 open import Overture.Inverses using (IsSurjective; Image_∋_; Inv; InvIsInv; eq)
-
-
 
 module Homomorphisms.HomomorphicImages {𝑆 : Signature 𝓞 𝓥} where
 
@@ -46,10 +44,10 @@ We begin with what seems, for our purposes, the most useful way to represent the
 \begin{code}
 
 IsHomImage : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆) → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
-IsHomImage {𝑨 = 𝑨} 𝑩 = Σ[ φ ꞉ hom 𝑨 𝑩 ] IsSurjective ∣ φ ∣ -- λ b → Image ∣ ϕ ∣ ∋ b
+IsHomImage {𝑨 = 𝑨} 𝑩 = Σ[ φ ∈ hom 𝑨 𝑩 ] IsSurjective ∣ φ ∣ -- λ b → Image ∣ ϕ ∣ ∋ b
 
 HomImages : Algebra 𝓤 𝑆 → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ lsuc 𝓦)
-HomImages {𝓦 = 𝓦}𝑨 = Σ[ 𝑩 ꞉ Algebra 𝓦 𝑆 ] IsHomImage{𝑨 = 𝑨} 𝑩
+HomImages {𝓦 = 𝓦}𝑨 = Σ[ 𝑩 ∈ Algebra 𝓦 𝑆 ] IsHomImage{𝑨 = 𝑨} 𝑩
 
 \end{code}
 
@@ -66,10 +64,10 @@ Given a class `𝒦` of `𝑆`-algebras, we need a type that expresses the asser
 module _ {𝓤 : Level} where
 
  IsHomImageOfClass : {𝒦 : Pred (Algebra 𝓤 𝑆)(lsuc 𝓤)} → Algebra 𝓤 𝑆 → Type(ov 𝓤)
- IsHomImageOfClass {𝒦 = 𝒦} 𝑩 = Σ[ 𝑨 ꞉ Algebra 𝓤 𝑆 ] ((𝑨 ∈ 𝒦) × (IsHomImage {𝑨 = 𝑨} 𝑩))
+ IsHomImageOfClass {𝒦 = 𝒦} 𝑩 = Σ[ 𝑨 ∈ Algebra 𝓤 𝑆 ] ((𝑨 ∈ 𝒦) × (IsHomImage {𝑨 = 𝑨} 𝑩))
 
  HomImageOfClass : Pred (Algebra 𝓤 𝑆) (lsuc 𝓤) → Type(ov 𝓤)
- HomImageOfClass 𝒦 = Σ[ 𝑩 ꞉ Algebra 𝓤 𝑆 ] IsHomImageOfClass{𝒦} 𝑩
+ HomImageOfClass 𝒦 = Σ[ 𝑩 ∈ Algebra 𝓤 𝑆 ] IsHomImageOfClass{𝒦} 𝑩
 
 \end{code}
 

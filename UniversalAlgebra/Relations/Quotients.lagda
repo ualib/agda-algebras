@@ -20,7 +20,7 @@ open import Relation.Binary using (Rel; IsEquivalence)
 open import Relation.Binary.PropositionalEquality using (sym; trans)
 open import Relation.Unary using (Pred; _⊆_)
 
-open import Overture.Preliminaries using (Type; 𝓤; 𝓥; 𝓦; -Σ)
+open import Overture.Preliminaries using (Type; 𝓤; 𝓥; 𝓦)
 open import Relations.Discrete using (ker)
 
 module Relations.Quotients where
@@ -79,7 +79,7 @@ If `R` is an equivalence relation on `A`, then the *quotient* of `A` modulo `R` 
 module _ {𝓤 𝓦 : Level} where
 
  _/_ : (A : Type 𝓤 ) → Rel A 𝓦 → Type(𝓤 ⊔ lsuc 𝓦)
- A / R = Σ[ C ꞉ Pred A 𝓦 ] IsBlock C {R}
+ A / R = Σ[ C ∈ Pred A 𝓦 ] IsBlock C {R}
 
  infix -1 _/_
 

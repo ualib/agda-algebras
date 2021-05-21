@@ -21,7 +21,7 @@ Readers who want to learn more about "proof-relevant mathematics" and other conc
 -- Imports from the Agda (Builtin) and the Agda Standard Library
 open import Agda.Builtin.Equality using (_≡_; refl)
 open import Agda.Primitive using (_⊔_; lzero; lsuc; Level)
-open import Data.Product using (_,_; Σ; _×_)
+open import Data.Product using (_,_; Σ; _×_; Σ-syntax)
 open import Function.Base using (_∘_; id)
 open import Relation.Binary using (Rel)
 open import Relation.Binary.PropositionalEquality.Core using (trans; subst; cong-app;
@@ -30,7 +30,7 @@ open ≡-Reasoning
 open import Relation.Unary using (Pred; _⊆_)
 
 -- Imports from the Agda Universal Algebra Library
-open import Overture.Preliminaries using (Type; 𝓤; 𝓥; 𝓦; fst; Π; -Π;-Σ; ∣_∣; ∥_∥; _⁻¹; _∼_)
+open import Overture.Preliminaries using (Type; 𝓤; 𝓥; 𝓦; fst; ∣_∣; ∥_∥; _⁻¹; _∼_)
 open import Overture.Inverses using (IsInjective)
 open import Relations.Continuous using (ContRel; DepRel)
 open import Relations.Quotients using (IsBlock)
@@ -49,10 +49,10 @@ First, a type is a *singleton* if it has exactly one inhabitant and a *subsingle
 \begin{code}
 
 is-center : (A : Type 𝓤 ) → A → Type 𝓤
-is-center A c = Π[ x ꞉ A ] c ≡ x
+is-center A c = (x : A) → c ≡ x
 
 is-singleton : Type 𝓤 → Type 𝓤
-is-singleton A = Σ[ c ꞉ A ] is-center A c
+is-singleton A = Σ A (is-center A)
 
 is-prop : Type 𝓤 → Type 𝓤
 is-prop A = (x y : A) → x ≡ y
@@ -71,7 +71,7 @@ Next, we consider the type `is-equiv` which is used to assert that a function is
 \begin{code}
 
 fiber : {A : Type 𝓤 } {B : Type 𝓦 } (f : A → B) → B → Type (𝓤 ⊔ 𝓦)
-fiber {𝓤}{𝓦}{A} f y = Σ[ x ꞉ A ] f x ≡ y
+fiber {𝓤}{𝓦}{A} f y = Σ[ x ∈ A ] f x ≡ y
 
 \end{code}
 
@@ -136,7 +136,7 @@ We will also need the function [to-Σ-≡](https://www.cs.bham.ac.uk/~mhe/HoTT-U
 
 module _ {A : Type 𝓤}{B : A → Type 𝓦} where
 
- to-Σ-≡ : {σ τ : Σ[ x ꞉ A ] B x} → (Σ[ p ꞉ (fst σ ≡ fst τ) ] subst B p ∥ σ ∥ ≡ ∥ τ ∥) → σ ≡ τ
+ to-Σ-≡ : {σ τ : Σ A B} → (Σ[ p ∈ (fst σ ≡ fst τ) ] subst B p ∥ σ ∥ ≡ ∥ τ ∥) → σ ≡ τ
  to-Σ-≡ (refl , refl) = refl
 
 
@@ -154,7 +154,7 @@ is-embedding : {A : Type 𝓤}{B : Type 𝓦} → (A → B) → Type (𝓤 ⊔ �
 is-embedding f = ∀ b → is-prop (fiber f b)
 
 singleton-type : {A : Type 𝓤} → A → Type 𝓤
-singleton-type {𝓤}{A} x = Σ[ y ꞉ A ] y ≡ x
+singleton-type {𝓤}{A} x = Σ[ y ∈ A ] y ≡ x
 
 \end{code}
 
@@ -166,7 +166,7 @@ Finding a proof that a function is an embedding isn't always easy, but one appro
 
 module _ {A : Type 𝓤}{B : Type 𝓦} where
  invertible : (A → B) → Type (𝓤 ⊔ 𝓦)
- invertible f = Σ[ g ꞉ (B → A) ] ((g ∘ f ∼ id) × (f ∘ g ∼ id))
+ invertible f = Σ[ g ∈ (B → A) ] ((g ∘ f ∼ id) × (f ∘ g ∼ id))
 
  equiv-is-embedding : (f : A → B) → is-equiv f → is-embedding f
  equiv-is-embedding f i y = singleton-is-prop (fiber f y) (i y)
@@ -226,7 +226,7 @@ monic-is-embedding|Set f Bset fmon b (u , fu≡b) (v , fv≡b) = γ
  uv : u ≡ v
  uv = fmon fuv
 
- arg1 : Σ[ p ꞉ u ≡ v ] subst (λ a → f a ≡ b) p fu≡b ≡ fv≡b
+ arg1 : Σ[ p ∈ u ≡ v ] subst (λ a → f a ≡ b) p fu≡b ≡ fv≡b
  arg1 = uv , Bset (f v) b (subst (λ a → f a ≡ b) uv fu≡b) fv≡b
 
  γ : (u , fu≡b) ≡ (v , fv≡b)
@@ -273,7 +273,7 @@ module _ {I : Type 𝓥} where
  IsContProp A P = ∀ (𝑎 : (I → A)) → is-prop (P 𝑎)
 
  ContProp : Type 𝓤 → (𝓦 : Level) → Type(𝓤 ⊔ 𝓥 ⊔ lsuc 𝓦)
- ContProp A 𝓦 = Σ[ P ꞉ ContRel I A 𝓦 ] IsContProp A P
+ ContProp A 𝓦 = Σ[ P ∈ ContRel I A 𝓦 ] IsContProp A P
 
  cont-prop-ext : Type 𝓤 → (𝓦 : Level) → Type(𝓤 ⊔ 𝓥 ⊔ lsuc 𝓦)
  cont-prop-ext A 𝓦 = {P Q : ContProp A 𝓦 } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
@@ -282,7 +282,7 @@ module _ {I : Type 𝓥} where
  IsDepProp 𝒜 P = ∀ (𝑎 : ((i : I) → 𝒜 i)) → is-prop (P 𝑎)
 
  DepProp : (I → Type 𝓤) → (𝓦 : Level) → Type(𝓤 ⊔ 𝓥 ⊔ lsuc 𝓦)
- DepProp 𝒜 𝓦 = Σ[ P ꞉ DepRel I 𝒜 𝓦 ] IsDepProp 𝒜 P
+ DepProp 𝒜 𝓦 = Σ[ P ∈ DepRel I 𝒜 𝓦 ] IsDepProp 𝒜 P
 
  dep-prop-ext : (I → Type 𝓤) → (𝓦 : Level) → Type(𝓤 ⊔ 𝓥 ⊔ lsuc 𝓦)
  dep-prop-ext 𝒜 𝓦 = {P Q : DepProp 𝒜 𝓦} → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q

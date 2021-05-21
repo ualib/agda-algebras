@@ -24,7 +24,7 @@ open import Function.Construct.Identity using (id-↣)
 open import Relation.Binary.PropositionalEquality.Core using (subst; cong-app)
 
 -- Imports from agda-algebras
-open import Overture.Preliminaries using (Type; 𝓤; 𝓥; 𝓦; 𝓩; _⁻¹; Π; -Π; -Σ; _∙_; 𝑖𝑑; _∼_)
+open import Overture.Preliminaries using (Type; 𝓤; 𝓥; 𝓦; 𝓩; _⁻¹; _∙_; 𝑖𝑑; _∼_)
 
 module Overture.Inverses where
 
@@ -98,7 +98,7 @@ module _ {A : Type 𝓤}{B : Type 𝓦} where
  IsSurjective f = ∀ y → Image f ∋ y
 
  Surjective : Type (𝓤 ⊔ 𝓦)
- Surjective = Σ[ f ꞉ (A → B) ] IsSurjective f
+ Surjective = Σ (A → B) IsSurjective
 
 \end{code}
 

@@ -43,7 +43,7 @@ open import Relation.Unary using (⋂; _∈_; Pred; _⊆_)
 -- Imports from the Agda Universal Algebra Library
 open import Algebras.Basic
 open import Overture.Inverses using (IsInjective; ∘-injective)
-open import Overture.Preliminaries using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; Π; -Π; -Σ; _∙_;_⁻¹; ∣_∣; ∥_∥; snd)
+open import Overture.Preliminaries using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; _∙_;_⁻¹; ∣_∣; ∥_∥; snd)
 open import Relations.Discrete using (Im_⊆_)
 open import Relations.Extensionality using (DFunExt)
 

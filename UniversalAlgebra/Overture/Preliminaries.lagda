@@ -81,58 +81,6 @@ variable
 
 \end{code}
 
-For the purposes of this library, we assume that the readers are familiar the basic parts of the Agda standard library above, and will not repeat all the definitions.
-
-Agda's default syntax for this type is `Σ A (λ x → B)`, but we prefer the notation `Σ x ꞉ A , B`, which is closer to the syntax in the preceding paragraph and the notation used in the [HoTT book][], for example. Fortunately, we can make the preferred syntax available; this is done in the [Type Topology][] library with the following type definition and `syntax` declaration.
-
-\begin{code}
-
--Σ : {𝓤 𝓥 : Level} (A : Type 𝓤 ) (B : A → Type 𝓥 ) → Type(𝓤 ⊔ 𝓥)
--Σ = Σ
-
-syntax -Σ A (λ x → B) = Σ[ x ꞉ A ] B    -- type \:4 to get ꞉
-
-infixr 3 -Σ
-
-\end{code}
-
-Also, the standard library made an alternative notation for the dependent pair type available which allows us to write `Σ[ x ∈ A ] B x` in place of `Σ A (λ x → B)`.  In the [agda-algebras][] library we may use any one of the three alternative notations,
-
-+ `Σ A (λ x → B)` (standard Agda notation)
-+ `Σ[ x ∈ A ] B x` ([Agda Standard Library][] notation)
-+ `Σ x ꞉ A , B` ([Type Topology][] notation)
-
-**Warning!** The symbol `꞉` is not the same as `:`. Type the colon in `Σ x ꞉ A ⸲ B` as `\:4` in [agda2-mode][].
- above is obtained by typing `\:4` in [agda2-mode][].
-
-
-#### <a id="dependent-function-type">Pi types (dependent functions)</a>
-
-Given universes `𝓤` and `𝓥`, a type `X : Type 𝓤`, and a type family `Y : X → Type 𝓥`, the *Pi type* (aka *dependent function type*) is denoted by `Π(x : X), Y x` and generalizes the function type `X → Y` by letting the type `Y x` of the codomain depend on the value `x` of the domain type. It is sometimes convenient to be explicit about this.
-
-\begin{code}
-
-Π : {A : Type 𝓤 } (B : A → Type 𝓦 ) → Type (𝓤 ⊔ 𝓦)
-Π {A = A} B = (x : A) → B x
-
-\end{code}
-
-To make the syntax for `Π` conform to the standard notation for *Pi types* (or dependent function type), [Escardó][] uses the same trick as the one used above for *Sigma types*.
-
-\begin{code}
-
--Π : (A : Type 𝓤 )(B : A → Type 𝓦 ) → Type(𝓤 ⊔ 𝓦)
--Π A B = Π B
-
-infixr 3 -Π
-syntax -Π A (λ x → B) = Π[ x ꞉ A ] B  -- type \,3 to get
-
-\end{code}
-
-**Warning!** The symbols ꞉ and ⸲are not the same as : and ,. Type the colon (resp. comma) in `Π x ꞉ A ⸲ B` as `\:4` (resp `\,3`) in [agda2-mode][].
-
-
-
 #### <a id="projection notation">Projection notation</a>
 
 The definition of `Σ` (and thus, of `×`) includes the fields `proj₁` and `proj₂` representing the first and second projections out of the product.  Sometimes we prefer to denote these projections by `∣_∣` and `∥_∥` respectively. However, for emphasis or readability we alternate between these and the following standard notations: `proj₁` and `fst` for the first projection, `proj₂` and `snd` for the second.  We define these alternative notations for projections out of pairs as follows.
@@ -235,7 +183,7 @@ We conclude this module with a definition that conveniently represents te assert
 
 \begin{code}
 
-_∼_ : {X : Type 𝓤 } {A : X → Type 𝓥 } → Π A → Π A → Type (𝓤 ⊔ 𝓥)
+_∼_ : {X : Type 𝓤 } {A : X → Type 𝓥 } → (f g : (x : X) → A x) → Type (𝓤 ⊔ 𝓥)
 f ∼ g = ∀ x → f x ≡ g x
 
 infix 8 _∼_
@@ -243,8 +191,6 @@ infix 8 _∼_
 \end{code}
 
 ---------------
-
-
 
 <sup>1</sup><span class="footnote" id="fn0"> We avoid using `𝓟` as a universe
 variable because in some libraries `𝓟` denotes a powerset type.</span>

@@ -25,7 +25,7 @@ open import Relation.Unary using (_⊆_)
 
 -- Imports from the Agda Universal Algebra Library
 open import Algebras.Basic
-open import Overture.Preliminaries using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; 𝓩; Π; -Π; -Σ; _⁻¹; ∣_∣; ∥_∥; fst; snd; 𝑖𝑑)
+open import Overture.Preliminaries using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; 𝓩; _⁻¹; ∣_∣; ∥_∥; fst; snd; 𝑖𝑑)
 open import Overture.Inverses using (IsInjective; IsSurjective; Image_∋_; SurjInv)
 open import Relations.Discrete using (ker; kernel)
 open import Relations.Quotients using (ker-IsEquivalence; _/_; ⟪_⟫; ⌞_⌟; R-block)
@@ -68,7 +68,7 @@ FirstHomTheorem|Set :
     (pe : pred-ext 𝓤 𝓦)(fe : swelldef 𝓥 𝓦)                              -- extensionality assumptions
     (Bset : is-set ∣ 𝑩 ∣)(buip : blk-uip ∣ 𝑨 ∣ ∣ kercon fe {𝑩} h ∣)     -- truncation assumptions
     -----------------------------------------------------------------------------------------------------------
- →  Σ[ φ ꞉ hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩  ] ((∣ h ∣ ≡ ∣ φ ∣ ∘ ∣ πker fe{𝑩}h ∣) × IsInjective ∣ φ ∣ × is-embedding ∣ φ ∣)
+ →  Σ[ φ ∈ hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩  ] ((∣ h ∣ ≡ ∣ φ ∣ ∘ ∣ πker fe{𝑩}h ∣) × IsInjective ∣ φ ∣ × is-embedding ∣ φ ∣)
 
 FirstHomTheorem|Set 𝑨 𝑩 h pe fe Bset buip = (φ , φhom) , refl , φmon , φemb
  where

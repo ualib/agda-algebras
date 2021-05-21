@@ -17,7 +17,7 @@ Here we formalize the informal notion of isomorphism between algebraic structure
 -- Imports from the Agda (Builtin) and the Agda Standard Library
 open import Agda.Builtin.Equality using (_≡_; refl)
 open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
-open import Data.Product using (_,_; Σ; _×_)
+open import Data.Product using (_,_; Σ; _×_; Σ-syntax)
 open import Function.Base  using (_∘_)
 open import Level renaming (suc to lsuc; zero to lzero)
 open import Relation.Binary.PropositionalEquality.Core using (cong; cong-app)
@@ -41,7 +41,7 @@ Recall, `f ~ g` means f and g are *extensionally* (or pointwise) equal; i.e., `�
 \begin{code}
 
 _≅_ : {𝓤 𝓦 : Level}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
-𝑨 ≅ 𝑩 =  Σ[ f ꞉ (hom 𝑨 𝑩)] Σ[ g ꞉ hom 𝑩 𝑨 ] ((∣ f ∣ ∘ ∣ g ∣ ∼ ∣ 𝒾𝒹 𝑩 ∣) × (∣ g ∣ ∘ ∣ f ∣ ∼ ∣ 𝒾𝒹 𝑨 ∣))
+𝑨 ≅ 𝑩 =  Σ[ f ∈ (hom 𝑨 𝑩)] Σ[ g ∈ hom 𝑩 𝑨 ] ((∣ f ∣ ∘ ∣ g ∣ ∼ ∣ 𝒾𝒹 𝑩 ∣) × (∣ g ∣ ∘ ∣ f ∣ ∼ ∣ 𝒾𝒹 𝑨 ∣))
 
 \end{code}
 
@@ -287,4 +287,3 @@ private variable 𝓘 : Level
  --  where
  --  finv : invertible (fst ∣ ϕ ∣)
  --  finv = ∣ fst ∥ ϕ ∥ ∣ , (snd ∥ snd ϕ ∥ , fst ∥ snd ϕ ∥)
-

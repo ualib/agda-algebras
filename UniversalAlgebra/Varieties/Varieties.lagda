@@ -16,7 +16,7 @@ This section presents the [Varieties.Varieties][] module of the [Agda Universal 
 -- Imports from Agda (builtin/primitive) and the Agda Standard Library
 open import Agda.Builtin.Equality using (_≡_; refl)
 open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
-open import Data.Product using (_,_; Σ; _×_)
+open import Data.Product using (_,_; Σ; _×_; Σ-syntax)
 open import Function.Base  using (_∘_)
 open import Level renaming (suc to lsuc; zero to lzero)
 open import Relation.Binary.PropositionalEquality.Core using (cong; cong-app; module ≡-Reasoning)
@@ -27,7 +27,7 @@ open import Relation.Unary using (⋂; _∈_; Pred; _⊆_)
 open import Algebras.Basic
 open import Overture.Inverses using (IsInjective)
 open import Overture.Preliminaries
- using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; Π; -Π; -Σ; _∙_;_⁻¹; ∣_∣; ∥_∥; snd; fst)
+ using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; _∙_;_⁻¹; ∣_∣; ∥_∥; snd; fst)
 open import Relations.Truncation using (hfunext)
 
 module Varieties.Varieties {𝑆 : Signature 𝓞 𝓥} where
@@ -143,7 +143,7 @@ is-variety : {𝓤 : Level}(𝒱 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)) → Type(o
 is-variety{𝓤} 𝒱 = V{𝓤}{𝓤} 𝒱 ⊆ 𝒱
 
 variety : (𝓤 : Level) → Type(lsuc (𝓞 ⊔ 𝓥 ⊔ (lsuc 𝓤)))
-variety 𝓤 = Σ[ 𝒱 ꞉ (Pred (Algebra 𝓤 𝑆)(ov 𝓤)) ] is-variety 𝒱
+variety 𝓤 = Σ[ 𝒱 ∈ (Pred (Algebra 𝓤 𝑆)(ov 𝓤)) ] is-variety 𝒱
 
 \end{code}
 
@@ -581,7 +581,7 @@ module class-products-with-maps
  where
 
  ℑ' : Type (ov 𝓤)
- ℑ' = Σ[ 𝑨 ꞉ (Algebra 𝓤 𝑆) ] ((𝑨 ∈ S{𝓤}{𝓤} 𝒦) × (X → ∣ 𝑨 ∣))
+ ℑ' = Σ[ 𝑨 ∈ (Algebra 𝓤 𝑆) ] ((𝑨 ∈ S{𝓤}{𝓤} 𝒦) × (X → ∣ 𝑨 ∣))
 
 \end{code}
 Notice that the second component of this dependent pair type is  `(𝑨 ∈ 𝒦) × (X → ∣ 𝑨 ∣)`. In previous versions of the [UALib][] this second component was simply `𝑨 ∈ 𝒦`, until we realized that adding the type `X → ∣ 𝑨 ∣` is quite useful. Later we will see exactly why, but for now suffice it to say that a map of type `X → ∣ 𝑨 ∣` may be viewed abstractly as an *ambient context*, or more concretely, as an assignment of *values* in `∣ 𝑨 ∣` to *variable symbols* in `X`.  When computing with or reasoning about products, while we don't want to rigidly impose a context in advance, want do want to lay our hands on whatever context is ultimately assumed.  Including the "context map" inside the index type `ℑ` of the product turns out to be a convenient way to achieve this flexibility.

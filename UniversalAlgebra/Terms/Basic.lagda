@@ -28,7 +28,7 @@ open import Relation.Unary using (Pred)
 -- Imports from the Agda Universal Algebra Library
 open import Algebras.Basic
 open import Overture.Preliminaries
- using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; Π; -Π; -Σ; _⁻¹; 𝑖𝑑; ∣_∣; ∥_∥)
+ using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; _⁻¹; 𝑖𝑑; ∣_∣; ∥_∥)
 open import Overture.Inverses using (IsSurjective; Image_∋_; Inv; InvIsInv; eq)
 
 

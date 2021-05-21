@@ -16,7 +16,7 @@ This section presents the [Algebras.Congruences][] module of the [Agda Universal
 open import Agda.Builtin.Equality using (_≡_; refl)
 open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
 open import Level renaming (suc to lsuc; zero to lzero)
-open import Data.Product using (_,_; Σ; _×_)
+open import Data.Product using (_,_; Σ; _×_; Σ-syntax)
 open import Data.Product.Properties
 open import Relation.Binary using (Rel; IsEquivalence)
 open import Relation.Unary using (Pred; _∈_)
@@ -24,7 +24,7 @@ open import Relation.Binary.PropositionalEquality.Core using (sym; trans; cong; 
 
 -- Imports from the Agda Universal Algebra Library
 open import Algebras.Basic
-open import Overture.Preliminaries using (Type; 𝓘; 𝓞; 𝓤; 𝓥; 𝓦; Π; -Π; -Σ; ∣_∣; ∥_∥; fst)
+open import Overture.Preliminaries using (Type; 𝓘; 𝓞; 𝓤; 𝓥; 𝓦; ∣_∣; ∥_∥; fst)
 open import Relations.Discrete using (𝟎; _|:_)
 open import Relations.Quotients using (_/_; ⟪_⟫; IsBlock)
 
@@ -46,7 +46,7 @@ record IsCongruence (𝑨 : Algebra 𝓤 𝑆)(θ : Rel ∣ 𝑨 ∣ 𝓦) : Typ
              is-compatible  : compatible 𝑨 θ
 
 Con : (𝑨 : Algebra 𝓤 𝑆) → Type(𝓤 ⊔ ov 𝓦)
-Con {𝓤}{𝓦}𝑨 = Σ[ θ ꞉ ( Rel ∣ 𝑨 ∣ 𝓦 ) ] IsCongruence 𝑨 θ
+Con {𝓤}{𝓦}𝑨 = Σ[ θ ∈ ( Rel ∣ 𝑨 ∣ 𝓦 ) ] IsCongruence 𝑨 θ
 
 \end{code}
 
