@@ -89,40 +89,6 @@ variable
 
 \end{code}
 
-
-#### <a id="dependent-pair-type">Sigma types (dependent pairs)</a>
-
-Given universes 𝓤 and 𝓥, a type `A : Type 𝓤`, and a type family `B : A → Type 𝓥`, the *Sigma type* (or *dependent pair type*), denoted by `Σ[x ∈ A] B x`, generalizes the Cartesian product `A × B` by allowing the type `B x` of the second argument of the ordered pair `(x , y)` to depend on the value `x` of the first.  That is, an inhabitant of the type `Σ[x ∈ A] B x` is a pair `(x , y)` such that `x : A` and `y : B x`.
-
-For pedagogical reasons, we given the definition of the dependent product type here, but it is already defined in the `Data.Product` module of the [Agda Standard Library][], and we import it from there.
-
-```agda
- record Σ {𝓤 𝓥} {A : Type 𝓤 } (B : A → Type 𝓥 ) : Type(𝓤 ⊔ 𝓥)  where
-  constructor _,_
-  field
-   pr₁ : A
-   pr₂ : B pr₁
-
- infixr 4 _,_
-```
-
-
-\end{code}
-
-
-Agda's default syntax for this type is `Σ A (λ x → B)`, but we prefer the notation `Σ x ꞉ A , B`, which is closer to the syntax in the preceding paragraph and the notation used in the [HoTT book][], for example. Fortunately, we can make the preferred syntax available; this is done in the [Type Topology][] library with the following type definition and `syntax` declaration.
-
-\begin{code}
-
--Σ : {𝓤 𝓥 : Level} (A : Type 𝓤 ) (B : A → Type 𝓥 ) → Type(𝓤 ⊔ 𝓥)
--Σ = Σ
-
-syntax -Σ A (λ x → B) = Σ[ x ꞉ A ] B    -- type \:4 to get ꞉
-
-infixr 3 -Σ
-
-\end{code}
-
 Also, the standard library made an alternative notation for the dependent pair type available which allows us to write `Σ[ x ∈ A ] B x` in place of `Σ A (λ x → B)`.  In the [agda-algebras][] library we may use any one of the three alternative notations,
 
 + `Σ A (λ x → B)` (standard Agda notation)

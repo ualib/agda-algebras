@@ -21,7 +21,7 @@ open import Data.Sum.Base using (_⊎_)
 open import Relation.Binary.Core using (REL; Rel; _⇒_;_=[_]⇒_)
 open import Relation.Unary using (∅; Pred; _∪_; _∈_; _⊆_; ｛_｝)
 
-open import Overture.Preliminaries using (Type; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; 𝓩; -Σ)
+open import Overture.Preliminaries using (Type; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; 𝓩)
 
 module Relations.Discrete where
 
@@ -133,10 +133,10 @@ module _ {A : Type 𝓤}{B : Type 𝓦} where
  kernel g (x , y) = g x ≡ g y
 
  ker-sigma : (A → B) → Type (𝓤 ⊔ 𝓦)
- ker-sigma g = Σ[ x ꞉ A ] Σ[ y ꞉ A ] g x ≡ g y
+ ker-sigma g = Σ[ x ∈ A ] Σ[ y ∈ A ] g x ≡ g y
 
  ker-sigma' : (A → B) → Type (𝓤 ⊔ 𝓦)
- ker-sigma' g = Σ[ (x , y) ꞉ (A × A) ] g x ≡ g y
+ ker-sigma' g = Σ[ (x , y) ∈ (A × A) ] g x ≡ g y
 
 \end{code}
 
@@ -154,10 +154,10 @@ module _ {A : Type 𝓤 } where
  𝟎-pred (x , y) = x ≡ y
 
  𝟎-sigma : Type 𝓤
- 𝟎-sigma = Σ[ x ꞉ A ] Σ[ y ꞉ A ] x ≡ y
+ 𝟎-sigma = Σ[ x ∈ A ] Σ[ y ∈ A ] x ≡ y
 
  𝟎-sigma' : Type 𝓤
- 𝟎-sigma' = Σ[ (x , y) ꞉ A × A ] x ≡ y
+ 𝟎-sigma' = Σ[ (x , y) ∈ A × A ] x ≡ y
 
 \end{code}
 
