@@ -21,13 +21,14 @@ open import Axiom.Extensionality.Propositional renaming (Extensionality to funex
 open import Data.Product using (_,_; Σ; _×_)
 open import Function.Base  using (_∘_)
 open import Level renaming (suc to lsuc; zero to lzero)
-open import Relation.Binary.PropositionalEquality.Core using (cong)
+open import Relation.Binary.PropositionalEquality.Core using (cong; module ≡-Reasoning)
+open ≡-Reasoning
 open import Relation.Unary using (Pred)
 
 -- Imports from the Agda Universal Algebra Library
 open import Algebras.Basic
 open import Overture.Preliminaries
- using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; Π; -Π; -Σ; _≡⟨_⟩_; _∎; _⁻¹; 𝑖𝑑; ∣_∣; ∥_∥)
+ using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; _⁻¹; 𝑖𝑑; ∣_∣; ∥_∥)
 open import Overture.Inverses using (IsSurjective; Image_∋_; Inv; InvIsInv; eq)
 
 
@@ -160,7 +161,7 @@ lift-of-epi-is-epi 𝑨 {h₀} hE y = γ
  η = (InvIsInv h₀ (hE y))⁻¹
 
  γ : Image ∣ lift-hom 𝑨 h₀ ∣ ∋ y
- γ = eq y (ℊ h₀⁻¹y) η
+ γ = eq (ℊ h₀⁻¹y) η
 
 \end{code}
 

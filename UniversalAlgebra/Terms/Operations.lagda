@@ -18,21 +18,20 @@ Here we define *term operations* which are simply terms interpreted in a particu
 -- Imports from Agda (builtin/primitive) and the Agda Standard Library
 open import Agda.Builtin.Equality using (_≡_; refl)
 open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
-open import Data.Product using (_,_; Σ; _×_)
+open import Data.Product using (_,_; Σ; _×_; Σ-syntax)
 open import Function.Base  using (_∘_)
 open import Level renaming (suc to lsuc; zero to lzero)
-open import Relation.Binary.PropositionalEquality.Core using (cong)
+open import Relation.Binary.PropositionalEquality.Core using (cong; module ≡-Reasoning)
+open ≡-Reasoning
 open import Relation.Unary using (Pred)
 
 -- Imports from the Agda Universal Algebra Library
 open import Overture.Inverses using (IsSurjective; Image_∋_; Inv; InvIsInv; eq)
 open import Overture.Preliminaries
- using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; Π; -Π; -Σ; _≡⟨_⟩_; _∎; _∙_;_⁻¹; ∣_∣; ∥_∥)
+ using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; _∙_;_⁻¹; ∣_∣; ∥_∥)
 
 open import Algebras.Basic
 open import Relations.Discrete using (_|:_)
-
-
 
 module Terms.Operations {𝑆 : Signature 𝓞 𝓥} where
 
@@ -96,7 +95,7 @@ We claim that for all `p : Term X` there exists `q : Term X` and `𝔱 : X → �
 term-interp : {X : Type 𝓧} (𝑓 : ∣ 𝑆 ∣){𝑠 𝑡 : ∥ 𝑆 ∥ 𝑓 → Term X} → 𝑠 ≡ 𝑡 → node 𝑓 𝑠 ≡ (𝑓 ̂ 𝑻 X) 𝑡
 term-interp 𝑓 {𝑠}{𝑡} st = cong (node 𝑓) st
 
-term-gen : funext 𝓥 (ov 𝓧) → {X : Type 𝓧}(p : ∣ 𝑻 X ∣) → Σ[ q ꞉ ∣ 𝑻 X ∣ ] p ≡ (𝑻 X ⟦ q ⟧) ℊ
+term-gen : funext 𝓥 (ov 𝓧) → {X : Type 𝓧}(p : ∣ 𝑻 X ∣) → Σ[ q ∈ ∣ 𝑻 X ∣ ] p ≡ (𝑻 X ⟦ q ⟧) ℊ
 term-gen _ (ℊ x) = (ℊ x) , refl
 term-gen fe (node 𝑓 𝑡) = node 𝑓 (λ i → ∣ term-gen fe (𝑡 i) ∣) , term-interp 𝑓 (fe λ i → ∥ term-gen fe (𝑡 i) ∥)
 

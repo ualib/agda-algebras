@@ -21,14 +21,15 @@ open import Axiom.Extensionality.Propositional renaming (Extensionality to funex
 open import Data.Product using (_,_; Σ; _×_)
 open import Function.Base  using (_∘_)
 open import Level renaming (suc to lsuc; zero to lzero)
-open import Relation.Binary.PropositionalEquality.Core using (cong)
+open import Relation.Binary.PropositionalEquality.Core using (cong; module ≡-Reasoning)
+open ≡-Reasoning
 open import Relation.Unary using (⋂; _∈_; Pred; _⊆_)
 
 -- Imports from the Agda Universal Algebra Library
 open import Algebras.Basic
 open import Relations.Discrete using (Im_⊆_)
 open import Overture.Preliminaries
- using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; Π; -Π; -Σ; _≡⟨_⟩_; _∎; _∙_;_⁻¹; ∣_∣; ∥_∥)
+ using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; _∙_;_⁻¹; ∣_∣; ∥_∥)
 
 
 
@@ -121,7 +122,7 @@ Here we formalize a few basic properties of subuniverses. First, the intersectio
 \begin{code}
 
 sub-intersection : {𝓘 : Level}{𝑨 : Algebra 𝓤 𝑆}{I : Type 𝓘}{𝒜 : I → Pred ∣ 𝑨 ∣ 𝓦}
- →                 Π[ i ꞉ I ] 𝒜 i ∈ Subuniverses 𝑨
+ →                 (( i : I ) → 𝒜 i ∈ Subuniverses 𝑨)
                    ----------------------------------
  →                 ⋂ I 𝒜 ∈ Subuniverses 𝑨
 
@@ -145,7 +146,7 @@ Next, subuniverses are closed under the action of term operations.
 
 sub-term-closed : {𝓧 : Level}{X : Type 𝓧}(𝑨 : Algebra 𝓤 𝑆){B : Pred ∣ 𝑨 ∣ 𝓦}
  →                (B ∈ Subuniverses 𝑨) → (t : Term X)(b : X → ∣ 𝑨 ∣)
- →                Π[ x ꞉ X ] (b x ∈ B)  →  (𝑨 ⟦ t ⟧)b ∈ B
+ →                ((x : X) → (b x ∈ B)) → (𝑨 ⟦ t ⟧)b ∈ B
 
 sub-term-closed 𝑨 AB (ℊ x) b Bb = Bb x
 sub-term-closed 𝑨{B}α(node 𝑓 𝑡)b β = α 𝑓(λ z → (𝑨 ⟦ 𝑡 z ⟧)b) λ x → sub-term-closed 𝑨{B}α(𝑡 x)b β
@@ -172,7 +173,7 @@ Alternatively, we could express the preceeding fact using an inductive type repr
 data TermImage (𝑨 : Algebra 𝓤 𝑆)(Y : Pred ∣ 𝑨 ∣ 𝓦) : Pred ∣ 𝑨 ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
  where
  var : ∀ {y : ∣ 𝑨 ∣} → y ∈ Y → y ∈ TermImage 𝑨 Y
- app : ∀ 𝑓 𝑡 →  Π[ x ꞉ ∥ 𝑆 ∥ 𝑓 ] 𝑡 x ∈ TermImage 𝑨 Y  → (𝑓 ̂ 𝑨) 𝑡 ∈ TermImage 𝑨 Y
+ app : ∀ 𝑓 𝑡 →  ((x : ∥ 𝑆 ∥ 𝑓) → 𝑡 x ∈ TermImage 𝑨 Y)  → (𝑓 ̂ 𝑨) 𝑡 ∈ TermImage 𝑨 Y
 
 \end{code}
 
@@ -205,9 +206,9 @@ Next we prove the important fact that homomorphisms are uniquely determined by t
 
 hom-unique : funext 𝓥 𝓦 → {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}
              (X : Pred ∣ 𝑨 ∣ 𝓤)  (g h : hom 𝑨 𝑩)
- →           Π[ x ꞉ ∣ 𝑨 ∣ ] (x ∈ X → ∣ g ∣ x ≡ ∣ h ∣ x)
+ →           ((x : ∣ 𝑨 ∣) → (x ∈ X → ∣ g ∣ x ≡ ∣ h ∣ x))
              -------------------------------------------------
- →           Π[ a ꞉ ∣ 𝑨 ∣ ] (a ∈ Sg 𝑨 X → ∣ g ∣ a ≡ ∣ h ∣ a)
+ →           (a : ∣ 𝑨 ∣) → (a ∈ Sg 𝑨 X → ∣ g ∣ a ≡ ∣ h ∣ a)
 
 hom-unique _ _ _ _ α a (var x) = α a x
 
@@ -244,4 +245,3 @@ and, under these assumptions, we proved `∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂) ≡ ∣
 
 
 {% include UALib.Links.md %}
-

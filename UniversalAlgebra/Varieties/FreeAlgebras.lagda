@@ -18,18 +18,19 @@ First we will define the relatively free algebra in a variety, which is the "fre
 -- Imports from Agda (builtin/primitive) and the Agda Standard Library
 open import Agda.Builtin.Equality using (_≡_; refl)
 open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
-open import Data.Product using (_,_; Σ; _×_)
+open import Data.Product using (_,_; Σ; _×_; Σ-syntax)
 open import Data.Sum.Base using (_⊎_)
 open import Function.Base  using (_∘_)
 open import Level renaming (suc to lsuc; zero to lzero)
 open import Relation.Binary using (Rel; IsEquivalence)
-open import Relation.Binary.PropositionalEquality.Core using (cong; cong-app)
+open import Relation.Binary.PropositionalEquality.Core using (cong; cong-app; module ≡-Reasoning)
+open ≡-Reasoning
 open import Relation.Unary using (Pred; _∈_; _⊆_)
 
 -- Imports from the Agda Universal Algebra Library
 open import Algebras.Basic
 open import Overture.Preliminaries
- using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; Π; -Π; -Σ; _≡⟨_⟩_; _∎; _∙_;_⁻¹; ∣_∣; ∥_∥; snd; fst)
+ using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; _∙_;_⁻¹; ∣_∣; ∥_∥; snd; fst)
 open import Overture.Inverses using (Inv; InvIsInv; IsSurjective)
 open import Relations.Quotients using (⟪_⟫)
 open import Relations.Extensionality using (DFunExt; swelldef; pred-ext)
@@ -202,7 +203,7 @@ Observe that the inhabitants of `ℭ` are maps from `ℑ` to `{𝔄 i : i ∈ �
 \begin{code}
 
  𝔽 : Algebra 𝓕⁺ 𝑆
- 𝔽 = ker[ 𝑻 X ⇒ ℭ ] homℭ ↾ wd 
+ 𝔽 = ker[ 𝑻 X ⇒ ℭ ] homℭ ↾ wd
 
  epi𝔽 : epi (𝑻 X) 𝔽
  epi𝔽 = πker wd {ℭ} homℭ
@@ -334,7 +335,7 @@ With these results in hand, it is now trivial to prove the main theorem of this 
  kernel-in-theory {p , q} pKq = (class-ids-⇒ {fe = fe} p q (class-models-kernel p q pKq))
 
  _↠_ : Type 𝓤 → Algebra 𝓕⁺ 𝑆 → Type 𝓕⁺
- X ↠ 𝑨 = Σ[ h ꞉ (X → ∣ 𝑨 ∣) ] IsSurjective h
+ X ↠ 𝑨 = Σ[ h ∈ (X → ∣ 𝑨 ∣) ] IsSurjective h
 
  𝔽-ModTh-epi : (𝑨 : Algebra 𝓕⁺ 𝑆) → (X ↠ 𝑨) → 𝑨 ∈ Mod (Th 𝕍𝒦) → epi 𝔽 𝑨
  𝔽-ModTh-epi 𝑨 (η , ηE) AinMTV = γ
@@ -448,9 +449,3 @@ From these it follows that every equational class is a variety. Thus, our formal
 <span style="float:right;">[Varieties ↑](Varieties.html)</span>
 
 {% include UALib.Links.md %}
-
-
-
-
-
-

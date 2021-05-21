@@ -27,7 +27,7 @@ open import Function.Base  using (_∘_; id)
 
 
 -- Imports from the Agda Universal Algebra Library
-open import Overture.Preliminaries using (Type; 𝓤; 𝓥; 𝓦; 𝓩; -Σ; Π; 𝑖𝑑; _⁻¹; _∙_)
+open import Overture.Preliminaries using (Type; 𝓤; 𝓥; 𝓦; 𝓩; 𝑖𝑑; _⁻¹; _∙_)
 open import Overture.Inverses using (IsSurjective; SurjInv; InvIsInv; Image_∋_; eq)
 open import Relations.Continuous using (ContRel; DepRel)
 open import Relations.Discrete using (Op)
@@ -129,7 +129,7 @@ We can also prove the following composition law for epics.
    η = (cong-app (compId ⁻¹)(finv y)) ∙ ζ
 
    γ : Image h ∋ y
-   γ = eq y (g (finv y)) (η ⁻¹)
+   γ = eq (g (finv y)) (η ⁻¹)
 
 \end{code}
 
@@ -137,11 +137,6 @@ We can also prove the following composition law for epics.
 #### <a id="alternative-extensionality-type">An alternative way to express function extensionality</a>
 
 A useful alternative for expressing dependent function extensionality, which is essentially equivalent to `dfunext`, is to assert that the `happly` function is actually an *equivalence*.
-
-
-
-
-
 
 
 The principle of *proposition extensionality* asserts that logically equivalent propositions are equivalent.  That is, if `P` and `Q` are propositions and if `P ⊆ Q` and `Q ⊆ P`, then `P ≡ Q`. For our purposes, it will suffice to formalize this notion for general predicates, rather than for propositions (i.e., truncated predicates).
@@ -389,8 +384,3 @@ We can also prove the following composition law for epics.
    γ = eq y (g (finv y)) (η ⁻¹)
 
 -->
-
-
-
-
-
