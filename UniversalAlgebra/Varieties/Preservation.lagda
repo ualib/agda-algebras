@@ -27,14 +27,12 @@ open import Relation.Unary using (Pred; _∈_; _⊆_; ｛_｝; _∪_)
 -- Imports from the Agda Universal Algebra Library
 open import Algebras.Basic
 open import Overture.Preliminaries
- using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; _∙_;_⁻¹; ∣_∣; ∥_∥; snd; fst)
+ using (Type; _∙_;_⁻¹; ∣_∣; ∥_∥; snd; fst)
 open import Overture.Inverses using (Inv; InvIsInv)
 open import Relations.Extensionality using (DFunExt)
 
 
-module Varieties.Preservation  {𝑆 : Signature 𝓞 𝓥}{𝓤 : Level} where
-
-
+module Varieties.Preservation {𝓞 𝓤 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
 
 open import Algebras.Products{𝑆 = 𝑆} using (ov)
 open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using (_≅_; ≅-refl)
@@ -43,6 +41,10 @@ open import Terms.Operations {𝑆 = 𝑆} using (_⟦_⟧; comm-hom-term)
 open import Varieties.EquationalLogic{𝑆 = 𝑆}
  using (_⊧_≋_; _⊧_≈_; Th; ⊧-I-invar; ⊧-Lift-invar; ⊧-lower-invar; ⊧-S-invar; ⊧-S-class-invar; ⊧-P-lift-invar; ⊧-P-invar)
 open import Varieties.Varieties {𝑆 = 𝑆} using (H; S; P; V)
+
+private
+  variable
+    𝓦 𝓧 : Level
 
 open H
 open S

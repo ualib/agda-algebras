@@ -24,10 +24,13 @@ open import Function.Construct.Identity using (id-↣)
 open import Relation.Binary.PropositionalEquality.Core using (subst; cong-app)
 
 -- Imports from agda-algebras
-open import Overture.Preliminaries using (Type; 𝓤; 𝓥; 𝓦; 𝓩; _⁻¹; _∙_; 𝑖𝑑; _∼_)
+open import Overture.Preliminaries using (Type; _⁻¹; _∙_; 𝑖𝑑; _∼_)
 
 module Overture.Inverses where
 
+private
+  variable
+    𝓤 𝓥 𝓦 𝓩 : Level
 \end{code}
 
 We begin by defining an data type that represents the semantic concept of *inverse image* of a function.

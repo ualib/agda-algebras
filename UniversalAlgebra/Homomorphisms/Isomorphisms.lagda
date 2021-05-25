@@ -25,13 +25,15 @@ open import Relation.Binary.PropositionalEquality.Core using (cong; cong-app)
 open import Algebras.Basic
 open import Overture.Preliminaries
 
-
-module Homomorphisms.Isomorphisms{𝑆 : Signature 𝓞 𝓥}  where
+module Homomorphisms.Isomorphisms {𝓞 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥}  where
 
 open import Algebras.Products {𝑆 = 𝑆} using (⨅)
 open import Homomorphisms.Basic {𝑆 = 𝑆}
  using (hom; kercon; ker[_⇒_]_↾_; πker; is-homomorphism; epi; epi-to-hom; 𝒾𝒹; ∘-hom; 𝓁𝒾𝒻𝓉; 𝓁ℴ𝓌ℯ𝓇; ∘-is-hom)
 
+private
+  variable
+    𝓤 𝓦 𝓧 𝓨 𝓩 : Level
 \end{code}
 
 #### <a id="isomorphism-toolbox">Definition of isomorphism</a>

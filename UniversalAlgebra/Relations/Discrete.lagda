@@ -21,9 +21,13 @@ open import Data.Sum.Base using (_⊎_)
 open import Relation.Binary.Core using (REL; Rel; _⇒_;_=[_]⇒_)
 open import Relation.Unary using (∅; Pred; _∪_; _∈_; _⊆_; ｛_｝)
 
-open import Overture.Preliminaries using (Type; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; 𝓩)
+open import Overture.Preliminaries using (Type)
 
 module Relations.Discrete where
+
+private
+  variable
+    𝓤 𝓥 𝓦 𝓧 𝓨 𝓩 : Level
 
 \end{code}
 

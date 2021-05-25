@@ -30,10 +30,10 @@ open import Relations.Extensionality using (pred-ext; swelldef)
 open import Relations.Truncation using (is-set; blk-uip)
 open import Overture.Inverses using (IsInjective; id-is-injective; ∘-injective)
 open import Overture.Preliminaries
- using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; 𝓩; _∙_;_⁻¹; ∣_∣; ∥_∥; snd; 𝑖𝑑; fst)
+ using (Type; _∙_;_⁻¹; ∣_∣; ∥_∥; snd; 𝑖𝑑; fst)
 
 
-module Subalgebras.Subalgebras {𝑆 : Signature 𝓞 𝓥} where
+module Subalgebras.Subalgebras {𝓞 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
 
 open import Algebras.Products{𝑆 = 𝑆} using (ov)
 open import Homomorphisms.Basic {𝑆 = 𝑆} using (hom; kercon; ker[_⇒_]_↾_; ∘-hom; is-homomorphism; ∘-is-hom)
@@ -41,6 +41,9 @@ open import Homomorphisms.Noether using (FirstHomTheorem|Set)
 open import Homomorphisms.Isomorphisms using (_≅_; ≅-sym; ≅-trans; Lift-≅)
 open import Terms.Basic {𝑆 = 𝑆} using (Term; ℊ; node; 𝑻)
 
+private
+  variable
+    𝓤 𝓦 𝓧 𝓨 𝓩 : Level
 \end{code}
 
 

@@ -29,17 +29,18 @@ open import Relation.Unary using (⋂; _∈_; Pred; _⊆_)
 open import Algebras.Basic
 open import Relations.Discrete using (Im_⊆_)
 open import Overture.Preliminaries
- using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; _∙_;_⁻¹; ∣_∣; ∥_∥)
+ using (Type; _∙_;_⁻¹; ∣_∣; ∥_∥)
 
-
-
-module Subalgebras.Subuniverses  {𝑆 : Signature 𝓞 𝓥} where
+module Subalgebras.Subuniverses {𝓞 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
 
 open import Algebras.Products{𝑆 = 𝑆} using (ov)
 open import Homomorphisms.Basic {𝑆 = 𝑆} using (hom)
 open import Terms.Basic {𝑆 = 𝑆} using (Term; ℊ; node)
 open import Terms.Operations {𝑆 = 𝑆} using (_⟦_⟧)
 
+private
+  variable
+    𝓤 𝓦 𝓧 : Level
 
 \end{code}
 

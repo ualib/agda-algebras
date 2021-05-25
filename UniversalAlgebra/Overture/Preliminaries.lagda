@@ -76,8 +76,9 @@ We adopt Escardó's convention of denoting universe levels by capital calligraph
 
 \begin{code}
 
-variable
- 𝓘 𝓞 𝓠 𝓡 𝓢 𝓣 𝓤 𝓥 𝓦 𝓧 𝓨 𝓩 : Level
+private
+  variable
+    𝓘 𝓞 𝓠 𝓡 𝓢 𝓣 𝓤 𝓥 𝓦 𝓧 𝓨 𝓩 : Level
 
 \end{code}
 

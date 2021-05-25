@@ -24,16 +24,18 @@ open import Relation.Unary using (Pred; ∅; _∪_; _∈_; _⊆_)
 -- Imports from the Agda Universal Algebra Library
 open import Algebras.Basic
 open import Overture.Preliminaries
- using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; _⁻¹; 𝑖𝑑; ∣_∣; ∥_∥; lower∼lift; lift∼lower)
+ using (Type; _⁻¹; 𝑖𝑑; ∣_∣; ∥_∥; lower∼lift; lift∼lower)
 open import Overture.Inverses using (IsSurjective; Image_∋_; Inv; InvIsInv; eq)
 
-module Homomorphisms.HomomorphicImages {𝑆 : Signature 𝓞 𝓥} where
+module Homomorphisms.HomomorphicImages {𝓞 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
 
 open import Algebras.Products{𝑆 = 𝑆} using (ov)
 open import Homomorphisms.Basic {𝑆 = 𝑆} using (hom; 𝓁𝒾𝒻𝓉; 𝓁ℴ𝓌ℯ𝓇)
 open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using (Lift-hom)
 
-
+private
+  variable
+    𝓤 𝓦 𝓧 𝓨 : Level
 \end{code}
 
 

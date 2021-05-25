@@ -24,14 +24,18 @@ open import Relation.Binary.PropositionalEquality.Core using (sym; trans; cong; 
 
 -- Imports from the Agda Universal Algebra Library
 open import Algebras.Basic
-open import Overture.Preliminaries using (Type; 𝓘; 𝓞; 𝓤; 𝓥; 𝓦; ∣_∣; ∥_∥; fst)
+open import Overture.Preliminaries using (Type; ∣_∣; ∥_∥; fst)
 open import Relations.Discrete using (𝟎; _|:_)
 open import Relations.Quotients using (_/_; ⟪_⟫; IsBlock)
 
 
-module Algebras.Congruences {𝑆 : Signature 𝓞 𝓥} where
+module Algebras.Congruences {𝓞 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
 
-open import Algebras.Products{𝑆 = 𝑆} using (ov)
+private
+  variable
+    𝓘 𝓤 𝓦 : Level
+
+open import Algebras.Products {𝑆 = 𝑆} using (ov)
 
 \end{code}
 
