@@ -25,18 +25,21 @@ open ≡-Reasoning
 
 -- Imports from the Agda Universal Algebra Library
 open import Algebras.Basic
-open import Overture.Preliminaries using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; 𝓩; _⁻¹; ∣_∣; ∥_∥; fst)
+open import Overture.Preliminaries using (Type; _⁻¹; ∣_∣; ∥_∥; fst)
 open import Overture.Inverses using (IsInjective; IsSurjective; Image_∋_)
 open import Relations.Discrete using (ker) -- 𝟎; _|:_)
 open import Relations.Extensionality using (swelldef)
 open import Relations.Quotients using (ker-IsEquivalence; _/_; ⟪_⟫; R-block)
 
-module Homomorphisms.Basic {𝑆 : Signature 𝓞 𝓥} where
+module Homomorphisms.Basic {𝓞 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
 
 open import Algebras.Congruences{𝑆 = 𝑆} using (Con; IsCongruence; mkcon; _╱_; /-≡)
 open import Algebras.Products{𝑆 = 𝑆} using (⨅)
 open IsCongruence
 
+private
+  variable
+     𝓤 𝓦 𝓧 𝓨 𝓩 : Level
 \end{code}
 
 #### <a id="homomorphisms">Homomorphisms</a>

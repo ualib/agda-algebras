@@ -30,7 +30,7 @@ open ≡-Reasoning
 open import Relation.Unary using (Pred; _⊆_)
 
 -- Imports from the Agda Universal Algebra Library
-open import Overture.Preliminaries using (Type; 𝓤; 𝓥; 𝓦; fst; ∣_∣; ∥_∥; _⁻¹; _∼_)
+open import Overture.Preliminaries using (Type; fst; ∣_∣; ∥_∥; _⁻¹; _∼_)
 open import Overture.Inverses using (IsInjective)
 open import Relations.Continuous using (ContRel; DepRel)
 open import Relations.Quotients using (IsBlock)
@@ -39,7 +39,9 @@ open import Relations.Quotients using (IsBlock)
 
 module Relations.Truncation where
 
-
+private
+  variable
+     𝓤 𝓥 𝓦 : Level
 \end{code}
 
 The MGS-Quotient module of the [Type Topology][] library defines the following *uniqueness-of-proofs* principle for binary relations.

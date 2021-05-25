@@ -16,15 +16,19 @@ This section presents the [Relations.Quotients][] module of the [Agda Universal 
 open import Agda.Builtin.Equality using (_≡_; refl)
 open import Agda.Primitive using (_⊔_; lzero; lsuc; Level)
 open import Data.Product  using (_,_; Σ; Σ-syntax; _×_)
+open import Level using (Level)
 open import Relation.Binary using (Rel; IsEquivalence)
 open import Relation.Binary.PropositionalEquality using (sym; trans)
 open import Relation.Unary using (Pred; _⊆_)
 
-open import Overture.Preliminaries using (Type; 𝓤; 𝓥; 𝓦)
+open import Overture.Preliminaries using (Type)
 open import Relations.Discrete using (ker)
 
 module Relations.Quotients where
 
+private
+  variable
+    𝓤 𝓥 𝓦 : Level
 \end{code}
 
 

@@ -25,7 +25,7 @@ open import Relation.Unary using (_⊆_)
 
 -- Imports from the Agda Universal Algebra Library
 open import Algebras.Basic
-open import Overture.Preliminaries using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; 𝓩; _⁻¹; ∣_∣; ∥_∥; fst; snd; 𝑖𝑑)
+open import Overture.Preliminaries using (Type; _⁻¹; ∣_∣; ∥_∥; fst; snd; 𝑖𝑑)
 open import Overture.Inverses using (IsInjective; IsSurjective; Image_∋_; SurjInv)
 open import Relations.Discrete using (ker; kernel)
 open import Relations.Quotients using (ker-IsEquivalence; _/_; ⟪_⟫; ⌞_⌟; R-block)
@@ -33,11 +33,14 @@ open import Relations.Truncation using (is-set; blk-uip; is-embedding; monic-is-
 open import Relations.Extensionality using (swelldef;  block-ext|uip; pred-ext; SurjInvIsRightInv; epic-factor)
 
 
-module Homomorphisms.Noether {𝑆 : Signature 𝓞 𝓥} where
+module Homomorphisms.Noether {𝓞 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
 
 open import Algebras.Congruences{𝑆 = 𝑆} using (Con; IsCongruence)
 open import Homomorphisms.Basic {𝑆 = 𝑆} using (hom; kercon; ker[_⇒_]_↾_; πker; is-homomorphism; epi; epi-to-hom)
 
+private
+  variable
+    𝓤 𝓦 𝓧 𝓨 𝓩 : Level
 \end{code}
 
 

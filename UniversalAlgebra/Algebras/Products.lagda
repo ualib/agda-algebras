@@ -20,12 +20,14 @@ open import Data.Product using (_,_; Σ; _×_; Σ-syntax)
 open import Relation.Unary using (Pred; _∈_)
 
 -- Imports from the Agda Universal Algebra Library
-open import Overture.Preliminaries using (Type; 𝓘; 𝓞; 𝓤; 𝓥; 𝓦; _⁻¹; 𝑖𝑑; ∣_∣; ∥_∥)
+open import Overture.Preliminaries using (Type; _⁻¹; 𝑖𝑑; ∣_∣; ∥_∥)
 open import Algebras.Basic
 
+module Algebras.Products {𝓞 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
 
-module Algebras.Products {𝑆 : Signature 𝓞 𝓥} where
-
+ private
+   variable
+     𝓘 𝓤 𝓦 : Level
 \end{code}
 
 From now on, the modules of the [UniversalAlgebra][] library will assume a fixed signature `𝑆 : Signature 𝓞 𝓥`.
