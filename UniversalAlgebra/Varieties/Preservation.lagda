@@ -16,6 +16,7 @@ This section presents the [Varieties.Preservation][] module of the [Agda Univers
 
 -- Imports from Agda (builtin/primitive) and the Agda Standard Library
 open import Agda.Builtin.Equality using (_≡_; refl)
+open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
 open import Data.Product using (_,_; Σ; _×_)
 open import Data.Sum.Base using (_⊎_)
 open import Function.Base  using (_∘_)
@@ -29,10 +30,12 @@ open import Algebras.Basic
 open import Overture.Preliminaries
  using (Type; _∙_;_⁻¹; ∣_∣; ∥_∥; snd; fst)
 open import Overture.Inverses using (Inv; InvIsInv)
-open import Relations.Extensionality using (DFunExt)
 
-
-module Varieties.Preservation {𝓞 𝓤 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
+-- <<<<<<< Extensionality
+module Varieties.Preservation  {𝑆 : Signature 𝓞 𝓥}{𝓤 : Level} where
+-- =======
+-- module Varieties.Preservation {𝓞 𝓤 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
+-- >>>>>>> master
 
 open import Algebras.Products{𝑆 = 𝑆} using (ov)
 open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using (_≅_; ≅-refl)
@@ -67,7 +70,7 @@ First we prove that the closure operator H is compatible with identities that ho
 
 \begin{code}
 
-module _ {fe : DFunExt}{X : Type 𝓧} {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
+module _ {fe : (∀ a b → funext a b)}{X : Type 𝓧} {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
 
  H-id1 : (p q : Term X) → 𝒦 ⊧ p ≋ q → H{𝓦 = 𝓤} 𝒦 ⊧ p ≋ q
  H-id1 p q α (hbase x) = ⊧-Lift-invar fe p q (α x)
@@ -311,7 +314,7 @@ Once again, and for the last time, completeness dictates that we formalize the c
 
 module _ {𝓦 : Level}{X : Type 𝓧}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
 
- V-id2 : DFunExt → (p q : Term X) → (V{𝓦 = 𝓦} 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
+ V-id2 : (∀ a b → funext a b) → (p q : Term X) → (V{𝓦 = 𝓦} 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
  V-id2 fe p q Vpq {𝑨} KA = ⊧-lower-invar fe p q (Vpq (vbase KA))
 
 \end{code}

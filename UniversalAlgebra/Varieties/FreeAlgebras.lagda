@@ -33,7 +33,7 @@ open import Overture.Preliminaries
  using (Type; _∙_;_⁻¹; ∣_∣; ∥_∥; snd; fst)
 open import Overture.Inverses using (Inv; InvIsInv; IsSurjective)
 open import Relations.Quotients using (⟪_⟫)
-open import Relations.Extensionality using (DFunExt; swelldef; pred-ext)
+open import Relations.Extensionality using (swelldef; pred-ext)
 open import Relations.Discrete using (kernel)
 open import Relations.Truncation using (is-set; blk-uip; hfunext)
 
@@ -159,11 +159,11 @@ Here, `⨅-hom-co` (defined in [Homomorphisms.Basic](Homomorphisms.Basic.html#pr
 
 
 #### <a id="F-in-classproduct">𝔽 ≤  ⨅ S(𝒦)</a>
-Now we come to a step in the Agda formalization of Birkhoff's theorem that is highly nontrivial. We must prove that the free algebra embeds in the product ℭ of all subalgebras of algebras in the class `𝒦`.  This is really the only stage in the proof of Birkhoff's theorem that requires the truncation assumption that `ℭ` be a *set* (that is, `ℭ` has the [UIP][] property).  We will also need to assume several local function extensionality postulates and, as a result, the next submodule will take as given the parameter `fe : DFunExt`.  This allows us to postulate local function extensionality when and where we need it in the proof. For example, if we want to assume function extensionality at universe levels 𝓥 and 𝓤, we simply apply `fe` to those universes: `fe 𝓥 𝓤`. (Earlier versions of the library used just a single *global* function extensionality postulate at the start of most modules, but we have since decided to exchange that elegant but crude option for greater precision and transparency.)
+Now we come to a step in the Agda formalization of Birkhoff's theorem that is highly nontrivial. We must prove that the free algebra embeds in the product ℭ of all subalgebras of algebras in the class `𝒦`.  This is really the only stage in the proof of Birkhoff's theorem that requires the truncation assumption that `ℭ` be a *set* (that is, `ℭ` has the [UIP][] property).  We will also need to assume several local function extensionality postulates and, as a result, the next submodule will take as given the parameter `fe : (∀ a b → funext a b)`.  This allows us to postulate local function extensionality when and where we need it in the proof. For example, if we want to assume function extensionality at universe levels 𝓥 and 𝓤, we simply apply `fe` to those universes: `fe 𝓥 𝓤`. (Earlier versions of the library used just a single *global* function extensionality postulate at the start of most modules, but we have since decided to exchange that elegant but crude option for greater precision and transparency.)
 
 \begin{code}
 
-module _ {fe : DFunExt}{wd+ : swelldef 𝓥 𝓕⁺} {wd : swelldef 𝓥 𝓕}{X : Type 𝓤} {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓕} where
+module _ {fe : (∀ a b → funext a b)}{wd+ : swelldef 𝓥 𝓕⁺} {wd : swelldef 𝓥 𝓕}{X : Type 𝓤} {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓕} where
 
  open class-products-with-maps {𝓤 = 𝓤}{X}{fe 𝓕 𝓤}{fe 𝓕⁺ 𝓕⁺}{fe 𝓕 𝓕} 𝒦
 

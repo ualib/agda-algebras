@@ -45,9 +45,15 @@ open import Algebras.Basic
 open import Overture.Inverses using (IsInjective; ∘-injective)
 open import Overture.Preliminaries using (Type; _∙_;_⁻¹; ∣_∣; ∥_∥; snd)
 open import Relations.Discrete using (Im_⊆_)
-open import Relations.Extensionality using (DFunExt)
+-- <<<<<<< Extensionality
+open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
 
-module Varieties.EquationalLogic {𝓞 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
+module Varieties.EquationalLogic {𝑆 : Signature 𝓞 𝓥} where
+-- =======
+-- open import Relations.Extensionality using (DFunExt)
+
+-- module Varieties.EquationalLogic {𝓞 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
+-- >>>>>>> master
 
 open import Subalgebras.Subalgebras{𝑆 = 𝑆} using (_≤_; SubalgebraOfClass; iso→injective)
 open import Algebras.Products{𝑆 = 𝑆} using (ov; ⨅)
@@ -116,7 +122,7 @@ The binary relation ⊧ would be practically useless if it were not an *algebrai
 
 module _ {𝓤 𝓦 : Level}{X : Type 𝓧}{𝑨 : Algebra 𝓤 𝑆} where
 
- ⊧-I-invar : DFunExt → (𝑩 : Algebra 𝓦 𝑆)(p q : Term X)
+ ⊧-I-invar : (∀ a b → funext a b) → (𝑩 : Algebra 𝓦 𝑆)(p q : Term X)
   →          𝑨 ⊧ p ≈ q  →  𝑨 ≅ 𝑩  →  𝑩 ⊧ p ≈ q
 
  ⊧-I-invar fe 𝑩 p q Apq (f , g , f∼g , g∼f) = (fe (𝓧 ⊔ 𝓦) 𝓦) λ x →
@@ -139,10 +145,10 @@ The ⊧ relation is also invariant under the algebraic lift and lower operations
 
 module _ {X : Type 𝓧}{𝑨 : Algebra 𝓤 𝑆} where
 
- ⊧-Lift-invar : DFunExt → (p q : Term X) → 𝑨 ⊧ p ≈ q → Lift-alg 𝑨 𝓦 ⊧ p ≈ q
+ ⊧-Lift-invar : (∀ a b → funext a b) → (p q : Term X) → 𝑨 ⊧ p ≈ q → Lift-alg 𝑨 𝓦 ⊧ p ≈ q
  ⊧-Lift-invar fe p q Apq = ⊧-I-invar fe (Lift-alg 𝑨 _) p q Apq Lift-≅
 
- ⊧-lower-invar : DFunExt → (p q : Term X) → Lift-alg 𝑨 𝓦 ⊧ p ≈ q  →  𝑨 ⊧ p ≈ q
+ ⊧-lower-invar : (∀ a b → funext a b) → (p q : Term X) → Lift-alg 𝑨 𝓦 ⊧ p ≈ q  →  𝑨 ⊧ p ≈ q
  ⊧-lower-invar fe p q lApq = ⊧-I-invar fe 𝑨 p q lApq (≅-sym Lift-≅)
 
 \end{code}
@@ -159,7 +165,7 @@ Identities modeled by an algebra `𝑨` are also modeled by every subalgebra of 
 
 module _ {𝓤 𝓦 : Level} {X : Type 𝓧} where
 
- ⊧-S-invar : DFunExt → {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆){p q : Term X}
+ ⊧-S-invar : (∀ a b → funext a b) → {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆){p q : Term X}
   →          𝑨 ⊧ p ≈ q  →  𝑩 ≤ 𝑨  →  𝑩 ⊧ p ≈ q
  ⊧-S-invar fe {𝑨} 𝑩 {p}{q} Apq B≤A = (fe (𝓧 ⊔ 𝓦) 𝓦) λ b → (∥ B≤A ∥) (ξ b)
   where
@@ -178,7 +184,7 @@ module _ {𝓤 𝓦 : Level} {X : Type 𝓧} where
 
  \begin{code}
 
- ⊧-S-class-invar : DFunExt → {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}(p q : Term X)
+ ⊧-S-class-invar : (∀ a b → funext a b) → {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}(p q : Term X)
   →                𝒦 ⊧ p ≋ q → (𝑩 : SubalgebraOfClass{𝓦} 𝒦) → ∣ 𝑩 ∣ ⊧ p ≈ q
  ⊧-S-class-invar fe p q Kpq (𝑩 , 𝑨 , SA , (ka , BisSA)) = ⊧-S-invar fe 𝑩 {p}{q}((Kpq ka)) (h , hinj)
   where
@@ -189,9 +195,6 @@ module _ {𝓤 𝓦 : Level} {X : Type 𝓧} where
  \end{code}
 
 
-
-
-
  #### <a id="product-invariance">Product invariance of ⊧</a>
 
  An identity satisfied by all algebras in an indexed collection is also satisfied by the product of algebras in that collection.
@@ -200,7 +203,7 @@ module _ {𝓤 𝓦 : Level} {X : Type 𝓧} where
 
 module _ {I : Type 𝓦}(𝒜 : I → Algebra 𝓤 𝑆){X : Type 𝓧} where
 
- ⊧-P-invar : DFunExt → {p q : Term X} → (∀ i → 𝒜 i ⊧ p ≈ q) → ⨅ 𝒜 ⊧ p ≈ q
+ ⊧-P-invar : (∀ a b → funext a b) → {p q : Term X} → (∀ i → 𝒜 i ⊧ p ≈ q) → ⨅ 𝒜 ⊧ p ≈ q
  ⊧-P-invar fe {p}{q} 𝒜pq = γ
   where
   γ : ⨅ 𝒜 ⟦ p ⟧  ≡  ⨅ 𝒜 ⟦ q ⟧
@@ -215,7 +218,7 @@ An identity satisfied by all algebras in a class is also satisfied by the produc
 
 \begin{code}
 
- ⊧-P-class-invar : DFunExt → {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}{p q : Term X}
+ ⊧-P-class-invar : (∀ a b → funext a b) → {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}{p q : Term X}
   →                𝒦 ⊧ p ≋ q → (∀ i → 𝒜 i ∈ 𝒦) → ⨅ 𝒜 ⊧ p ≈ q
 
  ⊧-P-class-invar fe {𝒦}{p}{q}α K𝒜 = ⊧-P-invar fe {p}{q}λ i → α (K𝒜 i)
@@ -226,7 +229,7 @@ An identity satisfied by all algebras in a class is also satisfied by the produc
 
  \begin{code}
 
- ⊧-P-lift-invar : DFunExt → {p q : Term X} → (∀ i → Lift-alg (𝒜 i) 𝓦 ⊧ p ≈ q)  →  ⨅ 𝒜 ⊧ p ≈ q
+ ⊧-P-lift-invar : (∀ a b → funext a b) → {p q : Term X} → (∀ i → Lift-alg (𝒜 i) 𝓦 ⊧ p ≈ q)  →  ⨅ 𝒜 ⊧ p ≈ q
  ⊧-P-lift-invar fe {p}{q} α = ⊧-P-invar fe {p}{q}Aipq
   where
   Aipq : ∀ i → (𝒜 i) ⊧ p ≈ q
@@ -243,7 +246,7 @@ If an algebra 𝑨 models an identity p ≈ q, then the pair (p , q) belongs to 
 
 module _ {X : Type 𝓧}{𝑨 : Algebra 𝓤 𝑆} where
 
- ⊧-H-invar : DFunExt → {p q : Term X}(φ : hom (𝑻 X) 𝑨) → 𝑨 ⊧ p ≈ q  →  ∣ φ ∣ p ≡ ∣ φ ∣ q
+ ⊧-H-invar : (∀ a b → funext a b) → {p q : Term X}(φ : hom (𝑻 X) 𝑨) → 𝑨 ⊧ p ≈ q  →  ∣ φ ∣ p ≡ ∣ φ ∣ q
 
  ⊧-H-invar fe {p}{q} φ β = ∣ φ ∣ p      ≡⟨ cong ∣ φ ∣ (term-agreement (fe 𝓥 (ov 𝓧)) p) ⟩
                  ∣ φ ∣((𝑻 X ⟦ p ⟧) ℊ)   ≡⟨ (comm-hom-term (fe 𝓥 𝓤) 𝑨 φ p ℊ ) ⟩
@@ -265,7 +268,7 @@ More generally, an identity is satisfied by all algebras in a class if and only 
 module _ {X : Type 𝓧}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}  where
 
  -- ⇒ (the "only if" direction)
- ⊧-H-class-invar : DFunExt → {p q : Term X}
+ ⊧-H-class-invar : (∀ a b → funext a b) → {p q : Term X}
   →                𝒦 ⊧ p ≋ q → ∀ 𝑨 φ → 𝑨 ∈ 𝒦 → ∣ φ ∣ ∘ (𝑻 X ⟦ p ⟧) ≡ ∣ φ ∣ ∘ (𝑻 X ⟦ q ⟧)
  ⊧-H-class-invar fe {p}{q} α 𝑨 φ ka = (fe (ov 𝓧) 𝓤) ξ
   where
@@ -277,7 +280,7 @@ module _ {X : Type 𝓧}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}  where
 
 
 -- ⇐ (the "if" direction)
- ⊧-H-class-coinvar : DFunExt → {p q : Term X}
+ ⊧-H-class-coinvar : (∀ a b → funext a b) → {p q : Term X}
   →  (∀ 𝑨 φ → 𝑨 ∈ 𝒦 → ∣ φ ∣ ∘ (𝑻 X ⟦ p ⟧) ≡ ∣ φ ∣ ∘ (𝑻 X ⟦ q ⟧)) → 𝒦 ⊧ p ≋ q
 
  ⊧-H-class-coinvar fe {p}{q} β {𝑨} ka = γ
