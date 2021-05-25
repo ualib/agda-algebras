@@ -21,13 +21,15 @@ open import Data.Product renaming (_,_ to infixr 50 _,_) using (Σ; _×_; Σ-syn
 open import Relation.Binary using (Rel)
 
 -- Imports from the Agda Universal Algebra Library
-open import Overture.Preliminaries using (Type; 𝓞; 𝓤; 𝓥; 𝓦; ∣_∣; ∥_∥)
+open import Overture.Preliminaries using (Type; ∣_∣; ∥_∥)
 open import Relations.Continuous using (ContRel; DepRel; cont-compatible-op; dep-compatible-op)
 open import Relations.Discrete using (Op; _|:_)
 
 module Algebras.Basic where
 
-
+private
+  variable
+    𝓞 𝓤 𝓥 𝓦 : Level
 \end{code}
 
 #### <a id="signatures">The signatures of an algebra</a>

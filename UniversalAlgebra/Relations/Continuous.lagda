@@ -15,12 +15,14 @@ This is the [Relations.Continuous][] module of the [Agda Universal Algebra Libra
 
 open import Agda.Primitive using (_⊔_; lzero; lsuc; Level)
 open import Agda.Builtin.Equality renaming (_≡_ to infix 0 _≡_)
-open import Overture.Preliminaries using (Type; 𝓤; 𝓥; 𝓦)
+open import Overture.Preliminaries using (Type)
 open import Relations.Discrete using (Op)
 
 module Relations.Continuous where
 
-
+private
+  variable
+    𝓤 𝓥 𝓦 : Level
 \end{code}
 
 #### <a id="motivation">Motivation</a>
@@ -121,6 +123,3 @@ In the definition of `dep-compatible-op`, we let Agda infer the type of `𝒶`; 
 <span style="float:right;">[Relations.Quotients →](Relations.Quotients.html)</span>
 
 {% include UALib.Links.md %}
-
-
-

@@ -27,10 +27,10 @@ open import Relation.Unary using (⋂; _∈_; Pred; _⊆_)
 open import Algebras.Basic
 open import Overture.Inverses using (IsInjective)
 open import Overture.Preliminaries
- using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; _∙_;_⁻¹; ∣_∣; ∥_∥; snd; fst)
+ using (Type; _∙_;_⁻¹; ∣_∣; ∥_∥; snd; fst)
 open import Relations.Truncation using (hfunext)
 
-module Varieties.Varieties {𝑆 : Signature 𝓞 𝓥} where
+module Varieties.Varieties {𝓞 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
 
 open import Algebras.Products{𝑆 = 𝑆} using (ov; ⨅; 𝔄; class-product)
 open import Homomorphisms.Basic{𝑆 = 𝑆} using (hom; 𝒾𝒹; ∘-hom; is-homomorphism)
@@ -38,7 +38,9 @@ open import Homomorphisms.HomomorphicImages{𝑆 = 𝑆} using (HomImages; Lift-
 open import Homomorphisms.Isomorphisms{𝑆 = 𝑆} using (_≅_; ≅-sym; Lift-≅; ≅-trans; ≅-refl; Lift-alg-iso; ⨅≅; Lift-alg-associative; Lift-alg-⨅≅)
 open import Subalgebras.Subalgebras{𝑆 = 𝑆} using (_≤_; _IsSubalgebraOfClass_; ≤-iso; ≤-refl; Subalgebra; ≤-TRANS-≅; ≤-trans; Lift-≤-Lift; ≤-Lift; _IsSubalgebraOf_)
 
-
+private
+  variable
+    𝓤 𝓦 𝓧 : Level
 \end{code}
 
 

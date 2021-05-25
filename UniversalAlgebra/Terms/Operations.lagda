@@ -28,18 +28,21 @@ open import Relation.Unary using (Pred)
 -- Imports from the Agda Universal Algebra Library
 open import Overture.Inverses using (IsSurjective; Image_∋_; Inv; InvIsInv; eq)
 open import Overture.Preliminaries
- using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; 𝓨; _∙_;_⁻¹; ∣_∣; ∥_∥)
+ using (Type; _∙_;_⁻¹; ∣_∣; ∥_∥)
 
 open import Algebras.Basic
 open import Relations.Discrete using (_|:_)
 
-module Terms.Operations {𝑆 : Signature 𝓞 𝓥} where
+module Terms.Operations {𝓞 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
 
 open import Algebras.Congruences{𝑆 = 𝑆} using (Con; IsCongruence)
 open import Algebras.Products{𝑆 = 𝑆} using (ov; ⨅)
 open import Homomorphisms.Basic {𝑆 = 𝑆} using (hom)
 open import Terms.Basic {𝑆 = 𝑆}
 
+private
+  variable
+    𝓤 𝓦 𝓧 𝓨 : Level
 \end{code}
 
 **Notation**. In the line above, we renamed for notational convenience the `generator` constructor of the `Term` type, so from now on we use `ℊ` in place of `generator`.

@@ -43,11 +43,17 @@ open import Relation.Unary using (⋂; _∈_; Pred; _⊆_)
 -- Imports from the Agda Universal Algebra Library
 open import Algebras.Basic
 open import Overture.Inverses using (IsInjective; ∘-injective)
-open import Overture.Preliminaries using (Type; 𝓞; 𝓤; 𝓥; 𝓦; 𝓧; _∙_;_⁻¹; ∣_∣; ∥_∥; snd)
+open import Overture.Preliminaries using (Type; _∙_;_⁻¹; ∣_∣; ∥_∥; snd)
 open import Relations.Discrete using (Im_⊆_)
+-- <<<<<<< Extensionality
 open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
 
 module Varieties.EquationalLogic {𝑆 : Signature 𝓞 𝓥} where
+-- =======
+-- open import Relations.Extensionality using (DFunExt)
+
+-- module Varieties.EquationalLogic {𝓞 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
+-- >>>>>>> master
 
 open import Subalgebras.Subalgebras{𝑆 = 𝑆} using (_≤_; SubalgebraOfClass; iso→injective)
 open import Algebras.Products{𝑆 = 𝑆} using (ov; ⨅)
@@ -58,6 +64,9 @@ open import Terms.Operations {𝑆 = 𝑆} using (_⟦_⟧; comm-hom-term; inter
 
 open Term
 
+private
+  variable
+    𝓤 𝓦 𝓧 : Level
 \end{code}
 
 
