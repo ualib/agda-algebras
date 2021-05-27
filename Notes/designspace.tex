@@ -1,0 +1,182 @@
+
+\documentclass[a4paper,UKenglish,cleveref, autoref, thm-restate]{lipics-v2021}
+%\graphicspath{{./graphics/}}%helpful if your graphic files are in another directory
+
+\bibliographystyle{plainurl}
+
+\title{The design space of generalizing universal algebra}
+
+\titlerunning{Design space of UA}
+
+\author{Jacques Carette}{McMaster University, Canada
+  \and \url{http://www.cas.mcmaster.ca/~carette}
+}{carette@mcmaster.ca}{https://orcid.org/0000-0001-8993-9804}{Funded in part by NSERC}
+
+\authorrunning{J. Carette}
+
+\Copyright{Jacques Carette}
+
+\ccsdesc[500]{Theory of computation~Type theory}
+
+\keywords{Universal Algebra, Theories}
+
+% \category{} %optional, e.g. invited paper
+
+% \relatedversion{} %optional, e.g. full version hosted on arXiv, HAL, or other respository/website
+%\relatedversiondetails[linktext={opt. text shown instead of the URL}, cite=DBLP:books/mk/GrayR93]{Classification (e.g. Full Version, Extended Version, Previous Version}{URL to related version} %linktext and cite are optional
+
+%\supplement{}%optional, e.g. related research data, source code, ... hosted on a repository like zenodo, figshare, GitHub, ...
+%\supplementdetails[linktext={opt. text shown instead of the URL}, cite=DBLP:books/mk/GrayR93, subcategory={Description, Subcategory}, swhid={Software Heritage Identifier}]{General Classification (e.g. Software, Dataset, Model, ...)}{URL to related version} %linktext, cite, and subcategory are optional
+
+%\funding{(Optional) general funding statement \dots}%optional, to capture a funding statement, which applies to all authors. Please enter author specific funding statements as fifth argument of the \author macro.
+
+% \acknowledgements{I want to thank \dots}%optional
+
+\nolinenumbers %uncomment to disable line numbering
+
+\hideLIPIcs  %uncomment to remove references to LIPIcs series (logo, DOI, ...), e.g. when preparing a pre-final version to be uploaded to arXiv or another public repository
+
+%Editor-only macros:: begin (do not touch as author)%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\EventEditors{John Q. Open and Joan R. Access}
+\EventNoEds{2}
+\EventLongTitle{42nd Conference on Very Important Topics (CVIT 2016)}
+\EventShortTitle{CVIT 2016}
+\EventAcronym{CVIT}
+\EventYear{2016}
+\EventDate{December 24--27, 2016}
+\EventLocation{Little Whinging, United Kingdom}
+\EventLogo{}
+\SeriesVolume{42}
+\ArticleNo{23}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\nat}{\ensuremath{\mathbb{N}}}
+\newcommand{\bool}{\ensuremath{\mathbb{B}}}
+
+\newcommand{\Set}{\ensuremath{\mathsf{Set}}}
+\newcommand{\Hom}{\ensuremath{\mathsf{Hom}}}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Documents the various directions that generalizations of universal algebra
+can take.
+\end{abstract}
+
+\section{The Design Space}
+\label{sec:design-space}
+
+Universal algebra is the study of theories that can be defined in
+single-sorted equational logic. Part of it is to look at the syntax of
+such theories, and then various constructions that can be performed
+uniformly on these.
+
+\subsection{Restrictions I}
+Traditionally, the following restrictions are put in place:
+\begin{enumerate}
+\item \label{1sort} There is a single \emph{sort} (or type). Everything
+ is homogeneous in terms of a single carrier ``set''
+\item \label{operations} There is a discrete, finite ``set'' of
+operation symbols.
+\item \label{arity} Each operation symbol has a finite, ordered ``number''
+of inputs. In other words, each has an \emph{arity} which can be
+identified with the natural numbers \nat.
+\item \label{coarity} Each operation symbol has a single ``result''.
+In other words, its \emph{coarity} is $1$.
+\item \label{equality} There is an assumed notion of equality in the
+meta-theory, written as $=$. It is generally only used at the single
+assumed sort. No other relations are assumed.
+\item \label{set-models} The \emph{models} are assumed to be in 
+\Set.
+\item \label{UIP} Equalities must simply hold in a model. There is
+no content in the proofs that these constraints are satisfied.
+This is related to \emph{proof irrelevance} and 
+\emph{Uniqueness of Identity Proofs} (UIP).
+\item \label{set-equality} It is meaningful to talk about the equality
+of functions in \Set.
+\item \label{set-quotient} It is meaningful to talk about the quotients
+in \Set.
+\item \label{totality} The interpretation of operation symbols in \Set
+is by \emph{total} functions.
+\end{enumerate}
+
+Many of these restrictions can be lifted, and quite a lot of the utility
+is retained. In particular, many of the fundamental constructions still work,
+and many of the basic results too. The more advanced classification theorems
+require re-interpretation, when they are valid at all.
+
+One leading example is being able to make sense of the following (true)
+statement: ``A Functor is a homomorphism of categories''. The construction
+of what it means to be a homomorphism needs to be lifted to the situation
+where $\mathsf{Category}$ as a \emph{theory} can exist. One can then
+continue this to say ``A natural transformation is a homomorphism of 
+functors'', which is again true, but considerably more difficult to
+operationalize.
+
+\subsection{Lifting Restrictions I}
+
+We discuss, to various levels of details, what it means to lift some
+some of the above restrictions. The usefulness of doing so is also listed.
+
+\subsubsection{Sorts}
+Vector spaces are very naturally $2$-sorted. So are group-actions.
+
+\subsubsection{Operations}
+Very little breaks down if one assumes non-finite signatures. Sometimes it
+is useful to assume gradedness.
+
+\subsubsection{Arity}
+There is no strong reason to assume ordered, finite number of inputs.
+Having various ``shapes'' of inputs is quite useful too. 
+
+\subsubsection{Coarity}
+Multiple outputs are quite prevalent. Just because they can often be
+``coded'' via multiple functions doesn't mean it's a good idea to do so.
+Even simple functions like 'factoring a natural number' wants quite
+complex coarity to exist.
+
+\subsubsection{Equality}
+
+\subsubsection{Set models}
+We know we can have ``algebras'' in all sorts of other places. This makes
+the language of universal algebra much more polymorphic, as it can then
+talk about structures in all sorts of other interesting places.
+Monoid objects are rather interesting in a lot of different categories.
+
+\subsubsection{UIP}
+It would be nice to treat the equations as both first-class and meaningful.
+So it would be good to not erase the proofs.
+
+\subsubsection{Function Equality}
+
+\subsubsection{Totality}
+
+\subsection{Notes}
+
+There are some items that are not clear where to discuss them. Some
+should probably be in a subsequent pair of Restriction/Lift sections,
+as they are dependent on seeing new restrictions that arise from lifting
+some of the ones above.  In particular:
+
+\begin{itemize}
+\item Relations. Classical relations can arise once we go $2$-sorted and
+add \bool to the meta-theory. (It can also be added in-theory as well,
+but that causes unnecessary bloat.)
+\item Relations again. Proof-relevant relations, i.e. relations that are
+inhabited by witnesses, require not only $n$-sorted, but a lifting of
+having just sorts for coarity. This is thus a bigger move.
+\item Indexed sorts. We need these to do (dependently-typed) \Hom for
+category theory.
+\item Parametrized theories. If one wants to internalize homomorphism, it
+is done most elegantly by having parameters. Interestingly, this is a neat
+way to cheat $1$-sortedness.
+\end{itemize}
+%%
+%% Bibliography
+%%
+
+% \bibliography{mathscheme}
+
+\end{document}
