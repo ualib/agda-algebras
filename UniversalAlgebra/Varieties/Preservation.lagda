@@ -173,7 +173,6 @@ Again, the obvious converse is barely worth the bits needed to formalize it.
   IH : ∀ i → Lift-alg (𝒜 i) 𝓤 ⟦ p ⟧ ≡ Lift-alg (𝒜 i) 𝓤 ⟦ q ⟧
   IH i = ⊧-Lift-invar fe p q ((P-id1 p q α) (x i))
 
- P-id1 p q α (pisou{𝑨}{𝑩} x x₁) = ⊧-I-invar fe 𝑩 p q (P-id1 p q α x) x₁
  P-id1 p q α (pisow{𝑨}{𝑩} x x₁) = ⊧-I-invar fe 𝑩 p q (P-id1 p q α x) x₁
 
 \end{code}

@@ -218,7 +218,6 @@ module _ {𝓤 : Level} {fovu : funext (ov 𝓤) (ov 𝓤)}{𝒦 : Pred (Algebra
    η : ⨅ 𝒜 IsSubalgebraOfClass (P{ov 𝓤}{ov 𝓤} (P{𝓤}{ov 𝓤} 𝒦))
    η = lemPS⊆SP hfe fovu  {I} {𝒜} ξ
 
- PS⊆SP hfe (pisou{𝑨}{𝑩} pA A≅B) = siso (PS⊆SP hfe pA) A≅B
  PS⊆SP hfe (pisow{𝑨}{𝑩} pA A≅B) = siso (PS⊆SP hfe pA) A≅B
 
 \end{code}
@@ -238,7 +237,6 @@ P⊆V{𝓤} (pliftu x) = vlift (P⊆V{𝓤}{𝓤} x)
 P⊆V{𝓤}{𝓦} (pliftw x) = vliftw (P⊆V{𝓤}{𝓦} x)
 P⊆V (produ x) = vprodu (λ i → P⊆V (x i))
 P⊆V (prodw x) = vprodw (λ i → P⊆V (x i))
-P⊆V (pisou x x₁) = visou (P⊆V x) x₁
 P⊆V (pisow x x₁) = visow (P⊆V x) x₁
 
 
@@ -334,7 +332,7 @@ If `p : 𝑨 ∈ 𝒦` and `h : X → ∣ 𝑨 ∣`, we view the triple `(𝑨 ,
 \begin{code}
 
  class-prod-s-∈-ps : class-product' ∈ P{ov 𝓤}{ov 𝓤}(S 𝒦)
- class-prod-s-∈-ps = pisou psPllA (⨅≅ {fiu = fe₂}{fiw = fe𝓕𝓤} llA≅A)
+ class-prod-s-∈-ps = pisow psPllA (⨅≅ {fiu = fe₂}{fiw = fe𝓕𝓤} llA≅A)
 
   where
   lA llA : ℑ' → Algebra (ov 𝓤) 𝑆

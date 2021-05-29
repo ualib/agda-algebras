@@ -41,7 +41,6 @@ data P {𝓤 𝓦 : Level}(𝒦 : Pred(Algebra 𝓤 𝑆)(ov 𝓤)) : Pred(Algeb
  pliftw : {𝑨 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑨 ∈ P{𝓤}{𝓦} 𝒦 → Lift-alg 𝑨 (𝓤 ⊔ 𝓦) ∈ P 𝒦
  produ  : {I : Type 𝓦 }{𝒜 : I → Algebra 𝓤 𝑆} → (∀ i → (𝒜 i) ∈ P{𝓤}{𝓤} 𝒦) → ⨅ 𝒜 ∈ P 𝒦
  prodw  : {I : Type 𝓦 }{𝒜 : I → Algebra _ 𝑆} → (∀ i → (𝒜 i) ∈ P{𝓤}{𝓦} 𝒦) → ⨅ 𝒜 ∈ P 𝒦
- pisou  : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra _ 𝑆} → 𝑨 ∈ P{𝓤}{𝓤} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ P 𝒦
  pisow  : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ P{𝓤}{𝓦} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ P 𝒦
 
 \end{code}
@@ -61,12 +60,11 @@ P-mono kk' (pliftu x)   = pliftu (P-mono kk' x)
 P-mono kk' (pliftw x)   = pliftw (P-mono kk' x)
 P-mono kk' (produ x)    = produ (λ i → P-mono kk' (x i))
 P-mono kk' (prodw x)    = prodw (λ i → P-mono kk' (x i))
-P-mono kk' (pisou x x₁) = pisou (P-mono kk' x) x₁
 P-mono kk' (pisow x x₁) = pisow (P-mono kk' x) x₁
 
 
 P-expa : {𝓤 : Level}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} → 𝒦 ⊆ P{𝓤}{𝓤} 𝒦
-P-expa{𝓤}{𝒦} {𝑨} KA = pisou{𝑨 = (Lift-alg 𝑨 𝓤)}{𝑩 = 𝑨} (pbase KA) (≅-sym Lift-≅)
+P-expa{𝓤}{𝒦} {𝑨} KA =  pisow {𝑩 = 𝑨} (pbase KA) (≅-sym Lift-≅)
 
 
 module _ {𝓤 𝓦 : Level} where
@@ -79,7 +77,6 @@ module _ {𝓤 𝓦 : Level} where
  P-idemp (pliftw x)   = pliftw (P-idemp x)
  P-idemp (produ x)    = prodw (λ i → P-idemp (x i))
  P-idemp (prodw x)    = prodw (λ i → P-idemp (x i))
- P-idemp (pisou x x₁) = pisow (P-idemp x) x₁
  P-idemp (pisow x x₁) = pisow (P-idemp x) x₁
 
 \end{code}
