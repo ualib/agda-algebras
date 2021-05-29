@@ -39,7 +39,6 @@ data S {𝓤 𝓦 : Level}(𝒦 : Pred(Algebra 𝓤 𝑆)(ov 𝓤)) : Pred(Algeb
  sbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → Lift-alg 𝑨 𝓦 ∈ S 𝒦
  slift : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → Lift-alg 𝑨 𝓦 ∈ S 𝒦
  ssub  : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra _ 𝑆} → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ S 𝒦
- ssubw : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ S{𝓤}{𝓦} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ S 𝒦
  siso  : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra _ 𝑆} → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ S 𝒦
 
 \end{code}
@@ -54,7 +53,6 @@ S-mono : {𝓤 𝓦 : Level}{𝒦 𝒦' : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}
 S-mono kk' (sbase x)            = sbase (kk' x)
 S-mono kk' (slift{𝑨} x)         = slift (S-mono kk' x)
 S-mono kk' (ssub{𝑨}{𝑩} sA B≤A)  = ssub (S-mono kk' sA) B≤A
-S-mono kk' (ssubw{𝑨}{𝑩} sA B≤A) = ssubw (S-mono kk' sA) B≤A
 S-mono kk' (siso x x₁)          = siso (S-mono kk' x) x₁
 
 \end{code}
@@ -94,17 +92,6 @@ module _ {𝓤 : Level}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
    B≅SA = ∥ snd ∥ BS ∥ ∥
 
  S→subalgebra {𝑩} (ssub{𝑨} sA B≤A) = ∣ AS ∣ , (𝑩 , B≤AS) , ∣ snd ∥ AS ∥ ∣ , ≅-refl
-  where
-   AS : 𝑨 IsSubalgebraOfClass 𝒦
-   AS = S→subalgebra sA
-   SA : Subalgebra ∣ AS ∣
-   SA = fst ∥ AS ∥
-   B≤SA : 𝑩 ≤ ∣ SA ∣
-   B≤SA = ≤-TRANS-≅ 𝑩 ∣ SA ∣ B≤A (∥ snd ∥ AS ∥ ∥)
-   B≤AS : 𝑩 ≤ ∣ AS ∣
-   B≤AS = ≤-trans ∣ AS ∣ B≤SA ∥ SA ∥
-
- S→subalgebra {𝑩} (ssubw{𝑨} sA B≤A) = ∣ AS ∣ , (𝑩 , B≤AS) , ∣ snd ∥ AS ∥ ∣ , ≅-refl
   where
    AS : 𝑨 IsSubalgebraOfClass 𝒦
    AS = S→subalgebra sA

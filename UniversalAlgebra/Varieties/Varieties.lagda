@@ -113,8 +113,6 @@ S⊆SP {𝓤}{𝓦}{𝒦}{𝑩}(ssub{𝑨} sA B≤A) =
   lAsc : lA IsSubalgebraOfClass (P 𝒦)
   lAsc = Lift-alg-subP Asc
 
-S⊆SP (ssubw{𝑨} sA B≤A) = ssubw (S⊆SP sA) B≤A
-
 S⊆SP {𝓤}{𝓦}{𝒦}{𝑩}(siso{𝑨} sA A≅B) = siso{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} lAsp lA≅B
  where
  lA : Algebra (𝓤 ⊔ 𝓦) 𝑆
@@ -197,7 +195,6 @@ module _ {𝓤 : Level} {fovu : funext (ov 𝓤) (ov 𝓤)}{𝒦 : Pred (Algebra
  PS⊆SP _ (pbase (sbase x)) = sbase (pbase x)
  PS⊆SP _ (pbase (slift{𝑨} x)) = slift (S⊆SP{𝓤}{ov 𝓤}{𝒦} (slift x))
  PS⊆SP _ (pbase{𝑩}(ssub{𝑨} sA B≤A)) = siso(ssub(S⊆SP(slift sA))(Lift-≤-Lift 𝑨 B≤A)) ≅-refl
- PS⊆SP _ (pbase {𝑩}(ssubw{𝑨} sA B≤A)) = ssub(slift(S⊆SP sA))(Lift-≤-Lift 𝑨 B≤A)
  PS⊆SP _ (pbase (siso{𝑨}{𝑩} x A≅B)) = siso (S⊆SP (slift x)) ( Lift-alg-iso A≅B )
  PS⊆SP hfe (pliftu x) = slift (PS⊆SP hfe x)
  PS⊆SP hfe (pliftw x) = slift (PS⊆SP hfe x)
@@ -246,7 +243,6 @@ SP⊆V : {𝓤 𝓦 : Level}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}
 SP⊆V (sbase{𝑨} PCloA) = P⊆V (pisow PCloA Lift-≅)
 SP⊆V (slift{𝑨} x) = vliftw (SP⊆V x)
 SP⊆V (ssub{𝑨}{𝑩} spA B≤A) = vssubw (SP⊆V spA) B≤A
-SP⊆V (ssubw{𝑨}{𝑩} spA B≤A) = vssubw (SP⊆V spA) B≤A
 SP⊆V (siso x x₁) = visow (SP⊆V x) x₁
 
 \end{code}
@@ -275,8 +271,6 @@ module _ {𝓤 : Level}  {fe₀ : funext (ov 𝓤) 𝓤}
   where
    B≤lA : 𝑩 ≤ Lift-alg 𝑨 (lsuc (ov 𝓤))
    B≤lA = ≤-Lift 𝑨 B≤A
-
- SP⊆V' (ssubw spA B≤A) = vssubw (SP⊆V' spA) B≤A
 
  SP⊆V' (siso{𝑨}{𝑩} x A≅B) = visow (VlA (SP⊆V x)) γ
   where

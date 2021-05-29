@@ -125,19 +125,6 @@ The converse of the foregoing result is almost too obvious to bother with. Nonet
    γ {𝑩} (inj₁ x) = α x
    γ {𝑩} (inj₂ y) = Apq y
 
- S-id1 p q α (ssubw{𝑨}{𝑩} sA B≤A) =
-  ⊧-S-class-invar fe p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ refl , ≅-refl)
-   where  --Apply S-⊧ to the class 𝒦 ∪ ｛ 𝑨 ｝
-   β : 𝑨 ⊧ p ≈ q
-   β = S-id1 p q α sA
-
-   Apq : ｛ 𝑨 ｝ ⊧ p ≋ q
-   Apq refl = β
-
-   γ : (𝒦 ∪ ｛ 𝑨 ｝) ⊧ p ≋ q
-   γ {𝑩} (inj₁ x) = α x
-   γ {𝑩} (inj₂ y) = Apq y
-
  S-id1 p q α (siso{𝑨}{𝑩} x x₁) = ⊧-I-invar fe 𝑩 p q (S-id1 p q α x) x₁
 
 \end{code}
