@@ -40,6 +40,7 @@ open import Subalgebras.Subalgebras{𝑆 = 𝑆} using (_≤_; _IsSubalgebraOfCl
 
 import Varieties.Algebras.H 𝑆 as VA-H
 import Varieties.Algebras.S 𝑆 as VA-S
+import Varieties.Algebras.P 𝑆 as VA-P
 
 \end{code}
 
@@ -61,27 +62,8 @@ We import some of these things from sub-modules.
 \begin{code}
 open VA-H using (H) public
 open VA-S public
+open VA-P public
 \end{code}
-
-#### <a id="product-closure">Product closure</a>
-
-The most useful inductive type that we have found for representing the semantic notion of an class of algebras closed under the taking of arbitrary products is the following.
-
-\begin{code}
-
-data P {𝓤 𝓦 : Level}(𝒦 : Pred(Algebra 𝓤 𝑆)(ov 𝓤)) : Pred(Algebra(𝓤 ⊔ 𝓦)𝑆)(ov(𝓤 ⊔ 𝓦))
- where
- pbase  : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → Lift-alg 𝑨 𝓦 ∈ P 𝒦
- pliftu : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ P{𝓤}{𝓤} 𝒦 → Lift-alg 𝑨 𝓦 ∈ P 𝒦
- pliftw : {𝑨 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑨 ∈ P{𝓤}{𝓦} 𝒦 → Lift-alg 𝑨 (𝓤 ⊔ 𝓦) ∈ P 𝒦
- produ  : {I : Type 𝓦 }{𝒜 : I → Algebra 𝓤 𝑆} → (∀ i → (𝒜 i) ∈ P{𝓤}{𝓤} 𝒦) → ⨅ 𝒜 ∈ P 𝒦
- prodw  : {I : Type 𝓦 }{𝒜 : I → Algebra _ 𝑆} → (∀ i → (𝒜 i) ∈ P{𝓤}{𝓦} 𝒦) → ⨅ 𝒜 ∈ P 𝒦
- pisou  : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra _ 𝑆} → 𝑨 ∈ P{𝓤}{𝓤} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ P 𝒦
- pisow  : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ P{𝓤}{𝓦} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ P 𝒦
-
-\end{code}
-
-
 
 #### <a id="varietal-closure">Varietal closure</a>
 
@@ -125,64 +107,6 @@ variety 𝓤 = Σ[ 𝒱 ∈ (Pred (Algebra 𝓤 𝑆)(ov 𝓤)) ] is-variety �
 #### <a id="closure-properties">Closure properties</a>
 
 The types defined above represent operators with useful closure properties. We now prove a handful of such properties that we need later.
-
-First, `P` is a closure operator.  This is proved by checking that `P` is *monotone*, *expansive*, and *idempotent*. The meaning of these terms will be clear from the definitions of the types that follow.
-
-\begin{code}
-
-P-mono : {𝓤 𝓦 : Level}{𝒦 𝒦' : Pred(Algebra 𝓤 𝑆)(ov 𝓤)}
- →       𝒦 ⊆ 𝒦' → P{𝓤}{𝓦} 𝒦 ⊆ P{𝓤}{𝓦} 𝒦'
-
-P-mono kk' (pbase x)    = pbase (kk' x)
-P-mono kk' (pliftu x)   = pliftu (P-mono kk' x)
-P-mono kk' (pliftw x)   = pliftw (P-mono kk' x)
-P-mono kk' (produ x)    = produ (λ i → P-mono kk' (x i))
-P-mono kk' (prodw x)    = prodw (λ i → P-mono kk' (x i))
-P-mono kk' (pisou x x₁) = pisou (P-mono kk' x) x₁
-P-mono kk' (pisow x x₁) = pisow (P-mono kk' x) x₁
-
-
-P-expa : {𝓤 : Level}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} → 𝒦 ⊆ P{𝓤}{𝓤} 𝒦
-P-expa{𝓤}{𝒦} {𝑨} KA = pisou{𝑨 = (Lift-alg 𝑨 𝓤)}{𝑩 = 𝑨} (pbase KA) (≅-sym Lift-≅)
-
-
-module _ {𝓤 𝓦 : Level} where
-
- P-idemp : {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}
-  →        P{𝓤 ⊔ 𝓦}{𝓤 ⊔ 𝓦} (P{𝓤}{𝓤 ⊔ 𝓦} 𝒦) ⊆ P{𝓤}{𝓤 ⊔ 𝓦} 𝒦
-
- P-idemp (pbase x)    = pliftw x
- P-idemp (pliftu x)   = pliftw (P-idemp x)
- P-idemp (pliftw x)   = pliftw (P-idemp x)
- P-idemp (produ x)    = prodw (λ i → P-idemp (x i))
- P-idemp (prodw x)    = prodw (λ i → P-idemp (x i))
- P-idemp (pisou x x₁) = pisow (P-idemp x) x₁
- P-idemp (pisow x x₁) = pisow (P-idemp x) x₁
-
-\end{code}
-
-Next we observe that lifting to a higher universe does not break the property of being a subalgebra of an algebra of a class.  In other words, if we lift a subalgebra of an algebra in a class, the result is still a subalgebra of an algebra in the class.
-
-\begin{code}
-module _ {𝓤 𝓦 : Level}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
-
- Lift-alg-subP : {𝑩 : Algebra 𝓤 𝑆}
-  →              𝑩 IsSubalgebraOfClass (P{𝓤}{𝓤} 𝒦)
-  →              (Lift-alg 𝑩 𝓦) IsSubalgebraOfClass (P{𝓤}{𝓦} 𝒦)
-
- Lift-alg-subP {𝑩}(𝑨 , (𝑪 , C≤A) , pA , B≅C ) =
-  lA , (lC , lC≤lA) , plA , (Lift-alg-iso B≅C)
-   where
-   lA lC : Algebra (𝓤 ⊔ 𝓦) 𝑆
-   lA = Lift-alg 𝑨 𝓦
-   lC = Lift-alg 𝑪 𝓦
-
-   lC≤lA : lC ≤ lA
-   lC≤lA = Lift-≤-Lift 𝑨 C≤A
-   plA : lA ∈ P 𝒦
-   plA = pliftu pA
-
-\end{code}
 
 The next lemma would be too obvious to care about were it not for the fact that we'll need it later, so it too must be formalized.
 
