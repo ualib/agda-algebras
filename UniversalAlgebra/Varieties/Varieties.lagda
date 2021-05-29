@@ -39,10 +39,8 @@ open import Homomorphisms.Isomorphisms{𝑆 = 𝑆} using (_≅_; ≅-sym; Lift-
 open import Subalgebras.Subalgebras{𝑆 = 𝑆} using (_≤_; _IsSubalgebraOfClass_; ≤-iso; ≤-refl; Subalgebra; ≤-TRANS-≅; ≤-trans; Lift-≤-Lift; ≤-Lift; _IsSubalgebraOf_)
 
 import Varieties.Algebras.H 𝑆 as VA-H
+import Varieties.Algebras.S 𝑆 as VA-S
 
-private
-  variable
-    𝓤 𝓦 𝓧 : Level
 \end{code}
 
 
@@ -59,29 +57,11 @@ An algebra is a homomorphic image (resp., subalgebra; resp., product) of every a
 A **variety** is a class of algebras, in the same signature, that is closed under the taking of homomorphic images, subalgebras, and arbitrary products.  To represent varieties we define inductive types for the closure operators `H`, `S`, and `P` that are composable.  Separately, we define an inductive type `V` which simultaneously represents closure under all three operators, `H`, `S`, and `P`.
 
 
-
 We import some of these things from sub-modules.
 \begin{code}
 open VA-H using (H) public
+open VA-S public
 \end{code}
-
-#### <a id="subalgebraic-closure">Subalgebraic closure</a>
-
-The most useful inductive type that we have found for representing the semantic notion of a class of algebras that s closed under the taking of subalgebras is the following.
-
-\begin{code}
-
-data S {𝓤 𝓦 : Level}(𝒦 : Pred(Algebra 𝓤 𝑆)(ov 𝓤)) : Pred(Algebra(𝓤 ⊔ 𝓦)𝑆)(ov(𝓤 ⊔ 𝓦))
- where
- sbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → Lift-alg 𝑨 𝓦 ∈ S 𝒦
- slift : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → Lift-alg 𝑨 𝓦 ∈ S 𝒦
- ssub  : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra _ 𝑆} → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ S 𝒦
- ssubw : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ S{𝓤}{𝓦} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ S 𝒦
- siso  : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra _ 𝑆} → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ S 𝒦
-
-\end{code}
-
-
 
 #### <a id="product-closure">Product closure</a>
 
@@ -181,88 +161,6 @@ module _ {𝓤 𝓦 : Level} where
 
 \end{code}
 
-Similarly, S is a closure operator.  The facts that S is idempotent and expansive won't be needed below, so we omit these, but we will make use of monotonicity of S.  Here is the proof of the latter.
-
-\begin{code}
-
-S-mono : {𝓤 𝓦 : Level}{𝒦 𝒦' : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}
- →       𝒦 ⊆ 𝒦' → S{𝓤}{𝓦} 𝒦 ⊆ S{𝓤}{𝓦} 𝒦'
-
-S-mono kk' (sbase x)            = sbase (kk' x)
-S-mono kk' (slift{𝑨} x)         = slift (S-mono kk' x)
-S-mono kk' (ssub{𝑨}{𝑩} sA B≤A)  = ssub (S-mono kk' sA) B≤A
-S-mono kk' (ssubw{𝑨}{𝑩} sA B≤A) = ssubw (S-mono kk' sA) B≤A
-S-mono kk' (siso x x₁)          = siso (S-mono kk' x) x₁
-
-\end{code}
-
-We sometimes want to go back and forth between our two representations of subalgebras of algebras in a class. The tools `subalgebra→S` and `S→subalgebra` are made for that purpose.
-
-\begin{code}
-
-module _ {𝓤 𝓦 : Level}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
-
- subalgebra→S : {𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑩 IsSubalgebraOfClass 𝒦 → 𝑩 ∈ S{𝓤}{𝓦} 𝒦
-
- subalgebra→S {𝑩} (𝑨 , ((𝑪 , C≤A) , KA , B≅C)) = ssub sA B≤A
-  where
-   B≤A : 𝑩 ≤ 𝑨
-   B≤A = ≤-iso 𝑨 B≅C C≤A
-
-   slAu : Lift-alg 𝑨 𝓤 ∈ S{𝓤}{𝓤} 𝒦
-   slAu = sbase KA
-
-   sA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦
-   sA = siso slAu (≅-sym Lift-≅)
-
-
-module _ {𝓤 : Level}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
-
- S→subalgebra : {𝑩 : Algebra 𝓤 𝑆} → 𝑩 ∈ S{𝓤}{𝓤} 𝒦  →  𝑩 IsSubalgebraOfClass 𝒦
-
- S→subalgebra (sbase{𝑩} x) = 𝑩 , (𝑩 , ≤-refl) , x , (≅-sym Lift-≅)
- S→subalgebra (slift{𝑩} x) = ∣ BS ∣ , SA , ∣ snd ∥ BS ∥ ∣ , ≅-trans (≅-sym Lift-≅) B≅SA
-  where
-   BS : 𝑩 IsSubalgebraOfClass 𝒦
-   BS = S→subalgebra x
-   SA : Subalgebra ∣ BS ∣
-   SA = fst ∥ BS ∥
-   B≅SA : 𝑩 ≅ ∣ SA ∣
-   B≅SA = ∥ snd ∥ BS ∥ ∥
-
- S→subalgebra {𝑩} (ssub{𝑨} sA B≤A) = ∣ AS ∣ , (𝑩 , B≤AS) , ∣ snd ∥ AS ∥ ∣ , ≅-refl
-  where
-   AS : 𝑨 IsSubalgebraOfClass 𝒦
-   AS = S→subalgebra sA
-   SA : Subalgebra ∣ AS ∣
-   SA = fst ∥ AS ∥
-   B≤SA : 𝑩 ≤ ∣ SA ∣
-   B≤SA = ≤-TRANS-≅ 𝑩 ∣ SA ∣ B≤A (∥ snd ∥ AS ∥ ∥)
-   B≤AS : 𝑩 ≤ ∣ AS ∣
-   B≤AS = ≤-trans ∣ AS ∣ B≤SA ∥ SA ∥
-
- S→subalgebra {𝑩} (ssubw{𝑨} sA B≤A) = ∣ AS ∣ , (𝑩 , B≤AS) , ∣ snd ∥ AS ∥ ∣ , ≅-refl
-  where
-   AS : 𝑨 IsSubalgebraOfClass 𝒦
-   AS = S→subalgebra sA
-   SA : Subalgebra ∣ AS ∣
-   SA = fst ∥ AS ∥
-   B≤SA : 𝑩 ≤ ∣ SA ∣
-   B≤SA = ≤-TRANS-≅ 𝑩 ∣ SA ∣ B≤A (∥ snd ∥ AS ∥ ∥)
-   B≤AS : 𝑩 ≤ ∣ AS ∣
-   B≤AS = ≤-trans ∣ AS ∣ B≤SA ∥ SA ∥
-
- S→subalgebra {𝑩} (siso{𝑨} sA A≅B) = ∣ AS ∣ , SA ,  ∣ snd ∥ AS ∥ ∣ , (≅-trans (≅-sym A≅B) A≅SA)
-  where
-   AS : 𝑨 IsSubalgebraOfClass 𝒦
-   AS = S→subalgebra sA
-   SA : Subalgebra ∣ AS ∣
-   SA = fst ∥ AS ∥
-   A≅SA : 𝑨 ≅ ∣ SA ∣
-   A≅SA = snd ∥ snd AS ∥
-
-\end{code}
-
 Next we observe that lifting to a higher universe does not break the property of being a subalgebra of an algebra of a class.  In other words, if we lift a subalgebra of an algebra in a class, the result is still a subalgebra of an algebra in the class.
 
 \begin{code}
@@ -351,7 +249,7 @@ We need to formalize one more lemma before arriving the main objective of this s
 
 \begin{code}
 
-module _ {𝒦 : Pred(Algebra 𝓤 𝑆)(ov 𝓤)} where
+module _ {𝓤 𝓦 : Level} {𝒦 : Pred(Algebra 𝓤 𝑆)(ov 𝓤)} where
 
  lemPS⊆SP : hfunext 𝓦 𝓤 → funext 𝓦 𝓤 → {I : Type 𝓦}{ℬ : I → Algebra 𝓤 𝑆}
   →         (∀ i → (ℬ i) IsSubalgebraOfClass 𝒦)
@@ -401,7 +299,7 @@ Finally, we are in a position to prove that a product of subalgebras of algebras
 
 \begin{code}
 
-module _ {fovu : funext (ov 𝓤) (ov 𝓤)}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
+module _ {𝓤 : Level} {fovu : funext (ov 𝓤) (ov 𝓤)}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
 
  PS⊆SP : -- extensionality assumptions:
             hfunext (ov 𝓤)(ov 𝓤)
@@ -474,7 +372,7 @@ As mentioned earlier, a technical hurdle that must be overcome when formalizing 
 
 open Lift
 
-module Vlift {fe₀ : funext (ov 𝓤) 𝓤}
+module Vlift {𝓤 : Level} {fe₀ : funext (ov 𝓤) 𝓤}
          {fe₁ : funext ((ov 𝓤) ⊔ (lsuc (ov 𝓤))) (lsuc (ov 𝓤))}
          {fe₂ : funext (ov 𝓤) (ov 𝓤)}
          {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
@@ -565,7 +463,7 @@ Before doing so, we need to redefine the class product so that each factor comes
 
 \begin{code}
 
-module class-products-with-maps
+module class-products-with-maps {𝓤 : Level}
  {X : Type 𝓤}
  {fe𝓕𝓤 : funext (ov 𝓤) 𝓤}
  {fe₁ : funext ((ov 𝓤) ⊔ (lsuc (ov 𝓤))) (lsuc (ov 𝓤))}
