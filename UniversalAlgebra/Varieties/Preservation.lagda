@@ -31,7 +31,7 @@ open import Overture.Preliminaries
  using (Type; _∙_;_⁻¹; ∣_∣; ∥_∥; snd; fst)
 open import Overture.Inverses using (Inv; InvIsInv)
 
-module Varieties.Preservation {𝓞 𝓤 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
+module Varieties.Preservation {𝓞 𝓤 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
 
 open import Algebras.Products{𝑆 = 𝑆} using (ov)
 open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using (_≅_; ≅-refl)
@@ -39,7 +39,7 @@ open import Terms.Basic {𝑆 = 𝑆} using (Term; 𝑻; lift-hom)
 open import Terms.Operations {𝑆 = 𝑆} using (_⟦_⟧; comm-hom-term)
 open import Varieties.EquationalLogic{𝑆 = 𝑆}
  using (_⊧_≋_; _⊧_≈_; Th; ⊧-I-invar; ⊧-Lift-invar; ⊧-lower-invar; ⊧-S-invar; ⊧-S-class-invar; ⊧-P-lift-invar; ⊧-P-invar)
-open import Varieties.Varieties {𝑆 = 𝑆} using (H; S; P; V)
+open import Varieties.Varieties 𝑆 using (H; S; P; V)
 
 private
   variable

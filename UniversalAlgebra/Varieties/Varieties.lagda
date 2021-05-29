@@ -30,13 +30,15 @@ open import Overture.Preliminaries
  using (Type; _∙_;_⁻¹; ∣_∣; ∥_∥; snd; fst)
 open import Relations.Truncation using (hfunext)
 
-module Varieties.Varieties {𝓞 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
+module Varieties.Varieties {𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
 
 open import Algebras.Products{𝑆 = 𝑆} using (ov; ⨅; 𝔄; class-product)
 open import Homomorphisms.Basic{𝑆 = 𝑆} using (hom; 𝒾𝒹; ∘-hom; is-homomorphism)
 open import Homomorphisms.HomomorphicImages{𝑆 = 𝑆} using (HomImages; Lift-alg-hom-image)
 open import Homomorphisms.Isomorphisms{𝑆 = 𝑆} using (_≅_; ≅-sym; Lift-≅; ≅-trans; ≅-refl; Lift-alg-iso; ⨅≅; Lift-alg-associative; Lift-alg-⨅≅)
 open import Subalgebras.Subalgebras{𝑆 = 𝑆} using (_≤_; _IsSubalgebraOfClass_; ≤-iso; ≤-refl; Subalgebra; ≤-TRANS-≅; ≤-trans; Lift-≤-Lift; ≤-Lift; _IsSubalgebraOf_)
+
+import Varieties.Algebras.H 𝑆 as VA-H
 
 private
   variable
@@ -58,20 +60,9 @@ A **variety** is a class of algebras, in the same signature, that is closed unde
 
 
 
-
-#### <a id="homomorphic-closure">Homomorphic closure</a>
-
-We define the inductive type `H` to represent classes of algebras that include all homomorphic images of algebras in the class; i.e., classes that are closed under the taking of homomorphic images.
-
+We import some of these things from sub-modules.
 \begin{code}
-
-data H {𝓤 𝓦 : Level}(𝒦 : Pred(Algebra 𝓤 𝑆)(ov 𝓤)) : Pred (Algebra (𝓤 ⊔ 𝓦) 𝑆)(ov(𝓤 ⊔ 𝓦))
- where
- hbase : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ 𝒦 → Lift-alg 𝑨 𝓦 ∈ H 𝒦
- hlift : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ H{𝓤}{𝓤} 𝒦 → Lift-alg 𝑨 𝓦 ∈ H 𝒦
- hhimg : {𝑨 𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑨 ∈ H{𝓤}{𝓦} 𝒦 → ((𝑩 , _) : HomImages 𝑨) → 𝑩 ∈ H 𝒦
- hiso  : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra (𝓤 ⊔ 𝓦) 𝑆} → 𝑨 ∈ H{𝓤}{𝓤} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ H 𝒦
-
+open VA-H using (H) public
 \end{code}
 
 #### <a id="subalgebraic-closure">Subalgebraic closure</a>

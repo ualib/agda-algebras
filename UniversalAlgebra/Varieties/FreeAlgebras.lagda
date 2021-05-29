@@ -37,7 +37,7 @@ open import Relations.Extensionality using (swelldef; pred-ext)
 open import Relations.Discrete using (kernel)
 open import Relations.Truncation using (is-set; blk-uip; hfunext)
 
-module Varieties.FreeAlgebras {𝓞 𝓤 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
+module Varieties.FreeAlgebras {𝓞 𝓤 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
 
 open import Algebras.Congruences{𝑆 = 𝑆} using (Con; IsCongruence; mkcon)
 open import Algebras.Products{𝑆 = 𝑆} using (ov; ⨅)
@@ -48,8 +48,8 @@ open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using (_≅_; ≅-refl; ≅
 open import Terms.Basic {𝑆 = 𝑆} using (Term; 𝑻; lift-hom; free-lift; free-unique; lift-of-epi-is-epi)
 open import Terms.Operations {𝑆 = 𝑆} using (_⟦_⟧; comm-hom-term; free-lift-interp)
 open import Varieties.EquationalLogic{𝑆 = 𝑆} using (_⊧_≋_; _⊧_≈_; Th; Mod)
-open import Varieties.Preservation {𝓤 = 𝓤} {𝑆 = 𝑆}
-open import Varieties.Varieties {𝑆 = 𝑆}
+open import Varieties.Preservation {𝓤 = 𝓤} 𝑆
+open import Varieties.Varieties 𝑆
 
 open Term
 
