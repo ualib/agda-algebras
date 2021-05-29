@@ -31,11 +31,7 @@ open import Overture.Preliminaries
  using (Type; _∙_;_⁻¹; ∣_∣; ∥_∥; snd; fst)
 open import Overture.Inverses using (Inv; InvIsInv)
 
--- <<<<<<< Extensionality
-module Varieties.Preservation  {𝑆 : Signature 𝓞 𝓥}{𝓤 : Level} where
--- =======
--- module Varieties.Preservation {𝓞 𝓤 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
--- >>>>>>> master
+module Varieties.Preservation {𝓞 𝓤 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
 
 open import Algebras.Products{𝑆 = 𝑆} using (ov)
 open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using (_≅_; ≅-refl)
