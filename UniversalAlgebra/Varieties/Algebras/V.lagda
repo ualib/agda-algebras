@@ -53,7 +53,6 @@ data V {𝓤 𝓦 : Level}(𝒦 : Pred(Algebra 𝓤 𝑆)(ov 𝓤)) : Pred(Algeb
  vlift  : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ∈ V{𝓤}{𝓤} 𝒦 → Lift-alg 𝑨 𝓦 ∈ V 𝒦
  vliftw : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓦} 𝒦 → Lift-alg 𝑨 (𝓤 ⊔ 𝓦) ∈ V 𝒦
  vhimg  : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓦} 𝒦 → ((𝑩 , _) : HomImages 𝑨) → 𝑩 ∈ V 𝒦
- vssub  : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓤} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ V 𝒦
  vssubw : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{𝓤}{𝓦} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ V 𝒦
  vprodu : {I : Type 𝓦}{𝒜 : I → Algebra 𝓤 𝑆} → (∀ i → (𝒜 i) ∈ V{𝓤}{𝓤} 𝒦) → ⨅ 𝒜 ∈ V 𝒦
  vprodw : {I : Type 𝓦}{𝒜 : I → Algebra _ 𝑆} → (∀ i → (𝒜 i) ∈ V{𝓤}{𝓦} 𝒦) → ⨅ 𝒜 ∈ V 𝒦
@@ -100,7 +99,6 @@ module Vlift {𝓤 : Level} {fe₀ : funext (ov 𝓤) 𝓤}
   vhimg{𝑩 = Lift-alg 𝑩 (lsuc (ov 𝓤))}
    (VlA x) ((Lift-alg ∣ hB ∣ (lsuc (ov 𝓤))) , (Lift-alg-hom-image {𝑩 = ∣ hB ∣} ∥ hB ∥))
 
- VlA (vssub{𝑨}{𝑩} x B≤A) = vssubw (vlift{𝓦 = (lsuc (ov 𝓤))} x) (Lift-≤-Lift 𝑨 B≤A)
  VlA (vssubw{𝑨}{𝑩} x B≤A) = vssubw (VlA x) (Lift-≤-Lift 𝑨 B≤A)
  VlA (vprodu{I}{𝒜} x) = visow (vprodw vlA) (≅-sym B≅A)
   where

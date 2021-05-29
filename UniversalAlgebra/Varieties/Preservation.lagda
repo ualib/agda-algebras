@@ -204,18 +204,6 @@ Finally, we prove the analogous preservation lemmas for the closure operator `V`
                 (𝑩 ⟦ q ⟧)(φ ∘(preim 𝒃)) ≡⟨ cong (𝑩 ⟦ q ⟧) (ζ 𝒃) ⟩
                 (𝑩 ⟦ q ⟧) 𝒃             ∎
 
- V-id1 p q α (vssub {𝑨}{𝑩} VA B≤A) = ⊧-S-class-invar fe p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ refl , ≅-refl)
-   where
-   IH : 𝑨 ⊧ p ≈ q
-   IH = V-id1 p q α VA
-
-   Asinglepq : ｛ 𝑨 ｝ ⊧ p ≋ q
-   Asinglepq refl = IH
-
-   γ : (𝒦 ∪ ｛ 𝑨 ｝) ⊧ p ≋ q
-   γ {𝑩} (inj₁ x) = α x
-   γ {𝑩} (inj₂ y) = Asinglepq y
-
  V-id1 p q α ( vssubw {𝑨}{𝑩} VA B≤A ) =
   ⊧-S-class-invar fe p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ refl , ≅-refl)
    where
@@ -258,7 +246,6 @@ Finally, we prove the analogous preservation lemmas for the closure operator `V`
                  (𝑩 ⟦ q ⟧) (φ ∘ (preim 𝒃))  ≡⟨ cong (𝑩 ⟦ q ⟧) (ζ 𝒃)⟩
                  (𝑩 ⟦ q ⟧) 𝒃               ∎
 
- V-id1' p q α (vssub{𝑨}{𝑩} VA B≤A) = ⊧-S-invar fe 𝑩 {p}{q}(V-id1 p q α VA) B≤A
  V-id1' p q α (vssubw {𝑨}{𝑩} VA B≤A) = ⊧-S-invar fe 𝑩 {p}{q}(V-id1' p q α VA) B≤A
  V-id1' p q α (vprodu{I}{𝒜} V𝒜) = ⊧-P-invar 𝒜 fe {p}{q} λ i → V-id1 p q α (V𝒜 i)
  V-id1' p q α (vprodw{I}{𝒜} V𝒜) = ⊧-P-invar 𝒜 fe {p}{q} λ i → V-id1' p q α (V𝒜 i)
