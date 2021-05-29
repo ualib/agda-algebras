@@ -90,8 +90,6 @@ module _ {fe : (∀ a b → funext a b)}{X : Type 𝓧} {𝒦 : Pred (Algebra �
                 (𝑩 ⟦ q ⟧)(φ ∘(preim 𝒃)) ≡⟨ cong (𝑩 ⟦ q ⟧) (ζ 𝒃) ⟩
                 (𝑩 ⟦ q ⟧) 𝒃             ∎
 
- H-id1 p q α (hiso{𝑨}{𝑩} x x₁) = ⊧-I-invar fe 𝑩 p q (H-id1 p q α x) x₁
-
 \end{code}
 
 The converse of the foregoing result is almost too obvious to bother with. Nonetheless, we formalize it for completeness.
