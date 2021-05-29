@@ -389,13 +389,11 @@ With this result in hand, along with what we proved earlier---namely, `PS(𝒦) 
 
 \begin{code}
 
-  open Vlift {𝓤}{fe 𝓕 𝓤}{fe 𝓕⁺ 𝓕⁺}{fe 𝓕 𝓕}{𝒦}
-
   𝔽∈SP : hfunext (ov 𝓤)(ov 𝓤) → 𝔽 ∈ (S{𝓕}{𝓕⁺} (P{𝓤}{𝓕} 𝒦))
   𝔽∈SP hfe = ssub (class-prod-s-∈-sp hfe) 𝔽≤ℭ
 
   𝔽∈𝕍 : hfunext (ov 𝓤)(ov 𝓤) → 𝔽 ∈ V 𝒦
-  𝔽∈𝕍 hfe = SP⊆V' (𝔽∈SP hfe)
+  𝔽∈𝕍 hfe = SP⊆V' {𝓤}{fe 𝓕 𝓤}{fe 𝓕⁺ 𝓕⁺}{fe 𝓕 𝓕}{𝒦} (𝔽∈SP hfe)
 
 \end{code}
 

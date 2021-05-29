@@ -70,7 +70,6 @@ module _ {fe : (∀ a b → funext a b)}{X : Type 𝓧} {𝒦 : Pred (Algebra �
 
  H-id1 : (p q : Term X) → 𝒦 ⊧ p ≋ q → H{𝓦 = 𝓤} 𝒦 ⊧ p ≋ q
  H-id1 p q α (hbase x) = ⊧-Lift-invar fe p q (α x)
- H-id1 p q α (hlift{𝑨} x) = ⊧-Lift-invar fe p q (H-id1 p q α x)
 
  H-id1 p q α (hhimg{𝑨}{𝑪} HA (𝑩 , ((φ , φhom) , φE))) = γ
   where
