@@ -31,7 +31,7 @@ open import Overture.Preliminaries
  using (Type; _∙_;_⁻¹; ∣_∣; ∥_∥; snd; fst)
 open import Overture.Inverses using (Inv; InvIsInv)
 
-module Varieties.Preservation {𝓞 𝓤 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
+module Varieties.Preservation {𝓞 𝓤 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
 
 open import Algebras.Products{𝑆 = 𝑆} using (ov)
 open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using (_≅_; ≅-refl)
@@ -39,7 +39,7 @@ open import Terms.Basic {𝑆 = 𝑆} using (Term; 𝑻; lift-hom)
 open import Terms.Operations {𝑆 = 𝑆} using (_⟦_⟧; comm-hom-term)
 open import Varieties.EquationalLogic{𝑆 = 𝑆}
  using (_⊧_≋_; _⊧_≈_; Th; ⊧-I-invar; ⊧-Lift-invar; ⊧-lower-invar; ⊧-S-invar; ⊧-S-class-invar; ⊧-P-lift-invar; ⊧-P-invar)
-open import Varieties.Varieties {𝑆 = 𝑆} using (H; S; P; V)
+open import Varieties.Varieties 𝑆 using (H; S; P; V)
 
 private
   variable
@@ -70,7 +70,6 @@ module _ {fe : (∀ a b → funext a b)}{X : Type 𝓧} {𝒦 : Pred (Algebra �
 
  H-id1 : (p q : Term X) → 𝒦 ⊧ p ≋ q → H{𝓦 = 𝓤} 𝒦 ⊧ p ≋ q
  H-id1 p q α (hbase x) = ⊧-Lift-invar fe p q (α x)
- H-id1 p q α (hlift{𝑨} x) = ⊧-Lift-invar fe p q (H-id1 p q α x)
 
  H-id1 p q α (hhimg{𝑨}{𝑪} HA (𝑩 , ((φ , φhom) , φE))) = γ
   where
@@ -90,8 +89,6 @@ module _ {fe : (∀ a b → funext a b)}{X : Type 𝓧} {𝒦 : Pred (Algebra �
                 φ((𝑨 ⟦ q ⟧)(preim 𝒃))   ≡⟨ comm-hom-term (fe 𝓥 𝓤) 𝑩 (φ , φhom) q (preim 𝒃) ⟩
                 (𝑩 ⟦ q ⟧)(φ ∘(preim 𝒃)) ≡⟨ cong (𝑩 ⟦ q ⟧) (ζ 𝒃) ⟩
                 (𝑩 ⟦ q ⟧) 𝒃             ∎
-
- H-id1 p q α (hiso{𝑨}{𝑩} x x₁) = ⊧-I-invar fe 𝑩 p q (H-id1 p q α x) x₁
 
 \end{code}
 
@@ -118,19 +115,6 @@ The converse of the foregoing result is almost too obvious to bother with. Nonet
  S-id1 p q α (ssub{𝑨}{𝑩} sA B≤A) =
   ⊧-S-class-invar fe p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , _⊎_.inj₂ refl , ≅-refl)
    where --Apply S-⊧ to the class 𝒦 ∪ ｛ 𝑨 ｝
-   β : 𝑨 ⊧ p ≈ q
-   β = S-id1 p q α sA
-
-   Apq : ｛ 𝑨 ｝ ⊧ p ≋ q
-   Apq refl = β
-
-   γ : (𝒦 ∪ ｛ 𝑨 ｝) ⊧ p ≋ q
-   γ {𝑩} (inj₁ x) = α x
-   γ {𝑩} (inj₂ y) = Apq y
-
- S-id1 p q α (ssubw{𝑨}{𝑩} sA B≤A) =
-  ⊧-S-class-invar fe p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ refl , ≅-refl)
-   where  --Apply S-⊧ to the class 𝒦 ∪ ｛ 𝑨 ｝
    β : 𝑨 ⊧ p ≈ q
    β = S-id1 p q α sA
 
@@ -176,7 +160,6 @@ Again, the obvious converse is barely worth the bits needed to formalize it.
   IH : ∀ i → Lift-alg (𝒜 i) 𝓤 ⟦ p ⟧ ≡ Lift-alg (𝒜 i) 𝓤 ⟦ q ⟧
   IH i = ⊧-Lift-invar fe p q ((P-id1 p q α) (x i))
 
- P-id1 p q α (pisou{𝑨}{𝑩} x x₁) = ⊧-I-invar fe 𝑩 p q (P-id1 p q α x) x₁
  P-id1 p q α (pisow{𝑨}{𝑩} x x₁) = ⊧-I-invar fe 𝑩 p q (P-id1 p q α x) x₁
 
 \end{code}
@@ -221,18 +204,6 @@ Finally, we prove the analogous preservation lemmas for the closure operator `V`
                 (𝑩 ⟦ q ⟧)(φ ∘(preim 𝒃)) ≡⟨ cong (𝑩 ⟦ q ⟧) (ζ 𝒃) ⟩
                 (𝑩 ⟦ q ⟧) 𝒃             ∎
 
- V-id1 p q α (vssub {𝑨}{𝑩} VA B≤A) = ⊧-S-class-invar fe p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ refl , ≅-refl)
-   where
-   IH : 𝑨 ⊧ p ≈ q
-   IH = V-id1 p q α VA
-
-   Asinglepq : ｛ 𝑨 ｝ ⊧ p ≋ q
-   Asinglepq refl = IH
-
-   γ : (𝒦 ∪ ｛ 𝑨 ｝) ⊧ p ≋ q
-   γ {𝑩} (inj₁ x) = α x
-   γ {𝑩} (inj₂ y) = Asinglepq y
-
  V-id1 p q α ( vssubw {𝑨}{𝑩} VA B≤A ) =
   ⊧-S-class-invar fe p q γ (𝑩 , 𝑨 , (𝑩 , B≤A) , inj₂ refl , ≅-refl)
    where
@@ -275,7 +246,6 @@ Finally, we prove the analogous preservation lemmas for the closure operator `V`
                  (𝑩 ⟦ q ⟧) (φ ∘ (preim 𝒃))  ≡⟨ cong (𝑩 ⟦ q ⟧) (ζ 𝒃)⟩
                  (𝑩 ⟦ q ⟧) 𝒃               ∎
 
- V-id1' p q α (vssub{𝑨}{𝑩} VA B≤A) = ⊧-S-invar fe 𝑩 {p}{q}(V-id1 p q α VA) B≤A
  V-id1' p q α (vssubw {𝑨}{𝑩} VA B≤A) = ⊧-S-invar fe 𝑩 {p}{q}(V-id1' p q α VA) B≤A
  V-id1' p q α (vprodu{I}{𝒜} V𝒜) = ⊧-P-invar 𝒜 fe {p}{q} λ i → V-id1 p q α (V𝒜 i)
  V-id1' p q α (vprodw{I}{𝒜} V𝒜) = ⊧-P-invar 𝒜 fe {p}{q} λ i → V-id1' p q α (V𝒜 i)
