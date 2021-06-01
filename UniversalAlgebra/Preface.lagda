@@ -62,15 +62,12 @@ The [agda-algebras][] library is developed and maintained by the *Agda Algebras 
 
 ### The Agda Algebras Development Team
 
-[Venanzio Capretta][]  
 [Jacques Carette][]  
 [William DeMeo][]  
-[Siva Somayyajula][]  
-[Hyeyoung Shin][]  
 
 ### Acknowledgements and attributions
 
-We thank [Andreas Abel][], [Andrej Bauer][], [Clifford Bergman][], [Martín Escardó][], [Ralph Freese][], [Bill Lampe][], and [JB Nation][] for helpful discussions, corrections, advice, inspiration and encouragement.
+We thank [Andreas Abel][], [Andrej Bauer][], [Clifford Bergman][], [Venanzio Capretta][], [Martín Escardó][], [Ralph Freese][], [Hyeyoung Shin][], and [Siva Somayyajula][] for helpful discussions, corrections, advice, inspiration and encouragement.
 
 Most of the mathematical results formalized in the [agda-algebras][] are well known. Regarding the source code in the [agda-algebras][] library, this is mainly due to the contributors listed above.
 
