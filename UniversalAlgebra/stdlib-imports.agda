@@ -2,7 +2,7 @@
 layout: default
 title : external-imports module
 date : 2021-05-20
-author: William DeMeo
+author: [agda-algebras development team][]
 -}
 
 -- Imports from the Agda Standard Library
@@ -55,7 +55,10 @@ open import Function.Definitions using (Injective) public
 open import Function.Bundles using (_↣_; mk↣) public
 open import Function.Construct.Identity using (id-↣) public
 
-open import Level public using ( Lift; lift; lower) public
+open import Level  using ( Lift; lift; lower)
+ renaming ( suc   to  lsuc                       -- ATTENTION!
+          ; zero  to  lzero                      -- ATTENTION!
+          ) public
 
 
 open import Relation.Binary using (IsEquivalence) public
@@ -68,3 +71,8 @@ open import Relation.Unary using (∅; Pred; _∪_; _∈_; _⊆_; ｛_｝; ⋂) 
 
 ℓ₁ : Level
 ℓ₁ = lsuc ℓ₀
+
+
+--------------------------------------
+
+-- [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
