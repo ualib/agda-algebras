@@ -2,7 +2,7 @@
 layout: default
 title : Overture.Inverses module
 date : 2021-01-12
-author: the agda-algebras development team
+author: [agda-algebras development team][]
 -}
 
 -- Inverses
@@ -86,3 +86,6 @@ module _ {A : Type 𝓤}{B : Type 𝓦} where
 -- Later, we will prove that this does indeed give the right-inverse, but we postpone the proof since it
 -- requires function extensionality, a concept we take up in the [Relations.Extensionality][] module.
 
+----------------------------
+
+-- [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

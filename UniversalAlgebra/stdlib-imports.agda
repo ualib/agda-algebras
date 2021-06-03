@@ -27,9 +27,7 @@ open import Axiom.Extensionality.Propositional
  renaming (Extensionality to funext             -- ATTENTION!
           ) public
 
--- Imports from the Data module of the Agda Standard Library
 open import Data.Empty public
-
 open import Data.Fin.Base
  renaming (lift to finLift                       -- ATTENTION!
           ) public
@@ -37,8 +35,7 @@ open import Data.Fin.Base
 open import Data.Nat using (ℕ; zero; suc) public
 open import Data.Nat.Properties
  using ( <-irrefl; <-irrelevant; ≤-irrelevant; <⇒≯; <⇒≱; suc-injective
-       ; n≤0⇒n≡0; <-transʳ; ≤-reflexive
-       ) public
+       ; n≤0⇒n≡0; <-transʳ; ≤-reflexive ) public
 
 open import Data.Product using ( _,_ ; Σ ; Σ-syntax ; _×_; ∃; ∃-syntax)
  renaming ( proj₁ to fst                         -- ATTENTION!
@@ -61,12 +58,11 @@ open import Function.Construct.Identity using (id-↣) public
 open import Level public using ( Lift; lift; lower) public
 
 
-open import Relation.Binary.Core using (_⇒_;_=[_]⇒_) public
-
+open import Relation.Binary using (IsEquivalence) public
+open import Relation.Binary.Core using (REL; Rel; _⇒_;_=[_]⇒_) public
 open import Relation.Binary.PropositionalEquality as Eq
 open Eq using (_≡_; refl; sym; trans; cong; cong-app; module ≡-Reasoning) public
 open ≡-Reasoning public
-
 open import Relation.Nullary using (¬_; Dec; _because_; ofʸ) public
 open import Relation.Unary using (∅; Pred; _∪_; _∈_; _⊆_; ｛_｝; ⋂) public
 

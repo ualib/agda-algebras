@@ -2,7 +2,7 @@
 layout: default
 title : Overture.Preliminaries module
 date : 2021-01-13
-author: the agda-algebras development team
+author: [agda-algebras development team][]
 -}
 
 -- Preliminaries
@@ -205,10 +205,10 @@ infixl 30 _∙_
 -- that if an application of `lower` is immediately followed by an application of `lift`, then the result is
 -- the identity transformation. Similarly, `lift` followed by `lower` is the identity.
 
-lift∼lower : ∀ {𝓤 𝓦}{A : Type 𝓤} → lift ∘ lower ≡ 𝑖𝑑 (Lift 𝓦 A)
+lift∼lower : {A : Type 𝓤} → lift ∘ lower ≡ 𝑖𝑑 (Lift 𝓦 A)
 lift∼lower = refl
 
-lower∼lift : {𝓤 𝓦 : Level}{A : Type 𝓤} → lower {𝓤}{𝓦}(lift {𝓤}{𝓦}(λ x → x)) ≡ 𝑖𝑑 A
+lower∼lift : {A : Type 𝓤} → lower {𝓤}{𝓦}(lift {𝓤}{𝓦}(λ x → x)) ≡ 𝑖𝑑 A
 lower∼lift = refl
 
 -- The proofs are trivial. Nonetheless, we'll come across some holes these lemmas can fill.
@@ -226,29 +226,22 @@ f ∼ g = ∀ x → f x ≡ g x
 infix 8 _∼_
 
 
+-- The following is convenient for proving two pairs of a product type are equal using the fact that their
+-- respective components are equal.
+
+≡-by-parts : {A : Type 𝓤}{B : Type 𝓦}{u v : A × B} → fst u ≡ fst v → snd u ≡ snd v → u ≡ v
+≡-by-parts refl refl = refl
+
+
+-- Lastly, we will use the following type (instead of `subst`) to transport equality proofs.
+
+transport : {A : Type 𝓤 } (B : A → Type 𝓦) {x y : A} → x ≡ y → B x → B y
+transport B refl = id
 
 
 
-{- OLD/UNUSED STUFF
 
-<sup>1</sup><span class="footnote" id="fn0"> We avoid using `𝓟` as a universe
-variable because in some libraries `𝓟` denotes a powerset type.</span>
+------------------------------
 
-<sup>2</sup> <span class="footnote" id="fn2"> Most of these types are already defined by in the [Type Topology][] library or the [Agda Standard Library][], so we often imports the definitions; occasionally, however, we repeat the definitions here for pedagogical reasons and to keep the presentation somewhat self-contained.
+-- [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 
-
-<sup>4</sup> <span class="footnote" id="fn4"> Moreover, if one assumes the [univalence axiom][] of [Homotopy Type Theory][], then point-wise equality of functions is equivalent to definitional equality of functions. (See [Function extensionality from univalence](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#funextfromua).)</span>
-
-<sup>5</sup><span class="footnote" id="fn5">Recall, from the [Overture.Preliminaries][] module, the special notation we use to denote Agda's *levels* and *universes*.</span>
-
-
-OLD LIST OF IMPORTS (replaced with import of stdlib-imports.agda
--- open import Agda.Builtin.Equality using (_≡_; refl)
--- open import Data.Product using (_,_; Σ; Σ-syntax; _×_; proj₁; proj₂)
--- open import Function.Base using (_∘_; id)
--- open import Level renaming (suc to lsuc; zero to lzero)
--- open import Relation.Binary.PropositionalEquality.Core using (sym; trans)
-
-
-
--}
