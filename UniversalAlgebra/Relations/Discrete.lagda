@@ -13,13 +13,6 @@ This is the [Relations.Discrete][] module of the [Agda Universal Algebra Library
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
--- open import Agda.Builtin.Equality using (_≡_)
--- open import Agda.Primitive using (_⊔_; lzero; lsuc; Level)
--- open import Data.Empty using (⊥)
--- open import Data.Sum.Base using (_⊎_)
-
--- open import Overture.Preliminaries using (Type)
-
 module Relations.Discrete where
 
 open import Agda.Builtin.Equality using    ( _≡_ ; refl     )

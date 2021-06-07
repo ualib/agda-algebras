@@ -18,7 +18,6 @@ Readers who want to learn more about "proof-relevant mathematics" and other conc
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
--- Imports from the Agda (Builtin) and the Agda Standard Library
 module Relations.Truncation where
 
 open import Agda.Builtin.Equality                 using    ( _≡_      ;   refl     )

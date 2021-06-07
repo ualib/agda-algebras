@@ -2,7 +2,7 @@
 layout: default
 title : Homomorphisms.Basic module (The Agda Universal Algebra Library)
 date : 2021-01-13
-author: William DeMeo
+author: [the ualib/agda-algebras development team][]
 ---
 
 ### <a id="basic-definitions">Basic Definitions</a>
@@ -13,33 +13,37 @@ This section describes the [Homomorphisms.Basic] module of the [Agda Universal A
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
--- Imports from the Agda (Builtin) and the Agda Standard Library
-open import Agda.Builtin.Equality using (_≡_; refl)
-open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
-open import Data.Product using (_,_; Σ; _×_; Σ-syntax)
-open import Function.Base  using (_∘_; id)
-open import Level renaming (suc to lsuc; zero to lzero)
-open import Relation.Binary using (Rel; IsEquivalence)
-open import Relation.Binary.PropositionalEquality.Core using (sym; trans; cong; module ≡-Reasoning)
-open ≡-Reasoning
-
--- Imports from the Agda Universal Algebra Library
+open import Level renaming ( suc to lsuc )
 open import Algebras.Basic
-open import Overture.Preliminaries using (Type; _⁻¹; ∣_∣; ∥_∥; fst)
-open import Overture.Inverses using (IsInjective; IsSurjective; Image_∋_)
-open import Relations.Discrete using (ker) -- 𝟎; _|:_)
-open import Relations.Extensionality using (swelldef)
-open import Relations.Quotients using (ker-IsEquivalence; _/_; ⟪_⟫; R-block)
 
 module Homomorphisms.Basic {𝓞 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
 
-open import Algebras.Congruences{𝑆 = 𝑆} using (Con; IsCongruence; mkcon; _╱_; /-≡)
-open import Algebras.Products{𝑆 = 𝑆} using (⨅)
-open IsCongruence
 
-private
-  variable
-     𝓤 𝓦 𝓧 𝓨 𝓩 : Level
+open import Axiom.Extensionality.Propositional    using    ()
+                                                  renaming (Extensionality to funext)
+
+open import Agda.Builtin.Equality                 using    ( _≡_      ;   refl  )
+open import Agda.Primitive                        using    ( _⊔_                )
+                                                  renaming ( Set      to  Type  )
+open import Data.Product                          using    ( _,_      ;   Σ
+                                                           ; Σ-syntax ;   _×_   )
+                                                  renaming ( proj₁    to  fst
+                                                           ; proj₂    to  snd   )
+open import Function.Base                         using    ( _∘_      ;   id    )
+open import Relation.Binary.PropositionalEquality using    ( trans    ;   cong
+                                                           ; cong-app
+                                                           ; module ≡-Reasoning )
+
+open import Overture.Preliminaries       using (_⁻¹; ∣_∣; ∥_∥)
+open import Overture.Inverses            using (IsInjective; IsSurjective; Image_∋_)
+open import Relations.Extensionality     using (swelldef)
+open import Relations.Discrete           using (ker)
+open import Algebras.Congruences {𝑆 = 𝑆} using (Con; IsCongruence; mkcon; _╱_; /-≡)
+open import Relations.Quotients          using (ker-IsEquivalence; _/_; ⟪_⟫; R-block)
+open import Algebras.Products {𝑆 = 𝑆}    using (⨅)
+
+private variable α β γ ρ : Level
+
 \end{code}
 
 #### <a id="homomorphisms">Homomorphisms</a>
@@ -52,9 +56,9 @@ To formalize this concept, we first define a type representing the assertion tha
 
 \begin{code}
 
-module _ (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) where
+module _ (𝑨 : Algebra α 𝑆)(𝑩 : Algebra β 𝑆) where
 
- compatible-op-map : ∣ 𝑆 ∣ → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Type(𝓤 ⊔ 𝓥 ⊔ 𝓦)
+ compatible-op-map : ∣ 𝑆 ∣ → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Type(α ⊔ 𝓥 ⊔ β)
  compatible-op-map 𝑓 h = ∀ 𝑎 → h ((𝑓 ̂ 𝑨) 𝑎) ≡ (𝑓 ̂ 𝑩) (h ∘ 𝑎)
 
 \end{code}
@@ -65,10 +69,10 @@ We now define the type `hom 𝑨 𝑩` of homomorphisms from `𝑨` to `𝑩` by
 
 \begin{code}
 
- is-homomorphism : (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
+ is-homomorphism : (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Type(𝓞 ⊔ 𝓥 ⊔ α ⊔ β)
  is-homomorphism g = ∀ 𝑓  →  compatible-op-map 𝑓 g
 
- hom : Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
+ hom : Type(𝓞 ⊔ 𝓥 ⊔ α ⊔ β)
  hom = Σ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) is-homomorphism
 
 \end{code}
@@ -80,15 +84,17 @@ The composition of homomorphisms is again a homomorphism.  We formalize this in 
 
 \begin{code}
 
-module _ (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆) where
+open ≡-Reasoning
+
+module _ (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}(𝑪 : Algebra γ 𝑆) where
 
   ∘-hom : hom 𝑨 𝑩  →  hom 𝑩 𝑪  →  hom 𝑨 𝑪
-  ∘-hom (g , ghom) (h , hhom) = h ∘ g , γ where
+  ∘-hom (g , ghom) (h , hhom) = h ∘ g , Goal where
 
-   γ : ∀ 𝑓 a → (h ∘ g)((𝑓 ̂ 𝑨) a) ≡ (𝑓 ̂ 𝑪)(h ∘ g ∘ a)
-   γ 𝑓 a = (h ∘ g)((𝑓 ̂ 𝑨) a)     ≡⟨ cong h ( ghom 𝑓 a ) ⟩
-           h ((𝑓 ̂ 𝑩)(g ∘ a))     ≡⟨ hhom 𝑓 ( g ∘ a ) ⟩
-           (𝑓 ̂ 𝑪)(h ∘ g ∘ a)     ∎
+   Goal : ∀ 𝑓 a → (h ∘ g)((𝑓 ̂ 𝑨) a) ≡ (𝑓 ̂ 𝑪)(h ∘ g ∘ a)
+   Goal 𝑓 a = (h ∘ g)((𝑓 ̂ 𝑨) a)     ≡⟨ cong h ( ghom 𝑓 a ) ⟩
+              h ((𝑓 ̂ 𝑩)(g ∘ a))     ≡⟨ hhom 𝑓 ( g ∘ a ) ⟩
+              (𝑓 ̂ 𝑪)(h ∘ g ∘ a)     ∎
 
 
   ∘-is-hom : {f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣}{g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣}
@@ -105,7 +111,7 @@ Let's look at a few examples of homomorphisms. These examples are actually quite
 
 \begin{code}
 
-𝒾𝒹 : (𝑨 : Algebra 𝓤 𝑆) → hom 𝑨 𝑨
+𝒾𝒹 : (𝑨 : Algebra α 𝑆) → hom 𝑨 𝑨
 𝒾𝒹 _ = id , λ 𝑓 𝑎 → refl
 
 \end{code}
@@ -116,10 +122,10 @@ Next, `lift` and `lower`, defined in the [Overture.Lifts][] module, are (the map
 
 open Lift
 
-𝓁𝒾𝒻𝓉 : {𝓦 : Level}{𝑨 : Algebra 𝓤 𝑆} → hom 𝑨 (Lift-alg 𝑨 𝓦)
+𝓁𝒾𝒻𝓉 : {β : Level}{𝑨 : Algebra α 𝑆} → hom 𝑨 (Lift-alg 𝑨 β)
 𝓁𝒾𝒻𝓉 = lift , λ 𝑓 𝑎 → refl
 
-𝓁ℴ𝓌ℯ𝓇 : {𝓦 : Level}{𝑨 : Algebra 𝓤 𝑆} → hom (Lift-alg 𝑨 𝓦) 𝑨
+𝓁ℴ𝓌ℯ𝓇 : {β : Level}{𝑨 : Algebra α 𝑆} → hom (Lift-alg 𝑨 β) 𝑨
 𝓁ℴ𝓌ℯ𝓇 = lower , λ 𝑓 𝑎 → refl
 
 \end{code}
@@ -133,16 +139,16 @@ A *monomorphism* is an injective homomorphism and an *epimorphism* is a surjecti
 
 \begin{code}
 
-is-monomorphism : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
+is-monomorphism : (𝑨 : Algebra α 𝑆)(𝑩 : Algebra β 𝑆) → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Type(𝓞 ⊔ 𝓥 ⊔ α ⊔ β)
 is-monomorphism 𝑨 𝑩 g = is-homomorphism 𝑨 𝑩 g × IsInjective g
 
-mon : Algebra 𝓤 𝑆 → Algebra 𝓦 𝑆  → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
+mon : Algebra α 𝑆 → Algebra β 𝑆  → Type(𝓞 ⊔ 𝓥 ⊔ α ⊔ β)
 mon 𝑨 𝑩 = Σ[ g ∈ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ] is-monomorphism 𝑨 𝑩 g
 
-is-epimorphism : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
+is-epimorphism : (𝑨 : Algebra α 𝑆)(𝑩 : Algebra β 𝑆) → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Type(𝓞 ⊔ 𝓥 ⊔ α ⊔ β)
 is-epimorphism 𝑨 𝑩 g = is-homomorphism 𝑨 𝑩 g × IsSurjective g
 
-epi : Algebra 𝓤 𝑆 → Algebra 𝓦 𝑆  → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
+epi : Algebra α 𝑆 → Algebra β 𝑆  → Type(𝓞 ⊔ 𝓥 ⊔ α ⊔ β)
 epi 𝑨 𝑩 = Σ[ g ∈ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ] is-epimorphism 𝑨 𝑩 g
 
 \end{code}
@@ -151,10 +157,10 @@ It will be convenient to have a function that takes an inhabitant of `mon` (or `
 
 \begin{code}
 
-mon-to-hom : (𝑨 : Algebra 𝓤 𝑆){𝑩 : Algebra 𝓦 𝑆} → mon 𝑨 𝑩 → hom 𝑨 𝑩
+mon-to-hom : (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆} → mon 𝑨 𝑩 → hom 𝑨 𝑩
 mon-to-hom 𝑨 ϕ = ∣ ϕ ∣ , fst ∥ ϕ ∥
 
-epi-to-hom : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆) → epi 𝑨 𝑩 → hom 𝑨 𝑩
+epi-to-hom : {𝑨 : Algebra α 𝑆}(𝑩 : Algebra β 𝑆) → epi 𝑨 𝑩 → hom 𝑨 𝑩
 epi-to-hom _ ϕ = ∣ ϕ ∣ , fst ∥ ϕ ∥
 
 \end{code}
@@ -170,9 +176,9 @@ The kernel of a homomorphism is a congruence relation and conversely for every c
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Level}{𝑨 : Algebra 𝓤 𝑆} where
+module _ {α β : Level}{𝑨 : Algebra α 𝑆} where
 
- homker-comp : swelldef 𝓥 𝓦 → {𝑩 : Algebra 𝓦 𝑆}(h : hom 𝑨 𝑩) → compatible 𝑨 (ker ∣ h ∣)
+ homker-comp : swelldef 𝓥 β → {𝑩 : Algebra β 𝑆}(h : hom 𝑨 𝑩) → compatible 𝑨 (ker ∣ h ∣)
  homker-comp wd {𝑩} h f {u}{v} kuv = ∣ h ∣((f ̂ 𝑨) u)   ≡⟨ ∥ h ∥ f u ⟩
                                      (f ̂ 𝑩)(∣ h ∣ ∘ u) ≡⟨ wd(f ̂ 𝑩)(∣ h ∣ ∘ u)(∣ h ∣ ∘ v)kuv ⟩
                                      (f ̂ 𝑩)(∣ h ∣ ∘ v) ≡⟨ (∥ h ∥ f v)⁻¹ ⟩
@@ -187,7 +193,7 @@ It is convenient to define a function that takes a homomorphism and constructs a
 
 \begin{code}
 
- kercon : swelldef 𝓥 𝓦 → {𝑩 : Algebra 𝓦 𝑆} → hom 𝑨 𝑩 → Con{𝓤}{𝓦} 𝑨
+ kercon : swelldef 𝓥 β → {𝑩 : Algebra β 𝑆} → hom 𝑨 𝑩 → Con{α}{β} 𝑨
  kercon wd {𝑩} h = ker ∣ h ∣ , mkcon (ker-IsEquivalence ∣ h ∣)(homker-comp wd {𝑩} h)
 
 \end{code}
@@ -196,11 +202,11 @@ With this congruence we construct the corresponding quotient, along with some sy
 
 \begin{code}
 
- kerquo : swelldef 𝓥 𝓦 → {𝑩 : Algebra 𝓦 𝑆} → hom 𝑨 𝑩 → Algebra (𝓤 ⊔ lsuc 𝓦) 𝑆
+ kerquo : swelldef 𝓥 β → {𝑩 : Algebra β 𝑆} → hom 𝑨 𝑩 → Algebra (α ⊔ lsuc β) 𝑆
  kerquo wd {𝑩} h = 𝑨 ╱ (kercon wd {𝑩} h)
 
 
-ker[_⇒_]_↾_ : (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → hom 𝑨 𝑩 → swelldef 𝓥 𝓦 → Algebra (𝓤 ⊔ lsuc 𝓦) 𝑆
+ker[_⇒_]_↾_ : (𝑨 : Algebra α 𝑆)(𝑩 : Algebra β 𝑆) → hom 𝑨 𝑩 → swelldef 𝓥 β → Algebra (α ⊔ lsuc β) 𝑆
 ker[ 𝑨 ⇒ 𝑩 ] h ↾ wd = kerquo wd {𝑩} h
 
 \end{code}
@@ -215,8 +221,8 @@ Given an algebra `𝑨` and a congruence `θ`, the *canonical projection* is a m
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Level}{𝑨 : Algebra 𝓤 𝑆} where
- πepi : (θ : Con{𝓤}{𝓦} 𝑨) → epi 𝑨 (𝑨 ╱ θ)
+module _ {α β : Level}{𝑨 : Algebra α 𝑆} where
+ πepi : (θ : Con{α}{β} 𝑨) → epi 𝑨 (𝑨 ╱ θ)
  πepi θ = (λ a → ⟪ a ⟫) , (λ _ _ → refl) , cπ-is-epic  where
   cπ-is-epic : IsSurjective (λ a → ⟪ a ⟫)
   -- <<<<<<< Quotients
@@ -233,7 +239,7 @@ In may happen that we don't care about the surjectivity of `πepi`, in which cas
 
 \begin{code}
 
- πhom : (θ : Con{𝓤}{𝓦} 𝑨) → hom 𝑨 (𝑨 ╱ θ)
+ πhom : (θ : Con{α}{β} 𝑨) → hom 𝑨 (𝑨 ╱ θ)
  πhom θ = epi-to-hom (𝑨 ╱ θ) (πepi θ)
 
 \end{code}
@@ -243,7 +249,7 @@ We combine the foregoing to define a function that takes 𝑆-algebras `𝑨` an
 
 \begin{code}
 
- πker : (wd : swelldef 𝓥 𝓦){𝑩 : Algebra 𝓦 𝑆}(h : hom 𝑨 𝑩) → epi 𝑨 (ker[ 𝑨 ⇒ 𝑩 ] h ↾ wd)
+ πker : (wd : swelldef 𝓥 β){𝑩 : Algebra β 𝑆}(h : hom 𝑨 𝑩) → epi 𝑨 (ker[ 𝑨 ⇒ 𝑩 ] h ↾ wd)
  πker wd {𝑩} h = πepi (kercon wd {𝑩} h)
 
 \end{code}
@@ -254,7 +260,7 @@ The kernel of the canonical projection of `𝑨` onto `𝑨 / θ` is equal to `�
 
  open IsCongruence
 
- ker-in-con : {wd : swelldef 𝓥 (𝓤 ⊔ lsuc 𝓦)}(θ : Con 𝑨)
+ ker-in-con : {wd : swelldef 𝓥 (α ⊔ lsuc β)}(θ : Con 𝑨)
   →           ∀ {x}{y} → ∣ kercon wd {𝑨 ╱ θ} (πhom θ) ∣ x y →  ∣ θ ∣ x y
 
  ker-in-con θ hyp = /-≡ θ hyp
@@ -265,15 +271,15 @@ The kernel of the canonical projection of `𝑨` onto `𝑨 / θ` is equal to `�
 
 #### <a id="product-homomorphisms">Product homomorphisms</a>
 
-Suppose we have an algebra `𝑨`, a type `I : Type 𝓘`, and a family `ℬ : I → Algebra 𝓦 𝑆` of algebras.  We sometimes refer to the inhabitants of `I` as *indices*, and call `ℬ` an *indexed family of algebras*.
+Suppose we have an algebra `𝑨`, a type `I : Type 𝓘`, and a family `ℬ : I → Algebra β 𝑆` of algebras.  We sometimes refer to the inhabitants of `I` as *indices*, and call `ℬ` an *indexed family of algebras*.
 
 If in addition we have a family `𝒽 : (i : I) → hom 𝑨 (ℬ i)` of homomorphisms, then we can construct a homomorphism from `𝑨` to the product `⨅ ℬ` in the natural way.
 
 \begin{code}
 
-module _ {𝓘 𝓦 : Level}{I : Type 𝓘}(ℬ : I → Algebra 𝓦 𝑆) where
+module _ {𝓘 β : Level}{I : Type 𝓘}(ℬ : I → Algebra β 𝑆) where
 
- ⨅-hom-co : funext 𝓘 𝓦 → {𝓤 : Level}(𝑨 : Algebra 𝓤 𝑆) → (∀(i : I) → hom 𝑨 (ℬ i)) → hom 𝑨 (⨅ ℬ)
+ ⨅-hom-co : funext 𝓘 β → {α : Level}(𝑨 : Algebra α 𝑆) → (∀(i : I) → hom 𝑨 (ℬ i)) → hom 𝑨 (⨅ ℬ)
  ⨅-hom-co fe 𝑨 𝒽 = (λ a i → ∣ 𝒽 i ∣ a) , (λ 𝑓 𝒶 → fe λ i → ∥ 𝒽 i ∥ 𝑓 𝒶)
 
 \end{code}
@@ -283,11 +289,11 @@ we could equally well have used one of the following alternatives, which may be 
 
 `Π λ i → hom 𝑨 (ℬ i)` &nbsp; or &nbsp; `(i : I) → hom 𝑨 (ℬ i)` &nbsp; or &nbsp; `∀ i → hom 𝑨 (ℬ i)`.
 
-The foregoing generalizes easily to the case in which the domain is also a product of a family of algebras. That is, if we are given `𝒜 : I → Algebra 𝓤 𝑆 and ℬ : I → Algebra 𝓦 𝑆` (two families of `𝑆`-algebras), and `𝒽 :  Π i ꞉ I , hom (𝒜 i)(ℬ i)` (a family of homomorphisms), then we can construct a homomorphism from `⨅ 𝒜` to `⨅ ℬ` in the following natural way.
+The foregoing generalizes easily to the case in which the domain is also a product of a family of algebras. That is, if we are given `𝒜 : I → Algebra α 𝑆 and ℬ : I → Algebra β 𝑆` (two families of `𝑆`-algebras), and `𝒽 :  Π i ꞉ I , hom (𝒜 i)(ℬ i)` (a family of homomorphisms), then we can construct a homomorphism from `⨅ 𝒜` to `⨅ ℬ` in the following natural way.
 
 \begin{code}
 
- ⨅-hom : funext 𝓘 𝓦 → {𝓤 : Level}(𝒜 : I → Algebra 𝓤 𝑆) → (∀ (i : I) → hom (𝒜 i) (ℬ i)) → hom (⨅ 𝒜)(⨅ ℬ)
+ ⨅-hom : funext 𝓘 β → {α : Level}(𝒜 : I → Algebra α 𝑆) → (∀ (i : I) → hom (𝒜 i) (ℬ i)) → hom (⨅ 𝒜)(⨅ ℬ)
  ⨅-hom fe 𝒜 𝒽 = (λ x i → ∣ 𝒽 i ∣ (x i)) , (λ 𝑓 𝒶 → fe λ i → ∥ 𝒽 i ∥ 𝑓 (λ x → 𝒶 x i))
 
 \end{code}
@@ -323,3 +329,7 @@ Recall, `h ∘ 𝒂` is the tuple whose i-th component is `h (𝒂 i)`.</span>
 <span style="float:right;">[Homomorphisms.Noether →](Homomorphisms.Noether.html)</span>
 
 {% include UALib.Links.md %}
+
+------------------------------
+
+[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team

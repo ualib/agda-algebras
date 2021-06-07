@@ -15,7 +15,8 @@ This section presents the [Relations.Extensionality][] module of the [Agda Unive
 
 module Relations.Extensionality where
 
-open import Axiom.Extensionality.Propositional    renaming (Extensionality to funext)
+open import Axiom.Extensionality.Propositional    using    ()
+                                                  renaming (Extensionality to funext)
 
 open import Agda.Builtin.Equality                 using    (_≡_    ;  refl    )
 open import Agda.Primitive                        using    ( _⊔_              )

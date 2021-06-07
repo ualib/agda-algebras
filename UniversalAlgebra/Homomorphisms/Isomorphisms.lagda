@@ -14,26 +14,29 @@ Here we formalize the informal notion of isomorphism between algebraic structure
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
--- Imports from the Agda (Builtin) and the Agda Standard Library
-open import Agda.Builtin.Equality using (_≡_; refl)
-open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
-open import Data.Product using (_,_; Σ; _×_; Σ-syntax)
-open import Function.Base  using (_∘_)
-open import Level renaming (suc to lsuc; zero to lzero)
-open import Relation.Binary.PropositionalEquality.Core using (cong; cong-app)
-
+open import Level renaming ( suc to lsuc )
 open import Algebras.Basic
-open import Overture.Preliminaries
 
 module Homomorphisms.Isomorphisms {𝓞 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥}  where
+
+open import Axiom.Extensionality.Propositional renaming (Extensionality to funext )
+open import Agda.Primitive                        using    ( _⊔_                  )
+                                                  renaming ( Set      to  Type    )
+open import Agda.Builtin.Equality                 using    ( _≡_      ;   refl    )
+open import Data.Product                          using    ( _,_      ;   Σ
+                                                           ; Σ-syntax ;   _×_     )
+                                                  renaming ( proj₁    to  fst
+                                                           ; proj₂    to  snd     )
+open import Function.Base  using (_∘_)
+open import Relation.Binary.PropositionalEquality using (cong; cong-app)
+
 
 open import Algebras.Products {𝑆 = 𝑆} using (⨅)
 open import Homomorphisms.Basic {𝑆 = 𝑆}
  using (hom; kercon; ker[_⇒_]_↾_; πker; is-homomorphism; epi; epi-to-hom; 𝒾𝒹; ∘-hom; 𝓁𝒾𝒻𝓉; 𝓁ℴ𝓌ℯ𝓇; ∘-is-hom)
+open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; _∼_ ; transport; _∙_; lower∼lift; lift∼lower)
 
-private
-  variable
-    𝓤 𝓦 𝓧 𝓨 𝓩 : Level
+private variable α β γ : Level
 \end{code}
 
 #### <a id="isomorphism-toolbox">Definition of isomorphism</a>
@@ -42,7 +45,7 @@ Recall, `f ~ g` means f and g are *extensionally* (or pointwise) equal; i.e., `�
 
 \begin{code}
 
-_≅_ : {𝓤 𝓦 : Level}(𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆) → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
+_≅_ : {α β : Level}(𝑨 : Algebra α 𝑆)(𝑩 : Algebra β 𝑆) → Type(𝓞 ⊔ 𝓥 ⊔ α ⊔ β)
 𝑨 ≅ 𝑩 =  Σ[ f ∈ (hom 𝑨 𝑩)] Σ[ g ∈ hom 𝑩 𝑨 ] ((∣ f ∣ ∘ ∣ g ∣ ∼ ∣ 𝒾𝒹 𝑩 ∣) × (∣ g ∣ ∘ ∣ f ∣ ∼ ∣ 𝒾𝒹 𝑨 ∣))
 
 \end{code}
@@ -55,17 +58,17 @@ That is, two structures are **isomorphic** provided there are homomorphisms goin
 
 \begin{code}
 
-≅-refl : {𝓤 : Level} {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ≅ 𝑨
-≅-refl {𝓤}{𝑨} = 𝒾𝒹 𝑨 , 𝒾𝒹 𝑨 , (λ a → refl) , (λ a → refl)
+≅-refl : {α : Level} {𝑨 : Algebra α 𝑆} → 𝑨 ≅ 𝑨
+≅-refl {α}{𝑨} = 𝒾𝒹 𝑨 , 𝒾𝒹 𝑨 , (λ a → refl) , (λ a → refl)
 
-≅-sym : {𝓤 𝓦 : Level}{𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}
+≅-sym : {α β : Level}{𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆}
  →      𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑨
 ≅-sym h = fst ∥ h ∥ , fst h , ∥ snd ∥ h ∥ ∥ , ∣ snd ∥ h ∥ ∣
 
-≅-trans : {𝑨 : Algebra 𝓧 𝑆}{𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆}
+≅-trans : {𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆}{𝑪 : Algebra γ 𝑆}
  →        𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≅ 𝑪
 
-≅-trans {𝑨 = 𝑨} {𝑩}{𝑪} ab bc = f , g , α , β
+≅-trans {𝑨 = 𝑨} {𝑩}{𝑪} ab bc = f , g , τ , ν
  where
   f1 : hom 𝑨 𝑩
   f1 = ∣ ab ∣
@@ -81,11 +84,11 @@ That is, two structures are **isomorphic** provided there are homomorphisms goin
   g : hom 𝑪 𝑨
   g = ∘-hom 𝑪 𝑨 g1 g2
 
-  α : ∣ f ∣ ∘ ∣ g ∣ ∼ ∣ 𝒾𝒹 𝑪 ∣
-  α x = (cong ∣ f2 ∣(∣ snd ∥ ab ∥ ∣ (∣ g1 ∣ x)))∙(∣ snd ∥ bc ∥ ∣) x
+  τ : ∣ f ∣ ∘ ∣ g ∣ ∼ ∣ 𝒾𝒹 𝑪 ∣
+  τ x = (cong ∣ f2 ∣(∣ snd ∥ ab ∥ ∣ (∣ g1 ∣ x)))∙(∣ snd ∥ bc ∥ ∣) x
 
-  β : ∣ g ∣ ∘ ∣ f ∣ ∼ ∣ 𝒾𝒹 𝑨 ∣
-  β x = (cong ∣ g2 ∣(∥ snd ∥ bc ∥ ∥ (∣ f1 ∣ x)))∙(∥ snd ∥ ab ∥ ∥) x
+  ν : ∣ g ∣ ∘ ∣ f ∣ ∼ ∣ 𝒾𝒹 𝑨 ∣
+  ν x = (cong ∣ g2 ∣(∥ snd ∥ bc ∥ ∥ (∣ f1 ∣ x)))∙(∥ snd ∥ ab ∥ ∥) x
 
 \end{code}
 
@@ -97,23 +100,23 @@ Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic 
 
 open Lift
 
-Lift-≅ : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ≅ (Lift-alg 𝑨 𝓦)
-Lift-≅{𝓤}{𝓦} {𝑨} = 𝓁𝒾𝒻𝓉 , (𝓁ℴ𝓌ℯ𝓇{𝓤}{𝓦}{𝑨}) , cong-app lift∼lower , cong-app (lower∼lift {𝓦 = 𝓦})
+Lift-≅ : {𝑨 : Algebra α 𝑆} → 𝑨 ≅ (Lift-alg 𝑨 β)
+Lift-≅{α}{β} {𝑨} = 𝓁𝒾𝒻𝓉 , (𝓁ℴ𝓌ℯ𝓇{α}{β}{𝑨}) , cong-app lift∼lower , cong-app (lower∼lift {β = β})
 
-Lift-hom : (𝓧 : Level)(𝓨 : Level){𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆)
+Lift-hom : (𝓧 : Level)(𝓨 : Level){𝑨 : Algebra α 𝑆}(𝑩 : Algebra β 𝑆)
  →         hom 𝑨 𝑩  →  hom (Lift-alg 𝑨 𝓧) (Lift-alg 𝑩 𝓨)
 
-Lift-hom 𝓧 𝓨 {𝑨} 𝑩 (f , fhom) = lift ∘ f ∘ lower , γ
+Lift-hom 𝓧 𝓨 {𝑨} 𝑩 (f , fhom) = lift ∘ f ∘ lower , Goal
  where
  lABh : is-homomorphism (Lift-alg 𝑨 𝓧) 𝑩 (f ∘ lower)
  lABh = ∘-is-hom (Lift-alg 𝑨 𝓧) 𝑩 {lower}{f} (λ _ _ → refl) fhom
 
- γ : is-homomorphism(Lift-alg 𝑨 𝓧)(Lift-alg 𝑩 𝓨) (lift ∘ (f ∘ lower))
- γ = ∘-is-hom (Lift-alg 𝑨 𝓧) (Lift-alg 𝑩 𝓨){f ∘ lower}{lift} lABh λ _ _ → refl
+ Goal : is-homomorphism(Lift-alg 𝑨 𝓧)(Lift-alg 𝑩 𝓨) (lift ∘ (f ∘ lower))
+ Goal = ∘-is-hom (Lift-alg 𝑨 𝓧) (Lift-alg 𝑩 𝓨){f ∘ lower}{lift} lABh λ _ _ → refl
 
 
-Lift-alg-iso : {𝑨 : Algebra 𝓤 𝑆}{𝓧 : Level}
-               {𝑩 : Algebra 𝓦 𝑆}{𝓨 : Level}
+Lift-alg-iso : {𝑨 : Algebra α 𝑆}{𝓧 : Level}
+               {𝑩 : Algebra β 𝑆}{𝓨 : Level}
                -----------------------------------------
  →             𝑨 ≅ 𝑩 → (Lift-alg 𝑨 𝓧) ≅ (Lift-alg 𝑩 𝓨)
 
@@ -132,13 +135,13 @@ The lift is also associative, up to isomorphism at least.
 
 module _ {𝓘 : Level} where
 
-  Lift-alg-assoc : {𝑨 : Algebra 𝓤 𝑆} → Lift-alg 𝑨 (𝓦 ⊔ 𝓘) ≅ (Lift-alg (Lift-alg 𝑨 𝓦) 𝓘)
-  Lift-alg-assoc {𝓤}{𝓦}{𝑨} = ≅-trans (≅-trans γ Lift-≅) Lift-≅
+  Lift-alg-assoc : {𝑨 : Algebra α 𝑆} → Lift-alg 𝑨 (β ⊔ 𝓘) ≅ (Lift-alg (Lift-alg 𝑨 β) 𝓘)
+  Lift-alg-assoc {α}{β}{𝑨} = ≅-trans (≅-trans Goal Lift-≅) Lift-≅
    where
-   γ : Lift-alg 𝑨 (𝓦 ⊔ 𝓘) ≅ 𝑨
-   γ = ≅-sym Lift-≅
+   Goal : Lift-alg 𝑨 (β ⊔ 𝓘) ≅ 𝑨
+   Goal = ≅-sym Lift-≅
 
-  Lift-alg-associative : (𝑨 : Algebra 𝓤 𝑆) → Lift-alg 𝑨 (𝓦 ⊔ 𝓘) ≅ (Lift-alg (Lift-alg 𝑨 𝓦) 𝓘)
+  Lift-alg-associative : (𝑨 : Algebra α 𝑆) → Lift-alg 𝑨 (β ⊔ 𝓘) ≅ (Lift-alg (Lift-alg 𝑨 β) 𝓘)
   Lift-alg-associative 𝑨 = Lift-alg-assoc {𝑨 = 𝑨}
 
 \end{code}
@@ -152,11 +155,11 @@ Products of isomorphic families of algebras are themselves isomorphic. The proof
 
 \begin{code}
 
-module _ {𝓘 : Level}{I : Type 𝓘}{fiu : funext 𝓘 𝓤}{fiw : funext 𝓘 𝓦} where
+module _ {𝓘 : Level}{I : Type 𝓘}{fiu : funext 𝓘 α}{fiw : funext 𝓘 β} where
 
-  ⨅≅ : {𝒜 : I → Algebra 𝓤 𝑆}{ℬ : I → Algebra 𝓦 𝑆} → (∀ (i : I) → 𝒜 i ≅ ℬ i) → ⨅ 𝒜 ≅ ⨅ ℬ
+  ⨅≅ : {𝒜 : I → Algebra α 𝑆}{ℬ : I → Algebra β 𝑆} → (∀ (i : I) → 𝒜 i ≅ ℬ i) → ⨅ 𝒜 ≅ ⨅ ℬ
 
-  ⨅≅ {𝒜}{ℬ} AB = γ
+  ⨅≅ {𝒜}{ℬ} AB = Goal
    where
    ϕ : ∣ ⨅ 𝒜 ∣ → ∣ ⨅ ℬ ∣
    ϕ a i = ∣ fst (AB i) ∣ (a i)
@@ -176,8 +179,8 @@ module _ {𝓘 : Level}{I : Type 𝓘}{fiu : funext 𝓘 𝓤}{fiw : funext 𝓘
    ψ~ϕ : ψ ∘ ϕ ∼ ∣ 𝒾𝒹 (⨅ 𝒜) ∣
    ψ~ϕ a = fiu λ i → snd ∥ snd (AB i) ∥ (a i)
 
-   γ : ⨅ 𝒜 ≅ ⨅ ℬ
-   γ = (ϕ , ϕhom) , ((ψ , ψhom) , ϕ~ψ , ψ~ϕ)
+   Goal : ⨅ 𝒜 ≅ ⨅ ℬ
+   Goal = (ϕ , ϕhom) , ((ψ , ψhom) , ϕ~ψ , ψ~ϕ)
 
 \end{code}
 
@@ -186,12 +189,12 @@ A nearly identical proof goes through for isomorphisms of lifted products (thoug
 
 \begin{code}
 
-module _ {𝓘 : Level}{I : Type 𝓘}{fizw : funext (𝓘 ⊔ 𝓩) 𝓦}{fiu : funext 𝓘 𝓤} where
+module _ {𝓘 : Level}{I : Type 𝓘}{fizw : funext (𝓘 ⊔ γ) β}{fiu : funext 𝓘 α} where
 
-  Lift-alg-⨅≅ : {𝒜 : I → Algebra 𝓤 𝑆}{ℬ : (Lift 𝓩 I) → Algebra 𝓦 𝑆}
-   →            (∀ i → 𝒜 i ≅ ℬ (lift i)) → Lift-alg (⨅ 𝒜) 𝓩 ≅ ⨅ ℬ
+  Lift-alg-⨅≅ : {𝒜 : I → Algebra α 𝑆}{ℬ : (Lift γ I) → Algebra β 𝑆}
+   →            (∀ i → 𝒜 i ≅ ℬ (lift i)) → Lift-alg (⨅ 𝒜) γ ≅ ⨅ ℬ
 
-  Lift-alg-⨅≅ {𝒜}{ℬ} AB = γ
+  Lift-alg-⨅≅ {𝒜}{ℬ} AB = Goal
    where
    ϕ : ∣ ⨅ 𝒜 ∣ → ∣ ⨅ ℬ ∣
    ϕ a i = ∣ fst (AB  (lower i)) ∣ (a (lower i))
@@ -214,8 +217,8 @@ module _ {𝓘 : Level}{I : Type 𝓘}{fizw : funext (𝓘 ⊔ 𝓩) 𝓦}{fiu :
    A≅B : ⨅ 𝒜 ≅ ⨅ ℬ
    A≅B = (ϕ , ϕhom) , ((ψ , ψhom) , ϕ~ψ , ψ~ϕ)
 
-   γ : Lift-alg (⨅ 𝒜) 𝓩 ≅ ⨅ ℬ
-   γ = ≅-trans (≅-sym Lift-≅) A≅B
+   Goal : Lift-alg (⨅ 𝒜) γ ≅ ⨅ ℬ
+   Goal = ≅-trans (≅-sym Lift-≅) A≅B
 
 \end{code}
 
@@ -257,8 +260,8 @@ Finally, we prove some useful facts about embeddings that occasionally come in h
 
 private variable 𝓘 : Level
 
- -- embedding-lift-nat : hfunext 𝓘 𝓤 → hfunext 𝓘 𝓦
- --   →                   {I : Type 𝓘}{A : I → Type 𝓤}{B : I → Type 𝓦}
+ -- embedding-lift-nat : hfunext 𝓘 α → hfunext 𝓘 β
+ --   →                   {I : Type 𝓘}{A : I → Type α}{B : I → Type β}
  --                       (h : Nat A B) → (∀ i → is-embedding (h i))
  --                       ------------------------------------------
  --   →                   is-embedding(NatΠ h)
@@ -266,8 +269,8 @@ private variable 𝓘 : Level
  -- embedding-lift-nat hfiu hfiw h hem = NatΠ-is-embedding hfiu hfiw h hem
 
 
- -- embedding-lift-nat' : hfunext 𝓘 𝓤 → hfunext 𝓘 𝓦
- --   →                    {I : Type 𝓘}{𝒜 : I → Algebra 𝓤 𝑆}{ℬ : I → Algebra 𝓦 𝑆}
+ -- embedding-lift-nat' : hfunext 𝓘 α → hfunext 𝓘 β
+ --   →                    {I : Type 𝓘}{𝒜 : I → Algebra α 𝑆}{ℬ : I → Algebra β 𝑆}
  --                        (h : Nat(fst ∘ 𝒜)(fst ∘ ℬ)) → (∀ i → is-embedding (h i))
  --                        --------------------------------------------------------
  --   →                    is-embedding(NatΠ h)
@@ -275,8 +278,8 @@ private variable 𝓘 : Level
  -- embedding-lift-nat' hfiu hfiw h hem = NatΠ-is-embedding hfiu hfiw h hem
 
 
- -- embedding-lift : hfunext 𝓘 𝓤 → hfunext 𝓘 𝓦
- --   →               {I : Type 𝓘} → {𝒜 : I → Algebra 𝓤 𝑆}{ℬ : I → Algebra 𝓦 𝑆}
+ -- embedding-lift : hfunext 𝓘 α → hfunext 𝓘 β
+ --   →               {I : Type 𝓘} → {𝒜 : I → Algebra α 𝑆}{ℬ : I → Algebra β 𝑆}
  --   →               (h : ∀ i → ∣ 𝒜 i ∣ → ∣ ℬ i ∣) → (∀ i → is-embedding (h i))
  --                   ----------------------------------------------------------
  --   →               is-embedding(λ (x : ∣ ⨅ 𝒜 ∣) (i : I) → (h i)(x i))
@@ -284,7 +287,7 @@ private variable 𝓘 : Level
  -- embedding-lift hfiu hfiw {I}{𝒜}{ℬ} h hem = embedding-lift-nat' hfiu hfiw {I}{𝒜}{ℬ} h hem
 
 
- -- iso→embedding : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆} → (ϕ : 𝑨 ≅ 𝑩) → is-embedding (fst ∣ ϕ ∣)
+ -- iso→embedding : {𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆} → (ϕ : 𝑨 ≅ 𝑩) → is-embedding (fst ∣ ϕ ∣)
  -- iso→embedding ϕ = equiv-is-embedding (fst ∣ ϕ ∣) {!!} -- (invertible-is-equiv (fst ∣ ϕ ∣) finv)
  --  where
  --  finv : invertible (fst ∣ ϕ ∣)
