@@ -2,7 +2,7 @@
 layout: default
 title : Overture.Preliminaries module
 date : 2021-01-13
-author: the agda-algebras development team
+author: [the ualib/agda-algebras development team][]
 ---
 
 ### <a id="preliminaries">Preliminaries</a>
@@ -13,9 +13,9 @@ This is the [Overture.Preliminaries][] module of the [agda-algebras][].
 
 The [Agda Universal Algebra Library](https://github.com/ualib/agda-algebras) (or [agda-algebras](https://github.com/ualib/agda-algebras) for short) is based on a version of [Martin-Löf type theory (MLTT)](https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory). We don't discuss [MLTT](https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory) in great detail here because there are already good and freely available resources covering the theory. (See, for example, the section of [Escardó's notes](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes) on [A spartan Martin-Löf type theory](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#mlttinagda), or the [ncatlab entry on Martin-Löf dependent type theory](https://ncatlab.org/nlab/show/Martin-L\%C3\%B6f+dependent+type+theory), or the [HoTT book](https://homotopytypetheory.org/book/).)
 
-The objects and assumptions that form the foundation of [MLTT](https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory) are few. There are the *primitive types* (`𝟘`, `𝟙`, and `ℕ`, denoting the empty type, one-element type, and natural numbers), the *type formers* (`+`, `Π`, `Σ`, `Id`, denoting *binary sum*, *product*, *sum*, and the *identity* type). Each of these type formers is defined by a *type forming rule* which specifies how that type is constructed. Lastly, we have an infinite collection of *type universes* (types of types) and *universe variables* to denote them. Following Escardó, [agda-algebras][] denotes universe levels by upper-case calligraphic letters from the second half of the English alphabet; to be precise, these are `𝓞`, `𝓠`, `𝓡`, …, `𝓧`, `𝓨`, `𝓩`.<sup>[1](Overture.Preliminaries.html#fn1)</sup>
+The objects and assumptions that form the foundation of [MLTT](https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory) are few. There are the *primitive types* (`𝟘`, `𝟙`, and `ℕ`, denoting the empty type, one-element type, and natural numbers), the *type formers* (`+`, `Π`, `Σ`, `Id`, denoting *binary sum*, *product*, *sum*, and the *identity* type). Each of these type formers is defined by a *type forming rule* which specifies how that type is constructed. Lastly, we have an infinite collection of *type universes* (types of types) and *universe variables* to denote them.
 
-That's all. There are no further axioms or logical deduction (proof derivation) rules needed for the foundations of
+There are no further axioms or logical deduction (proof derivation) rules needed for the foundations of
 [MLTT](https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory) that we take as the starting point of [agda-algebras][].  The logical semantics come from the [propositions-as-types correspondence](https://ncatlab.org/nlab/show/propositions+as+types): propositions and predicates are represented by types and the inhabitants of these types are the proofs of the propositions and predicates.  As such, proofs are constructed using the type forming rules. In other words, the type forming rules *are* the proof derivation rules.
 
 To this foundation, we add certain *extensionality principles* when and were we need them.  These will be developed as we progress.  However, classical axioms such as the [*Axiom of Choice*](https://ncatlab.org/nlab/show/axiom+of+choice) or the [*Law of the Excluded Middle*](https://ncatlab.org/nlab/show/excluded+middle) are not needed and are not assumed anywhere in the library.  In this sense, all theorems and proofs in [agda-algebras][] are [*constructive*](https://ncatlab.org/nlab/show/constructive+mathematics) (according to [nlab's definition](https://ncatlab.org/nlab/show/constructive+mathematics)).
@@ -50,58 +50,52 @@ The `OPTIONS` pragma is usually followed by the start of a module.  For example,
 module Overture.Preliminaries where
 
 -- Imports from the Agda (Builtin) and the Agda Standard Library
-open import Agda.Builtin.Equality using (_≡_; refl)
-open import Data.Product using (_,_; Σ; Σ-syntax; _×_; proj₁; proj₂)
-open import Function.Base using (_∘_; id)
-open import Level renaming (suc to lsuc; zero to lzero)
-open import Relation.Binary.PropositionalEquality.Core using (sym; trans)
+open import Agda.Builtin.Equality                 using    ( _≡_      ;  refl   )
+open import Function.Base                         using    ( _∘_      ;  id     )
+open import Relation.Binary.PropositionalEquality using    ( sym      ;  trans  )
+open import Data.Product                          using    ( _,_      ;   Σ
+                                                           ; Σ-syntax ;   _×_   )
+                                                  renaming ( proj₁    to  fst
+                                                           ; proj₂    to  snd   )
+open import Agda.Primitive                        using    ( _⊔_                )
+                                                  renaming ( Set      to  Type  )
+open import Level                                 using    ( Level    ;   Lift
+                                                           ; lift     ;   lower )
+                                                  renaming ( suc      to  lsuc  )
 
 \end{code}
+
+We prefer to use `Type` in place of Agda's `Set` since for us *set* will mean a very special kind of (truncated) type. (See [Relations.Truncation][]). We also use `ℓ₀` in place of level `zero`, and `ℓ₁` for the successor of `ℓ₀`.
 
 
 #### <a id="agda-universes">Agda Universes</a>
 
 Here we import the basic primitive operations we need for working with Agda's type universes. For the very small amount of background about *type universes* we require, we refer the reader to the brief [section on universe-levels](https://agda.readthedocs.io/en/v2.6.1.3/language/universe-levels.html) in the Agda documentation.
 
-We prefer to use `Type` in place of Agda's `Set` since for us *set* will mean a very special kind of (truncated) type. (See [Relations.Truncation][]).
-
 \begin{code}
 
-Type : (𝓤 : Level) → Set (lsuc 𝓤)
-Type 𝓤 = Set 𝓤
-
-\end{code}
-
-We adopt Escardó's convention of denoting universe levels by capital calligraphic letters.
-
-\begin{code}
-
-private
-  variable
-    𝓘 𝓞 𝓠 𝓡 𝓢 𝓣 𝓤 𝓥 𝓦 𝓧 𝓨 𝓩 : Level
+private variable α β : Level
 
 \end{code}
 
 #### <a id="projection notation">Projection notation</a>
 
-The definition of `Σ` (and thus, of `×`) includes the fields `proj₁` and `proj₂` representing the first and second projections out of the product.  Sometimes we prefer to denote these projections by `∣_∣` and `∥_∥` respectively. However, for emphasis or readability we alternate between these and the following standard notations: `proj₁` and `fst` for the first projection, `proj₂` and `snd` for the second.  We define these alternative notations for projections out of pairs as follows.
+The definition of `Σ` (and thus, of `×`) includes the fields `proj₁` and `proj₂` representing the first and second projections out of the product.  However, we prefer the shorter names `fst` and `snd`.  Sometimes we prefer to denote these projections by `∣_∣` and `∥_∥`, respectively. We define these alternative notations for projections out of pairs as follows.
 
 \begin{code}
 
-module _ {A : Type 𝓤 }{B : A → Type 𝓥} where
+module _ {A : Type α }{B : A → Type β} where
 
- ∣_∣ fst : Σ[ x ∈ A ] B x → A
- ∣_∣ = proj₁
- fst = proj₁
+ ∣_∣ : Σ[ x ∈ A ] B x → A
+ ∣_∣ = fst
 
- ∥_∥ snd : (z : Σ[ a ∈ A ] B a) → B ∣ z ∣
- ∥_∥ = proj₂
- snd = proj₂
+ ∥_∥ : (z : Σ[ a ∈ A ] B a) → B ∣ z ∣
+ ∥_∥ = snd
 
  infix  40 ∣_∣
 \end{code}
 
-Here we put the definitions inside an *anonymous module*, which starts with the `module` keyword followed by an underscore (instead of a module name). The purpose is simply to move the postulated typing judgments---the "parameters" of the module (e.g., `A : Type 𝓤`)---out of the way so they don't obfuscate the definitions inside the module.
+Here we put the definitions inside an *anonymous module*, which starts with the `module` keyword followed by an underscore (instead of a module name). The purpose is simply to move the postulated typing judgments---the "parameters" of the module (e.g., `A : Type α`)---out of the way so they don't obfuscate the definitions inside the module.
 
 Also note that multiple inhabitants of a single type (e.g., `∣_∣` and `fst`) may be declared on the same line.
 
@@ -109,7 +103,7 @@ We prove that `≡` obeys the substitution rule (subst) in the next subsection (
 
 \begin{code}
 
-_⁻¹ : {A : Type 𝓤} {x y : A} → x ≡ y → y ≡ x
+_⁻¹ : {A : Type α} {x y : A} → x ≡ y → y ≡ x
 p ⁻¹ = sym p
 
 infix  40 _⁻¹
@@ -120,10 +114,10 @@ If we have a proof `p : x ≡ y`, and we need a proof of `y ≡ x`, then instead
 
 \begin{code}
 
-_∙_ : {A : Type 𝓤}{x y z : A} → x ≡ y → y ≡ z → x ≡ z
+_∙_ : {A : Type α}{x y z : A} → x ≡ y → y ≡ z → x ≡ z
 p ∙ q = trans p q
 
-𝑖𝑑 : (A : Type 𝓤 ) → A → A
+𝑖𝑑 : (A : Type α ) → A → A
 𝑖𝑑 A = λ x → x
 
 infixl 30 _∙_
@@ -135,10 +129,10 @@ infixl 30 _∙_
 The hierarchy of universes in Agda is structured as follows:<sup>[1](Overture.Lifts.html#fn1)</sup>
 
 ```agda
-Type 𝓤 : Type (lsuc 𝓤),   Type(lsuc 𝓤) : Type (lsuc (lsuc 𝓤)),  etc.
+Type α : Type (lsuc α),   Type(lsuc α) : Type (lsuc (lsuc α)),  etc.
 ```
 
-This means that the universe `Type 𝓤` has type `Type(lsuc 𝓤)`, and  `Type(lsuc 𝓤)` has type `Type(lsuc (lsuc 𝓤))`, and so on.  It is important to note, however, this does *not* imply that  `Type 𝓤 : Type(lsuc(lsuc 𝓤))`. In other words, Agda's universe hierarchy is *non-cumulative*. This makes it possible to treat universe levels more precisely, which is nice. On the other hand, a non-cumulative hierarchy can sometimes make for a non-fun proof assistant. Specifically, in certain situations, the non-cumulativity makes it unduly difficult to convince Agda that a program or proof is correct.
+This means that the universe `Type α` has type `Type(lsuc α)`, and  `Type(lsuc α)` has type `Type(lsuc (lsuc α))`, and so on.  It is important to note, however, this does *not* imply that  `Type α : Type(lsuc(lsuc α))`. In other words, Agda's universe hierarchy is *non-cumulative*. This makes it possible to treat universe levels more precisely, which is nice. On the other hand, a non-cumulative hierarchy can sometimes make for a non-fun proof assistant. Specifically, in certain situations, the non-cumulativity makes it unduly difficult to convince Agda that a program or proof is correct.
 
 
 
@@ -151,15 +145,15 @@ Let us be more concrete about what is at issue here by considering a typical exa
 
 <samp>
 Birkhoff.lagda:498,20-23 <br>
-𝓤 != 𝓞 ⊔ 𝓥 ⊔ (lsuc 𝓤) when checking that the expression... has type...
+α != 𝓞 ⊔ 𝓥 ⊔ (lsuc α) when checking that the expression... has type...
 </samp>
 
-This error message means that Agda encountered the universe level `lsuc 𝓤`, on line 498 (columns 20--23) of the file `Birkhoff.lagda`, but was expecting a type at level `𝓞 ⊔ 𝓥 ⊔ lsuc 𝓤` instead.
+This error message means that Agda encountered the universe level `lsuc α`, on line 498 (columns 20--23) of the file `Birkhoff.lagda`, but was expecting a type at level `𝓞 ⊔ 𝓥 ⊔ lsuc α` instead.
 
 The general `Lift` record type that we now describe makes these situations easier to deal with. It takes a type inhabiting some universe and embeds it into a higher universe and, apart from syntax and notation, it is equivalent to the `Lift` type one finds in the `Level` module of the [Agda Standard Library][].
 
 ```agda
- record Lift {𝓦 𝓤 : Level} (A : Type 𝓤) : Type (𝓤 ⊔ 𝓦) where
+ record Lift {𝓦 α : Level} (A : Type α) : Type (α ⊔ 𝓦) where
   constructor lift
   field lower : A
 ```
@@ -168,10 +162,10 @@ The point of having a ramified hierarchy of universes is to avoid Russell's para
 
 \begin{code}
 
-lift∼lower : ∀ {𝓤 𝓦}{A : Type 𝓤} → lift ∘ lower ≡ 𝑖𝑑 (Lift 𝓦 A)
+lift∼lower : {A : Type α} → lift ∘ lower ≡ 𝑖𝑑 (Lift β A)
 lift∼lower = refl
 
-lower∼lift : {𝓤 𝓦 : Level}{A : Type 𝓤} → lower {𝓤}{𝓦}(lift {𝓤}{𝓦}(λ x → x)) ≡ 𝑖𝑑 A
+lower∼lift : {A : Type α} → lower {α}{β}(lift {α}{β}(λ x → x)) ≡ 𝑖𝑑 A
 lower∼lift = refl
 
 \end{code}
@@ -184,10 +178,29 @@ We conclude this module with a definition that conveniently represents te assert
 
 \begin{code}
 
-_∼_ : {X : Type 𝓤 } {A : X → Type 𝓥 } → (f g : (x : X) → A x) → Type (𝓤 ⊔ 𝓥)
+_∼_ : {A : Type α } {B : A → Type β } → (f g : (a : A) → B a) → Type (α ⊔ β)
 f ∼ g = ∀ x → f x ≡ g x
 
 infix 8 _∼_
+
+\end{code}
+
+The following is convenient for proving two pairs of a product type are equal using the fact that their
+respective components are equal.
+
+\begin{code}
+
+≡-by-parts : {A : Type α}{B : Type β}{u v : A × B} → fst u ≡ fst v → snd u ≡ snd v → u ≡ v
+≡-by-parts refl refl = refl
+
+\end{code}
+
+Lastly, we will use the following type (instead of `subst`) to transport equality proofs.
+
+\begin{code}
+
+transport : {A : Type α } (B : A → Type β) {x y : A} → x ≡ y → B x → B y
+transport B refl = id
 
 \end{code}
 
@@ -211,16 +224,9 @@ variable because in some libraries `𝓟` denotes a powerset type.</span>
 
 {% include UALib.Links.md %}
 
+------------------------------
+
+[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
 [agda-algebras]: https://github.com/ualib/agda-algebras
 
 
-
-<!--
-
-<sup>1</sup><span class="footnote" id="fn1"> [Martín Escardó][] has written an
-outstanding set of notes entitled
-[Introduction to Univalent Foundations of Mathematics with Agda](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/index.html)
-which we highly recommend to anyone wanting more details than we provide here
-about [MLTT][] and Univalent Foundations/HoTT in Agda.</span>
-
--->

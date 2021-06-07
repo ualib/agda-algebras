@@ -12,31 +12,29 @@ This section presents the [Algebras.Congruences][] module of the [Agda Universal
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
--- Imports from the Agda (Builtin) and the Agda Standard Library
-open import Agda.Builtin.Equality using (_≡_; refl)
-open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
-open import Level renaming (suc to lsuc; zero to lzero)
-open import Data.Product using (_,_; Σ; _×_; Σ-syntax)
-open import Data.Product.Properties
-open import Relation.Binary using (Rel; IsEquivalence)
-open import Relation.Unary using (Pred; _∈_)
-open import Relation.Binary.PropositionalEquality.Core using (sym; trans; cong; subst)
-
--- Imports from the Agda Universal Algebra Library
+open import Level renaming ( suc to lsuc )
 open import Algebras.Basic
-open import Overture.Preliminaries using (Type; ∣_∣; ∥_∥; fst)
-open import Relations.Discrete using (𝟎; _|:_)
-open import Relations.Quotients using (_/_; ⟪_⟫; IsBlock)
-
 
 module Algebras.Congruences {𝓞 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
 
-private
-  variable
-    𝓘 𝓤 𝓦 : Level
+open import Axiom.Extensionality.Propositional    renaming (Extensionality to funext)
+open import Agda.Builtin.Equality                 using    ( _≡_      ; refl    )
+open import Agda.Primitive                        using    ( _⊔_                )
+                                                  renaming ( Set      to  Type  )
+
+open import Relation.Binary                       using    ( IsEquivalence      )
+                                                  renaming ( Rel      to BinRel )
+
+open import Data.Product                          using    ( _,_      ;   Σ
+                                                           ; Σ-syntax ;   _×_   )
+open import Relation.Binary.PropositionalEquality using    ( sym ; trans ; cong )
 
 open import Algebras.Products {𝑆 = 𝑆} using (ov)
+open import Overture.Preliminaries    using (∣_∣; ∥_∥)
+open import Relations.Discrete        using (𝟎; _|:_)
+open import Relations.Quotients       using (_/_; ⟪_⟫; IsBlock)
 
+private variable α β ρ : Level
 \end{code}
 
 A *congruence relation* of an algebra `𝑨` is defined to be an equivalence relation that is compatible with the basic operations of `𝑨`.  This concept can be represented in a number of alternative but equivalent ways.
@@ -44,13 +42,13 @@ Formally, we define a record type (`IsCongruence`) to represent the property of 
 
 \begin{code}
 
-record IsCongruence (𝑨 : Algebra 𝓤 𝑆)(θ : Rel ∣ 𝑨 ∣ 𝓦) : Type(ov 𝓦 ⊔ 𝓤)  where
+record IsCongruence (𝑨 : Algebra α 𝑆)(θ : BinRel ∣ 𝑨 ∣ ρ) : Type(ov ρ ⊔ α)  where
  constructor mkcon
  field       is-equivalence : IsEquivalence θ
              is-compatible  : compatible 𝑨 θ
 
-Con : (𝑨 : Algebra 𝓤 𝑆) → Type(𝓤 ⊔ ov 𝓦)
-Con {𝓤}{𝓦}𝑨 = Σ[ θ ∈ ( Rel ∣ 𝑨 ∣ 𝓦 ) ] IsCongruence 𝑨 θ
+Con : (𝑨 : Algebra α 𝑆) → Type(α ⊔ ov ρ)
+Con {α}{ρ}𝑨 = Σ[ θ ∈ ( BinRel ∣ 𝑨 ∣ ρ ) ] IsCongruence 𝑨 θ
 
 \end{code}
 
@@ -58,10 +56,10 @@ Each of these types captures what it means to be a congruence and they are equiv
 
 \begin{code}
 
-IsCongruence→Con : {𝑨 : Algebra 𝓤 𝑆}(θ : Rel ∣ 𝑨 ∣ 𝓦) → IsCongruence 𝑨 θ → Con 𝑨
+IsCongruence→Con : {𝑨 : Algebra α 𝑆}(θ : BinRel ∣ 𝑨 ∣ ρ) → IsCongruence 𝑨 θ → Con 𝑨
 IsCongruence→Con θ p = θ , p
 
-Con→IsCongruence : {𝑨 : Algebra 𝓤 𝑆} → ((θ , _) : Con{𝓤}{𝓦} 𝑨) → IsCongruence 𝑨 θ
+Con→IsCongruence : {𝑨 : Algebra α 𝑆} → ((θ , _) : Con{α}{ρ} 𝑨) → IsCongruence 𝑨 θ
 Con→IsCongruence θ = ∥ θ ∥
 
 \end{code}
@@ -71,7 +69,7 @@ We defined the *zero relation* `𝟎` in the [Relations.Discrete][] module.  We 
 
 \begin{code}
 
-𝟎-IsEquivalence : {A : Type 𝓤} →  IsEquivalence {A = A} 𝟎
+𝟎-IsEquivalence : {A : Type α} →  IsEquivalence {A = A} 𝟎
 𝟎-IsEquivalence = record { refl = refl ; sym = sym; trans = trans }
 
 \end{code}
@@ -80,10 +78,10 @@ Next we formally record another obvious fact---that `𝟎-rel` is compatible wit
 
 \begin{code}
 
-𝟎-compatible-op : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 𝑆} (𝑓 : ∣ 𝑆 ∣) → (𝑓 ̂ 𝑨) |: 𝟎
+𝟎-compatible-op : funext 𝓥 α → {𝑨 : Algebra α 𝑆} (𝑓 : ∣ 𝑆 ∣) → (𝑓 ̂ 𝑨) |: 𝟎
 𝟎-compatible-op fe {𝑨} 𝑓 {i}{j} ptws0  = cong (𝑓 ̂ 𝑨) (fe ptws0)
 
-𝟎-compatible : funext 𝓥 𝓤 → {𝑨 : Algebra 𝓤 𝑆} → compatible 𝑨 𝟎
+𝟎-compatible : funext 𝓥 α → {𝑨 : Algebra α 𝑆} → compatible 𝑨 𝟎
 𝟎-compatible fe {𝑨} = λ 𝑓 x → 𝟎-compatible-op fe {𝑨} 𝑓 x
 
 \end{code}
@@ -92,10 +90,10 @@ Finally, we have the ingredients need to construct the zero congruence of any al
 
 \begin{code}
 
-Δ : (𝑨 : Algebra 𝓤 𝑆){fe : funext 𝓥 𝓤} → IsCongruence 𝑨 𝟎
+Δ : (𝑨 : Algebra α 𝑆){fe : funext 𝓥 α} → IsCongruence 𝑨 𝟎
 Δ 𝑨 {fe} = mkcon 𝟎-IsEquivalence (𝟎-compatible fe)
 
-𝟘 : (𝑨 : Algebra 𝓤 𝑆){fe : funext 𝓥 𝓤} → Con{𝓤} 𝑨
+𝟘 : (𝑨 : Algebra α 𝑆){fe : funext 𝓥 α} → Con{α} 𝑨
 𝟘 𝑨 {fe} = IsCongruence→Con 𝟎 (Δ 𝑨 {fe})
 
 \end{code}
@@ -108,7 +106,7 @@ In many areas of abstract mathematics the *quotient* of an algebra `𝑨` with r
 
 \begin{code}
 
-_╱_ : (𝑨 : Algebra 𝓤 𝑆) → Con{𝓤}{𝓦} 𝑨 → Algebra (𝓤 ⊔ lsuc 𝓦) 𝑆
+_╱_ : (𝑨 : Algebra α 𝑆) → Con{α}{ρ} 𝑨 → Algebra (α ⊔ lsuc ρ) 𝑆
 
 𝑨 ╱ θ = (∣ 𝑨 ∣ / ∣ θ ∣)  ,                                  -- the domain of the quotient algebra
         λ 𝑓 𝑎 → ⟪ (𝑓 ̂ 𝑨)(λ i →  IsBlock.block-u ∥ 𝑎 i ∥) ⟫  -- the basic operations of the quotient algebra
@@ -120,7 +118,7 @@ _╱_ : (𝑨 : Algebra 𝓤 𝑆) → Con{𝓤}{𝓦} 𝑨 → Algebra (𝓤 �
 \begin{code}
 
 
-𝟘[_╱_] : (𝑨 : Algebra 𝓤 𝑆)(θ : Con{𝓤}{𝓦} 𝑨) → Rel (∣ 𝑨 ∣ / ∣ θ ∣)(𝓤 ⊔ lsuc 𝓦)
+𝟘[_╱_] : (𝑨 : Algebra α 𝑆)(θ : Con{α}{ρ} 𝑨) → BinRel (∣ 𝑨 ∣ / ∣ θ ∣)(α ⊔ lsuc ρ)
 𝟘[ 𝑨 ╱ θ ] = λ u v → u ≡ v
 
 \end{code}
@@ -129,7 +127,7 @@ From this we easily obtain the zero congruence of `𝑨 ╱ θ` by applying the 
 
 \begin{code}
 
-𝟎[_╱_] : (𝑨 : Algebra 𝓤 𝑆)(θ : Con{𝓤}{𝓦} 𝑨){fe : funext 𝓥 (𝓤 ⊔ lsuc 𝓦)} → Con (𝑨 ╱ θ)
+𝟎[_╱_] : (𝑨 : Algebra α 𝑆)(θ : Con{α}{ρ} 𝑨){fe : funext 𝓥 (α ⊔ lsuc ρ)} → Con (𝑨 ╱ θ)
 𝟎[ 𝑨 ╱ θ ] {fe} = 𝟘[ 𝑨 ╱ θ ] , Δ (𝑨 ╱ θ) {fe}
 
 \end{code}
@@ -142,7 +140,7 @@ a large amount of extensionality that is miraculously true).
 
 open IsCongruence
 
-/-≡ : {𝑨 : Algebra 𝓤 𝑆}(θ : Con{𝓤}{𝓦} 𝑨){u v : ∣ 𝑨 ∣} → ⟪ u ⟫ {∣ θ ∣} ≡ ⟪ v ⟫ → ∣ θ ∣ u v
+/-≡ : {𝑨 : Algebra α 𝑆}(θ : Con{α}{ρ} 𝑨){u v : ∣ 𝑨 ∣} → ⟪ u ⟫ {∣ θ ∣} ≡ ⟪ v ⟫ → ∣ θ ∣ u v
 /-≡ θ refl = IsEquivalence.refl (is-equivalence ∥ θ ∥)
 
 \end{code}

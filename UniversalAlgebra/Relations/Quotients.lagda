@@ -2,7 +2,7 @@
 layout: default
 title : Relations.Quotients module (The Agda Universal Algebra Library)
 date : 2021-01-13
-author: William DeMeo
+author: [the ualib/agda-algebras development team][]
 ---
 
 ### <a id="equivalence-relations-and-quotients">Equivalence Relations and Quotients</a>
@@ -13,22 +13,26 @@ This section presents the [Relations.Quotients][] module of the [Agda Universal 
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Agda.Builtin.Equality using (_≡_; refl)
-open import Agda.Primitive using (_⊔_; lzero; lsuc; Level)
-open import Data.Product  using (_,_; Σ; Σ-syntax; _×_)
-open import Level using (Level)
-open import Relation.Binary using (Rel; IsEquivalence)
-open import Relation.Binary.PropositionalEquality using (sym; trans)
-open import Relation.Unary using (Pred; _⊆_)
-
-open import Overture.Preliminaries using (Type)
-open import Relations.Discrete using (ker)
-
 module Relations.Quotients where
 
-private
-  variable
-    𝓤 𝓥 𝓦 : Level
+open import Agda.Builtin.Equality                 using    (_≡_  ; refl      )
+open import Data.Product                          using    ( _,_ ; Σ
+                                                           ; Σ-syntax        )
+                                                  renaming ( proj₁ to fst
+                                                           ; proj₂ to snd    )
+open import Agda.Primitive                        using    ( _⊔_             )
+                                                  renaming ( Set   to Type
+                                                           ; Setω  to Typeω  )
+open import Level                                 renaming ( suc   to lsuc
+                                                           ; zero  to ℓ₀     )
+open import Relation.Binary                       using    ( IsEquivalence   )
+                                                  renaming ( Rel   to BinRel )
+open import Relation.Binary.PropositionalEquality using    ( sym  ; trans    )
+open import Relation.Unary                        using    ( Pred ; _⊆_      )
+open import Relations.Discrete                    using    ( ker             )
+
+private variable α β ρ 𝓥 : Level
+
 \end{code}
 
 
@@ -43,7 +47,7 @@ A prominent example of an equivalence relation is the kernel of any function.
 
 \begin{code}
 
-ker-IsEquivalence : {A : Type 𝓤}{B : Type 𝓦}(f : A → B) → IsEquivalence (ker f)
+ker-IsEquivalence : {A : Type α}{B : Type β}(f : A → B) → IsEquivalence (ker f)
 ker-IsEquivalence f = record { refl = refl ; sym = λ x → sym x ; trans = λ x y → trans x y }
 
 \end{code}
@@ -54,7 +58,7 @@ If `R` is an equivalence relation on `A`, then for each `u : A` there is an *equ
 
 \begin{code}
 
-[_] : {A : Type 𝓤} → A → {R : Rel A 𝓦} → Pred A 𝓦
+[_] : {A : Type α} → A → {R : BinRel A ρ} → Pred A ρ
 [ u ]{R} = R u
 
 infix 60 [_]
@@ -68,11 +72,11 @@ A predicate `C` over `A` is an `R`-block if and only if `C ≡ [ u ]` for some `
 
 \begin{code}
 
-record IsBlock {A : Type 𝓤}(C : Pred A 𝓦){R : Rel A 𝓦} : Type(𝓤 ⊔ lsuc 𝓦) where
+record IsBlock {A : Type α}(P : Pred A ρ){R : BinRel A ρ} : Type(α ⊔ lsuc ρ) where
   constructor R-block
   field
     block-u : A
-    C≡[u] : C ≡ [ block-u ]{R}
+    P≡[u] : P ≡ [ block-u ]{R}
 
 \end{code}
 
@@ -80,12 +84,10 @@ If `R` is an equivalence relation on `A`, then the *quotient* of `A` modulo `R` 
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Level} where
+_/_ : (A : Type α ) → BinRel A ρ → Type(α ⊔ lsuc ρ)
+A / R = Σ[ P ∈ Pred A _ ] IsBlock P {R}
 
- _/_ : (A : Type 𝓤 ) → Rel A 𝓦 → Type(𝓤 ⊔ lsuc 𝓦)
- A / R = Σ[ C ∈ Pred A 𝓦 ] IsBlock C {R}
-
- infix -1 _/_
+infix -1 _/_
 
 \end{code}
 
@@ -93,7 +95,7 @@ We use the following type to represent an \ab R-block with a designated represen
 
 \begin{code}
 
-⟪_⟫ : {A : Type 𝓤} → A → {R : Rel A 𝓦} → A / R
+⟪_⟫ : {A : Type α} → A → {R : BinRel A ρ} → A / R
 ⟪ a ⟫{R} = [ a ]{R} , R-block a refl
 
 \end{code}
@@ -102,7 +104,7 @@ Dually, the next type provides an *elimination rule*.<sup>[2](Relations.Quotient
 
 \begin{code}
 
-⌞_⌟ : {A : Type 𝓤}{R : Rel A 𝓦} → A / R  → A
+⌞_⌟ : {A : Type α}{R : BinRel A ρ} → A / R  → A
 ⌞ _ , R-block a _ ⌟ = a
 
 \end{code}
@@ -113,10 +115,10 @@ It will be convenient to have the following subset inclusion lemmas on hand when
 
 \begin{code}
 
-private variable A : Type 𝓤 ; x y : A ; R : Rel A 𝓦
+private variable A : Type α ; x y : A ; R : BinRel A ρ
 open IsEquivalence
 
-/-subset : IsEquivalence R → R x y →  [ x ]{R} ⊆  [ y ]{R}
+/-subset : IsEquivalence R → R x y →  [ x ]{R} ⊆ [ y ]{R}
 /-subset Req Rxy {z} Rxz = IsEquivalence.trans Req (IsEquivalence.sym Req Rxy) Rxz
 
 /-supset : IsEquivalence R → R x y →  [ y ]{R} ⊆ [ x ]{R}
@@ -140,3 +142,8 @@ An example application of these is the `block-ext` type in the [Relations.Extens
 <span style="float:right;">[Relations.Truncation →](Relations.Truncation.html)</span>
 
 {% include UALib.Links.md %}
+
+-----------------------------------------------
+
+[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
+

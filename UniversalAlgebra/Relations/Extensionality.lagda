@@ -2,7 +2,7 @@
 layout: default
 title : Relations.Extensionality module (The Agda Universal Algebra Library)
 date : 2021-02-23
-author: William DeMeo
+author: [the ualib/agda-algebras development team][]
 ---
 
 ### <a id="relation-extensionality">Relation Extensionality</a>
@@ -13,30 +13,34 @@ This section presents the [Relations.Extensionality][] module of the [Agda Unive
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
--- Imports from the Agda (Builtin) and the Agda Standard Library
-open import Agda.Builtin.Equality renaming (_≡_ to infix 0 _≡_)
-open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
--- open import Agda.Primitive using (_⊔_; lzero; lsuc; Level)
-open import Data.Product renaming (_,_ to infixr 50 _,_) using (Σ; _×_)
-open import Level renaming (suc to lsuc; zero to lzero)
-open import Relation.Binary using (Rel; IsEquivalence)
-open import Relation.Binary.PropositionalEquality.Core using (subst; cong-app)
-open import Relation.Unary using (Pred; _⊆_)
-open import Function.Base  using (_∘_; id)
-
--- Imports from the Agda Universal Algebra Library
-open import Overture.Preliminaries using (Type; 𝑖𝑑; _⁻¹; _∙_)
-open import Overture.Inverses using (IsSurjective; SurjInv; InvIsInv; Image_∋_; eq)
-open import Relations.Continuous using (ContRel; DepRel)
-open import Relations.Discrete using (Op)
-open import Relations.Quotients using ([_]; /-subset; /-supset; IsBlock; ⟪_⟫)
-open import Relations.Truncation using (blk-uip; to-Σ-≡)
-
 module Relations.Extensionality where
 
-private
-  variable
-    𝓤 𝓥 𝓦 𝓩 : Level
+open import Axiom.Extensionality.Propositional    renaming (Extensionality to funext)
+
+open import Agda.Builtin.Equality                 using    (_≡_    ;  refl    )
+open import Agda.Primitive                        using    ( _⊔_              )
+                                                  renaming ( Set   to Type    )
+open import Data.Product                          using    ( _,_ ; Σ-syntax ; Σ )
+                                                  renaming ( proj₁ to fst
+                                                           ; proj₂ to snd     )
+open import Function.Base                         using    ( _∘_   ;  id      )
+open import Level                                 renaming ( suc   to lsuc    )
+open import Relation.Binary                       using    ( IsEquivalence    )
+                                                  renaming ( Rel   to BinRel  )
+open import Relation.Binary.PropositionalEquality using    ( sym   ;  cong-app
+                                                           ; trans            )
+open import Relation.Unary                        using    ( Pred  ; _⊆_      )
+
+open import Overture.Preliminaries using ( 𝑖𝑑 ; _⁻¹ ; _∙_ ; transport )
+open import Overture.Inverses      using ( IsSurjective ; SurjInv
+                                         ; InvIsInv ; Image_∋_ ; eq  )
+open import Relations.Discrete     using ( Op                        )
+open import Relations.Quotients    using ( [_] ; /-subset
+                                         ; /-supset ; IsBlock ; ⟪_⟫  )
+open import Relations.Truncation   using ( blk-uip ; to-Σ-≡          )
+
+
+private variable α β γ ρ 𝓥 : Level
 \end{code}
 
 #### <a id="extensionality">Function Extensionality</a>
@@ -49,7 +53,7 @@ Note that the next proof requires function extensionality, which we postulate in
 
 \begin{code}
 
-module _ {fe : funext 𝓦 𝓦}{A : Type 𝓤}{B : Type 𝓦} where
+module _ {fe : funext β β}{A : Type α}{B : Type β} where
 
  SurjInvIsRightInv : (f : A → B)(fE : IsSurjective f) → f ∘ (SurjInv f fE) ≡ 𝑖𝑑 B
  SurjInvIsRightInv f fE = fe (λ x → InvIsInv f (fE x))
@@ -60,10 +64,10 @@ We can also prove the following composition law for epics.
 
 \begin{code}
 
- epic-factor : {C : Type 𝓩}(f : A → B)(g : A → C)(h : C → B)
+ epic-factor : {C : Type γ}(f : A → B)(g : A → C)(h : C → B)
   →            f ≡ h ∘ g → IsSurjective f → IsSurjective h
 
- epic-factor f g h compId fe y = γ
+ epic-factor f g h compId fe y = Goal
   where
    finv : B → A
    finv = SurjInv f fe
@@ -74,8 +78,8 @@ We can also prove the following composition law for epics.
    η : (h ∘ g) (finv y) ≡ y
    η = (cong-app (compId ⁻¹)(finv y)) ∙ ζ
 
-   γ : Image h ∋ y
-   γ = eq (g (finv y)) (η ⁻¹)
+   Goal : Image h ∋ y
+   Goal = eq (g (finv y)) (η ⁻¹)
 
 \end{code}
 
@@ -89,8 +93,8 @@ The principle of *proposition extensionality* asserts that logically equivalent 
 
 \begin{code}
 
-pred-ext : (𝓤 𝓦 : Level) → Type (lsuc (𝓤 ⊔ 𝓦))
-pred-ext 𝓤 𝓦 = ∀ {A : Type 𝓤}{P Q : Pred A 𝓦 } → P ⊆ Q → Q ⊆ P → P ≡ Q
+pred-ext : (α β : Level) → Type (lsuc (α ⊔ β))
+pred-ext α β = ∀ {A : Type α}{P Q : Pred A β } → P ⊆ Q → Q ⊆ P → P ≡ Q
 
 \end{code}
 
@@ -104,19 +108,19 @@ We need an identity type for congruence classes (blocks) over sets so that two d
 
 \begin{code}
 
-module _ {A : Type 𝓤}{R : Rel A 𝓦} where
+module _ {A : Type α}{R : BinRel A ρ} where
 
- block-ext : pred-ext 𝓤 𝓦 → IsEquivalence R → {u v : A} → R u v → [ u ]{R} ≡ [ v ]{R}
+ block-ext : pred-ext α ρ → IsEquivalence R → {u v : A} → R u v → [ u ]{R} ≡ [ v ]{R}
  block-ext pe Req {u}{v} Ruv = pe (/-subset Req Ruv) (/-supset Req Ruv)
 
 
  private
-   to-subtype|uip : blk-uip A R → {C D : Pred A 𝓦}{c : IsBlock C {R}}{d : IsBlock D {R}}
+   to-subtype|uip : blk-uip A R → {C D : Pred A ρ}{c : IsBlock C {R}}{d : IsBlock D {R}}
     →               C ≡ D → (C , c) ≡ (D , d)
 
-   to-subtype|uip buip {C}{D}{c}{d}CD = to-Σ-≡(CD , buip D(subst(λ B → IsBlock B)CD c)d)
+   to-subtype|uip buip {C}{D}{c}{d}CD = to-Σ-≡(CD , buip D(transport(λ B → IsBlock B)CD c)d)
 
- block-ext|uip : pred-ext 𝓤 𝓦 → blk-uip A R → IsEquivalence R → ∀{u}{v} → R u v → ⟪ u ⟫ ≡ ⟪ v ⟫
+ block-ext|uip : pred-ext α ρ → blk-uip A R → IsEquivalence R → ∀{u}{v} → R u v → ⟪ u ⟫ ≡ ⟪ v ⟫
  block-ext|uip pe buip Req Ruv = to-subtype|uip buip (block-ext pe Req Ruv)
 
 \end{code}
@@ -131,7 +135,7 @@ Of course, operations of type `Op I A` are well-defined in the sense that equal 
 
 \begin{code}
 
-welldef : {A : Type 𝓤}{I : Type 𝓥}(f : Op I A) → ∀ u v → u ≡ v → f u ≡ f v
+welldef : {A : Type α}{I : Type 𝓥}(f : Op I A) → ∀ u v → u ≡ v → f u ≡ f v
 welldef f u v refl = refl
 
 \end{code}
@@ -140,17 +144,17 @@ A stronger form of well-definedness of operations is to suppose that point-wise 
 
 \begin{code}
 
-swelldef : (𝓥 𝓤 : Level) → Type (lsuc (𝓤 ⊔ 𝓥))
-swelldef 𝓥 𝓤 = ∀ {A : Type 𝓤}{I : Type 𝓥}(f : Op I A)(u v : I → A) → (∀ i → u i ≡ v i) → f u ≡ f v
+swelldef : (𝓥 α : Level) → Type (lsuc (α ⊔ 𝓥))
+swelldef 𝓥 α = ∀ {A : Type α}{I : Type 𝓥}(f : Op I A)(u v : I → A) → (∀ i → u i ≡ v i) → f u ≡ f v
 
 private
-  funext→swelldef : {𝓤 𝓥 : Level} → funext 𝓥 𝓤 → swelldef 𝓥 𝓤
-  funext→swelldef fe f u v ptweq = γ
+  funext→swelldef : {α 𝓥 : Level} → funext 𝓥 α → swelldef 𝓥 α
+  funext→swelldef fe f u v ptweq = Goal
    where
    uv : u ≡ v
    uv = fe ptweq
-   γ : f u ≡ f v
-   γ = welldef f u v uv
+   Goal : f u ≡ f v
+   Goal = welldef f u v uv
 
 \end{code}
 
@@ -163,119 +167,7 @@ private
 {% include UALib.Links.md %}
 
 
+-----------------------------------------------
 
+[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!--
-
-#### <a id="extensionality">Function Extensionality</a>
-
-(This short and simple-minded introduction to function extensionality is for the uninitiated.  Those already familiar with this concept may wish to skip to the next module.)
-
-What does it mean to say that two functions `f g : A → B` are equal?
-
-Suppose `f` and `g` are defined on `A = ℤ` (the integers) as follows: `f x := x + 2` and `g x := ((2 * x) - 8)/2 + 6`.  Should we call `f` and `g` equal? Are they the "same" function?  What does that even mean?
-
-It's hard to resist the urge to reduce `g` to `x + 2` and proclaim that `f` and `g` are equal. Indeed, this is often an acceptable answer and the discussion normally ends there.  In the science of computing, however, more attention is paid to equality, and with good reason.
-
-We can probably all agree that the functions `f` and `g` above, while not syntactically equal, do produce the same output when given the same input so it seems fine to think of the functions as the same, for all intents and purposes. But we should ask ourselves at what point do we notice or care about the difference in the way functions are defined?
-
-What if we had started out this discussion with two functions, `f` and `g`, both of which take a list as argument and produce as output a correctly sorted version of the input list?  Suppose `f` is defined using the [merge sort](https://en.wikipedia.org/wiki/Merge_sort) algorithm, while `g` uses [quick sort](https://en.wikipedia.org/wiki/Quicksort).  Probably few of us would call `f` and `g` the "same" in this case.
-
-In the examples above, it is common to say that the two functions are [extensionally equal](https://en.wikipedia.org/wiki/Extensionality), since they produce the same *external* output when given the same input, but they are not [intensionally equal](https://en.wikipedia.org/wiki/Intension), since their *internal* definitions differ.
-
-Below we describe types that manifest this notion of *extensional equality of functions*, or *function extensionality*.
-
-#### <a id="function-extensionality-types">Function extensionality types</a>
-
-As explained above, a natural notion of function equality is defined as follows:  `f` and `g` are said to be *point-wise equal* provided `∀ x → f x ≡ g x`.  Here is how this is expressed in type theory (e.g., in the [Type Topology][] library).
-
-```agda
-_∼_ : {X : Type 𝓤 } {A : X → Type 𝓥 } → Π A → Π A → Type (𝓤 ⊔ 𝓥)
-f ∼ g = ∀ x → f x ≡ g x
-
-infix 8 _∼_
-```
-
-*Function extensionality* is the principle that point-wise equal functions are *definitionally* equal; that is, for all functions `f` and `g` we have `f ∼ g → f ≡ g`. In Agda this principle is represented by the
-`Extensionality` type defined in the `Axiom.Extensionality.Propositional` module of the standard library.  We show the definition here for easy reference.
-
-```agda
-funext : (𝓤 𝓦 : Level) → Type (lsuc (𝓤 ⊔ 𝓦))
-funext 𝓤 𝓦 = {A : Type 𝓤} {B : A → Type 𝓦} {f g : (x : A) → B x} → f ∼ g → f ≡ g
-```
-
-Note that this definition does not postulate function extensionality; it merely defines what the principle is and makes it available in case we want to postulate it.
-
-In most informal settings at least, this so-called *point-wise equality of functions* is typically what one means when one asserts that two functions are "equal."<sup>[4](Overture.Extensionality.html#fn4)</sup>
-However, it is important to keep in mind the following fact (see <a href="https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#funextfromua">Escardó's notes</a>):
-
-*Function extensionality is known to be neither provable nor disprovable in Martin-Löf type theory. It is an independent statement*.
-
-
-Previous versions of [UniversalAlgebra][] made heavy use of a *global function extensionality principle*. This asserts that function extensionality holds at all universe levels.
-However, we decided to remove all instances of global function extensionality from the latest version of the library and limit ourselves to local applications of the principle. This has the advantage of making transparent precisely how and where the library depends on function extensionality. The price we pay for this precision is a library that is littered with extensionality postulates. Eventually we will probably remove these postulates in favor of an alternative approach to extensionality; e.g., *univalence* and/or Cubical Agda.
-
-The following definition is useful for postulating function extensionality when and where needed.
-
-```agda
-DFunExt : Setω
-DFunExt = (𝓤 𝓥 : Level) → funext 𝓤 𝓥
-```
-
-The right-inverse of `f` is obtained by applying `EpicInv` to `f` and a proof of `Epic f`. To see that this does indeed give the right-inverse we prove the `EpicInvIsRightInv` lemma below. This requires function composition, denoted `∘` and defined in the Function module of the [Agda Standard Library][] (and imported above).
-
-```agda
- _∘_ : Π C → (f : A → B) → (x : A) → C (f x)
- g ∘ f = λ x → g (f x)
-```
-
-Note that the next proof requires function extensionality, which we postulate in the module declaration.
-
-module _ {fe : funext 𝓦 𝓦}{A : Type 𝓤}{B : Type 𝓦} where
-
- SurjInvIsRightInv : (f : A → B)(fE : IsSurjective f) → f ∘ (SurjInv f fE) ≡ 𝑖𝑑 B
- SurjInvIsRightInv f fE = fe (λ x → InvIsInv f (fE x))
-
-We can also prove the following composition law for epics.
-
- epic-factor : {C : Type 𝓩}(f : A → B)(g : A → C)(h : C → B)
-  →            f ≡ h ∘ g → IsSurjective f → IsSurjective h
-
- epic-factor f g h compId fe y = γ
-  where
-   finv : B → A
-   finv = SurjInv f fe
-
-   ζ : f (finv y) ≡ y
-   ζ = cong-app (EpicInvIsRightInv f fe) y
-
-   η : (h ∘ g) (finv y) ≡ y
-   η = (cong-app (compId ⁻¹)(finv y)) ∙ ζ
-
-   γ : Image h ∋ y
-   γ = eq y (g (finv y)) (η ⁻¹)
-
--->

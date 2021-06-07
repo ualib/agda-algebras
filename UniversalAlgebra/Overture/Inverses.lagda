@@ -2,7 +2,7 @@
 layout: default
 title : Overture.Inverses module
 date : 2021-01-12
-author: the agda-algebras development team
+author: [the ualib/agda-algebras development team][]
 ---
 
 ### <a id="inverses">Inverses</a>
@@ -13,33 +13,38 @@ This is the [Overture.Inverses][] module of the [agda-algebras][] library.
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
--- Imports from Agda (Builtin) and the Agda Standard Library
-open import Agda.Builtin.Equality using (_≡_; refl)
-open import Agda.Primitive using (_⊔_; lzero; lsuc; Level; Setω)
-open import Data.Product using (_,_; Σ; Σ-syntax; _×_)
-open import Function.Base  using (_∘_; id)
-import Function.Definitions as F -- for Injective
-open import Function.Bundles using (_↣_; mk↣)
-open import Function.Construct.Identity using (id-↣)
-open import Relation.Binary.PropositionalEquality.Core using (subst; cong-app)
-
--- Imports from agda-algebras
-open import Overture.Preliminaries using (Type; _⁻¹; _∙_; 𝑖𝑑; _∼_)
 
 module Overture.Inverses where
 
-private
-  variable
-    𝓤 𝓥 𝓦 𝓩 : Level
+-- Imports from Agda (Builtin) and the Agda Standard Library
+open import Agda.Builtin.Equality using (_≡_; refl)
+open import Agda.Primitive  using (_⊔_)
+ renaming ( Set  to Type
+          ; Setω to Typeω )
+open import Level
+ renaming ( suc  to lsuc
+          ; zero to ℓ₀   )
+
+open import Data.Product using (_,_; Σ; Σ-syntax)
+open import Function.Base  using (_∘_; id)
+import Function.Definitions as F  -- (for Injective)
+open import Function.Bundles using (_↣_; mk↣)
+open import Function.Construct.Identity using (id-↣)
+
+-- Imports from agda-algebras
+open import Overture.Preliminaries using (_⁻¹)
+
 \end{code}
 
 We begin by defining an data type that represents the semantic concept of *inverse image* of a function.
 
 \begin{code}
 
-module _ {A : Type 𝓤 }{B : Type 𝓦 } where
+private variable α β γ : Level
 
- data Image_∋_ (f : A → B) : B → Type (𝓤 ⊔ 𝓦) where
+module _ {A : Type α }{B : Type β } where
+
+ data Image_∋_ (f : A → B) : B → Type (α ⊔ β) where
   eq : {b : B} → (a : A) → b ≡ f a → Image f ∋ b
 
 \end{code}
@@ -69,9 +74,9 @@ We say that a function `f : A → B` is *injective* (or *monic*) if it does not 
 
 \begin{code}
 
-module _ {A : Type 𝓤}{B : Type 𝓦} where
+module _ {A : Type α}{B : Type β} where
 
- IsInjective : (A → B) → Type (𝓤 ⊔ 𝓦)
+ IsInjective : (A → B) → Type (α ⊔ β)
  IsInjective f = F.Injective _≡_ _≡_ f
 
 \end{code}
@@ -80,10 +85,10 @@ Before moving on to discuss surjective functions, let us prove (the obvious fact
 
 \begin{code}
 
-id-is-injective : {A : Type 𝓤} → A ↣ A
+id-is-injective : {A : Type α} → A ↣ A
 id-is-injective {A = A} = id-↣ A
 
-∘-injective : {A : Type 𝓤}{B : Type 𝓦}{C : Type 𝓩}{f : A → B}{g : B → C}
+∘-injective : {A : Type α}{B : Type β}{C : Type γ}{f : A → B}{g : B → C}
  →            IsInjective f → IsInjective g → IsInjective (g ∘ f)
 ∘-injective finj ginj = λ z → finj (ginj z)
 
@@ -96,11 +101,11 @@ A *surjective function* from `A` to `B` is a function `f : A → B` such that fo
 
 \begin{code}
 
-module _ {A : Type 𝓤}{B : Type 𝓦} where
- IsSurjective : (A → B) →  Type (𝓤 ⊔ 𝓦)
+module _ {A : Type α}{B : Type β} where
+ IsSurjective : (A → B) →  Type (α ⊔ β)
  IsSurjective f = ∀ y → Image f ∋ y
 
- Surjective : Type (𝓤 ⊔ 𝓦)
+ Surjective : Type (α ⊔ β)
  Surjective = Σ (A → B) IsSurjective
 
 \end{code}
@@ -126,3 +131,7 @@ Thus, a right-inverse of `f` is obtained by applying `SurjInv` to `f` and a proo
 
 
 {% include UALib.Links.md %}
+
+--------------------------------------
+
+[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
