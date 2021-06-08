@@ -2,7 +2,7 @@
 layout: default
 title : Homomorphisms.Isomoprhisms module (The Agda Universal Algebra Library)
 date : 2021-01-14
-author: William DeMeo
+author: [the ualib/agda-algebras development team][]
 ---
 
 ### <a id="isomorphisms">Isomorphisms</a>
@@ -19,24 +19,27 @@ open import Algebras.Basic
 
 module Homomorphisms.Isomorphisms {𝓞 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥}  where
 
-open import Axiom.Extensionality.Propositional renaming (Extensionality to funext )
+open import Axiom.Extensionality.Propositional    renaming (Extensionality to funext )
 open import Agda.Primitive                        using    ( _⊔_                  )
-                                                  renaming ( Set      to  Type    )
-open import Agda.Builtin.Equality                 using    ( _≡_      ;   refl    )
-open import Data.Product                          using    ( _,_      ;   Σ
-                                                           ; Σ-syntax ;   _×_     )
-                                                  renaming ( proj₁    to  fst
-                                                           ; proj₂    to  snd     )
-open import Function.Base  using (_∘_)
-open import Relation.Binary.PropositionalEquality using (cong; cong-app)
+                                                  renaming ( Set    to  Type      )
+open import Agda.Builtin.Equality                 using    ( _≡_    ;   refl      )
+open import Data.Product                          using    ( _,_    ;   Σ-syntax
+                                                           ;  Σ     ;   _×_       )
+                                                  renaming ( proj₁  to  fst
+                                                           ; proj₂  to  snd       )
+open import Function.Base                         using    ( _∘_                  )
+open import Relation.Binary.PropositionalEquality using    ( cong   ;   cong-app  )
 
 
-open import Algebras.Products {𝑆 = 𝑆} using (⨅)
-open import Homomorphisms.Basic {𝑆 = 𝑆}
- using (hom; kercon; ker[_⇒_]_↾_; πker; is-homomorphism; epi; epi-to-hom; 𝒾𝒹; ∘-hom; 𝓁𝒾𝒻𝓉; 𝓁ℴ𝓌ℯ𝓇; ∘-is-hom)
-open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; _∼_ ; transport; _∙_; lower∼lift; lift∼lower)
+open import Algebras.Products   {𝑆 = 𝑆}  using ( ⨅ )
+open import Homomorphisms.Basic {𝑆 = 𝑆}  using ( hom ; kercon ; ker[_⇒_]_↾_ ; πker
+                                               ; is-homomorphism ; epi ; epi-to-hom
+                                               ; 𝒾𝒹 ; ∘-hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; ∘-is-hom   )
+open import Overture.Preliminaries       using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; _∼_ ; transport ; _∙_
+                                               ; lower∼lift ; lift∼lower                  )
 
 private variable α β γ : Level
+
 \end{code}
 
 #### <a id="isomorphism-toolbox">Definition of isomorphism</a>
@@ -222,13 +225,7 @@ module _ {𝓘 : Level}{I : Type 𝓘}{fizw : funext (𝓘 ⊔ γ) β}{fiu : fun
 
 \end{code}
 
-
-
-
-
-
 --------------------------------------
-
 
 <br>
 
@@ -238,6 +235,9 @@ module _ {𝓘 : Level}{I : Type 𝓘}{fizw : funext (𝓘 ⊔ γ) β}{fiu : fun
 {% include UALib.Links.md %}
 
 
+------------------------------
+
+[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
 
 
 

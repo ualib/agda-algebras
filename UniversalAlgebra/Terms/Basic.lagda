@@ -2,7 +2,7 @@
 layout: default
 title : Terms.Basic module (The Agda Universal Algebra Library)
 date : 2021-01-14
-author: William DeMeo
+author: [the ualib/agda-algebras development team][]
 ---
 
 ### <a id="basic-definitions">Basic Definitions</a>
@@ -15,31 +15,30 @@ The theoretical background that begins each subsection below is based on Cliff B
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
--- Imports from Agda (builtin/primitive) and the Agda Standard Library
-open import Agda.Builtin.Equality using (_≡_; refl)
-open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
-open import Data.Product using (_,_; Σ; _×_)
-open import Function.Base  using (_∘_)
-open import Level renaming (suc to lsuc; zero to lzero)
-open import Relation.Binary.PropositionalEquality.Core using (cong; module ≡-Reasoning)
-open ≡-Reasoning
-open import Relation.Unary using (Pred)
-
--- Imports from the Agda Universal Algebra Library
+open import Level renaming ( suc to lsuc )
 open import Algebras.Basic
-open import Overture.Preliminaries
- using (Type; _⁻¹; 𝑖𝑑; ∣_∣; ∥_∥)
-open import Overture.Inverses using (IsSurjective; Image_∋_; Inv; InvIsInv; eq)
-
 
 module Terms.Basic {𝓞 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
 
-open import Algebras.Products{𝑆 = 𝑆} using (ov)
-open import Homomorphisms.Basic {𝑆 = 𝑆} using (hom) -- ; 𝓁𝒾𝒻𝓉; 𝓁ℴ𝓌ℯ𝓇)
 
-private
-  variable
-    𝓤 𝓦 𝓧 𝓨 : Level
+open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
+open import Relation.Binary.PropositionalEquality using ( cong ; module ≡-Reasoning )
+
+open import Agda.Primitive          using    ( _⊔_ )
+                                    renaming ( Set to Type )
+open import Agda.Builtin.Equality   using    ( _≡_ ; refl )
+open import Data.Product            using    ( _,_ ; Σ-syntax ; Σ )
+open import Function.Base           using    ( _∘_ )
+
+
+
+open import Overture.Preliminaries      using ( _⁻¹ ; 𝑖𝑑 ; ∣_∣ ; ∥_∥)
+open import Overture.Inverses           using ( IsSurjective ; Inv
+                                              ; InvIsInv ; Image_∋_; eq )
+open import Algebras.Products   {𝑆 = 𝑆} using ( ov )
+open import Homomorphisms.Basic {𝑆 = 𝑆} using ( hom )
+
+private variable 𝓤 𝓦 𝓧 𝓨 : Level
 \end{code}
 
 #### <a id="the-type-of-terms">The type of terms</a>
@@ -132,6 +131,8 @@ Finally, we prove that the homomorphism is unique.  This requires `funext 𝓥 �
 
 \begin{code}
 
+open ≡-Reasoning
+
 free-unique : funext 𝓥 𝓤 → (𝑨 : Algebra 𝓤 𝑆)(g h : hom (𝑻 X) 𝑨)
  →            (∀ x → ∣ g ∣ (ℊ x) ≡ ∣ h ∣ (ℊ x))
               ----------------------------------------
@@ -179,3 +180,8 @@ The `lift-hom` and `lift-of-epi-is-epi` types will be called to action when such
 <span style="float:right;">[Terms.Operations →](Terms.Operations.html)</span>
 
 {% include UALib.Links.md %}
+
+------------------------------
+
+[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
+

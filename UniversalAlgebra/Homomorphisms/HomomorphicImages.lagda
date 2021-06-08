@@ -2,7 +2,7 @@
 layout: default
 title : Homomorphisms.HomomorphicImages module (The Agda Universal Algebra Library)
 date : 2021-01-14
-author: William DeMeo
+author: [the ualib/agda-algebras development team][]
 ---
 
 ### <a id="homomorphic-images">Homomorphic Images</a>
@@ -19,24 +19,27 @@ open import Algebras.Basic
 
 module Homomorphisms.HomomorphicImages {𝓞 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
 
-open import Agda.Primitive                        using    ( _⊔_                  )
-                                                  renaming ( Set      to  Type    )
-open import Agda.Builtin.Equality                 using    ( _≡_      ;   refl    )
-open import Data.Product                          using    ( _,_      ;   Σ
-                                                           ; Σ-syntax ;   _×_     )
-                                                  renaming ( proj₁    to  fst
-                                                           ; proj₂    to  snd     )
-open import Relation.Unary                        using    ( Pred     ;   ∅       
-                                                           ; _∪_      ; _∈_ ; _⊆_ )
-open import Relation.Binary.PropositionalEquality.Core using (cong; cong-app; module ≡-Reasoning)
+open import Agda.Builtin.Equality   using    ( _≡_ ; refl )
+open import Agda.Primitive          using    ( _⊔_ )
+                                    renaming ( Set to Type )
+open import Data.Product            using    ( _,_ ; Σ-syntax ; Σ ; _×_ )
+                                    renaming ( proj₁ to fst
+                                             ; proj₂ to snd )
+open import Relation.Binary.PropositionalEquality.Core
+                                    using    ( cong ; cong-app ; module ≡-Reasoning )
+open import Relation.Unary          using    ( Pred ; _∈_ )
 
-open import Algebras.Products{𝑆 = 𝑆} using (ov)
-open import Overture.Preliminaries using (_⁻¹; 𝑖𝑑; ∣_∣; ∥_∥; lower∼lift; lift∼lower)
-open import Homomorphisms.Basic {𝑆 = 𝑆} using (hom; 𝓁𝒾𝒻𝓉; 𝓁ℴ𝓌ℯ𝓇)
-open import Overture.Inverses using (IsSurjective; Image_∋_; Inv; InvIsInv; eq)
-open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using (Lift-hom)
+
+open import Overture.Preliminaries             using ( _⁻¹ ; 𝑖𝑑 ; ∣_∣ ; ∥_∥
+                                                     ; lower∼lift ; lift∼lower )
+open import Overture.Inverses                  using ( IsSurjective ; Image_∋_
+                                                     ; Inv ; InvIsInv ; eq )
+open import Algebras.Products          {𝑆 = 𝑆} using ( ov )
+open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 )
+open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( Lift-hom )
 
 private variable α β γ : Level
+
 \end{code}
 
 
@@ -84,15 +87,14 @@ Here are some tools that have been useful (e.g., in the road to the proof of Bir
 
 open Lift
 open ≡-Reasoning
-Lift-epi-is-epi : {𝓩 β : Level}{𝑨 : Algebra α 𝑆}
-                  (𝑩 : Algebra β 𝑆)(h : hom 𝑨 𝑩)
-                  ----------------------------------------------------------
- →                IsSurjective ∣ h ∣ → IsSurjective ∣ Lift-hom 𝓩 β 𝑩 h ∣
 
-Lift-epi-is-epi {𝓩 = 𝓩} {β} {𝑨} 𝑩 h hepi y = eq (lift a) η
+Lift-epi-is-epi : {𝑨 : Algebra α 𝑆}(𝑩 : Algebra β 𝑆)(h : hom 𝑨 𝑩)
+ →                IsSurjective ∣ h ∣ → IsSurjective ∣ Lift-hom γ β 𝑩 h ∣
+
+Lift-epi-is-epi {β = β}{γ}{𝑨} 𝑩 h hepi y = eq (lift a) η
   where
-   lh : hom (Lift-alg 𝑨 𝓩) (Lift-alg 𝑩 β)
-   lh = Lift-hom 𝓩 β 𝑩 h
+   lh : hom (Lift-alg 𝑨 γ) (Lift-alg 𝑩 β)
+   lh = Lift-hom γ β 𝑩 h
 
    ζ : Image ∣ h ∣ ∋ (lower y)
    ζ = hepi (lower y)
@@ -100,7 +102,7 @@ Lift-epi-is-epi {𝓩 = 𝓩} {β} {𝑨} 𝑩 h hepi y = eq (lift a) η
    a : ∣ 𝑨 ∣
    a = Inv ∣ h ∣ ζ
 
-   ν : lift (∣ h ∣ a) ≡ ∣ Lift-hom 𝓩 β 𝑩 h ∣ (lift a)
+   ν : lift (∣ h ∣ a) ≡ ∣ Lift-hom γ β 𝑩 h ∣ (lift a)
    ν = cong (λ - → lift (∣ h ∣ (- a))) (lower∼lift {level-of-alg 𝑨}{β})
 
    η : y ≡ ∣ lh ∣ (lift a)
@@ -110,17 +112,17 @@ Lift-epi-is-epi {𝓩 = 𝓩} {β} {𝑨} 𝑩 h hepi y = eq (lift a) η
        ∣ lh ∣ (lift a) ∎
 
 
-Lift-alg-hom-image : {𝓩 β : Level}{𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆}
+Lift-alg-hom-image : {𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆}
  →                   IsHomImage {𝑨 = 𝑨} 𝑩
- →                   IsHomImage {𝑨 = Lift-alg 𝑨 𝓩} (Lift-alg 𝑩 β)
+ →                   IsHomImage {𝑨 = Lift-alg 𝑨 γ} (Lift-alg 𝑩 β)
 
-Lift-alg-hom-image {𝓩 = 𝓩}{β}{𝑨}{𝑩} ((φ , φhom) , φepic) = Goal
+Lift-alg-hom-image {β = β}{γ}{𝑨}{𝑩} ((φ , φhom) , φepic) = Goal
  where
-  lφ : hom (Lift-alg 𝑨 𝓩) (Lift-alg 𝑩 β)
-  lφ = (Lift-hom 𝓩 β 𝑩) (φ , φhom)
+  lφ : hom (Lift-alg 𝑨 γ) (Lift-alg 𝑩 β)
+  lφ = Lift-hom γ β 𝑩 (φ , φhom)
 
   lφepic : IsSurjective ∣ lφ ∣
-  lφepic = Lift-epi-is-epi {𝓩 = 𝓩} 𝑩 (φ , φhom) φepic
+  lφepic = Lift-epi-is-epi 𝑩 (φ , φhom) φepic
   Goal : IsHomImage (Lift-alg 𝑩 β)
   Goal = lφ , lφepic
 
@@ -132,3 +134,7 @@ Lift-alg-hom-image {𝓩 = 𝓩}{β}{𝑨}{𝑩} ((φ , φhom) , φepic) = Goal
 <span style="float:right;">[Terms →](Terms.html)</span>
 
 {% include UALib.Links.md %}
+
+------------------------------
+
+[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
