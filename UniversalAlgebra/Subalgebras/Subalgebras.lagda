@@ -2,7 +2,7 @@
 layout: default
 title : Subalgebras.Subalgebras module (The Agda Universal Algebra Library)
 date : 2021-01-14
-author: William DeMeo
+author: [the ualib/agda-algebras development team][]
 ---
 
 ### <a id="subalgebras">Subalgebras</a>
@@ -13,55 +13,57 @@ The [Subalgebras.Subalgebras][] module of the [Agda Universal Algebra Library][]
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
--- Imports from Agda (builtin/primitive) and the Agda Standard Library
-open import Agda.Builtin.Equality using (_≡_; refl)
-open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
-open import Data.Product using (_,_; Σ; _×_; Σ-syntax)
-open import Function.Base  using (_∘_)
-open import Function.Bundles using (Injection)
-open import Level renaming (suc to lsuc; zero to lzero)
-open import Relation.Binary.PropositionalEquality.Core using (cong; module ≡-Reasoning)
-open ≡-Reasoning
-open import Relation.Unary using (_∈_; Pred; _⊆_)
-
--- Imports from the Agda Universal Algebra Library
+open import Level using ( Level )
 open import Algebras.Basic
-open import Relations.Extensionality using (pred-ext; swelldef)
-open import Relations.Truncation using (is-set; blk-uip)
-open import Overture.Inverses using (IsInjective; id-is-injective; ∘-injective)
-open import Overture.Preliminaries
- using (Type; _∙_;_⁻¹; ∣_∣; ∥_∥; snd; 𝑖𝑑; fst)
 
 
-module Subalgebras.Subalgebras {𝓞 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
+module Subalgebras.Subalgebras {𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
 
-open import Algebras.Products{𝑆 = 𝑆} using (ov)
-open import Homomorphisms.Basic {𝑆 = 𝑆} using (hom; kercon; ker[_⇒_]_↾_; ∘-hom; is-homomorphism; ∘-is-hom)
-open import Homomorphisms.Noether using (FirstHomTheorem|Set)
-open import Homomorphisms.Isomorphisms using (_≅_; ≅-sym; ≅-trans; Lift-≅)
-open import Terms.Basic {𝑆 = 𝑆} using (Term; ℊ; node; 𝑻)
 
-private
-  variable
-    𝓤 𝓦 𝓧 𝓨 𝓩 : Level
+-- imports from Agda and the Agda Standard Library ------------------------------------
+open import Agda.Builtin.Equality      using    ( _≡_ ;  refl )
+open import Agda.Primitive             using    ( _⊔_ ;  lsuc )
+                                       renaming ( Set to Type )
+open import Data.Product               using    ( _,_ ; Σ-syntax ; Σ ; _×_ )
+                                       renaming ( proj₁ to fst
+                                                ; proj₂ to snd )
+open import Function.Base              using    ( _∘_ )
+open import Function.Bundles           using    ( Injection )
+open import
+ Relation.Binary.PropositionalEquality using    ( cong ; module ≡-Reasoning )
+open import Relation.Unary             using    ( _∈_ ; Pred ; _⊆_ )
+
+-- imports from agda-algebras --------------------------------------------------------------
+open import Overture.Preliminaries       using ( _∙_ ; _⁻¹ ; ∣_∣ ; ∥_∥ ; 𝑖𝑑 )
+open import Overture.Inverses            using ( ∘-injective ; IsInjective ; id-is-injective )
+open import Relations.Truncation         using ( is-set ; blk-uip )
+open import Relations.Extensionality     using ( swelldef ; pred-ext )
+open import Algebras.Products          𝑆 using ( ov )
+open import Homomorphisms.Basic        𝑆 using ( hom ; kercon ; ker[_⇒_]_↾_
+                                               ; ∘-hom ; is-homomorphism ; ∘-is-hom )
+open import Homomorphisms.Noether      𝑆 using ( FirstHomTheorem|Set )
+open import Homomorphisms.Isomorphisms 𝑆 using ( _≅_ ; ≅-sym ; ≅-trans ; Lift-≅ )
+open import Terms.Basic                𝑆 using ( Term ; ℊ ; node ; 𝑻 )
+
+private variable α β γ 𝓧 : Level
 \end{code}
 
 
 #### <a id="subalgebra-type">Subalgebra type</a>
 
-Given algebras `𝑨 : Algebra 𝓤 𝑆` and `𝑩 : Algebra 𝓦 𝑆`, we say that `𝑩` is a **subalgebra** of `𝑨` just in case `𝑩` can be *homomorphically embedded* in `𝑨`; that is, there exists a map `h : ∣ 𝑩 ∣ → ∣ 𝑨 ∣` that is both a homomorphism and an embedding.<sup>[1](Subalgebras.Subalgebras.html#fn1)</sup>
+Given algebras `𝑨 : Algebra α 𝑆` and `𝑩 : Algebra 𝓦 𝑆`, we say that `𝑩` is a **subalgebra** of `𝑨` just in case `𝑩` can be *homomorphically embedded* in `𝑨`; that is, there exists a map `h : ∣ 𝑩 ∣ → ∣ 𝑨 ∣` that is both a homomorphism and an embedding.<sup>[1](Subalgebras.Subalgebras.html#fn1)</sup>
 
 \begin{code}
 
-_IsSubalgebraOf_ : {𝓦 𝓤 : Level}(𝑩 : Algebra 𝓦 𝑆)(𝑨 : Algebra 𝓤 𝑆) → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
+_IsSubalgebraOf_ : (𝑩 : Algebra β 𝑆)(𝑨 : Algebra α 𝑆) → Type(𝓞 ⊔ 𝓥 ⊔ α ⊔ β)
 𝑩 IsSubalgebraOf 𝑨 = Σ[ h ∈ hom 𝑩 𝑨 ] IsInjective ∣ h ∣
 
-Subalgebra : {𝓦 𝓤 : Level} → Algebra 𝓤 𝑆 → Type(ov 𝓦 ⊔ 𝓤)
-Subalgebra {𝓦} 𝑨 = Σ[ 𝑩 ∈ (Algebra 𝓦 𝑆) ] 𝑩 IsSubalgebraOf 𝑨
+Subalgebra : Algebra α 𝑆 → Type(ov β ⊔ α)
+Subalgebra {α}{β} 𝑨 = Σ[ 𝑩 ∈ (Algebra β 𝑆) ] 𝑩 IsSubalgebraOf 𝑨
 
 \end{code}
 
-Note the order of the arguments.  The universe `𝓦` comes first because in certain situations we must explicitly specify this universe, whereas we can almost always leave the universe `𝓤` implicit. (See, for example, the definition of `_IsSubalgebraOfClass_` below.)
+Note the order of the arguments.  The universe `β` comes first because in certain situations we must explicitly specify this universe, whereas we can almost always leave the universe `α` implicit. (See, for example, the definition of `_IsSubalgebraOfClass_` below.)
 
 
 
@@ -72,9 +74,9 @@ We take this opportunity to prove an important lemma that makes use of the `IsSu
 
 \begin{code}
 
-module _ (𝑨 : Algebra 𝓤 𝑆)(𝑩 : Algebra 𝓦 𝑆)(h : hom 𝑨 𝑩)
+module _ (𝑨 : Algebra α 𝑆)(𝑩 : Algebra β 𝑆)(h : hom 𝑨 𝑩)
          -- extensionality assumptions:
-         (pe : pred-ext 𝓤 𝓦)(fe : swelldef 𝓥 𝓦)
+         (pe : pred-ext α β)(fe : swelldef 𝓥 β)
 
          -- truncation assumptions:
          (Bset : is-set ∣ 𝑩 ∣)
@@ -97,9 +99,9 @@ If we apply the foregoing theorem to the special case in which the `𝑨` is ter
 
 \begin{code}
 
-module _ (X : Type 𝓧)(𝑩 : Algebra 𝓦 𝑆)(h : hom (𝑻 X) 𝑩)
+module _ (X : Type 𝓧)(𝑩 : Algebra β 𝑆)(h : hom (𝑻 X) 𝑩)
          -- extensionality assumptions:
-         (pe : pred-ext (ov 𝓧) 𝓦)(fe : swelldef 𝓥 𝓦)
+         (pe : pred-ext (ov 𝓧) β)(fe : swelldef 𝓥 β)
 
          -- truncation assumptions:
          (Bset : is-set ∣ 𝑩 ∣)
@@ -107,7 +109,7 @@ module _ (X : Type 𝓧)(𝑩 : Algebra 𝓦 𝑆)(h : hom (𝑻 X) 𝑩)
          where
 
  free-quot-subalg : (ker[ 𝑻 X ⇒ 𝑩 ] h ↾ fe) IsSubalgebraOf 𝑩
- free-quot-subalg = FirstHomCorollary|Set{𝓤 = ov 𝓧}(𝑻 X) 𝑩 h pe fe Bset buip
+ free-quot-subalg = FirstHomCorollary|Set{α = ov 𝓧}(𝑻 X) 𝑩 h pe fe Bset buip
 
 \end{code}
 
@@ -115,7 +117,7 @@ module _ (X : Type 𝓧)(𝑩 : Algebra 𝓦 𝑆)(h : hom (𝑻 X) 𝑩)
 
 \begin{code}
 
-_≤_ : Algebra 𝓦 𝑆 → Algebra 𝓤 𝑆 → Type(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
+_≤_ : Algebra β 𝑆 → Algebra α 𝑆 → Type(𝓞 ⊔ 𝓥 ⊔ α ⊔ β)
 𝑩 ≤ 𝑨 = 𝑩 IsSubalgebraOf 𝑨
 
 \end{code}
@@ -125,16 +127,15 @@ From now on we will use `𝑩 ≤ 𝑨` to express the assertion that `𝑩` is 
 
 #### <a id="subalgebras-of-a-class">Subalgebras of a class</a>
 
-One of our goals is to formally express and prove properties of classes of algebraic structures.  Fixing a signature `𝑆` and a universe `𝓤`, we represent classes of `𝑆`-algebras with domains of type `Type 𝓤` as predicates over the `Algebra 𝓤 𝑆` type. In the syntax of the [UniversalAlgebra][] library, such predicates inhabit the type `Pred (Algebra 𝓤 𝑆) 𝓩`, for some universe 𝓩.
+One of our goals is to formally express and prove properties of classes of algebraic structures.  Fixing a signature `𝑆` and a universe `α`, we represent classes of `𝑆`-algebras with domains of type `Type α` as predicates over the `Algebra α 𝑆` type. In the syntax of the [UniversalAlgebra][] library, such predicates inhabit the type `Pred (Algebra α 𝑆) γ`, for some universe γ.
 
-Suppose `𝒦 : Pred (Algebra 𝓤 𝑆) 𝓩` denotes a class of `𝑆`-algebras and `𝑩 : Algebra 𝓦 𝑆` denotes an arbitrary `𝑆`-algebra. Then we might wish to consider the assertion that `𝑩` is a subalgebra of an algebra in the class `𝒦`.  The next type we define allows us to express this assertion as `𝑩 IsSubalgebraOfClass 𝒦`.
+Suppose `𝒦 : Pred (Algebra α 𝑆) γ` denotes a class of `𝑆`-algebras and `𝑩 : Algebra β 𝑆` denotes an arbitrary `𝑆`-algebra. Then we might wish to consider the assertion that `𝑩` is a subalgebra of an algebra in the class `𝒦`.  The next type we define allows us to express this assertion as `𝑩 IsSubalgebraOfClass 𝒦`.
 
 \begin{code}
+module _ {α β : Level} where
 
-module _ {𝓦 𝓤 𝓩 : Level} where
-
- _IsSubalgebraOfClass_ : Algebra 𝓦 𝑆 → Pred (Algebra 𝓤 𝑆) 𝓩 → Type(ov (𝓤 ⊔ 𝓦) ⊔ 𝓩)
- 𝑩 IsSubalgebraOfClass 𝒦 = Σ[ 𝑨 ∈ Algebra 𝓤 𝑆 ] Σ[ sa ∈ Subalgebra{𝓦} 𝑨 ] ((𝑨 ∈ 𝒦) × (𝑩 ≅ ∣ sa ∣))
+ _IsSubalgebraOfClass_ : Algebra β 𝑆 → Pred (Algebra α 𝑆) γ → Type (γ ⊔ (ov (α ⊔ β)))
+ 𝑩 IsSubalgebraOfClass 𝒦 = Σ[ 𝑨 ∈ Algebra α 𝑆 ] Σ[ sa ∈ Subalgebra{α}{β} 𝑨 ] ((𝑨 ∈ 𝒦) × (𝑩 ≅ ∣ sa ∣))
 
 \end{code}
 
@@ -142,8 +143,8 @@ Using this type, we express the collection of all subalgebras of algebras in a c
 
 \begin{code}
 
-SubalgebraOfClass : {𝓦 𝓤 : Level} → Pred (Algebra 𝓤 𝑆)(ov 𝓤) → Type(ov (𝓤 ⊔ 𝓦))
-SubalgebraOfClass {𝓦} 𝒦 = Σ[ 𝑩 ∈ Algebra 𝓦 𝑆 ] 𝑩 IsSubalgebraOfClass 𝒦
+ SubalgebraOfClass : Pred (Algebra α 𝑆)(ov α) → Type (ov (α ⊔ β))
+ SubalgebraOfClass 𝒦 = Σ[ 𝑩 ∈ Algebra β 𝑆 ] 𝑩 IsSubalgebraOfClass 𝒦
 
 \end{code}
 
@@ -155,22 +156,22 @@ First we show that the subalgebra relation is a *preorder*; i.e., it is a reflex
 
 \begin{code}
 
-≤-reflexive : (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ≤ 𝑨
+≤-reflexive : (𝑨 : Algebra α 𝑆) → 𝑨 ≤ 𝑨
 ≤-reflexive 𝑨 = (𝑖𝑑 ∣ 𝑨 ∣ , λ 𝑓 𝑎 → refl) , Injection.injective id-is-injective
 
-≤-refl : {𝑨 : Algebra 𝓤 𝑆} → 𝑨 ≤ 𝑨
+≤-refl : {𝑨 : Algebra α 𝑆} → 𝑨 ≤ 𝑨
 ≤-refl {𝑨 = 𝑨} = ≤-reflexive 𝑨
 
 
-≤-transitivity : (𝑨 : Algebra 𝓧 𝑆)(𝑩 : Algebra 𝓨 𝑆)(𝑪 : Algebra 𝓩 𝑆)
+≤-transitivity : (𝑨 : Algebra α 𝑆)(𝑩 : Algebra β 𝑆)(𝑪 : Algebra γ 𝑆)
  →               𝑪 ≤ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
 
-≤-transitivity 𝑨 𝑩 𝑪 CB BA = (∘-hom 𝑪 𝑨 ∣ CB ∣ ∣ BA ∣) , γ
+≤-transitivity 𝑨 𝑩 𝑪 CB BA = (∘-hom 𝑪 𝑨 ∣ CB ∣ ∣ BA ∣) , Goal
  where
-  γ : IsInjective ∣ (∘-hom 𝑪 𝑨 ∣ CB ∣ ∣ BA ∣) ∣
-  γ = ∘-injective ∥ CB ∥ ∥ BA ∥
+  Goal : IsInjective ∣ (∘-hom 𝑪 𝑨 ∣ CB ∣ ∣ BA ∣) ∣
+  Goal = ∘-injective ∥ CB ∥ ∥ BA ∥
 
-≤-trans : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆} → 𝑪 ≤ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
+≤-trans : (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}{𝑪 : Algebra γ 𝑆} → 𝑪 ≤ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
 ≤-trans 𝑨 {𝑩}{𝑪} = ≤-transitivity 𝑨 𝑩 𝑪
 
 \end{code}
@@ -178,8 +179,8 @@ First we show that the subalgebra relation is a *preorder*; i.e., it is a reflex
 Next we prove that if two algebras are isomorphic and one of them is a subalgebra of `𝑨`, then so is the other.
 
 \begin{code}
-
-iso→injective : {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}
+open ≡-Reasoning
+iso→injective : {𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆}
  →              ((f , _ , _ , _) : 𝑨 ≅ 𝑩) → IsInjective ∣ f ∣
 iso→injective {𝑨 = 𝑨} (f , g , f∼g , g∼f) {x}{y} fxfy =
  x                  ≡⟨ (g∼f x)⁻¹ ⟩
@@ -187,7 +188,7 @@ iso→injective {𝑨 = 𝑨} (f , g , f∼g , g∼f) {x}{y} fxfy =
  (∣ g ∣ ∘ ∣ f ∣) y  ≡⟨ g∼f y ⟩
  y                  ∎
 
-≤-iso : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝑪 : Algebra 𝓩 𝑆}
+≤-iso : (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}{𝑪 : Algebra γ 𝑆}
  →      𝑪 ≅ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
 
 ≤-iso 𝑨 {𝑩} {𝑪} CB BA = (g ∘ f , gfhom) , gfinj
@@ -204,21 +205,21 @@ iso→injective {𝑨 = 𝑨} (f , g , f∼g , g∼f) {x}{y} fxfy =
   gfhom = ∘-is-hom 𝑪 𝑨 {f}{g} (snd ∣ CB ∣) (snd ∣ BA ∣)
 
 
-≤-trans-≅ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
+≤-trans-≅ : (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}(𝑪 : Algebra γ 𝑆)
  →          𝑨 ≤ 𝑩 → 𝑨 ≅ 𝑪 → 𝑪 ≤ 𝑩
 
 ≤-trans-≅ 𝑨 {𝑩} 𝑪 A≤B B≅C = ≤-iso 𝑩 (≅-sym B≅C) A≤B
 
 
-≤-TRANS-≅ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}(𝑪 : Algebra 𝓩 𝑆)
+≤-TRANS-≅ : (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}(𝑪 : Algebra γ 𝑆)
  →          𝑨 ≤ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤ 𝑪
-≤-TRANS-≅ 𝑨 𝑪 A≤B B≅C = (∘-hom 𝑨 𝑪 ∣ A≤B ∣ ∣ B≅C ∣) , γ
+≤-TRANS-≅ 𝑨 𝑪 A≤B B≅C = (∘-hom 𝑨 𝑪 ∣ A≤B ∣ ∣ B≅C ∣) , Goal
  where
- γ : IsInjective ∣ (∘-hom 𝑨 𝑪 ∣ A≤B ∣ ∣ B≅C ∣) ∣
- γ = ∘-injective (∥ A≤B ∥)(iso→injective B≅C)
+ Goal : IsInjective ∣ (∘-hom 𝑨 𝑪 ∣ A≤B ∣ ∣ B≅C ∣) ∣
+ Goal = ∘-injective (∥ A≤B ∥)(iso→injective B≅C)
 
 
-≤-mono : (𝑩 : Algebra 𝓦 𝑆){𝒦 𝒦' : Pred (Algebra 𝓤 𝑆) 𝓩}
+≤-mono : (𝑩 : Algebra β 𝑆){𝒦 𝒦' : Pred (Algebra α 𝑆) γ}
  →       𝒦 ⊆ 𝒦' → 𝑩 IsSubalgebraOfClass 𝒦 → 𝑩 IsSubalgebraOfClass 𝒦'
 
 ≤-mono 𝑩 KK' KB = ∣ KB ∣ , fst ∥ KB ∥ , KK' (∣ snd ∥ KB ∥ ∣) , ∥ (snd ∥ KB ∥) ∥
@@ -231,30 +232,28 @@ iso→injective {𝑨 = 𝑨} (f , g , f∼g , g∼f) {x}{y} fxfy =
 
 \begin{code}
 
-module _ {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}{𝑩 : Algebra 𝓤 𝑆} where
+module _ {𝒦 : Pred (Algebra α 𝑆)(ov α)}{𝑩 : Algebra α 𝑆} where
 
- Lift-is-sub : 𝑩 IsSubalgebraOfClass 𝒦 → (Lift-alg 𝑩 𝓤) IsSubalgebraOfClass 𝒦
+ Lift-is-sub : 𝑩 IsSubalgebraOfClass 𝒦 → (Lift-alg 𝑩 α) IsSubalgebraOfClass 𝒦
  Lift-is-sub (𝑨 , (sa , (KA , B≅sa))) = 𝑨 , sa , KA , ≅-trans (≅-sym Lift-≅) B≅sa
 
 
-Lift-≤ : (𝑨 : Algebra 𝓧 𝑆){𝑩 : Algebra 𝓨 𝑆}{𝓩 : Level} → 𝑩 ≤ 𝑨 → Lift-alg 𝑩 𝓩 ≤ 𝑨
+Lift-≤ : (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}{γ : Level} → 𝑩 ≤ 𝑨 → Lift-alg 𝑩 γ ≤ 𝑨
 Lift-≤ 𝑨 B≤A = ≤-iso 𝑨 (≅-sym Lift-≅) B≤A
 
-≤-Lift : (𝑨 : Algebra 𝓧 𝑆){𝓩 : Level}{𝑩 : Algebra 𝓨 𝑆} → 𝑩 ≤ 𝑨 → 𝑩 ≤ Lift-alg 𝑨 𝓩
-≤-Lift 𝑨 {𝓩} {𝑩} B≤A = ≤-TRANS-≅ 𝑩 {𝑨} (Lift-alg 𝑨 𝓩) B≤A Lift-≅
+≤-Lift : (𝑨 : Algebra α 𝑆){γ : Level}{𝑩 : Algebra β 𝑆} → 𝑩 ≤ 𝑨 → 𝑩 ≤ Lift-alg 𝑨 γ
+≤-Lift 𝑨 {γ} {𝑩} B≤A = ≤-TRANS-≅ 𝑩 {𝑨} (Lift-alg 𝑨 γ) B≤A Lift-≅
 
 
-module _ {𝓧 𝓨 𝓩 𝓦 : Level} where
+Lift-≤-Lift : {𝑨 : Algebra α 𝑆}(ℓᵃ : Level){𝑩 : Algebra β 𝑆}(ℓᵇ : Level) → 𝑨 ≤ 𝑩 → Lift-alg 𝑨 ℓᵃ ≤ Lift-alg 𝑩 ℓᵇ
+Lift-≤-Lift {𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ A≤B = ≤-trans (Lift-alg 𝑩 ℓᵇ) (≤-trans 𝑩 lAA A≤B) B≤lB
+ where
 
- Lift-≤-Lift : {𝑨 : Algebra 𝓧 𝑆}(𝑩 : Algebra 𝓨 𝑆) → 𝑨 ≤ 𝑩 → Lift-alg 𝑨 𝓩 ≤ Lift-alg 𝑩 𝓦
- Lift-≤-Lift {𝑨} 𝑩 A≤B = ≤-trans (Lift-alg 𝑩 𝓦) (≤-trans 𝑩 lAA A≤B) B≤lB
-   where
+ lAA : (Lift-alg 𝑨 ℓᵃ) ≤ 𝑨
+ lAA = Lift-≤ 𝑨 {𝑨} ≤-refl
 
-   lAA : (Lift-alg 𝑨 𝓩) ≤ 𝑨
-   lAA = Lift-≤ 𝑨 {𝑨} ≤-refl
-
-   B≤lB : 𝑩 ≤ Lift-alg 𝑩 𝓦
-   B≤lB = ≤-Lift 𝑩 ≤-refl
+ B≤lB : 𝑩 ≤ Lift-alg 𝑩 ℓᵇ
+ B≤lB = ≤-Lift 𝑩 ≤-refl
 
 \end{code}
 
@@ -272,3 +271,7 @@ module _ {𝓧 𝓨 𝓩 𝓦 : Level} where
 <span style="float:right;">[Varieties →](Varieties.html)</span>
 
 {% include UALib.Links.md %}
+
+------------------------------
+
+[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team

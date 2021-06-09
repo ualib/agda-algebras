@@ -2,7 +2,7 @@
 layout: default
 title : Terms.Basic module (The Agda Universal Algebra Library)
 date : 2021-01-14
-author: William DeMeo
+author: [the ualib/agda-algebras development team][]
 ---
 
 ### <a id="basic-definitions">Basic Definitions</a>
@@ -15,31 +15,32 @@ The theoretical background that begins each subsection below is based on Cliff B
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
--- Imports from Agda (builtin/primitive) and the Agda Standard Library
-open import Agda.Builtin.Equality using (_≡_; refl)
-open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
-open import Data.Product using (_,_; Σ; _×_)
-open import Function.Base  using (_∘_)
-open import Level renaming (suc to lsuc; zero to lzero)
-open import Relation.Binary.PropositionalEquality.Core using (cong; module ≡-Reasoning)
-open ≡-Reasoning
-open import Relation.Unary using (Pred)
-
--- Imports from the Agda Universal Algebra Library
+open import Level using ( Level )
 open import Algebras.Basic
-open import Overture.Preliminaries
- using (Type; _⁻¹; 𝑖𝑑; ∣_∣; ∥_∥)
-open import Overture.Inverses using (IsSurjective; Image_∋_; Inv; InvIsInv; eq)
+
+module Terms.Basic {𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
 
 
-module Terms.Basic {𝓞 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
+open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
+open import Relation.Binary.PropositionalEquality using ( cong ; module ≡-Reasoning )
 
-open import Algebras.Products{𝑆 = 𝑆} using (ov)
-open import Homomorphisms.Basic {𝑆 = 𝑆} using (hom) -- ; 𝓁𝒾𝒻𝓉; 𝓁ℴ𝓌ℯ𝓇)
+open import Agda.Primitive          using    ( _⊔_ ;  lsuc )
+                                    renaming ( Set to Type )
+open import Agda.Builtin.Equality   using    ( _≡_ ;  refl )
+open import Data.Product            using    ( _,_ ;  Σ
+                                             ; Σ-syntax    )
+open import Function.Base           using    ( _∘_         )
 
-private
-  variable
-    𝓤 𝓦 𝓧 𝓨 : Level
+
+
+open import Overture.Preliminaries  using ( _⁻¹ ; 𝑖𝑑 ; ∣_∣ ; ∥_∥)
+open import Overture.Inverses       using ( IsSurjective ; Inv
+                                          ; InvIsInv ; Image_∋_; eq )
+open import Algebras.Products     𝑆 using ( ov )
+open import Homomorphisms.Basic   𝑆 using ( hom )
+
+private variable α β χ : Level
+
 \end{code}
 
 #### <a id="the-type-of-terms">The type of terms</a>
@@ -60,7 +61,7 @@ The definition of `Term X` is recursive, indicating that an inductive type could
 
 \begin{code}
 
-data Term (X : Type 𝓧 ) : Type(ov 𝓧)  where
+data Term (X : Type χ ) : Type (ov χ)  where
  ℊ : X → Term X    -- (ℊ for "generator")
  node : (f : ∣ 𝑆 ∣)(𝑡 : ∥ 𝑆 ∥ f → Term X) → Term X
 
@@ -71,7 +72,7 @@ open Term public
 This is a very basic inductive type that represents each term as a tree with an operation symbol at each `node` and a variable symbol at each leaf (`generator`).
 
 
-**Notation**. As usual, the type `X` represents an arbitrary collection of variable symbols. Recall, `ov 𝓧` is our shorthand notation for the universe level `𝓞 ⊔ 𝓥 ⊔ lsuc 𝓧`.
+**Notation**. As usual, the type `X` represents an arbitrary collection of variable symbols. Recall, `ov χ` is our shorthand notation for the universe level `𝓞 ⊔ 𝓥 ⊔ lsuc χ`.
 
 
 #### <a id="the-term-algebra">The term algebra</a>
@@ -86,7 +87,7 @@ In [Agda][] the term algebra can be defined as simply as one could hope.
 
 \begin{code}
 
-𝑻 : (X : Type 𝓧 ) → Algebra (ov 𝓧) 𝑆
+𝑻 : (X : Type χ ) → Algebra (ov χ) 𝑆
 𝑻 X = Term X , node
 
 \end{code}
@@ -104,9 +105,9 @@ We now prove this in [Agda][], starting with the fact that every map from `X` to
 
 \begin{code}
 
-private variable X : Type 𝓧
+private variable X : Type χ
 
-free-lift : (𝑨 : Algebra 𝓤 𝑆)(h : X → ∣ 𝑨 ∣) → ∣ 𝑻 X ∣ → ∣ 𝑨 ∣
+free-lift : (𝑨 : Algebra α 𝑆)(h : X → ∣ 𝑨 ∣) → ∣ 𝑻 X ∣ → ∣ 𝑨 ∣
 free-lift _ h (ℊ x) = h x
 free-lift 𝑨 h (node f 𝑡) = (f ̂ 𝑨) (λ i → free-lift 𝑨 h (𝑡 i))
 
@@ -123,48 +124,51 @@ The free lift so defined is a homomorphism by construction. Indeed, here is the 
 
 \begin{code}
 
-lift-hom : (𝑨 : Algebra 𝓤 𝑆) → (X → ∣ 𝑨 ∣) → hom (𝑻 X) 𝑨
+lift-hom : (𝑨 : Algebra α 𝑆) → (X → ∣ 𝑨 ∣) → hom (𝑻 X) 𝑨
 lift-hom 𝑨 h = free-lift 𝑨 h , λ f a → cong (f ̂ 𝑨) refl
 
 \end{code}
 
-Finally, we prove that the homomorphism is unique.  This requires `funext 𝓥 𝓤` (i.e., *function extensionality* at universe levels `𝓥` and `𝓤`) which we postulate by making it part of the premise in the following function type definition.
+Finally, we prove that the homomorphism is unique.  This requires `funext 𝓥 α` (i.e., *function extensionality* at universe levels `𝓥` and `α`) which we postulate by making it part of the premise in the following function type definition.
 
 \begin{code}
 
-free-unique : funext 𝓥 𝓤 → (𝑨 : Algebra 𝓤 𝑆)(g h : hom (𝑻 X) 𝑨)
+open ≡-Reasoning
+
+free-unique : funext 𝓥 α → (𝑨 : Algebra α 𝑆)(g h : hom (𝑻 X) 𝑨)
  →            (∀ x → ∣ g ∣ (ℊ x) ≡ ∣ h ∣ (ℊ x))
               ----------------------------------------
  →            ∀ (t : Term X) →  ∣ g ∣ t ≡ ∣ h ∣ t
 
 free-unique _ _ _ _ p (ℊ x) = p x
 free-unique fe 𝑨 g h p (node 𝑓 𝑡) = ∣ g ∣ (node 𝑓 𝑡)  ≡⟨ ∥ g ∥ 𝑓 𝑡 ⟩
-                                   (𝑓 ̂ 𝑨)(∣ g ∣ ∘ 𝑡)  ≡⟨ α ⟩
+                                   (𝑓 ̂ 𝑨)(∣ g ∣ ∘ 𝑡)  ≡⟨ Goal ⟩
                                    (𝑓 ̂ 𝑨)(∣ h ∣ ∘ 𝑡)  ≡⟨ (∥ h ∥ 𝑓 𝑡)⁻¹ ⟩
                                    ∣ h ∣ (node 𝑓 𝑡)   ∎
  where
- α : (𝑓 ̂ 𝑨) (∣ g ∣ ∘ 𝑡) ≡ (𝑓 ̂ 𝑨) (∣ h ∣ ∘ 𝑡)
- α = cong (𝑓 ̂ 𝑨) (fe λ i → free-unique fe 𝑨 g h p (𝑡 i))
+ Goal : (𝑓 ̂ 𝑨) (∣ g ∣ ∘ 𝑡) ≡ (𝑓 ̂ 𝑨) (∣ h ∣ ∘ 𝑡)
+ Goal = cong (𝑓 ̂ 𝑨) (fe λ i → free-unique fe 𝑨 g h p (𝑡 i))
 
 \end{code}
 
-Let's account for what we have proved thus far about the term algebra.  If we postulate a type `X : Type 𝓧` (representing an arbitrary collection of variable symbols) such that for each `𝑆`-algebra `𝑨` there is a map from `X` to the domain of `𝑨`, then it follows that for every `𝑆`-algebra `𝑨` there is a homomorphism from `𝑻 X` to `∣ 𝑨 ∣` that "agrees with the original map on `X`," by which we mean that for all `x : X` the lift evaluated at `ℊ x` is equal to the original function evaluated at `x`.
+Let's account for what we have proved thus far about the term algebra.  If we postulate a type `X : Type χ` (representing an arbitrary collection of variable symbols) such that for each `𝑆`-algebra `𝑨` there is a map from `X` to the domain of `𝑨`, then it follows that for every `𝑆`-algebra `𝑨` there is a homomorphism from `𝑻 X` to `∣ 𝑨 ∣` that "agrees with the original map on `X`," by which we mean that for all `x : X` the lift evaluated at `ℊ x` is equal to the original function evaluated at `x`.
 
 If we further assume that each of the mappings from `X` to `∣ 𝑨 ∣` is *surjective*, then the homomorphisms constructed with `free-lift` and `lift-hom` are *epimorphisms*, as we now prove.
 
 \begin{code}
 
-lift-of-epi-is-epi : (𝑨 : Algebra 𝓤 𝑆){h₀ : X → ∣ 𝑨 ∣}
+lift-of-epi-is-epi : (𝑨 : Algebra α 𝑆){h₀ : X → ∣ 𝑨 ∣}
  →                   IsSurjective h₀ → IsSurjective ∣ lift-hom 𝑨 h₀ ∣
-lift-of-epi-is-epi 𝑨 {h₀} hE y = γ
+
+lift-of-epi-is-epi 𝑨 {h₀} hE y = Goal
  where
  h₀⁻¹y = Inv h₀ (hE y)
 
  η : y ≡ ∣ lift-hom 𝑨 h₀ ∣ (ℊ h₀⁻¹y)
  η = (InvIsInv h₀ (hE y))⁻¹
 
- γ : Image ∣ lift-hom 𝑨 h₀ ∣ ∋ y
- γ = eq (ℊ h₀⁻¹y) η
+ Goal : Image ∣ lift-hom 𝑨 h₀ ∣ ∋ y
+ Goal = eq (ℊ h₀⁻¹y) η
 
 \end{code}
 
@@ -179,3 +183,8 @@ The `lift-hom` and `lift-of-epi-is-epi` types will be called to action when such
 <span style="float:right;">[Terms.Operations →](Terms.Operations.html)</span>
 
 {% include UALib.Links.md %}
+
+------------------------------
+
+[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
+

@@ -2,7 +2,7 @@
 layout: default
 title : Relations.Truncation module (The Agda Universal Algebra Library)
 date : 2021-02-23
-author: William DeMeo
+author: [the ualib/agda-algebras development team][]
 ---
 
 ### <a id="truncation">Truncation</a>
@@ -18,30 +18,33 @@ Readers who want to learn more about "proof-relevant mathematics" and other conc
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
--- Imports from the Agda (Builtin) and the Agda Standard Library
-open import Agda.Builtin.Equality using (_≡_; refl)
-open import Agda.Primitive using (_⊔_; lzero; lsuc; Level)
-open import Data.Product using (_,_; Σ; _×_; Σ-syntax)
-open import Function.Base using (_∘_; id)
-open import Relation.Binary using (Rel)
-open import Relation.Binary.PropositionalEquality.Core using (trans; subst; cong-app;
-  module ≡-Reasoning)
-open ≡-Reasoning
-open import Relation.Unary using (Pred; _⊆_)
-
--- Imports from the Agda Universal Algebra Library
-open import Overture.Preliminaries using (Type; fst; ∣_∣; ∥_∥; _⁻¹; _∼_)
-open import Overture.Inverses using (IsInjective)
-open import Relations.Continuous using (ContRel; DepRel)
-open import Relations.Quotients using (IsBlock)
-
-
-
 module Relations.Truncation where
 
-private
-  variable
-     𝓤 𝓥 𝓦 : Level
+open import Agda.Builtin.Equality                 using    ( _≡_      ;   refl     )
+open import Data.Product                          using    ( _,_      ;   Σ
+                                                           ; Σ-syntax ;   _×_      )
+                                                  renaming ( proj₁    to  fst
+                                                           ; proj₂    to  snd      )
+open import Agda.Primitive                        using    ( _⊔_                   )
+                                                  renaming ( Set      to  Type     )
+open import Level                                 renaming ( suc      to  lsuc     )
+open import Function.Base                         using    ( _∘_      ;   id       )
+open import Relation.Binary                       using    ( IsEquivalence         )
+                                                  renaming ( Rel      to  BinRel   )
+open import Relation.Binary.PropositionalEquality using    ( sym      ;   trans    )
+open import Relation.Unary                        using    ( Pred     ;   _⊆_      )
+open import Relation.Binary.PropositionalEquality using    ( trans    ;   cong-app
+                                                           ; module ≡-Reasoning    )
+open ≡-Reasoning
+
+-- -- Imports from the Agda Universal Algebra Library
+open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; _∼_ ; transport)
+open import Overture.Inverses      using ( IsInjective           )
+open import Relations.Quotients    using ( IsBlock               )
+open import Relations.Continuous   using ( ContRel ; DepRel      )
+
+private variable α β ρ 𝓥 : Level
+
 \end{code}
 
 The MGS-Quotient module of the [Type Topology][] library defines the following *uniqueness-of-proofs* principle for binary relations.
@@ -50,19 +53,19 @@ First, a type is a *singleton* if it has exactly one inhabitant and a *subsingle
 
 \begin{code}
 
-is-center : (A : Type 𝓤 ) → A → Type 𝓤
+is-center : (A : Type α ) → A → Type α
 is-center A c = (x : A) → c ≡ x
 
-is-singleton : Type 𝓤 → Type 𝓤
+is-singleton : Type α → Type α
 is-singleton A = Σ A (is-center A)
 
-is-prop : Type 𝓤 → Type 𝓤
+is-prop : Type α → Type α
 is-prop A = (x y : A) → x ≡ y
 
-is-prop-valued : {A : Type 𝓤} → Rel A 𝓦 → Type(𝓤 ⊔ 𝓦)
+is-prop-valued : {A : Type α} → BinRel A ρ → Type(α ⊔ ρ)
 is-prop-valued  _≈_ = ∀ x y → is-prop (x ≈ y)
 
-singleton-is-prop : {𝓤 : Level}(X : Type 𝓤) → is-singleton X → is-prop X
+singleton-is-prop : {α : Level}(X : Type α) → is-singleton X → is-prop X
 singleton-is-prop X (c , φ) x y = x ≡⟨ (φ x)⁻¹ ⟩ c ≡⟨ φ y ⟩ y ∎
 
 \end{code}
@@ -72,8 +75,8 @@ Next, we consider the type `is-equiv` which is used to assert that a function is
 
 \begin{code}
 
-fiber : {A : Type 𝓤 } {B : Type 𝓦 } (f : A → B) → B → Type (𝓤 ⊔ 𝓦)
-fiber {𝓤}{𝓦}{A} f y = Σ[ x ∈ A ] f x ≡ y
+fiber : {A : Type α } {B : Type β } (f : A → B) → B → Type (α ⊔ β)
+fiber {α}{β}{A} f y = Σ[ x ∈ A ] f x ≡ y
 
 \end{code}
 
@@ -81,7 +84,7 @@ A function is called an *equivalence* if all of its fibers are singletons.
 
 \begin{code}
 
-is-equiv : {A : Type 𝓤 } {B : Type 𝓦 } → (A → B) → Type (𝓤 ⊔ 𝓦)
+is-equiv : {A : Type α } {B : Type β } → (A → B) → Type (α ⊔ β)
 is-equiv f = ∀ y → is-singleton (fiber f y)
 
 \end{code}
@@ -90,12 +93,12 @@ We are finally ready to fulfill our promise of a type that provides an alternati
 
 \begin{code}
 
-hfunext :  ∀ 𝓤 𝓦 → Type (lsuc (𝓤 ⊔ 𝓦))
-hfunext 𝓤 𝓦 = {A : Type 𝓤}{B : A → Type 𝓦} (f g : (x : A) → B x) → is-equiv (cong-app{f = f}{g})
+hfunext :  ∀ α β → Type (lsuc (α ⊔ β))
+hfunext α β = {A : Type α}{B : A → Type β} (f g : (x : A) → B x) → is-equiv (cong-app{f = f}{g})
 
 \end{code}
 
-Thus, if `R : Rel A 𝓦`, then `is-subsingleton-valued R` is the assertion that for each pair `x y : A` there can be at most one proof that `R x y` holds.
+Thus, if `R : Rel A β`, then `is-subsingleton-valued R` is the assertion that for each pair `x y : A` there can be at most one proof that `R x y` holds.
 
 In this module ([Relations.Truncation][]) we introduce a number of similar but more general types used in the [UniversalAlgebra][] library to represent *uniqueness-of-proofs principles* for relations of arbitrary arity over arbitrary types.
 
@@ -119,11 +122,11 @@ This notion is formalized in the [Type Topology][] library, using the `is-subsin
 
 \begin{code}
 
-is-set : Type 𝓤 → Type 𝓤
+is-set : Type α → Type α
 is-set A = is-prop-valued{A = A} _≡_
 -- (x y : A) → is-prop (x ≡ y)
 
--- is-prop-valued : {A : Type 𝓤} → Rel A 𝓦 → Type(𝓤 ⊔ 𝓦)
+-- is-prop-valued : {A : Type α} → Rel A β → Type(α ⊔ β)
 -- is-prop-valued  _≈_ = ∀ x y → is-prop (x ≈ y)
 
 -- open import MGS-Embeddings using (is-set) public
@@ -136,9 +139,9 @@ We will also need the function [to-Σ-≡](https://www.cs.bham.ac.uk/~mhe/HoTT-U
 
 \begin{code}
 
-module _ {A : Type 𝓤}{B : A → Type 𝓦} where
+module _ {A : Type α}{B : A → Type β} where
 
- to-Σ-≡ : {σ τ : Σ A B} → (Σ[ p ∈ (fst σ ≡ fst τ) ] subst B p ∥ σ ∥ ≡ ∥ τ ∥) → σ ≡ τ
+ to-Σ-≡ : {σ τ : Σ[ x ∈ A ] B x} → (Σ[ p ∈ (fst σ ≡ fst τ) ] (transport B p ∥ σ ∥) ≡ ∥ τ ∥) → σ ≡ τ
  to-Σ-≡ (refl , refl) = refl
 
 
@@ -152,11 +155,11 @@ The `is-embedding` type is defined in the `MGS-Embeddings` module of the [Type T
 
 \begin{code}
 
-is-embedding : {A : Type 𝓤}{B : Type 𝓦} → (A → B) → Type (𝓤 ⊔ 𝓦)
+is-embedding : {A : Type α}{B : Type β} → (A → B) → Type (α ⊔ β)
 is-embedding f = ∀ b → is-prop (fiber f b)
 
-singleton-type : {A : Type 𝓤} → A → Type 𝓤
-singleton-type {𝓤}{A} x = Σ[ y ∈ A ] y ≡ x
+singleton-type : {A : Type α} → A → Type α
+singleton-type {α}{A} x = Σ[ y ∈ A ] y ≡ x
 
 \end{code}
 
@@ -166,8 +169,8 @@ Finding a proof that a function is an embedding isn't always easy, but one appro
 
 \begin{code}
 
-module _ {A : Type 𝓤}{B : Type 𝓦} where
- invertible : (A → B) → Type (𝓤 ⊔ 𝓦)
+module _ {A : Type α}{B : Type β} where
+ invertible : (A → B) → Type (α ⊔ β)
  invertible f = Σ[ g ∈ (B → A) ] ((g ∘ f ∼ id) × (f ∘ g ∼ id))
 
  equiv-is-embedding : (f : A → B) → is-equiv f → is-embedding f
@@ -217,7 +220,7 @@ Before moving on to define [propositions](Overture.Truncation.html#propositions)
 
 \begin{code}
 
-private variable A : Type 𝓤 ; B : Type 𝓦
+private variable A : Type α ; B : Type β
 
 monic-is-embedding|Set : (f : A → B) → is-set B → IsInjective f → is-embedding f
 monic-is-embedding|Set f Bset fmon b (u , fu≡b) (v , fv≡b) = γ
@@ -228,8 +231,8 @@ monic-is-embedding|Set f Bset fmon b (u , fu≡b) (v , fv≡b) = γ
  uv : u ≡ v
  uv = fmon fuv
 
- arg1 : Σ[ p ∈ u ≡ v ] subst (λ a → f a ≡ b) p fu≡b ≡ fv≡b
- arg1 = uv , Bset (f v) b (subst (λ a → f a ≡ b) uv fu≡b) fv≡b
+ arg1 : Σ[ p ∈ u ≡ v ] transport (λ a → f a ≡ b) p fu≡b ≡ fv≡b
+ arg1 = uv , Bset (f v) b (transport (λ a → f a ≡ b) uv fu≡b) fv≡b
 
  γ : (u , fu≡b) ≡ (v , fv≡b)
  γ = to-Σ-≡ arg1
@@ -244,16 +247,16 @@ In stating the previous result, we introduce a new convention to which we will t
 Recall, `IsBlock` was defined in the [Relations.Quotients][] module as follows:
 
 ```
- IsBlock : {A : Type 𝓤}(C : Pred A 𝓦){R : Rel A 𝓦} → Type(𝓤 ⊔ lsuc 𝓦)
+ IsBlock : {A : Type α}(C : Pred A β){R : Rel A β} → Type(α ⊔ lsuc β)
  IsBlock {A} C {R} = Σ u ꞉ A , C ≡ [ u ] {R}
 ```
 
-In the next module ([Relations.Extensionality][]) we will define a *quotient extensionality* principle that will require a form of unique identity proofs---specifically, we will assume that for each predicate `C : Pred A 𝓦` there is at most one proof of `IsBlock C`. We call this proof-irrelevance principle "uniqueness of block identity proofs", and define it as follows.
+In the next module ([Relations.Extensionality][]) we will define a *quotient extensionality* principle that will require a form of unique identity proofs---specifically, we will assume that for each predicate `C : Pred A β` there is at most one proof of `IsBlock C`. We call this proof-irrelevance principle "uniqueness of block identity proofs", and define it as follows.
 
 \begin{code}
 
-blk-uip : (A : Type 𝓤)(R : Rel A 𝓦 ) → Type(𝓤 ⊔ lsuc 𝓦)
-blk-uip {𝓤}{𝓦} A R = ∀ (C : Pred A 𝓦) → is-prop (IsBlock C {R})
+blk-uip : (A : Type α)(R : BinRel A ρ ) → Type(α ⊔ lsuc ρ)
+blk-uip A R = ∀ (C : Pred A _) → is-prop (IsBlock C {R})
 
 \end{code}
 
@@ -271,32 +274,25 @@ Naturally, we define the corresponding *truncated continuous relation type* and 
 
 module _ {I : Type 𝓥} where
 
- IsContProp : (A : Type 𝓤) → ContRel I A 𝓦  → Type(𝓥 ⊔ 𝓤 ⊔ 𝓦)
+ IsContProp : (A : Type α) → ContRel I A β  → Type(𝓥 ⊔ α ⊔ β)
  IsContProp A P = ∀ (𝑎 : (I → A)) → is-prop (P 𝑎)
 
- ContProp : Type 𝓤 → (𝓦 : Level) → Type(𝓤 ⊔ 𝓥 ⊔ lsuc 𝓦)
- ContProp A 𝓦 = Σ[ P ∈ ContRel I A 𝓦 ] IsContProp A P
+ ContProp : Type α → (β : Level) → Type(α ⊔ 𝓥 ⊔ lsuc β)
+ ContProp A β = Σ[ P ∈ ContRel I A β ] IsContProp A P
 
- cont-prop-ext : Type 𝓤 → (𝓦 : Level) → Type(𝓤 ⊔ 𝓥 ⊔ lsuc 𝓦)
- cont-prop-ext A 𝓦 = {P Q : ContProp A 𝓦 } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
+ cont-prop-ext : Type α → (β : Level) → Type(α ⊔ 𝓥 ⊔ lsuc β)
+ cont-prop-ext A β = {P Q : ContProp A β } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
 
- IsDepProp : (𝒜 : I → Type 𝓤) → DepRel I 𝒜 𝓦  → Type(𝓥 ⊔ 𝓤 ⊔ 𝓦)
+ IsDepProp : (𝒜 : I → Type α) → DepRel I 𝒜 β  → Type(𝓥 ⊔ α ⊔ β)
  IsDepProp 𝒜 P = ∀ (𝑎 : ((i : I) → 𝒜 i)) → is-prop (P 𝑎)
 
- DepProp : (I → Type 𝓤) → (𝓦 : Level) → Type(𝓤 ⊔ 𝓥 ⊔ lsuc 𝓦)
- DepProp 𝒜 𝓦 = Σ[ P ∈ DepRel I 𝒜 𝓦 ] IsDepProp 𝒜 P
+ DepProp : (I → Type α) → (β : Level) → Type(α ⊔ 𝓥 ⊔ lsuc β)
+ DepProp 𝒜 β = Σ[ P ∈ DepRel I 𝒜 β ] IsDepProp 𝒜 P
 
- dep-prop-ext : (I → Type 𝓤) → (𝓦 : Level) → Type(𝓤 ⊔ 𝓥 ⊔ lsuc 𝓦)
- dep-prop-ext 𝒜 𝓦 = {P Q : DepProp 𝒜 𝓦} → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
+ dep-prop-ext : (I → Type α) → (β : Level) → Type(α ⊔ 𝓥 ⊔ lsuc β)
+ dep-prop-ext 𝒜 β = {P Q : DepProp 𝒜 β} → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
 
 \end{code}
-
-
-
-
-
-
-
 
 ----------------------------
 
@@ -319,3 +315,8 @@ module _ {I : Type 𝓥} where
 
 
 {% include UALib.Links.md %}
+
+-----------------------------------------------
+
+[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
+

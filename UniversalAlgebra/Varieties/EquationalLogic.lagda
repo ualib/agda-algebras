@@ -2,314 +2,380 @@
 layout: default
 title : Varieties.EquationalLogic module (The Agda Universal Algebra Library)
 date : 2021-01-14
-author: William DeMeo
+author: [the ualib/agda-algebras development team][]
 ---
 
-### <a id="model-theory-and-equational-logic-types">Model Theory and Equational Logic</a>
-
-This section presents the [Varieties.EquationalLogic][] module of the [Agda Universal Algebra Library][] where the binary "models" relation ⊧, relating algebras (or classes of algebras) to the identities that they satisfy, is defined.
-
-Agda supports the definition of infix operations and relations, and we use this to define ⊧ so that we may write, e.g., `𝑨 ⊧ p ≈ q` or `𝒦 ⊧ p ≋ q`.
-
-We also prove some closure and invariance properties of ⊧.  In particular, we prove the following facts (which are needed, for example, in the proof the Birkhoff HSP Theorem).
-
-* [Algebraic invariance](#algebraic-invariance). The ⊧ relation is an *algebraic invariant* (stable under isomorphism).
-
-* [Subalgebraic invariance](#subalgebraic-invariance). Identities modeled by a class of algebras are also modeled by all subalgebras of algebras in the class.
-
-* [Product invariance](#product-invariance). Identities modeled by a class of algebras are also modeled by all products of algebras in the class.
-
-
-
-**Notation**. In the [Agda UniversalAlgebra][] library, because a class of structures has a different type than a single structure, we must use a slightly different syntax to avoid overloading the relations ⊧ and ≈. As a reasonable alternative to what we would normally express informally as 𝒦 ⊧ 𝑝 ≈ 𝑞, we have settled on 𝒦 ⊧ p ≋ q to denote this relation.  To reiterate, if 𝒦 is a class of 𝑆-algebras, we write 𝒦 ⊧ 𝑝 ≋ 𝑞 if every 𝑨 ∈ 𝒦 satisfies 𝑨 ⊧ 𝑝 ≈ 𝑞.
-
-**Unicode Hints**. To produce the symbols ≈, ⊧, and ≋ in [agda2-mode][], type `\~~`, `\models`, and `\~~~`, respectively.
+This is the [Varieties.EquationalLogic][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 
--- Imports from Agda (builtin/primitive) and the Agda Standard Library
-open import Agda.Builtin.Equality using (_≡_; refl)
-open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
-open import Data.Product using (_,_; Σ; _×_)
-open import Function.Base  using (_∘_)
-open import Level renaming (suc to lsuc; zero to lzero)
-open import Relation.Binary.PropositionalEquality.Core using (cong; cong-app; module ≡-Reasoning)
-open ≡-Reasoning
-open import Relation.Unary using (⋂; _∈_; Pred; _⊆_)
-
--- Imports from the Agda Universal Algebra Library
+open import Level renaming ( suc to lsuc )
 open import Algebras.Basic
-open import Overture.Inverses using (IsInjective; ∘-injective)
-open import Overture.Preliminaries using (Type; _∙_;_⁻¹; ∣_∣; ∥_∥; snd)
-open import Relations.Discrete using (Im_⊆_)
+
+
+module Varieties.EquationalLogic {𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
+
+
+
+-- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
 open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
-
-module Varieties.EquationalLogic {𝓞 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
-
-open import Subalgebras.Subalgebras{𝑆 = 𝑆} using (_≤_; SubalgebraOfClass; iso→injective)
-open import Algebras.Products{𝑆 = 𝑆} using (ov; ⨅)
-open import Homomorphisms.Basic {𝑆 = 𝑆} using (hom; 𝒾𝒹; ∘-hom)
-open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using (_≅_; Lift-≅; ≅-sym )
-open import Terms.Basic {𝑆 = 𝑆} using (Term; 𝑻; lift-hom)
-open import Terms.Operations {𝑆 = 𝑆} using (_⟦_⟧; comm-hom-term; interp-prod; term-agreement)
-
-open Term
-
-private
-  variable
-    𝓤 𝓦 𝓧 : Level
-\end{code}
-
-
-#### <a id="the-models-relation">The models relation</a>
-
-We define the binary "models" relation ⊧ using infix syntax so that we may write, e.g., `𝑨 ⊧ p ≈ q` or `𝒦 ⊧ p ≋ q`, relating algebras (or classes of algebras) to the identities that they satisfy. We also prove a coupld of useful facts about ⊧.  More will be proved about ⊧ in the next module, [Varieties.EquationalLogic](Varieties.EquationalLogic.html).
-
-\begin{code}
-
-module _ {𝓤 : Level}{X : Type 𝓧} where
- _⊧_≈_ : Algebra 𝓤 𝑆 → Term X → Term X → Type(𝓤 ⊔ 𝓧)
- 𝑨 ⊧ p ≈ q = 𝑨 ⟦ p ⟧ ≡ 𝑨 ⟦ q ⟧
-
- _⊧_≋_ : Pred(Algebra 𝓤 𝑆)(ov 𝓤) → Term X → Term X → Type(𝓧 ⊔ ov 𝓤)
- 𝒦 ⊧ p ≋ q = {𝑨 : Algebra 𝓤 𝑆} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
-
-\end{code}
-
-##### <a id="semantics-of-⊧">Syntax and semantics of ⊧</a>
-The expression `𝑨 ⊧ p ≈ q` represents the assertion that the identity `p ≈ q` holds when interpreted in the algebra `𝑨`; syntactically, `𝑨 ⟦ p ⟧ ≡ 𝑨 ⟦ q ⟧`.  It should be emphasized that the expression  `𝑨 ⟦ p ⟧ ≡ 𝑨 ⟦ q ⟧` interpreted computationally as an *extensional equality*, by which we mean that for each *assignment function*  `𝒂 :  X → ∣ 𝑨 ∣`, assigning values in the domain of `𝑨` to the variable symbols in `X`, we have `⟦ p ⟧ 𝑨 𝒂 ≡ ⟦ q ⟧  𝑨 𝒂`.
+open import Agda.Primitive          renaming ( Set to Type )
+                                    using    ( _⊔_ )
+open import Agda.Builtin.Equality   using    ( _≡_ ; refl )
+open import Data.Product            using    ( _,_ ; Σ-syntax ; Σ ; _×_ )
+                                    renaming ( proj₁ to fst
+                                             ; proj₂ to snd )
+open import Relation.Binary.PropositionalEquality
+                                    using    ( cong ; cong-app ; module ≡-Reasoning )
+open import Relation.Unary          using    ( _∈_ ; Pred ; _⊆_ )
 
 
 
-#### <a id="equational-theories-and-classes">Equational theories and models</a>
+-- imports from agda-algebras --------------------------------------------------------------
+open import Overture.Preliminaries       using ( ∣_∣ ; ∥_∥ )
+open import Overture.Inverses            using (IsInjective)
+open import Relations.Truncation         using ( hfunext )
 
-Here we define a type `Th` so that, if 𝒦 denotes a class of algebras, then `Th 𝒦` represents the set of identities modeled by all members of 𝒦.
+open import Algebras.Products          𝑆 using ( ov ; ⨅ ; 𝔄 ; class-product)
+open import Homomorphisms.Basic        𝑆 using (hom; 𝒾𝒹; ∘-hom; is-homomorphism)
+open import Homomorphisms.Isomorphisms 𝑆 using (_≅_ ; ≅-sym ; Lift-≅ ; ≅-trans
+                                               ; ≅-refl ; Lift-alg-iso ; ⨅≅
+                                               ; Lift-alg-associative ; Lift-alg-⨅≅ )
 
-\begin{code}
+open import Subalgebras.Subalgebras    𝑆 using ( _≤_ ; _IsSubalgebraOfClass_ ; Lift-≤-Lift
+                                               ; SubalgebraOfClass ; iso→injective
+                                               ; ≤-Lift ; _IsSubalgebraOf_ )
+private variable α β γ : Level
 
-Th : {X : Type 𝓧} → Pred (Algebra 𝓤 𝑆)(ov 𝓤) → Pred(Term X × Term X)(𝓧 ⊔ ov 𝓤)
-Th 𝒦 = λ (p , q) → 𝒦 ⊧ p ≋ q
-
-\end{code}
-
-If `ℰ` denotes a set of identities, then the class of algebras satisfying all identities in ℰ is represented by `Mod ℰ`, which we define in the following natural way.
-
-\begin{code}
-
-Mod : {X : Type 𝓧} → Pred(Term X × Term X)(𝓧 ⊔ ov 𝓤) → Pred(Algebra 𝓤 𝑆)(ov (𝓧 ⊔ 𝓤))
-Mod ℰ = λ 𝑨 → ∀ p q → (p , q) ∈ ℰ → 𝑨 ⊧ p ≈ q
+import Varieties.Closure.H 𝑆 as VC-H
+import Varieties.Closure.S 𝑆 as VC-S
+import Varieties.Closure.P 𝑆 as VC-P
+import Varieties.Closure.V 𝑆 as VC-V
 
 \end{code}
 
 
+Fix a signature 𝑆, let 𝒦 be a class of 𝑆-algebras, and define
+
+* H 𝒦 = algebras isomorphic to a homomorphic image of a members of 𝒦;
+* S 𝒦 = algebras isomorphic to a subalgebra of a member of 𝒦;
+* P 𝒦 = algebras isomorphic to a product of members of 𝒦.
+
+A straight-forward verification confirms that H, S, and P are **closure operators** (expansive, monotone, and idempotent).  A class 𝒦 of 𝑆-algebras is said to be *closed under the taking of homomorphic images* provided `H 𝒦 ⊆ 𝒦`. Similarly, 𝒦 is *closed under the taking of subalgebras* (resp., *arbitrary products*) provided `S 𝒦 ⊆ 𝒦` (resp., `P 𝒦 ⊆ 𝒦`). The operators H, S, and P can be composed with one another repeatedly, forming yet more closure operators.
+
+An algebra is a homomorphic image (resp., subalgebra; resp., product) of every algebra to which it is isomorphic. Thus, the class `H 𝒦` (resp., `S 𝒦`; resp., `P 𝒦`) is closed under isomorphism.
+
+A **variety** is a class of algebras, in the same signature, that is closed under the taking of homomorphic images, subalgebras, and arbitrary products.  To represent varieties we define inductive types for the closure operators `H`, `S`, and `P` that are composable.  Separately, we define an inductive type `V` which simultaneously represents closure under all three operators, `H`, `S`, and `P`.
 
 
-#### <a id="algebraic-invariance-of-models">Algebraic invariance of ⊧</a>
+We import some of these things from sub-modules.
+\begin{code}
+open VC-H using (H) public
+open VC-S public
+open VC-P public
+open VC-V public
+\end{code}
 
-The binary relation ⊧ would be practically useless if it were not an *algebraic invariant* (i.e., invariant under isomorphism).
+
+#### <a id="closure-properties">Closure properties</a>
+
+The types defined above represent operators with useful closure properties. We now prove a handful of such properties that we need later.
+
+The next lemma would be too obvious to care about were it not for the fact that we'll need it later, so it too must be formalized.
 
 \begin{code}
 
+S⊆SP : (𝒦 : Pred (Algebra α 𝑆)(ov α))
+ →     S{α}{β} 𝒦 ⊆ S{α ⊔ β}{α ⊔ β} (P{α}{β} 𝒦)
 
-module _ {𝓤 𝓦 : Level}{X : Type 𝓧}{𝑨 : Algebra 𝓤 𝑆} where
+S⊆SP {α} {β} 𝒦 {.(Lift-alg 𝑨 β)}(sbase{𝑨} x) = siso spllA(≅-sym Lift-≅)
+ where
+ llA : Algebra (α ⊔ β) 𝑆
+ llA = Lift-alg (Lift-alg 𝑨 β) (α ⊔ β)
 
- ⊧-I-invar : (∀ a b → funext a b) → (𝑩 : Algebra 𝓦 𝑆)(p q : Term X)
-  →          𝑨 ⊧ p ≈ q  →  𝑨 ≅ 𝑩  →  𝑩 ⊧ p ≈ q
+ spllA : llA ∈ S (P 𝒦)
+ spllA = sbase{α ⊔ β}{α ⊔ β} (pbase x)
 
- ⊧-I-invar fe 𝑩 p q Apq (f , g , f∼g , g∼f) = (fe (𝓧 ⊔ 𝓦) 𝓦) λ x →
-  (𝑩 ⟦ p ⟧) x                      ≡⟨ refl ⟩
-  (𝑩 ⟦ p ⟧) (∣ 𝒾𝒹 𝑩 ∣ ∘ x)         ≡⟨ cong (𝑩 ⟦ p ⟧) ((fe 𝓧 𝓦) λ i → ((f∼g)(x i))⁻¹)⟩
-  (𝑩 ⟦ p ⟧) ((∣ f ∣ ∘ ∣ g ∣) ∘ x)  ≡⟨ (comm-hom-term (fe 𝓥 𝓦) 𝑩 f p (∣ g ∣ ∘ x))⁻¹ ⟩
-  ∣ f ∣ ((𝑨 ⟦ p ⟧) (∣ g ∣ ∘ x))    ≡⟨ cong (λ - → ∣ f ∣ (- (∣ g ∣ ∘ x))) Apq ⟩
-  ∣ f ∣ ((𝑨 ⟦ q ⟧) (∣ g ∣ ∘ x))    ≡⟨ comm-hom-term (fe 𝓥 𝓦) 𝑩 f q (∣ g ∣ ∘ x) ⟩
-  (𝑩 ⟦ q ⟧) ((∣ f ∣ ∘ ∣ g ∣) ∘  x) ≡⟨ cong (𝑩 ⟦ q ⟧) ((fe 𝓧 𝓦) λ i → (f∼g) (x i)) ⟩
-  (𝑩 ⟦ q ⟧) x                      ∎
+S⊆SP {α} {β} 𝒦 {.(Lift-alg 𝑨 β)}(slift{𝑨} x) = subalgebra→S lAsc
+ where
+ splAu : 𝑨 ∈ S(P 𝒦)
+ splAu = S⊆SP{α}{α} 𝒦 x
 
- \end{code}
+ Asc : 𝑨 IsSubalgebraOfClass (P 𝒦)
+ Asc = S→subalgebra{α}{P{α}{α} 𝒦}{𝑨} splAu
 
- As the proof makes clear, we show 𝑩 ⊧ p ≈ q by showing that `𝑩 ⟦ p ⟧ ≡ 𝑩 ⟦ q ⟧ holds *extensionally*, that is, `∀ x, 𝑩 ⟦ p ⟧ x ≡ 𝑩 ⟦q ⟧ x`.
+ lAsc : (Lift-alg 𝑨 β) IsSubalgebraOfClass (P 𝒦)
+ lAsc = Lift-alg-subP' Asc
+S⊆SP {α} {β} 𝒦 {𝑩}(ssub{𝑨} sA B≤A) = ssub (subalgebra→S lAsc)( ≤-Lift 𝑨 B≤A )
+ where
+  lA : Algebra (α ⊔ β) 𝑆
+  lA = Lift-alg 𝑨 β
 
-#### <a id="lift-invariance">Lift-invariance of ⊧</a>
-The ⊧ relation is also invariant under the algebraic lift and lower operations.
+  splAu : 𝑨 ∈ S (P 𝒦)
+  splAu = S⊆SP{α}{α} 𝒦 sA
 
-\begin{code}
+  Asc : 𝑨 IsSubalgebraOfClass (P 𝒦)
+  Asc = S→subalgebra{α}{P{α}{α} 𝒦}{𝑨} splAu
 
-module _ {X : Type 𝓧}{𝑨 : Algebra 𝓤 𝑆} where
+  lAsc : lA IsSubalgebraOfClass (P 𝒦)
+  lAsc = Lift-alg-subP' Asc
 
- ⊧-Lift-invar : (∀ a b → funext a b) → (p q : Term X) → 𝑨 ⊧ p ≈ q → Lift-alg 𝑨 𝓦 ⊧ p ≈ q
- ⊧-Lift-invar fe p q Apq = ⊧-I-invar fe (Lift-alg 𝑨 _) p q Apq Lift-≅
+S⊆SP {α = α}{β} 𝒦 {𝑩}(siso{𝑨} sA A≅B) = siso{α ⊔ β}{α ⊔ β} lAsp lA≅B
+ where
+ lA : Algebra (α ⊔ β) 𝑆
+ lA = Lift-alg 𝑨 β
 
- ⊧-lower-invar : (∀ a b → funext a b) → (p q : Term X) → Lift-alg 𝑨 𝓦 ⊧ p ≈ q  →  𝑨 ⊧ p ≈ q
- ⊧-lower-invar fe p q lApq = ⊧-I-invar fe 𝑨 p q lApq (≅-sym Lift-≅)
+ lAsc : lA IsSubalgebraOfClass (P 𝒦)
+ lAsc = Lift-alg-subP' (S→subalgebra{α}{P{α}{α} 𝒦}{𝑨} (S⊆SP 𝒦 sA))
+
+ lAsp : lA ∈ S(P 𝒦)
+ lAsp = subalgebra→S{α ⊔ β}{α ⊔ β}{P{α}{β} 𝒦}{lA} lAsc
+
+ lA≅B : lA ≅ 𝑩
+ lA≅B = ≅-trans (≅-sym Lift-≅) A≅B
 
 \end{code}
 
 
 
-
-
-#### <a id="subalgebraic-invariance">Subalgebraic invariance of ⊧</a>
-
-Identities modeled by an algebra `𝑨` are also modeled by every subalgebra of `𝑨`, which fact can be formalized as follows.
+We need to formalize one more lemma before arriving the main objective of this section, which is the proof of the inclusion PS⊆SP.
 
 \begin{code}
 
-module _ {𝓤 𝓦 : Level} {X : Type 𝓧} where
+module _ {α β : Level} {𝒦 : Pred(Algebra α 𝑆)(ov α)} where
 
- ⊧-S-invar : (∀ a b → funext a b) → {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆){p q : Term X}
-  →          𝑨 ⊧ p ≈ q  →  𝑩 ≤ 𝑨  →  𝑩 ⊧ p ≈ q
- ⊧-S-invar fe {𝑨} 𝑩 {p}{q} Apq B≤A = (fe (𝓧 ⊔ 𝓦) 𝓦) λ b → (∥ B≤A ∥) (ξ b)
+ lemPS⊆SP : hfunext β α → funext β α → {I : Type β}{ℬ : I → Algebra α 𝑆}
+  →         (∀ i → (ℬ i) IsSubalgebraOfClass 𝒦)
+  →         ⨅ ℬ IsSubalgebraOfClass (P{α}{β} 𝒦)
+
+ lemPS⊆SP hwu fwu {I}{ℬ} B≤K = ⨅ 𝒜 , (⨅ SA , ⨅SA≤⨅𝒜) , ξ , (⨅≅ {fiu = fwu}{fiw = fwu} B≅SA)
   where
-  h : hom 𝑩 𝑨
-  h = ∣ B≤A ∣
+  𝒜 : I → Algebra α 𝑆
+  𝒜 = λ i → ∣ B≤K i ∣
 
-  ξ : ∀ b → ∣ h ∣ ((𝑩 ⟦ p ⟧) b) ≡ ∣ h ∣ ((𝑩 ⟦ q ⟧) b)
-  ξ b = ∣ h ∣((𝑩 ⟦ p ⟧) b)   ≡⟨ comm-hom-term (fe 𝓥 𝓤) 𝑨 h p b ⟩
-        (𝑨 ⟦ p ⟧)(∣ h ∣ ∘ b) ≡⟨ cong-app Apq (∣ h ∣ ∘ b) ⟩
-        (𝑨 ⟦ q ⟧)(∣ h ∣ ∘ b) ≡⟨ (comm-hom-term (fe 𝓥 𝓤) 𝑨 h q b)⁻¹ ⟩
-        ∣ h ∣((𝑩 ⟦ q ⟧) b)   ∎
+  SA : I → Algebra α 𝑆
+  SA = λ i → ∣ fst ∥ B≤K i ∥ ∣
 
- \end{code}
+  B≅SA : ∀ i → ℬ i ≅ SA i
+  B≅SA = λ i → ∥ snd ∥ B≤K i ∥ ∥
 
- Next, identities modeled by a class of algebras is also modeled by all subalgebras of the class.  In other terms, every term equation `p ≈ q` that is satisfied by all `𝑨 ∈ 𝒦` is also satisfied by every subalgebra of a member of 𝒦.
+  SA≤𝒜 : ∀ i → (SA i) IsSubalgebraOf (𝒜 i)
+  SA≤𝒜 = λ i → snd ∣ ∥ B≤K i ∥ ∣
 
- \begin{code}
+  h : ∀ i → ∣ SA i ∣ → ∣ 𝒜 i ∣
+  h = λ i → fst ∣ SA≤𝒜 i ∣
 
- ⊧-S-class-invar : (∀ a b → funext a b) → {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}(p q : Term X)
-  →                𝒦 ⊧ p ≋ q → (𝑩 : SubalgebraOfClass{𝓦} 𝒦) → ∣ 𝑩 ∣ ⊧ p ≈ q
- ⊧-S-class-invar fe p q Kpq (𝑩 , 𝑨 , SA , (ka , BisSA)) = ⊧-S-invar fe 𝑩 {p}{q}((Kpq ka)) (h , hinj)
-  where
-  h : hom 𝑩 𝑨
-  h = ∘-hom 𝑩 𝑨 (∣ BisSA ∣) ∣ snd SA ∣
-  hinj : IsInjective ∣ h ∣
-  hinj = ∘-injective (iso→injective BisSA) ∥ snd SA ∥
- \end{code}
+  hinj : ∀ i → IsInjective (h i)
+  hinj = λ i → snd (snd ∣ ∥ B≤K i ∥ ∣)
 
+  σ : ∣ ⨅ SA ∣ → ∣ ⨅ 𝒜 ∣
+  σ = λ x i → (h i) (x i)
+  ν : is-homomorphism (⨅ SA) (⨅ 𝒜) σ
+  ν = λ 𝑓 𝒂 → fwu λ i → (snd ∣ SA≤𝒜 i ∣) 𝑓 (λ x → 𝒂 x i)
 
- #### <a id="product-invariance">Product invariance of ⊧</a>
+  σinj : IsInjective σ
+  σinj σxσy = fwu λ i → (hinj i)(cong-app σxσy i)
 
- An identity satisfied by all algebras in an indexed collection is also satisfied by the product of algebras in that collection.
+  ⨅SA≤⨅𝒜 : ⨅ SA ≤ ⨅ 𝒜
+  ⨅SA≤⨅𝒜 = (σ , ν) , σinj
 
- \begin{code}
+  ξ : ⨅ 𝒜 ∈ P 𝒦
+  ξ = produ (λ i → P-expa (∣ snd ∥ B≤K i ∥ ∣))
 
-module _ {I : Type 𝓦}(𝒜 : I → Algebra 𝓤 𝑆){X : Type 𝓧} where
-
- ⊧-P-invar : (∀ a b → funext a b) → {p q : Term X} → (∀ i → 𝒜 i ⊧ p ≈ q) → ⨅ 𝒜 ⊧ p ≈ q
- ⊧-P-invar fe {p}{q} 𝒜pq = γ
-  where
-  γ : ⨅ 𝒜 ⟦ p ⟧  ≡  ⨅ 𝒜 ⟦ q ⟧
-  γ = (fe (𝓧 ⊔ 𝓤 ⊔ 𝓦) (𝓤 ⊔ 𝓦)) λ a → (⨅ 𝒜 ⟦ p ⟧) a      ≡⟨ interp-prod (fe 𝓥 (𝓤 ⊔ 𝓦)) p 𝒜 a ⟩
-      (λ i → (𝒜 i ⟦ p ⟧)(λ x → (a x)i)) ≡⟨ (fe 𝓦 𝓤) (λ i → cong-app (𝒜pq i) (λ x → (a x) i)) ⟩
-      (λ i → (𝒜 i ⟦ q ⟧)(λ x → (a x)i)) ≡⟨ (interp-prod (fe 𝓥 (𝓤 ⊔ 𝓦)) q 𝒜 a)⁻¹ ⟩
-      (⨅ 𝒜 ⟦ q ⟧) a                     ∎
 
 \end{code}
 
-An identity satisfied by all algebras in a class is also satisfied by the product of algebras in the class.
+
+
+#### <a id="PS-in-SP">PS(𝒦) ⊆ SP(𝒦)</a>
+
+Finally, we are in a position to prove that a product of subalgebras of algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
 
 \begin{code}
 
- ⊧-P-class-invar : (∀ a b → funext a b) → {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}{p q : Term X}
-  →                𝒦 ⊧ p ≋ q → (∀ i → 𝒜 i ∈ 𝒦) → ⨅ 𝒜 ⊧ p ≈ q
+module _ {α : Level} {fovu : funext (ov α) (ov α)}{𝒦 : Pred (Algebra α 𝑆)(ov α)} where
 
- ⊧-P-class-invar fe {𝒦}{p}{q}α K𝒜 = ⊧-P-invar fe {p}{q}λ i → α (K𝒜 i)
+ PS⊆SP : -- extensionality assumptions:
+            hfunext (ov α)(ov α)
 
- \end{code}
+  →      P{ov α}{ov α} (S{α}{ov α} 𝒦) ⊆ S{ov α}{ov α} (P{α}{ov α} 𝒦)
 
- Another fact that will turn out to be useful is that a product of a collection of algebras models p ≈ q if the lift of each algebra in the collection models p ≈ q.
+ PS⊆SP _ (pbase (sbase x)) = sbase (pbase x)
+ PS⊆SP _ (pbase (slift{𝑨} x)) = slift (S⊆SP{α}{ov α} 𝒦 (slift x))
+ PS⊆SP _ (pbase{𝑩}(ssub{𝑨} sA B≤A)) = siso(ssub(S⊆SP 𝒦 (slift sA))(Lift-≤-Lift (ov(α)){𝑨}(ov(α))B≤A)) ≅-refl
+ PS⊆SP _ (pbase (siso{𝑨}{𝑩} x A≅B)) = siso (S⊆SP 𝒦 (slift x)) ( Lift-alg-iso A≅B )
+ PS⊆SP hfe (pliftu x) = slift (PS⊆SP hfe x)
+ PS⊆SP hfe (pliftw x) = slift (PS⊆SP hfe x)
 
- \begin{code}
-
- ⊧-P-lift-invar : (∀ a b → funext a b) → {p q : Term X} → (∀ i → Lift-alg (𝒜 i) 𝓦 ⊧ p ≈ q)  →  ⨅ 𝒜 ⊧ p ≈ q
- ⊧-P-lift-invar fe {p}{q} α = ⊧-P-invar fe {p}{q}Aipq
+ PS⊆SP hfe (produ{I}{𝒜} x) = (S-mono (P-idemp)) (subalgebra→S η)
   where
-  Aipq : ∀ i → (𝒜 i) ⊧ p ≈ q
-  Aipq i = ⊧-lower-invar fe p q (α i) --  (≅-sym Lift-≅)
+   ξ : (i : I) → (𝒜 i) IsSubalgebraOfClass (P{α}{ov α} 𝒦)
+   ξ i = S→subalgebra (PS⊆SP hfe (x i))
+
+   η : ⨅ 𝒜 IsSubalgebraOfClass (P{ov α}{ov α} (P{α}{ov α} 𝒦))
+   η = lemPS⊆SP hfe fovu {I} {𝒜} ξ
+
+ PS⊆SP hfe (prodw{I}{𝒜} x) = (S-mono (P-idemp)) (subalgebra→S η)
+  where
+   ξ : (i : I) → (𝒜 i) IsSubalgebraOfClass (P{α}{ov α} 𝒦)
+   ξ i = S→subalgebra (PS⊆SP hfe (x i))
+
+   η : ⨅ 𝒜 IsSubalgebraOfClass (P{ov α}{ov α} (P{α}{ov α} 𝒦))
+   η = lemPS⊆SP hfe fovu  {I} {𝒜} ξ
+
+ PS⊆SP hfe (pisow{𝑨}{𝑩} pA A≅B) = siso (PS⊆SP hfe pA) A≅B
 
 \end{code}
 
 
-#### <a id="homomorphisc-invariance">Homomorphic invariance of ⊧</a>
 
-If an algebra 𝑨 models an identity p ≈ q, then the pair (p , q) belongs to the kernel of every homomorphism φ : hom (𝑻 X) 𝑨 from the term algebra to 𝑨; that is, every homomorphism from 𝑻 X to 𝑨 maps p and q to the same element of 𝑨.
+#### <a id="more-class-inclusions">More class inclusions</a>
 
- \begin{code}
-
-module _ {X : Type 𝓧}{𝑨 : Algebra 𝓤 𝑆} where
-
- ⊧-H-invar : (∀ a b → funext a b) → {p q : Term X}(φ : hom (𝑻 X) 𝑨) → 𝑨 ⊧ p ≈ q  →  ∣ φ ∣ p ≡ ∣ φ ∣ q
-
- ⊧-H-invar fe {p}{q} φ β = ∣ φ ∣ p      ≡⟨ cong ∣ φ ∣ (term-agreement (fe 𝓥 (ov 𝓧)) p) ⟩
-                 ∣ φ ∣((𝑻 X ⟦ p ⟧) ℊ)   ≡⟨ (comm-hom-term (fe 𝓥 𝓤) 𝑨 φ p ℊ ) ⟩
-                 (𝑨 ⟦ p ⟧) (∣ φ ∣ ∘ ℊ)  ≡⟨ cong-app β (∣ φ ∣ ∘ ℊ ) ⟩
-                 (𝑨 ⟦ q ⟧) (∣ φ ∣ ∘ ℊ)  ≡⟨ (comm-hom-term (fe 𝓥 𝓤) 𝑨 φ q ℊ )⁻¹ ⟩
-                 ∣ φ ∣ ((𝑻 X ⟦ q ⟧) ℊ)  ≡⟨(cong ∣ φ ∣ (term-agreement (fe 𝓥 (ov 𝓧)) q))⁻¹ ⟩
-                 ∣ φ ∣ q                ∎
-
-\end{code}
-
-More generally, an identity is satisfied by all algebras in a class if and only if that identity is invariant under all homomorphisms from the term algebra `𝑻 X` into algebras of the class. More precisely, if `𝒦` is a class of `𝑆`-algebras and `𝑝`, `𝑞` terms in the language of `𝑆`, then,
-
-```
-  𝒦 ⊧ p ≈ q  ⇔  ∀ 𝑨 ∈ 𝒦,  ∀ φ : hom (𝑻 X) 𝑨,  φ ∘ (𝑻 X)⟦ p ⟧ = φ ∘ (𝑻 X)⟦ q ⟧.
-```
+We conclude this subsection with three more inclusion relations that will have bit parts to play later (e.g., in the formal proof of Birkhoff's Theorem).
 
 \begin{code}
 
-module _ {X : Type 𝓧}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}  where
+P⊆V : {α β : Level}{𝒦 : Pred (Algebra α 𝑆)(ov α)} → P{α}{β} 𝒦 ⊆ V{α}{β} 𝒦
 
- -- ⇒ (the "only if" direction)
- ⊧-H-class-invar : (∀ a b → funext a b) → {p q : Term X}
-  →                𝒦 ⊧ p ≋ q → ∀ 𝑨 φ → 𝑨 ∈ 𝒦 → ∣ φ ∣ ∘ (𝑻 X ⟦ p ⟧) ≡ ∣ φ ∣ ∘ (𝑻 X ⟦ q ⟧)
- ⊧-H-class-invar fe {p}{q} α 𝑨 φ ka = (fe (ov 𝓧) 𝓤) ξ
+P⊆V (pbase x) = vbase x
+P⊆V{α} (pliftu x) = vlift (P⊆V{α}{α} x)
+P⊆V{α}{β} (pliftw x) = vliftw (P⊆V{α}{β} x)
+P⊆V (produ x) = vprodu (λ i → P⊆V (x i))
+P⊆V (prodw x) = vprodw (λ i → P⊆V (x i))
+P⊆V (pisow x x₁) = visow (P⊆V x) x₁
+
+
+SP⊆V : {α β : Level}{𝒦 : Pred (Algebra α 𝑆)(ov α)}
+ →     S{α ⊔ β}{α ⊔ β} (P{α}{β} 𝒦) ⊆ V 𝒦
+
+SP⊆V (sbase{𝑨} PCloA) = P⊆V (pisow PCloA Lift-≅)
+SP⊆V (slift{𝑨} x) = vliftw (SP⊆V x)
+SP⊆V (ssub{𝑨}{𝑩} spA B≤A) = vssubw (SP⊆V spA) B≤A
+SP⊆V (siso x x₁) = visow (SP⊆V x) x₁
+
+\end{code}
+#### <a id="V-is-closed-under-lift">V is closed under lift</a>
+
+As mentioned earlier, a technical hurdle that must be overcome when formalizing proofs in Agda is the proper handling of universe levels. In particular, in the proof of the Birkhoff's theorem, for example, we will need to know that if an algebra 𝑨 belongs to the variety V 𝒦, then so does the lift of 𝑨.  Let us get the tedious proof of this technical lemma out of the way.
+
+Above we proved that `SP(𝒦) ⊆ V(𝒦)`, and we did so under fairly general assumptions about the universe level parameters.  Unfortunately, this is sometimes not quite general enough, so we now prove the inclusion again for the specific universe parameters that align with subsequent applications of this result.
+
+
+\begin{code}
+
+module _ {α : Level}  {fe₀ : funext (ov α) α}
+         {fe₁ : funext ((ov α) ⊔ (lsuc (ov α))) (lsuc (ov α))}
+         {fe₂ : funext (ov α) (ov α)}
+         {𝒦 : Pred (Algebra α 𝑆)(ov α)} where
+
+ open Vlift {α}{fe₀}{fe₁}{fe₂}{𝒦}
+
+ SP⊆V' : S{ov α}{lsuc (ov α)} (P{α}{ov α} 𝒦) ⊆ V 𝒦
+
+ SP⊆V' (sbase{𝑨} x) = visow (VlA (SP⊆V (sbase x))) (≅-sym (Lift-alg-associative 𝑨))
+ SP⊆V' (slift x) = VlA (SP⊆V x)
+
+ SP⊆V' (ssub{𝑨}{𝑩} spA B≤A) = vssubw (VlA (SP⊆V spA)) B≤lA
   where
-   ξ : ∀(𝒂 : X → ∣ 𝑻 X ∣ ) → ∣ φ ∣ ((𝑻 X ⟦ p ⟧) 𝒂) ≡ ∣ φ ∣ ((𝑻 X ⟦ q ⟧) 𝒂)
-   ξ 𝒂 = ∣ φ ∣ ((𝑻 X ⟦ p ⟧) 𝒂)  ≡⟨ comm-hom-term (fe 𝓥 𝓤) 𝑨 φ p 𝒂 ⟩
-         (𝑨 ⟦ p ⟧)(∣ φ ∣ ∘ 𝒂)   ≡⟨ cong-app (α ka) (∣ φ ∣ ∘ 𝒂) ⟩
-         (𝑨 ⟦ q ⟧)(∣ φ ∣ ∘ 𝒂)   ≡⟨ (comm-hom-term (fe 𝓥 𝓤) 𝑨 φ q 𝒂)⁻¹ ⟩
-         ∣ φ ∣ ((𝑻 X ⟦ q ⟧) 𝒂)  ∎
+   B≤lA : 𝑩 ≤ Lift-alg 𝑨 (lsuc (ov α))
+   B≤lA = ≤-Lift 𝑨 B≤A
 
-
--- ⇐ (the "if" direction)
- ⊧-H-class-coinvar : (∀ a b → funext a b) → {p q : Term X}
-  →  (∀ 𝑨 φ → 𝑨 ∈ 𝒦 → ∣ φ ∣ ∘ (𝑻 X ⟦ p ⟧) ≡ ∣ φ ∣ ∘ (𝑻 X ⟦ q ⟧)) → 𝒦 ⊧ p ≋ q
-
- ⊧-H-class-coinvar fe {p}{q} β {𝑨} ka = γ
+ SP⊆V' (siso{𝑨}{𝑩} x A≅B) = visow (VlA (SP⊆V x)) Goal
   where
-  φ : (𝒂 : X → ∣ 𝑨 ∣) → hom (𝑻 X) 𝑨
-  φ 𝒂 = lift-hom 𝑨 𝒂
-
-  γ : 𝑨 ⊧ p ≈ q
-  γ = (fe (𝓧 ⊔ 𝓤) 𝓤) λ 𝒂 → (𝑨 ⟦ p ⟧)(∣ φ 𝒂 ∣ ∘ ℊ)     ≡⟨(comm-hom-term (fe 𝓥 𝓤) 𝑨 (φ 𝒂) p ℊ)⁻¹ ⟩
-               (∣ φ 𝒂 ∣ ∘ (𝑻 X ⟦ p ⟧)) ℊ  ≡⟨ cong-app (β 𝑨 (φ 𝒂) ka) ℊ ⟩
-               (∣ φ 𝒂 ∣ ∘ (𝑻 X ⟦ q ⟧)) ℊ  ≡⟨ (comm-hom-term (fe 𝓥 𝓤) 𝑨 (φ 𝒂) q ℊ) ⟩
-               (𝑨 ⟦ q ⟧)(∣ φ 𝒂 ∣ ∘ ℊ)     ∎
-
+   Goal : Lift-alg 𝑨 (lsuc (ov α)) ≅ 𝑩
+   Goal = ≅-trans (≅-sym Lift-≅) A≅B
 
 \end{code}
 
 
+#### <a id="S-in-SP">⨅ S(𝒦) ∈ SP(𝒦)</a>
+
+Finally, we prove a result that plays an important role, e.g., in the formal proof of Birkhoff's Theorem. As we saw in [Algebras.Products][], the (informal) product `⨅ S(𝒦)` of all subalgebras of algebras in 𝒦 is implemented (formally) in the [UniversalAlgebra][] library as `⨅ 𝔄 S(𝒦)`. Our goal is to prove that this product belongs to `SP(𝒦)`. We do so by first proving that the product belongs to `PS(𝒦)` and then applying the `PS⊆SP` lemma.
+
+Before doing so, we need to redefine the class product so that each factor comes with a map from the type `X` of variable symbols into that factor.  We will explain the reason for this below.
+
+\begin{code}
+
+module class-products-with-maps {α : Level}
+ {X : Type α}
+ {fe𝓕α : funext (ov α) α}
+ {fe₁ : funext ((ov α) ⊔ (lsuc (ov α))) (lsuc (ov α))}
+ {fe₂ : funext (ov α) (ov α)}
+ (𝒦 : Pred (Algebra α 𝑆)(ov α))
+ where
+
+ ℑ' : Type (ov α)
+ ℑ' = Σ[ 𝑨 ∈ (Algebra α 𝑆) ] ((𝑨 ∈ S{α}{α} 𝒦) × (X → ∣ 𝑨 ∣))
+
+\end{code}
+Notice that the second component of this dependent pair type is  `(𝑨 ∈ 𝒦) × (X → ∣ 𝑨 ∣)`. In previous versions of the [UALib][] this second component was simply `𝑨 ∈ 𝒦`, until we realized that adding the type `X → ∣ 𝑨 ∣` is quite useful. Later we will see exactly why, but for now suffice it to say that a map of type `X → ∣ 𝑨 ∣` may be viewed abstractly as an *ambient context*, or more concretely, as an assignment of *values* in `∣ 𝑨 ∣` to *variable symbols* in `X`.  When computing with or reasoning about products, while we don't want to rigidly impose a context in advance, want do want to lay our hands on whatever context is ultimately assumed.  Including the "context map" inside the index type `ℑ` of the product turns out to be a convenient way to achieve this flexibility.
 
 
--------------------------------------
+Taking the product over the index type `ℑ` requires a function that maps an index `i : ℑ` to the corresponding algebra.  Each `i : ℑ` is a triple, say, `(𝑨 , p , h)`, where `𝑨 : Algebra α 𝑆`, `p : 𝑨 ∈ 𝒦`, and `h : X → ∣ 𝑨 ∣`, so the function mapping an index to the corresponding algebra is simply the first projection.
 
-[↑ Varieties](Varieties.html)
-<span style="float:right;">[Varieties.Varieties →](Varieties.Varieties.html)</span>
+\begin{code}
+
+ 𝔄' : ℑ' → Algebra α 𝑆
+ 𝔄' = λ (i : ℑ') → ∣ i ∣
+
+\end{code}
+
+Finally, we define `class-product` which represents the product of all members of 𝒦.
+
+\begin{code}
+
+ class-product' : Algebra (ov α) 𝑆
+ class-product' = ⨅ 𝔄'
+
+\end{code}
+
+If `p : 𝑨 ∈ 𝒦` and `h : X → ∣ 𝑨 ∣`, we view the triple `(𝑨 , p , h) ∈ ℑ` as an index over the class, and so we can think of `𝔄 (𝑨 , p , h)` (which is simply `𝑨`) as the projection of the product `⨅ 𝔄` onto the `(𝑨 , p, h)`-th component.
+
+\begin{code}
+
+ class-prod-s-∈-ps : class-product' ∈ P{ov α}{ov α}(S 𝒦)
+ class-prod-s-∈-ps = pisow psPllA (⨅≅ {fiu = fe₂}{fiw = fe𝓕α} llA≅A)
+
+  where
+  lA llA : ℑ' → Algebra (ov α) 𝑆
+  lA i =  Lift-alg (𝔄 i) (ov α)
+  llA i = Lift-alg (lA i) (ov α)
+
+  slA : ∀ i → (lA i) ∈ S 𝒦
+  slA i = siso (fst ∥ i ∥) Lift-≅
+
+  psllA : ∀ i → (llA i) ∈ P (S 𝒦)
+  psllA i = pbase (slA i)
+
+  psPllA : ⨅ llA ∈ P (S 𝒦)
+  psPllA = produ psllA
+
+  llA≅A : ∀ i → (llA i) ≅ (𝔄' i)
+  llA≅A i = ≅-trans (≅-sym Lift-≅)(≅-sym Lift-≅)
+
+\end{code}
+
+
+So, since `PS⊆SP`, we see that that the product of all subalgebras of a class `𝒦` belongs to `SP(𝒦)`.
+
+\begin{code}
+
+ class-prod-s-∈-sp : hfunext (ov α) (ov α) → class-product ∈ S(P 𝒦)
+ class-prod-s-∈-sp hfe = PS⊆SP {fovu = fe₂} hfe class-prod-s-∈-ps
+
+\end{code}
+
+----------------------------
+
+[← Varieties.EquationalLogic](Varieties.EquationalLogic.html)
+<span style="float:right;">[Varieties.Preservation →](Varieties.Preservation.html)</span>
 
 {% include UALib.Links.md %}
 
 
+--------------------------------------
 
-
-<!--
-
-  -- open import Relation.Binary.Core using (_⇔_)
-
-  -- ⊧-H : DFunExt → {p q : Term X} → 𝒦 ⊧ p ≋ q ⇔ (∀ 𝑨 φ → 𝑨 ∈ 𝒦 → ∣ φ ∣ ∘ (𝑻 X ⟦ p ⟧) ≡ ∣ φ ∣ ∘(𝑻 X ⟦ q ⟧))
-  -- ⊧-H fe {p}{q} = ⊧-H-class-invar fe {p}{q} , ⊧-H-class-coinvar fe {p}{q}
-
-
--->
+[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team

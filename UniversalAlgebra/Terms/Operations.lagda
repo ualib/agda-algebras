@@ -2,7 +2,7 @@
 layout: default
 title : Terms.Operations module (The Agda Universal Algebra Library)
 date : 2021-01-14
-author: William DeMeo
+author: [the ualib/agda-algebras development team][]
 ---
 
 ### <a id="term-operations">Term Operations</a>
@@ -15,34 +15,39 @@ Here we define *term operations* which are simply terms interpreted in a particu
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
--- Imports from Agda (builtin/primitive) and the Agda Standard Library
-open import Agda.Builtin.Equality using (_≡_; refl)
-open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
-open import Data.Product using (_,_; Σ; _×_; Σ-syntax)
-open import Function.Base  using (_∘_)
-open import Level renaming (suc to lsuc; zero to lzero)
-open import Relation.Binary.PropositionalEquality.Core using (cong; module ≡-Reasoning)
-open ≡-Reasoning
-open import Relation.Unary using (Pred)
-
--- Imports from the Agda Universal Algebra Library
-open import Overture.Inverses using (IsSurjective; Image_∋_; Inv; InvIsInv; eq)
-open import Overture.Preliminaries
- using (Type; _∙_;_⁻¹; ∣_∣; ∥_∥)
-
+open import Level using ( Level )
 open import Algebras.Basic
-open import Relations.Discrete using (_|:_)
 
-module Terms.Operations {𝓞 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
 
-open import Algebras.Congruences{𝑆 = 𝑆} using (Con; IsCongruence)
-open import Algebras.Products{𝑆 = 𝑆} using (ov; ⨅)
-open import Homomorphisms.Basic {𝑆 = 𝑆} using (hom)
-open import Terms.Basic {𝑆 = 𝑆}
+module Terms.Operations {𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
 
-private
-  variable
-    𝓤 𝓦 𝓧 𝓨 : Level
+
+
+-- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
+open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
+open import Relation.Binary.PropositionalEquality using ( cong ; module ≡-Reasoning )
+open import Function.Base  using (_∘_)
+
+open import Agda.Primitive          using    ( _⊔_ ;  lsuc )
+                                    renaming ( Set to Type )
+open import Agda.Builtin.Equality   using    ( _≡_ ; refl )
+open import Data.Product            using    ( _,_ ; Σ-syntax ; Σ )
+
+
+
+
+
+-- Imports from agda-algebras --------------------------------------------------------------
+open import Overture.Preliminaries using ( _∙_ ; _⁻¹ ; ∣_∣ ; ∥_∥ )
+open import Relations.Discrete     using ( _|:_ )
+open import Algebras.Products    𝑆 using ( ov ; ⨅ )
+open import Algebras.Congruences 𝑆 using ( Con ; IsCongruence)
+open import Homomorphisms.Basic  𝑆 using ( hom)
+open import Terms.Basic          𝑆 using ( Term ; free-lift ; 𝑻 )
+
+open Term
+
+private variable α β γ ρ 𝓧 : Level
 \end{code}
 
 **Notation**. In the line above, we renamed for notational convenience the `generator` constructor of the `Term` type, so from now on we use `ℊ` in place of `generator`.
@@ -57,7 +62,7 @@ Thus the interpretation of a term is defined by induction on the structure of th
 
 \begin{code}
 
-_⟦_⟧ : (𝑨 : Algebra 𝓤 𝑆){X : Type 𝓧 } → Term X → (X → ∣ 𝑨 ∣) → ∣ 𝑨 ∣
+_⟦_⟧ : (𝑨 : Algebra α 𝑆){X : Type 𝓧 } → Term X → (X → ∣ 𝑨 ∣) → ∣ 𝑨 ∣
 𝑨 ⟦ ℊ x ⟧ = λ η → η x
 𝑨 ⟦ node 𝑓 𝑡 ⟧ = λ η → (𝑓 ̂ 𝑨) (λ i → (𝑨 ⟦ 𝑡 i ⟧) η)
 
@@ -67,7 +72,7 @@ It turns out that the intepretation of a term is the same as the `free-lift` (mo
 
 \begin{code}
 
-free-lift-interp : funext 𝓥 𝓤 → (𝑨 : Algebra 𝓤 𝑆){X : Type 𝓧 }(η : X → ∣ 𝑨 ∣)(p : Term X)
+free-lift-interp : funext 𝓥 α → (𝑨 : Algebra α 𝑆){X : Type 𝓧 }(η : X → ∣ 𝑨 ∣)(p : Term X)
  →                 (𝑨 ⟦ p ⟧) η ≡ (free-lift 𝑨 η) p
 
 free-lift-interp _ 𝑨 η (ℊ x) = refl
@@ -118,9 +123,11 @@ term-agreement fvx {X} p = ∥ term-gen fvx p ∥ ∙ (term-gen-agreement fvx p)
 
 \begin{code}
 
-module _ {X : Type 𝓧 }{I : Type 𝓦} where
+module _ {X : Type 𝓧 }{I : Type β} where
 
- interp-prod : funext 𝓥 (𝓤 ⊔ 𝓦) → (p : Term X)(𝒜 : I → Algebra 𝓤 𝑆)(𝑎 : X → ∀ i → ∣ 𝒜 i ∣)
+ open ≡-Reasoning
+
+ interp-prod : funext 𝓥 (α ⊔ β) → (p : Term X)(𝒜 : I → Algebra α 𝑆)(𝑎 : X → ∀ i → ∣ 𝒜 i ∣)
   →            (⨅ 𝒜 ⟦ p ⟧) 𝑎 ≡ λ i →  (𝒜 i ⟦ p ⟧) (λ j → 𝑎 j i)
 
  interp-prod _ (ℊ x₁) 𝒜 𝑎 = refl
@@ -132,7 +139,7 @@ module _ {X : Type 𝓧 }{I : Type 𝓦} where
   (λ i → (𝑓 ̂ 𝒜 i) (λ x → (𝒜 i ⟦ 𝑡 x ⟧) λ j → 𝑎 j i))  ∎
 
  -- inferred type: 𝑡 : X → ∣ ⨅ 𝒜 ∣
- interp-prod2 : funext (𝓤 ⊔ 𝓦 ⊔ 𝓧) (𝓤 ⊔ 𝓦) → funext 𝓥 (𝓤 ⊔ 𝓦) → (p : Term X)(𝒜 : I → Algebra 𝓤 𝑆)
+ interp-prod2 : funext (α ⊔ β ⊔ 𝓧) (α ⊔ β) → funext 𝓥 (α ⊔ β) → (p : Term X)(𝒜 : I → Algebra α 𝑆)
   →             ⨅ 𝒜 ⟦ p ⟧ ≡ (λ 𝑡 → (λ i → (𝒜 i ⟦ p ⟧) λ x → 𝑡 x i))
 
  interp-prod2 _ _ (ℊ x₁) 𝒜 = refl
@@ -155,7 +162,9 @@ We now prove two important facts about term operations.  The first of these, whi
 
 \begin{code}
 
-comm-hom-term : funext 𝓥 𝓦 → {𝑨 : Algebra 𝓤 𝑆} (𝑩 : Algebra 𝓦 𝑆)
+open ≡-Reasoning
+
+comm-hom-term : funext 𝓥 β → {𝑨 : Algebra α 𝑆} (𝑩 : Algebra β 𝑆)
                 (h : hom 𝑨 𝑩){X : Type 𝓧}(t : Term X) (a : X → ∣ 𝑨 ∣)
                 -----------------------------------------
   →             ∣ h ∣ ((𝑨 ⟦ t ⟧) a) ≡ (𝑩 ⟦ t ⟧) (∣ h ∣ ∘ a)
@@ -174,11 +183,11 @@ To conclude this module, we prove that every term is compatible with every congr
 \begin{code}
 
 
-module _ {𝓤 𝓦 : Level}{X : Type 𝓤} where
+module _ {α β : Level}{X : Type α} where
 
  open IsCongruence
 
- _∣:_ : {𝑨 : Algebra 𝓤 𝑆}(t : Term X)(θ : Con{𝓤}{𝓦} 𝑨) → (𝑨 ⟦ t ⟧) |: ∣ θ ∣
+ _∣:_ : {𝑨 : Algebra α 𝑆}(t : Term X)(θ : Con{α}{β} 𝑨) → (𝑨 ⟦ t ⟧) |: ∣ θ ∣
  ((ℊ x) ∣: θ) p = p x
  ((node 𝑓 𝑡) ∣: θ) p = (is-compatible ∥ θ ∥) 𝑓 λ x → ((𝑡 x) ∣: θ) p
 
@@ -200,20 +209,12 @@ module _ {𝓤 𝓦 : Level}{X : Type 𝓤} where
 {% include UALib.Links.md %}
 
 
+-----------------------------
+
+[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
 
 
 
 
 
 
-
-
-
-
-
-<!-- For the sake of comparison, here is the analogous theorem using `compatible-fun`.
-
---   compatible-term : {𝑨 : Algebra 𝓤 𝑆}(t : Term X)(θ : Con{𝓦} 𝑨) → compatible-op (𝑨 ⟦ t ⟧) ∣ θ ∣
---   compatible-term (ℊ x) θ p = λ y z → z x
---   compatible-term (node 𝑓 𝑡) θ u v p = (is-compatible ∥ θ ∥) 𝑓 λ x → ((compatible-op (𝑡 x) θ) u v) p
--->

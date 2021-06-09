@@ -37,9 +37,9 @@ More extensive instructions, that still apply, can be found on [the original pro
 
 ## Credits
 
-The [agda-algebras][] library is developed and maintained by the *Agda Algebras Development Team* which includes the contributors listed below.
+The [agda-algebras][] library is developed and maintained by the *ualib/agda-algebras development team*.
 
-### The Agda Algebras Development Team
+### The UALib/Agda-Algebras Development Team
 
 [Jacques Carette][]  
 [William DeMeo][]  

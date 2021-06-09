@@ -2,34 +2,38 @@
 layout: default
 title : Algebras.Basic module (Agda Universal Algebra Library)
 date : 2021-04-23
-author: William DeMeo
+author: [the ualib/agda-algebras development team][]
 ---
 
 ### <a id="algebras">Basic Definitions</a>
 
-This section presents the [Algebras.Basic][] module of the [Agda Universal Algebra Library][].
+This is the [Algebras.Basic][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
--- Imports from the Agda (Builtin) and the Agda Standard Library
-open import Data.Empty using (⊥)
-open import Agda.Builtin.Bool
-open import Level renaming (suc to lsuc; zero to lzero)
-open import Data.Product renaming (_,_ to infixr 50 _,_) using (Σ; _×_; Σ-syntax)
-open import Relation.Binary using (Rel)
-
--- Imports from the Agda Universal Algebra Library
-open import Overture.Preliminaries using (Type; ∣_∣; ∥_∥)
-open import Relations.Continuous using (ContRel; DepRel; cont-compatible-op; dep-compatible-op)
-open import Relations.Discrete using (Op; _|:_)
-
 module Algebras.Basic where
 
-private
-  variable
-    𝓞 𝓤 𝓥 𝓦 : Level
+-- Imports from the Agda (Builtin) and the Agda Standard Library
+open import Agda.Builtin.Bool
+open import Agda.Builtin.Equality                 using    (_≡_    ;   refl     )
+open import Agda.Primitive                        using    ( _⊔_                )
+                                                  renaming ( Set   to  Type     )
+open import Data.Empty                            using    ( ⊥                  )
+open import Data.Product                          using    ( _,_ ; Σ-syntax ; Σ )
+open import Level                                 renaming ( suc   to  lsuc
+                                                           ; zero  to  lzero    )
+open import Relation.Binary                       using    ( IsEquivalence      )
+                                                  renaming ( Rel   to  BinRel   )
+
+-- -- Imports from the Agda Universal Algebra Library
+open import Overture.Preliminaries using (∣_∣; ∥_∥)
+open import Relations.Discrete     using (Op; _|:_)
+open import Relations.Continuous   using (ContRel; DepRel; cont-compatible-op; dep-compatible-op)
+
+private variable α β ρ 𝓞 𝓥 : Level
+
 \end{code}
 
 #### <a id="signatures">The signatures of an algebra</a>
@@ -88,12 +92,12 @@ Note that to each operation symbol `𝑓 ∈ 𝐹` corresponds an operation `�
 
 #### <a id="algebra-types">Algebra types</a>
 
-Recall, we defined the type `Signature 𝓞 𝓥` above as the dependent pair type `Σ F ꞉ Type 𝓞 , (F → Type 𝓥)`, and the type `Op` of operation symbols is the function type `Op I A = (I → A) → A` (see [Relations.Discrete][]). For a fixed signature `𝑆 : Signature 𝓞 𝓥` and universe level `𝓤`, we define the *type of algebras in the signature* `𝑆` (or *type of* `𝑆`-*algebras*) *with domain type* `Type 𝓤` as follows.
+Recall, we defined the type `Signature 𝓞 𝓥` above as the dependent pair type `Σ F ꞉ Type 𝓞 , (F → Type 𝓥)`, and the type `Op` of operation symbols is the function type `Op I A = (I → A) → A` (see [Relations.Discrete][]). For a fixed signature `𝑆 : Signature 𝓞 𝓥` and universe level `α`, we define the *type of algebras in the signature* `𝑆` (or *type of* `𝑆`-*algebras*) *with domain type* `Type α` as follows.
 
 \begin{code}
 
-Algebra : (𝓤 : Level)(𝑆 : Signature 𝓞 𝓥) → Type (𝓞 ⊔ 𝓥 ⊔ lsuc 𝓤)
-Algebra 𝓤 𝑆 = Σ[ A ∈ Type 𝓤 ]                   -- the domain
+Algebra : (α : Level)(𝑆 : Signature 𝓞 𝓥) → Type (𝓞 ⊔ 𝓥 ⊔ lsuc α)
+Algebra α 𝑆 = Σ[ A ∈ Type α ]                   -- the domain
               ∀ (f : ∣ 𝑆 ∣) → Op (∥ 𝑆 ∥ f) A    -- the basic operations
 
 \end{code}
@@ -108,8 +112,8 @@ Occasionally we will be given an algebra and we just need to know the universe l
 
 \begin{code}
 
-level-of-alg : {𝑆 : Signature 𝓞 𝓥} → Algebra 𝓤 𝑆 → Level
-level-of-alg {𝓤 = 𝓤} _ = 𝓤
+level-of-alg : {𝑆 : Signature 𝓞 𝓥} → Algebra α 𝑆 → Level
+level-of-alg {α = α} _ = α
 
 \end{code}
 
@@ -120,10 +124,10 @@ Some people prefer to represent algebraic structures in type theory using record
 
 \begin{code}
 
-record algebra (𝓤 : Level) (𝑆 : Signature 𝓞 𝓥) : Type(lsuc(𝓞 ⊔ 𝓥 ⊔ 𝓤)) where
+record algebra (α : Level) (𝑆 : Signature 𝓞 𝓥) : Type(lsuc(𝓞 ⊔ 𝓥 ⊔ α)) where
  constructor mkalg
  field
-  univ : Type 𝓤
+  univ : Type α
   op : (f : ∣ 𝑆 ∣) → ((∥ 𝑆 ∥ f) → univ) → univ
 
 
@@ -137,10 +141,10 @@ module _ {𝑆 : Signature 𝓞 𝓥} where
 
  open algebra
 
- algebra→Algebra : algebra 𝓤 𝑆 → Algebra 𝓤 𝑆
+ algebra→Algebra : algebra α 𝑆 → Algebra α 𝑆
  algebra→Algebra 𝑨 = (univ 𝑨 , op 𝑨)
 
- Algebra→algebra : Algebra 𝓤 𝑆 → algebra 𝓤 𝑆
+ Algebra→algebra : Algebra α 𝑆 → algebra α 𝑆
  Algebra→algebra 𝑨 = mkalg ∣ 𝑨 ∣ ∥ 𝑨 ∥
 
 \end{code}
@@ -152,7 +156,7 @@ We now define a convenient shorthand for the interpretation of an operation symb
 
 \begin{code}
 
- _̂_ : (𝑓 : ∣ 𝑆 ∣)(𝑨 : Algebra 𝓤 𝑆) → (∥ 𝑆 ∥ 𝑓  →  ∣ 𝑨 ∣) → ∣ 𝑨 ∣
+ _̂_ : (𝑓 : ∣ 𝑆 ∣)(𝑨 : Algebra α 𝑆) → (∥ 𝑆 ∥ 𝑓  →  ∣ 𝑨 ∣) → ∣ 𝑨 ∣
 
  𝑓 ̂ 𝑨 = λ 𝑎 → (∥ 𝑨 ∥ 𝑓) 𝑎
 
@@ -172,16 +176,16 @@ Recall, in the [section on level lifting and lowering](Overture.Lifts.html#level
 
 open Lift
 
-Lift-op : {𝓘 : Level}{I : Type 𝓘}{A : Type 𝓤} → Op I A → (𝓦 : Level) → Op I (Lift 𝓦 A)
-Lift-op f 𝓦 = λ x → lift (f (λ i → lower (x i)))
+Lift-op : {𝓘 : Level}{I : Type 𝓘}{A : Type α} → Op I A → (β : Level) → Op I (Lift β A)
+Lift-op f β = λ x → lift (f (λ i → lower (x i)))
 
-Lift-alg : {𝑆 : Signature 𝓞 𝓥} → Algebra 𝓤 𝑆 → (𝓦 : Level) → Algebra (𝓤 ⊔ 𝓦) 𝑆
-Lift-alg {𝑆 = 𝑆} 𝑨 𝓦 = Lift 𝓦 ∣ 𝑨 ∣ , (λ (𝑓 : ∣ 𝑆 ∣) → Lift-op (𝑓 ̂ 𝑨) 𝓦)
+Lift-alg : {𝑆 : Signature 𝓞 𝓥} → Algebra α 𝑆 → (β : Level) → Algebra (α ⊔ β) 𝑆
+Lift-alg {𝑆 = 𝑆} 𝑨 β = Lift β ∣ 𝑨 ∣ , (λ (𝑓 : ∣ 𝑆 ∣) → Lift-op (𝑓 ̂ 𝑨) β)
 
 open algebra
 
-Lift-alg-record-type : {𝑆 : Signature 𝓞 𝓥} → algebra 𝓤 𝑆 → (𝓦 : Level) → algebra (𝓤 ⊔ 𝓦) 𝑆
-Lift-alg-record-type {𝑆 = 𝑆} 𝑨 𝓦 = mkalg (Lift 𝓦 (univ 𝑨)) (λ (f : ∣ 𝑆 ∣) → Lift-op ((op 𝑨) f) 𝓦)
+Lift-alg-record-type : {𝑆 : Signature 𝓞 𝓥} → algebra α 𝑆 → (β : Level) → algebra (α ⊔ β) 𝑆
+Lift-alg-record-type {𝑆 = 𝑆} 𝑨 β = mkalg (Lift β (univ 𝑨)) (λ (f : ∣ 𝑆 ∣) → Lift-op ((op 𝑨) f) β)
 
 \end{code}
 
@@ -199,7 +203,7 @@ We now define the function `compatible` so that, if `𝑨` denotes an algebra an
 
 \begin{code}
 
-compatible : {𝑆 : Signature 𝓞 𝓥}(𝑨 : Algebra 𝓤 𝑆) → Rel ∣ 𝑨 ∣ 𝓦 → Type(𝓞 ⊔ 𝓤 ⊔ 𝓥 ⊔ 𝓦)
+compatible : {𝑆 : Signature 𝓞 𝓥}(𝑨 : Algebra α 𝑆) → BinRel ∣ 𝑨 ∣ ρ → Type(𝓞 ⊔ α ⊔ 𝓥 ⊔ ρ)
 compatible  𝑨 R = ∀ 𝑓 → (𝑓 ̂ 𝑨) |: R
 
 \end{code}
@@ -217,10 +221,10 @@ In the [Relations.Continuous][] module, we defined a function called `cont-compa
 
 module _ {I : Type 𝓥} {𝑆 : Signature 𝓞 𝓥} where
 
- cont-compatible : (𝑨 : Algebra 𝓤 𝑆) → ContRel I ∣ 𝑨 ∣ 𝓦 → Type(𝓞 ⊔ 𝓤 ⊔ 𝓥 ⊔ 𝓦)
+ cont-compatible : (𝑨 : Algebra α 𝑆) → ContRel I ∣ 𝑨 ∣ β → Type(𝓞 ⊔ α ⊔ 𝓥 ⊔ β)
  cont-compatible 𝑨 R = ∀ (𝑓 : ∣ 𝑆 ∣ ) →  cont-compatible-op (𝑓 ̂ 𝑨) R
 
- dep-compatible : (𝒜 : I → Algebra 𝓤 𝑆) → DepRel I (λ i → ∣ 𝒜  i ∣) 𝓦 → Type(𝓞 ⊔ 𝓤 ⊔ 𝓥 ⊔ 𝓦)
+ dep-compatible : (𝒜 : I → Algebra α 𝑆) → DepRel I (λ i → ∣ 𝒜  i ∣) β → Type(𝓞 ⊔ α ⊔ 𝓥 ⊔ β)
  dep-compatible 𝒜 R = ∀ ( 𝑓 : ∣ 𝑆 ∣ ) →  dep-compatible-op (λ i → 𝑓 ̂ (𝒜 i)) R
 
 \end{code}
@@ -243,3 +247,7 @@ module _ {I : Type 𝓥} {𝑆 : Signature 𝓞 𝓥} where
 
 
 {% include UALib.Links.md %}
+
+--------------------------------------
+
+[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
