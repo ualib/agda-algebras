@@ -18,7 +18,7 @@ This is the [Algebras.Products][] module of the [Agda Universal Algebra Library]
 open import Level renaming ( suc to lsuc )
 open import Algebras.Basic
 
-module Algebras.Products {𝓞 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
+module Algebras.Products {𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
 
 open import Agda.Primitive                        using    ( _⊔_              )
                                                   renaming ( Set   to Type    )

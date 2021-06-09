@@ -16,10 +16,10 @@ This chapter presents the [Homomorphisms.Noether][] module of the [Agda Universa
 open import Level using ( Level ; Lift )
 open import Algebras.Basic
 
+module Homomorphisms.Noether {𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
 
-module Homomorphisms.Noether {𝓞 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
 
-
+-- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
 open import Axiom.Extensionality.Propositional    using    ()
                                                   renaming (Extensionality to funext)
 open import Agda.Primitive                        using    ( _⊔_      ;   lsuc  )
@@ -34,19 +34,24 @@ open import Relation.Binary                       using    ( IsEquivalence   )
 open import Relation.Binary.PropositionalEquality using    ( trans    ;   cong
                                                            ; cong-app
                                                            ; module ≡-Reasoning )
-open import Relation.Unary using (_⊆_)
+open import Relation.Unary                        using    ( _⊆_ )
 
 
-open import Algebras.Congruences{𝑆 = 𝑆} using (Con; IsCongruence)
-open import Overture.Preliminaries using (_⁻¹; ∣_∣; ∥_∥; 𝑖𝑑)
-open import Homomorphisms.Basic {𝑆 = 𝑆} using (hom; kercon; ker[_⇒_]_↾_; πker; is-homomorphism; epi; epi-to-hom)
-open import Relations.Extensionality using (swelldef;  block-ext|uip; pred-ext; SurjInvIsRightInv; epic-factor)
-open import Relations.Truncation using (is-set; blk-uip; is-embedding; monic-is-embedding|Set)
-open import Overture.Inverses using (IsInjective; IsSurjective; Image_∋_; SurjInv)
-open import Relations.Quotients using (ker-IsEquivalence; _/_; ⟪_⟫; ⌞_⌟; R-block)
-open import Relations.Discrete using (ker; kernel)
+-- Imports from agda-algebras --------------------------------------------------------------
+open import Overture.Preliminaries   using ( ∣_∣ ; ∥_∥ ; 𝑖𝑑 ; _⁻¹ )
+open import Overture.Inverses        using ( IsInjective ; IsSurjective ; Image_∋_ ; SurjInv )
+open import Relations.Discrete       using ( ker ; kernel )
+open import Relations.Quotients      using ( ker-IsEquivalence ; _/_ ; ⟪_⟫ ; ⌞_⌟ ; R-block)
+open import Relations.Truncation     using ( is-set ; blk-uip ; is-embedding
+                                           ; monic-is-embedding|Set )
+open import Relations.Extensionality using ( swelldef ; block-ext|uip ; pred-ext
+                                           ; SurjInvIsRightInv ; epic-factor )
+open import Algebras.Congruences   𝑆 using ( Con ; IsCongruence )
+open import Homomorphisms.Basic    𝑆 using ( hom ; kercon ; ker[_⇒_]_↾_ ; πker
+                                           ; is-homomorphism ; epi ; epi-to-hom )
 
 private variable α β γ : Level
+
 \end{code}
 
 

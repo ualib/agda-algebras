@@ -15,47 +15,56 @@ First we will define the relatively free algebra in a variety, which is the "fre
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
--- Imports from Agda (builtin/primitive) and the Agda Standard Library
-open import Agda.Builtin.Equality using (_≡_; refl)
-open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
-open import Data.Product using (_,_; Σ; _×_; Σ-syntax)
-open import Data.Sum.Base using (_⊎_)
-open import Function.Base  using (_∘_)
-open import Level renaming (suc to lsuc; zero to lzero)
-open import Relation.Binary using (Rel; IsEquivalence)
-open import Relation.Binary.PropositionalEquality.Core using (cong; cong-app; module ≡-Reasoning)
-open ≡-Reasoning
-open import Relation.Unary using (Pred; _∈_; _⊆_)
 
--- Imports from the Agda Universal Algebra Library
+open import Level renaming ( suc to lsuc )
 open import Algebras.Basic
-open import Overture.Preliminaries
- using (Type; _∙_;_⁻¹; ∣_∣; ∥_∥; snd; fst)
-open import Overture.Inverses using (Inv; InvIsInv; IsSurjective)
-open import Relations.Quotients using (⟪_⟫)
-open import Relations.Extensionality using (swelldef; pred-ext)
-open import Relations.Discrete using (kernel)
-open import Relations.Truncation using (is-set; blk-uip; hfunext)
 
-module Varieties.FreeAlgebras {𝓞 𝓤 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
+module Varieties.FreeAlgebras {α 𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
 
-open import Algebras.Congruences{𝑆 = 𝑆} using (Con; IsCongruence; mkcon)
-open import Algebras.Products{𝑆 = 𝑆} using (ov; ⨅)
-open import Subalgebras.Subalgebras{𝑆 = 𝑆} using (_≤_; FirstHomCorollary|Set)
-open import Homomorphisms.Basic{𝑆 = 𝑆} using (hom; ∘-hom; ⨅-hom-co; ker[_⇒_]_↾_; epi; πker; epi-to-hom; ker-in-con; kercon)
-open import Homomorphisms.Noether using (HomFactor; HomFactorEpi)
-open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using (_≅_; ≅-refl; ≅-sym; Lift-≅)
-open import Terms.Basic {𝑆 = 𝑆} using (Term; 𝑻; lift-hom; free-lift; free-unique; lift-of-epi-is-epi)
-open import Terms.Operations {𝑆 = 𝑆} using (_⟦_⟧; comm-hom-term; free-lift-interp)
-open import Varieties.EquationalLogic{𝑆 = 𝑆} using (_⊧_≋_; _⊧_≈_; Th; Mod)
-open import Varieties.Preservation {𝓤 = 𝓤} 𝑆
-open import Varieties.Varieties 𝑆
+
+-- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
+open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
+open import Agda.Builtin.Equality   using    ( _≡_ ; refl )
+open import Agda.Primitive          renaming ( Set to Type )
+                                    using    ( _⊔_ )
+open import Data.Product            using    ( _,_ ; Σ-syntax ; Σ ; _×_ )
+                                    renaming ( proj₁ to fst
+                                             ; proj₂ to snd )
+open import Function.Base           using    ( _∘_ )
+open import Relation.Binary         using    ( IsEquivalence )
+                                    renaming ( Rel to BinRel )
+open import Relation.Binary.PropositionalEquality
+                                    using    ( cong ; cong-app ; module ≡-Reasoning )
+open import Relation.Unary          using    ( Pred ; _∈_ ; _⊆_ ; ｛_｝ ; _∪_ )
+
+
+-- Imports from the Agda Universal Algebra Library -------------------------------------------
+open import Overture.Preliminaries       using ( ∣_∣ ; ∥_∥ ; _∙_ ; _⁻¹ )
+open import Overture.Inverses            using ( IsSurjective )
+open import Relations.Discrete           using ( kernel )
+open import Relations.Quotients          using ( ⟪_⟫ )
+open import Relations.Truncation         using ( is-set ; blk-uip ; hfunext )
+open import Relations.Extensionality     using ( swelldef ; pred-ext)
+open import Algebras.Products          𝑆 using ( ov ; ⨅ )
+open import Algebras.Congruences       𝑆 using ( Con; mkcon ; IsCongruence )
+open import Homomorphisms.Basic        𝑆 using ( hom ; ⨅-hom-co ; ker[_⇒_]_↾_ ; epi
+                                                     ; πker ; epi-to-hom ; ker-in-con
+                                                     ;  kercon ; ∘-hom )
+open import Homomorphisms.Noether      𝑆 using ( HomFactor ; HomFactorEpi )
+open import Homomorphisms.Isomorphisms 𝑆 using ( _≅_ ; ≅-refl ; ≅-sym ; Lift-≅ )
+open import Terms.Basic                𝑆 using ( Term ; 𝑻 ; free-lift ; lift-hom
+                                               ; free-unique ; lift-of-epi-is-epi )
+open import Terms.Operations           𝑆 using (_⟦_⟧; comm-hom-term; free-lift-interp )
+open import Subalgebras.Subalgebras    𝑆 using ( _≤_ ; FirstHomCorollary|Set )
+open import Varieties.Basic            𝑆 using (_⊧_≋_; _⊧_≈_; Th; Mod )
+open import Varieties.EquationalLogic  𝑆
+open import Varieties.Preservation {α} 𝑆
+
+
 
 open Term
 
-private
-  variable
-    𝓦 𝓧 : Level
+
 \end{code}
 
 
@@ -82,10 +91,10 @@ First, we represent the congruence relation `ψCon`, modulo which `𝑻 X` yield
 
 \begin{code}
 
-module _ {X : Type 𝓤} where
+module _ {X : Type α} where
 
- ψ : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓕) → Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) 𝓕
- ψ 𝒦 (p , q) = ∀(𝑨 : Algebra 𝓤 𝑆)(sA : 𝑨 ∈ S{𝓤}{𝓤} 𝒦)(h : X → ∣ 𝑨 ∣ )
+ ψ : (𝒦 : Pred (Algebra α 𝑆) 𝓕) → Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) 𝓕
+ ψ 𝒦 (p , q) = ∀(𝑨 : Algebra α 𝑆)(sA : 𝑨 ∈ S{α}{α} 𝒦)(h : X → ∣ 𝑨 ∣ )
                  →  (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
 
 \end{code}
@@ -94,7 +103,7 @@ We convert the predicate ψ into a relation by [currying](https://en.wikipedia.o
 
 \begin{code}
 
- ψRel : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓕) → Rel ∣ 𝑻 X ∣ 𝓕
+ ψRel : (𝒦 : Pred (Algebra α 𝑆) 𝓕) → BinRel ∣ 𝑻 X ∣ 𝓕
  ψRel 𝒦 p q = ψ 𝒦 (p , q)
 
 \end{code}
@@ -106,7 +115,9 @@ To express `ψRel` as a congruence of the term algebra `𝑻 X`, we must prove t
 
 \begin{code}
 
- ψcompatible : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓕){fe : funext 𝓥 𝓤} → compatible (𝑻 X)(ψRel 𝒦)
+ open ≡-Reasoning
+
+ ψcompatible : (𝒦 : Pred (Algebra α 𝑆) 𝓕){fe : funext 𝓥 α} → compatible (𝑻 X)(ψRel 𝒦)
  ψcompatible 𝒦{fe} 𝑓 {p} {q} ψpq 𝑨 sA h = γ
   where
   φ : hom (𝑻 X) 𝑨
@@ -119,7 +130,7 @@ To express `ψRel` as a congruence of the term algebra `𝑻 X`, we must prove t
       (𝑓 ̂ 𝑨) (∣ φ ∣ ∘ q)  ≡⟨ (∥ φ ∥ 𝑓 q)⁻¹ ⟩
       ∣ φ ∣ ((𝑓 ̂ 𝑻 X) q)  ∎
 
- ψIsEquivalence : {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓕 } → IsEquivalence (ψRel 𝒦)
+ ψIsEquivalence : {𝒦 : Pred (Algebra α 𝑆) 𝓕 } → IsEquivalence (ψRel 𝒦)
  ψIsEquivalence = record { refl = λ 𝑨 sA h → refl
                          ; sym = λ x 𝑨 sA h → (x 𝑨 sA h)⁻¹
                          ; trans = λ pψq qψr 𝑨 sA h → (pψq 𝑨 sA h) ∙ (qψr 𝑨 sA h) }
@@ -129,7 +140,7 @@ We have collected all the pieces necessary to express the collection of identiti
 
 \begin{code}
 
- ψCon : (𝒦 : Pred (Algebra 𝓤 𝑆) 𝓕){fe : funext 𝓥 𝓤} → Con (𝑻 X)
+ ψCon : (𝒦 : Pred (Algebra α 𝑆) 𝓕){fe : funext 𝓥 α} → Con (𝑻 X)
  ψCon 𝒦 {fe} = (ψRel 𝒦) , mkcon ψIsEquivalence (ψcompatible 𝒦 {fe})
 
 \end{code}
@@ -152,20 +163,20 @@ We accomplish this goal by constructing an algebra `𝔽` with the following pro
 
 We denote by `ℭ` the product of all subalgebras of algebras in `𝒦`, and by `homℭ` the homomorphism from `𝑻 X` to `ℭ` defined as follows: `homℭ := ⨅-hom-co (𝑻 X) 𝔄s hom𝔄`.
 
-Here, `⨅-hom-co` (defined in [Homomorphisms.Basic](Homomorphisms.Basic.html#product-homomorphisms)) takes the term algebra `𝑻 X`, a family `{𝔄s : I → Algebra 𝓤 𝑆}` of `𝑆`-algebras, and a family `hom𝔄 : ∀ i → hom (𝑻 X) (𝔄s i)` of homomorphisms and constructs the natural homomorphism `homℭ` from `𝑻 X` to the product `ℭ := ⨅ 𝔄`.  The homomorphism `homℭ : hom (𝑻 X) (⨅ ℭ)` is natural in the sense that the `i`-th component of the image of `𝑡 : Term X` under `homℭ` is the image `∣ hom𝔄 i ∣ 𝑡` of 𝑡 under the i-th homomorphism `hom𝔄 i`.
+Here, `⨅-hom-co` (defined in [Homomorphisms.Basic](Homomorphisms.Basic.html#product-homomorphisms)) takes the term algebra `𝑻 X`, a family `{𝔄s : I → Algebra α 𝑆}` of `𝑆`-algebras, and a family `hom𝔄 : ∀ i → hom (𝑻 X) (𝔄s i)` of homomorphisms and constructs the natural homomorphism `homℭ` from `𝑻 X` to the product `ℭ := ⨅ 𝔄`.  The homomorphism `homℭ : hom (𝑻 X) (⨅ ℭ)` is natural in the sense that the `i`-th component of the image of `𝑡 : Term X` under `homℭ` is the image `∣ hom𝔄 i ∣ 𝑡` of 𝑡 under the i-th homomorphism `hom𝔄 i`.
 
 
 
 
 
 #### <a id="F-in-classproduct">𝔽 ≤  ⨅ S(𝒦)</a>
-Now we come to a step in the Agda formalization of Birkhoff's theorem that is highly nontrivial. We must prove that the free algebra embeds in the product ℭ of all subalgebras of algebras in the class `𝒦`.  This is really the only stage in the proof of Birkhoff's theorem that requires the truncation assumption that `ℭ` be a *set* (that is, `ℭ` has the [UIP][] property).  We will also need to assume several local function extensionality postulates and, as a result, the next submodule will take as given the parameter `fe : (∀ a b → funext a b)`.  This allows us to postulate local function extensionality when and where we need it in the proof. For example, if we want to assume function extensionality at universe levels 𝓥 and 𝓤, we simply apply `fe` to those universes: `fe 𝓥 𝓤`. (Earlier versions of the library used just a single *global* function extensionality postulate at the start of most modules, but we have since decided to exchange that elegant but crude option for greater precision and transparency.)
+Now we come to a step in the Agda formalization of Birkhoff's theorem that is highly nontrivial. We must prove that the free algebra embeds in the product ℭ of all subalgebras of algebras in the class `𝒦`.  This is really the only stage in the proof of Birkhoff's theorem that requires the truncation assumption that `ℭ` be a *set* (that is, `ℭ` has the [UIP][] property).  We will also need to assume several local function extensionality postulates and, as a result, the next submodule will take as given the parameter `fe : (∀ a b → funext a b)`.  This allows us to postulate local function extensionality when and where we need it in the proof. For example, if we want to assume function extensionality at universe levels 𝓥 and α, we simply apply `fe` to those universes: `fe 𝓥 α`. (Earlier versions of the library used just a single *global* function extensionality postulate at the start of most modules, but we have since decided to exchange that elegant but crude option for greater precision and transparency.)
 
 \begin{code}
 
-module _ {fe : (∀ a b → funext a b)}{wd+ : swelldef 𝓥 𝓕⁺} {wd : swelldef 𝓥 𝓕}{X : Type 𝓤} {𝒦 : Pred (Algebra 𝓤 𝑆) 𝓕} where
+module _ {fe : (∀ a b → funext a b)}{wd+ : swelldef 𝓥 𝓕⁺} {wd : swelldef 𝓥 𝓕}{X : Type α} {𝒦 : Pred (Algebra α 𝑆) 𝓕} where
 
- open class-products-with-maps {𝓤 = 𝓤}{X}{fe 𝓕 𝓤}{fe 𝓕⁺ 𝓕⁺}{fe 𝓕 𝓕} 𝒦
+ open class-products-with-maps {X = X}{fe 𝓕 α}{fe 𝓕⁺ 𝓕⁺}{fe 𝓕 𝓕} 𝒦
 
 \end{code}
 
@@ -175,7 +186,7 @@ We begin by constructing `ℭ`, using the techniques described in the section on
 
   -- ℭ is the product of all subalgebras of algebras in 𝒦.
  ℭ : Algebra 𝓕 𝑆
- ℭ = ⨅ 𝔄' -- {𝓤 = 𝓤}{𝒦 = 𝒦})
+ ℭ = ⨅ 𝔄' -- {α = α}{𝒦 = 𝒦})
 
 \end{code}
 
@@ -184,7 +195,7 @@ Observe that the inhabitants of `ℭ` are maps from `ℑ` to `{𝔄 i : i ∈ �
 \begin{code}
 
  homℭ : hom (𝑻 X) ℭ
- homℭ = ⨅-hom-co 𝔄' (fe 𝓕 𝓤){𝓕}(𝑻 X) λ i → lift-hom (𝔄' i)(snd ∥ i ∥)
+ homℭ = ⨅-hom-co 𝔄' (fe 𝓕 α){𝓕}(𝑻 X) λ i → lift-hom (𝔄' i)(snd ∥ i ∥)
 
 \end{code}
 
@@ -218,13 +229,13 @@ We will need the following facts relating `homℭ`, `hom𝔽`, `and ψ`.
  ψlemma0 : ∀ p q →  ∣ homℭ ∣ p ≡ ∣ homℭ ∣ q  → (p , q) ∈ ψ 𝒦
  ψlemma0 p q phomℭq 𝑨 sA h = cong-app phomℭq (𝑨 , sA , h)
 
- ψlemma0-ap : {𝑨 : Algebra 𝓤 𝑆}{h : X → ∣ 𝑨 ∣} → 𝑨 ∈ S{𝓤}{𝓤} 𝒦
+ ψlemma0-ap : {𝑨 : Algebra α 𝑆}{h : X → ∣ 𝑨 ∣} → 𝑨 ∈ S{α}{α} 𝒦
   →           kernel ∣ hom𝔽 ∣ ⊆ kernel (free-lift 𝑨 h)
 
  ψlemma0-ap {𝑨}{h} skA {p , q} x = γ where
 
   ν : ∣ homℭ ∣ p ≡ ∣ homℭ ∣ q
-  ν = ker-in-con {ov 𝓤}{ov 𝓤}{𝑻 X}{wd+}(kercon wd {ℭ} homℭ) {p}{q} x
+  ν = ker-in-con {ov α}{ov α}{𝑻 X}{wd+}(kercon wd {ℭ} homℭ) {p}{q} x
 
   γ : (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
   γ = ((ψlemma0 p q) ν) 𝑨 skA h
@@ -236,8 +247,8 @@ We now use `ψlemma0-ap` to prove that every map `h : X → ∣ 𝑨 ∣`, from 
 
 \begin{code}
 
- 𝔽-lift-hom : (𝑨 : Algebra 𝓤 𝑆) → 𝑨 ∈ S{𝓤}{𝓤} 𝒦 → (X → ∣ 𝑨 ∣) → hom 𝔽 𝑨
- 𝔽-lift-hom 𝑨 skA h = fst(HomFactor (fe 𝓕 𝓤)(fe 𝓕⁺ 𝓕⁺) 𝑨 (lift-hom 𝑨 h) hom𝔽 (ψlemma0-ap skA) hom𝔽-is-epic)
+ 𝔽-lift-hom : (𝑨 : Algebra α 𝑆) → 𝑨 ∈ S{α}{α} 𝒦 → (X → ∣ 𝑨 ∣) → hom 𝔽 𝑨
+ 𝔽-lift-hom 𝑨 skA h = fst(HomFactor (fe 𝓕 α)(fe 𝓕⁺ 𝓕⁺) 𝑨 (lift-hom 𝑨 h) hom𝔽 (ψlemma0-ap skA) hom𝔽-is-epic)
 
 \end{code}
 
@@ -263,6 +274,7 @@ Next we define the lift of the natural embedding from `X` into 𝔽. We denote t
 It turns out that the homomorphism so defined is equivalent to `hom𝔽`.
 
 \begin{code}
+ open ≡-Reasoning
 
  hom𝔽-is-lift-hom : ∀ p → ∣ 𝔑 ∣ p ≡ ∣ hom𝔽 ∣ p
  hom𝔽-is-lift-hom (ℊ x) = refl
@@ -289,7 +301,7 @@ We need a three more lemmas before we are ready to tackle our main goal.
    φ = lift-hom 𝑨 h
 
    h≡φ : ∀ t → (∣ f ∣ ∘ ∣ 𝔑 ∣) t ≡ ∣ φ ∣ t
-   h≡φ t = free-unique (fe 𝓥 𝓤) 𝑨 h' φ (λ x → refl) t
+   h≡φ t = free-unique (fe 𝓥 α) 𝑨 h' φ (λ x → refl) t
 
    γ : ∣ φ ∣ p ≡ ∣ φ ∣ q
    γ = ∣ φ ∣ p             ≡⟨ (h≡φ p)⁻¹ ⟩
@@ -309,9 +321,9 @@ We need a three more lemmas before we are ready to tackle our main goal.
  ψlemma3 p q pψq {𝑨} kA = γ
    where
    γ : 𝑨 ⟦ p ⟧ ≡ 𝑨 ⟦ q ⟧
-   γ = fe 𝓤 𝓤 λ h → (𝑨 ⟦ p ⟧) h    ≡⟨ free-lift-interp (fe 𝓥 𝓤) 𝑨 h p ⟩
+   γ = fe α α λ h → (𝑨 ⟦ p ⟧) h    ≡⟨ free-lift-interp (fe 𝓥 α) 𝑨 h p ⟩
                  (free-lift 𝑨 h) p ≡⟨ pψq 𝑨 (siso (sbase kA) (≅-sym Lift-≅)) h ⟩
-                 (free-lift 𝑨 h) q ≡⟨ (free-lift-interp (fe 𝓥 𝓤) 𝑨 h q)⁻¹  ⟩
+                 (free-lift 𝑨 h) q ≡⟨ (free-lift-interp (fe 𝓥 α) 𝑨 h q)⁻¹  ⟩
                  (𝑨 ⟦ q ⟧) h       ∎
 
 \end{code}
@@ -324,12 +336,12 @@ With these results in hand, it is now trivial to prove the main theorem of this 
  class-models-kernel p q hyp = ψlemma3 p q (ψlemma2 hyp)
 
  𝕍𝒦 : Pred (Algebra 𝓕⁺ 𝑆) (lsuc 𝓕⁺)
- 𝕍𝒦 = V{𝓤}{𝓕⁺} 𝒦
+ 𝕍𝒦 = V{α}{𝓕⁺} 𝒦
 
  kernel-in-theory : kernel ∣ hom𝔽 ∣ ⊆ Th (V 𝒦)
  kernel-in-theory {p , q} pKq = (class-ids-⇒ {fe = fe} p q (class-models-kernel p q pKq))
 
- _↠_ : Type 𝓤 → Algebra 𝓕⁺ 𝑆 → Type 𝓕⁺
+ _↠_ : Type α → Algebra 𝓕⁺ 𝑆 → Type 𝓕⁺
  X ↠ 𝑨 = Σ[ h ∈ (X → ∣ 𝑨 ∣) ] IsSurjective h
 
  𝔽-ModTh-epi : (𝑨 : Algebra 𝓕⁺ 𝑆) → (X ↠ 𝑨) → 𝑨 ∈ Mod (Th 𝕍𝒦) → epi 𝔽 𝑨
@@ -365,7 +377,7 @@ Finally we come to one of the main theorems of this module; it asserts that ever
 
 \begin{code}
 
- module _ (pe : pred-ext (ov 𝓤)(ov 𝓤))(wd : swelldef 𝓥 𝓕)                      -- extensionality assumptions
+ module _ (pe : pred-ext (ov α)(ov α))(wd : swelldef 𝓥 𝓕)                      -- extensionality assumptions
           (Cset : is-set ∣ ℭ ∣)(kuip : blk-uip(Term X)∣ kercon wd{ℭ}homℭ ∣) -- truncation assumptions
   where
 
@@ -389,11 +401,11 @@ With this result in hand, along with what we proved earlier---namely, `PS(𝒦) 
 
 \begin{code}
 
-  𝔽∈SP : hfunext (ov 𝓤)(ov 𝓤) → 𝔽 ∈ (S{𝓕}{𝓕⁺} (P{𝓤}{𝓕} 𝒦))
+  𝔽∈SP : hfunext (ov α)(ov α) → 𝔽 ∈ (S{𝓕}{𝓕⁺} (P{α}{𝓕} 𝒦))
   𝔽∈SP hfe = ssub (class-prod-s-∈-sp hfe) 𝔽≤ℭ
 
-  𝔽∈𝕍 : hfunext (ov 𝓤)(ov 𝓤) → 𝔽 ∈ V 𝒦
-  𝔽∈𝕍 hfe = SP⊆V' {𝓤}{fe 𝓕 𝓤}{fe 𝓕⁺ 𝓕⁺}{fe 𝓕 𝓕}{𝒦} (𝔽∈SP hfe)
+  𝔽∈𝕍 : hfunext (ov α)(ov α) → 𝔽 ∈ V 𝒦
+  𝔽∈𝕍 hfe = SP⊆V' {α}{fe 𝓕 α}{fe 𝓕⁺ 𝓕⁺}{fe 𝓕 𝓕}{𝒦} (𝔽∈SP hfe)
 
 \end{code}
 
@@ -403,7 +415,7 @@ Now that we have all of the necessary ingredients, it is all but trivial to comb
 
 \begin{code}
 
-  Birkhoff : hfunext (ov 𝓤)(ov 𝓤) → (∀ 𝑨 → X ↠ 𝑨) → Mod (Th (V 𝒦)) ⊆ V 𝒦
+  Birkhoff : hfunext (ov α)(ov α) → (∀ 𝑨 → X ↠ 𝑨) → Mod (Th (V 𝒦)) ⊆ V 𝒦
 
   Birkhoff hfe 𝕏 {𝑨} α = vhimg{𝑩 = 𝑨} (𝔽∈𝕍 hfe) (𝑨 , epi-to-hom 𝑨 φE , snd ∥ φE ∥)
    where
@@ -416,7 +428,7 @@ The converse inclusion, `V 𝒦 ⊆ Mod X (Th (V 𝒦))`, is a simple consequenc
 
 \begin{code}
 
-  Birkhoff-converse : V{𝓤}{𝓕} 𝒦 ⊆ Mod{𝓧 = 𝓤}{X = X} (Th (V 𝒦))
+  Birkhoff-converse : V{α}{𝓕} 𝒦 ⊆ Mod{𝓧 = α}{X = X} (Th (V 𝒦))
   Birkhoff-converse α p q pThq = pThq α
 
 \end{code}

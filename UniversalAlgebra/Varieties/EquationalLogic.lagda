@@ -35,26 +35,20 @@ open import Relation.Unary          using    ( _∈_ ; Pred ; _⊆_ )
 
 
 -- imports from agda-algebras --------------------------------------------------------------
-open import Overture.Preliminaries            using ( _⁻¹ ; ∣_∣ ; ∥_∥ ; 𝑖𝑑 )
-open import Overture.Inverses                 using (IsInjective)
-open import Relations.Truncation              using ( hfunext )
+open import Overture.Preliminaries       using ( ∣_∣ ; ∥_∥ )
+open import Overture.Inverses            using (IsInjective)
+open import Relations.Truncation         using ( hfunext )
 
-open import Algebras.Products         {𝑆 = 𝑆} using ( ov ; ⨅ ; 𝔄 ; class-product)
-open import Homomorphisms.Basic       {𝑆 = 𝑆} using (hom; 𝒾𝒹; ∘-hom; is-homomorphism)
-open import Homomorphisms.Isomorphisms{𝑆 = 𝑆} using (_≅_ ; ≅-sym ; Lift-≅ ; ≅-trans
-                                                    ; ≅-refl ; Lift-alg-iso ; ⨅≅
-                                                    ; Lift-alg-associative ; Lift-alg-⨅≅ )
+open import Algebras.Products          𝑆 using ( ov ; ⨅ ; 𝔄 ; class-product)
+open import Homomorphisms.Basic        𝑆 using (hom; 𝒾𝒹; ∘-hom; is-homomorphism)
+open import Homomorphisms.Isomorphisms 𝑆 using (_≅_ ; ≅-sym ; Lift-≅ ; ≅-trans
+                                               ; ≅-refl ; Lift-alg-iso ; ⨅≅
+                                               ; Lift-alg-associative ; Lift-alg-⨅≅ )
 
-open import Subalgebras.Subalgebras   {𝑆 = 𝑆} using ( _≤_ ; _IsSubalgebraOfClass_ ; Lift-≤-Lift
-                                                    ; SubalgebraOfClass ; iso→injective
-                                                    ; ≤-Lift ; _IsSubalgebraOf_ )
-
--- open import Subalgebras.Subalgebras{𝑆 = 𝑆} using (_≤_; _IsSubalgebraOfClass_; ≤-iso; ≤-refl; Subalgebra; ≤-TRANS-≅; ≤-trans; ; ≤-Lift; _IsSubalgebraOf_)
-
-
+open import Subalgebras.Subalgebras    𝑆 using ( _≤_ ; _IsSubalgebraOfClass_ ; Lift-≤-Lift
+                                               ; SubalgebraOfClass ; iso→injective
+                                               ; ≤-Lift ; _IsSubalgebraOf_ )
 private variable α β γ : Level
-
-
 
 import Varieties.Closure.H 𝑆 as VC-H
 import Varieties.Closure.S 𝑆 as VC-S

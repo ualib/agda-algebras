@@ -2,10 +2,14 @@
 layout: default
 title : Varieties.Closure.V module (The Agda Universal Algebra Library)
 date : 2021-01-14
-author: the agda-algebras development team
+author: [the ualib/agda-algebras development team][]
 ---
 
 ### <a id="the-inductive-types-v">The Inductive Types V</a>
+
+A class 𝒦 of 𝑆-algebras is called a **variety** if it is closed under each of the closure operators H, S, and P introduced elsewhere; the corresponding closure operator is often denoted 𝕍, but we will denote it by `V`.
+
+We now define `V` as an inductive type which is hand-crafted to contain all the parts of H, S and P, under different names.
 
 \begin{code}
 
@@ -14,41 +18,21 @@ author: the agda-algebras development team
 open import Level using ( Level ; Lift )
 open import Algebras.Basic
 
-
 module Varieties.Closure.V {𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
-
 
 open import Axiom.Extensionality.Propositional renaming ( Extensionality to funext )
 open import Agda.Primitive   using    ( _⊔_ ;  lsuc )
                              renaming ( Set to Type )
+open import Data.Product     using    ( _,_ ; Σ-syntax )
+open import Relation.Unary   using    ( Pred ; _∈_ ; _⊆_)
 
-open import Data.Product     using    ( _,_ ; Σ-syntax ; Σ ; _×_ )
-                             renaming ( proj₁ to fst
-                                      ; proj₂ to snd )
-
-open import Relation.Unary   using    ( _∈_ ; Pred; _⊆_)
-
-
-open import Overture.Preliminaries                 using ( _⁻¹ ; ∣_∣ ; ∥_∥ ; 𝑖𝑑 )
-open import Overture.Inverses                      using ( IsSurjective )
-open import Algebras.Products              {𝑆 = 𝑆} using ( ov ; ⨅ ; 𝔄 ; class-product )
-open import Homomorphisms.Basic            {𝑆 = 𝑆} using ( hom )
-open import Homomorphisms.HomomorphicImages{𝑆 = 𝑆} using ( HomImages ; IsHomImage ; Lift-alg-hom-image )
-open import Homomorphisms.Isomorphisms     {𝑆 = 𝑆} using ( _≅_ ; Lift-alg-associative ; Lift-≅ ; Lift-hom
+open import Overture.Preliminaries            using ( ∣_∣ ; ∥_∥ )
+open import Algebras.Products               𝑆 using ( ov ; ⨅ )
+open import Homomorphisms.HomomorphicImages 𝑆 using ( HomImages ; IsHomImage ; Lift-alg-hom-image )
+open import Homomorphisms.Isomorphisms      𝑆 using ( _≅_ ; Lift-alg-associative ; Lift-≅ ; Lift-hom
                                                          ; Lift-alg-⨅≅ ; ≅-sym ; Lift-alg-iso )
-open import Subalgebras.Subalgebras        {𝑆 = 𝑆} using ( _≤_ ; _IsSubalgebraOfClass_ ; ≤-iso ; ≤-refl
-                                                         ; Subalgebra ; ≤-TRANS-≅ ; ≤-trans ; Lift-≤-Lift )
+open import Subalgebras.Subalgebras         𝑆 using ( _≤_ ; Lift-≤-Lift )
 
-\end{code}
-
-
-#### <a id="varietal-closure">Varietal closure</a>
-
-A class 𝒦 of 𝑆-algebras is called a **variety** if it is closed under each of the closure operators H, S, and P introduced elsewhere; the corresponding closure operator is often denoted 𝕍, but we will denote it by `V`.
-
-We now define `V` as an inductive type which is hand-crafted to contain all the parts of H, S and P, under different names.
-
-\begin{code}
 
 data V {α β : Level}(𝒦 : Pred(Algebra α 𝑆)(ov α)) : Pred(Algebra(α ⊔ β)𝑆)(ov(α ⊔ β))
  where
@@ -86,7 +70,6 @@ As mentioned earlier, a technical hurdle that must be overcome when formalizing 
 \begin{code}
 
 open Level
-
 
 module Vlift {α : Level} {fe₀ : funext (ov α) α}
              {fe₁ : funext ((ov α) ⊔ (lsuc (ov α))) (lsuc (ov α))}
@@ -147,5 +130,10 @@ module Vlift {α : Level} {fe₀ : funext (ov α) α}
 
 \end{code}
 
+--------------------------------------
 
 {% include UALib.Links.md %}
+
+--------------------------------------
+
+[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team

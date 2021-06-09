@@ -19,10 +19,11 @@ open import Level using ( Level )
 open import Algebras.Basic
 
 
-module Terms.Operations {𝓞 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
+module Terms.Operations {𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
 
 
 
+-- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
 open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
 open import Relation.Binary.PropositionalEquality using ( cong ; module ≡-Reasoning )
 open import Function.Base  using (_∘_)
@@ -36,13 +37,15 @@ open import Data.Product            using    ( _,_ ; Σ-syntax ; Σ )
 
 
 
-open import Algebras.Products  {𝑆 = 𝑆} using ( ov ; ⨅ )
-open import Algebras.Congruences{𝑆 = 𝑆} using (Con; IsCongruence)
-open import Homomorphisms.Basic {𝑆 = 𝑆} using (hom)
-open import Overture.Preliminaries using (_∙_;_⁻¹; ∣_∣; ∥_∥)
-open import Terms.Basic {𝑆 = 𝑆}
-open import Relations.Discrete using (_|:_)
+-- Imports from agda-algebras --------------------------------------------------------------
+open import Overture.Preliminaries using ( _∙_ ; _⁻¹ ; ∣_∣ ; ∥_∥ )
+open import Relations.Discrete     using ( _|:_ )
+open import Algebras.Products    𝑆 using ( ov ; ⨅ )
+open import Algebras.Congruences 𝑆 using ( Con ; IsCongruence)
+open import Homomorphisms.Basic  𝑆 using ( hom)
+open import Terms.Basic          𝑆 using ( Term ; free-lift ; 𝑻 )
 
+open Term
 
 private variable α β γ ρ 𝓧 : Level
 \end{code}

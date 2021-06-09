@@ -17,8 +17,10 @@ Here we formalize the informal notion of isomorphism between algebraic structure
 open import Level using ( Level ; Lift )
 open import Algebras.Basic
 
-module Homomorphisms.Isomorphisms {𝓞 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥}  where
+module Homomorphisms.Isomorphisms {𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥)  where
 
+
+-- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
 open import Axiom.Extensionality.Propositional    renaming (Extensionality to funext )
 open import Agda.Primitive                        using    ( _⊔_    ;   lsuc      )
                                                   renaming ( Set    to  Type      )
@@ -31,12 +33,12 @@ open import Function.Base                         using    ( _∘_              
 open import Relation.Binary.PropositionalEquality using    ( cong   ;   cong-app  )
 
 
-open import Algebras.Products   {𝑆 = 𝑆}  using ( ⨅ )
-open import Homomorphisms.Basic {𝑆 = 𝑆}  using ( hom ; kercon ; ker[_⇒_]_↾_ ; πker
-                                               ; is-homomorphism ; epi ; epi-to-hom
-                                               ; 𝒾𝒹 ; ∘-hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; ∘-is-hom   )
-open import Overture.Preliminaries       using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; _∼_ ; transport ; _∙_
-                                               ; lower∼lift ; lift∼lower                  )
+-- Imports from agda-algebras --------------------------------------------------------------
+open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; _∼_ ; transport ; _∙_
+                                         ; lower∼lift ; lift∼lower )
+open import Algebras.Products    𝑆 using ( ⨅ )
+open import Homomorphisms.Basic  𝑆 using ( hom ; kercon ; ker[_⇒_]_↾_ ; πker ; 𝒾𝒹 ; ∘-hom
+                                         ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-homomorphism ; ∘-is-hom )
 
 private variable α β γ : Level
 

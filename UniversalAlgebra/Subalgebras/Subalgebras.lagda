@@ -17,7 +17,7 @@ open import Level using ( Level )
 open import Algebras.Basic
 
 
-module Subalgebras.Subalgebras {𝓞 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
+module Subalgebras.Subalgebras {𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
 
 
 -- imports from Agda and the Agda Standard Library ------------------------------------
@@ -34,16 +34,16 @@ open import
 open import Relation.Unary             using    ( _∈_ ; Pred ; _⊆_ )
 
 -- imports from agda-algebras --------------------------------------------------------------
-open import Overture.Preliminaries     using ( _∙_ ; _⁻¹ ; ∣_∣ ; ∥_∥ ; 𝑖𝑑 )
-open import Overture.Inverses          using ( ∘-injective ; IsInjective ; id-is-injective )
-open import Relations.Truncation       using ( is-set ; blk-uip )
-open import Relations.Extensionality   using ( swelldef ; pred-ext )
-open import Algebras.Products  {𝑆 = 𝑆} using ( ov )
-open import Homomorphisms.Basic{𝑆 = 𝑆} using ( hom ; kercon ; ker[_⇒_]_↾_
-                                             ; ∘-hom ; is-homomorphism ; ∘-is-hom )
-open import Homomorphisms.Noether      using ( FirstHomTheorem|Set )
-open import Homomorphisms.Isomorphisms using ( _≅_ ; ≅-sym ; ≅-trans ; Lift-≅ )
-open import Terms.Basic        {𝑆 = 𝑆} using ( Term ; ℊ ; node ; 𝑻 )
+open import Overture.Preliminaries       using ( _∙_ ; _⁻¹ ; ∣_∣ ; ∥_∥ ; 𝑖𝑑 )
+open import Overture.Inverses            using ( ∘-injective ; IsInjective ; id-is-injective )
+open import Relations.Truncation         using ( is-set ; blk-uip )
+open import Relations.Extensionality     using ( swelldef ; pred-ext )
+open import Algebras.Products          𝑆 using ( ov )
+open import Homomorphisms.Basic        𝑆 using ( hom ; kercon ; ker[_⇒_]_↾_
+                                               ; ∘-hom ; is-homomorphism ; ∘-is-hom )
+open import Homomorphisms.Noether      𝑆 using ( FirstHomTheorem|Set )
+open import Homomorphisms.Isomorphisms 𝑆 using ( _≅_ ; ≅-sym ; ≅-trans ; Lift-≅ )
+open import Terms.Basic                𝑆 using ( Term ; ℊ ; node ; 𝑻 )
 
 private variable α β γ 𝓧 : Level
 \end{code}

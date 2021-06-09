@@ -18,7 +18,7 @@ The theoretical background that begins each subsection below is based on Cliff B
 open import Level using ( Level )
 open import Algebras.Basic
 
-module Terms.Basic {𝓞 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
+module Terms.Basic {𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
 
 
 open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
@@ -33,11 +33,11 @@ open import Function.Base           using    ( _∘_         )
 
 
 
-open import Overture.Preliminaries      using ( _⁻¹ ; 𝑖𝑑 ; ∣_∣ ; ∥_∥)
-open import Overture.Inverses           using ( IsSurjective ; Inv
-                                              ; InvIsInv ; Image_∋_; eq )
-open import Algebras.Products   {𝑆 = 𝑆} using ( ov )
-open import Homomorphisms.Basic {𝑆 = 𝑆} using ( hom )
+open import Overture.Preliminaries  using ( _⁻¹ ; 𝑖𝑑 ; ∣_∣ ; ∥_∥)
+open import Overture.Inverses       using ( IsSurjective ; Inv
+                                          ; InvIsInv ; Image_∋_; eq )
+open import Algebras.Products     𝑆 using ( ov )
+open import Homomorphisms.Basic   𝑆 using ( hom )
 
 private variable α β χ : Level
 

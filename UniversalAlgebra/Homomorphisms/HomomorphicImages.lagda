@@ -16,27 +16,29 @@ This section describes the [Homomorphisms.HomomorphicImages][] module of the [Ag
 open import Level using ( Level ; Lift )
 open import Algebras.Basic
 
-module Homomorphisms.HomomorphicImages {𝓞 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
+module Homomorphisms.HomomorphicImages {𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
 
-open import Agda.Primitive  using    ( _⊔_ ; lsuc )
-                            renaming ( Set to Type )
 
-open import Agda.Builtin.Equality   using    ( _≡_ ; refl )
-open import Data.Product            using    ( _,_ ; Σ-syntax ; Σ ; _×_ )
-                                    renaming ( proj₁ to fst
-                                             ; proj₂ to snd )
+-- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
+open import Agda.Primitive        using    ( _⊔_ ; lsuc )
+                                  renaming ( Set to Type )
+open import Agda.Builtin.Equality using    ( _≡_ ; refl )
+open import Data.Product          using    ( _,_ ; Σ-syntax ; Σ ; _×_ )
+                                  renaming ( proj₁ to fst
+                                           ; proj₂ to snd )
 open import Relation.Binary.PropositionalEquality.Core
-                                    using    ( cong ; cong-app ; module ≡-Reasoning )
-open import Relation.Unary          using    ( Pred ; _∈_ )
+                                  using    ( cong ; cong-app ; module ≡-Reasoning )
+open import Relation.Unary        using    ( Pred ; _∈_ )
 
 
-open import Overture.Preliminaries             using ( _⁻¹ ; 𝑖𝑑 ; ∣_∣ ; ∥_∥
-                                                     ; lower∼lift ; lift∼lower )
-open import Overture.Inverses                  using ( IsSurjective ; Image_∋_
-                                                     ; Inv ; InvIsInv ; eq )
-open import Algebras.Products          {𝑆 = 𝑆} using ( ov )
-open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 )
-open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( Lift-hom )
+-- Imports from agda-algebras --------------------------------------------------------------
+open import Overture.Preliminaries       using ( _⁻¹ ; 𝑖𝑑 ; ∣_∣ ; ∥_∥
+                                               ; lower∼lift ; lift∼lower )
+open import Overture.Inverses            using ( IsSurjective ; Image_∋_
+                                               ; Inv ; InvIsInv ; eq )
+open import Algebras.Products          𝑆 using ( ov )
+open import Homomorphisms.Basic        𝑆 using ( hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 )
+open import Homomorphisms.Isomorphisms 𝑆 using ( Lift-hom )
 
 -- private variable α β γ : Level
 

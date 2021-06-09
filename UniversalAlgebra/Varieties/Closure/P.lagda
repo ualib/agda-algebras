@@ -2,10 +2,12 @@
 layout: default
 title : Varieties.Closure.P module (The Agda Universal Algebra Library)
 date : 2021-01-14
-author: the agda-algebras development team
+author: [the ualib/agda-algebras development team][]
 ---
 
 ### <a id="the-inductive-types-p">The Inductive Type P </a>
+
+Here we define the inductive type `P` to represent classes of algebras that is closed under the taking of arbitrary products.
 
 \begin{code}
 
@@ -16,26 +18,14 @@ open import Algebras.Basic
 
 module Varieties.Closure.P {𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
 
+open import Agda.Primitive               using    ( _⊔_ ;  lsuc )
+                                         renaming ( Set to Type )
+open import Data.Product                 using    ( _,_ )
+open import Relation.Unary               using    ( Pred ; _∈_ ; _⊆_ )
+open import Algebras.Products          𝑆 using    ( ov ; ⨅ )
+open import Homomorphisms.Isomorphisms 𝑆 using    ( _≅_ ; ≅-sym ; Lift-≅ ; Lift-alg-iso )
+open import Subalgebras.Subalgebras    𝑆 using    ( _IsSubalgebraOfClass_ ; _≤_ ; Lift-≤-Lift )
 
-open import Agda.Primitive   using    ( _⊔_ ;  lsuc )
-                             renaming ( Set to Type )
-open import Data.Product     using    ( _,_ )
-open import Relation.Unary   using    ( _∈_ ; Pred; _⊆_)
-
-
-open import Algebras.Products{𝑆 = 𝑆} using ( ov ; ⨅ )
-open import Homomorphisms.Isomorphisms{𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; Lift-≅ ; Lift-alg-iso )
-open import Subalgebras.Subalgebras{𝑆 = 𝑆} using (_IsSubalgebraOfClass_ ; _≤_ ; Lift-≤-Lift )
-
--- private variable α β γ : Level
-
-\end{code}
-
-#### <a id="product-closure">Product closure</a>
-
-We define the inductive type `P` to represent classes of algebras that is closed under the taking of arbitrary products.
-
-\begin{code}
 
 data P {α β : Level}(𝒦 : Pred(Algebra α 𝑆)(ov α)) : Pred(Algebra(α ⊔ β)𝑆)(ov(α ⊔ β))
  where
@@ -49,7 +39,7 @@ data P {α β : Level}(𝒦 : Pred(Algebra α 𝑆)(ov α)) : Pred(Algebra(α �
 \end{code}
 
 
-#### <a id="closure-properties">Closure properties</a>
+#### <a id="closure-properties-of-P">Closure properties of P</a>
 
 `P` is a closure operator.  This is proved by checking that `P` is *monotone*, *expansive*, and *idempotent*. The meaning of these terms will be clear from the definitions of the types that follow.
 
@@ -121,10 +111,9 @@ module _ {α β : Level}{𝒦 : Pred (Algebra α 𝑆)(ov α)} where
 
 \end{code}
 
-
+--------------------------------------
 
 {% include UALib.Links.md %}
-
 
 --------------------------------------
 

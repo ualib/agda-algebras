@@ -35,7 +35,7 @@ We also prove some closure and invariance properties of ⊧.  In particular, we 
 open import Level using ( Level )
 open import Algebras.Basic
 
-module Varieties.Basic {𝓞 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
+module Varieties.Basic {𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
 
 
 -- imports from Agda and the Agda Standard Library -------------------------------------------
@@ -56,15 +56,15 @@ open import Relation.Unary          using    ( Pred ; _∈_ ; _⊆_ ; ⋂ )
 
 
 -- imports from agda-algebras --------------------------------------------------------------
-open import Overture.Preliminaries        using ( _⁻¹ ; ∣_∣ ; ∥_∥ ; 𝑖𝑑 )
-open import Overture.Inverses             using ( IsInjective ; ∘-injective )
-open import Algebras.Products     {𝑆 = 𝑆} using ( ov ; ⨅ )
-open import Homomorphisms.Basic   {𝑆 = 𝑆} using ( hom; 𝒾𝒹 ; ∘-hom ; is-homomorphism )
-open import Homomorphisms.Isomorphisms    using ( _≅_ ; ≅-sym ; ≅-trans ; Lift-≅ )
-open import Terms.Basic           {𝑆 = 𝑆} using ( Term ; 𝑻 ; lift-hom )
-open import Terms.Operations      {𝑆 = 𝑆} using ( _⟦_⟧ ; comm-hom-term
-                                                ; interp-prod ; term-agreement )
-open import Subalgebras.Subalgebras{𝑆 = 𝑆}using ( _≤_ ; SubalgebraOfClass ; iso→injective )
+open import Overture.Preliminaries       using ( ∣_∣ ; ∥_∥ ; 𝑖𝑑 ; _⁻¹ )
+open import Overture.Inverses            using ( IsInjective ; ∘-injective )
+open import Algebras.Products          𝑆 using ( ov ; ⨅ )
+open import Homomorphisms.Basic        𝑆 using ( hom; 𝒾𝒹 ; ∘-hom ; is-homomorphism )
+open import Homomorphisms.Isomorphisms 𝑆 using ( _≅_ ; ≅-sym ; ≅-trans ; Lift-≅ )
+open import Terms.Basic                𝑆 using ( Term ; 𝑻 ; lift-hom )
+open import Terms.Operations           𝑆 using ( _⟦_⟧ ; comm-hom-term
+                                               ; interp-prod ; term-agreement )
+open import Subalgebras.Subalgebras    𝑆 using ( _≤_ ; SubalgebraOfClass ; iso→injective )
 open Term
 
 private variable α β 𝓧 : Level
@@ -318,6 +318,23 @@ module _ {X : Type 𝓧}{𝒦 : Pred (Algebra α 𝑆)(ov α)}  where
 <span style="float:right;">[Varieties.Varieties →](Varieties.Varieties.html)</span>
 
 {% include UALib.Links.md %}
+
+
+--------------------------------------
+
+[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
