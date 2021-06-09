@@ -40,8 +40,6 @@ open import Algebras.Products          𝑆 using ( ov )
 open import Homomorphisms.Basic        𝑆 using ( hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 )
 open import Homomorphisms.Isomorphisms 𝑆 using ( Lift-hom )
 
--- private variable α β γ : Level
-
 \end{code}
 
 
@@ -50,7 +48,9 @@ open import Homomorphisms.Isomorphisms 𝑆 using ( Lift-hom )
 We begin with what seems, for our purposes, the most useful way to represent the class of *homomorphic images* of an algebra in dependent type theory.
 
 \begin{code}
+
 module _ {α β : Level } where
+
  IsHomImage : {𝑨 : Algebra α 𝑆}(𝑩 : Algebra β 𝑆) → Type(𝓞 ⊔ 𝓥 ⊔ α ⊔ β)
  IsHomImage {𝑨 = 𝑨} 𝑩 = Σ[ φ ∈ hom 𝑨 𝑩 ] IsSurjective ∣ φ ∣ -- λ b → Image ∣ ϕ ∣ ∋ b
 

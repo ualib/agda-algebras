@@ -37,7 +37,6 @@ open import Relation.Binary.PropositionalEquality
                                     using    ( cong ; cong-app ; module ≡-Reasoning )
 open import Relation.Unary          using    ( Pred ; _∈_ ; _⊆_ ; ｛_｝ ; _∪_ )
 
-
 -- Imports from the Agda Universal Algebra Library -------------------------------------------
 open import Overture.Preliminaries       using ( ∣_∣ ; ∥_∥ ; _∙_ ; _⁻¹ )
 open import Overture.Inverses            using ( IsSurjective )

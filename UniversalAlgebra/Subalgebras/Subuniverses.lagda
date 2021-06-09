@@ -30,13 +30,13 @@ open import Function.Base           using    ( _∘_ )
 open import Relation.Unary          using    ( Pred ; _∈_ ; _⊆_ ; ⋂ )
 
 -- imports from agda-algebras
-open import Overture.Preliminaries      using (∣_∣; ∥_∥; _⁻¹) -- _∙_;
-open import Relations.Discrete          using (Im_⊆_)
-open import Relations.Extensionality    using (swelldef)
-open import Algebras.Products   {𝑆 = 𝑆} using ( ov )
-open import Terms.Basic         {𝑆 = 𝑆} using ( Term ; ℊ ; node )
-open import Terms.Operations    {𝑆 = 𝑆} using ( _⟦_⟧ )
-open import Homomorphisms.Basic {𝑆 = 𝑆} using ( hom )
+open import Overture.Preliminaries   using (∣_∣; ∥_∥; _⁻¹)
+open import Relations.Discrete       using (Im_⊆_)
+open import Relations.Extensionality using (swelldef)
+open import Algebras.Products      𝑆 using ( ov )
+open import Terms.Basic            𝑆 using ( Term ; ℊ ; node )
+open import Terms.Operations       𝑆 using ( _⟦_⟧ )
+open import Homomorphisms.Basic    𝑆 using ( hom )
 
 private variable α β 𝓧 : Level
 
