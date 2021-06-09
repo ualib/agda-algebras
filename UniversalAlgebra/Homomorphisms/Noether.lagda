@@ -13,7 +13,7 @@ This chapter presents the [Homomorphisms.Noether][] module of the [Agda Universa
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Level renaming ( suc to lsuc )
+open import Level using ( Level ; Lift )
 open import Algebras.Basic
 
 
@@ -22,6 +22,8 @@ module Homomorphisms.Noether {𝓞 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} wh
 
 open import Axiom.Extensionality.Propositional    using    ()
                                                   renaming (Extensionality to funext)
+open import Agda.Primitive                        using    ( _⊔_      ;   lsuc  )
+                                                  renaming ( Set      to  Type  )
 open import Agda.Builtin.Equality                 using    ( _≡_      ;   refl  )
 open import Data.Product                          using    ( _,_      ;   Σ
                                                            ; Σ-syntax ;   _×_   )

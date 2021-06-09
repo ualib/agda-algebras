@@ -1,6 +1,6 @@
 ---
 layout: default
-title : Varieties.Algebras.H module (The Agda Universal Algebra Library)
+title : Varieties.Closure.H module (The Agda Universal Algebra Library)
 date : 2021-01-14
 author: the agda-algebras development team
 ---
@@ -11,19 +11,22 @@ author: the agda-algebras development team
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
--- Imports from the Agda Standard Library
-open import Data.Product using (_,_)
-open import Level renaming (suc to lsuc; zero to lzero)
-open import Relation.Unary using (_∈_; Pred)
+open import Level using ( Level ; Lift )
+open import Algebras.Basic
 
--- Imports from the Agda Universal Algebra Library
-open import Algebras.Basic using (Signature; Algebra; Lift-alg)
 
-module Varieties.Algebras.H {𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
+module Varieties.Closure.H {𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
 
-open import Algebras.Products{𝑆 = 𝑆} using (ov)
-open import Homomorphisms.HomomorphicImages{𝑆 = 𝑆} using (HomImages)
-open import Homomorphisms.Isomorphisms{𝑆 = 𝑆} using (_≅_)
+
+open import Agda.Primitive using  ( _⊔_ )
+open import Data.Product   using  ( _,_ )
+open import Relation.Unary using  ( Pred ; _∈_ ; _⊆_ )
+
+
+open import Algebras.Products          {𝑆 = 𝑆} using ( ov ; ⨅ )
+open import Homomorphisms.HomomorphicImages {𝑆 = 𝑆} using ( HomImages )
+
+
 
 \end{code}
 

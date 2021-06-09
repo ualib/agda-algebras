@@ -2,7 +2,7 @@
 layout: default
 title : Subalgebras.Subuniverses module (The Agda Universal Algebra Library)
 date : 2021-01-14
-author: William DeMeo
+author: [the ualib/agda-algebras development team][]
 ---
 
 ### <a id="subuniverses">Subuniverses</a>
@@ -15,32 +15,30 @@ We start by defining a type that represents the important concept of **subuniver
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
--- Imports from Agda (builtin/primitive) and the Agda Standard Library
-open import Agda.Builtin.Equality using (_≡_; refl)
-open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
-open import Data.Product using (_,_; Σ; _×_)
-open import Function.Base  using (_∘_)
-open import Level renaming (suc to lsuc; zero to lzero)
-open import Relation.Binary.PropositionalEquality.Core using (cong; module ≡-Reasoning)
-open ≡-Reasoning
-open import Relation.Unary using (⋂; _∈_; Pred; _⊆_)
-
--- Imports from the Agda Universal Algebra Library
+open import Level using ( Level )
 open import Algebras.Basic
-open import Relations.Discrete using (Im_⊆_)
-open import Overture.Preliminaries
- using (Type; _∙_;_⁻¹; ∣_∣; ∥_∥)
 
 module Subalgebras.Subuniverses {𝓞 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
 
-open import Algebras.Products{𝑆 = 𝑆} using (ov)
-open import Homomorphisms.Basic {𝑆 = 𝑆} using (hom)
-open import Terms.Basic {𝑆 = 𝑆} using (Term; ℊ; node)
-open import Terms.Operations {𝑆 = 𝑆} using (_⟦_⟧)
+-- imports from Agda and the Agda Standard Library
+open import Relation.Binary.PropositionalEquality using ( cong ; module ≡-Reasoning )
+open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
+open import Agda.Primitive          renaming ( Set to Type )
+                                    using    ( _⊔_ ; lsuc )
+open import Agda.Builtin.Equality   using    ( _≡_ ; refl )
+open import Function.Base           using    ( _∘_ )
+open import Relation.Unary          using    ( Pred ; _∈_ ; _⊆_ ; ⋂ )
 
-private
-  variable
-    𝓤 𝓦 𝓧 : Level
+-- imports from agda-algebras
+open import Overture.Preliminaries      using (∣_∣; ∥_∥; _⁻¹) -- _∙_;
+open import Relations.Discrete          using (Im_⊆_)
+open import Relations.Extensionality    using (swelldef)
+open import Algebras.Products   {𝑆 = 𝑆} using ( ov )
+open import Terms.Basic         {𝑆 = 𝑆} using ( Term ; ℊ ; node )
+open import Terms.Operations    {𝑆 = 𝑆} using ( _⟦_⟧ )
+open import Homomorphisms.Basic {𝑆 = 𝑆} using ( hom )
+
+private variable α β 𝓧 : Level
 
 \end{code}
 
@@ -48,7 +46,8 @@ We first show how to represent in [Agda][] the collection of subuniverses of an 
 
 \begin{code}
 
-Subuniverses : (𝑨 : Algebra 𝓤 𝑆) → Pred (Pred ∣ 𝑨 ∣ 𝓦)(𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
+Subuniverses : (𝑨 : Algebra α 𝑆) → Pred (Pred ∣ 𝑨 ∣ β) (𝓞 ⊔ 𝓥 ⊔ α ⊔ β)
+
 Subuniverses 𝑨 B = (𝑓 : ∣ 𝑆 ∣)(𝑎 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣) → Im 𝑎 ⊆ B → (𝑓 ̂ 𝑨) 𝑎 ∈ B
 
 \end{code}
@@ -61,9 +60,9 @@ Next we define a type to represent a single subuniverse of an algebra. If `𝑨`
 
 \begin{code}
 
-record Subuniverse {𝑨 : Algebra 𝓤 𝑆} : Type(ov (𝓤 ⊔ 𝓦)) where
+record Subuniverse {𝑨 : Algebra α 𝑆} : Type(ov (α ⊔ β)) where
  constructor mksub
- field       sset : Pred ∣ 𝑨 ∣ 𝓦
+ field       sset  : Pred ∣ 𝑨 ∣ β
              isSub : sset ∈ Subuniverses 𝑨
 
 \end{code}
@@ -79,17 +78,20 @@ We define an inductive type, denoted by `Sg`, that represents the subuniverse ge
 
 \begin{code}
 
-data Sg (𝑨 : Algebra 𝓤 𝑆)(X : Pred ∣ 𝑨 ∣ 𝓦) : Pred ∣ 𝑨 ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓦 ⊔ 𝓤) where
+data Sg (𝑨 : Algebra α 𝑆)(X : Pred ∣ 𝑨 ∣ β) : Pred ∣ 𝑨 ∣ (𝓞 ⊔ 𝓥 ⊔ α ⊔ β)
+ where
  var : ∀ {v} → v ∈ X → v ∈ Sg 𝑨 X
- app : (𝑓 : ∣ 𝑆 ∣)(𝑎 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣) → Im 𝑎 ⊆ Sg 𝑨 X → (𝑓 ̂ 𝑨) 𝑎 ∈ Sg 𝑨 X
+ app : ∀ f a → Im a ⊆ Sg 𝑨 X → (f ̂ 𝑨) a ∈ Sg 𝑨 X
 
 \end{code}
+
+(The inferred types in the `app` constructor are `f : ∣ 𝑆 ∣` and `a : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣`.)
 
 Given an arbitrary subset `X` of the domain `∣ 𝑨 ∣` of an `𝑆`-algebra `𝑨`, the type `Sg X` does indeed represent a subuniverse of `𝑨`. Proving this using the inductive type `Sg` is trivial, as we see here.
 
 \begin{code}
 
-sgIsSub : {𝑨 : Algebra 𝓤 𝑆}{X : Pred ∣ 𝑨 ∣ 𝓦} → Sg 𝑨 X ∈ Subuniverses 𝑨
+sgIsSub : {𝑨 : Algebra α 𝑆}{X : Pred ∣ 𝑨 ∣ β} → Sg 𝑨 X ∈ Subuniverses 𝑨
 sgIsSub = app
 
 \end{code}
@@ -98,21 +100,21 @@ Next we prove by structural induction that `Sg X` is the smallest subuniverse of
 
 \begin{code}
 
-sgIsSmallest : {𝓡 : Level}(𝑨 : Algebra 𝓤 𝑆){X : Pred ∣ 𝑨 ∣ 𝓦}(Y : Pred ∣ 𝑨 ∣ 𝓡)
+sgIsSmallest : {𝓡 : Level}(𝑨 : Algebra α 𝑆){X : Pred ∣ 𝑨 ∣ β}(Y : Pred ∣ 𝑨 ∣ 𝓡)
  →             Y ∈ Subuniverses 𝑨  →  X ⊆ Y  →  Sg 𝑨 X ⊆ Y
 
 sgIsSmallest _ _ _ XinY (var Xv) = XinY Xv
-sgIsSmallest 𝑨 Y YsubA XinY (app 𝑓 𝑎 SgXa) = Yfa
+sgIsSmallest 𝑨 Y YsubA XinY (app f a SgXa) = Yfa
  where
- IH : Im 𝑎 ⊆ Y
+ IH : Im a ⊆ Y
  IH i = sgIsSmallest 𝑨 Y YsubA XinY (SgXa i)
 
- Yfa : (𝑓 ̂ 𝑨) 𝑎 ∈ Y
- Yfa = YsubA 𝑓 𝑎 IH
+ Yfa : (f ̂ 𝑨) a ∈ Y
+ Yfa = YsubA f a IH
 
 \end{code}
 
-When the element of `Sg X` is constructed as `app 𝑓 𝑎 SgXa`, we may assume (the induction hypothesis) that the arguments in the tuple `𝑎` belong to `Y`. Then the result of applying `𝑓` to `𝑎` also belongs to `Y` since `Y` is a subuniverse.
+When the element of `Sg X` is constructed as `app f a SgXa`, we may assume (the induction hypothesis) that the arguments in the tuple `a` belong to `Y`. Then the result of applying `f` to `a` also belongs to `Y` since `Y` is a subuniverse.
 
 
 
@@ -122,56 +124,58 @@ Here we formalize a few basic properties of subuniverses. First, the intersectio
 
 \begin{code}
 
-sub-intersection : {𝓘 : Level}{𝑨 : Algebra 𝓤 𝑆}{I : Type 𝓘}{𝒜 : I → Pred ∣ 𝑨 ∣ 𝓦}
+sub-intersection : {𝓘 : Level}{𝑨 : Algebra α 𝑆}{I : Type 𝓘}{𝒜 : I → Pred ∣ 𝑨 ∣ β}
  →                 (( i : I ) → 𝒜 i ∈ Subuniverses 𝑨)
                    ----------------------------------
  →                 ⋂ I 𝒜 ∈ Subuniverses 𝑨
 
-sub-intersection α 𝑓 𝑎 β = λ i → α i 𝑓 𝑎 (λ x → β x i)
+sub-intersection σ f a ν = λ i → σ i f a (λ x → ν x i)
 
 \end{code}
 
 In the proof above, we assume the following typing judgments:
 
 ```
- α : ∀ i → 𝒜 i ∈ Subuniverses 𝑨
- 𝑓 : ∣ 𝑆 ∣
- 𝑎 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣
- β : Im 𝑎 ⊆ ⋂ I 𝒜
+ σ : ∀ i → 𝒜 i ∈ Subuniverses 𝑨
+ f : ∣ 𝑆 ∣
+ a : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣
+ ν : Im 𝑎 ⊆ ⋂ I 𝒜
 ```
-and we must prove `(𝑓 ̂ 𝑨) 𝑎 ∈ ⋂ I 𝒜`. In this case, Agda will fill in the proof term `λ i → α i 𝑓 𝑎 (λ x → β x i)` automatically with the command `C-c C-a`.
+and we must prove `(f ̂ 𝑨) a ∈ ⋂ I 𝒜`. In this case, Agda will fill in the proof term `λ i → σ i f a (λ x → ν x i)` automatically with the command `C-c C-a`.
 
 Next, subuniverses are closed under the action of term operations.
 
 \begin{code}
 
-sub-term-closed : {𝓧 : Level}{X : Type 𝓧}(𝑨 : Algebra 𝓤 𝑆){B : Pred ∣ 𝑨 ∣ 𝓦}
+sub-term-closed : {𝓧 : Level}{X : Type 𝓧}(𝑨 : Algebra α 𝑆){B : Pred ∣ 𝑨 ∣ β}
  →                (B ∈ Subuniverses 𝑨) → (t : Term X)(b : X → ∣ 𝑨 ∣)
  →                ((x : X) → (b x ∈ B)) → (𝑨 ⟦ t ⟧)b ∈ B
 
 sub-term-closed 𝑨 AB (ℊ x) b Bb = Bb x
-sub-term-closed 𝑨{B}α(node 𝑓 𝑡)b β = α 𝑓(λ z → (𝑨 ⟦ 𝑡 z ⟧)b) λ x → sub-term-closed 𝑨{B}α(𝑡 x)b β
+
+sub-term-closed 𝑨{B} σ (node f t)b ν =
+  σ f  (λ z → (𝑨 ⟦ t z ⟧) b) λ x → sub-term-closed 𝑨{B} σ (t x) b ν
 
 \end{code}
 
 In the induction step of the foregoing proof, the typing judgments of the premise are the following:
 
 ```
-𝑨   : Algebra 𝓤 𝑆
-B   : Pred ∣ 𝑨 ∣ 𝓦
-α   : B ∈ Subuniverses 𝑨
-𝑓   : ∣ 𝑆 ∣
-𝑡   : ∥ 𝑆 ∥ 𝑓 → Term X
+𝑨   : Algebra α 𝑆
+B   : Pred ∣ 𝑨 ∣ β
+σ   : B ∈ Subuniverses 𝑨
+f   : ∣ 𝑆 ∣
+t   : ∥ 𝑆 ∥ 𝑓 → Term X
 b   : X → ∣ 𝑨 ∣
-β   : ∀ x → b x ∈ B
+ν   : ∀ x → b x ∈ B
 ```
-and the given proof term establishes the goal `𝑨 ⟦ node 𝑓 𝑡 ⟧ b ∈ B`.
+and the given proof term establishes the goal `𝑨 ⟦ node f t ⟧ b ∈ B`.
 
 Alternatively, we could express the preceeding fact using an inductive type representing images of terms.
 
 \begin{code}
 
-data TermImage (𝑨 : Algebra 𝓤 𝑆)(Y : Pred ∣ 𝑨 ∣ 𝓦) : Pred ∣ 𝑨 ∣ (𝓞 ⊔ 𝓥 ⊔ 𝓤 ⊔ 𝓦)
+data TermImage (𝑨 : Algebra α 𝑆)(Y : Pred ∣ 𝑨 ∣ β) : Pred ∣ 𝑨 ∣ (𝓞 ⊔ 𝓥 ⊔ α ⊔ β)
  where
  var : ∀ {y : ∣ 𝑨 ∣} → y ∈ Y → y ∈ TermImage 𝑨 Y
  app : ∀ 𝑓 𝑡 →  ((x : ∥ 𝑆 ∥ 𝑓) → 𝑡 x ∈ TermImage 𝑨 Y)  → (𝑓 ̂ 𝑨) 𝑡 ∈ TermImage 𝑨 Y
@@ -182,10 +186,10 @@ By what we proved above, it should come as no surprise that `TermImage 𝑨 Y` i
 
 \begin{code}
 
-TermImageIsSub : {𝑨 : Algebra 𝓤 𝑆}{Y : Pred ∣ 𝑨 ∣ 𝓦} → TermImage 𝑨 Y ∈ Subuniverses 𝑨
+TermImageIsSub : {𝑨 : Algebra α 𝑆}{Y : Pred ∣ 𝑨 ∣ β} → TermImage 𝑨 Y ∈ Subuniverses 𝑨
 TermImageIsSub = app
 
-Y-onlyif-TermImageY : {𝑨 : Algebra 𝓤 𝑆}{Y : Pred ∣ 𝑨 ∣ 𝓦} → Y ⊆ TermImage 𝑨 Y
+Y-onlyif-TermImageY : {𝑨 : Algebra α 𝑆}{Y : Pred ∣ 𝑨 ∣ β} → Y ⊆ TermImage 𝑨 Y
 Y-onlyif-TermImageY {a} Ya = var Ya
 
 \end{code}
@@ -194,7 +198,7 @@ Since `Sg 𝑨 Y` is the smallest subuniverse containing Y, we obtain the follow
 
 \begin{code}
 
-SgY-onlyif-TermImageY : (𝑨 : Algebra 𝓤 𝑆)(Y : Pred ∣ 𝑨 ∣ 𝓦) → Sg 𝑨 Y ⊆ TermImage 𝑨 Y
+SgY-onlyif-TermImageY : (𝑨 : Algebra α 𝑆)(Y : Pred ∣ 𝑨 ∣ β) → Sg 𝑨 Y ⊆ TermImage 𝑨 Y
 SgY-onlyif-TermImageY 𝑨 Y = sgIsSmallest 𝑨 (TermImage 𝑨 Y) TermImageIsSub Y-onlyif-TermImageY
 
 \end{code}
@@ -205,39 +209,46 @@ Next we prove the important fact that homomorphisms are uniquely determined by t
 
 \begin{code}
 
-hom-unique : funext 𝓥 𝓦 → {𝑨 : Algebra 𝓤 𝑆}{𝑩 : Algebra 𝓦 𝑆}
-             (X : Pred ∣ 𝑨 ∣ 𝓤)  (g h : hom 𝑨 𝑩)
+open ≡-Reasoning
+
+hom-unique : swelldef 𝓥 β → {𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆}
+             (X : Pred ∣ 𝑨 ∣ α)  (g h : hom 𝑨 𝑩)
  →           ((x : ∣ 𝑨 ∣) → (x ∈ X → ∣ g ∣ x ≡ ∣ h ∣ x))
              -------------------------------------------------
  →           (a : ∣ 𝑨 ∣) → (a ∈ Sg 𝑨 X → ∣ g ∣ a ≡ ∣ h ∣ a)
 
-hom-unique _ _ _ _ α a (var x) = α a x
+hom-unique _ _ _ _ σ a (var x) = σ a x
 
-hom-unique fe {𝑨}{𝑩} X g h α fa (app 𝑓 𝒂 β) = ∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂)   ≡⟨ ∥ g ∥ 𝑓 𝒂 ⟩
-                                              (𝑓 ̂ 𝑩)(∣ g ∣ ∘ 𝒂 ) ≡⟨ cong (𝑓 ̂ 𝑩)(fe IH) ⟩
-                                              (𝑓 ̂ 𝑩)(∣ h ∣ ∘ 𝒂)  ≡⟨ ( ∥ h ∥ 𝑓 𝒂 )⁻¹ ⟩
-                                              ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂 )  ∎
- where IH = λ x → hom-unique fe {𝑨}{𝑩} X g h α (𝒂 x) (β x)
+hom-unique wd {𝑨}{𝑩} X g h σ fa (app 𝑓 a ν) = Goal
+ where
+ IH : ∀ x → ∣ g ∣ (a x) ≡ ∣ h ∣ (a x)
+ IH x = hom-unique wd{𝑨}{𝑩} X g h σ (a x) (ν x)
+
+ Goal : ∣ g ∣ ((𝑓 ̂ 𝑨) a) ≡ ∣ h ∣ ((𝑓 ̂ 𝑨) a)
+ Goal = ∣ g ∣ ((𝑓 ̂ 𝑨) a)   ≡⟨ ∥ g ∥ 𝑓 a ⟩
+        (𝑓 ̂ 𝑩)(∣ g ∣ ∘ a ) ≡⟨ wd (𝑓 ̂ 𝑩) (∣ g ∣ ∘ a) (∣ h ∣ ∘ a) IH ⟩
+        (𝑓 ̂ 𝑩)(∣ h ∣ ∘ a)  ≡⟨ ( ∥ h ∥ 𝑓 a )⁻¹ ⟩
+        ∣ h ∣ ((𝑓 ̂ 𝑨) a )  ∎
 
 \end{code}
 
-In the induction step, we have the following typing judgments in the premise:
+In the induction step, the following typing judgments are assumed:
 
 ```
-fe  : funext 𝓥 𝓦
-𝑨   : Algebra 𝓤 𝑆
-𝑩   : Algebra 𝓦 𝑆
-X   : Pred ∣ 𝑨 ∣ 𝓤
+wd  : swelldef 𝓥 β
+𝑨   : Algebra α 𝑆
+𝑩   : Algebra β 𝑆
+X   : Pred ∣ 𝑨 ∣ α
 g h  : hom 𝑨 𝑩
-α   : Π x ꞉ ∣ 𝑨 ∣ , (x ∈ X → ∣ g ∣ x ≡ ∣ h ∣ x)
+σ   : Π x ꞉ ∣ 𝑨 ∣ , (x ∈ X → ∣ g ∣ x ≡ ∣ h ∣ x)
 fa  : ∣ 𝑨 ∣
-fa  = (𝑓 ̂ 𝑨) 𝒂
+fa  = (𝑓 ̂ 𝑨) a
 𝑓   : ∣ 𝑆 ∣
-𝒂   : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣
-β   : Im 𝒂 ⊆ Sg 𝑨 X
+a   : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣
+ν   : Im a ⊆ Sg 𝑨 X
 ```
 
-and, under these assumptions, we proved `∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂) ≡ ∣ h ∣ ((𝑓 ̂ 𝑨) 𝒂)`.
+and, under these assumptions, we proved `∣ g ∣ ((𝑓 ̂ 𝑨) a) ≡ ∣ h ∣ ((𝑓 ̂ 𝑨) a)`.
 
 ---------------------------------
 
@@ -246,3 +257,7 @@ and, under these assumptions, we proved `∣ g ∣ ((𝑓 ̂ 𝑨) 𝒂) ≡ ∣
 
 
 {% include UALib.Links.md %}
+
+------------------------------
+
+[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team

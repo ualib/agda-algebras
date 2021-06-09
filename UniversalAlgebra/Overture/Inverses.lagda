@@ -17,22 +17,19 @@ This is the [Overture.Inverses][] module of the [agda-algebras][] library.
 module Overture.Inverses where
 
 -- Imports from Agda (Builtin) and the Agda Standard Library
-open import Agda.Builtin.Equality using (_≡_; refl)
-open import Agda.Primitive  using (_⊔_)
- renaming ( Set  to Type
-          ; Setω to Typeω )
-open import Level
- renaming ( suc  to lsuc
-          ; zero to ℓ₀   )
-
-open import Data.Product using (_,_; Σ; Σ-syntax)
-open import Function.Base  using (_∘_; id)
+open import Agda.Builtin.Equality       using    ( _≡_ ; refl   )
+open import Agda.Primitive              using    ( _⊔_          )
+                                        renaming ( Set  to Type )
+open import Level                       renaming ( suc  to lsuc )
+open import Data.Product                using    ( _,_ ; Σ
+                                                 ; Σ-syntax     )
+open import Function.Base               using    ( _∘_ ; id     )
 import Function.Definitions as F  -- (for Injective)
-open import Function.Bundles using (_↣_; mk↣)
-open import Function.Construct.Identity using (id-↣)
+open import Function.Bundles            using  ( _↣_ ; mk↣ )
+open import Function.Construct.Identity using  ( id-↣      )
 
 -- Imports from agda-algebras
-open import Overture.Preliminaries using (_⁻¹)
+open import Overture.Preliminaries using ( _⁻¹ )
 
 \end{code}
 

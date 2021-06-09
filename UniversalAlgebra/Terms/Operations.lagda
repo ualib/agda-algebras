@@ -15,7 +15,7 @@ Here we define *term operations* which are simply terms interpreted in a particu
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Level renaming ( suc to lsuc )
+open import Level using ( Level )
 open import Algebras.Basic
 
 
@@ -27,7 +27,7 @@ open import Axiom.Extensionality.Propositional renaming (Extensionality to funex
 open import Relation.Binary.PropositionalEquality using ( cong ; module ≡-Reasoning )
 open import Function.Base  using (_∘_)
 
-open import Agda.Primitive          using    ( _⊔_ )
+open import Agda.Primitive          using    ( _⊔_ ;  lsuc )
                                     renaming ( Set to Type )
 open import Agda.Builtin.Equality   using    ( _≡_ ; refl )
 open import Data.Product            using    ( _,_ ; Σ-syntax ; Σ )

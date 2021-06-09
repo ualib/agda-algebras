@@ -19,8 +19,8 @@ Because a class of structures has a different type than a single structure, we m
 
 module Varieties where
 
+open import Varieties.Base
 open import Varieties.EquationalLogic
-open import Varieties.Varieties
 open import Varieties.Preservation
 open import Varieties.FreeAlgebras
 

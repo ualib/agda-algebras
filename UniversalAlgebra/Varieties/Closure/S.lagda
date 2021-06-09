@@ -1,6 +1,6 @@
 ---
 layout: default
-title : Varieties.Algebras.S module (The Agda Universal Algebra Library)
+title : Varieties.Closure.S module (The Agda Universal Algebra Library)
 date : 2021-01-14
 author: the agda-algebras development team
 ---
@@ -11,20 +11,24 @@ author: the agda-algebras development team
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
--- Imports from the Agda Standard Library
-open import Data.Product using (_,_)
-open import Level renaming (suc to lsuc; zero to lzero)
-open import Relation.Unary using (_∈_; Pred; _⊆_)
 
--- Imports from the Agda Universal Algebra Library
+open import Level renaming ( suc to lsuc )
 open import Algebras.Basic
-open import Overture.Preliminaries using (∣_∣; ∥_∥; snd; fst)
 
-module Varieties.Algebras.S {𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
 
-open import Algebras.Products{𝑆 = 𝑆} using (ov)
-open import Homomorphisms.Isomorphisms{𝑆 = 𝑆} using (_≅_; ≅-sym; Lift-≅; ≅-trans; ≅-refl)
-open import Subalgebras.Subalgebras{𝑆 = 𝑆} using (_≤_; _IsSubalgebraOfClass_; ≤-iso; ≤-refl; Subalgebra; ≤-TRANS-≅; ≤-trans)
+module Varieties.Closure.S {𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
+
+
+open import Data.Product   renaming ( proj₁ to fst
+                                    ; proj₂ to snd )
+open import Relation.Unary using    ( Pred ; _∈_ ; _⊆_ )
+
+
+open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ )
+open import Algebras.Products          {𝑆 = 𝑆} using ( ov ; ⨅ )
+open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; ≅-refl ; ≅-trans ; Lift-≅ )
+open import Subalgebras.Subalgebras    {𝑆 = 𝑆} using (_≤_ ; ≤-iso ; ≤-refl ; ≤-trans ; ≤-TRANS-≅
+                                                     ; _IsSubalgebraOfClass_ ; Subalgebra )
 
 \end{code}
 
@@ -81,7 +85,7 @@ module _ {𝓤 : Level}{𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)} where
 
  S→subalgebra : {𝑩 : Algebra 𝓤 𝑆} → 𝑩 ∈ S{𝓤}{𝓤} 𝒦  →  𝑩 IsSubalgebraOfClass 𝒦
 
- S→subalgebra (sbase{𝑩} x) = 𝑩 , (𝑩 , ≤-refl) , x , (≅-sym Lift-≅)
+ S→subalgebra (sbase{𝑩} x) =  𝑩 , (𝑩 , ≤-refl) , x , (≅-sym Lift-≅)
  S→subalgebra (slift{𝑩} x) = ∣ BS ∣ , SA , ∣ snd ∥ BS ∥ ∣ , ≅-trans (≅-sym Lift-≅) B≅SA
   where
    BS : 𝑩 IsSubalgebraOfClass 𝒦

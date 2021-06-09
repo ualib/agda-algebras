@@ -13,15 +13,15 @@ This section describes the [Homomorphisms.HomomorphicImages][] module of the [Ag
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Level renaming ( suc to lsuc )
+open import Level using ( Level ; Lift )
 open import Algebras.Basic
-
 
 module Homomorphisms.HomomorphicImages {𝓞 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
 
+open import Agda.Primitive  using    ( _⊔_ ; lsuc )
+                            renaming ( Set to Type )
+
 open import Agda.Builtin.Equality   using    ( _≡_ ; refl )
-open import Agda.Primitive          using    ( _⊔_ )
-                                    renaming ( Set to Type )
 open import Data.Product            using    ( _,_ ; Σ-syntax ; Σ ; _×_ )
                                     renaming ( proj₁ to fst
                                              ; proj₂ to snd )
@@ -38,7 +38,7 @@ open import Algebras.Products          {𝑆 = 𝑆} using ( ov )
 open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 )
 open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( Lift-hom )
 
-private variable α β γ : Level
+-- private variable α β γ : Level
 
 \end{code}
 
@@ -48,12 +48,12 @@ private variable α β γ : Level
 We begin with what seems, for our purposes, the most useful way to represent the class of *homomorphic images* of an algebra in dependent type theory.
 
 \begin{code}
+module _ {α β : Level } where
+ IsHomImage : {𝑨 : Algebra α 𝑆}(𝑩 : Algebra β 𝑆) → Type(𝓞 ⊔ 𝓥 ⊔ α ⊔ β)
+ IsHomImage {𝑨 = 𝑨} 𝑩 = Σ[ φ ∈ hom 𝑨 𝑩 ] IsSurjective ∣ φ ∣ -- λ b → Image ∣ ϕ ∣ ∋ b
 
-IsHomImage : {𝑨 : Algebra α 𝑆}(𝑩 : Algebra β 𝑆) → Type(𝓞 ⊔ 𝓥 ⊔ α ⊔ β)
-IsHomImage {𝑨 = 𝑨} 𝑩 = Σ[ φ ∈ hom 𝑨 𝑩 ] IsSurjective ∣ φ ∣ -- λ b → Image ∣ ϕ ∣ ∋ b
-
-HomImages : Algebra α 𝑆 → Type(𝓞 ⊔ 𝓥 ⊔ α ⊔ lsuc β)
-HomImages {β = β}𝑨 = Σ[ 𝑩 ∈ Algebra β 𝑆 ] IsHomImage{𝑨 = 𝑨} 𝑩
+ HomImages : Algebra α 𝑆 → Type(𝓞 ⊔ 𝓥 ⊔ α ⊔ lsuc β)
+ HomImages 𝑨 = Σ[ 𝑩 ∈ Algebra β 𝑆 ] IsHomImage{𝑨 = 𝑨} 𝑩
 
 \end{code}
 
@@ -85,16 +85,18 @@ Here are some tools that have been useful (e.g., in the road to the proof of Bir
 
 \begin{code}
 
-open Lift
-open ≡-Reasoning
+module _ {α β : Level} where
 
-Lift-epi-is-epi : {𝑨 : Algebra α 𝑆}(𝑩 : Algebra β 𝑆)(h : hom 𝑨 𝑩)
- →                IsSurjective ∣ h ∣ → IsSurjective ∣ Lift-hom γ β 𝑩 h ∣
+ open Level
+ open ≡-Reasoning
 
-Lift-epi-is-epi {β = β}{γ}{𝑨} 𝑩 h hepi y = eq (lift a) η
+ Lift-epi-is-epi : {𝑨 : Algebra α 𝑆}(ℓᵃ : Level){𝑩 : Algebra β 𝑆}(ℓᵇ : Level)(h : hom 𝑨 𝑩)
+  →                IsSurjective ∣ h ∣ → IsSurjective ∣ Lift-hom ℓᵃ {𝑩} ℓᵇ h ∣
+
+ Lift-epi-is-epi {𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ h hepi y = eq (lift a) η
   where
-   lh : hom (Lift-alg 𝑨 γ) (Lift-alg 𝑩 β)
-   lh = Lift-hom γ β 𝑩 h
+   lh : hom (Lift-alg 𝑨 ℓᵃ) (Lift-alg 𝑩 ℓᵇ)
+   lh = Lift-hom ℓᵃ {𝑩} ℓᵇ h
 
    ζ : Image ∣ h ∣ ∋ (lower y)
    ζ = hepi (lower y)
@@ -102,7 +104,7 @@ Lift-epi-is-epi {β = β}{γ}{𝑨} 𝑩 h hepi y = eq (lift a) η
    a : ∣ 𝑨 ∣
    a = Inv ∣ h ∣ ζ
 
-   ν : lift (∣ h ∣ a) ≡ ∣ Lift-hom γ β 𝑩 h ∣ (lift a)
+   ν : lift (∣ h ∣ a) ≡ ∣ Lift-hom ℓᵃ {𝑩} ℓᵇ h ∣ (Level.lift a)
    ν = cong (λ - → lift (∣ h ∣ (- a))) (lower∼lift {level-of-alg 𝑨}{β})
 
    η : y ≡ ∣ lh ∣ (lift a)
@@ -111,19 +113,18 @@ Lift-epi-is-epi {β = β}{γ}{𝑨} 𝑩 h hepi y = eq (lift a) η
        lift (∣ h ∣ a)  ≡⟨ ν ⟩
        ∣ lh ∣ (lift a) ∎
 
+ Lift-alg-hom-image : {𝑨 : Algebra α 𝑆}(ℓᵃ : Level){𝑩 : Algebra β 𝑆}(ℓᵇ : Level)
+  →                   IsHomImage {𝑨 = 𝑨} 𝑩
+  →                   IsHomImage {𝑨 = Lift-alg 𝑨 ℓᵃ} (Lift-alg 𝑩 ℓᵇ)
 
-Lift-alg-hom-image : {𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆}
- →                   IsHomImage {𝑨 = 𝑨} 𝑩
- →                   IsHomImage {𝑨 = Lift-alg 𝑨 γ} (Lift-alg 𝑩 β)
-
-Lift-alg-hom-image {β = β}{γ}{𝑨}{𝑩} ((φ , φhom) , φepic) = Goal
- where
-  lφ : hom (Lift-alg 𝑨 γ) (Lift-alg 𝑩 β)
-  lφ = Lift-hom γ β 𝑩 (φ , φhom)
+ Lift-alg-hom-image {𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ ((φ , φhom) , φepic) = Goal
+  where
+  lφ : hom (Lift-alg 𝑨 ℓᵃ) (Lift-alg 𝑩 ℓᵇ)
+  lφ = Lift-hom ℓᵃ {𝑩} ℓᵇ (φ , φhom)
 
   lφepic : IsSurjective ∣ lφ ∣
-  lφepic = Lift-epi-is-epi 𝑩 (φ , φhom) φepic
-  Goal : IsHomImage (Lift-alg 𝑩 β)
+  lφepic = Lift-epi-is-epi ℓᵃ {𝑩} ℓᵇ (φ , φhom) φepic
+  Goal : IsHomImage (Lift-alg 𝑩 ℓᵇ)
   Goal = lφ , lφepic
 
 \end{code}

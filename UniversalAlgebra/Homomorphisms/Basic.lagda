@@ -13,7 +13,7 @@ This section describes the [Homomorphisms.Basic] module of the [Agda Universal A
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Level renaming ( suc to lsuc )
+open import Level using ( Level ; Lift )
 open import Algebras.Basic
 
 module Homomorphisms.Basic {𝓞 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥} where
@@ -23,7 +23,7 @@ open import Axiom.Extensionality.Propositional    using    ()
                                                   renaming (Extensionality to funext)
 
 open import Agda.Builtin.Equality                 using    ( _≡_      ;   refl  )
-open import Agda.Primitive                        using    ( _⊔_                )
+open import Agda.Primitive                        using    ( _⊔_      ;   lsuc  )
                                                   renaming ( Set      to  Type  )
 open import Data.Product                          using    ( _,_      ;   Σ
                                                            ; Σ-syntax ;   _×_   )
@@ -120,7 +120,7 @@ Next, `lift` and `lower`, defined in the [Overture.Lifts][] module, are (the map
 
 \begin{code}
 
-open Lift
+open Level
 
 𝓁𝒾𝒻𝓉 : {β : Level}{𝑨 : Algebra α 𝑆} → hom 𝑨 (Lift-alg 𝑨 β)
 𝓁𝒾𝒻𝓉 = lift , λ 𝑓 𝑎 → refl

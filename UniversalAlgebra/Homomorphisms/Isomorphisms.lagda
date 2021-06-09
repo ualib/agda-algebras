@@ -14,13 +14,13 @@ Here we formalize the informal notion of isomorphism between algebraic structure
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Level renaming ( suc to lsuc )
+open import Level using ( Level ; Lift )
 open import Algebras.Basic
 
 module Homomorphisms.Isomorphisms {𝓞 𝓥 : Level} {𝑆 : Signature 𝓞 𝓥}  where
 
 open import Axiom.Extensionality.Propositional    renaming (Extensionality to funext )
-open import Agda.Primitive                        using    ( _⊔_                  )
+open import Agda.Primitive                        using    ( _⊔_    ;   lsuc      )
                                                   renaming ( Set    to  Type      )
 open import Agda.Builtin.Equality                 using    ( _≡_    ;   refl      )
 open import Data.Product                          using    ( _,_    ;   Σ-syntax
@@ -101,21 +101,21 @@ Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic 
 
 \begin{code}
 
-open Lift
+open Level
 
 Lift-≅ : {𝑨 : Algebra α 𝑆} → 𝑨 ≅ (Lift-alg 𝑨 β)
 Lift-≅{α}{β} {𝑨} = 𝓁𝒾𝒻𝓉 , (𝓁ℴ𝓌ℯ𝓇{α}{β}{𝑨}) , cong-app lift∼lower , cong-app (lower∼lift {β = β})
 
-Lift-hom : (𝓧 : Level)(𝓨 : Level){𝑨 : Algebra α 𝑆}(𝑩 : Algebra β 𝑆)
- →         hom 𝑨 𝑩  →  hom (Lift-alg 𝑨 𝓧) (Lift-alg 𝑩 𝓨)
+Lift-hom : {𝑨 : Algebra α 𝑆}(ℓᵃ : Level){𝑩 : Algebra β 𝑆} (ℓᵇ : Level)
+ →         hom 𝑨 𝑩  →  hom (Lift-alg 𝑨 ℓᵃ) (Lift-alg 𝑩 ℓᵇ)
 
-Lift-hom 𝓧 𝓨 {𝑨} 𝑩 (f , fhom) = lift ∘ f ∘ lower , Goal
+Lift-hom {𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ (f , fhom) = lift ∘ f ∘ lower , Goal
  where
- lABh : is-homomorphism (Lift-alg 𝑨 𝓧) 𝑩 (f ∘ lower)
- lABh = ∘-is-hom (Lift-alg 𝑨 𝓧) 𝑩 {lower}{f} (λ _ _ → refl) fhom
+ lABh : is-homomorphism (Lift-alg 𝑨 ℓᵃ) 𝑩 (f ∘ lower)
+ lABh = ∘-is-hom (Lift-alg 𝑨 ℓᵃ) 𝑩 {lower}{f} (λ _ _ → refl) fhom
 
- Goal : is-homomorphism(Lift-alg 𝑨 𝓧)(Lift-alg 𝑩 𝓨) (lift ∘ (f ∘ lower))
- Goal = ∘-is-hom (Lift-alg 𝑨 𝓧) (Lift-alg 𝑩 𝓨){f ∘ lower}{lift} lABh λ _ _ → refl
+ Goal : is-homomorphism(Lift-alg 𝑨 ℓᵃ)(Lift-alg 𝑩 ℓᵇ) (lift ∘ (f ∘ lower))
+ Goal = ∘-is-hom (Lift-alg 𝑨 ℓᵃ) (Lift-alg 𝑩 ℓᵇ){f ∘ lower}{lift} lABh λ _ _ → refl
 
 
 Lift-alg-iso : {𝑨 : Algebra α 𝑆}{𝓧 : Level}
