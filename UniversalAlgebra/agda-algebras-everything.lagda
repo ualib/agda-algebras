@@ -5,7 +5,7 @@ date : 2021-06-09
 author: [the ualib/agda-algebras development team][]
 ---
 
--- All definitions/theorems in agda-algebras as of 6 June 2021.
+All definitions/theorems in agda-algebras as of 6 June 2021.
 
 \begin{code}
 
@@ -96,6 +96,11 @@ open import Varieties.Basic using ( _⊧_≈_ ; _⊧_≋_ ; Th ; Mod ; ⊧-I-inv
 open import Varieties.EquationalLogic using ( S⊆SP ; lemPS⊆SP ; PS⊆SP ; P⊆V ; SP⊆V ; SP⊆V'
                                             ; module class-products-with-maps )
                                     -- ; ℑ' ; 𝔄' ; class-product' ; class-prod-s-∈-ps ; class-prod-s-∈-sp )
+
+open import Varieties.Closure.H using ( H )
+open import Varieties.Closure.S using ( S ; S-mono ; subalgebra→S ; S→subalgebra )
+open import Varieties.Closure.P using ( P ; P-mono ; P-expa ; P-idemp ; Lift-alg-subP ;  Lift-alg-subP' )
+open import Varieties.Closure.V using ( V ; is-variety ; variety ; module Vlift )
 
 open import Varieties.Preservation using ( 𝓕 ; 𝓕⁺ ; H-id1 ; H-id2 ; S-id1 ; S-id2 ; P-id1 ; P-id2
                                          ; V-id1 ; V-id1' ; 𝒱 ; class-ids-⇒ ; class-ids-⇐ ; V-id2 )

@@ -352,4 +352,40 @@ open import Relation.Binary.PropositionalEquality
 open import Relation.Unary          using    ( Pred ; _∈_ ; _⊆_ ; ｛_｝ ; _∪_ )
 
 
+-- module Varieties.Closure.H {𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
+
+open import Agda.Primitive                    using ( _⊔_ )
+open import Data.Product                      using ( _,_ )
+open import Relation.Unary                    using ( Pred ; _∈_ ; _⊆_ )
+
+
+
+-- module Varieties.Closure.S {𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
+
+open import Data.Product   using    ( _,_ )
+                           renaming ( proj₁ to fst
+                                    ; proj₂ to snd )
+open import Relation.Unary using    ( Pred ; _∈_ ; _⊆_ )
+
+
+
+-- module Varieties.Closure.P {𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
+
+open import Agda.Primitive               using    ( _⊔_ ;  lsuc )
+                                         renaming ( Set to Type )
+open import Data.Product                 using    ( _,_ )
+open import Relation.Unary               using    ( Pred ; _∈_ ; _⊆_ )
+
+
+-- module Varieties.Closure.V {𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
+
+open import Axiom.Extensionality.Propositional renaming ( Extensionality to funext )
+open import Agda.Primitive   using    ( _⊔_ ;  lsuc )
+                             renaming ( Set to Type )
+open import Data.Product     using    ( _,_ ; Σ-syntax )
+open import Relation.Unary   using    ( Pred ; _∈_ ; _⊆_)
+
+
+
+
 \end{code}
