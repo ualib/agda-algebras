@@ -136,7 +136,7 @@ Of course, operations of type `Op I A` are well-defined in the sense that equal 
 
 \begin{code}
 
-welldef : {A : Type α}{I : Type 𝓥}(f : Op I A) → ∀ u v → u ≡ v → f u ≡ f v
+welldef : {A : Type α}{I : Type 𝓥}(f : Op A{I}) → ∀ u v → u ≡ v → f u ≡ f v
 welldef f u v refl = refl
 
 \end{code}
@@ -146,7 +146,7 @@ A stronger form of well-definedness of operations is to suppose that point-wise 
 \begin{code}
 
 swelldef : (𝓥 α : Level) → Type (lsuc (α ⊔ 𝓥))
-swelldef 𝓥 α = ∀ {A : Type α}{I : Type 𝓥}(f : Op I A)(u v : I → A) → (∀ i → u i ≡ v i) → f u ≡ f v
+swelldef 𝓥 α = ∀ {A : Type α}{I : Type 𝓥}(f : Op A{I})(u v : I → A) → (∀ i → u i ≡ v i) → f u ≡ f v
 
 private
   funext→swelldef : {α 𝓥 : Level} → funext 𝓥 α → swelldef 𝓥 α

@@ -163,12 +163,12 @@ Again, the obvious converse is barely worth the bits needed to formalize it.
 
  P-id1 p q σ (produ{I}{𝒜} x) = ⊧-P-lift-invar 𝒜  fe {p}{q} IH
   where
-  IH : ∀ i → (Lift-alg (𝒜 i) α) ⟦ p ⟧ ≡ (Lift-alg (𝒜 i) α) ⟦ q ⟧
+  IH : ∀ i → (Lift-Alg (𝒜 i) α) ⟦ p ⟧ ≡ (Lift-Alg (𝒜 i) α) ⟦ q ⟧
   IH i = ⊧-Lift-invar fe p q ((P-id1 p q σ) (x i))
 
  P-id1 p q σ (prodw{I}{𝒜} x) = ⊧-P-lift-invar 𝒜 fe {p}{q}IH
   where
-  IH : ∀ i → Lift-alg (𝒜 i) α ⟦ p ⟧ ≡ Lift-alg (𝒜 i) α ⟦ q ⟧
+  IH : ∀ i → Lift-Alg (𝒜 i) α ⟦ p ⟧ ≡ Lift-Alg (𝒜 i) α ⟦ q ⟧
   IH i = ⊧-Lift-invar fe p q ((P-id1 p q σ) (x i))
 
  P-id1 p q σ (pisow{𝑨}{𝑩} x x₁) = ⊧-I-invar fe 𝑩 p q (P-id1 p q σ x) x₁

@@ -34,8 +34,8 @@ open import Subalgebras.Subalgebras    𝑆 using (_≤_ ; ≤-iso ; ≤-refl ; 
 
 data S {α β : Level}(𝒦 : Pred(Algebra α 𝑆)(ov α)) : Pred(Algebra(α ⊔ β)𝑆)(ov(α ⊔ β))
  where
- sbase : {𝑨 : Algebra α 𝑆} → 𝑨 ∈ 𝒦 → Lift-alg 𝑨 β ∈ S 𝒦
- slift : {𝑨 : Algebra α 𝑆} → 𝑨 ∈ S{α}{α} 𝒦 → Lift-alg 𝑨 β ∈ S 𝒦
+ sbase : {𝑨 : Algebra α 𝑆} → 𝑨 ∈ 𝒦 → Lift-Alg 𝑨 β ∈ S 𝒦
+ slift : {𝑨 : Algebra α 𝑆} → 𝑨 ∈ S{α}{α} 𝒦 → Lift-Alg 𝑨 β ∈ S 𝒦
  ssub  : {𝑨 : Algebra α 𝑆}{𝑩 : Algebra _ 𝑆} → 𝑨 ∈ S{α}{α} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ S 𝒦
  siso  : {𝑨 : Algebra α 𝑆}{𝑩 : Algebra _ 𝑆} → 𝑨 ∈ S{α}{α} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ S 𝒦
 
@@ -70,7 +70,7 @@ module _ {α β : Level}{𝒦 : Pred (Algebra α 𝑆)(ov α)} where
    B≤A : 𝑩 ≤ 𝑨
    B≤A = ≤-iso 𝑨 B≅C C≤A
 
-   slAu : Lift-alg 𝑨 α ∈ S{α}{α} 𝒦
+   slAu : Lift-Alg 𝑨 α ∈ S{α}{α} 𝒦
    slAu = sbase KA
 
    sA : 𝑨 ∈ S{α}{α} 𝒦

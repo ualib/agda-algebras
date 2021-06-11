@@ -38,7 +38,8 @@ open import Agda.Builtin.Equality using    ( _≡_ ; refl     )
 open import Agda.Primitive        using    ( _⊔_            )
                                   renaming ( Set  to Type
                                            ; Setω to Typeω  )
-open import Level                 using    ( Level          )
+open import Function.Base         using    ( _∘_            )
+open import Level                 using    ( Level ; Lift   )
                                   renaming ( suc  to lsuc
                                            ; zero to ℓ₀     )
 open import Relation.Binary.Core  using    ( _⇒_ ; _=[_]⇒_  )
@@ -46,6 +47,7 @@ open import Relation.Binary.Core  using    ( _⇒_ ; _=[_]⇒_  )
                                              Rel  to BinRel )
 open import Relation.Unary        using    ( ∅; _∈_; Pred   )
 open import Data.Product          using    ( _,_ ; _×_      )
+
 
 
 -- module Relations.Continuous where

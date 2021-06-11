@@ -28,17 +28,17 @@ open import Relation.Unary   using    ( Pred ; _∈_ ; _⊆_)
 
 open import Overture.Preliminaries            using ( ∣_∣ ; ∥_∥ )
 open import Algebras.Products               𝑆 using ( ov ; ⨅ )
-open import Homomorphisms.HomomorphicImages 𝑆 using ( HomImages ; IsHomImage ; Lift-alg-hom-image )
-open import Homomorphisms.Isomorphisms      𝑆 using ( _≅_ ; Lift-alg-associative ; Lift-≅ ; Lift-hom
-                                                         ; Lift-alg-⨅≅ ; ≅-sym ; Lift-alg-iso )
+open import Homomorphisms.HomomorphicImages 𝑆 using ( HomImages ; IsHomImage ; Lift-Alg-hom-image )
+open import Homomorphisms.Isomorphisms      𝑆 using ( _≅_ ; Lift-Alg-associative ; Lift-≅ ; Lift-hom
+                                                         ; Lift-Alg-⨅≅ ; ≅-sym ; Lift-Alg-iso )
 open import Subalgebras.Subalgebras         𝑆 using ( _≤_ ; Lift-≤-Lift )
 
 
 data V {α β : Level}(𝒦 : Pred(Algebra α 𝑆)(ov α)) : Pred(Algebra(α ⊔ β)𝑆)(ov(α ⊔ β))
  where
- vbase  : {𝑨 : Algebra α 𝑆} → 𝑨 ∈ 𝒦 → Lift-alg 𝑨 β ∈ V 𝒦
- vlift  : {𝑨 : Algebra α 𝑆} → 𝑨 ∈ V{α}{α} 𝒦 → Lift-alg 𝑨 β ∈ V 𝒦
- vliftw : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ V{α}{β} 𝒦 → Lift-alg 𝑨 (α ⊔ β) ∈ V 𝒦
+ vbase  : {𝑨 : Algebra α 𝑆} → 𝑨 ∈ 𝒦 → Lift-Alg 𝑨 β ∈ V 𝒦
+ vlift  : {𝑨 : Algebra α 𝑆} → 𝑨 ∈ V{α}{α} 𝒦 → Lift-Alg 𝑨 β ∈ V 𝒦
+ vliftw : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ V{α}{β} 𝒦 → Lift-Alg 𝑨 (α ⊔ β) ∈ V 𝒦
  vhimg  : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{α}{β} 𝒦 → ((𝑩 , _) : HomImages 𝑨) → 𝑩 ∈ V 𝒦
  vssubw : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{α}{β} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ V 𝒦
  vprodu : {I : Type β}{𝒜 : I → Algebra α 𝑆} → (∀ i → (𝒜 i) ∈ V{α}{α} 𝒦) → ⨅ 𝒜 ∈ V 𝒦
@@ -77,17 +77,17 @@ module Vlift {α : Level} {fe₀ : funext (ov α) α}
              {𝒦 : Pred (Algebra α 𝑆)(ov α)} where
 
  VlA : {𝑨 : Algebra (ov α) 𝑆} → 𝑨 ∈ V{α}{ov α} 𝒦
-  →    Lift-alg 𝑨 (lsuc (ov α)) ∈ V{α}{lsuc (ov α)} 𝒦
- VlA (vbase{𝑨} x) = visow (vbase x) (Lift-alg-associative 𝑨)
- VlA (vlift{𝑨} x) = visow (vlift x) (Lift-alg-associative 𝑨)
- VlA (vliftw{𝑨} x) = visow (VlA x) (Lift-alg-associative 𝑨)
+  →    Lift-Alg 𝑨 (lsuc (ov α)) ∈ V{α}{lsuc (ov α)} 𝒦
+ VlA (vbase{𝑨} x) = visow (vbase x) (Lift-Alg-associative 𝑨)
+ VlA (vlift{𝑨} x) = visow (vlift x) (Lift-Alg-associative 𝑨)
+ VlA (vliftw{𝑨} x) = visow (VlA x) (Lift-Alg-associative 𝑨)
 
- VlA (vhimg{𝑨}{𝑩} x hB) = vhimg {𝑩 = Lift-alg 𝑩 (lsuc (ov α))} (VlA x) (lC , lChi)
+ VlA (vhimg{𝑨}{𝑩} x hB) = vhimg {𝑩 = Lift-Alg 𝑩 (lsuc (ov α))} (VlA x) (lC , lChi)
   where
   lC : Algebra (lsuc (ov(α))) 𝑆
-  lC = Lift-alg ∣ hB ∣ (lsuc (ov(α)))
+  lC = Lift-Alg ∣ hB ∣ (lsuc (ov(α)))
   lChi : IsHomImage lC
-  lChi = (Lift-alg-hom-image (lsuc (ov(α))) {∣ hB ∣} (lsuc (ov(α))) ∥ hB ∥)
+  lChi = (Lift-Alg-hom-image (lsuc (ov(α))) {∣ hB ∣} (lsuc (ov(α))) ∥ hB ∥)
 
  VlA (vssubw{𝑨}{𝑩} x B≤A) = vssubw (VlA x) (Lift-≤-Lift  (lsuc (ov(α))) {𝑨}  (lsuc (ov(α))) B≤A)
  VlA (vprodu{I}{𝒜} x) = visow (vprodw vlA) (≅-sym B≅A)
@@ -96,7 +96,7 @@ module Vlift {α : Level} {fe₀ : funext (ov α) α}
   𝑰 = Lift (lsuc (ov α)) I
 
   lA : 𝑰 → Algebra (lsuc (ov α)) 𝑆
-  lA i = Lift-alg (𝒜 (lower i)) (lsuc (ov α))
+  lA i = Lift-Alg (𝒜 (lower i)) (lsuc (ov α))
 
   vlA : ∀ i → (lA i) ∈ V{α}{lsuc (ov α)} 𝒦
   vlA i = vlift (x (lower i))
@@ -104,8 +104,8 @@ module Vlift {α : Level} {fe₀ : funext (ov α) α}
   iso-components : ∀ i → 𝒜 i ≅ lA (lift i)
   iso-components i = Lift-≅
 
-  B≅A : Lift-alg (⨅ 𝒜) (lsuc (ov α)) ≅ ⨅ lA
-  B≅A = Lift-alg-⨅≅  {fizw = fe₁}{fiu = fe₀} iso-components
+  B≅A : Lift-Alg (⨅ 𝒜) (lsuc (ov α)) ≅ ⨅ lA
+  B≅A = Lift-Alg-⨅≅  {fizw = fe₁}{fiu = fe₀} iso-components
 
 
  VlA (vprodw{I}{𝒜} x) = visow (vprodw vlA) (≅-sym B≅A)
@@ -114,7 +114,7 @@ module Vlift {α : Level} {fe₀ : funext (ov α) α}
   𝑰 = Lift (lsuc (ov α)) I
 
   lA : 𝑰 → Algebra (lsuc (ov α)) 𝑆
-  lA i = Lift-alg (𝒜 (lower i)) (lsuc (ov α))
+  lA i = Lift-Alg (𝒜 (lower i)) (lsuc (ov α))
 
   vlA : ∀ i → (lA i) ∈ V{α}{lsuc (ov α)} 𝒦
   vlA i = VlA (x (lower i))
@@ -122,11 +122,11 @@ module Vlift {α : Level} {fe₀ : funext (ov α) α}
   iso-components : ∀ i → 𝒜 i ≅ lA (lift i)
   iso-components i = Lift-≅
 
-  B≅A : Lift-alg (⨅ 𝒜) (lsuc (ov α)) ≅ ⨅ lA
-  B≅A = Lift-alg-⨅≅ {fizw = fe₁}{fiu = fe₂} iso-components
+  B≅A : Lift-Alg (⨅ 𝒜) (lsuc (ov α)) ≅ ⨅ lA
+  B≅A = Lift-Alg-⨅≅ {fizw = fe₁}{fiu = fe₂} iso-components
 
- VlA (visou{𝑨}{𝑩} x A≅B) = visow (vlift x) (Lift-alg-iso A≅B)
- VlA (visow{𝑨}{𝑩} x A≅B) = visow (VlA x) (Lift-alg-iso A≅B)
+ VlA (visou{𝑨}{𝑩} x A≅B) = visow (vlift x) (Lift-Alg-iso A≅B)
+ VlA (visow{𝑨}{𝑩} x A≅B) = visow (VlA x) (Lift-Alg-iso A≅B)
 
 \end{code}
 

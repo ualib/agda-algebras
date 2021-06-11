@@ -38,10 +38,11 @@ open import Relation.Binary.PropositionalEquality using    ( trans    ;   cong-a
 open ≡-Reasoning
 
 -- -- Imports from the Agda Universal Algebra Library
-open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; _∼_ ; transport)
+open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; _≈_ ; transport)
 open import Overture.Inverses      using ( IsInjective           )
 open import Relations.Quotients    using ( IsBlock               )
-open import Relations.Continuous   using ( ContRel ; DepRel      )
+open import Relations.Discrete     using ( Arity )
+open import Relations.Continuous   using ( Rel ; RelΠ )
 
 private variable α β ρ 𝓥 : Level
 
@@ -171,7 +172,7 @@ Finding a proof that a function is an embedding isn't always easy, but one appro
 
 module _ {A : Type α}{B : Type β} where
  invertible : (A → B) → Type (α ⊔ β)
- invertible f = Σ[ g ∈ (B → A) ] ((g ∘ f ∼ id) × (f ∘ g ∼ id))
+ invertible f = Σ[ g ∈ (B → A) ] ((g ∘ f ≈ id) × (f ∘ g ≈ id))
 
  equiv-is-embedding : (f : A → B) → is-equiv f → is-embedding f
  equiv-is-embedding f i y = singleton-is-prop (fiber f y) (i y)
@@ -272,25 +273,43 @@ Naturally, we define the corresponding *truncated continuous relation type* and 
 
 \begin{code}
 
-module _ {I : Type 𝓥} where
+-- OLD implementation:
+-- module _ {I : Type 𝓥} where
+--  IsContProp : (A : Type α) → ContRel I A β  → Type(𝓥 ⊔ α ⊔ β)
+--  IsContProp A P = ∀ (𝑎 : (I → A)) → is-prop (P 𝑎)
+--  ContProp : Type α → (β : Level) → Type(α ⊔ 𝓥 ⊔ lsuc β)
+--  ContProp A β = Σ[ P ∈ ContRel I A β ] IsContProp A P
+--  cont-prop-ext : Type α → (β : Level) → Type(α ⊔ 𝓥 ⊔ lsuc β)
+--  cont-prop-ext A β = {P Q : ContProp A β } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
+--  IsDepProp : (𝒜 : I → Type α) → DepRel I 𝒜 β  → Type(𝓥 ⊔ α ⊔ β)
+--  IsDepProp 𝒜 P = ∀ (𝑎 : ((i : I) → 𝒜 i)) → is-prop (P 𝑎)
+--  DepProp : (I → Type α) → (β : Level) → Type(α ⊔ 𝓥 ⊔ lsuc β)
+--  DepProp 𝒜 β = Σ[ P ∈ DepRel I 𝒜 β ] IsDepProp 𝒜 P
+--  dep-prop-ext : (I → Type α) → (β : Level) → Type(α ⊔ 𝓥 ⊔ lsuc β)
+--  dep-prop-ext 𝒜 β = {P Q : DepProp 𝒜 β} → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
 
- IsContProp : (A : Type α) → ContRel I A β  → Type(𝓥 ⊔ α ⊔ β)
- IsContProp A P = ∀ (𝑎 : (I → A)) → is-prop (P 𝑎)
+-- NEW:
+module _ {I : Arity 𝓥} where
 
- ContProp : Type α → (β : Level) → Type(α ⊔ 𝓥 ⊔ lsuc β)
- ContProp A β = Σ[ P ∈ ContRel I A β ] IsContProp A P
+ IsRelProp : {ρ : Level}(A : Type α) → Rel A {I}{ρ}  → Type (𝓥 ⊔ α ⊔ ρ)
+ IsRelProp B P = ∀ (b : (I → B)) → is-prop (P b)
 
- cont-prop-ext : Type α → (β : Level) → Type(α ⊔ 𝓥 ⊔ lsuc β)
- cont-prop-ext A β = {P Q : ContProp A β } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
+ RelProp : Type α → (ρ : Level) → Type (𝓥 ⊔ α ⊔ lsuc ρ)
+ RelProp A ρ = Σ[ P ∈ Rel A{I}{ρ} ] IsRelProp A P
 
- IsDepProp : (𝒜 : I → Type α) → DepRel I 𝒜 β  → Type(𝓥 ⊔ α ⊔ β)
- IsDepProp 𝒜 P = ∀ (𝑎 : ((i : I) → 𝒜 i)) → is-prop (P 𝑎)
+ RelPropExt : Type α → (ρ : Level) → Type (𝓥 ⊔ α ⊔ lsuc ρ)
+ RelPropExt A ρ = {P Q : RelProp A ρ } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
 
- DepProp : (I → Type α) → (β : Level) → Type(α ⊔ 𝓥 ⊔ lsuc β)
- DepProp 𝒜 β = Σ[ P ∈ DepRel I 𝒜 β ] IsDepProp 𝒜 P
+ IsRELProp : {ρ : Level} (𝒜 : I → Type α) → RelΠ I 𝒜 {ρ}  → Type (𝓥 ⊔ α ⊔ ρ)
+ IsRELProp 𝒜 P = ∀ (a : ((i : I) → 𝒜 i)) → is-prop (P a)
 
- dep-prop-ext : (I → Type α) → (β : Level) → Type(α ⊔ 𝓥 ⊔ lsuc β)
- dep-prop-ext 𝒜 β = {P Q : DepProp 𝒜 β} → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
+ RELProp : (I → Type α) → (ρ : Level) → Type (𝓥 ⊔ α ⊔ lsuc ρ)
+ RELProp 𝒜 ρ = Σ[ P ∈ RelΠ I 𝒜 {ρ} ] IsRELProp 𝒜 P
+
+ RELPropExt : (I → Type α) → (ρ : Level) → Type (𝓥 ⊔ α ⊔ lsuc ρ)
+ RELPropExt 𝒜 ρ = {P Q : RELProp 𝒜 ρ} → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
+
+
 
 \end{code}
 

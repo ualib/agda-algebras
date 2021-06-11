@@ -27,7 +27,7 @@ open import Homomorphisms.HomomorphicImages 𝑆 using ( HomImages )
 
 data H {α β : Level} (𝒦 : Pred (Algebra α 𝑆) (ov α)) : Pred (Algebra (α ⊔ β) 𝑆) (ov(α ⊔ β))
  where
- hbase : {𝑨 : Algebra α 𝑆} → 𝑨 ∈ 𝒦 → Lift-alg 𝑨 β ∈ H 𝒦
+ hbase : {𝑨 : Algebra α 𝑆} → 𝑨 ∈ 𝒦 → Lift-Alg 𝑨 β ∈ H 𝒦
  hhimg : {𝑨 𝑩 : Algebra (α ⊔ β) 𝑆} → 𝑨 ∈ H {α} {β} 𝒦 → ((𝑩 , _) : HomImages 𝑨) → 𝑩 ∈ H 𝒦
 
 \end{code}

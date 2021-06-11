@@ -97,7 +97,7 @@ module _ {α β : Level} where
 
  Lift-epi-is-epi {𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ h hepi y = eq (lift a) η
   where
-   lh : hom (Lift-alg 𝑨 ℓᵃ) (Lift-alg 𝑩 ℓᵇ)
+   lh : hom (Lift-Alg 𝑨 ℓᵃ) (Lift-Alg 𝑩 ℓᵇ)
    lh = Lift-hom ℓᵃ {𝑩} ℓᵇ h
 
    ζ : Image ∣ h ∣ ∋ (lower y)
@@ -107,7 +107,7 @@ module _ {α β : Level} where
    a = Inv ∣ h ∣ ζ
 
    ν : lift (∣ h ∣ a) ≡ ∣ Lift-hom ℓᵃ {𝑩} ℓᵇ h ∣ (Level.lift a)
-   ν = cong (λ - → lift (∣ h ∣ (- a))) (lower∼lift {level-of-alg 𝑨}{β})
+   ν = cong (λ - → lift (∣ h ∣ (- a))) (lower∼lift {Level-of-Carrier 𝑨}{β})
 
    η : y ≡ ∣ lh ∣ (lift a)
    η = y               ≡⟨ (cong-app lift∼lower) y ⟩
@@ -115,18 +115,18 @@ module _ {α β : Level} where
        lift (∣ h ∣ a)  ≡⟨ ν ⟩
        ∣ lh ∣ (lift a) ∎
 
- Lift-alg-hom-image : {𝑨 : Algebra α 𝑆}(ℓᵃ : Level){𝑩 : Algebra β 𝑆}(ℓᵇ : Level)
+ Lift-Alg-hom-image : {𝑨 : Algebra α 𝑆}(ℓᵃ : Level){𝑩 : Algebra β 𝑆}(ℓᵇ : Level)
   →                   IsHomImage {𝑨 = 𝑨} 𝑩
-  →                   IsHomImage {𝑨 = Lift-alg 𝑨 ℓᵃ} (Lift-alg 𝑩 ℓᵇ)
+  →                   IsHomImage {𝑨 = Lift-Alg 𝑨 ℓᵃ} (Lift-Alg 𝑩 ℓᵇ)
 
- Lift-alg-hom-image {𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ ((φ , φhom) , φepic) = Goal
+ Lift-Alg-hom-image {𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ ((φ , φhom) , φepic) = Goal
   where
-  lφ : hom (Lift-alg 𝑨 ℓᵃ) (Lift-alg 𝑩 ℓᵇ)
+  lφ : hom (Lift-Alg 𝑨 ℓᵃ) (Lift-Alg 𝑩 ℓᵇ)
   lφ = Lift-hom ℓᵃ {𝑩} ℓᵇ (φ , φhom)
 
   lφepic : IsSurjective ∣ lφ ∣
   lφepic = Lift-epi-is-epi ℓᵃ {𝑩} ℓᵇ (φ , φhom) φepic
-  Goal : IsHomImage (Lift-alg 𝑩 ℓᵇ)
+  Goal : IsHomImage (Lift-Alg 𝑩 ℓᵇ)
   Goal = lφ , lφepic
 
 \end{code}

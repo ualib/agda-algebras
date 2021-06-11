@@ -20,6 +20,7 @@ open import Agda.Builtin.Bool
 open import Agda.Builtin.Equality                 using    (_≡_    ;   refl     )
 open import Agda.Primitive                        using    ( _⊔_                )
                                                   renaming ( Set   to  Type     )
+                                                  renaming ( lzero to  ℓ₀       )
 open import Data.Empty                            using    ( ⊥                  )
 open import Data.Product                          using    ( _,_ ; Σ-syntax ; Σ )
 open import Level                                 renaming ( suc   to  lsuc
@@ -29,8 +30,8 @@ open import Relation.Binary                       using    ( IsEquivalence      
 
 -- -- Imports from the Agda Universal Algebra Library
 open import Overture.Preliminaries using (∣_∣; ∥_∥)
-open import Relations.Discrete     using (Op; _|:_)
-open import Relations.Continuous   using (ContRel; DepRel; cont-compatible-op; dep-compatible-op)
+open import Relations.Discrete     using ( Op ; _|:_ ; Arity )
+open import Relations.Continuous   using ( Rel; RelΠ ; compatible-Rel ; compatible-REL )
 
 private variable α β ρ 𝓞 𝓥 : Level
 
@@ -56,6 +57,17 @@ In the [UniversalAlgebra][] library we represent the *signature* of an algebraic
 
 Signature : (𝓞 𝓥 : Level) → Type (lsuc (𝓞 ⊔ 𝓥))
 Signature 𝓞 𝓥 = Σ[ F ∈ Type 𝓞 ] (F → Type 𝓥)
+
+
+Level-of-Signature : {𝓞 𝓥 : Level} → Signature 𝓞 𝓥 → Level
+Level-of-Signature {𝓞}{𝓥} _ = lsuc (𝓞 ⊔ 𝓥)
+
+-- Let's also introduce a signature type for the (not so) special case where
+-- arity types can be assumed to live at universe level zero.
+signature : (𝓞 : Level) → Type (lsuc 𝓞)
+signature 𝓞 = Σ[ F ∈ Type 𝓞 ] (F → Type)
+-- (It turns out that everything in the library up to the Birkhoff HSP
+-- theorem can be done with these "little" arities.)
 
 \end{code}
 
@@ -98,7 +110,22 @@ Recall, we defined the type `Signature 𝓞 𝓥` above as the dependent pair ty
 
 Algebra : (α : Level)(𝑆 : Signature 𝓞 𝓥) → Type (𝓞 ⊔ 𝓥 ⊔ lsuc α)
 Algebra α 𝑆 = Σ[ A ∈ Type α ]                   -- the domain
-              ∀ (f : ∣ 𝑆 ∣) → Op (∥ 𝑆 ∥ f) A    -- the basic operations
+              ∀ (f : ∣ 𝑆 ∣) → Op A{∥ 𝑆 ∥ f}    -- the basic operations
+
+-- special case where arity types live at universe level zero
+lilAlgebra : (α : Level)(𝑆 : signature 𝓞) → Type (𝓞 ⊔ lsuc α)
+lilAlgebra α 𝑆 = Σ[ A ∈ Type α ]                   -- the domain
+                 ∀ (f : ∣ 𝑆 ∣) → Op A {∥ 𝑆 ∥ f}    -- the basic operations
+
+
+-- The operation type Op is now defined in the Relations.Discrete module.
+--    OLD implementation of the type of operations
+--    Op : Type 𝓥 → Type α → Type(α ⊔ 𝓥)
+--    Op I A = (I → A) → A
+--    NEW notation for operations on A of arity I
+--    Op : Type α → {I : Arity} → Type α
+--    Op A {I} = (I → A) → A
+
 
 \end{code}
 
@@ -112,8 +139,17 @@ Occasionally we will be given an algebra and we just need to know the universe l
 
 \begin{code}
 
-level-of-alg : {𝑆 : Signature 𝓞 𝓥} → Algebra α 𝑆 → Level
-level-of-alg {α = α} _ = α
+Level-of-Alg : {α 𝓞 𝓥 : Level}{𝑆 : Signature 𝓞 𝓥} → Algebra α 𝑆 → Level
+Level-of-Alg {α = α}{𝓞}{𝓥} _ = 𝓞 ⊔ 𝓥 ⊔ lsuc α
+
+Level-of-Carrier : {α 𝓞 𝓥  : Level}{𝑆 : Signature 𝓞 𝓥} → Algebra α 𝑆 → Level
+Level-of-Carrier {α = α} _ = α
+
+Level-of-lilAlg : {α 𝓞 : Level}{𝑆 : signature 𝓞} → Algebra α 𝑆 → Level
+Level-of-lilAlg {α = α}{𝓞 = 𝓞} _ = (𝓞 ⊔ lsuc α)
+
+Level-of-lilCarrier : {α 𝓞 𝓥 : Level}{𝑆 : Signature 𝓞 𝓥} → Algebra α 𝑆 → Level
+Level-of-lilCarrier {α = α} _ = α
 
 \end{code}
 
@@ -127,8 +163,14 @@ Some people prefer to represent algebraic structures in type theory using record
 record algebra (α : Level) (𝑆 : Signature 𝓞 𝓥) : Type(lsuc(𝓞 ⊔ 𝓥 ⊔ α)) where
  constructor mkalg
  field
-  univ : Type α
-  op : (f : ∣ 𝑆 ∣) → ((∥ 𝑆 ∥ f) → univ) → univ
+  carrier : Type α
+  opsymbol : (f : ∣ 𝑆 ∣) → ((∥ 𝑆 ∥ f) → carrier) → carrier
+
+record lilalgebra (α : Level) (𝑆 : signature 𝓞) : Type(lsuc(𝓞 ⊔ α)) where
+ constructor mklilalg
+ field
+  carrier : Type α
+  opsymbol : (f : ∣ 𝑆 ∣) → ((∥ 𝑆 ∥ f) → carrier) → carrier
 
 
 \end{code}
@@ -142,7 +184,7 @@ module _ {𝑆 : Signature 𝓞 𝓥} where
  open algebra
 
  algebra→Algebra : algebra α 𝑆 → Algebra α 𝑆
- algebra→Algebra 𝑨 = (univ 𝑨 , op 𝑨)
+ algebra→Algebra 𝑨 = (carrier 𝑨 , opsymbol 𝑨)
 
  Algebra→algebra : Algebra α 𝑆 → algebra α 𝑆
  Algebra→algebra 𝑨 = mkalg ∣ 𝑨 ∣ ∥ 𝑨 ∥
@@ -176,25 +218,34 @@ Recall, in the [section on level lifting and lowering](Overture.Lifts.html#level
 
 open Lift
 
-Lift-op : {𝓘 : Level}{I : Type 𝓘}{A : Type α} → Op I A → (β : Level) → Op I (Lift β A)
+
+Lift-op : {I : Arity 𝓥} {A : Type α} → Op A {I} → (β : Level) → Op (Lift β A) {I}
 Lift-op f β = λ x → lift (f (λ i → lower (x i)))
 
-Lift-alg : {𝑆 : Signature 𝓞 𝓥} → Algebra α 𝑆 → (β : Level) → Algebra (α ⊔ β) 𝑆
-Lift-alg {𝑆 = 𝑆} 𝑨 β = Lift β ∣ 𝑨 ∣ , (λ (𝑓 : ∣ 𝑆 ∣) → Lift-op (𝑓 ̂ 𝑨) β)
+Lift-Alg : {𝑆 : Signature 𝓞 𝓥} → Algebra α 𝑆 → (β : Level) → Algebra (α ⊔ β) 𝑆
+Lift-Alg {𝑆 = 𝑆} 𝑨 β = Lift β ∣ 𝑨 ∣ , (λ (𝑓 : ∣ 𝑆 ∣) → Lift-op (𝑓 ̂ 𝑨) β)
+
+
+Lift-op-lilAlg : {I : Arity ℓ₀}{A : Type α} → Op A {I} → (β : Level) → Op (Lift β A) {I}
+Lift-op-lilAlg {I = I} = Lift-op{𝓥 = ℓ₀}{I = I}
+
+
+Lift-lilAlg : {𝑆 : signature 𝓞} → Algebra α 𝑆 → (β : Level) → Algebra (α ⊔ β) 𝑆
+Lift-lilAlg {𝑆 = 𝑆} 𝑨 β = Lift β ∣ 𝑨 ∣ , (λ (𝑓 : ∣ 𝑆 ∣) → Lift-op-lilAlg (𝑓 ̂ 𝑨) β)
 
 open algebra
 
-Lift-alg-record-type : {𝑆 : Signature 𝓞 𝓥} → algebra α 𝑆 → (β : Level) → algebra (α ⊔ β) 𝑆
-Lift-alg-record-type {𝑆 = 𝑆} 𝑨 β = mkalg (Lift β (univ 𝑨)) (λ (f : ∣ 𝑆 ∣) → Lift-op ((op 𝑨) f) β)
+Lift-algebra : {𝑆 : Signature 𝓞 𝓥} → algebra α 𝑆 → (β : Level) → algebra (α ⊔ β) 𝑆
+Lift-algebra {𝑆 = 𝑆} 𝑨 β = mkalg (Lift β (carrier 𝑨)) (λ (f : ∣ 𝑆 ∣) → Lift-op ((opsymbol 𝑨) f) β)
 
 \end{code}
 
-What makes the `Lift-alg` type so useful for resolving type level errors involving algebras is the nice properties it possesses.  Indeed, the [UniversalAlgebra][] library contains formal proofs of the following facts.
+What makes the `Lift-Alg` type so useful for resolving type level errors involving algebras is the nice properties it possesses.  Indeed, the [UniversalAlgebra][] library contains formal proofs of the following facts.
 
-+ [`Lift-alg` is a homomorphism](Homomorphisms.Basic.html#exmples-of-homomorphisms) (see [Homomorphisms.Basic][])
-+ [`Lift-alg` is an algebraic invariant](Homomorphisms.Isomorphisms.html#lift-is-an-algebraic-invariant") (see [Homomorphisms.Isomorphisms][])
-+ [`Lift-alg` of a subalgebra is a subalgebra](Subalgebras.Subalgebras.html#lifts-of-subalgebras) (see [Subalgebras.Subalgebras][])
-+ [`Lift-alg` preserves identities](Varieties.EquationalLogic.html#lift-invariance)) (see [Varieties.EquationalLogic][])
++ [`Lift-Alg` is a homomorphism](Homomorphisms.Basic.html#exmples-of-homomorphisms) (see [Homomorphisms.Basic][])
++ [`Lift-Alg` is an algebraic invariant](Homomorphisms.Isomorphisms.html#lift-is-an-algebraic-invariant") (see [Homomorphisms.Isomorphisms][])
++ [`Lift-Alg` of a subalgebra is a subalgebra](Subalgebras.Subalgebras.html#lifts-of-subalgebras) (see [Subalgebras.Subalgebras][])
++ [`Lift-Alg` preserves identities](Varieties.EquationalLogic.html#lift-invariance)) (see [Varieties.EquationalLogic][])
 
 
 #### <a id="compatibility-of-binary-relations">Compatibility of binary relations</a>
@@ -203,8 +254,11 @@ We now define the function `compatible` so that, if `𝑨` denotes an algebra an
 
 \begin{code}
 
-compatible : {𝑆 : Signature 𝓞 𝓥}(𝑨 : Algebra α 𝑆) → BinRel ∣ 𝑨 ∣ ρ → Type(𝓞 ⊔ α ⊔ 𝓥 ⊔ ρ)
+compatible : {𝑆 : Signature 𝓞 𝓥}(𝑨 : Algebra α 𝑆) → BinRel ∣ 𝑨 ∣ ρ → Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ)
 compatible  𝑨 R = ∀ 𝑓 → (𝑓 ̂ 𝑨) |: R
+
+compatible-lilAlg : {𝑆 : signature 𝓞}(𝑨 : Algebra α 𝑆) → BinRel ∣ 𝑨 ∣ ρ → Type(𝓞 ⊔ α ⊔ ρ)
+compatible-lilAlg  𝑨 R = ∀ 𝑓 → (𝑓 ̂ 𝑨) |: R
 
 \end{code}
 
@@ -219,13 +273,21 @@ In the [Relations.Continuous][] module, we defined a function called `cont-compa
 
 \begin{code}
 
-module _ {I : Type 𝓥} {𝑆 : Signature 𝓞 𝓥} where
+module _ {I : Arity 𝓥} {𝑆 : Signature 𝓞 𝓥} where
 
- cont-compatible : (𝑨 : Algebra α 𝑆) → ContRel I ∣ 𝑨 ∣ β → Type(𝓞 ⊔ α ⊔ 𝓥 ⊔ β)
- cont-compatible 𝑨 R = ∀ (𝑓 : ∣ 𝑆 ∣ ) →  cont-compatible-op (𝑓 ̂ 𝑨) R
+ compatible-Rel-alg : (𝑨 : Algebra α 𝑆) → Rel ∣ 𝑨 ∣ {I}{ρ} → Type(𝓞 ⊔ α ⊔ 𝓥 ⊔ ρ)
+ compatible-Rel-alg 𝑨 R = ∀ (𝑓 : ∣ 𝑆 ∣ ) →  compatible-Rel (𝑓 ̂ 𝑨) R
 
- dep-compatible : (𝒜 : I → Algebra α 𝑆) → DepRel I (λ i → ∣ 𝒜  i ∣) β → Type(𝓞 ⊔ α ⊔ 𝓥 ⊔ β)
- dep-compatible 𝒜 R = ∀ ( 𝑓 : ∣ 𝑆 ∣ ) →  dep-compatible-op (λ i → 𝑓 ̂ (𝒜 i)) R
+ compatible-REL-alg : (𝒜 : I → Algebra α 𝑆) → RelΠ I (λ i → ∣ 𝒜  i ∣) {ρ} → Type(𝓞 ⊔ α ⊔ 𝓥 ⊔ ρ)
+ compatible-REL-alg 𝒜 R = ∀ ( 𝑓 : ∣ 𝑆 ∣ ) →  compatible-REL (λ i → 𝑓 ̂ (𝒜 i)) R
+
+module _ {I : Arity ℓ₀} {𝑆 : signature 𝓞} where
+
+ compatible-Rel-lilAlg : (𝑨 : Algebra α 𝑆) → Rel ∣ 𝑨 ∣ {I}{ρ} → Type(𝓞 ⊔ α ⊔ ρ)
+ compatible-Rel-lilAlg 𝑨 R = ∀ (𝑓 : ∣ 𝑆 ∣ ) →  compatible-Rel (𝑓 ̂ 𝑨) R
+
+ compatible-REL-lilAlg : (𝒜 : I → Algebra α 𝑆) → RelΠ I (λ i → ∣ 𝒜  i ∣) {ρ} → Type(𝓞 ⊔ α ⊔ ρ)
+ compatible-REL-lilAlg 𝒜 R = ∀ ( 𝑓 : ∣ 𝑆 ∣ ) →  compatible-REL (λ i → 𝑓 ̂ (𝒜 i)) R
 
 \end{code}
 

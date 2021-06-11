@@ -34,7 +34,7 @@ open import Relation.Binary.PropositionalEquality using    ( cong   ;   cong-app
 
 
 -- Imports from agda-algebras --------------------------------------------------------------
-open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; _∼_ ; transport ; _∙_
+open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; _≈_ ; transport ; _∙_
                                          ; lower∼lift ; lift∼lower )
 open import Algebras.Products    𝑆 using ( ⨅ )
 open import Homomorphisms.Basic  𝑆 using ( hom ; kercon ; ker[_⇒_]_↾_ ; πker ; 𝒾𝒹 ; ∘-hom
@@ -51,7 +51,7 @@ Recall, `f ~ g` means f and g are *extensionally* (or pointwise) equal; i.e., `�
 \begin{code}
 
 _≅_ : {α β : Level}(𝑨 : Algebra α 𝑆)(𝑩 : Algebra β 𝑆) → Type(𝓞 ⊔ 𝓥 ⊔ α ⊔ β)
-𝑨 ≅ 𝑩 =  Σ[ f ∈ (hom 𝑨 𝑩)] Σ[ g ∈ hom 𝑩 𝑨 ] ((∣ f ∣ ∘ ∣ g ∣ ∼ ∣ 𝒾𝒹 𝑩 ∣) × (∣ g ∣ ∘ ∣ f ∣ ∼ ∣ 𝒾𝒹 𝑨 ∣))
+𝑨 ≅ 𝑩 =  Σ[ f ∈ (hom 𝑨 𝑩)] Σ[ g ∈ hom 𝑩 𝑨 ] ((∣ f ∣ ∘ ∣ g ∣ ≈ ∣ 𝒾𝒹 𝑩 ∣) × (∣ g ∣ ∘ ∣ f ∣ ≈ ∣ 𝒾𝒹 𝑨 ∣))
 
 \end{code}
 
@@ -89,10 +89,10 @@ That is, two structures are **isomorphic** provided there are homomorphisms goin
   g : hom 𝑪 𝑨
   g = ∘-hom 𝑪 𝑨 g1 g2
 
-  τ : ∣ f ∣ ∘ ∣ g ∣ ∼ ∣ 𝒾𝒹 𝑪 ∣
+  τ : ∣ f ∣ ∘ ∣ g ∣ ≈ ∣ 𝒾𝒹 𝑪 ∣
   τ x = (cong ∣ f2 ∣(∣ snd ∥ ab ∥ ∣ (∣ g1 ∣ x)))∙(∣ snd ∥ bc ∥ ∣) x
 
-  ν : ∣ g ∣ ∘ ∣ f ∣ ∼ ∣ 𝒾𝒹 𝑨 ∣
+  ν : ∣ g ∣ ∘ ∣ f ∣ ≈ ∣ 𝒾𝒹 𝑨 ∣
   ν x = (cong ∣ g2 ∣(∥ snd ∥ bc ∥ ∥ (∣ f1 ∣ x)))∙(∥ snd ∥ ab ∥ ∥) x
 
 \end{code}
@@ -105,27 +105,27 @@ Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic 
 
 open Level
 
-Lift-≅ : {𝑨 : Algebra α 𝑆} → 𝑨 ≅ (Lift-alg 𝑨 β)
+Lift-≅ : {𝑨 : Algebra α 𝑆} → 𝑨 ≅ (Lift-Alg 𝑨 β)
 Lift-≅{α}{β} {𝑨} = 𝓁𝒾𝒻𝓉 , (𝓁ℴ𝓌ℯ𝓇{α}{β}{𝑨}) , cong-app lift∼lower , cong-app (lower∼lift {β = β})
 
 Lift-hom : {𝑨 : Algebra α 𝑆}(ℓᵃ : Level){𝑩 : Algebra β 𝑆} (ℓᵇ : Level)
- →         hom 𝑨 𝑩  →  hom (Lift-alg 𝑨 ℓᵃ) (Lift-alg 𝑩 ℓᵇ)
+ →         hom 𝑨 𝑩  →  hom (Lift-Alg 𝑨 ℓᵃ) (Lift-Alg 𝑩 ℓᵇ)
 
 Lift-hom {𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ (f , fhom) = lift ∘ f ∘ lower , Goal
  where
- lABh : is-homomorphism (Lift-alg 𝑨 ℓᵃ) 𝑩 (f ∘ lower)
- lABh = ∘-is-hom (Lift-alg 𝑨 ℓᵃ) 𝑩 {lower}{f} (λ _ _ → refl) fhom
+ lABh : is-homomorphism (Lift-Alg 𝑨 ℓᵃ) 𝑩 (f ∘ lower)
+ lABh = ∘-is-hom (Lift-Alg 𝑨 ℓᵃ) 𝑩 {lower}{f} (λ _ _ → refl) fhom
 
- Goal : is-homomorphism(Lift-alg 𝑨 ℓᵃ)(Lift-alg 𝑩 ℓᵇ) (lift ∘ (f ∘ lower))
- Goal = ∘-is-hom (Lift-alg 𝑨 ℓᵃ) (Lift-alg 𝑩 ℓᵇ){f ∘ lower}{lift} lABh λ _ _ → refl
+ Goal : is-homomorphism(Lift-Alg 𝑨 ℓᵃ)(Lift-Alg 𝑩 ℓᵇ) (lift ∘ (f ∘ lower))
+ Goal = ∘-is-hom (Lift-Alg 𝑨 ℓᵃ) (Lift-Alg 𝑩 ℓᵇ){f ∘ lower}{lift} lABh λ _ _ → refl
 
 
-Lift-alg-iso : {𝑨 : Algebra α 𝑆}{𝓧 : Level}
+Lift-Alg-iso : {𝑨 : Algebra α 𝑆}{𝓧 : Level}
                {𝑩 : Algebra β 𝑆}{𝓨 : Level}
                -----------------------------------------
- →             𝑨 ≅ 𝑩 → (Lift-alg 𝑨 𝓧) ≅ (Lift-alg 𝑩 𝓨)
+ →             𝑨 ≅ 𝑩 → (Lift-Alg 𝑨 𝓧) ≅ (Lift-Alg 𝑩 𝓨)
 
-Lift-alg-iso A≅B = ≅-trans (≅-trans (≅-sym Lift-≅) A≅B) Lift-≅
+Lift-Alg-iso A≅B = ≅-trans (≅-trans (≅-sym Lift-≅) A≅B) Lift-≅
 
 \end{code}
 
@@ -140,14 +140,14 @@ The lift is also associative, up to isomorphism at least.
 
 module _ {𝓘 : Level} where
 
-  Lift-alg-assoc : {𝑨 : Algebra α 𝑆} → Lift-alg 𝑨 (β ⊔ 𝓘) ≅ (Lift-alg (Lift-alg 𝑨 β) 𝓘)
-  Lift-alg-assoc {α}{β}{𝑨} = ≅-trans (≅-trans Goal Lift-≅) Lift-≅
+  Lift-Alg-assoc : {𝑨 : Algebra α 𝑆} → Lift-Alg 𝑨 (β ⊔ 𝓘) ≅ (Lift-Alg (Lift-Alg 𝑨 β) 𝓘)
+  Lift-Alg-assoc {α}{β}{𝑨} = ≅-trans (≅-trans Goal Lift-≅) Lift-≅
    where
-   Goal : Lift-alg 𝑨 (β ⊔ 𝓘) ≅ 𝑨
+   Goal : Lift-Alg 𝑨 (β ⊔ 𝓘) ≅ 𝑨
    Goal = ≅-sym Lift-≅
 
-  Lift-alg-associative : (𝑨 : Algebra α 𝑆) → Lift-alg 𝑨 (β ⊔ 𝓘) ≅ (Lift-alg (Lift-alg 𝑨 β) 𝓘)
-  Lift-alg-associative 𝑨 = Lift-alg-assoc {𝑨 = 𝑨}
+  Lift-Alg-associative : (𝑨 : Algebra α 𝑆) → Lift-Alg 𝑨 (β ⊔ 𝓘) ≅ (Lift-Alg (Lift-Alg 𝑨 β) 𝓘)
+  Lift-Alg-associative 𝑨 = Lift-Alg-assoc {𝑨 = 𝑨}
 
 \end{code}
 
@@ -178,10 +178,10 @@ module _ {𝓘 : Level}{I : Type 𝓘}{fiu : funext 𝓘 α}{fiw : funext 𝓘 �
    ψhom : is-homomorphism (⨅ ℬ) (⨅ 𝒜) ψ
    ψhom 𝑓 𝒃 = fiu (λ i → snd ∣ snd (AB i) ∣ 𝑓 (λ x → 𝒃 x i))
 
-   ϕ~ψ : ϕ ∘ ψ ∼ ∣ 𝒾𝒹 (⨅ ℬ) ∣
+   ϕ~ψ : ϕ ∘ ψ ≈ ∣ 𝒾𝒹 (⨅ ℬ) ∣
    ϕ~ψ 𝒃 = fiw λ i → fst ∥ snd (AB i) ∥ (𝒃 i)
 
-   ψ~ϕ : ψ ∘ ϕ ∼ ∣ 𝒾𝒹 (⨅ 𝒜) ∣
+   ψ~ϕ : ψ ∘ ϕ ≈ ∣ 𝒾𝒹 (⨅ 𝒜) ∣
    ψ~ϕ a = fiu λ i → snd ∥ snd (AB i) ∥ (a i)
 
    Goal : ⨅ 𝒜 ≅ ⨅ ℬ
@@ -196,10 +196,10 @@ A nearly identical proof goes through for isomorphisms of lifted products (thoug
 
 module _ {𝓘 : Level}{I : Type 𝓘}{fizw : funext (𝓘 ⊔ γ) β}{fiu : funext 𝓘 α} where
 
-  Lift-alg-⨅≅ : {𝒜 : I → Algebra α 𝑆}{ℬ : (Lift γ I) → Algebra β 𝑆}
-   →            (∀ i → 𝒜 i ≅ ℬ (lift i)) → Lift-alg (⨅ 𝒜) γ ≅ ⨅ ℬ
+  Lift-Alg-⨅≅ : {𝒜 : I → Algebra α 𝑆}{ℬ : (Lift γ I) → Algebra β 𝑆}
+   →            (∀ i → 𝒜 i ≅ ℬ (lift i)) → Lift-Alg (⨅ 𝒜) γ ≅ ⨅ ℬ
 
-  Lift-alg-⨅≅ {𝒜}{ℬ} AB = Goal
+  Lift-Alg-⨅≅ {𝒜}{ℬ} AB = Goal
    where
    ϕ : ∣ ⨅ 𝒜 ∣ → ∣ ⨅ ℬ ∣
    ϕ a i = ∣ fst (AB  (lower i)) ∣ (a (lower i))
@@ -213,16 +213,16 @@ module _ {𝓘 : Level}{I : Type 𝓘}{fizw : funext (𝓘 ⊔ γ) β}{fiu : fun
    ψhom : is-homomorphism (⨅ ℬ) (⨅ 𝒜) ψ
    ψhom 𝑓 𝒃 = fiu (λ i → (snd ∣ snd (AB i) ∣) 𝑓 (λ x → 𝒃 x (lift i)))
 
-   ϕ~ψ : ϕ ∘ ψ ∼ ∣ 𝒾𝒹 (⨅ ℬ) ∣
+   ϕ~ψ : ϕ ∘ ψ ≈ ∣ 𝒾𝒹 (⨅ ℬ) ∣
    ϕ~ψ 𝒃 = fizw λ i → fst ∥ snd (AB (lower i)) ∥ (𝒃 i)
 
-   ψ~ϕ : ψ ∘ ϕ ∼ ∣ 𝒾𝒹 (⨅ 𝒜) ∣
+   ψ~ϕ : ψ ∘ ϕ ≈ ∣ 𝒾𝒹 (⨅ 𝒜) ∣
    ψ~ϕ a = fiu λ i → snd ∥ snd (AB i) ∥ (a i)
 
    A≅B : ⨅ 𝒜 ≅ ⨅ ℬ
    A≅B = (ϕ , ϕhom) , ((ψ , ψhom) , ϕ~ψ , ψ~ϕ)
 
-   Goal : Lift-alg (⨅ 𝒜) γ ≅ ⨅ ℬ
+   Goal : Lift-Alg (⨅ 𝒜) γ ≅ ⨅ ℬ
    Goal = ≅-trans (≅-sym Lift-≅) A≅B
 
 \end{code}

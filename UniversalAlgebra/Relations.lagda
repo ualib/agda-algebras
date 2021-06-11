@@ -2,7 +2,7 @@
 layout: default
 title : Relations module (The Agda Universal Algebra Library)
 date : 2021-01-12
-author: William DeMeo
+author: [the ualib/agda-algebras development team][]
 ---
 
 ## <a id="relation-and-quotient-types">Relation and Quotient Types</a>

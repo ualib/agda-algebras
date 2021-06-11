@@ -42,8 +42,8 @@ open import Relations.Truncation         using ( hfunext )
 open import Algebras.Products          𝑆 using ( ov ; ⨅ ; 𝔄 ; class-product)
 open import Homomorphisms.Basic        𝑆 using (hom; 𝒾𝒹; ∘-hom; is-homomorphism)
 open import Homomorphisms.Isomorphisms 𝑆 using (_≅_ ; ≅-sym ; Lift-≅ ; ≅-trans
-                                               ; ≅-refl ; Lift-alg-iso ; ⨅≅
-                                               ; Lift-alg-associative ; Lift-alg-⨅≅ )
+                                               ; ≅-refl ; Lift-Alg-iso ; ⨅≅
+                                               ; Lift-Alg-associative ; Lift-Alg-⨅≅ )
 
 open import Subalgebras.Subalgebras    𝑆 using ( _≤_ ; _IsSubalgebraOfClass_ ; Lift-≤-Lift
                                                ; SubalgebraOfClass ; iso→injective
@@ -91,15 +91,15 @@ The next lemma would be too obvious to care about were it not for the fact that 
 S⊆SP : (𝒦 : Pred (Algebra α 𝑆)(ov α))
  →     S{α}{β} 𝒦 ⊆ S{α ⊔ β}{α ⊔ β} (P{α}{β} 𝒦)
 
-S⊆SP {α} {β} 𝒦 {.(Lift-alg 𝑨 β)}(sbase{𝑨} x) = siso spllA(≅-sym Lift-≅)
+S⊆SP {α} {β} 𝒦 {.(Lift-Alg 𝑨 β)}(sbase{𝑨} x) = siso spllA(≅-sym Lift-≅)
  where
  llA : Algebra (α ⊔ β) 𝑆
- llA = Lift-alg (Lift-alg 𝑨 β) (α ⊔ β)
+ llA = Lift-Alg (Lift-Alg 𝑨 β) (α ⊔ β)
 
  spllA : llA ∈ S (P 𝒦)
  spllA = sbase{α ⊔ β}{α ⊔ β} (pbase x)
 
-S⊆SP {α} {β} 𝒦 {.(Lift-alg 𝑨 β)}(slift{𝑨} x) = subalgebra→S lAsc
+S⊆SP {α} {β} 𝒦 {.(Lift-Alg 𝑨 β)}(slift{𝑨} x) = subalgebra→S lAsc
  where
  splAu : 𝑨 ∈ S(P 𝒦)
  splAu = S⊆SP{α}{α} 𝒦 x
@@ -107,12 +107,12 @@ S⊆SP {α} {β} 𝒦 {.(Lift-alg 𝑨 β)}(slift{𝑨} x) = subalgebra→S lAsc
  Asc : 𝑨 IsSubalgebraOfClass (P 𝒦)
  Asc = S→subalgebra{α}{P{α}{α} 𝒦}{𝑨} splAu
 
- lAsc : (Lift-alg 𝑨 β) IsSubalgebraOfClass (P 𝒦)
- lAsc = Lift-alg-subP' Asc
+ lAsc : (Lift-Alg 𝑨 β) IsSubalgebraOfClass (P 𝒦)
+ lAsc = Lift-Alg-subP' Asc
 S⊆SP {α} {β} 𝒦 {𝑩}(ssub{𝑨} sA B≤A) = ssub (subalgebra→S lAsc)( ≤-Lift 𝑨 B≤A )
  where
   lA : Algebra (α ⊔ β) 𝑆
-  lA = Lift-alg 𝑨 β
+  lA = Lift-Alg 𝑨 β
 
   splAu : 𝑨 ∈ S (P 𝒦)
   splAu = S⊆SP{α}{α} 𝒦 sA
@@ -121,15 +121,15 @@ S⊆SP {α} {β} 𝒦 {𝑩}(ssub{𝑨} sA B≤A) = ssub (subalgebra→S lAsc)( 
   Asc = S→subalgebra{α}{P{α}{α} 𝒦}{𝑨} splAu
 
   lAsc : lA IsSubalgebraOfClass (P 𝒦)
-  lAsc = Lift-alg-subP' Asc
+  lAsc = Lift-Alg-subP' Asc
 
 S⊆SP {α = α}{β} 𝒦 {𝑩}(siso{𝑨} sA A≅B) = siso{α ⊔ β}{α ⊔ β} lAsp lA≅B
  where
  lA : Algebra (α ⊔ β) 𝑆
- lA = Lift-alg 𝑨 β
+ lA = Lift-Alg 𝑨 β
 
  lAsc : lA IsSubalgebraOfClass (P 𝒦)
- lAsc = Lift-alg-subP' (S→subalgebra{α}{P{α}{α} 𝒦}{𝑨} (S⊆SP 𝒦 sA))
+ lAsc = Lift-Alg-subP' (S→subalgebra{α}{P{α}{α} 𝒦}{𝑨} (S⊆SP 𝒦 sA))
 
  lAsp : lA ∈ S(P 𝒦)
  lAsp = subalgebra→S{α ⊔ β}{α ⊔ β}{P{α}{β} 𝒦}{lA} lAsc
@@ -206,7 +206,7 @@ module _ {α : Level} {fovu : funext (ov α) (ov α)}{𝒦 : Pred (Algebra α �
  PS⊆SP _ (pbase (sbase x)) = sbase (pbase x)
  PS⊆SP _ (pbase (slift{𝑨} x)) = slift (S⊆SP{α}{ov α} 𝒦 (slift x))
  PS⊆SP _ (pbase{𝑩}(ssub{𝑨} sA B≤A)) = siso(ssub(S⊆SP 𝒦 (slift sA))(Lift-≤-Lift (ov(α)){𝑨}(ov(α))B≤A)) ≅-refl
- PS⊆SP _ (pbase (siso{𝑨}{𝑩} x A≅B)) = siso (S⊆SP 𝒦 (slift x)) ( Lift-alg-iso A≅B )
+ PS⊆SP _ (pbase (siso{𝑨}{𝑩} x A≅B)) = siso (S⊆SP 𝒦 (slift x)) ( Lift-Alg-iso A≅B )
  PS⊆SP hfe (pliftu x) = slift (PS⊆SP hfe x)
  PS⊆SP hfe (pliftw x) = slift (PS⊆SP hfe x)
 
@@ -275,17 +275,17 @@ module _ {α : Level}  {fe₀ : funext (ov α) α}
 
  SP⊆V' : S{ov α}{lsuc (ov α)} (P{α}{ov α} 𝒦) ⊆ V 𝒦
 
- SP⊆V' (sbase{𝑨} x) = visow (VlA (SP⊆V (sbase x))) (≅-sym (Lift-alg-associative 𝑨))
+ SP⊆V' (sbase{𝑨} x) = visow (VlA (SP⊆V (sbase x))) (≅-sym (Lift-Alg-associative 𝑨))
  SP⊆V' (slift x) = VlA (SP⊆V x)
 
  SP⊆V' (ssub{𝑨}{𝑩} spA B≤A) = vssubw (VlA (SP⊆V spA)) B≤lA
   where
-   B≤lA : 𝑩 ≤ Lift-alg 𝑨 (lsuc (ov α))
+   B≤lA : 𝑩 ≤ Lift-Alg 𝑨 (lsuc (ov α))
    B≤lA = ≤-Lift 𝑨 B≤A
 
  SP⊆V' (siso{𝑨}{𝑩} x A≅B) = visow (VlA (SP⊆V x)) Goal
   where
-   Goal : Lift-alg 𝑨 (lsuc (ov α)) ≅ 𝑩
+   Goal : Lift-Alg 𝑨 (lsuc (ov α)) ≅ 𝑩
    Goal = ≅-trans (≅-sym Lift-≅) A≅B
 
 \end{code}
@@ -341,8 +341,8 @@ If `p : 𝑨 ∈ 𝒦` and `h : X → ∣ 𝑨 ∣`, we view the triple `(𝑨 ,
 
   where
   lA llA : ℑ' → Algebra (ov α) 𝑆
-  lA i =  Lift-alg (𝔄 i) (ov α)
-  llA i = Lift-alg (lA i) (ov α)
+  lA i =  Lift-Alg (𝔄 i) (ov α)
+  llA i = Lift-Alg (lA i) (ov α)
 
   slA : ∀ i → (lA i) ∈ S 𝒦
   slA i = siso (fst ∥ i ∥) Lift-≅

@@ -19,7 +19,8 @@ open import Agda.Builtin.Equality using    ( _≡_ ; refl     )
 open import Agda.Primitive        using    ( _⊔_            )
                                   renaming ( Set  to Type
                                            ; Setω to Typeω  )
-open import Level                 using    ( Level          )
+open import Function.Base         using    ( _∘_            )
+open import Level                 using    ( Level ; Lift   )
                                   renaming ( suc  to lsuc
                                            ; zero to ℓ₀     )
 open import Relation.Binary.Core  using    ( _⇒_ ; _=[_]⇒_  )
@@ -32,7 +33,7 @@ private variable α β ρ 𝓥 : Level
 
 \end{code}
 
-We define convenient notation for asserting that the image of a function (the first argument) is contained in a predicate (the second argument).
+We define convenient notation for asserting that the image of a function (the first argument) is contained in a predicate (i.e., a "subset" of the codomain---the second argument).
 
 \begin{code}
 
@@ -41,10 +42,53 @@ Im f ⊆ S = ∀ x → f x ∈ S
 
 \end{code}
 
+#### Operation symbols, unary relations, binary relations
+
+We now define the type of operation symbols of arity `I : Type lzero` over the type `A : Type α`.
+
+We make a type alias called `Arity` so to make it easy to specialize the library later, e.g., by restricting `Arity` to be `Type lzero` (which would relieve us of having to carry the 𝓥 arity universe parameter around).
+
+\begin{code}
+
+Arity : (𝓥 : Level) → Type (lsuc 𝓥)
+Arity 𝓥 = Type 𝓥
+
+\end{code}
+
+This is merely for notational convenience, and it's not clear whether it's a real restriction.
+
+(Question: Are there use-cases requiring arities inhabiting higher types?)
+
+
+The unary relation (or "predicate") type is imported from Relation.Unary of the std lib.
+
+  ```
+  Pred : ∀ {a} → Set a → (ℓ : Level) → Set (a ⊔ suc ℓ)
+  Pred A ℓ = A → Set ℓ
+  ```
+
+The binary relation types are called `Rel` and `REL` in the standard library, but we
+will call them `BinRel` and `BinREL` and reserve the names `Rel` and `REL` for the more
+general types of relations we define below and in the Relations.Continuous module.
+
+The heterogeneous binary relation type is imported from the standard library and renamed BinREL.
+
+  ```
+  BinREL : ∀ {ℓ} (A B : Type ℓ) (ℓ' : Level) → Type (ℓ-max ℓ (ℓ-suc ℓ'))
+  BinREL A B ℓ' = A → B → Type ℓ'
+  ```
+
+The homogeneous binary relation type is imported from the standard library and renamed BinRel.
+
+  ```
+  BinRel : ∀{ℓ} → Type ℓ → (ℓ' : Level) → Type (ℓ ⊔ lsuc ℓ')
+  BinRel A ℓ' = REL A A ℓ'
+  ```
+
+
 #### <a id="kernels">Kernels</a>
 
 The *kernel* of `f : A → B` is defined informally by `{(x , y) ∈ A × A : f x = f y}`. This can be represented in type theory and Agda in a number of ways, each of which may be useful in a particular context. For example, we could define the kernel to be an inhabitant of a (binary) relation type, or a (unary) predicate type.
-
 
 \begin{code}
 
@@ -53,12 +97,18 @@ module _ {A : Type α}{B : Type β} where
  ker : (A → B) → BinRel A β
  ker g x y = g x ≡ g y
 
+ kerlift : (A → B) → (ρ : Level) → BinRel A (β ⊔ ρ)
+ kerlift g ρ x y = Lift ρ (g x ≡ g y)
+
+ ker' : (A → B) → (I : Arity 𝓥) → BinRel (I → A) (β ⊔ 𝓥)
+ ker' g I x y = g ∘ x ≡ g ∘ y
+
  kernel : (A → B) → Pred (A × A) β
  kernel g (x , y) = g x ≡ g y
 
 \end{code}
 
-Similarly, the *identity relation* (which is equivalent to the kernel of an injective function) can be represented as follows.<sup>[2](Relations.Discrete#fn2)</sup>
+The *identity relation* (which is equivalent to the kernel of an injective function) can be represented as follows.<sup>[2](Relations.Discrete#fn2)</sup>
 
 \begin{code}
 
@@ -69,6 +119,23 @@ module _ {A : Type α } where
 
 \end{code}
 
+#### Subset containment relation for binary realtions
+
+\begin{code}
+
+module _ {α ρ : Level}{A : Type (α ⊔ ρ)} where
+
+ _⊑_ : BinRel A ρ → BinRel A ρ → Type (α ⊔ ρ)
+ P ⊑ Q = ∀ x y → P x y → Q x y
+
+ ⊑-refl : {P : BinRel A ρ} → P ⊑ P
+ ⊑-refl x y Pxy = Pxy
+
+ ⊑-trans : {P Q R : BinRel A ρ} → P ⊑ Q → Q ⊑ R → P ⊑ R
+ ⊑-trans {P = P}{Q}{R} PQ QR x y Pxy = QR x y (PQ x y Pxy)
+
+\end{code}
+
 
 #### <a id="operation-type">Operation type and compatibility</a>
 
@@ -76,51 +143,110 @@ module _ {A : Type α } where
 
 In the next subsection, we will define types that are useful for asserting and proving facts about *compatibility* of *operations* with relations, but first we need a general type with which to represent operations.  Here is the definition, which we justify below.
 
-\begin{code}
-
---The type of operations
-Op : Type 𝓥 → Type α → Type(α ⊔ 𝓥)
-Op I A = (I → A) → A
-
-\end{code}
-
 The type `Op` encodes the arity of an operation as an arbitrary type `I : Type 𝓥`, which gives us a very general way to represent an operation as a function type with domain `I → A` (the type of "tuples") and codomain `A`. For example, the `I`-*ary projection operations* on `A` are represented as inhabitants of the type `Op I A` as follows.
 
 \begin{code}
 
-π : {I : Type 𝓥 } {A : Type α } → I → Op I A
+-- OLD implementation of the type of operations
+-- Op : Type 𝓥 → Type α → Type(α ⊔ 𝓥)
+-- Op I A = (I → A) → A
+
+-- π : {I : Type 𝓥 } {A : Type α } → I → Op I A
+-- π i x = x i
+
+-- New notation for operations on A of arity I
+Op : Type α → {I : Arity 𝓥} → Type (α ⊔ 𝓥)
+Op A {I} = (I → A) → A
+
+-- Example (projections)
+π : {I : Arity 𝓥} {A : Type α } → I → Op A
 π i x = x i
 
 \end{code}
 
 Now suppose `A` and `I` are types and let `𝑓 : Op I` and `R : Rel A β` be an `I`-ary operation and a binary relation on `A`, respectively. We say `𝑓` and `R` are *compatible* and we write `𝑓 |: R` just in case `∀ u v : I → A`,
 
-&nbsp;&nbsp; `Π i ꞉ I , R (u i) (v i)` &nbsp; `→` &nbsp; `R (f u) (f v)`.<sup>[6](Relations.Discrete#fn6)</sup>
+`Π i ꞉ I , R (u i) (v i)  →  R (f u) (f v)`.<sup>[6](Relations.Discrete#fn6)</sup>
 
 Here is how we implement this in the [UniversalAlgebra][] library.
 
 \begin{code}
 
-eval-rel : {A : Type α}{I : Type 𝓥} → BinRel A ρ → BinRel (I → A)(𝓥 ⊔ ρ)
+-- OLD implementation:
+--    eval-rel : {A : Type α}{I : Type 𝓥} → BinRel A ρ → BinRel (I → A)(𝓥 ⊔ ρ)
+--    eval-rel R u v = ∀ i → R (u i) (v i)
+
+-- NEW implementation:
+
+{-Compatibility of binary relations.
+  We now define the function `compatible` so that, if `𝑩` denotes a structure and `r` a binary
+  relation, then `compatible 𝑩 r` will represent the assertion that `r` is *compatible* with all
+  basic operations of `𝑩`. in the following sense:
+  `∀ 𝑓 : ∣ 𝐹 ∣ → ∀(x y : ∥ 𝐹 ∥ 𝑓 → ∣ 𝑩 ∣) → (∀ i → r (x i)(y i)) → r (f x)(f y)` -}
+
+eval-rel : {A : Type α}{I : Arity 𝓥} → BinRel A ρ → BinRel (I → A) (𝓥 ⊔ ρ)
 eval-rel R u v = ∀ i → R (u i) (v i)
 
-_|:_ : {A : Type α}{I : Type 𝓥} → Op I A → BinRel A ρ → Type(α ⊔ 𝓥 ⊔ ρ)
-f |: R  = (eval-rel R) =[ f ]⇒ R
 
 \end{code}
 
 The function `eval-rel` "lifts" a binary relation to the corresponding `I`-ary relation.<sup>[5](Relations.Discrete#fn5)</sup>
 
-In case it helps the reader, we note that instead of using the slick implication notation, we could have defined the `|:` relation more explicitly, like so.
-
 \begin{code}
 
-compatible-op : {A : Type α}{I : Type 𝓥} → (f : Op I A)(R : BinRel A ρ) → Type(α ⊔ 𝓥 ⊔ ρ)
+-- OLD implementation:
+--
+--    compatible-op : {A : Type α}{I : Type 𝓥} → (f : Op I A)(R : BinRel A ρ) → Type(α ⊔ 𝓥 ⊔ ρ)
+--    compatible-op f R  = ∀ u v → (eval-rel R) u v → R (f u) (f v)
+--
+--    -- Fancy notation for compatible-op.
+--    _|:_ : {A : Type α}{I : Type 𝓥} → Op I A → BinRel A ρ → Type(α ⊔ 𝓥 ⊔ ρ)
+--    f |: R  = (eval-rel R) =[ f ]⇒ R
+--
+-- NEW implementation:
+
+compatible-op : {A : Type α}{I : Arity 𝓥} → Op A{I} → BinRel A ρ → Type (α ⊔ 𝓥 ⊔ ρ)
 compatible-op f R  = ∀ u v → (eval-rel R) u v → R (f u) (f v)
+
+--Fancy notation for compatible-op.
+_|:_ : {A : Type α}{I : Arity 𝓥} → Op A{I} → BinRel A ρ → Type (α ⊔ 𝓥 ⊔ ρ)
+f |: R  = (eval-rel R) =[ f ]⇒ R
 
 \end{code}
 
-However, this is a rare case in which the more elegant syntax used to define `|:` sometimes results in simpler proofs when applying the definition. (See, for example, `compatible-term` in the [Terms.Operations][] module.)
+These two types just defined are logically equivalent, as we now prove.
+
+\begin{code}
+
+compatagree : {A : Type α}{I : Arity 𝓥}{f : Op A{I}}{R : BinRel A ρ}
+ →            compatible-op f R → f |: R
+compatagree {f = f}{R} c {x}{y} Rxy = c x y Rxy
+
+compatagree' : {A : Type α}{I : Arity 𝓥}{f : Op A{I}}{R : BinRel A ρ}
+ →             f |: R → compatible-op f R
+compatagree' {f = f}{R} c = λ u v x → c x
+
+\end{code}
+
+However, in this case the more elegant syntax used to define `|:` can result in simpler proofs. (See, for example, `compatible-term` in the [Terms.Operations][] module.)
+
+The following function returns the arity of a given operation symbol, which is sometimes useful.
+
+\begin{code}
+
+arity[_] : {I : Arity 𝓥} {A : Type α } → Op A {I} → Arity 𝓥
+arity[_] {I = I} f = I
+
+\end{code}
+
+
+
+
+
+
+
+
+
 
 
 
