@@ -23,15 +23,15 @@ open import Agda.Primitive               using    ( _⊔_ ;  lsuc )
 open import Data.Product                 using    ( _,_ )
 open import Relation.Unary               using    ( Pred ; _∈_ ; _⊆_ )
 open import Algebras.Products          𝑆 using    ( ov ; ⨅ )
-open import Homomorphisms.Isomorphisms 𝑆 using    ( _≅_ ; ≅-sym ; Lift-≅ ; Lift-alg-iso )
+open import Homomorphisms.Isomorphisms 𝑆 using    ( _≅_ ; ≅-sym ; Lift-≅ ; Lift-Alg-iso )
 open import Subalgebras.Subalgebras    𝑆 using    ( _IsSubalgebraOfClass_ ; _≤_ ; Lift-≤-Lift )
 
 
 data P {α β : Level}(𝒦 : Pred(Algebra α 𝑆)(ov α)) : Pred(Algebra(α ⊔ β)𝑆)(ov(α ⊔ β))
  where
- pbase  : {𝑨 : Algebra α 𝑆} → 𝑨 ∈ 𝒦 → Lift-alg 𝑨 β ∈ P 𝒦
- pliftu : {𝑨 : Algebra α 𝑆} → 𝑨 ∈ P{α}{α} 𝒦 → Lift-alg 𝑨 β ∈ P 𝒦
- pliftw : {𝑨 : Algebra (α ⊔ β) 𝑆} → 𝑨 ∈ P{α}{β} 𝒦 → Lift-alg 𝑨 (α ⊔ β) ∈ P 𝒦
+ pbase  : {𝑨 : Algebra α 𝑆} → 𝑨 ∈ 𝒦 → Lift-Alg 𝑨 β ∈ P 𝒦
+ pliftu : {𝑨 : Algebra α 𝑆} → 𝑨 ∈ P{α}{α} 𝒦 → Lift-Alg 𝑨 β ∈ P 𝒦
+ pliftw : {𝑨 : Algebra (α ⊔ β) 𝑆} → 𝑨 ∈ P{α}{β} 𝒦 → Lift-Alg 𝑨 (α ⊔ β) ∈ P 𝒦
  produ  : {I : Type β }{𝒜 : I → Algebra α 𝑆} → (∀ i → (𝒜 i) ∈ P{α}{α} 𝒦) → ⨅ 𝒜 ∈ P 𝒦
  prodw  : {I : Type β }{𝒜 : I → Algebra _ 𝑆} → (∀ i → (𝒜 i) ∈ P{α}{β} 𝒦) → ⨅ 𝒜 ∈ P 𝒦
  pisow  : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ P{α}{β} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ P 𝒦
@@ -79,30 +79,30 @@ Next we observe that lifting to a higher universe does not break the property of
 \begin{code}
 module _ {α β : Level}{𝒦 : Pred (Algebra α 𝑆)(ov α)} where
 
- Lift-alg-subP : {𝑩 : Algebra β 𝑆}
+ Lift-Alg-subP : {𝑩 : Algebra β 𝑆}
   →              𝑩 IsSubalgebraOfClass (P{α}{β} 𝒦)
-  →              (Lift-alg 𝑩 α) IsSubalgebraOfClass (P{α}{β} 𝒦)
+  →              (Lift-Alg 𝑩 α) IsSubalgebraOfClass (P{α}{β} 𝒦)
 
- Lift-alg-subP (𝑨 , (𝑪 , C≤A) , pA , B≅C ) = lA , (lC , lC≤lA) , plA , (Lift-alg-iso B≅C)
+ Lift-Alg-subP (𝑨 , (𝑪 , C≤A) , pA , B≅C ) = lA , (lC , lC≤lA) , plA , (Lift-Alg-iso B≅C)
    where
    lA lC : Algebra (α ⊔ β)  𝑆
-   lA = Lift-alg 𝑨 (α ⊔ β)
-   lC = Lift-alg 𝑪 α
+   lA = Lift-Alg 𝑨 (α ⊔ β)
+   lC = Lift-Alg 𝑪 α
 
    lC≤lA : lC ≤ lA
    lC≤lA = Lift-≤-Lift α {𝑨} (α ⊔ β) C≤A
    plA : lA ∈ P{α}{β} 𝒦
    plA = pliftw pA
 
- Lift-alg-subP' : {𝑨 : Algebra α 𝑆}
+ Lift-Alg-subP' : {𝑨 : Algebra α 𝑆}
   →                𝑨 IsSubalgebraOfClass (P{α}{α} 𝒦)
-  →               (Lift-alg 𝑨 β) IsSubalgebraOfClass (P{α}{β} 𝒦)
+  →               (Lift-Alg 𝑨 β) IsSubalgebraOfClass (P{α}{β} 𝒦)
 
- Lift-alg-subP' (𝑩 , (𝑪 , C≤B) , pB , A≅C ) = lB , (lC , lC≤lB) , plB , (Lift-alg-iso A≅C)
+ Lift-Alg-subP' (𝑩 , (𝑪 , C≤B) , pB , A≅C ) = lB , (lC , lC≤lB) , plB , (Lift-Alg-iso A≅C)
    where
    lB lC : Algebra (α ⊔ β)  𝑆
-   lB = Lift-alg 𝑩 β
-   lC = Lift-alg 𝑪 β
+   lB = Lift-Alg 𝑩 β
+   lC = Lift-Alg 𝑪 β
 
    lC≤lB : lC ≤ lB
    lC≤lB = Lift-≤-Lift β {𝑩} β C≤B

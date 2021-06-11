@@ -59,9 +59,13 @@ open import Data.Product                          using    ( _,_      ;   Σ
                                                            ; proj₂    to  snd   )
 open import Agda.Primitive                        using    ( _⊔_                )
                                                   renaming ( Set      to  Type  )
+                                                  renaming ( lzero    to  ℓ₀    )
 open import Level                                 using    ( Level    ;   Lift
                                                            ; lift     ;   lower )
                                                   renaming ( suc      to  lsuc  )
+
+ℓ₁ : Level
+ℓ₁ = lsuc ℓ₀
 
 \end{code}
 
@@ -99,7 +103,7 @@ Here we put the definitions inside an *anonymous module*, which starts with the 
 
 Also note that multiple inhabitants of a single type (e.g., `∣_∣` and `fst`) may be declared on the same line.
 
-We prove that `≡` obeys the substitution rule (subst) in the next subsection (see the definition of `ap` below), but first we define some syntactic sugar that will make it easier to apply symmetry and transitivity of `≡` in proofs.<sup>[2](Overture.Equality.html#fn3)</sup>
+Let's define some useful syntactic sugar that will make it easier to apply symmetry and transitivity of `≡` in proofs.
 
 \begin{code}
 
@@ -123,6 +127,23 @@ p ∙ q = trans p q
 infixl 30 _∙_
 \end{code}
 
+
+#### Pi types
+
+The dependent function type is traditionally denoted with a Pi symbol typically arranged as Π(x : A) B x, or something similar.  In Agda syntax, one writes `(x : A) → B x` for the dependent function type, but may use syntax that is closer to the standard Π notation and made available in Agda as follows.
+
+\begin{code}
+
+Π : {A : Type α } (B : A → Type β ) → Type (α ⊔ β)
+Π {A = A} B = (x : A) → B x
+
+Π-syntax : (A : Type α)(B : A → Type β) → Type (α ⊔ β)
+Π-syntax A B = Π B
+
+syntax Π-syntax A (λ x → B) = Π[ x ∈ A ] B
+infix 6 Π-syntax
+
+\end{code}
 
 #### <a id="agdas-universe-hierarchy">Agda's universe hierarchy</a>
 
@@ -178,10 +199,16 @@ We conclude this module with a definition that conveniently represents te assert
 
 \begin{code}
 
-_∼_ : {A : Type α } {B : A → Type β } → (f g : (a : A) → B a) → Type (α ⊔ β)
-f ∼ g = ∀ x → f x ≡ g x
+-- OLD notation
+-- _∼_ : {A : Type α } {B : A → Type β } → (f g : (a : A) → B a) → Type (α ⊔ β)
+-- f ∼ g = ∀ x → f x ≡ g x
 
-infix 8 _∼_
+-- NEW notation
+-- (preferable since it coincides with the standard notation universally quantified equality)
+_≈_ : {A : Type α } {B : A → Type β } → (f g : (a : A) → B a) → Type (α ⊔ β)
+f ≈ g = ∀ x → f x ≡ g x
+
+infix 8 _≈_
 
 \end{code}
 
@@ -208,8 +235,6 @@ transport B refl = id
 
 <sup>1</sup><span class="footnote" id="fn0"> We avoid using `𝓟` as a universe
 variable because in some libraries `𝓟` denotes a powerset type.</span>
-
-<sup>2</sup> <span class="footnote" id="fn2"> Most of these types are already defined by in the [Type Topology][] library or the [Agda Standard Library][], so we often imports the definitions; occasionally, however, we repeat the definitions here for pedagogical reasons and to keep the presentation somewhat self-contained.
 
 
 <sup>4</sup> <span class="footnote" id="fn4"> Moreover, if one assumes the [univalence axiom][] of [Homotopy Type Theory][], then point-wise equality of functions is equivalent to definitional equality of functions. (See [Function extensionality from univalence](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#funextfromua).)</span>

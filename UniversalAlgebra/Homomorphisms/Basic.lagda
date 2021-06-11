@@ -122,10 +122,10 @@ Next, `lift` and `lower`, defined in the [Overture.Lifts][] module, are (the map
 
 open Level
 
-𝓁𝒾𝒻𝓉 : {β : Level}{𝑨 : Algebra α 𝑆} → hom 𝑨 (Lift-alg 𝑨 β)
+𝓁𝒾𝒻𝓉 : {β : Level}{𝑨 : Algebra α 𝑆} → hom 𝑨 (Lift-Alg 𝑨 β)
 𝓁𝒾𝒻𝓉 = lift , λ 𝑓 𝑎 → refl
 
-𝓁ℴ𝓌ℯ𝓇 : {β : Level}{𝑨 : Algebra α 𝑆} → hom (Lift-alg 𝑨 β) 𝑨
+𝓁ℴ𝓌ℯ𝓇 : {β : Level}{𝑨 : Algebra α 𝑆} → hom (Lift-Alg 𝑨 β) 𝑨
 𝓁ℴ𝓌ℯ𝓇 = lower , λ 𝑓 𝑎 → refl
 
 \end{code}

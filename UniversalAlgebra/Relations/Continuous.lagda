@@ -19,9 +19,14 @@ open import Agda.Primitive using (_⊔_) renaming ( Set   to  Type
                                                 ; Setω  to  Typeω )
 open import Level                      renaming ( suc   to  lsuc
                                                 ; zero  to  ℓ₀ )
-open import Relations.Discrete using (Op)
 
-private variable α 𝓥 β : Level
+
+open import Overture.Preliminaries using ( Π ; Π-syntax )
+
+open import Relations.Discrete using (Op ; Arity ; arity[_])
+
+private variable α ρ : Level
+
 \end{code}
 
 #### <a id="motivation">Motivation</a>
@@ -44,18 +49,50 @@ To define `DepRel`, the type of *dependent relations*, we exploit the full power
 
 \begin{code}
 
-ContRel : Type 𝓥 → Type α → (β : Level) → Type(α ⊔ 𝓥 ⊔ lsuc β)
-ContRel I A β = (I → A) → Type β
-
-DepRel : (I : Type 𝓥) → (I → Type α) → (β : Level) → Type(α ⊔ 𝓥 ⊔ lsuc β)
-DepRel I 𝒜 β = ((i : I) → 𝒜 i) → Type β
+-- OLD:  (do not delete until we're confident that the new approach is better)
+-- ContRel : Type 𝓥 → Type α → (β : Level) → Type(α ⊔ 𝓥 ⊔ lsuc β)
+-- ContRel I A β = (I → A) → Type β
+-- DepRel : (I : Type 𝓥) → (I → Type α) → (β : Level) → Type(α ⊔ 𝓥 ⊔ lsuc β)
+-- DepRel I 𝒜 β = ((i : I) → 𝒜 i) → Type β
 
 \end{code}
 
 Here, the tuples of a relation of type `DepRel I 𝒜 β` will inhabit the dependent function type `𝒜 : I → Type α` (where the codomain may depend on the input coordinate `i : I` of the domain). Heuristically, we can think of an inhabitant of type `DepRel I 𝒜 β` as a relation from `𝒜 i` to `𝒜 j` to `𝒜 k` to …. (This is only a rough heuristic since `I` could denote an uncountable collection.<sup>[2](Relations.Continuous.html#fn2)</sup>)
 
 
+#### New approach
 
+Here are some alternative general relation types that restrict the arity types to live in universe level zero.
+
+\begin{code}
+
+module _ {𝓥 : Level} where
+
+ ar : Type (lsuc 𝓥)
+ ar = Arity 𝓥
+
+-- Relations of arbitrary arity over a single sort.
+ Rel : Type α → {I : ar} → {ρ : Level} → Type (α ⊔ 𝓥 ⊔ lsuc ρ)
+ Rel A {I} {ρ} = (I → A) → Type ρ
+
+ Rel-syntax : Type α → ar → (ρ : Level) → Type (𝓥 ⊔ α ⊔ lsuc ρ)
+ Rel-syntax A I ρ = Rel A {I} {ρ}
+
+ syntax Rel-syntax A I ρ = Rel[ A ^ I ] ρ
+ infix 6 Rel-syntax
+
+ -- The type of arbitrarily multisorted relations of arbitrary arity
+ RelΠ : (I : ar) → (I → Type α) → {ρ : Level} → Type (𝓥 ⊔ α ⊔ lsuc ρ)
+ RelΠ I 𝒜 {ρ} = ((i : I) → 𝒜 i) → Type ρ
+
+ RelΠ-syntax : (I : ar) → (I → Type α) → {ρ : Level} → Type (𝓥 ⊔ α ⊔ lsuc ρ)
+ RelΠ-syntax I 𝒜 {ρ} = RelΠ I 𝒜 {ρ}
+
+ syntax RelΠ-syntax I (λ i → 𝒜) = RelΠ[ i ∈ I ] 𝒜
+ infix 6 RelΠ-syntax
+
+
+\end{code}
 
 
 #### <a id="compatibility-with-general-relations">Compatibility with general relations</a>
@@ -64,13 +101,41 @@ It will be helpful to have some functions that make it easy to assert that a giv
 
 \begin{code}
 
-module _ {I J : Type 𝓥} {A : Type α} where
+-- module _ {I J : Type 𝓥} {A : Type α} where
 
- eval-cont-rel : ContRel I A β → (I → J → A) → Type(𝓥 ⊔ β)
- eval-cont-rel R 𝒶 = ∀ (j : J) → R λ i → 𝒶 i j
+-- OLD:
+--   eval-cont-rel : ContRel I A β → (I → J → A) → Type(𝓥 ⊔ β)
+--   eval-cont-rel R 𝒶 = ∀ (j : J) → R λ i → 𝒶 i j
+--   cont-compatible-op : Op J A → ContRel I A β → Type(𝓥 ⊔ α ⊔ β)
+--   cont-compatible-op 𝑓 R  = ∀ (𝒶 : (I → J → A)) → (eval-cont-rel R 𝒶 → R λ i → (𝑓 (𝒶 i)))
+--
+-- NEW:
+-- Lift a relation of tuples up to a relation on tuples of tuples.
+ eval-Rel : {I : ar}{A : Type α} → Rel A {I}{ρ} → (J : ar) → (I → J → A) → Type (𝓥 ⊔ ρ)
+ eval-Rel R J t = ∀ (j : J) → R λ i → t i j
 
- cont-compatible-op : Op J A → ContRel I A β → Type(𝓥 ⊔ α ⊔ β)
- cont-compatible-op 𝑓 R  = ∀ (𝒶 : (I → J → A)) → (eval-cont-rel R 𝒶 → R λ i → (𝑓 (𝒶 i)))
+{- A relation R is compatible with an operation 𝑓 if for every tuple t of tuples
+   belonging to R, the tuple whose elements are the result of applying 𝑓 to
+   sections of t also belongs to R. (see the bottom of this file for an heuristic explanation) -}
+
+ compatible-Rel : {I J : ar}{A : Type α} → Op(A){J} → Rel A {I}{ρ} → Type (𝓥 ⊔ α ⊔ ρ)
+ compatible-Rel 𝑓 R  = ∀ t → eval-Rel R arity[ 𝑓 ] t → R λ i → 𝑓 (t i)
+-- (inferred type of t is I → J → A)
+
+ eval-REL : {I J : ar}{𝒜 : I → Type α}
+  →         RelΠ I 𝒜 {ρ}       -- the relation type: subsets of Π[ i ∈ I ] 𝒜 i
+                                -- (where Π[ i ∈ I ] 𝒜 i is a type of dependent functions or "tuples")
+  →         ((i : I) → J → 𝒜 i)  -- an I-tuple of (𝒥 i)-tuples
+  →         Type (𝓥 ⊔ ρ)
+ eval-REL{I = I}{J}{𝒜} R t = ∀ j → R λ i → (t i) j
+
+ compatible-REL : {I J : ar}{𝒜 : I → Type α}
+  →               (∀ i → Op (𝒜 i){J})  -- for each i : I, an operation of type  𝒪(𝒜 i){J} = (J → 𝒜 i) → 𝒜 i
+  →               RelΠ I 𝒜 {ρ}        -- a subset of Π[ i ∈ I ] 𝒜 i
+                                      -- (where Π[ i ∈ I ] 𝒜 i is a type of dependent functions or "tuples")
+  →               Type (𝓥 ⊔ α ⊔ ρ)
+ compatible-REL {I = I}{J}{𝒜} 𝑓 R  = Π[ t ∈ ((i : I) → J → 𝒜 i) ] eval-REL R t
+
 
 \end{code}
 
@@ -94,17 +159,29 @@ Above we saw lifts of continuous relations and what it means for such relations 
 
 \begin{code}
 
-module _ {I J : Type 𝓥} {𝒜 : I → Type α} where
+-- module _ {I J : Type 𝓥} {𝒜 : I → Type α} where
 
- eval-dep-rel : DepRel I 𝒜 β → (∀ i → (J → 𝒜 i)) → Type(𝓥 ⊔ β)
- eval-dep-rel R 𝒶 = ∀ j → R (λ i → (𝒶 i) j)
+ -- OLD:  (do not delete until we're confident that the new approach is better)
+ -- eval-dep-rel : DepRel I 𝒜 β → (∀ i → (J → 𝒜 i)) → Type(𝓥 ⊔ β)
+ -- eval-dep-rel R 𝒶 = ∀ j → R (λ i → (𝒶 i) j)
 
- dep-compatible-op : (∀ i → Op J (𝒜 i)) → DepRel I 𝒜 β → Type(𝓥 ⊔ α ⊔ β)
- dep-compatible-op 𝑓 R  = ∀ 𝒶 → (eval-dep-rel R) 𝒶 → R λ i → (𝑓 i)(𝒶 i)
+ -- dep-compatible-op : (∀ i → Op J (𝒜 i)) → DepRel I 𝒜 β → Type(𝓥 ⊔ α ⊔ β)
+ -- dep-compatible-op 𝑓 R  = ∀ 𝒶 → (eval-dep-rel R) 𝒶 → R λ i → (𝑓 i)(𝒶 i)
 
 \end{code}
 
 In the definition of `dep-compatible-op`, we let Agda infer the type of `𝒶`; in this case `𝒶 : Π i ꞉ I , (J → 𝒜 i)`.
+
+
+
+-- Restricting relations to a given scope.
+-- subtuple : {A : Type α}(scope : Pred I β) → (I → A) → (Σ[ i ∈ I ] i ∈ scope) → A
+-- subtuple scope tuple (i , p) = tuple i
+-- restriction : {I : Arity}{A : Type α} → Rel I A → (scope : Pred I ℓ₀) → Rel (Σ[ i ∈ I ] i ∈ scope) A
+-- restriction f scope x = {!!}
+
+\end{code}
+
 
 
 --------------------------------------

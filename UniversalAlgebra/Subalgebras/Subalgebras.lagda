@@ -234,25 +234,25 @@ iso→injective {𝑨 = 𝑨} (f , g , f∼g , g∼f) {x}{y} fxfy =
 
 module _ {𝒦 : Pred (Algebra α 𝑆)(ov α)}{𝑩 : Algebra α 𝑆} where
 
- Lift-is-sub : 𝑩 IsSubalgebraOfClass 𝒦 → (Lift-alg 𝑩 α) IsSubalgebraOfClass 𝒦
+ Lift-is-sub : 𝑩 IsSubalgebraOfClass 𝒦 → (Lift-Alg 𝑩 α) IsSubalgebraOfClass 𝒦
  Lift-is-sub (𝑨 , (sa , (KA , B≅sa))) = 𝑨 , sa , KA , ≅-trans (≅-sym Lift-≅) B≅sa
 
 
-Lift-≤ : (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}{γ : Level} → 𝑩 ≤ 𝑨 → Lift-alg 𝑩 γ ≤ 𝑨
+Lift-≤ : (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}{γ : Level} → 𝑩 ≤ 𝑨 → Lift-Alg 𝑩 γ ≤ 𝑨
 Lift-≤ 𝑨 B≤A = ≤-iso 𝑨 (≅-sym Lift-≅) B≤A
 
-≤-Lift : (𝑨 : Algebra α 𝑆){γ : Level}{𝑩 : Algebra β 𝑆} → 𝑩 ≤ 𝑨 → 𝑩 ≤ Lift-alg 𝑨 γ
-≤-Lift 𝑨 {γ} {𝑩} B≤A = ≤-TRANS-≅ 𝑩 {𝑨} (Lift-alg 𝑨 γ) B≤A Lift-≅
+≤-Lift : (𝑨 : Algebra α 𝑆){γ : Level}{𝑩 : Algebra β 𝑆} → 𝑩 ≤ 𝑨 → 𝑩 ≤ Lift-Alg 𝑨 γ
+≤-Lift 𝑨 {γ} {𝑩} B≤A = ≤-TRANS-≅ 𝑩 {𝑨} (Lift-Alg 𝑨 γ) B≤A Lift-≅
 
 
-Lift-≤-Lift : {𝑨 : Algebra α 𝑆}(ℓᵃ : Level){𝑩 : Algebra β 𝑆}(ℓᵇ : Level) → 𝑨 ≤ 𝑩 → Lift-alg 𝑨 ℓᵃ ≤ Lift-alg 𝑩 ℓᵇ
-Lift-≤-Lift {𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ A≤B = ≤-trans (Lift-alg 𝑩 ℓᵇ) (≤-trans 𝑩 lAA A≤B) B≤lB
+Lift-≤-Lift : {𝑨 : Algebra α 𝑆}(ℓᵃ : Level){𝑩 : Algebra β 𝑆}(ℓᵇ : Level) → 𝑨 ≤ 𝑩 → Lift-Alg 𝑨 ℓᵃ ≤ Lift-Alg 𝑩 ℓᵇ
+Lift-≤-Lift {𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ A≤B = ≤-trans (Lift-Alg 𝑩 ℓᵇ) (≤-trans 𝑩 lAA A≤B) B≤lB
  where
 
- lAA : (Lift-alg 𝑨 ℓᵃ) ≤ 𝑨
+ lAA : (Lift-Alg 𝑨 ℓᵃ) ≤ 𝑨
  lAA = Lift-≤ 𝑨 {𝑨} ≤-refl
 
- B≤lB : 𝑩 ≤ Lift-alg 𝑩 ℓᵇ
+ B≤lB : 𝑩 ≤ Lift-Alg 𝑩 ℓᵇ
  B≤lB = ≤-Lift 𝑩 ≤-refl
 
 \end{code}

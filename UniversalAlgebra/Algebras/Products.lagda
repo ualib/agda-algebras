@@ -55,8 +55,8 @@ open algebra
 
 ⨅' : {I : Type 𝓘 }(𝒜 : I → algebra α 𝑆) → algebra (𝓘 ⊔ α) 𝑆
 
-⨅' {I} 𝒜 = record { univ = ∀ i → univ (𝒜 i) ;                 -- domain
-                     op = λ 𝑓 𝑎 i → (op (𝒜 i)) 𝑓 λ x → 𝑎 x i } -- basic operations
+⨅' {I} 𝒜 = record { carrier = ∀ i → carrier (𝒜 i) ;                 -- domain
+                     opsymbol = λ 𝑓 𝑎 i → (opsymbol (𝒜 i)) 𝑓 λ x → 𝑎 x i } -- basic operations
 
 \end{code}
 

@@ -149,10 +149,10 @@ The ⊧ relation is also invariant under the algebraic lift and lower operations
 
 module _ {X : Type 𝓧}{𝑨 : Algebra α 𝑆} where
 
- ⊧-Lift-invar : (∀ a b → funext a b) → (p q : Term X) → 𝑨 ⊧ p ≈ q → Lift-alg 𝑨 β ⊧ p ≈ q
- ⊧-Lift-invar fe p q Apq = ⊧-I-invar fe (Lift-alg 𝑨 _) p q Apq Lift-≅
+ ⊧-Lift-invar : (∀ a b → funext a b) → (p q : Term X) → 𝑨 ⊧ p ≈ q → Lift-Alg 𝑨 β ⊧ p ≈ q
+ ⊧-Lift-invar fe p q Apq = ⊧-I-invar fe (Lift-Alg 𝑨 _) p q Apq Lift-≅
 
- ⊧-lower-invar : (∀ a b → funext a b) → (p q : Term X) → Lift-alg 𝑨 β ⊧ p ≈ q  →  𝑨 ⊧ p ≈ q
+ ⊧-lower-invar : (∀ a b → funext a b) → (p q : Term X) → Lift-Alg 𝑨 β ⊧ p ≈ q  →  𝑨 ⊧ p ≈ q
  ⊧-lower-invar fe p q lApq = ⊧-I-invar fe 𝑨 p q lApq (≅-sym Lift-≅)
 
 \end{code}
@@ -237,7 +237,7 @@ An identity satisfied by all algebras in a class is also satisfied by the produc
 
  \begin{code}
 
- ⊧-P-lift-invar : (∀ a b → funext a b) → {p q : Term X} → (∀ i → Lift-alg (𝒜 i) β ⊧ p ≈ q)  →  ⨅ 𝒜 ⊧ p ≈ q
+ ⊧-P-lift-invar : (∀ a b → funext a b) → {p q : Term X} → (∀ i → Lift-Alg (𝒜 i) β ⊧ p ≈ q)  →  ⨅ 𝒜 ⊧ p ≈ q
  ⊧-P-lift-invar fe {p}{q} σ = ⊧-P-invar fe {p}{q} Aipq
   where
   Aipq : ∀ i → (𝒜 i) ⊧ p ≈ q
