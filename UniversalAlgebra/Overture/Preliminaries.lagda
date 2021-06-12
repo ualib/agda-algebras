@@ -64,12 +64,38 @@ open import Level                                 using    ( Level    ;   Lift
                                                            ; lift     ;   lower )
                                                   renaming ( suc      to  lsuc  )
 
-ℓ₁ : Level
-ℓ₁ = lsuc ℓ₀
-
 \end{code}
 
 We prefer to use `Type` in place of Agda's `Set` since for us *set* will mean a very special kind of (truncated) type. (See [Relations.Truncation][]). We also use `ℓ₀` in place of level `zero`, and `ℓ₁` for the successor of `ℓ₀`.
+
+
+#### Some small levels and types
+
+
+\begin{code}
+
+ℓ₁ : Level
+ℓ₁ = lsuc ℓ₀
+
+-- The empty type
+data 𝟘 : Type ℓ₀ where  -- maybe we should use ⊥ instead ...?
+
+-- The one element type
+data 𝟙 : Type ℓ₀ where
+ 𝟎 : 𝟙
+
+-- the two element type
+data 𝟚 : Type ℓ₀ where  -- Should we use Bool instead?
+ 𝟎 : 𝟚                  -- Should we use false instead?
+ 𝟏 : 𝟚                  -- Should we use true instead?
+
+-- the three element type
+data 𝟛 : Type ℓ₀ where
+ 𝟎 : 𝟛
+ 𝟏 : 𝟛
+ 𝟐 : 𝟛
+
+\end{code}
 
 
 #### <a id="agda-universes">Agda Universes</a>
