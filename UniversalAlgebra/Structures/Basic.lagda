@@ -19,26 +19,19 @@ open import Data.Product          using    (  _,_ ; Σ ; _×_  ;
                                   renaming (  proj₁ to fst   ;
                                               proj₂ to snd   )
 open import Level                 using    (  Level ; Lift   )
-                                  renaming (  suc  to lsuc   ;
-                                              zero to ℓ₀     )
 open import Relation.Binary.Core  using    (  _⇒_ ; _=[_]⇒_  )
                                   renaming (  REL  to BinREL ;
                                               Rel  to BinRel )
 
-
-open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥ ; 𝟘 ; 𝟙 ; 𝟚 ; 𝟛 )
-open import Relations.Discrete     using ( Op ; _|:_ ; Arity ; compatible-op )
-open import Relations.Continuous   using ( Rel; RelΠ ; compatible-Rel ; compatible-REL )
+open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥ ; 𝟘 ; 𝟙 ; 𝟚 ; 𝟛 ; ℓ₁)
+open import Relations.Discrete     using ( Arity ; Op ; _|:_ ; compatible-op )
+open import Relations.Continuous   using ( Rel )
 
 private variable α ρ : Level
 
-ℓ₁ : Level
-ℓ₁ = lsuc ℓ₀
-
-
--- Inhabitants of Signature type are pairs, (s , ar), where s is an operation, OR a relation symbol (new!), 
-Signature : Type ℓ₁                               --  and ar the arity of s.
-Signature = Σ[ F ∈ Type ℓ₀ ] (F → Arity ℓ₀)
+-- Inhabitants of Signature type are pairs, (s , ar), where s is an operation symbol,
+Signature : Type ℓ₁                                -- OR a relation symbol (new!),
+Signature = Σ[ F ∈ Type ℓ₀ ] (F → Arity ℓ₀)        -- and ar the arity of s.
 
 
 Structure : (𝑅 F : Signature) → Type (lsuc (α ⊔ ρ))

@@ -31,7 +31,7 @@ open import Relation.Binary.PropositionalEquality using    ( sym ; trans ; cong 
 
 open import Algebras.Products      𝑆  using (ov)
 open import Overture.Preliminaries    using (∣_∣; ∥_∥)
-open import Relations.Discrete        using (𝟎; _|:_)
+open import Relations.Discrete        using (0[_] ; _|:_)
 open import Relations.Quotients       using (_/_; ⟪_⟫; IsBlock)
 
 private variable α β ρ : Level
@@ -69,7 +69,7 @@ We defined the *zero relation* `𝟎` in the [Relations.Discrete][] module.  We 
 
 \begin{code}
 
-𝟎-IsEquivalence : {A : Type α} →  IsEquivalence {A = A} 𝟎
+𝟎-IsEquivalence : {A : Type α} →  IsEquivalence {A = A} 0[ A ]
 𝟎-IsEquivalence = record { refl = refl ; sym = sym; trans = trans }
 
 \end{code}
@@ -78,10 +78,10 @@ Next we formally record another obvious fact---that `𝟎-rel` is compatible wit
 
 \begin{code}
 
-𝟎-compatible-op : funext 𝓥 α → {𝑨 : Algebra α 𝑆} (𝑓 : ∣ 𝑆 ∣) → (𝑓 ̂ 𝑨) |: 𝟎
+𝟎-compatible-op : funext 𝓥 α → {𝑨 : Algebra α 𝑆} (𝑓 : ∣ 𝑆 ∣) → (𝑓 ̂ 𝑨) |: 0[ ∣ 𝑨 ∣ ]
 𝟎-compatible-op fe {𝑨} 𝑓 {i}{j} ptws0  = cong (𝑓 ̂ 𝑨) (fe ptws0)
 
-𝟎-compatible : funext 𝓥 α → {𝑨 : Algebra α 𝑆} → compatible 𝑨 𝟎
+𝟎-compatible : funext 𝓥 α → {𝑨 : Algebra α 𝑆} → compatible 𝑨 0[ ∣ 𝑨 ∣ ]
 𝟎-compatible fe {𝑨} = λ 𝑓 x → 𝟎-compatible-op fe {𝑨} 𝑓 x
 
 \end{code}
@@ -90,11 +90,11 @@ Finally, we have the ingredients need to construct the zero congruence of any al
 
 \begin{code}
 
-Δ : (𝑨 : Algebra α 𝑆){fe : funext 𝓥 α} → IsCongruence 𝑨 𝟎
+Δ : (𝑨 : Algebra α 𝑆){fe : funext 𝓥 α} → IsCongruence 𝑨 0[ ∣ 𝑨 ∣ ]
 Δ 𝑨 {fe} = mkcon 𝟎-IsEquivalence (𝟎-compatible fe)
 
 𝟘 : (𝑨 : Algebra α 𝑆){fe : funext 𝓥 α} → Con{α} 𝑨
-𝟘 𝑨 {fe} = IsCongruence→Con 𝟎 (Δ 𝑨 {fe})
+𝟘 𝑨 {fe} = IsCongruence→Con 0[ ∣ 𝑨 ∣ ] (Δ 𝑨 {fe})
 
 \end{code}
 

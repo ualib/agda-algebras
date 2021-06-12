@@ -219,15 +219,15 @@ Recall, in the [section on level lifting and lowering](Overture.Lifts.html#level
 open Lift
 
 
-Lift-op : {I : Arity 𝓥} {A : Type α} → Op A {I} → (β : Level) → Op (Lift β A) {I}
-Lift-op f β = λ x → lift (f (λ i → lower (x i)))
+Lift-alg-op : {I : Arity 𝓥} {A : Type α} → Op A {I} → (β : Level) → Op (Lift β A) {I}
+Lift-alg-op f β = λ x → lift (f (λ i → lower (x i)))
 
 Lift-Alg : {𝑆 : Signature 𝓞 𝓥} → Algebra α 𝑆 → (β : Level) → Algebra (α ⊔ β) 𝑆
-Lift-Alg {𝑆 = 𝑆} 𝑨 β = Lift β ∣ 𝑨 ∣ , (λ (𝑓 : ∣ 𝑆 ∣) → Lift-op (𝑓 ̂ 𝑨) β)
+Lift-Alg {𝑆 = 𝑆} 𝑨 β = Lift β ∣ 𝑨 ∣ , (λ (𝑓 : ∣ 𝑆 ∣) → Lift-alg-op (𝑓 ̂ 𝑨) β)
 
 
 Lift-op-lilAlg : {I : Arity ℓ₀}{A : Type α} → Op A {I} → (β : Level) → Op (Lift β A) {I}
-Lift-op-lilAlg {I = I} = Lift-op{𝓥 = ℓ₀}{I = I}
+Lift-op-lilAlg {I = I} = Lift-alg-op{𝓥 = ℓ₀}{I = I}
 
 
 Lift-lilAlg : {𝑆 : signature 𝓞} → Algebra α 𝑆 → (β : Level) → Algebra (α ⊔ β) 𝑆
@@ -236,7 +236,7 @@ Lift-lilAlg {𝑆 = 𝑆} 𝑨 β = Lift β ∣ 𝑨 ∣ , (λ (𝑓 : ∣ 𝑆 
 open algebra
 
 Lift-algebra : {𝑆 : Signature 𝓞 𝓥} → algebra α 𝑆 → (β : Level) → algebra (α ⊔ β) 𝑆
-Lift-algebra {𝑆 = 𝑆} 𝑨 β = mkalg (Lift β (carrier 𝑨)) (λ (f : ∣ 𝑆 ∣) → Lift-op ((opsymbol 𝑨) f) β)
+Lift-algebra {𝑆 = 𝑆} 𝑨 β = mkalg (Lift β (carrier 𝑨)) (λ (f : ∣ 𝑆 ∣) → Lift-alg-op ((opsymbol 𝑨) f) β)
 
 \end{code}
 

@@ -17,7 +17,7 @@ open import Overture.Inverses               using ( Image_∋_ ; eq ; Inv ; InvI
                                                   ; id-is-injective ; ∘-injective ; IsSurjective
                                                   ; Surjective ; SurjInv ) public
 
-open import Relations.Discrete              using (Im_⊆_ ; Arity ; ker ; kerlift ; ker' ; kernel ; 𝟎
+open import Relations.Discrete              using (Im_⊆_ ; Arity ; ker ; kerlift ; ker' ; kernel ; 0[_]
                                                   ; _⊑_ ; ⊑-refl ; ⊑-trans ; Op ; π ; eval-rel
                                                   ; compatible-op ; _|:_ ; compatagree ; compatagree'
                                                   ; arity[_] ) public
@@ -38,20 +38,33 @@ open import Relations.Truncation            using ( is-center ; is-singleton ; i
 open import Relations.Extensionality        using ( SurjInvIsRightInv ; epic-factor ; pred-ext
                                                   ; block-ext ; block-ext|uip ; welldef ; swelldef ) public
 
-open import Algebras.Basic                  using ( Signature ; Level-of-Signature ; signature ; monoid-op
-                                                  ; monoid-sig ; Algebra ; lilAlgebra ; Level-of-Alg
-                                                  ; Level-of-Carrier ; Level-of-lilAlg ; Level-of-lilCarrier
-                                                  ; algebra ; lilalgebra ; algebra→Algebra ; Algebra→algebra
-                                                  ; _̂_ ; Lift-op ; Lift-Alg ; Lift-op-lilAlg ; Lift-lilAlg
-                                                  ; Lift-algebra ; compatible ; compatible-lilAlg
-                                                  ; compatible-Rel-alg ; compatible-REL-alg
-                                                  ; compatible-Rel-lilAlg ; compatible-REL-lilAlg ) public
+open import Algebras.Basic                  renaming ( Signature  to AlgebraSignature   -- to avoid conflicts with Structures.Basic
+                                                     ; signature  to algebra-signature
+                                                     ; compatible to compatibleAlgebra )
+                                            using    ( monoid-op ; monoid-sig ; Algebra ; lilAlgebra ; Level-of-Alg
+                                                     ; Level-of-Carrier ; Level-of-lilAlg ; Level-of-lilCarrier
+                                                     ; algebra ; lilalgebra ; algebra→Algebra ; Algebra→algebra
+                                                     ; _̂_ ; Lift-alg-op ; Lift-Alg ; Lift-op-lilAlg ; Lift-lilAlg
+                                                     ; Lift-algebra ;  compatible-lilAlg
+                                                     ; compatible-Rel-alg ; compatible-REL-alg
+                                                     ; compatible-Rel-lilAlg ; compatible-REL-lilAlg ) public
 
-open import Algebras.Products               using ( ⨅ ; ⨅' ; ov ; ℑ ; 𝔄 ; class-product ) public
+open import Algebras.Products               renaming ( ⨅ to ⨅a ; ℑ to ℑa )  -- to avoid conflicts with Structures.Products
+                                            using    ( ⨅' ; ov ; 𝔄 ; class-product ) public
 
 open import Algebras.Congruences            using ( IsCongruence ; Con ; IsCongruence→Con ; Con→IsCongruence
                                                   ; 𝟎-IsEquivalence ; 𝟎-compatible-op ; 𝟎-compatible
                                                   ; Δ ; 𝟘 ; _╱_ ; 𝟘[_╱_] ; 𝟎[_╱_] ; /-≡ ) public
+
+open import Structures.Basic                using ( Signature ; Structure ; RStructure ; AStructure
+                                                  ; Structure→RStructure ; Structure→AStructure
+                                                  ; _⟦_⟧ᵣ ; _⟦_⟧ₒ ; _ʳ_ ; _ᵒ_ ; Compatible ; Compatible'
+                                                  ; Lift-op ; Lift-rel ; Lift-struc ; signature ; structure
+                                                  ; compatible ; Sig∅ ; Sig-0 ; Sig-1 ; Sig-2 ; Sig-0-1
+                                                  ; Sig-0-1-2 ) public
+
+open import Structures.Products             using (  ⨅ ; ℓp ; ℑ ; 𝔖 ; class-prod ) public
+
 
 open import Homomorphisms.Basic             using ( compatible-op-map ; is-homomorphism ; hom ; ∘-hom
                                                   ; ∘-is-hom ; 𝒾𝒹 ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-monomorphism
