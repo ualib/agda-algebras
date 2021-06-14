@@ -22,6 +22,7 @@ open import Agda.Builtin.Equality                 using    ( _≡_      ; refl  
 open import Agda.Primitive                        using    ( _⊔_                )
                                                   renaming ( Set      to  Type  )
 
+open import Function.Base          using    ( _∘_ ) -- ; id     )
 open import Relation.Binary                       using    ( IsEquivalence      )
                                                   renaming ( Rel      to BinRel )
 
@@ -31,8 +32,11 @@ open import Relation.Binary.PropositionalEquality using    ( sym ; trans ; cong 
 
 open import Algebras.Products      𝑆  using (ov)
 open import Overture.Preliminaries    using (∣_∣; ∥_∥)
-open import Relations.Discrete        using (𝟎; _|:_)
-open import Relations.Quotients       using (_/_; ⟪_⟫; IsBlock)
+open import Relations.Discrete        using (0[_] ; _|:_)
+open import Relations.Quotients       using (_/_ ; ⟪_⟫ ; IsBlock ; Quotient ; Equivalence ; 0[_]Equivalence ;  ⟪_∼_⟫-elim )
+
+
+open import Relations.Extensionality  using (swelldef)
 
 private variable α β ρ : Level
 \end{code}
@@ -65,37 +69,22 @@ Con→IsCongruence θ = ∥ θ ∥
 \end{code}
 
 #### <a id="example">Example</a>
-We defined the *zero relation* `𝟎` in the [Relations.Discrete][] module.  We now build the *trivial congruence*, which has `𝟎` as its underlying relation. Observe that `𝟎` is equivalent to the identity relation `≡` and these are obviously both equivalence relations. In fact, we already proved this of `≡` in the [Overture.Equality][] module, so we simply apply the corresponding proofs.
+We defined the *zero relation* `0[_]` in the [Relations.Discrete][] module.  We now build the *trivial congruence*, which has `0[_]` as its underlying relation. Observe that `0[_]` is equivalent to the identity relation `≡` and these are obviously both equivalence relations. In fact, we already proved this of `≡` in the [Overture.Equality][] module, so we simply apply the corresponding proofs.
 
 \begin{code}
+-- Example. The zero congruence of a structure.
+0[_]Compatible : {α : Level}(𝑨 : Algebra α 𝑆){ρ : Level} → swelldef 𝓥 α → (𝑓 : ∣ 𝑆 ∣) → (𝑓 ̂ 𝑨) |: (0[ ∣ 𝑨 ∣ ]{ρ})
+0[ 𝑨 ]Compatible wd 𝑓 {i}{j} ptws0  = lift γ
+  where
+  γ : (𝑓 ̂ 𝑨) i ≡ (𝑓 ̂ 𝑨) j
+  γ = wd (𝑓 ̂ 𝑨) i j (lower ∘ ptws0)
 
-𝟎-IsEquivalence : {A : Type α} →  IsEquivalence {A = A} 𝟎
-𝟎-IsEquivalence = record { refl = refl ; sym = sym; trans = trans }
+open IsCongruence
+0Con[_] : {α : Level}(𝑨 : Algebra α 𝑆){ρ : Level} → swelldef 𝓥 α → Con{α}{α ⊔ ρ}  𝑨 
+0Con[ 𝑨 ]{ρ} wd = let 0eq = 0[ ∣ 𝑨 ∣ ]Equivalence{ρ}  in
+ ∣ 0eq ∣ , mkcon ∥ 0eq ∥ (0[ 𝑨 ]Compatible wd)
 
-\end{code}
-
-Next we formally record another obvious fact---that `𝟎-rel` is compatible with all operations of all algebras.
-
-\begin{code}
-
-𝟎-compatible-op : funext 𝓥 α → {𝑨 : Algebra α 𝑆} (𝑓 : ∣ 𝑆 ∣) → (𝑓 ̂ 𝑨) |: 𝟎
-𝟎-compatible-op fe {𝑨} 𝑓 {i}{j} ptws0  = cong (𝑓 ̂ 𝑨) (fe ptws0)
-
-𝟎-compatible : funext 𝓥 α → {𝑨 : Algebra α 𝑆} → compatible 𝑨 𝟎
-𝟎-compatible fe {𝑨} = λ 𝑓 x → 𝟎-compatible-op fe {𝑨} 𝑓 x
-
-\end{code}
-
-Finally, we have the ingredients need to construct the zero congruence of any algebra we like.
-
-\begin{code}
-
-Δ : (𝑨 : Algebra α 𝑆){fe : funext 𝓥 α} → IsCongruence 𝑨 𝟎
-Δ 𝑨 {fe} = mkcon 𝟎-IsEquivalence (𝟎-compatible fe)
-
-𝟘 : (𝑨 : Algebra α 𝑆){fe : funext 𝓥 α} → Con{α} 𝑨
-𝟘 𝑨 {fe} = IsCongruence→Con 𝟎 (Δ 𝑨 {fe})
-
+-- 0Con[ 𝑨 ]{ρ} wd = 0[ ∣ 𝑨 ∣ ]Equivalence {ρ} , 0[ 𝑨 ]Compatible wd
 \end{code}
 
 
@@ -127,8 +116,11 @@ From this we easily obtain the zero congruence of `𝑨 ╱ θ` by applying the 
 
 \begin{code}
 
-𝟎[_╱_] : (𝑨 : Algebra α 𝑆)(θ : Con{α}{ρ} 𝑨){fe : funext 𝓥 (α ⊔ lsuc ρ)} → Con (𝑨 ╱ θ)
-𝟎[ 𝑨 ╱ θ ] {fe} = 𝟘[ 𝑨 ╱ θ ] , Δ (𝑨 ╱ θ) {fe}
+-- 𝟎[_╱_] : (𝑨 : Algebra α 𝑆)(θ : Con{α}{ρ} 𝑨){fe : funext 𝓥 (α ⊔ lsuc ρ)} → Con (𝑨 ╱ θ)
+-- 𝟎[ 𝑨 ╱ θ ] {fe} = 𝟘[ 𝑨 ╱ θ ] , Δ (𝑨 ╱ θ) {fe}
+𝟎[_╱_] : {α : Level}(𝑨 : Algebra α 𝑆){ρ : Level}(θ : Con {α}{ρ}𝑨) → swelldef 𝓥 (α ⊔ lsuc ρ)  → Con (𝑨 ╱ θ)
+𝟎[_╱_] {α} 𝑨 {ρ} θ wd = let 0eq = 0[ ∣ 𝑨 ╱ θ ∣ ]Equivalence  in
+ ∣ 0eq ∣ , mkcon ∥ 0eq ∥ (0[ 𝑨 ╱ θ ]Compatible {ρ} wd)
 
 \end{code}
 
@@ -157,3 +149,56 @@ open IsCongruence
 <span style="float:right;">[Homomorphisms →](Homomorphisms.html)</span>
 
 {% include UALib.Links.md %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- OLD STUFF
+
+-- 𝟎-IsEquivalence : {A : Type α} →  IsEquivalence {A = A} 0[ A ]
+-- 𝟎-IsEquivalence = record { refl = refl ; sym = sym; trans = trans }
+
+\end{code}
+
+Next we formally record another obvious fact---that `𝟎-rel` is compatible with all operations of all algebras.
+
+𝟎-compatible-op : funext 𝓥 α → {𝑨 : Algebra α 𝑆} (𝑓 : ∣ 𝑆 ∣) → (𝑓 ̂ 𝑨) |: 0[ ∣ 𝑨 ∣ ]
+𝟎-compatible-op fe {𝑨} 𝑓 {i}{j} ptws0  = cong (𝑓 ̂ 𝑨) (fe ptws0)
+
+𝟎-compatible : funext 𝓥 α → {𝑨 : Algebra α 𝑆} → compatible 𝑨 0[ ∣ 𝑨 ∣ ]
+𝟎-compatible fe {𝑨} = λ 𝑓 x → 𝟎-compatible-op fe {𝑨} 𝑓 x
+
+\end{code}
+
+Finally, we have the ingredients need to construct the zero congruence of any algebra we like.
+
+
+Δ : (𝑨 : Algebra α 𝑆){fe : funext 𝓥 α} → IsCongruence 𝑨 0[ ∣ 𝑨 ∣ ]
+Δ 𝑨 {fe} = mkcon 0[ A ]-IsEquivalence (𝟎-compatible fe)
+
+𝟘 : (𝑨 : Algebra α 𝑆){fe : funext 𝓥 α} → Con{α} 𝑨
+𝟘 𝑨 {fe} = IsCongruence→Con 0[ ∣ 𝑨 ∣ ] (Δ 𝑨 {fe})
+

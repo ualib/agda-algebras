@@ -171,6 +171,32 @@ open import Relation.Binary.PropositionalEquality using    ( sym ; trans ; cong 
 
 
 
+-- module Structures.Basic where
+
+open import Agda.Primitive        using    (  _⊔_ ;  lsuc    )
+                                  renaming (  Set   to Type  ;
+                                              lzero to ℓ₀    )
+open import Data.Product          using    (  _,_ ; Σ ; _×_  ;
+                                              Σ-syntax       )
+                                  renaming (  proj₁ to fst   ;
+                                              proj₂ to snd   )
+open import Level                 using    (  Level ; Lift   )
+open import Relation.Binary.Core  using    (  _⇒_ ; _=[_]⇒_  )
+                                  renaming (  REL  to BinREL ;
+                                              Rel  to BinRel )
+
+
+-- module Structures.Products where
+
+open import Agda.Primitive        using    (  _⊔_ ;  lsuc    )
+                                  renaming (  Set   to Type  )
+open import Data.Product          using    (  _,_ ; Σ ; _×_  ;
+                                              Σ-syntax       )
+open import Level                 using    (  Level ; Lift   )
+open import Relation.Unary        using    (  ∅ ; _∈_ ; Pred )
+
+
+
 
 -- module Homomorphisms.Basic {𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
 

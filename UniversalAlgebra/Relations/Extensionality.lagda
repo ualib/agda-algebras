@@ -36,8 +36,8 @@ open import Overture.Preliminaries using ( 𝑖𝑑 ; _⁻¹ ; _∙_ ; transport
 open import Overture.Inverses      using ( IsSurjective ; SurjInv
                                          ; InvIsInv ; Image_∋_ ; eq  )
 open import Relations.Discrete     using ( Op                        )
-open import Relations.Quotients    using ( [_] ; /-subset
-                                         ; /-supset ; IsBlock ; ⟪_⟫  )
+open import Relations.Quotients    using ( [_] ; []-⊆ ; []-⊇ -- /-subset ; /-supset
+                                         ; IsBlock ; ⟪_⟫  )
 open import Relations.Truncation   using ( blk-uip ; to-Σ-≡          )
 
 
@@ -111,8 +111,9 @@ We need an identity type for congruence classes (blocks) over sets so that two d
 
 module _ {A : Type α}{R : BinRel A ρ} where
 
- block-ext : pred-ext α ρ → IsEquivalence R → {u v : A} → R u v → [ u ]{R} ≡ [ v ]{R}
- block-ext pe Req {u}{v} Ruv = pe (/-subset Req Ruv) (/-supset Req Ruv)
+ block-ext : pred-ext α ρ → IsEquivalence{a = α}{ℓ = ρ} R → {u v : A} → R u v → [ u ] R ≡ [ v ] R
+ -- block-ext pe Req {u}{v} Ruv = pe (/-subset Req Ruv) (/-supset Req Ruv)
+ block-ext pe Req {u}{v} Ruv = pe ([]-⊆ {R = (R , Req)} u v Ruv) ([]-⊇ {R = (R , Req)} u v Ruv)
 
 
  private

@@ -19,15 +19,15 @@ open import Agda.Builtin.Equality using    ( _≡_ ; refl     )
 open import Agda.Primitive        using    ( _⊔_            )
                                   renaming ( Set  to Type
                                            ; Setω to Typeω  )
+open import Data.Product          using    ( _,_ ; _×_      )
 open import Function.Base         using    ( _∘_            )
 open import Level                 using    ( Level ; Lift   )
                                   renaming ( suc  to lsuc
                                            ; zero to ℓ₀     )
 open import Relation.Binary.Core  using    ( _⇒_ ; _=[_]⇒_  )
-                                  renaming ( REL  to BinREL ;
-                                             Rel  to BinRel )
+                                  renaming ( REL  to BinREL
+                                           ; Rel  to BinRel )
 open import Relation.Unary        using    ( ∅; _∈_; Pred   )
-open import Data.Product          using    ( _,_ ; _×_      )
 
 private variable α β ρ 𝓥 : Level
 
@@ -112,10 +112,10 @@ The *identity relation* (which is equivalent to the kernel of an injective funct
 
 \begin{code}
 
-module _ {A : Type α } where
-
- 𝟎 : BinRel A α
- 𝟎 x y = x ≡ y
+-- 0[_] : (A : Type α) → BinRel A α
+-- 0[ A ] x y = x ≡ y
+0[_] : (A : Type α) → {ρ : Level} → BinRel A (α ⊔ ρ)
+0[ A ] {ρ} = λ x y → Lift ρ (x ≡ y)
 
 \end{code}
 
