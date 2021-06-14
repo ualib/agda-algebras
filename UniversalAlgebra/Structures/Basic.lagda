@@ -24,7 +24,7 @@ open import Relation.Binary.Core  using    (  _⇒_ ; _=[_]⇒_  )
                                               Rel  to BinRel )
 
 open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥ ; 𝟘 ; 𝟙 ; 𝟚 ; 𝟛 ; ℓ₁)
-open import Relations.Discrete     using ( Arity ; Op ; _|:_ ; compatible-op )
+open import Relations.Discrete     using ( Arity ; Op ; _|:_ ; _preserves_ )
 open import Relations.Continuous   using ( Rel )
 
 private variable α ρ : Level
@@ -72,7 +72,7 @@ module _ {𝑅 𝐹 : Signature} where
  Compatible 𝑨 r = ∀ 𝑓 → (𝑓 ᵒ 𝑨) |: r
 
  Compatible' : {ρ' : Level}(𝑨 : Structure{α}{ρ} 𝑅 𝐹) → BinRel (fst 𝑨) ρ'  → Type (α ⊔ ρ')
- Compatible' 𝑨 r = ∀ 𝑓 → compatible-op (𝑓 ᵒ 𝑨) r
+ Compatible' 𝑨 r = ∀ 𝑓 → (𝑓 ᵒ 𝑨) preserves r
 
  open Level
 

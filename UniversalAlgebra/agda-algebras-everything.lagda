@@ -19,8 +19,8 @@ open import Overture.Inverses               using    ( Image_∋_ ; eq ; Inv ; I
 
 open import Relations.Discrete              using    (Im_⊆_ ; Arity ; ker ; kerlift ; ker' ; kernel ; 0[_]
                                                      ; _⊑_ ; ⊑-refl ; ⊑-trans ; Op ; π ; eval-rel
-                                                     ; compatible-op ; _|:_ ; compatagree ; compatagree'
-                                                     ; arity[_] )
+                                                     ; _preserves_ ; _|:_ ; compatibility-agreement
+                                                     ; compatibility-agreement' ; arity[_] )
 
 open import Relations.Continuous            using    ( ar ; Rel ; Rel-syntax ; RelΠ ; RelΠ-syntax ; eval-Rel
                                                      ; compatible-Rel ; eval-REL ; compatible-REL )

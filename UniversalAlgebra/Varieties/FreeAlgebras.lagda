@@ -247,7 +247,7 @@ We now use `ψlemma0-ap` to prove that every map `h : X → ∣ 𝑨 ∣`, from 
 \begin{code}
 
  𝔽-lift-hom : (𝑨 : Algebra α 𝑆) → 𝑨 ∈ S{α}{α} 𝒦 → (X → ∣ 𝑨 ∣) → hom 𝔽 𝑨
- 𝔽-lift-hom 𝑨 skA h = fst(HomFactor (fe 𝓕 α)(fe 𝓕⁺ 𝓕⁺) 𝑨 (lift-hom 𝑨 h) hom𝔽 (ψlemma0-ap skA) hom𝔽-is-epic)
+ 𝔽-lift-hom 𝑨 skA h = fst(HomFactor (fe 𝓕 α) wd+  𝑨 (lift-hom 𝑨 h) hom𝔽 (ψlemma0-ap skA) hom𝔽-is-epic)
 
 \end{code}
 
@@ -362,7 +362,7 @@ With these results in hand, it is now trivial to prove the main theorem of this 
                       ∣ φ ∣ q      ∎
 
   γ : epi 𝔽 𝑨
-  γ = fst (HomFactorEpi (fe 𝓕 𝓕⁺)(fe 𝓕⁺ 𝓕⁺)(fe 𝓕⁺ 𝓕⁺) 𝑨 φ hom𝔽 kerincl hom𝔽-is-epic φE)
+  γ = fst (HomFactorEpi (fe 𝓕 𝓕⁺) wd+ 𝑨 φ hom𝔽 kerincl hom𝔽-is-epic φE)
 
 \end{code}
 
@@ -376,7 +376,7 @@ Finally we come to one of the main theorems of this module; it asserts that ever
 
 \begin{code}
 
- module _ (pe : pred-ext (ov α)(ov α))(wd : swelldef 𝓥 𝓕)                      -- extensionality assumptions
+ module _ (pe : pred-ext (ov α)(ov α))(wd : swelldef 𝓥 𝓕) -- extensionality assumptions
           (Cset : is-set ∣ ℭ ∣)(kuip : blk-uip(Term X)∣ kercon wd{ℭ}homℭ ∣) -- truncation assumptions
   where
 
