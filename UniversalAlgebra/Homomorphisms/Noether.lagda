@@ -79,10 +79,12 @@ open ≡-Reasoning
 FirstHomTheorem|Set :
 
     (𝑨 : Algebra α 𝑆)(𝑩 : Algebra β 𝑆)(h : hom 𝑨 𝑩)
-    (pe : pred-ext α β)(fe : swelldef 𝓥 β)                              -- extensionality assumptions
-    (Bset : is-set ∣ 𝑩 ∣)(buip : blk-uip ∣ 𝑨 ∣ ∣ kercon fe {𝑩} h ∣)     -- truncation assumptions
-    -----------------------------------------------------------------------------------------------------------
- →  Σ[ φ ∈ hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩  ] ((∣ h ∣ ≡ ∣ φ ∣ ∘ ∣ πker fe{𝑩}h ∣) × IsInjective ∣ φ ∣ × is-embedding ∣ φ ∣)
+    (pe : pred-ext α β)(fe : swelldef 𝓥 β)                          -- extensionality assumptions
+    (Bset : is-set ∣ 𝑩 ∣)(buip : blk-uip ∣ 𝑨 ∣ ∣ kercon fe {𝑩} h ∣) -- truncation assumptions
+    ----------------------------------------------------------------
+ →  Σ[ φ ∈ hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩  ]
+                            ( ( ∣ h ∣ ≡ ∣ φ ∣ ∘ ∣ πker fe{𝑩}h ∣ )
+                              × IsInjective ∣ φ ∣  ×  is-embedding ∣ φ ∣  )
 
 FirstHomTheorem|Set 𝑨 𝑩 h pe fe Bset buip = (φ , φhom) , refl , φmon , φemb
  where
@@ -113,15 +115,18 @@ Below we will prove that the homomorphism `φ`, whose existence we just proved, 
 
 FirstIsoTheorem|Set :
 
-     (𝑨 : Algebra α 𝑆)(𝑩 : Algebra β 𝑆)(h : hom 𝑨 𝑩)
-     (pe : pred-ext α β)(fe : swelldef 𝓥 β)(fww : funext β β)       -- extensionality assumptions
+     (𝑨 : Algebra α 𝑆) (𝑩 : Algebra β 𝑆) (h : hom 𝑨 𝑩)
+     (pe : pred-ext α β) (fe : swelldef 𝓥 β)                        -- extensionality assumptions
      (Bset : is-set ∣ 𝑩 ∣)(buip : blk-uip ∣ 𝑨 ∣ ∣ kercon fe{𝑩}h ∣)  -- truncation assumptions
  →   IsSurjective ∣ h ∣
-     -----------------------------------------------------------------------------------------------------------
- →   Σ[ f ∈ (epi (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩)] (∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣) × IsInjective ∣ f ∣ × is-embedding ∣ f ∣
+     ---------------------------------------------------------------
+ →   Σ[ f ∈ (epi (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩)]
+                          ( ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣ )
+                            × IsInjective ∣ f ∣ × is-embedding ∣ f ∣
 
-FirstIsoTheorem|Set 𝑨 𝑩 h pe fe fww Bset buip hE = (fmap , fhom , fepic) , refl , (snd ∥ FHT ∥)
- where
+FirstIsoTheorem|Set 𝑨 𝑩 h pe fe Bset buip hE =
+ (fmap , fhom , fepic) , refl , (snd ∥ FHT ∥)
+  where
   FHT = FirstHomTheorem|Set 𝑨 𝑩 h pe fe Bset buip
 
   fmap : ∣ ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe ∣ → ∣ 𝑩 ∣
@@ -136,7 +141,7 @@ FirstIsoTheorem|Set 𝑨 𝑩 h pe fe fww Bset buip hE = (fmap , fhom , fepic) ,
    a = SurjInv ∣ h ∣ hE b
 
    bfa : b ≡ fmap ⟪ a ⟫
-   bfa = (cong-app (SurjInvIsRightInv {fe = fww} ∣ h ∣ hE) b)⁻¹
+   bfa = ((SurjInvIsRightInv ∣ h ∣ hE) b)⁻¹
 
    Goal : Image fmap ∋ b
    Goal = Image_∋_.eq ⟪ a ⟫ bfa
@@ -150,12 +155,14 @@ Now we prove that the homomorphism `φ`, whose existence is guaranteed by `First
 module _ {fe : swelldef 𝓥 β}(𝑨 : Algebra α 𝑆)(𝑩 : Algebra β 𝑆)(h : hom 𝑨 𝑩) where
 
  NoetherHomUnique : (f g : hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩)
-  →                 ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣ → ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker fe{𝑩}h ∣
+  →                 ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣
+  →                 ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker fe{𝑩}h ∣
   →                 ∀ a  →  ∣ f ∣ a ≡ ∣ g ∣ a
 
- NoetherHomUnique f g hfk hgk (_ , R-block a refl) = ∣ f ∣ (_ , R-block a refl) ≡⟨ cong-app(hfk ⁻¹)a ⟩
-                                                     ∣ h ∣ a                    ≡⟨ cong-app(hgk)a ⟩
-                                                     ∣ g ∣ (_ , R-block a refl) ∎
+ NoetherHomUnique f g hfk hgk (_ , R-block a refl) =
+  ∣ f ∣ (_ , R-block a refl) ≡⟨ cong-app(hfk ⁻¹)a ⟩
+  ∣ h ∣ a                    ≡⟨ cong-app(hgk)a ⟩
+  ∣ g ∣ (_ , R-block a refl) ∎
 
 \end{code}
 
@@ -164,7 +171,9 @@ If, in addition, we postulate extensionality of functions defined on the domain 
 \begin{code}
 
  fe-NoetherHomUnique : {fuww : funext (α ⊔ lsuc β) β}(f g : hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩)
-  →  ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣  →  ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker fe{𝑩}h ∣  →  ∣ f ∣ ≡ ∣ g ∣
+  →                    ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣
+  →                    ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker fe{𝑩}h ∣
+  →                    ∣ f ∣ ≡ ∣ g ∣
 
  fe-NoetherHomUnique {fuww} f g hfk hgk = fuww (NoetherHomUnique f g hfk hgk)
 
@@ -175,7 +184,8 @@ The proof of `NoetherHomUnique` goes through for the special case of epimorphism
 \begin{code}
 
  NoetherIsoUnique : (f g : epi (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩)
-  →                 ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣ → ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker fe{𝑩}h ∣
+  →                 ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣
+  →                 ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker fe{𝑩}h ∣
   →                 ∀ a → ∣ f ∣ a ≡ ∣ g ∣ a
 
  NoetherIsoUnique f g hfk hgk = NoetherHomUnique (epi-to-hom 𝑩 f) (epi-to-hom 𝑩 g) hfk hgk
@@ -207,30 +217,31 @@ If `τ : hom 𝑨 𝑩`, `ν : hom 𝑨 𝑪`, `ν` is surjective, and `ker ν �
 
 module _ {𝑨 : Algebra α 𝑆}{𝑪 : Algebra γ 𝑆} where
 
- HomFactor : funext α β → funext γ γ → (𝑩 : Algebra β 𝑆)(τ : hom 𝑨 𝑩)(ν : hom 𝑨 𝑪)
+ HomFactor : funext α β → swelldef 𝓥 γ
+  →          (𝑩 : Algebra β 𝑆)(τ : hom 𝑨 𝑩)(ν : hom 𝑨 𝑪)
   →          kernel ∣ ν ∣ ⊆ kernel ∣ τ ∣ → IsSurjective ∣ ν ∣
-             -------------------------------------------
+             --------------------------------------------------
   →          Σ[ φ ∈ (hom 𝑪 𝑩)] ∣ τ ∣ ≡ ∣ φ ∣ ∘ ∣ ν ∣
 
- HomFactor fxy fzz 𝑩 τ ν Kντ νE = (φ , φIsHomCB) , τφν
+ HomFactor fxy wd 𝑩 τ ν Kντ νE = (φ , φIsHomCB) , τφν
   where
    νInv : ∣ 𝑪 ∣ → ∣ 𝑨 ∣
    νInv = SurjInv ∣ ν ∣ νE
 
-   η : ∣ ν ∣ ∘ νInv ≡ 𝑖𝑑 ∣ 𝑪 ∣
-   η = SurjInvIsRightInv{fe = fzz} ∣ ν ∣ νE
+   η : ∀ c → ∣ ν ∣ (νInv c) ≡ c
+   η c = SurjInvIsRightInv ∣ ν ∣ νE c
 
    φ : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
    φ = ∣ τ ∣ ∘ νInv
 
    ξ : ∀ a → kernel ∣ ν ∣ (a , νInv (∣ ν ∣ a))
-   ξ a = (cong-app η (∣ ν ∣ a))⁻¹
+   ξ a = (η (∣ ν ∣ a))⁻¹
 
    τφν : ∣ τ ∣ ≡ φ ∘ ∣ ν ∣
    τφν = fxy λ x → Kντ (ξ x)
 
    φIsHomCB : ∀ 𝑓 c → φ ((𝑓 ̂ 𝑪) c) ≡ ((𝑓 ̂ 𝑩)(φ ∘ c))
-   φIsHomCB 𝑓 c = φ ((𝑓 ̂ 𝑪) c)                    ≡⟨ cong(φ ∘(𝑓 ̂ 𝑪))(cong (λ - → - ∘ c)η ⁻¹)⟩
+   φIsHomCB 𝑓 c = φ ((𝑓 ̂ 𝑪) c)     ≡⟨ cong φ (wd (𝑓 ̂ 𝑪) c (∣ ν ∣ ∘ (νInv ∘ c)) (λ i → (η (c i))⁻¹)) ⟩
                   φ ((𝑓 ̂ 𝑪)(∣ ν ∣ ∘(νInv ∘ c)))   ≡⟨ cong φ (∥ ν ∥ 𝑓 (νInv ∘ c))⁻¹ ⟩
                   φ (∣ ν ∣((𝑓 ̂ 𝑨)(νInv ∘ c)))     ≡⟨ cong-app(τφν ⁻¹)((𝑓 ̂ 𝑨)(νInv ∘ c))⟩
                   ∣ τ ∣((𝑓 ̂ 𝑨)(νInv ∘ c))         ≡⟨ ∥ τ ∥ 𝑓 (νInv ∘ c) ⟩
@@ -242,22 +253,23 @@ If, in addition to the hypotheses of the last theorem, we assume τ is epic, the
 
 \begin{code}
 
- HomFactorEpi : funext α β → funext γ γ → funext β β
+ HomFactorEpi : funext α β → swelldef 𝓥 γ
   →             (𝑩 : Algebra β 𝑆)(τ : hom 𝑨 𝑩)(ν : hom 𝑨 𝑪)
-  →             kernel ∣ ν ∣ ⊆ kernel ∣ τ ∣ → IsSurjective ∣ ν ∣ → IsSurjective ∣ τ ∣
-                ----------------------------------------------------------
+  →             kernel ∣ ν ∣ ⊆ kernel ∣ τ ∣
+  →             IsSurjective ∣ ν ∣ → IsSurjective ∣ τ ∣
+                ---------------------------------------------
   →             Σ[ φ ∈ epi 𝑪 𝑩 ] ∣ τ ∣ ≡ ∣ φ ∣ ∘ ∣ ν ∣
 
- HomFactorEpi fxy fzz fyy 𝑩 τ ν kerincl νe τe = (fst ∣ φF ∣ ,(snd ∣ φF ∣ , φE)), ∥ φF ∥
+ HomFactorEpi fxy wd 𝑩 τ ν kerincl νe τe = (fst ∣ φF ∣ ,(snd ∣ φF ∣ , φE)), ∥ φF ∥
   where
    φF : Σ[ φ ∈ hom 𝑪 𝑩 ] ∣ τ ∣ ≡ ∣ φ ∣ ∘ ∣ ν ∣
-   φF = HomFactor fxy fzz 𝑩 τ ν kerincl νe
+   φF = HomFactor fxy wd 𝑩 τ ν kerincl νe
 
    φ : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
    φ = ∣ τ ∣ ∘ (SurjInv ∣ ν ∣ νe)
 
    φE : IsSurjective φ
-   φE = epic-factor {fe = fyy} ∣ τ ∣ ∣ ν ∣ φ ∥ φF ∥ τe
+   φE = epic-factor  ∣ τ ∣ ∣ ν ∣ φ ∥ φF ∥ τe
 
 \end{code}
 

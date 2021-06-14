@@ -205,10 +205,10 @@ The function `eval-rel` "lifts" a binary relation to the corresponding `I`-ary r
 --
 -- NEW implementation:
 
-compatible-op : {A : Type α}{I : Arity 𝓥} → Op A{I} → BinRel A ρ → Type (α ⊔ 𝓥 ⊔ ρ)
-compatible-op f R  = ∀ u v → (eval-rel R) u v → R (f u) (f v)
+_preserves_ : {A : Type α}{I : Arity 𝓥} → Op A{I} → BinRel A ρ → Type (α ⊔ 𝓥 ⊔ ρ)
+f preserves R  = ∀ u v → (eval-rel R) u v → R (f u) (f v)
 
---Fancy notation for compatible-op.
+--shorthand notation for preserves, defined using the fancy implication notation from the std lib.
 _|:_ : {A : Type α}{I : Arity 𝓥} → Op A{I} → BinRel A ρ → Type (α ⊔ 𝓥 ⊔ ρ)
 f |: R  = (eval-rel R) =[ f ]⇒ R
 
@@ -218,13 +218,13 @@ These two types just defined are logically equivalent, as we now prove.
 
 \begin{code}
 
-compatagree : {A : Type α}{I : Arity 𝓥}{f : Op A{I}}{R : BinRel A ρ}
- →            compatible-op f R → f |: R
-compatagree {f = f}{R} c {x}{y} Rxy = c x y Rxy
+compatibility-agreement : {A : Type α}{I : Arity 𝓥}{f : Op A{I}}{R : BinRel A ρ}
+ →            f preserves R → f |: R
+compatibility-agreement {f = f}{R} c {x}{y} Rxy = c x y Rxy
 
-compatagree' : {A : Type α}{I : Arity 𝓥}{f : Op A{I}}{R : BinRel A ρ}
- →             f |: R → compatible-op f R
-compatagree' {f = f}{R} c = λ u v x → c x
+compatibility-agreement' : {A : Type α}{I : Arity 𝓥}{f : Op A{I}}{R : BinRel A ρ}
+ →             f |: R → f preserves R
+compatibility-agreement' {f = f}{R} c = λ u v x → c x
 
 \end{code}
 
