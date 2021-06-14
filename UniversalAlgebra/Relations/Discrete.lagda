@@ -112,8 +112,10 @@ The *identity relation* (which is equivalent to the kernel of an injective funct
 
 \begin{code}
 
-0[_] : (A : Type α) → BinRel A α
-0[ A ] x y = x ≡ y
+-- 0[_] : (A : Type α) → BinRel A α
+-- 0[ A ] x y = x ≡ y
+0[_] : (A : Type α) → {ρ : Level} → BinRel A (α ⊔ ρ)
+0[ A ] {ρ} = λ x y → Lift ρ (x ≡ y)
 
 \end{code}
 

@@ -11,50 +11,55 @@ All definitions/theorems in agda-algebras as of 6 June 2021.
 
 open import Overture.Preliminaries          using ( ℓ₁ ; ∣_∣ ; ∥_∥ ; _⁻¹ ; _∙_ ; 𝑖𝑑 ; Π ; Π-syntax
                                                   ; lift∼lower ; lower∼lift ; _≈_ ; ≡-by-parts
-                                                  ; transport ) public
+                                                  ; transport )
 
 open import Overture.Inverses               using ( Image_∋_ ; eq ; Inv ; InvIsInv ; IsInjective
                                                   ; id-is-injective ; ∘-injective ; IsSurjective
-                                                  ; Surjective ; SurjInv ) public
+                                                  ; Surjective ; SurjInv )
 
 open import Relations.Discrete              using (Im_⊆_ ; Arity ; ker ; kerlift ; ker' ; kernel ; 0[_]
                                                   ; _⊑_ ; ⊑-refl ; ⊑-trans ; Op ; π ; eval-rel
                                                   ; compatible-op ; _|:_ ; compatagree ; compatagree'
-                                                  ; arity[_] ) public
+                                                  ; arity[_] )
 
 open import Relations.Continuous            using ( ar ; Rel ; Rel-syntax ; RelΠ ; RelΠ-syntax ; eval-Rel
-                                                  ; compatible-Rel ; eval-REL ; compatible-REL ) public
+                                                  ; compatible-Rel ; eval-REL ; compatible-REL )
 
-open import Relations.Quotients             using ( ker-IsEquivalence ; [_] ; IsBlock ; _/_ ; ⟪_⟫
-                                                  ; ⌞_⌟ ; /-subset ; /-supset ) public
+open import Relations.Quotients             using ( Equivalence ; ker-IsEquivalence
+                                                  ; kerlift-IsEquivalence ; [_] ; [_/_] ; Block
+                                                  ; IsBlock ; Quotient ; _/_ ; ⟪_⟫ ; ⌞_⌟
+                                                  ; []-⊆ ; []-⊇ ; ⊆-[] ; ⊇-[] ; 0[_]IsEquivalence
+                                                  ; 0[_]Equivalence ; ⟪_∼_⟫-elim ; ≡→⊆ )
 
 open import Relations.Truncation            using ( is-center ; is-singleton ; is-prop ; is-prop-valued
                                                   ; singleton-is-prop ; fiber ; is-equiv ; hfunext
                                                   ; is-set ; to-Σ-≡ ; is-embedding ; singleton-type
                                                   ; invertible ; equiv-is-embedding ; monic-is-embedding|Set
                                                   ; blk-uip ; IsRelProp ; RelProp ; RelPropExt ; IsRELProp
-                                                  ; RELProp ; RELPropExt ) public
+                                                  ; RELProp ; RELPropExt )
 
 open import Relations.Extensionality        using ( SurjInvIsRightInv ; epic-factor ; pred-ext
-                                                  ; block-ext ; block-ext|uip ; welldef ; swelldef ) public
+                                                  ; block-ext ; block-ext|uip ; welldef ; swelldef )
 
-open import Algebras.Basic                  renaming ( Signature  to AlgebraSignature   -- to avoid conflicts with Structures.Basic
+open import Algebras.Basic                  renaming ( Signature  to AlgebraSignature
+                                                       -- to avoid conflicts with Structures.Basic
                                                      ; signature  to algebra-signature
                                                      ; compatible to compatibleAlgebra )
-                                            using    ( monoid-op ; monoid-sig ; Algebra ; lilAlgebra ; Level-of-Alg
-                                                     ; Level-of-Carrier ; Level-of-lilAlg ; Level-of-lilCarrier
-                                                     ; algebra ; lilalgebra ; algebra→Algebra ; Algebra→algebra
-                                                     ; _̂_ ; Lift-alg-op ; Lift-Alg ; Lift-op-lilAlg ; Lift-lilAlg
-                                                     ; Lift-algebra ;  compatible-lilAlg
+                                            using    ( monoid-op ; monoid-sig ; Algebra ; lilAlgebra
+                                                     ; Level-of-Alg ; Level-of-Carrier ; Level-of-lilAlg
+                                                     ; Level-of-lilCarrier ; algebra ; lilalgebra
+                                                     ; algebra→Algebra ; Algebra→algebra ; _̂_
+                                                     ; Lift-alg-op ; Lift-Alg ; Lift-op-lilAlg
+                                                     ; Lift-lilAlg ; Lift-algebra ;  compatible-lilAlg
                                                      ; compatible-Rel-alg ; compatible-REL-alg
-                                                     ; compatible-Rel-lilAlg ; compatible-REL-lilAlg ) public
+                                                     ; compatible-Rel-lilAlg ; compatible-REL-lilAlg )
 
 open import Algebras.Products               renaming ( ⨅ to ⨅a ; ℑ to ℑa )  -- to avoid conflicts with Structures.Products
-                                            using    ( ⨅' ; ov ; 𝔄 ; class-product ) public
+                                            using    ( ⨅' ; ov ; 𝔄 ; class-product )
 
-open import Algebras.Congruences            using ( IsCongruence ; Con ; IsCongruence→Con ; Con→IsCongruence
-                                                  ; 𝟎-IsEquivalence ; 𝟎-compatible-op ; 𝟎-compatible
-                                                  ; Δ ; 𝟘 ; _╱_ ; 𝟘[_╱_] ; 𝟎[_╱_] ; /-≡ ) public
+open import Algebras.Congruences            using ( IsCongruence ; Con ; IsCongruence→Con
+                                                  ; Con→IsCongruence ; 0[_]Compatible ; 0Con[_]
+                                                  ; _╱_ ; 𝟘[_╱_] ; 𝟎[_╱_] ; /-≡ )
 
 open import Structures.Basic                using ( Signature ; Structure ; RStructure ; AStructure
                                                   ; Structure→RStructure ; Structure→AStructure
