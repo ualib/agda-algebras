@@ -28,9 +28,9 @@ open import Relation.Unary   using    ( Pred ; _∈_ ; _⊆_)
 
 open import Overture.Preliminaries            using ( ∣_∣ ; ∥_∥ )
 open import Algebras.Products               𝑆 using ( ov ; ⨅ )
-open import Homomorphisms.HomomorphicImages 𝑆 using ( HomImages ; IsHomImage ; Lift-Alg-hom-image )
+open import Homomorphisms.HomomorphicImages 𝑆 using ( HomImages ; _IsHomImageOf_ ; Lift-Alg-hom-image )
 open import Homomorphisms.Isomorphisms      𝑆 using ( _≅_ ; Lift-Alg-associative ; Lift-≅ ; Lift-hom
-                                                         ; Lift-Alg-⨅≅ ; ≅-sym ; Lift-Alg-iso )
+                                                    ; Lift-Alg-⨅≅ ; ≅-sym ; Lift-Alg-iso )
 open import Subalgebras.Subalgebras         𝑆 using ( _≤_ ; Lift-≤-Lift )
 
 
@@ -86,7 +86,7 @@ module Vlift {α : Level} {fe₀ : funext (ov α) α}
   where
   lC : Algebra (lsuc (ov(α))) 𝑆
   lC = Lift-Alg ∣ hB ∣ (lsuc (ov(α)))
-  lChi : IsHomImage lC
+  lChi : lC IsHomImageOf _
   lChi = (Lift-Alg-hom-image (lsuc (ov(α))) {∣ hB ∣} (lsuc (ov(α))) ∥ hB ∥)
 
  VlA (vssubw{𝑨}{𝑩} x B≤A) = vssubw (VlA x) (Lift-≤-Lift  (lsuc (ov(α))) {𝑨}  (lsuc (ov(α))) B≤A)

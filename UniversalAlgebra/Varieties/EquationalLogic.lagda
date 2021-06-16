@@ -40,7 +40,7 @@ open import Overture.Inverses            using (IsInjective)
 open import Relations.Truncation         using ( hfunext )
 
 open import Algebras.Products          𝑆 using ( ov ; ⨅ ; 𝔄 ; class-product)
-open import Homomorphisms.Basic        𝑆 using (hom; 𝒾𝒹; ∘-hom; is-homomorphism)
+open import Homomorphisms.Basic          using (hom; 𝒾𝒹; ∘-hom; is-homomorphism)
 open import Homomorphisms.Isomorphisms 𝑆 using (_≅_ ; ≅-sym ; Lift-≅ ; ≅-trans
                                                ; ≅-refl ; Lift-Alg-iso ; ⨅≅
                                                ; Lift-Alg-associative ; Lift-Alg-⨅≅ )

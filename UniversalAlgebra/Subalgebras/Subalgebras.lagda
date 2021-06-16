@@ -39,7 +39,7 @@ open import Overture.Inverses            using ( ∘-injective ; IsInjective ; i
 open import Relations.Truncation         using ( is-set ; blk-uip )
 open import Relations.Extensionality     using ( swelldef ; pred-ext )
 open import Algebras.Products          𝑆 using ( ov )
-open import Homomorphisms.Basic        𝑆 using ( hom ; kercon ; ker[_⇒_]_↾_
+open import Homomorphisms.Basic          using ( hom ; kercon ; ker[_⇒_]_↾_
                                                ; ∘-hom ; is-homomorphism ; ∘-is-hom )
 open import Homomorphisms.Noether      𝑆 using ( FirstHomTheorem|Set )
 open import Homomorphisms.Isomorphisms 𝑆 using ( _≅_ ; ≅-sym ; ≅-trans ; Lift-≅ )

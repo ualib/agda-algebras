@@ -37,7 +37,7 @@ open import Overture.Preliminaries  using ( _⁻¹ ; 𝑖𝑑 ; ∣_∣ ; ∥_�
 open import Overture.Inverses       using ( IsSurjective ; Inv
                                           ; InvIsInv ; Image_∋_; eq )
 open import Algebras.Products     𝑆 using ( ov )
-open import Homomorphisms.Basic   𝑆 using ( hom )
+open import Homomorphisms.Basic     using ( hom )
 
 private variable α β χ : Level
 

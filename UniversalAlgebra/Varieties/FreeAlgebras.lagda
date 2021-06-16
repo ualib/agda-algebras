@@ -46,7 +46,7 @@ open import Relations.Truncation         using ( is-set ; blk-uip ; hfunext )
 open import Relations.Extensionality     using ( swelldef ; pred-ext)
 open import Algebras.Products          𝑆 using ( ov ; ⨅ )
 open import Algebras.Congruences       𝑆 using ( Con; mkcon ; IsCongruence )
-open import Homomorphisms.Basic        𝑆 using ( hom ; ⨅-hom-co ; ker[_⇒_]_↾_ ; epi
+open import Homomorphisms.Basic          using ( hom ; ⨅-hom-co ; ker[_⇒_]_↾_ ; epi
                                                      ; πker ; epi-to-hom ; ker-in-con
                                                      ;  kercon ; ∘-hom )
 open import Homomorphisms.Noether      𝑆 using ( HomFactor ; HomFactorEpi )
@@ -234,7 +234,7 @@ We will need the following facts relating `homℭ`, `hom𝔽`, `and ψ`.
  ψlemma0-ap {𝑨}{h} skA {p , q} x = γ where
 
   ν : ∣ homℭ ∣ p ≡ ∣ homℭ ∣ q
-  ν = ker-in-con {ov α}{ov α}{𝑻 X}{wd+}(kercon wd {ℭ} homℭ) {p}{q} x
+  ν = ker-in-con {α = (ov α)}{ov α}{𝑻 X}{wd+}(kercon wd {ℭ} homℭ) {p}{q} x
 
   γ : (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
   γ = ((ψlemma0 p q) ν) 𝑨 skA h

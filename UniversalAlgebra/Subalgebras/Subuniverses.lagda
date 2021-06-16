@@ -36,7 +36,7 @@ open import Relations.Extensionality using (swelldef)
 open import Algebras.Products      𝑆 using ( ov )
 open import Terms.Basic            𝑆 using ( Term ; ℊ ; node )
 open import Terms.Operations       𝑆 using ( _⟦_⟧ )
-open import Homomorphisms.Basic    𝑆 using ( hom )
+open import Homomorphisms.Basic      using ( hom )
 
 private variable α β 𝓧 : Level
 

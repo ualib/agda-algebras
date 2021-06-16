@@ -47,7 +47,7 @@ open import Relations.Truncation     using ( is-set ; blk-uip ; is-embedding
 open import Relations.Extensionality using ( swelldef ; block-ext|uip ; pred-ext
                                            ; SurjInvIsRightInv ; epic-factor )
 open import Algebras.Congruences   𝑆 using ( Con ; IsCongruence )
-open import Homomorphisms.Basic    𝑆 using ( hom ; kercon ; ker[_⇒_]_↾_ ; πker
+open import Homomorphisms.Basic  {𝑆 = 𝑆} using ( hom ; kercon ; ker[_⇒_]_↾_ ; πker
                                            ; is-homomorphism ; epi ; epi-to-hom )
 
 private variable α β γ : Level

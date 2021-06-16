@@ -1,6 +1,6 @@
 ---
 layout: default
-title : Relations.Big module (The Agda Universal Algebra Library)
+title : Relations.Continuous module (The Agda Universal Algebra Library)
 date : 2021-02-28
 author: [the ualib/agda-algebras development team][]
 ---

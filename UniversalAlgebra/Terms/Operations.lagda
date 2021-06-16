@@ -42,7 +42,7 @@ open import Overture.Preliminaries using ( _∙_ ; _⁻¹ ; ∣_∣ ; ∥_∥ )
 open import Relations.Discrete     using ( _|:_ )
 open import Algebras.Products    𝑆 using ( ov ; ⨅ )
 open import Algebras.Congruences 𝑆 using ( Con ; IsCongruence)
-open import Homomorphisms.Basic  𝑆 using ( hom)
+open import Homomorphisms.Basic    using ( hom)
 open import Terms.Basic          𝑆 using ( Term ; free-lift ; 𝑻 )
 
 open Term

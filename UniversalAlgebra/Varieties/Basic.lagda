@@ -59,7 +59,7 @@ open import Relation.Unary          using    ( Pred ; _∈_ ; _⊆_ ; ⋂ )
 open import Overture.Preliminaries       using ( ∣_∣ ; ∥_∥ ; 𝑖𝑑 ; _⁻¹ )
 open import Overture.Inverses            using ( IsInjective ; ∘-injective )
 open import Algebras.Products          𝑆 using ( ov ; ⨅ )
-open import Homomorphisms.Basic        𝑆 using ( hom; 𝒾𝒹 ; ∘-hom ; is-homomorphism )
+open import Homomorphisms.Basic          using ( hom; 𝒾𝒹 ; ∘-hom ; is-homomorphism )
 open import Homomorphisms.Isomorphisms 𝑆 using ( _≅_ ; ≅-sym ; ≅-trans ; Lift-≅ )
 open import Terms.Basic                𝑆 using ( Term ; 𝑻 ; lift-hom )
 open import Terms.Operations           𝑆 using ( _⟦_⟧ ; comm-hom-term

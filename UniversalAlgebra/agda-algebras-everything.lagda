@@ -89,7 +89,7 @@ open import Homomorphisms.Isomorphisms      using    ( _≅_ ; ≅-refl ; ≅-sy
                                                      ; Lift-Alg-iso ; Lift-Alg-assoc ; Lift-Alg-associative
                                                      ; Lift-Alg-⨅≅ )
 
-open import Homomorphisms.HomomorphicImages using    ( IsHomImage ; HomImages ; IsHomImageOfClass
+open import Homomorphisms.HomomorphicImages using    ( _IsHomImageOf_ ; HomImages ; IsHomImageOfClass
                                                      ; HomImageOfClass ; Lift-epi-is-epi
                                                      ; Lift-Alg-hom-image )
 

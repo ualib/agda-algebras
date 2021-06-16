@@ -37,7 +37,7 @@ open import Relation.Binary.PropositionalEquality using    ( cong   ;   cong-app
 open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; _≈_ ; transport ; _∙_
                                          ; lower∼lift ; lift∼lower )
 open import Algebras.Products    𝑆 using ( ⨅ )
-open import Homomorphisms.Basic  𝑆 using ( hom ; kercon ; ker[_⇒_]_↾_ ; πker ; 𝒾𝒹 ; ∘-hom
+open import Homomorphisms.Basic   using ( hom ; kercon ; ker[_⇒_]_↾_ ; πker ; 𝒾𝒹 ; ∘-hom
                                          ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-homomorphism ; ∘-is-hom )
 
 private variable α β γ : Level
@@ -106,7 +106,7 @@ Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic 
 open Level
 
 Lift-≅ : {𝑨 : Algebra α 𝑆} → 𝑨 ≅ (Lift-Alg 𝑨 β)
-Lift-≅{α}{β} {𝑨} = 𝓁𝒾𝒻𝓉 , (𝓁ℴ𝓌ℯ𝓇{α}{β}{𝑨}) , cong-app lift∼lower , cong-app (lower∼lift {β = β})
+Lift-≅{β = β}{𝑨 = 𝑨} = 𝓁𝒾𝒻𝓉 𝑨 , 𝓁ℴ𝓌ℯ𝓇 𝑨 , cong-app lift∼lower , cong-app (lower∼lift {β = β})
 
 Lift-hom : {𝑨 : Algebra α 𝑆}(ℓᵃ : Level){𝑩 : Algebra β 𝑆} (ℓᵇ : Level)
  →         hom 𝑨 𝑩  →  hom (Lift-Alg 𝑨 ℓᵃ) (Lift-Alg 𝑩 ℓᵇ)
