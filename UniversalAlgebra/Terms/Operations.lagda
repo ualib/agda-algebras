@@ -120,17 +120,6 @@ term-gen-agreement wd {X} (node f t) = wd (f ̂ 𝑻 X) (λ x → (𝑻 X ⟦ t 
 term-agreement : swelldef 𝓥 (ov 𝓧) → {X : Type 𝓧}(p : ∣ 𝑻 X ∣) → p ≡  (𝑻 X ⟦ p ⟧) ℊ
 term-agreement wd {X} p = ∥ term-gen wd p ∥ ∙ (term-gen-agreement wd p)⁻¹
 
--- term-gen : funext 𝓥 (ov 𝓧) → {X : Type 𝓧}(p : ∣ 𝑻 X ∣) → Σ[ q ∈ ∣ 𝑻 X ∣ ] p ≡ (𝑻 X ⟦ q ⟧) ℊ
--- term-gen _ (ℊ x) = (ℊ x) , refl
--- term-gen fe (node 𝑓 𝑡) = node 𝑓 (λ i → ∣ term-gen fe (𝑡 i) ∣) , term-interp 𝑓 (fe λ i → ∥ term-gen fe (𝑡 i) ∥)
-
-
--- term-gen-agreement : (fe : funext 𝓥 (ov 𝓧)){X : Type 𝓧}(p : ∣ 𝑻 X ∣) → (𝑻 X ⟦ p ⟧) ℊ ≡ (𝑻 X ⟦ ∣ term-gen fe p ∣ ⟧) ℊ
--- term-gen-agreement _ (ℊ x) = refl
--- term-gen-agreement fe {X} (node f 𝑡) = cong (f ̂ 𝑻 X) (fe λ x → term-gen-agreement fe (𝑡 x))
-
--- term-agreement : funext 𝓥 (ov 𝓧) → {X : Type 𝓧}(p : ∣ 𝑻 X ∣) → p ≡  (𝑻 X ⟦ p ⟧) ℊ
--- term-agreement fvx {X} p = ∥ term-gen fvx p ∥ ∙ (term-gen-agreement fvx p)⁻¹
 
 \end{code}
 
