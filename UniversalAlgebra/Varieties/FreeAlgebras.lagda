@@ -43,21 +43,21 @@ open import Overture.Inverses            using ( IsSurjective )
 open import Relations.Discrete           using ( kernel )
 open import Relations.Quotients          using ( ⟪_⟫ )
 open import Relations.Truncation         using ( is-set ; blk-uip ; hfunext )
-open import Relations.Extensionality     using ( swelldef ; pred-ext)
-open import Algebras.Products          𝑆 using ( ov ; ⨅ )
-open import Algebras.Congruences       𝑆 using ( Con; mkcon ; IsCongruence )
-open import Homomorphisms.Basic          using ( hom ; ⨅-hom-co ; ker[_⇒_]_↾_ ; epi
+open import Relations.Extensionality           using (DFunExt; SwellDef ; pred-ext)
+open import Algebras.Products          {𝑆 = 𝑆} using ( ov ; ⨅ )
+open import Algebras.Congruences       {𝑆 = 𝑆} using ( Con; mkcon ; IsCongruence )
+open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom ; ⨅-hom-co ; ker[_⇒_]_↾_ ; epi
                                                      ; πker ; epi-to-hom ; ker-in-con
                                                      ;  kercon ; ∘-hom )
-open import Homomorphisms.Noether      𝑆 using ( HomFactor ; HomFactorEpi )
-open import Homomorphisms.Isomorphisms 𝑆 using ( _≅_ ; ≅-refl ; ≅-sym ; Lift-≅ )
-open import Terms.Basic                𝑆 using ( Term ; 𝑻 ; free-lift ; lift-hom
-                                               ; free-unique ; lift-of-epi-is-epi )
-open import Terms.Operations           𝑆 using (_⟦_⟧; comm-hom-term; free-lift-interp )
-open import Subalgebras.Subalgebras    𝑆 using ( _≤_ ; FirstHomCorollary|Set )
-open import Varieties.Basic            𝑆 using (_⊧_≋_; _⊧_≈_; Th; Mod )
-open import Varieties.EquationalLogic  𝑆
-open import Varieties.Preservation {α} 𝑆
+open import Homomorphisms.Noether      {𝑆 = 𝑆} using ( HomFactor ; HomFactorEpi )
+open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅-refl ; ≅-sym ; Lift-≅ )
+open import Terms.Basic                {𝑆 = 𝑆} using ( Term ; 𝑻 ; free-lift ; lift-hom
+                                                     ; free-unique ; lift-of-epi-is-epi )
+open import Terms.Operations           {𝑆 = 𝑆} using (_⟦_⟧; comm-hom-term; free-lift-interp )
+open import Subalgebras.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; FirstHomCorollary|Set )
+open import Varieties.Basic            {𝑆 = 𝑆} using (_⊧_≋_; _⊧_≈_; Th; Mod )
+open import Varieties.EquationalLogic  {𝑆 = 𝑆}
+open import Varieties.Preservation {α = α}{𝑆 = 𝑆}
 
 
 
@@ -173,7 +173,7 @@ Now we come to a step in the Agda formalization of Birkhoff's theorem that is hi
 
 \begin{code}
 
-module _ {fe : (∀ a b → funext a b)}{wd+ : swelldef 𝓥 𝓕⁺} {wd : swelldef 𝓥 𝓕}{X : Type α} {𝒦 : Pred (Algebra α 𝑆) 𝓕} where
+module _ {fe : DFunExt}{wd : SwellDef}{X : Type α} {𝒦 : Pred (Algebra α 𝑆) 𝓕} where
 
  open class-products-with-maps {X = X}{fe 𝓕 α}{fe 𝓕⁺ 𝓕⁺}{fe 𝓕 𝓕} 𝒦
 
@@ -208,10 +208,10 @@ Observe that the inhabitants of `ℭ` are maps from `ℑ` to `{𝔄 i : i ∈ �
 \begin{code}
 
  𝔽 : Algebra 𝓕⁺ 𝑆
- 𝔽 = ker[ 𝑻 X ⇒ ℭ ] homℭ ↾ wd
+ 𝔽 = ker[ 𝑻 X ⇒ ℭ ] homℭ ↾ (wd 𝓥 (ov α))
 
  epi𝔽 : epi (𝑻 X) 𝔽
- epi𝔽 = πker wd {ℭ} homℭ
+ epi𝔽 = πker (wd 𝓥 (ov α)) {ℭ} homℭ
 
  hom𝔽 : hom (𝑻 X) 𝔽
  hom𝔽 = epi-to-hom 𝔽 epi𝔽
@@ -234,7 +234,7 @@ We will need the following facts relating `homℭ`, `hom𝔽`, `and ψ`.
  ψlemma0-ap {𝑨}{h} skA {p , q} x = γ where
 
   ν : ∣ homℭ ∣ p ≡ ∣ homℭ ∣ q
-  ν = ker-in-con {α = (ov α)}{ov α}{𝑻 X}{wd+}(kercon wd {ℭ} homℭ) {p}{q} x
+  ν = ker-in-con {α = (ov α)}{ov α}{𝑻 X}{wd 𝓥 (lsuc (ov α))}(kercon (wd 𝓥 (ov α)) {ℭ} homℭ) {p}{q} x
 
   γ : (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
   γ = ((ψlemma0 p q) ν) 𝑨 skA h
@@ -247,7 +247,7 @@ We now use `ψlemma0-ap` to prove that every map `h : X → ∣ 𝑨 ∣`, from 
 \begin{code}
 
  𝔽-lift-hom : (𝑨 : Algebra α 𝑆) → 𝑨 ∈ S{α}{α} 𝒦 → (X → ∣ 𝑨 ∣) → hom 𝔽 𝑨
- 𝔽-lift-hom 𝑨 skA h = fst(HomFactor (fe 𝓕 α) wd+  𝑨 (lift-hom 𝑨 h) hom𝔽 (ψlemma0-ap skA) hom𝔽-is-epic)
+ 𝔽-lift-hom 𝑨 skA h = fst(HomFactor (fe 𝓕 α) (wd 𝓥 (lsuc (ov α)))  𝑨 (lift-hom 𝑨 h) hom𝔽 (ψlemma0-ap skA) hom𝔽-is-epic)
 
 \end{code}
 
@@ -317,13 +317,13 @@ We need a three more lemmas before we are ready to tackle our main goal.
 
 
  ψlemma3 : ∀ p q → (p , q) ∈ ψ{X = X} 𝒦 → 𝒦 ⊧ p ≋ q
- ψlemma3 p q pψq {𝑨} kA = γ
+ ψlemma3 p q pψq {𝑨} kA h = goal
    where
-   γ : 𝑨 ⟦ p ⟧ ≡ 𝑨 ⟦ q ⟧
-   γ = fe α α λ h → (𝑨 ⟦ p ⟧) h    ≡⟨ free-lift-interp (fe 𝓥 α) 𝑨 h p ⟩
-                 (free-lift 𝑨 h) p ≡⟨ pψq 𝑨 (siso (sbase kA) (≅-sym Lift-≅)) h ⟩
-                 (free-lift 𝑨 h) q ≡⟨ (free-lift-interp (fe 𝓥 α) 𝑨 h q)⁻¹  ⟩
-                 (𝑨 ⟦ q ⟧) h       ∎
+   goal : (𝑨 ⟦ p ⟧) h ≡ (𝑨 ⟦ q ⟧) h
+   goal = (𝑨 ⟦ p ⟧) h       ≡⟨ free-lift-interp (wd 𝓥 α) 𝑨 h p ⟩
+          (free-lift 𝑨 h) p ≡⟨ pψq 𝑨 (siso (sbase kA) (≅-sym Lift-≅)) h ⟩
+          (free-lift 𝑨 h) q ≡⟨ (free-lift-interp (wd 𝓥 α) 𝑨 h q)⁻¹  ⟩
+          (𝑨 ⟦ q ⟧) h       ∎
 
 \end{code}
 
@@ -335,16 +335,19 @@ With these results in hand, it is now trivial to prove the main theorem of this 
  class-models-kernel p q hyp = ψlemma3 p q (ψlemma2 hyp)
 
  𝕍𝒦 : Pred (Algebra 𝓕⁺ 𝑆) (lsuc 𝓕⁺)
- 𝕍𝒦 = V{α}{𝓕⁺} 𝒦
+ 𝕍𝒦 = V{α = α}{β = 𝓕⁺} 𝒦
 
- kernel-in-theory : kernel ∣ hom𝔽 ∣ ⊆ Th (V 𝒦)
- kernel-in-theory {p , q} pKq = (class-ids-⇒ {fe = fe} p q (class-models-kernel p q pKq))
+ kernel-in-theory' : kernel ∣ hom𝔽 ∣ ⊆ Th (V 𝒦)
+ kernel-in-theory' {p , q} pKq = (class-ids-⇒ fe wd p q (class-models-kernel p q pKq))
+
+ kernel-in-theory : kernel ∣ hom𝔽 ∣ ⊆ Th 𝕍𝒦
+ kernel-in-theory {p , q} pKq vkA x = class-ids fe wd p q (class-models-kernel p q pKq) vkA x
 
  _↠_ : Type α → Algebra 𝓕⁺ 𝑆 → Type 𝓕⁺
  X ↠ 𝑨 = Σ[ h ∈ (X → ∣ 𝑨 ∣) ] IsSurjective h
 
  𝔽-ModTh-epi : (𝑨 : Algebra 𝓕⁺ 𝑆) → (X ↠ 𝑨) → 𝑨 ∈ Mod (Th 𝕍𝒦) → epi 𝔽 𝑨
- 𝔽-ModTh-epi 𝑨 (η , ηE) AinMTV = γ
+ 𝔽-ModTh-epi 𝑨 (η , ηE) AinMTV = goal
   where
   φ : hom (𝑻 X) 𝑨
   φ = lift-hom 𝑨 η
@@ -353,16 +356,16 @@ With these results in hand, it is now trivial to prove the main theorem of this 
   φE = lift-of-epi-is-epi 𝑨 ηE
 
   pqlem2 : ∀ p q → (p , q) ∈ kernel ∣ hom𝔽 ∣ → 𝑨 ⊧ p ≈ q
-  pqlem2 p q hyp = AinMTV p q (kernel-in-theory hyp)
+  pqlem2 p q hyp = λ x → AinMTV p q (kernel-in-theory hyp) x
 
   kerincl : kernel ∣ hom𝔽 ∣ ⊆ kernel ∣ φ ∣
-  kerincl {p , q} x = ∣ φ ∣ p      ≡⟨ (free-lift-interp (fe 𝓥 𝓕⁺) 𝑨 η p)⁻¹ ⟩
-                      (𝑨 ⟦ p ⟧) η  ≡⟨ cong-app (pqlem2 p q x) η  ⟩
-                      (𝑨 ⟦ q ⟧) η  ≡⟨ free-lift-interp (fe 𝓥 𝓕⁺) 𝑨 η q ⟩
+  kerincl {p , q} x = ∣ φ ∣ p      ≡⟨ (free-lift-interp (wd 𝓥 𝓕⁺) 𝑨 η p)⁻¹ ⟩
+                      (𝑨 ⟦ p ⟧) η  ≡⟨ pqlem2 p q x η ⟩
+                      (𝑨 ⟦ q ⟧) η  ≡⟨ free-lift-interp (wd 𝓥 𝓕⁺) 𝑨 η q ⟩
                       ∣ φ ∣ q      ∎
 
-  γ : epi 𝔽 𝑨
-  γ = fst (HomFactorEpi (fe 𝓕 𝓕⁺) wd+ 𝑨 φ hom𝔽 kerincl hom𝔽-is-epic φE)
+  goal : epi 𝔽 𝑨
+  goal = fst (HomFactorEpi (fe 𝓕 𝓕⁺) (wd 𝓥 (lsuc (ov α))) 𝑨 φ hom𝔽 kerincl hom𝔽-is-epic φE)
 
 \end{code}
 
@@ -376,12 +379,13 @@ Finally we come to one of the main theorems of this module; it asserts that ever
 
 \begin{code}
 
- module _ (pe : pred-ext (ov α)(ov α))(wd : swelldef 𝓥 𝓕) -- extensionality assumptions
-          (Cset : is-set ∣ ℭ ∣)(kuip : blk-uip(Term X)∣ kercon wd{ℭ}homℭ ∣) -- truncation assumptions
+ module _ (pe : pred-ext (ov α)(ov α))(wd : SwellDef) -- extensionality assumptions
+          (Cset : is-set ∣ ℭ ∣)                       -- truncation assumptions
+          (kuip : blk-uip(Term X)∣ kercon (wd 𝓥 (ov α)){ℭ}homℭ ∣)
   where
 
-  𝔽≤ℭ : (ker[ 𝑻 X ⇒ ℭ ] homℭ ↾ wd) ≤ ℭ
-  𝔽≤ℭ = FirstHomCorollary|Set (𝑻 X) ℭ homℭ pe wd Cset kuip
+  𝔽≤ℭ : (ker[ 𝑻 X ⇒ ℭ ] homℭ ↾ (wd 𝓥 (ov α))) ≤ ℭ
+  𝔽≤ℭ = FirstHomCorollary|Set (𝑻 X) ℭ homℭ pe (wd 𝓥 (ov α)) Cset kuip
 
 \end{code}
 

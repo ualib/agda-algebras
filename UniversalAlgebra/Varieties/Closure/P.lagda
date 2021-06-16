@@ -16,15 +16,15 @@ Here we define the inductive type `P` to represent classes of algebras that is c
 open import Level using ( Level ; Lift )
 open import Algebras.Basic
 
-module Varieties.Closure.P {𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
+module Varieties.Closure.P {𝑆 : Signature 𝓞 𝓥} where
 
 open import Agda.Primitive               using    ( _⊔_ ;  lsuc )
                                          renaming ( Set to Type )
 open import Data.Product                 using    ( _,_ )
 open import Relation.Unary               using    ( Pred ; _∈_ ; _⊆_ )
-open import Algebras.Products          𝑆 using    ( ov ; ⨅ )
-open import Homomorphisms.Isomorphisms 𝑆 using    ( _≅_ ; ≅-sym ; Lift-≅ ; Lift-Alg-iso )
-open import Subalgebras.Subalgebras    𝑆 using    ( _IsSubalgebraOfClass_ ; _≤_ ; Lift-≤-Lift )
+open import Algebras.Products          {𝑆 = 𝑆} using    ( ov ; ⨅ )
+open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using    ( _≅_ ; ≅-sym ; Lift-≅ ; Lift-Alg-iso )
+open import Subalgebras.Subalgebras    {𝑆 = 𝑆} using    ( _IsSubalgebraOfClass_ ; _≤_ ; Lift-≤-Lift )
 
 
 data P {α β : Level}(𝒦 : Pred(Algebra α 𝑆)(ov α)) : Pred(Algebra(α ⊔ β)𝑆)(ov(α ⊔ β))

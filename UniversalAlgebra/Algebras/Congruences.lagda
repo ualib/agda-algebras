@@ -15,7 +15,7 @@ This section presents the [Algebras.Congruences][] module of the [Agda Universal
 open import Level renaming ( suc to lsuc )
 open import Algebras.Basic
 
-module Algebras.Congruences {𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
+module Algebras.Congruences {𝑆 : Signature 𝓞 𝓥} where
 
 open import Axiom.Extensionality.Propositional    renaming (Extensionality to funext)
 open import Agda.Builtin.Equality                 using    ( _≡_      ; refl    )
@@ -30,7 +30,7 @@ open import Data.Product                          using    ( _,_      ;   Σ
                                                            ; Σ-syntax ;   _×_   )
 open import Relation.Binary.PropositionalEquality using    ( sym ; trans ; cong )
 
-open import Algebras.Products      𝑆  using (ov)
+open import Algebras.Products      {𝑆 = 𝑆}   using (ov)
 open import Overture.Preliminaries    using (∣_∣; ∥_∥)
 open import Relations.Discrete        using (0[_] ; _|:_)
 open import Relations.Quotients       using (_/_ ; ⟪_⟫ ; IsBlock ; Quotient ; Equivalence ; 0[_]Equivalence ;  ⟪_∼_⟫-elim )

@@ -33,7 +33,9 @@ open import Overture.Preliminaries using (∣_∣; ∥_∥)
 open import Relations.Discrete     using ( Op ; _|:_ ; Arity )
 open import Relations.Continuous   using ( Rel; RelΠ ; compatible-Rel ; compatible-REL )
 
-private variable α β ρ 𝓞 𝓥 : Level
+private variable α β ρ : Level
+
+variable 𝓞 𝓥 : Level
 
 \end{code}
 

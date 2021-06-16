@@ -16,7 +16,7 @@ Here we define the inductive type `S` to represent classes of algebras that is c
 open import Level renaming ( suc to lsuc )
 open import Algebras.Basic
 
-module Varieties.Closure.S {𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
+module Varieties.Closure.S {𝑆 : Signature 𝓞 𝓥} where
 
 open import Data.Product   using    ( _,_ )
                            renaming ( proj₁ to fst
@@ -25,9 +25,9 @@ open import Relation.Unary using    ( Pred ; _∈_ ; _⊆_ )
 
 
 open import Overture.Preliminaries       using ( ∣_∣ ; ∥_∥ )
-open import Algebras.Products          𝑆 using ( ov ; ⨅ )
-open import Homomorphisms.Isomorphisms 𝑆 using ( _≅_ ; ≅-sym ; ≅-refl ; ≅-trans ; Lift-≅ )
-open import Subalgebras.Subalgebras    𝑆 using (_≤_ ; ≤-iso ; ≤-refl ; ≤-trans ; ≤-TRANS-≅
+open import Algebras.Products          {𝑆 = 𝑆} using ( ov ; ⨅ )
+open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; ≅-refl ; ≅-trans ; Lift-≅ )
+open import Subalgebras.Subalgebras    {𝑆 = 𝑆} using (_≤_ ; ≤-iso ; ≤-refl ; ≤-trans ; ≤-TRANS-≅
                                                ; _IsSubalgebraOfClass_ ; Subalgebra )
 
 
