@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module TYPES2021-imports where
+module Demos.TYPES2021-imports where
 
 
 -- Imports from Agda and Agda Std Lib -------------------------------------------------

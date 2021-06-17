@@ -1,6 +1,6 @@
 ---
 layout: default
-title : TYPES2021 module for talk introducing the Agda Universal Algebra Library
+title : Demos.TYPES2021 module for talk introducing the Agda Universal Algebra Library
 date : 2021-06-15
 author: William DeMeo
 ---
@@ -111,9 +111,10 @@ In the UALib (agda-algebras), every source file begins with
 ---
 
 \begin{code}
-open import TYPES2021-imports
 
-module TYPES2021  {𝓞 𝓥 : Level} where
+open import Demos.TYPES2021-imports
+
+module Demos.TYPES2021  {𝓞 𝓥 : Level} where
 
 variable α β γ ρ χ 𝓘 : Level
 
