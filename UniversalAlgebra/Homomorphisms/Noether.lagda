@@ -16,7 +16,7 @@ This chapter presents the [Homomorphisms.Noether][] module of the [Agda Universa
 open import Level using ( Level ; Lift )
 open import Algebras.Basic
 
-module Homomorphisms.Noether {𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
+module Homomorphisms.Noether {𝑆 : Signature 𝓞 𝓥} where
 
 
 -- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
@@ -46,8 +46,8 @@ open import Relations.Truncation     using ( is-set ; blk-uip ; is-embedding
                                            ; monic-is-embedding|Set )
 open import Relations.Extensionality using ( swelldef ; block-ext|uip ; pred-ext
                                            ; SurjInvIsRightInv ; epic-factor )
-open import Algebras.Congruences   𝑆 using ( Con ; IsCongruence )
-open import Homomorphisms.Basic    𝑆 using ( hom ; kercon ; ker[_⇒_]_↾_ ; πker
+open import Algebras.Congruences {𝑆 = 𝑆} using ( Con ; IsCongruence )
+open import Homomorphisms.Basic  {𝑆 = 𝑆} using ( hom ; kercon ; ker[_⇒_]_↾_ ; πker
                                            ; is-homomorphism ; epi ; epi-to-hom )
 
 private variable α β γ : Level
@@ -109,7 +109,7 @@ FirstHomTheorem|Set 𝑨 𝑩 h pe fe Bset buip = (φ , φhom) , refl , φmon , 
 
 \end{code}
 
-Below we will prove that the homomorphism `φ`, whose existence we just proved, is unique (see `NoetherHomUnique`), but first we show that if we add to the hypotheses of the first homomorphism theorem the assumption that `h` is surjective, then we obtain the so-called *first isomorphism theorem*.  Naturally, we let `FirstHomTheorem|Set` do most of the work. (Note that the proof also requires an additional local function extensionality postulate.)
+Below we will prove that the homomorphism `φ`, whose existence we just proved, is unique (see `NoetherHomUnique`), but first we show that if we add to the hypotheses of the first homomorphism theorem the assumption that `h` is surjective, then we obtain the so-called *first isomorphism theorem*.  Naturally, we let `FirstHomTheorem|Set` do most of the work.
 
 \begin{code}
 

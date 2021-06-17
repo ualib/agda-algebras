@@ -22,8 +22,8 @@ open import Relations.Discrete              using    (Im_⊆_ ; Arity ; ker ; ke
                                                      ; _preserves_ ; _|:_ ; compatibility-agreement
                                                      ; compatibility-agreement' ; arity[_] )
 
-open import Relations.Continuous            using    ( ar ; Rel ; Rel-syntax ; RelΠ ; RelΠ-syntax ; eval-Rel
-                                                     ; compatible-Rel ; eval-REL ; compatible-REL )
+open import Relations.Continuous            using    ( ar ; Rel ; Rel-syntax ; Ρ ; Ρ-syntax ; eval-Rel
+                                                     ; compatible-Rel ; eval-Ρ ; compatible-Ρ )
 
 open import Relations.Quotients             using    ( Equivalence ; ker-IsEquivalence
                                                      ; kerlift-IsEquivalence ; [_] ; [_/_] ; Block
@@ -35,8 +35,8 @@ open import Relations.Truncation            using    ( is-center ; is-singleton 
                                                      ; singleton-is-prop ; fiber ; is-equiv ; hfunext
                                                      ; is-set ; to-Σ-≡ ; is-embedding ; singleton-type
                                                      ; invertible ; equiv-is-embedding ; monic-is-embedding|Set
-                                                     ; blk-uip ; IsRelProp ; RelProp ; RelPropExt ; IsRELProp
-                                                     ; RELProp ; RELPropExt )
+                                                     ; blk-uip ; IsRelProp ; RelProp ; RelPropExt ; IsΡProp
+                                                     ; ΡProp ; ΡPropExt )
 
 open import Relations.Extensionality        using    ( SurjInvIsRightInv ; epic-factor ; pred-ext
                                                      ; block-ext ; block-ext|uip ; welldef ; swelldef )
@@ -51,8 +51,8 @@ open import Algebras.Basic                  renaming ( Signature  to AlgebraSign
                                                      ; algebra→Algebra ; Algebra→algebra ; _̂_
                                                      ; Lift-alg-op ; Lift-Alg ; Lift-op-lilAlg
                                                      ; Lift-lilAlg ; Lift-algebra ;  compatible-lilAlg
-                                                     ; compatible-Rel-alg ; compatible-REL-alg
-                                                     ; compatible-Rel-lilAlg ; compatible-REL-lilAlg )
+                                                     ; compatible-Rel-alg ; compatible-Ρ-alg
+                                                     ; compatible-Rel-lilAlg ; compatible-Ρ-lilAlg )
 
 open import Algebras.Products               renaming ( ⨅ to ⨅a ; ℑ to ℑa )
                                                      -- to avoid conflicts with Structures.Products
@@ -89,7 +89,7 @@ open import Homomorphisms.Isomorphisms      using    ( _≅_ ; ≅-refl ; ≅-sy
                                                      ; Lift-Alg-iso ; Lift-Alg-assoc ; Lift-Alg-associative
                                                      ; Lift-Alg-⨅≅ )
 
-open import Homomorphisms.HomomorphicImages using    ( IsHomImage ; HomImages ; IsHomImageOfClass
+open import Homomorphisms.HomomorphicImages using    ( _IsHomImageOf_ ; HomImages ; IsHomImageOfClass
                                                      ; HomImageOfClass ; Lift-epi-is-epi
                                                      ; Lift-Alg-hom-image )
 
@@ -133,17 +133,19 @@ open import Varieties.Closure.P             using    ( P ; P-mono ; P-expa ; P-i
                                                      ;  Lift-Alg-subP' )
 open import Varieties.Closure.V             using    ( V ; is-variety ; variety ; module Vlift )
 
-open import Varieties.Preservation          using    ( 𝓕 ; 𝓕⁺ ; H-id1 ; H-id2 ; S-id1 ; S-id2 ; P-id1
-                                                     ; P-id2 ; V-id1 ; V-id1' ; 𝒱 ; class-ids-⇒
+open import Varieties.Preservation          using    (𝓕 ; 𝓕⁺ ; H-id1 ; H-id2 ; S-id1 ; S-id2
+                                                     ; P-id1 ; P-id2 ; V-id1 ; module Vid' ; V-id1'
+                                                     ; ovu ; lovu ; 𝕍 ; 𝒱 ; class-ids-⇒ ; class-ids
                                                      ; class-ids-⇐ ; V-id2 )
+
 
 open import Varieties.FreeAlgebras          using    ( ψ ; ψRel ; ψcompatible ; ψIsEquivalence ; ψCon
                                                      ; ℭ ; homℭ ; 𝔽 ; epi𝔽 ; hom𝔽 ; hom𝔽-is-epic
                                                      ; ψlemma0 ; ψlemma0-ap ; 𝔽-lift-hom ; X↪𝔽 ; 𝔑
                                                      ; hom𝔽-is-lift-hom ; ψlemma1 ; ψlemma2 ; ψlemma3
-                                                     ; class-models-kernel ; 𝕍𝒦 ; kernel-in-theory; _↠_
+                                                     ; class-models-kernel ; 𝕍𝒦 ; kernel-in-theory
                                                      ; 𝔽-ModTh-epi ; 𝔽≤ℭ ; 𝔽∈SP ; 𝔽∈𝕍 ; Birkhoff
-                                                     ; Birkhoff-converse )
+                                                     ; Birkhoff-converse ; _↠_ )
 
 
 \end{code}

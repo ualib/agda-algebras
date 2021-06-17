@@ -16,7 +16,7 @@ This section describes the [Homomorphisms.Basic] module of the [Agda Universal A
 open import Level using ( Level ; Lift )
 open import Algebras.Basic
 
-module Homomorphisms.Basic {𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
+module Homomorphisms.Basic {𝑆 : Signature 𝓞 𝓥} where
 
 
 open import Axiom.Extensionality.Propositional    using    ()
@@ -39,8 +39,8 @@ open import Overture.Inverses            using (IsInjective; IsSurjective; Image
 open import Relations.Extensionality     using (swelldef)
 open import Relations.Discrete           using (ker)
 open import Relations.Quotients          using (ker-IsEquivalence; _/_; ⟪_⟫; R-block)
-open import Algebras.Congruences       𝑆 using (Con; IsCongruence; mkcon; _╱_; /-≡)
-open import Algebras.Products          𝑆 using (⨅)
+open import Algebras.Congruences    {𝑆 = 𝑆} using (Con; IsCongruence; mkcon; _╱_; /-≡)
+open import Algebras.Products       {𝑆 = 𝑆} using (⨅)
 
 private variable α β γ ρ : Level
 
@@ -122,11 +122,11 @@ Next, `lift` and `lower`, defined in the [Overture.Lifts][] module, are (the map
 
 open Level
 
-𝓁𝒾𝒻𝓉 : {β : Level}{𝑨 : Algebra α 𝑆} → hom 𝑨 (Lift-Alg 𝑨 β)
-𝓁𝒾𝒻𝓉 = lift , λ 𝑓 𝑎 → refl
+𝓁𝒾𝒻𝓉 : {β : Level}(𝑨 : Algebra α 𝑆) → hom 𝑨 (Lift-Alg 𝑨 β)
+𝓁𝒾𝒻𝓉 _ = lift , λ 𝑓 𝑎 → refl
 
-𝓁ℴ𝓌ℯ𝓇 : {β : Level}{𝑨 : Algebra α 𝑆} → hom (Lift-Alg 𝑨 β) 𝑨
-𝓁ℴ𝓌ℯ𝓇 = lower , λ 𝑓 𝑎 → refl
+𝓁ℴ𝓌ℯ𝓇 : {β : Level}(𝑨 : Algebra α 𝑆) → hom (Lift-Alg 𝑨 β) 𝑨
+𝓁ℴ𝓌ℯ𝓇 _ = lower , λ 𝑓 𝑎 → refl
 
 \end{code}
 

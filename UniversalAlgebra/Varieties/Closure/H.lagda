@@ -16,13 +16,13 @@ We define the inductive type `H` to represent classes of algebras that include a
 open import Level using ( Level ; Lift )
 open import Algebras.Basic
 
-module Varieties.Closure.H {𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
+module Varieties.Closure.H {𝑆 : Signature 𝓞 𝓥} where
 
 open import Agda.Primitive                    using ( _⊔_ )
 open import Data.Product                      using ( _,_ )
 open import Relation.Unary                    using ( Pred ; _∈_ ; _⊆_ )
-open import Algebras.Products               𝑆 using ( ov ; ⨅ )
-open import Homomorphisms.HomomorphicImages 𝑆 using ( HomImages )
+open import Algebras.Products               {𝑆 = 𝑆} using ( ov ; ⨅ )
+open import Homomorphisms.HomomorphicImages {𝑆 = 𝑆} using ( HomImages )
 
 
 data H {α β : Level} (𝒦 : Pred (Algebra α 𝑆) (ov α)) : Pred (Algebra (α ⊔ β) 𝑆) (ov(α ⊔ β))

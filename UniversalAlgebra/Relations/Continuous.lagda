@@ -1,6 +1,6 @@
 ---
 layout: default
-title : Relations.Big module (The Agda Universal Algebra Library)
+title : Relations.Continuous module (The Agda Universal Algebra Library)
 date : 2021-02-28
 author: [the ualib/agda-algebras development team][]
 ---
@@ -44,18 +44,8 @@ We refer to such relations as *dependent continuous relations* (or *dependent re
 
 #### <a id="continuous-and-dependent-relations">Continuous and dependent relations</a>
 
-Here we define the types `ContRel` and `DepRel`. The first of these represents predicates of arbitrary arity over a single type `A`; we call these *continuous relations*.<sup>[1](Relations.Continuous.html#fn1)</sup>
-To define `DepRel`, the type of *dependent relations*, we exploit the full power of dependent types and provide a completely general relation type.
-
-\begin{code}
-
--- OLD:  (do not delete until we're confident that the new approach is better)
--- ContRel : Type 𝓥 → Type α → (β : Level) → Type(α ⊔ 𝓥 ⊔ lsuc β)
--- ContRel I A β = (I → A) → Type β
--- DepRel : (I : Type 𝓥) → (I → Type α) → (β : Level) → Type(α ⊔ 𝓥 ⊔ lsuc β)
--- DepRel I 𝒜 β = ((i : I) → 𝒜 i) → Type β
-
-\end{code}
+Here we define the types `Rel` and `Ρ` (Rho). The first of these represents predicates of arbitrary arity over a single type `A`; we call these *continuous relations*.<sup>[1](Relations.Continuous.html#fn1)</sup>
+To define `Ρ`, the type of *dependent relations*, we exploit the full power of dependent types and provide a completely general relation type.
 
 Here, the tuples of a relation of type `DepRel I 𝒜 β` will inhabit the dependent function type `𝒜 : I → Type α` (where the codomain may depend on the input coordinate `i : I` of the domain). Heuristically, we can think of an inhabitant of type `DepRel I 𝒜 β` as a relation from `𝒜 i` to `𝒜 j` to `𝒜 k` to …. (This is only a rough heuristic since `I` could denote an uncountable collection.<sup>[2](Relations.Continuous.html#fn2)</sup>)
 
@@ -82,14 +72,14 @@ module _ {𝓥 : Level} where
  infix 6 Rel-syntax
 
  -- The type of arbitrarily multisorted relations of arbitrary arity
- RelΠ : (I : ar) → (I → Type α) → {ρ : Level} → Type (𝓥 ⊔ α ⊔ lsuc ρ)
- RelΠ I 𝒜 {ρ} = ((i : I) → 𝒜 i) → Type ρ
+ Ρ : (I : ar) → (I → Type α) → {ρ : Level} → Type (𝓥 ⊔ α ⊔ lsuc ρ)
+ Ρ I 𝒜 {ρ} = ((i : I) → 𝒜 i) → Type ρ
 
- RelΠ-syntax : (I : ar) → (I → Type α) → {ρ : Level} → Type (𝓥 ⊔ α ⊔ lsuc ρ)
- RelΠ-syntax I 𝒜 {ρ} = RelΠ I 𝒜 {ρ}
+ Ρ-syntax : (I : ar) → (I → Type α) → {ρ : Level} → Type (𝓥 ⊔ α ⊔ lsuc ρ)
+ Ρ-syntax I 𝒜 {ρ} = Ρ I 𝒜 {ρ}
 
- syntax RelΠ-syntax I (λ i → 𝒜) = RelΠ[ i ∈ I ] 𝒜
- infix 6 RelΠ-syntax
+ syntax Ρ-syntax I (λ i → 𝒜) = Ρ[ i ∈ I ] 𝒜
+ infix 6 Ρ-syntax
 
 
 \end{code}
@@ -101,15 +91,6 @@ It will be helpful to have some functions that make it easy to assert that a giv
 
 \begin{code}
 
--- module _ {I J : Type 𝓥} {A : Type α} where
-
--- OLD:
---   eval-cont-rel : ContRel I A β → (I → J → A) → Type(𝓥 ⊔ β)
---   eval-cont-rel R 𝒶 = ∀ (j : J) → R λ i → 𝒶 i j
---   cont-compatible-op : Op J A → ContRel I A β → Type(𝓥 ⊔ α ⊔ β)
---   cont-compatible-op 𝑓 R  = ∀ (𝒶 : (I → J → A)) → (eval-cont-rel R 𝒶 → R λ i → (𝑓 (𝒶 i)))
---
--- NEW:
 -- Lift a relation of tuples up to a relation on tuples of tuples.
  eval-Rel : {I : ar}{A : Type α} → Rel A {I}{ρ} → (J : ar) → (I → J → A) → Type (𝓥 ⊔ ρ)
  eval-Rel R J t = ∀ (j : J) → R λ i → t i j
@@ -120,21 +101,24 @@ It will be helpful to have some functions that make it easy to assert that a giv
 
  compatible-Rel : {I J : ar}{A : Type α} → Op(A){J} → Rel A {I}{ρ} → Type (𝓥 ⊔ α ⊔ ρ)
  compatible-Rel 𝑓 R  = ∀ t → eval-Rel R arity[ 𝑓 ] t → R λ i → 𝑓 (t i)
--- (inferred type of t is I → J → A)
+ -- (inferred type of t is I → J → A)
 
- eval-REL : {I J : ar}{𝒜 : I → Type α}
-  →         RelΠ I 𝒜 {ρ}       -- the relation type: subsets of Π[ i ∈ I ] 𝒜 i
-                                -- (where Π[ i ∈ I ] 𝒜 i is a type of dependent functions or "tuples")
+
+ -- Compatibility of operations with Ρ (Rho) types.
+
+ eval-Ρ : {I J : ar}{𝒜 : I → Type α}
+  →         Ρ I 𝒜 {ρ}            -- the relation type: subsets of Π[ i ∈ I ] 𝒜 i
+                                  -- (where Π[ i ∈ I ] 𝒜 i is a type of dependent functions or "tuples")
   →         ((i : I) → J → 𝒜 i)  -- an I-tuple of (𝒥 i)-tuples
   →         Type (𝓥 ⊔ ρ)
- eval-REL{I = I}{J}{𝒜} R t = ∀ j → R λ i → (t i) j
+ eval-Ρ{I = I}{J}{𝒜} R t = ∀ j → R λ i → (t i) j
 
- compatible-REL : {I J : ar}{𝒜 : I → Type α}
+ compatible-Ρ : {I J : ar}{𝒜 : I → Type α}
   →               (∀ i → Op (𝒜 i){J})  -- for each i : I, an operation of type  𝒪(𝒜 i){J} = (J → 𝒜 i) → 𝒜 i
-  →               RelΠ I 𝒜 {ρ}        -- a subset of Π[ i ∈ I ] 𝒜 i
-                                      -- (where Π[ i ∈ I ] 𝒜 i is a type of dependent functions or "tuples")
-  →               Type (𝓥 ⊔ α ⊔ ρ)
- compatible-REL {I = I}{J}{𝒜} 𝑓 R  = Π[ t ∈ ((i : I) → J → 𝒜 i) ] eval-REL R t
+  →               Ρ I 𝒜 {ρ}             -- a subset of Π[ i ∈ I ] 𝒜 i
+                                         -- (where Π[ i ∈ I ] 𝒜 i is a type of dependent functions or "tuples")
+  →               Type _
+ compatible-Ρ {I = I}{J}{𝒜} 𝑓 R  = Π[ t ∈ ((i : I) → J → 𝒜 i) ] eval-Ρ R t
 
 
 \end{code}

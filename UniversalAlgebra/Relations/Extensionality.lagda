@@ -50,7 +50,13 @@ private variable α β γ ρ 𝓥 : Level
 Previous versions of [UniversalAlgebra][] made heavy use of a *global function extensionality principle*. This asserts that function extensionality holds at all universe levels.
 However, we decided to remove all instances of global function extensionality from the latest version of the library and limit ourselves to local applications of the principle. This has the advantage of making transparent precisely how and where the library depends on function extensionality. The price we pay for this precision is a library that is littered with extensionality postulates. Eventually we will probably remove these postulates in favor of an alternative approach to extensionality, or even remove the need for it altogether.
 
+The following definition is useful for postulating function extensionality when and where needed.
+
 \begin{code}
+
+DFunExt : Setω
+DFunExt = (𝓤 𝓥 : Level) → funext 𝓤 𝓥
+
 
 module _ {A : Type α}{B : Type β} where
 
@@ -156,7 +162,15 @@ private
    Goal : f u ≡ f v
    Goal = welldef f u v uv
 
+
+SwellDef : Setω
+SwellDef = (𝓤 𝓥 : Level) → swelldef 𝓤 𝓥
+
+
 \end{code}
+
+
+
 
 ---------------------------------------
 

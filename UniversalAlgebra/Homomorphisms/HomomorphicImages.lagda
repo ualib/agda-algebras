@@ -16,7 +16,7 @@ This section describes the [Homomorphisms.HomomorphicImages][] module of the [Ag
 open import Level using ( Level ; Lift )
 open import Algebras.Basic
 
-module Homomorphisms.HomomorphicImages {𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
+module Homomorphisms.HomomorphicImages {𝑆 : Signature 𝓞 𝓥} where
 
 
 -- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
@@ -36,9 +36,9 @@ open import Overture.Preliminaries       using ( _⁻¹ ; 𝑖𝑑 ; ∣_∣ ; �
                                                ; lower∼lift ; lift∼lower )
 open import Overture.Inverses            using ( IsSurjective ; Image_∋_
                                                ; Inv ; InvIsInv ; eq )
-open import Algebras.Products          𝑆 using ( ov )
-open import Homomorphisms.Basic        𝑆 using ( hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 )
-open import Homomorphisms.Isomorphisms 𝑆 using ( Lift-hom )
+open import Algebras.Products          {𝑆 = 𝑆} using ( ov )
+open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 )
+open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( Lift-hom )
 
 \end{code}
 
@@ -51,11 +51,11 @@ We begin with what seems, for our purposes, the most useful way to represent the
 
 module _ {α β : Level } where
 
- IsHomImage : {𝑨 : Algebra α 𝑆}(𝑩 : Algebra β 𝑆) → Type(𝓞 ⊔ 𝓥 ⊔ α ⊔ β)
- IsHomImage {𝑨 = 𝑨} 𝑩 = Σ[ φ ∈ hom 𝑨 𝑩 ] IsSurjective ∣ φ ∣ -- λ b → Image ∣ ϕ ∣ ∋ b
+ _IsHomImageOf_ : (𝑩 : Algebra β 𝑆)(𝑨 : Algebra α 𝑆) → Type _
+ 𝑩 IsHomImageOf 𝑨 = Σ[ φ ∈ hom 𝑨 𝑩 ] IsSurjective ∣ φ ∣
 
  HomImages : Algebra α 𝑆 → Type(𝓞 ⊔ 𝓥 ⊔ α ⊔ lsuc β)
- HomImages 𝑨 = Σ[ 𝑩 ∈ Algebra β 𝑆 ] IsHomImage{𝑨 = 𝑨} 𝑩
+ HomImages 𝑨 = Σ[ 𝑩 ∈ Algebra β 𝑆 ] 𝑩 IsHomImageOf 𝑨
 
 \end{code}
 
@@ -72,7 +72,7 @@ Given a class `𝒦` of `𝑆`-algebras, we need a type that expresses the asser
 module _ {α : Level} where
 
  IsHomImageOfClass : {𝒦 : Pred (Algebra α 𝑆)(lsuc α)} → Algebra α 𝑆 → Type(ov α)
- IsHomImageOfClass {𝒦 = 𝒦} 𝑩 = Σ[ 𝑨 ∈ Algebra α 𝑆 ] ((𝑨 ∈ 𝒦) × (IsHomImage {𝑨 = 𝑨} 𝑩))
+ IsHomImageOfClass {𝒦 = 𝒦} 𝑩 = Σ[ 𝑨 ∈ Algebra α 𝑆 ] ((𝑨 ∈ 𝒦) × (𝑩 IsHomImageOf 𝑨))
 
  HomImageOfClass : Pred (Algebra α 𝑆) (lsuc α) → Type(ov α)
  HomImageOfClass 𝒦 = Σ[ 𝑩 ∈ Algebra α 𝑆 ] IsHomImageOfClass{𝒦} 𝑩
@@ -116,8 +116,8 @@ module _ {α β : Level} where
        ∣ lh ∣ (lift a) ∎
 
  Lift-Alg-hom-image : {𝑨 : Algebra α 𝑆}(ℓᵃ : Level){𝑩 : Algebra β 𝑆}(ℓᵇ : Level)
-  →                   IsHomImage {𝑨 = 𝑨} 𝑩
-  →                   IsHomImage {𝑨 = Lift-Alg 𝑨 ℓᵃ} (Lift-Alg 𝑩 ℓᵇ)
+  →                   𝑩 IsHomImageOf 𝑨
+  →                   (Lift-Alg 𝑩 ℓᵇ) IsHomImageOf (Lift-Alg 𝑨 ℓᵃ)
 
  Lift-Alg-hom-image {𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ ((φ , φhom) , φepic) = Goal
   where
@@ -126,7 +126,7 @@ module _ {α β : Level} where
 
   lφepic : IsSurjective ∣ lφ ∣
   lφepic = Lift-epi-is-epi ℓᵃ {𝑩} ℓᵇ (φ , φhom) φepic
-  Goal : IsHomImage (Lift-Alg 𝑩 ℓᵇ)
+  Goal : (Lift-Alg 𝑩 ℓᵇ) IsHomImageOf _
   Goal = lφ , lφepic
 
 \end{code}
