@@ -71,7 +71,13 @@ open import Homomorphisms.Noether           using    ( FirstHomTheorem|Set
                                                      -- ; NoetherHomUnique ; fe-NoetherHomUnique
                                                      -- ; NoetherIsoUnique ; HomFactor ; 
                                                      HomFactorEpi ) public
-open import Terms.Operations                using    (free-lift-interp ) public
 open import Homomorphisms.Isomorphisms      using    (  ⨅≅ ; Lift-Alg-assoc ) public
+open import Terms.Operations                using    (  free-lift-interp ; interp-prod ) public
 
 open ≡-Reasoning public
+open import Subalgebras.Subalgebras         using    ( -- _IsSubalgebraOf_ ; Subalgebra ; FirstHomCorollary|Set
+                                                     -- ; free-quot-subalg ; _≤_ ; _IsSubalgebraOfClass_
+                                                     -- ; SubalgebraOfClass ; ≤-reflexive ; ≤-refl
+                                                     -- ; ≤-transitivity ; ≤-trans ; iso→injective ; ≤-iso
+                                                     -- ; ≤-trans-≅ ; ≤-TRANS-≅ ; ≤-mono ; Lift-is-sub
+                                                      Lift-≤ ; Lift-≤-Lift ; ≤-Lift ) public

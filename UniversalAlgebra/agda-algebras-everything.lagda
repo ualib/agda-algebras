@@ -112,7 +112,7 @@ open import Subalgebras.Subuniverses        using    ( Subuniverses ; Subunivers
 
 open import Subalgebras.Subalgebras         using    ( _IsSubalgebraOf_ ; Subalgebra ; FirstHomCorollary|Set
                                                      ; free-quot-subalg ; _≤_ ; _IsSubalgebraOfClass_
-                                                     ; SubalgebraOfClass ; ≤-reflexive ; ≤-refl
+                                                     ; SubalgebraOfClass ; ≤-reflexive ; ≤-refl ; ≤-Lift
                                                      ; ≤-transitivity ; ≤-trans ; iso→injective ; ≤-iso
                                                      ; ≤-trans-≅ ; ≤-TRANS-≅ ; ≤-mono ; Lift-is-sub
                                                      ; Lift-≤ ; Lift-≤-Lift )

@@ -1147,37 +1147,6 @@ This requires a weak form of function extensionality at universe levels 𝓥 and
 
 ---
 
-#### LIFT OF SURJECTIVE IS SURJECTIVE
-
-If we postulate a type X : Type χ (representing an arbitrary collection of variable
-symbols) such that for each 𝑆-algebra 𝑨 there is a map from X to the domain of 𝑨,
-then it follows that for every 𝑆-algebra 𝑨 there is a homomorphism from 𝑻 X to
-∣ 𝑨 ∣ that "agrees with the original map on X," by which we mean that for all x : X
-the lift evaluated at ℊ x is equal to the original function evaluated at x.
-
-If we further assume that each of the mappings from X to ∣ 𝑨 ∣ is *surjective*, then
-the homomorphisms constructed with free-lift and lift-hom are *epimorphisms*, as we
-now prove.
-
-\begin{code}
-
- lift-of-epi-is-epi : (𝑨 : Algebra α 𝑆){h₀ : X → ∣ 𝑨 ∣}
-  →                   IsSurjective h₀ → IsSurjective ∣ lift-hom 𝑨 h₀ ∣
-
- lift-of-epi-is-epi 𝑨 {h₀} hE y = Goal
-  where
-  h₀⁻¹y = Inv h₀ (hE y)
-
-  η : y ≡ ∣ lift-hom 𝑨 h₀ ∣ (ℊ h₀⁻¹y)
-  η = (InvIsInv h₀ (hE y))⁻¹
-
-  Goal : Image ∣ lift-hom 𝑨 h₀ ∣ ∋ y
-  Goal = eq (ℊ h₀⁻¹y) η
-
-\end{code}
-
----
-
 ### TERM OPERATIONS
 
 Here we define *term operations* which are simply terms interpreted in a particular
@@ -1210,68 +1179,6 @@ Here is the agda-algebras implementation.
 ---
 
 
-#### INTERPRETATION OF TERMS IN PRODUCT ALGEBRAS
-
-\begin{code}
-
- module _ (wd : swelldef 𝓥 (β ⊔ α)){X : Type χ }{I : Type β} where
-
-  interp-prod : (p : Term X)(𝒜 : I → Algebra α 𝑆)(a : X → Π[ i ∈ I ] ∣ 𝒜 i ∣)
-   →            (⨅ 𝒜 ⟦ p ⟧) a ≡ λ i → (𝒜 i ⟦ p ⟧)(λ x → (a x) i)
-
-  interp-prod (ℊ _) 𝒜 a = refl
-  interp-prod (node 𝑓 𝑡) 𝒜 a = wd ((𝑓 ̂ ⨅ 𝒜)) u v IH
-   where
-   u : ∀ x → ∣ ⨅ 𝒜 ∣
-   u = λ x → (⨅ 𝒜 ⟦ 𝑡 x ⟧) a
-   v : ∀ x i → ∣ 𝒜 i ∣
-   v = λ x i → (𝒜 i ⟦ 𝑡 x ⟧)(λ j → a j i)
-   IH : ∀ i → u i ≡ v i
-   IH = λ x → interp-prod (𝑡 x) 𝒜 a
-
-
-
-
-
-
-
-
-
-
----
-
-
-  interp-prod2 : funext (α ⊔ β ⊔ χ) (α ⊔ β) → (p : Term X)(𝒜 : I → Algebra α 𝑆)
-   →             ⨅ 𝒜 ⟦ p ⟧ ≡ (λ a i → (𝒜 i ⟦ p ⟧) λ x → a x i)
-  interp-prod2 _ (ℊ x₁) 𝒜 = refl
-  interp-prod2 fe (node f t) 𝒜 = fe λ a → wd (f ̂ ⨅ 𝒜)(u a) (v a) (IH a)
-   where
-   u : ∀ a x → ∣ ⨅ 𝒜 ∣
-   u a = λ x → (⨅ 𝒜 ⟦ t x ⟧) a
-   v : ∀ (a : X → ∣ ⨅ 𝒜 ∣) → ∀ x i → ∣ 𝒜 i ∣
-   v a = λ x i → (𝒜 i ⟦ t x ⟧)(λ z → (a z) i)
-   IH : ∀ a x → (⨅ 𝒜 ⟦ t x ⟧) a ≡ λ i → (𝒜 i ⟦ t x ⟧)(λ z → (a z) i)
-   IH a = λ x → interp-prod (t x) 𝒜 a
-
-
-
-\end{code}
-
-
-
-
-
-
-
-
-
-
-
-
-
----
-
-
 #### COMPATIBILITY OF TERMS
 
 We now prove two important facts about term operations.  The first of these, which is used
@@ -1294,17 +1201,6 @@ very often in the sequel, asserts that every term commutes with every homomorphi
                         λ j → comm-hom-term wd 𝑩 h (𝑡 j) a
 
 \end{code}
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1342,42 +1238,6 @@ on ∣ 𝑨 ∣.
 
 
 
-
-
-
----
-
-
-
-
-#### SUBUNIVERSES AS RECORDS
-
-Next we define a type to represent a single subuniverse of an algebra. If 𝑨 is the
-algebra in question, then a subuniverse of 𝑨 is a subset of (i.e., predicate over) the
-domain ∣ 𝑨 ∣ that belongs to Subuniverses 𝑨.
-
-\begin{code}
-
- record Subuniverse {𝑨 : Algebra α 𝑆} : Type (ov(α ⊔ β)) where
-  constructor mksub
-  field       sset  : Pred ∣ 𝑨 ∣ β
-              isSub : sset ∈ Subuniverses 𝑨
-\end{code}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
 
 
@@ -1402,8 +1262,6 @@ a given subset of the domain of a given algebra, as follows.
   app : ∀ f a → Im a ⊆ Sg 𝑨 X → (f ̂ 𝑨) a ∈ Sg 𝑨 X
 
 \end{code}
-
-
 
 
 
@@ -1442,7 +1300,6 @@ f to a also belongs to Y since Y is a subuniverse.
 
 
 
-
 ---
 
 
@@ -1474,41 +1331,6 @@ and we must prove (f ̂ 𝑨) a ∈ ⋂ I 𝒜. In this case, Agda will fill in 
 λ i → σ i f a (λ x → ν x i) automatically with the command C-c C-a.
 
 
-
-
----
-
-#### SUBUNIVERSE LEMMAS
-
-Next, subuniverses are closed under the action of term operations.
-
-\begin{code}
-
-
- sub-term-closed : {X : Type χ}(𝑨 : Algebra α 𝑆){B : Pred ∣ 𝑨 ∣ β}
-  →                (B ∈ Subuniverses 𝑨) → (t : Term X)(b : X → ∣ 𝑨 ∣)
-  →                ((x : X) → (b x ∈ B)) → (𝑨 ⟦ t ⟧)b ∈ B
-
- sub-term-closed 𝑨 AB (ℊ x) b Bb = Bb x
-
- sub-term-closed 𝑨{B} σ (node f t)b ν =
-   σ f  (λ z → (𝑨 ⟦ t z ⟧) b) λ x → sub-term-closed 𝑨{B} σ (t x) b ν
-
-\end{code}
-
-In the induction step of the foregoing proof, the typing judgments of the premise are the
-following:
-
-
-𝑨   : Algebra α 𝑆
-B   : Pred ∣ 𝑨 ∣ β
-σ   : B ∈ Subuniverses 𝑨
-f   : ∣ 𝑆 ∣
-t   : ∥ 𝑆 ∥ 𝑓 → Term X
-b   : X → ∣ 𝑨 ∣
-ν   : ∀ x → b x ∈ B
-
-and the given proof term establishes the goal 𝑨 ⟦ node f t ⟧ b ∈ B.
 ---
 
 #### SUBUNIVERSE LEMMAS
@@ -1540,8 +1362,6 @@ values on a generating set.
 \end{code}
 
 
-
-
 ---
 
 In the induction step, the following typing judgments are assumed:
@@ -1561,8 +1381,6 @@ a   : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣
 
 
 and, under these assumptions, we proved ∣ g ∣ ((𝑓 ̂ 𝑨) a) ≡ ∣ h ∣ ((𝑓 ̂ 𝑨) a).
-
-
 
 
 
@@ -1606,62 +1424,14 @@ requirement we chose for the definition of the type IsSubalgebraOf.
 
 
 
-
-
 ---
 
-#### CONSEQUENCE OF FIRST HOMOMORPHISM THEOREM
 
-We prove an important lemma that makes use of the IsSubalgebraOf type defined above.
 
-If 𝑨 and 𝑩 are 𝑆-algebras and h : hom 𝑨 𝑩 a homomorphism from 𝑨 to 𝑩, then the
-quotient 𝑨 ╱ ker h is (isomorphic to) a subalgebra of 𝑩.  This is an easy corollary of
-the First Homomorphism Theorem.
 
-\begin{code}
 
- module _ (𝑨 : Algebra α 𝑆)(𝑩 : Algebra β 𝑆)(h : hom 𝑨 𝑩)
 
-          -- extensionality assumptions:
-          (pe : pred-ext α β)(fe : swelldef 𝓥 β)
-
-          -- truncation assumptions:
-          (Bset : is-set ∣ 𝑩 ∣)
-          (buip : blk-uip ∣ 𝑨 ∣ ∣ kercon fe {𝑩} h ∣)
-
-  where
-  FirstHomCorollary|Set : (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) IsSubalgebraOf 𝑩
-  FirstHomCorollary|Set = ϕhom , ϕinj
-   where
-    hh = FirstHomTheorem|Set 𝑨 𝑩 h pe fe Bset buip
-    ϕhom : hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩
-    ϕhom = ∣ hh ∣
-
-    ϕinj : IsInjective ∣ ϕhom ∣
-    ϕinj = ∣ snd ∥ hh ∥ ∣
-
-\end{code}
----
-
-If we apply the foregoing theorem to the special case in which the 𝑨 is term algebra 𝑻
-X, we obtain the following result which will be useful later.
-
-\begin{code}
-
- module _ (X : Type χ)(𝑩 : Algebra β 𝑆)(h : hom (𝑻 X) 𝑩)
-
-          -- extensionality assumptions:
-          (pe : pred-ext (𝓞 ⊔ 𝓥 ⊔ lsuc χ) β)(fe : swelldef 𝓥 β)
-
-          -- truncation assumptions:
-          (Bset : is-set ∣ 𝑩 ∣)
-          (buip : blk-uip (Term X) ∣ kercon fe {𝑩} h ∣)
-
-  where
-  free-quot-subalg : (ker[ 𝑻 X ⇒ 𝑩 ] h ↾ fe) IsSubalgebraOf 𝑩
-  free-quot-subalg = FirstHomCorollary|Set{α = (𝓞 ⊔ 𝓥 ⊔ lsuc χ)}(𝑻 X) 𝑩 h pe fe Bset buip
-
-\end{code}
+#### THE SUBALGEBRA RELATION
 
 For convenience, we define the following shorthand for the subalgebra relation.
 
@@ -1673,6 +1443,17 @@ For convenience, we define the following shorthand for the subalgebra relation.
 \end{code}
 
 From now on we will use 𝑩 ≤ 𝑨 to express the assertion that 𝑩 is a subalgebra of 𝑨.
+
+
+
+
+
+
+
+
+
+
+
 
 ---
 
@@ -1704,143 +1485,9 @@ Using this type, we express the collection of all subalgebras of algebras in a c
 
 \end{code}
 
-
-
-
----
-
-#### SUBALGEBRA LEMMAS 1
-
-We conclude this module by proving a number of useful facts about subalgebras. Some of the
-formal statements below may appear to be redundant, and indeed they are to some extent.
-However, each one differs slightly from the next, if only with respect to the explicitness
-or implicitness of their arguments.  The aim is to make it as convenient as possible to
-apply the lemmas in different situations.
-
-First we show that the subalgebra relation is a *preorder*; i.e., it is a reflexive,
-transitive binary relation.
-
-\begin{code}
-
- ≤-reflexive : (𝑨 : Algebra α 𝑆) → 𝑨 ≤ 𝑨
- ≤-reflexive 𝑨 = (𝑖𝑑 ∣ 𝑨 ∣ , λ 𝑓 𝑎 → refl) , Injection.injective id-is-injective
-
- ≤-refl : {𝑨 : Algebra α 𝑆} → 𝑨 ≤ 𝑨
- ≤-refl {𝑨 = 𝑨} = ≤-reflexive 𝑨
-
- ≤-transitivity : (𝑨 : Algebra α 𝑆)(𝑩 : Algebra β 𝑆)(𝑪 : Algebra γ 𝑆)
-  →               𝑪 ≤ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
-
- ≤-transitivity 𝑨 𝑩 𝑪 CB BA = (∘-hom 𝑪 𝑨 ∣ CB ∣ ∣ BA ∣) , Goal
-  where
-  Goal : IsInjective ∣ (∘-hom 𝑪 𝑨 ∣ CB ∣ ∣ BA ∣) ∣
-  Goal = ∘-injective ∥ CB ∥ ∥ BA ∥
-
- ≤-trans : (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}{𝑪 : Algebra γ 𝑆} → 𝑪 ≤ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
- ≤-trans 𝑨 {𝑩}{𝑪} = ≤-transitivity 𝑨 𝑩 𝑪
-
-\end{code}
-
----
-
-#### SUBALGEBRA LEMMAS 2
-
-Next we prove that if two algebras are isomorphic and one of them is a subalgebra of 𝑨,
-then so is the other.
-
-\begin{code}
- iso→injective : {𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆}
-  →              ((f , _ , _ , _) : 𝑨 ≅ 𝑩) → IsInjective ∣ f ∣
- iso→injective {𝑨 = 𝑨} (f , g , f∼g , g∼f) {x}{y} fxfy =
-  x                  ≡⟨ (g∼f x)⁻¹ ⟩
-  (∣ g ∣ ∘ ∣ f ∣) x  ≡⟨ cong ∣ g ∣ fxfy ⟩
-  (∣ g ∣ ∘ ∣ f ∣) y  ≡⟨ g∼f y ⟩
-  y                  ∎
-
- ≤-iso : (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}{𝑪 : Algebra γ 𝑆}
-  →      𝑪 ≅ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
-
- ≤-iso 𝑨 {𝑩} {𝑪} CB BA = (g ∘ f , gfhom) , gfinj
-  where
-   f : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
-   f = fst ∣ CB ∣
-   g : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
-   g = fst ∣ BA ∣
-
-   gfinj : IsInjective (g ∘ f)
-   gfinj = ∘-injective (iso→injective CB)(∥ BA ∥)
-
-   gfhom : is-homomorphism 𝑪 𝑨 (g ∘ f)
-   gfhom = ∘-is-hom 𝑪 𝑨 {f}{g} (snd ∣ CB ∣) (snd ∣ BA ∣)
-
-\end{code}
----
-
-#### SUBALGEBRA TRANSPORT LEMMAS
-
-\begin{code}
-
- ≤-trans-≅ : (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}(𝑪 : Algebra γ 𝑆)
-  →          𝑨 ≤ 𝑩 → 𝑨 ≅ 𝑪 → 𝑪 ≤ 𝑩
-
- ≤-trans-≅ 𝑨 {𝑩} 𝑪 A≤B B≅C = ≤-iso 𝑩 (≅-sym B≅C) A≤B
-
-
- ≤-TRANS-≅ : (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}(𝑪 : Algebra γ 𝑆)
-  →          𝑨 ≤ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤ 𝑪
- ≤-TRANS-≅ 𝑨 𝑪 A≤B B≅C = (∘-hom 𝑨 𝑪 ∣ A≤B ∣ ∣ B≅C ∣) , Goal
-  where
-  Goal : IsInjective ∣ (∘-hom 𝑨 𝑪 ∣ A≤B ∣ ∣ B≅C ∣) ∣
-  Goal = ∘-injective (∥ A≤B ∥)(iso→injective B≅C)
-
-
- ≤-mono : (𝑩 : Algebra β 𝑆){𝒦 𝒦' : Pred (Algebra α 𝑆) γ}
-  →       𝒦 ⊆ 𝒦' → 𝑩 IsSubalgebraOfClass 𝒦 → 𝑩 IsSubalgebraOfClass 𝒦'
-
- ≤-mono 𝑩 KK' KB = ∣ KB ∣ , fst ∥ KB ∥ , KK' (∣ snd ∥ KB ∥ ∣) , ∥ (snd ∥ KB ∥) ∥
-
-\end{code}
-
-
-
-
-
-
-
 ---
 
 
-#### LIFTS OF SUBALGEBRAS
-
-
-\begin{code}
-
- module _ {𝒦 : Pred (Algebra α 𝑆)(ov α)}{𝑩 : Algebra α 𝑆} where
-
-  Lift-is-sub : 𝑩 IsSubalgebraOfClass 𝒦 → (Lift-Alg 𝑩 α) IsSubalgebraOfClass 𝒦
-  Lift-is-sub (𝑨 , (sa , (KA , B≅sa))) = 𝑨 , sa , KA , ≅-trans (≅-sym Lift-≅) B≅sa
-
-
- Lift-≤ : (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}{γ : Level} → 𝑩 ≤ 𝑨 → Lift-Alg 𝑩 γ ≤ 𝑨
- Lift-≤ 𝑨 B≤A = ≤-iso 𝑨 (≅-sym Lift-≅) B≤A
-
- ≤-Lift : (𝑨 : Algebra α 𝑆){γ : Level}{𝑩 : Algebra β 𝑆} → 𝑩 ≤ 𝑨 → 𝑩 ≤ Lift-Alg 𝑨 γ
- ≤-Lift 𝑨 {γ} {𝑩} B≤A = ≤-TRANS-≅ 𝑩 {𝑨} (Lift-Alg 𝑨 γ) B≤A Lift-≅
-
-
- Lift-≤-Lift : {𝑨 : Algebra α 𝑆}(ℓᵃ : Level){𝑩 : Algebra β 𝑆}(ℓᵇ : Level) → 𝑨 ≤ 𝑩 → Lift-Alg 𝑨 ℓᵃ ≤ Lift-Alg 𝑩 ℓᵇ
- Lift-≤-Lift {𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ A≤B = ≤-trans (Lift-Alg 𝑩 ℓᵇ) (≤-trans 𝑩 lAA A≤B) B≤lB
-  where
-
-  lAA : (Lift-Alg 𝑨 ℓᵃ) ≤ 𝑨
-  lAA = Lift-≤ 𝑨 {𝑨} ≤-refl
-
-  B≤lB : 𝑩 ≤ Lift-Alg 𝑩 ℓᵇ
-  B≤lB = ≤-Lift 𝑩 ≤-refl
-
-\end{code}
-
----
 
 
 
@@ -1860,10 +1507,6 @@ In particular, we prove the following facts (which are needed, for example, in t
 
 * [Product invariance] ⊧ is preserved under the taking of products
   (ids modeled by a class are also modeled by all products of algebras in the class)
-
-
-
-
 
 
 
@@ -1935,9 +1578,8 @@ For each "environment" ρ :  X → ∣ 𝑨 ∣, we have  𝑨 ⟦ p ⟧ ρ  ≡
 
 
 
-
-
 ---
+
 
 
 #### EQUATIONAL THEORIES AND MODELS
@@ -1967,214 +1609,7 @@ in ℰ is Mod ℰ, which is defined in agda-algebras as
 
 
 
-
-
 ---
-
-
-#### ALGEBRAIC INVARIANCE OF ⊧
-
-The binary relation ⊧ would be practically useless if it were not an *algebraic invariant*
-(i.e., invariant under isomorphism).
-
-\begin{code}
-
- module _ (wd : SwellDef){X : Type χ}{𝑨 : Algebra α 𝑆}
-          (𝑩 : Algebra β 𝑆)(p q : Term X) where
-
-  ⊧-I-invar : 𝑨 ⊧ p ≈ q  →  𝑨 ≅ 𝑩  →  𝑩 ⊧ p ≈ q
-
-  ⊧-I-invar Apq (f , g , f∼g , g∼f) x =
-   (𝑩 ⟦ p ⟧) x                      ≡⟨ wd χ β (𝑩 ⟦ p ⟧) x (∣ f ∣ ∘ ∣ g ∣ ∘ x) (λ i → ( f∼g (x i))⁻¹) ⟩
-   (𝑩 ⟦ p ⟧) ((∣ f ∣ ∘ ∣ g ∣) ∘ x)  ≡⟨ (comm-hom-term (wd 𝓥 β) 𝑩 f p (∣ g ∣ ∘ x))⁻¹ ⟩
-   ∣ f ∣ ((𝑨 ⟦ p ⟧) (∣ g ∣ ∘ x))    ≡⟨ cong ∣ f ∣ (Apq (∣ g ∣ ∘ x))  ⟩
-   ∣ f ∣ ((𝑨 ⟦ q ⟧) (∣ g ∣ ∘ x))    ≡⟨ comm-hom-term (wd 𝓥 β) 𝑩 f q (∣ g ∣ ∘ x) ⟩
-   (𝑩 ⟦ q ⟧) ((∣ f ∣ ∘ ∣ g ∣) ∘  x) ≡⟨ wd χ β (𝑩 ⟦ q ⟧) (∣ f ∣ ∘ ∣ g ∣ ∘ x) x (λ i → ( f∼g (x i))) ⟩
-   (𝑩 ⟦ q ⟧) x                      ∎
-
-\end{code}
-
-
- As the proof makes clear, we show 𝑩 ⊧ p ≈ q by showing that 𝑩 ⟦ p ⟧ ≡ 𝑩 ⟦ q ⟧ holds
- *extensionally*, that is, ∀ x, 𝑩 ⟦ p ⟧ x ≡ 𝑩 ⟦q ⟧ x.
-
-
-
-
-
----
-
-#### LIFT-INVARIANCE OF ⊧
-
-The ⊧ relation is also invariant under the algebraic lift and lower operations.
-
-\begin{code}
-
- module _ (wd : SwellDef){X : Type χ}{𝑨 : Algebra α 𝑆} where
-
-  ⊧-Lift-invar : (p q : Term X) → 𝑨 ⊧ p ≈ q → Lift-Alg 𝑨 β ⊧ p ≈ q
-  ⊧-Lift-invar p q Apq = ⊧-I-invar wd (Lift-Alg 𝑨 _) p q Apq Lift-≅
-
-  ⊧-lower-invar : (p q : Term X) → Lift-Alg 𝑨 β ⊧ p ≈ q  →  𝑨 ⊧ p ≈ q
-  ⊧-lower-invar p q lApq = ⊧-I-invar wd 𝑨 p q lApq (≅-sym Lift-≅)
-
-\end{code}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
----
-
-
-#### SUBALGEBRAIC INVARIANCE OF ⊧
-
-Identities modeled by an algebra 𝑨 are also modeled by every subalgebra of 𝑨, which
-fact can be formalized as follows.
-
-\begin{code}
-
- module _ (wd : SwellDef){𝓤 𝓦 : Level}{X : Type χ} where
-
-  ⊧-S-invar : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆){p q : Term X}
-   →          𝑨 ⊧ p ≈ q  →  𝑩 ≤ 𝑨  →  𝑩 ⊧ p ≈ q
-  ⊧-S-invar {𝑨} 𝑩 {p}{q} Apq B≤A b = (∥ B≤A ∥) (ξ b)
-   where
-   h : hom 𝑩 𝑨
-   h = ∣ B≤A ∣
-
-   ξ : ∀ b → ∣ h ∣ ((𝑩 ⟦ p ⟧) b) ≡ ∣ h ∣ ((𝑩 ⟦ q ⟧) b)
-   ξ b = ∣ h ∣((𝑩 ⟦ p ⟧) b)   ≡⟨ comm-hom-term (wd 𝓥 𝓤) 𝑨 h p b ⟩
-        (𝑨 ⟦ p ⟧)(∣ h ∣ ∘ b) ≡⟨ Apq (∣ h ∣ ∘ b) ⟩
-        (𝑨 ⟦ q ⟧)(∣ h ∣ ∘ b) ≡⟨ (comm-hom-term (wd 𝓥 𝓤) 𝑨 h q b)⁻¹ ⟩
-        ∣ h ∣((𝑩 ⟦ q ⟧) b)   ∎
-
-\end{code}
-
-
-
-
-
-
-
----
-
-Next, identities modeled by a class of algebras is also modeled by all subalgebras of the
-class.  In other terms, every term equation p ≈ q that is satisfied by all 𝑨 ∈ 𝒦 is
-also satisfied by every subalgebra of a member of 𝒦.
-
- \begin{code}
-
-  ⊧-S-class-invar : {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}(p q : Term X)
-   →                𝒦 ⊧ p ≋ q → (𝑩 : SubalgebraOfClass 𝒦) → ∣ 𝑩 ∣ ⊧ p ≈ q
-  ⊧-S-class-invar p q Kpq (𝑩 , 𝑨 , SA , (ka , BisSA)) = ⊧-S-invar 𝑩 {p}{q}((Kpq ka)) (h , hinj)
-   where
-   h : hom 𝑩 𝑨
-   h = ∘-hom 𝑩 𝑨 (∣ BisSA ∣) ∣ snd SA ∣
-   hinj : IsInjective ∣ h ∣
-   hinj = ∘-injective (iso→injective BisSA) ∥ snd SA ∥
-
-\end{code}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
----
-
-
-#### PRODUCT INVARIANCE OF ⊧
-
-An identity satisfied by all algebras in an indexed collection is also satisfied by the
-product of algebras in that collection.
-
-\begin{code}
-
- module _ (fe : DFunExt)(wd : SwellDef){I : Type β}(𝒜 : I → Algebra α 𝑆){X : Type χ} where
-
-  ⊧-P-invar : (p q : Term X) → (∀ i → 𝒜 i ⊧ p ≈ q) → ⨅ 𝒜 ⊧ p ≈ q
-  ⊧-P-invar p q 𝒜pq a = goal
-   where
-   -- This is where function extensionality is used.
-   ξ : (λ i → (𝒜 i ⟦ p ⟧) (λ x → (a x) i)) ≡ (λ i → (𝒜 i ⟦ q ⟧)  (λ x → (a x) i))
-   ξ = fe β α λ i → 𝒜pq i (λ x → (a x) i)
-
-   goal : (⨅ 𝒜 ⟦ p ⟧) a  ≡  (⨅ 𝒜 ⟦ q ⟧) a
-   goal = (⨅ 𝒜 ⟦ p ⟧) a                      ≡⟨ interp-prod (wd 𝓥 (α ⊔ β)) p 𝒜 a ⟩
-       (λ i → (𝒜 i ⟦ p ⟧)(λ x → (a x)i))  ≡⟨ ξ ⟩
-       (λ i → (𝒜 i ⟦ q ⟧)(λ x → (a x)i))  ≡⟨ (interp-prod (wd 𝓥 (α ⊔ β)) q 𝒜 a)⁻¹ ⟩
-       (⨅ 𝒜 ⟦ q ⟧) a                      ∎
-
-\end{code}
-
-
-
-
-
-
-
----
-
-An identity satisfied by all algebras in a class is also satisfied by the product of
-algebras in the class.
-
-\begin{code}
-
-  ⊧-P-class-invar : (𝒦 : Pred (Algebra α 𝑆)(ov α)){p q : Term X}
-   →                𝒦 ⊧ p ≋ q → (∀ i → 𝒜 i ∈ 𝒦) → ⨅ 𝒜 ⊧ p ≈ q
-
-  ⊧-P-class-invar 𝒦 {p}{q}σ K𝒜 = ⊧-P-invar p q λ i → σ (K𝒜 i)
-
-\end{code}
-
-Another fact that will turn out to be useful is that a product of a collection of algebras
-models p ≈ q if the lift of each algebra in the collection models p ≈ q.
-
-\begin{code}
-
-  ⊧-P-lift-invar : (p q : Term X) → (∀ i → Lift-Alg (𝒜 i) β ⊧ p ≈ q)  →  ⨅ 𝒜 ⊧ p ≈ q
-  ⊧-P-lift-invar p q α = ⊧-P-invar p q Aipq
-   where
-   Aipq : ∀ i → (𝒜 i) ⊧ p ≈ q
-   Aipq i = ⊧-lower-invar wd p q (α i) --  (≅-sym Lift-≅)
-
-\end{code}
-
-
-
-
-
-
-
-
-
-
-
-
-
----
-
 
 
 
@@ -2205,7 +1640,6 @@ language of 𝑆, then,
 
 
 
-
 ---
 
   -- ⇐ (the "if" direction)
@@ -2225,7 +1659,6 @@ language of 𝑆, then,
 
 
 \end{code}
-
 
 
 
@@ -2269,8 +1702,6 @@ all three operators, H, S, and P.
 
 
 
-
-
 ---
 
 
@@ -2302,13 +1733,7 @@ We import some of these things from sub-modules.
 
 
 
-
-
 ---
-
-
-
-
 
 
 
@@ -2324,10 +1749,6 @@ it later, so it too must be formalized.
 
  S⊆SP : (𝒦 : Pred (Algebra α 𝑆)(ov α))
   →     S{α}{β} 𝒦 ⊆ S{α ⊔ β}{α ⊔ β} (P{α}{β} 𝒦)
-
-
-
-
 
 
 
@@ -2662,265 +2083,6 @@ So, since PS⊆SP, we see that that the product of all subalgebras of a class �
 \end{code}
 
 
----
-
-### EQUATION PRESERVATION
-
-We show that identities are preserved by closure operators H, S, and P.
-
-This will establish the easy direction of Birkhoff's HSP Theorem.
-
-#### H PRESERVES IDENTITIES
-
-First we prove that the closure operator H is compatible with identities that hold in the
-given class.
-
-\begin{code}
-
- module _ (wd : SwellDef){X : Type χ} {𝒦 : Pred (Algebra α 𝑆)(ov α)} where
-
-  H-id1 : (p q : Term X) → 𝒦 ⊧ p ≋ q → H{β = α} 𝒦 ⊧ p ≋ q
-  H-id1 p q σ (hbase x) = ⊧-Lift-invar wd p q (σ x)
-  H-id1 p q σ (hhimg{𝑨}{𝑪} HA (𝑩 , ((φ , φh) , φE))) b = goal
-   where
-   IH : 𝑨 ⊧ p ≈ q
-   IH = (H-id1 p q σ) HA
-
-   preim : X → ∣ 𝑨 ∣
-   preim x = Inv φ (φE (b x))
-
-   ζ : ∀ x → φ (preim x) ≡ b x
-   ζ x = InvIsInv φ (φE (b x))
-
-   goal : (𝑩 ⟦ p ⟧) b ≡ (𝑩 ⟦ q ⟧) b
-   goal = (𝑩 ⟦ p ⟧) b          ≡⟨ wd χ α (𝑩 ⟦ p ⟧) b (φ ∘ preim )(λ i → (ζ i)⁻¹)⟩
-       (𝑩 ⟦ p ⟧)(φ ∘ preim) ≡⟨(comm-hom-term (wd 𝓥 α) 𝑩 (φ , φh) p preim)⁻¹ ⟩
-       φ((𝑨 ⟦ p ⟧) preim)   ≡⟨ cong φ (IH preim) ⟩
-       φ((𝑨 ⟦ q ⟧) preim)   ≡⟨ comm-hom-term (wd 𝓥 α) 𝑩 (φ , φh) q preim ⟩
-       (𝑩 ⟦ q ⟧)(φ ∘ preim) ≡⟨ wd χ α (𝑩 ⟦ q ⟧)(φ ∘ preim) b ζ ⟩
-       (𝑩 ⟦ q ⟧) b          ∎
-
-\end{code}
-
-The converse of the foregoing result is almost too obvious to bother with. Nonetheless, we
-formalize it for completeness.
-
-\begin{code}
-
-  H-id2 : ∀ {β} → (p q : Term X) → H{β = β} 𝒦 ⊧ p ≋ q → 𝒦 ⊧ p ≋ q
-
-  H-id2 p q Hpq KA = ⊧-lower-invar wd p q (Hpq (hbase KA))
-
-\end{code}
-
----
-
-#### S PRESERVES IDENTITIES
-
-\begin{code}
-
-  S-id1 : (p q : Term X) → 𝒦 ⊧ p ≋ q → S{β = α} 𝒦 ⊧ p ≋ q
-
-  S-id1 p q σ (sbase x) = ⊧-Lift-invar wd p q (σ x)
-  S-id1 p q σ (slift x) = ⊧-Lift-invar wd p q ((S-id1 p q σ) x)
-
-  S-id1 p q σ (ssub{𝑨}{𝑩} sA B≤A) = ⊧-S-class-invar wd p q goal ν
-   where --Apply S-⊧ to the class 𝒦 ∪ ｛ 𝑨 ｝
-   τ : 𝑨 ⊧ p ≈ q
-   τ = S-id1 p q σ sA
-
-   Apq : ｛ 𝑨 ｝ ⊧ p ≋ q
-   Apq refl = τ
-
-   goal : (𝒦 ∪ ｛ 𝑨 ｝) ⊧ p ≋ q
-   goal {𝑩} (inl x) = σ x
-   goal {𝑩} (inr y) = Apq y
-
-   ν : SubalgebraOfClass (λ z → (𝒦 ∪ ｛ 𝑨 ｝) (fst z , snd z))
-   ν = (𝑩 , 𝑨 , (𝑩 , B≤A) , _⊎_.inj₂ refl , ≅-refl)
-
-  S-id1 p q σ (siso{𝑨}{𝑩} x x₁) = ⊧-I-invar wd 𝑩 p q (S-id1 p q σ x) x₁
-
-  -- Conversely,
-
-  S-id2 : ∀{β}(p q : Term X) → S{β = β}𝒦 ⊧ p ≋ q → 𝒦 ⊧ p ≋ q
-  S-id2 p q Spq {𝑨} KA = ⊧-lower-invar wd p q (Spq (sbase KA))
-
-\end{code}
-
-
----
-
-
-#### P PRESERVES IDENTITIES
-
-\begin{code}
-
- module _ (fe : DFunExt) (wd : SwellDef)  -- extensionality postulates
-
-          {X : Type χ} {𝒦 : Pred (Algebra α 𝑆)(ov α)} where
-
-  P-id1 : (p q : Term X) → 𝒦 ⊧ p ≋ q → P{β = α} 𝒦 ⊧ p ≋ q
-
-  P-id1 p q σ (pbase x) = ⊧-Lift-invar wd p q (σ x)
-  P-id1 p q σ (pliftu x) = ⊧-Lift-invar wd p q ((P-id1 p q σ) x)
-  P-id1 p q σ (pliftw x) = ⊧-Lift-invar wd p q ((P-id1 p q σ) x)
-  P-id1 p q σ (produ{I}{𝒜} x) = ⊧-P-lift-invar fe wd 𝒜  p q IH
-   where
-   IH : ∀ i → (Lift-Alg (𝒜 i) α) ⊧ p ≈ q
-   IH i = ⊧-Lift-invar wd  p q ((P-id1 p q σ) (x i))
-  P-id1 p q σ (prodw{I}{𝒜} x) = ⊧-P-lift-invar fe wd 𝒜  p q IH
-   where
-   IH : ∀ i → (Lift-Alg (𝒜 i) α) ⊧ p ≈ q
-   IH i = ⊧-Lift-invar wd  p q ((P-id1 p q σ) (x i))
-  P-id1 p q σ (pisow{𝑨}{𝑩} x y) = ⊧-I-invar wd 𝑩 p q (P-id1 p q σ x) y
-
- -- Conversely,
-
- module _  (wd : SwellDef){X : Type χ} {𝒦 : Pred (Algebra α 𝑆)(ov α)} where
-
-  P-id2 : ∀ {β}(p q : Term X) → P{β = β} 𝒦 ⊧ p ≋ q → 𝒦 ⊧ p ≋ q
-  P-id2 p q PKpq KA = ⊧-lower-invar wd p q (PKpq (pbase KA))
-
-\end{code}
-
-
-#### V PRESERVES IDENTITIES
-
-Finally, we prove the analogous preservation lemmas for the closure operator V.
-
-\begin{code}
-
- module Vid (fe : DFunExt)(wd : SwellDef) -- extensionality postulates
-            {X : Type χ} {𝒦 : Pred (Algebra α 𝑆)(ov α)} where
-
-  V-id1 : (p q : Term X) → 𝒦 ⊧ p ≋ q → V{β = α} 𝒦 ⊧ p ≋ q
-
-  V-id1 p q σ (vbase x) = ⊧-Lift-invar wd p q (σ x)
-  V-id1 p q σ (vlift{𝑨} x) = ⊧-Lift-invar wd p q ((V-id1 p q σ) x)
-  V-id1 p q σ (vliftw{𝑨} x) = ⊧-Lift-invar wd p q ((V-id1 p q σ) x)
-
-  V-id1 p q σ (vhimg{𝑨}{𝑪}VA (𝑩 , ((φ , φh) , φE))) b = goal
-   where
-   IH : 𝑨 ⊧ p ≈ q
-   IH = V-id1 p q σ VA
-
-   preim : X → ∣ 𝑨 ∣
-   preim x = Inv φ (φE (b x))
-
-   ζ : ∀ x → φ (preim x) ≡ b x
-   ζ x = InvIsInv φ (φE (b x))
-
-   goal : (𝑩 ⟦ p ⟧) b ≡ (𝑩 ⟦ q ⟧) b
-   goal = (𝑩 ⟦ p ⟧) b          ≡⟨ wd χ α (𝑩 ⟦ p ⟧) b (φ ∘ preim )(λ i → (ζ i)⁻¹)⟩
-       (𝑩 ⟦ p ⟧)(φ ∘ preim) ≡⟨(comm-hom-term (wd 𝓥 α) 𝑩 (φ , φh) p preim)⁻¹ ⟩
-       φ((𝑨 ⟦ p ⟧) preim)   ≡⟨ cong φ (IH preim) ⟩
-       φ((𝑨 ⟦ q ⟧) preim)   ≡⟨ comm-hom-term (wd 𝓥 α) 𝑩 (φ , φh) q preim ⟩
-       (𝑩 ⟦ q ⟧)(φ ∘ preim) ≡⟨ wd χ α (𝑩 ⟦ q ⟧)(φ ∘ preim) b ζ ⟩
-       (𝑩 ⟦ q ⟧) b          ∎
-
-  V-id1 p q σ ( vssubw {𝑨}{𝑩} VA B≤A ) =
-   ⊧-S-class-invar wd p q goal (𝑩 , 𝑨 , (𝑩 , B≤A) , inr refl , ≅-refl)
-    where
-    IH : 𝑨 ⊧ p ≈ q
-    IH = V-id1 p q σ VA
-
-    Asinglepq : ｛ 𝑨 ｝ ⊧ p ≋ q
-    Asinglepq refl = IH
-
-    goal : (𝒦 ∪ ｛ 𝑨 ｝) ⊧ p ≋ q
-    goal {𝑩} (inl x) = σ x
-    goal {𝑩} (inr y) = Asinglepq y
-
-  V-id1 p q σ (vprodu{I}{𝒜} V𝒜) = ⊧-P-invar fe wd 𝒜  p q λ i → V-id1 p q σ (V𝒜 i)
-  V-id1 p q σ (vprodw{I}{𝒜} V𝒜) = ⊧-P-invar fe wd 𝒜  p q λ i → V-id1 p q σ (V𝒜 i)
-  V-id1 p q σ (visou{𝑨}{𝑩} VA A≅B) = ⊧-I-invar wd 𝑩 p q (V-id1 p q σ VA) A≅B
-  V-id1 p q σ (visow{𝑨}{𝑩} VA A≅B) = ⊧-I-invar wd 𝑩 p q (V-id1 p q σ VA) A≅B
-
-
- -- conversely
-
- module _ (wd : SwellDef){X : Type χ}{𝒦 : Pred (Algebra α 𝑆)(ov α)} where
-
-  V-id2 : (p q : Term X) → (V{β = β} 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
-  V-id2 p q Vpq {𝑨} KA = ⊧-lower-invar wd p q (Vpq (vbase KA))
-
-\end{code}
-
----
-
-\begin{code}
-
- module Vid' (fe : DFunExt)(wd : SwellDef) {X : Type χ} {𝒦 : Pred (Algebra α 𝑆)(ov α)} where
-
-  open Vid fe wd {X}{𝒦} public
-
-  V-id1' : (p q : Term X) → 𝒦 ⊧ p ≋ q → V{β = β} 𝒦 ⊧ p ≋ q
-
-  V-id1' p q σ (vbase x) = ⊧-Lift-invar wd p q (σ x)
-  V-id1' p q σ (vlift{𝑨} x) = ⊧-Lift-invar wd p q ((V-id1 p q σ) x)
-  V-id1' p q σ (vliftw{𝑨} x) = ⊧-Lift-invar wd p q ((V-id1' p q σ) x)
-  V-id1' p q σ (vhimg{𝑨}{𝑪} VA (𝑩 , ((φ , φh) , φE))) b = goal
-   where
-   IH : 𝑨 ⊧ p ≈ q
-   IH = V-id1' p q σ VA
-
-   preim : X → ∣ 𝑨 ∣
-   preim x = Inv φ (φE (b x))
-
-   ζ : ∀ x → φ (preim x) ≡ b x
-   ζ x = InvIsInv φ (φE (b x))
-
-   goal : (𝑩 ⟦ p ⟧) b ≡ (𝑩 ⟦ q ⟧) b
-   goal = (𝑩 ⟦ p ⟧) b          ≡⟨ wd χ _ (𝑩 ⟦ p ⟧) b (φ ∘ preim )(λ i → (ζ i)⁻¹)⟩
-       (𝑩 ⟦ p ⟧)(φ ∘ preim) ≡⟨(comm-hom-term (wd 𝓥 _) 𝑩 (φ , φh) p preim)⁻¹ ⟩
-       φ((𝑨 ⟦ p ⟧) preim)   ≡⟨ cong φ (IH preim) ⟩
-       φ((𝑨 ⟦ q ⟧) preim)   ≡⟨ comm-hom-term (wd 𝓥 _) 𝑩 (φ , φh) q preim ⟩
-       (𝑩 ⟦ q ⟧)(φ ∘ preim) ≡⟨ wd χ _ (𝑩 ⟦ q ⟧)(φ ∘ preim) b ζ ⟩
-       (𝑩 ⟦ q ⟧) b          ∎
-
-  V-id1' p q σ (vssubw {𝑨}{𝑩} VA B≤A) = ⊧-S-invar wd 𝑩 {p}{q}(V-id1' p q σ VA) B≤A
-  V-id1' p q σ (vprodu{I}{𝒜} V𝒜) = ⊧-P-invar fe wd 𝒜  p q λ i → V-id1 p q σ (V𝒜 i)
-  V-id1' p q σ (vprodw{I}{𝒜} V𝒜) = ⊧-P-invar fe wd 𝒜  p q λ i → V-id1' p q σ (V𝒜 i)
-  V-id1' p q σ (visou {𝑨}{𝑩} VA A≅B) = ⊧-I-invar wd 𝑩 p q (V-id1 p q σ VA) A≅B
-  V-id1' p q σ (visow{𝑨}{𝑩} VA A≅B) = ⊧-I-invar wd 𝑩 p q (V-id1' p q σ VA)A≅B
-
-\end{code}
-
----
-
-#### CLASS IDENTITIES
-
-From V-id1 it follows that if 𝒦 is a class of structures, then the set of identities
-modeled by all structures in 𝒦 is equivalent to the set of identities modeled by all
-structures in V 𝒦.  In other terms, Th (V 𝒦) is precisely the set of identities
-modeled by 𝒦.   We formalize this observation as follows.
-
-\begin{code}
-
- module _ (fe : DFunExt)(wd : SwellDef) -- extensionality postulates
-          {X : Type χ} {𝒦 : Pred (Algebra α 𝑆)(ov α)} where
-
-  𝕍 : Pred (Algebra (lsuc (ov α)) 𝑆) (lsuc (lsuc (ov α)))
-  𝕍 = V{β = lsuc (ov α)} 𝒦
-
-  𝒱 : Pred (Algebra (ov α) 𝑆) (lsuc (ov α))
-  𝒱 = V{β = (ov α)} 𝒦
-
-  open Vid' fe wd {X}{𝒦} public
-
-  class-ids-⇒ : (p q : ∣ 𝑻 X ∣) → 𝒦 ⊧ p ≋ q  →  (p , q) ∈ Th 𝒱
-  class-ids-⇒ p q pKq VCloA = V-id1' p q pKq VCloA
-
-  class-ids-⇒' : (p q : ∣ 𝑻 X ∣) → 𝒦 ⊧ p ≋ q  →  (p , q) ∈ Th 𝕍
-  class-ids-⇒' p q pKq VCloA = V-id1' p q pKq VCloA
-
-
-  class-ids-⇐ : (p q : ∣ 𝑻 X ∣) → (p , q) ∈ Th 𝒱 →  𝒦 ⊧ p ≋ q
-  class-ids-⇐ p q Thpq {𝑨} KA = ⊧-lower-invar wd p q (Thpq (vbase KA))
-
-
-\end{code}
 
 ---
 
