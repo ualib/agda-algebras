@@ -29,8 +29,6 @@ author: William DeMeo
 
 
 
-
-
 ---
 
 
@@ -56,8 +54,6 @@ author: William DeMeo
 
 * DOCUMENTATION:
   https://ualib.gitlab.io/UALib.html](https://ualib.gitlab.io/UALib.html
-
-
 
 
 
@@ -95,8 +91,6 @@ CURRENT SCOPE of agda-algebras
 
 
 
-
-
 ---
 
 
@@ -119,8 +113,6 @@ CURRENT SCOPE of agda-algebras
 * [Specialized]
   Currently only single-sorted structures are covered (but we are developing a
   multi-sorted version).
-
-
 
 
 
@@ -161,19 +153,15 @@ Every source file in agda-algebras begins with
 
 
 
-
-
 ---
+
+###### (skip)
 
 \begin{code}
 open import Demos.TYPES2021-shortimports
 module Demos.TYPES2021-short  {𝓞 𝓥 : Level} where
 variable α β γ ρ χ 𝓘 : Level
 \end{code}
-
-
-
-
 
 
 
@@ -227,8 +215,6 @@ Aᴵ to an element of A. For example, the I-ary projection operations on A are
 π i x = x i
 
 \end{code}
-
-
 ---
 
 ### (SINGLE-SORTED) RELATIONS OF ARBITRARY ARITY
@@ -241,13 +227,12 @@ We could model these as predicates over A × A × ⋯ × A or as relations of ty
 
    A → A → ⋯ → A → Type
 
-This is awkward... we need to somehow form an n-fold arrow.
+This is awkward.  We need somehow to form an n-fold arrow.
 
 Easier and more general:
 
-* Define an arbitrary _arity type_   I : Type
-
-* Define the type of I-ary relations on A  as  (I → A) → Type
+* Define an arbitrary *arity type*   I : Type 𝓥
+* Define the type of I-ary relations on A  as  (I → A) → Type ρ
 
 \begin{code}
 
@@ -261,66 +246,32 @@ Rel A {I} {ρ} = (I → A) → Type ρ
 
 We call these "continuous" since their arity types may represent an uncountable
 set or continuum rather than a discrete or enumerable set.
-
 ---
 
 
 
-### DEPENDENT RELATIONS (Rho Types)
+### DEPENDENT RELATIONS  ("Rho Types")
 
-We can remove the single-sorted restriction by using dependent types.
+Remove the single-sorted restriction with dependent types!
 
 For an arbitrary family, 𝒜 : I → Type α, imagine a relation
 
-     from  𝒜 i  to  𝒜 j  to  𝒜 k  to  …                 (*)
+     from … to 𝒜 i  to  𝒜 j  to  𝒜 k  to  …               (*)
 
-In set theory, such a relation is a subset of the product Π(i : I) 𝒜 i.
+In set theory such relations are subsets of Π(i : I) 𝒜 i.
 
-Again, the set represented by the "indexing" type I might not even be enumerable
-so (*) is misleading; we should have said something like "to(i : I) 𝒜 i"
+The "indexing" type I might not even be enumerable so (*) is misleading.
 
-The `Ρ` (Rho) type manifests this general notion of relation.
+The Ρ (Rho) type manifests this general notion of relation as follows.
 
-\begin{code} -- arbitrarily-sorted relations of arbitrary arity --
+\begin{code} -- arbitrary-sorted relations of arbitrary arity
 
 Ρ : (I : Arity 𝓥 ) → (I → Type α) → {ρ : Level} → Type _
 Ρ I 𝒜 {ρ} = ((i : I) → 𝒜 i) → Type ρ
 
 \end{code}
 
-We refer to inhabitants of Ρ as "dependent relations" because the definition
-of Ρ uses a Pi type.
-
-
-
-
-
-
-
-### TYPES FOR SINGLE-SORTED ALGEBRAIC STRUCTURES
-
-
-
-#### SIGNATURE OF AN ALGEBRA
-
-Classically, a *signature*  𝑆 = (𝐶, 𝐹, 𝑅, ρ)  consists of three (possibly empty) sets
-(constant, function, and relation symbols) and an arity function
-
-    ρ : 𝐶 + 𝐹 + 𝑅 → 𝑁
-
-assigning an *arity* to each symbol.
-
-Often (but not always)  𝑁  is the natural numbers.
-
-An *algebraic signature* is a signature for algebraic structures (no relations symbols),
-
-  𝑆 = (𝐹, ρ)
-
-Heuristically, the arity  ρ 𝑓  of an operation symbol  𝑓 ∈ 𝐹  is the
-"number of arguments" that  𝑓  takes as "input".
-
-
-
+These are just predicates over dependent functions!
 
 
 
@@ -328,10 +279,18 @@ Heuristically, the arity  ρ 𝑓  of an operation symbol  𝑓 ∈ 𝐹  is the
 
 ---
 
+### TYPES FOR ALGEBRAIC STRUCTURES
 
-#### SIGNATURE TYPE
+#### SIGNATURES
 
-We represent the *signature* of an algebraic structure using the following Sigma type.
+An *algebraic signature* is a pair 𝑆 = (F, ρ) where F is a (possibly empty) set
+and ρ : F → N is an "arity function" assigning an arity to each symbol in F.
+
+Often (but not always)  𝑁  is the natural numbers.
+
+Heuristically, ρ 𝑓 is the "number of arguments" of 𝑓.
+
+Algebraic signature is represented in agda-algebras using the Sigma type
 
 \begin{code}
 
@@ -340,20 +299,10 @@ Signature 𝓞 𝓥 = Σ[ F ∈ Type 𝓞 ] (F → Type 𝓥)
 
 \end{code}
 
-A signature is a pair (F , ρ), where F : Type 𝓞 and ρ : F → Type 𝓥.
-
 We define syntax for the first and second projections: ∣_∣ and ∥_∥.
-
-If 𝑆 : Signature 𝓞 𝓥, then
-
-* ∣ 𝑆 ∣ = F is the set of operation symbols, and
-* ∥ 𝑆 ∥ = ρ is the arity function.
 
 If 𝑓 : ∣ 𝑆 ∣ is an operation symbol in the signature 𝑆, then ∥ 𝑆 ∥ 𝑓 is
 the arity of 𝑓.
-
-
-
 
 
 
@@ -364,7 +313,7 @@ the arity of 𝑓.
 
 
 
-#### EXAMPLE (Monoid).
+#### (Example: Monoid Signature)
 
 Here is how we could encode the signature for monoids as an inhabitant of
 Signature 𝓞 ℓ₀.
@@ -390,11 +339,9 @@ function λ { e → 𝟘; · → 𝟚 } which maps
 
 
 
-
-
 ---
 
-#### SPECIAL NOTATION
+#### (Special notation)
 
 Given a signature 𝑆 : Signature 𝓞 𝓥, the type Algebra α 𝑆 will have type
 Type(𝓞 ⊔ 𝓥 ⊔ lsuc α) and such types occur so often in agda-algebras
@@ -423,28 +370,22 @@ ov α = 𝓞 ⊔ 𝓥 ⊔ lsuc α
 
 
 
-
-
 ---
 
 
-#### ALGEBRAS IN THEORY
+#### ALGEBRAS in theory and in agda-algebras
 
-An *algebra* in the signature  𝑆 = (𝐹 , ρ)  is denoted by  𝑨 = (A , Fᴬ)  and
-consists of
+An *algebra* in the signature  𝑆 = (𝐹 , ρ)  is denoted by  𝑨 = (A , Fᴬ).
 
 * A = a nonempty set called the *carrier* of the algebra;
 
 * Fᴬ = { fᴬ ∣ f ∈ F, fᴬ : (ρ𝑓 → A) → A } = a collection of *operations* on A;
 
-* a (potentially empty) collection of *identities* satisfied by the elements and
-  operations.
+* a (potentially empty) set of *identities* satisfied by the elements and operations.
 
 
-#### ALGEBRAS IN agda-algebras
-
-For a fixed signature  𝑆 : Signature 𝓞 𝓥  and universe level α,
-define the type of 𝑆-algebras with domain in  Type α  as follows.
+For a fixed signature  𝑆 : Signature 𝓞 𝓥  and universe α, the type of 𝑆-algebras
+with domain in  Type α  is
 
 \begin{code}
 
@@ -458,9 +399,11 @@ Algebra α 𝑆 = Σ[ A ∈ Type α ]                   -- the domain
 
 
 
+
+
 ---
 
-#### TRUNCATION
+#### (Truncation)
 
 It would be more precise to refer to inhabitants of Algebra α 𝑆 as
 ∞-algebras because their domains can be of arbitrary type and need not be
@@ -489,11 +432,9 @@ only when necessary.
 
 
 
-
-
 ---
 
-#### Algebras as Inhabitants of Record Types
+#### (Algebras as record types)
 
 Some prefer to use record types for things like algebraic structures, and for
 those folks we offer the following.
@@ -506,13 +447,8 @@ record algebra (α : Level) (𝑆 : Signature 𝓞 𝓥) : Type(lsuc(𝓞 ⊔ �
   carrier : Type α
   opsymbol : (f : ∣ 𝑆 ∣) → ((∥ 𝑆 ∥ f) → carrier) → carrier
 
-\end{code}
-
-This representation of algebras as inhabitants of a record type is logically
-equivalent to the one using Sigma types in the sense that there is an (obvious)
-bi-implication between the two definitions.
-
-\begin{code}
+-- This representation of algebras is logically equivalent to the Sigma type
+-- representation in the sense of bi-implication, proved as follows.
 
 module _ {𝑆 : Signature 𝓞 𝓥} where
  open algebra
@@ -524,6 +460,8 @@ module _ {𝑆 : Signature 𝓞 𝓥} where
  Algebra→algebra 𝑨 = mkalg ∣ 𝑨 ∣ ∥ 𝑨 ∥
 
 \end{code}
+
+
 
 ---
 
@@ -556,11 +494,9 @@ evaluated at a.
 
 
 
-
-
 ---
 
-#### LEVEL LIFTING ALGEBRA TYPES
+#### (Level lifting algebra types)
 
 One encounters difficulties when working with a noncumulative universe hierarchy like Agda's.
 
@@ -589,74 +525,8 @@ nice structure-preserving properties it possesses.  Indeed, we prove the followi
 + Lift-Alg is an algebraic invariant (preserves isomorphism)
 + Lift-Alg is a "subalgebraic invariant" (lift of a subalgebra is a subalgebra)
 + Lift-Alg preserves identities
-
-
 ---
 
-
-#### COMPATIBILITY OF BINARY RELATIONS WITH ALGEBRAS
-
-We now define the function compatible so that, if 𝑨 is an algebra and R a binary
-relation, then compatible 𝑨 R is the assertion that R is *compatible* with
-all basic operations of 𝑨.
-
-The formal definition is immediate since all the work is already done by the "preserves" relation
-defined earlier.
-
-\begin{code}
-
- compatible : (𝑨 : Algebra α 𝑆) → BinRel ∣ 𝑨 ∣ ρ → Type _
-
- compatible  𝑨 R = ∀ 𝑓 → (𝑓 ̂ 𝑨) preserves R
-
-\end{code}
-
-
-
-
-
-
-
-
-
-
-
-
-
----
-
-
-
-
-
-#### COMPATIBILITY OF ALGEBRAS WITH GENERAL (RHO) RELATIONS
-
-We defined compatible-Ρ to represent the assertion that a given dependent
-relation is compatible with a given operation.
-
-The following represents compatibility of a dependent relation with all
-operations of an algebra.
-
-\begin{code}
-
- compatible-Ρ-alg : {I : Arity 𝓥} (𝒜 : I → Algebra α 𝑆) → Ρ I (λ i → ∣ 𝒜  i ∣) {ρ} → Type _
-
- compatible-Ρ-alg 𝒜 R = ∀ 𝑓 →  compatible-Ρ (λ i → 𝑓 ̂ (𝒜 i)) R
-
-\end{code}
-
-
-
-
-
-
-
-
-
-
-
-
----
 
 #### PRODUCT ALGEBRAS
 
@@ -686,9 +556,6 @@ algebra with
 
 
 
-
-
-
 ---
 
 
@@ -712,8 +579,6 @@ record type algebra.
           }
 
 \end{code}
-
-
 
 
 
@@ -753,43 +618,7 @@ representing products over arbitrary (nonindexed) families such as 𝒦.
 
 
 
-
-
 ---
-
-
-
-
-#### PRODUCTS OF ARBITRARY CLASSES OF ALGEBRAS
-
-Observe that Π 𝒦 is certainly not what we want.
-
-(Recall Pred (Algebra α 𝑆) β is the function type Algebra α 𝑆 → Type β, and the
-semantics of the latter takes 𝒦 𝑨 to mean 𝑨 ∈ 𝒦. Thus, by definition, 
-
- Π 𝒦   :=   Π[ 𝑨 ∈ (Algebra α 𝑆) ] 𝒦 𝑨   :=   ∀ (𝑨 : Algebra α 𝑆) → 𝑨 ∈ 𝒦,
-
-which simply asserts that every inhabitant of Algebra α 𝑆 belongs to 𝒦.
-
-We need a type that indexes the class 𝒦, and a function 𝔄 that maps an index to the
-inhabitant of 𝒦 at that index.
-
-But 𝒦 is a predicate (of type (Algebra α 𝑆) → Type β) and the type Algebra α 𝑆 seems
-rather nebulous in that there is no natural indexing class with which to "enumerate" all
-inhabitants of Algebra α 𝑆 belonging to 𝒦.
-
-
-
-
-
-
-
-
-
-
-
----
-
 
 
 
@@ -824,7 +653,6 @@ to the corresponding algebra.
 
 
 
-
 #### PRODUCTS OF ARBITRARY CLASSES OF ALGEBRAS
 
 Each i : ℑ is a pair, (𝑨 , p), where 𝑨 is an algebra and p is a proof that 𝑨
@@ -855,12 +683,11 @@ think of 𝔄 (𝑨 , p) (which is simply 𝑨) as the projection of the product
 ---
 
 
+
 ### CONGRUENCE RELATIONS
 
 A *congruence relation* of an algebra 𝑨 is an equivalence relation that is
 compatible with the basic operations of 𝑨.
-
-We define a record type IsCongruence to represent the property of being a congruence.
 
 \begin{code}
 
@@ -869,14 +696,12 @@ We define a record type IsCongruence to represent the property of being a congru
   field       is-equivalence : IsEquivalence θ
               is-compatible  : compatible 𝑨 θ
 
-\end{code}
-
-We define a Sigma type Con to represent the type of congruences of a given algebra.
-
-\begin{code}
 
  Con : (𝑨 : Algebra α 𝑆) → {ρ : Level} → Type _
  Con 𝑨 {ρ} = Σ[ θ ∈ ( BinRel ∣ 𝑨 ∣ ρ ) ] IsCongruence 𝑨 θ
+
+
+ open IsCongruence
 
 \end{code}
 
@@ -885,16 +710,12 @@ the sense that each implies the other. One implication is the "uncurry" operatio
 other is the second projection.
 
 
+
 ---
-
-
 
 #### QUOTIENT ALGEBRAS
 
-In many areas of abstract mathematics the *quotient* of an algebra 𝑨 with respect to a
-congruence relation θ of 𝑨 plays an important role. This quotient is typically denoted
-by 𝑨 / θ and Agda allows us to define and express quotients using this standard
-notation.
+If θ : Con 𝑨, the quotient algebra 𝑨 / θ is defined in agda-algebras as
 
 \begin{code}
 
@@ -906,17 +727,20 @@ notation.
 \end{code}
 
 
-Finally, the following elimination rule is sometimes useful (but it 'cheats' a lot by baking in
-a large amount of extensionality that is miraculously true).
+The following elimination rule is sometimes useful...
 
 \begin{code}
-
- open IsCongruence
 
  /-≡ : {𝑨 : Algebra α 𝑆}(θ : Con 𝑨 {ρ}){u v : ∣ 𝑨 ∣} → ⟪ u ⟫ {∣ θ ∣} ≡ ⟪ v ⟫ → ∣ θ ∣ u v
  /-≡ θ refl = IsEquivalence.refl (is-equivalence ∥ θ ∥)
 
 \end{code}
+
+...but it "cheats" a lot by baking in a large amount of extensionality that is
+miraculously true.
+
+
+
 
 ---
 
@@ -927,13 +751,13 @@ If 𝑨 and 𝑩 are 𝑆-algebras, then a *homomorphism* from 𝑨 to 𝑩 is a
 
   h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣
 
-from the domain of 𝑨 to the domain of 𝑩 that is *compatible* (or *commutes*) with all
-of the basic operations of the signature; that is,
+from the domain of 𝑨 to the domain of 𝑩 that is *compatible* (or *commutes*)
+with all of the basic operations of the signature; that is,
 
 ∀ (𝑓 : ∣ 𝑆 ∣) (a : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣) → h ((𝑓 ̂ 𝑨) a) ≡ (𝑓 ̂ 𝑩) (h ∘ a).
 
-To formalize this concept, we first define a type representing the assertion that a
-function h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣ commutes with a single basic operation 𝑓.
+To formalize this concept, we first define a type representing the assertion
+that a function h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣ commutes with a single basic operation 𝑓.
 
 \begin{code}
 
@@ -949,12 +773,7 @@ function h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣ commutes with a single basic operatio
 
 
 
-
-
 ---
-
-
-
 
 
 
@@ -971,7 +790,7 @@ is-homomorphism representing the property of being a homomorphism.
   hom : Type _
   hom = Σ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) is-homomorphism
 
-  -- Examples. The identity hom.
+  -- Example. The identity hom.
  𝒾𝒹 : (𝑨 : Algebra α 𝑆) → hom 𝑨 𝑨
  𝒾𝒹 _ = id , λ 𝑓 𝑎 → refl
 
@@ -984,10 +803,11 @@ is-homomorphism representing the property of being a homomorphism.
 
 
 
+
 ---
 
 
-#### HOMOMORPHISM THEOREM
+#### (Homomorphism theorems)
 
 1. The composition of homomorphisms is again a homomorphism.
 
@@ -1015,14 +835,12 @@ is-homomorphism representing the property of being a homomorphism.
 
 
 
-
-
 ---
 
 
 
 
-#### HOMOMORPHISM THEOREM
+#### (Homomorphism theorems)
 
 2. lift and lower are (the maps of) homomorphisms.
 
@@ -1048,11 +866,9 @@ is-homomorphism representing the property of being a homomorphism.
 
 
 
-
-
 ---
 
-#### HOMOMORPHISM FACTORIZATION
+#### (Homomorphism factorization)
 
 
 If τ : hom 𝑨 𝑩, ν : hom 𝑨 𝑪, ν is surjective, and ker ν ⊆ ker τ, then there exists
@@ -1076,8 +892,6 @@ If τ : hom 𝑨 𝑩, ν : hom 𝑨 𝑪, ν is surjective, and ker ν ⊆ ker 
    →          kernel ∣ ν ∣ ⊆ kernel ∣ τ ∣ → IsSurjective ∣ ν ∣
               --------------------------------------------------
    →          Σ[ φ ∈ (hom 𝑪 𝑩)] ∣ τ ∣ ≡ ∣ φ ∣ ∘ ∣ ν ∣
-
-
 
 
 
@@ -1108,41 +922,6 @@ If τ : hom 𝑨 𝑩, ν : hom 𝑨 𝑪, ν is surjective, and ker ν ⊆ ker 
                    φ (∣ ν ∣((𝑓 ̂ 𝑨)(νInv ∘ c)))     ≡⟨ cong-app(τφν ⁻¹)((𝑓 ̂ 𝑨)(νInv ∘ c))⟩
                    ∣ τ ∣((𝑓 ̂ 𝑨)(νInv ∘ c))         ≡⟨ ∥ τ ∥ 𝑓 (νInv ∘ c) ⟩
                    (𝑓 ̂ 𝑩)(λ x → ∣ τ ∣(νInv (c x))) ∎
-
-\end{code}
-
-
-
-
-
-
----
-
-
-#### HOMOMORPHISM FACTORIZATION
-
-If in addition we assume τ is epic, then so is φ.
-
-
-\begin{code}
-
-  HomFactorEpi : funext α β → swelldef 𝓥 γ
-   →             (𝑩 : Algebra β 𝑆)(τ : hom 𝑨 𝑩)(ν : hom 𝑨 𝑪)
-   →             kernel ∣ ν ∣ ⊆ kernel ∣ τ ∣
-   →             IsSurjective ∣ ν ∣ → IsSurjective ∣ τ ∣
-                 ---------------------------------------------
-   →             Σ[ φ ∈ epi 𝑪 𝑩 ] ∣ τ ∣ ≡ ∣ φ ∣ ∘ ∣ ν ∣
-
-  HomFactorEpi fxy wd 𝑩 τ ν kerincl νe τe = (fst ∣ φF ∣ ,(snd ∣ φF ∣ , φE)), ∥ φF ∥
-   where
-    φF : Σ[ φ ∈ hom 𝑪 𝑩 ] ∣ τ ∣ ≡ ∣ φ ∣ ∘ ∣ ν ∣
-    φF = HomFactor fxy wd 𝑩 τ ν kerincl νe
-
-    φ : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
-    φ = ∣ τ ∣ ∘ (SurjInv ∣ ν ∣ νe)
-
-    φE : IsSurjective φ
-    φE = epic-factor  ∣ τ ∣ ∣ ν ∣ φ ∥ φF ∥ τe
 
 \end{code}
 
@@ -1180,12 +959,9 @@ Recall, f ≈ g means f and g are *extensionally* (or pointwise) equal.
 
 
 
-
-
 ---
 
-
-#### ISOMORPHISM IS AN EQUIVALENCE RELATION
+#### (Isomorphism is an equivalence relation)
 
 \begin{code}
 
@@ -1197,40 +973,13 @@ Recall, f ≈ g means f and g are *extensionally* (or pointwise) equal.
 
  ≅-trans : {𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆}{𝑪 : Algebra γ 𝑆}
   →        𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≅ 𝑪
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
----
-
  ≅-trans {𝑨 = 𝑨} {𝑩}{𝑪} ab bc = f , g , τ , ν
   where
-  f1 : hom 𝑨 𝑩
   f1 = ∣ ab ∣
-  f2 : hom 𝑩 𝑪
   f2 = ∣ bc ∣
-  f : hom 𝑨 𝑪
   f = ∘-hom 𝑨 𝑪 f1 f2
-
-  g1 : hom 𝑪 𝑩
   g1 = fst ∥ bc ∥
-  g2 : hom 𝑩 𝑨
   g2 = fst ∥ ab ∥
-  g : hom 𝑪 𝑨
   g = ∘-hom 𝑪 𝑨 g1 g2
 
   τ : ∣ f ∣ ∘ ∣ g ∣ ≈ ∣ 𝒾𝒹 𝑪 ∣
@@ -1241,17 +990,10 @@ Recall, f ≈ g means f and g are *extensionally* (or pointwise) equal.
 
 \end{code}
 
-
-
-
-
-
-
-
 ---
 
 
-#### LIFT IS AN ALGEBRAIC INVARIANT
+#### (Lift is an algebraic invariant)
 
 The lift operation preserves isomorphism.
 
@@ -1271,8 +1013,6 @@ arising from noncumulativity of Agda's universe hierarchy.
 
  Lift-hom : {𝑨 : Algebra α 𝑆}(ℓᵃ : Level){𝑩 : Algebra β 𝑆} (ℓᵇ : Level)
   →         hom 𝑨 𝑩  →  hom (Lift-Alg 𝑨 ℓᵃ) (Lift-Alg 𝑩 ℓᵇ)
-
-
 
 
 
@@ -1312,12 +1052,10 @@ arising from noncumulativity of Agda's universe hierarchy.
 
 
 
-
-
 ---
 
 
-#### LIFT IS ASSOCIATIVE
+#### (Lift is associative)
 
 \begin{code}
 
@@ -1345,12 +1083,10 @@ arising from noncumulativity of Agda's universe hierarchy.
 
 
 
-
-
 ---
 
 
-#### PRODUCTS PRESERVE ISOMORPHISMS
+#### (Products preserve isomorphisms)
 
 Products of isomorphic families of algebras are themselves isomorphic.
 
@@ -1366,8 +1102,6 @@ Products of isomorphic families of algebras are themselves isomorphic.
    ⨅≅ : {𝒜 : I → Algebra α 𝑆}{ℬ : I → Algebra β 𝑆}
 
     →    (∀ (i : I) → 𝒜 i ≅ ℬ i) → ⨅ 𝒜 ≅ ⨅ ℬ
-
-
 
 
 
@@ -1411,11 +1145,10 @@ Products of isomorphic families of algebras are themselves isomorphic.
 
 
 
-
 ---
 
 
-#### ISOMORPHIC PRODUCTS WITH A LIFT
+#### (Isomorphic products with a lift)
 
 
 A nearly identical proof goes through for isomorphisms of lifted products.
@@ -1428,8 +1161,6 @@ A nearly identical proof goes through for isomorphisms of lifted products.
 
    Lift-Alg-⨅≅ : {𝒜 : I → Algebra α 𝑆}{ℬ : (Lift γ I) → Algebra β 𝑆}
     →            (∀ i → 𝒜 i ≅ ℬ (lift i)) → Lift-Alg (⨅ 𝒜) γ ≅ ⨅ ℬ
-
-
 
 
 
@@ -1478,7 +1209,7 @@ A nearly identical proof goes through for isomorphisms of lifted products.
 
 ---
 
-### HOMOMORPHIC IMAGES
+#### (Homomorphic images)
 
 What is (for our purposes) the most useful way to represent the class of
 *homomorphic images* of a single algebra in dependent type theory is
@@ -1507,14 +1238,12 @@ Given an 𝑆-algebra 𝑨 : Algebra α 𝑆, the type HomImages 𝑨 denotes th
 
 
 
-
-
 ---
 
 
 
 
-#### IMAGES OF A CLASS OF ALGEBRAS
+#### (Images of a class of algebras)
 
 Given a class 𝒦 of 𝑆-algebras, we need a type that expresses the assertion that a
 given algebra is a homomorphic image of some algebra in the class, as well as a type that
@@ -1540,11 +1269,11 @@ represents all such homomorphic images.
 
 
 
-
-
 ---
 
-#### LIFTING TOOLS
+
+
+#### (Lifting tools)
 
 Here are some tools that have been useful (e.g., in the road to the proof of Birkhoff's
 HSP theorem). The first states and proves the simple fact that the lift of an epimorphism
@@ -1555,6 +1284,27 @@ is an epimorphism.
  open Lift
  Lift-epi-is-epi : {𝑨 : Algebra α 𝑆}(ℓᵃ : Level){𝑩 : Algebra β 𝑆}(ℓᵇ : Level)(h : hom 𝑨 𝑩)
   →                IsSurjective ∣ h ∣ → IsSurjective ∣ Lift-hom ℓᵃ {𝑩} ℓᵇ h ∣
+
+
+ Lift-Alg-hom-image : {𝑨 : Algebra α 𝑆}(ℓᵃ : Level){𝑩 : Algebra β 𝑆}(ℓᵇ : Level)
+  →                   𝑩 IsHomImageOf 𝑨
+  →                   (Lift-Alg 𝑩 ℓᵇ) IsHomImageOf (Lift-Alg 𝑨 ℓᵃ)
+
+\end{code}
+
+
+
+
+
+
+
+
+
+---
+
+#### (Lifting tools (proofs))
+
+\begin{code}
 
  Lift-epi-is-epi {β = β}{𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ h hepi y = eq (lift a) η
   where
@@ -1575,13 +1325,21 @@ is an epimorphism.
        lift (lower y)  ≡⟨ cong lift (InvIsInv ∣ h ∣ ζ)⁻¹ ⟩
        lift (∣ h ∣ a)  ≡⟨ ν ⟩
        ∣ lh ∣ (lift a) ∎
+
+\end{code}
+
+
+
+
 ---
 
 
 
- Lift-Alg-hom-image : {𝑨 : Algebra α 𝑆}(ℓᵃ : Level){𝑩 : Algebra β 𝑆}(ℓᵇ : Level)
-  →                   𝑩 IsHomImageOf 𝑨
-  →                   (Lift-Alg 𝑩 ℓᵇ) IsHomImageOf (Lift-Alg 𝑨 ℓᵃ)
+
+#### (Lifting tools (proofs))
+
+
+\begin{code}
 
  Lift-Alg-hom-image {𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ ((φ , φhom) , φepic) = Goal
   where
@@ -1594,10 +1352,6 @@ is an epimorphism.
   Goal = lφ , lφepic
 
 \end{code}
-
-
-
-
 
 
 
@@ -1639,11 +1393,7 @@ The collection of *terms* in the signature 𝑆 over X is Term X := ⋃ₙ 𝑇�
 
 
 
-
-
 ---
-
-
 
 #### THE INDUCTIVE TYPE OF TERMS
 
@@ -1675,8 +1425,6 @@ Here
 
 
 ---
-
-
 
 
 #### THE TERM ALGEBRA
@@ -1738,8 +1486,6 @@ by induction on the structure of the given term.
 
 
 
-
-
 ---
 
 #### EXISTENCE
@@ -1761,8 +1507,6 @@ The free lift so defined is a homomorphism by construction.
  lift-hom 𝑨 h = free-lift 𝑨 h , λ f a → cong (f ̂ 𝑨) refl
 
 \end{code}
-
-
 
 
 
@@ -1804,8 +1548,6 @@ This requires a weak form of function extensionality at universe levels 𝓥 and
 
 
 
-
-
 ---
 
 #### LIFT OF SURJECTIVE IS SURJECTIVE
@@ -1837,8 +1579,6 @@ now prove.
 
 \end{code}
 
-
-
 ---
 
 ### TERM OPERATIONS
@@ -1868,8 +1608,6 @@ Here is the agda-algebras implementation.
  𝑨 ⟦ node 𝑓 𝑡 ⟧ = λ η → (𝑓 ̂ 𝑨) (λ i → (𝑨 ⟦ 𝑡 i ⟧) η)
 
 \end{code}
-
-
 
 
 ---
@@ -1903,8 +1641,6 @@ Here is the agda-algebras implementation.
 
 
 
-
-
 ---
 
 
@@ -1920,6 +1656,8 @@ Here is the agda-algebras implementation.
    IH : ∀ a x → (⨅ 𝒜 ⟦ t x ⟧) a ≡ λ i → (𝒜 i ⟦ t x ⟧)(λ z → (a z) i)
    IH a = λ x → interp-prod (t x) 𝒜 a
 
+
+
 \end{code}
 
 
@@ -1934,76 +1672,7 @@ Here is the agda-algebras implementation.
 
 
 
-
-
-
-
 ---
-
-#### INTERPRETATION OF A TERM IS THE FREE-LIFT
-
-It turns out that the intepretation of a term is the same as the free-lift (modulo
-argument order and assuming function extensionality).
-
-\begin{code}
-
- free-lift-interp : swelldef 𝓥 α → (𝑨 : Algebra α 𝑆){X : Type χ }(η : X → ∣ 𝑨 ∣)(p : Term X)
-  →                 (𝑨 ⟦ p ⟧) η ≡ (free-lift 𝑨 η) p
-
- free-lift-interp _ 𝑨 η (ℊ x) = refl
- free-lift-interp wd 𝑨 η (node 𝑓 𝑡) = wd (𝑓 ̂ 𝑨) (λ z → (𝑨 ⟦ 𝑡 z ⟧) η)
-                                       ((free-lift 𝑨 η) ∘ 𝑡)((free-lift-interp wd 𝑨 η) ∘ 𝑡)
-
-\end{code}
-
-If the algebra 𝑨 happens to be 𝑻 X, then we expect that ∀ 𝑠 we have (𝑻 X)⟦ p ⟧ 𝑠 ≡ p
-𝑠. But what is (𝑻 X)⟦ p ⟧ 𝑠 exactly? By definition, it depends on the form of p as
-follows: 
-
-* if p = ℊ x, then (𝑻 X)⟦ p ⟧ 𝑠 := (𝑻 X)⟦ ℊ x ⟧ 𝑠 ≡ 𝑠 x
-
-* if p = node 𝑓 𝑡, then (𝑻 X)⟦ p ⟧ 𝑠 := (𝑻 X)⟦ node 𝑓 𝑡 ⟧ 𝑠 = (𝑓 ̂ 𝑻 X) λ i → (𝑻 X)⟦ 𝑡 i ⟧ 𝑠
-
-Now, assume ϕ : hom 𝑻 𝑨. Then by comm-hom-term, we have ∣ ϕ ∣ (𝑻 X)⟦ p ⟧ 𝑠 = 𝑨 ⟦ p ⟧ ∣ ϕ ∣ ∘ 𝑠.
-
-* if p = ℊ x (and 𝑡 : X → ∣ 𝑻 X ∣), then
-
-  ∣ ϕ ∣ p ≡ ∣ ϕ ∣ (ℊ x) ≡ ∣ ϕ ∣ (λ 𝑡 → h 𝑡) ≡ λ 𝑡 → (∣ ϕ ∣ ∘ 𝑡) x
-
----
-
-* if p = node 𝑓 𝑡, then
-
-   ∣ ϕ ∣ p ≡ ∣ ϕ ∣ (𝑻 X)⟦ p ⟧ 𝑠 = (𝑻 X)⟦ node 𝑓 𝑡 ⟧ 𝑠 = (𝑓 ̂ 𝑻 X) λ i → (𝑻 X)⟦ 𝑡 i ⟧ 𝑠
-
-We claim that for all p : Term X there exists q : Term X and
-𝔱 : X → ∣ 𝑻 X ∣ such that p ≡ (𝑻 X)⟦ q ⟧ 𝔱. We prove this fact as follows.
-
-\begin{code}
-
- term-interp : {X : Type χ} (𝑓 : ∣ 𝑆 ∣){𝑠 𝑡 : ∥ 𝑆 ∥ 𝑓 → Term X} → 𝑠 ≡ 𝑡 → node 𝑓 𝑠 ≡ (𝑓 ̂ 𝑻 X) 𝑡
- term-interp 𝑓 {𝑠}{𝑡} st = cong (node 𝑓) st
-
- term-interp' : swelldef 𝓥 (ov χ) → {X : Type χ} (𝑓 : ∣ 𝑆 ∣){𝑠 𝑡 : ∥ 𝑆 ∥ 𝑓 → Term X}
-  →             (∀ i → 𝑠 i ≡ 𝑡 i) → node 𝑓 𝑠 ≡ (𝑓 ̂ 𝑻 X) 𝑡
- term-interp' wd 𝑓 {𝑠}{𝑡} st = wd (node 𝑓) 𝑠 𝑡 st
-
- term-gen : swelldef 𝓥 (ov χ) → {X : Type χ}(p : ∣ 𝑻 X ∣) → Σ[ q ∈ ∣ 𝑻 X ∣ ] p ≡ (𝑻 X ⟦ q ⟧) ℊ
- term-gen _ (ℊ x) = (ℊ x) , refl
- term-gen wd (node 𝑓 t) = (node 𝑓 (λ i → ∣ term-gen wd (t i) ∣)) ,
-                          term-interp' wd 𝑓 λ i → ∥ term-gen wd (t i) ∥
-
- term-gen-agreement : (wd : swelldef 𝓥 (ov χ)){X : Type χ}(p : ∣ 𝑻 X ∣) → (𝑻 X ⟦ p ⟧) ℊ ≡ (𝑻 X ⟦ ∣ term-gen wd p ∣ ⟧) ℊ
- term-gen-agreement _ (ℊ x) = refl
- term-gen-agreement wd {X} (node f t) = wd (f ̂ 𝑻 X) (λ x → (𝑻 X ⟦ t x ⟧) ℊ)
-                                          (λ x → (𝑻 X ⟦ ∣ term-gen wd (t x) ∣ ⟧) ℊ) λ i → term-gen-agreement wd (t i)
-
- term-agreement : swelldef 𝓥 (ov χ) → {X : Type χ}(p : ∣ 𝑻 X ∣) → p ≡  (𝑻 X ⟦ p ⟧) ℊ
- term-agreement wd {X} p = ∥ term-gen wd p ∥ ∙ (term-gen-agreement wd p)⁻¹
-
-\end{code}
----
-
 
 
 #### COMPATIBILITY OF TERMS
@@ -2031,29 +1700,6 @@ very often in the sequel, asserts that every term commutes with every homomorphi
 
 
 
-
-
-
-
----
-
-
-
-
-#### COMPATIBILITY OF TERMS AND CONGRUENCES
-
-To conclude this module, we prove that every term is compatible with every congruence
-relation. That is, if t : Term X and θ : Con 𝑨, then a θ b → t(a) θ t(b).
-
-\begin{code}
-
- open IsCongruence
-
- _∣:_ : {𝑨 : Algebra α 𝑆}(t : Term X)(θ : Con 𝑨 {ρ}) → (𝑨 ⟦ t ⟧) |: ∣ θ ∣
- ((ℊ x) ∣: θ) p = p x
- ((node 𝑓 𝑡) ∣: θ) p = is-compatible ∥ θ ∥ 𝑓 _ _ λ i → (𝑡 i ∣: θ) p
-
-\end{code}
 
 
 
@@ -2924,32 +2570,6 @@ models p ≈ q if the lift of each algebra in the collection models p ≈ q.
 
 
 
----
-
-
-
-#### HOMOMORPHIC INVARIANCE OF ⊧
-
-If an algebra 𝑨 models an identity p ≈ q, then the pair (p , q) belongs to the kernel of
-every homomorphism φ : hom (𝑻 X) 𝑨 from the term algebra to 𝑨; that is, every homomorphism
-from 𝑻 X to 𝑨 maps p and q to the same element of 𝑨.
-
-\begin{code}
-
- module _ (wd : SwellDef){X : Type χ}{𝑨 : Algebra α 𝑆} where
-
-  ⊧-H-invar : {p q : Term X}(φ : hom (𝑻 X) 𝑨) → 𝑨 ⊧ p ≈ q  →  ∣ φ ∣ p ≡ ∣ φ ∣ q
-
-  ⊧-H-invar {p}{q}φ β = ∣ φ ∣ p               ≡⟨ cong ∣ φ ∣(term-agreement(wd 𝓥 (ov χ)) p)⟩
-                       ∣ φ ∣((𝑻 X ⟦ p ⟧) ℊ)  ≡⟨ comm-hom-term (wd 𝓥 α) 𝑨 φ p ℊ ⟩
-                       (𝑨 ⟦ p ⟧) (∣ φ ∣ ∘ ℊ) ≡⟨ β (∣ φ ∣ ∘ ℊ ) ⟩
-                       (𝑨 ⟦ q ⟧) (∣ φ ∣ ∘ ℊ) ≡⟨ (comm-hom-term (wd 𝓥 α)  𝑨 φ q ℊ )⁻¹ ⟩
-                       ∣ φ ∣ ((𝑻 X ⟦ q ⟧) ℊ) ≡⟨(cong ∣ φ ∣ (term-agreement (wd 𝓥 (ov χ)) q))⁻¹ ⟩
-                       ∣ φ ∣ q               ∎
-
-
-\end{code}
-
 
 
 
@@ -3748,475 +3368,6 @@ X and (because of what we just observed) we may say that 𝔉 is free *in* S(P �
 
 ---
 
-#### THE FREE ALGEBRA IN AGDA
-
-Before we attempt to represent the free algebra in Agda we construct the congruence
-ψ(𝒦, 𝑻 𝑋) described above.
-
-First, we represent the congruence relation ψCon, modulo which 𝑻 X yields the
-relatively free algebra, 𝔉 𝒦 X := 𝑻 X ╱ ψCon.  We let ψ be the collection of
-identities (p, q) satisfied by all subalgebras of algebras in 𝒦.
-
-\begin{code}
-
- module _ {X : Type α}(𝒦 : Pred (Algebra α 𝑆) (ov α)) where
-
-  𝓕 𝓕⁺ : Level
-  𝓕 = ov α
-  𝓕⁺ = lsuc (ov α)    -- (this will be the level of the relatively free algebra)
-
-
-  ψ : Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) 𝓕
-
-  ψ (p , q) = ∀(𝑨 : Algebra α 𝑆)(sA : 𝑨 ∈ S{α}{α} 𝒦)(h : X → ∣ 𝑨 ∣ )
-                  →  (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
-
-\end{code}
-
----
-
-
-#### THE FREE ALGEBRA IN AGDA
-
-We convert the predicate ψ into a relation by currying.
-
-\begin{code}
-
-  ψRel : BinRel ∣ 𝑻 X ∣ 𝓕
-  ψRel p q = ψ (p , q)
-
-\end{code}
-
-To express ψRel as a congruence of the term algebra 𝑻 X, we must prove that
-
-1. ψRel is compatible with the operations of 𝑻 X (which are jsut the terms themselves) and
-2. ψRel it is an equivalence relation.
-
-
----
-
-
-#### THE FREE ALGEBRA IN AGDA
-
-\begin{code}
-
-  ψcompatible : swelldef 𝓥 α → compatible (𝑻 X) ψRel
-  ψcompatible wd 𝑓 p q ψpq 𝑨 sA h = goal
-   where
-   φ : hom (𝑻 X) 𝑨
-   φ = lift-hom 𝑨 h
-
-   goal : ∣ φ ∣ ((𝑓 ̂ 𝑻 X) p) ≡ ∣ φ ∣ ((𝑓 ̂ 𝑻 X) q)
-
-   goal = ∣ φ ∣ ((𝑓 ̂ 𝑻 X) p)  ≡⟨ ∥ φ ∥ 𝑓 p ⟩
-          (𝑓 ̂ 𝑨) (∣ φ ∣ ∘ p)  ≡⟨ wd (𝑓 ̂ 𝑨) (∣ φ ∣ ∘ p) (∣ φ ∣ ∘ q) (λ i → ψpq i 𝑨 sA h) ⟩
-          (𝑓 ̂ 𝑨) (∣ φ ∣ ∘ q)  ≡⟨ (∥ φ ∥ 𝑓 q)⁻¹ ⟩
-          ∣ φ ∣ ((𝑓 ̂ 𝑻 X) q)  ∎
-
-  ψIsEquivalence : IsEquivalence ψRel
-  ψIsEquivalence = record { refl = λ 𝑨 sA h → refl
-                          ; sym = λ x 𝑨 sA h → (x 𝑨 sA h)⁻¹
-                          ; trans = λ pψq qψr 𝑨 sA h → (pψq 𝑨 sA h) ∙ (qψr 𝑨 sA h) }
-\end{code}
-
----
-
-#### THE FREE ALGEBRA IN AGDA
-
-We have collected all the pieces necessary to express the collection of identities
-satisfied by all subalgebras of algebras in the class as a congruence relation of the term
-algebra. We call this congruence ψCon and define it using the Congruence constructor
-mkcon.
-
-\begin{code}
-
-  ψCon : swelldef 𝓥 α → Con (𝑻 X)
-  ψCon wd = ψRel , mkcon ψIsEquivalence (ψcompatible wd)
-
-\end{code}
-
-
----
-
-
-#### THE HSP THEOREM
-
-This section presents a formal proof of the Birkhoff HSP theorem.
-
-To complete the proof of Birkhoff's HSP theorem, it remains to show that
-Mod X (Th (V 𝒦)) is contained in V 𝒦; that is, every algebra that models the equations
-in Th (V 𝒦) belongs to V 𝒦.  This will prove that V 𝒦 is an equational class.  (The
-converse, that every equational class is a variety was already proved; see the remarks at
-the end of this module.)
-
-We accomplish this goal by constructing an algebra 𝔽 with the following properties:
-
-1. 𝔽 ∈ V 𝒦 and
-
-2. Every 𝑨 ∈ Mod X (Th (V 𝒦)) is a homomorphic image of 𝔽.
-
-We denote by ℭ the product of all subalgebras of algebras in 𝒦, and by homℭ the
-homomorphism from 𝑻 X to ℭ defined as follows: homℭ := ⨅-hom-co (𝑻 X) 𝔄s hom𝔄.
-
-Here, ⨅-hom-co (defined in
-[Homomorphisms.Basic](Homomorphisms.Basic.html#product-homomorphisms)) takes the term
-algebra 𝑻 X, a family {𝔄s : I → Algebra α 𝑆} of 𝑆-algebras, and a family hom𝔄 : ∀ i
-→ hom (𝑻 X) (𝔄s i) of homomorphisms and constructs the natural homomorphism homℭ from
-𝑻 X to the product ℭ := ⨅ 𝔄.  The homomorphism homℭ : hom (𝑻 X) (⨅ ℭ) is natural in
-the sense that the i-th component of the image of 𝑡 : Term X under homℭ is the image
-∣ hom𝔄 i ∣ 𝑡 of 𝑡 under the i-th homomorphism hom𝔄 i.
-
-
----
-
-
-#### 𝔽 ≤  ⨅ S(𝒦)
-
-Now we come to a step in the Agda formalization of Birkhoff's theorem that is highly
-nontrivial. We must prove that the free algebra embeds in the product ℭ of all subalgebras
-of algebras in the class 𝒦.  This is really the only stage in the proof of Birkhoff's
-theorem that requires the truncation assumption that ℭ be a *set* (that is, ℭ has the
-UIP property).
-
-
-We will also need to assume several local function extensionality postulates and, as a
-result, the next submodule will take as given the parameter fe : (∀ a b → funext a b).
-
-This allows us to postulate local function extensionality when and where we need it in the
-proof. For example, if we want to assume function extensionality at universe levels 𝓥 and
-α, we simply apply fe to those universes: fe 𝓥 α. (Earlier versions of the library
-used just a single *global* function extensionality postulate at the start of most
-modules, but we have since decided to exchange that elegant but crude option for greater
-precision and transparency.)
-
-\begin{code}
-
- module _ {α : Level}{fe : DFunExt}{wd : SwellDef}{X : Type α} {𝒦 : Pred (Algebra α 𝑆) (ov α)} where
-
-  ℓ ℓᶠ : Level
-  ℓ = ov α
-  ℓᶠ = lsuc (ov α)    -- (this will be the level of the relatively free algebra)
-
-  open class-products-with-maps {X = X}{fe ℓ α}{fe ℓᶠ ℓᶠ}{fe ℓ ℓ} 𝒦
-
-\end{code}
-
----
-
-
-We begin by constructing ℭ, using the approach described in the section on products of classes.
-
-\begin{code}
-
-  -- ℭ is the product of all subalgebras of algebras in 𝒦.
-  ℭ : Algebra ℓ 𝑆
-  ℭ = ⨅ 𝔄'
-
-\end{code}
-
-Observe that the inhabitants of ℭ are maps from ℑ to {𝔄 i : i ∈ ℑ}.  A homomorphism
-from 𝑻 X to ℭ is obtained as follows.
-
-\begin{code}
-
-  homℭ : hom (𝑻 X) ℭ
-  homℭ = ⨅-hom-co 𝔄' (fe ℓ α){ℓ}(𝑻 X) λ i → lift-hom (𝔄' i)(snd ∥ i ∥)
-
-\end{code}
-
-
----
-
-#### THE FREE ALGEBRA
-
- As mentioned above, the initial version of the [Agda UniversalAlgebra][] used the free
- algebra 𝔉 developed above.  However, our new, more direct proof uses the algebra 𝔽,
- which we now define, along with the natural epimorphism epi𝔽 : epi (𝑻 X) 𝔽 from 𝑻 X
- to 𝔽.
-
- We now define the algebra 𝔽, which plays the role of the free algebra, along with the
- natural epimorphism epi𝔽 : epi (𝑻 X) 𝔽 from 𝑻 X to 𝔽.
-
-\begin{code}
-
-  𝔽 : Algebra ℓᶠ 𝑆
-  𝔽 = ker[ 𝑻 X ⇒ ℭ ] homℭ ↾ (wd 𝓥 (ov α))
-
-  epi𝔽 : epi (𝑻 X) 𝔽
-  epi𝔽 = πker (wd 𝓥 (ov α)) {ℭ} homℭ
-
-  hom𝔽 : hom (𝑻 X) 𝔽
-  hom𝔽 = epi-to-hom 𝔽 epi𝔽
-
-  hom𝔽-is-epic : IsSurjective ∣ hom𝔽 ∣
-  hom𝔽-is-epic = snd ∥ epi𝔽 ∥
-
-\end{code}
-
----
-
-We will need the following facts relating homℭ, hom𝔽, and ψ.
-
-\begin{code}
-
-  ψlemma0 : ∀ p q →  ∣ homℭ ∣ p ≡ ∣ homℭ ∣ q  → (p , q) ∈ ψ 𝒦
-  ψlemma0 p q phomℭq 𝑨 sA h = cong-app phomℭq (𝑨 , sA , h)
-
-  ψlemma0-ap : {𝑨 : Algebra α 𝑆}{h : X → ∣ 𝑨 ∣} → 𝑨 ∈ S{α}{α} 𝒦
-   →           kernel ∣ hom𝔽 ∣ ⊆ kernel (free-lift 𝑨 h)
-
-  ψlemma0-ap {𝑨}{h} skA {p , q} x = goal where
-
-   ν : ∣ homℭ ∣ p ≡ ∣ homℭ ∣ q
-   ν = ker-in-con {α = (ov α)}{ov α}{𝑻 X}{wd 𝓥 (lsuc (ov α))}(kercon (wd 𝓥 (ov α)) {ℭ} homℭ) {p}{q} x
-
-   goal : (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
-   goal = ((ψlemma0 p q) ν) 𝑨 skA h
-
-
-\end{code}
-
----
-
-
-We now use ψlemma0-ap to prove that every map h : X → ∣ 𝑨 ∣, from X to a subalgebra
-𝑨 ∈ S 𝒦 of 𝒦, lifts to a homomorphism from 𝔽 to 𝑨.
-
-\begin{code}
-
-  𝔽-lift-hom : (𝑨 : Algebra α 𝑆) → 𝑨 ∈ S{α}{α} 𝒦 → (X → ∣ 𝑨 ∣) → hom 𝔽 𝑨
-  𝔽-lift-hom 𝑨 skA h = fst(HomFactor (fe ℓ α) (wd 𝓥 (lsuc (ov α)))  𝑨 (lift-hom 𝑨 h) hom𝔽 (ψlemma0-ap skA) hom𝔽-is-epic)
-
-\end{code}
-
----
-
-
-#### 𝒦 MODELS ψ
-
-The goal of this subsection is to prove that 𝒦 models ψ 𝒦. In other terms, for all
-pairs (p , q) ∈ Term X × Term X of terms, if (p , q) ∈ ψ 𝒦, then 𝒦 ⊧ p ≋ q.
-
-Next we define the lift of the natural embedding from X into 𝔽. We denote this
-homomorphism by 𝔑 : hom (𝑻 X) 𝔽 and define it as follows.
-
-\begin{code}
-
-  open IsCongruence
-
-  X↪𝔽 : X → ∣ 𝔽 ∣
-  X↪𝔽 x = ⟪ ℊ x ⟫ -- (the implicit relation here is  ⟨ kercon (fe 𝓥 ℓ) ℭ homℭ ⟩ )
-
-  𝔑 : hom (𝑻 X) 𝔽
-  𝔑 = lift-hom 𝔽 X↪𝔽
-
-\end{code}
-
----
-
-It turns out that the homomorphism so defined is equivalent to hom𝔽.
-
-\begin{code}
-
-  hom𝔽-is-lift-hom : ∀ p → ∣ 𝔑 ∣ p ≡ ∣ hom𝔽 ∣ p
-  hom𝔽-is-lift-hom (ℊ x) = refl
-  hom𝔽-is-lift-hom (node 𝑓 𝒕) =
-   ∣ 𝔑 ∣ (node 𝑓 𝒕)              ≡⟨ ∥ 𝔑 ∥ 𝑓 𝒕 ⟩
-   (𝑓 ̂ 𝔽)(λ i → ∣ 𝔑 ∣(𝒕 i))      ≡⟨ cong(𝑓 ̂ 𝔽)(fe 𝓥 ℓᶠ (λ x → hom𝔽-is-lift-hom(𝒕 x))) ⟩
-   (𝑓 ̂ 𝔽)(λ i → ∣ hom𝔽 ∣ (𝒕 i))  ≡⟨ (∥ hom𝔽 ∥ 𝑓 𝒕)⁻¹ ⟩
-   ∣ hom𝔽 ∣ (node 𝑓 𝒕)           ∎
-
-\end{code}
-
----
-
-We need a three more lemmas before we are ready to tackle our main goal.
-
-\begin{code}
-
-  ψlemma1 : kernel ∣ 𝔑 ∣ ⊆ ψ 𝒦
-  ψlemma1 {p , q} 𝔑pq 𝑨 sA h = goal
-   where
-    f : hom 𝔽 𝑨
-    f = 𝔽-lift-hom 𝑨 sA h
-
-    h' φ : hom (𝑻 X) 𝑨
-    h' = ∘-hom (𝑻 X) 𝑨 𝔑 f
-    φ = lift-hom 𝑨 h
-
-    h≡φ : ∀ t → (∣ f ∣ ∘ ∣ 𝔑 ∣) t ≡ ∣ φ ∣ t
-    h≡φ t = free-unique (wd 𝓥 α) 𝑨 h' φ (λ x → refl) t
-
-    goal : ∣ φ ∣ p ≡ ∣ φ ∣ q
-    goal = ∣ φ ∣ p             ≡⟨ (h≡φ p)⁻¹ ⟩
-           ∣ f ∣ ( ∣ 𝔑 ∣ p )   ≡⟨ cong ∣ f ∣ 𝔑pq ⟩
-           ∣ f ∣ ( ∣ 𝔑 ∣ q )   ≡⟨ h≡φ q ⟩
-           ∣ φ ∣ q             ∎
-
-
-  ψlemma2 : kernel ∣ hom𝔽 ∣ ⊆ ψ 𝒦
-  ψlemma2 {p , q} hyp = ψlemma1 {p , q} goal
-    where
-     goal : (free-lift 𝔽 X↪𝔽) p ≡ (free-lift 𝔽 X↪𝔽) q
-     goal = (hom𝔽-is-lift-hom p) ∙ hyp ∙ (hom𝔽-is-lift-hom q)⁻¹
-
-
-  ψlemma3 : ∀ p q → (p , q) ∈ ψ{X = X} 𝒦 → 𝒦 ⊧ p ≋ q
-  ψlemma3 p q pψq {𝑨} kA h = goal
-    where
-    goal : (𝑨 ⟦ p ⟧) h ≡ (𝑨 ⟦ q ⟧) h
-    goal = (𝑨 ⟦ p ⟧) h       ≡⟨ free-lift-interp (wd 𝓥 α) 𝑨 h p ⟩
-           (free-lift 𝑨 h) p ≡⟨ pψq 𝑨 (siso (sbase kA) (≅-sym Lift-≅)) h ⟩
-           (free-lift 𝑨 h) q ≡⟨ (free-lift-interp (wd 𝓥 α) 𝑨 h q)⁻¹  ⟩
-           (𝑨 ⟦ q ⟧) h       ∎
-
-\end{code}
-
----
-
-
-With these results in hand, it is now trivial to prove the main theorem of this
-subsection.
-
-\begin{code}
-
-  class-models-kernel : ∀ p q → (p , q) ∈ kernel ∣ hom𝔽 ∣ → 𝒦 ⊧ p ≋ q
-  class-models-kernel p q hyp = ψlemma3 p q (ψlemma2 hyp)
-
-  𝕍𝒦 : Pred (Algebra ℓᶠ 𝑆) (lsuc ℓᶠ)
-  𝕍𝒦 = V{α = α}{β = ℓᶠ} 𝒦
-
-  kernel-in-theory' : kernel ∣ hom𝔽 ∣ ⊆ Th (V 𝒦)
-  kernel-in-theory' {p , q} pKq = (class-ids-⇒ fe wd p q (class-models-kernel p q pKq))
-
-  kernel-in-theory : kernel ∣ hom𝔽 ∣ ⊆ Th 𝕍𝒦
-  kernel-in-theory {p , q} pKq vkA x = class-ids-⇒' fe wd p q (class-models-kernel p q pKq) vkA x
-
-  _↠_ : Type α → Algebra ℓᶠ 𝑆 → Type ℓᶠ
-  X ↠ 𝑨 = Σ[ h ∈ (X → ∣ 𝑨 ∣) ] IsSurjective h
-
-  𝔽-ModTh-epi : (𝑨 : Algebra ℓᶠ 𝑆) → (X ↠ 𝑨) → 𝑨 ∈ Mod (Th 𝕍𝒦) → epi 𝔽 𝑨
-  𝔽-ModTh-epi 𝑨 (η , ηE) AinMTV = goal
-   where
-   φ : hom (𝑻 X) 𝑨
-   φ = lift-hom 𝑨 η
-
-   φE : IsSurjective ∣ φ ∣
-   φE = lift-of-epi-is-epi 𝑨 ηE
-
-   pqlem2 : ∀ p q → (p , q) ∈ kernel ∣ hom𝔽 ∣ → 𝑨 ⊧ p ≈ q
-   pqlem2 p q hyp = λ x → AinMTV p q (kernel-in-theory hyp) x
-
-   kerincl : kernel ∣ hom𝔽 ∣ ⊆ kernel ∣ φ ∣
-   kerincl {p , q} x = ∣ φ ∣ p      ≡⟨ (free-lift-interp (wd 𝓥 ℓᶠ) 𝑨 η p)⁻¹ ⟩
-                       (𝑨 ⟦ p ⟧) η  ≡⟨ pqlem2 p q x η ⟩
-                       (𝑨 ⟦ q ⟧) η  ≡⟨ free-lift-interp (wd 𝓥 ℓᶠ) 𝑨 η q ⟩
-                       ∣ φ ∣ q      ∎
-
-   goal : epi 𝔽 𝑨
-   goal = fst (HomFactorEpi (fe ℓ ℓᶠ) (wd 𝓥 (lsuc (ov α))) 𝑨 φ hom𝔽 kerincl hom𝔽-is-epic φE)
-
-\end{code}
-
----
-
-
-
-#### THE HOMOMORPHIC IMAGES OF 𝔽
-
-Finally we come to one of the main theorems of this module; it asserts that every algebra
-in Mod X (Th 𝕍𝒦) is a homomorphic image of 𝔽.  We prove this below as the function (or
-proof object) 𝔽-ModTh-epi.  Before that, we prove two auxiliary lemmas.
-
-\begin{code}
-
-  module _ (pe : pred-ext (ov α)(ov α))(wd : SwellDef) -- extensionality assumptions
-           (Cset : is-set ∣ ℭ ∣)                       -- truncation assumptions
-           (kuip : blk-uip(Term X)∣ kercon (wd 𝓥 (ov α)){ℭ}homℭ ∣)
-   where
-
-   𝔽≤ℭ : (ker[ 𝑻 X ⇒ ℭ ] homℭ ↾ (wd 𝓥 (ov α))) ≤ ℭ
-   𝔽≤ℭ = FirstHomCorollary|Set (𝑻 X) ℭ homℭ pe (wd 𝓥 (ov α)) Cset kuip
-
-\end{code}
-
-The last piece we need to prove that every model of Th 𝕍𝒦 is a homomorphic image of 𝔽
-is a crucial assumption that is taken for granted throughout informal universal
-algebra---namely, that our collection X of variable symbols is arbitrarily large and
-that we have an *environment* which interprets the variable symbols in every algebra
-under consideration. In other terms, an environment provides, for every algebra 𝑨, a
-surjective mapping η : X → ∣ 𝑨 ∣ from X onto the domain of 𝑨.
-
-We do *not* assert that for an arbitrary type X such surjective maps exist.  Indeed, our
-X must is quite special to have this property.  Later, we will construct such an X,
-but for now we simply postulate its existence. Note that this assumption that an
-environment exists is only required in the proof of the theorem 𝔽-ModTh-epi.
-
----
-
-#### 𝔽 ∈ V(𝒦)
-
-With this result in hand, along with what we proved earlier---namely,
-PS(𝒦) ⊆ SP(𝒦) ⊆ HSP(𝒦) ≡ V 𝒦---it is not hard to show that 𝔽 belongs to V 𝒦.
-
-\begin{code}
-
-   𝔽∈SP : hfunext (ov α)(ov α) → 𝔽 ∈ (S{ℓ}{ℓᶠ} (P{α}{ℓ} 𝒦))
-   𝔽∈SP hfe = ssub (class-prod-s-∈-sp hfe) 𝔽≤ℭ
-
-   𝔽∈𝕍 : hfunext (ov α)(ov α) → 𝔽 ∈ V 𝒦
-   𝔽∈𝕍 hfe = SP⊆V' {α}{fe ℓ α}{fe ℓᶠ ℓᶠ}{fe ℓ ℓ}{𝒦} (𝔽∈SP hfe)
-
-\end{code}
-
----
-
-#### THE HSP THEOREM
-
-Now that we have all of the necessary ingredients, it is all but trivial to combine them
-to prove Birkhoff's HSP theorem. (Note that since the proof enlists the help of the
-𝔽-ModTh-epi theorem, we must assume an environment exists, which is manifested in the
-premise ∀ 𝑨 → X ↠ 𝑨.
-
-\begin{code}
-
-   Birkhoff : hfunext (ov α)(ov α) → (∀ 𝑨 → X ↠ 𝑨) → Mod (Th (V 𝒦)) ⊆ V 𝒦
-
-   Birkhoff hfe 𝕏 {𝑨} α = vhimg{𝑩 = 𝑨} (𝔽∈𝕍 hfe) (𝑨 , epi-to-hom 𝑨 φE , snd ∥ φE ∥)
-    where
-    φE : epi 𝔽 𝑨
-    φE = 𝔽-ModTh-epi 𝑨 (𝕏 𝑨) α
-
-\end{code}
-
----
-
-#### THE CONVERSE
-
-The converse inclusion, V 𝒦 ⊆ Mod X (Th (V 𝒦)), is a simple consequence of the fact that
-Mod Th is a closure operator. Nonetheless, completeness demands that we formalize this
-inclusion as well, however trivial the proof.
-
-\begin{code}
-
-   Birkhoff-converse : V{α}{ℓ} 𝒦 ⊆ Mod{χ = α}{X = X} (Th (V 𝒦))
-   Birkhoff-converse α p q pThq = pThq α
-
-\end{code}
-
-We have thus proved that every variety is an equational class.  Readers familiar with the
-classical formulation of the Birkhoff HSP theorem, as an "if and only if" result, might
-worry that we haven't completed the proof.  But recall that in the Varieties.Preservation
-module we proved the following identity preservation lemmas:
-
-* 𝒦 ⊧ p ≋ q → H 𝒦 ⊧ p ≋ q
-* 𝒦 ⊧ p ≋ q → S 𝒦 ⊧ p ≋ q
-* 𝒦 ⊧ p ≋ q → P 𝒦 ⊧ p ≋ q
-
-From these it follows that every equational class is a variety. Thus, our formal proof of
-Birkhoff's theorem is complete.
-
-
 ----------------------------
 
 
@@ -4243,37 +3394,31 @@ Birkhoff's theorem is complete.
 
 
 
--- ---
+---
 
--- #### COMPATIBILITY OF OPERATIONS WITH BINARY RELATIONS
+#### COMPATIBILITY OF OPERATIONS WITH BINARY RELATIONS
 
--- For types A and I,  let  𝑓 : Op A {I}  and   R : BinRel A β.
+For types A and I,  let  𝑓 : Op A {I}  and   R : BinRel A β.
 
--- We say  𝑓  and  R  are *compatible* just in case  ∀ u v : I → A,
+We say  𝑓  and  R  are *compatible* just in case  ∀ u v : I → A,
 
---   ∀ i  →  R (u i) (v i)  →  R (f u) (f v).
+  ∀ i  →  R (u i) (v i)  →  R (f u) (f v).
 
--- This is implemented in the agda-algebras library as follows:
+This is implemented in the agda-algebras library as follows:
 
--- \begin{code}
--- -- First lift the relation from pairs in A × A to pairs in Aᴵ × Aᴵ.
+-- First lift the relation from pairs in A × A to pairs in Aᴵ × Aᴵ.
 
--- eval-rel : {A : Type α}{I : Arity 𝓥 } → BinRel A ρ → BinRel (I → A) (𝓥 ⊔ ρ)
--- eval-rel R u v = ∀ i → R (u i) (v i)
+eval-rel : {A : Type α}{I : Arity 𝓥 } → BinRel A ρ → BinRel (I → A) (𝓥 ⊔ ρ)
+eval-rel R u v = ∀ i → R (u i) (v i)
 
--- _preserves_ : {A : Type α}{I : Arity 𝓥 } → Op A{I} → BinRel A ρ → Type _
--- f preserves R  = ∀ u v → (eval-rel R) u v → R (f u) (f v)
-
--- \end{code}
+_preserves_ : {A : Type α}{I : Arity 𝓥 } → Op A{I} → BinRel A ρ → Type _
+f preserves R  = ∀ u v → (eval-rel R) u v → R (f u) (f v)
 
 -- "f preserves R"  iff  ∀ (u , v) ∈ (eval-rel R)  →  (f u) (f v) ∈ R
 
--- \begin{code}
-
--- -- Shorthand
--- _|:_ : {A : Type α}{I : Arity 𝓥 } → Op A{I} → BinRel A ρ → Type _
--- f |: R  = (eval-rel R) =[ f ]⇒ R
--- \end{code}
+-- Shorthand
+_|:_ : {A : Type α}{I : Arity 𝓥 } → Op A{I} → BinRel A ρ → Type _
+f |: R  = (eval-rel R) =[ f ]⇒ R
 
 
 -- ---
@@ -4283,31 +3428,254 @@ Birkhoff's theorem is complete.
 -- The analogous type for dependent relations looks more complicated, but the idea
 -- is equally simple.
 
--- \begin{code}
+eval-Ρ : {I J : Arity 𝓥 }{𝒜 : I → Type α}
+  →      Ρ I 𝒜 {ρ}                -- "subsets" of Π[ i ∈ I ] 𝒜 i
+                                   -- Π[ i ∈ I ] 𝒜 i is a type of (dependent) "tuples"
+  →      ((i : I) → J → 𝒜 i)      -- an I-tuple of (𝒥 i)-tuples
+  →      Type _
 
--- eval-Ρ : {I J : Arity 𝓥 }{𝒜 : I → Type α}
---   →      Ρ I 𝒜 {ρ}                -- "subsets" of Π[ i ∈ I ] 𝒜 i
---                                    -- Π[ i ∈ I ] 𝒜 i is a type of (dependent) "tuples"
---   →      ((i : I) → J → 𝒜 i)      -- an I-tuple of (𝒥 i)-tuples
---   →      Type _
+eval-Ρ{I = I}{J}{𝒜} R t = ∀ j → R λ i → (t i) j
 
--- eval-Ρ{I = I}{J}{𝒜} R t = ∀ j → R λ i → (t i) j
+compatible-Ρ : {I J : Arity 𝓥 }{𝒜 : I → Type α}
+  →              (∀ i → Op (𝒜 i){J})  -- for each i, an operation of type  (J → 𝒜 i) → 𝒜 i
+  →              Ρ I 𝒜 {ρ}            -- a subset of Π[ i ∈ I ] 𝒜 i
+                                      -- where Π[ i ∈ I ] 𝒜 i is a "set" of (dependent) "tuples"
+  →              Type _
 
--- compatible-Ρ : {I J : Arity 𝓥 }{𝒜 : I → Type α}
---   →              (∀ i → Op (𝒜 i){J})  -- for each i, an operation of type  (J → 𝒜 i) → 𝒜 i
---   →              Ρ I 𝒜 {ρ}            -- a subset of Π[ i ∈ I ] 𝒜 i
---                                       -- where Π[ i ∈ I ] 𝒜 i is a "set" of (dependent) "tuples"
---   →              Type _
+compatible-Ρ {I = I}{J}{𝒜} 𝑓 R = Π[ t ∈ ((i : I) → J → 𝒜 i) ] eval-Ρ R t
 
--- compatible-Ρ {I = I}{J}{𝒜} 𝑓 R = Π[ t ∈ ((i : I) → J → 𝒜 i) ] eval-Ρ R t
+* eval-Ρ  "lifts" an I-ary relation to an (I → J)-ary relation.
+  The lifted relation will relate an I-tuple of J-tuples when the "I-slices"
+  (or "rows") of the J-tuples belong to the original relation.
 
--- \end{code}
+* compatible-Ρ denotes compatibility of an operation with a dependent relation.
 
--- * eval-Ρ  "lifts" an I-ary relation to an (I → J)-ary relation.
---   The lifted relation will relate an I-tuple of J-tuples when the "I-slices"
---   (or "rows") of the J-tuples belong to the original relation.
+---
 
--- * compatible-Ρ denotes compatibility of an operation with a dependent relation.
 
--- ---
+
+
+
+
+#### COMPATIBILITY OF TERMS AND CONGRUENCES
+
+To conclude this module, we prove that every term is compatible with every congruence
+relation. That is, if t : Term X and θ : Con 𝑨, then a θ b → t(a) θ t(b).
+
+ open IsCongruence
+ _∣:_ : {𝑨 : Algebra α 𝑆}(t : Term X)(θ : Con 𝑨 {ρ}) → (𝑨 ⟦ t ⟧) |: ∣ θ ∣
+ ((ℊ x) ∣: θ) p = p x
+ ((node 𝑓 𝑡) ∣: θ) p = is-compatible ∥ θ ∥ 𝑓 _ _ λ i → (𝑡 i ∣: θ) p
+
+
+
+
+
+Classically, a *signature*  𝑆 = (𝐶, 𝐹, 𝑅, ρ)  consists of three (possibly empty) sets
+(constant, function, and relation symbols) and an arity function
+
+    ρ : 𝐶 + 𝐹 + 𝑅 → 𝑁
+
+assigning an *arity* to each symbol.
+
+
+
+#### (Compatibility of binary relations with algebras)
+
+We now define the function compatible so that, if 𝑨 is an algebra and R a binary
+relation, then compatible 𝑨 R is the assertion that R is *compatible* with
+all basic operations of 𝑨.
+
+The formal definition is immediate since all the work is already done by the "preserves" relation
+defined earlier.
+
+ compatible : (𝑨 : Algebra α 𝑆) → BinRel ∣ 𝑨 ∣ ρ → Type _
+ compatible  𝑨 R = ∀ 𝑓 → (𝑓 ̂ 𝑨) preserves R
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+
+
+
+
+
+#### COMPATIBILITY OF ALGEBRAS WITH GENERAL (RHO) RELATIONS
+
+We defined compatible-Ρ to represent the assertion that a given dependent
+relation is compatible with a given operation.
+
+The following represents compatibility of a dependent relation with all
+operations of an algebra.
+
+ -- compatible-Ρ-alg : {I : Arity 𝓥} (𝒜 : I → Algebra α 𝑆) → Ρ I (λ i → ∣ 𝒜  i ∣) {ρ} → Type _
+ -- compatible-Ρ-alg 𝒜 R = ∀ 𝑓 →  compatible-Ρ (λ i → 𝑓 ̂ (𝒜 i)) R
+
+
+
+
+
+
+
+
+
+
+
+
+---
+
+
+
+
+#### PRODUCTS OF ARBITRARY CLASSES OF ALGEBRAS
+
+Observe that Π 𝒦 is certainly not what we want.
+
+(Recall Pred (Algebra α 𝑆) β is the function type Algebra α 𝑆 → Type β, and the
+semantics of the latter takes 𝒦 𝑨 to mean 𝑨 ∈ 𝒦. Thus, by definition, 
+
+ Π 𝒦   :=   Π[ 𝑨 ∈ (Algebra α 𝑆) ] 𝒦 𝑨   :=   ∀ (𝑨 : Algebra α 𝑆) → 𝑨 ∈ 𝒦,
+
+which simply asserts that every inhabitant of Algebra α 𝑆 belongs to 𝒦.
+
+We need a type that indexes the class 𝒦, and a function 𝔄 that maps an index to the
+inhabitant of 𝒦 at that index.
+
+But 𝒦 is a predicate (of type (Algebra α 𝑆) → Type β) and the type Algebra α 𝑆 seems
+rather nebulous in that there is no natural indexing class with which to "enumerate" all
+inhabitants of Algebra α 𝑆 belonging to 𝒦.
+
+
+
+
+
+
+
+
+
+---
+
+
+---
+
+
+#### (Homomorphism factorization)
+
+If in addition we assume τ is epic, then so is φ.
+
+  HomFactorEpi : funext α β → swelldef 𝓥 γ
+   →             (𝑩 : Algebra β 𝑆)(τ : hom 𝑨 𝑩)(ν : hom 𝑨 𝑪)
+   →             kernel ∣ ν ∣ ⊆ kernel ∣ τ ∣
+   →             IsSurjective ∣ ν ∣ → IsSurjective ∣ τ ∣
+                 ---------------------------------------------
+   →             Σ[ φ ∈ epi 𝑪 𝑩 ] ∣ τ ∣ ≡ ∣ φ ∣ ∘ ∣ ν ∣
+
+  HomFactorEpi fxy wd 𝑩 τ ν kerincl νe τe = (fst ∣ φF ∣ ,(snd ∣ φF ∣ , φE)), ∥ φF ∥
+   where
+    φF : Σ[ φ ∈ hom 𝑪 𝑩 ] ∣ τ ∣ ≡ ∣ φ ∣ ∘ ∣ ν ∣
+    φF = HomFactor fxy wd 𝑩 τ ν kerincl νe
+
+    φ : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
+    φ = ∣ τ ∣ ∘ (SurjInv ∣ ν ∣ νe)
+
+    φE : IsSurjective φ
+    φE = epic-factor  ∣ τ ∣ ∣ ν ∣ φ ∥ φF ∥ τe
+
+
+
+---
+
+#### (Interpretation of a term is the free-lift)
+
+It turns out that the intepretation of a term is the same as the free-lift (modulo
+argument order and assuming function extensionality).
+
+
+ free-lift-interp : swelldef 𝓥 α → (𝑨 : Algebra α 𝑆){X : Type χ }(η : X → ∣ 𝑨 ∣)(p : Term X)
+  →                 (𝑨 ⟦ p ⟧) η ≡ (free-lift 𝑨 η) p
+
+ free-lift-interp _ 𝑨 η (ℊ x) = refl
+ free-lift-interp wd 𝑨 η (node 𝑓 𝑡) = wd (𝑓 ̂ 𝑨) (λ z → (𝑨 ⟦ 𝑡 z ⟧) η)
+                                       ((free-lift 𝑨 η) ∘ 𝑡)((free-lift-interp wd 𝑨 η) ∘ 𝑡)
+
+
+If the algebra 𝑨 happens to be 𝑻 X, then we expect that ∀ 𝑠 we have (𝑻 X)⟦ p ⟧ 𝑠 ≡ p
+𝑠. But what is (𝑻 X)⟦ p ⟧ 𝑠 exactly? By definition, it depends on the form of p as
+follows: 
+
+* if p = ℊ x, then (𝑻 X)⟦ p ⟧ 𝑠 := (𝑻 X)⟦ ℊ x ⟧ 𝑠 ≡ 𝑠 x
+
+* if p = node 𝑓 𝑡, then (𝑻 X)⟦ p ⟧ 𝑠 := (𝑻 X)⟦ node 𝑓 𝑡 ⟧ 𝑠 = (𝑓 ̂ 𝑻 X) λ i → (𝑻 X)⟦ 𝑡 i ⟧ 𝑠
+
+Now, assume ϕ : hom 𝑻 𝑨. Then by comm-hom-term, we have ∣ ϕ ∣ (𝑻 X)⟦ p ⟧ 𝑠 = 𝑨 ⟦ p ⟧ ∣ ϕ ∣ ∘ 𝑠.
+
+* if p = ℊ x (and 𝑡 : X → ∣ 𝑻 X ∣), then
+
+  ∣ ϕ ∣ p ≡ ∣ ϕ ∣ (ℊ x) ≡ ∣ ϕ ∣ (λ 𝑡 → h 𝑡) ≡ λ 𝑡 → (∣ ϕ ∣ ∘ 𝑡) x
+
+---
+
+* if p = node 𝑓 𝑡, then
+
+   ∣ ϕ ∣ p ≡ ∣ ϕ ∣ (𝑻 X)⟦ p ⟧ 𝑠 = (𝑻 X)⟦ node 𝑓 𝑡 ⟧ 𝑠 = (𝑓 ̂ 𝑻 X) λ i → (𝑻 X)⟦ 𝑡 i ⟧ 𝑠
+
+We claim that for all p : Term X there exists q : Term X and
+𝔱 : X → ∣ 𝑻 X ∣ such that p ≡ (𝑻 X)⟦ q ⟧ 𝔱. We prove this fact as follows.
+
+
+ term-interp : {X : Type χ} (𝑓 : ∣ 𝑆 ∣){𝑠 𝑡 : ∥ 𝑆 ∥ 𝑓 → Term X} → 𝑠 ≡ 𝑡 → node 𝑓 𝑠 ≡ (𝑓 ̂ 𝑻 X) 𝑡
+ term-interp 𝑓 {𝑠}{𝑡} st = cong (node 𝑓) st
+
+ term-interp' : swelldef 𝓥 (ov χ) → {X : Type χ} (𝑓 : ∣ 𝑆 ∣){𝑠 𝑡 : ∥ 𝑆 ∥ 𝑓 → Term X}
+  →             (∀ i → 𝑠 i ≡ 𝑡 i) → node 𝑓 𝑠 ≡ (𝑓 ̂ 𝑻 X) 𝑡
+ term-interp' wd 𝑓 {𝑠}{𝑡} st = wd (node 𝑓) 𝑠 𝑡 st
+
+ term-gen : swelldef 𝓥 (ov χ) → {X : Type χ}(p : ∣ 𝑻 X ∣) → Σ[ q ∈ ∣ 𝑻 X ∣ ] p ≡ (𝑻 X ⟦ q ⟧) ℊ
+ term-gen _ (ℊ x) = (ℊ x) , refl
+ term-gen wd (node 𝑓 t) = (node 𝑓 (λ i → ∣ term-gen wd (t i) ∣)) ,
+                          term-interp' wd 𝑓 λ i → ∥ term-gen wd (t i) ∥
+
+ term-gen-agreement : (wd : swelldef 𝓥 (ov χ)){X : Type χ}(p : ∣ 𝑻 X ∣) → (𝑻 X ⟦ p ⟧) ℊ ≡ (𝑻 X ⟦ ∣ term-gen wd p ∣ ⟧) ℊ
+ term-gen-agreement _ (ℊ x) = refl
+ term-gen-agreement wd {X} (node f t) = wd (f ̂ 𝑻 X) (λ x → (𝑻 X ⟦ t x ⟧) ℊ)
+                                          (λ x → (𝑻 X ⟦ ∣ term-gen wd (t x) ∣ ⟧) ℊ) λ i → term-gen-agreement wd (t i)
+
+ term-agreement : swelldef 𝓥 (ov χ) → {X : Type χ}(p : ∣ 𝑻 X ∣) → p ≡  (𝑻 X ⟦ p ⟧) ℊ
+ term-agreement wd {X} p = ∥ term-gen wd p ∥ ∙ (term-gen-agreement wd p)⁻¹
+
+---
+---
+
+
+
+#### HOMOMORPHIC INVARIANCE OF ⊧
+
+If an algebra 𝑨 models an identity p ≈ q, then the pair (p , q) belongs to the kernel of
+every homomorphism φ : hom (𝑻 X) 𝑨 from the term algebra to 𝑨; that is, every homomorphism
+from 𝑻 X to 𝑨 maps p and q to the same element of 𝑨.
+
+
+ module _ (wd : SwellDef){X : Type χ}{𝑨 : Algebra α 𝑆} where
+
+  ⊧-H-invar : {p q : Term X}(φ : hom (𝑻 X) 𝑨) → 𝑨 ⊧ p ≈ q  →  ∣ φ ∣ p ≡ ∣ φ ∣ q
+
+  ⊧-H-invar {p}{q}φ β = ∣ φ ∣ p               ≡⟨ cong ∣ φ ∣(term-agreement(wd 𝓥 (ov χ)) p)⟩
+                       ∣ φ ∣((𝑻 X ⟦ p ⟧) ℊ)  ≡⟨ comm-hom-term (wd 𝓥 α) 𝑨 φ p ℊ ⟩
+                       (𝑨 ⟦ p ⟧) (∣ φ ∣ ∘ ℊ) ≡⟨ β (∣ φ ∣ ∘ ℊ ) ⟩
+                       (𝑨 ⟦ q ⟧) (∣ φ ∣ ∘ ℊ) ≡⟨ (comm-hom-term (wd 𝓥 α)  𝑨 φ q ℊ )⁻¹ ⟩
+                       ∣ φ ∣ ((𝑻 X ⟦ q ⟧) ℊ) ≡⟨(cong ∣ φ ∣ (term-agreement (wd 𝓥 (ov χ)) q))⁻¹ ⟩
+                       ∣ φ ∣ q               ∎
+
+
 
