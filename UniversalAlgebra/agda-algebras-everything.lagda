@@ -87,7 +87,7 @@ open import Homomorphisms.Noether           using    ( FirstHomTheorem|Set ; Fir
 
 open import Homomorphisms.Isomorphisms      using    ( _≅_ ; ≅-refl ; ≅-sym ; ≅-trans ; Lift-≅ ; Lift-hom
                                                      ; Lift-Alg-iso ; Lift-Alg-assoc ; Lift-Alg-associative
-                                                     ; Lift-Alg-⨅≅ )
+                                                     ; Lift-Alg-⨅≅ ; ⨅≅ )
 
 open import Homomorphisms.HomomorphicImages using    ( _IsHomImageOf_ ; HomImages ; IsHomImageOfClass
                                                      ; HomImageOfClass ; Lift-epi-is-epi

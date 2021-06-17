@@ -434,43 +434,14 @@ only when necessary.
 
 ---
 
-#### (Algebras as record types)
-
-Some prefer to use record types for things like algebraic structures, and for
-those folks we offer the following.
-
-\begin{code}
-
-record algebra (α : Level) (𝑆 : Signature 𝓞 𝓥) : Type(lsuc(𝓞 ⊔ 𝓥 ⊔ α)) where
- constructor mkalg
- field
-  carrier : Type α
-  opsymbol : (f : ∣ 𝑆 ∣) → ((∥ 𝑆 ∥ f) → carrier) → carrier
-
--- This representation of algebras is logically equivalent to the Sigma type
--- representation in the sense of bi-implication, proved as follows.
-
-module _ {𝑆 : Signature 𝓞 𝓥} where
- open algebra
-
- algebra→Algebra : algebra α 𝑆 → Algebra α 𝑆
- algebra→Algebra 𝑨 = (carrier 𝑨 , opsymbol 𝑨)
-
- Algebra→algebra : Algebra α 𝑆 → algebra α 𝑆
- Algebra→algebra 𝑨 = mkalg ∣ 𝑨 ∣ ∥ 𝑨 ∥
-
-\end{code}
-
-
-
----
-
 #### OPERATION INTERPRETATION SYNTAX
 
 A shorthand for the interpretation of an operation symbol which looks a bit
 like the standard notation in the literature is defined as follows.
 
 \begin{code}
+
+module _ {𝑆 : Signature 𝓞 𝓥} where
 
  _̂_ : ∀ 𝑓 (𝑨 : Algebra α 𝑆) → (∥ 𝑆 ∥ 𝑓  →  ∣ 𝑨 ∣) → ∣ 𝑨 ∣
 
@@ -481,8 +452,6 @@ like the standard notation in the literature is defined as follows.
 If 𝑓 : ∣ 𝑆 ∣ is an operation symbol, and a : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣ is a tuple of the
 appropriate arity, then (𝑓 ̂ 𝑨) a denotes the operation 𝑓 interpreted in 𝑨 and
 evaluated at a.
-
-
 
 
 
@@ -558,75 +527,21 @@ algebra with
 
 ---
 
-
-
-
-#### PRODUCT ALGEBRAS
-
-Here is how one could define a type representing the product of algebras inhabiting the
-record type algebra.
-
-\begin{code}
-
-  open algebra
-
-  ⨅' : (𝒜 : I → algebra α 𝑆) → algebra (𝓘 ⊔ α) 𝑆
-
-  ⨅' 𝒜 =
-
-   record { carrier = ∀ i → carrier (𝒜 i)                        -- domain
-          ; opsymbol = λ 𝑓 𝑎 i → (opsymbol (𝒜 i)) 𝑓 λ x → 𝑎 x i  -- basic operations
-          }
-
-\end{code}
-
-
-
-
-
-
-
-
----
-
-
-
 #### PRODUCTS OF ARBITRARY CLASSES OF ALGEBRAS
 
 One of our goals is to formally express and prove properties of *classes of algebras*.
 
-Fixing a signature 𝑆 and a universe α, we represent classes of 𝑆-algebras with
-domains in Type α as predicates over the Algebra α 𝑆 type.
+We represent classes of 𝑆-algebras with domains in Type α as predicates over the
+type Algebra α 𝑆.
 
-Such predicates inhabit the type Pred (Algebra α 𝑆) β, for some universe β.
-
-If 𝒦 is such a class of algebras, we write 𝒦 : Pred (Algebra α 𝑆) β and we prove
+If 𝒦 is such a class of algebras, 𝒦 : Pred (Algebra α 𝑆) β and we prove
 
   PS(𝒦) ⊆ SP(𝒦 )
 
-which asserts that products of subalgebras of algebras in 𝒦 are subalgebras of products
-of algebras in 𝒦.
-
-This turns out to be a nontrivial exercise and it requires that we first define a type
+This turns out to be a nontrivial exercise requiring that we define a type
 representing products over arbitrary (nonindexed) families such as 𝒦.
 
-
-
-
-
-
-
-
-
----
-
-
-
-
-#### PRODUCTS OF ARBITRARY CLASSES OF ALGEBRAS
-
-The solution is to essentially take 𝒦 itself to be the indexing type, at least
-heuristically that is how one can view the type ℑ that we now define.
+The solution is essentially to take 𝒦 itself to be the indexing type.
 
 \begin{code}
 
@@ -641,47 +556,38 @@ heuristically that is how one can view the type ℑ that we now define.
 Taking the product over the index type ℑ requires a function that maps an index i : ℑ
 to the corresponding algebra.
 
-
-
-
-
-
-
-
-
 ---
-
-
 
 #### PRODUCTS OF ARBITRARY CLASSES OF ALGEBRAS
 
-Each i : ℑ is a pair, (𝑨 , p), where 𝑨 is an algebra and p is a proof that 𝑨
-belongs to 𝒦, so the function mapping an index to the corresponding algebra is simply
-the first projection.
+Each i : ℑ is a pair (𝑨 , p), where p is a proof that 𝑨 ∈ 𝒦, so the function
+mapping an index to the corresponding algebra is simply the first projection.
 
 \begin{code}
 
   𝔄 : ℑ → Algebra α 𝑆
   𝔄 i = ∣ i ∣
 
-\end{code}
-
-Finally, we define class-product which represents the product of all members of 𝒦.
-
-\begin{code}
-
-  class-product : Algebra (ov α) 𝑆
+  class-product : Algebra (ov α) 𝑆      -- (the product of all members of 𝒦)
   class-product = ⨅ 𝔄
 
 \end{code}
 
-If p : 𝑨 ∈ 𝒦, we view the pair (𝑨 , p) ∈ ℑ as an *index* over the class, so we can
-think of 𝔄 (𝑨 , p) (which is simply 𝑨) as the projection of the product ⨅ 𝔄 onto the
+If p : 𝑨 ∈ 𝒦, we view the pair (𝑨 , p) ∈ ℑ as an *index* over the class, so
+𝔄 (𝑨 , p) (which is simply 𝑨) is the projection of the product ⨅ 𝔄 onto the
 (𝑨 , p)-th component.
 
 
----
 
+
+
+
+
+
+
+
+
+---
 
 
 ### CONGRUENCE RELATIONS
@@ -708,6 +614,7 @@ compatible with the basic operations of 𝑨.
 Each of these types captures what it means to be a congruence and they are equivalent in
 the sense that each implies the other. One implication is the "uncurry" operation and the
 other is the second projection.
+
 
 
 
@@ -1042,316 +949,6 @@ arising from noncumulativity of Agda's universe hierarchy.
 \end{code}
 
 
-
-
-
-
-
-
-
-
-
-
----
-
-
-#### (Lift is associative)
-
-\begin{code}
-
- Lift-Alg-assoc : (𝑨 : Algebra α 𝑆)
-
-  →               Lift-Alg 𝑨 (β ⊔ γ) ≅ (Lift-Alg (Lift-Alg 𝑨 β) γ)
-
- Lift-Alg-assoc{β = β}{γ} 𝑨 = ≅-trans (≅-trans Goal Lift-≅) Lift-≅
-  where
-  Goal : Lift-Alg 𝑨 (β ⊔ γ) ≅ 𝑨
-  Goal = ≅-sym Lift-≅
-
-\end{code}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
----
-
-
-#### (Products preserve isomorphisms)
-
-Products of isomorphic families of algebras are themselves isomorphic.
-
-(The proof here requires function extensionality.)
-
-
-\begin{code}
-
- module _ {𝓘 : Level}{I : Type 𝓘}
-          {fiu : funext 𝓘 α}{fiw : funext 𝓘 β}     -- we postulate function extensionality here
-          where
-
-   ⨅≅ : {𝒜 : I → Algebra α 𝑆}{ℬ : I → Algebra β 𝑆}
-
-    →    (∀ (i : I) → 𝒜 i ≅ ℬ i) → ⨅ 𝒜 ≅ ⨅ ℬ
-
-
-
-
-
-
-
-
-
-
-
-
----
-
-   ⨅≅ {𝒜 = 𝒜}{ℬ} AB = Goal
-    where
-    ϕ : ∣ ⨅ 𝒜 ∣ → ∣ ⨅ ℬ ∣
-    ϕ a i = ∣ fst (AB i) ∣ (a i)
-
-    ϕhom : is-homomorphism (⨅ 𝒜) (⨅ ℬ) ϕ
-    ϕhom 𝑓 a = fiw (λ i → ∥ fst (AB i) ∥ 𝑓 (λ x → a x i))
-
-    ψ : ∣ ⨅ ℬ ∣ → ∣ ⨅ 𝒜 ∣
-    ψ b i = ∣ fst ∥ AB i ∥ ∣ (b i)
-
-    ψhom : is-homomorphism (⨅ ℬ) (⨅ 𝒜) ψ
-    ψhom 𝑓 𝒃 = fiu (λ i → snd ∣ snd (AB i) ∣ 𝑓 (λ x → 𝒃 x i))
-
-    ϕ~ψ : ϕ ∘ ψ ≈ ∣ 𝒾𝒹 (⨅ ℬ) ∣
-    ϕ~ψ 𝒃 = fiw λ i → fst ∥ snd (AB i) ∥ (𝒃 i)
-
-    ψ~ϕ : ψ ∘ ϕ ≈ ∣ 𝒾𝒹 (⨅ 𝒜) ∣
-    ψ~ϕ a = fiu λ i → snd ∥ snd (AB i) ∥ (a i)
-
-    Goal : ⨅ 𝒜 ≅ ⨅ ℬ
-    Goal = (ϕ , ϕhom) , ((ψ , ψhom) , ϕ~ψ , ψ~ϕ)
-
-\end{code}
-
-
-
-
-
----
-
-
-#### (Isomorphic products with a lift)
-
-
-A nearly identical proof goes through for isomorphisms of lifted products.
-
-\begin{code}
-
- module _ {𝓘 : Level}{I : Type 𝓘}
-          {fizw : funext (𝓘 ⊔ γ) β}{fiu : funext 𝓘 α} -- function extensionality postulates
-          where
-
-   Lift-Alg-⨅≅ : {𝒜 : I → Algebra α 𝑆}{ℬ : (Lift γ I) → Algebra β 𝑆}
-    →            (∀ i → 𝒜 i ≅ ℬ (lift i)) → Lift-Alg (⨅ 𝒜) γ ≅ ⨅ ℬ
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
----
-
-   Lift-Alg-⨅≅ {𝒜 = 𝒜}{ℬ} AB = Goal
-    where
-    ϕ : ∣ ⨅ 𝒜 ∣ → ∣ ⨅ ℬ ∣
-    ϕ a i = ∣ fst (AB  (lower i)) ∣ (a (lower i))
-
-    ϕhom : is-homomorphism (⨅ 𝒜) (⨅ ℬ) ϕ
-    ϕhom 𝑓 a = fizw (λ i → (∥ fst (AB (lower i)) ∥) 𝑓 (λ x → a x (lower i)))
-
-    ψ : ∣ ⨅ ℬ ∣ → ∣ ⨅ 𝒜 ∣
-    ψ b i = ∣ fst ∥ AB i ∥ ∣ (b (lift i))
-
-    ψhom : is-homomorphism (⨅ ℬ) (⨅ 𝒜) ψ
-    ψhom 𝑓 𝒃 = fiu (λ i → (snd ∣ snd (AB i) ∣) 𝑓 (λ x → 𝒃 x (lift i)))
-
-    ϕ~ψ : ϕ ∘ ψ ≈ ∣ 𝒾𝒹 (⨅ ℬ) ∣
-    ϕ~ψ 𝒃 = fizw λ i → fst ∥ snd (AB (lower i)) ∥ (𝒃 i)
-
-    ψ~ϕ : ψ ∘ ϕ ≈ ∣ 𝒾𝒹 (⨅ 𝒜) ∣
-    ψ~ϕ a = fiu λ i → snd ∥ snd (AB i) ∥ (a i)
-
-    A≅B : ⨅ 𝒜 ≅ ⨅ ℬ
-    A≅B = (ϕ , ϕhom) , ((ψ , ψhom) , ϕ~ψ , ψ~ϕ)
-
-    Goal : Lift-Alg (⨅ 𝒜) γ ≅ ⨅ ℬ
-    Goal = ≅-trans (≅-sym Lift-≅) A≅B
-
-\end{code}
-
-
----
-
-#### (Homomorphic images)
-
-What is (for our purposes) the most useful way to represent the class of
-*homomorphic images* of a single algebra in dependent type theory is
-
-\begin{code}
-
- _IsHomImageOf_ : (𝑩 : Algebra β 𝑆) (𝑨 : Algebra α 𝑆) → Type _
- 𝑩 IsHomImageOf 𝑨 = Σ[ φ ∈ hom 𝑨 𝑩 ] IsSurjective ∣ φ ∣
-
- HomImages : Algebra α 𝑆 → Type _
- HomImages {α = α}𝑨 = Σ[ 𝑩 ∈ Algebra α _ ] 𝑩 IsHomImageOf 𝑨
-
-\end{code}
-
-Given an 𝑆-algebra 𝑨 : Algebra α 𝑆, the type HomImages 𝑨 denotes the class of algebras
-𝑩 : Algebra β 𝑆 with a map φ : ∣ 𝑨 ∣ → ∣ 𝑩 ∣ such that φ is a surjective homomorphism.
-
-
-
-
-
-
-
-
-
-
-
-
----
-
-
-
-
-#### (Images of a class of algebras)
-
-Given a class 𝒦 of 𝑆-algebras, we need a type that expresses the assertion that a
-given algebra is a homomorphic image of some algebra in the class, as well as a type that
-represents all such homomorphic images.
-
-\begin{code}
-
- IsHomImageOfClass : Pred (Algebra α 𝑆)(lsuc α) → Algebra α 𝑆 → Type _
- IsHomImageOfClass 𝒦 𝑩 = Σ[ 𝑨 ∈ Algebra _ _ ] ((𝑨 ∈ 𝒦) × (𝑩 IsHomImageOf 𝑨))
-
- HomImageOfClass : Pred (Algebra α 𝑆) (lsuc α) → Type _
- HomImageOfClass 𝒦 = Σ[ 𝑩 ∈ Algebra _ _ ] IsHomImageOfClass 𝒦 𝑩
-
-\end{code}
-
-
-
-
-
-
-
-
-
-
-
----
-
-
-
-#### (Lifting tools)
-
-Here are some tools that have been useful (e.g., in the road to the proof of Birkhoff's
-HSP theorem). The first states and proves the simple fact that the lift of an epimorphism
-is an epimorphism.
-
-\begin{code}
-
- open Lift
- Lift-epi-is-epi : {𝑨 : Algebra α 𝑆}(ℓᵃ : Level){𝑩 : Algebra β 𝑆}(ℓᵇ : Level)(h : hom 𝑨 𝑩)
-  →                IsSurjective ∣ h ∣ → IsSurjective ∣ Lift-hom ℓᵃ {𝑩} ℓᵇ h ∣
-
-
- Lift-Alg-hom-image : {𝑨 : Algebra α 𝑆}(ℓᵃ : Level){𝑩 : Algebra β 𝑆}(ℓᵇ : Level)
-  →                   𝑩 IsHomImageOf 𝑨
-  →                   (Lift-Alg 𝑩 ℓᵇ) IsHomImageOf (Lift-Alg 𝑨 ℓᵃ)
-
-\end{code}
-
-
-
-
-
-
-
-
-
----
-
-#### (Lifting tools (proofs))
-
-\begin{code}
-
- Lift-epi-is-epi {β = β}{𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ h hepi y = eq (lift a) η
-  where
-   lh : hom (Lift-Alg 𝑨 ℓᵃ) (Lift-Alg 𝑩 ℓᵇ)
-   lh = Lift-hom ℓᵃ {𝑩} ℓᵇ h
-
-   ζ : Image ∣ h ∣ ∋ (lower y)
-   ζ = hepi (lower y)
-
-   a : ∣ 𝑨 ∣
-   a = Inv ∣ h ∣ ζ
-
-   ν : lift (∣ h ∣ a) ≡ ∣ Lift-hom ℓᵃ {𝑩} ℓᵇ h ∣ (lift a)
-   ν = cong (λ - → lift (∣ h ∣ (- a))) (lower∼lift {Level-of-Carrier 𝑨}{β})
-
-   η : y ≡ ∣ lh ∣ (lift a)
-   η = y               ≡⟨ (cong-app lift∼lower) y ⟩
-       lift (lower y)  ≡⟨ cong lift (InvIsInv ∣ h ∣ ζ)⁻¹ ⟩
-       lift (∣ h ∣ a)  ≡⟨ ν ⟩
-       ∣ lh ∣ (lift a) ∎
-
-\end{code}
-
-
-
-
----
-
-
-
-
-#### (Lifting tools (proofs))
-
-
-\begin{code}
-
- Lift-Alg-hom-image {𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ ((φ , φhom) , φepic) = Goal
-  where
-  lφ : hom (Lift-Alg 𝑨 ℓᵃ) (Lift-Alg 𝑩 ℓᵇ)
-  lφ = Lift-hom ℓᵃ {𝑩} ℓᵇ (φ , φhom)
-
-  lφepic : IsSurjective ∣ lφ ∣
-  lφepic = Lift-epi-is-epi ℓᵃ {𝑩} ℓᵇ (φ , φhom) φepic
-  Goal : (Lift-Alg 𝑩 ℓᵇ) IsHomImageOf _
-  Goal = lφ , lφepic
-
-\end{code}
 
 
 
@@ -2951,7 +2548,7 @@ subsequent applications of this result.
 
   SP⊆V' : S{ov α}{lsuc (ov α)} (P{α}{ov α} 𝒦) ⊆ V 𝒦
 
-  SP⊆V' (sbase{𝑨} x) = visow (VlA (SP⊆V (sbase x))) (≅-sym (Lift-Alg-assoc 𝑨))
+  SP⊆V' (sbase{𝑨} x) = visow (VlA (SP⊆V (sbase x))) (≅-sym (Lift-Alg-assoc {𝑨 = 𝑨}))
   SP⊆V' (slift x) = VlA (SP⊆V x)
 
   SP⊆V' (ssub{𝑨}{𝑩} spA B≤A) = vssubw (VlA (SP⊆V spA)) B≤lA

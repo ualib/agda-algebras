@@ -72,5 +72,6 @@ open import Homomorphisms.Noether           using    ( FirstHomTheorem|Set
                                                      -- ; NoetherIsoUnique ; HomFactor ; 
                                                      HomFactorEpi ) public
 open import Terms.Operations                using    (free-lift-interp ) public
+open import Homomorphisms.Isomorphisms      using    (  ⨅≅ ; Lift-Alg-assoc ) public
 
 open ≡-Reasoning public
