@@ -42,7 +42,7 @@ open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; _≈_ ; 
 open import Overture.Inverses      using ( IsInjective           )
 open import Relations.Quotients    using ( IsBlock               )
 open import Relations.Discrete     using ( Arity )
-open import Relations.Continuous   using ( Rel ; RelΠ )
+open import Relations.Continuous   using ( Rel ; Ρ )
 
 private variable α β ρ 𝓥 : Level
 
@@ -273,22 +273,6 @@ Naturally, we define the corresponding *truncated continuous relation type* and 
 
 \begin{code}
 
--- OLD implementation:
--- module _ {I : Type 𝓥} where
---  IsContProp : (A : Type α) → ContRel I A β  → Type(𝓥 ⊔ α ⊔ β)
---  IsContProp A P = ∀ (𝑎 : (I → A)) → is-prop (P 𝑎)
---  ContProp : Type α → (β : Level) → Type(α ⊔ 𝓥 ⊔ lsuc β)
---  ContProp A β = Σ[ P ∈ ContRel I A β ] IsContProp A P
---  cont-prop-ext : Type α → (β : Level) → Type(α ⊔ 𝓥 ⊔ lsuc β)
---  cont-prop-ext A β = {P Q : ContProp A β } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
---  IsDepProp : (𝒜 : I → Type α) → DepRel I 𝒜 β  → Type(𝓥 ⊔ α ⊔ β)
---  IsDepProp 𝒜 P = ∀ (𝑎 : ((i : I) → 𝒜 i)) → is-prop (P 𝑎)
---  DepProp : (I → Type α) → (β : Level) → Type(α ⊔ 𝓥 ⊔ lsuc β)
---  DepProp 𝒜 β = Σ[ P ∈ DepRel I 𝒜 β ] IsDepProp 𝒜 P
---  dep-prop-ext : (I → Type α) → (β : Level) → Type(α ⊔ 𝓥 ⊔ lsuc β)
---  dep-prop-ext 𝒜 β = {P Q : DepProp 𝒜 β} → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
-
--- NEW:
 module _ {I : Arity 𝓥} where
 
  IsRelProp : {ρ : Level}(A : Type α) → Rel A {I}{ρ}  → Type (𝓥 ⊔ α ⊔ ρ)
@@ -300,14 +284,14 @@ module _ {I : Arity 𝓥} where
  RelPropExt : Type α → (ρ : Level) → Type (𝓥 ⊔ α ⊔ lsuc ρ)
  RelPropExt A ρ = {P Q : RelProp A ρ } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
 
- IsRELProp : {ρ : Level} (𝒜 : I → Type α) → RelΠ I 𝒜 {ρ}  → Type (𝓥 ⊔ α ⊔ ρ)
- IsRELProp 𝒜 P = ∀ (a : ((i : I) → 𝒜 i)) → is-prop (P a)
+ IsΡProp : {ρ : Level} (𝒜 : I → Type α) → Ρ I 𝒜 {ρ}  → Type (𝓥 ⊔ α ⊔ ρ)
+ IsΡProp 𝒜 P = ∀ (a : ((i : I) → 𝒜 i)) → is-prop (P a)
 
- RELProp : (I → Type α) → (ρ : Level) → Type (𝓥 ⊔ α ⊔ lsuc ρ)
- RELProp 𝒜 ρ = Σ[ P ∈ RelΠ I 𝒜 {ρ} ] IsRELProp 𝒜 P
+ ΡProp : (I → Type α) → (ρ : Level) → Type (𝓥 ⊔ α ⊔ lsuc ρ)
+ ΡProp 𝒜 ρ = Σ[ P ∈ Ρ I 𝒜 {ρ} ] IsΡProp 𝒜 P
 
- RELPropExt : (I → Type α) → (ρ : Level) → Type (𝓥 ⊔ α ⊔ lsuc ρ)
- RELPropExt 𝒜 ρ = {P Q : RELProp 𝒜 ρ} → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
+ ΡPropExt : (I → Type α) → (ρ : Level) → Type (𝓥 ⊔ α ⊔ lsuc ρ)
+ ΡPropExt 𝒜 ρ = {P Q : ΡProp 𝒜 ρ} → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
 
 
 
