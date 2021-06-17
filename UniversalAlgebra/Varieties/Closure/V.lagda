@@ -18,7 +18,7 @@ We now define `V` as an inductive type which is hand-crafted to contain all the 
 open import Level using ( Level ; Lift )
 open import Algebras.Basic
 
-module Varieties.Closure.V {𝑆 : Signature 𝓞 𝓥} where
+module Varieties.Closure.V {𝑆 : Signature 𝓞 𝓥}  where
 
 open import Axiom.Extensionality.Propositional renaming ( Extensionality to funext )
 open import Agda.Primitive   using    ( _⊔_ ;  lsuc )

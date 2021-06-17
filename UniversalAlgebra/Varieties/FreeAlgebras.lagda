@@ -43,7 +43,7 @@ open import Overture.Inverses            using ( IsSurjective )
 open import Relations.Discrete           using ( kernel )
 open import Relations.Quotients          using ( ⟪_⟫ )
 open import Relations.Truncation         using ( is-set ; blk-uip ; hfunext )
-open import Relations.Extensionality           using (DFunExt; SwellDef ; pred-ext)
+open import Relations.Extensionality           using (DFunExt; SwellDef ; swelldef ; pred-ext)
 open import Algebras.Products          {𝑆 = 𝑆} using ( ov ; ⨅ )
 open import Algebras.Congruences       {𝑆 = 𝑆} using ( Con; mkcon ; IsCongruence )
 open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom ; ⨅-hom-co ; ker[_⇒_]_↾_ ; epi
@@ -90,10 +90,10 @@ First, we represent the congruence relation `ψCon`, modulo which `𝑻 X` yield
 
 \begin{code}
 
-module _ {X : Type α} where
+module _ {X : Type α}(𝒦 : Pred (Algebra α 𝑆) 𝓕) where
 
- ψ : (𝒦 : Pred (Algebra α 𝑆) 𝓕) → Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) 𝓕
- ψ 𝒦 (p , q) = ∀(𝑨 : Algebra α 𝑆)(sA : 𝑨 ∈ S{α}{α} 𝒦)(h : X → ∣ 𝑨 ∣ )
+ ψ : Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) 𝓕
+ ψ (p , q) = ∀(𝑨 : Algebra α 𝑆)(sA : 𝑨 ∈ S{α}{α} 𝒦)(h : X → ∣ 𝑨 ∣ )
                  →  (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
 
 \end{code}
@@ -102,8 +102,8 @@ We convert the predicate ψ into a relation by [currying](https://en.wikipedia.o
 
 \begin{code}
 
- ψRel : (𝒦 : Pred (Algebra α 𝑆) 𝓕) → BinRel ∣ 𝑻 X ∣ 𝓕
- ψRel 𝒦 p q = ψ 𝒦 (p , q)
+ ψRel : BinRel ∣ 𝑻 X ∣ 𝓕
+ ψRel p q = ψ (p , q)
 
 \end{code}
 
@@ -116,8 +116,8 @@ To express `ψRel` as a congruence of the term algebra `𝑻 X`, we must prove t
 
  open ≡-Reasoning
 
- ψcompatible : (𝒦 : Pred (Algebra α 𝑆) 𝓕){fe : funext 𝓥 α} → compatible (𝑻 X)(ψRel 𝒦)
- ψcompatible 𝒦{fe} 𝑓 {p} {q} ψpq 𝑨 sA h = γ
+ ψcompatible : swelldef 𝓥 α → compatible (𝑻 X) ψRel
+ ψcompatible wd 𝑓 {p} {q} ψpq 𝑨 sA h = γ
   where
   φ : hom (𝑻 X) 𝑨
   φ = lift-hom 𝑨 h
@@ -125,11 +125,11 @@ To express `ψRel` as a congruence of the term algebra `𝑻 X`, we must prove t
   γ : ∣ φ ∣ ((𝑓 ̂ 𝑻 X) p) ≡ ∣ φ ∣ ((𝑓 ̂ 𝑻 X) q)
 
   γ = ∣ φ ∣ ((𝑓 ̂ 𝑻 X) p)  ≡⟨ ∥ φ ∥ 𝑓 p ⟩
-      (𝑓 ̂ 𝑨) (∣ φ ∣ ∘ p)  ≡⟨ cong(𝑓 ̂ 𝑨)(fe λ x → (ψpq x) 𝑨 sA h) ⟩
+      (𝑓 ̂ 𝑨) (∣ φ ∣ ∘ p)  ≡⟨ wd (𝑓 ̂ 𝑨)(∣ φ ∣ ∘ p)(∣ φ ∣ ∘ q)(λ x → ψpq x 𝑨 sA h) ⟩
       (𝑓 ̂ 𝑨) (∣ φ ∣ ∘ q)  ≡⟨ (∥ φ ∥ 𝑓 q)⁻¹ ⟩
       ∣ φ ∣ ((𝑓 ̂ 𝑻 X) q)  ∎
 
- ψIsEquivalence : {𝒦 : Pred (Algebra α 𝑆) 𝓕 } → IsEquivalence (ψRel 𝒦)
+ ψIsEquivalence : IsEquivalence ψRel
  ψIsEquivalence = record { refl = λ 𝑨 sA h → refl
                          ; sym = λ x 𝑨 sA h → (x 𝑨 sA h)⁻¹
                          ; trans = λ pψq qψr 𝑨 sA h → (pψq 𝑨 sA h) ∙ (qψr 𝑨 sA h) }
@@ -139,8 +139,8 @@ We have collected all the pieces necessary to express the collection of identiti
 
 \begin{code}
 
- ψCon : (𝒦 : Pred (Algebra α 𝑆) 𝓕){fe : funext 𝓥 α} → Con (𝑻 X)
- ψCon 𝒦 {fe} = (ψRel 𝒦) , mkcon ψIsEquivalence (ψcompatible 𝒦 {fe})
+ ψCon : swelldef 𝓥 α → Con (𝑻 X)
+ ψCon wd = ψRel , mkcon ψIsEquivalence (ψcompatible wd)
 
 \end{code}
 
@@ -185,7 +185,7 @@ We begin by constructing `ℭ`, using the techniques described in the section on
 
   -- ℭ is the product of all subalgebras of algebras in 𝒦.
  ℭ : Algebra 𝓕 𝑆
- ℭ = ⨅ 𝔄' -- {α = α}{𝒦 = 𝒦})
+ ℭ = ⨅ 𝔄'
 
 \end{code}
 
@@ -300,7 +300,7 @@ We need a three more lemmas before we are ready to tackle our main goal.
    φ = lift-hom 𝑨 h
 
    h≡φ : ∀ t → (∣ f ∣ ∘ ∣ 𝔑 ∣) t ≡ ∣ φ ∣ t
-   h≡φ t = free-unique (fe 𝓥 α) 𝑨 h' φ (λ x → refl) t
+   h≡φ t = free-unique (wd 𝓥 α) 𝑨 h' φ (λ x → refl) t
 
    γ : ∣ φ ∣ p ≡ ∣ φ ∣ q
    γ = ∣ φ ∣ p             ≡⟨ (h≡φ p)⁻¹ ⟩

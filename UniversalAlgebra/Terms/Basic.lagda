@@ -36,6 +36,7 @@ open import Function.Base           using    ( _∘_         )
 open import Overture.Preliminaries  using ( _⁻¹ ; 𝑖𝑑 ; ∣_∣ ; ∥_∥)
 open import Overture.Inverses       using ( IsSurjective ; Inv
                                           ; InvIsInv ; Image_∋_; eq )
+open import Relations.Extensionality using (swelldef)
 open import Algebras.Products     {𝑆 = 𝑆} using ( ov )
 open import Homomorphisms.Basic   {𝑆 = 𝑆} using ( hom )
 
@@ -135,19 +136,32 @@ Finally, we prove that the homomorphism is unique.  This requires `funext 𝓥 �
 
 open ≡-Reasoning
 
-free-unique : funext 𝓥 α → (𝑨 : Algebra α 𝑆)(g h : hom (𝑻 X) 𝑨)
+free-unique : swelldef 𝓥 α → (𝑨 : Algebra α 𝑆)(g h : hom (𝑻 X) 𝑨)
  →            (∀ x → ∣ g ∣ (ℊ x) ≡ ∣ h ∣ (ℊ x))
               ----------------------------------------
  →            ∀ (t : Term X) →  ∣ g ∣ t ≡ ∣ h ∣ t
 
 free-unique _ _ _ _ p (ℊ x) = p x
-free-unique fe 𝑨 g h p (node 𝑓 𝑡) = ∣ g ∣ (node 𝑓 𝑡)  ≡⟨ ∥ g ∥ 𝑓 𝑡 ⟩
-                                   (𝑓 ̂ 𝑨)(∣ g ∣ ∘ 𝑡)  ≡⟨ Goal ⟩
-                                   (𝑓 ̂ 𝑨)(∣ h ∣ ∘ 𝑡)  ≡⟨ (∥ h ∥ 𝑓 𝑡)⁻¹ ⟩
-                                   ∣ h ∣ (node 𝑓 𝑡)   ∎
- where
- Goal : (𝑓 ̂ 𝑨) (∣ g ∣ ∘ 𝑡) ≡ (𝑓 ̂ 𝑨) (∣ h ∣ ∘ 𝑡)
- Goal = cong (𝑓 ̂ 𝑨) (fe λ i → free-unique fe 𝑨 g h p (𝑡 i))
+
+free-unique wd 𝑨 g h p (node 𝑓 𝑡) =
+
+ ∣ g ∣ (node 𝑓 𝑡)    ≡⟨ ∥ g ∥ 𝑓 𝑡 ⟩
+ (𝑓 ̂ 𝑨)(∣ g ∣ ∘ 𝑡)  ≡⟨ wd (𝑓 ̂ 𝑨)(∣ g ∣ ∘ 𝑡)(∣ h ∣ ∘ 𝑡)(λ i → free-unique wd 𝑨 g h p (𝑡 i)) ⟩
+ (𝑓 ̂ 𝑨)(∣ h ∣ ∘ 𝑡)  ≡⟨ (∥ h ∥ 𝑓 𝑡)⁻¹ ⟩
+ ∣ h ∣ (node 𝑓 𝑡)    ∎
+-- free-unique : funext 𝓥 α → (𝑨 : Algebra α 𝑆)(g h : hom (𝑻 X) 𝑨)
+--  →            (∀ x → ∣ g ∣ (ℊ x) ≡ ∣ h ∣ (ℊ x))
+--               ----------------------------------------
+--  →            ∀ (t : Term X) →  ∣ g ∣ t ≡ ∣ h ∣ t
+
+-- free-unique _ _ _ _ p (ℊ x) = p x
+-- free-unique fe 𝑨 g h p (node 𝑓 𝑡) = ∣ g ∣ (node 𝑓 𝑡)  ≡⟨ ∥ g ∥ 𝑓 𝑡 ⟩
+--                                    (𝑓 ̂ 𝑨)(∣ g ∣ ∘ 𝑡)  ≡⟨ Goal ⟩
+--                                    (𝑓 ̂ 𝑨)(∣ h ∣ ∘ 𝑡)  ≡⟨ (∥ h ∥ 𝑓 𝑡)⁻¹ ⟩
+--                                    ∣ h ∣ (node 𝑓 𝑡)   ∎
+--  where
+--  Goal : (𝑓 ̂ 𝑨) (∣ g ∣ ∘ 𝑡) ≡ (𝑓 ̂ 𝑨) (∣ h ∣ ∘ 𝑡)
+--  Goal = cong (𝑓 ̂ 𝑨) (fe λ i → free-unique fe 𝑨 g h p (𝑡 i))
 
 \end{code}
 
