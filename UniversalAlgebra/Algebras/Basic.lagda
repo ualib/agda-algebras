@@ -31,7 +31,7 @@ open import Relation.Binary                       using    ( IsEquivalence      
 -- -- Imports from the Agda Universal Algebra Library
 open import Overture.Preliminaries using (∣_∣; ∥_∥)
 open import Relations.Discrete     using ( Op ; _|:_ ; Arity )
-open import Relations.Continuous   using ( Rel; Ρ ; compatible-Rel ; compatible-Ρ )
+open import Relations.Continuous   using ( Rel; ΠΡ ; compatible-Rel ; compatible-ΠΡ )
 
 private variable α β ρ : Level
 
@@ -280,16 +280,16 @@ module _ {I : Arity 𝓥} {𝑆 : Signature 𝓞 𝓥} where
  compatible-Rel-alg : (𝑨 : Algebra α 𝑆) → Rel ∣ 𝑨 ∣ {I}{ρ} → Type(𝓞 ⊔ α ⊔ 𝓥 ⊔ ρ)
  compatible-Rel-alg 𝑨 R = ∀ (𝑓 : ∣ 𝑆 ∣ ) →  compatible-Rel (𝑓 ̂ 𝑨) R
 
- compatible-Ρ-alg : (𝒜 : I → Algebra α 𝑆) → Ρ I (λ i → ∣ 𝒜  i ∣) {ρ} → Type(𝓞 ⊔ α ⊔ 𝓥 ⊔ ρ)
- compatible-Ρ-alg 𝒜 R = ∀ ( 𝑓 : ∣ 𝑆 ∣ ) →  compatible-Ρ (λ i → 𝑓 ̂ (𝒜 i)) R
+ compatible-ΠΡ-alg : (𝒜 : I → Algebra α 𝑆) → ΠΡ I (λ i → ∣ 𝒜  i ∣) {ρ} → Type(𝓞 ⊔ α ⊔ 𝓥 ⊔ ρ)
+ compatible-ΠΡ-alg 𝒜 R = ∀ ( 𝑓 : ∣ 𝑆 ∣ ) →  compatible-ΠΡ (λ i → 𝑓 ̂ (𝒜 i)) R
 
 module _ {I : Arity ℓ₀} {𝑆 : signature 𝓞} where
 
  compatible-Rel-lilAlg : (𝑨 : Algebra α 𝑆) → Rel ∣ 𝑨 ∣ {I}{ρ} → Type(𝓞 ⊔ α ⊔ ρ)
  compatible-Rel-lilAlg 𝑨 R = ∀ (𝑓 : ∣ 𝑆 ∣ ) →  compatible-Rel (𝑓 ̂ 𝑨) R
 
- compatible-Ρ-lilAlg : (𝒜 : I → Algebra α 𝑆) → Ρ I (λ i → ∣ 𝒜  i ∣) {ρ} → Type(𝓞 ⊔ α ⊔ ρ)
- compatible-Ρ-lilAlg 𝒜 R = ∀ ( 𝑓 : ∣ 𝑆 ∣ ) →  compatible-Ρ (λ i → 𝑓 ̂ (𝒜 i)) R
+ compatible-ΠΡ-lilAlg : (𝒜 : I → Algebra α 𝑆) → ΠΡ I (λ i → ∣ 𝒜  i ∣) {ρ} → Type(𝓞 ⊔ α ⊔ ρ)
+ compatible-ΠΡ-lilAlg 𝒜 R = ∀ ( 𝑓 : ∣ 𝑆 ∣ ) →  compatible-ΠΡ (λ i → 𝑓 ̂ (𝒜 i)) R
 
 \end{code}
 

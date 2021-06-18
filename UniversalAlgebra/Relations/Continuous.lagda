@@ -44,8 +44,8 @@ We refer to such relations as *dependent continuous relations* (or *dependent re
 
 #### <a id="continuous-and-dependent-relations">Continuous and dependent relations</a>
 
-Here we define the types `Rel` and `Ρ` (Rho). The first of these represents predicates of arbitrary arity over a single type `A`; we call these *continuous relations*.<sup>[1](Relations.Continuous.html#fn1)</sup>
-To define `Ρ`, the type of *dependent relations*, we exploit the full power of dependent types and provide a completely general relation type.
+Here we define the types `Rel` and `ΠΡ` ("Pi Rho"). The first of these represents predicates of arbitrary arity over a single type `A`; we call these *continuous relations*.<sup>[1](Relations.Continuous.html#fn1)</sup>
+To define `ΠΡ`, the type of *dependent relations*, we exploit the full power of dependent types and provide a completely general relation type.
 
 Here, the tuples of a relation of type `DepRel I 𝒜 β` will inhabit the dependent function type `𝒜 : I → Type α` (where the codomain may depend on the input coordinate `i : I` of the domain). Heuristically, we can think of an inhabitant of type `DepRel I 𝒜 β` as a relation from `𝒜 i` to `𝒜 j` to `𝒜 k` to …. (This is only a rough heuristic since `I` could denote an uncountable collection.<sup>[2](Relations.Continuous.html#fn2)</sup>)
 
@@ -72,14 +72,14 @@ module _ {𝓥 : Level} where
  infix 6 Rel-syntax
 
  -- The type of arbitrarily multisorted relations of arbitrary arity
- Ρ : (I : ar) → (I → Type α) → {ρ : Level} → Type (𝓥 ⊔ α ⊔ lsuc ρ)
- Ρ I 𝒜 {ρ} = ((i : I) → 𝒜 i) → Type ρ
+ ΠΡ : (I : ar) → (I → Type α) → {ρ : Level} → Type (𝓥 ⊔ α ⊔ lsuc ρ)
+ ΠΡ I 𝒜 {ρ} = ((i : I) → 𝒜 i) → Type ρ
 
- Ρ-syntax : (I : ar) → (I → Type α) → {ρ : Level} → Type (𝓥 ⊔ α ⊔ lsuc ρ)
- Ρ-syntax I 𝒜 {ρ} = Ρ I 𝒜 {ρ}
+ ΠΡ-syntax : (I : ar) → (I → Type α) → {ρ : Level} → Type (𝓥 ⊔ α ⊔ lsuc ρ)
+ ΠΡ-syntax I 𝒜 {ρ} = ΠΡ I 𝒜 {ρ}
 
- syntax Ρ-syntax I (λ i → 𝒜) = Ρ[ i ∈ I ] 𝒜
- infix 6 Ρ-syntax
+ syntax ΠΡ-syntax I (λ i → 𝒜) = ΠΡ[ i ∈ I ] 𝒜
+ infix 6 ΠΡ-syntax
 
 
 \end{code}
@@ -104,21 +104,21 @@ It will be helpful to have some functions that make it easy to assert that a giv
  -- (inferred type of t is I → J → A)
 
 
- -- Compatibility of operations with Ρ (Rho) types.
+ -- Compatibility of operations with ΠΡ (PiRho) types.
 
- eval-Ρ : {I J : ar}{𝒜 : I → Type α}
-  →         Ρ I 𝒜 {ρ}            -- the relation type: subsets of Π[ i ∈ I ] 𝒜 i
+ eval-ΠΡ : {I J : ar}{𝒜 : I → Type α}
+  →         ΠΡ I 𝒜 {ρ}            -- the relation type: subsets of Π[ i ∈ I ] 𝒜 i
                                   -- (where Π[ i ∈ I ] 𝒜 i is a type of dependent functions or "tuples")
   →         ((i : I) → J → 𝒜 i)  -- an I-tuple of (𝒥 i)-tuples
   →         Type (𝓥 ⊔ ρ)
- eval-Ρ{I = I}{J}{𝒜} R t = ∀ j → R λ i → (t i) j
+ eval-ΠΡ{I = I}{J}{𝒜} R t = ∀ j → R λ i → (t i) j
 
- compatible-Ρ : {I J : ar}{𝒜 : I → Type α}
+ compatible-ΠΡ : {I J : ar}{𝒜 : I → Type α}
   →               (∀ i → Op (𝒜 i){J})  -- for each i : I, an operation of type  𝒪(𝒜 i){J} = (J → 𝒜 i) → 𝒜 i
-  →               Ρ I 𝒜 {ρ}             -- a subset of Π[ i ∈ I ] 𝒜 i
+  →               ΠΡ I 𝒜 {ρ}             -- a subset of Π[ i ∈ I ] 𝒜 i
                                          -- (where Π[ i ∈ I ] 𝒜 i is a type of dependent functions or "tuples")
   →               Type _
- compatible-Ρ {I = I}{J}{𝒜} 𝑓 R  = Π[ t ∈ ((i : I) → J → 𝒜 i) ] eval-Ρ R t
+ compatible-ΠΡ {I = I}{J}{𝒜} 𝑓 R  = Π[ t ∈ ((i : I) → J → 𝒜 i) ] eval-ΠΡ R t
 
 
 \end{code}

@@ -22,8 +22,8 @@ open import Relations.Discrete              using    (Im_⊆_ ; Arity ; ker ; ke
                                                      ; _preserves_ ; _|:_ ; compatibility-agreement
                                                      ; compatibility-agreement' ; arity[_] )
 
-open import Relations.Continuous            using    ( ar ; Rel ; Rel-syntax ; Ρ ; Ρ-syntax ; eval-Rel
-                                                     ; compatible-Rel ; eval-Ρ ; compatible-Ρ )
+open import Relations.Continuous            using    ( ar ; Rel ; Rel-syntax ; ΠΡ ; ΠΡ-syntax ; eval-Rel
+                                                     ; compatible-Rel ; eval-ΠΡ ; compatible-ΠΡ )
 
 open import Relations.Quotients             using    ( Equivalence ; ker-IsEquivalence
                                                      ; kerlift-IsEquivalence ; [_] ; [_/_] ; Block
@@ -35,8 +35,8 @@ open import Relations.Truncation            using    ( is-center ; is-singleton 
                                                      ; singleton-is-prop ; fiber ; is-equiv ; hfunext
                                                      ; is-set ; to-Σ-≡ ; is-embedding ; singleton-type
                                                      ; invertible ; equiv-is-embedding ; monic-is-embedding|Set
-                                                     ; blk-uip ; IsRelProp ; RelProp ; RelPropExt ; IsΡProp
-                                                     ; ΡProp ; ΡPropExt )
+                                                     ; blk-uip ; IsRelProp ; RelProp ; RelPropExt ; IsΠΡProp
+                                                     ; ΠΡProp ; ΠΡPropExt )
 
 open import Relations.Extensionality        using    ( SurjInvIsRightInv ; epic-factor ; pred-ext
                                                      ; block-ext ; block-ext|uip ; welldef ; swelldef )
@@ -51,8 +51,8 @@ open import Algebras.Basic                  renaming ( Signature  to AlgebraSign
                                                      ; algebra→Algebra ; Algebra→algebra ; _̂_
                                                      ; Lift-alg-op ; Lift-Alg ; Lift-op-lilAlg
                                                      ; Lift-lilAlg ; Lift-algebra ;  compatible-lilAlg
-                                                     ; compatible-Rel-alg ; compatible-Ρ-alg
-                                                     ; compatible-Rel-lilAlg ; compatible-Ρ-lilAlg )
+                                                     ; compatible-Rel-alg ; compatible-ΠΡ-alg
+                                                     ; compatible-Rel-lilAlg ; compatible-ΠΡ-lilAlg )
 
 open import Algebras.Products               renaming ( ⨅ to ⨅a ; ℑ to ℑa )
                                                      -- to avoid conflicts with Structures.Products

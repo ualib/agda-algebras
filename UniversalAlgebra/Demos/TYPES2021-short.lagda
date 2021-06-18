@@ -36,24 +36,24 @@ author: William DeMeo
 # THE AGDA UNIVERSAL ALGEBRA LIBRARY
 ## and Birkhoff's Theorem in Dependent Type Theory
 
-**Conference** TYPES 2021
-**Session**    Proof Assistant Applications
 
-**Author**     William DeMeo
+*Conference* TYPES 2021
+*Session*    Proof Assistant Applications
 
-**Coauthors**  This is joint work with
-               * Jacques Carette
-               * Venanzio Capretta
-               * Hyeyoung Shin
-               * Siva Somayyajula
+*Author*     William DeMeo
 
-**References**
+*Coauthors*  This is joint work with
+             * Jacques Carette
+             * Venanzio Capretta
+             * Siva Somayyajula
+             * Hyeyoung Shin
 
-* SOURCE CODE:
-  https://github.com/ualib/agda-algebras](https://github.com/ualib/agda-algebras
 
-* DOCUMENTATION:
-  https://ualib.gitlab.io/UALib.html](https://ualib.gitlab.io/UALib.html
+*References*
+
+* Source: https://github.com/ualib/agda-algebras
+
+* Docs: https://ualib.org
 
 
 
@@ -68,7 +68,7 @@ The Agda Universal Algebra Library (agda-algebras) is a collection of types
 and programs (theorems and proofs) formalizing general (universal) algebra
 in dependent type theory using Agda.
 
-#### SCOPE of agda-algebras
+#### Current Scope of agda-algebras
 
 * [Operations] of arbitrary arity over an arbitrary type (single-sorted)
 
@@ -187,17 +187,13 @@ variable α β γ ρ χ 𝓘 : Level
 ---
 
 
+
 ### (SINGLE-SORTED) OPERATIONS OF ARBITRARY ARITY
 
-**Notation**. We reserve two variable symbols 𝓞 and 𝓥 for special purposes.
+The type Op encodes arity of an operation as a type  I : Type 𝓥,
+so we can represent an operation as a function with
 
-1. 𝓞 is the universe level for types of *operation symbols*.
-
-2. 𝓥 is the unvierse level for types of *arities* of relations or operations.
-
-The type Op will encode the arity of an operation as a type  I : Type 𝓥,
-so we can represent an operation as a function type with domain  I → A
-(the type of "tuples") and codomain A.
+ domain:  I → A  (the type of "tuples" of A)  and  codomain: A.
 
 \begin{code}
 
@@ -215,7 +211,12 @@ Aᴵ to an element of A. For example, the I-ary projection operations on A are
 π i x = x i
 
 \end{code}
+
+
+
+
 ---
+
 
 ### (SINGLE-SORTED) RELATIONS OF ARBITRARY ARITY
 
@@ -223,34 +224,33 @@ In Set theory, an n-ary relation on a set A is a subset of
 
   A × A × ⋯ × A
 
-We could model these as predicates over A × A × ⋯ × A or as relations of type
+Could model these as predicates over A × A × ⋯ × A or as
 
-   A → A → ⋯ → A → Type
+   A → A → ⋯ → A → Type      ...awkward.
 
-This is awkward.  We need somehow to form an n-fold arrow.
 
-Easier and more general:
 
-* Define an arbitrary *arity type*   I : Type 𝓥
-* Define the type of I-ary relations on A  as  (I → A) → Type ρ
+Easier and more general to do...
 
 \begin{code}
 
-Arity : (𝓥 : Level) → Type _    -- just a type alias
+Arity : (𝓥 : Level) → Type _    -- (a type alias)
 Arity 𝓥 = Type 𝓥
+
+-- For an "arity type"  I : Arity 𝓥
+-- define the type of I-ary relations on A as
 
 Rel : Type α → {I : Arity 𝓥 } → {ρ : Level} → Type _
 Rel A {I} {ρ} = (I → A) → Type ρ
 
 \end{code}
 
-We call these "continuous" since their arity types may represent an uncountable
-set or continuum rather than a discrete or enumerable set.
+
 ---
 
 
 
-### DEPENDENT RELATIONS  ("Rho Types")
+### DEPENDENT RELATIONS  ("PiRho Types" ...?)
 
 Remove the single-sorted restriction with dependent types!
 
@@ -262,12 +262,12 @@ In set theory such relations are subsets of Π(i : I) 𝒜 i.
 
 The "indexing" type I might not even be enumerable so (*) is misleading.
 
-The Ρ (Rho) type manifests this general notion of relation as follows.
+The ΠΡ (PiRho) type manifests this general notion of relation as follows.
 
 \begin{code} -- arbitrary-sorted relations of arbitrary arity
 
-Ρ : (I : Arity 𝓥 ) → (I → Type α) → {ρ : Level} → Type _
-Ρ I 𝒜 {ρ} = ((i : I) → 𝒜 i) → Type ρ
+ΠΡ : (I : Arity 𝓥 ) → (I → Type α) → {ρ : Level} → Type _
+ΠΡ I 𝒜 {ρ} = ((i : I) → 𝒜 i) → Type ρ
 
 \end{code}
 
