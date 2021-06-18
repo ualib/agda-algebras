@@ -229,7 +229,6 @@ Could model these as predicates over A × A × ⋯ × A or as
    A → A → ⋯ → A → Type      ...awkward.
 
 
-
 Easier and more general to do...
 
 \begin{code}
@@ -246,32 +245,33 @@ Rel A {I} {ρ} = (I → A) → Type ρ
 \end{code}
 
 
+
 ---
 
 
+### DEPENDENT RELATIONS  ("Pi-Rho" types...?)
 
-### DEPENDENT RELATIONS  ("PiRho Types" ...?)
+Remove the single-sorted restriction using dependent types!
 
-Remove the single-sorted restriction with dependent types!
+For an arbitrary family  𝒜 : I → Type α  consider a relation
 
-For an arbitrary family, 𝒜 : I → Type α, imagine a relation
-
-     from … to 𝒜 i  to  𝒜 j  to  𝒜 k  to  …               (*)
+     from 𝒜 i  to  𝒜 j  to  𝒜 k  to  …               (*)
 
 In set theory such relations are subsets of Π(i : I) 𝒜 i.
 
 The "indexing" type I might not even be enumerable so (*) is misleading.
 
-The ΠΡ (PiRho) type manifests this general notion of relation as follows.
+The ΠΡ type manifests this completely general notion of relation.
 
 \begin{code} -- arbitrary-sorted relations of arbitrary arity
 
 ΠΡ : (I : Arity 𝓥 ) → (I → Type α) → {ρ : Level} → Type _
+
 ΠΡ I 𝒜 {ρ} = ((i : I) → 𝒜 i) → Type ρ
 
 \end{code}
 
-These are just predicates over dependent functions!
+These are just predicates over dependent function types!
 
 
 
