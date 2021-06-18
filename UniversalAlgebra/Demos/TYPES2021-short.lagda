@@ -33,7 +33,6 @@ author: William DeMeo
 
 
 
-
 # THE AGDA UNIVERSAL ALGEBRA LIBRARY
 ## and Birkhoff's Theorem in Dependent Type Theory
 
@@ -41,6 +40,7 @@ author: William DeMeo
 **Session**    Proof Assistant Applications
 
 **Author**     William DeMeo
+
 **Coauthors**  This is joint work with
                * Jacques Carette
                * Venanzio Capretta
@@ -62,33 +62,33 @@ author: William DeMeo
 
 ---
 
-
 ### INTRODUCTION
 
-The Agda Universal Algebra Library (agda-algebras) is a collection of types and
-programs (theorems and proofs) formalizing general (universal) algebra in
-dependent type theory using Agda.
+The Agda Universal Algebra Library (agda-algebras) is a collection of types
+and programs (theorems and proofs) formalizing general (universal) algebra
+in dependent type theory using Agda.
 
-CURRENT SCOPE of agda-algebras
+#### SCOPE of agda-algebras
 
 * [Operations] of arbitrary arity over an arbitrary type (single-sorted)
 
 * [Relations] of arbitrary arity over arbitrary type families (many-sorted)
 
-* [Signatures] of operation and relation symbols and their arities
+* [Signatures] of operation and/or relation symbols and their arities
 
-* [Algebras] and products and quotients of algebras
+* [Algebras] and product algebras and quotient algebras (hom images)
 
-* [Homomorphisms] and the standard isomorphism theorems
+* [Homomorphisms] and standard isomorphism and factoraization theorems
 
-* [Terms] in the language of a given signature
+* [Terms] and the absolutely free term algebra
 
-* [Subalgebras] and inductive subalgebra generation type
+* [Subalgebras] and an inductive type for subalgebra generation
 
-* [Varieties] and inductive types of closure operators (H, S, P)
+* [Varieties] and inductive types for closure operators H, S, and P.
 
-* [Free Algebras] and [Birkhoff's HSP Theorem]
+* [Free Algebras] relative to a set of equations
 
+* [Birkhoff's HSP Theorem]
 
 
 ---
@@ -96,19 +96,18 @@ CURRENT SCOPE of agda-algebras
 
 
 
-### FEATURES of agda-algebras
+#### FEATURES of agda-algebras
 
 * [General]
-  Algebraic/relational structures that are more general than those
-  of "classical" algebra, and even more general than informal universal algebra.
+  Algebraic/relational structures that are more general than those of
+  "classical" algebra, and even more general than informal universal algebra.
 
 * [Constructive]
   Classical axioms (Choice, Excluded Middle) are never used.
 
 * [Computational] (to some degree)
-  We use extensionality of functions, propositions, and predicates
-  to prove some theorems (but not globally, and we are working on
-  removing these instances).
+  Occasionally we postulate extensionality of functions and propositions
+  to prove theorems (but not globally, and we are working on removing these).
 
 * [Specialized]
   Currently only single-sorted structures are covered (but we are developing a
@@ -122,16 +121,15 @@ CURRENT SCOPE of agda-algebras
 
 
 
+
 ---
 
 
 
+#### LOGICAL FOUNDATIONS
 
-
-### GENERAL LOGICAL FOUNDATIONS
-
-We use the Agda  OPTIONS pragma to specify the logical axioms and deduction
-rules that are assumed throughout the library.
+We use the Agda OPTIONS pragma to specify the logical axioms
+and deduction rules assumed throughout agda-algebras.
 
 Every source file in agda-algebras begins with
 
@@ -146,6 +144,8 @@ Every source file in agda-algebras begins with
 * --exact-split →  allow only definitions that behave like judgmental equalities.
 
 * --safe        →  nothing is postulated outright---non-MLTT axioms must be explicit
+
+
 
 
 
@@ -283,18 +283,22 @@ These are just predicates over dependent functions!
 
 #### SIGNATURES
 
-An *algebraic signature* is a pair 𝑆 = (F, ρ) where F is a (possibly empty) set
-and ρ : F → N is an "arity function" assigning an arity to each symbol in F.
+An *algebraic signature* is a pair 𝑆 = (F, ρ) where
 
-Often (but not always)  𝑁  is the natural numbers.
+* F is a (possibly empty) set
+
+* ρ : F → N is an "arity function"
 
 Heuristically, ρ 𝑓 is the "number of arguments" of 𝑓.
 
-Algebraic signature is represented in agda-algebras using the Sigma type
+Often (but not always) N is the set of natural numbers.
+
+Signature is represented in agda-algebras using dependent pair type.
 
 \begin{code}
 
-Signature : (𝓞 𝓥 : Level) → Type (lsuc (𝓞 ⊔ 𝓥))
+Signature : (𝓞 𝓥 : Level) → Type _
+
 Signature 𝓞 𝓥 = Σ[ F ∈ Type 𝓞 ] (F → Type 𝓥)
 
 \end{code}
@@ -304,16 +308,11 @@ We define syntax for the first and second projections: ∣_∣ and ∥_∥.
 If 𝑓 : ∣ 𝑆 ∣ is an operation symbol in the signature 𝑆, then ∥ 𝑆 ∥ 𝑓 is
 the arity of 𝑓.
 
-
-
-
-
 ---
 
 
 
-
-#### (Example: Monoid Signature)
+#### (Example: Monoid Signature)   (skip)
 
 Here is how we could encode the signature for monoids as an inhabitant of
 Signature 𝓞 ℓ₀.
@@ -339,9 +338,10 @@ function λ { e → 𝟘; · → 𝟚 } which maps
 
 
 
+
 ---
 
-#### (Special notation)
+#### (Special notation)  (skip)
 
 Given a signature 𝑆 : Signature 𝓞 𝓥, the type Algebra α 𝑆 will have type
 Type(𝓞 ⊔ 𝓥 ⊔ lsuc α) and such types occur so often in agda-algebras
@@ -373,25 +373,25 @@ ov α = 𝓞 ⊔ 𝓥 ⊔ lsuc α
 ---
 
 
-#### ALGEBRAS in theory and in agda-algebras
+#### ALGEBRAS
 
-An *algebra* in the signature  𝑆 = (𝐹 , ρ)  is denoted by  𝑨 = (A , Fᴬ).
+Informally, an *algebra* in the signature 𝑆 = (F , ρ) is denoted 𝑨 = (A , Fᴬ).
 
 * A = a nonempty set called the *carrier* of the algebra;
 
 * Fᴬ = { fᴬ ∣ f ∈ F, fᴬ : (ρ𝑓 → A) → A } = a collection of *operations* on A;
 
-* a (potentially empty) set of *identities* satisfied by the elements and operations.
+* a set (maybe empty) of identities satisfied by the elements and operations.
 
 
-For a fixed signature  𝑆 : Signature 𝓞 𝓥  and universe α, the type of 𝑆-algebras
-with domain in  Type α  is
+For signature 𝑆 and universe α the type of 𝑆-algebras with carrier in Type α is
 
 \begin{code}
 
 Algebra : (α : Level)(𝑆 : Signature 𝓞 𝓥) → Type (ov α)
 
 Algebra α 𝑆 = Σ[ A ∈ Type α ]                   -- the domain
+
               ∀ (f : ∣ 𝑆 ∣) → Op A {∥ 𝑆 ∥ f}    -- the basic operations
 
 \end{code}
@@ -403,7 +403,7 @@ Algebra α 𝑆 = Σ[ A ∈ Type α ]                   -- the domain
 
 ---
 
-#### (Truncation)
+#### (Truncation)   (skip)
 
 It would be more precise to refer to inhabitants of Algebra α 𝑆 as
 ∞-algebras because their domains can be of arbitrary type and need not be
@@ -465,7 +465,7 @@ evaluated at a.
 
 ---
 
-#### (Level lifting algebra types)
+#### (Level lifting algebra types)   (skip)
 
 One encounters difficulties when working with a noncumulative universe hierarchy like Agda's.
 
@@ -497,13 +497,13 @@ nice structure-preserving properties it possesses.  Indeed, we prove the followi
 ---
 
 
-#### PRODUCT ALGEBRAS
+#### Product Algebras  (skip)
 
 
 Recall the informal definition of a *product* of 𝑆-algebras.
 
-Given a type I : Type 𝓘 and a family 𝒜 : I → Algebra α 𝑆, the *product* ⨅ 𝒜 is the
-algebra with
+Given a type I : Type 𝓘 and a family 𝒜 : I → Algebra α 𝑆, the *product* ⨅ 𝒜 is
+the algebra with
 
 * carrier: the Cartesian product Π 𝑖 ꞉ I , ∣ 𝒜 𝑖 ∣ of the domains of the algebras in 𝒜
 
@@ -518,10 +518,10 @@ algebra with
   ⨅ : (𝒜 : I → Algebra α 𝑆 ) → Algebra (𝓘 ⊔ α) 𝑆
 
   ⨅ 𝒜 = ( ∀ (i : I) → ∣ 𝒜 i ∣ ) ,           -- domain of the product algebra
-          λ 𝑓 𝑎 i → (𝑓 ̂ 𝒜 i) λ x → 𝑎 x i   -- basic operations of the product algebra
+
+         λ 𝑓 𝑎 i → (𝑓 ̂ 𝒜 i) λ x → 𝑎 x i   -- basic operations of the product algebra
 
 \end{code}
-
 
 
 
@@ -529,34 +529,36 @@ algebra with
 
 #### PRODUCTS OF ARBITRARY CLASSES OF ALGEBRAS
 
-One of our goals is to formally express and prove properties of *classes of algebras*.
+We want to formally express and prove properties of *classes of algebras*.
 
-We represent classes of 𝑆-algebras with domains in Type α as predicates over the
-type Algebra α 𝑆.
+Classes of 𝑆-algebras are represented as predicates over the type Algebra α 𝑆.
 
-If 𝒦 is such a class of algebras, 𝒦 : Pred (Algebra α 𝑆) β and we prove
+  𝒦 : Pred (Algebra α 𝑆) β
+
+We want to prove theorems like
 
   PS(𝒦) ⊆ SP(𝒦 )
 
-This turns out to be a nontrivial exercise requiring that we define a type
-representing products over arbitrary (nonindexed) families such as 𝒦.
+This is nontrivial, requiring a type of product over arbitrary
+(nonindexed) families like 𝒦.
 
-The solution is essentially to take 𝒦 itself to be the indexing type.
+The solution: essentially take 𝒦 itself to be the indexing type.
 
 \begin{code}
 
  module _ {𝒦 : Pred (Algebra α 𝑆)(ov α)} where
-
   -- The index for the product of algebras in 𝒦.
   ℑ : Type (ov α)
   ℑ = Σ[ 𝑨 ∈ Algebra α 𝑆 ] 𝑨 ∈ 𝒦
 
 \end{code}
 
-Taking the product over the index type ℑ requires a function that maps an index i : ℑ
-to the corresponding algebra.
+To take the product over the index type ℑ we just map each
+index i = (𝑨ᵢ , pᵢ) to the corresponding algebra 𝑨ᵢ.
 
 ---
+
+
 
 #### PRODUCTS OF ARBITRARY CLASSES OF ALGEBRAS
 
@@ -573,11 +575,9 @@ mapping an index to the corresponding algebra is simply the first projection.
 
 \end{code}
 
-If p : 𝑨 ∈ 𝒦, we view the pair (𝑨 , p) ∈ ℑ as an *index* over the class, so
-𝔄 (𝑨 , p) (which is simply 𝑨) is the projection of the product ⨅ 𝔄 onto the
-(𝑨 , p)-th component.
-
-
+If p : 𝑨 ∈ 𝒦, then the pair (𝑨 , p) ∈ ℑ is an "index" over the class, and
+𝔄 (𝑨 , p) is the projection of the product ⨅ 𝔄 onto the (𝑨 , p)-th component
+algebra.
 
 
 
@@ -604,6 +604,7 @@ compatible with the basic operations of 𝑨.
 
 
  Con : (𝑨 : Algebra α 𝑆) → {ρ : Level} → Type _
+
  Con 𝑨 {ρ} = Σ[ θ ∈ ( BinRel ∣ 𝑨 ∣ ρ ) ] IsCongruence 𝑨 θ
 
 
@@ -614,7 +615,6 @@ compatible with the basic operations of 𝑨.
 Each of these types captures what it means to be a congruence and they are equivalent in
 the sense that each implies the other. One implication is the "uncurry" operation and the
 other is the second projection.
-
 
 
 
@@ -629,6 +629,7 @@ If θ : Con 𝑨, the quotient algebra 𝑨 / θ is defined in agda-algebras as
  _╱_ : (𝑨 : Algebra α 𝑆) → Con 𝑨 {ρ} → Algebra (α ⊔ lsuc ρ) 𝑆
 
  𝑨 ╱ θ = (∣ 𝑨 ∣ / ∣ θ ∣)  ,                                  -- domain of the quotient algebra
+
           λ 𝑓 𝑎 → ⟪ (𝑓 ̂ 𝑨)(λ i →  IsBlock.block-u ∥ 𝑎 i ∥) ⟫  -- operations of the quotient algebra
 
 \end{code}
@@ -639,13 +640,12 @@ The following elimination rule is sometimes useful...
 \begin{code}
 
  /-≡ : {𝑨 : Algebra α 𝑆}(θ : Con 𝑨 {ρ}){u v : ∣ 𝑨 ∣} → ⟪ u ⟫ {∣ θ ∣} ≡ ⟪ v ⟫ → ∣ θ ∣ u v
+
  /-≡ θ refl = IsEquivalence.refl (is-equivalence ∥ θ ∥)
 
 \end{code}
 
-...but it "cheats" a lot by baking in a large amount of extensionality that is
-miraculously true.
-
+...but it "cheats" by baking in a large amount of extensionality that is miraculously true.
 
 
 
@@ -714,7 +714,7 @@ is-homomorphism representing the property of being a homomorphism.
 ---
 
 
-#### (Homomorphism theorems)
+#### (Homomorphism theorems)  (skip)
 
 1. The composition of homomorphisms is again a homomorphism.
 
@@ -747,7 +747,7 @@ is-homomorphism representing the property of being a homomorphism.
 
 
 
-#### (Homomorphism theorems)
+#### (Homomorphism theorems)  (skip)
 
 2. lift and lower are (the maps of) homomorphisms.
 
@@ -775,7 +775,7 @@ is-homomorphism representing the property of being a homomorphism.
 
 ---
 
-#### (Homomorphism factorization)
+#### (Homomorphism factorization)  (skip)
 
 
 If τ : hom 𝑨 𝑩, ν : hom 𝑨 𝑪, ν is surjective, and ker ν ⊆ ker τ, then there exists
@@ -806,6 +806,8 @@ If τ : hom 𝑨 𝑩, ν : hom 𝑨 𝑪, ν is surjective, and ker ν ⊆ ker 
 
 ---
 
+ -- Proof of factorization theorem
+
   HomFactor fxy wd 𝑩 τ ν Kντ νE = (φ , φIsHomCB) , τφν
    where
     νInv : ∣ 𝑪 ∣ → ∣ 𝑨 ∣
@@ -831,8 +833,6 @@ If τ : hom 𝑨 𝑩, ν : hom 𝑨 𝑪, ν is surjective, and ker ν ⊆ ker 
                    (𝑓 ̂ 𝑩)(λ x → ∣ τ ∣(νInv (c x))) ∎
 
 \end{code}
-
-
 
 
 ---
@@ -868,7 +868,7 @@ Recall, f ≈ g means f and g are *extensionally* (or pointwise) equal.
 
 ---
 
-#### (Isomorphism is an equivalence relation)
+#### (Isomorphism is an equivalence relation)  (skip)
 
 \begin{code}
 
@@ -900,7 +900,7 @@ Recall, f ≈ g means f and g are *extensionally* (or pointwise) equal.
 ---
 
 
-#### (Lift is an algebraic invariant)
+#### (Lift is an algebraic invariant)   (skip)
 
 The lift operation preserves isomorphism.
 
@@ -916,6 +916,7 @@ arising from noncumulativity of Agda's universe hierarchy.
  open Lift
 
  Lift-≅ : {𝑨 : Algebra α 𝑆} → 𝑨 ≅ (Lift-Alg 𝑨 β)
+
  Lift-≅ {β = β}{𝑨 = 𝑨} = 𝓁𝒾𝒻𝓉 𝑨 , 𝓁ℴ𝓌ℯ𝓇 𝑨 , cong-app lift∼lower , cong-app (lower∼lift{β = β})
 
  Lift-hom : {𝑨 : Algebra α 𝑆}(ℓᵃ : Level){𝑩 : Algebra β 𝑆} (ℓᵇ : Level)
@@ -927,9 +928,10 @@ arising from noncumulativity of Agda's universe hierarchy.
 
 
 
-
 ---
 
+
+ -- Proof.
  Lift-hom {𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ (f , fhom) = lift ∘ f ∘ lower , Goal
   where
   lABh : is-homomorphism (Lift-Alg 𝑨 ℓᵃ) 𝑩 (f ∘ lower)
@@ -957,30 +959,28 @@ arising from noncumulativity of Agda's universe hierarchy.
 
 
 
-
-
 ---
 
 
 #### TERMS
 
-Fix a signature 𝑆 and let X denote an arbitrary nonempty collection of variable
-symbols. Assume the symbols in X are distinct from the operation symbols of 𝑆:
-X ∩ ∣ 𝑆 ∣ = ∅.
+Let X an arbitrary nonempty collection of variable symbols.
 
-By a *word* in the language of 𝑆, we mean a nonempty, finite sequence of members of
-X ⊎ ∣ 𝑆 ∣. We denote the concatenation of such sequences by simple juxtaposition.
+A *word* in the language of 𝑆 is a nonempty finite sequence of members of X ⊎ ∣ 𝑆 ∣.
 
-Let S₀ denote the set of nullary operation symbols of 𝑆. We define by induction on n
-the sets 𝑇ₙ of *words* over X ⊎ ∣ 𝑆 ∣ as follows (cf. Bergman 2012, Def. 4.19):
+Let S₀ denote the nullary operation symbols of 𝑆.
 
-𝑇₀ := X ∪ S₀ and 𝑇ₙ₊₁ := 𝑇ₙ ∪ 𝒯ₙ
+Define the sets 𝑇ₙ of *words* over X ⊎ ∣ 𝑆 ∣ by
+
+    𝑇₀ := X ∪ S₀
+
+  𝑇ₙ₊₁ := 𝑇ₙ ∪ 𝒯ₙ
 
 where 𝒯ₙ is the collection of all 𝑓 𝑡 such that 𝑓 : ∣ 𝑆 ∣ and 𝑡 : ∥ 𝑆 ∥ 𝑓 → 𝑇ₙ.
-(Recall, ∥ 𝑆 ∥ 𝑓 is the arity of the operation symbol 𝑓.)
 
-The collection of *terms* in the signature 𝑆 over X is Term X := ⋃ₙ 𝑇ₙ.
+The collection of *terms* in the signature 𝑆 over X is
 
+  Term X := ⋃ₙ 𝑇ₙ.
 
 
 
@@ -992,16 +992,11 @@ The collection of *terms* in the signature 𝑆 over X is Term X := ⋃ₙ 𝑇�
 
 ---
 
+
 #### THE INDUCTIVE TYPE OF TERMS
 
-
-By an 𝑆-*term* we mean a term in the language of 𝑆.
-
-The informal definition of Term X above is recursive, so an inductive type can
-be used to represent the semantic notion of terms in type theory.
-
-Term are trees with an operation symbol at each node and a variable symbol at
-each leaf (generator).
+Terms are simply trees with an operation symbol at each node and a variable
+symbol at each leaf (generator).
 
 \begin{code}
 
@@ -1021,30 +1016,35 @@ Here
 
 
 
+
+
+
+
+
 ---
+
 
 
 #### THE TERM ALGEBRA
 
-If the type Term X is nonempty (equivalently, if X or ∣ 𝑆 ∣ is nonempty), then we
-can define an algebraic structure, denoted by 𝑻 X and called the *term algebra in the
-signature* 𝑆 *over* X.
+An algebraic structure 𝑻 X called the *term algebra* in 𝑆 over X is
 
 \begin{code}
 
  𝑻 : (X : Type χ ) → Algebra (ov χ) 𝑆
+
  𝑻 X = Term X , node
 
 \end{code}
 
-Terms are viewed as acting on other terms, so both the domain and basic operations of the
-algebra are the terms themselves.
+Terms act on other terms---both domain and operations of the algebra are terms.
 
-+ 𝑓 ̂ (𝑻 X) is the operation on Term X that maps a tuple 𝑡 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑻 X ∣ of
-  terms to the formal term 𝑓 𝑡.
++ 𝑓 ̂ (𝑻 X) maps a tuple 𝑡 of terms to the formal term 𝑓 𝑡.
 
-+ 𝑻 X is the algebra with universe ∣ 𝑻 X ∣ := Term X and operations 𝑓 ̂ (𝑻 X), one
-  for each symbol 𝑓 in ∣ 𝑆 ∣.
++ 𝑻 X is the algebra with universe ∣ 𝑻 X ∣ := Term X and operations 𝑓 ̂ (𝑻 X).
+
+
+
 
 
 
@@ -1073,12 +1073,12 @@ by induction on the structure of the given term.
  private variable X : Type χ
 
  free-lift : (𝑨 : Algebra α 𝑆)(h : X → ∣ 𝑨 ∣) → ∣ 𝑻 X ∣ → ∣ 𝑨 ∣
+
  free-lift _ h (ℊ x)     = h x
+
  free-lift 𝑨 h (node f 𝑡) = (f ̂ 𝑨) (λ i → free-lift 𝑨 h (𝑡 i))
 
 \end{code}
-
-
 
 
 
@@ -1087,20 +1087,20 @@ by induction on the structure of the given term.
 
 #### EXISTENCE
 
-At the base step the term is a generator, ℊ x, and the free lift of h
-agrees with h.
+At the base step the term is ℊ x and the free lift of h agrees with h.
 
 In the inductive step the term is node f 𝑡 and the free lift is defined as
 follows:
 
-Assuming we know the image of each subterm 𝑡 i under the free lift of h, define the
-free lift at the full term by applying f ̂ 𝑨 to the images of the subterms.
+Assuming we know the image of each subterm 𝑡 i, define the free lift at the full
+term by applying f ̂ 𝑨 to the images of subterms.
 
 The free lift so defined is a homomorphism by construction.
 
 \begin{code}
 
  lift-hom : (𝑨 : Algebra α 𝑆) → (X → ∣ 𝑨 ∣) → hom (𝑻 X) 𝑨
+
  lift-hom 𝑨 h = free-lift 𝑨 h , λ f a → cong (f ̂ 𝑨) refl
 
 \end{code}
@@ -1116,12 +1116,11 @@ The free lift so defined is a homomorphism by construction.
 
 ---
 
+
 #### UNIQUENESS
 
-Finally, we prove that the homomorphism is unique.
-
-This requires a weak form of function extensionality at universe levels 𝓥 and
-α which we postulate by making it part of the premise in the following definition.
+Proof that the homomorphism is unique requires a weak form of function
+extensionality which we postulate in the premise as swelldef 𝓥 α.
 
 \begin{code}
 
@@ -1141,29 +1140,25 @@ This requires a weak form of function extensionality at universe levels 𝓥 and
 
 \end{code}
 
+(See Overture.Extensionality for definition of swelldef.)
 
 
 
 
 ---
 
-### TERM OPERATIONS
 
-Here we define *term operations* which are simply terms interpreted in a particular
-algebra, and we prove some compatibility properties of term operations.
 
-When we interpret a term in an algebra we call the resulting function a *term operation*.
 
-Given a term p and an algebra 𝑨, we denote by 𝑨 ⟦ p ⟧ the *interpretation* of p in
-𝑨.  This is naturally defined by induction on the structure of the term.
+### (Term Operations)  (skip)
 
-1. If p is a generator ℊ x and a : X → ∣ 𝑨 ∣ is a tuple of elements of ∣ 𝑨 ∣, then
-   𝑨 ⟦ p ⟧ a := a x.
+For a term p, the *term operation* 𝑨 ⟦ p ⟧ is the *interpretation* of p in 𝑨.
 
-2. If p = 𝑓 𝑡, where 𝑓 is an operation symbol, if 𝑡 : ∥ 𝑆 ∥ 𝑓 → 𝑻 X is a tuple of
-   terms, and if a : X → ∣ 𝑨 ∣ is a tuple from 𝑨, then we define
+1. If p is ℊ x and a : X → ∣ 𝑨 ∣ is 𝑎 tuple in ∣ 𝑨 ∣, then  𝑨 ⟦ p ⟧ 𝑎 := 𝑎 x.
 
-   𝑨 ⟦ p ⟧ a = 𝑨 ⟦ 𝑓 𝑡 ⟧ a := (𝑓 ̂ 𝑨) (λ i → 𝑨 ⟦ 𝑡 i ⟧ a).
+2. If p = 𝑓 𝑡, where 𝑡 is a tuple of terms, and if 𝑎 is a tuple from 𝑨, then
+
+   𝑨 ⟦ p ⟧ 𝑎 = 𝑨 ⟦ 𝑓 𝑡 ⟧ 𝑎 := (𝑓 ̂ 𝑨) (λ i → 𝑨 ⟦ 𝑡 i ⟧ 𝑎)
 
 Here is the agda-algebras implementation.
 
@@ -1176,10 +1171,15 @@ Here is the agda-algebras implementation.
 \end{code}
 
 
+
+
+
+
+
 ---
 
 
-#### COMPATIBILITY OF TERMS
+#### (Compatibility of Terms) (skip)
 
 We now prove two important facts about term operations.  The first of these, which is used
 very often in the sequel, asserts that every term commutes with every homomorphism.
@@ -1211,7 +1211,7 @@ very often in the sequel, asserts that every term commutes with every homomorphi
 
 
 
-### SUBUNIVERSES
+### (Subuniverses)  (skip)
 
 Suppose 𝑨 is an algebra.  A subset B ⊆ ∣ 𝑨 ∣ is said to be **closed under the operations
 of** 𝑨 if for each 𝑓 ∈ ∣ 𝑆 ∣ and all tuples 𝒃 : ∥ 𝑆 ∥ 𝑓 → 𝐵 the element (𝑓 ̂ 𝑨) 𝒃 belongs
@@ -1243,7 +1243,7 @@ on ∣ 𝑨 ∣.
 
 
 
-#### SUBUNIVERSE GENERATION
+#### (Subuniverse Generation) (skip)
 
 If 𝑨 is an algebra and X ⊆ ∣ 𝑨 ∣ a subset of the domain of 𝑨, then the **subuniverse
 of** 𝑨 **generated by** X is typically denoted by Sg<sup>𝑨</sup>(X) and defined
@@ -1274,7 +1274,7 @@ a given subset of the domain of a given algebra, as follows.
 
 
 
-#### SUBUNIVERSE LEMMAS
+#### (Subuniverse Lemmas) (skip)
 
 By structural induction we prove Sg X is the smallest subuniverse of 𝑨 containing X.
 
@@ -1303,7 +1303,7 @@ f to a also belongs to Y since Y is a subuniverse.
 ---
 
 
-#### SUBUNIVERSE LEMMAS
+#### (Subuniverse Lemmas) (skip)
 
 Here we formalize a few basic properties of subuniverses. First, the intersection of
 subuniverses is again a subuniverse.
@@ -1333,7 +1333,7 @@ and we must prove (f ̂ 𝑨) a ∈ ⋂ I 𝒜. In this case, Agda will fill in 
 
 ---
 
-#### SUBUNIVERSE LEMMAS
+#### (Subuniverse Lemmas)  (skip)
 
 Next we prove the important fact that homomorphisms are uniquely determined by their
 values on a generating set.
@@ -1395,7 +1395,7 @@ and, under these assumptions, we proved ∣ g ∣ ((𝑓 ̂ 𝑨) a) ≡ ∣ h �
 
 ---
 
-### SUBALGEBRAS
+### (Subalgebras) (skip)
 
 Given algebras 𝑨 : Algebra α 𝑆 and 𝑩 : Algebra𝓦β 𝑆, we say that 𝑩 is a
 **subalgebra** of 𝑨 just in case 𝑩 can be *homomorphically embedded* in 𝑨.
@@ -1431,7 +1431,7 @@ requirement we chose for the definition of the type IsSubalgebraOf.
 
 
 
-#### THE SUBALGEBRA RELATION
+#### (The Subalgebra Relation) (skip)
 
 For convenience, we define the following shorthand for the subalgebra relation.
 
@@ -1459,7 +1459,7 @@ From now on we will use 𝑩 ≤ 𝑨 to express the assertion that 𝑩 is a su
 
 
 
-#### SUBALGEBRAS OF A CLASS
+#### (Subalgebras of a Class) (skip)
 
 Suppose 𝒦 : Pred (Algebra α 𝑆) γ denotes a class of 𝑆-algebras and 𝑩 : Algebra β 𝑆
 denotes an arbitrary 𝑆-algebra. Then we might wish to consider the assertion that 𝑩 is
@@ -1493,21 +1493,21 @@ Using this type, we express the collection of all subalgebras of algebras in a c
 
 ### VARIETIES, MODEL THEORY, AND EQUATIONAL LOGIC
 
-The binary "models" relation ⊧, relating algebras (or classes of algebras) to the
-identities that they satisfy, is defined.
+We define the binary "models" relation ⊧ relating algebras (or classes of
+algebras) to the identities they satisfy.
 
 We prove some closure and invariance properties of ⊧.
 
-In particular, we prove the following facts (which are needed, for example, in the proof the Birkhoff HSP Theorem).
+In particular,
 
-* [Algebraic invariance]  ⊧  is an *algebraic invariant* (stable under isomorphism).
+* [Algebraic invariance]
+  ⊧  is an *algebraic invariant* (stable under isomorphism).
 
-* [Subalgebraic invariance] ⊧ is a *subalgebraic invariant*
-  (ids modeled by a class are also modeled by all subalgebras of algebras in the class)
+* [Subalgebraic invariance]
+  ⊧ is a *subalgebraic invariant*
 
-* [Product invariance] ⊧ is preserved under the taking of products
-  (ids modeled by a class are also modeled by all products of algebras in the class)
-
+* [Product invariance]
+  ⊧ is preserved under the taking of products
 
 
 
@@ -1551,7 +1551,7 @@ For a class 𝒦, we write 𝒦 ⊧ p ≋ q when 𝑨 ⊧ p ≈ q holds for all 
 
 
 
-#### SEMANTICS OF ⊧
+#### (Semantics of ⊧) (skip)
 
 The expression 𝑨 ⊧ p ≈ q represents the assertion that the identity p ≈ q holds
 when interpreted in the algebra 𝑨; syntactically, 𝑨 ⟦ p ⟧ ≡ 𝑨 ⟦ q ⟧.
@@ -1584,22 +1584,22 @@ For each "environment" ρ :  X → ∣ 𝑨 ∣, we have  𝑨 ⟦ p ⟧ ρ  ≡
 
 #### EQUATIONAL THEORIES AND MODELS
 
-The type Th is defined so that if 𝒦 is a class of algebras, then
-Th 𝒦 is the set of identities modeled by all members of 𝒦.
+For a class 𝒦 of algebras, Th 𝒦 is the set of ids modeled by all members of 𝒦.
 
 \begin{code}
 
  Th : {X : Type χ} → Pred (Algebra α 𝑆)(ov α) → Pred(Term X × Term X)(χ ⊔ ov α)
+
  Th 𝒦 = λ (p , q) → 𝒦 ⊧ p ≋ q
 
 \end{code}
 
-If ℰ is a set of identities, then the class of algebras satisfying all identities
-in ℰ is Mod ℰ, which is defined in agda-algebras as
+For a set ℰ of identities, Mod ℰ is the class of algebras satisfying all ids in ℰ.
 
 \begin{code}
 
  Mod : {X : Type χ} → Pred(Term X × Term X)(χ ⊔ ov α) → Pred(Algebra α 𝑆) (ov (χ ⊔ α))
+
  Mod ℰ = λ 𝑨 → ∀ p q → (p , q) ∈ ℰ → 𝑨 ⊧ p ≈ q
 
 \end{code}
@@ -1612,6 +1612,7 @@ in ℰ is Mod ℰ, which is defined in agda-algebras as
 ---
 
 
+#### (Identitied and Homs) (skip)
 
 More generally, an identity is satisfied by all algebras in a class if and only if that
 identity is invariant under all homomorphisms from the term algebra 𝑻 X into algebras of
@@ -1636,7 +1637,6 @@ language of 𝑆, then,
          (𝑨 ⟦ p ⟧)(∣ φ ∣ ∘ a)   ≡⟨ (σ ka) (∣ φ ∣ ∘ a) ⟩
          (𝑨 ⟦ q ⟧)(∣ φ ∣ ∘ a)   ≡⟨ (comm-hom-term (wd 𝓥 α) 𝑨 φ q a)⁻¹ ⟩
          ∣ φ ∣ ((𝑻 X ⟦ q ⟧) a)  ∎
-
 
 
 
@@ -1676,28 +1676,27 @@ language of 𝑆, then,
 
 ### EQUATIONAL LOGIC
 
+
 Fix a signature 𝑆, let 𝒦 be a class of 𝑆-algebras, and define
 
 * H 𝒦 = algebras isomorphic to a homomorphic image of a members of 𝒦;
 * S 𝒦 = algebras isomorphic to a subalgebra of a member of 𝒦;
 * P 𝒦 = algebras isomorphic to a product of members of 𝒦.
 
-A straight-forward verification confirms that H, S, and P are **closure operators**
-(expansive, monotone, and idempotent).  A class 𝒦 of 𝑆-algebras is said to be *closed
-under the taking of homomorphic images* provided H 𝒦 ⊆ 𝒦. Similarly, 𝒦 is *closed under
-the taking of subalgebras* (resp., *arbitrary products*) provided S 𝒦 ⊆ 𝒦 (resp., P 𝒦 ⊆
-𝒦). The operators H, S, and P can be composed with one another repeatedly, forming yet
-more closure operators.
+H, S, and P are **closure operators** (expansive, monotone, and idempotent).
 
-An algebra is a homomorphic image (resp., subalgebra; resp., product) of every algebra to
-which it is isomorphic. Thus, the class H 𝒦 (resp., S 𝒦; resp., P 𝒦) is closed under
-isomorphism.
 
-A **variety** is a class of algebras, in the same signature, that is closed under the
-taking of homomorphic images, subalgebras, and arbitrary products.  To represent varieties
-we define inductive types for the closure operators H, S, and P that are composable.
-Separately, we define an inductive type V which simultaneously represents closure under
-all three operators, H, S, and P.
+
+A *variety* is a class of algebras, in the same signature, that is closed under
+the taking of homomorphic images, subalgebras, and arbitrary products.
+
+  𝒦 is a variety   iff    HSP 𝒦 ⊆ 𝒦
+
+
+To represent varieties in Agda, we define inductive types for the closure
+operators H, S, and P that are composable, and an inductive type V which
+simultaneously represents closure under all three operators, H, S, and P.
+
 
 
 
@@ -1705,11 +1704,15 @@ all three operators, H, S, and P.
 ---
 
 
-We import some of these things from sub-modules.
+
+#### (The inductive types H, S, P)  (skip)
+
+
+We import these from sub-modules.
 
 \begin{code}
  open import Varieties.Closure.H {𝑆 = 𝑆} as VC-H public
- open import Varieties.Closure.S {𝑆 = 𝑆}as VC-S public
+ open import Varieties.Closure.S {𝑆 = 𝑆} as VC-S public
  open import Varieties.Closure.P {𝑆 = 𝑆} as VC-P public
  open import Varieties.Closure.V {𝑆 = 𝑆} as VC-V public
 
@@ -1729,6 +1732,33 @@ We import some of these things from sub-modules.
 
 
 
+---
+
+
+
+### BIRKHOFF'S THEOREM
+
+
+
+Theorem (Birkhoff, 1935).  A variety is an equational class.
+
+
+
+
+
+That is, a class 𝒦 of algebras is a variety (HSP(𝒦) ⊆ 𝒦)
+
+  iff
+
+𝒦 is the class of algebras satisfying a particular set of identities.
+
+
+
+
+
+
+
+
 
 
 
@@ -1736,398 +1766,35 @@ We import some of these things from sub-modules.
 ---
 
 
+#### BIRKHOFF'S THEOREM (the hard direction)
 
-#### Closure Properties
 
-The types defined above represent operators with useful closure properties. We now prove a
-handful of such properties that we need later.
+Goal:   Mod X (Th (V 𝒦))  ⊆  V 𝒦
 
-The next lemma would be too obvious to care about were it not for the fact that we'll need
-it later, so it too must be formalized.
 
-\begin{code}
+(Any algebra modeling all equations in Th (V 𝒦) belongs to V 𝒦.)
 
- S⊆SP : (𝒦 : Pred (Algebra α 𝑆)(ov α))
-  →     S{α}{β} 𝒦 ⊆ S{α ⊔ β}{α ⊔ β} (P{α}{β} 𝒦)
 
+This will prove that V 𝒦 is an "equational class."
 
+Indeed, V 𝒦 is the class satsifying the identities in Th (V 𝒦)!
 
 
+We prove Goal by constructing an algebra 𝔽 with the following properties:
 
+1. 𝔽 ∈ V 𝒦  and
 
+2. Every 𝑨 ∈ Mod X (Th (V 𝒦)) is a homomorphic image of 𝔽 and so belongs to V 𝒦.
 
 
 
----
 
 
- S⊆SP {α} {β} 𝒦 {.(Lift-Alg 𝑨 β)}(sbase{𝑨} x) = siso spllA(≅-sym Lift-≅)
-  where
-  llA : Algebra (α ⊔ β) 𝑆
-  llA = Lift-Alg (Lift-Alg 𝑨 β) (α ⊔ β)
 
-  spllA : llA ∈ S (P 𝒦)
-  spllA = sbase{α ⊔ β}{α ⊔ β} (pbase x)
 
- S⊆SP {α} {β} 𝒦 {.(Lift-Alg 𝑨 β)}(slift{𝑨} x) = subalgebra→S lAsc
-  where
-  splAu : 𝑨 ∈ S(P 𝒦)
-  splAu = S⊆SP{α}{α} 𝒦 x
 
-  Asc : 𝑨 IsSubalgebraOfClass (P 𝒦)
-  Asc = S→subalgebra{α}{P{α}{α} 𝒦}{𝑨} splAu
 
-  lAsc : (Lift-Alg 𝑨 β) IsSubalgebraOfClass (P 𝒦)
-  lAsc = Lift-Alg-subP' Asc
-
- S⊆SP {α} {β} 𝒦 {𝑩}(ssub{𝑨} sA B≤A) = ssub (subalgebra→S lAsc)( ≤-Lift 𝑨 B≤A )
-  where
-   lA : Algebra (α ⊔ β) 𝑆
-   lA = Lift-Alg 𝑨 β
-
-   splAu : 𝑨 ∈ S (P 𝒦)
-   splAu = S⊆SP{α}{α} 𝒦 sA
-
-   Asc : 𝑨 IsSubalgebraOfClass (P 𝒦)
-   Asc = S→subalgebra{α}{P{α}{α} 𝒦}{𝑨} splAu
-
-   lAsc : lA IsSubalgebraOfClass (P 𝒦)
-   lAsc = Lift-Alg-subP' Asc
-
- S⊆SP {α = α}{β} 𝒦 {𝑩}(siso{𝑨} sA A≅B) = siso{α ⊔ β}{α ⊔ β} lAsp lA≅B
-  where
-  lA : Algebra (α ⊔ β) 𝑆
-  lA = Lift-Alg 𝑨 β
-
-  lAsc : lA IsSubalgebraOfClass (P 𝒦)
-  lAsc = Lift-Alg-subP' (S→subalgebra{α}{P{α}{α} 𝒦}{𝑨} (S⊆SP 𝒦 sA))
-
-  lAsp : lA ∈ S(P 𝒦)
-  lAsp = subalgebra→S{α ⊔ β}{α ⊔ β}{P{α}{β} 𝒦}{lA} lAsc
-
-  lA≅B : lA ≅ 𝑩
-  lA≅B = ≅-trans (≅-sym Lift-≅) A≅B
-
-\end{code}
-
-
----
-
-We need to formalize one more lemma before arriving the main objective of this section,
-which is the proof of the inclusion PS⊆SP.
-
-\begin{code}
-
- module _ {α β : Level} {𝒦 : Pred(Algebra α 𝑆)(ov α)} where
-
-  lemPS⊆SP : hfunext β α → funext β α → {I : Type β}{ℬ : I → Algebra α 𝑆}
-   →         (∀ i → (ℬ i) IsSubalgebraOfClass 𝒦)
-   →         ⨅ ℬ IsSubalgebraOfClass (P{α}{β} 𝒦)
-
-  lemPS⊆SP hwu fwu {I}{ℬ} B≤K = ⨅ 𝒜 , (⨅ SA , ⨅SA≤⨅𝒜) , ξ , (⨅≅ {fiu = fwu}{fiw = fwu} B≅SA)
-   where
-   𝒜 : I → Algebra α 𝑆
-   𝒜 = λ i → ∣ B≤K i ∣
-
-   SA : I → Algebra α 𝑆
-   SA = λ i → ∣ fst ∥ B≤K i ∥ ∣
-
-   B≅SA : ∀ i → ℬ i ≅ SA i
-   B≅SA = λ i → ∥ snd ∥ B≤K i ∥ ∥
-
-   SA≤𝒜 : ∀ i → (SA i) IsSubalgebraOf (𝒜 i)
-   SA≤𝒜 = λ i → snd ∣ ∥ B≤K i ∥ ∣
-
-   h : ∀ i → ∣ SA i ∣ → ∣ 𝒜 i ∣
-   h = λ i → fst ∣ SA≤𝒜 i ∣
-
-   hinj : ∀ i → IsInjective (h i)
-   hinj = λ i → snd (snd ∣ ∥ B≤K i ∥ ∣)
-
-   σ : ∣ ⨅ SA ∣ → ∣ ⨅ 𝒜 ∣
-   σ = λ x i → (h i) (x i)
-   ν : is-homomorphism (⨅ SA) (⨅ 𝒜) σ
-   ν = λ 𝑓 𝒂 → fwu λ i → (snd ∣ SA≤𝒜 i ∣) 𝑓 (λ x → 𝒂 x i)
-
-   σinj : IsInjective σ
-   σinj σxσy = fwu λ i → (hinj i)(cong-app σxσy i)
-
-   ⨅SA≤⨅𝒜 : ⨅ SA ≤ ⨅ 𝒜
-   ⨅SA≤⨅𝒜 = (σ , ν) , σinj
-
-   ξ : ⨅ 𝒜 ∈ P 𝒦
-   ξ = produ (λ i → P-expa (∣ snd ∥ B≤K i ∥ ∣))
-
-
-\end{code}
-
-
----
-
-#### PS(𝒦) ⊆ SP(𝒦)
-
-Finally, we are in a position to prove that a product of subalgebras of algebras in a
-class 𝒦 is a subalgebra of a product of algebras in 𝒦.
-
-\begin{code}
-
- module _ {fovu : funext (ov α) (ov α)}      -- ← extensionality postulate
-          {𝒦 : Pred (Algebra α 𝑆)(ov α)} where
-
-  PS⊆SP :
-          hfunext (ov α)(ov α)               -- ← extensionality postulate
-
-   →      P{ov α}{ov α} (S{α}{ov α} 𝒦) ⊆ S{ov α}{ov α} (P{α}{ov α} 𝒦)
-
-  PS⊆SP _ (pbase (sbase x)) = sbase (pbase x)
-
-  PS⊆SP _ (pbase (slift{𝑨} x)) = slift (S⊆SP{α}{ov α} 𝒦 (slift x))
-
-  PS⊆SP _ (pbase{𝑩}(ssub{𝑨} sA B≤A)) = siso ( ssub (S⊆SP 𝒦 (slift sA))
-                                              (Lift-≤-Lift (ov α) {𝑨} (ov α) B≤A) ) ≅-refl
-
-  PS⊆SP _ (pbase (siso{𝑨}{𝑩} x A≅B)) = siso (S⊆SP 𝒦 (slift x)) ( Lift-Alg-iso A≅B )
-
-  PS⊆SP hfe (pliftu x) = slift (PS⊆SP hfe x)
-
-  PS⊆SP hfe (pliftw x) = slift (PS⊆SP hfe x)
-
-  PS⊆SP hfe (produ{I}{𝒜} x) = (S-mono (P-idemp)) (subalgebra→S η)
-   where
-    ξ : (i : I) → (𝒜 i) IsSubalgebraOfClass (P{α}{ov α} 𝒦)
-    ξ i = S→subalgebra (PS⊆SP hfe (x i))
-
-    η : ⨅ 𝒜 IsSubalgebraOfClass (P{ov α}{ov α} (P{α}{ov α} 𝒦))
-    η = lemPS⊆SP hfe fovu {I} {𝒜} ξ
-
-  PS⊆SP hfe (prodw{I}{𝒜} x) = (S-mono (P-idemp)) (subalgebra→S η)
-   where
-    ξ : (i : I) → (𝒜 i) IsSubalgebraOfClass (P{α}{ov α} 𝒦)
-    ξ i = S→subalgebra (PS⊆SP hfe (x i))
-
-    η : ⨅ 𝒜 IsSubalgebraOfClass (P{ov α}{ov α} (P{α}{ov α} 𝒦))
-    η = lemPS⊆SP hfe fovu  {I} {𝒜} ξ
-
-  PS⊆SP hfe (pisow{𝑨}{𝑩} pA A≅B) = siso (PS⊆SP hfe pA) A≅B
-
-\end{code}
-
----
-
-#### MORE CLASS INCLUSIONS
-
-We conclude this subsection with three more inclusion relations that will have bit parts
-to play later (e.g., in the formal proof of Birkhoff's Theorem).
-
-\begin{code}
-
- module _ {𝒦 : Pred (Algebra α 𝑆)(ov α)} where
-
-  P⊆V : P{α}{β} 𝒦 ⊆ V{α}{β} 𝒦
-
-  P⊆V (pbase A∈K)    = vbase  A∈K
-  P⊆V (pliftu A∈P)   = vlift  (P⊆V A∈P)
-  P⊆V (pliftw A∈P)   = vliftw (P⊆V A∈P)
-  P⊆V (produ Ai∈P)   = vprodu (P⊆V ∘ Ai∈P)
-  P⊆V (prodw Ai∈P)   = vprodw (P⊆V ∘ Ai∈P)
-  P⊆V (pisow A∈P A≅) = visow  (P⊆V A∈P) A≅
-
-
-  SP⊆V : S{α ⊔ β}{α ⊔ β} (P{α}{β} 𝒦) ⊆ V 𝒦
-
-  SP⊆V (sbase{𝑨} A∈P)        = P⊆V (pisow A∈P Lift-≅)
-  SP⊆V (slift{𝑨} A∈SP)       = vliftw (SP⊆V A∈SP)
-  SP⊆V (ssub{𝑨}{𝑩} A∈SP B≤A) = vssubw (SP⊆V A∈SP) B≤A
-  SP⊆V (siso A∈SP A≅)        = visow (SP⊆V A∈SP) A≅
-
-\end{code}
-
----
-
-#### V IS CLOSED UNDER LIFT
-
-As mentioned earlier, a technical hurdle that must be overcome when formalizing proofs in
-Agda is the proper handling of universe levels. In particular, in the proof of the
-Birkhoff's theorem, for example, we will need to know that if an algebra 𝑨 belongs to the
-variety V 𝒦, then so does the lift of 𝑨.  Let us get the tedious proof of this technical
-lemma out of the way.
-
-Above we proved that SP(𝒦) ⊆ V(𝒦), and we did so under fairly general assumptions about
-the universe level parameters.  Unfortunately, this is sometimes not quite general enough,
-so we now prove the inclusion again for the specific universe parameters that align with
-subsequent applications of this result.
-
-
-\begin{code}
-
- module _ {fe₀ : funext (ov α) α}
-          {fe₁ : funext ((ov α) ⊔ (lsuc (ov α))) (lsuc (ov α))}
-          {fe₂ : funext (ov α) (ov α)}
-          {𝒦 : Pred (Algebra α 𝑆)(ov α)} where
-
-  open Vlift {α}{fe₀}{fe₁}{fe₂}{𝒦}
-
-  SP⊆V' : S{ov α}{lsuc (ov α)} (P{α}{ov α} 𝒦) ⊆ V 𝒦
-
-  SP⊆V' (sbase{𝑨} x) = visow (VlA (SP⊆V (sbase x))) (≅-sym (Lift-Alg-assoc {𝑨 = 𝑨}))
-  SP⊆V' (slift x) = VlA (SP⊆V x)
-
-  SP⊆V' (ssub{𝑨}{𝑩} spA B≤A) = vssubw (VlA (SP⊆V spA)) B≤lA
-   where
-    B≤lA : 𝑩 ≤ Lift-Alg 𝑨 (lsuc (ov α))
-    B≤lA = ≤-Lift 𝑨 B≤A
-
-  SP⊆V' (siso{𝑨}{𝑩} x A≅B) = visow (VlA (SP⊆V x)) Goal
-   where
-    Goal : Lift-Alg 𝑨 (lsuc (ov α)) ≅ 𝑩
-    Goal = ≅-trans (≅-sym Lift-≅) A≅B
-
-\end{code}
-
-
-#### ⨅ S(𝒦) ∈ SP(𝒦)
-
-Finally, we prove a result that plays an important role, e.g., in the formal proof of
-Birkhoff's Theorem. As we saw in [Algebras.Products][], the (informal) product ⨅ S(𝒦) of
-all subalgebras of algebras in 𝒦 is implemented (formally) in the [UniversalAlgebra][]
-library as ⨅ 𝔄 S(𝒦). Our goal is to prove that this product belongs to SP(𝒦). We do so
-by first proving that the product belongs to PS(𝒦) and then applying the PS⊆SP lemma.
-
-Before doing so, we need to redefine the class product so that each factor comes with a
-map from the type X of variable symbols into that factor.  We will explain the reason
-for this below.
-
-\begin{code}
-
- module class-products-with-maps {α : Level}
-  {X : Type α}
-  {fe𝓕α : funext (ov α) α}
-  {fe₁ : funext ((ov α) ⊔ (lsuc (ov α))) (lsuc (ov α))}
-  {fe₂ : funext (ov α) (ov α)}
-  (𝒦 : Pred (Algebra α 𝑆)(ov α))
-  where
-
-  ℑ' : Type (ov α)
-  ℑ' = Σ[ 𝑨 ∈ (Algebra α 𝑆) ] ((𝑨 ∈ S{α}{α} 𝒦) × (X → ∣ 𝑨 ∣))
-
-\end{code}
-
-Notice that the second component of this dependent pair type is  (𝑨 ∈ 𝒦) × (X → ∣ 𝑨 ∣).
-In previous versions of the [UALib][] this second component was simply 𝑨 ∈ 𝒦, until we
-realized that adding the type X → ∣ 𝑨 ∣ is quite useful. Later we will see exactly why,
-but for now suffice it to say that a map of type X → ∣ 𝑨 ∣ may be viewed abstractly as
-an *ambient context*, or more concretely, as an assignment of *values* in ∣ 𝑨 ∣ to
-*variable symbols* in X.  When computing with or reasoning about products, while we
-don't want to rigidly impose a context in advance, want do want to lay our hands on
-whatever context is ultimately assumed.  Including the "context map" inside the index type
-ℑ of the product turns out to be a convenient way to achieve this flexibility.
-
-
-Taking the product over the index type ℑ requires a function that maps an index i : ℑ
-to the corresponding algebra.  Each i : ℑ is a triple, say, (𝑨 , p , h), where 𝑨 :
-Algebra α 𝑆, p : 𝑨 ∈ 𝒦, and h : X → ∣ 𝑨 ∣, so the function mapping an index to the
-corresponding algebra is simply the first projection.
-
-\begin{code}
-
-  𝔄' : ℑ' → Algebra α 𝑆
-  𝔄' = λ (i : ℑ') → ∣ i ∣
-
-\end{code}
-
-Finally, we define class-product which represents the product of all members of 𝒦.
-
-\begin{code}
-
-  class-product' : Algebra (ov α) 𝑆
-  class-product' = ⨅ 𝔄'
-
-\end{code}
-
-If p : 𝑨 ∈ 𝒦 and h : X → ∣ 𝑨 ∣, we view the triple (𝑨 , p , h) ∈ ℑ as an index over
-the class, and so we can think of 𝔄 (𝑨 , p , h) (which is simply 𝑨) as the projection
-of the product ⨅ 𝔄 onto the (𝑨 , p, h)-th component. 
-
-\begin{code}
-
-  class-prod-s-∈-ps : class-product' ∈ P{ov α}{ov α}(S 𝒦)
-  class-prod-s-∈-ps = pisow psPllA (⨅≅ {fiu = fe₂}{fiw = fe𝓕α} llA≅A)
-
-   where
-   lA llA : ℑ' → Algebra (ov α) 𝑆
-   lA i =  Lift-Alg (𝔄 i) (ov α)
-   llA i = Lift-Alg (lA i) (ov α)
-
-   slA : ∀ i → (lA i) ∈ S 𝒦
-   slA i = siso (fst ∥ i ∥) Lift-≅
-
-   psllA : ∀ i → (llA i) ∈ P (S 𝒦)
-   psllA i = pbase (slA i)
-
-   psPllA : ⨅ llA ∈ P (S 𝒦)
-   psPllA = produ psllA
-
-   llA≅A : ∀ i → (llA i) ≅ (𝔄' i)
-   llA≅A i = ≅-trans (≅-sym Lift-≅)(≅-sym Lift-≅)
-
-\end{code}
-
-
-So, since PS⊆SP, we see that that the product of all subalgebras of a class 𝒦 belongs to SP(𝒦).
-
-\begin{code}
-
-  class-prod-s-∈-sp : hfunext (ov α) (ov α) → class-product ∈ S(P 𝒦)
-  class-prod-s-∈-sp hfe = PS⊆SP {fovu = fe₂} hfe class-prod-s-∈-ps
-
-\end{code}
-
-
-
----
-
-### FREE ALGEBRAS AND BIRKHOFF'S THEOREM
-
-First we will define the relatively free algebra in a variety, which is the "freest"
-algebra among (universal for) those algebras that model all identities holding in the
-variety. Then we give a formal proof of Birkhoff's theorem which says that a variety is an
-equational class. In other terms, a class 𝒦 of algebras is closed under the operators
-H, S, and P if and only if 𝒦 is the class of algebras that satisfy some set of
-identities.
-
----
-
-#### THE FREE ALGEBRA IN THEORY
-
-We formalize, for a given class 𝒦 of 𝑆-algebras, the (relatively) free algebra in S(P
-𝒦) over X.
-
-We use the next definition to take a free algebra *for* a class 𝒦 and produce the free
-algebra *in* 𝒦.
-
-Θ(𝒦, 𝑨) := {θ ∈ Con 𝑨 : 𝑨 / θ ∈ (S 𝒦)}   and     ψ(𝒦, 𝑨) := ⋂ Θ(𝒦, 𝑨).
-
-Notice that Θ(𝒦, 𝑨) may be empty, in which case ψ(𝒦, 𝑨) = 1 and then 𝑨 / ψ(𝒦, 𝑨) is
-trivial.
-
-The free algebra is constructed by applying the above definitions to the special case in
-which 𝑨 is the term algebra 𝑻 X of 𝑆-terms over X.
-
-Since 𝑻 X is free for (and in) the class of all 𝑆-algebras, it follows that 𝑻 X is
-free for every class 𝒦 of 𝑆-algebras. Of course, 𝑻 X is not necessarily a member of
-𝒦, but if we form the quotient of 𝑻 X modulo the congruence ψ(𝒦, 𝑻 X), which we
-denote by 𝔉 := (𝑻 X) / ψ(𝒦, 𝑻 X), then it's not hard to see that 𝔉 is a subdirect
-product of the algebras in {(𝑻 𝑋) / θ}, where θ ranges over Θ(𝒦, 𝑻 X), so 𝔉
-belongs to S(P 𝒦), and it follows that 𝔉 satisfies all the identities satisfied by all
-members of 𝒦.  Indeed, for each pair p q : 𝑻 X, if 𝒦 ⊧ p ≈ q, then p and q must
-belong to the same ψ(𝒦, 𝑻 X)-class, so p and q are identified in the quotient 𝔉.
-
-The 𝔉 that we have just defined is called the **free algebra over** 𝒦 **generated by**
-X and (because of what we just observed) we may say that 𝔉 is free *in* S(P 𝒦).
-
----
-
-----------------------------
+---------
 
 
 [the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
