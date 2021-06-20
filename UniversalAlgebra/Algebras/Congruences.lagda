@@ -12,7 +12,6 @@ This section presents the [Algebras.Congruences][] module of the [Agda Universal
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Level renaming ( suc to lsuc )
 open import Algebras.Basic
 
 module Algebras.Congruences {𝑆 : Signature 𝓞 𝓥} where
@@ -22,7 +21,8 @@ open import Agda.Builtin.Equality                 using    ( _≡_      ; refl  
 open import Agda.Primitive                        using    ( _⊔_                )
                                                   renaming ( Set      to  Type  )
 
-open import Function.Base          using    ( _∘_ ) -- ; id     )
+open import Function.Base                         using    ( _∘_ )
+open import Level                                 renaming ( suc to lsuc )
 open import Relation.Binary                       using    ( IsEquivalence      )
                                                   renaming ( Rel      to BinRel )
 
@@ -31,9 +31,11 @@ open import Data.Product                          using    ( _,_      ;   Σ
 open import Relation.Binary.PropositionalEquality using    ( sym ; trans ; cong )
 
 open import Algebras.Products      {𝑆 = 𝑆}   using (ov)
-open import Overture.Preliminaries    using (∣_∣; ∥_∥)
-open import Relations.Discrete        using (0[_] ; _|:_)
-open import Relations.Quotients       using (_/_ ; ⟪_⟫ ; IsBlock ; Quotient ; Equivalence ; 0[_]Equivalence ;  ⟪_∼_⟫-elim )
+open import Overture.Preliminaries    using ( ∣_∣  ; ∥_∥  )
+open import Relations.Discrete        using ( 0[_] ; _|:_ )
+open import Relations.Quotients       using ( _/_  ; ⟪_⟫ ; IsBlock ; Quotient
+                                                   ; Equivalence ; 0[_]Equivalence
+                                                   ;  ⟪_∼_⟫-elim )
 
 
 open import Relations.Extensionality  using (swelldef)
