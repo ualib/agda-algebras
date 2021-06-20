@@ -120,14 +120,6 @@ lilAlgebra α 𝑆 = Σ[ A ∈ Type α ]                   -- the domain
                  ∀ (f : ∣ 𝑆 ∣) → Op A {∥ 𝑆 ∥ f}    -- the basic operations
 
 
--- The operation type Op is now defined in the Relations.Discrete module.
---    OLD implementation of the type of operations
---    Op : Type 𝓥 → Type α → Type(α ⊔ 𝓥)
---    Op I A = (I → A) → A
---    NEW notation for operations on A of arity I
---    Op : Type α → {I : Arity} → Type α
---    Op A {I} = (I → A) → A
-
 
 \end{code}
 

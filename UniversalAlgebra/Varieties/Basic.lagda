@@ -40,8 +40,9 @@ module Varieties.Basic {𝑆 : Signature 𝓞 𝓥} where
 
 -- imports from Agda and the Agda Standard Library -------------------------------------------
 open import Agda.Builtin.Equality   using    ( _≡_ ;  refl )
-open import Agda.Primitive          renaming ( Set to Type )
-                                    using    ( _⊔_ ;  lsuc )
+open import Agda.Primitive          using    ( _⊔_ ;  lsuc )
+                                   renaming ( Set to Type
+                                            ; lzero to  ℓ₀       )
 open import Axiom.Extensionality.Propositional
                                     renaming ( Extensionality to funext )
 open import Data.Product            using    ( _,_ ; Σ-syntax ; Σ ; _×_ )
@@ -56,7 +57,7 @@ open import Relation.Unary          using    ( Pred ; _∈_ ; _⊆_ ; ⋂ )
 
 
 -- imports from agda-algebras --------------------------------------------------------------
-open import Overture.Preliminaries       using ( ∣_∣ ; ∥_∥ ; 𝑖𝑑 ; _⁻¹ ; _≈_ )
+open import Overture.Preliminaries       using ( ∣_∣ ; ∥_∥ ; 𝑖𝑑 ; _⁻¹ ; _≈_ ; Π ; Π-syntax)
 open import Overture.Inverses            using ( IsInjective ; ∘-injective )
 open import Relations.Extensionality using (DFunExt; SwellDef)
 
@@ -69,8 +70,6 @@ open import Terms.Operations           {𝑆 = 𝑆} using ( _⟦_⟧ ; comm-hom
 open import Subalgebras.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; SubalgebraOfClass ; iso→injective )
 open Term
 
-private variable α β 𝓧 : Level
-
 \end{code}
 
 
@@ -80,12 +79,13 @@ We define the binary "models" relation ⊧ using infix syntax so that we may wri
 
 \begin{code}
 
-module _ {X : Type 𝓧} where
- _⊧_≈_ : Algebra α 𝑆 → Term X → Term X → Type(α ⊔ 𝓧)
- 𝑨 ⊧ p ≈ q = 𝑨 ⟦ p ⟧ ≈ 𝑨 ⟦ q ⟧
 
- _⊧_≋_ : Pred(Algebra α 𝑆)(ov α) → Term X → Term X → Type(𝓧 ⊔ ov α)
- 𝒦 ⊧ p ≋ q = {𝑨 : Algebra _ 𝑆} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
+_⊧_≈_ : {α χ : Level}{X : Type χ} → Algebra α 𝑆 → Term X → Term X → Type _
+𝑨 ⊧ p ≈ q = 𝑨 ⟦ p ⟧ ≈ 𝑨 ⟦ q ⟧
+
+_⊧_≋_ : {α ρ χ : Level}{X : Type χ} → Pred(Algebra α 𝑆) ρ → Term X → Term X → Type _
+𝒦 ⊧ p ≋ q = {𝑨 : Algebra _ 𝑆} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
+
 
 \end{code}
 
@@ -100,8 +100,10 @@ Here we define a type `Th` so that, if 𝒦 denotes a class of algebras, then `T
 
 \begin{code}
 
-Th : {X : Type 𝓧} → Pred (Algebra α 𝑆)(ov α) → Pred(Term X × Term X)(𝓧 ⊔ ov α)
-Th 𝒦 = λ (p , q) → 𝒦 ⊧ p ≋ q
+module _ {α χ : Level}{X : Type χ} where
+
+ Th : Pred (Algebra α 𝑆)(ov α) → Pred(Term X × Term X) (χ ⊔ ov α)
+ Th 𝒦 = λ (p , q) → 𝒦 ⊧ p ≋ q
 
 \end{code}
 
@@ -109,12 +111,19 @@ If `ℰ` denotes a set of identities, then the class of algebras satisfying all 
 
 \begin{code}
 
-Mod : {X : Type 𝓧} → Pred(Term X × Term X)(𝓧 ⊔ ov α) → Pred(Algebra α 𝑆)(ov (𝓧 ⊔ α))
-Mod ℰ = λ 𝑨 → ∀ p q → (p , q) ∈ ℰ → 𝑨 ⊧ p ≈ q
+ Mod : Pred(Term X × Term X) (χ ⊔ ov α) → Pred(Algebra α 𝑆) (ov (α ⊔ χ))
+ Mod ℰ = λ 𝑨 → ∀ p q → (p , q) ∈ ℰ → 𝑨 ⊧ p ≈ q
 
 \end{code}
 
+The entailment ℰ ⊢ p ≈ q is valid iff p ≈ q holds in all models that satify all equations in ℰ.
 
+\begin{code}
+
+ _⊢_≈_ : Pred(Term X × Term X) (χ ⊔ ov α) → Term X → Term X → Type (ov (α ⊔ χ))
+ ℰ ⊢ p ≈ q = Mod ℰ ⊧ p ≋ q
+
+\end{code}
 
 
 #### <a id="algebraic-invariance-of-models">Algebraic invariance of ⊧</a>
@@ -125,17 +134,17 @@ The binary relation ⊧ would be practically useless if it were not an *algebrai
 
 open ≡-Reasoning
 
-module _ (wd : SwellDef){X : Type 𝓧}{𝑨 : Algebra α 𝑆}
+module _ (wd : SwellDef){α β χ : Level}{X : Type χ}{𝑨 : Algebra α 𝑆}
          (𝑩 : Algebra β 𝑆)(p q : Term X) where
 
  ⊧-I-invar : 𝑨 ⊧ p ≈ q  →  𝑨 ≅ 𝑩  →  𝑩 ⊧ p ≈ q
 
  ⊧-I-invar Apq (f , g , f∼g , g∼f) x =
-  (𝑩 ⟦ p ⟧) x                      ≡⟨ wd 𝓧 β (𝑩 ⟦ p ⟧) x (∣ f ∣ ∘ ∣ g ∣ ∘ x) (λ i → ( f∼g (x i))⁻¹) ⟩
+  (𝑩 ⟦ p ⟧) x                      ≡⟨ wd χ β (𝑩 ⟦ p ⟧) x (∣ f ∣ ∘ ∣ g ∣ ∘ x) (λ i → ( f∼g (x i))⁻¹) ⟩
   (𝑩 ⟦ p ⟧) ((∣ f ∣ ∘ ∣ g ∣) ∘ x)  ≡⟨ (comm-hom-term (wd 𝓥 β) 𝑩 f p (∣ g ∣ ∘ x))⁻¹ ⟩
   ∣ f ∣ ((𝑨 ⟦ p ⟧) (∣ g ∣ ∘ x))    ≡⟨ cong ∣ f ∣ (Apq (∣ g ∣ ∘ x))  ⟩
   ∣ f ∣ ((𝑨 ⟦ q ⟧) (∣ g ∣ ∘ x))    ≡⟨ comm-hom-term (wd 𝓥 β) 𝑩 f q (∣ g ∣ ∘ x) ⟩
-  (𝑩 ⟦ q ⟧) ((∣ f ∣ ∘ ∣ g ∣) ∘  x) ≡⟨ wd 𝓧 β (𝑩 ⟦ q ⟧) (∣ f ∣ ∘ ∣ g ∣ ∘ x) x (λ i → ( f∼g (x i))) ⟩
+  (𝑩 ⟦ q ⟧) ((∣ f ∣ ∘ ∣ g ∣) ∘  x) ≡⟨ wd χ β (𝑩 ⟦ q ⟧) (∣ f ∣ ∘ ∣ g ∣ ∘ x) x (λ i → ( f∼g (x i))) ⟩
   (𝑩 ⟦ q ⟧) x                      ∎
 
 \end{code}
@@ -148,7 +157,7 @@ The ⊧ relation is also invariant under the algebraic lift and lower operations
 
 \begin{code}
 
-module _ (wd : SwellDef){X : Type 𝓧}{𝑨 : Algebra α 𝑆} where
+module _ (wd : SwellDef){α β χ : Level}{X : Type χ}{𝑨 : Algebra α 𝑆} where
 
  ⊧-Lift-invar : (p q : Term X) → 𝑨 ⊧ p ≈ q → Lift-Alg 𝑨 β ⊧ p ≈ q
  ⊧-Lift-invar p q Apq = ⊧-I-invar wd (Lift-Alg 𝑨 _) p q Apq Lift-≅
@@ -168,7 +177,7 @@ Identities modeled by an algebra `𝑨` are also modeled by every subalgebra of 
 
 \begin{code}
 
-module _ (wd : SwellDef){𝓤 𝓦 : Level}{X : Type 𝓧} where
+module _ (wd : SwellDef){χ : Level}{𝓤 𝓦 : Level}{X : Type χ} where
 
  ⊧-S-invar : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆){p q : Term X}
   →          𝑨 ⊧ p ≈ q  →  𝑩 ≤ 𝑨  →  𝑩 ⊧ p ≈ q
@@ -207,7 +216,7 @@ module _ (wd : SwellDef){𝓤 𝓦 : Level}{X : Type 𝓧} where
 
  \begin{code}
 
-module _ (fe : DFunExt)(wd : SwellDef){I : Type β}(𝒜 : I → Algebra α 𝑆){X : Type 𝓧} where
+module _ (fe : DFunExt)(wd : SwellDef){α β χ : Level}{I : Type β}(𝒜 : I → Algebra α 𝑆){X : Type χ} where
 
  ⊧-P-invar : (p q : Term X) → (∀ i → 𝒜 i ⊧ p ≈ q) → ⨅ 𝒜 ⊧ p ≈ q
  ⊧-P-invar p q 𝒜pq a = goal
@@ -255,15 +264,15 @@ If an algebra 𝑨 models an identity p ≈ q, then the pair (p , q) belongs to 
 
  \begin{code}
 
-module _ (wd : SwellDef){X : Type 𝓧}{𝑨 : Algebra α 𝑆} where
+module _ (wd : SwellDef){α χ : Level}{X : Type χ}{𝑨 : Algebra α 𝑆} where
 
  ⊧-H-invar : {p q : Term X}(φ : hom (𝑻 X) 𝑨) → 𝑨 ⊧ p ≈ q  →  ∣ φ ∣ p ≡ ∣ φ ∣ q
 
- ⊧-H-invar {p}{q}φ β = ∣ φ ∣ p               ≡⟨ cong ∣ φ ∣(term-agreement(wd 𝓥 (ov 𝓧)) p)⟩
+ ⊧-H-invar {p}{q}φ β = ∣ φ ∣ p               ≡⟨ cong ∣ φ ∣(term-agreement(wd 𝓥 (ov χ)) p)⟩
                        ∣ φ ∣((𝑻 X ⟦ p ⟧) ℊ)  ≡⟨ comm-hom-term (wd 𝓥 α) 𝑨 φ p ℊ ⟩
                        (𝑨 ⟦ p ⟧) (∣ φ ∣ ∘ ℊ) ≡⟨ β (∣ φ ∣ ∘ ℊ ) ⟩
                        (𝑨 ⟦ q ⟧) (∣ φ ∣ ∘ ℊ) ≡⟨ (comm-hom-term (wd 𝓥 α)  𝑨 φ q ℊ )⁻¹ ⟩
-                       ∣ φ ∣ ((𝑻 X ⟦ q ⟧) ℊ) ≡⟨(cong ∣ φ ∣ (term-agreement (wd 𝓥 (ov 𝓧)) q))⁻¹ ⟩
+                       ∣ φ ∣ ((𝑻 X ⟦ q ⟧) ℊ) ≡⟨(cong ∣ φ ∣ (term-agreement (wd 𝓥 (ov χ)) q))⁻¹ ⟩
                        ∣ φ ∣ q               ∎
 
 
@@ -277,7 +286,7 @@ More generally, an identity is satisfied by all algebras in a class if and only 
 
 \begin{code}
 
-module _ (wd : SwellDef){X : Type 𝓧}{𝒦 : Pred (Algebra α 𝑆)(ov α)}  where
+module _ (wd : SwellDef){α χ : Level}{X : Type χ}{𝒦 : Pred (Algebra α 𝑆)(ov α)}  where
 
  -- ⇒ (the "only if" direction)
  ⊧-H-class-invar : {p q : Term X}

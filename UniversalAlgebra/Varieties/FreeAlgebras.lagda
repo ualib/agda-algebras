@@ -431,7 +431,7 @@ The converse inclusion, `V 𝒦 ⊆ Mod X (Th (V 𝒦))`, is a simple consequenc
 
 \begin{code}
 
-  Birkhoff-converse : V{α}{𝓕} 𝒦 ⊆ Mod{𝓧 = α}{X = X} (Th (V 𝒦))
+  Birkhoff-converse : V{α}{𝓕} 𝒦 ⊆ Mod{χ = α}{X = X} (Th (V 𝒦))
   Birkhoff-converse α p q pThq = pThq α
 
 \end{code}
