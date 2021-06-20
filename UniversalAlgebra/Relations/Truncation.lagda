@@ -42,7 +42,7 @@ open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; _≈_ ; 
 open import Overture.Inverses      using ( IsInjective           )
 open import Relations.Quotients    using ( IsBlock               )
 open import Relations.Discrete     using ( Arity )
-open import Relations.Continuous   using ( Rel ; Ρ )
+open import Relations.Continuous   using ( Rel ; ΠΡ )
 
 private variable α β ρ 𝓥 : Level
 
@@ -284,14 +284,14 @@ module _ {I : Arity 𝓥} where
  RelPropExt : Type α → (ρ : Level) → Type (𝓥 ⊔ α ⊔ lsuc ρ)
  RelPropExt A ρ = {P Q : RelProp A ρ } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
 
- IsΡProp : {ρ : Level} (𝒜 : I → Type α) → Ρ I 𝒜 {ρ}  → Type (𝓥 ⊔ α ⊔ ρ)
- IsΡProp 𝒜 P = ∀ (a : ((i : I) → 𝒜 i)) → is-prop (P a)
+ IsΠΡProp : {ρ : Level} (𝒜 : I → Type α) → ΠΡ I 𝒜 {ρ}  → Type (𝓥 ⊔ α ⊔ ρ)
+ IsΠΡProp 𝒜 P = ∀ (a : ((i : I) → 𝒜 i)) → is-prop (P a)
 
- ΡProp : (I → Type α) → (ρ : Level) → Type (𝓥 ⊔ α ⊔ lsuc ρ)
- ΡProp 𝒜 ρ = Σ[ P ∈ Ρ I 𝒜 {ρ} ] IsΡProp 𝒜 P
+ ΠΡProp : (I → Type α) → (ρ : Level) → Type (𝓥 ⊔ α ⊔ lsuc ρ)
+ ΠΡProp 𝒜 ρ = Σ[ P ∈ ΠΡ I 𝒜 {ρ} ] IsΠΡProp 𝒜 P
 
- ΡPropExt : (I → Type α) → (ρ : Level) → Type (𝓥 ⊔ α ⊔ lsuc ρ)
- ΡPropExt 𝒜 ρ = {P Q : ΡProp 𝒜 ρ} → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
+ ΠΡPropExt : (I → Type α) → (ρ : Level) → Type (𝓥 ⊔ α ⊔ lsuc ρ)
+ ΠΡPropExt 𝒜 ρ = {P Q : ΠΡProp 𝒜 ρ} → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
 
 
 

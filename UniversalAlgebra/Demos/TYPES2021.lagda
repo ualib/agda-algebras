@@ -3542,33 +3542,61 @@ With this result in hand, along with what we proved earlier---namely,
 
 \end{code}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ---
 
-#### THE HSP THEOREM
 
-Now that we have all of the necessary ingredients, it is all but trivial to combine them
-to prove Birkhoff's HSP theorem. (Note that since the proof enlists the help of the
-`𝔽-ModTh-epi` theorem, we must assume an environment exists, which is manifested in the
-premise `∀ 𝑨 → X ↠ 𝑨`.
+#### BIRKHOFF'S THEOREM in Agda
+
+
+We develop the necessary ingredients above and combine them here.
 
 \begin{code}
 
-   Birkhoff : hfunext (ov α)(ov α) → (∀ 𝑨 → X ↠ 𝑨) → Mod (Th (V 𝒦)) ⊆ V 𝒦
+   Birkhoff : hfunext (ov α)(ov α) → (∀ 𝑨 → X ↠ 𝑨)
 
-   Birkhoff hfe 𝕏 {𝑨} α = vhimg{𝑩 = 𝑨} (𝔽∈𝕍 hfe) (𝑨 , epi-to-hom 𝑨 φE , snd ∥ φE ∥)
+    →         Mod (Th (V 𝒦)) ⊆ V 𝒦
+
+   Birkhoff hfe 𝕏 {𝑨} α =
+
+    vhimg{𝑩 = 𝑨} (𝔽∈𝕍 hfe) (𝑨 , epi-to-hom 𝑨 φE , snd ∥ φE ∥)
+
     where
     φE : epi 𝔽 𝑨
     φE = 𝔽-ModTh-epi 𝑨 (𝕏 𝑨) α
 
 \end{code}
 
+
+The proof enlists the help of the 𝔽-ModTh-epi theorem which assumes a
+suitable "environment"; this is manifested in the premise ∀ 𝑨 → X ↠ 𝑨.
+
+
+
+
 ---
+
 
 #### THE CONVERSE
 
-The converse inclusion, `V 𝒦 ⊆ Mod X (Th (V 𝒦))`, is a simple consequence of the fact that
-`Mod Th` is a closure operator. Nonetheless, completeness demands that we formalize this
-inclusion as well, however trivial the proof.
+The converse  V 𝒦 ⊆ Mod X (Th (V 𝒦))  is a simple consequence of:
+
+  Mod Th is a closure operator
+
+Nonetheless, here's the proof.
 
 \begin{code}
 
@@ -3577,27 +3605,83 @@ inclusion as well, however trivial the proof.
 
 \end{code}
 
-We have thus proved that every variety is an equational class.  Readers familiar with the
-classical formulation of the Birkhoff HSP theorem, as an "if and only if" result, might
-worry that we haven't completed the proof.  But recall that in the Varieties.Preservation
-module we proved the following identity preservation lemmas:
-
-* `𝒦 ⊧ p ≋ q → H 𝒦 ⊧ p ≋ q`
-* `𝒦 ⊧ p ≋ q → S 𝒦 ⊧ p ≋ q`
-* `𝒦 ⊧ p ≋ q → P 𝒦 ⊧ p ≋ q`
-
-From these it follows that every equational class is a variety. Thus, our formal proof of
-Birkhoff's theorem is complete.
+This completes the proof that every variety is an equational class.
 
 
-----------------------------
 
 
-[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
+
+
+
+
+
 
 
 
 ---
+
+
+
+
+
+
+
+
+
+
+
+                  T H A N K    Y O U  !!!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[the agda-algebras development team]: https://github.com/ualib/agda-algebras
+
+
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #### REFERENCES
 
