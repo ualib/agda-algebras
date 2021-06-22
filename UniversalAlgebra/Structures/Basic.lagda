@@ -82,13 +82,23 @@ module _ {𝑅 𝐹 : Signature} where
  Lift-rel : {I : Arity ℓ₀}{A : Type α} → Rel A {I}{ρ} → (ℓ : Level) → Rel (Lift ℓ A) {I}{ρ}
  Lift-rel r ℓ x = r (λ i → lower (x i))
 
- Lift-struc : Structure {α}{ρ}𝑅 𝐹 → (ℓ : Level) → Structure {α = (α ⊔ ℓ)}{ρ} 𝑅 𝐹
- Lift-struc {α}{ρ}𝑨 ℓ = Lift ℓ ∣ 𝑨 ∣ , (lrel , lop )
+ Lift-Strucˡ : (ℓ : Level) → Structure {α}{ρ}𝑅 𝐹 → Structure {α = (α ⊔ ℓ)}{ρ} 𝑅 𝐹
+ Lift-Strucˡ {α}{ρ}ℓ 𝑨 = Lift ℓ ∣ 𝑨 ∣ , (lrel , lop )
   where
   lrel : (r : ∣ 𝑅 ∣) → Rel (Lift ℓ ∣ 𝑨 ∣){snd 𝑅 r}{ρ}
   lrel r = λ x → ((r ʳ 𝑨) (λ i → lower (x i)))
   lop : (f : ∣ 𝐹 ∣) → Op (Lift ℓ ∣ 𝑨 ∣) {snd 𝐹 f}
   lop f = λ x → lift ((f ᵒ 𝑨)( λ i → lower (x i)))
+
+ Lift-Strucʳ : (ℓ : Level) → Structure {α}{ρ}𝑅 𝐹 → Structure {α}{ρ = (ρ ⊔ ℓ)} 𝑅 𝐹
+ Lift-Strucʳ {α}{ρ} ℓ 𝑨 = ∣ 𝑨 ∣ , lrel , snd ∥ 𝑨 ∥
+  where
+  lrel : (r : ∣ 𝑅 ∣) → Rel (∣ 𝑨 ∣){∥ 𝑅 ∥ r}{ρ ⊔ ℓ}
+  lrel r = λ x → Lift ℓ ((r ʳ 𝑨) x) -- λ x → ((r ʳ 𝑨) (λ i → lower (x i)))
+
+ Lift-Struc : (ℓˡ ℓʳ : Level) → Structure {α}{ρ}𝑅 𝐹 → Structure {α = (α ⊔ ℓˡ)}{ρ = (ρ ⊔ ℓʳ)} 𝑅 𝐹
+ Lift-Struc {α}{ρ} ℓˡ ℓʳ 𝑨 = Lift-Strucʳ ℓʳ (Lift-Strucˡ ℓˡ 𝑨)
+
 
 \end{code}
 

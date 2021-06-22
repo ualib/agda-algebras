@@ -1,8 +1,8 @@
 ---
 layout: default
-title : Structures.congruences module
+title : Structures.AsRecordsCongruences module
 date : 2021-05-28
-author: William DeMeo
+author: [the ualib/agda-algebras development team][]
 ---
 
 
@@ -15,11 +15,9 @@ dependent pair type.
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Structures.AsRecords
+open import Structures.AsRecordsBasic
 
-open import Structures.AsRecords
-
-module Structures.congruences {𝑅 𝐹 : signature} where
+module Structures.AsRecordsCongruences {𝑅 𝐹 : signature} where
 
 open import Agda.Builtin.Equality  using    ( _≡_   ;  refl     )
 open import Agda.Primitive         using    (  _⊔_  ;  lsuc     )
@@ -29,18 +27,15 @@ open import Data.Product           using    (  _,_  ;  Σ
                                    renaming ( proj₁ to fst      )
 open import Level                  using    ( Level ;  Lift
                                             ; lift  ;  lower    )
-                                   renaming ( zero  to ℓ₀
-                                            ; suc   to lsuc     )
+                                   renaming ( zero  to ℓ₀       )
 open import Function.Base          using    ( _∘_               )
-open import Relation.Unary         using    ( _∈_   ;  Pred     )
-open import Relation.Binary        using    ( IsEquivalence     )
-                                   renaming ( Rel   to BinRel   )
 
 
 
 open import Overture.Preliminaries   using ( ∣_∣ )
-open import Relations.Discrete       using ( _|:_ ; 0[_])
-open import Relations.Quotients      using ( Equivalence ; 0[_]Equivalence ; Quotient
+open import Relations.Discrete       using ( _|:_ ; 0[_] )
+open import Relations.Quotients      using ( Equivalence ; Quotient
+                                           ; 0[_]Equivalence
                                            ; ⟪_⟫ ; ⌞_⌟ ; ⟪_∼_⟫-elim ; _/_ )
 open import Relations.Extensionality using ( swelldef )
 
@@ -84,6 +79,11 @@ _╱_ = quotient
 𝟎[ 𝑨 ╱ θ ] wd = 0con[ 𝑨 ╱ θ ] wd
 
 \end{code}
+
+
+--------------------------------------
+
+[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
 
 
 -------------------------------------------------------------------

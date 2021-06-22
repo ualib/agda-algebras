@@ -13,7 +13,7 @@ This chapter presents the [Homomorphisms.Noether][] module of the [Agda Universa
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Level using ( Level ; Lift )
+open import Level using ( Level )
 open import Algebras.Basic
 
 module Homomorphisms.Noether {𝑆 : Signature 𝓞 𝓥} where

@@ -1,19 +1,18 @@
 ---
 layout: default
-title : Structures.AsRecords module
+title : Structures.AsRecordsBasic module (Agda Universal Algebra Library)
 date : 2021-05-20
-author: William DeMeo
+author: [the ualib/agda-algebras development team][]
 ---
 
 This is a submodule of the Structures module which presents general (relational-algebraic) structures as
-inhabitants of record types.  For a similar development using Sigma types see the module called
-Structures.Basic. 
+inhabitants of record types.  For a similar development using Sigma types see the Structures.Basic module.
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Structures.AsRecords where
+module Structures.AsRecordsBasic where
 
 open import Agda.Primitive        using    (  _⊔_ ;  lsuc    )
                                   renaming (  Set   to Type  ;
@@ -106,6 +105,9 @@ Sig-0-1-2 = record { symbol = 𝟛 ; arity = λ{ 𝟛.𝟎 → 𝟘 ; 𝟛.𝟏 
 
 
 
+--------------------------------------
+
+[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
 
 
 
