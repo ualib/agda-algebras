@@ -48,82 +48,85 @@ private variable 𝑅 𝐹 : Signature
 
 -- Development for Structures (Sigma type representation)
 
-module _ {α ρ β ρ' : Level}
-         (𝑨 : Structure {α} {ρ} 𝑅 𝐹)
-         (𝑩 : Structure {β} {ρ'} 𝑅 𝐹) where
+module _ {α ρᵃ : Level}
+         (𝑨 : Structure  𝑅 𝐹 {α}{ρᵃ})
+         {β ρᵇ : Level}
+         (𝑩 : Structure 𝑅 𝐹 {β}{ρᵇ}) where
 
- CompRel : (fst 𝑅) → ((fst 𝑨) → (fst 𝑩)) → Type (α ⊔ ρ ⊔ ρ')
- CompRel R h = ∀ a → ((R ʳ 𝑨) a) → ((R ʳ 𝑩) (h ∘ a))
+ preserves : ∣ 𝑅 ∣ → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Type (α ⊔ ρᵃ ⊔ ρᵇ)
+ preserves r h = ∀ a → ((r ʳ 𝑨) a) → ((r ʳ 𝑩) (h ∘ a))
 
- IsHom-rel : ((fst 𝑨) → (fst 𝑩)) → Type (α ⊔ ρ ⊔ ρ')
- IsHom-rel h = ∀ R →  CompRel R h
+ is-hom-rel : (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Type (α ⊔ ρᵃ ⊔ ρᵇ)
+ is-hom-rel h = ∀ r →  preserves r h
 
- CompOp : (fst 𝐹) → ((fst 𝑨) → (fst 𝑩)) → Type (α ⊔ β)
- CompOp f h = ∀ a → h ((f ᵒ 𝑨) a) ≡ (f ᵒ 𝑩) (h ∘ a)
+ comp-op : ∣ 𝐹 ∣ → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Type (α ⊔ β)
+ comp-op f h = ∀ a → h ((f ᵒ 𝑨) a) ≡ (f ᵒ 𝑩) (h ∘ a)
 
- IsHom-op : ((fst 𝑨) → (fst 𝑩)) → Type (α ⊔ β)
- IsHom-op h = ∀ f → CompOp f h
+ is-hom-op : (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Type (α ⊔ β)
+ is-hom-op h = ∀ f → comp-op f h
 
- IsHom : ((fst 𝑨) → (fst 𝑩)) → Type (α ⊔ ρ ⊔ β ⊔ ρ')
- IsHom h = IsHom-rel h × IsHom-op h
+ is-hom : (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Type (α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
+ is-hom h = is-hom-rel h × is-hom-op h
 
- Hom : Type (α ⊔ ρ ⊔ β ⊔ ρ')
- Hom = Σ[ h ∈ ((fst 𝑨) → (fst 𝑩)) ] IsHom h
+ hom : Type (α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
+ hom = Σ[ h ∈ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ] is-hom h
 
 
 
-module _ {α ρᵃ β ρᵇ γ ρᶜ : Level}{𝑅 𝐹 : Signature}
-         (𝑨 : Structure {α} {ρᵃ} 𝑅 𝐹){𝑩 : Structure {β}{ρᵇ} 𝑅 𝐹}
-         (𝑪 : Structure {γ} {ρᶜ} 𝑅 𝐹) where
+module _ {𝑅 𝐹 : Signature}
+         {α ρᵃ : Level}(𝑨 : Structure 𝑅 𝐹 {α}{ρᵃ})
+         {β ρᵇ : Level}{𝑩 : Structure 𝑅 𝐹 {β}{ρᵇ}}
+         {γ ρᶜ : Level}(𝑪 : Structure 𝑅 𝐹 {γ}{ρᶜ}) where
 
- ∘-IsHom-rel : {f : (fst 𝑨) → (fst 𝑩)}{g : (fst 𝑩) → (fst 𝑪)}
-  →             IsHom-rel 𝑨 𝑩 f → IsHom-rel 𝑩 𝑪 g → IsHom-rel 𝑨 𝑪 (g ∘ f)
- ∘-IsHom-rel {f}{g} fhr ghr R a = λ z → ghr R (λ z₁ → f (a z₁)) (fhr R a z)
+ ∘-is-hom-rel : {f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣}{g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣}
+  →             is-hom-rel 𝑨 𝑩 f → is-hom-rel 𝑩 𝑪 g → is-hom-rel 𝑨 𝑪 (g ∘ f)
+ ∘-is-hom-rel {f}{g} fhr ghr R a = λ z → ghr R (λ z₁ → f (a z₁)) (fhr R a z)
 
- ∘-IsHom-op : {f : (fst 𝑨) → (fst 𝑩)}{g : (fst 𝑩) → (fst 𝑪)}
-  →            IsHom-op 𝑨 𝑩 f → IsHom-op 𝑩 𝑪 g → IsHom-op 𝑨 𝑪 (g ∘ f)
- ∘-IsHom-op {f}{g} fho gho 𝑓 a = cong g (fho 𝑓 a) ∙ gho 𝑓 (f ∘ a)
+ ∘-is-hom-op : {f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣}{g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣}
+  →            is-hom-op 𝑨 𝑩 f → is-hom-op 𝑩 𝑪 g → is-hom-op 𝑨 𝑪 (g ∘ f)
+ ∘-is-hom-op {f}{g} fho gho 𝑓 a = cong g (fho 𝑓 a) ∙ gho 𝑓 (f ∘ a)
 
- ∘-IsHom : {f : (fst 𝑨) → (fst 𝑩)}{g : (fst 𝑩) → (fst 𝑪)}
-  →         IsHom 𝑨 𝑩 f → IsHom 𝑩 𝑪 g → IsHom 𝑨 𝑪 (g ∘ f)
- ∘-IsHom {f} {g} fhro ghro = ihr , iho
+ ∘-is-hom : {f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣}{g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣}
+  →         is-hom 𝑨 𝑩 f → is-hom 𝑩 𝑪 g → is-hom 𝑨 𝑪 (g ∘ f)
+ ∘-is-hom {f} {g} fhro ghro = ihr , iho
   where
-  ihr : IsHom-rel 𝑨 𝑪 (g ∘ f)
-  ihr = ∘-IsHom-rel {f}{g} (fst fhro) (fst ghro)
+  ihr : is-hom-rel 𝑨 𝑪 (g ∘ f)
+  ihr = ∘-is-hom-rel {f}{g} (fst fhro) (fst ghro)
 
-  iho : IsHom-op 𝑨 𝑪 (g ∘ f)
-  iho = ∘-IsHom-op {f}{g} (snd fhro) (snd ghro)
+  iho : is-hom-op 𝑨 𝑪 (g ∘ f)
+  iho = ∘-is-hom-op {f}{g} (snd fhro) (snd ghro)
 
- ∘-Hom : Hom 𝑨 𝑩  →  Hom 𝑩 𝑪  →  Hom 𝑨 𝑪
- ∘-Hom (f , fh) (g , gh) = g ∘ f , ∘-IsHom {f}{g} fh gh
+ ∘-hom : hom 𝑨 𝑩 → hom 𝑩 𝑪 → hom 𝑨 𝑪
+ ∘-hom (f , fh) (g , gh) = g ∘ f , ∘-is-hom {f}{g} fh gh
 
 
 module _ {α ρ : Level} where
 
- 𝒾𝒹 : (𝑨 : Structure {α} {ρ} 𝑅 𝐹) → Hom 𝑨 𝑨
+ 𝒾𝒹 : (𝑨 : Structure 𝑅 𝐹 {α}{ρ}) → hom 𝑨 𝑨
  𝒾𝒹 _ = id , (λ R a z → z)  , (λ f a → refl)
 
-module _ {α ρᵃ β ρᵇ : Level}
-         (𝑨 : Structure {α}{ρᵃ} 𝑅 𝐹)
-         (𝑩 : Structure {β}{ρᵇ} 𝑅 𝐹) where
+module _ {α ρᵃ : Level}
+         (𝑨 : Structure 𝑅 𝐹 {α}{ρᵃ})
+         {β ρᵇ : Level}
+         (𝑩 : Structure 𝑅 𝐹 {β}{ρᵇ}) where
 
- IsMon : ((fst 𝑨) → (fst 𝑩)) → Type (α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
- IsMon g = IsHom 𝑨 𝑩 g × IsInjective g
+ is-mon : (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Type (α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
+ is-mon g = is-hom 𝑨 𝑩 g × IsInjective g
 
- Mon : Type (α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
- Mon = Σ[ g ∈ ((fst 𝑨) → (fst 𝑩)) ] IsMon g
+ mon : Type (α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
+ mon = Σ[ g ∈ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ] is-mon g
 
- IsEpi : ((fst 𝑨) → (fst 𝑩)) → Type (α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
- IsEpi g = IsHom 𝑨 𝑩 g × IsSurjective g
+ is-epi : (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Type (α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
+ is-epi g = is-hom 𝑨 𝑩 g × IsSurjective g
 
- Epi : Type (α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
- Epi = Σ[ g ∈ ((fst 𝑨) → (fst 𝑩)) ] IsEpi g
+ epi : Type (α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
+ epi = Σ[ g ∈ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ] is-epi g
 
- Mon→Hom : Mon → Hom 𝑨 𝑩
- Mon→Hom ϕ = (fst ϕ) , fst (snd ϕ )
+ mon→hom : mon → hom 𝑨 𝑩
+ mon→hom ϕ = (fst ϕ) , fst (snd ϕ )
 
- Epi→Hom : Epi → Hom 𝑨 𝑩
- Epi→Hom ϕ = (fst ϕ) , fst (snd ϕ)
+ epi→hom : epi → hom 𝑨 𝑩
+ epi→hom ϕ = (fst ϕ) , fst (snd ϕ)
 
 
 \end{code}
@@ -138,24 +141,24 @@ module _ {𝑅 𝐹 : Signature}
 
  open Lift
 
- 𝓁𝒾𝒻𝓉 : (ℓ ρ : Level)(𝑨 : Structure {α}{ρᵃ} 𝑅 𝐹) → Hom 𝑨 (Lift-Struc ℓ ρ 𝑨)
+ 𝓁𝒾𝒻𝓉 : (ℓ ρ : Level)(𝑨 : Structure  𝑅 𝐹{α}{ρᵃ}) → hom 𝑨 (Lift-Struc ℓ ρ 𝑨)
  𝓁𝒾𝒻𝓉 = λ ℓ ρ 𝑨 → lift , ( (λ R a x → lift x) , λ f a → refl )
 
- 𝓁ℴ𝓌ℯ𝓇 : (ℓ ρ : Level)(𝑨 : Structure {α}{ρᵃ} 𝑅 𝐹) → Hom (Lift-Struc ℓ ρ 𝑨) 𝑨
+ 𝓁ℴ𝓌ℯ𝓇 : (ℓ ρ : Level)(𝑨 : Structure  𝑅 𝐹{α}{ρᵃ}) → hom (Lift-Struc ℓ ρ 𝑨) 𝑨
  𝓁ℴ𝓌ℯ𝓇 = λ ℓ ρ 𝑨 → lower , (λ R a x → lower x) , (λ f a → refl)
 
 module _ {𝑅 𝐹 : Signature}
          {α ρᵃ β ρᵇ : Level}{𝑅 𝐹 : Signature}
-         {𝑨 : Structure {α} {ρᵃ} 𝑅 𝐹}{𝑩 : Structure {β}{ρᵇ} 𝑅 𝐹} where
+         {𝑨 : Structure 𝑅 𝐹 {α}{ρᵃ}}{𝑩 : Structure 𝑅 𝐹 {β}{ρᵇ}} where
 
- Lift-Hom : (ℓ ρ ℓ' ρ' : Level) → Hom 𝑨 𝑩 → Hom (Lift-Struc ℓ ρ 𝑨) (Lift-Struc ℓ' ρ' 𝑩)
+ Lift-Hom : (ℓ ρ ℓ' ρ' : Level) → hom 𝑨 𝑩 → hom (Lift-Struc ℓ ρ 𝑨) (Lift-Struc ℓ' ρ' 𝑩)
  Lift-Hom ℓ ρ ℓ' ρ' (h , hhom) = lift ∘ h ∘ lower , Goal
   where
-  lABh : IsHom (Lift-Struc ℓ ρ 𝑨) 𝑩 (h ∘ lower)
-  lABh = ∘-IsHom{𝑅 = 𝑅}{𝐹} (Lift-Struc ℓ ρ 𝑨) 𝑩{lower}{h} ((λ R a x → lower x) , (λ f a → refl)) hhom
+  lABh : is-hom (Lift-Struc ℓ ρ 𝑨) 𝑩 (h ∘ lower)
+  lABh = ∘-is-hom{𝑅 = 𝑅}{𝐹} (Lift-Struc ℓ ρ 𝑨) 𝑩{lower}{h} ((λ R a x → lower x) , (λ f a → refl)) hhom
 
-  Goal : IsHom (Lift-Struc ℓ ρ 𝑨) (Lift-Struc ℓ' ρ' 𝑩) (lift ∘ h ∘ lower)
-  Goal = ∘-IsHom{𝑅 = 𝑅}{𝐹} (Lift-Struc ℓ ρ 𝑨) (Lift-Struc ℓ' ρ' 𝑩)
+  Goal : is-hom (Lift-Struc ℓ ρ 𝑨) (Lift-Struc ℓ' ρ' 𝑩) (lift ∘ h ∘ lower)
+  Goal = ∘-is-hom{𝑅 = 𝑅}{𝐹} (Lift-Struc ℓ ρ 𝑨) (Lift-Struc ℓ' ρ' 𝑩)
                 {h ∘ lower}{lift} lABh ((λ R a x → lift x) , (λ f a → refl))
 
 \end{code}
@@ -171,9 +174,9 @@ The kernel of a homomorphism is a congruence relation and conversely for every c
 open ≡-Reasoning
 module _ {𝑅 𝐹 : Signature}
          {α ρᵃ β ρᵇ : Level}
-         {𝑨 : Structure {α}{ρᵃ} 𝑅 𝐹}{𝑩 : Structure {β}{ρᵇ} 𝑅 𝐹} where
+         {𝑨 : Structure 𝑅 𝐹 {α}{ρᵃ}}{𝑩 : Structure 𝑅 𝐹{β}{ρᵇ}} where
 
- Homker-comp : swelldef ℓ₀ β → (h : Hom 𝑨 𝑩) → Compatible 𝑨 (ker ∣ h ∣)
+ Homker-comp : swelldef ℓ₀ β → (h : hom 𝑨 𝑩) → Compatible 𝑨 (ker ∣ h ∣)
  Homker-comp wd h f {u}{v} kuv = (∣ h ∣ ((f ᵒ 𝑨) u))  ≡⟨(snd ∥ h ∥) f u ⟩
                               ((f ᵒ 𝑩)(∣ h ∣ ∘ u)) ≡⟨ wd (f ᵒ 𝑩) (∣ h ∣ ∘ u) (∣ h ∣ ∘ v) kuv ⟩
                               ((f ᵒ 𝑩)(∣ h ∣ ∘ v)) ≡⟨((snd ∥ h ∥) f v)⁻¹ ⟩

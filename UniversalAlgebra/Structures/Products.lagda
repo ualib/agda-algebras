@@ -27,15 +27,15 @@ open import Structures.Basic       using ( Signature ; Structure ; _ʳ_ ; _ᵒ_ 
 
 
 private variable
- α ρ ι : Level
  𝑅 𝐹 : Signature
+ α ρ ι : Level
 
-⨅ : (ℑ : Type ι)(𝒜 : ℑ → Structure {α}{ρ} 𝑅 𝐹) → Structure {α ⊔ ι} {ρ ⊔ ι} 𝑅 𝐹
-⨅ ℑ 𝒜 = Π[ 𝔦 ∈ ℑ ] ∣ 𝒜 𝔦 ∣ ,                     -- domain of the product structure
+⨅ : {ℑ : Type ι}(𝒜 : ℑ → Structure  𝑅 𝐹{α}{ρ}) → Structure 𝑅 𝐹 {α ⊔ ι} {ρ ⊔ ι}
+⨅ {ℑ = ℑ} 𝒜 = Π[ 𝔦 ∈ ℑ ] ∣ 𝒜 𝔦 ∣ ,                     -- domain of the product structure
          ( λ r a → ∀ 𝔦 → (r ʳ 𝒜 𝔦) λ x → a x 𝔦 ) , -- interpretations of relations
          ( λ 𝑓 a 𝔦 → (𝑓 ᵒ 𝒜 𝔦) λ x → a x 𝔦 )        -- interpretations of  operations
 
-module _ {α ρ τ : Level}{𝒦 : Pred (Structure {α}{ρ} 𝑅 𝐹) τ} where
+module _ {α ρ τ : Level}{𝒦 : Pred (Structure 𝑅 𝐹 {α}{ρ}) τ} where
 
  ℓp : Level
  ℓp = lsuc (α ⊔ ρ) ⊔ τ
@@ -47,7 +47,7 @@ module _ {α ρ τ : Level}{𝒦 : Pred (Structure {α}{ρ} 𝑅 𝐹) τ} where
  𝔖 𝔦 = ∣ 𝔦 ∣
 
  class-prod : Structure 𝑅 𝐹
- class-prod = ⨅ ℑ 𝔖
+ class-prod = ⨅ 𝔖
 
 \end{code}
 
