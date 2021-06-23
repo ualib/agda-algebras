@@ -28,32 +28,31 @@ open import Relation.Unary         using    ( _∈_   ;  Pred     )
 
 open import Overture.Preliminaries using    ( ∣_∣   ; Π-syntax
                                             ; Π                 )
+private variable 𝐹 𝑅 : signature
 
+module _ {α ρ ℓ : Level} where
 
-module _ {𝑅 𝐹 : signature}{α ρ ℓ : Level} where
-
- ⨅ : (ℑ : Type ℓ)(𝒜 : ℑ → structure 𝑅 𝐹 {α} {ρ} ) → structure 𝑅 𝐹 {α ⊔ ℓ} {ρ ⊔ ℓ}
- ⨅ ℑ 𝒜 = record { carrier = Π[ 𝔦 ∈ ℑ ] carrier (𝒜 𝔦)            -- domain of the product structure
-                 ; rel = λ r a → ∀ 𝔦 → (rel (𝒜 𝔦) r) λ x → a x 𝔦 -- interpretation of relations
-                 ; op = λ 𝑓 a 𝔦 → (op (𝒜 𝔦) 𝑓) λ x → a x 𝔦       -- interpretation of  operations
+ ⨅ : {ℑ : Type ℓ}(𝒜 : ℑ → structure 𝐹 {α} 𝑅 {ρ} ) → structure 𝐹 {α ⊔ ℓ} 𝑅 {ρ ⊔ ℓ}
+ ⨅ {ℑ = ℑ} 𝒜 = record { carrier = Π[ i ∈ ℑ ] carrier (𝒜 i)            -- domain of the product structure
+                 ; op = λ 𝑓 a i → (op (𝒜 i) 𝑓) λ x → a x i       -- interpretation of  operations
+                 ; rel = λ r a → ∀ i → (rel (𝒜 i) r) λ x → a x i -- interpretation of relations
                  }
 
 
-module _ {𝑅 𝐹 : signature}
-         {α ρ ℓ : Level}
-         {𝒦 : Pred (structure 𝑅 𝐹 {α}{ρ}) ℓ} where
+module _ {α ρ ℓ : Level}
+         {𝒦 : Pred (structure 𝐹 {α} 𝑅 {ρ}) ℓ} where
 
   ℓp : Level
   ℓp = lsuc (α ⊔ ρ) ⊔ ℓ
 
   ℑ : Type ℓp
-  ℑ = Σ[ 𝑨 ∈ structure 𝑅 𝐹 {α}{ρ}] 𝑨 ∈ 𝒦
+  ℑ = Σ[ 𝑨 ∈ structure 𝐹 {α} 𝑅 {ρ}] 𝑨 ∈ 𝒦
 
-  𝔄 : ℑ → structure 𝑅 𝐹 {α}{ρ}
+  𝔄 : ℑ → structure 𝐹 {α} 𝑅 {ρ}
   𝔄 𝔦 = ∣ 𝔦 ∣
 
-  class-product : structure 𝑅 𝐹
-  class-product = ⨅ ℑ 𝔄
+  class-product : structure 𝐹 𝑅
+  class-product = ⨅ 𝔄
 
 \end{code}
 

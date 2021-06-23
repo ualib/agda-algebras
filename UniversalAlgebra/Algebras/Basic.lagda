@@ -112,12 +112,12 @@ Recall, we defined the type `Signature 𝓞 𝓥` above as the dependent pair ty
 
 Algebra : (α : Level)(𝑆 : Signature 𝓞 𝓥) → Type (𝓞 ⊔ 𝓥 ⊔ lsuc α)
 Algebra α 𝑆 = Σ[ A ∈ Type α ]                   -- the domain
-              ∀ (f : ∣ 𝑆 ∣) → Op A{∥ 𝑆 ∥ f}    -- the basic operations
+              ∀ (f : ∣ 𝑆 ∣) → Op A (∥ 𝑆 ∥ f)    -- the basic operations
 
 -- special case where arity types live at universe level zero
 lilAlgebra : (α : Level)(𝑆 : signature 𝓞) → Type (𝓞 ⊔ lsuc α)
 lilAlgebra α 𝑆 = Σ[ A ∈ Type α ]                   -- the domain
-                 ∀ (f : ∣ 𝑆 ∣) → Op A {∥ 𝑆 ∥ f}    -- the basic operations
+                 ∀ (f : ∣ 𝑆 ∣) → Op A (∥ 𝑆 ∥ f)    -- the basic operations
 
 
 
@@ -213,14 +213,14 @@ Recall, in the [section on level lifting and lowering](Overture.Lifts.html#level
 open Lift
 
 
-Lift-alg-op : {I : Arity 𝓥} {A : Type α} → Op A {I} → (β : Level) → Op (Lift β A) {I}
+Lift-alg-op : {I : Arity 𝓥} {A : Type α} → Op A I → (β : Level) → Op (Lift β A) I
 Lift-alg-op f β = λ x → lift (f (λ i → lower (x i)))
 
 Lift-Alg : {𝑆 : Signature 𝓞 𝓥} → Algebra α 𝑆 → (β : Level) → Algebra (α ⊔ β) 𝑆
 Lift-Alg {𝑆 = 𝑆} 𝑨 β = Lift β ∣ 𝑨 ∣ , (λ (𝑓 : ∣ 𝑆 ∣) → Lift-alg-op (𝑓 ̂ 𝑨) β)
 
 
-Lift-op-lilAlg : {I : Arity ℓ₀}{A : Type α} → Op A {I} → (β : Level) → Op (Lift β A) {I}
+Lift-op-lilAlg : {I : Arity ℓ₀}{A : Type α} → Op A I → (β : Level) → Op (Lift β A) I
 Lift-op-lilAlg {I = I} = Lift-alg-op{𝓥 = ℓ₀}{I = I}
 
 
@@ -269,7 +269,7 @@ In the [Relations.Continuous][] module, we defined a function called `cont-compa
 
 module _ {I : Arity 𝓥} {𝑆 : Signature 𝓞 𝓥} where
 
- compatible-Rel-alg : (𝑨 : Algebra α 𝑆) → Rel ∣ 𝑨 ∣ {I}{ρ} → Type(𝓞 ⊔ α ⊔ 𝓥 ⊔ ρ)
+ compatible-Rel-alg : (𝑨 : Algebra α 𝑆) → Rel ∣ 𝑨 ∣ I{ρ} → Type(𝓞 ⊔ α ⊔ 𝓥 ⊔ ρ)
  compatible-Rel-alg 𝑨 R = ∀ (𝑓 : ∣ 𝑆 ∣ ) →  compatible-Rel (𝑓 ̂ 𝑨) R
 
  compatible-ΠΡ-alg : (𝒜 : I → Algebra α 𝑆) → ΠΡ I (λ i → ∣ 𝒜  i ∣) {ρ} → Type(𝓞 ⊔ α ⊔ 𝓥 ⊔ ρ)
@@ -277,7 +277,7 @@ module _ {I : Arity 𝓥} {𝑆 : Signature 𝓞 𝓥} where
 
 module _ {I : Arity ℓ₀} {𝑆 : signature 𝓞} where
 
- compatible-Rel-lilAlg : (𝑨 : Algebra α 𝑆) → Rel ∣ 𝑨 ∣ {I}{ρ} → Type(𝓞 ⊔ α ⊔ ρ)
+ compatible-Rel-lilAlg : (𝑨 : Algebra α 𝑆) → Rel ∣ 𝑨 ∣ I{ρ} → Type(𝓞 ⊔ α ⊔ ρ)
  compatible-Rel-lilAlg 𝑨 R = ∀ (𝑓 : ∣ 𝑆 ∣ ) →  compatible-Rel (𝑓 ̂ 𝑨) R
 
  compatible-ΠΡ-lilAlg : (𝒜 : I → Algebra α 𝑆) → ΠΡ I (λ i → ∣ 𝒜  i ∣) {ρ} → Type(𝓞 ⊔ α ⊔ ρ)

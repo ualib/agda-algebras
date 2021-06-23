@@ -47,12 +47,12 @@ open import Structures.AsRecordsBasic using ( signature ; structure ; Sig∅
 open structure
 open signature
 
-private variable 𝑅 𝐹 : signature
+private variable 𝐹 𝑅 : signature
 
 module _ {α ρᵃ : Level}
-         (𝑨 : structure 𝑅 𝐹 {α}{ρᵃ})
+         (𝑨 : structure 𝐹 {α}𝑅 {ρᵃ})
          {β ρᵇ : Level}
-         (𝑩 : structure 𝑅 𝐹 {β}{ρᵇ}) where
+         (𝑩 : structure 𝐹 {β}𝑅 {ρᵇ}) where
 
  private
   A = carrier 𝑨
@@ -78,8 +78,8 @@ module _ {α ρᵃ : Level}
 
 
 -- The special case when 𝑅 = ∅ (i.e., purely algebraic structures)
-module _ {α ρᵃ : Level}{𝑨 : structure Sig∅ 𝐹 {α}{ρᵃ}}
-         {β ρᵇ : Level}{𝑩 : structure Sig∅ 𝐹 {β}{ρᵇ}} where
+module _ {α : Level}{𝑨 : structure 𝐹 {α} Sig∅ {ℓ₀}}
+         {β : Level}{𝑩 : structure 𝐹 {β} Sig∅ {ℓ₀}} where
 
  -- The type of homomorphisms from one algebraic structure to another.
  hom-alg : Type (α ⊔ β)
@@ -87,9 +87,9 @@ module _ {α ρᵃ : Level}{𝑨 : structure Sig∅ 𝐹 {α}{ρᵃ}}
 
 
 
-module _ {α ρᵃ : Level}{𝑨 : structure 𝑅 𝐹 {α} {ρᵃ}}
-         {β ρᵇ : Level}{𝑩 : structure 𝑅 𝐹 {β} {ρᵇ}}
-         {γ ρᶜ : Level}{𝑪 : structure 𝑅 𝐹 {γ} {ρᶜ}} where
+module _ {α ρᵃ : Level}{𝑨 : structure 𝐹 {α} 𝑅 {ρᵃ}}
+         {β ρᵇ : Level}{𝑩 : structure 𝐹 {β} 𝑅 {ρᵇ}}
+         {γ ρᶜ : Level}{𝑪 : structure 𝐹 {γ} 𝑅 {ρᶜ}} where
 
  private
   A = carrier 𝑨
@@ -118,13 +118,13 @@ module _ {α ρᵃ : Level}{𝑨 : structure 𝑅 𝐹 {α} {ρᵃ}}
  ∘-hom (f , fh) (g , gh) = g ∘ f , ∘-is-hom f g fh gh
 
 
-module _ {α ρᵃ : Level}{𝑨 : structure 𝑅 𝐹 {α}{ρᵃ}} where
+module _ {α ρᵃ : Level}{𝑨 : structure 𝐹 {α}𝑅 {ρᵃ}} where
  𝒾𝒹 : hom 𝑨 𝑨
  𝒾𝒹 = id , (λ _ _ z → z)  , (λ _ _ → refl)
 
 
-module _ {α ρᵃ : Level}{𝑨 : structure 𝑅 𝐹 {α} {ρᵃ}}
-         {β ρᵇ : Level}{𝑩 : structure 𝑅 𝐹 {β}{ρᵇ}} where
+module _ {α ρᵃ : Level}{𝑨 : structure 𝐹 {α} 𝑅 {ρᵃ}}
+         {β ρᵇ : Level}{𝑩 : structure 𝐹 {β} 𝑅 {ρᵇ}} where
 
  private
   A = carrier 𝑨
@@ -152,10 +152,10 @@ module _ {α ρᵃ : Level}{𝑨 : structure 𝑅 𝐹 {α} {ρᵃ}}
 module _ {𝑅 𝐹 : signature}{α ρᵃ : Level} where
  open Lift
 
- 𝓁𝒾𝒻𝓉 : {ℓ : Level}{𝑨 : structure 𝑅 𝐹 {α} {ρᵃ}} → hom 𝑨 (Lift-struc ℓ {𝑨})
+ 𝓁𝒾𝒻𝓉 : {ℓ : Level}{𝑨 : structure 𝐹 {α} 𝑅 {ρᵃ}} → hom 𝑨 (Lift-struc ℓ {𝑨})
  𝓁𝒾𝒻𝓉 = lift , (λ _ _ x → x) , λ _ _ → refl
 
- 𝓁ℴ𝓌ℯ𝓇 : {ℓ : Level}{𝑨 : structure 𝑅 𝐹 {α}{ρᵃ}} → hom (Lift-struc ℓ {𝑨}) 𝑨
+ 𝓁ℴ𝓌ℯ𝓇 : {ℓ : Level}{𝑨 : structure 𝐹 {α}𝑅 {ρᵃ}} → hom (Lift-struc ℓ {𝑨}) 𝑨
  𝓁ℴ𝓌ℯ𝓇 = lower , (λ _ _ x → x) , (λ _ _ → refl)
 
 -- Kernels of homomorphisms
@@ -163,7 +163,7 @@ module _ {𝑅 𝐹 : signature}{α ρᵃ : Level} where
 
 open ≡-Reasoning
 module _ {α ρᵃ : Level}
-         {β ρᵇ : Level}{𝑨 : structure 𝑅 𝐹 {α} {β ⊔ ρᵃ}}{𝑩 : structure 𝑅 𝐹 {β} {ρᵇ}}
+         {β ρᵇ : Level}{𝑨 : structure 𝐹 {α} 𝑅 {β ⊔ ρᵃ}}{𝑩 : structure 𝐹 {β} 𝑅 {ρᵇ}}
          {wd : swelldef ℓ₀ β} where
 
  homker-comp : (h : hom 𝑨 𝑩) → compatible 𝑨 (ker ∣ h ∣)
@@ -192,18 +192,18 @@ module _ {α ρᵃ : Level}
                 ; sym = λ p → lift (sym (lower p))
                 ; trans = λ p q → lift (trans (lower p)(lower q)) }
 
- kerquo : hom 𝑨 𝑩 → structure 𝑅 𝐹 {lsuc (α ⊔ β ⊔ ρᵃ)} {β ⊔ ρᵃ}
+ kerquo : hom 𝑨 𝑩 → structure 𝐹 {lsuc (α ⊔ β ⊔ ρᵃ)} 𝑅 {β ⊔ ρᵃ}
  kerquo h = 𝑨 ╱ (kercon h)
 
 module _ {α ρᵃ β ρᵇ : Level}   where
- ker[_⇒_] : (𝑨 : structure 𝑅 𝐹 {α} {β ⊔ ρᵃ} )(𝑩 : structure 𝑅 𝐹{β} {ρᵇ} ){wd : swelldef ℓ₀ β}
-  →         hom 𝑨 𝑩 → structure 𝑅 𝐹
+ ker[_⇒_] : (𝑨 : structure 𝐹 {α} 𝑅 {β ⊔ ρᵃ} )(𝑩 : structure 𝐹{β} 𝑅 {ρᵇ} ){wd : swelldef ℓ₀ β}
+  →         hom 𝑨 𝑩 → structure 𝐹 𝑅
  ker[_⇒_] 𝑨 𝑩 {wd} h = kerquo{ρᵃ = ρᵃ}{𝑨 = 𝑨}{𝑩}{wd = wd} h
 
 
 -- Canonical projections
 
-module _ {α ρᵃ : Level}{𝑨 : structure 𝑅 𝐹 {α}{ρᵃ} } where
+module _ {α ρᵃ : Level}{𝑨 : structure 𝐹 {α}𝑅 {ρᵃ} } where
 
  open Image_∋_
  open import Structures.AsRecordsCongruences
@@ -221,7 +221,7 @@ module _ {α ρᵃ : Level}{𝑨 : structure 𝑅 𝐹 {α}{ρᵃ} } where
  πhom θ = epi→hom {𝑨 = 𝑨} {𝑩 = (𝑨 ╱ θ)} (πepi θ)
 
 module _ {α ρᵃ : Level}
-         {β ρᵇ : Level}{𝑨 : structure 𝑅 𝐹 {α} {β ⊔ ρᵃ}}{𝑩 : structure 𝑅 𝐹 {β} {ρᵇ}}
+         {β ρᵇ : Level}{𝑨 : structure 𝐹 {α} 𝑅 {β ⊔ ρᵃ}}{𝑩 : structure 𝐹 {β} 𝑅 {ρᵇ}}
          {wd : swelldef ℓ₀ β} where
 
  πker : (h : hom 𝑨 𝑩) → epi {𝑨 = 𝑨} {𝑩 = (ker[_⇒_]{ρᵃ = ρᵃ} 𝑨 𝑩 {wd = wd} h)}
@@ -230,28 +230,28 @@ module _ {α ρᵃ : Level}
 
 open import Structures.AsRecordsProducts
 
-module _ {α ρᵃ : Level}{𝑨 : structure 𝑅 𝐹 {α}{ρᵃ}}
+module _ {α ρᵃ : Level}{𝑨 : structure 𝐹 {α}𝑅 {ρᵃ}}
          {ℓ : Level}{I : Type ℓ}
-         {β ρᵇ : Level}{ℬ : I → structure 𝑅 𝐹 {β}{ρᵇ}} where
+         {β ρᵇ : Level}{ℬ : I → structure 𝐹 {β}𝑅 {ρᵇ}} where
 
- ⨅-hom-co : funext ℓ β → (∀(i : I) → hom 𝑨 (ℬ i)) → hom 𝑨 (⨅ I ℬ)
+ ⨅-hom-co : funext ℓ β → (∀(i : I) → hom 𝑨 (ℬ i)) → hom 𝑨 (⨅ ℬ)
  ⨅-hom-co fe h = ((λ a i → ∣ h i ∣ a)) , (λ R a x 𝔦 → fst ∥ h 𝔦 ∥ R a x) , (λ f a → fe (λ i → snd ∥ h i ∥ f a))
 
 
 module _ {ℓ : Level}{I : Type ℓ}
-         {α ρᵃ : Level}{𝒜 : I → structure 𝑅 𝐹 {α}{ρᵃ}}
-         {β ρᵇ : Level}{ℬ : I → structure 𝑅 𝐹 {β}{ρᵇ}} where
+         {α ρᵃ : Level}{𝒜 : I → structure 𝐹 {α}𝑅 {ρᵃ}}
+         {β ρᵇ : Level}{ℬ : I → structure 𝐹 {β}𝑅 {ρᵇ}} where
 
- ⨅-hom : funext ℓ β → Π[ i ∈ I ] hom (𝒜 i)(ℬ i) → hom (⨅ I 𝒜)(⨅ I ℬ)
+ ⨅-hom : funext ℓ β → Π[ i ∈ I ] hom (𝒜 i)(ℬ i) → hom (⨅ 𝒜)(⨅ ℬ)
  ⨅-hom fe h = (λ a i → ∣ h i ∣ (a i)) , (λ R a x 𝔦 → fst ∥ h 𝔦 ∥ R (λ z → a z 𝔦) (x 𝔦))
                                          , λ f a → fe (λ i → snd ∥ h i ∥ f (λ z → a z i))
 
 module _ {ℓ : Level}{I : Type ℓ}
-         {α ρᵃ : Level}{𝒜 : I → structure 𝑅 𝐹 {α}{ρᵃ}} where
+         {α ρᵃ : Level}{𝒜 : I → structure 𝐹 {α}𝑅 {ρᵃ}} where
 
  -- Projection out of products
 
- ⨅-projection-hom : Π[ i ∈ I ] hom (⨅ I 𝒜) (𝒜 i)
+ ⨅-projection-hom : Π[ i ∈ I ] hom (⨅ 𝒜) (𝒜 i)
  ⨅-projection-hom = λ x → (λ z → z x) , (λ R a z → z x)  , λ f a → refl
 
 \end{code}

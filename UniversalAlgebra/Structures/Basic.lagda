@@ -35,15 +35,15 @@ Signature = Σ[ F ∈ Type ℓ₀ ] (F → Arity ℓ₀)        -- and ar the ar
 Structure : (𝑅 F : Signature){α ρ : Level} → Type (lsuc (α ⊔ ρ))
 Structure 𝑅 𝐹 {α}{ρ} =
   Σ[ A ∈ Type α ]                        -- the domain of the structure is A
-   ( ((r : ∣ 𝑅 ∣) → Rel A {snd 𝑅 r}{ρ})  -- the interpretations of the relation symbols
-   × ((f : ∣ 𝐹 ∣) → Op A{snd 𝐹 f}) )     -- the interpretations of the operation symbols
+   ( ((r : ∣ 𝑅 ∣) → Rel A (snd 𝑅 r){ρ})  -- the interpretations of the relation symbols
+   × ((f : ∣ 𝐹 ∣) → Op A (snd 𝐹 f)) )     -- the interpretations of the operation symbols
 
 
 RStructure : Signature → {α ρ : Level} → Type (lsuc (α ⊔ ρ))
-RStructure 𝑅 {α} {ρ} = Σ[ A ∈ Type α ] ∀(r : ∣ 𝑅 ∣) → Rel A {snd 𝑅 r} {ρ}
+RStructure 𝑅 {α} {ρ} = Σ[ A ∈ Type α ] ∀(r : ∣ 𝑅 ∣) → Rel A (snd 𝑅 r) {ρ}
 
 AStructure : Signature → {α : Level} → Type (lsuc α)
-AStructure 𝐹 {α} = Σ[ A ∈ Type α ] ∀ (f : ∣ 𝐹 ∣) → Op A {snd 𝐹 f}
+AStructure 𝐹 {α} = Σ[ A ∈ Type α ] ∀ (f : ∣ 𝐹 ∣) → Op A (snd 𝐹 f)
 
 
 module _ {𝑅 𝐹 : Signature} {α ρ : Level} where
@@ -56,16 +56,16 @@ module _ {𝑅 𝐹 : Signature} {α ρ : Level} where
  Structure→AStructure (A , (_ , ℱ)) = A , ℱ
 
   -- Syntax for interpretation of relations and operations.
- _⟦_⟧ᵣ : (𝒜 : Structure 𝑅 𝐹 {α}{ρ})(𝑟 : ∣ 𝑅 ∣) → Rel ∣ 𝒜 ∣ {∥ 𝑅 ∥ 𝑟} {ρ}
+ _⟦_⟧ᵣ : (𝒜 : Structure 𝑅 𝐹 {α}{ρ})(𝑟 : ∣ 𝑅 ∣) → Rel ∣ 𝒜 ∣ (∥ 𝑅 ∥ 𝑟) {ρ}
  𝒜 ⟦ 𝑟 ⟧ᵣ = λ a → (fst ∥ 𝒜 ∥ 𝑟) a
 
- _⟦_⟧ₒ : (𝒜 : Structure 𝑅 𝐹 {α}{ρ})(𝑓 : ∣ 𝐹 ∣) → Op ∣ 𝒜 ∣ {∥ 𝐹 ∥ 𝑓}
+ _⟦_⟧ₒ : (𝒜 : Structure 𝑅 𝐹 {α}{ρ})(𝑓 : ∣ 𝐹 ∣) → Op ∣ 𝒜 ∣ (∥ 𝐹 ∥ 𝑓)
  𝒜 ⟦ 𝑓 ⟧ₒ = λ a → (snd ∥ 𝒜 ∥ 𝑓) a
 
- _ʳ_ : (𝑟 : ∣ 𝑅 ∣)(𝒜 : Structure 𝑅 𝐹 {α}) → Rel ∣ 𝒜 ∣ {∥ 𝑅 ∥ 𝑟}{ρ}
+ _ʳ_ : (𝑟 : ∣ 𝑅 ∣)(𝒜 : Structure 𝑅 𝐹 {α}) → Rel ∣ 𝒜 ∣ (∥ 𝑅 ∥ 𝑟){ρ}
  𝑟 ʳ 𝒜 = λ a → (𝒜 ⟦ 𝑟 ⟧ᵣ) a
 
- _ᵒ_ : (𝑓 : ∣ 𝐹 ∣)(𝒜 : Structure 𝑅 𝐹 {α}{ρ}) → Op ∣ 𝒜 ∣{∥ 𝐹 ∥ 𝑓}
+ _ᵒ_ : (𝑓 : ∣ 𝐹 ∣)(𝒜 : Structure 𝑅 𝐹 {α}{ρ}) → Op ∣ 𝒜 ∣(∥ 𝐹 ∥ 𝑓)
  𝑓 ᵒ 𝒜 = λ a → (𝒜 ⟦ 𝑓 ⟧ₒ) a
 
  Compatible : {ρ' : Level}(𝑨 : Structure 𝑅 𝐹{α}{ρ}) → BinRel ∣ 𝑨 ∣ ρ'  → Type (α ⊔ ρ')
@@ -76,24 +76,24 @@ module _ {𝑅 𝐹 : Signature} {α ρ : Level} where
 
  open Level
 
- Lift-op : {I : Arity ℓ₀}{A : Type α} → Op A{I} → (ℓ : Level) → Op (Lift ℓ A){I}
+ Lift-op : {I : Arity ℓ₀}{A : Type α} → Op A I → (ℓ : Level) → Op (Lift ℓ A) I
  Lift-op f ℓ = λ x → lift (f (λ i → lower (x i)))
 
- Lift-rel : {I : Arity ℓ₀}{A : Type α} → Rel A {I}{ρ} → (ℓ : Level) → Rel (Lift ℓ A) {I}{ρ}
+ Lift-rel : {I : Arity ℓ₀}{A : Type α} → Rel A I {ρ} → (ℓ : Level) → Rel (Lift ℓ A) I{ρ}
  Lift-rel r ℓ x = r (λ i → lower (x i))
 
  Lift-Strucˡ : (ℓ : Level) → Structure 𝑅 𝐹 {α}{ρ} → Structure 𝑅 𝐹 {α = (α ⊔ ℓ)}{ρ}
  Lift-Strucˡ ℓ 𝑨 = Lift ℓ ∣ 𝑨 ∣ , (lrel , lop )
   where
-  lrel : (r : ∣ 𝑅 ∣) → Rel (Lift ℓ ∣ 𝑨 ∣){∥ 𝑅 ∥ r}{ρ}
+  lrel : (r : ∣ 𝑅 ∣) → Rel (Lift ℓ ∣ 𝑨 ∣)(∥ 𝑅 ∥ r){ρ}
   lrel r = λ x → ((r ʳ 𝑨) (λ i → lower (x i)))
-  lop : (f : ∣ 𝐹 ∣) → Op (Lift ℓ ∣ 𝑨 ∣) {∥ 𝐹 ∥ f}
+  lop : (f : ∣ 𝐹 ∣) → Op (Lift ℓ ∣ 𝑨 ∣) (∥ 𝐹 ∥ f)
   lop f = λ x → lift ((f ᵒ 𝑨)( λ i → lower (x i)))
 
  Lift-Strucʳ : (ℓ : Level) → Structure 𝑅 𝐹 {α}{ρ} → Structure 𝑅 𝐹 {α}{ρ = (ρ ⊔ ℓ)}
  Lift-Strucʳ ℓ 𝑨 = ∣ 𝑨 ∣ , lrel , snd ∥ 𝑨 ∥
   where
-  lrel : (r : ∣ 𝑅 ∣) → Rel (∣ 𝑨 ∣){∥ 𝑅 ∥ r}{ρ ⊔ ℓ}
+  lrel : (r : ∣ 𝑅 ∣) → Rel (∣ 𝑨 ∣)(∥ 𝑅 ∥ r){ρ ⊔ ℓ}
   lrel r = λ x → Lift ℓ ((r ʳ 𝑨) x) -- λ x → ((r ʳ 𝑨) (λ i → lower (x i)))
 
 

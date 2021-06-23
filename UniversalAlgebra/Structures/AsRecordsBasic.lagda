@@ -43,34 +43,40 @@ record signature : Type ℓ₁ where
 open signature public
 
 
-record structure (𝑅 𝐹 : signature) {α ρ : Level} : Type (lsuc (α ⊔ ρ)) where
+record structure
+ (𝐹 : signature){α : Level}
+ (𝑅 : signature){ρ : Level} : Type (lsuc (α ⊔ ρ)) where
  field
   carrier : Type α
-  rel : ∀ (𝑟 : symbol 𝑅) → Rel carrier {arity 𝑅 𝑟} {ρ}  -- interpretations of relations
-  op : ∀ (𝑓 : symbol 𝐹) → Op carrier{arity 𝐹 𝑓}       -- interpretations of operations
+  op  : ∀ (𝑓 : symbol 𝐹) → Op  carrier (arity 𝐹 𝑓)      -- interpret. of operations
+  rel : ∀ (𝑟 : symbol 𝑅) → Rel carrier (arity 𝑅 𝑟) {ρ}  -- interpret. of relations
 
 open structure public
 
-compatible : {𝑅 𝐹 : signature}{α ρᵃ ℓ : Level}(𝑨 : structure 𝑅 𝐹 {α}{ρᵃ}) → BinRel (carrier 𝑨) ℓ → Type (α ⊔ ℓ)
-compatible {𝑅 = 𝑅}{𝐹} 𝑨 r = ∀ (𝑓 : symbol 𝐹) → ((op 𝑨) 𝑓) |: r
+private variable 𝐹 𝑅 : signature
+
+module _ {α ρᵃ ℓ : Level} where
+
+ compatible : (𝑨 : structure 𝐹 {α} 𝑅 {ρᵃ}) → BinRel (carrier 𝑨) ℓ → Type (α ⊔ ℓ)
+ compatible {𝐹} 𝑨 r = ∀ (𝑓 : symbol 𝐹) → ((op 𝑨) 𝑓) |: r
 
 open Level
 
-Lift-op : (ℓ : Level){α : Level}(A : Type α){I : ar} → Op A{I} → Op (Lift ℓ A){I}
+Lift-op : (ℓ : Level){α : Level}(A : Type α){I : ar} → Op A I → Op (Lift ℓ A) I
 Lift-op ℓ A f = λ x → lift (f (λ i → lower (x i)))
 
-Lift-rel : (ℓ : Level){α ρ : Level}(A : Type α){I : ar} → Rel A {I}{ρ} →  Rel (Lift ℓ A) {I}{ρ}
+Lift-rel : (ℓ : Level){α ρ : Level}(A : Type α){I : ar} → Rel A I{ρ} →  Rel (Lift ℓ A)I{ρ}
 Lift-rel ℓ A r x = r (λ i → lower (x i))
 
 module _ {𝑅 𝐹 : signature}{α ρᵃ : Level} where
 
- Lift-struc : (ℓ : Level) {𝑨 : structure 𝑅 𝐹 {α} {ρᵃ}} → structure 𝑅 𝐹
- Lift-struc ℓ {𝑨} = record { carrier = Lift ℓ (carrier 𝑨) ; rel = lrel ; op = lop }
+ Lift-struc : (ℓ : Level) {𝑨 : structure 𝐹 {α} 𝑅 {ρᵃ}} → structure 𝐹 𝑅
+ Lift-struc ℓ {𝑨} = record { carrier = Lift ℓ (carrier 𝑨) ; op = lop ; rel = lrel }
   where
-  lrel : (r : symbol 𝑅 ) → Rel (Lift ℓ (carrier 𝑨)){arity 𝑅 r}{ρᵃ}
-  lrel r = λ x → ((rel 𝑨)r) (λ i → lower (x i))
-  lop : (f : symbol 𝐹) → Op (Lift ℓ (carrier 𝑨)) {arity 𝐹 f}
+  lop : (f : symbol 𝐹) → Op (Lift ℓ (carrier 𝑨)) (arity 𝐹 f)
   lop f = λ x → lift (((op 𝑨) f)( λ i → lower (x i)))
+  lrel : (r : symbol 𝑅 ) → Rel (Lift ℓ (carrier 𝑨))(arity 𝑅 r){ρᵃ}
+  lrel r = λ x → ((rel 𝑨)r) (λ i → lower (x i))
 
 
 

@@ -155,11 +155,11 @@ The type `Op` encodes the arity of an operation as an arbitrary type `I : Type �
 -- π i x = x i
 
 -- New notation for operations on A of arity I
-Op : Type α → {I : Arity 𝓥} → Type (α ⊔ 𝓥)
-Op A {I} = (I → A) → A
+Op : Type α → Arity 𝓥 → Type (α ⊔ 𝓥)
+Op A I = (I → A) → A
 
 -- Example (projections)
-π : {I : Arity 𝓥} {A : Type α } → I → Op A
+π : {I : Arity 𝓥} {A : Type α } → I → Op A I
 π i x = x i
 
 \end{code}
@@ -205,11 +205,11 @@ The function `eval-rel` "lifts" a binary relation to the corresponding `I`-ary r
 --
 -- NEW implementation:
 
-_preserves_ : {A : Type α}{I : Arity 𝓥} → Op A{I} → BinRel A ρ → Type (α ⊔ 𝓥 ⊔ ρ)
+_preserves_ : {A : Type α}{I : Arity 𝓥} → Op A I → BinRel A ρ → Type (α ⊔ 𝓥 ⊔ ρ)
 f preserves R  = ∀ u v → (eval-rel R) u v → R (f u) (f v)
 
 --shorthand notation for preserves, defined using the fancy implication notation from the std lib.
-_|:_ : {A : Type α}{I : Arity 𝓥} → Op A{I} → BinRel A ρ → Type (α ⊔ 𝓥 ⊔ ρ)
+_|:_ : {A : Type α}{I : Arity 𝓥} → Op A I → BinRel A ρ → Type (α ⊔ 𝓥 ⊔ ρ)
 f |: R  = (eval-rel R) =[ f ]⇒ R
 
 \end{code}
@@ -218,11 +218,11 @@ These two types just defined are logically equivalent, as we now prove.
 
 \begin{code}
 
-compatibility-agreement : {A : Type α}{I : Arity 𝓥}{f : Op A{I}}{R : BinRel A ρ}
+compatibility-agreement : {A : Type α}{I : Arity 𝓥}{f : Op A I}{R : BinRel A ρ}
  →            f preserves R → f |: R
 compatibility-agreement {f = f}{R} c {x}{y} Rxy = c x y Rxy
 
-compatibility-agreement' : {A : Type α}{I : Arity 𝓥}{f : Op A{I}}{R : BinRel A ρ}
+compatibility-agreement' : {A : Type α}{I : Arity 𝓥}{f : Op A I}{R : BinRel A ρ}
  →             f |: R → f preserves R
 compatibility-agreement' {f = f}{R} c = λ u v x → c x
 
@@ -234,7 +234,7 @@ The following function returns the arity of a given operation symbol, which is s
 
 \begin{code}
 
-arity[_] : {I : Arity 𝓥} {A : Type α } → Op A {I} → Arity 𝓥
+arity[_] : {I : Arity 𝓥} {A : Type α } → Op A I → Arity 𝓥
 arity[_] {I = I} f = I
 
 \end{code}
