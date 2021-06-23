@@ -1,8 +1,8 @@
 ---
 layout: default
-title : Structures.congruences module
+title : Structures.AsRecordsCongruences module
 date : 2021-05-28
-author: William DeMeo
+author: [the ualib/agda-algebras development team][]
 ---
 
 
@@ -15,11 +15,9 @@ dependent pair type.
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Structures.AsRecords
+open import Structures.AsRecordsBasic
 
-open import Structures.AsRecords
-
-module Structures.congruences {𝑅 𝐹 : signature} where
+module Structures.AsRecordsCongruences where
 
 open import Agda.Builtin.Equality  using    ( _≡_   ;  refl     )
 open import Agda.Primitive         using    (  _⊔_  ;  lsuc     )
@@ -29,61 +27,76 @@ open import Data.Product           using    (  _,_  ;  Σ
                                    renaming ( proj₁ to fst      )
 open import Level                  using    ( Level ;  Lift
                                             ; lift  ;  lower    )
-                                   renaming ( zero  to ℓ₀
-                                            ; suc   to lsuc     )
+                                   renaming ( zero  to ℓ₀       )
 open import Function.Base          using    ( _∘_               )
-open import Relation.Unary         using    ( _∈_   ;  Pred     )
-open import Relation.Binary        using    ( IsEquivalence     )
-                                   renaming ( Rel   to BinRel   )
 
 
 
 open import Overture.Preliminaries   using ( ∣_∣ )
-open import Relations.Discrete       using ( _|:_ ; 0[_])
-open import Relations.Quotients      using ( Equivalence ; 0[_]Equivalence ; Quotient
+open import Relations.Discrete       using ( _|:_ ; 0[_] )
+open import Relations.Quotients      using ( Equivalence ; Quotient
+                                           ; 0[_]Equivalence
                                            ; ⟪_⟫ ; ⌞_⌟ ; ⟪_∼_⟫-elim ; _/_ )
 open import Relations.Extensionality using ( swelldef )
 
 
-private variable α ρ : Level
+module _ {𝑅 𝐹 : signature}
+         {α ρᵃ : Level}
+         where
 
-con : (𝑨 : structure {α} {ρ} 𝑅 𝐹) → Type (lsuc α ⊔ lsuc ρ)
-con {α}{ρ} 𝑨 = Σ[ θ ∈ Equivalence (carrier 𝑨) {α ⊔ ρ}] (compatible 𝑨 ∣ θ ∣)
+ con : structure 𝑅 𝐹 {α} {ρᵃ} → Type (lsuc (α ⊔ ρᵃ))
+ con 𝑨 = Σ[ θ ∈ Equivalence (carrier 𝑨) {α ⊔ ρᵃ}] (compatible 𝑨 ∣ θ ∣)
 
--- Example. The zero congruence of a structure.
-0[_]compatible : (𝑨 : structure {α} {ρ} 𝑅 𝐹) → swelldef ℓ₀ α → (𝑓 : symbol 𝐹) → (op 𝑨) 𝑓 |: (0[ carrier 𝑨 ] {ρ})
-0[ 𝑨 ]compatible wd 𝑓 {i}{j} ptws0  = lift γ
+
+ -- Example. The zero congruence of a structure.
+ 0[_]compatible : (𝑨 : structure 𝑅 𝐹 {α} {ρᵃ}) → swelldef ℓ₀ α → (𝑓 : symbol 𝐹) → (op 𝑨) 𝑓 |: (0[ carrier 𝑨 ] {ρᵃ})
+ 0[ 𝑨 ]compatible wd 𝑓 {i}{j} ptws0  = lift γ
   where
   γ : ((op 𝑨) 𝑓) i ≡ ((op 𝑨) 𝑓) j
   γ = wd ((op 𝑨) 𝑓) i j (lower ∘ ptws0)
 
-0con[_] : (𝑨 : structure {α} {ρ} 𝑅 𝐹) → swelldef ℓ₀ α → con 𝑨
-0con[ 𝑨 ] wd = 0[ carrier 𝑨 ]Equivalence , 0[ 𝑨 ]compatible wd
+ 0con[_] : (𝑨 : structure 𝑅 𝐹 {α} {ρᵃ}) → swelldef ℓ₀ α → con 𝑨
+ 0con[ 𝑨 ] wd = 0[ carrier 𝑨 ]Equivalence , 0[ 𝑨 ]compatible wd
+
+
 
 -- Quotient structures
+module _ {𝑅 𝐹 : signature}
+         {α ρᵃ : Level}
+         (𝑨 : structure 𝑅 𝐹 {α} {ρᵃ})
+         where
 
-quotient : (𝑨 : structure {α} {ρ} 𝑅 𝐹) → con 𝑨 → structure {lsuc (α ⊔ ρ)} {ρ} 𝑅 𝐹
-quotient {α}{ρ}𝑨 θ = record
-                     { carrier = Quotient (carrier 𝑨) ∣ θ ∣     -- domain of quotient structure
-                     ; rel = λ r x → ((rel 𝑨) r) (λ i → ⌞ x i ⌟)   -- interpretation of relations
-                     ; op = λ f b → ⟪ ((op 𝑨) f) (λ i → ⌞ b i ⌟) ⟫ {fst ∣ θ ∣} -- interp of operations
-                     }
+ quotient : con 𝑨 → structure 𝑅 𝐹
+ quotient θ = record
+             { carrier = Quotient (carrier 𝑨) ∣ θ ∣     -- domain of quotient structure
+             ; rel = λ r x → ((rel 𝑨) r) (λ i → ⌞ x i ⌟)   -- interpretation of relations
+             ; op = λ f b → ⟪ ((op 𝑨) f) (λ i → ⌞ b i ⌟) ⟫ {fst ∣ θ ∣} -- interp of operations
+             }
 
--- Alternative notation for the quotient (useful on when the levels can be inferred).
-_╱_ : (𝑨 : structure {α} {ρ} 𝑅 𝐹) → con 𝑨 → structure {lsuc (α ⊔ ρ)} {ρ} 𝑅 𝐹
-_╱_ = quotient
+-- Quotient structures
+module _ {𝑅 𝐹 : signature}
+         {α ρᵃ : Level} where
+
+ -- Alternative notation for the quotient (useful on when the levels can be inferred).
+ _╱_ : (𝑨 : structure 𝑅 𝐹 {α} {ρᵃ}) → con 𝑨 → structure 𝑅 𝐹 {lsuc (α ⊔ ρᵃ)} {ρᵃ} 
+ _╱_ = quotient{𝑅}{𝐹}{α}{ρᵃ}
 
 
-/≡-elim : {𝑨 : structure {α} {ρ} 𝑅 𝐹}( (θ , _ ) : con 𝑨){u v : carrier 𝑨}
- →        ⟪ u ⟫ {∣ θ ∣} ≡ ⟪ v ⟫ {∣ θ ∣} → ∣ θ ∣ u v
-/≡-elim θ {u}{v} x =  ⟪ u ∼ v ⟫-elim{R = ∣ θ ∣} x
+ /≡-elim : {𝑨 : structure 𝑅 𝐹 {α}{ρᵃ}} ((θ , _ ) : con 𝑨){u v : carrier 𝑨}
+  →        ⟪ u ⟫ {∣ θ ∣} ≡ ⟪ v ⟫ {∣ θ ∣} → ∣ θ ∣ u v
+ /≡-elim θ {u}{v} x =  ⟪ u ∼ v ⟫-elim{R = ∣ θ ∣} x
 
 
--- Example. The zero congruence of a quotient structure.
-𝟎[_╱_] : (𝑨 : structure {α} {ρ} 𝑅 𝐹)(θ : con 𝑨) → swelldef ℓ₀ (lsuc α ⊔ lsuc ρ)  → con (𝑨 ╱ θ)
-𝟎[ 𝑨 ╱ θ ] wd = 0con[ 𝑨 ╱ θ ] wd
+ -- Example. The zero congruence of a quotient structure.
+ 𝟎[_╱_] : (𝑨 : structure 𝑅 𝐹 {α} {ρᵃ}) (θ : con 𝑨) → swelldef ℓ₀ (lsuc (α ⊔ ρᵃ))  → con (𝑨 ╱ θ)
+ 𝟎[ 𝑨 ╱ θ ] wd = 0con[ 𝑨 ╱ θ ] wd
 
 \end{code}
+
+
+--------------------------------------
+
+[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
 
 
 -------------------------------------------------------------------

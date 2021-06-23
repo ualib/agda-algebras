@@ -1,8 +1,8 @@
 ---
 layout: default
-title : Sturctures.products module (cubical-structures library)
+title : Sturctures.AsRecordsProducts module
 date : 2021-05-11
-author: William DeMeo
+author: [the ualib/agda-algebras development team][]
 ---
 
 ### Products for structures as records
@@ -14,9 +14,9 @@ dependent pair type.
 
 {-# OPTIONS --without-K --exact-split --safe #-} -- cubical #-}
 
-open import Structures.AsRecords
+open import Structures.AsRecordsBasic
 
-module Structures.products {𝑅 𝐹 : signature} where
+module Structures.AsRecordsProducts where
 
 
 open import Agda.Primitive         using    ( _⊔_   ;  lsuc     )
@@ -30,30 +30,37 @@ open import Overture.Preliminaries using    ( ∣_∣   ; Π-syntax
                                             ; Π                 )
 
 
-module _ {α ρ ι : Level} where
+module _ {𝑅 𝐹 : signature}{α ρ ℓ : Level} where
 
- ⨅ : (ℑ : Type ι)(𝒜 : ℑ → structure {α} 𝑅 {ρ} 𝐹) → structure {α ⊔ ι} 𝑅 {ρ ⊔ ι} 𝐹
+ ⨅ : (ℑ : Type ℓ)(𝒜 : ℑ → structure 𝑅 𝐹 {α} {ρ} ) → structure 𝑅 𝐹 {α ⊔ ℓ} {ρ ⊔ ℓ}
  ⨅ ℑ 𝒜 = record { carrier = Π[ 𝔦 ∈ ℑ ] carrier (𝒜 𝔦)            -- domain of the product structure
                  ; rel = λ r a → ∀ 𝔦 → (rel (𝒜 𝔦) r) λ x → a x 𝔦 -- interpretation of relations
                  ; op = λ 𝑓 a 𝔦 → (op (𝒜 𝔦) 𝑓) λ x → a x 𝔦       -- interpretation of  operations
                  }
 
 
-module _ {α ρ τ : Level} {𝒦 : Pred (structure {α} 𝑅 {ρ} 𝐹) τ} where
+module _ {𝑅 𝐹 : signature}
+         {α ρ ℓ : Level}
+         {𝒦 : Pred (structure 𝑅 𝐹 {α}{ρ}) ℓ} where
 
- ℓp : Level
- ℓp = lsuc (α ⊔ ρ) ⊔ τ
+  ℓp : Level
+  ℓp = lsuc (α ⊔ ρ) ⊔ ℓ
 
- ℑ : Type ℓp
- ℑ = Σ[ 𝑨 ∈ structure {α} 𝑅 {ρ} 𝐹 ] 𝑨 ∈ 𝒦
+  ℑ : Type ℓp
+  ℑ = Σ[ 𝑨 ∈ structure 𝑅 𝐹 {α}{ρ}] 𝑨 ∈ 𝒦
 
- 𝔄 : ℑ → structure {α} 𝑅 {ρ} 𝐹
- 𝔄 𝔦 = ∣ 𝔦 ∣
+  𝔄 : ℑ → structure 𝑅 𝐹 {α}{ρ}
+  𝔄 𝔦 = ∣ 𝔦 ∣
 
- class-product : structure 𝑅 𝐹
- class-product = ⨅ ℑ 𝔄
+  class-product : structure 𝑅 𝐹
+  class-product = ⨅ ℑ 𝔄
 
 \end{code}
+
+--------------------------------------
+
+[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
+
 
 -------------------------------------------------------------------
 --                        THE END                                --

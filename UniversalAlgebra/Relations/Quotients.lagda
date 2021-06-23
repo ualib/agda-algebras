@@ -36,9 +36,6 @@ open import Relations.Discrete      using  ( ker ; 0[_] ; kerlift )
 
 
 
--- private variable α β ρ 𝓥 : Level
-
-
 \end{code}
 
 

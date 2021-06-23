@@ -126,6 +126,8 @@ The entailment ℰ ⊢ p ≈ q is valid iff p ≈ q holds in all models that sat
 \end{code}
 
 
+
+
 #### <a id="algebraic-invariance-of-models">Algebraic invariance of ⊧</a>
 
 The binary relation ⊧ would be practically useless if it were not an *algebraic invariant* (i.e., invariant under isomorphism).
@@ -317,6 +319,78 @@ module _ (wd : SwellDef){α χ : Level}{X : Type χ}{𝒦 : Pred (Algebra α �
 
 
 \end{code}
+
+
+
+
+#### Derivations
+
+This part will be adapted from Andreas Abel's development.
+
+"Equalitional logic allows us to prove entailments via the inference rules for the judgment Γ → ℰ ⊢ p ≈ q.
+  -- This could be coined as equational theory over a given
+  -- set of equations $E$.
+  -- Relation $E ⊢ Γ ▹ \_ ≡ \_$ is the least congruence over the equations $E$.
+
+  data _⊢_▹_≡_ {I : Type ℓⁱ}
+    (E : I → Eq) : (Γ : Cxt) (t t' : Term Γ) → Type (lsuc ℓᵒ ⊔ ℓᵃ ⊔ ℓⁱ) where
+
+    hyp    :  ∀ i → let t ≐ t' = E i in
+              E ⊢ _ ▹ t ≡ t'
+
+    base   :  ∀ (x : Γ) {f f' : (i : ⊥) → Term _} →
+              E ⊢ Γ ▹ var' x f ≡ var' x f'
+
+    app    :  (∀ i → E ⊢ Γ ▹ ts i ≡ ts' i) →
+              E ⊢ Γ ▹ (op ∙ ts) ≡ (op ∙ ts')
+
+    sub    :  E ⊢ Δ ▹ t ≡ t' →
+              ∀ (σ : Sub Γ Δ) →
+              E ⊢ Γ ▹ (t [ σ ]) ≡ (t' [ σ ])
+
+    refl   :  ∀ (t : Term Γ) →
+              E ⊢ Γ ▹ t ≡ t
+
+    sym    :  E ⊢ Γ ▹ t ≡ t' →
+              E ⊢ Γ ▹ t' ≡ t
+
+    trans  :  E ⊢ Γ ▹ t₁ ≡ t₂ →
+              E ⊢ Γ ▹ t₂ ≡ t₃ →
+              E ⊢ Γ ▹ t₁ ≡ t₃
+
+  -- Soundness of the inference rules
+  -----------------------------------
+
+  -- We assume a model $M$ that validates all equations in $E$.
+
+  module Soundness {I : Type ℓⁱ} (E : I → Eq) (M : SetoidModel ℓᵐ ℓᵉ)
+    (V : ∀ i → M ⊧ E i) where
+    open SetoidModel M
+
+    -- In any model $M$ that satisfies the equations $E$,
+    -- derived equality is actual equality.
+
+    sound : E ⊢ Γ ▹ t ≡ t' → M ⊧ (t ≐ t')
+
+    sound (hyp i)                        =  V i
+    sound (app {op = op} es) ρ           =  den .cong (refl , λ i → sound (es i) ρ)
+    sound (sub {t = t} {t' = t'} e σ) ρ  =  begin
+      ⦅ t [ σ ]   ⦆ .apply ρ   ≈⟨ substitution {M = M} t σ ρ ⟩
+      ⦅ t         ⦆ .apply ρ'  ≈⟨ sound e ρ' ⟩
+      ⦅ t'        ⦆ .apply ρ'  ≈˘⟨ substitution {M = M} t' σ ρ ⟩
+      ⦅ t' [ σ ]  ⦆ .apply ρ   ∎
+      where
+      open SetoidReasoning Den
+      ρ' = ⦅ σ ⦆s ρ
+
+    sound (base x {f} {f'})              =  isEquiv {M = M} .IsEquivalence.refl {var' x λ()}
+
+    sound (refl t)                       =  isEquiv {M = M} .IsEquivalence.refl {t}
+    sound (sym {t = t} {t' = t'} e)      =  isEquiv {M = M} .IsEquivalence.sym
+                                            {x = t} {y = t'} (sound e)
+    sound (trans  {t₁ = t₁} {t₂ = t₂}
+                  {t₃ = t₃} e e')        =  isEquiv {M = M} .IsEquivalence.trans
+                                            {i = t₁} {j = t₂} {k = t₃} (sound e) (sound e')
 
 
 

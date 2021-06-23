@@ -1,19 +1,18 @@
 ---
 layout: default
-title : Structures.AsRecords module
+title : Structures.AsRecordsBasic module (Agda Universal Algebra Library)
 date : 2021-05-20
-author: William DeMeo
+author: [the ualib/agda-algebras development team][]
 ---
 
 This is a submodule of the Structures module which presents general (relational-algebraic) structures as
-inhabitants of record types.  For a similar development using Sigma types see the module called
-Structures.Basic. 
+inhabitants of record types.  For a similar development using Sigma types see the Structures.Basic module.
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Structures.AsRecords where
+module Structures.AsRecordsBasic where
 
 open import Agda.Primitive        using    (  _⊔_ ;  lsuc    )
                                   renaming (  Set   to Type  ;
@@ -31,8 +30,6 @@ open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥ ; 𝟘 ; 𝟙 ; �
 open import Relations.Discrete     using ( Arity ; Op ; _|:_ ; _preserves_ )
 open import Relations.Continuous   using ( Rel )
 
-private variable α ρ : Level
-
 
 ar : Type ℓ₁
 ar = Arity ℓ₀
@@ -46,7 +43,7 @@ record signature : Type ℓ₁ where
 open signature public
 
 
-record structure {α ρ : Level} (𝑅 : signature) (𝐹 : signature) : Type (lsuc (α ⊔ ρ)) where
+record structure (𝑅 𝐹 : signature) {α ρ : Level} : Type (lsuc (α ⊔ ρ)) where
  field
   carrier : Type α
   rel : ∀ (𝑟 : symbol 𝑅) → Rel carrier {arity 𝑅 𝑟} {ρ}  -- interpretations of relations
@@ -54,24 +51,23 @@ record structure {α ρ : Level} (𝑅 : signature) (𝐹 : signature) : Type (l
 
 open structure public
 
-compatible : {α ρ β : Level}{𝑅 𝐹 : signature}(𝑨 : structure {α} {ρ} 𝑅 𝐹) → BinRel (carrier 𝑨) β → Type (α ⊔ β)
+compatible : {𝑅 𝐹 : signature}{α ρᵃ ℓ : Level}(𝑨 : structure 𝑅 𝐹 {α}{ρᵃ}) → BinRel (carrier 𝑨) ℓ → Type (α ⊔ ℓ)
 compatible {𝑅 = 𝑅}{𝐹} 𝑨 r = ∀ (𝑓 : symbol 𝐹) → ((op 𝑨) 𝑓) |: r
 
+open Level
 
-module _ {α ρ : Level}{𝑅 𝐹 : signature} where
+Lift-op : (ℓ : Level){α : Level}(A : Type α){I : ar} → Op A{I} → Op (Lift ℓ A){I}
+Lift-op ℓ A f = λ x → lift (f (λ i → lower (x i)))
 
- open Level
+Lift-rel : (ℓ : Level){α ρ : Level}(A : Type α){I : ar} → Rel A {I}{ρ} →  Rel (Lift ℓ A) {I}{ρ}
+Lift-rel ℓ A r x = r (λ i → lower (x i))
 
- Lift-op : {I : ar}{A : Type α} → Op A{I} → (ℓ : Level) → Op (Lift ℓ A){I}
- Lift-op f ℓ = λ x → lift (f (λ i → lower (x i)))
+module _ {𝑅 𝐹 : signature}{α ρᵃ : Level} where
 
- Lift-rel : {I : ar}{A : Type α} → Rel A {I}{ρ} → (ℓ : Level) → Rel (Lift ℓ A) {I}{ρ}
- Lift-rel r ℓ x = r (λ i → lower (x i))
-
- Lift-structure : structure {α} {ρ} 𝑅 𝐹 → (ℓ : Level) → structure {α ⊔ ℓ} {ρ} 𝑅 𝐹
- Lift-structure 𝑨 ℓ = record { carrier = Lift ℓ (carrier 𝑨) ; rel = lrel ; op = lop }
+ Lift-struc : (ℓ : Level) {𝑨 : structure 𝑅 𝐹 {α} {ρᵃ}} → structure 𝑅 𝐹
+ Lift-struc ℓ {𝑨} = record { carrier = Lift ℓ (carrier 𝑨) ; rel = lrel ; op = lop }
   where
-  lrel : (r : symbol 𝑅 ) → Rel (Lift ℓ (carrier 𝑨)){arity 𝑅 r}{ρ}
+  lrel : (r : symbol 𝑅 ) → Rel (Lift ℓ (carrier 𝑨)){arity 𝑅 r}{ρᵃ}
   lrel r = λ x → ((rel 𝑨)r) (λ i → lower (x i))
   lop : (f : symbol 𝐹) → Op (Lift ℓ (carrier 𝑨)) {arity 𝐹 f}
   lop f = λ x → lift (((op 𝑨) f)( λ i → lower (x i)))
@@ -106,6 +102,9 @@ Sig-0-1-2 = record { symbol = 𝟛 ; arity = λ{ 𝟛.𝟎 → 𝟘 ; 𝟛.𝟏 
 
 
 
+--------------------------------------
+
+[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
 
 
 
@@ -114,17 +113,6 @@ Sig-0-1-2 = record { symbol = 𝟛 ; arity = λ{ 𝟛.𝟎 → 𝟘 ; 𝟛.𝟏 
 -------------------------------------------------------------------
 --                        THE END                                --
 -------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
 
 
 

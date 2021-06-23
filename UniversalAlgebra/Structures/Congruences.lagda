@@ -32,22 +32,24 @@ open import Relations.Quotients    using ( Equivalence ; 0[_]Equivalence ; Quoti
                                          ; ⟪_⟫ ; ⌞_⌟ ; ⟪_∼_⟫-elim ; _/_ )
 open import Relations.Extensionality using ( swelldef )
 
-private variable
- α ρ τ 𝓥 : Level
- 𝑅 𝐹 : Signature
+private variable 𝑅 𝐹 : Signature
+--  α ρ τ 𝓥 : Level
+--  
 
-Con : (𝑨 : Structure {α}{ρ} 𝑅 𝐹) → Type (lsuc (α ⊔ ρ))
-Con {α = α}{ρ = ρ}𝑨 = Σ[ θ ∈ Equivalence ∣ 𝑨 ∣{α ⊔ ρ} ] (Compatible 𝑨 ∣ θ ∣)
+module _ {α ρ : Level} where
 
--- Example. The zero congruence of a structure.
-0[_]Compatible : (𝑨 : Structure {α} {ρ} 𝑅  𝐹) → swelldef ℓ₀ α → (𝑓 : ∣ 𝐹 ∣) → (𝑓 ᵒ 𝑨) |: (0[ ∣ 𝑨 ∣ ]{ρ})
-0[ 𝑨 ]Compatible wd 𝑓 {i}{j} ptws0  = lift γ
+ Con : (𝑨 : Structure 𝑅 𝐹 {α}{ρ}) → Type (lsuc (α ⊔ ρ))
+ Con 𝑨 = Σ[ θ ∈ Equivalence ∣ 𝑨 ∣{α ⊔ ρ} ] (Compatible 𝑨 ∣ θ ∣)
+
+ -- Example. The zero congruence of a structure.
+ 0[_]Compatible : (𝑨 : Structure 𝑅 𝐹 {α}{ρ}) → swelldef ℓ₀ α → (𝑓 : ∣ 𝐹 ∣) → (𝑓 ᵒ 𝑨) |: (0[ ∣ 𝑨 ∣ ]{ρ})
+ 0[ 𝑨 ]Compatible wd 𝑓 {i}{j} ptws0  = lift γ
   where
   γ : (𝑓 ᵒ 𝑨) i ≡ (𝑓 ᵒ 𝑨) j
   γ = wd (𝑓 ᵒ 𝑨) i j (lower ∘ ptws0)
 
-0Con[_] : (𝑨 : Structure {α} {ρ} 𝑅 𝐹) → swelldef ℓ₀ α → Con 𝑨
-0Con[ 𝑨 ] wd = 0[ ∣ 𝑨 ∣ ]Equivalence , 0[ 𝑨 ]Compatible wd
+ 0Con[_] : (𝑨 : Structure 𝑅 𝐹 {α}{ρ}) → swelldef ℓ₀ α → Con 𝑨
+ 0Con[ 𝑨 ] wd = 0[ ∣ 𝑨 ∣ ]Equivalence , 0[ 𝑨 ]Compatible wd
 
 \end{code}
 
@@ -55,15 +57,15 @@ Con {α = α}{ρ = ρ}𝑨 = Σ[ θ ∈ Equivalence ∣ 𝑨 ∣{α ⊔ ρ} ] (C
 
 \begin{code}
 
-_╱_ : (𝑨 : Structure {α} {ρ} 𝑅 𝐹) → Con 𝑨 → Structure {lsuc (α ⊔ ρ)} {ρ} 𝑅 𝐹
+ _╱_ : (𝑨 : Structure 𝑅 𝐹 {α}{ρ}) → Con 𝑨 → Structure 𝑅 𝐹 {lsuc (α ⊔ ρ)}{ρ}
 
-_╱_ {α}{ρ} 𝑨 θ = (Quotient (∣ 𝑨 ∣) {α ⊔ ρ} ∣ θ ∣)        -- domain of quotient structure
-                 , (λ r x → (r ʳ 𝑨) λ i → ⌞ x i ⌟)      -- interpretation of relations
-                 , λ f b → ⟪ (f ᵒ 𝑨) (λ i → ⌞ b i ⌟)  ⟫ -- interp of operations
+ 𝑨 ╱ θ = (Quotient (∣ 𝑨 ∣) {α ⊔ ρ} ∣ θ ∣)        -- domain of quotient structure
+          , (λ r x → (r ʳ 𝑨) λ i → ⌞ x i ⌟)      -- interpretation of relations
+          , λ f b → ⟪ (f ᵒ 𝑨) (λ i → ⌞ b i ⌟)  ⟫ -- interp of operations
 
-/≡-elim : {𝑨 : Structure {α} {ρ} 𝑅 𝐹}( (θ , _ ) : Con 𝑨){u v : ∣ 𝑨 ∣}
- →    ⟪ u ⟫{∣ θ ∣} ≡ ⟪ v ⟫ → ∣ θ ∣ u v
-/≡-elim θ {u}{v} x =  ⟪ u ∼ v ⟫-elim {R = ∣ θ ∣} x
+ /≡-elim : {𝑨 : Structure 𝑅 𝐹 {α}{ρ}}( (θ , _ ) : Con 𝑨){u v : ∣ 𝑨 ∣}
+  →    ⟪ u ⟫{∣ θ ∣} ≡ ⟪ v ⟫ → ∣ θ ∣ u v
+ /≡-elim θ {u}{v} x =  ⟪ u ∼ v ⟫-elim {R = ∣ θ ∣} x
 
 \end{code}
 
@@ -71,10 +73,10 @@ Example. The zero congruence of an arbitrary structure.
 
 \begin{code}
 
-𝟘[_╱_] : (𝑨 : Structure {α} {ρ} 𝑅 𝐹)(θ : Con 𝑨) → BinRel (∣ 𝑨 ∣ / (fst ∣ θ ∣)) (lsuc (α ⊔ ρ))
-𝟘[ 𝑨 ╱ θ ] = λ u v → u ≡ v
+ 𝟘[_╱_] : (𝑨 : Structure 𝑅 𝐹 {α}{ρ})(θ : Con 𝑨) → BinRel (∣ 𝑨 ∣ / (fst ∣ θ ∣)) (lsuc (α ⊔ ρ))
+ 𝟘[ 𝑨 ╱ θ ] = λ u v → u ≡ v
 
-𝟎[_╱_] : (𝑨 : Structure {α} {ρ} 𝑅 𝐹)(θ : Con 𝑨) → swelldef ℓ₀ (lsuc (α ⊔ ρ)) → Con (𝑨 ╱ θ)
+𝟎[_╱_] : {α ρ : Level}(𝑨 : Structure 𝑅 𝐹 {α}{ρ})(θ : Con 𝑨) → swelldef ℓ₀ (lsuc (α ⊔ ρ)) → Con (𝑨 ╱ θ)
 𝟎[ 𝑨 ╱ θ ] wd = 0[ ∣ 𝑨 ╱ θ ∣ ]Equivalence , 0[ 𝑨 ╱ θ ]Compatible wd
 
 \end{code}
