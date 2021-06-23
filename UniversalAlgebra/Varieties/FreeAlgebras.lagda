@@ -55,7 +55,7 @@ open import Terms.Basic                {𝑆 = 𝑆} using ( Term ; 𝑻 ; free-
                                                      ; free-unique ; lift-of-epi-is-epi )
 open import Terms.Operations           {𝑆 = 𝑆} using (_⟦_⟧; comm-hom-term; free-lift-interp )
 open import Subalgebras.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; FirstHomCorollary|Set )
-open import Varieties.Basic            {𝑆 = 𝑆} using (_⊧_≋_; _⊧_≈_; Th; Mod )
+open import Varieties.Basic            {𝑆 = 𝑆} using (_⊫_≈_; _⊧_≈_; Th; Mod )
 open import Varieties.EquationalLogic  {𝑆 = 𝑆}
 open import Varieties.Preservation {α = α}{𝑆 = 𝑆}
 
@@ -254,7 +254,7 @@ We now use `ψlemma0-ap` to prove that every map `h : X → ∣ 𝑨 ∣`, from 
 
 #### <a id="k-models-psi">𝒦 models ψ</a>
 
-The goal of this subsection is to prove that `𝒦` models `ψ 𝒦`. In other terms, for all pairs `(p , q) ∈ Term X × Term X` of terms, if `(p , q) ∈ ψ 𝒦`, then `𝒦 ⊧ p ≋ q`.
+The goal of this subsection is to prove that `𝒦` models `ψ 𝒦`. In other terms, for all pairs `(p , q) ∈ Term X × Term X` of terms, if `(p , q) ∈ ψ 𝒦`, then `𝒦 ⊫ p ≈ q`.
 
 Next we define the lift of the natural embedding from `X` into 𝔽. We denote this homomorphism by `𝔑 : hom (𝑻 X) 𝔽` and define it as follows.
 
@@ -316,7 +316,7 @@ We need a three more lemmas before we are ready to tackle our main goal.
     γ = (hom𝔽-is-lift-hom p) ∙ hyp ∙ (hom𝔽-is-lift-hom q)⁻¹
 
 
- ψlemma3 : ∀ p q → (p , q) ∈ ψ{X = X} 𝒦 → 𝒦 ⊧ p ≋ q
+ ψlemma3 : ∀ p q → (p , q) ∈ ψ{X = X} 𝒦 → 𝒦 ⊫ p ≈ q
  ψlemma3 p q pψq {𝑨} kA h = goal
    where
    goal : (𝑨 ⟦ p ⟧) h ≡ (𝑨 ⟦ q ⟧) h
@@ -331,7 +331,7 @@ With these results in hand, it is now trivial to prove the main theorem of this 
 
 \begin{code}
 
- class-models-kernel : ∀ p q → (p , q) ∈ kernel ∣ hom𝔽 ∣ → 𝒦 ⊧ p ≋ q
+ class-models-kernel : ∀ p q → (p , q) ∈ kernel ∣ hom𝔽 ∣ → 𝒦 ⊫ p ≈ q
  class-models-kernel p q hyp = ψlemma3 p q (ψlemma2 hyp)
 
  𝕍𝒦 : Pred (Algebra 𝓕⁺ 𝑆) (lsuc 𝓕⁺)
@@ -438,9 +438,9 @@ The converse inclusion, `V 𝒦 ⊆ Mod X (Th (V 𝒦))`, is a simple consequenc
 
 We have thus proved that every variety is an equational class.  Readers familiar with the classical formulation of the Birkhoff HSP theorem, as an "if and only if" result, might worry that we haven't completed the proof.  But recall that in the [Varieties.Preservation][] module we proved the following identity preservation lemmas:
 
-* `𝒦 ⊧ p ≋ q → H 𝒦 ⊧ p ≋ q`
-* `𝒦 ⊧ p ≋ q → S 𝒦 ⊧ p ≋ q`
-* `𝒦 ⊧ p ≋ q → P 𝒦 ⊧ p ≋ q`
+* `𝒦 ⊫ p ≈ q → H 𝒦 ⊫ p ≈ q`
+* `𝒦 ⊫ p ≈ q → S 𝒦 ⊫ p ≈ q`
+* `𝒦 ⊫ p ≈ q → P 𝒦 ⊫ p ≈ q`
 
 From these it follows that every equational class is a variety. Thus, our formal proof of Birkhoff's theorem is complete.
 

@@ -105,11 +105,11 @@ open import Subalgebras.Subalgebras         using    ( _IsSubalgebraOf_ ; Subalg
                                                      ; ≤-trans-≅ ; ≤-TRANS-≅ ; ≤-mono ; Lift-is-sub
                                                      ; Lift-≤ ; Lift-≤-Lift )
 
-open import Varieties.Basic                 using    ( _⊧_≈_ ; _⊧_≋_ ; _⊢_≈_ ; Th ; Mod ; ⊧-I-invar
-                                                     ; ⊧-Lift-invar ; ⊧-lower-invar ; ⊧-S-invar
-                                                     ; ⊧-S-class-invar ; ⊧-P-invar ; ⊧-P-class-invar
-                                                     ; ⊧-P-lift-invar ; ⊧-H-invar ; ⊧-H-class-invar
-                                                     ; ⊧-H-class-coinvar )
+open import Varieties.Basic                 using    ( _⊧_≈_ ; _⊫_≈_ ; _⊢_≈_ ; _⊢_▹_≈_ ; Th ; Mod
+                                                     ; ⊧-I-invar ; ⊧-Lift-invar ; ⊧-lower-invar
+                                                     ; ⊧-S-invar ; ⊧-S-class-invar ; ⊧-P-invar
+                                                     ; ⊧-P-class-invar ; ⊧-P-lift-invar ; ⊧-H-invar
+                                                     ; ⊧-H-class-invar ; ⊧-H-class-coinvar )
 
 open import Varieties.EquationalLogic       using    ( S⊆SP ; lemPS⊆SP ; PS⊆SP ; P⊆V ; SP⊆V ; SP⊆V'
                                                      ; module class-products-with-maps )

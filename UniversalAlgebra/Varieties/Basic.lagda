@@ -9,7 +9,7 @@ author: [the ualib/agda-algebras development team][]
 
 This section presents the [Varieties.Basic][] module of the [Agda Universal Algebra Library][] where the binary "models" relation ⊧, relating algebras (or classes of algebras) to the identities that they satisfy, is defined.
 
-Agda supports the definition of infix operations and relations, and we use this to define ⊧ so that we may write, e.g., `𝑨 ⊧ p ≈ q` or `𝒦 ⊧ p ≋ q`.
+Agda supports the definition of infix operations and relations, and we use this to define ⊧ so that we may write, e.g., `𝑨 ⊧ p ≈ q` or `𝒦 ⊫ p ≈ q`.
 
 We also prove some closure and invariance properties of ⊧.  In particular, we prove the following facts (which are needed, for example, in the proof the Birkhoff HSP Theorem).
 
@@ -21,7 +21,7 @@ We also prove some closure and invariance properties of ⊧.  In particular, we 
 
 
 
-**Notation**. In the [Agda UniversalAlgebra][] library, because a class of structures has a different type than a single structure, we must use a slightly different syntax to avoid overloading the relations ⊧ and ≈. As a reasonable alternative to what we would normally express informally as 𝒦 ⊧ 𝑝 ≈ 𝑞, we have settled on 𝒦 ⊧ p ≋ q to denote this relation.  To reiterate, if 𝒦 is a class of 𝑆-algebras, we write 𝒦 ⊧ 𝑝 ≋ 𝑞 if every 𝑨 ∈ 𝒦 satisfies 𝑨 ⊧ 𝑝 ≈ 𝑞.
+**Notation**. In the [Agda UniversalAlgebra][] library, because a class of structures has a different type than a single structure, we must use a slightly different syntax to avoid overloading the relations ⊧ and ≈. As a reasonable alternative to what we would normally express informally as 𝒦 ⊧ 𝑝 ≈ 𝑞, we have settled on 𝒦 ⊫ p ≈ q to denote this relation.  To reiterate, if 𝒦 is a class of 𝑆-algebras, we write 𝒦 ⊧ 𝑝 ≋ 𝑞 if every 𝑨 ∈ 𝒦 satisfies 𝑨 ⊧ 𝑝 ≈ 𝑞.
 
 **Unicode Hints**. To produce the symbols ≈, ⊧, and ≋ in [agda2-mode][], type `\~~`, `\models`, and `\~~~`, respectively.
 
@@ -75,16 +75,19 @@ open Term
 
 #### <a id="the-models-relation">The models relation</a>
 
-We define the binary "models" relation ⊧ using infix syntax so that we may write, e.g., `𝑨 ⊧ p ≈ q` or `𝒦 ⊧ p ≋ q`, relating algebras (or classes of algebras) to the identities that they satisfy. We also prove a coupld of useful facts about ⊧.  More will be proved about ⊧ in the next module, [Varieties.EquationalLogic](Varieties.EquationalLogic.html).
+We define the binary "models" relation ⊧ using infix syntax so that we may write, e.g., `𝑨 ⊧ p ≈ q` or `𝒦 ⊫ p ≈ q`, relating algebras (or classes of algebras) to the identities that they satisfy. We also prove a coupld of useful facts about ⊧.  More will be proved about ⊧ in the next module, [Varieties.EquationalLogic](Varieties.EquationalLogic.html).
 
 \begin{code}
 
 
-_⊧_≈_ : {α χ : Level}{X : Type χ} → Algebra α 𝑆 → Term X → Term X → Type _
+-- curried versions
+-- (unicode: use \models and \~~ to get ⊧ and ≈)
+_⊧_≈_ : {χ : Level}{X : Type χ} → {α : Level} → Algebra α 𝑆 → Term X → Term X → Type _
 𝑨 ⊧ p ≈ q = 𝑨 ⟦ p ⟧ ≈ 𝑨 ⟦ q ⟧
 
-_⊧_≋_ : {α ρ χ : Level}{X : Type χ} → Pred(Algebra α 𝑆) ρ → Term X → Term X → Type _
-𝒦 ⊧ p ≋ q = {𝑨 : Algebra _ 𝑆} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
+-- (unicode: use \||= and \~~ to get ⊫ and ≈)
+_⊫_≈_ : {χ : Level}{X : Type χ} → {α ρ : Level} → Pred(Algebra α 𝑆) ρ → Term X → Term X → Type _
+𝒦 ⊫ p ≈ q = {𝑨 : Algebra _ 𝑆} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
 
 
 \end{code}
@@ -100,10 +103,10 @@ Here we define a type `Th` so that, if 𝒦 denotes a class of algebras, then `T
 
 \begin{code}
 
-module _ {α χ : Level}{X : Type χ} where
+module _ {χ : Level}{X : Type χ} where
 
- Th : Pred (Algebra α 𝑆)(ov α) → Pred(Term X × Term X) (χ ⊔ ov α)
- Th 𝒦 = λ (p , q) → 𝒦 ⊧ p ≋ q
+ Th : {α : Level} → Pred (Algebra α 𝑆) (ov α) → Pred(Term X × Term X) (χ ⊔ ov α)
+ Th 𝒦 = λ (p , q) → 𝒦 ⊫ p ≈ q
 
 \end{code}
 
@@ -111,8 +114,12 @@ If `ℰ` denotes a set of identities, then the class of algebras satisfying all 
 
 \begin{code}
 
- Mod : Pred(Term X × Term X) (χ ⊔ ov α) → Pred(Algebra α 𝑆) (ov (α ⊔ χ))
+ Mod : {α : Level} → Pred(Term X × Term X) (ov α) → Pred(Algebra α 𝑆) (ov (χ ⊔ α))
  Mod ℰ = λ 𝑨 → ∀ p q → (p , q) ∈ ℰ → 𝑨 ⊧ p ≈ q
+
+ -- tupled version
+ Modtup : {ι : Level}{I : Type ι} → (I → Term X × Term X) → {α : Level} → Pred(Algebra α 𝑆)(χ ⊔ ι ⊔ α)
+ Modtup ℰ = λ 𝑨 → ∀ i → 𝑨 ⊧ (fst (ℰ i)) ≈ (snd (ℰ i))
 
 \end{code}
 
@@ -120,11 +127,50 @@ The entailment ℰ ⊢ p ≈ q is valid iff p ≈ q holds in all models that sat
 
 \begin{code}
 
- _⊢_≈_ : Pred(Term X × Term X) (χ ⊔ ov α) → Term X → Term X → Type (ov (α ⊔ χ))
- ℰ ⊢ p ≈ q = Mod ℰ ⊧ p ≋ q
+module _ {χ : Level}{X : Type χ}{α : Level} where
+
+ _⊢_≈_ : Pred(Term X × Term X) (ov α) → Term X → Term X → Type (ov (χ ⊔ α))
+ ℰ ⊢ p ≈ q = Mod {α = α} ℰ ⊫ p ≈ q
 
 \end{code}
 
+
+#### Derivations in a "context" X
+
+This section on derivations is an adaptation of Andreas Abel's `Sub`, `_[_]`, and `_⊢_▹_≡` types.
+
+Quoting Abel, "Equalitional logic allows us to prove entailments via the inference rules for the judgment E ⊢ Γ ▹ p ≡ q. This could be coined as equational theory over a given set of equations $E$. Relation E ⊢ Γ ▹ _≡_ is the least congruence over the equations E."
+
+\begin{code}
+
+-- Substitutions. A substitution from Y to X holds a term in X for each variable in Y.
+Subst : {χ : Level}(Y X : Type χ) → Type _
+Subst Y X = (x : X) → Term Y
+
+-- Application of a substitution.
+_[_] : {χ : Level}{Y X : Type χ}(t : Term Y) (σ : Subst X Y) → Term X
+(ℊ x) [ σ ] = σ x
+(node 𝑓 t)  [ σ ] = node 𝑓 λ i → t i [ σ ]
+
+module _ {χ : Level}{X Y : Type χ}
+         {ι : Level}{I : Type ι} where
+
+ variable
+  p q r :  Term X
+  op : ∣ 𝑆 ∣
+  ts ts' : {X : Type χ}(i : ∥ 𝑆 ∥ op) → Term X
+
+ data _⊢_▹_≈_
+  (ℰ : {X : Type χ} → I → Term X × Term X) : (X : Type χ)(p q : Term X) → Type (ι ⊔ ov χ) where
+  hyp   :  ∀ i                               → ℰ ⊢ X ▹ (fst (ℰ i)) ≈ (snd (ℰ i))
+  base  :  ∀ (x : X)                         → ℰ ⊢ X ▹ ℊ x ≈ ℊ x
+  app   :  (∀ i → ℰ ⊢ X ▹ ts i ≈ ts' i)      → ℰ ⊢ X ▹ (node op ts) ≈ (node op ts')
+  sub   :  ℰ ⊢ X ▹ p ≈ q → ∀ (σ : Subst Y X) → ℰ ⊢ Y ▹ (p [ σ ]) ≈ (q [ σ ])
+  refl  :  ∀ (t : Term X)                    → ℰ ⊢ X ▹ t ≈ t
+  sym   :  ℰ ⊢ X ▹ p ≈ q                     → ℰ ⊢ X ▹ q ≈ p
+  trans :  ℰ ⊢ X ▹ p ≈ q → ℰ ⊢ X ▹ q ≈ r     → ℰ ⊢ X ▹ p ≈ r
+
+\end{code}
 
 
 
@@ -201,7 +247,7 @@ module _ (wd : SwellDef){χ : Level}{𝓤 𝓦 : Level}{X : Type χ} where
  \begin{code}
 
  ⊧-S-class-invar : {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}(p q : Term X)
-  →                𝒦 ⊧ p ≋ q → (𝑩 : SubalgebraOfClass 𝒦) → ∣ 𝑩 ∣ ⊧ p ≈ q
+  →                𝒦 ⊫ p ≈ q → (𝑩 : SubalgebraOfClass 𝒦) → ∣ 𝑩 ∣ ⊧ p ≈ q
  ⊧-S-class-invar p q Kpq (𝑩 , 𝑨 , SA , (ka , BisSA)) = ⊧-S-invar 𝑩 {p}{q}((Kpq ka)) (h , hinj)
   where
   h : hom 𝑩 𝑨
@@ -240,7 +286,7 @@ An identity satisfied by all algebras in a class is also satisfied by the produc
 \begin{code}
 
  ⊧-P-class-invar : (𝒦 : Pred (Algebra α 𝑆)(ov α)){p q : Term X}
-  →                𝒦 ⊧ p ≋ q → (∀ i → 𝒜 i ∈ 𝒦) → ⨅ 𝒜 ⊧ p ≈ q
+  →                𝒦 ⊫ p ≈ q → (∀ i → 𝒜 i ∈ 𝒦) → ⨅ 𝒜 ⊧ p ≈ q
 
  ⊧-P-class-invar 𝒦 {p}{q}σ K𝒜 = ⊧-P-invar p q λ i → σ (K𝒜 i)
 
@@ -292,7 +338,7 @@ module _ (wd : SwellDef){α χ : Level}{X : Type χ}{𝒦 : Pred (Algebra α �
 
  -- ⇒ (the "only if" direction)
  ⊧-H-class-invar : {p q : Term X}
-  →                𝒦 ⊧ p ≋ q → ∀ 𝑨 φ → 𝑨 ∈ 𝒦 → ∀ a → ∣ φ ∣ ((𝑻 X ⟦ p ⟧) a) ≡ ∣ φ ∣ ((𝑻 X ⟦ q ⟧) a)
+  →                𝒦 ⊫ p ≈ q → ∀ 𝑨 φ → 𝑨 ∈ 𝒦 → ∀ a → ∣ φ ∣ ((𝑻 X ⟦ p ⟧) a) ≡ ∣ φ ∣ ((𝑻 X ⟦ q ⟧) a)
  ⊧-H-class-invar {p = p}{q} σ 𝑨 φ ka a = ξ
   where
    ξ : ∣ φ ∣ ((𝑻 X ⟦ p ⟧) a) ≡ ∣ φ ∣ ((𝑻 X ⟦ q ⟧) a)
@@ -304,7 +350,7 @@ module _ (wd : SwellDef){α χ : Level}{X : Type χ}{𝒦 : Pred (Algebra α �
 
 -- ⇐ (the "if" direction)
  ⊧-H-class-coinvar : {p q : Term X}
-  →  (∀ 𝑨 φ → 𝑨 ∈ 𝒦 → ∀ a → ∣ φ ∣ ((𝑻 X ⟦ p ⟧) a) ≡ ∣ φ ∣ ((𝑻 X ⟦ q ⟧) a)) → 𝒦 ⊧ p ≋ q
+  →  (∀ 𝑨 φ → 𝑨 ∈ 𝒦 → ∀ a → ∣ φ ∣ ((𝑻 X ⟦ p ⟧) a) ≡ ∣ φ ∣ ((𝑻 X ⟦ q ⟧) a)) → 𝒦 ⊫ p ≈ q
 
  ⊧-H-class-coinvar {p}{q} β {𝑨} ka = γ
   where
@@ -320,77 +366,6 @@ module _ (wd : SwellDef){α χ : Level}{X : Type χ}{𝒦 : Pred (Algebra α �
 
 \end{code}
 
-
-
-
-#### Derivations
-
-This part will be adapted from Andreas Abel's development.
-
-"Equalitional logic allows us to prove entailments via the inference rules for the judgment Γ → ℰ ⊢ p ≈ q.
-  -- This could be coined as equational theory over a given
-  -- set of equations $E$.
-  -- Relation $E ⊢ Γ ▹ \_ ≡ \_$ is the least congruence over the equations $E$.
-
-  data _⊢_▹_≡_ {I : Type ℓⁱ}
-    (E : I → Eq) : (Γ : Cxt) (t t' : Term Γ) → Type (lsuc ℓᵒ ⊔ ℓᵃ ⊔ ℓⁱ) where
-
-    hyp    :  ∀ i → let t ≐ t' = E i in
-              E ⊢ _ ▹ t ≡ t'
-
-    base   :  ∀ (x : Γ) {f f' : (i : ⊥) → Term _} →
-              E ⊢ Γ ▹ var' x f ≡ var' x f'
-
-    app    :  (∀ i → E ⊢ Γ ▹ ts i ≡ ts' i) →
-              E ⊢ Γ ▹ (op ∙ ts) ≡ (op ∙ ts')
-
-    sub    :  E ⊢ Δ ▹ t ≡ t' →
-              ∀ (σ : Sub Γ Δ) →
-              E ⊢ Γ ▹ (t [ σ ]) ≡ (t' [ σ ])
-
-    refl   :  ∀ (t : Term Γ) →
-              E ⊢ Γ ▹ t ≡ t
-
-    sym    :  E ⊢ Γ ▹ t ≡ t' →
-              E ⊢ Γ ▹ t' ≡ t
-
-    trans  :  E ⊢ Γ ▹ t₁ ≡ t₂ →
-              E ⊢ Γ ▹ t₂ ≡ t₃ →
-              E ⊢ Γ ▹ t₁ ≡ t₃
-
-  -- Soundness of the inference rules
-  -----------------------------------
-
-  -- We assume a model $M$ that validates all equations in $E$.
-
-  module Soundness {I : Type ℓⁱ} (E : I → Eq) (M : SetoidModel ℓᵐ ℓᵉ)
-    (V : ∀ i → M ⊧ E i) where
-    open SetoidModel M
-
-    -- In any model $M$ that satisfies the equations $E$,
-    -- derived equality is actual equality.
-
-    sound : E ⊢ Γ ▹ t ≡ t' → M ⊧ (t ≐ t')
-
-    sound (hyp i)                        =  V i
-    sound (app {op = op} es) ρ           =  den .cong (refl , λ i → sound (es i) ρ)
-    sound (sub {t = t} {t' = t'} e σ) ρ  =  begin
-      ⦅ t [ σ ]   ⦆ .apply ρ   ≈⟨ substitution {M = M} t σ ρ ⟩
-      ⦅ t         ⦆ .apply ρ'  ≈⟨ sound e ρ' ⟩
-      ⦅ t'        ⦆ .apply ρ'  ≈˘⟨ substitution {M = M} t' σ ρ ⟩
-      ⦅ t' [ σ ]  ⦆ .apply ρ   ∎
-      where
-      open SetoidReasoning Den
-      ρ' = ⦅ σ ⦆s ρ
-
-    sound (base x {f} {f'})              =  isEquiv {M = M} .IsEquivalence.refl {var' x λ()}
-
-    sound (refl t)                       =  isEquiv {M = M} .IsEquivalence.refl {t}
-    sound (sym {t = t} {t' = t'} e)      =  isEquiv {M = M} .IsEquivalence.sym
-                                            {x = t} {y = t'} (sound e)
-    sound (trans  {t₁ = t₁} {t₂ = t₂}
-                  {t₃ = t₃} e e')        =  isEquiv {M = M} .IsEquivalence.trans
-                                            {i = t₁} {j = t₂} {k = t₃} (sound e) (sound e')
 
 
 
@@ -420,14 +395,50 @@ This part will be adapted from Andreas Abel's development.
 
 
 
-
-
 <!--
 
   -- open import Relation.Binary.Core using (_⇔_)
 
-  -- ⊧-H : DFunExt → {p q : Term X} → 𝒦 ⊧ p ≋ q ⇔ (∀ 𝑨 φ → 𝑨 ∈ 𝒦 → ∣ φ ∣ ∘ (𝑻 X ⟦ p ⟧) ≡ ∣ φ ∣ ∘(𝑻 X ⟦ q ⟧))
+  -- ⊧-H : DFunExt → {p q : Term X} → 𝒦 ⊫ p ≈ q ⇔ (∀ 𝑨 φ → 𝑨 ∈ 𝒦 → ∣ φ ∣ ∘ (𝑻 X ⟦ p ⟧) ≡ ∣ φ ∣ ∘(𝑻 X ⟦ q ⟧))
   -- ⊧-H fe {p}{q} = ⊧-H-class-invar fe {p}{q} , ⊧-H-class-coinvar fe {p}{q}
 
 
 -->
+Soundness of the inference rules. We assume a model 𝑨 that validates all equations in ℰ.
+
+
+\begin{code}
+
+-- module Soundness {ι : Level}{I : Type ι}
+--                  {χ : Level}(ℰ : {X : Type χ} → I → Term X × Term X)
+--                  {α : Level}(𝑨 : Algebra α 𝑆)
+--                  (Amod : 𝑨 ∈ Modtup ℰ) where
+
+--  -- In any 𝑨 ∈ Mod ℰ, derived equality is actual equality.
+
+--  sound : {X : Type χ}{p q : Term X} → ℰ ⊢ X ▹ p ≈ q → 𝑨 ⊧ p ≈ q
+--  sound x = {!!}
+
+\end{code}
+ -- (hyp i)                        =  V i
+ --    sound (app {op = op} es) ρ           =  den .cong (refl , λ i → sound (es i) ρ)
+ --    sound (sub {t = t} {t' = t'} e σ) ρ  =  begin
+ --      ⦅ t [ σ ]   ⦆ .apply ρ   ≈⟨ substitution {M = M} t σ ρ ⟩
+ --      ⦅ t         ⦆ .apply ρ'  ≈⟨ sound e ρ' ⟩
+ --      ⦅ t'        ⦆ .apply ρ'  ≈˘⟨ substitution {M = M} t' σ ρ ⟩
+ --      ⦅ t' [ σ ]  ⦆ .apply ρ   ∎
+ --      where
+ --      open SetoidReasoning Den
+ --      ρ' = ⦅ σ ⦆s ρ
+
+ --    sound (base x {f} {f'})              =  isEquiv {M = M} .IsEquivalence.refl {var' x λ()}
+
+ --    sound (refl t)                       =  isEquiv {M = M} .IsEquivalence.refl {t}
+ --    sound (sym {t = t} {t' = t'} e)      =  isEquiv {M = M} .IsEquivalence.sym
+ --                                            {x = t} {y = t'} (sound e)
+ --    sound (trans  {t₁ = t₁} {t₂ = t₂}
+ --                  {t₃ = t₃} e e')        =  isEquiv {M = M} .IsEquivalence.trans
+ --                                            {i = t₁} {j = t₂} {k = t₃} (sound e) (sound e')
+
+
+

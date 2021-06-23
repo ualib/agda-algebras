@@ -21,7 +21,8 @@ open import Axiom.Extensionality.Propositional    using    ()
 open import Agda.Builtin.Equality                 using    (_≡_    ;  refl    )
 open import Agda.Primitive                        using    ( _⊔_              )
                                                   renaming ( Set   to Type    )
-open import Data.Product                          using    ( _,_ ; Σ-syntax ; Σ )
+open import Data.Product                          using    ( _,_   ; Σ-syntax
+                                                           ; _×_   ; Σ        )
                                                   renaming ( proj₁ to fst
                                                            ; proj₂ to snd     )
 open import Function.Base                         using    ( _∘_   ;  id      )
@@ -97,6 +98,9 @@ A useful alternative for expressing dependent function extensionality, which is 
 The principle of *proposition extensionality* asserts that logically equivalent propositions are equivalent.  That is, if `P` and `Q` are propositions and if `P ⊆ Q` and `Q ⊆ P`, then `P ≡ Q`. For our purposes, it will suffice to formalize this notion for general predicates, rather than for propositions (i.e., truncated predicates).
 
 \begin{code}
+
+_≐_ : {α β : Level}{A : Type α}(P Q : Pred A β ) → Type _
+P ≐ Q = (P ⊆ Q) × (Q ⊆ P)
 
 pred-ext : (α β : Level) → Type (lsuc (α ⊔ β))
 pred-ext α β = ∀ {A : Type α}{P Q : Pred A β } → P ⊆ Q → Q ⊆ P → P ≡ Q
