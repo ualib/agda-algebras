@@ -48,10 +48,26 @@ private variable α β γ : Level
 
 Recall, `f ~ g` means f and g are *extensionally* (or pointwise) equal; i.e., `∀ x, f x ≡ g x`. We use this notion of equality of functions in the following definition of **isomorphism**.
 
-\begin{code}
+We could define this using Sigma types, like this.
 
+```agda
 _≅_ : {α β : Level}(𝑨 : Algebra α 𝑆)(𝑩 : Algebra β 𝑆) → Type(𝓞 ⊔ 𝓥 ⊔ α ⊔ β)
 𝑨 ≅ 𝑩 =  Σ[ f ∈ (hom 𝑨 𝑩)] Σ[ g ∈ hom 𝑩 𝑨 ] ((∣ f ∣ ∘ ∣ g ∣ ≈ ∣ 𝒾𝒹 𝑩 ∣) × (∣ g ∣ ∘ ∣ f ∣ ≈ ∣ 𝒾𝒹 𝑨 ∣))
+```
+
+However, with four components, an equivalent record type is easier to work with.
+
+\begin{code}
+
+record _≅_ (𝑨 : Algebra α 𝑆)(𝑩 : Algebra β 𝑆) : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ β) where
+ field
+  to : hom 𝑨 𝑩
+  from : hom 𝑩 𝑨
+  to∼from : ∣ to ∣ ∘ ∣ from ∣ ≈ ∣ 𝒾𝒹 𝑩 ∣
+  from∼to : ∣ from ∣ ∘ ∣ to ∣ ≈ ∣ 𝒾𝒹 𝑨 ∣
+
+open _≅_ public
+
 
 \end{code}
 
@@ -64,36 +80,36 @@ That is, two structures are **isomorphic** provided there are homomorphisms goin
 \begin{code}
 
 ≅-refl : {α : Level} {𝑨 : Algebra α 𝑆} → 𝑨 ≅ 𝑨
-≅-refl {α}{𝑨} = 𝒾𝒹 𝑨 , 𝒾𝒹 𝑨 , (λ a → refl) , (λ a → refl)
+≅-refl {α}{𝑨} = record { to = 𝒾𝒹 𝑨 ; from = 𝒾𝒹 𝑨 ; to∼from = λ _ → refl ; from∼to = λ _ → refl }
 
 ≅-sym : {α β : Level}{𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆}
  →      𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑨
-≅-sym h = fst ∥ h ∥ , fst h , ∥ snd ∥ h ∥ ∥ , ∣ snd ∥ h ∥ ∣
+≅-sym φ = record { to = from φ ; from = to φ ; to∼from = from∼to φ ; from∼to = to∼from φ }
 
 ≅-trans : {𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆}{𝑪 : Algebra γ 𝑆}
  →        𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≅ 𝑪
 
-≅-trans {𝑨 = 𝑨} {𝑩}{𝑪} ab bc = f , g , τ , ν
+≅-trans {𝑨 = 𝑨} {𝑩}{𝑪} ab bc = record { to = f ; from = g ; to∼from = τ ; from∼to = ν }
  where
   f1 : hom 𝑨 𝑩
-  f1 = ∣ ab ∣
+  f1 = to ab
   f2 : hom 𝑩 𝑪
-  f2 = ∣ bc ∣
+  f2 = to bc
   f : hom 𝑨 𝑪
   f = ∘-hom 𝑨 𝑪 f1 f2
 
   g1 : hom 𝑪 𝑩
-  g1 = fst ∥ bc ∥
+  g1 = from bc
   g2 : hom 𝑩 𝑨
-  g2 = fst ∥ ab ∥
+  g2 = from ab
   g : hom 𝑪 𝑨
   g = ∘-hom 𝑪 𝑨 g1 g2
 
   τ : ∣ f ∣ ∘ ∣ g ∣ ≈ ∣ 𝒾𝒹 𝑪 ∣
-  τ x = (cong ∣ f2 ∣(∣ snd ∥ ab ∥ ∣ (∣ g1 ∣ x)))∙(∣ snd ∥ bc ∥ ∣) x
+  τ x = (cong ∣ f2 ∣(to∼from ab (∣ g1 ∣ x)))∙(to∼from bc) x
 
   ν : ∣ g ∣ ∘ ∣ f ∣ ≈ ∣ 𝒾𝒹 𝑨 ∣
-  ν x = (cong ∣ g2 ∣(∥ snd ∥ bc ∥ ∥ (∣ f1 ∣ x)))∙(∥ snd ∥ ab ∥ ∥) x
+  ν x = (cong ∣ g2 ∣(from∼to bc (∣ f1 ∣ x)))∙(from∼to ab) x
 
 \end{code}
 
@@ -106,7 +122,11 @@ Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic 
 open Level
 
 Lift-≅ : {𝑨 : Algebra α 𝑆} → 𝑨 ≅ (Lift-Alg 𝑨 β)
-Lift-≅{β = β}{𝑨 = 𝑨} = 𝓁𝒾𝒻𝓉 𝑨 , 𝓁ℴ𝓌ℯ𝓇 𝑨 , cong-app lift∼lower , cong-app (lower∼lift {β = β})
+Lift-≅{β = β}{𝑨 = 𝑨} = record { to = 𝓁𝒾𝒻𝓉 𝑨
+                              ; from = 𝓁ℴ𝓌ℯ𝓇 𝑨
+                              ; to∼from = cong-app lift∼lower
+                              ; from∼to = cong-app (lower∼lift {β = β})
+                              }
 
 Lift-Alg-iso : {𝑨 : Algebra α 𝑆}{𝓧 : Level}
                {𝑩 : Algebra β 𝑆}{𝓨 : Level}
@@ -152,28 +172,28 @@ module _ {𝓘 : Level}{I : Type 𝓘}{fiu : funext 𝓘 α}{fiw : funext 𝓘 �
 
   ⨅≅ : {𝒜 : I → Algebra α 𝑆}{ℬ : I → Algebra β 𝑆} → (∀ (i : I) → 𝒜 i ≅ ℬ i) → ⨅ 𝒜 ≅ ⨅ ℬ
 
-  ⨅≅ {𝒜}{ℬ} AB = Goal
+  ⨅≅ {𝒜}{ℬ} AB = record { to = ϕ , ϕhom ; from = ψ , ψhom ; to∼from = ϕ∼ψ ; from∼to = ψ∼ϕ }
    where
    ϕ : ∣ ⨅ 𝒜 ∣ → ∣ ⨅ ℬ ∣
-   ϕ a i = ∣ fst (AB i) ∣ (a i)
+   ϕ a i = ∣ to (AB i) ∣ (a i)
 
    ϕhom : is-homomorphism (⨅ 𝒜) (⨅ ℬ) ϕ
-   ϕhom 𝑓 a = fiw (λ i → ∥ fst (AB i) ∥ 𝑓 (λ x → a x i))
+   ϕhom 𝑓 a = fiw (λ i → ∥ to (AB i) ∥ 𝑓 (λ x → a x i))
 
    ψ : ∣ ⨅ ℬ ∣ → ∣ ⨅ 𝒜 ∣
-   ψ b i = ∣ fst ∥ AB i ∥ ∣ (b i)
+   ψ b i = ∣ from (AB i) ∣ (b i)
 
    ψhom : is-homomorphism (⨅ ℬ) (⨅ 𝒜) ψ
-   ψhom 𝑓 𝒃 = fiu (λ i → snd ∣ snd (AB i) ∣ 𝑓 (λ x → 𝒃 x i))
+   ψhom 𝑓 𝒃 = fiu (λ i → ∥ from (AB i) ∥ 𝑓 (λ x → 𝒃 x i))
 
-   ϕ~ψ : ϕ ∘ ψ ≈ ∣ 𝒾𝒹 (⨅ ℬ) ∣
-   ϕ~ψ 𝒃 = fiw λ i → fst ∥ snd (AB i) ∥ (𝒃 i)
+   ϕ∼ψ : ϕ ∘ ψ ≈ ∣ 𝒾𝒹 (⨅ ℬ) ∣
+   ϕ∼ψ 𝒃 = fiw λ i → to∼from (AB i) (𝒃 i)
 
-   ψ~ϕ : ψ ∘ ϕ ≈ ∣ 𝒾𝒹 (⨅ 𝒜) ∣
-   ψ~ϕ a = fiu λ i → snd ∥ snd (AB i) ∥ (a i)
+   ψ∼ϕ : ψ ∘ ϕ ≈ ∣ 𝒾𝒹 (⨅ 𝒜) ∣
+   ψ∼ϕ a = fiu λ i → from∼to (AB i)(a i)
 
-   Goal : ⨅ 𝒜 ≅ ⨅ ℬ
-   Goal = (ϕ , ϕhom) , ((ψ , ψhom) , ϕ~ψ , ψ~ϕ)
+   -- Goal : ⨅ 𝒜 ≅ ⨅ ℬ
+   -- Goal = (ϕ , ϕhom) , ((ψ , ψhom) , ϕ~ψ , ψ~ϕ)
 
 \end{code}
 
@@ -190,25 +210,25 @@ module _ {𝓘 : Level}{I : Type 𝓘}{fizw : funext (𝓘 ⊔ γ) β}{fiu : fun
   Lift-Alg-⨅≅ {𝒜}{ℬ} AB = Goal
    where
    ϕ : ∣ ⨅ 𝒜 ∣ → ∣ ⨅ ℬ ∣
-   ϕ a i = ∣ fst (AB  (lower i)) ∣ (a (lower i))
+   ϕ a i = ∣ to (AB  (lower i)) ∣ (a (lower i))
 
    ϕhom : is-homomorphism (⨅ 𝒜) (⨅ ℬ) ϕ
-   ϕhom 𝑓 a = fizw (λ i → (∥ fst (AB (lower i)) ∥) 𝑓 (λ x → a x (lower i)))
+   ϕhom 𝑓 a = fizw (λ i → (∥ to (AB (lower i)) ∥) 𝑓 (λ x → a x (lower i)))
 
    ψ : ∣ ⨅ ℬ ∣ → ∣ ⨅ 𝒜 ∣
-   ψ b i = ∣ fst ∥ AB i ∥ ∣ (b (lift i))
+   ψ b i = ∣ from (AB i) ∣ (b (lift i))
 
    ψhom : is-homomorphism (⨅ ℬ) (⨅ 𝒜) ψ
-   ψhom 𝑓 𝒃 = fiu (λ i → (snd ∣ snd (AB i) ∣) 𝑓 (λ x → 𝒃 x (lift i)))
+   ψhom 𝑓 𝒃 = fiu (λ i → ∥ from (AB i) ∥ 𝑓 (λ x → 𝒃 x (lift i)))
 
-   ϕ~ψ : ϕ ∘ ψ ≈ ∣ 𝒾𝒹 (⨅ ℬ) ∣
-   ϕ~ψ 𝒃 = fizw λ i → fst ∥ snd (AB (lower i)) ∥ (𝒃 i)
+   ϕ∼ψ : ϕ ∘ ψ ≈ ∣ 𝒾𝒹 (⨅ ℬ) ∣
+   ϕ∼ψ 𝒃 = fizw λ i → to∼from (AB (lower i)) (𝒃 i)
 
-   ψ~ϕ : ψ ∘ ϕ ≈ ∣ 𝒾𝒹 (⨅ 𝒜) ∣
-   ψ~ϕ a = fiu λ i → snd ∥ snd (AB i) ∥ (a i)
+   ψ∼ϕ : ψ ∘ ϕ ≈ ∣ 𝒾𝒹 (⨅ 𝒜) ∣
+   ψ∼ϕ a = fiu λ i → from∼to (AB i) (a i)
 
    A≅B : ⨅ 𝒜 ≅ ⨅ ℬ
-   A≅B = (ϕ , ϕhom) , ((ψ , ψhom) , ϕ~ψ , ψ~ϕ)
+   A≅B = record { to = ϕ , ϕhom ; from = ψ , ψhom ; to∼from = ϕ∼ψ ; from∼to = ψ∼ϕ }
 
    Goal : Lift-Alg (⨅ 𝒜) γ ≅ ⨅ ℬ
    Goal = ≅-trans (≅-sym Lift-≅) A≅B

@@ -59,7 +59,7 @@ open import Relation.Unary          using    ( Pred ; _∈_ ; _⊆_ ; ⋂ )
 -- imports from agda-algebras --------------------------------------------------------------
 open import Overture.Preliminaries       using ( ∣_∣ ; ∥_∥ ; 𝑖𝑑 ; _⁻¹ ; _≈_ ; Π ; Π-syntax)
 open import Overture.Inverses            using ( IsInjective ; ∘-injective )
-open import Relations.Extensionality using (DFunExt; SwellDef)
+open import Relations.Extensionality using (DFunExt; SwellDef; swelldef)
 
 open import Algebras.Products          {𝑆 = 𝑆} using ( ov ; ⨅ )
 open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom; 𝒾𝒹 ; ∘-hom ; is-homomorphism )
@@ -118,8 +118,8 @@ If `ℰ` denotes a set of identities, then the class of algebras satisfying all 
  Mod ℰ = λ 𝑨 → ∀ p q → (p , q) ∈ ℰ → 𝑨 ⊧ p ≈ q
 
  -- tupled version
- Modtup : {ι : Level}{I : Type ι} → (I → Term X × Term X) → {α : Level} → Pred(Algebra α 𝑆)(χ ⊔ ι ⊔ α)
- Modtup ℰ = λ 𝑨 → ∀ i → 𝑨 ⊧ (fst (ℰ i)) ≈ (snd (ℰ i))
+ Modᵗ : {ι : Level}{I : Type ι} → (I → Term X × Term X) → {α : Level} → Pred(Algebra α 𝑆)(χ ⊔ ι ⊔ α)
+ Modᵗ ℰ = λ 𝑨 → ∀ i → 𝑨 ⊧ (fst (ℰ i)) ≈ (snd (ℰ i))
 
 \end{code}
 
@@ -152,24 +152,56 @@ _[_] : {χ : Level}{Y X : Type χ}(t : Term Y) (σ : Subst X Y) → Term X
 (ℊ x) [ σ ] = σ x
 (node 𝑓 t)  [ σ ] = node 𝑓 λ i → t i [ σ ]
 
-module _ {χ : Level}{X Y : Type χ}
-         {ι : Level}{I : Type ι} where
+module _ {γ ι : Level}{I : Type ι} where
 
- variable
-  p q r :  Term X
+ private variable
+  Γ Δ : Type γ
+  p q r :  Term Γ
   op : ∣ 𝑆 ∣
-  ts ts' : {X : Type χ}(i : ∥ 𝑆 ∥ op) → Term X
+  ts ts' : {Γ : Type γ}(i : ∥ 𝑆 ∥ op) → Term Γ
 
  data _⊢_▹_≈_
-  (ℰ : {X : Type χ} → I → Term X × Term X) : (X : Type χ)(p q : Term X) → Type (ι ⊔ ov χ) where
-  hyp   :  ∀ i                               → ℰ ⊢ X ▹ (fst (ℰ i)) ≈ (snd (ℰ i))
-  base  :  ∀ (x : X)                         → ℰ ⊢ X ▹ ℊ x ≈ ℊ x
-  app   :  (∀ i → ℰ ⊢ X ▹ ts i ≈ ts' i)      → ℰ ⊢ X ▹ (node op ts) ≈ (node op ts')
-  sub   :  ℰ ⊢ X ▹ p ≈ q → ∀ (σ : Subst Y X) → ℰ ⊢ Y ▹ (p [ σ ]) ≈ (q [ σ ])
-  refl  :  ∀ (t : Term X)                    → ℰ ⊢ X ▹ t ≈ t
-  sym   :  ℰ ⊢ X ▹ p ≈ q                     → ℰ ⊢ X ▹ q ≈ p
-  trans :  ℰ ⊢ X ▹ p ≈ q → ℰ ⊢ X ▹ q ≈ r     → ℰ ⊢ X ▹ p ≈ r
+  (ℰ : {X : Type γ} → I → Term X × Term X) : (Γ : Type γ)(p q : Term Γ) → Type (ι ⊔ ov γ) where
+  hyp   :  ∀ i                               → ℰ ⊢ Γ ▹ (fst (ℰ i)) ≈ (snd (ℰ i))
+  base  :  ∀ (x : Γ)                         → ℰ ⊢ Γ ▹ ℊ x ≈ ℊ x
+  app   :  (∀ i → ℰ ⊢ Γ ▹ ts i ≈ ts' i)      → ℰ ⊢ Γ ▹ (node op ts) ≈ (node op ts')
+  sub   :  ℰ ⊢ Γ ▹ p ≈ q → ∀ (σ : Subst Δ Γ) → ℰ ⊢ Δ ▹ (p [ σ ]) ≈ (q [ σ ])
+  refl  :  ∀ (t : Term Γ)                    → ℰ ⊢ Γ ▹ t ≈ t
+  sym   :  ℰ ⊢ Γ ▹ p ≈ q                     → ℰ ⊢ Γ ▹ q ≈ p
+  trans :  ℰ ⊢ Γ ▹ p ≈ q → ℰ ⊢ Γ ▹ q ≈ r     → ℰ ⊢ Γ ▹ p ≈ r
 
+
+-- Soundness of the inference rules
+-- We assume an algebra 𝑨 ∈ Modᵗ ℰ, i.e., an algebra that satisfies all equations in ℰ.
+-- module _ {χ : Level}{X Y : Type χ}
+--          {ι : Level}{I : Type ι}
+--          (ℰ : {Y : Type χ} → I → Term Y × Term Y)
+--          {α : Level}(𝑨 : Algebra α 𝑆)
+--          (A⊧ℰ : 𝑨 ∈ Modᵗ{χ}{X} ℰ) where
+
+--  private variable p q r : Term X
+
+--  -- If 𝑨 ∈ Modᵗ ℰ, then derived equality is actual equality.
+--  -- (we'll prove this next (24 June))
+--  sound : swelldef 𝓥 α → ℰ ⊢ X ▹ p ≈ q → 𝑨 ⊧ p ≈ q
+
+--  sound _ (hyp i) = A⊧ℰ i
+--  sound _ (base x) = λ _ → refl
+--  sound wd (app {op = op}{ts}{ts'} x) =
+--   λ a → wd (op ̂ 𝑨) (λ i → (𝑨 ⟦ ts i ⟧) a) (λ i → (𝑨 ⟦ ts' i ⟧) a) λ i → sound wd (x i) a
+--  sound - (sub{X}{p}{q} x σ) a = Goal
+--   where
+--   -- ξ : (𝑨 ⟦ p ⟧) a ≡ (𝑨 ⟦ q ⟧) a
+--   -- ξ = ?
+--   Goal : (𝑨 ⟦ p [ σ ] ⟧) a ≡ (𝑨 ⟦ q [ σ ] ⟧) a
+--   Goal = {!!}
+-- -- _⟦_⟧ : (𝑨 : Algebra α 𝑆){X : Type 𝓧 } → Term X → (X → ∣ 𝑨 ∣) → ∣ 𝑨 ∣
+-- -- 𝑨 ⟦ ℊ x ⟧ = λ η → η x
+-- -- 𝑨 ⟦ node 𝑓 𝑡 ⟧ = λ η → (𝑓 ̂ 𝑨) (λ i → (𝑨 ⟦ 𝑡 i ⟧) η)
+--  sound - (refl _) = λ _ → refl
+--  sound - (sym x) = {!!}
+--  sound - (trans x x₁) = {!!}
+ 
 \end{code}
 
 
@@ -181,19 +213,25 @@ The binary relation ⊧ would be practically useless if it were not an *algebrai
 \begin{code}
 
 open ≡-Reasoning
+open _≅_
 
 module _ (wd : SwellDef){α β χ : Level}{X : Type χ}{𝑨 : Algebra α 𝑆}
          (𝑩 : Algebra β 𝑆)(p q : Term X) where
 
  ⊧-I-invar : 𝑨 ⊧ p ≈ q  →  𝑨 ≅ 𝑩  →  𝑩 ⊧ p ≈ q
 
- ⊧-I-invar Apq (f , g , f∼g , g∼f) x =
+ ⊧-I-invar Apq φ x =
   (𝑩 ⟦ p ⟧) x                      ≡⟨ wd χ β (𝑩 ⟦ p ⟧) x (∣ f ∣ ∘ ∣ g ∣ ∘ x) (λ i → ( f∼g (x i))⁻¹) ⟩
   (𝑩 ⟦ p ⟧) ((∣ f ∣ ∘ ∣ g ∣) ∘ x)  ≡⟨ (comm-hom-term (wd 𝓥 β) 𝑩 f p (∣ g ∣ ∘ x))⁻¹ ⟩
   ∣ f ∣ ((𝑨 ⟦ p ⟧) (∣ g ∣ ∘ x))    ≡⟨ cong ∣ f ∣ (Apq (∣ g ∣ ∘ x))  ⟩
   ∣ f ∣ ((𝑨 ⟦ q ⟧) (∣ g ∣ ∘ x))    ≡⟨ comm-hom-term (wd 𝓥 β) 𝑩 f q (∣ g ∣ ∘ x) ⟩
   (𝑩 ⟦ q ⟧) ((∣ f ∣ ∘ ∣ g ∣) ∘  x) ≡⟨ wd χ β (𝑩 ⟦ q ⟧) (∣ f ∣ ∘ ∣ g ∣ ∘ x) x (λ i → ( f∼g (x i))) ⟩
   (𝑩 ⟦ q ⟧) x                      ∎
+  where
+  f = to φ
+  g = from φ
+  f∼g = to∼from φ
+  g∼f = from∼to φ
 
 \end{code}
 
@@ -248,12 +286,12 @@ module _ (wd : SwellDef){χ : Level}{𝓤 𝓦 : Level}{X : Type χ} where
 
  ⊧-S-class-invar : {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}(p q : Term X)
   →                𝒦 ⊫ p ≈ q → (𝑩 : SubalgebraOfClass 𝒦) → ∣ 𝑩 ∣ ⊧ p ≈ q
- ⊧-S-class-invar p q Kpq (𝑩 , 𝑨 , SA , (ka , BisSA)) = ⊧-S-invar 𝑩 {p}{q}((Kpq ka)) (h , hinj)
+ ⊧-S-class-invar p q Kpq (𝑩 , 𝑨 , SA , (ka , B≅SA)) = ⊧-S-invar 𝑩 {p}{q}((Kpq ka)) (h , hinj)
   where
   h : hom 𝑩 𝑨
-  h = ∘-hom 𝑩 𝑨 (∣ BisSA ∣) ∣ snd SA ∣
+  h = ∘-hom 𝑩 𝑨 (to B≅SA) ∣ snd SA ∣
   hinj : IsInjective ∣ h ∣
-  hinj = ∘-injective (iso→injective BisSA) ∥ snd SA ∥
+  hinj = ∘-injective (iso→injective B≅SA) ∥ snd SA ∥
 
 \end{code}
 
@@ -352,16 +390,16 @@ module _ (wd : SwellDef){α χ : Level}{X : Type χ}{𝒦 : Pred (Algebra α �
  ⊧-H-class-coinvar : {p q : Term X}
   →  (∀ 𝑨 φ → 𝑨 ∈ 𝒦 → ∀ a → ∣ φ ∣ ((𝑻 X ⟦ p ⟧) a) ≡ ∣ φ ∣ ((𝑻 X ⟦ q ⟧) a)) → 𝒦 ⊫ p ≈ q
 
- ⊧-H-class-coinvar {p}{q} β {𝑨} ka = γ
+ ⊧-H-class-coinvar {p}{q} β {𝑨} ka = goal
   where
   φ : (a : X → ∣ 𝑨 ∣) → hom (𝑻 X) 𝑨
   φ a = lift-hom 𝑨 a
 
-  γ : 𝑨 ⊧ p ≈ q
-  γ a = (𝑨 ⟦ p ⟧)(∣ φ a ∣ ∘ ℊ)     ≡⟨(comm-hom-term (wd 𝓥 α) 𝑨 (φ a) p ℊ)⁻¹ ⟩
-               (∣ φ a ∣ ∘ (𝑻 X ⟦ p ⟧)) ℊ  ≡⟨ β 𝑨 (φ a) ka ℊ ⟩
-               (∣ φ a ∣ ∘ (𝑻 X ⟦ q ⟧)) ℊ  ≡⟨ (comm-hom-term (wd 𝓥 α) 𝑨 (φ a) q ℊ) ⟩
-               (𝑨 ⟦ q ⟧)(∣ φ a ∣ ∘ ℊ)     ∎
+  goal : 𝑨 ⊧ p ≈ q
+  goal a = (𝑨 ⟦ p ⟧)(∣ φ a ∣ ∘ ℊ)     ≡⟨(comm-hom-term (wd 𝓥 α) 𝑨 (φ a) p ℊ)⁻¹ ⟩
+           (∣ φ a ∣ ∘ (𝑻 X ⟦ p ⟧)) ℊ  ≡⟨ β 𝑨 (φ a) ka ℊ ⟩
+           (∣ φ a ∣ ∘ (𝑻 X ⟦ q ⟧)) ℊ  ≡⟨ (comm-hom-term (wd 𝓥 α) 𝑨 (φ a) q ℊ) ⟩
+           (𝑨 ⟦ q ⟧)(∣ φ a ∣ ∘ ℊ)     ∎
 
 
 \end{code}
