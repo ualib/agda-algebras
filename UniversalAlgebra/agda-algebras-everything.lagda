@@ -105,29 +105,27 @@ open import Subalgebras.Subalgebras         using    ( _IsSubalgebraOf_ ; Subalg
                                                      ; ≤-trans-≅ ; ≤-TRANS-≅ ; ≤-mono ; Lift-is-sub
                                                      ; Lift-≤ ; Lift-≤-Lift )
 
-open import Varieties.Basic                 using    ( _⊧_≈_ ; _⊫_≈_ ; _⊢_≈_ ; _⊢_▹_≈_ ; Th ; Mod
-                                                     ; ⊧-I-invar ; ⊧-Lift-invar ; ⊧-lower-invar
+open import Varieties.Basic                 using    ( _⊧_≈_ ; _⊫_≈_ ; Th ; Mod )
+
+open import Varieties.Properties            using    ( ⊧-I-invar ; ⊧-Lift-invar ; ⊧-lower-invar
                                                      ; ⊧-S-invar ; ⊧-S-class-invar ; ⊧-P-invar
                                                      ; ⊧-P-class-invar ; ⊧-P-lift-invar ; ⊧-H-invar
                                                      ; ⊧-H-class-invar ; ⊧-H-class-coinvar )
 
-open import Varieties.EquationalLogic       using    ( S⊆SP ; lemPS⊆SP ; PS⊆SP ; P⊆V ; SP⊆V ; SP⊆V'
-                                                     ; module class-products-with-maps )
+open import Varieties.EquationalLogic       using    ( _⊢_≈_ ; Subst ; _[_] ; _⊢_▹_≈_ )
 
-open import Varieties.Closure.H             using    ( H )
+open import Varieties.Closure               using    ( H ; S ; P ; V ; is-variety ; variety
+                                                     ; S-mono ; subalgebra→S ; S→subalgebra
+                                                     ; P-mono ; P-expa ; P-idemp ; Lift-Alg-subP
+                                                     ; Lift-Alg-subP' ; module Vlift )
 
-open import Varieties.Closure.S             using    ( S ; S-mono ; subalgebra→S ; S→subalgebra )
+open import Varieties.Preservation          using    (S⊆SP ; lemPS⊆SP ; PS⊆SP ; P⊆V ; SP⊆V ; SP⊆V'
+                                                     ; module class-products-with-maps ; H-id1 ; H-id2
+                                                     ; S-id1 ; S-id2 ; P-id1 ; P-id2 ; V-id1
+                                                     ; module Vid' ; V-id1' ; ovu ; lovu ; 𝕍 ; 𝒱
+                                                     ; class-ids-⇒ ; class-ids ; class-ids-⇐ ; V-id2 )
 
-open import Varieties.Closure.P             using    ( P ; P-mono ; P-expa ; P-idemp ; Lift-Alg-subP
-                                                     ;  Lift-Alg-subP' )
-open import Varieties.Closure.V             using    ( V ; is-variety ; variety ; module Vlift )
-
-open import Varieties.Preservation          using    (𝓕 ; 𝓕⁺ ; H-id1 ; H-id2 ; S-id1 ; S-id2
-                                                     ; P-id1 ; P-id2 ; V-id1 ; module Vid' ; V-id1'
-                                                     ; ovu ; lovu ; 𝕍 ; 𝒱 ; class-ids-⇒ ; class-ids
-                                                     ; class-ids-⇐ ; V-id2 )
-
-open import Varieties.FreeAlgebras          using    ( ψ ; ψRel ; ψcompatible ; ψIsEquivalence ; ψCon
+open import Varieties.FreeAlgebras          using    ( 𝓕 ; 𝓕⁺ ; ψ ; ψRel ; ψcompatible ; ψIsEquivalence ; ψCon
                                                      ; ℭ ; homℭ ; 𝔽 ; epi𝔽 ; hom𝔽 ; hom𝔽-is-epic
                                                      ; ψlemma0 ; ψlemma0-ap ; 𝔽-lift-hom ; X↪𝔽 ; 𝔑
                                                      ; hom𝔽-is-lift-hom ; ψlemma1 ; ψlemma2 ; ψlemma3

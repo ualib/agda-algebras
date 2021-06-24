@@ -60,6 +60,7 @@ However, with four components, an equivalent record type is easier to work with.
 \begin{code}
 
 record _≅_ (𝑨 : Algebra α 𝑆)(𝑩 : Algebra β 𝑆) : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ β) where
+ constructor mkiso
  field
   to : hom 𝑨 𝑩
   from : hom 𝑩 𝑨

@@ -42,7 +42,7 @@ open import Algebras.Products          {𝑆 = 𝑆} using ( ov )
 open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom ; kercon ; ker[_⇒_]_↾_
                                                      ; ∘-hom ; is-homomorphism ; ∘-is-hom )
 open import Homomorphisms.Noether      {𝑆 = 𝑆} using ( FirstHomTheorem|Set )
-open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; ≅-trans ; Lift-≅ )
+open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; ≅-trans ; Lift-≅ ; mkiso)
 open import Terms.Basic                {𝑆 = 𝑆} using ( Term ; ℊ ; node ; 𝑻 )
 
 private variable α β γ 𝓧 : Level
@@ -145,8 +145,6 @@ Using this type, we express the collection of all subalgebras of algebras in a c
 
  SubalgebraOfClass : Pred (Algebra α 𝑆)(ov α) → Type (ov (α ⊔ β))
  SubalgebraOfClass 𝒦 = Σ[ 𝑩 ∈ Algebra β 𝑆 ] 𝑩 IsSubalgebraOfClass 𝒦
- -- SubalgebraOfClass : Pred (Algebra α 𝑆)(ov α) → Type (ov (α ⊔ β))
- -- SubalgebraOfClass 𝒦 = Σ[ 𝑩 ∈ Algebra β 𝑆 ] 𝑩 IsSubalgebraOfClass 𝒦
 
 \end{code}
 
@@ -181,21 +179,17 @@ First we show that the subalgebra relation is a *preorder*; i.e., it is a reflex
 Next we prove that if two algebras are isomorphic and one of them is a subalgebra of `𝑨`, then so is the other.
 
 \begin{code}
+
 open ≡-Reasoning
 open _≅_
 
 iso→injective : {𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆}
  →              (φ : 𝑨 ≅ 𝑩) → IsInjective ∣ to φ ∣
-iso→injective {𝑨 = 𝑨} φ {x}{y} fxfy =
+iso→injective {𝑨 = 𝑨} (mkiso f g f∼g g∼f) {x} {y} fxfy =
  x                  ≡⟨ (g∼f x)⁻¹ ⟩
  (∣ g ∣ ∘ ∣ f ∣) x  ≡⟨ cong ∣ g ∣ fxfy ⟩
  (∣ g ∣ ∘ ∣ f ∣) y  ≡⟨ g∼f y ⟩
  y                  ∎
- where
- f = to φ
- g = from φ
- f∼g = to∼from φ
- g∼f = from∼to φ
 
 ≤-iso : (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}{𝑪 : Algebra γ 𝑆}
  →      𝑪 ≅ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
