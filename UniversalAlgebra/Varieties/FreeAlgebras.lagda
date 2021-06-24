@@ -56,13 +56,17 @@ open import Terms.Basic                {𝑆 = 𝑆} using ( Term ; 𝑻 ; free-
 open import Terms.Operations           {𝑆 = 𝑆} using (_⟦_⟧; comm-hom-term; free-lift-interp )
 open import Subalgebras.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; FirstHomCorollary|Set )
 open import Varieties.Basic            {𝑆 = 𝑆} using (_⊫_≈_; _⊧_≈_; Th; Mod )
-open import Varieties.EquationalLogic  {𝑆 = 𝑆}
-open import Varieties.Preservation {α = α}{𝑆 = 𝑆}
-
-
+open import Varieties.Closure          {𝑆 = 𝑆} using ( S ; P ; V )
+open import Varieties.Preservation     {𝑆 = 𝑆} using ( module class-products-with-maps
+                                                     ; class-ids-⇒ ; class-ids ; SP⊆V')
 
 open Term
+open S
+open V
 
+𝓕 𝓕⁺ : Level
+𝓕 = ov α
+𝓕⁺ = lsuc (ov α)    -- (this will be the level of the relatively free algebra)
 
 \end{code}
 
@@ -310,10 +314,10 @@ We need a three more lemmas before we are ready to tackle our main goal.
 
 
  ψlemma2 : kernel ∣ hom𝔽 ∣ ⊆ ψ 𝒦
- ψlemma2 {p , q} hyp = ψlemma1 {p , q} γ
+ ψlemma2 {p , q} x = ψlemma1 {p , q} γ
    where
     γ : (free-lift 𝔽 X↪𝔽) p ≡ (free-lift 𝔽 X↪𝔽) q
-    γ = (hom𝔽-is-lift-hom p) ∙ hyp ∙ (hom𝔽-is-lift-hom q)⁻¹
+    γ = (hom𝔽-is-lift-hom p) ∙ x ∙ (hom𝔽-is-lift-hom q)⁻¹
 
 
  ψlemma3 : ∀ p q → (p , q) ∈ ψ{X = X} 𝒦 → 𝒦 ⊫ p ≈ q
@@ -332,7 +336,7 @@ With these results in hand, it is now trivial to prove the main theorem of this 
 \begin{code}
 
  class-models-kernel : ∀ p q → (p , q) ∈ kernel ∣ hom𝔽 ∣ → 𝒦 ⊫ p ≈ q
- class-models-kernel p q hyp = ψlemma3 p q (ψlemma2 hyp)
+ class-models-kernel p q x = ψlemma3 p q (ψlemma2 x)
 
  𝕍𝒦 : Pred (Algebra 𝓕⁺ 𝑆) (lsuc 𝓕⁺)
  𝕍𝒦 = V{α = α}{β = 𝓕⁺} 𝒦
@@ -356,7 +360,7 @@ With these results in hand, it is now trivial to prove the main theorem of this 
   φE = lift-of-epi-is-epi 𝑨 ηE
 
   pqlem2 : ∀ p q → (p , q) ∈ kernel ∣ hom𝔽 ∣ → 𝑨 ⊧ p ≈ q
-  pqlem2 p q hyp = λ x → AinMTV p q (kernel-in-theory hyp) x
+  pqlem2 p q z = λ x → AinMTV p q (kernel-in-theory z) x
 
   kerincl : kernel ∣ hom𝔽 ∣ ⊆ kernel ∣ φ ∣
   kerincl {p , q} x = ∣ φ ∣ p      ≡⟨ (free-lift-interp (wd 𝓥 𝓕⁺) 𝑨 η p)⁻¹ ⟩
