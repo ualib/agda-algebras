@@ -182,13 +182,20 @@ Next we prove that if two algebras are isomorphic and one of them is a subalgebr
 
 \begin{code}
 open ≡-Reasoning
+open _≅_
+
 iso→injective : {𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆}
- →              ((f , _ , _ , _) : 𝑨 ≅ 𝑩) → IsInjective ∣ f ∣
-iso→injective {𝑨 = 𝑨} (f , g , f∼g , g∼f) {x}{y} fxfy =
+ →              (φ : 𝑨 ≅ 𝑩) → IsInjective ∣ to φ ∣
+iso→injective {𝑨 = 𝑨} φ {x}{y} fxfy =
  x                  ≡⟨ (g∼f x)⁻¹ ⟩
  (∣ g ∣ ∘ ∣ f ∣) x  ≡⟨ cong ∣ g ∣ fxfy ⟩
  (∣ g ∣ ∘ ∣ f ∣) y  ≡⟨ g∼f y ⟩
  y                  ∎
+ where
+ f = to φ
+ g = from φ
+ f∼g = to∼from φ
+ g∼f = from∼to φ
 
 ≤-iso : (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}{𝑪 : Algebra γ 𝑆}
  →      𝑪 ≅ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
@@ -196,7 +203,7 @@ iso→injective {𝑨 = 𝑨} (f , g , f∼g , g∼f) {x}{y} fxfy =
 ≤-iso 𝑨 {𝑩} {𝑪} CB BA = (g ∘ f , gfhom) , gfinj
  where
   f : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
-  f = fst ∣ CB ∣
+  f = ∣ to CB ∣
   g : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
   g = fst ∣ BA ∣
 
@@ -204,7 +211,7 @@ iso→injective {𝑨 = 𝑨} (f , g , f∼g , g∼f) {x}{y} fxfy =
   gfinj = ∘-injective (iso→injective CB)(∥ BA ∥)
 
   gfhom : is-homomorphism 𝑪 𝑨 (g ∘ f)
-  gfhom = ∘-is-hom 𝑪 𝑨 {f}{g} (snd ∣ CB ∣) (snd ∣ BA ∣)
+  gfhom = ∘-is-hom 𝑪 𝑨 {f}{g} ∥ to CB ∥ (snd ∣ BA ∣)
 
 
 ≤-trans-≅ : (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}(𝑪 : Algebra γ 𝑆)
@@ -215,9 +222,9 @@ iso→injective {𝑨 = 𝑨} (f , g , f∼g , g∼f) {x}{y} fxfy =
 
 ≤-TRANS-≅ : (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}(𝑪 : Algebra γ 𝑆)
  →          𝑨 ≤ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤ 𝑪
-≤-TRANS-≅ 𝑨 𝑪 A≤B B≅C = (∘-hom 𝑨 𝑪 ∣ A≤B ∣ ∣ B≅C ∣) , Goal
+≤-TRANS-≅ 𝑨 𝑪 A≤B B≅C = (∘-hom 𝑨 𝑪 ∣ A≤B ∣ (to B≅C)) , Goal
  where
- Goal : IsInjective ∣ (∘-hom 𝑨 𝑪 ∣ A≤B ∣ ∣ B≅C ∣) ∣
+ Goal : IsInjective ∣ (∘-hom 𝑨 𝑪 ∣ A≤B ∣ (to B≅C)) ∣
  Goal = ∘-injective (∥ A≤B ∥)(iso→injective B≅C)
 
 
