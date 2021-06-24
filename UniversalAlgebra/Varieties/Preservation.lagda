@@ -47,7 +47,7 @@ open import Terms.Basic                {𝑆 = 𝑆} using (Term ; 𝑻 ; lift-h
 open import Terms.Operations           {𝑆 = 𝑆} using (_⟦_⟧; comm-hom-term)
 open import Subalgebras.Subalgebras         using    ( SubalgebraOfClass )
  
-open import Varieties.Basic            {𝑆 = 𝑆} using ( _⊧_≋_ ; _⊧_≈_ ; ⊧-Lift-invar
+open import Varieties.Basic            {𝑆 = 𝑆} using ( _⊫_≈_ ; _⊧_≈_ ; ⊧-Lift-invar
                                                      ; ⊧-lower-invar ; ⊧-S-class-invar
                                                      ; ⊧-I-invar ; ⊧-P-lift-invar
                                                      ; ⊧-P-invar ; ⊧-S-invar ; Th)
@@ -81,7 +81,7 @@ open ≡-Reasoning
 
 module _ (wd : SwellDef){X : Type 𝓧} {𝒦 : Pred (Algebra α 𝑆)(ov α)} where
 
- H-id1 : (p q : Term X) → 𝒦 ⊧ p ≋ q → H{β = α} 𝒦 ⊧ p ≋ q
+ H-id1 : (p q : Term X) → 𝒦 ⊫ p ≈ q → H{β = α} 𝒦 ⊫ p ≈ q
  H-id1 p q σ (hbase x) = ⊧-Lift-invar wd p q (σ x)
  H-id1 p q σ (hhimg{𝑨}{𝑪} HA (𝑩 , ((φ , φh) , φE))) b = goal
   where
@@ -108,7 +108,7 @@ The converse of the foregoing result is almost too obvious to bother with. Nonet
 
 \begin{code}
 
- H-id2 : ∀ {β} → (p q : Term X) → H{β = β} 𝒦 ⊧ p ≋ q → 𝒦 ⊧ p ≋ q
+ H-id2 : ∀ {β} → (p q : Term X) → H{β = β} 𝒦 ⊫ p ≈ q → 𝒦 ⊫ p ≈ q
 
  H-id2 p q Hpq KA = ⊧-lower-invar wd p q (Hpq (hbase KA))
 
@@ -119,7 +119,7 @@ The converse of the foregoing result is almost too obvious to bother with. Nonet
 
 \begin{code}
 
- S-id1 : (p q : Term X) → 𝒦 ⊧ p ≋ q → S{β = α} 𝒦 ⊧ p ≋ q
+ S-id1 : (p q : Term X) → 𝒦 ⊫ p ≈ q → S{β = α} 𝒦 ⊫ p ≈ q
 
  S-id1 p q σ (sbase x) = ⊧-Lift-invar wd p q (σ x)
  S-id1 p q σ (slift x) = ⊧-Lift-invar wd p q ((S-id1 p q σ) x)
@@ -129,10 +129,10 @@ The converse of the foregoing result is almost too obvious to bother with. Nonet
   τ : 𝑨 ⊧ p ≈ q
   τ = S-id1 p q σ sA
 
-  Apq : ｛ 𝑨 ｝ ⊧ p ≋ q
+  Apq : ｛ 𝑨 ｝ ⊫ p ≈ q
   Apq refl = τ
 
-  goal : (𝒦 ∪ ｛ 𝑨 ｝) ⊧ p ≋ q
+  goal : (𝒦 ∪ ｛ 𝑨 ｝) ⊫ p ≈ q
   goal {𝑩} (inj₁ x) = σ x
   goal {𝑩} (inj₂ y) = Apq y
 
@@ -147,7 +147,7 @@ Again, the obvious converse is barely worth the bits needed to formalize it.
 
 \begin{code}
 
- S-id2 : ∀{β}(p q : Term X) → S{β = β}𝒦 ⊧ p ≋ q → 𝒦 ⊧ p ≋ q
+ S-id2 : ∀{β}(p q : Term X) → S{β = β}𝒦 ⊫ p ≈ q → 𝒦 ⊫ p ≈ q
 
  S-id2 p q Spq {𝑨} KA = ⊧-lower-invar wd p q (Spq (sbase KA))
 
@@ -163,7 +163,7 @@ Again, the obvious converse is barely worth the bits needed to formalize it.
 
 module _ (fe : DFunExt) (wd : SwellDef){X : Type 𝓧} {𝒦 : Pred (Algebra α 𝑆)(ov α)} where
 
- P-id1 : (p q : Term X) → 𝒦 ⊧ p ≋ q → P{β = α} 𝒦 ⊧ p ≋ q
+ P-id1 : (p q : Term X) → 𝒦 ⊫ p ≈ q → P{β = α} 𝒦 ⊫ p ≈ q
 
  P-id1 p q σ (pbase x) = ⊧-Lift-invar wd p q (σ x)
  P-id1 p q σ (pliftu x) = ⊧-Lift-invar wd p q ((P-id1 p q σ) x)
@@ -189,7 +189,7 @@ module _ (fe : DFunExt) (wd : SwellDef){X : Type 𝓧} {𝒦 : Pred (Algebra α 
 
 module _  (wd : SwellDef){X : Type 𝓧} {𝒦 : Pred (Algebra α 𝑆)(ov α)} where
 
- P-id2 : ∀ {β}(p q : Term X) → P{β = β} 𝒦 ⊧ p ≋ q → 𝒦 ⊧ p ≋ q
+ P-id2 : ∀ {β}(p q : Term X) → P{β = β} 𝒦 ⊫ p ≈ q → 𝒦 ⊫ p ≈ q
  P-id2 p q PKpq KA = ⊧-lower-invar wd p q (PKpq (pbase KA))
 
 \end{code}
@@ -203,7 +203,7 @@ Finally, we prove the analogous preservation lemmas for the closure operator `V`
 
 module Vid (fe : DFunExt)(wd : SwellDef){𝓧 : Level} {X : Type 𝓧} {𝒦 : Pred (Algebra α 𝑆)(ov α)} where
 
- V-id1 : (p q : Term X) → 𝒦 ⊧ p ≋ q → V{β = α} 𝒦 ⊧ p ≋ q
+ V-id1 : (p q : Term X) → 𝒦 ⊫ p ≈ q → V{β = α} 𝒦 ⊫ p ≈ q
  V-id1 p q σ (vbase x) = ⊧-Lift-invar wd p q (σ x)
  V-id1 p q σ (vlift{𝑨} x) = ⊧-Lift-invar wd p q ((V-id1 p q σ) x)
  V-id1 p q σ (vliftw{𝑨} x) = ⊧-Lift-invar wd p q ((V-id1 p q σ) x)
@@ -233,10 +233,10 @@ module Vid (fe : DFunExt)(wd : SwellDef){𝓧 : Level} {X : Type 𝓧} {𝒦 : P
    IH : 𝑨 ⊧ p ≈ q
    IH = V-id1 p q σ VA
 
-   Asinglepq : ｛ 𝑨 ｝ ⊧ p ≋ q
+   Asinglepq : ｛ 𝑨 ｝ ⊫ p ≈ q
    Asinglepq refl = IH
 
-   goal : (𝒦 ∪ ｛ 𝑨 ｝) ⊧ p ≋ q
+   goal : (𝒦 ∪ ｛ 𝑨 ｝) ⊫ p ≈ q
    goal {𝑩} (inj₁ x) = σ x
    goal {𝑩} (inj₂ y) = Asinglepq y
 
@@ -248,7 +248,7 @@ module Vid (fe : DFunExt)(wd : SwellDef){𝓧 : Level} {X : Type 𝓧} {𝒦 : P
 module Vid' (fe : DFunExt)(wd : SwellDef){𝓧 : Level} {X : Type 𝓧} {𝒦 : Pred (Algebra α 𝑆)(ov α)} where
 
  open Vid fe wd {𝓧}{X}{𝒦} public
- V-id1' : (p q : Term X) → 𝒦 ⊧ p ≋ q → V{β = β} 𝒦 ⊧ p ≋ q
+ V-id1' : (p q : Term X) → 𝒦 ⊫ p ≈ q → V{β = β} 𝒦 ⊫ p ≈ q
  V-id1' p q σ (vbase x) = ⊧-Lift-invar wd p q (σ x)
  V-id1' p q σ (vlift{𝑨} x) = ⊧-Lift-invar wd p q ((V-id1 p q σ) x)
  V-id1' p q σ (vliftw{𝑨} x) = ⊧-Lift-invar wd p q ((V-id1' p q σ) x)
@@ -297,14 +297,14 @@ module _ (fe : DFunExt)(wd : SwellDef){𝓧 : Level} {X : Type 𝓧} {𝒦 : Pre
  𝒱 = V{β = ovu} 𝒦
 
  open Vid' fe wd {𝓧}{X}{𝒦} public
- class-ids-⇒ : (p q : ∣ 𝑻 X ∣) → 𝒦 ⊧ p ≋ q  →  (p , q) ∈ Th 𝒱
+ class-ids-⇒ : (p q : ∣ 𝑻 X ∣) → 𝒦 ⊫ p ≈ q  →  (p , q) ∈ Th 𝒱
  class-ids-⇒ p q pKq VCloA = V-id1' p q pKq VCloA
 
- class-ids : (p q : ∣ 𝑻 X ∣) → 𝒦 ⊧ p ≋ q  →  (p , q) ∈ Th 𝕍
+ class-ids : (p q : ∣ 𝑻 X ∣) → 𝒦 ⊫ p ≈ q  →  (p , q) ∈ Th 𝕍
  class-ids p q pKq VCloA = V-id1' p q pKq VCloA
 
 
- class-ids-⇐ : (p q : ∣ 𝑻 X ∣) → (p , q) ∈ Th 𝒱 →  𝒦 ⊧ p ≋ q
+ class-ids-⇐ : (p q : ∣ 𝑻 X ∣) → (p , q) ∈ Th 𝒱 →  𝒦 ⊫ p ≈ q
  class-ids-⇐ p q Thpq {𝑨} KA = ⊧-lower-invar wd p q (Thpq (vbase KA))
 
 
@@ -317,7 +317,7 @@ Once again, and for the last time, completeness dictates that we formalize the c
 
 module _ (wd : SwellDef){X : Type 𝓧}{𝒦 : Pred (Algebra α 𝑆)(ov α)} where
 
- V-id2 : (p q : Term X) → (V{β = β} 𝒦 ⊧ p ≋ q) → (𝒦 ⊧ p ≋ q)
+ V-id2 : (p q : Term X) → (V{β = β} 𝒦 ⊫ p ≈ q) → (𝒦 ⊫ p ≈ q)
  V-id2 p q Vpq {𝑨} KA = ⊧-lower-invar wd p q (Vpq (vbase KA))
 
 \end{code}

@@ -21,7 +21,8 @@ open import Axiom.Extensionality.Propositional    using    ()
 open import Agda.Builtin.Equality                 using    (_≡_    ;  refl    )
 open import Agda.Primitive                        using    ( _⊔_              )
                                                   renaming ( Set   to Type    )
-open import Data.Product                          using    ( _,_ ; Σ-syntax ; Σ )
+open import Data.Product                          using    ( _,_   ; Σ-syntax
+                                                           ; _×_   ; Σ        )
                                                   renaming ( proj₁ to fst
                                                            ; proj₂ to snd     )
 open import Function.Base                         using    ( _∘_   ;  id      )
@@ -98,6 +99,9 @@ The principle of *proposition extensionality* asserts that logically equivalent 
 
 \begin{code}
 
+_≐_ : {α β : Level}{A : Type α}(P Q : Pred A β ) → Type _
+P ≐ Q = (P ⊆ Q) × (Q ⊆ P)
+
 pred-ext : (α β : Level) → Type (lsuc (α ⊔ β))
 pred-ext α β = ∀ {A : Type α}{P Q : Pred A β } → P ⊆ Q → Q ⊆ P → P ≡ Q
 
@@ -141,7 +145,7 @@ Of course, operations of type `Op I A` are well-defined in the sense that equal 
 
 \begin{code}
 
-welldef : {A : Type α}{I : Type 𝓥}(f : Op A{I}) → ∀ u v → u ≡ v → f u ≡ f v
+welldef : {A : Type α}{I : Type 𝓥}(f : Op A I) → ∀ u v → u ≡ v → f u ≡ f v
 welldef f u v refl = refl
 
 \end{code}
@@ -151,7 +155,7 @@ A stronger form of well-definedness of operations is to suppose that point-wise 
 \begin{code}
 
 swelldef : (𝓥 α : Level) → Type (lsuc (α ⊔ 𝓥))
-swelldef 𝓥 α = ∀ {A : Type α}{I : Type 𝓥}(f : Op A{I})(u v : I → A) → (∀ i → u i ≡ v i) → f u ≡ f v
+swelldef 𝓥 α = ∀ {A : Type α}{I : Type 𝓥}(f : Op A I)(u v : I → A) → (∀ i → u i ≡ v i) → f u ≡ f v
 
 private
   funext→swelldef : {α 𝓥 : Level} → funext 𝓥 α → swelldef 𝓥 α

@@ -62,11 +62,11 @@ module _ {𝓥 : Level} where
  ar = Arity 𝓥
 
 -- Relations of arbitrary arity over a single sort.
- Rel : Type α → {I : ar} → {ρ : Level} → Type (α ⊔ 𝓥 ⊔ lsuc ρ)
- Rel A {I} {ρ} = (I → A) → Type ρ
+ Rel : Type α → ar → {ρ : Level} → Type (α ⊔ 𝓥 ⊔ lsuc ρ)
+ Rel A I {ρ} = (I → A) → Type ρ
 
  Rel-syntax : Type α → ar → (ρ : Level) → Type (𝓥 ⊔ α ⊔ lsuc ρ)
- Rel-syntax A I ρ = Rel A {I} {ρ}
+ Rel-syntax A I ρ = Rel A I {ρ}
 
  syntax Rel-syntax A I ρ = Rel[ A ^ I ] ρ
  infix 6 Rel-syntax
@@ -92,14 +92,14 @@ It will be helpful to have some functions that make it easy to assert that a giv
 \begin{code}
 
 -- Lift a relation of tuples up to a relation on tuples of tuples.
- eval-Rel : {I : ar}{A : Type α} → Rel A {I}{ρ} → (J : ar) → (I → J → A) → Type (𝓥 ⊔ ρ)
+ eval-Rel : {I : ar}{A : Type α} → Rel A I{ρ} → (J : ar) → (I → J → A) → Type (𝓥 ⊔ ρ)
  eval-Rel R J t = ∀ (j : J) → R λ i → t i j
 
 {- A relation R is compatible with an operation 𝑓 if for every tuple t of tuples
    belonging to R, the tuple whose elements are the result of applying 𝑓 to
    sections of t also belongs to R. (see the bottom of this file for an heuristic explanation) -}
 
- compatible-Rel : {I J : ar}{A : Type α} → Op(A){J} → Rel A {I}{ρ} → Type (𝓥 ⊔ α ⊔ ρ)
+ compatible-Rel : {I J : ar}{A : Type α} → Op(A) J → Rel A I{ρ} → Type (𝓥 ⊔ α ⊔ ρ)
  compatible-Rel 𝑓 R  = ∀ t → eval-Rel R arity[ 𝑓 ] t → R λ i → 𝑓 (t i)
  -- (inferred type of t is I → J → A)
 
@@ -114,7 +114,7 @@ It will be helpful to have some functions that make it easy to assert that a giv
  eval-ΠΡ{I = I}{J}{𝒜} R t = ∀ j → R λ i → (t i) j
 
  compatible-ΠΡ : {I J : ar}{𝒜 : I → Type α}
-  →               (∀ i → Op (𝒜 i){J})  -- for each i : I, an operation of type  𝒪(𝒜 i){J} = (J → 𝒜 i) → 𝒜 i
+  →               (∀ i → Op (𝒜 i) J)  -- for each i : I, an operation of type  𝒪(𝒜 i){J} = (J → 𝒜 i) → 𝒜 i
   →               ΠΡ I 𝒜 {ρ}             -- a subset of Π[ i ∈ I ] 𝒜 i
                                          -- (where Π[ i ∈ I ] 𝒜 i is a type of dependent functions or "tuples")
   →               Type _

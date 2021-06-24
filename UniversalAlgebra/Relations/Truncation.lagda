@@ -275,11 +275,11 @@ Naturally, we define the corresponding *truncated continuous relation type* and 
 
 module _ {I : Arity 𝓥} where
 
- IsRelProp : {ρ : Level}(A : Type α) → Rel A {I}{ρ}  → Type (𝓥 ⊔ α ⊔ ρ)
+ IsRelProp : {ρ : Level}(A : Type α) → Rel A I{ρ}  → Type (𝓥 ⊔ α ⊔ ρ)
  IsRelProp B P = ∀ (b : (I → B)) → is-prop (P b)
 
  RelProp : Type α → (ρ : Level) → Type (𝓥 ⊔ α ⊔ lsuc ρ)
- RelProp A ρ = Σ[ P ∈ Rel A{I}{ρ} ] IsRelProp A P
+ RelProp A ρ = Σ[ P ∈ Rel A I{ρ} ] IsRelProp A P
 
  RelPropExt : Type α → (ρ : Level) → Type (𝓥 ⊔ α ⊔ lsuc ρ)
  RelPropExt A ρ = {P Q : RelProp A ρ } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
