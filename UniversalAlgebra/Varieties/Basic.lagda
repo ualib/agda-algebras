@@ -22,8 +22,6 @@ Agda supports the definition of infix operations and relations, and we use this 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 
--- Imports from Agda (builtin/primitive) and the Agda Standard Library
-
 open import Level using ( Level )
 open import Algebras.Basic
 
@@ -31,36 +29,20 @@ module Varieties.Basic {𝑆 : Signature 𝓞 𝓥} where
 
 
 -- imports from Agda and the Agda Standard Library -------------------------------------------
-open import Agda.Builtin.Equality   using    ( _≡_ ;  refl )
 open import Agda.Primitive          using    ( _⊔_ ;  lsuc )
-                                   renaming ( Set to Type
-                                            ; lzero to  ℓ₀       )
-open import Axiom.Extensionality.Propositional
-                                    renaming ( Extensionality to funext )
-open import Data.Product            using    ( _,_ ; Σ-syntax ; Σ ; _×_ )
+                                    renaming ( Set to Type )
+open import Data.Product            using    ( _×_ ; _,_ )
                                     renaming ( proj₁ to fst
                                              ; proj₂ to snd )
-open import Function.Base           using    ( _∘_ )
-open import Relation.Binary.PropositionalEquality
-                                    using    ( cong ; cong-app
-                                             ; module ≡-Reasoning)
-open import Relation.Unary          using    ( Pred ; _∈_ ; _⊆_ ; ⋂ )
+open import Relation.Unary          using    ( Pred ; _∈_ )
 
 
 
--- imports from agda-algebras --------------------------------------------------------------
-open import Overture.Preliminaries       using ( ∣_∣ ; ∥_∥ ; 𝑖𝑑 ; _⁻¹ ; _≈_ ; Π ; Π-syntax)
-open import Overture.Inverses            using ( IsInjective ; ∘-injective )
-open import Relations.Extensionality using (DFunExt; SwellDef; swelldef)
-
-open import Algebras.Products          {𝑆 = 𝑆} using ( ov ; ⨅ )
-open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom; 𝒾𝒹 ; ∘-hom ; is-homomorphism )
-open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; ≅-trans ; Lift-≅ )
-open import Terms.Basic                {𝑆 = 𝑆} using ( Term ; 𝑻 ; lift-hom )
-open import Terms.Operations           {𝑆 = 𝑆} using ( _⟦_⟧ ; comm-hom-term
-                                               ; interp-prod ; term-agreement )
-open import Subalgebras.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; SubalgebraOfClass ; iso→injective )
-open Term
+-- -- imports from agda-algebras --------------------------------------------------------------
+open import Overture.Preliminaries    using ( _≈_ )
+open import Algebras.Products {𝑆 = 𝑆} using ( ov )
+open import Terms.Basic       {𝑆 = 𝑆} using ( Term ; 𝑻 ; lift-hom )
+open import Terms.Operations  {𝑆 = 𝑆} using ( _⟦_⟧ )
 
 \end{code}
 

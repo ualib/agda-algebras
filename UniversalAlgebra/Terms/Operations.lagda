@@ -24,23 +24,23 @@ module Terms.Operations {𝑆 : Signature 𝓞 𝓥} where
 
 
 -- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
-open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
-open import Relation.Binary.PropositionalEquality using ( cong ; module ≡-Reasoning )
-open import Function.Base  using (_∘_)
-
-open import Agda.Primitive          using    ( _⊔_ ;  lsuc )
-                                    renaming ( Set to Type )
-open import Agda.Builtin.Equality   using    ( _≡_ ; refl )
-open import Data.Product            using    ( _,_ ; Σ-syntax ; Σ )
-
+open import Agda.Primitive                        using    ( _⊔_ ;  lsuc )
+                                                  renaming ( Set to Type )
+open import Agda.Builtin.Equality                 using    ( _≡_ ; refl )
+open import Axiom.Extensionality.Propositional    using    ()
+                                                  renaming (Extensionality to funext)
+open import Data.Product                          using    ( _,_ ; Σ-syntax ; Σ )
+open import Function.Base                         using    ( _∘_ )
+open import Relation.Binary.PropositionalEquality using    (sym ; cong
+                                                           ; module ≡-Reasoning )
 
 
 
 
 -- Imports from agda-algebras --------------------------------------------------------------
-open import Overture.Preliminaries using ( _∙_ ; _⁻¹ ; ∣_∣ ; ∥_∥ ; Π ; Π-syntax)
-open import Relations.Discrete     using ( _|:_ )
-open import Relations.Extensionality using ( swelldef )
+open import Overture.Preliminaries       using ( _∙_ ; _⁻¹ ; ∣_∣ ; ∥_∥ ; Π ; Π-syntax ; _≈_ )
+open import Relations.Discrete           using ( _|:_ )
+open import Relations.Extensionality     using ( swelldef )
 open import Algebras.Products    {𝑆 = 𝑆} using ( ov ; ⨅ )
 open import Algebras.Congruences {𝑆 = 𝑆} using ( Con ; IsCongruence)
 open import Homomorphisms.Basic  {𝑆 = 𝑆} using ( hom)
@@ -48,7 +48,8 @@ open import Terms.Basic          {𝑆 = 𝑆} using ( Term ; free-lift ; 𝑻 )
 
 open Term
 
-private variable α β γ ρ 𝓧 : Level
+private variable α β γ ρ χ : Level
+
 \end{code}
 
 When we interpret a term in an algebra we call the resulting function a *term operation*.  Given a term `p` and an algebra `𝑨`, we denote by `𝑨 ⟦ p ⟧` the *interpretation* of `p` in `𝑨`.  This is defined inductively as follows.
@@ -61,7 +62,7 @@ Thus the interpretation of a term is defined by induction on the structure of th
 
 \begin{code}
 
-_⟦_⟧ : (𝑨 : Algebra α 𝑆){X : Type 𝓧 } → Term X → (X → ∣ 𝑨 ∣) → ∣ 𝑨 ∣
+_⟦_⟧ : (𝑨 : Algebra α 𝑆){X : Type χ } → Term X → (X → ∣ 𝑨 ∣) → ∣ 𝑨 ∣
 𝑨 ⟦ ℊ x ⟧ = λ η → η x
 𝑨 ⟦ node 𝑓 𝑡 ⟧ = λ η → (𝑓 ̂ 𝑨) (λ i → (𝑨 ⟦ 𝑡 i ⟧) η)
 
@@ -71,12 +72,52 @@ It turns out that the intepretation of a term is the same as the `free-lift` (mo
 
 \begin{code}
 
-free-lift-interp : swelldef 𝓥 α → (𝑨 : Algebra α 𝑆){X : Type 𝓧 }(η : X → ∣ 𝑨 ∣)(p : Term X)
+free-lift-interp : swelldef 𝓥 α → (𝑨 : Algebra α 𝑆){X : Type χ }(η : X → ∣ 𝑨 ∣)(p : Term X)
  →                 (𝑨 ⟦ p ⟧) η ≡ (free-lift 𝑨 η) p
 
 free-lift-interp _ 𝑨 η (ℊ x) = refl
 free-lift-interp wd 𝑨 η (node 𝑓 𝑡) = wd (𝑓 ̂ 𝑨) (λ z → (𝑨 ⟦ 𝑡 z ⟧) η)
                                        ((free-lift 𝑨 η) ∘ 𝑡)((free-lift-interp wd 𝑨 η) ∘ 𝑡)
+
+
+
+-- A substitution from Y to X is simply a function from Y to X.
+
+-- Application of a Subst.
+_[_] : {χ : Level}{X Y : Type χ} → Term Y → (Y → X) → Term X
+(ℊ y) [ σ ] = ℊ (σ y)
+(node 𝑓 t)  [ σ ] = node 𝑓 λ i → t i [ σ ]
+
+
+-- Substerm X Y, an inhabitant of which replaces each variable symbol in Y with a term from Term X.
+Substerm : (X Y : Type χ) → Type _
+Substerm X Y = (y : Y) → Term X
+
+-- Application of a Substerm.
+_[_]t : {X Y : Type χ } → Term Y → Substerm X Y → Term X
+(ℊ y) [ σ ]t = σ y
+(node f 𝑡) [ σ ]t = node f (λ z → (𝑡 z) [ σ ]t )
+
+
+open ≡-Reasoning
+
+subst-lemma : swelldef 𝓥 α → {X Y : Type χ }(p : Term Y)(σ : Y → X)(𝑨 : Algebra α 𝑆)(η : X → ∣ 𝑨 ∣)
+ →            (𝑨 ⟦ p [ σ ] ⟧) η ≡ (𝑨 ⟦ p ⟧) (η ∘ σ)
+subst-lemma _ (ℊ x) σ 𝑨 η = refl
+subst-lemma wd (node f 𝑡) σ 𝑨 η = wd (f ̂ 𝑨) (λ i → (𝑨 ⟦ (𝑡 i) [ σ ] ⟧) η)
+                                             (λ i → (𝑨 ⟦ 𝑡 i ⟧) (η ∘ σ))
+                                             (λ i → subst-lemma wd (𝑡 i) σ 𝑨 η)
+
+open ≡-Reasoning
+
+subst-theorem : swelldef 𝓥 α → {X Y : Type χ }
+                (p q : Term Y)(σ : Y → X)(𝑨 : Algebra α 𝑆)
+ →              𝑨 ⟦ p ⟧ ≈ 𝑨 ⟦ q ⟧ → 𝑨 ⟦ p [ σ ] ⟧ ≈ 𝑨 ⟦ q [ σ ] ⟧
+
+subst-theorem wd p q σ 𝑨 Apq η = (𝑨 ⟦ p [ σ ] ⟧) η ≡⟨ subst-lemma wd p σ 𝑨 η ⟩
+                                 (𝑨 ⟦ p ⟧) (η ∘ σ) ≡⟨ Apq (η ∘ σ) ⟩
+                                 (𝑨 ⟦ q ⟧) (η ∘ σ) ≡⟨ sym (subst-lemma wd q σ 𝑨 η) ⟩
+                                 (𝑨 ⟦ q [ σ ] ⟧) η ∎
 
 \end{code}
 
@@ -100,24 +141,24 @@ We claim that for all `p : Term X` there exists `q : Term X` and `𝔱 : X → �
 
 \begin{code}
 
-term-interp : {X : Type 𝓧} (𝑓 : ∣ 𝑆 ∣){𝑠 𝑡 : ∥ 𝑆 ∥ 𝑓 → Term X} → 𝑠 ≡ 𝑡 → node 𝑓 𝑠 ≡ (𝑓 ̂ 𝑻 X) 𝑡
+term-interp : {X : Type χ} (𝑓 : ∣ 𝑆 ∣){𝑠 𝑡 : ∥ 𝑆 ∥ 𝑓 → Term X} → 𝑠 ≡ 𝑡 → node 𝑓 𝑠 ≡ (𝑓 ̂ 𝑻 X) 𝑡
 term-interp 𝑓 {𝑠}{𝑡} st = cong (node 𝑓) st
 
-term-interp' : swelldef 𝓥 (ov 𝓧) → {X : Type 𝓧} (𝑓 : ∣ 𝑆 ∣){𝑠 𝑡 : ∥ 𝑆 ∥ 𝑓 → Term X}
+term-interp' : swelldef 𝓥 (ov χ) → {X : Type χ} (𝑓 : ∣ 𝑆 ∣){𝑠 𝑡 : ∥ 𝑆 ∥ 𝑓 → Term X}
  →             (∀ i → 𝑠 i ≡ 𝑡 i) → node 𝑓 𝑠 ≡ (𝑓 ̂ 𝑻 X) 𝑡
 term-interp' wd 𝑓 {𝑠}{𝑡} st = wd (node 𝑓) 𝑠 𝑡 st
 
-term-gen : swelldef 𝓥 (ov 𝓧) → {X : Type 𝓧}(p : ∣ 𝑻 X ∣) → Σ[ q ∈ ∣ 𝑻 X ∣ ] p ≡ (𝑻 X ⟦ q ⟧) ℊ
+term-gen : swelldef 𝓥 (ov χ) → {X : Type χ}(p : ∣ 𝑻 X ∣) → Σ[ q ∈ ∣ 𝑻 X ∣ ] p ≡ (𝑻 X ⟦ q ⟧) ℊ
 term-gen _ (ℊ x) = (ℊ x) , refl
 term-gen wd (node 𝑓 t) = (node 𝑓 (λ i → ∣ term-gen wd (t i) ∣)) ,
                          term-interp' wd 𝑓 λ i → ∥ term-gen wd (t i) ∥
 
-term-gen-agreement : (wd : swelldef 𝓥 (ov 𝓧)){X : Type 𝓧}(p : ∣ 𝑻 X ∣) → (𝑻 X ⟦ p ⟧) ℊ ≡ (𝑻 X ⟦ ∣ term-gen wd p ∣ ⟧) ℊ
+term-gen-agreement : (wd : swelldef 𝓥 (ov χ)){X : Type χ}(p : ∣ 𝑻 X ∣) → (𝑻 X ⟦ p ⟧) ℊ ≡ (𝑻 X ⟦ ∣ term-gen wd p ∣ ⟧) ℊ
 term-gen-agreement _ (ℊ x) = refl
 term-gen-agreement wd {X} (node f t) = wd (f ̂ 𝑻 X) (λ x → (𝑻 X ⟦ t x ⟧) ℊ)
                                           (λ x → (𝑻 X ⟦ ∣ term-gen wd (t x) ∣ ⟧) ℊ) λ i → term-gen-agreement wd (t i)
 
-term-agreement : swelldef 𝓥 (ov 𝓧) → {X : Type 𝓧}(p : ∣ 𝑻 X ∣) → p ≡  (𝑻 X ⟦ p ⟧) ℊ
+term-agreement : swelldef 𝓥 (ov χ) → {X : Type χ}(p : ∣ 𝑻 X ∣) → p ≡  (𝑻 X ⟦ p ⟧) ℊ
 term-agreement wd {X} p = ∥ term-gen wd p ∥ ∙ (term-gen-agreement wd p)⁻¹
 
 
@@ -129,7 +170,7 @@ term-agreement wd {X} p = ∥ term-gen wd p ∥ ∙ (term-gen-agreement wd p)⁻
 
 \begin{code}
 
-module _ (wd : swelldef 𝓥 (β ⊔ α)){X : Type 𝓧 }{I : Type β} where
+module _ (wd : swelldef 𝓥 (β ⊔ α)){X : Type χ }{I : Type β} where
 
  interp-prod : (p : Term X)(𝒜 : I → Algebra α 𝑆)(a : X → Π[ i ∈ I ] ∣ 𝒜 i ∣)
   →            (⨅ 𝒜 ⟦ p ⟧) a ≡ λ i → (𝒜 i ⟦ p ⟧)(λ x → (a x) i)
@@ -144,7 +185,7 @@ module _ (wd : swelldef 𝓥 (β ⊔ α)){X : Type 𝓧 }{I : Type β} where
   IH : ∀ i → u i ≡ v i
   IH = λ x → interp-prod (𝑡 x) 𝒜 a
 
- interp-prod2 : funext (α ⊔ β ⊔ 𝓧) (α ⊔ β) → (p : Term X)(𝒜 : I → Algebra α 𝑆)
+ interp-prod2 : funext (α ⊔ β ⊔ χ) (α ⊔ β) → (p : Term X)(𝒜 : I → Algebra α 𝑆)
   →             ⨅ 𝒜 ⟦ p ⟧ ≡ (λ a i → (𝒜 i ⟦ p ⟧) λ x → a x i)
  interp-prod2 _ (ℊ x₁) 𝒜 = refl
  interp-prod2 fe (node f t) 𝒜 = fe λ a → wd (f ̂ ⨅ 𝒜)(u a) (v a) (IH a)
@@ -165,10 +206,9 @@ We now prove two important facts about term operations.  The first of these, whi
 
 \begin{code}
 
-open ≡-Reasoning
 
 comm-hom-term : swelldef 𝓥 β → {𝑨 : Algebra α 𝑆} (𝑩 : Algebra β 𝑆)
-                (h : hom 𝑨 𝑩){X : Type 𝓧}(t : Term X) (a : X → ∣ 𝑨 ∣)
+                (h : hom 𝑨 𝑩){X : Type χ}(t : Term X) (a : X → ∣ 𝑨 ∣)
                 -----------------------------------------
   →             ∣ h ∣ ((𝑨 ⟦ t ⟧) a) ≡ (𝑩 ⟦ t ⟧) (∣ h ∣ ∘ a)
 
