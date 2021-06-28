@@ -15,8 +15,8 @@ This section presents the [Relations.Quotients][] module of the [Agda Universal 
 
 module Relations.Quotients where
 
-open import Agda.Builtin.Equality                 using    (_≡_  ; refl      )
-open import Data.Product                          using    ( _,_ ; Σ
+open import Agda.Builtin.Equality as E            using    (_≡_  ) -- ; refl      )
+open import Data.Product                          using    ( _,_ ; Σ ; _×_
                                                            ; Σ-syntax        )
                                                   renaming ( proj₁ to fst
                                                            ; proj₂ to snd    )
@@ -25,14 +25,14 @@ open import Agda.Primitive                        using    ( _⊔_             )
                                                            ; Setω  to Typeω  )
 open import Level                                 renaming ( suc   to lsuc
                                                            ; zero  to ℓ₀     )
-open import Relation.Binary                       using    ( IsEquivalence   )
+open import Relation.Binary                       using    ( IsEquivalence   ; IsPartialEquivalence)
                                                   renaming ( Rel   to BinRel )
-open import Relation.Binary.PropositionalEquality using    ( sym  ; trans    )
+import Relation.Binary.PropositionalEquality as P using    ( refl ; sym  ; trans    )
 open import Relation.Unary                        using    ( Pred ; _⊆_      )
-
 
 open import Overture.Preliminaries  using  ( ∣_∣ )
 open import Relations.Discrete      using  ( ker ; 0[_] ; kerlift )
+open import Relations.BinPred                      using    ( Reflexive ; Symmetric ; Transitive )
 
 
 
@@ -48,6 +48,30 @@ A binary relation is called a *preorder* if it is reflexive and transitive. An *
 Equivalence : {α : Level} → Type α → {ρ : Level} → Type (α ⊔ lsuc ρ)
 Equivalence {α} A {ρ} = Σ[ r ∈ BinRel A ρ ] IsEquivalence r
 
+
+
+\end{code}
+
+Similarly, for "binary relations" of type `Pred(X × X) _`, we have corresponding IsEquivalence and Equivalence types.
+
+\begin{code}
+
+module _ {χ : Level}{X : Type χ}{ρ : Level} where
+
+ record IsPartialEquivPred (R : Pred (X × X) ρ) : Type (χ ⊔ ρ) where
+  field
+   sym   : Symmetric R
+   trans : Transitive R
+
+ record IsEquivPred (R : Pred (X × X) ρ) : Type (χ ⊔ ρ) where
+  field
+   refl  : Reflexive R
+   sym   : Symmetric R
+   trans : Transitive R
+
+  reflexive : ∀ x y → x ≡ y → R (x , y)
+  reflexive x .x P.refl = refl
+
 \end{code}
 
 Thus, if we have `(R ,  p) : Equivalence A`, then `R` denotes a binary relation over `A` and `p` is of record type `IsEquivalence R` with fields containing the three proofs showing that `R` is an equivalence relation.
@@ -57,10 +81,10 @@ A prominent example of an equivalence relation is the kernel of any function.
 \begin{code}
 
 ker-IsEquivalence : {α : Level}{A : Type α}{β : Level}{B : Type β}(f : A → B) → IsEquivalence (ker f)
-ker-IsEquivalence f = record { refl = refl ; sym = λ x → sym x ; trans = λ x y → trans x y }
+ker-IsEquivalence f = record { refl = P.refl ; sym = λ x → P.sym x ; trans = λ x y → P.trans x y }
 
 kerlift-IsEquivalence : {α : Level}{A : Type α}{β : Level}{B : Type β}(f : A → B){ρ : Level} → IsEquivalence (kerlift f ρ)
-kerlift-IsEquivalence f = record { refl = lift refl ; sym = λ x → lift (sym (lower x)) ; trans = λ x y → lift (trans (lower x) (lower y)) }
+kerlift-IsEquivalence f = record { refl = lift P.refl ; sym = λ x → lift (P.sym (lower x)) ; trans = λ x y → lift (P.trans (lower x) (lower y)) }
 
 \end{code}
 
@@ -128,7 +152,7 @@ We use the following type to represent an \ab R-block with a designated represen
 \begin{code}
 
 ⟪_⟫ : {α : Level}{A : Type α}{ρ : Level} → A → {R : BinRel A ρ} → A / R
-⟪ a ⟫{R} = [ a ] R , R-block a refl
+⟪ a ⟫{R} = [ a ] R , R-block a P.refl
 
 \end{code}
 
@@ -190,9 +214,9 @@ This is obviously an equivalence relation, as we now confirm.
 \begin{code}
 
 0[_]IsEquivalence : {α : Level}(A : Type α){ρ : Level} → IsEquivalence (0[ A ] {ρ})
-0[ A ]IsEquivalence {ρ} = record { refl = lift refl
-                              ; sym = λ p → lift (sym (lower p))
-                              ; trans = λ p q → lift (trans (lower p) (lower q)) }
+0[ A ]IsEquivalence {ρ} = record { refl = lift P.refl
+                              ; sym = λ p → lift (P.sym (lower p))
+                              ; trans = λ p q → lift (P.trans (lower p) (lower q)) }
 
 0[_]Equivalence : {α : Level}(A : Type α) {ρ : Level} → Equivalence A {α ⊔ ρ}
 0[ A ]Equivalence {ρ} = 0[ A ] {ρ} , 0[ A ]IsEquivalence
@@ -213,11 +237,11 @@ The following are sometimes useful.
 ⟪_∼_⟫-elim : {α : Level}{A : Type α} → (u v : A) → {ρ : Level}{R : Equivalence A{ρ} }
  →         ⟪ u ⟫{∣ R ∣} ≡ ⟪ v ⟫ → ∣ R ∣ u v
 
-⟪ u ∼ .u ⟫-elim {ρ} {R} refl = IsEquivalence.refl (snd R)
+⟪ u ∼ .u ⟫-elim {ρ} {R} P.refl = IsEquivalence.refl (snd R)
 
 
-≡→⊆ : {α : Level}{A : Type α}{ρ : Level}(P Q : Pred A ρ) → P ≡ Q → P ⊆ Q
-≡→⊆ P .P refl {x} Px = Px
+≡→⊆ : {α : Level}{A : Type α}{ρ : Level}(Q R : Pred A ρ) → Q ≡ R → Q ⊆ R
+≡→⊆ Q .Q P.refl {x} Qx = Qx
 
 \end{code}
 

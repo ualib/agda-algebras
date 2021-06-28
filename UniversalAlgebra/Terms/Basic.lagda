@@ -15,7 +15,6 @@ The theoretical background that begins each subsection below is based on Cliff B
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Level using ( Level )
 open import Algebras.Basic
 
 module Terms.Basic {𝑆 : Signature 𝓞 𝓥} where
@@ -24,7 +23,7 @@ module Terms.Basic {𝑆 : Signature 𝓞 𝓥} where
 open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
 open import Relation.Binary.PropositionalEquality using ( cong ; module ≡-Reasoning )
 
-open import Agda.Primitive          using    ( _⊔_ ;  lsuc )
+open import Agda.Primitive          using    ( _⊔_ ;  lsuc ; Level )
                                     renaming ( Set to Type )
 open import Agda.Builtin.Equality   using    ( _≡_ ;  refl )
 open import Data.Product            using    ( _,_ ;  Σ
