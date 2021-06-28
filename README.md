@@ -23,6 +23,32 @@ Agda ([version 2.6.1](https://agda.readthedocs.io/en/v2.6.1/getting-started/inst
 
 If you don't have it, follow the [official Agda installation instructions](https://agda.readthedocs.io/en/v2.6.0/getting-started/installation.html).
 
+
+For reference, the following is a list of commands that should Agda version 2.6.2 on a Ubuntu 18.04 distro. Please submit an issue or pull request if these commands don't work for you.
+
+```
+cabal update
+git clone git@github.com:agda/agda.git
+cd agda
+git checkout release-2.6.2
+cabal install Agda-2.6.2 --program-suffix=-2.6.2  # (takes a very long time)
+cd ~/.cabal/bin/
+touch ~/.emacs
+cp ~/.emacs ~/.emacs.backup
+./agda-mode-2.6.2 setup
+./agda-mode-2.6.2 compile
+mkdir -p ~/bin
+cp ~/.emacs ~/bin
+cp ~/.emacs.backup ~/.emacs
+cd ~/bin
+echo '#!/bin/bash' > agdamacs
+echo 'PATH=~/.cabal/bin:$PATH emacs --no-init-file --load ~/bin/.emacs \$@' >> agdamacs
+chmod +x agdamacs
+echo 'export PATH=~/bin:~/.cabal/bin:$PATH' >> ~/.profile
+```
+
+Now invoking the command `agdamacs` will launch emacs with Agda 2.6.2 and agda-mode installed.)
+
 -----------------------------
 
 ## Contributing to this repository
