@@ -24,6 +24,7 @@ open import Function.Base         using    ( _∘_            )
 open import Level                 using    ( Level ; Lift   )
                                   renaming ( suc  to lsuc
                                            ; zero to ℓ₀     )
+open import Relation.Binary.Definitions using (Reflexive ; Symmetric ; Transitive )
 open import Relation.Binary.Core  using    ( _⇒_ ; _=[_]⇒_  )
                                   renaming ( REL  to BinREL
                                            ; Rel  to BinRel )
@@ -112,8 +113,6 @@ The *identity relation* (which is equivalent to the kernel of an injective funct
 
 \begin{code}
 
--- 0[_] : (A : Type α) → BinRel A α
--- 0[ A ] x y = x ≡ y
 0[_] : (A : Type α) → {ρ : Level} → BinRel A (α ⊔ ρ)
 0[ A ] {ρ} = λ x y → Lift ρ (x ≡ y)
 
@@ -128,11 +127,11 @@ module _ {α ρ : Level}{A : Type (α ⊔ ρ)} where
  _⊑_ : BinRel A ρ → BinRel A ρ → Type (α ⊔ ρ)
  P ⊑ Q = ∀ x y → P x y → Q x y
 
- ⊑-refl : {P : BinRel A ρ} → P ⊑ P
- ⊑-refl x y Pxy = Pxy
+ ⊑-refl : Reflexive _⊑_
+ ⊑-refl = λ _ _ z → z
 
- ⊑-trans : {P Q R : BinRel A ρ} → P ⊑ Q → Q ⊑ R → P ⊑ R
- ⊑-trans {P = P}{Q}{R} PQ QR x y Pxy = QR x y (PQ x y Pxy)
+ ⊑-trans : Transitive _⊑_
+ ⊑-trans P⊑Q Q⊑R x y Pxy = Q⊑R x y (P⊑Q x y Pxy)
 
 \end{code}
 
@@ -187,6 +186,9 @@ Here is how we implement this in the [UniversalAlgebra][] library.
 eval-rel : {A : Type α}{I : Arity 𝓥} → BinRel A ρ → BinRel (I → A) (𝓥 ⊔ ρ)
 eval-rel R u v = ∀ i → R (u i) (v i)
 
+eval-pred : {A : Type α}{I : Arity 𝓥} → Pred (A × A) ρ → BinRel (I → A) (𝓥 ⊔ ρ)
+eval-pred P u v = ∀ i → (u i , v i) ∈ P
+
 
 \end{code}
 
@@ -208,9 +210,16 @@ The function `eval-rel` "lifts" a binary relation to the corresponding `I`-ary r
 _preserves_ : {A : Type α}{I : Arity 𝓥} → Op A I → BinRel A ρ → Type (α ⊔ 𝓥 ⊔ ρ)
 f preserves R  = ∀ u v → (eval-rel R) u v → R (f u) (f v)
 
+_preserves-pred_ : {A : Type α}{I : Arity 𝓥} → Op A I → Pred ( A × A ) ρ → Type (α ⊔ 𝓥 ⊔ ρ)
+f preserves-pred P  = ∀ u v → (eval-pred P) u v → (f u , f v) ∈ P
+
 --shorthand notation for preserves, defined using the fancy implication notation from the std lib.
 _|:_ : {A : Type α}{I : Arity 𝓥} → Op A I → BinRel A ρ → Type (α ⊔ 𝓥 ⊔ ρ)
 f |: R  = (eval-rel R) =[ f ]⇒ R
+
+--shorthand notation for preserves, defined using the fancy implication notation from the std lib.
+_|:pred_ : {A : Type α}{I : Arity 𝓥} → Op A I → Pred (A × A) ρ → Type (α ⊔ 𝓥 ⊔ ρ)
+f |:pred P  = (eval-pred P) =[ f ]⇒ λ x y → (x , y) ∈ P
 
 \end{code}
 

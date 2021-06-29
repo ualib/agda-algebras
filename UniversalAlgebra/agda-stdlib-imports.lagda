@@ -356,7 +356,9 @@ open import Agda.Primitive          renaming ( Set to Type )
 open import Data.Product            using    ( _,_ ; Σ-syntax ; Σ ; _×_ )
                                     renaming ( proj₁ to fst
                                              ; proj₂ to snd )
-open import Data.Sum.Base           using    ( _⊎_ )
+open import Data.Sum.Base           using    ( _⊎_ ) -- (we might also want [_,_] )
+                                    renaming ( inj₁  to inl
+                                             ; inj₂  to inr )
 open import Function.Base           using    ( _∘_ )
 open import Relation.Binary.PropositionalEquality
                                     using    ( cong ; cong-app ; module ≡-Reasoning )

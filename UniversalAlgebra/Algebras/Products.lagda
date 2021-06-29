@@ -15,12 +15,11 @@ This is the [Algebras.Products][] module of the [Agda Universal Algebra Library]
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 
-open import Level renaming ( suc to lsuc )
 open import Algebras.Basic
 
 module Algebras.Products {𝑆 : Signature 𝓞 𝓥} where
 
-open import Agda.Primitive                        using    ( _⊔_              )
+open import Agda.Primitive                        using    ( lsuc  ; _⊔_ ; Level     )
                                                   renaming ( Set   to Type    )
 open import Data.Product                          using    ( _,_ ; Σ ; Σ-syntax )
 open import Relation.Unary                        using    ( Pred  ; _⊆_ ; _∈_  )

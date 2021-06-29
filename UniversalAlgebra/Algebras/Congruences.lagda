@@ -16,29 +16,32 @@ open import Algebras.Basic
 
 module Algebras.Congruences {𝑆 : Signature 𝓞 𝓥} where
 
+-- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
 open import Axiom.Extensionality.Propositional    renaming (Extensionality to funext)
-open import Agda.Builtin.Equality                 using    ( _≡_      ; refl    )
-open import Agda.Primitive                        using    ( _⊔_                )
-                                                  renaming ( Set      to  Type  )
 
-open import Function.Base                         using    ( _∘_ )
-open import Level                                 renaming ( suc to lsuc )
-open import Relation.Binary                       using    ( IsEquivalence      )
-                                                  renaming ( Rel      to BinRel )
+open import Agda.Builtin.Equality                 using    ( _≡_ ; refl     )
+open import Agda.Primitive                        using    ( _⊔_            )
+                                                  renaming ( Set to  Type   )
+open import Data.Product                          using    ( _,_ ;   Σ
+                                                           ; _×_ ; Σ-syntax )
+open import Function.Base                         using    ( _∘_            )
+open import Level                                 renaming ( suc to lsuc    )
+open import Relation.Binary                       using    ( IsEquivalence  )
+                                                  renaming ( Rel to BinRel  )
+open import Relation.Binary.PropositionalEquality using    ( sym ; trans
+                                                           ; cong           )
 
-open import Data.Product                          using    ( _,_      ;   Σ
-                                                           ; Σ-syntax ;   _×_   )
-open import Relation.Binary.PropositionalEquality using    ( sym ; trans ; cong )
 
-open import Algebras.Products      {𝑆 = 𝑆}   using (ov)
+-- Imports from agda-algebras --------------------------------------------------------------
 open import Overture.Preliminaries    using ( ∣_∣  ; ∥_∥  )
 open import Relations.Discrete        using ( 0[_] ; _|:_ )
 open import Relations.Quotients       using ( _/_  ; ⟪_⟫ ; IsBlock ; Quotient
-                                                   ; Equivalence ; 0[_]Equivalence
-                                                   ;  ⟪_∼_⟫-elim )
-
-
+                                            ; Equivalence ; 0[_]Equivalence
+                                            ;  ⟪_∼_⟫-elim )
 open import Relations.Extensionality  using (swelldef)
+open import Algebras.Products {𝑆 = 𝑆} using (ov)
+
+
 
 private variable α β ρ : Level
 \end{code}

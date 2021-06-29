@@ -15,16 +15,14 @@ Here we define *term operations* which are simply terms interpreted in a particu
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Level using ( Level )
 open import Algebras.Basic
-
 
 module Terms.Operations {𝑆 : Signature 𝓞 𝓥} where
 
 
 
 -- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
-open import Agda.Primitive                        using    ( _⊔_ ;  lsuc )
+open import Agda.Primitive                        using    ( _⊔_ ;  lsuc ; Level )
                                                   renaming ( Set to Type )
 open import Agda.Builtin.Equality                 using    ( _≡_ ; refl )
 open import Axiom.Extensionality.Propositional    using    ()

@@ -17,20 +17,22 @@ module Algebras.Basic where
 
 -- Imports from the Agda (Builtin) and the Agda Standard Library
 open import Agda.Builtin.Bool
-open import Agda.Builtin.Equality                 using    (_≡_    ;   refl     )
-open import Agda.Primitive                        using    ( _⊔_                )
-                                                  renaming ( Set   to  Type     )
-                                                  renaming ( lzero to  ℓ₀       )
-open import Data.Empty                            using    ( ⊥                  )
-open import Data.Product                          using    ( _,_ ; Σ-syntax ; Σ )
-open import Level                                 renaming ( suc   to  lsuc
-                                                           ; zero  to  lzero    )
-open import Relation.Binary                       using    ( IsEquivalence      )
-                                                  renaming ( Rel   to  BinRel   )
+open import Agda.Builtin.Equality  using    (_≡_    ;   refl     )
+open import Agda.Primitive         using    ( _⊔_                )
+                                   renaming ( Set   to  Type
+                                            ; lzero to  ℓ₀       )
+open import Data.Empty             using    ( ⊥                  )
+open import Data.Product           using    ( _,_   ;   _×_
+                                            ; Σ     ;   Σ-syntax )
+open import Level                  renaming ( suc   to  lsuc
+                                            ; zero  to  lzero    )
+open import Relation.Binary        using    ( IsEquivalence      )
+                                   renaming ( Rel   to  BinRel   )
+open import Relation.Unary         using    ( _∈_   ;   Pred     )
 
 -- -- Imports from the Agda Universal Algebra Library
 open import Overture.Preliminaries using (∣_∣; ∥_∥)
-open import Relations.Discrete     using ( Op ; _|:_ ; Arity )
+open import Relations.Discrete     using ( Op ; _|:_ ; Arity ; _|:pred_ )
 open import Relations.Continuous   using ( Rel; ΠΡ ; compatible-Rel ; compatible-ΠΡ )
 
 private variable α β ρ : Level
@@ -250,6 +252,9 @@ We now define the function `compatible` so that, if `𝑨` denotes an algebra an
 
 compatible : {𝑆 : Signature 𝓞 𝓥}(𝑨 : Algebra α 𝑆) → BinRel ∣ 𝑨 ∣ ρ → Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ)
 compatible  𝑨 R = ∀ 𝑓 → (𝑓 ̂ 𝑨) |: R
+
+compatible-pred : {𝑆 : Signature 𝓞 𝓥}(𝑨 : Algebra α 𝑆) → Pred (∣ 𝑨 ∣ × ∣ 𝑨 ∣)ρ → Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ)
+compatible-pred  𝑨 P = ∀ 𝑓 → (𝑓 ̂ 𝑨) |:pred P
 
 compatible-lilAlg : {𝑆 : signature 𝓞}(𝑨 : Algebra α 𝑆) → BinRel ∣ 𝑨 ∣ ρ → Type(𝓞 ⊔ α ⊔ ρ)
 compatible-lilAlg  𝑨 R = ∀ 𝑓 → (𝑓 ̂ 𝑨) |: R

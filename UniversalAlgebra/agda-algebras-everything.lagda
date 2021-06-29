@@ -60,6 +60,9 @@ open import Algebras.Basic                  using    ( Signature ; signature ; m
                                                      ; compatible-Rel-alg ; compatible-ΠΡ-alg
                                                      ; compatible-Rel-lilAlg ; compatible-ΠΡ-lilAlg )
 
+
+open import Algebras.Setoid                 using    ( ⟦_⟧s ; Algebroid ; SetoidAlgebra )
+
 open import Algebras.Products               using    ( ⨅ ; ⨅' ; ov ; ℑ ; 𝔄 ; class-product )
 
 open import Algebras.Congruences            using    ( IsCongruence ; Con ; IsCongruence→Con
@@ -88,11 +91,23 @@ open import Homomorphisms.HomomorphicImages using    ( _IsHomImageOf_ ; HomImage
 open import Terms.Basic                     using    (Term ; ℊ ; node ; 𝑻 ; free-lift ; lift-hom
                                                      ; free-unique ; lift-of-epi-is-epi )
 
+
+open import Terms.Setoid                    using    ( Ops ; Sub ; _[_] ; module Environment )
+open Environment                            using (_≃_ ; Env ; ⦅_⦆ ; Equal ; isEquiv ; ⦅_⦆s ; substitution)
+
+
+
+
 open import Terms.Operations                using    ( _⟦_⟧ ; free-lift-interp ; term-interp
                                                      ; term-gen ; term-gen-agreement ; term-agreement
                                                      ; interp-prod ; interp-prod2 ; comm-hom-term
                                                      ; _∣:_ ; _[_] ; Substerm ; _[_]t ; subst-lemma
                                                      ; subst-theorem )
+
+
+
+
+
 
 open import Subalgebras.Subuniverses        using    ( Subuniverses ; Subuniverse ; Sg ; sgIsSub
                                                      ; sgIsSmallest ; sub-intersection ; sub-term-closed
@@ -113,7 +128,12 @@ open import Varieties.Properties            using    ( ⊧-I-invar ; ⊧-Lift-in
                                                      ; ⊧-P-class-invar ; ⊧-P-lift-invar ; ⊧-H-invar
                                                      ; ⊧-H-class-invar ; ⊧-H-class-coinvar )
 
-open import Varieties.EquationalLogic       using    ( _⊢_≈_ ; [_▹_]⊢ ; sound )
+open import Varieties.EquationalLogic       using    ( Eq ; _⊨_ ; _⊧_ ; Mod ; _⊫_ ; _⊃_ ; _⊢_▹_≈_
+                                                     ; module Soundness ; module TermModel ; module Completeness )
+open Soundness    using ( sound        )
+open TermModel    using ( TermSetoid   )
+open Completeness using ( completeness )
+
 
 open import Varieties.Closure               using    ( H ; S ; P ; V ; is-variety ; variety
                                                      ; S-mono ; subalgebra→S ; S→subalgebra
