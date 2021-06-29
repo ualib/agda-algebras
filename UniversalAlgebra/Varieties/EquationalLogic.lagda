@@ -1,4 +1,4 @@
-n---
+---
 layout: default
 title : Varieties.EquationalLogic module (The Agda Universal Algebra Library)
 date : 2021-01-14
