@@ -61,13 +61,18 @@ open import Algebras.Basic                  using    ( Signature ; signature ; m
                                                      ; compatible-Rel-lilAlg ; compatible-ΠΡ-lilAlg )
 
 
-open import Algebras.Setoid                 using    ( ⟦_⟧s ; Algebroid ; SetoidAlgebra )
+open import Algebras.Setoid                 using    ( ⟦_⟧s ; Algebroid ; SetoidAlgebra ; _̂_ ; ⨅ ; ⨅' )
 
 open import Algebras.Products               using    ( ⨅ ; ⨅' ; ov ; ℑ ; 𝔄 ; class-product )
 
 open import Algebras.Congruences            using    ( IsCongruence ; Con ; IsCongruence→Con
                                                      ; Con→IsCongruence ; 0[_]Compatible ; 0Con[_]
                                                      ; _╱_ ; 𝟘[_╱_] ; 𝟎[_╱_] ; /-≡ )
+
+
+open import Algebras.SetoidCongruences      using    ( _∣≈_ ; IsCongruence ; Con ; IsCongruence→Con
+                                                     ; Con→IsCongruence ; _╱_ )
+
 
 open import Homomorphisms.Basic             using    ( compatible-op-map ; is-homomorphism ; hom ; ∘-hom
                                                      ; ∘-is-hom ; 𝒾𝒹 ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-monomorphism

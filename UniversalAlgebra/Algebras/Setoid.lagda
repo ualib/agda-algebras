@@ -13,7 +13,7 @@ This is the [Algebras.Basic][] module of the [Agda Universal Algebra Library][].
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Algebras.Basic
+open import Algebras.Basic using (𝓞 ; 𝓥 ; Signature )
 
 module Algebras.Setoid {𝑆 : Signature 𝓞 𝓥} where
 
@@ -34,6 +34,7 @@ open import Relation.Binary        using    ( Setoid  ;  IsEquivalence )
 
 -- -- -- Imports from the Agda Universal Algebra Library
 open import Overture.Preliminaries using ( ∥_∥ ; ∣_∣ )
+open import Relations.Discrete using ( _|:_)
 
 \end{code}
 
@@ -49,10 +50,10 @@ First we define an operator that translates an ordinary signature into a signatu
 
 open Setoid using    (_≈_ ; Carrier )
             renaming ( refl  to reflS
-                      ; sym   to symS
-                      ; trans to transS
-                      ; isEquivalence to isEqv )
-open Func renaming ( f to apply )
+                     ; sym   to symS
+                     ; trans to transS
+                     ; isEquivalence to isEqv )
+open Func renaming   ( f to apply )
 
 ⟦_⟧s : {α ρ : Level} → Signature 𝓞 𝓥 → Setoid α ρ → Setoid _ _
 
@@ -90,6 +91,17 @@ record SetoidAlgebra α ρ : Type (𝓞 ⊔ 𝓥 ⊔ lsuc (α ⊔ ρ)) where
      --       1. a function  f : (⟦ 𝑆 ⟧s Den) .Carrier  → Den . Carrier
      --       2. a proof cong : f Preserves _≈₁_ ⟶ _≈₂_ (that f preserves the setoid equalities)
 
+\end{code}
+
+Easier notation for application of an (interpreted) operation symbol.
+
+\begin{code}
+
+_̂_ : {α ρ : Level} (f : ∣ 𝑆 ∣)(𝑨 : Algebroid α ρ) → (∥ 𝑆 ∥ f  →  Carrier ∣ 𝑨 ∣) → Carrier ∣ 𝑨 ∣
+
+f ̂ 𝑨 = λ a → apply ∥ 𝑨 ∥ (f , a)
+
+\end{code}
 
 \end{code}
 
