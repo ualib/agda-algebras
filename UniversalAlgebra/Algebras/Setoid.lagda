@@ -18,9 +18,8 @@ open import Algebras.Basic
 module Algebras.Setoid {𝑆 : Signature 𝓞 𝓥} where
 
 -- -- Imports from the Agda (Builtin) and the Agda Standard Library
-open import Function.Base          using    ( _on_                     )
+open import Function.Base          using    ( _on_    ; flip           )
 open import Function.Bundles       using    ( Func                     )
-open Func                          renaming ( f       to apply)
 open import Agda.Builtin.Equality  using    ( _≡_     ;   refl         )
 open import Agda.Primitive         using    ( _⊔_                      )
                                    renaming ( Set     to Type          )
@@ -32,9 +31,6 @@ open import Level                  renaming ( suc     to lsuc          )
 open import Relation.Binary.Core   using    ( _=[_]⇒_ )
 open import Relation.Binary        using    ( Setoid  ;  IsEquivalence )
                                    renaming ( Rel     to BinRel        )
-open Setoid                        using    ( isEquivalence ; _≈_      )
-                                   renaming ( Carrier  to  ∣_∣  )
-
 
 -- -- -- Imports from the Agda Universal Algebra Library
 open import Overture.Preliminaries using ( ∥_∥ )
@@ -52,15 +48,19 @@ First we define an operator that translates an ordinary signature into a signatu
 \begin{code}
 
 ⟦_⟧s : {α ρ : Level} → Signature 𝓞 𝓥 → Setoid α ρ → Setoid _ _
+
+open Setoid using    ( _≈_      ;   isEquivalence )
+            renaming ( Carrier  to  ∣_∣           )
+
 ⟦ 𝑆 ⟧s ξ .∣_∣ = Σ[ f ∈ (fst 𝑆) ] ((∥ 𝑆 ∥ f) → ∣ ξ ∣)
 ⟦ 𝑆 ⟧s ξ ._≈_ (f , args) (f' , args') = Σ[ eq ∈ f ≡ f' ] EqArgs eq args args'
  where
  EqArgs : (eq : f ≡ f') → (∥ 𝑆 ∥ f → ∣ ξ ∣) → (∥ 𝑆 ∥ f' → ∣ ξ ∣) → Type _
  EqArgs refl args args' = (i : ∥ 𝑆 ∥ f) → ξ ._≈_ (args i) (args' i)
 
-⟦ 𝑆 ⟧s ξ .isEquivalence .IsEquivalence.refl                        = refl , λ _ → Setoid.refl  ξ
-⟦ 𝑆 ⟧s ξ .isEquivalence .IsEquivalence.sym   (refl , g)            = refl , λ i → Setoid.sym   ξ (g i)
-⟦ 𝑆 ⟧s ξ .isEquivalence .IsEquivalence.trans (refl , g) (refl , h) = refl , λ i → Setoid.trans ξ (g i) (h i)
+IsEquivalence.refl  (⟦ 𝑆 ⟧s ξ .isEquivalence)                       = refl , λ _ → Setoid.refl  ξ
+IsEquivalence.sym   (⟦ 𝑆 ⟧s ξ .isEquivalence) (refl , g)            = refl , λ i → Setoid.sym   ξ (g i)
+IsEquivalence.trans (⟦ 𝑆 ⟧s ξ .isEquivalence) (refl , g) (refl , h) = refl , λ i → Setoid.trans ξ (g i) (h i)
 
 \end{code}
 
@@ -94,39 +94,31 @@ record SetoidAlgebra α ρ : Type (𝓞 ⊔ 𝓥 ⊔ lsuc (α ⊔ ρ)) where
 module _ {α ρ ι : Level} where
 
  open SetoidAlgebra
+ open Func           using    ( cong                     )
+                     renaming ( f             to  apply  )
+ open Setoid         using    ( Carrier       ;   _≈_    )
+                     renaming ( isEquivalence to  isEqv  )
+ open IsEquivalence  renaming ( refl          to  reflE
+                              ; sym           to  symE
+                              ; trans         to  transE )
 
- ⨅ : {I : Type ι }(𝒜 : I → SetoidAlgebra α ρ) → SetoidAlgebra _ _ -- (𝓘 ⊔ α) 𝑆
- open IsEquivalence renaming ( refl  to  reflE
-                             ; sym   to  symE
-                             ; trans to  transE )
+ ⨅ : {I : Type ι }(𝒜 : I → SetoidAlgebra α ρ) → SetoidAlgebra (α ⊔ ι) (ρ ⊔ ι)
 
- Den (⨅ {I} 𝒜) .∣_∣ = ∀ i → ∣ Den (𝒜 i) ∣
- Den (⨅ {I} 𝒜) ._≈_ = λ as bs → ∀ i → Den (𝒜 i) ._≈_ (as i) (bs i)
- Den (⨅ {I} 𝒜) .isEquivalence .reflE = λ i → Den (𝒜 i) .isEquivalence .reflE
- Den (⨅ {I} 𝒜) .isEquivalence .symE = λ x i → Den (𝒜 i) .isEquivalence .symE (x i)
- Den (⨅ {I} 𝒜) .isEquivalence .transE = λ x y i → Den (𝒜 i) .isEquivalence .transE (x i) (y i)
+ Den (⨅ {I} 𝒜) =
 
- apply (den (⨅ {I} 𝒜)) (f , a) i = apply (den (𝒜 i)) (f , (λ x → a x i))
- cong (den (⨅ {I} 𝒜)){x}{y}  = Goal
-  where
-  ⨅𝒜 : Type _
-  ⨅𝒜 = ∣ Den (⨅ 𝒜) ∣
+  record { Carrier = ∀ i → Carrier (Den (𝒜 i))
 
-  𝔄 : I → Type _
-  𝔄 i = ∣ Den (𝒜 i) ∣
+         ; _≈_ = λ a b → ∀ i → Den (𝒜 i) ._≈_ (a i) (b i)
 
-  f : ∣ ⟦ 𝑆 ⟧s (Den (⨅ 𝒜)) ∣ → ⨅𝒜
-  f = apply (den (⨅ 𝒜))
+         ; isEquivalence =
+            record { refl  =     λ i → reflE  (isEqv (Den (𝒜 i)))
+                   ; sym   =   λ x i → symE   (isEqv (Den (𝒜 i)))(x i)
+                   ; trans = λ x y i → transE (isEqv (Den (𝒜 i)))(x i)(y i)
+                   }
+         }
 
-  P : BinRel ∣ ⟦ 𝑆 ⟧s (Den (⨅ 𝒜))∣  _
-  P u v = (⟦ 𝑆 ⟧s (Den (⨅ 𝒜)) ≈ u) v
-
-  Q : BinRel (∀ i → 𝔄 i) _
-  Q as bs = (i : I) → Den (𝒜 i) ._≈_ (as i) (bs i)
-
-  Goal : P =[ f ]⇒ Q
-  Goal {(u , u')} {(v , v')} (refl , u'≈v') i = cong (den (𝒜 i)) (refl , (λ j → u'≈v' j i))
-
+ (den (⨅ {I} 𝒜)) .apply (f    , a    ) i = apply (den (𝒜 i)) (f    , flip a i    )
+ (den (⨅ {I} 𝒜)) .cong  (refl , u'≈v') i = cong  (den (𝒜 i)) (refl , flip u'≈v' i)
 
 \end{code}
 
