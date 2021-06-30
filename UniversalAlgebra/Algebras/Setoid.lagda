@@ -2,7 +2,7 @@
 layout: default
 title : Algebras.Basic module (Agda Universal Algebra Library)
 date : 2021-04-23
-author: [the ualib/agda-algebras development team][]
+author: [the agda-algebras development team][]
 ---
 
 ### <a id="algebras">Basic Definitions</a>
@@ -33,7 +33,7 @@ open import Relation.Binary        using    ( Setoid  ;  IsEquivalence )
                                    renaming ( Rel     to BinRel        )
 
 -- -- -- Imports from the Agda Universal Algebra Library
-open import Overture.Preliminaries using ( ∥_∥ )
+open import Overture.Preliminaries using ( ∥_∥ ; ∣_∣ )
 
 \end{code}
 
@@ -47,43 +47,83 @@ First we define an operator that translates an ordinary signature into a signatu
 
 \begin{code}
 
+open Setoid using    (_≈_ ; Carrier )
+            renaming ( refl  to reflS
+                      ; sym   to symS
+                      ; trans to transS
+                      ; isEquivalence to isEqv )
+open Func renaming ( f to apply )
+
 ⟦_⟧s : {α ρ : Level} → Signature 𝓞 𝓥 → Setoid α ρ → Setoid _ _
 
-open Setoid using    ( _≈_      ;   isEquivalence )
-            renaming ( Carrier  to  ∣_∣           )
-
-⟦ 𝑆 ⟧s ξ .∣_∣ = Σ[ f ∈ (fst 𝑆) ] ((∥ 𝑆 ∥ f) → ∣ ξ ∣)
-⟦ 𝑆 ⟧s ξ ._≈_ (f , args) (f' , args') = Σ[ eq ∈ f ≡ f' ] EqArgs eq args args'
+Carrier (⟦ 𝑆 ⟧s ξ) = Σ[ f ∈ ∣ 𝑆 ∣ ] ((∥ 𝑆 ∥ f) → ξ .Carrier)
+_≈_ (⟦ 𝑆 ⟧s ξ) (f , u) (g , v) = Σ[ eqv ∈ f ≡ g ] EqArgs eqv u v
  where
- EqArgs : (eq : f ≡ f') → (∥ 𝑆 ∥ f → ∣ ξ ∣) → (∥ 𝑆 ∥ f' → ∣ ξ ∣) → Type _
- EqArgs refl args args' = (i : ∥ 𝑆 ∥ f) → ξ ._≈_ (args i) (args' i)
+ EqArgs : f ≡ g → (∥ 𝑆 ∥ f → Carrier ξ) → (∥ 𝑆 ∥ g → Carrier ξ) → Type _
+ EqArgs refl u v = ∀ i → (_≈_ ξ) (u i) (v i)
 
-IsEquivalence.refl  (⟦ 𝑆 ⟧s ξ .isEquivalence)                       = refl , λ _ → Setoid.refl  ξ
-IsEquivalence.sym   (⟦ 𝑆 ⟧s ξ .isEquivalence) (refl , g)            = refl , λ i → Setoid.sym   ξ (g i)
-IsEquivalence.trans (⟦ 𝑆 ⟧s ξ .isEquivalence) (refl , g) (refl , h) = refl , λ i → Setoid.trans ξ (g i) (h i)
+IsEquivalence.refl  (isEqv (⟦ 𝑆 ⟧s ξ))                     = refl , λ _ → reflS  ξ
+IsEquivalence.sym   (isEqv (⟦ 𝑆 ⟧s ξ))(refl , g)           = refl , λ i → symS   ξ (g i)
+IsEquivalence.trans (isEqv (⟦ 𝑆 ⟧s ξ))(refl , g)(refl , h) = refl , λ i → transS ξ (g i) (h i)
 
 \end{code}
 
 
-##### Setoid Algebra
+##### Setoid Algebras
 
 A setoid algebra is just like an algebra but we require that all basic operations of the algebra respect the underlying setoid equality.
 The `Func` record packs a function (apply) with a proof (cong) that the function respects equality.
 
 \begin{code}
 
-Algebroid : (α ρ : Level)(𝑆 : Signature 𝓞 𝓥) → Type (𝓞 ⊔ 𝓥 ⊔ lsuc (α ⊔ ρ))
-Algebroid α ρ 𝑆 = Σ[ A ∈ Setoid α ρ ]      -- the domain (a setoid)
-                   Func (⟦ 𝑆 ⟧s A) A       -- the basic operations, along with proofs that each respects setoid equality
+Algebroid : (α ρ : Level) → Type (𝓞 ⊔ 𝓥 ⊔ lsuc (α ⊔ ρ))
+Algebroid α ρ = Σ[ A ∈ Setoid α ρ ]      -- the domain (a setoid)
+                 Func (⟦ 𝑆 ⟧s A) A       -- the basic operations,
+                                           -- along with congruence proofs that
+                                           -- each operation espects setoid equality
 
 record SetoidAlgebra α ρ : Type (𝓞 ⊔ 𝓥 ⊔ lsuc (α ⊔ ρ)) where
   field
-    Den  :  Setoid α ρ
-    den  :  Func (⟦ 𝑆 ⟧s Den) Den
+    Domain : Setoid α ρ
+    Interp : Func (⟦ 𝑆 ⟧s Domain) Domain
      --      ^^^^^^^^^^^^^^^^^^^^^^^ is a record type with two fields:
      --       1. a function  f : (⟦ 𝑆 ⟧s Den) .Carrier  → Den . Carrier
      --       2. a proof cong : f Preserves _≈₁_ ⟶ _≈₂_ (that f preserves the setoid equalities)
 
+
+\end{code}
+
+#### Products of Algebroids
+
+\begin{code}
+
+open Func           using    ( cong                     )
+                    renaming ( f             to  apply  )
+open Setoid         using    ( Carrier       ;   _≈_    )
+                    renaming ( isEquivalence to  isEqv  )
+open IsEquivalence  renaming ( refl          to  reflE
+                             ; sym           to  symE
+                             ; trans         to  transE )
+
+module _ {α ρ ι : Level} where
+
+ ⨅ : {I : Type ι }(𝒜 : I → Algebroid α ρ) → Algebroid (α ⊔ ι) (ρ ⊔ ι)
+
+ ⨅ {I} 𝒜 = domain , interp-ops
+  where
+  domain : Setoid _ _
+  domain = record { Carrier = ∀ i → Carrier ∣ 𝒜 i ∣
+                  ; _≈_ = λ u v  → ∀ i → (_≈_ ∣ 𝒜 i ∣) (u i) (v i)
+                  ; isEquivalence =
+                     record { refl  =     λ i → reflE  (isEqv ∣ 𝒜 i ∣)
+                            ; sym   =   λ x i → symE   (isEqv ∣ 𝒜 i ∣)(x i)
+                            ; trans = λ u v i → transE (isEqv ∣ 𝒜 i ∣)(u i)(v i)
+                            }
+                  }
+
+  interp-ops : Func (⟦ 𝑆 ⟧s domain) domain
+  apply interp-ops ( f   , as ) i = apply ∥ 𝒜 i ∥ ( f   , (flip as i ))
+  cong  interp-ops (refl , f=g) i = cong  ∥ 𝒜 i ∥ (refl , (flip f=g i))
 
 \end{code}
 
@@ -94,31 +134,28 @@ record SetoidAlgebra α ρ : Type (𝓞 ⊔ 𝓥 ⊔ lsuc (α ⊔ ρ)) where
 module _ {α ρ ι : Level} where
 
  open SetoidAlgebra
- open Func           using    ( cong                     )
-                     renaming ( f             to  apply  )
- open Setoid         using    ( Carrier       ;   _≈_    )
-                     renaming ( isEquivalence to  isEqv  )
- open IsEquivalence  renaming ( refl          to  reflE
-                              ; sym           to  symE
-                              ; trans         to  transE )
 
- ⨅ : {I : Type ι }(𝒜 : I → SetoidAlgebra α ρ) → SetoidAlgebra (α ⊔ ι) (ρ ⊔ ι)
+ ⨅' : {I : Type ι }(𝒜 : I → SetoidAlgebra α ρ) → SetoidAlgebra (α ⊔ ι) (ρ ⊔ ι)
 
- Den (⨅ {I} 𝒜) =
+ Domain (⨅' {I} 𝒜) =
 
-  record { Carrier = ∀ i → Carrier (Den (𝒜 i))
+  record { Carrier = ∀ i → Carrier (Domain (𝒜 i))
 
-         ; _≈_ = λ a b → ∀ i → Den (𝒜 i) ._≈_ (a i) (b i)
+         ; _≈_ = λ a b → ∀ i → Domain (𝒜 i) ._≈_ (a i) (b i)
 
          ; isEquivalence =
-            record { refl  =     λ i → reflE  (isEqv (Den (𝒜 i)))
-                   ; sym   =   λ x i → symE   (isEqv (Den (𝒜 i)))(x i)
-                   ; trans = λ x y i → transE (isEqv (Den (𝒜 i)))(x i)(y i)
+            record { refl  =     λ i → reflE  (isEqv (Domain (𝒜 i)))
+                   ; sym   =   λ x i → symE   (isEqv (Domain (𝒜 i)))(x i)
+                   ; trans = λ x y i → transE (isEqv (Domain (𝒜 i)))(x i)(y i)
                    }
          }
 
- (den (⨅ {I} 𝒜)) .apply (f    , a    ) i = apply (den (𝒜 i)) (f    , flip a i    )
- (den (⨅ {I} 𝒜)) .cong  (refl , u'≈v') i = cong  (den (𝒜 i)) (refl , flip u'≈v' i)
+ (Interp (⨅' {I} 𝒜)) .apply (f    , a   ) i = apply (Interp (𝒜 i)) (f    , flip a i   )
+ (Interp (⨅' {I} 𝒜)) .cong  (refl , f=g ) i = cong  (Interp (𝒜 i)) (refl , flip f=g i )
 
 \end{code}
 
+
+--------------------------------
+
+[the agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

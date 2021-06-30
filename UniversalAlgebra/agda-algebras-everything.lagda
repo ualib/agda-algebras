@@ -2,7 +2,7 @@
 layout: default
 title : Overture.Inverses module
 date : 2021-06-09
-author: [the ualib/agda-algebras development team][]
+author: [the agda-algebras development team][]
 ---
 
 All definitions/theorems in agda-algebras as of 22 June 2021.
@@ -203,6 +203,6 @@ open import Structures.Homs                 using    ( preserves ; is-hom-rel ; 
 
 
 
---------------------------------------
+--------------------------------
 
-[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
+[the agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
