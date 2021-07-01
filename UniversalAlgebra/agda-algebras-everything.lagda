@@ -61,7 +61,7 @@ open import Algebras.Basic                  using    ( Signature ; signature ; m
                                                      ; compatible-Rel-lilAlg ; compatible-ΠΡ-lilAlg )
 
 
-open import Algebras.Setoid                 using    ( ⟦_⟧s ; Algebroid ; SetoidAlgebra ; _̂_ ; ⨅ ; ⨅' )
+open import Algebras.Setoid                 using    ( ⟦_⟧s ; Algebroid ; SetoidAlgebra ; _̂_ ; _∙_ ; ⨅ ; ⨅s )
 
 open import Algebras.Products               using    ( ⨅ ; ⨅' ; ov ; ℑ ; 𝔄 ; class-product )
 
@@ -70,7 +70,7 @@ open import Algebras.Congruences            using    ( IsCongruence ; Con ; IsCo
                                                      ; _╱_ ; 𝟘[_╱_] ; 𝟎[_╱_] ; /-≡ )
 
 
-open import Algebras.SetoidCongruences      using    ( _∣≈_ ; IsCongruence ; Con ; IsCongruence→Con
+open import Algebras.SetoidCongruences      using    ( _∣≈_ ; _∣≋_ ; IsCongruence ; Con ; IsCongruence→Con
                                                      ; Con→IsCongruence ; _╱_ )
 
 
