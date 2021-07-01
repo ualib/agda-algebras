@@ -19,26 +19,27 @@ module Varieties.Setoid {α 𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) wher
 
 
 -- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
-open import Agda.Primitive          renaming ( Set to Type )
-                                    using    ( _⊔_ )
-open import Data.Product            using    ( _,_ ; Σ-syntax ; Σ ; _×_ )
+open import Agda.Primitive          renaming ( Set   to Type    )
+                                    using    ( _⊔_              )
+open import Data.Product            using    ( _,_   ; Σ-syntax
+                                             ; Σ     ; _×_      )
                                     renaming ( proj₁ to fst
-                                             ; proj₂ to snd )
-open import Relation.Unary          using    ( Pred ; _∈_ ) -- ; _⊆_ ; ｛_｝ ; _∪_ )
+                                             ; proj₂ to snd     )
+open import Relation.Unary          using    ( Pred  ; _∈_      )
 
 -- Imports from the Agda Universal Algebra Library -------------------------------------------
-open import Overture.Preliminaries       using ( ∣_∣ ) -- ; ∥_∥ ; _∙_ ; _⁻¹ )
-open import Algebras.Products          {𝑆 = 𝑆} using ( ov ) 
-open import Algebras.Setoid      {𝑆 = 𝑆} using ( SetoidAlgebra ; ⟦_⟧s ; ⨅')
-open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom ; epi ) -- ⨅-hom-co ; ker[_⇒_]_↾_ ; 
-open import Varieties.EquationalLogic     {𝑆 = 𝑆} using ( Eq ; _⊫_ ; module TermModel)
+open import Overture.Preliminaries             using ( ∣_∣ )
+open import Algebras.Products          {𝑆 = 𝑆} using ( ov )
+open import Algebras.Setoid            {𝑆 = 𝑆} using ( SetoidAlgebra ; ⟦_⟧s ; ⨅s)
+open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom ; epi )
+open import Varieties.EquationalLogic  {𝑆 = 𝑆} using ( Eq ; _⊫_ ; module TermModel)
 
 private variable
  χ ρ ℓ : Level
 
 module _ {Γ : Type χ}{𝒦 : Pred (SetoidAlgebra α ρ) ℓ} where
 
- -- I indexes the collection of equations modeled by 𝒦
+ -- ℐ indexes the collection of equations modeled by 𝒦
  ℐ : Type (ℓ ⊔ ov(α ⊔ χ ⊔ ρ))
  ℐ = Σ[ eq ∈ Eq{χ} ] 𝒦 ⊫ eq
 
@@ -56,7 +57,7 @@ We now define the algebra `𝔽`, which plays the role of the relatively free al
  -- The relatively free algebra (relative to Th 𝒦) is called `M`
  -- and is derived from `TermSetoid Γ` and `TermInterp Γ` and
  -- imported from the EquationalLogic module.
- open TermModel {ι = (ℓ ⊔ ov(α ⊔ χ ⊔ ρ))}{Γ = Γ}{I = ℐ} ℰ
+ open TermModel {Γ = Γ}{ι = (ℓ ⊔ ov(α ⊔ χ ⊔ ρ))}{I = ℐ} ℰ
 
  𝔽 : SetoidAlgebra _ _
  𝔽 = M Γ
