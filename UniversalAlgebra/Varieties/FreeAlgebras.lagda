@@ -2,7 +2,7 @@
 layout: default
 title : Varieties.FreeAlgebras module (Agda Universal Algebra Library)
 date : 2021-03-01
-author: William DeMeo
+author: [the agda-algebras development team][]
 ---
 
 ## <a id="free-algebras-and-birkhoffs-theorem">Free Algebras and Birkhoff's Theorem</a>
@@ -461,3 +461,8 @@ From these it follows that every equational class is a variety. Thus, our formal
 <span style="float:right;">[Varieties ↑](Varieties.html)</span>
 
 {% include UALib.Links.md %}
+
+
+--------------------------------
+
+[the agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

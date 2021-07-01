@@ -2,7 +2,7 @@
 layout: default
 title : Algebras.Congruences module (The Agda Universal Algebra Library)
 date : 2021-01-13
-author: William DeMeo
+author: [the agda-algebras development team][]
 ---
 
 ### <a id="congruence-relations">Congruence Relations</a>
@@ -157,53 +157,12 @@ open IsCongruence
 
 
 
+--------------------------------
+
+[the agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--- OLD STUFF
-
--- 𝟎-IsEquivalence : {A : Type α} →  IsEquivalence {A = A} 0[ A ]
--- 𝟎-IsEquivalence = record { refl = refl ; sym = sym; trans = trans }
-
-\end{code}
-
-Next we formally record another obvious fact---that `𝟎-rel` is compatible with all operations of all algebras.
-
-𝟎-compatible-op : funext 𝓥 α → {𝑨 : Algebra α 𝑆} (𝑓 : ∣ 𝑆 ∣) → (𝑓 ̂ 𝑨) |: 0[ ∣ 𝑨 ∣ ]
-𝟎-compatible-op fe {𝑨} 𝑓 {i}{j} ptws0  = cong (𝑓 ̂ 𝑨) (fe ptws0)
-
-𝟎-compatible : funext 𝓥 α → {𝑨 : Algebra α 𝑆} → compatible 𝑨 0[ ∣ 𝑨 ∣ ]
-𝟎-compatible fe {𝑨} = λ 𝑓 x → 𝟎-compatible-op fe {𝑨} 𝑓 x
-
-\end{code}
-
-Finally, we have the ingredients need to construct the zero congruence of any algebra we like.
-
-
-Δ : (𝑨 : Algebra α 𝑆){fe : funext 𝓥 α} → IsCongruence 𝑨 0[ ∣ 𝑨 ∣ ]
-Δ 𝑨 {fe} = mkcon 0[ A ]-IsEquivalence (𝟎-compatible fe)
-
-𝟘 : (𝑨 : Algebra α 𝑆){fe : funext 𝓥 α} → Con{α} 𝑨
-𝟘 𝑨 {fe} = IsCongruence→Con 0[ ∣ 𝑨 ∣ ] (Δ 𝑨 {fe})
 

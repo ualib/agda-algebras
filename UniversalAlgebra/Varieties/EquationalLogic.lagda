@@ -143,13 +143,13 @@ module Soundness {χ α ρ ι : Level}{I : Type ι} (E : I → Eq{χ})
  open SetoidAlgebra M
 
  -- In any model M that satisfies the equations E, derived equality is actual equality.
- open SetoidReasoning Den
+ open SetoidReasoning Domain
 
  open Environment M
  sound : ∀ {p q} → E ⊢ Γ ▹ p ≈ q → M ⊨ (p ≐ q)
 
  sound (hyp i)                      =  V i
- sound (app {f = f} es) ρ           =  den .cong (≡-refl , λ i → sound (es i) ρ)
+ sound (app {f = f} es) ρ           =  Interp .cong (≡-refl , λ i → sound (es i) ρ)
  sound (sub {p = p} {q} Epq σ) ρ    =  begin
                                        ⦅ p [ σ ] ⦆ .apply ρ          ≈⟨ substitution p σ ρ ⟩
                                        ⦅ p       ⦆ .apply (⦅ σ ⦆s ρ) ≈⟨ sound Epq (⦅ σ ⦆s ρ)  ⟩
@@ -204,8 +204,8 @@ module TermModel {χ ι : Level}{Γ : Type χ}{I : Type ι} (E : I → Eq) where
 
  -- The term model per context Γ.
  M : Type χ → SetoidAlgebra _ _
- Den (M Γ) = TermSetoid Γ
- den (M Γ) = TermInterp
+ Domain (M Γ) = TermSetoid Γ
+ Interp (M Γ) = TermInterp
 
  open Environment (M Γ)
 
@@ -273,7 +273,7 @@ module Completeness {χ ι : Level}{I : Type ι} (E : I → Eq{χ}) {Γ} where
 
 --------------------------------------
 
-[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
+[the agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 
 
 

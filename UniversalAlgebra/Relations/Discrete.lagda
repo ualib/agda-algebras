@@ -86,6 +86,13 @@ The homogeneous binary relation type is imported from the standard library and r
   BinRel A ℓ' = REL A A ℓ'
   ```
 
+\begin{code}
+
+Level-of-Rel : {A : Type α}{ℓ : Level} → BinRel A ℓ → Level
+Level-of-Rel {A = A}{ℓ} _ = ℓ
+
+\end{code}
+
 
 #### <a id="kernels">Kernels</a>
 

@@ -65,7 +65,7 @@ More extensive instructions, that still apply, can be found on [the original pro
 
 The [agda-algebras][] library is developed and maintained by the *ualib/agda-algebras development team*.
 
-### The UALib/Agda-Algebras Development Team
+### The agda-algebras development team
 
 [Jacques Carette][]  
 [William DeMeo][]  
