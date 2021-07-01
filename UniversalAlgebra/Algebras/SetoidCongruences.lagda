@@ -29,7 +29,7 @@ open import Relation.Binary        using    ( Setoid ;  IsEquivalence )
 open import Overture.Preliminaries    using ( ∣_∣  ; ∥_∥  )
 open import Relations.Discrete        using ( 0[_] ; _|:_ )
 open import Algebras.Products {𝑆 = 𝑆} using ( ov )
-open import Algebras.Setoid   {𝑆 = 𝑆} using ( Algebroid ; _̂_ ; ⟦_⟧s)
+open import Algebras.Setoid   {𝑆 = 𝑆} using ( Algebroid ; _̂_ ; _∙_ ; ⟦_⟧s ; SetoidAlgebra ; 𝕌[_])
 
 private variable α ρ ℓ : Level
 
@@ -41,9 +41,15 @@ We now define the function `compatible` so that, if `𝑨` denotes an algebra an
 
 \begin{code}
 open Setoid
+open SetoidAlgebra
 
-_∣≈_ : (𝑨 : Algebroid α ρ) → BinRel (Carrier ∣ 𝑨 ∣) ℓ → Type _
+-- SetoidAlgebra compatibility with binary relation
+_∣≈_ : (𝑨 : SetoidAlgebra α ρ) → BinRel 𝕌[ 𝑨 ] ℓ → Type _
 𝑨 ∣≈ R = ∀ 𝑓 → (𝑓 ̂ 𝑨) |: R
+
+-- Algebroid compatibility with binary relation
+_∣≋_ : (𝑨 : Algebroid α ρ) → BinRel (Carrier ∣ 𝑨 ∣) ℓ → Type _
+𝑨 ∣≋ R = ∀ 𝑓 → (𝑓 ∙ 𝑨) |: R
 
 \end{code}
 
@@ -53,13 +59,21 @@ Formally, we define a record type (`IsCongruence`) to represent the property of 
 
 \begin{code}
 
-record IsCongruence (𝑨 : Algebroid α ρ)(θ : BinRel (Carrier ∣ 𝑨 ∣) ℓ) : Type (ov ℓ ⊔ α)  where
+-- record IsCongruence (𝑨 : Algebroid α ρ)(θ : BinRel (Carrier ∣ 𝑨 ∣) ℓ) : Type (ov ℓ ⊔ α)  where
+--  constructor mkcon
+--  field       is-equivalence : IsEquivalence θ
+--              is-compatible  : 𝑨 ∣≋ θ
+
+-- Con : {α ρ : Level}(𝑨 : Algebroid α ρ) → {ℓ : Level} → Type _
+-- Con 𝑨 {ℓ} = Σ[ θ ∈ ( BinRel (Carrier ∣ 𝑨 ∣) ℓ ) ] IsCongruence 𝑨 θ
+
+record IsCongruence (𝑨 : SetoidAlgebra α ρ)(θ : BinRel 𝕌[ 𝑨 ] ℓ) : Type (ov ℓ ⊔ α)  where
  constructor mkcon
  field       is-equivalence : IsEquivalence θ
              is-compatible  : 𝑨 ∣≈ θ
 
-Con : {α ρ : Level}(𝑨 : Algebroid α ρ) → {ℓ : Level} → Type _
-Con 𝑨 {ℓ} = Σ[ θ ∈ ( BinRel (Carrier ∣ 𝑨 ∣) ℓ ) ] IsCongruence 𝑨 θ
+Con : (𝑨 : SetoidAlgebra α ρ) → {ℓ : Level} → Type _
+Con 𝑨 {ℓ} = Σ[ θ ∈ ( BinRel 𝕌[ 𝑨 ] ℓ ) ] IsCongruence 𝑨 θ
 
 \end{code}
 
@@ -67,10 +81,10 @@ Each of these types captures what it means to be a congruence and they are equiv
 
 \begin{code}
 
-IsCongruence→Con : {𝑨 : Algebroid α ρ}(θ : BinRel (Carrier ∣ 𝑨 ∣) ℓ) → IsCongruence 𝑨 θ → Con 𝑨
+IsCongruence→Con : {𝑨 : SetoidAlgebra α ρ}(θ : BinRel 𝕌[ 𝑨 ] ℓ) → IsCongruence 𝑨 θ → Con 𝑨
 IsCongruence→Con θ p = θ , p
 
-Con→IsCongruence : {ℓ : Level}{𝑨 : Algebroid α ρ}((θ , _) : Con 𝑨 {ℓ}) → IsCongruence 𝑨 θ
+Con→IsCongruence : {𝑨 : SetoidAlgebra α ρ}((θ , _) : Con 𝑨 {ℓ}) → IsCongruence 𝑨 θ
 Con→IsCongruence θ = ∥ θ ∥
 
 \end{code}
@@ -82,29 +96,42 @@ In many areas of abstract mathematics the *quotient* of an algebra `𝑨` with r
 
 open IsCongruence
 
-module _ {α ρ ℓ : Level} where
+open Func using ( cong ) renaming ( f to _<$>_  )
 
- _╱_ : (𝑨 : Algebroid α ρ) → Con 𝑨 {ℓ} → Algebroid _ _
+_╱_ : (𝑨 : SetoidAlgebra α ρ) → Con {α}{ρ} 𝑨 {ℓ} → SetoidAlgebra _ _
 
- 𝑨 ╱ θ = domain            -- the domain of the quotient algebra
-       , interp            -- the basic operations of the quotient algebra
-  where
-  open Func using ( cong ) renaming ( f to apply  )
+Domain (𝑨 ╱ θ) = record { Carrier = 𝕌[ 𝑨 ]
+                        ; _≈_ = ∣ θ ∣
+                        ; isEquivalence = is-equivalence ∥ θ ∥
+                        }
+(Interp (𝑨 ╱ θ)) <$> (f , a) = (f ̂ 𝑨) a
+cong (Interp (𝑨 ╱ θ)) {f , u} {.f , v} (_≡_.refl , a) = is-compatible  ∥ θ ∥ f a
 
-  -- the domain of the quotient algebra
-  domain : Setoid α ℓ
-  domain = record { Carrier = Carrier ∣ 𝑨 ∣
-              ; _≈_ = λ x y → ∣ θ ∣ x y
-              ; isEquivalence = is-equivalence ∥ θ ∥
-              }
 
-  -- the basic operations of the quotient algebra
-  interp : Func (⟦ 𝑆 ⟧s domain) domain
-  apply interp (f , a) = (f ̂ 𝑨) a
-  cong interp {f , u} {.f , v} (refl , a) = Goal
-   where
-   Goal : ∣ θ ∣ ((f ̂ 𝑨) u) ((f ̂ 𝑨) v)
-   Goal = is-compatible ∥ θ ∥ f a
+-- Algebroid Quotient (omitting for now, in favor of SetoidAlgebra representation)
+-- module _ {α ρ ℓ : Level} where
+
+--  _╱_ : (𝑨 : Algebroid α ρ) → Con 𝑨 {ℓ} → Algebroid _ _
+
+--  𝑨 ╱ θ = domain            -- the domain of the quotient algebra
+--        , interp            -- the basic operations of the quotient algebra
+--   where
+--   open Func using ( cong ) renaming ( f to apply  )
+
+--   -- the domain of the quotient algebra
+--   domain : Setoid α ℓ
+--   domain = record { Carrier = Carrier ∣ 𝑨 ∣
+--               ; _≈_ = λ x y → ∣ θ ∣ x y
+--               ; isEquivalence = is-equivalence ∥ θ ∥
+--               }
+
+--   -- the basic operations of the quotient algebra
+--   interp : Func (⟦ 𝑆 ⟧s domain) domain
+--   apply interp (f , a) = (f ∙ 𝑨) a
+--   cong interp {f , u} {.f , v} (refl , a) = Goal
+--    where
+--    Goal : ∣ θ ∣ ((f ∙ 𝑨) u) ((f ∙ 𝑨) v)
+--    Goal = is-compatible ∥ θ ∥ f a
 
 
 \end{code}
