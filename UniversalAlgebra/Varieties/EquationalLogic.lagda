@@ -87,7 +87,7 @@ module _ {ι : Level}{I : Type ι} where
  Mod : (I → Eq{χ}) → Pred(SetoidAlgebra α ρ) (χ ⊔ ι ⊔ α ⊔ ρ)
  Mod E = λ 𝑨 → 𝑨 ⊧ E
 
-_⊫_ : Pred (SetoidAlgebra α ρ) ρ → Eq{χ} → Type _
+_⊫_ : Pred (SetoidAlgebra α ρ) ℓ → Eq{χ} → Type _
 𝒦 ⊫ eq = ∀ 𝑨 → 𝒦 𝑨 → 𝑨 ⊨ eq                        -- (type \||= to get ⊫)
 
 
