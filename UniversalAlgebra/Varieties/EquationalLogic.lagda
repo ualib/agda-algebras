@@ -29,14 +29,15 @@ open import Agda.Builtin.Equality  using    ( _≡_                      )
                                    renaming ( refl    to ≡-refl        )
 open import Agda.Primitive         using    ( _⊔_     ;  lsuc          )
                                    renaming ( Set     to Type          )
-open import Data.Product           using    ( _,_     ;  Σ-syntax )
+open import Data.Product           using    ( _,_     ;  Σ-syntax      )
+open import Function.Base          using    ( _∘_     ;  flip          )
 open import Function.Bundles       using    ( Func                     )
 open import Relation.Binary        using    ( Setoid  ;  IsEquivalence )
 open import Relation.Unary          using    ( Pred ; _∈_ )
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 open Setoid        using    ( Carrier ; _≈_ ; isEquivalence )
-open Func          renaming ( f     to  apply )
+open Func          renaming ( f     to  _<$>_ )
 open IsEquivalence renaming ( refl  to  reflE
                             ; sym   to  symmE
                             ; trans to  tranE )
@@ -58,7 +59,7 @@ private variable
  op    : ∣ Ops Γ ∣
 
 -- Equations
--- An equation is a pair (s , t) of terms of the same sort in the same context.
+-- An equation is a pair (s , t) of terms in the same context.
 record Eq : Type (ov χ) where
  constructor _≐_
  field
@@ -66,7 +67,7 @@ record Eq : Type (ov χ) where
   lhs   : Term cxt
   rhs   : Term cxt
 
-open Eq
+open Eq public
 
 
 -- Equation p ≐ q holding in algebra M.
@@ -76,20 +77,21 @@ M ⊨ (p ≐ q) = Equal p q                                -- (type \|= to get �
 
 module _ {ι : Level}{I : Type ι} where
 
- -- Sets of equations are presented as collection E : I → Eq.
- -- Here's is how we represent the assertion that an algebra
- -- models all equations in a set E.
+ -- An I-indexed set of equations inhabits the type I → Eq.
+ -- For such `E : I → Eq`...
+
+ -- ...`𝑨 ⊧ E` is the assertion that algebra 𝑨 models all equations in a set E.
  _⊧_ : (𝑨 : SetoidAlgebra α ρ)(E : I → Eq{χ}) → Type _
  𝑨 ⊧ E = ∀ i → Equal (lhs (E i))(rhs (E i))       -- (type \models to get ⊧)
   where open Environment 𝑨
 
- -- tupled version
+ -- ...`Mod E` is the class of algebras that model all term equations in E.
  Mod : (I → Eq{χ}) → Pred(SetoidAlgebra α ρ) (χ ⊔ ι ⊔ α ⊔ ρ)
- Mod E = λ 𝑨 → 𝑨 ⊧ E
+ Mod E = _⊧ E
 
-_⊫_ : Pred (SetoidAlgebra α ρ) ρ → Eq{χ} → Type _
+
+_⊫_ : Pred (SetoidAlgebra α ρ) ℓ → Eq{χ} → Type _
 𝒦 ⊫ eq = ∀ 𝑨 → 𝒦 𝑨 → 𝑨 ⊨ eq                        -- (type \||= to get ⊫)
-
 
 
 module _ {α}{ρ}{ι}{I : Type ι} where
@@ -151,13 +153,13 @@ module Soundness {χ α ρ ι : Level}{I : Type ι} (E : I → Eq{χ})
  sound (hyp i)                      =  V i
  sound (app {f = f} es) ρ           =  Interp .cong (≡-refl , λ i → sound (es i) ρ)
  sound (sub {p = p} {q} Epq σ) ρ    =  begin
-                                       ⦅ p [ σ ] ⦆ .apply ρ          ≈⟨ substitution p σ ρ ⟩
-                                       ⦅ p       ⦆ .apply (⦅ σ ⦆s ρ) ≈⟨ sound Epq (⦅ σ ⦆s ρ)  ⟩
-                                       ⦅ q       ⦆ .apply (⦅ σ ⦆s ρ) ≈˘⟨ substitution  q σ ρ ⟩
-                                       ⦅ q [ σ ] ⦆ .apply ρ          ∎
+                                       ⦅ p [ σ ] ⦆ <$> ρ          ≈⟨ substitution p σ ρ ⟩
+                                       ⦅ p       ⦆ <$> (⦅ σ ⦆s ρ) ≈⟨ sound Epq (⦅ σ ⦆s ρ)  ⟩
+                                       ⦅ q       ⦆ <$> (⦅ σ ⦆s ρ) ≈˘⟨ substitution  q σ ρ ⟩
+                                       ⦅ q [ σ ] ⦆ <$> ρ          ∎
 
  sound (refl {p = p})               = isEquiv .reflE {x = p}
- sound (sym {p = p} {q} Epq)        = isEquiv .symmE {x = p} {q} (sound Epq)
+ sound (sym {p = p} {q} Epq)        = isEquiv .symmE {x = p}{q}   (sound Epq)
  sound (trans{p = p}{q}{r} Epq Eqr) = isEquiv .tranE {i = p}{q}{r}(sound Epq)(sound Eqr)
 
 
@@ -185,21 +187,21 @@ see: http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf)
 
 -- Universal model
 -- A term model for E and Γ is Term Γ modulo E ⊢ Γ ▹ _≈_.
-module TermModel {χ ι : Level}{Γ : Type χ}{I : Type ι} (E : I → Eq) where
+module TermModel {χ : Level}{Γ : Type χ}{ι : Level}{I : Type ι} (E : I → Eq) where
  open SetoidAlgebra
 
- -- Term Γ s quotiented by E⊢Γ▹·≡·.
+ -- Term Γ modulo E.
  TermSetoid : Type χ → Setoid _ _
- TermSetoid Γ .Carrier               = Term Γ
- TermSetoid Γ ._≈_                   = E ⊢ Γ ▹_≈_
- TermSetoid Γ .isEquivalence .reflE  = refl
- TermSetoid Γ .isEquivalence .symmE   = sym
- TermSetoid Γ .isEquivalence .tranE = trans
+
+ TermSetoid Γ = record { Carrier       = Term Γ
+                       ; _≈_           = E ⊢ Γ ▹_≈_
+                       ; isEquivalence = record { refl = refl ; sym = sym ; trans = trans }
+                       }
 
  -- The interpretation of an operation is simply the operation itself.
  -- This works since E ⊢ Γ ▹_≈_ is a congruence.
  TermInterp : ∀ {Γ} → Func (⟦ 𝑆 ⟧s (TermSetoid Γ)) (TermSetoid Γ)
- apply TermInterp (f , ts) = node f ts
+ TermInterp <$> (f , ts) = node f ts
  cong TermInterp (≡-refl , h) = app h
 
  -- The term model per context Γ.
@@ -216,22 +218,23 @@ module TermModel {χ ι : Level}{Γ : Type χ}{I : Type ι} (E : I → Eq) where
  -- σ₀ acts indeed as identity.
  identity : (t : Term Γ) → E ⊢ Γ ▹ t [ σ₀ ] ≈ t
  identity (ℊ x) = refl
- identity (node f ts) = app λ i → identity (ts i)
+ identity (node f ts) = app (identity ∘ ts)
 
  -- Evaluation in the term model is substitution $E ⊢ Γ ▹ ⦅t⦆σ ≡ t[σ]$.
  -- This would even hold "up to the nose" if we had function extensionality.
 
- evaluation : (t : Term Δ) (σ : Sub Γ Δ) → E ⊢ Γ ▹ (apply ⦅ t ⦆ σ) ≈ (t [ σ ])
+ evaluation : (t : Term Δ) (σ : Sub Γ Δ) → E ⊢ Γ ▹ (⦅ t ⦆ <$> σ) ≈ (t [ σ ])
  evaluation (ℊ x)    σ = refl
- evaluation (node f ts)  σ = app (λ i → evaluation (ts i) σ)
+--  evaluation (node f ts)  σ = app (λ i → evaluation (ts i) σ)
+ evaluation (node f ts)  σ = app (flip (evaluation ∘ ts) σ)
 
  -- The term model satisfies all the equations it started out with.
  satisfies : ∀ i → M Γ ⊨ E i
  satisfies i σ = begin
-                 apply ⦅ p ⦆ σ  ≈⟨ evaluation p σ ⟩
+                 ⦅ p ⦆ <$> σ  ≈⟨ evaluation p σ ⟩
                  p [ σ ]        ≈⟨ sub (hyp i) σ ⟩
                  q [ σ ]        ≈˘⟨ evaluation q σ ⟩
-                 apply ⦅ q ⦆ σ  ∎
+                 ⦅ q ⦆ <$> σ  ∎
                  where
                   open SetoidReasoning (TermSetoid _)
                   p = lhs (E i)
@@ -257,8 +260,8 @@ module Completeness {χ ι : Level}{I : Type ι} (E : I → Eq{χ}) {Γ} where
  completeness p q V = begin
                   p              ≈˘⟨ identity p ⟩
                   p [ σ₀ ]       ≈˘⟨ evaluation p σ₀ ⟩
-                  apply ⦅ p ⦆ σ₀  ≈⟨ V (M Γ) satisfies σ₀ ⟩
-                  apply ⦅ q ⦆ σ₀  ≈⟨ evaluation q σ₀ ⟩
+                  ⦅ p ⦆ <$> σ₀  ≈⟨ V (M Γ) satisfies σ₀ ⟩
+                  ⦅ q ⦆ <$> σ₀  ≈⟨ evaluation q σ₀ ⟩
                   q [ σ₀ ]       ≈⟨ identity q ⟩
                   q              ∎
                   where open SetoidReasoning (TermSetoid Γ)

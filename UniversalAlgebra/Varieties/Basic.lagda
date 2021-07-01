@@ -5,7 +5,7 @@ date : 2021-01-14
 author: [the ualib/agda-algebras development team][]
 ---
 
-### Varieties, Model Theory, and Equational Logic
+## Varieties, Model Theory, and Equational Logic
 
 This section presents the [Varieties.Basic][] module of the [Agda Universal Algebra Library][] where the binary "models" relation ⊧, relating algebras (or classes of algebras) to the identities that they satisfy, is defined.
 
@@ -31,7 +31,7 @@ module Varieties.Basic {𝑆 : Signature 𝓞 𝓥} where
 -- imports from Agda and the Agda Standard Library -------------------------------------------
 open import Agda.Primitive          using    ( _⊔_ ;  lsuc )
                                     renaming ( Set to Type )
-open import Data.Product            using    ( _×_ ; _,_ )
+open import Data.Product            using    ( _×_ ; _,_ ; Σ-syntax)
                                     renaming ( proj₁ to fst
                                              ; proj₂ to snd )
 open import Relation.Unary          using    ( Pred ; _∈_ )
@@ -44,64 +44,78 @@ open import Algebras.Products {𝑆 = 𝑆} using ( ov )
 open import Terms.Basic       {𝑆 = 𝑆} using ( Term ; 𝑻 ; lift-hom )
 open import Terms.Operations  {𝑆 = 𝑆} using ( _⟦_⟧ )
 
+private variable χ α ρ ι : Level
+                 X : Type χ
+
 \end{code}
 
 
-#### <a id="the-models-relation">The models relation</a>
-
-We define the binary "models" relation ⊧ using infix syntax so that we may write, e.g., `𝑨 ⊧ p ≈ q` or `𝒦 ⊫ p ≈ q`, relating algebras (or classes of algebras) to the identities that they satisfy. We also prove a coupld of useful facts about ⊧.  More will be proved about ⊧ in the next module, [Varieties.EquationalLogic](Varieties.EquationalLogic.html).
+### The "models" relation
+We define the binary "models" relation ⊧ using infix syntax so that we may
+write, e.g., `𝑨 ⊧ p ≈ q` or `𝒦 ⊫ p ≈ q`, relating algebras (or classes of
+algebras) to the identities that they satisfy. We also prove a couple of useful
+facts about ⊧.  More will be proved about ⊧ in the next module,
+Varieties.EquationalLogic.
 
 \begin{code}
 
-
--- curried versions
--- (unicode: use \models and \~~ to get ⊧ and ≈)
-_⊧_≈_ : {χ : Level}{X : Type χ} → {α : Level} → Algebra α 𝑆 → Term X → Term X → Type _
+_⊧_≈_ : Algebra α 𝑆 → Term X → Term X → Type _
 𝑨 ⊧ p ≈ q = 𝑨 ⟦ p ⟧ ≈ 𝑨 ⟦ q ⟧
 
--- (unicode: use \||= and \~~ to get ⊫ and ≈)
-_⊫_≈_ : {χ : Level}{X : Type χ} → {α ρ : Level} → Pred(Algebra α 𝑆) ρ → Term X → Term X → Type _
+_⊫_≈_ : Pred(Algebra α 𝑆) ρ → Term X → Term X → Type _
 𝒦 ⊫ p ≈ q = {𝑨 : Algebra _ 𝑆} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
 
-
 \end{code}
 
-##### <a id="semantics-of-⊧">Syntax and semantics of ⊧</a>
-The expression `𝑨 ⊧ p ≈ q` represents the assertion that the identity `p ≈ q` holds when interpreted in the algebra `𝑨`; syntactically, `𝑨 ⟦ p ⟧ ≡ 𝑨 ⟦ q ⟧`.  It should be emphasized that the expression  `𝑨 ⟦ p ⟧ ≡ 𝑨 ⟦ q ⟧` interpreted computationally as an *extensional equality*, by which we mean that for each *assignment function*  `𝒂 :  X → ∣ 𝑨 ∣`, assigning values in the domain of `𝑨` to the variable symbols in `X`, we have `⟦ p ⟧ 𝑨 𝒂 ≡ ⟦ q ⟧  𝑨 𝒂`.
+The expression `𝑨 ⊧ p ≈ q` represents the assertion that the identity `p ≈ q`
+holds when interpreted in the algebra `𝑨`; syntactically, `𝑨 ⟦ p ⟧ ≈ 𝑨 ⟦ q ⟧`.
+
+The expression `𝑨 ⟦ p ⟧ ≈ 𝑨 ⟦ q ⟧` denotes *extensional equality*; that is,
+for each "environment" `η :  X → ∣ 𝑨 ∣` (assigning values in the domain of `𝑨`
+to the variable symbols in `X`) the (intensional) equality `𝑨 ⟦ p ⟧ η ≡ 𝑨 ⟦ q ⟧ η`
+holds.
 
 
+### Equational theories and models
 
-#### <a id="equational-theories-and-classes">Equational theories and models</a>
-
-Here we define a type `Th` so that, if 𝒦 denotes a class of algebras, then `Th 𝒦` represents the set of identities modeled by all members of 𝒦.
+If 𝒦 denotes a class of structures, then `Th 𝒦` represents the set of identities
+modeled by the members of 𝒦.
 
 \begin{code}
 
-module _ {χ : Level}{X : Type χ} where
-
- Th : {α : Level} → Pred (Algebra α 𝑆) (ov α) → Pred(Term X × Term X) (χ ⊔ ov α)
- Th 𝒦 = λ (p , q) → 𝒦 ⊫ p ≈ q
+Th : Pred (Algebra α 𝑆) (ov α) → Pred(Term X × Term X) _
+Th 𝒦 = λ (p , q) → 𝒦 ⊫ p ≈ q
 
 \end{code}
 
-If `ℰ` denotes a set of identities, then the class of algebras satisfying all identities in ℰ is represented by `Mod ℰ`, which we define in the following natural way.
+Perhaps we want to represent Th 𝒦 as an indexed collection.  We do so
+essentially by taking `Th 𝒦` itself to be the index set, as follows.
 
 \begin{code}
 
- Mod : {α : Level} → Pred(Term X × Term X) (ov α) → Pred(Algebra α 𝑆) (ov (χ ⊔ α))
- Mod ℰ = λ 𝑨 → ∀ p q → (p , q) ∈ ℰ → 𝑨 ⊧ p ≈ q
+module _ {X : Type χ}{𝒦 : Pred (Algebra α 𝑆) (ov α)} where
 
- -- tupled version
- Modᵗ : {ι : Level}{I : Type ι} → (I → Term X × Term X) → {α : Level} → Pred(Algebra α 𝑆)(χ ⊔ ι ⊔ α)
- Modᵗ ℰ = λ 𝑨 → ∀ i → 𝑨 ⊧ (fst (ℰ i)) ≈ (snd (ℰ i))
+ ℐ : Type (ov(α ⊔ χ))
+ ℐ = Σ[ (p , q) ∈ (Term X × Term X) ] 𝒦 ⊫ p ≈ q
+
+ ℰ : ℐ → Term X × Term X
+ ℰ ((p , q) , _) = (p , q)
+
 
 \end{code}
 
+If `ℰ` denotes a set of identities, then `Mod ℰ` is the class of structures
+satisfying the identities in `ℰ`.
 
+\begin{code}
 
+Mod : Pred(Term X × Term X) (ov α) → Pred(Algebra α 𝑆) _
+Mod ℰ = λ 𝑨 → ∀ p q → (p , q) ∈ ℰ → 𝑨 ⊧ p ≈ q
+-- (tupled version)
+Modᵗ : {I : Type ι} → (I → Term X × Term X) → {α : Level} → Pred(Algebra α 𝑆) _
+Modᵗ ℰ = λ 𝑨 → ∀ i → 𝑨 ⊧ (fst (ℰ i)) ≈ (snd (ℰ i))
 
-
-
+\end{code}
 
 -------------------------------------
 

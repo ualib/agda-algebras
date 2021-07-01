@@ -97,10 +97,7 @@ i.e., blocks of a partition (recall partitions correspond to equivalence relatio
 
 \begin{code}
 
--- [_] : {A : Type α} → A → {R : BinRel A ρ} → Pred A ρ
--- [ u ]{R} = R u
 [_] : {α : Level}{A : Type α} → A → {ρ : Level} → BinRel A ρ → Pred A ρ
-
 [ u ]{ρ} R = R u      -- (the R-block containing u : A)
 
 -- Alternative notation
@@ -170,13 +167,6 @@ Here `C` is a predicate and `p` is a proof of `C ≡ [ a ] R`.
 It will be convenient to have the following subset inclusion lemmas on hand when working with quotient types.
 
 \begin{code}
-
--- private variable A : Type α ; x y : A ; R : BinRel A ρ
--- open IsEquivalence
--- /-subset : IsEquivalence R → R x y →  [ x ]{R} ⊆ [ y ]{R}
--- /-subset Req Rxy {z} Rxz = IsEquivalence.trans Req (IsEquivalence.sym Req Rxy) Rxz
--- /-supset : IsEquivalence R → R x y →  [ y ]{R} ⊆ [ x ]{R}
--- /-supset Req Rxy {z} Ryz = IsEquivalence.trans Req Rxy Ryz
 
 module _ {α : Level}{A : Type α}
          {ρ : Level}                   -- note: ρ is an explicit parameter
