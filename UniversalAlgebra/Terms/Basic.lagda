@@ -2,7 +2,7 @@
 layout: default
 title : Terms.Basic module (The Agda Universal Algebra Library)
 date : 2021-01-14
-author: [the ualib/agda-algebras development team][]
+author: [the agda-algebras development team][]
 ---
 
 ### <a id="basic-definitions">Basic Definitions</a>
@@ -21,7 +21,8 @@ module Terms.Basic {𝑆 : Signature 𝓞 𝓥} where
 
 
 open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
-open import Relation.Binary.PropositionalEquality using ( cong ; module ≡-Reasoning )
+-- 
+import Relation.Binary.PropositionalEquality as P
 
 open import Agda.Primitive          using    ( _⊔_ ;  lsuc ; Level )
                                     renaming ( Set to Type )
@@ -29,6 +30,9 @@ open import Agda.Builtin.Equality   using    ( _≡_ ;  refl )
 open import Data.Product            using    ( _,_ ;  Σ
                                              ; Σ-syntax    )
 open import Function.Base           using    ( _∘_         )
+open import Data.Empty.Polymorphic using    ( ⊥      ) -- ;  ⊥-elim        )
+open import Level                 using    (  Level ; Lift   )
+open import Relation.Binary        using    ( IsEquivalence )
 
 
 
@@ -63,9 +67,46 @@ The definition of `Term X` is recursive, indicating that an inductive type could
 
 data Term (X : Type χ ) : Type (ov χ)  where
  ℊ : X → Term X    -- (ℊ for "generator")
- node : (f : ∣ 𝑆 ∣)(𝑡 : ∥ 𝑆 ∥ f → Term X) → Term X
+ node : (f : ∣ 𝑆 ∣)(t : ∥ 𝑆 ∥ f → Term X) → Term X
 
-open Term public
+module _ {X : Type χ } where
+
+
+ data _≐_ : Term X → Term X → Type (𝓞 ⊔ 𝓥 ⊔ lsuc χ) where
+  refl : {x y : X} → x ≡ y → (ℊ x) ≐ (ℊ y)
+  genl : ∀ {f : ∣ 𝑆 ∣}{s t : ∥ 𝑆 ∥ f → Term X} → (∀ i → (s i) ≐ (t i)) → (node f s) ≐ (node f t)
+
+
+--  _≐_ : Term X → Term X → Type (𝓞 ⊔ 𝓥 ⊔ χ)
+--  ℊ x ≐ ℊ y = Lift (𝓞 ⊔ 𝓥) (x ≡ y)
+--  ℊ x ≐ node f t = ⊥
+--  node f s ≐ ℊ x = ⊥
+--  node f s ≐ node g t = Σ[ eqv ∈ f ≡ g ] EqArgs eqv s t
+--   where
+--   EqArgs : f ≡ g → (∥ 𝑆 ∥ f → Term _) → (∥ 𝑆 ∥ g → Term _) → Type _
+--   EqArgs refl s t = ∀ i → (s i) ≐ (t i)
+
+ -- open Level
+ -- ≐-isRefl : Reflexive _≐_
+ -- ≐-isRefl = ?
+
+ -- ≐-isSym : Symmetric _≐_
+ -- ≐-isSym = ?
+
+ -- ≐-isTrans : Transitive _≐_
+ -- ≐-isTrans = ?
+
+ -- IsEquivalence.refl ≐-isEqv {ℊ x} = lift refl
+ -- IsEquivalence.refl ≐-isEqv {node f t} = (P.refl , λ i → IsEquivalence.refl ≐-isEqv)
+
+ -- IsEquivalence.sym ≐-isEqv {ℊ x} {ℊ y} x≐y = lift (P.sym (lower x≐y))
+ -- IsEquivalence.sym ≐-isEqv {node f s} {node g t} (refl , st) = P.refl , λ i → (IsEquivalence.sym ≐-isEqv) (st i)
+
+ -- IsEquivalence.trans ≐-isEqv {x}{y}{z} p q = {!!}
+ -- IsEquivalence.refl ≐-isEqv {ℊ x} = lift refl
+ -- IsEquivalence.refl ≐-isEqv {node f t} = (refl , λ i → {!!})
+ -- IsEquivalence.sym ≐-isEqv = {!!}
+ -- IsEquivalence.trans ≐-isEqv = {!!}
 
 \end{code}
 
@@ -125,7 +166,7 @@ The free lift so defined is a homomorphism by construction. Indeed, here is the 
 \begin{code}
 
 lift-hom : (𝑨 : Algebra α 𝑆) → (X → ∣ 𝑨 ∣) → hom (𝑻 X) 𝑨
-lift-hom 𝑨 h = free-lift 𝑨 h , λ f a → cong (f ̂ 𝑨) refl
+lift-hom 𝑨 h = free-lift 𝑨 h , λ f a → P.cong (f ̂ 𝑨) refl
 
 \end{code}
 
@@ -133,7 +174,7 @@ Finally, we prove that the homomorphism is unique.  This requires `funext 𝓥 �
 
 \begin{code}
 
-open ≡-Reasoning
+open P.≡-Reasoning
 
 free-unique : swelldef 𝓥 α → (𝑨 : Algebra α 𝑆)(g h : hom (𝑻 X) 𝑨)
  →            (∀ x → ∣ g ∣ (ℊ x) ≡ ∣ h ∣ (ℊ x))
@@ -186,5 +227,5 @@ The `lift-hom` and `lift-of-epi-is-epi` types will be called to action when such
 
 ------------------------------
 
-[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
+[the agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 
