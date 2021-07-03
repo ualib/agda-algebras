@@ -42,7 +42,8 @@ open import Relations.Extensionality     using ( swelldef )
 open import Algebras.Products    {𝑆 = 𝑆} using ( ov ; ⨅ )
 open import Algebras.Congruences {𝑆 = 𝑆} using ( Con ; IsCongruence)
 open import Homomorphisms.Basic  {𝑆 = 𝑆} using ( hom)
-open import Terms.Basic          {𝑆 = 𝑆} using ( Term ; free-lift ; 𝑻 )
+open import Terms.Basic          {𝑆 = 𝑆} using ( Term ; 𝑻 )
+open import Terms.Properties     {𝑆 = 𝑆} using ( free-lift )
 
 open Term
 

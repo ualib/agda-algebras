@@ -5,11 +5,7 @@ date : 2021-06-28
 author: [the agda-algebras development team][]
 ---
 
-### Interpretation of Terms in Setoid Algebras
-
-The approach to terms and their interpretation in this module was inspired by
-Andreas Abel's proof of Birkhoff's completeness theorem.
-(See http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf.)
+### Setoids of Terms
 
 \begin{code}
 
@@ -20,20 +16,21 @@ open import Algebras.Basic
 module Terms.Setoid {𝑆 : Signature 𝓞 𝓥} where
 
 -- imports from Agda and the Agda Standard Library -------------------------------------------
-open import Agda.Primitive         using    ( Level  ;  _⊔_  ;  lsuc  )
-                                   renaming ( Set    to Type          )
-open import Agda.Builtin.Equality  using    ( _≡_    ;  refl  )
-open import Data.Product           using    ( _,_    ; _×_   ; Σ-syntax         )
-open import Function.Bundles       using    ( Func                    )
-open import Relation.Binary        using    ( Setoid ;  IsEquivalence )
-open import Data.Empty.Polymorphic using    ( ⊥      ;  ⊥-elim        )
-open import Data.Sum.Base          using    ( _⊎_                     )
-                                   renaming ( inj₁   to inl
-                                            ; inj₂   to inr           )
-open import Level                 using    (  Level ; Lift   )
-import Relation.Binary.PropositionalEquality as P
+open import Agda.Builtin.Equality       using    ( _≡_       ;  refl )
+open import Agda.Primitive              using    ( _⊔_       ;  lsuc )
+                                        renaming ( Set       to Type )
+open import Data.Empty.Polymorphic      using    ( ⊥                 )
+open import Data.Product                using    ( _,_               )
+open import Data.Sum.Base               using    ( _⊎_               )
+                                        renaming ( inj₁      to inl
+                                                 ; inj₂      to inr  )
+open import Function.Bundles            using    ( Func              )
+open import Level                       using    ( Level     ; Lift  )
+open import Relation.Binary             using    ( Setoid    ; IsEquivalence )
+open import Relation.Binary.Definitions using    ( Reflexive ; Symmetric ; Transitive )
+import Relation.Binary.PropositionalEquality as PE
 
--- -- imports from agda-algebras --------------------------------------------------------------
+-- -- -- imports from agda-algebras --------------------------------------------------------------
 open import Overture.Preliminaries           using ( ∣_∣ ; ∥_∥ )
 open import Algebras.Setoid          {𝑆 = 𝑆} using ( SetoidAlgebra )
 open import Terms.Basic              {𝑆 = 𝑆} using ( Term )
@@ -45,6 +42,66 @@ private variable
  Γ Δ : Type χ
 
 \end{code}
+
+
+#### Equality of Terms
+
+We take a different approach here, using Setoids instead of quotient types.
+That is, we will define the collection of terms in a signature as a setoid
+with a particular equality-of-terms relation, which we must define.
+Ultimately we will use this to define the (absolutely free) term algebra
+as a SetoidAlgebra whose carrier is the setoid of terms.
+
+\begin{code}
+
+module _ {X : Type χ } where
+
+ -- Equality of terms as an inductive datatype
+ data _≐_ : Term X → Term X → Type (𝓞 ⊔ 𝓥 ⊔ lsuc χ) where
+  refl : {x y : X} → x ≡ y → (ℊ x) ≐ (ℊ y)
+  genl : ∀ {f : ∣ 𝑆 ∣}{s t : ∥ 𝑆 ∥ f → Term X} → (∀ i → (s i) ≐ (t i)) → (node f s) ≐ (node f t)
+
+ -- Equality of terms is an equivalence relation
+ open Level
+ ≐-isRefl : Reflexive _≐_
+ ≐-isRefl {ℊ x} = refl refl
+ ≐-isRefl {node f t} = genl (λ i → ≐-isRefl)
+
+ ≐-isSym : Symmetric _≐_
+ ≐-isSym {.(ℊ _)} {.(ℊ _)} (refl x) = refl (PE.sym x)
+ ≐-isSym {.(node _ _)} {.(node _ _)} (genl x) = genl (λ i → ≐-isSym (x i))
+
+ ≐-isTrans : Transitive _≐_
+ ≐-isTrans {.(ℊ _)} {.(ℊ _)} {.(ℊ _)} (refl x) (refl y) = refl (PE.trans x y)
+ ≐-isTrans {.(node _ _)} {.(node _ _)} {.(node _ _)} (genl x) (genl y) = genl (λ i → ≐-isTrans (x i) (y i))
+
+ ≐-isEquiv : IsEquivalence _≐_
+ ≐-isEquiv = record { refl = ≐-isRefl ; sym = ≐-isSym ; trans = ≐-isTrans }
+
+TermSetoid : (X : Type χ) → Setoid _ _
+TermSetoid X = record { Carrier = Term X ; _≈_ = _≐_ ; isEquivalence = ≐-isEquiv }
+
+module _ where
+
+ open SetoidAlgebra
+ open Func renaming ( f to _<$>_ )
+
+ -- The Term SetoidAlgebra
+ TermAlgebra : (X : Type χ) → SetoidAlgebra _ _
+ Domain (TermAlgebra X) = TermSetoid X
+ Interp (TermAlgebra X) <$> (f , ts) = node f ts
+ cong (Interp (TermAlgebra X)) {f , ss} {.f , ts} (refl , ss≈ts) = genl ss≈ts
+
+\end{code}
+
+
+
+
+### Interpretation of Terms in Setoid Algebras
+
+The approach to terms and their interpretation in this module was inspired by
+Andreas Abel's proof of Birkhoff's completeness theorem.
+(See http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf.)
 
 To obtain terms with free variables, we add nullary operations, each representing a variable.
 These are covered in the std lib FreeMonad module, albeit with the restriction that the sets of

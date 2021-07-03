@@ -93,24 +93,19 @@ open import Homomorphisms.HomomorphicImages using    ( _IsHomImageOf_ ; HomImage
                                                      ; HomImageOfClass ; Lift-epi-is-epi
                                                      ; Lift-Alg-hom-image )
 
-open import Terms.Basic                     using    (Term ; ℊ ; node ; 𝑻 ; free-lift ; lift-hom
-                                                     ; free-unique ; lift-of-epi-is-epi )
+open import Terms.Basic                     using    (Term ; 𝑻 )
 
+open import Terms.Properties                using    (free-lift ; lift-hom ; free-unique ; lift-of-epi-is-epi )
 
-open import Terms.Setoid                    using    ( Ops ; Sub ; _[_] ; module Environment )
-open Environment                            using (_≃_ ; Env ; ⦅_⦆ ; Equal ; isEquiv ; ⦅_⦆s ; substitution)
-
-
-
+open import Terms.Setoid                    using    ( _≐_ ; ≐-isRefl ; ≐-isSym ; ≐-isTrans ; ≐-isEquiv
+                                                     ; TermSetoid ; TermAlgebra ; Ops ; Sub ; _[_] ; module Environment )
+open Environment                            using    (_≃_ ; Env ; ⦅_⦆ ; Equal ; isEquiv ; ⦅_⦆s ; substitution)
 
 open import Terms.Operations                using    ( _⟦_⟧ ; free-lift-interp ; term-interp
                                                      ; term-gen ; term-gen-agreement ; term-agreement
                                                      ; interp-prod ; interp-prod2 ; comm-hom-term
                                                      ; _∣:_ ; _[_] ; Substerm ; _[_]t ; subst-lemma
                                                      ; subst-theorem )
-
-
-
 
 
 

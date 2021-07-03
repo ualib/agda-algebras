@@ -51,7 +51,8 @@ open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom ; ⨅-hom-co ; 
                                                      ;  kercon ; ∘-hom )
 open import Homomorphisms.Noether      {𝑆 = 𝑆} using ( HomFactor ; HomFactorEpi )
 open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅-refl ; ≅-sym ; Lift-≅ )
-open import Terms.Basic                {𝑆 = 𝑆} using ( Term ; 𝑻 ; free-lift ; lift-hom
+open import Terms.Basic                {𝑆 = 𝑆} using ( Term ; 𝑻 )
+open import Terms.Properties           {𝑆 = 𝑆} using ( free-lift ; lift-hom
                                                      ; free-unique ; lift-of-epi-is-epi )
 open import Terms.Operations           {𝑆 = 𝑆} using (_⟦_⟧; comm-hom-term; free-lift-interp )
 open import Subalgebras.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; FirstHomCorollary|Set )
