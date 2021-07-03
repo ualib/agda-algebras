@@ -1,12 +1,13 @@
 ---
 layout: default
-title : Algebras.Congruences module (The Agda Universal Algebra Library)
-date : 2021-01-13
-author: [the agda-algebras development team][]
+title : Algebras.Congruences.Basic module (The Agda Universal Algebra Library)
+date : 2021-07-03
+author: [agda-algebras development team][]
 ---
 
 ### <a id="congruence-relations">Congruence Relations</a>
-This section presents the [Algebras.Congruences][] module of the [Agda Universal Algebra Library][].
+
+This is the [Congruences.Basic][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
@@ -14,7 +15,7 @@ This section presents the [Algebras.Congruences][] module of the [Agda Universal
 
 open import Algebras.Basic
 
-module Algebras.Congruences {𝑆 : Signature 𝓞 𝓥} where
+module Congruences.Basic {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
 open import Axiom.Extensionality.Propositional    renaming (Extensionality to funext)
@@ -39,7 +40,7 @@ open import Relations.Quotients       using ( _/_  ; ⟪_⟫ ; IsBlock ; Quotien
                                             ; Equivalence ; 0[_]Equivalence
                                             ;  ⟪_∼_⟫-elim )
 open import Relations.Extensionality  using (swelldef)
-open import Algebras.Products {𝑆 = 𝑆} using (ov)
+open import Products.Basic {𝑆 = 𝑆}    using (ov)
 
 
 
@@ -89,7 +90,6 @@ open IsCongruence
 0Con[ 𝑨 ]{ρ} wd = let 0eq = 0[ ∣ 𝑨 ∣ ]Equivalence{ρ}  in
  ∣ 0eq ∣ , mkcon ∥ 0eq ∥ (0[ 𝑨 ]Compatible wd)
 
--- 0Con[ 𝑨 ]{ρ} wd = 0[ ∣ 𝑨 ∣ ]Equivalence {ρ} , 0[ 𝑨 ]Compatible wd
 \end{code}
 
 
@@ -121,8 +121,6 @@ From this we easily obtain the zero congruence of `𝑨 ╱ θ` by applying the 
 
 \begin{code}
 
--- 𝟎[_╱_] : (𝑨 : Algebra α 𝑆)(θ : Con{α}{ρ} 𝑨){fe : funext 𝓥 (α ⊔ lsuc ρ)} → Con (𝑨 ╱ θ)
--- 𝟎[ 𝑨 ╱ θ ] {fe} = 𝟘[ 𝑨 ╱ θ ] , Δ (𝑨 ╱ θ) {fe}
 𝟎[_╱_] : {α : Level}(𝑨 : Algebra α 𝑆){ρ : Level}(θ : Con {α}{ρ}𝑨) → swelldef 𝓥 (α ⊔ lsuc ρ)  → Con (𝑨 ╱ θ)
 𝟎[_╱_] {α} 𝑨 {ρ} θ wd = let 0eq = 0[ ∣ 𝑨 ╱ θ ∣ ]Equivalence  in
  ∣ 0eq ∣ , mkcon ∥ 0eq ∥ (0[ 𝑨 ╱ θ ]Compatible {ρ} wd)
@@ -142,24 +140,15 @@ open IsCongruence
 
 \end{code}
 
---------------------------------------
-
-<sup>1</sup><span class="footnote" id="fn1"> **Unicode Hints**. Produce the `╱` symbol in [agda2-mode][] by typing `\---` and then `C-f` a number of times.</span>
-
-
-<br>
-<br>
-
-[← Algebras.Products](Algebras.Products.html)
-<span style="float:right;">[Homomorphisms →](Homomorphisms.html)</span>
+------------------------------
 
 {% include UALib.Links.md %}
 
 
 
---------------------------------
+------------------------------
 
-[the agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 
 
 

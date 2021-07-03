@@ -2,12 +2,12 @@
 layout: default
 title : Subalgebras.Subuniverses module (The Agda Universal Algebra Library)
 date : 2021-01-14
-author: [the ualib/agda-algebras development team][]
+author: [agda-algebras development team][]
 ---
 
 ### <a id="subuniverses">Subuniverses</a>
 
-This section presents the [Subalgebras.Subuniverses][] module of the [Agda Universal Algebra Library][].
+This is the [Subalgebras.Subuniverses][] module of the [Agda Universal Algebra Library][].
 
 We start by defining a type that represents the important concept of **subuniverse**. Suppose 𝑨 is an algebra.  A subset B ⊆ ∣ 𝑨 ∣ is said to be **closed under the operations of** 𝑨 if for each 𝑓 ∈ ∣ 𝑆 ∣ and all tuples 𝒃 : ∥ 𝑆 ∥ 𝑓 → 𝐵 the element (𝑓 ̂ 𝑨) 𝒃 belongs to B. If a subset B ⊆ 𝐴 is closed under the operations of 𝑨, then we call B a **subuniverse** of 𝑨.
 
@@ -15,7 +15,6 @@ We start by defining a type that represents the important concept of **subuniver
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Level using ( Level )
 open import Algebras.Basic
 
 module Subalgebras.Subuniverses {𝑆 : Signature 𝓞 𝓥} where
@@ -24,19 +23,19 @@ module Subalgebras.Subuniverses {𝑆 : Signature 𝓞 𝓥} where
 open import Relation.Binary.PropositionalEquality using ( cong ; module ≡-Reasoning )
 open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
 open import Agda.Primitive          renaming ( Set to Type )
-                                    using    ( _⊔_ ; lsuc )
+                                    using    ( _⊔_ ; lsuc ; Level )
 open import Agda.Builtin.Equality   using    ( _≡_ ; refl )
 open import Function.Base           using    ( _∘_ )
 open import Relation.Unary          using    ( Pred ; _∈_ ; _⊆_ ; ⋂ )
 
--- imports from agda-algebras
-open import Overture.Preliminaries   using (∣_∣; ∥_∥; _⁻¹)
-open import Relations.Discrete       using (Im_⊆_)
-open import Relations.Extensionality using (swelldef)
-open import Algebras.Products      {𝑆 = 𝑆} using ( ov )
-open import Terms.Basic            {𝑆 = 𝑆} using ( Term ; ℊ ; node )
-open import Terms.Operations       {𝑆 = 𝑆} using ( _⟦_⟧ )
-open import Homomorphisms.Basic    {𝑆 = 𝑆} using ( hom )
+-- imports from agda-algebras ------------------------------------------------------
+open import Overture.Preliminaries      using (∣_∣; ∥_∥; _⁻¹)
+open import Relations.Discrete          using (Im_⊆_)
+open import Relations.Extensionality    using (swelldef)
+open import Products.Basic      {𝑆 = 𝑆} using ( ov )
+open import Terms.Basic         {𝑆 = 𝑆} using ( Term ; ℊ ; node )
+open import Terms.Operations    {𝑆 = 𝑆} using ( _⟦_⟧ )
+open import Homomorphisms.Basic {𝑆 = 𝑆} using ( hom )
 
 private variable α β 𝓧 : Level
 
@@ -260,4 +259,4 @@ and, under these assumptions, we proved `∣ g ∣ ((𝑓 ̂ 𝑨) a) ≡ ∣ h 
 
 ------------------------------
 
-[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

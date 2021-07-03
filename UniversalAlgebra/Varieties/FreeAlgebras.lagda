@@ -2,12 +2,12 @@
 layout: default
 title : Varieties.FreeAlgebras module (Agda Universal Algebra Library)
 date : 2021-03-01
-author: [the agda-algebras development team][]
+author: [agda-algebras development team][]
 ---
 
 ## <a id="free-algebras-and-birkhoffs-theorem">Free Algebras and Birkhoff's Theorem</a>
 
-This section presents the [Varieties.FreeAlgebras][] module of the [Agda Universal Algebra Library][].
+This is the [Varieties.FreeAlgebras][] module of the [Agda Universal Algebra Library][].
 
 First we will define the relatively free algebra in a variety, which is the "freest" algebra among (universal for) those algebras that model all identities holding in the variety. Then we give a formal proof of Birkhoff's theorem which says that a variety is an equational class. In other terms, a class `𝒦` of algebras is closed under the operators `H`, `S`, and `P` if and only if 𝒦 is the class of algebras that satisfy some set of identities.
 
@@ -17,7 +17,7 @@ First we will define the relatively free algebra in a variety, which is the "fre
 
 
 open import Level renaming ( suc to lsuc )
-open import Algebras.Basic
+open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Varieties.FreeAlgebras {α 𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
 
@@ -38,14 +38,15 @@ open import Relation.Binary.PropositionalEquality
 open import Relation.Unary          using    ( Pred ; _∈_ ; _⊆_ ; ｛_｝ ; _∪_ )
 
 -- Imports from the Agda Universal Algebra Library -------------------------------------------
-open import Overture.Preliminaries       using ( ∣_∣ ; ∥_∥ ; _∙_ ; _⁻¹ )
-open import Overture.Inverses            using ( IsSurjective )
-open import Relations.Discrete           using ( kernel )
-open import Relations.Quotients          using ( ⟪_⟫ )
-open import Relations.Truncation         using ( is-set ; blk-uip ; hfunext )
-open import Relations.Extensionality           using (DFunExt; SwellDef ; swelldef ; pred-ext)
-open import Algebras.Products          {𝑆 = 𝑆} using ( ov ; ⨅ )
-open import Algebras.Congruences       {𝑆 = 𝑆} using ( Con; mkcon ; IsCongruence )
+open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ ; _∙_ ; _⁻¹ )
+open import Overture.Inverses                  using ( IsSurjective )
+open import Relations.Discrete                 using ( kernel )
+open import Relations.Quotients                using ( ⟪_⟫ )
+open import Relations.Truncation               using ( is-set ; blk-uip ; hfunext )
+open import Relations.Extensionality           using ( DFunExt; SwellDef ; swelldef ; pred-ext )
+open import Algebras.Basic                     using ( Algebra ; Lift-Alg ; compatible ; _̂_ )
+open import Products.Basic             {𝑆 = 𝑆} using ( ov ; ⨅ )
+open import Congruences.Basic          {𝑆 = 𝑆} using ( Con; mkcon ; IsCongruence )
 open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom ; ⨅-hom-co ; ker[_⇒_]_↾_ ; epi
                                                      ; πker ; epi-to-hom ; ker-in-con
                                                      ;  kercon ; ∘-hom )
@@ -54,13 +55,12 @@ open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅-refl ; 
 open import Terms.Basic                {𝑆 = 𝑆} using ( Term ; 𝑻 )
 open import Terms.Properties           {𝑆 = 𝑆} using ( free-lift ; lift-hom
                                                      ; free-unique ; lift-of-epi-is-epi )
-open import Terms.Operations           {𝑆 = 𝑆} using (_⟦_⟧; comm-hom-term; free-lift-interp )
+open import Terms.Operations           {𝑆 = 𝑆} using ( _⟦_⟧; comm-hom-term; free-lift-interp )
 open import Subalgebras.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; FirstHomCorollary|Set )
-open import Varieties.Basic            {𝑆 = 𝑆} using (_⊫_≈_; _⊧_≈_; Th; Mod )
+open import Varieties.Basic            {𝑆 = 𝑆} using ( _⊫_≈_; _⊧_≈_; Th; Mod )
 open import Varieties.Closure          {𝑆 = 𝑆} using ( S ; P ; V )
 open import Varieties.Preservation     {𝑆 = 𝑆} using ( module class-products-with-maps
                                                      ; class-ids-⇒ ; class-ids ; SP⊆V')
-
 open Term
 open S
 open V
@@ -460,11 +460,6 @@ proof of Birkhoff's theorem is complete.
 
 
 
-
-
-
-
-
 ----------------------------
 
 
@@ -482,4 +477,4 @@ proof of Birkhoff's theorem is complete.
 
 --------------------------------
 
-[the agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

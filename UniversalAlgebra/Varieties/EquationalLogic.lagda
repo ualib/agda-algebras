@@ -2,7 +2,7 @@
 layout: default
 title : Varieties.EquationalLogic module (The Agda Universal Algebra Library)
 date : 2021-01-14
-author: [the ualib/agda-algebras development team][]
+author: [agda-algebras development team][]
 ---
 
 This is the [Varieties.EquationalLogic][] module of the [Agda Universal Algebra Library][].
@@ -18,8 +18,7 @@ This module is based on Andreas Abel's Agda formalization of Birkhoff's complete
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 
-open import Level using ( Level )
-open import Algebras.Basic
+open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Varieties.EquationalLogic {𝑆 : Signature 𝓞 𝓥} where
 
@@ -27,7 +26,7 @@ module Varieties.EquationalLogic {𝑆 : Signature 𝓞 𝓥} where
 -- imports from Agda and the Agda Standard Library -------------------------------------------
 open import Agda.Builtin.Equality  using    ( _≡_                      )
                                    renaming ( refl    to ≡-refl        )
-open import Agda.Primitive         using    ( _⊔_     ;  lsuc          )
+open import Agda.Primitive         using    ( _⊔_     ;  lsuc  ; Level )
                                    renaming ( Set     to Type          )
 open import Data.Product           using    ( _,_     ;  Σ-syntax      )
 open import Function.Base          using    ( _∘_     ;  flip          )
@@ -46,7 +45,7 @@ open IsEquivalence renaming ( refl  to  reflE
 -- imports from agda-algebras --------------------------------------------------------------
 open import Overture.Preliminaries       using ( ∣_∣ )
 open import Algebras.Setoid      {𝑆 = 𝑆} using ( SetoidAlgebra ; ⟦_⟧s )
-open import Algebras.Products    {𝑆 = 𝑆} using ( ov )
+open import Products.Basic       {𝑆 = 𝑆} using ( ov )
 open import Terms.Basic          {𝑆 = 𝑆} using ( Term )
 open import Terms.Setoid         {𝑆 = 𝑆} using ( module Environment ; Ops ; Sub ; _[_] )
 

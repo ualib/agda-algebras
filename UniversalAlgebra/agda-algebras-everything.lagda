@@ -60,17 +60,19 @@ open import Algebras.Basic                  using    ( Signature ; signature ; m
                                                      ; compatible-Rel-alg ; compatible-ΠΡ-alg
                                                      ; compatible-Rel-lilAlg ; compatible-ΠΡ-lilAlg )
 
+open import Algebras.Setoid                 using    ( ⟦_⟧s ; Algebroid ; SetoidAlgebra ; _̂_ ; _∙_ )
 
-open import Algebras.Setoid                 using    ( ⟦_⟧s ; Algebroid ; SetoidAlgebra ; _̂_ ; _∙_ ; ⨅ ; ⨅s )
 
-open import Algebras.Products               using    ( ⨅ ; ⨅' ; ov ; ℑ ; 𝔄 ; class-product )
+open import Products.Basic                  using    ( ⨅ ; ⨅' ; ov ; ℑ ; 𝔄 ; class-product )
 
-open import Algebras.Congruences            using    ( IsCongruence ; Con ; IsCongruence→Con
+open import Products.Setoid                 using    ( ⨅ ; ⨅s ; ℑ ; 𝔄 ; class-product )
+
+
+open import Congruences.Basic               using    ( IsCongruence ; Con ; IsCongruence→Con
                                                      ; Con→IsCongruence ; 0[_]Compatible ; 0Con[_]
                                                      ; _╱_ ; 𝟘[_╱_] ; 𝟎[_╱_] ; /-≡ )
 
-
-open import Algebras.SetoidCongruences      using    ( _∣≈_ ; _∣≋_ ; IsCongruence ; Con ; IsCongruence→Con
+open import Congruences.Setoid              using    ( _∣≈_ ; _∣≋_ ; IsCongruence ; Con ; IsCongruence→Con
                                                      ; Con→IsCongruence ; _╱_ )
 
 
@@ -93,12 +95,20 @@ open import Homomorphisms.HomomorphicImages using    ( _IsHomImageOf_ ; HomImage
                                                      ; HomImageOfClass ; Lift-epi-is-epi
                                                      ; Lift-Alg-hom-image )
 
+open import Homomorphisms.Setoid            using    ( compatible-op-map ; is-homomorphism ; hom
+                                                     ; ∘-hom ; ∘-is-hom ; 𝒾𝒹 ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇
+                                                     ; Lift-hom ; is-monomorphism ; mon ; epi
+                                                     ; is-epimorphism ; mon-to-hom ; epi-to-hom
+                                                     ; homker-comp )
+
 open import Terms.Basic                     using    (Term ; 𝑻 )
 
 open import Terms.Properties                using    (free-lift ; lift-hom ; free-unique ; lift-of-epi-is-epi )
 
 open import Terms.Setoid                    using    ( _≐_ ; ≐-isRefl ; ≐-isSym ; ≐-isTrans ; ≐-isEquiv
-                                                     ; TermSetoid ; TermAlgebra ; Ops ; Sub ; _[_] ; module Environment )
+                                                     ; TermSetoid ; TermAlgebra ; Ops ; Sub ; _[_]
+                                                     ; module Environment )
+
 open Environment                            using    (_≃_ ; Env ; ⦅_⦆ ; Equal ; isEquiv ; ⦅_⦆s ; substitution)
 
 open import Terms.Operations                using    ( _⟦_⟧ ; free-lift-interp ; term-interp

@@ -2,7 +2,7 @@
 layout: default
 title : Homomorphisms module (The Agda Universal Algebra Library)
 date : 2021-01-12
-author: William DeMeo
+author: [agda-algebras development team][]
 ---
 
 ## <a id="homomorphism-types">Homomorphism Types</a>
@@ -15,6 +15,7 @@ This chapter presents the [Homomorphisms][] module of the [Agda Universal Algebr
 module Homomorphisms where
 
 open import Homomorphisms.Basic
+open import Homomorphisms.Setoid
 open import Homomorphisms.Noether
 open import Homomorphisms.Isomorphisms
 open import Homomorphisms.HomomorphicImages
@@ -28,3 +29,6 @@ open import Homomorphisms.HomomorphicImages
 
 {% include UALib.Links.md %}
 
+--------------------------------
+
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

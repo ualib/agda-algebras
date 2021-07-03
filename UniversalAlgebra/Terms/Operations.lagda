@@ -2,7 +2,7 @@
 layout: default
 title : Terms.Operations module (The Agda Universal Algebra Library)
 date : 2021-01-14
-author: [the ualib/agda-algebras development team][]
+author: [agda-algebras development team][]
 ---
 
 ### <a id="term-operations">Term Operations</a>
@@ -39,9 +39,9 @@ open import Relation.Binary.PropositionalEquality using    (sym ; cong
 open import Overture.Preliminaries       using ( _∙_ ; _⁻¹ ; ∣_∣ ; ∥_∥ ; Π ; Π-syntax ; _≈_ )
 open import Relations.Discrete           using ( _|:_ )
 open import Relations.Extensionality     using ( swelldef )
-open import Algebras.Products    {𝑆 = 𝑆} using ( ov ; ⨅ )
-open import Algebras.Congruences {𝑆 = 𝑆} using ( Con ; IsCongruence)
-open import Homomorphisms.Basic  {𝑆 = 𝑆} using ( hom)
+open import Products.Basic       {𝑆 = 𝑆} using ( ov ; ⨅ )
+open import Congruences.Basic    {𝑆 = 𝑆} using ( Con ; IsCongruence)
+open import Homomorphisms.Basic  {𝑆 = 𝑆} using ( hom )
 open import Terms.Basic          {𝑆 = 𝑆} using ( Term ; 𝑻 )
 open import Terms.Properties     {𝑆 = 𝑆} using ( free-lift )
 
@@ -255,7 +255,7 @@ module _ {α β : Level}{X : Type α} where
 
 -----------------------------
 
-[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 
 
 

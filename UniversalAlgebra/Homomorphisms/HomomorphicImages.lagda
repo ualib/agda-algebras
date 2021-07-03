@@ -2,12 +2,12 @@
 layout: default
 title : Homomorphisms.HomomorphicImages module (The Agda Universal Algebra Library)
 date : 2021-01-14
-author: [the ualib/agda-algebras development team][]
+author: [agda-algebras development team][]
 ---
 
 ### <a id="homomorphic-images">Homomorphic Images</a>
 
-This section describes the [Homomorphisms.HomomorphicImages][] module of the [Agda Universal Algebra Library][].
+This is the [Homomorphisms.HomomorphicImages][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
@@ -32,12 +32,10 @@ open import Relation.Unary        using    ( Pred ; _∈_ )
 
 
 -- Imports from agda-algebras --------------------------------------------------------------
-open import Overture.Preliminaries       using ( _⁻¹ ; 𝑖𝑑 ; ∣_∣ ; ∥_∥
-                                               ; lower∼lift ; lift∼lower )
-open import Overture.Inverses            using ( IsSurjective ; Image_∋_
-                                               ; Inv ; InvIsInv ; eq )
-open import Algebras.Products          {𝑆 = 𝑆} using ( ov )
-open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; Lift-hom)
+open import Overture.Preliminaries      using ( _⁻¹ ; 𝑖𝑑 ; ∣_∣ ; ∥_∥ ; lower∼lift ; lift∼lower )
+open import Overture.Inverses           using ( IsSurjective ; Image_∋_ ; Inv ; InvIsInv ; eq )
+open import Products.Basic      {𝑆 = 𝑆} using ( ov )
+open import Homomorphisms.Basic {𝑆 = 𝑆} using ( hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; Lift-hom )
 
 \end{code}
 

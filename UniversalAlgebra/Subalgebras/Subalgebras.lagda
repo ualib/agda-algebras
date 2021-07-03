@@ -2,7 +2,7 @@
 layout: default
 title : Subalgebras.Subalgebras module (The Agda Universal Algebra Library)
 date : 2021-01-14
-author: [the ualib/agda-algebras development team][]
+author: [agda-algebras development team][]
 ---
 
 ### <a id="subalgebras">Subalgebras</a>
@@ -13,32 +13,29 @@ The [Subalgebras.Subalgebras][] module of the [Agda Universal Algebra Library][]
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Level using ( Level )
-open import Algebras.Basic
-
+open import Algebras.Basic using (𝓞 ; 𝓥 ; Signature )
 
 module Subalgebras.Subalgebras {𝑆 : Signature 𝓞 𝓥} where
 
-
 -- imports from Agda and the Agda Standard Library ------------------------------------
 open import Agda.Builtin.Equality      using    ( _≡_ ;  refl )
-open import Agda.Primitive             using    ( _⊔_ ;  lsuc )
+open import Agda.Primitive             using    ( _⊔_ ;  lsuc ; Level )
                                        renaming ( Set to Type )
 open import Data.Product               using    ( _,_ ; Σ-syntax ; Σ ; _×_ )
                                        renaming ( proj₁ to fst
                                                 ; proj₂ to snd )
 open import Function.Base              using    ( _∘_ )
 open import Function.Bundles           using    ( Injection )
-open import
- Relation.Binary.PropositionalEquality using    ( cong ; module ≡-Reasoning )
 open import Relation.Unary             using    ( _∈_ ; Pred ; _⊆_ )
+import Relation.Binary.PropositionalEquality as PE
 
 -- imports from agda-algebras --------------------------------------------------------------
-open import Overture.Preliminaries       using ( _∙_ ; _⁻¹ ; ∣_∣ ; ∥_∥ ; 𝑖𝑑 )
-open import Overture.Inverses            using ( ∘-injective ; IsInjective ; id-is-injective )
-open import Relations.Truncation         using ( is-set ; blk-uip )
-open import Relations.Extensionality     using ( swelldef ; pred-ext )
-open import Algebras.Products          {𝑆 = 𝑆} using ( ov )
+open import Overture.Preliminaries             using ( _∙_ ; _⁻¹ ; ∣_∣ ; ∥_∥ ; 𝑖𝑑 )
+open import Overture.Inverses                  using ( ∘-injective ; IsInjective ; id-is-injective )
+open import Relations.Truncation               using ( is-set ; blk-uip )
+open import Relations.Extensionality           using ( swelldef ; pred-ext )
+open import Algebras.Basic                     using ( Algebra ; Lift-Alg )
+open import Products.Basic             {𝑆 = 𝑆} using ( ov )
 open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom ; kercon ; ker[_⇒_]_↾_
                                                      ; ∘-hom ; is-homomorphism ; ∘-is-hom )
 open import Homomorphisms.Noether      {𝑆 = 𝑆} using ( FirstHomTheorem|Set )
@@ -180,14 +177,14 @@ Next we prove that if two algebras are isomorphic and one of them is a subalgebr
 
 \begin{code}
 
-open ≡-Reasoning
+open PE.≡-Reasoning
 open _≅_
 
 iso→injective : {𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆}
  →              (φ : 𝑨 ≅ 𝑩) → IsInjective ∣ to φ ∣
 iso→injective {𝑨 = 𝑨} (mkiso f g f∼g g∼f) {x} {y} fxfy =
  x                  ≡⟨ (g∼f x)⁻¹ ⟩
- (∣ g ∣ ∘ ∣ f ∣) x  ≡⟨ cong ∣ g ∣ fxfy ⟩
+ (∣ g ∣ ∘ ∣ f ∣) x  ≡⟨ PE.cong ∣ g ∣ fxfy ⟩
  (∣ g ∣ ∘ ∣ f ∣) y  ≡⟨ g∼f y ⟩
  y                  ∎
 
@@ -277,4 +274,4 @@ Lift-≤-Lift {𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ A≤B = ≤-trans (Lift-Alg �
 
 ------------------------------
 
-[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

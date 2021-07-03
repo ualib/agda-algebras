@@ -1,12 +1,13 @@
 ---
 layout: default
-title : Algebras.SetoidCongruences module (The Agda Universal Algebra Library)
-date : 2021-01-13
-author: [the agda-algebras development team][]
+title : Algebras.Congruences.Setoid module (The Agda Universal Algebra Library)
+date : 2021-07-03
+author: [agda-algebras development team][]
 ---
 
-### <a id="congruence-relations">Congruence Relations</a>
-This section presents the [Algebras.Congruences][] module of the [Agda Universal Algebra Library][].
+### Congruences of SetoidAlgebras
+
+This is the [Congruences.Setoid][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
@@ -14,7 +15,7 @@ This section presents the [Algebras.Congruences][] module of the [Agda Universal
 
 open import Algebras.Basic using (𝓞 ; 𝓥 ; Signature)
 
-module Algebras.SetoidCongruences {𝑆 : Signature 𝓞 𝓥} where
+module Congruences.Setoid {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
 open import Function.Bundles       using    ( Func                    )
@@ -25,11 +26,11 @@ open import Data.Product           using    ( _,_    ;  Σ-syntax      )
 open import Relation.Binary        using    ( Setoid ;  IsEquivalence )
                                    renaming ( Rel    to BinRel        )
 
--- -- Imports from agda-algebras --------------------------------------------------------------
+-- Imports from agda-algebras --------------------------------------------------------------
 open import Overture.Preliminaries    using ( ∣_∣  ; ∥_∥  )
 open import Relations.Discrete        using ( 0[_] ; _|:_ )
-open import Algebras.Products {𝑆 = 𝑆} using ( ov )
 open import Algebras.Setoid   {𝑆 = 𝑆} using ( Algebroid ; _̂_ ; _∙_ ; ⟦_⟧s ; SetoidAlgebra ; 𝕌[_])
+open import Products.Basic    {𝑆 = 𝑆} using ( ov )
 
 private variable α ρ ℓ : Level
 
@@ -59,18 +60,12 @@ Formally, we define a record type (`IsCongruence`) to represent the property of 
 
 \begin{code}
 
--- record IsCongruence (𝑨 : Algebroid α ρ)(θ : BinRel (Carrier ∣ 𝑨 ∣) ℓ) : Type (ov ℓ ⊔ α)  where
---  constructor mkcon
---  field       is-equivalence : IsEquivalence θ
---              is-compatible  : 𝑨 ∣≋ θ
-
--- Con : {α ρ : Level}(𝑨 : Algebroid α ρ) → {ℓ : Level} → Type _
--- Con 𝑨 {ℓ} = Σ[ θ ∈ ( BinRel (Carrier ∣ 𝑨 ∣) ℓ ) ] IsCongruence 𝑨 θ
-
 record IsCongruence (𝑨 : SetoidAlgebra α ρ)(θ : BinRel 𝕌[ 𝑨 ] ℓ) : Type (ov ℓ ⊔ α)  where
  constructor mkcon
  field       is-equivalence : IsEquivalence θ
              is-compatible  : 𝑨 ∣≈ θ
+
+open IsCongruence public
 
 Con : (𝑨 : SetoidAlgebra α ρ) → {ℓ : Level} → Type _
 Con 𝑨 {ℓ} = Σ[ θ ∈ ( BinRel 𝕌[ 𝑨 ] ℓ ) ] IsCongruence 𝑨 θ
@@ -94,7 +89,6 @@ In many areas of abstract mathematics the *quotient* of an algebra `𝑨` with r
 
 \begin{code}
 
-open IsCongruence
 
 open Func using ( cong ) renaming ( f to _<$>_  )
 
@@ -106,6 +100,14 @@ Domain (𝑨 ╱ θ) = record { Carrier = 𝕌[ 𝑨 ]
                         }
 (Interp (𝑨 ╱ θ)) <$> (f , a) = (f ̂ 𝑨) a
 cong (Interp (𝑨 ╱ θ)) {f , u} {.f , v} (_≡_.refl , a) = is-compatible  ∥ θ ∥ f a
+
+
+
+-- /-≡ : {𝑨 : SetoidAlgebra α ρ}(θ : Con{α}{ρ}𝑨{ℓ}) {u v : ∣ 𝑨 ∣} → ⟪ u ⟫ {∣ θ ∣} ≡ ⟪ v ⟫ → ∣ θ ∣ u v
+-- /-≡ θ refl = IsEquivalence.refl (is-equivalence ∥ θ ∥)
+
+\end{code}
+
 
 
 -- Algebroid Quotient (omitting for now, in favor of SetoidAlgebra representation)
@@ -138,7 +140,7 @@ cong (Interp (𝑨 ╱ θ)) {f , u} {.f , v} (_≡_.refl , a) = is-compatible  �
 
 --------------------------------------
 
-[the agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 
 
 
