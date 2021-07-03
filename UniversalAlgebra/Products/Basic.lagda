@@ -1,14 +1,14 @@
 ---
 layout: default
-title : Algebras.Products module (Agda Universal Algebra Library)
+title : Products.Basic module (Agda Universal Algebra Library)
 date : 2021-01-12
-author: [the ualib/agda-algebras development team][]
+author: [agda-algebras development team][]
 ---
 
 
-### <a id="product-algebras">Product Algebras</a>
+### Products of Algebras and Product Algebras
 
-This is the [Algebras.Products][] module of the [Agda Universal Algebra Library][].
+This is the [Products.Basic][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
@@ -17,7 +17,7 @@ This is the [Algebras.Products][] module of the [Agda Universal Algebra Library]
 
 open import Algebras.Basic
 
-module Algebras.Products {𝑆 : Signature 𝓞 𝓥} where
+module Products.Basic {𝑆 : Signature 𝓞 𝓥} where
 
 open import Agda.Primitive                        using    ( lsuc  ; _⊔_ ; Level     )
                                                   renaming ( Set   to Type    )
@@ -131,4 +131,4 @@ If `p : 𝑨 ∈ 𝒦`, we view the pair `(𝑨 , p) ∈ ℑ` as an *index* over
 
 -----------------------------------------------
 
-[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

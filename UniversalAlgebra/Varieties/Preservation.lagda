@@ -2,60 +2,48 @@
 layout: default
 title : Varieties.Preservation (The Agda Universal Algebra Library)
 date : 2021-01-14
-author: [the ualib/agda-algebras development team][]
+author: [agda-algebras development team][]
 ---
 
 ### <a id="Equation preservation">Equation preservation</a>
 
-This section presents the [Varieties.Preservation][] module of the [Agda Universal Algebra Library][]. In this module we show that identities are preserved by closure operators H, S, and P.  This will establish the easy direction of Birkhoff's HSP Theorem.
-
-
-\begin{code}
-
-
-\end{code}
+This is the [Varieties.Preservation][] module of the [Agda Universal Algebra Library][]. In this module we show that identities are preserved by closure operators H, S, and P.  This will establish the easy direction of Birkhoff's HSP Theorem.
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-
-open import Algebras.Basic
-
+open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Varieties.Preservation {𝑆 : Signature 𝓞 𝓥} where
 
-
-
 -- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
 open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
-open import Agda.Primitive          renaming ( Set to Type )
-                                    using    ( _⊔_ ; lsuc ; Level )
-open import Agda.Builtin.Equality   using    ( _≡_ ; refl )
-open import Data.Product            using    ( _,_ ; Σ-syntax ; _×_ )
-                                    renaming ( proj₁ to fst
-                                             ; proj₂ to snd )
+open import Agda.Primitive          renaming ( Set   to Type )
+                                    using    ( _⊔_   ; lsuc ; Level )
+open import Agda.Builtin.Equality   using    ( _≡_   ; refl )
+open import Data.Product            using    ( _,_   ; Σ-syntax ; _×_ )
+                                    renaming ( proj₁ to fst ; proj₂ to snd )
 open import Data.Sum.Base           using    ( _⊎_ )
-                                    renaming ( inj₁  to inl
-                                             ; inj₂  to inr )
+                                    renaming ( inj₁  to inl ; inj₂  to inr )
 open import Function.Base           using    ( _∘_ )
-open import Relation.Binary.PropositionalEquality
-                                    using    ( sym ; cong ; cong-app ; module ≡-Reasoning )
 open import Relation.Unary          using    ( Pred ; _⊆_ ; _∈_ ; ｛_｝ ; _∪_ )
+import Relation.Binary.PropositionalEquality as PE
 
 
 
 -- -- imports from agda-algebras --------------------------------------------------------------
 open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
-open import Overture.Inverses                  using (Inv ; IsInjective ; InvIsInv )
+open import Overture.Inverses                  using ( Inv ; IsInjective ; InvIsInv )
 open import Relations.Truncation               using ( hfunext )
-open import Relations.Extensionality           using (SwellDef; DFunExt )
-open import Algebras.Products          {𝑆 = 𝑆} using ( ov ; ⨅ ; 𝔄 ; class-product)
+open import Relations.Extensionality           using ( SwellDef; DFunExt )
+open import Algebras.Basic                     using ( Algebra ; Lift-Alg )
+open import Products.Basic             {𝑆 = 𝑆} using ( ov ; ⨅ ; 𝔄 ; class-product)
 open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( is-homomorphism )
-open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using (_≅_ ; ≅-sym ; Lift-≅ ; ≅-trans ; ≅-refl
+open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; Lift-≅ ; ≅-trans ; ≅-refl
                                                      ; ⨅≅ ; Lift-Alg-iso ; Lift-Alg-associative )
-open import Terms.Basic                {𝑆 = 𝑆} using (Term ; 𝑻 )
-open import Terms.Operations           {𝑆 = 𝑆} using (_⟦_⟧; comm-hom-term)
+open import Terms.Basic                {𝑆 = 𝑆} using ( Term ; 𝑻 )
+open import Terms.Operations           {𝑆 = 𝑆} using ( _⟦_⟧; comm-hom-term)
 open import Subalgebras.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; _IsSubalgebraOfClass_ ; ≤-Lift
                                                      ; Lift-≤-Lift ; _IsSubalgebraOf_ ; SubalgebraOfClass )
 open import Varieties.Basic            {𝑆 = 𝑆} using ( _⊫_≈_ ; _⊧_≈_ ; Th)
@@ -64,13 +52,12 @@ open import Varieties.Properties       {𝑆 = 𝑆} using ( ⊧-Lift-invar ; �
 open import Varieties.Closure          {𝑆 = 𝑆} using ( H ; S ; P ; V ; P-expa ; S→subalgebra
                                                      ; Lift-Alg-subP' ; subalgebra→S ; S-mono
                                                      ; P-idemp ; module Vlift)
-
 open H
 open S
 open P
 open V
 
-private variable α β : Level -- β γ : Level
+private variable α β : Level
 
 \end{code}
 
@@ -173,7 +160,7 @@ module _ {α β : Level} {𝒦 : Pred(Algebra α 𝑆)(ov α)} where
   ν = λ 𝑓 𝒂 → fwu λ i → (snd ∣ SA≤𝒜 i ∣) 𝑓 (λ x → 𝒂 x i)
 
   σinj : IsInjective σ
-  σinj σxσy = fwu λ i → (hinj i)(cong-app σxσy i)
+  σinj σxσy = fwu λ i → (hinj i)(PE.cong-app σxσy i)
 
   ⨅SA≤⨅𝒜 : ⨅ SA ≤ ⨅ 𝒜
   ⨅SA≤⨅𝒜 = (σ , ν) , σinj
@@ -371,7 +358,7 @@ First we prove that the closure operator H is compatible with identities that ho
 
 \begin{code}
 
-open ≡-Reasoning
+open PE.≡-Reasoning
 
 private variable 𝓧 : Level
 open Term
@@ -394,7 +381,7 @@ module _ (wd : SwellDef){X : Type 𝓧} {𝒦 : Pred (Algebra α 𝑆)(ov α)} w
   goal : (𝑩 ⟦ p ⟧) b ≡ (𝑩 ⟦ q ⟧) b
   goal = (𝑩 ⟦ p ⟧) b          ≡⟨ wd 𝓧 α (𝑩 ⟦ p ⟧) b (φ ∘ preim )(λ i → (ζ i)⁻¹)⟩
       (𝑩 ⟦ p ⟧)(φ ∘ preim) ≡⟨(comm-hom-term (wd 𝓥 α) 𝑩 (φ , φh) p preim)⁻¹ ⟩
-      φ((𝑨 ⟦ p ⟧) preim)   ≡⟨ cong φ (IH preim) ⟩
+      φ((𝑨 ⟦ p ⟧) preim)   ≡⟨ PE.cong φ (IH preim) ⟩
       φ((𝑨 ⟦ q ⟧) preim)   ≡⟨ comm-hom-term (wd 𝓥 α) 𝑩 (φ , φh) q preim ⟩
       (𝑩 ⟦ q ⟧)(φ ∘ preim) ≡⟨ wd 𝓧 α (𝑩 ⟦ q ⟧)(φ ∘ preim) b ζ ⟩
       (𝑩 ⟦ q ⟧) b          ∎
@@ -519,7 +506,7 @@ module Vid (fe : DFunExt)(wd : SwellDef){𝓧 : Level} {X : Type 𝓧} {𝒦 : P
   goal : (𝑩 ⟦ p ⟧) b ≡ (𝑩 ⟦ q ⟧) b
   goal = (𝑩 ⟦ p ⟧) b          ≡⟨ wd 𝓧 α (𝑩 ⟦ p ⟧) b (φ ∘ preim )(λ i → (ζ i)⁻¹)⟩
       (𝑩 ⟦ p ⟧)(φ ∘ preim) ≡⟨(comm-hom-term (wd 𝓥 α) 𝑩 (φ , φh) p preim)⁻¹ ⟩
-      φ((𝑨 ⟦ p ⟧) preim)   ≡⟨ cong φ (IH preim) ⟩
+      φ((𝑨 ⟦ p ⟧) preim)   ≡⟨ PE.cong φ (IH preim) ⟩
       φ((𝑨 ⟦ q ⟧) preim)   ≡⟨ comm-hom-term (wd 𝓥 α) 𝑩 (φ , φh) q preim ⟩
       (𝑩 ⟦ q ⟧)(φ ∘ preim) ≡⟨ wd 𝓧 α (𝑩 ⟦ q ⟧)(φ ∘ preim) b ζ ⟩
       (𝑩 ⟦ q ⟧) b          ∎
@@ -563,7 +550,7 @@ module Vid' (fe : DFunExt)(wd : SwellDef){𝓧 : Level} {X : Type 𝓧} {𝒦 : 
   goal : (𝑩 ⟦ p ⟧) b ≡ (𝑩 ⟦ q ⟧) b
   goal = (𝑩 ⟦ p ⟧) b          ≡⟨ wd 𝓧 _ (𝑩 ⟦ p ⟧) b (φ ∘ preim )(λ i → (ζ i)⁻¹)⟩
       (𝑩 ⟦ p ⟧)(φ ∘ preim) ≡⟨(comm-hom-term (wd 𝓥 _) 𝑩 (φ , φh) p preim)⁻¹ ⟩
-      φ((𝑨 ⟦ p ⟧) preim)   ≡⟨ cong φ (IH preim) ⟩
+      φ((𝑨 ⟦ p ⟧) preim)   ≡⟨ PE.cong φ (IH preim) ⟩
       φ((𝑨 ⟦ q ⟧) preim)   ≡⟨ comm-hom-term (wd 𝓥 _) 𝑩 (φ , φh) q preim ⟩
       (𝑩 ⟦ q ⟧)(φ ∘ preim) ≡⟨ wd 𝓧 _ (𝑩 ⟦ q ⟧)(φ ∘ preim) b ζ ⟩
       (𝑩 ⟦ q ⟧) b          ∎
@@ -629,7 +616,7 @@ module _ (wd : SwellDef){X : Type 𝓧}{𝒦 : Pred (Algebra α 𝑆)(ov α)} wh
 
 --------------------------------------
 
-[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 
 
 

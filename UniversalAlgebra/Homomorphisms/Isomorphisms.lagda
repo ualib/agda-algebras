@@ -2,12 +2,12 @@
 layout: default
 title : Homomorphisms.Isomoprhisms module (The Agda Universal Algebra Library)
 date : 2021-01-14
-author: [the ualib/agda-algebras development team][]
+author: [agda-algebras development team][]
 ---
 
 ### <a id="isomorphisms">Isomorphisms</a>
 
-This section describes the [Homomorphisms.Isomorphisms][] module of the [Agda Universal Algebra Library][].
+This is the [Homomorphisms.Isomorphisms][] module of the [Agda Universal Algebra Library][].
 Here we formalize the informal notion of isomorphism between algebraic structures.
 ̇
 \begin{code}
@@ -34,11 +34,11 @@ open import Relation.Binary.PropositionalEquality using    ( cong   ;   cong-app
 
 
 -- Imports from agda-algebras --------------------------------------------------------------
-open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; _≈_ ; transport ; _∙_
-                                         ; lower∼lift ; lift∼lower )
-open import Algebras.Products    {𝑆 = 𝑆} using ( ⨅ )
+open import Overture.Preliminaries       using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; _≈_ ; transport ; _∙_
+                                               ; lower∼lift ; lift∼lower )
+open import Products.Basic       {𝑆 = 𝑆} using ( ⨅ )
 open import Homomorphisms.Basic  {𝑆 = 𝑆} using ( hom ; kercon ; ker[_⇒_]_↾_ ; πker ; 𝒾𝒹 ; ∘-hom
-                                         ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-homomorphism ; ∘-is-hom ; Lift-hom)
+                                               ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-homomorphism ; ∘-is-hom ; Lift-hom)
 
 private variable α β γ : Level
 

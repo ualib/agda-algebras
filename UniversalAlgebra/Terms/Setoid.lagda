@@ -200,27 +200,6 @@ module Environment (M : SetoidAlgebra α ℓ) where
 
 
 
--- -- The Absolutely Free Algebra (haven't gotten this to work yet)
---
--- open SetoidAlgebra
--- open Func renaming (f to apply)
--- open Setoid
--- open Level
--- 𝑻 : (X : Type χ ) → SetoidAlgebra (𝓞 ⊔ 𝓥 ⊔ lsuc χ) _
--- Carrier (Domain (𝑻 X)) = Term X
--- _≈_ (Domain (𝑻 X)) (ℊ x) (ℊ y) = Lift (𝓞 ⊔ 𝓥) (x ≡ y)
--- _≈_ (Domain (𝑻 X)) (ℊ x) (node f t) = ⊥
--- _≈_ (Domain (𝑻 X)) (node f s) (ℊ y) = ⊥
--- _≈_ (Domain (𝑻 X)) (node f s) (node g t) = Σ[ eqv ∈ f ≡ g ] (EqArgs eqv s t)
---  where
---  EqArgs : f ≡ g → (∥ 𝑆 ∥ f → Term X) → (∥ 𝑆 ∥ g → Term X) → Type _
---  EqArgs P.refl u v = ∀ i → (_≈_ (Domain (𝑻 X))) (u i) (v i)
-
--- isEquivalence (Domain (𝑻 X)) = {!!}
--- --  record { refl = P.refl ; sym = P.sym ; trans = P.trans }
--- apply (Interp (𝑻 X)) (f , ts) = node f ts
--- cong (Interp (𝑻 X)) {f , xs} {.f , ys} (refl , xs=ys) = {!!} -- P.cong (node f) (cong (Interp {!𝑻 X!}) {!!})
-
 
 --------------------------------
 

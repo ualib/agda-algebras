@@ -2,7 +2,7 @@
 layout: default
 title : Varieties.Closure module (The Agda Universal Algebra Library)
 date : 2021-01-14
-author: [the ualib/agda-algebras development team][]
+author: [agda-algebras development team][]
 ---
 
 ### Closure Operators
@@ -24,23 +24,23 @@ A **variety** is a class of algebras, in the same signature, that is closed unde
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Level using    ( Level ;  Lift )
-open import Algebras.Basic
+open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Varieties.Closure {𝑆 : Signature 𝓞 𝓥} where
 
 open import Axiom.Extensionality.Propositional renaming ( Extensionality to funext )
-open import Agda.Primitive              using    ( _⊔_ ;  lsuc )
-                                        renaming ( Set to Type )
-open import Data.Product                using    ( _,_ ; Σ-syntax )
-                                        renaming ( proj₁ to fst
-                                                 ; proj₂ to snd )
-open import Relation.Unary              using    ( Pred  ; _∈_
-                                                 ; _⊆_           )
+open import Agda.Primitive      using    ( _⊔_ ;  lsuc )
+                                renaming ( Set to Type )
+open import Data.Product        using    ( _,_ ; Σ-syntax )
+                                renaming ( proj₁ to fst
+                                         ; proj₂ to snd )
+open import Level               using    ( Level ;  Lift )
+open import Relation.Unary      using    ( Pred  ; _∈_ ; _⊆_ )
 
 
 open import Overture.Preliminaries                  using ( ∣_∣ ; ∥_∥ )
-open import Algebras.Products               {𝑆 = 𝑆} using ( ov ; ⨅ )
+open import Products.Basic                  {𝑆 = 𝑆} using ( ov ; ⨅ )
+open import Algebras.Basic                          using ( Algebra ; Lift-Alg )
 open import Homomorphisms.Isomorphisms      {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; Lift-≅
                                                           ; ≅-trans ; Lift-Alg-⨅≅
                                                           ; ≅-refl ; Lift-Alg-iso
@@ -364,7 +364,7 @@ module Vlift {α : Level} {fe₀ : funext (ov α) α}
 
 --------------------------------------
 
-[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 
 
 

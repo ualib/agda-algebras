@@ -2,12 +2,12 @@
 layout: default
 title : Varieties.Basic module (The Agda Universal Algebra Library)
 date : 2021-01-14
-author: [the agda-algebras development team][]
+author: [agda-algebras development team][]
 ---
 
 ## Varieties, Model Theory, and Equational Logic
 
-This section presents the [Varieties.Basic][] module of the [Agda Universal Algebra Library][] where the binary "models" relation ⊧, relating algebras (or classes of algebras) to the identities that they satisfy, is defined.
+This is the [Varieties.Basic][] module of the [Agda Universal Algebra Library][] where the binary "models" relation ⊧, relating algebras (or classes of algebras) to the identities that they satisfy, is defined.
 
 Agda supports the definition of infix operations and relations, and we use this to define ⊧ so that we may write, e.g., `𝑨 ⊧ p ≈ q` or `𝒦 ⊫ p ≈ q`.
 
@@ -22,25 +22,24 @@ Agda supports the definition of infix operations and relations, and we use this 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 
-open import Level using ( Level )
-open import Algebras.Basic
+open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Varieties.Basic {𝑆 : Signature 𝓞 𝓥} where
 
 
 -- imports from Agda and the Agda Standard Library -------------------------------------------
-open import Agda.Primitive          using    ( _⊔_ ;  lsuc )
-                                    renaming ( Set to Type )
-open import Data.Product            using    ( _×_ ; _,_ ; Σ-syntax)
-                                    renaming ( proj₁ to fst
-                                             ; proj₂ to snd )
-open import Relation.Unary          using    ( Pred ; _∈_ )
+open import Agda.Primitive   using    ( _⊔_ ;  lsuc ; Level )
+                             renaming ( Set to Type )
+open import Data.Product     using    ( _×_ ; _,_ ; Σ-syntax)
+                             renaming ( proj₁ to fst ; proj₂ to snd )
+open import Relation.Unary   using    ( Pred ; _∈_ )
 
 
 
 -- -- imports from agda-algebras --------------------------------------------------------------
 open import Overture.Preliminaries    using ( _≈_ )
-open import Algebras.Products {𝑆 = 𝑆} using ( ov )
+open import Algebras.Basic            using ( Algebra )
+open import Products.Basic    {𝑆 = 𝑆} using ( ov )
 open import Terms.Basic       {𝑆 = 𝑆} using ( Term ; 𝑻 )
 open import Terms.Operations  {𝑆 = 𝑆} using ( _⟦_⟧ )
 
@@ -127,7 +126,7 @@ Modᵗ ℰ = λ 𝑨 → ∀ i → 𝑨 ⊧ (fst (ℰ i)) ≈ (snd (ℰ i))
 
 --------------------------------------
 
-[the agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 
 
 

@@ -2,7 +2,7 @@
 layout: default
 title : Algebras module (Agda Universal Algebra Library)
 date : 2021-01-12
-author: William DeMeo
+author: [the agda-algebras development team][]
 ---
 
 ## <a id="algebra-types">Algebra Types</a>
@@ -21,9 +21,8 @@ A popular way to represent algebraic structures in type theory is with record ty
 
 module Algebras where
 
-open import Algebras.Basic public
-open import Algebras.Products public
-open import Algebras.Congruences
+open import Algebras.Basic
+open import Algebras.Setoid
 
 \end{code}
 
@@ -33,3 +32,9 @@ open import Algebras.Congruences
 <span style="float:right;">[Algebras.Basic →](Algebras.Basic.html)</span>
 
 {% include UALib.Links.md %}
+
+
+--------------------------------------
+
+[the agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
+

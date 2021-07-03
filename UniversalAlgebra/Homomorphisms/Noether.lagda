@@ -2,7 +2,7 @@
 layout: default
 title : Homomorphisms.Noether module (The Agda Universal Algebra Library)
 date : 2021-01-13
-author: [the ualib/agda-algebras development team][]
+author: [agda-algebras development team][]
 ---
 
 ### <a id="homomorphism-theorems">Homomorphism Theorems</a>
@@ -38,17 +38,17 @@ open import Relation.Unary                        using    ( _⊆_ )
 
 
 -- Imports from agda-algebras --------------------------------------------------------------
-open import Overture.Preliminaries   using ( ∣_∣ ; ∥_∥ ; 𝑖𝑑 ; _⁻¹ )
-open import Overture.Inverses        using ( IsInjective ; IsSurjective ; Image_∋_ ; SurjInv )
-open import Relations.Discrete       using ( ker ; kernel )
-open import Relations.Quotients      using ( ker-IsEquivalence ; _/_ ; ⟪_⟫ ; ⌞_⌟ ; R-block)
-open import Relations.Truncation     using ( is-set ; blk-uip ; is-embedding
-                                           ; monic-is-embedding|Set )
-open import Relations.Extensionality using ( swelldef ; block-ext|uip ; pred-ext
-                                           ; SurjInvIsRightInv ; epic-factor )
-open import Algebras.Congruences {𝑆 = 𝑆} using ( Con ; IsCongruence )
-open import Homomorphisms.Basic  {𝑆 = 𝑆} using ( hom ; kercon ; ker[_⇒_]_↾_ ; πker
-                                           ; is-homomorphism ; epi ; epi-to-hom )
+open import Overture.Preliminaries      using ( ∣_∣ ; ∥_∥ ; 𝑖𝑑 ; _⁻¹ )
+open import Overture.Inverses           using ( IsInjective ; IsSurjective ; Image_∋_ ; SurjInv )
+open import Relations.Discrete          using ( ker ; kernel )
+open import Relations.Quotients         using ( ker-IsEquivalence ; _/_ ; ⟪_⟫ ; ⌞_⌟ ; R-block)
+open import Relations.Truncation        using ( is-set ; blk-uip ; is-embedding
+                                              ; monic-is-embedding|Set )
+open import Relations.Extensionality    using ( swelldef ; block-ext|uip ; pred-ext
+                                              ; SurjInvIsRightInv ; epic-factor )
+open import Congruences.Basic   {𝑆 = 𝑆} using ( Con ; IsCongruence )
+open import Homomorphisms.Basic {𝑆 = 𝑆} using ( hom ; kercon ; ker[_⇒_]_↾_ ; πker
+                                              ; is-homomorphism ; epi ; epi-to-hom )
 
 private variable α β γ : Level
 
@@ -291,4 +291,4 @@ If, in addition to the hypotheses of the last theorem, we assume τ is epic, the
 
 ------------------------------
 
-[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

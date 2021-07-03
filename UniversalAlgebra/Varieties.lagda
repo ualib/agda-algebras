@@ -21,6 +21,7 @@ module Varieties where
 
 open import Varieties.Basic
 open import Varieties.Properties
+open import Varieties.Properties
 open import Varieties.Closure
 open import Varieties.EquationalLogic
 open import Varieties.Preservation
