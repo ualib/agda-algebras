@@ -2,7 +2,7 @@
 layout: default
 title : Varieties.Basic module (The Agda Universal Algebra Library)
 date : 2021-01-14
-author: [the ualib/agda-algebras development team][]
+author: [the agda-algebras development team][]
 ---
 
 ## Varieties, Model Theory, and Equational Logic
@@ -41,7 +41,7 @@ open import Relation.Unary          using    ( Pred ; _∈_ )
 -- -- imports from agda-algebras --------------------------------------------------------------
 open import Overture.Preliminaries    using ( _≈_ )
 open import Algebras.Products {𝑆 = 𝑆} using ( ov )
-open import Terms.Basic       {𝑆 = 𝑆} using ( Term ; 𝑻 ; lift-hom )
+open import Terms.Basic       {𝑆 = 𝑆} using ( Term ; 𝑻 )
 open import Terms.Operations  {𝑆 = 𝑆} using ( _⟦_⟧ )
 
 private variable χ α ρ ι : Level
@@ -127,16 +127,7 @@ Modᵗ ℰ = λ 𝑨 → ∀ i → 𝑨 ⊧ (fst (ℰ i)) ≈ (snd (ℰ i))
 
 --------------------------------------
 
-[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
-
-
-
-
-
-
-
-
-
+[the agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 
 
 
@@ -151,41 +142,3 @@ Modᵗ ℰ = λ 𝑨 → ∀ i → 𝑨 ⊧ (fst (ℰ i)) ≈ (snd (ℰ i))
 
 
 -->
-Soundness of the inference rules. We assume a model 𝑨 that validates all equations in ℰ.
-
-
-\begin{code}
-
--- module Soundness {ι : Level}{I : Type ι}
---                  {χ : Level}(ℰ : {X : Type χ} → I → Term X × Term X)
---                  {α : Level}(𝑨 : Algebra α 𝑆)
---                  (Amod : 𝑨 ∈ Modtup ℰ) where
-
---  -- In any 𝑨 ∈ Mod ℰ, derived equality is actual equality.
-
---  sound : {X : Type χ}{p q : Term X} → ℰ ⊢ X ▹ p ≈ q → 𝑨 ⊧ p ≈ q
---  sound x = {!!}
-
-\end{code}
- -- (hyp i)                        =  V i
- --    sound (app {op = op} es) ρ           =  den .cong (refl , λ i → sound (es i) ρ)
- --    sound (sub {t = t} {t' = t'} e σ) ρ  =  begin
- --      ⦅ t [ σ ]   ⦆ .apply ρ   ≈⟨ substitution {M = M} t σ ρ ⟩
- --      ⦅ t         ⦆ .apply ρ'  ≈⟨ sound e ρ' ⟩
- --      ⦅ t'        ⦆ .apply ρ'  ≈˘⟨ substitution {M = M} t' σ ρ ⟩
- --      ⦅ t' [ σ ]  ⦆ .apply ρ   ∎
- --      where
- --      open SetoidReasoning Den
- --      ρ' = ⦅ σ ⦆s ρ
-
- --    sound (base x {f} {f'})              =  isEquiv {M = M} .IsEquivalence.refl {var' x λ()}
-
- --    sound (refl t)                       =  isEquiv {M = M} .IsEquivalence.refl {t}
- --    sound (sym {t = t} {t' = t'} e)      =  isEquiv {M = M} .IsEquivalence.sym
- --                                            {x = t} {y = t'} (sound e)
- --    sound (trans  {t₁ = t₁} {t₂ = t₂}
- --                  {t₃ = t₃} e e')        =  isEquiv {M = M} .IsEquivalence.trans
- --                                            {i = t₁} {j = t₂} {k = t₃} (sound e) (sound e')
-
-
-

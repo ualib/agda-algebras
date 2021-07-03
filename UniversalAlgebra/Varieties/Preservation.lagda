@@ -20,7 +20,6 @@ This section presents the [Varieties.Preservation][] module of the [Agda Univers
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 
-open import Level renaming ( suc to lsuc )
 open import Algebras.Basic
 
 
@@ -31,9 +30,9 @@ module Varieties.Preservation {𝑆 : Signature 𝓞 𝓥} where
 -- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
 open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
 open import Agda.Primitive          renaming ( Set to Type )
-                                    using    ( _⊔_ )
+                                    using    ( _⊔_ ; lsuc ; Level )
 open import Agda.Builtin.Equality   using    ( _≡_ ; refl )
-open import Data.Product            using    ( _,_ ; Σ-syntax ; Σ ; _×_ )
+open import Data.Product            using    ( _,_ ; Σ-syntax ; _×_ )
                                     renaming ( proj₁ to fst
                                              ; proj₂ to snd )
 open import Data.Sum.Base           using    ( _⊎_ )
@@ -41,45 +40,37 @@ open import Data.Sum.Base           using    ( _⊎_ )
                                              ; inj₂  to inr )
 open import Function.Base           using    ( _∘_ )
 open import Relation.Binary.PropositionalEquality
-                                    using    ( cong ; cong-app ; module ≡-Reasoning )
--- open import Relation.Unary          using    ( _∈_ ; Pred ; _⊆_ )
-open import Relation.Unary          using    ( Pred ; _∈_ ; _⊆_ ; ｛_｝ ; _∪_ )
+                                    using    ( sym ; cong ; cong-app ; module ≡-Reasoning )
+open import Relation.Unary          using    ( Pred ; _⊆_ ; _∈_ ; ｛_｝ ; _∪_ )
 
 
 
--- imports from agda-algebras --------------------------------------------------------------
-open import Overture.Preliminaries             using ( _⁻¹ ; ∣_∣ ; ∥_∥ ; 𝑖𝑑 )
-open import Overture.Inverses            using (Inv ; IsInjective ;InvIsInv )
-open import Relations.Truncation         using ( hfunext )
-open import Relations.Extensionality           using (DFunExt; SwellDef)
+-- -- imports from agda-algebras --------------------------------------------------------------
+open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
+open import Overture.Inverses                  using (Inv ; IsInjective ; InvIsInv )
+open import Relations.Truncation               using ( hfunext )
+open import Relations.Extensionality           using (SwellDef; DFunExt )
 open import Algebras.Products          {𝑆 = 𝑆} using ( ov ; ⨅ ; 𝔄 ; class-product)
-open import Homomorphisms.Basic        {𝑆 = 𝑆} using (hom; 𝒾𝒹; ∘-hom; is-homomorphism)
-open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using (_≅_ ; ≅-sym ; Lift-≅ ; ≅-trans
-                                                     ; ≅-refl ; Lift-Alg-iso ; ⨅≅
-                                                     ; Lift-Alg-associative ; Lift-Alg-⨅≅ )
-
-open import Terms.Basic                {𝑆 = 𝑆} using (Term ; 𝑻 ; lift-hom)
+open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( is-homomorphism )
+open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using (_≅_ ; ≅-sym ; Lift-≅ ; ≅-trans ; ≅-refl
+                                                     ; ⨅≅ ; Lift-Alg-iso ; Lift-Alg-associative )
+open import Terms.Basic                {𝑆 = 𝑆} using (Term ; 𝑻 )
 open import Terms.Operations           {𝑆 = 𝑆} using (_⟦_⟧; comm-hom-term)
-open import Subalgebras.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; _IsSubalgebraOfClass_ ; Lift-≤-Lift
-                                                     ; SubalgebraOfClass ; iso→injective
-                                                     ; ≤-Lift ; _IsSubalgebraOf_ )
+open import Subalgebras.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; _IsSubalgebraOfClass_ ; ≤-Lift
+                                                     ; Lift-≤-Lift ; _IsSubalgebraOf_ ; SubalgebraOfClass )
 open import Varieties.Basic            {𝑆 = 𝑆} using ( _⊫_≈_ ; _⊧_≈_ ; Th)
-open import Varieties.Properties       {𝑆 = 𝑆} using ( ⊧-Lift-invar ; ⊧-lower-invar
-                                                     ; ⊧-S-class-invar ; ⊧-I-invar
-                                                     ; ⊧-P-lift-invar ; ⊧-P-invar
-                                                     ; ⊧-S-invar)
-
-open import Varieties.Closure          {𝑆 = 𝑆} using ( H ; S ; P ; V ; S-mono
-                                                     ; P-expa ; P-idemp ; module Vlift
-                                                     ; S→subalgebra ; Lift-Alg-subP'
-                                                     ; subalgebra→S )
+open import Varieties.Properties       {𝑆 = 𝑆} using ( ⊧-Lift-invar ; ⊧-lower-invar ; ⊧-S-class-invar
+                                                     ; ⊧-I-invar ; ⊧-P-lift-invar ; ⊧-P-invar ; ⊧-S-invar)
+open import Varieties.Closure          {𝑆 = 𝑆} using ( H ; S ; P ; V ; P-expa ; S→subalgebra
+                                                     ; Lift-Alg-subP' ; subalgebra→S ; S-mono
+                                                     ; P-idemp ; module Vlift)
 
 open H
 open S
 open P
 open V
 
-private variable α β γ : Level
+private variable α β : Level -- β γ : Level
 
 \end{code}
 

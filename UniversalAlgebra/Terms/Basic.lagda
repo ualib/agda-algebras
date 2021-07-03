@@ -7,9 +7,7 @@ author: [the agda-algebras development team][]
 
 ### <a id="basic-definitions">Basic Definitions</a>
 
-This section presents the [Terms.Basic][] module of the [Agda Universal Algebra Library][].
-
-The theoretical background that begins each subsection below is based on Cliff Bergman's textbook [Bergman (2012)][], specifically, Section 4.3.  Apart from notation, our presentation is similar to Bergman's, but we will be more concise, omitting some details and all examples, in order to more quickly arrive at our objective, which is to use type theory to express the concepts and formalize them in the [Agda][] language.  We refer the reader to [Bergman (2012)][] for a more complete exposition of classical (informal) universal algebra.
+This is the [Terms.Basic][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
@@ -19,35 +17,17 @@ open import Algebras.Basic
 
 module Terms.Basic {𝑆 : Signature 𝓞 𝓥} where
 
+open import Agda.Primitive            using    ( Level )
+                                      renaming ( Set to Type )
+open import Data.Product              using    ( _,_ )
+open import Overture.Preliminaries    using    ( ∣_∣ ; ∥_∥ )
+open import Algebras.Products {𝑆 = 𝑆} using    ( ov )
 
-open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
--- 
-import Relation.Binary.PropositionalEquality as P
-
-open import Agda.Primitive          using    ( _⊔_ ;  lsuc ; Level )
-                                    renaming ( Set to Type )
-open import Agda.Builtin.Equality   using    ( _≡_ ;  refl )
-open import Data.Product            using    ( _,_ ;  Σ
-                                             ; Σ-syntax    )
-open import Function.Base           using    ( _∘_         )
-open import Data.Empty.Polymorphic using    ( ⊥      ) -- ;  ⊥-elim        )
-open import Level                 using    (  Level ; Lift   )
-open import Relation.Binary        using    ( IsEquivalence )
-
-
-
-open import Overture.Preliminaries  using ( _⁻¹ ; 𝑖𝑑 ; ∣_∣ ; ∥_∥)
-open import Overture.Inverses       using ( IsSurjective ; Inv
-                                          ; InvIsInv ; Image_∋_; eq )
-open import Relations.Extensionality using (swelldef)
-open import Algebras.Products     {𝑆 = 𝑆} using ( ov )
-open import Homomorphisms.Basic   {𝑆 = 𝑆} using ( hom )
-
-private variable α β χ : Level
+private variable χ : Level
 
 \end{code}
 
-#### <a id="the-type-of-terms">The type of terms</a>
+#### The type of terms
 
 Fix a signature `𝑆` and let `X` denote an arbitrary nonempty collection of variable symbols. Assume the symbols in `X` are distinct from the operation symbols of `𝑆`, that is `X ∩ ∣ 𝑆 ∣ = ∅`.
 
@@ -69,54 +49,15 @@ data Term (X : Type χ ) : Type (ov χ)  where
  ℊ : X → Term X    -- (ℊ for "generator")
  node : (f : ∣ 𝑆 ∣)(t : ∥ 𝑆 ∥ f → Term X) → Term X
 
-module _ {X : Type χ } where
-
-
- data _≐_ : Term X → Term X → Type (𝓞 ⊔ 𝓥 ⊔ lsuc χ) where
-  refl : {x y : X} → x ≡ y → (ℊ x) ≐ (ℊ y)
-  genl : ∀ {f : ∣ 𝑆 ∣}{s t : ∥ 𝑆 ∥ f → Term X} → (∀ i → (s i) ≐ (t i)) → (node f s) ≐ (node f t)
-
-
---  _≐_ : Term X → Term X → Type (𝓞 ⊔ 𝓥 ⊔ χ)
---  ℊ x ≐ ℊ y = Lift (𝓞 ⊔ 𝓥) (x ≡ y)
---  ℊ x ≐ node f t = ⊥
---  node f s ≐ ℊ x = ⊥
---  node f s ≐ node g t = Σ[ eqv ∈ f ≡ g ] EqArgs eqv s t
---   where
---   EqArgs : f ≡ g → (∥ 𝑆 ∥ f → Term _) → (∥ 𝑆 ∥ g → Term _) → Type _
---   EqArgs refl s t = ∀ i → (s i) ≐ (t i)
-
- -- open Level
- -- ≐-isRefl : Reflexive _≐_
- -- ≐-isRefl = ?
-
- -- ≐-isSym : Symmetric _≐_
- -- ≐-isSym = ?
-
- -- ≐-isTrans : Transitive _≐_
- -- ≐-isTrans = ?
-
- -- IsEquivalence.refl ≐-isEqv {ℊ x} = lift refl
- -- IsEquivalence.refl ≐-isEqv {node f t} = (P.refl , λ i → IsEquivalence.refl ≐-isEqv)
-
- -- IsEquivalence.sym ≐-isEqv {ℊ x} {ℊ y} x≐y = lift (P.sym (lower x≐y))
- -- IsEquivalence.sym ≐-isEqv {node f s} {node g t} (refl , st) = P.refl , λ i → (IsEquivalence.sym ≐-isEqv) (st i)
-
- -- IsEquivalence.trans ≐-isEqv {x}{y}{z} p q = {!!}
- -- IsEquivalence.refl ≐-isEqv {ℊ x} = lift refl
- -- IsEquivalence.refl ≐-isEqv {node f t} = (refl , λ i → {!!})
- -- IsEquivalence.sym ≐-isEqv = {!!}
- -- IsEquivalence.trans ≐-isEqv = {!!}
-
 \end{code}
 
 This is a very basic inductive type that represents each term as a tree with an operation symbol at each `node` and a variable symbol at each leaf (`generator`).
 
-
 **Notation**. As usual, the type `X` represents an arbitrary collection of variable symbols. Recall, `ov χ` is our shorthand notation for the universe level `𝓞 ⊔ 𝓥 ⊔ lsuc χ`.
 
 
-#### <a id="the-term-algebra">The term algebra</a>
+
+#### The term algebra
 
 For a given signature `𝑆`, if the type `Term X` is nonempty (equivalently, if `X` or `∣ 𝑆 ∣` is nonempty), then we can define an algebraic structure, denoted by `𝑻 X` and called the *term algebra in the signature* `𝑆` *over* `X`.  Terms are viewed as acting on other terms, so both the domain and basic operations of the algebra are the terms themselves.
 
@@ -133,97 +74,6 @@ In [Agda][] the term algebra can be defined as simply as one could hope.
 
 \end{code}
 
-
-
-#### <a id="the-universal-property">The universal property</a>
-
-The term algebra `𝑻 X` is *absolutely free* (or *universal*, or *initial*) for algebras in the signature `𝑆`. That is, for every 𝑆-algebra `𝑨`, the following hold.
-
-1. Every function from `𝑋` to `∣ 𝑨 ∣` lifts to a homomorphism from `𝑻 X` to `𝑨`.
-2. The homomorphism that exists by item 1 is unique.
-
-We now prove this in [Agda][], starting with the fact that every map from `X` to `∣ 𝑨 ∣` lifts to a map from `∣ 𝑻 X ∣` to `∣ 𝑨 ∣` in a natural way, by induction on the structure of the given term.
-
-\begin{code}
-
-private variable X : Type χ
-
-free-lift : (𝑨 : Algebra α 𝑆)(h : X → ∣ 𝑨 ∣) → ∣ 𝑻 X ∣ → ∣ 𝑨 ∣
-free-lift _ h (ℊ x) = h x
-free-lift 𝑨 h (node f 𝑡) = (f ̂ 𝑨) (λ i → free-lift 𝑨 h (𝑡 i))
-
-\end{code}
-
-Naturally, at the base step of the induction, when the term has the form `generator`
-x, the free lift of `h` agrees with `h`.  For the inductive step, when the
-given term has the form `node f 𝑡`, the free lift is defined as
-follows: Assuming (the induction hypothesis) that we know the image of each
-subterm `𝑡 i` under the free lift of `h`, define the free lift at the
-full term by applying `f ̂ 𝑨` to the images of the subterms.
-
-The free lift so defined is a homomorphism by construction. Indeed, here is the trivial proof.
-
-\begin{code}
-
-lift-hom : (𝑨 : Algebra α 𝑆) → (X → ∣ 𝑨 ∣) → hom (𝑻 X) 𝑨
-lift-hom 𝑨 h = free-lift 𝑨 h , λ f a → P.cong (f ̂ 𝑨) refl
-
-\end{code}
-
-Finally, we prove that the homomorphism is unique.  This requires `funext 𝓥 α` (i.e., *function extensionality* at universe levels `𝓥` and `α`) which we postulate by making it part of the premise in the following function type definition.
-
-\begin{code}
-
-open P.≡-Reasoning
-
-free-unique : swelldef 𝓥 α → (𝑨 : Algebra α 𝑆)(g h : hom (𝑻 X) 𝑨)
- →            (∀ x → ∣ g ∣ (ℊ x) ≡ ∣ h ∣ (ℊ x))
-              ----------------------------------------
- →            ∀ (t : Term X) →  ∣ g ∣ t ≡ ∣ h ∣ t
-
-free-unique _ _ _ _ p (ℊ x) = p x
-
-free-unique wd 𝑨 g h p (node 𝑓 𝑡) =
-
- ∣ g ∣ (node 𝑓 𝑡)    ≡⟨ ∥ g ∥ 𝑓 𝑡 ⟩
- (𝑓 ̂ 𝑨)(∣ g ∣ ∘ 𝑡)  ≡⟨ wd (𝑓 ̂ 𝑨)(∣ g ∣ ∘ 𝑡)(∣ h ∣ ∘ 𝑡)(λ i → free-unique wd 𝑨 g h p (𝑡 i)) ⟩
- (𝑓 ̂ 𝑨)(∣ h ∣ ∘ 𝑡)  ≡⟨ (∥ h ∥ 𝑓 𝑡)⁻¹ ⟩
- ∣ h ∣ (node 𝑓 𝑡)    ∎
-
-\end{code}
-
-Let's account for what we have proved thus far about the term algebra.  If we postulate a type `X : Type χ` (representing an arbitrary collection of variable symbols) such that for each `𝑆`-algebra `𝑨` there is a map from `X` to the domain of `𝑨`, then it follows that for every `𝑆`-algebra `𝑨` there is a homomorphism from `𝑻 X` to `∣ 𝑨 ∣` that "agrees with the original map on `X`," by which we mean that for all `x : X` the lift evaluated at `ℊ x` is equal to the original function evaluated at `x`.
-
-If we further assume that each of the mappings from `X` to `∣ 𝑨 ∣` is *surjective*, then the homomorphisms constructed with `free-lift` and `lift-hom` are *epimorphisms*, as we now prove.
-
-\begin{code}
-
-lift-of-epi-is-epi : (𝑨 : Algebra α 𝑆){h₀ : X → ∣ 𝑨 ∣}
- →                   IsSurjective h₀ → IsSurjective ∣ lift-hom 𝑨 h₀ ∣
-
-lift-of-epi-is-epi 𝑨 {h₀} hE y = Goal
- where
- h₀⁻¹y = Inv h₀ (hE y)
-
- η : y ≡ ∣ lift-hom 𝑨 h₀ ∣ (ℊ h₀⁻¹y)
- η = (InvIsInv h₀ (hE y))⁻¹
-
- Goal : Image ∣ lift-hom 𝑨 h₀ ∣ ∋ y
- Goal = eq (ℊ h₀⁻¹y) η
-
-\end{code}
-
-The `lift-hom` and `lift-of-epi-is-epi` types will be called to action when such epimorphisms are needed later (e.g., in the [Varieties][] module).
-
-
---------------------------------------
-
-<p></p>
-
-[↑ Terms](Terms.html)
-<span style="float:right;">[Terms.Operations →](Terms.Operations.html)</span>
-
-{% include UALib.Links.md %}
 
 ------------------------------
 
