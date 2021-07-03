@@ -192,6 +192,11 @@ open import Structures.Basic                using    ( Signature ; Structure ; R
 open import Structures.Congruences          using    ( Con ; 0[_]Compatible ; 0Con[_] ; _╱_ ; /≡-elim
                                                      ; 𝟘[_╱_] ; 𝟎[_╱_] )
 
+open import Structures.Entailment           using    ( ℓ₁ ; _⊧_≈_ ; _⊧_≋_ ; Th ; Mod ; fMod )
+
+
+open import Structures.Graphs               using    ( Gr-sig ; Gr ; hom→Grhom ; Grhom→hom ; _⇛_⇚_ )
+
 open import Structures.Homs                 using    ( preserves ; is-hom-rel ; comp-op ; is-hom-op
                                                      ; is-hom ; hom ; ∘-is-hom-rel ; ∘-is-hom-op
                                                      ; ∘-is-hom ; ∘-hom ; 𝒾𝒹 ; is-mon ; mon ; is-epi
@@ -199,7 +204,12 @@ open import Structures.Homs                 using    ( preserves ; is-hom-rel ; 
                                                      ; Lift-Hom ; Homker-comp )
 
 
+open import Structures.Iso                  using    ( _≅_ ; ≅-refl ; ≅-sym ; ≅-trans ; Lift-≅
+                                                     ; Lift-Struc-iso ; ⨅≅ )
 
+open import Structures.Products             using   ( ⨅ ; ℓp ; ℑ ; 𝔖 ; class-prod )
+
+open import Structures.Terms                using    ( Term ; _⟦_⟧ )
 
 \end{code}
 

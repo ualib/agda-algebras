@@ -7,6 +7,7 @@
 open import Agda.Builtin.Equality                 using    ( _≡_      ;  refl   )
 open import Function.Base                         using    ( _∘_      ;  id     )
 open import Relation.Binary.PropositionalEquality using    ( sym      ;  trans  )
+open import Data.Nat                              using    ( ℕ                  )
 open import Data.Product                          using    ( _,_      ;   Σ
                                                            ; Σ-syntax ;   _×_   )
                                                   renaming ( proj₁    to  fst
@@ -63,10 +64,6 @@ open import Relations.Discrete using (Op)
 -- module Relations.Quotients where
 
 open import Agda.Builtin.Equality                 using    (_≡_  ; refl      )
-open import Data.Product                          using    ( _,_ ; Σ
-                                                           ; Σ-syntax        )
-                                                  renaming ( proj₁ to fst
-                                                           ; proj₂ to snd    )
 open import Agda.Primitive                        using    ( _⊔_             )
                                                   renaming ( Set   to Type
                                                            ; Setω  to Typeω  )

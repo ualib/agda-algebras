@@ -107,6 +107,9 @@ open SetoidAlgebra
 𝕌[_] : SetoidAlgebra α ρ →  Type α
 𝕌[ 𝑨 ] = Carrier (Domain 𝑨)
 
+𝔻[_] : SetoidAlgebra α ρ →  Setoid α ρ
+𝔻[ 𝑨 ] = Domain 𝑨
+
 
 -- Easier notation for application of an (interpreted) operation symbol.
 

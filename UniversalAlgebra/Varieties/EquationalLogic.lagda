@@ -61,7 +61,7 @@ private variable
 -- Equations
 -- An equation is a pair (s , t) of terms in the same context.
 record Eq : Type (ov χ) where
- constructor _≐_
+ constructor _≈̇_
  field
   {cxt} : Type χ
   lhs   : Term cxt
@@ -70,10 +70,9 @@ record Eq : Type (ov χ) where
 open Eq public
 
 
--- Equation p ≐ q holding in algebra M.
-_⊨_ : (M : SetoidAlgebra α ℓ)(tid : Eq{χ}) → Type _
-M ⊨ (p ≐ q) = Equal p q                                -- (type \|= to get ⊨)
- where open Environment M
+-- Equation p ≈̇ q holding in algebra M. (type \~~\^. to get ≈̇) (type \|= to get ⊨)
+_⊨_ : (M : SetoidAlgebra α ℓ)(term-identity : Eq{χ}) → Type _
+M ⊨ (p ≈̇ q) = Equal p q  where open Environment M
 
 module _ {ι : Level}{I : Type ι} where
 
@@ -114,7 +113,7 @@ module _ {χ ι : Level} where
  data _⊢_▹_≈_ {I : Type ι}
   (E : I → Eq) : (Γ : Type χ) (p q : Term Γ) → Type ((ov χ) ⊔ ι) where
 
-  hyp : ∀ i → let p ≐ q = E i in E ⊢ _ ▹ p ≈ q
+  hyp : ∀ i → let p ≈̇ q = E i in E ⊢ _ ▹ p ≈ q
 
   app : ∀ {ps qs} → (∀ i → E ⊢ Γ ▹ ps i ≈ qs i) → E ⊢ Γ ▹ (node f ps) ≈ (node f qs)
 
@@ -148,7 +147,7 @@ module Soundness {χ α ρ ι : Level}{I : Type ι} (E : I → Eq{χ})
  open SetoidReasoning Domain
 
  open Environment M
- sound : ∀ {p q} → E ⊢ Γ ▹ p ≈ q → M ⊨ (p ≐ q)
+ sound : ∀ {p q} → E ⊢ Γ ▹ p ≈ q → M ⊨ (p ≈̇ q)
 
  sound (hyp i)                      =  V i
  sound (app {f = f} es) ρ           =  Interp .cong (≡-refl , λ i → sound (es i) ρ)
@@ -254,9 +253,9 @@ module Completeness {χ ι : Level}{I : Type ι} (E : I → Eq{χ}) {Γ} where
  open TermModel {Γ = Γ} E
  open Environment (M Γ)
 
- -- Birkhoff's completeness theorem [Birkhoff (1935)]:
+ -- Birkhoff's completeness theorem.
  -- Any valid consequence is derivable.
- completeness : ∀ p q → Mod E ⊫ (p ≐ q) → E ⊢ Γ ▹ p ≈ q
+ completeness : ∀ p q → Mod E ⊫ (p ≈̇ q) → E ⊢ Γ ▹ p ≈ q
  completeness p q V = begin
                   p              ≈˘⟨ identity p ⟩
                   p [ σ₀ ]       ≈˘⟨ evaluation p σ₀ ⟩
