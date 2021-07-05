@@ -32,8 +32,11 @@ open import Relation.Binary                       using    ( IsEquivalence    )
 open import Relation.Binary.PropositionalEquality using    ( sym   ;  cong-app
                                                            ; trans            )
 open import Relation.Unary                        using    ( Pred  ; _⊆_      )
+import Relation.Binary.PropositionalEquality as PE
 
-open import Overture.Preliminaries using ( 𝑖𝑑 ; _⁻¹ ; _∙_ ; transport )
+
+
+open import Overture.Preliminaries using ( 𝑖𝑑 ; _⁻¹ ; _∙_ ; transport ; _≈_)
 open import Overture.Inverses      using ( IsSurjective ; SurjInv
                                          ; InvIsInv ; Image_∋_ ; eq  )
 open import Relations.Discrete     using ( Op                        )
@@ -70,10 +73,28 @@ We can also prove the following composition law for epics.
 
 \begin{code}
 
+ open PE.≡-Reasoning
  epic-factor : {C : Type γ}(f : A → B)(g : A → C)(h : C → B)
-  →            f ≡ h ∘ g → IsSurjective f → IsSurjective h
+  →            f ≈ h ∘ g → IsSurjective f → IsSurjective h
 
- epic-factor f g h compId fe y = Goal
+ epic-factor f g h compId fe y = Goal -- Goal
+  where
+   finv : B → A
+   finv = SurjInv f fe
+
+   ζ : y ≡ f (finv y)
+   ζ = (SurjInvIsRightInv f fe y)⁻¹
+
+   η : y ≡ (h ∘ g) (finv y)
+   η = ζ ∙ compId (finv y)
+
+   Goal : Image h ∋ y
+   Goal = eq (g (finv y)) η
+
+ epic-factor-intensional : {C : Type γ}(f : A → B)(g : A → C)(h : C → B)
+  →                        f ≡ h ∘ g → IsSurjective f → IsSurjective h
+
+ epic-factor-intensional f g h compId fe y = Goal
   where
    finv : B → A
    finv = SurjInv f fe

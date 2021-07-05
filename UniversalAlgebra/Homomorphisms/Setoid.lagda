@@ -32,7 +32,7 @@ open import Relation.Unary                        using    ( _⊆_ )
 import Relation.Binary.PropositionalEquality as PE
 
 -- Imports from the Agda Universal Algebra Library
-open import Overture.Preliminaries     using ( ∣_∣ ; ∥_∥ ; _⁻¹)
+open import Overture.Preliminaries     using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; _≈_)
 open import Overture.Inverses          using ( IsInjective ; IsSurjective )
 open import Overture.Inverses          using ( SurjInv )
 open import Relations.Discrete         using ( ker ; kernel )
@@ -79,43 +79,41 @@ module _ {α ρᵃ : Level} (𝑨 : SetoidAlgebra α ρᵃ)  -- (explicit 𝑨)
   C = 𝕌[ 𝑪 ]
 
  -- The composition of homomorphisms is again a homomorphism.
- ∘-hom : hom 𝑨 𝑩  →  hom 𝑩 𝑪  →  hom 𝑨 𝑪
- ∘-hom (g , ghom) (h , hhom) = h ∘ g , Goal where
-
-  Goal : ∀ 𝑓 a → (h ∘ g)((𝑓 ̂ 𝑨) a) ≡ (𝑓 ̂ 𝑪)(h ∘ g ∘ a)
-  Goal 𝑓 a = (h ∘ g)((𝑓 ̂ 𝑨) a)     ≡⟨ ≡-cong h ( ghom 𝑓 a ) ⟩
-             h ((𝑓 ̂ 𝑩)(g ∘ a))     ≡⟨ hhom 𝑓 ( g ∘ a ) ⟩
-             (𝑓 ̂ 𝑪)(h ∘ g ∘ a)     ∎
-
-
- ∘-is-hom : {f : A → B}{g : B → C}
-  →         is-homomorphism 𝑨 𝑩 f → is-homomorphism 𝑩 𝑪 g
+ ∘-is-hom : {g : A → B}{h : B → C}
+  →         is-homomorphism 𝑨 𝑩 g → is-homomorphism 𝑩 𝑪 h
             -------------------------------------------------
-  →         is-homomorphism 𝑨 𝑪 (g ∘ f)
+  →         is-homomorphism 𝑨 𝑪 (h ∘ g)
 
- ∘-is-hom {f} {g} fhom ghom = ∥ ∘-hom (f , fhom) (g , ghom) ∥
+ ∘-is-hom {g} {h} ghom hhom 𝑓 a = (h ∘ g)((𝑓 ̂ 𝑨) a) ≡⟨ ≡-cong h ( ghom 𝑓 a ) ⟩
+                                  h ((𝑓 ̂ 𝑩)(g ∘ a)) ≡⟨ hhom 𝑓 ( g ∘ a ) ⟩
+                                  (𝑓 ̂ 𝑪)(h ∘ g ∘ a) ∎
 
-module _ {α ρ : Level} where
+ ∘-hom : hom 𝑨 𝑩  →  hom 𝑩 𝑪  →  hom 𝑨 𝑪
+ ∘-hom (g , ghom) (h , hhom) = h ∘ g , ∘-is-hom {g}{h} ghom hhom 
 
- -- the identity homs
- 𝒾𝒹 : (𝑨 : SetoidAlgebra α ρ) → hom 𝑨 𝑨
- 𝒾𝒹 _ = id , λ 𝑓 a → refl
 
- open Level
+private variable
+ α ρ : Level
+ 𝑨 : SetoidAlgebra α ρ
 
- -- the lift hom
- 𝓁𝒾𝒻𝓉 : {β : Level}(𝑨 : SetoidAlgebra α ρ) → hom 𝑨 (Lift-SetoidAlg 𝑨 β)
- 𝓁𝒾𝒻𝓉 _ = lift , (λ 𝑓 a → refl)
+-- the identity homs
+𝒾𝒹 : hom 𝑨 𝑨
+𝒾𝒹 = id , λ 𝑓 a → refl
 
- -- the lower hom
- 𝓁ℴ𝓌ℯ𝓇 : {β : Level}(𝑨 : SetoidAlgebra α ρ) → hom (Lift-SetoidAlg 𝑨 β) 𝑨
- 𝓁ℴ𝓌ℯ𝓇 _ = (lower , λ 𝑓 a → refl)
+open Level
+-- the lift hom
+𝓁𝒾𝒻𝓉 : {β : Level} → hom 𝑨 (Lift-SetoidAlg 𝑨 β)
+𝓁𝒾𝒻𝓉 = lift , (λ 𝑓 a → refl)
 
-module _ {α ρᵃ : Level} {𝑨 : SetoidAlgebra α ρᵃ}
-         (ℓᵃ : Level)
-         {β ρᵇ : Level}{𝑩 : SetoidAlgebra β ρᵇ}
-         (ℓᵇ : Level)
-         where
+-- the lower hom
+𝓁ℴ𝓌ℯ𝓇 : {β : Level} → hom (Lift-SetoidAlg 𝑨 β) 𝑨
+𝓁ℴ𝓌ℯ𝓇 = (lower , λ 𝑓 a → refl)
+
+module LiftSetoidHom {α ρᵃ : Level}{𝑨 : SetoidAlgebra α ρᵃ}
+                     (ℓᵃ : Level)
+                     {β ρᵇ : Level}{𝑩 : SetoidAlgebra β ρᵇ}
+                     (ℓᵇ : Level)
+                     where
  open Level
 
  Lift-hom : hom 𝑨 𝑩  →  hom (Lift-SetoidAlg 𝑨 ℓᵃ) (Lift-SetoidAlg 𝑩 ℓᵇ)
@@ -145,32 +143,28 @@ module _ {α ρᵃ : Level} (𝑨 : SetoidAlgebra α ρᵃ)
  is-monomorphism : (A → B) → Type _
  is-monomorphism g = is-homomorphism 𝑨 𝑩 g × IsInjective g
 
- mon : Type(𝓞 ⊔ 𝓥 ⊔ α ⊔ β)
- mon = Σ[ g ∈ (A → B) ] is-monomorphism g
-
  is-epimorphism : (A → B) → Type _
  is-epimorphism g = is-homomorphism 𝑨 𝑩 g × IsSurjective g
 
- epi : Type _
- epi = Σ[ g ∈ (A → B) ] is-epimorphism g
-
-
--- The "hom reduct" of a mon
--- N.B. 𝑨 explicit, 𝑩 implicit
-module _ {α ρᵃ : Level} (𝑨 : SetoidAlgebra α ρᵃ)
-         {β ρᵇ : Level} {𝑩 : SetoidAlgebra β ρᵇ} where
+record mon {α ρᵃ : Level} (𝑨 : SetoidAlgebra α ρᵃ)
+           {β ρᵇ : Level} (𝑩 : SetoidAlgebra β ρᵇ) : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ β) where
+ field
+  map : 𝕌[ 𝑨 ] → 𝕌[ 𝑩 ]
+  is-mon : is-monomorphism 𝑨 𝑩 map
 
  mon-to-hom : mon 𝑨 𝑩 → hom 𝑨 𝑩
- mon-to-hom ϕ = ∣ ϕ ∣ , fst ∥ ϕ ∥
+ mon-to-hom _ = map , ∣ is-mon ∣
 
 
--- The "hom reduct" of an epi
--- N.B. 𝑨 implicit, 𝑩 explicit
-module _ {α ρᵃ : Level} {𝑨 : SetoidAlgebra α ρᵃ}
-         {β ρᵇ : Level} (𝑩 : SetoidAlgebra β ρᵇ) where
+record epi {α ρᵃ : Level} (𝑨 : SetoidAlgebra α ρᵃ)
+           {β ρᵇ : Level} (𝑩 : SetoidAlgebra β ρᵇ) : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ β) where
+ field
+  map : 𝕌[ 𝑨 ] → 𝕌[ 𝑩 ]
+  is-epi : is-epimorphism 𝑨 𝑩 map
 
  epi-to-hom : epi 𝑨 𝑩 → hom 𝑨 𝑩
- epi-to-hom ϕ = ∣ ϕ ∣ , fst ∥ ϕ ∥
+ epi-to-hom _ = map , ∣ is-epi ∣
+
 
 \end{code}
 
@@ -191,9 +185,9 @@ module _ {α ρᵃ : Level} (𝑨 : SetoidAlgebra α ρᵃ)
 
  homker-comp : swelldef 𝓥 β → (h : hom 𝑨 𝑩) → 𝑨 ∣≈ (ker ∣ h ∣)
  homker-comp wd h f {u}{v} kuv = ∣ h ∣((f ̂ 𝑨) u)   ≡⟨ ∥ h ∥ f u ⟩
-                                     (f ̂ 𝑩)(∣ h ∣ ∘ u) ≡⟨ wd(f ̂ 𝑩)(∣ h ∣ ∘ u)(∣ h ∣ ∘ v)kuv ⟩
-                                     (f ̂ 𝑩)(∣ h ∣ ∘ v) ≡⟨ (∥ h ∥ f v)⁻¹ ⟩
-                                     ∣ h ∣((f ̂ 𝑨) v)   ∎
+                                 (f ̂ 𝑩)(∣ h ∣ ∘ u) ≡⟨ wd(f ̂ 𝑩)(∣ h ∣ ∘ u)(∣ h ∣ ∘ v)kuv ⟩
+                                 (f ̂ 𝑩)(∣ h ∣ ∘ v) ≡⟨ (∥ h ∥ f v)⁻¹ ⟩
+                                 ∣ h ∣((f ̂ 𝑨) v)   ∎
 
 -- NOT WORKING YET
 --  kercon : swelldef 𝓥 β → hom 𝑨 𝑩 → Con 𝑨 -- {α}{β}
@@ -245,35 +239,36 @@ module _ {α ρᵃ : Level} {𝑨 : SetoidAlgebra α ρᵃ}
  open import Axiom.Extensionality.Propositional    using    ()
                                                   renaming (Extensionality to funext)
 
- HomFactor : funext α β → swelldef 𝓥 γ
+ HomFactor : swelldef 𝓥 γ
   →          (τ : hom 𝑨 𝑩)(ν : hom 𝑨 𝑪)
   →          kernel ∣ ν ∣ ⊆ kernel ∣ τ ∣ → IsSurjective ∣ ν ∣
              --------------------------------------------------
-  →          Σ[ φ ∈ (hom 𝑪 𝑩)] ∣ τ ∣ ≡ ∣ φ ∣ ∘ ∣ ν ∣
+  →          Σ[ φ ∈ (hom 𝑪 𝑩)] (∣ τ ∣ ≈ ∣ φ ∣ ∘ ∣ ν ∣)
 
- HomFactor fxy wd τ ν Kντ νE = (φ , φIsHomCB) , τφν
+ HomFactor wd τ ν Kντ νE = (φ , φIsHomCB)  , τφν
   where
-   νInv : C → A
-   νInv = SurjInv ∣ ν ∣ νE
+  νInv : C → A
+  νInv = SurjInv ∣ ν ∣ νE
 
-   η : ∀ c → ∣ ν ∣ (νInv c) ≡ c
-   η c = SurjInvIsRightInv ∣ ν ∣ νE c
+  η : ∀ c → c ≡ ∣ ν ∣ (νInv c)
+  η c = sym (SurjInvIsRightInv ∣ ν ∣ νE c)
 
-   φ : C → B
-   φ = ∣ τ ∣ ∘ νInv
+  φ : C → B
+  φ = ∣ τ ∣ ∘ νInv
 
-   ξ : ∀ a → kernel ∣ ν ∣ (a , νInv (∣ ν ∣ a))
-   ξ a = (η (∣ ν ∣ a))⁻¹
+  ξ : ∀ a → kernel ∣ ν ∣ (a , νInv (∣ ν ∣ a))
+  ξ a = η (∣ ν ∣ a)
 
-   τφν : ∣ τ ∣ ≡ φ ∘ ∣ ν ∣
-   τφν = fxy λ x → Kντ (ξ x)
+  τφν : ∣ τ ∣ ≈ φ ∘ ∣ ν ∣
+  τφν x = Kντ (ξ x)
 
-   φIsHomCB : ∀ 𝑓 c → φ ((𝑓 ̂ 𝑪) c) ≡ ((𝑓 ̂ 𝑩)(φ ∘ c))
-   φIsHomCB 𝑓 c = φ ((𝑓 ̂ 𝑪) c)     ≡⟨ PE.cong φ (wd (𝑓 ̂ 𝑪) c (∣ ν ∣ ∘ (νInv ∘ c)) (λ i → (η (c i))⁻¹)) ⟩
-                  φ ((𝑓 ̂ 𝑪)(∣ ν ∣ ∘(νInv ∘ c)))   ≡⟨ PE.cong φ (∥ ν ∥ 𝑓 (νInv ∘ c))⁻¹ ⟩
-                  φ (∣ ν ∣((𝑓 ̂ 𝑨)(νInv ∘ c)))     ≡⟨ cong-app(τφν ⁻¹)((𝑓 ̂ 𝑨)(νInv ∘ c))⟩
-                  ∣ τ ∣((𝑓 ̂ 𝑨)(νInv ∘ c))         ≡⟨ ∥ τ ∥ 𝑓 (νInv ∘ c) ⟩
-                  (𝑓 ̂ 𝑩)(λ x → ∣ τ ∣(νInv (c x))) ∎
+  φIsHomCB : ∀ 𝑓 c → φ ((𝑓 ̂ 𝑪) c) ≡ ((𝑓 ̂ 𝑩)(φ ∘ c))
+  φIsHomCB 𝑓 c =
+   φ ((𝑓 ̂ 𝑪) c)                    ≡⟨ ≡-cong φ (wd (𝑓 ̂ 𝑪) c (∣ ν ∣ ∘ (νInv ∘ c)) λ i → η ((c i)))⟩
+   φ ((𝑓 ̂ 𝑪)(∣ ν ∣ ∘(νInv ∘ c)))   ≡⟨ ≡-cong φ (∥ ν ∥ 𝑓 (νInv ∘ c))⁻¹ ⟩
+   φ (∣ ν ∣((𝑓 ̂ 𝑨)(νInv ∘ c)))     ≡⟨ sym (τφν ((𝑓 ̂ 𝑨)(νInv ∘ c))) ⟩
+   ∣ τ ∣((𝑓 ̂ 𝑨)(νInv ∘ c))         ≡⟨ ∥ τ ∥ 𝑓 (νInv ∘ c) ⟩
+   (𝑓 ̂ 𝑩)(λ x → ∣ τ ∣(νInv (c x))) ∎
 
 \end{code}
 
@@ -281,17 +276,20 @@ If, in addition to the hypotheses of the last theorem, we assume τ is epic, the
 
 \begin{code}
 
- HomFactorEpi : funext α β → swelldef 𝓥 γ
+ open epi
+ HomFactorEpi : swelldef 𝓥 γ
   →             (τ : hom 𝑨 𝑩)(ν : hom 𝑨 𝑪)
   →             kernel ∣ ν ∣ ⊆ kernel ∣ τ ∣
   →             IsSurjective ∣ ν ∣ → IsSurjective ∣ τ ∣
                 ---------------------------------------------
-  →             Σ[ φ ∈ epi 𝑪 𝑩 ] ∣ τ ∣ ≡ ∣ φ ∣ ∘ ∣ ν ∣
+  →             Σ[ φ ∈ epi 𝑪 𝑩 ] ∣ τ ∣ ≈ (φ .map) ∘ ∣ ν ∣
 
- HomFactorEpi fxy wd τ ν kerincl νe τe = (fst ∣ φF ∣ ,(snd ∣ φF ∣ , φE)), ∥ φF ∥
+ HomFactorEpi wd τ ν kerincl νe τe = record { map = fst ∣ φF ∣
+                                            ; is-epi = (snd ∣ φF ∣) , φE
+                                            } , ∥ φF ∥
   where
-   φF : Σ[ φ ∈ hom 𝑪 𝑩 ] ∣ τ ∣ ≡ ∣ φ ∣ ∘ ∣ ν ∣
-   φF = HomFactor fxy wd τ ν kerincl νe
+   φF : Σ[ φ ∈ hom 𝑪 𝑩 ] ∣ τ ∣ ≈ ∣ φ ∣ ∘ ∣ ν ∣
+   φF = HomFactor wd τ ν kerincl νe
 
    φ : C → B
    φ = ∣ τ ∣ ∘ (SurjInv ∣ ν ∣ νe)

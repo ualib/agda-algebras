@@ -43,7 +43,8 @@ open import Relations.Truncation            using    ( is-center ; is-singleton 
                                                      ; ΠΡProp ; ΠΡPropExt )
 
 open import Relations.Extensionality        using    ( SurjInvIsRightInv ; epic-factor ; pred-ext
-                                                     ; block-ext ; block-ext|uip ; welldef ; swelldef )
+                                                     ; epic-factor-intensional ; block-ext
+                                                     ; block-ext|uip ; welldef ; swelldef )
 
 
 
@@ -97,9 +98,8 @@ open import Homomorphisms.HomomorphicImages using    ( _IsHomImageOf_ ; HomImage
 
 open import Homomorphisms.Setoid            using    ( compatible-op-map ; is-homomorphism ; hom
                                                      ; ∘-hom ; ∘-is-hom ; 𝒾𝒹 ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇
-                                                     ; Lift-hom ; is-monomorphism ; mon ; epi
-                                                     ; is-epimorphism ; mon-to-hom ; epi-to-hom
-                                                     ; homker-comp )
+                                                     ; module LiftSetoidHom ; is-monomorphism ; mon ; epi
+                                                     ; is-epimorphism ; homker-comp )
 
 open import Terms.Basic                     using    (Term ; 𝑻 )
 

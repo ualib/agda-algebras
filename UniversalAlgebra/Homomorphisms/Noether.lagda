@@ -45,7 +45,7 @@ open import Relations.Quotients         using ( ker-IsEquivalence ; _/_ ; ⟪_�
 open import Relations.Truncation        using ( is-set ; blk-uip ; is-embedding
                                               ; monic-is-embedding|Set )
 open import Relations.Extensionality    using ( swelldef ; block-ext|uip ; pred-ext
-                                              ; SurjInvIsRightInv ; epic-factor )
+                                              ; SurjInvIsRightInv ; epic-factor-intensional )
 open import Congruences.Basic   {𝑆 = 𝑆} using ( Con ; IsCongruence )
 open import Homomorphisms.Basic {𝑆 = 𝑆} using ( hom ; kercon ; ker[_⇒_]_↾_ ; πker
                                               ; is-homomorphism ; epi ; epi-to-hom )
@@ -269,7 +269,7 @@ If, in addition to the hypotheses of the last theorem, we assume τ is epic, the
    φ = ∣ τ ∣ ∘ (SurjInv ∣ ν ∣ νe)
 
    φE : IsSurjective φ
-   φE = epic-factor  ∣ τ ∣ ∣ ν ∣ φ ∥ φF ∥ τe
+   φE = epic-factor-intensional  ∣ τ ∣ ∣ ν ∣ φ ∥ φF ∥ τe
 
 \end{code}
 
