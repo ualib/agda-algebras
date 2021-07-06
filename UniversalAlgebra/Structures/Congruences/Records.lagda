@@ -1,8 +1,8 @@
 ---
 layout: default
-title : Structures.AsRecordsCongruences module
+title : Structures.Congruences.Records module
 date : 2021-05-28
-author: [the ualib/agda-algebras development team][]
+author: [agda-algebras development team][]
 ---
 
 
@@ -15,9 +15,9 @@ dependent pair type.
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Structures.AsRecordsBasic
+open import Structures.Records
 
-module Structures.AsRecordsCongruences where
+module Structures.Congruences.Records where
 
 open import Agda.Builtin.Equality  using    ( _≡_   ;  refl     )
 open import Agda.Primitive         using    (  _⊔_  ;  lsuc     )
@@ -91,7 +91,7 @@ module _ {α ρᵃ : Level} where
 
 --------------------------------------
 
-[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 
 
 -------------------------------------------------------------------
@@ -103,35 +103,6 @@ module _ {α ρᵃ : Level} where
 
 
 
-
-
-
-
-
--- 𝟘[_╱_] : (𝑨 : structure {α} 𝑅 {ρ} 𝐹)(θ : con 𝑨) → BinRel (_/_ {α}{ρ} (carrier 𝑨) ∣ θ ∣) (lsuc (α ⊔ ρ))
--- 𝟘[ 𝑨 ╱ θ ] = λ u v → u ≡ v
-
-
-
-
-
-
-<!-- NO LONGER NEEDED ----------------------------------------------------------
-
--- Imports from the Agda (Builtin) and the Agda Standard Library
--- open import Agda.Builtin.Equality using (_≡_; refl)
--- open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
--- open import Level renaming (suc to lsuc; zero to lzero)
--- open import Data.Product using (_,_; Σ; _×_)
--- open import Relation.Binary using (Rel; IsEquivalence)
--- open import Relation.Unary using (Pred; _∈_)
--- open import Relation.Binary.PropositionalEquality.Core using (sym; trans; cong)
-
--- -- Imports from the Agda carrierersal Algebra Library
--- open import Algebras.Basic
--- open import Overture.Preliminaries using (Type; 𝓘; 𝓞; 𝓤; 𝓥; 𝓦; Π; -Π; -Σ; ∣_∣; ∥_∥; fst)
--- open import Relations.Discrete using (𝟎; _|:_)
--- open import Relations.Quotients using (_/_; ⟪_⟫)
 
 --------------------------------------------------------------------------------- -->
 open _/ₜ_

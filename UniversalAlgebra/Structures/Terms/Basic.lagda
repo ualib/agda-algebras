@@ -1,20 +1,20 @@
 ---
 layout: default
-title : Structures.Terms
+title : Structures.Terms.Basic
 date : 2021-07-02
-author: [the agda-algebras development team][]
+author: [agda-algebras development team][]
 ---
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Structures.Terms where
+module Structures.Terms.Basic where
 
-open import Agda.Primitive             using    ( Level                   )
-                                       renaming ( Set       to  Type
-                                                ; lzero     to  ℓ₀        )
-open import Structures.AsRecordsBasic  using    ( signature ;   structure )
+open import Agda.Primitive      using    ( Level                   )
+                                renaming ( Set       to  Type
+                                         ; lzero     to  ℓ₀        )
+open import Structures.Records  using    ( signature ;   structure )
 
 open signature
 open structure
@@ -57,4 +57,4 @@ module _ {𝐹 𝑅 : signature}{χ : Level}{X : Type χ} where
 
 ------------------------------
 
-[the agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

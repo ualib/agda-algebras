@@ -1,8 +1,8 @@
 ---
 layout: default
-title : Structures.Congruences module
+title : Structures.Congruences.Basic module
 date : 2021-05-12
-author: [the agda-algebras development team][]
+author: [agda-algebras development team][]
 ---
 
 \begin{code}
@@ -10,7 +10,7 @@ author: [the agda-algebras development team][]
 {-# OPTIONS --without-K --exact-split --safe #-} -- cubical #-}
 
 
-module Structures.Congruences where
+module Structures.Congruences.Basic where
 
 open import Agda.Builtin.Equality  using    ( _≡_   ;  refl    )
 open import Agda.Primitive         using    ( _⊔_   ;  lsuc    )
@@ -88,7 +88,7 @@ Example. The zero congruence of an arbitrary structure.
 
 --------------------------------------
 
-[the agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 
 
 -------------------------------------------------------------------

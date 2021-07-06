@@ -1,8 +1,8 @@
 ---
 layout: default
-title : Structures.0Graphs
+title : Structures.Graphs.0Graphs
 date : 2021-06-22
-author: [the agda-algebras development team][]
+author: [agda-algebras development team][]
 ---
 
 N.B. This module differs from Graphs.lagda in that here we assume some universes are assumed to be level zero (i.e., ℓ₀). This simplifies some things; e.g., we avoid having to use lift and lower (cf. Graphs.lagda)
@@ -15,7 +15,7 @@ The *graph* of 𝑨 is the structure Gr 𝑨 with the same domain as 𝑨 with r
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Structures.0Graphs where
+module Structures.Graphs.0Graphs where
 
 open import Agda.Primitive                        using    ( _⊔_    ;   Level )
                                                   renaming ( Set    to  Type
@@ -29,10 +29,10 @@ open import Function.Base                         using    ( _∘_              
 import Relation.Binary.PropositionalEquality as PE
 
 -- -- Imports from agda-algebras --------------------------------------------------------------
-open import Overture.Preliminaries     using ( 𝟙 ; ∣_∣ ; ∥_∥ )
-open import Structures.AsRecordsBasic  using ( signature ; structure ; Sig∅)
-open import Structures.AsRecordsHoms   using ( hom ; is-hom-rel ; is-hom-op)
-open import Relations.Continuous       using ( Rel )
+open import Overture.Preliminaries   using ( 𝟙 ; ∣_∣ ; ∥_∥ )
+open import Structures.Records       using ( signature ; structure ; Sig∅)
+open import Structures.Homs.Records  using ( hom ; is-hom-rel ; is-hom-op)
+open import Relations.Continuous     using ( Rel )
 
 
 open signature
@@ -137,5 +137,5 @@ module _ {𝐹 𝑅 : signature}{χ : Level}{X : Type χ}
 
 ------------------------------
 
-[the agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 

@@ -1,15 +1,15 @@
 ---
 layout: default
-title : Structures.Homs
+title : Structures.Homs.Basic
 date : 2021-06-22
-author: [the ualib/agda-algebras development team][]
+author: [agda-algebras development team][]
 ---
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-} -- cubical #-}
 
-module Structures.Homs where
+module Structures.Homs.Basic where
 
 open import Agda.Builtin.Equality  using    ( _≡_   ;  refl     )
 open import Agda.Primitive         using    (  _⊔_  ;  lsuc     )
@@ -22,12 +22,7 @@ open import Level                  using    ( Level ;  Lift
                                             ; lift  ;  lower    )
                                    renaming ( zero  to ℓ₀       )
 open import Function.Base          using    ( _∘_   ;  id      )
-open import Relation.Binary.PropositionalEquality using    ( cong -- trans    ;   cong
---                                                           ; cong-app
-                                                           ; module ≡-Reasoning )
-
-
-
+open import Relation.Binary.PropositionalEquality as PE
 
 
 open import Overture.Preliminaries   using ( ∣_∣ ; ∥_∥ ; _∙_ ; _⁻¹)
@@ -40,7 +35,7 @@ open import Relations.Extensionality using ( swelldef )
 
 open import Structures.Basic         using ( Signature ; Structure ; _ʳ_ ; _ᵒ_ ; Compatible
                                            ; Lift-Strucʳ ; Lift-Strucˡ ; Lift-Struc )
-open import Structures.Congruences
+open import Structures.Congruences.Basic
 
 
 private variable 𝑅 𝐹 : Signature
@@ -459,7 +454,7 @@ We could prove a more general result involving projections onto multiple factors
 
 --------------------------------------
 
-[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
+[the agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 
 
 -------------------------------------------------------------------

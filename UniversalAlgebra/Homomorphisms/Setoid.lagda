@@ -18,17 +18,17 @@ open import Algebras.Basic using (𝓞 ; 𝓥 ; Signature )
 module Homomorphisms.Setoid {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from the Agda (Builtin) and the Agda Standard Library
-open import Agda.Builtin.Equality  using    ( _≡_    ;  refl     )
-open import Agda.Primitive         using    ( _⊔_    ;  lsuc     )
-                                   renaming ( Set    to Type     )
-open import Data.Product           using    ( _,_    ;  Σ-syntax
-                                            ; Σ      ;  _×_      )
-                                   renaming ( proj₁  to  fst
-                                            ; proj₂  to  snd     )
-open import Function               using    ( _∘_    ;  id       )
-open import Level                  using    ( Level  ;  Lift     )
-open import Relation.Binary                       using    ( IsEquivalence  )
-open import Relation.Unary                        using    ( _⊆_ )
+open import Agda.Builtin.Equality  using    ( _≡_      ;  refl )
+open import Agda.Primitive         using    ( _⊔_      ;  lsuc )
+                                   renaming ( Set      to Type )
+open import Data.Product           using    ( _,_      ;  Σ
+                                            ; Σ-syntax ;  _×_  )
+                                   renaming ( proj₁    to fst
+                                            ; proj₂    to snd  )
+open import Function               using    ( _∘_      ;  id   )
+open import Level                  using    ( Level    ;  Lift )
+open import Relation.Binary        using    ( IsEquivalence    )
+open import Relation.Unary         using    ( _⊆_              )
 import Relation.Binary.PropositionalEquality as PE
 
 -- Imports from the Agda Universal Algebra Library
@@ -36,12 +36,13 @@ open import Overture.Preliminaries     using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; _≈
 open import Overture.Inverses          using ( IsInjective ; IsSurjective )
 open import Overture.Inverses          using ( SurjInv )
 open import Relations.Discrete         using ( ker ; kernel )
+open import Relations.Quotients        using ( ker-IsEquivalence )
 open import Relations.Truncation       using ( is-set ; blk-uip ; is-embedding
                                              ; monic-is-embedding|Set )
 open import Relations.Extensionality   using ( swelldef ; block-ext|uip ; pred-ext
                                              ; SurjInvIsRightInv ; epic-factor )
-open import Algebras.Setoid   {𝑆 = 𝑆}  using ( 𝕌[_] ; SetoidAlgebra ; _̂_ ; Lift-SetoidAlg )
-open import Congruences.Setoid {𝑆 = 𝑆} using ( _∣≈_ ; Con ; IsCongruence ; _╱_)
+open import Algebras.Setoid    {𝑆 = 𝑆} using ( 𝕌[_] ; SetoidAlgebra ; _̂_ ; Lift-SetoidAlg )
+open import Congruences.Setoid {𝑆 = 𝑆} using ( _∣≈_ ; Con ; IsCongruence ; mkcon ; _╱_)
 \end{code}
 
 ### Homomorphisms for setoid algebras
@@ -189,18 +190,18 @@ module _ {α ρᵃ : Level} (𝑨 : SetoidAlgebra α ρᵃ)
                                  (f ̂ 𝑩)(∣ h ∣ ∘ v) ≡⟨ (∥ h ∥ f v)⁻¹ ⟩
                                  ∣ h ∣((f ̂ 𝑨) v)   ∎
 
--- NOT WORKING YET
---  kercon : swelldef 𝓥 β → hom 𝑨 𝑩 → Con 𝑨 -- {α}{β}
---  kercon wd h = ker ∣ h ∣ , {!!} -- mkcon (ker-IsEquivalence ∣ h ∣)(homker-comp wd {𝑩} h)
 
---  kerquo : swelldef 𝓥 β → hom 𝑨 𝑩 → SetoidAlgebra _ _ -- (α ⊔ lsuc β) _
---  kerquo wd h = 𝑨 ╱ (kercon wd h)
+ kercon : swelldef 𝓥 β → hom 𝑨 𝑩 → Con 𝑨
+ kercon wd h = ker ∣ h ∣ , mkcon (ker-IsEquivalence ∣ h ∣) (homker-comp wd h)
+
+ kerquo : swelldef 𝓥 β → hom 𝑨 𝑩 → SetoidAlgebra _ _
+ kerquo wd h = 𝑨 ╱ (kercon wd h)
 
 
--- ker[_⇒_]_↾_ : {α ρᵃ : Level} (𝑨 : SetoidAlgebra α ρᵃ)
---               {β ρᵇ : Level} (𝑩 : SetoidAlgebra β ρᵇ)
---  →            hom 𝑨 𝑩 → swelldef 𝓥 β → SetoidAlgebra _ _ --  (α ⊔ lsuc β) _
--- ker[ 𝑨 ⇒ 𝑩 ] h ↾ wd = kerquo 𝑨 𝑩 wd h
+ker[_⇒_]_↾_ : {α ρᵃ : Level} (𝑨 : SetoidAlgebra α ρᵃ)
+              {β ρᵇ : Level} (𝑩 : SetoidAlgebra β ρᵇ)
+ →            hom 𝑨 𝑩 → swelldef 𝓥 β → SetoidAlgebra _ _
+ker[ 𝑨 ⇒ 𝑩 ] h ↾ wd = kerquo 𝑨 𝑩 wd h
 
 \end{code}
 

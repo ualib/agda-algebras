@@ -1,8 +1,8 @@
 ---
 layout: default
-title : Structures.Graphs module
+title : Structures.Graphs.Basic module
 date : 2021-06-22
-author: [the agda-algebras development team][]
+author: [agda-algebras development team][]
 ---
 
 N.B. This module differs from 0Graphs.lagda in that this module is universe polymorphic; i.e., we do not restrict universe levels (to, e.g., ℓ₀). This complicates some things; e.g., we must use lift and lower in some places (cf. 0Graphs.lagda).
@@ -15,7 +15,7 @@ The *graph* of 𝑨 is the structure Gr 𝑨 with the same domain as 𝑨 with r
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Structures.Graphs where
+module Structures.Graphs.Basic where
 
 open import Agda.Primitive                        using    ( _⊔_    ;   lsuc     )
                                                   renaming ( Set    to  Type
@@ -33,10 +33,10 @@ import Relation.Binary.PropositionalEquality as PE
 
 
 -- Imports from agda-algebras --------------------------------------------------------------
-open import Overture.Preliminaries     using ( ∣_∣ ; _≈_ ; ∥_∥ ; _∙_ ; lower∼lift ; lift∼lower ; 𝟙)
-open import Structures.AsRecordsBasic  using ( signature ; structure ; Sig∅ )
-open import Structures.AsRecordsHoms   using ( hom ; 𝒾𝒹 ; ∘-hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-hom-rel; is-hom-op)
-open import Relations.Continuous       using ( Rel )
+open import Overture.Preliminaries   using ( ∣_∣ ; _≈_ ; ∥_∥ ; _∙_ ; lower∼lift ; lift∼lower ; 𝟙)
+open import Structures.Records       using ( signature ; structure ; Sig∅ )
+open import Structures.Homs.Records  using ( hom ; 𝒾𝒹 ; ∘-hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-hom-rel; is-hom-op)
+open import Relations.Continuous     using ( Rel )
 
 open signature
 open structure
@@ -103,8 +103,9 @@ module _ {𝐹 𝑅 : signature}
    goal = PE.sym (lower (∣ hhom ∣ (inr f) split (lift refl)))
 
 
+\end{code}
 
 ------------------------------
 
-[the agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 
