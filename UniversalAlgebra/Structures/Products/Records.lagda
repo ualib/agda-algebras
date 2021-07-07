@@ -2,7 +2,7 @@
 layout: default
 title : Sturctures.AsRecordsProducts module
 date : 2021-05-11
-author: [the ualib/agda-algebras development team][]
+author: [agda-algebras development team][]
 ---
 
 ### Products for structures as records
@@ -14,9 +14,9 @@ dependent pair type.
 
 {-# OPTIONS --without-K --exact-split --safe #-} -- cubical #-}
 
-open import Structures.AsRecordsBasic
+open import Structures.Records
 
-module Structures.AsRecordsProducts where
+module Structures.Products.Records where
 
 
 open import Agda.Primitive         using    ( _⊔_   ;  lsuc     )

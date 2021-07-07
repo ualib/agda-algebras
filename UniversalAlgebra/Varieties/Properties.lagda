@@ -2,7 +2,7 @@
 layout: default
 title : Varieties.Properties module (The Agda Universal Algebra Library)
 date : 2021-06-24
-author: [the ualib/agda-algebras development team][]
+author: [agda-algebras development team][]
 ---
 
 ### Properties of the ⊧ relation
@@ -24,15 +24,14 @@ We prove some closure and invariance properties of ⊧.  In particular, we prove
 
 -- Imports from Agda (builtin/primitive) and the Agda Standard Library
 
-open import Level using ( Level )
-open import Algebras.Basic
+open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Varieties.Properties {𝑆 : Signature 𝓞 𝓥} where
 
 
 -- imports from Agda and the Agda Standard Library -------------------------------------------
 open import Agda.Builtin.Equality   using    ( _≡_ ;  refl )
-open import Agda.Primitive          using    ( _⊔_ ;  lsuc )
+open import Agda.Primitive          using    ( _⊔_ ;  lsuc ; Level )
                                     renaming ( Set to Type ; lzero to  ℓ₀ )
 open import Axiom.Extensionality.Propositional
                                     renaming ( Extensionality to funext )
@@ -48,8 +47,9 @@ open import Relation.Unary          using    ( Pred ; _∈_ ; _⊆_ ; ⋂ )
 -- imports from agda-algebras --------------------------------------------------------------
 open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ ; 𝑖𝑑 ; _⁻¹ ; _≈_ ; Π ; Π-syntax)
 open import Overture.Inverses                  using ( IsInjective ; ∘-injective )
-open import Relations.Extensionality           using (DFunExt; SwellDef; swelldef)
-open import Algebras.Products          {𝑆 = 𝑆} using ( ov ; ⨅ )
+open import Relations.Extensionality           using ( DFunExt ; SwellDef ; swelldef )
+open import Algebras.Basic                     using ( Algebra ; Lift-Alg )
+open import Products.Basic             {𝑆 = 𝑆} using ( ov ; ⨅ )
 open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom; 𝒾𝒹 ; ∘-hom ; is-homomorphism )
 open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; mkiso ; ≅-sym ; ≅-trans ; Lift-≅ )
 open import Terms.Basic                {𝑆 = 𝑆} using ( Term ; 𝑻 )
@@ -253,3 +253,6 @@ module _ (wd : SwellDef){α χ : Level}{X : Type χ}{𝒦 : Pred (Algebra α �
 
 \end{code}
 
+--------------------------------------
+
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

@@ -2,7 +2,7 @@
 layout: default
 title : Structures.Basic module
 date : 2021-05-20
-author: [the ualib/agda-algebras development team][]
+author: [agda-algebras development team][]
 ---
 
 \begin{code}
@@ -110,30 +110,7 @@ module _ {𝑅 𝐹 : Signature} {α ρ : Level} where
 
 --------------------------------------
 
-[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
-
-
-
-
-
-
-
-
--------------------------------------------------------------------
---                        THE END                                --
--------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 
 
 

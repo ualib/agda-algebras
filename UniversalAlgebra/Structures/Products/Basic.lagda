@@ -1,8 +1,8 @@
 ---
 layout: default
-title : Structures.Products module
+title : Structures.Products.Basic module
 date : 2021-05-11
-author: [the ualib/agda-algebras development team][]
+author: [agda-algebras development team][]
 ---
 
 ### Product structures
@@ -13,7 +13,7 @@ author: [the ualib/agda-algebras development team][]
 
 
 
-module Structures.Products where
+module Structures.Products.Basic where
 
 open import Agda.Primitive        using    (  _⊔_  ;  lsuc     )
                                   renaming (  Set  to Type     )
@@ -57,7 +57,7 @@ If `p : 𝑨 ∈ 𝒦`, we view the pair `(𝑨 , p) ∈ ℑ` as an *index* over
 
 --------------------------------------
 
-[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 
 
 

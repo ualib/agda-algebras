@@ -1,15 +1,15 @@
 ---
 layout: default
-title : Structures.AsRecordsHoms
+title : Structures.Homs.Records
 date : 2021-06-22
-author: [the ualib/agda-algebras development team][]
+author: [agda-algebras development team][]
 ---
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-} -- cubical #-}
 
-module Structures.AsRecordsHoms where
+module Structures.Homs.Records where
 
 open import Axiom.Extensionality.Propositional using () renaming (Extensionality to funext)
 open import Agda.Builtin.Equality  using    ( _≡_   ;  refl     )
@@ -40,7 +40,7 @@ open import Relations.Quotients       using ( Equivalence ; Quotient
                                             ; ⟪_∼_⟫-elim ; _/_ )
 open import Relations.Extensionality  using ( swelldef )
 
-open import Structures.AsRecordsBasic using ( signature ; structure ; Sig∅
+open import Structures.Records        using ( signature ; structure ; Sig∅
                                             ; Lift-struc ; compatible )
 
 
@@ -182,7 +182,7 @@ module _ {α ρᵃ : Level}
          (op 𝑩 f)(h ∘ v) ≡⟨ (snd hhom f v)⁻¹ ⟩
          h (op 𝑨 f v)    ∎
 
- open import Structures.AsRecordsCongruences
+ open import Structures.Congruences.Records
 
  kercon : hom 𝑨 𝑩 → con 𝑨
  kercon (h , hhom) = ((λ x y → Lift (α ⊔ ρᵃ) (h x ≡ h y)) , goal) , kerlift-comp (h , hhom)
@@ -206,7 +206,7 @@ module _ {α ρᵃ β ρᵇ : Level}   where
 module _ {α ρᵃ : Level}{𝑨 : structure 𝐹 {α}𝑅 {ρᵃ} } where
 
  open Image_∋_
- open import Structures.AsRecordsCongruences
+ open import Structures.Congruences.Records
 
  πepi : (θ : con 𝑨) → epi {𝑨 = 𝑨}{𝑩 = 𝑨 ╱ θ}
  πepi θ = (λ a → ⟪ a ⟫ {fst ∣ θ ∣}) , (γrel , (λ _ _ → refl)) , cπ-is-epic
@@ -228,7 +228,7 @@ module _ {α ρᵃ : Level}
  πker h = πepi (kercon{ρᵃ = ρᵃ} {𝑨 = 𝑨}{𝑩 = 𝑩}{wd = wd}  h)
 
 
-open import Structures.AsRecordsProducts
+open import Structures.Products.Records
 
 module _ {α ρᵃ : Level}{𝑨 : structure 𝐹 {α}𝑅 {ρᵃ}}
          {ℓ : Level}{I : Type ℓ}
@@ -258,4 +258,4 @@ module _ {ℓ : Level}{I : Type ℓ}
 
 --------------------------------------
 
-[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

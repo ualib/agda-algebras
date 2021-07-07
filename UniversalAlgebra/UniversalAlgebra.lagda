@@ -65,6 +65,8 @@ open import Preface
 open import Overture
 open import Relations
 open import Algebras
+open import Congruences
+open import Products
 open import Homomorphisms
 open import Terms
 open import Subalgebras
@@ -91,17 +93,27 @@ open import Varieties
 
 - [Algebra Types](Algebras.html)
   - [Basic Definitions](Algebras.Basic.html)
-  - [Product Algebras](Algebras.Products.html)
-  - [Congruence Relations](Algebras.Congruences.html)
+  - [Algebras on Setoid Domains](Algebras.Setoid.html)
+
+- [Product Types](Products.html)
+  - [Products of Algebras](Products.Basic.html)
+  - [Products of Algebras over Setoids](Products.Setoid.html)
+
+- [Congruence Types](Congruences.html)
+  - [Congruences of Algebras](Congruences.html)
+  - [Congruences of Algebras over Setoids](Congruences.Setoid.html)
 
 - [Homomorphism Types](Homomorphisms.html)
   - [Basic Definitions](Homomorphisms.Basic.html)
+  - [Homomorphisms of Algebras over Setoids](Homomorphisms.Setoid.html)
   - [Homomorphism Theorems](Homomorphisms.Noether.html)
   - [Isomorphisms](Homomorphisms.Isomorphisms.html)
   - [Homomorphic Images](Homomorphisms.HomomorphicImages.html)
 
 - [Types for Terms](Terms.html)
   - [Basic Definitions](Terms.Basic.html)
+  - [Basic Properties of Terms](Terms.Properties.html)
+  - [Terms over Setoids](Terms.Setoid.html)
   - [Term Operations](Terms.Operations.html)
 
 - [Subalgebra Types](Subalgebras.html)

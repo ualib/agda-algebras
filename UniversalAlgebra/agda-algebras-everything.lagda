@@ -43,7 +43,8 @@ open import Relations.Truncation            using    ( is-center ; is-singleton 
                                                      ; ΠΡProp ; ΠΡPropExt )
 
 open import Relations.Extensionality        using    ( SurjInvIsRightInv ; epic-factor ; pred-ext
-                                                     ; block-ext ; block-ext|uip ; welldef ; swelldef )
+                                                     ; epic-factor-intensional ; block-ext
+                                                     ; block-ext|uip ; welldef ; swelldef )
 
 
 
@@ -60,17 +61,19 @@ open import Algebras.Basic                  using    ( Signature ; signature ; m
                                                      ; compatible-Rel-alg ; compatible-ΠΡ-alg
                                                      ; compatible-Rel-lilAlg ; compatible-ΠΡ-lilAlg )
 
+open import Algebras.Setoid                 using    ( ⟦_⟧s ; Algebroid ; SetoidAlgebra ; _̂_ ; _∙_ )
 
-open import Algebras.Setoid                 using    ( ⟦_⟧s ; Algebroid ; SetoidAlgebra ; _̂_ ; _∙_ ; ⨅ ; ⨅s )
 
-open import Algebras.Products               using    ( ⨅ ; ⨅' ; ov ; ℑ ; 𝔄 ; class-product )
+open import Products.Basic                  using    ( ⨅ ; ⨅' ; ov ; ℑ ; 𝔄 ; class-product )
 
-open import Algebras.Congruences            using    ( IsCongruence ; Con ; IsCongruence→Con
+open import Products.Setoid                 using    ( ⨅ ; ⨅s ; ℑ ; 𝔄 ; class-product )
+
+
+open import Congruences.Basic               using    ( IsCongruence ; Con ; IsCongruence→Con
                                                      ; Con→IsCongruence ; 0[_]Compatible ; 0Con[_]
                                                      ; _╱_ ; 𝟘[_╱_] ; 𝟎[_╱_] ; /-≡ )
 
-
-open import Algebras.SetoidCongruences      using    ( _∣≈_ ; _∣≋_ ; IsCongruence ; Con ; IsCongruence→Con
+open import Congruences.Setoid              using    ( _∣≈_ ; _∣≋_ ; IsCongruence ; Con ; IsCongruence→Con
                                                      ; Con→IsCongruence ; _╱_ )
 
 
@@ -93,12 +96,20 @@ open import Homomorphisms.HomomorphicImages using    ( _IsHomImageOf_ ; HomImage
                                                      ; HomImageOfClass ; Lift-epi-is-epi
                                                      ; Lift-Alg-hom-image )
 
+open import Homomorphisms.Setoid            using    ( compatible-op-map ; is-homomorphism ; hom
+                                                     ; ∘-hom ; ∘-is-hom ; 𝒾𝒹 ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇
+                                                     ; module LiftSetoidHom ; is-monomorphism ; mon ; epi
+                                                     ; is-epimorphism ; homker-comp ;  kercon ; kerquo
+                                                     ; ker[_⇒_]_↾_ )
+
 open import Terms.Basic                     using    (Term ; 𝑻 )
 
 open import Terms.Properties                using    (free-lift ; lift-hom ; free-unique ; lift-of-epi-is-epi )
 
 open import Terms.Setoid                    using    ( _≐_ ; ≐-isRefl ; ≐-isSym ; ≐-isTrans ; ≐-isEquiv
-                                                     ; TermSetoid ; TermAlgebra ; Ops ; Sub ; _[_] ; module Environment )
+                                                     ; TermSetoid ; TermAlgebra ; Ops ; Sub ; _[_]
+                                                     ; module Environment )
+
 open Environment                            using    (_≃_ ; Env ; ⦅_⦆ ; Equal ; isEquiv ; ⦅_⦆s ; substitution)
 
 open import Terms.Operations                using    ( _⟦_⟧ ; free-lift-interp ; term-interp
@@ -159,15 +170,34 @@ open import Varieties.FreeAlgebras          using    ( 𝓕 ; 𝓕⁺ ; ψ ; ψR
 -- STRUCTURES ------------------------------------------------------------------------
 
 
-open import Structures.AsRecordsBasic       using    ( ar ; signature ; structure ; compatible
+open import Structures.Basic                using    ( Signature ; Structure ; RStructure ; AStructure
+                                                     ; Structure→RStructure ; Structure→AStructure
+                                                     ; _⟦_⟧ᵣ ; _⟦_⟧ₒ ; _ʳ_ ; _ᵒ_ ; Compatible
+                                                     ; Compatible' ; Lift-op ; Lift-rel
+                                                     ; Lift-Strucˡ ; Lift-Strucʳ ; Lift-Struc )
+
+open import Structures.Records              using    ( ar ; signature ; structure ; compatible
                                                      ; Lift-op ; Lift-rel ; Lift-struc
                                                      ; Sig∅ ; Sig-0 ; Sig-1 ; Sig-2 ; Sig-0-1
                                                      ; Sig-0-1-2 )
 
-open import Structures.AsRecordsCongruences using    ( con ; 0[_]compatible ; 0con[_] ; quotient
+open import Structures.Products.Basic       using    ( ⨅ ; ℓp ; ℑ ; 𝔖 ; class-prod )
+
+open import Structures.Products.Records     using    ( ⨅ ; ℓp ; ℑ ; 𝔄 ; class-product )
+
+open import Structures.Congruences.Basic    using    ( Con ; 0[_]Compatible ; 0Con[_] ; _╱_ ; /≡-elim
+                                                     ; 𝟘[_╱_] ; 𝟎[_╱_] )
+
+open import Structures.Congruences.Records  using    ( con ; 0[_]compatible ; 0con[_] ; quotient
                                                      ; _╱_ ; /≡-elim ; 𝟎[_╱_] )
 
-open import Structures.AsRecordsHoms        using    ( preserves ; is-hom-rel ; comm-op ; is-hom-op
+open import Structures.Homs.Basic           using    ( preserves ; is-hom-rel ; comp-op ; is-hom-op
+                                                     ; is-hom ; hom ; ∘-is-hom-rel ; ∘-is-hom-op
+                                                     ; ∘-is-hom ; ∘-hom ; 𝒾𝒹 ; is-mon ; mon ; is-epi
+                                                     ; epi ; mon→hom ; epi→hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇
+                                                     ; Lift-Hom ; Homker-comp )
+
+open import Structures.Homs.Records         using    ( preserves ; is-hom-rel ; comm-op ; is-hom-op
                                                      ; is-hom ; hom ; hom-alg ; ∘-is-hom-rel
                                                      ; ∘-is-hom-op ; ∘-is-hom ; ∘-hom ; 𝒾𝒹
                                                      ; is-mon ; mon ; mon→hom ; is-epi ; epi
@@ -176,35 +206,17 @@ open import Structures.AsRecordsHoms        using    ( preserves ; is-hom-rel ; 
                                                      ; πepi ; πhom ; πker ; ⨅-hom-co ; ⨅-hom
                                                      ; ⨅-projection-hom )
 
-open import Structures.AsRecordsProducts    using    (  ⨅ ; ℓp ; ℑ ; 𝔄 ; class-product )
 
-open import Structures.Basic                using    ( Signature ; Structure ; RStructure ; AStructure
-                                                     ; Structure→RStructure ; Structure→AStructure
-                                                     ; _⟦_⟧ᵣ ; _⟦_⟧ₒ ; _ʳ_ ; _ᵒ_ ; Compatible
-                                                     ; Compatible' ; Lift-op ; Lift-rel
-                                                     ; Lift-Strucˡ ; Lift-Strucʳ ; Lift-Struc )
-
-open import Structures.Congruences          using    ( Con ; 0[_]Compatible ; 0Con[_] ; _╱_ ; /≡-elim
-                                                     ; 𝟘[_╱_] ; 𝟎[_╱_] )
-
-open import Structures.Entailment           using    ( ℓ₁ ; _⊧_≈_ ; _⊧_≋_ ; Th ; Mod ; fMod )
-
-
-open import Structures.Graphs               using    ( Gr-sig ; Gr ; hom→Grhom ; Grhom→hom ; _⇛_⇚_ )
-
-open import Structures.Homs                 using    ( preserves ; is-hom-rel ; comp-op ; is-hom-op
-                                                     ; is-hom ; hom ; ∘-is-hom-rel ; ∘-is-hom-op
-                                                     ; ∘-is-hom ; ∘-hom ; 𝒾𝒹 ; is-mon ; mon ; is-epi
-                                                     ; epi ; mon→hom ; epi→hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇
-                                                     ; Lift-Hom ; Homker-comp )
-
-
-open import Structures.Iso                  using    ( _≅_ ; ≅-refl ; ≅-sym ; ≅-trans ; Lift-≅
+open import Structures.Homs.Iso             using    ( _≅_ ; ≅-refl ; ≅-sym ; ≅-trans ; Lift-≅
                                                      ; Lift-Struc-iso ; ⨅≅ )
 
-open import Structures.Products             using   ( ⨅ ; ℓp ; ℑ ; 𝔖 ; class-prod )
+open import Structures.Terms.Basic          using    ( Term ; _⟦_⟧ )
 
-open import Structures.Terms                using    ( Term ; _⟦_⟧ )
+open import Structures.Terms.Entailment     using    ( ℓ₁ ; _⊧_≈_ ; _⊧_≋_ ; Th ; Mod ; fMod )
+
+open import Structures.Graphs.Basic         using    ( Gr-sig ; Gr ; hom→Grhom ; Grhom→hom )
+
+open import Structures.Graphs.0Graphs       using    ( Gr-sig ; Gr ; hom→Grhom ; Grhom→hom ; _⇛_⇚_ )
 
 \end{code}
 

@@ -2,7 +2,7 @@
 layout: default
 title : Terms.Properties module (The Agda Universal Algebra Library)
 date : 2021-07-03
-author: [the agda-algebras development team][]
+author: [agda-algebras development team][]
 ---
 
 ### Properties of Terms and the Term Algebra
@@ -19,30 +19,29 @@ open import Algebras.Basic
 module Terms.Properties {𝑆 : Signature 𝓞 𝓥} where
 
 
+-- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
 open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
-
 import Relation.Binary.PropositionalEquality as PE
-
-open import Agda.Primitive          using    ( _⊔_ ;  lsuc ; Level )
-                                    renaming ( Set to Type )
-open import Agda.Builtin.Equality   using    ( _≡_ ;  refl )
-open import Data.Product            using    ( _,_ ;  Σ
-                                             ; Σ-syntax    )
-open import Function.Base           using    ( _∘_         )
-open import Data.Empty.Polymorphic using    ( ⊥      ) -- ;  ⊥-elim        )
-open import Level                 using    (  Level ; Lift   )
-open import Relation.Binary        using    ( IsEquivalence ; Setoid )
+open import Agda.Primitive              using    ( _⊔_ ;  lsuc   )
+                                        renaming ( Set to Type   )
+open import Agda.Builtin.Equality       using    ( _≡_ ;  refl   )
+open import Data.Product                using    ( _,_ ;  Σ
+                                                 ; Σ-syntax      )
+open import Function.Base               using    ( _∘_           )
+open import Data.Empty.Polymorphic      using    ( ⊥             )
+open import Level                       using    ( Level ; Lift  )
+open import Relation.Binary             using    ( IsEquivalence ; Setoid )
 open import Relation.Binary.Definitions using (Reflexive ; Symmetric ; Transitive )
 
 
-
-open import Overture.Preliminaries  using ( _⁻¹ ; 𝑖𝑑 ; ∣_∣ ; ∥_∥)
-open import Overture.Inverses       using ( IsSurjective ; Inv
-                                          ; InvIsInv ; Image_∋_; eq )
-open import Relations.Extensionality using (swelldef)
-open import Algebras.Products     {𝑆 = 𝑆} using ( ov )
-open import Homomorphisms.Basic   {𝑆 = 𝑆} using ( hom )
-open import Terms.Basic           {𝑆 = 𝑆}
+-- Imports from agda-algebras --------------------------------------------------------------
+open import Overture.Preliminaries     using ( _⁻¹ ; 𝑖𝑑 ; ∣_∣ ; ∥_∥)
+open import Overture.Inverses          using ( IsSurjective ; Inv
+                                             ; InvIsInv ; Image_∋_; eq )
+open import Relations.Extensionality    using (swelldef)
+open import Products.Basic      {𝑆 = 𝑆} using ( ov )
+open import Homomorphisms.Basic {𝑆 = 𝑆} using ( hom )
+open import Terms.Basic         {𝑆 = 𝑆}
 
 private variable α β χ : Level
 

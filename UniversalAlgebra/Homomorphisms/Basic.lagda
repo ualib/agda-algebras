@@ -2,7 +2,7 @@
 layout: default
 title : Homomorphisms.Basic module (The Agda Universal Algebra Library)
 date : 2021-01-13
-author: [the ualib/agda-algebras development team][]
+author: [agda-algebras development team][]
 ---
 
 ### <a id="basic-definitions">Basic Definitions</a>
@@ -39,8 +39,8 @@ open import Overture.Inverses            using (IsInjective; IsSurjective; Image
 open import Relations.Extensionality     using (swelldef)
 open import Relations.Discrete           using (ker)
 open import Relations.Quotients          using (ker-IsEquivalence; _/_; ⟪_⟫; R-block)
-open import Algebras.Congruences    {𝑆 = 𝑆} using (Con; IsCongruence; mkcon; _╱_; /-≡)
-open import Algebras.Products       {𝑆 = 𝑆} using (⨅)
+open import Congruences.Basic    {𝑆 = 𝑆} using (Con; IsCongruence; mkcon; _╱_; /-≡)
+open import Products.Basic       {𝑆 = 𝑆} using (⨅)
 
 private variable α β γ ρ : Level
 
@@ -238,12 +238,6 @@ module _ {α β : Level}{𝑨 : Algebra α 𝑆} where
  πepi : (θ : Con{α}{β} 𝑨) → epi 𝑨 (𝑨 ╱ θ)
  πepi θ = (λ a → ⟪ a ⟫) , (λ _ _ → refl) , cπ-is-epic  where
   cπ-is-epic : IsSurjective (λ a → ⟪ a ⟫)
-  -- <<<<<<< Quotients
-  -- cπ-is-epic (C , R-block a refl ) =  Image_∋_.im a
-  -- =======
-  -- cπ-is-epic (C , (a , refl)) =  Image_∋_.eq a refl
-  -- >>>>>>> master
-  -- wjd: not sure how this conflict occurred, but the following line seems to resolve it.
   cπ-is-epic (C , R-block a refl ) =  Image_∋_.eq a refl
 
 \end{code}
@@ -345,4 +339,4 @@ Recall, `h ∘ 𝒂` is the tuple whose i-th component is `h (𝒂 i)`.</span>
 
 ------------------------------
 
-[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

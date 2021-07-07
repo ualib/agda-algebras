@@ -29,10 +29,12 @@ open import Relation.Unary          using    ( Pred  ; _∈_      )
 
 -- Imports from the Agda Universal Algebra Library -------------------------------------------
 open import Overture.Preliminaries             using ( ∣_∣ )
-open import Algebras.Products          {𝑆 = 𝑆} using ( ov )
-open import Algebras.Setoid            {𝑆 = 𝑆} using ( SetoidAlgebra ; ⟦_⟧s ; ⨅s)
-open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom ; epi )
+open import Products.Basic             {𝑆 = 𝑆} using ( ov )
+open import Products.Setoid            {𝑆 = 𝑆} using ( ⨅s )
+open import Algebras.Setoid            {𝑆 = 𝑆} using ( SetoidAlgebra ; ⟦_⟧s )
+-- open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom ; epi )
 open import Varieties.EquationalLogic  {𝑆 = 𝑆} using ( Eq ; _⊫_ ; module TermModel)
+open import Terms.Setoid               {𝑆 = 𝑆} using ( TermAlgebra )
 
 private variable
  χ ρ ℓ : Level
@@ -62,7 +64,7 @@ We now define the algebra `𝔽`, which plays the role of the relatively free al
  𝔽 : SetoidAlgebra _ _
  𝔽 = M Γ
 
- -- epi𝔽 : epi TermSetoid(𝑻 X) 𝔽
+ -- epi𝔽 : epi (TermSetoid Γ) 𝔽
  -- epi𝔽 = ?
 
  -- hom𝔽 : hom (𝑻 X) 𝔽
