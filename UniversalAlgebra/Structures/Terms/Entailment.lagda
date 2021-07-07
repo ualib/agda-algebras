@@ -1,8 +1,8 @@
 ---
 layout: default
-title : Structures.Terms
+title : Structures.Terms.Entailment
 date : 2021-07-02
-author: [the agda-algebras development team][]
+author: [agda-algebras development team][]
 ---
 
 
@@ -10,7 +10,7 @@ author: [the agda-algebras development team][]
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Structures.Entailment where
+module Structures.Terms.Entailment where
 
 open import Agda.Primitive   using    ( _⊔_   ;  Level
                                       ; lsuc           )
@@ -24,9 +24,9 @@ open import Data.Product     using    ( _,_   ;  _×_   )
                                       ; proj₂    to  snd   )
 
 -- -- Imports from agda-algebras --------------------------------------
-open import Overture.Preliminaries     using ( _≈_ )
-open import Structures.AsRecordsBasic  using ( signature ; structure )
-open import Structures.Terms
+open import Overture.Preliminaries  using ( _≈_ )
+open import Structures.Records      using ( signature ; structure )
+open import Structures.Terms.Basic
 
 open signature
 open structure
@@ -59,5 +59,5 @@ The entailment ℰ ⊢ p ≈ q is valid iff p ≈ q holds in all models that sat
 
 ------------------------------
 
-[the agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 

@@ -1,8 +1,8 @@
 ---
 layout: default
-title : Structures.Iso module (The Agda Universal Algebra Library)
+title : Structures.Homs.Iso module (The Agda Universal Algebra Library)
 date : 2021-06-22
-author: [the ualib/agda-algebras development team][]
+author: [agda-algebras development team][]
 ---
 
 ### <a id="isomorphisms">Isomorphisms</a>
@@ -11,7 +11,7 @@ author: [the ualib/agda-algebras development team][]
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Structures.Iso where
+module Structures.Homs.Iso where
 
 
 -- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
@@ -30,10 +30,10 @@ open import Relation.Binary.PropositionalEquality using    ( cong   ; cong-app  
 
 
 -- Imports from agda-algebras --------------------------------------------------------------
-open import Overture.Preliminaries using ( ∣_∣ ; _≈_ ; ∥_∥ ; _∙_ ; lower∼lift ; lift∼lower )
-open import Structures.Basic         using ( Signature ; Structure ; Lift-Struc )
-open import Structures.Homs         using ( hom ; 𝒾𝒹 ; ∘-hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-hom)
-open import Structures.Products             using    (  ⨅ ; ℓp ; ℑ ; 𝔖 ; class-prod )
+open import Overture.Preliminaries    using ( ∣_∣ ; _≈_ ; ∥_∥ ; _∙_ ; lower∼lift ; lift∼lower )
+open import Structures.Basic          using ( Signature ; Structure ; Lift-Struc )
+open import Structures.Homs.Basic     using ( hom ; 𝒾𝒹 ; ∘-hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-hom)
+open import Structures.Products.Basic using    (  ⨅ ; ℓp ; ℑ ; 𝔖 ; class-prod )
 
 private variable 𝑅 𝐹 : Signature
 
@@ -258,7 +258,7 @@ A nearly identical proof goes through for isomorphisms of lifted products (thoug
 
 ------------------------------
 
-[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 
 
 
