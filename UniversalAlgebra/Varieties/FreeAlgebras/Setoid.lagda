@@ -1,8 +1,8 @@
 ---
 layout: default
-title : Varieties.Setoid module (Agda Universal Algebra Library)
+title : Varieties.FreeAlgebras.Setoid module (Agda Universal Algebra Library)
 date : 2021-06-29
-author: [the agda-algebras development team][]
+author: [agda-algebras development team][]
 ---
 
 ### Free Algebras and Birkhoff's Theorem (Setoid version)
@@ -15,26 +15,29 @@ author: [the agda-algebras development team][]
 open import Level using (Level)
 open import Algebras.Basic
 
-module Varieties.Setoid {α 𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
+module Varieties.FreeAlgebras.Setoid {α 𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
 
 
 -- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
+open import Agda.Builtin.Equality       using    ( _≡_       ;  refl )
 open import Agda.Primitive          renaming ( Set   to Type    )
                                     using    ( _⊔_              )
 open import Data.Product            using    ( _,_   ; Σ-syntax
                                              ; Σ     ; _×_      )
                                     renaming ( proj₁ to fst
                                              ; proj₂ to snd     )
+open import Function.Base           using    ( id )
 open import Relation.Unary          using    ( Pred  ; _∈_      )
 
 -- Imports from the Agda Universal Algebra Library -------------------------------------------
 open import Overture.Preliminaries             using ( ∣_∣ )
+open import Overture.Inverses                  using ( IsSurjective ; Image_∋_ ; Inv ; InvIsInv ; eq )
 open import Products.Basic             {𝑆 = 𝑆} using ( ov )
 open import Products.Setoid            {𝑆 = 𝑆} using ( ⨅s )
 open import Algebras.Setoid            {𝑆 = 𝑆} using ( SetoidAlgebra ; ⟦_⟧s )
--- open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom ; epi )
-open import Varieties.EquationalLogic  {𝑆 = 𝑆} using ( Eq ; _⊫_ ; module TermModel)
+open import Homomorphisms.Setoid       {𝑆 = 𝑆} using ( hom ; epi )
 open import Terms.Setoid               {𝑆 = 𝑆} using ( TermAlgebra )
+open import Varieties.EquationalLogic.Setoid {𝑆 = 𝑆} using ( Eq ; _⊫_ ; module TermModel ; Mod ; Th)
 
 private variable
  χ ρ ℓ : Level
@@ -46,7 +49,7 @@ module _ {Γ : Type χ}{𝒦 : Pred (SetoidAlgebra α ρ) ℓ} where
  ℐ = Σ[ eq ∈ Eq{χ} ] 𝒦 ⊫ eq
 
  ℰ : ℐ → Eq
- ℰ (eq , p) = eq
+ ℰ (eqv , p) = eqv
 
 \end{code}
 
@@ -64,14 +67,23 @@ We now define the algebra `𝔽`, which plays the role of the relatively free al
  𝔽 : SetoidAlgebra _ _
  𝔽 = M Γ
 
- -- epi𝔽 : epi (TermSetoid Γ) 𝔽
- -- epi𝔽 = ?
+ epi𝔽 : epi (TermAlgebra Γ) 𝔽
+ epi𝔽 = record { map = id ; is-epi = (λ 𝑓 a → refl) , λ y → eq y refl }
 
- -- hom𝔽 : hom (𝑻 X) 𝔽
- -- hom𝔽 = epi-to-hom 𝔽 epi𝔽
+ open epi
 
- -- hom𝔽-is-epic : IsSurjective ∣ hom𝔽 ∣
- -- hom𝔽-is-epic = snd ∥ epi𝔽 ∥
+ hom𝔽 : hom (TermAlgebra Γ) 𝔽
+ hom𝔽 = epi-to-hom epi𝔽
+
+ hom𝔽-is-epic : IsSurjective ∣ hom𝔽 ∣
+ hom𝔽-is-epic = snd (is-epi epi𝔽)
+
+ -- 𝕍𝒦 : Pred (SetoidAlgebra _ _) _
+ -- 𝕍𝒦 = V 𝒦
+
+ -- 𝔽-ModTh-epi : (𝑨 : SetoidAlgebra _ _) → 𝑨 ∈ Mod (Th 𝕍𝒦) → epi 𝔽 𝑨
+ -- 𝔽-ModTh-epi 𝑨 AinMTV = ?
+
 
 \end{code}
 

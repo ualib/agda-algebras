@@ -1,13 +1,13 @@
 ---
 layout: default
-title : Varieties.Basic module (The Agda Universal Algebra Library)
+title : Varieties.EquationalLogic.Basic module (The Agda Universal Algebra Library)
 date : 2021-01-14
 author: [agda-algebras development team][]
 ---
 
 ## Varieties, Model Theory, and Equational Logic
 
-This is the [Varieties.Basic][] module of the [Agda Universal Algebra Library][] where the binary "models" relation ⊧, relating algebras (or classes of algebras) to the identities that they satisfy, is defined.
+This is the [Varieties.EquationalLogic.Basic][] module of the [Agda Universal Algebra Library][] where the binary "models" relation ⊧, relating algebras (or classes of algebras) to the identities that they satisfy, is defined.
 
 Agda supports the definition of infix operations and relations, and we use this to define ⊧ so that we may write, e.g., `𝑨 ⊧ p ≈ q` or `𝒦 ⊫ p ≈ q`.
 
@@ -24,7 +24,7 @@ Agda supports the definition of infix operations and relations, and we use this 
 
 open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
-module Varieties.Basic {𝑆 : Signature 𝓞 𝓥} where
+module Varieties.EquationalLogic.Basic {𝑆 : Signature 𝓞 𝓥} where
 
 
 -- imports from Agda and the Agda Standard Library -------------------------------------------

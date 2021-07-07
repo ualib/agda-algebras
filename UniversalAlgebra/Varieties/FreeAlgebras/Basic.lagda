@@ -1,13 +1,13 @@
 ---
 layout: default
-title : Varieties.FreeAlgebras module (Agda Universal Algebra Library)
+title : Varieties.FreeAlgebras.Basic module (Agda Universal Algebra Library)
 date : 2021-03-01
 author: [agda-algebras development team][]
 ---
 
 ## <a id="free-algebras-and-birkhoffs-theorem">Free Algebras and Birkhoff's Theorem</a>
 
-This is the [Varieties.FreeAlgebras][] module of the [Agda Universal Algebra Library][].
+This is the [Varieties.FreeAlgebras.Basic][] module of the [Agda Universal Algebra Library][].
 
 First we will define the relatively free algebra in a variety, which is the "freest" algebra among (universal for) those algebras that model all identities holding in the variety. Then we give a formal proof of Birkhoff's theorem which says that a variety is an equational class. In other terms, a class `𝒦` of algebras is closed under the operators `H`, `S`, and `P` if and only if 𝒦 is the class of algebras that satisfy some set of identities.
 
@@ -19,7 +19,7 @@ First we will define the relatively free algebra in a variety, which is the "fre
 open import Level renaming ( suc to lsuc )
 open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
-module Varieties.FreeAlgebras {α 𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
+module Varieties.FreeAlgebras.Basic {α 𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
 
 
 -- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
@@ -57,8 +57,8 @@ open import Terms.Properties           {𝑆 = 𝑆} using ( free-lift ; lift-ho
                                                      ; free-unique ; lift-of-epi-is-epi )
 open import Terms.Operations           {𝑆 = 𝑆} using ( _⟦_⟧; comm-hom-term; free-lift-interp )
 open import Subalgebras.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; FirstHomCorollary|Set )
-open import Varieties.Basic            {𝑆 = 𝑆} using ( _⊫_≈_; _⊧_≈_; Th; Mod )
-open import Varieties.Closure          {𝑆 = 𝑆} using ( S ; P ; V )
+open import Varieties.EquationalLogic.Basic {𝑆 = 𝑆} using ( _⊫_≈_; _⊧_≈_; Th; Mod )
+open import Varieties.Closure.Basic    {𝑆 = 𝑆} using ( S ; P ; V )
 open import Varieties.Preservation     {𝑆 = 𝑆} using ( module class-products-with-maps
                                                      ; class-ids-⇒ ; class-ids ; SP⊆V')
 open Term

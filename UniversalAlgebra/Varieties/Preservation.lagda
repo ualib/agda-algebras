@@ -46,10 +46,10 @@ open import Terms.Basic                {𝑆 = 𝑆} using ( Term ; 𝑻 )
 open import Terms.Operations           {𝑆 = 𝑆} using ( _⟦_⟧; comm-hom-term)
 open import Subalgebras.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; _IsSubalgebraOfClass_ ; ≤-Lift
                                                      ; Lift-≤-Lift ; _IsSubalgebraOf_ ; SubalgebraOfClass )
-open import Varieties.Basic            {𝑆 = 𝑆} using ( _⊫_≈_ ; _⊧_≈_ ; Th)
+open import Varieties.EquationalLogic.Basic {𝑆 = 𝑆} using ( _⊫_≈_ ; _⊧_≈_ ; Th)
 open import Varieties.Properties       {𝑆 = 𝑆} using ( ⊧-Lift-invar ; ⊧-lower-invar ; ⊧-S-class-invar
                                                      ; ⊧-I-invar ; ⊧-P-lift-invar ; ⊧-P-invar ; ⊧-S-invar)
-open import Varieties.Closure          {𝑆 = 𝑆} using ( H ; S ; P ; V ; P-expa ; S→subalgebra
+open import Varieties.Closure.Basic    {𝑆 = 𝑆} using ( H ; S ; P ; V ; P-expa ; S→subalgebra
                                                      ; Lift-Alg-subP' ; subalgebra→S ; S-mono
                                                      ; P-idemp ; module Vlift)
 open H
