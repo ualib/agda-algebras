@@ -52,7 +52,6 @@ module Overture.Preliminaries where
 -- Imports from the Agda (Builtin) and the Agda Standard Library
 open import Agda.Builtin.Equality                 using    ( _≡_      ;  refl   )
 open import Function.Base                         using    ( _∘_      ;  id     )
-open import Relation.Binary.PropositionalEquality using    ( sym      ;  trans  )
 open import Data.Product                          using    ( _,_      ;   Σ
                                                            ; Σ-syntax ;   _×_   )
                                                   renaming ( proj₁    to  fst
@@ -63,6 +62,9 @@ open import Agda.Primitive                        using    ( _⊔_              
 open import Level                                 using    ( Level    ;   Lift
                                                            ; lift     ;   lower )
                                                   renaming ( suc      to  lsuc  )
+open import Relation.Binary.Structures            using    ( IsEquivalence
+                                                           ; IsPartialOrder     )
+open import Relation.Binary.PropositionalEquality as PE
 
 \end{code}
 
@@ -134,7 +136,7 @@ Let's define some useful syntactic sugar that will make it easier to apply symme
 \begin{code}
 
 _⁻¹ : {A : Type α} {x y : A} → x ≡ y → y ≡ x
-p ⁻¹ = sym p
+p ⁻¹ = PE.sym p
 
 infix  40 _⁻¹
 
@@ -231,10 +233,17 @@ We conclude this module with a definition that conveniently represents te assert
 
 -- NEW notation
 -- (preferable since it coincides with the standard notation universally quantified equality)
-_≈_ : {A : Type α } {B : A → Type β } → (f g : (a : A) → B a) → Type (α ⊔ β)
-f ≈ g = ∀ x → f x ≡ g x
+module _ {α : Level}{A : Type α}{β : Level}{B : A → Type β } where
 
-infix 8 _≈_
+ _≈_ :  (f g : (a : A) → B a) → Type (α ⊔ β)
+ f ≈ g = ∀ x → f x ≡ g x
+
+ infix 8 _≈_
+
+ ≈IsEquivalence : IsEquivalence _≈_
+ IsEquivalence.refl ≈IsEquivalence = λ _ → refl
+ IsEquivalence.sym ≈IsEquivalence {f}{g} f≈g = λ x → sym (f≈g x)
+ IsEquivalence.trans ≈IsEquivalence {f}{g}{h} f≈g g≈h = λ x → trans (f≈g x) (g≈h x)
 
 \end{code}
 
