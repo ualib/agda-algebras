@@ -2,7 +2,7 @@
 layout: default
 title : GaloisConnections.Basic module (The Agda Universal Algebra Library)
 date : 2021-07-01
-author: [the agda-algebras development team][]
+author: [agda-algebras development team][]
 ---
 
 ## Galois Connection
@@ -52,5 +52,5 @@ module _ {α α₁ α₂ : Level}(A : Poset α α₁ α₂)
 
 --------------------------------------
 
-[the agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 

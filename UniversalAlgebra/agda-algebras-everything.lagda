@@ -48,6 +48,14 @@ open import Relations.Extensionality        using    ( SurjInvIsRightInv ; epic-
 
 
 
+-- Galois Connections --------------------------------------------------------------
+
+open import GaloisConnections.Basic         using    ( Galois )
+
+open import GaloisConnections.Properties    using    ( Inv ; Fix ; FixInv ; InvFix ; InvFixInv ; FixInvFix )
+
+
+
 -- ALGEBRAS ------------------------------------------------------------------------
 
 open import Algebras.Basic                  using    ( Signature ; signature ; monoid-op ; monoid-sig
