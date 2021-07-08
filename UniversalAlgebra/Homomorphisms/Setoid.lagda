@@ -153,8 +153,8 @@ record mon {α ρᵃ : Level} (𝑨 : SetoidAlgebra α ρᵃ)
   map : 𝕌[ 𝑨 ] → 𝕌[ 𝑩 ]
   is-mon : is-monomorphism 𝑨 𝑩 map
 
- mon-to-hom : mon 𝑨 𝑩 → hom 𝑨 𝑩
- mon-to-hom _ = map , ∣ is-mon ∣
+ mon-to-hom : hom 𝑨 𝑩
+ mon-to-hom = map , ∣ is-mon ∣
 
 
 record epi {α ρᵃ : Level} (𝑨 : SetoidAlgebra α ρᵃ)
@@ -163,8 +163,8 @@ record epi {α ρᵃ : Level} (𝑨 : SetoidAlgebra α ρᵃ)
   map : 𝕌[ 𝑨 ] → 𝕌[ 𝑩 ]
   is-epi : is-epimorphism 𝑨 𝑩 map
 
- epi-to-hom : epi 𝑨 𝑩 → hom 𝑨 𝑩
- epi-to-hom _ = map , ∣ is-epi ∣
+ epi-to-hom : hom 𝑨 𝑩
+ epi-to-hom = map , ∣ is-epi ∣
 
 
 \end{code}

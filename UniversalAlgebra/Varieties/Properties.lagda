@@ -56,7 +56,7 @@ open import Terms.Basic                {𝑆 = 𝑆} using ( Term ; 𝑻 )
 open import Terms.Properties           {𝑆 = 𝑆} using ( lift-hom )
 open import Terms.Operations           {𝑆 = 𝑆} using ( _⟦_⟧ ; comm-hom-term ; interp-prod ; term-agreement )
 open import Subalgebras.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; SubalgebraOfClass ; iso→injective )
-open import Varieties.Basic            {𝑆 = 𝑆} using ( _⊧_≈_ ; _⊫_≈_ )
+open import Varieties.EquationalLogic.Basic {𝑆 = 𝑆} using ( _⊧_≈_ ; _⊫_≈_ )
 
 \end{code}
 #### <a id="algebraic-invariance-of-models">Algebraic invariance of ⊧</a>

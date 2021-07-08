@@ -1,6 +1,6 @@
 ---
 layout: default
-title : Varieties.EquationalLogic module (The Agda Universal Algebra Library)
+title : Varieties.EquationalLogic.Setoid module (The Agda Universal Algebra Library)
 date : 2021-01-14
 author: [agda-algebras development team][]
 ---
@@ -20,19 +20,22 @@ This module is based on Andreas Abel's Agda formalization of Birkhoff's complete
 
 open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
-module Varieties.EquationalLogic {𝑆 : Signature 𝓞 𝓥} where
+module Varieties.EquationalLogic.Setoid {𝑆 : Signature 𝓞 𝓥} where
 
 
 -- imports from Agda and the Agda Standard Library -------------------------------------------
-open import Agda.Builtin.Equality  using    ( _≡_                      )
-                                   renaming ( refl    to ≡-refl        )
-open import Agda.Primitive         using    ( _⊔_     ;  lsuc  ; Level )
-                                   renaming ( Set     to Type          )
-open import Data.Product           using    ( _,_     ;  Σ-syntax      )
-open import Function.Base          using    ( _∘_     ;  flip          )
-open import Function.Bundles       using    ( Func                     )
-open import Relation.Binary        using    ( Setoid  ;  IsEquivalence )
-open import Relation.Unary          using    ( Pred ; _∈_ )
+open import Agda.Builtin.Equality  using    ( _≡_                       )
+                                   renaming ( refl     to ≡-refl        )
+open import Agda.Primitive         using    ( _⊔_      ;  lsuc  ; Level )
+                                   renaming ( Set      to Type          )
+open import Data.Product           using    ( _,_      ;   Σ
+                                            ; Σ-syntax ;   _×_          )
+                                   renaming ( proj₁    to  fst
+                                            ; proj₂    to  snd          )
+open import Function.Base          using    ( _∘_      ;  flip          )
+open import Function.Bundles       using    ( Func                      )
+open import Relation.Binary        using    ( Setoid   ;  IsEquivalence )
+open import Relation.Unary         using    ( Pred     ; _∈_            )
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 open Setoid        using    ( Carrier ; _≈_ ; isEquivalence )
@@ -91,6 +94,16 @@ module _ {ι : Level}{I : Type ι} where
 _⊫_ : Pred (SetoidAlgebra α ρ) ℓ → Eq{χ} → Type _
 𝒦 ⊫ eq = ∀ 𝑨 → 𝒦 𝑨 → 𝑨 ⊨ eq                        -- (type \||= to get ⊫)
 
+module _ {α ρ ℓ χ : Level}{X : Type χ} where
+
+ ThPred : Pred (SetoidAlgebra α ρ) ℓ → Pred(Term X × Term X) (ℓ ⊔ χ ⊔ ov (α ⊔ ρ))
+ ThPred 𝒦 = λ (p , q) → 𝒦 ⊫ (p ≈̇ q)
+
+ ℑTh : Pred(Term X × Term X) (ℓ ⊔ χ ⊔ ov (α ⊔ ρ)) → Type (ℓ ⊔ ov (α ⊔ ρ ⊔ χ))
+ ℑTh P = Σ[ p ∈ (Term X × Term X) ] p ∈ P
+
+ Th : (𝒦 : Pred (SetoidAlgebra α ρ) ℓ) → ℑTh (ThPred 𝒦) → Eq{χ}
+ Th 𝒦 = λ i → fst ∣ i ∣ ≈̇ snd ∣ i ∣
 
 module _ {α}{ρ}{ι}{I : Type ι} where
  -- An entailment E ⊃ eq holds iff it holds in all models of E.
