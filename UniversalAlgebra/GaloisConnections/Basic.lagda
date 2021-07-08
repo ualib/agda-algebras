@@ -1,6 +1,6 @@
 ---
 layout: default
-title : Relations.GaloisConnection module (The Agda Universal Algebra Library)
+title : GaloisConnections.Basic module (The Agda Universal Algebra Library)
 date : 2021-07-01
 author: [the agda-algebras development team][]
 ---
@@ -21,29 +21,34 @@ In other terms, F is a left adjoint of G and G is a right adjoint of F.
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Relation.Binary.Bundles using (Poset)
-open import Agda.Primitive          using    ( _⊔_ ; Level)
-                                    renaming ( Set to Type )
+module GaloisConnections.Basic where
 
-module Relations.GaloisConnection
- {α α₁ α₂ : Level}(A : Poset α α₁ α₂)
- {β β₁ β₂ : Level}(B : Poset β β₁ β₂)
- where
+open import Agda.Primitive          using    ( _⊔_ ;  Level )
+                                    renaming ( Set to Type  )
+open import Relation.Binary.Bundles using    ( Poset        )
 
-open Poset
+module _ {α α₁ α₂ : Level}(A : Poset α α₁ α₂)
+         {β β₁ β₂ : Level}(B : Poset β β₁ β₂)
+         where
 
-private
- _≤A_ = _≤_ A
- _≤B_ = _≤_ B
+ open Poset
 
-record Galois : Type  (α ⊔ α₂ ⊔ β ⊔ β₂) where
- field
-  F : Carrier A → Carrier B
-  G : Carrier B → Carrier A
-  F⊣G : ∀ a b → (F a) ≤B b → a ≤A (G b)
-  F⊢G : ∀ a b → a ≤A (G b) → (F a) ≤B b
+ private
+  _≤A_ = _≤_ A
+  _≤B_ = _≤_ B
+
+ record Galois : Type  (α ⊔ α₂ ⊔ β ⊔ β₂) where
+  field
+   F : Carrier A → Carrier B
+   G : Carrier B → Carrier A
+   F⊣G : ∀ a b → (F a) ≤B b → a ≤A (G b)
+   F⊢G : ∀ a b → a ≤A (G b) → (F a) ≤B b
+
 
 \end{code}
+
+
+
 
 --------------------------------------
 
