@@ -65,24 +65,23 @@ module _ {ℓ : Level}{𝒜 ℬ : Type ℓ} where
 
  -- For A ⊆ 𝒜, define A ⃗ R = {b : b ∈ ℬ,  ∀ a ∈ A → R a b }
  _⃗_ : (A : Pred 𝒜 ℓ) (R : REL 𝒜 ℬ ℓ) → Pred ℬ ℓ
- A ⃗ R = λ b → (a : 𝒜) → a ∈ A → R a b
+ A ⃗ R = λ b → A ⊆ (λ a → R a b)
 
  -- For B ⊆ ℬ, define R ⃖ B = {a : a ∈ 𝒜,  ∀ b ∈ B → R a b }
  _⃖_ : (R : REL 𝒜 ℬ ℓ)(B : Pred ℬ ℓ) → Pred 𝒜 ℓ
- R ⃖ B = λ a → (b : ℬ) → b ∈ B → R a b
-
+ R ⃖ B = λ a → B ⊆ R a
 
  ←→≥id : {A : Pred 𝒜 ℓ} {R : REL 𝒜 ℬ ℓ} → A ⊆ R ⃖ (A ⃗ R)
- ←→≥id p b ARb = ARb _ p
+ ←→≥id p b = b p
 
  →←≥id : {B : Pred ℬ ℓ} {R : REL 𝒜 ℬ ℓ}  → B ⊆ (R ⃖ B) ⃗ R
- →←≥id p a aRB = aRB _ p
+ →←≥id p a = a p
 
  →←→⊆→ : {A : Pred 𝒜 ℓ}{R : REL 𝒜 ℬ ℓ} → (R ⃖ (A ⃗ R)) ⃗ R ⊆ A ⃗ R
- →←→⊆→ p a Aa = p a (λ b ARb → ARb a Aa)
+ →←→⊆→ p a = p (λ z → z a)
 
  ←→←⊆← : {B : Pred ℬ ℓ}{R : REL 𝒜 ℬ ℓ}  → R ⃖ ((R ⃖ B) ⃗ R) ⊆ R ⃖ B
- ←→←⊆← p b Bb = p b (λ a aRB → aRB b Bb)
+ ←→←⊆← p b = p (λ z → z b)
 
 module _ {ℓ ρ : Level}{𝒜 ℬ : Type ℓ} where
 
@@ -95,7 +94,13 @@ module _ {ℓ ρ : Level}{𝒜 ℬ : Type ℓ} where
  →←Closed : {B : Pred ℬ ℓ} {R : REL 𝒜 ℬ ℓ} → Type ℓ
  →←Closed {B = B}{R} = (R ⃖ B) ⃗ R ⊆ B
 
+
+
+
+
 \end{code}
+
+
 
 
 --------------------------------------
