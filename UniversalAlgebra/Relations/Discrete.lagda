@@ -30,6 +30,8 @@ open import Relation.Binary.Core  using    ( _⇒_ ; _=[_]⇒_  )
                                            ; Rel  to BinRel )
 open import Relation.Unary        using    ( ∅; _∈_; Pred   )
 
+open import Overture.Preliminaries using (_≈_)
+
 private variable α β ρ 𝓥 : Level
 
 \end{code}
@@ -252,6 +254,19 @@ The following function returns the arity of a given operation symbol, which is s
 
 arity[_] : {I : Arity 𝓥} {A : Type α } → Op A I → Arity 𝓥
 arity[_] {I = I} f = I
+
+
+
+-- transPred : {A : Type α } (P Q : Pred A β) → P ≈ Q → ∀ x → P x → Q x
+-- transPred P Q P≈Q x Px = Goal
+--  where
+--  ξ : P x ≡ Q x
+--  ξ = P≈Q x
+--  η : P x → P x ≡ Q x → Q x
+--  η u refl = {!!}
+--  Goal : Q x
+--  Goal = {!!}
+
 
 \end{code}
 
