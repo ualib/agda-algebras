@@ -31,9 +31,9 @@ open import Relation.Unary          using    ( _⊆_ ;  _∈_ ; Pred   )
 
 
 
-module _ {ℓ ρ : Level}
-         (A : Poset (ℓ ⊔ lsuc ρ) (ℓ ⊔ ρ) (ℓ ⊔ ρ))
-         (B : Poset (ℓ ⊔ lsuc ρ) (ℓ ⊔ ρ) (ℓ ⊔ ρ))
+module _ {α β ρ : Level}
+         (A : Poset (lsuc (α ⊔ ρ)) (α ⊔ ρ) (α ⊔ ρ))
+         (B : Poset (lsuc (β ⊔ ρ)) (β ⊔ ρ) (β ⊔ ρ))
          where
 
  open Poset
@@ -42,14 +42,14 @@ module _ {ℓ ρ : Level}
   _≤A_ = _≤_ A
   _≤B_ = _≤_ B
 
- record Galois : Type (ℓ ⊔ lsuc ρ)  where
+ record Galois : Type (lsuc (α ⊔ β ⊔ ρ))  where
   field
    F : Carrier A → Carrier B
    G : Carrier B → Carrier A
    GF≥id : ∀ a →  a ≤A G (F a)
    FG≥id : ∀ b →  b ≤B F (G b)
 
- record Residuation : Type (ℓ ⊔ lsuc ρ)  where
+ record Residuation : Type (lsuc (α ⊔ β ⊔ ρ))  where
   field
    f     : Carrier A → Carrier B
    fhom  : f Preserves _≤A_ ⟶ _≤B_
@@ -64,11 +64,11 @@ module _ {ℓ : Level}{𝒜 ℬ : Type ℓ} where
  infix 10 _⃗_ _⃖_
 
  -- For A ⊆ 𝒜, define A ⃗ R = {b : b ∈ ℬ,  ∀ a ∈ A → R a b }
- _⃗_ : (A : Pred 𝒜 ℓ) (R : REL 𝒜 ℬ ℓ) → Pred ℬ ℓ
+ _⃗_ : Pred 𝒜 ℓ → REL 𝒜 ℬ ℓ → Pred ℬ ℓ
  A ⃗ R = λ b → A ⊆ (λ a → R a b)
 
  -- For B ⊆ ℬ, define R ⃖ B = {a : a ∈ 𝒜,  ∀ b ∈ B → R a b }
- _⃖_ : (R : REL 𝒜 ℬ ℓ)(B : Pred ℬ ℓ) → Pred 𝒜 ℓ
+ _⃖_ : REL 𝒜 ℬ ℓ → Pred ℬ ℓ → Pred 𝒜 ℓ
  R ⃖ B = λ a → B ⊆ R a
 
  ←→≥id : {A : Pred 𝒜 ℓ} {R : REL 𝒜 ℬ ℓ} → A ⊆ R ⃖ (A ⃗ R)
@@ -95,8 +95,25 @@ module _ {ℓ ρ : Level}{𝒜 ℬ : Type ℓ} where
  →←Closed {B = B}{R} = (R ⃖ B) ⃗ R ⊆ B
 
 
+module _ {α β ρ : Level}{𝒜 : Type α}{ℬ : Type β}{R : REL 𝒜 ℬ ρ} where
 
+ Foo : Pred 𝒜 (α ⊔ β ⊔ ρ) → Pred ℬ (α ⊔ β ⊔ ρ)
+ Foo A = λ b → A ⊆ (λ a → R a b)
 
+ Bar : Pred ℬ (α ⊔ β ⊔ ρ) → Pred 𝒜 (α ⊔ β ⊔ ρ)
+ Bar B = λ a → B ⊆ R a
+
+ BarFoo≥id : {A : Pred 𝒜 (α ⊔ β ⊔ ρ)} → A ⊆ Bar (Foo A)
+ BarFoo≥id p b = b p
+
+ FooBar≥id : {B : Pred ℬ (α ⊔ β ⊔ ρ)} → B ⊆ Foo (Bar B)
+ FooBar≥id p a = a p
+
+ FooBarFoo⊆Foo : {A : Pred 𝒜 (α ⊔ β ⊔ ρ)} → Foo (Bar (Foo A)) ⊆ Foo A
+ FooBarFoo⊆Foo p a = p (λ z → z a)
+
+ BarFooBar⊆Bar : {B : Pred ℬ (α ⊔ β ⊔ ρ)} → Bar (Foo (Bar B)) ⊆ Bar B
+ BarFooBar⊆Bar p b = p (λ z → z b)
 
 \end{code}
 

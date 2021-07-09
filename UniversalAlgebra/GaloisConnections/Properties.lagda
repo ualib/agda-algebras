@@ -23,7 +23,7 @@ open import Relation.Unary          using    ( Pred ; _⊆_ )
 import Relation.Binary.Structures as BS
 
 
-open import GaloisConnections.Basic using (Galois ; ←→≥id ; →←≥id ; _⃗_ ; _⃖_ )
+open import GaloisConnections.Basic using (Galois ; ←→≥id ; →←≥id ; _⃗_ ; _⃖_ ; Foo ; Bar ; BarFoo≥id ; FooBar≥id)
 
 
 open Poset
@@ -31,9 +31,9 @@ open Poset
 
 -- Definition of the poset of subsets of a set with the usual set inclusion relation.
 -- (I couldn't find this in the standard library, though I suspect it's somewhere.)
-module _ {ℓ ρ : Level}{𝒜 : Type ℓ} where
+module _ {α ρ : Level}{𝒜 : Type α} where
 
- _≐_ : (P Q : Pred 𝒜 ρ) → Type (ℓ ⊔ ρ)
+ _≐_ : Pred 𝒜 ρ → Pred 𝒜 ρ → Type (α ⊔ ρ)
  P ≐ Q = (P ⊆ Q) × (Q ⊆ P)
 
  open BS.IsEquivalence renaming (refl to ref ; sym to symm ; trans to tran)
@@ -44,8 +44,10 @@ module _ {ℓ ρ : Level}{𝒜 : Type ℓ} where
  tran ≐-iseqv (u₁ , u₂) (v₁ , v₂) = v₁ ∘ u₁ , u₂ ∘ v₂
 
 
- PosetOfSubsets : Poset (ℓ ⊔ lsuc ρ) (ℓ ⊔ ρ) (ℓ ⊔ ρ)
- Carrier PosetOfSubsets = Pred 𝒜 ρ
+module _ {α ρ : Level}{𝒜 : Type α} where
+
+ PosetOfSubsets : Poset (lsuc (α ⊔ ρ)) (α ⊔ ρ) (α ⊔ ρ)
+ Carrier PosetOfSubsets = Pred 𝒜 (α ⊔ ρ)
  _≈_ PosetOfSubsets = _≐_
  _≤_ PosetOfSubsets = _⊆_
  isPartialOrder PosetOfSubsets =
@@ -57,7 +59,7 @@ module _ {ℓ ρ : Level}{𝒜 : Type ℓ} where
          }
 
 
-module _ {ℓ : Level}{𝒜 ℬ : Type ℓ} where
+module onelevel {ℓ : Level}{𝒜 ℬ : Type ℓ} where
 
  𝒫𝒜 𝒫ℬ : Poset _ _ _
  𝒫𝒜 = PosetOfSubsets{ℓ}{ℓ}{𝒜}
@@ -65,12 +67,26 @@ module _ {ℓ : Level}{𝒜 ℬ : Type ℓ} where
 
 
  -- Every binary relation from one poset to another induces a Galois connection.
- Rel→Gal : (R : REL 𝒜 ℬ ℓ) → Galois{ℓ}{ℓ} 𝒫𝒜 𝒫ℬ
+ Rel→Gal : (R : REL 𝒜 ℬ ℓ) → Galois{ℓ}{ℓ}{ℓ} 𝒫𝒜 𝒫ℬ
  Rel→Gal R = record { F = _⃗ R
                     ; G = R ⃖_
                     ; GF≥id = λ _ → ←→≥id
                     ; FG≥id = λ _ → →←≥id }
 
 
+
+-- generalizing... (letting relation types live in a different universe level)
+module _ {ℓ ρ : Level}{𝒜 ℬ : Type ℓ} where
+
+ 𝒫𝒜 𝒫ℬ : Poset (lsuc (ℓ ⊔ ρ)) (ℓ ⊔ ρ) (ℓ ⊔ ρ)
+ 𝒫𝒜 = PosetOfSubsets{ℓ}{ρ}{𝒜 = 𝒜}
+ 𝒫ℬ = PosetOfSubsets{ℓ}{ρ}{𝒜 = ℬ}
+
+ -- Every binary relation from one poset to another induces a Galois connection.
+ Rel→Gal : (R : REL 𝒜 ℬ ρ) → Galois{ℓ}{ℓ}{ρ} 𝒫𝒜 𝒫ℬ
+ Rel→Gal R = record { F = Foo{R = R}
+                    ; G = Bar
+                    ; GF≥id = λ _ → BarFoo≥id
+                    ; FG≥id = λ _ → FooBar≥id }
 
 \end{code}
