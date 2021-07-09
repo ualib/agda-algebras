@@ -26,7 +26,7 @@ module GaloisConnections.Basic where
 open import Agda.Primitive          using    ( _⊔_ ;  Level ; lsuc)
                                     renaming ( Set to Type )
 open import Relation.Binary.Bundles using    ( Poset )
-open import Relation.Binary.Core    using    ( REL ; Rel ; _⇒_ )
+open import Relation.Binary.Core    using    ( REL ; Rel ; _⇒_ ; _Preserves_⟶_ )
 open import Relation.Unary          using    ( _⊆_ ;  _∈_ ; Pred   )
 
 
@@ -51,8 +51,9 @@ module _ {ℓ ρ : Level}
 
  record Residuation : Type (ℓ ⊔ lsuc ρ)  where
   field
-   f : Carrier A → Carrier B
-   g : Carrier B → Carrier A
+   f     : Carrier A → Carrier B
+   fhom  : f Preserves _≤A_ ⟶ _≤B_
+   g     : Carrier B → Carrier A
    gf≥id : ∀ a → a ≤A g (f a)
    fg≤id : ∀ b → f (g b) ≤B b
 

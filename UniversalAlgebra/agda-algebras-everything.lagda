@@ -10,6 +10,7 @@ All definitions/theorems in agda-algebras as of 22 June 2021.
 \begin{code}
 
 
+-- OVERTURE -----------------------------------------------------------------------------------------
 open import Overture.Preliminaries          using    ( ℓ₁ ; ∣_∣ ; ∥_∥ ; _⁻¹ ; _∙_ ; 𝑖𝑑 ; Π ; Π-syntax
                                                      ; lift∼lower ; lower∼lift ; _≈_ ; ≡-by-parts
                                                      ; transport )
@@ -19,7 +20,8 @@ open import Overture.Inverses               using    ( Image_∋_ ; eq ; Inv ; I
                                                      ; Surjective ; SurjInv )
 
 
--- RELATIONS  ------------------------------------------------------------------------
+
+-- RELATIONS  -----------------------------------------------------------------------------------------
 
 open import Relations.Discrete              using    (Im_⊆_ ; Arity ; ker ; kerlift ; ker' ; kernel ; 0[_]
                                                      ; _⊑_ ; ⊑-refl ; ⊑-trans ; Op ; π ; eval-rel
@@ -49,15 +51,18 @@ open import Relations.Extensionality        using    ( SurjInvIsRightInv ; epic-
 
 
 
--- Galois Connections --------------------------------------------------------------
+-- GALOIS CONNECTIONS --------------------------------------------------------------------------------
 
-open import GaloisConnections.Basic         using    ( Galois )
+open import GaloisConnections.Basic         using    ( Galois ; Residuation ; _⃗_ ; _⃖_
+                                                     ; ←→≥id ; →←≥id ; →←→⊆→ ; ←→←⊆←
+                                                     ; ←→Closed ; →←Closed )
 
-open import GaloisConnections.Properties    using    ( Inv ; Fix ; FixInv ; InvFix ; InvFixInv ; FixInvFix )
+open import GaloisConnections.Properties    using    ( _≐_ ; ≐-iseqv ; PosetOfSubsets
+                                                     ; 𝒫𝒜 ; 𝒫ℬ ; Rel→Gal )
 
 
 
--- ALGEBRAS ------------------------------------------------------------------------
+-- ALGEBRAS ------------------------------------------------------------------------------------------
 
 open import Algebras.Basic                  using    ( Signature ; signature ; monoid-op ; monoid-sig
                                                      ; compatible ; Algebra ; lilAlgebra
@@ -72,10 +77,18 @@ open import Algebras.Basic                  using    ( Signature ; signature ; m
 open import Algebras.Setoid                 using    ( ⟦_⟧s ; Algebroid ; SetoidAlgebra ; _̂_ ; _∙_ )
 
 
+
+
+-- PRODUCTS ------------------------------------------------------------------------------------------
+
 open import Products.Basic                  using    ( ⨅ ; ⨅' ; ov ; ℑ ; 𝔄 ; class-product )
 
 open import Products.Setoid                 using    ( ⨅ ; ⨅s ; ℑ ; 𝔄 ; class-product )
 
+
+
+
+-- CONGRUENCES ------------------------------------------------------------------------------------------
 
 open import Congruences.Basic               using    ( IsCongruence ; Con ; IsCongruence→Con
                                                      ; Con→IsCongruence ; 0[_]Compatible ; 0Con[_]
@@ -84,6 +97,9 @@ open import Congruences.Basic               using    ( IsCongruence ; Con ; IsCo
 open import Congruences.Setoid              using    ( _∣≈_ ; _∣≋_ ; IsCongruence ; Con ; IsCongruence→Con
                                                      ; Con→IsCongruence ; _╱_ )
 
+
+
+-- HOMOMORPHISMS ------------------------------------------------------------------------------------------
 
 open import Homomorphisms.Basic             using    ( compatible-op-map ; is-homomorphism ; hom ; ∘-hom
                                                      ; ∘-is-hom ; 𝒾𝒹 ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-monomorphism
@@ -110,6 +126,11 @@ open import Homomorphisms.Setoid            using    ( compatible-op-map ; is-ho
                                                      ; is-epimorphism ; homker-comp ;  kercon ; kerquo
                                                      ; ker[_⇒_]_↾_ )
 
+
+
+
+-- TERMS ------------------------------------------------------------------------------------------
+
 open import Terms.Basic                     using    (Term ; 𝑻 )
 
 open import Terms.Properties                using    (free-lift ; lift-hom ; free-unique ; lift-of-epi-is-epi )
@@ -128,6 +149,9 @@ open import Terms.Operations                using    ( _⟦_⟧ ; free-lift-inte
 
 
 
+
+-- SUBALGEBRAS ------------------------------------------------------------------------------------------
+
 open import Subalgebras.Subuniverses        using    ( Subuniverses ; Subuniverse ; Sg ; sgIsSub
                                                      ; sgIsSmallest ; sub-intersection ; sub-term-closed
                                                      ; TermImage ; TermImageIsSub ; Y-onlyif-TermImageY
@@ -139,6 +163,10 @@ open import Subalgebras.Subalgebras         using    ( _IsSubalgebraOf_ ; Subalg
                                                      ; ≤-transitivity ; ≤-trans ; iso→injective ; ≤-iso
                                                      ; ≤-trans-≅ ; ≤-TRANS-≅ ; ≤-mono ; Lift-is-sub
                                                      ; Lift-≤ ; Lift-≤-Lift )
+
+
+
+-- VARIETIES ------------------------------------------------------------------------------------------
 
 open import Varieties.EquationalLogic.Basic using    ( _⊧_≈_ ; _⊫_≈_ ; Th ; Mod )
 
@@ -176,8 +204,8 @@ open import Varieties.FreeAlgebras.Basic    using    ( 𝓕 ; 𝓕⁺ ; ψ ; ψR
 
 
 
--- STRUCTURES ------------------------------------------------------------------------
 
+-- GENERAL STRUCTURES (allowing both operation and relation symbols) ---------------------------------
 
 open import Structures.Basic                using    ( Signature ; Structure ; RStructure ; AStructure
                                                      ; Structure→RStructure ; Structure→AStructure
