@@ -31,9 +31,9 @@ open import Relation.Unary          using    ( _⊆_ ;  _∈_ ; Pred   )
 
 
 
-module _ {ℓ : Level}
-         (A : Poset (lsuc ℓ) ℓ ℓ)
-         (B : Poset (lsuc ℓ) ℓ ℓ)
+module _ {ℓ ρ : Level}
+         (A : Poset (ℓ ⊔ lsuc ρ) (ℓ ⊔ ρ) (ℓ ⊔ ρ))
+         (B : Poset (ℓ ⊔ lsuc ρ) (ℓ ⊔ ρ) (ℓ ⊔ ρ))
          where
 
  open Poset
@@ -42,14 +42,14 @@ module _ {ℓ : Level}
   _≤A_ = _≤_ A
   _≤B_ = _≤_ B
 
- record Galois : Type (lsuc ℓ)  where
+ record Galois : Type (ℓ ⊔ lsuc ρ)  where
   field
    F : Carrier A → Carrier B
    G : Carrier B → Carrier A
    GF≥id : ∀ a →  a ≤A G (F a)
    FG≥id : ∀ b →  b ≤B F (G b)
 
- record Residuation : Type (lsuc ℓ)  where
+ record Residuation : Type (ℓ ⊔ lsuc ρ)  where
   field
    f : Carrier A → Carrier B
    g : Carrier B → Carrier A
@@ -93,7 +93,6 @@ module _ {ℓ ρ : Level}{𝒜 ℬ : Type ℓ} where
  -- Definition of "closed" with respect to the closure operator λ B → (R ⃖ B) ⃗ R
  →←Closed : {B : Pred ℬ ℓ} {R : REL 𝒜 ℬ ℓ} → Type ℓ
  →←Closed {B = B}{R} = (R ⃖ B) ⃗ R ⊆ B
-
 
 \end{code}
 
