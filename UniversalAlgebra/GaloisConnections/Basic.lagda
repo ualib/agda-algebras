@@ -54,7 +54,7 @@ module _ {ℓ : Level}
    f : Carrier A → Carrier B
    g : Carrier B → Carrier A
    gf≥id : ∀ a → a ≤A g (f a)
-   fg≤id : ∀ b → b ≤B f (g b)
+   fg≤id : ∀ b → f (g b) ≤B b
 
 
 
