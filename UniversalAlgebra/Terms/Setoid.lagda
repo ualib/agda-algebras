@@ -2,7 +2,7 @@
 layout: default
 title : Terms.Setoid module (The Agda Universal Algebra Library)
 date : 2021-06-28
-author: [the agda-algebras development team][]
+author: [agda-algebras development team][]
 ---
 
 ### Setoids of Terms
@@ -203,4 +203,4 @@ module Environment (M : SetoidAlgebra α ℓ) where
 
 --------------------------------
 
-[the agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
