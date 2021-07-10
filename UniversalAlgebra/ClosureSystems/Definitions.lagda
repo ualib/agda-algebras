@@ -1,6 +1,6 @@
 ---
 layout: default
-title : ClosureSystems.Basic module (The Agda Universal Algebra Library)
+title : ClosureSystems.Definitions module (The Agda Universal Algebra Library)
 date : 2021-07-10
 author: [agda-algebras development team][]
 ---
