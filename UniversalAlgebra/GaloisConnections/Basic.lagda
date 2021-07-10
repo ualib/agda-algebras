@@ -58,8 +58,61 @@ module _ {α β ρ : Level}
    fg≤id : ∀ b → f (g b) ≤B b
 
 
+module _ {α β ρ : Level}{𝒜 : Type α}{ℬ : Type β} where
 
-module _ {ℓ : Level}{𝒜 ℬ : Type ℓ} where
+ -- For A ⊆ 𝒜, define A ⃗ R = {b : b ∈ ℬ,  ∀ a ∈ A → R a b }
+ _⃗_ : Pred 𝒜 (α ⊔ β ⊔ ρ) → REL 𝒜 ℬ ρ → Pred ℬ (α ⊔ β ⊔ ρ)
+ A ⃗ R = λ b → A ⊆ (λ a → R a b)
+
+ -- For B ⊆ ℬ, define R ⃖ B = {a : a ∈ 𝒜,  ∀ b ∈ B → R a b }
+ _⃖_ : REL 𝒜 ℬ ρ → Pred ℬ (α ⊔ β ⊔ ρ) → Pred 𝒜 (α ⊔ β ⊔ ρ)
+ R ⃖ B = λ a → B ⊆ R a
+
+ ←→≥id : {A : Pred 𝒜 (α ⊔ β ⊔ ρ)} {R : REL 𝒜 ℬ ρ} → A ⊆ R ⃖ (A ⃗ R)
+ ←→≥id p b = b p
+
+ →←≥id : {B : Pred ℬ (α ⊔ β ⊔ ρ)} {R : REL 𝒜 ℬ ρ}  → B ⊆ (R ⃖ B) ⃗ R
+ →←≥id p a = a p
+
+ →←→⊆→ : {A : Pred 𝒜 (α ⊔ β ⊔ ρ)}{R : REL 𝒜 ℬ ρ} → (R ⃖ (A ⃗ R)) ⃗ R ⊆ A ⃗ R
+ →←→⊆→ p a = p (λ z → z a)
+
+ ←→←⊆← : {B : Pred ℬ (α ⊔ β ⊔ ρ)}{R : REL 𝒜 ℬ ρ}  → R ⃖ ((R ⃖ B) ⃗ R) ⊆ R ⃖ B
+ ←→←⊆← p b = p (λ z → z b)
+
+ -- Definition of "closed" with respect to the closure operator λ A → R ⃖ (A ⃗ R)
+ ←→Closed : {A : Pred 𝒜 (α ⊔ β ⊔ ρ)}{R : REL 𝒜 ℬ ρ} → Type _
+ ←→Closed {A = A}{R} = R ⃖ (A ⃗ R) ⊆ A
+
+ -- Definition of "closed" with respect to the closure operator λ B → (R ⃖ B) ⃗ R
+ →←Closed : {B : Pred ℬ (α ⊔ β ⊔ ρ)}{R : REL 𝒜 ℬ ρ} → Type _
+ →←Closed {B = B}{R} = (R ⃖ B) ⃗ R ⊆ B
+
+
+
+
+\end{code}
+
+
+
+
+--------------------------------------
+
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
+
+
+
+
+
+
+
+
+
+
+
+
+-- old, single universe level version
+module one-level {ℓ : Level}{𝒜 ℬ : Type ℓ} where
 
  infix 10 _⃗_ _⃖_
 
@@ -82,45 +135,4 @@ module _ {ℓ : Level}{𝒜 ℬ : Type ℓ} where
 
  ←→←⊆← : {B : Pred ℬ ℓ}{R : REL 𝒜 ℬ ℓ}  → R ⃖ ((R ⃖ B) ⃗ R) ⊆ R ⃖ B
  ←→←⊆← p b = p (λ z → z b)
-
-module _ {ℓ ρ : Level}{𝒜 ℬ : Type ℓ} where
-
-
- -- Definition of "closed" with respect to the closure operator λ A → R ⃖ (A ⃗ R)
- ←→Closed : {A : Pred 𝒜 ℓ} {R : REL 𝒜 ℬ ℓ} → Type ℓ
- ←→Closed {A = A}{R} = R ⃖ (A ⃗ R) ⊆ A
-
- -- Definition of "closed" with respect to the closure operator λ B → (R ⃖ B) ⃗ R
- →←Closed : {B : Pred ℬ ℓ} {R : REL 𝒜 ℬ ℓ} → Type ℓ
- →←Closed {B = B}{R} = (R ⃖ B) ⃗ R ⊆ B
-
-
-module _ {α β ρ : Level}{𝒜 : Type α}{ℬ : Type β}{R : REL 𝒜 ℬ ρ} where
-
- Foo : Pred 𝒜 (α ⊔ β ⊔ ρ) → Pred ℬ (α ⊔ β ⊔ ρ)
- Foo A = λ b → A ⊆ (λ a → R a b)
-
- Bar : Pred ℬ (α ⊔ β ⊔ ρ) → Pred 𝒜 (α ⊔ β ⊔ ρ)
- Bar B = λ a → B ⊆ R a
-
- BarFoo≥id : {A : Pred 𝒜 (α ⊔ β ⊔ ρ)} → A ⊆ Bar (Foo A)
- BarFoo≥id p b = b p
-
- FooBar≥id : {B : Pred ℬ (α ⊔ β ⊔ ρ)} → B ⊆ Foo (Bar B)
- FooBar≥id p a = a p
-
- FooBarFoo⊆Foo : {A : Pred 𝒜 (α ⊔ β ⊔ ρ)} → Foo (Bar (Foo A)) ⊆ Foo A
- FooBarFoo⊆Foo p a = p (λ z → z a)
-
- BarFooBar⊆Bar : {B : Pred ℬ (α ⊔ β ⊔ ρ)} → Bar (Foo (Bar B)) ⊆ Bar B
- BarFooBar⊆Bar p b = p (λ z → z b)
-
-\end{code}
-
-
-
-
---------------------------------------
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 
