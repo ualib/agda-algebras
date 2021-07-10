@@ -2,7 +2,7 @@
 layout: default
 title : GaloisConnections.Properties module (The Agda Universal Algebra Library)
 date : 2021-07-01
-author: [the agda-algebras development team][]
+author: [agda-algebras development team][]
 ---
 
 \begin{code}
@@ -23,7 +23,7 @@ open import Relation.Unary          using    ( Pred ; _⊆_ )
 import Relation.Binary.Structures as BS
 
 
-open import GaloisConnections.Basic using (Galois ; ←→≥id ; →←≥id ; _⃗_ ; _⃖_ ; Foo ; Bar ; BarFoo≥id ; FooBar≥id)
+open import GaloisConnections.Basic using (Galois ; ←→≥id ; →←≥id ; _⃗_ ; _⃖_ )
 
 
 open Poset
@@ -59,23 +59,6 @@ module _ {α ρ : Level}{𝒜 : Type α} where
          }
 
 
-module onelevel {ℓ : Level}{𝒜 ℬ : Type ℓ} where
-
- 𝒫𝒜 𝒫ℬ : Poset _ _ _
- 𝒫𝒜 = PosetOfSubsets{ℓ}{ℓ}{𝒜}
- 𝒫ℬ = PosetOfSubsets{ℓ}{ℓ}{ℬ}
-
-
- -- Every binary relation from one poset to another induces a Galois connection.
- Rel→Gal : (R : REL 𝒜 ℬ ℓ) → Galois{ℓ}{ℓ}{ℓ} 𝒫𝒜 𝒫ℬ
- Rel→Gal R = record { F = _⃗ R
-                    ; G = R ⃖_
-                    ; GF≥id = λ _ → ←→≥id
-                    ; FG≥id = λ _ → →←≥id }
-
-
-
--- generalizing... (letting relation types live in a different universe level)
 module _ {ℓ ρ : Level}{𝒜 ℬ : Type ℓ} where
 
  𝒫𝒜 𝒫ℬ : Poset (lsuc (ℓ ⊔ ρ)) (ℓ ⊔ ρ) (ℓ ⊔ ρ)
@@ -84,9 +67,41 @@ module _ {ℓ ρ : Level}{𝒜 ℬ : Type ℓ} where
 
  -- Every binary relation from one poset to another induces a Galois connection.
  Rel→Gal : (R : REL 𝒜 ℬ ρ) → Galois{ℓ}{ℓ}{ρ} 𝒫𝒜 𝒫ℬ
- Rel→Gal R = record { F = Foo{R = R}
-                    ; G = Bar
-                    ; GF≥id = λ _ → BarFoo≥id
-                    ; FG≥id = λ _ → FooBar≥id }
+ Rel→Gal R = record { F = _⃗ R
+                    ; G = R ⃖_
+                    ; GF≥id = λ _ → ←→≥id
+                    ; FG≥id = λ _ → →←≥id }
 
 \end{code}
+
+
+--------------------------------------
+
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
+
+
+
+
+
+
+
+
+
+
+
+-- old, single universel level version
+-- module onelevel {ℓ : Level}{𝒜 ℬ : Type ℓ} where
+
+--  𝒫𝒜 𝒫ℬ : Poset _ _ _
+--  𝒫𝒜 = PosetOfSubsets{ℓ}{ℓ}{𝒜}
+--  𝒫ℬ = PosetOfSubsets{ℓ}{ℓ}{ℬ}
+
+
+--  -- Every binary relation from one poset to another induces a Galois connection.
+--  Rel→Gal : (R : REL 𝒜 ℬ ℓ) → Galois{ℓ}{ℓ}{ℓ} 𝒫𝒜 𝒫ℬ
+--  Rel→Gal R = record { F = _⃗ R
+--                     ; G = R ⃖_
+--                     ; GF≥id = λ _ → ←→≥id
+--                     ; FG≥id = λ _ → →←≥id }
+
+
