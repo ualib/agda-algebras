@@ -51,7 +51,7 @@ open import Relations.Extensionality        using    ( SurjInvIsRightInv ; epic-
 
 
 
--- GALOIS CONNECTIONS --------------------------------------------------------------------------------
+-- GALOIS CONNECTIONS -------------------------------------------------------------------------------
 
 open import GaloisConnections.Basic         using    ( Galois ; Residuation ; _⃗_ ; _⃖_
                                                      ; ←→≥id ; →←≥id ; →←→⊆→ ; ←→←⊆←
@@ -60,6 +60,14 @@ open import GaloisConnections.Basic         using    ( Galois ; Residuation ; _�
 open import GaloisConnections.Properties    using    ( _≐_ ; ≐-iseqv ; PosetOfSubsets
                                                      ; 𝒫𝒜 ; 𝒫ℬ ; Rel→Gal )
 
+-- CLOSURE SYSTEMS & OPERATORS -----------------------------------------------------------------------
+
+open import ClosureSystems.Definitions      using    ( Extensive ; OrderPreserving ; Idempotent )
+
+open import ClosureSystems.Basic            using    ( ⊥ ; ⊤ ; ∅ ; 𝒞𝓁 ; ClOp )
+
+open import ClosureSystems.Properties       using    ( ≦rfl ; ≦trans ; ≦antisym ; clop→law⇒
+                                                     ; clop→law⇐ ; clop←law )
 
 
 -- ALGEBRAS ------------------------------------------------------------------------------------------
