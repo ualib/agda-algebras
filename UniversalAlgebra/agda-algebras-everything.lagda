@@ -91,7 +91,7 @@ open import Algebras.Setoid                 using    ( ⟦_⟧s ; Algebroid ; Se
 
 open import Products.Basic                  using    ( ⨅ ; ⨅' ; ov ; ℑ ; 𝔄 ; class-product )
 
-open import Products.Setoid                 using    ( ⨅ ; ⨅s ; ℑ ; 𝔄 ; class-product )
+open import Products.Setoid                 using    ( ⨅ ; ⨅oid ; ℑ ; 𝔄 ; class-product )
 
 
 
@@ -120,9 +120,6 @@ open import Homomorphisms.Noether           using    ( FirstHomTheorem|Set ; Fir
                                                      ; NoetherHomUnique ; fe-NoetherHomUnique
                                                      ; NoetherIsoUnique ; HomFactor ; HomFactorEpi )
 
-open import Homomorphisms.Isomorphisms      using    ( _≅_ ; ≅-refl ; ≅-sym ; ≅-trans ; Lift-≅
-                                                     ; Lift-Alg-iso ; Lift-Alg-assoc ; Lift-Alg-associative
-                                                     ; Lift-Alg-⨅≅ ; ⨅≅ )
 
 open import Homomorphisms.HomomorphicImages using    ( _IsHomImageOf_ ; HomImages ; IsHomImageOfClass
                                                      ; HomImageOfClass ; Lift-epi-is-epi
@@ -135,6 +132,15 @@ open import Homomorphisms.Setoid            using    ( compatible-op-map ; is-ho
                                                      ; ker[_⇒_]_↾_ )
 
 
+
+open import Isomorphisms.Basic              using    ( _≅_ ; ≅-refl ; ≅-sym ; ≅-trans ; Lift-≅
+                                                     ; Lift-Alg-iso ; Lift-Alg-assoc ; Lift-Alg-associative
+                                                     ; Lift-Alg-⨅≅ ; ⨅≅ )
+
+
+open import Isomorphisms.Setoid             using    ( _≅_ ; ≅-refl ; ≅-sym ; ≅-trans ; Lift-≅
+                                                     ; Lift-SetoidAlg-iso ; Lift-SetoidAlg-assoc
+                                                     ; Lift-SetoidAlg-associative )
 
 
 -- TERMS ------------------------------------------------------------------------------------------
@@ -175,7 +181,18 @@ open import Subalgebras.Subalgebras         using    ( _IsSubalgebraOf_ ; Subalg
 open import Subalgebras.Setoid              using    ( Subuniverses ; Subuniverse ; Sg ; sgIsSub
                                                      ; sgIsSmallest ; ⋂s ; sub-term-closed
                                                      ; TermImage ; TermImageIsSub ; B-onlyif-TermImageB
-                                                     ; SgB-onlyif-TermImageB ; hom-unique )
+                                                     ; SgB-onlyif-TermImageB ; hom-unique
+                                                     ; _≥s_ ; _IsSupalgebraOf_ ; _≤s_ ; _IsSubalgebraOf_
+                                                     ; ≅→≤s ; ≅→≥s ; SubalgebraOf ; Subalgebra
+                                                     ; IsSubalgebraREL ; SubalgebraREL ; _≤c_
+                                                     ; _IsSubalgebraOfClass_ ; SubalgebraOfClass
+                                                     ; SubalgebraOfClass' ; SubalgebrasOfClass
+                                                     ; ≤s-refl ; ≥s-refl ; ≤s-refl'
+                                                     ; ≤s-trans ; ≥s-trans ; ≤s-preorder
+                                                     ; A≥B→B≅C→A≥C ; A≤B→B≅C→A≤C ; A≅B→B≥C→A≥C
+                                                     ; A≅B→B≤C→A≤C ; ≤s-TRANS-≅ ; ≤s-mono
+                                                     ; Lift-is-sub ; ≤s-Lift ; ≥s-Lift
+                                                     ; Lift-≤s-Lift )
 
 -- VARIETIES ------------------------------------------------------------------------------------------
 
