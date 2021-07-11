@@ -147,7 +147,7 @@ open import Terms.Setoid                    using    ( _≐_ ; ≐-isRefl ; ≐-
                                                      ; TermSetoid ; TermAlgebra ; Ops ; Sub ; _[_]
                                                      ; module Environment )
 
-open Environment                            using    (_≃_ ; Env ; ⦅_⦆ ; Equal ; isEquiv ; ⦅_⦆s ; substitution)
+open Environment                            using    (_≃_ ; Env ; ⟦_⟧ ; Equal ; isEquiv ; ⟦_⟧s ; substitution)
 
 open import Terms.Operations                using    ( _⟦_⟧ ; free-lift-interp ; term-interp
                                                      ; term-gen ; term-gen-agreement ; term-agreement
@@ -172,7 +172,10 @@ open import Subalgebras.Subalgebras         using    ( _IsSubalgebraOf_ ; Subalg
                                                      ; ≤-trans-≅ ; ≤-TRANS-≅ ; ≤-mono ; Lift-is-sub
                                                      ; Lift-≤ ; Lift-≤-Lift )
 
-
+open import Subalgebras.Setoid              using    ( Subuniverses ; Subuniverse ; Sg ; sgIsSub
+                                                     ; sgIsSmallest ; ⋂s ; sub-term-closed
+                                                     ; TermImage ; TermImageIsSub ; B-onlyif-TermImageB
+                                                     ; SgB-onlyif-TermImageB ; hom-unique )
 
 -- VARIETIES ------------------------------------------------------------------------------------------
 

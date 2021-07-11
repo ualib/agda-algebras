@@ -158,16 +158,16 @@ module Soundness {χ α ρ ι : Level}{I : Type ι} (E : I → Eq{χ})
  -- In any model M that satisfies the equations E, derived equality is actual equality.
  open SetoidReasoning Domain
 
- open Environment M
+ open Environment M renaming (⟦_⟧s to ⟪_⟫)
  sound : ∀ {p q} → E ⊢ Γ ▹ p ≈ q → M ⊨ (p ≈̇ q)
 
  sound (hyp i)                      =  V i
  sound (app {f = f} es) ρ           =  Interp .cong (≡-refl , λ i → sound (es i) ρ)
  sound (sub {p = p} {q} Epq σ) ρ    =  begin
-                                       ⦅ p [ σ ] ⦆ <$> ρ          ≈⟨ substitution p σ ρ ⟩
-                                       ⦅ p       ⦆ <$> (⦅ σ ⦆s ρ) ≈⟨ sound Epq (⦅ σ ⦆s ρ)  ⟩
-                                       ⦅ q       ⦆ <$> (⦅ σ ⦆s ρ) ≈˘⟨ substitution  q σ ρ ⟩
-                                       ⦅ q [ σ ] ⦆ <$> ρ          ∎
+                                       ⟦ p [ σ ] ⟧ <$> ρ          ≈⟨ substitution p σ ρ ⟩
+                                       ⟦ p       ⟧ <$> ⟪ σ ⟫ ρ ≈⟨ sound Epq (⟪ σ ⟫ ρ)  ⟩
+                                       ⟦ q       ⟧ <$> ⟪ σ ⟫ ρ ≈˘⟨ substitution  q σ ρ ⟩
+                                       ⟦ q [ σ ] ⟧ <$> ρ          ∎
 
  sound (refl {p = p})               = isEquiv .reflE {x = p}
  sound (sym {p = p} {q} Epq)        = isEquiv .symmE {x = p}{q}   (sound Epq)
@@ -231,10 +231,10 @@ module TermModel {χ : Level}{Γ : Type χ}{ι : Level}{I : Type ι} (E : I → 
  identity (ℊ x) = refl
  identity (node f ts) = app (identity ∘ ts)
 
- -- Evaluation in the term model is substitution $E ⊢ Γ ▹ ⦅t⦆σ ≡ t[σ]$.
+ -- Evaluation in the term model is substitution $E ⊢ Γ ▹ ⟦t⟧σ ≡ t[σ]$.
  -- This would even hold "up to the nose" if we had function extensionality.
 
- evaluation : (t : Term Δ) (σ : Sub Γ Δ) → E ⊢ Γ ▹ (⦅ t ⦆ <$> σ) ≈ (t [ σ ])
+ evaluation : (t : Term Δ) (σ : Sub Γ Δ) → E ⊢ Γ ▹ (⟦ t ⟧ <$> σ) ≈ (t [ σ ])
  evaluation (ℊ x)    σ = refl
 --  evaluation (node f ts)  σ = app (λ i → evaluation (ts i) σ)
  evaluation (node f ts)  σ = app (flip (evaluation ∘ ts) σ)
@@ -242,10 +242,10 @@ module TermModel {χ : Level}{Γ : Type χ}{ι : Level}{I : Type ι} (E : I → 
  -- The term model satisfies all the equations it started out with.
  satisfies : ∀ i → M Γ ⊨ E i
  satisfies i σ = begin
-                 ⦅ p ⦆ <$> σ  ≈⟨ evaluation p σ ⟩
+                 ⟦ p ⟧ <$> σ  ≈⟨ evaluation p σ ⟩
                  p [ σ ]        ≈⟨ sub (hyp i) σ ⟩
                  q [ σ ]        ≈˘⟨ evaluation q σ ⟩
-                 ⦅ q ⦆ <$> σ  ∎
+                 ⟦ q ⟧ <$> σ  ∎
                  where
                   open SetoidReasoning (TermSetoid _)
                   p = lhs (E i)
@@ -271,8 +271,8 @@ module Completeness {χ ι : Level}{I : Type ι} (E : I → Eq{χ}) {Γ} where
  completeness p q V = begin
                   p              ≈˘⟨ identity p ⟩
                   p [ σ₀ ]       ≈˘⟨ evaluation p σ₀ ⟩
-                  ⦅ p ⦆ <$> σ₀  ≈⟨ V (M Γ) satisfies σ₀ ⟩
-                  ⦅ q ⦆ <$> σ₀  ≈⟨ evaluation q σ₀ ⟩
+                  ⟦ p ⟧ <$> σ₀  ≈⟨ V (M Γ) satisfies σ₀ ⟩
+                  ⟦ q ⟧ <$> σ₀  ≈⟨ evaluation q σ₀ ⟩
                   q [ σ₀ ]       ≈⟨ identity q ⟩
                   q              ∎
                   where open SetoidReasoning (TermSetoid Γ)
