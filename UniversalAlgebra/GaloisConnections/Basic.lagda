@@ -49,15 +49,6 @@ module _ {α β ρ₁ ρ₂ ρ₃ ρ₄ : Level}
    GF≥id : ∀ a →  a ≤A G (F a)
    FG≥id : ∀ b →  b ≤B F (G b)
 
- record Residuation : Type (lsuc (α ⊔ β ⊔ ρ₂ ⊔ ρ₄))  where
-  field
-   f     : Carrier A → Carrier B
-   fhom  : f Preserves _≤A_ ⟶ _≤B_
-   g     : Carrier B → Carrier A
-   gf≥id : ∀ a → a ≤A g (f a)
-   fg≤id : ∀ b → f (g b) ≤B b
-
-
 module _ {α β : Level}{𝒜 : Type α}{ℬ : Type β} where
 
  -- For A ⊆ 𝒜, define A ⃗ R = {b : b ∈ ℬ,  ∀ a ∈ A → R a b }
