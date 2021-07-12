@@ -37,26 +37,16 @@ private variable α β ρ 𝓥 : Level
 
 
 
+-- Functions for defining poitwise equality of functions wrt a
+-- given equality (see e.g. defn of _≈̇_ in Residuation.Properties)
+PointWise : {A : Type α}{B : Type β }
+            (_≋_ : BinRel B ρ) → BinRel (A → B) _
+PointWise {A = A}{B} _≋_ = λ (f g : A → B) → ∀ x → f x ≋ g x
 
-module _ {α : Level}{A : Type α}{β : Level}{B : Type β } where
-
- PointWise : (_≋_ : BinRel B ρ) → BinRel (A → B) _
- PointWise _≋_ = λ (f g : A → B) → ∀ x → f x ≋ g x
-
-
-module _ {α : Level}{A : Type α}{β : Level}{B : A → Type β } where
-
- depPointWise : (_≋_ : {γ : Level}{C : Type γ} → BinRel C ρ)
-  →          BinRel ((a : A) → B a) _
- depPointWise _≋_ = λ (f g : (a : A) → B a) → ∀ x → f x ≋ g x
-
---  infix 8 _≈_
-
---  ≈IsEquivalence : IsEquivalence _≈_
-
-
-
-
+depPointWise : {A : Type α}{B : A → Type β }
+               (_≋_ : {γ : Level}{C : Type γ} → BinRel C ρ)
+ →             BinRel ((a : A) → B a) _
+depPointWise {A = A}{B} _≋_ = λ (f g : (a : A) → B a) → ∀ x → f x ≋ g x
 
 
 
