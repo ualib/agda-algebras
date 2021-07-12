@@ -51,7 +51,7 @@ open import Relations.Extensionality           using ( DFunExt ; SwellDef ; swel
 open import Algebras.Basic                     using ( Algebra ; Lift-Alg )
 open import Products.Basic             {𝑆 = 𝑆} using ( ov ; ⨅ )
 open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom; 𝒾𝒹 ; ∘-hom ; is-homomorphism )
-open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; mkiso ; ≅-sym ; ≅-trans ; Lift-≅ )
+open import Isomorphisms.Basic         {𝑆 = 𝑆} using ( _≅_ ; mkiso ; ≅-sym ; ≅-trans ; Lift-≅ )
 open import Terms.Basic                {𝑆 = 𝑆} using ( Term ; 𝑻 )
 open import Terms.Properties           {𝑆 = 𝑆} using ( lift-hom )
 open import Terms.Operations           {𝑆 = 𝑆} using ( _⟦_⟧ ; comm-hom-term ; interp-prod ; term-agreement )

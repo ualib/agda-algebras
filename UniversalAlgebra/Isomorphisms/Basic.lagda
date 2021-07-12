@@ -1,7 +1,7 @@
 ---
 layout: default
-title : Homomorphisms.Isomoprhisms module (The Agda Universal Algebra Library)
-date : 2021-01-14
+title : Isomoprhisms.Basic module (The Agda Universal Algebra Library)
+date : 2021-07-11
 author: [agda-algebras development team][]
 ---
 
@@ -17,7 +17,7 @@ Here we formalize the informal notion of isomorphism between algebraic structure
 open import Level using ( Level ; Lift )
 open import Algebras.Basic
 
-module Homomorphisms.Isomorphisms {𝑆 : Signature 𝓞 𝓥}  where
+module Isomorphisms.Basic {𝑆 : Signature 𝓞 𝓥}  where
 
 
 -- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
