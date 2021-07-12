@@ -64,10 +64,9 @@ open import GaloisConnections.Properties    using    ( _≐_ ; ≐-iseqv ; Poset
 
 open import ClosureSystems.Definitions      using    ( Extensive ; OrderPreserving ; Idempotent )
 
-open import ClosureSystems.Basic            using    ( ⊥ ; ⊤ ; ∅ ; 𝒞𝓁 ; ClOp )
+open import ClosureSystems.Basic            using    ( ∅ ; 𝒞𝓁 ; ClOp )
 
-open import ClosureSystems.Properties       using    ( ≦rfl ; ≦trans ; ≦antisym ; clop→law⇒
-                                                     ; clop→law⇐ ; clop←law )
+open import ClosureSystems.Properties       using    ( clop→law⇒ ; clop→law⇐ ; clop←law )
 
 
 -- ALGEBRAS ------------------------------------------------------------------------------------------
