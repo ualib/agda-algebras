@@ -33,11 +33,11 @@ module _ {α ιᵃ ρᵃ : Level} (A : Poset α ιᵃ ρᵃ)
  record Residuation : Type (lsuc (α ⊔ ρᵃ ⊔ β ⊔ ρᵇ))  where
   field
    f     : Carrier A → Carrier B
-   fhom  : f Preserves _≤A_ ⟶ _≤B_
    g     : Carrier B → Carrier A
+   fhom  : f Preserves _≤A_ ⟶ _≤B_
+   ghom  : g Preserves _≤B_ ⟶ _≤A_
    gf≥id : ∀ a → a ≤A g (f a)
    fg≤id : ∀ b → f (g b) ≤B b
-
 
 
 \end{code}
