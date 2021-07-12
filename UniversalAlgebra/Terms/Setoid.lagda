@@ -162,21 +162,23 @@ module Environment (M : SetoidAlgebra α ℓ) where
  -- The standard library offers `iter' (on sets), but we need this to be a Func (on setoids).
  open Func renaming ( f to _<$>_ )
 
- ⦅_⦆ : (t : Term Γ) → Func (Env Γ) Domain
- ⦅ ℊ x ⦆         <$> ρ =  ρ x
- ⦅ node f args ⦆  <$> ρ = Interp <$> (f , λ i → ⦅ args i ⦆ <$> ρ)
- cong  ⦅ ℊ x ⦆ ρ₁≡ρ₂ = ρ₁≡ρ₂ x
- cong  ⦅ node f args ⦆  ρ₁=ρ₂  =  cong Interp (refl , λ i → cong ⦅ args i ⦆ ρ₁=ρ₂)
+ ⟦_⟧ : {Γ : Type χ}(t : Term Γ) → Func (Env Γ) Domain
+
+ ⟦ ℊ x ⟧ <$> ρ = ρ x
+ ⟦ ℊ x ⟧ .cong ρ₁≡ρ₂ = ρ₁≡ρ₂ x
+
+ ⟦ node f args ⟧ <$> ρ = Interp <$> (f , λ i → ⟦ args i ⟧ <$> ρ)
+ ⟦ node f args ⟧ .cong  ρ₁≡ρ₂  =  cong Interp (refl , λ i → cong ⟦ args i ⟧ ρ₁≡ρ₂)
 
 
  -- An equality between two terms holds in a model
  -- if the two terms are equal under all valuations of their free variables.
  Equal : ∀ {Γ : Type χ} (p q : Term Γ) → Type _
- Equal p q = ∀ (ρ : Env _ .Carrier) →  ⦅ p ⦆ <$> ρ ≃ ⦅ q ⦆ <$> ρ
+ Equal p q = ∀ (ρ : Env _ .Carrier) →  ⟦ p ⟧ <$> ρ ≃ ⟦ q ⟧ <$> ρ
 
 
  -- Equal is an equivalence relation.
- isEquiv : IsEquivalence (Equal {Γ = Γ})
+ isEquiv : {Γ : Type χ} → IsEquivalence (Equal {Γ = Γ})
 
  isEquiv = record { refl  =         λ ρ → reflS  Domain
                   ; sym   =     λ x=y ρ → symS   Domain (x=y ρ)
@@ -184,13 +186,13 @@ module Environment (M : SetoidAlgebra α ℓ) where
                   }
 
  -- Evaluation of a substitution gives an environment.
- ⦅_⦆s : Sub Γ Δ → Carrier (Env Γ) → Carrier (Env Δ)
- ⦅ σ ⦆s ρ x = ⦅ σ x ⦆ <$> ρ
+ ⟦_⟧s : {Γ Δ : Type χ} → Sub Γ Δ → Carrier (Env Γ) → Carrier (Env Δ)
+ ⟦ σ ⟧s ρ x = ⟦ σ x ⟧ <$> ρ
 
 
- -- Substitution lemma: ⦅t[σ]⦆ρ ≃ ⦅t⦆⦅σ⦆ρ
- substitution : (t : Term Δ) (σ : Sub Γ Δ) (ρ : Env Γ .Carrier)
-  →             ⦅ t [ σ ] ⦆ <$> ρ  ≃  ⦅ t ⦆ <$> (⦅ σ ⦆s ρ)
+ -- Substitution lemma: ⟦t[σ]⟧ρ ≃ ⟦t⟧⟦σ⟧ρ
+ substitution : {Γ Δ : Type χ} → (t : Term Δ) (σ : Sub Γ Δ) (ρ : Env Γ .Carrier)
+  →             ⟦ t [ σ ] ⟧ <$> ρ  ≃  ⟦ t ⟧ <$> (⟦ σ ⟧s ρ)
 
  substitution (ℊ x) σ ρ = reflS Domain
  substitution (node f ts) σ ρ = cong Interp (refl , λ i → substitution (ts i) σ ρ)
