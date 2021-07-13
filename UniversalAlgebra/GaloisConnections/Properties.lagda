@@ -31,7 +31,7 @@ open Poset
 
 -- Definition of the poset of subsets of a set with the usual set inclusion relation.
 -- (I couldn't find this in the standard library, though I suspect it's somewhere.)
-module _ {α ρ : Level}{𝒜 : Type α} where
+module _ {α ρ : Level} {𝒜 : Type α} where
 
  _≐_ : Pred 𝒜 ρ → Pred 𝒜 ρ → Type (α ⊔ ρ)
  P ≐ Q = (P ⊆ Q) × (Q ⊆ P)
@@ -44,10 +44,10 @@ module _ {α ρ : Level}{𝒜 : Type α} where
  tran ≐-iseqv (u₁ , u₂) (v₁ , v₂) = v₁ ∘ u₁ , u₂ ∘ v₂
 
 
-module _ {α ρ : Level}{𝒜 : Type α} where
+module _ {α : Level} (ρ : Level) (𝒜 : Type α) where
 
- PosetOfSubsets : Poset (lsuc (α ⊔ ρ)) (α ⊔ ρ) (α ⊔ ρ)
- Carrier PosetOfSubsets = Pred 𝒜 (α ⊔ ρ)
+ PosetOfSubsets : Poset (α ⊔ lsuc ρ) (α ⊔ ρ) (α ⊔ ρ)
+ Carrier PosetOfSubsets = Pred 𝒜 ρ
  _≈_ PosetOfSubsets = _≐_
  _≤_ PosetOfSubsets = _⊆_
  isPartialOrder PosetOfSubsets =
@@ -58,20 +58,26 @@ module _ {α ρ : Level}{𝒜 : Type α} where
          ; antisym = _,_
          }
 
+\end{code}
 
-module _ {ℓ ρ : Level}{𝒜 ℬ : Type ℓ} where
+A Binary relation from one poset to another induces a Galois connection, but only in a very special
+situation, namely when all the involved sets are of the same size.  This is akin to the situation
+with Adjunctions in Category Theory (unsurprisingly). In other words, there is likely a
+unit/counit definition that is more level polymorphic.
+\begin{code}
+module _ {ℓ : Level}{𝒜 : Type ℓ} {ℬ : Type ℓ} where
 
- 𝒫𝒜 𝒫ℬ : Poset (lsuc (ℓ ⊔ ρ)) (ℓ ⊔ ρ) (ℓ ⊔ ρ)
- 𝒫𝒜 = PosetOfSubsets{ℓ}{ρ}{𝒜 = 𝒜}
- 𝒫ℬ = PosetOfSubsets{ℓ}{ρ}{𝒜 = ℬ}
+ 𝒫𝒜 : Poset (lsuc ℓ) ℓ ℓ
+ 𝒫ℬ : Poset (lsuc ℓ) ℓ ℓ
+ 𝒫𝒜 = PosetOfSubsets ℓ 𝒜
+ 𝒫ℬ = PosetOfSubsets ℓ ℬ
 
  -- Every binary relation from one poset to another induces a Galois connection.
- Rel→Gal : (R : REL 𝒜 ℬ ρ) → Galois{ℓ}{ℓ}{ρ} 𝒫𝒜 𝒫ℬ
+ Rel→Gal : (R : REL 𝒜 ℬ ℓ) → Galois 𝒫𝒜 𝒫ℬ
  Rel→Gal R = record { F = _⃗ R
                     ; G = R ⃖_
                     ; GF≥id = λ _ → ←→≥id
                     ; FG≥id = λ _ → →←≥id }
-
 \end{code}
 
 
@@ -103,5 +109,3 @@ module _ {ℓ ρ : Level}{𝒜 ℬ : Type ℓ} where
 --                     ; G = R ⃖_
 --                     ; GF≥id = λ _ → ←→≥id
 --                     ; FG≥id = λ _ → →←≥id }
-
-

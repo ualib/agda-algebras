@@ -49,38 +49,40 @@ open import Congruences.Setoid {𝑆 = 𝑆} using ( _∣≈_ ; Con ; IsCongruen
 
 \begin{code}
 
-module _ {α ρᵃ : Level} (𝑨 : SetoidAlgebra α ρᵃ)
-         {β ρᵇ : Level} (𝑩 : SetoidAlgebra β ρᵇ)
-         where
- private
-  A = 𝕌[ 𝑨 ] -- (𝕌 = forgetful functor)
-  B = 𝕌[ 𝑩 ]
+-- module _ {α ρᵃ : Level} (𝑨 : SetoidAlgebra α ρᵃ)
+--          {β ρᵇ : Level} (𝑩 : SetoidAlgebra β ρᵇ)
+--          where
+--  private
+--   A = 𝕌[ 𝑨 ] -- (𝕌 = forgetful functor)
+--   B = 𝕌[ 𝑩 ]
 
- compatible-op-map : ∣ 𝑆 ∣ → (A → B) → Type _
- compatible-op-map 𝑓 h = ∀ a → h ((𝑓 ̂ 𝑨) a) ≡ (𝑓 ̂ 𝑩) (h ∘ a)
+compatible-op-map : {α ρᵃ : Level} (𝑨 : SetoidAlgebra α ρᵃ)
+                    {β ρᵇ : Level} (𝑩 : SetoidAlgebra β ρᵇ)
+ →                  ∣ 𝑆 ∣ → (𝕌[ 𝑨 ] → 𝕌[ 𝑩 ]) → Type _
+compatible-op-map 𝑨 𝑩 f h = ∀ a → h ((f ̂ 𝑨) a) ≡ (f ̂ 𝑩) (h ∘ a)
 
- -- The property of being a homomorphism.
- is-homomorphism : (A → B) → Type(𝓞 ⊔ 𝓥 ⊔ α ⊔ β)
- is-homomorphism h = ∀ 𝑓  →  compatible-op-map 𝑓 h
+-- The property of being a homomorphism.
+is-homomorphism : {α ρᵃ : Level} (𝑨 : SetoidAlgebra α ρᵃ)
+                  {β ρᵇ : Level} (𝑩 : SetoidAlgebra β ρᵇ)
+ →                (𝕌[ 𝑨 ] → 𝕌[ 𝑩 ]) → Type _
+is-homomorphism 𝑨 𝑩 h = ∀ f  →  compatible-op-map 𝑨 𝑩 f h
 
- -- The type of homomorphisms from `𝑨` to `𝑩`.
- hom : Type(𝓞 ⊔ 𝓥 ⊔ α ⊔ β)
- hom = Σ (A → B) is-homomorphism
+-- The type of homomorphisms from `𝑨` to `𝑩`.
+hom : {α ρᵃ : Level} (𝑨 : SetoidAlgebra α ρᵃ)
+                  {β ρᵇ : Level} (𝑩 : SetoidAlgebra β ρᵇ)
+ →                Type _
+hom 𝑨 𝑩 = Σ (𝕌[ 𝑨 ] → 𝕌[ 𝑩 ]) (is-homomorphism 𝑨 𝑩)
 
 open PE.≡-Reasoning
 open PE renaming (cong to ≡-cong)
 
 module _ {α ρᵃ : Level} (𝑨 : SetoidAlgebra α ρᵃ)  -- (explicit 𝑨)
-         {β ρᵇ : Level} {𝑩 : SetoidAlgebra β ρᵇ}  -- (implicit 𝑩)
+         {β ρᵇ : Level} (𝑩 : SetoidAlgebra β ρᵇ)  -- (implicit 𝑩)
          {γ ρᶜ : Level} (𝑪 : SetoidAlgebra γ ρᶜ)  -- (explicit 𝑪)
          where
- private
-  A = 𝕌[ 𝑨 ]  -- carrier of domain of 𝑨
-  B = 𝕌[ 𝑩 ]
-  C = 𝕌[ 𝑪 ]
 
  -- The composition of homomorphisms is again a homomorphism.
- ∘-is-hom : {g : A → B}{h : B → C}
+ ∘-is-hom : {g : 𝕌[ 𝑨 ] → 𝕌[ 𝑩 ]}{h : 𝕌[ 𝑩 ] → 𝕌[ 𝑪 ]}
   →         is-homomorphism 𝑨 𝑩 g → is-homomorphism 𝑩 𝑪 h
             -------------------------------------------------
   →         is-homomorphism 𝑨 𝑪 (h ∘ g)
@@ -95,19 +97,18 @@ module _ {α ρᵃ : Level} (𝑨 : SetoidAlgebra α ρᵃ)  -- (explicit 𝑨)
 
 private variable
  α ρ : Level
- 𝑨 : SetoidAlgebra α ρ
 
 -- the identity homs
-𝒾𝒹 : hom 𝑨 𝑨
-𝒾𝒹 = id , λ 𝑓 a → refl
+𝒾𝒹 :  (𝑨 : SetoidAlgebra α ρ) → hom 𝑨 𝑨
+𝒾𝒹 _ = id , λ 𝑓 a → refl
 
 open Level
 -- the lift hom
-𝓁𝒾𝒻𝓉 : {β : Level} → hom 𝑨 (Lift-SetoidAlg 𝑨 β)
+𝓁𝒾𝒻𝓉 : {𝑨 : SetoidAlgebra α ρ}{β : Level} → hom 𝑨 (Lift-SetoidAlg 𝑨 β)
 𝓁𝒾𝒻𝓉 = lift , (λ 𝑓 a → refl)
 
 -- the lower hom
-𝓁ℴ𝓌ℯ𝓇 : {β : Level} → hom (Lift-SetoidAlg 𝑨 β) 𝑨
+𝓁ℴ𝓌ℯ𝓇 : {𝑨 : SetoidAlgebra α ρ}{β : Level} → hom (Lift-SetoidAlg 𝑨 β) 𝑨
 𝓁ℴ𝓌ℯ𝓇 = (lower , λ 𝑓 a → refl)
 
 module LiftSetoidHom {α ρᵃ : Level}{𝑨 : SetoidAlgebra α ρᵃ}
@@ -126,10 +127,10 @@ module LiftSetoidHom {α ρᵃ : Level}{𝑨 : SetoidAlgebra α ρᵃ}
   lB = Lift-SetoidAlg 𝑩 ℓᵇ
 
   lABh : is-homomorphism lA 𝑩 (f ∘ lower)
-  lABh = ∘-is-hom lA {𝑩 = 𝑨}  𝑩 {lower}{f} (λ _ _ → refl) fhom
+  lABh = ∘-is-hom lA 𝑨  𝑩 {lower}{f} (λ _ _ → refl) fhom
 
   Goal : is-homomorphism lA lB (lift ∘ (f ∘ lower))
-  Goal = ∘-is-hom lA {𝑩 = 𝑩} lB {f ∘ lower}{lift} lABh λ _ _ → refl
+  Goal = ∘-is-hom lA 𝑩 lB {f ∘ lower}{lift} lABh λ _ _ → refl
 
 
 -- Monomorphisms and epimorphisms

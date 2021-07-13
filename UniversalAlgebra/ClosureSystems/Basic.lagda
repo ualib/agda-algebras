@@ -37,26 +37,17 @@ module ClosureSystems.Basic where
 open import Agda.Primitive             using    ( _⊔_   ;  Level
                                                 ; lsuc            )
                                        renaming ( Set   to Type   )
+open import Data.Empty.Polymorphic     using    ( ⊥ )
+open import Data.Unit.Polymorphic      using    (⊤ ; tt)
 open import Relation.Binary.Bundles    using    ( Poset           )
 open import Relation.Unary             using    ( Pred  ;   _⊆_
                                                 ; _∈_   ;   ⋂     )
 
 open import ClosureSystems.Definitions using    ( Extensive ; OrderPreserving ; Idempotent )
 
-open Poset
-
-
--- universe-polymorphic empty type
-data ⊥ {ℓ : Level} : Type ℓ where
-
--- universe-polymorphic top
-record ⊤ {ℓ : Level} : Type ℓ where
-  instance constructor tt
-
 -- universe-polymorphic emptyset type
 ∅ : {ℓ ℓ₁ : Level}{A : Type ℓ} → Pred A ℓ₁
 ∅ = λ _ → ⊥
-
 
 -- closure system
 data 𝒞𝓁 {ℓ : Level}(X : Type ℓ) : Pred (Pred X ℓ) (ℓ ⊔ lsuc ℓ) where
@@ -84,15 +75,15 @@ Thus, a closure operator is an extensive, idempotent poset endomorphism.
 
 -- ClOp, the inhabitants of which denote closure operators.
 record ClOp {ℓ ℓ₁ ℓ₂ : Level}(𝑨 : Poset ℓ ℓ₁ ℓ₂) : Type  (ℓ ⊔ ℓ₂ ⊔ ℓ₁) where
+ open Poset 𝑨
  private
-  _≦_ = _≤_ 𝑨
-  _≋_ = _≈_ 𝑨
- field
-  C : Carrier 𝑨 → Carrier 𝑨
-  isExtensive       : Extensive _≦_ C
-  isOrderPreserving : OrderPreserving _≦_ C
-  isIdempotent      : Idempotent _≋_ C
+   A = Carrier
 
+ field
+  C : A → A
+  isExtensive       : Extensive _≤_ C
+  isOrderPreserving : OrderPreserving _≤_ C
+  isIdempotent      : Idempotent _≈_ C
 
 \end{code}
 
@@ -102,4 +93,3 @@ record ClOp {ℓ ℓ₁ ℓ₂ : Level}(𝑨 : Poset ℓ ℓ₁ ℓ₂) : Type  
 --------------------------------------
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
-

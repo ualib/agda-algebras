@@ -39,7 +39,7 @@ open import Products.Basic             {𝑆 = 𝑆} using ( ov )
 open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom ; kercon ; ker[_⇒_]_↾_
                                                      ; ∘-hom ; is-homomorphism ; ∘-is-hom )
 open import Homomorphisms.Noether      {𝑆 = 𝑆} using ( FirstHomTheorem|Set )
-open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; ≅-trans ; Lift-≅ ; mkiso)
+open import Isomorphisms.Basic         {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; ≅-trans ; Lift-≅ ; mkiso)
 open import Terms.Basic                {𝑆 = 𝑆} using ( Term ; ℊ ; node ; 𝑻 )
 
 private variable α β γ 𝓧 : Level

@@ -40,7 +40,7 @@ open import Relations.Extensionality           using ( SwellDef; DFunExt )
 open import Algebras.Basic                     using ( Algebra ; Lift-Alg )
 open import Products.Basic             {𝑆 = 𝑆} using ( ov ; ⨅ ; 𝔄 ; class-product)
 open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( is-homomorphism )
-open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; Lift-≅ ; ≅-trans ; ≅-refl
+open import Isomorphisms.Basic         {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; Lift-≅ ; ≅-trans ; ≅-refl
                                                      ; ⨅≅ ; Lift-Alg-iso ; Lift-Alg-associative )
 open import Terms.Basic                {𝑆 = 𝑆} using ( Term ; 𝑻 )
 open import Terms.Operations           {𝑆 = 𝑆} using ( _⟦_⟧; comm-hom-term)

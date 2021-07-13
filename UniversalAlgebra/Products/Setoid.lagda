@@ -36,9 +36,6 @@ open import Algebras.Setoid {𝑆 = 𝑆} using ( Algebroid ; ⟦_⟧s ; SetoidA
 private variable α ρ ι : Level
 
 
--- Products of Algebroids
--- ----------------------
-
 open Func           using    ( cong                     )
                     renaming ( f             to  _<$>_  )
 open Setoid         using    ( Carrier       ;   _≈_    )
@@ -47,9 +44,38 @@ open IsEquivalence  renaming ( refl          to  reflE
                              ; sym           to  symE
                              ; trans         to  transE )
 
-⨅ : {I : Type ι }(𝒜 : I → Algebroid α ρ) → Algebroid (α ⊔ ι) (ρ ⊔ ι)
 
-⨅ {I} 𝒜 = domain , interp
+-- Products of SetoidAlgebras
+-- --------------------------
+
+open SetoidAlgebra
+
+⨅ : {I : Type ι }(𝒜 : I → SetoidAlgebra α ρ) → SetoidAlgebra (α ⊔ ι) (ρ ⊔ ι)
+
+Domain (⨅ {I} 𝒜) =
+
+ record { Carrier = ∀ i → Carrier (Domain (𝒜 i))
+
+        ; _≈_ = λ a b → ∀ i → Domain (𝒜 i) ._≈_ (a i) (b i)
+
+        ; isEquivalence =
+           record { refl  =     λ i → reflE  (isEqv (Domain (𝒜 i)))
+                  ; sym   =   λ x i → symE   (isEqv (Domain (𝒜 i)))(x i)
+                  ; trans = λ x y i → transE (isEqv (Domain (𝒜 i)))(x i)(y i)
+                  }
+        }
+
+(Interp (⨅ {I} 𝒜)) <$> (f , a) = λ i → (f ̂ (𝒜 i)) (flip a i)
+cong (Interp (⨅ {I} 𝒜)) (refl , f=g ) = λ i → cong  (Interp (𝒜 i)) (refl , flip f=g i )
+
+
+
+-- Products of Algebroids
+-- ----------------------
+
+⨅oid : {I : Type ι }(𝒜 : I → Algebroid α ρ) → Algebroid (α ⊔ ι) (ρ ⊔ ι)
+
+⨅oid {I} 𝒜 = domain , interp
  where
  domain : Setoid _ _
  domain = record { Carrier = ∀ i → Carrier ∣ 𝒜 i ∣
@@ -66,32 +92,6 @@ open IsEquivalence  renaming ( refl          to  reflE
  cong  interp (refl , f=g) i = cong  ∥ 𝒜 i ∥ (refl , (flip f=g i))
 
 
-
--- Products of SetoidAlgebras
--- --------------------------
-
-open SetoidAlgebra
-
-⨅s : {I : Type ι }(𝒜 : I → SetoidAlgebra α ρ) → SetoidAlgebra (α ⊔ ι) (ρ ⊔ ι)
-
-Domain (⨅s {I} 𝒜) =
-
- record { Carrier = ∀ i → Carrier (Domain (𝒜 i))
-
-        ; _≈_ = λ a b → ∀ i → Domain (𝒜 i) ._≈_ (a i) (b i)
-
-        ; isEquivalence =
-           record { refl  =     λ i → reflE  (isEqv (Domain (𝒜 i)))
-                  ; sym   =   λ x i → symE   (isEqv (Domain (𝒜 i)))(x i)
-                  ; trans = λ x y i → transE (isEqv (Domain (𝒜 i)))(x i)(y i)
-                  }
-        }
-
-(Interp (⨅s {I} 𝒜)) <$> (f , a) = λ i → (f ̂ (𝒜 i)) (flip a i)
-cong (Interp (⨅s {I} 𝒜)) (refl , f=g ) = λ i → cong  (Interp (𝒜 i)) (refl , flip f=g i )
-
-
-
 -- Products of classes of Algebroids
 -- ---------------------------------
 
@@ -105,7 +105,7 @@ module _ {𝒦 : Pred (Algebroid α ρ) (𝓞 ⊔ 𝓥 ⊔ lsuc α)} where
  𝔄 i = ∣ i ∣
 
  class-product : Algebroid (𝓞 ⊔ 𝓥 ⊔ lsuc (α ⊔ ρ)) _
- class-product = ⨅ 𝔄
+ class-product = ⨅oid 𝔄
 
 \end{code}
 

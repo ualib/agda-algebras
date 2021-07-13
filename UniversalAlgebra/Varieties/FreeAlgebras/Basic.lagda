@@ -51,7 +51,7 @@ open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom ; ⨅-hom-co ; 
                                                      ; πker ; epi-to-hom ; ker-in-con
                                                      ;  kercon ; ∘-hom )
 open import Homomorphisms.Noether      {𝑆 = 𝑆} using ( HomFactor ; HomFactorEpi )
-open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅-refl ; ≅-sym ; Lift-≅ )
+open import Isomorphisms.Basic         {𝑆 = 𝑆} using ( _≅_ ; ≅-refl ; ≅-sym ; Lift-≅ )
 open import Terms.Basic                {𝑆 = 𝑆} using ( Term ; 𝑻 )
 open import Terms.Properties           {𝑆 = 𝑆} using ( free-lift ; lift-hom
                                                      ; free-unique ; lift-of-epi-is-epi )
