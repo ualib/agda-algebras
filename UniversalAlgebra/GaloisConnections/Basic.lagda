@@ -49,14 +49,6 @@ module _ {α β ℓᵃ ρᵃ ℓᵇ ρᵇ : Level}
    GF≥id : ∀ a →  a ≤A G (F a)
    FG≥id : ∀ b →  b ≤B F (G b)
 
- record Residuation : Type (lsuc (α ⊔ β ⊔ ρᵃ ⊔ ρᵇ))  where
-  field
-   f     : Carrier A → Carrier B
-   fhom  : f Preserves _≤A_ ⟶ _≤B_
-   g     : Carrier B → Carrier A
-   gf≥id : ∀ a → a ≤A g (f a)
-   fg≤id : ∀ b → f (g b) ≤B b
-
 
 module _ {α β : Level}{𝒜 : Type α}{ℬ : Type β} where
 
@@ -104,31 +96,3 @@ module _ {α β : Level}{𝒜 : Type α}{ℬ : Type β} where
 
 
 
-
-
-
-
--- old, single universe level version
-module one-level {ℓ : Level}{𝒜 ℬ : Type ℓ} where
-
- infix 10 _⃗_ _⃖_
-
- -- For A ⊆ 𝒜, define A ⃗ R = {b : b ∈ ℬ,  ∀ a ∈ A → R a b }
- _⃗_ : Pred 𝒜 ℓ → REL 𝒜 ℬ ℓ → Pred ℬ ℓ
- A ⃗ R = λ b → A ⊆ (λ a → R a b)
-
- -- For B ⊆ ℬ, define R ⃖ B = {a : a ∈ 𝒜,  ∀ b ∈ B → R a b }
- _⃖_ : REL 𝒜 ℬ ℓ → Pred ℬ ℓ → Pred 𝒜 ℓ
- R ⃖ B = λ a → B ⊆ R a
-
- ←→≥id : {A : Pred 𝒜 ℓ} {R : REL 𝒜 ℬ ℓ} → A ⊆ R ⃖ (A ⃗ R)
- ←→≥id p b = b p
-
- →←≥id : {B : Pred ℬ ℓ} {R : REL 𝒜 ℬ ℓ}  → B ⊆ (R ⃖ B) ⃗ R
- →←≥id p a = a p
-
- →←→⊆→ : {A : Pred 𝒜 ℓ}{R : REL 𝒜 ℬ ℓ} → (R ⃖ (A ⃗ R)) ⃗ R ⊆ A ⃗ R
- →←→⊆→ p a = p (λ z → z a)
-
- ←→←⊆← : {B : Pred ℬ ℓ}{R : REL 𝒜 ℬ ℓ}  → R ⃖ ((R ⃖ B) ⃗ R) ⊆ R ⃖ B
- ←→←⊆← p b = p (λ z → z b)
