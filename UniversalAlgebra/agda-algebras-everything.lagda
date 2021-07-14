@@ -69,6 +69,12 @@ open import ClosureSystems.Basic            using    ( ∅ ; 𝒞𝓁 ; ClOp )
 open import ClosureSystems.Properties       using    ( clop→law⇒ ; clop→law⇐ ; clop←law )
 
 
+-- Complexity ----------------------------------------------------------------------------------------
+
+open import Complexity.CSP                  using    ( Constraint ; CSPInstance )
+
+open import Complexity.FiniteCSP            using    ( Constraint ; CSPInstance )
+
 -- ALGEBRAS ------------------------------------------------------------------------------------------
 
 open import Algebras.Basic                  using    ( Signature ; signature ; monoid-op ; monoid-sig

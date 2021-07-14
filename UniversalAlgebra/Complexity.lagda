@@ -15,6 +15,7 @@ module Complexity where
 
 open import Complexity.Basic
 open import Complexity.CSP
+open import Complexity.FiniteCSP
 
 \end{code}
 
