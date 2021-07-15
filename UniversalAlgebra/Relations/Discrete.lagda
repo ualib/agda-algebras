@@ -25,14 +25,30 @@ open import Level                 using    ( Level ; Lift   )
                                   renaming ( suc  to lsuc
                                            ; zero to ℓ₀     )
 open import Relation.Binary.Definitions using (Reflexive ; Symmetric ; Transitive )
+open import Relation.Binary       using    ( IsEquivalence  ) --  ; IsPartialEquivalence)
 open import Relation.Binary.Core  using    ( _⇒_ ; _=[_]⇒_  )
                                   renaming ( REL  to BinREL
                                            ; Rel  to BinRel )
 open import Relation.Unary        using    ( ∅; _∈_; Pred   )
 
-open import Overture.Preliminaries using (_≈_)
+open import Overture.Preliminaries using (_≈_ ; Π-syntax)
 
 private variable α β ρ 𝓥 : Level
+
+
+
+-- Functions for defining poitwise equality of functions wrt a
+-- given equality (see e.g. defn of _≈̇_ in Residuation.Properties)
+PointWise : {A : Type α}{B : Type β }
+            (_≋_ : BinRel B ρ) → BinRel (A → B) _
+PointWise {A = A}{B} _≋_ = λ (f g : A → B) → ∀ x → f x ≋ g x
+
+depPointWise : {A : Type α}{B : A → Type β }
+               (_≋_ : {γ : Level}{C : Type γ} → BinRel C ρ)
+ →             BinRel ((a : A) → B a) _
+depPointWise {A = A}{B} _≋_ = λ (f g : (a : A) → B a) → ∀ x → f x ≋ g x
+
+
 
 \end{code}
 
