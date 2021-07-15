@@ -61,7 +61,7 @@ module _ -- levels for...
          -- {ρ : Level} -- ... relation types
          where
 
- record Constraint (var : Type ν)(dom : Type δ){ρ : Level} : Type (lsuc (ι ⊔ ν ⊔ δ ⊔ ρ)) where
+ record Constraint (var : Type ν)(dom : Type δ){ρ : Level} : Type (ν ⊔ δ ⊔ lsuc (ι ⊔ ρ)) where
   field
    arity  : Type ι               -- The "number" of variables involved in the constraint.
    scope  : arity → var          -- Which variables are involved in the constraint.
@@ -83,7 +83,7 @@ An instance of a constraint satisfaction problem is a triple 𝑃 = (𝑉, 𝐷,
 
 \begin{code}
 
- record CSPInstance  (var : Type ν)(dom : Type δ){ρ : Level} : Type (lsuc (ι ⊔ ν ⊔ δ ⊔ ρ)) where
+ record CSPInstance  (var : Type ν)(dom : Type δ){ρ : Level} : Type (ν ⊔ δ ⊔ lsuc (ι ⊔ ρ)) where
   field
    arity : Type ι                         -- The "number" of constraints of the instance.
    cs    : arity → Constraint var dom {ρ} -- The constraints of the instance.
