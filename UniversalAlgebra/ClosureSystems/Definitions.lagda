@@ -25,12 +25,15 @@ private variable
 
 Extensive : Rel A ℓ → (A → A) → Type _
 Extensive _≤_ C = ∀{x} → x ≤ C x
+-- Try to replace Extensive by proposing a new stdlib equivalent: Relation.Binary.Core.Extensive
 
-OrderPreserving : Rel A ℓ → (A → A) → Type _
-OrderPreserving _≤_ C = ∀ {x y} → x ≤ y → C x ≤ C y
+-- (Deprecated) Replaced with stdlib equivalent: Relation.Binary.Core._Preserves_⟶_)
+-- OrderPreserving : Rel A ℓ → (A → A) → Type _
+-- OrderPreserving _≤_ C = ∀ {x y} → x ≤ y → C x ≤ C y
 
-Idempotent : Rel A ℓ → (A → A) → Type _
-Idempotent _≈_ C = ∀ {x} → C (C x) ≈ C x
+-- (Deprecated) Replaced with stdlib equivalent: Algebra.Definitions(_≈_).IdempotentFun
+-- Idempotent : Rel A ℓ → (A → A) → Type _
+-- Idempotent _≈_ C = ∀ {x} → C (C x) ≈ C x
 
 \end{code}
 
