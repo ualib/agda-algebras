@@ -14,9 +14,11 @@ inhabitants of record types.  For a similar development using Sigma types see th
 
 module Structures.Records where
 
+open import Agda.Builtin.Equality                 using ( _≡_ ; refl )
 open import Agda.Primitive        using    (  _⊔_ ;  lsuc    )
                                   renaming (  Set   to Type  ;
                                               lzero to ℓ₀    )
+open import Data.Bool             using    (  Bool ; true ; false )
 open import Data.Product          using    (  _,_ ; Σ ; _×_  ;
                                               Σ-syntax       )
                                   renaming (  proj₁ to fst   ;
@@ -25,6 +27,9 @@ open import Level                 using    (  Level ; Lift   )
 open import Relation.Binary.Core  using    (  _⇒_ ; _=[_]⇒_  )
                                   renaming (  REL  to BinREL ;
                                               Rel  to BinRel )
+open import Relation.Binary.PropositionalEquality.Core using (_≢_)
+open import Relation.Unary             using    ( Pred  ;   _⊆_
+                                                ; _∈_   ;   ⋂     )
 
 open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥ ; 𝟘 ; 𝟙 ; 𝟚 ; 𝟛 ; ℓ₁)
 open import Relations.Discrete     using ( Arity ; Op ; _|:_ ; _preserves_ )
@@ -78,35 +83,7 @@ module _ {𝑅 𝐹 : signature}{α ρᵃ : Level} where
   lrel : (r : symbol 𝑅 ) → Rel (Lift ℓ (carrier 𝑨))(arity 𝑅 r){ρᵃ}
   lrel r = λ x → ((rel 𝑨)r) (λ i → lower (x i))
 
-
-
--- Some examples (of finite signatures)
--- The signature with...
--- ... no symbols  (e.g., sets)
-Sig∅ : signature
-Sig∅ = record { symbol = 𝟘 ; arity = λ () }
-
--- ... one nulary symbol (e.g., pointed sets)
-Sig-0 : signature
-Sig-0 = record { symbol = 𝟙 ; arity = λ 𝟎 → 𝟘 }
-
-Sig-1 : signature -- ...one unary
-Sig-1 = record { symbol = 𝟙 ; arity = λ 𝟎 → 𝟙 }
-
--- ...one binary symbol (e.g., magmas, semigroups, semilattices)
-Sig-2 : signature
-Sig-2 = record { symbol = 𝟙 ; arity = λ 𝟎 → 𝟚 }
-
--- ...one nulary and one binary (e.g., monoids)
-Sig-0-1 : signature
-Sig-0-1 = record { symbol = 𝟚 ; arity = λ{ 𝟚.𝟎 → 𝟘 ; 𝟚.𝟏 → 𝟚 } }
-
--- ...one nulary, one unary, and one binary (e.g., groups)
-Sig-0-1-2 : signature
-Sig-0-1-2 = record { symbol = 𝟛 ; arity = λ{ 𝟛.𝟎 → 𝟘 ; 𝟛.𝟏 → 𝟙 ; 𝟛.𝟐 → 𝟚 } }
 \end{code}
-
-
 
 --------------------------------------
 
