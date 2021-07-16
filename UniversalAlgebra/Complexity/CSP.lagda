@@ -11,14 +11,26 @@ author: [agda-algebras development team][]
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Complexity.CSP where
+open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+
+module Complexity.CSP {𝑆 : Signature 𝓞 𝓥} where
 
 open import Agda.Primitive         using    ( _⊔_ ; lsuc ; Level)
                                    renaming ( Set to Type )
 open import Function.Base          using    ( _∘_ )
 open import Relation.Unary         using    ( _∈_; Pred   )
+open import Data.Product           using ( _,_ ; Σ ; Σ-syntax ; _×_ )
+open import Function.Bundles       using    ( Func                    )
+open import Function.Base          using    ( flip                    )
+open import Relation.Binary        using    ( Setoid ;  IsEquivalence )
 
-open import Relations.Continuous   using    ( Rel )
+
+open import Overture.Preliminaries  using ( ∣_∣ ; ∥_∥ )
+open import Relations.Continuous    using    ( ΠΡ ; ΠΡ-syntax )
+open import Products.Setoid {𝑆 = 𝑆} using ( ov ; ⨅ )
+open import Subalgebras.Setoid {𝑆 = 𝑆} using ( _≤s_ )
+open import Algebras.Setoid {𝑆 = 𝑆} using ( SetoidAlgebra )
+
 
 \end{code}
 
@@ -57,23 +69,30 @@ where,
 module _ -- levels for...
          {ι : Level} -- ...arity (or argument index) types
          {ν : Level} -- ...variable symbol types
-         {δ : Level} -- ... domain types
-         -- {ρ : Level} -- ... relation types
+         {α ℓ : Level} -- ... domain types
          where
-
- record Constraint (var : Type ν)(dom : Type δ){ρ : Level} : Type (ν ⊔ δ ⊔ lsuc (ι ⊔ ρ)) where
+ open Setoid
+ record Constraint (var : Type ν) (dom : var → Setoid α ℓ) : Type (ν ⊔ α ⊔ lsuc ι) where
   field
    arity  : Type ι               -- The "number" of variables involved in the constraint.
    scope  : arity → var          -- Which variables are involved in the constraint.
-   rel    : Rel dom arity {ρ}    -- The constraint relation.
+   rel    : ΠΡ[ i ∈ arity ] (Carrier (dom (scope i)))     -- The constraint relation.
 
-  satisfies : (var → dom) → Type ρ  -- An assignment 𝑓 : var → dom of values to variables
-  satisfies f = f ∘ scope ∈ rel     -- *satisfies* the constraint 𝐶 = (σ , 𝑅) provided
+  satisfies : (∀ v → Carrier (dom v)) → Type  -- An assignment 𝑓 : var → dom of values to variables
+  satisfies f = rel (f ∘ scope)      -- *satisfies* the constraint 𝐶 = (σ , 𝑅) provided
                                     -- 𝑓 ∘ σ ∈ 𝑅, where σ is the scope of the constraint.
-
 \end{code}
 
-#### CSP Instances
+#### CSP Templates and Instances
+
+A CSP "template" restricts the relations that may occur in instances of the problem.
+A convenient way to specify a template is to give an indexed family
+𝒜 : var → SetoidAlgebra α ρ of algebras (one for each variable symbol in var)
+and require that relations be subalgebras of the product ⨅ var 𝒜.
+
+To construct a CSP instance, then, we just have to give a family 𝒜 of algebras, specify
+the number (ar) of constraints, and for each i : ar, define a constraint as a relation
+over (some of) the members of 𝒜.
 
 An instance of a constraint satisfaction problem is a triple 𝑃 = (𝑉, 𝐷, 𝐶) where
 
@@ -82,13 +101,14 @@ An instance of a constraint satisfaction problem is a triple 𝑃 = (𝑉, 𝐷,
 * 𝐶 denotes an indexed collection of constraints.
 
 \begin{code}
-
- record CSPInstance  (var : Type ν)(dom : Type δ){ρ : Level} : Type (ν ⊔ δ ⊔ lsuc (ι ⊔ ρ)) where
+ open SetoidAlgebra
+ open Setoid
+ record CSPInstance (var : Type ν)(𝒜 : var → SetoidAlgebra α ℓ) : Type (ν ⊔ α ⊔ lsuc ι) where
   field
-   arity : Type ι                         -- The "number" of constraints of the instance.
-   cs    : arity → Constraint var dom {ρ} -- The constraints of the instance.
+   ar : Type ι       -- ar indexes the contraints in the instance
+   cs : (i : ar) → Constraint var (λ v → Domain (𝒜 v))
 
-  isSolution : (var → dom) → Type (ι ⊔ ρ)               -- An assignment *solves* the instance
+  isSolution : (∀ v → Carrier (Domain (𝒜 v))) → Type _  -- An assignment *solves* the instance
   isSolution f = ∀ i → (Constraint.satisfies (cs i)) f  -- if it satisfies all the constraints.
 
 \end{code}
