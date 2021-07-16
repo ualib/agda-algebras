@@ -15,20 +15,12 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Complexity.CSP {𝑆 : Signature 𝓞 𝓥} where
 
-open import Agda.Primitive         using    ( _⊔_ ; lsuc ; Level)
-                                   renaming ( Set to Type )
-open import Function.Base          using    ( _∘_ )
-open import Relation.Unary         using    ( _∈_; Pred   )
-open import Data.Product           using ( _,_ ; Σ ; Σ-syntax ; _×_ )
-open import Function.Bundles       using    ( Func                    )
-open import Function.Base          using    ( flip                    )
-open import Relation.Binary        using    ( Setoid ;  IsEquivalence )
+open import Agda.Primitive   using ( _⊔_ ; lsuc ; Level) renaming ( Set to Type )
+open import Function.Base    using ( _∘_ )
+open import Relation.Binary  using ( Setoid )
 
 
-open import Overture.Preliminaries  using ( ∣_∣ ; ∥_∥ )
-open import Relations.Continuous    using    ( ΠΡ ; ΠΡ-syntax )
-open import Products.Setoid {𝑆 = 𝑆} using ( ov ; ⨅ )
-open import Subalgebras.Setoid {𝑆 = 𝑆} using ( _≤s_ )
+open import Relations.Continuous    using ( ΠΡ ; ΠΡ-syntax )
 open import Algebras.Setoid {𝑆 = 𝑆} using ( SetoidAlgebra )
 
 
