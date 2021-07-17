@@ -62,9 +62,9 @@ open import GaloisConnections.Properties    using    ( _≐_ ; ≐-iseqv ; Poset
 
 -- CLOSURE SYSTEMS & OPERATORS -----------------------------------------------------------------------
 
-open import ClosureSystems.Definitions      using    ( Extensive ; OrderPreserving ; Idempotent )
+open import ClosureSystems.Definitions      using    ( Extensive ) -- ; OrderPreserving ; Idempotent )
 
-open import ClosureSystems.Basic            using    ( ∅ ; 𝒞𝓁 ; ClOp )
+open import ClosureSystems.Basic            using    ( IntersectClosed ; ClosureSystem ; ClOp )
 
 open import ClosureSystems.Properties       using    ( clop→law⇒ ; clop→law⇐ ; clop←law )
 
