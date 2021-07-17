@@ -34,30 +34,26 @@ Some examples of closure systems are the following:
 
 module ClosureSystems.Basic where
 
-open import Agda.Primitive             using    ( _⊔_   ;  Level
-                                                ; lsuc            )
-                                       renaming ( Set   to Type   )
-open import Data.Empty.Polymorphic     using    ( ⊥ )
-open import Data.Unit.Polymorphic      using    (⊤ ; tt)
-open import Relation.Binary.Bundles    using    ( Poset           )
-open import Relation.Unary             using    ( Pred  ;   _⊆_
-                                                ; _∈_   ;   ⋂     )
+open import Agda.Primitive           using ( _⊔_ ; lsuc )     renaming ( Set to Type )
+import Algebra.Definitions
+open import Data.Product             using ( Σ-syntax )
+open import Level                    using ( Level ; Lift )   renaming ( zero to ℓ₀ )
+open import Relation.Binary.Bundles  using ( Poset )
+open import Relation.Binary.Core     using ( _Preserves_⟶_ )
+open import Relation.Unary           using ( Pred ; _∈_ ; ⋂ )
 
-open import ClosureSystems.Definitions using    ( Extensive ; OrderPreserving ; Idempotent )
+open import ClosureSystems.Definitions using ( Extensive )
 
--- universe-polymorphic emptyset type
-∅ : {ℓ ℓ₁ : Level}{A : Type ℓ} → Pred A ℓ₁
-∅ = λ _ → ⊥
 
--- closure system
-data 𝒞𝓁 {ℓ : Level}(X : Type ℓ) : Pred (Pred X ℓ) (ℓ ⊔ lsuc ℓ) where
- nul : ∅ ∈ 𝒞𝓁 X
- all  : (λ _ → ⊤) ∈ 𝒞𝓁 X
- and : {I : Type}(c : I → Pred X ℓ) → (∀ i → c i ∈ 𝒞𝓁 X) → (⋂ I c) ∈ 𝒞𝓁 X
+module _ {χ ℓ ρ : Level}{X : Type χ} where
+
+ IntersectClosed : Pred (Pred X ℓ) ρ → Type _
+ IntersectClosed C = ∀ {I : Type ℓ}{c : I → Pred X ℓ} → (∀ i → (c i) ∈ C) → ⋂ I c ∈ C
+
+ ClosureSystem : Type _
+ ClosureSystem = Σ[ C ∈ Pred (Pred X ℓ) ρ ] IntersectClosed C
 
 \end{code}
-
-
 
 
 #### Closure Operators
@@ -75,15 +71,18 @@ Thus, a closure operator is an extensive, idempotent poset endomorphism.
 
 -- ClOp, the inhabitants of which denote closure operators.
 record ClOp {ℓ ℓ₁ ℓ₂ : Level}(𝑨 : Poset ℓ ℓ₁ ℓ₂) : Type  (ℓ ⊔ ℓ₂ ⊔ ℓ₁) where
+
  open Poset 𝑨
  private
    A = Carrier
 
+ open Algebra.Definitions (_≈_)
+
  field
   C : A → A
   isExtensive       : Extensive _≤_ C
-  isOrderPreserving : OrderPreserving _≤_ C
-  isIdempotent      : Idempotent _≈_ C
+  isOrderPreserving : C Preserves _≤_ ⟶ _≤_
+  isIdempotent      : IdempotentFun C
 
 \end{code}
 

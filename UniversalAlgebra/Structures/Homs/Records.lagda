@@ -39,9 +39,8 @@ open import Relations.Quotients       using ( Equivalence ; Quotient
                                             ; kerlift-IsEquivalence ; ⟪_⟫ ; ⌞_⌟
                                             ; ⟪_∼_⟫-elim ; _/_ )
 open import Relations.Extensionality  using ( swelldef )
-
-open import Structures.Records        using ( signature ; structure ; Sig∅
-                                            ; Lift-struc ; compatible )
+open import Structures.Records        using ( signature ; structure ; Lift-struc ; compatible )
+open import Structures.Examples       using ( Sig∅ )
 
 
 open structure

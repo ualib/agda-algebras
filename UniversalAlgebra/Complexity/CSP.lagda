@@ -7,6 +7,86 @@ author: [agda-algebras development team][]
 
 ### Constraint Satisfaction Problems
 
+#### The relational formulation of CSP
+
+Let 𝒜 = (𝐴 , 𝑅ᵃ) be a *relational structure* (or 𝑅-structure), that is, a pair consisting
+of a set 𝐴 along with a collection 𝑅ᵃ ⊆ ⋃ₙ 𝒫(𝐴ⁿ) of relations on 𝐴.
+
+We associate with 𝒜 a *constraint satisfaction problem* denoted by CSP(𝒜), which is the
+decision problem that is solved by finding an algorithm or program that does the following:
+
+Take as input
+
++ an *instance*, which is an 𝑅-structure ℬ = (𝐵 , 𝑅ᵇ) (in the same signature as 𝒜)
+
+Output
+
++ "yes" or "no" according as there is, or is not, a *solution*, which is a 𝑅-structure
+  homomorphism h : ℬ → 𝒜.
+
+If there is such an algorithm that takes at most a power of 𝑛 operations to process an
+input structure ℬ of size 𝑛 (i.e., 𝑛 bits of memory are required to encode ℬ), then
+we say that CSP(𝒜) is *tractable*.  Otherwise, CSP(𝒜) is *intractable*.
+
+Equivalently, if we define
+
+  CSP(𝒜) := \{ ℬ ∣ ℬ an 𝑅-structure and ∃ hom ℬ → 𝒜 \}
+
+then the CSP problem described above is simply the membership problem for the subset
+CSP(𝒜) of 𝑅 structures having homomorphisms into 𝒜.
+
+That is, our algorithm must take as input an 𝑅-structure (a relational structure in the
+signature of 𝒜) and decide whether or not it belongs to the set CSP(𝒜).
+
+
+
+#### Connection to algebraic CSP
+
+Let A be a set, let Op(A) denote the set of all operations, Rel(A) the set of all
+relations, on A.
+
+Given R ⊆ Rel(A), define the set of operations on A that preserve all relations
+in R as follows:
+
+∣: ⃖ R  =  \{ f ∈ Op(𝐴) ∣ ∀ r ∈ R, f ∣: r \}.
+
+Recall, f ∣: r is our notation for `f Preserves r ⟶ r`, which means that r is a
+subuniverse of a power of the algebra (A , {f}).
+
+Equivalently, `f Preserves r ⟶ r means` the following: if f is 𝑚-ary and r is
+𝑛-ary, then for every size-𝑚 collection 𝑎𝑠 of 𝑛-tuples from r (that is, ∣ 𝑎𝑠 ∣ = 𝑚
+and ∀ a ∈ 𝑎𝑠, r a) we have r (f ∘ (zip 𝑎𝑠)).
+
+
+If 𝒜 = (A , R) is a relational structure, then the set ∣: ⃖R of operations on A that
+preserve all relations in R is called the set of *polymorphisms* of 𝒜.
+
+Conversely, starting with a collection F ⊆ Op(A) of operations on A, define
+the set of all relations preserved by the functions in F as follows:
+
+F ⃗ ∣:  =  \{ r ∈ Rel(A) ∣ ∀ f ∈ F, f ∣: r \}.
+
+It is easy to see that for all F ⊆ Op(A) and all R ⊆ Rel(A), we have
+
+  F ⊆  ∣: ⃖ (F ⃗ ∣:)    and    R ⊆ (∣: ⃖ R) ⃗ ∣:.
+
+Let 𝑨(R) denote the algebraic structure with domain A and operations ∣: ⃖ R.
+
+Then every r ∈ R is a subalgebra of a power of 𝑨(R).
+
+Clearly (∣: ⃖ R) ⃗ ∣: is the set 𝖲 (𝖯fin 𝑨(R)) of subalgebras of finite powers of 𝑨(R).
+
+The reason this Galois connection is useful is due to the following fact (observed by
+Peter Jeavons in the late 1990's):
+
+*Theorem*. Let 𝒜 = (A, R) be a finite relational structure.
+           If R' ⊆ (∣: ⃖ R) ⃗ ∣: is finite, then CSP((A, Γ'))
+           is reducible in poly-time to CSP(𝒜)
+
+In particular, the tractability of CSP(𝒜) depends only on its associated polymorphism
+algebra, 𝑨(R) := (A , ∣: ⃖ R).
+
+
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}

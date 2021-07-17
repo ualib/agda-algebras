@@ -14,21 +14,17 @@ author: [agda-algebras development team][]
 
 module ClosureSystems.Properties where
 
-open import Agda.Primitive              using    ( _⊔_   ;  Level  )
-                                        renaming ( Set   to Type   )
-open import Data.Product                using    ( _,_   ;   _×_   )
-                                        renaming ( proj₁ to  fst
-                                                 ; proj₂ to  snd   )
-open import Function.Bundles            using    ( _↔_   ; Inverse )
-open import Relation.Binary.Bundles     using    ( Poset           )
-open import Relation.Binary.Definitions using    ( Reflexive ; Transitive ; Antisymmetric )
-open import Relation.Binary.Structures  using    ( IsPreorder ; IsPartialOrder     )
-import      Relation.Binary.Reasoning.PartialOrder as ≤-Reasoning
+open import Agda.Primitive          using ( _⊔_ ; Level ) renaming ( Set to Type )
+import Algebra.Definitions
+open import Data.Product            using ( _,_ ; _×_ )
+open import Function.Bundles        using ( _↔_ ; Inverse )
+open import Relation.Binary.Bundles using ( Poset )
+open import Relation.Binary.Core    using ( _Preserves_⟶_ )
+import Relation.Binary.Reasoning.PartialOrder as ≤-Reasoning
 
-open import ClosureSystems.Basic        using    ( ClOp            )
-open import ClosureSystems.Definitions  using    ( Extensive
-                                                 ; OrderPreserving
-                                                 ; Idempotent      )
+
+open import ClosureSystems.Basic       using ( ClOp )
+open import ClosureSystems.Definitions using ( Extensive )
 open ClOp
 open Inverse
 
@@ -47,7 +43,7 @@ module _ {ℓ ℓ₁ ℓ₂ : Level}{𝑨 : Poset ℓ ℓ₁ ℓ₂}(𝑪 : ClOp
  clop→law⇒ : (x y : A) → x ≤ (c y) → (c x) ≤ (c y)
  clop→law⇒ x y x≤cy = begin
    c x     ≤⟨ isOrderPreserving 𝑪 x≤cy ⟩
-   c (c y) ≈⟨ isIdempotent 𝑪 ⟩
+   c (c y) ≈⟨ isIdempotent 𝑪 y ⟩
    c y ∎
 
  clop→law⇐ : (x y : A) → (c x) ≤ (c y) → x ≤ (c y)
@@ -62,6 +58,8 @@ module _ {ℓ ℓ₁ ℓ₂ : Level}{𝑨 : Poset ℓ ℓ₁ ℓ₂} where
  private
   A = Carrier
 
+ open Algebra.Definitions (_≈_)
+
  -- The converse of Theorem 1 also holds.
  --
  -- Theorem 2. If `𝑨 = (A , ≤)` is a poset and `c : A → A` satisfies
@@ -69,7 +67,7 @@ module _ {ℓ ℓ₁ ℓ₂ : Level}{𝑨 : Poset ℓ ℓ₁ ℓ₂} where
  --            then `c` is a closure operator on A.
  --
  clop←law : (c : A → A) → ((x y : A) → (x ≤ (c y) ↔ (c x) ≤ (c y)))
-  →         Extensive _≤_ c × OrderPreserving _≤_ c × Idempotent _≈_ c
+  →         Extensive _≤_ c × c Preserves _≤_ ⟶ _≤_ × IdempotentFun c
 
  clop←law c hyp  = e , (o , i)
   where
@@ -79,20 +77,14 @@ module _ {ℓ ℓ₁ ℓ₂ : Level}{𝑨 : Poset ℓ ℓ₁ ℓ₂} where
   h2 : ∀ {x y} → c x ≤ c y → x ≤ (c y)
   h2 {x}{y} = f⁻¹ (hyp x y)
 
-  η : ∀ {x} →  c (c x) ≤ c x
-  η = h1 refl
-
-  η' : ∀ {x} → c x ≤ c (c x)
-  η' = h2 refl
-
   e : Extensive _≤_ c
   e = h2 refl
 
-  o : OrderPreserving _≤_ c
+  o : c Preserves _≤_ ⟶ _≤_
   o u = h1 (trans u e)
 
-  i : Idempotent _≈_ c
-  i = antisym η η'
+  i : IdempotentFun c
+  i x = antisym (h1 refl) (h2 refl)
 
 \end{code}
 

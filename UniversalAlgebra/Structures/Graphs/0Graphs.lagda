@@ -30,7 +30,8 @@ import Relation.Binary.PropositionalEquality as PE
 
 -- -- Imports from agda-algebras --------------------------------------------------------------
 open import Overture.Preliminaries   using ( 𝟙 ; ∣_∣ ; ∥_∥ )
-open import Structures.Records       using ( signature ; structure ; Sig∅)
+open import Structures.Records       using ( signature ; structure )
+open import Structures.Examples      using ( Sig∅)
 open import Structures.Homs.Records  using ( hom ; is-hom-rel ; is-hom-op)
 open import Relations.Continuous     using ( Rel )
 

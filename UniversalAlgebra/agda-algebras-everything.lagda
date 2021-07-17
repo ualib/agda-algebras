@@ -53,7 +53,7 @@ open import Relations.Extensionality        using    ( SurjInvIsRightInv ; epic-
 
 -- GALOIS CONNECTIONS -------------------------------------------------------------------------------
 
-open import GaloisConnections.Basic         using    ( Galois ; Residuation ; _⃗_ ; _⃖_
+open import GaloisConnections.Basic         using    ( Galois ; _⃗_ ; _⃖_
                                                      ; ←→≥id ; →←≥id ; →←→⊆→ ; ←→←⊆←
                                                      ; ←→Closed ; →←Closed )
 
@@ -62,9 +62,9 @@ open import GaloisConnections.Properties    using    ( _≐_ ; ≐-iseqv ; Poset
 
 -- CLOSURE SYSTEMS & OPERATORS -----------------------------------------------------------------------
 
-open import ClosureSystems.Definitions      using    ( Extensive ; OrderPreserving ; Idempotent )
+open import ClosureSystems.Definitions      using    ( Extensive ) -- ; OrderPreserving ; Idempotent )
 
-open import ClosureSystems.Basic            using    ( ∅ ; 𝒞𝓁 ; ClOp )
+open import ClosureSystems.Basic            using    ( IntersectClosed ; ClosureSystem ; ClOp )
 
 open import ClosureSystems.Properties       using    ( clop→law⇒ ; clop→law⇐ ; clop←law )
 
@@ -241,9 +241,9 @@ open import Structures.Basic                using    ( Signature ; Structure ; R
                                                      ; Lift-Strucˡ ; Lift-Strucʳ ; Lift-Struc )
 
 open import Structures.Records              using    ( ar ; signature ; structure ; compatible
-                                                     ; Lift-op ; Lift-rel ; Lift-struc
-                                                     ; Sig∅ ; Sig-0 ; Sig-1 ; Sig-2 ; Sig-0-1
-                                                     ; Sig-0-1-2 )
+                                                     ; Lift-op ; Lift-rel ; Lift-struc )
+open import Structures.Examples             using    ( Sig∅ ; Sig-0 ; Sig-1 ; Sig-2 ; Sig-0-1
+                                                     ; Sig-0-1-2 ; SL ; NAE3SAT ; nae3sat )
 
 open import Structures.Products.Basic       using    ( ⨅ ; ℓp ; ℑ ; 𝔖 ; class-prod )
 
