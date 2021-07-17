@@ -45,13 +45,13 @@ open import Relation.Unary           using ( Pred ; _∈_ ; ⋂ )
 open import ClosureSystems.Definitions using ( Extensive )
 
 
-module _ {χ ℓ ρ ι : Level}{X : Type χ} where
+module _ {χ ℓ ρ : Level}{X : Type χ} where
 
- IntersectClosed : Pred (Pred X (ℓ ⊔ ι) ) ρ → Type _
- IntersectClosed C = ∀ {I : Type ι}{c : I → Pred X ℓ} → (∀ i → (λ x → Lift ι (c i x)) ∈ C) → ⋂ I c ∈ C
+ IntersectClosed : Pred (Pred X ℓ) ρ → Type _
+ IntersectClosed C = ∀ {I : Type}{c : I → Pred X ℓ} → (∀ i → (c i) ∈ C) → ⋂ I c ∈ C
 
  ClosureSystem : Type _
- ClosureSystem = Σ[ C ∈ Pred (Pred X (ℓ ⊔ ι) ) ρ ] IntersectClosed C
+ ClosureSystem = Σ[ C ∈ Pred (Pred X ℓ) ρ ] IntersectClosed C
 
 \end{code}
 
