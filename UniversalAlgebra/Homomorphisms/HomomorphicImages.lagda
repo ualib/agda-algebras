@@ -34,7 +34,7 @@ open import Relation.Unary        using    ( Pred ; _∈_ )
 -- Imports from agda-algebras --------------------------------------------------------------
 open import Overture.Preliminaries      using ( _⁻¹ ; 𝑖𝑑 ; ∣_∣ ; ∥_∥ ; lower∼lift ; lift∼lower )
 open import Overture.Inverses           using ( IsSurjective ; Image_∋_ ; Inv ; InvIsInv ; eq )
-open import Products.Basic      {𝑆 = 𝑆} using ( ov )
+open import Algebras.Products   {𝑆 = 𝑆} using ( ov )
 open import Homomorphisms.Basic {𝑆 = 𝑆} using ( hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; Lift-hom )
 
 \end{code}

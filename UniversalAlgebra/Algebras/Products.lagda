@@ -1,6 +1,6 @@
 ---
 layout: default
-title : Products.Basic module (Agda Universal Algebra Library)
+title : Algebras.Products module (Agda Universal Algebra Library)
 date : 2021-01-12
 author: [agda-algebras development team][]
 ---
@@ -8,25 +8,30 @@ author: [agda-algebras development team][]
 
 ### Products of Algebras and Product Algebras
 
-This is the [Products.Basic][] module of the [Agda Universal Algebra Library][].
+This is the [Algebras.Products][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 
-open import Algebras.Basic
+open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
-module Products.Basic {𝑆 : Signature 𝓞 𝓥} where
+module Algebras.Products {𝑆 : Signature 𝓞 𝓥} where
 
-open import Agda.Primitive                        using    ( lsuc  ; _⊔_ ; Level     )
-                                                  renaming ( Set   to Type    )
-open import Data.Product                          using    ( _,_ ; Σ ; Σ-syntax )
-open import Relation.Unary                        using    ( Pred  ; _⊆_ ; _∈_  )
 
+-- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
+open import Agda.Primitive  using ( lsuc ; _⊔_ ; Level ) renaming ( Set to Type )
+open import Data.Product    using ( _,_ ; Σ ; Σ-syntax )
+open import Relation.Unary  using ( Pred ; _⊆_ ; _∈_ )
+
+
+-- Imports from agda-algebras --------------------------------------------------------------
 open import Overture.Preliminaries using (_⁻¹; 𝑖𝑑; ∣_∣; ∥_∥)
+open import Algebras.Basic         using ( Algebra ; _̂_ ; algebra )
 
 private variable α β ρ 𝓘 : Level
+
 \end{code}
 
 From now on, the modules of the [UniversalAlgebra][] library will assume a fixed signature `𝑆 : Signature 𝓞 𝓥`.

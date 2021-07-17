@@ -1,6 +1,6 @@
 ---
 layout: default
-title : Isomoprhisms.Basic module (The Agda Universal Algebra Library)
+title : Homomorphisms.Isomoprhisms module (The Agda Universal Algebra Library)
 date : 2021-07-11
 author: [agda-algebras development team][]
 ---
@@ -17,28 +17,22 @@ Here we formalize the informal notion of isomorphism between algebraic structure
 open import Level using ( Level ; Lift )
 open import Algebras.Basic
 
-module Isomorphisms.Basic {𝑆 : Signature 𝓞 𝓥}  where
+module Homomorphisms.Isomorphisms {𝑆 : Signature 𝓞 𝓥}  where
 
 
 -- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
-open import Axiom.Extensionality.Propositional    renaming (Extensionality to funext )
-open import Agda.Primitive                        using    ( _⊔_    ;   lsuc      )
-                                                  renaming ( Set    to  Type      )
-open import Agda.Builtin.Equality                 using    ( _≡_    ;   refl      )
-open import Data.Product                          using    ( _,_    ;   Σ-syntax
-                                                           ;  Σ     ;   _×_       )
-                                                  renaming ( proj₁  to  fst
-                                                           ; proj₂  to  snd       )
-open import Function.Base                         using    ( _∘_                  )
-open import Relation.Binary.PropositionalEquality using    ( cong   ;   cong-app  )
+open import Axiom.Extensionality.Propositional using ()  renaming (Extensionality to funext )
+open import Agda.Primitive          using ( _⊔_ ; lsuc ) renaming ( Set to Type )
+open import Agda.Builtin.Equality   using ( _≡_ ; refl )
+open import Data.Product            using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst )
+open import Function.Base           using ( _∘_ )
+import Relation.Binary.PropositionalEquality as PE
 
 
 -- Imports from agda-algebras --------------------------------------------------------------
-open import Overture.Preliminaries       using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; _≈_ ; transport ; _∙_
-                                               ; lower∼lift ; lift∼lower )
-open import Products.Basic       {𝑆 = 𝑆} using ( ⨅ )
-open import Homomorphisms.Basic  {𝑆 = 𝑆} using ( hom ; kercon ; ker[_⇒_]_↾_ ; πker ; 𝒾𝒹 ; ∘-hom
-                                               ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-homomorphism ; ∘-is-hom ; Lift-hom)
+open import Overture.Preliminaries      using ( ∣_∣ ; ∥_∥ ; _≈_ ; _∙_ ; lower∼lift ; lift∼lower )
+open import Algebras.Products   {𝑆 = 𝑆} using ( ⨅ )
+open import Homomorphisms.Basic {𝑆 = 𝑆} using ( hom ; 𝒾𝒹 ; ∘-hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-homomorphism )
 
 private variable α β γ : Level
 
@@ -107,10 +101,10 @@ That is, two structures are **isomorphic** provided there are homomorphisms goin
   g = ∘-hom 𝑪 𝑨 g1 g2
 
   τ : ∣ f ∣ ∘ ∣ g ∣ ≈ ∣ 𝒾𝒹 𝑪 ∣
-  τ x = (cong ∣ f2 ∣(to∼from ab (∣ g1 ∣ x)))∙(to∼from bc) x
+  τ x = (PE.cong ∣ f2 ∣(to∼from ab (∣ g1 ∣ x)))∙(to∼from bc) x
 
   ν : ∣ g ∣ ∘ ∣ f ∣ ≈ ∣ 𝒾𝒹 𝑨 ∣
-  ν x = (cong ∣ g2 ∣(from∼to bc (∣ f1 ∣ x)))∙(from∼to ab) x
+  ν x = (PE.cong ∣ g2 ∣(from∼to bc (∣ f1 ∣ x)))∙(from∼to ab) x
 
 \end{code}
 
@@ -125,8 +119,8 @@ open Level
 Lift-≅ : {𝑨 : Algebra α 𝑆} → 𝑨 ≅ (Lift-Alg 𝑨 β)
 Lift-≅{β = β}{𝑨 = 𝑨} = record { to = 𝓁𝒾𝒻𝓉 𝑨
                               ; from = 𝓁ℴ𝓌ℯ𝓇 𝑨
-                              ; to∼from = cong-app lift∼lower
-                              ; from∼to = cong-app (lower∼lift {β = β})
+                              ; to∼from = PE.cong-app lift∼lower
+                              ; from∼to = PE.cong-app (lower∼lift {β = β})
                               }
 
 Lift-Alg-iso : {𝑨 : Algebra α 𝑆}{𝓧 : Level}
@@ -193,9 +187,6 @@ module _ {𝓘 : Level}{I : Type 𝓘}{fiu : funext 𝓘 α}{fiw : funext 𝓘 �
    ψ∼ϕ : ψ ∘ ϕ ≈ ∣ 𝒾𝒹 (⨅ 𝒜) ∣
    ψ∼ϕ a = fiu λ i → from∼to (AB i)(a i)
 
-   -- Goal : ⨅ 𝒜 ≅ ⨅ ℬ
-   -- Goal = (ϕ , ϕhom) , ((ψ , ψhom) , ϕ~ψ , ψ~ϕ)
-
 \end{code}
 
 
@@ -259,47 +250,3 @@ module _ {𝓘 : Level}{I : Type 𝓘}{fizw : funext (𝓘 ⊔ γ) β}{fiu : fun
 
 
 
-
-
-
-
-<!-- NO LONGER USED
-
-#### <a id="embedding-tools">Embedding tools</a>
-
-Finally, we prove some useful facts about embeddings that occasionally come in handy.
-
-private variable 𝓘 : Level
-
- -- embedding-lift-nat : hfunext 𝓘 α → hfunext 𝓘 β
- --   →                   {I : Type 𝓘}{A : I → Type α}{B : I → Type β}
- --                       (h : Nat A B) → (∀ i → is-embedding (h i))
- --                       ------------------------------------------
- --   →                   is-embedding(NatΠ h)
-
- -- embedding-lift-nat hfiu hfiw h hem = NatΠ-is-embedding hfiu hfiw h hem
-
-
- -- embedding-lift-nat' : hfunext 𝓘 α → hfunext 𝓘 β
- --   →                    {I : Type 𝓘}{𝒜 : I → Algebra α 𝑆}{ℬ : I → Algebra β 𝑆}
- --                        (h : Nat(fst ∘ 𝒜)(fst ∘ ℬ)) → (∀ i → is-embedding (h i))
- --                        --------------------------------------------------------
- --   →                    is-embedding(NatΠ h)
-
- -- embedding-lift-nat' hfiu hfiw h hem = NatΠ-is-embedding hfiu hfiw h hem
-
-
- -- embedding-lift : hfunext 𝓘 α → hfunext 𝓘 β
- --   →               {I : Type 𝓘} → {𝒜 : I → Algebra α 𝑆}{ℬ : I → Algebra β 𝑆}
- --   →               (h : ∀ i → ∣ 𝒜 i ∣ → ∣ ℬ i ∣) → (∀ i → is-embedding (h i))
- --                   ----------------------------------------------------------
- --   →               is-embedding(λ (x : ∣ ⨅ 𝒜 ∣) (i : I) → (h i)(x i))
-
- -- embedding-lift hfiu hfiw {I}{𝒜}{ℬ} h hem = embedding-lift-nat' hfiu hfiw {I}{𝒜}{ℬ} h hem
-
-
- -- iso→embedding : {𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆} → (ϕ : 𝑨 ≅ 𝑩) → is-embedding (fst ∣ ϕ ∣)
- -- iso→embedding ϕ = equiv-is-embedding (fst ∣ ϕ ∣) {!!} -- (invertible-is-equiv (fst ∣ ϕ ∣) finv)
- --  where
- --  finv : invertible (fst ∣ ϕ ∣)
- --  finv = ∣ fst ∥ ϕ ∥ ∣ , (snd ∥ snd ϕ ∥ , fst ∥ snd ϕ ∥)

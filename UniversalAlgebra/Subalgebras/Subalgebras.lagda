@@ -18,15 +18,12 @@ open import Algebras.Basic using (𝓞 ; 𝓥 ; Signature )
 module Subalgebras.Subalgebras {𝑆 : Signature 𝓞 𝓥} where
 
 -- imports from Agda and the Agda Standard Library ------------------------------------
-open import Agda.Builtin.Equality      using    ( _≡_ ;  refl )
-open import Agda.Primitive             using    ( _⊔_ ;  lsuc ; Level )
-                                       renaming ( Set to Type )
-open import Data.Product               using    ( _,_ ; Σ-syntax ; Σ ; _×_ )
-                                       renaming ( proj₁ to fst
-                                                ; proj₂ to snd )
-open import Function.Base              using    ( _∘_ )
-open import Function.Bundles           using    ( Injection )
-open import Relation.Unary             using    ( _∈_ ; Pred ; _⊆_ )
+open import Agda.Builtin.Equality using ( _≡_ ; refl )
+open import Agda.Primitive        using ( _⊔_ ; lsuc ; Level )       renaming ( Set to Type )
+open import Data.Product          using ( _,_ ; Σ-syntax ; Σ ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Function.Base         using ( _∘_ )
+open import Function.Bundles      using ( Injection )
+open import Relation.Unary        using ( _∈_ ; Pred ; _⊆_ )
 import Relation.Binary.PropositionalEquality as PE
 
 -- imports from agda-algebras --------------------------------------------------------------
@@ -35,11 +32,10 @@ open import Overture.Inverses                  using ( ∘-injective ; IsInjecti
 open import Relations.Truncation               using ( is-set ; blk-uip )
 open import Relations.Extensionality           using ( swelldef ; pred-ext )
 open import Algebras.Basic                     using ( Algebra ; Lift-Alg )
-open import Products.Basic             {𝑆 = 𝑆} using ( ov )
-open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom ; kercon ; ker[_⇒_]_↾_
-                                                     ; ∘-hom ; is-homomorphism ; ∘-is-hom )
+open import Algebras.Products          {𝑆 = 𝑆} using ( ov )
+open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom ; kercon ; ker[_⇒_]_↾_ ; ∘-hom ; is-homomorphism ; ∘-is-hom )
 open import Homomorphisms.Noether      {𝑆 = 𝑆} using ( FirstHomTheorem|Set )
-open import Isomorphisms.Basic         {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; ≅-trans ; Lift-≅ ; mkiso)
+open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; ≅-trans ; Lift-≅ ; mkiso)
 open import Terms.Basic                {𝑆 = 𝑆} using ( Term ; ℊ ; node ; 𝑻 )
 
 private variable α β γ 𝓧 : Level

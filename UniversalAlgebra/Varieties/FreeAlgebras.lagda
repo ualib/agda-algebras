@@ -1,6 +1,6 @@
 ---
 layout: default
-title : Varieties.FreeAlgebras.Basic module (Agda Universal Algebra Library)
+title : Varieties.FreeAlgebras module (Agda Universal Algebra Library)
 date : 2021-03-01
 author: [agda-algebras development team][]
 ---
@@ -19,7 +19,7 @@ First we will define the relatively free algebra in a variety, which is the "fre
 open import Level renaming ( suc to lsuc )
 open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
-module Varieties.FreeAlgebras.Basic {α 𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
+module Varieties.FreeAlgebras {α 𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
 
 
 -- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
@@ -45,20 +45,20 @@ open import Relations.Quotients                using ( ⟪_⟫ )
 open import Relations.Truncation               using ( is-set ; blk-uip ; hfunext )
 open import Relations.Extensionality           using ( DFunExt; SwellDef ; swelldef ; pred-ext )
 open import Algebras.Basic                     using ( Algebra ; Lift-Alg ; compatible ; _̂_ )
-open import Products.Basic             {𝑆 = 𝑆} using ( ov ; ⨅ )
-open import Congruences.Basic          {𝑆 = 𝑆} using ( Con; mkcon ; IsCongruence )
+open import Algebras.Products          {𝑆 = 𝑆} using ( ov ; ⨅ )
+open import Algebras.Congruences       {𝑆 = 𝑆} using ( Con; mkcon ; IsCongruence )
 open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom ; ⨅-hom-co ; ker[_⇒_]_↾_ ; epi
                                                      ; πker ; epi-to-hom ; ker-in-con
                                                      ;  kercon ; ∘-hom )
 open import Homomorphisms.Noether      {𝑆 = 𝑆} using ( HomFactor ; HomFactorEpi )
-open import Isomorphisms.Basic         {𝑆 = 𝑆} using ( _≅_ ; ≅-refl ; ≅-sym ; Lift-≅ )
+open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅-refl ; ≅-sym ; Lift-≅ )
 open import Terms.Basic                {𝑆 = 𝑆} using ( Term ; 𝑻 )
 open import Terms.Properties           {𝑆 = 𝑆} using ( free-lift ; lift-hom
                                                      ; free-unique ; lift-of-epi-is-epi )
 open import Terms.Operations           {𝑆 = 𝑆} using ( _⟦_⟧; comm-hom-term; free-lift-interp )
 open import Subalgebras.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; FirstHomCorollary|Set )
-open import Varieties.EquationalLogic.Basic {𝑆 = 𝑆} using ( _⊫_≈_; _⊧_≈_; Th; Mod )
-open import Varieties.Closure.Basic    {𝑆 = 𝑆} using ( S ; P ; V )
+open import Varieties.EquationalLogic  {𝑆 = 𝑆} using ( _⊫_≈_; _⊧_≈_; Th; Mod )
+open import Varieties.Closure          {𝑆 = 𝑆} using ( S ; P ; V )
 open import Varieties.Preservation     {𝑆 = 𝑆} using ( module class-products-with-maps
                                                      ; class-ids-⇒ ; class-ids ; SP⊆V')
 open Term
@@ -252,7 +252,7 @@ We now use `ψlemma0-ap` to prove that every map `h : X → ∣ 𝑨 ∣`, from 
 \begin{code}
 
  𝔽-lift-hom : (𝑨 : Algebra α 𝑆) → 𝑨 ∈ S{α}{α} 𝒦 → (X → ∣ 𝑨 ∣) → hom 𝔽 𝑨
- 𝔽-lift-hom 𝑨 skA h = fst(HomFactor (fe 𝓕 α) (wd 𝓥 (lsuc (ov α)))  𝑨 (lift-hom 𝑨 h) hom𝔽 (ψlemma0-ap skA) hom𝔽-is-epic)
+ 𝔽-lift-hom 𝑨 skA h = fst(HomFactor (wd 𝓥 (lsuc (ov α)))  𝑨 (lift-hom 𝑨 h) hom𝔽 (ψlemma0-ap skA) hom𝔽-is-epic)
 
 \end{code}
 
@@ -284,10 +284,12 @@ It turns out that the homomorphism so defined is equivalent to `hom𝔽`.
  hom𝔽-is-lift-hom (ℊ x) = refl
  hom𝔽-is-lift-hom (node 𝑓 𝒕) =
   ∣ 𝔑 ∣ (node 𝑓 𝒕)              ≡⟨ ∥ 𝔑 ∥ 𝑓 𝒕 ⟩
-  (𝑓 ̂ 𝔽)(λ i → ∣ 𝔑 ∣(𝒕 i))      ≡⟨ cong(𝑓 ̂ 𝔽)(fe 𝓥 𝓕⁺ (λ x → hom𝔽-is-lift-hom(𝒕 x))) ⟩
-  (𝑓 ̂ 𝔽)(λ i → ∣ hom𝔽 ∣ (𝒕 i))  ≡⟨ (∥ hom𝔽 ∥ 𝑓 𝒕)⁻¹ ⟩
+  (𝑓 ̂ 𝔽)(λ i → ∣ 𝔑 ∣(𝒕 i))     ≡⟨ wd-proof ⟩
+  (𝑓 ̂ 𝔽)(λ i → ∣ hom𝔽 ∣ (𝒕 i)) ≡⟨ (∥ hom𝔽 ∥ 𝑓 𝒕)⁻¹ ⟩
   ∣ hom𝔽 ∣ (node 𝑓 𝒕)           ∎
-
+   where wd-proof = wd 𝓥 (lsuc (ov α))
+                    (𝑓 ̂ 𝔽) (λ i → ∣ 𝔑 ∣(𝒕 i)) (λ i → ∣ hom𝔽 ∣ (𝒕 i))
+                    (λ x → hom𝔽-is-lift-hom(𝒕 x))
 \end{code}
 
 We need a three more lemmas before we are ready to tackle our main goal.
@@ -370,7 +372,7 @@ With these results in hand, it is now trivial to prove the main theorem of this 
                       ∣ φ ∣ q      ∎
 
   goal : epi 𝔽 𝑨
-  goal = fst (HomFactorEpi (fe 𝓕 𝓕⁺) (wd 𝓥 (lsuc (ov α))) 𝑨 φ hom𝔽 kerincl hom𝔽-is-epic φE)
+  goal = fst (HomFactorEpi (wd 𝓥 (lsuc (ov α))) 𝑨 φ hom𝔽 kerincl hom𝔽-is-epic φE)
 
 \end{code}
 
