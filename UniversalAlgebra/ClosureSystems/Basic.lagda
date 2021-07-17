@@ -48,7 +48,7 @@ open import ClosureSystems.Definitions using ( Extensive )
 module _ {χ ℓ ρ : Level}{X : Type χ} where
 
  IntersectClosed : Pred (Pred X ℓ) ρ → Type _
- IntersectClosed C = ∀ {I : Type}{c : I → Pred X ℓ} → (∀ i → (c i) ∈ C) → ⋂ I c ∈ C
+ IntersectClosed C = ∀ {I : Type ℓ}{c : I → Pred X ℓ} → (∀ i → (c i) ∈ C) → ⋂ I c ∈ C
 
  ClosureSystem : Type _
  ClosureSystem = Σ[ C ∈ Pred (Pred X ℓ) ρ ] IntersectClosed C
