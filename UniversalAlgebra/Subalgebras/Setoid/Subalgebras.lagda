@@ -56,12 +56,6 @@ module _ where
  𝑨 ≥s 𝑩 = 𝑨 IsSupalgebraOf 𝑩
  𝑨 ≤s 𝑩 = 𝑨 IsSubalgebraOf 𝑩
 
- open _≅_
- ≅→≤s : {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ} → 𝑨 ≅ 𝑩 → 𝑨 ≤s 𝑩
- ≅→≤s φ = (to φ) , ≅toInjective φ
-
- ≅→≥s : {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ} → 𝑨 ≅ 𝑩 → 𝑨 ≥s 𝑩
- ≅→≥s φ = (from φ) , ≅fromInjective φ
 
  record SubalgebraOf : Type (ov (α ⊔ β ⊔ ρ ⊔ ρᵃ ⊔ ρᵇ)) where
   field
@@ -133,100 +127,6 @@ module _ where
 \end{code}
 
 
-#### Subalgebra lemmas
-
-The subalgebra relation is a *preorder*; i.e., it is a reflexive, transitive binary relation.
-
-\begin{code}
-
-
-private variable α ρᵃ β ρᵇ γ ρᶜ : Level
-
-≤s-refl : {𝑨 𝑩 : SetoidAlgebra α ρᵃ} → 𝑨 ≅ 𝑩 → 𝑨 ≤s 𝑩
-≤s-refl {𝑨 = 𝑨}{𝑩} A≅B = ≅→≤s A≅B
-
-≥s-refl : {𝑨 𝑩 : SetoidAlgebra α ρᵃ} → 𝑨 ≅ 𝑩 → 𝑨 ≥s 𝑩
-≥s-refl {𝑨 = 𝑨}{𝑩} A≅B = ≅→≤s (≅-sym A≅B)
-
-≤s-refl' : {𝑨 : SetoidAlgebra α ρᵃ} → 𝑨 ≤s 𝑨
-≤s-refl' {𝑨 = 𝑨} = (id , λ f a → refl) , Injection.injective id-is-injective
-
-
-≤s-trans : (𝑨 : SetoidAlgebra α ρᵃ){𝑩 : SetoidAlgebra β ρᵇ}(𝑪 : SetoidAlgebra γ ρᶜ)
-  →        𝑨 ≤s 𝑩 → 𝑩 ≤s 𝑪 → 𝑨 ≤s 𝑪
-
-≤s-trans 𝑨 {𝑩} 𝑪 A≤B B≤C = (∘-hom 𝑨 𝑩 𝑪 ∣ A≤B ∣ ∣ B≤C ∣ ) , Goal
- where
- Goal : IsInjective ∣ (∘-hom 𝑨 𝑩 𝑪 ∣ A≤B ∣ ∣ B≤C ∣) ∣
- Goal = ∘-injective ∥ A≤B ∥ ∥ B≤C ∥
-
-≥s-trans : (𝑨 : SetoidAlgebra α ρᵃ){𝑩 : SetoidAlgebra β ρᵇ}(𝑪 : SetoidAlgebra γ ρᶜ)
-  →        𝑨 ≥s 𝑩 → 𝑩 ≥s 𝑪 → 𝑨 ≥s 𝑪
-≥s-trans 𝑨 {𝑩} 𝑪 A≥B B≥C = ≤s-trans 𝑪 {𝑩} 𝑨 B≥C A≥B
-
-
-module _ {α ρᵃ ρ : Level} where
-
- open import Relation.Binary.Structures {a = ov(α ⊔ ρᵃ)}{ℓ = (𝓞 ⊔ 𝓥 ⊔ α)} (_≅_ {α}{ρᵃ}{α}{ρᵃ})
-
- open IsPreorder
- ≤s-preorder : IsPreorder _≤s_
- isEquivalence ≤s-preorder = record { refl = ≅-refl ; sym = ≅-sym ; trans = ≅-trans }
- reflexive ≤s-preorder = ≤s-refl
- trans ≤s-preorder {𝑨}{𝑩}{𝑪} A≤B B≤C = ≤s-trans 𝑨 {𝑩} 𝑪 A≤B B≤C
-
-
-
-open _≅_
-
-module _ (𝑨 : SetoidAlgebra α ρᵃ){𝑩 : SetoidAlgebra β ρᵇ}(𝑪 : SetoidAlgebra γ ρᶜ) where
-
- A≥B→B≅C→A≥C : 𝑨 ≥s 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≥s 𝑪
- A≥B→B≅C→A≥C A≥B B≅C  = ≥s-trans 𝑨 {𝑩} 𝑪 A≥B (≅→≥s B≅C)
-
- A≤B→B≅C→A≤C : 𝑨 ≤s 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤s 𝑪
- A≤B→B≅C→A≤C A≤B B≅C = ≤s-trans 𝑨{𝑩} 𝑪 A≤B (≅→≤s B≅C)
-
- A≅B→B≥C→A≥C : 𝑨 ≅ 𝑩 → 𝑩 ≥s 𝑪 → 𝑨 ≥s 𝑪
-
- A≅B→B≥C→A≥C A≅B B≥C = ≥s-trans 𝑨{𝑩}𝑪 (≅→≥s A≅B) B≥C
-
- A≅B→B≤C→A≤C : 𝑨 ≅ 𝑩 → 𝑩 ≤s 𝑪 → 𝑨 ≤s 𝑪
- A≅B→B≤C→A≤C A≅B B≤C = ≤s-trans 𝑨{𝑩}𝑪 (≅→≤s A≅B) B≤C
-
-
-≤s-TRANS-≅ : (𝑨 : SetoidAlgebra α ρᵃ){𝑩 : SetoidAlgebra β ρᵇ}(𝑪 : SetoidAlgebra γ ρᶜ)
- →          𝑨 ≤s 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤s 𝑪
-≤s-TRANS-≅ 𝑨 {𝑩} 𝑪 (h , hinj) B≅C = (∘-hom 𝑨 𝑩 𝑪 h (to B≅C)) , ∘-injective hinj (≅toInjective B≅C)
-
-≤s-mono : (𝑩 : SetoidAlgebra β ρᵇ){𝒦 𝒦' : Pred (SetoidAlgebra α ρᵃ) γ}
- →        𝒦 ⊆ 𝒦' → 𝑩 IsSubalgebraOfClass 𝒦 → 𝑩 IsSubalgebraOfClass 𝒦'
-
-≤s-mono 𝑩 KK' (𝑨 , (KA , B≤A)) = 𝑨 , ((KK' KA) , B≤A)
-
-\end{code}
-
-
-#### Lifts of subalgebras
-
-\begin{code}
-
-module _ {𝒦 : Pred (SetoidAlgebra α ρᵃ)(ov α)}{𝑩 : SetoidAlgebra β ρᵇ}{ℓ : Level} where
-
- Lift-is-sub : 𝑩 IsSubalgebraOfClass 𝒦 → (Lift-SetoidAlg 𝑩 ℓ) IsSubalgebraOfClass 𝒦
- Lift-is-sub (𝑨 , (KA , B≤A)) = 𝑨 , (KA , A≥B→B≅C→A≥C 𝑨 (Lift-SetoidAlg 𝑩 ℓ) B≤A Lift-≅)
-
-≤s-Lift : (𝑨 : SetoidAlgebra α ρᵃ){𝑩 : SetoidAlgebra β ρᵇ}{ℓ : Level} → 𝑨 ≤s 𝑩 → 𝑨 ≤s Lift-SetoidAlg 𝑩 ℓ
-≤s-Lift 𝑨 {𝑩}{ℓ} A≤sB = A≤B→B≅C→A≤C 𝑨 (Lift-SetoidAlg 𝑩 ℓ) A≤sB Lift-≅
-
-≥s-Lift : (𝑨 : SetoidAlgebra α ρᵃ){𝑩 : SetoidAlgebra β ρᵇ}{ℓ : Level} → 𝑨 ≥s 𝑩 → 𝑨 ≥s Lift-SetoidAlg 𝑩 ℓ
-≥s-Lift 𝑨 {𝑩}{ℓ} A≥sB = A≥B→B≅C→A≥C 𝑨 (Lift-SetoidAlg 𝑩 ℓ) A≥sB Lift-≅
-
-Lift-≤s-Lift : {𝑨 : SetoidAlgebra α ρᵃ}(ℓᵃ : Level){𝑩 : SetoidAlgebra β ρᵇ}(ℓᵇ : Level)
- →             𝑨 ≤s 𝑩 → Lift-SetoidAlg 𝑨 ℓᵃ ≤s Lift-SetoidAlg 𝑩 ℓᵇ
-Lift-≤s-Lift {𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ A≤sB = ≥s-Lift (Lift-SetoidAlg 𝑩 ℓᵇ){𝑨} (≤s-Lift 𝑨{𝑩} A≤sB)
-
-\end{code}
 
 ------------------------------
 

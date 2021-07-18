@@ -47,10 +47,10 @@ open import Homomorphisms.Isomorphisms      {𝑆 = 𝑆} using ( _≅_ ; ≅-sy
                                                           ; Lift-Alg-associative )
 open import Homomorphisms.HomomorphicImages {𝑆 = 𝑆} using ( HomImages ; _IsHomImageOf_
                                                           ; Lift-Alg-hom-image )
-open import Subalgebras.Subalgebras         {𝑆 = 𝑆} using (_≤_ ; ≤-iso ; ≤-refl
+open import Subalgebras.Subalgebras         {𝑆 = 𝑆} using (_≤_ ; _IsSubalgebraOfClass_ ; Subalgebra )
+open import Subalgebras.Properties          {𝑆 = 𝑆} using ( ≤-iso ; ≤-refl ; A≅B→B≤C→A≤C
                                                           ; ≤-TRANS-≅ ; ≤-trans
-                                                          ; _IsSubalgebraOfClass_
-                                                          ; Subalgebra ; Lift-≤-Lift )
+                                                          ; Lift-≤-Lift )
 
 \end{code}
 
@@ -168,7 +168,7 @@ module _ {α β : Level}{𝒦 : Pred (Algebra α 𝑆)(ov α)} where
  subalgebra→S {𝑩} (𝑨 , ((𝑪 , C≤A) , KA , B≅C)) = ssub sA B≤A
   where
    B≤A : 𝑩 ≤ 𝑨
-   B≤A = ≤-iso 𝑨 B≅C C≤A
+   B≤A = A≅B→B≤C→A≤C {𝑪 = 𝑨} B≅C C≤A
 
    slAu : Lift-Alg 𝑨 α ∈ S{α}{α} 𝒦
    slAu = sbase KA
@@ -181,7 +181,7 @@ module _ {α : Level}{𝒦 : Pred (Algebra α 𝑆)(ov α)} where
 
  S→subalgebra : {𝑩 : Algebra α 𝑆} → 𝑩 ∈ S{α}{α} 𝒦  →  𝑩 IsSubalgebraOfClass 𝒦
 
- S→subalgebra (sbase{𝑩} x) =  𝑩 , (𝑩 , ≤-refl) , x , (≅-sym Lift-≅)
+ S→subalgebra (sbase{𝑩} x) =  𝑩 , ((𝑩 , (≤-refl ≅-refl)) , x , ≅-sym Lift-≅)
  S→subalgebra (slift{𝑩} x) = ∣ BS ∣ , SA , ∣ snd ∥ BS ∥ ∣ , ≅-trans (≅-sym Lift-≅) B≅SA
   where
    BS : 𝑩 IsSubalgebraOfClass 𝒦
@@ -200,7 +200,7 @@ module _ {α : Level}{𝒦 : Pred (Algebra α 𝑆)(ov α)} where
    B≤SA : 𝑩 ≤ ∣ SA ∣
    B≤SA = ≤-TRANS-≅ 𝑩 ∣ SA ∣ B≤A (∥ snd ∥ AS ∥ ∥)
    B≤AS : 𝑩 ≤ ∣ AS ∣
-   B≤AS = ≤-trans ∣ AS ∣ B≤SA ∥ SA ∥
+   B≤AS = ≤-trans 𝑩 ∣ AS ∣ B≤SA ∥ SA ∥
 
  S→subalgebra {𝑩} (siso{𝑨} sA A≅B) = ∣ AS ∣ , SA ,  ∣ snd ∥ AS ∥ ∣ , (≅-trans (≅-sym A≅B) A≅SA)
   where

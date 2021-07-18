@@ -41,8 +41,8 @@ open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; L
                                                      ; Lift-Alg-iso ; Lift-Alg-associative )
 open import Terms.Basic                {𝑆 = 𝑆} using ( Term ; 𝑻 )
 open import Terms.Operations           {𝑆 = 𝑆} using ( _⟦_⟧; comm-hom-term)
-open import Subalgebras.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; _IsSubalgebraOfClass_ ; ≤-Lift
-                                                     ; Lift-≤-Lift ; _IsSubalgebraOf_ ; SubalgebraOfClass )
+open import Subalgebras.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; _IsSubalgebraOf_ ; _IsSubalgebraOfClass_ ; SubalgebraOfClass )
+open import Subalgebras.Properties     {𝑆 = 𝑆} using ( ≤-Lift ; Lift-≤-Lift )
 open import Varieties.EquationalLogic  {𝑆 = 𝑆} using ( _⊫_≈_ ; _⊧_≈_ ; Th)
 open import Varieties.Properties       {𝑆 = 𝑆} using ( ⊧-Lift-invar ; ⊧-lower-invar ; ⊧-S-class-invar
                                                      ; ⊧-I-invar ; ⊧-P-lift-invar ; ⊧-P-invar ; ⊧-S-invar)
@@ -89,7 +89,7 @@ S⊆SP {α} {β} 𝒦 {.(Lift-Alg 𝑨 β)}(slift{𝑨} x) = subalgebra→S lAsc
 
  lAsc : (Lift-Alg 𝑨 β) IsSubalgebraOfClass (P 𝒦)
  lAsc = Lift-Alg-subP' Asc
-S⊆SP {α} {β} 𝒦 {𝑩}(ssub{𝑨} sA B≤A) = ssub (subalgebra→S lAsc)( ≤-Lift 𝑨 B≤A )
+S⊆SP {α} {β} 𝒦 {𝑩}(ssub{𝑨} sA B≤A) = ssub (subalgebra→S lAsc) (≤-Lift 𝑩{𝑨} B≤A )
  where
   lA : Algebra (α ⊔ β) 𝑆
   lA = Lift-Alg 𝑨 β
@@ -261,7 +261,7 @@ module _ {α : Level}  {fe₀ : funext (ov α) α}
  SP⊆V' (ssub{𝑨}{𝑩} spA B≤A) = vssubw (VlA (SP⊆V spA)) B≤lA
   where
    B≤lA : 𝑩 ≤ Lift-Alg 𝑨 (lsuc (ov α))
-   B≤lA = ≤-Lift 𝑨 B≤A
+   B≤lA = ≤-Lift 𝑩{𝑨} B≤A
 
  SP⊆V' (siso{𝑨}{𝑩} x A≅B) = visow (VlA (SP⊆V x)) Goal
   where

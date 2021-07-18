@@ -123,9 +123,9 @@ f ̂ 𝑨 = λ a → (Interp 𝑨) <$> (f , a)
 \begin{code}
 
 open Level
-Lift-SetoidAlg : SetoidAlgebra α ρ → (β : Level) → SetoidAlgebra (α ⊔ β) ρ
-Domain (Lift-SetoidAlg 𝑨 β) =
- record { Carrier = Lift β 𝕌[ 𝑨 ]
+Lift-SetoidAlg : (ℓ : Level){𝑨 : SetoidAlgebra α ρ} → SetoidAlgebra (α ⊔ ℓ) ρ
+Domain (Lift-SetoidAlg ℓ {𝑨}) =
+ record { Carrier = Lift ℓ 𝕌[ 𝑨 ]
         ; _≈_ = λ x y → (Domain 𝑨 ≈ (lower x))(lower y)
         ; isEquivalence =
            record { refl = reflS (Domain 𝑨)
@@ -133,8 +133,8 @@ Domain (Lift-SetoidAlg 𝑨 β) =
                   ; trans = transS (Domain 𝑨)
                   }
         }
-(Interp (Lift-SetoidAlg 𝑨 β)) <$> (f , la) = lift ((f ̂ 𝑨) (lower ∘ la))
-cong (Interp (Lift-SetoidAlg 𝑨 β)) {(f , la)} {(.f , lb)} (refl , la=lb) = cong (Interp 𝑨) ((refl , la=lb))
+(Interp (Lift-SetoidAlg ℓ{𝑨})) <$> (f , la) = lift ((f ̂ 𝑨) (lower ∘ la))
+cong (Interp (Lift-SetoidAlg ℓ {𝑨})) {(f , la)} {(.f , lb)} (refl , la=lb) = cong (Interp 𝑨) ((refl , la=lb))
 
 
 \end{code}

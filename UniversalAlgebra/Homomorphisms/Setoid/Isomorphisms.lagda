@@ -61,7 +61,7 @@ However, with four components, an equivalent record type is easier to work with.
 \begin{code}
 
 private variable
- α ρᵃ β ρᵇ ρ : Level
+ α ρᵃ β ρᵇ : Level
 
 record _≅_ (𝑨 : SetoidAlgebra α ρᵃ)(𝑩 : SetoidAlgebra β ρᵇ) : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ β) where
  constructor mkiso
@@ -74,8 +74,7 @@ record _≅_ (𝑨 : SetoidAlgebra α ρᵃ)(𝑩 : SetoidAlgebra β ρᵇ) : Ty
 open _≅_ public
 
 
-IsIsomorphismREL : {α ρᵃ β ρᵇ ρ : Level}
- →                 REL (SetoidAlgebra α ρᵃ)(SetoidAlgebra β ρᵇ) ρ → Type (ov (α ⊔ ρᵃ ⊔ β ⊔ ρᵇ))
+IsIsomorphismREL : {ℓ : Level} → REL (SetoidAlgebra α ρᵃ)(SetoidAlgebra β ρᵇ) ℓ → Type _
 IsIsomorphismREL {α} {ρᵃ} {β}{ρᵇ} _ = ∀{𝑨}{𝑩} → _≅_ {α} {ρᵃ} {β}{ρᵇ} 𝑨 𝑩
 
 
@@ -89,20 +88,18 @@ That is, two structures are **isomorphic** provided there are homomorphisms goin
 
 \begin{code}
 
-≅-refl : {α ρᵃ : Level}{𝑨 : SetoidAlgebra α ρᵃ} → 𝑨 ≅ 𝑨
+private variable γ ρᶜ : Level
+
+≅-refl : {𝑨 : SetoidAlgebra α ρᵃ} → 𝑨 ≅ 𝑨
 ≅-refl {𝑨 = 𝑨} = record { to = 𝒾𝒹 𝑨 ; from = 𝒾𝒹 𝑨 ; to∼from = λ _ → refl ; from∼to = λ _ → refl }
 
-≅-sym : {α ρᵃ : Level}{𝑨 : SetoidAlgebra α ρᵃ}
-        {β ρᵇ : Level}{𝑩 : SetoidAlgebra β ρᵇ}
- →      𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑨
+≅-sym : {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ} → 𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑨
 ≅-sym φ = record { to = from φ ; from = to φ ; to∼from = from∼to φ ; from∼to = to∼from φ }
 
-≅-trans : {α ρᵃ : Level}{𝑨 : SetoidAlgebra α ρᵃ}
-          {β ρᵇ : Level}{𝑩 : SetoidAlgebra β ρᵇ}
-          {γ ρᶜ : Level}{𝑪 : SetoidAlgebra γ ρᶜ}
+≅-trans : {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ}{𝑪 : SetoidAlgebra γ ρᶜ}
  →        𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≅ 𝑪
 
-≅-trans {𝑨 = 𝑨}{ρᵇ = ρᵇ}{𝑩} {𝑪 = 𝑪} ab bc = record { to = f ; from = g ; to∼from = τ ; from∼to = ν }
+≅-trans {𝑨 = 𝑨}{𝑩}{𝑪} ab bc = record { to = f ; from = g ; to∼from = τ ; from∼to = ν }
  where
   f1 : hom 𝑨 𝑩
   f1 = to ab
@@ -144,17 +141,10 @@ That is, two structures are **isomorphic** provided there are homomorphisms goin
 
 ≅fromInjective φ = ≅toInjective (≅-sym φ)
 
-
-
-
 \end{code}
 
 
-
-
-
-
-#### <a id="lift-is-an-algebraic-invariant">Lift is an algebraic invariant</a>
+#### Lift is an algebraic invariant
 
 Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic invariant*). As our focus is universal algebra, this is important and is what makes the lift operation a workable solution to the technical problems that arise from the noncumulativity of the universe hierarchy discussed in [Overture.Lifts][].
 
@@ -162,17 +152,17 @@ Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic 
 
 open Level
 
-Lift-≅ : {α ρᵃ : Level}{β : Level}{𝑨 : SetoidAlgebra α ρᵃ} → 𝑨 ≅ (Lift-SetoidAlg 𝑨 β)
-Lift-≅ {β = β} {𝑨} = record { to = 𝓁𝒾𝒻𝓉 {𝑨 = 𝑨}
+Lift-≅ : {ℓ : Level}{𝑨 : SetoidAlgebra α ρᵃ} → 𝑨 ≅ (Lift-SetoidAlg ℓ {𝑨} )
+Lift-≅ {ℓ = ℓ} {𝑨} = record { to = 𝓁𝒾𝒻𝓉 {𝑨 = 𝑨}
                               ; from = 𝓁ℴ𝓌ℯ𝓇  {𝑨 = 𝑨}
                               ; to∼from = cong-app lift∼lower
-                              ; from∼to = cong-app (lower∼lift {β = β})
+                              ; from∼to = cong-app (lower∼lift {β = ℓ})
                               }
 
-Lift-SetoidAlg-iso : {α ρᵃ : Level}{𝑨 : SetoidAlgebra α ρᵃ}{𝓧 : Level}
-               {β ρᵇ : Level}{𝑩 : SetoidAlgebra β ρᵇ}{𝓨 : Level}
-               -----------------------------------------
- →             𝑨 ≅ 𝑩 → (Lift-SetoidAlg 𝑨 𝓧) ≅ (Lift-SetoidAlg 𝑩 𝓨)
+Lift-SetoidAlg-iso : {ℓᵃ : Level}{𝑨 : SetoidAlgebra α ρᵃ}
+                     {ℓᵇ : Level}{𝑩 : SetoidAlgebra β ρᵇ}
+               -------------------------------------------------------------
+ →             𝑨 ≅ 𝑩 →  Lift-SetoidAlg ℓᵃ {𝑨} ≅ Lift-SetoidAlg ℓᵇ {𝑩}
 
 Lift-SetoidAlg-iso A≅B = ≅-trans (≅-trans (≅-sym Lift-≅ ) A≅B) Lift-≅
 
@@ -186,16 +176,15 @@ The lift is also associative, up to isomorphism at least.
 
 \begin{code}
 
-module _ {𝓘 : Level} where
+module _ {ι : Level} where
 
-  Lift-SetoidAlg-assoc : {α ρᵃ : Level}(β : Level){𝑨 : SetoidAlgebra α ρᵃ} → Lift-SetoidAlg 𝑨 (β ⊔ 𝓘) ≅ (Lift-SetoidAlg (Lift-SetoidAlg 𝑨 β) 𝓘)
-  Lift-SetoidAlg-assoc β {𝑨} = ≅-trans (≅-trans Goal Lift-≅) Lift-≅
-   where
-   Goal : Lift-SetoidAlg 𝑨 (β ⊔ 𝓘)  ≅ 𝑨
-   Goal = ≅-sym Lift-≅
+  Lift-SetoidAlg-assoc : (ℓ : Level){𝑨 : SetoidAlgebra α ρᵃ}
+   →                     Lift-SetoidAlg (ℓ ⊔ ι) {𝑨} ≅  Lift-SetoidAlg ι {Lift-SetoidAlg ℓ {𝑨}}
+  Lift-SetoidAlg-assoc ℓ {𝑨} = ≅-trans (≅-trans (≅-sym Lift-≅) Lift-≅) Lift-≅
 
-  Lift-SetoidAlg-associative : {α ρᵃ : Level}(β : Level)(𝑨 : SetoidAlgebra α ρᵃ) → Lift-SetoidAlg 𝑨 (β ⊔ 𝓘) ≅ (Lift-SetoidAlg (Lift-SetoidAlg 𝑨 β) 𝓘)
-  Lift-SetoidAlg-associative β 𝑨 = Lift-SetoidAlg-assoc β {𝑨}
+  Lift-SetoidAlg-associative : (ℓ : Level)(𝑨 : SetoidAlgebra α ρᵃ)
+   →                           Lift-SetoidAlg (ℓ ⊔ ι){𝑨} ≅ Lift-SetoidAlg ι {Lift-SetoidAlg ℓ {𝑨}} 
+  Lift-SetoidAlg-associative ℓ 𝑨 = Lift-SetoidAlg-assoc ℓ {𝑨}
 
 \end{code}
 

@@ -147,16 +147,23 @@ open Environment                            using    (_≃_ ; Env ; ⟦_⟧ ; Eq
 -- SUBALGEBRAS ------------------------------------------------------------------------------------------
 
 open import Subalgebras.Subuniverses        using    ( Subuniverses ; Subuniverse ; Sg ; sgIsSub
-                                                     ; sgIsSmallest ; sub-intersection ; sub-term-closed
+                                                     ; sgIsSmallest ; ⋂s ; sub-term-closed
                                                      ; TermImage ; TermImageIsSub ; Y-onlyif-TermImageY
                                                      ; SgY-onlyif-TermImageY ; hom-unique )
 
-open import Subalgebras.Subalgebras         using    ( _IsSubalgebraOf_ ; Subalgebra ; FirstHomCorollary|Set
-                                                     ; free-quot-subalg ; _≤_ ; _IsSubalgebraOfClass_
-                                                     ; SubalgebraOfClass ; ≤-reflexive ; ≤-refl ; ≤-Lift
-                                                     ; ≤-transitivity ; ≤-trans ; iso→injective ; ≤-iso
-                                                     ; ≤-trans-≅ ; ≤-TRANS-≅ ; ≤-mono ; Lift-is-sub
-                                                     ; Lift-≤ ; Lift-≤-Lift )
+open import Subalgebras.Subalgebras         using    ( _≥_ ; _IsSupalgebraOf_ ; _≤_ ; _IsSubalgebraOf_
+                                                     ; SubalgebraOf ; Subalgebra ; FirstHomCorollary|Set
+                                                     ; free-quot-subalg ; _IsSubalgebraOfClass_
+                                                     ; SubalgebraOfClass )
+
+
+open import Subalgebras.Properties          using    ( ≅→≤ ; ≅→≥ ; ≤-reflexive ; ≤-refl ; ≥-refl
+                                                     ; ≤-trans ; ≥-trans ; ≤-preorder ; A≥B→B≅C→A≥C
+                                                     ; A≤B→B≅C→A≤C ; A≅B→B≥C→A≥C ; A≅B→B≤C→A≤C
+                                                     ; iso→injective ; ≤-iso ; ≤-trans-≅ ; ≤-TRANS-≅
+                                                     ; ≤-mono ; Lift-is-sub ; ≤-Lift ; ≥-Lift
+                                                     ; Lift-≤-Lift )
+
 
 open import Subalgebras.Setoid.Subuniverses  using   ( Subuniverses ; Subuniverse ; Sg ; sgIsSub
                                                      ; sgIsSmallest ; ⋂s ; sub-term-closed
@@ -164,16 +171,18 @@ open import Subalgebras.Setoid.Subuniverses  using   ( Subuniverses ; Subunivers
                                                      ; SgB-onlyif-TermImageB ; hom-unique )
 
 open import Subalgebras.Setoid.Subalgebras  using    ( _≥s_ ; _IsSupalgebraOf_ ; _≤s_ ; _IsSubalgebraOf_
-                                                     ; ≅→≤s ; ≅→≥s ; SubalgebraOf ; Subalgebra
+                                                     ; SubalgebraOf ; Subalgebra
                                                      ; IsSubalgebraREL ; SubalgebraREL ; _≤c_
                                                      ; _IsSubalgebraOfClass_ ; SubalgebraOfClass
-                                                     ; SubalgebraOfClass' ; SubalgebrasOfClass
-                                                     ; ≤s-refl ; ≥s-refl ; ≤s-refl'
+                                                     ; SubalgebraOfClass' ; SubalgebrasOfClass )
+
+open import Subalgebras.Setoid.Properties   using    ( ≅→≤s ; ≅→≥s ; ≤s-refl ; ≥s-refl ; ≤s-reflexive
                                                      ; ≤s-trans ; ≥s-trans ; ≤s-preorder
-                                                     ; A≥B→B≅C→A≥C ; A≤B→B≅C→A≤C ; A≅B→B≥C→A≥C
-                                                     ; A≅B→B≤C→A≤C ; ≤s-TRANS-≅ ; ≤s-mono
-                                                     ; Lift-is-sub ; ≤s-Lift ; ≥s-Lift
-                                                     ; Lift-≤s-Lift )
+                                                     ; A≥B→B≅C→A≥C ; A≤B→B≅C→A≤C ; A≅B→B≥C→A≥C ; A≅B→B≤C→A≤C
+                                                     ; ≤s-TRANS-≅ ; ≤s-mono ; Lift-is-sub ; ≤s-Lift
+                                                     ; ≥s-Lift ; Lift-≤s-Lift ) 
+
+
 
 -- VARIETIES ------------------------------------------------------------------------------------------
 

@@ -47,7 +47,8 @@ open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; mkiso ; Lif
 open import Terms.Basic                {𝑆 = 𝑆} using ( Term ; 𝑻 )
 open import Terms.Properties           {𝑆 = 𝑆} using ( lift-hom )
 open import Terms.Operations           {𝑆 = 𝑆} using ( _⟦_⟧ ; comm-hom-term ; interp-prod ; term-agreement )
-open import Subalgebras.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; SubalgebraOfClass ; iso→injective )
+open import Subalgebras.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; SubalgebraOfClass )
+open import Subalgebras.Properties     {𝑆 = 𝑆} using ( iso→injective )
 open import Varieties.EquationalLogic  {𝑆 = 𝑆} using ( _⊧_≈_ ; _⊫_≈_ )
 
 \end{code}

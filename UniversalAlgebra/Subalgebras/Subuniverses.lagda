@@ -118,18 +118,16 @@ When the element of `Sg X` is constructed as `app f a SgXa`, we may assume (the 
 
 
 
-#### <a id="subuniverse-lemmas">Subuniverse Lemmas</a>
+#### Subuniverse Lemmas
 
 Here we formalize a few basic properties of subuniverses. First, the intersection of subuniverses is again a subuniverse.
 
 \begin{code}
 
-sub-intersection : {𝓘 : Level}{𝑨 : Algebra α 𝑆}{I : Type 𝓘}{𝒜 : I → Pred ∣ 𝑨 ∣ β}
- →                 (( i : I ) → 𝒜 i ∈ Subuniverses 𝑨)
-                   ----------------------------------
- →                 ⋂ I 𝒜 ∈ Subuniverses 𝑨
+⋂s : {𝓘 : Level}{𝑨 : Algebra α 𝑆}{I : Type 𝓘}{𝒜 : I → Pred ∣ 𝑨 ∣ β}
+ →   (∀ i → 𝒜 i ∈ Subuniverses 𝑨) → ⋂ I 𝒜 ∈ Subuniverses 𝑨
 
-sub-intersection σ f a ν = λ i → σ i f a (λ x → ν x i)
+⋂s σ f a ν = λ i → σ i f a (λ x → ν x i)
 
 \end{code}
 
@@ -251,10 +249,6 @@ a   : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣
 and, under these assumptions, we proved `∣ g ∣ ((𝑓 ̂ 𝑨) a) ≡ ∣ h ∣ ((𝑓 ̂ 𝑨) a)`.
 
 ---------------------------------
-
-[↑ Subalgebras](Subalgebras.html)
-<span style="float:right;">[Subalgebras.Subalgebras →](Subalgebras.Subalgebras.html)</span>
-
 
 {% include UALib.Links.md %}
 
