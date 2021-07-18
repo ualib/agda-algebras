@@ -158,8 +158,8 @@ open import Subalgebras.Subalgebras         using    ( _≥_ ; _IsSupalgebraOf_ 
 
 
 open import Subalgebras.Properties          using    ( ≅→≤ ; ≅→≥ ; ≤-reflexive ; ≤-refl ; ≥-refl
-                                                     ; ≤-trans ; ≥-trans ; ≤-preorder ; A≥B→B≅C→A≥C
-                                                     ; A≤B→B≅C→A≤C ; A≅B→B≥C→A≥C ; A≅B→B≤C→A≤C
+                                                     ; ≤-trans ; ≥-trans ; ≤-preorder ; A≥B×B≅C→A≥C
+                                                     ; A≤B×B≅C→A≤C ; A≅B×B≥C→A≥C ; A≅B×B≤C→A≤C
                                                      ; iso→injective ; ≤-iso ; ≤-trans-≅ ; ≤-TRANS-≅
                                                      ; ≤-mono ; Lift-is-sub ; ≤-Lift ; ≥-Lift
                                                      ; Lift-≤-Lift )
@@ -178,7 +178,7 @@ open import Subalgebras.Setoid.Subalgebras  using    ( _≥s_ ; _IsSupalgebraOf_
 
 open import Subalgebras.Setoid.Properties   using    ( ≅→≤s ; ≅→≥s ; ≤s-refl ; ≥s-refl ; ≤s-reflexive
                                                      ; ≤s-trans ; ≥s-trans ; ≤s-preorder
-                                                     ; A≥B→B≅C→A≥C ; A≤B→B≅C→A≤C ; A≅B→B≥C→A≥C ; A≅B→B≤C→A≤C
+                                                     ; A≥B×B≅C→A≥C ; A≤B×B≅C→A≤C ; A≅B×B≥C→A≥C ; A≅B×B≤C→A≤C
                                                      ; ≤s-TRANS-≅ ; ≤s-mono ; Lift-is-sub ; ≤s-Lift
                                                      ; ≥s-Lift ; Lift-≤s-Lift )
 

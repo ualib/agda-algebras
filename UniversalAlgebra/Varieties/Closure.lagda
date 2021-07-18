@@ -48,9 +48,8 @@ open import Homomorphisms.Isomorphisms      {𝑆 = 𝑆} using ( _≅_ ; ≅-sy
 open import Homomorphisms.HomomorphicImages {𝑆 = 𝑆} using ( HomImages ; _IsHomImageOf_
                                                           ; Lift-Alg-hom-image )
 open import Subalgebras.Subalgebras         {𝑆 = 𝑆} using (_≤_ ; _IsSubalgebraOfClass_ ; Subalgebra )
-open import Subalgebras.Properties          {𝑆 = 𝑆} using ( ≤-iso ; ≤-refl ; A≅B→B≤C→A≤C
-                                                          ; ≤-TRANS-≅ ; ≤-trans
-                                                          ; Lift-≤-Lift )
+open import Subalgebras.Properties          {𝑆 = 𝑆} using ( ≤-iso ; ≤-refl ; A≅B×B≤C→A≤C
+                                                          ; ≤-TRANS-≅ ; ≤-trans ; Lift-≤-Lift )
 
 \end{code}
 
@@ -168,7 +167,7 @@ module _ {α β : Level}{𝒦 : Pred (Algebra α 𝑆)(ov α)} where
  subalgebra→S {𝑩} (𝑨 , ((𝑪 , C≤A) , KA , B≅C)) = ssub sA B≤A
   where
    B≤A : 𝑩 ≤ 𝑨
-   B≤A = A≅B→B≤C→A≤C {𝑪 = 𝑨} B≅C C≤A
+   B≤A = A≅B×B≤C→A≤C {𝑪 = 𝑨} B≅C C≤A
 
    slAu : Lift-Alg 𝑨 α ∈ S{α}{α} 𝒦
    slAu = sbase KA
