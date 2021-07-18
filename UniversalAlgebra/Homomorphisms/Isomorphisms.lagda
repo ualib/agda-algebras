@@ -73,15 +73,16 @@ That is, two structures are **isomorphic** provided there are homomorphisms goin
 
 \begin{code}
 
-≅-refl : {α : Level} {𝑨 : Algebra α 𝑆} → 𝑨 ≅ 𝑨
+private variable α β γ : Level
+
+≅-refl : {𝑨 : Algebra α 𝑆} → 𝑨 ≅ 𝑨
 ≅-refl {α}{𝑨} = record { to = 𝒾𝒹 𝑨 ; from = 𝒾𝒹 𝑨 ; to∼from = λ _ → refl ; from∼to = λ _ → refl }
 
-≅-sym : {α β : Level}{𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆}
+≅-sym : {𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆}
  →      𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑨
 ≅-sym φ = record { to = from φ ; from = to φ ; to∼from = from∼to φ ; from∼to = to∼from φ }
 
-≅-trans : {α β γ : Level}
-          {𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆}{𝑪 : Algebra γ 𝑆}
+≅-trans : {𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆}{𝑪 : Algebra γ 𝑆}
  →        𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≅ 𝑪
 
 ≅-trans {𝑨 = 𝑨}{𝑩}{𝑪} ab bc = record { to = f ; from = g ; to∼from = τ ; from∼to = ν }
