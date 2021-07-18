@@ -180,7 +180,7 @@ open import Subalgebras.Setoid.Properties   using    ( ≅→≤s ; ≅→≥s ;
                                                      ; ≤s-trans ; ≥s-trans ; ≤s-preorder
                                                      ; A≥B→B≅C→A≥C ; A≤B→B≅C→A≤C ; A≅B→B≥C→A≥C ; A≅B→B≤C→A≤C
                                                      ; ≤s-TRANS-≅ ; ≤s-mono ; Lift-is-sub ; ≤s-Lift
-                                                     ; ≥s-Lift ; Lift-≤s-Lift ) 
+                                                     ; ≥s-Lift ; Lift-≤s-Lift )
 
 
 

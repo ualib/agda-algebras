@@ -114,17 +114,17 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ}{𝑪 : S
 
 module _ {𝒦 : Pred (SetoidAlgebra α ρᵃ)(ov α)}{𝑩 : SetoidAlgebra β ρᵇ}{ℓ : Level} where
 
- Lift-is-sub : 𝑩 IsSubalgebraOfClass 𝒦 → (Lift-SetoidAlg ℓ {𝑩}) IsSubalgebraOfClass 𝒦
+ Lift-is-sub : 𝑩 IsSubalgebraOfClass 𝒦 → (Lift-SetoidAlg 𝑩 ℓ) IsSubalgebraOfClass 𝒦
  Lift-is-sub (𝑨 , (KA , B≤A)) = 𝑨 , (KA , A≥B→B≅C→A≥C {𝑨 = 𝑨}{𝑩} B≤A Lift-≅)
 
-≤s-Lift : (𝑨 : SetoidAlgebra α ρᵃ){𝑩 : SetoidAlgebra β ρᵇ}{ℓ : Level} → 𝑨 ≤s 𝑩 → 𝑨 ≤s Lift-SetoidAlg ℓ {𝑩}
-≤s-Lift 𝑨 {𝑩}{ℓ} A≤sB = A≤B→B≅C→A≤C{𝑨 = 𝑨}{𝑩 = 𝑩}  A≤sB Lift-≅
+≤s-Lift : (𝑨 : SetoidAlgebra α ρᵃ){𝑩 : SetoidAlgebra β ρᵇ}{ℓ : Level} → 𝑨 ≤s 𝑩 → 𝑨 ≤s Lift-SetoidAlg 𝑩 ℓ
+≤s-Lift 𝑨 {𝑩}{ℓ} A≤sB = A≤B→B≅C→A≤C{𝑨 = 𝑨}{𝑩}  A≤sB Lift-≅
 
-≥s-Lift : (𝑨 : SetoidAlgebra α ρᵃ){𝑩 : SetoidAlgebra β ρᵇ}{ℓ : Level} → 𝑨 ≥s 𝑩 → 𝑨 ≥s Lift-SetoidAlg ℓ {𝑩}
-≥s-Lift 𝑨 {𝑩}{ℓ} A≥sB = A≥B→B≅C→A≥C {𝑨 = 𝑨}{𝑩 = 𝑩} A≥sB Lift-≅
+≥s-Lift : (𝑨 : SetoidAlgebra α ρᵃ){𝑩 : SetoidAlgebra β ρᵇ}{ℓ : Level} → 𝑨 ≥s 𝑩 → 𝑨 ≥s Lift-SetoidAlg 𝑩 ℓ
+≥s-Lift 𝑨 {𝑩}{ℓ} A≥sB = A≥B→B≅C→A≥C {𝑨 = 𝑨}{𝑩} A≥sB Lift-≅
 
 Lift-≤s-Lift : {𝑨 : SetoidAlgebra α ρᵃ}(ℓᵃ : Level){𝑩 : SetoidAlgebra β ρᵇ}(ℓᵇ : Level)
- →             𝑨 ≤s 𝑩 → Lift-SetoidAlg ℓᵃ {𝑨} ≤s Lift-SetoidAlg ℓᵇ {𝑩}
-Lift-≤s-Lift {𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ A≤sB = ≥s-Lift (Lift-SetoidAlg ℓᵇ {𝑩}){𝑨} (≤s-Lift 𝑨{𝑩} A≤sB)
+ →             𝑨 ≤s 𝑩 → Lift-SetoidAlg 𝑨 ℓᵃ ≤s Lift-SetoidAlg 𝑩 ℓᵇ
+Lift-≤s-Lift {𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ A≤sB = ≥s-Lift (Lift-SetoidAlg 𝑩 ℓᵇ){𝑨} (≤s-Lift 𝑨{𝑩} A≤sB)
 
 \end{code}

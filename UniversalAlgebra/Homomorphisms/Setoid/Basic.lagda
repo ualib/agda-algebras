@@ -104,11 +104,11 @@ private variable
 
 open Level
 -- the lift hom
-𝓁𝒾𝒻𝓉 : {ℓ : Level}{𝑨 : SetoidAlgebra α ρ} → hom 𝑨 (Lift-SetoidAlg ℓ {𝑨})
+𝓁𝒾𝒻𝓉 : {ℓ : Level}{𝑨 : SetoidAlgebra α ρ} → hom 𝑨 (Lift-SetoidAlg 𝑨 ℓ)
 𝓁𝒾𝒻𝓉 = lift , (λ 𝑓 a → refl)
 
 -- the lower hom
-𝓁ℴ𝓌ℯ𝓇 : {ℓ : Level}{𝑨 : SetoidAlgebra α ρ} → hom (Lift-SetoidAlg ℓ {𝑨}) 𝑨
+𝓁ℴ𝓌ℯ𝓇 : {ℓ : Level}{𝑨 : SetoidAlgebra α ρ} → hom (Lift-SetoidAlg 𝑨 ℓ) 𝑨
 𝓁ℴ𝓌ℯ𝓇 = (lower , λ 𝑓 a → refl)
 
 module LiftSetoidHom {α ρᵃ : Level}{𝑨 : SetoidAlgebra α ρᵃ}
@@ -118,13 +118,13 @@ module LiftSetoidHom {α ρᵃ : Level}{𝑨 : SetoidAlgebra α ρᵃ}
                      where
  open Level
 
- Lift-hom : hom 𝑨 𝑩  →  hom (Lift-SetoidAlg ℓᵃ {𝑨}) (Lift-SetoidAlg ℓᵇ {𝑩})
+ Lift-hom : hom 𝑨 𝑩  →  hom (Lift-SetoidAlg 𝑨 ℓᵃ) (Lift-SetoidAlg 𝑩 ℓᵇ)
 
  Lift-hom (f , fhom) = lift ∘ f ∘ lower , Goal
   where
   lA lB : SetoidAlgebra _ _
-  lA = Lift-SetoidAlg ℓᵃ {𝑨}
-  lB = Lift-SetoidAlg ℓᵇ {𝑩}
+  lA = Lift-SetoidAlg 𝑨 ℓᵃ
+  lB = Lift-SetoidAlg 𝑩 ℓᵇ
 
   lABh : is-homomorphism lA 𝑩 (f ∘ lower)
   lABh = ∘-is-hom lA 𝑨  𝑩 {lower}{f} (λ _ _ → refl) fhom

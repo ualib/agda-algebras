@@ -152,7 +152,7 @@ Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic 
 
 open Level
 
-Lift-≅ : {ℓ : Level}{𝑨 : SetoidAlgebra α ρᵃ} → 𝑨 ≅ (Lift-SetoidAlg ℓ {𝑨} )
+Lift-≅ : {ℓ : Level}{𝑨 : SetoidAlgebra α ρᵃ} → 𝑨 ≅ (Lift-SetoidAlg 𝑨 ℓ)
 Lift-≅ {ℓ = ℓ} {𝑨} = record { to = 𝓁𝒾𝒻𝓉 {𝑨 = 𝑨}
                               ; from = 𝓁ℴ𝓌ℯ𝓇  {𝑨 = 𝑨}
                               ; to∼from = cong-app lift∼lower
@@ -162,7 +162,7 @@ Lift-≅ {ℓ = ℓ} {𝑨} = record { to = 𝓁𝒾𝒻𝓉 {𝑨 = 𝑨}
 Lift-SetoidAlg-iso : {ℓᵃ : Level}{𝑨 : SetoidAlgebra α ρᵃ}
                      {ℓᵇ : Level}{𝑩 : SetoidAlgebra β ρᵇ}
                -------------------------------------------------------------
- →             𝑨 ≅ 𝑩 →  Lift-SetoidAlg ℓᵃ {𝑨} ≅ Lift-SetoidAlg ℓᵇ {𝑩}
+ →             𝑨 ≅ 𝑩 →  Lift-SetoidAlg 𝑨 ℓᵃ ≅ Lift-SetoidAlg 𝑩 ℓᵇ
 
 Lift-SetoidAlg-iso A≅B = ≅-trans (≅-trans (≅-sym Lift-≅ ) A≅B) Lift-≅
 
@@ -179,11 +179,11 @@ The lift is also associative, up to isomorphism at least.
 module _ {ι : Level} where
 
   Lift-SetoidAlg-assoc : (ℓ : Level){𝑨 : SetoidAlgebra α ρᵃ}
-   →                     Lift-SetoidAlg (ℓ ⊔ ι) {𝑨} ≅  Lift-SetoidAlg ι {Lift-SetoidAlg ℓ {𝑨}}
+   →                     Lift-SetoidAlg 𝑨 (ℓ ⊔ ι) ≅  Lift-SetoidAlg (Lift-SetoidAlg 𝑨 ℓ) ι
   Lift-SetoidAlg-assoc ℓ {𝑨} = ≅-trans (≅-trans (≅-sym Lift-≅) Lift-≅) Lift-≅
 
   Lift-SetoidAlg-associative : (ℓ : Level)(𝑨 : SetoidAlgebra α ρᵃ)
-   →                           Lift-SetoidAlg (ℓ ⊔ ι){𝑨} ≅ Lift-SetoidAlg ι {Lift-SetoidAlg ℓ {𝑨}} 
+   →                           Lift-SetoidAlg 𝑨 (ℓ ⊔ ι) ≅ Lift-SetoidAlg (Lift-SetoidAlg 𝑨 ℓ) ι
   Lift-SetoidAlg-associative ℓ 𝑨 = Lift-SetoidAlg-assoc ℓ {𝑨}
 
 \end{code}
