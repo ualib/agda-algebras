@@ -5,50 +5,40 @@ date : 2021-01-13
 author: [agda-algebras development team][]
 ---
 
-### <a id="homomorphism-theorems">Homomorphism Theorems</a>
+### Homomorphism Theorems
 
-This chapter presents the [Homomorphisms.Noether][] module of the [Agda Universal Algebra Library][].
+This is the [Homomorphisms.Noether][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import Level using ( Level )
-open import Algebras.Basic
+open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Homomorphisms.Noether {𝑆 : Signature 𝓞 𝓥} where
 
 
 -- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
-open import Axiom.Extensionality.Propositional    using    ()
-                                                  renaming (Extensionality to funext)
-open import Agda.Primitive                        using    ( _⊔_      ;   lsuc  )
-                                                  renaming ( Set      to  Type  )
-open import Agda.Builtin.Equality                 using    ( _≡_      ;   refl  )
-open import Data.Product                          using    ( _,_      ;   Σ
-                                                           ; Σ-syntax ;   _×_   )
-                                                  renaming ( proj₁    to  fst
-                                                           ; proj₂    to  snd   )
-open import Function.Base                         using    ( _∘_      ;   id    )
-open import Relation.Binary                       using    ( IsEquivalence   )
-open import Relation.Binary.PropositionalEquality using    ( trans    ;   cong
-                                                           ; cong-app
-                                                           ; module ≡-Reasoning )
-open import Relation.Unary                        using    ( _⊆_ )
+open import Agda.Builtin.Equality using ( _≡_ ; refl )
+open import Agda.Primitive        using ( _⊔_ ; lsuc ) renaming ( Set to Type )
+open import Data.Product          using ( Σ-syntax ; _,_ ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Function.Base         using ( _∘_ ; id )
+open import Relation.Binary       using ( IsEquivalence )
+open import Relation.Unary        using ( _⊆_ )
+import Relation.Binary.PropositionalEquality as PE
 
 
 -- Imports from agda-algebras --------------------------------------------------------------
-open import Overture.Preliminaries      using ( ∣_∣ ; ∥_∥ ; 𝑖𝑑 ; _⁻¹ )
-open import Overture.Inverses           using ( IsInjective ; IsSurjective ; Image_∋_ ; SurjInv )
-open import Relations.Discrete          using ( ker ; kernel )
-open import Relations.Quotients         using ( ker-IsEquivalence ; _/_ ; ⟪_⟫ ; ⌞_⌟ ; R-block)
-open import Relations.Truncation        using ( is-set ; blk-uip ; is-embedding
-                                              ; monic-is-embedding|Set )
-open import Relations.Extensionality    using ( swelldef ; block-ext|uip ; pred-ext
-                                              ; SurjInvIsRightInv ; epic-factor-intensional )
-open import Congruences.Basic   {𝑆 = 𝑆} using ( Con ; IsCongruence )
-open import Homomorphisms.Basic {𝑆 = 𝑆} using ( hom ; kercon ; ker[_⇒_]_↾_ ; πker
-                                              ; is-homomorphism ; epi ; epi-to-hom )
+open import Overture.Preliminaries       using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
+open import Overture.Inverses            using ( IsInjective ; IsSurjective ; SurjInv ; Image_∋_ ) 
+open import Relations.Discrete           using ( kernel )
+open import Relations.Quotients          using ( ⌞_⌟ ; R-block ; ⟪_⟫ )
+open import Relations.Truncation         using ( is-set ; blk-uip ; is-embedding ; monic-is-embedding|Set )
+open import Relations.Extensionality     using ( pred-ext ; swelldef ; block-ext|uip ; SurjInvIsRightInv ; epic-factor )
+open import Algebras.Basic               using ( Algebra ; _̂_)
+open import Algebras.Congruences {𝑆 = 𝑆} using ( Con ; IsCongruence )
+open import Homomorphisms.Basic  {𝑆 = 𝑆} using ( hom ; kercon ; ker[_⇒_]_↾_ ; πker ; is-homomorphism ; epi ; epi-to-hom )
 
 private variable α β γ : Level
 
@@ -74,7 +64,7 @@ Note that the classical, informal statement of the first homomorphism theorem do
 Without further ado, we present our formalization of the first homomorphism theorem.<sup>[2](Homomorphisms.Noether.html#fn2)</sup>
 
 \begin{code}
-open ≡-Reasoning
+open PE.≡-Reasoning
 
 FirstHomTheorem|Set :
 
@@ -98,7 +88,7 @@ FirstHomTheorem|Set 𝑨 𝑩 h pe fe Bset buip = (φ , φhom) , refl , φmon , 
 
   φhom : is-homomorphism (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩 φ
   φhom 𝑓 a = ∣ h ∣ ( (𝑓 ̂ 𝑨) (λ x → ⌞ a x ⌟) ) ≡⟨ ∥ h ∥ 𝑓 (λ x → ⌞ a x ⌟)  ⟩
-             (𝑓 ̂ 𝑩) (∣ h ∣ ∘ (λ x → ⌞ a x ⌟))  ≡⟨ cong (𝑓 ̂ 𝑩) refl ⟩
+             (𝑓 ̂ 𝑩) (∣ h ∣ ∘ (λ x → ⌞ a x ⌟))  ≡⟨ PE.cong (𝑓 ̂ 𝑩) refl ⟩
              (𝑓 ̂ 𝑩) (λ x → φ (a x))            ∎
 
   φmon : IsInjective φ
@@ -160,24 +150,22 @@ module _ {fe : swelldef 𝓥 β}(𝑨 : Algebra α 𝑆)(𝑩 : Algebra β 𝑆)
   →                 ∀ a  →  ∣ f ∣ a ≡ ∣ g ∣ a
 
  NoetherHomUnique f g hfk hgk (_ , R-block a refl) =
-  ∣ f ∣ (_ , R-block a refl) ≡⟨ cong-app(hfk ⁻¹)a ⟩
-  ∣ h ∣ a                    ≡⟨ cong-app(hgk)a ⟩
+  ∣ f ∣ (_ , R-block a refl) ≡⟨ PE.cong-app(hfk ⁻¹)a ⟩
+  ∣ h ∣ a                    ≡⟨ PE.cong-app(hgk)a ⟩
   ∣ g ∣ (_ , R-block a refl) ∎
 
 \end{code}
 
 If, in addition, we postulate extensionality of functions defined on the domain `ker[ 𝑨 ⇒ 𝑩 ] h`, then we obtain the following variation of the last result.<sup>[1](Homomorphisms.Noether.html#fn1)</sup>
 
-\begin{code}
-
- fe-NoetherHomUnique : {fuww : funext (α ⊔ lsuc β) β}(f g : hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩)
+```
+fe-NoetherHomUnique : {fuww : funext (α ⊔ lsuc β) β}(f g : hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩)
   →                    ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣
   →                    ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker fe{𝑩}h ∣
   →                    ∣ f ∣ ≡ ∣ g ∣
 
  fe-NoetherHomUnique {fuww} f g hfk hgk = fuww (NoetherHomUnique f g hfk hgk)
-
-\end{code}
+```
 
 The proof of `NoetherHomUnique` goes through for the special case of epimorphisms, as we now verify.
 
@@ -217,13 +205,13 @@ If `τ : hom 𝑨 𝑩`, `ν : hom 𝑨 𝑪`, `ν` is surjective, and `ker ν �
 
 module _ {𝑨 : Algebra α 𝑆}{𝑪 : Algebra γ 𝑆} where
 
- HomFactor : funext α β → swelldef 𝓥 γ
+ HomFactor : swelldef 𝓥 γ
   →          (𝑩 : Algebra β 𝑆)(τ : hom 𝑨 𝑩)(ν : hom 𝑨 𝑪)
   →          kernel ∣ ν ∣ ⊆ kernel ∣ τ ∣ → IsSurjective ∣ ν ∣
              --------------------------------------------------
-  →          Σ[ φ ∈ (hom 𝑪 𝑩)] ∣ τ ∣ ≡ ∣ φ ∣ ∘ ∣ ν ∣
+  →          Σ[ φ ∈ (hom 𝑪 𝑩)] ∀ x → ∣ τ ∣ x ≡ ∣ φ ∣ (∣ ν ∣ x)
 
- HomFactor fxy wd 𝑩 τ ν Kντ νE = (φ , φIsHomCB) , τφν
+ HomFactor wd 𝑩 τ ν Kντ νE = (φ , φIsHomCB) , τφν
   where
    νInv : ∣ 𝑪 ∣ → ∣ 𝑨 ∣
    νInv = SurjInv ∣ ν ∣ νE
@@ -237,13 +225,13 @@ module _ {𝑨 : Algebra α 𝑆}{𝑪 : Algebra γ 𝑆} where
    ξ : ∀ a → kernel ∣ ν ∣ (a , νInv (∣ ν ∣ a))
    ξ a = (η (∣ ν ∣ a))⁻¹
 
-   τφν : ∣ τ ∣ ≡ φ ∘ ∣ ν ∣
-   τφν = fxy λ x → Kντ (ξ x)
+   τφν : ∀ x → ∣ τ ∣ x ≡ φ (∣ ν ∣ x)
+   τφν = λ x → Kντ (ξ x)
 
    φIsHomCB : ∀ 𝑓 c → φ ((𝑓 ̂ 𝑪) c) ≡ ((𝑓 ̂ 𝑩)(φ ∘ c))
-   φIsHomCB 𝑓 c = φ ((𝑓 ̂ 𝑪) c)     ≡⟨ cong φ (wd (𝑓 ̂ 𝑪) c (∣ ν ∣ ∘ (νInv ∘ c)) (λ i → (η (c i))⁻¹)) ⟩
-                  φ ((𝑓 ̂ 𝑪)(∣ ν ∣ ∘(νInv ∘ c)))   ≡⟨ cong φ (∥ ν ∥ 𝑓 (νInv ∘ c))⁻¹ ⟩
-                  φ (∣ ν ∣((𝑓 ̂ 𝑨)(νInv ∘ c)))     ≡⟨ cong-app(τφν ⁻¹)((𝑓 ̂ 𝑨)(νInv ∘ c))⟩
+   φIsHomCB 𝑓 c = φ ((𝑓 ̂ 𝑪) c)     ≡⟨ PE.cong φ (wd (𝑓 ̂ 𝑪) c (∣ ν ∣ ∘ (νInv ∘ c)) (λ i → (η (c i))⁻¹)) ⟩
+                  φ ((𝑓 ̂ 𝑪)(∣ ν ∣ ∘(νInv ∘ c)))   ≡⟨ PE.cong φ (∥ ν ∥ 𝑓 (νInv ∘ c))⁻¹ ⟩
+                  φ (∣ ν ∣((𝑓 ̂ 𝑨)(νInv ∘ c)))     ≡⟨ (τφν ((𝑓 ̂ 𝑨)(νInv ∘ c)))⁻¹ ⟩
                   ∣ τ ∣((𝑓 ̂ 𝑨)(νInv ∘ c))         ≡⟨ ∥ τ ∥ 𝑓 (νInv ∘ c) ⟩
                   (𝑓 ̂ 𝑩)(λ x → ∣ τ ∣(νInv (c x))) ∎
 
@@ -253,23 +241,23 @@ If, in addition to the hypotheses of the last theorem, we assume τ is epic, the
 
 \begin{code}
 
- HomFactorEpi : funext α β → swelldef 𝓥 γ
+ HomFactorEpi : swelldef 𝓥 γ
   →             (𝑩 : Algebra β 𝑆)(τ : hom 𝑨 𝑩)(ν : hom 𝑨 𝑪)
   →             kernel ∣ ν ∣ ⊆ kernel ∣ τ ∣
   →             IsSurjective ∣ ν ∣ → IsSurjective ∣ τ ∣
                 ---------------------------------------------
-  →             Σ[ φ ∈ epi 𝑪 𝑩 ] ∣ τ ∣ ≡ ∣ φ ∣ ∘ ∣ ν ∣
+  →             Σ[ φ ∈ epi 𝑪 𝑩 ] ∀ x → ∣ τ ∣ x ≡ ∣ φ ∣ (∣ ν ∣ x)
 
- HomFactorEpi fxy wd 𝑩 τ ν kerincl νe τe = (fst ∣ φF ∣ ,(snd ∣ φF ∣ , φE)), ∥ φF ∥
+ HomFactorEpi wd 𝑩 τ ν kerincl νe τe = (fst ∣ φF ∣ ,(snd ∣ φF ∣ , φE)), ∥ φF ∥
   where
-   φF : Σ[ φ ∈ hom 𝑪 𝑩 ] ∣ τ ∣ ≡ ∣ φ ∣ ∘ ∣ ν ∣
-   φF = HomFactor fxy wd 𝑩 τ ν kerincl νe
+   φF : Σ[ φ ∈ hom 𝑪 𝑩 ] ∀ x → ∣ τ ∣ x ≡ ∣ φ ∣ (∣ ν ∣ x)
+   φF = HomFactor wd 𝑩 τ ν kerincl νe
 
    φ : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
    φ = ∣ τ ∣ ∘ (SurjInv ∣ ν ∣ νe)
 
    φE : IsSurjective φ
-   φE = epic-factor-intensional  ∣ τ ∣ ∣ ν ∣ φ ∥ φF ∥ τe
+   φE = epic-factor ∣ τ ∣ ∣ ν ∣ φ ∥ φF ∥ τe
 
 \end{code}
 

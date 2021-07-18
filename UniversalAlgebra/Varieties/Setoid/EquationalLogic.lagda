@@ -1,6 +1,6 @@
 ---
 layout: default
-title : Varieties.EquationalLogic.Setoid module (The Agda Universal Algebra Library)
+title : Varieties.Setoid.EquationalLogic module (The Agda Universal Algebra Library)
 date : 2021-01-14
 author: [agda-algebras development team][]
 ---
@@ -20,7 +20,7 @@ This module is based on Andreas Abel's Agda formalization of Birkhoff's complete
 
 open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
-module Varieties.EquationalLogic.Setoid {𝑆 : Signature 𝓞 𝓥} where
+module Varieties.Setoid.EquationalLogic {𝑆 : Signature 𝓞 𝓥} where
 
 
 -- imports from Agda and the Agda Standard Library -------------------------------------------
@@ -47,10 +47,10 @@ open IsEquivalence renaming ( refl  to  reflE
 
 -- imports from agda-algebras --------------------------------------------------------------
 open import Overture.Preliminaries       using ( ∣_∣ )
-open import Algebras.Setoid      {𝑆 = 𝑆} using ( SetoidAlgebra ; ⟦_⟧s )
-open import Products.Basic       {𝑆 = 𝑆} using ( ov )
+open import Algebras.Setoid.Basic{𝑆 = 𝑆} using ( SetoidAlgebra ; ⟦_⟧s )
+open import Algebras.Products    {𝑆 = 𝑆} using ( ov )
 open import Terms.Basic          {𝑆 = 𝑆} using ( Term )
-open import Terms.Setoid         {𝑆 = 𝑆} using ( module Environment ; Ops ; Sub ; _[_] )
+open import Terms.Setoid.Basic   {𝑆 = 𝑆} using ( module Environment ; Ops ; Sub ; _[_] )
 
 open Term
 

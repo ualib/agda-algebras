@@ -1,13 +1,13 @@
 ---
 layout: default
-title : Algebras.Congruences.Basic module (The Agda Universal Algebra Library)
+title : Algebras.Congruences module (The Agda Universal Algebra Library)
 date : 2021-07-03
 author: [agda-algebras development team][]
 ---
 
-### <a id="congruence-relations">Congruence Relations</a>
+### Congruence Relations
 
-This is the [Congruences.Basic][] module of the [Agda Universal Algebra Library][].
+This is the [Algebras.Congruences][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
@@ -15,32 +15,23 @@ This is the [Congruences.Basic][] module of the [Agda Universal Algebra Library]
 
 open import Algebras.Basic
 
-module Congruences.Basic {𝑆 : Signature 𝓞 𝓥} where
+module Algebras.Congruences {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
-open import Axiom.Extensionality.Propositional    renaming (Extensionality to funext)
-
-open import Agda.Builtin.Equality                 using    ( _≡_ ; refl     )
-open import Agda.Primitive                        using    ( _⊔_            )
-                                                  renaming ( Set to  Type   )
-open import Data.Product                          using    ( _,_ ;   Σ
-                                                           ; _×_ ; Σ-syntax )
-open import Function.Base                         using    ( _∘_            )
-open import Level                                 renaming ( suc to lsuc    )
-open import Relation.Binary                       using    ( IsEquivalence  )
-                                                  renaming ( Rel to BinRel  )
-open import Relation.Binary.PropositionalEquality using    ( sym ; trans
-                                                           ; cong           )
+open import Agda.Builtin.Equality  using ( _≡_ ; refl )
+open import Agda.Primitive         using ( _⊔_ ; lsuc ) renaming ( Set to Type )
+open import Data.Product           using ( Σ-syntax ; _,_ )
+open import Function.Base          using ( _∘_ )
+open import Level                  using ( Level ; Lift )
+open import Relation.Binary        using ( IsEquivalence ) renaming ( Rel to BinRel )
 
 
 -- Imports from agda-algebras --------------------------------------------------------------
 open import Overture.Preliminaries    using ( ∣_∣  ; ∥_∥  )
-open import Relations.Discrete        using ( 0[_] ; _|:_ )
-open import Relations.Quotients       using ( _/_  ; ⟪_⟫ ; IsBlock ; Quotient
-                                            ; Equivalence ; 0[_]Equivalence
-                                            ;  ⟪_∼_⟫-elim )
-open import Relations.Extensionality  using (swelldef)
-open import Products.Basic {𝑆 = 𝑆}    using (ov)
+open import Relations.Discrete        using ( _|:_ ; 0[_] )
+open import Relations.Quotients       using ( 0[_]Equivalence ; _/_ ; ⟪_⟫ ; IsBlock )
+open import Relations.Extensionality  using ( swelldef )
+open import Algebras.Products {𝑆 = 𝑆} using ( ov )
 
 
 
@@ -78,6 +69,8 @@ Con→IsCongruence θ = ∥ θ ∥
 We defined the *zero relation* `0[_]` in the [Relations.Discrete][] module.  We now build the *trivial congruence*, which has `0[_]` as its underlying relation. Observe that `0[_]` is equivalent to the identity relation `≡` and these are obviously both equivalence relations. In fact, we already proved this of `≡` in the [Overture.Equality][] module, so we simply apply the corresponding proofs.
 
 \begin{code}
+open Level
+
 -- Example. The zero congruence of a structure.
 0[_]Compatible : {α : Level}(𝑨 : Algebra α 𝑆){ρ : Level} → swelldef 𝓥 α → (𝑓 : ∣ 𝑆 ∣) → (𝑓 ̂ 𝑨) |: (0[ ∣ 𝑨 ∣ ]{ρ})
 0[ 𝑨 ]Compatible wd 𝑓 {i}{j} ptws0  = lift γ

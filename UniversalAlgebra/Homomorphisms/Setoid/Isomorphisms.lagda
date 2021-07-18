@@ -1,6 +1,6 @@
 ---
 layout: default
-title : Isomoprhisms.Setoid module (The Agda Universal Algebra Library)
+title : Homomorphisms.Setoid.Isomoprhisms module (The Agda Universal Algebra Library)
 date : 2021-07-11
 author: [agda-algebras development team][]
 ---
@@ -13,7 +13,7 @@ author: [agda-algebras development team][]
 
 open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
-module Isomorphisms.Setoid {𝑆 : Signature 𝓞 𝓥}  where
+module Homomorphisms.Setoid.Isomorphisms {𝑆 : Signature 𝓞 𝓥}  where
 
 
 -- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
@@ -32,14 +32,13 @@ open import Relation.Binary.PropositionalEquality as PE using    ( cong   ;   co
 
 
 -- Imports from agda-algebras --------------------------------------------------------------
-open import Overture.Preliminaries       using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; transport ; _∙_
-                                               ; lower∼lift ; lift∼lower )
-                                          renaming (_≈_ to _≋_ )
-open import Overture.Inverses            using (IsInjective)
-open import Products.Basic       {𝑆 = 𝑆} using ( ov )
-open import Products.Setoid       {𝑆 = 𝑆} using ( ⨅ )
-open import Algebras.Setoid      {𝑆 = 𝑆} using ( SetoidAlgebra ; 𝕌[_] ; _̂_ ; Lift-SetoidAlg)
-open import Homomorphisms.Setoid {𝑆 = 𝑆} using ( hom ; kercon ; ker[_⇒_]_↾_ ; ∘-hom ; 𝒾𝒹 
+open import Overture.Preliminaries         using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; transport ; _∙_ ; lower∼lift ; lift∼lower )
+                                           renaming (_≈_ to _≋_ )
+open import Overture.Inverses                using (IsInjective)
+open import Algebras.Products        {𝑆 = 𝑆} using ( ov )
+open import Algebras.Setoid.Products {𝑆 = 𝑆} using ( ⨅ )
+open import Algebras.Setoid.Basic    {𝑆 = 𝑆} using ( SetoidAlgebra ; 𝕌[_] ; _̂_ ; Lift-SetoidAlg)
+open import Homomorphisms.Setoid.Basic {𝑆 = 𝑆} using ( hom ; kercon ; ker[_⇒_]_↾_ ; ∘-hom ; 𝒾𝒹 
                                                ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-homomorphism ; ∘-is-hom ) -- ; Lift-hom)
 
 -- private variable α ρᵃ β ρᵇ γ ρᶜ : Level

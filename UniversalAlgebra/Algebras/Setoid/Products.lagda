@@ -1,6 +1,6 @@
 ---
 layout: default
-title : Products.Setoid module (Agda Universal Algebra Library)
+title : Algebras.Setoid.Products module (Agda Universal Algebra Library)
 date : 2021-07-03
 author: [agda-algebras development team][]
 ---
@@ -8,7 +8,7 @@ author: [agda-algebras development team][]
 
 ### Products of SetoidAlgebras
 
-This is the [Products.Setoid][] module of the [Agda Universal Algebra Library][].
+This is the [Algebras.Setoid.Products][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
@@ -17,36 +17,30 @@ This is the [Products.Setoid][] module of the [Agda Universal Algebra Library][]
 
 open import Algebras.Basic using (𝓞 ; 𝓥 ; Signature)
 
-module Products.Setoid {𝑆 : Signature 𝓞 𝓥} where
+module Algebras.Setoid.Products {𝑆 : Signature 𝓞 𝓥} where
 
-open import Agda.Builtin.Equality  using    ( _≡_    ;  refl          )
-open import Agda.Primitive                        using    ( lsuc  ; _⊔_ ; Level     )
-                                                  renaming ( Set   to Type    )
-open import Function.Bundles       using    ( Func                    )
-open import Function.Base          using    ( flip                    )
-open import Relation.Binary        using    ( Setoid ;  IsEquivalence )
+open import Agda.Builtin.Equality  using ( _≡_ ; refl )
+open import Agda.Primitive         using ( lsuc ; _⊔_ ; Level ) renaming ( Set to Type )
+open import Data.Product           using ( _,_ ; Σ ; Σ-syntax )
+open import Function.Base          using ( flip )
+open import Function.Bundles       using ( Func )
+open import Relation.Binary        using ( Setoid ;  IsEquivalence )
+open import Relation.Unary         using ( Pred ; _⊆_ ; _∈_ )
 
+open import Overture.Preliminaries        using ( ∣_∣; ∥_∥)
+open import Algebras.Setoid.Basic {𝑆 = 𝑆} using ( Algebroid ; ⟦_⟧s ; SetoidAlgebra ; _̂_)
 
-open import Data.Product                          using    ( _,_ ; Σ ; Σ-syntax )
-open import Relation.Unary                        using    ( Pred  ; _⊆_ ; _∈_  )
-
-open import Overture.Preliminaries using ( ∣_∣; ∥_∥)
-open import Algebras.Setoid {𝑆 = 𝑆} using ( Algebroid ; ⟦_⟧s ; SetoidAlgebra ; _̂_)
+open Func          using ( cong ) renaming ( f to _<$>_ )
+open Setoid        using ( Carrier ; _≈_ ) renaming ( isEquivalence to isEqv )
+open IsEquivalence using () renaming ( refl to reflE ; sym to symE ; trans to transE )
 
 private variable α ρ ι : Level
 
+\end{code}
 
-open Func           using    ( cong                     )
-                    renaming ( f             to  _<$>_  )
-open Setoid         using    ( Carrier       ;   _≈_    )
-                    renaming ( isEquivalence to  isEqv  )
-open IsEquivalence  renaming ( refl          to  reflE
-                             ; sym           to  symE
-                             ; trans         to  transE )
+#### Products of SetoidAlgebras
 
-
--- Products of SetoidAlgebras
--- --------------------------
+\begin{code}
 
 open SetoidAlgebra
 
@@ -68,10 +62,11 @@ Domain (⨅ {I} 𝒜) =
 (Interp (⨅ {I} 𝒜)) <$> (f , a) = λ i → (f ̂ (𝒜 i)) (flip a i)
 cong (Interp (⨅ {I} 𝒜)) (refl , f=g ) = λ i → cong  (Interp (𝒜 i)) (refl , flip f=g i )
 
+\end{code}
 
+#### Products of Algebroids
 
--- Products of Algebroids
--- ----------------------
+\begin{code}
 
 ⨅oid : {I : Type ι }(𝒜 : I → Algebroid α ρ) → Algebroid (α ⊔ ι) (ρ ⊔ ι)
 
@@ -91,9 +86,11 @@ cong (Interp (⨅ {I} 𝒜)) (refl , f=g ) = λ i → cong  (Interp (𝒜 i)) (r
  interp <$> (f , as ) = λ i → ∥ 𝒜 i ∥ <$> (f , (flip as i ))
  cong  interp (refl , f=g) i = cong  ∥ 𝒜 i ∥ (refl , (flip f=g i))
 
+\end{code}
 
--- Products of classes of Algebroids
--- ---------------------------------
+#### Products of classes of Algebroids
+
+\begin{code}
 
 module _ {𝒦 : Pred (Algebroid α ρ) (𝓞 ⊔ 𝓥 ⊔ lsuc α)} where
 
@@ -109,5 +106,7 @@ module _ {𝒦 : Pred (Algebroid α ρ) (𝓞 ⊔ 𝓥 ⊔ lsuc α)} where
 
 \end{code}
 
-If `p : 𝑨 ∈ 𝒦`, we view the pair `(𝑨 , p) ∈ ℑ` as an *index* over the class, so we can think of `𝔄 (𝑨 , p)` (which is simply `𝑨`) as the projection of the product `⨅ 𝔄` onto the `(𝑨 , p)`-th component.
+If `p : 𝑨 ∈ 𝒦`, we view the pair `(𝑨 , p) ∈ ℑ` as an *index* over the class,
+so we can think of `𝔄 (𝑨 , p)` (which is simply `𝑨`) as the projection of the
+product `⨅ 𝔄` onto the `(𝑨 , p)`-th component.
 

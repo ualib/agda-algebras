@@ -1,13 +1,13 @@
 ---
 layout: default
-title : Algebras.Basic module (Agda Universal Algebra Library)
+title : Algebras.Setoid.Basic module (Agda Universal Algebra Library)
 date : 2021-04-23
 author: [agda-algebras development team][]
 ---
 
-### <a id="algebras">Basic Definitions</a>
+### Basic Definitions
 
-This is the [Algebras.Basic][] module of the [Agda Universal Algebra Library][].
+This is the [Algebras.Setoid.Basic][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
@@ -15,7 +15,7 @@ This is the [Algebras.Basic][] module of the [Agda Universal Algebra Library][].
 
 open import Algebras.Basic using (𝓞 ; 𝓥 ; Signature )
 
-module Algebras.Setoid {𝑆 : Signature 𝓞 𝓥} where
+module Algebras.Setoid.Basic {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from the Agda (Builtin) and the Agda Standard Library
 open import Agda.Builtin.Equality  using    ( _≡_    ;  refl          )

@@ -17,20 +17,16 @@ module Algebras.Basic where
 
 -- Imports from the Agda (Builtin) and the Agda Standard Library
 open import Agda.Builtin.Bool
-open import Agda.Builtin.Equality  using    (_≡_    ;   refl     )
-open import Agda.Primitive         using    ( _⊔_                )
-                                   renaming ( Set   to  Type
-                                            ; lzero to  ℓ₀       )
-open import Data.Empty             using    ( ⊥                  )
-open import Data.Product           using    ( _,_   ;   _×_
-                                            ; Σ     ;   Σ-syntax )
-open import Level                  renaming ( suc   to  lsuc
-                                            ; zero  to  lzero    )
-open import Relation.Binary        using    ( IsEquivalence      )
-                                   renaming ( Rel   to  BinRel   )
-open import Relation.Unary         using    ( _∈_   ;   Pred     )
+open import Agda.Builtin.Equality  using (_≡_ ; refl )
+open import Agda.Primitive         using ( _⊔_ ; lsuc ) renaming ( Set to  Type ; lzero to ℓ₀ )
+open import Data.Empty             using ( ⊥ )
+open import Data.Product           using ( _,_ ; _×_ ; Σ ; Σ-syntax )
+open import Level                  using ( Level ; Lift )
+open import Relation.Binary        using ( IsEquivalence ) renaming ( Rel to BinRel )
+open import Relation.Unary         using ( _∈_ ; Pred )
 
--- -- Imports from the Agda Universal Algebra Library
+
+-- Imports from the Agda Universal Algebra Library
 open import Overture.Preliminaries using (∣_∣; ∥_∥)
 open import Relations.Discrete     using ( Op ; _|:_ ; Arity ; _|:pred_ )
 open import Relations.Continuous   using ( Rel; ΠΡ ; compatible-Rel ; compatible-ΠΡ )
@@ -87,7 +83,7 @@ In the [Overture][] module we defined special syntax for the first and second pr
 data monoid-op {𝓞 : Level} : Type 𝓞 where
  e : monoid-op; · : monoid-op
 
-monoid-sig : Signature 𝓞 lzero
+monoid-sig : Signature 𝓞 ℓ₀
 monoid-sig = monoid-op , λ { e → ⊥; · → Bool }
 
 \end{code}
@@ -212,8 +208,7 @@ Recall, in the [section on level lifting and lowering](Overture.Lifts.html#level
 \begin{code}
 
 
-open Lift
-
+open Level
 
 Lift-alg-op : {I : Arity 𝓥} {A : Type α} → Op A I → (β : Level) → Op (Lift β A) I
 Lift-alg-op f β = λ x → lift (f (λ i → lower (x i)))

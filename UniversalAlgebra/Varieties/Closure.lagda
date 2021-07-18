@@ -1,6 +1,6 @@
 ---
 layout: default
-title : Varieties.Closure.Basic module (The Agda Universal Algebra Library)
+title : Varieties.Closure  module (The Agda Universal Algebra Library)
 date : 2021-01-14
 author: [agda-algebras development team][]
 ---
@@ -26,7 +26,7 @@ A **variety** is a class of algebras, in the same signature, that is closed unde
 
 open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
-module Varieties.Closure.Basic {𝑆 : Signature 𝓞 𝓥} where
+module Varieties.Closure {𝑆 : Signature 𝓞 𝓥} where
 
 open import Axiom.Extensionality.Propositional renaming ( Extensionality to funext )
 open import Agda.Primitive      using    ( _⊔_ ;  lsuc )
@@ -39,9 +39,9 @@ open import Relation.Unary      using    ( Pred  ; _∈_ ; _⊆_ )
 
 
 open import Overture.Preliminaries                  using ( ∣_∣ ; ∥_∥ )
-open import Products.Basic                  {𝑆 = 𝑆} using ( ov ; ⨅ )
 open import Algebras.Basic                          using ( Algebra ; Lift-Alg )
-open import Isomorphisms.Basic              {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; Lift-≅
+open import Algebras.Products               {𝑆 = 𝑆} using ( ov ; ⨅ )
+open import Homomorphisms.Isomorphisms      {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; Lift-≅
                                                           ; ≅-trans ; Lift-Alg-⨅≅
                                                           ; ≅-refl ; Lift-Alg-iso
                                                           ; Lift-Alg-associative )

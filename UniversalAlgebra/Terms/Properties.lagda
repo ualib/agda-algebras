@@ -14,7 +14,7 @@ This is the [Terms.Properties][] module of the [Agda Universal Algebra Library][
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Algebras.Basic
+open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Terms.Properties {𝑆 : Signature 𝓞 𝓥} where
 
@@ -35,11 +35,11 @@ open import Relation.Binary.Definitions using (Reflexive ; Symmetric ; Transitiv
 
 
 -- Imports from agda-algebras --------------------------------------------------------------
-open import Overture.Preliminaries     using ( _⁻¹ ; 𝑖𝑑 ; ∣_∣ ; ∥_∥)
-open import Overture.Inverses          using ( IsSurjective ; Inv
-                                             ; InvIsInv ; Image_∋_; eq )
+open import Overture.Preliminaries      using ( _⁻¹ ; 𝑖𝑑 ; ∣_∣ ; ∥_∥)
+open import Overture.Inverses           using ( IsSurjective ; Inv ; InvIsInv ; Image_∋_; eq )
 open import Relations.Extensionality    using (swelldef)
-open import Products.Basic      {𝑆 = 𝑆} using ( ov )
+open import Algebras.Basic              using ( Algebra ; _̂_ )
+open import Algebras.Products   {𝑆 = 𝑆} using ( ov )
 open import Homomorphisms.Basic {𝑆 = 𝑆} using ( hom )
 open import Terms.Basic         {𝑆 = 𝑆}
 

@@ -18,16 +18,13 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 module Varieties.Preservation {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
-open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
-open import Agda.Primitive          renaming ( Set   to Type )
-                                    using    ( _⊔_   ; lsuc ; Level )
-open import Agda.Builtin.Equality   using    ( _≡_   ; refl )
-open import Data.Product            using    ( _,_   ; Σ-syntax ; _×_ )
-                                    renaming ( proj₁ to fst ; proj₂ to snd )
-open import Data.Sum.Base           using    ( _⊎_ )
-                                    renaming ( inj₁  to inl ; inj₂  to inr )
-open import Function.Base           using    ( _∘_ )
-open import Relation.Unary          using    ( Pred ; _⊆_ ; _∈_ ; ｛_｝ ; _∪_ )
+open import Agda.Builtin.Equality   using ( _≡_ ; refl )
+open import Agda.Primitive          using ( _⊔_ ; lsuc ; Level )   renaming ( Set   to Type )
+open import Axiom.Extensionality.Propositional using ()            renaming (Extensionality to funext)
+open import Data.Product            using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Data.Sum.Base           using ( _⊎_ )                  renaming ( inj₁  to inl ; inj₂  to inr )
+open import Function.Base           using ( _∘_ )
+open import Relation.Unary          using ( Pred ; _⊆_ ; _∈_ ; ｛_｝ ; _∪_ )
 import Relation.Binary.PropositionalEquality as PE
 
 
@@ -38,18 +35,18 @@ open import Overture.Inverses                  using ( Inv ; IsInjective ; InvIs
 open import Relations.Truncation               using ( hfunext )
 open import Relations.Extensionality           using ( SwellDef; DFunExt )
 open import Algebras.Basic                     using ( Algebra ; Lift-Alg )
-open import Products.Basic             {𝑆 = 𝑆} using ( ov ; ⨅ ; 𝔄 ; class-product)
+open import Algebras.Products          {𝑆 = 𝑆} using ( ov ; ⨅ ; 𝔄 ; class-product)
 open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( is-homomorphism )
-open import Isomorphisms.Basic         {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; Lift-≅ ; ≅-trans ; ≅-refl
-                                                     ; ⨅≅ ; Lift-Alg-iso ; Lift-Alg-associative )
+open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; Lift-≅ ; ≅-trans ; ⨅≅ ; ≅-refl
+                                                     ; Lift-Alg-iso ; Lift-Alg-associative )
 open import Terms.Basic                {𝑆 = 𝑆} using ( Term ; 𝑻 )
 open import Terms.Operations           {𝑆 = 𝑆} using ( _⟦_⟧; comm-hom-term)
 open import Subalgebras.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; _IsSubalgebraOfClass_ ; ≤-Lift
                                                      ; Lift-≤-Lift ; _IsSubalgebraOf_ ; SubalgebraOfClass )
-open import Varieties.EquationalLogic.Basic {𝑆 = 𝑆} using ( _⊫_≈_ ; _⊧_≈_ ; Th)
+open import Varieties.EquationalLogic  {𝑆 = 𝑆} using ( _⊫_≈_ ; _⊧_≈_ ; Th)
 open import Varieties.Properties       {𝑆 = 𝑆} using ( ⊧-Lift-invar ; ⊧-lower-invar ; ⊧-S-class-invar
                                                      ; ⊧-I-invar ; ⊧-P-lift-invar ; ⊧-P-invar ; ⊧-S-invar)
-open import Varieties.Closure.Basic    {𝑆 = 𝑆} using ( H ; S ; P ; V ; P-expa ; S→subalgebra
+open import Varieties.Closure          {𝑆 = 𝑆} using ( H ; S ; P ; V ; P-expa ; S→subalgebra
                                                      ; Lift-Alg-subP' ; subalgebra→S ; S-mono
                                                      ; P-idemp ; module Vlift)
 open H

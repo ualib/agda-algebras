@@ -15,7 +15,7 @@ We start by defining a type that represents the important concept of **subuniver
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Algebras.Basic
+open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Subalgebras.Subuniverses {𝑆 : Signature 𝓞 𝓥} where
 
@@ -29,10 +29,11 @@ open import Function.Base           using    ( _∘_ )
 open import Relation.Unary          using    ( Pred ; _∈_ ; _⊆_ ; ⋂ )
 
 -- imports from agda-algebras ------------------------------------------------------
-open import Overture.Preliminaries      using (∣_∣; ∥_∥; _⁻¹)
-open import Relations.Discrete          using (Im_⊆_)
-open import Relations.Extensionality    using (swelldef)
-open import Products.Basic      {𝑆 = 𝑆} using ( ov )
+open import Overture.Preliminaries      using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
+open import Relations.Discrete          using ( Im_⊆_ )
+open import Relations.Extensionality    using ( swelldef )
+open import Algebras.Basic              using ( Algebra ; _̂_ )
+open import Algebras.Products   {𝑆 = 𝑆} using ( ov )
 open import Terms.Basic         {𝑆 = 𝑆} using ( Term ; ℊ ; node )
 open import Terms.Operations    {𝑆 = 𝑆} using ( _⟦_⟧ )
 open import Homomorphisms.Basic {𝑆 = 𝑆} using ( hom )

@@ -1,6 +1,6 @@
 ---
 layout: default
-title : Varieties.EquationalLogic.Basic module (The Agda Universal Algebra Library)
+title : Varieties.EquationalLogic module (The Agda Universal Algebra Library)
 date : 2021-01-14
 author: [agda-algebras development team][]
 ---
@@ -24,7 +24,7 @@ Agda supports the definition of infix operations and relations, and we use this 
 
 open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
-module Varieties.EquationalLogic.Basic {𝑆 : Signature 𝓞 𝓥} where
+module Varieties.EquationalLogic {𝑆 : Signature 𝓞 𝓥} where
 
 
 -- imports from Agda and the Agda Standard Library -------------------------------------------
@@ -39,7 +39,7 @@ open import Relation.Unary   using    ( Pred ; _∈_ )
 -- -- imports from agda-algebras --------------------------------------------------------------
 open import Overture.Preliminaries    using ( _≈_ )
 open import Algebras.Basic            using ( Algebra )
-open import Products.Basic    {𝑆 = 𝑆} using ( ov )
+open import Algebras.Products {𝑆 = 𝑆} using ( ov )
 open import Terms.Basic       {𝑆 = 𝑆} using ( Term ; 𝑻 )
 open import Terms.Operations  {𝑆 = 𝑆} using ( _⟦_⟧ )
 

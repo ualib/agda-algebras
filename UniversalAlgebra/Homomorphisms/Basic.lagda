@@ -39,8 +39,8 @@ open import Overture.Inverses            using (IsInjective; IsSurjective; Image
 open import Relations.Extensionality     using (swelldef)
 open import Relations.Discrete           using (ker)
 open import Relations.Quotients          using (ker-IsEquivalence; _/_; ⟪_⟫; R-block)
-open import Congruences.Basic    {𝑆 = 𝑆} using (Con; IsCongruence; mkcon; _╱_; /-≡)
-open import Products.Basic       {𝑆 = 𝑆} using (⨅)
+open import Algebras.Congruences {𝑆 = 𝑆} using (Con; IsCongruence; mkcon; _╱_; /-≡)
+open import Algebras.Products    {𝑆 = 𝑆} using (⨅)
 
 private variable α β γ ρ : Level
 

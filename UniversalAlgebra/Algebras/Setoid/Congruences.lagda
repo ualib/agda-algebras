@@ -1,6 +1,6 @@
 ---
 layout: default
-title : Algebras.Congruences.Setoid module (The Agda Universal Algebra Library)
+title : Algebras.Setoid.Congruences module (The Agda Universal Algebra Library)
 date : 2021-07-03
 author: [agda-algebras development team][]
 ---
@@ -15,22 +15,22 @@ This is the [Congruences.Setoid][] module of the [Agda Universal Algebra Library
 
 open import Algebras.Basic using (𝓞 ; 𝓥 ; Signature)
 
-module Congruences.Setoid {𝑆 : Signature 𝓞 𝓥} where
+module Algebras.Setoid.Congruences {𝑆 : Signature 𝓞 𝓥} where
+
 
 -- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
-open import Function.Bundles       using    ( Func                    )
-open import Agda.Builtin.Equality  using    ( _≡_    ;  refl          )
-open import Agda.Primitive         using    ( _⊔_    ;  Level         )
-                                   renaming ( Set    to Type          )
-open import Data.Product           using    ( _,_    ;  Σ-syntax      )
-open import Relation.Binary        using    ( Setoid ;  IsEquivalence )
-                                   renaming ( Rel    to BinRel        )
+open import Function.Bundles      using ( Func )
+open import Agda.Builtin.Equality using ( _≡_ ; refl )
+open import Agda.Primitive        using ( _⊔_ ; Level ) renaming ( Set to Type )
+open import Data.Product          using ( _,_ ; Σ-syntax )
+open import Relation.Binary       using ( Setoid ; IsEquivalence ) renaming ( Rel to BinRel )
+
 
 -- Imports from agda-algebras --------------------------------------------------------------
-open import Overture.Preliminaries    using ( ∣_∣  ; ∥_∥  )
-open import Relations.Discrete        using ( 0[_] ; _|:_ )
-open import Algebras.Setoid   {𝑆 = 𝑆} using ( Algebroid ; _̂_ ; _∙_ ; ⟦_⟧s ; SetoidAlgebra ; 𝕌[_])
-open import Products.Basic    {𝑆 = 𝑆} using ( ov )
+open import Overture.Preliminaries        using ( ∣_∣  ; ∥_∥  )
+open import Relations.Discrete            using ( 0[_] ; _|:_ )
+open import Algebras.Setoid.Basic {𝑆 = 𝑆} using ( Algebroid ; _̂_ ; _∙_ ; ⟦_⟧s ; SetoidAlgebra ; 𝕌[_])
+open import Algebras.Products     {𝑆 = 𝑆} using ( ov )
 
 private variable α ρ ℓ : Level
 
