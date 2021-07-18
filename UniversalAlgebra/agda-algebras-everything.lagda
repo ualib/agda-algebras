@@ -44,11 +44,10 @@ open import Relations.Truncation            using    ( is-center ; is-singleton 
                                                      ; blk-uip ; IsRelProp ; RelProp ; RelPropExt ; IsΠΡProp
                                                      ; ΠΡProp ; ΠΡPropExt )
 
-open import Relations.Extensionality        using    ( SurjInvIsRightInv ; epic-factor ; pred-ext
-                                                     ; epic-factor-intensional ; block-ext
-                                                     ; block-ext|uip ; welldef ; swelldef )
-
-
+open import Relations.Extensionality        using    ( DFunExt ; SurjInvIsRightInv ; epic-factor
+                                                     ; epic-factor-intensional ; _≐_ ; pred-ext
+                                                     ; block-ext ; block-ext|uip ; welldef
+                                                     ; swelldef ; funext→swelldef ; SwellDef )
 
 
 -- GALOIS CONNECTIONS -------------------------------------------------------------------------------

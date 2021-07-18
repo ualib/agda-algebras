@@ -15,40 +15,30 @@ This section presents the [Relations.Extensionality][] module of the [Agda Unive
 
 module Relations.Extensionality where
 
-open import Axiom.Extensionality.Propositional    using    ()
-                                                  renaming (Extensionality to funext)
-
-open import Agda.Builtin.Equality                 using    (_≡_    ;  refl    )
-open import Agda.Primitive                        using    ( _⊔_              )
-                                                  renaming ( Set   to Type    )
-open import Data.Product                          using    ( _,_   ; Σ-syntax
-                                                           ; _×_   ; Σ        )
-                                                  renaming ( proj₁ to fst
-                                                           ; proj₂ to snd     )
-open import Function.Base                         using    ( _∘_   ;  id      )
-open import Level                                 renaming ( suc   to lsuc    )
-open import Relation.Binary                       using    ( IsEquivalence    )
-                                                  renaming ( Rel   to BinRel  )
-open import Relation.Binary.PropositionalEquality using    ( sym   ;  cong-app
-                                                           ; trans            )
-open import Relation.Unary                        using    ( Pred  ; _⊆_      )
+-- imports from Agda and the Agda Standard Library ------------------------------------
+open import Agda.Builtin.Equality  using (_≡_ ; refl )
+open import Agda.Primitive         using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type ; Setω to Typeω )
+open import Data.Product           using ( _,_ ;  _×_ )
+open import Function.Base          using ( _∘_ ; id )
+open import Relation.Binary        using ( IsEquivalence ) renaming ( Rel to BinRel )
+open import Relation.Unary         using ( Pred ; _⊆_ )
+open import Axiom.Extensionality.Propositional using () renaming ( Extensionality to funext )
 import Relation.Binary.PropositionalEquality as PE
 
 
-
-open import Overture.Preliminaries using ( 𝑖𝑑 ; _⁻¹ ; _∙_ ; transport ; _≈_)
-open import Overture.Inverses      using ( IsSurjective ; SurjInv
-                                         ; InvIsInv ; Image_∋_ ; eq  )
-open import Relations.Discrete     using ( Op                        )
-open import Relations.Quotients    using ( [_] ; []-⊆ ; []-⊇ -- /-subset ; /-supset
-                                         ; IsBlock ; ⟪_⟫  )
-open import Relations.Truncation   using ( blk-uip ; to-Σ-≡          )
+-- imports from agda-algebras --------------------------------------------------------------
+open import Overture.Preliminaries using ( _≈_; _⁻¹ ; _∙_ ; transport )
+open import Overture.Inverses      using ( IsSurjective ; SurjInv ; InvIsInv ; Image_∋_ ; eq )
+open import Relations.Discrete     using ( Op )
+open import Relations.Quotients    using ( [_] ; []-⊆ ; []-⊇ ; IsBlock ; ⟪_⟫ )
+open import Relations.Truncation   using ( blk-uip ; to-Σ-≡ )
 
 
 private variable α β γ ρ 𝓥 : Level
+
 \end{code}
 
-#### <a id="extensionality">Function Extensionality</a>
+#### Function Extensionality
 
 
 Previous versions of [UniversalAlgebra][] made heavy use of a *global function extensionality principle*. This asserts that function extensionality holds at all universe levels.
@@ -58,7 +48,7 @@ The following definition is useful for postulating function extensionality when 
 
 \begin{code}
 
-DFunExt : Setω
+DFunExt : Typeω
 DFunExt = (𝓤 𝓥 : Level) → funext 𝓤 𝓥
 
 
@@ -67,17 +57,13 @@ module _ {A : Type α}{B : Type β} where
  SurjInvIsRightInv : (f : A → B)(fE : IsSurjective f) → ∀ b → f ((SurjInv f fE) b) ≡ b
  SurjInvIsRightInv f fE b = InvIsInv f (fE b)
 
-\end{code}
-
-We can also prove the following composition law for epics.
-
-\begin{code}
-
  open PE.≡-Reasoning
+
+ -- composition law for epics
  epic-factor : {C : Type γ}(f : A → B)(g : A → C)(h : C → B)
   →            f ≈ h ∘ g → IsSurjective f → IsSurjective h
 
- epic-factor f g h compId fe y = Goal -- Goal
+ epic-factor f g h compId fe y = Goal
   where
    finv : B → A
    finv = SurjInv f fe
@@ -103,7 +89,7 @@ We can also prove the following composition law for epics.
    ζ = SurjInvIsRightInv f fe y
 
    η : (h ∘ g) (finv y) ≡ y
-   η = (cong-app (compId ⁻¹)(finv y)) ∙ ζ
+   η = (PE.cong-app (compId ⁻¹)(finv y)) ∙ ζ
 
    Goal : Image h ∋ y
    Goal = eq (g (finv y)) (η ⁻¹)
@@ -111,7 +97,7 @@ We can also prove the following composition law for epics.
 \end{code}
 
 
-#### <a id="alternative-extensionality-type">An alternative way to express function extensionality</a>
+#### An alternative way to express function extensionality
 
 A useful alternative for expressing dependent function extensionality, which is essentially equivalent to `dfunext`, is to assert that the `happly` function is actually an *equivalence*.
 
@@ -131,8 +117,7 @@ pred-ext α β = ∀ {A : Type α}{P Q : Pred A β } → P ⊆ Q → Q ⊆ P →
 Note that `pred-ext` merely defines an extensionality principle. It does not postulate that the principle holds.  If we wish to postulate `pred-ext`, then we do so by assuming that type is inhabited (see `block-ext` below, for example).
 
 
-
-#### <a id="quotient-extensionality">Quotient extensionality</a>
+#### Quotient extensionality
 
 We need an identity type for congruence classes (blocks) over sets so that two different presentations of the same block (e.g., using different representatives) may be identified.  This requires two postulates: (1) *predicate extensionality*, manifested by the `pred-ext` type; (2) *equivalence class truncation* or "uniqueness of block identity proofs", manifested by the `blk-uip` type defined in the [Relations.Truncation][] module. We now use `pred-ext` and `blk-uip` to define a type called `block-ext|uip` which we require for the proof of the First Homomorphism Theorem presented in [Homomorphisms.Noether][].
 
@@ -140,23 +125,29 @@ We need an identity type for congruence classes (blocks) over sets so that two d
 
 module _ {A : Type α}{R : BinRel A ρ} where
 
- block-ext : pred-ext α ρ → IsEquivalence{a = α}{ℓ = ρ} R → {u v : A} → R u v → [ u ] R ≡ [ v ] R
- -- block-ext pe Req {u}{v} Ruv = pe (/-subset Req Ruv) (/-supset Req Ruv)
- block-ext pe Req {u}{v} Ruv = pe ([]-⊆ {R = (R , Req)} u v Ruv) ([]-⊇ {R = (R , Req)} u v Ruv)
+ block-ext : pred-ext α ρ → IsEquivalence{a = α}{ℓ = ρ} R
+  →          {u v : A} → R u v → [ u ] R ≡ [ v ] R
+
+ block-ext pe Req {u}{v} Ruv = pe ([]-⊆ {R = (R , Req)} u v Ruv)
+                                  ([]-⊇ {R = (R , Req)} u v Ruv)
 
 
  private
-   to-subtype|uip : blk-uip A R → {C D : Pred A ρ}{c : IsBlock C {R}}{d : IsBlock D {R}}
+   to-subtype|uip : blk-uip A R
+    →               {C D : Pred A ρ}{c : IsBlock C {R}}{d : IsBlock D {R}}
     →               C ≡ D → (C , c) ≡ (D , d)
 
-   to-subtype|uip buip {C}{D}{c}{d}CD = to-Σ-≡(CD , buip D(transport(λ B → IsBlock B)CD c)d)
+   to-subtype|uip buip {C}{D}{c}{d} CD =
+    to-Σ-≡ (CD , buip D (transport (λ B → IsBlock B) CD c) d)
 
- block-ext|uip : pred-ext α ρ → blk-uip A R → IsEquivalence R → ∀{u}{v} → R u v → ⟪ u ⟫ ≡ ⟪ v ⟫
+ block-ext|uip : pred-ext α ρ → blk-uip A R
+  →              IsEquivalence R → ∀{u}{v} → R u v → ⟪ u ⟫ ≡ ⟪ v ⟫
+
  block-ext|uip pe buip Req Ruv = to-subtype|uip buip (block-ext pe Req Ruv)
 
 \end{code}
 
-#### <a id="strongly-well-defined-operations">Strongly well-defined operations</a>
+#### Strongly well-defined operations
 
 We now describe an extensionality principle that seems weaker than function extensionality, but still (probably) not provable in [MLTT][]. (We address this and other questions  below.)  We call this the principle *strong well-definedness of operations*. We will encounter situations in which this weaker extensionality principle suffices as a substitute for function extensionality.
 
@@ -178,17 +169,10 @@ A stronger form of well-definedness of operations is to suppose that point-wise 
 swelldef : (𝓥 α : Level) → Type (lsuc (α ⊔ 𝓥))
 swelldef 𝓥 α = ∀ {A : Type α}{I : Type 𝓥}(f : Op A I)(u v : I → A) → (∀ i → u i ≡ v i) → f u ≡ f v
 
-private
-  funext→swelldef : {α 𝓥 : Level} → funext 𝓥 α → swelldef 𝓥 α
-  funext→swelldef fe f u v ptweq = Goal
-   where
-   uv : u ≡ v
-   uv = fe ptweq
-   Goal : f u ≡ f v
-   Goal = welldef f u v uv
+funext→swelldef : {α 𝓥 : Level} → funext 𝓥 α → swelldef 𝓥 α
+funext→swelldef fe f u v ptweq = welldef f u v (fe ptweq)
 
-
-SwellDef : Setω
+SwellDef : Typeω
 SwellDef = (𝓤 𝓥 : Level) → swelldef 𝓤 𝓥
 
 
@@ -199,14 +183,8 @@ SwellDef = (𝓤 𝓥 : Level) → swelldef 𝓤 𝓥
 
 ---------------------------------------
 
-[← Relations.Truncation](Relations.Truncation.html)
-<span style="float:right;">[Algebras →](Algebras.html)</span>
-
-
 {% include UALib.Links.md %}
 
-
------------------------------------------------
 
 [the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
 
