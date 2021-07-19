@@ -112,7 +112,7 @@ open import Homomorphisms.HomomorphicImages using    ( _IsHomImageOf_ ; HomImage
                                                      ; Lift-Alg-hom-image )
 
 open import Homomorphisms.Isomorphisms      using    ( _≅_ ; ≅-refl ; ≅-sym ; ≅-trans ; Lift-≅
-                                                     ; Lift-Alg-iso ; Lift-Alg-assoc ; Lift-Alg-associative
+                                                     ; Lift-Alg-iso ; Lift-Alg-assoc 
                                                      ; Lift-Alg-⨅≅ ; ⨅≅ )
 
 open import Homomorphisms.Setoid.Basic      using    ( compatible-op-map ; is-homomorphism ; hom
@@ -122,8 +122,7 @@ open import Homomorphisms.Setoid.Basic      using    ( compatible-op-map ; is-ho
                                                      ; ker[_⇒_]_↾_ )
 
 open import Homomorphisms.Setoid.Isomorphisms using    ( _≅_ ; ≅-refl ; ≅-sym ; ≅-trans ; Lift-≅
-                                                     ; Lift-SetoidAlg-iso ; Lift-SetoidAlg-assoc
-                                                     ; Lift-SetoidAlg-associative )
+                                                     ; Lift-SetoidAlg-iso ; Lift-SetoidAlg-assoc )
 
 -- TERMS ------------------------------------------------------------------------------------------
 

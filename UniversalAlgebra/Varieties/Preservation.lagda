@@ -38,10 +38,11 @@ open import Algebras.Basic                     using ( Algebra ; Lift-Alg )
 open import Algebras.Products          {𝑆 = 𝑆} using ( ov ; ⨅ ; 𝔄 ; class-product)
 open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( is-homomorphism )
 open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; Lift-≅ ; ≅-trans ; ⨅≅ ; ≅-refl
-                                                     ; Lift-Alg-iso ; Lift-Alg-associative )
+                                                     ; Lift-Alg-iso ; Lift-Alg-assoc )
 open import Terms.Basic                {𝑆 = 𝑆} using ( Term ; 𝑻 )
 open import Terms.Operations           {𝑆 = 𝑆} using ( _⟦_⟧; comm-hom-term)
-open import Subalgebras.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; _IsSubalgebraOf_ ; _IsSubalgebraOfClass_ ; SubalgebraOfClass )
+open import Subalgebras.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; _IsSubalgebraOf_ ; _IsSubalgebraOfClass_
+                                                     ; SubalgebraOfClass )
 open import Subalgebras.Properties     {𝑆 = 𝑆} using ( ≤-Lift ; Lift-≤-Lift )
 open import Varieties.EquationalLogic  {𝑆 = 𝑆} using ( _⊫_≈_ ; _⊧_≈_ ; Th)
 open import Varieties.Properties       {𝑆 = 𝑆} using ( ⊧-Lift-invar ; ⊧-lower-invar ; ⊧-S-class-invar
@@ -255,7 +256,7 @@ module _ {α : Level}  {fe₀ : funext (ov α) α}
 
  SP⊆V' : S{ov α}{lsuc (ov α)} (P{α}{ov α} 𝒦) ⊆ V 𝒦
 
- SP⊆V' (sbase{𝑨} x) = visow (VlA (SP⊆V (sbase x))) (≅-sym (Lift-Alg-associative 𝑨))
+ SP⊆V' (sbase{𝑨} x) = visow (VlA (SP⊆V (sbase x))) (≅-sym (Lift-Alg-assoc _ _{𝑨}))
  SP⊆V' (slift x) = VlA (SP⊆V x)
 
  SP⊆V' (ssub{𝑨}{𝑩} spA B≤A) = vssubw (VlA (SP⊆V spA)) B≤lA

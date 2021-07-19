@@ -24,7 +24,7 @@ open import Data.Product                using ( _,_ ; Σ-syntax ; _×_ ) renamin
 open import Function.Base               using ( _∘_ )
 open import Level                       using ( Level ; Lift )
 open import Relation.Binary             using ( Setoid ; REL)
-open import Relation.Binary.Definitions using ( Reflexive ; Sym ; Transitive )
+open import Relation.Binary.Definitions using ( Reflexive ; Sym ; Trans ; Transitive )
 import Relation.Binary.PropositionalEquality as PE
 
 
@@ -56,7 +56,7 @@ However, with four components, an equivalent record type is easier to work with.
 \begin{code}
 
 private variable
- α ρᵃ β ρᵇ γ ρᶜ : Level
+ α ρᵃ β ρᵇ γ ρᶜ ι : Level
 
 record _≅_ (𝑨 : SetoidAlgebra α ρᵃ)(𝑩 : SetoidAlgebra β ρᵇ) : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ β) where
  constructor mkiso
@@ -82,58 +82,40 @@ That is, two structures are **isomorphic** provided there are homomorphisms goin
 ≅-refl : Reflexive (_≅_ {α}{ρᵃ})
 ≅-refl {α}{ρᵃ}{𝑨} = mkiso (𝒾𝒹 𝑨) (𝒾𝒹 𝑨) (λ _ → refl) λ _ → refl
 
-≅-sym : {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ} → 𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑨
-≅-sym φ = record { to = from φ ; from = to φ ; to∼from = from∼to φ ; from∼to = to∼from φ }
+≅-sym : Sym (_≅_{β}{ρᵇ}) (_≅_{α}{ρᵃ})
+≅-sym φ = mkiso (from φ) (to φ) (from∼to φ) (to∼from φ)
 
-≅-sym' : Sym (_≅_{β}{ρᵇ}) (_≅_{α}{ρᵃ})
-≅-sym' φ = record { to = from φ ; from = to φ ; to∼from = from∼to φ ; from∼to = to∼from φ }
-
-≅-trans : {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ}{𝑪 : SetoidAlgebra γ ρᶜ}
- →        𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≅ 𝑪
-
-≅-trans {𝑨 = 𝑨}{𝑩}{𝑪} ab bc = record { to = f ; from = g ; to∼from = τ ; from∼to = ν }
+≅-trans : Trans (_≅_ {α}{ρᵃ})(_≅_{β}{ρᵇ})(_≅_{α}{ρᵃ}{γ}{ρᶜ})
+≅-trans {ρᶜ = ρᶜ}{𝑨}{𝑩}{𝑪} ab bc = mkiso f g τ ν
   where
-  f1 : hom 𝑨 𝑩
-  f1 = to ab
-  f2 : hom 𝑩 𝑪
-  f2 = to bc
   f : hom 𝑨 𝑪
-  f = ∘-hom 𝑨 𝑩 𝑪 f1 f2
-
-  g1 : hom 𝑪 𝑩
-  g1 = from bc
-  g2 : hom 𝑩 𝑨
-  g2 = from ab
+  f = ∘-hom 𝑨 𝑩 𝑪 (to ab) (to bc)
   g : hom 𝑪 𝑨
-  g = ∘-hom 𝑪 𝑩 𝑨 g1 g2
+  g = ∘-hom 𝑪 𝑩 𝑨 (from bc) (from ab)
 
   τ : ∣ f ∣ ∘ ∣ g ∣ ≋ ∣ 𝒾𝒹 𝑪 ∣
-  τ x = (PE.cong ∣ f2 ∣(to∼from ab (∣ g1 ∣ x)))∙(to∼from bc) x
+  τ x = (PE.cong ∣ to bc ∣(to∼from ab (∣ from bc ∣ x)))∙(to∼from bc) x
 
   ν : ∣ g ∣ ∘ ∣ f ∣ ≋ ∣ 𝒾𝒹 𝑨 ∣
-  ν x = (PE.cong ∣ g2 ∣(from∼to bc (∣ f1 ∣ x)))∙(from∼to ab) x
+  ν x = (PE.cong ∣ from ab ∣(from∼to bc (∣ to ab ∣ x)))∙(from∼to ab) x
 
 
-module _ {α ρᵃ β ρᵇ : Level} where
+-- The "to" map of an isomorphism is injective.
+≅toInjective : {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ}
+               (φ : 𝑨 ≅ 𝑩) → IsInjective ∣ to φ ∣
 
- -- The "to" map of an isomorphism is injective.
- ≅toInjective : {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ}
-                (φ : 𝑨 ≅ 𝑩) → IsInjective ∣ to φ ∣
-
- ≅toInjective (mkiso (f , _) (g , _) _ g∼f){a}{b} fafb =
-  a       ≡⟨ (g∼f a)⁻¹ ⟩
-  g (f a) ≡⟨ PE.cong g fafb ⟩
-  g (f b) ≡⟨ g∼f b ⟩
-  b       ∎ where open PE.≡-Reasoning
+≅toInjective (mkiso (f , _) (g , _) _ g∼f){a}{b} fafb =
+ a       ≡⟨ (g∼f a)⁻¹ ⟩
+ g (f a) ≡⟨ PE.cong g fafb ⟩
+ g (f b) ≡⟨ g∼f b ⟩
+ b       ∎ where open PE.≡-Reasoning
 
 
-module _ {α ρᵃ β ρᵇ : Level} where
+-- The "from" map of an isomorphism is injective.
+≅fromInjective : {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ}
+                 (φ : 𝑨 ≅ 𝑩) → IsInjective ∣ from φ ∣
 
- -- The "from" map of an isomorphism is injective.
- ≅fromInjective : {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ}
-                  (φ : 𝑨 ≅ 𝑩) → IsInjective ∣ from φ ∣
-
- ≅fromInjective φ = ≅toInjective (≅-sym φ)
+≅fromInjective φ = ≅toInjective (≅-sym φ)
 
 \end{code}
 
@@ -170,15 +152,10 @@ The lift is also associative, up to isomorphism at least.
 
 \begin{code}
 
-module _ {ι : Level} where
+Lift-SetoidAlg-assoc : (ℓ₁ ℓ₂ : Level){𝑨 : SetoidAlgebra α ρᵃ}
+ →                     Lift-SetoidAlg 𝑨 (ℓ₁ ⊔ ℓ₂) ≅  Lift-SetoidAlg (Lift-SetoidAlg 𝑨 ℓ₁) ℓ₂
 
-  Lift-SetoidAlg-assoc : (ℓ : Level){𝑨 : SetoidAlgebra α ρᵃ}
-   →                     Lift-SetoidAlg 𝑨 (ℓ ⊔ ι) ≅  Lift-SetoidAlg (Lift-SetoidAlg 𝑨 ℓ) ι
-  Lift-SetoidAlg-assoc ℓ {𝑨} = ≅-trans (≅-trans (≅-sym Lift-≅) Lift-≅) Lift-≅
-
-  Lift-SetoidAlg-associative : (ℓ : Level)(𝑨 : SetoidAlgebra α ρᵃ)
-   →                           Lift-SetoidAlg 𝑨 (ℓ ⊔ ι) ≅ Lift-SetoidAlg (Lift-SetoidAlg 𝑨 ℓ) ι
-  Lift-SetoidAlg-associative ℓ 𝑨 = Lift-SetoidAlg-assoc ℓ {𝑨}
+Lift-SetoidAlg-assoc _ _ = ≅-trans (≅-trans (≅-sym Lift-≅) Lift-≅) Lift-≅
 
 \end{code}
 

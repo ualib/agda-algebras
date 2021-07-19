@@ -44,7 +44,7 @@ open import Algebras.Products               {𝑆 = 𝑆} using ( ov ; ⨅ )
 open import Homomorphisms.Isomorphisms      {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; Lift-≅
                                                           ; ≅-trans ; Lift-Alg-⨅≅
                                                           ; ≅-refl ; Lift-Alg-iso
-                                                          ; Lift-Alg-associative )
+                                                          ; Lift-Alg-assoc )
 open import Homomorphisms.HomomorphicImages {𝑆 = 𝑆} using ( HomImages ; _IsHomImageOf_
                                                           ; Lift-Alg-hom-image )
 open import Subalgebras.Subalgebras         {𝑆 = 𝑆} using (_≤_ ; _IsSubalgebraOfClass_ ; Subalgebra )
@@ -305,9 +305,9 @@ module Vlift {α : Level} {fe₀ : funext (ov α) α}
 
  VlA : {𝑨 : Algebra (ov α) 𝑆} → 𝑨 ∈ V{α}{ov α} 𝒦
   →    Lift-Alg 𝑨 (lsuc (ov α)) ∈ V{α}{lsuc (ov α)} 𝒦
- VlA (vbase{𝑨} x) = visow (vbase x) (Lift-Alg-associative 𝑨)
- VlA (vlift{𝑨} x) = visow (vlift x) (Lift-Alg-associative 𝑨)
- VlA (vliftw{𝑨} x) = visow (VlA x) (Lift-Alg-associative 𝑨)
+ VlA (vbase{𝑨} x) = visow (vbase x) (Lift-Alg-assoc _ _ {𝑨})
+ VlA (vlift{𝑨} x) = visow (vlift x) (Lift-Alg-assoc _ _ {𝑨})
+ VlA (vliftw{𝑨} x) = visow (VlA x) (Lift-Alg-assoc _ _ {𝑨})
 
  VlA (vhimg{𝑨}{𝑩} x hB) = vhimg {𝑩 = Lift-Alg 𝑩 (lsuc (ov α))} (VlA x) (lC , lChi)
   where
