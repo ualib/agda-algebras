@@ -17,31 +17,26 @@ module Homomorphisms.Setoid.Isomorphisms {𝑆 : Signature 𝓞 𝓥}  where
 
 
 -- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
-open import Axiom.Extensionality.Propositional    renaming (Extensionality to funext )
-open import Agda.Primitive                        using    ( _⊔_    ;   lsuc   )
-                                                  renaming ( Set    to  Type      )
-open import Agda.Builtin.Equality                 using    ( _≡_    ;   refl      )
-open import Data.Product                          using    ( _,_    ;   Σ-syntax
-                                                           ;  Σ     ;   _×_       )
-                                                  renaming ( proj₁  to  fst
-                                                           ; proj₂  to  snd       )
-open import Level using ( Level ; Lift )
-open import Function.Base                         using    ( _∘_                  )
-open import Relation.Binary        using    ( Setoid ; REL)
-open import Relation.Binary.PropositionalEquality as PE using    ( cong   ;   cong-app  )
+open import Axiom.Extensionality.Propositional using () renaming (Extensionality to funext )
+open import Agda.Builtin.Equality       using ( _≡_ ; refl )
+open import Agda.Primitive              using ( _⊔_ ; lsuc ) renaming ( Set to Type )
+open import Data.Product                using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Function.Base               using ( _∘_ )
+open import Level                       using ( Level ; Lift )
+open import Relation.Binary             using ( Setoid ; REL)
+open import Relation.Binary.Definitions using ( Reflexive ; Sym ; Trans ; Transitive )
+import Relation.Binary.PropositionalEquality as PE
 
 
 -- Imports from agda-algebras --------------------------------------------------------------
-open import Overture.Preliminaries         using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; transport ; _∙_ ; lower∼lift ; lift∼lower )
-                                           renaming (_≈_ to _≋_ )
-open import Overture.Inverses                using (IsInjective)
-open import Algebras.Products        {𝑆 = 𝑆} using ( ov )
-open import Algebras.Setoid.Products {𝑆 = 𝑆} using ( ⨅ )
-open import Algebras.Setoid.Basic    {𝑆 = 𝑆} using ( SetoidAlgebra ; 𝕌[_] ; _̂_ ; Lift-SetoidAlg)
-open import Homomorphisms.Setoid.Basic {𝑆 = 𝑆} using ( hom ; kercon ; ker[_⇒_]_↾_ ; ∘-hom ; 𝒾𝒹 
-                                               ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-homomorphism ; ∘-is-hom ) -- ; Lift-hom)
-
--- private variable α ρᵃ β ρᵇ γ ρᶜ : Level
+open import Overture.Preliminaries             using    ( ∣_∣ ; ∥_∥ ; _⁻¹ ; _∙_ ; lower∼lift ; lift∼lower )
+                                               renaming (_≈_ to _≋_ )
+open import Overture.Inverses                  using    (IsInjective)
+open import Algebras.Products          {𝑆 = 𝑆} using    ( ov )
+open import Algebras.Setoid.Products   {𝑆 = 𝑆} using    ( ⨅ )
+open import Algebras.Setoid.Basic      {𝑆 = 𝑆} using    ( SetoidAlgebra ; 𝕌[_] ; _̂_ ; Lift-SetoidAlg)
+open import Homomorphisms.Setoid.Basic {𝑆 = 𝑆} using    ( hom ; kercon ; ker[_⇒_]_↾_ ; ∘-hom ; 𝒾𝒹
+                                                        ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-homomorphism ; ∘-is-hom )
 
 \end{code}
 
@@ -61,7 +56,7 @@ However, with four components, an equivalent record type is easier to work with.
 \begin{code}
 
 private variable
- α ρᵃ β ρᵇ ρ : Level
+ α ρᵃ β ρᵇ γ ρᶜ ι : Level
 
 record _≅_ (𝑨 : SetoidAlgebra α ρᵃ)(𝑩 : SetoidAlgebra β ρᵇ) : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ β) where
  constructor mkiso
@@ -74,11 +69,6 @@ record _≅_ (𝑨 : SetoidAlgebra α ρᵃ)(𝑩 : SetoidAlgebra β ρᵇ) : Ty
 open _≅_ public
 
 
-IsIsomorphismREL : {α ρᵃ β ρᵇ ρ : Level}
- →                 REL (SetoidAlgebra α ρᵃ)(SetoidAlgebra β ρᵇ) ρ → Type (ov (α ⊔ ρᵃ ⊔ β ⊔ ρᵇ))
-IsIsomorphismREL {α} {ρᵃ} {β}{ρᵇ} _ = ∀{𝑨}{𝑩} → _≅_ {α} {ρᵃ} {β}{ρᵇ} 𝑨 𝑩
-
-
 \end{code}
 
 That is, two structures are **isomorphic** provided there are homomorphisms going back and forth between them which compose to the identity map.
@@ -89,42 +79,25 @@ That is, two structures are **isomorphic** provided there are homomorphisms goin
 
 \begin{code}
 
-≅-refl : {α ρᵃ : Level}{𝑨 : SetoidAlgebra α ρᵃ} → 𝑨 ≅ 𝑨
-≅-refl {𝑨 = 𝑨} = record { to = 𝒾𝒹 𝑨 ; from = 𝒾𝒹 𝑨 ; to∼from = λ _ → refl ; from∼to = λ _ → refl }
+≅-refl : Reflexive (_≅_ {α}{ρᵃ})
+≅-refl {α}{ρᵃ}{𝑨} = mkiso (𝒾𝒹 𝑨) (𝒾𝒹 𝑨) (λ _ → refl) λ _ → refl
 
-≅-sym : {α ρᵃ : Level}{𝑨 : SetoidAlgebra α ρᵃ}
-        {β ρᵇ : Level}{𝑩 : SetoidAlgebra β ρᵇ}
- →      𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑨
-≅-sym φ = record { to = from φ ; from = to φ ; to∼from = from∼to φ ; from∼to = to∼from φ }
+≅-sym : Sym (_≅_{β}{ρᵇ}) (_≅_{α}{ρᵃ})
+≅-sym φ = mkiso (from φ) (to φ) (from∼to φ) (to∼from φ)
 
-≅-trans : {α ρᵃ : Level}{𝑨 : SetoidAlgebra α ρᵃ}
-          {β ρᵇ : Level}{𝑩 : SetoidAlgebra β ρᵇ}
-          {γ ρᶜ : Level}{𝑪 : SetoidAlgebra γ ρᶜ}
- →        𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≅ 𝑪
-
-≅-trans {𝑨 = 𝑨}{ρᵇ = ρᵇ}{𝑩} {𝑪 = 𝑪} ab bc = record { to = f ; from = g ; to∼from = τ ; from∼to = ν }
- where
-  f1 : hom 𝑨 𝑩
-  f1 = to ab
-  f2 : hom 𝑩 𝑪
-  f2 = to bc
+≅-trans : Trans (_≅_ {α}{ρᵃ})(_≅_{β}{ρᵇ})(_≅_{α}{ρᵃ}{γ}{ρᶜ})
+≅-trans {ρᶜ = ρᶜ}{𝑨}{𝑩}{𝑪} ab bc = mkiso f g τ ν
+  where
   f : hom 𝑨 𝑪
-  f = ∘-hom 𝑨 𝑩 𝑪 f1 f2
-
-  g1 : hom 𝑪 𝑩
-  g1 = from bc
-  g2 : hom 𝑩 𝑨
-  g2 = from ab
+  f = ∘-hom 𝑨 𝑩 𝑪 (to ab) (to bc)
   g : hom 𝑪 𝑨
-  g = ∘-hom 𝑪 𝑩 𝑨 g1 g2
+  g = ∘-hom 𝑪 𝑩 𝑨 (from bc) (from ab)
 
   τ : ∣ f ∣ ∘ ∣ g ∣ ≋ ∣ 𝒾𝒹 𝑪 ∣
-  τ x = (cong ∣ f2 ∣(to∼from ab (∣ g1 ∣ x)))∙(to∼from bc) x
+  τ x = (PE.cong ∣ to bc ∣(to∼from ab (∣ from bc ∣ x)))∙(to∼from bc) x
 
   ν : ∣ g ∣ ∘ ∣ f ∣ ≋ ∣ 𝒾𝒹 𝑨 ∣
-  ν x = (cong ∣ g2 ∣(from∼to bc (∣ f1 ∣ x)))∙(from∼to ab) x
-
-
+  ν x = (PE.cong ∣ from ab ∣(from∼to bc (∣ to ab ∣ x)))∙(from∼to ab) x
 
 
 -- The "to" map of an isomorphism is injective.
@@ -133,7 +106,7 @@ That is, two structures are **isomorphic** provided there are homomorphisms goin
 
 ≅toInjective (mkiso (f , _) (g , _) _ g∼f){a}{b} fafb =
  a       ≡⟨ (g∼f a)⁻¹ ⟩
- g (f a) ≡⟨ cong g fafb ⟩
+ g (f a) ≡⟨ PE.cong g fafb ⟩
  g (f b) ≡⟨ g∼f b ⟩
  b       ∎ where open PE.≡-Reasoning
 
@@ -144,17 +117,10 @@ That is, two structures are **isomorphic** provided there are homomorphisms goin
 
 ≅fromInjective φ = ≅toInjective (≅-sym φ)
 
-
-
-
 \end{code}
 
 
-
-
-
-
-#### <a id="lift-is-an-algebraic-invariant">Lift is an algebraic invariant</a>
+#### Lift is an algebraic invariant
 
 Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic invariant*). As our focus is universal algebra, this is important and is what makes the lift operation a workable solution to the technical problems that arise from the noncumulativity of the universe hierarchy discussed in [Overture.Lifts][].
 
@@ -162,17 +128,17 @@ Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic 
 
 open Level
 
-Lift-≅ : {α ρᵃ : Level}{β : Level}{𝑨 : SetoidAlgebra α ρᵃ} → 𝑨 ≅ (Lift-SetoidAlg 𝑨 β)
-Lift-≅ {β = β} {𝑨} = record { to = 𝓁𝒾𝒻𝓉 {𝑨 = 𝑨}
+Lift-≅ : {ℓ : Level}{𝑨 : SetoidAlgebra α ρᵃ} → 𝑨 ≅ (Lift-SetoidAlg 𝑨 ℓ)
+Lift-≅ {ℓ = ℓ} {𝑨} = record { to = 𝓁𝒾𝒻𝓉 {𝑨 = 𝑨}
                               ; from = 𝓁ℴ𝓌ℯ𝓇  {𝑨 = 𝑨}
-                              ; to∼from = cong-app lift∼lower
-                              ; from∼to = cong-app (lower∼lift {β = β})
+                              ; to∼from = PE.cong-app lift∼lower
+                              ; from∼to = PE.cong-app (lower∼lift {β = ℓ})
                               }
 
-Lift-SetoidAlg-iso : {α ρᵃ : Level}{𝑨 : SetoidAlgebra α ρᵃ}{𝓧 : Level}
-               {β ρᵇ : Level}{𝑩 : SetoidAlgebra β ρᵇ}{𝓨 : Level}
-               -----------------------------------------
- →             𝑨 ≅ 𝑩 → (Lift-SetoidAlg 𝑨 𝓧) ≅ (Lift-SetoidAlg 𝑩 𝓨)
+Lift-SetoidAlg-iso : {ℓᵃ : Level}{𝑨 : SetoidAlgebra α ρᵃ}
+                     {ℓᵇ : Level}{𝑩 : SetoidAlgebra β ρᵇ}
+               -------------------------------------------------------------
+ →             𝑨 ≅ 𝑩 →  Lift-SetoidAlg 𝑨 ℓᵃ ≅ Lift-SetoidAlg 𝑩 ℓᵇ
 
 Lift-SetoidAlg-iso A≅B = ≅-trans (≅-trans (≅-sym Lift-≅ ) A≅B) Lift-≅
 
@@ -186,16 +152,10 @@ The lift is also associative, up to isomorphism at least.
 
 \begin{code}
 
-module _ {𝓘 : Level} where
+Lift-SetoidAlg-assoc : (ℓ₁ ℓ₂ : Level){𝑨 : SetoidAlgebra α ρᵃ}
+ →                     Lift-SetoidAlg 𝑨 (ℓ₁ ⊔ ℓ₂) ≅  Lift-SetoidAlg (Lift-SetoidAlg 𝑨 ℓ₁) ℓ₂
 
-  Lift-SetoidAlg-assoc : {α ρᵃ : Level}(β : Level){𝑨 : SetoidAlgebra α ρᵃ} → Lift-SetoidAlg 𝑨 (β ⊔ 𝓘) ≅ (Lift-SetoidAlg (Lift-SetoidAlg 𝑨 β) 𝓘)
-  Lift-SetoidAlg-assoc β {𝑨} = ≅-trans (≅-trans Goal Lift-≅) Lift-≅
-   where
-   Goal : Lift-SetoidAlg 𝑨 (β ⊔ 𝓘)  ≅ 𝑨
-   Goal = ≅-sym Lift-≅
-
-  Lift-SetoidAlg-associative : {α ρᵃ : Level}(β : Level)(𝑨 : SetoidAlgebra α ρᵃ) → Lift-SetoidAlg 𝑨 (β ⊔ 𝓘) ≅ (Lift-SetoidAlg (Lift-SetoidAlg 𝑨 β) 𝓘)
-  Lift-SetoidAlg-associative β 𝑨 = Lift-SetoidAlg-assoc β {𝑨}
+Lift-SetoidAlg-assoc _ _ = ≅-trans (≅-trans (≅-sym Lift-≅) Lift-≅) Lift-≅
 
 \end{code}
 

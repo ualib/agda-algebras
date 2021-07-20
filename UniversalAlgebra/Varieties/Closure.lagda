@@ -44,13 +44,11 @@ open import Algebras.Products               {𝑆 = 𝑆} using ( ov ; ⨅ )
 open import Homomorphisms.Isomorphisms      {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; Lift-≅
                                                           ; ≅-trans ; Lift-Alg-⨅≅
                                                           ; ≅-refl ; Lift-Alg-iso
-                                                          ; Lift-Alg-associative )
+                                                          ; Lift-Alg-assoc )
 open import Homomorphisms.HomomorphicImages {𝑆 = 𝑆} using ( HomImages ; _IsHomImageOf_
                                                           ; Lift-Alg-hom-image )
-open import Subalgebras.Subalgebras         {𝑆 = 𝑆} using (_≤_ ; ≤-iso ; ≤-refl
-                                                          ; ≤-TRANS-≅ ; ≤-trans
-                                                          ; _IsSubalgebraOfClass_
-                                                          ; Subalgebra ; Lift-≤-Lift )
+open import Subalgebras.Subalgebras         {𝑆 = 𝑆} using (_≤_ ; _IsSubalgebraOfClass_ ; Subalgebra )
+open import Subalgebras.Properties          {𝑆 = 𝑆} using ( ≤-refl ; ≅-RESP-≤ ; ≤-RESP-≅ ; ≤-trans ; Lift-≤-Lift )
 
 \end{code}
 
@@ -168,7 +166,7 @@ module _ {α β : Level}{𝒦 : Pred (Algebra α 𝑆)(ov α)} where
  subalgebra→S {𝑩} (𝑨 , ((𝑪 , C≤A) , KA , B≅C)) = ssub sA B≤A
   where
    B≤A : 𝑩 ≤ 𝑨
-   B≤A = ≤-iso 𝑨 B≅C C≤A
+   B≤A = ≅-RESP-≤ {𝑪 = 𝑨} B≅C C≤A
 
    slAu : Lift-Alg 𝑨 α ∈ S{α}{α} 𝒦
    slAu = sbase KA
@@ -181,7 +179,7 @@ module _ {α : Level}{𝒦 : Pred (Algebra α 𝑆)(ov α)} where
 
  S→subalgebra : {𝑩 : Algebra α 𝑆} → 𝑩 ∈ S{α}{α} 𝒦  →  𝑩 IsSubalgebraOfClass 𝒦
 
- S→subalgebra (sbase{𝑩} x) =  𝑩 , (𝑩 , ≤-refl) , x , (≅-sym Lift-≅)
+ S→subalgebra (sbase{𝑩} x) =  𝑩 , ((𝑩 , (≤-refl ≅-refl)) , x , ≅-sym Lift-≅)
  S→subalgebra (slift{𝑩} x) = ∣ BS ∣ , SA , ∣ snd ∥ BS ∥ ∣ , ≅-trans (≅-sym Lift-≅) B≅SA
   where
    BS : 𝑩 IsSubalgebraOfClass 𝒦
@@ -198,9 +196,9 @@ module _ {α : Level}{𝒦 : Pred (Algebra α 𝑆)(ov α)} where
    SA : Subalgebra ∣ AS ∣
    SA = fst ∥ AS ∥
    B≤SA : 𝑩 ≤ ∣ SA ∣
-   B≤SA = ≤-TRANS-≅ 𝑩 ∣ SA ∣ B≤A (∥ snd ∥ AS ∥ ∥)
+   B≤SA = ≤-RESP-≅ B≤A (∥ snd ∥ AS ∥ ∥)
    B≤AS : 𝑩 ≤ ∣ AS ∣
-   B≤AS = ≤-trans ∣ AS ∣ B≤SA ∥ SA ∥
+   B≤AS = ≤-trans 𝑩 ∣ AS ∣ B≤SA ∥ SA ∥
 
  S→subalgebra {𝑩} (siso{𝑨} sA A≅B) = ∣ AS ∣ , SA ,  ∣ snd ∥ AS ∥ ∣ , (≅-trans (≅-sym A≅B) A≅SA)
   where
@@ -306,9 +304,9 @@ module Vlift {α : Level} {fe₀ : funext (ov α) α}
 
  VlA : {𝑨 : Algebra (ov α) 𝑆} → 𝑨 ∈ V{α}{ov α} 𝒦
   →    Lift-Alg 𝑨 (lsuc (ov α)) ∈ V{α}{lsuc (ov α)} 𝒦
- VlA (vbase{𝑨} x) = visow (vbase x) (Lift-Alg-associative 𝑨)
- VlA (vlift{𝑨} x) = visow (vlift x) (Lift-Alg-associative 𝑨)
- VlA (vliftw{𝑨} x) = visow (VlA x) (Lift-Alg-associative 𝑨)
+ VlA (vbase{𝑨} x) = visow (vbase x) (Lift-Alg-assoc _ _ {𝑨})
+ VlA (vlift{𝑨} x) = visow (vlift x) (Lift-Alg-assoc _ _ {𝑨})
+ VlA (vliftw{𝑨} x) = visow (VlA x) (Lift-Alg-assoc _ _ {𝑨})
 
  VlA (vhimg{𝑨}{𝑩} x hB) = vhimg {𝑩 = Lift-Alg 𝑩 (lsuc (ov α))} (VlA x) (lC , lChi)
   where

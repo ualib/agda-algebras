@@ -104,11 +104,11 @@ private variable
 
 open Level
 -- the lift hom
-𝓁𝒾𝒻𝓉 : {𝑨 : SetoidAlgebra α ρ}{β : Level} → hom 𝑨 (Lift-SetoidAlg 𝑨 β)
+𝓁𝒾𝒻𝓉 : {ℓ : Level}{𝑨 : SetoidAlgebra α ρ} → hom 𝑨 (Lift-SetoidAlg 𝑨 ℓ)
 𝓁𝒾𝒻𝓉 = lift , (λ 𝑓 a → refl)
 
 -- the lower hom
-𝓁ℴ𝓌ℯ𝓇 : {𝑨 : SetoidAlgebra α ρ}{β : Level} → hom (Lift-SetoidAlg 𝑨 β) 𝑨
+𝓁ℴ𝓌ℯ𝓇 : {ℓ : Level}{𝑨 : SetoidAlgebra α ρ} → hom (Lift-SetoidAlg 𝑨 ℓ) 𝑨
 𝓁ℴ𝓌ℯ𝓇 = (lower , λ 𝑓 a → refl)
 
 module LiftSetoidHom {α ρᵃ : Level}{𝑨 : SetoidAlgebra α ρᵃ}
