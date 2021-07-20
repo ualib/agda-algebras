@@ -90,7 +90,7 @@ S⊆SP {α} {β} 𝒦 {.(Lift-Alg 𝑨 β)}(slift{𝑨} x) = subalgebra→S lAsc
 
  lAsc : (Lift-Alg 𝑨 β) IsSubalgebraOfClass (P 𝒦)
  lAsc = Lift-Alg-subP' Asc
-S⊆SP {α} {β} 𝒦 {𝑩}(ssub{𝑨} sA B≤A) = ssub (subalgebra→S lAsc) (≤-Lift 𝑩{𝑨} B≤A )
+S⊆SP {α} {β} 𝒦 {𝑩}(ssub{𝑨} sA B≤A) = ssub (subalgebra→S lAsc) (≤-Lift 𝑨 B≤A )
  where
   lA : Algebra (α ⊔ β) 𝑆
   lA = Lift-Alg 𝑨 β
@@ -262,7 +262,7 @@ module _ {α : Level}  {fe₀ : funext (ov α) α}
  SP⊆V' (ssub{𝑨}{𝑩} spA B≤A) = vssubw (VlA (SP⊆V spA)) B≤lA
   where
    B≤lA : 𝑩 ≤ Lift-Alg 𝑨 (lsuc (ov α))
-   B≤lA = ≤-Lift 𝑩{𝑨} B≤A
+   B≤lA = ≤-Lift 𝑨 B≤A
 
  SP⊆V' (siso{𝑨}{𝑩} x A≅B) = visow (VlA (SP⊆V x)) Goal
   where

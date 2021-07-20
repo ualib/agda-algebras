@@ -48,18 +48,17 @@ Given algebras `𝑨 : Algebra α 𝑆` and `𝑩 : Algebra 𝓦 𝑆`, we say t
 
 \begin{code}
 
-_≥_  -- (alias for supalgebra (aka overalgebra))
- _IsSupalgebraOf_ : Algebra α 𝑆 → Algebra β 𝑆 → Type _
-𝑨 IsSupalgebraOf 𝑩 = Σ[ h ∈ hom 𝑩 𝑨 ] IsInjective ∣ h ∣
-
 _≤_  -- (alias for subalgebra relation))
  _IsSubalgebraOf_ : Algebra α 𝑆 → Algebra β 𝑆 → Type _
 𝑨 IsSubalgebraOf 𝑩 = Σ[ h ∈ hom 𝑨 𝑩 ] IsInjective ∣ h ∣
 
+_≥_  -- (alias for supalgebra (aka overalgebra))
+ _IsSupalgebraOf_ : Algebra α 𝑆 → Algebra β 𝑆 → Type _
+𝑨 IsSupalgebraOf 𝑩 = Σ[ h ∈ hom 𝑩 𝑨 ] IsInjective ∣ h ∣
 
--- Syntactic sugar for sup/sub-algebra relations.
-𝑨 ≥ 𝑩 = 𝑨 IsSupalgebraOf 𝑩
+-- Syntactic sugar for sub/sup-algebra relations.
 𝑨 ≤ 𝑩 = 𝑨 IsSubalgebraOf 𝑩
+𝑨 ≥ 𝑩 = 𝑨 IsSupalgebraOf 𝑩
 
 -- From now on we use `𝑨 ≤ 𝑩` to express the assertion that `𝑨` is a subalgebra of `𝑩`.
 

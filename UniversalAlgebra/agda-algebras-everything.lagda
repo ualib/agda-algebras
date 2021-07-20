@@ -156,12 +156,11 @@ open import Subalgebras.Subalgebras         using    ( _≥_ ; _IsSupalgebraOf_ 
                                                      ; SubalgebraOfClass )
 
 
-open import Subalgebras.Properties          using    ( ≅→≤ ; ≅→≥ ; ≤-reflexive ; ≤-refl ; ≥-refl
-                                                     ; ≤-trans ; ≥-trans ; ≤-preorder ; A≥B×B≅C→A≥C
-                                                     ; A≤B×B≅C→A≤C ; A≅B×B≥C→A≥C ; A≅B×B≤C→A≤C
-                                                     ; iso→injective ; ≤-iso ; ≤-trans-≅ ; ≤-TRANS-≅
-                                                     ; ≤-mono ; Lift-is-sub ; ≤-Lift ; ≥-Lift
-                                                     ; Lift-≤-Lift )
+open import Subalgebras.Properties          using    ( ≤-refl ; ≥-refl ; ≤-reflexive ; ≤-trans ; ≥-trans
+                                                     ; ≤-preorder ; ≥-preorder ; ≤-resp-≅ ; ≅-resp-≥
+                                                     ; ≥-resp-≅ ; ≅-resp-≤ ; ≤-RESP-≅ ; ≥-RESP-≅ ; ≅-RESP-≤
+                                                     ; ≅-RESP-≥ ; iso→injective ; ≤-mono ; Lift-is-sub
+                                                     ; ≤-Lift ; ≥-Lift ; Lift-≤-Lift )
 
 
 open import Subalgebras.Setoid.Subuniverses  using   ( Subuniverses ; Subuniverse ; Sg ; sgIsSub

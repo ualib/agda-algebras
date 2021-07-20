@@ -19,9 +19,11 @@ module Subalgebras.Properties {𝑆 : Signature 𝓞 𝓥} where
 open import Agda.Builtin.Equality using ( _≡_ ; refl )
 open import Agda.Primitive        using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
 open import Data.Product          using ( _,_ ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Function.Base         using ( _∘_ ; id )
+open import Function.Base         using ( _∘_ ; id ; flip )
 open import Function.Bundles      using ( Injection )
 open import Relation.Unary        using ( Pred ; _⊆_ )
+open import Relation.Binary.Definitions using ( _Respectsʳ_ ; _Respectsˡ_ )
+-- open import Relation.Binary.HeterogeneousEquality using ()
 import Relation.Binary.PropositionalEquality as PE
 
 -- -- imports from agda-algebras --------------------------------------------------------------
@@ -40,21 +42,15 @@ private variable α β γ 𝓧 : Level
 -- The subalgebra relation is a *preorder*, i.e., a reflexive transitive binary relation.
 
 open _≅_
-≅→≤ : {𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆} → 𝑨 ≅ 𝑩 → 𝑨 ≤ 𝑩
-≅→≤ φ = (to φ) , ≅toInjective φ
 
-≅→≥ : {𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆} → 𝑨 ≅ 𝑩 → 𝑨 ≥ 𝑩
-≅→≥ φ = (from φ) , ≅fromInjective φ
+≤-refl : {𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆} → 𝑨 ≅ 𝑩 → 𝑨 ≤ 𝑩
+≤-refl φ = (to φ) , ≅toInjective φ
 
+≥-refl : {𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆} → 𝑨 ≅ 𝑩 → 𝑨 ≥ 𝑩
+≥-refl φ = (from φ) , ≅fromInjective φ
 
 ≤-reflexive : (𝑨 : Algebra α 𝑆) → 𝑨 ≤ 𝑨
 ≤-reflexive 𝑨 = (id , λ 𝑓 𝑎 → refl) , Injection.injective id-is-injective
-
-≤-refl : {𝑨 : Algebra α 𝑆} {𝑩 : Algebra β 𝑆} → 𝑨 ≅ 𝑩 → 𝑨 ≤ 𝑩
-≤-refl A≅B = ≅→≤ A≅B
-
-≥-refl : {𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆} → 𝑨 ≅ 𝑩 → 𝑨 ≥ 𝑩
-≥-refl A≅B = ≅→≤ (≅-sym A≅B)
 
 ≤-trans : (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}(𝑪 : Algebra γ 𝑆)
  →        𝑨 ≤ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
@@ -67,35 +63,73 @@ open _≅_
 
 ≥-trans 𝑨 {𝑩} 𝑪 A≥B B≥C = ≤-trans 𝑪 {𝑩} 𝑨 B≥C A≥B
 
+\end{code}
 
-module _ {α β ρ : Level} where
+#### Relations between ≤, ≥, and ≅
+
+In case all algebras live in the same universe level, we can use some of the definitions in the standard library.
+However, to obtain more general versions, we need to either extend the standard library's Binary.Structures module
+to be universe polymorphic, or just implement what we need here.  For now we do the latter (below).
+
+\begin{code}
+
+module _ {α : Level} where
 
  open import Relation.Binary.Structures {a = (ov α)}{ℓ = (𝓞 ⊔ 𝓥 ⊔ α)} (_≅_ {α}{α})
 
  open IsPreorder
+
  ≤-preorder : IsPreorder _≤_
  isEquivalence ≤-preorder = record { refl = ≅-refl ; sym = ≅-sym ; trans = ≅-trans }
  reflexive ≤-preorder = ≤-refl
- trans ≤-preorder {𝑨}{𝑩}{𝑪} A≤B B≤C = ≤-trans 𝑨 {𝑩} 𝑪 A≤B B≤C
+ trans ≤-preorder {𝑨}{𝑩}{𝑪} A≤B B≤C = ≤-trans 𝑨 𝑪 A≤B B≤C
 
-open _≅_
+ ≥-preorder : IsPreorder _≥_
+ isEquivalence ≥-preorder = record { refl = ≅-refl ; sym = ≅-sym ; trans = ≅-trans }
+ reflexive ≥-preorder = ≥-refl
+ trans ≥-preorder {𝑨}{𝑩}{𝑪} A≥B B≥C = ≥-trans 𝑨 𝑪 A≥B B≥C
 
-module _ {α β γ : Level}{𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆}{𝑪 : Algebra γ 𝑆} where
+-- Consequences of the fact that _≤_ and _≥_ are preorders relative to _≅_.
 
--- If two algebras are isomorphic and one of them is a subalgebra of `𝑨`, then so is the other.
+-- These are essentially equivalent variations on the following obvious fact:
+-- If two algebras are isomorphic and one of them is a subalgebra, then so is the other.
 
- A≥B×B≅C→A≥C : 𝑨 ≥ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≥ 𝑪
- A≥B×B≅C→A≥C A≥B B≅C  = ≥-trans 𝑨 {𝑩} 𝑪 A≥B (≅→≥ B≅C)
+ -- 1a. If 𝑨 ≤ 𝑩  and  𝑩 ≅ 𝑪, then  𝑨 ≤ 𝑪
+ ≤-resp-≅ : _≤_ Respectsʳ _≅_     -- usage: (note the argument order)
+ ≤-resp-≅ = ∼-respˡ-≈ ≥-preorder  -- (p : 𝑩 ≅ 𝑪) (q : 𝑨 ≤ 𝑩) → (≤-resp-≅ p q) : 𝑨 ≤ 𝑪
 
- A≤B×B≅C→A≤C : 𝑨 ≤ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤ 𝑪
- A≤B×B≅C→A≤C A≤B B≅C = ≤-trans 𝑨{𝑩} 𝑪 A≤B (≅→≤ B≅C)
+ -- 2a. If 𝑨 ≥ 𝑩  and  𝑩 ≅ 𝑪,   then 𝑨 ≥ 𝑪
+ ≥-resp-≅ : _≥_ Respectsʳ _≅_
+ ≥-resp-≅ {𝑨} = ∼-respˡ-≈ ≤-preorder {𝑨}
 
- A≅B×B≥C→A≥C : 𝑨 ≅ 𝑩 → 𝑩 ≥ 𝑪 → 𝑨 ≥ 𝑪
+ -- 1b. If 𝑩 ≅ 𝑪   and 𝑩 ≥ 𝑨, then  𝑪 ≥ 𝑨
+ ≅-resp-≥ : _≥_ Respectsˡ _≅_
+ ≅-resp-≥ = ≤-resp-≅
 
- A≅B×B≥C→A≥C A≅B B≥C = ≥-trans 𝑨{𝑩}𝑪 (≅→≥ A≅B) B≥C
+ -- 2b. If 𝑩 ≅ 𝑪  and 𝑩 ≤ 𝑨, then  𝑪 ≤ 𝑨
+ ≅-resp-≤ : _≤_ Respectsˡ _≅_
+ ≅-resp-≤ {𝑨} = ≥-resp-≅ {𝑨}
 
- A≅B×B≤C→A≤C : 𝑨 ≅ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
- A≅B×B≤C→A≤C A≅B B≤C = ≤-trans 𝑨{𝑩}𝑪 (≅→≤ A≅B) B≤C
+\end{code}
+
+#### Relations between ≤, ≥, and ≅ (Universe-polymorphic versions)
+
+\begin{code}
+
+module _ {𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆}{𝑪 : Algebra γ 𝑆} where
+ ≤-RESP-≅ : 𝑨 ≤ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤ 𝑪
+ ≤-RESP-≅ a<b bc = ≤-trans 𝑨 𝑪 a<b (≤-refl bc)
+
+ ≥-RESP-≅ : 𝑨 ≥ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≥ 𝑪
+ ≥-RESP-≅ a<b ac = ≤-trans 𝑪 𝑨 (≤-refl (≅-sym ac)) a<b
+
+module _ {𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆}{𝑪 : Algebra γ 𝑆} where
+
+ ≅-RESP-≤ : 𝑨 ≅ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
+ ≅-RESP-≤ ab b<c = ≥-RESP-≅{𝑨 = 𝑪} b<c (≅-sym ab)
+
+ ≅-RESP-≥ : 𝑨 ≅ 𝑩 → 𝑩 ≥ 𝑪 → 𝑨 ≥ 𝑪
+ ≅-RESP-≥ ab b<c = ≤-RESP-≅ b<c (≅-sym ab)
 
 
 open PE.≡-Reasoning
@@ -107,11 +141,25 @@ iso→injective {𝑨 = 𝑨} (mkiso f g f∼g g∼f) {x} {y} fxfy =
  (∣ g ∣ ∘ ∣ f ∣) y  ≡⟨ g∼f y ⟩
  y                  ∎
 
-≤-iso : (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}{𝑪 : Algebra γ 𝑆}
- →      𝑪 ≅ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
+≤-mono : (𝑩 : Algebra β 𝑆){𝒦 𝒦' : Pred (Algebra α 𝑆) γ}
+ →       𝒦 ⊆ 𝒦' → 𝑩 IsSubalgebraOfClass 𝒦 → 𝑩 IsSubalgebraOfClass 𝒦'
 
-≤-iso 𝑨 {𝑩} {𝑪} CB BA = (g ∘ f , gfhom) , gfinj
- where
+≤-mono 𝑩 KK' KB = ∣ KB ∣ , fst ∥ KB ∥ , KK' (∣ snd ∥ KB ∥ ∣) , ∥ (snd ∥ KB ∥) ∥
+
+
+module OLD-DEPRECATED-NAMES {𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆}{𝑪 : Algebra γ 𝑆} where
+
+ ≤-trans-≅ : 𝑨 ≤ 𝑩 → 𝑨 ≅ 𝑪 → 𝑪 ≤ 𝑩
+ ≤-trans-≅ = ≥-RESP-≅{𝑨 = 𝑩}
+
+ ≤-TRANS-≅ : 𝑨 ≤ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤ 𝑪
+ ≤-TRANS-≅ = ≤-RESP-≅
+
+ ≤-iso : (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}{𝑪 : Algebra γ 𝑆}
+  →      𝑪 ≅ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
+
+ ≤-iso 𝑨 {𝑩} {𝑪} CB BA = (g ∘ f , gfhom) , gfinj
+  where
   f : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
   f = ∣ to CB ∣
   g : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
@@ -122,26 +170,6 @@ iso→injective {𝑨 = 𝑨} (mkiso f g f∼g g∼f) {x} {y} fxfy =
 
   gfhom : is-homomorphism 𝑪 𝑨 (g ∘ f)
   gfhom = ∘-is-hom 𝑪 𝑨 {f}{g} ∥ to CB ∥ (snd ∣ BA ∣)
-
-
-≤-trans-≅ : (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}(𝑪 : Algebra γ 𝑆)
- →          𝑨 ≤ 𝑩 → 𝑨 ≅ 𝑪 → 𝑪 ≤ 𝑩
-
-≤-trans-≅ 𝑨 {𝑩} 𝑪 A≤B B≅C = ≤-iso 𝑩 (≅-sym B≅C) A≤B
-
-
-≤-TRANS-≅ : (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}(𝑪 : Algebra γ 𝑆)
- →          𝑨 ≤ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤ 𝑪
-≤-TRANS-≅ 𝑨 𝑪 A≤B B≅C = (∘-hom 𝑨 𝑪 ∣ A≤B ∣ (to B≅C)) , Goal
- where
- Goal : IsInjective ∣ (∘-hom 𝑨 𝑪 ∣ A≤B ∣ (to B≅C)) ∣
- Goal = ∘-injective (∥ A≤B ∥)(iso→injective B≅C)
-
-
-≤-mono : (𝑩 : Algebra β 𝑆){𝒦 𝒦' : Pred (Algebra α 𝑆) γ}
- →       𝒦 ⊆ 𝒦' → 𝑩 IsSubalgebraOfClass 𝒦 → 𝑩 IsSubalgebraOfClass 𝒦'
-
-≤-mono 𝑩 KK' KB = ∣ KB ∣ , fst ∥ KB ∥ , KK' (∣ snd ∥ KB ∥ ∣) , ∥ (snd ∥ KB ∥) ∥
 
 
 
@@ -155,14 +183,14 @@ module _ {𝒦 : Pred (Algebra α 𝑆)(ov α)}{𝑩 : Algebra α 𝑆} where
  Lift-is-sub (𝑨 , (sa , (KA , B≅sa))) = 𝑨 , sa , KA , ≅-trans (≅-sym Lift-≅) B≅sa
 
 
-≤-Lift : (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}{ℓ : Level} → 𝑨 ≤ 𝑩 → 𝑨 ≤ Lift-Alg 𝑩 ℓ
-≤-Lift 𝑨 {𝑩} {ℓ} A≤B = A≤B×B≅C→A≤C {𝑩 = 𝑩} A≤B Lift-≅
+≤-Lift : {𝑨 : Algebra α 𝑆}(𝑩 : Algebra β 𝑆){ℓ : Level} → 𝑨 ≤ 𝑩 → 𝑨 ≤ Lift-Alg 𝑩 ℓ
+≤-Lift 𝑩 a<b = ≤-RESP-≅{𝑩 = 𝑩} a<b Lift-≅
 
 ≥-Lift : (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}{ℓ : Level} → 𝑨 ≥ 𝑩 → 𝑨 ≥ Lift-Alg 𝑩 ℓ
-≥-Lift 𝑨 {𝑩}{ℓ} A≥B = A≥B×B≅C→A≥C {𝑨 = 𝑨}{𝑩 = 𝑩} A≥B Lift-≅
+≥-Lift 𝑨 a>b = ≥-RESP-≅{𝑨 = 𝑨} a>b Lift-≅
 
 Lift-≤-Lift : {𝑨 : Algebra α 𝑆}(ℓᵃ : Level){𝑩 : Algebra β 𝑆}(ℓᵇ : Level) → 𝑨 ≤ 𝑩 → Lift-Alg 𝑨 ℓᵃ ≤ Lift-Alg 𝑩 ℓᵇ
-Lift-≤-Lift {𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ A≤B = ≥-Lift (Lift-Alg 𝑩 ℓᵇ) {𝑨} (≤-Lift 𝑨 {𝑩} A≤B)
+Lift-≤-Lift ℓᵃ {𝑩} ℓᵇ a<b = ≥-Lift (Lift-Alg 𝑩 ℓᵇ) (≤-Lift 𝑩 a<b)
 
 \end{code}
 
