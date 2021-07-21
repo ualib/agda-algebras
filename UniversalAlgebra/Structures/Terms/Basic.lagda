@@ -11,17 +11,19 @@ author: [agda-algebras development team][]
 
 module Structures.Terms.Basic where
 
-open import Agda.Primitive      using    ( Level                   )
-                                renaming ( Set       to  Type
-                                         ; lzero     to  ℓ₀        )
-open import Structures.Records  using    ( signature ;   structure )
+open import Agda.Primitive      using ( lsuc ; Level ; _⊔_ ) renaming ( Set to Type ; lzero to ℓ₀ )
+
+open import Structures.Records  using ( signature ; structure )
 
 open signature
 open structure
 
-module _ {𝐹 : signature}{χ : Level} where
 
- data Term (X : Type χ ) : Type χ  where
+module _ {𝓞 𝓥 : Level}
+         {𝐹 : signature 𝓞 𝓥}
+         {χ : Level} where
+
+ data Term (X : Type χ ) : Type (𝓞 ⊔ 𝓥 ⊔ (lsuc χ))  where
   ℊ : X → Term X    -- (ℊ for "generator")
   node : (f : symbol 𝐹)(𝑡 : (arity 𝐹) f → Term X) → Term X
 
@@ -46,11 +48,18 @@ Thus interpretation of a term is defined by structural induction.
 
 \begin{code}
 
-module _ {𝐹 𝑅 : signature}{χ : Level}{X : Type χ} where
+private variable
+ 𝓞₀ 𝓥₀ 𝓞₁ 𝓥₁ : Level
+ 𝐹 : signature 𝓞₀ 𝓥₀
+ 𝑅 : signature 𝓞₁ 𝓥₁
+ χ : Level
+ X : Type χ
+ α ρ : Level
 
- _⟦_⟧ : (𝑨 : structure 𝐹 {ℓ₀} 𝑅 {ℓ₀}) → Term X → (X → carrier 𝑨) → carrier 𝑨
- 𝑨 ⟦ ℊ x ⟧ = λ η → η x
- 𝑨 ⟦ node 𝑓 𝑡 ⟧ = λ η → ((op 𝑨) 𝑓) (λ i → (𝑨 ⟦ 𝑡 i ⟧) η)
+
+_⟦_⟧ : (𝑨 : structure 𝐹 𝑅 {α} {ρ}) → Term X → (X → carrier 𝑨) → carrier 𝑨
+𝑨 ⟦ ℊ x ⟧ = λ η → η x
+𝑨 ⟦ node 𝑓 𝑡 ⟧ = λ η → ((op 𝑨) 𝑓) (λ i → (𝑨 ⟦ 𝑡 i ⟧) η)
 
 
 \end{code}

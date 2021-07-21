@@ -15,76 +15,68 @@ dependent pair type.
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Structures.Records
-
 module Structures.Congruences.Records where
 
-open import Agda.Builtin.Equality  using    ( _≡_   ;  refl     )
-open import Agda.Primitive         using    (  _⊔_  ;  lsuc     )
-                                   renaming (  Set  to Type     )
-open import Data.Product           using    (  _,_  ;  Σ
-                                            ;  _×_  ;  Σ-syntax )
-                                   renaming ( proj₁ to fst      )
-open import Level                  using    ( Level ;  Lift
-                                            ; lift  ;  lower    )
-                                   renaming ( zero  to ℓ₀       )
-open import Function.Base          using    ( _∘_               )
-
+open import Agda.Builtin.Equality  using ( _≡_ ; refl )
+open import Agda.Primitive         using ( _⊔_ ; lsuc ) renaming (  Set  to Type     )
+open import Data.Product           using ( _,_ ; _×_ ; Σ-syntax ) renaming ( proj₁ to fst )
+open import Function.Base          using ( _∘_ )
+open import Level                  using ( Level ; Lift ; lift ; lower ) renaming ( zero  to ℓ₀ )
 
 
 open import Overture.Preliminaries   using ( ∣_∣ )
 open import Relations.Discrete       using ( _|:_ ; 0[_] )
-open import Relations.Quotients      using ( Equivalence ; Quotient
-                                           ; 0[_]Equivalence
+open import Relations.Quotients      using ( Equivalence ; Quotient ; 0[_]Equivalence
                                            ; ⟪_⟫ ; ⌞_⌟ ; ⟪_∼_⟫-elim ; _/_ )
 open import Relations.Extensionality using ( swelldef )
 
+open import Structures.Records
 
-private variable 𝐹 𝑅 : signature
+private variable
+ 𝓞₀ 𝓥₀ 𝓞₁ 𝓥₁ : Level
+ 𝐹 : signature 𝓞₀ 𝓥₀
+ 𝑅 : signature 𝓞₁ 𝓥₁
+ α ρ : Level
 
-module _ {α ρᵃ : Level} where
-
- con : structure 𝐹 {α} 𝑅 {ρᵃ} → Type (lsuc (α ⊔ ρᵃ))
- con 𝑨 = Σ[ θ ∈ Equivalence (carrier 𝑨) {α ⊔ ρᵃ}] (compatible 𝑨 ∣ θ ∣)
-
-
- -- Example. The zero congruence of a structure.
- 0[_]compatible : (𝑨 : structure 𝐹 {α} 𝑅 {ρᵃ})
-  →               swelldef ℓ₀ α → (𝑓 : symbol 𝐹)
-  →               (op 𝑨) 𝑓 |: (0[ carrier 𝑨 ] {ρᵃ})
-
- 0[ 𝑨 ]compatible wd 𝑓 {i}{j} ptws0  = lift γ
-  where
-  γ : ((op 𝑨) 𝑓) i ≡ ((op 𝑨) 𝑓) j
-  γ = wd ((op 𝑨) 𝑓) i j (lower ∘ ptws0)
-
- 0con[_] : (𝑨 : structure 𝐹 {α} 𝑅 {ρᵃ}) → swelldef ℓ₀ α → con 𝑨
- 0con[ 𝑨 ] wd = 0[ carrier 𝑨 ]Equivalence , 0[ 𝑨 ]compatible wd
+con : ∀ {α ρ} → structure 𝐹 𝑅 {α}{ρ} → Type _
+con {α = α}{ρ} 𝑨 = Σ[ θ ∈ Equivalence (carrier 𝑨){α ⊔ ρ} ] (compatible 𝑨 ∣ θ ∣)
 
 
+-- Example. The zero congruence of a structure.
+0[_]compatible : (𝑨 : structure 𝐹 𝑅 {α} {ρ})
+ →               swelldef (siglev₁ 𝐹) α → (𝑓 : symbol 𝐹)
+ →               (op 𝑨) 𝑓 |: (0[ carrier 𝑨 ] {ρ})
+
+0[ 𝑨 ]compatible wd 𝑓 {i}{j} ptws0  = lift γ
+ where
+ γ : ((op 𝑨) 𝑓) i ≡ ((op 𝑨) 𝑓) j
+ γ = wd ((op 𝑨) 𝑓) i j (lower ∘ ptws0)
+
+0con[_] : (𝑨 : structure 𝐹 𝑅 {α} {ρ}) → swelldef (siglev₁ 𝐹) α → con 𝑨
+0con[ 𝑨 ] wd = 0[ carrier 𝑨 ]Equivalence , 0[ 𝑨 ]compatible wd
 
 -- Quotient structures
-module _ {α ρᵃ : Level} where
 
- _╱_  -- alias  (useful on when signature and universe parameters can be inferred)
-  quotient : (𝑨 : structure 𝐹 {α} 𝑅 {ρᵃ}) → con 𝑨 → structure 𝐹 𝑅
- quotient 𝑨 θ = record
-             { carrier = Quotient (carrier 𝑨) ∣ θ ∣     -- domain of quotient structure
-             ; op = λ f b → ⟪ ((op 𝑨) f) (λ i → ⌞ b i ⌟) ⟫ {fst ∣ θ ∣} -- interp of operations
-             ; rel = λ r x → ((rel 𝑨) r) (λ i → ⌞ x i ⌟)   -- interpretation of relations
-             }
+_╱_  -- alias  (useful on when signature and universe parameters can be inferred)
+ quotient : (𝑨 : structure 𝐹 𝑅 {α}{ρ}) → con 𝑨 → structure 𝐹 𝑅
+quotient 𝑨 θ = record
+            { carrier = Quotient (carrier 𝑨) ∣ θ ∣     -- domain of quotient structure
+            ; op = λ f b → ⟪ ((op 𝑨) f) (λ i → ⌞ b i ⌟) ⟫ {fst ∣ θ ∣} -- interp of operations
+            ; rel = λ r x → ((rel 𝑨) r) (λ i → ⌞ x i ⌟)   -- interpretation of relations
+            }
 
- _╱_ = quotient
-
-
- /≡-elim : {𝑨 : structure 𝐹 {α} 𝑅 {ρᵃ}} ((θ , _ ) : con 𝑨){u v : carrier 𝑨}
-  →        ⟪ u ⟫ {∣ θ ∣} ≡ ⟪ v ⟫ {∣ θ ∣} → ∣ θ ∣ u v
- /≡-elim θ {u}{v} x =  ⟪ u ∼ v ⟫-elim{R = ∣ θ ∣} x
+_╱_ = quotient
 
 
- -- Example. The zero congruence of a quotient structure.
- 𝟎[_╱_] : (𝑨 : structure 𝐹 {α} 𝑅 {ρᵃ}) (θ : con 𝑨) → swelldef ℓ₀ (lsuc (α ⊔ ρᵃ))  → con (𝑨 ╱ θ)
- 𝟎[ 𝑨 ╱ θ ] wd = 0con[ 𝑨 ╱ θ ] wd
+/≡-elim : {𝑨 : structure 𝐹 𝑅 {α}{ρ}} ((θ , _ ) : con 𝑨){u v : carrier 𝑨}
+ →        ⟪ u ⟫ {∣ θ ∣} ≡ ⟪ v ⟫ {∣ θ ∣} → ∣ θ ∣ u v
+/≡-elim θ {u}{v} x =  ⟪ u ∼ v ⟫-elim{R = ∣ θ ∣} x
+
+
+
+-- Example. The zero congruence of a quotient structure.
+𝟎[_╱_] : (𝑨 : structure 𝐹 𝑅 {α}{ρ}) (θ : con 𝑨) → swelldef (siglev₁ 𝐹)(lsuc (α ⊔ ρ)) → con (𝑨 ╱ θ)
+𝟎[ 𝑨 ╱ θ ] wd = 0con[ 𝑨 ╱ θ ] wd
 
 \end{code}
 
