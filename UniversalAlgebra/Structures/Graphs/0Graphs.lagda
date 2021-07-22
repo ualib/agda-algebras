@@ -5,7 +5,7 @@ date : 2021-06-22
 author: [agda-algebras development team][]
 ---
 
-N.B. This module differs from Graphs.lagda in that here we assume some universes are assumed to be level zero (i.e., ℓ₀). This simplifies some things; e.g., we avoid having to use lift and lower (cf. Graphs.lagda)
+N.B. This module differs from Graphs.lagda in that here we assume some universes are level zero (i.e., ℓ₀). This simplifies some things; e.g., we avoid having to use lift and lower (cf. Graphs.lagda)
 
 Definition [Graph of a structure]. Let 𝑨 be an (𝑅,𝐹)-structure (relations from 𝑅 and operations from 𝐹).
 The *graph* of 𝑨 is the structure Gr 𝑨 with the same domain as 𝑨 with relations from 𝑅 and together with a (k+1)-ary relation symbol G 𝑓 for each 𝑓 ∈ 𝐹 of arity k, which is interpreted in Gr 𝑨 as all tuples (t , y) ∈ Aᵏ⁺¹ such that 𝑓 t ≡ y. (See also Definition 2 of https://arxiv.org/pdf/2010.04958v2.pdf)
@@ -40,7 +40,7 @@ open signature
 open structure
 open _⊎_
 
-Gr-sig : signature → signature → signature
+Gr-sig : signature ℓ₀ ℓ₀ → signature ℓ₀ ℓ₀ → signature ℓ₀ ℓ₀
 
 Gr-sig 𝐹 𝑅 = record { symbol = symbol 𝑅 ⊎ symbol 𝐹
                     ; arity  = ar }
@@ -50,10 +50,11 @@ Gr-sig 𝐹 𝑅 = record { symbol = symbol 𝑅 ⊎ symbol 𝐹
  ar (inr 𝑓) = (arity 𝐹) 𝑓 ⊎ 𝟙
 
 
-module _ {𝐹 𝑅 : signature} where
+private variable
+ 𝐹 𝑅 : signature ℓ₀ ℓ₀
 
- Gr : structure 𝐹 {ℓ₀} 𝑅 {ℓ₀} → structure Sig∅ {ℓ₀} (Gr-sig 𝐹 𝑅) {ℓ₀}
- Gr 𝑨 = record { carrier = carrier 𝑨 ; op = λ () ; rel = split }
+Gr : structure 𝐹 𝑅 {ℓ₀} {ℓ₀} → structure Sig∅ (Gr-sig 𝐹 𝑅) {ℓ₀} {ℓ₀}
+Gr {𝐹}{𝑅} 𝑨 = record { carrier = carrier 𝑨 ; op = λ () ; rel = split }
   where
   split : (s : symbol 𝑅 ⊎ symbol 𝐹) → Rel (carrier 𝑨) (arity (Gr-sig 𝐹 𝑅) s) {ℓ₀}
   split (inl 𝑟) arg = rel 𝑨 𝑟 arg
@@ -62,8 +63,7 @@ module _ {𝐹 𝑅 : signature} where
 
 open PE.≡-Reasoning
 
-module _ {𝐹 𝑅 : signature}
-         {𝑨 𝑩 : structure 𝐹 {ℓ₀} 𝑅 {ℓ₀}} where
+module _ {𝑨 𝑩 : structure 𝐹 𝑅 {ℓ₀}{ℓ₀}} where
 
  hom→Grhom : hom 𝑨 𝑩 → hom (Gr 𝑨) (Gr 𝑩)
  hom→Grhom (h , hhom) = h , (i , ii)
@@ -108,17 +108,15 @@ instance Y of CSP(A) such that Y ⊧ Σ and | Hom(X , A)| = |Hom(Y , A)|. -}
 
 \begin{code}
 
-module _ {𝐹 𝑅 : signature} where
+record _⇛_⇚_ (𝑩 𝑨 𝑪 : structure 𝐹 𝑅) : Type ℓ₀ where
+ field
+  to   : hom 𝑩 𝑨 → hom 𝑪 𝑨
+  from : hom 𝑪 𝑨 → hom 𝑩 𝑨
+  to∼from : ∀ h → (to ∘ from) h ≡ h
+  from∼to : ∀ h → (from ∘ to) h ≡ h
 
- record _⇛_⇚_ (𝑩 𝑨 𝑪 : structure 𝐹 𝑅) : Type ℓ₀ where
-  field
-   to   : hom 𝑩 𝑨 → hom 𝑪 𝑨
-   from : hom 𝑪 𝑨 → hom 𝑩 𝑨
-   to∼from : ∀ h → (to ∘ from) h ≡ h
-   from∼to : ∀ h → (from ∘ to) h ≡ h
-
-module _ {𝐹 𝑅 : signature}{χ : Level}{X : Type χ}
-         {𝑨 : structure 𝐹 {ℓ₀} 𝑅 {ℓ₀}} where
+module _ {χ : Level}{X : Type χ}
+         {𝑨 : structure 𝐹 𝑅 {ℓ₀} {ℓ₀}} where
 
 
  -- LEMMAIII1 : (ℰ : Pred (Term X × Term X) (ℓ₀ ⊔ χ))

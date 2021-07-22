@@ -17,18 +17,14 @@ The *graph* of 𝑨 is the structure Gr 𝑨 with the same domain as 𝑨 with r
 
 module Structures.Graphs.Basic where
 
-open import Agda.Primitive                        using    ( _⊔_    ;   lsuc     )
-                                                  renaming ( Set    to  Type
-                                                           ; lzero  to ℓ₀        )
-open import Agda.Builtin.Equality                 using    ( _≡_    ;   refl     )
-open import Data.Sum.Base                         using    (_⊎_                  )
-                                                  renaming ( inj₁   to  inl
-                                                           ; inj₂   to  inr      )
-open import Data.Product                          using    ( _,_    ;   Σ-syntax
-                                                           ;  Σ     ;   _×_      )
-open import Level                                 using    ( Level  ;  Lift
-                                                           ; lift   ;  lower     )
-open import Function.Base                         using    ( _∘_                 )
+open import Agda.Primitive         using    ( _⊔_ ; lsuc ; Level )
+                                   renaming ( Set to Type ; lzero  to ℓ₀ )
+open import Agda.Builtin.Equality  using    ( _≡_ ; refl )
+open import Data.Sum.Base          using    ( _⊎_ )
+                                   renaming ( inj₁ to inl ; inj₂ to inr )
+open import Data.Product           using    ( _,_ ; Σ-syntax ; _×_ )
+open import Level                  using    ( Lift ; lift ; lower )
+open import Function.Base          using    ( _∘_  )
 import Relation.Binary.PropositionalEquality as PE
 
 
@@ -44,20 +40,21 @@ open structure
 open _⊎_
 
 
-Gr-sig : signature → signature → signature
+Gr-sig : signature ℓ₀ ℓ₀ → signature ℓ₀ ℓ₀ → signature ℓ₀ ℓ₀
 
 Gr-sig 𝐹 𝑅 = record { symbol = symbol 𝑅 ⊎ symbol 𝐹
                     ; arity  = ar }
  where
- ar : symbol 𝑅 ⊎ symbol 𝐹 → Type ℓ₀
+ ar : symbol 𝑅 ⊎ symbol 𝐹 → Type _
  ar (inl 𝑟) = (arity 𝑅) 𝑟
  ar (inr 𝑓) = (arity 𝐹) 𝑓 ⊎ 𝟙
 
+private variable
+ 𝐹 𝑅 : signature ℓ₀ ℓ₀
+ α ρ : Level
 
-module _ {𝐹 𝑅 : signature}{α ρ : Level} where
-
- Gr : structure 𝐹 {α} 𝑅 {ρ} → structure Sig∅ {α} (Gr-sig 𝐹 𝑅) {α ⊔ ρ}
- Gr 𝑨 = record { carrier = carrier 𝑨 ; op = λ () ; rel = split }
+Gr : ∀{α ρ} → structure 𝐹 𝑅 {α} {ρ} → structure Sig∅ (Gr-sig 𝐹 𝑅) {α} {α ⊔ ρ}
+Gr {𝐹}{𝑅}{α}{ρ} 𝑨 = record { carrier = carrier 𝑨 ; op = λ () ; rel = split }
   where
   split : (s : symbol 𝑅 ⊎ symbol 𝐹) → Rel (carrier 𝑨) (arity (Gr-sig 𝐹 𝑅) s) {α ⊔ ρ}
   split (inl 𝑟) arg = Lift α (rel 𝑨 𝑟 arg)
@@ -66,9 +63,11 @@ module _ {𝐹 𝑅 : signature}{α ρ : Level} where
 
 open PE.≡-Reasoning
 
-module _ {𝐹 𝑅 : signature}
-         {α ρᵃ : Level}{𝑨 : structure 𝐹 {α} 𝑅 {ρᵃ}}
-         {β ρᵇ : Level}{𝑩 : structure 𝐹 {β} 𝑅 {ρᵇ}} where
+private variable
+ ρᵃ β ρᵇ : Level
+
+module _ {𝑨 : structure 𝐹 𝑅 {α} {ρᵃ}}
+         {𝑩 : structure 𝐹 𝑅 {β} {ρᵇ}} where
 
  hom→Grhom : hom 𝑨 𝑩 → hom (Gr 𝑨) (Gr 𝑩)
  hom→Grhom (h , hhom) = h , (i , ii)

@@ -229,8 +229,10 @@ open import Structures.Basic                using    ( Signature ; Structure ; R
                                                      ; Compatible' ; Lift-op ; Lift-rel
                                                      ; Lift-Strucˡ ; Lift-Strucʳ ; Lift-Struc )
 
-open import Structures.Records              using    ( ar ; signature ; structure ; compatible
-                                                     ; Lift-op ; Lift-rel ; Lift-struc )
+open import Structures.Records              using    ( signature ; structure ; _ʳ_ ; _ᵒ_ ; compatible
+                                                     ; Lift-op ; Lift-rel ; Lift-Strucˡ ; Lift-Strucʳ
+                                                     ; Lift-Struc ; siglˡ ; siglʳ ; sigl )
+
 open import Structures.Examples             using    ( Sig∅ ; Sig-0 ; Sig-1 ; Sig-2 ; Sig-0-1
                                                      ; Sig-0-1-2 ; SL ; NAE3SAT ; nae3sat )
 
@@ -265,7 +267,7 @@ open import Structures.Homs.Iso             using    ( _≅_ ; ≅-refl ; ≅-sy
 
 open import Structures.Terms.Basic          using    ( Term ; _⟦_⟧ )
 
-open import Structures.Terms.Entailment     using    ( ℓ₁ ; _⊧_≈_ ; _⊧_≋_ ; Th ; Mod ; fMod )
+open import Structures.Terms.Entailment     using    ( _⊧_≈_ ; _⊧_≋_ ; Th ; Mod ; fMod )
 
 open import Structures.Graphs.Basic         using    ( Gr-sig ; Gr ; hom→Grhom ; Grhom→hom )
 

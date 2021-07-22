@@ -33,8 +33,9 @@ open import Relations.Quotients      using ( Equivalence ; Quotient
                                            ; ⟪_⟫ ; ⌞_⌟ ; ⟪_∼_⟫-elim ; _/_ )
 open import Relations.Extensionality using ( swelldef )
 
-open import Structures.Basic         using ( Signature ; Structure ; _ʳ_ ; _ᵒ_ ; Compatible
+open import Structures.Basic         using ( Signature ; Structure ; Compatible ; _ʳ_ ; _ᵒ_
                                            ; Lift-Strucʳ ; Lift-Strucˡ ; Lift-Struc )
+
 open import Structures.Congruences.Basic
 
 
