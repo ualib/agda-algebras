@@ -1,6 +1,6 @@
 ---
 layout: default
-title : Structures.Congruences.Basic module
+title : Structures.Sigma.Congruences module
 date : 2021-05-12
 author: [agda-algebras development team][]
 ---
@@ -10,32 +10,26 @@ author: [agda-algebras development team][]
 {-# OPTIONS --without-K --exact-split --safe #-} -- cubical #-}
 
 
-module Structures.Congruences.Basic where
+module Structures.Sigma.Congruences where
 
-open import Agda.Builtin.Equality  using    ( _≡_   ;  refl    )
-open import Agda.Primitive         using    ( _⊔_   ;  lsuc    )
-                                   renaming ( Set   to Type    )
-open import Data.Product           using    ( _,_   ;  Σ
-                                            ; _×_   ; Σ-syntax )
-                                   renaming ( proj₁ to fst     )
-open import Function.Base          using    ( _∘_              )
-open import Level                  using    ( Level ;  Lift
-                                            ; lift  ;  lower   )
-                                   renaming ( zero  to ℓ₀      )
-open import Relation.Unary         using    ( ∅     ; Pred
-                                            ; _∈_              )
-open import Relation.Binary        using    ( IsEquivalence    )
-                                   renaming ( Rel   to BinRel  )
+open import Agda.Builtin.Equality  using    ( _≡_ ; refl )
+open import Agda.Primitive         using    ( _⊔_ ; lsuc )
+                                   renaming ( Set to Type ; lzero to ℓ₀ )
+open import Data.Product           using    ( _,_ ; _×_ ; Σ-syntax )
+                                   renaming ( proj₁ to fst )
+open import Function.Base          using    ( _∘_ )
+open import Level                  using    ( Level ; Lift ; lift ; lower )
+open import Relation.Unary         using    ( Pred ; _∈_ )
+open import Relation.Binary        using    ( IsEquivalence )
+                                   renaming ( Rel to BinRel )
 
 
 open import Overture.Preliminaries   using ( ∣_∣ )
-open import Structures.Basic         using ( Signature ; Structure
-                                           ; _ᵒ_ ; Compatible ; _ʳ_ )
 open import Relations.Discrete       using ( _|:_ ; 0[_] )
-open import Relations.Quotients      using ( Equivalence ; ⟪_⟫ ; ⌞_⌟
-                                           ; 0[_]Equivalence ; _/_
-                                           ; ⟪_∼_⟫-elim ; Quotient )
+open import Relations.Quotients      using ( Equivalence ; ⟪_⟫ ; ⌞_⌟ ; 0[_]Equivalence
+                                           ; _/_ ; ⟪_∼_⟫-elim ; Quotient )
 open import Relations.Extensionality using ( swelldef )
+open import Structures.Sigma.Basic   using ( Signature ; Structure ; _ᵒ_ ; Compatible ; _ʳ_ )
 
 private variable 𝑅 𝐹 : Signature
 

@@ -15,7 +15,7 @@ dependent pair type.
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Structures.Congruences.Records where
+module Structures.Congruences where
 
 open import Agda.Builtin.Equality  using ( _≡_ ; refl )
 open import Agda.Primitive         using ( _⊔_ ; lsuc ) renaming ( Set  to Type )
@@ -29,14 +29,17 @@ open import Relations.Discrete       using ( _|:_ ; 0[_] )
 open import Relations.Quotients      using ( Equivalence ; Quotient ; 0[_]Equivalence
                                            ; ⟪_⟫ ; ⌞_⌟ ; ⟪_∼_⟫-elim ; _/_ )
 open import Relations.Extensionality using ( swelldef )
-
-open import Structures.Records
+open import Structures.Basic         using ( signature ; structure ; sigl ; siglʳ
+                                           ; compatible )
 
 private variable
  𝓞₀ 𝓥₀ 𝓞₁ 𝓥₁ : Level
  𝐹 : signature 𝓞₀ 𝓥₀
  𝑅 : signature 𝓞₁ 𝓥₁
  α ρ : Level
+
+open signature
+open structure
 
 con : ∀ {α ρ} → structure 𝐹 𝑅 {α}{ρ} → Type (sigl 𝐹 ⊔ lsuc α ⊔ lsuc ρ)
 con {α = α}{ρ} 𝑨 = Σ[ θ ∈ Equivalence (carrier 𝑨){α ⊔ ρ} ] (compatible 𝑨 ∣ θ ∣)
