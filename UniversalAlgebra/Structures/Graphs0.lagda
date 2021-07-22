@@ -1,6 +1,6 @@
 ---
 layout: default
-title : Structures.Graphs.0Graphs
+title : Structures.Graphs0
 date : 2021-06-22
 author: [agda-algebras development team][]
 ---
@@ -15,25 +15,23 @@ The *graph* of 𝑨 is the structure Gr 𝑨 with the same domain as 𝑨 with r
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Structures.Graphs.0Graphs where
+module Structures.Graphs0 where
 
-open import Agda.Primitive                        using    ( _⊔_    ;   Level )
-                                                  renaming ( Set    to  Type
-                                                           ; lzero  to ℓ₀     )
-open import Agda.Builtin.Equality                 using    ( _≡_    ;   refl  )
-open import Data.Sum.Base                         using    ( _⊎_              )
-                                                  renaming ( inj₁   to inl
-                                                           ; inj₂   to inr    )
-open import Data.Product                          using    ( _,_              )
-open import Function.Base                         using    ( _∘_              )
+open import Agda.Primitive          using    ( _⊔_ ; Level )
+                                    renaming ( Set to Type ; lzero to ℓ₀ )
+open import Agda.Builtin.Equality   using    ( _≡_ ; refl )
+open import Data.Product            using    ( _,_ )
+open import Data.Sum.Base           using    ( _⊎_ )
+                                    renaming ( inj₁ to inl ; inj₂ to inr )
+open import Function.Base           using    ( _∘_ )
 import Relation.Binary.PropositionalEquality as PE
 
 -- -- Imports from agda-algebras --------------------------------------------------------------
-open import Overture.Preliminaries   using ( 𝟙 ; ∣_∣ ; ∥_∥ )
-open import Structures.Records       using ( signature ; structure )
-open import Structures.Examples      using ( Sig∅)
-open import Structures.Homs.Records  using ( hom ; is-hom-rel ; is-hom-op)
-open import Relations.Continuous     using ( Rel )
+open import Overture.Preliminaries using ( 𝟙 ; ∣_∣ ; ∥_∥ )
+open import Relations.Continuous   using ( Rel )
+open import Structures.Basic       using ( signature ; structure )
+open import Structures.Examples    using ( Sig∅ )
+open import Structures.Homs        using ( hom ; is-hom-rel ; is-hom-op )
 
 
 open signature

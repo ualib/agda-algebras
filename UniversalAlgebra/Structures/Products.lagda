@@ -1,6 +1,6 @@
 ---
 layout: default
-title : Sturctures.AsRecordsProducts module
+title : Sturctures.Products module
 date : 2021-05-11
 author: [agda-algebras development team][]
 ---
@@ -14,36 +14,35 @@ dependent pair type.
 
 {-# OPTIONS --without-K --exact-split --safe #-} -- cubical #-}
 
-open import Structures.Records
+module Structures.Products where
 
-module Structures.Products.Records where
+open import Agda.Primitive using ( _⊔_ ; lsuc ) renaming ( Set to Type )
+open import Data.Product   using ( _,_ ; Σ-syntax )
+open import Level          using ( Level )
+open import Relation.Unary using ( _∈_ ; Pred )
 
 
-open import Agda.Primitive         using    ( _⊔_   ;  lsuc     )
-                                   renaming ( Set   to Type     )
-open import Data.Product           using    ( _,_   ;  Σ-syntax
-                                            ; Σ                 )
-open import Level                  using    ( Level             )
-open import Relation.Unary         using    ( _∈_   ;  Pred     )
+open import Overture.Preliminaries using ( ∣_∣ ; Π-syntax )
+open import Structures.Basic       using ( signature ; structure )
 
-open import Overture.Preliminaries using    ( ∣_∣   ; Π-syntax
-                                            ; Π                 )
+
 private variable
  𝓞₀ 𝓥₀ 𝓞₁ 𝓥₁ : Level
  𝐹 : signature 𝓞₀ 𝓥₀
  𝑅 : signature 𝓞₁ 𝓥₁
+ α ρ ℓ : Level
 
-module _ {α ρ ℓ : Level} where
+open structure
 
- ⨅ : {ℑ : Type ℓ}(𝒜 : ℑ → structure 𝐹 𝑅 {α} {ρ} ) → structure 𝐹 𝑅 --  {ρ ⊔ ℓ} {α ⊔ ℓ}
- ⨅ {ℑ = ℑ} 𝒜 = record { carrier = Π[ i ∈ ℑ ] carrier (𝒜 i)            -- domain of the product structure
-                 ; op = λ 𝑓 a i → (op (𝒜 i) 𝑓) λ x → a x i       -- interpretation of  operations
-                 ; rel = λ r a → ∀ i → (rel (𝒜 i) r) λ x → a x i -- interpretation of relations
-                 }
+⨅ : {ℑ : Type ℓ}(𝒜 : ℑ → structure 𝐹 𝑅 {α}{ρ} ) → structure 𝐹 𝑅
+⨅ {ℑ = ℑ} 𝒜 =
+ record { carrier = Π[ i ∈ ℑ ] carrier (𝒜 i)            -- domain of the product structure
+        ; op = λ 𝑓 a i → (op (𝒜 i) 𝑓) λ x → a x i       -- interpretation of  operations
+        ; rel = λ r a → ∀ i → (rel (𝒜 i) r) λ x → a x i -- interpretation of relations
+        }
 
 
-module _ {α ρ ℓ : Level}
-         {𝒦 : Pred (structure 𝐹 𝑅  {α}{ρ}) ℓ} where
+module _ {𝒦 : Pred (structure 𝐹 𝑅 {α}{ρ}) ℓ} where
 
   ℓp : Level
   ℓp = lsuc (α ⊔ ρ) ⊔ ℓ

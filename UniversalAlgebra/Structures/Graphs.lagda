@@ -1,6 +1,6 @@
 ---
 layout: default
-title : Structures.Graphs.Basic module
+title : Structures.Graphs module
 date : 2021-06-22
 author: [agda-algebras development team][]
 ---
@@ -15,14 +15,14 @@ The *graph* of 𝑨 is the structure Gr 𝑨 with the same domain as 𝑨 with r
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Structures.Graphs.Basic where
+module Structures.Graphs where
 
 open import Agda.Primitive         using    ( _⊔_ ; lsuc ; Level )
                                    renaming ( Set to Type ; lzero  to ℓ₀ )
 open import Agda.Builtin.Equality  using    ( _≡_ ; refl )
+open import Data.Product           using    ( _,_ ; Σ-syntax ; _×_ )
 open import Data.Sum.Base          using    ( _⊎_ )
                                    renaming ( inj₁ to inl ; inj₂ to inr )
-open import Data.Product           using    ( _,_ ; Σ-syntax ; _×_ )
 open import Level                  using    ( Lift ; lift ; lower )
 open import Function.Base          using    ( _∘_  )
 import Relation.Binary.PropositionalEquality as PE
@@ -30,10 +30,10 @@ import Relation.Binary.PropositionalEquality as PE
 
 -- Imports from agda-algebras --------------------------------------------------------------
 open import Overture.Preliminaries   using ( ∣_∣ ; _≈_ ; ∥_∥ ; _∙_ ; lower∼lift ; lift∼lower ; 𝟙)
-open import Structures.Records       using ( signature ; structure )
-open import Structures.Examples      using ( Sig∅ )
-open import Structures.Homs.Records  using ( hom ; 𝒾𝒹 ; ∘-hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-hom-rel; is-hom-op)
 open import Relations.Continuous     using ( Rel )
+open import Structures.Basic         using ( signature ; structure )
+open import Structures.Examples      using ( Sig∅ )
+open import Structures.Homs          using ( hom ; 𝒾𝒹 ; ∘-hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-hom-rel; is-hom-op)
 
 open signature
 open structure

@@ -1,6 +1,6 @@
 ---
 layout: default
-title : Structures.Homs.Iso module (The Agda Universal Algebra Library)
+title : Structures.Sigma.Isos module (The Agda Universal Algebra Library)
 date : 2021-06-22
 author: [agda-algebras development team][]
 ---
@@ -11,7 +11,7 @@ author: [agda-algebras development team][]
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Structures.Homs.Iso where
+module Structures.Sigma.Isos where
 
 
 -- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
@@ -31,9 +31,9 @@ open import Relation.Binary.PropositionalEquality using    ( cong   ; cong-app  
 
 -- Imports from agda-algebras --------------------------------------------------------------
 open import Overture.Preliminaries    using ( ∣_∣ ; _≈_ ; ∥_∥ ; _∙_ ; lower∼lift ; lift∼lower )
-open import Structures.Basic          using ( Signature ; Structure ; Lift-Struc )
-open import Structures.Homs.Basic     using ( hom ; 𝒾𝒹 ; ∘-hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-hom)
-open import Structures.Products.Basic using    (  ⨅ ; ℓp ; ℑ ; 𝔖 ; class-prod )
+open import Structures.Sigma.Basic    using ( Signature ; Structure ; Lift-Struc )
+open import Structures.Sigma.Homs     using ( hom ; 𝒾𝒹 ; ∘-hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-hom)
+open import Structures.Sigma.Products using    (  ⨅ ; ℓp ; ℑ ; 𝔖 ; class-prod )
 
 private variable 𝑅 𝐹 : Signature
 

@@ -1,6 +1,6 @@
 ---
 layout: default
-title : Structures.Products.Basic module
+title : Structures.Sigma.Products module
 date : 2021-05-11
 author: [agda-algebras development team][]
 ---
@@ -11,20 +11,16 @@ author: [agda-algebras development team][]
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
+module Structures.Sigma.Products where
 
-
-module Structures.Products.Basic where
-
-open import Agda.Primitive        using    (  _⊔_  ;  lsuc     )
-                                  renaming (  Set  to Type     )
-open import Data.Product          using    (  _,_  ;  Σ
-                                           ; _×_   ;  Σ-syntax )
-open import Level                 using    ( Level ; Lift      )
-open import Relation.Unary        using    (  ∅    ; _∈_
-                                           ; Pred              )
+open import Agda.Primitive using    ( _⊔_ ; lsuc )
+                           renaming ( Set to Type )
+open import Data.Product   using    ( _,_ ; _×_ ; Σ-syntax )
+open import Level          using    ( Level ; Lift )
+open import Relation.Unary using    ( _∈_ ; Pred )
 
 open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥ ; Π ; Π-syntax )
-open import Structures.Basic       using ( Signature ; Structure ; _ʳ_ ; _ᵒ_ )
+open import Structures.Sigma.Basic using ( Signature ; Structure ; _ʳ_ ; _ᵒ_ )
 
 
 private variable

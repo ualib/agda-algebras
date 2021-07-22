@@ -1,6 +1,6 @@
 ---
 layout: default
-title : Structures.Homs.Basic
+title : Structures.Sigma.Homs
 date : 2021-06-22
 author: [agda-algebras development team][]
 ---
@@ -9,34 +9,27 @@ author: [agda-algebras development team][]
 
 {-# OPTIONS --without-K --exact-split --safe #-} -- cubical #-}
 
-module Structures.Homs.Basic where
+module Structures.Sigma.Homs where
 
-open import Agda.Builtin.Equality  using    ( _≡_   ;  refl     )
-open import Agda.Primitive         using    (  _⊔_  ;  lsuc     )
-                                   renaming (  Set  to Type     )
-open import Data.Product           using    (  _,_  ;  Σ
-                                            ;  _×_  ;  Σ-syntax )
-                                   renaming ( proj₁ to fst
-                                            ; proj₂ to snd     )
-open import Level                  using    ( Level ;  Lift
-                                            ; lift  ;  lower    )
-                                   renaming ( zero  to ℓ₀       )
-open import Function.Base          using    ( _∘_   ;  id      )
+open import Agda.Builtin.Equality  using    ( _≡_ ; refl )
+open import Agda.Primitive         using    ( _⊔_ ; lsuc )
+                                   renaming ( Set to Type ; lzero to ℓ₀ )
+open import Data.Product           using    ( _,_ ; _×_ ; Σ-syntax )
+                                   renaming ( proj₁ to fst ; proj₂ to snd )
+open import Level                  using    ( Level ; Lift ; lift ; lower )
+open import Function.Base          using    ( _∘_ ; id )
 open import Relation.Binary.PropositionalEquality as PE
 
 
 open import Overture.Preliminaries   using ( ∣_∣ ; ∥_∥ ; _∙_ ; _⁻¹)
 open import Overture.Inverses        using ( IsInjective ; IsSurjective )
 open import Relations.Discrete       using ( _|:_ ; 0[_] ; ker )
-open import Relations.Quotients      using ( Equivalence ; Quotient
-                                           ; 0[_]Equivalence ; ker-IsEquivalence ; kerlift-IsEquivalence
+open import Relations.Quotients      using ( Equivalence ; Quotient ; 0[_]Equivalence
+                                           ; ker-IsEquivalence ; kerlift-IsEquivalence
                                            ; ⟪_⟫ ; ⌞_⌟ ; ⟪_∼_⟫-elim ; _/_ )
 open import Relations.Extensionality using ( swelldef )
-
-open import Structures.Basic         using ( Signature ; Structure ; Compatible ; _ʳ_ ; _ᵒ_
+open import Structures.Sigma.Basic   using ( Signature ; Structure ; Compatible ; _ʳ_ ; _ᵒ_
                                            ; Lift-Strucʳ ; Lift-Strucˡ ; Lift-Struc )
-
-open import Structures.Congruences.Basic
 
 
 private variable 𝑅 𝐹 : Signature

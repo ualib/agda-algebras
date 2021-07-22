@@ -11,13 +11,12 @@ author: [agda-algebras development team][]
 
 module Structures.Examples where
 
-open import Agda.Primitive         using    ( Level )
-                                   renaming ( Set to Type ; lzero to ℓ₀ )
-open import Data.Product           using    ( _,_ ; _×_  )
-open import Relation.Unary         using    ( Pred ; _∈_ ; ⋂ )
+open import Agda.Primitive  using ( Level ) renaming ( Set to Type ; lzero to ℓ₀ )
+open import Data.Product    using ( _,_ ; _×_  )
+open import Relation.Unary  using ( Pred ; _∈_ ; ⋂ )
 
 open import Overture.Preliminaries using ( 𝟘 ; 𝟙 ; 𝟚 ; 𝟛 )
-open import Structures.Records     using ( signature ; structure )
+open import Structures.Basic       using ( signature ; structure )
 
 
 
