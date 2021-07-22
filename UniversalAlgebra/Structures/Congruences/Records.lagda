@@ -18,10 +18,10 @@ dependent pair type.
 module Structures.Congruences.Records where
 
 open import Agda.Builtin.Equality  using ( _≡_ ; refl )
-open import Agda.Primitive         using ( _⊔_ ; lsuc ) renaming (  Set  to Type     )
+open import Agda.Primitive         using ( _⊔_ ; lsuc ) renaming ( Set  to Type )
 open import Data.Product           using ( _,_ ; _×_ ; Σ-syntax ) renaming ( proj₁ to fst )
 open import Function.Base          using ( _∘_ )
-open import Level                  using ( Level ; Lift ; lift ; lower ) renaming ( zero  to ℓ₀ )
+open import Level                  using ( Level ; Lift ; lift ; lower )
 
 
 open import Overture.Preliminaries   using ( ∣_∣ )
@@ -38,21 +38,20 @@ private variable
  𝑅 : signature 𝓞₁ 𝓥₁
  α ρ : Level
 
-con : ∀ {α ρ} → structure 𝐹 𝑅 {α}{ρ} → Type _
+con : ∀ {α ρ} → structure 𝐹 𝑅 {α}{ρ} → Type (sigl 𝐹 ⊔ lsuc α ⊔ lsuc ρ)
 con {α = α}{ρ} 𝑨 = Σ[ θ ∈ Equivalence (carrier 𝑨){α ⊔ ρ} ] (compatible 𝑨 ∣ θ ∣)
 
 
 -- Example. The zero congruence of a structure.
-0[_]compatible : (𝑨 : structure 𝐹 𝑅 {α} {ρ})
- →               swelldef (siglev₁ 𝐹) α → (𝑓 : symbol 𝐹)
- →               (op 𝑨) 𝑓 |: (0[ carrier 𝑨 ] {ρ})
+0[_]compatible : (𝑨 : structure 𝐹 𝑅 {α} {ρ}) → swelldef (siglʳ 𝐹) α
+ →               (𝑓 : symbol 𝐹) → (op 𝑨) 𝑓 |: (0[ carrier 𝑨 ] {ρ})
 
 0[ 𝑨 ]compatible wd 𝑓 {i}{j} ptws0  = lift γ
  where
  γ : ((op 𝑨) 𝑓) i ≡ ((op 𝑨) 𝑓) j
  γ = wd ((op 𝑨) 𝑓) i j (lower ∘ ptws0)
 
-0con[_] : (𝑨 : structure 𝐹 𝑅 {α} {ρ}) → swelldef (siglev₁ 𝐹) α → con 𝑨
+0con[_] : (𝑨 : structure 𝐹 𝑅 {α} {ρ}) → swelldef (siglʳ 𝐹) α → con 𝑨
 0con[ 𝑨 ] wd = 0[ carrier 𝑨 ]Equivalence , 0[ 𝑨 ]compatible wd
 
 -- Quotient structures
@@ -75,7 +74,8 @@ _╱_ = quotient
 
 
 -- Example. The zero congruence of a quotient structure.
-𝟎[_╱_] : (𝑨 : structure 𝐹 𝑅 {α}{ρ}) (θ : con 𝑨) → swelldef (siglev₁ 𝐹)(lsuc (α ⊔ ρ)) → con (𝑨 ╱ θ)
+𝟎[_╱_] : (𝑨 : structure 𝐹 𝑅 {α}{ρ}) (θ : con 𝑨)
+ →       swelldef (siglʳ 𝐹)(lsuc (α ⊔ ρ)) → con (𝑨 ╱ θ)
 𝟎[ 𝑨 ╱ θ ] wd = 0con[ 𝑨 ╱ θ ] wd
 
 \end{code}

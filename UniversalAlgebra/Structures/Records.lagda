@@ -12,28 +12,13 @@ inhabitants of record types.  For a similar development using Sigma types see th
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Level                 using    (  Level ; Lift   )
-
 module Structures.Records  where
 
-open import Agda.Primitive        using    (  _⊔_ ;  lsuc  )
-                                  renaming (  Set   to Type  ;
-                                              lzero to ℓ₀    )
+open import Agda.Primitive       using    ( _⊔_ ; lsuc ) renaming ( Set to Type )
+open import Function.Base        using    ( flip ; _∘_ )
+open import Level                using    ( Level ; Lift ; lift ; lower )
+open import Relation.Binary.Core using    () renaming ( Rel to BinRel )
 
-open import Agda.Builtin.Equality                 using ( _≡_ ; refl )
-open import Data.Bool             using    (  Bool ; true ; false )
-open import Data.Product          using    (  _,_ ; Σ ; _×_  ;
-                                              Σ-syntax       )
-                                  renaming (  proj₁ to fst   ;
-                                              proj₂ to snd   )
-open import Relation.Binary.Core  using    (  _⇒_ ; _=[_]⇒_  )
-                                  renaming (  REL  to BinREL ;
-                                              Rel  to BinRel )
-open import Relation.Binary.PropositionalEquality.Core using (_≢_)
-open import Relation.Unary             using    ( Pred  ;   _⊆_
-                                                ; _∈_   ;   ⋂     )
-
-open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥ ; 𝟘 ; 𝟙 ; 𝟚 ; 𝟛 ; ℓ₁)
 open import Relations.Discrete     using ( Arity ; Op ; _|:_ ; _preserves_ )
 open import Relations.Continuous   using ( Rel )
 
@@ -44,11 +29,14 @@ record signature (𝓞 𝓥 : Level) : Type (lsuc (𝓞 ⊔ 𝓥)) where
   symbol : Type 𝓞
   arity : symbol → Type 𝓥
 
-siglev₀ : {𝓞 𝓥 : Level} → signature 𝓞 𝓥 → Level
-siglev₀ {𝓞}{𝓥} _ = 𝓞
+siglˡ : {𝓞 𝓥 : Level} → signature 𝓞 𝓥 → Level
+siglˡ {𝓞}{𝓥} _ = 𝓞
 
-siglev₁ : {𝓞 𝓥 : Level} → signature 𝓞 𝓥 → Level
-siglev₁ {𝓞}{𝓥} _ = 𝓥
+siglʳ : {𝓞 𝓥 : Level} → signature 𝓞 𝓥 → Level
+siglʳ {𝓞}{𝓥} _ = 𝓥
+
+sigl : {𝓞 𝓥 : Level} → signature 𝓞 𝓥 → Level
+sigl {𝓞}{𝓥} _ = 𝓞 ⊔ 𝓥
 
 open signature public
 
@@ -70,10 +58,10 @@ module _ {𝓞₀ 𝓥₀ 𝓞₁ 𝓥₁ : Level} where
 
   -- Syntactic sugar for interpretation of operation
   _ʳ_ : ∀ {α ρ} → (r : symbol 𝑅)(𝒜 : structure 𝐹 𝑅 {α}{ρ}) → Rel (carrier 𝒜) ((arity 𝑅) r) {ρ}
-  r ʳ 𝒜 = λ a → ((rel 𝒜) r) a
+  _ʳ_ = flip rel
 
   _ᵒ_ : ∀ {α ρ} → (f : symbol 𝐹)(𝒜 : structure 𝐹 𝑅 {α}{ρ}) → Op (carrier 𝒜)((arity 𝐹) f)
-  f ᵒ 𝒜 = λ a → (op 𝒜 f) a
+  _ᵒ_ = flip op
 
   compatible : ∀ {α ρ ℓ} → (𝑨 : structure 𝐹 𝑅 {α}{ρ}) → BinRel (carrier 𝑨) ℓ → Type _
   compatible 𝑨 r = ∀ (f : symbol 𝐹) → (f ᵒ 𝑨) |: r
@@ -82,25 +70,27 @@ module _ {𝓞₀ 𝓥₀ 𝓞₁ 𝓥₁ : Level} where
 
   -- lift an operation to act on type of higher universe level
   Lift-op : ∀ {ι α} → {I : Arity ι}{A : Type α} → Op A I → {ℓ : Level} → Op (Lift ℓ A) I
-  Lift-op f = λ x → lift (f (λ i → lower (x i)))
+  --  Lift-op f = λ x → lift (f (λ i → lower (x i)))
+  Lift-op f = λ z → lift (f (lower ∘ z))
 
   -- lift a relation to a predicate on type of higher universe level
   -- (note ρ doesn't change; see Lift-Structʳ for that)
   Lift-rel : ∀ {ι α ρ} → {I : Arity ι}{A : Type α} → Rel A I {ρ} → {ℓ : Level} → Rel (Lift ℓ A) I{ρ}
-  Lift-rel r x = r (λ i → lower (x i))
+  Lift-rel r x = r (lower ∘ x)
 
   -- lift the domain of a structure to live in a type at a higher universe level
   Lift-Strucˡ : ∀ {α ρ} → (ℓ : Level) → structure 𝐹 𝑅 {α}{ρ} → structure 𝐹 𝑅  {α ⊔ ℓ}{ρ}
   Lift-Strucˡ ℓ 𝑨 = record { carrier = Lift ℓ (carrier 𝑨)
-                           ; op = λ f → Lift-op ((op 𝑨) f)
-                           ; rel = λ r → Lift-rel (rel 𝑨 r) }
+                           ; op = λ f → Lift-op (f ᵒ 𝑨)
+                           ; rel = λ R → Lift-rel (R ʳ 𝑨)
+                           }
 
   -- lift the relations of a structure from level ρ to level ρ ⊔ ℓ
   Lift-Strucʳ : ∀ {α ρ} → (ℓ : Level) → structure 𝐹 𝑅 {α}{ρ} → structure 𝐹 𝑅 {α}{ρ ⊔ ℓ}
   Lift-Strucʳ ℓ 𝑨 = record { carrier = carrier 𝑨 ; op = op 𝑨 ; rel = lrel }
    where
    lrel : (r : symbol 𝑅) → Rel (carrier 𝑨) ((arity 𝑅) r)
-   lrel r = λ x → Lift ℓ ((r ʳ 𝑨) x)
+   lrel r = Lift ℓ ∘ r ʳ 𝑨
 
 
   -- lift both domain of structure and the level of its relations

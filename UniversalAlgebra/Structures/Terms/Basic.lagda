@@ -18,9 +18,10 @@ open import Structures.Records  using ( signature ; structure )
 open signature
 open structure
 
+private variable
+ 𝓞 𝓥 : Level
 
-module _ {𝓞 𝓥 : Level}
-         {𝐹 : signature 𝓞 𝓥}
+module _ {𝐹 : signature 𝓞 𝓥}
          {χ : Level} where
 
  data Term (X : Type χ ) : Type (𝓞 ⊔ 𝓥 ⊔ (lsuc χ))  where

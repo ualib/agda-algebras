@@ -12,15 +12,17 @@ author: [agda-algebras development team][]
 
 module Structures.Homs.Records where
 
-open import Axiom.Extensionality.Propositional using () renaming (Extensionality to funext)
-open import Agda.Builtin.Equality  using ( _≡_ ; refl )
-open import Agda.Primitive         using ( _⊔_ ; lsuc ) renaming ( Set to Type )
-open import Data.Product           using ( _,_ ; Σ ; _×_ ; Σ-syntax ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Level                  using ( Level ;  Lift ; lift ; lower ) renaming ( zero  to ℓ₀ )
-open import Function.Base          using ( _∘_ ; id )
-open import Relation.Binary        using ( IsEquivalence )
-open import Relation.Binary.PropositionalEquality
-                                   using ( cong ; module ≡-Reasoning ; sym ; trans )
+open import Axiom.Extensionality.Propositional using ()
+                                   renaming (Extensionality to funext)
+open import Agda.Builtin.Equality  using    ( _≡_ ; refl )
+open import Agda.Primitive         using    ( _⊔_ ; lsuc )
+                                   renaming ( lzero to ℓ₀ ; Set to Type )
+open import Data.Product           using    ( _,_ ; Σ ; _×_ ; Σ-syntax )
+                                   renaming ( proj₁ to fst ; proj₂ to snd )
+open import Function.Base          using    ( _∘_ ; id )
+open import Level                  using    ( Level ;  Lift ; lift ; lower )
+open import Relation.Binary        using    ( IsEquivalence )
+import Relation.Binary.PropositionalEquality as PE
 
 
 open import Overture.Preliminaries   using ( ℓ₁ ; ∣_∣ ; ∥_∥ ; _⁻¹ ; _∙_ ; 𝑖𝑑 ; Π ; Π-syntax)
@@ -31,7 +33,7 @@ open import Relations.Quotients      using ( Equivalence ; Quotient ; 0[_]Equiva
                                            ; ⟪_⟫ ; ⌞_⌟ ; ⟪_∼_⟫-elim ; _/_ )
 open import Relations.Extensionality using ( swelldef )
 open import Structures.Records       using ( signature ; structure ; Lift-Struc
-                                           ; Lift-Strucˡ ; compatible ; siglev₁)
+                                           ; Lift-Strucˡ ; compatible ; siglʳ ; sigl)
 open import Structures.Examples      using ( Sig∅ )
 
 
@@ -52,22 +54,22 @@ module _ (𝑨 : structure 𝐹 𝑅 {α}{ρᵃ})
   A = carrier 𝑨
   B = carrier 𝑩
 
- preserves : (symbol 𝑅) → (A → B) → Type _ -- (α ⊔ ρᵃ ⊔ ρᵇ)
+ preserves : (symbol 𝑅) → (A → B) → Type (siglʳ 𝑅 ⊔ α ⊔ ρᵃ ⊔ ρᵇ)
  preserves 𝑟 h = ∀ a → ((rel 𝑨) 𝑟 a) → ((rel 𝑩) 𝑟) (h ∘ a)
 
- is-hom-rel : (A → B) → Type _ -- (α ⊔ ρᵃ ⊔ ρᵇ)
+ is-hom-rel : (A → B) → Type (sigl 𝑅 ⊔ α ⊔ ρᵃ ⊔ ρᵇ)
  is-hom-rel h = ∀ (r : symbol 𝑅) → preserves r h
 
- comm-op : (A → B) → (symbol 𝐹) → Type _ -- (α ⊔ β)
+ comm-op : (A → B) → (symbol 𝐹) → Type (siglʳ 𝐹 ⊔ α ⊔ β)
  comm-op h f = ∀ a → h (((op 𝑨) f) a) ≡ ((op 𝑩) f) (h ∘ a)
 
- is-hom-op : (A → B) → Type _ -- (α ⊔ β)
+ is-hom-op : (A → B) → Type (sigl 𝐹 ⊔ α ⊔ β)
  is-hom-op h = ∀ f → comm-op h f
 
- is-hom : (A → B) → Type _ -- (α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
+ is-hom : (A → B) → Type (sigl 𝐹 ⊔ sigl 𝑅 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
  is-hom h = is-hom-rel h × is-hom-op h
 
- hom : Type _ -- (α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
+ hom : Type (sigl 𝐹 ⊔ sigl 𝑅 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
  hom = Σ[ h ∈ (A → B) ] is-hom h
 
 
@@ -86,17 +88,17 @@ module _ {𝑨 : structure 𝐹 𝑅 {α}{ρᵃ}}
 
  ∘-is-hom-op : (f : A → B)(g : B → C)
   →            is-hom-op 𝑨 𝑩 f → is-hom-op 𝑩 𝑪 g → is-hom-op 𝑨 𝑪 (g ∘ f)
- ∘-is-hom-op f g fho gho 𝑓 a = cong g (fho 𝑓 a) ∙ gho 𝑓 (f ∘ a)
+ ∘-is-hom-op f g fho gho 𝑓 a = PE.cong g (fho 𝑓 a) ∙ gho 𝑓 (f ∘ a)
 
  ∘-is-hom : (f : A → B)(g : B → C)
   →         is-hom 𝑨 𝑩 f → is-hom 𝑩 𝑪 g → is-hom 𝑨 𝑪 (g ∘ f)
  ∘-is-hom f g fhro ghro = ihr , iho
   where
   ihr : is-hom-rel 𝑨 𝑪 (g ∘ f)
-  ihr = ∘-is-hom-rel f g (fst fhro) (fst ghro)
+  ihr = ∘-is-hom-rel f g ∣ fhro ∣ ∣ ghro ∣
 
   iho : is-hom-op 𝑨 𝑪 (g ∘ f)
-  iho = ∘-is-hom-op f g (snd fhro) (snd ghro)
+  iho = ∘-is-hom-op f g ∥ fhro ∥ ∥ ghro ∥
 
  ∘-hom : hom 𝑨 𝑩 → hom 𝑩 𝑪 → hom 𝑨 𝑪
  ∘-hom (f , fh) (g , gh) = g ∘ f , ∘-is-hom f g fh gh
@@ -113,24 +115,24 @@ module _ {𝑨 : structure 𝐹 𝑅 {α}{ρᵃ}}
   A = carrier 𝑨
   B = carrier 𝑩
 
- is-mon : (A → B) → Type _ -- (α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
+ is-mon : (A → B) → Type (sigl 𝐹 ⊔ sigl 𝑅 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
  is-mon g = is-hom 𝑨 𝑩 g × IsInjective g
 
- mon : Type _ -- (α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
+ mon : Type (sigl 𝐹 ⊔ sigl 𝑅 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
  mon = Σ[ g ∈ (A → B) ] is-mon g
 
  mon→hom : mon → hom 𝑨 𝑩
- mon→hom ϕ = (fst ϕ) , fst (snd ϕ )
+ mon→hom ϕ = ∣ ϕ ∣ , fst ∥ ϕ ∥
 
 
- is-epi : (A → B) → Type _ -- (α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
+ is-epi : (A → B) → Type (sigl 𝐹 ⊔ sigl 𝑅 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
  is-epi g = is-hom 𝑨 𝑩 g × IsSurjective g
 
- epi : Type _ -- (α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
+ epi : Type (sigl 𝐹 ⊔ sigl 𝑅 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
  epi = Σ[ g ∈ (A → B) ] is-epi g
 
  epi→hom : epi → hom 𝑨 𝑩
- epi→hom ϕ = (fst ϕ) , fst (snd ϕ)
+ epi→hom ϕ = ∣ ϕ ∣ , fst ∥ ϕ ∥
 
 open Lift
 
@@ -143,42 +145,44 @@ open Lift
 -- Kernels of homomorphisms
 
 
-open ≡-Reasoning
+open PE.≡-Reasoning
 module _ {𝑨 : structure 𝐹 𝑅  {α}{β ⊔ ρᵃ}}{𝑩 : structure 𝐹 𝑅 {β} {ρᵇ}}
-         {wd : swelldef (siglev₁ 𝐹) β} where
+         where
 
- homker-comp : (h : hom 𝑨 𝑩) → compatible 𝑨 (ker ∣ h ∣)
- homker-comp (h , hhom) f {u}{v} kuv =
+ homker-comp : (h : hom 𝑨 𝑩){wd : swelldef (siglʳ 𝐹) β} 
+  →            compatible 𝑨 (ker ∣ h ∣)
+ homker-comp (h , hhom) {wd} f {u}{v} kuv =
   h (((op 𝑨)f) u)    ≡⟨ ∥ hhom ∥ f u ⟩
   ((op 𝑩) f)(h ∘ u)  ≡⟨ wd ((op 𝑩)f) (h ∘ u) (h ∘ v) kuv ⟩
   ((op 𝑩) f)(h ∘ v)  ≡⟨ (∥ hhom ∥ f v)⁻¹ ⟩
   h (((op 𝑨)f) v)    ∎
 
- kerlift-comp : (h : hom 𝑨 𝑩) → compatible 𝑨 (kerlift ∣ h ∣ (α ⊔ ρᵃ) )
- kerlift-comp (h , hhom) f {u}{v} kuv = lift goal
+ kerlift-comp : (h : hom 𝑨 𝑩){wd : swelldef (siglʳ 𝐹) β} 
+  →             compatible 𝑨 (kerlift ∣ h ∣ (α ⊔ ρᵃ) )
+ kerlift-comp (h , hhom) {wd} f {u}{v} kuv = lift goal
   where
   goal : h (op 𝑨 f u) ≡ h (op 𝑨 f v)
-  goal = h (op 𝑨 f u)    ≡⟨ snd hhom f u ⟩
+  goal = h (op 𝑨 f u)    ≡⟨ ∥ hhom ∥ f u ⟩
          (op 𝑩 f)(h ∘ u) ≡⟨ wd (op 𝑩 f)(h ∘ u)(h ∘ v)(lower ∘ kuv) ⟩
-         (op 𝑩 f)(h ∘ v) ≡⟨ (snd hhom f v)⁻¹ ⟩
+         (op 𝑩 f)(h ∘ v) ≡⟨ (∥ hhom ∥ f v ) ⁻¹ ⟩
          h (op 𝑨 f v)    ∎
 
  open import Structures.Congruences.Records
 
- kercon : hom 𝑨 𝑩 → con 𝑨
- kercon (h , hhom) = ((λ x y → Lift (α ⊔ ρᵃ) (h x ≡ h y)) , goal) , kerlift-comp (h , hhom)
+ kercon : hom 𝑨 𝑩 → {wd : swelldef (siglʳ 𝐹) β} → con 𝑨
+ kercon (h , hhom) {wd} = ((λ x y → Lift (α ⊔ ρᵃ) (h x ≡ h y)) , goal) , kerlift-comp (h , hhom) {wd}
   where
   goal : IsEquivalence (λ x y → Lift (α ⊔ ρᵃ) (h x ≡ h y))
   goal = record { refl = lift refl
-                ; sym = λ p → lift (sym (lower p))
-                ; trans = λ p q → lift (trans (lower p)(lower q)) }
+                ; sym = λ p → lift (PE.sym (lower p))
+                ; trans = λ p q → lift (PE.trans (lower p)(lower q)) }
 
- kerquo : hom 𝑨 𝑩 → structure 𝐹 𝑅 {lsuc (α ⊔ β ⊔ ρᵃ)} {β ⊔ ρᵃ}
- kerquo h = 𝑨 ╱ (kercon h)
+ kerquo : hom 𝑨 𝑩 → {wd : swelldef (siglʳ 𝐹) β} → structure 𝐹 𝑅 {lsuc (α ⊔ β ⊔ ρᵃ)} {β ⊔ ρᵃ}
+ kerquo h {wd} = 𝑨 ╱ (kercon h {wd})
 
-ker[_⇒_] : (𝑨 : structure 𝐹 𝑅 {α} {β ⊔ ρᵃ} )(𝑩 : structure 𝐹 𝑅 {β}{ρᵇ} ){wd : swelldef (siglev₁ 𝐹) β}
- →         hom 𝑨 𝑩 → structure 𝐹 𝑅
-ker[_⇒_] {ρᵃ = ρᵃ} 𝑨 𝑩 {wd} h = kerquo{ρᵃ = ρᵃ}{𝑨 = 𝑨}{𝑩}{wd = wd} h
+ker[_⇒_] : (𝑨 : structure 𝐹 𝑅 {α} {β ⊔ ρᵃ} )(𝑩 : structure 𝐹 𝑅 {β}{ρᵇ} )
+ →         hom 𝑨 𝑩 → {wd : swelldef (siglʳ 𝐹) β} → structure 𝐹 𝑅
+ker[_⇒_] {ρᵃ = ρᵃ} 𝑨 𝑩 h {wd} = kerquo{ρᵃ = ρᵃ}{𝑨 = 𝑨}{𝑩} h {wd}
 
 
 -- Canonical projections
@@ -201,33 +205,35 @@ module _ {𝑨 : structure 𝐹 𝑅 {α}{ρᵃ} } where
  πhom θ = epi→hom {𝑨 = 𝑨} {𝑩 = (𝑨 ╱ θ)} (πepi θ)
 
 module _ {𝑨 : structure 𝐹 𝑅  {α}{β ⊔ ρᵃ}}{𝑩 : structure 𝐹 𝑅 {β} {ρᵇ}}
-         {wd : swelldef (siglev₁ 𝐹) β} where
+         where
 
- πker : (h : hom 𝑨 𝑩) → epi {𝑨 = 𝑨} {𝑩 = (ker[_⇒_]{ρᵃ = ρᵃ} 𝑨 𝑩 {wd = wd} h)}
- πker h = πepi (kercon{ρᵃ = ρᵃ} {𝑨 = 𝑨}{𝑩 = 𝑩}{wd = wd}  h)
+ πker : (h : hom 𝑨 𝑩){wd : swelldef (siglʳ 𝐹) β}
+  →     epi {𝑨 = 𝑨} {𝑩 = (ker[_⇒_]{ρᵃ = ρᵃ} 𝑨 𝑩 h {wd})}
+ πker h {wd} = πepi (kercon{ρᵃ = ρᵃ} {𝑨 = 𝑨}{𝑩 = 𝑩} h {wd})
 
 
 open import Structures.Products.Records
 
-module _ {𝑨 : structure 𝐹 𝑅  {α}{ρᵃ}}
-         {ℓ : Level}{I : Type ℓ}
-         {ℬ : I → structure 𝐹 𝑅  {β}{ρᵇ}} where
- ⨅-hom-co : funext ℓ β → (∀(i : I) → hom 𝑨 (ℬ i)) → hom 𝑨 (⨅ ℬ)
- ⨅-hom-co fe h = ((λ a i → ∣ h i ∣ a)) , (λ R a x 𝔦 → fst ∥ h 𝔦 ∥ R a x) , (λ f a → fe (λ i → snd ∥ h i ∥ f a))
+module _ {ℓ : Level}{I : Type ℓ} where
+
+  module _ {𝑨 : structure 𝐹 𝑅  {α}{ρᵃ}}
+           {ℬ : I → structure 𝐹 𝑅  {β}{ρᵇ}} where
+   ⨅-hom-co : funext ℓ β → (∀(i : I) → hom 𝑨 (ℬ i)) → hom 𝑨 (⨅ ℬ)
+   ⨅-hom-co fe h = ((λ a i → ∣ h i ∣ a)) , (λ R a x 𝔦 → fst ∥ h 𝔦 ∥ R a x) , (λ f a → fe (λ i → snd ∥ h i ∥ f a))
 
 
-module _ {ℓ : Level}{I : Type ℓ}
-         {𝒜 : I → structure 𝐹 𝑅 {α}{ρᵃ}}
-         {ℬ : I → structure 𝐹 𝑅  {β}{ρᵇ}} where
- ⨅-hom : funext ℓ β → Π[ i ∈ I ] hom (𝒜 i)(ℬ i) → hom (⨅ 𝒜)(⨅ ℬ)
- ⨅-hom fe h = (λ a i → ∣ h i ∣ (a i)) , (λ R a x 𝔦 → fst ∥ h 𝔦 ∥ R (λ z → a z 𝔦) (x 𝔦))
-                                         , λ f a → fe (λ i → snd ∥ h i ∥ f (λ z → a z i))
+  module _ {𝒜 : I → structure 𝐹 𝑅 {α}{ρᵃ}}
+           {ℬ : I → structure 𝐹 𝑅  {β}{ρᵇ}} where
 
--- Projection out of products
-module _ {ℓ : Level}{I : Type ℓ}
-         {𝒜 : I → structure 𝐹 𝑅  {α}{ρᵃ}} where
- ⨅-projection-hom : Π[ i ∈ I ] hom (⨅ 𝒜) (𝒜 i)
- ⨅-projection-hom = λ x → (λ z → z x) , (λ R a z → z x)  , λ f a → refl
+   ⨅-hom : funext ℓ β → Π[ i ∈ I ] hom (𝒜 i)(ℬ i) → hom (⨅ 𝒜)(⨅ ℬ)
+   ⨅-hom fe h = (λ a i → ∣ h i ∣ (a i))
+                , (λ R a x 𝔦 → fst ∥ h 𝔦 ∥ R (λ z → a z 𝔦) (x 𝔦))
+                , λ f a → fe (λ i → snd ∥ h i ∥ f (λ z → a z i))
+
+  -- Projection out of products
+  module _ {𝒜 : I → structure 𝐹 𝑅 {α}{ρᵃ}} where
+   ⨅-projection-hom : Π[ i ∈ I ] hom (⨅ 𝒜) (𝒜 i)
+   ⨅-projection-hom = λ x → (λ z → z x) , (λ R a z → z x)  , λ f a → refl
 
 
 
@@ -236,7 +242,7 @@ module _ {𝑨 : structure 𝐹 Sig∅ {α}{ℓ₀}}
          {𝑩 : structure 𝐹 Sig∅ {β}{ℓ₀}} where
 
  -- The type of homomorphisms from one algebraic structure to another.
- hom-alg : Type _ -- (α ⊔ β)
+ hom-alg : Type (sigl 𝐹 ⊔ α ⊔ β)
  hom-alg = Σ[ h ∈ ((carrier 𝑨) → (carrier 𝑩)) ] is-hom-op 𝑨 𝑩 h
 
 

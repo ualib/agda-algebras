@@ -229,8 +229,9 @@ open import Structures.Basic                using    ( Signature ; Structure ; R
                                                      ; Compatible' ; Lift-op ; Lift-rel
                                                      ; Lift-Strucˡ ; Lift-Strucʳ ; Lift-Struc )
 
-open import Structures.Records              using    ( signature ; structure ; compatible ; Lift-op
-                                                     ; Lift-rel ; Lift-Strucˡ ; Lift-Strucʳ ; Lift-Struc)
+open import Structures.Records              using    ( signature ; structure ; _ʳ_ ; _ᵒ_ ; compatible
+                                                     ; Lift-op ; Lift-rel ; Lift-Strucˡ ; Lift-Strucʳ
+                                                     ; Lift-Struc ; siglˡ ; siglʳ ; sigl )
 
 open import Structures.Examples             using    ( Sig∅ ; Sig-0 ; Sig-1 ; Sig-2 ; Sig-0-1
                                                      ; Sig-0-1-2 ; SL ; NAE3SAT ; nae3sat )

@@ -15,21 +15,16 @@ The *graph* of 𝑨 is the structure Gr 𝑨 with the same domain as 𝑨 with r
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Agda.Primitive using    ( Level )
-
 module Structures.Graphs.Basic where
 
-open import Agda.Primitive                        using    ( _⊔_    ;   lsuc     )
-                                                  renaming ( Set    to  Type
-                                                           ; lzero  to ℓ₀        )
-open import Agda.Builtin.Equality                 using    ( _≡_    ;   refl     )
-open import Data.Sum.Base                         using    (_⊎_                  )
-                                                  renaming ( inj₁   to  inl
-                                                           ; inj₂   to  inr      )
-open import Data.Product                          using    ( _,_    ;   Σ-syntax
-                                                           ;  Σ     ;   _×_      )
-open import Level                                 using    ( Lift ; lift ; lower )
-open import Function.Base                         using    ( _∘_                 )
+open import Agda.Primitive         using    ( _⊔_ ; lsuc ; Level )
+                                   renaming ( Set to Type ; lzero  to ℓ₀ )
+open import Agda.Builtin.Equality  using    ( _≡_ ; refl )
+open import Data.Sum.Base          using    ( _⊎_ )
+                                   renaming ( inj₁ to inl ; inj₂ to inr )
+open import Data.Product           using    ( _,_ ; Σ-syntax ; _×_ )
+open import Level                  using    ( Lift ; lift ; lower )
+open import Function.Base          using    ( _∘_  )
 import Relation.Binary.PropositionalEquality as PE
 
 
