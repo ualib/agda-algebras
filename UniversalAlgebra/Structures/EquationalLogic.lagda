@@ -7,6 +7,8 @@ author: [agda-algebras development team][]
 
 \begin{code}
 
+{-# OPTIONS --without-K --exact-split --safe #-}
+
 module Structures.EquationalLogic where
 
 open import Agda.Primitive using ( lsuc ; _⊔_ ; Level ) renaming ( Set to Type )
