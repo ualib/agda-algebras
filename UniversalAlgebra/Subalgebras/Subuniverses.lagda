@@ -60,7 +60,7 @@ Next we define a type to represent a single subuniverse of an algebra. If `𝑨`
 
 \begin{code}
 
-record Subuniverse {𝑨 : Algebra α 𝑆} : Type(ov (α ⊔ β)) where
+record Subuniverse {𝑨 : Algebra α 𝑆} : Type(ov β ⊔ α) where
  constructor mksub
  field       sset  : Pred ∣ 𝑨 ∣ β
              isSub : sset ∈ Subuniverses 𝑨
