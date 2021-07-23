@@ -2,7 +2,7 @@
 layout: default
 title : Overture.Inverses module
 date : 2021-06-09
-author: [the agda-algebras development team][]
+author: [agda-algebras development team][]
 ---
 
 All definitions/theorems in agda-algebras as of 22 June 2021.
@@ -112,7 +112,7 @@ open import Homomorphisms.HomomorphicImages using    ( _IsHomImageOf_ ; HomImage
                                                      ; Lift-Alg-hom-image )
 
 open import Homomorphisms.Isomorphisms      using    ( _≅_ ; ≅-refl ; ≅-sym ; ≅-trans ; Lift-≅
-                                                     ; Lift-Alg-iso ; Lift-Alg-assoc 
+                                                     ; Lift-Alg-iso ; Lift-Alg-assoc
                                                      ; Lift-Alg-⨅≅ ; ⨅≅ )
 
 open import Homomorphisms.Setoid.Basic      using    ( compatible-op-map ; is-homomorphism ; hom
@@ -244,7 +244,11 @@ open import Structures.Homs                 using    ( preserves ; is-hom-rel ; 
                                                      ; πepi ; πhom ; πker ; ⨅-hom-co ; ⨅-hom
                                                      ; ⨅-projection-hom )
 
-open import Structures.Terms                using    ( Term ; _⟦_⟧ ; _⊧_≈_ ; _⊧_≋_ ; Th ; Mod ; fMod )
+open import Structures.Terms.Basic          using    ( Term )
+
+open import Structures.Terms.Operations     using    ( _⟦_⟧ )
+
+open import Structures.EquationalLogic      using    ( _⊧_≈_ ; _⊧_≋_ ; Th ; Mod ; fMod )
 
 open import Structures.Graphs               using    ( Gr-sig ; Gr ; hom→Grhom ; Grhom→hom )
 
@@ -252,7 +256,7 @@ open import Structures.Graphs0              using    ( Gr-sig ; Gr ; hom→Grhom
 
 
 
--- GENERAL STRUCTURES represented using Sigma types (instead of record types) -------------------------
+-- GENERAL STRUCTURES represented as Sigma types (instead of record types) -------------------------
 
 open import Structures.Sigma.Basic          using    ( Signature ; Structure ; RStructure ; AStructure
                                                      ; Structure→RStructure ; Structure→AStructure
@@ -275,6 +279,9 @@ open import Structures.Sigma.Isos           using    ( _≅_ ; ≅-refl ; ≅-sy
                                                      ; Lift-Struc-iso ; ⨅≅ )
 
 
+-- COMPLEXITY ---------------------------------------------------------------------------------------
+
+open import Complexity.CSP                   using   (Constraint ; CSPInstance )
 
 
 \end{code}
@@ -286,4 +293,4 @@ open import Structures.Sigma.Isos           using    ( _≅_ ; ≅-refl ; ≅-sy
 
 --------------------------------
 
-[the agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
