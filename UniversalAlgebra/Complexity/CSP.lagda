@@ -101,7 +101,7 @@ open import Relation.Binary  using ( Setoid )
 
 
 open import Relations.Continuous    using ( ΠΡ ; ΠΡ-syntax )
-open import Algebras.Setoid {𝑆 = 𝑆} using ( SetoidAlgebra )
+open import Algebras.Setoid.Basic {𝑆 = 𝑆} using ( SetoidAlgebra )
 
 
 \end{code}
