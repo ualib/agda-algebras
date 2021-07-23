@@ -244,6 +244,11 @@ open import Structures.Homs                 using    ( preserves ; is-hom-rel ; 
                                                      ; πepi ; πhom ; πker ; ⨅-hom-co ; ⨅-hom
                                                      ; ⨅-projection-hom )
 
+
+open import Structures.Isos                 using    ( _≅_ ; ≅-refl ; ≅-sym ; ≅-trans ; Lift-≅ˡ
+                                                     ; Lift-Strucˡ-iso ; ⨅≅ )
+
+
 open import Structures.Terms                using    ( Term ; _⟦_⟧ ; _⊧_≈_ ; _⊧_≋_ ; Th ; Mod ; fMod )
 
 open import Structures.Graphs               using    ( Gr-sig ; Gr ; hom→Grhom ; Grhom→hom )
