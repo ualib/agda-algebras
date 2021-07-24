@@ -173,7 +173,7 @@ Alternatively, we could express the preceeding fact using an inductive type repr
    →           (a : A) → (a ∈ Sg G → ∣ g ∣ a ≡ ∣ h ∣ a)
 
   hom-unique _ G g h σ a (var Ga) = σ a Ga
-  hom-unique wd G g h σ .((f ᵒ 𝑨) a) (app f a SgGa) = {!!} -- Goal
+  hom-unique wd G g h σ .((f ᵒ 𝑨) a) (app f a SgGa) = Goal
    where
    IH : ∀ x → ∣ g ∣ (a x) ≡ ∣ h ∣ (a x)
    IH x = hom-unique wd G g h σ (a x) (SgGa x)
