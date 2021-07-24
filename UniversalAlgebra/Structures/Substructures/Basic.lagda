@@ -23,13 +23,14 @@ open import Function.Base         using ( _∘_ )
 open import Relation.Unary        using ( Pred ; _∈_ ; _⊆_ ; ⋂ )
 import Relation.Binary.PropositionalEquality as PE
 
--- -- -- imports from agda-algebras ------------------------------------------------------
+-- imports from agda-algebras ------------------------------------------------------
 open import Overture.Preliminaries   using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
 open import Relations.Discrete       using ( Im_⊆_ )
 open import Relations.Extensionality using ( swelldef )
 open import Structures.Basic         using ( signature ; structure ; _ᵒ_ ; sigl ; siglˡ ; siglʳ )
 open import Structures.Homs          using ( hom )
-open import Structures.Terms
+open import Structures.Terms.Basic
+open import Structures.Terms.Operations
 
 open structure
 open signature

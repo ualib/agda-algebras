@@ -259,6 +259,14 @@ open import Structures.Substructures.Basic  using    ( Subuniverses ; Subunivers
                                                      ; TermImageIsSub ; B-onlyif-TermImageB
                                                      ; SgB-onlyif-TermImageB ; hom-unique )
 
+open import Structures.Substructures.Substructures
+                                            using    ( _≥s_ ; _IsSupstructureOf_ ; _≤s_ ; _IsSubstructureOf_
+                                                     ; SubstructureOf ; Substructure ; IsSubstructureREL
+                                                     ; _≤c_ ; _IsSubstructureOfClass_ ; SubstructureOfClass
+                                                     ; SubstructureOfClass' ; SubstructuresOfClass )
+
+
+
 -- GENERAL STRUCTURES represented as Sigma types (instead of record types) -------------------------
 
 open import Structures.Sigma.Basic          using    ( Signature ; Structure ; RStructure ; AStructure
