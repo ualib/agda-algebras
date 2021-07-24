@@ -5,7 +5,7 @@ date : 2021-07-23
 author: [agda-algebras development team][]
 ---
 
-### <a id="isomorphisms">Isomorphisms</a>
+### Isomorphisms
 
 \begin{code}
 
@@ -16,24 +16,21 @@ module Structures.Isos where
 
 -- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
 open import Axiom.Extensionality.Propositional using () renaming (Extensionality to funext)
-open import Agda.Primitive                        using    ( _⊔_    ;   lsuc     )
-                                                  renaming ( Set    to  Type     )
-open import Agda.Builtin.Equality                 using    ( _≡_    ;   refl     )
-open import Data.Product                          using    ( _,_    ;   Σ-syntax
-                                                           ;  Σ     ;   _×_      )
-                                                  renaming ( proj₁  to  fst
-                                                           ; proj₂  to  snd      )
-open import Level                                 using    ( Level  ;  Lift
-                                                           ; lift   ;  lower     )
-open import Function.Base                         using    ( _∘_                 )
-open import Relation.Binary.PropositionalEquality using    ( cong   ; cong-app   )
+open import Agda.Primitive        using ( _⊔_ ; lsuc ) renaming ( Set to Type )
+open import Agda.Builtin.Equality using ( _≡_ ; refl )
+open import Data.Product          using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Level                 using ( Level ; Lift )
+open import Function.Base         using ( _∘_ )
+import Relation.Binary.PropositionalEquality as PE
 
 
 -- Imports from agda-algebras --------------------------------------------------------------
-open import Overture.Preliminaries    using ( ∣_∣ ; _≈_ ; ∥_∥ ; _∙_ ; lower∼lift ; lift∼lower )
-open import Structures.Basic    using ( signature ; structure ; Lift-Strucˡ ; Lift-Struc ; sigl ; siglˡ ; siglʳ )
-open import Structures.Homs     using ( hom ; 𝒾𝒹 ; ∘-hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-hom )
-open import Structures.Products using ( ⨅ ; ℓp ; ℑ ; class-product )
+open import Overture.Preliminaries using ( ∣_∣ ; _≈_ ; ∥_∥ ; _∙_ ; lower∼lift ; lift∼lower )
+open import Structures.Basic       using ( signature ; structure ; Lift-Strucˡ ; Lift-Strucʳ
+                                         ; Lift-Struc ; sigl ; siglˡ ; siglʳ )
+open import Structures.Homs        using ( hom ; 𝒾𝒹 ; ∘-hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; 𝓁𝒾𝒻𝓉ˡ
+                                         ; 𝓁ℴ𝓌ℯ𝓇ˡ ; 𝓁𝒾𝒻𝓉ʳ ; 𝓁ℴ𝓌ℯ𝓇ʳ ; is-hom )
+open import Structures.Products    using ( ⨅ ; ℓp ; ℑ ; class-product )
 
 private variable
  𝓞₀ 𝓥₀ 𝓞₁ 𝓥₁ α ρᵃ β ρᵇ γ ρᶜ ι : Level
@@ -67,44 +64,45 @@ That is, two structures are isomorphic provided there are homomorphisms going ba
 
 \begin{code}
 
-≅-refl : {𝑨 : structure 𝐹 𝑅 {α}{ρᵃ}} → 𝑨 ≅ 𝑨
-≅-refl {𝑨 = 𝑨} = mkiso 𝒾𝒹 𝒾𝒹 (λ _ → refl) (λ _ → refl)
+module _ {𝑨 : structure 𝐹 𝑅 {α}{ρᵃ}} where
+
+ ≅-refl : 𝑨 ≅ 𝑨
+ ≅-refl = mkiso 𝒾𝒹 𝒾𝒹 (λ _ → refl) (λ _ → refl)
+
+ module _ {𝑩 : structure 𝐹 𝑅 {β}{ρᵇ}} where
+  ≅-sym : 𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑨
+  ≅-sym A≅B = mkiso (from A≅B) (to A≅B) (from∼to A≅B) (to∼from A≅B)
 
 
-≅-sym : {𝑨 : structure 𝐹 𝑅 {α}{ρᵃ}}{𝑩 : structure 𝐹 𝑅 {β}{ρᵇ}}
- →      𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑨
-≅-sym A≅B = mkiso (from A≅B) (to A≅B) (from∼to A≅B) (to∼from A≅B)
+  module _ {𝑪 : structure 𝐹 𝑅 {γ}{ρᶜ}} where
 
-module _ (𝑨 : structure 𝐹 𝑅 {α}{ρᵃ}){𝑩 : structure 𝐹 𝑅 {β}{ρᵇ}}
-         (𝑪 : structure 𝐹 𝑅 {γ}{ρᶜ}) where
+   ≅-trans : 𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≅ 𝑪
+   ≅-trans ab bc = mkiso f g τ ν
+    where
+    f1 : hom 𝑨 𝑩
+    f1 = to ab
+    f2 : hom 𝑩 𝑪
+    f2 = to bc
+    f : hom 𝑨 𝑪
+    f = ∘-hom {𝑨 = 𝑨}{𝑩}{𝑪} f1 f2
 
- ≅-trans : 𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≅ 𝑪
+    g1 : hom 𝑪 𝑩
+    g1 = from bc
+    g2 : hom 𝑩 𝑨
+    g2 = from ab
+    g : hom 𝑪 𝑨
+    g = ∘-hom {𝑨 = 𝑪}{𝑩}{𝑨}g1 g2
 
- ≅-trans ab bc = record { to = f ; from = g ; to∼from = τ ; from∼to = ν }
-  where
-  f1 : hom 𝑨 𝑩
-  f1 = to ab
-  f2 : hom 𝑩 𝑪
-  f2 = to bc
-  f : hom 𝑨 𝑪
-  f = ∘-hom {𝑨 = 𝑨}{𝑩}{𝑪} f1 f2
+    τ : ∣ f ∣ ∘ ∣ g ∣ ≈ ∣ 𝒾𝒹 {𝑨 = 𝑪} ∣
+    τ x = (PE.cong ∣ f2 ∣(to∼from ab (∣ g1 ∣ x)))∙(to∼from bc) x
 
-  g1 : hom 𝑪 𝑩
-  g1 = from bc
-  g2 : hom 𝑩 𝑨
-  g2 = from ab
-  g : hom 𝑪 𝑨
-  g = ∘-hom {𝑨 = 𝑪}{𝑩}{𝑨}g1 g2
-
-  τ : ∣ f ∣ ∘ ∣ g ∣ ≈ ∣ 𝒾𝒹 {𝑨 = 𝑪} ∣
-  τ x = (cong ∣ f2 ∣(to∼from ab (∣ g1 ∣ x)))∙(to∼from bc) x
-
-  ν : ∣ g ∣ ∘ ∣ f ∣ ≈ ∣ 𝒾𝒹 {𝑨 = 𝑨} ∣
-  ν x = (cong ∣ g2 ∣(from∼to bc (∣ f1 ∣ x)))∙(from∼to ab) x
+    ν : ∣ g ∣ ∘ ∣ f ∣ ≈ ∣ 𝒾𝒹 {𝑨 = 𝑨} ∣
+    ν x = (PE.cong ∣ g2 ∣(from∼to bc (∣ f1 ∣ x)))∙(from∼to ab) x
 
 \end{code}
 
-#### <a id="lift-is-an-algebraic-invariant">Lift is an algebraic invariant</a>
+
+#### Lift is an algebraic invariant
 
 Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic invariant*). As our focus is universal algebra, this is important and is what makes the lift operation a workable solution to the technical problems that arise from the noncumulativity of the universe hierarchy discussed in [Overture.Lifts][].
 
@@ -112,35 +110,36 @@ Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic 
 
 open Level
 
-Lift-≅ˡ : (ℓ : Level) → {𝑨 : structure 𝐹 𝑅{α}{ρᵃ}} → 𝑨 ≅ (Lift-Strucˡ ℓ 𝑨)
-Lift-≅ˡ {α = α}{ρᵃ} ℓ {𝑨} = record { to = 𝓁𝒾𝒻𝓉
-                                   ; from = 𝓁ℴ𝓌ℯ𝓇 {𝑨 = 𝑨}
-                                   ; to∼from = cong-app lift∼lower
-                                   ; from∼to = cong-app (lower∼lift{α}{ρᵃ})
+Lift-≅ˡ : {ℓ : Level}{𝑨 : structure 𝐹 𝑅{α}{ρᵃ}} → 𝑨 ≅ (Lift-Strucˡ ℓ 𝑨)
+Lift-≅ˡ {α = α}{ρᵃ}{𝑨 = 𝑨} = record { to = 𝓁𝒾𝒻𝓉ˡ
+                                   ; from = 𝓁ℴ𝓌ℯ𝓇ˡ {𝑨 = 𝑨}
+                                   ; to∼from = PE.cong-app lift∼lower
+                                   ; from∼to = PE.cong-app (lower∼lift{α}{ρᵃ})
                                    }
 
- -- (todo: a more general version)
- -- Lift-≅ : (ℓ ρ : Level) → {𝑨 : structure 𝐹 𝑅{α}{ρᵃ}} → 𝑨 ≅ (Lift-Struc ℓ ρ 𝑨)
- -- Lift-≅ ℓ ρ {𝑨} = record { to = 𝓁𝒾𝒻𝓉   -- 𝓁𝒾𝒻𝓉 ℓ ρ 𝑨
- --                         ; from = 𝓁ℴ𝓌ℯ𝓇 -- ℓ ρ 𝑨
- --                         ; to∼from = cong-app lift∼lower
- --                         ; from∼to = cong-app (lower∼lift{α}{ρ})
- --                         }
+Lift-≅ʳ : {ℓ : Level}{𝑨 : structure 𝐹 𝑅{α}{ρᵃ}} → 𝑨 ≅ (Lift-Strucʳ ℓ 𝑨)
+Lift-≅ʳ {α = α}{ρᵃ}{𝑨 = 𝑨} = record { to = 𝓁𝒾𝒻𝓉ʳ
+                                   ; from = 𝓁ℴ𝓌ℯ𝓇ʳ
+                                   ; to∼from = PE.cong-app refl
+                                   ; from∼to = PE.cong-app refl
+                                   }
+
+Lift-≅ : {ℓ ρ : Level}{𝑨 : structure 𝐹 𝑅{α}{ρᵃ}} → 𝑨 ≅ (Lift-Struc ℓ ρ 𝑨)
+Lift-≅ {α = α}{ρᵃ}{𝑨 = 𝑨} = record { to = 𝓁𝒾𝒻𝓉
+                         ; from = 𝓁ℴ𝓌ℯ𝓇 {𝑨 = 𝑨}
+                         ; to∼from = PE.cong-app lift∼lower
+                         ; from∼to = PE.cong-app (lower∼lift{α}{ρᵃ})
+                         }
 
 module _ {𝑨 : structure 𝐹 𝑅{α}{ρᵃ}}{𝑩 : structure 𝐹 𝑅{β}{ρᵇ}} where
 
  Lift-Strucˡ-iso : (ℓ ℓ' : Level) → 𝑨 ≅ 𝑩 → Lift-Strucˡ ℓ 𝑨 ≅ Lift-Strucˡ ℓ' 𝑩
 
- Lift-Strucˡ-iso ℓ ℓ' A≅B = ≅-trans (Lift-Strucˡ ℓ 𝑨) (Lift-Strucˡ ℓ' 𝑩)
-                                 ( ≅-trans (Lift-Strucˡ ℓ 𝑨) 𝑩 (≅-sym (Lift-≅ˡ ℓ)) A≅B )
-                                  (Lift-≅ˡ ℓ')
+ Lift-Strucˡ-iso ℓ ℓ' A≅B = ≅-trans ( ≅-trans (≅-sym Lift-≅ˡ) A≅B ) Lift-≅ˡ
 
 
- -- (todo: a more general version)
- -- Lift-Struc-iso : (ℓ ρ ℓ' ρ' : Level) → 𝑨 ≅ 𝑩 → Lift-Struc ℓ ρ 𝑨 ≅ Lift-Struc ℓ' ρ' 𝑩
- -- Lift-Struc-iso ℓ ρ ℓ' ρ' A≅B = ≅-trans (Lift-Struc ℓ ρ 𝑨) (Lift-Struc ℓ' ρ' 𝑩)
- --                                 ( ≅-trans (Lift-Struc ℓ ρ 𝑨) 𝑩 (≅-sym (Lift-≅ ℓ ρ)) A≅B )
- --                                  (Lift-≅ ℓ' ρ')
+ Lift-Struc-iso : (ℓ ρ ℓ' ρ' : Level) → 𝑨 ≅ 𝑩 → Lift-Struc ℓ ρ 𝑨 ≅ Lift-Struc ℓ' ρ' 𝑩
+ Lift-Struc-iso ℓ ρ ℓ' ρ' A≅B = ≅-trans ( ≅-trans (≅-sym Lift-≅) A≅B ) Lift-≅
 
 \end{code}
 
@@ -152,21 +151,26 @@ The lift is also associative, up to isomorphism at least.
 
 \begin{code}
 
--- module _ {α ρᵃ : Level}
---          {𝑨 : Structure {α} {ρᵃ} 𝑅 𝐹} where
+module _ {𝑨 : structure 𝐹 𝑅 {α}{ρᵃ} } where
 
---  Lift-Struc-assocˡ : {ℓ ℓ' : Level} → Lift-Strucˡ (ℓ ⊔ ℓ') 𝑨 ≅ (Lift-Strucˡ ℓ (Lift-Strucˡ ℓ' 𝑨))
---  Lift-Struc-assocˡ = {!!} -- ≅-trans (≅-trans Goal Lift-≅) Lift-≅
---   -- where
---   -- Goal : Lift-Alg 𝑨 (β ⊔ 𝓘) ≅ 𝑨
---   -- Goal = ≅-sym Lift-≅
+ Lift-Struc-assocˡ : {ℓ ℓ' : Level} → Lift-Strucˡ (ℓ ⊔ ℓ') 𝑨 ≅ (Lift-Strucˡ ℓ (Lift-Strucˡ ℓ' 𝑨))
+ Lift-Struc-assocˡ {ℓ}{ℓ'} = ≅-trans (≅-trans Goal Lift-≅ˡ) Lift-≅ˡ
+  where
+  Goal : Lift-Strucˡ (ℓ ⊔ ℓ') 𝑨 ≅ 𝑨
+  Goal = ≅-sym Lift-≅ˡ
 
---  Lift-Struc-assocʳ : {ρ ρ' : Level} → Lift-Strucʳ (ρ ⊔ ρ') 𝑨 ≅ (Lift-Strucʳ ρ (Lift-Strucʳ ρ' 𝑨))
---  Lift-Struc-assocʳ = {!!} -- ≅-trans (≅-trans Goal Lift-≅) Lift-≅
+ Lift-Struc-assocʳ : {ρ ρ' : Level} → Lift-Strucʳ (ρ ⊔ ρ') 𝑨 ≅ (Lift-Strucʳ ρ (Lift-Strucʳ ρ' 𝑨))
+ Lift-Struc-assocʳ {ρ}{ρ'} = ≅-trans (≅-trans Goal Lift-≅ʳ) Lift-≅ʳ
+  where
+  Goal : Lift-Strucʳ (ρ ⊔ ρ') 𝑨 ≅ 𝑨
+  Goal = ≅-sym Lift-≅ʳ
 
---  Lift-Struc-assoc : {ℓ ℓ' ρ ρ' : Level}
---   →                 Lift-Struc (ℓ ⊔ ℓ') (ρ ⊔ ρ') 𝑨 ≅ (Lift-Struc ℓ ρ (Lift-Struc ℓ' ρ' 𝑨))
---  Lift-Struc-assoc = {!!} -- ≅-trans (≅-trans Goal Lift-≅) Lift-≅
+ Lift-Struc-assoc : {ℓ ℓ' ρ ρ' : Level}
+  →                 Lift-Struc (ℓ ⊔ ℓ') (ρ ⊔ ρ') 𝑨 ≅ (Lift-Struc ℓ ρ (Lift-Struc ℓ' ρ' 𝑨))
+ Lift-Struc-assoc {ℓ}{ℓ'}{ρ}{ρ'} = ≅-trans (≅-trans Goal Lift-≅ ) Lift-≅
+  where
+  Goal : Lift-Struc (ℓ ⊔ ℓ') (ρ ⊔ ρ') 𝑨 ≅ 𝑨
+  Goal = ≅-sym Lift-≅
 
 \end{code}
 
@@ -179,9 +183,7 @@ Products of isomorphic families of algebras are themselves isomorphic. The proof
 
 \begin{code}
 
-module _ {I : Type ι}
-         {fe : funext ρᵇ ρᵇ}
-         {fiu : funext ι α}{fiw : funext ι β} where
+module _ {I : Type ι} {fiu : funext ι α} {fiw : funext ι β} where
 
  open structure
  ⨅≅ : {𝒜 : I → structure 𝐹 𝑅{α}{ρᵃ}}{ℬ : I → structure 𝐹 𝑅{β}{ρᵇ}} → (∀ (i : I) → 𝒜 i ≅ ℬ i) → ⨅ 𝒜 ≅ ⨅ ℬ
@@ -216,36 +218,40 @@ A nearly identical proof goes through for isomorphisms of lifted products (thoug
 
 \begin{code}
 
--- module _ {𝓘 : Level}{I : Type 𝓘}{fizw : funext (𝓘 ⊔ γ) β}{fiu : funext 𝓘 α} where
+module _ {I : Type ι}{fizw : funext (ι ⊔ γ) β}{fiu : funext ι α} where
 
---   Lift-Alg-⨅≅ : {𝒜 : I → Algebra α 𝑆}{ℬ : (Lift γ I) → Algebra β 𝑆}
---    →            (∀ i → 𝒜 i ≅ ℬ (lift i)) → Lift-Alg (⨅ 𝒜) γ ≅ ⨅ ℬ
+ open structure
 
---   Lift-Alg-⨅≅ {𝒜}{ℬ} AB = Goal
---    where
---    ϕ : ∣ ⨅ 𝒜 ∣ → ∣ ⨅ ℬ ∣
---    ϕ a i = ∣ fst (AB  (lower i)) ∣ (a (lower i))
+ Lift-Struc-⨅≅ : {𝒜 : I → structure 𝐹 𝑅 {α}{ρᵃ}}{ℬ : (Lift γ I) → structure 𝐹 𝑅 {β}{ρᵇ}}
+  →            (∀ i → 𝒜 i ≅ ℬ (lift i)) → Lift-Strucˡ γ (⨅ 𝒜) ≅ ⨅ ℬ
 
---    ϕhom : is-homomorphism (⨅ 𝒜) (⨅ ℬ) ϕ
---    ϕhom 𝑓 a = fizw (λ i → (∥ fst (AB (lower i)) ∥) 𝑓 (λ x → a x (lower i)))
+ Lift-Struc-⨅≅ {𝒜 = 𝒜}{ℬ} AB = Goal
+  where
+   ϕ : carrier (⨅ 𝒜) →  carrier (⨅ ℬ)
+   ϕ a i = ∣ to (AB (lower i)) ∣ (a (lower i))
 
---    ψ : ∣ ⨅ ℬ ∣ → ∣ ⨅ 𝒜 ∣
---    ψ b i = ∣ fst ∥ AB i ∥ ∣ (b (lift i))
+   ϕhom : is-hom (⨅ 𝒜) (⨅ ℬ) ϕ
+   ϕhom = (λ r a x i → fst ∥ to (AB (lower i)) ∥ r (λ x₁ → a x₁ (lower i)) (x (lower i)))
+          , λ f a → fizw (λ i → snd ∥ to (AB (lower i)) ∥ f (λ x → a x (lower i)))
 
---    ψhom : is-homomorphism (⨅ ℬ) (⨅ 𝒜) ψ
---    ψhom 𝑓 𝒃 = fiu (λ i → (snd ∣ snd (AB i) ∣) 𝑓 (λ x → 𝒃 x (lift i)))
+   ψ : carrier (⨅ ℬ) → carrier (⨅ 𝒜)
+   ψ b i = ∣ from (AB i) ∣ (b (lift i))
 
---    ϕ~ψ : ϕ ∘ ψ ≈ ∣ 𝒾𝒹 (⨅ ℬ) ∣
---    ϕ~ψ 𝒃 = fizw λ i → fst ∥ snd (AB (lower i)) ∥ (𝒃 i)
+   ψhom : is-hom (⨅ ℬ) (⨅ 𝒜) ψ
+   ψhom = (λ r a x i → fst ∥ from (AB i) ∥ r (λ x₁ → a x₁ (lift i)) (x (lift i)))
+          , λ f a → fiu (λ i → snd ∥ from (AB i) ∥ f (λ x → a x (lift i)))
 
---    ψ~ϕ : ψ ∘ ϕ ≈ ∣ 𝒾𝒹 (⨅ 𝒜) ∣
---    ψ~ϕ a = fiu λ i → snd ∥ snd (AB i) ∥ (a i)
+   ϕ~ψ : ϕ ∘ ψ ≈ ∣ 𝒾𝒹 {𝑨 = (⨅ ℬ)} ∣
+   ϕ~ψ b = fizw (λ i → to∼from (AB (lower i)) (b i))
 
---    A≅B : ⨅ 𝒜 ≅ ⨅ ℬ
---    A≅B = (ϕ , ϕhom) , ((ψ , ψhom) , ϕ~ψ , ψ~ϕ)
+   ψ~ϕ : ψ ∘ ϕ ≈ ∣ 𝒾𝒹 {𝑨 = (⨅ 𝒜)} ∣
+   ψ~ϕ a = fiu (λ i → from∼to (AB i) (a i))
 
---    Goal : Lift-Alg (⨅ 𝒜) γ ≅ ⨅ ℬ
---    Goal = ≅-trans (≅-sym Lift-≅) A≅B
+   A≅B : ⨅ 𝒜 ≅ ⨅ ℬ
+   A≅B = mkiso (ϕ , ϕhom) (ψ , ψhom) ϕ~ψ ψ~ϕ
+
+   Goal : Lift-Strucˡ γ (⨅ 𝒜) ≅ ⨅ ℬ
+   Goal = ≅-trans (≅-sym Lift-≅ˡ) A≅B
 
 \end{code}
 

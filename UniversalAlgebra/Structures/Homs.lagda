@@ -30,7 +30,7 @@ open import Overture.Inverses        using ( IsInjective ; IsSurjective ; Image_
 open import Relations.Discrete       using ( ker ; kerlift )
 open import Relations.Quotients      using ( ⟪_⟫ )
 open import Relations.Extensionality using ( swelldef )
-open import Structures.Basic         using ( signature ; structure ; Lift-Struc
+open import Structures.Basic         using ( signature ; structure ; Lift-Struc ; Lift-Strucʳ
                                            ; Lift-Strucˡ ; compatible ; siglʳ ; sigl )
 open import Structures.Examples      using ( Sig∅ )
 open import Structures.Congruences   using ( con ; _╱_)
@@ -136,11 +136,24 @@ module _ {𝑨 : structure 𝐹 𝑅 {α}{ρᵃ}}
 
 open Lift
 
-𝓁𝒾𝒻𝓉 : {ℓ : Level}{𝑨 : structure 𝐹 𝑅  {α}{ρᵃ}} → hom 𝑨 (Lift-Strucˡ ℓ 𝑨)
-𝓁𝒾𝒻𝓉 = lift , (λ _ _ x → x) , λ _ _ → refl
+𝓁𝒾𝒻𝓉ˡ : {ℓ : Level}{𝑨 : structure 𝐹 𝑅  {α}{ρᵃ}} → hom 𝑨 (Lift-Strucˡ ℓ 𝑨)
+𝓁𝒾𝒻𝓉ˡ = lift , (λ _ _ x → x) , λ _ _ → refl
 
-𝓁ℴ𝓌ℯ𝓇 : {ℓ : Level}{𝑨 : structure 𝐹 𝑅 {α}{ρᵃ}} → hom (Lift-Strucˡ ℓ 𝑨) 𝑨
-𝓁ℴ𝓌ℯ𝓇 = lower , (λ _ _ x → x) , (λ _ _ → refl)
+𝓁𝒾𝒻𝓉ʳ : {ρ : Level}{𝑨 : structure 𝐹 𝑅  {α}{ρᵃ}} → hom 𝑨 (Lift-Strucʳ ρ 𝑨)
+𝓁𝒾𝒻𝓉ʳ = id , (λ _ _ x → lift x) , λ _ _ → refl
+
+𝓁𝒾𝒻𝓉 : {ℓˡ ℓʳ : Level}{𝑨 : structure 𝐹 𝑅  {α}{ρᵃ}} → hom 𝑨 (Lift-Struc ℓˡ ℓʳ 𝑨)
+𝓁𝒾𝒻𝓉 = lift , ((λ _ _ x → lift x) , λ _ _ → refl)
+
+𝓁ℴ𝓌ℯ𝓇ˡ : {ℓ : Level}{𝑨 : structure 𝐹 𝑅 {α}{ρᵃ}} → hom (Lift-Strucˡ ℓ 𝑨) 𝑨
+𝓁ℴ𝓌ℯ𝓇ˡ = lower , (λ _ _ x → x) , (λ _ _ → refl)
+
+𝓁ℴ𝓌ℯ𝓇ʳ : {ρ : Level}{𝑨 : structure 𝐹 𝑅 {α}{ρᵃ}} → hom (Lift-Strucʳ ρ 𝑨) 𝑨
+𝓁ℴ𝓌ℯ𝓇ʳ = id , ((λ _ _ x → lower x) , λ _ _ → refl)
+
+𝓁ℴ𝓌ℯ𝓇 : {ℓˡ ℓʳ : Level}{𝑨 : structure 𝐹 𝑅  {α}{ρᵃ}} → hom (Lift-Struc ℓˡ ℓʳ 𝑨) 𝑨
+𝓁ℴ𝓌ℯ𝓇 = lower , (λ _ _ x → lower x) , (λ _ _ → refl)
+
 
 -- Kernels of homomorphisms
 
@@ -149,7 +162,7 @@ open PE.≡-Reasoning
 module _ {𝑨 : structure 𝐹 𝑅  {α}{β ⊔ ρᵃ}}{𝑩 : structure 𝐹 𝑅 {β} {ρᵇ}}
          where
 
- homker-comp : (h : hom 𝑨 𝑩){wd : swelldef (siglʳ 𝐹) β} 
+ homker-comp : (h : hom 𝑨 𝑩){wd : swelldef (siglʳ 𝐹) β}
   →            compatible 𝑨 (ker ∣ h ∣)
  homker-comp (h , hhom) {wd} f {u}{v} kuv =
   h (((op 𝑨)f) u)    ≡⟨ ∥ hhom ∥ f u ⟩
