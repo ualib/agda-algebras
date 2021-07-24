@@ -1,13 +1,13 @@
 ---
 layout: default
-title : Relations.Truncation module (The Agda Universal Algebra Library)
+title : Foundations.Truncation module (The Agda Universal Algebra Library)
 date : 2021-02-23
 author: [the ualib/agda-algebras development team][]
 ---
 
-### <a id="truncation">Truncation</a>
+### Truncation
 
-This section presents the [Relations.Truncation][] module of the [Agda Universal Algebra Library][].
+This is the [Foundations.Truncation][] module of the [Agda Universal Algebra Library][].
 
 We start with a brief discussion of standard notions of *truncation*, *h-sets* (which we just call *sets*), and the *uniqueness of identity types* principle.
 We then prove that a monic function into a *set* is an embedding. The section concludes with a *uniqueness of identity proofs* principle for blocks of equivalence relations.
@@ -18,7 +18,7 @@ Readers who want to learn more about "proof-relevant mathematics" and other conc
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Relations.Truncation where
+module Foundations.Truncation where
 
 open import Agda.Builtin.Equality                 using    ( _≡_      ;   refl     )
 open import Data.Product                          using    ( _,_      ;   Σ

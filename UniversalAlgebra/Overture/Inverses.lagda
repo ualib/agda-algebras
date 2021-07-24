@@ -17,19 +17,19 @@ This is the [Overture.Inverses][] module of the [agda-algebras][] library.
 module Overture.Inverses where
 
 -- Imports from Agda (Builtin) and the Agda Standard Library
-open import Agda.Builtin.Equality       using    ( _≡_ ; refl   )
-open import Agda.Primitive              using    ( _⊔_          )
-                                        renaming ( Set  to Type )
-open import Level                       renaming ( suc  to lsuc )
-open import Data.Product                using    ( _,_ ; Σ
-                                                 ; Σ-syntax     )
-open import Function.Base               using    ( _∘_ ; id     )
-import Function.Definitions as F  -- (for Injective)
-open import Function.Bundles            using  ( _↣_ ; mk↣ )
-open import Function.Construct.Identity using  ( id-↣      )
+open import Agda.Builtin.Equality       using ( _≡_ ; refl )
+open import Agda.Primitive              using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
+open import Data.Product                using ( _,_ ; _×_ ; Σ-syntax ; Σ)
+open import Data.Fin.Base               using ( Fin )
+open import Data.Nat                    using ( ℕ )
+open import Function.Base               using ( _∘_ ; id )
+open import Function.Definitions        using ( Injective )
+open import Function.Bundles            using ( _↣_ ; mk↣ )
+open import Function.Construct.Identity using ( id-↣ )
+import Relation.Binary.PropositionalEquality as PE
 
 -- Imports from agda-algebras
-open import Overture.Preliminaries using ( _⁻¹ )
+open import Overture.Preliminaries using ( _⁻¹ ; _≈_ )
 
 \end{code}
 
@@ -74,7 +74,7 @@ We say that a function `f : A → B` is *injective* (or *monic*) if it does not 
 module _ {A : Type α}{B : Type β} where
 
  IsInjective : (A → B) → Type (α ⊔ β)
- IsInjective f = F.Injective _≡_ _≡_ f
+ IsInjective f = Injective _≡_ _≡_ f
 
 \end{code}
 
@@ -119,16 +119,92 @@ With the next definition, we can represent a *right-inverse* of a surjective fun
 Thus, a right-inverse of `f` is obtained by applying `SurjInv` to `f` and a proof of `IsSurjective f`.  Later, we will prove that this does indeed give the right-inverse, but we postpone the proof since it requires function extensionality, a concept we take up in the [Relations.Extensionality][] module.
 
 
--------------------------------------
+#### Bijections of function types
 
-<p></p>
+In set theory, these would simply be bijections between sets, or "set isomorphisms."
 
-[← Overture.Preliminaries](Overture.Preliminaries.html)
-<span style="float:right;">[Relations →](Relations.html)</span>
+\begin{code}
+
+record Bijection (A : Type α)(B : Type β) : Type (α ⊔ β) where
+ field
+  to : A → B
+  from : B → A
+  to-from : to ∘ from ≡ id
+  from-to : from ∘ to ≡ id
+
+record BijectionExt (A : Type α)(B : Type β) : Type (α ⊔ β) where
+ field
+  to : A → B
+  from : B → A
+  to-from : to ∘ from ≈ id
+  from-to : from ∘ to ≈ id
 
 
-{% include UALib.Links.md %}
+∣_∣=∣_∣ : (A : Type α)(B : Type β) → Type (α ⊔ β)
+∣ A ∣=∣ B ∣ = Bijection A B
+
+∣_∣≈∣_∣ : (A : Type α)(B : Type β) → Type (α ⊔ β)
+∣ A ∣≈∣ B ∣ = BijectionExt A B
+
+
+open Fin renaming (zero to zz ; suc to ss)
+
+module _ {A : Type α} where
+
+ uncurry₀ : A → A → A × A
+ uncurry₀ x y = x , y
+
+ curry1 : A × A → (Fin 2 → A)
+ curry1 (x , y) zz = x
+ curry1 (x , y) (ss zz) = y
+
+ uncurry1 : (Fin 2 → A) → A × A
+ uncurry1 u = u zz , u (ss zz)
+
+ unc1-cur1 : uncurry1 ∘ curry1 ≡ id
+ unc1-cur1 = refl
+
+ cur1-unc1-ext : ∀ u i → (curry1 (uncurry1 u)) i ≡ u i
+ cur1-unc1-ext u zz = refl
+ cur1-unc1-ext u (ss zz) = refl
+
+module _ {A : Type α}{B : Type β} where
+
+ open PE.≡-Reasoning
+
+ Curry : (A × A → B) → A → A → B
+ Curry f x y = f (x , y)
+
+ Uncurry : (A → A → B) → A × A → B
+ Uncurry f (x , y) = f x y
+
+ A×A→B≅A→A→B : ∣ (A × A → B) ∣=∣ (A → A → B) ∣
+ A×A→B≅A→A→B = record { to = Curry
+                      ; from = Uncurry
+                      ; to-from = refl
+                      ; from-to = refl }
+
+ Curry' : ((Fin 2 → A) → B) → A × A → B
+ Curry' f = f ∘ curry1
+
+ Uncurry' : (A × A → B) → ((Fin 2 → A) → B)
+ Uncurry' f = f ∘ uncurry1
+
+ -- unc-cur' : ∀ f u → (Uncurry' ∘ Curry') f u ≡ f u
+ -- unc-cur' f u = (Uncurry' ∘ Curry') f u ≡⟨ refl ⟩
+ --                f (curry1 (uncurry1 u)) ≡⟨ PE.cong f {!!} ⟩ f u ∎
+
+ -- Fin2A≅A×A→B : ∣ ((Fin 2 → A) → B) ∣=∣ (A × A → B) ∣
+ -- Fin2A≅A×A→B = record { to = Curry'
+ --                      ; from = Uncurry'
+ --                      ; to-from = refl
+ --                      ; from-to = {!!} }
+
+
+
+\end{code}
+
 
 --------------------------------------
 
-[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

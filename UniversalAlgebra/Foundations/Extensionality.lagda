@@ -1,19 +1,19 @@
 ---
 layout: default
-title : Relations.Extensionality module (The Agda Universal Algebra Library)
+title : Foundations.Extensionality module (The Agda Universal Algebra Library)
 date : 2021-02-23
 author: [the ualib/agda-algebras development team][]
 ---
 
-### <a id="relation-extensionality">Relation Extensionality</a>
+### Extensionality
 
-This section presents the [Relations.Extensionality][] module of the [Agda Universal Algebra Library][].
+This is the [Foundations.Extensionality][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Relations.Extensionality where
+module Foundations.Extensionality where
 
 -- imports from Agda and the Agda Standard Library ------------------------------------
 open import Agda.Builtin.Equality  using (_≡_ ; refl )
@@ -31,7 +31,7 @@ open import Overture.Preliminaries using ( _≈_; _⁻¹ ; _∙_ ; transport )
 open import Overture.Inverses      using ( IsSurjective ; SurjInv ; InvIsInv ; Image_∋_ ; eq )
 open import Relations.Discrete     using ( Op )
 open import Relations.Quotients    using ( [_] ; []-⊆ ; []-⊇ ; IsBlock ; ⟪_⟫ )
-open import Relations.Truncation   using ( blk-uip ; to-Σ-≡ )
+open import Foundations.Truncation   using ( blk-uip ; to-Σ-≡ )
 
 
 private variable α β γ ρ 𝓥 : Level
@@ -147,36 +147,6 @@ module _ {A : Type α}{R : BinRel A ρ} where
 
 \end{code}
 
-#### Strongly well-defined operations
-
-We now describe an extensionality principle that seems weaker than function extensionality, but still (probably) not provable in [MLTT][]. (We address this and other questions  below.)  We call this the principle *strong well-definedness of operations*. We will encounter situations in which this weaker extensionality principle suffices as a substitute for function extensionality.
-
-Suppose we have a function whose domain is a function type, say, `I → A`.  For example, inhabitants of the type `Op` defined above are such functions.  (Recall, the domain of inhabitants of type `Op I A := (I → A) → A` is `I → A`.)
-
-Of course, operations of type `Op I A` are well-defined in the sense that equal inputs result in equal outputs.
-
-\begin{code}
-
-welldef : {A : Type α}{I : Type 𝓥}(f : Op A I) → ∀ u v → u ≡ v → f u ≡ f v
-welldef f u v refl = refl
-
-\end{code}
-
-A stronger form of well-definedness of operations is to suppose that point-wise equal inputs lead to the same output.  In other terms, we could suppose that  for all `f : Op I A`, we have `f u ≡ f v` whenever `∀ i → u i ≡ v i` holds.  We call this formalize this notation in the following type.
-
-\begin{code}
-
-swelldef : (𝓥 α : Level) → Type (lsuc (α ⊔ 𝓥))
-swelldef 𝓥 α = ∀ {A : Type α}{I : Type 𝓥}(f : Op A I)(u v : I → A) → (∀ i → u i ≡ v i) → f u ≡ f v
-
-funext→swelldef : {α 𝓥 : Level} → funext 𝓥 α → swelldef 𝓥 α
-funext→swelldef fe f u v ptweq = welldef f u v (fe ptweq)
-
-SwellDef : Typeω
-SwellDef = (𝓤 𝓥 : Level) → swelldef 𝓤 𝓥
-
-
-\end{code}
 
 
 
