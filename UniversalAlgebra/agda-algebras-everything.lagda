@@ -230,6 +230,10 @@ open import Structures.Basic                using    ( signature ; structure ; _
 open import Structures.Examples             using    ( Sig∅ ; Sig-0 ; Sig-1 ; Sig-2 ; Sig-0-1
                                                      ; Sig-0-1-2 ; SL ; NAE3SAT ; nae3sat )
 
+open import Structures.Graphs               using    ( Gr-sig ; Gr ; hom→Grhom ; Grhom→hom )
+
+open import Structures.Graphs0              using    ( Gr-sig ; Gr ; hom→Grhom ; Grhom→hom ; _⇛_⇚_ )
+
 open import Structures.Products             using    ( ⨅ ; ℓp ; ℑ ; 𝔄 ; class-product )
 
 open import Structures.Congruences          using    ( con ; 0[_]compatible ; 0con[_] ; quotient
@@ -250,11 +254,10 @@ open import Structures.Terms.Operations     using    ( _⟦_⟧ )
 
 open import Structures.EquationalLogic      using    ( _⊧_≈_ ; _⊧_≋_ ; Th ; Mod ; fMod )
 
-open import Structures.Graphs               using    ( Gr-sig ; Gr ; hom→Grhom ; Grhom→hom )
-
-open import Structures.Graphs0              using    ( Gr-sig ; Gr ; hom→Grhom ; Grhom→hom ; _⇛_⇚_ )
-
-
+open import Structures.Substructures.Basic  using    ( Subuniverses ; Subuniverse ; Sg ; sgIsSub
+                                                     ; sgIsSmallest ; ⋂s ; sub-term-closed ; TermImage
+                                                     ; TermImageIsSub ; B-onlyif-TermImageB
+                                                     ; SgB-onlyif-TermImageB ; hom-unique )
 
 -- GENERAL STRUCTURES represented as Sigma types (instead of record types) -------------------------
 
