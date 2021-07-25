@@ -28,7 +28,7 @@ open import Overture.Preliminaries   using ( ∣_∣ )
 open import Relations.Discrete       using ( _|:_ ; 0[_] )
 open import Relations.Quotients      using ( Equivalence ; Quotient ; 0[_]Equivalence
                                            ; ⟪_⟫ ; ⌞_⌟ ; ⟪_∼_⟫-elim ; _/_ )
-open import Relations.Extensionality using ( swelldef )
+open import Foundations.Welldefined  using ( swelldef )
 open import Structures.Basic         using ( signature ; structure ; sigl ; siglʳ
                                            ; compatible )
 

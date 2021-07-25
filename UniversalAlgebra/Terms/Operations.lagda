@@ -38,7 +38,7 @@ open import Relation.Binary.PropositionalEquality using    (sym ; cong
 -- Imports from agda-algebras --------------------------------------------------------------
 open import Overture.Preliminaries       using ( _∙_ ; _⁻¹ ; ∣_∣ ; ∥_∥ ; Π ; Π-syntax ; _≈_ )
 open import Relations.Discrete           using ( _|:_ )
-open import Relations.Extensionality     using ( swelldef )
+open import Foundations.Welldefined      using ( swelldef )
 open import Algebras.Products    {𝑆 = 𝑆} using ( ov ; ⨅ )
 open import Algebras.Congruences {𝑆 = 𝑆} using ( Con ; IsCongruence)
 open import Homomorphisms.Basic  {𝑆 = 𝑆} using ( hom )

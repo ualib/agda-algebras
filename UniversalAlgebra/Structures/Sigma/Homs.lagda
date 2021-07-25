@@ -27,7 +27,7 @@ open import Relations.Discrete       using ( _|:_ ; 0[_] ; ker )
 open import Relations.Quotients      using ( Equivalence ; Quotient ; 0[_]Equivalence
                                            ; ker-IsEquivalence ; kerlift-IsEquivalence
                                            ; ⟪_⟫ ; ⌞_⌟ ; ⟪_∼_⟫-elim ; _/_ )
-open import Relations.Extensionality using ( swelldef )
+open import Foundations.Welldefined  using ( swelldef )
 open import Structures.Sigma.Basic   using ( Signature ; Structure ; Compatible ; _ʳ_ ; _ᵒ_
                                            ; Lift-Strucʳ ; Lift-Strucˡ ; Lift-Struc )
 
