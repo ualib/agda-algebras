@@ -30,7 +30,7 @@ open import Overture.Inverses        using ( IsInjective ; IsSurjective ; Image_
 open import Relations.Discrete       using ( ker ; kerlift )
 open import Relations.Quotients      using ( ⟪_⟫ )
 open import Relations.Extensionality using ( swelldef )
-open import Structures.Basic         using ( signature ; structure ; Lift-Struc
+open import Structures.Basic         using ( signature ; structure ; Lift-Struc ; Lift-Strucʳ
                                            ; Lift-Strucˡ ; compatible ; siglʳ ; sigl )
 open import Structures.Examples      using ( Sig∅ )
 open import Structures.Congruences   using ( con ; _╱_)
@@ -44,7 +44,7 @@ private variable
  𝓞₀ 𝓥₀ 𝓞₁ 𝓥₁ : Level
  𝐹 : signature 𝓞₀ 𝓥₀
  𝑅 : signature 𝓞₁ 𝓥₁
- α ρᵃ β ρᵇ γ ρᶜ : Level
+ α ρᵃ β ρᵇ γ ρᶜ ℓ : Level
 
 
 module _ (𝑨 : structure 𝐹 𝑅 {α}{ρᵃ})
@@ -69,8 +69,13 @@ module _ (𝑨 : structure 𝐹 𝑅 {α}{ρᵃ})
  is-hom : (A → B) → Type (sigl 𝐹 ⊔ sigl 𝑅 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
  is-hom h = is-hom-rel h × is-hom-op h
 
+ -- homomorphism
  hom : Type (sigl 𝐹 ⊔ sigl 𝑅 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
  hom = Σ[ h ∈ (A → B) ] is-hom h
+
+-- endomorphism
+end : structure 𝐹 𝑅 {α}{ρᵃ} → Type (sigl 𝐹 ⊔ sigl 𝑅 ⊔ α ⊔ ρᵃ)
+end 𝑨 = hom 𝑨 𝑨
 
 
 module _ {𝑨 : structure 𝐹 𝑅 {α}{ρᵃ}}
@@ -104,7 +109,7 @@ module _ {𝑨 : structure 𝐹 𝑅 {α}{ρᵃ}}
  ∘-hom (f , fh) (g , gh) = g ∘ f , ∘-is-hom f g fh gh
 
 
-𝒾𝒹 : {𝑨 : structure 𝐹 𝑅 {α}{ρᵃ}} → hom 𝑨 𝑨
+𝒾𝒹 : {𝑨 : structure 𝐹 𝑅 {α}{ρᵃ}} → end 𝑨
 𝒾𝒹 = id , (λ _ _ z → z)  , (λ _ _ → refl)
 
 
@@ -136,11 +141,24 @@ module _ {𝑨 : structure 𝐹 𝑅 {α}{ρᵃ}}
 
 open Lift
 
-𝓁𝒾𝒻𝓉 : {ℓ : Level}{𝑨 : structure 𝐹 𝑅  {α}{ρᵃ}} → hom 𝑨 (Lift-Strucˡ ℓ 𝑨)
-𝓁𝒾𝒻𝓉 = lift , (λ _ _ x → x) , λ _ _ → refl
+𝓁𝒾𝒻𝓉ˡ : {ℓ : Level}{𝑨 : structure 𝐹 𝑅  {α}{ρᵃ}} → hom 𝑨 (Lift-Strucˡ ℓ 𝑨)
+𝓁𝒾𝒻𝓉ˡ = lift , (λ _ _ x → x) , λ _ _ → refl
 
-𝓁ℴ𝓌ℯ𝓇 : {ℓ : Level}{𝑨 : structure 𝐹 𝑅 {α}{ρᵃ}} → hom (Lift-Strucˡ ℓ 𝑨) 𝑨
-𝓁ℴ𝓌ℯ𝓇 = lower , (λ _ _ x → x) , (λ _ _ → refl)
+𝓁𝒾𝒻𝓉ʳ : {ρ : Level}{𝑨 : structure 𝐹 𝑅  {α}{ρᵃ}} → hom 𝑨 (Lift-Strucʳ ρ 𝑨)
+𝓁𝒾𝒻𝓉ʳ = id , (λ _ _ x → lift x) , λ _ _ → refl
+
+𝓁𝒾𝒻𝓉 : {ℓˡ ℓʳ : Level}{𝑨 : structure 𝐹 𝑅  {α}{ρᵃ}} → hom 𝑨 (Lift-Struc ℓˡ ℓʳ 𝑨)
+𝓁𝒾𝒻𝓉 = lift , ((λ _ _ x → lift x) , λ _ _ → refl)
+
+𝓁ℴ𝓌ℯ𝓇ˡ : {ℓ : Level}{𝑨 : structure 𝐹 𝑅 {α}{ρᵃ}} → hom (Lift-Strucˡ ℓ 𝑨) 𝑨
+𝓁ℴ𝓌ℯ𝓇ˡ = lower , (λ _ _ x → x) , (λ _ _ → refl)
+
+𝓁ℴ𝓌ℯ𝓇ʳ : {ρ : Level}{𝑨 : structure 𝐹 𝑅 {α}{ρᵃ}} → hom (Lift-Strucʳ ρ 𝑨) 𝑨
+𝓁ℴ𝓌ℯ𝓇ʳ = id , ((λ _ _ x → lower x) , λ _ _ → refl)
+
+𝓁ℴ𝓌ℯ𝓇 : {ℓˡ ℓʳ : Level}{𝑨 : structure 𝐹 𝑅  {α}{ρᵃ}} → hom (Lift-Struc ℓˡ ℓʳ 𝑨) 𝑨
+𝓁ℴ𝓌ℯ𝓇 = lower , (λ _ _ x → lower x) , (λ _ _ → refl)
+
 
 -- Kernels of homomorphisms
 
@@ -149,7 +167,7 @@ open PE.≡-Reasoning
 module _ {𝑨 : structure 𝐹 𝑅  {α}{β ⊔ ρᵃ}}{𝑩 : structure 𝐹 𝑅 {β} {ρᵇ}}
          where
 
- homker-comp : (h : hom 𝑨 𝑩){wd : swelldef (siglʳ 𝐹) β} 
+ homker-comp : (h : hom 𝑨 𝑩){wd : swelldef (siglʳ 𝐹) β}
   →            compatible 𝑨 (ker ∣ h ∣)
  homker-comp (h , hhom) {wd} f {u}{v} kuv =
   h (((op 𝑨)f) u)    ≡⟨ ∥ hhom ∥ f u ⟩
@@ -211,12 +229,15 @@ module _ {𝑨 : structure 𝐹 𝑅  {α}{β ⊔ ρᵃ}}{𝑩 : structure 𝐹 
 
 
 
-module _ {ℓ : Level}{I : Type ℓ} where
+module _ {I : Type ℓ} where
 
   module _ {𝑨 : structure 𝐹 𝑅  {α}{ρᵃ}}
            {ℬ : I → structure 𝐹 𝑅  {β}{ρᵇ}} where
+
    ⨅-hom-co : funext ℓ β → (∀(i : I) → hom 𝑨 (ℬ i)) → hom 𝑨 (⨅ ℬ)
-   ⨅-hom-co fe h = ((λ a i → ∣ h i ∣ a)) , (λ R a x 𝔦 → fst ∥ h 𝔦 ∥ R a x) , (λ f a → fe (λ i → snd ∥ h i ∥ f a))
+   ⨅-hom-co fe h = (λ a i → ∣ h i ∣ a)
+                   , (λ R a x 𝔦 → fst ∥ h 𝔦 ∥ R a x)
+                   , λ f a → fe (λ i → snd ∥ h i ∥ f a)
 
 
   module _ {𝒜 : I → structure 𝐹 𝑅 {α}{ρᵃ}}

@@ -243,10 +243,18 @@ open import Structures.Homs                 using    ( preserves ; is-hom-rel ; 
                                                      ; is-hom ; hom ; hom-alg ; ∘-is-hom-rel
                                                      ; ∘-is-hom-op ; ∘-is-hom ; ∘-hom ; 𝒾𝒹
                                                      ; is-mon ; mon ; mon→hom ; is-epi ; epi
-                                                     ; epi→hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; homker-comp
-                                                     ; kerlift-comp ; kercon ; kerquo ; ker[_⇒_]
-                                                     ; πepi ; πhom ; πker ; ⨅-hom-co ; ⨅-hom
-                                                     ; ⨅-projection-hom )
+                                                     ; epi→hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; 𝓁𝒾𝒻𝓉ˡ ; 𝓁𝒾𝒻𝓉ʳ
+                                                     ; 𝓁ℴ𝓌ℯ𝓇ˡ ; 𝓁ℴ𝓌ℯ𝓇ʳ ; homker-comp
+                                                     ; kerlift-comp ; kercon ; kerquo
+                                                     ; ker[_⇒_] ; πepi ; πhom ; πker ; ⨅-hom-co
+                                                     ; ⨅-hom ; ⨅-projection-hom )
+
+
+open import Structures.Isos                 using    ( _≅_ ; ≅-refl ; ≅-sym ; ≅-trans ; Lift-≅ˡ
+                                                     ; Lift-≅ʳ ; Lift-≅ ; Lift-Strucˡ-iso
+                                                     ; Lift-Struc-iso ; Lift-Struc-assocˡ
+                                                     ; Lift-Struc-assocʳ ; Lift-Struc-assoc ; ⨅≅
+                                                     ; Lift-Struc-⨅≅ )
 
 open import Structures.Terms.Basic          using    ( Term )
 
