@@ -33,7 +33,7 @@ open import Structures.Homs        using ( hom ; 𝒾𝒹 ; ∘-hom ; 𝓁𝒾�
 open import Structures.Products    using ( ⨅ ; ℓp ; ℑ ; class-product )
 
 private variable
- 𝓞₀ 𝓥₀ 𝓞₁ 𝓥₁ α ρᵃ β ρᵇ γ ρᶜ ι : Level
+ 𝓞₀ 𝓥₀ 𝓞₁ 𝓥₁ α ρᵃ β ρᵇ γ ρᶜ ρ ℓ ι : Level
  𝐹 : signature 𝓞₀ 𝓥₀
  𝑅 : signature 𝓞₁ 𝓥₁
 
@@ -41,11 +41,15 @@ private variable
 
 #### Definition of isomorphism
 
-Recall, `f ~ g` means f and g are *extensionally* (or pointwise) equal; i.e., `∀ x, f x ≡ g x`. We use this notion of equality of functions in the following definition of **isomorphism**.
+Recall, `f ≈ g` means f and g are *extensionally* (or pointwise) equal; i.e., `∀ x, f x ≡ g x`.
+We use this notion of equality of functions in the following definition of *isomorphism*.
 
 \begin{code}
 
-record _≅_ (𝑨 : structure  𝐹 𝑅 {α}{ρᵃ})(𝑩 : structure 𝐹 𝑅 {β}{ρᵇ}) : Type (sigl 𝐹 ⊔ sigl 𝑅 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ) where
+record _≅_ (𝑨 : structure  𝐹 𝑅 {α}{ρᵃ})
+           (𝑩 : structure 𝐹 𝑅 {β}{ρᵇ}) : Type (sigl 𝐹 ⊔ sigl 𝑅 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
+           where
+
  constructor mkiso
  field
   to : hom 𝑨 𝑩
@@ -71,33 +75,24 @@ module _ {𝑨 : structure 𝐹 𝑅 {α}{ρᵃ}} where
 
  module _ {𝑩 : structure 𝐹 𝑅 {β}{ρᵇ}} where
   ≅-sym : 𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑨
-  ≅-sym A≅B = mkiso (from A≅B) (to A≅B) (from∼to A≅B) (to∼from A≅B)
+  ≅-sym φ = mkiso (from φ) (to φ) (from∼to φ) (to∼from φ)
 
 
   module _ {𝑪 : structure 𝐹 𝑅 {γ}{ρᶜ}} where
 
    ≅-trans : 𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≅ 𝑪
-   ≅-trans ab bc = mkiso f g τ ν
+   ≅-trans φab φbc = mkiso f g τ ν
     where
-    f1 : hom 𝑨 𝑩
-    f1 = to ab
-    f2 : hom 𝑩 𝑪
-    f2 = to bc
     f : hom 𝑨 𝑪
-    f = ∘-hom {𝑨 = 𝑨}{𝑩}{𝑪} f1 f2
-
-    g1 : hom 𝑪 𝑩
-    g1 = from bc
-    g2 : hom 𝑩 𝑨
-    g2 = from ab
+    f = ∘-hom {𝑨 = 𝑨}{𝑩}{𝑪} (to φab) (to φbc)
     g : hom 𝑪 𝑨
-    g = ∘-hom {𝑨 = 𝑪}{𝑩}{𝑨}g1 g2
+    g = ∘-hom {𝑨 = 𝑪}{𝑩}{𝑨} (from φbc) (from φab)
 
     τ : ∣ f ∣ ∘ ∣ g ∣ ≈ ∣ 𝒾𝒹 {𝑨 = 𝑪} ∣
-    τ x = (PE.cong ∣ f2 ∣(to∼from ab (∣ g1 ∣ x)))∙(to∼from bc) x
+    τ x = ( PE.cong ∣ to φbc ∣ (to∼from φab (∣ from φbc ∣ x)) ) ∙ (to∼from φbc) x
 
     ν : ∣ g ∣ ∘ ∣ f ∣ ≈ ∣ 𝒾𝒹 {𝑨 = 𝑨} ∣
-    ν x = (PE.cong ∣ g2 ∣(from∼to bc (∣ f1 ∣ x)))∙(from∼to ab) x
+    ν x = ( PE.cong ∣ from φab ∣ (from∼to φbc (∣ to φab ∣ x)) ) ∙ (from∼to φab) x
 
 \end{code}
 
@@ -110,31 +105,33 @@ Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic 
 
 open Level
 
-Lift-≅ˡ : {ℓ : Level}{𝑨 : structure 𝐹 𝑅{α}{ρᵃ}} → 𝑨 ≅ (Lift-Strucˡ ℓ 𝑨)
-Lift-≅ˡ {α = α}{ρᵃ}{𝑨 = 𝑨} = record { to = 𝓁𝒾𝒻𝓉ˡ
-                                   ; from = 𝓁ℴ𝓌ℯ𝓇ˡ {𝑨 = 𝑨}
-                                   ; to∼from = PE.cong-app lift∼lower
-                                   ; from∼to = PE.cong-app (lower∼lift{α}{ρᵃ})
-                                   }
+module _ {𝑨 : structure 𝐹 𝑅{α}{ρᵃ}} where
 
-Lift-≅ʳ : {ℓ : Level}{𝑨 : structure 𝐹 𝑅{α}{ρᵃ}} → 𝑨 ≅ (Lift-Strucʳ ℓ 𝑨)
-Lift-≅ʳ {α = α}{ρᵃ}{𝑨 = 𝑨} = record { to = 𝓁𝒾𝒻𝓉ʳ
-                                   ; from = 𝓁ℴ𝓌ℯ𝓇ʳ
-                                   ; to∼from = PE.cong-app refl
-                                   ; from∼to = PE.cong-app refl
-                                   }
+ Lift-≅ˡ : 𝑨 ≅ (Lift-Strucˡ ℓ 𝑨)
+ Lift-≅ˡ = record { to = 𝓁𝒾𝒻𝓉ˡ
+                  ; from = 𝓁ℴ𝓌ℯ𝓇ˡ {𝑨 = 𝑨}
+                  ; to∼from = PE.cong-app lift∼lower
+                  ; from∼to = PE.cong-app (lower∼lift{α}{ρᵃ})
+                  }
 
-Lift-≅ : {ℓ ρ : Level}{𝑨 : structure 𝐹 𝑅{α}{ρᵃ}} → 𝑨 ≅ (Lift-Struc ℓ ρ 𝑨)
-Lift-≅ {α = α}{ρᵃ}{𝑨 = 𝑨} = record { to = 𝓁𝒾𝒻𝓉
-                         ; from = 𝓁ℴ𝓌ℯ𝓇 {𝑨 = 𝑨}
-                         ; to∼from = PE.cong-app lift∼lower
-                         ; from∼to = PE.cong-app (lower∼lift{α}{ρᵃ})
-                         }
+ Lift-≅ʳ : 𝑨 ≅ (Lift-Strucʳ ℓ 𝑨)
+ Lift-≅ʳ  = record { to = 𝓁𝒾𝒻𝓉ʳ
+                   ; from = 𝓁ℴ𝓌ℯ𝓇ʳ
+                   ; to∼from = PE.cong-app refl
+                   ; from∼to = PE.cong-app refl
+                   }
 
-module _ {𝑨 : structure 𝐹 𝑅{α}{ρᵃ}}{𝑩 : structure 𝐹 𝑅{β}{ρᵇ}} where
+ Lift-≅ : 𝑨 ≅ (Lift-Struc ℓ ρ 𝑨)
+ Lift-≅  = record { to = 𝓁𝒾𝒻𝓉
+                  ; from = 𝓁ℴ𝓌ℯ𝓇 {𝑨 = 𝑨}
+                  ; to∼from = PE.cong-app lift∼lower
+                  ; from∼to = PE.cong-app (lower∼lift{α}{ρᵃ})
+                  }
+
+
+module _ {𝑨 : structure 𝐹 𝑅{α}{ρᵃ}} {𝑩 : structure 𝐹 𝑅{β}{ρᵇ}} where
 
  Lift-Strucˡ-iso : (ℓ ℓ' : Level) → 𝑨 ≅ 𝑩 → Lift-Strucˡ ℓ 𝑨 ≅ Lift-Strucˡ ℓ' 𝑩
-
  Lift-Strucˡ-iso ℓ ℓ' A≅B = ≅-trans ( ≅-trans (≅-sym Lift-≅ˡ) A≅B ) Lift-≅ˡ
 
 
@@ -183,12 +180,13 @@ Products of isomorphic families of algebras are themselves isomorphic. The proof
 
 \begin{code}
 
-module _ {I : Type ι} {fiu : funext ι α} {fiw : funext ι β} where
+module _ {I : Type ι} {𝒜 : I → structure 𝐹 𝑅{α}{ρᵃ}}{ℬ : I → structure 𝐹 𝑅{β}{ρᵇ}} where
 
  open structure
- ⨅≅ : {𝒜 : I → structure 𝐹 𝑅{α}{ρᵃ}}{ℬ : I → structure 𝐹 𝑅{β}{ρᵇ}} → (∀ (i : I) → 𝒜 i ≅ ℬ i) → ⨅ 𝒜 ≅ ⨅ ℬ
+ open PE.≡-Reasoning
+ ⨅≅ : funext ι α → funext ι β → (∀ (i : I) → 𝒜 i ≅ ℬ i) → ⨅ 𝒜 ≅ ⨅ ℬ
 
- ⨅≅ {𝒜 = 𝒜}{ℬ} AB = record { to = ϕ , ϕhom ; from = ψ , ψhom ; to∼from = ϕ~ψ ; from∼to = ψ~ϕ }
+ ⨅≅ fiu fiw AB = record { to = ϕ , ϕhom ; from = ψ , ψhom ; to∼from = ϕ~ψ ; from∼to = ψ~ϕ }
   where
   ϕ : carrier (⨅ 𝒜) → carrier (⨅ ℬ)
   ϕ a i = ∣ to (AB i) ∣ (a i)
@@ -196,7 +194,6 @@ module _ {I : Type ι} {fiu : funext ι α} {fiw : funext ι β} where
   ϕhom : is-hom (⨅ 𝒜) (⨅ ℬ) ϕ
   ϕhom = (λ r a x 𝔦 → fst ∥ to (AB 𝔦) ∥ r (λ z → a z 𝔦) (x 𝔦)) ,
           λ f a → fiw (λ i → snd ∥ to (AB i) ∥ f (λ z → a z i))
-
   ψ : carrier (⨅ ℬ) → carrier (⨅ 𝒜)
   ψ b i = ∣ from (AB i) ∣ (b i)
 
@@ -218,14 +215,14 @@ A nearly identical proof goes through for isomorphisms of lifted products (thoug
 
 \begin{code}
 
-module _ {I : Type ι}{fizw : funext (ι ⊔ γ) β}{fiu : funext ι α} where
+module _ {I : Type ι}{𝒜 : I → structure 𝐹 𝑅 {α}{ρᵃ}}{ℬ : (Lift γ I) → structure 𝐹 𝑅 {β}{ρᵇ}} where
 
  open structure
 
- Lift-Struc-⨅≅ : {𝒜 : I → structure 𝐹 𝑅 {α}{ρᵃ}}{ℬ : (Lift γ I) → structure 𝐹 𝑅 {β}{ρᵇ}}
-  →            (∀ i → 𝒜 i ≅ ℬ (lift i)) → Lift-Strucˡ γ (⨅ 𝒜) ≅ ⨅ ℬ
+ Lift-Struc-⨅≅ : funext (ι ⊔ γ) β → funext ι α
+  →               (∀ i → 𝒜 i ≅ ℬ (lift i)) → Lift-Strucˡ γ (⨅ 𝒜) ≅ ⨅ ℬ
 
- Lift-Struc-⨅≅ {𝒜 = 𝒜}{ℬ} AB = Goal
+ Lift-Struc-⨅≅ fizw fiu AB = Goal
   where
    ϕ : carrier (⨅ 𝒜) →  carrier (⨅ ℬ)
    ϕ a i = ∣ to (AB (lower i)) ∣ (a (lower i))

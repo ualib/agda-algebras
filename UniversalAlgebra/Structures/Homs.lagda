@@ -44,7 +44,7 @@ private variable
  𝓞₀ 𝓥₀ 𝓞₁ 𝓥₁ : Level
  𝐹 : signature 𝓞₀ 𝓥₀
  𝑅 : signature 𝓞₁ 𝓥₁
- α ρᵃ β ρᵇ γ ρᶜ : Level
+ α ρᵃ β ρᵇ γ ρᶜ ℓ : Level
 
 
 module _ (𝑨 : structure 𝐹 𝑅 {α}{ρᵃ})
@@ -69,8 +69,13 @@ module _ (𝑨 : structure 𝐹 𝑅 {α}{ρᵃ})
  is-hom : (A → B) → Type (sigl 𝐹 ⊔ sigl 𝑅 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
  is-hom h = is-hom-rel h × is-hom-op h
 
+ -- homomorphism
  hom : Type (sigl 𝐹 ⊔ sigl 𝑅 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
  hom = Σ[ h ∈ (A → B) ] is-hom h
+
+-- endomorphism
+end : structure 𝐹 𝑅 {α}{ρᵃ} → Type (sigl 𝐹 ⊔ sigl 𝑅 ⊔ α ⊔ ρᵃ)
+end 𝑨 = hom 𝑨 𝑨
 
 
 module _ {𝑨 : structure 𝐹 𝑅 {α}{ρᵃ}}
@@ -104,7 +109,7 @@ module _ {𝑨 : structure 𝐹 𝑅 {α}{ρᵃ}}
  ∘-hom (f , fh) (g , gh) = g ∘ f , ∘-is-hom f g fh gh
 
 
-𝒾𝒹 : {𝑨 : structure 𝐹 𝑅 {α}{ρᵃ}} → hom 𝑨 𝑨
+𝒾𝒹 : {𝑨 : structure 𝐹 𝑅 {α}{ρᵃ}} → end 𝑨
 𝒾𝒹 = id , (λ _ _ z → z)  , (λ _ _ → refl)
 
 
@@ -224,12 +229,15 @@ module _ {𝑨 : structure 𝐹 𝑅  {α}{β ⊔ ρᵃ}}{𝑩 : structure 𝐹 
 
 
 
-module _ {ℓ : Level}{I : Type ℓ} where
+module _ {I : Type ℓ} where
 
   module _ {𝑨 : structure 𝐹 𝑅  {α}{ρᵃ}}
            {ℬ : I → structure 𝐹 𝑅  {β}{ρᵇ}} where
+
    ⨅-hom-co : funext ℓ β → (∀(i : I) → hom 𝑨 (ℬ i)) → hom 𝑨 (⨅ ℬ)
-   ⨅-hom-co fe h = ((λ a i → ∣ h i ∣ a)) , (λ R a x 𝔦 → fst ∥ h 𝔦 ∥ R a x) , (λ f a → fe (λ i → snd ∥ h i ∥ f a))
+   ⨅-hom-co fe h = (λ a i → ∣ h i ∣ a)
+                   , (λ R a x 𝔦 → fst ∥ h 𝔦 ∥ R a x)
+                   , λ f a → fe (λ i → snd ∥ h i ∥ f a)
 
 
   module _ {𝒜 : I → structure 𝐹 𝑅 {α}{ρᵃ}}
