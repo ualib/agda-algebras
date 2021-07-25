@@ -85,6 +85,14 @@ The unary relation (or "predicate") type is imported from Relation.Unary of the 
   Pred : ∀ {a} → Set a → (ℓ : Level) → Set (a ⊔ suc ℓ)
   Pred A ℓ = A → Set ℓ
   ```
+Sometimes it is useful to obtain the underlying type of a predicate.
+
+\begin{code}
+
+PredType : {A : Type α} → Pred A ρ → Type α
+PredType {A = A} _ = A
+
+\end{code}
 
 The binary relation types are called `Rel` and `REL` in the standard library, but we
 will call them `BinRel` and `BinREL` and reserve the names `Rel` and `REL` for the more

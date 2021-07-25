@@ -23,7 +23,7 @@ open import Function.Base         using ( _∘_ )
 open import Relation.Unary        using ( Pred ; _∈_ ; _⊆_ ; ⋂ )
 import Relation.Binary.PropositionalEquality as PE
 
--- -- -- imports from agda-algebras ------------------------------------------------------
+-- imports from agda-algebras ------------------------------------------------------
 open import Overture.Preliminaries   using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
 open import Relations.Discrete       using ( Im_⊆_ )
 open import Foundations.Welldefined  using ( swelldef )

@@ -248,10 +248,18 @@ open import Structures.Homs                 using    ( preserves ; is-hom-rel ; 
                                                      ; is-hom ; hom ; hom-alg ; ∘-is-hom-rel
                                                      ; ∘-is-hom-op ; ∘-is-hom ; ∘-hom ; 𝒾𝒹
                                                      ; is-mon ; mon ; mon→hom ; is-epi ; epi
-                                                     ; epi→hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; homker-comp
-                                                     ; kerlift-comp ; kercon ; kerquo ; ker[_⇒_]
-                                                     ; πepi ; πhom ; πker ; ⨅-hom-co ; ⨅-hom
-                                                     ; ⨅-projection-hom )
+                                                     ; epi→hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; 𝓁𝒾𝒻𝓉ˡ ; 𝓁𝒾𝒻𝓉ʳ
+                                                     ; 𝓁ℴ𝓌ℯ𝓇ˡ ; 𝓁ℴ𝓌ℯ𝓇ʳ ; homker-comp
+                                                     ; kerlift-comp ; kercon ; kerquo
+                                                     ; ker[_⇒_] ; πepi ; πhom ; πker ; ⨅-hom-co
+                                                     ; ⨅-hom ; ⨅-projection-hom )
+
+
+open import Structures.Isos                 using    ( _≅_ ; ≅-refl ; ≅-sym ; ≅-trans ; Lift-≅ˡ
+                                                     ; Lift-≅ʳ ; Lift-≅ ; Lift-Strucˡ-iso
+                                                     ; Lift-Struc-iso ; Lift-Struc-assocˡ
+                                                     ; Lift-Struc-assocʳ ; Lift-Struc-assoc ; ⨅≅
+                                                     ; Lift-Struc-⨅≅ )
 
 open import Structures.Terms.Basic          using    ( Term )
 
@@ -263,6 +271,14 @@ open import Structures.Substructures.Basic  using    ( Subuniverses ; Subunivers
                                                      ; sgIsSmallest ; ⋂s ; sub-term-closed ; TermImage
                                                      ; TermImageIsSub ; B-onlyif-TermImageB
                                                      ; SgB-onlyif-TermImageB ; hom-unique )
+
+open import Structures.Substructures.Substructures
+                                            using    ( _≥s_ ; _IsSupstructureOf_ ; _≤s_ ; _IsSubstructureOf_
+                                                     ; SubstructureOf ; Substructure ; IsSubstructureREL
+                                                     ; _≤c_ ; _IsSubstructureOfClass_ ; SubstructureOfClass
+                                                     ; SubstructureOfClass' ; SubstructuresOfClass )
+
+
 
 -- GENERAL STRUCTURES represented as Sigma types (instead of record types) -------------------------
 
