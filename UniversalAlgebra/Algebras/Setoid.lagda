@@ -1,24 +1,23 @@
 ---
 layout: default
-title : Terms.Setoid module (The Agda Universal Algebra Library)
-date : 2021-06-28
+title : Algebras.Setoid module (Agda Universal Algebra Library)
+date : 2021-07-26
 author: [agda-algebras development team][]
 ---
-
-### Setoids of Terms
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Terms.Setoid where
+module Algebras.Setoid where
 
-open import Terms.Basic
-
+open import Algebras.Setoid.Basic
+open import Algebras.Setoid.Products
+open import Algebras.Setoid.Congruences
 
 \end{code}
+
 
 --------------------------------
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
-

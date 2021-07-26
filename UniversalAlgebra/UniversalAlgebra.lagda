@@ -64,69 +64,19 @@ module UniversalAlgebra where
 open import Preface
 open import Overture
 open import Relations
+open import Foundations
+open import GaloisConnections
+open import ClosureSystems
 open import Algebras
-open import Congruences
-open import Products
 open import Homomorphisms
 open import Terms
 open import Subalgebras
 open import Varieties
+open import Structures
+open import Complexity
 
 \end{code}
 
--------------------------------------------
-
-### <a id="detailed-contents"></a> Detailed Contents
-
-- [Preface][]
-
-- [Overture](Overture.html)
-  - [Preliminaries](Overture.Preliminaries.html)
-  - [Inverses](Overture.Inverses.html)
-
-- [Relation and Quotient Types](Relations.html)
-  - [Discrete Relations](Relations.Discrete.html)
-  - [Continuous Relations](Relations.Continuous.html)
-  - [Quotients](Relations.Quotients.html)
-  - [Truncation](Relations.Truncation.html)
-  - [Relation Extensionality](Relations.Extensionality.html)
-
-- [Algebra Types](Algebras.html)
-  - [Basic Definitions](Algebras.Basic.html)
-  - [Algebras on Setoid Domains](Algebras.Setoid.html)
-
-- [Product Types](Products.html)
-  - [Products of Algebras](Products.Basic.html)
-  - [Products of Algebras over Setoids](Products.Setoid.html)
-
-- [Congruence Types](Congruences.html)
-  - [Congruences of Algebras](Congruences.html)
-  - [Congruences of Algebras over Setoids](Congruences.Setoid.html)
-
-- [Homomorphism Types](Homomorphisms.html)
-  - [Basic Definitions](Homomorphisms.Basic.html)
-  - [Homomorphisms of Algebras over Setoids](Homomorphisms.Setoid.html)
-  - [Homomorphism Theorems](Homomorphisms.Noether.html)
-  - [Isomorphisms](Homomorphisms.Isomorphisms.html)
-  - [Homomorphic Images](Homomorphisms.HomomorphicImages.html)
-
-- [Types for Terms](Terms.html)
-  - [Basic Definitions](Terms.Basic.html)
-  - [Basic Properties of Terms](Terms.Properties.html)
-  - [Terms over Setoids](Terms.Setoid.html)
-  - [Term Operations](Terms.Operations.html)
-
-- [Subalgebra Types](Subalgebras.html)
-  - [Subuniverses](Subalgebras.Subuniverses.html)
-  - [Subalgebras](Subalgebras.Subalgebras)
-
-- [Equations and Varieties](Varieties.html)
-  - [Model Theory and Equational Logic](Varieties.EquationalLogic.html)
-  - [The Inductive Types H, S, P, V](Varieties.Varieties.html)
-  - [Equation Preservation Theorems](Varieties.Preservation.html)
-  - [Free Algebras and Birkhoff's Theorem](Varieties.FreeAlgebras.html)
-
----------------------------------------
 
 #### License and citations
 
