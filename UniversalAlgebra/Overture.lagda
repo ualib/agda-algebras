@@ -2,10 +2,10 @@
 layout: default
 title : Overture module (Agda Universal Algebra Library)
 date : 2021-01-12
-author: William DeMeo
+author: [agda-algebras development team][]
 ---
 
-## <a id="prelude">Overture</a>
+## Overture
 
 This is the [Overture][] module of the [Agda Universal Algebra Library][].
 
@@ -19,14 +19,14 @@ module Overture where
 
 open import Overture.Preliminaries
 open import Overture.Inverses
+open import Overture.Transformers
 
 \end{code}
 
 --------------------------------------
 
-<p></p>
-
-[← Preface](Preface.html)
-<span style="float:right;">[Overture.Preliminaries →](Overture.Preliminaries.html)</span>
-
 {% include UALib.Links.md %}
+
+--------------------------------
+
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

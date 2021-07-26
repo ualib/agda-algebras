@@ -2,12 +2,12 @@
 layout: default
 title : Varieties module (Agda Universal Algebra Library)
 date : 2021-01-14
-author: William DeMeo
+author: [agda-algebras development team][]
 ---
 
-## <a id="equations-and-varieties">Equations and Varieties</a>
+## Equations and Varieties
 
-This chapter presents the [Varieties][] module of the [Agda Universal Algebra Library][], where we define types for theories and their models and for equational logic and prove properties of these types.
+This is the [Varieties][] module of the [Agda Universal Algebra Library][], where we define types for theories and their models, and for equational logic, and we prove properties of these types.
 
 Let 𝑆 be a signature. By an **identity** or **equation** in 𝑆 we mean an ordered pair of terms, written 𝑝 ≈ 𝑞, from the term algebra 𝑻 X. If 𝑨 is an 𝑆-algebra we say that 𝑨 **satisfies** 𝑝 ≈ 𝑞 provided 𝑝 ̇ 𝑨 ≡ 𝑞 ̇ 𝑨 holds. In this situation, we write 𝑨 ⊧ 𝑝 ≈ 𝑞 and say that 𝑨 **models** the identity 𝑝 ≈ q. If 𝒦 is a class of algebras, all of the same signature, we write 𝒦 ⊧ p ≈ q if, for every 𝑨 ∈ 𝒦, 𝑨 ⊧ 𝑝 ≈ 𝑞.
 
@@ -19,13 +19,12 @@ Because a class of structures has a different type than a single structure, we m
 
 module Varieties where
 
-open import Varieties.Basic
-open import Varieties.Properties
-open import Varieties.Properties
-open import Varieties.Closure
 open import Varieties.EquationalLogic
+open import Varieties.Closure
+open import Varieties.Properties
 open import Varieties.Preservation
 open import Varieties.FreeAlgebras
+open import Varieties.Setoid
 
 \end{code}
 
@@ -39,7 +38,8 @@ In the Varieties.Entailment submodule, we define the entailment relation and pro
 
 --------------------------------------
 
-[← Subalgebras](Subalgebras.html)
-<span style="float:right;">[Varieties.EquationalLogic →](Varieties.EquationalLogic.html)</span>
-
 {% include UALib.Links.md %}
+
+--------------------------------
+
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

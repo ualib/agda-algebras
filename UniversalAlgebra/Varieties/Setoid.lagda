@@ -1,31 +1,27 @@
 ---
 layout: default
-title : Subalgebras module (The Agda Universal Algebra Library)
-date : 2021-01-14
+title : Varieties.Setoid module (Agda Universal Algebra Library)
+date : 2021-07-26
 author: [agda-algebras development team][]
 ---
 
-## Subalgebra Types
+## Equations and Varieties for Setoids
 
-This is the [Subalgebras][] module of the [Agda Universal Algebra Library][].
+This is the [Varieties.Setoid][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Subalgebras where
+module Varieties.Setoid where
 
-open import Subalgebras.Subuniverses
-open import Subalgebras.Subalgebras
-open import Subalgebras.Properties
-open import Subalgebras.Setoid
+open import Varieties.Setoid.EquationalLogic
 
 \end{code}
 
 --------------------------------------
 
 {% include UALib.Links.md %}
-
 
 --------------------------------
 

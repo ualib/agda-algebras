@@ -45,6 +45,8 @@ open import Relations.Quotients             using    ( Equivalence ; ker-IsEquiv
                                                      ; []-⊆ ; []-⊇ ; ⊆-[] ; ⊇-[] ; 0[_]IsEquivalence
                                                      ; 0[_]Equivalence ; ⟪_∼_⟫-elim ; ≡→⊆ )
 
+-- FOUNDATIONS -----------------------------------------------------------------------------------------
+
 open import Foundations.Welldefined         using    ( welldef ; swelldef ; funext→swelldef ; SwellDef
                                                      ; swelldef' ; funext' ; funext'→swelldef'
                                                      ; swelldef'→funext' ; Fin2-wd )
@@ -120,13 +122,13 @@ open import Homomorphisms.Noether           using    ( FirstHomTheorem|Set ; Fir
                                                      ; NoetherHomUnique ; NoetherIsoUnique ; HomFactor
                                                      ; HomFactorEpi )
 
-open import Homomorphisms.HomomorphicImages using    ( _IsHomImageOf_ ; HomImages ; IsHomImageOfClass
-                                                     ; HomImageOfClass ; Lift-epi-is-epi
-                                                     ; Lift-Alg-hom-image )
-
 open import Homomorphisms.Isomorphisms      using    ( _≅_ ; ≅-refl ; ≅-sym ; ≅-trans ; Lift-≅
                                                      ; Lift-Alg-iso ; Lift-Alg-assoc
                                                      ; Lift-Alg-⨅≅ ; ⨅≅ )
+
+open import Homomorphisms.HomomorphicImages using    ( _IsHomImageOf_ ; HomImages ; IsHomImageOfClass
+                                                     ; HomImageOfClass ; Lift-epi-is-epi
+                                                     ; Lift-Alg-hom-image )
 
 open import Homomorphisms.Setoid.Basic      using    ( compatible-op-map ; is-homomorphism ; hom
                                                      ; ∘-hom ; ∘-is-hom ; 𝒾𝒹 ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇
