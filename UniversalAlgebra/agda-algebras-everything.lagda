@@ -37,17 +37,22 @@ open import Relations.Quotients             using    ( Equivalence ; ker-IsEquiv
                                                      ; []-⊆ ; []-⊇ ; ⊆-[] ; ⊇-[] ; 0[_]IsEquivalence
                                                      ; 0[_]Equivalence ; ⟪_∼_⟫-elim ; ≡→⊆ )
 
-open import Relations.Truncation            using    ( is-center ; is-singleton ; is-prop ; is-prop-valued
+open import Foundations.Welldefined         using    ( welldef ; swelldef ; funext→swelldef ; SwellDef
+                                                     ; swelldef' ; funext' ; funext'→swelldef'
+                                                     ; swelldef'→funext' ; Fin2-wd )
+
+open import Foundations.Truncation          using    ( is-center ; is-singleton ; is-prop ; is-prop-valued
                                                      ; singleton-is-prop ; fiber ; is-equiv ; hfunext
                                                      ; is-set ; to-Σ-≡ ; is-embedding ; singleton-type
                                                      ; invertible ; equiv-is-embedding ; monic-is-embedding|Set
                                                      ; blk-uip ; IsRelProp ; RelProp ; RelPropExt ; IsΠΡProp
                                                      ; ΠΡProp ; ΠΡPropExt )
 
-open import Relations.Extensionality        using    ( DFunExt ; SurjInvIsRightInv ; epic-factor
+open import Foundations.Extensionality      using    ( DFunExt ; SurjInvIsRightInv ; epic-factor
                                                      ; epic-factor-intensional ; _≐_ ; pred-ext
-                                                     ; block-ext ; block-ext|uip ; welldef
-                                                     ; swelldef ; funext→swelldef ; SwellDef )
+                                                     ; block-ext ; block-ext|uip )
+
+
 
 
 -- GALOIS CONNECTIONS -------------------------------------------------------------------------------

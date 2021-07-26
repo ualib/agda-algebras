@@ -26,7 +26,7 @@ import Relation.Binary.PropositionalEquality as PE
 -- imports from agda-algebras ------------------------------------------------------
 open import Overture.Preliminaries   using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
 open import Relations.Discrete       using ( Im_⊆_ )
-open import Relations.Extensionality using ( swelldef )
+open import Foundations.Welldefined  using ( swelldef )
 open import Structures.Basic         using ( signature ; structure ; _ᵒ_ ; sigl ; siglˡ ; siglʳ )
 open import Structures.Homs          using ( hom )
 open import Structures.Terms.Basic

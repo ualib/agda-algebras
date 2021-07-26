@@ -32,7 +32,7 @@ import Relation.Binary.PropositionalEquality as PE
 open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
 open import Overture.Inverses                  using ( ∘-injective ; IsInjective ; id-is-injective )
 open import Relations.Discrete                 using ( Im_⊆_ )
-open import Relations.Extensionality           using ( swelldef )
+open import Foundations.Welldefined              using ( swelldef )
 open import Algebras.Setoid.Basic      {𝑆 = 𝑆} using ( SetoidAlgebra ; 𝕌[_] ; _̂_ ; Lift-SetoidAlg )
 open import Algebras.Products          {𝑆 = 𝑆} using ( ov )
 open import Terms.Basic                {𝑆 = 𝑆} using ( Term ; ℊ ; node )

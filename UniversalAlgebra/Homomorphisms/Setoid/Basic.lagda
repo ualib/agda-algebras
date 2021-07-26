@@ -37,10 +37,10 @@ open import Overture.Inverses          using ( IsInjective ; IsSurjective )
 open import Overture.Inverses          using ( SurjInv )
 open import Relations.Discrete         using ( ker ; kernel )
 open import Relations.Quotients        using ( ker-IsEquivalence )
-open import Relations.Truncation       using ( is-set ; blk-uip ; is-embedding
-                                             ; monic-is-embedding|Set )
-open import Relations.Extensionality   using ( swelldef ; block-ext|uip ; pred-ext
-                                             ; SurjInvIsRightInv ; epic-factor )
+open import Foundations.Truncation     using ( is-set ; blk-uip ; is-embedding ; monic-is-embedding|Set )
+open import Foundations.Welldefined    using ( swelldef )
+open import Foundations.Extensionality using ( block-ext|uip ; pred-ext ; SurjInvIsRightInv ; epic-factor )
+
 open import Algebras.Setoid.Basic    {𝑆 = 𝑆} using ( 𝕌[_] ; SetoidAlgebra ; _̂_ ; Lift-SetoidAlg )
 open import Algebras.Setoid.Congruences {𝑆 = 𝑆} using ( _∣≈_ ; Con ; IsCongruence ; mkcon ; _╱_)
 \end{code}

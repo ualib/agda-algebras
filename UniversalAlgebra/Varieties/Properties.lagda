@@ -39,7 +39,8 @@ import Relation.Binary.PropositionalEquality as PE
 -- imports from agda-algebras --------------------------------------------------------------
 open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
 open import Overture.Inverses                  using ( IsInjective ; ∘-injective )
-open import Relations.Extensionality           using ( SwellDef ; DFunExt )
+open import Foundations.Welldefined            using ( SwellDef )
+open import Foundations.Extensionality         using ( DFunExt )
 open import Algebras.Basic                     using ( Algebra ; Lift-Alg )
 open import Algebras.Products          {𝑆 = 𝑆} using ( ov ; ⨅ )
 open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom; ∘-hom )

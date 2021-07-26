@@ -36,7 +36,7 @@ open import Relation.Binary.PropositionalEquality using    ( trans    ;   cong
 
 open import Overture.Preliminaries       using (_⁻¹; ∣_∣; ∥_∥)
 open import Overture.Inverses            using (IsInjective; IsSurjective; Image_∋_)
-open import Relations.Extensionality     using (swelldef)
+open import Foundations.Welldefined      using (swelldef)
 open import Relations.Discrete           using (ker)
 open import Relations.Quotients          using (ker-IsEquivalence; _/_; ⟪_⟫; R-block)
 open import Algebras.Congruences {𝑆 = 𝑆} using (Con; IsCongruence; mkcon; _╱_; /-≡)

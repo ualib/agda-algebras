@@ -29,7 +29,7 @@ open import Overture.Preliminaries   using ( _∙_ ; ∣_∣ ; ∥_∥ ; _⁻¹ 
 open import Overture.Inverses        using ( IsInjective ; IsSurjective ; Image_∋_ )
 open import Relations.Discrete       using ( ker ; kerlift )
 open import Relations.Quotients      using ( ⟪_⟫ )
-open import Relations.Extensionality using ( swelldef )
+open import Foundations.Welldefined  using ( swelldef )
 open import Structures.Basic         using ( signature ; structure ; Lift-Struc ; Lift-Strucʳ
                                            ; Lift-Strucˡ ; compatible ; siglʳ ; sigl )
 open import Structures.Examples      using ( Sig∅ )

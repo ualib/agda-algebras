@@ -2,27 +2,16 @@
 layout: default
 title : Overture.Preliminaries module
 date : 2021-01-13
-author: [the ualib/agda-algebras development team][]
+author: [agda-algebras development team][]
 ---
 
 ### <a id="preliminaries">Preliminaries</a>
 
-This is the [Overture.Preliminaries][] module of the [agda-algebras][].
+This is the [Overture.Preliminaries][] module of the [agda-algebras][] library.
 
-#### <a id="logical-foundations">Logical foundations</a>
+#### Logical foundations
 
-The [Agda Universal Algebra Library](https://github.com/ualib/agda-algebras) (or [agda-algebras](https://github.com/ualib/agda-algebras) for short) is based on a version of [Martin-Löf type theory (MLTT)](https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory). We don't discuss [MLTT](https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory) in great detail here because there are already good and freely available resources covering the theory. (See, for example, the section of [Escardó's notes](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes) on [A spartan Martin-Löf type theory](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#mlttinagda), or the [ncatlab entry on Martin-Löf dependent type theory](https://ncatlab.org/nlab/show/Martin-L\%C3\%B6f+dependent+type+theory), or the [HoTT book](https://homotopytypetheory.org/book/).)
-
-The objects and assumptions that form the foundation of [MLTT](https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory) are few. There are the *primitive types* (`𝟘`, `𝟙`, and `ℕ`, denoting the empty type, one-element type, and natural numbers), the *type formers* (`+`, `Π`, `Σ`, `Id`, denoting *binary sum*, *product*, *sum*, and the *identity* type). Each of these type formers is defined by a *type forming rule* which specifies how that type is constructed. Lastly, we have an infinite collection of *type universes* (types of types) and *universe variables* to denote them.
-
-There are no further axioms or logical deduction (proof derivation) rules needed for the foundations of
-[MLTT](https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory) that we take as the starting point of [agda-algebras][].  The logical semantics come from the [propositions-as-types correspondence](https://ncatlab.org/nlab/show/propositions+as+types): propositions and predicates are represented by types and the inhabitants of these types are the proofs of the propositions and predicates.  As such, proofs are constructed using the type forming rules. In other words, the type forming rules *are* the proof derivation rules.
-
-To this foundation, we add certain *extensionality principles* when and were we need them.  These will be developed as we progress.  However, classical axioms such as the [*Axiom of Choice*](https://ncatlab.org/nlab/show/axiom+of+choice) or the [*Law of the Excluded Middle*](https://ncatlab.org/nlab/show/excluded+middle) are not needed and are not assumed anywhere in the library.  In this sense, all theorems and proofs in [agda-algebras][] are [*constructive*](https://ncatlab.org/nlab/show/constructive+mathematics) (according to [nlab's definition](https://ncatlab.org/nlab/show/constructive+mathematics)).
-
-A few specific instances (e.g., the proof of the Noether isomorphism theorems and Birkhoff's HSP theorem) require certain *truncation* assumptions. In such cases, the theory is not [predicative](https://ncatlab.org/nlab/show/predicative+mathematics) (according to [nlab's definition](https://ncatlab.org/nlab/show/predicative+mathematics)). These instances are always clearly identified.
-
-#### <a id="specifying-logical-foundations">Specifying logical foundations in Agda</a>
+(See also the Foundations module of the [agda-algebras][] library.)
 
 An Agda program typically begins by setting some options and by importing types from existing Agda libraries. Options are specified with the `OPTIONS` *pragma* and control the way Agda behaves by, for example, specifying the logical axioms and deduction rules we wish to assume when the program is type-checked to verify its correctness. Every Agda program in [agda-algebras][] begins with the following line.
 
@@ -42,7 +31,7 @@ These options control certain foundational assumptions that Agda makes when type
 
 Note that if we wish to type-check a file that imports another file that still has some unmet proof obligations, we must replace the `--safe` flag with `--allow-unsolved-metas`, but this is never done in (publicly released versions of) the [agda-algebras][] library.
 
-#### <a id="agda-modules">Agda Modules</a>
+#### Agda Modules
 
 The `OPTIONS` pragma is usually followed by the start of a module.  For example, the [Overture.Preliminaries][] module begins with the following line, and then a list of imports of things used in the module.
 
@@ -50,31 +39,15 @@ The `OPTIONS` pragma is usually followed by the start of a module.  For example,
 module Overture.Preliminaries where
 
 -- Imports from the Agda (Builtin) and the Agda Standard Library
-open import Agda.Builtin.Equality                 using    ( _≡_      ;  refl   )
-open import Function.Base                         using    ( _∘_      ;  id     )
-open import Data.Product                          using    ( _,_      ;   Σ
-                                                           ; Σ-syntax ;   _×_   )
-                                                  renaming ( proj₁    to  fst
-                                                           ; proj₂    to  snd   )
-open import Agda.Primitive                        using    ( _⊔_                )
-                                                  renaming ( Set      to  Type  )
-                                                  renaming ( lzero    to  ℓ₀    )
-open import Level                                 using    ( Level    ;   Lift
-                                                           ; lift     ;   lower )
-                                                  renaming ( suc      to  lsuc  )
-open import Relation.Binary.Structures            using    ( IsEquivalence
-                                                           ; IsPartialOrder     )
+open import Agda.Builtin.Equality       using ( _≡_ ; refl )
+open import Agda.Primitive              using ( _⊔_ ; lsuc )           renaming ( Set to  Type ; lzero to  ℓ₀ )
+open import Data.Product                using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Function.Base               using ( _∘_ ; id )
+open import Level                       using ( Level ; Lift ; lift ; lower )
+open import Relation.Binary.Structures  using ( IsEquivalence ; IsPartialOrder )
 open import Relation.Binary.PropositionalEquality as PE
 
-\end{code}
-
-We prefer to use `Type` in place of Agda's `Set` since for us *set* will mean a very special kind of (truncated) type. (See [Relations.Truncation][]). We also use `ℓ₀` in place of level `zero`, and `ℓ₁` for the successor of `ℓ₀`.
-
-
-#### Some small levels and types
-
-
-\begin{code}
+private variable α β : Level
 
 ℓ₁ : Level
 ℓ₁ = lsuc ℓ₀
@@ -87,9 +60,9 @@ data 𝟙 : Type ℓ₀ where
  𝟎 : 𝟙
 
 -- the two element type
-data 𝟚 : Type ℓ₀ where  -- Should we use Bool instead?
- 𝟎 : 𝟚                  -- Should we use false instead?
- 𝟏 : 𝟚                  -- Should we use true instead?
+data 𝟚 : Type ℓ₀ where  -- We could use Bool instead.
+ 𝟎 : 𝟚                  -- "         " false "   "
+ 𝟏 : 𝟚                  -- "         " true  "   "
 
 -- the three element type
 data 𝟛 : Type ℓ₀ where
@@ -100,17 +73,7 @@ data 𝟛 : Type ℓ₀ where
 \end{code}
 
 
-#### <a id="agda-universes">Agda Universes</a>
-
-Here we import the basic primitive operations we need for working with Agda's type universes. For the very small amount of background about *type universes* we require, we refer the reader to the brief [section on universe-levels](https://agda.readthedocs.io/en/v2.6.1.3/language/universe-levels.html) in the Agda documentation.
-
-\begin{code}
-
-private variable α β : Level
-
-\end{code}
-
-#### <a id="projection notation">Projection notation</a>
+#### Projection notation
 
 The definition of `Σ` (and thus, of `×`) includes the fields `proj₁` and `proj₂` representing the first and second projections out of the product.  However, we prefer the shorter names `fst` and `snd`.  Sometimes we prefer to denote these projections by `∣_∣` and `∥_∥`, respectively. We define these alternative notations for projections out of pairs as follows.
 
@@ -173,7 +136,7 @@ infix 6 Π-syntax
 
 \end{code}
 
-#### <a id="agdas-universe-hierarchy">Agda's universe hierarchy</a>
+#### Agda's universe hierarchy
 
 The hierarchy of universes in Agda is structured as follows:<sup>[1](Overture.Lifts.html#fn1)</sup>
 
@@ -186,7 +149,7 @@ This means that the universe `Type α` has type `Type(lsuc α)`, and  `Type(lsuc
 
 
 
-#### <a id="lifting-and-lowering">Lifting and lowering</a>
+#### Lifting and lowering
 
 Here we describe a general `Lift` type that help us overcome the technical issue described in the previous subsection.  In the [Lifts of algebras section](Algebras.Algebras.html#lifts-of-algebras) of the [Algebras.Algebras][] module we will define a couple domain-specific lifting types which have certain properties that make them useful for resolving universe level problems when working with algebra types.
 
@@ -266,27 +229,15 @@ transport B refl = id
 
 \end{code}
 
----------------
-
-<sup>1</sup><span class="footnote" id="fn0"> We avoid using `𝓟` as a universe
-variable because in some libraries `𝓟` denotes a powerset type.</span>
 
 
-<sup>4</sup> <span class="footnote" id="fn4"> Moreover, if one assumes the [univalence axiom][] of [Homotopy Type Theory][], then point-wise equality of functions is equivalent to definitional equality of functions. (See [Function extensionality from univalence](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#funextfromua).)</span>
 
-<sup>5</sup><span class="footnote" id="fn5">Recall, from the [Overture.Preliminaries][] module, the special notation we use to denote Agda's *levels* and *universes*.</span>
 
-<br>
-<br>
-
-[↑ Overture](Overture.html)
-<span style="float:right;">[Overture.Inverses →](Overture.Inverses.html)</span>
-
-{% include UALib.Links.md %}
 
 ------------------------------
 
-[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
+
 [agda-algebras]: https://github.com/ualib/agda-algebras
 
 
