@@ -177,7 +177,7 @@ The point of having a ramified hierarchy of universes is to avoid Russell's para
 lift∼lower : {A : Type α} → lift ∘ lower ≡ 𝑖𝑑 (Lift β A)
 lift∼lower = refl
 
-lower∼lift : {A : Type α} → lower {α}{β}(lift {α}{β}(λ x → x)) ≡ 𝑖𝑑 A
+lower∼lift : {A : Type α} → (lower {α}{β}) ∘ lift ≡ 𝑖𝑑 A
 lower∼lift = refl
 
 \end{code}
