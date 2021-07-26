@@ -19,7 +19,15 @@ open import Overture.Inverses               using    ( Image_∋_ ; eq ; Inv ; I
                                                      ; id-is-injective ; ∘-injective ; IsSurjective
                                                      ; Surjective ; SurjInv )
 
-
+open import Overture.Transformers           using    ( Bijection ; ∣_∣=∣_∣ ; PointwiseBijection
+                                                     ; ∣_∣≈∣_∣ ; uncurry₀ ; Curry ; Uncurry
+                                                     ; A×A→B≅A→A→B ; A→A→Fin2A ; A→A→Fin2A'
+                                                     ; A→A→Fin2A-pointwise-agreement ; A×A→Fin2A
+                                                     ; Fin2A→A×A ; Fin2A~A×A ; A×A~Fin2A-pointwise
+                                                     ; A→A~Fin2A-pointwise ; Fin2A ; Fin2A≡
+                                                     ; CurryFin2 ; UncurryFin2 ; CurryFin2~UncurryFin2
+                                                     ; CurryFin3 ; UncurryFin3 ; Fin2A→B-to-A×A→B
+                                                     ; A×A→B-to-Fin2A→B ; Fin2A→B~A×A→B )
 
 -- RELATIONS  -----------------------------------------------------------------------------------------
 

@@ -16,13 +16,16 @@ open import Agda.Primitive        using ( _⊔_ ; lsuc ; Level ) renaming ( Set 
 open import Axiom.Extensionality.Propositional
                                   using () renaming ( Extensionality to funext )
 open import Data.Fin.Base         using ( Fin )
-open import Function.Base         using ( _$_ )
+open import Data.Product                using ( _,_ ; _×_ )
+open import Function.Base         using ( _$_ ; _∘_ ; id )
 import Relation.Binary.PropositionalEquality as PE
 
 
-open import Overture.Preliminaries using ( _≈_ )
+open import Overture.Preliminaries using ( _≈_ ; _⁻¹)
 open import Relations.Discrete     using ( Op )
-open import Overture.Inverses      using ( UncurryFin )
+open import Overture.Transformers  using ( CurryFin2 ; UncurryFin2 ; UncurryFin3 ; A×A→Fin2A ; Fin2A→A×A
+                                         ; A×A→B-to-Fin2A→B ; A→A→Fin2A ; Fin2A→B-to-A×A→B
+                                         ; A×A~Fin2A-pointwise ; A→A~Fin2A-pointwise )
 
 private variable
  ι α β 𝓥 : Level
@@ -163,31 +166,70 @@ so f is essentially of type (Fin 2 → A) → B.
 
 module _ {A : Type α}{B : Type β} where
 
- open Fin renaming ( zero to zz ; suc to ss )
+ open Fin renaming ( zero to z ; suc to s )
  open PE.≡-Reasoning
 
+ A×A-wd : (f : A × A → B)(u v : Fin 2 → A)
+  →        u ≈ v → (A×A→B-to-Fin2A→B f) u ≡ (A×A→B-to-Fin2A→B f) v
+
+ A×A-wd f u v u≈v = Goal
+  where
+  zip1 : ∀ {a x y} → x ≡ y → f (a , x) ≡ f (a , y)
+  zip1 refl = refl
+
+  zip2 : ∀ {x y b} → x ≡ y → f (x , b) ≡ f (y , b)
+  zip2 refl = refl
+
+  Goal : (A×A→B-to-Fin2A→B f) u ≡ (A×A→B-to-Fin2A→B f) v
+  Goal = (A×A→B-to-Fin2A→B f) u     ≡⟨ refl ⟩
+         f (u z , u (s z)) ≡⟨ zip1 (u≈v (s z)) ⟩
+         f (u z , v (s z)) ≡⟨ zip2 (u≈v z) ⟩
+         f (v z , v (s z)) ≡⟨ refl ⟩
+         (A×A→B-to-Fin2A→B f) v ∎
+
  Fin2-wd : (f : A → A → B)(u v : Fin 2 → A)
-  →        u ≈ v → (UncurryFin f) u ≡ (UncurryFin f) v
+  →        u ≈ v → (UncurryFin2 f) u ≡ (UncurryFin2 f) v
 
  Fin2-wd f u v u≈v = Goal
   where
-  ξ : u zz ≡ v zz
-  ξ = u≈v zz
-  ζ : u (ss zz) ≡ v (ss zz)
-  ζ = u≈v (ss zz)
-
   zip1 : ∀ {a x y} → x ≡ y → f a x ≡ f a y
   zip1 refl = refl
 
   zip2 : ∀ {x y b} → x ≡ y → f x b ≡ f y b
   zip2 refl = refl
 
-  Goal : (UncurryFin f) u ≡ (UncurryFin f) v
-  Goal = (UncurryFin f) u     ≡⟨ refl ⟩
-         f (u zz) (u (ss zz)) ≡⟨ zip1 (u≈v (ss zz)) ⟩
-         f (u zz) (v (ss zz)) ≡⟨ zip2 (u≈v zz) ⟩
-         f (v zz) (v (ss zz)) ≡⟨ refl ⟩
-         (UncurryFin f) v ∎
+  Goal : (UncurryFin2 f) u ≡ (UncurryFin2 f) v
+  Goal = (UncurryFin2 f) u     ≡⟨ refl ⟩
+         f (u z) (u (s z)) ≡⟨ zip1 (u≈v (s z)) ⟩
+         f (u z) (v (s z)) ≡⟨ zip2 (u≈v z) ⟩
+         f (v z) (v (s z)) ≡⟨ refl ⟩
+         (UncurryFin2 f) v ∎
+
+
+
+
+ Fin3-wd : (f : A → A → A → B)(u v : Fin 3 → A)
+  →        u ≈ v → (UncurryFin3 f) u ≡ (UncurryFin3 f) v
+
+ Fin3-wd f u v u≈v = Goal
+  where
+
+  zip1 : ∀ {a b x y} → x ≡ y → f a b x ≡ f a b y
+  zip1 refl = refl
+
+  zip2 : ∀ {a b x y} → x ≡ y → f a x b ≡ f a y b
+  zip2 refl = refl
+
+  zip3 : ∀ {a b x y} → x ≡ y → f x a b ≡ f y a b
+  zip3 refl = refl
+
+  Goal : (UncurryFin3 f) u ≡ (UncurryFin3 f) v
+  Goal = (UncurryFin3 f) u     ≡⟨ refl ⟩
+         f (u z) (u (s z)) (u (s (s z))) ≡⟨ zip1 (u≈v (s (s z))) ⟩
+         f (u z) (u (s z)) (v (s (s z))) ≡⟨ zip2 (u≈v (s z)) ⟩
+         f (u z) (v (s z)) (v (s (s z))) ≡⟨ zip3 (u≈v z) ⟩
+         f (v z) (v (s z)) (v (s (s z))) ≡⟨ refl ⟩
+         (UncurryFin3 f) v ∎
 
 
  -- NEXT: try to prove (f : (Fin 2 → A) → B)(u v : Fin 2 → A) →  u ≈ v → f u ≡ f v
@@ -200,3 +242,35 @@ module _ {A : Type α}{B : Type β} where
 -------------------------------------
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -- It seems `Fin n → A` does not behave as we would home and expect.
+ -- Instead, try using Vector A n, or try defining our own finite type FinTyp n.
+
+ -- Fin2-unc∘cur≈id : (f : (Fin 2 → A) → B) → (UncurryFin2 ∘ CurryFin2) f ≡ f
+ -- Fin2-unc∘cur≈id f = {!!}
+
+ -- Fin2-swelldef : (f : (Fin 2 → A) → B)(u v : Fin 2 → A) → u ≈ v → f u ≡ f v
+ -- Fin2-swelldef f u v u≈v = f u                           ≡⟨ PE.cong-app ((Fin2-unc∘cur≈id f)⁻¹) u ⟩
+ --                           (UncurryFin2 (CurryFin2 f)) u ≡⟨ Fin2-wd (CurryFin2 f) u v u≈v ⟩
+ --                           (UncurryFin2 (CurryFin2 f)) v ≡⟨ PE.cong-app (Fin2-unc∘cur≈id f) v ⟩
+ --                           f v ∎
