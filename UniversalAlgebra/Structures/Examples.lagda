@@ -23,31 +23,35 @@ open import Structures.Basic       using ( signature ; structure )
 -- Some examples (of finite signatures)
 -- The signature with...
 -- ... no symbols  (e.g., sets)
-Sig∅ : signature ℓ₀ ℓ₀
-Sig∅ = record { symbol = 𝟘 ; arity = λ () }
+S∅ : signature ℓ₀ ℓ₀
+S∅ = record { symbol = 𝟘 ; arity = λ () }
 
--- ... one nulary symbol (e.g., pointed sets)
-Sig-0 : signature ℓ₀ ℓ₀
-Sig-0 = record { symbol = 𝟙 ; arity = λ 𝟎 → 𝟘 }
+-- ... one nullary symbol (e.g., pointed sets)
+S1 : signature ℓ₀ ℓ₀
+S1 = record { symbol = 𝟙 ; arity = λ 𝟎 → 𝟘 }
 
-Sig-1 : signature ℓ₀ ℓ₀ -- ...one unary
-Sig-1 = record { symbol = 𝟙 ; arity = λ 𝟎 → 𝟙 }
+S01 : signature ℓ₀ ℓ₀ -- ...one unary
+S01 = record { symbol = 𝟙 ; arity = λ 𝟎 → 𝟙 }
 
 -- ...one binary symbol (e.g., magmas, semigroups, semilattices)
-Sig-2 : signature ℓ₀ ℓ₀
-Sig-2 = record { symbol = 𝟙 ; arity = λ 𝟎 → 𝟚 }
+S001 : signature ℓ₀ ℓ₀
+S001 = record { symbol = 𝟙 ; arity = λ 𝟎 → 𝟚 }
 
 -- ...one ternary symbol (e.g., boolean NAE-3-SAT relational structure)
-Sig-3 : signature ℓ₀ ℓ₀
-Sig-3 = record { symbol = 𝟙 ; arity = λ 𝟎 → 𝟛 }
+S0001 : signature ℓ₀ ℓ₀
+S0001 = record { symbol = 𝟙 ; arity = λ 𝟎 → 𝟛 }
 
--- ...one nulary and one binary (e.g., monoids)
-Sig-0-1 : signature ℓ₀ ℓ₀
-Sig-0-1 = record { symbol = 𝟚 ; arity = λ{ 𝟚.𝟎 → 𝟘 ; 𝟚.𝟏 → 𝟚 } }
+-- ...0 nullary, 2 unary, and 1 binary
+S021 : signature ℓ₀ ℓ₀
+S021 = record { symbol = 𝟛 ; arity = λ{ 𝟛.𝟎 → 𝟚 ; 𝟛.𝟏 → 𝟙 ; 𝟛.𝟐 → 𝟙 } }
 
--- ...one nulary, one unary, and one binary (e.g., groups)
-Sig-0-1-2 : signature ℓ₀ ℓ₀
-Sig-0-1-2 = record { symbol = 𝟛 ; arity = λ{ 𝟛.𝟎 → 𝟘 ; 𝟛.𝟏 → 𝟙 ; 𝟛.𝟐 → 𝟚 } }
+-- ...one nullary and one binary (e.g., monoids)
+S101 : signature ℓ₀ ℓ₀
+S101 = record { symbol = 𝟚 ; arity = λ{ 𝟚.𝟎 → 𝟘 ; 𝟚.𝟏 → 𝟚 } }
+
+-- ...one nullary, one unary, and one binary (e.g., groups)
+S111 : signature ℓ₀ ℓ₀
+S111 = record { symbol = 𝟛 ; arity = λ{ 𝟛.𝟎 → 𝟘 ; 𝟛.𝟏 → 𝟙 ; 𝟛.𝟐 → 𝟚 } }
 
 \end{code}
 
@@ -56,9 +60,9 @@ An example of a (purely) algebraic structure is a 3-element meet semilattice.
 
 \begin{code}
 
-SL : structure {ℓ₀}{ℓ₀}{ℓ₀}{ℓ₀} Sig-2   -- (one binary operation symbol)
-               Sig∅    -- (no relation symbols)
-               {ℓ₀}{ℓ₀}
+SL : structure S001   -- (one binary operation symbol)
+               S∅     -- (no relation symbols)
+               {ρ = ℓ₀}
 
 SL = record { carrier = 𝟛
             ; op = λ _ x → meet (x 𝟚.𝟎) (x 𝟚.𝟏)
@@ -91,8 +95,8 @@ data NAE3SAT : Pred (𝟚 × 𝟚 × 𝟚) ℓ₀ where
  r6 : (𝟚.𝟏 , 𝟚.𝟏 , 𝟚.𝟎) ∈ NAE3SAT
 
 
-nae3sat : structure{ℓ₀}{ℓ₀}{ℓ₀}{ℓ₀}  Sig∅    -- (no operation symbols)
-                    Sig-3   -- (one ternary relation symbol)
+nae3sat : structure S∅    -- (no operation symbols)
+                    S0001 -- (one ternary relation symbol)
 
 nae3sat = record { carrier = 𝟚
                  ; op = λ ()
