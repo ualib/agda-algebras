@@ -1,6 +1,6 @@
 ---
 layout: default
-title : Complexity.CSPexercises module (The Agda Universal Algebra Library)
+title : Complexity.CSPExercises module (The Agda Universal Algebra Library)
 date : 2021-07-26
 author: [agda-algebras development team][] and Libor Barto⁺
 ---
@@ -13,7 +13,7 @@ author: [agda-algebras development team][] and Libor Barto⁺
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Complexity.CSPexercises  where
+module Complexity.CSPExercises  where
 
 
 open import Agda.Primitive        using ( _⊔_ ; Level ) renaming ( Set to Type ; lzero to ℓ₀ )
@@ -32,7 +32,7 @@ open import Overture.Preliminaries using ( 𝟙 ; ∣_∣ ; ∥_∥ )
 open import Overture.Preliminaries using ( 𝟘 ; 𝟙 ; 𝟚 ; 𝟛 )
 open import Relations.Continuous   using ( Rel )
 open import Structures.Basic       using ( signature ; structure )
-open import Structures.Examples    using ( S∅ ; S001 ; S021)
+open import Structures.ExamplesOfSignatures    using ( S∅ ; S001 ; S021)
 open import Structures.Homs        using ( hom ; is-hom-rel ; is-hom-op )
 open import Structures.Terms.Basic using ( Term )
 
@@ -48,13 +48,13 @@ open _⊎_
 Some exercises below refer to the following relations on 𝟚 := \{0, 1\} (where i, j ∈ 𝟚):
 
 \begin{align*}
- C_i    & := \{ i \}                             \\
- R      & := \{ (0, 0), (1, 1) \}                 \\
- N      & := \{ (0, 1), (1, 0) \}                  \\
- S_{ij} & := 𝟚² - \{ (i , j) \},                    \\
- H      & := 𝟚³ - \{ (1, 1, 0) \}                    \\
- G_1    & := \{ (0,0,0), (0,1,1), (1,0,1), (1,1,0) \} \\
- G_2    & := \{ (0,0,1), (0,1,0), (1,0,0), (1,1,1) \}
+ Cᵢᵃ    & := \{ i \}                             \\
+ Rᵃ    & := \{ (0, 0), (1, 1) \}                 \\
+ Nᵃ    & := \{ (0, 1), (1, 0) \}                  \\
+ Sᵢⱼᵃ  & := 𝟚² - \{ (i , j) \},                    \\
+ Hᵃ    & := 𝟚³ - \{ (1, 1, 0) \}                 \\
+ G₁ᵃ   & := \{ (0,0,0), (0,1,1), (1,0,1), (1,1,0) \} \\
+ G₂ᵃ   & := \{ (0,0,1), (0,1,0), (1,0,0), (1,1,1) \}
 \end{align*}
 
 
@@ -63,14 +63,14 @@ Some exercises below refer to the following relations on 𝟚 := \{0, 1\} (where
 
 **Exercise 2**. Find a polymomial-time algorithm for CSP(A), where
 
-2.1. 𝑨 = ({0, 1}, 𝑅) = (𝟚 , \{(0,0), (1, 1)\})
-2.2. 𝑨 = ({0, 1}, 𝑅, 𝐶₀, 𝐶₁) = (𝟚 , \{ (0,0) , (1, 1) \} , \{ 0 \} , \{ 1 \})
-2.3. 𝑨 = ({0, 1}, 𝑆₁₀) = (𝟚 , 𝟚³ - \{ (1, 0) \})
-2.4. 𝑨 = ({0, 1}, 𝑆₁₀, 𝐶₀, 𝐶₁) = (𝟚 , 𝟚³ - \{ (1, 0) \} , \{ 0 \} , \{ 1 \})
-2.5. 𝑨 = ({0, 1}, 𝑆₀₁, 𝑆₁₀, 𝐶₀, 𝐶₁) = (𝟚 , 𝟚³ - \{ (0, 1) \} , 𝟚³ - \{ (1, 0) \} , \{ 0 \} , \{ 1 \})
-2.6. 𝑨 = ({0, 1}, 𝑁) = (𝟚 , \{ (0, 1) , (1, 0) \})
-2.7. 𝑨 = ({0, 1}, 𝑅, 𝑁, 𝐶₀, 𝐶₁) = (𝟚 , \{ (0,0) , (1, 1) \} , \{ (0, 1) , (1, 0) \} , \{ 0 \} , \{ 1 \})
-2.8. 𝑨 = ({0, 1}, 𝑅, 𝑁, 𝐶₀, 𝐶₁, 𝑆₀₀, 𝑆₀₁, 𝑆₁₀, 𝑆₁₁) = (𝟚 , \{ (0,0) , (1, 1) \} , \{ (0, 1) , (1, 0) \} , \{ 0 \} , \{ 1 \} , 𝟚³ - \{ (0, 0) \} , 𝟚³ - \{ (0, 1) \} , 𝟚³ - \{ (1, 0) \} , 𝟚³ - \{ (1, 1) \})
+2.1. 𝑨 = ({0, 1}, Rᵃ) = (𝟚 , \{(0,0), (1, 1)\})
+2.2. 𝑨 = ({0, 1}, Rᵃ, C₀ᵃ, C₁ᵃ) = (𝟚 , \{ (0,0) , (1, 1) \} , \{ 0 \} , \{ 1 \})
+2.3. 𝑨 = ({0, 1}, S₁₀ᵃ) = (𝟚 , 𝟚³ - \{ (1, 0) \})
+2.4. 𝑨 = ({0, 1}, S₁₀ᵃ, C₀ᵃ, C₁ᵃ) = (𝟚 , 𝟚³ - \{ (1, 0) \} , \{ 0 \} , \{ 1 \})
+2.5. 𝑨 = ({0, 1}, S₀₁ᵃ, S₁₀ᵃ, C₀ᵃ, C₁ᵃ) = (𝟚 , 𝟚³ - \{ (0, 1) \} , 𝟚³ - \{ (1, 0) \} , \{ 0 \} , \{ 1 \})
+2.6. 𝑨 = ({0, 1}, Nᵃ) = (𝟚 , \{ (0, 1) , (1, 0) \})
+2.7. 𝑨 = ({0, 1}, Rᵃ, Nᵃ, C₀ᵃ, C₁ᵃ) = (𝟚 , \{ (0,0) , (1, 1) \} , \{ (0, 1) , (1, 0) \} , \{ 0 \} , \{ 1 \})
+2.8. 𝑨 = ({0, 1}, Rᵃ, Nᵃ, C₀ᵃ, C₁ᵃ, 𝑆₀₀, S₀₁ᵃ, S₁₀ᵃ, S₁₁ᵃ) = (𝟚 , \{ (0,0) , (1, 1) \} , \{ (0, 1) , (1, 0) \} , \{ 0 \} , \{ 1 \} , 𝟚³ - \{ (0, 0) \} , 𝟚³ - \{ (0, 1) \} , 𝟚³ - \{ (1, 0) \} , 𝟚³ - \{ (1, 1) \})
 2.9. 𝑨 = ({0, 1}, all unary and binary relations)
 
 
@@ -78,7 +78,7 @@ Some exercises below refer to the following relations on 𝟚 := \{0, 1\} (where
 **Solution 2.1**. If 𝑨 = ({0, 1}, Rᵃ) = (𝟚 , \{(0,0), (1, 1)\}), then an instance of (the HOM
 formulation of) CSP(𝑨) is a relational structure 𝑩 = (B, Rᵇ⟩, where Rᵇ ⊆ B² and we must decide
 whether there exists a homomorphism f : 𝑩 → 𝑨, that is, a map f : B → A (= 𝟚) such that
-∀ (b, b'), if (b, b') ∈ Rᵇ, then (f b, f b') ∈ Rᵃ.
+∀ (b, b'), if (b, b') ∈ Rᵇ, then (f b, f b') ∈ Rᵇ.
 
 Of course, the constant map f ≡ 0 that sends every element of B to 0 (as well as the
 constantly-1 map) is such a homomorphism.  Let's prove this formally.
@@ -119,7 +119,7 @@ signature to 𝑨. ∎
 then an instance of HOM CSP(𝑨) is a relational structure 𝑩 = (B, Rᵇ, C₀ᵇ, C₁ᵇ), where
 Rᵇ ⊆ B², C₀ᵇ ⊆ B, C₁ᵇ ⊆ B, and we must decide whether there exists a homomorphism
 f : hom 𝑩 𝑨, that is, a map f : B → 𝟚 such that the following conditions hold:
- 1. ∀ (x, y) ∈ B², (x, y) ∈ Rᵇ implies (f x , f y) ∈ 𝑅,
+ 1. ∀ (x, y) ∈ B², (x, y) ∈ Rᵇ implies (f x , f y) ∈ Rᵇ,
  2. f is constantly 0 on C₀ᵇ, and
  3. f is constantly 1 on C₁ᵇ.
 
@@ -153,8 +153,8 @@ module solution-2-2 where
   c₁ : 𝟚.𝟏 ∈ C₁ᵃ
 
 
- 𝑨 : structure S∅    -- (no operation symbols)
-               S021  -- (one binary relation symbol)
+ 𝑨 : structure S∅    -- (no operations)
+               S021  -- (two unary relations and one binary relation)
 
  𝑨 = record { carrier = 𝟚
             ; op = λ ()
@@ -167,55 +167,40 @@ module solution-2-2 where
             rels 𝟛.𝟐 x = x 𝟙.𝟎 ∈ C₁ᵃ
 
 
- -- Claim: Given an arbitrary 𝑩 in the signatures Sig∅ Sig-2, we can construct a homomorphism from 𝑩 to 𝑨.
- claim :  (𝑩 : structure S∅ S021 {ℓ₀}{ℓ₀})
-  →       (∀ (x : 𝟚 → carrier 𝑩)
-           → (rel 𝑩) 𝟛.𝟎 x  -- if ((x 𝟚.𝟎) , (x 𝟚.𝟏)) ∈ Rᵇ, then...
-           → ((rel 𝑩) 𝟛.𝟏 (λ _ → (x 𝟚.𝟎)) → ¬ (rel 𝑩) 𝟛.𝟐 (λ _ → (x 𝟚.𝟏)))
-             × ((rel 𝑩) 𝟛.𝟏 (λ _ → (x 𝟚.𝟏)) → ¬ (rel 𝑩) 𝟛.𝟐 (λ _ → (x 𝟚.𝟎)))
-          --  × (x 𝟚.𝟎 ∈ C₁ᵇ → x 𝟚.𝟏 ∉ C₀ᵇ))
-          )
-  →       hom 𝑩 𝑨
- claim 𝑩 x = {!!}
+ -- Claim: Given an arbitrary 𝑩 in the signatures S∅ S021, we can construct a homomorphism from 𝑩 to 𝑨.
+ -- claim :  (𝑩 : structure S∅ S021 {ℓ₀}{ℓ₀})
+ --  →       (∀ (x : 𝟚 → carrier 𝑩)
+ --           → (rel 𝑩) 𝟛.𝟎 x  -- if ((x 𝟚.𝟎) , (x 𝟚.𝟏)) ∈ Rᵇ, then...
+ --           → ((rel 𝑩) 𝟛.𝟏 (λ _ → (x 𝟚.𝟎)) → ¬ (rel 𝑩) 𝟛.𝟐 (λ _ → (x 𝟚.𝟏)))
+ --             × ((rel 𝑩) 𝟛.𝟏 (λ _ → (x 𝟚.𝟏)) → ¬ (rel 𝑩) 𝟛.𝟐 (λ _ → (x 𝟚.𝟎)))
+ --          --  × (x 𝟚.𝟎 ∈ C₁ᵇ → x 𝟚.𝟏 ∉ C₀ᵇ))
+ --          )
+ --  →       hom 𝑩 𝑨
+ -- claim 𝑩 x = {!!}
 
 \end{code}
 
-**Solution 2.3**. 𝑨 = ({0, 1}, 𝑆₁₀) = (𝟚 , 𝟚³ - \{ (1, 0) \})
-\begin{code}
 
-\end{code}
+(The remainder are "todo.")
 
-**Solution 2.4**. 𝑨 = ({0, 1}, 𝑆₁₀, 𝐶₀, 𝐶₁) = (𝟚 , 𝟚³ - \{ (1, 0) \} , \{ 0 \} , \{ 1 \})
-\begin{code}
+**Solution 2.3**. 𝑨 = ({0, 1}, S₁₀ᵃ) = (𝟚 , 𝟚³ - \{ (1, 0) \})
 
-\end{code}
+**Solution 2.4**. 𝑨 = ({0, 1}, S₁₀ᵃ, C₀ᵃ, C₁ᵃ) = (𝟚 , 𝟚³ - \{ (1, 0) \} , \{ 0 \} , \{ 1 \})
 
-**Solution 2.5**. 𝑨 = ({0, 1}, 𝑆₀₁, 𝑆₁₀, 𝐶₀, 𝐶₁) = (𝟚 , 𝟚³ - \{ (0, 1) \} , 𝟚³ - \{ (1, 0) \} , \{ 0 \} , \{ 1 \})
-\begin{code}
+**Solution 2.5**. 𝑨 = ({0, 1}, S₀₁ᵃ, S₁₀ᵃ, C₀ᵃ, C₁ᵃ) = (𝟚 , 𝟚³ - \{ (0, 1) \} , 𝟚³ - \{ (1, 0) \} , \{ 0 \} , \{ 1 \})
 
-\end{code}
+**Solution 2.6**. 𝑨 = ({0, 1}, Nᵃ) = (𝟚 , \{ (0, 1) , (1, 0) \})
 
-**Solution 2.6**. 𝑨 = ({0, 1}, 𝑁) = (𝟚 , \{ (0, 1) , (1, 0) \})
-\begin{code}
+**Solution 2.7**. 𝑨 = ({0, 1}, Rᵃ, Nᵃ, C₀ᵃ, C₁ᵃ) = (𝟚 , \{ (0,0) , (1, 1) \} , \{ (0, 1) , (1, 0) \} , \{ 0 \} , \{ 1 \})
 
-\end{code}
-
-**Solution 2.7**. 𝑨 = ({0, 1}, 𝑅, 𝑁, 𝐶₀, 𝐶₁) = (𝟚 , \{ (0,0) , (1, 1) \} , \{ (0, 1) , (1, 0) \} , \{ 0 \} , \{ 1 \})
-\begin{code}
-
-\end{code}
-
-**Solution 2.8**. 𝑨 = ({0, 1}, 𝑅, 𝑁, 𝐶₀, 𝐶₁, 𝑆₀₀, 𝑆₀₁, 𝑆₁₀, 𝑆₁₁) = (𝟚 , \{ (0,0) , (1, 1) \} , \{ (0, 1) , (1, 0) \} , \{ 0 \} , \{ 1 \} , 𝟚³ - \{ (0, 0) \} , 𝟚³ - \{ (0, 1) \} , 𝟚³ - \{ (1, 0) \} , 𝟚³ - \{ (1, 1) \})
-\begin{code}
-
-\end{code}
+**Solution 2.8**. 𝑨 = ({0, 1}, Rᵃ, Nᵃ, C₀ᵃ, C₁ᵃ, 𝑆₀₀, S₀₁ᵃ, S₁₀ᵃ, S₁₁ᵃ) = (𝟚 , \{ (0,0) , (1, 1) \} , \{ (0, 1) , (1, 0) \} , \{ 0 \} , \{ 1 \} , 𝟚³ - \{ (0, 0) \} , 𝟚³ - \{ (0, 1) \} , 𝟚³ - \{ (1, 0) \} , 𝟚³ - \{ (1, 1) \})
 
 **Solution 2.9**. 𝑨 = ({0, 1}, all unary and binary relations)
 
 
-**Exercise 3**. Find a polynomial-time algorithm for CSP({0, 1}, 𝐻, 𝐶₀, 𝐶₁).
+**Exercise 3**. Find a polynomial-time algorithm for CSP({0, 1}, Hᵃ, C₀ᵃ, C₁ᵃ).
 
-**Exercise 4**. Find a polynomial-time algorithm for CSP({0, 1}, 𝐶₀, 𝐶₁, 𝐺₁, 𝐺₂).
+**Exercise 4**. Find a polynomial-time algorithm for CSP({0, 1}, C₀ᵃ, C₁ᵃ, G₁ᵃ, G₂ᵃ).
 
 **Exercise 5**. Find a polynomial-time algorithm for CSP(ℚ, <).
 

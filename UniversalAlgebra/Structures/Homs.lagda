@@ -32,7 +32,8 @@ open import Relations.Quotients      using ( ⟪_⟫ )
 open import Foundations.Welldefined  using ( swelldef )
 open import Structures.Basic         using ( signature ; structure ; Lift-Struc ; Lift-Strucʳ
                                            ; Lift-Strucˡ ; compatible ; siglʳ ; sigl )
-open import Structures.Examples      using ( S∅ )
+open import Structures.ExamplesOfSignatures
+                                     using ( S∅ )
 open import Structures.Congruences   using ( con ; _╱_)
 open import Structures.Products      using ( ⨅ )
 
