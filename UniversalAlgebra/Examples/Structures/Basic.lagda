@@ -1,6 +1,6 @@
 ---
 layout: default
-title : Structures.Examples module (Agda Universal Algebra Library)
+title : Examples.Structures.Basic module (Agda Universal Algebra Library)
 date : 2021-07-29
 author: [agda-algebras development team][]
 ---
@@ -11,7 +11,7 @@ author: [agda-algebras development team][]
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Structures.Examples where
+module Examples.Structures.Basic where
 
 open import Agda.Primitive  using ( Level ) renaming ( Set to Type ; lzero to ℓ₀ )
 open import Data.Product    using ( _,_ ; _×_  )
@@ -20,7 +20,7 @@ open import Relation.Unary  using ( Pred ; _∈_ ; ⋂ )
 open import Overture.Preliminaries using ( 𝟘 ; 𝟙 ; 𝟚 ; 𝟛 )
 open import Structures.Basic       using ( signature ; structure )
 
-open import Structures.ExamplesOfSignatures      using ( S001 ; S∅ ; S0001 )
+open import Examples.Structures.Signatures      using ( S001 ; S∅ ; S0001 )
 
 -- An example of a (purely) algebraic structure is a 3-element meet semilattice.
 

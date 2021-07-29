@@ -32,7 +32,7 @@ import Relation.Binary.PropositionalEquality as PE
 open import Overture.Preliminaries   using ( ∣_∣ ; _≈_ ; ∥_∥ ; _∙_ ; lower∼lift ; lift∼lower ; 𝟙)
 open import Relations.Continuous     using ( Rel )
 open import Structures.Basic         using ( signature ; structure )
-open import Structures.ExamplesOfSignatures
+open import Examples.Structures.Signatures
                                      using ( S∅ )
 open import Structures.Homs          using ( hom ; 𝒾𝒹 ; ∘-hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-hom-rel; is-hom-op)
 

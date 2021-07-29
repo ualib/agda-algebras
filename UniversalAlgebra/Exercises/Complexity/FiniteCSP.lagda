@@ -1,6 +1,6 @@
 ---
 layout: default
-title : Complexity.CSPExercises module (The Agda Universal Algebra Library)
+title : Exercises.Complexity.FiniteCSP module (The Agda Universal Algebra Library)
 date : 2021-07-26
 author: [agda-algebras development team][] and Libor Barto⁺
 ---
@@ -13,7 +13,7 @@ author: [agda-algebras development team][] and Libor Barto⁺
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Complexity.CSPExercises  where
+module Exercises.Complexity.FiniteCSP  where
 
 
 open import Agda.Primitive        using ( _⊔_ ; Level ) renaming ( Set to Type ; lzero to ℓ₀ )
@@ -32,7 +32,7 @@ open import Overture.Preliminaries using ( 𝟙 ; ∣_∣ ; ∥_∥ )
 open import Overture.Preliminaries using ( 𝟘 ; 𝟙 ; 𝟚 ; 𝟛 )
 open import Relations.Continuous   using ( Rel )
 open import Structures.Basic       using ( signature ; structure )
-open import Structures.ExamplesOfSignatures    using ( S∅ ; S001 ; S021)
+open import Examples.Structures.Signatures    using ( S∅ ; S001 ; S021)
 open import Structures.Homs        using ( hom ; is-hom-rel ; is-hom-op )
 open import Structures.Terms.Basic using ( Term )
 

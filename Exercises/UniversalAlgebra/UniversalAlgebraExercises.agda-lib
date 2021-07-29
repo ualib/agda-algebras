@@ -1,3 +1,0 @@
-name: UniversalAlgebraExercises
-depend: standard-library
-include: . ../../UniversalAlgebra ../../Examples/UniversalAlgebra

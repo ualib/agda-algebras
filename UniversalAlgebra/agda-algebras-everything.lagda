@@ -320,17 +320,17 @@ open import Complexity.CSP                   using   (Constraint ; CSPInstance )
 
 -- EXAMPLES -----------------------------------------------------------------------------------------
 
-open import Structures.ExamplesOfSignatures  using  ( S∅ ; S1 ; S01 ; S001 ; S0001 ; S021 ; S101 ; S111 )
+open import Examples.Structures.Signatures   using  ( S∅ ; S1 ; S01 ; S001 ; S0001 ; S021 ; S101 ; S111 )
 
 
-open import Structures.Examples              using  (SL ; NAE3SAT ; nae3sat )
+open import Examples.Structures.Basic        using  (SL ; NAE3SAT ; nae3sat )
 
 
 
 
 -- EXERCISES -----------------------------------------------------------------------------------------
 
-open import Complexity.CSPExercises          using  ( module solution-2-1 ; module solution-2-2 )
+open import Exercises.Complexity.FiniteCSP   using  ( module solution-2-1 ; module solution-2-2 )
 
 \end{code}
 

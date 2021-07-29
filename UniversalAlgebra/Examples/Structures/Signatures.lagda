@@ -1,6 +1,6 @@
 ---
 layout: default
-title : Structures.ExamplesOfSignatures module (Agda Universal Algebra Library)
+title : Examples.Structures.Signatures module (Agda Universal Algebra Library)
 date : 2021-07-16
 author: [agda-algebras development team][]
 ---
@@ -9,7 +9,7 @@ author: [agda-algebras development team][]
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Structures.ExamplesOfSignatures where
+module Examples.Structures.Signatures where
 
 open import Agda.Primitive  using ( Level ) renaming ( Set to Type ; lzero to ℓ₀ )
 open import Data.Product    using ( _,_ ; _×_  )
