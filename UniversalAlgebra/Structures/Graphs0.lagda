@@ -33,7 +33,8 @@ import Relation.Binary.PropositionalEquality as PE
 open import Overture.Preliminaries using ( 𝟙 ; ∣_∣ ; ∥_∥ )
 open import Relations.Continuous   using ( Rel )
 open import Structures.Basic       using ( signature ; structure )
-open import Structures.Examples    using ( Sig∅ )
+open import Examples.Structures.Signatures
+                                   using ( S∅ )
 open import Structures.Homs        using ( hom ; is-hom-rel ; is-hom-op )
 open import Structures.Terms.Basic       using ( Term )
 open import Structures.EquationalLogic   using ( fMod )
@@ -56,7 +57,7 @@ Gr-sig 𝐹 𝑅 = record { symbol = symbol 𝑅 ⊎ symbol 𝐹
 private variable
  𝐹 𝑅 : signature ℓ₀ ℓ₀
 
-Gr : structure 𝐹 𝑅 {ℓ₀} {ℓ₀} → structure Sig∅ (Gr-sig 𝐹 𝑅) {ℓ₀} {ℓ₀}
+Gr : structure 𝐹 𝑅 {ℓ₀} {ℓ₀} → structure S∅ (Gr-sig 𝐹 𝑅) {ℓ₀} {ℓ₀}
 Gr {𝐹}{𝑅} 𝑨 = record { carrier = carrier 𝑨 ; op = λ () ; rel = split }
   where
   split : (s : symbol 𝑅 ⊎ symbol 𝐹) → Rel (carrier 𝑨) (arity (Gr-sig 𝐹 𝑅) s) {ℓ₀}

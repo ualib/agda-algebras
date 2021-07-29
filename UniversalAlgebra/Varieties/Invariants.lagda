@@ -25,7 +25,7 @@ open import Agda.Primitive          using    ( Level )
 open import Relation.Unary          using    ( Pred )
 
 -- -- Imports from the Agda Universal Algebra Library -------------------------------------------
-open import Isomorphisms.Basic {𝑆 = 𝑆} using ( _≅_ )
+open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ )
 
 private variable α ℓ : Level
 AlgebraicInvariant : Pred (Algebra α 𝑆) ℓ → Type _
