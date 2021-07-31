@@ -16,7 +16,7 @@ module Complexity.FiniteCSP  where
 open import Agda.Primitive        using ( _⊔_ ; lsuc ; Level) renaming ( Set to Type )
 open import Agda.Builtin.List     using (List; []; _∷_)
 open import Data.Bool             using ( Bool ; T? ; true)
-open import Data.Bool.Base        using ( T )
+open import Data.Bool.Base        using ( T ; _∧_ )
 open import Data.Fin.Base         using ( Fin ; toℕ )
 open import Data.List.Base        using ( length ; [_] ; _++_; head ; tail ; all) renaming (lookup to get)
 open import Data.Product          using ( _,_ ; Σ-syntax ; _×_ )
@@ -25,7 +25,8 @@ open import Data.Vec.Relation.Unary.All using ( All )
 open import Data.Nat              using ( ℕ )
 open import Function.Base         using ( _∘_ )
 open import Relation.Binary       using ( DecSetoid ; Rel )
-open import Relation.Unary        using ( Pred ; _∈_ )
+open import Relation.Nullary      using ( Dec )
+open import Relation.Unary        using ( Pred ; _∈_ ; Decidable )
 
 private variable
  α ℓ ρ : Level
@@ -72,10 +73,13 @@ open DecSetoid
 
 -- {nvar : ℕ}{dom : Vec (DecSetoid α ℓ) nvar} → 
 
+open Dec
+
 record Constraint {ρ : Level} (nvar : ℕ) (dom : Vec (DecSetoid α ℓ) nvar) : Type (α ⊔ lsuc ρ) where
  field
   s   : Vec Bool nvar        -- entry i is true iff variable i is in scope
   rel : Pred (∀ i → Carrier (dom ⟨ i ⟩)) ρ -- some functions from `Fin nvar` to `dom`
+  dec : Decidable rel
 
  -- scope size (i.e., # of vars involved in constraint)
  ∣s∣ : ℕ
@@ -90,7 +94,11 @@ record Constraint {ρ : Level} (nvar : ℕ) (dom : Vec (DecSetoid α ℓ) nvar) 
                 ( (g ∈ rel) × f ≐s g )                        -- the function f, evaluated at each variable
                                                              -- in the scope, belongs to the relation rel.
 
+ satisfies? : (f : ∀ i → Carrier (dom ⟨ i ⟩)) → Dec (satisfies f) -- Type (α ⊔ ℓ ⊔ ρ)
+ satisfies? f = {!!}
+
 open Constraint
+
 record CSPInstance {ρ : Level} (nvar : ℕ) (dom : Vec (DecSetoid α ℓ) nvar) : Type (α ⊔ lsuc ρ)  where
  field
   ncon : ℕ      -- the number of constraints involved
@@ -104,7 +112,9 @@ record CSPInstance {ρ : Level} (nvar : ℕ) (dom : Vec (DecSetoid α ℓ) nvar)
   P c = (satisfies c) f
 
 
-record CSPInstanceList {ρ : Level} (nvar : ℕ) (dom : Vec (DecSetoid α ℓ) nvar) : Type (α ⊔ lsuc ρ)  where
+record CSPInstanceList {ρ : Level}
+                       (nvar : ℕ)
+                       (dom : Vec (DecSetoid α ℓ) nvar) : Type (α ⊔ lsuc ρ)  where
  field
   constr : List (Constraint {ρ = ρ} nvar dom)
 
@@ -113,7 +123,7 @@ record CSPInstanceList {ρ : Level} (nvar : ℕ) (dom : Vec (DecSetoid α ℓ) n
  isSolution f = all P constr
   where
   P : (Constraint nvar dom) → Bool
-  P c = {!!} -- (satisfies c) f → 
+  P c = does ((satisfies? c) f) -- (satisfies c) f → 
 
 
 \end{code}

@@ -76,20 +76,6 @@ As mentioned earlier, throughout the [UniversalAlgebra][] library `𝓞` denote 
 In the [Overture][] module we defined special syntax for the first and second projections---namely, ∣\_∣ and ∥\_∥, resp. Consequently, if `𝑆 : Signature 𝓞 𝓥` is a signature, then ∣ 𝑆 ∣ denotes the set of operation symbols, and ∥ 𝑆 ∥ denotes the arity function. If 𝑓 : ∣ 𝑆 ∣ is an operation symbol in the signature 𝑆, then ∥ 𝑆 ∥ 𝑓 is the arity of 𝑓.
 
 
-**Example (Monoid)**. Here is how we could define the signature for monoids as a member of the type `Signature 𝓞 𝓥`.
-
-\begin{code}
-
-data monoid-op {𝓞 : Level} : Type 𝓞 where
- e : monoid-op; · : monoid-op
-
-monoid-sig : Signature 𝓞 ℓ₀
-monoid-sig = monoid-op , λ { e → ⊥; · → Bool }
-
-\end{code}
-
-Thus, the signature for a monoid consists of two operation symbols, `e` and `·`, and a function `λ { e → 𝟘; · → 𝟚 }` which maps `e` to the empty type 𝟘 (since `e` is the nullary identity) and maps `·` to the two element type 𝟚 (since `·` is binary).
-
 
 #### <a id="algebras">Algebras</a>
 
