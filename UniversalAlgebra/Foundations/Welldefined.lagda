@@ -283,16 +283,16 @@ module _ {A : Type α}{B : Type β} where -- {de : DecidableEquality A} where
  CurryListA' f a (x ∷ l) = f ([ a ] ++ (x ∷ l))
 
 
- ListA→B-dec : (f : List A → B)(u v : List A)
-  →        (length u) ≡ (length v)
-  →        ( ∀ {i j} → toℕ i ≡ toℕ j → (lookup u i) ≡ (lookup v j ))
-  →        f u ≡ f v
- ListA→B-dec f u v x y = {!Goal!}
-  where
-  zip1 : (CurryListA' f) (head u) (tail u) ≡ f u
-  zip1 = ?
-  Goal : f u ≡ f v
-  Goal = {!!}
+ -- ListA→B-dec : (f : List A → B)(u v : List A)
+ --  →        (length u) ≡ (length v)
+ --  →        ( ∀ {i j} → toℕ i ≡ toℕ j → (lookup u i) ≡ (lookup v j ))
+ --  →        f u ≡ f v
+ -- ListA→B-dec f u v x y = {!Goal!}
+ --  where
+ --  zip1 : (CurryListA' f) (head u) (tail u) ≡ f u
+ --  zip1 = ?
+ --  Goal : f u ≡ f v
+ --  Goal = {!!}
 
 
 
