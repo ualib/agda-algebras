@@ -69,6 +69,9 @@ is-prop-valued  _≈_ = ∀ x y → is-prop (x ≈ y)
 singleton-is-prop : {α : Level}(X : Type α) → is-singleton X → is-prop X
 singleton-is-prop X (c , φ) x y = x ≡⟨ (φ x)⁻¹ ⟩ c ≡⟨ φ y ⟩ y ∎
 
+is-inhabited : Type α → Type (lsuc α)
+is-inhabited {α = α} X = (P : Type α ) → is-prop P → (X → P) → P
+
 \end{code}
 
 

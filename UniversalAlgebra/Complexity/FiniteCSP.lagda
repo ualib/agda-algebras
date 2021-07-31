@@ -14,9 +14,11 @@ author: [agda-algebras development team][]
 module Complexity.FiniteCSP  where
 
 open import Agda.Primitive        using ( _⊔_ ; lsuc ; Level) renaming ( Set to Type )
-open import Data.Bool             using ( Bool ; T? )
+open import Agda.Builtin.List     using (List; []; _∷_)
+open import Data.Bool             using ( Bool ; T? ; true)
 open import Data.Bool.Base        using ( T )
 open import Data.Fin.Base         using ( Fin ; toℕ )
+open import Data.List.Base        using ( length ; [_] ; _++_; head ; tail ; all) renaming (lookup to get)
 open import Data.Product          using ( _,_ ; Σ-syntax ; _×_ )
 open import Data.Vec              using ( Vec ; lookup ; count ; tabulate )
 open import Data.Vec.Relation.Unary.All using ( All )
@@ -62,8 +64,8 @@ A *constraint* consists of
 \begin{code}
 
 -- syntactic sugar for vector element lookup
-_[_] : {A : Set α}{n : ℕ} → Vec A n → Fin n → A
-v [ i ] = (lookup v) i
+_⟨_⟩ : {A : Set α}{n : ℕ} → Vec A n → Fin n → A
+v ⟨ i ⟩ = (lookup v) i
 
 
 open DecSetoid
@@ -73,21 +75,20 @@ open DecSetoid
 record Constraint {ρ : Level} (nvar : ℕ) (dom : Vec (DecSetoid α ℓ) nvar) : Type (α ⊔ lsuc ρ) where
  field
   s   : Vec Bool nvar        -- entry i is true iff variable i is in scope
-  rel : Pred (∀ i → Carrier (dom [ i ])) ρ -- some functions from `Fin nvar` to `dom`
+  rel : Pred (∀ i → Carrier (dom ⟨ i ⟩)) ρ -- some functions from `Fin nvar` to `dom`
 
  -- scope size (i.e., # of vars involved in constraint)
  ∣s∣ : ℕ
  ∣s∣ = count T? s
 
  -- point-wise equality of functions when restricted to the scope
- _≐s_ : Rel (∀ i → Carrier (dom [ i ])) ℓ
- f ≐s g = ∀ i → T (s [ i ]) → (dom [ i ])._≈_ (f i) (g i)
+ _≐s_ : Rel (∀ i → Carrier (dom ⟨ i ⟩)) ℓ
+ f ≐s g = ∀ i → T (s ⟨ i ⟩) → (dom ⟨ i ⟩)._≈_ (f i) (g i)
 
- satisfies : (∀ i → Carrier (dom [ i ])) → Type (α ⊔ ℓ ⊔ ρ) -- An assignment f of values to variables
- satisfies f = Σ[ g ∈ (∀ i → Carrier (dom [ i ])) ]         -- *satisfies* the constraint provided
+ satisfies : (∀ i → Carrier (dom ⟨ i ⟩)) → Type (α ⊔ ℓ ⊔ ρ) -- An assignment f of values to variables
+ satisfies f = Σ[ g ∈ (∀ i → Carrier (dom ⟨ i ⟩)) ]         -- *satisfies* the constraint provided
                 ( (g ∈ rel) × f ≐s g )                        -- the function f, evaluated at each variable
                                                              -- in the scope, belongs to the relation rel.
-
 
 open Constraint
 record CSPInstance {ρ : Level} (nvar : ℕ) (dom : Vec (DecSetoid α ℓ) nvar) : Type (α ⊔ lsuc ρ)  where
@@ -96,11 +97,23 @@ record CSPInstance {ρ : Level} (nvar : ℕ) (dom : Vec (DecSetoid α ℓ) nvar)
   constr : Vec (Constraint {ρ = ρ} nvar dom) ncon
 
  -- f *solves* the instance if it satisfies all constraints.
- isSolution :  (∀ i → Carrier (dom [ i ])) → Type _
+ isSolution :  (∀ i → Carrier (dom ⟨ i ⟩)) → Type _
  isSolution f = All P constr
   where
   P : Pred (Constraint nvar dom) _
   P c = (satisfies c) f
+
+
+record CSPInstanceList {ρ : Level} (nvar : ℕ) (dom : Vec (DecSetoid α ℓ) nvar) : Type (α ⊔ lsuc ρ)  where
+ field
+  constr : List (Constraint {ρ = ρ} nvar dom)
+
+ -- f *solves* the instance if it satisfies all constraints.
+ isSolution :  (∀ i → Carrier (dom ⟨ i ⟩)) → Bool
+ isSolution f = all P constr
+  where
+  P : (Constraint nvar dom) → Bool
+  P c = {!!} -- (satisfies c) f → 
 
 
 \end{code}

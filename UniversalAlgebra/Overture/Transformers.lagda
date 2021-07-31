@@ -22,6 +22,7 @@ open import Agda.Primitive              using ( _⊔_ ; lsuc ; Level ) renaming 
 open import Data.Product                using ( _,_ ; _×_ )
 open import Data.Fin.Base               using ( Fin )
 open import Function.Base               using ( _∘_ ; id )
+import Relation.Binary.PropositionalEquality as PE
 
 -- Imports from agda-algebras
 open import Overture.Preliminaries using ( _≈_ )
@@ -85,9 +86,23 @@ module _ {A : Type α} {B : Type β} where
 
 \begin{code}
 
-open Fin renaming (zero to z ; suc to s)
-
 module _ {A : Type α} where
+
+ open Fin renaming (zero to z ; suc to s)
+
+ A×A→Fin2A : A × A → Fin 2 → A
+ A×A→Fin2A (x , y) z = x
+ A×A→Fin2A (x , y) (s z) = y
+
+ Fin2A→A×A : (Fin 2 → A) → A × A
+ Fin2A→A×A u = u z , u (s z)
+
+ Fin2A~A×A : {A : Type α} → Fin2A→A×A ∘ A×A→Fin2A ≡ id
+ Fin2A~A×A = refl
+
+ A×A~Fin2A-pointwise : ∀ u → (A×A→Fin2A (Fin2A→A×A u)) ≈ u
+ A×A~Fin2A-pointwise u z = refl
+ A×A~Fin2A-pointwise u (s z) = refl
 
  A→A→Fin2A : A → A → Fin 2 → A
  A→A→Fin2A x y z = x
@@ -103,20 +118,6 @@ module _ {A : Type α} where
  A→A→Fin2A-pointwise-agreement : (x y : A) → ∀ i → (A→A→Fin2A x y) i ≡ (A→A→Fin2A' x y) i
  A→A→Fin2A-pointwise-agreement x y z = refl
  A→A→Fin2A-pointwise-agreement x y (s z) = refl
-
- A×A→Fin2A : A × A → Fin 2 → A
- A×A→Fin2A (x , y) z = x
- A×A→Fin2A (x , y) (s z) = y
-
- Fin2A→A×A : (Fin 2 → A) → A × A
- Fin2A→A×A u = u z , u (s z)
-
- Fin2A~A×A : {A : Type α} → Fin2A→A×A ∘ A×A→Fin2A ≡ id
- Fin2A~A×A = refl
-
- A×A~Fin2A-pointwise : ∀ u → (A×A→Fin2A (Fin2A→A×A u)) ≈ u
- A×A~Fin2A-pointwise u z = refl
- A×A~Fin2A-pointwise u (s z) = refl
 
  A→A~Fin2A-pointwise : (v : Fin 2 → A) → ∀ i → A→A→Fin2A (v z) (v (s z)) i ≡ v i
  A→A~Fin2A-pointwise v z = refl
@@ -141,6 +142,12 @@ function types, `(Fin 2 → A) → B` and `A × A → B`, nor between the types
 
 module _ {A : Type α} {B : Type β} where
 
+ open Fin renaming (zero to z ; suc to s)
+
+ lemma : (u : Fin 2 → A) → u ≈ (λ {z → u z ; (s z) → u (s z)})
+ lemma u z = refl
+ lemma u (s z) = refl
+
  CurryFin2 : ((Fin 2 → A) → B) → A → A → B
  CurryFin2 f x y = f (A→A→Fin2A x y)
 
@@ -149,6 +156,21 @@ module _ {A : Type α} {B : Type β} where
 
  CurryFin2~UncurryFin2 : CurryFin2 ∘ UncurryFin2 ≡ id
  CurryFin2~UncurryFin2 = refl
+
+ open PE.≡-Reasoning
+ -- UncurryFin2~CurryFin2 : ∀ f u → (UncurryFin2 ∘ CurryFin2) f u ≡ f u
+ -- UncurryFin2~CurryFin2 f u = Goal
+ --  where
+ --  -- Equiv Goal: (λ u → f (A→A→Fin2A (u z) (u (s z)))) ≡ f
+ --  Goal : (UncurryFin2 ∘ CurryFin2) f u ≡ f u
+ --  Goal = (UncurryFin2 ∘ CurryFin2) f u ≡⟨ refl ⟩
+ --         UncurryFin2 (λ x y → (f (A→A→Fin2A x y))) u ≡⟨ refl ⟩
+ --         (λ x y → (f (A→A→Fin2A x y))) (u z) (u (s z)) ≡⟨ refl ⟩
+ --         f (A→A→Fin2A (u z) (u (s z))) ≡⟨ PE.cong f {!!} ⟩
+ --         f (λ {z → u z ; (s z) → u (s z)}) ≡⟨ PE.cong f {!!} ⟩
+ --         f u ∎
+
+
 
  CurryFin3 : {A : Type α} → ((Fin 3 → A) → B) → A → A → A → B
  CurryFin3 {A = A} f x₁ x₂ x₃ = f u
@@ -169,6 +191,39 @@ module _ {A : Type α} {B : Type β} where
 
  Fin2A→B~A×A→B : Fin2A→B-to-A×A→B ∘ A×A→B-to-Fin2A→B ≡ id
  Fin2A→B~A×A→B = refl
+
+ -- open PE.≡-Reasoning
+ -- A×A→B~Fin2A→B : ∀ f → (A×A→B-to-Fin2A→B ∘ Fin2A→B-to-A×A→B) f ≈ f
+ -- A×A→B~Fin2A→B f u = Goal
+ --  where
+ --  Goal : (A×A→B-to-Fin2A→B ∘ Fin2A→B-to-A×A→B) f u ≡ f u
+ --  Goal = (A×A→B-to-Fin2A→B ∘ Fin2A→B-to-A×A→B) f u ≡⟨ refl ⟩
+ --         A×A→B-to-Fin2A→B (f ∘ A×A→Fin2A) u ≡⟨ refl ⟩
+ --         ((f ∘ A×A→Fin2A) ∘ Fin2A→A×A) u ≡⟨ refl ⟩
+ --         f (A×A→Fin2A (Fin2A→A×A u)) ≡⟨ {!!} ⟩
+ --         f (λ { 𝟚.𝟎 → (A×A→Fin2A (Fin2A→A×A u)) 𝟚.𝟎 ; 𝟚.𝟏 → (A×A→Fin2A (Fin2A→A×A u)) 𝟚.𝟏 }) ≡⟨ {!!} ⟩
+ --         f u ∎
+
+
+
+ -- A×A→Fin2A : A × A → Fin 2 → A
+ -- A×A→Fin2A (x , y) z = x
+ -- A×A→Fin2A (x , y) (s z) = y
+
+ -- Fin2A→A×A : (Fin 2 → A) → A × A
+ -- Fin2A→A×A u = u z , u (s z)
+
+ -- Fin2A~A×A : {A : Type α} → Fin2A→A×A ∘ A×A→Fin2A ≡ id
+ -- Fin2A~A×A = refl
+
+ -- A×A~Fin2A-pointwise : ∀ u → (A×A→Fin2A (Fin2A→A×A u)) ≈ u
+ -- A×A~Fin2A-pointwise u z = refl
+ -- A×A~Fin2A-pointwise u (s z) = refl
+
+ -- A→A~Fin2A-pointwise : (v : Fin 2 → A) → ∀ i → A→A→Fin2A (v z) (v (s z)) i ≡ v i
+ -- A→A~Fin2A-pointwise v z = refl
+ -- A→A~Fin2A-pointwise v (s z) = refl
+
 
 \end{code}
 
