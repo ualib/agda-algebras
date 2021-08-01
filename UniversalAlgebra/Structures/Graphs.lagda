@@ -32,7 +32,8 @@ import Relation.Binary.PropositionalEquality as PE
 open import Overture.Preliminaries   using ( ∣_∣ ; _≈_ ; ∥_∥ ; _∙_ ; lower∼lift ; lift∼lower ; 𝟙)
 open import Relations.Continuous     using ( Rel )
 open import Structures.Basic         using ( signature ; structure )
-open import Structures.Examples      using ( Sig∅ )
+open import Examples.Structures.Signatures
+                                     using ( S∅ )
 open import Structures.Homs          using ( hom ; 𝒾𝒹 ; ∘-hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-hom-rel; is-hom-op)
 
 open signature
@@ -53,7 +54,7 @@ private variable
  𝐹 𝑅 : signature ℓ₀ ℓ₀
  α ρ : Level
 
-Gr : ∀{α ρ} → structure 𝐹 𝑅 {α} {ρ} → structure Sig∅ (Gr-sig 𝐹 𝑅) {α} {α ⊔ ρ}
+Gr : ∀{α ρ} → structure 𝐹 𝑅 {α} {ρ} → structure S∅ (Gr-sig 𝐹 𝑅) {α} {α ⊔ ρ}
 Gr {𝐹}{𝑅}{α}{ρ} 𝑨 = record { carrier = carrier 𝑨 ; op = λ () ; rel = split }
   where
   split : (s : symbol 𝑅 ⊎ symbol 𝐹) → Rel (carrier 𝑨) (arity (Gr-sig 𝐹 𝑅) s) {α ⊔ ρ}

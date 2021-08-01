@@ -242,9 +242,6 @@ open import Structures.Basic                using    ( signature ; structure ; _
                                                      ; Lift-op ; Lift-rel ; Lift-Strucˡ ; Lift-Strucʳ
                                                      ; Lift-Struc ; siglˡ ; siglʳ ; sigl )
 
-open import Structures.Examples             using    ( Sig∅ ; Sig-0 ; Sig-1 ; Sig-2 ; Sig-0-1
-                                                     ; Sig-0-1-2 ; SL ; NAE3SAT ; nae3sat )
-
 open import Structures.Graphs               using    ( Gr-sig ; Gr ; hom→Grhom ; Grhom→hom )
 
 open import Structures.Graphs0              using    ( Gr-sig ; Gr ; hom→Grhom ; Grhom→hom ; _⇛_⇚_ )
@@ -318,9 +315,24 @@ open import Structures.Sigma.Isos           using    ( _≅_ ; ≅-refl ; ≅-sy
 open import Complexity.CSP                   using   (Constraint ; CSPInstance )
 
 
+
+
+
+-- EXAMPLES -----------------------------------------------------------------------------------------
+
+open import Examples.Structures.Signatures   using  ( S∅ ; S1 ; S01 ; S001 ; S0001 ; S021 ; S101 ; S111 )
+
+
+open import Examples.Structures.Basic        using  (SL ; NAE3SAT ; nae3sat )
+
+
+
+
+-- EXERCISES -----------------------------------------------------------------------------------------
+
+open import Exercises.Complexity.FiniteCSP   using  ( module solution-2-1 ; module solution-2-2 )
+
 \end{code}
-
-
 
 
 
