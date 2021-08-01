@@ -1,4 +1,4 @@
----
+n---
 layout: default
 title : Complexity.FiniteCSP module (The Agda Universal Algebra Library)
 date : 2021-07-26
@@ -17,16 +17,22 @@ open import Agda.Primitive        using ( _⊔_ ; lsuc ; Level) renaming ( Set t
 open import Agda.Builtin.List     using (List; []; _∷_)
 open import Data.Bool             using ( Bool ; T? ; true)
 open import Data.Bool.Base        using ( T ; _∧_ )
-open import Data.Fin.Base         using ( Fin ; toℕ )
-open import Data.List.Base        using ( length ; [_] ; _++_; head ; tail ; all) renaming (lookup to get)
-open import Data.Product          using ( _,_ ; Σ-syntax ; _×_ )
-open import Data.Vec              using ( Vec ; lookup ; count ; tabulate )
+open import Data.Fin.Base         using ( Fin ; toℕ ; fold′ ; fromℕ ; raise )
+open import Data.List.Base        using ( [_] ; _++_; head ; tail ; all) renaming (lookup to get)
+open import Data.Product          using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Data.Vec              using ( Vec ; lookup ; filter ; zip )
+open import Data.Vec.Base         using ( allFin ; count ; tabulate ) renaming (length to vlength)
+open import Data.Vec.Bounded.Base using ( Vec≤ )
 open import Data.Vec.Relation.Unary.All using ( All )
-open import Data.Nat              using ( ℕ )
+open import Data.Nat              using ( ℕ ; zero ; suc )
 open import Function.Base         using ( _∘_ )
 open import Relation.Binary       using ( DecSetoid ; Rel )
-open import Relation.Nullary      using ( Dec )
-open import Relation.Unary        using ( Pred ; _∈_ ; Decidable )
+open import Relation.Binary.Structures using ( IsDecEquivalence )
+open import Relation.Nullary      using ( Dec ; _because_ ; Reflects )
+open import Relation.Unary        using ( Pred ; _∈_ ; Decidable ; ⋂ )
+
+open import Overture.Preliminaries using ( Π-syntax )
+
 
 private variable
  α ℓ ρ : Level
@@ -48,6 +54,8 @@ We can use the following function to construct the vector of variables.
 
 range : (n : ℕ) → Vec ℕ n
 range n = tabulate toℕ
+
+
 -- `range n` is 0 ∷ 1 ∷ 2 ∷ … ∷ n-1 ∷ []
 
 \end{code}
@@ -75,59 +83,103 @@ open DecSetoid
 
 open Dec
 
-module CSPInstance
- (nvar : ℕ)
- (dom : Vec (DecSetoid α ℓ) nvar)
+module finite-csp
+ {ρ : Level}
+ (nvar' : ℕ)
+ (dom : Vec (DecSetoid α ℓ) (suc nvar')) where
 
- -- point-wise equality of functions when restricted to a scope
- _≐s_ : {s : Vec Bool nvar} → Rel (∀ i → Carrier (dom ⟨ i ⟩)) ℓ
- f ≐s g = ∀ i → T (s ⟨ i ⟩) → (dom ⟨ i ⟩)._≈_ (f i) (g i)
+ private
+  nvar = suc nvar'
 
- record Constraint {ρ : Level} : Type (α ⊔ lsuc ρ) where
+ open Vec≤
+
+ record Constraint : Type (α ⊔ lsuc ρ) where
   field
    s   : Vec Bool nvar        -- entry i is true iff variable i is in scope
    rel : Pred (∀ i → Carrier (dom ⟨ i ⟩)) ρ -- some functions from `Fin nvar` to `dom`
    dec : Decidable rel
 
- -- scope size (i.e., # of vars involved in constraint)
- ∣s∣ : ℕ
- ∣s∣ = count T? s
+  -- scope size (i.e., # of vars involved in constraint)
+  ∣s∣ : ℕ
+  ∣s∣ = count T? s
 
- satisfies : (∀ i → Carrier (dom ⟨ i ⟩)) → Type (α ⊔ ℓ ⊔ ρ) -- An assignment f of values to variables
- satisfies f = Σ[ g ∈ (∀ i → Carrier (dom ⟨ i ⟩)) ]         -- *satisfies* the constraint provided
-                ( (g ∈ rel) × f ≐s g )                        -- the function f, evaluated at each variable
-                                                             -- in the scope, belongs to the relation rel.
+  -- variables symbols (i.e., 0, 1, ..., nvar -1) zipped with true/false values from s
+  i&s : Vec (Fin nvar × Bool) nvar
+  i&s = zip (allFin nvar) s
 
- satisfies? : (f : ∀ i → Carrier (dom ⟨ i ⟩)) → Dec (satisfies f) -- Type (α ⊔ ℓ ⊔ ρ)
- satisfies? f = {!!}
+  -- variables in scope along with T in second coordinate
+  sfT : Vec (Fin nvar × Bool) _
+  sfT = vec (filter (λ x → T? (snd x)) i&s)
 
-open Constraint
+  -- the scope function
+  sf : Fin (vlength sfT) → Fin nvar
+  sf i = fst (lookup sfT i)
 
-record CSPInstance {ρ : Level} (nvar : ℕ) (dom : Vec (DecSetoid α ℓ) nvar) : Type (α ⊔ lsuc ρ)  where
- field
-  ncon : ℕ      -- the number of constraints involved
-  constr : Vec (Constraint {ρ = ρ} nvar dom) ncon
+  ScRestr : (∀ i → Carrier (dom ⟨ i ⟩)) → (∀ j → Carrier(dom ⟨ sf j ⟩))
+  ScRestr f = f ∘ sf
 
- -- f *solves* the instance if it satisfies all constraints.
- isSolution :  (∀ i → Carrier (dom ⟨ i ⟩)) → Type _
- isSolution f = All P constr
+  -- point-wise equality of functions
+  _≐_ : Rel (∀ i → Carrier (dom ⟨ i ⟩)) ℓ
+  f ≐ g = ∀ (i : Fin nvar) → (dom ⟨ i ⟩)._≈_ (f i) (g i)
+
+  foldbool : (n : ℕ) (b : Bool) (f : Fin n → Bool) → Bool
+  foldbool zero b f = b
+  foldbool (suc n) b f = foldbool n (b ∧ (f (fromℕ n))) (λ i → f (raise 1 i))
+
+  decide : (f g : (i : Fin nvar) → Carrier (dom ⟨ i ⟩)) → Bool
+  decide f g = foldbool nvar true (λ i → does ((dom ⟨ i ⟩)._≟_ (f i) (g i)))
+
+  ≐-dec : IsDecEquivalence _≐_
+
+  IsDecEquivalence.isEquivalence ≐-dec = record { refl = λ i → (dom ⟨ i ⟩) .refl
+                                                ; sym = λ x i → (dom ⟨ i ⟩) .sym (x i)
+                                                ; trans = λ x y i → (dom ⟨ i ⟩) .trans (x i) (y i) }
+
+  IsDecEquivalence._≟_ ≐-dec = λ x y → decide x y because {!!}
+
+  -- point-wise equality of scope-restricted functions
+  _≐s_ : Rel (∀ i → Carrier (dom ⟨ i ⟩)) ℓ
+  f ≐s g = ∀ j → (dom ⟨ sf j ⟩)._≈_ (f (sf j)) (g (sf j))
+
+ open Constraint
+
+ _satisfies_ : (∀ i → Carrier (dom ⟨ i ⟩)) → Constraint → Type _
+ f satisfies c = Σ[ g ∈ (∀ i → Carrier (dom ⟨ i ⟩)) ]
+                 ( (g ∈ (rel c)) × ((_≐s_ c) f g))
+
+
+ _satisfies?_ : (f : ∀ i → Carrier (dom ⟨ i ⟩)) → (c : Constraint) → Dec (f satisfies c)
+ f satisfies? c = record { does = d ; proof = p }
   where
-  P : Pred (Constraint nvar dom) _
-  P c = (satisfies c) f
+  d : Bool
+  p : Reflects (f satisfies c) d
+  d = {!!}
+  p = {!!}
 
 
-record CSPInstanceList {ρ : Level}
-                       (nvar : ℕ)
-                       (dom : Vec (DecSetoid α ℓ) nvar) : Type (α ⊔ lsuc ρ)  where
- field
-  constr : List (Constraint {ρ = ρ} nvar dom)
+ record CSPInstance : Type (α ⊔ lsuc ρ)  where
+  field
+   ncon : ℕ      -- the number of constraints involved
+   constr : Vec Constraint ncon
 
- -- f *solves* the instance if it satisfies all constraints.
- isSolution :  (∀ i → Carrier (dom ⟨ i ⟩)) → Bool
- isSolution f = all P constr
-  where
-  P : (Constraint nvar dom) → Bool
-  P c = does ((satisfies? c) f)
+  -- f *solves* the instance if it satisfies all constraints.
+  isSolution :  (∀ i → Carrier (dom ⟨ i ⟩)) → Type _
+  isSolution f = All P constr
+   where
+   P : Pred Constraint _
+   P c = f satisfies c
+
+
+ record CSPInstanceList : Type (α ⊔ lsuc ρ)  where
+  field
+   constr : List Constraint
+
+  -- f *solves* the instance if it satisfies all constraints.
+  isSolution :  (∀ i → Carrier (dom ⟨ i ⟩)) → Bool
+  isSolution f = all P constr
+   where
+   P : Constraint → Bool
+   P c = does (f satisfies? c)
 
 
 \end{code}
