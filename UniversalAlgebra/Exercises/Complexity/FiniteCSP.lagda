@@ -16,29 +16,20 @@ author: [agda-algebras development team][] and Libor Barto⁺
 module Exercises.Complexity.FiniteCSP  where
 
 
-open import Agda.Primitive        using ( _⊔_ ; Level ) renaming ( Set to Type ; lzero to ℓ₀ )
-open import Agda.Builtin.Equality using ( _≡_ ; refl )
-open import Data.Product          using ( _,_ ; _×_ ; Σ-syntax )
-open import Data.Sum.Base         using ( _⊎_ ) renaming ( inj₁ to inl ; inj₂ to inr )
-open import Data.Fin.Base         using ( Fin )
-open import Data.Nat              using ( ℕ )
-open import Function.Base         using ( _∘_ )
-open import Relation.Nullary      using ( ¬_ )
-open import Relation.Unary        using ( Pred ; _∈_ ; _∉_ )
-import Relation.Binary.PropositionalEquality as PE
+open import Agda.Primitive  using ( ) renaming (lzero to ℓ₀ )
+open import Data.Product    using ( _,_ ; _×_ )
+open import Relation.Unary  using ( Pred ; _∈_ )
 
--- -- Imports from agda-algebras --------------------------------------------------------------
-open import Overture.Preliminaries using ( 𝟙 ; ∣_∣ ; ∥_∥ )
-open import Overture.Preliminaries using ( 𝟘 ; 𝟙 ; 𝟚 ; 𝟛 )
-open import Relations.Continuous   using ( Rel )
-open import Structures.Basic       using ( signature ; structure )
-open import Examples.Structures.Signatures    using ( S∅ ; S001 ; S021)
-open import Structures.Homs        using ( hom ; is-hom-rel ; is-hom-op )
-open import Structures.Terms.Basic using ( Term )
+-- Imports from agda-algebras --------------------------------------------------------------
+open import Overture.Preliminaries         using ( 𝟘 ; 𝟙 ; 𝟚 ; 𝟛 )
+open import Relations.Continuous           using ( Rel )
+open import Structures.Basic               using ( signature ; structure )
+open import Examples.Structures.Signatures using ( S∅ ; S001 ; S021)
+open import Structures.Homs                using ( hom )
 
 open signature
 open structure
-open _⊎_
+-- open _⊎_
 
 
 
