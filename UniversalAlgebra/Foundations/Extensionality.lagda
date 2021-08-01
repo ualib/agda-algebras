@@ -2,7 +2,7 @@
 layout: default
 title : Foundations.Extensionality module (The Agda Universal Algebra Library)
 date : 2021-02-23
-author: [the ualib/agda-algebras development team][]
+author: [agda-algebras development team][]
 ---
 
 ### Extensionality
@@ -156,5 +156,5 @@ module _ {A : Type α}{R : BinRel A ρ} where
 {% include UALib.Links.md %}
 
 
-[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 

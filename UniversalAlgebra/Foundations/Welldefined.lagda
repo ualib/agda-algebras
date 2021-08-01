@@ -12,12 +12,18 @@ author: [agda-algebras development team][]
 module Foundations.Welldefined where
 
 open import Agda.Builtin.Equality using (_≡_; refl)
+open import Agda.Builtin.List     using (List; []; _∷_)
 open import Agda.Primitive        using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type ; Setω to Typeω )
 open import Axiom.Extensionality.Propositional
                                   using () renaming ( Extensionality to funext )
-open import Data.Fin.Base         using ( Fin )
+open import Data.Fin.Base         using ( Fin ; toℕ)
+open import Data.Nat.Base as ℕ using (ℕ; zero; suc; _+_; _*_ ; _≤_ ; s≤s)
 open import Data.Product                using ( _,_ ; _×_ )
+open import Data.List.Base        using ( lookup ; length ; [_] ; _++_; head ; tail)
+open import Data.List.Properties  using ( ≡-dec )
 open import Function.Base         using ( _$_ ; _∘_ ; id )
+open import Relation.Binary       using ( Rel )
+open import Relation.Binary.Definitions  using ( DecidableEquality )
 import Relation.Binary.PropositionalEquality as PE
 
 
@@ -28,7 +34,7 @@ open import Overture.Transformers  using ( CurryFin2 ; UncurryFin2 ; UncurryFin3
                                          ; A×A~Fin2A-pointwise ; A→A~Fin2A-pointwise )
 
 private variable
- ι α β 𝓥 : Level
+ ι α β 𝓥 ρ : Level
 
 \end{code}
 
@@ -164,6 +170,7 @@ so f is essentially of type (Fin 2 → A) → B.
 
 \begin{code}
 
+
 module _ {A : Type α}{B : Type β} where
 
  open Fin renaming ( zero to z ; suc to s )
@@ -205,6 +212,28 @@ module _ {A : Type α}{B : Type β} where
          f (v z) (v (s z)) ≡⟨ refl ⟩
          (UncurryFin2 f) v ∎
 
+ -- Fin2-wd' : (f : (List A) → B)(u v : List A)
+ --  →        (all ∀ i → (loou ≈ v → f u ≡ f v
+
+ -- Fin2-wd' f u v u≈v = {!!}
+  -- where
+  -- zip1 : ∀ {a x y} → x ≡ y → f a x ≡ f a y
+  -- zip1 refl = refl
+  -- Goal : f u ≡ f v
+  -- Goal = {!!}
+  -- zip1 : ∀ {a x y} → x ≡ y → f a x ≡ f a y
+  -- zip1 refl = refl
+
+  -- zip2 : ∀ {x y b} → x ≡ y → f x b ≡ f y b
+  -- zip2 refl = refl
+
+  -- Goal : f (λ {z → u z ; (s z) → u (s z)}) ≡ f (λ {z → v z ; (s z) → v (s z)})
+  -- Goal = {!!} -- f (λ {z → u z ; (s z) → u (s z)}) ≡⟨ {!!} ⟩ 
+         -- (CurryFin2 f) (u z) (u (s z)) ≡⟨ {!!} ⟩ -- zip1 (u≈v (s z)) ⟩
+         -- (CurryFin2 f) (u z) (v (s z)) ≡⟨ {!!} ⟩ -- zip2 (u≈v z) ⟩
+         -- (CurryFin2 f) (v z) (v (s z)) ≡⟨ {!!} ⟩
+         -- f (λ {z → v z ; (s z) → v (s z) }) ∎
+
 
 
 
@@ -233,6 +262,40 @@ module _ {A : Type α}{B : Type β} where
 
 
  -- NEXT: try to prove (f : (Fin 2 → A) → B)(u v : Fin 2 → A) →  u ≈ v → f u ≡ f v
+
+module _ {A : Type α}{B : Type β} where -- {de : DecidableEquality A} where
+
+ ListA→B : (f : List A → B)(u v : List A)
+  →        u ≡ v → f u ≡ f v
+ ListA→B f u .u refl = refl
+
+ -- lookup⁻ : length xs ≡ length ys →
+ --          (∀ {i j} → toℕ i ≡ toℕ j → R (lookup xs i) (lookup ys j)) →
+ --          Pointwise R xs ys
+ -- →        ( ∀ i j → i ≡ j → (lookup u) i ≡ (lookup v) j )
+
+ CurryListA : (List A → B) → (List A → A → B)
+ CurryListA f [] a = f [ a ]
+ CurryListA f (x ∷ l) a = f ((x ∷ l) ++ [ a ]) 
+
+ CurryListA' : (List A → B) → (A → List A → B)
+ CurryListA' f a [] = f [ a ]
+ CurryListA' f a (x ∷ l) = f ([ a ] ++ (x ∷ l))
+
+
+ -- ListA→B-dec : (f : List A → B)(u v : List A)
+ --  →        (length u) ≡ (length v)
+ --  →        ( ∀ {i j} → toℕ i ≡ toℕ j → (lookup u i) ≡ (lookup v j ))
+ --  →        f u ≡ f v
+ -- ListA→B-dec f u v x y = {!Goal!}
+ --  where
+ --  zip1 : (CurryListA' f) (head u) (tail u) ≡ f u
+ --  zip1 = ?
+ --  Goal : f u ≡ f v
+ --  Goal = {!!}
+
+
+
 
 \end{code}
 

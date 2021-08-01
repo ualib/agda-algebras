@@ -11,22 +11,22 @@ author: [agda-algebras development team][]
 
 module Structures.Sigma.Basic where
 
-open import Agda.Primitive        using    ( _⊔_ ; lsuc )
-                                  renaming ( Set to Type ; lzero to ℓ₀ )
-open import Data.Product          using    ( _,_ ; _×_ ; Σ-syntax )
-                                  renaming ( proj₁ to fst ; proj₂ to snd )
-open import Level                 using    ( Level ; Lift )
-open import Relation.Binary.Core  using    ( _⇒_ ; _=[_]⇒_ )
-                                  renaming ( REL to BinREL ; Rel to BinRel )
+open import Agda.Primitive        using ( _⊔_ ; lsuc ; Level )
+                               renaming ( Set to Type ; lzero to ℓ₀ )
+open import Data.Product          using ( _,_ ; _×_ ; Σ-syntax )
+                               renaming ( proj₁ to fst ; proj₂ to snd )
+open import Level                 using ( )
+open import Relation.Binary.Core  using ( _⇒_ ; _=[_]⇒_ )
+                               renaming ( REL to BinREL ; Rel to BinRel )
 
-open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥ ; 𝟘 ; 𝟙 ; 𝟚 ; 𝟛 ; ℓ₁)
-open import Relations.Discrete     using ( Arity ; Op ; _|:_ ; _preserves_ )
+open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥ ; ℓ₁)
+open import Relations.Discrete     using ( Op ; _|:_ ; _preserves_ )
 open import Relations.Continuous   using ( Rel )
 
 
 -- Inhabitants of Signature type are pairs, (s , ar), where s is an operation symbol,
 Signature : Type ℓ₁                                -- OR a relation symbol (new!),
-Signature = Σ[ F ∈ Type ℓ₀ ] (F → Arity ℓ₀)        -- and ar the arity of s.
+Signature = Σ[ F ∈ Type ℓ₀ ] (F → Type ℓ₀)        -- and ar the arity of s.
 
 
 Structure : (𝑅 F : Signature){α ρ : Level} → Type (lsuc (α ⊔ ρ))
@@ -73,10 +73,10 @@ module _ {𝑅 𝐹 : Signature} {α ρ : Level} where
 
  open Level
 
- Lift-op : {I : Arity ℓ₀}{A : Type α} → Op A I → (ℓ : Level) → Op (Lift ℓ A) I
+ Lift-op : {I : Type ℓ₀}{A : Type α} → Op A I → (ℓ : Level) → Op (Lift ℓ A) I
  Lift-op f ℓ = λ x → lift (f (λ i → lower (x i)))
 
- Lift-rel : {I : Arity ℓ₀}{A : Type α} → Rel A I {ρ} → (ℓ : Level) → Rel (Lift ℓ A) I{ρ}
+ Lift-rel : {I : Type ℓ₀}{A : Type α} → Rel A I {ρ} → (ℓ : Level) → Rel (Lift ℓ A) I{ρ}
  Lift-rel r ℓ x = r (λ i → lower (x i))
 
  Lift-Strucˡ : (ℓ : Level) → Structure 𝑅 𝐹 {α}{ρ} → Structure 𝑅 𝐹 {α = (α ⊔ ℓ)}{ρ}
@@ -93,7 +93,6 @@ module _ {𝑅 𝐹 : Signature} {α ρ : Level} where
   lrel : (r : ∣ 𝑅 ∣) → Rel (∣ 𝑨 ∣)(∥ 𝑅 ∥ r){ρ ⊔ ℓ}
   lrel r = λ x → Lift ℓ ((r ʳ 𝑨) x) -- λ x → ((r ʳ 𝑨) (λ i → lower (x i)))
 
-
 module _ {𝑅 𝐹 : Signature} {α ρ : Level} where
 
  Lift-Struc : (ℓˡ ℓʳ : Level) → Structure 𝑅 𝐹 {α}{ρ} → Structure 𝑅 𝐹 {α ⊔ ℓˡ}{ρ ⊔ ℓʳ}
@@ -101,8 +100,6 @@ module _ {𝑅 𝐹 : Signature} {α ρ : Level} where
 
 
 \end{code}
-
-
 
 
 --------------------------------------

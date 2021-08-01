@@ -1,13 +1,13 @@
 ---
 layout: default
-title : Relations.Properties module (The Agda Universal Algebra Library)
+title : Relations.BinPred module (The Agda Universal Algebra Library)
 date : 2021-06-26
-author: [the ualib/agda-algebras development team][]
+author: [agda-algebras development team][]
 ---
 
-### <a id="unary-relations">Properties of binary predicates</a>
+### Properties of binary predicates
 
-This is the [Relations.Properties][] module of the [Agda Universal Algebra Library][].
+This is the [Relations.BinPred][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
@@ -15,21 +15,12 @@ This is the [Relations.Properties][] module of the [Agda Universal Algebra Libra
 
 module Relations.BinPred where
 
-open import Agda.Builtin.Equality using    ( _≡_  ; refl    )
-open import Agda.Primitive        using    ( _⊔_            )
-                                  renaming ( Set  to Type   )
-open import Data.Product          using    ( _,_  ; _×_     )
-open import Function.Base         using    ( _∘_            )
-open import Level                 using    ( Level ; Lift   )
-                                  renaming ( suc  to lsuc
-                                           ; zero to ℓ₀     )
-open import Data.Sum.Base         using    ( _⊎_            )
-open import Relation.Binary.Core  using    (                )
-                                  renaming ( REL  to BinREL
-                                           ; Rel  to BinRel )
-open import Relation.Nullary      using    ( ¬_             )
-open import Relation.Unary        using    ( ∅; _∈_; _∉_
-                                           ; Pred           )
+open import Agda.Builtin.Equality using ( _≡_ )
+open import Agda.Primitive        using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
+open import Data.Product          using ( _,_ ; _×_ )
+open import Data.Sum.Base         using ( _⊎_ )
+open import Relation.Binary.Core  using ( ) renaming ( REL to BinREL ; Rel to BinRel )
+open import Relation.Unary        using ( Pred ; _∈_ ; _∉_ )
 
 
 private variable
@@ -95,3 +86,10 @@ Connex P Q = ∀ x y → (x , y) ∈ P ⊎ (y , x) ∈ Q
 Total : Pred (A × A) ℓ → Type _
 Total P = Connex P P
 
+\end{code}
+
+
+
+-----------------------------------------------
+
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
