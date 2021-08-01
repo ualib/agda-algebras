@@ -75,19 +75,23 @@ open DecSetoid
 
 open Dec
 
-record Constraint {ρ : Level} (nvar : ℕ) (dom : Vec (DecSetoid α ℓ) nvar) : Type (α ⊔ lsuc ρ) where
- field
-  s   : Vec Bool nvar        -- entry i is true iff variable i is in scope
-  rel : Pred (∀ i → Carrier (dom ⟨ i ⟩)) ρ -- some functions from `Fin nvar` to `dom`
-  dec : Decidable rel
+module CSPInstance
+ (nvar : ℕ)
+ (dom : Vec (DecSetoid α ℓ) nvar)
+
+ -- point-wise equality of functions when restricted to a scope
+ _≐s_ : {s : Vec Bool nvar} → Rel (∀ i → Carrier (dom ⟨ i ⟩)) ℓ
+ f ≐s g = ∀ i → T (s ⟨ i ⟩) → (dom ⟨ i ⟩)._≈_ (f i) (g i)
+
+ record Constraint {ρ : Level} : Type (α ⊔ lsuc ρ) where
+  field
+   s   : Vec Bool nvar        -- entry i is true iff variable i is in scope
+   rel : Pred (∀ i → Carrier (dom ⟨ i ⟩)) ρ -- some functions from `Fin nvar` to `dom`
+   dec : Decidable rel
 
  -- scope size (i.e., # of vars involved in constraint)
  ∣s∣ : ℕ
  ∣s∣ = count T? s
-
- -- point-wise equality of functions when restricted to the scope
- _≐s_ : Rel (∀ i → Carrier (dom ⟨ i ⟩)) ℓ
- f ≐s g = ∀ i → T (s ⟨ i ⟩) → (dom ⟨ i ⟩)._≈_ (f i) (g i)
 
  satisfies : (∀ i → Carrier (dom ⟨ i ⟩)) → Type (α ⊔ ℓ ⊔ ρ) -- An assignment f of values to variables
  satisfies f = Σ[ g ∈ (∀ i → Carrier (dom ⟨ i ⟩)) ]         -- *satisfies* the constraint provided
@@ -123,7 +127,7 @@ record CSPInstanceList {ρ : Level}
  isSolution f = all P constr
   where
   P : (Constraint nvar dom) → Bool
-  P c = does ((satisfies? c) f) -- (satisfies c) f → 
+  P c = does ((satisfies? c) f)
 
 
 \end{code}
