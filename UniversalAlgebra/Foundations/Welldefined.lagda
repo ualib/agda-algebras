@@ -213,6 +213,28 @@ module _ {A : Type α}{B : Type β} where
          f (v z) (v (s z)) ≡⟨ refl ⟩
          (UncurryFin2 f) v ∎
 
+ -- Fin2-wd' : (f : (List A) → B)(u v : List A)
+ --  →        (all ∀ i → (loou ≈ v → f u ≡ f v
+
+ -- Fin2-wd' f u v u≈v = {!!}
+  -- where
+  -- zip1 : ∀ {a x y} → x ≡ y → f a x ≡ f a y
+  -- zip1 refl = refl
+  -- Goal : f u ≡ f v
+  -- Goal = {!!}
+  -- zip1 : ∀ {a x y} → x ≡ y → f a x ≡ f a y
+  -- zip1 refl = refl
+
+  -- zip2 : ∀ {x y b} → x ≡ y → f x b ≡ f y b
+  -- zip2 refl = refl
+
+  -- Goal : f (λ {z → u z ; (s z) → u (s z)}) ≡ f (λ {z → v z ; (s z) → v (s z)})
+  -- Goal = {!!} -- f (λ {z → u z ; (s z) → u (s z)}) ≡⟨ {!!} ⟩ 
+         -- (CurryFin2 f) (u z) (u (s z)) ≡⟨ {!!} ⟩ -- zip1 (u≈v (s z)) ⟩
+         -- (CurryFin2 f) (u z) (v (s z)) ≡⟨ {!!} ⟩ -- zip2 (u≈v z) ⟩
+         -- (CurryFin2 f) (v z) (v (s z)) ≡⟨ {!!} ⟩
+         -- f (λ {z → v z ; (s z) → v (s z) }) ∎
+
 
  Fin3-wd : (f : A → A → A → B)(u v : Fin 3 → A)
   →        u ≈ v → (UncurryFin3 f) u ≡ (UncurryFin3 f) v
@@ -240,11 +262,14 @@ module _ {A : Type α}{B : Type β} where
 
  -- NEXT: try to prove (f : (Fin 2 → A) → B)(u v : Fin 2 → A) →  u ≈ v → f u ≡ f v
 
+
 module _ {A : Type α}{B : Type β} where
+
 
  ListA→B : (f : List A → B)(u v : List A)
   →        u ≡ v → f u ≡ f v
  ListA→B f u .u refl = refl
+
 
  CurryListA : (List A → B) → (List A → A → B)
  CurryListA f [] a = f [ a ]
@@ -255,10 +280,7 @@ module _ {A : Type α}{B : Type β} where
  CurryListA' f a (x ∷ l) = f ([ a ] ++ (x ∷ l))
 
 
-
 \end{code}
-
-
 
 
 -------------------------------------
