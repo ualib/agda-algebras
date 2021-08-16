@@ -68,6 +68,7 @@ funext→swelldef fe f u v ptweq = welldef f u v (fe ptweq)
 -- universe-level-polymorphic version
 SwellDef : Typeω
 SwellDef = (α β : Level) → swelldef α β
+
 \end{code}
 
 There are certain situations in which a (seemingly) weaker principle than function extensionality suffices.
@@ -95,6 +96,7 @@ funext'→swelldef' fe f ptweq = PE.cong f (fe ptweq)
  -- `swelldef ι α (ι ⊔ α)` implies `funext ι α`   (Note the universe levels!)
 swelldef'→funext' : swelldef' ι α (ι ⊔ α) → funext' ι α
 swelldef'→funext' wd ptweq = wd _$_ ptweq
+
 \end{code}
 
 
@@ -122,14 +124,13 @@ I believe there is no way to prove that `swelldef ι α α` implies funext ι α
 It seems unlikely that we could prove swelldef in MLTT because, on the face of it,
 to prove f u ≡ f v, we need u ≡ v, but we only have ∀ i → u i ≡ v i.
 
-\begin{code}
+```agda
+swelldef-proof : ∀ {I : Type ι}{A : Type α}{B : Type β}
+ →                 (f : (I → A) → B){u v : I → A}
+ →                 (∀ i → u i ≡ v i) → f u ≡ f v
+swelldef-proof {I = I}{A}{B} f {u}{v} x = {!!}  --   <== we are stuck
+```
 
--- swelldef-proof : ∀ {I : Type ι}{A : Type α}{B : Type β}
---  →                 (f : (I → A) → B){u v : I → A}
---  →                 (∀ i → u i ≡ v i) → f u ≡ f v
--- swelldef-proof {I = I}{A}{B} f {u}{v} x = {!!}  --   <== we are stuck
-
-\end{code}
 
 HOWEVER, we *can* prove swelldef in MLTT for certain types at least, using a zipper argument.
 
@@ -235,8 +236,6 @@ module _ {A : Type α}{B : Type β} where
          -- f (λ {z → v z ; (s z) → v (s z) }) ∎
 
 
-
-
  Fin3-wd : (f : A → A → A → B)(u v : Fin 3 → A)
   →        u ≈ v → (UncurryFin3 f) u ≡ (UncurryFin3 f) v
 
@@ -253,26 +252,24 @@ module _ {A : Type α}{B : Type β} where
   zip3 refl = refl
 
   Goal : (UncurryFin3 f) u ≡ (UncurryFin3 f) v
-  Goal = (UncurryFin3 f) u     ≡⟨ refl ⟩
+  Goal = (UncurryFin3 f) u               ≡⟨ refl ⟩
          f (u z) (u (s z)) (u (s (s z))) ≡⟨ zip1 (u≈v (s (s z))) ⟩
          f (u z) (u (s z)) (v (s (s z))) ≡⟨ zip2 (u≈v (s z)) ⟩
          f (u z) (v (s z)) (v (s (s z))) ≡⟨ zip3 (u≈v z) ⟩
          f (v z) (v (s z)) (v (s (s z))) ≡⟨ refl ⟩
-         (UncurryFin3 f) v ∎
+         (UncurryFin3 f) v               ∎
 
 
  -- NEXT: try to prove (f : (Fin 2 → A) → B)(u v : Fin 2 → A) →  u ≈ v → f u ≡ f v
 
-module _ {A : Type α}{B : Type β} where -- {de : DecidableEquality A} where
+
+module _ {A : Type α}{B : Type β} where
+
 
  ListA→B : (f : List A → B)(u v : List A)
   →        u ≡ v → f u ≡ f v
  ListA→B f u .u refl = refl
 
- -- lookup⁻ : length xs ≡ length ys →
- --          (∀ {i j} → toℕ i ≡ toℕ j → R (lookup xs i) (lookup ys j)) →
- --          Pointwise R xs ys
- -- →        ( ∀ i j → i ≡ j → (lookup u) i ≡ (lookup v) j )
 
  CurryListA : (List A → B) → (List A → A → B)
  CurryListA f [] a = f [ a ]
@@ -283,23 +280,7 @@ module _ {A : Type α}{B : Type β} where -- {de : DecidableEquality A} where
  CurryListA' f a (x ∷ l) = f ([ a ] ++ (x ∷ l))
 
 
- -- ListA→B-dec : (f : List A → B)(u v : List A)
- --  →        (length u) ≡ (length v)
- --  →        ( ∀ {i j} → toℕ i ≡ toℕ j → (lookup u i) ≡ (lookup v j ))
- --  →        f u ≡ f v
- -- ListA→B-dec f u v x y = {!Goal!}
- --  where
- --  zip1 : (CurryListA' f) (head u) (tail u) ≡ f u
- --  zip1 = ?
- --  Goal : f u ≡ f v
- --  Goal = {!!}
-
-
-
-
 \end{code}
-
-
 
 
 -------------------------------------
@@ -332,8 +313,3 @@ module _ {A : Type α}{B : Type β} where -- {de : DecidableEquality A} where
  -- Fin2-unc∘cur≈id : (f : (Fin 2 → A) → B) → (UncurryFin2 ∘ CurryFin2) f ≡ f
  -- Fin2-unc∘cur≈id f = {!!}
 
- -- Fin2-swelldef : (f : (Fin 2 → A) → B)(u v : Fin 2 → A) → u ≈ v → f u ≡ f v
- -- Fin2-swelldef f u v u≈v = f u                           ≡⟨ PE.cong-app ((Fin2-unc∘cur≈id f)⁻¹) u ⟩
- --                           (UncurryFin2 (CurryFin2 f)) u ≡⟨ Fin2-wd (CurryFin2 f) u v u≈v ⟩
- --                           (UncurryFin2 (CurryFin2 f)) v ≡⟨ PE.cong-app (Fin2-unc∘cur≈id f) v ⟩
- --                           f v ∎

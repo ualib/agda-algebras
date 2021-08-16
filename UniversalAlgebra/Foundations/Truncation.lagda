@@ -104,7 +104,7 @@ Now, perhaps we have two proofs, say, `r s : p ≡₁ q` that the proofs `p` and
 
 In [homotopy type theory](https://homotopytypetheory.org), a type `A` with an identity relation `≡₀` is called a *set* (or *0-groupoid*) if for every pair `x y : A` there is at most one proof of `x ≡₀ y`. In other words, the type `A`, along with it's equality type `≡₀`, form a *set* if for all `x y : A` there is at most one proof of `x ≡₀ y`.
 
-This notion is formalized in the [Type Topology][] library, using the `is-subsingleton` type that we saw earlier ([Overture.Inverses][]), as follows.<sup>[1](Relations.Truncation.html#fn1)</sup>.
+This notion is formalized in the [Type Topology][] library, using the `is-subsingleton` type that we saw earlier ([Overture.Inverses][]), as follows.
 
 \begin{code}
 
@@ -154,7 +154,6 @@ module _ {A : Type α}{B : Type β} where
 
  equiv-is-embedding : (f : A → B) → is-equiv f → is-embedding f
  equiv-is-embedding f i y = singleton-is-prop (fiber f y) (i y)
-
 
 \end{code}
 
@@ -246,7 +245,6 @@ module _ {I : Type 𝓥} where
 
 {% include UALib.Links.md %}
 
------------------------------------------------
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 
