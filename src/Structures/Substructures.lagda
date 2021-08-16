@@ -25,6 +25,4 @@ open import Structures.Substructures.Substructures
 
 {% include UALib.Links.md %}
 
---------------------------------------
-
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
