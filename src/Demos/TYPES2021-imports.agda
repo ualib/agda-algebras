@@ -37,27 +37,28 @@ open import Relation.Binary.PropositionalEquality
 
 
 -- Imports from agda-algebras ------------------------------------------------------------
-open import Overture.Preliminaries   using ( Π ; 𝑖𝑑 ; Π-syntax ; ∣_∣ ; ∥_∥
-                                           ; _⁻¹ ; _≈_ ; _∙_ ; lift∼lower
-                                           ; lower∼lift                      ) public
-open import Overture.Inverses        using ( IsInjective ; IsSurjective
-                                           ; Image_∋_ ; SurjInv ; Inv
-                                           ; InvIsInv ; eq ; id-is-injective
-                                           ; ∘-injective                     ) public
-open import Relations.Discrete       using ( arity[_] ; ker
-                                           ; kernel ; Im_⊆_                  ) public
-open import Relations.Quotients      using ( ker-IsEquivalence ; _/_ ; ⌞_⌟
-                                           ; ⟪_⟫ ; IsBlock ; Quotient
-                                           ; Equivalence ; 0[_]Equivalence
-                                           ;  ⟪_∼_⟫-elim ; R-block           ) public
-open import Relations.Truncation     using ( is-set ; blk-uip
-                                           ; is-embedding ; hfunext
-                                           ; monic-is-embedding|Set          ) public
-open import Relations.Extensionality using ( SwellDef ; DFunExt ; swelldef
-                                           ; block-ext|uip ; pred-ext
-                                           ; SurjInvIsRightInv ; epic-factor ) public
-open import Algebras.Basic           using ( Level-of-Carrier                ) public
-open import Homomorphisms.Basic      using ( kercon ; ker[_⇒_]_↾_
-                                           ; ⨅-hom-co ; πker ; ∘-is-hom
-                                           ; epi ; epi-to-hom ; ker-in-con   ) public
-open import Homomorphisms.Noether    using ( FirstHomTheorem|Set             ) public
+open import Overture.Preliminaries     using ( Π ; 𝑖𝑑 ; Π-syntax ; ∣_∣ ; ∥_∥
+                                             ; _⁻¹ ; _≈_ ; _∙_ ; lift∼lower
+                                             ; lower∼lift                      ) public
+open import Overture.Inverses          using ( IsInjective ; IsSurjective
+                                             ; Image_∋_ ; SurjInv ; Inv
+                                             ; InvIsInv ; eq ; id-is-injective
+                                             ; ∘-injective                     ) public
+open import Relations.Discrete         using ( arity[_] ; ker
+                                             ; kernel ; Im_⊆_                  ) public
+open import Relations.Quotients        using ( ker-IsEquivalence ; _/_ ; ⌞_⌟
+                                             ; ⟪_⟫ ; IsBlock ; Quotient
+                                             ; Equivalence ; 0[_]Equivalence
+                                             ;  ⟪_∼_⟫-elim ; R-block           ) public
+open import Foundations.Truncation     using ( is-set ; blk-uip
+                                             ; is-embedding ; hfunext
+                                             ; monic-is-embedding|Set          ) public
+open import Foundations.Extensionality using ( DFunExt ; block-ext|uip ; pred-ext
+                                             ; SurjInvIsRightInv ; epic-factor ) public
+open import Foundations.Welldefined    using ( swelldef ; SwellDef ) public
+
+open import Algebras.Basic             using ( Level-of-Carrier                ) public
+open import Homomorphisms.Basic        using ( kercon ; ker[_⇒_]_↾_
+                                             ; ⨅-hom-co ; πker ; ∘-is-hom
+                                             ; epi ; epi-to-hom ; ker-in-con   ) public
+open import Homomorphisms.Noether      using ( FirstHomTheorem|Set             ) public
