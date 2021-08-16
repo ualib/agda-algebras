@@ -44,37 +44,37 @@ module _ where
  private variable
   α ρᵃ β ρᵇ : Level
 
- _≥s_  -- (alias for supalgebra (aka overalgebra))
+ _≥_  -- (alias for supalgebra (aka overalgebra))
   _IsSupalgebraOf_ : SetoidAlgebra α ρᵃ → SetoidAlgebra β ρᵇ → Type _
  𝑨 IsSupalgebraOf 𝑩 = Σ[ h ∈ hom 𝑩 𝑨 ] IsInjective ∣ h ∣
 
- _≤s_  -- (alias for subalgebra relation))
+ _≤_  -- (alias for subalgebra relation))
   _IsSubalgebraOf_ : SetoidAlgebra α ρᵃ → SetoidAlgebra β ρᵇ → Type _
  𝑨 IsSubalgebraOf 𝑩 = Σ[ h ∈ hom 𝑨 𝑩 ] IsInjective ∣ h ∣
 
  -- Syntactic sugar for sup/sub-algebra relations.
- 𝑨 ≥s 𝑩 = 𝑨 IsSupalgebraOf 𝑩
- 𝑨 ≤s 𝑩 = 𝑨 IsSubalgebraOf 𝑩
+ 𝑨 ≥ 𝑩 = 𝑨 IsSupalgebraOf 𝑩
+ 𝑨 ≤ 𝑩 = 𝑨 IsSubalgebraOf 𝑩
 
 
  record SubalgebraOf : Type (ov (α ⊔ β ⊔ ρ ⊔ ρᵃ ⊔ ρᵇ)) where
   field
    algebra : SetoidAlgebra α ρᵃ
    subalgebra : SetoidAlgebra β ρᵇ
-   issubalgebra : subalgebra ≤s algebra
+   issubalgebra : subalgebra ≤ algebra
 
 
  Subalgebra : SetoidAlgebra α ρᵃ → {β ρᵇ : Level} → Type _
- Subalgebra 𝑨 {β}{ρᵇ} = Σ[ 𝑩 ∈ (SetoidAlgebra β ρᵇ) ] 𝑩 ≤s 𝑨
+ Subalgebra 𝑨 {β}{ρᵇ} = Σ[ 𝑩 ∈ (SetoidAlgebra β ρᵇ) ] 𝑩 ≤ 𝑨
 
  -- usage note: for 𝑨 : SetoidAlgebra α ρᵃ, inhabitant of `Subalgebra 𝑨` is a pair
  --             `(𝑩 , p) : Subalgebra 𝑨`  providing
  --                                       - `𝑩 : SetoidAlgebra β ρᵇ` and
- --                                       - `p : 𝑩 ≤s 𝑨`, a proof that 𝑩 is a subalgebra of 𝐴.
+ --                                       - `p : 𝑩 ≤ 𝑨`, a proof that 𝑩 is a subalgebra of 𝐴.
 
 
  IsSubalgebraREL : {α ρᵃ β ρᵇ : Level} → REL (SetoidAlgebra α ρᵃ)(SetoidAlgebra β ρᵇ) ρ → Type _
- IsSubalgebraREL {α}{ρᵃ}{β}{ρᵇ} R = ∀ {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ} → 𝑨 ≤s 𝑩
+ IsSubalgebraREL {α}{ρᵃ}{β}{ρᵇ} R = ∀ {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ} → 𝑨 ≤ 𝑩
 
  record SubalgebraREL(R : REL (SetoidAlgebra β ρᵇ)(SetoidAlgebra α ρᵃ) ρ) : Type (ov (α ⊔ β ⊔ ρ ⊔ ρᵃ ⊔ ρᵇ))
   where
@@ -83,7 +83,7 @@ module _ where
 
 \end{code}
 
-From now on we will use `𝑩 ≤s 𝑨` to express the assertion that `𝑩` is a subalgebra of `𝑨`.
+From now on we will use `𝑩 ≤ 𝑨` to express the assertion that `𝑩` is a subalgebra of `𝑨`.
 
 
 #### Subalgebras of a class of algebras
@@ -99,7 +99,7 @@ module _ where
 
  _≤c_
   _IsSubalgebraOfClass_ : SetoidAlgebra β ρᵇ → Pred (SetoidAlgebra α ρᵃ) ρ → Type _
- 𝑩 IsSubalgebraOfClass 𝒦 = Σ[ 𝑨 ∈ SetoidAlgebra _ _ ] ((𝑨 ∈ 𝒦) × (𝑩 ≤s 𝑨))
+ 𝑩 IsSubalgebraOfClass 𝒦 = Σ[ 𝑨 ∈ SetoidAlgebra _ _ ] ((𝑨 ∈ 𝒦) × (𝑩 ≤ 𝑨))
 
  𝑩 ≤c 𝒦 = 𝑩 IsSubalgebraOfClass 𝒦
 
@@ -118,7 +118,7 @@ module _ where
    classalgebra : SetoidAlgebra α ρᵃ
    isclassalgebra : classalgebra ∈ class
    subalgebra : SetoidAlgebra β ρᵇ
-   issubalgebra : subalgebra ≤s classalgebra
+   issubalgebra : subalgebra ≤ classalgebra
 
  -- The collection of subalgebras of algebras in class 𝒦.
  SubalgebrasOfClass : Pred (SetoidAlgebra α ρᵃ) ρ → {β ρᵇ : Level} → Type _

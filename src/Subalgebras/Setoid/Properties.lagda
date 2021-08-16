@@ -32,7 +32,7 @@ open import Algebras.Products                 {𝑆 = 𝑆} using ( ov )
 open import Homomorphisms.Setoid.Basic        {𝑆 = 𝑆} using ( hom ; ∘-hom )
 open import Homomorphisms.Setoid.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅toInjective ; ≅fromInjective
                                                             ;  ≅-sym ; ≅-refl ; ≅-trans ; Lift-≅ )
-open import Subalgebras.Setoid.Subalgebras    {𝑆 = 𝑆} using ( _≤s_ ; _≥s_ ; _IsSubalgebraOfClass_ )
+open import Subalgebras.Setoid.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; _≥_ ; _IsSubalgebraOfClass_ )
 
 private variable α ρᵃ β ρᵇ γ ρᶜ : Level
 
@@ -40,31 +40,31 @@ private variable α ρᵃ β ρᵇ γ ρᶜ : Level
 
 open _≅_
 
-≅→≤s : {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ} → 𝑨 ≅ 𝑩 → 𝑨 ≤s 𝑩
-≅→≤s φ = (to φ) , ≅toInjective φ
+≅→≤ : {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ} → 𝑨 ≅ 𝑩 → 𝑨 ≤ 𝑩
+≅→≤ φ = (to φ) , ≅toInjective φ
 
-≅→≥s : {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ} → 𝑨 ≅ 𝑩 → 𝑨 ≥s 𝑩
-≅→≥s φ = (from φ) , ≅fromInjective φ
+≅→≥ : {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ} → 𝑨 ≅ 𝑩 → 𝑨 ≥ 𝑩
+≅→≥ φ = (from φ) , ≅fromInjective φ
 
-≤s-refl : {𝑨 𝑩 : SetoidAlgebra α ρᵃ} → 𝑨 ≅ 𝑩 → 𝑨 ≤s 𝑩
-≤s-refl {𝑨 = 𝑨}{𝑩} A≅B = ≅→≤s A≅B
+≤-refl : {𝑨 𝑩 : SetoidAlgebra α ρᵃ} → 𝑨 ≅ 𝑩 → 𝑨 ≤ 𝑩
+≤-refl {𝑨 = 𝑨}{𝑩} A≅B = ≅→≤ A≅B
 
-≥s-refl : {𝑨 𝑩 : SetoidAlgebra α ρᵃ} → 𝑨 ≅ 𝑩 → 𝑨 ≥s 𝑩
-≥s-refl {𝑨 = 𝑨}{𝑩} A≅B = ≅→≤s (≅-sym A≅B)
-
-
-≤s-reflexive : {𝑨 : SetoidAlgebra α ρᵃ} → 𝑨 ≤s 𝑨
-≤s-reflexive {𝑨 = 𝑨} = (id , λ f a → refl) , Injection.injective id-is-injective
+≥-refl : {𝑨 𝑩 : SetoidAlgebra α ρᵃ} → 𝑨 ≅ 𝑩 → 𝑨 ≥ 𝑩
+≥-refl {𝑨 = 𝑨}{𝑩} A≅B = ≅→≤ (≅-sym A≅B)
 
 
-≤s-trans : (𝑨 : SetoidAlgebra α ρᵃ){𝑩 : SetoidAlgebra β ρᵇ}(𝑪 : SetoidAlgebra γ ρᶜ)
-  →        𝑨 ≤s 𝑩 → 𝑩 ≤s 𝑪 → 𝑨 ≤s 𝑪
+≤-reflexive : {𝑨 : SetoidAlgebra α ρᵃ} → 𝑨 ≤ 𝑨
+≤-reflexive {𝑨 = 𝑨} = (id , λ f a → refl) , Injection.injective id-is-injective
 
-≤s-trans 𝑨 {𝑩} 𝑪 A≤B B≤C = (∘-hom 𝑨 𝑩 𝑪 ∣ A≤B ∣ ∣ B≤C ∣ ) , ∘-injective ∥ A≤B ∥ ∥ B≤C ∥
 
-≥s-trans : (𝑨 : SetoidAlgebra α ρᵃ){𝑩 : SetoidAlgebra β ρᵇ}(𝑪 : SetoidAlgebra γ ρᶜ)
-  →        𝑨 ≥s 𝑩 → 𝑩 ≥s 𝑪 → 𝑨 ≥s 𝑪
-≥s-trans 𝑨 {𝑩} 𝑪 A≥B B≥C = ≤s-trans 𝑪 {𝑩} 𝑨 B≥C A≥B
+≤-trans : (𝑨 : SetoidAlgebra α ρᵃ){𝑩 : SetoidAlgebra β ρᵇ}(𝑪 : SetoidAlgebra γ ρᶜ)
+  →        𝑨 ≤ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
+
+≤-trans 𝑨 {𝑩} 𝑪 A≤B B≤C = (∘-hom 𝑨 𝑩 𝑪 ∣ A≤B ∣ ∣ B≤C ∣ ) , ∘-injective ∥ A≤B ∥ ∥ B≤C ∥
+
+≥-trans : (𝑨 : SetoidAlgebra α ρᵃ){𝑩 : SetoidAlgebra β ρᵇ}(𝑪 : SetoidAlgebra γ ρᶜ)
+  →        𝑨 ≥ 𝑩 → 𝑩 ≥ 𝑪 → 𝑨 ≥ 𝑪
+≥-trans 𝑨 {𝑩} 𝑪 A≥B B≥C = ≤-trans 𝑪 {𝑩} 𝑨 B≥C A≥B
 
 
 module _ {α ρᵃ ρ : Level} where
@@ -72,10 +72,10 @@ module _ {α ρᵃ ρ : Level} where
  open import Relation.Binary.Structures {a = ov(α ⊔ ρᵃ)}{ℓ = (𝓞 ⊔ 𝓥 ⊔ α)} (_≅_ {α}{ρᵃ}{α}{ρᵃ})
 
  open IsPreorder
- ≤s-preorder : IsPreorder _≤s_
- isEquivalence ≤s-preorder = record { refl = ≅-refl ; sym = ≅-sym ; trans = ≅-trans }
- reflexive ≤s-preorder = ≤s-refl
- trans ≤s-preorder {𝑨}{𝑩}{𝑪} A≤B B≤C = ≤s-trans 𝑨 {𝑩} 𝑪 A≤B B≤C
+ ≤-preorder : IsPreorder _≤_
+ isEquivalence ≤-preorder = record { refl = ≅-refl ; sym = ≅-sym ; trans = ≅-trans }
+ reflexive ≤-preorder = ≤-refl
+ trans ≤-preorder {𝑨}{𝑩}{𝑪} A≤B B≤C = ≤-trans 𝑨 {𝑩} 𝑪 A≤B B≤C
 
 
 
@@ -83,28 +83,28 @@ open _≅_
 
 module _ {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ}{𝑪 : SetoidAlgebra γ ρᶜ} where
 
- A≥B×B≅C→A≥C : 𝑨 ≥s 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≥s 𝑪
- A≥B×B≅C→A≥C A≥B B≅C  = ≥s-trans 𝑨 {𝑩} 𝑪 A≥B (≅→≥s B≅C)
+ A≥B×B≅C→A≥C : 𝑨 ≥ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≥ 𝑪
+ A≥B×B≅C→A≥C A≥B B≅C  = ≥-trans 𝑨 {𝑩} 𝑪 A≥B (≅→≥ B≅C)
 
- A≤B×B≅C→A≤C : 𝑨 ≤s 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤s 𝑪
- A≤B×B≅C→A≤C A≤B B≅C = ≤s-trans 𝑨{𝑩} 𝑪 A≤B (≅→≤s B≅C)
+ A≤B×B≅C→A≤C : 𝑨 ≤ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤ 𝑪
+ A≤B×B≅C→A≤C A≤B B≅C = ≤-trans 𝑨{𝑩} 𝑪 A≤B (≅→≤ B≅C)
 
- A≅B×B≥C→A≥C : 𝑨 ≅ 𝑩 → 𝑩 ≥s 𝑪 → 𝑨 ≥s 𝑪
+ A≅B×B≥C→A≥C : 𝑨 ≅ 𝑩 → 𝑩 ≥ 𝑪 → 𝑨 ≥ 𝑪
 
- A≅B×B≥C→A≥C A≅B B≥C = ≥s-trans 𝑨{𝑩}𝑪 (≅→≥s A≅B) B≥C
+ A≅B×B≥C→A≥C A≅B B≥C = ≥-trans 𝑨{𝑩}𝑪 (≅→≥ A≅B) B≥C
 
- A≅B×B≤C→A≤C : 𝑨 ≅ 𝑩 → 𝑩 ≤s 𝑪 → 𝑨 ≤s 𝑪
- A≅B×B≤C→A≤C A≅B B≤C = ≤s-trans 𝑨{𝑩}𝑪 (≅→≤s A≅B) B≤C
+ A≅B×B≤C→A≤C : 𝑨 ≅ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
+ A≅B×B≤C→A≤C A≅B B≤C = ≤-trans 𝑨{𝑩}𝑪 (≅→≤ A≅B) B≤C
 
 
-≤s-TRANS-≅ : (𝑨 : SetoidAlgebra α ρᵃ){𝑩 : SetoidAlgebra β ρᵇ}(𝑪 : SetoidAlgebra γ ρᶜ)
- →          𝑨 ≤s 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤s 𝑪
-≤s-TRANS-≅ 𝑨 {𝑩} 𝑪 (h , hinj) B≅C = (∘-hom 𝑨 𝑩 𝑪 h (to B≅C)) , ∘-injective hinj (≅toInjective B≅C)
+≤-TRANS-≅ : (𝑨 : SetoidAlgebra α ρᵃ){𝑩 : SetoidAlgebra β ρᵇ}(𝑪 : SetoidAlgebra γ ρᶜ)
+ →          𝑨 ≤ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤ 𝑪
+≤-TRANS-≅ 𝑨 {𝑩} 𝑪 (h , hinj) B≅C = (∘-hom 𝑨 𝑩 𝑪 h (to B≅C)) , ∘-injective hinj (≅toInjective B≅C)
 
-≤s-mono : (𝑩 : SetoidAlgebra β ρᵇ){𝒦 𝒦' : Pred (SetoidAlgebra α ρᵃ) γ}
+≤-mono : (𝑩 : SetoidAlgebra β ρᵇ){𝒦 𝒦' : Pred (SetoidAlgebra α ρᵃ) γ}
  →        𝒦 ⊆ 𝒦' → 𝑩 IsSubalgebraOfClass 𝒦 → 𝑩 IsSubalgebraOfClass 𝒦'
 
-≤s-mono 𝑩 KK' (𝑨 , (KA , B≤A)) = 𝑨 , ((KK' KA) , B≤A)
+≤-mono 𝑩 KK' (𝑨 , (KA , B≤A)) = 𝑨 , ((KK' KA) , B≤A)
 
 
 
@@ -117,14 +117,14 @@ module _ {𝒦 : Pred (SetoidAlgebra α ρᵃ)(ov α)}{𝑩 : SetoidAlgebra β �
  Lift-is-sub : 𝑩 IsSubalgebraOfClass 𝒦 → (Lift-SetoidAlg 𝑩 ℓ) IsSubalgebraOfClass 𝒦
  Lift-is-sub (𝑨 , (KA , B≤A)) = 𝑨 , (KA , A≥B×B≅C→A≥C {𝑨 = 𝑨}{𝑩} B≤A Lift-≅)
 
-≤s-Lift : (𝑨 : SetoidAlgebra α ρᵃ){𝑩 : SetoidAlgebra β ρᵇ}{ℓ : Level} → 𝑨 ≤s 𝑩 → 𝑨 ≤s Lift-SetoidAlg 𝑩 ℓ
-≤s-Lift 𝑨 {𝑩}{ℓ} A≤sB = A≤B×B≅C→A≤C{𝑨 = 𝑨}{𝑩}  A≤sB Lift-≅
+≤-Lift : (𝑨 : SetoidAlgebra α ρᵃ){𝑩 : SetoidAlgebra β ρᵇ}{ℓ : Level} → 𝑨 ≤ 𝑩 → 𝑨 ≤ Lift-SetoidAlg 𝑩 ℓ
+≤-Lift 𝑨 {𝑩}{ℓ} A≤B = A≤B×B≅C→A≤C{𝑨 = 𝑨}{𝑩}  A≤B Lift-≅
 
-≥s-Lift : (𝑨 : SetoidAlgebra α ρᵃ){𝑩 : SetoidAlgebra β ρᵇ}{ℓ : Level} → 𝑨 ≥s 𝑩 → 𝑨 ≥s Lift-SetoidAlg 𝑩 ℓ
-≥s-Lift 𝑨 {𝑩}{ℓ} A≥sB = A≥B×B≅C→A≥C {𝑨 = 𝑨}{𝑩} A≥sB Lift-≅
+≥-Lift : (𝑨 : SetoidAlgebra α ρᵃ){𝑩 : SetoidAlgebra β ρᵇ}{ℓ : Level} → 𝑨 ≥ 𝑩 → 𝑨 ≥ Lift-SetoidAlg 𝑩 ℓ
+≥-Lift 𝑨 {𝑩}{ℓ} A≥B = A≥B×B≅C→A≥C {𝑨 = 𝑨}{𝑩} A≥B Lift-≅
 
-Lift-≤s-Lift : {𝑨 : SetoidAlgebra α ρᵃ}(ℓᵃ : Level){𝑩 : SetoidAlgebra β ρᵇ}(ℓᵇ : Level)
- →             𝑨 ≤s 𝑩 → Lift-SetoidAlg 𝑨 ℓᵃ ≤s Lift-SetoidAlg 𝑩 ℓᵇ
-Lift-≤s-Lift {𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ A≤sB = ≥s-Lift (Lift-SetoidAlg 𝑩 ℓᵇ){𝑨} (≤s-Lift 𝑨{𝑩} A≤sB)
+Lift-≤-Lift : {𝑨 : SetoidAlgebra α ρᵃ}(ℓᵃ : Level){𝑩 : SetoidAlgebra β ρᵇ}(ℓᵇ : Level)
+ →             𝑨 ≤ 𝑩 → Lift-SetoidAlg 𝑨 ℓᵃ ≤ Lift-SetoidAlg 𝑩 ℓᵇ
+Lift-≤-Lift {𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ A≤B = ≥-Lift (Lift-SetoidAlg 𝑩 ℓᵇ){𝑨} (≤-Lift 𝑨{𝑩} A≤B)
 
 \end{code}

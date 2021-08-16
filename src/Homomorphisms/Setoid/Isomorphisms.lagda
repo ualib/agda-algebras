@@ -162,7 +162,7 @@ Lift-SetoidAlg-assoc _ _ = ≅-trans (≅-trans (≅-sym Lift-≅) Lift-≅) Lif
 
 
 
-#### <a id="products-preserve-isomorphisms">Products preserve isomorphisms</a>
+#### Products preserve isomorphisms
 
 Products of isomorphic families of algebras are themselves isomorphic. The proof looks a bit technical, but it is as straightforward as it ought to be.
 
