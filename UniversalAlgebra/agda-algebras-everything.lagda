@@ -49,7 +49,9 @@ open import Relations.Quotients             using    ( Equivalence ; ker-IsEquiv
 
 open import Foundations.Welldefined         using    ( welldef ; swelldef ; funext→swelldef ; SwellDef
                                                      ; swelldef' ; funext' ; funext'→swelldef'
-                                                     ; swelldef'→funext' ; Fin2-wd )
+                                                     ; swelldef'→funext' ; A×A-wd ; Fin2-wd ; Fin3-wd
+                                                     ; ListA→B ; CurryListA ; CurryListA' )
+
 
 open import Foundations.Truncation          using    ( is-center ; is-singleton ; is-prop ; is-prop-valued
                                                      ; singleton-is-prop ; fiber ; is-equiv ; hfunext
@@ -85,12 +87,11 @@ open import ClosureSystems.Properties       using    ( clop→law⇒ ; clop→la
 
 -- ALGEBRAS ------------------------------------------------------------------------------------------
 
-open import Algebras.Basic                  using    ( Signature ; signature ; monoid-op ; monoid-sig
-                                                     ; compatible ; Algebra ; lilAlgebra
-                                                     ; Level-of-Alg ; Level-of-Carrier ; Level-of-lilAlg
-                                                     ; Level-of-lilCarrier ; algebra ; lilalgebra
-                                                     ; algebra→Algebra ; Algebra→algebra ; _̂_
-                                                     ; Lift-alg-op ; Lift-Alg ; Lift-op-lilAlg
+open import Algebras.Basic                  using    ( Signature ; signature ; compatible ; Algebra
+                                                     ; lilAlgebra ; Level-of-Alg ; Level-of-Carrier
+                                                     ; Level-of-lilAlg ; Level-of-lilCarrier ; algebra
+                                                     ; lilalgebra ; algebra→Algebra ; Algebra→algebra
+                                                     ; _̂_ ; Lift-alg-op ; Lift-Alg ; Lift-op-lilAlg
                                                      ; Lift-lilAlg ; Lift-algebra ;  compatible-lilAlg
                                                      ; compatible-Rel-alg ; compatible-ΠΡ-alg
                                                      ; compatible-Rel-lilAlg ; compatible-ΠΡ-lilAlg )

@@ -2,7 +2,7 @@
 layout: default
 title : Foundations.Truncation module (The Agda Universal Algebra Library)
 date : 2021-02-23
-author: [the ualib/agda-algebras development team][]
+author: [agda-algebras development team][]
 ---
 
 ### Truncation
@@ -122,7 +122,7 @@ Now, perhaps we have two proofs, say, `r s : p ≡₁ q` that the proofs `p` and
 
 In [homotopy type theory](https://homotopytypetheory.org), a type `A` with an identity relation `≡₀` is called a *set* (or *0-groupoid*) if for every pair `x y : A` there is at most one proof of `x ≡₀ y`. In other words, the type `A`, along with it's equality type `≡₀`, form a *set* if for all `x y : A` there is at most one proof of `x ≡₀ y`.
 
-This notion is formalized in the [Type Topology][] library, using the `is-subsingleton` type that we saw earlier ([Overture.Inverses][]), as follows.<sup>[1](Relations.Truncation.html#fn1)</sup>.
+This notion is formalized in the [Type Topology][] library, using the `is-subsingleton` type that we saw earlier ([Overture.Inverses][]), as follows.
 
 \begin{code}
 
@@ -139,7 +139,7 @@ is-set A = is-prop-valued{A = A} _≡_
 
 Thus, the pair `(A , ≡₀)` forms a set if and only if it satisfies `∀ x y : A → is-subsingleton (x ≡₀ y)`.
 
-We will also need the function [to-Σ-≡](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#sigmaequality), which is part of Escardó's characterization of *equality in Sigma types*.<sup>[2](Relations.Truncation.html#fn2)</sup> It is defined as follows.
+We will also need the function [to-Σ-≡](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#sigmaequality), which is part of Escardó's characterization of *equality in Sigma types*. It is defined as follows.
 
 \begin{code}
 
@@ -180,45 +180,12 @@ module _ {A : Type α}{B : Type β} where
  equiv-is-embedding : (f : A → B) → is-equiv f → is-embedding f
  equiv-is-embedding f i y = singleton-is-prop (fiber f y) (i y)
 
--- open import MGS-Retracts using (_◁⟨_⟩_; _◀; Σ-retract; retract-of-singleton; singleton-type-center; singleton-type-centered)
-
- -- invertible-is-equiv : (f : A → B) → invertible f → is-equiv f
- -- invertible-is-equiv f (g , η , ε) b₀ = γ
- --  where
- --  s : (b : B) → f (g b) ≡ b₀ → b ≡ b₀
- --  s b = subst (_≡ b₀) (ε b)
- --  r : (b : B) → b ≡ b₀ → f (g b) ≡ b₀
- --  r b = subst (_≡ b₀) ((ε b)⁻¹)
-
- --  β : (b : B) → (f (g b) ≡ b₀) ◁ (b ≡ b₀)
- --  β b = (r b) , (s b) , subst-is-section (_≡ b₀) (ε b)
-
-  -- α : fiber f b₀ ◁ singleton-type b₀
-  -- α = (λ _ → g b₀ , ε b₀) , ((λ _ → b₀ , refl) , (λ x → {!!}))
-  -- (Σ a ꞉ A , (f a ≡ b₀))     ◁⟨ Σ-reindexing-retract g (f , η) ⟩
-  --      (Σ b ꞉ B , f (g b) ≡ b₀) ◁⟨ Σ-retract  β                   ⟩
-  --      (Σ b ꞉ B , b ≡ b₀)       ◀
-
-  -- γ : is-singleton (fiber f b₀)
-  -- γ = (g b₀ , ε b₀) , {!!}
-
-  -- γ : is-singleton (fiber f b₀)
-  -- γ = (g b₀ , ε b₀) , {!!}
-
- -- invertible-is-embedding : (f : A → B) → invertible f → is-embedding f
- -- invertible-is-embedding f fi = equiv-is-embedding f (invertible-is-equiv f fi)
-
 \end{code}
-
-
-
-
-
 
 We will use `is-embedding`, `is-set`, and `to-Σ-≡` in the next subsection to prove that a monic function into a set is an embedding.
 
 
-#### <a id="injective-functions-are-set-embeddings">Injective functions are set embeddings</a>
+#### Injective functions are set embeddings
 
 Before moving on to define [propositions](Overture.Truncation.html#propositions), we discharge an obligation we mentioned but left unfulfilled in the [embeddings](Overture.Inverses.html#embeddings) section of the [Overture.Inverses][] module.  Recall, we described and imported the `is-embedding` type, and we remarked that an embedding is not simply a monic function.  However, if we assume that the codomain is truncated so as to have unique identity proofs (i.e., is a set), then we can prove that any monic function into that codomain will be an embedding.  On the other hand, embeddings are always monic, so we will end up with an equivalence.
 
@@ -246,7 +213,7 @@ monic-is-embedding|Set f Bset fmon b (u , fu≡b) (v , fv≡b) = γ
 In stating the previous result, we introduce a new convention to which we will try to adhere. If the antecedent of a theorem includes the assumption that one of the types involved is a *set* (in the sense defined above), then we add to the name of the theorem the suffix `|Set`, which calls to mind the standard mathematical notation for the restriction of a function.
 
 
-#### <a id="equivalence-class-truncation">Equivalence class truncation</a>
+#### Equivalence class truncation
 
 Recall, `IsBlock` was defined in the [Relations.Quotients][] module as follows:
 
@@ -266,9 +233,8 @@ blk-uip A R = ∀ (C : Pred A _) → is-prop (IsBlock C {R})
 
 It might seem unreasonable to postulate that there is at most one inhabitant of `IsBlock C`, since equivalence classes typically have multiple members, any one of which could serve as a class representative.  However, postulating `blk-uip A R` is tantamount to collapsing each `R`-block to a single point, and this is indeed the correct semantic interpretation of the elements of the quotient `A / R`.
 
-----------------------------
 
-#### <a id="general-propositions">General propositions*</a>
+#### General propositions
 
 This section defines more general truncated predicates which we call *continuous propositions* and *dependent propositions*. Recall, above (in the [Relations.Continuous][] module) we defined types called `ContRel` and `DepRel` to represent relations of arbitrary arity over arbitrary collections of sorts.
 
@@ -295,34 +261,11 @@ module _ {I : Arity 𝓥} where
 
  ΠΡPropExt : (I → Type α) → (ρ : Level) → Type (𝓥 ⊔ α ⊔ lsuc ρ)
  ΠΡPropExt 𝒜 ρ = {P Q : ΠΡProp 𝒜 ρ} → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
-
-
-
 \end{code}
 
 ----------------------------
 
-
-<sup>*</sup><span class="footnote" id="fn0"> Sections marked with an asterisk include new types that are more abstract and general than some of the types defined in other sections. As yet these general types are not used elsewhere in the [UniversalAlgebra][] library, so sections marked * may be safely skimmed or skipped.</span>
-
-
-<sup>1</sup><span class="footnote" id="fn1"> As [Escardó][] explains, "at this point, with the definition of these notions, we are entering the realm of univalent mathematics, but not yet needing the univalence axiom."</span>
-
-<sup>2</sup><span class="footnote" id="fn2"> See [https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#sigmaequality](www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#sigmaequality).</span>
-
-<sup>3</sup><span class="footnote" id="fn3"> This is another example of proof-irrelevance. Indeed, if `R` is a binary proposition and we have two proofs of `R x y`, then the proofs are indistinguishable.
-</span>
-
-<br>
-<br>
-
-[← Relations.Quotients](Relations.Quotients.html)
-<span style="float:right;">[Relations.Extensionality →](Relations.Extensionality.html)</span>
-
-
 {% include UALib.Links.md %}
 
------------------------------------------------
-
-[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 

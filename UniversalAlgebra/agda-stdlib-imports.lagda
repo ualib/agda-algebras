@@ -24,7 +24,7 @@ open import Relation.Binary                       using ( IsEquivalence )
 open import Relation.Binary.Bundles               using ( Poset )
 open import Relation.Binary.Core                  using ( _Preserves_⟶_ ) --; Extensive ; Idempotent₁ )
 open import Relation.Binary.Core                  using ( _⇒_ ; _=[_]⇒_ )                                        renaming ( REL to BinREL ; Rel to BinRel )
-open import Relation.Binary.PropositionalEquality using ( sym  ; trans ; cong ; cong-app ; module ≡-Reasoning )
+open import Relation.Binary.PropositionalEquality as PE using (_≡_; refl ; sym  ; trans ; cong ; cong-app ; module ≡-Reasoning )
 open import Relation.Unary                        using ( ∅; _∈_; Pred ; _⊆_ ; ⋂ ; ｛_｝ ; _∪_ )
 
 

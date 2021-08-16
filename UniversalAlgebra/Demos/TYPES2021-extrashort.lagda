@@ -129,7 +129,7 @@ in dependent type theory using Agda.
 \begin{code}
 {-# OPTIONS --without-K --exact-split --safe #-}
 open import Demos.TYPES2021-shortimports
-module Demos.TYPES2021-short  {𝓞 𝓥 : Level} where
+module Demos.TYPES2021-extrashort  {𝓞 𝓥 : Level} where
 variable α β γ ρ χ 𝓘 : Level
 \end{code}
 
@@ -317,7 +317,7 @@ Terms are simply trees with an operation symbol at each node and a variable
 symbol at each leaf (generator).
 
 \begin{code}
-
+module _ {𝑆 : Signature 𝓞 𝓥}  where
  data Term (X : Type χ ) : Type (ov χ)  where
 
   ℊ : X → Term X       -- (ℊ for "generator")

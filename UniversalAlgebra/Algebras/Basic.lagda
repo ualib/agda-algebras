@@ -2,10 +2,10 @@
 layout: default
 title : Algebras.Basic module (Agda Universal Algebra Library)
 date : 2021-04-23
-author: [the ualib/agda-algebras development team][]
+author: [the agda-algebras development team][]
 ---
 
-### <a id="algebras">Basic Definitions</a>
+### Basic Definitions
 
 This is the [Algebras.Basic][] module of the [Agda Universal Algebra Library][].
 
@@ -37,7 +37,7 @@ variable 𝓞 𝓥 : Level
 
 \end{code}
 
-#### <a id="signatures">The signatures of an algebra</a>
+#### The signatures of an algebra
 
 In [model theory](https://en.wikipedia.org/wiki/Model_theory), the *signature* `𝑆 = (𝐶, 𝐹, 𝑅, ρ)` of a structure consists of three (possibly empty) sets `𝐶`, `𝐹`, and `𝑅`---called *constant symbols*, *function symbols*, and *relation symbols*, respectively---along with a function `ρ : 𝐶 + 𝐹 + 𝑅 → 𝑁` that assigns an *arity* to each symbol. Often (but not always) `𝑁 = ℕ`, the natural numbers.
 
@@ -49,7 +49,7 @@ If `A` is a set and `𝑓` is a (`ρ 𝑓`)-ary operation on `A`, we often indic
 
 **Example**. Suppose `𝑔 : (m → A) → A` is an `m`-ary operation on `A`, and `a : m → A` is an `m`-tuple on `A`. Then `𝑔 a` may be viewed as `𝑔 (a 0, a 1, …, a (m-1))`, which has type `A`. Suppose further that `𝑓 : (ρ𝑓 → B) → B` is a `ρ𝑓`-ary operation on `B`, let `a : ρ𝑓 → A` be a `ρ𝑓`-tuple on `A`, and let `h : A → B` be a function.  Then the following typing judgments obtain: `h ∘ a : ρ𝑓 → B` and we `𝑓 (h ∘ a) : B`.
 
-#### <a id="signature-type">Signature type</a>
+#### Signature type
 
 In the [UniversalAlgebra][] library we represent the *signature* of an algebraic structure using the following type.
 
@@ -77,7 +77,7 @@ In the [Overture][] module we defined special syntax for the first and second pr
 
 
 
-#### <a id="algebras">Algebras</a>
+#### Algebras
 
 Our first goal is to develop a working vocabulary and formal library for classical (single-sorted, set-based) universal algebra.  In this section we define the main objects of study.  An *algebraic structure* (or *algebra*) in the signature `𝑆 = (𝐹, ρ)` is denoted by `𝑨 = (A, F`<sup>`𝑨`</sup>`)` and consists of
 

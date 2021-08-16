@@ -49,19 +49,19 @@ open import Relations.Discrete       using ( arity[_] ; ker
 -- open import Relations.Discrete              using    (Im_⊆_ ; Arity ; ker ; kerlift ; ker' ; kernel ; 0[_]
 --                                                      ; _⊑_ ; ⊑-refl ; ⊑-trans ; Op ; π ; eval-rel
 --                                                      ;  _|:_ ; compatibility-agreement
-open import Relations.Continuous    using ( compatible-Ρ ) public
+-- open import Relations.Continuous    using ( compatible-Ρ ) public
 
 
 open import Relations.Quotients      using ( ker-IsEquivalence ; _/_ ; ⌞_⌟
                                            ; ⟪_⟫ ; IsBlock ; Quotient
                                            ; Equivalence ; 0[_]Equivalence
                                            ;  ⟪_∼_⟫-elim ; R-block           ) public
-open import Relations.Truncation     using ( is-set ; blk-uip
+open import Foundations.Truncation     using ( is-set ; blk-uip
                                            ; is-embedding ; hfunext
                                            ; monic-is-embedding|Set          ) public
-open import Relations.Extensionality using ( SwellDef ; DFunExt ; swelldef
-                                           ; block-ext|uip ; pred-ext
-                                           ; SurjInvIsRightInv ; epic-factor ) public
+-- open import Foundations.Extensionality using ( SwellDef ; DFunExt ; swelldef
+--                                            ; block-ext|uip ; pred-ext
+--                                            ; SurjInvIsRightInv ; epic-factor ) public
 open import Algebras.Basic           using ( Level-of-Carrier ; compatible   ) public
 open import Homomorphisms.Basic      using ( kercon ; ker[_⇒_]_↾_
                                            ; ⨅-hom-co ; πker ; ∘-is-hom
@@ -74,10 +74,12 @@ open import Homomorphisms.Noether           using    ( FirstHomTheorem|Set
 open import Homomorphisms.Isomorphisms      using    (  ⨅≅ ; Lift-Alg-assoc ) public
 open import Terms.Operations                using    (  free-lift-interp ; interp-prod ) public
 
+open import Algebras.Products              using (ov) public
+open import Algebras.Basic using ( _̂_ ) public
 open ≡-Reasoning public
-open import Subalgebras.Subalgebras         using    ( -- _IsSubalgebraOf_ ; Subalgebra ; FirstHomCorollary|Set
-                                                     -- ; free-quot-subalg ; _≤_ ; _IsSubalgebraOfClass_
-                                                     -- ; SubalgebraOfClass ; ≤-reflexive ; ≤-refl
-                                                     -- ; ≤-transitivity ; ≤-trans ; iso→injective ; ≤-iso
-                                                     -- ; ≤-trans-≅ ; ≤-TRANS-≅ ; ≤-mono ; Lift-is-sub
-                                                      Lift-≤ ; Lift-≤-Lift ; ≤-Lift ) public
+-- open import Subalgebras.Subalgebras         using    ( -- _IsSubalgebraOf_ ; Subalgebra ; FirstHomCorollary|Set
+--                                                      -- ; free-quot-subalg ; _≤_ ; _IsSubalgebraOfClass_
+--                                                      -- ; SubalgebraOfClass ; ≤-reflexive ; ≤-refl
+--                                                      -- ; ≤-transitivity ; ≤-trans ; iso→injective ; ≤-iso
+--                                                      -- ; ≤-trans-≅ ; ≤-TRANS-≅ ; ≤-mono ; Lift-is-sub
+--                                                       Lift-≤ ; Lift-≤-Lift ; ≤-Lift ) public
