@@ -33,8 +33,7 @@ import Relation.Binary.PropositionalEquality as PE
 
 -- Imports from the Agda Universal Algebra Library
 open import Overture.Preliminaries     using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; _≈_)
-open import Overture.Inverses          using ( IsInjective ; IsSurjective )
-open import Overture.Inverses          using ( SurjInv )
+open import Overture.Inverses          using ( IsInjective ; IsSurjective ; SurjInv )
 open import Relations.Discrete         using ( ker ; kernel )
 open import Relations.Quotients        using ( ker-IsEquivalence )
 open import Foundations.Truncation     using ( is-set ; blk-uip ; is-embedding ; monic-is-embedding|Set )
