@@ -1,3 +1,0 @@
-#!/bin/bash
-PATH=$HOME/ualib/agda/.cabal-sandbox/bin/:$PATH
-emacs --no-init-file --load $HOME/ualib/.emacs $@
