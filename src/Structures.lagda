@@ -17,7 +17,6 @@ This is the [Structures][] module of the [Agda Universal Algebra Library][].
 module Structures where
 
 open import Structures.Basic
-open import Structures.Examples
 open import Structures.Graphs
 open import Structures.Graphs0
 open import Structures.Products

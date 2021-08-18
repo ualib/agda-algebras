@@ -31,7 +31,7 @@ open import Overture.Transformers           using    ( Bijection ; ∣_∣=∣_�
 
 -- RELATIONS  -----------------------------------------------------------------------------------------
 
-open import Relations.Discrete              using    (Im_⊆_ ; Arity ; ker ; kerlift ; ker' ; kernel ; 0[_]
+open import Relations.Discrete              using    (Im_⊆_ ; ker ; kerlift ; ker' ; kernel ; 0[_]
                                                      ; _⊑_ ; ⊑-refl ; ⊑-trans ; Op ; π ; eval-rel
                                                      ; _preserves_ ; _|:_ ; compatibility-agreement
                                                      ; compatibility-agreement' ; arity[_] )
@@ -133,7 +133,7 @@ open import Homomorphisms.HomomorphicImages using    ( _IsHomImageOf_ ; HomImage
 
 open import Homomorphisms.Setoid.Basic      using    ( compatible-op-map ; is-homomorphism ; hom
                                                      ; ∘-hom ; ∘-is-hom ; 𝒾𝒹 ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇
-                                                     ; module LiftSetoidHom ; is-monomorphism ; mon ; epi
+                                                     ; is-monomorphism ; mon ; epi ; Lift-hom
                                                      ; is-epimorphism ; homker-comp ;  kercon ; kerquo
                                                      ; ker[_⇒_]_↾_ )
 
@@ -184,17 +184,17 @@ open import Subalgebras.Setoid.Subuniverses  using   ( Subuniverses ; Subunivers
                                                      ; TermImage ; TermImageIsSub ; B-onlyif-TermImageB
                                                      ; SgB-onlyif-TermImageB ; hom-unique )
 
-open import Subalgebras.Setoid.Subalgebras  using    ( _≥s_ ; _IsSupalgebraOf_ ; _≤s_ ; _IsSubalgebraOf_
+open import Subalgebras.Setoid.Subalgebras  using    ( _≥_ ; _IsSupalgebraOf_ ; _≤_ ; _IsSubalgebraOf_
                                                      ; SubalgebraOf ; Subalgebra
                                                      ; IsSubalgebraREL ; SubalgebraREL ; _≤c_
                                                      ; _IsSubalgebraOfClass_ ; SubalgebraOfClass
                                                      ; SubalgebraOfClass' ; SubalgebrasOfClass )
 
-open import Subalgebras.Setoid.Properties   using    ( ≅→≤s ; ≅→≥s ; ≤s-refl ; ≥s-refl ; ≤s-reflexive
-                                                     ; ≤s-trans ; ≥s-trans ; ≤s-preorder
+open import Subalgebras.Setoid.Properties   using    ( ≅→≤ ; ≅→≥ ; ≤-refl ; ≥-refl ; ≤-reflexive
+                                                     ; ≤-trans ; ≥-trans ; ≤-preorder
                                                      ; A≥B×B≅C→A≥C ; A≤B×B≅C→A≤C ; A≅B×B≥C→A≥C ; A≅B×B≤C→A≤C
-                                                     ; ≤s-TRANS-≅ ; ≤s-mono ; Lift-is-sub ; ≤s-Lift
-                                                     ; ≥s-Lift ; Lift-≤s-Lift )
+                                                     ; ≤-TRANS-≅ ; ≤-mono ; Lift-is-sub ; ≤-Lift
+                                                     ; ≥-Lift ; Lift-≤-Lift )
 
 
 

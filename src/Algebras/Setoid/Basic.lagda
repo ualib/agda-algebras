@@ -102,6 +102,18 @@ open SetoidAlgebra
 𝔻[ 𝑨 ] = Domain 𝑨
 
 
+-- The universe level of a SetoidAlgebra
+
+Level-of-Alg : {α ρ 𝓞 𝓥 : Level}{𝑆 : Signature 𝓞 𝓥} → SetoidAlgebra α ρ → Level
+Level-of-Alg {α = α}{ρ}{𝓞}{𝓥} _ = 𝓞 ⊔ 𝓥 ⊔ lsuc (α ⊔ ρ)
+
+Level-of-Carrier : {α ρ 𝓞 𝓥  : Level}{𝑆 : Signature 𝓞 𝓥} → SetoidAlgebra α ρ → Level
+Level-of-Carrier {α = α} _ = α
+
+
+
+
+
 -- Easier notation for application of an (interpreted) operation symbol.
 
 _∙_ : (f : ∣ 𝑆 ∣)(𝑨 : Algebroid α ρ) → (∥ 𝑆 ∥ f  →  Carrier ∣ 𝑨 ∣) → Carrier ∣ 𝑨 ∣
@@ -114,9 +126,10 @@ _̂_ : (f : ∣ 𝑆 ∣)(𝑨 : SetoidAlgebra α ρ) → (∥ 𝑆 ∥ f  →  
 
 f ̂ 𝑨 = λ a → (Interp 𝑨) <$> (f , a)
 
-\end{code}
+
 
 \end{code}
+
 
 #### Level lifting setoid algebra types
 
@@ -139,6 +152,22 @@ Interp (Lift-SetoidAlg 𝑨 ℓ) <$> (f , la) = lift ((f ̂ 𝑨) (lower ∘ la)
 
 cong (Interp (Lift-SetoidAlg 𝑨 ℓ)) (≡.refl , la=lb) = cong (Interp 𝑨) ((≡.refl , la=lb))
 
+
+-- Lift-Alg : SetoidAlgebra α ρ → (α' ρ' : Level) → SetoidAlgebra (α ⊔ α') (ρ ⊔ ρ')
+
+-- Lift-Alg {α}{ρ} 𝑨 α' ρ' = record { Domain = dom
+--                           ; Interp = interp }
+--  where
+--  dom : Setoid (α ⊔ α') (ρ ⊔ ρ')
+--  dom = record { Carrier = Lift α' 𝕌[ 𝑨 ]
+--               ; _≈_ = λ x y → Lift ρ' (lower x ≈A lower y)
+--               ; isEquivalence = record { refl = lift refl
+--                                        ; sym = λ x → lift (sym (lower x))
+--                                        ; trans = λ x y → lift (trans (lower x) (lower y))
+--                                        }
+--               } where open Setoid (Domain 𝑨) renaming (_≈_ to _≈A_)
+--  interp : Func (⟦ 𝑆 ⟧s dom) dom
+--  interp = {!!}
 
 -- Alternatively, we could define the Lift of a SetoidAlgebra inside an anonymous module where we open
 -- SetoidAlgebra 𝑨 and Setoid (Domain 𝑨) to give ourselves simpler handles on the fields.

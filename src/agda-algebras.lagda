@@ -26,11 +26,11 @@ of citation.
 
 -->
 
-## <a id="ualib">The Agda Universal Algebra Library</a>
+## The Agda Universal Algebra Library
 
 ---------------------------------------------------------------------------------
 
-(version 2.03 of {{ "now" | date: "%d %b %Y" }})
+(version 0.01 of {{ "now" | date: "%d %b %Y" }})
 
 **Abstract**. The [Agda UniversalAlgebra][] library is a collection of types and programs (theorems and proofs) that formalizes the foundations of universal algebra in dependent type theory using the [Agda][] proof assistant language.
 
@@ -52,13 +52,13 @@ We hope the library will be useful to mathematicians and computer scientists who
 
 --------------------------------
 
-### <a id="brief-contents"></a> Brief Contents
+### Brief Contents
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module UniversalAlgebra where
+module agda-algebras where
 
 -- Imports from Agda (builtin/primitive) and the Agda Standard Library
 open import Preface

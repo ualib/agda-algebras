@@ -13,11 +13,27 @@ This is the [Homomorphisms.Setoid.Noether][] module of the [Agda Universal Algeb
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Level using ( Level )
-open import Algebras.Basic
+open import Algebras.Basic using (𝓞 ; 𝓥 ; Signature )
 
 module Homomorphisms.Setoid.Noether {𝑆 : Signature 𝓞 𝓥} where
 
+open import Data.Product    using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Function        using ( _∘_ ; id )
+open import Level           using ( Level )
+open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; sym ; cong )
+open import Relation.Binary.PropositionalEquality.Core using ( module ≡-Reasoning )
+open import Relation.Unary  using ( _⊆_ )
+
+-- Imports from the Agda Universal Algebra Library
+open import Overture.Preliminaries     using ( ∣_∣ ; ∥_∥ ; _≈_)
+open import Overture.Inverses          using ( IsInjective ; IsSurjective ; SurjInv )
+open import Foundations.Welldefined    using ( swelldef )
+open import Foundations.Extensionality using ( block-ext|uip ; pred-ext ; SurjInvIsRightInv ; epic-factor )
+open import Relations.Discrete         using ( kernel )
+
+open import Algebras.Setoid.Basic      {𝑆 = 𝑆} using ( 𝕌[_] ; SetoidAlgebra ; _̂_ )
+open import Homomorphisms.Setoid.Basic {𝑆 = 𝑆} using ( hom ; kercon ; ker[_⇒_]_↾_ ; ∘-hom ; 𝒾𝒹 ; epi
+                                                     ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-homomorphism ; ∘-is-hom )
 \end{code}
 
 
@@ -76,11 +92,11 @@ module _ {α ρᵃ : Level} {𝑨 : SetoidAlgebra α ρᵃ}
 
   φIsHomCB : ∀ 𝑓 c → φ ((𝑓 ̂ 𝑪) c) ≡ ((𝑓 ̂ 𝑩)(φ ∘ c))
   φIsHomCB 𝑓 c =
-   φ ((𝑓 ̂ 𝑪) c)                    ≡⟨ ≡-cong φ (wd (𝑓 ̂ 𝑪) c (∣ ν ∣ ∘ (νInv ∘ c)) λ i → η ((c i)))⟩
-   φ ((𝑓 ̂ 𝑪)(∣ ν ∣ ∘(νInv ∘ c)))   ≡⟨ ≡-cong φ (∥ ν ∥ 𝑓 (νInv ∘ c))⁻¹ ⟩
+   φ ((𝑓 ̂ 𝑪) c)                    ≡⟨ cong φ (wd (𝑓 ̂ 𝑪) c (∣ ν ∣ ∘ (νInv ∘ c)) λ i → η ((c i)))⟩
+   φ ((𝑓 ̂ 𝑪)(∣ ν ∣ ∘(νInv ∘ c)))   ≡⟨ cong φ (sym (∥ ν ∥ 𝑓 (νInv ∘ c))) ⟩
    φ (∣ ν ∣((𝑓 ̂ 𝑨)(νInv ∘ c)))     ≡⟨ sym (τφν ((𝑓 ̂ 𝑨)(νInv ∘ c))) ⟩
    ∣ τ ∣((𝑓 ̂ 𝑨)(νInv ∘ c))         ≡⟨ ∥ τ ∥ 𝑓 (νInv ∘ c) ⟩
-   (𝑓 ̂ 𝑩)(λ x → ∣ τ ∣(νInv (c x))) ∎
+   (𝑓 ̂ 𝑩)(λ x → ∣ τ ∣(νInv (c x))) ∎ where open ≡-Reasoning
 
 \end{code}
 
