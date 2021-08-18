@@ -1,3 +1,7 @@
+# This file is essentially a copy of the Makefile in the agda-categories library by Jacques Carette.
+# The only difference is that this version works with .lagda files instead of .agda files.
+# The original Makefile from agda-categories is https://github.com/agda/agda-categories/blob/master/Makefile
+
 .PHONY: test Everything.agda clean
 
 OTHEROPTS=
