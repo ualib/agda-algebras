@@ -17,6 +17,16 @@ the [documentation](https://ualib.guthub.io/agda-algebras), for (this version of
 
 -----------------------------
 
+## Documentation
+
+Agda was used to generate html pages for each module. These pages are now served at
+
+[https://ualib.github.io/agda-algebras/](https://ualib.github.io/agda-algebras/)
+
+(The previous version of the agda-algebras library, called UALib, is documented at [ualib.org](https://ualib.gitlab.io).)
+
+----------------------------------
+
 ## Install Agda
 
 Agda ([version 2.6.1](https://agda.readthedocs.io/en/v2.6.1/getting-started/installation.html) or greater) is required. 
