@@ -12,7 +12,8 @@ test: Everything.agda
 	agda ${RTSARGS} -i. Everything.agda
 
 html: Everything.agda
-	agda ${RTSARGS} --html -i. Everything.agda
+	agda ${RTSARGS} --html --html-dir=./docs -i. Everything.agda
+	cp ./docs/agda-algebras.html ./docs/index.html
 
 Everything.agda:
 	git ls-tree --full-tree -r --name-only HEAD | grep '^src/[^\.]*.lagda' | sed -e 's|^src/[/]*|import |' -e 's|/|.|g' -e 's/.lagda//' -e '/import Everything/d' | LC_COLLATE='C' sort > Everything.agda

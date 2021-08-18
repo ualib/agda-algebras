@@ -1,0 +1,8 @@
+image: ruby:2.6
+
+pages:
+  stage: build
+  script:
+    - make html
+  only:
+  - master
