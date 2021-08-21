@@ -22,27 +22,21 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Varieties.Setoid.EquationalLogic {𝑆 : Signature 𝓞 𝓥} where
 
-
 -- imports from Agda and the Agda Standard Library -------------------------------------------
-open import Agda.Builtin.Equality  using    ( _≡_                       )
-                                   renaming ( refl     to ≡-refl        )
-open import Agda.Primitive         using    ( _⊔_      ;  lsuc  ; Level )
-                                   renaming ( Set      to Type          )
-open import Data.Product           using    ( _,_      ;   Σ
-                                            ; Σ-syntax ;   _×_          )
-                                   renaming ( proj₁    to  fst
-                                            ; proj₂    to  snd          )
-open import Function.Base          using    ( _∘_      ;  flip          )
-open import Function.Bundles       using    ( Func                      )
-open import Relation.Binary        using    ( Setoid   ;  IsEquivalence )
-open import Relation.Unary         using    ( Pred     ; _∈_            )
+open import Agda.Primitive   using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
+open import Data.Product     using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Function.Base    using ( _∘_ ; flip )
+open import Function.Bundles using ( Func )
+open import Relation.Binary  using ( Setoid ; IsEquivalence )
+open import Relation.Unary   using ( Pred ; _∈_ )
+open import Relation.Binary.PropositionalEquality
+                             using ( _≡_ ; refl )
+
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
-open Setoid        using    ( Carrier ; _≈_ ; isEquivalence )
-open Func          renaming ( f     to  _<$>_ )
-open IsEquivalence renaming ( refl  to  reflE
-                            ; sym   to  symmE
-                            ; trans to  tranE )
+open Setoid using ( Carrier ; _≈_ ; isEquivalence )
+open Func renaming ( f to _<$>_ )
+open IsEquivalence renaming ( refl to reflE ; sym to  symmE ; trans to tranE )
 
 
 -- imports from agda-algebras --------------------------------------------------------------
@@ -162,7 +156,7 @@ module Soundness {χ α ρ ι : Level}{I : Type ι} (E : I → Eq{χ})
  sound : ∀ {p q} → E ⊢ Γ ▹ p ≈ q → M ⊨ (p ≈̇ q)
 
  sound (hyp i)                      =  V i
- sound (app {f = f} es) ρ           =  Interp .cong (≡-refl , λ i → sound (es i) ρ)
+ sound (app {f = f} es) ρ           =  Interp .cong (refl , λ i → sound (es i) ρ)
  sound (sub {p = p} {q} Epq σ) ρ    =  begin
                                        ⟦ p [ σ ] ⟧ <$> ρ          ≈⟨ substitution p σ ρ ⟩
                                        ⟦ p       ⟧ <$> ⟪ σ ⟫ ρ ≈⟨ sound Epq (⟪ σ ⟫ ρ)  ⟩
@@ -213,7 +207,7 @@ module TermModel {χ : Level}{Γ : Type χ}{ι : Level}{I : Type ι} (E : I → 
  -- This works since E ⊢ Γ ▹_≈_ is a congruence.
  TermInterp : ∀ {Γ} → Func (⟦ 𝑆 ⟧s (TermSetoid Γ)) (TermSetoid Γ)
  TermInterp <$> (f , ts) = node f ts
- cong TermInterp (≡-refl , h) = app h
+ cong TermInterp (refl , h) = app h
 
  -- The term model per context Γ.
  M : Type χ → SetoidAlgebra _ _

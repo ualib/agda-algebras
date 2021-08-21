@@ -39,13 +39,13 @@ The `OPTIONS` pragma is usually followed by the start of a module.  For example,
 module Overture.Preliminaries where
 
 -- Imports from the Agda (Builtin) and the Agda Standard Library
-open import Agda.Builtin.Equality       using ( _≡_ ; refl )
 open import Agda.Primitive              using ( _⊔_ ; lsuc )           renaming ( Set to  Type ; lzero to  ℓ₀ )
 open import Data.Product                using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
 open import Function.Base               using ( _∘_ ; id )
 open import Level                       using ( Level ; Lift ; lift ; lower )
 open import Relation.Binary.Structures  using ( IsEquivalence ; IsPartialOrder )
-open import Relation.Binary.PropositionalEquality as PE
+open import Relation.Binary.PropositionalEquality
+                                        using    ( _≡_ ; refl ; sym ; trans )
 
 private variable α β : Level
 
@@ -99,7 +99,7 @@ Let's define some useful syntactic sugar that will make it easier to apply symme
 \begin{code}
 
 _⁻¹ : {A : Type α} {x y : A} → x ≡ y → y ≡ x
-p ⁻¹ = PE.sym p
+p ⁻¹ = sym p
 
 infix  40 _⁻¹
 

@@ -11,16 +11,15 @@ author: [agda-algebras development team][]
 
 module Structures.Sigma.Homs where
 
-open import Agda.Builtin.Equality  using    ( _≡_ ; refl )
-open import Agda.Primitive         using    ( _⊔_ ; lsuc )
-                                   renaming ( Set to Type ; lzero to ℓ₀ )
-open import Data.Product           using    ( _,_ ; _×_ ; Σ-syntax )
-                                   renaming ( proj₁ to fst ; proj₂ to snd )
-open import Level                  using    ( Level ; Lift ; lift ; lower )
-open import Function.Base          using    ( _∘_ ; id )
-open import Relation.Binary.PropositionalEquality as PE
+-- Imports from the Agda Standard Library ----------------------------------------------------------
+open import Agda.Primitive  using ( _⊔_ ; lsuc ) renaming ( Set to Type ; lzero to ℓ₀ )
+open import Data.Product    using ( _,_ ; _×_ ; Σ-syntax ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Level           using ( Level ; Lift ; lift ; lower )
+open import Function.Base   using ( _∘_ ; id )
+open import Relation.Binary.PropositionalEquality
+                            using ( _≡_ ;  cong ; refl ; module ≡-Reasoning )
 
-
+-- Imports from agda-algebras ----------------------------------------------------------------------
 open import Overture.Preliminaries   using ( ∣_∣ ; ∥_∥ ; _∙_ ; _⁻¹)
 open import Overture.Inverses        using ( IsInjective ; IsSurjective )
 open import Relations.Discrete       using ( _|:_ ; 0[_] ; ker )

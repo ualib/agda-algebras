@@ -15,8 +15,7 @@ This is the [Relations.Continuous][] module of the [Agda Universal Algebra Libra
 
 module Relations.Continuous where
 
-open import Agda.Primitive    using ( _⊔_ ; lsuc ; Level )
-                           renaming ( Set to Type )
+open import Agda.Primitive using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
 
 open import Overture.Preliminaries using ( Π ; Π-syntax )
 open import Relations.Discrete     using ( Op ; arity[_] )

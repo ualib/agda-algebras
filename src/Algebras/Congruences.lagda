@@ -17,16 +17,16 @@ open import Algebras.Basic
 
 module Algebras.Congruences {𝑆 : Signature 𝓞 𝓥} where
 
--- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
-open import Agda.Builtin.Equality  using ( _≡_ ; refl )
-open import Agda.Primitive         using ( _⊔_ ; lsuc ) renaming ( Set to Type )
-open import Data.Product           using ( Σ-syntax ; _,_ )
-open import Function.Base          using ( _∘_ )
-open import Level                  using ( Level ; Lift )
-open import Relation.Binary        using ( IsEquivalence ) renaming ( Rel to BinRel )
+-- Imports from Agda and the Agda Standard Library ---------------------
+open import Agda.Primitive  using ( _⊔_ ; lsuc ) renaming ( Set to Type )
+open import Data.Product    using ( Σ-syntax ; _,_ )
+open import Function.Base   using ( _∘_ )
+open import Level           using ( Level )
+open import Relation.Binary using ( IsEquivalence ) renaming ( Rel to BinRel )
+open import Relation.Binary.PropositionalEquality
+                            using ( _≡_ ; refl )
 
-
--- Imports from agda-algebras --------------------------------------------------------------
+-- Imports from agda-algebras ----------------------------------------------------------
 open import Overture.Preliminaries    using ( ∣_∣  ; ∥_∥  )
 open import Relations.Discrete        using ( _|:_ ; 0[_] )
 open import Relations.Quotients       using ( 0[_]Equivalence ; _/_ ; ⟪_⟫ ; IsBlock )

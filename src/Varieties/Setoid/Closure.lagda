@@ -22,22 +22,24 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Varieties.Setoid.Closure {𝑆 : Signature 𝓞 𝓥} where
 
-open import Axiom.Extensionality.Propositional renaming ( Extensionality to funext )
-open import Agda.Primitive using ( _⊔_ ; lsuc ) renaming ( Set to Type )
+-- imports from Agda and the Agda Standard Library -------------------------------------------
+open import Agda.Primitive using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
+open import Axiom.Extensionality.Propositional
+                           using () renaming ( Extensionality to funext )
 open import Data.Product   using ( _,_ ; Σ-syntax ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Level          using ( Level ;  Lift )
 open import Relation.Unary using ( Pred  ; _∈_ ; _⊆_ )
 
 
-open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ )
-open import Algebras.Setoid.Products   {𝑆 = 𝑆} using ( ⨅ )
-open import Algebras.Setoid.Basic      {𝑆 = 𝑆} using ( SetoidAlgebra ) renaming ( Lift-SetoidAlg to Lift-Alg )
-open import Homomorphisms.Setoid.Basic {𝑆 = 𝑆} using ( )
-open import Homomorphisms.Setoid.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; Lift-≅ ; ≅-trans ; ≅-refl ) -- ; Lift-Alg-⨅≅
-open import Homomorphisms.Setoid.HomomorphicImages {𝑆 = 𝑆} using ( HomImages )
-                                                     -- ; Lift-Alg-iso ; Lift-Alg-associative )
-open import Subalgebras.Setoid.Subalgebras         {𝑆 = 𝑆} using (_≤_  -- -- ; ≤-iso ; ≤-refl ; ≤-TRANS-≅ ; ≤-trans
-                                                          ; _IsSubalgebraOfClass_ ; Subalgebra )
+-- imports from agda-algebras --------------------------------------------------------------
+open import Overture.Preliminaries           using ( ∣_∣ ; ∥_∥ )
+open import Algebras.Setoid.Products {𝑆 = 𝑆} using ( ⨅ )
+open import Algebras.Setoid.Basic    {𝑆 = 𝑆} using ( SetoidAlgebra ) renaming ( Lift-SetoidAlg to Lift-Alg )
+open import Homomorphisms.Setoid.Isomorphisms
+                                     {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; Lift-≅ ; ≅-trans ; ≅-refl )
+open import Homomorphisms.Setoid.HomomorphicImages
+                                     {𝑆 = 𝑆} using ( HomImages )
+open import Subalgebras.Setoid.Subalgebras
+                                     {𝑆 = 𝑆} using (_≤_ ; _IsSubalgebraOfClass_ ; Subalgebra )
 
 ov : Level → Level
 ov α = 𝓞 ⊔ 𝓥 ⊔ lsuc α

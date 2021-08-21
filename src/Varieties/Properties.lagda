@@ -26,15 +26,13 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 module Varieties.Properties {𝑆 : Signature 𝓞 𝓥} where
 
 -- imports from Agda and the Agda Standard Library -------------------------------------------
-open import Agda.Builtin.Equality using ( _≡_ ; refl )
-open import Agda.Primitive        using ( _⊔_ ; lsuc ; Level )   renaming ( Set to Type ; lzero to  ℓ₀ )
-open import Axiom.Extensionality.Propositional using ()          renaming ( Extensionality to funext )
-open import Data.Product          using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Function.Base         using ( _∘_ )
-open import Relation.Unary        using ( Pred ; _∈_ ; _⊆_ ; ⋂ )
-import Relation.Binary.PropositionalEquality as PE
-
-
+open import Agda.Primitive using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type ; lzero to  ℓ₀ )
+open import Axiom.Extensionality.Propositional using () renaming ( Extensionality to funext )
+open import Data.Product   using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Function.Base  using ( _∘_ )
+open import Relation.Unary using ( Pred ; _∈_ ; _⊆_ ; ⋂ )
+open import Relation.Binary.PropositionalEquality
+                           using ( _≡_ ; refl ; module ≡-Reasoning ; cong )
 
 -- imports from agda-algebras --------------------------------------------------------------
 open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
@@ -60,7 +58,7 @@ The binary relation ⊧ would be practically useless if it were not an *algebrai
 \begin{code}
 
 open Term
-open PE.≡-Reasoning
+open ≡-Reasoning
 open _≅_
 
 module _ (wd : SwellDef){α β χ : Level}{X : Type χ}{𝑨 : Algebra α 𝑆}
@@ -71,7 +69,7 @@ module _ (wd : SwellDef){α β χ : Level}{X : Type χ}{𝑨 : Algebra α 𝑆}
  ⊧-I-invar Apq (mkiso f g f∼g g∼f) x =
   (𝑩 ⟦ p ⟧) x                      ≡⟨ wd χ β (𝑩 ⟦ p ⟧) x (∣ f ∣ ∘ ∣ g ∣ ∘ x) (λ i → ( f∼g (x i))⁻¹) ⟩
   (𝑩 ⟦ p ⟧) ((∣ f ∣ ∘ ∣ g ∣) ∘ x)  ≡⟨ (comm-hom-term (wd 𝓥 β) 𝑩 f p (∣ g ∣ ∘ x))⁻¹ ⟩
-  ∣ f ∣ ((𝑨 ⟦ p ⟧) (∣ g ∣ ∘ x))    ≡⟨ PE.cong ∣ f ∣ (Apq (∣ g ∣ ∘ x))  ⟩
+  ∣ f ∣ ((𝑨 ⟦ p ⟧) (∣ g ∣ ∘ x))    ≡⟨ cong ∣ f ∣ (Apq (∣ g ∣ ∘ x))  ⟩
   ∣ f ∣ ((𝑨 ⟦ q ⟧) (∣ g ∣ ∘ x))    ≡⟨ comm-hom-term (wd 𝓥 β) 𝑩 f q (∣ g ∣ ∘ x) ⟩
   (𝑩 ⟦ q ⟧) ((∣ f ∣ ∘ ∣ g ∣) ∘  x) ≡⟨ wd χ β (𝑩 ⟦ q ⟧) (∣ f ∣ ∘ ∣ g ∣ ∘ x) x (λ i → ( f∼g (x i))) ⟩
   (𝑩 ⟦ q ⟧) x                      ∎
@@ -197,11 +195,11 @@ module _ (wd : SwellDef){α χ : Level}{X : Type χ}{𝑨 : Algebra α 𝑆} whe
 
  ⊧-H-invar : {p q : Term X}(φ : hom (𝑻 X) 𝑨) → 𝑨 ⊧ p ≈ q  →  ∣ φ ∣ p ≡ ∣ φ ∣ q
 
- ⊧-H-invar {p}{q}φ β = ∣ φ ∣ p               ≡⟨ PE.cong ∣ φ ∣(term-agreement(wd 𝓥 (ov χ)) p)⟩
+ ⊧-H-invar {p}{q}φ β = ∣ φ ∣ p               ≡⟨ cong ∣ φ ∣(term-agreement(wd 𝓥 (ov χ)) p)⟩
                        ∣ φ ∣((𝑻 X ⟦ p ⟧) ℊ)  ≡⟨ comm-hom-term (wd 𝓥 α) 𝑨 φ p ℊ ⟩
                        (𝑨 ⟦ p ⟧) (∣ φ ∣ ∘ ℊ) ≡⟨ β (∣ φ ∣ ∘ ℊ ) ⟩
                        (𝑨 ⟦ q ⟧) (∣ φ ∣ ∘ ℊ) ≡⟨ (comm-hom-term (wd 𝓥 α)  𝑨 φ q ℊ )⁻¹ ⟩
-                       ∣ φ ∣ ((𝑻 X ⟦ q ⟧) ℊ) ≡⟨(PE.cong ∣ φ ∣ (term-agreement (wd 𝓥 (ov χ)) q))⁻¹ ⟩
+                       ∣ φ ∣ ((𝑻 X ⟦ q ⟧) ℊ) ≡⟨(cong ∣ φ ∣ (term-agreement (wd 𝓥 (ov χ)) q))⁻¹ ⟩
                        ∣ φ ∣ q               ∎
 
 

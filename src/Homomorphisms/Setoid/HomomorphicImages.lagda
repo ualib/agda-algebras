@@ -20,11 +20,11 @@ module Homomorphisms.Setoid.HomomorphicImages {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
 open import Agda.Primitive        using ( _⊔_ ; lsuc ) renaming ( Set to Type )
-open import Agda.Builtin.Equality using ( _≡_ ; refl )
-open import Data.Product          using ( _,_ ; Σ-syntax ; Σ ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Data.Product          using ( _,_ ; Σ-syntax ; _×_ )
 open import Level                 using ( Level ; Lift )
-open import Relation.Binary.PropositionalEquality.Core using ( cong ; cong-app ; module ≡-Reasoning ; sym )
 open import Relation.Unary        using ( Pred ; _∈_ )
+open import Relation.Binary.PropositionalEquality
+                                  using ( sym ; cong-app ; _≡_ ; module ≡-Reasoning ; cong )
 
 
 -- Imports from agda-algebras --------------------------------------------------------------

@@ -14,14 +14,15 @@ author: [agda-algebras development team][]
 module Structures.Isos where
 
 
--- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
-open import Axiom.Extensionality.Propositional using () renaming (Extensionality to funext)
-open import Agda.Primitive        using ( _⊔_ ; lsuc ) renaming ( Set to Type )
-open import Agda.Builtin.Equality using ( _≡_ ; refl )
-open import Data.Product          using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Level                 using ( Level ; Lift )
-open import Function.Base         using ( _∘_ )
-import Relation.Binary.PropositionalEquality as PE
+-- Imports from Agda and the Agda Standard Library ---------------------
+open import Agda.Primitive using ( _⊔_ ; lsuc ) renaming ( Set to Type )
+open import Axiom.Extensionality.Propositional
+                           using () renaming (Extensionality to funext)
+open import Data.Product   using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Level          using ( Level ; Lift )
+open import Function.Base  using ( _∘_ )
+open import Relation.Binary.PropositionalEquality
+                           using ( _≡_ ; refl ; cong ; cong-app ; module ≡-Reasoning )
 
 
 -- Imports from agda-algebras --------------------------------------------------------------
@@ -89,10 +90,10 @@ module _ {𝑨 : structure 𝐹 𝑅 {α}{ρᵃ}} where
     g = ∘-hom {𝑨 = 𝑪}{𝑩}{𝑨} (from φbc) (from φab)
 
     τ : ∣ f ∣ ∘ ∣ g ∣ ≈ ∣ 𝒾𝒹 {𝑨 = 𝑪} ∣
-    τ x = ( PE.cong ∣ to φbc ∣ (to∼from φab (∣ from φbc ∣ x)) ) ∙ (to∼from φbc) x
+    τ x = ( cong ∣ to φbc ∣ (to∼from φab (∣ from φbc ∣ x)) ) ∙ (to∼from φbc) x
 
     ν : ∣ g ∣ ∘ ∣ f ∣ ≈ ∣ 𝒾𝒹 {𝑨 = 𝑨} ∣
-    ν x = ( PE.cong ∣ from φab ∣ (from∼to φbc (∣ to φab ∣ x)) ) ∙ (from∼to φab) x
+    ν x = ( cong ∣ from φab ∣ (from∼to φbc (∣ to φab ∣ x)) ) ∙ (from∼to φab) x
 
 \end{code}
 
@@ -110,22 +111,22 @@ module _ {𝑨 : structure 𝐹 𝑅{α}{ρᵃ}} where
  Lift-≅ˡ : 𝑨 ≅ (Lift-Strucˡ ℓ 𝑨)
  Lift-≅ˡ = record { to = 𝓁𝒾𝒻𝓉ˡ
                   ; from = 𝓁ℴ𝓌ℯ𝓇ˡ {𝑨 = 𝑨}
-                  ; to∼from = PE.cong-app lift∼lower
-                  ; from∼to = PE.cong-app (lower∼lift{α}{ρᵃ})
+                  ; to∼from = cong-app lift∼lower
+                  ; from∼to = cong-app (lower∼lift{α}{ρᵃ})
                   }
 
  Lift-≅ʳ : 𝑨 ≅ (Lift-Strucʳ ℓ 𝑨)
  Lift-≅ʳ  = record { to = 𝓁𝒾𝒻𝓉ʳ
                    ; from = 𝓁ℴ𝓌ℯ𝓇ʳ
-                   ; to∼from = PE.cong-app refl
-                   ; from∼to = PE.cong-app refl
+                   ; to∼from = cong-app refl
+                   ; from∼to = cong-app refl
                    }
 
  Lift-≅ : 𝑨 ≅ (Lift-Struc ℓ ρ 𝑨)
  Lift-≅  = record { to = 𝓁𝒾𝒻𝓉
                   ; from = 𝓁ℴ𝓌ℯ𝓇 {𝑨 = 𝑨}
-                  ; to∼from = PE.cong-app lift∼lower
-                  ; from∼to = PE.cong-app (lower∼lift{α}{ρᵃ})
+                  ; to∼from = cong-app lift∼lower
+                  ; from∼to = cong-app (lower∼lift{α}{ρᵃ})
                   }
 
 
@@ -183,7 +184,7 @@ Products of isomorphic families of algebras are themselves isomorphic. The proof
 module _ {I : Type ι} {𝒜 : I → structure 𝐹 𝑅{α}{ρᵃ}}{ℬ : I → structure 𝐹 𝑅{β}{ρᵇ}} where
 
  open structure
- open PE.≡-Reasoning
+ open ≡-Reasoning
  ⨅≅ : funext ι α → funext ι β → (∀ (i : I) → 𝒜 i ≅ ℬ i) → ⨅ 𝒜 ≅ ⨅ ℬ
 
  ⨅≅ fiu fiw AB = record { to = ϕ , ϕhom ; from = ψ , ψhom ; to∼from = ϕ~ψ ; from∼to = ψ~ϕ }

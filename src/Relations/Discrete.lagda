@@ -15,19 +15,20 @@ This is the [Relations.Discrete][] module of the [Agda Universal Algebra Library
 
 module Relations.Discrete where
 
-open import Agda.Builtin.Equality       using ( _≡_ ; refl )
-open import Agda.Primitive              using ( _⊔_ ; lsuc )
-                                     renaming ( Set to Type )
-open import Data.Product                using ( _,_ ; _×_ )
-open import Function.Base               using ( _∘_ )
-open import Level                       using ( Level ; Lift )
-open import Relation.Binary             using ( IsEquivalence )
-open import Relation.Binary.Core        using ( _⇒_ ; _=[_]⇒_  )
-                                     renaming ( REL to BinREL ; Rel to BinRel )
-open import Relation.Binary.Definitions using ( Reflexive ; Symmetric ; Transitive )
-open import Relation.Unary              using ( ∅; _∈_; Pred )
+-- Imports from Agda and the Agda Standard Library
+open import Agda.Primitive       using ( _⊔_ ; lsuc ) renaming ( Set to Type )
+open import Data.Product         using ( _,_ ; _×_ )
+open import Function.Base        using ( _∘_ )
+open import Level                using ( Level ; Lift )
+open import Relation.Binary      using ( IsEquivalence )
+open import Relation.Binary.Core using ( _⇒_ ; _=[_]⇒_ ) renaming ( REL to BinREL ; Rel to BinRel )
+open import Relation.Binary.Definitions
+                                 using ( Reflexive ; Symmetric ; Transitive )
+open import Relation.Unary       using ( ∅; _∈_; Pred )
+open import Relation.Binary.PropositionalEquality
+                                 using ( _≡_ ; refl )
 
-
+-- Imports from agda-algebras
 open import Overture.Preliminaries using (_≈_ ; Π-syntax)
 
 private variable α β ρ 𝓥 : Level

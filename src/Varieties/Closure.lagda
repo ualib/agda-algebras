@@ -28,16 +28,16 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Varieties.Closure {𝑆 : Signature 𝓞 𝓥} where
 
-open import Axiom.Extensionality.Propositional renaming ( Extensionality to funext )
-open import Agda.Primitive      using    ( _⊔_ ;  lsuc )
-                                renaming ( Set to Type )
-open import Data.Product        using    ( _,_ ; Σ-syntax )
-                                renaming ( proj₁ to fst
-                                         ; proj₂ to snd )
-open import Level               using    ( Level ;  Lift )
-open import Relation.Unary      using    ( Pred  ; _∈_ ; _⊆_ )
+-- Imports from Agda and the Agda Standard Library
+open import Axiom.Extensionality.Propositional
+                            using () renaming ( Extensionality to funext )
+open import Agda.Primitive  using ( _⊔_ ; lsuc ) renaming ( Set to Type )
+open import Data.Product    using ( _,_ ; Σ-syntax ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Level           using ( Level ;  Lift )
+open import Relation.Unary  using ( Pred  ; _∈_ ; _⊆_ )
 
 
+-- Imports from agda-algebras
 open import Overture.Preliminaries                  using ( ∣_∣ ; ∥_∥ )
 open import Algebras.Basic                          using ( Algebra ; Lift-Alg )
 open import Algebras.Products               {𝑆 = 𝑆} using ( ov ; ⨅ )

@@ -12,19 +12,19 @@ author: [agda-algebras development team][]
 
 module Structures.Homs where
 
-open import Axiom.Extensionality.Propositional using ()
-                                   renaming (Extensionality to funext)
-open import Agda.Builtin.Equality  using    ( _≡_ ; refl )
-open import Agda.Primitive         using    ( _⊔_ ; lsuc )
-                                   renaming ( lzero to ℓ₀ ; Set to Type )
-open import Data.Product           using    ( _×_ ; Σ-syntax ; _,_ )
-                                   renaming ( proj₁ to fst ; proj₂ to snd )
-open import Function.Base          using    ( _∘_ ; id )
-open import Level                  using    ( Level ;  Lift ; lift ; lower )
-open import Relation.Binary        using    ( IsEquivalence )
-import Relation.Binary.PropositionalEquality as PE
+-- imports from Agda and the Agda Standard Library -------------------------------------------
+open import Agda.Primitive  using ( _⊔_ ; lsuc ) renaming ( lzero to ℓ₀ ; Set to Type )
+open import Axiom.Extensionality.Propositional
+                            using () renaming (Extensionality to funext)
+open import Data.Product    using ( _×_ ; Σ-syntax ; _,_ ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Function.Base   using ( _∘_ ; id )
+open import Level           using ( Level ; Lift ; lift ; lower )
+open import Relation.Binary using ( IsEquivalence )
+open import Relation.Binary.PropositionalEquality
+                            using ( _≡_ ; refl ; sym ; cong ; module ≡-Reasoning ; trans )
 
 
+-- Imports from agda-algebras --------------------------------------------------------------
 open import Overture.Preliminaries   using ( _∙_ ; ∣_∣ ; ∥_∥ ; _⁻¹ ; Π-syntax )
 open import Overture.Inverses        using ( IsInjective ; IsSurjective ; Image_∋_ )
 open import Relations.Discrete       using ( ker ; kerlift )
@@ -94,7 +94,7 @@ module _ {𝑨 : structure 𝐹 𝑅 {α}{ρᵃ}}
 
  ∘-is-hom-op : (f : A → B)(g : B → C)
   →            is-hom-op 𝑨 𝑩 f → is-hom-op 𝑩 𝑪 g → is-hom-op 𝑨 𝑪 (g ∘ f)
- ∘-is-hom-op f g fho gho 𝑓 a = PE.cong g (fho 𝑓 a) ∙ gho 𝑓 (f ∘ a)
+ ∘-is-hom-op f g fho gho 𝑓 a = cong g (fho 𝑓 a) ∙ gho 𝑓 (f ∘ a)
 
  ∘-is-hom : (f : A → B)(g : B → C)
   →         is-hom 𝑨 𝑩 f → is-hom 𝑩 𝑪 g → is-hom 𝑨 𝑪 (g ∘ f)
@@ -164,7 +164,7 @@ open Lift
 -- Kernels of homomorphisms
 
 
-open PE.≡-Reasoning
+open ≡-Reasoning
 module _ {𝑨 : structure 𝐹 𝑅  {α}{β ⊔ ρᵃ}}{𝑩 : structure 𝐹 𝑅 {β} {ρᵇ}}
          where
 
@@ -192,8 +192,8 @@ module _ {𝑨 : structure 𝐹 𝑅  {α}{β ⊔ ρᵃ}}{𝑩 : structure 𝐹 
   where
   goal : IsEquivalence (λ x y → Lift (α ⊔ ρᵃ) (h x ≡ h y))
   goal = record { refl = lift refl
-                ; sym = λ p → lift (PE.sym (lower p))
-                ; trans = λ p q → lift (PE.trans (lower p)(lower q)) }
+                ; sym = λ p → lift (sym (lower p))
+                ; trans = λ p q → lift (trans (lower p)(lower q)) }
 
  kerquo : hom 𝑨 𝑩 → {wd : swelldef (siglʳ 𝐹) β} → structure 𝐹 𝑅 {lsuc (α ⊔ β ⊔ ρᵃ)} {β ⊔ ρᵃ}
  kerquo h {wd} = 𝑨 ╱ (kercon h {wd})

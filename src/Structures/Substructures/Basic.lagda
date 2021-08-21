@@ -16,12 +16,12 @@ This is the [Structures.Substructures.Basic][] module of the [Agda Universal Alg
 module Structures.Substructures.Basic where
 
 -- imports from Agda and the Agda Standard Library
-open import Agda.Builtin.Equality using ( _≡_ ; refl )
-open import Agda.Primitive        using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
-open import Data.Product          using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Function.Base         using ( _∘_ )
-open import Relation.Unary        using ( Pred ; _∈_ ; _⊆_ ; ⋂ )
-import Relation.Binary.PropositionalEquality as PE
+open import Agda.Primitive using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
+open import Data.Product   using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₂ to snd )
+open import Function.Base  using ( _∘_ )
+open import Relation.Unary using ( Pred ; _∈_ ; _⊆_ ; ⋂ )
+open import Relation.Binary.PropositionalEquality
+                           using ( _≡_ ; module ≡-Reasoning )
 
 -- imports from agda-algebras ------------------------------------------------------
 open import Overture.Preliminaries   using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
@@ -178,7 +178,7 @@ Alternatively, we could express the preceeding fact using an inductive type repr
    where
    IH : ∀ x → ∣ g ∣ (a x) ≡ ∣ h ∣ (a x)
    IH x = hom-unique wd G g h σ (a x) (SgGa x)
-   open PE.≡-Reasoning
+   open ≡-Reasoning
    Goal : ∣ g ∣ ((f ᵒ 𝑨) a) ≡ ∣ h ∣ ((f ᵒ 𝑨) a)
    Goal = ∣ g ∣ ((f ᵒ 𝑨) a) ≡⟨ snd ∥ g ∥ f a ⟩
           (f ᵒ 𝑩)(∣ g ∣ ∘ a ) ≡⟨ wd (f ᵒ 𝑩) (∣ g ∣ ∘ a) (∣ h ∣ ∘ a) IH ⟩

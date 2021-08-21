@@ -15,16 +15,13 @@ This is the [Relations.Quotients][] module of the [Agda Universal Algebra Librar
 
 module Relations.Quotients where
 
-open import Agda.Builtin.Equality as E using ( _≡_ )
-open import Data.Product               using ( _,_ ; _×_ ; Σ-syntax )
-                                    renaming ( proj₁ to fst ; proj₂ to snd )
-open import Agda.Primitive             using ( _⊔_ ; Level ; lsuc )
-                                    renaming ( Set to Type )
-open import Level                      using ( )
-open import Relation.Binary            using ( IsEquivalence ; IsPartialEquivalence)
-                                    renaming ( Rel to BinRel )
-open import Relation.Unary             using ( Pred ; _⊆_ )
-import Relation.Binary.PropositionalEquality as PE
+open import Data.Product    using ( _,_ ; _×_ ; Σ-syntax ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Agda.Primitive  using ( _⊔_ ; Level ; lsuc ) renaming ( Set to Type )
+open import Level           using ()
+open import Relation.Binary using ( IsEquivalence ; IsPartialEquivalence) renaming ( Rel to BinRel )
+open import Relation.Unary  using ( Pred ; _⊆_ )
+open import Relation.Binary.PropositionalEquality as PE
+                            using ( _≡_ )
 
 open import Overture.Preliminaries  using  ( ∣_∣ )
 open import Relations.Discrete      using  ( ker ; 0[_] ; kerlift )

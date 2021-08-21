@@ -20,8 +20,7 @@ module Homomorphisms.Setoid.Noether {𝑆 : Signature 𝓞 𝓥} where
 open import Data.Product    using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
 open import Function        using ( _∘_ ; id )
 open import Level           using ( Level )
-open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; sym ; cong )
-open import Relation.Binary.PropositionalEquality.Core using ( module ≡-Reasoning )
+open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; sym ; cong ; module ≡-Reasoning )
 open import Relation.Unary  using ( _⊆_ )
 
 -- Imports from the Agda Universal Algebra Library

@@ -15,12 +15,13 @@ This is the [Relations.BinPred][] module of the [Agda Universal Algebra Library]
 
 module Relations.BinPred where
 
-open import Agda.Builtin.Equality using ( _≡_ )
 open import Agda.Primitive        using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
 open import Data.Product          using ( _,_ ; _×_ )
 open import Data.Sum.Base         using ( _⊎_ )
 open import Relation.Binary.Core  using ( ) renaming ( REL to BinREL ; Rel to BinRel )
 open import Relation.Unary        using ( Pred ; _∈_ ; _∉_ )
+open import Relation.Binary.PropositionalEquality
+                                  using ( _≡_ )
 
 
 private variable

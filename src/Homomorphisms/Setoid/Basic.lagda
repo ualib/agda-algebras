@@ -18,18 +18,14 @@ open import Algebras.Basic using (𝓞 ; 𝓥 ; Signature )
 module Homomorphisms.Setoid.Basic {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from the Agda (Builtin) and the Agda Standard Library
-open import Agda.Builtin.Equality  using    ( _≡_      ;  refl )
-open import Agda.Primitive         using    ( _⊔_      ;  lsuc )
-                                   renaming ( Set      to Type )
-open import Data.Product           using    ( _,_      ;  Σ
-                                            ; Σ-syntax ;  _×_  )
-                                   renaming ( proj₁    to fst
-                                            ; proj₂    to snd  )
-open import Function               using    ( _∘_      ;  id   )
-open import Level                  using    ( Level    ;  Lift )
-open import Relation.Binary        using    ( IsEquivalence    )
-open import Relation.Unary         using    ( _⊆_              )
-open import Relation.Binary.PropositionalEquality using (module ≡-Reasoning ; cong )
+open import Agda.Primitive    using ( _⊔_ ; lsuc ) renaming ( Set to Type )
+open import Data.Product      using ( _,_ ; Σ ; Σ-syntax ; _×_ )
+open import Function          using ( _∘_ ; id )
+open import Level             using ( Level ; Lift )
+open import Relation.Binary   using ( IsEquivalence )
+open import Relation.Unary    using ( _⊆_ )
+open import Relation.Binary.PropositionalEquality
+                              using ( _≡_ ; refl ; module ≡-Reasoning ; cong )
 
 
 -- Imports from the Agda Universal Algebra Library

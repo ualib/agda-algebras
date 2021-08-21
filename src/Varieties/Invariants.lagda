@@ -19,12 +19,11 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature ; Algebra )
 module Varieties.Invariants (𝑆 : Signature 𝓞 𝓥) where
 
 
--- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
-open import Agda.Primitive          using    ( Level )
-                                    renaming ( Set to Type )
-open import Relation.Unary          using    ( Pred )
+-- Imports from Agda and the Agda Standard Library ---------------------
+open import Agda.Primitive using ( Level ) renaming ( Set to Type )
+open import Relation.Unary using ( Pred )
 
--- -- Imports from the Agda Universal Algebra Library -------------------------------------------
+-- Imports from the Agda Universal Algebra Library -------------------------------------------
 open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ )
 
 private variable α ℓ : Level

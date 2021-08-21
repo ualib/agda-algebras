@@ -16,14 +16,15 @@ This is the [Overture.Inverses][] module of the [agda-algebras][] library.
 
 module Overture.Inverses where
 
--- Imports from Agda (Builtin) and the Agda Standard Library
-open import Agda.Builtin.Equality       using ( _≡_ ; refl )
+-- Imports from Agda and the Agda Standard Library
 open import Agda.Primitive              using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
 open import Data.Product                using ( _,_ ; _×_ ; Σ )
 open import Function.Base               using ( _∘_ )
 open import Function.Definitions        using ( Injective )
 open import Function.Bundles            using ( _↣_ ; mk↣ )
 open import Function.Construct.Identity using ( id-↣ )
+open import Relation.Binary.PropositionalEquality
+                                        using ( _≡_ ; refl )
 
 -- Imports from agda-algebras
 open import Overture.Preliminaries using ( _⁻¹ )

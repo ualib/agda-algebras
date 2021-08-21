@@ -14,11 +14,13 @@ inhabitants of record types.  For a similar development using Sigma types see th
 
 module Structures.Basic  where
 
-open import Agda.Primitive       using    ( _⊔_ ; lsuc ) renaming ( Set to Type )
-open import Function.Base        using    ( flip ; _∘_ )
-open import Level                using    ( Level ; Lift ; lift ; lower )
-open import Relation.Binary.Core using    () renaming ( Rel to BinRel )
+-- imports from Agda and the Agda Standard Library -------------------------------------------
+open import Agda.Primitive       using ( _⊔_ ; lsuc ) renaming ( Set to Type )
+open import Function.Base        using ( flip ; _∘_ )
+open import Level                using ( Level ; Lift ; lift ; lower )
+open import Relation.Binary.Core using () renaming ( Rel to BinRel )
 
+-- imports from agda-algebras --------------------------------------------------------------
 open import Relations.Discrete     using ( Op ; _|:_ ; _preserves_ )
 open import Relations.Continuous   using ( Rel )
 

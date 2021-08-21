@@ -16,12 +16,13 @@ dependent pair type.
 
 module Structures.Products where
 
+-- Imports from the Agda Standard Library ----------------------------------
 open import Agda.Primitive using ( _⊔_ ; lsuc ) renaming ( Set to Type )
 open import Data.Product   using ( _,_ ; Σ-syntax )
 open import Level          using ( Level )
 open import Relation.Unary using ( _∈_ ; Pred )
 
-
+-- Imports from agda-algebras ----------------------------------------------
 open import Overture.Preliminaries using ( ∣_∣ ; Π-syntax )
 open import Structures.Basic       using ( signature ; structure )
 

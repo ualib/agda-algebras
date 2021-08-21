@@ -26,17 +26,12 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Varieties.EquationalLogic {𝑆 : Signature 𝓞 𝓥} where
 
-
 -- imports from Agda and the Agda Standard Library -------------------------------------------
-open import Agda.Primitive   using    ( _⊔_ ;  lsuc ; Level )
-                             renaming ( Set to Type )
-open import Data.Product     using    ( _×_ ; _,_ ; Σ-syntax)
-                             renaming ( proj₁ to fst ; proj₂ to snd )
-open import Relation.Unary   using    ( Pred ; _∈_ )
+open import Agda.Primitive using ( _⊔_ ;  lsuc ; Level ) renaming ( Set to Type )
+open import Data.Product   using ( _×_ ; _,_ ; Σ-syntax) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Relation.Unary using ( Pred ; _∈_ )
 
-
-
--- -- imports from agda-algebras --------------------------------------------------------------
+-- imports from agda-algebras --------------------------------------------------------------
 open import Overture.Preliminaries    using ( _≈_ )
 open import Algebras.Basic            using ( Algebra )
 open import Algebras.Products {𝑆 = 𝑆} using ( ov )

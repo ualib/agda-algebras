@@ -12,24 +12,23 @@ author: [agda-algebras development team][]
 
 module Structures.Sigma.Congruences where
 
-open import Agda.Builtin.Equality  using    ( _≡_ ; refl )
-open import Agda.Primitive         using    ( _⊔_ ; lsuc )
-                                   renaming ( Set to Type ; lzero to ℓ₀ )
-open import Data.Product           using    ( _,_ ; _×_ ; Σ-syntax )
-                                   renaming ( proj₁ to fst )
-open import Function.Base          using    ( _∘_ )
-open import Level                  using    ( Level ; Lift ; lift ; lower )
-open import Relation.Unary         using    ( Pred ; _∈_ )
-open import Relation.Binary        using    ( IsEquivalence )
-                                   renaming ( Rel to BinRel )
+-- Imports from the Agda Standard Library ------------------------------------------------
+open import Agda.Primitive  using ( _⊔_ ; lsuc ) renaming ( Set to Type ; lzero to ℓ₀ )
+open import Data.Product    using ( _,_ ; _×_ ; Σ-syntax ) renaming ( proj₁ to fst )
+open import Function.Base   using ( _∘_ )
+open import Level           using ( Level ; Lift ; lift ; lower )
+open import Relation.Unary  using ( Pred ; _∈_ )
+open import Relation.Binary using ( IsEquivalence ) renaming ( Rel to BinRel )
+open import Relation.Binary.PropositionalEquality
+                            using ( _≡_ )
 
-
-open import Overture.Preliminaries   using ( ∣_∣ )
-open import Relations.Discrete       using ( _|:_ ; 0[_] )
-open import Relations.Quotients      using ( Equivalence ; ⟪_⟫ ; ⌞_⌟ ; 0[_]Equivalence
-                                           ; _/_ ; ⟪_∼_⟫-elim ; Quotient )
-open import Foundations.Welldefined  using ( swelldef )
-open import Structures.Sigma.Basic   using ( Signature ; Structure ; _ᵒ_ ; Compatible ; _ʳ_ )
+-- Imports from agda-algebras ------------------------------------------------------------
+open import Overture.Preliminaries  using ( ∣_∣ )
+open import Relations.Discrete      using ( _|:_ ; 0[_] )
+open import Relations.Quotients     using ( Equivalence ; ⟪_⟫ ; ⌞_⌟ ; 0[_]Equivalence
+                                          ; _/_ ; ⟪_∼_⟫-elim ; Quotient )
+open import Foundations.Welldefined using ( swelldef )
+open import Structures.Sigma.Basic  using ( Signature ; Structure ; _ᵒ_ ; Compatible ; _ʳ_ )
 
 private variable 𝑅 𝐹 : Signature
 

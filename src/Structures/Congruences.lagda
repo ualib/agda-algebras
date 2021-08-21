@@ -17,20 +17,23 @@ dependent pair type.
 
 module Structures.Congruences where
 
-open import Agda.Builtin.Equality  using ( _≡_ ; refl )
-open import Agda.Primitive         using ( _⊔_ ; lsuc ) renaming ( Set  to Type )
-open import Data.Product           using ( _,_ ; _×_ ; Σ-syntax ) renaming ( proj₁ to fst )
-open import Function.Base          using ( _∘_ )
-open import Level                  using ( Level ; Lift ; lift ; lower )
+-- imports from Agda and the Agda Standard Library -------------------------------------------
+open import Agda.Primitive using ( _⊔_ ; lsuc ) renaming ( Set  to Type )
+open import Data.Product   using ( _,_ ; _×_ ; Σ-syntax ) renaming ( proj₁ to fst )
+open import Function.Base  using ( _∘_ )
+open import Level          using ( Level ; Lift ; lift ; lower )
+open import Relation.Binary.PropositionalEquality
+                           using ( _≡_ ; refl )
 
 
-open import Overture.Preliminaries   using ( ∣_∣ )
-open import Relations.Discrete       using ( _|:_ ; 0[_] )
-open import Relations.Quotients      using ( Equivalence ; Quotient ; 0[_]Equivalence
-                                           ; ⟪_⟫ ; ⌞_⌟ ; ⟪_∼_⟫-elim ; _/_ )
-open import Foundations.Welldefined  using ( swelldef )
-open import Structures.Basic         using ( signature ; structure ; sigl ; siglʳ
-                                           ; compatible )
+-- imports from agda-algebras --------------------------------------------------------------
+open import Overture.Preliminaries using ( ∣_∣ )
+open import Relations.Discrete     using ( _|:_ ; 0[_] )
+open import Relations.Quotients    using ( Equivalence ; Quotient ; 0[_]Equivalence
+                                         ; ⟪_⟫ ; ⌞_⌟ ; ⟪_∼_⟫-elim ; _/_ )
+open import Foundations.Welldefined using ( swelldef )
+open import Structures.Basic        using ( signature ; structure ; sigl ; siglʳ
+                                          ; compatible )
 
 private variable
  𝓞₀ 𝓥₀ 𝓞₁ 𝓥₁ : Level

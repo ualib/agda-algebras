@@ -11,20 +11,20 @@ author: [agda-algebras development team][]
 
 module Foundations.Welldefined where
 
-open import Agda.Builtin.Equality using (_≡_; refl)
-open import Agda.Builtin.List     using (List; []; _∷_)
 open import Agda.Primitive        using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type ; Setω to Typeω )
 open import Axiom.Extensionality.Propositional
                                   using () renaming ( Extensionality to funext )
 open import Data.Fin.Base         using ( Fin ; toℕ)
-open import Data.Nat.Base as ℕ using (ℕ; zero; suc; _+_; _*_ ; _≤_ ; s≤s)
-open import Data.Product                using ( _,_ ; _×_ )
-open import Data.List.Base        using ( lookup ; length ; [_] ; _++_; head ; tail)
+open import Data.Nat.Base         using (ℕ; zero; suc; _+_; _*_ ; _≤_ ; s≤s)
+open import Data.Product          using ( _,_ ; _×_ )
+open import Data.List.Base        using ( List ; [] ; _∷_ ; lookup ; length ; [_] ; _++_; head ; tail)
 open import Data.List.Properties  using ( ≡-dec )
 open import Function.Base         using ( _$_ ; _∘_ ; id )
 open import Relation.Binary       using ( Rel )
-open import Relation.Binary.Definitions  using ( DecidableEquality )
-import Relation.Binary.PropositionalEquality as PE
+open import Relation.Binary.Definitions
+                                  using ( DecidableEquality )
+open import Relation.Binary.PropositionalEquality
+                                  using ( _≡_ ; refl ; module ≡-Reasoning ; cong )
 
 
 open import Overture.Preliminaries using ( _≈_ ; _⁻¹)
@@ -49,7 +49,7 @@ Of course, operations of type `Op I A` are well-defined in the sense that equal 
 \begin{code}
 
 welldef : {A : Type α}{I : Type 𝓥}(f : Op A I) → ∀ u v → u ≡ v → f u ≡ f v
-welldef f u v = PE.cong f
+welldef f u v = cong f
 
 \end{code}
 
@@ -90,7 +90,7 @@ funext' α β = ∀ {A : Type α } {B : Type β } {f g : A → B}
 
 -- `funext ι α` implies `swelldef ι α β`        (Note the universe levels!)
 funext'→swelldef' : funext' ι α → swelldef' ι α β
-funext'→swelldef' fe f ptweq = PE.cong f (fe ptweq)
+funext'→swelldef' fe f ptweq = cong f (fe ptweq)
 
 
  -- `swelldef ι α (ι ⊔ α)` implies `funext ι α`   (Note the universe levels!)
@@ -175,7 +175,7 @@ so f is essentially of type (Fin 2 → A) → B.
 module _ {A : Type α}{B : Type β} where
 
  open Fin renaming ( zero to z ; suc to s )
- open PE.≡-Reasoning
+ open ≡-Reasoning
 
  A×A-wd : (f : A × A → B)(u v : Fin 2 → A)
   →        u ≈ v → (A×A→B-to-Fin2A→B f) u ≡ (A×A→B-to-Fin2A→B f) v

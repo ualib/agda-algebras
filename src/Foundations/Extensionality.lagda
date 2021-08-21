@@ -16,14 +16,15 @@ This is the [Foundations.Extensionality][] module of the [Agda Universal Algebra
 module Foundations.Extensionality where
 
 -- imports from Agda and the Agda Standard Library ------------------------------------
-open import Agda.Builtin.Equality  using (_≡_ ; refl )
+open import Axiom.Extensionality.Propositional
+                                   using () renaming ( Extensionality to funext )
 open import Agda.Primitive         using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type ; Setω to Typeω )
 open import Data.Product           using ( _,_ ;  _×_ )
 open import Function.Base          using ( _∘_ ; id )
 open import Relation.Binary        using ( IsEquivalence ) renaming ( Rel to BinRel )
 open import Relation.Unary         using ( Pred ; _⊆_ )
-open import Axiom.Extensionality.Propositional using () renaming ( Extensionality to funext )
-import Relation.Binary.PropositionalEquality as PE
+open import Relation.Binary.PropositionalEquality
+                                   using ( _≡_ ; refl ; module ≡-Reasoning ; cong-app )
 
 
 -- imports from agda-algebras --------------------------------------------------------------
@@ -57,7 +58,7 @@ module _ {A : Type α}{B : Type β} where
  SurjInvIsRightInv : (f : A → B)(fE : IsSurjective f) → ∀ b → f ((SurjInv f fE) b) ≡ b
  SurjInvIsRightInv f fE b = InvIsInv f (fE b)
 
- open PE.≡-Reasoning
+ open ≡-Reasoning
 
  -- composition law for epics
  epic-factor : {C : Type γ}(f : A → B)(g : A → C)(h : C → B)
@@ -89,7 +90,7 @@ module _ {A : Type α}{B : Type β} where
    ζ = SurjInvIsRightInv f fe y
 
    η : (h ∘ g) (finv y) ≡ y
-   η = (PE.cong-app (compId ⁻¹)(finv y)) ∙ ζ
+   η = (cong-app (compId ⁻¹)(finv y)) ∙ ζ
 
    Goal : Image h ∋ y
    Goal = eq (g (finv y)) (η ⁻¹)

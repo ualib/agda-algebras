@@ -21,21 +21,16 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Varieties.FreeAlgebras {α 𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
 
-
--- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
-open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
-open import Agda.Builtin.Equality   using    ( _≡_ ; refl )
-open import Agda.Primitive          renaming ( Set to Type )
-                                    using    ( _⊔_ )
-open import Data.Product            using    ( _,_ ; Σ-syntax ; Σ ; _×_ )
-                                    renaming ( proj₁ to fst
-                                             ; proj₂ to snd )
-open import Function.Base           using    ( _∘_ )
-open import Relation.Binary         using    ( IsEquivalence )
-                                    renaming ( Rel to BinRel )
+-- Imports from Agda and the Agda Standard Library ---------------------
+open import Axiom.Extensionality.Propositional
+                            using () renaming (Extensionality to funext)
+open import Agda.Primitive  using ( _⊔_ ) renaming ( Set to Type )
+open import Data.Product    using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Function.Base   using ( _∘_ )
+open import Relation.Binary using ( IsEquivalence ) renaming ( Rel to BinRel )
 open import Relation.Binary.PropositionalEquality
-                                    using    ( cong ; cong-app ; module ≡-Reasoning )
-open import Relation.Unary          using    ( Pred ; _∈_ ; _⊆_ ; ｛_｝ ; _∪_ )
+                            using ( _≡_ ; refl ; cong ; cong-app ; module ≡-Reasoning )
+open import Relation.Unary  using    ( Pred ; _∈_ ; _⊆_ ; ｛_｝ ; _∪_ )
 
 -- Imports from the Agda Universal Algebra Library -------------------------------------------
 open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ ; _∙_ ; _⁻¹ )

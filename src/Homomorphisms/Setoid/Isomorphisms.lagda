@@ -18,14 +18,14 @@ module Homomorphisms.Setoid.Isomorphisms {𝑆 : Signature 𝓞 𝓥}  where
 
 -- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
 open import Axiom.Extensionality.Propositional using () renaming (Extensionality to funext )
-open import Agda.Builtin.Equality       using ( _≡_ ; refl )
 open import Agda.Primitive              using ( _⊔_ ; lsuc ) renaming ( Set to Type )
-open import Data.Product                using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Data.Product                using ( _,_ ; Σ-syntax ; _×_ )
 open import Function.Base               using ( _∘_ )
 open import Level                       using ( Level ; Lift )
 open import Relation.Binary             using ( Setoid ; REL)
 open import Relation.Binary.Definitions using ( Reflexive ; Sym ; Trans ; Transitive )
-import Relation.Binary.PropositionalEquality as PE
+open import Relation.Binary.PropositionalEquality
+                                        using ( _≡_ ; refl ; cong ; module ≡-Reasoning ; cong-app )
 
 
 -- Imports from agda-algebras --------------------------------------------------------------
@@ -94,10 +94,10 @@ That is, two structures are **isomorphic** provided there are homomorphisms goin
   g = ∘-hom 𝑪 𝑩 𝑨 (from bc) (from ab)
 
   τ : ∣ f ∣ ∘ ∣ g ∣ ≋ ∣ 𝒾𝒹 𝑪 ∣
-  τ x = (PE.cong ∣ to bc ∣(to∼from ab (∣ from bc ∣ x)))∙(to∼from bc) x
+  τ x = (cong ∣ to bc ∣(to∼from ab (∣ from bc ∣ x)))∙(to∼from bc) x
 
   ν : ∣ g ∣ ∘ ∣ f ∣ ≋ ∣ 𝒾𝒹 𝑨 ∣
-  ν x = (PE.cong ∣ from ab ∣(from∼to bc (∣ to ab ∣ x)))∙(from∼to ab) x
+  ν x = (cong ∣ from ab ∣(from∼to bc (∣ to ab ∣ x)))∙(from∼to ab) x
 
 
 -- The "to" map of an isomorphism is injective.
@@ -106,9 +106,9 @@ That is, two structures are **isomorphic** provided there are homomorphisms goin
 
 ≅toInjective (mkiso (f , _) (g , _) _ g∼f){a}{b} fafb =
  a       ≡⟨ (g∼f a)⁻¹ ⟩
- g (f a) ≡⟨ PE.cong g fafb ⟩
+ g (f a) ≡⟨ cong g fafb ⟩
  g (f b) ≡⟨ g∼f b ⟩
- b       ∎ where open PE.≡-Reasoning
+ b       ∎ where open ≡-Reasoning
 
 
 -- The "from" map of an isomorphism is injective.
@@ -131,8 +131,8 @@ open Level
 Lift-≅ : {ℓ : Level}{𝑨 : SetoidAlgebra α ρᵃ} → 𝑨 ≅ (Lift-SetoidAlg 𝑨 ℓ)
 Lift-≅ {ℓ = ℓ} {𝑨} = record { to = 𝓁𝒾𝒻𝓉 {𝑨 = 𝑨}
                               ; from = 𝓁ℴ𝓌ℯ𝓇  {𝑨 = 𝑨}
-                              ; to∼from = PE.cong-app lift∼lower
-                              ; from∼to = PE.cong-app (lower∼lift {β = ℓ})
+                              ; to∼from = cong-app lift∼lower
+                              ; from∼to = cong-app (lower∼lift {β = ℓ})
                               }
 
 Lift-SetoidAlg-iso : {ℓᵃ : Level}{𝑨 : SetoidAlgebra α ρᵃ}

@@ -20,7 +20,6 @@ Readers who want to learn more about "proof-relevant mathematics" and other conc
 
 module Foundations.Truncation where
 
-open import Agda.Builtin.Equality using ( _≡_ ; refl )
 open import Agda.Primitive        using ( _⊔_ ; lsuc ; Level )
                                renaming ( Set to Type )
 open import Data.Product          using ( _,_ ; Σ ; Σ-syntax ; _×_ )
@@ -29,7 +28,8 @@ open import Function.Base         using ( _∘_ ; id )
 open import Relation.Binary       using ( IsEquivalence )
                                renaming ( Rel to BinRel )
 open import Relation.Unary        using ( Pred ; _⊆_ )
-import Relation.Binary.PropositionalEquality as PE
+open import Relation.Binary.PropositionalEquality
+                                   using ( _≡_ ; refl ; module ≡-Reasoning ; cong-app ; trans )
 
 -- -- Imports from the Agda Universal Algebra Library
 open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; _≈_ ; transport)
@@ -59,7 +59,7 @@ is-prop A = (x y : A) → x ≡ y
 is-prop-valued : {A : Type α} → BinRel A ρ → Type(α ⊔ ρ)
 is-prop-valued  _≈_ = ∀ x y → is-prop (x ≈ y)
 
-open PE.≡-Reasoning
+open ≡-Reasoning
 singleton-is-prop : {α : Level}(X : Type α) → is-singleton X → is-prop X
 singleton-is-prop X (c , φ) x y = x ≡⟨ (φ x)⁻¹ ⟩ c ≡⟨ φ y ⟩ y ∎
 
@@ -81,7 +81,7 @@ is-equiv f = ∀ y → is-singleton (fiber f y)
 
 -- An alternative means of postulating function extensionality.
 hfunext :  ∀ α β → Type (lsuc (α ⊔ β))
-hfunext α β = {A : Type α}{B : A → Type β} (f g : (x : A) → B x) → is-equiv (PE.cong-app{f = f}{g})
+hfunext α β = {A : Type α}{B : A → Type β} (f g : (x : A) → B x) → is-equiv (cong-app{f = f}{g})
 
 \end{code}
 
@@ -174,7 +174,7 @@ monic-is-embedding|Set : (f : A → B) → is-set B → IsInjective f → is-emb
 monic-is-embedding|Set f Bset fmon b (u , fu≡b) (v , fv≡b) = γ
  where
  fuv : f u ≡ f v
- fuv = PE.trans fu≡b (fv≡b ⁻¹)
+ fuv = trans fu≡b (fv≡b ⁻¹)
 
  uv : u ≡ v
  uv = fmon fuv

@@ -13,22 +13,18 @@ This is the [Homomorphisms.HomomorphicImages][] module of the [Agda Universal Al
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Level using ( Level ; Lift )
 open import Algebras.Basic
 
 module Homomorphisms.HomomorphicImages {𝑆 : Signature 𝓞 𝓥} where
 
 
--- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
-open import Agda.Primitive        using    ( _⊔_ ; lsuc )
-                                  renaming ( Set to Type )
-open import Agda.Builtin.Equality using    ( _≡_ ; refl )
-open import Data.Product          using    ( _,_ ; Σ-syntax ; Σ ; _×_ )
-                                  renaming ( proj₁ to fst
-                                           ; proj₂ to snd )
-open import Relation.Binary.PropositionalEquality.Core
-                                  using    ( cong ; cong-app ; module ≡-Reasoning )
-open import Relation.Unary        using    ( Pred ; _∈_ )
+-- Imports from Agda and the Agda Standard Library --------------------------------
+open import Agda.Primitive using ( _⊔_ ; lsuc ) renaming ( Set to Type )
+open import Data.Product   using ( _,_ ; Σ-syntax ; Σ ; _×_ )
+open import Level          using ( Level )
+open import Relation.Binary.PropositionalEquality
+                           using ( _≡_ ; module ≡-Reasoning ; cong ; cong-app )
+open import Relation.Unary using ( Pred ; _∈_ )
 
 
 -- Imports from agda-algebras --------------------------------------------------------------

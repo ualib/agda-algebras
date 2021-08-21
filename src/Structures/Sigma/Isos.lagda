@@ -14,22 +14,17 @@ author: [agda-algebras development team][]
 module Structures.Sigma.Isos where
 
 
--- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
-open import Axiom.Extensionality.Propositional using () renaming (Extensionality to funext)
-open import Agda.Primitive                        using    ( _⊔_    ;   lsuc     )
-                                                  renaming ( Set    to  Type     )
-open import Agda.Builtin.Equality                 using    ( _≡_    ;   refl     )
-open import Data.Product                          using    ( _,_    ;   Σ-syntax
-                                                           ;  Σ     ;   _×_      )
-                                                  renaming ( proj₁  to  fst
-                                                           ; proj₂  to  snd      )
-open import Level                                 using    ( Level  ;  Lift
-                                                           ; lift   ;  lower     )
-open import Function.Base                         using    ( _∘_                 )
-open import Relation.Binary.PropositionalEquality using    ( cong   ; cong-app   )
+-- Imports from the Agda Standard Library ------------------------------------------------------
+open import Axiom.Extensionality.Propositional
+                           using () renaming (Extensionality to funext)
+open import Agda.Primitive using ( _⊔_ ; lsuc ) renaming ( Set to Type )
+open import Data.Product   using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Function.Base  using ( _∘_ )
+open import Level          using ( Level ; Lift ; lift ; lower )
+open import Relation.Binary.PropositionalEquality
+                           using ( _≡_ ; refl ; cong ; cong-app )
 
-
--- Imports from agda-algebras --------------------------------------------------------------
+-- Imports from agda-algebras -------------------------------------------------------------------
 open import Overture.Preliminaries    using ( ∣_∣ ; _≈_ ; ∥_∥ ; _∙_ ; lower∼lift ; lift∼lower )
 open import Structures.Sigma.Basic    using ( Signature ; Structure ; Lift-Struc )
 open import Structures.Sigma.Homs     using ( hom ; 𝒾𝒹 ; ∘-hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-hom)

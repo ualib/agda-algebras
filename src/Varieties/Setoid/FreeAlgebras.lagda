@@ -12,21 +12,18 @@ author: [agda-algebras development team][]
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 
-open import Level using (Level)
 open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Varieties.Setoid.FreeAlgebras {𝑆 : Signature 𝓞 𝓥} where
 
 
--- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
-open import Agda.Builtin.Equality       using    ( _≡_       ;  refl )
-open import Agda.Primitive using ( _⊔_ ; lsuc ) renaming ( Set to Type )
-open import Data.Product            using    ( _,_   ; Σ-syntax
-                                             ; Σ     ; _×_      )
-                                    renaming ( proj₁ to fst
-                                             ; proj₂ to snd     )
-open import Function.Base           using    ( id )
-open import Relation.Unary          using    ( Pred  ; _∈_      )
+-- Imports from Agda and the Agda Standard Library ---------------------
+open import Agda.Primitive using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
+open import Data.Product   using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Function.Base  using ( id )
+open import Relation.Unary using ( Pred  ; _∈_ )
+open import Relation.Binary.PropositionalEquality
+                           using ( refl )
 
 -- Imports from the Agda Universal Algebra Library -------------------------------------------
 open import Overture.Preliminaries             using ( ∣_∣ )
@@ -35,7 +32,8 @@ open import Algebras.Setoid.Products   {𝑆 = 𝑆} using ( ⨅ )
 open import Algebras.Setoid.Basic      {𝑆 = 𝑆} using ( SetoidAlgebra ; ⟦_⟧s )
 open import Homomorphisms.Setoid.Basic {𝑆 = 𝑆} using ( hom ; epi )
 open import Terms.Setoid.Basic         {𝑆 = 𝑆} using ( TermAlgebra )
-open import Varieties.Setoid.EquationalLogic {𝑆 = 𝑆} using ( Eq ; _⊫_ ; module TermModel ; Mod ; Th)
+open import Varieties.Setoid.EquationalLogic
+                                       {𝑆 = 𝑆} using ( Eq ; _⊫_ ; module TermModel ; Mod ; Th)
 
 private variable
  α χ ρ ℓ : Level

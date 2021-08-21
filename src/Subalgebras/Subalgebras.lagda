@@ -18,13 +18,11 @@ open import Algebras.Basic using (𝓞 ; 𝓥 ; Signature )
 module Subalgebras.Subalgebras {𝑆 : Signature 𝓞 𝓥} where
 
 -- imports from Agda and the Agda Standard Library ------------------------------------
-open import Agda.Builtin.Equality using ( _≡_ ; refl )
 open import Agda.Primitive        using ( _⊔_ ; lsuc ; Level )       renaming ( Set to Type )
 open import Data.Product          using ( _,_ ; Σ-syntax ; Σ ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
 open import Function.Base         using ( _∘_ )
 open import Function.Bundles      using ( Injection )
 open import Relation.Unary        using ( _∈_ ; Pred ; _⊆_ )
-import Relation.Binary.PropositionalEquality as PE
 
 -- imports from agda-algebras --------------------------------------------------------------
 open import Overture.Preliminaries             using ( _∙_ ; _⁻¹ ; ∣_∣ ; ∥_∥ ; 𝑖𝑑 )

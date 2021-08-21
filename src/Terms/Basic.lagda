@@ -17,11 +17,11 @@ open import Algebras.Basic
 
 module Terms.Basic {𝑆 : Signature 𝓞 𝓥} where
 
-open import Agda.Primitive            using    ( Level )
-                                      renaming ( Set to Type )
-open import Data.Product              using    ( _,_ )
-open import Overture.Preliminaries    using    ( ∣_∣ ; ∥_∥ )
-open import Algebras.Products    {𝑆 = 𝑆} using    ( ov )
+open import Agda.Primitive using ( Level ) renaming ( Set to Type )
+open import Data.Product   using ( _,_ )
+
+open import Overture.Preliminaries    using ( ∣_∣ ; ∥_∥ )
+open import Algebras.Products {𝑆 = 𝑆} using ( ov )
 
 private variable χ : Level
 

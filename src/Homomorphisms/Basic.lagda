@@ -13,34 +13,28 @@ This section describes the [Homomorphisms.Basic] module of the [Agda Universal A
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Level using ( Level ; Lift )
 open import Algebras.Basic
 
 module Homomorphisms.Basic {𝑆 : Signature 𝓞 𝓥} where
 
+-- Imports from Agda and the Agda Standard Library --------------------------------
+open import Agda.Primitive using ( _⊔_ ; lsuc ) renaming ( Set to Type )
+open import Axiom.Extensionality.Propositional
+                           using () renaming (Extensionality to funext)
+open import Data.Product   using ( _,_ ; Σ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst )
+open import Function.Base  using ( _∘_ ; id )
+open import Level          using ( Level )
+open import Relation.Binary.PropositionalEquality
+                           using ( _≡_ ; module ≡-Reasoning ; cong ; refl )
 
-open import Axiom.Extensionality.Propositional    using    ()
-                                                  renaming (Extensionality to funext)
-
-open import Agda.Builtin.Equality                 using    ( _≡_      ;   refl  )
-open import Agda.Primitive                        using    ( _⊔_      ;   lsuc  )
-                                                  renaming ( Set      to  Type  )
-open import Data.Product                          using    ( _,_      ;   Σ
-                                                           ; Σ-syntax ;   _×_   )
-                                                  renaming ( proj₁    to  fst
-                                                           ; proj₂    to  snd   )
-open import Function.Base                         using    ( _∘_      ;   id    )
-open import Relation.Binary.PropositionalEquality using    ( trans    ;   cong
-                                                           ; cong-app
-                                                           ; module ≡-Reasoning )
-
-open import Overture.Preliminaries       using (_⁻¹; ∣_∣; ∥_∥)
-open import Overture.Inverses            using (IsInjective; IsSurjective; Image_∋_)
-open import Foundations.Welldefined      using (swelldef)
-open import Relations.Discrete           using (ker)
-open import Relations.Quotients          using (ker-IsEquivalence; _/_; ⟪_⟫; R-block)
-open import Algebras.Congruences {𝑆 = 𝑆} using (Con; IsCongruence; mkcon; _╱_; /-≡)
-open import Algebras.Products    {𝑆 = 𝑆} using (⨅)
+-- Imports from agda-algebras --------------------------------------------------------------
+open import Overture.Preliminaries       using ( _⁻¹ ; ∣_∣ ; ∥_∥)
+open import Overture.Inverses            using ( IsInjective ; IsSurjective ; Image_∋_ )
+open import Foundations.Welldefined      using ( swelldef )
+open import Relations.Discrete           using ( ker )
+open import Relations.Quotients          using ( ker-IsEquivalence ; _/_ ; ⟪_⟫ ; R-block )
+open import Algebras.Congruences {𝑆 = 𝑆} using ( Con ; IsCongruence ; mkcon ; _╱_ ; /-≡ )
+open import Algebras.Products    {𝑆 = 𝑆} using ( ⨅ )
 
 private variable α β γ ρ : Level
 

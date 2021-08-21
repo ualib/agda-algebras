@@ -23,11 +23,11 @@ In other terms, F is a left adjoint of G and G is a right adjoint of F.
 
 module GaloisConnections.Basic where
 
-open import Agda.Primitive          using    ( _⊔_ ;  Level ; lsuc)
-                                    renaming ( Set to Type )
-open import Relation.Binary.Bundles using    ( Poset )
-open import Relation.Binary.Core    using    ( REL ; Rel ; _⇒_ ; _Preserves_⟶_ )
-open import Relation.Unary          using    ( _⊆_ ;  _∈_ ; Pred   )
+-- imports from Agda and the Agda Standard Library
+open import Agda.Primitive          using ( _⊔_ ;  Level ; lsuc) renaming ( Set to Type )
+open import Relation.Binary.Bundles using ( Poset )
+open import Relation.Binary.Core    using ( REL ; Rel ; _⇒_ ; _Preserves_⟶_ )
+open import Relation.Unary          using ( _⊆_ ;  _∈_ ; Pred   )
 
 
 

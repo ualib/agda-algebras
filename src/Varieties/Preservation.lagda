@@ -17,22 +17,21 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Varieties.Preservation {𝑆 : Signature 𝓞 𝓥} where
 
--- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
-open import Agda.Builtin.Equality   using ( _≡_ ; refl )
-open import Agda.Primitive          using ( _⊔_ ; lsuc ; Level )   renaming ( Set   to Type )
-open import Axiom.Extensionality.Propositional using ()            renaming (Extensionality to funext)
-open import Data.Product            using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Data.Sum.Base           using ( _⊎_ )                  renaming ( inj₁  to inl ; inj₂  to inr )
-open import Function.Base           using ( _∘_ )
-open import Relation.Unary          using ( Pred ; _⊆_ ; _∈_ ; ｛_｝ ; _∪_ )
-import Relation.Binary.PropositionalEquality as PE
+-- Imports from Agda and the Agda Standard Library ---------------------
+open import Agda.Primitive  using ( _⊔_ ; lsuc ; Level ) renaming ( Set   to Type )
+open import Axiom.Extensionality.Propositional
+                            using () renaming (Extensionality to funext)
+open import Data.Product    using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Data.Sum.Base   using ( _⊎_ ) renaming ( inj₁  to inl ; inj₂  to inr )
+open import Function.Base   using ( _∘_ )
+open import Relation.Unary  using ( Pred ; _⊆_ ; _∈_ ; ｛_｝ ; _∪_ )
+open import Relation.Binary.PropositionalEquality
+                            using ( _≡_ ; refl ; module ≡-Reasoning ; cong-app ; cong )
 
-
-
--- -- imports from agda-algebras --------------------------------------------------------------
+-- imports from agda-algebras --------------------------------------------------------------
 open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
 open import Overture.Inverses                  using ( Inv ; IsInjective ; InvIsInv )
-open import Foundations.Truncation               using ( hfunext )
+open import Foundations.Truncation             using ( hfunext )
 open import Foundations.Welldefined            using ( SwellDef )
 open import Foundations.Extensionality         using ( DFunExt )
 open import Algebras.Basic                     using ( Algebra ; Lift-Alg )
@@ -159,7 +158,7 @@ module _ {α β : Level} {𝒦 : Pred(Algebra α 𝑆)(ov α)} where
   ν = λ 𝑓 𝒂 → fwu λ i → (snd ∣ SA≤𝒜 i ∣) 𝑓 (λ x → 𝒂 x i)
 
   σinj : IsInjective σ
-  σinj σxσy = fwu λ i → (hinj i)(PE.cong-app σxσy i)
+  σinj σxσy = fwu λ i → (hinj i)(cong-app σxσy i)
 
   ⨅SA≤⨅𝒜 : ⨅ SA ≤ ⨅ 𝒜
   ⨅SA≤⨅𝒜 = (σ , ν) , σinj
@@ -357,7 +356,7 @@ First we prove that the closure operator H is compatible with identities that ho
 
 \begin{code}
 
-open PE.≡-Reasoning
+open ≡-Reasoning
 
 private variable 𝓧 : Level
 open Term
@@ -380,7 +379,7 @@ module _ (wd : SwellDef){X : Type 𝓧} {𝒦 : Pred (Algebra α 𝑆)(ov α)} w
   goal : (𝑩 ⟦ p ⟧) b ≡ (𝑩 ⟦ q ⟧) b
   goal = (𝑩 ⟦ p ⟧) b          ≡⟨ wd 𝓧 α (𝑩 ⟦ p ⟧) b (φ ∘ preim )(λ i → (ζ i)⁻¹)⟩
       (𝑩 ⟦ p ⟧)(φ ∘ preim) ≡⟨(comm-hom-term (wd 𝓥 α) 𝑩 (φ , φh) p preim)⁻¹ ⟩
-      φ((𝑨 ⟦ p ⟧) preim)   ≡⟨ PE.cong φ (IH preim) ⟩
+      φ((𝑨 ⟦ p ⟧) preim)   ≡⟨ cong φ (IH preim) ⟩
       φ((𝑨 ⟦ q ⟧) preim)   ≡⟨ comm-hom-term (wd 𝓥 α) 𝑩 (φ , φh) q preim ⟩
       (𝑩 ⟦ q ⟧)(φ ∘ preim) ≡⟨ wd 𝓧 α (𝑩 ⟦ q ⟧)(φ ∘ preim) b ζ ⟩
       (𝑩 ⟦ q ⟧) b          ∎
@@ -505,7 +504,7 @@ module Vid (fe : DFunExt)(wd : SwellDef){𝓧 : Level} {X : Type 𝓧} {𝒦 : P
   goal : (𝑩 ⟦ p ⟧) b ≡ (𝑩 ⟦ q ⟧) b
   goal = (𝑩 ⟦ p ⟧) b          ≡⟨ wd 𝓧 α (𝑩 ⟦ p ⟧) b (φ ∘ preim )(λ i → (ζ i)⁻¹)⟩
       (𝑩 ⟦ p ⟧)(φ ∘ preim) ≡⟨(comm-hom-term (wd 𝓥 α) 𝑩 (φ , φh) p preim)⁻¹ ⟩
-      φ((𝑨 ⟦ p ⟧) preim)   ≡⟨ PE.cong φ (IH preim) ⟩
+      φ((𝑨 ⟦ p ⟧) preim)   ≡⟨ cong φ (IH preim) ⟩
       φ((𝑨 ⟦ q ⟧) preim)   ≡⟨ comm-hom-term (wd 𝓥 α) 𝑩 (φ , φh) q preim ⟩
       (𝑩 ⟦ q ⟧)(φ ∘ preim) ≡⟨ wd 𝓧 α (𝑩 ⟦ q ⟧)(φ ∘ preim) b ζ ⟩
       (𝑩 ⟦ q ⟧) b          ∎
@@ -549,7 +548,7 @@ module Vid' (fe : DFunExt)(wd : SwellDef){𝓧 : Level} {X : Type 𝓧} {𝒦 : 
   goal : (𝑩 ⟦ p ⟧) b ≡ (𝑩 ⟦ q ⟧) b
   goal = (𝑩 ⟦ p ⟧) b          ≡⟨ wd 𝓧 _ (𝑩 ⟦ p ⟧) b (φ ∘ preim )(λ i → (ζ i)⁻¹)⟩
       (𝑩 ⟦ p ⟧)(φ ∘ preim) ≡⟨(comm-hom-term (wd 𝓥 _) 𝑩 (φ , φh) p preim)⁻¹ ⟩
-      φ((𝑨 ⟦ p ⟧) preim)   ≡⟨ PE.cong φ (IH preim) ⟩
+      φ((𝑨 ⟦ p ⟧) preim)   ≡⟨ cong φ (IH preim) ⟩
       φ((𝑨 ⟦ q ⟧) preim)   ≡⟨ comm-hom-term (wd 𝓥 _) 𝑩 (φ , φh) q preim ⟩
       (𝑩 ⟦ q ⟧)(φ ∘ preim) ≡⟨ wd 𝓧 _ (𝑩 ⟦ q ⟧)(φ ∘ preim) b ζ ⟩
       (𝑩 ⟦ q ⟧) b          ∎
