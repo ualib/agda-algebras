@@ -88,13 +88,10 @@ open import ClosureSystems.Properties       using    ( clop→law⇒ ; clop→la
 -- ALGEBRAS ------------------------------------------------------------------------------------------
 
 open import Algebras.Basic                  using    ( Signature ; signature ; compatible ; Algebra
-                                                     ; lilAlgebra ; Level-of-Alg ; Level-of-Carrier
-                                                     ; Level-of-lilAlg ; Level-of-lilCarrier ; algebra
-                                                     ; lilalgebra ; algebra→Algebra ; Algebra→algebra
-                                                     ; _̂_ ; Lift-alg-op ; Lift-Alg ; Lift-op-lilAlg
-                                                     ; Lift-lilAlg ; Lift-algebra ;  compatible-lilAlg
-                                                     ; compatible-Rel-alg ; compatible-ΠΡ-alg
-                                                     ; compatible-Rel-lilAlg ; compatible-ΠΡ-lilAlg )
+                                                     ; Level-of-Alg ; Level-of-Carrier ; algebra
+                                                     ; algebra→Algebra ; Algebra→algebra ; _̂_
+                                                     ; Lift-alg-op ; Lift-Alg ; Lift-algebra
+                                                     ; compatible-Rel-alg ; compatible-ΠΡ-alg )
 
 open import Algebras.Products               using    ( ⨅ ; ⨅' ; ov ; ℑ ; 𝔄 ; class-product )
 
@@ -102,7 +99,7 @@ open import Algebras.Congruences            using    ( IsCongruence ; Con ; IsCo
                                                      ; Con→IsCongruence ; 0[_]Compatible ; 0Con[_]
                                                      ; _╱_ ; 𝟘[_╱_] ; 𝟎[_╱_] ; /-≡ )
 
-open import Algebras.Setoid.Basic           using    ( ⟦_⟧s ; Algebroid ; SetoidAlgebra ; _̂_ ; _∙_ )
+open import Algebras.Setoid.Basic           using    ( ⟦_⟧ ; Algebroid ; SetoidAlgebra ; _̂_ ; _∙_ )
 
 open import Algebras.Setoid.Products        using    ( ⨅ ; ⨅oid ; ℑ ; 𝔄 ; class-product )
 

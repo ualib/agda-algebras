@@ -35,6 +35,8 @@ open import Overture.Preliminaries using ( ∥_∥ ; ∣_∣ )
 private variable
  α ρ ι : Level
 
+ov : Level → Level
+ov α = 𝓞 ⊔ 𝓥 ⊔ lsuc α
 \end{code}
 
 #### Models (again)
@@ -54,17 +56,17 @@ open Setoid using    (_≈_ ; Carrier )
                      ; isEquivalence to isEqv )
 open Func renaming   ( f to _<$>_ )
 
-⟦_⟧s : Signature 𝓞 𝓥 → Setoid α ρ → Setoid _ _
+⟦_⟧ : Signature 𝓞 𝓥 → Setoid α ρ → Setoid _ _
 
-Carrier (⟦ 𝑆 ⟧s ξ) = Σ[ f ∈ ∣ 𝑆 ∣ ] ((∥ 𝑆 ∥ f) → ξ .Carrier)
-_≈_ (⟦ 𝑆 ⟧s ξ) (f , u) (g , v) = Σ[ eqv ∈ f ≡ g ] EqArgs eqv u v
+Carrier (⟦ 𝑆 ⟧ ξ) = Σ[ f ∈ ∣ 𝑆 ∣ ] ((∥ 𝑆 ∥ f) → ξ .Carrier)
+_≈_ (⟦ 𝑆 ⟧ ξ) (f , u) (g , v) = Σ[ eqv ∈ f ≡ g ] EqArgs eqv u v
  where
  EqArgs : f ≡ g → (∥ 𝑆 ∥ f → Carrier ξ) → (∥ 𝑆 ∥ g → Carrier ξ) → Type _
  EqArgs refl u v = ∀ i → (_≈_ ξ) (u i) (v i)
 
-IsEquivalence.refl  (isEqv (⟦ 𝑆 ⟧s ξ))                     = refl , λ _ → reflS  ξ
-IsEquivalence.sym   (isEqv (⟦ 𝑆 ⟧s ξ))(refl , g)           = refl , λ i → symS   ξ (g i)
-IsEquivalence.trans (isEqv (⟦ 𝑆 ⟧s ξ))(refl , g)(refl , h) = refl , λ i → transS ξ (g i) (h i)
+IsEquivalence.refl  (isEqv (⟦ 𝑆 ⟧ ξ))                     = refl , λ _ → reflS  ξ
+IsEquivalence.sym   (isEqv (⟦ 𝑆 ⟧ ξ))(refl , g)           = refl , λ i → symS   ξ (g i)
+IsEquivalence.trans (isEqv (⟦ 𝑆 ⟧ ξ))(refl , g)(refl , h) = refl , λ i → transS ξ (g i) (h i)
 
 \end{code}
 
@@ -78,14 +80,14 @@ The `Func` record packs a function (f, aka apply, aka _<$>_) with a proof (cong)
 
 Algebroid : (α ρ : Level) → Type (𝓞 ⊔ 𝓥 ⊔ lsuc (α ⊔ ρ))
 Algebroid α ρ = Σ[ A ∈ Setoid α ρ ]      -- the domain (a setoid)
-                 Func (⟦ 𝑆 ⟧s A) A       -- the basic operations,
+                 Func (⟦ 𝑆 ⟧ A) A       -- the basic operations,
                                          -- along with congruence proofs that
                                          -- each operation espects setoid equality
 
 record SetoidAlgebra α ρ : Type (𝓞 ⊔ 𝓥 ⊔ lsuc (α ⊔ ρ)) where
   field
     Domain : Setoid α ρ
-    Interp : Func (⟦ 𝑆 ⟧s Domain) Domain
+    Interp : Func (⟦ 𝑆 ⟧ Domain) Domain
      --      ^^^^^^^^^^^^^^^^^^^^^^^ is a record type with two fields:
      --       1. a function  f : Carrier (⟦ 𝑆 ⟧s Domain)  → Carrier Domain
      --       2. a proof cong : f Preserves _≈₁_ ⟶ _≈₂_ (that f preserves the setoid equalities)

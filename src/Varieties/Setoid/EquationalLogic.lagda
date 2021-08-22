@@ -41,7 +41,7 @@ open IsEquivalence renaming ( refl to reflE ; sym to  symmE ; trans to tranE )
 
 -- imports from agda-algebras --------------------------------------------------------------
 open import Overture.Preliminaries       using ( ∣_∣ )
-open import Algebras.Setoid.Basic{𝑆 = 𝑆} using ( SetoidAlgebra ; ⟦_⟧s )
+open import Algebras.Setoid.Basic{𝑆 = 𝑆} using ( SetoidAlgebra ) renaming ( ⟦_⟧ to ⟦_⟧s )
 open import Algebras.Products    {𝑆 = 𝑆} using ( ov )
 open import Terms.Basic          {𝑆 = 𝑆} using ( Term )
 open import Terms.Setoid.Basic   {𝑆 = 𝑆} using ( module Environment ; Ops ; Sub ; _[_] )

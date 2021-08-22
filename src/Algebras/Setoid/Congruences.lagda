@@ -29,8 +29,7 @@ open import Relation.Binary.PropositionalEquality
 -- Imports from agda-algebras --------------------------------------------------------------
 open import Overture.Preliminaries        using ( ∣_∣  ; ∥_∥  )
 open import Relations.Discrete            using ( 0[_] ; _|:_ )
-open import Algebras.Setoid.Basic {𝑆 = 𝑆} using ( Algebroid ; _̂_ ; _∙_ ; ⟦_⟧s ; SetoidAlgebra ; 𝕌[_])
-open import Algebras.Products     {𝑆 = 𝑆} using ( ov )
+open import Algebras.Setoid.Basic {𝑆 = 𝑆} using ( ov ; SetoidAlgebra ; 𝕌[_] ; _̂_ ; Algebroid ; _∙_ )
 
 private variable α ρ ℓ : Level
 
