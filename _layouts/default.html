@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>{{ page.title }} </title>
+      <link rel="icon" type="image/jpeg" href="css/favicon.jpg">
+      <link rel="stylesheet" type="text/css" href="css/Agda-wjd.css">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Spicy+Rice|Rye|Diplomata|Roboto+Mono|Alfa+Slab+One|Concert+One|Ultra|Pacifico|Abril+Fatface|Creepster|Fascinate+Inline|Jacques+Francois+Shadow|Oleo+Script+Swash+Caps">
+      <link rel="preconnect" href="https://fonts.gstatic.com">
+      <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Source+Code+Pro" rel="stylesheet">
+      <img src='css/lambda.jpg' style='position:fixed; top:0; left:0; padding: 20px 0px 0px 20px;' width='100' height='' alt='' />
+      <!-- <img src='css/cornerlogo.png' style='position:fixed; top:0; left:0; padding: 20px 0px 0px 20px;' width='100' height='' alt='' /> -->
+      <!-- <img src='css/stereotypeb-avatar.png' style='position:fixed; bottom:0; right:0; padding: 0px 20px 20px 0px;' width='150' height='' alt='' /> -->
+      {% include analytics.html %}
+  </head>
+  <body>
+      <style>
+       body, html{
+           margin: 60px auto;
+           width: 80%;
+           /* font-family:'Helvetica', 'Arial', 'Sans-Serif'; */
+           font-size: 1.17em;
+              /* line-height: 0.8em; */
+       }
+       a {
+           text-decoration: none;
+           color: #5F38AD;
+
+       }
+       a:hover {
+           text-decoration: underline;
+       }
+
+       h1 {
+           font-size: 3em;
+           font-family:'Helvetica', 'Arial', 'Sans-Serif';
+           color: #5F38AD;
+       }
+
+       h2 {
+           font-size: 2.5em;
+           font-family:'Helvetica', 'Arial', 'Sans-Serif';
+           color: #5F38AD;
+       }
+       h3 {
+           font-size: 2.0em;
+           font-family:'Helvetica', 'Arial', 'Sans-Serif';
+           color: #5F38AD;
+       }
+       h4 {
+           font-size: 1.5em;
+           font-family:'Helvetica', 'Arial', 'Sans-Serif';
+           color: #5F38AD;
+       }
+       .dotted_box {
+           border: #EA9258 1px dotted;
+       }
+       .dotted_box #title {
+           position: relative;
+           top: -0.5em;
+           padding: 0.2em 0.8em
+           margin-left: 1em;
+           display: inline;
+           background-color: white;
+       }
+       .dotted_box #content {}
+       .color_box {
+           box-shadow: 0 0 0 0.2em #EA9258;
+                       0 0 0 0.3em #5F38AD;
+           margin: 0.3em;
+           padding:1em;
+       }
+       .color_box #title {
+           position: relative;
+           top: -0.5em;
+           padding: 0.2em 0.8em
+           margin-left: 1em;
+           display: inline;
+           background-color: #5F38AD;
+       }
+       .color_box #content {}
+       span.footnote {
+           font-size: smaller;
+       }
+	    </style>
+      <div class="container">
+          <p><a href="UALib.html">Agda UALib ↑</a></p>
+
+          <hr />
+
+          {{ content }}
+          </div><!-- /.container -->
+      </body>
+
+</html>
