@@ -1,4 +1,13 @@
-<h2>Algebras.Congruences module</h2>
+---
+layout: default
+title : Algebras.Congruences module (The Agda Universal Algebra Library)
+date : 2021-07-03
+author: [agda-algebras development team][]
+---
+
+### Congruence Relations
+
+This is the [Algebras.Congruences][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
@@ -24,12 +33,12 @@ open import Relations.Quotients       using ( 0[_]Equivalence ; _/_ ; ⟪_⟫ ; 
 open import Foundations.Welldefined   using ( swelldef )
 open import Algebras.Products {𝑆 = 𝑆} using ( ov )
 
+
+
 private variable α β ρ : Level
 \end{code}
 
-<h3>Congruence Relations</h3>
-
-A <i>congruence relation</i> of an algebra `𝑨` is defined to be an equivalence relation that is compatible with the basic operations of `𝑨`.  This concept can be represented in a number of alternative but equivalent ways.
+A *congruence relation* of an algebra `𝑨` is defined to be an equivalence relation that is compatible with the basic operations of `𝑨`.  This concept can be represented in a number of alternative but equivalent ways.
 Formally, we define a record type (`IsCongruence`) to represent the property of being a congruence, and we define a Sigma type (`Con`) to represent the type of congruences of a given algebra.
 
 \begin{code}
@@ -56,8 +65,8 @@ Con→IsCongruence θ = ∥ θ ∥
 
 \end{code}
 
-<h4 id="example">Example</h4>
-We defined the <i>zero relation</i> `0[_]` in the [Relations.Discrete][] module.  We now build the <i>trivial congruence</i>, which has `0[_]` as its underlying relation. Observe that `0[_]` is equivalent to the identity relation `≡` and these are obviously both equivalence relations. In fact, we already proved this of `≡` in the [Overture.Equality][] module, so we simply apply the corresponding proofs.
+#### <a id="example">Example</a>
+We defined the *zero relation* `0[_]` in the [Relations.Discrete][] module.  We now build the *trivial congruence*, which has `0[_]` as its underlying relation. Observe that `0[_]` is equivalent to the identity relation `≡` and these are obviously both equivalence relations. In fact, we already proved this of `≡` in the [Overture.Equality][] module, so we simply apply the corresponding proofs.
 
 \begin{code}
 open Level
@@ -79,8 +88,8 @@ open IsCongruence
 
 A concrete example is `⟪𝟎⟫[ 𝑨 ╱ θ ]`, presented in the next subsection.
 
-<h4 id="quotient-algebras">Quotient algebras</h4>
-In many areas of abstract mathematics the <i>quotient</i> of an algebra `𝑨` with respect to a congruence relation `θ` of `𝑨` plays an important role. This quotient is typically denoted by `𝑨 / θ` and Agda allows us to define and express quotients using this standard notation.<sup>[1](Algebras.Congruences.html#fn1)</sup>
+#### <a id="quotient-algebras">Quotient algebras</a>
+In many areas of abstract mathematics the *quotient* of an algebra `𝑨` with respect to a congruence relation `θ` of `𝑨` plays an important role. This quotient is typically denoted by `𝑨 / θ` and Agda allows us to define and express quotients using this standard notation.<sup>[1](Algebras.Congruences.html#fn1)</sup>
 
 \begin{code}
 
@@ -91,7 +100,7 @@ _╱_ : (𝑨 : Algebra α 𝑆) → Con{α}{ρ} 𝑨 → Algebra (α ⊔ lsuc �
 
 \end{code}
 
-<b>Example</b>. If we adopt the notation `𝟎[ 𝑨 ╱ θ ]` for the zero (or identity) relation on the quotient algebra `𝑨 ╱ θ`, then we define the zero relation as follows.
+**Example**. If we adopt the notation `𝟎[ 𝑨 ╱ θ ]` for the zero (or identity) relation on the quotient algebra `𝑨 ╱ θ`, then we define the zero relation as follows.
 
 \begin{code}
 
@@ -124,4 +133,18 @@ open IsCongruence
 
 \end{code}
 
-{% include footnote.html %}
+------------------------------
+
+{% include UALib.Links.md %}
+
+
+
+------------------------------
+
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
+
+
+
+
+
+
