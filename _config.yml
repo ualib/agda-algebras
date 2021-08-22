@@ -46,16 +46,13 @@ markdown: kramdown
 exclude:
   # - .sass-cache/
   # - .jekyll-cache/
-  - Makefile
-  - *.agdai
-  - *.lagda
-  - *.agda
-  - README.md
-  - INSTALL_AGDA.md
-  - gemfiles/
-  - Gemfile
-  - Gemfile.lock
-  - node_modules/
+  - "Makefile"
+  - "README.md"
+  - "INSTALL_AGDA.md"
+  - "gemfiles/"
+  - "Gemfile"
+  - "Gemfile.lock"
+  - "node_modules/"
 #   - vendor/bundle/
 #   - vendor/cache/
 #   - vendor/gems/
