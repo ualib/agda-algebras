@@ -31,7 +31,7 @@ open import Relation.Unary   using ( Pred ; _⊆_ ; _∈_ )
 
 -- Imports from agda-algebras --------------------------------------------------------------
 open import Overture.Preliminaries        using ( ∣_∣; ∥_∥)
-open import Algebras.Setoid.Basic {𝑆 = 𝑆} using ( Algebroid ; ⟦_⟧s ; SetoidAlgebra ; _̂_)
+open import Algebras.Setoid.Basic {𝑆 = 𝑆} using ( Algebroid ; ⟦_⟧ ; SetoidAlgebra ; _̂_ ; ov )
 
 open Func          using ( cong ) renaming ( f to _<$>_ )
 open Setoid        using ( Carrier ; _≈_ ) renaming ( isEquivalence to isEqv )
@@ -85,7 +85,7 @@ cong (Interp (⨅ {I} 𝒜)) (refl , f=g ) = λ i → cong  (Interp (𝒜 i)) (r
                            }
                  }
 
- interp : Func (⟦ 𝑆 ⟧s domain) domain
+ interp : Func (⟦ 𝑆 ⟧ domain) domain
  interp <$> (f , as ) = λ i → ∥ 𝒜 i ∥ <$> (f , (flip as i ))
  cong  interp (refl , f=g) i = cong  ∥ 𝒜 i ∥ (refl , (flip f=g i))
 
@@ -97,14 +97,14 @@ cong (Interp (⨅ {I} 𝒜)) (refl , f=g ) = λ i → cong  (Interp (𝒜 i)) (r
 
 module _ {𝒦 : Pred (Algebroid α ρ) (𝓞 ⊔ 𝓥 ⊔ lsuc α)} where
 
- ℑ : Type (𝓞 ⊔ 𝓥 ⊔ lsuc (α ⊔ ρ))
+ ℑ : Type (ov(α ⊔ ρ))
  ℑ = Σ[ 𝑨 ∈ (Algebroid α ρ) ] 𝑨 ∈ 𝒦
 
 
  𝔄 : ℑ → Algebroid α ρ
  𝔄 i = ∣ i ∣
 
- class-product : Algebroid (𝓞 ⊔ 𝓥 ⊔ lsuc (α ⊔ ρ)) _
+ class-product : Algebroid (ov (α ⊔ ρ)) _
  class-product = ⨅oid 𝔄
 
 \end{code}

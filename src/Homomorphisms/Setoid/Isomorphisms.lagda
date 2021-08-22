@@ -29,14 +29,13 @@ open import Relation.Binary.PropositionalEquality
 
 
 -- Imports from agda-algebras --------------------------------------------------------------
-open import Overture.Preliminaries             using    ( ∣_∣ ; ∥_∥ ; _⁻¹ ; _∙_ ; lower∼lift ; lift∼lower )
-                                               renaming (_≈_ to _≋_ )
-open import Overture.Inverses                  using    (IsInjective)
-open import Algebras.Products          {𝑆 = 𝑆} using    ( ov )
-open import Algebras.Setoid.Products   {𝑆 = 𝑆} using    ( ⨅ )
-open import Algebras.Setoid.Basic      {𝑆 = 𝑆} using    ( SetoidAlgebra ; 𝕌[_] ; _̂_ ; Lift-SetoidAlg)
-open import Homomorphisms.Setoid.Basic {𝑆 = 𝑆} using    ( hom ; kercon ; ker[_⇒_]_↾_ ; ∘-hom ; 𝒾𝒹
-                                                        ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-homomorphism ; ∘-is-hom )
+open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; _∙_ ; lower∼lift ; lift∼lower )
+                                               renaming ( _≈_ to _≋_ )
+open import Overture.Inverses                  using ( IsInjective )
+open import Algebras.Setoid.Products   {𝑆 = 𝑆} using ( ⨅ )
+open import Algebras.Setoid.Basic      {𝑆 = 𝑆} using ( SetoidAlgebra ; 𝕌[_] ; _̂_ ; Lift-SetoidAlg)
+open import Homomorphisms.Setoid.Basic {𝑆 = 𝑆} using ( hom ; kercon ; ker[_⇒_]_↾_ ; ∘-hom ; 𝒾𝒹
+                                                     ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-homomorphism ; ∘-is-hom )
 
 \end{code}
 
@@ -166,7 +165,7 @@ Lift-SetoidAlg-assoc _ _ = ≅-trans (≅-trans (≅-sym Lift-≅) Lift-≅) Lif
 
 Products of isomorphic families of algebras are themselves isomorphic. The proof looks a bit technical, but it is as straightforward as it ought to be.
 
-begin{code}
+\begin{code}
 
 module _ {𝓘 : Level}{I : Type 𝓘}{fiu : funext 𝓘 α}{fiw : funext 𝓘 β} where
 
@@ -194,15 +193,12 @@ module _ {𝓘 : Level}{I : Type 𝓘}{fiu : funext 𝓘 α}{fiw : funext 𝓘 �
    ψ∼ϕ : ψ ∘ ϕ ≋ ∣ 𝒾𝒹 (⨅ 𝒜) ∣
    ψ∼ϕ a = fiu λ i → from∼to (AB i)(a i)
 
-   -- Goal : ⨅ 𝒜 ≅ ⨅ ℬ
-   -- Goal = (ϕ , ϕhom) , ((ψ , ψhom) , ϕ~ψ , ψ~ϕ)
-
 \end{code}
 
 
 A nearly identical proof goes through for isomorphisms of lifted products (though, just for fun, we use the universal quantifier syntax here to express the dependent function type in the statement of the lemma, instead of the Pi notation we used in the statement of the previous lemma; that is, `∀ i → 𝒜 i ≅ ℬ (lift i)` instead of `Π i ꞉ I , 𝒜 i ≅ ℬ (lift i)`.)
 
-begin{code}
+\begin{code}
 
 module _ {𝓘 : Level}{I : Type 𝓘}{fizw : funext (𝓘 ⊔ γ) β}{fiu : funext 𝓘 α} where
 

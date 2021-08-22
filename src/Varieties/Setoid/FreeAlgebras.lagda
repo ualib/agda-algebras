@@ -29,7 +29,7 @@ open import Relation.Binary.PropositionalEquality
 open import Overture.Preliminaries             using ( ∣_∣ )
 open import Overture.Inverses                  using ( IsSurjective ; Image_∋_ ; Inv ; InvIsInv ; eq )
 open import Algebras.Setoid.Products   {𝑆 = 𝑆} using ( ⨅ )
-open import Algebras.Setoid.Basic      {𝑆 = 𝑆} using ( SetoidAlgebra ; ⟦_⟧s )
+open import Algebras.Setoid.Basic      {𝑆 = 𝑆} using ( SetoidAlgebra ) renaming ( ⟦_⟧ to ⟦_⟧s )
 open import Homomorphisms.Setoid.Basic {𝑆 = 𝑆} using ( hom ; epi )
 open import Terms.Setoid.Basic         {𝑆 = 𝑆} using ( TermAlgebra )
 open import Varieties.Setoid.EquationalLogic

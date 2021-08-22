@@ -33,17 +33,14 @@ open import Relation.Unary using ( Pred  ; _∈_ ; _⊆_ )
 -- imports from agda-algebras --------------------------------------------------------------
 open import Overture.Preliminaries           using ( ∣_∣ ; ∥_∥ )
 open import Algebras.Setoid.Products {𝑆 = 𝑆} using ( ⨅ )
-open import Algebras.Setoid.Basic    {𝑆 = 𝑆} using ( SetoidAlgebra ) renaming ( Lift-SetoidAlg to Lift-Alg )
+open import Algebras.Setoid.Basic    {𝑆 = 𝑆} using ( SetoidAlgebra ; ov )
+                                             renaming ( Lift-SetoidAlg to Lift-Alg )
 open import Homomorphisms.Setoid.Isomorphisms
                                      {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; Lift-≅ ; ≅-trans ; ≅-refl )
 open import Homomorphisms.Setoid.HomomorphicImages
                                      {𝑆 = 𝑆} using ( HomImages )
 open import Subalgebras.Setoid.Subalgebras
                                      {𝑆 = 𝑆} using (_≤_ ; _IsSubalgebraOfClass_ ; Subalgebra )
-
-ov : Level → Level
-ov α = 𝓞 ⊔ 𝓥 ⊔ lsuc α
-
 
 -- The inductive type H
 
