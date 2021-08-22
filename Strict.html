@@ -1,5 +1,4 @@
-<!DOCTYPE HTML>
-<html><head><meta charset="utf-8"><title>Strict</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Comment">------------------------------------------------------------------------</a>
+<a id="1" class="Comment">------------------------------------------------------------------------</a>
 <a id="74" class="Comment">-- The Agda standard library</a>
 <a id="103" class="Comment">--</a>
 <a id="106" class="Comment">-- Strictness combinators</a>
@@ -30,4 +29,3 @@
 
   <a id="683" href="Strict.html#683" class="Function">seq-≡</a> <a id="689" class="Symbol">:</a> <a id="691" class="Symbol">(</a><a id="692" href="Strict.html#692" class="Bound">a</a> <a id="694" class="Symbol">:</a> <a id="696" href="Strict.html#482" class="Bound">A</a><a id="697" class="Symbol">)</a> <a id="699" class="Symbol">(</a><a id="700" href="Strict.html#700" class="Bound">b</a> <a id="702" class="Symbol">:</a> <a id="704" href="Strict.html#494" class="Bound">B</a><a id="705" class="Symbol">)</a> <a id="707" class="Symbol">→</a> <a id="709" href="Strict.html#634" class="Function">seq</a> <a id="713" href="Strict.html#692" class="Bound">a</a> <a id="715" href="Strict.html#700" class="Bound">b</a> <a id="717" href="Agda.Builtin.Equality.html#151" class="Datatype Operator">≡</a> <a id="719" href="Strict.html#700" class="Bound">b</a>
   <a id="723" href="Strict.html#683" class="Function">seq-≡</a> <a id="729" href="Strict.html#729" class="Bound">a</a> <a id="731" href="Strict.html#731" class="Bound">b</a> <a id="733" class="Symbol">=</a> <a id="735" href="Strict.html#417" class="Primitive">force-≡</a> <a id="743" href="Strict.html#729" class="Bound">a</a> <a id="745" class="Symbol">(λ</a> <a id="748" href="Strict.html#748" class="Bound">_</a> <a id="750" class="Symbol">→</a> <a id="752" href="Strict.html#731" class="Bound">b</a><a id="753" class="Symbol">)</a>
-</pre></body></html>
