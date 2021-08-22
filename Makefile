@@ -8,11 +8,24 @@ OTHEROPTS=
 
 RTSARGS = +RTS -M6G -A128M ${OTHEROPTS} -RTS
 
+TEX := $(wildcard html/*.tex)
+MD := $(TEX:.tex=.md)
+
+all: test $(TEX) $(MD)
+
 test: Everything.agda
 	agda ${RTSARGS} -i. Everything.agda
 
+
+$(MD): %.md: %.tex
+	mv $< $@
+
+$(TEX): html
+
 html: Everything.agda
-	agda ${RTSARGS} --html -i. Everything.agda
+	agda ${RTSARGS} --html --html-highlight=code -i. Everything.agda
+
+
 
 Everything.agda:
 	git ls-tree --full-tree -r --name-only HEAD | grep '^src/[^\.]*.lagda' | sed -e 's|^src/[/]*|import |' -e 's|/|.|g' -e 's/.lagda//' -e '/import Everything/d' | LC_COLLATE='C' sort > Everything.agda
