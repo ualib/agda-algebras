@@ -21,19 +21,14 @@ module Terms.Operations {𝑆 : Signature 𝓞 𝓥} where
 
 
 
--- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
-open import Agda.Primitive                        using    ( _⊔_ ;  lsuc ; Level )
-                                                  renaming ( Set to Type )
-open import Agda.Builtin.Equality                 using    ( _≡_ ; refl )
-open import Axiom.Extensionality.Propositional    using    ()
-                                                  renaming (Extensionality to funext)
-open import Data.Product                          using    ( _,_ ; Σ-syntax ; Σ )
-open import Function.Base                         using    ( _∘_ )
-open import Relation.Binary.PropositionalEquality using    (sym ; cong
-                                                           ; module ≡-Reasoning )
-
-
-
+-- Imports from Agda and the Agda Standard Library ---------------------
+open import Agda.Primitive using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
+open import Axiom.Extensionality.Propositional
+                           using () renaming (Extensionality to funext)
+open import Data.Product   using ( _,_ ; Σ-syntax ; Σ )
+open import Function.Base  using ( _∘_ )
+open import Relation.Binary.PropositionalEquality
+                           using ( _≡_ ; refl ; module ≡-Reasoning ; sym ; cong )
 
 -- Imports from agda-algebras --------------------------------------------------------------
 open import Overture.Preliminaries       using ( _∙_ ; _⁻¹ ; ∣_∣ ; ∥_∥ ; Π ; Π-syntax ; _≈_ )

@@ -13,11 +13,10 @@ author: [agda-algebras development team][]
 
 module Residuation.Basic where
 
-open import Agda.Primitive          using    ( _⊔_ ;  Level ; lsuc)
-                                    renaming ( Set to Type )
-open import Function.Base           using    ( _on_ )
-open import Relation.Binary.Bundles using    ( Poset )
-open import Relation.Binary.Core    using    ( _Preserves_⟶_ )
+open import Agda.Primitive          using ( _⊔_ ;  Level ; lsuc) renaming ( Set to Type )
+open import Function.Base           using ( _on_ )
+open import Relation.Binary.Bundles using ( Poset )
+open import Relation.Binary.Core    using ( _Preserves_⟶_ )
 
 
 module _ {α ιᵃ ρᵃ : Level} (A : Poset α ιᵃ ρᵃ)

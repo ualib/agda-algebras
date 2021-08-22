@@ -16,15 +16,15 @@ open import Algebras.Basic using (𝓞 ; 𝓥 ; Signature )
 module Subalgebras.Properties {𝑆 : Signature 𝓞 𝓥} where
 
 -- imports from Agda and the Agda Standard Library ------------------------------------
-open import Agda.Builtin.Equality using ( _≡_ ; refl )
-open import Agda.Primitive        using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
-open import Data.Product          using ( _,_ ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Function.Base         using ( _∘_ ; id ; flip )
-open import Function.Bundles      using ( Injection )
-open import Relation.Unary        using ( Pred ; _⊆_ )
-open import Relation.Binary.Definitions using ( _Respectsʳ_ ; _Respectsˡ_ )
--- open import Relation.Binary.HeterogeneousEquality using ()
-import Relation.Binary.PropositionalEquality as PE
+open import Agda.Primitive   using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
+open import Data.Product     using ( _,_ ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Function.Base    using ( _∘_ ; id ; flip )
+open import Function.Bundles using ( Injection )
+open import Relation.Unary   using ( Pred ; _⊆_ )
+open import Relation.Binary.Definitions
+                             using ( _Respectsʳ_ ; _Respectsˡ_ )
+open import Relation.Binary.PropositionalEquality
+                             using ( refl ; module ≡-Reasoning ; cong )
 
 -- -- imports from agda-algebras --------------------------------------------------------------
 open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
@@ -132,12 +132,12 @@ module _ {𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆}{𝑪 : Algebra γ 𝑆
  ≅-RESP-≥ ab b<c = ≤-RESP-≅ b<c (≅-sym ab)
 
 
-open PE.≡-Reasoning
+open ≡-Reasoning
 iso→injective : {𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆}
  →              (φ : 𝑨 ≅ 𝑩) → IsInjective ∣ to φ ∣
 iso→injective {𝑨 = 𝑨} (mkiso f g f∼g g∼f) {x} {y} fxfy =
  x                  ≡⟨ (g∼f x)⁻¹ ⟩
- (∣ g ∣ ∘ ∣ f ∣) x  ≡⟨ PE.cong ∣ g ∣ fxfy ⟩
+ (∣ g ∣ ∘ ∣ f ∣) x  ≡⟨ cong ∣ g ∣ fxfy ⟩
  (∣ g ∣ ∘ ∣ f ∣) y  ≡⟨ g∼f y ⟩
  y                  ∎
 

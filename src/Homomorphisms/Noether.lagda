@@ -13,20 +13,19 @@ This is the [Homomorphisms.Noether][] module of the [Agda Universal Algebra Libr
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Level using ( Level )
 open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Homomorphisms.Noether {𝑆 : Signature 𝓞 𝓥} where
 
 
--- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
-open import Agda.Builtin.Equality using ( _≡_ ; refl )
-open import Agda.Primitive        using ( _⊔_ ; lsuc ) renaming ( Set to Type )
-open import Data.Product          using ( Σ-syntax ; _,_ ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Function.Base         using ( _∘_ ; id )
-open import Relation.Binary       using ( IsEquivalence )
-open import Relation.Unary        using ( _⊆_ )
-import Relation.Binary.PropositionalEquality as PE
+-- Imports from Agda and the Agda Standard Library ---------------------------------------
+open import Agda.Primitive  using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
+open import Data.Product    using ( Σ-syntax ; _,_ ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Function.Base   using ( _∘_ ; id )
+open import Relation.Binary using ( IsEquivalence )
+open import Relation.Binary.PropositionalEquality
+                            using ( _≡_ ; refl ; module ≡-Reasoning ; cong ; cong-app )
+open import Relation.Unary  using ( _⊆_ )
 
 
 -- Imports from agda-algebras --------------------------------------------------------------
@@ -65,7 +64,7 @@ Note that the classical, informal statement of the first homomorphism theorem do
 Without further ado, we present our formalization of the first homomorphism theorem.<sup>[2](Homomorphisms.Noether.html#fn2)</sup>
 
 \begin{code}
-open PE.≡-Reasoning
+open ≡-Reasoning
 
 FirstHomTheorem|Set :
 
@@ -89,7 +88,7 @@ FirstHomTheorem|Set 𝑨 𝑩 h pe fe Bset buip = (φ , φhom) , refl , φmon , 
 
   φhom : is-homomorphism (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩 φ
   φhom 𝑓 a = ∣ h ∣ ( (𝑓 ̂ 𝑨) (λ x → ⌞ a x ⌟) ) ≡⟨ ∥ h ∥ 𝑓 (λ x → ⌞ a x ⌟)  ⟩
-             (𝑓 ̂ 𝑩) (∣ h ∣ ∘ (λ x → ⌞ a x ⌟))  ≡⟨ PE.cong (𝑓 ̂ 𝑩) refl ⟩
+             (𝑓 ̂ 𝑩) (∣ h ∣ ∘ (λ x → ⌞ a x ⌟))  ≡⟨ cong (𝑓 ̂ 𝑩) refl ⟩
              (𝑓 ̂ 𝑩) (λ x → φ (a x))            ∎
 
   φmon : IsInjective φ
@@ -151,8 +150,8 @@ module _ {fe : swelldef 𝓥 β}(𝑨 : Algebra α 𝑆)(𝑩 : Algebra β 𝑆)
   →                 ∀ a  →  ∣ f ∣ a ≡ ∣ g ∣ a
 
  NoetherHomUnique f g hfk hgk (_ , R-block a refl) =
-  ∣ f ∣ (_ , R-block a refl) ≡⟨ PE.cong-app(hfk ⁻¹)a ⟩
-  ∣ h ∣ a                    ≡⟨ PE.cong-app(hgk)a ⟩
+  ∣ f ∣ (_ , R-block a refl) ≡⟨ cong-app(hfk ⁻¹)a ⟩
+  ∣ h ∣ a                    ≡⟨ cong-app(hgk)a ⟩
   ∣ g ∣ (_ , R-block a refl) ∎
 
 \end{code}
@@ -230,11 +229,12 @@ module _ {𝑨 : Algebra α 𝑆}{𝑪 : Algebra γ 𝑆} where
    τφν = λ x → Kντ (ξ x)
 
    φIsHomCB : ∀ 𝑓 c → φ ((𝑓 ̂ 𝑪) c) ≡ ((𝑓 ̂ 𝑩)(φ ∘ c))
-   φIsHomCB 𝑓 c = φ ((𝑓 ̂ 𝑪) c)     ≡⟨ PE.cong φ (wd (𝑓 ̂ 𝑪) c (∣ ν ∣ ∘ (νInv ∘ c)) (λ i → (η (c i))⁻¹)) ⟩
-                  φ ((𝑓 ̂ 𝑪)(∣ ν ∣ ∘(νInv ∘ c)))   ≡⟨ PE.cong φ (∥ ν ∥ 𝑓 (νInv ∘ c))⁻¹ ⟩
-                  φ (∣ ν ∣((𝑓 ̂ 𝑨)(νInv ∘ c)))     ≡⟨ (τφν ((𝑓 ̂ 𝑨)(νInv ∘ c)))⁻¹ ⟩
-                  ∣ τ ∣((𝑓 ̂ 𝑨)(νInv ∘ c))         ≡⟨ ∥ τ ∥ 𝑓 (νInv ∘ c) ⟩
-                  (𝑓 ̂ 𝑩)(λ x → ∣ τ ∣(νInv (c x))) ∎
+   φIsHomCB 𝑓 c =
+    φ ((𝑓 ̂ 𝑪) c)                    ≡⟨ cong φ (wd (𝑓 ̂ 𝑪) c (∣ ν ∣ ∘ (νInv ∘ c)) (λ i → (η (c i))⁻¹))⟩
+    φ ((𝑓 ̂ 𝑪)(∣ ν ∣ ∘(νInv ∘ c)))   ≡⟨ cong φ (∥ ν ∥ 𝑓 (νInv ∘ c))⁻¹ ⟩
+    φ (∣ ν ∣((𝑓 ̂ 𝑨)(νInv ∘ c)))     ≡⟨ (τφν ((𝑓 ̂ 𝑨)(νInv ∘ c)))⁻¹ ⟩
+    ∣ τ ∣((𝑓 ̂ 𝑨)(νInv ∘ c))         ≡⟨ ∥ τ ∥ 𝑓 (νInv ∘ c) ⟩
+    (𝑓 ̂ 𝑩)(λ x → ∣ τ ∣(νInv (c x))) ∎
 
 \end{code}
 

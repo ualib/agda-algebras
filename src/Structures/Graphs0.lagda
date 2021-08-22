@@ -17,19 +17,18 @@ The *graph* of 𝑨 is the structure Gr 𝑨 with the same domain as 𝑨 with r
 
 module Structures.Graphs0 where
 
-open import Agda.Primitive          using    ( _⊔_ ; Level )
-                                    renaming ( Set to Type ; lzero to ℓ₀ )
-open import Agda.Builtin.Equality   using    ( _≡_ ; refl )
-open import Data.Product            using    ( _,_ ; _×_ ; Σ-syntax )
-open import Data.Sum.Base           using    ( _⊎_ )
-                                    renaming ( inj₁ to inl ; inj₂ to inr )
-open import Data.Fin.Base                         using ( Fin )
-open import Data.Nat                              using ( ℕ )
-open import Function.Base           using    ( _∘_ )
-open import Relation.Unary          using    ( Pred ; _∈_ ) -- ∅; Pred ; _⊆_ ; ⋂ ; ｛_｝ ; _∪_ )
-import Relation.Binary.PropositionalEquality as PE
+-- imports from Agda and the Agda Standard Library -------------------------------------------
+open import Agda.Primitive using ( _⊔_ ; Level ) renaming ( Set to Type ; lzero to ℓ₀ )
+open import Data.Product   using ( _,_ ; _×_ ; Σ-syntax )
+open import Data.Sum.Base  using ( _⊎_ ) renaming ( inj₁ to inl ; inj₂ to inr )
+open import Data.Fin.Base  using ( Fin )
+open import Data.Nat       using ( ℕ )
+open import Function.Base  using ( _∘_ )
+open import Relation.Unary using ( Pred ; _∈_ )
+open import Relation.Binary.PropositionalEquality
+                           using ( _≡_ ; module ≡-Reasoning ; cong ; sym ; refl )
 
--- -- Imports from agda-algebras --------------------------------------------------------------
+-- Imports from agda-algebras --------------------------------------------------------------
 open import Overture.Preliminaries using ( 𝟙 ; ∣_∣ ; ∥_∥ )
 open import Relations.Continuous   using ( Rel )
 open import Structures.Basic       using ( signature ; structure )
@@ -65,7 +64,7 @@ Gr {𝐹}{𝑅} 𝑨 = record { carrier = carrier 𝑨 ; op = λ () ; rel = spli
   split (inr 𝑓) args = op 𝑨 𝑓 (args ∘ inl) ≡ args (inr 𝟙.𝟎)
 
 
-open PE.≡-Reasoning
+open ≡-Reasoning
 
 module _ {𝑨 𝑩 : structure 𝐹 𝑅 {ℓ₀}{ℓ₀}} where
 
@@ -80,8 +79,8 @@ module _ {𝑨 𝑩 : structure 𝐹 𝑅 {ℓ₀}{ℓ₀}} where
    homop = ∥ hhom ∥ 𝑓 (a ∘ inl)
 
    goal : op 𝑩 𝑓 (h ∘ (a ∘ inl)) ≡ h (a (inr 𝟙.𝟎))
-   goal = op 𝑩 𝑓 (h ∘ (a ∘ inl)) ≡⟨ PE.sym homop ⟩
-          h (op 𝑨 𝑓 (a ∘ inl))   ≡⟨ PE.cong h x ⟩
+   goal = op 𝑩 𝑓 (h ∘ (a ∘ inl)) ≡⟨ sym homop ⟩
+          h (op 𝑨 𝑓 (a ∘ inl))   ≡⟨ cong h x ⟩
           h (a (inr 𝟙.𝟎))         ∎
 
   ii : is-hom-op (Gr 𝑨) (Gr 𝑩) h
@@ -100,7 +99,7 @@ module _ {𝑨 𝑩 : structure 𝐹 𝑅 {ℓ₀}{ℓ₀}} where
    split (inl x) = a x
    split (inr y) = op 𝑨 f a
    goal : h (op 𝑨 f a) ≡ op 𝑩 f (λ x → h (a x))
-   goal = PE.sym (∣ hhom ∣ (inr f) split refl)
+   goal = sym (∣ hhom ∣ (inr f) split refl)
 
 \end{code}
 

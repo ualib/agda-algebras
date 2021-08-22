@@ -18,17 +18,16 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 module Subalgebras.Setoid.Subuniverses {𝑆 : Signature 𝓞 𝓥} where
 
 -- imports from Agda and the Agda Standard Library
-open import Agda.Primitive          renaming ( Set to Type )
-                                    using    ( _⊔_ ; lsuc ; Level )
-open import Agda.Builtin.Equality   using    ( _≡_ ; refl )
-open import Data.Product            using    ( _,_ ; Σ-syntax ; Σ ; _×_ )
-open import Function.Base           using    ( _∘_ ; id )
-open import Function.Bundles        using    ( Func ; Injection )
-open import Relation.Binary         using    ( Setoid ; REL )
-open import Relation.Unary          using    ( Pred ; _∈_ ; _⊆_ ; ⋂ )
-import Relation.Binary.PropositionalEquality as PE
+open import Agda.Primitive   using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
+open import Data.Product     using ( _,_ ; Σ-syntax ; Σ ; _×_ )
+open import Function.Base    using ( _∘_ ; id )
+open import Function.Bundles using ( Func ; Injection )
+open import Relation.Binary  using ( Setoid ; REL )
+open import Relation.Unary   using ( Pred ; _∈_ ; _⊆_ ; ⋂ )
+open import Relation.Binary.PropositionalEquality
+                             using ( _≡_ ; module ≡-Reasoning )
 
--- -- -- imports from agda-algebras ------------------------------------------------------
+-- imports from agda-algebras ------------------------------------------------------
 open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
 open import Overture.Inverses                  using ( ∘-injective ; IsInjective ; id-is-injective )
 open import Relations.Discrete                 using ( Im_⊆_ )
@@ -210,7 +209,7 @@ Alternatively, we could express the preceeding fact using an inductive type repr
    where
    IH : ∀ x → ∣ g ∣ (a x) ≡ ∣ h ∣ (a x)
    IH x = hom-unique wd G g h σ (a x) (SgGa x)
-   open PE.≡-Reasoning
+   open ≡-Reasoning
    Goal : ∣ g ∣ ((f ̂ 𝑨) a) ≡ ∣ h ∣ ((f ̂ 𝑨) a)
    Goal = ∣ g ∣ ((f ̂ 𝑨) a) ≡⟨ ∥ g ∥ f a ⟩
           (f ̂ 𝑩)(∣ g ∣ ∘ a ) ≡⟨ wd (f ̂ 𝑩) (∣ g ∣ ∘ a) (∣ h ∣ ∘ a) IH ⟩

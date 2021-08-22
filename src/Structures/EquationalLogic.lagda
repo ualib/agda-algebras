@@ -11,14 +11,14 @@ author: [agda-algebras development team][]
 
 module Structures.EquationalLogic where
 
+-- imports from Agda and the Agda Standard Library -------------------------------------------
 open import Agda.Primitive using ( lsuc ; _⊔_ ; Level ) renaming ( Set to Type )
 open import Data.Fin.Base  using ( Fin )
 open import Data.Nat       using ( ℕ )
 open import Data.Product   using ( _,_ ;  _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
 open import Relation.Unary using ( Pred ; _∈_ )
 
-
--- -- Imports from agda-algebras --------------------------------------
+-- Imports from agda-algebras --------------------------------------
 open import Overture.Preliminaries  using ( _≈_ )
 open import Structures.Basic        using ( signature ; structure ; _ᵒ_ )
 open import Structures.Terms.Basic

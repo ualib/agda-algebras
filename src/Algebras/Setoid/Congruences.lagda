@@ -18,13 +18,13 @@ open import Algebras.Basic using (𝓞 ; 𝓥 ; Signature)
 module Algebras.Setoid.Congruences {𝑆 : Signature 𝓞 𝓥} where
 
 
--- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
+-- Imports from the Agda Standard Library ---------------------
 open import Function.Bundles      using ( Func )
-open import Agda.Builtin.Equality using ( _≡_ ; refl )
 open import Agda.Primitive        using ( _⊔_ ; Level ) renaming ( Set to Type )
 open import Data.Product          using ( _,_ ; Σ-syntax )
 open import Relation.Binary       using ( Setoid ; IsEquivalence ) renaming ( Rel to BinRel )
-
+open import Relation.Binary.PropositionalEquality
+                                  using ( refl )
 
 -- Imports from agda-algebras --------------------------------------------------------------
 open import Overture.Preliminaries        using ( ∣_∣  ; ∥_∥  )
@@ -99,42 +99,7 @@ Domain (𝑨 ╱ θ) = record { Carrier = 𝕌[ 𝑨 ]
                         ; isEquivalence = is-equivalence ∥ θ ∥
                         }
 (Interp (𝑨 ╱ θ)) <$> (f , a) = (f ̂ 𝑨) a
-cong (Interp (𝑨 ╱ θ)) {f , u} {.f , v} (_≡_.refl , a) = is-compatible  ∥ θ ∥ f a
-
-
-
--- /-≡ : {𝑨 : SetoidAlgebra α ρ}(θ : Con{α}{ρ}𝑨{ℓ}) {u v : ∣ 𝑨 ∣} → ⟪ u ⟫ {∣ θ ∣} ≡ ⟪ v ⟫ → ∣ θ ∣ u v
--- /-≡ θ refl = IsEquivalence.refl (is-equivalence ∥ θ ∥)
-
-\end{code}
-
-
-
--- Algebroid Quotient (omitting for now, in favor of SetoidAlgebra representation)
--- module _ {α ρ ℓ : Level} where
-
---  _╱_ : (𝑨 : Algebroid α ρ) → Con 𝑨 {ℓ} → Algebroid _ _
-
---  𝑨 ╱ θ = domain            -- the domain of the quotient algebra
---        , interp            -- the basic operations of the quotient algebra
---   where
---   open Func using ( cong ) renaming ( f to apply  )
-
---   -- the domain of the quotient algebra
---   domain : Setoid α ℓ
---   domain = record { Carrier = Carrier ∣ 𝑨 ∣
---               ; _≈_ = λ x y → ∣ θ ∣ x y
---               ; isEquivalence = is-equivalence ∥ θ ∥
---               }
-
---   -- the basic operations of the quotient algebra
---   interp : Func (⟦ 𝑆 ⟧s domain) domain
---   apply interp (f , a) = (f ∙ 𝑨) a
---   cong interp {f , u} {.f , v} (refl , a) = Goal
---    where
---    Goal : ∣ θ ∣ ((f ∙ 𝑨) u) ((f ∙ 𝑨) v)
---    Goal = is-compatible ∥ θ ∥ f a
-
+cong (Interp (𝑨 ╱ θ)) {f , u} {.f , v} (refl , a) = is-compatible  ∥ θ ∥ f a
 
 \end{code}
 

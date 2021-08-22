@@ -11,14 +11,13 @@ author: [agda-algebras development team][]
 
 module Structures.Sigma.Basic where
 
-open import Agda.Primitive        using ( _⊔_ ; lsuc ; Level )
-                               renaming ( Set to Type ; lzero to ℓ₀ )
-open import Data.Product          using ( _,_ ; _×_ ; Σ-syntax )
-                               renaming ( proj₁ to fst ; proj₂ to snd )
-open import Level                 using ( )
-open import Relation.Binary.Core  using ( _⇒_ ; _=[_]⇒_ )
-                               renaming ( REL to BinREL ; Rel to BinRel )
+-- Imports from the Agda Standard Library ------------------------------------------------
+open import Agda.Primitive       using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type ; lzero to ℓ₀ )
+open import Data.Product         using ( _,_ ; _×_ ; Σ-syntax ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Level                using ()
+open import Relation.Binary.Core using ( _⇒_ ; _=[_]⇒_ ) renaming ( REL to BinREL ; Rel to BinRel )
 
+-- Imports from agda-algebras ------------------------------------------------------------
 open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥ ; ℓ₁)
 open import Relations.Discrete     using ( Op ; _|:_ ; _preserves_ )
 open import Relations.Continuous   using ( Rel )

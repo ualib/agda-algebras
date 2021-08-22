@@ -20,13 +20,13 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 module Subalgebras.Subuniverses {𝑆 : Signature 𝓞 𝓥} where
 
 -- imports from Agda and the Agda Standard Library
-open import Relation.Binary.PropositionalEquality using ( cong ; module ≡-Reasoning )
-open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
-open import Agda.Primitive          renaming ( Set to Type )
-                                    using    ( _⊔_ ; lsuc ; Level )
-open import Agda.Builtin.Equality   using    ( _≡_ ; refl )
-open import Function.Base           using    ( _∘_ )
-open import Relation.Unary          using    ( Pred ; _∈_ ; _⊆_ ; ⋂ )
+open import Agda.Primitive        using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
+open import Axiom.Extensionality.Propositional
+                                  using () renaming (Extensionality to funext)
+open import Function.Base         using ( _∘_ )
+open import Relation.Binary.PropositionalEquality
+                                  using ( module ≡-Reasoning ; _≡_ )
+open import Relation.Unary        using ( Pred ; _∈_ ; _⊆_ ; ⋂ )
 
 -- imports from agda-algebras ------------------------------------------------------
 open import Overture.Preliminaries      using ( ∣_∣ ; ∥_∥ ; _⁻¹ )

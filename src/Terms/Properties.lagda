@@ -19,19 +19,18 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 module Terms.Properties {𝑆 : Signature 𝓞 𝓥} where
 
 
--- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
-open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
-import Relation.Binary.PropositionalEquality as PE
-open import Agda.Primitive              using    ( _⊔_ ;  lsuc   )
-                                        renaming ( Set to Type   )
-open import Agda.Builtin.Equality       using    ( _≡_ ;  refl   )
-open import Data.Product                using    ( _,_ ;  Σ
-                                                 ; Σ-syntax      )
-open import Function.Base               using    ( _∘_           )
-open import Data.Empty.Polymorphic      using    ( ⊥             )
-open import Level                       using    ( Level ; Lift  )
-open import Relation.Binary             using    ( IsEquivalence ; Setoid )
-open import Relation.Binary.Definitions using (Reflexive ; Symmetric ; Transitive )
+-- Imports from Agda and the Agda Standard Library ---------------------
+open import Axiom.Extensionality.Propositional
+                                   using () renaming (Extensionality to funext)
+open import Agda.Primitive         using ( Level ; _⊔_ ; lsuc ) renaming ( Set to Type )
+open import Data.Product           using ( _,_ ; Σ-syntax )
+open import Function.Base          using ( _∘_ )
+open import Data.Empty.Polymorphic using ( ⊥ )
+open import Relation.Binary        using ( IsEquivalence ; Setoid )
+open import Relation.Binary.Definitions
+                                   using (Reflexive ; Symmetric ; Transitive )
+open import Relation.Binary.PropositionalEquality
+                                   using ( _≡_ ; refl ; module ≡-Reasoning ; cong )
 
 
 -- Imports from agda-algebras --------------------------------------------------------------
@@ -79,7 +78,7 @@ The free lift so defined is a homomorphism by construction. Indeed, here is the 
 \begin{code}
 
 lift-hom : (𝑨 : Algebra α 𝑆) → (X → ∣ 𝑨 ∣) → hom (𝑻 X) 𝑨
-lift-hom 𝑨 h = free-lift 𝑨 h , λ f a → PE.cong (f ̂ 𝑨) refl
+lift-hom 𝑨 h = free-lift 𝑨 h , λ f a → cong (f ̂ 𝑨) refl
 
 \end{code}
 
@@ -87,7 +86,7 @@ Finally, we prove that the homomorphism is unique.  This requires `funext 𝓥 �
 
 \begin{code}
 
-open PE.≡-Reasoning
+open ≡-Reasoning
 
 free-unique : swelldef 𝓥 α → (𝑨 : Algebra α 𝑆)(g h : hom (𝑻 X) 𝑨)
  →            (∀ x → ∣ g ∣ (ℊ x) ≡ ∣ h ∣ (ℊ x))

@@ -17,20 +17,19 @@ open import Algebras.Basic using (𝓞 ; 𝓥 ; Signature )
 
 module Algebras.Setoid.Basic {𝑆 : Signature 𝓞 𝓥} where
 
--- Imports from the Agda (Builtin) and the Agda Standard Library
-open import Agda.Builtin.Equality  as ≡ using    ( _≡_ ) --    ;  refl          )
-open import Agda.Primitive         using    ( _⊔_    ;  lsuc          )
-                                   renaming ( Set    to Type          )
-open import Data.Product           using    ( _,_    ;  _×_
-                                            ; Σ      ;  Σ-syntax      )
-open import Function               using    ( _∘_                     )
-open import Function.Base          using    ( flip                    )
-open import Function.Bundles       using    ( Func                    )
-open import Level                  using    ( Level  ;  Lift          )
-open import Relation.Binary        using    ( Setoid ;  IsEquivalence )
-open import Relation.Unary         using    ( Pred  ; _∈_             )
+-- Imports from the Agda and the Agda Standard Library
+open import Agda.Primitive   using ( _⊔_ ; lsuc ) renaming ( Set to Type )
+open import Data.Product     using ( _,_ ; _×_ ; Σ-syntax )
+open import Function         using ( _∘_ )
+open import Function.Base    using ( flip )
+open import Function.Bundles using ( Func )
+open import Level            using ( Level  ; Lift )
+open import Relation.Binary  using ( Setoid ; IsEquivalence )
+open import Relation.Binary.PropositionalEquality as PE
+                             using ( _≡_ ; refl )
+open import Relation.Unary   using ( Pred  ; _∈_ )
 
--- -- Imports from the Agda Universal Algebra Library
+-- Imports from the Agda Universal Algebra Library
 open import Overture.Preliminaries using ( ∥_∥ ; ∣_∣ )
 
 private variable
@@ -61,11 +60,11 @@ Carrier (⟦ 𝑆 ⟧s ξ) = Σ[ f ∈ ∣ 𝑆 ∣ ] ((∥ 𝑆 ∥ f) → ξ .
 _≈_ (⟦ 𝑆 ⟧s ξ) (f , u) (g , v) = Σ[ eqv ∈ f ≡ g ] EqArgs eqv u v
  where
  EqArgs : f ≡ g → (∥ 𝑆 ∥ f → Carrier ξ) → (∥ 𝑆 ∥ g → Carrier ξ) → Type _
- EqArgs ≡.refl u v = ∀ i → (_≈_ ξ) (u i) (v i)
+ EqArgs refl u v = ∀ i → (_≈_ ξ) (u i) (v i)
 
-IsEquivalence.refl  (isEqv (⟦ 𝑆 ⟧s ξ))                     = ≡.refl , λ _ → reflS  ξ
-IsEquivalence.sym   (isEqv (⟦ 𝑆 ⟧s ξ))(≡.refl , g)           = ≡.refl , λ i → symS   ξ (g i)
-IsEquivalence.trans (isEqv (⟦ 𝑆 ⟧s ξ))(≡.refl , g)(≡.refl , h) = ≡.refl , λ i → transS ξ (g i) (h i)
+IsEquivalence.refl  (isEqv (⟦ 𝑆 ⟧s ξ))                     = refl , λ _ → reflS  ξ
+IsEquivalence.sym   (isEqv (⟦ 𝑆 ⟧s ξ))(refl , g)           = refl , λ i → symS   ξ (g i)
+IsEquivalence.trans (isEqv (⟦ 𝑆 ⟧s ξ))(refl , g)(refl , h) = refl , λ i → transS ξ (g i) (h i)
 
 \end{code}
 
@@ -142,40 +141,21 @@ Lift-SetoidAlg : SetoidAlgebra α ρ → (ℓ : Level) → SetoidAlgebra (α ⊔
 
 Domain (Lift-SetoidAlg 𝑨 ℓ) = record { Carrier = Lift ℓ 𝕌[ 𝑨 ]
                                      ; _≈_ = λ x y → lower x ≈A lower y
-                                     ; isEquivalence = record { refl = refl
+                                     ; isEquivalence = record { refl = srefl
                                                               ; sym = sym
                                                               ; trans = trans
                                                               }
-                                     } where open Setoid (Domain 𝑨) renaming (_≈_ to _≈A_)
+                                     } where open Setoid (Domain 𝑨) renaming (_≈_ to _≈A_ ; refl to srefl )
 
 Interp (Lift-SetoidAlg 𝑨 ℓ) <$> (f , la) = lift ((f ̂ 𝑨) (lower ∘ la))
 
-cong (Interp (Lift-SetoidAlg 𝑨 ℓ)) (≡.refl , la=lb) = cong (Interp 𝑨) ((≡.refl , la=lb))
+cong (Interp (Lift-SetoidAlg 𝑨 ℓ)) (refl , la=lb) = cong (Interp 𝑨) ((refl , la=lb))
 
-
--- Lift-Alg : SetoidAlgebra α ρ → (α' ρ' : Level) → SetoidAlgebra (α ⊔ α') (ρ ⊔ ρ')
-
--- Lift-Alg {α}{ρ} 𝑨 α' ρ' = record { Domain = dom
---                           ; Interp = interp }
---  where
---  dom : Setoid (α ⊔ α') (ρ ⊔ ρ')
---  dom = record { Carrier = Lift α' 𝕌[ 𝑨 ]
---               ; _≈_ = λ x y → Lift ρ' (lower x ≈A lower y)
---               ; isEquivalence = record { refl = lift refl
---                                        ; sym = λ x → lift (sym (lower x))
---                                        ; trans = λ x y → lift (trans (lower x) (lower y))
---                                        }
---               } where open Setoid (Domain 𝑨) renaming (_≈_ to _≈A_)
---  interp : Func (⟦ 𝑆 ⟧s dom) dom
---  interp = {!!}
-
--- Alternatively, we could define the Lift of a SetoidAlgebra inside an anonymous module where we open
--- SetoidAlgebra 𝑨 and Setoid (Domain 𝑨) to give ourselves simpler handles on the fields.
 
 module _ (𝑨 : SetoidAlgebra α ρ) where
 
  open SetoidAlgebra 𝑨
- open Setoid (Domain 𝑨)
+ open Setoid (Domain 𝑨) renaming ( refl to srefl )
  private
   A = Carrier (Domain 𝑨)
   _≈A_ = _≈_ (Domain 𝑨)
@@ -183,17 +163,13 @@ module _ (𝑨 : SetoidAlgebra α ρ) where
  Lift-SetoidAlg' : (ℓ : Level) → SetoidAlgebra (α ⊔ ℓ) ρ
 
  Domain (Lift-SetoidAlg' ℓ) = record { Carrier = Lift ℓ A
-                                    ; _≈_ = λ x y → lower x ≈A lower y
-                                    ; isEquivalence = record { refl = refl ; sym = sym ; trans = trans }
-                                    }
+                                     ; _≈_ = λ x y → lower x ≈A lower y
+                                     ; isEquivalence = record { refl = srefl ; sym = sym ; trans = trans }
+                                     }
 
  Interp (Lift-SetoidAlg' ℓ) <$> (f , la) = lift ((f ̂ 𝑨) (lower ∘ la))
 
- cong (Interp (Lift-SetoidAlg' ℓ)) (≡.refl , la≡lb) = cong (Interp 𝑨) (≡.refl , la≡lb)
-
-
-
-
+ cong (Interp (Lift-SetoidAlg' ℓ)) (refl , la≡lb) = cong (Interp 𝑨) (PE.refl , la≡lb)
 
 \end{code}
 

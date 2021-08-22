@@ -15,10 +15,10 @@ author: [agda-algebras development team][]
 module Structures.Substructures.Substructures where
 
 -- imports from Agda and the Agda Standard Library
-open import Agda.Primitive        using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
-open import Data.Product          using ( _,_ ; Σ-syntax ; _×_ )
-open import Relation.Binary       using ( REL )
-open import Relation.Unary        using ( Pred ; _∈_ )
+open import Agda.Primitive  using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
+open import Data.Product    using ( _,_ ; Σ-syntax ; _×_ )
+open import Relation.Binary using ( REL )
+open import Relation.Unary  using ( Pred ; _∈_ )
 
 -- imports from agda-algebras ------------------------------------------------------
 open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥ )

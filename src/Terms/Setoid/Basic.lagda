@@ -16,24 +16,22 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 module Terms.Setoid.Basic {𝑆 : Signature 𝓞 𝓥} where
 
 -- imports from Agda and the Agda Standard Library -------------------------------------------
-open import Agda.Builtin.Equality       using    ( _≡_       ;  refl )
-open import Agda.Primitive              using    ( _⊔_       ;  lsuc )
-                                        renaming ( Set       to Type )
-open import Data.Empty.Polymorphic      using    ( ⊥                 )
-open import Data.Product                using    ( _,_               )
-open import Data.Sum.Base               using    ( _⊎_               )
-                                        renaming ( inj₁      to inl
-                                                 ; inj₂      to inr  )
-open import Function.Bundles            using    ( Func              )
-open import Level                       using    ( Level     ; Lift  )
-open import Relation.Binary             using    ( Setoid    ; IsEquivalence )
-open import Relation.Binary.Definitions using    ( Reflexive ; Symmetric ; Transitive )
-import Relation.Binary.PropositionalEquality as PE
+open import Agda.Primitive         using ( Level ; _⊔_ ; lsuc ) renaming ( Set to Type )
+open import Data.Empty.Polymorphic using ( ⊥ )
+open import Data.Product           using ( _,_ )
+open import Data.Sum.Base          using ( _⊎_ ) renaming ( inj₁ to inl ; inj₂ to inr )
+open import Function.Bundles       using ( Func )
+open import Level                  using ( Level ; Lift )
+open import Relation.Binary        using ( Setoid ; IsEquivalence )
+open import Relation.Binary.Definitions
+                                   using ( Reflexive ; Symmetric ; Transitive )
+open import Relation.Binary.PropositionalEquality
+                                   using ( _≡_ ; sym ; trans ; refl )
 
--- -- -- imports from agda-algebras --------------------------------------------------------------
-open import Overture.Preliminaries           using ( ∣_∣ ; ∥_∥ )
-open import Algebras.Setoid.Basic    {𝑆 = 𝑆} using ( SetoidAlgebra )
-open import Terms.Basic              {𝑆 = 𝑆} using ( Term )
+-- imports from agda-algebras --------------------------------------------------------------
+open import Overture.Preliminaries        using ( ∣_∣ ; ∥_∥ )
+open import Algebras.Setoid.Basic {𝑆 = 𝑆} using ( SetoidAlgebra )
+open import Terms.Basic           {𝑆 = 𝑆} using ( Term )
 open Term
 
 
@@ -68,11 +66,11 @@ module _ {X : Type χ } where
  ≐-isRefl {node f t} = genl (λ i → ≐-isRefl)
 
  ≐-isSym : Symmetric _≐_
- ≐-isSym {.(ℊ _)} {.(ℊ _)} (refl x) = refl (PE.sym x)
+ ≐-isSym {.(ℊ _)} {.(ℊ _)} (refl x) = refl (sym x)
  ≐-isSym {.(node _ _)} {.(node _ _)} (genl x) = genl (λ i → ≐-isSym (x i))
 
  ≐-isTrans : Transitive _≐_
- ≐-isTrans {.(ℊ _)} {.(ℊ _)} {.(ℊ _)} (refl x) (refl y) = refl (PE.trans x y)
+ ≐-isTrans {.(ℊ _)} {.(ℊ _)} {.(ℊ _)} (refl x) (refl y) = refl (trans x y)
  ≐-isTrans {.(node _ _)} {.(node _ _)} {.(node _ _)} (genl x) (genl y) = genl (λ i → ≐-isTrans (x i) (y i))
 
  ≐-isEquiv : IsEquivalence _≐_

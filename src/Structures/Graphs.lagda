@@ -17,15 +17,14 @@ The *graph* of 𝑨 is the structure Gr 𝑨 with the same domain as 𝑨 with r
 
 module Structures.Graphs where
 
-open import Agda.Primitive         using    ( _⊔_ ; lsuc ; Level )
-                                   renaming ( Set to Type ; lzero  to ℓ₀ )
-open import Agda.Builtin.Equality  using    ( _≡_ ; refl )
-open import Data.Product           using    ( _,_ ; Σ-syntax ; _×_ )
-open import Data.Sum.Base          using    ( _⊎_ )
-                                   renaming ( inj₁ to inl ; inj₂ to inr )
-open import Level                  using    ( Lift ; lift ; lower )
-open import Function.Base          using    ( _∘_  )
-import Relation.Binary.PropositionalEquality as PE
+-- imports from Agda and the Agda Standard Library -------------------------------------------
+open import Agda.Primitive using ( _⊔_ ; lsuc ) renaming ( Set to Type ; lzero  to ℓ₀ )
+open import Data.Product   using ( _,_ ; Σ-syntax ; _×_ )
+open import Data.Sum.Base  using ( _⊎_ ) renaming ( inj₁ to inl ; inj₂ to inr )
+open import Level          using ( Level ; Lift ; lift ; lower )
+open import Function.Base  using ( _∘_  )
+open import Relation.Binary.PropositionalEquality
+                           using ( _≡_ ; refl ; module ≡-Reasoning ; cong ; sym )
 
 
 -- Imports from agda-algebras --------------------------------------------------------------
@@ -62,7 +61,7 @@ Gr {𝐹}{𝑅}{α}{ρ} 𝑨 = record { carrier = carrier 𝑨 ; op = λ () ; re
   split (inr 𝑓) args = Lift ρ (op 𝑨 𝑓 (args ∘ inl) ≡ args (inr 𝟙.𝟎))
 
 
-open PE.≡-Reasoning
+open ≡-Reasoning
 
 private variable
  ρᵃ β ρᵇ : Level
@@ -81,8 +80,8 @@ module _ {𝑨 : structure 𝐹 𝑅 {α} {ρᵃ}}
    homop = ∥ hhom ∥ 𝑓 (a ∘ inl)
 
    goal : op 𝑩 𝑓 (h ∘ (a ∘ inl)) ≡ h (a (inr 𝟙.𝟎))
-   goal = op 𝑩 𝑓 (h ∘ (a ∘ inl)) ≡⟨ PE.sym homop ⟩
-          h (op 𝑨 𝑓 (a ∘ inl))   ≡⟨ PE.cong h (lower x) ⟩
+   goal = op 𝑩 𝑓 (h ∘ (a ∘ inl)) ≡⟨ sym homop ⟩
+          h (op 𝑨 𝑓 (a ∘ inl))   ≡⟨ cong h (lower x) ⟩
           h (a (inr 𝟙.𝟎))         ∎
 
   ii : is-hom-op (Gr 𝑨) (Gr 𝑩) h
@@ -101,7 +100,7 @@ module _ {𝑨 : structure 𝐹 𝑅 {α} {ρᵃ}}
    split (inl x) = a x
    split (inr y) = op 𝑨 f a
    goal : h (op 𝑨 f a) ≡ op 𝑩 f (λ x → h (a x))
-   goal = PE.sym (lower (∣ hhom ∣ (inr f) split (lift refl)))
+   goal = sym (lower (∣ hhom ∣ (inr f) split (lift refl)))
 
 
 \end{code}

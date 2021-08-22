@@ -11,15 +11,14 @@ author: [agda-algebras development team][]
 
 module GaloisConnections.Properties where
 
-open import Agda.Primitive          using    ( _⊔_ ; Level ; lsuc )
-                                    renaming ( Set to Type )
-open import Data.Product            using    ( _,_ ; _×_ )
-                                    renaming ( proj₁ to fst ; proj₂ to snd )
-open import Data.Product            using    ( swap )
-open import Function.Base           using    ( _∘_ ; id )
-open import Relation.Binary.Bundles using    ( Poset )
-open import Relation.Binary.Core    using    ( REL )
-open import Relation.Unary          using    ( Pred ; _⊆_ )
+-- imports from Agda and the Agda Standard Library
+open import Agda.Primitive          using ( _⊔_ ; Level ; lsuc ) renaming ( Set to Type )
+open import Data.Product            using ( _,_ ; _×_ ) renaming ( proj₁ to fst )
+open import Data.Product            using ( swap )
+open import Function.Base           using ( _∘_ ; id )
+open import Relation.Binary.Bundles using ( Poset )
+open import Relation.Binary.Core    using ( REL )
+open import Relation.Unary          using ( Pred ; _⊆_ )
 import Relation.Binary.Structures as BS
 
 

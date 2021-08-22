@@ -16,13 +16,13 @@ This is the [Overture.Transformers][] module of the [agda-algebras][] library.  
 
 module Overture.Transformers where
 
--- Imports from Agda (Builtin) and the Agda Standard Library
-open import Agda.Builtin.Equality       using ( _≡_ ; refl )
-open import Agda.Primitive              using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
-open import Data.Product                using ( _,_ ; _×_ )
-open import Data.Fin.Base               using ( Fin )
-open import Function.Base               using ( _∘_ ; id )
-import Relation.Binary.PropositionalEquality as PE
+-- Imports from Agda and the Agda Standard Library
+open import Agda.Primitive using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
+open import Data.Product   using ( _,_ ; _×_ )
+open import Data.Fin.Base  using ( Fin )
+open import Function.Base  using ( _∘_ ; id )
+open import Relation.Binary.PropositionalEquality
+                           using ( _≡_ ; refl ; module ≡-Reasoning )
 
 -- Imports from agda-algebras
 open import Overture.Preliminaries using ( _≈_ )
@@ -157,7 +157,7 @@ module _ {A : Type α} {B : Type β} where
  CurryFin2~UncurryFin2 : CurryFin2 ∘ UncurryFin2 ≡ id
  CurryFin2~UncurryFin2 = refl
 
- open PE.≡-Reasoning
+ open ≡-Reasoning
  -- UncurryFin2~CurryFin2 : ∀ f u → (UncurryFin2 ∘ CurryFin2) f u ≡ f u
  -- UncurryFin2~CurryFin2 f u = Goal
  --  where

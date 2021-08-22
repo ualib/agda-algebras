@@ -14,15 +14,14 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 module Subalgebras.Setoid.Subalgebras {𝑆 : Signature 𝓞 𝓥} where
 
 -- imports from Agda and the Agda Standard Library
-open import Agda.Primitive         using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
-open import Agda.Builtin.Equality   using    ( _≡_ ; refl )
-open import Data.Product            using    ( _,_ ; Σ-syntax ; _×_ )
-open import Function.Base           using    ( id )
-open import Function.Bundles        using    ( Injection )
-open import Relation.Binary         using    ( Setoid ; REL )
-open import Relation.Unary          using    ( Pred ; _∈_ ; _⊆_ )
+open import Agda.Primitive   using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
+open import Data.Product     using ( _,_ ; Σ-syntax ; _×_ )
+open import Function.Base    using ( id )
+open import Function.Bundles using ( Injection )
+open import Relation.Binary  using ( Setoid ; REL )
+open import Relation.Unary   using ( Pred ; _∈_ ; _⊆_ )
 
--- -- -- -- imports from agda-algebras ------------------------------------------------------
+-- imports from agda-algebras ------------------------------------------------------
 open import Overture.Preliminaries                    using ( ∣_∣ ; ∥_∥ )
 open import Overture.Inverses                         using ( IsInjective ; id-is-injective ; ∘-injective )
 open import Algebras.Setoid.Basic             {𝑆 = 𝑆} using ( SetoidAlgebra ; Lift-SetoidAlg )
