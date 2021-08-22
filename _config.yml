@@ -1,0 +1,15 @@
+name: William DeMeo
+markdown: kramdown
+exclude:
+  - "Makefile"
+  - ".github-ci.yml"
+  - "Gemfile"
+  - "Gemfile.lock"
+  - "*.agdai"
+  - "*.lagda"
+  - "*.agda"
+  - "*.hs"
+  - "*.hi"
+  - "*.o"
+  - "README.md"
+  - "INSTALL_AGDA.md"
