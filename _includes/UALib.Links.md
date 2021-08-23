@@ -1,17 +1,20 @@
 <!-- UniversalAlgebra Library links -->
-[Agda Universal Algebra Library]: https://ualib.github.io
-[Agda UniversalAlgebra]: https://ualib.github.io
+[Agda Universal Algebra Library]: https://ualib.github.io/agda-algebras
+[Agda UniversalAlgebra]: https://ualib.github.io/agda-algebras
 [git repository of the Agda UALib]: https://github.com/ualib/agda-algebras
 [git repository of the agda-algebras library]: https://github.com/ualib/agda-algebras
 [UniversalAlgebra]: https://ualib.github.io
 [UniversalAlgebra repository]: https://github.com/ualib/agda-universal-algebra
 [new issue]: https://github.com/ualib/agda-algebras/issues/new/choose
-[agda-algebras]: agda-algebras.html
+[agda-algebras]: https://github.com/ualib/agda-algebras
 [agda-algebras-everything]: agda-algebras-everything.html
+[merge request]: https://github.com/ualib/agda-algebras/compare
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 
 [Preface]: Preface.html
 
 [Overture]: Overture.html
+[Overture.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Overture.lagda
 [Overture.Preliminaries]: Overture.Preliminaries.html
 [Overture.Inverses]: Overture.Inverses.html
 [Overture.Transformers]: Overture.Transformers.html
