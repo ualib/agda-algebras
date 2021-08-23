@@ -101,7 +101,15 @@ module _ {𝑅 𝐹 : Signature} {α ρ : Level} where
 \end{code}
 
 
---------------------------------------
+--------------------------------
+
+<br>
+<br>
+
+[← Structures.Sigma](Structures.Sigma.html)
+<span style="float:right;">[Structures.Sigma.Products →](Structures.Sigma.Products.html)</span>
+
+{% include UALib.Links.md %}
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 

@@ -92,7 +92,13 @@ variety α ρ = Σ[ 𝒱 ∈ (Pred (SetoidAlgebra α ρ)_) ] is-variety 𝒱
 \end{code}
 
 
---------------------------------------
+--------------------------------
+
+<br>
+<br>
+
+[← Varieties.Setoid.EquationalLogic](Varieties.Setoid.EquationalLogic.html)
+<span style="float:right;">[Varieties.Setoid.FreeAlgebras →](Varieties.Setoid.FreeAlgebras.html)</span>
 
 {% include UALib.Links.md %}
 

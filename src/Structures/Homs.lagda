@@ -269,10 +269,15 @@ module _ {𝑨 : structure 𝐹 S∅ {α}{ℓ₀}}
 
 
 
+--------------------------------
 
+<br>
+<br>
 
+[← Structures.Congruences](Structures.Congruences.html)
+<span style="float:right;">[Structures.Isos →](Structures.Isos.html)</span>
 
+{% include UALib.Links.md %}
 
---------------------------------------
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

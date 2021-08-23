@@ -5,7 +5,7 @@ date : 2021-02-28
 author: [agda-algebras development team][]
 ---
 
-### Continuous Relations
+### <a id="continuous-relations">Continuous Relations</a>
 
 This is the [Relations.Continuous][] module of the [Agda Universal Algebra Library][].
 
@@ -24,7 +24,7 @@ private variable α ρ : Level
 
 \end{code}
 
-#### Motivation
+#### <a id="motivation">Motivation</a>
 
 In set theory, an n-ary relation on a set `A` is simply a subset of the n-fold product `A × A × ⋯ × A`.  As such, we could model these as predicates over the type `A × A × ⋯ × A`, or as relations of type `A → A → ⋯ → A → Type β` (for some universe β).  To implement such a relation in type theory, we would need to know the arity in advance, and then somehow form an n-fold arrow →.  It's easier and more general to instead define an arity type `I : Type 𝓥`, and define the type representing `I`-ary relations on `A` as the function type `(I → A) → Type β`.  Then, if we are specifically interested in an n-ary relation for some natural number `n`, we could take `I` to be a finite set (e.g., of type `Fin n`).
 
@@ -38,7 +38,7 @@ We refer to such relations as *dependent continuous relations* (or *dependent re
 
 
 
-#### Continuous and dependent relations
+#### <a id="continuous-and-dependent-relations">Continuous and dependent relations</a>
 
 Here we define the types `Rel` and `ΠΡ` ("Pi Rho"). The first of these represents predicates of arbitrary arity over a single type `A`; we call these *continuous relations*.<sup>[1](Relations.Continuous.html#fn1)</sup>
 To define `ΠΡ`, the type of *dependent relations*, we exploit the full power of dependent types and provide a completely general relation type.
@@ -73,10 +73,11 @@ module _ {𝓥 : Level} where
  syntax ΠΡ-syntax I (λ i → 𝒜) = ΠΡ[ i ∈ I ] 𝒜
  infix 6 ΠΡ-syntax
 
+\end{code}
 
+#### <a id="compatibility-with-general-relations">Compatibility with general relations</a>
 
--- Compatibility with general relations
--- ------------------------------------
+\begin{code}
 
  -- Lift a relation of tuples up to a relation on tuples of tuples.
  eval-Rel : {I : ar}{A : Type α} → Rel A I{ρ} → (J : ar) → (I → J → A) → Type (𝓥 ⊔ ρ)
@@ -109,7 +110,7 @@ module _ {𝓥 : Level} where
 
 \end{code}
 
-#### Elaboration
+#### <a id="elaboration">Elaboration</a>
 
 The first of these is an *evaluation* function which "lifts" an `I`-ary relation to an `(I → J)`-ary relation. The lifted relation will relate an `I`-tuple of `J`-tuples when the "`I`-slices" (or "rows") of the `J`-tuples belong to the original relation. The second definition denotes compatibility of an operation with a continuous relation.
 
@@ -130,8 +131,13 @@ Now `eval-cont-rel R 𝒶` is defined by `∀ j → R (λ i → 𝒶 i j)` which
 
 --------------------------------------
 
-{% include UALib.Links.md %}
+<br>
+<br>
 
---------------------------------------
+[← Relations.Discrete](Relations.Discrete.html)
+<span style="float:right;">[Foundations →](Foundations.html)</span>
+
+
+{% include UALib.Links.md %}
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

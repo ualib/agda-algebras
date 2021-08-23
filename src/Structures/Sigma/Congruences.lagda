@@ -79,11 +79,14 @@ Example. The zero congruence of an arbitrary structure.
 
 \end{code}
 
---------------------------------------
+--------------------------------
+
+<br>
+<br>
+
+[← Structures.Sigma.Products](Structures.Sigma.Products.html)
+<span style="float:right;">[Structures.Sigma.Homs →](Structures.Sigma.Homs.html)</span>
+
+{% include UALib.Links.md %}
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
-
-
--------------------------------------------------------------------
---                        THE END                                --
--------------------------------------------------------------------

@@ -59,56 +59,14 @@ module _ {𝒦 : Pred (structure 𝐹 𝑅 {α}{ρ}) ℓ} where
 
 \end{code}
 
---------------------------------------
+--------------------------------
 
-[the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
+<br>
+<br>
 
+[← Structures.Graphs0](Structures.Graphs0.html)
+<span style="float:right;">[Structures.Congruences →](Structures.Congruences.html)</span>
 
--------------------------------------------------------------------
---                        THE END                                --
--------------------------------------------------------------------
+{% include UALib.Links.md %}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--- Imports from the Agda (Builtin) and the Agda Standard Library
--- open import Level renaming (suc to lsuc; zero to lzero)
--- open import Data.Product using (_,_; Σ; _×_)
--- open import Relation.Unary using (Pred; _∈_)
-
--- Imports from the Agda Universal Algebra Library
--- open import Overture.Preliminaries using (Type; 𝓘; 𝓞; 𝓤; 𝓥; 𝓦; Π; -Π; -Σ; _≡⟨_⟩_; _∎; _⁻¹; 𝑖𝑑; ∣_∣; ∥_∥)
--- open import Algebras.Basic
-
-
--- open import Relation.Binary using (Rel; IsEquivalence)
--- open import Relation.Binary.PropositionalEquality.Core using (trans)
-
--- open import Agda.Primitive using (_⊔_; lsuc)
--- open import Relation.Unary using (Pred; _∈_)
-
--- open import Cubical.Core.Primitives using (_≡_; Type; Level; Σ-syntax;  i0; i1; fst; snd; _,_)
--- open import Cubical.Foundations.Prelude using (refl; sym; _∙_; funExt; cong; _∎; _≡⟨_⟩_)
--- open import Cubical.Foundations.Function using (_∘_)
--- open import Cubical.Data.Sigma.Base using (_×_)
-
--- -- Imports from the Agda Universal Algebra Library
--- open import overture.preliminaries using (Π; Π-syntax; _⁻¹; id; ∣_∣)
--- open import structures.basic using (Signature; Structure; _ʳ_; _ᵒ_; signature; structure)
--- open import overture.inverses using (IsInjective; IsSurjective)
--- open import relations.discrete using (ker)
-
-
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

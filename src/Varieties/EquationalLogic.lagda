@@ -114,7 +114,7 @@ Modᵗ ℰ = λ 𝑨 → ∀ i → 𝑨 ⊧ (fst (ℰ i)) ≈ (snd (ℰ i))
 -------------------------------------
 
 [↑ Varieties](Varieties.html)
-<span style="float:right;">[Varieties.EquationalLogic →](Varieties.EquationalLogic.html)</span>
+<span style="float:right;">[Varieties.Closure →](Varieties.Closure.html)</span>
 
 {% include UALib.Links.md %}
 

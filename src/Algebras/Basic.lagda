@@ -271,12 +271,15 @@ module _ {I : Type ℓ₀} {𝑆 : signature 𝓞} where
 
 \end{code}
 
-
-
 -------------------------------------
 
+<br>
+<br>
+
+[↑ Algebras](Algebras.html)
+<span style="float:right;">[Algebras.Congruences →](Algebras.Congruences.html)</span>
 
 {% include UALib.Links.md %}
 
-
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
+

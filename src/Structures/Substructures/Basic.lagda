@@ -203,7 +203,15 @@ wd   : swelldef (siglʳ 𝐹) β
 
 and, under these assumptions, we proved `∣ g ∣ ((f ᵒ 𝑨) a) ≡ ∣ h ∣ ((f ᵒ 𝑨) a)`.
 
-------------------------------
+--------------------------------
+
+<br>
+<br>
+
+[← Structures.Substructures.Basic](Structures.Substructures.Basic.html)
+<span style="float:right;">[Structures.Sigma →](Structures.Sigma.html)</span>
+
+{% include UALib.Links.md %}
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 

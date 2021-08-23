@@ -5,7 +5,7 @@ date : 2021-07-10
 author: [agda-algebras development team][]
 ---
 
-### Definitions for Closure Systems and Operators
+### <a id="definitions-for-closure-systems-and-operators">Definitions for Closure Systems and Operators</a>
 
 \begin{code}
 
@@ -38,6 +38,15 @@ Extensive _≤_ C = ∀{x} → x ≤ C x
 \end{code}
 
 --------------------------------------
+
+<br>
+<br>
+
+[↑ ClosureSystems](ClosureSystems.html)
+<span style="float:right;">[ClosureSystems.Basic →](ClosureSystems.Basic.html)</span>
+
+{% include UALib.Links.md %}
+
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 

@@ -5,12 +5,12 @@ date : 2021-01-12
 author: [agda-algebras development team][]
 ---
 
-## Relation and Quotient Types
+## <a id="relation-and-quotient-types>Telation and Quotient Types</a>
 
-This is the [UniversalAlgebra.Relations][] module of the [Agda Universal Algebra Library][].
+This is the [Relations][] module of the [Agda Universal Algebra Library][].
 
-In [Relations.Discrete][] we define types that represent *unary* and *binary relations*, which we refer to as "discrete relations" to contrast them with the ("continuous") *general* and *dependent relations* that we introduce in [Relations.Continuous][]. We call the latter "continuous relations" because they can have arbitrary arity (general relations) and they can be defined over arbitrary families of types (dependent relations).
-
+In the [Relations.Discrete][] submodule we define types that represent *unary* and *binary relations*, which we refer to as "discrete relations" to contrast them with the ("continuous") *general* and *dependent relations* that we introduce in [Relations.Continuous][]. We call the latter "continuous relations" because they can have arbitrary arity (general relations) and they can be defined over arbitrary families of types (dependent relations).
+Finally, in [Relations.Quotients][] we define quotient types.
 
 \begin{code}
 
@@ -27,10 +27,12 @@ open import Relations.Quotients public
 
 -------------------------------------
 
+<br>
+<br>
+
+[← Overture.Transformers](Overture.Transformers.html)
+<span style="float:right;">[Relations.Discrete →](Relations.Discrete.html)</span>
 
 {% include UALib.Links.md %}
-
-
---------------------------------
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

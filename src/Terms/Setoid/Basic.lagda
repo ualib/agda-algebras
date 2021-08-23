@@ -203,4 +203,12 @@ module Environment (M : SetoidAlgebra α ℓ) where
 
 --------------------------------
 
+<br>
+<br>
+
+[↑ Terms.Setoid](Terms.Setoid.html)
+<span style="float:right;">[Subalgebras →](Subalgebras.html)</span>
+
+{% include UALib.Links.md %}
+
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

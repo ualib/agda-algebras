@@ -285,31 +285,12 @@ module _ {A : Type α}{B : Type β} where
 
 -------------------------------------
 
+
+<br>
+<br>
+
+[↑ Foundations](Foundations.html)
+<span style="float:right;">[Foundations.Truncation →](Foundations.Truncation.html)</span>
+
+
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -- It seems `Fin n → A` does not behave as we would home and expect.
- -- Instead, try using Vector A n, or try defining our own finite type FinTyp n.
-
- -- Fin2-unc∘cur≈id : (f : (Fin 2 → A) → B) → (UncurryFin2 ∘ CurryFin2) f ≡ f
- -- Fin2-unc∘cur≈id f = {!!}
-

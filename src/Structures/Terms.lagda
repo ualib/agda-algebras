@@ -19,6 +19,14 @@ open import Structures.Terms.Operations
 
 --------------------------------
 
+<br>
+<br>
+
+[← Structures.Homs](Structures.Isos.html)
+<span style="float:right;">[Structures.Terms.Basic →](Structures.Terms.Basic.html)</span>
+
+{% include UALib.Links.md %}
+
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 
 

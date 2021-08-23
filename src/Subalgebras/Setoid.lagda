@@ -21,9 +21,14 @@ open import Subalgebras.Setoid.Properties
 
 \end{code}
 
---------------------------------------
+---------------------------------
+
+<br>
+<br>
+
+[← Subalgebras.Properties](Subalgebras.Properties.html)
+<span style="float:right;">[Subalgebras.Setoid.Subuniverses →](Subalgebras.Setoid.Subuniverses.html)</span>
 
 {% include UALib.Links.md %}
-
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

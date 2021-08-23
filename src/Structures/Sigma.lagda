@@ -24,10 +24,14 @@ open import Structures.Sigma.Isos
 
 \end{code}
 
--------------------------------------
+--------------------------------
+
+<br>
+<br>
+
+[← Structures.Substructures.Substructures](Structures.Substructures.Substructures.html)
+<span style="float:right;">[Structures.Sigma.Basic →](Structures.Sigma.Basic.html)</span>
 
 {% include UALib.Links.md %}
-
---------------------------------------
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

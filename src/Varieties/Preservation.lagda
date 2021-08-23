@@ -607,7 +607,7 @@ module _ (wd : SwellDef){X : Type 𝓧}{𝒦 : Pred (Algebra α 𝑆)(ov α)} wh
 
 ----------------------------
 
-[← Varieties.Varieties](Varieties.Varieties.html)
+[← Varieties.Properties](Varieties.Properties.html)
 <span style="float:right;">[FreeAlgebras →](Varieties.FreeAlgebras.html)</span>
 
 {% include UALib.Links.md %}

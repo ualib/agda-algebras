@@ -235,6 +235,14 @@ module _ {𝓘 : Level}{I : Type 𝓘}{fizw : funext (𝓘 ⊔ γ) β}{fiu : fun
 
 ------------------------------
 
+<br>
+<br>
+
+[← Homomorphisms.Setoid.Noether](Homomorphisms.Setoid.Noether.html)
+<span style="float:right;">[Homomorphisms.Setoid.HomomorphicImages →](Homomorphisms.Setoid.HomomorphicImages.html)</span>
+
+{% include UALib.Links.md %}
+
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 
 

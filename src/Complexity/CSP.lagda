@@ -5,9 +5,9 @@ date : 2021-07-14
 author: [agda-algebras development team][]
 ---
 
-### Constraint Satisfaction Problems
+### <a id="constraint-satisfaction-problems">Constraint Satisfaction Problems</a>
 
-#### The relational formulation of CSP
+#### <a id="the-relational-formulation-of-csp">The relational formulation of CSP</a>
 
 Let 𝒜 = (𝐴 , 𝑅ᵃ) be a *relational structure* (or 𝑅-structure), that is, a pair consisting
 of a set 𝐴 along with a collection 𝑅ᵃ ⊆ ⋃ₙ 𝒫(𝐴ⁿ) of relations on 𝐴.
@@ -40,7 +40,7 @@ signature of 𝒜) and decide whether or not it belongs to the set CSP(𝒜).
 
 
 
-#### Connection to algebraic CSP
+#### <a id="connection-to-algebraic-csp">Connection to algebraic CSP</a>
 
 Let A be a set, let Op(A) denote the set of all operations, Rel(A) the set of all
 relations, on A.
@@ -86,7 +86,6 @@ Peter Jeavons in the late 1990's):
 In particular, the tractability of CSP(𝒜) depends only on its associated polymorphism
 algebra, 𝑨(R) := (A , ∣: ⃖ R).
 
-
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -103,16 +102,16 @@ open import Relation.Binary  using ( Setoid )
 open import Relations.Continuous    using ( ΠΡ ; ΠΡ-syntax )
 open import Algebras.Setoid.Basic {𝑆 = 𝑆} using ( SetoidAlgebra )
 
-
 \end{code}
 
-#### Constraints
+
+#### <a id="constraints">Constraints</a>
 
 A constraint c consists of
 
- 1. a scope function,  s : I → var, and
+1. a scope function,  s : I → var, and
 
- 2. a constraint relation, i.e., a predicate over the function type I → D
+2. a constraint relation, i.e., a predicate over the function type I → D
 
         I ···> var
          .     .
@@ -155,7 +154,8 @@ module _ -- levels for...
                                     -- 𝑓 ∘ σ ∈ 𝑅, where σ is the scope of the constraint.
 \end{code}
 
-#### CSP Templates and Instances
+
+#### <a id="csp-templates-and-instances">CSP templates and instances</a>
 
 A CSP "template" restricts the relations that may occur in instances of the problem.
 A convenient way to specify a template is to give an indexed family
@@ -173,6 +173,7 @@ An instance of a constraint satisfaction problem is a triple 𝑃 = (𝑉, 𝐷,
 * 𝐶 denotes an indexed collection of constraints.
 
 \begin{code}
+
  open SetoidAlgebra
  open Setoid
  record CSPInstance (var : Type ν)(𝒜 : var → SetoidAlgebra α ℓ) : Type (ν ⊔ α ⊔ lsuc ι) where
@@ -186,8 +187,9 @@ An instance of a constraint satisfaction problem is a triple 𝑃 = (𝑉, 𝐷,
 \end{code}
 
 
-
 --------------------------------------
+
+{% include UALib.Links.md %}
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 

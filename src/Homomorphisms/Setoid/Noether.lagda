@@ -128,4 +128,12 @@ If, in addition to the hypotheses of the last theorem, we assume τ is epic, the
 
 --------------------------------
 
+<br>
+<br>
+
+[← Homomorphisms.Setoid.Basic](Homomorphisms.Setoid.Basic.html)
+<span style="float:right;">[Homomorphisms.Setoid.Isomorphisms →](Homomorphisms.Setoid.Isomorphisms.html)</span>
+
+{% include UALib.Links.md %}
+
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

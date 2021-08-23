@@ -5,8 +5,7 @@ date : 2021-07-08
 author: [agda-algebras development team][]
 ---
 
-### Properties of Closure Systems and Operators
-
+### <a id="properties-of-closure-systems-and-operators">Properties of Closure Systems and Operators</a>
 
 \begin{code}
 
@@ -37,9 +36,14 @@ module _ {ℓ ℓ₁ ℓ₂ : Level}{𝑨 : Poset ℓ ℓ₁ ℓ₂}(𝑪 : ClOp
   c = C 𝑪
   A = Carrier
 
- -- Theorem 1. If `𝑨 = (A , ≦)` is a poset and `c` is a closure operator on A, then
- --            ∀ (x y : A) → (x ≦ (c y) ↔ (c x) ≦ (c y))
- --
+\end{code}
+
+**Theorem 1**. If `𝑨 = (A , ≦)` is a poset and `c` is a closure operator on A, then
+
+            ∀ (x y : A) → (x ≦ (c y) ↔ (c x) ≦ (c y))
+
+\begin{code}
+
  clop→law⇒ : (x y : A) → x ≤ (c y) → (c x) ≤ (c y)
  clop→law⇒ x y x≤cy = begin
    c x     ≤⟨ isOrderPreserving 𝑪 x≤cy ⟩
@@ -52,6 +56,18 @@ module _ {ℓ ℓ₁ ℓ₂ : Level}{𝑨 : Poset ℓ ℓ₁ ℓ₂}(𝑪 : ClOp
    c x ≤⟨ cx≤cy ⟩
    c y ∎
 
+\end{code}
+
+The converse of Theorem 1 also holds. That is,
+
+**Theorem 2**. If `𝑨 = (A , ≤)` is a poset and `c : A → A` satisfies
+
+∀ (x y : A) → (x ≤ (c y) ↔ (c x) ≤ (c y))
+
+then `c` is a closure operator on A.
+
+\begin{code}
+
 module _ {ℓ ℓ₁ ℓ₂ : Level}{𝑨 : Poset ℓ ℓ₁ ℓ₂} where
  open Poset 𝑨
 
@@ -60,12 +76,6 @@ module _ {ℓ ℓ₁ ℓ₂ : Level}{𝑨 : Poset ℓ ℓ₁ ℓ₂} where
 
  open Algebra.Definitions (_≈_)
 
- -- The converse of Theorem 1 also holds.
- --
- -- Theorem 2. If `𝑨 = (A , ≤)` is a poset and `c : A → A` satisfies
- --            ∀ (x y : A) → (x ≤ (c y) ↔ (c x) ≤ (c y))
- --            then `c` is a closure operator on A.
- --
  clop←law : (c : A → A) → ((x y : A) → (x ≤ (c y) ↔ (c x) ≤ (c y)))
   →         Extensive _≤_ c × c Preserves _≤_ ⟶ _≤_ × IdempotentFun c
 
@@ -92,5 +102,13 @@ module _ {ℓ ℓ₁ ℓ₂ : Level}{𝑨 : Poset ℓ ℓ₁ ℓ₂} where
 
 
 --------------------------------------
+
+<br>
+<br>
+
+[← ClosureSystems.Basic](ClosureSystems.Basic.html)
+<span style="float:right;">[Algebras →](Algebras.html)</span>
+
+{% include UALib.Links.md %}
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

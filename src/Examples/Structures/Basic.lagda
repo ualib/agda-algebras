@@ -5,7 +5,7 @@ date : 2021-07-29
 author: [agda-algebras development team][]
 ---
 
-### Examples of Structures
+### <a id="examples-of-structures">Examples of Structures</a>
 
 \begin{code}
 
@@ -69,3 +69,12 @@ nae3sat = record { carrier = 𝟚
 
 
 \end{code}
+
+
+--------------------------------------
+
+{% include UALib.Links.md %}
+
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
+
+

@@ -130,8 +130,14 @@ If `p : 𝑨 ∈ 𝒦`, we view the pair `(𝑨 , p) ∈ ℑ` as an *index* over
 [← Algebras.Basic](Algebras.Basic.html)
 <span style="float:right;">[Algebras.Congruences →](Algebras.Congruences.html)</span>
 
-{% include UALib.Links.md %}
+--------------------------------------------
 
------------------------------------------------
+<br>
+<br>
+
+[← Algebras.Congruences](Algebras.Congruences.html)
+<span style="float:right;">[Algebras.Setoid →](Algebras.Setoid.html)</span>
+
+{% include UALib.Links.md %}
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

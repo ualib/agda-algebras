@@ -133,18 +133,14 @@ open IsCongruence
 
 \end{code}
 
-------------------------------
+<br>
+<br>
+
+[← Algebras.Basic](Algebras.Basic.html)
+<span style="float:right;">[Algebras.Products →](Algebras.Products.html)</span>
 
 {% include UALib.Links.md %}
 
 
-
-------------------------------
-
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
-
-
-
-
-
 

@@ -89,6 +89,14 @@ We now define the algebra `𝔽`, which plays the role of the relatively free al
 \end{code}
 
 
-----------------------------
+--------------------------------
+
+<br>
+<br>
+
+[← Varieties.Setoid.Closure](Varieties.Setoid.Closure.html)
+<span style="float:right;">[Structures →](Structures.html)</span>
+
+{% include UALib.Links.md %}
 
 [the agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

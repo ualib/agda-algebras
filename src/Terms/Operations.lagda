@@ -242,13 +242,10 @@ module _ {α β : Level}{X : Type α} where
 <br>
 <br>
 
-[← Terms.Basic](Terms.Basic.html)
-<span style="float:right;">[Subalgebras →](Subalgebras.html)</span>
+[← Terms.Properties](Terms.Properties.html)
+<span style="float:right;">[Terms.Setoid →](Terms.Setoid.html)</span>
 
 {% include UALib.Links.md %}
-
-
------------------------------
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 

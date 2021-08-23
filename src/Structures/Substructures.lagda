@@ -21,7 +21,13 @@ open import Structures.Substructures.Substructures
 
 \end{code}
 
--------------------------------------
+--------------------------------
+
+<br>
+<br>
+
+[← Structures.Terms.Operations](Structures.Terms.Operations.html)
+<span style="float:right;">[Structures.Substructures.Basic →](Structures.Substructures.Basic.html)</span>
 
 {% include UALib.Links.md %}
 

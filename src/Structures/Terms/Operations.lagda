@@ -45,3 +45,12 @@ _⟦_⟧ : (𝑨 : structure 𝐹 𝑅 {α} {ρ}) → Term X → (X → carrier 
 𝑨 ⟦ ℊ x ⟧ = λ a → a x
 𝑨 ⟦ node f t ⟧ = λ a → (f ᵒ 𝑨) (λ i → (𝑨 ⟦ t i ⟧ ) a)
 
+--------------------------------
+
+<br>
+<br>
+
+[← Structures.Terms.Basic](Structures.Terms.Basic.html)
+<span style="float:right;">[Structures.Substructures →](Structures.Substructures.html)</span>
+
+{% include UALib.Links.md %}

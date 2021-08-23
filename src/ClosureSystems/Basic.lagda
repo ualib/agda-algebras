@@ -5,9 +5,9 @@ date : 2021-07-08
 author: [agda-algebras development team][]
 ---
 
-### Closure Systems and Operators
+### <a id="closure-systems-and-operators">Closure Systems and Operators</a>
 
-#### Closure Systems
+#### <a id="closure-systems">Closure Systems</a>
 
 A *closure system* on a set `X` is a collection `𝒞` of subsets of `X` that is closed
 under arbitrary intersection (including the empty intersection, so `⋂ ∅ = X ∈ 𝒞`.
@@ -17,8 +17,7 @@ inclusion ordering.
 
 Since every complete meet semilattice is automatically a complete lattice, the closed
 sets of a closure system form a complete lattice.
-(See J.B. Nation's [Lattice Theory Notes](http://math.hawaii.edu/~jb/math618/Nation-LatticeTheory.pdf).)
-\cite[Theorem 2.5]{Nation-notes}
+(See J.B. Nation's [Lattice Theory Notes](http://math.hawaii.edu/~jb/math618/Nation-LatticeTheory.pdf), Theorem 2.5.)
 
 Some examples of closure systems are the following:
 
@@ -56,7 +55,7 @@ module _ {χ ℓ ρ : Level}{X : Type χ} where
 \end{code}
 
 
-#### Closure Operators
+#### <a id="closure-operators">Closure Operators</a>
 
 Let `𝑷 = (P, ≤)` be a poset. An function `C : P → P` is called a *closure operator*
 on `𝑷` if it is
@@ -87,8 +86,14 @@ record ClOp {ℓ ℓ₁ ℓ₂ : Level}(𝑨 : Poset ℓ ℓ₁ ℓ₂) : Type  
 \end{code}
 
 
-
-
 --------------------------------------
+
+<br>
+<br>
+
+[← ClosureSystems.Definitions](ClosureSystems.Definitions.html)
+<span style="float:right;">[ClosureSystems.Properties →](ClosureSystems.Properties.html)</span>
+
+{% include UALib.Links.md %}
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

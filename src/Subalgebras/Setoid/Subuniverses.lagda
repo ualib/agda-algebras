@@ -234,7 +234,15 @@ wd   : swelldef 𝓥 β
 
 and, under these assumptions, we proved `∣ g ∣ ((f ̂ 𝑨) a) ≡ ∣ h ∣ ((f ̂ 𝑨) a)`.
 
-------------------------------
+---------------------------------
+
+<br>
+<br>
+
+[↑ Subalgebras.Setoid](Subalgebras.Setoid.html)
+<span style="float:right;">[Subalgebras.Setoid.Subalgebras →](Subalgebras.Setoid.Subalgebras.html)</span>
+
+{% include UALib.Links.md %}
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 

@@ -356,11 +356,15 @@ module Vlift {α : Level} {fe₀ : funext (ov α) α}
 
 \end{code}
 
---------------------------------------
+---------------------------------
+
+<br>
+<br>
+
+[↑ Varieties.EquationalLogic](Varieties.EquationalLogic.html)
+<span style="float:right;">[Varieties.Properties →](Varieties.Properties.html)</span>
 
 {% include UALib.Links.md %}
-
---------------------------------------
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 

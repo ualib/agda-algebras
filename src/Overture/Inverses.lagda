@@ -5,7 +5,7 @@ date : 2021-01-12
 author: [agda-algebras development team][]
 ---
 
-### Inverses
+### <a id="inverses">Inverses</a>
 
 This is the [Overture.Inverses][] module of the [agda-algebras][] library.
 
@@ -119,6 +119,15 @@ Thus, a right-inverse of `f` is obtained by applying `SurjInv` to `f` and a proo
 
 
 --------------------------------------
+
+<br>
+<br>
+
+[← Overture.Preliminaries](Overture.Preliminaries.html)
+<span style="float:right;">[Overture.Transformers →](Overture.Transformers.html)</span>
+
+
+{% include UALib.Links.md %}
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 

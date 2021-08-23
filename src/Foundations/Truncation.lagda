@@ -243,6 +243,14 @@ module _ {I : Type 𝓥} where
 
 ----------------------------
 
+<br>
+<br>
+
+[← Foundations.Welldefined](Foundations.Welldefined.html)
+<span style="float:right;">[Foundations.Extensionality →](Foundations.Extensionality.html)</span>
+
+
+
 {% include UALib.Links.md %}
 
 

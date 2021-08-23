@@ -241,70 +241,15 @@ A nearly identical proof goes through for isomorphisms of lifted products (thoug
 
 \end{code}
 
---------------------------------------
+--------------------------------
 
 <br>
+<br>
 
-[← Homomorphisms.Noether](Homomorphisms.Noether.html)
-<span style="float:right;">[Homomorphisms.HomomorphicImages →](Homomorphisms.HomomorphicImages.html)</span>
+[← Structures.Sigma.Products](Structures.Sigma.Products.html)
+<span style="float:right;">[Complexity →](Complexity.html)</span>
 
 {% include UALib.Links.md %}
 
-
-------------------------------
-
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- NO LONGER USED
-
-#### <a id="embedding-tools">Embedding tools</a>
-
-Finally, we prove some useful facts about embeddings that occasionally come in handy.
-
-private variable 𝓘 : Level
-
- -- embedding-lift-nat : hfunext 𝓘 α → hfunext 𝓘 β
- --   →                   {I : Type 𝓘}{A : I → Type α}{B : I → Type β}
- --                       (h : Nat A B) → (∀ i → is-embedding (h i))
- --                       ------------------------------------------
- --   →                   is-embedding(NatΠ h)
-
- -- embedding-lift-nat hfiu hfiw h hem = NatΠ-is-embedding hfiu hfiw h hem
-
-
- -- embedding-lift-nat' : hfunext 𝓘 α → hfunext 𝓘 β
- --   →                    {I : Type 𝓘}{𝒜 : I → Algebra α 𝑆}{ℬ : I → Algebra β 𝑆}
- --                        (h : Nat(fst ∘ 𝒜)(fst ∘ ℬ)) → (∀ i → is-embedding (h i))
- --                        --------------------------------------------------------
- --   →                    is-embedding(NatΠ h)
-
- -- embedding-lift-nat' hfiu hfiw h hem = NatΠ-is-embedding hfiu hfiw h hem
-
-
- -- embedding-lift : hfunext 𝓘 α → hfunext 𝓘 β
- --   →               {I : Type 𝓘} → {𝒜 : I → Algebra α 𝑆}{ℬ : I → Algebra β 𝑆}
- --   →               (h : ∀ i → ∣ 𝒜 i ∣ → ∣ ℬ i ∣) → (∀ i → is-embedding (h i))
- --                   ----------------------------------------------------------
- --   →               is-embedding(λ (x : ∣ ⨅ 𝒜 ∣) (i : I) → (h i)(x i))
-
- -- embedding-lift hfiu hfiw {I}{𝒜}{ℬ} h hem = embedding-lift-nat' hfiu hfiw {I}{𝒜}{ℬ} h hem
-
-
- -- iso→embedding : {𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆} → (ϕ : 𝑨 ≅ 𝑩) → is-embedding (fst ∣ ϕ ∣)
- -- iso→embedding ϕ = equiv-is-embedding (fst ∣ ϕ ∣) {!!} -- (invertible-is-equiv (fst ∣ ϕ ∣) finv)
- --  where
- --  finv : invertible (fst ∣ ϕ ∣)
- --  finv = ∣ fst ∥ ϕ ∥ ∣ , (snd ∥ snd ϕ ∥ , fst ∥ snd ϕ ∥)

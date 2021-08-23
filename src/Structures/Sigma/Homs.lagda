@@ -443,77 +443,14 @@ Later we will need a proof of the fact that projecting out of a product algebra 
 We could prove a more general result involving projections onto multiple factors, but so far the single-factor result has sufficed.
 
 
+--------------------------------
+
+<br>
+<br>
+
+[← Structures.Sigma.Congruences](Structures.Sigma.Congruences.html)
+<span style="float:right;">[Structures.Sigma.Isos →](Structures.Sigma.Isos.html)</span>
+
 {% include UALib.Links.md %}
 
---------------------------------------
-
 [the agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
-
-
--------------------------------------------------------------------
---                        THE END                                --
--------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-Detailed proofs.
-```
- ∘-IsHom-rel : {f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣}{g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣}
-  →             IsHom-rel 𝑨 𝑩 f → IsHom-rel 𝑩 𝑪 g → IsHom-rel 𝑨 𝑪 (g ∘ f)
- ∘-IsHom-rel {f}{g} fhr ghr R a = pf
-  where
-  pf : ((R ʳ 𝑨) a) ≡ (R ʳ 𝑪)(g ∘ f ∘ a)
-  pf = (R ʳ 𝑨) a          ≡⟨ fhr R a ⟩
-       (R ʳ 𝑩)(f ∘ a)     ≡⟨ ghr R (f ∘ a)⟩
-       (R ʳ 𝑪)(g ∘ f ∘ a) ∎
-
- ∘-IsHom-op : {f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣}{g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣}
-  →            IsHom-op 𝑨 𝑩 f → IsHom-op 𝑩 𝑪 g → IsHom-op 𝑨 𝑪 (g ∘ f)
- ∘-IsHom-op {f}{g} fho gho 𝑓 a = pf
-  where
-  pf : (g ∘ f) ((𝑓 ᵒ 𝑨) a) ≡ (𝑓 ᵒ 𝑪) (λ x → (g ∘ f) (a x))
-  pf = (g ∘ f) ((𝑓 ᵒ 𝑨) a) ≡⟨ cong g (fho 𝑓 a)⟩
-       g ((𝑓 ᵒ 𝑩)(f ∘ a)) ≡⟨ gho 𝑓 (f ∘ a) ⟩
-       (𝑓 ᵒ 𝑪) (λ x → (g ∘ f) (a x)) ∎
-
-
-```
-  hghr : ∀ R a → ((R ʳ 𝑨) a) ≡ (R ʳ 𝑪)(h ∘ g ∘ a)
-  hghr R a = (R ʳ 𝑨) a          ≡⟨ ghr R a ⟩
-             (R ʳ 𝑩)(g ∘ a)     ≡⟨ hhr R (g ∘ a)⟩
-             (R ʳ 𝑪)(h ∘ g ∘ a) ∎
-
-  hgho : ∀ 𝑓 a → (h ∘ g)((𝑓 ᵒ 𝑨) a) ≡ (𝑓 ᵒ 𝑪)(h ∘ g ∘ a)
-  hgho 𝑓 a = (h ∘ g)((𝑓 ᵒ 𝑨) a) ≡⟨ cong h (gho 𝑓 a)⟩
-             h ((𝑓 ᵒ 𝑩)(g ∘ a)) ≡⟨ hho 𝑓 (g ∘ a)⟩
-             (𝑓 ᵒ 𝑪)(h ∘ g ∘ a) ∎
-open import Agda.Primitive using (_⊔_; lsuc)
-
-
-open import Cubical.Core.Primitives using (_≡_; Type; Level; _,_; Σ-syntax;  i0; i1; fst; snd)
-open import Cubical.Foundations.Prelude using (refl; sym; _∙_; funExt; cong; _∎; _≡⟨_⟩_)
-open import Cubical.Foundations.Function using (_∘_)
-open import Cubical.Data.Sigma.Base using (_×_)
-open import Cubical.HITs.TypeQuotients -- .Base where
-
-
--- Imports from the Agda Universal Algebra Library
-open import structures.basic using (Signature; Structure; _ʳ_; _ᵒ_; compatible)
-open import overture.preliminaries using (id; _⁻¹; ∣_∣; ∥_∥)
-open import overture.inverses using (IsInjective; IsSurjective; Image_∋_; im)
-open import relations.discrete using (ker; ker')
-open import relations.quotients using (ker-IsEquivalence; ⟪_/_⟫)
-
--- open import agda-imports
--- open import overture.preliminaries
--- open import overture.inverses
--- open import relations.discrete
--- open import relations.quotients
--- open import relations.extensionality
-

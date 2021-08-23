@@ -5,7 +5,7 @@ date : 2021-01-13
 author: [agda-algebras development team][]
 ---
 
-### Quotients
+### <a id="quotients">Quotients</a>
 
 This is the [Relations.Quotients][] module of the [Agda Universal Algebra Library][].
 
@@ -30,19 +30,29 @@ open import Relations.BinPred       using  ( Reflexive ; Symmetric ; Transitive 
 private variable
  α β χ : Level
 
--- ---------------------
--- Equivalence relations
--- ---------------------
--- A binary relation is called a *preorder* if it is reflexive and transitive.
--- An *equivalence relation* is a symmetric preorder. The property of being
--- an equivalence relation is represented in the [Agda Standard Library][] by
--- a record type called `IsEquivalence`.
+\end{code}
+
+#### <a id="equivalence-relations">Equivalence relations</a>
+
+A binary relation is called a *preorder* if it is reflexive and transitive.
+An *equivalence relation* is a symmetric preorder. The property of being
+an equivalence relation is represented in the [Agda Standard Library][] by
+a record type called `IsEquivalence`.  Here we define the `Equivalence` type
+which is inhabited by pairs `(r , p)` where `r` is a binary relation and `p`
+is a proof that `r` satisfies `IsEquivalence`.
+
+\begin{code}
 
 Equivalence : Type α → {ρ : Level} → Type (α ⊔ lsuc ρ)
 Equivalence A {ρ} = Σ[ r ∈ BinRel A ρ ] IsEquivalence r
 
--- Similarly, for "binary relations" of type `Pred(X × X) _`, we have corresponding
--- IsEquivalence and Equivalence types.
+\end{code}
+
+Another way to represent binary relations is as the inhabitants of the
+type `Pred(X × X) _`, and we here define the `IsPartialEquivPred`
+and `IsEquivPred` types corresponding to such a representation.
+
+\begin{code}
 
 module _ {X : Type χ}{ρ : Level} where
 
@@ -60,11 +70,17 @@ module _ {X : Type χ}{ρ : Level} where
   reflexive : ∀ x y → x ≡ y → R (x , y)
   reflexive x .x PE.refl = refl
 
--- Thus, if we have `(R ,  p) : Equivalence A`, then `R` denotes a binary
--- relation over `A` and `p` is of record type `IsEquivalence R` with fields
--- containing the three proofs showing that `R` is an equivalence relation.
+\end{code}
 
--- A prominent example of an equivalence relation is the kernel of any function.
+Thus, if we have `(R ,  p) : Equivalence A`, then `R` denotes a binary
+relation over `A` and `p` is of record type `IsEquivalence R` with fields
+containing the three proofs showing that `R` is an equivalence relation.
+
+#### <a id="kernels">Kernels</a>
+
+A prominent example of an equivalence relation is the kernel of any function.
+
+\begin{code}
 
 open Level
 ker-IsEquivalence : {A : Type α}{B : Type β}(f : A → B) → IsEquivalence (ker f)
@@ -79,15 +95,20 @@ kerlift-IsEquivalence f = record { refl = lift PE.refl
                                  ; trans = λ x y → lift (PE.trans (lower x) (lower y))
                                  }
 
--- ----------------------------
--- Equivalence classes (blocks)
--- ----------------------------
--- If `R` is an equivalence relation on `A`, then for each `u : A` there is
--- an *equivalence class* (or *equivalence block*, or `R`-*block*) containing `u`,
--- which we denote and define by `[ u ] := {v : A | R u v}`.
+\end{code}
 
--- Before defining the quotient type, we define a type representing inhabitants of quotients;
--- i.e., blocks of a partition (recall partitions correspond to equivalence relations) -}
+
+#### <a id="equivalence-classes"> Equivalence classes (blocks) </a>
+
+
+If `R` is an equivalence relation on `A`, then for each `u : A` there is
+an *equivalence class* (or *equivalence block*, or `R`-*block*) containing `u`,
+which we denote and define by `[ u ] := {v : A | R u v}`.
+
+Before defining the quotient type, we define a type representing inhabitants of quotients;
+i.e., blocks of a partition (recall partitions correspond to equivalence relations) -}
+
+\begin{code}
 
 [_] : {A : Type α} → A → {ρ : Level} → BinRel A ρ → Pred A ρ
 [ u ]{ρ} R = R u      -- (the R-block containing u : A)
@@ -102,11 +123,15 @@ Block u {ρ} R = ∣ R ∣ u
 
 infix 60 [_]
 
--- Thus, `v ∈ [ u ]` if and only if `R u v`, as desired.  We often refer to `[ u ]`
--- as the `R`-*block containing* `u`.
+\end{code}
 
--- A predicate `C` over `A` is an `R`-block if and only if `C ≡ [ u ]` for some `u : A`.
--- We represent this characterization of an `R`-block as follows.
+Thus, `v ∈ [ u ]` if and only if `R u v`, as desired.  We often refer to `[ u ]`
+as the `R`-*block containing* `u`.
+
+A predicate `C` over `A` is an `R`-block if and only if `C ≡ [ u ]` for some `u : A`.
+We represent this characterization of an `R`-block as follows.
+
+\begin{code}
 
 record IsBlock {A : Type α}{ρ : Level}(P : Pred A ρ){R : BinRel A ρ} : Type(α ⊔ lsuc ρ) where
  constructor R-block
@@ -114,9 +139,13 @@ record IsBlock {A : Type α}{ρ : Level}(P : Pred A ρ){R : BinRel A ρ} : Type(
   block-u : A
   P≡[u] : P ≡ [ block-u ]{ρ} R
 
--- If `R` is an equivalence relation on `A`, then the *quotient* of `A` modulo `R` is
--- denoted by `A / R` and is defined to be the collection `{[ u ] ∣  y : A}` of all
--- `R`-blocks.
+\end{code}
+
+If `R` is an equivalence relation on `A`, then the *quotient* of `A` modulo `R` is
+denoted by `A / R` and is defined to be the collection `{[ u ] ∣  y : A}` of all
+`R`-blocks.
+
+\begin{code}
 
 Quotient : (A : Type α){ρ : Level} → Equivalence A{ρ} → Type(α ⊔ lsuc ρ)
 Quotient A R = Σ[ P ∈ Pred A _ ] IsBlock P {∣ R ∣}
@@ -126,18 +155,29 @@ A / R = Σ[ P ∈ Pred A _ ] IsBlock P {R}
 
 infix -1 _/_
 
--- We use the following type to represent an \ab R-block with a designated representative.
+\end{code}
+
+We use the following type to represent an R-block with a designated representative.
+
+\begin{code}
 
 ⟪_⟫ : {α : Level}{A : Type α}{ρ : Level} → A → {R : BinRel A ρ} → A / R
 ⟪ a ⟫{R} = [ a ] R , R-block a PE.refl
 
--- Dually, the next type provides an *elimination rule*.<sup>[2](Relations.Quotients.html#fn2)</sup>
+\end{code}
+
+Dually, the next type provides an *elimination rule*.
+
+\begin{code}
 
 ⌞_⌟ : {α : Level}{A : Type α}{ρ : Level}{R : BinRel A ρ} → A / R  → A
 ⌞ _ , R-block a _ ⌟ = a
 
--- (Here `C` is a predicate and `p` is a proof of `C ≡ [ a ] R`.)
+\end{code}
 
+Here `C` is a predicate and `p` is a proof of `C ≡ [ a ] R`.
+
+\begin{code}
 
 module _ {A : Type α}
          {ρ : Level}    -- note: ρ is an implicit parameter
@@ -155,7 +195,6 @@ module _ {A : Type α}
 
  ⊇-[] : (x y : A) → [ y ] ∣ R ∣ ⊆  [ x ] ∣ R ∣ → ∣ R ∣ x y
  ⊇-[] x y yx = yx (IsEquivalence.refl (snd R))
-
 
 \end{code}
 
@@ -197,8 +236,6 @@ This is obviously an equivalence relation, as we now confirm.
 --------------------------------------
 
 {% include UALib.Links.md %}
-
------------------------------------------------
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 
