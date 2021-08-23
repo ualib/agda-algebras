@@ -21,7 +21,13 @@ This is the [Structures.Substructures][] module of the [Agda Universal Algebra L
 
 </pre>
 
--------------------------------------
+--------------------------------
+
+<br>
+<br>
+
+[← Structures.Terms.Operations](Structures.Terms.Operations.html)
+<span style="float:right;">[Structures.Substructures.Basic →](Structures.Substructures.Basic.html)</span>
 
 {% include UALib.Links.md %}
 

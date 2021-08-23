@@ -30,10 +30,14 @@ This is the [Structures][] module of the [Agda Universal Algebra Library][].
 
 </pre>
 
--------------------------------------
+--------------------------------
+
+<br>
+<br>
+
+[← Varieties.Setoid.FreeAlgebras](Varieties.Setoid.FreeAlgebras.html)
+<span style="float:right;">[Structures.Basic →](Structures.Basic.html)</span>
 
 {% include UALib.Links.md %}
-
---------------------------------------
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

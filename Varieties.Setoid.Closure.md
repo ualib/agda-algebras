@@ -31,7 +31,7 @@ Fix a signature 𝑆, let 𝒦 be a class of 𝑆-algebras, and define
 
 
 <a id="1088" class="Comment">-- imports from agda-algebras --------------------------------------------------------------</a>
-<a id="1181" class="Keyword">open</a> <a id="1186" class="Keyword">import</a> <a id="1193" href="Overture.Preliminaries.html" class="Module">Overture.Preliminaries</a>           <a id="1226" class="Keyword">using</a> <a id="1232" class="Symbol">(</a> <a id="1234" href="Overture.Preliminaries.html#4155" class="Function Operator">∣_∣</a> <a id="1238" class="Symbol">;</a> <a id="1240" href="Overture.Preliminaries.html#4193" class="Function Operator">∥_∥</a> <a id="1244" class="Symbol">)</a>
+<a id="1181" class="Keyword">open</a> <a id="1186" class="Keyword">import</a> <a id="1193" href="Overture.Preliminaries.html" class="Module">Overture.Preliminaries</a>           <a id="1226" class="Keyword">using</a> <a id="1232" class="Symbol">(</a> <a id="1234" href="Overture.Preliminaries.html#4245" class="Function Operator">∣_∣</a> <a id="1238" class="Symbol">;</a> <a id="1240" href="Overture.Preliminaries.html#4283" class="Function Operator">∥_∥</a> <a id="1244" class="Symbol">)</a>
 <a id="1246" class="Keyword">open</a> <a id="1251" class="Keyword">import</a> <a id="1258" href="Algebras.Setoid.Products.html" class="Module">Algebras.Setoid.Products</a> <a id="1283" class="Symbol">{</a><a id="1284" class="Argument">𝑆</a> <a id="1286" class="Symbol">=</a> <a id="1288" href="Varieties.Setoid.Closure.html#615" class="Bound">𝑆</a><a id="1289" class="Symbol">}</a> <a id="1291" class="Keyword">using</a> <a id="1297" class="Symbol">(</a> <a id="1299" href="Algebras.Setoid.Products.html#1555" class="Function">⨅</a> <a id="1301" class="Symbol">)</a>
 <a id="1303" class="Keyword">open</a> <a id="1308" class="Keyword">import</a> <a id="1315" href="Algebras.Setoid.Basic.html" class="Module">Algebras.Setoid.Basic</a>    <a id="1340" class="Symbol">{</a><a id="1341" class="Argument">𝑆</a> <a id="1343" class="Symbol">=</a> <a id="1345" href="Varieties.Setoid.Closure.html#615" class="Bound">𝑆</a><a id="1346" class="Symbol">}</a> <a id="1348" class="Keyword">using</a> <a id="1354" class="Symbol">(</a> <a id="1356" href="Algebras.Setoid.Basic.html#3113" class="Record">SetoidAlgebra</a> <a id="1370" class="Symbol">;</a> <a id="1372" href="Algebras.Setoid.Basic.html#1178" class="Function">ov</a> <a id="1375" class="Symbol">)</a>
                                              <a id="1422" class="Keyword">renaming</a> <a id="1431" class="Symbol">(</a> <a id="1433" href="Algebras.Setoid.Basic.html#4353" class="Function">Lift-SetoidAlg</a> <a id="1448" class="Symbol">to</a> <a id="1451" class="Function">Lift-Alg</a> <a id="1460" class="Symbol">)</a>
@@ -92,7 +92,13 @@ With the closure operator V representing closure under HSP, we represent formall
 </pre>
 
 
---------------------------------------
+--------------------------------
+
+<br>
+<br>
+
+[← Varieties.Setoid.EquationalLogic](Varieties.Setoid.EquationalLogic.html)
+<span style="float:right;">[Varieties.Setoid.FreeAlgebras →](Varieties.Setoid.FreeAlgebras.html)</span>
 
 {% include UALib.Links.md %}
 

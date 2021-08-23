@@ -12,12 +12,22 @@ author: [agda-algebras development team][]
 <a id="224" class="Keyword">module</a> <a id="231" href="Homomorphisms.Setoid.html" class="Module">Homomorphisms.Setoid</a> <a id="252" class="Keyword">where</a>
 
 <a id="259" class="Keyword">open</a> <a id="264" class="Keyword">import</a> <a id="271" href="Homomorphisms.Setoid.Basic.html" class="Module">Homomorphisms.Setoid.Basic</a>
-<a id="298" class="Keyword">open</a> <a id="303" class="Keyword">import</a> <a id="310" href="Homomorphisms.Setoid.Isomorphisms.html" class="Module">Homomorphisms.Setoid.Isomorphisms</a>
+<a id="298" class="Keyword">open</a> <a id="303" class="Keyword">import</a> <a id="310" href="Homomorphisms.Setoid.Noether.html" class="Module">Homomorphisms.Setoid.Noether</a>
+<a id="339" class="Keyword">open</a> <a id="344" class="Keyword">import</a> <a id="351" href="Homomorphisms.Setoid.Isomorphisms.html" class="Module">Homomorphisms.Setoid.Isomorphisms</a>
+<a id="385" class="Keyword">open</a> <a id="390" class="Keyword">import</a> <a id="397" href="Homomorphisms.Setoid.HomomorphicImages.html" class="Module">Homomorphisms.Setoid.HomomorphicImages</a>
 
 </pre>
 
 
 --------------------------------
+
+<br>
+<br>
+
+[← Homomorphisms.HomomorphicImages](Homomorphisms.HomomorphicImages.html)
+<span style="float:right;">[Homomorphisms.Setoid.Basic →](Homomorphisms.Setoid.Basic.html)</span>
+
+{% include UALib.Links.md %}
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 

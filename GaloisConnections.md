@@ -23,10 +23,14 @@ This is the [UniversalAlgebra.GaloisConnections][] module of the [Agda Universal
 
 -------------------------------------
 
+<br>
+<br>
+
+[← Foundations.Extensionality](Foundations.Extensionality.html)
+<span style="float:right;">[GaloisConnections.Basic →](GaloisConnections.Basic.html)</span>
+
 
 {% include UALib.Links.md %}
 
-
---------------------------------
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

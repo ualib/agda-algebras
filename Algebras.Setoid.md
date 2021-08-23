@@ -20,4 +20,12 @@ author: [agda-algebras development team][]
 
 --------------------------------
 
+<br>
+<br>
+
+[← Algebras.Products](Algebras.Products.html)
+<span style="float:right;">[Algebras.Setoid.Basic →](Algebras.Setoid.Basic.html)</span>
+
+{% include UALib.Links.md %}
+
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

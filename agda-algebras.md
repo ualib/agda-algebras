@@ -5,7 +5,7 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-[The Agda Universal Algebra Library](UniversalAlgebra.html)
+<!--
 
 LICENSE:
 
@@ -30,7 +30,7 @@ of citation.
 
 ---------------------------------------------------------------------------------
 
-(version 0.01 of {{ "now" | date: "%d %b %Y" }})
+(Version 2.01 of {{ "now" | date: "%d %b %Y" }})
 
 **Abstract**. The [Agda UniversalAlgebra][] library is a collection of types and programs (theorems and proofs) that formalizes the foundations of universal algebra in dependent type theory using the [Agda][] proof assistant language.
 
@@ -42,13 +42,11 @@ We hope the library will be useful to mathematicians and computer scientists who
 
 **Keywords and phrases**. Universal algebra, Equational logic, Martin-Löf Type Theory, Birkhoff’s HSP Theorem, Formalization of mathematics, Agda
 
-**Software Repository**. [https://gitlab.com/ualib/ualib.gitlab.io.git](https://gitlab.com/ualib/ualib.gitlab.io.git)
-
-**PDF documentation**. [ualib-part1.pdf](ualib-part1.pdf), [ualib-part2.pdf](ualib-part2.pdf) (ualib-part3.pdf coming soon)
+**Software Repository**. [https://github.com/ualib/agda-algebras](https://gitub.com/ualib/agda-algebras)
 
 **Citing this work**. To learn [how to cite the Agda UALib](Preface.html#how-to-cite-the-agda-ualib) and its documentation, follow [this link](Preface.html#how-to-cite-the-agda-ualib).
 
-**Contributors**. William DeMeo, Jacques Carette, Venanzio Capretta, Siva Somayyajula, Andreas Abel, Hyeyoung Shin.
+**Contributors**. William DeMeo, Jacques Carette, Siva Somayyajula, Andreas Abel, Hyeyoung Shin.
 
 --------------------------------
 
@@ -56,29 +54,29 @@ We hope the library will be useful to mathematicians and computer scientists who
 
 <pre class="Agda">
 
-<a id="3455" class="Symbol">{-#</a> <a id="3459" class="Keyword">OPTIONS</a> <a id="3467" class="Pragma">--without-K</a> <a id="3479" class="Pragma">--exact-split</a> <a id="3493" class="Pragma">--safe</a> <a id="3500" class="Symbol">#-}</a>
+<a id="3243" class="Symbol">{-#</a> <a id="3247" class="Keyword">OPTIONS</a> <a id="3255" class="Pragma">--without-K</a> <a id="3267" class="Pragma">--exact-split</a> <a id="3281" class="Pragma">--safe</a> <a id="3288" class="Symbol">#-}</a>
 
-<a id="3505" class="Keyword">module</a> <a id="3512" href="agda-algebras.html" class="Module">agda-algebras</a> <a id="3526" class="Keyword">where</a>
+<a id="3293" class="Keyword">module</a> <a id="3300" href="agda-algebras.html" class="Module">agda-algebras</a> <a id="3314" class="Keyword">where</a>
 
-<a id="3533" class="Comment">-- Imports from Agda (builtin/primitive) and the Agda Standard Library</a>
-<a id="3604" class="Keyword">open</a> <a id="3609" class="Keyword">import</a> <a id="3616" href="Preface.html" class="Module">Preface</a>
-<a id="3624" class="Keyword">open</a> <a id="3629" class="Keyword">import</a> <a id="3636" href="Overture.html" class="Module">Overture</a>
-<a id="3645" class="Keyword">open</a> <a id="3650" class="Keyword">import</a> <a id="3657" href="Relations.html" class="Module">Relations</a>
-<a id="3667" class="Keyword">open</a> <a id="3672" class="Keyword">import</a> <a id="3679" href="Foundations.html" class="Module">Foundations</a>
-<a id="3691" class="Keyword">open</a> <a id="3696" class="Keyword">import</a> <a id="3703" href="GaloisConnections.html" class="Module">GaloisConnections</a>
-<a id="3721" class="Keyword">open</a> <a id="3726" class="Keyword">import</a> <a id="3733" href="ClosureSystems.html" class="Module">ClosureSystems</a>
-<a id="3748" class="Keyword">open</a> <a id="3753" class="Keyword">import</a> <a id="3760" href="Algebras.html" class="Module">Algebras</a>
-<a id="3769" class="Keyword">open</a> <a id="3774" class="Keyword">import</a> <a id="3781" href="Homomorphisms.html" class="Module">Homomorphisms</a>
-<a id="3795" class="Keyword">open</a> <a id="3800" class="Keyword">import</a> <a id="3807" href="Terms.html" class="Module">Terms</a>
-<a id="3813" class="Keyword">open</a> <a id="3818" class="Keyword">import</a> <a id="3825" href="Subalgebras.html" class="Module">Subalgebras</a>
-<a id="3837" class="Keyword">open</a> <a id="3842" class="Keyword">import</a> <a id="3849" href="Varieties.html" class="Module">Varieties</a>
-<a id="3859" class="Keyword">open</a> <a id="3864" class="Keyword">import</a> <a id="3871" href="Structures.html" class="Module">Structures</a>
-<a id="3882" class="Keyword">open</a> <a id="3887" class="Keyword">import</a> <a id="3894" href="Complexity.html" class="Module">Complexity</a>
+<a id="3321" class="Comment">-- Imports from Agda (builtin/primitive) and the Agda Standard Library</a>
+<a id="3392" class="Keyword">open</a> <a id="3397" class="Keyword">import</a> <a id="3404" href="Preface.html" class="Module">Preface</a>
+<a id="3412" class="Keyword">open</a> <a id="3417" class="Keyword">import</a> <a id="3424" href="Overture.html" class="Module">Overture</a>
+<a id="3433" class="Keyword">open</a> <a id="3438" class="Keyword">import</a> <a id="3445" href="Relations.html" class="Module">Relations</a>
+<a id="3455" class="Keyword">open</a> <a id="3460" class="Keyword">import</a> <a id="3467" href="Foundations.html" class="Module">Foundations</a>
+<a id="3479" class="Keyword">open</a> <a id="3484" class="Keyword">import</a> <a id="3491" href="GaloisConnections.html" class="Module">GaloisConnections</a>
+<a id="3509" class="Keyword">open</a> <a id="3514" class="Keyword">import</a> <a id="3521" href="ClosureSystems.html" class="Module">ClosureSystems</a>
+<a id="3536" class="Keyword">open</a> <a id="3541" class="Keyword">import</a> <a id="3548" href="Algebras.html" class="Module">Algebras</a>
+<a id="3557" class="Keyword">open</a> <a id="3562" class="Keyword">import</a> <a id="3569" href="Homomorphisms.html" class="Module">Homomorphisms</a>
+<a id="3583" class="Keyword">open</a> <a id="3588" class="Keyword">import</a> <a id="3595" href="Terms.html" class="Module">Terms</a>
+<a id="3601" class="Keyword">open</a> <a id="3606" class="Keyword">import</a> <a id="3613" href="Subalgebras.html" class="Module">Subalgebras</a>
+<a id="3625" class="Keyword">open</a> <a id="3630" class="Keyword">import</a> <a id="3637" href="Varieties.html" class="Module">Varieties</a>
+<a id="3647" class="Keyword">open</a> <a id="3652" class="Keyword">import</a> <a id="3659" href="Structures.html" class="Module">Structures</a>
+<a id="3670" class="Keyword">open</a> <a id="3675" class="Keyword">import</a> <a id="3682" href="Complexity.html" class="Module">Complexity</a>
 
 </pre>
 
 
-#### License and citations
+#### <a id="license">License</a>
 
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
   <img alt="Creative Commons License" style="border-width:0; float: left; padding:5px 5px 0px 0px" height='40' src="css/by-sa.svg" />

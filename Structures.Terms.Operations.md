@@ -46,3 +46,13 @@ Thus interpretation of a term is defined by structural induction.
 <a id="1293" href="Structures.Terms.Operations.html#1293" class="Bound">𝑨</a> <a id="1295" href="Structures.Terms.Operations.html#1197" class="Function Operator">⟦</a> <a id="1297" href="Structures.Terms.Basic.html#551" class="InductiveConstructor">node</a> <a id="1302" href="Structures.Terms.Operations.html#1302" class="Bound">f</a> <a id="1304" href="Structures.Terms.Operations.html#1304" class="Bound">t</a> <a id="1306" href="Structures.Terms.Operations.html#1197" class="Function Operator">⟧</a> <a id="1308" class="Symbol">=</a> <a id="1310" class="Symbol">λ</a> <a id="1312" href="Structures.Terms.Operations.html#1312" class="Bound">a</a> <a id="1314" class="Symbol">→</a> <a id="1316" class="Symbol">(</a><a id="1317" href="Structures.Terms.Operations.html#1302" class="Bound">f</a> <a id="1319" href="Structures.Basic.html#2090" class="Function Operator">ᵒ</a> <a id="1321" href="Structures.Terms.Operations.html#1293" class="Bound">𝑨</a><a id="1322" class="Symbol">)</a> <a id="1324" class="Symbol">(λ</a> <a id="1327" href="Structures.Terms.Operations.html#1327" class="Bound">i</a> <a id="1329" class="Symbol">→</a> <a id="1331" class="Symbol">(</a><a id="1332" href="Structures.Terms.Operations.html#1293" class="Bound">𝑨</a> <a id="1334" href="Structures.Terms.Operations.html#1197" class="Function Operator">⟦</a> <a id="1336" href="Structures.Terms.Operations.html#1304" class="Bound">t</a> <a id="1338" href="Structures.Terms.Operations.html#1327" class="Bound">i</a> <a id="1340" href="Structures.Terms.Operations.html#1197" class="Function Operator">⟧</a> <a id="1342" class="Symbol">)</a> <a id="1344" href="Structures.Terms.Operations.html#1312" class="Bound">a</a><a id="1345" class="Symbol">)</a>
 
 </pre>
+
+--------------------------------
+
+<br>
+<br>
+
+[← Structures.Terms.Basic](Structures.Terms.Basic.html)
+<span style="float:right;">[Structures.Substructures →](Structures.Substructures.html)</span>
+
+{% include UALib.Links.md %}

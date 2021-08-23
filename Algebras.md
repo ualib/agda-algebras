@@ -28,9 +28,15 @@ A popular way to represent algebraic structures in type theory is with record ty
 
 -------------------------------------
 
+<br>
+<br>
+
+[← ClosureSystems.Properties](ClosureSystems.Properties.html)
+<span style="float:right;">[Algebras.Basic →](Algebras.Basic.html)</span>
+
+
 {% include UALib.Links.md %}
 
---------------------------------------
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 

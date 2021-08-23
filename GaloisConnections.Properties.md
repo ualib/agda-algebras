@@ -22,7 +22,7 @@ author: [agda-algebras development team][]
 <a id="763" class="Keyword">import</a> <a id="770" href="Relation.Binary.Structures.html" class="Module">Relation.Binary.Structures</a> <a id="797" class="Symbol">as</a> <a id="800" class="Module">BS</a>
 
 
-<a id="805" class="Keyword">open</a> <a id="810" class="Keyword">import</a> <a id="817" href="GaloisConnections.Basic.html" class="Module">GaloisConnections.Basic</a> <a id="841" class="Keyword">using</a> <a id="847" class="Symbol">(</a><a id="848" href="GaloisConnections.Basic.html#1155" class="Record">Galois</a> <a id="855" class="Symbol">;</a> <a id="857" href="GaloisConnections.Basic.html#1696" class="Function">←→≥id</a> <a id="863" class="Symbol">;</a> <a id="865" href="GaloisConnections.Basic.html#1784" class="Function">→←≥id</a> <a id="871" class="Symbol">;</a> <a id="873" href="GaloisConnections.Basic.html#1447" class="Function Operator">_⃗_</a> <a id="877" class="Symbol">;</a> <a id="879" href="GaloisConnections.Basic.html#1607" class="Function Operator">_⃖_</a> <a id="883" class="Symbol">)</a>
+<a id="805" class="Keyword">open</a> <a id="810" class="Keyword">import</a> <a id="817" href="GaloisConnections.Basic.html" class="Module">GaloisConnections.Basic</a> <a id="841" class="Keyword">using</a> <a id="847" class="Symbol">(</a><a id="848" href="GaloisConnections.Basic.html#1156" class="Record">Galois</a> <a id="855" class="Symbol">;</a> <a id="857" href="GaloisConnections.Basic.html#1697" class="Function">←→≥id</a> <a id="863" class="Symbol">;</a> <a id="865" href="GaloisConnections.Basic.html#1785" class="Function">→←≥id</a> <a id="871" class="Symbol">;</a> <a id="873" href="GaloisConnections.Basic.html#1448" class="Function Operator">_⃗_</a> <a id="877" class="Symbol">;</a> <a id="879" href="GaloisConnections.Basic.html#1608" class="Function Operator">_⃖_</a> <a id="883" class="Symbol">)</a>
 
 
 <a id="887" class="Keyword">open</a> <a id="892" href="Relation.Binary.Bundles.html#3028" class="Module">Poset</a>
@@ -72,15 +72,23 @@ unit/counit definition that is more level polymorphic.
  <a id="2344" href="GaloisConnections.Properties.html#2294" class="Function">𝒫ℬ</a> <a id="2347" class="Symbol">=</a> <a id="2349" href="GaloisConnections.Properties.html#1446" class="Function">PosetOfSubsets</a> <a id="2364" href="GaloisConnections.Properties.html#2225" class="Bound">ℓ</a> <a id="2366" href="GaloisConnections.Properties.html#2249" class="Bound">ℬ</a>
 
  <a id="2370" class="Comment">-- Every binary relation from one poset to another induces a Galois connection.</a>
- <a id="2451" href="GaloisConnections.Properties.html#2451" class="Function">Rel→Gal</a> <a id="2459" class="Symbol">:</a> <a id="2461" class="Symbol">(</a><a id="2462" href="GaloisConnections.Properties.html#2462" class="Bound">R</a> <a id="2464" class="Symbol">:</a> <a id="2466" href="Relation.Binary.Core.html#766" class="Function">REL</a> <a id="2470" href="GaloisConnections.Properties.html#2236" class="Bound">𝒜</a> <a id="2472" href="GaloisConnections.Properties.html#2249" class="Bound">ℬ</a> <a id="2474" href="GaloisConnections.Properties.html#2225" class="Bound">ℓ</a><a id="2475" class="Symbol">)</a> <a id="2477" class="Symbol">→</a> <a id="2479" href="GaloisConnections.Basic.html#1155" class="Record">Galois</a> <a id="2486" href="GaloisConnections.Properties.html#2269" class="Function">𝒫𝒜</a> <a id="2489" href="GaloisConnections.Properties.html#2294" class="Function">𝒫ℬ</a>
- <a id="2493" href="GaloisConnections.Properties.html#2451" class="Function">Rel→Gal</a> <a id="2501" href="GaloisConnections.Properties.html#2501" class="Bound">R</a> <a id="2503" class="Symbol">=</a> <a id="2505" class="Keyword">record</a> <a id="2512" class="Symbol">{</a> <a id="2514" href="GaloisConnections.Basic.html#1212" class="Field">F</a> <a id="2516" class="Symbol">=</a> <a id="2518" href="GaloisConnections.Basic.html#1447" class="Function Operator">_⃗</a> <a id="2521" href="GaloisConnections.Properties.html#2501" class="Bound">R</a>
-                    <a id="2543" class="Symbol">;</a> <a id="2545" href="GaloisConnections.Basic.html#1241" class="Field">G</a> <a id="2547" class="Symbol">=</a> <a id="2549" href="GaloisConnections.Properties.html#2501" class="Bound">R</a> <a id="2551" href="GaloisConnections.Basic.html#1607" class="Function Operator">⃖_</a>
-                    <a id="2574" class="Symbol">;</a> <a id="2576" href="GaloisConnections.Basic.html#1270" class="Field">GF≥id</a> <a id="2582" class="Symbol">=</a> <a id="2584" class="Symbol">λ</a> <a id="2586" href="GaloisConnections.Properties.html#2586" class="Bound">_</a> <a id="2588" class="Symbol">→</a> <a id="2590" href="GaloisConnections.Basic.html#1696" class="Function">←→≥id</a>
-                    <a id="2616" class="Symbol">;</a> <a id="2618" href="GaloisConnections.Basic.html#1301" class="Field">FG≥id</a> <a id="2624" class="Symbol">=</a> <a id="2626" class="Symbol">λ</a> <a id="2628" href="GaloisConnections.Properties.html#2628" class="Bound">_</a> <a id="2630" class="Symbol">→</a> <a id="2632" href="GaloisConnections.Basic.html#1784" class="Function">→←≥id</a> <a id="2638" class="Symbol">}</a>
+ <a id="2451" href="GaloisConnections.Properties.html#2451" class="Function">Rel→Gal</a> <a id="2459" class="Symbol">:</a> <a id="2461" class="Symbol">(</a><a id="2462" href="GaloisConnections.Properties.html#2462" class="Bound">R</a> <a id="2464" class="Symbol">:</a> <a id="2466" href="Relation.Binary.Core.html#766" class="Function">REL</a> <a id="2470" href="GaloisConnections.Properties.html#2236" class="Bound">𝒜</a> <a id="2472" href="GaloisConnections.Properties.html#2249" class="Bound">ℬ</a> <a id="2474" href="GaloisConnections.Properties.html#2225" class="Bound">ℓ</a><a id="2475" class="Symbol">)</a> <a id="2477" class="Symbol">→</a> <a id="2479" href="GaloisConnections.Basic.html#1156" class="Record">Galois</a> <a id="2486" href="GaloisConnections.Properties.html#2269" class="Function">𝒫𝒜</a> <a id="2489" href="GaloisConnections.Properties.html#2294" class="Function">𝒫ℬ</a>
+ <a id="2493" href="GaloisConnections.Properties.html#2451" class="Function">Rel→Gal</a> <a id="2501" href="GaloisConnections.Properties.html#2501" class="Bound">R</a> <a id="2503" class="Symbol">=</a> <a id="2505" class="Keyword">record</a> <a id="2512" class="Symbol">{</a> <a id="2514" href="GaloisConnections.Basic.html#1213" class="Field">F</a> <a id="2516" class="Symbol">=</a> <a id="2518" href="GaloisConnections.Basic.html#1448" class="Function Operator">_⃗</a> <a id="2521" href="GaloisConnections.Properties.html#2501" class="Bound">R</a>
+                    <a id="2543" class="Symbol">;</a> <a id="2545" href="GaloisConnections.Basic.html#1242" class="Field">G</a> <a id="2547" class="Symbol">=</a> <a id="2549" href="GaloisConnections.Properties.html#2501" class="Bound">R</a> <a id="2551" href="GaloisConnections.Basic.html#1608" class="Function Operator">⃖_</a>
+                    <a id="2574" class="Symbol">;</a> <a id="2576" href="GaloisConnections.Basic.html#1271" class="Field">GF≥id</a> <a id="2582" class="Symbol">=</a> <a id="2584" class="Symbol">λ</a> <a id="2586" href="GaloisConnections.Properties.html#2586" class="Bound">_</a> <a id="2588" class="Symbol">→</a> <a id="2590" href="GaloisConnections.Basic.html#1697" class="Function">←→≥id</a>
+                    <a id="2616" class="Symbol">;</a> <a id="2618" href="GaloisConnections.Basic.html#1302" class="Field">FG≥id</a> <a id="2624" class="Symbol">=</a> <a id="2626" class="Symbol">λ</a> <a id="2628" href="GaloisConnections.Properties.html#2628" class="Bound">_</a> <a id="2630" class="Symbol">→</a> <a id="2632" href="GaloisConnections.Basic.html#1785" class="Function">→←≥id</a> <a id="2638" class="Symbol">}</a>
 </pre>
 
 
 --------------------------------------
+
+<br>
+<br>
+
+[← GaloisConnections.Basic](GaloisConnections.Basic.html)
+<span style="float:right;">[ClosureSystems →](ClosureSystems.html)</span>
+
+{% include UALib.Links.md %}
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 
@@ -88,23 +96,3 @@ unit/counit definition that is more level polymorphic.
 
 
 
-
-
-
-
-
-
--- old, single universel level version
--- module onelevel {ℓ : Level}{𝒜 ℬ : Type ℓ} where
-
---  𝒫𝒜 𝒫ℬ : Poset _ _ _
---  𝒫𝒜 = PosetOfSubsets{ℓ}{ℓ}{𝒜}
---  𝒫ℬ = PosetOfSubsets{ℓ}{ℓ}{ℬ}
-
-
---  -- Every binary relation from one poset to another induces a Galois connection.
---  Rel→Gal : (R : REL 𝒜 ℬ ℓ) → Galois{ℓ}{ℓ}{ℓ} 𝒫𝒜 𝒫ℬ
---  Rel→Gal R = record { F = _⃗ R
---                     ; G = R ⃖_
---                     ; GF≥id = λ _ → ←→≥id
---                     ; FG≥id = λ _ → →←≥id }

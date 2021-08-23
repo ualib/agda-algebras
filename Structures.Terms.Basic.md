@@ -25,6 +25,14 @@ author: [agda-algebras development team][]
 
 </pre>
 
-------------------------------
+--------------------------------
+
+<br>
+<br>
+
+[↑ Structures.Terms](Structures.Terms.html)
+<span style="float:right;">[Structures.Terms.Operations →](Structures.Terms.Operations.html)</span>
+
+{% include UALib.Links.md %}
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

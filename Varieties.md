@@ -36,10 +36,15 @@ In the Varieties.Entailment submodule, we define the entailment relation and pro
 
 
 
---------------------------------------
+---------------------------------
+
+<br>
+<br>
+
+[← Subalgebras.Setoid.Properties](Subalgebras.Setoid.Properties.html)
+<span style="float:right;">[Varieties.EquationalLogic →](Varieties.EquationalLogic.html)</span>
 
 {% include UALib.Links.md %}
 
---------------------------------
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

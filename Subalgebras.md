@@ -24,6 +24,12 @@ This is the [Subalgebras][] module of the [Agda Universal Algebra Library][].
 
 --------------------------------------
 
+<br>
+<br>
+
+[← Terms.Setoid.Basic](Terms.Setoid.Basic.html)
+<span style="float:right;">[Subalgebras.Subuniverses →](Subalgebras.Subuniverses.html)</span>
+
 {% include UALib.Links.md %}
 
 
