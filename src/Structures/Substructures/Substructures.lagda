@@ -123,6 +123,17 @@ Suppose `𝒦 : Pred (Algebra α 𝑆) γ` denotes a class of `𝑆`-algebras an
 \end{code}
 
 
+--------------------------------
+
+<br>
+<br>
+
+[← Structures.Substructures.Basic](Structures.Substructures.Basic.html)
+<span style="float:right;">[Structures.Sigma →](Structures.Sigma.html)</span>
+
+{% include UALib.Links.md %}
+
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 
 ------------------------------
 

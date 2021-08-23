@@ -208,8 +208,8 @@ and, under these assumptions, we proved `∣ g ∣ ((f ᵒ 𝑨) a) ≡ ∣ h �
 <br>
 <br>
 
-[← Structures.Substructures.Basic](Structures.Substructures.Basic.html)
-<span style="float:right;">[Structures.Sigma →](Structures.Sigma.html)</span>
+[↑ Structures.Substructures](Structures.Substructures.html)
+<span style="float:right;">[Structures.Substructures.Substructures →](Structures.Substructures.Substructures.html)</span>
 
 {% include UALib.Links.md %}
 

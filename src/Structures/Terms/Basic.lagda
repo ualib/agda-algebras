@@ -25,6 +25,14 @@ data Term  {χ : Level} (X : Type χ ) : Type (lsuc (𝓞 ⊔ 𝓥 ⊔ χ))  whe
 
 \end{code}
 
-------------------------------
+--------------------------------
+
+<br>
+<br>
+
+[↑ Structures.Terms](Structures.Terms.html)
+<span style="float:right;">[Structures.Terms.Operations →](Structures.Terms.Operations.html)</span>
+
+{% include UALib.Links.md %}
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
