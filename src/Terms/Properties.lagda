@@ -130,5 +130,13 @@ The `lift-hom` and `lift-of-epi-is-epi` types will be called to action when such
 
 ------------------------------
 
+<br>
+<br>
+
+[← Terms.Basic](Terms.Basic.html)
+<span style="float:right;">[Terms.Operations →](Terms.Operations.html)</span>
+
+{% include UALib.Links.md %}
+
 [the agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 

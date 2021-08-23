@@ -238,5 +238,14 @@ module _ {I : Type 𝓥} {𝑆 : Signature 𝓞 𝓥} where
 
 \end{code}
 
+-------------------------------------
 
-{% include footer.html %}
+<br>
+<br>
+
+[↑ Algebras](Algebras.html)
+<span style="float:right;">[Algebras.Congruences →](Algebras.Congruences.html)</span>
+
+
+{% include UALib.Links.md %}
+

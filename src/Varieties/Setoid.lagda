@@ -16,13 +16,19 @@ This is the [Varieties.Setoid][] module of the [Agda Universal Algebra Library][
 module Varieties.Setoid where
 
 open import Varieties.Setoid.EquationalLogic
+open import Varieties.Setoid.Closure
+open import Varieties.Setoid.FreeAlgebras
 
 \end{code}
 
---------------------------------------
+--------------------------------
+
+<br>
+<br>
+
+[← Varieties.FreeAlgebras](Varieties.FreeAlgebras.html)
+<span style="float:right;">[Varieties.Setoid.EquationalLogic →](Varieties.Setoid.EquationalLogic.html)</span>
 
 {% include UALib.Links.md %}
-
---------------------------------
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

@@ -253,6 +253,17 @@ module _ {I : Type ι}{𝒜 : I → structure 𝐹 𝑅 {α}{ρᵃ}}{ℬ : (Lift
 
 \end{code}
 
+--------------------------------
+
+<br>
+<br>
+
+[← Structures.Homs](Structures.Homs.html)
+<span style="float:right;">[Structures.Terms →](Structures.Terms.html)</span>
+
+{% include UALib.Links.md %}
+
+
 ------------------------------
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

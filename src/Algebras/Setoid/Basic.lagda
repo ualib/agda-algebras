@@ -192,9 +192,14 @@ involving algebras is the nice properties it possesses.  Indeed, the
   (see [Varieties.EquationalLogic][])
 
 
-
-
-
 --------------------------------
+
+<br>
+<br>
+
+[↑ Algebras.Setoid](Algebras.Setoid.html)
+<span style="float:right;">[Algebras.Setoid.Products →](Algebras.Setoid.Products.html)</span>
+
+{% include UALib.Links.md %}
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

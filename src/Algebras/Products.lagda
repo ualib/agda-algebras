@@ -108,6 +108,13 @@ Finally, we define `class-product` which represents the product of all members o
 
 If `p : 𝑨 ∈ 𝒦`, we view the pair `(𝑨 , p) ∈ ℑ` as an <i>index</i> over the class, so we can think of `𝔄 (𝑨 , p)` (which is simply `𝑨`) as the projection of the product `⨅ 𝔄` onto the `(𝑨 , p)`-th component.
 
+--------------------------------------------
 
-{% include footer.html %}
+<br>
+<br>
+
+[← Algebras.Congruences](Algebras.Congruences.html)
+<span style="float:right;">[Algebras.Setoid →](Algebras.Setoid.html)</span>
+
+{% include UALib.Links.md %}
 

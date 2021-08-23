@@ -279,17 +279,15 @@ module Completeness {χ ι : Level}{I : Type ι} (E : I → Eq{χ}) {Γ} where
 
 
 
---------------------------------------
+--------------------------------
+
+<br>
+<br>
+
+[← Varieties.Setoid](Varieties.Setoid.html)
+<span style="float:right;">[Varieties.Setoid.Closure →](Varieties.Setoid.Closure.html)</span>
+
+{% include UALib.Links.md %}
+
 
 [the agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
-
-
-
-
-
-
--- ℰ ⊢ p ≈ q is valid iff p ≈ q holds in all models that satify all equations in ℰ.
--- _⊢_≈_ : Pred(Term X × Term X) (ov α) → Term X → Term X → Type (ov (χ ⊔ α))
--- ℰ ⊢ p ≈ q = Mod ℰ ⊫ p ≈ q
-
-

@@ -129,3 +129,14 @@ Lift-≤-Lift : {𝑨 : SetoidAlgebra α ρᵃ}(ℓᵃ : Level){𝑩 : SetoidAlg
 Lift-≤-Lift {𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ A≤B = ≥-Lift (Lift-SetoidAlg 𝑩 ℓᵇ){𝑨} (≤-Lift 𝑨{𝑩} A≤B)
 
 \end{code}
+
+---------------------------------
+
+<br>
+<br>
+
+[← Subalgebras.Setoid.Subalgebras](Subalgebras.Setoid.Subalgebras.html)
+<span style="float:right;">[Varieties →](Varieties.html)</span>
+
+{% include UALib.Links.md %}
+

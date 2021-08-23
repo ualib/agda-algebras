@@ -278,6 +278,4 @@ If, in addition to the hypotheses of the last theorem, we assume τ is epic, the
 {% include UALib.Links.md %}
 
 
-------------------------------
-
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

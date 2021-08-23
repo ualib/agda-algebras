@@ -9,7 +9,7 @@ author: [agda-algebras development team][]
 
 This is the [Overture.Preliminaries][] module of the [agda-algebras][] library.
 
-#### Logical foundations
+#### <a id="logical-foundations">Logical foundations</a>
 
 (See also the Foundations module of the [agda-algebras][] library.)
 
@@ -31,7 +31,8 @@ These options control certain foundational assumptions that Agda makes when type
 
 Note that if we wish to type-check a file that imports another file that still has some unmet proof obligations, we must replace the `--safe` flag with `--allow-unsolved-metas`, but this is never done in (publicly released versions of) the [agda-algebras][] library.
 
-#### Agda Modules
+
+#### <a id="agda-modules">Agda Modules</a>
 
 The `OPTIONS` pragma is usually followed by the start of a module.  For example, the [Overture.Preliminaries][] module begins with the following line, and then a list of imports of things used in the module.
 
@@ -73,7 +74,7 @@ data 𝟛 : Type ℓ₀ where
 \end{code}
 
 
-#### Projection notation
+#### <a id="projection-notation">Projection notation</a>
 
 The definition of `Σ` (and thus, of `×`) includes the fields `proj₁` and `proj₂` representing the first and second projections out of the product.  However, we prefer the shorter names `fst` and `snd`.  Sometimes we prefer to denote these projections by `∣_∣` and `∥_∥`, respectively. We define these alternative notations for projections out of pairs as follows.
 
@@ -119,7 +120,7 @@ infixl 30 _∙_
 \end{code}
 
 
-#### Pi types
+#### <a id="pi-types">Pi types</a>
 
 The dependent function type is traditionally denoted with a Pi symbol typically arranged as Π(x : A) B x, or something similar.  In Agda syntax, one writes `(x : A) → B x` for the dependent function type, but may use syntax that is closer to the standard Π notation and made available in Agda as follows.
 
@@ -136,7 +137,7 @@ infix 6 Π-syntax
 
 \end{code}
 
-#### Agda's universe hierarchy
+#### <a id="agdas-universe-hierarchy">Agda's universe hierarchy</a>
 
 The hierarchy of universes in Agda is structured as follows:<sup>[1](Overture.Lifts.html#fn1)</sup>
 
@@ -149,7 +150,7 @@ This means that the universe `Type α` has type `Type(lsuc α)`, and  `Type(lsuc
 
 
 
-#### Lifting and lowering
+#### <a id="lifting-and-lowering">Lifting and lowering</a>
 
 Here we describe a general `Lift` type that help us overcome the technical issue described in the previous subsection.  In the [Lifts of algebras section](Algebras.Algebras.html#lifts-of-algebras) of the [Algebras.Algebras][] module we will define a couple domain-specific lifting types which have certain properties that make them useful for resolving universe level problems when working with algebra types.
 
@@ -184,18 +185,13 @@ lower∼lift = refl
 
 The proofs are trivial. Nonetheless, we'll come across some holes these lemmas can fill.
 
+
 #### <a id="pointwise-equality-of-dependent-functions">Pointwise equality of dependent functions</a>
 
 We conclude this module with a definition that conveniently represents te assertion that two functions are (extensionally) the same in the sense that they produce the same output when given the same input.  (We will have more to say about this notion of equality in the [Relations.Extensionality][] module.)
 
 \begin{code}
 
--- OLD notation
--- _∼_ : {A : Type α } {B : A → Type β } → (f g : (a : A) → B a) → Type (α ⊔ β)
--- f ∼ g = ∀ x → f x ≡ g x
-
--- NEW notation
--- (preferable since it coincides with the standard notation universally quantified equality)
 module _ {α : Level}{A : Type α}{β : Level}{B : A → Type β } where
 
  _≈_ :  (f g : (a : A) → B a) → Type (α ⊔ β)
@@ -230,11 +226,17 @@ transport B refl = id
 \end{code}
 
 
-
-
-
-
 ------------------------------
+
+<br>
+<br>
+
+[↑ Overture](Overture.html)
+<span style="float:right;">[Overture.Inverses →](Overture.Inverses.html)</span>
+
+
+
+{% include UALib.Links.md %}
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 

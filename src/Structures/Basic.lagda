@@ -107,19 +107,15 @@ module _ {𝐹 : signature 𝓞₀ 𝓥₀}{𝑅 : signature 𝓞₁ 𝓥₁} wh
 
 \end{code}
 
---------------------------------------
+--------------------------------
+
+<br>
+<br>
+
+[↑ Structures](Structures.html)
+<span style="float:right;">[Structures.Graphs →](Structures.Graphs.html)</span>
+
+{% include UALib.Links.md %}
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
-
-
-
-
-
--------------------------------------------------------------------
---                        THE END                                --
--------------------------------------------------------------------
-
-
-
-
 

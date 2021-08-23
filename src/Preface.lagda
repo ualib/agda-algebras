@@ -110,10 +110,11 @@ See also: [dblp record](https://dblp.uni-trier.de/rec/journals/corr/abs-2101-101
 ### <a id="contributions-welcomed">Contributions welcomed</a>
 Readers and users are encouraged to suggest improvements to the Agda [agda-algebras][] library and/or its documentation by submitting a [new issue][] or [merge request][] to [github.com/ualib/agda-algebras/](https://github.com/ualib/agda-algebras).
 
-* Submit a new [issue][] or [feature request][].
-* Submit a new [merge request][].
+* Submit a [new issue][] or [merge request][].
 
 ------------------------------------------------
+
+<span style="float:right;">[Overture →](Overture.html)</span>
 
 {% include UALib.Links.md %}
 

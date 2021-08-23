@@ -5,7 +5,7 @@ date : 2021-07-01
 author: [agda-algebras development team][]
 ---
 
-## Galois Connection
+### Galois Connection
 
 If 𝑨 = (A, ≤) and 𝑩 = (B, ≤) are two partially ordered sets (posets), then a
 *Galois connection* between 𝑨 and 𝑩 is a pair (F , G) of functions such that
@@ -83,9 +83,15 @@ module _ {α β : Level}{𝒜 : Type α}{ℬ : Type β} where
 \end{code}
 
 
-
-
 --------------------------------------
+
+<br>
+<br>
+
+[↑ GaloisConnections](GaloisConnections.html)
+<span style="float:right;">[GaloisConnections.Properties →](GaloisConnections.Properties.html)</span>
+
+{% include UALib.Links.md %}
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 

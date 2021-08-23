@@ -238,14 +238,13 @@ module _ {α β γ ι  : Level}{I : Type ι}{fizw : funext (ι ⊔ γ) β}{fiu :
 --------------------------------------
 
 <br>
+<br>
 
 [← Homomorphisms.Noether](Homomorphisms.Noether.html)
 <span style="float:right;">[Homomorphisms.HomomorphicImages →](Homomorphisms.HomomorphicImages.html)</span>
 
 {% include UALib.Links.md %}
 
-
-------------------------------
 
 [the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
 

@@ -113,3 +113,13 @@ If `p : 𝑨 ∈ 𝒦`, we view the pair `(𝑨 , p) ∈ ℑ` as an *index* over
 so we can think of `𝔄 (𝑨 , p)` (which is simply `𝑨`) as the projection of the
 product `⨅ 𝔄` onto the `(𝑨 , p)`-th component.
 
+--------------------------------
+
+<br>
+<br>
+
+[← Algebras.Setoid.Basic](Algebras.Setoid.Basic.html)
+<span style="float:right;">[Algebras.Setoid.Congruences →](Algebras.Setoid.Congruences.html)</span>
+
+{% include UALib.Links.md %}
+

@@ -245,6 +245,16 @@ module _ (wd : SwellDef){α χ : Level}{X : Type χ}{𝒦 : Pred (Algebra α �
 
 \end{code}
 
+---------------------------------
+
+<br>
+<br>
+
+[← Varieties.Closure](Varieties.Closure.html)
+<span style="float:right;">[Varieties.Preservation →](Varieties.Preservation.html)</span>
+
+{% include UALib.Links.md %}
+
 --------------------------------------
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

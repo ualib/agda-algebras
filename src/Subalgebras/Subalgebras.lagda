@@ -151,6 +151,14 @@ Using this type, we express the collection of all subalgebras of algebras in a c
 
 \end{code}
 
-------------------------------
+---------------------------------
+
+<br>
+<br>
+
+[← Subalgebras.Subuniverses](Subalgebras.Subuniverses.html)
+<span style="float:right;">[Subalgebras.Properties →](Subalgebras.Properties.html)</span>
+
+{% include UALib.Links.md %}
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

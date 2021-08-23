@@ -42,7 +42,7 @@ private variable α β γ ρ : Level
 
 #### <a id="homomorphisms">Homomorphisms</a>
 
-If `𝑨` and `𝑩` are `𝑆`-algebras, then a *homomorphism* from `𝑨` to `𝑩` is a function `h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣` from the domain of `𝑨` to the domain of `𝑩` that is *compatible* (or *commutes*) with all of the basic operations of the signature; that is, for all operation symbols `𝑓 : ∣ 𝑆 ∣` and tuples `a : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣` of `𝑨`, the following holds:<sup>[1](Homomorphisms.Basic.html#fn1)</sup>
+If `𝑨` and `𝑩` are `𝑆`-algebras, then a *homomorphism* from `𝑨` to `𝑩` is a function `h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣` from the domain of `𝑨` to the domain of `𝑩` that is *compatible* (or *commutes*) with all of the basic operations of the signature; that is, for all operation symbols `𝑓 : ∣ 𝑆 ∣` and tuples `a : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣` of `𝑨`, the following holds:<sup>[1](Homomorphisms.Basic.html#fn1),</sup><sup>[2](Homomorphisms.Basic.html#fn2)</sup>
 
 `h ((𝑓 ̂ 𝑨) a) ≡ (𝑓 ̂ 𝑩) (h ∘ a)`.
 
@@ -321,9 +321,10 @@ We could prove a more general result involving projections onto multiple factors
 <sup>1</sup><span class="footnote" id="fn1">
 Recall, `h ∘ 𝒂` is the tuple whose i-th component is `h (𝒂 i)`.</span>
 
-<span class="footnote">Instead of "homomorphism," we sometimes use the nickname "hom" to refer to such a map.</span>
+<sup>2</sup><span class="footnote" id="fn2">Instead of "homomorphism," we sometimes use the nickname "hom" to refer to such a map.</span>
 
 
+<br>
 <br>
 
 [↑ Homomorphisms](Homomorphisms.html)
@@ -331,6 +332,5 @@ Recall, `h ∘ 𝒂` is the tuple whose i-th component is `h (𝒂 i)`.</span>
 
 {% include UALib.Links.md %}
 
-------------------------------
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

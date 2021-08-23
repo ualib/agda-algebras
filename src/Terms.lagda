@@ -23,9 +23,13 @@ open import Terms.Setoid
 
 -------------------------------------
 
-{% include UALib.Links.md %}
+<br>
+<br>
 
-------------------------------
+[← Homomorphisms.Setoid.HomomorphicImages](Homomorphisms.Setoid.HomomorphicImages.html)
+<span style="float:right;">[Terms.Basic →](Terms.Basic.html)</span>
+
+{% include UALib.Links.md %}
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 

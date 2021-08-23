@@ -127,7 +127,7 @@ module _ {α β : Level} where
 --------------------------------------
 
 [← Homomorphisms.Isomorphisms](Homomorphisms.Isomorphisms.html)
-<span style="float:right;">[Terms →](Terms.html)</span>
+<span style="float:right;">[Homomorphisms.Setoid →](Homomorphisms.Setoid.html)</span>
 
 {% include UALib.Links.md %}
 

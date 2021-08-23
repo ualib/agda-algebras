@@ -77,5 +77,13 @@ In [Agda][] the term algebra can be defined as simply as one could hope.
 
 ------------------------------
 
+<br>
+<br>
+
+[↑ Terms](Terms.html)
+<span style="float:right;">[Terms.Properties →](Terms.Properties.html)</span>
+
+{% include UALib.Links.md %}
+
 [the agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 

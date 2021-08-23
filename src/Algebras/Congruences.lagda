@@ -124,4 +124,12 @@ open IsCongruence
 
 \end{code}
 
-{% include footnote.html %}
+
+--------------------------------------------
+<br>
+<br>
+
+[← Algebras.Basic](Algebras.Basic.html)
+<span style="float:right;">[Algebras.Products →](Algebras.Products.html)</span>
+
+{% include UALib.Links.md %}

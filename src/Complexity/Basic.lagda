@@ -5,7 +5,7 @@ date : 2021-07-13
 author: [agda-algebras development team][]
 ---
 
-### Complexity Theory
+### <a id="complexity-theory">Complexity Theory</a>
 
 \begin{code}
 
@@ -16,7 +16,7 @@ module Complexity.Basic where
 
 \end{code}
 
-#### Words
+#### <a id="words">Words</a>
 
 Let 𝑇ₙ be a totally ordered set of size 𝑛.  Let 𝐴 be a set (the alphabet).
 We can model the set 𝑊ₙ, of *words* (strings of letters from 𝐴) of length 𝑛
@@ -36,14 +36,16 @@ stops in at most (size 𝑥) 𝑐 + 𝑑 steps and computes 𝑓 𝑥.
 
 At first we will simplify by assuming 𝑇ₙ is `Fin n`.
 
-\begin{code}
 
-\end{code}
+--------------------------------
 
+<br>
+<br>
 
+[↑ Complexity](Complexity.html)
+<span style="float:right;">[Complexity.CSP →](Complexity.CSP.html)</span>
 
-
---------------------------------------
+{% include UALib.Links.md %}
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 

@@ -150,33 +150,20 @@ module _ {χ : Level}{X : Type χ}
 \end{code}
 
 
-------------------------------
+--------------------------------
+
+<br>
+<br>
+
+[← Structures.Graphs](Structures.Graphs.html)
+<span style="float:right;">[Structures.Products →](Structures.Products.html)</span>
+
+{% include UALib.Links.md %}
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- -- LEMMAIII1 : (ℰ : Pred (Term X × Term X) (ℓ₀ ⊔ χ))
- --  →          (𝑨 ∈ Mod ℰ)
- --  →          ∀(𝑩 : structure 𝐹 𝑅)
- --  →          Σ[ 𝑪 ∈ structure 𝐹 𝑅 ] (𝑪 ∈ Mod ℰ × (𝑩 ⇛ 𝑨 ⇚ 𝑪))
- -- LEMMAIII1 ℰ 𝑨⊧ℰ 𝑩 = {!!} , {!!}
 
 
 

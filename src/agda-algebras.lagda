@@ -5,7 +5,7 @@ date : 2021-01-14
 author: William DeMeo
 ---
 
-[The Agda Universal Algebra Library](UniversalAlgebra.html)
+<!--
 
 LICENSE:
 
@@ -30,7 +30,7 @@ of citation.
 
 ---------------------------------------------------------------------------------
 
-(version 0.01 of {{ "now" | date: "%d %b %Y" }})
+(Version 2.01 of {{ "now" | date: "%d %b %Y" }})
 
 **Abstract**. The [Agda UniversalAlgebra][] library is a collection of types and programs (theorems and proofs) that formalizes the foundations of universal algebra in dependent type theory using the [Agda][] proof assistant language.
 
@@ -42,13 +42,11 @@ We hope the library will be useful to mathematicians and computer scientists who
 
 **Keywords and phrases**. Universal algebra, Equational logic, Martin-Löf Type Theory, Birkhoff’s HSP Theorem, Formalization of mathematics, Agda
 
-**Software Repository**. [https://gitlab.com/ualib/ualib.gitlab.io.git](https://gitlab.com/ualib/ualib.gitlab.io.git)
-
-**PDF documentation**. [ualib-part1.pdf](ualib-part1.pdf), [ualib-part2.pdf](ualib-part2.pdf) (ualib-part3.pdf coming soon)
+**Software Repository**. [https://github.com/ualib/agda-algebras](https://gitub.com/ualib/agda-algebras)
 
 **Citing this work**. To learn [how to cite the Agda UALib](Preface.html#how-to-cite-the-agda-ualib) and its documentation, follow [this link](Preface.html#how-to-cite-the-agda-ualib).
 
-**Contributors**. William DeMeo, Jacques Carette, Venanzio Capretta, Siva Somayyajula, Andreas Abel, Hyeyoung Shin.
+**Contributors**. William DeMeo, Jacques Carette, Siva Somayyajula, Andreas Abel, Hyeyoung Shin.
 
 --------------------------------
 
@@ -78,7 +76,7 @@ open import Complexity
 \end{code}
 
 
-#### License and citations
+#### <a id="license">License</a>
 
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
   <img alt="Creative Commons License" style="border-width:0; float: left; padding:5px 5px 0px 0px" height='40' src="css/by-sa.svg" />

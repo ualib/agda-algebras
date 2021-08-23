@@ -250,8 +250,13 @@ and, under these assumptions, we proved `∣ g ∣ ((𝑓 ̂ 𝑨) a) ≡ ∣ h 
 
 ---------------------------------
 
+<br>
+<br>
+
+[↑ Subalgebras](Subalgebras.html)
+<span style="float:right;">[Subalgebras.Subalgebras →](Subalgebras.Subalgebras.html)</span>
+
 {% include UALib.Links.md %}
 
-------------------------------
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

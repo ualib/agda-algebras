@@ -82,29 +82,17 @@ module _ {ℓ : Level}{𝒜 : Type ℓ} {ℬ : Type ℓ} where
 
 --------------------------------------
 
+<br>
+<br>
+
+[← GaloisConnections.Basic](GaloisConnections.Basic.html)
+<span style="float:right;">[ClosureSystems →](ClosureSystems.html)</span>
+
+{% include UALib.Links.md %}
+
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 
 
 
 
 
-
-
-
-
-
-
--- old, single universel level version
--- module onelevel {ℓ : Level}{𝒜 ℬ : Type ℓ} where
-
---  𝒫𝒜 𝒫ℬ : Poset _ _ _
---  𝒫𝒜 = PosetOfSubsets{ℓ}{ℓ}{𝒜}
---  𝒫ℬ = PosetOfSubsets{ℓ}{ℓ}{ℬ}
-
-
---  -- Every binary relation from one poset to another induces a Galois connection.
---  Rel→Gal : (R : REL 𝒜 ℬ ℓ) → Galois{ℓ}{ℓ}{ℓ} 𝒫𝒜 𝒫ℬ
---  Rel→Gal R = record { F = _⃗ R
---                     ; G = R ⃖_
---                     ; GF≥id = λ _ → ←→≥id
---                     ; FG≥id = λ _ → →←≥id }

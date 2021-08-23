@@ -181,3 +181,14 @@ ker[_⇒_]_↾_ : (𝑨 : SetoidAlgebra α ρᵃ) (𝑩 : SetoidAlgebra β ρᵇ
 ker[ 𝑨 ⇒ 𝑩 ] h ↾ wd = kerquo 𝑨 𝑩 wd h
 
 \end{code}
+
+
+--------------------------------
+
+<br>
+<br>
+
+[↑ Homomorphisms.Setoid](Homomorphisms.Setoid.html)
+<span style="float:right;">[Homomorphisms.Setoid.Noether →](Homomorphisms.Setoid.Noether.html)</span>
+
+{% include UALib.Links.md %}

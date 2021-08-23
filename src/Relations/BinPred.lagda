@@ -5,7 +5,7 @@ date : 2021-06-26
 author: [agda-algebras development team][]
 ---
 
-### Properties of binary predicates
+### <a id="properties-of-binary-predicates">Properties of binary predicates</a>
 
 This is the [Relations.BinPred][] module of the [Agda Universal Algebra Library][].
 
@@ -92,5 +92,14 @@ Total P = Connex P P
 
 
 -----------------------------------------------
+
+<br>
+<br>
+
+[↑ Relations](Relations.html)
+<span style="float:right;">[Relations.Discrete →](Relations.Discrete.html)</span>
+
+
+{% include UALib.Links.md %}
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

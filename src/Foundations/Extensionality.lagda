@@ -154,6 +154,14 @@ module _ {A : Type α}{R : BinRel A ρ} where
 
 ---------------------------------------
 
+
+<br>
+<br>
+
+[← Foundations.Truncation](Foundations.Truncation.html)
+<span style="float:right;">[GaloisConnections →](GaloisConnections.html)</span>
+
+
 {% include UALib.Links.md %}
 
 

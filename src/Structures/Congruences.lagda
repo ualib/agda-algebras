@@ -87,44 +87,15 @@ _╱_ = quotient
 \end{code}
 
 
---------------------------------------
+--------------------------------
+
+<br>
+<br>
+
+[← Structures.Products](Structures.Products.html)
+<span style="float:right;">[Structures.Homs →](Structures.Homs.html)</span>
+
+{% include UALib.Links.md %}
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
-
-
--------------------------------------------------------------------
---                        THE END                                --
--------------------------------------------------------------------
-
-
-
-
-
-
-
---------------------------------------------------------------------------------- -->
-open _/ₜ_
-
-_╱ₜ_ : (𝑩 : Structure 𝑅 𝐹 {β}) → Con{α} 𝑩 → Structure 𝑅 𝐹
-
-𝑩 ╱ₜ θ = (∣ 𝑩 ∣ /ₜ ∣ fst θ ∣)                                    -- domain of the quotient algebra
-, rel -- basic relations of the quotient structure
-, op        -- basic operations of the quotient algebra
-where
-rel : (r : ∣ 𝑅 ∣)(b : ∥ 𝑅 ∥ r → ∣ 𝑩 ∣ /ₜ ∣ fst θ ∣) → Type ?
-rel r b = ?
--- (λ 𝑟 [ x ] → ((𝑟 ʳ 𝑩) λ i → ∣ fst θ ∣ (x i)))
-op : (f : ∣ 𝐹 ∣)(b : ∥ 𝐹 ∥ f → ∣ 𝑩 ∣ /ₜ ∣ fst θ ∣) → ∣ 𝑩 ∣ /ₜ ∣ fst θ ∣
-op f b = ? -- λ 𝑓 [ 𝑎 ] → [ ((𝑓 ᵒ 𝑩)(λ i →  𝑎 i)) ]  
-
-record IsMinBin {A : Type α} (_≣_ : BinRel A ℓ₀ ) : Typeω where
- field
-   isequiv : IsEquivalence{α}{ℓ₀} _≣_
-   ismin : {ρ' : Level}(_≋_ : BinRel A ρ'){x y : A} → x ≣ y → x ≋ y
-
- reflexive : _≡_ ⇒ _≣_
- reflexive refl = IsEquivalence.refl isequiv
-
- corefl : _≣_ ⇒ _≡_
- corefl x≣y = ismin _≡_ x≣y
 
