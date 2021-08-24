@@ -54,7 +54,7 @@ open Setoid using    (_≈_ ; Carrier )
                      ; sym   to symS
                      ; trans to transS
                      ; isEquivalence to isEqv )
-open Func renaming   ( f to _<$>_ )
+open Func renaming   ( f to _<$>_ ; cong to ≈cong )
 
 ⟦_⟧ : Signature 𝓞 𝓥 → Setoid α ρ → Setoid _ _
 
@@ -80,7 +80,7 @@ The `Func` record packs a function (f, aka apply, aka _<$>_) with a proof (cong)
 
 Algebroid : (α ρ : Level) → Type (𝓞 ⊔ 𝓥 ⊔ lsuc (α ⊔ ρ))
 Algebroid α ρ = Σ[ A ∈ Setoid α ρ ]      -- the domain (a setoid)
-                 Func (⟦ 𝑆 ⟧ A) A       -- the basic operations,
+                  Func (⟦ 𝑆 ⟧ A) A       -- the basic operations,
                                          -- along with congruence proofs that
                                          -- each operation espects setoid equality
 
@@ -89,8 +89,12 @@ record SetoidAlgebra α ρ : Type (𝓞 ⊔ 𝓥 ⊔ lsuc (α ⊔ ρ)) where
     Domain : Setoid α ρ
     Interp : Func (⟦ 𝑆 ⟧ Domain) Domain
      --      ^^^^^^^^^^^^^^^^^^^^^^^ is a record type with two fields:
-     --       1. a function  f : Carrier (⟦ 𝑆 ⟧s Domain)  → Carrier Domain
+     --       1. a function  f : Carrier (⟦ 𝑆 ⟧ Domain)  → Carrier Domain
      --       2. a proof cong : f Preserves _≈₁_ ⟶ _≈₂_ (that f preserves the setoid equalities)
+
+  -- ≈cong : ∀ f u v → (∀ i → (_≈_ Domain) (u i) (v i)) → _≈_ (⟦ 𝑆 ⟧ Domain) (f , u) (f , v)
+  -- ≈cong f u v uv = refl , uv
+
 
 
 open SetoidAlgebra
@@ -121,13 +125,15 @@ _∙_ : (f : ∣ 𝑆 ∣)(𝑨 : Algebroid α ρ) → (∥ 𝑆 ∥ f  →  Car
 
 f ∙ 𝑨 = λ a → ∥ 𝑨 ∥ <$> (f , a)
 
+
 open SetoidAlgebra
 
 _̂_ : (f : ∣ 𝑆 ∣)(𝑨 : SetoidAlgebra α ρ) → (∥ 𝑆 ∥ f  →  𝕌[ 𝑨 ]) → 𝕌[ 𝑨 ]
 
 f ̂ 𝑨 = λ a → (Interp 𝑨) <$> (f , a)
-
-
+-- ≈cong :  (f : ∣ 𝑆 ∣)(𝑨 : SetoidAlgebra α ρ)(u v : ∥ 𝑆 ∥ f  →  𝕌[ 𝑨 ])
+--  →       (∀ i → (_≈_ (Domain 𝑨)) (u i) (v i)) → _≈_ (⟦ 𝑆 ⟧ (Domain 𝑨)) (f , u) (f , v)
+-- ≈cong f 𝑨 u v uv = refl , uv
 
 \end{code}
 
@@ -151,16 +157,20 @@ Domain (Lift-SetoidAlg 𝑨 ℓ) = record { Carrier = Lift ℓ 𝕌[ 𝑨 ]
 
 Interp (Lift-SetoidAlg 𝑨 ℓ) <$> (f , la) = lift ((f ̂ 𝑨) (lower ∘ la))
 
-cong (Interp (Lift-SetoidAlg 𝑨 ℓ)) (refl , la=lb) = cong (Interp 𝑨) ((refl , la=lb))
+≈cong (Interp (Lift-SetoidAlg 𝑨 ℓ)) (refl , la=lb) = ≈cong (Interp 𝑨) ((refl , la=lb))
 
 
-module _ (𝑨 : SetoidAlgebra α ρ) where
+module _ {𝑨 : SetoidAlgebra α ρ} where
 
  open SetoidAlgebra 𝑨
  open Setoid (Domain 𝑨) renaming ( refl to srefl )
  private
   A = Carrier (Domain 𝑨)
   _≈A_ = _≈_ (Domain 𝑨)
+
+ -- ≈cong : (f : ∣ 𝑆 ∣)(x y : ∥ 𝑆 ∥ f  →  A)
+ --  →      (∀ i → (x i) ≈A (y i)) → ((f ̂ 𝑨) x) ≈A ((f ̂ 𝑨) y)
+ -- ≈cong f x y xy = {!!}
 
  Lift-SetoidAlg' : (ℓ : Level) → SetoidAlgebra (α ⊔ ℓ) ρ
 
@@ -171,7 +181,7 @@ module _ (𝑨 : SetoidAlgebra α ρ) where
 
  Interp (Lift-SetoidAlg' ℓ) <$> (f , la) = lift ((f ̂ 𝑨) (lower ∘ la))
 
- cong (Interp (Lift-SetoidAlg' ℓ)) (refl , la≡lb) = cong (Interp 𝑨) (PE.refl , la≡lb)
+ ≈cong (Interp (Lift-SetoidAlg' ℓ)) (refl , la≡lb) = ≈cong (Interp 𝑨) (PE.refl , la≡lb)
 
 \end{code}
 

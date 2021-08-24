@@ -19,8 +19,6 @@ open import Algebras.Basic
 
 module Terms.Operations {𝑆 : Signature 𝓞 𝓥} where
 
-
-
 -- Imports from Agda and the Agda Standard Library ---------------------
 open import Agda.Primitive using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
 open import Axiom.Extensionality.Propositional
@@ -50,7 +48,7 @@ When we interpret a term in an algebra we call the resulting function a *term op
 
 1. If `p` is a variable symbol `x : X` and if `a : X → ∣ 𝑨 ∣` is a tuple of elements of `∣ 𝑨 ∣`, then `𝑨 ⟦ p ⟧ a := a x`.
 
-2. If `p = 𝑓 𝑡`, where `𝑓 : ∣ 𝑆 ∣` is an operation symbol, if `𝑡 : ∥ 𝑆 ∥ 𝑓 → 𝑻 X` is a tuple of terms, and if `a : X → ∣ 𝑨 ∣` is a tuple from `𝑨`, then we define `𝑨 ⟦ p ⟧ a = 𝑨 ⟦ 𝑓 𝑡 ⟧ a := (𝑓 ̂ 𝑨) (λ i → 𝑨 ⟦ 𝑡 i ⟧ a)`.
+2. If `p = f t`, where `f : ∣ 𝑆 ∣` is an operation symbol, if `t : ∥ 𝑆 ∥ f → 𝑻 X` is a tuple of terms, and if `a : X → ∣ 𝑨 ∣` is a tuple from `𝑨`, then we define `𝑨 ⟦ p ⟧ a = 𝑨 ⟦ f t ⟧ a := (f ̂ 𝑨) (λ i → 𝑨 ⟦ t i ⟧ a)`.
 
 Thus the interpretation of a term is defined by induction on the structure of the term, and the definition is formally implemented in [UniversalAlgebra][] as follows.
 
@@ -58,7 +56,7 @@ Thus the interpretation of a term is defined by induction on the structure of th
 
 _⟦_⟧ : (𝑨 : Algebra α 𝑆){X : Type χ } → Term X → (X → ∣ 𝑨 ∣) → ∣ 𝑨 ∣
 𝑨 ⟦ ℊ x ⟧ = λ η → η x
-𝑨 ⟦ node 𝑓 𝑡 ⟧ = λ η → (𝑓 ̂ 𝑨) (λ i → (𝑨 ⟦ 𝑡 i ⟧) η)
+𝑨 ⟦ node f t ⟧ = λ η → (f ̂ 𝑨) (λ i → (𝑨 ⟦ t i ⟧) η)
 
 \end{code}
 
@@ -70,82 +68,42 @@ free-lift-interp : swelldef 𝓥 α → (𝑨 : Algebra α 𝑆){X : Type χ }(�
  →                 (𝑨 ⟦ p ⟧) η ≡ (free-lift 𝑨 η) p
 
 free-lift-interp _ 𝑨 η (ℊ x) = refl
-free-lift-interp wd 𝑨 η (node 𝑓 𝑡) = wd (𝑓 ̂ 𝑨) (λ z → (𝑨 ⟦ 𝑡 z ⟧) η)
-                                       ((free-lift 𝑨 η) ∘ 𝑡)((free-lift-interp wd 𝑨 η) ∘ 𝑡)
-
-
-
--- A substitution from Y to X is simply a function from Y to X.
-
--- Application of a Subst.
-_[_] : {χ : Level}{X Y : Type χ} → Term Y → (Y → X) → Term X
-(ℊ y) [ σ ] = ℊ (σ y)
-(node 𝑓 t)  [ σ ] = node 𝑓 λ i → t i [ σ ]
-
-
--- Substerm X Y, an inhabitant of which replaces each variable symbol in Y with a term from Term X.
-Substerm : (X Y : Type χ) → Type _
-Substerm X Y = (y : Y) → Term X
-
--- Application of a Substerm.
-_[_]t : {X Y : Type χ } → Term Y → Substerm X Y → Term X
-(ℊ y) [ σ ]t = σ y
-(node f 𝑡) [ σ ]t = node f (λ z → (𝑡 z) [ σ ]t )
-
-
-open ≡-Reasoning
-
-subst-lemma : swelldef 𝓥 α → {X Y : Type χ }(p : Term Y)(σ : Y → X)(𝑨 : Algebra α 𝑆)(η : X → ∣ 𝑨 ∣)
- →            (𝑨 ⟦ p [ σ ] ⟧) η ≡ (𝑨 ⟦ p ⟧) (η ∘ σ)
-subst-lemma _ (ℊ x) σ 𝑨 η = refl
-subst-lemma wd (node f 𝑡) σ 𝑨 η = wd (f ̂ 𝑨) (λ i → (𝑨 ⟦ (𝑡 i) [ σ ] ⟧) η)
-                                             (λ i → (𝑨 ⟦ 𝑡 i ⟧) (η ∘ σ))
-                                             (λ i → subst-lemma wd (𝑡 i) σ 𝑨 η)
-
-open ≡-Reasoning
-
-subst-theorem : swelldef 𝓥 α → {X Y : Type χ }
-                (p q : Term Y)(σ : Y → X)(𝑨 : Algebra α 𝑆)
- →              𝑨 ⟦ p ⟧ ≈ 𝑨 ⟦ q ⟧ → 𝑨 ⟦ p [ σ ] ⟧ ≈ 𝑨 ⟦ q [ σ ] ⟧
-
-subst-theorem wd p q σ 𝑨 Apq η = (𝑨 ⟦ p [ σ ] ⟧) η ≡⟨ subst-lemma wd p σ 𝑨 η ⟩
-                                 (𝑨 ⟦ p ⟧) (η ∘ σ) ≡⟨ Apq (η ∘ σ) ⟩
-                                 (𝑨 ⟦ q ⟧) (η ∘ σ) ≡⟨ sym (subst-lemma wd q σ 𝑨 η) ⟩
-                                 (𝑨 ⟦ q [ σ ] ⟧) η ∎
+free-lift-interp wd 𝑨 η (node f t) = wd (f ̂ 𝑨) (λ z → (𝑨 ⟦ t z ⟧) η)
+                                       ((free-lift 𝑨 η) ∘ t)((free-lift-interp wd 𝑨 η) ∘ t)
 
 \end{code}
 
-If the algebra 𝑨 happens to be `𝑻 X`, then we expect that `∀ 𝑠` we have `(𝑻 X)⟦ p ⟧ 𝑠 ≡ p 𝑠`. But what is `(𝑻 X)⟦ p ⟧ 𝑠` exactly? By definition, it depends on the form of `p` as follows:
+If the algebra in question happens to be `𝑻 X`, then we expect that `∀ s` we have `(𝑻 X)⟦ p ⟧ s ≡ p s`. But what is `(𝑻 X)⟦ p ⟧ s` exactly? By definition, it depends on the form of `p` as follows:
 
-* if `p = ℊ x`, then `(𝑻 X)⟦ p ⟧ 𝑠 := (𝑻 X)⟦ ℊ x ⟧ 𝑠 ≡ 𝑠 x`
+* if `p = ℊ x`, then `(𝑻 X)⟦ p ⟧ s := (𝑻 X)⟦ ℊ x ⟧ s ≡ s x`
 
-* if `p = node 𝑓 𝑡`, then `(𝑻 X)⟦ p ⟧ 𝑠 := (𝑻 X)⟦ node 𝑓 𝑡 ⟧ 𝑠 = (𝑓 ̂ 𝑻 X) λ i → (𝑻 X)⟦ 𝑡 i ⟧ 𝑠`
+* if `p = node f t`, then `(𝑻 X)⟦ p ⟧ s := (𝑻 X)⟦ node f t ⟧ s = (f ̂ 𝑻 X) λ i → (𝑻 X)⟦ t i ⟧ s`
 
-Now, assume `ϕ : hom 𝑻 𝑨`. Then by `comm-hom-term`, we have `∣ ϕ ∣ (𝑻 X)⟦ p ⟧ 𝑠 = 𝑨 ⟦ p ⟧ ∣ ϕ ∣ ∘ 𝑠`.
+Now, assume `ϕ : hom 𝑻 𝑨`. Then by `comm-hom-term`, we have `∣ ϕ ∣ (𝑻 X)⟦ p ⟧ s = 𝑨 ⟦ p ⟧ ∣ ϕ ∣ ∘ s`.
 
-* if `p = ℊ x` (and `𝑡 : X → ∣ 𝑻 X ∣`), then
+* if `p = ℊ x` (and `t : X → ∣ 𝑻 X ∣`), then
 
-  `∣ ϕ ∣ p ≡ ∣ ϕ ∣ (ℊ x) ≡ ∣ ϕ ∣ (λ 𝑡 → h 𝑡) ≡ λ 𝑡 → (∣ ϕ ∣ ∘ 𝑡) x`
+  `∣ ϕ ∣ p ≡ ∣ ϕ ∣ (ℊ x) ≡ ∣ ϕ ∣ (λ t → h t) ≡ λ t → (∣ ϕ ∣ ∘ t) x`
 
-* if `p = node 𝑓 𝑡`, then
+* if `p = node f t`, then
 
-   ∣ ϕ ∣ p ≡ ∣ ϕ ∣ (𝑻 X)⟦ p ⟧ 𝑠 = (𝑻 X)⟦ node 𝑓 𝑡 ⟧ 𝑠 = (𝑓 ̂ 𝑻 X) λ i → (𝑻 X)⟦ 𝑡 i ⟧ 𝑠
+   ∣ ϕ ∣ p ≡ ∣ ϕ ∣ (𝑻 X)⟦ p ⟧ s = (𝑻 X)⟦ node f t ⟧ s = (f ̂ 𝑻 X) λ i → (𝑻 X)⟦ t i ⟧ s
 
-We claim that for all `p : Term X` there exists `q : Term X` and `𝔱 : X → ∣ 𝑻 X ∣` such that `p ≡ (𝑻 X)⟦ q ⟧ 𝔱`. We prove this fact as follows.
+We claim that for all `p : Term X` there exists `q : Term X` and `t : X → ∣ 𝑻 X ∣` such that `p ≡ (𝑻 X)⟦ q ⟧ t`. We prove this fact as follows.
 
 \begin{code}
 
-term-interp : {X : Type χ} (𝑓 : ∣ 𝑆 ∣){𝑠 𝑡 : ∥ 𝑆 ∥ 𝑓 → Term X} → 𝑠 ≡ 𝑡 → node 𝑓 𝑠 ≡ (𝑓 ̂ 𝑻 X) 𝑡
-term-interp 𝑓 {𝑠}{𝑡} st = cong (node 𝑓) st
+term-interp : {X : Type χ} (f : ∣ 𝑆 ∣){s t : ∥ 𝑆 ∥ f → Term X} → s ≡ t → node f s ≡ (f ̂ 𝑻 X) t
+term-interp f {s}{t} st = cong (node f) st
 
-term-interp' : swelldef 𝓥 (ov χ) → {X : Type χ} (𝑓 : ∣ 𝑆 ∣){𝑠 𝑡 : ∥ 𝑆 ∥ 𝑓 → Term X}
- →             (∀ i → 𝑠 i ≡ 𝑡 i) → node 𝑓 𝑠 ≡ (𝑓 ̂ 𝑻 X) 𝑡
-term-interp' wd 𝑓 {𝑠}{𝑡} st = wd (node 𝑓) 𝑠 𝑡 st
+term-interp' : swelldef 𝓥 (ov χ) → {X : Type χ} (f : ∣ 𝑆 ∣){s t : ∥ 𝑆 ∥ f → Term X}
+ →             (∀ i → s i ≡ t i) → node f s ≡ (f ̂ 𝑻 X) t
+term-interp' wd f {s}{t} st = wd (node f) s t st
 
 term-gen : swelldef 𝓥 (ov χ) → {X : Type χ}(p : ∣ 𝑻 X ∣) → Σ[ q ∈ ∣ 𝑻 X ∣ ] p ≡ (𝑻 X ⟦ q ⟧) ℊ
 term-gen _ (ℊ x) = (ℊ x) , refl
-term-gen wd (node 𝑓 t) = (node 𝑓 (λ i → ∣ term-gen wd (t i) ∣)) ,
-                         term-interp' wd 𝑓 λ i → ∥ term-gen wd (t i) ∥
+term-gen wd (node f t) = (node f (λ i → ∣ term-gen wd (t i) ∣)) ,
+                         term-interp' wd f λ i → ∥ term-gen wd (t i) ∥
 
 term-gen-agreement : (wd : swelldef 𝓥 (ov χ)){X : Type χ}(p : ∣ 𝑻 X ∣) → (𝑻 X ⟦ p ⟧) ℊ ≡ (𝑻 X ⟦ ∣ term-gen wd p ∣ ⟧) ℊ
 term-gen-agreement _ (ℊ x) = refl
@@ -170,14 +128,14 @@ module _ (wd : swelldef 𝓥 (β ⊔ α)){X : Type χ }{I : Type β} where
   →            (⨅ 𝒜 ⟦ p ⟧) a ≡ λ i → (𝒜 i ⟦ p ⟧)(λ x → (a x) i)
 
  interp-prod (ℊ _) 𝒜 a = refl
- interp-prod (node 𝑓 𝑡) 𝒜 a = wd ((𝑓 ̂ ⨅ 𝒜)) u v IH
+ interp-prod (node f t) 𝒜 a = wd ((f ̂ ⨅ 𝒜)) u v IH
   where
   u : ∀ x → ∣ ⨅ 𝒜 ∣
-  u = λ x → (⨅ 𝒜 ⟦ 𝑡 x ⟧) a
+  u = λ x → (⨅ 𝒜 ⟦ t x ⟧) a
   v : ∀ x i → ∣ 𝒜 i ∣
-  v = λ x i → (𝒜 i ⟦ 𝑡 x ⟧)(λ j → a j i)
+  v = λ x i → (𝒜 i ⟦ t x ⟧)(λ j → a j i)
   IH : ∀ i → u i ≡ v i
-  IH = λ x → interp-prod (𝑡 x) 𝒜 a
+  IH = λ x → interp-prod (t x) 𝒜 a
 
  interp-prod2 : funext (α ⊔ β ⊔ χ) (α ⊔ β) → (p : Term X)(𝒜 : I → Algebra α 𝑆)
   →             ⨅ 𝒜 ⟦ p ⟧ ≡ (λ a i → (𝒜 i ⟦ p ⟧) λ x → a x i)
@@ -200,6 +158,7 @@ We now prove two important facts about term operations.  The first of these, whi
 
 \begin{code}
 
+open ≡-Reasoning
 
 comm-hom-term : swelldef 𝓥 β → {𝑨 : Algebra α 𝑆} (𝑩 : Algebra β 𝑆)
                 (h : hom 𝑨 𝑩){X : Type χ}(t : Term X) (a : X → ∣ 𝑨 ∣)
@@ -207,13 +166,13 @@ comm-hom-term : swelldef 𝓥 β → {𝑨 : Algebra α 𝑆} (𝑩 : Algebra β
   →             ∣ h ∣ ((𝑨 ⟦ t ⟧) a) ≡ (𝑩 ⟦ t ⟧) (∣ h ∣ ∘ a)
 
 comm-hom-term _ 𝑩 h (ℊ x) a = refl
-comm-hom-term wd {𝑨} 𝑩 h (node 𝑓 𝑡) a = ∣ h ∣((𝑓 ̂ 𝑨) λ i →  (𝑨 ⟦ 𝑡 i ⟧) a)    ≡⟨ i  ⟩
-                                         (𝑓 ̂ 𝑩)(λ i →  ∣ h ∣ ((𝑨 ⟦ 𝑡 i ⟧) a))  ≡⟨ ii ⟩
-                                         (𝑓 ̂ 𝑩)(λ r → (𝑩 ⟦ 𝑡 r ⟧) (∣ h ∣ ∘ a)) ∎
- where i  = ∥ h ∥ 𝑓 λ r → (𝑨 ⟦ 𝑡 r ⟧) a
-       ii = wd (𝑓 ̂ 𝑩) (λ i₁ → ∣ h ∣ ((𝑨 ⟦ 𝑡 i₁ ⟧) a))
-                       (λ r → (𝑩 ⟦ 𝑡 r ⟧) (λ x → ∣ h ∣ (a x)))
-                       λ j → comm-hom-term wd 𝑩 h (𝑡 j) a
+comm-hom-term wd {𝑨} 𝑩 h (node f t) a = ∣ h ∣((f ̂ 𝑨) λ i →  (𝑨 ⟦ t i ⟧) a)    ≡⟨ i  ⟩
+                                         (f ̂ 𝑩)(λ i →  ∣ h ∣ ((𝑨 ⟦ t i ⟧) a))  ≡⟨ ii ⟩
+                                         (f ̂ 𝑩)(λ r → (𝑩 ⟦ t r ⟧) (∣ h ∣ ∘ a)) ∎
+ where i  = ∥ h ∥ f λ r → (𝑨 ⟦ t r ⟧) a
+       ii = wd (f ̂ 𝑩) (λ i₁ → ∣ h ∣ ((𝑨 ⟦ t i₁ ⟧) a))
+                       (λ r → (𝑩 ⟦ t r ⟧) (λ x → ∣ h ∣ (a x)))
+                       λ j → comm-hom-term wd 𝑩 h (t j) a
 
 \end{code}
 
@@ -228,11 +187,66 @@ module _ {α β : Level}{X : Type α} where
 
  _∣:_ : {𝑨 : Algebra α 𝑆}(t : Term X)(θ : Con{α}{β} 𝑨) → (𝑨 ⟦ t ⟧) |: ∣ θ ∣
  ((ℊ x) ∣: θ) p = p x
- ((node 𝑓 𝑡) ∣: θ) p = (is-compatible ∥ θ ∥) 𝑓 λ x → ((𝑡 x) ∣: θ) p
+ ((node f t) ∣: θ) p = (is-compatible ∥ θ ∥) f λ x → ((t x) ∣: θ) p
 
 \end{code}
 
 **WARNING!** The compatibility relation for terms `∣:` is typed as \|:, whereas the compatibility type for functions `|:` (defined in the [Relations.Discrete][] module) is typed as `|:`.
+
+
+
+#### <a id="substitution">Substitution</a>
+
+A substitution from `Y` to `X` is simply a function from `Y` to `X`, and the application of a substitution is represented as follows.
+
+\begin{code}
+
+_[_] : {χ : Level}{X Y : Type χ} → Term Y → (Y → X) → Term X
+(ℊ y) [ σ ] = ℊ (σ y)
+(node f t)  [ σ ] = node f λ i → t i [ σ ]
+
+\end{code}
+
+Alternatively, we may want a substitution that replaces each variable symbol in `Y`, not with an element of `X`, but with a term from `Term X`.
+
+\begin{code}
+
+-- Substerm X Y, an inhabitant of which replaces each variable symbol in Y with a term from Term X.
+Substerm : (X Y : Type χ) → Type (ov χ)
+Substerm X Y = (y : Y) → Term X
+
+-- Application of a Substerm.
+_[_]t : {X Y : Type χ } → Term Y → Substerm X Y → Term X
+(ℊ y) [ σ ]t = σ y
+(node f t) [ σ ]t = node f (λ z → (t z) [ σ ]t )
+
+\end{code}
+
+Next we prove the important Substitution Theorem which asserts that an identity `p ≈ q` holds in an algebra `𝑨` iff it holds in `𝑨` after applying any substitution.
+
+\begin{code}
+
+
+subst-lemma : swelldef 𝓥 α → {X Y : Type χ }(p : Term Y)(σ : Y → X)(𝑨 : Algebra α 𝑆)(η : X → ∣ 𝑨 ∣)
+ →            (𝑨 ⟦ p [ σ ] ⟧) η ≡ (𝑨 ⟦ p ⟧) (η ∘ σ)
+subst-lemma _ (ℊ x) σ 𝑨 η = refl
+subst-lemma wd (node f t) σ 𝑨 η = wd (f ̂ 𝑨) (λ i → (𝑨 ⟦ (t i) [ σ ] ⟧) η)
+                                             (λ i → (𝑨 ⟦ t i ⟧) (η ∘ σ))
+                                             (λ i → subst-lemma wd (t i) σ 𝑨 η)
+
+subst-theorem : swelldef 𝓥 α → {X Y : Type χ }
+                (p q : Term Y)(σ : Y → X)(𝑨 : Algebra α 𝑆)
+ →              𝑨 ⟦ p ⟧ ≈ 𝑨 ⟦ q ⟧ → 𝑨 ⟦ p [ σ ] ⟧ ≈ 𝑨 ⟦ q [ σ ] ⟧
+
+subst-theorem wd p q σ 𝑨 Apq η = (𝑨 ⟦ p [ σ ] ⟧) η ≡⟨ subst-lemma wd p σ 𝑨 η ⟩
+                                 (𝑨 ⟦ p ⟧) (η ∘ σ) ≡⟨ Apq (η ∘ σ) ⟩
+                                 (𝑨 ⟦ q ⟧) (η ∘ σ) ≡⟨ sym (subst-lemma wd q σ 𝑨 η) ⟩
+                                 (𝑨 ⟦ q [ σ ] ⟧) η ∎
+
+\end{code}
+
+
+
 
 
 --------------------------------------

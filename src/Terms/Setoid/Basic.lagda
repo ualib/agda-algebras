@@ -5,7 +5,7 @@ date : 2021-07-17
 author: [agda-algebras development team][]
 ---
 
-### Setoids of Terms
+### <a id="setoids-of-terms">Setoids of Terms</a>
 
 \begin{code}
 
@@ -30,8 +30,8 @@ open import Relation.Binary.PropositionalEquality
 
 -- imports from agda-algebras --------------------------------------------------------------
 open import Overture.Preliminaries        using ( ∣_∣ ; ∥_∥ )
-open import Algebras.Setoid.Basic {𝑆 = 𝑆} using ( SetoidAlgebra )
-open import Terms.Basic           {𝑆 = 𝑆} using ( Term )
+open import Algebras.Setoid.Basic {𝑆 = 𝑆} using ( SetoidAlgebra ; ov )
+open import Terms.Basic           {𝑆 = 𝑆} using ( Term ) public
 open Term
 
 
@@ -42,7 +42,7 @@ private variable
 \end{code}
 
 
-#### Equality of Terms
+#### <a id="equality-of-terms">Equality of Terms</a>
 
 We take a different approach here, using Setoids instead of quotient types.
 That is, we will define the collection of terms in a signature as a setoid
@@ -55,7 +55,7 @@ as a SetoidAlgebra whose carrier is the setoid of terms.
 module _ {X : Type χ } where
 
  -- Equality of terms as an inductive datatype
- data _≐_ : Term X → Term X → Type (𝓞 ⊔ 𝓥 ⊔ lsuc χ) where
+ data _≐_ : Term X → Term X → Type (ov χ) where
   refl : {x y : X} → x ≡ y → (ℊ x) ≐ (ℊ y)
   genl : ∀ {f : ∣ 𝑆 ∣}{s t : ∥ 𝑆 ∥ f → Term X} → (∀ i → (s i) ≐ (t i)) → (node f s) ≐ (node f t)
 
@@ -76,7 +76,7 @@ module _ {X : Type χ } where
  ≐-isEquiv : IsEquivalence _≐_
  ≐-isEquiv = record { refl = ≐-isRefl ; sym = ≐-isSym ; trans = ≐-isTrans }
 
-TermSetoid : (X : Type χ) → Setoid _ _
+TermSetoid : (X : Type χ) → Setoid (ov χ) (ov χ)
 TermSetoid X = record { Carrier = Term X ; _≈_ = _≐_ ; isEquivalence = ≐-isEquiv }
 
 module _ where
@@ -85,17 +85,17 @@ module _ where
  open Func renaming ( f to _<$>_ )
 
  -- The Term SetoidAlgebra
- TermAlgebra : (X : Type χ) → SetoidAlgebra _ _
- Domain (TermAlgebra X) = TermSetoid X
- Interp (TermAlgebra X) <$> (f , ts) = node f ts
- cong (Interp (TermAlgebra X)) {f , ss} {.f , ts} (refl , ss≈ts) = genl ss≈ts
+ 𝑻 : (X : Type χ) → SetoidAlgebra (ov χ) (ov χ)
+ Domain (𝑻 X) = TermSetoid X
+ Interp (𝑻 X) <$> (f , ts) = node f ts
+ cong (Interp (𝑻 X)) {f , ss} {.f , ts} (refl , ss≈ts) = genl ss≈ts
 
 \end{code}
 
 
 
 
-### Interpretation of Terms in Setoid Algebras
+#### <a id="interpretation-of-terms-in-setoid-algebras">Interpretation of Terms in Setoid Algebras</a>
 
 The approach to terms and their interpretation in this module was inspired by
 Andreas Abel's proof of Birkhoff's completeness theorem.
@@ -116,7 +116,7 @@ Ops X = ((∣ 𝑆 ∣ ⊎ X) , ar)
 
 
 -- Parallel substitutions. A substitution from Δ to Γ holds a term in Γ for each variable in Δ.
-Sub : (Γ Δ : Type χ) → Type _
+Sub : (Γ Δ : Type χ) → Type (ov χ)
 Sub Γ Δ = (x : Δ) → Term Γ
 
 
@@ -196,10 +196,6 @@ module Environment (M : SetoidAlgebra α ℓ) where
  substitution (node f ts) σ ρ = cong Interp (refl , λ i → substitution (ts i) σ ρ)
 
 \end{code}
-
-
-
-
 
 --------------------------------
 

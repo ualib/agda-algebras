@@ -5,7 +5,7 @@ date : 2021-07-03
 author: [agda-algebras development team][]
 ---
 
-### Homomorphisms of Algebras over Setoids
+### <a id="homomorphisms-of-algebras-over-setoids">Homomorphisms of Algebras over Setoids</a>
 
 This is the [Homomorphisms.Setoid][] module of the [Agda Universal Algebra Library][].
 
@@ -45,7 +45,7 @@ private variable
 
 \end{code}
 
-### Homomorphisms for setoid algebras
+#### <a id="basic-definitions">Basic Definitions</a>
 
 \begin{code}
 
@@ -60,6 +60,12 @@ module _ (𝑨 : SetoidAlgebra α ρᵃ) (𝑩 : SetoidAlgebra β ρᵇ) where
  -- The type of homomorphisms from `𝑨` to `𝑩`.
  hom : Type _
  hom = Σ (𝕌[ 𝑨 ] → 𝕌[ 𝑩 ]) is-homomorphism
+
+\end{code}
+
+#### <a id="composition-of-homs">Composition of homs</a>
+
+\begin{code}
 
 open ≡-Reasoning
 
@@ -81,6 +87,12 @@ module _ (𝑨 : SetoidAlgebra α ρᵃ)  -- (explicit 𝑨)
  ∘-hom : hom 𝑨 𝑩  →  hom 𝑩 𝑪  →  hom 𝑨 𝑪
  ∘-hom (g , ghom) (h , hhom) = h ∘ g , ∘-is-hom {g}{h} ghom hhom 
 
+
+\end{code}
+
+#### <a id="lifting-and-lowering">Lifting and lowering</a>
+
+\begin{code}
 
 
 -- the identity homs
@@ -113,8 +125,12 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ} {𝑩 : SetoidAlgebra β ρᵇ} where
   Goal : is-homomorphism lA lB (lift ∘ (f ∘ lower))
   Goal = ∘-is-hom lA 𝑩 lB {f ∘ lower}{lift} lABh λ _ _ → refl
 
+\end{code}
 
--- Monomorphisms and epimorphisms
+#### <a id="monomorphisms-and-epimorphisms">Monomorphisms and epimorphisms</a>
+
+\begin{code}
+
 module _ (𝑨 : SetoidAlgebra α ρᵃ) (𝑩 : SetoidAlgebra β ρᵇ) where
 
  private
@@ -149,9 +165,7 @@ record epi (𝑨 : SetoidAlgebra α ρᵃ)
 
 \end{code}
 
-
-
-#### Kernels of homomorphisms for SetoidAlgebras
+#### <a id="kernels-of-homomorphisms">Kernels of homomorphisms</a>
 
 \begin{code}
 
