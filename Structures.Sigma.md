@@ -28,7 +28,7 @@ This is the [Structures.Sigma][] module of the [Agda Universal Algebra Library][
 
 <br>
 
-[← Structures.Substructures](Structures.Substructures.html)
+[← Structures.EquationalLogic](Structures.EquationalLogic.html)
 <span style="float:right;">[Structures.Sigma.Basic →](Structures.Sigma.Basic.html)</span>
 
 {% include UALib.Links.md %}

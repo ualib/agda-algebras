@@ -24,8 +24,8 @@ This is the [Structures][] module of the [Agda Universal Algebra Library][].
 <a id="571" class="Keyword">open</a> <a id="576" class="Keyword">import</a> <a id="583" href="Structures.Homs.html" class="Module">Structures.Homs</a>
 <a id="599" class="Keyword">open</a> <a id="604" class="Keyword">import</a> <a id="611" href="Structures.Isos.html" class="Module">Structures.Isos</a>
 <a id="627" class="Keyword">open</a> <a id="632" class="Keyword">import</a> <a id="639" href="Structures.Terms.html" class="Module">Structures.Terms</a>
-<a id="656" class="Keyword">open</a> <a id="661" class="Keyword">import</a> <a id="668" href="Structures.EquationalLogic.html" class="Module">Structures.EquationalLogic</a>
-<a id="695" class="Keyword">open</a> <a id="700" class="Keyword">import</a> <a id="707" href="Structures.Substructures.html" class="Module">Structures.Substructures</a>
+<a id="656" class="Keyword">open</a> <a id="661" class="Keyword">import</a> <a id="668" href="Structures.Substructures.html" class="Module">Structures.Substructures</a>
+<a id="693" class="Keyword">open</a> <a id="698" class="Keyword">import</a> <a id="705" href="Structures.EquationalLogic.html" class="Module">Structures.EquationalLogic</a>
 <a id="732" class="Keyword">open</a> <a id="737" class="Keyword">import</a> <a id="744" href="Structures.Sigma.html" class="Module">Structures.Sigma</a>
 
 </pre>

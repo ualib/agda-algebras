@@ -7,27 +7,25 @@ author: [agda-algebras development team][]
 
 ## Foundations
 
-This is the [UniversalAlgebra.Foundations][] module of the [Agda Universal Algebra Library][].
+This is the [Foundations][] module of the [Agda Universal Algebra Library][].
 
 
 <pre class="Agda">
-<a id="283" class="Symbol">{-#</a> <a id="287" class="Keyword">OPTIONS</a> <a id="295" class="Pragma">--without-K</a> <a id="307" class="Pragma">--exact-split</a> <a id="321" class="Pragma">--safe</a> <a id="328" class="Symbol">#-}</a>
+<a id="266" class="Symbol">{-#</a> <a id="270" class="Keyword">OPTIONS</a> <a id="278" class="Pragma">--without-K</a> <a id="290" class="Pragma">--exact-split</a> <a id="304" class="Pragma">--safe</a> <a id="311" class="Symbol">#-}</a>
 </pre>
 
 <pre class="Agda">
-<a id="357" class="Keyword">module</a> <a id="364" href="Foundations.html" class="Module">Foundations</a> <a id="376" class="Keyword">where</a>
+<a id="340" class="Keyword">module</a> <a id="347" href="Foundations.html" class="Module">Foundations</a> <a id="359" class="Keyword">where</a>
 
-<a id="383" class="Keyword">open</a> <a id="388" class="Keyword">import</a> <a id="395" href="Foundations.Welldefined.html" class="Module">Foundations.Welldefined</a> <a id="419" class="Keyword">public</a>
-<a id="426" class="Keyword">open</a> <a id="431" class="Keyword">import</a> <a id="438" href="Foundations.Truncation.html" class="Module">Foundations.Truncation</a> <a id="461" class="Keyword">public</a>
-<a id="468" class="Keyword">open</a> <a id="473" class="Keyword">import</a> <a id="480" href="Foundations.Extensionality.html" class="Module">Foundations.Extensionality</a> <a id="507" class="Keyword">public</a>
+<a id="366" class="Keyword">open</a> <a id="371" class="Keyword">import</a> <a id="378" href="Foundations.Welldefined.html" class="Module">Foundations.Welldefined</a> <a id="402" class="Keyword">public</a>
+<a id="409" class="Keyword">open</a> <a id="414" class="Keyword">import</a> <a id="421" href="Foundations.Truncation.html" class="Module">Foundations.Truncation</a> <a id="444" class="Keyword">public</a>
+<a id="451" class="Keyword">open</a> <a id="456" class="Keyword">import</a> <a id="463" href="Foundations.Extensionality.html" class="Module">Foundations.Extensionality</a> <a id="490" class="Keyword">public</a>
 
 </pre>
 
 
 -------------------------------------
 
-
-<br>
 <br>
 
 [← Relations.Quotients](Relations.Quotients.html)

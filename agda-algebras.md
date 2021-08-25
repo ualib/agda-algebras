@@ -58,20 +58,19 @@ We hope the library will be useful to mathematicians and computer scientists who
 
 <a id="3315" class="Keyword">module</a> <a id="3322" href="agda-algebras.html" class="Module">agda-algebras</a> <a id="3336" class="Keyword">where</a>
 
-<a id="3343" class="Comment">-- Imports from Agda (builtin/primitive) and the Agda Standard Library</a>
-<a id="3414" class="Keyword">open</a> <a id="3419" class="Keyword">import</a> <a id="3426" href="Preface.html" class="Module">Preface</a>
-<a id="3434" class="Keyword">open</a> <a id="3439" class="Keyword">import</a> <a id="3446" href="Overture.html" class="Module">Overture</a>
-<a id="3455" class="Keyword">open</a> <a id="3460" class="Keyword">import</a> <a id="3467" href="Relations.html" class="Module">Relations</a>
-<a id="3477" class="Keyword">open</a> <a id="3482" class="Keyword">import</a> <a id="3489" href="Foundations.html" class="Module">Foundations</a>
-<a id="3501" class="Keyword">open</a> <a id="3506" class="Keyword">import</a> <a id="3513" href="GaloisConnections.html" class="Module">GaloisConnections</a>
-<a id="3531" class="Keyword">open</a> <a id="3536" class="Keyword">import</a> <a id="3543" href="ClosureSystems.html" class="Module">ClosureSystems</a>
-<a id="3558" class="Keyword">open</a> <a id="3563" class="Keyword">import</a> <a id="3570" href="Algebras.html" class="Module">Algebras</a>
-<a id="3579" class="Keyword">open</a> <a id="3584" class="Keyword">import</a> <a id="3591" href="Homomorphisms.html" class="Module">Homomorphisms</a>
-<a id="3605" class="Keyword">open</a> <a id="3610" class="Keyword">import</a> <a id="3617" href="Terms.html" class="Module">Terms</a>
-<a id="3623" class="Keyword">open</a> <a id="3628" class="Keyword">import</a> <a id="3635" href="Subalgebras.html" class="Module">Subalgebras</a>
-<a id="3647" class="Keyword">open</a> <a id="3652" class="Keyword">import</a> <a id="3659" href="Varieties.html" class="Module">Varieties</a>
-<a id="3669" class="Keyword">open</a> <a id="3674" class="Keyword">import</a> <a id="3681" href="Structures.html" class="Module">Structures</a>
-<a id="3692" class="Keyword">open</a> <a id="3697" class="Keyword">import</a> <a id="3704" href="Complexity.html" class="Module">Complexity</a>
+<a id="3343" class="Keyword">open</a> <a id="3348" class="Keyword">import</a> <a id="3355" href="Preface.html" class="Module">Preface</a>
+<a id="3363" class="Keyword">open</a> <a id="3368" class="Keyword">import</a> <a id="3375" href="Overture.html" class="Module">Overture</a>
+<a id="3384" class="Keyword">open</a> <a id="3389" class="Keyword">import</a> <a id="3396" href="Relations.html" class="Module">Relations</a>
+<a id="3406" class="Keyword">open</a> <a id="3411" class="Keyword">import</a> <a id="3418" href="Foundations.html" class="Module">Foundations</a>
+<a id="3430" class="Keyword">open</a> <a id="3435" class="Keyword">import</a> <a id="3442" href="GaloisConnections.html" class="Module">GaloisConnections</a>
+<a id="3460" class="Keyword">open</a> <a id="3465" class="Keyword">import</a> <a id="3472" href="ClosureSystems.html" class="Module">ClosureSystems</a>
+<a id="3487" class="Keyword">open</a> <a id="3492" class="Keyword">import</a> <a id="3499" href="Algebras.html" class="Module">Algebras</a>
+<a id="3508" class="Keyword">open</a> <a id="3513" class="Keyword">import</a> <a id="3520" href="Homomorphisms.html" class="Module">Homomorphisms</a>
+<a id="3534" class="Keyword">open</a> <a id="3539" class="Keyword">import</a> <a id="3546" href="Terms.html" class="Module">Terms</a>
+<a id="3552" class="Keyword">open</a> <a id="3557" class="Keyword">import</a> <a id="3564" href="Subalgebras.html" class="Module">Subalgebras</a>
+<a id="3576" class="Keyword">open</a> <a id="3581" class="Keyword">import</a> <a id="3588" href="Varieties.html" class="Module">Varieties</a>
+<a id="3598" class="Keyword">open</a> <a id="3603" class="Keyword">import</a> <a id="3610" href="Structures.html" class="Module">Structures</a>
+<a id="3621" class="Keyword">open</a> <a id="3626" class="Keyword">import</a> <a id="3633" href="Complexity.html" class="Module">Complexity</a>
 
 </pre>
 

@@ -29,7 +29,6 @@ Finally, in [Relations.Quotients][] we define quotient types.
 -------------------------------------
 
 <br>
-<br>
 
 [← Overture.Transformers](Overture.Transformers.html)
 <span style="float:right;">[Relations.Discrete →](Relations.Discrete.html)</span>

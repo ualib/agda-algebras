@@ -56,7 +56,7 @@ Thus interpretation of a term is defined by structural induction.
 <br>
 
 [← Structures.Isos](Structures.Isos.html)
-<span style="float:right;">[Structures.EquationalLogic →](Structures.EquationalLogic.html)</span>
+<span style="float:right;">[Structures.Substructures →](Structures.Substructures.html)</span>
 
 {% include UALib.Links.md %}
 

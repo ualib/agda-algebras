@@ -24,7 +24,6 @@ This is the [GaloisConnections][] module of the [Agda Universal Algebra Library]
 -------------------------------------
 
 <br>
-<br>
 
 [← Foundations.Extensionality](Foundations.Extensionality.html)
 <span style="float:right;">[GaloisConnections.Basic →](GaloisConnections.Basic.html)</span>

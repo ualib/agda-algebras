@@ -114,6 +114,7 @@ Readers and users are encouraged to suggest improvements to the Agda [agda-algeb
 
 ------------------------------------------------
 
+[← agda-algebras](agda-algebras.html)
 <span style="float:right;">[Overture →](Overture.html)</span>
 
 {% include UALib.Links.md %}
