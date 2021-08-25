@@ -20,10 +20,7 @@ This is the [ClosureSystems][] module of the [Agda Universal Algebra Library][].
 
 </pre>
 
-
 --------------------------------
-
-<br>
 
 [← GaloisConnections.Properties](GaloisConnections.Properties.html)
 <span style="float:right;">[ClosureSystems.Basic →](ClosureSystems.Basic.html)</span>

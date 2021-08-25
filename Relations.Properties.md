@@ -94,11 +94,8 @@ This is the [Relations.Properties][] module of the [Agda Universal Algebra Libra
 
 -----------------------------------------------
 
-<br>
-
 [← Relations.Continuous](Relations.Continuous.html)
 <span style="float:right;">[Relations.Quotients →](Relations.Quotients.html)</span>
-
 
 {% include UALib.Links.md %}
 

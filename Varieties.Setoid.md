@@ -23,8 +23,6 @@ This is the [Varieties.Setoid][] module of the [Agda Universal Algebra Library][
 
 --------------------------------
 
-<br>
-
 [← Varieties.FreeAlgebras](Varieties.FreeAlgebras.html)
 <span style="float:right;">[Varieties.Setoid.EquationalLogic →](Varieties.Setoid.EquationalLogic.html)</span>
 

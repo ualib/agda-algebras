@@ -24,12 +24,9 @@ This is the [Subalgebras][] module of the [Agda Universal Algebra Library][].
 
 --------------------------------------
 
-<br>
-
 [← Terms.Setoid.Properties](Terms.Setoid.Properties.html)
 <span style="float:right;">[Subalgebras.Subuniverses →](Subalgebras.Subuniverses.html)</span>
 
 {% include UALib.Links.md %}
-
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

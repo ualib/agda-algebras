@@ -19,10 +19,7 @@ author: [agda-algebras development team][]
 
 </pre>
 
-
 --------------------------------
-
-<br>
 
 [← Algebras.Congruences](Algebras.Congruences.html)
 <span style="float:right;">[Algebras.Setoid.Basic →](Algebras.Setoid.Basic.html)</span>

@@ -25,9 +25,6 @@ The source code for this module comprises the (literate) [Agda][] program that w
 
 --------------------------------------
 
-<br>
-<br>
-
 [← Preface](Preface.html)
 <span style="float:right;">[Overture.Preliminaries →](Overture.Preliminaries.html)</span>
 

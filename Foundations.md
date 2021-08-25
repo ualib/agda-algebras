@@ -26,12 +26,9 @@ This is the [Foundations][] module of the [Agda Universal Algebra Library][].
 
 -------------------------------------
 
-<br>
-
 [← Relations.Quotients](Relations.Quotients.html)
 <span style="float:right;">[Foundations.Welldefined →](Foundations.Welldefined.html)</span>
 
 {% include UALib.Links.md %}
-
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

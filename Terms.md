@@ -23,8 +23,6 @@ This is the [Terms][] module of the [Agda Universal Algebra Library][].
 
 -------------------------------------
 
-<br>
-
 [← Homomorphisms.Setoid.HomomorphicImages](Homomorphisms.Setoid.HomomorphicImages.html)
 <span style="float:right;">[Terms.Basic →](Terms.Basic.html)</span>
 

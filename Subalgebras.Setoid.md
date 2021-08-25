@@ -23,8 +23,6 @@ This is the [Subalgebras.Setoid][] module of the [Agda Universal Algebra Library
 
 ---------------------------------
 
-<br>
-
 [← Subalgebras.Properties](Subalgebras.Properties.html)
 <span style="float:right;">[Subalgebras.Setoid.Subuniverses →](Subalgebras.Setoid.Subuniverses.html)</span>
 
