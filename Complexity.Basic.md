@@ -40,7 +40,6 @@ At first we will simplify by assuming 𝑇ₙ is `Fin n`.
 --------------------------------
 
 <br>
-<br>
 
 [↑ Complexity](Complexity.html)
 <span style="float:right;">[Complexity.CSP →](Complexity.CSP.html)</span>

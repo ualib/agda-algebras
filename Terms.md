@@ -5,25 +5,24 @@ date : 2021-01-14
 author: [agda-algebras development team][]
 ---
 
-## Types for Terms
+## <a id="types-for-terms">Types for Terms</a>
 
 This is the [Terms][] module of the [Agda Universal Algebra Library][].
 
 <pre class="Agda">
-<a id="251" class="Symbol">{-#</a> <a id="255" class="Keyword">OPTIONS</a> <a id="263" class="Pragma">--without-K</a> <a id="275" class="Pragma">--exact-split</a> <a id="289" class="Pragma">--safe</a> <a id="296" class="Symbol">#-}</a>
+<a id="279" class="Symbol">{-#</a> <a id="283" class="Keyword">OPTIONS</a> <a id="291" class="Pragma">--without-K</a> <a id="303" class="Pragma">--exact-split</a> <a id="317" class="Pragma">--safe</a> <a id="324" class="Symbol">#-}</a>
 
-<a id="301" class="Keyword">module</a> <a id="308" href="Terms.html" class="Module">Terms</a> <a id="314" class="Keyword">where</a>
+<a id="329" class="Keyword">module</a> <a id="336" href="Terms.html" class="Module">Terms</a> <a id="342" class="Keyword">where</a>
 
-<a id="321" class="Keyword">open</a> <a id="326" class="Keyword">import</a> <a id="333" href="Terms.Basic.html" class="Module">Terms.Basic</a>
-<a id="345" class="Keyword">open</a> <a id="350" class="Keyword">import</a> <a id="357" href="Terms.Properties.html" class="Module">Terms.Properties</a>
-<a id="374" class="Keyword">open</a> <a id="379" class="Keyword">import</a> <a id="386" href="Terms.Operations.html" class="Module">Terms.Operations</a>
-<a id="403" class="Keyword">open</a> <a id="408" class="Keyword">import</a> <a id="415" href="Terms.Setoid.html" class="Module">Terms.Setoid</a>
+<a id="349" class="Keyword">open</a> <a id="354" class="Keyword">import</a> <a id="361" href="Terms.Basic.html" class="Module">Terms.Basic</a>
+<a id="373" class="Keyword">open</a> <a id="378" class="Keyword">import</a> <a id="385" href="Terms.Properties.html" class="Module">Terms.Properties</a>
+<a id="402" class="Keyword">open</a> <a id="407" class="Keyword">import</a> <a id="414" href="Terms.Operations.html" class="Module">Terms.Operations</a>
+<a id="431" class="Keyword">open</a> <a id="436" class="Keyword">import</a> <a id="443" href="Terms.Setoid.html" class="Module">Terms.Setoid</a>
 
 </pre>
 
 -------------------------------------
 
-<br>
 <br>
 
 [← Homomorphisms.Setoid.HomomorphicImages](Homomorphisms.Setoid.HomomorphicImages.html)

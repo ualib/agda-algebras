@@ -23,7 +23,6 @@ This is the [Complexity][] module of the [Agda Universal Algebra Library][].
 --------------------------------
 
 <br>
-<br>
 
 [← Structures.Sigma.Isos](Structures.Sigma.Isos.html)
 <span style="float:right;">[Complexity.Basic →](Complexity.Basic.html)</span>

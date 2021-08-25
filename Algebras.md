@@ -5,7 +5,7 @@ date : 2021-01-12
 author: [agda-algebras development team][]
 ---
 
-## Algebra Types
+## <a id="algebra-types">Algebra Types</a>
 
 This is the [Algebras][] module of the [Agda Universal Algebra Library][]. Here we use type theory and [Agda][] to codify the most basic objects of universal algebra, such as types in Agda *signatures* ([Algebras.Signatures][]), *algebras* ([Algebras.Algebras][]), *product algebras* ([Algebras.Products][]), *congruence relations* and *quotient algebras* ([Algebras.Congruences][]).
 
@@ -15,14 +15,14 @@ A popular way to represent algebraic structures in type theory is with record ty
 
 <pre class="Agda">
 
-<a id="1315" class="Symbol">{-#</a> <a id="1319" class="Keyword">OPTIONS</a> <a id="1327" class="Pragma">--without-K</a> <a id="1339" class="Pragma">--exact-split</a> <a id="1353" class="Pragma">--safe</a> <a id="1360" class="Symbol">#-}</a>
+<a id="1341" class="Symbol">{-#</a> <a id="1345" class="Keyword">OPTIONS</a> <a id="1353" class="Pragma">--without-K</a> <a id="1365" class="Pragma">--exact-split</a> <a id="1379" class="Pragma">--safe</a> <a id="1386" class="Symbol">#-}</a>
 
-<a id="1365" class="Keyword">module</a> <a id="1372" href="Algebras.html" class="Module">Algebras</a> <a id="1381" class="Keyword">where</a>
+<a id="1391" class="Keyword">module</a> <a id="1398" href="Algebras.html" class="Module">Algebras</a> <a id="1407" class="Keyword">where</a>
 
-<a id="1388" class="Keyword">open</a> <a id="1393" class="Keyword">import</a> <a id="1400" href="Algebras.Basic.html" class="Module">Algebras.Basic</a>
-<a id="1415" class="Keyword">open</a> <a id="1420" class="Keyword">import</a> <a id="1427" href="Algebras.Products.html" class="Module">Algebras.Products</a>
-<a id="1445" class="Keyword">open</a> <a id="1450" class="Keyword">import</a> <a id="1457" href="Algebras.Congruences.html" class="Module">Algebras.Congruences</a>
-<a id="1478" class="Keyword">open</a> <a id="1483" class="Keyword">import</a> <a id="1490" href="Algebras.Setoid.html" class="Module">Algebras.Setoid</a>
+<a id="1414" class="Keyword">open</a> <a id="1419" class="Keyword">import</a> <a id="1426" href="Algebras.Basic.html" class="Module">Algebras.Basic</a>
+<a id="1441" class="Keyword">open</a> <a id="1446" class="Keyword">import</a> <a id="1453" href="Algebras.Products.html" class="Module">Algebras.Products</a>
+<a id="1471" class="Keyword">open</a> <a id="1476" class="Keyword">import</a> <a id="1483" href="Algebras.Congruences.html" class="Module">Algebras.Congruences</a>
+<a id="1504" class="Keyword">open</a> <a id="1509" class="Keyword">import</a> <a id="1516" href="Algebras.Setoid.html" class="Module">Algebras.Setoid</a>
 
 </pre>
 

@@ -215,7 +215,7 @@ follows.
 <br>
 <br>
 
-[← Relations.BinPred](Relations.BinPred.html)
+[↑ Relations](Relations.html)
 <span style="float:right;">[Relations.Continuous →](Relations.Continuous.html)</span>
 
 

@@ -26,7 +26,6 @@ This chapter presents the [Homomorphisms][] module of the [Agda Universal Algebr
 --------------------------------------
 
 <br>
-<br>
 
 [← Algebras.Setoid.Congruences](Algebras.Setoid.Congruences.html)
 <span style="float:right;">[Homomorphisms.Basic →](Homomorphisms.Basic.html)</span>

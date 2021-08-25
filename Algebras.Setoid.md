@@ -5,15 +5,17 @@ date : 2021-07-26
 author: [agda-algebras development team][]
 ---
 
+### <a id="setoid-representation-of-algebras">Setoid Representation of Algebras</a>
+
 <pre class="Agda">
 
-<a id="165" class="Symbol">{-#</a> <a id="169" class="Keyword">OPTIONS</a> <a id="177" class="Pragma">--without-K</a> <a id="189" class="Pragma">--exact-split</a> <a id="203" class="Pragma">--safe</a> <a id="210" class="Symbol">#-}</a>
+<a id="250" class="Symbol">{-#</a> <a id="254" class="Keyword">OPTIONS</a> <a id="262" class="Pragma">--without-K</a> <a id="274" class="Pragma">--exact-split</a> <a id="288" class="Pragma">--safe</a> <a id="295" class="Symbol">#-}</a>
 
-<a id="215" class="Keyword">module</a> <a id="222" href="Algebras.Setoid.html" class="Module">Algebras.Setoid</a> <a id="238" class="Keyword">where</a>
+<a id="300" class="Keyword">module</a> <a id="307" href="Algebras.Setoid.html" class="Module">Algebras.Setoid</a> <a id="323" class="Keyword">where</a>
 
-<a id="245" class="Keyword">open</a> <a id="250" class="Keyword">import</a> <a id="257" href="Algebras.Setoid.Basic.html" class="Module">Algebras.Setoid.Basic</a>
-<a id="279" class="Keyword">open</a> <a id="284" class="Keyword">import</a> <a id="291" href="Algebras.Setoid.Products.html" class="Module">Algebras.Setoid.Products</a>
-<a id="316" class="Keyword">open</a> <a id="321" class="Keyword">import</a> <a id="328" href="Algebras.Setoid.Congruences.html" class="Module">Algebras.Setoid.Congruences</a>
+<a id="330" class="Keyword">open</a> <a id="335" class="Keyword">import</a> <a id="342" href="Algebras.Setoid.Basic.html" class="Module">Algebras.Setoid.Basic</a>
+<a id="364" class="Keyword">open</a> <a id="369" class="Keyword">import</a> <a id="376" href="Algebras.Setoid.Products.html" class="Module">Algebras.Setoid.Products</a>
+<a id="401" class="Keyword">open</a> <a id="406" class="Keyword">import</a> <a id="413" href="Algebras.Setoid.Congruences.html" class="Module">Algebras.Setoid.Congruences</a>
 
 </pre>
 
@@ -21,9 +23,8 @@ author: [agda-algebras development team][]
 --------------------------------
 
 <br>
-<br>
 
-[← Algebras.Products](Algebras.Products.html)
+[← Algebras.Congruences](Algebras.Congruences.html)
 <span style="float:right;">[Algebras.Setoid.Basic →](Algebras.Setoid.Basic.html)</span>
 
 {% include UALib.Links.md %}

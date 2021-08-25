@@ -5,23 +5,25 @@ date : 2021-07-26
 author: [agda-algebras development team][]
 ---
 
+### <a id="types-for-homomorphism-of-setoid-algebras">Types for Homomorphism of Setoid Algebras</a>
+
+
 <pre class="Agda">
 
-<a id="174" class="Symbol">{-#</a> <a id="178" class="Keyword">OPTIONS</a> <a id="186" class="Pragma">--without-K</a> <a id="198" class="Pragma">--exact-split</a> <a id="212" class="Pragma">--safe</a> <a id="219" class="Symbol">#-}</a>
+<a id="276" class="Symbol">{-#</a> <a id="280" class="Keyword">OPTIONS</a> <a id="288" class="Pragma">--without-K</a> <a id="300" class="Pragma">--exact-split</a> <a id="314" class="Pragma">--safe</a> <a id="321" class="Symbol">#-}</a>
 
-<a id="224" class="Keyword">module</a> <a id="231" href="Homomorphisms.Setoid.html" class="Module">Homomorphisms.Setoid</a> <a id="252" class="Keyword">where</a>
+<a id="326" class="Keyword">module</a> <a id="333" href="Homomorphisms.Setoid.html" class="Module">Homomorphisms.Setoid</a> <a id="354" class="Keyword">where</a>
 
-<a id="259" class="Keyword">open</a> <a id="264" class="Keyword">import</a> <a id="271" href="Homomorphisms.Setoid.Basic.html" class="Module">Homomorphisms.Setoid.Basic</a>
-<a id="298" class="Keyword">open</a> <a id="303" class="Keyword">import</a> <a id="310" href="Homomorphisms.Setoid.Noether.html" class="Module">Homomorphisms.Setoid.Noether</a>
-<a id="339" class="Keyword">open</a> <a id="344" class="Keyword">import</a> <a id="351" href="Homomorphisms.Setoid.Isomorphisms.html" class="Module">Homomorphisms.Setoid.Isomorphisms</a>
-<a id="385" class="Keyword">open</a> <a id="390" class="Keyword">import</a> <a id="397" href="Homomorphisms.Setoid.HomomorphicImages.html" class="Module">Homomorphisms.Setoid.HomomorphicImages</a>
+<a id="361" class="Keyword">open</a> <a id="366" class="Keyword">import</a> <a id="373" href="Homomorphisms.Setoid.Basic.html" class="Module">Homomorphisms.Setoid.Basic</a>
+<a id="400" class="Keyword">open</a> <a id="405" class="Keyword">import</a> <a id="412" href="Homomorphisms.Setoid.Noether.html" class="Module">Homomorphisms.Setoid.Noether</a>
+<a id="441" class="Keyword">open</a> <a id="446" class="Keyword">import</a> <a id="453" href="Homomorphisms.Setoid.Isomorphisms.html" class="Module">Homomorphisms.Setoid.Isomorphisms</a>
+<a id="487" class="Keyword">open</a> <a id="492" class="Keyword">import</a> <a id="499" href="Homomorphisms.Setoid.HomomorphicImages.html" class="Module">Homomorphisms.Setoid.HomomorphicImages</a>
 
 </pre>
 
 
 --------------------------------
 
-<br>
 <br>
 
 [← Homomorphisms.HomomorphicImages](Homomorphisms.HomomorphicImages.html)

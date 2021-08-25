@@ -5,7 +5,7 @@ date : 2021-01-12
 author: [agda-algebras development team][]
 ---
 
-## <a id="relation-and-quotient-types>Telation and Quotient Types</a>
+## <a id="types-for-relations-and-quotients">Types for Relations and Quotients</a>
 
 This is the [Relations][] module of the [Agda Universal Algebra Library][].
 
@@ -14,13 +14,14 @@ Finally, in [Relations.Quotients][] we define quotient types.
 
 <pre class="Agda">
 
-<a id="823" class="Symbol">{-#</a> <a id="827" class="Keyword">OPTIONS</a> <a id="835" class="Pragma">--without-K</a> <a id="847" class="Pragma">--exact-split</a> <a id="861" class="Pragma">--safe</a> <a id="868" class="Symbol">#-}</a>
+<a id="836" class="Symbol">{-#</a> <a id="840" class="Keyword">OPTIONS</a> <a id="848" class="Pragma">--without-K</a> <a id="860" class="Pragma">--exact-split</a> <a id="874" class="Pragma">--safe</a> <a id="881" class="Symbol">#-}</a>
 
-<a id="873" class="Keyword">module</a> <a id="880" href="Relations.html" class="Module">Relations</a> <a id="890" class="Keyword">where</a>
+<a id="886" class="Keyword">module</a> <a id="893" href="Relations.html" class="Module">Relations</a> <a id="903" class="Keyword">where</a>
 
-<a id="897" class="Keyword">open</a> <a id="902" class="Keyword">import</a> <a id="909" href="Relations.Discrete.html" class="Module">Relations.Discrete</a> <a id="928" class="Keyword">public</a>
-<a id="935" class="Keyword">open</a> <a id="940" class="Keyword">import</a> <a id="947" href="Relations.Continuous.html" class="Module">Relations.Continuous</a> <a id="968" class="Keyword">public</a>
-<a id="975" class="Keyword">open</a> <a id="980" class="Keyword">import</a> <a id="987" href="Relations.Quotients.html" class="Module">Relations.Quotients</a> <a id="1007" class="Keyword">public</a>
+<a id="910" class="Keyword">open</a> <a id="915" class="Keyword">import</a> <a id="922" href="Relations.Discrete.html" class="Module">Relations.Discrete</a> <a id="941" class="Keyword">public</a>
+<a id="948" class="Keyword">open</a> <a id="953" class="Keyword">import</a> <a id="960" href="Relations.Continuous.html" class="Module">Relations.Continuous</a> <a id="981" class="Keyword">public</a>
+<a id="988" class="Keyword">open</a> <a id="993" class="Keyword">import</a> <a id="1000" href="Relations.Properties.html" class="Module">Relations.Properties</a> <a id="1021" class="Keyword">public</a>
+<a id="1028" class="Keyword">open</a> <a id="1033" class="Keyword">import</a> <a id="1040" href="Relations.Quotients.html" class="Module">Relations.Quotients</a> <a id="1060" class="Keyword">public</a>
 
 </pre>
 
