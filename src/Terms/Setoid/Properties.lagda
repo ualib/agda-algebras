@@ -82,26 +82,9 @@ lift-hom 𝑨 h = free-lift 𝑨 h , λ f a → cong (f ̂ 𝑨) refl
 
 \end{code}
 
-Finally, we prove that the homomorphism is unique.  This requires `funext 𝓥 α` (i.e., *function extensionality* at universe levels `𝓥` and `α`) which we postulate by making it part of the premise in the following function type definition.
+Finally, we prove that the homomorphism is unique.  Recall, when we proved this in the module [Terms.Properties][], we needed function extensionality. Here, by using setoid equality, we can omit the `swelldef` hypothesis used to prove `free-unique` in the [Terms.Properties][] module.
 
 \begin{code}
-
-open ≡-Reasoning
-
-free-unique : swelldef 𝓥 α → (𝑨 : SetoidAlgebra α ρ)(g h : hom (𝑻 X) 𝑨)
- →            (∀ x → ∣ g ∣ (ℊ x) ≡ ∣ h ∣ (ℊ x))
-              ----------------------------------------
- →            ∀ (t : Term X) →  ∣ g ∣ t ≡ ∣ h ∣ t
-
-free-unique _ _ _ _ p (ℊ x) = p x
-
-free-unique wd 𝑨 g h p (node f t) =
-
- ∣ g ∣ (node f t)    ≡⟨ ∥ g ∥ f t ⟩
- (f ̂ 𝑨)(∣ g ∣ ∘ t)  ≡⟨ wd (f ̂ 𝑨)(∣ g ∣ ∘ t)(∣ h ∣ ∘ t)(λ i → free-unique wd 𝑨 g h p (t i)) ⟩
- (f ̂ 𝑨)(∣ h ∣ ∘ t)  ≡⟨ (∥ h ∥ f t)⁻¹ ⟩
- ∣ h ∣ (node f t)    ∎
-
 
 module _ {𝑨 : SetoidAlgebra α ρ} where
  open SetoidAlgebra
@@ -112,21 +95,21 @@ module _ {𝑨 : SetoidAlgebra α ρ} where
   A = 𝕌[ 𝑨 ]
   _≋_ = (Domain 𝑨) ._≈_
 
- free-uniqueS : (g h : hom (𝑻 X) 𝑨)
-  →             (∀ x → ∣ g ∣ (ℊ x) ≋ ∣ h ∣ (ℊ x))
-                ----------------------------------------
-  →             ∀ (t : Term X) →  ∣ g ∣ t ≋ ∣ h ∣ t
+ free-unique : (g h : hom (𝑻 X) 𝑨)
+  →            (∀ x → ∣ g ∣ (ℊ x) ≋ ∣ h ∣ (ℊ x))
+               ------------------------------------------
+  →            ∀ (t : Term X) →  ∣ g ∣ t ≋ ∣ h ∣ t
 
- free-uniqueS _ _ p (ℊ x) = p x
+ free-unique _ _ p (ℊ x) = p x
 
- free-uniqueS g h p (node f t) =
+ free-unique g h p (node f t) =
   trans (Domain 𝑨) (trans (Domain 𝑨) geq lem3) (sym (Domain 𝑨) heq)
   where
   lem1 : ∀ x y → x ≡ y → x ≋ y
   lem1 x .x refl = Setoid.refl (Domain 𝑨)
 
   lem2 : ∀ i → (∣ g ∣ ∘ t) i ≋ (∣ h ∣ ∘ t) i
-  lem2 i = free-uniqueS g h p (t i)
+  lem2 i = free-unique g h p (t i)
 
   lem3 : (f ̂ 𝑨)(∣ g ∣ ∘ t) ≋ (f ̂ 𝑨)(∣ h ∣ ∘ t)
   lem3 = ≈cong (Interp 𝑨) (_≡_.refl , lem2)
@@ -165,7 +148,7 @@ The `lift-hom` and `lift-of-epi-is-epi` types will be called to action when such
 
 ------------------------------
 
-[← Terms.Setoid.Basic](Terms.Setoid.Basic.html)
+<span style="float:left;">[← Terms.Setoid.Basic](Terms.Setoid.Basic.html)</span>
 <span style="float:right;">[Subalgebras →](Subalgebras.html)</span>
 
 {% include UALib.Links.md %}
