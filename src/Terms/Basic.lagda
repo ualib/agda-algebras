@@ -77,7 +77,6 @@ In [Agda][] the term algebra can be defined as simply as one could hope.
 ------------------------------
 
 <br>
-<br>
 
 [↑ Terms](Terms.html)
 <span style="float:right;">[Terms.Properties →](Terms.Properties.html)</span>

@@ -121,7 +121,6 @@ S⊆SP {α = α}{β} 𝒦 {𝑩}(siso{𝑨} sA A≅B) = siso{α ⊔ β}{α ⊔ �
 \end{code}
 
 
-
 We need to formalize one more lemma before arriving the main objective of this section, which is the proof of the inclusion PS⊆SP.
 
 \begin{code}
@@ -238,6 +237,8 @@ SP⊆V (ssub{𝑨}{𝑩} spA B≤A) = vssubw (SP⊆V spA) B≤A
 SP⊆V (siso x x₁) = visow (SP⊆V x) x₁
 
 \end{code}
+
+
 #### <a id="V-is-closed-under-lift">V is closed under lift</a>
 
 As mentioned earlier, a technical hurdle that must be overcome when formalizing proofs in Agda is the proper handling of universe levels. In particular, in the proof of the Birkhoff's theorem, for example, we will need to know that if an algebra 𝑨 belongs to the variety V 𝒦, then so does the lift of 𝑨.  Let us get the tedious proof of this technical lemma out of the way.
@@ -292,6 +293,7 @@ module class-products-with-maps {α : Level}
  ℑ' = Σ[ 𝑨 ∈ (Algebra α 𝑆) ] ((𝑨 ∈ S{α}{α} 𝒦) × (X → ∣ 𝑨 ∣))
 
 \end{code}
+
 Notice that the second component of this dependent pair type is  `(𝑨 ∈ 𝒦) × (X → ∣ 𝑨 ∣)`. In previous versions of the [UALib][] this second component was simply `𝑨 ∈ 𝒦`, until we realized that adding the type `X → ∣ 𝑨 ∣` is quite useful. Later we will see exactly why, but for now suffice it to say that a map of type `X → ∣ 𝑨 ∣` may be viewed abstractly as an *ambient context*, or more concretely, as an assignment of *values* in `∣ 𝑨 ∣` to *variable symbols* in `X`.  When computing with or reasoning about products, while we don't want to rigidly impose a context in advance, want do want to lay our hands on whatever context is ultimately assumed.  Including the "context map" inside the index type `ℑ` of the product turns out to be a convenient way to achieve this flexibility.
 
 
@@ -434,8 +436,6 @@ Again, the obvious converse is barely worth the bits needed to formalize it.
  S-id2 p q Spq {𝑨} KA = ⊧-lower-invar wd p q (Spq (sbase KA))
 
 \end{code}
-
-
 
 
 
@@ -607,12 +607,12 @@ module _ (wd : SwellDef){X : Type 𝓧}{𝒦 : Pred (Algebra α 𝑆)(ov α)} wh
 
 ----------------------------
 
+<br>
+
 [← Varieties.Properties](Varieties.Properties.html)
-<span style="float:right;">[FreeAlgebras →](Varieties.FreeAlgebras.html)</span>
+<span style="float:right;">[Varieties.FreeAlgebras →](Varieties.FreeAlgebras.html)</span>
 
 {% include UALib.Links.md %}
-
---------------------------------------
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 

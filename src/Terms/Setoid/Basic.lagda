@@ -5,7 +5,7 @@ date : 2021-07-17
 author: [agda-algebras development team][]
 ---
 
-### <a id="setoids-of-terms">Setoids of Terms</a>
+### <a id="basic-definitions">Basic Definitions</a>
 
 \begin{code}
 
@@ -91,8 +91,6 @@ module _ where
  cong (Interp (𝑻 X)) {f , ss} {.f , ts} (refl , ss≈ts) = genl ss≈ts
 
 \end{code}
-
-
 
 
 #### <a id="interpretation-of-terms-in-setoid-algebras">Interpretation of Terms in Setoid Algebras</a>
@@ -200,10 +198,9 @@ module Environment (M : SetoidAlgebra α ℓ) where
 --------------------------------
 
 <br>
-<br>
 
 [↑ Terms.Setoid](Terms.Setoid.html)
-<span style="float:right;">[Subalgebras →](Subalgebras.html)</span>
+<span style="float:right;">[Terms.Setoid.Properties →](Terms.Setoid.Properties.html)</span>
 
 {% include UALib.Links.md %}
 

@@ -5,7 +5,7 @@ date : 2021-07-08
 author: [agda-algebras development team][]
 ---
 
-### <a id="closure-systems-and-operators">Closure Systems and Operators</a>
+### <a id="basic-definitions">Basic Definitions</a>
 
 #### <a id="closure-systems">Closure Systems</a>
 
@@ -33,18 +33,25 @@ Some examples of closure systems are the following:
 
 module ClosureSystems.Basic where
 
-open import Agda.Primitive           using ( _⊔_ ; lsuc )     renaming ( Set to Type )
+open import Agda.Primitive           using ( _⊔_ ; lsuc ) renaming ( Set to Type )
 import Algebra.Definitions
 open import Data.Product             using ( Σ-syntax )
-open import Level                    using ( Level ; Lift )   renaming ( zero to ℓ₀ )
+open import Level                    using ( Level ; Lift ) renaming ( zero to ℓ₀ )
 open import Relation.Binary.Bundles  using ( Poset )
-open import Relation.Binary.Core     using ( _Preserves_⟶_ )
+open import Relation.Binary.Core     using ( Rel ; _Preserves_⟶_ )
 open import Relation.Unary           using ( Pred ; _∈_ ; ⋂ )
 
-open import ClosureSystems.Definitions using ( Extensive )
 
+private variable
+ α ρ : Level
+ a : Type α
 
-module _ {χ ℓ ρ : Level}{X : Type χ} where
+Extensive : Rel a ρ → (a → a) → Type _
+Extensive _≤_ C = ∀{x} → x ≤ C x
+
+-- (We might propose a new stdlib equivalent to Extensive in, e.g., `Relation.Binary.Core`.)
+
+module _ {χ ρ ℓ : Level}{X : Type χ} where
 
  IntersectClosed : Pred (Pred X ℓ) ρ → Type _
  IntersectClosed C = ∀ {I : Type ℓ}{c : I → Pred X ℓ} → (∀ i → (c i) ∈ C) → ⋂ I c ∈ C
@@ -91,7 +98,7 @@ record ClOp {ℓ ℓ₁ ℓ₂ : Level}(𝑨 : Poset ℓ ℓ₁ ℓ₂) : Type  
 <br>
 <br>
 
-[← ClosureSystems.Definitions](ClosureSystems.Definitions.html)
+[↑ ClosureSystems.Definitions](ClosureSystems.html)
 <span style="float:right;">[ClosureSystems.Properties →](ClosureSystems.Properties.html)</span>
 
 {% include UALib.Links.md %}

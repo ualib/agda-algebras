@@ -5,17 +5,13 @@ date : 2021-01-14
 author: [agda-algebras development team][]
 ---
 
-## Varieties, Model Theory, and Equational Logic
+### <a id="varieties-model-theory-and-equational-logic">Varieties, Model Theory, and Equational Logic</a>
 
-This is the [Varieties.EquationalLogic.Basic][] module of the [Agda Universal Algebra Library][] where the binary "models" relation ⊧, relating algebras (or classes of algebras) to the identities that they satisfy, is defined.
+This is the [Varieties.EquationalLogic][] module of the [Agda Universal Algebra Library][] where the binary "models" relation ⊧, relating algebras (or classes of algebras) to the identities that they satisfy, is defined.
 
-Agda supports the definition of infix operations and relations, and we use this to define ⊧ so that we may write, e.g., `𝑨 ⊧ p ≈ q` or `𝒦 ⊫ p ≈ q`.
+Let 𝑆 be a signature. By an **identity** or **equation** in 𝑆 we mean an ordered pair of terms, written 𝑝 ≈ 𝑞, from the term algebra 𝑻 X. If 𝑨 is an 𝑆-algebra we say that 𝑨 **satisfies** 𝑝 ≈ 𝑞 provided 𝑝 ̇ 𝑨 ≡ 𝑞 ̇ 𝑨 holds. In this situation, we write 𝑨 ⊧ 𝑝 ≈ 𝑞 and say that 𝑨 **models** the identity 𝑝 ≈ q. If 𝒦 is a class of algebras, all of the same signature, we write 𝒦 ⊧ p ≈ q if, for every 𝑨 ∈ 𝒦, 𝑨 ⊧ 𝑝 ≈ 𝑞.
 
-
-
-**Notation**. In the [Agda UniversalAlgebra][] library, because a class of structures has a different type than a single structure, we must use a slightly different syntax to avoid overloading the relations ⊧ and ≈. As a reasonable alternative to what we would normally express informally as 𝒦 ⊧ 𝑝 ≈ 𝑞, we have settled on 𝒦 ⊫ p ≈ q to denote this relation.  To reiterate, if 𝒦 is a class of 𝑆-algebras, we write 𝒦 ⊧ 𝑝 ≋ 𝑞 if every 𝑨 ∈ 𝒦 satisfies 𝑨 ⊧ 𝑝 ≈ 𝑞.
-
-**Unicode Hints**. To produce the symbols ≈, ⊧, and ≋ in [agda2-mode][], type `\~~`, `\models`, and `\~~~`, respectively.
+Because a class of structures has a different type than a single structure, we must use a slightly different syntax to avoid overloading the relations ⊧ and ≈. As a reasonable alternative to what we would normally express informally as 𝒦 ⊧ 𝑝 ≈ 𝑞, we have settled on 𝒦 ⊫ p ≈ q to denote this relation.  To reiterate, if 𝒦 is a class of 𝑆-algebras, we write 𝒦 ⊫ 𝑝 ≈ 𝑞 if every 𝑨 ∈ 𝒦 satisfies 𝑨 ⊧ 𝑝 ≈ 𝑞.
 
 \begin{code}
 
@@ -44,8 +40,9 @@ private variable χ α ρ ι : Level
 \end{code}
 
 
-### The "models" relation
-We define the binary "models" relation ⊧ using infix syntax so that we may
+#### <a id="the-models-relation">The models relation</a>
+
+We define the binary "models" relation `⊧` using infix syntax so that we may
 write, e.g., `𝑨 ⊧ p ≈ q` or `𝒦 ⊫ p ≈ q`, relating algebras (or classes of
 algebras) to the identities that they satisfy. We also prove a couple of useful
 facts about ⊧.  More will be proved about ⊧ in the next module,
@@ -70,7 +67,7 @@ to the variable symbols in `X`) the (intensional) equality `𝑨 ⟦ p ⟧ η �
 holds.
 
 
-### Equational theories and models
+#### <a id="equational-theories-and-models">Equational theories and models</a>
 
 If 𝒦 denotes a class of structures, then `Th 𝒦` represents the set of identities
 modeled by the members of 𝒦.
@@ -113,13 +110,13 @@ Modᵗ ℰ = λ 𝑨 → ∀ i → 𝑨 ⊧ (fst (ℰ i)) ≈ (snd (ℰ i))
 
 -------------------------------------
 
+<br>
+
 [↑ Varieties](Varieties.html)
 <span style="float:right;">[Varieties.Closure →](Varieties.Closure.html)</span>
 
 {% include UALib.Links.md %}
 
-
---------------------------------------
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 

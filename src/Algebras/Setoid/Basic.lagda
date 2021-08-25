@@ -5,7 +5,7 @@ date : 2021-04-23
 author: [agda-algebras development team][]
 ---
 
-### Basic Definitions
+#### <a id="basic-definitions">Basic Definitions</a>
 
 This is the [Algebras.Setoid.Basic][] module of the [Agda Universal Algebra Library][].
 
@@ -39,7 +39,8 @@ ov : Level → Level
 ov α = 𝓞 ⊔ 𝓥 ⊔ lsuc α
 \end{code}
 
-#### Models (again)
+
+#### <a id="setoid-algebras">Setoid Algebras</a>
 
 Here we define algebras over a setoid, instead of a mere type with no equivalence on it.
 
@@ -71,10 +72,10 @@ IsEquivalence.trans (isEqv (⟦ 𝑆 ⟧ ξ))(refl , g)(refl , h) = refl , λ i 
 \end{code}
 
 
-##### Setoid Algebras
-
-A setoid algebra is just like an algebra but we require that all basic operations of the algebra respect the underlying setoid equality.
-The `Func` record packs a function (f, aka apply, aka _<$>_) with a proof (cong) that the function respects equality.
+A setoid algebra is just like an algebra but we require that all basic operations
+of the algebra respect the underlying setoid equality. The `Func` record packs a
+function (f, aka apply, aka _<$>_) with a proof (cong) that the function respects
+equality.
 
 \begin{code}
 
@@ -84,6 +85,12 @@ Algebroid α ρ = Σ[ A ∈ Setoid α ρ ]      -- the domain (a setoid)
                                          -- along with congruence proofs that
                                          -- each operation espects setoid equality
 
+\end{code}
+
+Alternatively, we can represent a setoid algebra using a record type as follows.
+
+\begin{code}
+
 record SetoidAlgebra α ρ : Type (𝓞 ⊔ 𝓥 ⊔ lsuc (α ⊔ ρ)) where
   field
     Domain : Setoid α ρ
@@ -92,10 +99,11 @@ record SetoidAlgebra α ρ : Type (𝓞 ⊔ 𝓥 ⊔ lsuc (α ⊔ ρ)) where
      --       1. a function  f : Carrier (⟦ 𝑆 ⟧ Domain)  → Carrier Domain
      --       2. a proof cong : f Preserves _≈₁_ ⟶ _≈₂_ (that f preserves the setoid equalities)
 
-  -- ≈cong : ∀ f u v → (∀ i → (_≈_ Domain) (u i) (v i)) → _≈_ (⟦ 𝑆 ⟧ Domain) (f , u) (f , v)
-  -- ≈cong f u v uv = refl , uv
+\end{code}
 
+It should be clear that the two types `Algebroid` and `SetoidAlgebra` are equivalent. (We tend to use the latter throughout most of the [agda-algebras][] library.)
 
+\begin{code}
 
 open SetoidAlgebra
 
@@ -117,8 +125,6 @@ Level-of-Carrier {α = α} _ = α
 
 
 
-
-
 -- Easier notation for application of an (interpreted) operation symbol.
 
 _∙_ : (f : ∣ 𝑆 ∣)(𝑨 : Algebroid α ρ) → (∥ 𝑆 ∥ f  →  Carrier ∣ 𝑨 ∣) → Carrier ∣ 𝑨 ∣
@@ -131,14 +137,11 @@ open SetoidAlgebra
 _̂_ : (f : ∣ 𝑆 ∣)(𝑨 : SetoidAlgebra α ρ) → (∥ 𝑆 ∥ f  →  𝕌[ 𝑨 ]) → 𝕌[ 𝑨 ]
 
 f ̂ 𝑨 = λ a → (Interp 𝑨) <$> (f , a)
--- ≈cong :  (f : ∣ 𝑆 ∣)(𝑨 : SetoidAlgebra α ρ)(u v : ∥ 𝑆 ∥ f  →  𝕌[ 𝑨 ])
---  →       (∀ i → (_≈_ (Domain 𝑨)) (u i) (v i)) → _≈_ (⟦ 𝑆 ⟧ (Domain 𝑨)) (f , u) (f , v)
--- ≈cong f 𝑨 u v uv = refl , uv
 
 \end{code}
 
 
-#### Level lifting setoid algebra types
+#### <a id="level-lifting-setoid-algebra-types">Level lifting setoid algebra types</a>
 
 \begin{code}
 
@@ -168,10 +171,6 @@ module _ {𝑨 : SetoidAlgebra α ρ} where
   A = Carrier (Domain 𝑨)
   _≈A_ = _≈_ (Domain 𝑨)
 
- -- ≈cong : (f : ∣ 𝑆 ∣)(x y : ∥ 𝑆 ∥ f  →  A)
- --  →      (∀ i → (x i) ≈A (y i)) → ((f ̂ 𝑨) x) ≈A ((f ̂ 𝑨) y)
- -- ≈cong f x y xy = {!!}
-
  Lift-SetoidAlg' : (ℓ : Level) → SetoidAlgebra (α ⊔ ℓ) ρ
 
  Domain (Lift-SetoidAlg' ℓ) = record { Carrier = Lift ℓ A
@@ -185,26 +184,9 @@ module _ {𝑨 : SetoidAlgebra α ρ} where
 
 \end{code}
 
-What makes the `Lift-Alg` type so useful for resolving type level errors
-involving algebras is the nice properties it possesses.  Indeed, the
-[UniversalAlgebra][] library contains formal proofs of the following facts.
-
-+ [`Lift-Alg` is a homomorphism](Homomorphisms.Basic.html#exmples-of-homomorphisms)
- (see [Homomorphisms.Basic][]) 
-
-+ [`Lift-Alg` is an algebraic invariant](Homomorphisms.Isomorphisms.html#lift-is-an-algebraic-invariant")
-  (see [Homomorphisms.Isomorphisms][])
-
-+ [`Lift-Alg` of a subalgebra is a subalgebra](Subalgebras.Subalgebras.html#lifts-of-subalgebras)
-  (see [Subalgebras.Subalgebras][])
-
-+ [`Lift-Alg` preserves identities](Varieties.EquationalLogic.html#lift-invariance))
-  (see [Varieties.EquationalLogic][])
-
 
 --------------------------------
 
-<br>
 <br>
 
 [↑ Algebras.Setoid](Algebras.Setoid.html)

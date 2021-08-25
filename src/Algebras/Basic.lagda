@@ -5,7 +5,7 @@ date : 2021-04-23
 author: [agda-algebras development team][]
 ---
 
-### Basic Definitions
+### <a id="basic-definitions">Basic Definitions</a>
 
 This is the [Algebras.Basic][] module of the [Agda Universal Algebra Library][].
 
@@ -16,8 +16,6 @@ This is the [Algebras.Basic][] module of the [Agda Universal Algebra Library][].
 module Algebras.Basic where
 
 -- Imports from the Agda (Builtin) and the Agda Standard Library
-open import Agda.Builtin.Bool
-open import Agda.Builtin.Equality  using (_≡_ ; refl )
 open import Agda.Primitive         using ( _⊔_ ; lsuc ) renaming ( Set to  Type ; lzero to ℓ₀ )
 open import Data.Empty             using ( ⊥ )
 open import Data.Product           using ( _,_ ; _×_ ; Σ ; Σ-syntax )
@@ -37,7 +35,7 @@ variable 𝓞 𝓥 : Level
 
 \end{code}
 
-#### The signatures of an algebra
+#### <a id="signatures-of-an-algebra">Signatures of an algebra</a>
 
 In [model theory](https://en.wikipedia.org/wiki/Model_theory), the *signature* `𝑆 = (𝐶, 𝐹, 𝑅, ρ)` of a structure consists of three (possibly empty) sets `𝐶`, `𝐹`, and `𝑅`---called *constant symbols*, *function symbols*, and *relation symbols*, respectively---along with a function `ρ : 𝐶 + 𝐹 + 𝑅 → 𝑁` that assigns an *arity* to each symbol. Often (but not always) `𝑁 = ℕ`, the natural numbers.
 
@@ -49,7 +47,7 @@ If `A` is a set and `𝑓` is a (`ρ 𝑓`)-ary operation on `A`, we often indic
 
 **Example**. Suppose `𝑔 : (m → A) → A` is an `m`-ary operation on `A`, and `a : m → A` is an `m`-tuple on `A`. Then `𝑔 a` may be viewed as `𝑔 (a 0, a 1, …, a (m-1))`, which has type `A`. Suppose further that `𝑓 : (ρ𝑓 → B) → B` is a `ρ𝑓`-ary operation on `B`, let `a : ρ𝑓 → A` be a `ρ𝑓`-tuple on `A`, and let `h : A → B` be a function.  Then the following typing judgments obtain: `h ∘ a : ρ𝑓 → B` and we `𝑓 (h ∘ a) : B`.
 
-#### Signature type
+#### <a id="signature-type">Signature type</a>
 
 In the [UniversalAlgebra][] library we represent the *signature* of an algebraic structure using the following type.
 
@@ -62,13 +60,6 @@ Signature 𝓞 𝓥 = Σ[ F ∈ Type 𝓞 ] (F → Type 𝓥)
 Level-of-Signature : {𝓞 𝓥 : Level} → Signature 𝓞 𝓥 → Level
 Level-of-Signature {𝓞}{𝓥} _ = lsuc (𝓞 ⊔ 𝓥)
 
--- Let's also introduce a signature type for the (not so) special case where
--- arity types can be assumed to live at universe level zero.
-signature : (𝓞 : Level) → Type (lsuc 𝓞)
-signature 𝓞 = Σ[ F ∈ Type 𝓞 ] (F → Type)
--- (It turns out that everything in the library up to the Birkhoff HSP
--- theorem can be done with these "little" arities.)
-
 \end{code}
 
 As mentioned earlier, throughout the [UniversalAlgebra][] library `𝓞` denote the universe level of *operation symbol* types, while `𝓥` denotes the universe level of *arity* types.
@@ -77,7 +68,7 @@ In the [Overture][] module we defined special syntax for the first and second pr
 
 
 
-#### Algebras
+#### <a id="algebras">Algebras</a>
 
 Our first goal is to develop a working vocabulary and formal library for classical (single-sorted, set-based) universal algebra.  In this section we define the main objects of study.  An *algebraic structure* (or *algebra*) in the signature `𝑆 = (𝐹, ρ)` is denoted by `𝑨 = (A, F`<sup>`𝑨`</sup>`)` and consists of
 
@@ -87,9 +78,6 @@ Our first goal is to develop a working vocabulary and formal library for classic
 
 Note that to each operation symbol `𝑓 ∈ 𝐹` corresponds an operation `𝑓`<sup>`𝑨`</sup> on `𝐴` of arity `ρ𝑓`; we call such `𝑓`<sup>`𝑨`</sup> the *interpretation* of the symbol `𝑓` in the algebra `𝑨`. We call an algebra in the signature `𝑆` an `𝑆`-*algebra*.  An algebra is called *finite* if it has a finite domain, and is called *trivial* if its universe is a singleton.  Given two algebras `𝑨` and `𝑩`, we say that `𝑩` is a *reduct* of `𝑨` if both algebras have the same domain and `𝑩` can be obtained from `𝑨` by simply removing some of the operations.
 
-
-#### <a id="algebra-types">Algebra types</a>
-
 Recall, we defined the type `Signature 𝓞 𝓥` above as the dependent pair type `Σ F ꞉ Type 𝓞 , (F → Type 𝓥)`, and the type `Op` of operation symbols is the function type `Op I A = (I → A) → A` (see [Relations.Discrete][]). For a fixed signature `𝑆 : Signature 𝓞 𝓥` and universe level `α`, we define the *type of algebras in the signature* `𝑆` (or *type of* `𝑆`-*algebras*) *with domain type* `Type α` as follows.
 
 \begin{code}
@@ -98,41 +86,14 @@ Algebra : (α : Level)(𝑆 : Signature 𝓞 𝓥) → Type (𝓞 ⊔ 𝓥 ⊔ l
 Algebra α 𝑆 = Σ[ A ∈ Type α ]                   -- the domain
               ∀ (f : ∣ 𝑆 ∣) → Op A (∥ 𝑆 ∥ f)    -- the basic operations
 
--- special case where arity types live at universe level zero
-lilAlgebra : (α : Level)(𝑆 : signature 𝓞) → Type (𝓞 ⊔ lsuc α)
-lilAlgebra α 𝑆 = Σ[ A ∈ Type α ]                   -- the domain
-                 ∀ (f : ∣ 𝑆 ∣) → Op A (∥ 𝑆 ∥ f)    -- the basic operations
-
-
-
 \end{code}
 
 It would be more precise to refer to inhabitants of this type as ∞-*algebras* because their domains can be of arbitrary type and need not be truncated at some level and, in particular, need to be a set. (See the [Relations.Truncation][] module.)
 
 We might take this opportunity to define the type of 0-*algebras*, that is, algebras whose domains are sets, which is probably closer to what most of us think of when doing informal universal algebra.  However, below we will only need to know that the domains of certain algebras are sets in a few places in the [UniversalAlgebra][] library, so it seems preferable to work with general (∞-)algebras throughout and then explicitly postulate [uniquness of identity proofs](Relations.Truncation.html#uniqueness-of-identity-proofs) when and only when necessary.
 
-##### <a id="the-universe-level-of-an-algebra">The universe level of an algebra</a>
 
-Occasionally we will be given an algebra and we just need to know the universe level of its domain. The following utility function provides this.
-
-\begin{code}
-
-Level-of-Alg : {α 𝓞 𝓥 : Level}{𝑆 : Signature 𝓞 𝓥} → Algebra α 𝑆 → Level
-Level-of-Alg {α = α}{𝓞}{𝓥} _ = 𝓞 ⊔ 𝓥 ⊔ lsuc α
-
-Level-of-Carrier : {α 𝓞 𝓥  : Level}{𝑆 : Signature 𝓞 𝓥} → Algebra α 𝑆 → Level
-Level-of-Carrier {α = α} _ = α
-
-Level-of-lilAlg : {α 𝓞 : Level}{𝑆 : signature 𝓞} → Algebra α 𝑆 → Level
-Level-of-lilAlg {α = α}{𝓞 = 𝓞} _ = (𝓞 ⊔ lsuc α)
-
-Level-of-lilCarrier : {α 𝓞 𝓥 : Level}{𝑆 : Signature 𝓞 𝓥} → Algebra α 𝑆 → Level
-Level-of-lilCarrier {α = α} _ = α
-
-\end{code}
-
-
-##### <a id="algebras-as-record-types">Algebras as record types</a>
+#### <a id="algebras-as-record-types">Algebras as record types</a>
 
 Some people prefer to represent algebraic structures in type theory using records, and for those folks we offer the following (equivalent) definition.
 
@@ -143,13 +104,6 @@ record algebra (α : Level) (𝑆 : Signature 𝓞 𝓥) : Type(lsuc(𝓞 ⊔ �
  field
   carrier : Type α
   opsymbol : (f : ∣ 𝑆 ∣) → ((∥ 𝑆 ∥ f) → carrier) → carrier
-
-record lilalgebra (α : Level) (𝑆 : signature 𝓞) : Type(lsuc(𝓞 ⊔ α)) where
- constructor mklilalg
- field
-  carrier : Type α
-  opsymbol : (f : ∣ 𝑆 ∣) → ((∥ 𝑆 ∥ f) → carrier) → carrier
-
 
 \end{code}
 
@@ -186,6 +140,20 @@ So, if `𝑓 : ∣ 𝑆 ∣` is an operation symbol in the signature `𝑆`, and
 
 
 
+#### <a id="the-universe-level-of-an-algebra">The universe level of an algebra</a>
+
+Occasionally we will be given an algebra and we just need to know the universe level of its domain. The following utility function provides this.
+
+\begin{code}
+
+Level-of-Alg : {α 𝓞 𝓥 : Level}{𝑆 : Signature 𝓞 𝓥} → Algebra α 𝑆 → Level
+Level-of-Alg {α = α}{𝓞}{𝓥} _ = 𝓞 ⊔ 𝓥 ⊔ lsuc α
+
+Level-of-Carrier : {α 𝓞 𝓥  : Level}{𝑆 : Signature 𝓞 𝓥} → Algebra α 𝑆 → Level
+Level-of-Carrier {α = α} _ = α
+
+\end{code}
+
 
 #### <a id="lifts-of-algebras">Level lifting algebra types</a>
 
@@ -202,13 +170,6 @@ Lift-alg-op f β = λ x → lift (f (λ i → lower (x i)))
 Lift-Alg : {𝑆 : Signature 𝓞 𝓥} → Algebra α 𝑆 → (β : Level) → Algebra (α ⊔ β) 𝑆
 Lift-Alg {𝑆 = 𝑆} 𝑨 β = Lift β ∣ 𝑨 ∣ , (λ (𝑓 : ∣ 𝑆 ∣) → Lift-alg-op (𝑓 ̂ 𝑨) β)
 
-
-Lift-op-lilAlg : {I : Type ℓ₀}{A : Type α} → Op A I → (β : Level) → Op (Lift β A) I
-Lift-op-lilAlg {I = I} = Lift-alg-op{𝓥 = ℓ₀}{I = I}
-
-
-Lift-lilAlg : {𝑆 : signature 𝓞} → Algebra α 𝑆 → (β : Level) → Algebra (α ⊔ β) 𝑆
-Lift-lilAlg {𝑆 = 𝑆} 𝑨 β = Lift β ∣ 𝑨 ∣ , (λ (𝑓 : ∣ 𝑆 ∣) → Lift-op-lilAlg (𝑓 ̂ 𝑨) β)
 
 open algebra
 
@@ -237,14 +198,9 @@ compatible  𝑨 R = ∀ 𝑓 → (𝑓 ̂ 𝑨) |: R
 compatible-pred : {𝑆 : Signature 𝓞 𝓥}(𝑨 : Algebra α 𝑆) → Pred (∣ 𝑨 ∣ × ∣ 𝑨 ∣)ρ → Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ)
 compatible-pred  𝑨 P = ∀ 𝑓 → (𝑓 ̂ 𝑨) |:pred P
 
-compatible-lilAlg : {𝑆 : signature 𝓞}(𝑨 : Algebra α 𝑆) → BinRel ∣ 𝑨 ∣ ρ → Type(𝓞 ⊔ α ⊔ ρ)
-compatible-lilAlg  𝑨 R = ∀ 𝑓 → (𝑓 ̂ 𝑨) |: R
-
 \end{code}
 
 Recall, the `|:` type was defined in [Relations.Discrete][] module.
-
-
 
 
 #### <a id="compatibility-of-continuous-relations">Compatibility of continuous relations<sup>[★](Algebras.Algebras.html#fn0)</sup></a>
@@ -261,23 +217,14 @@ module _ {I : Type 𝓥} {𝑆 : Signature 𝓞 𝓥} where
  compatible-ΠΡ-alg : (𝒜 : I → Algebra α 𝑆) → ΠΡ I (λ i → ∣ 𝒜  i ∣) {ρ} → Type(𝓞 ⊔ α ⊔ 𝓥 ⊔ ρ)
  compatible-ΠΡ-alg 𝒜 R = ∀ ( 𝑓 : ∣ 𝑆 ∣ ) →  compatible-ΠΡ (λ i → 𝑓 ̂ (𝒜 i)) R
 
-module _ {I : Type ℓ₀} {𝑆 : signature 𝓞} where
-
- compatible-Rel-lilAlg : (𝑨 : Algebra α 𝑆) → Rel ∣ 𝑨 ∣ I{ρ} → Type(𝓞 ⊔ α ⊔ ρ)
- compatible-Rel-lilAlg 𝑨 R = ∀ (𝑓 : ∣ 𝑆 ∣ ) →  compatible-Rel (𝑓 ̂ 𝑨) R
-
- compatible-ΠΡ-lilAlg : (𝒜 : I → Algebra α 𝑆) → ΠΡ I (λ i → ∣ 𝒜  i ∣) {ρ} → Type(𝓞 ⊔ α ⊔ ρ)
- compatible-ΠΡ-lilAlg 𝒜 R = ∀ ( 𝑓 : ∣ 𝑆 ∣ ) →  compatible-ΠΡ (λ i → 𝑓 ̂ (𝒜 i)) R
-
 \end{code}
 
 -------------------------------------
 
 <br>
-<br>
 
 [↑ Algebras](Algebras.html)
-<span style="float:right;">[Algebras.Congruences →](Algebras.Congruences.html)</span>
+<span style="float:right;">[Algebras.Products →](Algebras.Products.html)</span>
 
 {% include UALib.Links.md %}
 

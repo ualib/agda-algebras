@@ -5,7 +5,7 @@ date : 2021-01-12
 author: [agda-algebras development team][]
 ---
 
-## <a id="relation-and-quotient-types>Telation and Quotient Types</a>
+## <a id="types-for-relations-and-quotients">Types for Relations and Quotients</a>
 
 This is the [Relations][] module of the [Agda Universal Algebra Library][].
 
@@ -20,6 +20,7 @@ module Relations where
 
 open import Relations.Discrete public
 open import Relations.Continuous public
+open import Relations.Properties public
 open import Relations.Quotients public
 
 \end{code}

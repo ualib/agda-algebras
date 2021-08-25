@@ -1,27 +1,64 @@
 <!-- UniversalAlgebra Library links -->
-[Agda Universal Algebra Library]: https://ualib.gitlab.io
-[Agda UniversalAlgebra]: https://ualib.gitlab.io
-[git repository of the Agda UALib]: https://github.com/ualib/agda-universal-algebra
-[UniversalAlgebra]: https://ualib.gitlab.io
+[Agda Universal Algebra Library]: https://ualib.github.io/agda-algebras
+[Agda UniversalAlgebra]: https://ualib.github.io/agda-algebras
+[git repository of the Agda UALib]: https://github.com/ualib/agda-algebras
+[git repository of the agda-algebras library]: https://github.com/ualib/agda-algebras
+[UniversalAlgebra]: https://ualib.github.io
 [UniversalAlgebra repository]: https://github.com/ualib/agda-universal-algebra
-[new issue]: https://github.com/ualib/agda-universal-algebra/issues/new/choose
+[new issue]: https://github.com/ualib/agda-algebras/issues/new/choose
+[agda-algebras]: https://github.com/ualib/agda-algebras
+[agda-algebras-everything]: agda-algebras-everything.html
+[merge request]: https://github.com/ualib/agda-algebras/compare
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 
 [Preface]: Preface.html
+
 [Overture]: Overture.html
+[Overture.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Overture.lagda
 [Overture.Preliminaries]: Overture.Preliminaries.html
 [Overture.Inverses]: Overture.Inverses.html
+[Overture.Transformers]: Overture.Transformers.html
 
 [Relations]: Relations.html
 [Relations.Discrete]: Relations.Discrete.html
 [Relations.Continuous]: Relations.Continuous.html
+[Relations.Properties]: Relations.Properties.html
 [Relations.Quotients]: Relations.Quotients.html
-[Relations.Truncation]: Relations.Truncation.html
-[Relations.Extensionality]: Relations.Extensionality.html
 
 [Algebras]: Algebras.html
 [Algebras.Basic]: Algebras.Basic.html
 [Algebras.Products]: Algebras.Products.html
 [Algebras.Congruences]: Algebras.Congruences.html
+[Algebras.Setoid]: Algebras.Setoid.html
+[Algebras.Setoid.Basic]: Algebras.Setoid.Basic.html
+[Algebras.Setoid.Congruences]: Algebras.Setoid.Congruences.html
+[Algebras.Setoid.Products]: Algebras.Setoid.Products.html
+
+[ClosureSystems]: ClosureSystems.html
+[ClosureSystems.Basic]: ClosureSystems.Basic.html
+[ClosureSystems.Definitions]: ClosureSystems.Definitions.html
+[ClosureSystems.Properties]: ClosureSystems.Properties.html
+
+[Residuation]: Residuation.html
+[Residuation.Basic]: Residuation.Basic.html
+[Residuation.Properties]: Residuation.Properties.html
+
+[Complexity]: Complexity.html
+[Complexity.Basic]: Complexity.Basic.html
+[Complexity.CSP]: Complexity.CSP.html
+  
+[Examples.Structures.Basic]: Examples.Structures.Basic.html
+[Examples.Structures.Signatures]: Examples.Structures.Signatures.html
+[Exercises.Complexity.FiniteCSP]: Exercises.Complexity.FiniteCSP.html
+
+[Foundations]: Foundations.html
+[Foundations.Extensionality]: Foundations.Extensionality.html
+[Foundations.Truncation]: Foundations.Truncation.html
+[Foundations.Welldefined]: Foundations.Welldefined.html
+
+[GaloisConnections]: GaloisConnections.html
+[GaloisConnections.Basic]: GaloisConnections.Basic.html
+[GaloisConnections.Properties]: GaloisConnections.Properties.html
 
 [Homomorphisms]: Homomorphisms.html
 [Homomorphisms.Basic]: Homomorphisms.Basic.html
@@ -29,21 +66,67 @@
 [Homomorphisms.Isomorphisms]: Homomorphisms.Isomorphisms.html
 [Homomorphisms.HomomorphicImages]: Homomorphisms.HomomorphicImages.html
 
+[Homomorphisms.Setoid]: Homomorphisms.Setoid.html
+[Homomorphisms.Setoid.Basic]: Homomorphisms.Setoid.Basic.html
+[Homomorphisms.Setoid.HomomorphicImages]: Homomorphisms.Setoid.HomomorphicImages.html
+[Homomorphisms.Setoid.Isomorphisms]: Homomorphisms.Setoid.Isomorphisms.html
+[Homomorphisms.Setoid.Noether]: Homomorphisms.Setoid.Noether.html
+
 [Terms]: Terms.html
 [Terms.Basic]: Terms.Basic.html
 [Terms.Operations]: Terms.Operations.html
 
+[Terms.Basic]: Terms.Basic.html
+[Terms.Operations]: Terms.Operations.html
+[Terms.Properties]: Terms.Properties.html
+[Terms.Setoid.Basic]: Terms.Setoid.Basic.html
+[Terms.Setoid]: Terms.Setoid.html
+[Terms]: Terms.html
+
 [Subalgebras]: Subalgebras.html
-[Subalgebras.Subuniverses]: Subalgebras.Subuniverses.html
+[Subalgebras.Properties]: Subalgebras.Properties.html
+[Subalgebras.Setoid.Properties]: Subalgebras.Setoid.Properties.html
+[Subalgebras.Setoid.Subalgebras]: Subalgebras.Setoid.Subalgebras.html
+[Subalgebras.Setoid.Subuniverses]: Subalgebras.Setoid.Subuniverses.html
+[Subalgebras.Setoid]: Subalgebras.Setoid.html
 [Subalgebras.Subalgebras]: Subalgebras.Subalgebras.html
-[Subalgebras.Univalent]: Subalgebras.Univalent.html
+[Subalgebras.Subuniverses]: Subalgebras.Subuniverses.html
 
 [Varieties]: Varieties.html
+[Varieties.Closure]: Varieties.Closure.html
 [Varieties.EquationalLogic]: Varieties.EquationalLogic.html
-[Varieties.Varieties]: Varieties.Varieties.html
-[Varieties section]: Varieties.Varieties.html
-[Varieties.Preservation]: Varieties.Preservation.html
 [Varieties.FreeAlgebras]: Varieties.FreeAlgebras.html
+[Varieties.Invariants]: Varieties.Invariants.html
+[Varieties.Preservation]: Varieties.Preservation.html
+[Varieties.Properties]: Varieties.Properties.html
+
+[Varieties.Setoid]: Varieties.Setoid.html
+[Varieties.Setoid.Closure]: Varieties.Setoid.Closure.html
+[Varieties.Setoid.EquationalLogic]: Varieties.Setoid.EquationalLogic.html
+[Varieties.Setoid.FreeAlgebras]: Varieties.Setoid.FreeAlgebras.html
+
+[Structures]: Structures.html
+[Structures.Basic]: Structures.Basic.html
+[Structures.Congruences]: Structures.Congruences.html
+[Structures.EquationalLogic]: Structures.EquationalLogic.html
+[Structures.Graphs0]: Structures.Graphs0.html
+[Structures.Graphs]: Structures.Graphs.html
+[Structures.Homs]: Structures.Homs.html
+[Structures.Isos]: Structures.Isos.html
+[Structures.Products]: Structures.Products.html
+[Structures.Sigma.Basic]: Structures.Sigma.Basic.html
+[Structures.Sigma.Congruences]: Structures.Sigma.Congruences.html
+[Structures.Sigma.Homs]: Structures.Sigma.Homs.html
+[Structures.Sigma.Isos]: Structures.Sigma.Isos.html
+[Structures.Sigma.Products]: Structures.Sigma.Products.html
+[Structures.Sigma]: Structures.Sigma.html
+[Structures.Substructures.Basic]: Structures.Substructures.Basic.html
+[Structures.Substructures.Substructures]: Structures.Substructures.Substructures.html
+[Structures.Substructures]: Structures.Substructures.html
+[Structures.Terms.Basic]: Structures.Terms.Basic.html
+[Structures.Terms.Operations]: Structures.Terms.Operations.html
+[Structures.Terms]: Structures.Terms.html
+
 
 
 
@@ -175,101 +258,3 @@
 [williamdemeo.org]: https://williamdemeo.gitlab.io/
 [williamdemeo@gitlab]: https://gitlab.com/williamdemeo
 [williamdemeo@github]: https://github.com/williamdemeo
-
-
-
-<!-- [UALib.Preface]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Preface.lagda -->
-
-<!-- [UALib.Overture]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Overture.lagda -->
-<!-- [UALib.Overture module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Overture.lagda -->
-<!-- [UALib.Overture.Preliminaries]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Overture/Preliminaries.lagda -->
-<!-- [UALib.Overture.Equality]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Overture/Equality.lagda -->
-<!-- [UALib.Overture.Inverses]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Overture/Inverses.lagda -->
-<!-- [UALib.Overture.Extensionality]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Overture/Extensionality.lagda -->
-<!-- [UALib.Overture.Lifts]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Overture/Lifts.lagda -->
-
-<!-- [UALib.Algebras]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras.lagda -->
-<!-- [UALib.Algebras module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras.lagda -->
-<!-- [UALib.Algebras.Signatures]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras/Signatures.lagda -->
-<!-- [UALib.Algebras.Algebras]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras/Algebras.lagda -->
-<!-- [UALib.Algebras.Products]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras/Products.lagda -->
-<!-- [UALib.Algebras.Congruences]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Algebras/Congruences.lagda -->
-
-<!-- [UALib.Relations module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations.lagda -->
-<!-- [UALib.Relations]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations.lagda -->
-<!-- [UALib.Relations.Discrete]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations/Discrete.lagda -->
-<!-- [UALib.Relations.Continuous]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations/Continuous.lagda -->
-<!-- [UALib.Relations.Quotients]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations/Quotients.lagda -->
-<!-- [UALib.Relations.Truncation]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Relations/Truncation.lagda -->
-
-<!-- [UALib.Homomorphisms.Basic module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/Basic.lagda -->
-<!-- [UALib.Homomorphisms.Noether module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/Noether.lagda -->
-<!-- [UALib.Homomorphisms.Isomorphisms module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/Isomorphisms.lagda -->
-<!-- [UALib.Homomorphisms.HomomorphicImages module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/HomomorphicImages.lagda -->
-
-<!-- [UALib.Homomorphisms module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms.lagda -->
-<!-- [UALib.Homomorphisms]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms.lagda -->
-<!-- [UALib.Homomorphisms.Basic]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/Basic.lagda -->
-<!-- [UALib.Homomorphisms.Noether]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/Noether.lagda -->
-<!-- [UALib.Homomorphisms.Isomorphisms]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/Isomorphisms.lagda -->
-<!-- [UALib.Homomorphisms.HomomorphicImages]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Homomorphisms/HomomorphicImages.lagda -->
-
-<!-- [UALib.Terms module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Terms.lagda -->
-<!-- [UALib.Terms]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Terms.lagda -->
-<!-- [UALib.Terms.Basic]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Terms/Basic.lagda -->
-<!-- [UALib.Terms.Operations]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Terms/Operations.lagda -->
-
-<!-- [UALib.Subalgebras module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras.lagda -->
-<!-- [UALib.Subalgebras]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras.lagda -->
-<!-- [UALib.Subalgebras.Subuniverses]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras/Subuniverses.lagda -->
-<!-- [UALib.Subalgebras.Properties]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras/Properties.lagda -->
-<!-- [UALib.Subalgebras.Homomorphisms]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras/Homomorphisms.lagda -->
-<!-- [UALib.Subalgebras.Subalgebras]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras/Subalgebras.lagda -->
-<!-- [UALib.Subalgebras.Univalent]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Subalgebras/Univalent.lagda -->
-
-<!-- [UALib.Varieties]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties.lagda -->
-<!-- [UALib.Varieties module]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties.lagda -->
-<!-- [UALib.Varieties.EquationalLogic]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties/EquationalLogic.lagda -->
-<!-- [UALib.Varieties.Varieties]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties/Varieties.lagda -->
-<!-- [UALib.Varieties.Preservation]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties/Preservation.lagda -->
-<!-- [UALib.Varieties.FreeAlgebras]: https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/Varieties/FreeAlgebras.lagda -->
-<!-- [univalence axiom]: https://ncatlab.org/nlab/show/univalence+axiom -->
-
-<!-- [Appendix]: Appendix.html -->
-<!-- [Appendix.Imports]: Appendix.Imports.html -->
-
-
-<!--
-[core.lean]: https://github.com/leanprover/lean/blob/master/library/init/core.lean
-
-[free.lean]: https://gitlab.com/ualib/lean-ualib/tree/william/src/free.lean
-[function.lean]: https://github.com/leanprover/lean/blob/master/library/init/function.lean
-[functions.lean]: https://github.com/leanprover/lean/blob/master/library/init/algebra/functions.lean
-
-[lattice.lean]: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/lattice.lean
-[`lean/library/init`]: https://github.com/leanprover/lean/tree/master/library/init
-[`lean/library/init/algebra`]: https://github.com/leanprover/lean/blob/master/library/init/algebra
-[`lean/library/init/data`]: https://github.com/leanprover/lean/tree/master/library/init/data
-[lean_src]: https://github.com/leanprover/lean
-[logic.lean]: https://github.com/leanprover/lean/blob/master/library/init/logic.lean
-
-[`mathlib/src/data/set/basic.lean`]: https://github.com/leanprover-community/mathlib/blob/master/src/data/set/basic.lean
-
-[`nat/`]: https://github.com/leanprover/lean/blob/master/library/init/data/nat
-
-[order.lean]: https://github.com/leanprover/lean/blob/master/library/init/algebra/order.lean
-
-[prod.lean]: https://github.com/leanprover/lean/blob/master/library/init/data/prod.lean
-[propext.lean]: https://github.com/leanprover/lean/blob/master/library/init/propext.lean
-
-[quot.lean]: https://github.com/leanprover/lean/blob/master/library/init/data/quot.lean
-[quotient.lean]: https://gitlab.com/ualib/lean-ualib/blob/william/src/quotient.lean
-
-[setoid.lean]: https://github.com/leanprover/lean/blob/master/library/init/data/setoid.lean
-[`sigma/`]: https://github.com/leanprover/lean/blob/master/library/init/data/sigma/
-[`sigma/basic.lean`]: https://github.com/leanprover/lean/blob/master/library/init/data/sigma/basic.lean
-
-
-
-
--->

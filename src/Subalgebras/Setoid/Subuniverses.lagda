@@ -5,9 +5,9 @@ date : 2021-07-11
 author: [agda-algebras development team][]
 ---
 
-### Subuniverses of Setoid Algebras
+### <a id="subuniverses-of-setoid-algebras">Subuniverses of Setoid Algebras</a>
 
-This is the [Subalgebras.Setoid][] module of the [Agda Universal Algebra Library][].
+This is the [Subalgebras.Setoid.Subuniverses][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
@@ -62,10 +62,10 @@ module _ {α ρᵃ : Level}  (𝑨 : SetoidAlgebra α ρᵃ) where
   field       sset  : Pred A ρ
               isSub : sset ∈ Subuniverses
 
-
 \end{code}
 
-#### Subuniverse Generation
+
+#### <a id="subuniverse-generation">Subuniverse Generation</a>
 
 \begin{code}
 
@@ -236,7 +236,6 @@ and, under these assumptions, we proved `∣ g ∣ ((f ̂ 𝑨) a) ≡ ∣ h ∣
 
 ---------------------------------
 
-<br>
 <br>
 
 [↑ Subalgebras.Setoid](Subalgebras.Setoid.html)

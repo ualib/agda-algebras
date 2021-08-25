@@ -5,6 +5,8 @@ date : 2021-07-25
 author: [agda-algebras development team][]
 ---
 
+### <a id="notions-of-well-definedness">Notions of well-definedness</a>
+
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -38,7 +40,7 @@ private variable
 
 \end{code}
 
-#### Strongly well-defined operations
+#### <a id="strongly-well-defined-operations">Strongly well-defined operations</a>
 
 We now describe an extensionality principle that seems weaker than function extensionality, but still (probably) not provable in [MLTT][]. (We address this and other questions  below.)  We call this the principle *strong well-definedness of operations*. We will encounter situations in which this weaker extensionality principle suffices as a substitute for function extensionality.
 
@@ -101,7 +103,7 @@ swelldef'→funext' wd ptweq = wd _$_ ptweq
 
 
 
-#### Questions
+#### <a id="questions">Questions</a>
 
 1. Does the converse `swelldef→funext` hold or is `swelldef` is strictly weaker than `funext`?
 2. If `swelldef` is strictly weaker than `funext`, then can we prove it in MLTT?
@@ -119,7 +121,7 @@ In the agda-algebras library, swelldef is used exclusively on operation type, so
 I believe there is no way to prove that `swelldef ι α α` implies funext ι α.
 
 
-#### New thoughts/ideas
+#### <a id="some-new-ideas">Some new ideas</a>
 
 It seems unlikely that we could prove swelldef in MLTT because, on the face of it,
 to prove f u ≡ f v, we need u ≡ v, but we only have ∀ i → u i ≡ v i.
@@ -212,28 +214,6 @@ module _ {A : Type α}{B : Type β} where
          f (u z) (v (s z)) ≡⟨ zip2 (u≈v z) ⟩
          f (v z) (v (s z)) ≡⟨ refl ⟩
          (UncurryFin2 f) v ∎
-
- -- Fin2-wd' : (f : (List A) → B)(u v : List A)
- --  →        (all ∀ i → (loou ≈ v → f u ≡ f v
-
- -- Fin2-wd' f u v u≈v = {!!}
-  -- where
-  -- zip1 : ∀ {a x y} → x ≡ y → f a x ≡ f a y
-  -- zip1 refl = refl
-  -- Goal : f u ≡ f v
-  -- Goal = {!!}
-  -- zip1 : ∀ {a x y} → x ≡ y → f a x ≡ f a y
-  -- zip1 refl = refl
-
-  -- zip2 : ∀ {x y b} → x ≡ y → f x b ≡ f y b
-  -- zip2 refl = refl
-
-  -- Goal : f (λ {z → u z ; (s z) → u (s z)}) ≡ f (λ {z → v z ; (s z) → v (s z)})
-  -- Goal = {!!} -- f (λ {z → u z ; (s z) → u (s z)}) ≡⟨ {!!} ⟩ 
-         -- (CurryFin2 f) (u z) (u (s z)) ≡⟨ {!!} ⟩ -- zip1 (u≈v (s z)) ⟩
-         -- (CurryFin2 f) (u z) (v (s z)) ≡⟨ {!!} ⟩ -- zip2 (u≈v z) ⟩
-         -- (CurryFin2 f) (v z) (v (s z)) ≡⟨ {!!} ⟩
-         -- f (λ {z → v z ; (s z) → v (s z) }) ∎
 
 
  Fin3-wd : (f : A → A → A → B)(u v : Fin 3 → A)

@@ -5,7 +5,9 @@ date : 2021-07-23
 author: [agda-algebras development team][]
 ---
 
-### Isomorphisms
+### <a id="isomorphisms">Isomorphisms</a>
+
+This is the [Sturctures.Isos][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
@@ -40,7 +42,9 @@ private variable
 
 \end{code}
 
-#### Definition of isomorphism
+
+
+#### <a id="definition-of-isomorphism">Definition of Isomorphism</a>
 
 Recall, `f ≈ g` means f and g are *extensionally* (or pointwise) equal; i.e., `∀ x, f x ≡ g x`.
 We use this notion of equality of functions in the following definition of *isomorphism*.
@@ -65,7 +69,8 @@ open _≅_ public
 That is, two structures are isomorphic provided there are homomorphisms going back and forth between them which compose to the identity map.
 
 
-#### Isomorphism is an equivalence relation
+
+#### <a id="isomorphism-is-an-equivalence-relation">Isomorphism is an equivalence relation</a>
 
 \begin{code}
 
@@ -98,7 +103,8 @@ module _ {𝑨 : structure 𝐹 𝑅 {α}{ρᵃ}} where
 \end{code}
 
 
-#### Lift is an algebraic invariant
+
+#### <a id="lift-is-an-algebraic-invariant">Lift is an algebraic invariant</a>
 
 Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic invariant*). As our focus is universal algebra, this is important and is what makes the lift operation a workable solution to the technical problems that arise from the noncumulativity of the universe hierarchy discussed in [Overture.Lifts][].
 
@@ -143,7 +149,8 @@ module _ {𝑨 : structure 𝐹 𝑅{α}{ρᵃ}} {𝑩 : structure 𝐹 𝑅{β}
 
 
 
-#### Lift associativity
+
+#### <a id="lift-associativity">Lift associativity</a>
 
 The lift is also associative, up to isomorphism at least.
 
@@ -175,7 +182,7 @@ module _ {𝑨 : structure 𝐹 𝑅 {α}{ρᵃ} } where
 
 
 
-#### Products preserve isomorphisms
+#### <a id="products-preserve-isomorphisms">Products preserve isomorphisms</a>
 
 Products of isomorphic families of algebras are themselves isomorphic. The proof looks a bit technical, but it is as straightforward as it ought to be.
 
@@ -256,15 +263,12 @@ module _ {I : Type ι}{𝒜 : I → structure 𝐹 𝑅 {α}{ρᵃ}}{ℬ : (Lift
 --------------------------------
 
 <br>
-<br>
 
 [← Structures.Homs](Structures.Homs.html)
 <span style="float:right;">[Structures.Terms →](Structures.Terms.html)</span>
 
 {% include UALib.Links.md %}
 
-
-------------------------------
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 

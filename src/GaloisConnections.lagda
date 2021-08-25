@@ -5,9 +5,9 @@ date : 2021-07-26
 author: [agda-algebras development team][]
 ---
 
-## Foundations
+## <a id="galois-connections">Galois Connections</a>
 
-This is the [UniversalAlgebra.GaloisConnections][] module of the [Agda Universal Algebra Library][].
+This is the [GaloisConnections][] module of the [Agda Universal Algebra Library][].
 
 
 \begin{code}

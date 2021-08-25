@@ -7,7 +7,7 @@ author: [agda-algebras development team][]
 
 ### <a id="homomorphisms-of-algebras-over-setoids">Homomorphisms of Algebras over Setoids</a>
 
-This is the [Homomorphisms.Setoid][] module of the [Agda Universal Algebra Library][].
+This is the [Homomorphisms.Setoid.Basic][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
@@ -199,7 +199,6 @@ ker[ 𝑨 ⇒ 𝑩 ] h ↾ wd = kerquo 𝑨 𝑩 wd h
 
 --------------------------------
 
-<br>
 <br>
 
 [↑ Homomorphisms.Setoid](Homomorphisms.Setoid.html)

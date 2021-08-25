@@ -5,7 +5,7 @@ date : 2021-07-12
 author: [agda-algebras development team][]
 ---
 
-## Closure Systems and Operators
+## <a id="closure-systems-and-operators">Closure Systems and Operators</a>
 
 \begin{code}
 
@@ -13,7 +13,6 @@ author: [agda-algebras development team][]
 
 module ClosureSystems where
 
-open import ClosureSystems.Definitions
 open import ClosureSystems.Basic
 open import ClosureSystems.Properties
 

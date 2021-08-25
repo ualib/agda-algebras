@@ -5,10 +5,9 @@ date : 2021-05-11
 author: [agda-algebras development team][]
 ---
 
-### Products for structures as records
+### <a id="products-for-structures-as-records">Products for structures as records</a>
 
-This module is similar to Products.lagda but for structures represented using records rather than
-dependent pair type.
+This is the [Sturctures.Products][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
@@ -61,7 +60,6 @@ module _ {𝒦 : Pred (structure 𝐹 𝑅 {α}{ρ}) ℓ} where
 
 --------------------------------
 
-<br>
 <br>
 
 [← Structures.Graphs0](Structures.Graphs0.html)

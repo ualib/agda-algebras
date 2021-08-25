@@ -5,7 +5,7 @@ date : 2021-06-22
 author: [agda-algebras development team][]
 ---
 
-### <a id="isomorphisms">Isomorphisms</a>
+### <a id="isomorphisms-of-general-structures">Isomorphisms of General Structures</a>
 
 \begin{code}
 
@@ -33,6 +33,7 @@ open import Structures.Sigma.Products using    (  ⨅ ; ℓp ; ℑ ; 𝔖 ; clas
 private variable 𝑅 𝐹 : Signature
 
 \end{code}
+
 
 #### <a id="isomorphism-toolbox">Definition of isomorphism</a>
 
@@ -137,35 +138,6 @@ module _ {α ρᵃ β ρᵇ : Level}
 
 
 
-
-#### <a id="lift-associativity">Lift associativity</a>
-
-The lift is also associative, up to isomorphism at least.
-
-\begin{code}
-
--- module _ {α ρᵃ : Level}
---          {𝑨 : Structure {α} {ρᵃ} 𝑅 𝐹} where
-
---  Lift-Struc-assocˡ : {ℓ ℓ' : Level} → Lift-Strucˡ (ℓ ⊔ ℓ') 𝑨 ≅ (Lift-Strucˡ ℓ (Lift-Strucˡ ℓ' 𝑨))
---  Lift-Struc-assocˡ = {!!} -- ≅-trans (≅-trans Goal Lift-≅) Lift-≅
---   -- where
---   -- Goal : Lift-Alg 𝑨 (β ⊔ 𝓘) ≅ 𝑨
---   -- Goal = ≅-sym Lift-≅
-
---  Lift-Struc-assocʳ : {ρ ρ' : Level} → Lift-Strucʳ (ρ ⊔ ρ') 𝑨 ≅ (Lift-Strucʳ ρ (Lift-Strucʳ ρ' 𝑨))
---  Lift-Struc-assocʳ = {!!} -- ≅-trans (≅-trans Goal Lift-≅) Lift-≅
-
---  Lift-Struc-assoc : {ℓ ℓ' ρ ρ' : Level}
---   →                 Lift-Struc (ℓ ⊔ ℓ') (ρ ⊔ ρ') 𝑨 ≅ (Lift-Struc ℓ ρ (Lift-Struc ℓ' ρ' 𝑨))
---  Lift-Struc-assoc = {!!} -- ≅-trans (≅-trans Goal Lift-≅) Lift-≅
-
-
-\end{code}
-
-
-
-
 #### <a id="products-preserve-isomorphisms">Products preserve isomorphisms</a>
 
 Products of isomorphic families of algebras are themselves isomorphic. The proof looks a bit technical, but it is as straightforward as it ought to be.
@@ -203,53 +175,67 @@ module _ {ι : Level}{I : Type ι}
 
 \end{code}
 
-
-A nearly identical proof goes through for isomorphisms of lifted products (though, just for fun, we use the universal quantifier syntax here to express the dependent function type in the statement of the lemma, instead of the Pi notation we used in the statement of the previous lemma; that is, `∀ i → 𝒜 i ≅ ℬ (lift i)` instead of `Π i ꞉ I , 𝒜 i ≅ ℬ (lift i)`.)
-
-\begin{code}
-
--- module _ {𝓘 : Level}{I : Type 𝓘}{fizw : funext (𝓘 ⊔ γ) β}{fiu : funext 𝓘 α} where
-
---   Lift-Alg-⨅≅ : {𝒜 : I → Algebra α 𝑆}{ℬ : (Lift γ I) → Algebra β 𝑆}
---    →            (∀ i → 𝒜 i ≅ ℬ (lift i)) → Lift-Alg (⨅ 𝒜) γ ≅ ⨅ ℬ
-
---   Lift-Alg-⨅≅ {𝒜}{ℬ} AB = Goal
---    where
---    ϕ : ∣ ⨅ 𝒜 ∣ → ∣ ⨅ ℬ ∣
---    ϕ a i = ∣ fst (AB  (lower i)) ∣ (a (lower i))
-
---    ϕhom : is-homomorphism (⨅ 𝒜) (⨅ ℬ) ϕ
---    ϕhom 𝑓 a = fizw (λ i → (∥ fst (AB (lower i)) ∥) 𝑓 (λ x → a x (lower i)))
-
---    ψ : ∣ ⨅ ℬ ∣ → ∣ ⨅ 𝒜 ∣
---    ψ b i = ∣ fst ∥ AB i ∥ ∣ (b (lift i))
-
---    ψhom : is-homomorphism (⨅ ℬ) (⨅ 𝒜) ψ
---    ψhom 𝑓 𝒃 = fiu (λ i → (snd ∣ snd (AB i) ∣) 𝑓 (λ x → 𝒃 x (lift i)))
-
---    ϕ~ψ : ϕ ∘ ψ ≈ ∣ 𝒾𝒹 (⨅ ℬ) ∣
---    ϕ~ψ 𝒃 = fizw λ i → fst ∥ snd (AB (lower i)) ∥ (𝒃 i)
-
---    ψ~ϕ : ψ ∘ ϕ ≈ ∣ 𝒾𝒹 (⨅ 𝒜) ∣
---    ψ~ϕ a = fiu λ i → snd ∥ snd (AB i) ∥ (a i)
-
---    A≅B : ⨅ 𝒜 ≅ ⨅ ℬ
---    A≅B = (ϕ , ϕhom) , ((ψ , ψhom) , ϕ~ψ , ψ~ϕ)
-
---    Goal : Lift-Alg (⨅ 𝒜) γ ≅ ⨅ ℬ
---    Goal = ≅-trans (≅-sym Lift-≅) A≅B
-
-\end{code}
-
 --------------------------------
 
 <br>
-<br>
 
-[← Structures.Sigma.Products](Structures.Sigma.Products.html)
+[← Structures.Sigma.Homs](Structures.Sigma.Homs.html)
 <span style="float:right;">[Complexity →](Complexity.html)</span>
 
 {% include UALib.Links.md %}
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- the rest is not yet implemented 
+
+A nearly identical proof goes through for isomorphisms of lifted products (though, just for fun, we use the universal quantifier syntax here to express the dependent function type in the statement of the lemma, instead of the Pi notation we used in the statement of the previous lemma; that is, `∀ i → 𝒜 i ≅ ℬ (lift i)` instead of `Π i ꞉ I , 𝒜 i ≅ ℬ (lift i)`.)
+
+begin{code}
+
+module _ {𝓘 : Level}{I : Type 𝓘}{fizw : funext (𝓘 ⊔ γ) β}{fiu : funext 𝓘 α} where
+
+  Lift-Alg-⨅≅ : {𝒜 : I → Algebra α 𝑆}{ℬ : (Lift γ I) → Algebra β 𝑆}
+   →            (∀ i → 𝒜 i ≅ ℬ (lift i)) → Lift-Alg (⨅ 𝒜) γ ≅ ⨅ ℬ
+
+  Lift-Alg-⨅≅ {𝒜}{ℬ} AB = Goal
+   where
+   ϕ : ∣ ⨅ 𝒜 ∣ → ∣ ⨅ ℬ ∣
+   ϕ a i = ∣ fst (AB  (lower i)) ∣ (a (lower i))
+
+   ϕhom : is-homomorphism (⨅ 𝒜) (⨅ ℬ) ϕ
+   ϕhom 𝑓 a = fizw (λ i → (∥ fst (AB (lower i)) ∥) 𝑓 (λ x → a x (lower i)))
+
+   ψ : ∣ ⨅ ℬ ∣ → ∣ ⨅ 𝒜 ∣
+   ψ b i = ∣ fst ∥ AB i ∥ ∣ (b (lift i))
+
+   ψhom : is-homomorphism (⨅ ℬ) (⨅ 𝒜) ψ
+   ψhom 𝑓 𝒃 = fiu (λ i → (snd ∣ snd (AB i) ∣) 𝑓 (λ x → 𝒃 x (lift i)))
+
+   ϕ~ψ : ϕ ∘ ψ ≈ ∣ 𝒾𝒹 (⨅ ℬ) ∣
+   ϕ~ψ 𝒃 = fizw λ i → fst ∥ snd (AB (lower i)) ∥ (𝒃 i)
+
+   ψ~ϕ : ψ ∘ ϕ ≈ ∣ 𝒾𝒹 (⨅ 𝒜) ∣
+   ψ~ϕ a = fiu λ i → snd ∥ snd (AB i) ∥ (a i)
+
+   A≅B : ⨅ 𝒜 ≅ ⨅ ℬ
+   A≅B = (ϕ , ϕhom) , ((ψ , ψhom) , ϕ~ψ , ψ~ϕ)
+
+   Goal : Lift-Alg (⨅ 𝒜) γ ≅ ⨅ ℬ
+   Goal = ≅-trans (≅-sym Lift-≅) A≅B
+
+\end{code}
+
+-->

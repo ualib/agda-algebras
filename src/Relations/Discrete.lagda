@@ -215,7 +215,7 @@ module _ {A : Type α}{I : Type 𝓥}{f : Op A I}{R : BinRel A ρ} where
 <br>
 <br>
 
-[← Relations.BinPred](Relations.BinPred.html)
+[↑ Relations](Relations.html)
 <span style="float:right;">[Relations.Continuous →](Relations.Continuous.html)</span>
 
 

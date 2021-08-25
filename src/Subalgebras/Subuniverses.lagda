@@ -118,7 +118,7 @@ When the element of `Sg X` is constructed as `app f a SgXa`, we may assume (the 
 
 
 
-#### Subuniverse Lemmas
+#### <a id="subuniverse-lemmas">Subuniverse Lemmas</a>
 
 Here we formalize a few basic properties of subuniverses. First, the intersection of subuniverses is again a subuniverse.
 
@@ -250,7 +250,6 @@ and, under these assumptions, we proved `∣ g ∣ ((𝑓 ̂ 𝑨) a) ≡ ∣ h 
 
 ---------------------------------
 
-<br>
 <br>
 
 [↑ Subalgebras](Subalgebras.html)

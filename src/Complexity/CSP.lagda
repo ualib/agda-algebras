@@ -187,7 +187,12 @@ An instance of a constraint satisfaction problem is a triple 𝑃 = (𝑉, 𝐷,
 \end{code}
 
 
---------------------------------------
+--------------------------------
+
+<br>
+
+[← Complexity.Basic](Complexity.Basic.html)
+<span style="float:right;">[agda-algebras ↑](agda-algebras.html)</span>
 
 {% include UALib.Links.md %}
 

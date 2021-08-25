@@ -20,9 +20,9 @@ open import Relation.Unary using ( Pred ; _∈_ )
 
 -- Imports from agda-algebras --------------------------------------
 open import Overture.Preliminaries  using ( _≈_ )
+open import Terms.Basic
 open import Structures.Basic        using ( signature ; structure ; _ᵒ_ )
-open import Structures.Terms.Basic
-open import Structures.Terms.Operations
+open import Structures.Terms
 
 
 private variable
@@ -51,3 +51,16 @@ fMod : {n : ℕ} → (Fin n → (Term X × Term X)) → Pred(structure 𝐹 𝑅
 fMod ℰ = λ 𝑨 → ∀ i → 𝑨 ⊧ fst (ℰ i) ≈ snd (ℰ i)
 
 \end{code}
+
+--------------------------------
+
+<br>
+
+[← Structures.Terms](Structures.Terms.html)
+<span style="float:right;">[Structures.Substructures →](Structures.Substructures.html)</span>
+
+{% include UALib.Links.md %}
+
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
+
+

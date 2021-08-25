@@ -5,7 +5,7 @@ date : 2021-02-23
 author: [agda-algebras development team][]
 ---
 
-### Truncation
+### <a id="truncation">Truncation</a>
 
 This is the [Foundations.Truncation][] module of the [Agda Universal Algebra Library][].
 
@@ -89,7 +89,7 @@ Thus, if `R : Rel A β`, then `is-subsingleton-valued R` is the assertion that f
 
 
 
-#### Uniqueness of identity proofs
+#### <a id="uniqueness-of-identity-proofs">Uniqueness of identity proofs</a>
 
 This brief introduction is intended for novices; those already familiar with the concept of *truncation* and *uniqueness of identity proofs* may want to skip to the next subsection.
 
@@ -128,7 +128,7 @@ module _ {A : Type α}{B : A → Type β} where
 \end{code}
 
 
-#### Embeddings
+#### <a id="embeddings">Embeddings</a>
 
 The `is-embedding` type is defined in the `MGS-Embeddings` module of the [Type Topology][] library in the following way.
 
@@ -190,7 +190,7 @@ monic-is-embedding|Set f Bset fmon b (u , fu≡b) (v , fv≡b) = γ
 In stating the previous result, we introduce a new convention to which we will try to adhere. If the antecedent of a theorem includes the assumption that one of the types involved is a *set* (in the sense defined above), then we add to the name of the theorem the suffix `|Set`, which calls to mind the standard mathematical notation for the restriction of a function.
 
 
-#### Equivalence class truncation
+#### <a id="equivalence-class-truncation">Equivalence class truncation</a>
 
 Recall, `IsBlock` was defined in the [Relations.Quotients][] module as follows:
 
@@ -211,7 +211,7 @@ blk-uip A R = ∀ (C : Pred A _) → is-prop (IsBlock C {R})
 It might seem unreasonable to postulate that there is at most one inhabitant of `IsBlock C`, since equivalence classes typically have multiple members, any one of which could serve as a class representative.  However, postulating `blk-uip A R` is tantamount to collapsing each `R`-block to a single point, and this is indeed the correct semantic interpretation of the elements of the quotient `A / R`.
 
 
-#### General propositions
+#### <a id="general-propositions">General propositions</a>
 
 This section defines more general truncated predicates which we call *continuous propositions* and *dependent propositions*. Recall, above (in the [Relations.Continuous][] module) we defined types called `ContRel` and `DepRel` to represent relations of arbitrary arity over arbitrary collections of sorts.
 

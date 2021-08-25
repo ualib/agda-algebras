@@ -5,6 +5,12 @@ date : 2021-06-22
 author: [agda-algebras development team][]
 ---
 
+
+### <a id="homomorphisms-of-general-structures">Homomorphisms of General Structures</a>
+
+This is the [Sturctures.Homs][] module of the [Agda Universal Algebra Library][].
+
+
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-} -- cubical #-}
@@ -160,9 +166,13 @@ open Lift
 𝓁ℴ𝓌ℯ𝓇 : {ℓˡ ℓʳ : Level}{𝑨 : structure 𝐹 𝑅  {α}{ρᵃ}} → hom (Lift-Struc ℓˡ ℓʳ 𝑨) 𝑨
 𝓁ℴ𝓌ℯ𝓇 = lower , (λ _ _ x → lower x) , (λ _ _ → refl)
 
+\end{code}
 
--- Kernels of homomorphisms
 
+
+#### <a id="kernels-of-homomorphisms">Kernels of homomorphisms</a>
+
+\begin{code}
 
 open ≡-Reasoning
 module _ {𝑨 : structure 𝐹 𝑅  {α}{β ⊔ ρᵃ}}{𝑩 : structure 𝐹 𝑅 {β} {ρᵇ}}
@@ -176,7 +186,7 @@ module _ {𝑨 : structure 𝐹 𝑅  {α}{β ⊔ ρᵃ}}{𝑩 : structure 𝐹 
   ((op 𝑩) f)(h ∘ v)  ≡⟨ (∥ hhom ∥ f v)⁻¹ ⟩
   h (((op 𝑨)f) v)    ∎
 
- kerlift-comp : (h : hom 𝑨 𝑩){wd : swelldef (siglʳ 𝐹) β} 
+ kerlift-comp : (h : hom 𝑨 𝑩){wd : swelldef (siglʳ 𝐹) β}
   →             compatible 𝑨 (kerlift ∣ h ∣ (α ⊔ ρᵃ) )
  kerlift-comp (h , hhom) {wd} f {u}{v} kuv = lift goal
   where
@@ -202,8 +212,13 @@ ker[_⇒_] : (𝑨 : structure 𝐹 𝑅 {α} {β ⊔ ρᵃ} )(𝑩 : structure 
  →         hom 𝑨 𝑩 → {wd : swelldef (siglʳ 𝐹) β} → structure 𝐹 𝑅
 ker[_⇒_] {ρᵃ = ρᵃ} 𝑨 𝑩 h {wd} = kerquo{ρᵃ = ρᵃ}{𝑨 = 𝑨}{𝑩} h {wd}
 
+\end{code}
 
--- Canonical projections
+
+
+#### <a id="canonical-projections">Canonical projections</a>
+
+\begin{code}
 
 module _ {𝑨 : structure 𝐹 𝑅 {α}{ρᵃ} } where
 
@@ -227,7 +242,6 @@ module _ {𝑨 : structure 𝐹 𝑅  {α}{β ⊔ ρᵃ}}{𝑩 : structure 𝐹 
  πker : (h : hom 𝑨 𝑩){wd : swelldef (siglʳ 𝐹) β}
   →     epi {𝑨 = 𝑨} {𝑩 = (ker[_⇒_]{ρᵃ = ρᵃ} 𝑨 𝑩 h {wd})}
  πker h {wd} = πepi (kercon{ρᵃ = ρᵃ} {𝑨 = 𝑨}{𝑩 = 𝑩} h {wd})
-
 
 
 module _ {I : Type ℓ} where
@@ -264,14 +278,10 @@ module _ {𝑨 : structure 𝐹 S∅ {α}{ℓ₀}}
  hom-alg : Type (sigl 𝐹 ⊔ α ⊔ β)
  hom-alg = Σ[ h ∈ ((carrier 𝑨) → (carrier 𝑩)) ] is-hom-op 𝑨 𝑩 h
 
-
 \end{code}
-
-
 
 --------------------------------
 
-<br>
 <br>
 
 [← Structures.Congruences](Structures.Congruences.html)

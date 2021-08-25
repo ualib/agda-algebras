@@ -25,7 +25,7 @@ open import Relation.Binary.PropositionalEquality as PE
 
 open import Overture.Preliminaries  using  ( ∣_∣ )
 open import Relations.Discrete      using  ( ker ; 0[_] ; kerlift )
-open import Relations.BinPred       using  ( Reflexive ; Symmetric ; Transitive )
+open import Relations.Properties       using  ( Reflexive ; Symmetric ; Transitive )
 
 private variable
  α β χ : Level

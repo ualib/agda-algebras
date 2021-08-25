@@ -26,7 +26,6 @@ open import Homomorphisms.Setoid
 --------------------------------------
 
 <br>
-<br>
 
 [← Algebras.Setoid.Congruences](Algebras.Setoid.Congruences.html)
 <span style="float:right;">[Homomorphisms.Basic →](Homomorphisms.Basic.html)</span>

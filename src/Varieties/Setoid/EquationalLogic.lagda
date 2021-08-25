@@ -5,9 +5,10 @@ date : 2021-01-14
 author: [agda-algebras development team][]
 ---
 
-This is the [Varieties.EquationalLogic][] module of the [Agda Universal Algebra Library][].
+### <a id="entailment-derivation-rules-soundness-and-completeness">Entailment, derivation rules, soundness and completeness</a>
 
-### Entailment, derivation rules, soundness and completeness
+This is the [Varieties.Setoid.EquationalLogic][] module of the [Agda Universal Algebra Library][].
+
 
 This module is based on Andreas Abel's Agda formalization of Birkhoff's completeness theorem.
 (See: http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf)
@@ -41,8 +42,7 @@ open IsEquivalence renaming ( refl to reflE ; sym to  symmE ; trans to tranE )
 
 -- imports from agda-algebras --------------------------------------------------------------
 open import Overture.Preliminaries       using ( ∣_∣ )
-open import Algebras.Setoid.Basic{𝑆 = 𝑆} using ( SetoidAlgebra ) renaming ( ⟦_⟧ to ⟦_⟧s )
-open import Algebras.Products    {𝑆 = 𝑆} using ( ov )
+open import Algebras.Setoid.Basic{𝑆 = 𝑆} using ( SetoidAlgebra ; ov ) renaming ( ⟦_⟧ to ⟦_⟧s )
 open import Terms.Basic          {𝑆 = 𝑆} using ( Term )
 open import Terms.Setoid.Basic   {𝑆 = 𝑆} using ( module Environment ; Ops ; Sub ; _[_] )
 
@@ -107,7 +107,7 @@ module _ {α}{ρ}{ι}{I : Type ι} where
 \end{code}
 
 
-#### Derivations in a context
+#### <a id="derivations-in-a-context">Derivations in a context</a>
 
 (Based on Andreas Abel's Agda formalization of Birkhoff's completeness theorem;
 see: http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf)
@@ -135,7 +135,7 @@ module _ {χ ι : Level} where
 
 
 
-#### Soundness of the inference rules
+#### <a id="soundness-of-the-inference-rules">Soundness of the inference rules</a>
 
 (Based on Andreas Abel's Agda formalization of Birkhoff's completeness theorem;
 see: http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf)
@@ -179,7 +179,9 @@ The converse is Birkhoff's completeness theorem: if Mod E ⊫ p ≈ q, then E �
 
 We will prove that result next.
 
-#### Birkhoff's completeness theorem
+
+
+#### <a id="birkhoffs-completeness-theorem">Birkhoff's completeness theorem</a>
 
 The proof proceeds by constructing a relatively free algebra consisting of term
 quotiented by derivable equality E ⊢ Γ ▹ _≈_.  It then suffices to prove
@@ -191,50 +193,50 @@ see: http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf)
 \begin{code}
 
 -- Universal model
--- A term model for E and Γ is Term Γ modulo E ⊢ Γ ▹ _≈_.
-module TermModel {χ : Level}{Γ : Type χ}{ι : Level}{I : Type ι} (E : I → Eq) where
+-- A term model for E and X is Term X modulo E ⊢ X ▹ _≈_.
+module TermModel {χ : Level}{X : Type χ}{ι : Level}{I : Type ι} (E : I → Eq) where
  open SetoidAlgebra
 
- -- Term Γ modulo E.
+ -- Term X modulo E.
  TermSetoid : Type χ → Setoid _ _
 
- TermSetoid Γ = record { Carrier       = Term Γ
-                       ; _≈_           = E ⊢ Γ ▹_≈_
+ TermSetoid X = record { Carrier       = Term X
+                       ; _≈_           = E ⊢ X ▹_≈_
                        ; isEquivalence = record { refl = refl ; sym = sym ; trans = trans }
                        }
 
  -- The interpretation of an operation is simply the operation itself.
- -- This works since E ⊢ Γ ▹_≈_ is a congruence.
- TermInterp : ∀ {Γ} → Func (⟦ 𝑆 ⟧s (TermSetoid Γ)) (TermSetoid Γ)
+ -- This works since E ⊢ X ▹_≈_ is a congruence.
+ TermInterp : ∀ {X} → Func (⟦ 𝑆 ⟧s (TermSetoid X)) (TermSetoid X)
  TermInterp <$> (f , ts) = node f ts
  cong TermInterp (refl , h) = app h
 
- -- The term model per context Γ.
+ -- The term model per context X.
  M : Type χ → SetoidAlgebra _ _
- Domain (M Γ) = TermSetoid Γ
- Interp (M Γ) = TermInterp
+ Domain (M X) = TermSetoid X
+ Interp (M X) = TermInterp
 
- open Environment (M Γ)
+ open Environment (M X)
 
  -- The identity substitution σ₀ maps variables to themselves.
- σ₀ : {Γ : Type χ} → Sub Γ Γ
+ σ₀ : {X : Type χ} → Sub X X
  σ₀ x = ℊ x
 
  -- σ₀ acts indeed as identity.
- identity : (t : Term Γ) → E ⊢ Γ ▹ t [ σ₀ ] ≈ t
+ identity : (t : Term X) → E ⊢ X ▹ t [ σ₀ ] ≈ t
  identity (ℊ x) = refl
  identity (node f ts) = app (identity ∘ ts)
 
- -- Evaluation in the term model is substitution $E ⊢ Γ ▹ ⟦t⟧σ ≡ t[σ]$.
+ -- Evaluation in the term model is substitution $E ⊢ X ▹ ⟦t⟧σ ≡ t[σ]$.
  -- This would even hold "up to the nose" if we had function extensionality.
 
- evaluation : (t : Term Δ) (σ : Sub Γ Δ) → E ⊢ Γ ▹ (⟦ t ⟧ <$> σ) ≈ (t [ σ ])
+ evaluation : (t : Term Δ) (σ : Sub X Δ) → E ⊢ X ▹ (⟦ t ⟧ <$> σ) ≈ (t [ σ ])
  evaluation (ℊ x)    σ = refl
 --  evaluation (node f ts)  σ = app (λ i → evaluation (ts i) σ)
  evaluation (node f ts)  σ = app (flip (evaluation ∘ ts) σ)
 
  -- The term model satisfies all the equations it started out with.
- satisfies : ∀ i → M Γ ⊨ E i
+ satisfies : ∀ i → M X ⊨ E i
  satisfies i σ = begin
                  ⟦ p ⟧ <$> σ  ≈⟨ evaluation p σ ⟩
                  p [ σ ]        ≈⟨ sub (hyp i) σ ⟩
@@ -245,46 +247,32 @@ module TermModel {χ : Level}{Γ : Type χ}{ι : Level}{I : Type ι} (E : I → 
                   p = lhs (E i)
                   q = rhs (E i)
 
-\end{code}
 
-#### Birkhoff's Completeness Theorem
-
-(Based on Andreas Abel's Agda formalization of Birkhoff's completeness theorem;
-see: http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf)
-
-
-\begin{code}
-
-module Completeness {χ ι : Level}{I : Type ι} (E : I → Eq{χ}) {Γ} where
- open TermModel {Γ = Γ} E
- open Environment (M Γ)
+module Completeness {χ ι : Level}{I : Type ι} (E : I → Eq{χ}) {X} where
+ open TermModel {X = X} E
+ open Environment (M X)
 
  -- Birkhoff's completeness theorem.
  -- Any valid consequence is derivable.
- completeness : ∀ p q → Mod E ⊫ (p ≈̇ q) → E ⊢ Γ ▹ p ≈ q
+ completeness : ∀ p q → Mod E ⊫ (p ≈̇ q) → E ⊢ X ▹ p ≈ q
  completeness p q V = begin
                   p              ≈˘⟨ identity p ⟩
                   p [ σ₀ ]       ≈˘⟨ evaluation p σ₀ ⟩
-                  ⟦ p ⟧ <$> σ₀  ≈⟨ V (M Γ) satisfies σ₀ ⟩
+                  ⟦ p ⟧ <$> σ₀  ≈⟨ V (M X) satisfies σ₀ ⟩
                   ⟦ q ⟧ <$> σ₀  ≈⟨ evaluation q σ₀ ⟩
                   q [ σ₀ ]       ≈⟨ identity q ⟩
                   q              ∎
-                  where open SetoidReasoning (TermSetoid Γ)
+                  where open SetoidReasoning (TermSetoid X)
 
 
 \end{code}
-
-
-
-
 
 
 --------------------------------
 
 <br>
-<br>
 
-[← Varieties.Setoid](Varieties.Setoid.html)
+[↑ Varieties.Setoid](Varieties.Setoid.html)
 <span style="float:right;">[Varieties.Setoid.Closure →](Varieties.Setoid.Closure.html)</span>
 
 {% include UALib.Links.md %}

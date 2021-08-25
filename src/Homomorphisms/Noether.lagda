@@ -5,7 +5,7 @@ date : 2021-01-13
 author: [agda-algebras development team][]
 ---
 
-### Homomorphism Theorems
+### <a id="homomorphism-theorems">Homomorphism Theorems</a>
 
 This is the [Homomorphisms.Noether][] module of the [Agda Universal Algebra Library][].
 
@@ -269,7 +269,8 @@ If, in addition to the hypotheses of the last theorem, we assume τ is epic, the
 
 <sup>2</sup><span class="footnote" id="fn2"> In this module we are already assuming *global* function extensionality (`gfe`), and we could just appeal to `gfe` (e.g., in the proof of `FirstHomomorphismTheorem`) instead of adding local function extensionality (\ab{fe}) to the list of assumptions.  However, we sometimes add an extra extensionality postulate in order to highlight where and how the principle is applied.}</span>
 
-<br>
+--------------------------------
+
 <br>
 
 [← Homomorphisms.Basic](Homomorphisms.Basic.html)

@@ -323,8 +323,8 @@ Recall, `h ∘ 𝒂` is the tuple whose i-th component is `h (𝒂 i)`.</span>
 
 <sup>2</sup><span class="footnote" id="fn2">Instead of "homomorphism," we sometimes use the nickname "hom" to refer to such a map.</span>
 
+---------------------------------
 
-<br>
 <br>
 
 [↑ Homomorphisms](Homomorphisms.html)

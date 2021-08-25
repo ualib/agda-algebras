@@ -5,6 +5,9 @@ date : 2021-06-22
 author: [agda-algebras development team][]
 ---
 
+### <a id="homomorphisms-of-general-structures">Homomorphisms of general structures</a>
+
+
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-} -- cubical #-}
@@ -170,53 +173,74 @@ module _ {𝑅 𝐹 : Signature}
                               ((f ᵒ 𝑩)(∣ h ∣ ∘ v)) ≡⟨((snd ∥ h ∥) f v)⁻¹ ⟩
                               (∣ h ∣((f ᵒ 𝑨) v))   ∎
 
--- module _ {𝑅 𝐹 : Signature}
---          {α ρᵃ β ρᵇ : Level}
---          {𝑨 : Structure {α}{ρᵃ} 𝑅 𝐹}{𝑩 : Structure {β}{ρᵇ} 𝑅 𝐹} where
-
---  KerCon : swelldef {!!} {!!} → Hom 𝑨 𝑩 → Con{α = α}{ρ = (β ⊔ ρᵃ)} (Lift-Strucʳ β 𝑨)
---  KerCon wd h = θ , Cθ -- θ , Cθ
---   where
---   θ : Equivalence{α = α} ∣ 𝑨 ∣ {ρ = (α ⊔ β ⊔ ρᵃ)}
---   θ = (λ x y → Lift (α ⊔ ρᵃ) (ker ∣ h ∣ x y)) , kerlift-IsEquivalence ∣ h ∣
+\end{code}
 
 
---   Cθ : Compatible (Lift-Strucʳ β 𝑨) ∣ θ ∣
---   Cθ = {!Homker-comp{𝑨 = (Lift-Strucʳ β 𝑨)} wd (Lift-Hom ℓ₀ β ℓ₀ ℓ₀ h) ?!}
+--------------------------------
+
+<br>
+
+[← Structures.Sigma.Congruences](Structures.Sigma.Congruences.html)
+<span style="float:right;">[Structures.Sigma.Isos →](Structures.Sigma.Isos.html)</span>
+
+{% include UALib.Links.md %}
+
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
+
+
+
+
+
+
+<!-- ------- The rest is not yet integrated ------------------------------------------------
+
+module _ {𝑅 𝐹 : Signature}
+         {α ρᵃ β ρᵇ : Level}
+         {𝑨 : Structure {α}{ρᵃ} 𝑅 𝐹}{𝑩 : Structure {β}{ρᵇ} 𝑅 𝐹} where
+
+ KerCon : swelldef {!!} {!!} → Hom 𝑨 𝑩 → Con{α = α}{ρ = (β ⊔ ρᵃ)} (Lift-Strucʳ β 𝑨)
+ KerCon wd h = θ , Cθ -- θ , Cθ
+  where
+  θ : Equivalence{α = α} ∣ 𝑨 ∣ {ρ = (α ⊔ β ⊔ ρᵃ)}
+  θ = (λ x y → Lift (α ⊔ ρᵃ) (ker ∣ h ∣ x y)) , kerlift-IsEquivalence ∣ h ∣
+
+
+  Cθ : Compatible (Lift-Strucʳ β 𝑨) ∣ θ ∣
+  Cθ = {!Homker-comp{𝑨 = (Lift-Strucʳ β 𝑨)} wd (Lift-Hom ℓ₀ β ℓ₀ ℓ₀ h) ?!}
 
 \end{code}
 
 With this congruence we construct the corresponding quotient, along with some syntactic sugar to denote it.
 
-\begin{code}
+begin{code}
 
--- module _ {α ρᵃ β ρᵇ : Level}{𝑅 𝐹 : Signature}
---          {𝑨 : Structure {α}{ρᵃ} 𝑅 𝐹}{𝑩 : Structure {β}{ρᵇ} 𝑅 𝐹} where
---  KerQuo : Hom 𝑨 𝑩 → Structure 𝑅 𝐹
---  KerQuo h = {!!} -- 𝑨 ╱ KerCon{𝑨 = 𝑨}{𝑩 = 𝑩}{wd = wd} h
--- module _ {𝑨 : Structure {α} {ℓ₀} 𝑅 𝐹} {wd : swelldef ℓ₀ ℓ₀ } where
- -- KerQuo : {𝑩 : Structure {ℓ₀} {ℓ₀} 𝑅  𝐹} → Hom 𝑨 𝑩 → Structure {lsuc α} {ℓ₀} 𝑅 𝐹 -- lsuc ℓ₀ ⊔ α
- -- KerQuo {𝑩 = 𝑩} h = {!!} -- 𝑨 ╱ KerCon{𝑨 = 𝑨}{𝑩 = 𝑩}{wd = wd} h
+module _ {α ρᵃ β ρᵇ : Level}{𝑅 𝐹 : Signature}
+         {𝑨 : Structure {α}{ρᵃ} 𝑅 𝐹}{𝑩 : Structure {β}{ρᵇ} 𝑅 𝐹} where
+ KerQuo : Hom 𝑨 𝑩 → Structure 𝑅 𝐹
+ KerQuo h = {!!} -- 𝑨 ╱ KerCon{𝑨 = 𝑨}{𝑩 = 𝑩}{wd = wd} h
+module _ {𝑨 : Structure {α} {ℓ₀} 𝑅 𝐹} {wd : swelldef ℓ₀ ℓ₀ } where
+ KerQuo : {𝑩 : Structure {ℓ₀} {ℓ₀} 𝑅  𝐹} → Hom 𝑨 𝑩 → Structure {lsuc α} {ℓ₀} 𝑅 𝐹 -- lsuc ℓ₀ ⊔ α
+ KerQuo {𝑩 = 𝑩} h = {!!} -- 𝑨 ╱ KerCon{𝑨 = 𝑨}{𝑩 = 𝑩}{wd = wd} h
 
--- module _ {α β ρ ρ : Level} {𝑨 : Structure {ρ} 𝑅 𝐹 {α}} where
+module _ {α β ρ ρ : Level} {𝑨 : Structure {ρ} 𝑅 𝐹 {α}} where
 
- -- kerquo : {𝑩 : Structure {ρ} 𝑅 𝐹 {β}} → hom 𝑨 𝑩 → Structure {ρ} 𝑅 𝐹 {lsuc ρ ⊔ α} --  {𝓤 ⊔ lsuc 𝓦}
- -- kerquo {𝑩 = 𝑩} h = 𝑨 ╱ {!kercon h!} -- (kercon {𝑩 = 𝑩} h)
+ kerquo : {𝑩 : Structure {ρ} 𝑅 𝐹 {β}} → hom 𝑨 𝑩 → Structure {ρ} 𝑅 𝐹 {lsuc ρ ⊔ α} --  {𝓤 ⊔ lsuc 𝓦}
+ kerquo {𝑩 = 𝑩} h = 𝑨 ╱ {!kercon h!} -- (kercon {𝑩 = 𝑩} h)
 
 
--- ker[_⇒_]_ : (𝑨 : Structure{ρ} 𝑅 𝐹 {α})(𝑩 : Structure{ρ} 𝑅 𝐹 {β}) → hom 𝑨 𝑩 → Structure 𝑅 𝐹
--- ker[ 𝑨 ⇒ 𝑩 ] h = kerquo {𝑩 = 𝑩} h
+ker[_⇒_]_ : (𝑨 : Structure{ρ} 𝑅 𝐹 {α})(𝑩 : Structure{ρ} 𝑅 𝐹 {β}) → hom 𝑨 𝑩 → Structure 𝑅 𝐹
+ker[ 𝑨 ⇒ 𝑩 ] h = kerquo {𝑩 = 𝑩} h
 
 \end{code}
 
 Thus, given `h : hom 𝑨 𝑩`, we can construct the quotient of `𝑨` modulo the kernel of `h`, and the syntax for this quotient in the [UniversalAlgebra][] library is `𝑨 [ 𝑩 ]/ker h ↾ fe`.
 
 
-
 #### <a id="the-canonical-projection">The canonical projection</a>
 
 Given an algebra `𝑨` and a congruence `θ`, the *canonical projection* is a map from `𝑨` onto `𝑨 ╱ θ` that is constructed, and proved epimorphic, as follows.
 
+begin{code}
 
 module _ {𝑩 : Structure 𝑅 𝐹 {β}} where
  open Image_∋_
@@ -240,6 +264,7 @@ In may happen that we don't care about the surjectivity of `πepi`, in which cas
 
 We combine the foregoing to define a function that takes 𝑆-algebras `𝑨` and `𝑩`, and a homomorphism `h : hom 𝑨 𝑩` and returns the canonical epimorphism from `𝑨` onto `𝑨 [ 𝑩 ]/ker h`. (Recall, the latter is the special notation we defined above for the quotient of `𝑨` modulo the kernel of `h`.)
 
+begin{code}
 
  πker : (wd : swelldef 𝓥 𝓦){𝑩 : Algebra 𝓦 𝑆}(h : hom 𝑨 𝑩) → epi 𝑨 (ker[ 𝑨 ⇒ 𝑩 ] h ↾ wd)
  πker wd {𝑩} h = πepi (kercon wd {𝑩} h)
@@ -259,13 +284,13 @@ The kernel of the canonical projection of `𝑨` onto `𝑨 / θ` is equal to `�
 \end{code}
 
 
-
 #### <a id="product-homomorphisms">Product homomorphisms</a>
 
 Suppose we have an algebra `𝑨`, a type `I : Type 𝓘`, and a family `ℬ : I → Algebra 𝓦 𝑆` of algebras.  We sometimes refer to the inhabitants of `I` as *indices*, and call `ℬ` an *indexed family of algebras*.
 
 If in addition we have a family `𝒽 : (i : I) → hom 𝑨 (ℬ i)` of homomorphisms, then we can construct a homomorphism from `𝑨` to the product `⨅ ℬ` in the natural way.
 
+begin{code}
 
 module _ {𝓘 𝓦 : Level}{I : Type 𝓘}(ℬ : I → Algebra 𝓦 𝑆) where
 
@@ -281,6 +306,7 @@ we could equally well have used one of the following alternatives, which may be 
 
 The foregoing generalizes easily to the case in which the domain is also a product of a family of algebras. That is, if we are given `𝒜 : I → Algebra 𝓤 𝑆 and ℬ : I → Algebra 𝓦 𝑆` (two families of `𝑆`-algebras), and `𝒽 :  Π i ꞉ I , hom (𝒜 i)(ℬ i)` (a family of homomorphisms), then we can construct a homomorphism from `⨅ 𝒜` to `⨅ ℬ` in the following natural way.
 
+begin{code}
 
  ⨅-hom : funext 𝓘 𝓦 → {𝓤 : Level}(𝒜 : I → Algebra 𝓤 𝑆) → Π[ i ꞉ I ] hom (𝒜 i)(ℬ i) → hom (⨅ 𝒜)(⨅ ℬ)
  ⨅-hom fe 𝒜 𝒽 = (λ x i → ∣ 𝒽 i ∣ (x i)) , (λ 𝑓 𝒶 → fe λ i → ∥ 𝒽 i ∥ 𝑓 (λ x → 𝒶 x i))
@@ -293,6 +319,7 @@ The foregoing generalizes easily to the case in which the domain is also a produ
 
 Later we will need a proof of the fact that projecting out of a product algebra onto one of its factors is a homomorphism.
 
+begin{code}
 
  ⨅-projection-hom : Π[ i ꞉ I ] hom (⨅ ℬ) (ℬ i)
  ⨅-projection-hom = λ x → (λ z → z x) , λ _ _ → refl
@@ -301,12 +328,9 @@ Later we will need a proof of the fact that projecting out of a product algebra 
 
 We could prove a more general result involving projections onto multiple factors, but so far the single-factor result has sufficed.
 
-
-
-
-
 \end{code}
 
+-->
 
 
 
@@ -314,14 +338,6 @@ We could prove a more general result involving projections onto multiple factors
 
 
 
-
-
-
-
-
-
-
----------- The rest is not yet integrated ------------------------------------------------
 
 
 

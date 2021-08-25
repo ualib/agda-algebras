@@ -5,6 +5,10 @@ date : 2021-06-22
 author: [agda-algebras development team][]
 ---
 
+### <a id="graph-structures-again">Graph Structures (again)</a>
+
+This is the [Structures.Graphs0][] module of the [Agda Universal Algebra Library][].
+
 N.B. This module differs from Graphs.lagda in that here we assume some universes are level zero (i.e., ℓ₀). This simplifies some things; e.g., we avoid having to use lift and lower (cf. Graphs.lagda)
 
 Definition [Graph of a structure]. Let 𝑨 be an (𝑅,𝐹)-structure (relations from 𝑅 and operations from 𝐹).
@@ -35,8 +39,6 @@ open import Structures.Basic       using ( signature ; structure )
 open import Examples.Structures.Signatures
                                    using ( S∅ )
 open import Structures.Homs        using ( hom ; is-hom-rel ; is-hom-op )
-open import Structures.Terms.Basic       using ( Term )
-open import Structures.EquationalLogic   using ( fMod )
 
 
 open signature
@@ -152,7 +154,6 @@ module _ {χ : Level}{X : Type χ}
 
 --------------------------------
 
-<br>
 <br>
 
 [← Structures.Graphs](Structures.Graphs.html)

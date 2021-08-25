@@ -135,7 +135,7 @@ Now `eval-cont-rel R 𝒶` is defined by `∀ j → R (λ i → 𝒶 i j)` which
 <br>
 
 [← Relations.Discrete](Relations.Discrete.html)
-<span style="float:right;">[Foundations →](Foundations.html)</span>
+<span style="float:right;">[Relations.Properties →](Relations.Properties.html)</span>
 
 
 {% include UALib.Links.md %}

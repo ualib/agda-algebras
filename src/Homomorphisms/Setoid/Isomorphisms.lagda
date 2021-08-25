@@ -5,7 +5,7 @@ date : 2021-07-11
 author: [agda-algebras development team][]
 ---
 
-### Isomorphisms between Setoid Algebras
+### <a id="isomorphisms-between-setoid-algebras">Isomorphisms between Setoid Algebras</a>
 
 \begin{code}
 
@@ -74,7 +74,7 @@ That is, two structures are **isomorphic** provided there are homomorphisms goin
 
 
 
-#### Isomorphism is an equivalence relation
+#### <a id="isomorphism-is-an-equivalence-relation">Isomorphism is an equivalence relation</a>
 
 \begin{code}
 
@@ -119,7 +119,7 @@ That is, two structures are **isomorphic** provided there are homomorphisms goin
 \end{code}
 
 
-#### Lift is an algebraic invariant
+#### <a id="lift-is-an-algebraic-invariant">Lift is an algebraic invariant</a>
 
 Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic invariant*). As our focus is universal algebra, this is important and is what makes the lift operation a workable solution to the technical problems that arise from the noncumulativity of the universe hierarchy discussed in [Overture.Lifts][].
 
@@ -145,7 +145,7 @@ Lift-SetoidAlg-iso A≅B = ≅-trans (≅-trans (≅-sym Lift-≅ ) A≅B) Lift-
 
 
 
-#### Lift associativity
+#### <a id="lift-associativity">Lift associativity</a>
 
 The lift is also associative, up to isomorphism at least.
 
@@ -161,7 +161,7 @@ Lift-SetoidAlg-assoc _ _ = ≅-trans (≅-trans (≅-sym Lift-≅) Lift-≅) Lif
 
 
 
-#### Products preserve isomorphisms
+#### <a id="products-preserve-isomorphisms">Products preserve isomorphisms</a>
 
 Products of isomorphic families of algebras are themselves isomorphic. The proof looks a bit technical, but it is as straightforward as it ought to be.
 
@@ -235,7 +235,6 @@ module _ {𝓘 : Level}{I : Type 𝓘}{fizw : funext (𝓘 ⊔ γ) β}{fiu : fun
 
 ------------------------------
 
-<br>
 <br>
 
 [← Homomorphisms.Setoid.Noether](Homomorphisms.Setoid.Noether.html)

@@ -5,7 +5,7 @@ date : 2021-07-17
 author: [agda-algebras development team][]
 ---
 
-### Homomorphism Theorems
+### <a id="homomorphism-theorems-for-setoid-algebras">Homomorphism Theorems for Setoid Algebras</a>
 
 This is the [Homomorphisms.Setoid.Noether][] module of the [Agda Universal Algebra Library][].
 
@@ -36,7 +36,7 @@ open import Homomorphisms.Setoid.Basic {𝑆 = 𝑆} using ( hom ; kercon ; ker[
 \end{code}
 
 
-#### Homomorphism Decomposition for SetoidAlgebras
+#### <a id="homomorphism-decomposition-for-setoidalgebras">Homomorphism Decomposition for SetoidAlgebras</a>
 
 
 If `τ : hom 𝑨 𝑩`, `ν : hom 𝑨 𝑪`, `ν` is surjective, and `ker ν ⊆ ker τ`, then there exists `φ : hom 𝑪 𝑩` such that `τ = φ ∘ ν` so the following diagram commutes:
@@ -128,7 +128,6 @@ If, in addition to the hypotheses of the last theorem, we assume τ is epic, the
 
 --------------------------------
 
-<br>
 <br>
 
 [← Homomorphisms.Setoid.Basic](Homomorphisms.Setoid.Basic.html)
