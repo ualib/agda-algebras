@@ -5,7 +5,7 @@ date : 2021-01-14
 author: [agda-algebras development team][]
 ---
 
-## Types for Terms
+## <a id="types-for-terms">Types for Terms</a>
 
 This is the [Terms][] module of the [Agda Universal Algebra Library][].
 
@@ -23,7 +23,6 @@ open import Terms.Setoid
 
 -------------------------------------
 
-<br>
 <br>
 
 [← Homomorphisms.Setoid.HomomorphicImages](Homomorphisms.Setoid.HomomorphicImages.html)

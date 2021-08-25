@@ -30,7 +30,7 @@ open import Foundations.Extensionality public
 <br>
 <br>
 
-[← Relations.Continuous](Relations.Continuous.html)
+[← Relations.Quotients](Relations.Quotients.html)
 <span style="float:right;">[Foundations.Welldefined →](Foundations.Welldefined.html)</span>
 
 {% include UALib.Links.md %}

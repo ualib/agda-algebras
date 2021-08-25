@@ -22,13 +22,14 @@ open import Relation.Binary.Core    using ( _Preserves_⟶_ )
 import Relation.Binary.Reasoning.PartialOrder as ≤-Reasoning
 
 
-open import ClosureSystems.Basic       using ( ClOp )
-open import ClosureSystems.Definitions using ( Extensive )
+open import ClosureSystems.Basic       using ( Extensive ; ClOp )
 open ClOp
 open Inverse
 
+private variable
+ ℓ ℓ₁ ℓ₂ : Level
 
-module _ {ℓ ℓ₁ ℓ₂ : Level}{𝑨 : Poset ℓ ℓ₁ ℓ₂}(𝑪 : ClOp 𝑨) where
+module _ {𝑨 : Poset ℓ ℓ₁ ℓ₂}(𝑪 : ClOp 𝑨) where
  open Poset 𝑨
  open ≤-Reasoning 𝑨
 
@@ -68,7 +69,7 @@ then `c` is a closure operator on A.
 
 \begin{code}
 
-module _ {ℓ ℓ₁ ℓ₂ : Level}{𝑨 : Poset ℓ ℓ₁ ℓ₂} where
+module _ {𝑨 : Poset ℓ ℓ₁ ℓ₂} where
  open Poset 𝑨
 
  private
@@ -98,12 +99,8 @@ module _ {ℓ ℓ₁ ℓ₂ : Level}{𝑨 : Poset ℓ ℓ₁ ℓ₂} where
 
 \end{code}
 
+----------------------------
 
-
-
---------------------------------------
-
-<br>
 <br>
 
 [← ClosureSystems.Basic](ClosureSystems.Basic.html)

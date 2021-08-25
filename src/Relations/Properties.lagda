@@ -1,19 +1,19 @@
 ---
 layout: default
-title : Relations.BinPred module (The Agda Universal Algebra Library)
+title : Relations.Properties module (The Agda Universal Algebra Library)
 date : 2021-06-26
 author: [agda-algebras development team][]
 ---
 
 ### <a id="properties-of-binary-predicates">Properties of binary predicates</a>
 
-This is the [Relations.BinPred][] module of the [Agda Universal Algebra Library][].
+This is the [Relations.Properties][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Relations.BinPred where
+module Relations.Properties where
 
 open import Agda.Primitive        using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
 open import Data.Product          using ( _,_ ; _×_ )
@@ -96,8 +96,8 @@ Total P = Connex P P
 <br>
 <br>
 
-[↑ Relations](Relations.html)
-<span style="float:right;">[Relations.Discrete →](Relations.Discrete.html)</span>
+[← Relations.Continuous](Relations.Continuous.html)
+<span style="float:right;">[Relations.Quotients →](Relations.Quotients.html)</span>
 
 
 {% include UALib.Links.md %}

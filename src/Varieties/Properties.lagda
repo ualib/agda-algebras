@@ -5,17 +5,16 @@ date : 2021-06-24
 author: [agda-algebras development team][]
 ---
 
-### Properties of the ⊧ relation
+### <a id="properties-of-the-models-relation">Properties of the models relation</a>
 
-We prove some closure and invariance properties of ⊧.  In particular, we prove the following facts (which are needed, for example, in the proof the Birkhoff HSP Theorem).
+We prove some closure and invariance properties of the relation `⊧`.  In particular, we prove the following facts (which are needed, for example, in the proof the Birkhoff HSP Theorem).
 
-* [Algebraic invariance](#algebraic-invariance). The ⊧ relation is an *algebraic invariant* (stable under isomorphism).
+* [Algebraic invariance](#algebraic-invariance). `⊧` is an *algebraic invariant* (stable under isomorphism).
 
 * [Subalgebraic invariance](#subalgebraic-invariance). Identities modeled by a class of algebras are also modeled by all subalgebras of algebras in the class.
 
 * [Product invariance](#product-invariance). Identities modeled by a class of algebras are also modeled by all products of algebras in the class.
 
-**Unicode Hints**. To produce the symbols ≈, ⊧, and ≋ in [agda2-mode][], type `\~~`, `\models`, and `\~~~`, respectively.
 
 \begin{code}
 
@@ -51,6 +50,8 @@ open import Subalgebras.Properties     {𝑆 = 𝑆} using ( iso→injective )
 open import Varieties.EquationalLogic  {𝑆 = 𝑆} using ( _⊧_≈_ ; _⊫_≈_ )
 
 \end{code}
+
+
 #### <a id="algebraic-invariance-of-models">Algebraic invariance of ⊧</a>
 
 The binary relation ⊧ would be practically useless if it were not an *algebraic invariant* (i.e., invariant under isomorphism).
@@ -96,8 +97,6 @@ module _ (wd : SwellDef){α β χ : Level}{X : Type χ}{𝑨 : Algebra α 𝑆} 
 
 
 
-
-
 #### <a id="subalgebraic-invariance">Subalgebraic invariance of ⊧</a>
 
 Identities modeled by an algebra `𝑨` are also modeled by every subalgebra of `𝑨`, which fact can be formalized as follows.
@@ -121,7 +120,7 @@ module _ (wd : SwellDef){χ : Level}{𝓤 𝓦 : Level}{X : Type χ} where
 
 \end{code}
 
- Next, identities modeled by a class of algebras is also modeled by all subalgebras of the class.  In other terms, every term equation `p ≈ q` that is satisfied by all `𝑨 ∈ 𝒦` is also satisfied by every subalgebra of a member of 𝒦.
+Next, identities modeled by a class of algebras is also modeled by all subalgebras of the class.  In other terms, every term equation `p ≈ q` that is satisfied by all `𝑨 ∈ 𝒦` is also satisfied by every subalgebra of a member of 𝒦.
 
  \begin{code}
 
@@ -137,9 +136,10 @@ module _ (wd : SwellDef){χ : Level}{𝓤 𝓦 : Level}{X : Type χ} where
 \end{code}
 
 
- #### <a id="product-invariance">Product invariance of ⊧</a>
 
- An identity satisfied by all algebras in an indexed collection is also satisfied by the product of algebras in that collection.
+#### <a id="product-invariance">Product invariance of ⊧</a>
+
+An identity satisfied by all algebras in an indexed collection is also satisfied by the product of algebras in that collection.
 
  \begin{code}
 
@@ -183,6 +183,7 @@ Another fact that will turn out to be useful is that a product of a collection o
   Aipq i = ⊧-lower-invar wd p q (α i) --  (≅-sym Lift-≅)
 
 \end{code}
+
 
 
 #### <a id="homomorphisc-invariance">Homomorphic invariance of ⊧</a>
@@ -248,13 +249,11 @@ module _ (wd : SwellDef){α χ : Level}{X : Type χ}{𝒦 : Pred (Algebra α �
 ---------------------------------
 
 <br>
-<br>
 
 [← Varieties.Closure](Varieties.Closure.html)
 <span style="float:right;">[Varieties.Preservation →](Varieties.Preservation.html)</span>
 
 {% include UALib.Links.md %}
 
---------------------------------------
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

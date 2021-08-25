@@ -5,7 +5,7 @@ date : 2021-01-14
 author: [agda-algebras development team][]
 ---
 
-### Closure Operators
+### <a id="closure-operators">Closure Operators</a>
 
 Fix a signature 𝑆, let 𝒦 be a class of 𝑆-algebras, and define
 
@@ -13,11 +13,11 @@ Fix a signature 𝑆, let 𝒦 be a class of 𝑆-algebras, and define
 * S 𝒦 = algebras isomorphic to a subalgebra of a member of 𝒦;
 * P 𝒦 = algebras isomorphic to a product of members of 𝒦.
 
-A straight-forward verification confirms that H, S, and P are **closure operators** (expansive, monotone, and idempotent).  A class 𝒦 of 𝑆-algebras is said to be *closed under the taking of homomorphic images* provided `H 𝒦 ⊆ 𝒦`. Similarly, 𝒦 is *closed under the taking of subalgebras* (resp., *arbitrary products*) provided `S 𝒦 ⊆ 𝒦` (resp., `P 𝒦 ⊆ 𝒦`). The operators H, S, and P can be composed with one another repeatedly, forming yet more closure operators.
+A straight-forward verification confirms that H, S, and P are *closure operators* (expansive, monotone, and idempotent).  A class 𝒦 of 𝑆-algebras is said to be *closed under the taking of homomorphic images* provided `H 𝒦 ⊆ 𝒦`. Similarly, 𝒦 is *closed under the taking of subalgebras* (resp., *arbitrary products*) provided `S 𝒦 ⊆ 𝒦` (resp., `P 𝒦 ⊆ 𝒦`). The operators H, S, and P can be composed with one another repeatedly, forming yet more closure operators.
 
 An algebra is a homomorphic image (resp., subalgebra; resp., product) of every algebra to which it is isomorphic. Thus, the class `H 𝒦` (resp., `S 𝒦`; resp., `P 𝒦`) is closed under isomorphism.
 
-A **variety** is a class of algebras, in the same signature, that is closed under the taking of homomorphic images, subalgebras, and arbitrary products.  To represent varieties we define inductive types for the closure operators `H`, `S`, and `P` that are composable.  Separately, we define an inductive type `V` which simultaneously represents closure under all three operators, `H`, `S`, and `P`.
+A *variety* is a class of algebras, in the same signature, that is closed under the taking of homomorphic images, subalgebras, and arbitrary products.  To represent varieties we define inductive types for the closure operators `H`, `S`, and `P` that are composable.  Separately, we define an inductive type `V` which simultaneously represents closure under all three operators, `H`, `S`, and `P`.
 
 
 \begin{code}
@@ -38,17 +38,18 @@ open import Relation.Unary  using ( Pred  ; _∈_ ; _⊆_ )
 
 
 -- Imports from agda-algebras
-open import Overture.Preliminaries                  using ( ∣_∣ ; ∥_∥ )
-open import Algebras.Basic                          using ( Algebra ; Lift-Alg )
-open import Algebras.Products               {𝑆 = 𝑆} using ( ov ; ⨅ )
-open import Homomorphisms.Isomorphisms      {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; Lift-≅
-                                                          ; ≅-trans ; Lift-Alg-⨅≅
-                                                          ; ≅-refl ; Lift-Alg-iso
-                                                          ; Lift-Alg-assoc )
-open import Homomorphisms.HomomorphicImages {𝑆 = 𝑆} using ( HomImages ; _IsHomImageOf_
-                                                          ; Lift-Alg-hom-image )
-open import Subalgebras.Subalgebras         {𝑆 = 𝑆} using (_≤_ ; _IsSubalgebraOfClass_ ; Subalgebra )
-open import Subalgebras.Properties          {𝑆 = 𝑆} using ( ≤-refl ; ≅-RESP-≤ ; ≤-RESP-≅ ; ≤-trans ; Lift-≤-Lift )
+open import Overture.Preliminaries          using ( ∣_∣ ; ∥_∥ )
+open import Algebras.Basic                  using ( Algebra ; Lift-Alg )
+open import Algebras.Products       {𝑆 = 𝑆} using ( ov ; ⨅ )
+open import Homomorphisms.Isomorphisms
+                                    {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; Lift-≅ ; ≅-trans ; ≅-refl
+                                                  ; Lift-Alg-⨅≅ ; Lift-Alg-iso ; Lift-Alg-assoc )
+open import Homomorphisms.HomomorphicImages
+                                    {𝑆 = 𝑆} using ( HomImages ; _IsHomImageOf_
+                                                  ; Lift-Alg-hom-image )
+open import Subalgebras.Subalgebras {𝑆 = 𝑆} using (_≤_ ; _IsSubalgebraOfClass_ ; Subalgebra )
+open import Subalgebras.Properties  {𝑆 = 𝑆} using ( ≤-refl ; ≅-RESP-≤ ; ≤-RESP-≅
+                                                  ; ≤-trans ; Lift-≤-Lift )
 
 \end{code}
 
@@ -135,10 +136,6 @@ variety α = Σ[ 𝒱 ∈ (Pred (Algebra α 𝑆)(ov α)) ] is-variety 𝒱
 \end{code}
 
 
-
-
-
-
 #### <a id="closure-properties-of-S">Closure properties of S</a>
 
 `S` is a closure operator.  The facts that S is idempotent and expansive won't be needed, so we omit these, but we will make use of monotonicity of S.  Here is the proof of the latter.
@@ -210,8 +207,6 @@ module _ {α : Level}{𝒦 : Pred (Algebra α 𝑆)(ov α)} where
    A≅SA = snd ∥ snd AS ∥
 
 \end{code}
-
-
 
 
 #### <a id="closure-properties-of-P">Closure properties of P</a>
@@ -287,8 +282,6 @@ module _ {α β : Level}{𝒦 : Pred (Algebra α 𝑆)(ov α)} where
 \end{code}
 
 
-
-
 #### <a id="V-is-closed-under-lift">V is closed under lift</a>
 
 As mentioned earlier, a technical hurdle that must be overcome when formalizing proofs in Agda is the proper handling of universe levels. In particular, in the proof of the Birkhoff's theorem, for example, we will need to know that if an algebra 𝑨 belongs to the variety V 𝒦, then so does the lift of 𝑨.  Let us get the tedious proof of this technical lemma out of the way.
@@ -359,9 +352,8 @@ module Vlift {α : Level} {fe₀ : funext (ov α) α}
 ---------------------------------
 
 <br>
-<br>
 
-[↑ Varieties.EquationalLogic](Varieties.EquationalLogic.html)
+[← Varieties.EquationalLogic](Varieties.EquationalLogic.html)
 <span style="float:right;">[Varieties.Properties →](Varieties.Properties.html)</span>
 
 {% include UALib.Links.md %}

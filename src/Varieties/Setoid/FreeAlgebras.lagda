@@ -5,7 +5,7 @@ date : 2021-06-29
 author: [agda-algebras development team][]
 ---
 
-### Free Algebras and Birkhoff's Theorem (Setoid version)
+### <a id="free-algebras-and-birkhoffs-theorem-setoid-version">Free Algebras and Birkhoff's Theorem (Setoid version)</a>
 
 \begin{code}
 
@@ -29,21 +29,17 @@ open import Relation.Binary.PropositionalEquality
 open import Overture.Preliminaries             using ( ∣_∣ )
 open import Overture.Inverses                  using ( IsSurjective ; Image_∋_ ; Inv ; InvIsInv ; eq )
 open import Algebras.Setoid.Products   {𝑆 = 𝑆} using ( ⨅ )
-open import Algebras.Setoid.Basic      {𝑆 = 𝑆} using ( SetoidAlgebra ) renaming ( ⟦_⟧ to ⟦_⟧s )
+open import Algebras.Setoid.Basic      {𝑆 = 𝑆} using ( SetoidAlgebra ; ov ) renaming ( ⟦_⟧ to ⟦_⟧s )
 open import Homomorphisms.Setoid.Basic {𝑆 = 𝑆} using ( hom ; epi )
-open import Terms.Setoid.Basic         {𝑆 = 𝑆} using ( TermAlgebra )
+open import Terms.Setoid.Basic         {𝑆 = 𝑆} using ( 𝑻 )
 open import Varieties.Setoid.EquationalLogic
                                        {𝑆 = 𝑆} using ( Eq ; _⊫_ ; module TermModel ; Mod ; Th)
 
 private variable
  α χ ρ ℓ : Level
 
-ov : Level → Level
-ov α = 𝓞 ⊔ 𝓥 ⊔ lsuc α
 
-
-
-module _ {Γ : Type χ}{𝒦 : Pred (SetoidAlgebra α ρ) ℓ} where
+module _ {X : Type χ}{𝒦 : Pred (SetoidAlgebra α ρ) ℓ} where
 
  -- ℐ indexes the collection of equations modeled by 𝒦
  ℐ : Type (ℓ ⊔ ov(α ⊔ χ ⊔ ρ))
@@ -54,7 +50,7 @@ module _ {Γ : Type χ}{𝒦 : Pred (SetoidAlgebra α ρ) ℓ} where
 
 \end{code}
 
-#### The free algebra
+#### <a id="the-free-algebra">The free algebra</a>
 
 We now define the algebra `𝔽`, which plays the role of the relatively free algebra, along with the natural epimorphism `epi𝔽 : epi (𝑻 X) 𝔽` from `𝑻 X` to `𝔽`.
 
@@ -63,17 +59,17 @@ We now define the algebra `𝔽`, which plays the role of the relatively free al
  -- The relatively free algebra (relative to Th 𝒦) is called `M`
  -- and is derived from `TermSetoid Γ` and `TermInterp Γ` and
  -- imported from the EquationalLogic module.
- open TermModel {Γ = Γ}{ι = (ℓ ⊔ ov(α ⊔ χ ⊔ ρ))}{I = ℐ} ℰ
+ open TermModel {X = X}{ι = (ℓ ⊔ ov(α ⊔ χ ⊔ ρ))}{I = ℐ} ℰ
 
  𝔽 : SetoidAlgebra _ _
- 𝔽 = M Γ
+ 𝔽 = M X
 
- epi𝔽 : epi (TermAlgebra Γ) 𝔽
+ epi𝔽 : epi (𝑻 X) 𝔽
  epi𝔽 = record { map = id ; is-epi = (λ 𝑓 a → refl) , λ y → eq y refl }
 
  open epi
 
- hom𝔽 : hom (TermAlgebra Γ) 𝔽
+ hom𝔽 : hom (𝑻 X) 𝔽
  hom𝔽 = epi-to-hom epi𝔽
 
  hom𝔽-is-epic : IsSurjective ∣ hom𝔽 ∣
@@ -89,9 +85,12 @@ We now define the algebra `𝔽`, which plays the role of the relatively free al
 \end{code}
 
 
+To be continued...
+
+(TODO: complete this module)
+
 --------------------------------
 
-<br>
 <br>
 
 [← Varieties.Setoid.Closure](Varieties.Setoid.Closure.html)

@@ -5,9 +5,9 @@ date : 2021-07-26
 author: [agda-algebras development team][]
 ---
 
-## Types for Substructures of General Mathematical Structures
+## <a id="types-for-general-mathematical-structures">Types for General Mathematical Structures</a>
 
-This is the [Structures.Substructures][] module of the [Agda Universal Algebra Library][].
+This is the [Structures.Sigma][] module of the [Agda Universal Algebra Library][].
 
 
 \begin{code}
@@ -27,9 +27,8 @@ open import Structures.Sigma.Isos
 --------------------------------
 
 <br>
-<br>
 
-[← Structures.Substructures.Substructures](Structures.Substructures.Substructures.html)
+[← Structures.Substructures](Structures.Substructures.html)
 <span style="float:right;">[Structures.Sigma.Basic →](Structures.Sigma.Basic.html)</span>
 
 {% include UALib.Links.md %}

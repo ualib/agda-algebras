@@ -5,7 +5,7 @@ date : 2021-08-16
 author: [agda-algebras development team][]
 ---
 
-### Homomorphic Images
+### <a id="homomorphic-images">Homomorphic Images</a>
 
 This is the [Homomorphisms.HomomorphicImages][] module of the [Agda Universal Algebra Library][].
 
@@ -43,7 +43,7 @@ ov α = 𝓞 ⊔ 𝓥 ⊔ lsuc α
 \end{code}
 
 
-#### Hom images of a single algebra
+#### <a id="hom-images-of-a-single-algebra">Hom images of a single algebra</a>
 
 We begin with what seems, for our purposes, the most useful way to represent the class of *homomorphic images* of an algebra in dependent type theory.
 
@@ -61,7 +61,7 @@ These types should be self-explanatory, but just to be sure, let's describe the 
 
 
 
-#### Hom images of a class of algebras
+#### <a id="hom-images-of-a-class-of-algebras">Hom images of a class of algebras</a>
 
 Given a class `𝒦` of `𝑆`-algebras, we need a type that expresses the assertion that a given algebra is a homomorphic image of some algebra in the class, as well as a type that represents all such homomorphic images.
 
@@ -127,7 +127,6 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ} {𝑩 : SetoidAlgebra β ρᵇ} where
 
 --------------------------------------
 
-<br>
 <br>
 
 [← Homomorphisms.Setoid.Isomoprhisms](Homomorphisms.Setoid.Isomoprhisms.html)

@@ -5,6 +5,8 @@ date : 2021-07-01
 author: [agda-algebras development team][]
 ---
 
+### <a id="properties">Properties</a>
+
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -21,15 +23,19 @@ open import Relation.Binary.Core    using ( REL )
 open import Relation.Unary          using ( Pred ; _⊆_ )
 import Relation.Binary.Structures as BS
 
-
 open import GaloisConnections.Basic using (Galois ; ←→≥id ; →←≥id ; _⃗_ ; _⃖_ )
-
 
 open Poset
 
+\end{code}
 
--- Definition of the poset of subsets of a set with the usual set inclusion relation.
--- (I couldn't find this in the standard library, though I suspect it's somewhere.)
+#### <a id="the-poset-of-subsets-of-a-set">The poset of subsets of a set</a>
+
+Here is one way to represent the poset of all subsets of a set with the usual set inclusion relation.
+(I couldn't find this in the standard library; we should propose adding it or something similar.)
+
+\begin{code}
+
 module _ {α ρ : Level} {𝒜 : Type α} where
 
  _≐_ : Pred 𝒜 ρ → Pred 𝒜 ρ → Type (α ⊔ ρ)
@@ -63,7 +69,9 @@ A Binary relation from one poset to another induces a Galois connection, but onl
 situation, namely when all the involved sets are of the same size.  This is akin to the situation
 with Adjunctions in Category Theory (unsurprisingly). In other words, there is likely a
 unit/counit definition that is more level polymorphic.
+
 \begin{code}
+
 module _ {ℓ : Level}{𝒜 : Type ℓ} {ℬ : Type ℓ} where
 
  𝒫𝒜 : Poset (lsuc ℓ) ℓ ℓ
@@ -77,6 +85,7 @@ module _ {ℓ : Level}{𝒜 : Type ℓ} {ℬ : Type ℓ} where
                     ; G = R ⃖_
                     ; GF≥id = λ _ → ←→≥id
                     ; FG≥id = λ _ → →←≥id }
+
 \end{code}
 
 

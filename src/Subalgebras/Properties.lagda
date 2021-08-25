@@ -5,7 +5,7 @@ date : 2021-07-18
 author: [agda-algebras development team][]
 ---
 
-### Properties of the Subalgebra inclusion relation
+### <a id="properties-of-the-subalgebra-inclusion-relation">Properties of the Subalgebra Inclusion Relation</a>
 
 \begin{code}
 
@@ -65,11 +65,12 @@ open _≅_
 
 \end{code}
 
-#### Relations between ≤, ≥, and ≅
+#### <a id="relations-between">Relations between ≤, ≥, and ≅</a>
 
-In case all algebras live in the same universe level, we can use some of the definitions in the standard library.
-However, to obtain more general versions, we need to either extend the standard library's Binary.Structures module
-to be universe polymorphic, or just implement what we need here.  For now we do the latter (below).
+In case all algebras live in the same universe level, we can use some of the definitions
+in the standard library. However, to obtain more general versions, we need to either
+extend the standard library's Binary.Structures module to be universe polymorphic, or
+just implement what we need here.  For now we do the latter (below).
 
 \begin{code}
 
@@ -89,10 +90,12 @@ module _ {α : Level} where
  reflexive ≥-preorder = ≥-refl
  trans ≥-preorder {𝑨}{𝑩}{𝑪} A≥B B≥C = ≥-trans 𝑨 𝑪 A≥B B≥C
 
--- Consequences of the fact that _≤_ and _≥_ are preorders relative to _≅_.
+\end{code}
 
--- These are essentially equivalent variations on the following obvious fact:
--- If two algebras are isomorphic and one of them is a subalgebra, then so is the other.
+Here are some consequences of the fact that `_≤_` and `_≥_` are preorders relative to `_≅_`.
+These are essentially equivalent variations on the following obvious fact: If two algebras are isomorphic and one of them is a subalgebra, then so is the other.
+
+\begin{code}
 
  -- 1a. If 𝑨 ≤ 𝑩  and  𝑩 ≅ 𝑪, then  𝑨 ≤ 𝑪
  ≤-resp-≅ : _≤_ Respectsʳ _≅_     -- usage: (note the argument order)
@@ -112,7 +115,7 @@ module _ {α : Level} where
 
 \end{code}
 
-#### Relations between ≤, ≥, and ≅ (Universe-polymorphic versions)
+#### <a id="relations-between-polymorphic-versions)">Relations between ≤, ≥, and ≅ (universe-polymorphic versions)</a>
 
 \begin{code}
 
@@ -146,36 +149,11 @@ iso→injective {𝑨 = 𝑨} (mkiso f g f∼g g∼f) {x} {y} fxfy =
 
 ≤-mono 𝑩 KK' KB = ∣ KB ∣ , fst ∥ KB ∥ , KK' (∣ snd ∥ KB ∥ ∣) , ∥ (snd ∥ KB ∥) ∥
 
+\end{code}
 
-module OLD-DEPRECATED-NAMES {𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆}{𝑪 : Algebra γ 𝑆} where
+#### <a id="lifts-of-subalgebras">Lifts of subalgebras</a>
 
- ≤-trans-≅ : 𝑨 ≤ 𝑩 → 𝑨 ≅ 𝑪 → 𝑪 ≤ 𝑩
- ≤-trans-≅ = ≥-RESP-≅{𝑨 = 𝑩}
-
- ≤-TRANS-≅ : 𝑨 ≤ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤ 𝑪
- ≤-TRANS-≅ = ≤-RESP-≅
-
- ≤-iso : (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}{𝑪 : Algebra γ 𝑆}
-  →      𝑪 ≅ 𝑩 → 𝑩 ≤ 𝑨 → 𝑪 ≤ 𝑨
-
- ≤-iso 𝑨 {𝑩} {𝑪} CB BA = (g ∘ f , gfhom) , gfinj
-  where
-  f : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
-  f = ∣ to CB ∣
-  g : ∣ 𝑩 ∣ → ∣ 𝑨 ∣
-  g = fst ∣ BA ∣
-
-  gfinj : IsInjective (g ∘ f)
-  gfinj = ∘-injective (iso→injective CB)(∥ BA ∥)
-
-  gfhom : is-homomorphism 𝑪 𝑨 (g ∘ f)
-  gfhom = ∘-is-hom 𝑪 𝑨 {f}{g} ∥ to CB ∥ (snd ∣ BA ∣)
-
-
-
--- --------------------
--- Lifts of subalgebras
--- --------------------
+\begin{code}
 
 module _ {𝒦 : Pred (Algebra α 𝑆)(ov α)}{𝑩 : Algebra α 𝑆} where
 
@@ -197,7 +175,6 @@ Lift-≤-Lift ℓᵃ {𝑩} ℓᵇ a<b = ≥-Lift (Lift-Alg 𝑩 ℓᵇ) (≤-Li
 
 ---------------------------------
 
-<br>
 <br>
 
 [← Subalgebras.Subalgebras](Subalgebras.Subalgebras.html)

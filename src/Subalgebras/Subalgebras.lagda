@@ -154,7 +154,6 @@ Using this type, we express the collection of all subalgebras of algebras in a c
 ---------------------------------
 
 <br>
-<br>
 
 [← Subalgebras.Subuniverses](Subalgebras.Subuniverses.html)
 <span style="float:right;">[Subalgebras.Properties →](Subalgebras.Properties.html)</span>

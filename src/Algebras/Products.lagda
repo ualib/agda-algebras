@@ -6,7 +6,7 @@ author: [agda-algebras development team][]
 ---
 
 
-### Products of Algebras and Product Algebras
+### <a id="products-of-algebras-and-product-algebras">Products of Algebras and Product Algebras</a>
 
 This is the [Algebras.Products][] module of the [Agda Universal Algebra Library][].
 
@@ -133,10 +133,9 @@ If `p : 𝑨 ∈ 𝒦`, we view the pair `(𝑨 , p) ∈ ℑ` as an *index* over
 --------------------------------------------
 
 <br>
-<br>
 
-[← Algebras.Congruences](Algebras.Congruences.html)
-<span style="float:right;">[Algebras.Setoid →](Algebras.Setoid.html)</span>
+[← Algebras.Basic](Algebras.Basic.html)
+<span style="float:right;">[Algebras.Congruences →](Algebras.Congruences.html)</span>
 
 {% include UALib.Links.md %}
 

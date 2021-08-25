@@ -5,7 +5,7 @@ date : 2021-07-26
 author: [agda-algebras development team][]
 ---
 
-## Equations and Varieties for Setoids
+### <a id="equations-and-varieties-for-setoids">Equations and Varieties for Setoids</a>
 
 This is the [Varieties.Setoid][] module of the [Agda Universal Algebra Library][].
 
@@ -23,7 +23,6 @@ open import Varieties.Setoid.FreeAlgebras
 
 --------------------------------
 
-<br>
 <br>
 
 [← Varieties.FreeAlgebras](Varieties.FreeAlgebras.html)

@@ -5,7 +5,10 @@ date : 2021-07-18
 author: [agda-algebras development team][]
 ---
 
-#### Properties of the Subalgebra Relation
+#### <a id="properties-of-the-subalgebra-relation">Properties of the Subalgebra Relation</a>
+
+This is the [Subalgebras.Setoid.Properties][] module of the [Agda Universal Algebra Library][].
+
 
 \begin{code}
 
@@ -37,7 +40,11 @@ open import Subalgebras.Setoid.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; _≥
 
 private variable α ρᵃ β ρᵇ γ ρᶜ : Level
 
--- The subalgebra relation is a *preorder*, i.e., a reflexive, transitive binary relation.
+\end{code}
+
+The subalgebra relation is a *preorder*, i.e., a reflexive, transitive binary relation.
+
+\begin{code}
 
 open _≅_
 
@@ -107,11 +114,11 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ}{𝑪 : S
 
 ≤-mono 𝑩 KK' (𝑨 , (KA , B≤A)) = 𝑨 , ((KK' KA) , B≤A)
 
+\end{code}
 
+#### <a id="lifts-of-subalgebras">Lifts of subalgebras</a>
 
--- ---------------------
--- Lifts of subalgebras
--- ---------------------
+\begin{code}
 
 module _ {𝒦 : Pred (SetoidAlgebra α ρᵃ)(ov α)}{𝑩 : SetoidAlgebra β ρᵇ}{ℓ : Level} where
 
@@ -132,7 +139,6 @@ Lift-≤-Lift {𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ A≤B = ≥-Lift (Lift-SetoidAl
 
 ---------------------------------
 
-<br>
 <br>
 
 [← Subalgebras.Setoid.Subalgebras](Subalgebras.Setoid.Subalgebras.html)

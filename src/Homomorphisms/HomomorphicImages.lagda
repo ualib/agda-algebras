@@ -126,11 +126,11 @@ module _ {α β : Level} where
 
 --------------------------------------
 
+<br>
+
 [← Homomorphisms.Isomorphisms](Homomorphisms.Isomorphisms.html)
 <span style="float:right;">[Homomorphisms.Setoid →](Homomorphisms.Setoid.html)</span>
 
 {% include UALib.Links.md %}
-
-------------------------------
 
 [the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team

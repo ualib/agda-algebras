@@ -5,7 +5,7 @@ date : 2021-06-28
 author: [agda-algebras development team][]
 ---
 
-### Setoids of Terms
+### <a id="representing-terms-using-setoids">Representing Terms using Setoids</a>
 
 \begin{code}
 
@@ -13,7 +13,7 @@ author: [agda-algebras development team][]
 
 module Terms.Setoid where
 
-open import Terms.Basic
+open import Terms.Setoid.Basic
 
 
 \end{code}

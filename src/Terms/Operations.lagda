@@ -253,7 +253,8 @@ subst-theorem wd p q σ 𝑨 Apq η = (𝑨 ⟦ p [ σ ] ⟧) η ≡⟨ subst-le
 
 <sup>1</sup><span class="footnote" id="fn1">We plan to resolve this before the next major release of the [Agda UALib][].</span>
 
-<br>
+----------------------------------
+
 <br>
 
 [← Terms.Properties](Terms.Properties.html)

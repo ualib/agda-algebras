@@ -5,6 +5,8 @@ date : 2021-05-12
 author: [agda-algebras development team][]
 ---
 
+### <a id="congruences-of-general-structures">Congruences of general structures</a>
+
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-} -- cubical #-}
@@ -51,7 +53,7 @@ module _ {α ρ : Level} where
 
 \end{code}
 
-#### Quotient structures
+#### <a id="quotient-structures">Quotient structures</a>
 
 \begin{code}
 
@@ -81,7 +83,6 @@ Example. The zero congruence of an arbitrary structure.
 
 --------------------------------
 
-<br>
 <br>
 
 [← Structures.Sigma.Products](Structures.Sigma.Products.html)

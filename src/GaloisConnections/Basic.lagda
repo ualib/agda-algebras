@@ -5,7 +5,7 @@ date : 2021-07-01
 author: [agda-algebras development team][]
 ---
 
-### Galois Connection
+### <a id="basic-definitions">Basic Definitions</a>
 
 If 𝑨 = (A, ≤) and 𝑩 = (B, ≤) are two partially ordered sets (posets), then a
 *Galois connection* between 𝑨 and 𝑩 is a pair (F , G) of functions such that

@@ -5,7 +5,7 @@ date : 2021-02-23
 author: [agda-algebras development team][]
 ---
 
-### Extensionality
+### <a id="extensionality">Extensionality</a>
 
 This is the [Foundations.Extensionality][] module of the [Agda Universal Algebra Library][].
 
@@ -39,7 +39,7 @@ private variable α β γ ρ 𝓥 : Level
 
 \end{code}
 
-#### Function Extensionality
+#### <a id="function-extensionality">Function Extensionality</a>
 
 
 Previous versions of [UniversalAlgebra][] made heavy use of a *global function extensionality principle*. This asserts that function extensionality holds at all universe levels.
@@ -98,7 +98,7 @@ module _ {A : Type α}{B : Type β} where
 \end{code}
 
 
-#### An alternative way to express function extensionality
+#### <a id="an-alternative-way-to-express-function-extensionality">An alternative way to express function extensionality</a>
 
 A useful alternative for expressing dependent function extensionality, which is essentially equivalent to `dfunext`, is to assert that the `happly` function is actually an *equivalence*.
 
@@ -148,12 +148,7 @@ module _ {A : Type α}{R : BinRel A ρ} where
 
 \end{code}
 
-
-
-
-
 ---------------------------------------
-
 
 <br>
 <br>

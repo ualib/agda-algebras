@@ -5,10 +5,10 @@ date : 2021-07-03
 author: [agda-algebras development team][]
 ---
 
-
-### Products of SetoidAlgebras
+#### <a id="products-of-setoidalgebras">Products of Setoid Algebras</a>
 
 This is the [Algebras.Setoid.Products][] module of the [Agda Universal Algebra Library][].
+
 
 \begin{code}
 
@@ -41,7 +41,7 @@ private variable α ρ ι : Level
 
 \end{code}
 
-#### Products of SetoidAlgebras
+##### <a id="products-of-setoidalgebras">Products of SetoidAlgebras</a>
 
 \begin{code}
 
@@ -67,7 +67,31 @@ cong (Interp (⨅ {I} 𝒜)) (refl , f=g ) = λ i → cong  (Interp (𝒜 i)) (r
 
 \end{code}
 
-#### Products of Algebroids
+
+##### <a id="products-of-classes-of-setoidalgebras">Products of classes of SetoidAlgebras</a>
+
+\begin{code}
+
+module _ {𝒦 : Pred (SetoidAlgebra α ρ) (ov α)} where
+
+ ℑ : Type (ov(α ⊔ ρ))
+ ℑ = Σ[ 𝑨 ∈ (SetoidAlgebra α ρ) ] 𝑨 ∈ 𝒦
+
+
+ 𝔄 : ℑ → SetoidAlgebra α ρ
+ 𝔄 i = ∣ i ∣
+
+ class-product : SetoidAlgebra (ov (α ⊔ ρ)) _
+ class-product = ⨅ 𝔄
+
+\end{code}
+
+If `p : 𝑨 ∈ 𝒦`, we view the pair `(𝑨 , p) ∈ ℑ` as an *index* over the class,
+so we can think of `𝔄 (𝑨 , p)` (which is simply `𝑨`) as the projection of the
+product `⨅ 𝔄` onto the `(𝑨 , p)`-th component.
+
+
+##### <a id="products-of-algebroids">Products of Algebroids</a>
 
 \begin{code}
 
@@ -91,31 +115,26 @@ cong (Interp (⨅ {I} 𝒜)) (refl , f=g ) = λ i → cong  (Interp (𝒜 i)) (r
 
 \end{code}
 
-#### Products of classes of Algebroids
+##### <a id="products-of-classes-of-algebroids">Products of classes of Algebroids</a>
 
 \begin{code}
 
 module _ {𝒦 : Pred (Algebroid α ρ) (𝓞 ⊔ 𝓥 ⊔ lsuc α)} where
 
- ℑ : Type (ov(α ⊔ ρ))
- ℑ = Σ[ 𝑨 ∈ (Algebroid α ρ) ] 𝑨 ∈ 𝒦
+ ℑ' : Type (ov(α ⊔ ρ))
+ ℑ' = Σ[ 𝑨 ∈ (Algebroid α ρ) ] 𝑨 ∈ 𝒦
 
 
- 𝔄 : ℑ → Algebroid α ρ
- 𝔄 i = ∣ i ∣
+ 𝔄' : ℑ' → Algebroid α ρ
+ 𝔄' i = ∣ i ∣
 
- class-product : Algebroid (ov (α ⊔ ρ)) _
- class-product = ⨅oid 𝔄
+ class-product' : Algebroid (ov (α ⊔ ρ)) _
+ class-product' = ⨅oid 𝔄'
 
 \end{code}
 
-If `p : 𝑨 ∈ 𝒦`, we view the pair `(𝑨 , p) ∈ ℑ` as an *index* over the class,
-so we can think of `𝔄 (𝑨 , p)` (which is simply `𝑨`) as the projection of the
-product `⨅ 𝔄` onto the `(𝑨 , p)`-th component.
-
 --------------------------------
 
-<br>
 <br>
 
 [← Algebras.Setoid.Basic](Algebras.Setoid.Basic.html)

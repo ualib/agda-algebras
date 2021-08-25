@@ -5,6 +5,9 @@ date : 2021-07-26
 author: [agda-algebras development team][]
 ---
 
+### <a id="types-for-homomorphism-of-setoid-algebras">Types for Homomorphism of Setoid Algebras</a>
+
+
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -21,7 +24,6 @@ open import Homomorphisms.Setoid.HomomorphicImages
 
 --------------------------------
 
-<br>
 <br>
 
 [← Homomorphisms.HomomorphicImages](Homomorphisms.HomomorphicImages.html)

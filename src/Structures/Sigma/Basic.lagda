@@ -5,6 +5,10 @@ date : 2021-05-20
 author: [agda-algebras development team][]
 ---
 
+### <a id="basic-definitions">Basic Definitions</a>
+
+This is the [Structures.Sigma.Basic][] module of the [Agda Universal Algebra Library][].
+
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -103,7 +107,6 @@ module _ {𝑅 𝐹 : Signature} {α ρ : Level} where
 
 --------------------------------
 
-<br>
 <br>
 
 [← Structures.Sigma](Structures.Sigma.html)

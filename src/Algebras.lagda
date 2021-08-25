@@ -5,7 +5,7 @@ date : 2021-01-12
 author: [agda-algebras development team][]
 ---
 
-## Algebra Types
+## <a id="algebra-types">Algebra Types</a>
 
 This is the [Algebras][] module of the [Agda Universal Algebra Library][]. Here we use type theory and [Agda][] to codify the most basic objects of universal algebra, such as types in Agda *signatures* ([Algebras.Signatures][]), *algebras* ([Algebras.Algebras][]), *product algebras* ([Algebras.Products][]), *congruence relations* and *quotient algebras* ([Algebras.Congruences][]).
 

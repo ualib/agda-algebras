@@ -5,7 +5,7 @@ date : 2021-07-26
 author: [agda-algebras development team][]
 ---
 
-## Subalgebra Setoid Types
+## <a id="subalgebra-setoid-types">Subalgebra Setoid Types</a>
 
 This is the [Subalgebras.Setoid][] module of the [Agda Universal Algebra Library][].
 
@@ -23,7 +23,6 @@ open import Subalgebras.Setoid.Properties
 
 ---------------------------------
 
-<br>
 <br>
 
 [← Subalgebras.Properties](Subalgebras.Properties.html)

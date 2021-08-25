@@ -5,8 +5,9 @@ date : 2021-05-20
 author: [agda-algebras development team][]
 ---
 
-This is a submodule of the Structures module which presents general (relational-algebraic) structures as
-inhabitants of record types.  For a similar development using Sigma types see the Structures.Sigma.Basic module.
+### <a id="basic-definitions">Basic Definitions</a>
+
+This is the [Structures.Basic][] module of the [Agda Universal Algebra Library][]. It is a submodule of the Structures module which presents general (relational-algebraic) structures as inhabitants of record types.  For a similar development using Sigma types see the Structures.Sigma.Basic module.
 
 \begin{code}
 
@@ -101,15 +102,10 @@ module _ {𝐹 : signature 𝓞₀ 𝓥₀}{𝑅 : signature 𝓞₁ 𝓥₁} wh
  Lift-Struc : ∀ {α ρ} → (ℓˡ ℓʳ : Level) → structure 𝐹 𝑅 {α}{ρ} → structure 𝐹 𝑅 {α ⊔ ℓˡ}{ρ ⊔ ℓʳ}
  Lift-Struc ℓˡ ℓʳ 𝑨 = Lift-Strucʳ ℓʳ (Lift-Strucˡ ℓˡ 𝑨)
 
-
-
-
-
 \end{code}
 
 --------------------------------
 
-<br>
 <br>
 
 [↑ Structures](Structures.html)

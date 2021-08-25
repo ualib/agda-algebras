@@ -78,16 +78,14 @@ open import GaloisConnections.Properties    using    ( _≐_ ; ≐-iseqv ; Poset
 
 -- CLOSURE SYSTEMS & OPERATORS -----------------------------------------------------------------------
 
-open import ClosureSystems.Definitions      using    ( Extensive ) -- ; OrderPreserving ; Idempotent )
-
-open import ClosureSystems.Basic            using    ( IntersectClosed ; ClosureSystem ; ClOp )
+open import ClosureSystems.Basic            using    ( Extensive ; IntersectClosed ; ClosureSystem ; ClOp )
 
 open import ClosureSystems.Properties       using    ( clop→law⇒ ; clop→law⇐ ; clop←law )
 
 
 -- ALGEBRAS ------------------------------------------------------------------------------------------
 
-open import Algebras.Basic                  using    ( Signature ; signature ; compatible ; Algebra
+open import Algebras.Basic                  using    ( Signature ; compatible ; Algebra
                                                      ; Level-of-Alg ; Level-of-Carrier ; algebra
                                                      ; algebra→Algebra ; Algebra→algebra ; _̂_
                                                      ; Lift-alg-op ; Lift-Alg ; Lift-algebra
@@ -150,7 +148,7 @@ open import Terms.Operations                using    ( _⟦_⟧ ; free-lift-inte
                                                      ; subst-theorem )
 
 open import Terms.Setoid.Basic              using    ( _≐_ ; ≐-isRefl ; ≐-isSym ; ≐-isTrans ; ≐-isEquiv
-                                                     ; TermSetoid ; TermAlgebra ; Ops ; Sub ; _[_]
+                                                     ; TermSetoid ; 𝑻 ; Ops ; Sub ; _[_]
                                                      ; module Environment )
 
 open Environment                            using    (_≃_ ; Env ; ⟦_⟧ ; Equal ; isEquiv ; ⟦_⟧s ; substitution)
@@ -266,19 +264,15 @@ open import Structures.Isos                 using    ( _≅_ ; ≅-refl ; ≅-sy
                                                      ; Lift-Struc-assocʳ ; Lift-Struc-assoc ; ⨅≅
                                                      ; Lift-Struc-⨅≅ )
 
-open import Structures.Terms.Basic          using    ( Term )
-
-open import Structures.Terms.Operations     using    ( _⟦_⟧ )
+open import Structures.Terms                using    ( _⟦_⟧ )
 
 open import Structures.EquationalLogic      using    ( _⊧_≈_ ; _⊧_≋_ ; Th ; Mod ; fMod )
 
-open import Structures.Substructures.Basic  using    ( Subuniverses ; Subuniverse ; Sg ; sgIsSub
+open import Structures.Substructures        using    ( Subuniverses ; Subuniverse ; Sg ; sgIsSub
                                                      ; sgIsSmallest ; ⋂s ; sub-term-closed ; TermImage
                                                      ; TermImageIsSub ; B-onlyif-TermImageB
-                                                     ; SgB-onlyif-TermImageB ; hom-unique )
-
-open import Structures.Substructures.Substructures
-                                            using    ( _≥s_ ; _IsSupstructureOf_ ; _≤s_ ; _IsSubstructureOf_
+                                                     ; SgB-onlyif-TermImageB ; hom-unique
+                                                     ; _≥s_ ; _IsSupstructureOf_ ; _≤s_ ; _IsSubstructureOf_
                                                      ; SubstructureOf ; Substructure ; IsSubstructureREL
                                                      ; _≤c_ ; _IsSubstructureOfClass_ ; SubstructureOfClass
                                                      ; SubstructureOfClass' ; SubstructuresOfClass )

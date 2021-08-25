@@ -5,7 +5,7 @@ date : 2021-07-03
 author: [agda-algebras development team][]
 ---
 
-### Congruence Relations
+### <a id="congruence-relations">Congruence Relations</a>
 
 This is the [Algebras.Congruences][] module of the [Agda Universal Algebra Library][].
 
@@ -65,10 +65,13 @@ Con→IsCongruence θ = ∥ θ ∥
 
 \end{code}
 
+
 #### <a id="example">Example</a>
+
 We defined the *zero relation* `0[_]` in the [Relations.Discrete][] module.  We now build the *trivial congruence*, which has `0[_]` as its underlying relation. Observe that `0[_]` is equivalent to the identity relation `≡` and these are obviously both equivalence relations. In fact, we already proved this of `≡` in the [Overture.Equality][] module, so we simply apply the corresponding proofs.
 
 \begin{code}
+
 open Level
 
 -- Example. The zero congruence of a structure.
@@ -88,7 +91,9 @@ open IsCongruence
 
 A concrete example is `⟪𝟎⟫[ 𝑨 ╱ θ ]`, presented in the next subsection.
 
+
 #### <a id="quotient-algebras">Quotient algebras</a>
+
 In many areas of abstract mathematics the *quotient* of an algebra `𝑨` with respect to a congruence relation `θ` of `𝑨` plays an important role. This quotient is typically denoted by `𝑨 / θ` and Agda allows us to define and express quotients using this standard notation.<sup>[1](Algebras.Congruences.html#fn1)</sup>
 
 \begin{code}
@@ -133,11 +138,12 @@ open IsCongruence
 
 \end{code}
 
-<br>
+-------------------------------------------------
+
 <br>
 
-[← Algebras.Basic](Algebras.Basic.html)
-<span style="float:right;">[Algebras.Products →](Algebras.Products.html)</span>
+[← Algebras.Products](Algebras.Products.html)
+<span style="float:right;">[Algebras.Setoid →](Algebras.Setoid.html)</span>
 
 {% include UALib.Links.md %}
 

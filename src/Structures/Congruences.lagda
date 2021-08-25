@@ -6,10 +6,9 @@ author: [agda-algebras development team][]
 ---
 
 
-#### Congruences for structures as records
+### <a id="congruences-of-general-structures">Congruences of general structures</a>
 
-This module is similar to Congruences.lagda but for structures represented using records rather than
-dependent pair type.
+This is the [Structures.Congruences][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
@@ -89,7 +88,6 @@ _╱_ = quotient
 
 --------------------------------
 
-<br>
 <br>
 
 [← Structures.Products](Structures.Products.html)

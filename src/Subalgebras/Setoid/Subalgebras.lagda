@@ -5,6 +5,11 @@ date : 2021-07-17
 author: [agda-algebras development team][]
 ---
 
+### <a id="subalgebras-of SetoidAlgebras">Subalgebras of SetoidAlgebras</a>
+
+This is the [Subalgebras.Setoid.Subalgebras][] module of the [Agda Universal Algebra Library][].
+
+
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -32,12 +37,6 @@ open import Homomorphisms.Setoid.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅t
 
 private variable ρ : Level
 
-\end{code}
-
-
-#### Subalgebras of SetoidAlgebras
-
-\begin{code}
 module _ where
 
  private variable
@@ -66,10 +65,10 @@ module _ where
  Subalgebra : SetoidAlgebra α ρᵃ → {β ρᵇ : Level} → Type _
  Subalgebra 𝑨 {β}{ρᵇ} = Σ[ 𝑩 ∈ (SetoidAlgebra β ρᵇ) ] 𝑩 ≤ 𝑨
 
- -- usage note: for 𝑨 : SetoidAlgebra α ρᵃ, inhabitant of `Subalgebra 𝑨` is a pair
- --             `(𝑩 , p) : Subalgebra 𝑨`  providing
- --                                       - `𝑩 : SetoidAlgebra β ρᵇ` and
- --                                       - `p : 𝑩 ≤ 𝑨`, a proof that 𝑩 is a subalgebra of 𝐴.
+ {- usage note: for 𝑨 : SetoidAlgebra α ρᵃ, inhabitant of `Subalgebra 𝑨` is a pair
+                `(𝑩 , p) : Subalgebra 𝑨`  providing
+                                          - `𝑩 : SetoidAlgebra β ρᵇ` and
+                                          - `p : 𝑩 ≤ 𝑨`, a proof that 𝑩 is a subalgebra of 𝐴. -}
 
 
  IsSubalgebraREL : {α ρᵃ β ρᵇ : Level} → REL (SetoidAlgebra α ρᵃ)(SetoidAlgebra β ρᵇ) ρ → Type _
@@ -85,7 +84,7 @@ module _ where
 From now on we will use `𝑩 ≤ 𝑨` to express the assertion that `𝑩` is a subalgebra of `𝑨`.
 
 
-#### Subalgebras of a class of algebras
+#### <a id="subalgebras-of-a-class-of-algebras">Subalgebras of a class of algebras</a>
 
 Suppose `𝒦 : Pred (Algebra α 𝑆) γ` denotes a class of `𝑆`-algebras and `𝑩 : SetoidAlgebra β ρᵇ` denotes an arbitrary `𝑆`-algebra. Then we might wish to consider the assertion that `𝑩` is a subalgebra of an algebra in the class `𝒦`.  The next type we define allows us to express this assertion as `𝑩 IsSubalgebraOfClass 𝒦`.
 
@@ -129,7 +128,6 @@ module _ where
 
 ---------------------------------
 
-<br>
 <br>
 
 [← Subalgebras.Setoid.Subuniverses](Subalgebras.Setoid.Subuniverses.html)

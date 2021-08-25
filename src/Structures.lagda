@@ -5,7 +5,7 @@ date : 2021-07-26
 author: [agda-algebras development team][]
 ---
 
-## Types for General Mathematical Structures
+## <a id="types-for-general-mathematical-structures">Types for General Mathematical Structures</a>
 
 This is the [Structures][] module of the [Agda Universal Algebra Library][].
 
@@ -32,7 +32,6 @@ open import Structures.Sigma
 
 --------------------------------
 
-<br>
 <br>
 
 [← Varieties.Setoid.FreeAlgebras](Varieties.Setoid.FreeAlgebras.html)
