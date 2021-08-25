@@ -1,6 +1,6 @@
 ---
 layout: title-page
-title : The Agda Universal Algebra Library
+title : agda-algebras.lagda (The Agda Universal Algebra Library)
 date : 2021-01-14
 author: William DeMeo
 ---
@@ -54,24 +54,24 @@ We hope the library will be useful to mathematicians and computer scientists who
 
 <pre class="Agda">
 
-<a id="3243" class="Symbol">{-#</a> <a id="3247" class="Keyword">OPTIONS</a> <a id="3255" class="Pragma">--without-K</a> <a id="3267" class="Pragma">--exact-split</a> <a id="3281" class="Pragma">--safe</a> <a id="3288" class="Symbol">#-}</a>
+<a id="3265" class="Symbol">{-#</a> <a id="3269" class="Keyword">OPTIONS</a> <a id="3277" class="Pragma">--without-K</a> <a id="3289" class="Pragma">--exact-split</a> <a id="3303" class="Pragma">--safe</a> <a id="3310" class="Symbol">#-}</a>
 
-<a id="3293" class="Keyword">module</a> <a id="3300" href="agda-algebras.html" class="Module">agda-algebras</a> <a id="3314" class="Keyword">where</a>
+<a id="3315" class="Keyword">module</a> <a id="3322" href="agda-algebras.html" class="Module">agda-algebras</a> <a id="3336" class="Keyword">where</a>
 
-<a id="3321" class="Comment">-- Imports from Agda (builtin/primitive) and the Agda Standard Library</a>
-<a id="3392" class="Keyword">open</a> <a id="3397" class="Keyword">import</a> <a id="3404" href="Preface.html" class="Module">Preface</a>
-<a id="3412" class="Keyword">open</a> <a id="3417" class="Keyword">import</a> <a id="3424" href="Overture.html" class="Module">Overture</a>
-<a id="3433" class="Keyword">open</a> <a id="3438" class="Keyword">import</a> <a id="3445" href="Relations.html" class="Module">Relations</a>
-<a id="3455" class="Keyword">open</a> <a id="3460" class="Keyword">import</a> <a id="3467" href="Foundations.html" class="Module">Foundations</a>
-<a id="3479" class="Keyword">open</a> <a id="3484" class="Keyword">import</a> <a id="3491" href="GaloisConnections.html" class="Module">GaloisConnections</a>
-<a id="3509" class="Keyword">open</a> <a id="3514" class="Keyword">import</a> <a id="3521" href="ClosureSystems.html" class="Module">ClosureSystems</a>
-<a id="3536" class="Keyword">open</a> <a id="3541" class="Keyword">import</a> <a id="3548" href="Algebras.html" class="Module">Algebras</a>
-<a id="3557" class="Keyword">open</a> <a id="3562" class="Keyword">import</a> <a id="3569" href="Homomorphisms.html" class="Module">Homomorphisms</a>
-<a id="3583" class="Keyword">open</a> <a id="3588" class="Keyword">import</a> <a id="3595" href="Terms.html" class="Module">Terms</a>
-<a id="3601" class="Keyword">open</a> <a id="3606" class="Keyword">import</a> <a id="3613" href="Subalgebras.html" class="Module">Subalgebras</a>
-<a id="3625" class="Keyword">open</a> <a id="3630" class="Keyword">import</a> <a id="3637" href="Varieties.html" class="Module">Varieties</a>
-<a id="3647" class="Keyword">open</a> <a id="3652" class="Keyword">import</a> <a id="3659" href="Structures.html" class="Module">Structures</a>
-<a id="3670" class="Keyword">open</a> <a id="3675" class="Keyword">import</a> <a id="3682" href="Complexity.html" class="Module">Complexity</a>
+<a id="3343" class="Comment">-- Imports from Agda (builtin/primitive) and the Agda Standard Library</a>
+<a id="3414" class="Keyword">open</a> <a id="3419" class="Keyword">import</a> <a id="3426" href="Preface.html" class="Module">Preface</a>
+<a id="3434" class="Keyword">open</a> <a id="3439" class="Keyword">import</a> <a id="3446" href="Overture.html" class="Module">Overture</a>
+<a id="3455" class="Keyword">open</a> <a id="3460" class="Keyword">import</a> <a id="3467" href="Relations.html" class="Module">Relations</a>
+<a id="3477" class="Keyword">open</a> <a id="3482" class="Keyword">import</a> <a id="3489" href="Foundations.html" class="Module">Foundations</a>
+<a id="3501" class="Keyword">open</a> <a id="3506" class="Keyword">import</a> <a id="3513" href="GaloisConnections.html" class="Module">GaloisConnections</a>
+<a id="3531" class="Keyword">open</a> <a id="3536" class="Keyword">import</a> <a id="3543" href="ClosureSystems.html" class="Module">ClosureSystems</a>
+<a id="3558" class="Keyword">open</a> <a id="3563" class="Keyword">import</a> <a id="3570" href="Algebras.html" class="Module">Algebras</a>
+<a id="3579" class="Keyword">open</a> <a id="3584" class="Keyword">import</a> <a id="3591" href="Homomorphisms.html" class="Module">Homomorphisms</a>
+<a id="3605" class="Keyword">open</a> <a id="3610" class="Keyword">import</a> <a id="3617" href="Terms.html" class="Module">Terms</a>
+<a id="3623" class="Keyword">open</a> <a id="3628" class="Keyword">import</a> <a id="3635" href="Subalgebras.html" class="Module">Subalgebras</a>
+<a id="3647" class="Keyword">open</a> <a id="3652" class="Keyword">import</a> <a id="3659" href="Varieties.html" class="Module">Varieties</a>
+<a id="3669" class="Keyword">open</a> <a id="3674" class="Keyword">import</a> <a id="3681" href="Structures.html" class="Module">Structures</a>
+<a id="3692" class="Keyword">open</a> <a id="3697" class="Keyword">import</a> <a id="3704" href="Complexity.html" class="Module">Complexity</a>
 
 </pre>
 
