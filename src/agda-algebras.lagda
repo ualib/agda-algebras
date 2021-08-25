@@ -1,6 +1,6 @@
 ---
 layout: title-page
-title : The Agda Universal Algebra Library
+title : agda-algebras.lagda (The Agda Universal Algebra Library)
 date : 2021-01-14
 author: William DeMeo
 ---

@@ -233,7 +233,12 @@ This is obviously an equivalence relation, as we now confirm.
 \end{code}
 
 
---------------------------------------
+-------------------------------------
+
+<br>
+
+[← Relations.Properties](Relations.Properties.html)
+<span style="float:right;">[Foundations →](Foundations.html)</span>
 
 {% include UALib.Links.md %}
 
