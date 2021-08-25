@@ -58,7 +58,6 @@ We hope the library will be useful to mathematicians and computer scientists who
 
 module agda-algebras where
 
--- Imports from Agda (builtin/primitive) and the Agda Standard Library
 open import Preface
 open import Overture
 open import Relations

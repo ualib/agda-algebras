@@ -44,7 +44,7 @@ ov α = 𝓞 ⊔ 𝓥 ⊔ lsuc α
 
 Here we define algebras over a setoid, instead of a mere type with no equivalence on it.
 
-(This approach is inspired by the one taken, e.g., by Andreas Abel in his formalization Birkhoff's completeness theorem; see http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf.)
+(This approach is inspired by the one taken, e.g., by Andreas Abel in his formalization Birkhoff's completeness theorem; a [pdf is available here](http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf).)
 
 First we define an operator that translates an ordinary signature into a signature over a setoid domain.
 

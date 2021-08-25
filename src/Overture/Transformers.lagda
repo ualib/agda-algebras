@@ -186,7 +186,6 @@ module _ {A : Type α} {B : Type β} where
 --------------------------------------
 
 <br>
-<br>
 
 [← Overture.Inverses](Overture.Inverses.html)
 <span style="float:right;">[Relations →](Relations.html)</span>

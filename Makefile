@@ -13,6 +13,8 @@ MD := $(TEX:.tex=.md)
 
 all: test html $(TEX) $(MD)
 
+md : $(MD)
+
 test: Everything.agda
 	agda ${RTSARGS} -i. Everything.agda
 

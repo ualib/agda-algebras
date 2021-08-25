@@ -21,7 +21,6 @@ open import Terms.Setoid.Basic
 --------------------------------
 
 <br>
-<br>
 
 [← Terms.Operations](Terms.Operations.html)
 <span style="float:right;">[Terms.Setoid.Basic →](Terms.Setoid.Basic.html)</span>

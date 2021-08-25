@@ -24,10 +24,10 @@ open import Function.Definitions        using ( Injective )
 open import Function.Bundles            using ( _↣_ ; mk↣ )
 open import Function.Construct.Identity using ( id-↣ )
 open import Relation.Binary.PropositionalEquality
-                                        using ( _≡_ ; refl )
+                                        using ( _≡_ ; refl ; module ≡-Reasoning ; cong-app )
 
 -- Imports from agda-algebras
-open import Overture.Preliminaries using ( _⁻¹ )
+open import Overture.Preliminaries using ( _⁻¹ ; _≈_ ; _∙_ )
 
 \end{code}
 
@@ -114,13 +114,57 @@ With the next definition, we can represent a *right-inverse* of a surjective fun
 
 \end{code}
 
-Thus, a right-inverse of `f` is obtained by applying `SurjInv` to `f` and a proof of `IsSurjective f`.  Later, we will prove that this does indeed give the right-inverse, but we postpone the proof since it requires function extensionality, a concept we take up in the [Relations.Extensionality][] module.
+Thus, a right-inverse of `f` is obtained by applying `SurjInv` to `f` and a proof of `IsSurjective f`.  Next we prove that this does indeed give the right-inverse.
 
+\begin{code}
+
+module _ {A : Type α}{B : Type β} where
+
+ SurjInvIsRightInv : (f : A → B)(fE : IsSurjective f) → ∀ b → f ((SurjInv f fE) b) ≡ b
+ SurjInvIsRightInv f fE b = InvIsInv f (fE b)
+
+ open ≡-Reasoning
+
+ -- composition law for epics
+ epic-factor : {C : Type γ}(f : A → B)(g : A → C)(h : C → B)
+  →            f ≈ h ∘ g → IsSurjective f → IsSurjective h
+
+ epic-factor f g h compId fe y = Goal
+  where
+   finv : B → A
+   finv = SurjInv f fe
+
+   ζ : y ≡ f (finv y)
+   ζ = (SurjInvIsRightInv f fe y)⁻¹
+
+   η : y ≡ (h ∘ g) (finv y)
+   η = ζ ∙ compId (finv y)
+
+   Goal : Image h ∋ y
+   Goal = eq (g (finv y)) η
+
+ epic-factor-intensional : {C : Type γ}(f : A → B)(g : A → C)(h : C → B)
+  →                        f ≡ h ∘ g → IsSurjective f → IsSurjective h
+
+ epic-factor-intensional f g h compId fe y = Goal
+  where
+   finv : B → A
+   finv = SurjInv f fe
+
+   ζ : f (finv y) ≡ y
+   ζ = SurjInvIsRightInv f fe y
+
+   η : (h ∘ g) (finv y) ≡ y
+   η = (cong-app (compId ⁻¹)(finv y)) ∙ ζ
+
+   Goal : Image h ∋ y
+   Goal = eq (g (finv y)) (η ⁻¹)
+
+\end{code}
 
 
 --------------------------------------
 
-<br>
 <br>
 
 [← Overture.Preliminaries](Overture.Preliminaries.html)

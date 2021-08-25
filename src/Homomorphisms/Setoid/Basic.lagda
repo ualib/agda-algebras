@@ -30,12 +30,12 @@ open import Relation.Binary.PropositionalEquality
 
 -- Imports from the Agda Universal Algebra Library
 open import Overture.Preliminaries     using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; _≈_)
-open import Overture.Inverses          using ( IsInjective ; IsSurjective ; SurjInv )
+open import Overture.Inverses          using ( IsInjective ; IsSurjective ; SurjInv ; SurjInvIsRightInv ; epic-factor )
 open import Relations.Discrete         using ( ker ; kernel )
 open import Relations.Quotients        using ( ker-IsEquivalence )
 open import Foundations.Truncation     using ( is-set ; blk-uip ; is-embedding ; monic-is-embedding|Set )
 open import Foundations.Welldefined    using ( swelldef )
-open import Foundations.Extensionality using ( block-ext|uip ; pred-ext ; SurjInvIsRightInv ; epic-factor )
+open import Foundations.Extensionality using ( block-ext|uip ; pred-ext )
 
 open import Algebras.Setoid.Basic    {𝑆 = 𝑆} using ( 𝕌[_] ; SetoidAlgebra ; _̂_ ; Lift-SetoidAlg )
 open import Algebras.Setoid.Congruences {𝑆 = 𝑆} using ( _∣≈_ ; Con ; IsCongruence ; mkcon ; _╱_)

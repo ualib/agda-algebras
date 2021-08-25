@@ -15,6 +15,7 @@ This is the [Relations.Properties][] module of the [Agda Universal Algebra Libra
 
 module Relations.Properties where
 
+-- imports from Agda and the Agda Standard Library  ---------------------------------------
 open import Agda.Primitive        using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
 open import Data.Product          using ( _,_ ; _×_ )
 open import Data.Sum.Base         using ( _⊎_ )
@@ -93,7 +94,6 @@ Total P = Connex P P
 
 -----------------------------------------------
 
-<br>
 <br>
 
 [← Relations.Continuous](Relations.Continuous.html)

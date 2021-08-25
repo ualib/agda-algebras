@@ -7,7 +7,7 @@ author: [agda-algebras development team][]
 
 ## Foundations
 
-This is the [UniversalAlgebra.Foundations][] module of the [Agda Universal Algebra Library][].
+This is the [Foundations][] module of the [Agda Universal Algebra Library][].
 
 
 \begin{code}[hide]
@@ -26,8 +26,6 @@ open import Foundations.Extensionality public
 
 -------------------------------------
 
-
-<br>
 <br>
 
 [← Relations.Quotients](Relations.Quotients.html)

@@ -139,7 +139,7 @@ infix 6 Π-syntax
 
 #### <a id="agdas-universe-hierarchy">Agda's universe hierarchy</a>
 
-The hierarchy of universes in Agda is structured as follows:<sup>[1](Overture.Lifts.html#fn1)</sup>
+The hierarchy of universes in Agda is structured as follows:
 
 ```agda
 Type α : Type (lsuc α),   Type(lsuc α) : Type (lsuc (lsuc α)),  etc.
@@ -188,7 +188,7 @@ The proofs are trivial. Nonetheless, we'll come across some holes these lemmas c
 
 #### <a id="pointwise-equality-of-dependent-functions">Pointwise equality of dependent functions</a>
 
-We conclude this module with a definition that conveniently represents te assertion that two functions are (extensionally) the same in the sense that they produce the same output when given the same input.  (We will have more to say about this notion of equality in the [Relations.Extensionality][] module.)
+We conclude this module with a definition that conveniently represents te assertion that two functions are (extensionally) the same in the sense that they produce the same output when given the same input.  (We will have more to say about this notion of equality in the [Foundations.Extensionality][] module.)
 
 \begin{code}
 
@@ -229,17 +229,13 @@ transport B refl = id
 ------------------------------
 
 <br>
-<br>
 
 [↑ Overture](Overture.html)
 <span style="float:right;">[Overture.Inverses →](Overture.Inverses.html)</span>
 
 
-
 {% include UALib.Links.md %}
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
-
-[agda-algebras]: https://github.com/ualib/agda-algebras
 
 

@@ -68,7 +68,7 @@ Con→IsCongruence θ = ∥ θ ∥
 
 #### <a id="example">Example</a>
 
-We defined the *zero relation* `0[_]` in the [Relations.Discrete][] module.  We now build the *trivial congruence*, which has `0[_]` as its underlying relation. Observe that `0[_]` is equivalent to the identity relation `≡` and these are obviously both equivalence relations. In fact, we already proved this of `≡` in the [Overture.Equality][] module, so we simply apply the corresponding proofs.
+We now defined the *zero relation* `0[_]` and build the *trivial congruence*, which has `0[_]` as its underlying relation. Observe that `0[_]` is equivalent to the identity relation `≡` and is obviously an equivalence relation.
 
 \begin{code}
 
@@ -82,7 +82,7 @@ open Level
   γ = wd (𝑓 ̂ 𝑨) i j (lower ∘ ptws0)
 
 open IsCongruence
-0Con[_] : {α : Level}(𝑨 : Algebra α 𝑆){ρ : Level} → swelldef 𝓥 α → Con{α}{α ⊔ ρ}  𝑨 
+0Con[_] : {α : Level}(𝑨 : Algebra α 𝑆){ρ : Level} → swelldef 𝓥 α → Con{α}{α ⊔ ρ}  𝑨
 0Con[ 𝑨 ]{ρ} wd = let 0eq = 0[ ∣ 𝑨 ∣ ]Equivalence{ρ}  in
  ∣ 0eq ∣ , mkcon ∥ 0eq ∥ (0[ 𝑨 ]Compatible wd)
 
@@ -94,7 +94,7 @@ A concrete example is `⟪𝟎⟫[ 𝑨 ╱ θ ]`, presented in the next subsect
 
 #### <a id="quotient-algebras">Quotient algebras</a>
 
-In many areas of abstract mathematics the *quotient* of an algebra `𝑨` with respect to a congruence relation `θ` of `𝑨` plays an important role. This quotient is typically denoted by `𝑨 / θ` and Agda allows us to define and express quotients using this standard notation.<sup>[1](Algebras.Congruences.html#fn1)</sup>
+In many areas of abstract mathematics the *quotient* of an algebra `𝑨` with respect to a congruence relation `θ` of `𝑨` plays an important role. This quotient is typically denoted by `𝑨 / θ` and Agda allows us to define and express quotients using this standard notation.
 
 \begin{code}
 

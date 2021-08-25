@@ -56,7 +56,7 @@ _⟦_⟧ : (𝑨 : structure 𝐹 𝑅 {α} {ρ}) → Term X → (X → carrier 
 <br>
 
 [← Structures.Isos](Structures.Isos.html)
-<span style="float:right;">[Structures.EquationalLogic →](Structures.EquationalLogic.html)</span>
+<span style="float:right;">[Structures.Substructures →](Structures.Substructures.html)</span>
 
 {% include UALib.Links.md %}
 

@@ -7,6 +7,8 @@ author: [agda-algebras development team][]
 
 ### <a id="basic-definitions">Basic Definitions</a>
 
+This is the [GaloisConnections.Basic][] module of the [Agda Universal Algebra Library][].
+
 If 𝑨 = (A, ≤) and 𝑩 = (B, ≤) are two partially ordered sets (posets), then a
 *Galois connection* between 𝑨 and 𝑩 is a pair (F , G) of functions such that
 
@@ -85,7 +87,6 @@ module _ {α β : Level}{𝒜 : Type α}{ℬ : Type β} where
 
 --------------------------------------
 
-<br>
 <br>
 
 [↑ GaloisConnections](GaloisConnections.html)

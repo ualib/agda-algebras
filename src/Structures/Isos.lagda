@@ -7,7 +7,7 @@ author: [agda-algebras development team][]
 
 ### <a id="isomorphisms">Isomorphisms</a>
 
-This is the [Sturctures.Isos][] module of the [Agda Universal Algebra Library][].
+This is the [Structures.Isos][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 

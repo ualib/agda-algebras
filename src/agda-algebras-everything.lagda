@@ -17,7 +17,8 @@ open import Overture.Preliminaries          using    ( ℓ₁ ; ∣_∣ ; ∥_�
 
 open import Overture.Inverses               using    ( Image_∋_ ; eq ; Inv ; InvIsInv ; IsInjective
                                                      ; id-is-injective ; ∘-injective ; IsSurjective
-                                                     ; Surjective ; SurjInv )
+                                                     ; Surjective ; SurjInv ; SurjInvIsRightInv
+                                                     ; epic-factor ; epic-factor-intensional )
 
 open import Overture.Transformers           using    ( Bijection ; ∣_∣=∣_∣ ; PointwiseBijection
                                                      ; ∣_∣≈∣_∣ ; uncurry₀ ; Curry ; Uncurry
@@ -60,9 +61,7 @@ open import Foundations.Truncation          using    ( is-center ; is-singleton 
                                                      ; blk-uip ; IsRelProp ; RelProp ; RelPropExt ; IsΠΡProp
                                                      ; ΠΡProp ; ΠΡPropExt )
 
-open import Foundations.Extensionality      using    ( DFunExt ; SurjInvIsRightInv ; epic-factor
-                                                     ; epic-factor-intensional ; _≐_ ; pred-ext
-                                                     ; block-ext ; block-ext|uip )
+open import Foundations.Extensionality      using    ( DFunExt ; _≐_ ; pred-ext ; block-ext ; block-ext|uip )
 
 
 

@@ -96,8 +96,7 @@ module _ where
 #### <a id="interpretation-of-terms-in-setoid-algebras">Interpretation of Terms in Setoid Algebras</a>
 
 The approach to terms and their interpretation in this module was inspired by
-Andreas Abel's proof of Birkhoff's completeness theorem.
-(See http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf.)
+[Andreas Abel's formal proof of Birkhoff's completeness theorem](http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf).
 
 To obtain terms with free variables, we add nullary operations, each representing a variable.
 These are covered in the std lib FreeMonad module, albeit with the restriction that the sets of

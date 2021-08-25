@@ -7,13 +7,15 @@ author: [agda-algebras development team][]
 
 ### <a id="properties">Properties</a>
 
+This is the [GaloisConnections.Properties][] module of the [Agda Universal Algebra Library][].
+
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 module GaloisConnections.Properties where
 
--- imports from Agda and the Agda Standard Library
+-- imports from Agda and the Agda Standard Library  ---------------------------------------
 open import Agda.Primitive          using ( _⊔_ ; Level ; lsuc ) renaming ( Set to Type )
 open import Data.Product            using ( _,_ ; _×_ ) renaming ( proj₁ to fst )
 open import Data.Product            using ( swap )
@@ -23,6 +25,7 @@ open import Relation.Binary.Core    using ( REL )
 open import Relation.Unary          using ( Pred ; _⊆_ )
 import Relation.Binary.Structures as BS
 
+-- imports from agda-algebras --------------------------------------------------------------
 open import GaloisConnections.Basic using (Galois ; ←→≥id ; →←≥id ; _⃗_ ; _⃖_ )
 
 open Poset
@@ -31,8 +34,7 @@ open Poset
 
 #### <a id="the-poset-of-subsets-of-a-set">The poset of subsets of a set</a>
 
-Here is one way to represent the poset of all subsets of a set with the usual set inclusion relation.
-(I couldn't find this in the standard library; we should propose adding it or something similar.)
+Here we define a type that represents the poset of subsets of a given set equipped with the usual set inclusion relation.<sup>[1](GaloisConnections.Properties.html#fn1)</sup>
 
 \begin{code}
 
@@ -91,7 +93,12 @@ module _ {ℓ : Level}{𝒜 : Type ℓ} {ℬ : Type ℓ} where
 
 --------------------------------------
 
-<br>
+<span class="footnote" id="fn1">
+<sup>1</sup>It seems there is no definition in the standard library of this rather canonical example of a poset; we should propose adding it.
+</span>
+
+--------------------
+
 <br>
 
 [← GaloisConnections.Basic](GaloisConnections.Basic.html)

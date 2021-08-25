@@ -7,6 +7,8 @@ author: [agda-algebras development team][]
 
 ### <a id="constraint-satisfaction-problems">Constraint Satisfaction Problems</a>
 
+This is the [Complexity.CSP][] module of the [Agda Universal Algebra Library][].
+
 #### <a id="the-relational-formulation-of-csp">The relational formulation of CSP</a>
 
 Let 𝒜 = (𝐴 , 𝑅ᵃ) be a *relational structure* (or 𝑅-structure), that is, a pair consisting
