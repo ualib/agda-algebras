@@ -35,7 +35,6 @@ open import Relation.Binary.PropositionalEquality
 -- Imports from the Agda Universal Algebra Library ----------------------------------------
 open import Overture.Preliminaries             using ( _⁻¹ ; 𝑖𝑑 ; ∣_∣ ; ∥_∥ ; transport )
 open import Overture.Inverses                  using ( IsSurjective ; Inv ; InvIsInv ; Image_∋_ ; eq )
-open import Foundations.Welldefined            using ( swelldef )
 open import Algebras.Setoid.Basic      {𝑆 = 𝑆} using ( SetoidAlgebra ; _̂_ ; ov ; 𝕌[_] )
 open import Homomorphisms.Setoid.Basic {𝑆 = 𝑆} using ( hom )
 open import Terms.Setoid.Basic         {𝑆 = 𝑆} using ( Term ; 𝑻 ; _≐_ )
@@ -60,6 +59,7 @@ We now prove this in [Agda][], starting with the fact that every map from `X` to
 private variable X : Type χ
 open Setoid using (Carrier)
 open SetoidAlgebra
+
 free-lift : (𝑨 : SetoidAlgebra α ρ)(h : X → 𝕌[ 𝑨 ]) → 𝕌[ 𝑻 X ] → 𝕌[ 𝑨 ]
 free-lift _ h (ℊ x) = h x
 free-lift 𝑨 h (node f t) = (f ̂ 𝑨) (λ i → free-lift 𝑨 h (t i))
