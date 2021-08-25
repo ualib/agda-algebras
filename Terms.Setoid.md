@@ -16,7 +16,7 @@ This is the [Terms.Setoid][] module of the [Agda Universal Algebra Library][].
 <a id="379" class="Keyword">module</a> <a id="386" href="Terms.Setoid.html" class="Module">Terms.Setoid</a> <a id="399" class="Keyword">where</a>
 
 <a id="406" class="Keyword">open</a> <a id="411" class="Keyword">import</a> <a id="418" href="Terms.Setoid.Basic.html" class="Module">Terms.Setoid.Basic</a>
-<a id="437" class="Comment">-- open import Terms.Setoid.Properties</a>
+<a id="437" class="Keyword">open</a> <a id="442" class="Keyword">import</a> <a id="449" href="Terms.Setoid.Properties.html" class="Module">Terms.Setoid.Properties</a>
 
 
 </pre>
