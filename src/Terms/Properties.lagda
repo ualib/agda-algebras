@@ -18,8 +18,7 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Terms.Properties {𝑆 : Signature 𝓞 𝓥} where
 
-
--- Imports from Agda and the Agda Standard Library ---------------------
+-- Imports from Agda and the Agda Standard Library --------------------------------------
 open import Axiom.Extensionality.Propositional
                                    using () renaming (Extensionality to funext)
 open import Agda.Primitive         using ( Level ; _⊔_ ; lsuc ) renaming ( Set to Type )
@@ -33,7 +32,7 @@ open import Relation.Binary.PropositionalEquality
                                    using ( _≡_ ; refl ; module ≡-Reasoning ; cong )
 
 
--- Imports from agda-algebras --------------------------------------------------------------
+-- Imports from the Agda Universal Algebra Library ----------------------------------------
 open import Overture.Preliminaries      using ( _⁻¹ ; 𝑖𝑑 ; ∣_∣ ; ∥_∥)
 open import Overture.Inverses           using ( IsSurjective ; Inv ; InvIsInv ; Image_∋_; eq )
 open import Foundations.Welldefined     using (swelldef)
@@ -129,8 +128,6 @@ The `lift-hom` and `lift-of-epi-is-epi` types will be called to action when such
 
 
 ------------------------------
-
-<br>
 
 [← Terms.Basic](Terms.Basic.html)
 <span style="float:right;">[Terms.Operations →](Terms.Operations.html)</span>

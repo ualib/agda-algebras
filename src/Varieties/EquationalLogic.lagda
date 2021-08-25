@@ -22,20 +22,21 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Varieties.EquationalLogic {𝑆 : Signature 𝓞 𝓥} where
 
--- imports from Agda and the Agda Standard Library -------------------------------------------
+-- Imports from Agda and the Agda Standard Library -------------------------------------------
 open import Agda.Primitive using ( _⊔_ ;  lsuc ; Level ) renaming ( Set to Type )
 open import Data.Product   using ( _×_ ; _,_ ; Σ-syntax) renaming ( proj₁ to fst ; proj₂ to snd )
 open import Relation.Unary using ( Pred ; _∈_ )
 
--- imports from agda-algebras --------------------------------------------------------------
+-- Imports from the Agda Universal Algebra Library ---------------------
 open import Overture.Preliminaries    using ( _≈_ )
 open import Algebras.Basic            using ( Algebra )
 open import Algebras.Products {𝑆 = 𝑆} using ( ov )
 open import Terms.Basic       {𝑆 = 𝑆} using ( Term ; 𝑻 )
 open import Terms.Operations  {𝑆 = 𝑆} using ( _⟦_⟧ )
 
-private variable χ α ρ ι : Level
-                 X : Type χ
+private variable
+ χ α ρ ι : Level
+ X : Type χ
 
 \end{code}
 
@@ -110,13 +111,10 @@ Modᵗ ℰ = λ 𝑨 → ∀ i → 𝑨 ⊧ (fst (ℰ i)) ≈ (snd (ℰ i))
 
 -------------------------------------
 
-<br>
-
 [↑ Varieties](Varieties.html)
 <span style="float:right;">[Varieties.Closure →](Varieties.Closure.html)</span>
 
 {% include UALib.Links.md %}
-
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 

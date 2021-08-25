@@ -24,7 +24,7 @@ open import Relation.Binary using ( IsEquivalence ) renaming ( Rel to BinRel )
 open import Relation.Binary.PropositionalEquality
                             using ( _≡_ )
 
--- Imports from agda-algebras ------------------------------------------------------------
+-- Imports from the Agda Universal Algebra Library ---------------------------------------
 open import Overture.Preliminaries  using ( ∣_∣ )
 open import Relations.Discrete      using ( _|:_ ; 0[_] )
 open import Relations.Quotients     using ( Equivalence ; ⟪_⟫ ; ⌞_⌟ ; 0[_]Equivalence
@@ -82,8 +82,6 @@ Example. The zero congruence of an arbitrary structure.
 \end{code}
 
 --------------------------------
-
-<br>
 
 [← Structures.Sigma.Products](Structures.Sigma.Products.html)
 <span style="float:right;">[Structures.Sigma.Homs →](Structures.Sigma.Homs.html)</span>

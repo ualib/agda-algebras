@@ -23,8 +23,6 @@ open import Varieties.Setoid.FreeAlgebras
 
 --------------------------------
 
-<br>
-
 [← Varieties.FreeAlgebras](Varieties.FreeAlgebras.html)
 <span style="float:right;">[Varieties.Setoid.EquationalLogic →](Varieties.Setoid.EquationalLogic.html)</span>
 

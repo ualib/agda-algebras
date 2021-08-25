@@ -15,8 +15,10 @@ This is the [Relations.Continuous][] module of the [Agda Universal Algebra Libra
 
 module Relations.Continuous where
 
+-- Imports from Agda and the Agda Standard Library -------------------------------
 open import Agda.Primitive using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
 
+-- Imports from agda-algebras ----------------------------------------------------
 open import Overture.Preliminaries using ( Π ; Π-syntax )
 open import Relations.Discrete     using ( Op ; arity[_] )
 
@@ -135,14 +137,10 @@ For simplicity, pretend for a moment that `J` is a finite set, say, `{1, 2, ...,
 
 Now `eval-cont-rel R 𝒶` is defined by `∀ j → R (λ i → 𝒶 i j)` which asserts that each row of the `I` columns shown above belongs to the original relation `R`. Finally, `cont-compatible-op` takes a `J`-ary operation `𝑓 : Op J A` and an `I`-tuple `𝒶 : I → J → A` of `J`-tuples, and determines whether the `I`-tuple `λ i → 𝑓 (𝑎 i)` belongs to `R`.
 
-
 --------------------------------------
-
-<br>
 
 [← Relations.Discrete](Relations.Discrete.html)
 <span style="float:right;">[Relations.Properties →](Relations.Properties.html)</span>
-
 
 {% include UALib.Links.md %}
 

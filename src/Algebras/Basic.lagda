@@ -15,19 +15,18 @@ This is the [Algebras.Basic][] module of the [Agda Universal Algebra Library][].
 
 module Algebras.Basic where
 
--- Imports from the Agda (Builtin) and the Agda Standard Library
-open import Agda.Primitive         using ( _⊔_ ; lsuc ) renaming ( Set to  Type ; lzero to ℓ₀ )
-open import Data.Empty             using ( ⊥ )
-open import Data.Product           using ( _,_ ; _×_ ; Σ ; Σ-syntax )
-open import Level                  using ( Level ; Lift )
-open import Relation.Binary        using ( IsEquivalence ) renaming ( Rel to BinRel )
-open import Relation.Unary         using ( _∈_ ; Pred )
+-- Imports from the Agda (Builtin) and the Agda Standard Library -----------------------
+open import Agda.Primitive  using ( _⊔_ ; lsuc ) renaming ( Set to  Type ; lzero to ℓ₀ )
+open import Data.Product    using ( _,_ ; _×_ ; Σ-syntax )
+open import Level           using ( Level ) -- ; Lift )
+open import Relation.Binary using ( IsEquivalence ) renaming ( Rel to BinRel )
+open import Relation.Unary  using ( _∈_ ; Pred )
 
 
--- Imports from the Agda Universal Algebra Library
-open import Overture.Preliminaries using (∣_∣; ∥_∥)
+-- Imports from the Agda Universal Algebra Library -------------------------------------
+open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥ )
 open import Relations.Discrete     using ( Op ; _|:_ ; _|:pred_ )
-open import Relations.Continuous   using ( Rel; ΠΡ ; compatible-Rel ; compatible-ΠΡ )
+open import Relations.Continuous   using ( Rel ; compatible-Rel ; ΠΡ ; compatible-ΠΡ )
 
 private variable α β ρ : Level
 
@@ -223,9 +222,7 @@ module _ {I : Type 𝓥} {𝑆 : Signature 𝓞 𝓥} where
 
 -------------------------------------
 
-<br>
-
-[↑ Algebras](Algebras.html)
+<span>[↑ Algebras](Algebras.html)</span>
 <span style="float:right;">[Algebras.Products →](Algebras.Products.html)</span>
 
 {% include UALib.Links.md %}

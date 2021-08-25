@@ -96,16 +96,16 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Complexity.CSP {𝑆 : Signature 𝓞 𝓥} where
 
+-- Imports from Agda and the Agda Standard Library ------------------------------
 open import Agda.Primitive   using ( _⊔_ ; lsuc ; Level) renaming ( Set to Type )
 open import Function.Base    using ( _∘_ )
 open import Relation.Binary  using ( Setoid )
 
-
+-- Imports from the Agda Universal Algebra Library ------------------------------
 open import Relations.Continuous    using ( ΠΡ ; ΠΡ-syntax )
 open import Algebras.Setoid.Basic {𝑆 = 𝑆} using ( SetoidAlgebra )
 
 \end{code}
-
 
 #### <a id="constraints">Constraints</a>
 
@@ -120,7 +120,6 @@ A constraint c consists of
           .   .
            ⌟ ⌞
             D
-
 
 The *scope* of a constraint is an indexed subset of the set of variable symbols.
 We could define a type for this, e.g.,
@@ -191,9 +190,7 @@ An instance of a constraint satisfaction problem is a triple 𝑃 = (𝑉, 𝐷,
 
 --------------------------------
 
-<br>
-
-[← Complexity.Basic](Complexity.Basic.html)
+<span>[← Complexity.Basic](Complexity.Basic.html)</span>
 <span style="float:right;">[agda-algebras ↑](agda-algebras.html)</span>
 
 {% include UALib.Links.md %}

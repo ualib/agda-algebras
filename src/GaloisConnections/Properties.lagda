@@ -15,7 +15,7 @@ This is the [GaloisConnections.Properties][] module of the [Agda Universal Algeb
 
 module GaloisConnections.Properties where
 
--- imports from Agda and the Agda Standard Library  ---------------------------------------
+-- Imports from Agda and the Agda Standard Library  ---------------------------------------
 open import Agda.Primitive          using ( _⊔_ ; Level ; lsuc ) renaming ( Set to Type )
 open import Data.Product            using ( _,_ ; _×_ ) renaming ( proj₁ to fst )
 open import Data.Product            using ( swap )
@@ -25,7 +25,7 @@ open import Relation.Binary.Core    using ( REL )
 open import Relation.Unary          using ( Pred ; _⊆_ )
 import Relation.Binary.Structures as BS
 
--- imports from agda-algebras --------------------------------------------------------------
+-- Imports from agda-algebras --------------------------------------------------------------
 open import GaloisConnections.Basic using (Galois ; ←→≥id ; →←≥id ; _⃗_ ; _⃖_ )
 
 open Poset
@@ -98,8 +98,6 @@ module _ {ℓ : Level}{𝒜 : Type ℓ} {ℬ : Type ℓ} where
 </span>
 
 --------------------
-
-<br>
 
 [← GaloisConnections.Basic](GaloisConnections.Basic.html)
 <span style="float:right;">[ClosureSystems →](ClosureSystems.html)</span>

@@ -9,7 +9,6 @@ author: [agda-algebras development team][]
 
 This is the [Subalgebras.Setoid.Subalgebras][] module of the [Agda Universal Algebra Library][].
 
-
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -18,7 +17,7 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Subalgebras.Setoid.Subalgebras {𝑆 : Signature 𝓞 𝓥} where
 
--- imports from Agda and the Agda Standard Library
+-- imports from Agda and the Agda Standard Library -------------------------------------------------
 open import Agda.Primitive   using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
 open import Data.Product     using ( _,_ ; Σ-syntax ; _×_ )
 open import Function.Base    using ( id )
@@ -26,14 +25,15 @@ open import Function.Bundles using ( Injection )
 open import Relation.Binary  using ( Setoid ; REL )
 open import Relation.Unary   using ( Pred ; _∈_ ; _⊆_ )
 
--- imports from agda-algebras ------------------------------------------------------
-open import Overture.Preliminaries                    using ( ∣_∣ ; ∥_∥ )
-open import Overture.Inverses                         using ( IsInjective ; id-is-injective ; ∘-injective )
-open import Algebras.Setoid.Basic             {𝑆 = 𝑆} using ( SetoidAlgebra ; Lift-SetoidAlg )
-open import Algebras.Products                 {𝑆 = 𝑆} using ( ov )
-open import Homomorphisms.Setoid.Basic        {𝑆 = 𝑆} using ( hom ; ∘-hom )
-open import Homomorphisms.Setoid.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅toInjective ; ≅fromInjective
-                                                            ;  ≅-sym ; ≅-refl ; ≅-trans ; Lift-≅ )
+-- Imports from the Agda Universal Algebra Library --------------------------------------------------
+open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ )
+open import Overture.Inverses                  using ( IsInjective ; id-is-injective ; ∘-injective )
+open import Algebras.Setoid.Basic      {𝑆 = 𝑆} using ( SetoidAlgebra ; Lift-SetoidAlg )
+open import Algebras.Products          {𝑆 = 𝑆} using ( ov )
+open import Homomorphisms.Setoid.Basic {𝑆 = 𝑆} using ( hom ; ∘-hom )
+open import Homomorphisms.Setoid.Isomorphisms
+                                       {𝑆 = 𝑆} using ( _≅_ ; ≅toInjective ; ≅fromInjective
+                                                     ; ≅-sym ; ≅-refl ; ≅-trans ; Lift-≅ )
 
 private variable ρ : Level
 
@@ -124,11 +124,7 @@ module _ where
 
 \end{code}
 
-
-
 ---------------------------------
-
-<br>
 
 [← Subalgebras.Setoid.Subuniverses](Subalgebras.Setoid.Subuniverses.html)
 <span style="float:right;">[Subalgebras.Setoid.Properties →](Subalgebras.Setoid.Properties.html)</span>

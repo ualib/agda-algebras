@@ -17,8 +17,7 @@ open import Algebras.Basic using (𝓞 ; 𝓥 ; Signature)
 
 module Algebras.Setoid.Congruences {𝑆 : Signature 𝓞 𝓥} where
 
-
--- Imports from the Agda Standard Library ---------------------
+-- Imports from the Agda Standard Library ---------------------------------------
 open import Function.Bundles      using ( Func )
 open import Agda.Primitive        using ( _⊔_ ; Level ) renaming ( Set to Type )
 open import Data.Product          using ( _,_ ; Σ-syntax )
@@ -26,10 +25,11 @@ open import Relation.Binary       using ( Setoid ; IsEquivalence ) renaming ( Re
 open import Relation.Binary.PropositionalEquality
                                   using ( refl )
 
--- Imports from agda-algebras --------------------------------------------------------------
+-- Imports from the Agda Universal Algebras Library ------------------------------
 open import Overture.Preliminaries        using ( ∣_∣  ; ∥_∥  )
 open import Relations.Discrete            using ( 0[_] ; _|:_ )
-open import Algebras.Setoid.Basic {𝑆 = 𝑆} using ( ov ; SetoidAlgebra ; 𝕌[_] ; _̂_ ; Algebroid ; _∙_ )
+open import Algebras.Setoid.Basic {𝑆 = 𝑆} using ( ov ; SetoidAlgebra ; 𝕌[_]
+                                                ; _̂_ ; Algebroid ; _∙_ )
 
 private variable α ρ ℓ : Level
 
@@ -105,8 +105,6 @@ cong (Interp (𝑨 ╱ θ)) {f , u} {.f , v} (refl , a) = is-compatible  ∥ θ 
 \end{code}
 
 --------------------------------------
-
-<br>
 
 [← Algebras.Setoid.Products](Algebras.Setoid.Products.html)
 <span style="float:right;">[Homomorphisms →](Homomorphisms.html)</span>

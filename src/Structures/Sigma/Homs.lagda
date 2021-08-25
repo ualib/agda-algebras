@@ -22,7 +22,7 @@ open import Function.Base   using ( _∘_ ; id )
 open import Relation.Binary.PropositionalEquality
                             using ( _≡_ ;  cong ; refl ; module ≡-Reasoning )
 
--- Imports from agda-algebras ----------------------------------------------------------------------
+-- Imports from the Agda Universal Algebra Library ---------------------------------------------
 open import Overture.Preliminaries   using ( ∣_∣ ; ∥_∥ ; _∙_ ; _⁻¹)
 open import Overture.Inverses        using ( IsInjective ; IsSurjective )
 open import Relations.Discrete       using ( _|:_ ; 0[_] ; ker )
@@ -460,9 +460,6 @@ We could prove a more general result involving projections onto multiple factors
 
 
 --------------------------------
-
-<br>
-<br>
 
 [← Structures.Sigma.Congruences](Structures.Sigma.Congruences.html)
 <span style="float:right;">[Structures.Sigma.Isos →](Structures.Sigma.Isos.html)</span>

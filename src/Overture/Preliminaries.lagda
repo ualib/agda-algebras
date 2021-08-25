@@ -39,14 +39,15 @@ The `OPTIONS` pragma is usually followed by the start of a module.  For example,
 \begin{code}
 module Overture.Preliminaries where
 
--- Imports from the Agda (Builtin) and the Agda Standard Library
-open import Agda.Primitive              using ( _⊔_ ; lsuc )           renaming ( Set to  Type ; lzero to  ℓ₀ )
-open import Data.Product                using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Function.Base               using ( _∘_ ; id )
-open import Level                       using ( Level ; Lift ; lift ; lower )
-open import Relation.Binary.Structures  using ( IsEquivalence ; IsPartialOrder )
+-- Imports from Agda and the Agda Standard Library -----------------------------------------------
+open import Agda.Primitive using ( _⊔_ ; lsuc ) renaming ( Set to  Type ; lzero to  ℓ₀ )
+open import Data.Product   using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Function.Base  using ( _∘_ ; id )
+open import Level          using ( Level ; Lift ; lift ; lower )
+open import Relation.Binary.Structures
+                           using ( IsEquivalence ; IsPartialOrder )
 open import Relation.Binary.PropositionalEquality
-                                        using    ( _≡_ ; refl ; sym ; trans )
+                           using ( _≡_ ; refl ; sym ; trans )
 
 private variable α β : Level
 
@@ -227,8 +228,6 @@ transport B refl = id
 
 
 ------------------------------
-
-<br>
 
 [↑ Overture](Overture.html)
 <span style="float:right;">[Overture.Inverses →](Overture.Inverses.html)</span>

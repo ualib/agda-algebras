@@ -25,12 +25,9 @@ open import Homomorphisms.Setoid
 
 --------------------------------------
 
-<br>
-
 [← Algebras.Setoid.Congruences](Algebras.Setoid.Congruences.html)
 <span style="float:right;">[Homomorphisms.Basic →](Homomorphisms.Basic.html)</span>
 
 {% include UALib.Links.md %}
-
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

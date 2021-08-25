@@ -17,7 +17,7 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 module Varieties.Setoid.FreeAlgebras {𝑆 : Signature 𝓞 𝓥} where
 
 
--- Imports from Agda and the Agda Standard Library ---------------------
+-- Imports from Agda and the Agda Standard Library ------------------------------------------------
 open import Agda.Primitive using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
 open import Data.Product   using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
 open import Function.Base  using ( id )
@@ -25,7 +25,7 @@ open import Relation.Unary using ( Pred  ; _∈_ )
 open import Relation.Binary.PropositionalEquality
                            using ( refl )
 
--- Imports from the Agda Universal Algebra Library -------------------------------------------
+-- Imports from the Agda Universal Algebra Library ---------------------------------------------------
 open import Overture.Preliminaries             using ( ∣_∣ )
 open import Overture.Inverses                  using ( IsSurjective ; Image_∋_ ; Inv ; InvIsInv ; eq )
 open import Algebras.Setoid.Products   {𝑆 = 𝑆} using ( ⨅ )
@@ -90,8 +90,6 @@ To be continued...
 (TODO: complete this module)
 
 --------------------------------
-
-<br>
 
 [← Varieties.Setoid.Closure](Varieties.Setoid.Closure.html)
 <span style="float:right;">[Structures →](Structures.html)</span>

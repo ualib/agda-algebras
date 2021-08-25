@@ -17,7 +17,7 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Varieties.Preservation {𝑆 : Signature 𝓞 𝓥} where
 
--- Imports from Agda and the Agda Standard Library ---------------------
+-- Imports from Agda and the Agda Standard Library -----------------------------------------------
 open import Agda.Primitive  using ( _⊔_ ; lsuc ; Level ) renaming ( Set   to Type )
 open import Axiom.Extensionality.Propositional
                             using () renaming (Extensionality to funext)
@@ -28,7 +28,7 @@ open import Relation.Unary  using ( Pred ; _⊆_ ; _∈_ ; ｛_｝ ; _∪_ )
 open import Relation.Binary.PropositionalEquality
                             using ( _≡_ ; refl ; module ≡-Reasoning ; cong-app ; cong )
 
--- imports from agda-algebras --------------------------------------------------------------
+-- Imports from the Agda Universal Algebra Library ---------------------------------------------
 open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
 open import Overture.Inverses                  using ( Inv ; IsInjective ; InvIsInv )
 open import Foundations.Truncation             using ( hfunext )
@@ -607,19 +607,10 @@ module _ (wd : SwellDef){X : Type 𝓧}{𝒦 : Pred (Algebra α 𝑆)(ov α)} wh
 
 ----------------------------
 
-<br>
-
 [← Varieties.Properties](Varieties.Properties.html)
 <span style="float:right;">[Varieties.FreeAlgebras →](Varieties.FreeAlgebras.html)</span>
 
 {% include UALib.Links.md %}
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
-
-
-
-
-
-
-
 

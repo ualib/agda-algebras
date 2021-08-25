@@ -18,7 +18,7 @@ This is the [Structures.Homs][] module of the [Agda Universal Algebra Library][]
 
 module Structures.Homs where
 
--- imports from Agda and the Agda Standard Library -------------------------------------------
+-- Imports from Agda and the Agda Standard Library -------------------------------------------
 open import Agda.Primitive  using ( _⊔_ ; lsuc ) renaming ( lzero to ℓ₀ ; Set to Type )
 open import Axiom.Extensionality.Propositional
                             using () renaming (Extensionality to funext)
@@ -30,7 +30,7 @@ open import Relation.Binary.PropositionalEquality
                             using ( _≡_ ; refl ; sym ; cong ; module ≡-Reasoning ; trans )
 
 
--- Imports from agda-algebras --------------------------------------------------------------
+-- Imports from the Agda Universal Algebra Library ---------------------------------------------
 open import Overture.Preliminaries   using ( _∙_ ; ∣_∣ ; ∥_∥ ; _⁻¹ ; Π-syntax )
 open import Overture.Inverses        using ( IsInjective ; IsSurjective ; Image_∋_ )
 open import Relations.Discrete       using ( ker ; kerlift )
@@ -281,8 +281,6 @@ module _ {𝑨 : structure 𝐹 S∅ {α}{ℓ₀}}
 \end{code}
 
 --------------------------------
-
-<br>
 
 [← Structures.Congruences](Structures.Congruences.html)
 <span style="float:right;">[Structures.Isos →](Structures.Isos.html)</span>

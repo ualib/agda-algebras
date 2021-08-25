@@ -16,6 +16,7 @@ This is the [ClosureSystems.Properties][] module of the [Agda Universal Algebra 
 
 module ClosureSystems.Properties where
 
+-- Imports from Agda and the Agda Standard Library  ------------------------------
 open import Agda.Primitive          using ( _⊔_ ; Level ) renaming ( Set to Type )
 import Algebra.Definitions
 open import Data.Product            using ( _,_ ; _×_ )
@@ -24,7 +25,7 @@ open import Relation.Binary.Bundles using ( Poset )
 open import Relation.Binary.Core    using ( _Preserves_⟶_ )
 import Relation.Binary.Reasoning.PartialOrder as ≤-Reasoning
 
-
+-- Imports from agda-algebras ----------------------------------------------------
 open import ClosureSystems.Basic       using ( Extensive ; ClOp )
 open ClOp
 open Inverse
@@ -103,8 +104,6 @@ module _ {𝑨 : Poset ℓ ℓ₁ ℓ₂} where
 \end{code}
 
 ----------------------------
-
-<br>
 
 [← ClosureSystems.Basic](ClosureSystems.Basic.html)
 <span style="float:right;">[Algebras →](Algebras.html)</span>

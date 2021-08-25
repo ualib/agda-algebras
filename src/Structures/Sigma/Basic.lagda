@@ -21,7 +21,7 @@ open import Data.Product         using ( _,_ ; _×_ ; Σ-syntax ) renaming ( pro
 open import Level                using ()
 open import Relation.Binary.Core using ( _⇒_ ; _=[_]⇒_ ) renaming ( REL to BinREL ; Rel to BinRel )
 
--- Imports from agda-algebras ------------------------------------------------------------
+-- Imports from the Agda Universal Algebra Library ---------------------------------------------
 open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥ ; ℓ₁)
 open import Relations.Discrete     using ( Op ; _|:_ ; _preserves_ )
 open import Relations.Continuous   using ( Rel )
@@ -106,8 +106,6 @@ module _ {𝑅 𝐹 : Signature} {α ρ : Level} where
 
 
 --------------------------------
-
-<br>
 
 [← Structures.Sigma](Structures.Sigma.html)
 <span style="float:right;">[Structures.Sigma.Products →](Structures.Sigma.Products.html)</span>

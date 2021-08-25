@@ -19,16 +19,16 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Subalgebras.Subuniverses {𝑆 : Signature 𝓞 𝓥} where
 
--- imports from Agda and the Agda Standard Library
-open import Agda.Primitive        using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
+-- Imports from Agda and the Agda Standard Library -----------------------------
+open import Agda.Primitive using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
 open import Axiom.Extensionality.Propositional
-                                  using () renaming (Extensionality to funext)
-open import Function.Base         using ( _∘_ )
+                           using () renaming (Extensionality to funext)
+open import Function.Base  using ( _∘_ )
 open import Relation.Binary.PropositionalEquality
-                                  using ( module ≡-Reasoning ; _≡_ )
-open import Relation.Unary        using ( Pred ; _∈_ ; _⊆_ ; ⋂ )
+                           using ( module ≡-Reasoning ; _≡_ )
+open import Relation.Unary using ( Pred ; _∈_ ; _⊆_ ; ⋂ )
 
--- imports from agda-algebras ------------------------------------------------------
+-- Imports from the Agda Universal Algebra Library -----------------------------
 open import Overture.Preliminaries      using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
 open import Relations.Discrete          using ( Im_⊆_ )
 open import Foundations.Welldefined     using ( swelldef )
@@ -249,8 +249,6 @@ a   : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣
 and, under these assumptions, we proved `∣ g ∣ ((𝑓 ̂ 𝑨) a) ≡ ∣ h ∣ ((𝑓 ̂ 𝑨) a)`.
 
 ---------------------------------
-
-<br>
 
 [↑ Subalgebras](Subalgebras.html)
 <span style="float:right;">[Subalgebras.Subalgebras →](Subalgebras.Subalgebras.html)</span>

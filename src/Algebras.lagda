@@ -9,7 +9,6 @@ author: [agda-algebras development team][]
 
 This is the [Algebras][] module of the [Agda Universal Algebra Library][] in which we use type theory and [Agda][] to codify the most basic objects of universal algebra, such as *signatures*, *algebras*, *product algebras*, *congruence relations*, and *quotient algebras*.
 
-
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -25,15 +24,10 @@ open import Algebras.Setoid
 
 -------------------------------------
 
-<br>
-<br>
-
 [← ClosureSystems.Properties](ClosureSystems.Properties.html)
 <span style="float:right;">[Algebras.Basic →](Algebras.Basic.html)</span>
 
-
 {% include UALib.Links.md %}
-
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 

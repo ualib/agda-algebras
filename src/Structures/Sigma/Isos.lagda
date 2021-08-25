@@ -24,7 +24,7 @@ open import Level          using ( Level ; Lift ; lift ; lower )
 open import Relation.Binary.PropositionalEquality
                            using ( _≡_ ; refl ; cong ; cong-app )
 
--- Imports from agda-algebras -------------------------------------------------------------------
+-- Imports from the Agda Universal Algebra Library ---------------------------------------------
 open import Overture.Preliminaries    using ( ∣_∣ ; _≈_ ; ∥_∥ ; _∙_ ; lower∼lift ; lift∼lower )
 open import Structures.Sigma.Basic    using ( Signature ; Structure ; Lift-Struc )
 open import Structures.Sigma.Homs     using ( hom ; 𝒾𝒹 ; ∘-hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-hom)
@@ -176,8 +176,6 @@ module _ {ι : Level}{I : Type ι}
 \end{code}
 
 --------------------------------
-
-<br>
 
 [← Structures.Sigma.Homs](Structures.Sigma.Homs.html)
 <span style="float:right;">[Complexity →](Complexity.html)</span>

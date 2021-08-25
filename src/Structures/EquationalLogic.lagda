@@ -15,17 +15,17 @@ This is the [Structures.EquationalLogic][] module of the [Agda Universal Algebra
 
 module Structures.EquationalLogic where
 
--- imports from Agda and the Agda Standard Library -------------------------------------------
+-- Imports from Agda and the Agda Standard Library --------------------------------------
 open import Agda.Primitive using ( lsuc ; _⊔_ ; Level ) renaming ( Set to Type )
 open import Data.Fin.Base  using ( Fin )
 open import Data.Nat       using ( ℕ )
 open import Data.Product   using ( _,_ ;  _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
 open import Relation.Unary using ( Pred ; _∈_ )
 
--- Imports from agda-algebras --------------------------------------
-open import Overture.Preliminaries  using ( _≈_ )
+-- Imports from the Agda Universal Algebra Library --------------------------------------
+open import Overture.Preliminaries using ( _≈_ )
 open import Terms.Basic
-open import Structures.Basic        using ( signature ; structure ; _ᵒ_ )
+open import Structures.Basic       using ( signature ; structure ; _ᵒ_ )
 open import Structures.Terms
 
 
@@ -58,12 +58,8 @@ fMod ℰ = λ 𝑨 → ∀ i → 𝑨 ⊧ fst (ℰ i) ≈ snd (ℰ i)
 
 --------------------------------
 
-<br>
-
 [← Structures.Substructures](Structures.Substructures.html)
 <span style="float:right;">[Structures.Sigma →](Structures.Sigma.html)</span>
-
-
 
 {% include UALib.Links.md %}
 

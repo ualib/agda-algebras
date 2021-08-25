@@ -19,12 +19,12 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Algebras.Products {𝑆 : Signature 𝓞 𝓥} where
 
--- Imports from Agda and the Agda Standard Library ----------------------------------------
+-- Imports from Agda and the Agda Standard Library ------------------------------
 open import Agda.Primitive  using ( lsuc ; _⊔_ ; Level ) renaming ( Set to Type )
 open import Data.Product    using ( _,_ ; Σ ; Σ-syntax )
 open import Relation.Unary  using ( Pred ; _⊆_ ; _∈_ )
 
--- Imports from agda-algebras --------------------------------------------------------------
+-- Imports from agda-algebras ---------------------------------------------------
 open import Overture.Preliminaries using (_⁻¹; 𝑖𝑑; ∣_∣; ∥_∥)
 open import Algebras.Basic         using ( Algebra ; _̂_ ; algebra )
 
@@ -128,8 +128,6 @@ If `p : 𝑨 ∈ 𝒦`, we view the pair `(𝑨 , p) ∈ ℑ` as an *index* over
 <sup>2</sup><span class="footnote" id="fn2"> **Unicode Hints**. Some of our types are denoted with with Gothic ("mathfrak") symbols. To produce them in [agda2-mode][], type `\Mf` followed by a letter. For example, `\MfI` ↝ `ℑ`.</span>
 
 --------------------------------------------
-
-<br>
 
 [← Algebras.Basic](Algebras.Basic.html)
 <span style="float:right;">[Algebras.Congruences →](Algebras.Congruences.html)</span>

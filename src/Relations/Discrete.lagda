@@ -15,26 +15,29 @@ This is the [Relations.Discrete][] module of the [Agda Universal Algebra Library
 
 module Relations.Discrete where
 
--- Imports from Agda and the Agda Standard Library
+-- Imports from Agda and the Agda Standard Library ----------------------------------------------
 open import Agda.Primitive       using ( _⊔_ ; lsuc ) renaming ( Set to Type )
 open import Data.Product         using ( _,_ ; _×_ )
 open import Function.Base        using ( _∘_ )
 open import Level                using ( Level ; Lift )
-open import Relation.Binary      using ( IsEquivalence )
 open import Relation.Binary.Core using ( _⇒_ ; _=[_]⇒_ ) renaming ( REL to BinREL ; Rel to BinRel )
 open import Relation.Binary.Definitions
-                                 using ( Reflexive ; Symmetric ; Transitive )
-open import Relation.Unary       using ( ∅; _∈_; Pred )
+                                 using ( Reflexive ; Transitive )
+open import Relation.Unary       using ( _∈_; Pred )
 open import Relation.Binary.PropositionalEquality
-                                 using ( _≡_ ; refl )
+                                 using ( _≡_ )
 
--- Imports from agda-algebras
+-- Imports from agda-algebras -------------------------------------------------------------------
 open import Overture.Preliminaries using (_≈_ ; Π-syntax)
 
 private variable α β ρ 𝓥 : Level
+\end{code}
 
--- Functions for defining poitwise equality of functions wrt a
--- given equality (see e.g. defn of _≈̇_ in Residuation.Properties)
+Here is a function that is useful for defining poitwise equality of functions wrt a given equality
+(see, e.g., the definition of `_≈̇_` in the [Residuation.Properties][] module).
+
+\begin{code}
+
 PointWise : {A : Type α}{B : Type β }
             (_≋_ : BinRel B ρ) → BinRel (A → B) _
 PointWise {A = A}{B} _≋_ = λ (f g : A → B) → ∀ x → f x ≋ g x
@@ -44,9 +47,13 @@ depPointWise : {A : Type α}{B : A → Type β }
  →             BinRel ((a : A) → B a) _
 depPointWise {A = A}{B} _≋_ = λ (f g : (a : A) → B a) → ∀ x → f x ≋ g x
 
+\end{code}
 
--- Notation for asserting that the image of a function (the first argument)
--- is contained in a predicate (i.e., a "subset" of the codomain---the second argument).
+Here is useful notation for asserting that the image of a function (the first argument)
+is contained in a predicate, the second argument (a "subset" of the codomain).
+
+\begin{code}
+
 Im_⊆_ : {A : Type α}{B : Type β} → (A → B) → Pred B ρ → Type (α ⊔ ρ)
 Im f ⊆ S = ∀ x → f x ∈ S
 
@@ -214,13 +221,9 @@ module _ {A : Type α}{I : Type 𝓥}{f : Op A I}{R : BinRel A ρ} where
 
 --------------------------------------
 
-<br>
-
 [↑ Relations](Relations.html)
 <span style="float:right;">[Relations.Continuous →](Relations.Continuous.html)</span>
 
-
 {% include UALib.Links.md %}
-
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

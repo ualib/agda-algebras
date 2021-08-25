@@ -25,9 +25,6 @@ open import Overture.Transformers
 
 --------------------------------------
 
-<br>
-<br>
-
 [← Preface](Preface.html)
 <span style="float:right;">[Overture.Preliminaries →](Overture.Preliminaries.html)</span>
 

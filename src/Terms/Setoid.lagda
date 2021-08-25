@@ -7,6 +7,8 @@ author: [agda-algebras development team][]
 
 ### <a id="representing-terms-using-setoids">Representing Terms using Setoids</a>
 
+This is the [Terms.Setoid][] module of the [Agda Universal Algebra Library][].
+
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -14,13 +16,12 @@ author: [agda-algebras development team][]
 module Terms.Setoid where
 
 open import Terms.Setoid.Basic
+open import Terms.Setoid.Properties
 
 
 \end{code}
 
 --------------------------------
-
-<br>
 
 [← Terms.Operations](Terms.Operations.html)
 <span style="float:right;">[Terms.Setoid.Basic →](Terms.Setoid.Basic.html)</span>

@@ -18,7 +18,7 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Subalgebras.Setoid.Properties {𝑆 : Signature 𝓞 𝓥} where
 
--- imports from Agda and the Agda Standard Library
+-- Imports from Agda and the Agda Standard Library ------------------------------------
 open import Agda.Primitive   using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
 open import Data.Product     using ( _,_ )
 open import Function.Base    using ( id )
@@ -28,15 +28,17 @@ open import Relation.Unary   using ( Pred ; _⊆_ )
 open import Relation.Binary.PropositionalEquality
                              using ( refl )
 
--- imports from agda-algebras ------------------------------------------------------
-open import Overture.Preliminaries                    using ( ∣_∣ ; ∥_∥ )
-open import Overture.Inverses                         using ( IsInjective ; id-is-injective ; ∘-injective )
-open import Algebras.Setoid.Basic             {𝑆 = 𝑆} using ( SetoidAlgebra ; Lift-SetoidAlg )
-open import Algebras.Products                 {𝑆 = 𝑆} using ( ov )
-open import Homomorphisms.Setoid.Basic        {𝑆 = 𝑆} using ( hom ; ∘-hom )
-open import Homomorphisms.Setoid.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅toInjective ; ≅fromInjective
-                                                            ;  ≅-sym ; ≅-refl ; ≅-trans ; Lift-≅ )
-open import Subalgebras.Setoid.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; _≥_ ; _IsSubalgebraOfClass_ )
+-- Imports from the Agda Universal Algebra Library ---------------------------------------------------
+open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ )
+open import Overture.Inverses                  using ( IsInjective ; id-is-injective ; ∘-injective )
+open import Algebras.Setoid.Basic      {𝑆 = 𝑆} using ( SetoidAlgebra ; Lift-SetoidAlg )
+open import Algebras.Products          {𝑆 = 𝑆} using ( ov )
+open import Homomorphisms.Setoid.Basic {𝑆 = 𝑆} using ( hom ; ∘-hom )
+open import Homomorphisms.Setoid.Isomorphisms
+                                       {𝑆 = 𝑆} using ( _≅_ ; ≅toInjective ; ≅fromInjective
+                                                     ;  ≅-sym ; ≅-refl ; ≅-trans ; Lift-≅ )
+open import Subalgebras.Setoid.Subalgebras
+                                       {𝑆 = 𝑆} using ( _≤_ ; _≥_ ; _IsSubalgebraOfClass_ )
 
 private variable α ρᵃ β ρᵇ γ ρᶜ : Level
 
@@ -139,10 +141,9 @@ Lift-≤-Lift {𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ A≤B = ≥-Lift (Lift-SetoidAl
 
 ---------------------------------
 
-<br>
-
 [← Subalgebras.Setoid.Subalgebras](Subalgebras.Setoid.Subalgebras.html)
 <span style="float:right;">[Varieties →](Varieties.html)</span>
 
 {% include UALib.Links.md %}
 
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

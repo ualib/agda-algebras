@@ -16,7 +16,7 @@ This is the [Overture.Inverses][] module of the [agda-algebras][] library.
 
 module Overture.Inverses where
 
--- Imports from Agda and the Agda Standard Library
+-- Imports from Agda and the Agda Standard Library ---------------------------------------------
 open import Agda.Primitive              using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
 open import Data.Product                using ( _,_ ; _×_ ; Σ )
 open import Function.Base               using ( _∘_ )
@@ -164,8 +164,6 @@ module _ {A : Type α}{B : Type β} where
 
 
 --------------------------------------
-
-<br>
 
 [← Overture.Preliminaries](Overture.Preliminaries.html)
 <span style="float:right;">[Overture.Transformers →](Overture.Transformers.html)</span>

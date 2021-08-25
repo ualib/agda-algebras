@@ -22,8 +22,6 @@ open import Complexity.CSP
 
 --------------------------------
 
-<br>
-
 [← Structures.Sigma.Isos](Structures.Sigma.Isos.html)
 <span style="float:right;">[Complexity.Basic →](Complexity.Basic.html)</span>
 

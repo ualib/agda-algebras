@@ -21,7 +21,7 @@ The *graph* of 𝑨 is the structure Gr 𝑨 with the same domain as 𝑨 with r
 
 module Structures.Graphs0 where
 
--- imports from Agda and the Agda Standard Library -------------------------------------------
+-- Imports from Agda and the Agda Standard Library -------------------------------------------
 open import Agda.Primitive using ( _⊔_ ; Level ) renaming ( Set to Type ; lzero to ℓ₀ )
 open import Data.Product   using ( _,_ ; _×_ ; Σ-syntax )
 open import Data.Sum.Base  using ( _⊎_ ) renaming ( inj₁ to inl ; inj₂ to inr )
@@ -32,7 +32,7 @@ open import Relation.Unary using ( Pred ; _∈_ )
 open import Relation.Binary.PropositionalEquality
                            using ( _≡_ ; module ≡-Reasoning ; cong ; sym ; refl )
 
--- Imports from agda-algebras --------------------------------------------------------------
+-- Imports from the Agda Universal Algebra Library ---------------------------------------------
 open import Overture.Preliminaries using ( 𝟙 ; ∣_∣ ; ∥_∥ )
 open import Relations.Continuous   using ( Rel )
 open import Structures.Basic       using ( signature ; structure )
@@ -153,8 +153,6 @@ module _ {χ : Level}{X : Type χ}
 
 
 --------------------------------
-
-<br>
 
 [← Structures.Graphs](Structures.Graphs.html)
 <span style="float:right;">[Structures.Products →](Structures.Products.html)</span>

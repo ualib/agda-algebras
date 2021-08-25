@@ -30,8 +30,7 @@ open import Function.Base  using ( _∘_  )
 open import Relation.Binary.PropositionalEquality
                            using ( _≡_ ; refl ; module ≡-Reasoning ; cong ; sym )
 
-
--- Imports from agda-algebras --------------------------------------------------------------
+-- Imports from the Agda Universal Algebra Library ---------------------------------------------
 open import Overture.Preliminaries   using ( ∣_∣ ; _≈_ ; ∥_∥ ; _∙_ ; lower∼lift ; lift∼lower ; 𝟙)
 open import Relations.Continuous     using ( Rel )
 open import Structures.Basic         using ( signature ; structure )
@@ -110,8 +109,6 @@ module _ {𝑨 : structure 𝐹 𝑅 {α} {ρᵃ}}
 \end{code}
 
 --------------------------------
-
-<br>
 
 [← Structures.Basic](Structures.Basic.html)
 <span style="float:right;">[Structures.Graphs0 →](Structures.Graphs0.html)</span>

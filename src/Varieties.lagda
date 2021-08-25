@@ -27,8 +27,6 @@ open import Varieties.Setoid
 
 ---------------------------------
 
-<br>
-
 [← Subalgebras.Setoid.Properties](Subalgebras.Setoid.Properties.html)
 <span style="float:right;">[Varieties.EquationalLogic →](Varieties.EquationalLogic.html)</span>
 

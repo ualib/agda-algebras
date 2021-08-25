@@ -20,10 +20,7 @@ open import ClosureSystems.Properties
 
 \end{code}
 
-
 --------------------------------
-
-<br>
 
 [← GaloisConnections.Properties](GaloisConnections.Properties.html)
 <span style="float:right;">[ClosureSystems.Basic →](ClosureSystems.Basic.html)</span>

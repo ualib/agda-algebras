@@ -32,7 +32,7 @@ open import Overture.Preliminaries using ( _≈_; _⁻¹ ; _∙_ ; transport )
 open import Overture.Inverses      using ( IsSurjective ; SurjInv ; InvIsInv ; Image_∋_ ; eq )
 open import Relations.Discrete     using ( Op )
 open import Relations.Quotients    using ( [_] ; []-⊆ ; []-⊇ ; IsBlock ; ⟪_⟫ )
-open import Foundations.Truncation   using ( blk-uip ; to-Σ-≡ )
+open import Foundations.Truncation using ( blk-uip ; to-Σ-≡ )
 
 
 private variable α β γ ρ 𝓥 : Level
@@ -108,14 +108,10 @@ module _ {A : Type α}{R : BinRel A ρ} where
 
 ---------------------------------------
 
-<br>
-
 [← Foundations.Truncation](Foundations.Truncation.html)
 <span style="float:right;">[GaloisConnections →](GaloisConnections.html)</span>
 
-
 {% include UALib.Links.md %}
-
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 

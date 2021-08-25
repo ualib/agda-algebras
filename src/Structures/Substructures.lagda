@@ -17,7 +17,7 @@ This is the [Structures.Substructures][] module of the [Agda Universal Algebra L
 
 module Structures.Substructures where
 
--- imports from Agda and the Agda Standard Library
+-- Imports from Agda and the Agda Standard Library ------------------------------------
 open import Agda.Primitive  using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
 open import Data.Product    using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₂ to snd )
 open import Function.Base   using ( _∘_ )
@@ -26,16 +26,15 @@ open import Relation.Binary.PropositionalEquality
                             using ( _≡_ ; module ≡-Reasoning )
 open import Relation.Unary  using ( Pred ; _∈_ ; _⊆_ ; ⋂ )
 
--- imports from agda-algebras ------------------------------------------------------
-open import Overture.Preliminaries   using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
-open import Overture.Inverses        using ( IsInjective )
-open import Relations.Discrete       using ( Im_⊆_ ; PredType )
-open import Foundations.Welldefined  using ( swelldef )
+-- Imports from the Agda Universal Algebra Library -------------------------------------
+open import Overture.Preliminaries  using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
+open import Overture.Inverses       using ( IsInjective )
+open import Relations.Discrete      using ( Im_⊆_ ; PredType )
+open import Foundations.Welldefined using ( swelldef )
 open import Terms.Basic
-open import Structures.Basic         using ( signature ; structure ; _ᵒ_ ; sigl ; siglˡ ; siglʳ )
-open import Structures.Homs          using ( hom )
+open import Structures.Basic        using ( signature ; structure ; _ᵒ_ ; sigl ; siglˡ ; siglʳ )
+open import Structures.Homs         using ( hom )
 open import Structures.Terms
-
 
 open structure
 open signature
@@ -303,8 +302,6 @@ Suppose `𝒦 : Pred (Algebra α 𝑆) γ` denotes a class of `𝑆`-algebras an
 
 
 --------------------------------
-
-<br>
 
 [← Structures.Terms](Structures.Terms.html)
 <span style="float:right;">[Structures.EquationalLogic →](Structures.EquationalLogic.html)</span>
