@@ -28,7 +28,7 @@ open import Structures.Sigma.Isos
 
 <br>
 
-[← Structures.Substructures](Structures.Substructures.html)
+[← Structures.EquationalLogic](Structures.EquationalLogic.html)
 <span style="float:right;">[Structures.Sigma.Basic →](Structures.Sigma.Basic.html)</span>
 
 {% include UALib.Links.md %}

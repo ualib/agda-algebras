@@ -144,7 +144,7 @@ module _ {A : Type (α ⊔ ρ)} where
 
 **Notation**. For consistency and readability, we reserve two universe variables for
 special purposes.  The first of these is 𝓞 which shall be reserved for types that
-represent *operation symbols* (see [Algebras.Signatures][]). The second is 𝓥 which we
+represent *operation symbols*. The second is 𝓥 which we
 reserve for types representing *arities* of relations or operations.
 
 In the next subsection, we define types that are useful for asserting and proving
@@ -181,9 +181,11 @@ eval-rel R u v = ∀ i → R (u i) (v i)
 eval-pred : {A : Type α}{I : Type 𝓥} → Pred (A × A) ρ → BinRel (I → A) (𝓥 ⊔ ρ)
 eval-pred P u v = ∀ i → (u i , v i) ∈ P
 
+\end{code}
 
--- If `f : Op I` and `R : Rel A β`, then we say `f` and `R` are *compatible*
--- just in case `∀ u v : I → A`, `Π i ꞉ I , R (u i) (v i)  →  R (f u) (f v)`.
+If `f : Op I` and `R : Rel A β`, then we say `f` and `R` are *compatible* just in case `∀ u v : I → A`, `Π i ꞉ I , R (u i) (v i)  →  R (f u) (f v)`.
+
+\begin{code}
 
 _preserves_ : {A : Type α}{I : Type 𝓥} → Op A I → BinRel A ρ → Type (α ⊔ 𝓥 ⊔ ρ)
 f preserves R  = ∀ u v → (eval-rel R) u v → R (f u) (f v)
@@ -212,7 +214,6 @@ module _ {A : Type α}{I : Type 𝓥}{f : Op A I}{R : BinRel A ρ} where
 
 --------------------------------------
 
-<br>
 <br>
 
 [↑ Relations](Relations.html)

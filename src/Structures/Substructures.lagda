@@ -40,12 +40,6 @@ open import Structures.Terms
 open structure
 open signature
 
-
--- private variable
---  𝓞₀ 𝓥₀ 𝓞₁ 𝓥₁ ρ α ρᵃ β ρᵇ γ ρᶜ χ ι : Level
---  𝐹 : signature 𝓞₀ 𝓥₀
---  𝑅 : signature 𝓞₁ 𝓥₁
-
 private variable
  𝓞₀ 𝓥₀ 𝓞₁ 𝓥₁ ρ α ρᵃ β ρᵇ γ ρᶜ χ ι : Level
  𝐹 : signature 𝓞₀ 𝓥₀
@@ -311,10 +305,10 @@ Suppose `𝒦 : Pred (Algebra α 𝑆) γ` denotes a class of `𝑆`-algebras an
 --------------------------------
 
 <br>
-<br>
 
-[← Structures.Terms.Operations](Structures.Terms.Operations.html)
-<span style="float:right;">[Structures.Substructures.Basic →](Structures.Substructures.Basic.html)</span>
+[← Structures.Terms](Structures.Terms.html)
+<span style="float:right;">[Structures.EquationalLogic →](Structures.EquationalLogic.html)</span>
+
 
 {% include UALib.Links.md %}
 

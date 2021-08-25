@@ -41,7 +41,7 @@ open import Homomorphisms.Setoid.Basic {𝑆 = 𝑆} using ( hom ; kercon ; ker[
 
 #### <a id="isomorphism-toolbox">Definition of isomorphism</a>
 
-Recall, `f ~ g` means f and g are *extensionally* (or pointwise) equal; i.e., `∀ x, f x ≡ g x`. We use this notion of equality of functions in the following definition of **isomorphism**.
+Recall, `f ~ g` means f and g are *extensionally* (or pointwise) equal; i.e., `∀ x, f x ≡ g x`. We use this notion of equality of functions in the following definition of *isomorphism*.
 
 We could define this using Sigma types, like this.
 
@@ -70,7 +70,7 @@ open _≅_ public
 
 \end{code}
 
-That is, two structures are **isomorphic** provided there are homomorphisms going back and forth between them which compose to the identity map.
+That is, two structures are *isomorphic* provided there are homomorphisms going back and forth between them which compose to the identity map.
 
 
 
@@ -121,7 +121,7 @@ That is, two structures are **isomorphic** provided there are homomorphisms goin
 
 #### <a id="lift-is-an-algebraic-invariant">Lift is an algebraic invariant</a>
 
-Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic invariant*). As our focus is universal algebra, this is important and is what makes the lift operation a workable solution to the technical problems that arise from the noncumulativity of the universe hierarchy discussed in [Overture.Lifts][].
+Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic invariant*). As our focus is universal algebra, this is important and is what makes the lift operation a workable solution to the technical problems that arise from the noncumulativity of Agda's universe hierarchy.
 
 \begin{code}
 

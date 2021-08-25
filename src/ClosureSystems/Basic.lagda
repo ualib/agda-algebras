@@ -7,6 +7,8 @@ author: [agda-algebras development team][]
 
 ### <a id="basic-definitions">Basic Definitions</a>
 
+This is the [ClosureSystems.Basic][] module of the [Agda Universal Algebra Library][].
+
 #### <a id="closure-systems">Closure Systems</a>
 
 A *closure system* on a set `X` is a collection `𝒞` of subsets of `X` that is closed
@@ -95,7 +97,6 @@ record ClOp {ℓ ℓ₁ ℓ₂ : Level}(𝑨 : Poset ℓ ℓ₁ ℓ₂) : Type  
 
 --------------------------------------
 
-<br>
 <br>
 
 [↑ ClosureSystems.Definitions](ClosureSystems.html)

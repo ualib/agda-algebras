@@ -7,6 +7,9 @@ author: [agda-algebras development team][]
 
 ### <a id="properties-of-closure-systems-and-operators">Properties of Closure Systems and Operators</a>
 
+This is the [ClosureSystems.Properties][] module of the [Agda Universal Algebra Library][].
+
+
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}

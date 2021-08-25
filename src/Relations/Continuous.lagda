@@ -83,16 +83,24 @@ module _ {𝓥 : Level} where
  eval-Rel : {I : ar}{A : Type α} → Rel A I{ρ} → (J : ar) → (I → J → A) → Type (𝓥 ⊔ ρ)
  eval-Rel R J t = ∀ (j : J) → R λ i → t i j
 
- -- A relation R is compatible with an operation 𝑓 if for every tuple t of tuples
- -- belonging to R, the tuple whose elements are the result of applying 𝑓 to
- -- sections of t also belongs to R.
+\end{code}
+
+A relation `R` is compatible with an operation `f` if for every tuple `t` of tuples
+belonging to `R`, the tuple whose elements are the result of applying `f` to
+sections of `t` also belongs to `R`.
+
+\begin{code}
 
  compatible-Rel : {I J : ar}{A : Type α} → Op(A) J → Rel A I{ρ} → Type (𝓥 ⊔ α ⊔ ρ)
- compatible-Rel 𝑓 R  = ∀ t → eval-Rel R arity[ 𝑓 ] t → R λ i → 𝑓 (t i)
+ compatible-Rel f R  = ∀ t → eval-Rel R arity[ f ] t → R λ i → f (t i)
  -- (inferred type of t is I → J → A)
 
+\end{code}
 
- -- Compatibility of operations with ΠΡ (PiRho) types.
+
+#### <a id="compatibility-of-operations-with-pirho-types">Compatibility of operations with ΠΡ types</a>
+
+\begin{code}
 
  eval-ΠΡ : {I J : ar}{𝒜 : I → Type α}
   →         ΠΡ I 𝒜 {ρ}            -- the relation type: subsets of Π[ i ∈ I ] 𝒜 i
@@ -110,7 +118,7 @@ module _ {𝓥 : Level} where
 
 \end{code}
 
-#### <a id="elaboration">Elaboration</a>
+#### <a id="detailed-explanation">Detailed explanation</a>
 
 The first of these is an *evaluation* function which "lifts" an `I`-ary relation to an `(I → J)`-ary relation. The lifted relation will relate an `I`-tuple of `J`-tuples when the "`I`-slices" (or "rows") of the `J`-tuples belong to the original relation. The second definition denotes compatibility of an operation with a continuous relation.
 
@@ -128,10 +136,8 @@ For simplicity, pretend for a moment that `J` is a finite set, say, `{1, 2, ...,
 Now `eval-cont-rel R 𝒶` is defined by `∀ j → R (λ i → 𝒶 i j)` which asserts that each row of the `I` columns shown above belongs to the original relation `R`. Finally, `cont-compatible-op` takes a `J`-ary operation `𝑓 : Op J A` and an `I`-tuple `𝒶 : I → J → A` of `J`-tuples, and determines whether the `I`-tuple `λ i → 𝑓 (𝑎 i)` belongs to `R`.
 
 
-
 --------------------------------------
 
-<br>
 <br>
 
 [← Relations.Discrete](Relations.Discrete.html)

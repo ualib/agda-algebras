@@ -24,12 +24,12 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; sym ; c
 open import Relation.Unary  using ( _⊆_ )
 
 -- Imports from the Agda Universal Algebra Library
-open import Overture.Preliminaries     using ( ∣_∣ ; ∥_∥ ; _≈_)
-open import Overture.Inverses          using ( IsInjective ; IsSurjective ; SurjInv )
-open import Foundations.Welldefined    using ( swelldef )
-open import Foundations.Extensionality using ( block-ext|uip ; pred-ext ; SurjInvIsRightInv ; epic-factor )
-open import Relations.Discrete         using ( kernel )
-
+open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ ; _≈_)
+open import Overture.Inverses                  using ( IsInjective ; IsSurjective ; SurjInv
+                                                     ; SurjInvIsRightInv ; epic-factor )
+open import Foundations.Welldefined            using ( swelldef )
+open import Foundations.Extensionality         using ( block-ext|uip ; pred-ext )
+open import Relations.Discrete                 using ( kernel )
 open import Algebras.Setoid.Basic      {𝑆 = 𝑆} using ( 𝕌[_] ; SetoidAlgebra ; _̂_ )
 open import Homomorphisms.Setoid.Basic {𝑆 = 𝑆} using ( hom ; kercon ; ker[_⇒_]_↾_ ; ∘-hom ; 𝒾𝒹 ; epi
                                                      ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-homomorphism ; ∘-is-hom )

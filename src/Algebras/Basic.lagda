@@ -95,7 +95,9 @@ We might take this opportunity to define the type of 0-*algebras*, that is, alge
 
 #### <a id="algebras-as-record-types">Algebras as record types</a>
 
-Some people prefer to represent algebraic structures in type theory using records, and for those folks we offer the following (equivalent) definition.
+A popular way to represent algebraic structures in type theory is with record types.  The Sigma type defined above provides an equivalent alternative that we happen to prefer and we use it throughout the library, both for consistency and because of its direct connection to the existential quantifier of logic. Recall that the type `Σ x ꞉ X , P x` represents the proposition, "there exists `x` in `X` such that `P x` holds;" in symbols, `∃ x ∈ X , P x`.  Indeed, an inhabitant of `Σ x ꞉ X , P x` is a pair `(x , p)` such that `x` inhabits `X` and `p` is a proof of `P x`. In other terms, the pair `(x , p)` is a witness and proof of the proposition `∃ x ∈ X , P x`.
+
+Nonetheless, for those who prefer to represent algebraic structures in type theory using records, we offer the following definition (which is equivalent to the Sigma type formulation).
 
 \begin{code}
 
@@ -203,7 +205,7 @@ compatible-pred  𝑨 P = ∀ 𝑓 → (𝑓 ̂ 𝑨) |:pred P
 Recall, the `|:` type was defined in [Relations.Discrete][] module.
 
 
-#### <a id="compatibility-of-continuous-relations">Compatibility of continuous relations<sup>[★](Algebras.Algebras.html#fn0)</sup></a>
+#### <a id="compatibility-of-continuous-relations">Compatibility of continuous relations</a>
 
 In the [Relations.Continuous][] module, we defined a function called `cont-compatible-op` to represent the assertion that a given continuous relation is compatible with a given operation. With that, it is easy to define a function, which we call `cont-compatible`, representing compatibility of a continuous relation with all operations of an algebra.  Similarly, we define the analogous `dep-compatible` function for the (even more general) type of *dependent relations*.
 

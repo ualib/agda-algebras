@@ -24,7 +24,6 @@ open import GaloisConnections.Properties
 -------------------------------------
 
 <br>
-<br>
 
 [← Foundations.Extensionality](Foundations.Extensionality.html)
 <span style="float:right;">[GaloisConnections.Basic →](GaloisConnections.Basic.html)</span>

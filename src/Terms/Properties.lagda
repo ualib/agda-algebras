@@ -131,7 +131,6 @@ The `lift-hom` and `lift-of-epi-is-epi` types will be called to action when such
 ------------------------------
 
 <br>
-<br>
 
 [← Terms.Basic](Terms.Basic.html)
 <span style="float:right;">[Terms.Operations →](Terms.Operations.html)</span>

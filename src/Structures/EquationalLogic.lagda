@@ -5,6 +5,10 @@ date : 2021-07-23
 author: [agda-algebras development team][]
 ---
 
+### <a id="equational-logic-for-general-structures">Equational Logic for General Structures</a>
+
+This is the [Structures.EquationalLogic][] module of the [Agda Universal Algebra Library][].
+
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -56,8 +60,10 @@ fMod ℰ = λ 𝑨 → ∀ i → 𝑨 ⊧ fst (ℰ i) ≈ snd (ℰ i)
 
 <br>
 
-[← Structures.Terms](Structures.Terms.html)
-<span style="float:right;">[Structures.Substructures →](Structures.Substructures.html)</span>
+[← Structures.Substructures](Structures.Substructures.html)
+<span style="float:right;">[Structures.Sigma →](Structures.Sigma.html)</span>
+
+
 
 {% include UALib.Links.md %}
 

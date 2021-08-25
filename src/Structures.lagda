@@ -24,8 +24,8 @@ open import Structures.Congruences
 open import Structures.Homs
 open import Structures.Isos
 open import Structures.Terms
-open import Structures.EquationalLogic
 open import Structures.Substructures
+open import Structures.EquationalLogic
 open import Structures.Sigma
 
 \end{code}

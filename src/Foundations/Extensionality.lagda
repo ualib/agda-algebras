@@ -24,7 +24,7 @@ open import Function.Base          using ( _∘_ ; id )
 open import Relation.Binary        using ( IsEquivalence ) renaming ( Rel to BinRel )
 open import Relation.Unary         using ( Pred ; _⊆_ )
 open import Relation.Binary.PropositionalEquality
-                                   using ( _≡_ ; refl ; module ≡-Reasoning ; cong-app )
+                                   using ( _≡_ ; refl )
 
 
 -- imports from agda-algebras --------------------------------------------------------------
@@ -42,8 +42,9 @@ private variable α β γ ρ 𝓥 : Level
 #### <a id="function-extensionality">Function Extensionality</a>
 
 
-Previous versions of [UniversalAlgebra][] made heavy use of a *global function extensionality principle*. This asserts that function extensionality holds at all universe levels.
-However, we decided to remove all instances of global function extensionality from the latest version of the library and limit ourselves to local applications of the principle. This has the advantage of making transparent precisely how and where the library depends on function extensionality. The price we pay for this precision is a library that is littered with extensionality postulates. Eventually we will probably remove these postulates in favor of an alternative approach to extensionality, or even remove the need for it altogether.
+Previous versions of the [agda-algebras][] library made heavy use of a *global function extensionality
+principle* asserting that function extensionality holds at all universe levels.
+However, we have removed all instances of global function extensionality from the current version of the library and we now limit ourselves to local applications of the principle. This has the advantage of making transparent precisely how and where the library depends on function extensionality. Eventually we hope to be able to remove these postulates altogether in favor of an alternative approach to extensionality (e.g., by working with setoids or by reimplementing the entire library in Cubical Agda).
 
 The following definition is useful for postulating function extensionality when and where needed.
 
@@ -51,49 +52,6 @@ The following definition is useful for postulating function extensionality when 
 
 DFunExt : Typeω
 DFunExt = (𝓤 𝓥 : Level) → funext 𝓤 𝓥
-
-
-module _ {A : Type α}{B : Type β} where
-
- SurjInvIsRightInv : (f : A → B)(fE : IsSurjective f) → ∀ b → f ((SurjInv f fE) b) ≡ b
- SurjInvIsRightInv f fE b = InvIsInv f (fE b)
-
- open ≡-Reasoning
-
- -- composition law for epics
- epic-factor : {C : Type γ}(f : A → B)(g : A → C)(h : C → B)
-  →            f ≈ h ∘ g → IsSurjective f → IsSurjective h
-
- epic-factor f g h compId fe y = Goal
-  where
-   finv : B → A
-   finv = SurjInv f fe
-
-   ζ : y ≡ f (finv y)
-   ζ = (SurjInvIsRightInv f fe y)⁻¹
-
-   η : y ≡ (h ∘ g) (finv y)
-   η = ζ ∙ compId (finv y)
-
-   Goal : Image h ∋ y
-   Goal = eq (g (finv y)) η
-
- epic-factor-intensional : {C : Type γ}(f : A → B)(g : A → C)(h : C → B)
-  →                        f ≡ h ∘ g → IsSurjective f → IsSurjective h
-
- epic-factor-intensional f g h compId fe y = Goal
-  where
-   finv : B → A
-   finv = SurjInv f fe
-
-   ζ : f (finv y) ≡ y
-   ζ = SurjInvIsRightInv f fe y
-
-   η : (h ∘ g) (finv y) ≡ y
-   η = (cong-app (compId ⁻¹)(finv y)) ∙ ζ
-
-   Goal : Image h ∋ y
-   Goal = eq (g (finv y)) (η ⁻¹)
 
 \end{code}
 
@@ -150,7 +108,6 @@ module _ {A : Type α}{R : BinRel A ρ} where
 
 ---------------------------------------
 
-<br>
 <br>
 
 [← Foundations.Truncation](Foundations.Truncation.html)

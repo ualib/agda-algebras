@@ -8,7 +8,7 @@ author: [agda-algebras development team][]
 
 ### <a id="homomorphisms-of-general-structures">Homomorphisms of General Structures</a>
 
-This is the [Sturctures.Homs][] module of the [Agda Universal Algebra Library][].
+This is the [Structures.Homs][] module of the [Agda Universal Algebra Library][].
 
 
 \begin{code}

@@ -30,12 +30,13 @@ open import Relation.Unary  using ( _⊆_ )
 
 -- Imports from agda-algebras --------------------------------------------------------------
 open import Overture.Preliminaries       using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
-open import Overture.Inverses            using ( IsInjective ; IsSurjective ; SurjInv ; Image_∋_ ) 
+open import Overture.Inverses            using ( IsInjective ; IsSurjective ; SurjInv ; Image_∋_
+                                               ; SurjInvIsRightInv ; epic-factor )
 open import Relations.Discrete           using ( kernel )
 open import Relations.Quotients          using ( ⌞_⌟ ; R-block ; ⟪_⟫ )
 open import Foundations.Truncation       using ( is-set ; blk-uip ; is-embedding ; monic-is-embedding|Set )
 open import Foundations.Welldefined      using ( swelldef )
-open import Foundations.Extensionality   using ( pred-ext ; block-ext|uip ; SurjInvIsRightInv ; epic-factor )
+open import Foundations.Extensionality   using ( pred-ext ; block-ext|uip )
 open import Algebras.Basic               using ( Algebra ; _̂_)
 open import Algebras.Congruences {𝑆 = 𝑆} using ( Con ; IsCongruence )
 open import Homomorphisms.Basic  {𝑆 = 𝑆} using ( hom ; kercon ; ker[_⇒_]_↾_ ; πker ; is-homomorphism ; epi ; epi-to-hom )
@@ -51,7 +52,7 @@ Here we formalize a version of the *first homomorphism theorem*, sometimes calle
 
 Informally, the theorem states that every homomorphism from `𝑨` to `𝑩` (`𝑆`-algebras) factors through the quotient algebra `𝑨 ╱ ker h` (`𝑨` modulo the kernel of the given homomorphism).  In other terms, given `h : hom 𝑨 𝑩` there exists `φ : hom (𝑨 ╱ ker h) 𝑩` which, when composed with the canonical projection `πker : 𝑨 ↠ 𝑨 ╱ ker h`, is equal to `h`; that is, `h = φ ∘ πker`.  Moreover, `φ` is a *monomorphism* (injective homomorphism) and is unique.
 
-Our formal proof of this theorem will require function extensionality, proposition extensionality, and a couple of truncation assumptions.  The extensionality assumptions are postulated using `dfunext` and `pred-ext` from [Overture.FunExtensionality][] and [Relations.Extensionality][] (resp.). As for truncation, to prove that `φ` is injective we require<sup>[1](Homomorphisms.Noether.html#fn1)</sup>
+Our formal proof of this theorem will require function extensionality, proposition extensionality, and a couple of truncation assumptions.  The extensionality assumptions are postulated using `swelldef` and `pred-ext` which were defined in [Foundations.Welldefined][] and [Foundations.Extensionality][]. As for truncation, to prove that `φ` is injective we require<sup>[1](Homomorphisms.Noether.html#fn1)</sup>
 
 + `buip`: *uniqueness of (block) identity proofs*; given two blocks of the kernel there is at most one proof that the blocks are equal;
 
@@ -61,7 +62,7 @@ To prove that `φ` is an embedding we require
 
 Note that the classical, informal statement of the first homomorphism theorem does not demand that `φ` be an embedding (in our sense of having subsingleton fibers), and if we left this out of the consequent of our formal theorem statement, then we could omit from the antecedent the assumption that `∣ 𝑩 ∣` is a set.
 
-Without further ado, we present our formalization of the first homomorphism theorem.<sup>[2](Homomorphisms.Noether.html#fn2)</sup>
+Without further ado, we present our formalization of the first homomorphism theorem.
 
 \begin{code}
 open ≡-Reasoning
@@ -265,9 +266,8 @@ If, in addition to the hypotheses of the last theorem, we assume τ is epic, the
 
 --------------------------------------
 
-<sup>1</sup><span class="footnote" id="fn1"> See [Relations.Truncation][] for a discussion of *truncation*, *sets*, and *uniqueness of identity proofs*.</span>
+<sup>1</sup><span class="footnote" id="fn1"> See [Foundations.Truncation][] for a discussion of *truncation*, *sets*, and *uniqueness of identity proofs*.</span>
 
-<sup>2</sup><span class="footnote" id="fn2"> In this module we are already assuming *global* function extensionality (`gfe`), and we could just appeal to `gfe` (e.g., in the proof of `FirstHomomorphismTheorem`) instead of adding local function extensionality (\ab{fe}) to the list of assumptions.  However, we sometimes add an extra extensionality postulate in order to highlight where and how the principle is applied.}</span>
 
 --------------------------------
 

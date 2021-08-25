@@ -7,7 +7,7 @@ author: [agda-algebras development team][]
 
 ### <a id="products-for-structures-as-records">Products for structures as records</a>
 
-This is the [Sturctures.Products][] module of the [Agda Universal Algebra Library][].
+This is the [Structures.Products][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 

@@ -29,6 +29,7 @@
 [Algebras.Basic]: Algebras.Basic.html
 [Algebras.Products]: Algebras.Products.html
 [Algebras.Congruences]: Algebras.Congruences.html
+
 [Algebras.Setoid]: Algebras.Setoid.html
 [Algebras.Setoid.Basic]: Algebras.Setoid.Basic.html
 [Algebras.Setoid.Congruences]: Algebras.Setoid.Congruences.html
@@ -36,7 +37,6 @@
 
 [ClosureSystems]: ClosureSystems.html
 [ClosureSystems.Basic]: ClosureSystems.Basic.html
-[ClosureSystems.Definitions]: ClosureSystems.Definitions.html
 [ClosureSystems.Properties]: ClosureSystems.Properties.html
 
 [Residuation]: Residuation.html
@@ -76,21 +76,24 @@
 [Terms.Basic]: Terms.Basic.html
 [Terms.Operations]: Terms.Operations.html
 
+[Terms]: Terms.html
 [Terms.Basic]: Terms.Basic.html
 [Terms.Operations]: Terms.Operations.html
 [Terms.Properties]: Terms.Properties.html
-[Terms.Setoid.Basic]: Terms.Setoid.Basic.html
+
 [Terms.Setoid]: Terms.Setoid.html
-[Terms]: Terms.html
+[Terms.Setoid.Basic]: Terms.Setoid.Basic.html
+[Terms.Setoid.Properties]: Terms.Setoid.Properties.html
 
 [Subalgebras]: Subalgebras.html
 [Subalgebras.Properties]: Subalgebras.Properties.html
+[Subalgebras.Subalgebras]: Subalgebras.Subalgebras.html
+[Subalgebras.Subuniverses]: Subalgebras.Subuniverses.html
+
+[Subalgebras.Setoid]: Subalgebras.Setoid.html
 [Subalgebras.Setoid.Properties]: Subalgebras.Setoid.Properties.html
 [Subalgebras.Setoid.Subalgebras]: Subalgebras.Setoid.Subalgebras.html
 [Subalgebras.Setoid.Subuniverses]: Subalgebras.Setoid.Subuniverses.html
-[Subalgebras.Setoid]: Subalgebras.Setoid.html
-[Subalgebras.Subalgebras]: Subalgebras.Subalgebras.html
-[Subalgebras.Subuniverses]: Subalgebras.Subuniverses.html
 
 [Varieties]: Varieties.html
 [Varieties.Closure]: Varieties.Closure.html
@@ -106,26 +109,23 @@
 [Varieties.Setoid.FreeAlgebras]: Varieties.Setoid.FreeAlgebras.html
 
 [Structures]: Structures.html
-[Structures.Basic]: Structures.Basic.html
-[Structures.Congruences]: Structures.Congruences.html
-[Structures.EquationalLogic]: Structures.EquationalLogic.html
-[Structures.Graphs0]: Structures.Graphs0.html
 [Structures.Graphs]: Structures.Graphs.html
+[Structures.Graphs0]: Structures.Graphs0.html
+[Structures.Basic]: Structures.Basic.html
+[Structures.Products]: Structures.Products.html
+[Structures.Congruences]: Structures.Congruences.html
 [Structures.Homs]: Structures.Homs.html
 [Structures.Isos]: Structures.Isos.html
-[Structures.Products]: Structures.Products.html
+[Structures.Terms]: Structures.Terms.html
+[Structures.Substructures]: Structures.Substructures.html
+[Structures.EquationalLogic]: Structures.EquationalLogic.html
+
+[Structures.Sigma]: Structures.Sigma.html
 [Structures.Sigma.Basic]: Structures.Sigma.Basic.html
+[Structures.Sigma.Products]: Structures.Sigma.Products.html
 [Structures.Sigma.Congruences]: Structures.Sigma.Congruences.html
 [Structures.Sigma.Homs]: Structures.Sigma.Homs.html
 [Structures.Sigma.Isos]: Structures.Sigma.Isos.html
-[Structures.Sigma.Products]: Structures.Sigma.Products.html
-[Structures.Sigma]: Structures.Sigma.html
-[Structures.Substructures.Basic]: Structures.Substructures.Basic.html
-[Structures.Substructures.Substructures]: Structures.Substructures.Substructures.html
-[Structures.Substructures]: Structures.Substructures.html
-[Structures.Terms.Basic]: Structures.Terms.Basic.html
-[Structures.Terms.Operations]: Structures.Terms.Operations.html
-[Structures.Terms]: Structures.Terms.html
 
 
 
@@ -258,3 +258,4 @@
 [williamdemeo.org]: https://williamdemeo.gitlab.io/
 [williamdemeo@gitlab]: https://gitlab.com/williamdemeo
 [williamdemeo@github]: https://github.com/williamdemeo
+

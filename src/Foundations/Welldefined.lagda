@@ -267,7 +267,6 @@ module _ {A : Type α}{B : Type β} where
 
 
 <br>
-<br>
 
 [↑ Foundations](Foundations.html)
 <span style="float:right;">[Foundations.Truncation →](Foundations.Truncation.html)</span>

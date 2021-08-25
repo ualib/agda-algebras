@@ -10,8 +10,7 @@ author: [agda-algebras development team][]
 This is the [Varieties.Setoid.EquationalLogic][] module of the [Agda Universal Algebra Library][].
 
 
-This module is based on Andreas Abel's Agda formalization of Birkhoff's completeness theorem.
-(See: http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf)
+This module is based on [Andreas Abel's Agda formalization of Birkhoff's completeness theorem](http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf).
 
 
 \begin{code}
@@ -109,8 +108,7 @@ module _ {α}{ρ}{ι}{I : Type ι} where
 
 #### <a id="derivations-in-a-context">Derivations in a context</a>
 
-(Based on Andreas Abel's Agda formalization of Birkhoff's completeness theorem;
-see: http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf)
+(Based on [Andreas Abel's Agda formalization of Birkhoff's completeness theorem](http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf).)
 
 \begin{code}
 
@@ -137,8 +135,7 @@ module _ {χ ι : Level} where
 
 #### <a id="soundness-of-the-inference-rules">Soundness of the inference rules</a>
 
-(Based on Andreas Abel's Agda formalization of Birkhoff's completeness theorem;
-see: http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf)
+(Based on [Andreas Abel's Agda formalization of Birkhoff's completeness theorem](see: http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf).)
 
 
 \begin{code}
@@ -187,8 +184,7 @@ The proof proceeds by constructing a relatively free algebra consisting of term
 quotiented by derivable equality E ⊢ Γ ▹ _≈_.  It then suffices to prove
 that this model satisfies all equations in $E$.
 
-(Based on Andreas Abel's Agda formalization of Birkhoff's completeness theorem;
-see: http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf)
+(Based on [Andreas Abel's Agda formalization of Birkhoff's completeness theorem](http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf).)
 
 \begin{code}
 
