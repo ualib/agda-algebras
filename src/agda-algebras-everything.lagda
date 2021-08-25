@@ -150,8 +150,12 @@ open import Terms.Setoid.Basic              using    ( _≐_ ; ≐-isRefl ; ≐-
                                                      ; TermSetoid ; 𝑻 ; Ops ; Sub ; _[_]
                                                      ; module Environment )
 
+
+
 open Environment                            using    (_≃_ ; Env ; ⟦_⟧ ; Equal ; isEquiv ; ⟦_⟧s ; substitution)
 
+open import Terms.Setoid.Properties         using    ( free-lift ; lift-hom ; free-unique
+                                                     ; lift-of-epi-is-epi )
 
 -- SUBALGEBRAS ------------------------------------------------------------------------------------------
 
