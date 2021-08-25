@@ -23,8 +23,6 @@ open import Subalgebras.Setoid.Properties
 
 ---------------------------------
 
-<br>
-
 [← Subalgebras.Properties](Subalgebras.Properties.html)
 <span style="float:right;">[Subalgebras.Setoid.Subuniverses →](Subalgebras.Setoid.Subuniverses.html)</span>
 

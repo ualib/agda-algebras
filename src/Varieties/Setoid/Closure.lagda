@@ -30,7 +30,7 @@ open import Data.Product   using ( _,_ ; Σ-syntax ) renaming ( proj₁ to fst ;
 open import Relation.Unary using ( Pred  ; _∈_ ; _⊆_ )
 
 
--- imports from agda-algebras --------------------------------------------------------------
+-- Imports from the Agda Universal Algebra Library ---------------------------------------------
 open import Overture.Preliminaries           using ( ∣_∣ ; ∥_∥ )
 open import Algebras.Setoid.Products {𝑆 = 𝑆} using ( ⨅ )
 open import Algebras.Setoid.Basic    {𝑆 = 𝑆} using ( SetoidAlgebra ; ov )
@@ -94,20 +94,10 @@ variety α ρ = Σ[ 𝒱 ∈ (Pred (SetoidAlgebra α ρ)_) ] is-variety 𝒱
 
 --------------------------------
 
-<br>
-
 [← Varieties.Setoid.EquationalLogic](Varieties.Setoid.EquationalLogic.html)
 <span style="float:right;">[Varieties.Setoid.FreeAlgebras →](Varieties.Setoid.FreeAlgebras.html)</span>
 
 {% include UALib.Links.md %}
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
-
-
-
-
-
-
-
-
 

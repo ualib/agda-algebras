@@ -7,6 +7,8 @@ author: [agda-algebras development team][]
 
 ### <a id="basic-definitions">Basic Definitions</a>
 
+This is the [Terms.Setoid.Basic][] module of the [Agda Universal Algebra Library][].
+
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -15,7 +17,7 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Terms.Setoid.Basic {𝑆 : Signature 𝓞 𝓥} where
 
--- imports from Agda and the Agda Standard Library -------------------------------------------
+-- imports from Agda and the Agda Standard Library -------------------------------------
 open import Agda.Primitive         using ( Level ; _⊔_ ; lsuc ) renaming ( Set to Type )
 open import Data.Empty.Polymorphic using ( ⊥ )
 open import Data.Product           using ( _,_ )
@@ -28,7 +30,7 @@ open import Relation.Binary.Definitions
 open import Relation.Binary.PropositionalEquality
                                    using ( _≡_ ; sym ; trans ; refl )
 
--- imports from agda-algebras --------------------------------------------------------------
+-- Imports from the Agda Universal Algebra Library --------------------
 open import Overture.Preliminaries        using ( ∣_∣ ; ∥_∥ )
 open import Algebras.Setoid.Basic {𝑆 = 𝑆} using ( SetoidAlgebra ; ov )
 open import Terms.Basic           {𝑆 = 𝑆} using ( Term ) public
@@ -195,8 +197,6 @@ module Environment (M : SetoidAlgebra α ℓ) where
 \end{code}
 
 --------------------------------
-
-<br>
 
 [↑ Terms.Setoid](Terms.Setoid.html)
 <span style="float:right;">[Terms.Setoid.Properties →](Terms.Setoid.Properties.html)</span>

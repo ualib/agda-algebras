@@ -7,6 +7,7 @@ author: [agda-algebras development team][]
 
 ### <a id="types-for-homomorphism-of-setoid-algebras">Types for Homomorphism of Setoid Algebras</a>
 
+This is the [Homomorphisms.Setoid][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
@@ -21,10 +22,7 @@ open import Homomorphisms.Setoid.HomomorphicImages
 
 \end{code}
 
-
 --------------------------------
-
-<br>
 
 [← Homomorphisms.HomomorphicImages](Homomorphisms.HomomorphicImages.html)
 <span style="float:right;">[Homomorphisms.Setoid.Basic →](Homomorphisms.Setoid.Basic.html)</span>

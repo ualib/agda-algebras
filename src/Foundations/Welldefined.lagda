@@ -13,27 +13,23 @@ author: [agda-algebras development team][]
 
 module Foundations.Welldefined where
 
-open import Agda.Primitive        using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type ; Setω to Typeω )
+-- Imports from Agda and the Agda Standard Library  -------------------------------------
+open import Agda.Primitive        using ( _⊔_ ; lsuc ; Level )
+                                  renaming ( Set to Type ; Setω to Typeω )
 open import Axiom.Extensionality.Propositional
                                   using () renaming ( Extensionality to funext )
 open import Data.Fin.Base         using ( Fin ; toℕ)
-open import Data.Nat.Base         using (ℕ; zero; suc; _+_; _*_ ; _≤_ ; s≤s)
 open import Data.Product          using ( _,_ ; _×_ )
-open import Data.List.Base        using ( List ; [] ; _∷_ ; lookup ; length ; [_] ; _++_; head ; tail)
-open import Data.List.Properties  using ( ≡-dec )
+open import Data.List.Base        using ( List ; [] ; [_] ; _∷_ ; _++_ )
 open import Function.Base         using ( _$_ ; _∘_ ; id )
-open import Relation.Binary       using ( Rel )
-open import Relation.Binary.Definitions
-                                  using ( DecidableEquality )
 open import Relation.Binary.PropositionalEquality
                                   using ( _≡_ ; refl ; module ≡-Reasoning ; cong )
 
 
+-- Imports from agda-algebras -----------------------------------------------------------
 open import Overture.Preliminaries using ( _≈_ ; _⁻¹)
 open import Relations.Discrete     using ( Op )
-open import Overture.Transformers  using ( CurryFin2 ; UncurryFin2 ; UncurryFin3 ; A×A→Fin2A ; Fin2A→A×A
-                                         ; A×A→B-to-Fin2A→B ; A→A→Fin2A ; Fin2A→B-to-A×A→B
-                                         ; A×A~Fin2A-pointwise ; A→A~Fin2A-pointwise )
+open import Overture.Transformers  using ( A×A→B-to-Fin2A→B ;  UncurryFin2 ; UncurryFin3 )
 
 private variable
  ι α β 𝓥 ρ : Level
@@ -265,11 +261,9 @@ module _ {A : Type α}{B : Type β} where
 
 -------------------------------------
 
-
-<br>
-
 [↑ Foundations](Foundations.html)
 <span style="float:right;">[Foundations.Truncation →](Foundations.Truncation.html)</span>
 
+{% include UALib.Links.md %}
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

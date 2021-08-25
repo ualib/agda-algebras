@@ -21,7 +21,7 @@ open import Data.Product   using ( _,_ ; Σ-syntax )
 open import Level          using ( Level )
 open import Relation.Unary using ( _∈_ ; Pred )
 
--- Imports from agda-algebras ----------------------------------------------
+-- Imports from the Agda Universal Algebra Library -------------------------
 open import Overture.Preliminaries using ( ∣_∣ ; Π-syntax )
 open import Structures.Basic       using ( signature ; structure )
 
@@ -59,8 +59,6 @@ module _ {𝒦 : Pred (structure 𝐹 𝑅 {α}{ρ}) ℓ} where
 \end{code}
 
 --------------------------------
-
-<br>
 
 [← Structures.Graphs0](Structures.Graphs0.html)
 <span style="float:right;">[Structures.Congruences →](Structures.Congruences.html)</span>

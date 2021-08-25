@@ -15,7 +15,7 @@ open import Algebras.Basic using (𝓞 ; 𝓥 ; Signature )
 
 module Subalgebras.Properties {𝑆 : Signature 𝓞 𝓥} where
 
--- imports from Agda and the Agda Standard Library ------------------------------------
+-- Imports from Agda and the Agda Standard Library -------------------------------
 open import Agda.Primitive   using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
 open import Data.Product     using ( _,_ ) renaming ( proj₁ to fst ; proj₂ to snd )
 open import Function.Base    using ( _∘_ ; id ; flip )
@@ -26,7 +26,7 @@ open import Relation.Binary.Definitions
 open import Relation.Binary.PropositionalEquality
                              using ( refl ; module ≡-Reasoning ; cong )
 
--- -- imports from agda-algebras --------------------------------------------------------------
+-- Imports from the Agda Universal Algebra Library --------------------
 open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
 open import Overture.Inverses                  using (  id-is-injective ; ∘-injective ; IsInjective )
 open import Algebras.Basic                     using ( Algebra ; Lift-Alg )
@@ -174,8 +174,6 @@ Lift-≤-Lift ℓᵃ {𝑩} ℓᵇ a<b = ≥-Lift (Lift-Alg 𝑩 ℓᵇ) (≤-Li
 
 
 ---------------------------------
-
-<br>
 
 [← Subalgebras.Subalgebras](Subalgebras.Subalgebras.html)
 <span style="float:right;">[Subalgebras.Setoid →](Subalgebras.Setoid.html)</span>

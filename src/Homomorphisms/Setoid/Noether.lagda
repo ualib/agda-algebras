@@ -17,13 +17,14 @@ open import Algebras.Basic using (𝓞 ; 𝓥 ; Signature )
 
 module Homomorphisms.Setoid.Noether {𝑆 : Signature 𝓞 𝓥} where
 
-open import Data.Product    using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Function        using ( _∘_ ; id )
-open import Level           using ( Level )
+-- Imports from Agda and the Agda Standard Library -------------------------------------------------
+open import Data.Product   using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Function       using ( _∘_ ; id )
+open import Level          using ( Level )
 open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; sym ; cong ; module ≡-Reasoning )
-open import Relation.Unary  using ( _⊆_ )
+open import Relation.Unary using ( _⊆_ )
 
--- Imports from the Agda Universal Algebra Library
+-- Imports from the Agda Universal Algebra Library ------------------------------------------------
 open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ ; _≈_)
 open import Overture.Inverses                  using ( IsInjective ; IsSurjective ; SurjInv
                                                      ; SurjInvIsRightInv ; epic-factor )
@@ -127,8 +128,6 @@ If, in addition to the hypotheses of the last theorem, we assume τ is epic, the
 \end{code}
 
 --------------------------------
-
-<br>
 
 [← Homomorphisms.Setoid.Basic](Homomorphisms.Setoid.Basic.html)
 <span style="float:right;">[Homomorphisms.Setoid.Isomorphisms →](Homomorphisms.Setoid.Isomorphisms.html)</span>

@@ -15,13 +15,13 @@ This is the [Structures.Basic][] module of the [Agda Universal Algebra Library][
 
 module Structures.Basic  where
 
--- imports from Agda and the Agda Standard Library -------------------------------------------
+-- Imports from Agda and the Agda Standard Library -----------------------------
 open import Agda.Primitive       using ( _⊔_ ; lsuc ) renaming ( Set to Type )
 open import Function.Base        using ( flip ; _∘_ )
 open import Level                using ( Level ; Lift ; lift ; lower )
 open import Relation.Binary.Core using () renaming ( Rel to BinRel )
 
--- imports from agda-algebras --------------------------------------------------------------
+-- Imports from the Agda Universal Algebra Library -----------------------------
 open import Relations.Discrete     using ( Op ; _|:_ ; _preserves_ )
 open import Relations.Continuous   using ( Rel )
 
@@ -105,8 +105,6 @@ module _ {𝐹 : signature 𝓞₀ 𝓥₀}{𝑅 : signature 𝓞₁ 𝓥₁} wh
 \end{code}
 
 --------------------------------
-
-<br>
 
 [↑ Structures](Structures.html)
 <span style="float:right;">[Structures.Graphs →](Structures.Graphs.html)</span>

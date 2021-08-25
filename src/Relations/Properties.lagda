@@ -94,11 +94,8 @@ Total P = Connex P P
 
 -----------------------------------------------
 
-<br>
-
 [← Relations.Continuous](Relations.Continuous.html)
 <span style="float:right;">[Relations.Quotients →](Relations.Quotients.html)</span>
-
 
 {% include UALib.Links.md %}
 

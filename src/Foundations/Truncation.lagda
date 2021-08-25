@@ -20,18 +20,17 @@ Readers who want to learn more about "proof-relevant mathematics" and other conc
 
 module Foundations.Truncation where
 
-open import Agda.Primitive        using ( _⊔_ ; lsuc ; Level )
-                               renaming ( Set to Type )
-open import Data.Product          using ( _,_ ; Σ ; Σ-syntax ; _×_ )
-                               renaming ( proj₁ to fst ; proj₂ to snd )
-open import Function.Base         using ( _∘_ ; id )
-open import Relation.Binary       using ( IsEquivalence )
-                               renaming ( Rel to BinRel )
-open import Relation.Unary        using ( Pred ; _⊆_ )
+-- Imports from Agda and the Agda Standard Library  -------------------------------------
+open import Agda.Primitive   using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
+open import Data.Product     using ( _,_ ; Σ ; Σ-syntax ; _×_ )
+                             renaming ( proj₁ to fst ; proj₂ to snd )
+open import Function.Base    using ( _∘_ ; id )
+open import Relation.Binary  using ( IsEquivalence ) renaming ( Rel to BinRel )
+open import Relation.Unary   using ( Pred ; _⊆_ )
 open import Relation.Binary.PropositionalEquality
-                                   using ( _≡_ ; refl ; module ≡-Reasoning ; cong-app ; trans )
+                             using ( _≡_ ; refl ; module ≡-Reasoning ; cong-app ; trans )
 
--- -- Imports from the Agda Universal Algebra Library
+-- Imports from the Agda Universal Algebra Library --------------------------------------
 open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; _≈_ ; transport)
 open import Overture.Inverses      using ( IsInjective )
 open import Relations.Quotients    using ( IsBlock )
@@ -243,15 +242,10 @@ module _ {I : Type 𝓥} where
 
 ----------------------------
 
-<br>
-
 [← Foundations.Welldefined](Foundations.Welldefined.html)
 <span style="float:right;">[Foundations.Extensionality →](Foundations.Extensionality.html)</span>
 
-
-
 {% include UALib.Links.md %}
-
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 

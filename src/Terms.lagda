@@ -23,8 +23,6 @@ open import Terms.Setoid
 
 -------------------------------------
 
-<br>
-
 [← Homomorphisms.Setoid.HomomorphicImages](Homomorphisms.Setoid.HomomorphicImages.html)
 <span style="float:right;">[Terms.Basic →](Terms.Basic.html)</span>
 

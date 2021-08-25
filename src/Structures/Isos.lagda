@@ -27,7 +27,7 @@ open import Relation.Binary.PropositionalEquality
                            using ( _≡_ ; refl ; cong ; cong-app ; module ≡-Reasoning )
 
 
--- Imports from agda-algebras --------------------------------------------------------------
+-- Imports from the Agda Universal Algebra Library ---------------------------------------------
 open import Overture.Preliminaries using ( ∣_∣ ; _≈_ ; ∥_∥ ; _∙_ ; lower∼lift ; lift∼lower )
 open import Structures.Basic       using ( signature ; structure ; Lift-Strucˡ ; Lift-Strucʳ
                                          ; Lift-Struc ; sigl ; siglˡ ; siglʳ )
@@ -261,8 +261,6 @@ module _ {I : Type ι}{𝒜 : I → structure 𝐹 𝑅 {α}{ρᵃ}}{ℬ : (Lift
 \end{code}
 
 --------------------------------
-
-<br>
 
 [← Structures.Homs](Structures.Homs.html)
 <span style="float:right;">[Structures.Terms →](Structures.Terms.html)</span>

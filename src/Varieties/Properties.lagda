@@ -24,7 +24,7 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Varieties.Properties {𝑆 : Signature 𝓞 𝓥} where
 
--- imports from Agda and the Agda Standard Library -------------------------------------------
+-- Imports from Agda and the Agda Standard Library -------------------------------------------
 open import Agda.Primitive using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type ; lzero to  ℓ₀ )
 open import Axiom.Extensionality.Propositional using () renaming ( Extensionality to funext )
 open import Data.Product   using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
@@ -33,7 +33,7 @@ open import Relation.Unary using ( Pred ; _∈_ ; _⊆_ ; ⋂ )
 open import Relation.Binary.PropositionalEquality
                            using ( _≡_ ; refl ; module ≡-Reasoning ; cong )
 
--- imports from agda-algebras --------------------------------------------------------------
+-- Imports from the Agda Universal Algebra Library ---------------------------------------------
 open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
 open import Overture.Inverses                  using ( IsInjective ; ∘-injective )
 open import Foundations.Welldefined            using ( SwellDef )
@@ -44,7 +44,8 @@ open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom; ∘-hom )
 open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; mkiso ; Lift-≅ ; ≅-sym ; ≅-trans )
 open import Terms.Basic                {𝑆 = 𝑆} using ( Term ; 𝑻 )
 open import Terms.Properties           {𝑆 = 𝑆} using ( lift-hom )
-open import Terms.Operations           {𝑆 = 𝑆} using ( _⟦_⟧ ; comm-hom-term ; interp-prod ; term-agreement )
+open import Terms.Operations           {𝑆 = 𝑆} using ( _⟦_⟧ ; comm-hom-term ; interp-prod
+                                                     ; term-agreement )
 open import Subalgebras.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; SubalgebraOfClass )
 open import Subalgebras.Properties     {𝑆 = 𝑆} using ( iso→injective )
 open import Varieties.EquationalLogic  {𝑆 = 𝑆} using ( _⊧_≈_ ; _⊫_≈_ )
@@ -247,8 +248,6 @@ module _ (wd : SwellDef){α χ : Level}{X : Type χ}{𝒦 : Pred (Algebra α �
 \end{code}
 
 ---------------------------------
-
-<br>
 
 [← Varieties.Closure](Varieties.Closure.html)
 <span style="float:right;">[Varieties.Preservation →](Varieties.Preservation.html)</span>

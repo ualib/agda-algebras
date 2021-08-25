@@ -9,14 +9,11 @@ author: [agda-algebras development team][]
 
 This is the [Varieties.Setoid.EquationalLogic][] module of the [Agda Universal Algebra Library][].
 
-
 This module is based on [Andreas Abel's Agda formalization of Birkhoff's completeness theorem](http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf).
-
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
-
 
 open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
@@ -39,11 +36,11 @@ open Func renaming ( f to _<$>_ )
 open IsEquivalence renaming ( refl to reflE ; sym to  symmE ; trans to tranE )
 
 
--- imports from agda-algebras --------------------------------------------------------------
+-- Imports from the Agda Universal Algebra Library ---------------------------------------------
 open import Overture.Preliminaries       using ( ∣_∣ )
-open import Algebras.Setoid.Basic{𝑆 = 𝑆} using ( SetoidAlgebra ; ov ) renaming ( ⟦_⟧ to ⟦_⟧s )
-open import Terms.Basic          {𝑆 = 𝑆} using ( Term )
-open import Terms.Setoid.Basic   {𝑆 = 𝑆} using ( module Environment ; Ops ; Sub ; _[_] )
+open import Algebras.Setoid.Basic {𝑆 = 𝑆} using ( SetoidAlgebra ; ov ) renaming ( ⟦_⟧ to ⟦_⟧s )
+open import Terms.Basic           {𝑆 = 𝑆} using ( Term )
+open import Terms.Setoid.Basic    {𝑆 = 𝑆} using ( module Environment ; Ops ; Sub ; _[_] )
 
 open Term
 
@@ -265,8 +262,6 @@ module Completeness {χ ι : Level}{I : Type ι} (E : I → Eq{χ}) {X} where
 
 
 --------------------------------
-
-<br>
 
 [↑ Varieties.Setoid](Varieties.Setoid.html)
 <span style="float:right;">[Varieties.Setoid.Closure →](Varieties.Setoid.Closure.html)</span>

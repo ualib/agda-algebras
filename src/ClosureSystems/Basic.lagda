@@ -28,13 +28,13 @@ Some examples of closure systems are the following:
 * equivalence relations on a set
 * congruence relations of an algebra
 
-
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 module ClosureSystems.Basic where
 
+-- Imports from Agda and the Agda Standard Library  ---------------------------------------
 open import Agda.Primitive           using ( _⊔_ ; lsuc ) renaming ( Set to Type )
 import Algebra.Definitions
 open import Data.Product             using ( Σ-syntax )
@@ -42,7 +42,6 @@ open import Level                    using ( Level ; Lift ) renaming ( zero to �
 open import Relation.Binary.Bundles  using ( Poset )
 open import Relation.Binary.Core     using ( Rel ; _Preserves_⟶_ )
 open import Relation.Unary           using ( Pred ; _∈_ ; ⋂ )
-
 
 private variable
  α ρ : Level
@@ -94,10 +93,7 @@ record ClOp {ℓ ℓ₁ ℓ₂ : Level}(𝑨 : Poset ℓ ℓ₁ ℓ₂) : Type  
 
 \end{code}
 
-
 --------------------------------------
-
-<br>
 
 [↑ ClosureSystems.Definitions](ClosureSystems.html)
 <span style="float:right;">[ClosureSystems.Properties →](ClosureSystems.Properties.html)</span>

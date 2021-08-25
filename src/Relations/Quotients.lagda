@@ -15,6 +15,7 @@ This is the [Relations.Quotients][] module of the [Agda Universal Algebra Librar
 
 module Relations.Quotients where
 
+-- Imports from Agda and the Agda Standard Library  ----------------------------------------------
 open import Data.Product    using ( _,_ ; _×_ ; Σ-syntax ) renaming ( proj₁ to fst ; proj₂ to snd )
 open import Agda.Primitive  using ( _⊔_ ; Level ; lsuc ) renaming ( Set to Type )
 open import Level           using ()
@@ -23,6 +24,7 @@ open import Relation.Unary  using ( Pred ; _⊆_ )
 open import Relation.Binary.PropositionalEquality as PE
                             using ( _≡_ )
 
+-- Imports from agda-algebras ---------------------------------------------------------------------
 open import Overture.Preliminaries  using  ( ∣_∣ )
 open import Relations.Discrete      using  ( ker ; 0[_] ; kerlift )
 open import Relations.Properties       using  ( Reflexive ; Symmetric ; Transitive )
@@ -234,8 +236,6 @@ This is obviously an equivalence relation, as we now confirm.
 
 
 -------------------------------------
-
-<br>
 
 [← Relations.Properties](Relations.Properties.html)
 <span style="float:right;">[Foundations →](Foundations.html)</span>

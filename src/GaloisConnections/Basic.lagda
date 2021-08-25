@@ -25,12 +25,11 @@ In other terms, F is a left adjoint of G and G is a right adjoint of F.
 
 module GaloisConnections.Basic where
 
--- imports from Agda and the Agda Standard Library
+-- imports from Agda and the Agda Standard Library --------------------------------------
 open import Agda.Primitive          using ( _⊔_ ;  Level ; lsuc) renaming ( Set to Type )
 open import Relation.Binary.Bundles using ( Poset )
 open import Relation.Binary.Core    using ( REL ; Rel ; _⇒_ ; _Preserves_⟶_ )
 open import Relation.Unary          using ( _⊆_ ;  _∈_ ; Pred   )
-
 
 
 module _ {α β ℓᵃ ρᵃ ℓᵇ ρᵇ : Level}
@@ -87,19 +86,11 @@ module _ {α β : Level}{𝒜 : Type α}{ℬ : Type β} where
 
 --------------------------------------
 
-<br>
-
 [↑ GaloisConnections](GaloisConnections.html)
 <span style="float:right;">[GaloisConnections.Properties →](GaloisConnections.Properties.html)</span>
 
 {% include UALib.Links.md %}
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
-
-
-
-
-
-
 
 

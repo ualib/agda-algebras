@@ -32,8 +32,6 @@ open import Structures.Sigma
 
 --------------------------------
 
-<br>
-
 [← Varieties.Setoid.FreeAlgebras](Varieties.Setoid.FreeAlgebras.html)
 <span style="float:right;">[Structures.Basic →](Structures.Basic.html)</span>
 

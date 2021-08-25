@@ -9,7 +9,6 @@ author: [agda-algebras development team][]
 
 This is the [GaloisConnections][] module of the [Agda Universal Algebra Library][].
 
-
 \begin{code}
 {-# OPTIONS --without-K --exact-split --safe #-}
 
@@ -20,16 +19,11 @@ open import GaloisConnections.Properties
 
 \end{code}
 
-
 -------------------------------------
-
-<br>
 
 [← Foundations.Extensionality](Foundations.Extensionality.html)
 <span style="float:right;">[GaloisConnections.Basic →](GaloisConnections.Basic.html)</span>
 
-
 {% include UALib.Links.md %}
-
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

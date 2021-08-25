@@ -17,19 +17,17 @@ open import Algebras.Basic using (𝓞 ; 𝓥 ; Signature )
 
 module Algebras.Setoid.Basic {𝑆 : Signature 𝓞 𝓥} where
 
--- Imports from the Agda and the Agda Standard Library
+-- Imports from the Agda and the Agda Standard Library --------------------
 open import Agda.Primitive   using ( _⊔_ ; lsuc ) renaming ( Set to Type )
 open import Data.Product     using ( _,_ ; _×_ ; Σ-syntax )
 open import Function         using ( _∘_ )
-open import Function.Base    using ( flip )
 open import Function.Bundles using ( Func )
-open import Level            using ( Level  ; Lift )
+open import Level            using ( Level )
 open import Relation.Binary  using ( Setoid ; IsEquivalence )
 open import Relation.Binary.PropositionalEquality as PE
                              using ( _≡_ ; refl )
-open import Relation.Unary   using ( Pred  ; _∈_ )
 
--- Imports from the Agda Universal Algebra Library
+-- Imports from the Agda Universal Algebra Library ----------------------
 open import Overture.Preliminaries using ( ∥_∥ ; ∣_∣ )
 
 private variable
@@ -186,8 +184,6 @@ module _ {𝑨 : SetoidAlgebra α ρ} where
 
 
 --------------------------------
-
-<br>
 
 [↑ Algebras.Setoid](Algebras.Setoid.html)
 <span style="float:right;">[Algebras.Setoid.Products →](Algebras.Setoid.Products.html)</span>

@@ -17,18 +17,16 @@ open import Algebras.Basic
 
 module Homomorphisms.HomomorphicImages {𝑆 : Signature 𝓞 𝓥} where
 
-
--- Imports from Agda and the Agda Standard Library --------------------------------
+-- Imports from Agda and the Agda Standard Library ------------------------------------------
 open import Agda.Primitive using ( _⊔_ ; lsuc ) renaming ( Set to Type )
 open import Data.Product   using ( _,_ ; Σ-syntax ; Σ ; _×_ )
 open import Level          using ( Level )
 open import Relation.Binary.PropositionalEquality
-                           using ( _≡_ ; module ≡-Reasoning ; cong ; cong-app )
+                           using ( _≡_ ; module ≡-Reasoning ; cong ; cong-app ; sym )
 open import Relation.Unary using ( Pred ; _∈_ )
 
-
--- Imports from agda-algebras --------------------------------------------------------------
-open import Overture.Preliminaries      using ( _⁻¹ ; 𝑖𝑑 ; ∣_∣ ; ∥_∥ ; lower∼lift ; lift∼lower )
+-- Imports from the Agda Universal Algebra Library ------------------------------------------
+open import Overture.Preliminaries      using ( 𝑖𝑑 ; ∣_∣ ; ∥_∥ ; lower∼lift ; lift∼lower )
 open import Overture.Inverses           using ( IsSurjective ; Image_∋_ ; Inv ; InvIsInv ; eq )
 open import Algebras.Products   {𝑆 = 𝑆} using ( ov )
 open import Homomorphisms.Basic {𝑆 = 𝑆} using ( hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; Lift-hom )
@@ -104,7 +102,7 @@ module _ {α β : Level} where
 
    η : y ≡ ∣ lh ∣ (lift a)
    η = y               ≡⟨ (cong-app lift∼lower) y ⟩
-       lift (lower y)  ≡⟨ cong lift (InvIsInv ∣ h ∣ ζ)⁻¹ ⟩
+       lift (lower y)  ≡⟨ cong lift (sym (InvIsInv ∣ h ∣ ζ)) ⟩
        lift (∣ h ∣ a)  ≡⟨ ν ⟩
        ∣ lh ∣ (lift a) ∎
 
@@ -125,8 +123,6 @@ module _ {α β : Level} where
 \end{code}
 
 --------------------------------------
-
-<br>
 
 [← Homomorphisms.Isomorphisms](Homomorphisms.Isomorphisms.html)
 <span style="float:right;">[Homomorphisms.Setoid →](Homomorphisms.Setoid.html)</span>

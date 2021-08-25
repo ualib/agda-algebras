@@ -17,14 +17,14 @@ open import Algebras.Basic using (𝓞 ; 𝓥 ; Signature )
 
 module Subalgebras.Subalgebras {𝑆 : Signature 𝓞 𝓥} where
 
--- imports from Agda and the Agda Standard Library ------------------------------------
-open import Agda.Primitive        using ( _⊔_ ; lsuc ; Level )       renaming ( Set to Type )
-open import Data.Product          using ( _,_ ; Σ-syntax ; Σ ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Function.Base         using ( _∘_ )
-open import Function.Bundles      using ( Injection )
-open import Relation.Unary        using ( _∈_ ; Pred ; _⊆_ )
+-- imports from Agda and the Agda Standard Library ------------------------------------------------
+open import Agda.Primitive   using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
+open import Data.Product     using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Function.Base    using ( _∘_ )
+open import Function.Bundles using ( Injection )
+open import Relation.Unary   using ( _∈_ ; Pred ; _⊆_ )
 
--- imports from agda-algebras --------------------------------------------------------------
+-- Imports from the Agda Universal Algebra Library --------------------------------------------------
 open import Overture.Preliminaries             using ( _∙_ ; _⁻¹ ; ∣_∣ ; ∥_∥ ; 𝑖𝑑 )
 open import Overture.Inverses                  using ( ∘-injective ; IsInjective ; id-is-injective )
 open import Foundations.Truncation             using ( is-set ; blk-uip )
@@ -32,9 +32,11 @@ open import Foundations.Welldefined            using ( swelldef )
 open import Foundations.Extensionality         using ( pred-ext )
 open import Algebras.Basic                     using ( Algebra ; Lift-Alg )
 open import Algebras.Products          {𝑆 = 𝑆} using ( ov )
-open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom ; kercon ; ker[_⇒_]_↾_ ; ∘-hom ; is-homomorphism ; ∘-is-hom ; 𝒾𝒹 )
+open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom ; kercon ; ker[_⇒_]_↾_ ; ∘-hom
+                                                     ; is-homomorphism ; ∘-is-hom ; 𝒾𝒹 )
 open import Homomorphisms.Noether      {𝑆 = 𝑆} using ( FirstHomTheorem|Set )
-open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; ≅-trans ; Lift-≅ ; mkiso ; ≅toInjective ; ≅fromInjective )
+open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; ≅-trans ; Lift-≅ ; mkiso
+                                                     ; ≅toInjective ; ≅fromInjective )
 open import Terms.Basic                {𝑆 = 𝑆} using ( Term ; ℊ ; node ; 𝑻 )
 
 private variable α β γ 𝓧 : Level
@@ -152,8 +154,6 @@ Using this type, we express the collection of all subalgebras of algebras in a c
 \end{code}
 
 ---------------------------------
-
-<br>
 
 [← Subalgebras.Subuniverses](Subalgebras.Subuniverses.html)
 <span style="float:right;">[Subalgebras.Properties →](Subalgebras.Properties.html)</span>

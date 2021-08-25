@@ -268,10 +268,7 @@ If, in addition to the hypotheses of the last theorem, we assume τ is epic, the
 
 <sup>1</sup><span class="footnote" id="fn1"> See [Foundations.Truncation][] for a discussion of *truncation*, *sets*, and *uniqueness of identity proofs*.</span>
 
-
 --------------------------------
-
-<br>
 
 [← Homomorphisms.Basic](Homomorphisms.Basic.html)
 <span style="float:right;">[Homomorphisms.Isomorphisms →](Homomorphisms.Isomorphisms.html)</span>

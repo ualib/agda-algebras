@@ -31,6 +31,7 @@ Thus interpretation of a term is defined by structural induction.
 
 module Structures.Terms where
 
+-- Imports from Agda and the Agda Standard Library ---------------------
 open import Agda.Primitive    using ( lsuc ; _⊔_ ; Level ) renaming ( Set to Type )
 open import Structures.Basic  using ( signature ; structure ; _ᵒ_ )
 open import Terms.Basic
@@ -52,8 +53,6 @@ _⟦_⟧ : (𝑨 : structure 𝐹 𝑅 {α} {ρ}) → Term X → (X → carrier 
 \end{code}
 
 --------------------------------
-
-<br>
 
 [← Structures.Isos](Structures.Isos.html)
 <span style="float:right;">[Structures.Substructures →](Structures.Substructures.html)</span>

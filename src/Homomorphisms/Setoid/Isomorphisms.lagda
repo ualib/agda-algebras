@@ -28,7 +28,7 @@ open import Relation.Binary.PropositionalEquality
                                         using ( _≡_ ; refl ; cong ; module ≡-Reasoning ; cong-app )
 
 
--- Imports from agda-algebras --------------------------------------------------------------
+-- Imports from the Agda Universal Algebra Library -----------------------------------------------------
 open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; _∙_ ; lower∼lift ; lift∼lower )
                                                renaming ( _≈_ to _≋_ )
 open import Overture.Inverses                  using ( IsInjective )
@@ -235,25 +235,12 @@ module _ {𝓘 : Level}{I : Type 𝓘}{fizw : funext (𝓘 ⊔ γ) β}{fiu : fun
 
 ------------------------------
 
-<br>
-
 [← Homomorphisms.Setoid.Noether](Homomorphisms.Setoid.Noether.html)
 <span style="float:right;">[Homomorphisms.Setoid.HomomorphicImages →](Homomorphisms.Setoid.HomomorphicImages.html)</span>
 
 {% include UALib.Links.md %}
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
-
-
-
-
-
-
-
-
-
-
-
 
 
 

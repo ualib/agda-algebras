@@ -27,7 +27,7 @@ open import Level          using ( Level )
 open import Relation.Binary.PropositionalEquality
                            using ( _≡_ ; module ≡-Reasoning ; cong ; refl )
 
--- Imports from agda-algebras --------------------------------------------------------------
+-- Imports from the Agda Universal Algebras Library --------------------------------
 open import Overture.Preliminaries       using ( _⁻¹ ; ∣_∣ ; ∥_∥)
 open import Overture.Inverses            using ( IsInjective ; IsSurjective ; Image_∋_ )
 open import Foundations.Welldefined      using ( swelldef )
@@ -325,12 +325,9 @@ Recall, `h ∘ 𝒂` is the tuple whose i-th component is `h (𝒂 i)`.</span>
 
 ---------------------------------
 
-<br>
-
 [↑ Homomorphisms](Homomorphisms.html)
 <span style="float:right;">[Homomorphisms.Noether →](Homomorphisms.Noether.html)</span>
 
 {% include UALib.Links.md %}
-
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

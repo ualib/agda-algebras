@@ -457,13 +457,9 @@ proof of Birkhoff's theorem is complete.
 
 --------------------------------
 
-<br>
-
-
 [← Varieties.Preservation](Varieties.Preservation.html)
 <span style="float:right;">[Varieties.Setoid →](Varieties.Setoid.html)</span>
 
 {% include UALib.Links.md %}
-
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

@@ -16,7 +16,7 @@ This is the [Overture.Transformers][] module of the [agda-algebras][] library.  
 
 module Overture.Transformers where
 
--- Imports from Agda and the Agda Standard Library
+-- Imports from Agda and the Agda Standard Library ---------------------------------
 open import Agda.Primitive using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
 open import Data.Product   using ( _,_ ; _×_ )
 open import Data.Fin.Base  using ( Fin )
@@ -24,7 +24,7 @@ open import Function.Base  using ( _∘_ ; id )
 open import Relation.Binary.PropositionalEquality
                            using ( _≡_ ; refl ; module ≡-Reasoning )
 
--- Imports from agda-algebras
+-- Imports from agda-algebras ------------------------------------------------------
 open import Overture.Preliminaries using ( _≈_ )
 
 private variable
@@ -185,20 +185,10 @@ module _ {A : Type α} {B : Type β} where
 
 --------------------------------------
 
-<br>
-
 [← Overture.Inverses](Overture.Inverses.html)
 <span style="float:right;">[Relations →](Relations.html)</span>
 
 {% include UALib.Links.md %}
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
-
-
-
-
-
-
-
-
 

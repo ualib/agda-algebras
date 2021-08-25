@@ -28,7 +28,7 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Varieties.Closure {𝑆 : Signature 𝓞 𝓥} where
 
--- Imports from Agda and the Agda Standard Library
+-- Imports from Agda and the Agda Standard Library ---------------------------------------
 open import Axiom.Extensionality.Propositional
                             using () renaming ( Extensionality to funext )
 open import Agda.Primitive  using ( _⊔_ ; lsuc ) renaming ( Set to Type )
@@ -37,19 +37,15 @@ open import Level           using ( Level ;  Lift )
 open import Relation.Unary  using ( Pred  ; _∈_ ; _⊆_ )
 
 
--- Imports from agda-algebras
-open import Overture.Preliminaries          using ( ∣_∣ ; ∥_∥ )
-open import Algebras.Basic                  using ( Algebra ; Lift-Alg )
-open import Algebras.Products       {𝑆 = 𝑆} using ( ov ; ⨅ )
-open import Homomorphisms.Isomorphisms
-                                    {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; Lift-≅ ; ≅-trans ; ≅-refl
-                                                  ; Lift-Alg-⨅≅ ; Lift-Alg-iso ; Lift-Alg-assoc )
-open import Homomorphisms.HomomorphicImages
-                                    {𝑆 = 𝑆} using ( HomImages ; _IsHomImageOf_
-                                                  ; Lift-Alg-hom-image )
-open import Subalgebras.Subalgebras {𝑆 = 𝑆} using (_≤_ ; _IsSubalgebraOfClass_ ; Subalgebra )
-open import Subalgebras.Properties  {𝑆 = 𝑆} using ( ≤-refl ; ≅-RESP-≤ ; ≤-RESP-≅
-                                                  ; ≤-trans ; Lift-≤-Lift )
+-- Imports from the Agda Universal Algebra Library ---------------------------------------
+open import Overture.Preliminaries                  using ( ∣_∣ ; ∥_∥ )
+open import Algebras.Basic                          using ( Algebra ; Lift-Alg )
+open import Algebras.Products               {𝑆 = 𝑆} using ( ov ; ⨅ )
+open import Homomorphisms.Isomorphisms      {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; Lift-≅ ; ≅-trans ; ≅-refl
+                                                          ; Lift-Alg-iso ; Lift-Alg-⨅≅ ; Lift-Alg-assoc )
+open import Homomorphisms.HomomorphicImages {𝑆 = 𝑆} using ( HomImages ; _IsHomImageOf_ ; Lift-Alg-hom-image )
+open import Subalgebras.Subalgebras         {𝑆 = 𝑆} using (_≤_ ; _IsSubalgebraOfClass_ ; Subalgebra )
+open import Subalgebras.Properties          {𝑆 = 𝑆} using ( ≤-refl ; ≅-RESP-≤ ; ≤-RESP-≅ ; ≤-trans ; Lift-≤-Lift )
 
 \end{code}
 
@@ -350,8 +346,6 @@ module Vlift {α : Level} {fe₀ : funext (ov α) α}
 \end{code}
 
 ---------------------------------
-
-<br>
 
 [← Varieties.EquationalLogic](Varieties.EquationalLogic.html)
 <span style="float:right;">[Varieties.Properties →](Varieties.Properties.html)</span>

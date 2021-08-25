@@ -17,7 +17,7 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Subalgebras.Setoid.Subuniverses {𝑆 : Signature 𝓞 𝓥} where
 
--- imports from Agda and the Agda Standard Library
+-- Imports from Agda and the Agda Standard Library -----------------------------------------------
 open import Agda.Primitive   using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
 open import Data.Product     using ( _,_ ; Σ-syntax ; Σ ; _×_ )
 open import Function.Base    using ( _∘_ ; id )
@@ -27,7 +27,7 @@ open import Relation.Unary   using ( Pred ; _∈_ ; _⊆_ ; ⋂ )
 open import Relation.Binary.PropositionalEquality
                              using ( _≡_ ; module ≡-Reasoning )
 
--- imports from agda-algebras ------------------------------------------------------
+-- Imports from the Agda Universal Algebra Library -----------------------------------------------
 open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
 open import Overture.Inverses                  using ( ∘-injective ; IsInjective ; id-is-injective )
 open import Relations.Discrete                 using ( Im_⊆_ )
@@ -37,8 +37,9 @@ open import Algebras.Products          {𝑆 = 𝑆} using ( ov )
 open import Terms.Basic                {𝑆 = 𝑆} using ( Term ; ℊ ; node )
 open import Terms.Setoid.Basic         {𝑆 = 𝑆} using ( module Environment )
 open import Homomorphisms.Setoid.Basic {𝑆 = 𝑆} using ( hom ; ∘-hom )
-open import Homomorphisms.Setoid.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ;  ≅-sym ; ≅-refl ; ≅-trans ; Lift-≅
-                                               ; ≅toInjective ; ≅fromInjective )
+open import Homomorphisms.Setoid.Isomorphisms
+                                       {𝑆 = 𝑆} using ( _≅_ ;  ≅-sym ; ≅-refl ; ≅-trans ; Lift-≅
+                                                     ; ≅toInjective ; ≅fromInjective )
 
 private variable ρ : Level
 
@@ -235,8 +236,6 @@ wd   : swelldef 𝓥 β
 and, under these assumptions, we proved `∣ g ∣ ((f ̂ 𝑨) a) ≡ ∣ h ∣ ((f ̂ 𝑨) a)`.
 
 ---------------------------------
-
-<br>
 
 [↑ Subalgebras.Setoid](Subalgebras.Setoid.html)
 <span style="float:right;">[Subalgebras.Setoid.Subalgebras →](Subalgebras.Setoid.Subalgebras.html)</span>

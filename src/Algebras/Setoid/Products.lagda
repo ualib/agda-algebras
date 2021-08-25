@@ -9,7 +9,6 @@ author: [agda-algebras development team][]
 
 This is the [Algebras.Setoid.Products][] module of the [Agda Universal Algebra Library][].
 
-
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -19,9 +18,9 @@ open import Algebras.Basic using (𝓞 ; 𝓥 ; Signature)
 
 module Algebras.Setoid.Products {𝑆 : Signature 𝓞 𝓥} where
 
--- Imports from the Agda Standard Library ---------------------
+-- Imports from Agda and the Agda Standard Library --------------------------------
 open import Agda.Primitive   using ( lsuc ; _⊔_ ; Level ) renaming ( Set to Type )
-open import Data.Product     using ( _,_ ; Σ ; Σ-syntax )
+open import Data.Product     using ( _,_ ; Σ-syntax )
 open import Function.Base    using ( flip )
 open import Function.Bundles using ( Func )
 open import Relation.Binary  using ( Setoid ;  IsEquivalence )
@@ -29,21 +28,16 @@ open import Relation.Binary.PropositionalEquality
                              using ( refl )
 open import Relation.Unary   using ( Pred ; _⊆_ ; _∈_ )
 
--- Imports from agda-algebras --------------------------------------------------------------
-open import Overture.Preliminaries        using ( ∣_∣; ∥_∥)
-open import Algebras.Setoid.Basic {𝑆 = 𝑆} using ( Algebroid ; ⟦_⟧ ; SetoidAlgebra ; _̂_ ; ov )
-
 open Func          using ( cong ) renaming ( f to _<$>_ )
 open Setoid        using ( Carrier ; _≈_ ) renaming ( isEquivalence to isEqv )
 open IsEquivalence using () renaming ( refl to reflE ; sym to symE ; trans to transE )
 
+
+-- Imports from agda-algebras -----------------------------------------------------
+open import Overture.Preliminaries        using ( ∣_∣; ∥_∥)
+open import Algebras.Setoid.Basic {𝑆 = 𝑆} using ( Algebroid ; ⟦_⟧ ; SetoidAlgebra ; _̂_ ; ov )
+
 private variable α ρ ι : Level
-
-\end{code}
-
-##### <a id="products-of-setoidalgebras">Products of SetoidAlgebras</a>
-
-\begin{code}
 
 open SetoidAlgebra
 
@@ -66,7 +60,6 @@ Domain (⨅ {I} 𝒜) =
 cong (Interp (⨅ {I} 𝒜)) (refl , f=g ) = λ i → cong  (Interp (𝒜 i)) (refl , flip f=g i )
 
 \end{code}
-
 
 ##### <a id="products-of-classes-of-setoidalgebras">Products of classes of SetoidAlgebras</a>
 
@@ -135,10 +128,9 @@ module _ {𝒦 : Pred (Algebroid α ρ) (𝓞 ⊔ 𝓥 ⊔ lsuc α)} where
 
 --------------------------------
 
-<br>
-
 [← Algebras.Setoid.Basic](Algebras.Setoid.Basic.html)
 <span style="float:right;">[Algebras.Setoid.Congruences →](Algebras.Setoid.Congruences.html)</span>
 
 {% include UALib.Links.md %}
 
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

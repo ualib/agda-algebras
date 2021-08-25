@@ -28,7 +28,7 @@ open import Function.Base  using ( _∘_ )
 open import Relation.Binary.PropositionalEquality
                            using ( _≡_ ; refl ; module ≡-Reasoning ; sym ; cong )
 
--- Imports from agda-algebras --------------------------------------------------------------
+-- Imports from Agda Universal Algebra Library ----------------------------------------------
 open import Overture.Preliminaries       using ( _∙_ ; _⁻¹ ; ∣_∣ ; ∥_∥ ; Π ; Π-syntax ; _≈_ )
 open import Relations.Discrete           using ( _|:_ )
 open import Foundations.Welldefined      using ( swelldef )
@@ -245,13 +245,7 @@ subst-theorem wd p q σ 𝑨 Apq η = (𝑨 ⟦ p [ σ ] ⟧) η ≡⟨ subst-le
 
 \end{code}
 
-
-
-
-
 ----------------------------------
-
-<br>
 
 [← Terms.Properties](Terms.Properties.html)
 <span style="float:right;">[Terms.Setoid →](Terms.Setoid.html)</span>
@@ -259,9 +253,4 @@ subst-theorem wd p q σ 𝑨 Apq η = (𝑨 ⟦ p [ σ ] ⟧) η ≡⟨ subst-le
 {% include UALib.Links.md %}
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
-
-
-
-
-
 

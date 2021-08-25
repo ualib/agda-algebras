@@ -26,8 +26,6 @@ open import Structures.Sigma.Isos
 
 --------------------------------
 
-<br>
-
 [← Structures.EquationalLogic](Structures.EquationalLogic.html)
 <span style="float:right;">[Structures.Sigma.Basic →](Structures.Sigma.Basic.html)</span>
 

@@ -19,10 +19,9 @@ open import Data.Product   using ( _,_ ; _×_ ; Σ-syntax )
 open import Level          using ( Level ; Lift )
 open import Relation.Unary using ( _∈_ ; Pred )
 
--- Imports from agda-algebras ------------------------------------------------
+-- Imports from the Agda Universal Algebra Library ---------------------------
 open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥ ; Π ; Π-syntax )
 open import Structures.Sigma.Basic using ( Signature ; Structure ; _ʳ_ ; _ᵒ_ )
-
 
 private variable
  𝑅 𝐹 : Signature
@@ -53,8 +52,6 @@ If `p : 𝑨 ∈ 𝒦`, we view the pair `(𝑨 , p) ∈ ℑ` as an *index* over
 
 
 --------------------------------
-
-<br>
 
 [← Structures.Sigma.Basic](Structures.Sigma.Basic.html)
 <span style="float:right;">[Structures.Sigma.Congruences →](Structures.Sigma.Congruences.html)</span>

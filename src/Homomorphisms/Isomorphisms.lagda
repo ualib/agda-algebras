@@ -19,24 +19,23 @@ open import Algebras.Basic
 module Homomorphisms.Isomorphisms {𝑆 : Signature 𝓞 𝓥}  where
 
 
--- Imports from Agda and the Agda Standard Library ---------------------
-open import Agda.Primitive              using ( _⊔_ ; lsuc ) renaming ( Set to Type )
+-- Imports from Agda and the Agda Standard Library -----------------------------------------------
+open import Agda.Primitive  using ( _⊔_ ; lsuc ) renaming ( Set to Type )
 open import Axiom.Extensionality.Propositional
-                                        using () renaming (Extensionality to funext )
-open import Data.Product                using ( _,_ ; Σ-syntax ; _×_ )
-open import Function.Base               using ( _∘_ )
-open import Level                       using ( Level )
-open import Relation.Binary.Definitions using ( Reflexive ; Sym ; Symmetric; Trans; Transitive )
+                            using () renaming (Extensionality to funext )
+open import Data.Product    using ( _,_ ; Σ-syntax ; _×_ )
+open import Function.Base   using ( _∘_ )
+open import Level           using ( Level )
+open import Relation.Binary.Definitions
+                            using ( Reflexive ; Sym ; Symmetric; Trans; Transitive )
 open import Relation.Binary.PropositionalEquality
-                                        using ( _≡_ ; refl ; cong ; module ≡-Reasoning ; cong-app )
+                            using ( _≡_ ; refl ; cong ; sym ; module ≡-Reasoning ; cong-app )
 
-
--- Imports from agda-algebras --------------------------------------------------------------
-open import Overture.Preliminaries      using ( ∣_∣ ; ∥_∥ ; _⁻¹ ;_≈_ ; _∙_ ; lower∼lift ; lift∼lower )
+-- Imports from the Agda Universal Algebra Library -----------------------------------------------
+open import Overture.Preliminaries      using ( ∣_∣ ; ∥_∥ ; _≈_ ; _∙_ ; lower∼lift ; lift∼lower )
 open import Overture.Inverses           using ( IsInjective )
 open import Algebras.Products   {𝑆 = 𝑆} using ( ⨅ )
 open import Homomorphisms.Basic {𝑆 = 𝑆} using ( hom ; 𝒾𝒹 ; ∘-hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-homomorphism )
-
 
 \end{code}
 
@@ -103,7 +102,7 @@ private variable α β γ ι : Level
                (φ : 𝑨 ≅ 𝑩) → IsInjective ∣ to φ ∣
 
 ≅toInjective (mkiso (f , _) (g , _) _ g∼f){a}{b} fafb =
- a       ≡⟨ (g∼f a)⁻¹ ⟩
+ a       ≡⟨ sym (g∼f a) ⟩
  g (f a) ≡⟨ cong g fafb ⟩
  g (f b) ≡⟨ g∼f b ⟩
  b       ∎ where open ≡-Reasoning
@@ -161,8 +160,6 @@ Lift-Alg-assoc ℓ₁ ℓ₂ {𝑨} = ≅-trans (≅-trans Goal Lift-≅) Lift-�
 
 
 \end{code}
-
-
 
 
 #### <a id="products-preserve-isomorphisms">Products preserve isomorphisms</a>
@@ -237,22 +234,10 @@ module _ {α β γ ι  : Level}{I : Type ι}{fizw : funext (ι ⊔ γ) β}{fiu :
 
 --------------------------------------
 
-<br>
-
 [← Homomorphisms.Noether](Homomorphisms.Noether.html)
 <span style="float:right;">[Homomorphisms.HomomorphicImages →](Homomorphisms.HomomorphicImages.html)</span>
 
 {% include UALib.Links.md %}
 
-
 [the ualib/agda-algebras development team]: https://github.com/ualib/agda-algebras#the-ualib-agda-algebras-development-team
-
-
-
-
-
-
-
-
-
 

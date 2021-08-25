@@ -17,9 +17,11 @@ open import Algebras.Basic
 
 module Terms.Basic {𝑆 : Signature 𝓞 𝓥} where
 
+-- Imports from Agda and the Agda Standard Library ----------------
 open import Agda.Primitive using ( Level ) renaming ( Set to Type )
 open import Data.Product   using ( _,_ )
 
+-- Imports from the Agda Universal Algebra Library ----------------
 open import Overture.Preliminaries    using ( ∣_∣ ; ∥_∥ )
 open import Algebras.Products {𝑆 = 𝑆} using ( ov )
 
@@ -73,10 +75,7 @@ In [Agda][] the term algebra can be defined as simply as one could hope.
 
 \end{code}
 
-
 ------------------------------
-
-<br>
 
 [↑ Terms](Terms.html)
 <span style="float:right;">[Terms.Properties →](Terms.Properties.html)</span>

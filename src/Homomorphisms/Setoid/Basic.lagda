@@ -17,7 +17,7 @@ open import Algebras.Basic using (𝓞 ; 𝓥 ; Signature )
 
 module Homomorphisms.Setoid.Basic {𝑆 : Signature 𝓞 𝓥} where
 
--- Imports from the Agda (Builtin) and the Agda Standard Library
+-- Imports from Agda and the Agda Standard Library ------------------------------------------
 open import Agda.Primitive    using ( _⊔_ ; lsuc ) renaming ( Set to Type )
 open import Data.Product      using ( _,_ ; Σ ; Σ-syntax ; _×_ )
 open import Function          using ( _∘_ ; id )
@@ -28,17 +28,20 @@ open import Relation.Binary.PropositionalEquality
                               using ( _≡_ ; refl ; module ≡-Reasoning ; cong )
 
 
--- Imports from the Agda Universal Algebra Library
+-- Imports from the Agda Universal Algebra Library ------------------------------------------
 open import Overture.Preliminaries     using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; _≈_)
-open import Overture.Inverses          using ( IsInjective ; IsSurjective ; SurjInv ; SurjInvIsRightInv ; epic-factor )
+open import Overture.Inverses          using ( IsInjective ; IsSurjective ; SurjInv
+                                             ; SurjInvIsRightInv ; epic-factor )
 open import Relations.Discrete         using ( ker ; kernel )
 open import Relations.Quotients        using ( ker-IsEquivalence )
-open import Foundations.Truncation     using ( is-set ; blk-uip ; is-embedding ; monic-is-embedding|Set )
+open import Foundations.Truncation     using ( is-set ; blk-uip ; is-embedding
+                                             ; monic-is-embedding|Set )
 open import Foundations.Welldefined    using ( swelldef )
 open import Foundations.Extensionality using ( block-ext|uip ; pred-ext )
-
-open import Algebras.Setoid.Basic    {𝑆 = 𝑆} using ( 𝕌[_] ; SetoidAlgebra ; _̂_ ; Lift-SetoidAlg )
-open import Algebras.Setoid.Congruences {𝑆 = 𝑆} using ( _∣≈_ ; Con ; IsCongruence ; mkcon ; _╱_)
+open import Algebras.Setoid.Basic
+                               {𝑆 = 𝑆} using ( 𝕌[_] ; SetoidAlgebra ; _̂_ ; Lift-SetoidAlg )
+open import Algebras.Setoid.Congruences
+                               {𝑆 = 𝑆} using ( _∣≈_ ; Con ; IsCongruence ; mkcon ; _╱_)
 
 private variable
  α β γ ρ ρᵃ ρᵇ ρᶜ ℓ : Level
@@ -198,8 +201,6 @@ ker[ 𝑨 ⇒ 𝑩 ] h ↾ wd = kerquo 𝑨 𝑩 wd h
 
 
 --------------------------------
-
-<br>
 
 [↑ Homomorphisms.Setoid](Homomorphisms.Setoid.html)
 <span style="float:right;">[Homomorphisms.Setoid.Noether →](Homomorphisms.Setoid.Noether.html)</span>

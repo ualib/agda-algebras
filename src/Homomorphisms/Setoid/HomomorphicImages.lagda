@@ -17,8 +17,7 @@ open import Algebras.Basic using (𝓞 ; 𝓥 ; Signature )
 
 module Homomorphisms.Setoid.HomomorphicImages {𝑆 : Signature 𝓞 𝓥} where
 
-
--- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
+-- Imports from Agda and the Agda Standard Library ------------------------------------------
 open import Agda.Primitive        using ( _⊔_ ; lsuc ) renaming ( Set to Type )
 open import Data.Product          using ( _,_ ; Σ-syntax ; _×_ )
 open import Level                 using ( Level ; Lift )
@@ -27,7 +26,7 @@ open import Relation.Binary.PropositionalEquality
                                   using ( sym ; cong-app ; _≡_ ; module ≡-Reasoning ; cong )
 
 
--- Imports from agda-algebras --------------------------------------------------------------
+-- Imports from the Agda Universal Algebra Library ---------------------------------------------
 open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ ; lower∼lift ; lift∼lower )
 open import Overture.Inverses                  using ( IsSurjective ; Image_∋_ ; Inv ; InvIsInv ; eq )
 open import Algebras.Setoid.Basic      {𝑆 = 𝑆} using ( SetoidAlgebra ; 𝕌[_] ; Level-of-Carrier )
@@ -126,8 +125,6 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ} {𝑩 : SetoidAlgebra β ρᵇ} where
 \end{code}
 
 --------------------------------------
-
-<br>
 
 [← Homomorphisms.Setoid.Isomoprhisms](Homomorphisms.Setoid.Isomoprhisms.html)
 <span style="float:right;">[Terms →](Terms.html)</span>

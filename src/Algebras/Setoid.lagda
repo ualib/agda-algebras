@@ -19,10 +19,7 @@ open import Algebras.Setoid.Congruences
 
 \end{code}
 
-
 --------------------------------
-
-<br>
 
 [← Algebras.Congruences](Algebras.Congruences.html)
 <span style="float:right;">[Algebras.Setoid.Basic →](Algebras.Setoid.Basic.html)</span>

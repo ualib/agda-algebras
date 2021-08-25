@@ -16,7 +16,7 @@ This is the [Structures.Congruences][] module of the [Agda Universal Algebra Lib
 
 module Structures.Congruences where
 
--- imports from Agda and the Agda Standard Library -------------------------------------------
+-- Imports from Agda and the Agda Standard Library --------------------------------------
 open import Agda.Primitive using ( _⊔_ ; lsuc ) renaming ( Set  to Type )
 open import Data.Product   using ( _,_ ; _×_ ; Σ-syntax ) renaming ( proj₁ to fst )
 open import Function.Base  using ( _∘_ )
@@ -24,8 +24,7 @@ open import Level          using ( Level ; Lift ; lift ; lower )
 open import Relation.Binary.PropositionalEquality
                            using ( _≡_ ; refl )
 
-
--- imports from agda-algebras --------------------------------------------------------------
+-- Imports from the Agda Universal Algebra Library --------------------------------------
 open import Overture.Preliminaries using ( ∣_∣ )
 open import Relations.Discrete     using ( _|:_ ; 0[_] )
 open import Relations.Quotients    using ( Equivalence ; Quotient ; 0[_]Equivalence
@@ -87,8 +86,6 @@ _╱_ = quotient
 
 
 --------------------------------
-
-<br>
 
 [← Structures.Products](Structures.Products.html)
 <span style="float:right;">[Structures.Homs →](Structures.Homs.html)</span>
