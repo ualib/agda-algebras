@@ -11,7 +11,7 @@ RTSARGS = +RTS -M6G -A128M ${OTHEROPTS} -RTS
 TEX := $(wildcard html/*.tex)
 MD := $(TEX:.tex=.md)
 
-all: test $(TEX) $(MD)
+all: test html $(TEX) $(MD)
 
 test: Everything.agda
 	agda ${RTSARGS} -i. Everything.agda
