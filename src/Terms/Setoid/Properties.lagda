@@ -93,32 +93,29 @@ module _ {𝑨 : SetoidAlgebra α ρ} where
 
  private
   A = 𝕌[ 𝑨 ]
-  _≋_ = (Domain 𝑨) ._≈_
+  _≈A_ = (Domain 𝑨) ._≈_
 
  free-unique : (g h : hom (𝑻 X) 𝑨)
-  →            (∀ x → ∣ g ∣ (ℊ x) ≋ ∣ h ∣ (ℊ x))
+  →            (∀ x → ∣ g ∣ (ℊ x) ≈A ∣ h ∣ (ℊ x))
                ------------------------------------------
-  →            ∀ (t : Term X) →  ∣ g ∣ t ≋ ∣ h ∣ t
+  →            ∀ (t : Term X) →  ∣ g ∣ t ≈A ∣ h ∣ t
 
  free-unique _ _ p (ℊ x) = p x
 
  free-unique g h p (node f t) =
   trans (Domain 𝑨) (trans (Domain 𝑨) geq lem3) (sym (Domain 𝑨) heq)
   where
-  lem1 : ∀ x y → x ≡ y → x ≋ y
-  lem1 x .x refl = Setoid.refl (Domain 𝑨)
-
-  lem2 : ∀ i → (∣ g ∣ ∘ t) i ≋ (∣ h ∣ ∘ t) i
+  lem2 : ∀ i → (∣ g ∣ ∘ t) i ≈A (∣ h ∣ ∘ t) i
   lem2 i = free-unique g h p (t i)
 
-  lem3 : (f ̂ 𝑨)(∣ g ∣ ∘ t) ≋ (f ̂ 𝑨)(∣ h ∣ ∘ t)
+  lem3 : (f ̂ 𝑨)(∣ g ∣ ∘ t) ≈A (f ̂ 𝑨)(∣ h ∣ ∘ t)
   lem3 = ≈cong (Interp 𝑨) (_≡_.refl , lem2)
 
-  geq : ∣ g ∣ (node f t) ≋ (f ̂ 𝑨)(∣ g ∣ ∘ t)
-  geq = lem1 (∣ g ∣ (node f t)) ((f ̂ 𝑨)(∣ g ∣ ∘ t)) (∥ g ∥ f t)
+  geq : ∣ g ∣ (node f t) ≈A (f ̂ 𝑨)(∣ g ∣ ∘ t)
+  geq = ==⇒ 𝑨 (∥ g ∥ f t)
 
-  heq : ∣ h ∣ (node f t) ≋ (f ̂ 𝑨)(∣ h ∣ ∘ t)
-  heq = lem1 (∣ h ∣ (node f t)) ((f ̂ 𝑨)(∣ h ∣ ∘ t)) (∥ h ∥ f t)
+  heq : ∣ h ∣ (node f t) ≈A (f ̂ 𝑨)(∣ h ∣ ∘ t)
+  heq = ==⇒ 𝑨 (∥ h ∥ f t)
 
 \end{code}
 
