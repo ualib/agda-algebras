@@ -57,8 +57,8 @@ We now prove this in [Agda][], starting with the fact that every map from `X` to
 \begin{code}
 
 private variable X : Type χ
-open Setoid using (Carrier)
-open SetoidAlgebra
+-- open Setoid using (Carrier)
+-- open SetoidAlgebra
 
 free-lift : (𝑨 : SetoidAlgebra α ρ)(h : X → 𝕌[ 𝑨 ]) → 𝕌[ 𝑻 X ] → 𝕌[ 𝑨 ]
 free-lift _ h (ℊ x) = h x
@@ -86,36 +86,37 @@ Finally, we prove that the homomorphism is unique.  Recall, when we proved this 
 
 \begin{code}
 
+-- open Setoid using    (_≈_ ; Carrier )
+--             renaming ( refl  to reflS
+--                      ; sym   to symS
+--                      ; trans to transS
+--                      ; isEquivalence to isEqv )
+-- open Func renaming   ( f to _<$>_ ; cong to ≈cong )
+
 module _ {𝑨 : SetoidAlgebra α ρ} where
- open SetoidAlgebra
- open Setoid
- open Func renaming   ( f to _<$>_ ; cong to ≈cong )
+ open SetoidAlgebra 𝑨
+ open Setoid Domain renaming ( _≈_ to _≈A_ )
 
- private
-  A = 𝕌[ 𝑨 ]
-  _≈A_ = (Domain 𝑨) ._≈_
-
- free-unique : (g h : hom (𝑻 X) 𝑨)
+ free-unique : {g h : hom (𝑻 X) 𝑨}
   →            (∀ x → ∣ g ∣ (ℊ x) ≈A ∣ h ∣ (ℊ x))
-               ------------------------------------------
+               --------------------------------------
   →            ∀ (t : Term X) →  ∣ g ∣ t ≈A ∣ h ∣ t
 
- free-unique _ _ p (ℊ x) = p x
+ free-unique p (ℊ x) = p x
 
- free-unique g h p (node f t) =
-  trans (Domain 𝑨) (trans (Domain 𝑨) geq lem3) (sym (Domain 𝑨) heq)
+ free-unique {g = g} {h} p (node f t) = trans (trans geq lem3) (sym heq)
   where
   lem2 : ∀ i → (∣ g ∣ ∘ t) i ≈A (∣ h ∣ ∘ t) i
-  lem2 i = free-unique g h p (t i)
+  lem2 i = free-unique{g = g}{h} p (t i)
 
   lem3 : (f ̂ 𝑨)(∣ g ∣ ∘ t) ≈A (f ̂ 𝑨)(∣ h ∣ ∘ t)
-  lem3 = ≈cong (Interp 𝑨) (_≡_.refl , lem2)
+  lem3 = Func.cong Interp (_≡_.refl , lem2)
 
   geq : ∣ g ∣ (node f t) ≈A (f ̂ 𝑨)(∣ g ∣ ∘ t)
-  geq = ==⇒ 𝑨 (∥ g ∥ f t)
+  geq = ≡→≈ (∥ g ∥ f t)
 
   heq : ∣ h ∣ (node f t) ≈A (f ̂ 𝑨)(∣ h ∣ ∘ t)
-  heq = ==⇒ 𝑨 (∥ h ∥ f t)
+  heq = ≡→≈ (∥ h ∥ f t)
 
 \end{code}
 
