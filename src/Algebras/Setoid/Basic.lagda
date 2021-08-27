@@ -90,12 +90,14 @@ Alternatively, we can represent a setoid algebra using a record type as follows.
 \begin{code}
 
 record SetoidAlgebra α ρ : Type (𝓞 ⊔ 𝓥 ⊔ lsuc (α ⊔ ρ)) where
-  field
-    Domain : Setoid α ρ
-    Interp : Func (⟦ 𝑆 ⟧ Domain) Domain
-     --      ^^^^^^^^^^^^^^^^^^^^^^^ is a record type with two fields:
-     --       1. a function  f : Carrier (⟦ 𝑆 ⟧ Domain)  → Carrier Domain
-     --       2. a proof cong : f Preserves _≈₁_ ⟶ _≈₂_ (that f preserves the setoid equalities)
+ field
+  Domain : Setoid α ρ
+  Interp : Func (⟦ 𝑆 ⟧ Domain) Domain
+   --      ^^^^^^^^^^^^^^^^^^^^^^^ is a record type with two fields:
+   --       1. a function  f : Carrier (⟦ 𝑆 ⟧ Domain)  → Carrier Domain
+   --       2. a proof cong : f Preserves _≈₁_ ⟶ _≈₂_ (that f preserves the setoid equalities)
+ ≡→≈ : ∀{x}{y} → x ≡ y → (_≈_ Domain) x y
+ ≡→≈ refl = Setoid.refl Domain
 
 \end{code}
 
