@@ -57,8 +57,6 @@ We now prove this in [Agda][], starting with the fact that every map from `X` to
 \begin{code}
 
 private variable X : Type χ
--- open Setoid using (Carrier)
--- open SetoidAlgebra
 
 free-lift : (𝑨 : SetoidAlgebra α ρ)(h : X → 𝕌[ 𝑨 ]) → 𝕌[ 𝑻 X ] → 𝕌[ 𝑨 ]
 free-lift _ h (ℊ x) = h x
@@ -85,13 +83,6 @@ lift-hom 𝑨 h = free-lift 𝑨 h , λ f a → cong (f ̂ 𝑨) refl
 Finally, we prove that the homomorphism is unique.  Recall, when we proved this in the module [Terms.Properties][], we needed function extensionality. Here, by using setoid equality, we can omit the `swelldef` hypothesis used to prove `free-unique` in the [Terms.Properties][] module.
 
 \begin{code}
-
--- open Setoid using    (_≈_ ; Carrier )
---             renaming ( refl  to reflS
---                      ; sym   to symS
---                      ; trans to transS
---                      ; isEquivalence to isEqv )
--- open Func renaming   ( f to _<$>_ ; cong to ≈cong )
 
 module _ {𝑨 : SetoidAlgebra α ρ} where
  open SetoidAlgebra 𝑨
