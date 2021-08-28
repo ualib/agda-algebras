@@ -5,18 +5,18 @@ date : 2021-07-13
 author: [agda-algebras development team][]
 ---
 
-### <a id="complexity-theory">Complexity Theory</a>
+## <a id="complexity-theory">Complexity Theory</a>
 
 <pre class="Agda">
 
-<a id="223" class="Symbol">{-#</a> <a id="227" class="Keyword">OPTIONS</a> <a id="235" class="Pragma">--without-K</a> <a id="247" class="Pragma">--exact-split</a> <a id="261" class="Pragma">--safe</a> <a id="268" class="Symbol">#-}</a>
+<a id="222" class="Symbol">{-#</a> <a id="226" class="Keyword">OPTIONS</a> <a id="234" class="Pragma">--without-K</a> <a id="246" class="Pragma">--exact-split</a> <a id="260" class="Pragma">--safe</a> <a id="267" class="Symbol">#-}</a>
 
-<a id="273" class="Keyword">module</a> <a id="280" href="Complexity.Basic.html" class="Module">Complexity.Basic</a> <a id="297" class="Keyword">where</a>
+<a id="272" class="Keyword">module</a> <a id="279" href="Complexity.Basic.html" class="Module">Complexity.Basic</a> <a id="296" class="Keyword">where</a>
 
 
 </pre>
 
-#### <a id="words">Words</a>
+### <a id="words">Words</a>
 
 Let 𝑇ₙ be a totally ordered set of size 𝑛.  Let 𝐴 be a set (the alphabet).
 We can model the set 𝑊ₙ, of *words* (strings of letters from 𝐴) of length 𝑛
@@ -39,7 +39,7 @@ At first we will simplify by assuming 𝑇ₙ is `Fin n`.
 
 --------------------------------
 
-[↑ Complexity](Complexity.html)
+<span style="float:left;">[↑ Complexity](Complexity.html)</span>
 <span style="float:right;">[Complexity.CSP →](Complexity.CSP.html)</span>
 
 {% include UALib.Links.md %}

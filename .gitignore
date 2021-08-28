@@ -9,3 +9,6 @@ _build/
 *.vtc
 *.ptb
 *.tar.gz
+Everything.agda
+html
+src

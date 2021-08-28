@@ -5,7 +5,7 @@ date : 2021-01-12
 author: [agda-algebras development team][]
 ---
 
-## <a id="overture">Overture</a>
+# <a id="overture">Overture</a>
 
 This is the [Overture][] module of the [Agda Universal Algebra Library][].
 
@@ -13,19 +13,19 @@ The source code for this module comprises the (literate) [Agda][] program that w
 
 <pre class="Agda">
 
-<a id="553" class="Symbol">{-#</a> <a id="557" class="Keyword">OPTIONS</a> <a id="565" class="Pragma">--without-K</a> <a id="577" class="Pragma">--exact-split</a> <a id="591" class="Pragma">--safe</a> <a id="598" class="Symbol">#-}</a>
+<a id="552" class="Symbol">{-#</a> <a id="556" class="Keyword">OPTIONS</a> <a id="564" class="Pragma">--without-K</a> <a id="576" class="Pragma">--exact-split</a> <a id="590" class="Pragma">--safe</a> <a id="597" class="Symbol">#-}</a>
 
-<a id="603" class="Keyword">module</a> <a id="610" href="Overture.html" class="Module">Overture</a> <a id="619" class="Keyword">where</a>
+<a id="602" class="Keyword">module</a> <a id="609" href="Overture.html" class="Module">Overture</a> <a id="618" class="Keyword">where</a>
 
-<a id="626" class="Keyword">open</a> <a id="631" class="Keyword">import</a> <a id="638" href="Overture.Preliminaries.html" class="Module">Overture.Preliminaries</a>
-<a id="661" class="Keyword">open</a> <a id="666" class="Keyword">import</a> <a id="673" href="Overture.Inverses.html" class="Module">Overture.Inverses</a>
-<a id="691" class="Keyword">open</a> <a id="696" class="Keyword">import</a> <a id="703" href="Overture.Transformers.html" class="Module">Overture.Transformers</a>
+<a id="625" class="Keyword">open</a> <a id="630" class="Keyword">import</a> <a id="637" href="Overture.Preliminaries.html" class="Module">Overture.Preliminaries</a>
+<a id="660" class="Keyword">open</a> <a id="665" class="Keyword">import</a> <a id="672" href="Overture.Inverses.html" class="Module">Overture.Inverses</a>
+<a id="690" class="Keyword">open</a> <a id="695" class="Keyword">import</a> <a id="702" href="Overture.Transformers.html" class="Module">Overture.Transformers</a>
 
 </pre>
 
 --------------------------------------
 
-[← Preface](Preface.html)
+<span style="float:left;">[← Preface](Preface.html)</span>
 <span style="float:right;">[Overture.Preliminaries →](Overture.Preliminaries.html)</span>
 
 {% include UALib.Links.md %}
