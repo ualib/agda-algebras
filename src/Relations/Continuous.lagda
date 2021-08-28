@@ -5,7 +5,7 @@ date : 2021-02-28
 author: [agda-algebras development team][]
 ---
 
-### <a id="continuous-relations">Continuous Relations</a>
+## <a id="continuous-relations">Continuous Relations</a>
 
 This is the [Relations.Continuous][] module of the [Agda Universal Algebra Library][].
 
@@ -26,7 +26,7 @@ private variable α ρ : Level
 
 \end{code}
 
-#### <a id="motivation">Motivation</a>
+### <a id="motivation">Motivation</a>
 
 In set theory, an n-ary relation on a set `A` is simply a subset of the n-fold product `A × A × ⋯ × A`.  As such, we could model these as predicates over the type `A × A × ⋯ × A`, or as relations of type `A → A → ⋯ → A → Type β` (for some universe β).  To implement such a relation in type theory, we would need to know the arity in advance, and then somehow form an n-fold arrow →.  It's easier and more general to instead define an arity type `I : Type 𝓥`, and define the type representing `I`-ary relations on `A` as the function type `(I → A) → Type β`.  Then, if we are specifically interested in an n-ary relation for some natural number `n`, we could take `I` to be a finite set (e.g., of type `Fin n`).
 
@@ -34,18 +34,18 @@ Below we will define `ContRel` to be the type `(I → A) → Type β` and we wil
 
 Just as `Rel A β` was the single-sorted special case of the multisorted `REL A B β` type, so too will `ContRel I A β` be the single-sorted version of a completely general type of relations. The latter will represent relations that not only have arbitrary arities, but also are defined over arbitrary families of types.
 
-To be more concrete, given an arbitrary family `A : I → Type α` of types, we may have a relation from `A i` to `A j` to `A k` to …, where the collection represented by the "indexing" type `I` might not even be enumerable.<sup>[1](Relations.Continuous.html#fn1)</sup>
+To be more concrete, given an arbitrary family `A : I → Type α` of types, we may have a relation from `A i` to `A j` to `A k` to …, where the collection represented by the "indexing" type `I` might not even be enumerable.
 
 We refer to such relations as *dependent continuous relations* (or *dependent relations* for short) because the definition of a type that represents them requires depedent types.  The `DepRel` type that we define [below](Relations.Continuous.html#dependent-relations) manifests this completely general notion of relation.
 
 
 
-#### <a id="continuous-and-dependent-relations">Continuous and dependent relations</a>
+### <a id="continuous-and-dependent-relations">Continuous and dependent relations</a>
 
-Here we define the types `Rel` and `ΠΡ` ("Pi Rho"). The first of these represents predicates of arbitrary arity over a single type `A`; we call these *continuous relations*.<sup>[1](Relations.Continuous.html#fn1)</sup>
+Here we define the types `Rel` and `ΠΡ` ("Pi Rho"). The first of these represents predicates of arbitrary arity over a single type `A`; we call these *continuous relations*.
 To define `ΠΡ`, the type of *dependent relations*, we exploit the full power of dependent types and provide a completely general relation type.
 
-Here, the tuples of a relation of type `DepRel I 𝒜 β` will inhabit the dependent function type `𝒜 : I → Type α` (where the codomain may depend on the input coordinate `i : I` of the domain). Heuristically, we can think of an inhabitant of type `DepRel I 𝒜 β` as a relation from `𝒜 i` to `𝒜 j` to `𝒜 k` to …. (This is only a rough heuristic since `I` could denote an uncountable collection.<sup>[2](Relations.Continuous.html#fn2)</sup>)
+Here, the tuples of a relation of type `DepRel I 𝒜 β` will inhabit the dependent function type `𝒜 : I → Type α` (where the codomain may depend on the input coordinate `i : I` of the domain). Heuristically, we can think of an inhabitant of type `DepRel I 𝒜 β` as a relation from `𝒜 i` to `𝒜 j` to `𝒜 k` to …. (This is only a rough heuristic since `I` could denote an uncountable collection.
 
 
 \begin{code}
@@ -77,7 +77,7 @@ module _ {𝓥 : Level} where
 
 \end{code}
 
-#### <a id="compatibility-with-general-relations">Compatibility with general relations</a>
+### <a id="compatibility-with-general-relations">Compatibility with general relations</a>
 
 \begin{code}
 
@@ -100,7 +100,7 @@ sections of `t` also belongs to `R`.
 \end{code}
 
 
-#### <a id="compatibility-of-operations-with-pirho-types">Compatibility of operations with ΠΡ types</a>
+### <a id="compatibility-of-operations-with-pirho-types">Compatibility of operations with ΠΡ types</a>
 
 \begin{code}
 
@@ -120,7 +120,7 @@ sections of `t` also belongs to `R`.
 
 \end{code}
 
-#### <a id="detailed-explanation">Detailed explanation</a>
+### <a id="detailed-explanation">Detailed explanation</a>
 
 The first of these is an *evaluation* function which "lifts" an `I`-ary relation to an `(I → J)`-ary relation. The lifted relation will relate an `I`-tuple of `J`-tuples when the "`I`-slices" (or "rows") of the `J`-tuples belong to the original relation. The second definition denotes compatibility of an operation with a continuous relation.
 
@@ -139,7 +139,7 @@ Now `eval-cont-rel R 𝒶` is defined by `∀ j → R (λ i → 𝒶 i j)` which
 
 --------------------------------------
 
-[← Relations.Discrete](Relations.Discrete.html)
+<span style="float:left;">[← Relations.Discrete](Relations.Discrete.html)</span>
 <span style="float:right;">[Relations.Properties →](Relations.Properties.html)</span>
 
 {% include UALib.Links.md %}

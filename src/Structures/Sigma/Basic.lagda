@@ -5,7 +5,7 @@ date : 2021-05-20
 author: [agda-algebras development team][]
 ---
 
-### <a id="basic-definitions">Basic Definitions</a>
+## <a id="basic-definitions">Basic Definitions</a>
 
 This is the [Structures.Sigma.Basic][] module of the [Agda Universal Algebra Library][].
 
@@ -104,18 +104,12 @@ module _ {𝑅 𝐹 : Signature} {α ρ : Level} where
 
 \end{code}
 
-
 --------------------------------
 
-[← Structures.Sigma](Structures.Sigma.html)
+<span style="float:left;">[← Structures.Sigma](Structures.Sigma.html)</span>
 <span style="float:right;">[Structures.Sigma.Products →](Structures.Sigma.Products.html)</span>
 
 {% include UALib.Links.md %}
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
-
-
-
-
-
 

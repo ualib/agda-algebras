@@ -5,7 +5,7 @@ date : 2021-02-23
 author: [agda-algebras development team][]
 ---
 
-### <a id="truncation">Truncation</a>
+## <a id="truncation">Truncation</a>
 
 This is the [Foundations.Truncation][] module of the [Agda Universal Algebra Library][].
 
@@ -88,7 +88,7 @@ Thus, if `R : Rel A β`, then `is-subsingleton-valued R` is the assertion that f
 
 
 
-#### <a id="uniqueness-of-identity-proofs">Uniqueness of identity proofs</a>
+### <a id="uniqueness-of-identity-proofs">Uniqueness of identity proofs</a>
 
 This brief introduction is intended for novices; those already familiar with the concept of *truncation* and *uniqueness of identity proofs* may want to skip to the next subsection.
 
@@ -99,7 +99,7 @@ We are asking about an identity type on the identity type `≡₀`, and whether 
 Now, perhaps we have two proofs, say, `r s : p ≡₁ q` that the proofs `p` and `q` are equivalent. Then of course we wonder whether `r ≡₂ s` has a proof!  But at some level we may decide that the potential to distinguish two proofs of an identity in a meaningful way (so-called *proof-relevance*) is not useful or desirable.  At that point, say, at level `k`, we would be naturally inclined to assume that there is at most one proof of any identity of the form `p ≡ₖ q`.  This is called [truncation](https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html#truncation) (at level `k`).
 
 
-#### Sets
+### Sets
 
 In [homotopy type theory](https://homotopytypetheory.org), a type `A` with an identity relation `≡₀` is called a *set* (or *0-groupoid*) if for every pair `x y : A` there is at most one proof of `x ≡₀ y`. In other words, the type `A`, along with it's equality type `≡₀`, form a *set* if for all `x y : A` there is at most one proof of `x ≡₀ y`.
 
@@ -127,7 +127,7 @@ module _ {A : Type α}{B : A → Type β} where
 \end{code}
 
 
-#### <a id="embeddings">Embeddings</a>
+### <a id="embeddings">Embeddings</a>
 
 The `is-embedding` type is defined in the `MGS-Embeddings` module of the [Type Topology][] library in the following way.
 
@@ -159,7 +159,7 @@ module _ {A : Type α}{B : Type β} where
 We will use `is-embedding`, `is-set`, and `to-Σ-≡` in the next subsection to prove that a monic function into a set is an embedding.
 
 
-#### Injective functions are set embeddings
+### Injective functions are set embeddings
 
 Before moving on to define [propositions](Overture.Truncation.html#propositions), we discharge an obligation we mentioned but left unfulfilled in the [embeddings](Overture.Inverses.html#embeddings) section of the [Overture.Inverses][] module.  Recall, we described and imported the `is-embedding` type, and we remarked that an embedding is not simply a monic function.  However, if we assume that the codomain is truncated so as to have unique identity proofs (i.e., is a set), then we can prove that any monic function into that codomain will be an embedding.  On the other hand, embeddings are always monic, so we will end up with an equivalence.
 
@@ -189,7 +189,7 @@ monic-is-embedding|Set f Bset fmon b (u , fu≡b) (v , fv≡b) = γ
 In stating the previous result, we introduce a new convention to which we will try to adhere. If the antecedent of a theorem includes the assumption that one of the types involved is a *set* (in the sense defined above), then we add to the name of the theorem the suffix `|Set`, which calls to mind the standard mathematical notation for the restriction of a function.
 
 
-#### <a id="equivalence-class-truncation">Equivalence class truncation</a>
+### <a id="equivalence-class-truncation">Equivalence class truncation</a>
 
 Recall, `IsBlock` was defined in the [Relations.Quotients][] module as follows:
 
@@ -210,7 +210,7 @@ blk-uip A R = ∀ (C : Pred A _) → is-prop (IsBlock C {R})
 It might seem unreasonable to postulate that there is at most one inhabitant of `IsBlock C`, since equivalence classes typically have multiple members, any one of which could serve as a class representative.  However, postulating `blk-uip A R` is tantamount to collapsing each `R`-block to a single point, and this is indeed the correct semantic interpretation of the elements of the quotient `A / R`.
 
 
-#### <a id="general-propositions">General propositions</a>
+### <a id="general-propositions">General propositions</a>
 
 This section defines more general truncated predicates which we call *continuous propositions* and *dependent propositions*. Recall, above (in the [Relations.Continuous][] module) we defined types called `ContRel` and `DepRel` to represent relations of arbitrary arity over arbitrary collections of sorts.
 
@@ -242,7 +242,7 @@ module _ {I : Type 𝓥} where
 
 ----------------------------
 
-[← Foundations.Welldefined](Foundations.Welldefined.html)
+<span style="float:left;">[← Foundations.Welldefined](Foundations.Welldefined.html)</span>
 <span style="float:right;">[Foundations.Extensionality →](Foundations.Extensionality.html)</span>
 
 {% include UALib.Links.md %}

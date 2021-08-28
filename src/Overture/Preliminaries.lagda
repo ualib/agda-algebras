@@ -5,15 +5,15 @@ date : 2021-01-13
 author: [agda-algebras development team][]
 ---
 
-### <a id="preliminaries">Preliminaries</a>
+## <a id="preliminaries">Preliminaries</a>
 
 This is the [Overture.Preliminaries][] module of the [agda-algebras][] library.
 
-#### <a id="logical-foundations">Logical foundations</a>
+### <a id="logical-foundations">Logical foundations</a>
 
 (See also the Foundations module of the [agda-algebras][] library.)
 
-An Agda program typically begins by setting some options and by importing types from existing Agda libraries. Options are specified with the `OPTIONS` *pragma* and control the way Agda behaves by, for example, specifying the logical axioms and deduction rules we wish to assume when the program is type-checked to verify its correctness. Every Agda program in [agda-algebras][] begins with the following line.
+An Agda program typically begins by setting some options and by importing types from existing Agda libraries. Options are specified with the `OPTIONS` *pragma* and control the way Agda behaves by, for example, specifying the logical axioms and deduction rules we wish to assume when the program is type-checked to verify its correctness. Every Agda program in [agda-algebras](https://github.com/ualib/agda-algebras) begins with the following line.
 
 \begin{code}
 
@@ -23,16 +23,16 @@ An Agda program typically begins by setting some options and by importing types 
 
 These options control certain foundational assumptions that Agda makes when type-checking the program to verify its correctness.
 
-* `--without-K` disables [Streicher's K axiom](https://ncatlab.org/nlab/show/axiom+K+%28type+theory%29) ; see also the [section on axiom K](https://agda.readthedocs.io/en/v2.6.1/language/without-k.html) in the [Agda Language Reference][] manual.
+* `--without-K` disables [Streicher's K axiom](https://ncatlab.org/nlab/show/axiom+K+%28type+theory%29) ; see also the [section on axiom K](https://agda.readthedocs.io/en/v2.6.1/language/without-k.html) in the [Agda Language Reference Manual](https://agda.readthedocs.io/en/v2.6.1.3/language).
 
-* `--exact-split` makes Agda accept only those definitions that behave like so-called *judgmental* equalities.  [Escardó][] explains this by saying it "makes sure that pattern matching corresponds to Martin-Löf eliminators;" see also the [Pattern matching and equality section](https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html#pattern-matching-and-equality) of the [Agda Tools][] documentation.
+* `--exact-split` makes Agda accept only those definitions that behave like so-called *judgmental* equalities.  [Martín Escardó](https://www.cs.bham.ac.uk/~mhe) explains this by saying it "makes sure that pattern matching corresponds to Martin-Löf eliminators;" see also the [Pattern matching and equality section](https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html#pattern-matching-and-equality) of the [Agda Tools](https://agda.readthedocs.io/en/v2.6.1.3/tools/) documentation.
 
-* `safe` ensures that nothing is postulated outright---every non-MLTT axiom has to be an explicit assumption (e.g., an argument to a function or module); see also [this section](https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html#cmdoption-safe) of the [Agda Tools][] documentation and the [Safe Agda section](https://agda.readthedocs.io/en/v2.6.1/language/safe-agda.html#safe-agda) of the [Agda Language Reference][].
+* `safe` ensures that nothing is postulated outright---every non-MLTT axiom has to be an explicit assumption (e.g., an argument to a function or module); see also [this section](https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html#cmdoption-safe) of the [Agda Tools](https://agda.readthedocs.io/en/v2.6.1.3/tools/) documentation and the [Safe Agda section](https://agda.readthedocs.io/en/v2.6.1/language/safe-agda.html#safe-agda) of the [Agda Language Reference](https://agda.readthedocs.io/en/v2.6.1.3/language).
 
-Note that if we wish to type-check a file that imports another file that still has some unmet proof obligations, we must replace the `--safe` flag with `--allow-unsolved-metas`, but this is never done in (publicly released versions of) the [agda-algebras][] library.
+Note that if we wish to type-check a file that imports another file that still has some unmet proof obligations, we must replace the `--safe` flag with `--allow-unsolved-metas`, but this is never done in (publicly released versions of) the [agda-algebras](https://github.com/ualib/agda-algebras) library.
 
 
-#### <a id="agda-modules">Agda Modules</a>
+### <a id="agda-modules">Agda Modules</a>
 
 The `OPTIONS` pragma is usually followed by the start of a module.  For example, the [Overture.Preliminaries][] module begins with the following line, and then a list of imports of things used in the module.
 
@@ -75,7 +75,7 @@ data 𝟛 : Type ℓ₀ where
 \end{code}
 
 
-#### <a id="projection-notation">Projection notation</a>
+### <a id="projection-notation">Projection notation</a>
 
 The definition of `Σ` (and thus, of `×`) includes the fields `proj₁` and `proj₂` representing the first and second projections out of the product.  However, we prefer the shorter names `fst` and `snd`.  Sometimes we prefer to denote these projections by `∣_∣` and `∥_∥`, respectively. We define these alternative notations for projections out of pairs as follows.
 
@@ -121,7 +121,7 @@ infixl 30 _∙_
 \end{code}
 
 
-#### <a id="pi-types">Pi types</a>
+### <a id="pi-types">Pi types</a>
 
 The dependent function type is traditionally denoted with a Pi symbol typically arranged as Π(x : A) B x, or something similar.  In Agda syntax, one writes `(x : A) → B x` for the dependent function type, but may use syntax that is closer to the standard Π notation and made available in Agda as follows.
 
@@ -138,7 +138,7 @@ infix 6 Π-syntax
 
 \end{code}
 
-#### <a id="agdas-universe-hierarchy">Agda's universe hierarchy</a>
+### <a id="agdas-universe-hierarchy">Agda's universe hierarchy</a>
 
 The hierarchy of universes in Agda is structured as follows:
 
@@ -151,9 +151,9 @@ This means that the universe `Type α` has type `Type(lsuc α)`, and  `Type(lsuc
 
 
 
-#### <a id="lifting-and-lowering">Lifting and lowering</a>
+### <a id="lifting-and-lowering">Lifting and lowering</a>
 
-Here we describe a general `Lift` type that help us overcome the technical issue described in the previous subsection.  In the [Lifts of algebras section](Algebras.Algebras.html#lifts-of-algebras) of the [Algebras.Algebras][] module we will define a couple domain-specific lifting types which have certain properties that make them useful for resolving universe level problems when working with algebra types.
+Here we describe a general `Lift` type that help us overcome the technical issue described in the previous subsection.  In the [Lifts of algebras section](Algebras.Basic.html#lifts-of-algebras) of the [Algebras.Basic][] module we will define a couple domain-specific lifting types which have certain properties that make them useful for resolving universe level problems when working with algebra types.
 
 Let us be more concrete about what is at issue here by considering a typical example. Agda will often complain with errors like the following:
 
@@ -187,7 +187,7 @@ lower∼lift = refl
 The proofs are trivial. Nonetheless, we'll come across some holes these lemmas can fill.
 
 
-#### <a id="pointwise-equality-of-dependent-functions">Pointwise equality of dependent functions</a>
+### <a id="pointwise-equality-of-dependent-functions">Pointwise equality of dependent functions</a>
 
 We conclude this module with a definition that conveniently represents te assertion that two functions are (extensionally) the same in the sense that they produce the same output when given the same input.  (We will have more to say about this notion of equality in the [Foundations.Extensionality][] module.)
 
@@ -229,7 +229,7 @@ transport B refl = id
 
 ------------------------------
 
-[↑ Overture](Overture.html)
+<span style="float:left;">[↑ Overture](Overture.html)</span>
 <span style="float:right;">[Overture.Inverses →](Overture.Inverses.html)</span>
 
 

@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# DESCRIPTION: This shell script generates html and markdown files for the
+# static web pages processed by jekyll and comprising the Agda Universal
+# Algebra Library html documentation.
+
+SRCDIR="src"
+HTMLDIR="html"
+AGDA="agda"
+TARGET="Everything"
+OPTIONS="--html --html-highlight=code"
+
+## absolute module names with no src/ prefix and no .lagda suffix
+CHOPMODS=$(find $SRCDIR -name "*.lagda" | sed -e 's|^src/[/]*||' -e 's|.lagda||')
+
+## replace / with . in $CHOPMODS list of module names
+DOTMODS=$(echo $CHOPMODS | sed -e 's|/|.|g')
+
+echo " "
+echo "STEP 1. Generating agda program Everything.agda which imports all modules..."
+echo " "
+
+git ls-tree --full-tree -r --name-only HEAD | grep '^src/[^\.]*.lagda' | sed -e 's|^src/[/]*|import |' -e 's|/|.|g' -e 's/.lagda//' -e '/import Everything/d' | LC_COLLATE='C' sort > $SRCDIR/$TARGET.agda
+
+echo " "
+echo "STEP 2. Type checking Everything.agda which imports"
+echo "        all modules, and generating html/markdown files..."
+echo " "
+
+$AGDA $OPTIONS $SRCDIR/$TARGET.agda
+
+echo " "
+echo "STEP 3. copying agda-algebras.tex to index.md and renaming"
+echo "        all generated .tex files to have .md extension...."
+echo " "
+
+cp $HTMLDIR/{agda-algebras.tex,index.markdown}
+
+# For some reason `agda --html` generates .tex files from our markdown-commented .lagda files.
+# We rename them to have the more appropriate .md extension.
+for f in $DOTMODS; do
+    mv $HTMLDIR/$f.{tex,md}; done
+echo " "
+
+# Play a sound so we know when the script finishes :)
+paplay  /usr/share/sounds/ubuntu/stereo/dialog-warning.ogg

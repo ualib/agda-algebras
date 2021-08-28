@@ -5,7 +5,7 @@ date : 2021-05-11
 author: [agda-algebras development team][]
 ---
 
-### <a id="products-for-structures-as-records">Products for structures as records</a>
+## <a id="products-for-structures-as-records">Products for structures as records</a>
 
 This is the [Structures.Products][] module of the [Agda Universal Algebra Library][].
 
@@ -60,7 +60,7 @@ module _ {𝒦 : Pred (structure 𝐹 𝑅 {α}{ρ}) ℓ} where
 
 --------------------------------
 
-[← Structures.Graphs0](Structures.Graphs0.html)
+<span style="float:left;">[← Structures.Graphs0](Structures.Graphs0.html)</span>
 <span style="float:right;">[Structures.Congruences →](Structures.Congruences.html)</span>
 
 {% include UALib.Links.md %}

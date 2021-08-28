@@ -5,7 +5,7 @@ date : 2021-05-11
 author: [agda-algebras development team][]
 ---
 
-### <a id="product-structures">Product structures</a>
+## <a id="product-structures">Product structures</a>
 
 \begin{code}
 
@@ -53,7 +53,7 @@ If `p : 𝑨 ∈ 𝒦`, we view the pair `(𝑨 , p) ∈ ℑ` as an *index* over
 
 --------------------------------
 
-[← Structures.Sigma.Basic](Structures.Sigma.Basic.html)
+<span style="float:left;">[← Structures.Sigma.Basic](Structures.Sigma.Basic.html)</span>
 <span style="float:right;">[Structures.Sigma.Congruences →](Structures.Sigma.Congruences.html)</span>
 
 {% include UALib.Links.md %}

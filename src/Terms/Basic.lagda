@@ -5,7 +5,7 @@ date : 2021-01-14
 author: [the agda-algebras development team][]
 ---
 
-### <a id="basic-definitions">Basic Definitions</a>
+## <a id="basic-definitions">Basic Definitions</a>
 
 This is the [Terms.Basic][] module of the [Agda Universal Algebra Library][].
 
@@ -29,7 +29,7 @@ private variable χ : Level
 
 \end{code}
 
-#### <a id="the-type-of-terms">The type of terms</a>
+### <a id="the-type-of-terms">The type of terms</a>
 
 Fix a signature `𝑆` and let `X` denote an arbitrary nonempty collection of variable symbols. Assume the symbols in `X` are distinct from the operation symbols of `𝑆`, that is `X ∩ ∣ 𝑆 ∣ = ∅`.
 
@@ -58,7 +58,7 @@ This is a very basic inductive type that represents each term as a tree with an 
 **Notation**. As usual, the type `X` represents an arbitrary collection of variable symbols. Recall, `ov χ` is our shorthand notation for the universe level `𝓞 ⊔ 𝓥 ⊔ lsuc χ`.
 
 
-#### <a id="the-term-algebra">The term algebra</a>
+### <a id="the-term-algebra">The term algebra</a>
 
 For a given signature `𝑆`, if the type `Term X` is nonempty (equivalently, if `X` or `∣ 𝑆 ∣` is nonempty), then we can define an algebraic structure, denoted by `𝑻 X` and called the *term algebra in the signature* `𝑆` *over* `X`.  Terms are viewed as acting on other terms, so both the domain and basic operations of the algebra are the terms themselves.
 
@@ -77,7 +77,7 @@ In [Agda][] the term algebra can be defined as simply as one could hope.
 
 ------------------------------
 
-[↑ Terms](Terms.html)
+<span style="float:left;">[↑ Terms](Terms.html)</span>
 <span style="float:right;">[Terms.Properties →](Terms.Properties.html)</span>
 
 {% include UALib.Links.md %}

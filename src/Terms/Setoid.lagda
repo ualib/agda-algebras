@@ -5,7 +5,7 @@ date : 2021-06-28
 author: [agda-algebras development team][]
 ---
 
-### <a id="representing-terms-using-setoids">Representing Terms using Setoids</a>
+# <a id="representing-terms-using-setoids">Representing Terms using Setoids</a>
 
 This is the [Terms.Setoid][] module of the [Agda Universal Algebra Library][].
 
@@ -23,7 +23,7 @@ open import Terms.Setoid.Properties
 
 --------------------------------
 
-[← Terms.Operations](Terms.Operations.html)
+<span style="float:left;">[← Terms.Operations](Terms.Operations.html)</span>
 <span style="float:right;">[Terms.Setoid.Basic →](Terms.Setoid.Basic.html)</span>
 
 {% include UALib.Links.md %}

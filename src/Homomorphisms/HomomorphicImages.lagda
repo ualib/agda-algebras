@@ -5,7 +5,7 @@ date : 2021-01-14
 author: [agda-algebras development team][]
 ---
 
-### <a id="homomorphic-images">Homomorphic Images</a>
+## <a id="homomorphic-images">Homomorphic Images</a>
 
 This is the [Homomorphisms.HomomorphicImages][] module of the [Agda Universal Algebra Library][].
 
@@ -34,7 +34,7 @@ open import Homomorphisms.Basic {𝑆 = 𝑆} using ( hom ; 𝓁𝒾𝒻𝓉 ; �
 \end{code}
 
 
-#### <a id="images-of-a-single-algebra">Images of a single algebra</a>
+### <a id="images-of-a-single-algebra">Images of a single algebra</a>
 
 We begin with what seems, for our purposes, the most useful way to represent the class of *homomorphic images* of an algebra in dependent type theory.
 
@@ -53,8 +53,7 @@ module _ {α β : Level } where
 These types should be self-explanatory, but just to be sure, let's describe the Sigma type appearing in the second definition. Given an `𝑆`-algebra `𝑨 : Algebra α 𝑆`, the type `HomImages 𝑨` denotes the class of algebras `𝑩 : Algebra β 𝑆` with a map `φ : ∣ 𝑨 ∣ → ∣ 𝑩 ∣` such that `φ` is a surjective homomorphism.
 
 
-
-#### <a id="images-of-a-class-of-algebras">Images of a class of algebras</a>
+### <a id="images-of-a-class-of-algebras">Images of a class of algebras</a>
 
 Given a class `𝒦` of `𝑆`-algebras, we need a type that expresses the assertion that a given algebra is a homomorphic image of some algebra in the class, as well as a type that represents all such homomorphic images.
 
@@ -71,8 +70,7 @@ module _ {α : Level} where
 \end{code}
 
 
-
-#### <a id="lifting-tools">Lifting tools</a>
+### <a id="lifting-tools">Lifting tools</a>
 
 Here are some tools that have been useful (e.g., in the road to the proof of Birkhoff's HSP theorem). The first states and proves the simple fact that the lift of an epimorphism is an epimorphism.
 
@@ -124,7 +122,7 @@ module _ {α β : Level} where
 
 --------------------------------------
 
-[← Homomorphisms.Isomorphisms](Homomorphisms.Isomorphisms.html)
+<span style="float:left;">[← Homomorphisms.Isomorphisms](Homomorphisms.Isomorphisms.html)</span>
 <span style="float:right;">[Homomorphisms.Setoid →](Homomorphisms.Setoid.html)</span>
 
 {% include UALib.Links.md %}

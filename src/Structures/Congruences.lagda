@@ -6,7 +6,7 @@ author: [agda-algebras development team][]
 ---
 
 
-### <a id="congruences-of-general-structures">Congruences of general structures</a>
+## <a id="congruences-of-general-structures">Congruences of general structures</a>
 
 This is the [Structures.Congruences][] module of the [Agda Universal Algebra Library][].
 
@@ -87,7 +87,7 @@ _╱_ = quotient
 
 --------------------------------
 
-[← Structures.Products](Structures.Products.html)
+<span style="float:left;">[← Structures.Products](Structures.Products.html)</span>
 <span style="float:right;">[Structures.Homs →](Structures.Homs.html)</span>
 
 {% include UALib.Links.md %}

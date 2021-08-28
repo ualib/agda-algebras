@@ -5,7 +5,7 @@ date : 2021-07-26
 author: [agda-algebras development team][]
 ---
 
-## <a id="types-for-computational-complexity">Types for Computational Complexity</a>
+# <a id="types-for-computational-complexity">Types for Computational Complexity</a>
 
 This is the [Complexity][] module of the [Agda Universal Algebra Library][].
 
@@ -22,7 +22,7 @@ open import Complexity.CSP
 
 --------------------------------
 
-[← Structures.Sigma.Isos](Structures.Sigma.Isos.html)
+<span style="float:left;">[← Structures.Sigma.Isos](Structures.Sigma.Isos.html)</span>
 <span style="float:right;">[Complexity.Basic →](Complexity.Basic.html)</span>
 
 {% include UALib.Links.md %}

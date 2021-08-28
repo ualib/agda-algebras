@@ -5,7 +5,7 @@ date : 2021-01-14
 author: [agda-algebras development team][]
 ---
 
-### <a id="closure-operators-for-setoid-algebras">Closure Operators for Setoid Algebras</a>
+## <a id="closure-operators-for-setoid-algebras">Closure Operators for Setoid Algebras</a>
 
 Fix a signature 𝑆, let 𝒦 be a class of 𝑆-algebras, and define
 
@@ -94,7 +94,7 @@ variety α ρ = Σ[ 𝒱 ∈ (Pred (SetoidAlgebra α ρ)_) ] is-variety 𝒱
 
 --------------------------------
 
-[← Varieties.Setoid.EquationalLogic](Varieties.Setoid.EquationalLogic.html)
+<span style="float:left;">[← Varieties.Setoid.EquationalLogic](Varieties.Setoid.EquationalLogic.html)</span>
 <span style="float:right;">[Varieties.Setoid.FreeAlgebras →](Varieties.Setoid.FreeAlgebras.html)</span>
 
 {% include UALib.Links.md %}

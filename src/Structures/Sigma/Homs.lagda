@@ -5,7 +5,7 @@ date : 2021-06-22
 author: [agda-algebras development team][]
 ---
 
-### <a id="homomorphisms-of-general-structures">Homomorphisms of general structures</a>
+## <a id="homomorphisms-of-general-structures">Homomorphisms of general structures</a>
 
 
 \begin{code}
@@ -156,7 +156,7 @@ module _ {𝑅 𝐹 : Signature}
 
 
 
-#### <a id="kernels-of-homomorphisms">Kernels of homomorphisms</a>
+### <a id="kernels-of-homomorphisms">Kernels of homomorphisms</a>
 
 The kernel of a homomorphism is a congruence relation and conversely for every congruence relation θ, there exists a homomorphism with kernel θ (namely, that canonical projection onto the quotient modulo θ).
 
@@ -236,7 +236,7 @@ ker[ 𝑨 ⇒ 𝑩 ] h = kerquo {𝑩 = 𝑩} h
 Thus, given `h : hom 𝑨 𝑩`, we can construct the quotient of `𝑨` modulo the kernel of `h`, and the syntax for this quotient in the [UniversalAlgebra][] library is `𝑨 [ 𝑩 ]/ker h ↾ fe`.
 
 
-#### <a id="the-canonical-projection">The canonical projection</a>
+### <a id="the-canonical-projection">The canonical projection</a>
 
 Given an algebra `𝑨` and a congruence `θ`, the *canonical projection* is a map from `𝑨` onto `𝑨 ╱ θ` that is constructed, and proved epimorphic, as follows.
 
@@ -284,7 +284,7 @@ The kernel of the canonical projection of `𝑨` onto `𝑨 / θ` is equal to `�
 \end{code}
 
 
-#### <a id="product-homomorphisms">Product homomorphisms</a>
+### <a id="product-homomorphisms">Product homomorphisms</a>
 
 Suppose we have an algebra `𝑨`, a type `I : Type 𝓘`, and a family `ℬ : I → Algebra 𝓦 𝑆` of algebras.  We sometimes refer to the inhabitants of `I` as *indices*, and call `ℬ` an *indexed family of algebras*.
 
@@ -315,7 +315,7 @@ begin{code}
 
 
 
-#### <a id="projections-out-of-products">Projection out of products</a>
+### <a id="projections-out-of-products">Projection out of products</a>
 
 Later we will need a proof of the fact that projecting out of a product algebra onto one of its factors is a homomorphism.
 
@@ -373,7 +373,7 @@ Thus, given `h : hom 𝑨 𝑩`, we can construct the quotient of `𝑨` modulo 
 
 
 
-#### <a id="the-canonical-projection">The canonical projection</a>
+### <a id="the-canonical-projection">The canonical projection</a>
 
 Given an algebra `𝑨` and a congruence `θ`, the *canonical projection* is a map from `𝑨` onto `𝑨 ╱ θ` that is constructed, and proved epimorphic, as follows.
 
@@ -417,7 +417,7 @@ The kernel of the canonical projection of `𝑨` onto `𝑨 / θ` is equal to `�
 
 
 
-#### <a id="product-homomorphisms">Product homomorphisms</a>
+### <a id="product-homomorphisms">Product homomorphisms</a>
 
 Suppose we have an algebra `𝑨`, a type `I : Type 𝓘`, and a family `ℬ : I → Algebra 𝓦 𝑆` of algebras.  We sometimes refer to the inhabitants of `I` as *indices*, and call `ℬ` an *indexed family of algebras*.
 
@@ -446,7 +446,7 @@ The foregoing generalizes easily to the case in which the domain is also a produ
 
 
 
-#### <a id="projections-out-of-products">Projection out of products</a>
+### <a id="projections-out-of-products">Projection out of products</a>
 
 Later we will need a proof of the fact that projecting out of a product algebra onto one of its factors is a homomorphism.
 
@@ -461,7 +461,7 @@ We could prove a more general result involving projections onto multiple factors
 
 --------------------------------
 
-[← Structures.Sigma.Congruences](Structures.Sigma.Congruences.html)
+<span style="float:left;">[← Structures.Sigma.Congruences](Structures.Sigma.Congruences.html)</span>
 <span style="float:right;">[Structures.Sigma.Isos →](Structures.Sigma.Isos.html)</span>
 
 {% include UALib.Links.md %}

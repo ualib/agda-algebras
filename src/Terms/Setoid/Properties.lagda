@@ -5,7 +5,7 @@ date : 2021-08-24
 author: [agda-algebras development team][]
 ---
 
-### <a id="properties-of-the-setoid-based-term-algebra">Properties of the Setoid-based Term Algebra</a>
+## <a id="basic-properties">Basic properties</a>
 
 This is the [Terms.Setoid.Properties][] module of the [Agda Universal Algebra Library][].
 
@@ -45,7 +45,7 @@ private variable α ρ χ : Level
 \end{code}
 
 
-#### <a id="the-universal-property">The universal property</a>
+### <a id="the-universal-property">The universal property</a>
 
 The term algebra `𝑻 X` is *absolutely free* (or *universal*, or *initial*) for algebras in the signature `𝑆`. That is, for every 𝑆-algebra `𝑨`, the following hold.
 

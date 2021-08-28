@@ -5,7 +5,7 @@ date : 2021-07-26
 author: [agda-algebras development team][]
 ---
 
-### <a id="interpretation-of-terms-in-general-structures">Interpretation of Terms in General Structures</a>
+## <a id="interpretation-of-terms-in-general-structures">Interpretation of Terms in General Structures</a>
 
 This is the [Structures.Terms][] module of the [Agda Universal Algebra Library][].
 
@@ -54,7 +54,7 @@ _⟦_⟧ : (𝑨 : structure 𝐹 𝑅 {α} {ρ}) → Term X → (X → carrier 
 
 --------------------------------
 
-[← Structures.Isos](Structures.Isos.html)
+<span style="float:left;">[← Structures.Isos](Structures.Isos.html)</span>
 <span style="float:right;">[Structures.Substructures →](Structures.Substructures.html)</span>
 
 {% include UALib.Links.md %}

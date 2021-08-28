@@ -5,7 +5,7 @@ date : 2021-01-13
 author: [agda-algebras development team][]
 ---
 
-### <a id="homomorphism-theorems">Homomorphism Theorems</a>
+## <a id="homomorphism-theorems">Homomorphism Theorems</a>
 
 This is the [Homomorphisms.Noether][] module of the [Agda Universal Algebra Library][].
 
@@ -46,13 +46,13 @@ private variable α β γ : Level
 \end{code}
 
 
-#### <a id="the-first-homomorphism-theorem">The First Homomorphism Theorem</a>
+### <a id="the-first-homomorphism-theorem">The First Homomorphism Theorem</a>
 
 Here we formalize a version of the *first homomorphism theorem*, sometimes called *Noether's first homomorphism theorem*, after Emmy Noether who was among the first proponents of the abstract approach to the subject that we now call "modern algebra").
 
 Informally, the theorem states that every homomorphism from `𝑨` to `𝑩` (`𝑆`-algebras) factors through the quotient algebra `𝑨 ╱ ker h` (`𝑨` modulo the kernel of the given homomorphism).  In other terms, given `h : hom 𝑨 𝑩` there exists `φ : hom (𝑨 ╱ ker h) 𝑩` which, when composed with the canonical projection `πker : 𝑨 ↠ 𝑨 ╱ ker h`, is equal to `h`; that is, `h = φ ∘ πker`.  Moreover, `φ` is a *monomorphism* (injective homomorphism) and is unique.
 
-Our formal proof of this theorem will require function extensionality, proposition extensionality, and a couple of truncation assumptions.  The extensionality assumptions are postulated using `swelldef` and `pred-ext` which were defined in [Foundations.Welldefined][] and [Foundations.Extensionality][]. As for truncation, to prove that `φ` is injective we require<sup>[1](Homomorphisms.Noether.html#fn1)</sup>
+Our formal proof of this theorem will require function extensionality, proposition extensionality, and a couple of truncation assumptions.  The extensionality assumptions are postulated using `swelldef` and `pred-ext` which were defined in [Foundations.Welldefined][] and [Foundations.Extensionality][]. As for truncation, to prove that `φ` is injective we require
 
 + `buip`: *uniqueness of (block) identity proofs*; given two blocks of the kernel there is at most one proof that the blocks are equal;
 
@@ -157,7 +157,7 @@ module _ {fe : swelldef 𝓥 β}(𝑨 : Algebra α 𝑆)(𝑩 : Algebra β 𝑆)
 
 \end{code}
 
-If, in addition, we postulate extensionality of functions defined on the domain `ker[ 𝑨 ⇒ 𝑩 ] h`, then we obtain the following variation of the last result.<sup>[1](Homomorphisms.Noether.html#fn1)</sup>
+If, in addition, we postulate extensionality of functions defined on the domain `ker[ 𝑨 ⇒ 𝑩 ] h`, then we obtain the following variation of the last result. (See [Foundations.Truncation][] for a discussion of *truncation*, *sets*, and *uniqueness of identity proofs*.)
 
 ```
 fe-NoetherHomUnique : {fuww : funext (α ⊔ lsuc β) β}(f g : hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩)
@@ -183,11 +183,7 @@ The proof of `NoetherHomUnique` goes through for the special case of epimorphism
 
 
 
-
-
-
-
-#### <a id="homomorphism-decomposition">Homomorphism decomposition</a>
+### <a id="homomorphism-decomposition">Homomorphism decomposition</a>
 
 If `τ : hom 𝑨 𝑩`, `ν : hom 𝑨 𝑪`, `ν` is surjective, and `ker ν ⊆ ker τ`, then there exists `φ : hom 𝑪 𝑩` such that `τ = φ ∘ ν` so the following diagram commutes:
 
@@ -266,11 +262,7 @@ If, in addition to the hypotheses of the last theorem, we assume τ is epic, the
 
 --------------------------------------
 
-<sup>1</sup><span class="footnote" id="fn1"> See [Foundations.Truncation][] for a discussion of *truncation*, *sets*, and *uniqueness of identity proofs*.</span>
-
---------------------------------
-
-[← Homomorphisms.Basic](Homomorphisms.Basic.html)
+<span style="float:left;">[← Homomorphisms.Basic](Homomorphisms.Basic.html)</span>
 <span style="float:right;">[Homomorphisms.Isomorphisms →](Homomorphisms.Isomorphisms.html)</span>
 
 {% include UALib.Links.md %}

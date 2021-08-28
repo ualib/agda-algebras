@@ -5,7 +5,7 @@ date : 2021-07-03
 author: [agda-algebras development team][]
 ---
 
-#### <a id="products-of-setoidalgebras">Products of Setoid Algebras</a>
+## <a id="products-of-setoidalgebras">Products of Setoid Algebras</a>
 
 This is the [Algebras.Setoid.Products][] module of the [Agda Universal Algebra Library][].
 
@@ -61,7 +61,7 @@ cong (Interp (⨅ {I} 𝒜)) (refl , f=g ) = λ i → cong  (Interp (𝒜 i)) (r
 
 \end{code}
 
-##### <a id="products-of-classes-of-setoidalgebras">Products of classes of SetoidAlgebras</a>
+### <a id="products-of-classes-of-setoidalgebras">Products of classes of SetoidAlgebras</a>
 
 \begin{code}
 
@@ -84,7 +84,7 @@ so we can think of `𝔄 (𝑨 , p)` (which is simply `𝑨`) as the projection 
 product `⨅ 𝔄` onto the `(𝑨 , p)`-th component.
 
 
-##### <a id="products-of-algebroids">Products of Algebroids</a>
+### <a id="products-of-algebroids">Products of Algebroids</a>
 
 \begin{code}
 
@@ -108,7 +108,7 @@ product `⨅ 𝔄` onto the `(𝑨 , p)`-th component.
 
 \end{code}
 
-##### <a id="products-of-classes-of-algebroids">Products of classes of Algebroids</a>
+### <a id="products-of-classes-of-algebroids">Products of classes of Algebroids</a>
 
 \begin{code}
 
@@ -128,7 +128,7 @@ module _ {𝒦 : Pred (Algebroid α ρ) (𝓞 ⊔ 𝓥 ⊔ lsuc α)} where
 
 --------------------------------
 
-[← Algebras.Setoid.Basic](Algebras.Setoid.Basic.html)
+<span style="float:left;">[← Algebras.Setoid.Basic](Algebras.Setoid.Basic.html)</span>
 <span style="float:right;">[Algebras.Setoid.Congruences →](Algebras.Setoid.Congruences.html)</span>
 
 {% include UALib.Links.md %}

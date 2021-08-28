@@ -5,7 +5,7 @@ date : 2021-01-13
 author: [agda-algebras development team][]
 ---
 
-### <a id="basic-definitions">Basic Definitions</a>
+## <a id="basic-definitions">Basic Definitions</a>
 
 This section describes the [Homomorphisms.Basic] module of the [Agda Universal Algebra Library][].
 
@@ -40,11 +40,13 @@ private variable α β γ ρ : Level
 
 \end{code}
 
-#### <a id="homomorphisms">Homomorphisms</a>
+### <a id="homomorphisms">Homomorphisms</a>
 
-If `𝑨` and `𝑩` are `𝑆`-algebras, then a *homomorphism* from `𝑨` to `𝑩` is a function `h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣` from the domain of `𝑨` to the domain of `𝑩` that is *compatible* (or *commutes*) with all of the basic operations of the signature; that is, for all operation symbols `𝑓 : ∣ 𝑆 ∣` and tuples `a : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣` of `𝑨`, the following holds:<sup>[1](Homomorphisms.Basic.html#fn1),</sup><sup>[2](Homomorphisms.Basic.html#fn2)</sup>
+If `𝑨` and `𝑩` are `𝑆`-algebras, then a *homomorphism* from `𝑨` to `𝑩` is a function `h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣` from the domain of `𝑨` to the domain of `𝑩` that is *compatible* (or *commutes*) with all of the basic operations of the signature; that is, for all operation symbols `𝑓 : ∣ 𝑆 ∣` and tuples `a : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣` of `𝑨`, the following holds:
 
 `h ((𝑓 ̂ 𝑨) a) ≡ (𝑓 ̂ 𝑩) (h ∘ a)`.
+
+**Remarks**. Recall, `h ∘ 𝒂` is the tuple whose i-th component is `h (𝒂 i)`. Instead of "homomorphism," we sometimes use the nickname "hom" to refer to such a map.
 
 To formalize this concept, we first define a type representing the assertion that a function `h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣` commutes with a single basic operation `𝑓`.  With Agda's extremely flexible syntax the defining equation above can be expressed unadulterated.
 
@@ -72,7 +74,7 @@ We now define the type `hom 𝑨 𝑩` of homomorphisms from `𝑨` to `𝑩` by
 \end{code}
 
 
-#### <a id="homomorphism-composition">Homomorphism composition</a>
+### <a id="homomorphism-composition">Homomorphism composition</a>
 
 The composition of homomorphisms is again a homomorphism.  We formalize this in a number of alternative ways.
 
@@ -99,7 +101,7 @@ module _ (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}(𝑪 : Algebra γ 𝑆
 
 
 
-#### <a id="exmples-of-homomorphisms">Examples of homomorphisms</a>
+### <a id="exmples-of-homomorphisms">Examples of homomorphisms</a>
 
 Let's look at a few examples of homomorphisms. These examples are actually quite special in that the function in question commutes with the basic operations of *all* algebras and so, no matter the algebras involved, is always a homomorphism (trivially). We begin with the identity map, which is proved to be (the underlying map of) a homomorphism as follows.
 
@@ -140,7 +142,7 @@ Lift-hom {𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ (f , fhom) = lift ∘ f ∘ lower , 
 
 
 
-#### <a id="monomorphisms-and-epimorphisms">Monomorphisms and epimorphisms</a>
+### <a id="monomorphisms-and-epimorphisms">Monomorphisms and epimorphisms</a>
 
 A *monomorphism* is an injective homomorphism and an *epimorphism* is a surjective homomorphism. These are represented in the [UniversalAlgebra][] library by the following types.
 
@@ -177,7 +179,7 @@ epi-to-hom _ ϕ = ∣ ϕ ∣ , fst ∥ ϕ ∥
 
 
 
-#### <a id="kernels-of-homomorphisms">Kernels of homomorphisms</a>
+### <a id="kernels-of-homomorphisms">Kernels of homomorphisms</a>
 
 The kernel of a homomorphism is a congruence relation and conversely for every congruence relation θ, there exists a homomorphism with kernel θ (namely, that canonical projection onto the quotient modulo θ).
 
@@ -222,7 +224,7 @@ Thus, given `h : hom 𝑨 𝑩`, we can construct the quotient of `𝑨` modulo 
 
 
 
-#### <a id="the-canonical-projection">The canonical projection</a>
+### <a id="the-canonical-projection">The canonical projection</a>
 
 Given an algebra `𝑨` and a congruence `θ`, the *canonical projection* is a map from `𝑨` onto `𝑨 ╱ θ` that is constructed, and proved epimorphic, as follows.
 
@@ -270,7 +272,7 @@ The kernel of the canonical projection of `𝑨` onto `𝑨 / θ` is equal to `�
 
 
 
-#### <a id="product-homomorphisms">Product homomorphisms</a>
+### <a id="product-homomorphisms">Product homomorphisms</a>
 
 Suppose we have an algebra `𝑨`, a type `I : Type 𝓘`, and a family `ℬ : I → Algebra β 𝑆` of algebras.  We sometimes refer to the inhabitants of `I` as *indices*, and call `ℬ` an *indexed family of algebras*.
 
@@ -300,8 +302,7 @@ The foregoing generalizes easily to the case in which the domain is also a produ
 \end{code}
 
 
-
-#### <a id="projections-out-of-products">Projection out of products</a>
+### <a id="projections-out-of-products">Projection out of products</a>
 
 Later we will need a proof of the fact that projecting out of a product algebra onto one of its factors is a homomorphism.
 
@@ -316,16 +317,9 @@ We could prove a more general result involving projections onto multiple factors
 
 
 
---------------------------------------
-
-<sup>1</sup><span class="footnote" id="fn1">
-Recall, `h ∘ 𝒂` is the tuple whose i-th component is `h (𝒂 i)`.</span>
-
-<sup>2</sup><span class="footnote" id="fn2">Instead of "homomorphism," we sometimes use the nickname "hom" to refer to such a map.</span>
-
 ---------------------------------
 
-[↑ Homomorphisms](Homomorphisms.html)
+<span style="float:left;">[↑ Homomorphisms](Homomorphisms.html)</span>
 <span style="float:right;">[Homomorphisms.Noether →](Homomorphisms.Noether.html)</span>
 
 {% include UALib.Links.md %}

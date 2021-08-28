@@ -5,7 +5,7 @@ date : 2021-01-14
 author: [agda-algebras development team][]
 ---
 
-### <a id="closure-operators">Closure Operators</a>
+## <a id="closure-operators">Closure Operators</a>
 
 Fix a signature 𝑆, let 𝒦 be a class of 𝑆-algebras, and define
 
@@ -49,7 +49,7 @@ open import Subalgebras.Properties          {𝑆 = 𝑆} using ( ≤-refl ; ≅
 
 \end{code}
 
-#### <a id="the-inductive-type-h">The Inductive Type H</a>
+### <a id="the-inductive-type-h">The Inductive Type H</a>
 
 We define the inductive type `H` to represent classes of algebras that include all homomorphic images of algebras in the class; i.e., classes that are closed under the taking of homomorphic images.
 
@@ -62,7 +62,7 @@ data H {α β : Level} (𝒦 : Pred (Algebra α 𝑆) (ov α)) : Pred (Algebra (
 
 \end{code}
 
-#### <a id="the-inductive-type-s">The Inductive Type S</a>
+### <a id="the-inductive-type-s">The Inductive Type S</a>
 
 Here we define the inductive type `S` to represent classes of algebras that is closed under the taking of subalgebras.
 
@@ -77,7 +77,7 @@ data S {α β : Level}(𝒦 : Pred(Algebra α 𝑆)(ov α)) : Pred(Algebra(α �
 
 \end{code}
 
-#### <a id="the-inductive-types-p">The Inductive Type P </a>
+### <a id="the-inductive-types-p">The Inductive Type P </a>
 
 Here we define the inductive type `P` to represent classes of algebras that is closed under the taking of arbitrary products.
 
@@ -95,7 +95,7 @@ data P {α β : Level}(𝒦 : Pred(Algebra α 𝑆)(ov α)) : Pred(Algebra(α �
 \end{code}
 
 
-#### <a id="the-inductive-types-v">The Inductive Types V</a>
+### <a id="the-inductive-types-v">The Inductive Types V</a>
 
 A class 𝒦 of 𝑆-algebras is called a *variety* if it is closed under each of the closure operators H, S, and P introduced elsewhere; the corresponding closure operator is often denoted 𝕍, but we will denote it by `V`.
 
@@ -132,7 +132,7 @@ variety α = Σ[ 𝒱 ∈ (Pred (Algebra α 𝑆)(ov α)) ] is-variety 𝒱
 \end{code}
 
 
-#### <a id="closure-properties-of-S">Closure properties of S</a>
+### <a id="closure-properties-of-S">Closure properties of S</a>
 
 `S` is a closure operator.  The facts that S is idempotent and expansive won't be needed, so we omit these, but we will make use of monotonicity of S.  Here is the proof of the latter.
 
@@ -205,7 +205,7 @@ module _ {α : Level}{𝒦 : Pred (Algebra α 𝑆)(ov α)} where
 \end{code}
 
 
-#### <a id="closure-properties-of-P">Closure properties of P</a>
+### <a id="closure-properties-of-P">Closure properties of P</a>
 
 `P` is a closure operator.  This is proved by checking that `P` is *monotone*, *expansive*, and *idempotent*. The meaning of these terms will be clear from the definitions of the types that follow.
 
@@ -278,7 +278,7 @@ module _ {α β : Level}{𝒦 : Pred (Algebra α 𝑆)(ov α)} where
 \end{code}
 
 
-#### <a id="V-is-closed-under-lift">V is closed under lift</a>
+### <a id="V-is-closed-under-lift">V is closed under lift</a>
 
 As mentioned earlier, a technical hurdle that must be overcome when formalizing proofs in Agda is the proper handling of universe levels. In particular, in the proof of the Birkhoff's theorem, for example, we will need to know that if an algebra 𝑨 belongs to the variety V 𝒦, then so does the lift of 𝑨.  Let us get the tedious proof of this technical lemma out of the way.
 
@@ -347,7 +347,7 @@ module Vlift {α : Level} {fe₀ : funext (ov α) α}
 
 ---------------------------------
 
-[← Varieties.EquationalLogic](Varieties.EquationalLogic.html)
+<span style="float:left;">[← Varieties.EquationalLogic](Varieties.EquationalLogic.html)</span>
 <span style="float:right;">[Varieties.Properties →](Varieties.Properties.html)</span>
 
 {% include UALib.Links.md %}

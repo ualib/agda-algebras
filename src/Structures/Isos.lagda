@@ -5,7 +5,7 @@ date : 2021-07-23
 author: [agda-algebras development team][]
 ---
 
-### <a id="isomorphisms">Isomorphisms</a>
+## <a id="isomorphisms">Isomorphisms</a>
 
 This is the [Structures.Isos][] module of the [Agda Universal Algebra Library][].
 
@@ -44,7 +44,7 @@ private variable
 
 
 
-#### <a id="definition-of-isomorphism">Definition of Isomorphism</a>
+### <a id="definition-of-isomorphism">Definition of Isomorphism</a>
 
 Recall, `f ≈ g` means f and g are *extensionally* (or pointwise) equal; i.e., `∀ x, f x ≡ g x`.
 We use this notion of equality of functions in the following definition of *isomorphism*.
@@ -70,7 +70,7 @@ That is, two structures are isomorphic provided there are homomorphisms going ba
 
 
 
-#### <a id="isomorphism-is-an-equivalence-relation">Isomorphism is an equivalence relation</a>
+### <a id="isomorphism-is-an-equivalence-relation">Isomorphism is an equivalence relation</a>
 
 \begin{code}
 
@@ -104,7 +104,7 @@ module _ {𝑨 : structure 𝐹 𝑅 {α}{ρᵃ}} where
 
 
 
-#### <a id="lift-is-an-algebraic-invariant">Lift is an algebraic invariant</a>
+### <a id="lift-is-an-algebraic-invariant">Lift is an algebraic invariant</a>
 
 Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic invariant*). As our focus is universal algebra, this is important and is what makes the lift operation a workable solution to the technical problems that arise from the noncumulativity of the universe hierarchy discussed in [Overture.Lifts][].
 
@@ -150,7 +150,7 @@ module _ {𝑨 : structure 𝐹 𝑅{α}{ρᵃ}} {𝑩 : structure 𝐹 𝑅{β}
 
 
 
-#### <a id="lift-associativity">Lift associativity</a>
+### <a id="lift-associativity">Lift associativity</a>
 
 The lift is also associative, up to isomorphism at least.
 
@@ -182,7 +182,7 @@ module _ {𝑨 : structure 𝐹 𝑅 {α}{ρᵃ} } where
 
 
 
-#### <a id="products-preserve-isomorphisms">Products preserve isomorphisms</a>
+### <a id="products-preserve-isomorphisms">Products preserve isomorphisms</a>
 
 Products of isomorphic families of algebras are themselves isomorphic. The proof looks a bit technical, but it is as straightforward as it ought to be.
 
@@ -262,7 +262,7 @@ module _ {I : Type ι}{𝒜 : I → structure 𝐹 𝑅 {α}{ρᵃ}}{ℬ : (Lift
 
 --------------------------------
 
-[← Structures.Homs](Structures.Homs.html)
+<span style="float:left;">[← Structures.Homs](Structures.Homs.html)</span>
 <span style="float:right;">[Structures.Terms →](Structures.Terms.html)</span>
 
 {% include UALib.Links.md %}

@@ -5,7 +5,7 @@ date : 2021-07-26
 author: [agda-algebras development team][]
 ---
 
-### <a id="types-for-homomorphism-of-setoid-algebras">Types for Homomorphism of Setoid Algebras</a>
+# <a id="types-for-homomorphism-of-setoid-algebras">Types for Homomorphism of Setoid Algebras</a>
 
 This is the [Homomorphisms.Setoid][] module of the [Agda Universal Algebra Library][].
 
@@ -24,7 +24,7 @@ open import Homomorphisms.Setoid.HomomorphicImages
 
 --------------------------------
 
-[← Homomorphisms.HomomorphicImages](Homomorphisms.HomomorphicImages.html)
+<span style="float:left;">[← Homomorphisms.HomomorphicImages](Homomorphisms.HomomorphicImages.html)</span>
 <span style="float:right;">[Homomorphisms.Setoid.Basic →](Homomorphisms.Setoid.Basic.html)</span>
 
 {% include UALib.Links.md %}

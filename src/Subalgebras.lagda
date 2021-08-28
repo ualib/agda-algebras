@@ -5,7 +5,7 @@ date : 2021-01-14
 author: [agda-algebras development team][]
 ---
 
-## <a id="subalgebra-types">Subalgebra Types</a>
+# <a id="subalgebra-types">Subalgebra Types</a>
 
 This is the [Subalgebras][] module of the [Agda Universal Algebra Library][].
 
@@ -24,7 +24,7 @@ open import Subalgebras.Setoid
 
 --------------------------------------
 
-[← Terms.Setoid.Properties](Terms.Setoid.Properties.html)
+<span style="float:left;">[← Terms.Setoid.Properties](Terms.Setoid.Properties.html)</span>
 <span style="float:right;">[Subalgebras.Subuniverses →](Subalgebras.Subuniverses.html)</span>
 
 {% include UALib.Links.md %}

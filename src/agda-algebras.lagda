@@ -21,36 +21,36 @@ of citation.
   type-checked by the Agda proof assistant and to automatically generate html files
   (which are meant to be read by people).
 
-* This is done with the generatehtml file to generate markdown and html files from the
+* This is done with the generate-html file to generate markdown and html files from the
   literate Agda (.lagda) files, and then using jekyll to convert markdown into html.
 
 -->
 
-## The Agda Universal Algebra Library
+# The Agda Universal Algebra Library
 
 ---------------------------------------------------------------------------------
 
 (Version 2.01 of {{ "now" | date: "%d %b %Y" }})
 
-**Abstract**. The [Agda UniversalAlgebra][] library is a collection of types and programs (theorems and proofs) that formalizes the foundations of universal algebra in dependent type theory using the [Agda][] proof assistant language.
+**Abstract**. The [Agda Universal Algebra Library](https://ualib.github.io/agda-algebras) is a collection of types and programs (theorems and proofs) that formalizes the foundations of universal algebra in dependent type theory using the [Agda](https://wiki.portal.chalmers.se/agda/pmwiki.php) proof assistant language.
 
-In the latest version of the library we have defined many new types for representing the important constructs and theorems that comprise part of the foundations of general (universal) algebra and equational logic. These types are implemented in so called "literate" Agda files, with the `.lagda` extension, and they are grouped into modules so that they may be easily imported into other Agda programs.
+The library contains definitions of many new types for representing important constructs and theorems comprising a substantial part of the foundations of general (universal) algebra and equational logic. These types are implemented in so called "literate" Agda files (with the `.lagda` extension), and they are grouped into modules which can be easily imported and integrated into other Agda developments.
 
-To give an idea of the current scope of the library, we note that it now includes a complete proof of the [Birkhoff HSP Theorem](Birkhoff.HSPTheorem.html) which asserts that every variety is an equational class.  That is, if 𝒦 is a class of algebras that is closed under the taking of homomorphic images, subalgebras, and arbitrary products, then 𝒦 is the class of algebras satisfying some set of identities. To our knowledge, ours is the first formal, constructive, machine-checked proof of Birkhoff's Theorem.<sup>[1](UniversalAlgebra.html#fn1)</sup>
+To get an idea of the current scope of the library, note that it now includes a formal proof of Birkhoff's [HSP Theorem](https://en.wikipedia.org/wiki/Variety_(universal_algebra)#Birkhoff's_theorem), which asserts that every *variety* is an *equational class*.  That is, if 𝒦 is a class of algebras which is closed under the taking of homomorphic images, subalgebras, and arbitrary products, then 𝒦 is the class of all algebras satisfying some set of identities. To our knowledge, ours is the first formal, machine-checked proof of Birkhoff's Theorem. (If you believe you there is evidence refuting this claim, we would love to hear about it; please [email us](mailto:williamdemeo@gmail.com)!)
 
-We hope the library will be useful to mathematicians and computer scientists who wish to formally develop their work in type theory and verify their results with a proof assistant. Indeed, the [Agda UniversalAlgebra][] library is (or wants to be when it grows up) an indispensable guide on our mathematical journey, helping us forge new paths to higher peaks, all the time verifying and authenticating what we think we found along the way.
+We hope the library is useful to mathematicians and computer scientists who wish to formalize their work in dependent type theory and verify their results with a proof assistant. Indeed, the [Agda Universal Algebra Library]((https://ualib.github.io/agda-algebras) aims to become an indispensable companion on our mathematical journeys, helping us authenticate the discoveries we make along the way.
 
 **Keywords and phrases**. Universal algebra, Equational logic, Martin-Löf Type Theory, Birkhoff’s HSP Theorem, Formalization of mathematics, Agda
 
-**Software Repository**. [https://github.com/ualib/agda-algebras](https://gitub.com/ualib/agda-algebras)
+**Software Repository**. [github.com/ualib/agda-algebras](https://gitub.com/ualib/agda-algebras)
 
-**Citing this work**. To learn [how to cite the Agda UALib](Preface.html#how-to-cite-the-agda-ualib) and its documentation, follow [this link](Preface.html#how-to-cite-the-agda-ualib).
+**Citing this work**. See the instructions at [ualib.github.io/agda-algebras/Preface.html](https://ualib.github.io/agda-algebras/Preface.html#how-to-cite-the-agda-ualib).
 
-**Contributors**. William DeMeo, Jacques Carette, Siva Somayyajula, Andreas Abel, Hyeyoung Shin.
+**Primary Contributors**. [William DeMeo](https://williamdemeo.gitlab.io) and [Jacques Carette](http://www.cas.mcmaster.ca/~carette/)
 
 --------------------------------
 
-### Brief Contents
+## Brief Contents
 
 \begin{code}
 
@@ -62,6 +62,7 @@ open import Preface
 open import Overture
 open import Relations
 open import Foundations
+open import Residuation
 open import GaloisConnections
 open import ClosureSystems
 open import Algebras
@@ -75,7 +76,7 @@ open import Complexity
 \end{code}
 
 
-#### <a id="license">License</a>
+## <a id="license">License</a>
 
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
   <img alt="Creative Commons License" style="border-width:0; float: left; padding:5px 5px 0px 0px" height='40' src="css/by-sa.svg" />
@@ -86,7 +87,7 @@ open import Complexity
 </span> by
 <a xmlns:cc="http://creativecommons.org/ns#" href="https://williamdemeo.gitlab.io/" property="cc:attributionName" rel="cc:attributionURL">
   William DeMeo
-</a>
+</a> and the <a href="
 is licensed under a
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
   Creative Commons Attribution-ShareAlike 4.0 International License.
@@ -104,10 +105,6 @@ Based on the work at
 <p></p>
 
 ---------------------------------
-
-<span class="footnote" id="fn1"><sup>1</sup>[Contact the authors](mailto:williamdemeo@gmail.com) if you find any evidence that refutes this claim.</span>
-
-<p></p>
 
 <span style="float:right;">[Next Module (Preface) →](Preface.html)</span>
 

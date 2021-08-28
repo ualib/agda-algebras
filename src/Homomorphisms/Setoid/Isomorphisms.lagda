@@ -5,7 +5,7 @@ date : 2021-07-11
 author: [agda-algebras development team][]
 ---
 
-### <a id="isomorphisms-between-setoid-algebras">Isomorphisms between Setoid Algebras</a>
+## <a id="isomorphisms-between-setoid-algebras">Isomorphisms between Setoid Algebras</a>
 
 \begin{code}
 
@@ -39,7 +39,7 @@ open import Homomorphisms.Setoid.Basic {𝑆 = 𝑆} using ( hom ; kercon ; ker[
 
 \end{code}
 
-#### <a id="isomorphism-toolbox">Definition of isomorphism</a>
+### <a id="isomorphism-toolbox">Definition of isomorphism</a>
 
 Recall, `f ~ g` means f and g are *extensionally* (or pointwise) equal; i.e., `∀ x, f x ≡ g x`. We use this notion of equality of functions in the following definition of *isomorphism*.
 
@@ -74,7 +74,7 @@ That is, two structures are *isomorphic* provided there are homomorphisms going 
 
 
 
-#### <a id="isomorphism-is-an-equivalence-relation">Isomorphism is an equivalence relation</a>
+### <a id="isomorphism-is-an-equivalence-relation">Isomorphism is an equivalence relation</a>
 
 \begin{code}
 
@@ -119,7 +119,7 @@ That is, two structures are *isomorphic* provided there are homomorphisms going 
 \end{code}
 
 
-#### <a id="lift-is-an-algebraic-invariant">Lift is an algebraic invariant</a>
+### <a id="lift-is-an-algebraic-invariant">Lift is an algebraic invariant</a>
 
 Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic invariant*). As our focus is universal algebra, this is important and is what makes the lift operation a workable solution to the technical problems that arise from the noncumulativity of Agda's universe hierarchy.
 
@@ -145,7 +145,7 @@ Lift-SetoidAlg-iso A≅B = ≅-trans (≅-trans (≅-sym Lift-≅ ) A≅B) Lift-
 
 
 
-#### <a id="lift-associativity">Lift associativity</a>
+### <a id="lift-associativity">Lift associativity</a>
 
 The lift is also associative, up to isomorphism at least.
 
@@ -160,8 +160,7 @@ Lift-SetoidAlg-assoc _ _ = ≅-trans (≅-trans (≅-sym Lift-≅) Lift-≅) Lif
 
 
 
-
-#### <a id="products-preserve-isomorphisms">Products preserve isomorphisms</a>
+### <a id="products-preserve-isomorphisms">Products preserve isomorphisms</a>
 
 Products of isomorphic families of algebras are themselves isomorphic. The proof looks a bit technical, but it is as straightforward as it ought to be.
 
@@ -235,7 +234,7 @@ module _ {𝓘 : Level}{I : Type 𝓘}{fizw : funext (𝓘 ⊔ γ) β}{fiu : fun
 
 ------------------------------
 
-[← Homomorphisms.Setoid.Noether](Homomorphisms.Setoid.Noether.html)
+<span style="float:left;">[← Homomorphisms.Setoid.Noether](Homomorphisms.Setoid.Noether.html)</span>
 <span style="float:right;">[Homomorphisms.Setoid.HomomorphicImages →](Homomorphisms.Setoid.HomomorphicImages.html)</span>
 
 {% include UALib.Links.md %}

@@ -5,7 +5,7 @@ date : 2021-01-14
 author: [agda-algebras development team][]
 ---
 
-### <a id="varieties-model-theory-and-equational-logic">Varieties, Model Theory, and Equational Logic</a>
+## <a id="varieties-model-theory-and-equational-logic">Varieties, Model Theory, and Equational Logic</a>
 
 This is the [Varieties.EquationalLogic][] module of the [Agda Universal Algebra Library][] where the binary "models" relation ⊧, relating algebras (or classes of algebras) to the identities that they satisfy, is defined.
 
@@ -41,7 +41,7 @@ private variable
 \end{code}
 
 
-#### <a id="the-models-relation">The models relation</a>
+### <a id="the-models-relation">The models relation</a>
 
 We define the binary "models" relation `⊧` using infix syntax so that we may
 write, e.g., `𝑨 ⊧ p ≈ q` or `𝒦 ⊫ p ≈ q`, relating algebras (or classes of
@@ -68,7 +68,7 @@ to the variable symbols in `X`) the (intensional) equality `𝑨 ⟦ p ⟧ η �
 holds.
 
 
-#### <a id="equational-theories-and-models">Equational theories and models</a>
+### <a id="equational-theories-and-models">Equational theories and models</a>
 
 If 𝒦 denotes a class of structures, then `Th 𝒦` represents the set of identities
 modeled by the members of 𝒦.
@@ -111,7 +111,7 @@ Modᵗ ℰ = λ 𝑨 → ∀ i → 𝑨 ⊧ (fst (ℰ i)) ≈ (snd (ℰ i))
 
 -------------------------------------
 
-[↑ Varieties](Varieties.html)
+<span style="float:left;">[↑ Varieties](Varieties.html)</span>
 <span style="float:right;">[Varieties.Closure →](Varieties.Closure.html)</span>
 
 {% include UALib.Links.md %}

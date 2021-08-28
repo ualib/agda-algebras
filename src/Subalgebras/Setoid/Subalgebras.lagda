@@ -5,7 +5,7 @@ date : 2021-07-17
 author: [agda-algebras development team][]
 ---
 
-### <a id="subalgebras-of SetoidAlgebras">Subalgebras of SetoidAlgebras</a>
+## <a id="subalgebras-of SetoidAlgebras">Subalgebras of SetoidAlgebras</a>
 
 This is the [Subalgebras.Setoid.Subalgebras][] module of the [Agda Universal Algebra Library][].
 
@@ -84,7 +84,7 @@ module _ where
 From now on we will use `𝑩 ≤ 𝑨` to express the assertion that `𝑩` is a subalgebra of `𝑨`.
 
 
-#### <a id="subalgebras-of-a-class-of-algebras">Subalgebras of a class of algebras</a>
+### <a id="subalgebras-of-a-class-of-algebras">Subalgebras of a class of algebras</a>
 
 Suppose `𝒦 : Pred (Algebra α 𝑆) γ` denotes a class of `𝑆`-algebras and `𝑩 : SetoidAlgebra β ρᵇ` denotes an arbitrary `𝑆`-algebra. Then we might wish to consider the assertion that `𝑩` is a subalgebra of an algebra in the class `𝒦`.  The next type we define allows us to express this assertion as `𝑩 IsSubalgebraOfClass 𝒦`.
 
@@ -126,7 +126,7 @@ module _ where
 
 ---------------------------------
 
-[← Subalgebras.Setoid.Subuniverses](Subalgebras.Setoid.Subuniverses.html)
+<span style="float:left;">[← Subalgebras.Setoid.Subuniverses](Subalgebras.Setoid.Subuniverses.html)</span>
 <span style="float:right;">[Subalgebras.Setoid.Properties →](Subalgebras.Setoid.Properties.html)</span>
 
 {% include UALib.Links.md %}

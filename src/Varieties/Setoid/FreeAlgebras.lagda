@@ -5,7 +5,7 @@ date : 2021-06-29
 author: [agda-algebras development team][]
 ---
 
-### <a id="free-algebras-and-birkhoffs-theorem-setoid-version">Free Algebras and Birkhoff's Theorem (Setoid version)</a>
+## <a id="free-algebras-and-birkhoffs-theorem-setoid-version">Free Algebras and Birkhoff's Theorem (Setoid version)</a>
 
 \begin{code}
 
@@ -50,7 +50,7 @@ module _ {X : Type χ}{𝒦 : Pred (SetoidAlgebra α ρ) ℓ} where
 
 \end{code}
 
-#### <a id="the-free-algebra">The free algebra</a>
+### <a id="the-free-algebra">The free algebra</a>
 
 We now define the algebra `𝔽`, which plays the role of the relatively free algebra, along with the natural epimorphism `epi𝔽 : epi (𝑻 X) 𝔽` from `𝑻 X` to `𝔽`.
 
@@ -91,7 +91,7 @@ To be continued...
 
 --------------------------------
 
-[← Varieties.Setoid.Closure](Varieties.Setoid.Closure.html)
+<span style="float:left;">[← Varieties.Setoid.Closure](Varieties.Setoid.Closure.html)</span>
 <span style="float:right;">[Structures →](Structures.html)</span>
 
 {% include UALib.Links.md %}

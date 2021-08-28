@@ -5,7 +5,7 @@ date : 2021-06-22
 author: [agda-algebras development team][]
 ---
 
-### <a id="graph-structures-again">Graph Structures (again)</a>
+## <a id="graph-structures-again">Graph Structures (again)</a>
 
 This is the [Structures.Graphs0][] module of the [Agda Universal Algebra Library][].
 
@@ -154,15 +154,10 @@ module _ {χ : Level}{X : Type χ}
 
 --------------------------------
 
-[← Structures.Graphs](Structures.Graphs.html)
+<span style="float:left;">[← Structures.Graphs](Structures.Graphs.html)</span>
 <span style="float:right;">[Structures.Products →](Structures.Products.html)</span>
 
 {% include UALib.Links.md %}
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
-
-
-
-
-
 

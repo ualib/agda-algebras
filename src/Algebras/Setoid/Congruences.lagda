@@ -5,7 +5,7 @@ date : 2021-07-03
 author: [agda-algebras development team][]
 ---
 
-#### <a id="congruences-of-setoidalgebras">Congruences of Setoid Algebras</a>
+## <a id="congruences-of-setoidalgebras">Congruences of Setoid Algebras</a>
 
 This is the [Algebras.Setoid.Congruences][] module of the [Agda Universal Algebra Library][].
 
@@ -35,7 +35,7 @@ private variable α ρ ℓ : Level
 
 \end{code}
 
-#### <a id="compatibility-of-binary-relations">Compatibility of binary relations</a>
+## <a id="compatibility-of-binary-relations">Compatibility of binary relations</a>
 
 We now define the function `compatible` so that, if `𝑨` denotes an algebra and `R` a binary relation, then `compatible 𝑨 R` will represent the assertion that `R` is *compatible* with all basic operations of `𝑨`. The formal definition is immediate since all the work is done by the relation `|:`, which we defined above (see [Relations.Discrete][]).
 
@@ -84,7 +84,7 @@ Con→IsCongruence θ = ∥ θ ∥
 \end{code}
 
 
-#### <a id="quotient-algebras">Quotient algebras</a>
+## <a id="quotient-algebras">Quotient algebras</a>
 
 In many areas of abstract mathematics the *quotient* of an algebra `𝑨` with respect to a congruence relation `θ` of `𝑨` plays an important role. This quotient is typically denoted by `𝑨 / θ` and Agda allows us to define and express quotients using this standard notation.
 
@@ -106,7 +106,7 @@ cong (Interp (𝑨 ╱ θ)) {f , u} {.f , v} (refl , a) = is-compatible  ∥ θ 
 
 --------------------------------------
 
-[← Algebras.Setoid.Products](Algebras.Setoid.Products.html)
+<span style="float:left;">[← Algebras.Setoid.Products](Algebras.Setoid.Products.html)</span>
 <span style="float:right;">[Homomorphisms →](Homomorphisms.html)</span>
 
 {% include UALib.Links.md %}

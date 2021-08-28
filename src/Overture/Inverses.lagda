@@ -5,7 +5,7 @@ date : 2021-01-12
 author: [agda-algebras development team][]
 ---
 
-### <a id="inverses">Inverses</a>
+## <a id="inverses">Inverses</a>
 
 This is the [Overture.Inverses][] module of the [agda-algebras][] library.
 
@@ -63,7 +63,7 @@ We can prove that `Inv f` is the *right-inverse* of `f`, as follows.
 \end{code}
 
 
-#### <a id="injective-functions">Injective functions</a>
+### <a id="injective-functions">Injective functions</a>
 
 We say that a function `f : A → B` is *injective* (or *monic*) if it does not map two distinct elements of the domain to the same point in the codomain. The following type manifests this property.
 
@@ -90,7 +90,7 @@ id-is-injective {A = A} = id-↣ A
 \end{code}
 
 
-#### <a id="epics">Surjective functions</a>
+### <a id="epics">Surjective functions</a>
 
 A *surjective function* from `A` to `B` is a function `f : A → B` such that for all `b : B` there exists `a : A` such that `f a ≡ b`.  In other words, the range and codomain of `f` agree.  The following types manifest this notion.
 
@@ -165,7 +165,7 @@ module _ {A : Type α}{B : Type β} where
 
 --------------------------------------
 
-[← Overture.Preliminaries](Overture.Preliminaries.html)
+<span style="float:left;">[← Overture.Preliminaries](Overture.Preliminaries.html)</span>
 <span style="float:right;">[Overture.Transformers →](Overture.Transformers.html)</span>
 
 

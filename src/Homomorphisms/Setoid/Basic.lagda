@@ -5,7 +5,7 @@ date : 2021-07-03
 author: [agda-algebras development team][]
 ---
 
-### <a id="homomorphisms-of-algebras-over-setoids">Homomorphisms of Algebras over Setoids</a>
+## <a id="homomorphisms-of-algebras-over-setoids">Homomorphisms of Algebras over Setoids</a>
 
 This is the [Homomorphisms.Setoid.Basic][] module of the [Agda Universal Algebra Library][].
 
@@ -48,7 +48,7 @@ private variable
 
 \end{code}
 
-#### <a id="basic-definitions">Basic Definitions</a>
+### <a id="basic-definitions">Basic Definitions</a>
 
 \begin{code}
 
@@ -66,7 +66,7 @@ module _ (𝑨 : SetoidAlgebra α ρᵃ) (𝑩 : SetoidAlgebra β ρᵇ) where
 
 \end{code}
 
-#### <a id="composition-of-homs">Composition of homs</a>
+### <a id="composition-of-homs">Composition of homs</a>
 
 \begin{code}
 
@@ -93,7 +93,7 @@ module _ (𝑨 : SetoidAlgebra α ρᵃ)  -- (explicit 𝑨)
 
 \end{code}
 
-#### <a id="lifting-and-lowering">Lifting and lowering</a>
+### <a id="lifting-and-lowering">Lifting and lowering</a>
 
 \begin{code}
 
@@ -130,7 +130,7 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ} {𝑩 : SetoidAlgebra β ρᵇ} where
 
 \end{code}
 
-#### <a id="monomorphisms-and-epimorphisms">Monomorphisms and epimorphisms</a>
+### <a id="monomorphisms-and-epimorphisms">Monomorphisms and epimorphisms</a>
 
 \begin{code}
 
@@ -168,7 +168,7 @@ record epi (𝑨 : SetoidAlgebra α ρᵃ)
 
 \end{code}
 
-#### <a id="kernels-of-homomorphisms">Kernels of homomorphisms</a>
+### <a id="kernels-of-homomorphisms">Kernels of homomorphisms</a>
 
 \begin{code}
 
@@ -199,10 +199,11 @@ ker[ 𝑨 ⇒ 𝑩 ] h ↾ wd = kerquo 𝑨 𝑩 wd h
 
 \end{code}
 
-
 --------------------------------
 
-[↑ Homomorphisms.Setoid](Homomorphisms.Setoid.html)
+<span style="float:left;">[↑ Homomorphisms.Setoid](Homomorphisms.Setoid.html)</span>
 <span style="float:right;">[Homomorphisms.Setoid.Noether →](Homomorphisms.Setoid.Noether.html)</span>
 
 {% include UALib.Links.md %}
+
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
