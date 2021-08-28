@@ -44,7 +44,7 @@ We hope the library is useful to mathematicians and computer scientists who wish
 
 **Software Repository**. [github.com/ualib/agda-algebras](https://gitub.com/ualib/agda-algebras)
 
-**Citing this work**. See the instructions at [ualib.github.io/agda-algebras/Preface.html](https://ualib.github.io/agda-algebras/Preface.html#how-to-cite-the-agda-ualib).
+**Citing this work**. See the instructions at [agda-algebras/Preface.html](https://ualib.github.io/agda-algebras/Preface.html#how-to-cite-the-agda-algebras-library).
 
 **Primary Contributors**. [William DeMeo](https://williamdemeo.gitlab.io) and [Jacques Carette](http://www.cas.mcmaster.ca/~carette/)
 
@@ -54,24 +54,24 @@ We hope the library is useful to mathematicians and computer scientists who wish
 
 <pre class="Agda">
 
-<a id="3442" class="Symbol">{-#</a> <a id="3446" class="Keyword">OPTIONS</a> <a id="3454" class="Pragma">--without-K</a> <a id="3466" class="Pragma">--exact-split</a> <a id="3480" class="Pragma">--safe</a> <a id="3487" class="Symbol">#-}</a>
+<a id="3437" class="Symbol">{-#</a> <a id="3441" class="Keyword">OPTIONS</a> <a id="3449" class="Pragma">--without-K</a> <a id="3461" class="Pragma">--exact-split</a> <a id="3475" class="Pragma">--safe</a> <a id="3482" class="Symbol">#-}</a>
 
-<a id="3492" class="Keyword">module</a> <a id="3499" href="agda-algebras.html" class="Module">agda-algebras</a> <a id="3513" class="Keyword">where</a>
+<a id="3487" class="Keyword">module</a> <a id="3494" href="agda-algebras.html" class="Module">agda-algebras</a> <a id="3508" class="Keyword">where</a>
 
-<a id="3520" class="Keyword">open</a> <a id="3525" class="Keyword">import</a> <a id="3532" href="Preface.html" class="Module">Preface</a>
-<a id="3540" class="Keyword">open</a> <a id="3545" class="Keyword">import</a> <a id="3552" href="Overture.html" class="Module">Overture</a>
-<a id="3561" class="Keyword">open</a> <a id="3566" class="Keyword">import</a> <a id="3573" href="Relations.html" class="Module">Relations</a>
-<a id="3583" class="Keyword">open</a> <a id="3588" class="Keyword">import</a> <a id="3595" href="Foundations.html" class="Module">Foundations</a>
-<a id="3607" class="Keyword">open</a> <a id="3612" class="Keyword">import</a> <a id="3619" href="Residuation.html" class="Module">Residuation</a>
-<a id="3631" class="Keyword">open</a> <a id="3636" class="Keyword">import</a> <a id="3643" href="GaloisConnections.html" class="Module">GaloisConnections</a>
-<a id="3661" class="Keyword">open</a> <a id="3666" class="Keyword">import</a> <a id="3673" href="ClosureSystems.html" class="Module">ClosureSystems</a>
-<a id="3688" class="Keyword">open</a> <a id="3693" class="Keyword">import</a> <a id="3700" href="Algebras.html" class="Module">Algebras</a>
-<a id="3709" class="Keyword">open</a> <a id="3714" class="Keyword">import</a> <a id="3721" href="Homomorphisms.html" class="Module">Homomorphisms</a>
-<a id="3735" class="Keyword">open</a> <a id="3740" class="Keyword">import</a> <a id="3747" href="Terms.html" class="Module">Terms</a>
-<a id="3753" class="Keyword">open</a> <a id="3758" class="Keyword">import</a> <a id="3765" href="Subalgebras.html" class="Module">Subalgebras</a>
-<a id="3777" class="Keyword">open</a> <a id="3782" class="Keyword">import</a> <a id="3789" href="Varieties.html" class="Module">Varieties</a>
-<a id="3799" class="Keyword">open</a> <a id="3804" class="Keyword">import</a> <a id="3811" href="Structures.html" class="Module">Structures</a>
-<a id="3822" class="Keyword">open</a> <a id="3827" class="Keyword">import</a> <a id="3834" href="Complexity.html" class="Module">Complexity</a>
+<a id="3515" class="Keyword">open</a> <a id="3520" class="Keyword">import</a> <a id="3527" href="Preface.html" class="Module">Preface</a>
+<a id="3535" class="Keyword">open</a> <a id="3540" class="Keyword">import</a> <a id="3547" href="Overture.html" class="Module">Overture</a>
+<a id="3556" class="Keyword">open</a> <a id="3561" class="Keyword">import</a> <a id="3568" href="Relations.html" class="Module">Relations</a>
+<a id="3578" class="Keyword">open</a> <a id="3583" class="Keyword">import</a> <a id="3590" href="Foundations.html" class="Module">Foundations</a>
+<a id="3602" class="Keyword">open</a> <a id="3607" class="Keyword">import</a> <a id="3614" href="Residuation.html" class="Module">Residuation</a>
+<a id="3626" class="Keyword">open</a> <a id="3631" class="Keyword">import</a> <a id="3638" href="GaloisConnections.html" class="Module">GaloisConnections</a>
+<a id="3656" class="Keyword">open</a> <a id="3661" class="Keyword">import</a> <a id="3668" href="ClosureSystems.html" class="Module">ClosureSystems</a>
+<a id="3683" class="Keyword">open</a> <a id="3688" class="Keyword">import</a> <a id="3695" href="Algebras.html" class="Module">Algebras</a>
+<a id="3704" class="Keyword">open</a> <a id="3709" class="Keyword">import</a> <a id="3716" href="Homomorphisms.html" class="Module">Homomorphisms</a>
+<a id="3730" class="Keyword">open</a> <a id="3735" class="Keyword">import</a> <a id="3742" href="Terms.html" class="Module">Terms</a>
+<a id="3748" class="Keyword">open</a> <a id="3753" class="Keyword">import</a> <a id="3760" href="Subalgebras.html" class="Module">Subalgebras</a>
+<a id="3772" class="Keyword">open</a> <a id="3777" class="Keyword">import</a> <a id="3784" href="Varieties.html" class="Module">Varieties</a>
+<a id="3794" class="Keyword">open</a> <a id="3799" class="Keyword">import</a> <a id="3806" href="Structures.html" class="Module">Structures</a>
+<a id="3817" class="Keyword">open</a> <a id="3822" class="Keyword">import</a> <a id="3829" href="Complexity.html" class="Module">Complexity</a>
 
 </pre>
 
@@ -93,7 +93,7 @@ is licensed under a
   Creative Commons Attribution-ShareAlike 4.0 International License.
 </a>
 <br />
-<a href="https://ualib.gitlab.io/Preface.html#how-to-cite-the-agda-ualib">BibTeX citation information.</a>
+<a href="https://ualib.github.io/agda-algebras/Preface.html#how-to-cite-the-agda-ualib">BibTeX citation information.</a>
 <br />
 <br />
 <a href="https://stereotypeb.gitlab.io"><img alt="stereotypeb" style="border-width:0; float: left; padding:0px 5px 0px 0px;" width='70' src="css/stereotypeb-avatar.png" /></a>
