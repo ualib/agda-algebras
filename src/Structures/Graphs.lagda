@@ -5,7 +5,7 @@ date : 2021-06-22
 author: [agda-algebras development team][]
 ---
 
-### <a id="graph-structures">Graph Structures</a>
+## <a id="graph-structures">Graph Structures</a>
 
 This is the [Structures.Graphs][] module of the [Agda Universal Algebra Library][].
 
@@ -110,7 +110,7 @@ module _ {𝑨 : structure 𝐹 𝑅 {α} {ρᵃ}}
 
 --------------------------------
 
-[← Structures.Basic](Structures.Basic.html)
+<span style="float:left;">[← Structures.Basic](Structures.Basic.html)</span>
 <span style="float:right;">[Structures.Graphs0 →](Structures.Graphs0.html)</span>
 
 {% include UALib.Links.md %}

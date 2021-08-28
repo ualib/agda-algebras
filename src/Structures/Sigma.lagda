@@ -5,7 +5,7 @@ date : 2021-07-26
 author: [agda-algebras development team][]
 ---
 
-## <a id="types-for-general-mathematical-structures">Types for General Mathematical Structures</a>
+## <a id="sigma-types-for-general-mathematical-structures">Sigma Types for General Mathematical Structures</a>
 
 This is the [Structures.Sigma][] module of the [Agda Universal Algebra Library][].
 
@@ -26,7 +26,7 @@ open import Structures.Sigma.Isos
 
 --------------------------------
 
-[← Structures.EquationalLogic](Structures.EquationalLogic.html)
+<span style="float:left;">[← Structures.EquationalLogic](Structures.EquationalLogic.html)</span>
 <span style="float:right;">[Structures.Sigma.Basic →](Structures.Sigma.Basic.html)</span>
 
 {% include UALib.Links.md %}

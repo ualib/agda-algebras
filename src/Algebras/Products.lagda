@@ -6,7 +6,7 @@ author: [agda-algebras development team][]
 ---
 
 
-### <a id="products-of-algebras-and-product-algebras">Products of Algebras and Product Algebras</a>
+## <a id="products-of-algebras-and-product-algebras">Products of Algebras and Product Algebras</a>
 
 This is the [Algebras.Products][] module of the [Agda Universal Algebra Library][].
 
@@ -75,7 +75,7 @@ ov α = 𝓞 ⊔ 𝓥 ⊔ lsuc α
 
 
 
-#### <a id="products-of-classes-of-algebras">Products of classes of algebras</a>
+## <a id="products-of-classes-of-algebras">Products of classes of algebras</a>
 
 An arbitrary class `𝒦` of algebras is represented as a predicate over the type `Algebra α 𝑆`, for some universe level `α` and signature `𝑆`. That is, `𝒦 : Pred (Algebra α 𝑆) β`, for some type `β`. Later we will formally state and prove that the product of all subalgebras of algebras in `𝒦` belongs to the class `SP(𝒦)` of subalgebras of products of algebras in `𝒦`. That is, `⨅ S(𝒦) ∈ SP(𝒦 )`. This turns out to be a nontrivial exercise.
 
@@ -87,9 +87,9 @@ To begin, we need to define types that represent products over arbitrary (nonind
 
 which asserts that every inhabitant of the type `Algebra α 𝑆` belongs to `𝒦`.  Evidently this is not the product algebra that we seek.
 
-What we need is a type that serves to index the class `𝒦`, and a function `𝔄` that maps an index to the inhabitant of `𝒦` at that index. But `𝒦` is a predicate (of type `(Algebra α 𝑆) → Type β`) and the type `Algebra α 𝑆` seems rather nebulous in that there is no natural indexing class with which to "enumerate" all inhabitants of `Algebra α 𝑆` belonging to `𝒦`.<sup>[1](Algebras.Product.html#fn1)</sup>
+What we need is a type that serves to index the class `𝒦`, and a function `𝔄` that maps an index to the inhabitant of `𝒦` at that index. But `𝒦` is a predicate (of type `(Algebra α 𝑆) → Type β`) and the type `Algebra α 𝑆` seems rather nebulous in that there is no natural indexing class with which to "enumerate" all inhabitants of `Algebra α 𝑆` belonging to `𝒦`.
 
-The solution is to essentially take `𝒦` itself to be the indexing type, at least heuristically that is how one can view the type `ℑ` that we now define.<sup>[2](Algebras.Product.html#fn2)</sup>
+The solution is to essentially take `𝒦` itself to be the indexing type, at least heuristically that is how one can view the type `ℑ` that we now define.
 
 \begin{code}
 
@@ -119,17 +119,9 @@ Finally, we define `class-product` which represents the product of all members o
 
 If `p : 𝑨 ∈ 𝒦`, we view the pair `(𝑨 , p) ∈ ℑ` as an *index* over the class, so we can think of `𝔄 (𝑨 , p)` (which is simply `𝑨`) as the projection of the product `⨅ 𝔄` onto the `(𝑨 , p)`-th component.
 
-
-
 -----------------------
 
-<sup>1</sup><span class="footnote" id="fn1"> If you haven't seen this before, give it some thought and see if the correct type comes to you organically.</span>
-
-<sup>2</sup><span class="footnote" id="fn2"> **Unicode Hints**. Some of our types are denoted with with Gothic ("mathfrak") symbols. To produce them in [agda2-mode][], type `\Mf` followed by a letter. For example, `\MfI` ↝ `ℑ`.</span>
-
---------------------------------------------
-
-[← Algebras.Basic](Algebras.Basic.html)
+<span style="float:left;">[← Algebras.Basic](Algebras.Basic.html)</span>
 <span style="float:right;">[Algebras.Congruences →](Algebras.Congruences.html)</span>
 
 {% include UALib.Links.md %}

@@ -5,7 +5,7 @@ date : 2021-01-12
 author: [agda-algebras development team][]
 ---
 
-## <a id="types-for-relations-and-quotients">Types for Relations and Quotients</a>
+# <a id="relations">Relations</a>
 
 This is the [Relations][] module of the [Agda Universal Algebra Library][].
 
@@ -27,7 +27,7 @@ open import Relations.Quotients public
 
 -------------------------------------
 
-[← Overture.Transformers](Overture.Transformers.html)
+<span style="float:left;">[← Overture.Transformers](Overture.Transformers.html)</span>
 <span style="float:right;">[Relations.Discrete →](Relations.Discrete.html)</span>
 
 {% include UALib.Links.md %}

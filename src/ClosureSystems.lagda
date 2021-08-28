@@ -5,7 +5,7 @@ date : 2021-07-12
 author: [agda-algebras development team][]
 ---
 
-## <a id="closure-systems-and-operators">Closure Systems and Operators</a>
+# <a id="closure-systems-and-operators">Closure Systems and Operators</a>
 
 This is the [ClosureSystems][] module of the [Agda Universal Algebra Library][].
 
@@ -22,7 +22,7 @@ open import ClosureSystems.Properties
 
 --------------------------------
 
-[← GaloisConnections.Properties](GaloisConnections.Properties.html)
+<span style="float:left;">[← GaloisConnections.Properties](GaloisConnections.Properties.html)</span>
 <span style="float:right;">[ClosureSystems.Basic →](ClosureSystems.Basic.html)</span>
 
 {% include UALib.Links.md %}

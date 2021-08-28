@@ -207,7 +207,7 @@ wd   : swelldef (siglʳ 𝐹) β
 
 and, under these assumptions, we proved `∣ g ∣ ((f ᵒ 𝑨) a) ≡ ∣ h ∣ ((f ᵒ 𝑨) a)`.
 
-#### <a id="substructures">Substructures</a>
+### <a id="substructures">Substructures</a>
 
 
 \begin{code}
@@ -261,7 +261,7 @@ module _ {𝐹 : signature 𝓞₀ 𝓥₀}
 
 From now on we will use `𝑩 ≤s 𝑨` to express the assertion that `𝑩` is a subalgebra of `𝑨`.
 
-#### Substructures of a class of algebras
+### Substructures of a class of algebras
 
 Suppose `𝒦 : Pred (Algebra α 𝑆) γ` denotes a class of `𝑆`-algebras and `𝑩 : structure 𝐹 𝑅 {β}{ρᵇ}` denotes an arbitrary `𝑆`-algebra. Then we might wish to consider the assertion that `𝑩` is a subalgebra of an algebra in the class `𝒦`.  The next type we define allows us to express this assertion as `𝑩 IsSubstructureOfClass 𝒦`.
 
@@ -303,7 +303,7 @@ Suppose `𝒦 : Pred (Algebra α 𝑆) γ` denotes a class of `𝑆`-algebras an
 
 --------------------------------
 
-[← Structures.Terms](Structures.Terms.html)
+<span style="float:left;">[← Structures.Terms](Structures.Terms.html)</span>
 <span style="float:right;">[Structures.EquationalLogic →](Structures.EquationalLogic.html)</span>
 
 

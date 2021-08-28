@@ -5,7 +5,7 @@ date : 2021-08-16
 author: [agda-algebras development team][]
 ---
 
-### <a id="homomorphic-images">Homomorphic Images</a>
+## <a id="homomorphic-images">Homomorphic Images</a>
 
 This is the [Homomorphisms.HomomorphicImages][] module of the [Agda Universal Algebra Library][].
 
@@ -42,7 +42,7 @@ ov α = 𝓞 ⊔ 𝓥 ⊔ lsuc α
 \end{code}
 
 
-#### <a id="hom-images-of-a-single-algebra">Hom images of a single algebra</a>
+### <a id="hom-images-of-a-single-algebra">Hom images of a single algebra</a>
 
 We begin with what seems, for our purposes, the most useful way to represent the class of *homomorphic images* of an algebra in dependent type theory.
 
@@ -60,7 +60,7 @@ These types should be self-explanatory, but just to be sure, let's describe the 
 
 
 
-#### <a id="hom-images-of-a-class-of-algebras">Hom images of a class of algebras</a>
+### <a id="hom-images-of-a-class-of-algebras">Hom images of a class of algebras</a>
 
 Given a class `𝒦` of `𝑆`-algebras, we need a type that expresses the assertion that a given algebra is a homomorphic image of some algebra in the class, as well as a type that represents all such homomorphic images.
 
@@ -76,7 +76,7 @@ HomImageOfClass 𝒦 = Σ[ 𝑩 ∈ SetoidAlgebra _ _ ] IsHomImageOfClass {𝒦 
 
 
 
-#### <a id="lifting-tools">Lifting tools</a>
+### <a id="lifting-tools">Lifting tools</a>
 
 Here are some tools that have been useful (e.g., in the road to the proof of Birkhoff's HSP theorem). The first states and proves the simple fact that the lift of an epimorphism is an epimorphism.
 
@@ -126,7 +126,7 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ} {𝑩 : SetoidAlgebra β ρᵇ} where
 
 --------------------------------------
 
-[← Homomorphisms.Setoid.Isomoprhisms](Homomorphisms.Setoid.Isomoprhisms.html)
+<span style="float:left;">[← Homomorphisms.Setoid.Isomoprhisms](Homomorphisms.Setoid.Isomoprhisms.html)</span>
 <span style="float:right;">[Terms →](Terms.html)</span>
 
 {% include UALib.Links.md %}

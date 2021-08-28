@@ -5,7 +5,7 @@ date : 2021-01-14
 author: [agda-algebras development team][]
 ---
 
-### <a id="entailment-derivation-rules-soundness-and-completeness">Entailment, derivation rules, soundness and completeness</a>
+## <a id="entailment-derivation-rules-soundness-and-completeness">Entailment, derivation rules, soundness and completeness</a>
 
 This is the [Varieties.Setoid.EquationalLogic][] module of the [Agda Universal Algebra Library][].
 
@@ -103,7 +103,7 @@ module _ {α}{ρ}{ι}{I : Type ι} where
 \end{code}
 
 
-#### <a id="derivations-in-a-context">Derivations in a context</a>
+### <a id="derivations-in-a-context">Derivations in a context</a>
 
 (Based on [Andreas Abel's Agda formalization of Birkhoff's completeness theorem](http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf).)
 
@@ -130,7 +130,7 @@ module _ {χ ι : Level} where
 
 
 
-#### <a id="soundness-of-the-inference-rules">Soundness of the inference rules</a>
+### <a id="soundness-of-the-inference-rules">Soundness of the inference rules</a>
 
 (Based on [Andreas Abel's Agda formalization of Birkhoff's completeness theorem](see: http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf).)
 
@@ -175,7 +175,7 @@ We will prove that result next.
 
 
 
-#### <a id="birkhoffs-completeness-theorem">Birkhoff's completeness theorem</a>
+### <a id="birkhoffs-completeness-theorem">Birkhoff's completeness theorem</a>
 
 The proof proceeds by constructing a relatively free algebra consisting of term
 quotiented by derivable equality E ⊢ Γ ▹ _≈_.  It then suffices to prove
@@ -263,7 +263,7 @@ module Completeness {χ ι : Level}{I : Type ι} (E : I → Eq{χ}) {X} where
 
 --------------------------------
 
-[↑ Varieties.Setoid](Varieties.Setoid.html)
+<span style="float:left;">[↑ Varieties.Setoid](Varieties.Setoid.html)</span>
 <span style="float:right;">[Varieties.Setoid.Closure →](Varieties.Setoid.Closure.html)</span>
 
 {% include UALib.Links.md %}

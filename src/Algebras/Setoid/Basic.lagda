@@ -5,7 +5,7 @@ date : 2021-04-23
 author: [agda-algebras development team][]
 ---
 
-#### <a id="basic-definitions">Basic Definitions</a>
+## <a id="basic-definitions">Basic Definitions</a>
 
 This is the [Algebras.Setoid.Basic][] module of the [Agda Universal Algebra Library][].
 
@@ -38,7 +38,7 @@ ov α = 𝓞 ⊔ 𝓥 ⊔ lsuc α
 \end{code}
 
 
-#### <a id="setoid-algebras">Setoid Algebras</a>
+## <a id="setoid-algebras">Setoid Algebras</a>
 
 Here we define algebras over a setoid, instead of a mere type with no equivalence on it.
 
@@ -141,7 +141,7 @@ f ̂ 𝑨 = λ a → (Interp 𝑨) <$> (f , a)
 \end{code}
 
 
-#### <a id="level-lifting-setoid-algebra-types">Level lifting setoid algebra types</a>
+## <a id="level-lifting-setoid-algebra-types">Level lifting setoid algebra types</a>
 
 \begin{code}
 
@@ -187,7 +187,7 @@ module _ {𝑨 : SetoidAlgebra α ρ} where
 
 --------------------------------
 
-[↑ Algebras.Setoid](Algebras.Setoid.html)
+<span style="float:left;">[↑ Algebras.Setoid](Algebras.Setoid.html)</span>
 <span style="float:right;">[Algebras.Setoid.Products →](Algebras.Setoid.Products.html)</span>
 
 {% include UALib.Links.md %}

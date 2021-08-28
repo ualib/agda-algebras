@@ -5,7 +5,7 @@ date : 2021-07-12
 author: [agda-algebras development team][]
 ---
 
-## Residuation
+## <a id="basic-definitions">Basic definitions</a>
 
 \begin{code}
 
@@ -40,3 +40,12 @@ module _ {α ιᵃ ρᵃ : Level} (A : Poset α ιᵃ ρᵃ)
 
 
 \end{code}
+
+------------------------------------------
+
+<span style="float:left;">[↑ Residuation ](Residuation.html)</span>
+<span style="float:right;">[Residuation.Properties →](Residuation.Properties.html)</span>
+
+{% include UALib.Links.md %}
+
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

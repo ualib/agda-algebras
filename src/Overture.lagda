@@ -5,7 +5,7 @@ date : 2021-01-12
 author: [agda-algebras development team][]
 ---
 
-## <a id="overture">Overture</a>
+# <a id="overture">Overture</a>
 
 This is the [Overture][] module of the [Agda Universal Algebra Library][].
 
@@ -25,7 +25,7 @@ open import Overture.Transformers
 
 --------------------------------------
 
-[← Preface](Preface.html)
+<span style="float:left;">[← Preface](Preface.html)</span>
 <span style="float:right;">[Overture.Preliminaries →](Overture.Preliminaries.html)</span>
 
 {% include UALib.Links.md %}

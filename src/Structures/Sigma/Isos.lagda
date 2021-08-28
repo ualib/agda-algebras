@@ -5,7 +5,7 @@ date : 2021-06-22
 author: [agda-algebras development team][]
 ---
 
-### <a id="isomorphisms-of-general-structures">Isomorphisms of General Structures</a>
+## <a id="isomorphisms-of-general-structures">Isomorphisms of General Structures</a>
 
 \begin{code}
 
@@ -35,7 +35,7 @@ private variable 𝑅 𝐹 : Signature
 \end{code}
 
 
-#### <a id="isomorphism-toolbox">Definition of isomorphism</a>
+### <a id="isomorphism-toolbox">Definition of isomorphism</a>
 
 Recall, `f ~ g` means f and g are *extensionally* (or pointwise) equal; i.e., `∀ x, f x ≡ g x`. We use this notion of equality of functions in the following definition of **isomorphism**.
 
@@ -58,7 +58,7 @@ That is, two structures are **isomorphic** provided there are homomorphisms goin
 
 
 
-#### <a id="isomorphism-is-an-equivalence-relation">Isomorphism is an equivalence relation</a>
+### <a id="isomorphism-is-an-equivalence-relation">Isomorphism is an equivalence relation</a>
 
 \begin{code}
 
@@ -106,7 +106,7 @@ module _ {α ρᵃ β ρᵇ γ ρᶜ : Level}
 
 \end{code}
 
-#### <a id="lift-is-an-algebraic-invariant">Lift is an algebraic invariant</a>
+### <a id="lift-is-an-algebraic-invariant">Lift is an algebraic invariant</a>
 
 Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic invariant*). As our focus is universal algebra, this is important and is what makes the lift operation a workable solution to the technical problems that arise from the noncumulativity of the universe hierarchy discussed in [Overture.Lifts][].
 
@@ -132,13 +132,11 @@ module _ {α ρᵃ β ρᵇ : Level}
                                  ( ≅-trans (Lift-Struc ℓ ρ 𝑨) 𝑩 (≅-sym (Lift-≅ ℓ ρ)) A≅B )
                                   (Lift-≅ ℓ' ρ')
 
-
-
 \end{code}
 
 
 
-#### <a id="products-preserve-isomorphisms">Products preserve isomorphisms</a>
+### <a id="products-preserve-isomorphisms">Products preserve isomorphisms</a>
 
 Products of isomorphic families of algebras are themselves isomorphic. The proof looks a bit technical, but it is as straightforward as it ought to be.
 
@@ -172,12 +170,11 @@ module _ {ι : Level}{I : Type ι}
    ψ~ϕ : ψ ∘ ϕ ≈ ∣ 𝒾𝒹 (⨅ 𝒜) ∣
    ψ~ϕ a = fiu λ i → (from∼to (AB i)) (a i)
 
-
 \end{code}
 
 --------------------------------
 
-[← Structures.Sigma.Homs](Structures.Sigma.Homs.html)
+<span style="float:left;">[← Structures.Sigma.Homs](Structures.Sigma.Homs.html)</span>
 <span style="float:right;">[Complexity →](Complexity.html)</span>
 
 {% include UALib.Links.md %}

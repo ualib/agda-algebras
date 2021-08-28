@@ -5,7 +5,7 @@ date : 2021-07-12
 author: [agda-algebras development team][]
 ---
 
-## Residuation Properties
+## <a id="basic-properties">Basic properties</a>
 
 \begin{code}
 
@@ -62,3 +62,12 @@ module _ {α ιᵃ ρᵃ : Level} {A : Poset α ιᵃ ρᵃ}
   gt = gf≥id R (𝑔 b)
 
 \end{code}
+
+------------------------------------------
+
+<span style="float:left;">[← Residuation.Basic ](Residuation.Basic.html)</span>
+<span style="float:right;">[GaloisConnections →](GaloisConnections.html)</span>
+
+{% include UALib.Links.md %}
+
+[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

@@ -5,7 +5,7 @@ date : 2021-01-14
 author: [agda-algebras development team][]
 ---
 
-### <a id="Equation preservation">Equation preservation</a>
+## <a id="Equation preservation">Equation preservation</a>
 
 This is the [Varieties.Preservation][] module of the [Agda Universal Algebra Library][]. In this module we show that identities are preserved by closure operators H, S, and P.  This will establish the easy direction of Birkhoff's HSP Theorem.
 
@@ -61,7 +61,7 @@ private variable α β : Level
 
 
 
-#### <a id="closure-properties">Closure properties</a>
+### <a id="closure-properties">Closure properties</a>
 
 The types defined above represent operators with useful closure properties. We now prove a handful of such properties that we need later.
 
@@ -170,7 +170,7 @@ module _ {α β : Level} {𝒦 : Pred(Algebra α 𝑆)(ov α)} where
 
 
 
-#### <a id="PS-in-SP">PS(𝒦) ⊆ SP(𝒦)</a>
+### <a id="PS-in-SP">PS(𝒦) ⊆ SP(𝒦)</a>
 
 Finally, we are in a position to prove that a product of subalgebras of algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
 
@@ -212,7 +212,7 @@ module _ {α : Level} {fovu : funext (ov α) (ov α)}{𝒦 : Pred (Algebra α �
 
 
 
-#### <a id="more-class-inclusions">More class inclusions</a>
+### <a id="more-class-inclusions">More class inclusions</a>
 
 We conclude this subsection with three more inclusion relations that will have bit parts to play later (e.g., in the formal proof of Birkhoff's Theorem).
 
@@ -239,7 +239,7 @@ SP⊆V (siso x x₁) = visow (SP⊆V x) x₁
 \end{code}
 
 
-#### <a id="V-is-closed-under-lift">V is closed under lift</a>
+### <a id="V-is-closed-under-lift">V is closed under lift</a>
 
 As mentioned earlier, a technical hurdle that must be overcome when formalizing proofs in Agda is the proper handling of universe levels. In particular, in the proof of the Birkhoff's theorem, for example, we will need to know that if an algebra 𝑨 belongs to the variety V 𝒦, then so does the lift of 𝑨.  Let us get the tedious proof of this technical lemma out of the way.
 
@@ -273,7 +273,7 @@ module _ {α : Level}  {fe₀ : funext (ov α) α}
 \end{code}
 
 
-#### <a id="S-in-SP">⨅ S(𝒦) ∈ SP(𝒦)</a>
+### <a id="S-in-SP">⨅ S(𝒦) ∈ SP(𝒦)</a>
 
 Finally, we prove a result that plays an important role, e.g., in the formal proof of Birkhoff's Theorem. As we saw in [Algebras.Products][], the (informal) product `⨅ S(𝒦)` of all subalgebras of algebras in 𝒦 is implemented (formally) in the [UniversalAlgebra][] library as `⨅ 𝔄 S(𝒦)`. Our goal is to prove that this product belongs to `SP(𝒦)`. We do so by first proving that the product belongs to `PS(𝒦)` and then applying the `PS⊆SP` lemma.
 
@@ -352,7 +352,7 @@ So, since `PS⊆SP`, we see that that the product of all subalgebras of a class 
 \end{code}
 
 
-#### <a id="h-preserves-identities">H preserves identities</a>
+### <a id="h-preserves-identities">H preserves identities</a>
 
 First we prove that the closure operator H is compatible with identities that hold in the given class.
 
@@ -399,7 +399,7 @@ The converse of the foregoing result is almost too obvious to bother with. Nonet
 \end{code}
 
 
-#### <a id="s-preserves-identities">S preserves identities</a>
+### <a id="s-preserves-identities">S preserves identities</a>
 
 \begin{code}
 
@@ -439,7 +439,7 @@ Again, the obvious converse is barely worth the bits needed to formalize it.
 
 
 
-#### <a id="p-preserves-identities">P preserves identities</a>
+### <a id="p-preserves-identities">P preserves identities</a>
 
 \begin{code}
 
@@ -477,7 +477,7 @@ module _  (wd : SwellDef){X : Type 𝓧} {𝒦 : Pred (Algebra α 𝑆)(ov α)} 
 \end{code}
 
 
-#### <a id="v-preserves-identities">V preserves identities</a>
+### <a id="v-preserves-identities">V preserves identities</a>
 
 Finally, we prove the analogous preservation lemmas for the closure operator `V`.
 
@@ -562,7 +562,7 @@ module Vid' (fe : DFunExt)(wd : SwellDef){𝓧 : Level} {X : Type 𝓧} {𝒦 : 
 \end{code}
 
 
-#### <a id="class-identities">Class identities</a>
+### <a id="class-identities">Class identities</a>
 
 From `V-id1` it follows that if 𝒦 is a class of structures, then the set of identities modeled by all structures in `𝒦` is equivalent to the set of identities modeled by all structures in `V 𝒦`.  In other terms, `Th (V 𝒦)` is precisely the set of identities modeled by `𝒦`.   We formalize this observation as follows.
 
@@ -607,7 +607,7 @@ module _ (wd : SwellDef){X : Type 𝓧}{𝒦 : Pred (Algebra α 𝑆)(ov α)} wh
 
 ----------------------------
 
-[← Varieties.Properties](Varieties.Properties.html)
+<span style="float:left;">[← Varieties.Properties](Varieties.Properties.html)</span>
 <span style="float:right;">[Varieties.FreeAlgebras →](Varieties.FreeAlgebras.html)</span>
 
 {% include UALib.Links.md %}

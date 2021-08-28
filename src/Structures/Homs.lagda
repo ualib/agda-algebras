@@ -6,7 +6,7 @@ author: [agda-algebras development team][]
 ---
 
 
-### <a id="homomorphisms-of-general-structures">Homomorphisms of General Structures</a>
+## <a id="homomorphisms-of-general-structures">Homomorphisms of General Structures</a>
 
 This is the [Structures.Homs][] module of the [Agda Universal Algebra Library][].
 
@@ -170,7 +170,7 @@ open Lift
 
 
 
-#### <a id="kernels-of-homomorphisms">Kernels of homomorphisms</a>
+### <a id="kernels-of-homomorphisms">Kernels of homomorphisms</a>
 
 \begin{code}
 
@@ -216,7 +216,7 @@ ker[_⇒_] {ρᵃ = ρᵃ} 𝑨 𝑩 h {wd} = kerquo{ρᵃ = ρᵃ}{𝑨 = 𝑨}
 
 
 
-#### <a id="canonical-projections">Canonical projections</a>
+### <a id="canonical-projections">Canonical projections</a>
 
 \begin{code}
 
@@ -282,10 +282,9 @@ module _ {𝑨 : structure 𝐹 S∅ {α}{ℓ₀}}
 
 --------------------------------
 
-[← Structures.Congruences](Structures.Congruences.html)
+<span style="float:left;">[← Structures.Congruences](Structures.Congruences.html)</span>
 <span style="float:right;">[Structures.Isos →](Structures.Isos.html)</span>
 
 {% include UALib.Links.md %}
-
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

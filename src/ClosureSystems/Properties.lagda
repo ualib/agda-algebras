@@ -5,7 +5,7 @@ date : 2021-07-08
 author: [agda-algebras development team][]
 ---
 
-### <a id="properties-of-closure-systems-and-operators">Properties of Closure Systems and Operators</a>
+## <a id="basic-properties">Basic properties</a>
 
 This is the [ClosureSystems.Properties][] module of the [Agda Universal Algebra Library][].
 
@@ -105,7 +105,7 @@ module _ {𝑨 : Poset ℓ ℓ₁ ℓ₂} where
 
 ----------------------------
 
-[← ClosureSystems.Basic](ClosureSystems.Basic.html)
+<span style="float:left;">[← ClosureSystems.Basic](ClosureSystems.Basic.html)</span>
 <span style="float:right;">[Algebras →](Algebras.html)</span>
 
 {% include UALib.Links.md %}

@@ -5,11 +5,11 @@ date : 2021-07-08
 author: [agda-algebras development team][]
 ---
 
-### <a id="basic-definitions">Basic Definitions</a>
+## <a id="basic-definitions">Basic definitions</a>
 
 This is the [ClosureSystems.Basic][] module of the [Agda Universal Algebra Library][].
 
-#### <a id="closure-systems">Closure Systems</a>
+### <a id="closure-systems">Closure Systems</a>
 
 A *closure system* on a set `X` is a collection `𝒞` of subsets of `X` that is closed
 under arbitrary intersection (including the empty intersection, so `⋂ ∅ = X ∈ 𝒞`.
@@ -63,7 +63,7 @@ module _ {χ ρ ℓ : Level}{X : Type χ} where
 \end{code}
 
 
-#### <a id="closure-operators">Closure Operators</a>
+### <a id="closure-operators">Closure Operators</a>
 
 Let `𝑷 = (P, ≤)` be a poset. An function `C : P → P` is called a *closure operator*
 on `𝑷` if it is
@@ -95,7 +95,7 @@ record ClOp {ℓ ℓ₁ ℓ₂ : Level}(𝑨 : Poset ℓ ℓ₁ ℓ₂) : Type  
 
 --------------------------------------
 
-[↑ ClosureSystems.Definitions](ClosureSystems.html)
+<span style="float:left;">[↑ ClosureSystems.Definitions](ClosureSystems.html)</span>
 <span style="float:right;">[ClosureSystems.Properties →](ClosureSystems.Properties.html)</span>
 
 {% include UALib.Links.md %}

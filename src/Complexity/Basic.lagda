@@ -5,7 +5,7 @@ date : 2021-07-13
 author: [agda-algebras development team][]
 ---
 
-### <a id="complexity-theory">Complexity Theory</a>
+## <a id="complexity-theory">Complexity Theory</a>
 
 \begin{code}
 
@@ -16,7 +16,7 @@ module Complexity.Basic where
 
 \end{code}
 
-#### <a id="words">Words</a>
+### <a id="words">Words</a>
 
 Let 𝑇ₙ be a totally ordered set of size 𝑛.  Let 𝐴 be a set (the alphabet).
 We can model the set 𝑊ₙ, of *words* (strings of letters from 𝐴) of length 𝑛
@@ -39,7 +39,7 @@ At first we will simplify by assuming 𝑇ₙ is `Fin n`.
 
 --------------------------------
 
-[↑ Complexity](Complexity.html)
+<span style="float:left;">[↑ Complexity](Complexity.html)</span>
 <span style="float:right;">[Complexity.CSP →](Complexity.CSP.html)</span>
 
 {% include UALib.Links.md %}

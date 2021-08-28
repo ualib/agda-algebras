@@ -5,7 +5,7 @@ date : 2021-07-18
 author: [agda-algebras development team][]
 ---
 
-### <a id="properties-of-the-subalgebra-inclusion-relation">Properties of the Subalgebra Inclusion Relation</a>
+## <a id="properties-of-the-subalgebra-inclusion-relation">Properties of the Subalgebra Inclusion Relation</a>
 
 \begin{code}
 
@@ -65,7 +65,7 @@ open _≅_
 
 \end{code}
 
-#### <a id="relations-between">Relations between ≤, ≥, and ≅</a>
+### <a id="relations-between">Relations between ≤, ≥, and ≅</a>
 
 In case all algebras live in the same universe level, we can use some of the definitions
 in the standard library. However, to obtain more general versions, we need to either
@@ -115,7 +115,7 @@ These are essentially equivalent variations on the following obvious fact: If tw
 
 \end{code}
 
-#### <a id="relations-between-polymorphic-versions)">Relations between ≤, ≥, and ≅ (universe-polymorphic versions)</a>
+### <a id="relations-between-polymorphic-versions)">Relations between ≤, ≥, and ≅ (universe-polymorphic versions)</a>
 
 \begin{code}
 
@@ -151,7 +151,7 @@ iso→injective {𝑨 = 𝑨} (mkiso f g f∼g g∼f) {x} {y} fxfy =
 
 \end{code}
 
-#### <a id="lifts-of-subalgebras">Lifts of subalgebras</a>
+### <a id="lifts-of-subalgebras">Lifts of subalgebras</a>
 
 \begin{code}
 
@@ -175,7 +175,7 @@ Lift-≤-Lift ℓᵃ {𝑩} ℓᵇ a<b = ≥-Lift (Lift-Alg 𝑩 ℓᵇ) (≤-Li
 
 ---------------------------------
 
-[← Subalgebras.Subalgebras](Subalgebras.Subalgebras.html)
+<span style="float:left;">[← Subalgebras.Subalgebras](Subalgebras.Subalgebras.html)</span>
 <span style="float:right;">[Subalgebras.Setoid →](Subalgebras.Setoid.html)</span>
 
 {% include UALib.Links.md %}
