@@ -50,7 +50,7 @@ When we interpret a term in an algebra we call the resulting function a *term op
 
 2. If `p = f t`, where `f : ∣ 𝑆 ∣` is an operation symbol, if `t : ∥ 𝑆 ∥ f → 𝑻 X` is a tuple of terms, and if `a : X → ∣ 𝑨 ∣` is a tuple from `𝑨`, then we define `𝑨 ⟦ p ⟧ a = 𝑨 ⟦ f t ⟧ a := (f ̂ 𝑨) (λ i → 𝑨 ⟦ t i ⟧ a)`.
 
-Thus the interpretation of a term is defined by induction on the structure of the term, and the definition is formally implemented in [UniversalAlgebra][] as follows.
+Thus the interpretation of a term is defined by induction on the structure of the term, and the definition is formally implemented in the [agda-algebras](https://github.com/ualib/agda-algebras) library as follows.
 
 \begin{code}
 

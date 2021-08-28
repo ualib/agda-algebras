@@ -44,7 +44,7 @@ We hope the library is useful to mathematicians and computer scientists who wish
 
 **Software Repository**. [github.com/ualib/agda-algebras](https://gitub.com/ualib/agda-algebras)
 
-**Citing this work**. See the instructions at [ualib.github.io/agda-algebras/Preface.html](https://ualib.github.io/agda-algebras/Preface.html#how-to-cite-the-agda-ualib).
+**Citing this work**. See the instructions at [agda-algebras/Preface.html](https://ualib.github.io/agda-algebras/Preface.html#how-to-cite-the-agda-algebras-library).
 
 **Primary Contributors**. [William DeMeo](https://williamdemeo.gitlab.io) and [Jacques Carette](http://www.cas.mcmaster.ca/~carette/)
 

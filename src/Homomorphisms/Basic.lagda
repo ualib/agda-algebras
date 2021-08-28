@@ -144,7 +144,7 @@ Lift-hom {𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ (f , fhom) = lift ∘ f ∘ lower , 
 
 ### <a id="monomorphisms-and-epimorphisms">Monomorphisms and epimorphisms</a>
 
-A *monomorphism* is an injective homomorphism and an *epimorphism* is a surjective homomorphism. These are represented in the [UniversalAlgebra][] library by the following types.
+A *monomorphism* is an injective homomorphism and an *epimorphism* is a surjective homomorphism. These are represented in the [agda-algebras](https://github.com/ualib/agda-algebras) library by the following types.
 
 \begin{code}
 
@@ -220,7 +220,7 @@ ker[ 𝑨 ⇒ 𝑩 ] h ↾ wd = kerquo wd {𝑩} h
 
 \end{code}
 
-Thus, given `h : hom 𝑨 𝑩`, we can construct the quotient of `𝑨` modulo the kernel of `h`, and the syntax for this quotient in the [UniversalAlgebra][] library is `𝑨 [ 𝑩 ]/ker h ↾ fe`.
+Thus, given `h : hom 𝑨 𝑩`, we can construct the quotient of `𝑨` modulo the kernel of `h`, and the syntax for this quotient in the [agda-algebras](https://github.com/ualib/agda-algebras) library is `𝑨 [ 𝑩 ]/ker h ↾ fe`.
 
 
 
