@@ -95,7 +95,7 @@ If you find the [agda-algebras](https://github.com/ualib/agda-algebras) library 
  archivePrefix = {arXiv},
  primaryClass  = {cs.LO},
  url           = {https://arxiv.org/abs/2101.10166},
- note          = {source code: \url{https://gitlab.com/ualib/ualib.gitlab.io}}
+ note          = {source code: \url{https://github.com/ualib/agda-algebras}}
 }
 ```
 
