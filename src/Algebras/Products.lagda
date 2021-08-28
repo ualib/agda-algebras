@@ -32,11 +32,11 @@ private variable α β ρ 𝓘 : Level
 
 \end{code}
 
-From now on, the modules of the [UniversalAlgebra][] library will assume a fixed signature `𝑆 : Signature 𝓞 𝓥`.
+From now on, the modules of the [agda-algebras](https://github.com/ualib/agda-algebras) library will assume a fixed signature `𝑆 : Signature 𝓞 𝓥`.
 
 Recall the informal definition of a *product* of `𝑆`-algebras. Given a type `I : Type 𝓘` and a family `𝒜 : I → Algebra α 𝑆`, the *product* `⨅ 𝒜` is the algebra whose domain is the Cartesian product `Π 𝑖 ꞉ I , ∣ 𝒜 𝑖 ∣` of the domains of the algebras in `𝒜`, and whose operations are defined as follows: if `𝑓` is a `J`-ary operation symbol and if `𝑎 : Π 𝑖 ꞉ I , J → 𝒜 𝑖` is an `I`-tuple of `J`-tuples such that `𝑎 𝑖` is a `J`-tuple of elements of `𝒜 𝑖` (for each `𝑖`), then `(𝑓 ̂ ⨅ 𝒜) 𝑎 := (i : I) → (𝑓 ̂ 𝒜 i)(𝑎 i)`.
 
-In [UniversalAlgebra][] a *product of* `𝑆`-*algebras* is represented by the following type.
+In the [agda-algebras](https://github.com/ualib/agda-algebras) library a *product of* `𝑆`-*algebras* is represented by the following type.
 
 \begin{code}
 
@@ -49,7 +49,7 @@ In [UniversalAlgebra][] a *product of* `𝑆`-*algebras* is represented by the f
 
 (Alternative acceptable notation for the domain of the product is `∀ i → ∣ 𝒜 i ∣`.)
 
-The type just defined is the one that will be used throughout the [UniversalAlgebra][] library whenever the product of an indexed collection of algebras (of type `Algebra`) is required.  However, for the sake of completeness, here is how one could define a type representing the product of algebras inhabiting the record type `algebra`.
+The type just defined is the one that will be used throughout the [agda-algebras](https://github.com/ualib/agda-algebras) library whenever the product of an indexed collection of algebras (of type `Algebra`) is required.  However, for the sake of completeness, here is how one could define a type representing the product of algebras inhabiting the record type `algebra`.
 
 \begin{code}
 
@@ -64,7 +64,7 @@ open algebra
 
 
 
-**Notation**. Given a signature `𝑆 : Signature 𝓞 𝓥`, the type `Algebra α 𝑆` has type `Type(𝓞 ⊔ 𝓥 ⊔ lsuc α)`.  Such types occur so often in the [UniversalAlgebra][] library that we define the following shorthand for their universes.
+**Notation**. Given a signature `𝑆 : Signature 𝓞 𝓥`, the type `Algebra α 𝑆` has type `Type(𝓞 ⊔ 𝓥 ⊔ lsuc α)`.  Such types occur so often in the [agda-algebras](https://github.com/ualib/agda-algebras) library that we define the following shorthand for their universes.
 
 \begin{code}
 
