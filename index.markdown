@@ -83,11 +83,11 @@ We hope the library is useful to mathematicians and computer scientists who wish
   <!-- <img alt="Creative Commons License" style="border-width:0; float: left; padding:5px 5px 0px 0px" height='40' src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /> -->
 </a>
 <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">
-  The Agda Universal Algebra Library
+  The agda-algebras library and its documentation,
 </span> by
 <a xmlns:cc="http://creativecommons.org/ns#" href="https://williamdemeo.gitlab.io/" property="cc:attributionName" rel="cc:attributionURL">
   William DeMeo
-</a> and the <a href="
+  </a> and the <a href="https://github.com/ualib/agda-algebras/Preface.html#the-agda-algebras-development-team">agda algebras team</a>,
 is licensed under a
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
   Creative Commons Attribution-ShareAlike 4.0 International License.
