@@ -36,7 +36,7 @@ of citation.
 
 The library contains definitions of many new types for representing important constructs and theorems comprising a substantial part of the foundations of general (universal) algebra and equational logic. These types are implemented in so called "literate" Agda files (with the `.lagda` extension), and they are grouped into modules which can be easily imported and integrated into other Agda developments.
 
-To get an idea of the current scope of the library, note that it now includes a formal proof of Birkhoff's [HSP Theorem](https://en.wikipedia.org/wiki/Variety_(universal_algebra)#Birkhoff's_theorem), which asserts that every *variety* is an *equational class*.  That is, if 𝒦 is a class of algebras which is closed under the taking of homomorphic images, subalgebras, and arbitrary products, then 𝒦 is the class of all algebras satisfying some set of identities. To our knowledge, ours is the first formal, machine-checked proof of Birkhoff's Theorem. (If you believe you there is evidence refuting this claim, we would love to hear about it; please [email us](mailto:williamdemeo@gmail.com)!)
+To get an idea of the current scope of the library, note that it now includes a formal proof of Birkhoff's [HSP Theorem](https://en.wikipedia.org/wiki/Variety_(universal_algebra)#Birkhoff's_theorem), which asserts that every *variety* is an *equational class*.  That is, if 𝒦 is a class of algebras which is closed under the taking of homomorphic images, subalgebras, and arbitrary products, then 𝒦 is the class of all algebras satisfying some set of identities. To our knowledge, ours is the first formal, machine-checked proof of Birkhoff's Theorem. (If you have evidence refuting this claim, we would love to hear about it; please [email us](mailto:williamdemeo@gmail.com)!)
 
 We hope the library is useful to mathematicians and computer scientists who wish to formalize their work in dependent type theory and verify their results with a proof assistant. Indeed, the [agda-algebras library](https://github.com/ualib/agda-algebras) aims to become an indispensable companion on our mathematical journeys, helping us authenticate the discoveries we make along the way.
 
@@ -54,24 +54,24 @@ We hope the library is useful to mathematicians and computer scientists who wish
 
 <pre class="Agda">
 
-<a id="3458" class="Symbol">{-#</a> <a id="3462" class="Keyword">OPTIONS</a> <a id="3470" class="Pragma">--without-K</a> <a id="3482" class="Pragma">--exact-split</a> <a id="3496" class="Pragma">--safe</a> <a id="3503" class="Symbol">#-}</a>
+<a id="3442" class="Symbol">{-#</a> <a id="3446" class="Keyword">OPTIONS</a> <a id="3454" class="Pragma">--without-K</a> <a id="3466" class="Pragma">--exact-split</a> <a id="3480" class="Pragma">--safe</a> <a id="3487" class="Symbol">#-}</a>
 
-<a id="3508" class="Keyword">module</a> <a id="3515" href="agda-algebras.html" class="Module">agda-algebras</a> <a id="3529" class="Keyword">where</a>
+<a id="3492" class="Keyword">module</a> <a id="3499" href="agda-algebras.html" class="Module">agda-algebras</a> <a id="3513" class="Keyword">where</a>
 
-<a id="3536" class="Keyword">open</a> <a id="3541" class="Keyword">import</a> <a id="3548" href="Preface.html" class="Module">Preface</a>
-<a id="3556" class="Keyword">open</a> <a id="3561" class="Keyword">import</a> <a id="3568" href="Overture.html" class="Module">Overture</a>
-<a id="3577" class="Keyword">open</a> <a id="3582" class="Keyword">import</a> <a id="3589" href="Relations.html" class="Module">Relations</a>
-<a id="3599" class="Keyword">open</a> <a id="3604" class="Keyword">import</a> <a id="3611" href="Foundations.html" class="Module">Foundations</a>
-<a id="3623" class="Keyword">open</a> <a id="3628" class="Keyword">import</a> <a id="3635" href="Residuation.html" class="Module">Residuation</a>
-<a id="3647" class="Keyword">open</a> <a id="3652" class="Keyword">import</a> <a id="3659" href="GaloisConnections.html" class="Module">GaloisConnections</a>
-<a id="3677" class="Keyword">open</a> <a id="3682" class="Keyword">import</a> <a id="3689" href="ClosureSystems.html" class="Module">ClosureSystems</a>
-<a id="3704" class="Keyword">open</a> <a id="3709" class="Keyword">import</a> <a id="3716" href="Algebras.html" class="Module">Algebras</a>
-<a id="3725" class="Keyword">open</a> <a id="3730" class="Keyword">import</a> <a id="3737" href="Homomorphisms.html" class="Module">Homomorphisms</a>
-<a id="3751" class="Keyword">open</a> <a id="3756" class="Keyword">import</a> <a id="3763" href="Terms.html" class="Module">Terms</a>
-<a id="3769" class="Keyword">open</a> <a id="3774" class="Keyword">import</a> <a id="3781" href="Subalgebras.html" class="Module">Subalgebras</a>
-<a id="3793" class="Keyword">open</a> <a id="3798" class="Keyword">import</a> <a id="3805" href="Varieties.html" class="Module">Varieties</a>
-<a id="3815" class="Keyword">open</a> <a id="3820" class="Keyword">import</a> <a id="3827" href="Structures.html" class="Module">Structures</a>
-<a id="3838" class="Keyword">open</a> <a id="3843" class="Keyword">import</a> <a id="3850" href="Complexity.html" class="Module">Complexity</a>
+<a id="3520" class="Keyword">open</a> <a id="3525" class="Keyword">import</a> <a id="3532" href="Preface.html" class="Module">Preface</a>
+<a id="3540" class="Keyword">open</a> <a id="3545" class="Keyword">import</a> <a id="3552" href="Overture.html" class="Module">Overture</a>
+<a id="3561" class="Keyword">open</a> <a id="3566" class="Keyword">import</a> <a id="3573" href="Relations.html" class="Module">Relations</a>
+<a id="3583" class="Keyword">open</a> <a id="3588" class="Keyword">import</a> <a id="3595" href="Foundations.html" class="Module">Foundations</a>
+<a id="3607" class="Keyword">open</a> <a id="3612" class="Keyword">import</a> <a id="3619" href="Residuation.html" class="Module">Residuation</a>
+<a id="3631" class="Keyword">open</a> <a id="3636" class="Keyword">import</a> <a id="3643" href="GaloisConnections.html" class="Module">GaloisConnections</a>
+<a id="3661" class="Keyword">open</a> <a id="3666" class="Keyword">import</a> <a id="3673" href="ClosureSystems.html" class="Module">ClosureSystems</a>
+<a id="3688" class="Keyword">open</a> <a id="3693" class="Keyword">import</a> <a id="3700" href="Algebras.html" class="Module">Algebras</a>
+<a id="3709" class="Keyword">open</a> <a id="3714" class="Keyword">import</a> <a id="3721" href="Homomorphisms.html" class="Module">Homomorphisms</a>
+<a id="3735" class="Keyword">open</a> <a id="3740" class="Keyword">import</a> <a id="3747" href="Terms.html" class="Module">Terms</a>
+<a id="3753" class="Keyword">open</a> <a id="3758" class="Keyword">import</a> <a id="3765" href="Subalgebras.html" class="Module">Subalgebras</a>
+<a id="3777" class="Keyword">open</a> <a id="3782" class="Keyword">import</a> <a id="3789" href="Varieties.html" class="Module">Varieties</a>
+<a id="3799" class="Keyword">open</a> <a id="3804" class="Keyword">import</a> <a id="3811" href="Structures.html" class="Module">Structures</a>
+<a id="3822" class="Keyword">open</a> <a id="3827" class="Keyword">import</a> <a id="3834" href="Complexity.html" class="Module">Complexity</a>
 
 </pre>
 
@@ -87,7 +87,7 @@ We hope the library is useful to mathematicians and computer scientists who wish
 </span> by
 <a xmlns:cc="http://creativecommons.org/ns#" href="https://williamdemeo.gitlab.io/" property="cc:attributionName" rel="cc:attributionURL">
   William DeMeo
-  </a> and the <a href="https://github.com/ualib/agda-algebras/Preface.html#the-agda-algebras-development-team">agda algebras team</a>,
+  </a> and the <a href="https://ualib.github.io/agda-algebras/Preface.html#the-agda-algebras-development-team">agda algebras team</a>,
 is licensed under a
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
   Creative Commons Attribution-ShareAlike 4.0 International License.
