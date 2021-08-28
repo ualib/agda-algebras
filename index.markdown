@@ -38,7 +38,7 @@ The library contains definitions of many new types for representing important co
 
 To get an idea of the current scope of the library, note that it now includes a formal proof of Birkhoff's [HSP Theorem](https://en.wikipedia.org/wiki/Variety_(universal_algebra)#Birkhoff's_theorem), which asserts that every *variety* is an *equational class*.  That is, if 𝒦 is a class of algebras which is closed under the taking of homomorphic images, subalgebras, and arbitrary products, then 𝒦 is the class of all algebras satisfying some set of identities. To our knowledge, ours is the first formal, machine-checked proof of Birkhoff's Theorem. (If you believe you there is evidence refuting this claim, we would love to hear about it; please [email us](mailto:williamdemeo@gmail.com)!)
 
-We hope the library is useful to mathematicians and computer scientists who wish to formalize their work in dependent type theory and verify their results with a proof assistant. Indeed, the [Agda Universal Algebra Library]((https://ualib.github.io/agda-algebras) aims to become an indispensable companion on our mathematical journeys, helping us authenticate the discoveries we make along the way.
+We hope the library is useful to mathematicians and computer scientists who wish to formalize their work in dependent type theory and verify their results with a proof assistant. Indeed, the [agda-algebras library](https://github.com/ualib/agda-algebras) aims to become an indispensable companion on our mathematical journeys, helping us authenticate the discoveries we make along the way.
 
 **Keywords and phrases**. Universal algebra, Equational logic, Martin-Löf Type Theory, Birkhoff’s HSP Theorem, Formalization of mathematics, Agda
 
@@ -54,24 +54,24 @@ We hope the library is useful to mathematicians and computer scientists who wish
 
 <pre class="Agda">
 
-<a id="3467" class="Symbol">{-#</a> <a id="3471" class="Keyword">OPTIONS</a> <a id="3479" class="Pragma">--without-K</a> <a id="3491" class="Pragma">--exact-split</a> <a id="3505" class="Pragma">--safe</a> <a id="3512" class="Symbol">#-}</a>
+<a id="3458" class="Symbol">{-#</a> <a id="3462" class="Keyword">OPTIONS</a> <a id="3470" class="Pragma">--without-K</a> <a id="3482" class="Pragma">--exact-split</a> <a id="3496" class="Pragma">--safe</a> <a id="3503" class="Symbol">#-}</a>
 
-<a id="3517" class="Keyword">module</a> <a id="3524" href="agda-algebras.html" class="Module">agda-algebras</a> <a id="3538" class="Keyword">where</a>
+<a id="3508" class="Keyword">module</a> <a id="3515" href="agda-algebras.html" class="Module">agda-algebras</a> <a id="3529" class="Keyword">where</a>
 
-<a id="3545" class="Keyword">open</a> <a id="3550" class="Keyword">import</a> <a id="3557" href="Preface.html" class="Module">Preface</a>
-<a id="3565" class="Keyword">open</a> <a id="3570" class="Keyword">import</a> <a id="3577" href="Overture.html" class="Module">Overture</a>
-<a id="3586" class="Keyword">open</a> <a id="3591" class="Keyword">import</a> <a id="3598" href="Relations.html" class="Module">Relations</a>
-<a id="3608" class="Keyword">open</a> <a id="3613" class="Keyword">import</a> <a id="3620" href="Foundations.html" class="Module">Foundations</a>
-<a id="3632" class="Keyword">open</a> <a id="3637" class="Keyword">import</a> <a id="3644" href="Residuation.html" class="Module">Residuation</a>
-<a id="3656" class="Keyword">open</a> <a id="3661" class="Keyword">import</a> <a id="3668" href="GaloisConnections.html" class="Module">GaloisConnections</a>
-<a id="3686" class="Keyword">open</a> <a id="3691" class="Keyword">import</a> <a id="3698" href="ClosureSystems.html" class="Module">ClosureSystems</a>
-<a id="3713" class="Keyword">open</a> <a id="3718" class="Keyword">import</a> <a id="3725" href="Algebras.html" class="Module">Algebras</a>
-<a id="3734" class="Keyword">open</a> <a id="3739" class="Keyword">import</a> <a id="3746" href="Homomorphisms.html" class="Module">Homomorphisms</a>
-<a id="3760" class="Keyword">open</a> <a id="3765" class="Keyword">import</a> <a id="3772" href="Terms.html" class="Module">Terms</a>
-<a id="3778" class="Keyword">open</a> <a id="3783" class="Keyword">import</a> <a id="3790" href="Subalgebras.html" class="Module">Subalgebras</a>
-<a id="3802" class="Keyword">open</a> <a id="3807" class="Keyword">import</a> <a id="3814" href="Varieties.html" class="Module">Varieties</a>
-<a id="3824" class="Keyword">open</a> <a id="3829" class="Keyword">import</a> <a id="3836" href="Structures.html" class="Module">Structures</a>
-<a id="3847" class="Keyword">open</a> <a id="3852" class="Keyword">import</a> <a id="3859" href="Complexity.html" class="Module">Complexity</a>
+<a id="3536" class="Keyword">open</a> <a id="3541" class="Keyword">import</a> <a id="3548" href="Preface.html" class="Module">Preface</a>
+<a id="3556" class="Keyword">open</a> <a id="3561" class="Keyword">import</a> <a id="3568" href="Overture.html" class="Module">Overture</a>
+<a id="3577" class="Keyword">open</a> <a id="3582" class="Keyword">import</a> <a id="3589" href="Relations.html" class="Module">Relations</a>
+<a id="3599" class="Keyword">open</a> <a id="3604" class="Keyword">import</a> <a id="3611" href="Foundations.html" class="Module">Foundations</a>
+<a id="3623" class="Keyword">open</a> <a id="3628" class="Keyword">import</a> <a id="3635" href="Residuation.html" class="Module">Residuation</a>
+<a id="3647" class="Keyword">open</a> <a id="3652" class="Keyword">import</a> <a id="3659" href="GaloisConnections.html" class="Module">GaloisConnections</a>
+<a id="3677" class="Keyword">open</a> <a id="3682" class="Keyword">import</a> <a id="3689" href="ClosureSystems.html" class="Module">ClosureSystems</a>
+<a id="3704" class="Keyword">open</a> <a id="3709" class="Keyword">import</a> <a id="3716" href="Algebras.html" class="Module">Algebras</a>
+<a id="3725" class="Keyword">open</a> <a id="3730" class="Keyword">import</a> <a id="3737" href="Homomorphisms.html" class="Module">Homomorphisms</a>
+<a id="3751" class="Keyword">open</a> <a id="3756" class="Keyword">import</a> <a id="3763" href="Terms.html" class="Module">Terms</a>
+<a id="3769" class="Keyword">open</a> <a id="3774" class="Keyword">import</a> <a id="3781" href="Subalgebras.html" class="Module">Subalgebras</a>
+<a id="3793" class="Keyword">open</a> <a id="3798" class="Keyword">import</a> <a id="3805" href="Varieties.html" class="Module">Varieties</a>
+<a id="3815" class="Keyword">open</a> <a id="3820" class="Keyword">import</a> <a id="3827" href="Structures.html" class="Module">Structures</a>
+<a id="3838" class="Keyword">open</a> <a id="3843" class="Keyword">import</a> <a id="3850" href="Complexity.html" class="Module">Complexity</a>
 
 </pre>
 
