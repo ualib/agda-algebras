@@ -98,9 +98,9 @@ Algebra α 𝑆 = Σ[ A ∈ Type α ]                   -- the domain
 
 \end{code}
 
-It would be more precise to refer to inhabitants of this type as ∞-*algebras* because their domains can be of arbitrary type and need not be truncated at some level and, in particular, need to be a set. (See the [Foundations.Truncation](https://ualib.github.io/agda-algebras/Foundations.Truncation.html) module.)
+It would be more precise to refer to inhabitants of this type as ∞-*algebras* because their domains can be of arbitrary type and need not be truncated at some level and, in particular, need to be a set. (See the [Equality.Truncation](https://ualib.github.io/agda-algebras/Equality.Truncation.html) module.)
 
-We might take this opportunity to define the type of 0-*algebras*, that is, algebras whose domains are sets, which is probably closer to what most of us think of when doing informal universal algebra.  However, in the [agda-algebras](https://github.com/ualib/agda-algebras) library we will only need to know that the domains of certain algebras are sets in a few places, so it seems preferable to work with general (∞-)algebras throughout and then explicitly postulate additional axioms (e.g., [uniquness of identity proofs](https://ualib.github.io/agda-algebras/Foundations.Truncation.html#uniqueness-of-identity-proofs) if and only if necessary.
+We might take this opportunity to define the type of 0-*algebras*, that is, algebras whose domains are sets, which is probably closer to what most of us think of when doing informal universal algebra.  However, in the [agda-algebras](https://github.com/ualib/agda-algebras) library we will only need to know that the domains of certain algebras are sets in a few places, so it seems preferable to work with general (∞-)algebras throughout and then explicitly postulate additional axioms (e.g., [uniquness of identity proofs](https://ualib.github.io/agda-algebras/Equality.Truncation.html#uniqueness-of-identity-proofs) if and only if necessary.
 
 
 #### <a id="algebras-as-record-types">Algebras as record types</a>

@@ -63,7 +63,7 @@ module agda-algebras where
 open import Preface
 open import Overture
 open import Relations
-open import Foundations
+open import Equality
 open import Residuation
 open import GaloisConnections
 open import ClosureSystems

@@ -28,8 +28,8 @@ open import Relation.Unary using ( _⊆_ )
 open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ ; _≈_)
 open import Overture.Inverses                  using ( IsInjective ; IsSurjective ; SurjInv
                                                      ; SurjInvIsRightInv ; epic-factor )
-open import Foundations.Welldefined            using ( swelldef )
-open import Foundations.Extensionality         using ( block-ext|uip ; pred-ext )
+open import Equality.Welldefined               using ( swelldef )
+open import Equality.Extensionality            using ( block-ext|uip ; pred-ext )
 open import Relations.Discrete                 using ( kernel )
 open import Algebras.Setoid.Basic      {𝑆 = 𝑆} using ( 𝕌[_] ; SetoidAlgebra ; _̂_ )
 open import Homomorphisms.Setoid.Basic {𝑆 = 𝑆} using ( hom ; kercon ; ker[_⇒_]_↾_ ; ∘-hom ; 𝒾𝒹 ; epi

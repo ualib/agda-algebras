@@ -51,10 +51,10 @@
 [Examples.Structures.Signatures]: https://ualib.github.io/agda-algebras/Examples.Structures.Signatures.html
 [Exercises.Complexity.FiniteCSP]: https://ualib.github.io/agda-algebras/Exercises.Complexity.FiniteCSP.html
 
-[Foundations]: https://ualib.github.io/agda-algebras/Foundations.html
-[Foundations.Extensionality]: https://ualib.github.io/agda-algebras/Foundations.Extensionality.html
-[Foundations.Truncation]: https://ualib.github.io/agda-algebras/Foundations.Truncation.html
-[Foundations.Welldefined]: https://ualib.github.io/agda-algebras/Foundations.Welldefined.html
+[Equality]: https://ualib.github.io/agda-algebras/Equality.html
+[Equality.Extensionality]: https://ualib.github.io/agda-algebras/Equality.Extensionality.html
+[Equality.Truncation]: https://ualib.github.io/agda-algebras/Equality.Truncation.html
+[Equality.Welldefined]: https://ualib.github.io/agda-algebras/Equality.Welldefined.html
 
 [GaloisConnections]: https://ualib.github.io/agda-algebras/GaloisConnections.html
 [GaloisConnections.Basic]: https://ualib.github.io/agda-algebras/GaloisConnections.Basic.html

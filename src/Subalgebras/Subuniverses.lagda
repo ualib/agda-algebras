@@ -31,7 +31,7 @@ open import Relation.Unary using ( Pred ; _∈_ ; _⊆_ ; ⋂ )
 -- Imports from the Agda Universal Algebra Library -----------------------------
 open import Overture.Preliminaries      using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
 open import Relations.Discrete          using ( Im_⊆_ )
-open import Foundations.Welldefined     using ( swelldef )
+open import Equality.Welldefined        using ( swelldef )
 open import Algebras.Basic              using ( Algebra ; _̂_ )
 open import Algebras.Products   {𝑆 = 𝑆} using ( ov )
 open import Terms.Basic         {𝑆 = 𝑆} using ( Term ; ℊ ; node )

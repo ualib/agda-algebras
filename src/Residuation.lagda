@@ -21,7 +21,7 @@ open import Residuation.Properties
 
 --------------------------------
 
-<span style="float:left;">[← Foundations.Transformers ](Foundations.Transformers.html)</span>
+<span style="float:left;">[← Equality.Transformers ](Equality.Transformers.html)</span>
 <span style="float:right;">[Residuation.Basic →](Residuation.Basic.html)</span>
 
 {% include UALib.Links.md %}

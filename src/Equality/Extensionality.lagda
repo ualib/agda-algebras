@@ -1,19 +1,19 @@
 ---
 layout: default
-title : "Foundations.Extensionality module (The Agda Universal Algebra Library)"
+title : "Equality.Extensionality module (The Agda Universal Algebra Library)"
 date : "2021-02-23"
 author: "agda-algebras development team"
 ---
 
 ### <a id="extensionality">Extensionality</a>
 
-This is the [Foundations.Extensionality][] module of the [Agda Universal Algebra Library][].
+This is the [Equality.Extensionality][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Foundations.Extensionality where
+module Equality.Extensionality where
 
 -- imports from Agda and the Agda Standard Library ------------------------------------
 open import Axiom.Extensionality.Propositional
@@ -32,7 +32,7 @@ open import Overture.Preliminaries using ( _≈_; _⁻¹ ; _∙_ ; transport )
 open import Overture.Inverses      using ( IsSurjective ; SurjInv ; InvIsInv ; Image_∋_ ; eq )
 open import Relations.Discrete     using ( Op )
 open import Relations.Quotients    using ( [_] ; []-⊆ ; []-⊇ ; IsBlock ; ⟪_⟫ )
-open import Foundations.Truncation using ( blk-uip ; to-Σ-≡ )
+open import Equality.Truncation using ( blk-uip ; to-Σ-≡ )
 
 
 private variable α β γ ρ 𝓥 : Level
@@ -108,7 +108,7 @@ module _ {A : Type α}{R : BinRel A ρ} where
 
 ---------------------------------------
 
-<span style="float:left;">[← Foundations.Truncation](Foundations.Truncation.html)</span>
+<span style="float:left;">[← Equality.Truncation](Equality.Truncation.html)</span>
 <span style="float:right;">[Residuation →](Residuation.html)</span>
 
 {% include UALib.Links.md %}

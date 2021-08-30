@@ -27,9 +27,9 @@ open import Overture.Preliminaries using ( ∣_∣ )
 open import Relations.Discrete     using ( _|:_ ; 0[_] )
 open import Relations.Quotients    using ( Equivalence ; Quotient ; 0[_]Equivalence
                                          ; ⟪_⟫ ; ⌞_⌟ ; ⟪_∼_⟫-elim ; _/_ )
-open import Foundations.Welldefined using ( swelldef )
-open import Structures.Basic using ( signature ; structure ; sigl ; siglʳ ; compatible )
-
+open import Equality.Welldefined   using ( swelldef )
+open import Structures.Basic       using ( signature ; structure ; sigl
+                                         ; siglʳ ; compatible )
 private variable
  𝓞₀ 𝓥₀ 𝓞₁ 𝓥₁ : Level
  𝐹 : signature 𝓞₀ 𝓥₀

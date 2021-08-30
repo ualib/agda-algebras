@@ -27,20 +27,19 @@ open import Relation.Binary.PropositionalEquality
                             using ( _≡_ ; refl ; sym ; cong ; module ≡-Reasoning ; trans )
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
-open import Overture.Preliminaries   using ( _∙_ ; ∣_∣ ; ∥_∥ ; _⁻¹ ; Π-syntax )
-open import Overture.Inverses        using ( IsInjective ; IsSurjective ; Image_∋_ )
-open import Relations.Discrete       using ( ker ; kerlift )
-open import Relations.Quotients      using ( ⟪_⟫ )
-open import Foundations.Welldefined  using ( swelldef )
-open import Structures.Basic         using ( signature ; structure ; Lift-Struc ; Lift-Strucʳ
-                                           ; Lift-Strucˡ ; compatible ; siglʳ ; sigl )
+open import Overture.Preliminaries using ( _∙_ ; ∣_∣ ; ∥_∥ ; _⁻¹ ; Π-syntax )
+open import Overture.Inverses      using ( IsInjective ; IsSurjective ; Image_∋_ )
+open import Relations.Discrete     using ( ker ; kerlift )
+open import Relations.Quotients    using ( ⟪_⟫ )
+open import Equality.Welldefined   using ( swelldef )
+open import Structures.Basic       using ( signature ; structure ; Lift-Struc ; Lift-Strucʳ
+                                         ; Lift-Strucˡ ; compatible ; siglʳ ; sigl )
 open import Examples.Structures.Signatures
-                                     using ( S∅ )
-open import Structures.Congruences   using ( con ; _╱_)
-open import Structures.Products      using ( ⨅ )
+                                   using ( S∅ )
+open import Structures.Congruences using ( con ; _╱_)
+open import Structures.Products    using ( ⨅ )
 open structure
 open signature
-
 private variable
  𝓞₀ 𝓥₀ 𝓞₁ 𝓥₁ : Level
  𝐹 : signature 𝓞₀ 𝓥₀

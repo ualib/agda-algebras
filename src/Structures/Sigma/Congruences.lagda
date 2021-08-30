@@ -23,13 +23,12 @@ open import Relation.Binary using ( IsEquivalence ) renaming ( Rel to BinRel )
 open import Relation.Binary.PropositionalEquality using ( _≡_ )
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------
-open import Overture.Preliminaries  using ( ∣_∣ )
-open import Relations.Discrete      using ( _|:_ ; 0[_] )
-open import Relations.Quotients     using ( Equivalence ; ⟪_⟫ ; ⌞_⌟ ; 0[_]Equivalence
-                                          ; _/_ ; ⟪_∼_⟫-elim ; Quotient )
-open import Foundations.Welldefined using ( swelldef )
-open import Structures.Sigma.Basic  using ( Signature ; Structure ; _ᵒ_ ; Compatible ; _ʳ_ )
-
+open import Overture.Preliminaries using ( ∣_∣ )
+open import Relations.Discrete     using ( _|:_ ; 0[_] )
+open import Relations.Quotients    using ( Equivalence ; ⟪_⟫ ; ⌞_⌟ ; 0[_]Equivalence
+                                         ; _/_ ; ⟪_∼_⟫-elim ; Quotient )
+open import Equality.Welldefined   using ( swelldef )
+open import Structures.Sigma.Basic using ( Signature ; Structure ; _ᵒ_ ; Compatible ; _ʳ_ )
 private variable 𝑅 𝐹 : Signature
 
 module _ {α ρ : Level} where

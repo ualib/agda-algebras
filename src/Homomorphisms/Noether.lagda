@@ -17,30 +17,28 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Homomorphisms.Noether {𝑆 : Signature 𝓞 𝓥} where
 
-
 -- Imports from Agda and the Agda Standard Library ---------------------------------------
 open import Agda.Primitive  using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
-open import Data.Product    using ( Σ-syntax ; _,_ ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Data.Product    using (Σ-syntax;_,_;_×_) renaming (proj₁ to fst;proj₂ to snd)
 open import Function.Base   using ( _∘_ ; id )
 open import Relation.Binary using ( IsEquivalence )
 open import Relation.Binary.PropositionalEquality
                             using ( _≡_ ; refl ; module ≡-Reasoning ; cong ; cong-app )
 open import Relation.Unary  using ( _⊆_ )
 
-
 -- Imports from agda-algebras --------------------------------------------------------------
-open import Overture.Preliminaries       using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
-open import Overture.Inverses            using ( IsInjective ; IsSurjective ; SurjInv ; Image_∋_
-                                               ; SurjInvIsRightInv ; epic-factor )
-open import Relations.Discrete           using ( kernel )
-open import Relations.Quotients          using ( ⌞_⌟ ; R-block ; ⟪_⟫ )
-open import Foundations.Truncation       using ( is-set ; blk-uip ; is-embedding ; monic-is-embedding|Set )
-open import Foundations.Welldefined      using ( swelldef )
-open import Foundations.Extensionality   using ( pred-ext ; block-ext|uip )
-open import Algebras.Basic               using ( Algebra ; _̂_)
+open import Overture.Preliminaries  using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
+open import Overture.Inverses       using ( IsInjective ; IsSurjective ; SurjInv ; Image_∋_
+                                          ; SurjInvIsRightInv ; epic-factor )
+open import Relations.Discrete      using ( kernel )
+open import Relations.Quotients     using ( ⌞_⌟ ; R-block ; ⟪_⟫ )
+open import Equality.Welldefined    using ( swelldef )
+open import Equality.Truncation     using (is-set;blk-uip;is-embedding;monic-is-embedding|Set)
+open import Equality.Extensionality using ( pred-ext ; block-ext|uip )
+open import Algebras.Basic          using ( Algebra ; _̂_)
 open import Algebras.Congruences {𝑆 = 𝑆} using ( Con ; IsCongruence )
-open import Homomorphisms.Basic  {𝑆 = 𝑆} using ( hom ; kercon ; ker[_⇒_]_↾_ ; πker ; is-homomorphism ; epi ; epi-to-hom )
-
+open import Homomorphisms.Basic  {𝑆 = 𝑆} using ( hom ; kercon ; ker[_⇒_]_↾_ ; πker
+                                               ; is-homomorphism ; epi ; epi-to-hom )
 private variable α β γ : Level
 
 \end{code}
@@ -52,7 +50,7 @@ Here we formalize a version of the *first homomorphism theorem*, sometimes calle
 
 Informally, the theorem states that every homomorphism from `𝑨` to `𝑩` (`𝑆`-algebras) factors through the quotient algebra `𝑨 ╱ ker h` (`𝑨` modulo the kernel of the given homomorphism).  In other terms, given `h : hom 𝑨 𝑩` there exists `φ : hom (𝑨 ╱ ker h) 𝑩` which, when composed with the canonical projection `πker : 𝑨 ↠ 𝑨 ╱ ker h`, is equal to `h`; that is, `h = φ ∘ πker`.  Moreover, `φ` is a *monomorphism* (injective homomorphism) and is unique.
 
-Our formal proof of this theorem will require function extensionality, proposition extensionality, and a couple of truncation assumptions.  The extensionality assumptions are postulated using `swelldef` and `pred-ext` which were defined in [Foundations.Welldefined][] and [Foundations.Extensionality][]. As for truncation, to prove that `φ` is injective we require
+Our formal proof of this theorem will require function extensionality, proposition extensionality, and a couple of truncation assumptions.  The extensionality assumptions are postulated using `swelldef` and `pred-ext` which were defined in [Equality.Welldefined][] and [Equality.Extensionality][]. As for truncation, to prove that `φ` is injective we require
 
 + `buip`: *uniqueness of (block) identity proofs*; given two blocks of the kernel there is at most one proof that the blocks are equal;
 
@@ -157,7 +155,7 @@ module _ {fe : swelldef 𝓥 β}(𝑨 : Algebra α 𝑆)(𝑩 : Algebra β 𝑆)
 
 \end{code}
 
-If, in addition, we postulate extensionality of functions defined on the domain `ker[ 𝑨 ⇒ 𝑩 ] h`, then we obtain the following variation of the last result. (See [Foundations.Truncation][] for a discussion of *truncation*, *sets*, and *uniqueness of identity proofs*.)
+If, in addition, we postulate extensionality of functions defined on the domain `ker[ 𝑨 ⇒ 𝑩 ] h`, then we obtain the following variation of the last result. (See [Equality.Truncation][] for a discussion of *truncation*, *sets*, and *uniqueness of identity proofs*.)
 
 ```
 fe-NoetherHomUnique : {fuww : funext (α ⊔ lsuc β) β}(f g : hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩)

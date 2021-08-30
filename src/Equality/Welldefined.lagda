@@ -1,6 +1,6 @@
 ---
 layout: default
-title : "Foundations.Welldefined module (The Agda Universal Algebra Library)"
+title : "Equality.Welldefined module (The Agda Universal Algebra Library)"
 date : "2021-07-25"
 author: "agda-algebras development team"
 ---
@@ -11,7 +11,7 @@ author: "agda-algebras development team"
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Foundations.Welldefined where
+module Equality.Welldefined where
 
 -- Imports from Agda and the Agda Standard Library  -------------------------------------
 open import Agda.Primitive        using ( _⊔_ ; lsuc ; Level )
@@ -261,7 +261,7 @@ module _ {A : Type α}{B : Type β} where
 
 -------------------------------------
 
-<span style="float:left;">[↑ Foundations](Foundations.html)</span>
-<span style="float:right;">[Foundations.Truncation →](Foundations.Truncation.html)</span>
+<span style="float:left;">[↑ Equality](Equality.html)</span>
+<span style="float:right;">[Equality.Truncation →](Equality.Truncation.html)</span>
 
 {% include UALib.Links.md %}

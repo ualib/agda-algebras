@@ -27,19 +27,19 @@ open import Relation.Unary   using ( Pred ; _∈_ ; _⊆_ ; ⋂ )
 open import Relation.Binary.PropositionalEquality using ( _≡_ ; module ≡-Reasoning )
 
 -- Imports from the Agda Universal Algebra Library -----------------------------------------------
-open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
-open import Overture.Inverses                  using ( ∘-injective ; IsInjective ; id-is-injective )
-open import Relations.Discrete                 using ( Im_⊆_ )
-open import Foundations.Welldefined            using ( swelldef )
-open import Algebras.Setoid.Basic      {𝑆 = 𝑆} using ( SetoidAlgebra ; 𝕌[_] ; _̂_ ; Lift-Alg )
-open import Algebras.Products          {𝑆 = 𝑆} using ( ov )
-open import Terms.Basic                {𝑆 = 𝑆} using ( Term ; ℊ ; node )
-open import Terms.Setoid.Basic         {𝑆 = 𝑆} using ( module Environment )
-open import Homomorphisms.Setoid.Basic {𝑆 = 𝑆} using ( hom ; ∘-hom )
+open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
+open import Overture.Inverses      using ( ∘-injective ; IsInjective ; id-is-injective )
+open import Relations.Discrete     using ( Im_⊆_ )
+open import Equality.Welldefined   using ( swelldef )
+open import Algebras.Setoid.Basic {𝑆 = 𝑆} using ( SetoidAlgebra ; 𝕌[_] ; _̂_ ; Lift-Alg )
+open import Algebras.Products     {𝑆 = 𝑆} using ( ov )
+open import Terms.Basic           {𝑆 = 𝑆} using ( Term ; ℊ ; node )
+open import Terms.Setoid.Basic    {𝑆 = 𝑆} using ( module Environment )
+open import Homomorphisms.Setoid.Basic
+                                  {𝑆 = 𝑆} using ( hom ; ∘-hom )
 open import Homomorphisms.Setoid.Isomorphisms
-                                       {𝑆 = 𝑆} using ( _≅_ ;  ≅-sym ; ≅-refl ; ≅-trans ; Lift-≅
-                                                     ; ≅toInjective ; ≅fromInjective )
-
+                                  {𝑆 = 𝑆} using ( _≅_ ;  ≅-sym ; ≅-refl ; ≅-trans ; Lift-≅
+                                                ; ≅toInjective ; ≅fromInjective )
 private variable ρ : Level
 
 \end{code}

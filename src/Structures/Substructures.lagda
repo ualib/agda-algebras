@@ -25,18 +25,16 @@ open import Relation.Binary.PropositionalEquality
 open import Relation.Unary  using ( Pred ; _∈_ ; _⊆_ ; ⋂ )
 
 -- Imports from the Agda Universal Algebra Library -------------------------------------
-open import Overture.Preliminaries  using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
-open import Overture.Inverses       using ( IsInjective )
-open import Relations.Discrete      using ( Im_⊆_ ; PredType )
-open import Foundations.Welldefined using ( swelldef )
+open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
+open import Overture.Inverses      using ( IsInjective )
+open import Relations.Discrete     using ( Im_⊆_ ; PredType )
+open import Equality.Welldefined   using ( swelldef )
 open import Terms.Basic
-open import Structures.Basic        using ( signature ; structure ; _ᵒ_ ; sigl ; siglˡ ; siglʳ )
-open import Structures.Homs         using ( hom )
+open import Structures.Basic using ( signature ; structure ; _ᵒ_ ; sigl ; siglˡ ; siglʳ )
+open import Structures.Homs  using ( hom )
 open import Structures.Terms
-
 open structure
 open signature
-
 private variable
  𝓞₀ 𝓥₀ 𝓞₁ 𝓥₁ ρ α ρᵃ β ρᵇ γ ρᶜ χ ι : Level
  𝐹 : signature 𝓞₀ 𝓥₀
@@ -210,29 +208,29 @@ and, under these assumptions, we proved `∣ g ∣ ((f ᵒ 𝑨) a) ≡ ∣ h �
 
 \begin{code}
 
-_≥s_  -- (alias for supstructure (aka parent structure; aka overstructure))
+_≥_  -- (alias for supstructure (aka parent structure; aka overstructure))
  _IsSupstructureOf_ : structure 𝐹 𝑅 {α}{ρᵃ} → structure 𝐹 𝑅 {β}{ρᵇ}
   →                   Type (sigl 𝐹 ⊔ sigl 𝑅 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
 
 𝑨 IsSupstructureOf 𝑩 = Σ[ h ∈ hom 𝑩 𝑨 ] IsInjective ∣ h ∣
 
 
-_≤s_  -- (alias for subalgebra relation))
+_≤_  -- (alias for subalgebra relation))
  _IsSubstructureOf_ : structure 𝐹 𝑅 {α}{ρᵃ} → structure 𝐹 𝑅 {β}{ρᵇ}
   →                   Type (sigl 𝐹 ⊔ sigl 𝑅 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ )
 
 𝑨 IsSubstructureOf 𝑩 = Σ[ h ∈ hom 𝑨 𝑩 ] IsInjective ∣ h ∣
 
 -- Syntactic sugar for sup/sub-algebra relations.
-𝑨 ≥s 𝑩 = 𝑨 IsSupstructureOf 𝑩
-𝑨 ≤s 𝑩 = 𝑨 IsSubstructureOf 𝑩
+𝑨 ≥ 𝑩 = 𝑨 IsSupstructureOf 𝑩
+𝑨 ≤ 𝑩 = 𝑨 IsSubstructureOf 𝑩
 
 
 record SubstructureOf : Type (sigl 𝐹 ⊔ sigl 𝑅 ⊔ lsuc (α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)) where
  field
   struc      : structure 𝐹 𝑅 {α}{ρᵃ}
   substruc   : structure 𝐹 𝑅 {β}{ρᵇ}
-  issubstruc : substruc ≤s struc
+  issubstruc : substruc ≤ struc
 
 
 
@@ -242,22 +240,22 @@ module _ {𝐹 : signature 𝓞₀ 𝓥₀}
  Substructure : structure 𝐹 𝑅 {α}{ρᵃ} → {β ρᵇ : Level}
   →             Type (sigl 𝐹 ⊔ sigl 𝑅 ⊔ α ⊔ ρᵃ ⊔ lsuc (β ⊔ ρᵇ))
 
- Substructure 𝑨 {β}{ρᵇ} = Σ[ 𝑩 ∈ (structure 𝐹 𝑅 {β}{ρᵇ}) ] 𝑩 ≤s 𝑨
+ Substructure 𝑨 {β}{ρᵇ} = Σ[ 𝑩 ∈ (structure 𝐹 𝑅 {β}{ρᵇ}) ] 𝑩 ≤ 𝑨
 
  {- For 𝑨 : structure 𝐹 𝑅 {α}{ρᵃ}, inhabitant of `Substructure 𝑨` is
     a pair `(𝑩 , p) : Substructure 𝑨`  providing
     + a structure, `𝑩 : structure 𝐹 𝑅 {β}{ρᵇ}`, and
-    + a proof, `p : 𝑩 ≤s 𝑨`, that 𝑩 is a substructure of 𝐴. -}
+    + a proof, `p : 𝑩 ≤ 𝑨`, that 𝑩 is a substructure of 𝐴. -}
 
 
  IsSubstructureREL : ∀ {α}{ρᵃ}{β}{ρᵇ} → REL (structure 𝐹 𝑅 {α}{ρᵃ})(structure 𝐹 𝑅 {β}{ρᵇ}) ρ
   →                  Type (sigl 𝐹 ⊔ sigl 𝑅 ⊔ lsuc (α ⊔ ρᵃ ⊔ β ⊔ ρᵇ))
 
- IsSubstructureREL {α = α}{ρᵃ}{β}{ρᵇ} R = ∀ {𝑨 : structure 𝐹 𝑅 {α}{ρᵃ}}{𝑩 : structure 𝐹 𝑅 {β}{ρᵇ}} → 𝑨 ≤s 𝑩
+ IsSubstructureREL {α = α}{ρᵃ}{β}{ρᵇ} R = ∀ {𝑨 : structure 𝐹 𝑅 {α}{ρᵃ}}{𝑩 : structure 𝐹 𝑅 {β}{ρᵇ}} → 𝑨 ≤ 𝑩
 
 \end{code}
 
-From now on we will use `𝑩 ≤s 𝑨` to express the assertion that `𝑩` is a subalgebra of `𝑨`.
+From now on we will use `𝑩 ≤ 𝑨` to express the assertion that `𝑩` is a subalgebra of `𝑨`.
 
 #### Substructures of a class of algebras
 
@@ -269,7 +267,7 @@ Suppose `𝒦 : Pred (Algebra α 𝑆) γ` denotes a class of `𝑆`-algebras an
   _IsSubstructureOfClass_ : structure 𝐹 𝑅 {β}{ρᵇ} → Pred (structure 𝐹 𝑅 {α}{ρᵃ}) ρ
    →                        Type (sigl 𝐹 ⊔ sigl 𝑅 ⊔ lsuc (α ⊔ ρᵃ) ⊔ β ⊔ ρᵇ ⊔ ρ)
 
- 𝑩 IsSubstructureOfClass 𝒦 = Σ[ 𝑨 ∈ PredType 𝒦 ] ((𝑨 ∈ 𝒦) × (𝑩 ≤s 𝑨))
+ 𝑩 IsSubstructureOfClass 𝒦 = Σ[ 𝑨 ∈ PredType 𝒦 ] ((𝑨 ∈ 𝒦) × (𝑩 ≤ 𝑨))
 
  𝑩 ≤c 𝒦 = 𝑩 IsSubstructureOfClass 𝒦
 
@@ -286,7 +284,7 @@ Suppose `𝒦 : Pred (Algebra α 𝑆) γ` denotes a class of `𝑆`-algebras an
    classalgebra : structure 𝐹 𝑅 {α}{ρᵃ}
    isclassalgebra : classalgebra ∈ class
    subalgebra : structure 𝐹 𝑅 {β}{ρᵇ}
-   issubalgebra : subalgebra ≤s classalgebra
+   issubalgebra : subalgebra ≤ classalgebra
 
  -- The collection of subalgebras of algebras in class 𝒦.
  SubstructuresOfClass : Pred (structure 𝐹 𝑅 {α}{ρᵃ}) ρ → {β ρᵇ : Level}

@@ -35,8 +35,8 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; module 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
 open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
 open import Overture.Inverses                  using ( IsInjective ; ∘-injective )
-open import Foundations.Welldefined            using ( SwellDef )
-open import Foundations.Extensionality         using ( DFunExt )
+open import Equality.Welldefined               using ( SwellDef )
+open import Equality.Extensionality            using ( DFunExt )
 open import Algebras.Basic                     using ( Algebra ; Lift-Alg )
 open import Algebras.Products          {𝑆 = 𝑆} using ( ov ; ⨅ )
 open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom; ∘-hom )
