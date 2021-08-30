@@ -25,6 +25,16 @@
 [Relations.Properties]: https://ualib.github.io/agda-algebras/Relations.Properties.html
 [Relations.Quotients]: https://ualib.github.io/agda-algebras/Relations.Quotients.html
 
+[Equality]: https://ualib.github.io/agda-algebras/Equality.html
+[Equality.Extensionality]: https://ualib.github.io/agda-algebras/Equality.Extensionality.html
+[Equality.Truncation]: https://ualib.github.io/agda-algebras/Equality.Truncation.html
+[Equality.Welldefined]: https://ualib.github.io/agda-algebras/Equality.Welldefined.html
+
+[Adjunction]: https://ualib.github.io/agda-algebras/Adjunction.html
+[Adjunction.Closure]: https://ualib.github.io/agda-algebras/Adjunction.Closure.html
+[Adjunction.Galois]: https://ualib.github.io/agda-algebras/Adjunction.Galois.html
+[Adjunction.Residuation]: https://ualib.github.io/agda-algebras/Residuation.html
+
 [Algebras]: https://ualib.github.io/agda-algebras/Algebras.html
 [Algebras.Basic]: https://ualib.github.io/agda-algebras/Algebras.Basic.html
 [Algebras.Products]: https://ualib.github.io/agda-algebras/Algebras.Products.html
@@ -35,14 +45,6 @@
 [Algebras.Setoid.Congruences]: https://ualib.github.io/agda-algebras/Algebras.Setoid.Congruences.html
 [Algebras.Setoid.Products]: https://ualib.github.io/agda-algebras/Algebras.Setoid.Products.html
 
-[ClosureSystems]: https://ualib.github.io/agda-algebras/ClosureSystems.html
-[ClosureSystems.Basic]: https://ualib.github.io/agda-algebras/ClosureSystems.Basic.html
-[ClosureSystems.Properties]: https://ualib.github.io/agda-algebras/ClosureSystems.Properties.html
-
-[Residuation]: https://ualib.github.io/agda-algebras/Residuation.html
-[Residuation.Basic]: https://ualib.github.io/agda-algebras/Residuation.Basic.html
-[Residuation.Properties]: https://ualib.github.io/agda-algebras/Residuation.Properties.html
-
 [Complexity]: https://ualib.github.io/agda-algebras/Complexity.html
 [Complexity.Basic]: https://ualib.github.io/agda-algebras/Complexity.Basic.html
 [Complexity.CSP]: https://ualib.github.io/agda-algebras/Complexity.CSP.html
@@ -50,15 +52,6 @@
 [Examples.Structures.Basic]: https://ualib.github.io/agda-algebras/Examples.Structures.Basic.html
 [Examples.Structures.Signatures]: https://ualib.github.io/agda-algebras/Examples.Structures.Signatures.html
 [Exercises.Complexity.FiniteCSP]: https://ualib.github.io/agda-algebras/Exercises.Complexity.FiniteCSP.html
-
-[Equality]: https://ualib.github.io/agda-algebras/Equality.html
-[Equality.Extensionality]: https://ualib.github.io/agda-algebras/Equality.Extensionality.html
-[Equality.Truncation]: https://ualib.github.io/agda-algebras/Equality.Truncation.html
-[Equality.Welldefined]: https://ualib.github.io/agda-algebras/Equality.Welldefined.html
-
-[GaloisConnections]: https://ualib.github.io/agda-algebras/GaloisConnections.html
-[GaloisConnections.Basic]: https://ualib.github.io/agda-algebras/GaloisConnections.Basic.html
-[GaloisConnections.Properties]: https://ualib.github.io/agda-algebras/GaloisConnections.Properties.html
 
 [Homomorphisms]: https://ualib.github.io/agda-algebras/Homomorphisms.html
 [Homomorphisms.Basic]: https://ualib.github.io/agda-algebras/Homomorphisms.Basic.html
