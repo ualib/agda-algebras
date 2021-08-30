@@ -1,25 +1,25 @@
 ---
 layout: default
-title : Homomorphisms module (The Agda Universal Algebra Library)
-date : 2021-01-12
-author: [agda-algebras development team][]
+title : "Homomorphisms module (The Agda Universal Algebra Library)"
+date : "2021-01-12"
+author: "agda-algebras development team"
 ---
 
-# <a id="homomorphism-types">Homomorphism Types</a>
+## <a id="homomorphism-types">Homomorphism Types</a>
 
 This chapter presents the [Homomorphisms][] module of the [Agda Universal Algebra Library][].
 
 <pre class="Agda">
 
-<a id="315" class="Symbol">{-#</a> <a id="319" class="Keyword">OPTIONS</a> <a id="327" class="Pragma">--without-K</a> <a id="339" class="Pragma">--exact-split</a> <a id="353" class="Pragma">--safe</a> <a id="360" class="Symbol">#-}</a>
+<a id="318" class="Symbol">{-#</a> <a id="322" class="Keyword">OPTIONS</a> <a id="330" class="Pragma">--without-K</a> <a id="342" class="Pragma">--exact-split</a> <a id="356" class="Pragma">--safe</a> <a id="363" class="Symbol">#-}</a>
 
-<a id="365" class="Keyword">module</a> <a id="372" href="Homomorphisms.html" class="Module">Homomorphisms</a> <a id="386" class="Keyword">where</a>
+<a id="368" class="Keyword">module</a> <a id="375" href="Homomorphisms.html" class="Module">Homomorphisms</a> <a id="389" class="Keyword">where</a>
 
-<a id="393" class="Keyword">open</a> <a id="398" class="Keyword">import</a> <a id="405" href="Homomorphisms.Basic.html" class="Module">Homomorphisms.Basic</a>
-<a id="425" class="Keyword">open</a> <a id="430" class="Keyword">import</a> <a id="437" href="Homomorphisms.Noether.html" class="Module">Homomorphisms.Noether</a>
-<a id="459" class="Keyword">open</a> <a id="464" class="Keyword">import</a> <a id="471" href="Homomorphisms.Isomorphisms.html" class="Module">Homomorphisms.Isomorphisms</a>
-<a id="498" class="Keyword">open</a> <a id="503" class="Keyword">import</a> <a id="510" href="Homomorphisms.HomomorphicImages.html" class="Module">Homomorphisms.HomomorphicImages</a>
-<a id="542" class="Keyword">open</a> <a id="547" class="Keyword">import</a> <a id="554" href="Homomorphisms.Setoid.html" class="Module">Homomorphisms.Setoid</a>
+<a id="396" class="Keyword">open</a> <a id="401" class="Keyword">import</a> <a id="408" href="Homomorphisms.Basic.html" class="Module">Homomorphisms.Basic</a>
+<a id="428" class="Keyword">open</a> <a id="433" class="Keyword">import</a> <a id="440" href="Homomorphisms.Noether.html" class="Module">Homomorphisms.Noether</a>
+<a id="462" class="Keyword">open</a> <a id="467" class="Keyword">import</a> <a id="474" href="Homomorphisms.Isomorphisms.html" class="Module">Homomorphisms.Isomorphisms</a>
+<a id="501" class="Keyword">open</a> <a id="506" class="Keyword">import</a> <a id="513" href="Homomorphisms.HomomorphicImages.html" class="Module">Homomorphisms.HomomorphicImages</a>
+<a id="545" class="Keyword">open</a> <a id="550" class="Keyword">import</a> <a id="557" href="Homomorphisms.Setoid.html" class="Module">Homomorphisms.Setoid</a>
 
 </pre>
 
@@ -29,5 +29,3 @@ This chapter presents the [Homomorphisms][] module of the [Agda Universal Algebr
 <span style="float:right;">[Homomorphisms.Basic →](Homomorphisms.Basic.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

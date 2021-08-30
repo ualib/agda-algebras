@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Overture module (Agda Universal Algebra Library)
-date : 2021-01-12
-author: [agda-algebras development team][]
+title : "Overture module (Agda Universal Algebra Library)"
+date : "2021-01-12"
+author: "the agda-algebras development team"
 ---
 
-# <a id="overture">Overture</a>
+## <a id="overture">Overture</a>
 
 This is the [Overture][] module of the [Agda Universal Algebra Library][].
 
@@ -13,13 +13,13 @@ The source code for this module comprises the (literate) [Agda][] program that w
 
 <pre class="Agda">
 
-<a id="552" class="Symbol">{-#</a> <a id="556" class="Keyword">OPTIONS</a> <a id="564" class="Pragma">--without-K</a> <a id="576" class="Pragma">--exact-split</a> <a id="590" class="Pragma">--safe</a> <a id="597" class="Symbol">#-}</a>
+<a id="559" class="Symbol">{-#</a> <a id="563" class="Keyword">OPTIONS</a> <a id="571" class="Pragma">--without-K</a> <a id="583" class="Pragma">--exact-split</a> <a id="597" class="Pragma">--safe</a> <a id="604" class="Symbol">#-}</a>
 
-<a id="602" class="Keyword">module</a> <a id="609" href="Overture.html" class="Module">Overture</a> <a id="618" class="Keyword">where</a>
+<a id="609" class="Keyword">module</a> <a id="616" href="Overture.html" class="Module">Overture</a> <a id="625" class="Keyword">where</a>
 
-<a id="625" class="Keyword">open</a> <a id="630" class="Keyword">import</a> <a id="637" href="Overture.Preliminaries.html" class="Module">Overture.Preliminaries</a>
-<a id="660" class="Keyword">open</a> <a id="665" class="Keyword">import</a> <a id="672" href="Overture.Inverses.html" class="Module">Overture.Inverses</a>
-<a id="690" class="Keyword">open</a> <a id="695" class="Keyword">import</a> <a id="702" href="Overture.Transformers.html" class="Module">Overture.Transformers</a>
+<a id="632" class="Keyword">open</a> <a id="637" class="Keyword">import</a> <a id="644" href="Overture.Preliminaries.html" class="Module">Overture.Preliminaries</a>
+<a id="667" class="Keyword">open</a> <a id="672" class="Keyword">import</a> <a id="679" href="Overture.Inverses.html" class="Module">Overture.Inverses</a>
+<a id="697" class="Keyword">open</a> <a id="702" class="Keyword">import</a> <a id="709" href="Overture.Transformers.html" class="Module">Overture.Transformers</a>
 
 </pre>
 
@@ -29,5 +29,3 @@ The source code for this module comprises the (literate) [Agda][] program that w
 <span style="float:right;">[Overture.Preliminaries →](Overture.Preliminaries.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

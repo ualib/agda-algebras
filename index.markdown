@@ -1,8 +1,8 @@
 ---
 layout: title-page
-title : agda-algebras.lagda (The Agda Universal Algebra Library)
-date : 2021-01-14
-author: William DeMeo
+title : "agda-algebras.lagda (The Agda Universal Algebra Library)"
+date : "2021-01-14"
+author: "[agda-algebras development team][]"
 ---
 
 <!--
@@ -26,7 +26,7 @@ of citation.
 
 -->
 
-# The Agda Universal Algebra Library
+## The Agda Universal Algebra Library
 
 ---------------------------------------------------------------------------------
 
@@ -50,33 +50,36 @@ We hope the library is useful to mathematicians and computer scientists who wish
 
 --------------------------------
 
-## Brief Contents
+### Brief Contents
+
+The following list of modules imported by the current module, [agda-algebras](https://ualib.github.io/agda-algebras/agda-algebras.html), serves as a brief table of contents.
 
 <pre class="Agda">
+<a id="3646" class="Symbol">{-#</a> <a id="3650" class="Keyword">OPTIONS</a> <a id="3658" class="Pragma">--without-K</a> <a id="3670" class="Pragma">--exact-split</a> <a id="3684" class="Pragma">--safe</a> <a id="3691" class="Symbol">#-}</a>
+</pre>
+<pre class="Agda">
+<a id="3719" class="Keyword">module</a> <a id="3726" href="agda-algebras.html" class="Module">agda-algebras</a> <a id="3740" class="Keyword">where</a>
 
-<a id="3437" class="Symbol">{-#</a> <a id="3441" class="Keyword">OPTIONS</a> <a id="3449" class="Pragma">--without-K</a> <a id="3461" class="Pragma">--exact-split</a> <a id="3475" class="Pragma">--safe</a> <a id="3482" class="Symbol">#-}</a>
-
-<a id="3487" class="Keyword">module</a> <a id="3494" href="agda-algebras.html" class="Module">agda-algebras</a> <a id="3508" class="Keyword">where</a>
-
-<a id="3515" class="Keyword">open</a> <a id="3520" class="Keyword">import</a> <a id="3527" href="Preface.html" class="Module">Preface</a>
-<a id="3535" class="Keyword">open</a> <a id="3540" class="Keyword">import</a> <a id="3547" href="Overture.html" class="Module">Overture</a>
-<a id="3556" class="Keyword">open</a> <a id="3561" class="Keyword">import</a> <a id="3568" href="Relations.html" class="Module">Relations</a>
-<a id="3578" class="Keyword">open</a> <a id="3583" class="Keyword">import</a> <a id="3590" href="Foundations.html" class="Module">Foundations</a>
-<a id="3602" class="Keyword">open</a> <a id="3607" class="Keyword">import</a> <a id="3614" href="Residuation.html" class="Module">Residuation</a>
-<a id="3626" class="Keyword">open</a> <a id="3631" class="Keyword">import</a> <a id="3638" href="GaloisConnections.html" class="Module">GaloisConnections</a>
-<a id="3656" class="Keyword">open</a> <a id="3661" class="Keyword">import</a> <a id="3668" href="ClosureSystems.html" class="Module">ClosureSystems</a>
-<a id="3683" class="Keyword">open</a> <a id="3688" class="Keyword">import</a> <a id="3695" href="Algebras.html" class="Module">Algebras</a>
-<a id="3704" class="Keyword">open</a> <a id="3709" class="Keyword">import</a> <a id="3716" href="Homomorphisms.html" class="Module">Homomorphisms</a>
-<a id="3730" class="Keyword">open</a> <a id="3735" class="Keyword">import</a> <a id="3742" href="Terms.html" class="Module">Terms</a>
-<a id="3748" class="Keyword">open</a> <a id="3753" class="Keyword">import</a> <a id="3760" href="Subalgebras.html" class="Module">Subalgebras</a>
-<a id="3772" class="Keyword">open</a> <a id="3777" class="Keyword">import</a> <a id="3784" href="Varieties.html" class="Module">Varieties</a>
-<a id="3794" class="Keyword">open</a> <a id="3799" class="Keyword">import</a> <a id="3806" href="Structures.html" class="Module">Structures</a>
-<a id="3817" class="Keyword">open</a> <a id="3822" class="Keyword">import</a> <a id="3829" href="Complexity.html" class="Module">Complexity</a>
+<a id="3747" class="Keyword">open</a> <a id="3752" class="Keyword">import</a> <a id="3759" href="Preface.html" class="Module">Preface</a>
+<a id="3767" class="Keyword">open</a> <a id="3772" class="Keyword">import</a> <a id="3779" href="Overture.html" class="Module">Overture</a>
+<a id="3788" class="Keyword">open</a> <a id="3793" class="Keyword">import</a> <a id="3800" href="Relations.html" class="Module">Relations</a>
+<a id="3810" class="Keyword">open</a> <a id="3815" class="Keyword">import</a> <a id="3822" href="Equality.html" class="Module">Equality</a>
+<a id="3831" class="Keyword">open</a> <a id="3836" class="Keyword">import</a> <a id="3843" href="Residuation.html" class="Module">Residuation</a>
+<a id="3855" class="Keyword">open</a> <a id="3860" class="Keyword">import</a> <a id="3867" href="GaloisConnections.html" class="Module">GaloisConnections</a>
+<a id="3885" class="Keyword">open</a> <a id="3890" class="Keyword">import</a> <a id="3897" href="ClosureSystems.html" class="Module">ClosureSystems</a>
+<a id="3912" class="Keyword">open</a> <a id="3917" class="Keyword">import</a> <a id="3924" href="Algebras.html" class="Module">Algebras</a>
+<a id="3933" class="Keyword">open</a> <a id="3938" class="Keyword">import</a> <a id="3945" href="Homomorphisms.html" class="Module">Homomorphisms</a>
+<a id="3959" class="Keyword">open</a> <a id="3964" class="Keyword">import</a> <a id="3971" href="Terms.html" class="Module">Terms</a>
+<a id="3977" class="Keyword">open</a> <a id="3982" class="Keyword">import</a> <a id="3989" href="Subalgebras.html" class="Module">Subalgebras</a>
+<a id="4001" class="Keyword">open</a> <a id="4006" class="Keyword">import</a> <a id="4013" href="Varieties.html" class="Module">Varieties</a>
+<a id="4023" class="Keyword">open</a> <a id="4028" class="Keyword">import</a> <a id="4035" href="Structures.html" class="Module">Structures</a>
+<a id="4046" class="Keyword">open</a> <a id="4051" class="Keyword">import</a> <a id="4058" href="Complexity.html" class="Module">Complexity</a>
 
 </pre>
 
+------------------------------
 
-## <a id="license">License</a>
+##### <a id="license">License</a>
 
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
   <img alt="Creative Commons License" style="border-width:0; float: left; padding:5px 5px 0px 0px" height='40' src="css/by-sa.svg" />
@@ -93,7 +96,7 @@ is licensed under a
   Creative Commons Attribution-ShareAlike 4.0 International License.
 </a>
 <br />
-<a href="https://ualib.github.io/agda-algebras/Preface.html#how-to-cite-the-agda-ualib">BibTeX citation information.</a>
+<a href="https://ualib.github.io/agda-algebras/Preface.html#how-to-cite-the-agda-algebras-library">BibTeX citation information.</a>
 <br />
 <br />
 <a href="https://stereotypeb.gitlab.io"><img alt="stereotypeb" style="border-width:0; float: left; padding:0px 5px 0px 0px;" width='70' src="css/stereotypeb-avatar.png" /></a>

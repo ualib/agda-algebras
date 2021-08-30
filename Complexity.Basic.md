@@ -1,22 +1,21 @@
 ---
 layout: default
-title : Complexity.Basic module (The Agda Universal Algebra Library)
-date : 2021-07-13
-author: [agda-algebras development team][]
+title : "Complexity.Basic module (The Agda Universal Algebra Library)"
+date : "2021-07-13"
+author: "agda-algebras development team"
 ---
 
-## <a id="complexity-theory">Complexity Theory</a>
+### <a id="complexity-theory">Complexity Theory</a>
 
 <pre class="Agda">
 
-<a id="222" class="Symbol">{-#</a> <a id="226" class="Keyword">OPTIONS</a> <a id="234" class="Pragma">--without-K</a> <a id="246" class="Pragma">--exact-split</a> <a id="260" class="Pragma">--safe</a> <a id="267" class="Symbol">#-}</a>
+<a id="225" class="Symbol">{-#</a> <a id="229" class="Keyword">OPTIONS</a> <a id="237" class="Pragma">--without-K</a> <a id="249" class="Pragma">--exact-split</a> <a id="263" class="Pragma">--safe</a> <a id="270" class="Symbol">#-}</a>
 
-<a id="272" class="Keyword">module</a> <a id="279" href="Complexity.Basic.html" class="Module">Complexity.Basic</a> <a id="296" class="Keyword">where</a>
-
+<a id="275" class="Keyword">module</a> <a id="282" href="Complexity.Basic.html" class="Module">Complexity.Basic</a> <a id="299" class="Keyword">where</a>
 
 </pre>
 
-### <a id="words">Words</a>
+#### <a id="words">Words</a>
 
 Let 𝑇ₙ be a totally ordered set of size 𝑛.  Let 𝐴 be a set (the alphabet).
 We can model the set 𝑊ₙ, of *words* (strings of letters from 𝐴) of length 𝑛
@@ -36,14 +35,9 @@ stops in at most (size 𝑥) 𝑐 + 𝑑 steps and computes 𝑓 𝑥.
 
 At first we will simplify by assuming 𝑇ₙ is `Fin n`.
 
-
 --------------------------------
 
 <span style="float:left;">[↑ Complexity](Complexity.html)</span>
 <span style="float:right;">[Complexity.CSP →](Complexity.CSP.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
-
-
