@@ -31,9 +31,9 @@ open import Relation.Binary.PropositionalEquality
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
 open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
 open import Overture.Inverses                  using ( Inv ; IsInjective ; InvIsInv )
-open import Foundations.Truncation             using ( hfunext )
-open import Foundations.Welldefined            using ( SwellDef )
-open import Foundations.Extensionality         using ( DFunExt )
+open import Equality.Welldefined               using ( SwellDef )
+open import Equality.Truncation                using ( hfunext )
+open import Equality.Extensionality            using ( DFunExt )
 open import Algebras.Basic                     using ( Algebra ; Lift-Alg )
 open import Algebras.Products          {𝑆 = 𝑆} using ( ov ; ⨅ ; 𝔄 ; class-product)
 open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( is-homomorphism )

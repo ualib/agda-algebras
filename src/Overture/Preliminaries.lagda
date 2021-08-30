@@ -11,7 +11,7 @@ This is the [Overture.Preliminaries][] module of the [agda-algebras][] library.
 
 #### <a id="logical-foundations">Logical foundations</a>
 
-(See also the Foundations module of the [agda-algebras][] library.)
+(See also the Equality module of the [agda-algebras][] library.)
 
 An Agda program typically begins by setting some options and by importing types from existing Agda libraries. Options are specified with the `OPTIONS` *pragma* and control the way Agda behaves by, for example, specifying the logical axioms and deduction rules we wish to assume when the program is type-checked to verify its correctness. Every Agda program in [agda-algebras](https://github.com/ualib/agda-algebras) begins with the following line.
 \begin{code}
@@ -173,7 +173,7 @@ The proofs are trivial. Nonetheless, we'll come across some holes these lemmas c
 
 #### <a id="pointwise-equality-of-dependent-functions">Pointwise equality of dependent functions</a>
 
-We conclude this module with a definition that conveniently represents te assertion that two functions are (extensionally) the same in the sense that they produce the same output when given the same input.  (We will have more to say about this notion of equality in the [Foundations.Extensionality][] module.)
+We conclude this module with a definition that conveniently represents te assertion that two functions are (extensionally) the same in the sense that they produce the same output when given the same input.  (We will have more to say about this notion of equality in the [Equality.Extensionality][] module.)
 \begin{code}
 
 module _ {α : Level}{A : Type α}{β : Level}{B : A → Type β } where

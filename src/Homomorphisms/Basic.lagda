@@ -28,11 +28,11 @@ open import Relation.Binary.PropositionalEquality
                            using ( _≡_ ; module ≡-Reasoning ; cong ; refl )
 
 -- Imports from the Agda Universal Algebras Library --------------------------------
-open import Overture.Preliminaries       using ( _⁻¹ ; ∣_∣ ; ∥_∥)
-open import Overture.Inverses            using ( IsInjective ; IsSurjective ; Image_∋_ )
-open import Foundations.Welldefined      using ( swelldef )
-open import Relations.Discrete           using ( ker )
-open import Relations.Quotients          using ( ker-IsEquivalence ; _/_ ; ⟪_⟫ ; R-block )
+open import Overture.Preliminaries using ( _⁻¹ ; ∣_∣ ; ∥_∥)
+open import Overture.Inverses      using ( IsInjective ; IsSurjective ; Image_∋_ )
+open import Equality.Welldefined   using ( swelldef )
+open import Relations.Discrete     using ( ker )
+open import Relations.Quotients    using ( ker-IsEquivalence ; _/_ ; ⟪_⟫ ; R-block )
 open import Algebras.Congruences {𝑆 = 𝑆} using ( Con ; IsCongruence ; mkcon ; _╱_ ; /-≡ )
 open import Algebras.Products    {𝑆 = 𝑆} using ( ⨅ )
 

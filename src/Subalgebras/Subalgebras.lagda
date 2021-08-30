@@ -25,20 +25,19 @@ open import Function.Bundles using ( Injection )
 open import Relation.Unary   using ( _∈_ ; Pred ; _⊆_ )
 
 -- Imports from the Agda Universal Algebra Library --------------------------------------------------
-open import Overture.Preliminaries             using ( _∙_ ; _⁻¹ ; ∣_∣ ; ∥_∥ ; 𝑖𝑑 )
-open import Overture.Inverses                  using ( ∘-injective ; IsInjective ; id-is-injective )
-open import Foundations.Truncation             using ( is-set ; blk-uip )
-open import Foundations.Welldefined            using ( swelldef )
-open import Foundations.Extensionality         using ( pred-ext )
-open import Algebras.Basic                     using ( Algebra ; Lift-Alg )
-open import Algebras.Products          {𝑆 = 𝑆} using ( ov )
-open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom ; kercon ; ker[_⇒_]_↾_ ; ∘-hom
-                                                     ; is-homomorphism ; ∘-is-hom ; 𝒾𝒹 )
+open import Overture.Preliminaries     using ( _∙_ ; _⁻¹ ; ∣_∣ ; ∥_∥ ; 𝑖𝑑 )
+open import Overture.Inverses          using ( ∘-injective ; IsInjective ; id-is-injective )
+open import Equality.Welldefined       using ( swelldef )
+open import Equality.Truncation        using ( is-set ; blk-uip )
+open import Equality.Extensionality    using ( pred-ext )
+open import Algebras.Basic             using ( Algebra ; Lift-Alg )
+open import Algebras.Products  {𝑆 = 𝑆} using ( ov )
+open import Homomorphisms.Basic{𝑆 = 𝑆} using ( hom ; kercon ; ker[_⇒_]_↾_ ; ∘-hom
+                                            ; is-homomorphism ; ∘-is-hom ; 𝒾𝒹 )
 open import Homomorphisms.Noether      {𝑆 = 𝑆} using ( FirstHomTheorem|Set )
 open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; ≅-trans ; Lift-≅ ; mkiso
                                                      ; ≅toInjective ; ≅fromInjective )
 open import Terms.Basic                {𝑆 = 𝑆} using ( Term ; ℊ ; node ; 𝑻 )
-
 private variable α β γ 𝓧 : Level
 \end{code}
 
@@ -62,8 +61,6 @@ _≥_  -- (alias for supalgebra (aka overalgebra))
 𝑨 ≥ 𝑩 = 𝑨 IsSupalgebraOf 𝑩
 
 -- From now on we use `𝑨 ≤ 𝑩` to express the assertion that `𝑨` is a subalgebra of `𝑩`.
-
-
 record SubalgebraOf : Type (ov (α ⊔ β)) where
  field
   algebra : Algebra α 𝑆
@@ -74,14 +71,10 @@ record SubalgebraOf : Type (ov (α ⊔ β)) where
 Subalgebra : Algebra α 𝑆 → {β : Level} → Type _
 Subalgebra  𝑨 {β} = Σ[ 𝑩 ∈ (Algebra β 𝑆) ] 𝑩 ≤ 𝑨
 
-
 \end{code}
 
 
-
 Note the order of the arguments.  The universe `β` comes first because in certain situations we must explicitly specify this universe, whereas we can almost always leave the universe `α` implicit. (See, for example, the definition of `_IsSubalgebraOfClass_` below.)
-
-
 
 
 #### <a id="consequences-of-first-homomorphism-theorem">Consequences of First Homomorphism Theorem</a>

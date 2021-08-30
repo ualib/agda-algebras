@@ -30,7 +30,7 @@ open import Relation.Binary.PropositionalEquality
 open import Overture.Preliminaries    using ( ∣_∣  ; ∥_∥  )
 open import Relations.Discrete        using ( _|:_ ; 0[_] )
 open import Relations.Quotients       using ( 0[_]Equivalence ; _/_ ; ⟪_⟫ ; IsBlock )
-open import Foundations.Welldefined   using ( swelldef )
+open import Equality.Welldefined   using ( swelldef )
 open import Algebras.Products {𝑆 = 𝑆} using ( ov )
 
 
