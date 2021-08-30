@@ -58,15 +58,14 @@ open import Equality.Truncation     using ( is-center ; is-singleton ; is-prop ;
 open import Equality.Extensionality using ( DFunExt ; _≐_ ; pred-ext ; block-ext ; block-ext|uip )
 
 
--- GALOIS CONNECTIONS -------------------------------------------------------------------------------
-open import GaloisConnections.Basic      using ( Galois ; _⃗_ ; _⃖_ ; ←→≥id ; →←≥id ; →←→⊆→ ; ←→←⊆←
-                                               ; ←→Closed ; →←Closed )
+-- ADJUNCTION -------------------------------------------------------------------------------
+open import Adjunction.Closure     using ( Extensive ; IntersectClosed ; ClosureSystem ; ClOp
+                                         ; clop→law⇒ ; clop→law⇐ ; clop←law )
 
-open import GaloisConnections.Properties using ( _≐_ ; ≐-iseqv ; PosetOfSubsets ; 𝒫𝒜 ; 𝒫ℬ ; Rel→Gal )
-
--- CLOSURE SYSTEMS & OPERATORS -----------------------------------------------------------------------
-open import ClosureSystems.Basic      using ( Extensive ; IntersectClosed ; ClosureSystem ; ClOp )
-open import ClosureSystems.Properties using ( clop→law⇒ ; clop→law⇐ ; clop←law )
+open import Adjunction.Galois      using ( Galois ; _⃗_ ; _⃖_ ; ←→≥id ; →←≥id ; →←→⊆→ ; ←→←⊆←
+                                         ; ←→Closed ; →←Closed ;  _≐_ ; ≐-iseqv ; PosetOfSubsets
+                                         ; 𝒫𝒜 ; 𝒫ℬ ; Rel→Gal )
+open import Adjunction.Residuation using ( Residuation ; weak-inverse ; weak-inverse' )
 
 
 -- ALGEBRAS ------------------------------------------------------------------------------------------

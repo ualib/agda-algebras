@@ -64,9 +64,7 @@ open import Preface
 open import Overture
 open import Relations
 open import Equality
-open import Residuation
-open import GaloisConnections
-open import ClosureSystems
+open import Adjunction
 open import Algebras
 open import Homomorphisms
 open import Terms
