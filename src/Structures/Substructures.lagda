@@ -210,22 +210,22 @@ and, under these assumptions, we proved `∣ g ∣ ((f ᵒ 𝑨) a) ≡ ∣ h �
 
 \begin{code}
 
-_≥s_  -- (alias for supstructure (aka parent structure; aka overstructure))
+_≥_  -- (alias for supstructure (aka parent structure; aka overstructure))
  _IsSupstructureOf_ : structure 𝐹 𝑅 {α}{ρᵃ} → structure 𝐹 𝑅 {β}{ρᵇ}
   →                   Type (sigl 𝐹 ⊔ sigl 𝑅 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
 
 𝑨 IsSupstructureOf 𝑩 = Σ[ h ∈ hom 𝑩 𝑨 ] IsInjective ∣ h ∣
 
 
-_≤s_  -- (alias for subalgebra relation))
+_≤_  -- (alias for subalgebra relation))
  _IsSubstructureOf_ : structure 𝐹 𝑅 {α}{ρᵃ} → structure 𝐹 𝑅 {β}{ρᵇ}
   →                   Type (sigl 𝐹 ⊔ sigl 𝑅 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ )
 
 𝑨 IsSubstructureOf 𝑩 = Σ[ h ∈ hom 𝑨 𝑩 ] IsInjective ∣ h ∣
 
 -- Syntactic sugar for sup/sub-algebra relations.
-𝑨 ≥s 𝑩 = 𝑨 IsSupstructureOf 𝑩
-𝑨 ≤s 𝑩 = 𝑨 IsSubstructureOf 𝑩
+𝑨 ≥ 𝑩 = 𝑨 IsSupstructureOf 𝑩
+𝑨 ≤ 𝑩 = 𝑨 IsSubstructureOf 𝑩
 
 
 record SubstructureOf : Type (sigl 𝐹 ⊔ sigl 𝑅 ⊔ lsuc (α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)) where
@@ -269,7 +269,7 @@ Suppose `𝒦 : Pred (Algebra α 𝑆) γ` denotes a class of `𝑆`-algebras an
   _IsSubstructureOfClass_ : structure 𝐹 𝑅 {β}{ρᵇ} → Pred (structure 𝐹 𝑅 {α}{ρᵃ}) ρ
    →                        Type (sigl 𝐹 ⊔ sigl 𝑅 ⊔ lsuc (α ⊔ ρᵃ) ⊔ β ⊔ ρᵇ ⊔ ρ)
 
- 𝑩 IsSubstructureOfClass 𝒦 = Σ[ 𝑨 ∈ PredType 𝒦 ] ((𝑨 ∈ 𝒦) × (𝑩 ≤s 𝑨))
+ 𝑩 IsSubstructureOfClass 𝒦 = Σ[ 𝑨 ∈ PredType 𝒦 ] ((𝑨 ∈ 𝒦) × (𝑩 ≤ 𝑨))
 
  𝑩 ≤c 𝒦 = 𝑩 IsSubstructureOfClass 𝒦
 

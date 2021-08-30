@@ -43,12 +43,6 @@ md: html $(MDFILES)
 docs: html $(HTMLDIR)/index.markdown $(TEXDIR)/agda-algebras.tex
 	@echo "target: $@ prereq: $<"
 
-## default rule for converting a markdown file to a latex file
-%.tex: %.md
-	@echo "target: $@ prereq: $<"
-	cat $(LINKFILE) >> $<              ## first add links to bottom of md so pandoc can insert them as \hrefs
-	pandoc -f markdown -t latex $< -o $@
-
 html: Everything.agda
 	@echo "target: $@ prereq: $<"
 	@echo $@
@@ -63,48 +57,18 @@ $(MDFILES): $(TEXMDFILES)
 	@echo "target: $@ prereq: $<"
 	mv $< $@
 
-# $(HTMLDIR)/agda-algebras.tex: html
-# 	@echo "target: $@ prereq: $<"
-
-# $(TEXDIR)/agda-algebras.tex: $(TEXDIR)/agda-algebras.md
-# 	@echo "target: $@ prereq: $<"
-
-# $(TEXDIR)/agda-algebras.md: $(LATEXDIR)/agda-algebras.tex
-# 	@echo "target: $@ prereq: $<"
-# 	mkdir -p $(TEXDIR)
-# 	cp $< $@
-
-$(LATEXDIR)/%.tex: $(SRCDIR)/agda-algebras.lagda
-	@echo "target: $@ prereq: $<"
-	agda --latex $<
-
-$(MDFILES): $(TEXMDFILES)
-	@echo "target: $@ prereq: $<"
-	cp $< $@
-#	cp $(HTMLDIR)/agda-algebras.md $(HTMLDIR)/
-
-# # Make latex files using pandoc
-# latex: $(TEXFILES)
-
-# $(TEXFILES): $(SRC)
-# 	echo "processing $<";
-# 	agda --latex $<
-
-# $(TEXFILES): $(TEXDIR)/%.md: $(TEXDIR)/%.tex
-# 	mv $< $@
-
-%.tex: %.lagda
-	@echo "target: $@ prereq: $<"
-	agda --latex $<
-
-%.md: %.tex
-	@echo "target: $@ prereq: $<"
-	cp $< $@
-
-
 clean:
 	find . -name '*.agdai' -exec rm \{\} \;
 
 profile: Everything.agda
 	@echo "target: $@ prereq: $<"
 	agda ${RTSARGS} -v profile:7 -v profile.definitions:15 $(SRCDIR)/Everything.agda
+
+
+
+# ## default rule for converting a markdown file to a latex file
+# %.tex: %.md
+# 	@echo "target: $@ prereq: $<"
+# 	cat $(LINKFILE) >> $<              ## first add links to bottom of md so pandoc can insert them as \hrefs
+# 	pandoc -f markdown -t latex $< -o $@
+
