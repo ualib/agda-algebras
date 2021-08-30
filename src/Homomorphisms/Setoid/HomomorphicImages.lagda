@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Homomorphisms.Setoid.HomomorphicImages module (The Agda Universal Algebra Library)
-date : 2021-08-16
-author: [agda-algebras development team][]
+title : "Homomorphisms.Setoid.HomomorphicImages module (The Agda Universal Algebra Library)"
+date : "2021-08-16"
+author: "agda-algebras development team"
 ---
 
-## <a id="homomorphic-images">Homomorphic Images</a>
+#### <a id="homomorphic-images-of-setoid-algebras">Homomorphic images of setoid algebras</a>
 
 This is the [Homomorphisms.HomomorphicImages][] module of the [Agda Universal Algebra Library][].
 
@@ -29,20 +29,14 @@ open import Relation.Binary.PropositionalEquality
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
 open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ ; lower∼lift ; lift∼lower )
 open import Overture.Inverses                  using ( IsSurjective ; Image_∋_ ; Inv ; InvIsInv ; eq )
-open import Algebras.Setoid.Basic      {𝑆 = 𝑆} using ( SetoidAlgebra ; 𝕌[_] ; Level-of-Carrier )
-                                               renaming (Lift-SetoidAlg to Lift-Alg)
+open import Algebras.Setoid.Basic      {𝑆 = 𝑆} using ( SetoidAlgebra ; 𝕌[_] ; Level-of-Carrier
+                                                     ; Lift-Alg ; ov )
 open import Homomorphisms.Setoid.Basic {𝑆 = 𝑆} using ( hom ; Lift-hom )
 
 private variable
  α β ρ ρᵃ ρᵇ : Level
 
-ov : Level → Level
-ov α = 𝓞 ⊔ 𝓥 ⊔ lsuc α
-
 \end{code}
-
-
-### <a id="hom-images-of-a-single-algebra">Hom images of a single algebra</a>
 
 We begin with what seems, for our purposes, the most useful way to represent the class of *homomorphic images* of an algebra in dependent type theory.
 
@@ -60,7 +54,7 @@ These types should be self-explanatory, but just to be sure, let's describe the 
 
 
 
-### <a id="hom-images-of-a-class-of-algebras">Hom images of a class of algebras</a>
+#### <a id="homomorphic-images-of-classes-of-setoid-algebras">Homomorphic images of classes of setoid algebras</a>
 
 Given a class `𝒦` of `𝑆`-algebras, we need a type that expresses the assertion that a given algebra is a homomorphic image of some algebra in the class, as well as a type that represents all such homomorphic images.
 
@@ -75,8 +69,7 @@ HomImageOfClass 𝒦 = Σ[ 𝑩 ∈ SetoidAlgebra _ _ ] IsHomImageOfClass {𝒦 
 \end{code}
 
 
-
-### <a id="lifting-tools">Lifting tools</a>
+#### <a id="lifting-tools">Lifting tools</a>
 
 Here are some tools that have been useful (e.g., in the road to the proof of Birkhoff's HSP theorem). The first states and proves the simple fact that the lift of an epimorphism is an epimorphism.
 
@@ -130,5 +123,3 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ} {𝑩 : SetoidAlgebra β ρᵇ} where
 <span style="float:right;">[Terms →](Terms.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

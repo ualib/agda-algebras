@@ -1,14 +1,13 @@
 ---
 layout: default
-title : Structures.Sigma module (Agda Universal Algebra Library)
-date : 2021-07-26
-author: [agda-algebras development team][]
+title : "Structures.Sigma module (Agda Universal Algebra Library)"
+date : "2021-07-26"
+author: "agda-algebras development team"
 ---
 
-## <a id="sigma-types-for-general-mathematical-structures">Sigma Types for General Mathematical Structures</a>
+### <a id="sigma-types-for-general-mathematical-structures">Sigma Types for General Mathematical Structures</a>
 
 This is the [Structures.Sigma][] module of the [Agda Universal Algebra Library][].
-
 
 \begin{code}
 
@@ -30,5 +29,3 @@ open import Structures.Sigma.Isos
 <span style="float:right;">[Structures.Sigma.Basic →](Structures.Sigma.Basic.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

@@ -21,7 +21,7 @@ MODULES := $(shell find $(SRCDIR) -name "*.lagda" | sed -e 's|^src/[/]*||' -e 's
 TEXFILES = $(shell find . -name "*.tex")
 TEXMDFILES = $(wildcard $(HTMLDIR)/*.tex)
 MDFILES = $(TEXMDFILES:.tex=.md)
-LINKFILE = $(INCLDIR)/UALib.AbsLinks.md
+LINKFILE = $(INCLDIR)/UALib.Links.md
 
 default: Everything.agda
 

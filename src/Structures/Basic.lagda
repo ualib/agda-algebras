@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Structures.Basic module (Agda Universal Algebra Library)
-date : 2021-05-20
-author: [agda-algebras development team][]
+title : "Structures.Basic module (Agda Universal Algebra Library)"
+date : "2021-05-20"
+author: "agda-algebras development team"
 ---
 
-## <a id="basic-definitions">Basic Definitions</a>
+### <a id="basic-definitions">Basic Definitions</a>
 
 This is the [Structures.Basic][] module of the [Agda Universal Algebra Library][]. It is a submodule of the Structures module which presents general (relational-algebraic) structures as inhabitants of record types.  For a similar development using Sigma types see the Structures.Sigma.Basic module.
 
@@ -110,6 +110,3 @@ module _ {𝐹 : signature 𝓞₀ 𝓥₀}{𝑅 : signature 𝓞₁ 𝓥₁} wh
 <span style="float:right;">[Structures.Graphs →](Structures.Graphs.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
-

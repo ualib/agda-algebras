@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Homomorphisms.Basic module (The Agda Universal Algebra Library)
-date : 2021-01-13
-author: [agda-algebras development team][]
+title : "Homomorphisms.Basic module (The Agda Universal Algebra Library)"
+date : "2021-01-13"
+author: "agda-algebras development team"
 ---
 
-## <a id="basic-definitions">Basic Definitions</a>
+### <a id="basic-definitions">Basic Definitions</a>
 
 This section describes the [Homomorphisms.Basic] module of the [Agda Universal Algebra Library][].
 
@@ -40,7 +40,7 @@ private variable α β γ ρ : Level
 
 \end{code}
 
-### <a id="homomorphisms">Homomorphisms</a>
+#### <a id="homomorphisms">Homomorphisms</a>
 
 If `𝑨` and `𝑩` are `𝑆`-algebras, then a *homomorphism* from `𝑨` to `𝑩` is a function `h : ∣ 𝑨 ∣ → ∣ 𝑩 ∣` from the domain of `𝑨` to the domain of `𝑩` that is *compatible* (or *commutes*) with all of the basic operations of the signature; that is, for all operation symbols `𝑓 : ∣ 𝑆 ∣` and tuples `a : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣` of `𝑨`, the following holds:
 
@@ -74,7 +74,7 @@ We now define the type `hom 𝑨 𝑩` of homomorphisms from `𝑨` to `𝑩` by
 \end{code}
 
 
-### <a id="homomorphism-composition">Homomorphism composition</a>
+#### <a id="homomorphism-composition">Homomorphism composition</a>
 
 The composition of homomorphisms is again a homomorphism.  We formalize this in a number of alternative ways.
 
@@ -101,9 +101,11 @@ module _ (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}(𝑪 : Algebra γ 𝑆
 
 
 
-### <a id="exmples-of-homomorphisms">Examples of homomorphisms</a>
+#### <a id="important-exmples-of-homomorphisms">Important examples of homomorphisms</a>
 
-Let's look at a few examples of homomorphisms. These examples are actually quite special in that the function in question commutes with the basic operations of *all* algebras and so, no matter the algebras involved, is always a homomorphism (trivially). We begin with the identity map, which is proved to be (the underlying map of) a homomorphism as follows.
+Let's look at a few important examples of homomorphisms. These examples are actually quite special in that every algebra has such a homomorphism.
+
+We begin with the identity map, which is proved to be (the underlying map of) a homomorphism as follows.
 
 \begin{code}
 
@@ -112,7 +114,7 @@ Let's look at a few examples of homomorphisms. These examples are actually quite
 
 \end{code}
 
-Next, `lift` and `lower` are (the maps of) homomorphisms.
+Next, the lifting of an algebra to a higher universe level is, in fact, a homomorphism. Dually, the lowering of a lifted algebra to its original universe level is a homomorphism.
 
 \begin{code}
 
@@ -124,6 +126,11 @@ open Level
 𝓁ℴ𝓌ℯ𝓇 : {β : Level}(𝑨 : Algebra α 𝑆) → hom (Lift-Alg 𝑨 β) 𝑨
 𝓁ℴ𝓌ℯ𝓇 _ = lower , λ 𝑓 𝑎 → refl
 
+\end{code}
+
+Finally, a homomorphism from `𝑨` to `𝑩` can be lifted to a homomorphism from `Lift-Alg 𝑨 ℓᵃ` to `Lift-Alg 𝑩 ℓᵇ`.
+
+\begin{code}
 
 Lift-hom : {𝑨 : Algebra α 𝑆}(ℓᵃ : Level){𝑩 : Algebra β 𝑆} (ℓᵇ : Level)
  →         hom 𝑨 𝑩  →  hom (Lift-Alg 𝑨 ℓᵃ) (Lift-Alg 𝑩 ℓᵇ)
@@ -136,13 +143,12 @@ Lift-hom {𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ (f , fhom) = lift ∘ f ∘ lower , 
  Goal : is-homomorphism(Lift-Alg 𝑨 ℓᵃ)(Lift-Alg 𝑩 ℓᵇ) (lift ∘ (f ∘ lower))
  Goal = ∘-is-hom (Lift-Alg 𝑨 ℓᵃ) (Lift-Alg 𝑩 ℓᵇ){f ∘ lower}{lift} lABh λ _ _ → refl
 
-
 \end{code}
 
+We should probably point out that while the lifting and lowering homomorphisms are important for our formal treatment of algebras in type theory, they never arise---in fact, they are not even definable---in classical universal algebra based on set theory.
 
 
-
-### <a id="monomorphisms-and-epimorphisms">Monomorphisms and epimorphisms</a>
+#### <a id="monomorphisms-and-epimorphisms">Monomorphisms and epimorphisms</a>
 
 A *monomorphism* is an injective homomorphism and an *epimorphism* is a surjective homomorphism. These are represented in the [agda-algebras](https://github.com/ualib/agda-algebras) library by the following types.
 
@@ -179,7 +185,7 @@ epi-to-hom _ ϕ = ∣ ϕ ∣ , fst ∥ ϕ ∥
 
 
 
-### <a id="kernels-of-homomorphisms">Kernels of homomorphisms</a>
+#### <a id="kernels-of-homomorphisms">Kernels of homomorphisms</a>
 
 The kernel of a homomorphism is a congruence relation and conversely for every congruence relation θ, there exists a homomorphism with kernel θ (namely, that canonical projection onto the quotient modulo θ).
 
@@ -224,7 +230,7 @@ Thus, given `h : hom 𝑨 𝑩`, we can construct the quotient of `𝑨` modulo 
 
 
 
-### <a id="the-canonical-projection">The canonical projection</a>
+#### <a id="the-canonical-projection">The canonical projection</a>
 
 Given an algebra `𝑨` and a congruence `θ`, the *canonical projection* is a map from `𝑨` onto `𝑨 ╱ θ` that is constructed, and proved epimorphic, as follows.
 
@@ -272,7 +278,7 @@ The kernel of the canonical projection of `𝑨` onto `𝑨 / θ` is equal to `�
 
 
 
-### <a id="product-homomorphisms">Product homomorphisms</a>
+#### <a id="product-homomorphisms">Product homomorphisms</a>
 
 Suppose we have an algebra `𝑨`, a type `I : Type 𝓘`, and a family `ℬ : I → Algebra β 𝑆` of algebras.  We sometimes refer to the inhabitants of `I` as *indices*, and call `ℬ` an *indexed family of algebras*.
 
@@ -302,7 +308,7 @@ The foregoing generalizes easily to the case in which the domain is also a produ
 \end{code}
 
 
-### <a id="projections-out-of-products">Projection out of products</a>
+#### <a id="projections-out-of-products">Projection out of products</a>
 
 Later we will need a proof of the fact that projecting out of a product algebra onto one of its factors is a homomorphism.
 
@@ -315,13 +321,9 @@ Later we will need a proof of the fact that projecting out of a product algebra 
 
 We could prove a more general result involving projections onto multiple factors, but so far the single-factor result has sufficed.
 
-
-
 ---------------------------------
 
 <span style="float:left;">[↑ Homomorphisms](Homomorphisms.html)</span>
 <span style="float:right;">[Homomorphisms.Noether →](Homomorphisms.Noether.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

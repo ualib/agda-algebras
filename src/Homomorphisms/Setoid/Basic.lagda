@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Homomorphisms.Setoid.Basic module (Agda Universal Algebra Library)
-date : 2021-07-03
-author: [agda-algebras development team][]
+title : "Homomorphisms.Setoid.Basic module (Agda Universal Algebra Library)"
+date : "2021-07-03"
+author: "agda-algebras development team"
 ---
 
-## <a id="homomorphisms-of-algebras-over-setoids">Homomorphisms of Algebras over Setoids</a>
+#### <a id="homomorphisms-of-algebras-over-setoids">Homomorphisms of Algebras over Setoids</a>
 
 This is the [Homomorphisms.Setoid.Basic][] module of the [Agda Universal Algebra Library][].
 
@@ -39,18 +39,12 @@ open import Foundations.Truncation     using ( is-set ; blk-uip ; is-embedding
 open import Foundations.Welldefined    using ( swelldef )
 open import Foundations.Extensionality using ( block-ext|uip ; pred-ext )
 open import Algebras.Setoid.Basic
-                               {𝑆 = 𝑆} using ( 𝕌[_] ; SetoidAlgebra ; _̂_ ; Lift-SetoidAlg )
+                               {𝑆 = 𝑆} using ( 𝕌[_] ; SetoidAlgebra ; _̂_ ; Lift-Alg )
 open import Algebras.Setoid.Congruences
                                {𝑆 = 𝑆} using ( _∣≈_ ; Con ; IsCongruence ; mkcon ; _╱_)
 
 private variable
  α β γ ρ ρᵃ ρᵇ ρᶜ ℓ : Level
-
-\end{code}
-
-### <a id="basic-definitions">Basic Definitions</a>
-
-\begin{code}
 
 module _ (𝑨 : SetoidAlgebra α ρᵃ) (𝑩 : SetoidAlgebra β ρᵇ) where
  compatible-op-map : ∣ 𝑆 ∣ → (𝕌[ 𝑨 ] → 𝕌[ 𝑩 ]) → Type _
@@ -66,7 +60,7 @@ module _ (𝑨 : SetoidAlgebra α ρᵃ) (𝑩 : SetoidAlgebra β ρᵇ) where
 
 \end{code}
 
-### <a id="composition-of-homs">Composition of homs</a>
+##### <a id="composition-of-homs">Composition of homs</a>
 
 \begin{code}
 
@@ -93,34 +87,37 @@ module _ (𝑨 : SetoidAlgebra α ρᵃ)  -- (explicit 𝑨)
 
 \end{code}
 
-### <a id="lifting-and-lowering">Lifting and lowering</a>
+##### <a id="lifting-and-lowering">Lifting and lowering of homs</a>
+
+First we define the identity homomorphism for setoid algebras and then we prove that the operations of lifting and lowering of a setoid algebra are homomorphisms.
 
 \begin{code}
 
-
--- the identity homs
 𝒾𝒹 :  (𝑨 : SetoidAlgebra α ρ) → hom 𝑨 𝑨
 𝒾𝒹 _ = id , λ 𝑓 a → refl
 
 open Level
--- the lift hom
-𝓁𝒾𝒻𝓉 : {𝑨 : SetoidAlgebra α ρ} → hom 𝑨 (Lift-SetoidAlg 𝑨 ℓ)
+𝓁𝒾𝒻𝓉 : {𝑨 : SetoidAlgebra α ρ} → hom 𝑨 (Lift-Alg 𝑨 ℓ)
 𝓁𝒾𝒻𝓉 = lift , (λ 𝑓 a → refl)
 
--- the lower hom
-𝓁ℴ𝓌ℯ𝓇 : {𝑨 : SetoidAlgebra α ρ} → hom (Lift-SetoidAlg 𝑨 ℓ) 𝑨
+𝓁ℴ𝓌ℯ𝓇 : {𝑨 : SetoidAlgebra α ρ} → hom (Lift-Alg 𝑨 ℓ) 𝑨
 𝓁ℴ𝓌ℯ𝓇 = (lower , λ 𝑓 a → refl)
+
+\end{code}
+
+Next we formalize the fact that a homomorphism from `𝑨` to `𝑩` can be lifted to a homomorphism from `Lift-Alg 𝑨 ℓᵃ` to `Lift-Alg 𝑩 ℓᵇ`.
+
+\begin{code}
 
 module _ {𝑨 : SetoidAlgebra α ρᵃ} {𝑩 : SetoidAlgebra β ρᵇ} where
  open Level
 
- Lift-hom : hom 𝑨 𝑩  → (ℓᵃ ℓᵇ : Level) →  hom (Lift-SetoidAlg 𝑨 ℓᵃ) (Lift-SetoidAlg 𝑩 ℓᵇ)
-
+ Lift-hom : hom 𝑨 𝑩  → (ℓᵃ ℓᵇ : Level) →  hom (Lift-Alg 𝑨 ℓᵃ) (Lift-Alg 𝑩 ℓᵇ)
  Lift-hom (f , fhom) ℓᵃ ℓᵇ = lift ∘ f ∘ lower , Goal
   where
   lA lB : SetoidAlgebra _ _
-  lA = Lift-SetoidAlg 𝑨 ℓᵃ
-  lB = Lift-SetoidAlg 𝑩 ℓᵇ
+  lA = Lift-Alg 𝑨 ℓᵃ
+  lB = Lift-Alg 𝑩 ℓᵇ
 
   lABh : is-homomorphism lA 𝑩 (f ∘ lower)
   lABh = ∘-is-hom lA 𝑨  𝑩 {lower}{f} (λ _ _ → refl) fhom
@@ -130,12 +127,11 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ} {𝑩 : SetoidAlgebra β ρᵇ} where
 
 \end{code}
 
-### <a id="monomorphisms-and-epimorphisms">Monomorphisms and epimorphisms</a>
+#### <a id="monomorphisms-and-epimorphisms">Monomorphisms and epimorphisms</a>
 
 \begin{code}
 
 module _ (𝑨 : SetoidAlgebra α ρᵃ) (𝑩 : SetoidAlgebra β ρᵇ) where
-
  private
   A = 𝕌[ 𝑨 ]  -- carrier of domain of 𝑨
   B = 𝕌[ 𝑩 ]  -- carrier of domain of 𝑩
@@ -155,7 +151,6 @@ record mon (𝑨 : SetoidAlgebra α ρᵃ)
  mon-to-hom : hom 𝑨 𝑩
  mon-to-hom = map , ∣ is-mon ∣
 
-
 record epi (𝑨 : SetoidAlgebra α ρᵃ)
            (𝑩 : SetoidAlgebra β ρᵇ) : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ β) where
  field
@@ -165,19 +160,16 @@ record epi (𝑨 : SetoidAlgebra α ρᵃ)
  epi-to-hom : hom 𝑨 𝑩
  epi-to-hom = map , ∣ is-epi ∣
 
-
 \end{code}
 
-### <a id="kernels-of-homomorphisms">Kernels of homomorphisms</a>
+#### <a id="kernels-of-homomorphisms">Kernels of homomorphisms</a>
 
 \begin{code}
-
 
 module _ (𝑨 : SetoidAlgebra α ρᵃ) (𝑩 : SetoidAlgebra β ρᵇ) where
  private
   A = 𝕌[ 𝑨 ]
   B = 𝕌[ 𝑩 ]
-
 
  homker-comp : swelldef 𝓥 β → (h : hom 𝑨 𝑩) → 𝑨 ∣≈ (ker ∣ h ∣)
  homker-comp wd h f {u}{v} kuv = ∣ h ∣((f ̂ 𝑨) u)   ≡⟨ ∥ h ∥ f u ⟩
@@ -185,13 +177,11 @@ module _ (𝑨 : SetoidAlgebra α ρᵃ) (𝑩 : SetoidAlgebra β ρᵇ) where
                                  (f ̂ 𝑩)(∣ h ∣ ∘ v) ≡⟨ (∥ h ∥ f v)⁻¹ ⟩
                                  ∣ h ∣((f ̂ 𝑨) v)   ∎
 
-
  kercon : swelldef 𝓥 β → hom 𝑨 𝑩 → Con 𝑨
  kercon wd h = ker ∣ h ∣ , mkcon (ker-IsEquivalence ∣ h ∣) (homker-comp wd h)
 
  kerquo : swelldef 𝓥 β → hom 𝑨 𝑩 → SetoidAlgebra _ _
  kerquo wd h = 𝑨 ╱ (kercon wd h)
-
 
 ker[_⇒_]_↾_ : (𝑨 : SetoidAlgebra α ρᵃ) (𝑩 : SetoidAlgebra β ρᵇ)
  →            hom 𝑨 𝑩 → swelldef 𝓥 β → SetoidAlgebra _ _
@@ -205,5 +195,3 @@ ker[ 𝑨 ⇒ 𝑩 ] h ↾ wd = kerquo 𝑨 𝑩 wd h
 <span style="float:right;">[Homomorphisms.Setoid.Noether →](Homomorphisms.Setoid.Noether.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

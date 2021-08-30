@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Sturctures.Products module
-date : 2021-05-11
-author: [agda-algebras development team][]
+title : "Sturctures.Products module"
+date : "2021-05-11"
+author: "agda-algebras development team"
 ---
 
-## <a id="products-for-structures-as-records">Products for structures as records</a>
+### <a id="products-for-structures-as-records">Products for structures as records</a>
 
 This is the [Structures.Products][] module of the [Agda Universal Algebra Library][].
 
@@ -64,5 +64,3 @@ module _ {𝒦 : Pred (structure 𝐹 𝑅 {α}{ρ}) ℓ} where
 <span style="float:right;">[Structures.Congruences →](Structures.Congruences.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

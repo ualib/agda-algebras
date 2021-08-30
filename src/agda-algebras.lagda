@@ -1,8 +1,8 @@
 ---
 layout: title-page
-title : agda-algebras.lagda (The Agda Universal Algebra Library)
-date : 2021-01-14
-author: William DeMeo
+title : "agda-algebras.lagda (The Agda Universal Algebra Library)"
+date : "2021-01-14"
+author: "[agda-algebras development team][]"
 ---
 
 <!--
@@ -26,7 +26,7 @@ of citation.
 
 -->
 
-# The Agda Universal Algebra Library
+## The Agda Universal Algebra Library
 
 ---------------------------------------------------------------------------------
 
@@ -50,12 +50,14 @@ We hope the library is useful to mathematicians and computer scientists who wish
 
 --------------------------------
 
-## Brief Contents
+### Brief Contents
 
-\begin{code}
+The following list of modules imported by the current module, [agda-algebras](https://ualib.github.io/agda-algebras/agda-algebras.html), serves as a brief table of contents.
 
+\begin{code}[hide]
 {-# OPTIONS --without-K --exact-split --safe #-}
-
+\end{code}
+\begin{code}
 module agda-algebras where
 
 open import Preface
@@ -75,8 +77,9 @@ open import Complexity
 
 \end{code}
 
+------------------------------
 
-## <a id="license">License</a>
+##### <a id="license">License</a>
 
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
   <img alt="Creative Commons License" style="border-width:0; float: left; padding:5px 5px 0px 0px" height='40' src="css/by-sa.svg" />
@@ -93,7 +96,7 @@ is licensed under a
   Creative Commons Attribution-ShareAlike 4.0 International License.
 </a>
 <br />
-<a href="https://ualib.github.io/agda-algebras/Preface.html#how-to-cite-the-agda-ualib">BibTeX citation information.</a>
+<a href="https://ualib.github.io/agda-algebras/Preface.html#how-to-cite-the-agda-algebras-library">BibTeX citation information.</a>
 <br />
 <br />
 <a href="https://stereotypeb.gitlab.io"><img alt="stereotypeb" style="border-width:0; float: left; padding:0px 5px 0px 0px;" width='70' src="css/stereotypeb-avatar.png" /></a>

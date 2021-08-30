@@ -1,15 +1,15 @@
 ---
 layout: default
-title : Complexity.CSP module (The Agda Universal Algebra Library)
-date : 2021-07-14
-author: [agda-algebras development team][]
+title : "Complexity.CSP module (The Agda Universal Algebra Library)"
+date : "2021-07-14"
+author: "the agda-algebras development team"
 ---
 
-## <a id="constraint-satisfaction-problems">Constraint Satisfaction Problems</a>
+### <a id="constraint-satisfaction-problems">Constraint Satisfaction Problems</a>
 
 This is the [Complexity.CSP][] module of the [Agda Universal Algebra Library][].
 
-### <a id="the-relational-formulation-of-csp">The relational formulation of CSP</a>
+#### <a id="the-relational-formulation-of-csp">The relational formulation of CSP</a>
 
 Let 𝒜 = (𝐴 , 𝑅ᵃ) be a *relational structure* (or 𝑅-structure), that is, a pair consisting
 of a set 𝐴 along with a collection 𝑅ᵃ ⊆ ⋃ₙ 𝒫(𝐴ⁿ) of relations on 𝐴.
@@ -42,7 +42,7 @@ signature of 𝒜) and decide whether or not it belongs to the set CSP(𝒜).
 
 
 
-### <a id="connection-to-algebraic-csp">Connection to algebraic CSP</a>
+#### <a id="connection-to-algebraic-csp">Connection to algebraic CSP</a>
 
 Let A be a set, let Op(A) denote the set of all operations, Rel(A) the set of all
 relations, on A.
@@ -107,7 +107,7 @@ open import Algebras.Setoid.Basic {𝑆 = 𝑆} using ( SetoidAlgebra )
 
 \end{code}
 
-### <a id="constraints">Constraints</a>
+#### <a id="constraints">Constraints</a>
 
 A constraint c consists of
 
@@ -156,7 +156,7 @@ module _ -- levels for...
 \end{code}
 
 
-### <a id="csp-templates-and-instances">CSP templates and instances</a>
+#### <a id="csp-templates-and-instances">CSP templates and instances</a>
 
 A CSP "template" restricts the relations that may occur in instances of the problem.
 A convenient way to specify a template is to give an indexed family
@@ -187,14 +187,9 @@ An instance of a constraint satisfaction problem is a triple 𝑃 = (𝑉, 𝐷,
 
 \end{code}
 
-
 --------------------------------
 
 <span>[← Complexity.Basic](Complexity.Basic.html)</span>
 <span style="float:right;">[agda-algebras ↑](agda-algebras.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
-
-

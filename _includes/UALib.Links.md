@@ -11,123 +11,121 @@
 [merge request]: https://github.com/ualib/agda-algebras/compare
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 
-[Preface]: Preface.html
+[Preface]: https://ualib.github.io/agda-algebras/Preface.html
 
-[Overture]: Overture.html
+[Overture]: https://ualib.github.io/agda-algebras/Overture.html
 [Overture.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Overture.lagda
-[Overture.Preliminaries]: Overture.Preliminaries.html
-[Overture.Inverses]: Overture.Inverses.html
-[Overture.Transformers]: Overture.Transformers.html
+[Overture.Preliminaries]: https://ualib.github.io/agda-algebras/Overture.Preliminaries.html
+[Overture.Inverses]: https://ualib.github.io/agda-algebras/Overture.Inverses.html
+[Overture.Transformers]: https://ualib.github.io/agda-algebras/Overture.Transformers.html
 
-[Relations]: Relations.html
-[Relations.Discrete]: Relations.Discrete.html
-[Relations.Continuous]: Relations.Continuous.html
-[Relations.Properties]: Relations.Properties.html
-[Relations.Quotients]: Relations.Quotients.html
+[Relations]: https://ualib.github.io/agda-algebras/Relations.html
+[Relations.Discrete]: https://ualib.github.io/agda-algebras/Relations.Discrete.html
+[Relations.Continuous]: https://ualib.github.io/agda-algebras/Relations.Continuous.html
+[Relations.Properties]: https://ualib.github.io/agda-algebras/Relations.Properties.html
+[Relations.Quotients]: https://ualib.github.io/agda-algebras/Relations.Quotients.html
 
-[Algebras]: Algebras.html
-[Algebras.Basic]: Algebras.Basic.html
-[Algebras.Products]: Algebras.Products.html
-[Algebras.Congruences]: Algebras.Congruences.html
+[Algebras]: https://ualib.github.io/agda-algebras/Algebras.html
+[Algebras.Basic]: https://ualib.github.io/agda-algebras/Algebras.Basic.html
+[Algebras.Products]: https://ualib.github.io/agda-algebras/Algebras.Products.html
+[Algebras.Congruences]: https://ualib.github.io/agda-algebras/Algebras.Congruences.html
 
-[Algebras.Setoid]: Algebras.Setoid.html
-[Algebras.Setoid.Basic]: Algebras.Setoid.Basic.html
-[Algebras.Setoid.Congruences]: Algebras.Setoid.Congruences.html
-[Algebras.Setoid.Products]: Algebras.Setoid.Products.html
+[Algebras.Setoid]: https://ualib.github.io/agda-algebras/Algebras.Setoid.html
+[Algebras.Setoid.Basic]: https://ualib.github.io/agda-algebras/Algebras.Setoid.Basic.html
+[Algebras.Setoid.Congruences]: https://ualib.github.io/agda-algebras/Algebras.Setoid.Congruences.html
+[Algebras.Setoid.Products]: https://ualib.github.io/agda-algebras/Algebras.Setoid.Products.html
 
-[ClosureSystems]: ClosureSystems.html
-[ClosureSystems.Basic]: ClosureSystems.Basic.html
-[ClosureSystems.Properties]: ClosureSystems.Properties.html
+[ClosureSystems]: https://ualib.github.io/agda-algebras/ClosureSystems.html
+[ClosureSystems.Basic]: https://ualib.github.io/agda-algebras/ClosureSystems.Basic.html
+[ClosureSystems.Properties]: https://ualib.github.io/agda-algebras/ClosureSystems.Properties.html
 
-[Residuation]: Residuation.html
-[Residuation.Basic]: Residuation.Basic.html
-[Residuation.Properties]: Residuation.Properties.html
+[Residuation]: https://ualib.github.io/agda-algebras/Residuation.html
+[Residuation.Basic]: https://ualib.github.io/agda-algebras/Residuation.Basic.html
+[Residuation.Properties]: https://ualib.github.io/agda-algebras/Residuation.Properties.html
 
-[Complexity]: Complexity.html
-[Complexity.Basic]: Complexity.Basic.html
-[Complexity.CSP]: Complexity.CSP.html
+[Complexity]: https://ualib.github.io/agda-algebras/Complexity.html
+[Complexity.Basic]: https://ualib.github.io/agda-algebras/Complexity.Basic.html
+[Complexity.CSP]: https://ualib.github.io/agda-algebras/Complexity.CSP.html
   
-[Examples.Structures.Basic]: Examples.Structures.Basic.html
-[Examples.Structures.Signatures]: Examples.Structures.Signatures.html
-[Exercises.Complexity.FiniteCSP]: Exercises.Complexity.FiniteCSP.html
+[Examples.Structures.Basic]: https://ualib.github.io/agda-algebras/Examples.Structures.Basic.html
+[Examples.Structures.Signatures]: https://ualib.github.io/agda-algebras/Examples.Structures.Signatures.html
+[Exercises.Complexity.FiniteCSP]: https://ualib.github.io/agda-algebras/Exercises.Complexity.FiniteCSP.html
 
-[Foundations]: Foundations.html
-[Foundations.Extensionality]: Foundations.Extensionality.html
-[Foundations.Truncation]: Foundations.Truncation.html
-[Foundations.Welldefined]: Foundations.Welldefined.html
+[Foundations]: https://ualib.github.io/agda-algebras/Foundations.html
+[Foundations.Extensionality]: https://ualib.github.io/agda-algebras/Foundations.Extensionality.html
+[Foundations.Truncation]: https://ualib.github.io/agda-algebras/Foundations.Truncation.html
+[Foundations.Welldefined]: https://ualib.github.io/agda-algebras/Foundations.Welldefined.html
 
-[GaloisConnections]: GaloisConnections.html
-[GaloisConnections.Basic]: GaloisConnections.Basic.html
-[GaloisConnections.Properties]: GaloisConnections.Properties.html
+[GaloisConnections]: https://ualib.github.io/agda-algebras/GaloisConnections.html
+[GaloisConnections.Basic]: https://ualib.github.io/agda-algebras/GaloisConnections.Basic.html
+[GaloisConnections.Properties]: https://ualib.github.io/agda-algebras/GaloisConnections.Properties.html
 
-[Homomorphisms]: Homomorphisms.html
-[Homomorphisms.Basic]: Homomorphisms.Basic.html
-[Homomorphisms.Noether]: Homomorphisms.Noether.html
-[Homomorphisms.Isomorphisms]: Homomorphisms.Isomorphisms.html
-[Homomorphisms.HomomorphicImages]: Homomorphisms.HomomorphicImages.html
+[Homomorphisms]: https://ualib.github.io/agda-algebras/Homomorphisms.html
+[Homomorphisms.Basic]: https://ualib.github.io/agda-algebras/Homomorphisms.Basic.html
+[Homomorphisms.Noether]: https://ualib.github.io/agda-algebras/Homomorphisms.Noether.html
+[Homomorphisms.Isomorphisms]: https://ualib.github.io/agda-algebras/Homomorphisms.Isomorphisms.html
+[Homomorphisms.HomomorphicImages]: https://ualib.github.io/agda-algebras/Homomorphisms.HomomorphicImages.html
 
-[Homomorphisms.Setoid]: Homomorphisms.Setoid.html
-[Homomorphisms.Setoid.Basic]: Homomorphisms.Setoid.Basic.html
-[Homomorphisms.Setoid.HomomorphicImages]: Homomorphisms.Setoid.HomomorphicImages.html
-[Homomorphisms.Setoid.Isomorphisms]: Homomorphisms.Setoid.Isomorphisms.html
-[Homomorphisms.Setoid.Noether]: Homomorphisms.Setoid.Noether.html
+[Homomorphisms.Setoid]: https://ualib.github.io/agda-algebras/Homomorphisms.Setoid.html
+[Homomorphisms.Setoid.Basic]: https://ualib.github.io/agda-algebras/Homomorphisms.Setoid.Basic.html
+[Homomorphisms.Setoid.HomomorphicImages]: https://ualib.github.io/agda-algebras/Homomorphisms.Setoid.HomomorphicImages.html
+[Homomorphisms.Setoid.Isomorphisms]: https://ualib.github.io/agda-algebras/Homomorphisms.Setoid.Isomorphisms.html
+[Homomorphisms.Setoid.Noether]: https://ualib.github.io/agda-algebras/Homomorphisms.Setoid.Noether.html
 
-[Terms]: Terms.html
-[Terms.Basic]: Terms.Basic.html
-[Terms.Operations]: Terms.Operations.html
+[Terms]: https://ualib.github.io/agda-algebras/Terms.html
+[Terms.Basic]: https://ualib.github.io/agda-algebras/Terms.Basic.html
+[Terms.Operations]: https://ualib.github.io/agda-algebras/Terms.Operations.html
 
-[Terms]: Terms.html
-[Terms.Basic]: Terms.Basic.html
-[Terms.Operations]: Terms.Operations.html
-[Terms.Properties]: Terms.Properties.html
+[Terms]: https://ualib.github.io/agda-algebras/Terms.html
+[Terms.Basic]: https://ualib.github.io/agda-algebras/Terms.Basic.html
+[Terms.Operations]: https://ualib.github.io/agda-algebras/Terms.Operations.html
+[Terms.Properties]: https://ualib.github.io/agda-algebras/Terms.Properties.html
 
-[Terms.Setoid]: Terms.Setoid.html
-[Terms.Setoid.Basic]: Terms.Setoid.Basic.html
-[Terms.Setoid.Properties]: Terms.Setoid.Properties.html
+[Terms.Setoid]: https://ualib.github.io/agda-algebras/Terms.Setoid.html
+[Terms.Setoid.Basic]: https://ualib.github.io/agda-algebras/Terms.Setoid.Basic.html
+[Terms.Setoid.Properties]: https://ualib.github.io/agda-algebras/Terms.Setoid.Properties.html
 
-[Subalgebras]: Subalgebras.html
-[Subalgebras.Properties]: Subalgebras.Properties.html
-[Subalgebras.Subalgebras]: Subalgebras.Subalgebras.html
-[Subalgebras.Subuniverses]: Subalgebras.Subuniverses.html
+[Subalgebras]: https://ualib.github.io/agda-algebras/Subalgebras.html
+[Subalgebras.Properties]: https://ualib.github.io/agda-algebras/Subalgebras.Properties.html
+[Subalgebras.Subalgebras]: https://ualib.github.io/agda-algebras/Subalgebras.Subalgebras.html
+[Subalgebras.Subuniverses]: https://ualib.github.io/agda-algebras/Subalgebras.Subuniverses.html
 
-[Subalgebras.Setoid]: Subalgebras.Setoid.html
-[Subalgebras.Setoid.Properties]: Subalgebras.Setoid.Properties.html
-[Subalgebras.Setoid.Subalgebras]: Subalgebras.Setoid.Subalgebras.html
-[Subalgebras.Setoid.Subuniverses]: Subalgebras.Setoid.Subuniverses.html
+[Subalgebras.Setoid]: https://ualib.github.io/agda-algebras/Subalgebras.Setoid.html
+[Subalgebras.Setoid.Properties]: https://ualib.github.io/agda-algebras/Subalgebras.Setoid.Properties.html
+[Subalgebras.Setoid.Subalgebras]: https://ualib.github.io/agda-algebras/Subalgebras.Setoid.Subalgebras.html
+[Subalgebras.Setoid.Subuniverses]: https://ualib.github.io/agda-algebras/Subalgebras.Setoid.Subuniverses.html
 
-[Varieties]: Varieties.html
-[Varieties.Closure]: Varieties.Closure.html
-[Varieties.EquationalLogic]: Varieties.EquationalLogic.html
-[Varieties.FreeAlgebras]: Varieties.FreeAlgebras.html
-[Varieties.Invariants]: Varieties.Invariants.html
-[Varieties.Preservation]: Varieties.Preservation.html
-[Varieties.Properties]: Varieties.Properties.html
+[Varieties]: https://ualib.github.io/agda-algebras/Varieties.html
+[Varieties.Closure]: https://ualib.github.io/agda-algebras/Varieties.Closure.html
+[Varieties.EquationalLogic]: https://ualib.github.io/agda-algebras/Varieties.EquationalLogic.html
+[Varieties.FreeAlgebras]: https://ualib.github.io/agda-algebras/Varieties.FreeAlgebras.html
+[Varieties.Invariants]: https://ualib.github.io/agda-algebras/Varieties.Invariants.html
+[Varieties.Preservation]: https://ualib.github.io/agda-algebras/Varieties.Preservation.html
+[Varieties.Properties]: https://ualib.github.io/agda-algebras/Varieties.Properties.html
 
-[Varieties.Setoid]: Varieties.Setoid.html
-[Varieties.Setoid.Closure]: Varieties.Setoid.Closure.html
-[Varieties.Setoid.EquationalLogic]: Varieties.Setoid.EquationalLogic.html
-[Varieties.Setoid.FreeAlgebras]: Varieties.Setoid.FreeAlgebras.html
+[Varieties.Setoid]: https://ualib.github.io/agda-algebras/Varieties.Setoid.html
+[Varieties.Setoid.Closure]: https://ualib.github.io/agda-algebras/Varieties.Setoid.Closure.html
+[Varieties.Setoid.EquationalLogic]: https://ualib.github.io/agda-algebras/Varieties.Setoid.EquationalLogic.html
+[Varieties.Setoid.FreeAlgebras]: https://ualib.github.io/agda-algebras/Varieties.Setoid.FreeAlgebras.html
 
-[Structures]: Structures.html
-[Structures.Graphs]: Structures.Graphs.html
-[Structures.Graphs0]: Structures.Graphs0.html
-[Structures.Basic]: Structures.Basic.html
-[Structures.Products]: Structures.Products.html
-[Structures.Congruences]: Structures.Congruences.html
-[Structures.Homs]: Structures.Homs.html
-[Structures.Isos]: Structures.Isos.html
-[Structures.Terms]: Structures.Terms.html
-[Structures.Substructures]: Structures.Substructures.html
-[Structures.EquationalLogic]: Structures.EquationalLogic.html
+[Structures]: https://ualib.github.io/agda-algebras/Structures.html
+[Structures.Graphs]: https://ualib.github.io/agda-algebras/Structures.Graphs.html
+[Structures.Graphs0]: https://ualib.github.io/agda-algebras/Structures.Graphs0.html
+[Structures.Basic]: https://ualib.github.io/agda-algebras/Structures.Basic.html
+[Structures.Products]: https://ualib.github.io/agda-algebras/Structures.Products.html
+[Structures.Congruences]: https://ualib.github.io/agda-algebras/Structures.Congruences.html
+[Structures.Homs]: https://ualib.github.io/agda-algebras/Structures.Homs.html
+[Structures.Isos]: https://ualib.github.io/agda-algebras/Structures.Isos.html
+[Structures.Terms]: https://ualib.github.io/agda-algebras/Structures.Terms.html
+[Structures.Substructures]: https://ualib.github.io/agda-algebras/Structures.Substructures.html
+[Structures.EquationalLogic]: https://ualib.github.io/agda-algebras/Structures.EquationalLogic.html
 
-[Structures.Sigma]: Structures.Sigma.html
-[Structures.Sigma.Basic]: Structures.Sigma.Basic.html
-[Structures.Sigma.Products]: Structures.Sigma.Products.html
-[Structures.Sigma.Congruences]: Structures.Sigma.Congruences.html
-[Structures.Sigma.Homs]: Structures.Sigma.Homs.html
-[Structures.Sigma.Isos]: Structures.Sigma.Isos.html
-
-
+[Structures.Sigma]: https://ualib.github.io/agda-algebras/Structures.Sigma.html
+[Structures.Sigma.Basic]: https://ualib.github.io/agda-algebras/Structures.Sigma.Basic.html
+[Structures.Sigma.Products]: https://ualib.github.io/agda-algebras/Structures.Sigma.Products.html
+[Structures.Sigma.Congruences]: https://ualib.github.io/agda-algebras/Structures.Sigma.Congruences.html
+[Structures.Sigma.Homs]: https://ualib.github.io/agda-algebras/Structures.Sigma.Homs.html
+[Structures.Sigma.Isos]: https://ualib.github.io/agda-algebras/Structures.Sigma.Isos.html
 
 
 [absolute value]: https://en.wikipedia.org/wiki/Absolute_value

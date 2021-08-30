@@ -3,24 +3,40 @@
 SRCDIR="src"
 echo "SRCDIR = $SRCDIR"
 
-
 INCLDIR="_includes"
 echo "INCLDIR = $INCLDIR"
 
 ## markdown formatted links (to be appended before pandoc processing)
-LINKFILE="$INCLDIR/UALib.AbsLinks.md"
+LINKFILE="$INCLDIR/UALib.Links.md"
 #echo "LINKFILE = $LINKFILE"
 
 ## absolute module names with no src/ prefix and no .lagda suffix
 CHOPMODS=$(find $SRCDIR -name "*.lagda" | sed -e 's|^src/[/]*||' -e 's|.lagda||')
 # echo "CHOPMODS = $CHOPMODS"
 
-for f in $CHOPMODS; do
+## Options for the pandoc command
+# (not using --top-level-division=part )
+PANOPTS="-f markdown -t latex"
+
+if [ $# -eq 0 ]
+  then
+    echo "No arguments supplied... processing ALL modules..."
+    for f in $CHOPMODS; do
      echo "processing $f.lagda";
-     agda --latex src/$f.lagda;
+     agda --latex --only-scope-checking src/$f.lagda;
      cat $LINKFILE >> latex/$f.tex;
      DOTNAME="latex/$(echo $f | sed 's|/|.|g').tex"
-     pandoc -f markdown -t latex latex/$f.tex -o $DOTNAME;
+     pandoc $PANOPTS latex/$f.tex -o $DOTNAME
      sed -i '/[\]begin[{]center[}][\]rule/,$d' $DOTNAME;
-done
+    done
+else
+    echo "Processing $1 only..."
+    f="$(echo $1 | sed -e 's|^src/[/]*||' -e 's|.lagda||')"
+    agda --latex src/$f.lagda
+    cat $LINKFILE >> latex/$f.tex
+    DOTNAME="latex/$(echo $f | sed 's|/|.|g').tex"
+    pandoc $PANOPTS latex/$f.tex -o $DOTNAME
+    sed -i '/[\]begin[{]center[}][\]rule/,$d' $DOTNAME
+fi
+
 

@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Terms.Operations module (The Agda Universal Algebra Library)
-date : 2021-01-14
-author: [agda-algebras development team][]
+title : "Terms.Operations module (The Agda Universal Algebra Library)"
+date : "2021-01-14"
+author: "agda-algebras development team"
 ---
 
-## <a id="term-operations">Term Operations</a>
+### <a id="term-operations">Term Operations</a>
 
 This section presents the [Terms.Operations][] module of the [Agda Universal Algebra Library][].
 
@@ -118,7 +118,7 @@ term-agreement wd {X} p = ∥ term-gen wd p ∥ ∙ (term-gen-agreement wd p)⁻
 
 
 
-### <a id="interpretation-of-terms-in-product-algebras">Interpretation of terms in product algebras</a>
+#### <a id="interpretation-of-terms-in-product-algebras">Interpretation of terms in product algebras</a>
 
 \begin{code}
 
@@ -152,7 +152,7 @@ module _ (wd : swelldef 𝓥 (β ⊔ α)){X : Type χ }{I : Type β} where
 \end{code}
 
 
-### <a id="compatibility-of-terms">Compatibility of terms</a>
+#### <a id="compatibility-of-terms">Compatibility of terms</a>
 
 We now prove two important facts about term operations.  The first of these, which is used very often in the sequel, asserts that every term commutes with every homomorphism.
 
@@ -195,7 +195,7 @@ module _ {α β : Level}{X : Type α} where
 
 
 
-### <a id="substitution">Substitution</a>
+#### <a id="substitution">Substitution</a>
 
 A substitution from `Y` to `X` is simply a function from `Y` to `X`, and the application of a substitution is represented as follows.
 
@@ -251,6 +251,3 @@ subst-theorem wd p q σ 𝑨 Apq η = (𝑨 ⟦ p [ σ ] ⟧) η ≡⟨ subst-le
 <span style="float:right;">[Terms.Setoid →](Terms.Setoid.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
-

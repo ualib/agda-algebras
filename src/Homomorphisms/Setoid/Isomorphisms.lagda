@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Homomorphisms.Setoid.Isomoprhisms module (The Agda Universal Algebra Library)
-date : 2021-07-11
-author: [agda-algebras development team][]
+title : "Homomorphisms.Setoid.Isomoprhisms module (The Agda Universal Algebra Library)"
+date : "2021-07-11"
+author: "agda-algebras development team"
 ---
 
-## <a id="isomorphisms-between-setoid-algebras">Isomorphisms between Setoid Algebras</a>
+#### <a id="isomorphisms-of-setoid-algebras">Isomorphisms of setoid algebras</a>
 
 \begin{code}
 
@@ -15,7 +15,6 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Homomorphisms.Setoid.Isomorphisms {𝑆 : Signature 𝓞 𝓥}  where
 
-
 -- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
 open import Axiom.Extensionality.Propositional using () renaming (Extensionality to funext )
 open import Agda.Primitive              using ( _⊔_ ; lsuc ) renaming ( Set to Type )
@@ -24,22 +23,18 @@ open import Function.Base               using ( _∘_ )
 open import Level                       using ( Level ; Lift )
 open import Relation.Binary             using ( Setoid ; REL)
 open import Relation.Binary.Definitions using ( Reflexive ; Sym ; Trans ; Transitive )
-open import Relation.Binary.PropositionalEquality
-                                        using ( _≡_ ; refl ; cong ; module ≡-Reasoning ; cong-app )
-
+open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; cong ; module ≡-Reasoning ; cong-app )
 
 -- Imports from the Agda Universal Algebra Library -----------------------------------------------------
-open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; _∙_ ; lower∼lift ; lift∼lower )
-                                               renaming ( _≈_ to _≋_ )
+open import Overture.Preliminaries
+ using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; _∙_ ; lower∼lift ; lift∼lower ) renaming ( _≈_ to _≋_ )
 open import Overture.Inverses                  using ( IsInjective )
 open import Algebras.Setoid.Products   {𝑆 = 𝑆} using ( ⨅ )
-open import Algebras.Setoid.Basic      {𝑆 = 𝑆} using ( SetoidAlgebra ; 𝕌[_] ; _̂_ ; Lift-SetoidAlg)
-open import Homomorphisms.Setoid.Basic {𝑆 = 𝑆} using ( hom ; kercon ; ker[_⇒_]_↾_ ; ∘-hom ; 𝒾𝒹
-                                                     ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-homomorphism ; ∘-is-hom )
+open import Algebras.Setoid.Basic      {𝑆 = 𝑆} using ( SetoidAlgebra ; 𝕌[_] ; _̂_ ; Lift-Alg)
+open import Homomorphisms.Setoid.Basic {𝑆 = 𝑆}
+ using ( hom ; kercon ; ker[_⇒_]_↾_ ; ∘-hom ; 𝒾𝒹 ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-homomorphism ; ∘-is-hom )
 
 \end{code}
-
-### <a id="isomorphism-toolbox">Definition of isomorphism</a>
 
 Recall, `f ~ g` means f and g are *extensionally* (or pointwise) equal; i.e., `∀ x, f x ≡ g x`. We use this notion of equality of functions in the following definition of *isomorphism*.
 
@@ -67,14 +62,12 @@ record _≅_ (𝑨 : SetoidAlgebra α ρᵃ)(𝑩 : SetoidAlgebra β ρᵇ) : Ty
 
 open _≅_ public
 
-
 \end{code}
 
 That is, two structures are *isomorphic* provided there are homomorphisms going back and forth between them which compose to the identity map.
 
 
-
-### <a id="isomorphism-is-an-equivalence-relation">Isomorphism is an equivalence relation</a>
+#### <a id="properties-of-isomorphisms-of-setoid-algebras">Properties of isomorphism of setoid algebras</a>
 
 \begin{code}
 
@@ -118,49 +111,38 @@ That is, two structures are *isomorphic* provided there are homomorphisms going 
 
 \end{code}
 
-
-### <a id="lift-is-an-algebraic-invariant">Lift is an algebraic invariant</a>
-
 Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic invariant*). As our focus is universal algebra, this is important and is what makes the lift operation a workable solution to the technical problems that arise from the noncumulativity of Agda's universe hierarchy.
 
 \begin{code}
 
 open Level
 
-Lift-≅ : {ℓ : Level}{𝑨 : SetoidAlgebra α ρᵃ} → 𝑨 ≅ (Lift-SetoidAlg 𝑨 ℓ)
+Lift-≅ : {ℓ : Level}{𝑨 : SetoidAlgebra α ρᵃ} → 𝑨 ≅ (Lift-Alg 𝑨 ℓ)
 Lift-≅ {ℓ = ℓ} {𝑨} = record { to = 𝓁𝒾𝒻𝓉 {𝑨 = 𝑨}
                               ; from = 𝓁ℴ𝓌ℯ𝓇  {𝑨 = 𝑨}
                               ; to∼from = cong-app lift∼lower
                               ; from∼to = cong-app (lower∼lift {β = ℓ})
                               }
 
-Lift-SetoidAlg-iso : {ℓᵃ : Level}{𝑨 : SetoidAlgebra α ρᵃ}
+Lift-Alg-iso : {ℓᵃ : Level}{𝑨 : SetoidAlgebra α ρᵃ}
                      {ℓᵇ : Level}{𝑩 : SetoidAlgebra β ρᵇ}
                -------------------------------------------------------------
- →             𝑨 ≅ 𝑩 →  Lift-SetoidAlg 𝑨 ℓᵃ ≅ Lift-SetoidAlg 𝑩 ℓᵇ
+ →             𝑨 ≅ 𝑩 →  Lift-Alg 𝑨 ℓᵃ ≅ Lift-Alg 𝑩 ℓᵇ
 
-Lift-SetoidAlg-iso A≅B = ≅-trans (≅-trans (≅-sym Lift-≅ ) A≅B) Lift-≅
+Lift-Alg-iso A≅B = ≅-trans (≅-trans (≅-sym Lift-≅ ) A≅B) Lift-≅
 
 \end{code}
-
-
-
-### <a id="lift-associativity">Lift associativity</a>
 
 The lift is also associative, up to isomorphism at least.
 
 \begin{code}
 
-Lift-SetoidAlg-assoc : (ℓ₁ ℓ₂ : Level){𝑨 : SetoidAlgebra α ρᵃ}
- →                     Lift-SetoidAlg 𝑨 (ℓ₁ ⊔ ℓ₂) ≅  Lift-SetoidAlg (Lift-SetoidAlg 𝑨 ℓ₁) ℓ₂
+Lift-Alg-assoc : (ℓ₁ ℓ₂ : Level){𝑨 : SetoidAlgebra α ρᵃ}
+ →                     Lift-Alg 𝑨 (ℓ₁ ⊔ ℓ₂) ≅  Lift-Alg (Lift-Alg 𝑨 ℓ₁) ℓ₂
 
-Lift-SetoidAlg-assoc _ _ = ≅-trans (≅-trans (≅-sym Lift-≅) Lift-≅) Lift-≅
+Lift-Alg-assoc _ _ = ≅-trans (≅-trans (≅-sym Lift-≅) Lift-≅) Lift-≅
 
 \end{code}
-
-
-
-### <a id="products-preserve-isomorphisms">Products preserve isomorphisms</a>
 
 Products of isomorphic families of algebras are themselves isomorphic. The proof looks a bit technical, but it is as straightforward as it ought to be.
 
@@ -201,10 +183,10 @@ A nearly identical proof goes through for isomorphisms of lifted products (thoug
 
 module _ {𝓘 : Level}{I : Type 𝓘}{fizw : funext (𝓘 ⊔ γ) β}{fiu : funext 𝓘 α} where
 
-  Lift-SetoidAlg-⨅≅ : {𝒜 : I → SetoidAlgebra α ρᵃ}{ℬ : (Lift γ I) → SetoidAlgebra β ρᵇ}
-   →            (∀ i → 𝒜 i ≅ ℬ (lift i)) → Lift-SetoidAlg (⨅ 𝒜) γ ≅ ⨅ ℬ
+  Lift-Alg-⨅≅ : {𝒜 : I → SetoidAlgebra α ρᵃ}{ℬ : (Lift γ I) → SetoidAlgebra β ρᵇ}
+   →            (∀ i → 𝒜 i ≅ ℬ (lift i)) → Lift-Alg (⨅ 𝒜) γ ≅ ⨅ ℬ
 
-  Lift-SetoidAlg-⨅≅ {𝒜 = 𝒜}{ℬ} AB = Goal
+  Lift-Alg-⨅≅ {𝒜 = 𝒜}{ℬ} AB = Goal
    where
    ϕ : 𝕌[ ⨅ 𝒜 ] → 𝕌[ ⨅ ℬ ]
    ϕ a i = ∣ to (AB  (lower i)) ∣ (a (lower i))
@@ -227,7 +209,7 @@ module _ {𝓘 : Level}{I : Type 𝓘}{fizw : funext (𝓘 ⊔ γ) β}{fiu : fun
    A≅B : ⨅ 𝒜 ≅ ⨅ ℬ
    A≅B = record { to = ϕ , ϕhom ; from = ψ , ψhom ; to∼from = ϕ∼ψ ; from∼to = ψ∼ϕ }
 
-   Goal : Lift-SetoidAlg (⨅ 𝒜) γ ≅ ⨅ ℬ
+   Goal : Lift-Alg (⨅ 𝒜) γ ≅ ⨅ ℬ
    Goal = ≅-trans (≅-sym Lift-≅) A≅B
 
 \end{code}
@@ -238,8 +220,3 @@ module _ {𝓘 : Level}{I : Type 𝓘}{fizw : funext (𝓘 ⊔ γ) β}{fiu : fun
 <span style="float:right;">[Homomorphisms.Setoid.HomomorphicImages →](Homomorphisms.Setoid.HomomorphicImages.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
-
-
-

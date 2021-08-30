@@ -23,9 +23,9 @@ open import Overture.Inverses               using    ( Image_∋_ ; eq ; Inv ; I
 open import Overture.Transformers           using    ( Bijection ; ∣_∣=∣_∣ ; PointwiseBijection
                                                      ; ∣_∣≈∣_∣ ; uncurry₀ ; Curry ; Uncurry
                                                      ; A×A→B≅A→A→B ; A→A→Fin2A ; A→A→Fin2A'
-                                                     ; A→A→Fin2A-pointwise-agreement ; A×A→Fin2A
-                                                     ; Fin2A→A×A ; Fin2A~A×A ; A×A~Fin2A-pointwise
-                                                     ; A→A~Fin2A-pointwise ; Fin2A ; Fin2A≡
+                                                     ; A→A→Fin2A-ptws-agree ; A×A→Fin2A
+                                                     ; Fin2A→A×A ; Fin2A~A×A ; A×A~Fin2A-ptws
+                                                     ; A→A~Fin2A-ptws ; Fin2A ; Fin2A≡
                                                      ; CurryFin2 ; UncurryFin2 ; CurryFin2~UncurryFin2
                                                      ; CurryFin3 ; UncurryFin3 ; Fin2A→B-to-A×A→B
                                                      ; A×A→B-to-Fin2A→B ; Fin2A→B~A×A→B )
@@ -96,9 +96,12 @@ open import Algebras.Congruences            using    ( IsCongruence ; Con ; IsCo
                                                      ; Con→IsCongruence ; 0[_]Compatible ; 0Con[_]
                                                      ; _╱_ ; 𝟘[_╱_] ; 𝟎[_╱_] ; /-≡ )
 
-open import Algebras.Setoid.Basic           using    ( ⟦_⟧ ; Algebroid ; SetoidAlgebra ; _̂_ ; _∙_ )
+open import Algebras.Setoid.Basic           using    ( ⟦_⟧ ; Algebroid ; SetoidAlgebra ; _̂_ ; _∙_
+                                                     ; ov ; 𝕌[_] ; 𝔻[_] ; Level-of-Alg
+                                                     ; Level-of-Carrier ; Lift-Alg ; Lift-Alg' )
 
-open import Algebras.Setoid.Products        using    ( ⨅ ; ⨅oid ; ℑ ; 𝔄 ; class-product )
+open import Algebras.Setoid.Products        using    ( ⨅ ; ℑ ; 𝔄 ; class-product
+                                                     ; ⨅oid ; ℑ' ; 𝔄' ; class-product' )
 
 open import Algebras.Setoid.Congruences     using    ( _∣≈_ ; _∣≋_ ; IsCongruence ; Con ; IsCongruence→Con
                                                      ; Con→IsCongruence ; _╱_ )
@@ -132,7 +135,7 @@ open import Homomorphisms.Setoid.Basic      using    ( compatible-op-map ; is-ho
                                                      ; ker[_⇒_]_↾_ )
 
 open import Homomorphisms.Setoid.Isomorphisms using    ( _≅_ ; ≅-refl ; ≅-sym ; ≅-trans ; Lift-≅
-                                                     ; Lift-SetoidAlg-iso ; Lift-SetoidAlg-assoc )
+                                                     ; Lift-Alg-iso ; Lift-Alg-assoc )
 
 -- TERMS ------------------------------------------------------------------------------------------
 

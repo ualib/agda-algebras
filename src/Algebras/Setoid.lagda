@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Algebras.Setoid module (Agda Universal Algebra Library)
-date : 2021-07-26
-author: [agda-algebras development team][]
+title : "Algebras.Setoid module (Agda Universal Algebra Library)"
+date : "2021-07-26"
+author: "agda-algebras development team"
 ---
 
-# <a id="setoid-representation-of-algebras">Setoid Representation of Algebras</a>
+### <a id="setoid-representation-of-algebras">Setoid Representation of Algebras</a>
 
 \begin{code}
 
@@ -25,5 +25,3 @@ open import Algebras.Setoid.Congruences
 <span style="float:right;">[Algebras.Setoid.Basic →](Algebras.Setoid.Basic.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

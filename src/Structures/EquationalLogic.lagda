@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Structures.EquationalLogic
-date : 2021-07-23
-author: [agda-algebras development team][]
+title : "Structures.EquationalLogic"
+date : "2021-07-23"
+author: "agda-algebras development team"
 ---
 
-## <a id="equational-logic-for-general-structures">Equational Logic for General Structures</a>
+### <a id="equational-logic-for-general-structures">Equational Logic for General Structures</a>
 
 This is the [Structures.EquationalLogic][] module of the [Agda Universal Algebra Library][].
 
@@ -27,7 +27,6 @@ open import Overture.Preliminaries using ( _≈_ )
 open import Terms.Basic
 open import Structures.Basic       using ( signature ; structure ; _ᵒ_ )
 open import Structures.Terms
-
 
 private variable
  𝓞₀ 𝓥₀ 𝓞₁ 𝓥₁ χ α ρ ℓ : Level
@@ -62,7 +61,3 @@ fMod ℰ = λ 𝑨 → ∀ i → 𝑨 ⊧ fst (ℰ i) ≈ snd (ℰ i)
 <span style="float:right;">[Structures.Sigma →](Structures.Sigma.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
-
-

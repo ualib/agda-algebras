@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Subalgebras.Subalgebras module (The Agda Universal Algebra Library)
-date : 2021-01-14
-author: [agda-algebras development team][]
+title : "Subalgebras.Subalgebras module (The Agda Universal Algebra Library)"
+date : "2021-01-14"
+author: "agda-algebras development team"
 ---
 
-## <a id="subalgebras">Subalgebras</a>
+### <a id="subalgebras">Subalgebras</a>
 
 The [Subalgebras.Subalgebras][] module of the [Agda Universal Algebra Library][] defines the `Subalgebra` type, representing the subalgebra of a given algebra, as well as the collection of all subalgebras of a given class of algebras.
 
@@ -43,7 +43,7 @@ private variable α β γ 𝓧 : Level
 \end{code}
 
 
-### <a id="subalgebra-type">Subalgebra type</a>
+#### <a id="subalgebra-type">Subalgebra type</a>
 
 Given algebras `𝑨 : Algebra α 𝑆` and `𝑩 : Algebra 𝓦 𝑆`, we say that `𝑩` is a *subalgebra* of `𝑨` just in case `𝑩` can be *homomorphically embedded* in `𝑨`; that is, there exists a map `h : ∣ 𝑩 ∣ → ∣ 𝑨 ∣` that is both a homomorphism and an embedding.
 
@@ -84,7 +84,7 @@ Note the order of the arguments.  The universe `β` comes first because in certa
 
 
 
-### <a id="consequences-of-first-homomorphism-theorem">Consequences of First Homomorphism Theorem</a>
+#### <a id="consequences-of-first-homomorphism-theorem">Consequences of First Homomorphism Theorem</a>
 
 We take this opportunity to prove an important lemma that makes use of the `IsSubalgebraOf` type defined above.  It is the following: If `𝑨` and `𝑩` are `𝑆`-algebras and `h : hom 𝑨 𝑩` a homomorphism from `𝑨` to `𝑩`, then the quotient `𝑨 ╱ ker h` is (isomorphic to) a subalgebra of `𝑩`.  This is an easy corollary of the First Homomorphism Theorem proved in the [Homomorphisms.Noether][] module.
 
@@ -129,7 +129,7 @@ module _ (X : Type 𝓧)(𝑩 : Algebra β 𝑆)(h : hom (𝑻 X) 𝑩)
 
 \end{code}
 
-### <a id="subalgebras-of-a-class">Subalgebras of a class</a>
+#### <a id="subalgebras-of-a-class">Subalgebras of a class</a>
 
 One of our goals is to formally express and prove properties of classes of algebraic structures.  Fixing a signature `𝑆` and a universe `α`, we represent classes of `𝑆`-algebras with domains of type `Type α` as predicates over the `Algebra α 𝑆` type. In the syntax of the [agda-algebras](https://github.com/ualib/agda-algebras) library, such predicates inhabit the type `Pred (Algebra α 𝑆) γ`, for some universe γ.
 
@@ -159,5 +159,3 @@ Using this type, we express the collection of all subalgebras of algebras in a c
 <span style="float:right;">[Subalgebras.Properties →](Subalgebras.Properties.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

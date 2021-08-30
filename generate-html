@@ -41,6 +41,3 @@ cp $HTMLDIR/{agda-algebras.tex,index.markdown}
 for f in $DOTMODS; do
     mv $HTMLDIR/$f.{tex,md}; done
 echo " "
-
-# Play a sound so we know when the script finishes :)
-paplay  /usr/share/sounds/ubuntu/stereo/dialog-warning.ogg

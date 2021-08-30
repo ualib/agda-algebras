@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Foundations.Extensionality module (The Agda Universal Algebra Library)
-date : 2021-02-23
-author: [agda-algebras development team][]
+title : "Foundations.Extensionality module (The Agda Universal Algebra Library)"
+date : "2021-02-23"
+author: "agda-algebras development team"
 ---
 
-## <a id="extensionality">Extensionality</a>
+### <a id="extensionality">Extensionality</a>
 
 This is the [Foundations.Extensionality][] module of the [Agda Universal Algebra Library][].
 
@@ -39,7 +39,7 @@ private variable α β γ ρ 𝓥 : Level
 
 \end{code}
 
-### <a id="function-extensionality">Function Extensionality</a>
+#### <a id="function-extensionality">Function Extensionality</a>
 
 
 Previous versions of the [agda-algebras][] library made heavy use of a *global function extensionality
@@ -56,7 +56,7 @@ DFunExt = (𝓤 𝓥 : Level) → funext 𝓤 𝓥
 \end{code}
 
 
-### <a id="an-alternative-way-to-express-function-extensionality">An alternative way to express function extensionality</a>
+#### <a id="an-alternative-way-to-express-function-extensionality">An alternative way to express function extensionality</a>
 
 A useful alternative for expressing dependent function extensionality, which is essentially equivalent to `dfunext`, is to assert that the `happly` function is actually an *equivalence*.
 
@@ -76,7 +76,7 @@ pred-ext α β = ∀ {A : Type α}{P Q : Pred A β } → P ⊆ Q → Q ⊆ P →
 Note that `pred-ext` merely defines an extensionality principle. It does not postulate that the principle holds.  If we wish to postulate `pred-ext`, then we do so by assuming that type is inhabited (see `block-ext` below, for example).
 
 
-### Quotient extensionality
+#### Quotient extensionality
 
 We need an identity type for congruence classes (blocks) over sets so that two different presentations of the same block (e.g., using different representatives) may be identified.  This requires two postulates: (1) *predicate extensionality*, manifested by the `pred-ext` type; (2) *equivalence class truncation* or "uniqueness of block identity proofs", manifested by the `blk-uip` type defined in the [Relations.Truncation][] module. We now use `pred-ext` and `blk-uip` to define a type called `block-ext|uip` which we require for the proof of the First Homomorphism Theorem presented in [Homomorphisms.Noether][].
 
@@ -112,6 +112,3 @@ module _ {A : Type α}{R : BinRel A ρ} where
 <span style="float:right;">[Residuation →](Residuation.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
-

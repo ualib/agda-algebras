@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Varieties.Setoid.EquationalLogic module (The Agda Universal Algebra Library)
-date : 2021-01-14
-author: [agda-algebras development team][]
+title : "Varieties.Setoid.EquationalLogic module (The Agda Universal Algebra Library)"
+date : "2021-01-14"
+author: "agda-algebras development team"
 ---
 
-## <a id="entailment-derivation-rules-soundness-and-completeness">Entailment, derivation rules, soundness and completeness</a>
+#### <a id="entailment-derivation-rules-soundness-and-completeness">Entailment, derivation rules, soundness and completeness</a>
 
 This is the [Varieties.Setoid.EquationalLogic][] module of the [Agda Universal Algebra Library][].
 
@@ -26,24 +26,19 @@ open import Function.Base    using ( _∘_ ; flip )
 open import Function.Bundles using ( Func )
 open import Relation.Binary  using ( Setoid ; IsEquivalence )
 open import Relation.Unary   using ( Pred ; _∈_ )
-open import Relation.Binary.PropositionalEquality
-                             using ( _≡_ ; refl )
-
+open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl )
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
-open Setoid using ( Carrier ; _≈_ ; isEquivalence )
-open Func renaming ( f to _<$>_ )
+open Setoid        using ( Carrier ; _≈_ ; isEquivalence )
+open Func          renaming ( f to _<$>_ )
 open IsEquivalence renaming ( refl to reflE ; sym to  symmE ; trans to tranE )
 
-
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
-open import Overture.Preliminaries       using ( ∣_∣ )
+open import Overture.Preliminaries        using ( ∣_∣ )
 open import Algebras.Setoid.Basic {𝑆 = 𝑆} using ( SetoidAlgebra ; ov ) renaming ( ⟦_⟧ to ⟦_⟧s )
 open import Terms.Basic           {𝑆 = 𝑆} using ( Term )
 open import Terms.Setoid.Basic    {𝑆 = 𝑆} using ( module Environment ; Ops ; Sub ; _[_] )
-
 open Term
-
 private variable
  χ α ρ ℓ : Level
  X Γ Δ : Type χ
@@ -60,7 +55,6 @@ record Eq : Type (ov χ) where
   rhs   : Term cxt
 
 open Eq public
-
 
 -- Equation p ≈̇ q holding in algebra M. (type \~~\^. to get ≈̇) (type \|= to get ⊨)
 _⊨_ : (M : SetoidAlgebra α ℓ)(term-identity : Eq{χ}) → Type _
@@ -79,7 +73,6 @@ module _ {ι : Level}{I : Type ι} where
  -- ...`Mod E` is the class of algebras that model all term equations in E.
  Mod : (I → Eq{χ}) → Pred(SetoidAlgebra α ρ) (χ ⊔ ι ⊔ α ⊔ ρ)
  Mod E = _⊧ E
-
 
 _⊫_ : Pred (SetoidAlgebra α ρ) ℓ → Eq{χ} → Type _
 𝒦 ⊫ eq = ∀ 𝑨 → 𝒦 𝑨 → 𝑨 ⊨ eq                        -- (type \||= to get ⊫)
@@ -103,7 +96,7 @@ module _ {α}{ρ}{ι}{I : Type ι} where
 \end{code}
 
 
-### <a id="derivations-in-a-context">Derivations in a context</a>
+#### <a id="derivations-in-a-context">Derivations in a context</a>
 
 (Based on [Andreas Abel's Agda formalization of Birkhoff's completeness theorem](http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf).)
 
@@ -130,10 +123,9 @@ module _ {χ ι : Level} where
 
 
 
-### <a id="soundness-of-the-inference-rules">Soundness of the inference rules</a>
+#### <a id="soundness-of-the-inference-rules">Soundness of the inference rules</a>
 
 (Based on [Andreas Abel's Agda formalization of Birkhoff's completeness theorem](see: http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf).)
-
 
 \begin{code}
 
@@ -175,7 +167,7 @@ We will prove that result next.
 
 
 
-### <a id="birkhoffs-completeness-theorem">Birkhoff's completeness theorem</a>
+#### <a id="birkhoffs-completeness-theorem">Birkhoff's completeness theorem</a>
 
 The proof proceeds by constructing a relatively free algebra consisting of term
 quotiented by derivable equality E ⊢ Γ ▹ _≈_.  It then suffices to prove
@@ -222,10 +214,8 @@ module TermModel {χ : Level}{X : Type χ}{ι : Level}{I : Type ι} (E : I → E
 
  -- Evaluation in the term model is substitution $E ⊢ X ▹ ⟦t⟧σ ≡ t[σ]$.
  -- This would even hold "up to the nose" if we had function extensionality.
-
  evaluation : (t : Term Δ) (σ : Sub X Δ) → E ⊢ X ▹ (⟦ t ⟧ <$> σ) ≈ (t [ σ ])
  evaluation (ℊ x)    σ = refl
---  evaluation (node f ts)  σ = app (λ i → evaluation (ts i) σ)
  evaluation (node f ts)  σ = app (flip (evaluation ∘ ts) σ)
 
  -- The term model satisfies all the equations it started out with.
@@ -240,7 +230,6 @@ module TermModel {χ : Level}{X : Type χ}{ι : Level}{I : Type ι} (E : I → E
                   p = lhs (E i)
                   q = rhs (E i)
 
-
 module Completeness {χ ι : Level}{I : Type ι} (E : I → Eq{χ}) {X} where
  open TermModel {X = X} E
  open Environment (M X)
@@ -251,15 +240,14 @@ module Completeness {χ ι : Level}{I : Type ι} (E : I → Eq{χ}) {X} where
  completeness p q V = begin
                   p              ≈˘⟨ identity p ⟩
                   p [ σ₀ ]       ≈˘⟨ evaluation p σ₀ ⟩
-                  ⟦ p ⟧ <$> σ₀  ≈⟨ V (M X) satisfies σ₀ ⟩
-                  ⟦ q ⟧ <$> σ₀  ≈⟨ evaluation q σ₀ ⟩
+                  ⟦ p ⟧ <$> σ₀   ≈⟨ V (M X) satisfies σ₀ ⟩
+                  ⟦ q ⟧ <$> σ₀   ≈⟨ evaluation q σ₀ ⟩
                   q [ σ₀ ]       ≈⟨ identity q ⟩
                   q              ∎
-                  where open SetoidReasoning (TermSetoid X)
-
+  where
+  open SetoidReasoning (TermSetoid X)
 
 \end{code}
-
 
 --------------------------------
 
@@ -267,6 +255,3 @@ module Completeness {χ ι : Level}{I : Type ι} (E : I → Eq{χ}) {X} where
 <span style="float:right;">[Varieties.Setoid.Closure →](Varieties.Setoid.Closure.html)</span>
 
 {% include UALib.Links.md %}
-
-
-[the agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

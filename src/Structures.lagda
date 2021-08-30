@@ -1,14 +1,13 @@
 ---
 layout: default
-title : Structures module (Agda Universal Algebra Library)
-date : 2021-07-26
-author: [agda-algebras development team][]
+title : ""Structures module (Agda Universal Algebra Library)""
+date : ""2021-07-26""
+author: "[agda-algebras development team]"
 ---
 
-# <a id="types-for-general-mathematical-structures">Types for General Mathematical Structures</a>
+## <a id="types-for-general-mathematical-structures">Types for General Mathematical Structures</a>
 
 This is the [Structures][] module of the [Agda Universal Algebra Library][].
-
 
 \begin{code}
 
@@ -36,5 +35,3 @@ open import Structures.Sigma
 <span style="float:right;">[Structures.Basic →](Structures.Basic.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

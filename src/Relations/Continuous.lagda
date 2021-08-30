@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Relations.Continuous module (The Agda Universal Algebra Library)
-date : 2021-02-28
-author: [agda-algebras development team][]
+title : "Relations.Continuous module (The Agda Universal Algebra Library)"
+date : "2021-02-28"
+author: "[agda-algebras development team][]"
 ---
 
-## <a id="continuous-relations">Continuous Relations</a>
+### <a id="continuous-relations">Continuous Relations</a>
 
 This is the [Relations.Continuous][] module of the [Agda Universal Algebra Library][].
 
@@ -26,7 +26,7 @@ private variable α ρ : Level
 
 \end{code}
 
-### <a id="motivation">Motivation</a>
+#### <a id="motivation">Motivation</a>
 
 In set theory, an n-ary relation on a set `A` is simply a subset of the n-fold product `A × A × ⋯ × A`.  As such, we could model these as predicates over the type `A × A × ⋯ × A`, or as relations of type `A → A → ⋯ → A → Type β` (for some universe β).  To implement such a relation in type theory, we would need to know the arity in advance, and then somehow form an n-fold arrow →.  It's easier and more general to instead define an arity type `I : Type 𝓥`, and define the type representing `I`-ary relations on `A` as the function type `(I → A) → Type β`.  Then, if we are specifically interested in an n-ary relation for some natural number `n`, we could take `I` to be a finite set (e.g., of type `Fin n`).
 
@@ -40,7 +40,7 @@ We refer to such relations as *dependent continuous relations* (or *dependent re
 
 
 
-### <a id="continuous-and-dependent-relations">Continuous and dependent relations</a>
+#### <a id="continuous-and-dependent-relations">Continuous and dependent relations</a>
 
 Here we define the types `Rel` and `ΠΡ` ("Pi Rho"). The first of these represents predicates of arbitrary arity over a single type `A`; we call these *continuous relations*.
 To define `ΠΡ`, the type of *dependent relations*, we exploit the full power of dependent types and provide a completely general relation type.
@@ -77,7 +77,7 @@ module _ {𝓥 : Level} where
 
 \end{code}
 
-### <a id="compatibility-with-general-relations">Compatibility with general relations</a>
+#### <a id="compatibility-with-general-relations">Compatibility with general relations</a>
 
 \begin{code}
 
@@ -100,7 +100,7 @@ sections of `t` also belongs to `R`.
 \end{code}
 
 
-### <a id="compatibility-of-operations-with-pirho-types">Compatibility of operations with ΠΡ types</a>
+#### <a id="compatibility-of-operations-with-pirho-types">Compatibility of operations with ΠΡ types</a>
 
 \begin{code}
 
@@ -120,7 +120,7 @@ sections of `t` also belongs to `R`.
 
 \end{code}
 
-### <a id="detailed-explanation">Detailed explanation</a>
+#### <a id="detailed-explanation">Detailed explanation</a>
 
 The first of these is an *evaluation* function which "lifts" an `I`-ary relation to an `(I → J)`-ary relation. The lifted relation will relate an `I`-tuple of `J`-tuples when the "`I`-slices" (or "rows") of the `J`-tuples belong to the original relation. The second definition denotes compatibility of an operation with a continuous relation.
 

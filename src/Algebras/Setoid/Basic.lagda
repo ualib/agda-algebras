@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Algebras.Setoid.Basic module (Agda Universal Algebra Library)
-date : 2021-04-23
-author: [agda-algebras development team][]
+title : "Algebras.Setoid.Basic module (Agda Universal Algebra Library)"
+date : "2021-04-23"
+author: "agda-algebras development team"
 ---
 
-## <a id="basic-definitions">Basic Definitions</a>
+#### <a id="basic-definitions">Basic Definitions</a>
 
 This is the [Algebras.Setoid.Basic][] module of the [Agda Universal Algebra Library][].
 
@@ -38,7 +38,7 @@ ov α = 𝓞 ⊔ 𝓥 ⊔ lsuc α
 \end{code}
 
 
-## <a id="setoid-algebras">Setoid Algebras</a>
+#### <a id="setoid-algebras">Setoid Algebras</a>
 
 Here we define algebras over a setoid, instead of a mere type with no equivalence on it.
 
@@ -141,26 +141,26 @@ f ̂ 𝑨 = λ a → (Interp 𝑨) <$> (f , a)
 \end{code}
 
 
-## <a id="level-lifting-setoid-algebra-types">Level lifting setoid algebra types</a>
+#### <a id="level-lifting-setoid-algebra-types">Level lifting setoid algebra types</a>
 
 \begin{code}
 
 open Level
 
 
-Lift-SetoidAlg : SetoidAlgebra α ρ → (ℓ : Level) → SetoidAlgebra (α ⊔ ℓ) ρ
+Lift-Alg : SetoidAlgebra α ρ → (ℓ : Level) → SetoidAlgebra (α ⊔ ℓ) ρ
 
-Domain (Lift-SetoidAlg 𝑨 ℓ) = record { Carrier = Lift ℓ 𝕌[ 𝑨 ]
-                                     ; _≈_ = λ x y → lower x ≈A lower y
-                                     ; isEquivalence = record { refl = srefl
-                                                              ; sym = sym
-                                                              ; trans = trans
-                                                              }
-                                     } where open Setoid (Domain 𝑨) renaming (_≈_ to _≈A_ ; refl to srefl )
+Domain (Lift-Alg 𝑨 ℓ) = record { Carrier = Lift ℓ 𝕌[ 𝑨 ]
+                               ; _≈_ = λ x y → lower x ≈A lower y
+                               ; isEquivalence = record { refl = srefl
+                                                        ; sym = sym
+                                                        ; trans = trans
+                                                        }
+                               } where open Setoid (Domain 𝑨) renaming (_≈_ to _≈A_ ; refl to srefl )
 
-Interp (Lift-SetoidAlg 𝑨 ℓ) <$> (f , la) = lift ((f ̂ 𝑨) (lower ∘ la))
+Interp (Lift-Alg 𝑨 ℓ) <$> (f , la) = lift ((f ̂ 𝑨) (lower ∘ la))
 
-≈cong (Interp (Lift-SetoidAlg 𝑨 ℓ)) (refl , la=lb) = ≈cong (Interp 𝑨) ((refl , la=lb))
+≈cong (Interp (Lift-Alg 𝑨 ℓ)) (refl , la=lb) = ≈cong (Interp 𝑨) ((refl , la=lb))
 
 
 module _ {𝑨 : SetoidAlgebra α ρ} where
@@ -171,16 +171,16 @@ module _ {𝑨 : SetoidAlgebra α ρ} where
   A = Carrier (Domain 𝑨)
   _≈A_ = _≈_ (Domain 𝑨)
 
- Lift-SetoidAlg' : (ℓ : Level) → SetoidAlgebra (α ⊔ ℓ) ρ
+ Lift-Alg' : (ℓ : Level) → SetoidAlgebra (α ⊔ ℓ) ρ
 
- Domain (Lift-SetoidAlg' ℓ) = record { Carrier = Lift ℓ A
+ Domain (Lift-Alg' ℓ) = record { Carrier = Lift ℓ A
                                      ; _≈_ = λ x y → lower x ≈A lower y
                                      ; isEquivalence = record { refl = srefl ; sym = sym ; trans = trans }
                                      }
 
- Interp (Lift-SetoidAlg' ℓ) <$> (f , la) = lift ((f ̂ 𝑨) (lower ∘ la))
+ Interp (Lift-Alg' ℓ) <$> (f , la) = lift ((f ̂ 𝑨) (lower ∘ la))
 
- ≈cong (Interp (Lift-SetoidAlg' ℓ)) (refl , la≡lb) = ≈cong (Interp 𝑨) (PE.refl , la≡lb)
+ ≈cong (Interp (Lift-Alg' ℓ)) (refl , la≡lb) = ≈cong (Interp 𝑨) (PE.refl , la≡lb)
 
 \end{code}
 
@@ -191,5 +191,3 @@ module _ {𝑨 : SetoidAlgebra α ρ} where
 <span style="float:right;">[Algebras.Setoid.Products →](Algebras.Setoid.Products.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

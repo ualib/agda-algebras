@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Foundations.Welldefined module (The Agda Universal Algebra Library)
-date : 2021-07-25
-author: [agda-algebras development team][]
+title : "Foundations.Welldefined module (The Agda Universal Algebra Library)"
+date : "2021-07-25"
+author: "agda-algebras development team"
 ---
 
-## <a id="notions-of-well-definedness">Notions of well-definedness</a>
+### <a id="notions-of-well-definedness">Notions of well-definedness</a>
 
 \begin{code}
 
@@ -36,7 +36,7 @@ private variable
 
 \end{code}
 
-### <a id="strongly-well-defined-operations">Strongly well-defined operations</a>
+#### <a id="strongly-well-defined-operations">Strongly well-defined operations</a>
 
 We now describe an extensionality principle that seems weaker than function extensionality, but still (probably) not provable in [MLTT][]. (We address this and other questions  below.)  We call this the principle *strong well-definedness of operations*. We will encounter situations in which this weaker extensionality principle suffices as a substitute for function extensionality.
 
@@ -99,7 +99,7 @@ swelldef'→funext' wd ptweq = wd _$_ ptweq
 
 
 
-### <a id="questions">Questions</a>
+#### <a id="questions">Questions</a>
 
 1. Does the converse `swelldef→funext` hold or is `swelldef` is strictly weaker than `funext`?
 2. If `swelldef` is strictly weaker than `funext`, then can we prove it in MLTT?
@@ -117,7 +117,7 @@ In the agda-algebras library, swelldef is used exclusively on operation type, so
 I believe there is no way to prove that `swelldef ι α α` implies funext ι α.
 
 
-### <a id="some-new-ideas">Some new ideas</a>
+#### <a id="some-new-ideas">Some new ideas</a>
 
 It seems unlikely that we could prove swelldef in MLTT because, on the face of it,
 to prove f u ≡ f v, we need u ≡ v, but we only have ∀ i → u i ≡ v i.
@@ -265,5 +265,3 @@ module _ {A : Type α}{B : Type β} where
 <span style="float:right;">[Foundations.Truncation →](Foundations.Truncation.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

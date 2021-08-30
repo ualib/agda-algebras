@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Subalgebras.Setoid.Subuniverses module (The Agda Universal Algebra Library)
-date : 2021-07-11
-author: [agda-algebras development team][]
+title : "Subalgebras.Setoid.Subuniverses module (The Agda Universal Algebra Library)"
+date : "2021-07-11"
+author: "agda-algebras development team"
 ---
 
-## <a id="subuniverses-of-setoid-algebras">Subuniverses of Setoid Algebras</a>
+#### <a id="subuniverses-of-setoid-algebras">Subuniverses of setoid algebras</a>
 
 This is the [Subalgebras.Setoid.Subuniverses][] module of the [Agda Universal Algebra Library][].
 
@@ -24,15 +24,14 @@ open import Function.Base    using ( _∘_ ; id )
 open import Function.Bundles using ( Func ; Injection )
 open import Relation.Binary  using ( Setoid ; REL )
 open import Relation.Unary   using ( Pred ; _∈_ ; _⊆_ ; ⋂ )
-open import Relation.Binary.PropositionalEquality
-                             using ( _≡_ ; module ≡-Reasoning )
+open import Relation.Binary.PropositionalEquality using ( _≡_ ; module ≡-Reasoning )
 
 -- Imports from the Agda Universal Algebra Library -----------------------------------------------
 open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
 open import Overture.Inverses                  using ( ∘-injective ; IsInjective ; id-is-injective )
 open import Relations.Discrete                 using ( Im_⊆_ )
-open import Foundations.Welldefined              using ( swelldef )
-open import Algebras.Setoid.Basic      {𝑆 = 𝑆} using ( SetoidAlgebra ; 𝕌[_] ; _̂_ ; Lift-SetoidAlg )
+open import Foundations.Welldefined            using ( swelldef )
+open import Algebras.Setoid.Basic      {𝑆 = 𝑆} using ( SetoidAlgebra ; 𝕌[_] ; _̂_ ; Lift-Alg )
 open import Algebras.Products          {𝑆 = 𝑆} using ( ov )
 open import Terms.Basic                {𝑆 = 𝑆} using ( Term ; ℊ ; node )
 open import Terms.Setoid.Basic         {𝑆 = 𝑆} using ( module Environment )
@@ -63,13 +62,8 @@ module _ {α ρᵃ : Level}  (𝑨 : SetoidAlgebra α ρᵃ) where
   field       sset  : Pred A ρ
               isSub : sset ∈ Subuniverses
 
-\end{code}
 
-
-### <a id="subuniverse-generation">Subuniverse Generation</a>
-
-\begin{code}
-
+ -- Subuniverse Generation
  data Sg (G : Pred A ρ) : Pred A (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ) where
   var : ∀ {v} → v ∈ G → v ∈ Sg G
   app : ∀ f a → Im a ⊆ Sg G → (f ̂ 𝑨) a ∈ Sg G
@@ -220,7 +214,6 @@ Alternatively, we could express the preceeding fact using an inductive type repr
 \end{code}
 
 In the induction step, the following typing judgments are assumed:
-
 ```
 SgGa : Im a ⊆ Sg 𝑨 G
 a    : ∥ 𝑆 ∥ f → Subalgebras.Setoid.A 𝑨
@@ -232,7 +225,6 @@ G    : Pred A ρ
 wd   : swelldef 𝓥 β
 𝑩    : SetoidAlgebra β ρᵇ
 ```
-
 and, under these assumptions, we proved `∣ g ∣ ((f ̂ 𝑨) a) ≡ ∣ h ∣ ((f ̂ 𝑨) a)`.
 
 ---------------------------------
@@ -241,7 +233,3 @@ and, under these assumptions, we proved `∣ g ∣ ((f ̂ 𝑨) a) ≡ ∣ h ∣
 <span style="float:right;">[Subalgebras.Setoid.Subalgebras →](Subalgebras.Setoid.Subalgebras.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
-
-
