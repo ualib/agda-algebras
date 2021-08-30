@@ -1,20 +1,17 @@
 ---
 layout: default
-title : Structures.Homs.Records
-date : 2021-06-22
-author: [agda-algebras development team][]
+title : "Structures.Homs.Records"
+date : "2021-06-22"
+author: "agda-algebras development team"
 ---
 
-
-## <a id="homomorphisms-of-general-structures">Homomorphisms of General Structures</a>
+### <a id="homomorphisms-of-general-structures">Homomorphisms of General Structures</a>
 
 This is the [Structures.Homs][] module of the [Agda Universal Algebra Library][].
-
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-} -- cubical #-}
-
 
 module Structures.Homs where
 
@@ -29,7 +26,6 @@ open import Relation.Binary using ( IsEquivalence )
 open import Relation.Binary.PropositionalEquality
                             using ( _≡_ ; refl ; sym ; cong ; module ≡-Reasoning ; trans )
 
-
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
 open import Overture.Preliminaries   using ( _∙_ ; ∣_∣ ; ∥_∥ ; _⁻¹ ; Π-syntax )
 open import Overture.Inverses        using ( IsInjective ; IsSurjective ; Image_∋_ )
@@ -42,8 +38,6 @@ open import Examples.Structures.Signatures
                                      using ( S∅ )
 open import Structures.Congruences   using ( con ; _╱_)
 open import Structures.Products      using ( ⨅ )
-
-
 open structure
 open signature
 
@@ -53,10 +47,7 @@ private variable
  𝑅 : signature 𝓞₁ 𝓥₁
  α ρᵃ β ρᵇ γ ρᶜ ℓ : Level
 
-
-module _ (𝑨 : structure 𝐹 𝑅 {α}{ρᵃ})
-         (𝑩 : structure 𝐹 𝑅 {β}{ρᵇ}) where
-
+module _ (𝑨 : structure 𝐹 𝑅 {α}{ρᵃ}) (𝑩 : structure 𝐹 𝑅 {β}{ρᵇ}) where
  private
   A = carrier 𝑨
   B = carrier 𝑩
@@ -170,7 +161,7 @@ open Lift
 
 
 
-### <a id="kernels-of-homomorphisms">Kernels of homomorphisms</a>
+#### <a id="kernels-of-homomorphisms">Kernels of homomorphisms</a>
 
 \begin{code}
 
@@ -216,7 +207,7 @@ ker[_⇒_] {ρᵃ = ρᵃ} 𝑨 𝑩 h {wd} = kerquo{ρᵃ = ρᵃ}{𝑨 = 𝑨}
 
 
 
-### <a id="canonical-projections">Canonical projections</a>
+#### <a id="canonical-projections">Canonical projections</a>
 
 \begin{code}
 
@@ -286,5 +277,3 @@ module _ {𝑨 : structure 𝐹 S∅ {α}{ℓ₀}}
 <span style="float:right;">[Structures.Isos →](Structures.Isos.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

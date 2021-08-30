@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Residuation.Properties module (The Agda Universal Algebra Library)
-date : 2021-07-12
-author: [agda-algebras development team][]
+title : "Residuation.Properties module (The Agda Universal Algebra Library)"
+date : "2021-07-12"
+author: "agda-algebras development team"
 ---
 
-## <a id="basic-properties">Basic properties</a>
+### <a id="basic-properties">Basic properties</a>
 
 \begin{code}
 
@@ -69,5 +69,3 @@ module _ {α ιᵃ ρᵃ : Level} {A : Poset α ιᵃ ρᵃ}
 <span style="float:right;">[GaloisConnections →](GaloisConnections.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

@@ -1,12 +1,11 @@
 ---
 layout: default
-title : Algebras.Products module (Agda Universal Algebra Library)
-date : 2021-01-12
-author: [agda-algebras development team][]
+title : "Algebras.Products module (Agda Universal Algebra Library)"
+date : "2021-01-12"
+author: "agda-algebras development team"
 ---
 
-
-## <a id="products-of-algebras-and-product-algebras">Products of Algebras and Product Algebras</a>
+### <a id="products-of-algebras-and-product-algebras">Products of Algebras and Product Algebras</a>
 
 This is the [Algebras.Products][] module of the [Agda Universal Algebra Library][].
 
@@ -75,7 +74,7 @@ ov α = 𝓞 ⊔ 𝓥 ⊔ lsuc α
 
 
 
-## <a id="products-of-classes-of-algebras">Products of classes of algebras</a>
+### <a id="products-of-classes-of-algebras">Products of classes of algebras</a>
 
 An arbitrary class `𝒦` of algebras is represented as a predicate over the type `Algebra α 𝑆`, for some universe level `α` and signature `𝑆`. That is, `𝒦 : Pred (Algebra α 𝑆) β`, for some type `β`. Later we will formally state and prove that the product of all subalgebras of algebras in `𝒦` belongs to the class `SP(𝒦)` of subalgebras of products of algebras in `𝒦`. That is, `⨅ S(𝒦) ∈ SP(𝒦 )`. This turns out to be a nontrivial exercise.
 
@@ -125,5 +124,3 @@ If `p : 𝑨 ∈ 𝒦`, we view the pair `(𝑨 , p) ∈ ℑ` as an *index* over
 <span style="float:right;">[Algebras.Congruences →](Algebras.Congruences.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

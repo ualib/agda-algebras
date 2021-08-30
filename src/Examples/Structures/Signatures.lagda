@@ -1,8 +1,8 @@
 ---
 layout: default
-title : Examples.Structures.Signatures module (Agda Universal Algebra Library)
-date : 2021-07-16
-author: [agda-algebras development team][]
+title : "Examples.Structures.Signatures module (Agda Universal Algebra Library)"
+date : "2021-07-16"
+author: "agda-algebras development team"
 ---
 
 \begin{code}
@@ -13,11 +13,8 @@ module Examples.Structures.Signatures where
 
 open import Agda.Primitive  using ( ) renaming ( lzero to ℓ₀ )
 
-
 open import Overture.Preliminaries using ( 𝟘 ; 𝟙 ; 𝟚 ; 𝟛 )
 open import Structures.Basic       using ( signature ; structure )
-
-
 
 -- Some examples (of finite signatures)
 -- The signature with...
@@ -54,4 +51,7 @@ S111 = record { symbol = 𝟛 ; arity = λ{ 𝟛.𝟎 → 𝟘 ; 𝟛.𝟏 → �
 
 \end{code}
 
+--------------------------------
+
+{% include UALib.Links.md %}
 

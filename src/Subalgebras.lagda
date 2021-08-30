@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Subalgebras module (The Agda Universal Algebra Library)
-date : 2021-01-14
-author: [agda-algebras development team][]
+title : "Subalgebras module (The Agda Universal Algebra Library)"
+date : "2021-01-14"
+author: "agda-algebras development team"
 ---
 
-# <a id="subalgebra-types">Subalgebra Types</a>
+## <a id="subalgebra-types">Subalgebra Types</a>
 
 This is the [Subalgebras][] module of the [Agda Universal Algebra Library][].
 
@@ -28,5 +28,3 @@ open import Subalgebras.Setoid
 <span style="float:right;">[Subalgebras.Subuniverses →](Subalgebras.Subuniverses.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

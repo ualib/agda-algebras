@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Relations module (The Agda Universal Algebra Library)
-date : 2021-01-12
-author: [agda-algebras development team][]
+title : "Relations module (The Agda Universal Algebra Library)"
+date : "2021-01-12"
+author: "the agda-algebras development team"
 ---
 
-# <a id="relations">Relations</a>
+## <a id="relations">Relations</a>
 
 This is the [Relations][] module of the [Agda Universal Algebra Library][].
 
@@ -31,5 +31,3 @@ open import Relations.Quotients public
 <span style="float:right;">[Relations.Discrete →](Relations.Discrete.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

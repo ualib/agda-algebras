@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Homomorphisms.Noether module (The Agda Universal Algebra Library)
-date : 2021-01-13
-author: [agda-algebras development team][]
+title : "Homomorphisms.Noether module (The Agda Universal Algebra Library)"
+date : "2021-01-13"
+author: "agda-algebras development team"
 ---
 
-## <a id="homomorphism-theorems">Homomorphism Theorems</a>
+### <a id="homomorphism-theorems">Homomorphism Theorems</a>
 
 This is the [Homomorphisms.Noether][] module of the [Agda Universal Algebra Library][].
 
@@ -46,7 +46,7 @@ private variable α β γ : Level
 \end{code}
 
 
-### <a id="the-first-homomorphism-theorem">The First Homomorphism Theorem</a>
+#### <a id="the-first-homomorphism-theorem">The First Homomorphism Theorem</a>
 
 Here we formalize a version of the *first homomorphism theorem*, sometimes called *Noether's first homomorphism theorem*, after Emmy Noether who was among the first proponents of the abstract approach to the subject that we now call "modern algebra").
 
@@ -183,7 +183,7 @@ The proof of `NoetherHomUnique` goes through for the special case of epimorphism
 
 
 
-### <a id="homomorphism-decomposition">Homomorphism decomposition</a>
+#### <a id="homomorphism-decomposition">Homomorphism decomposition</a>
 
 If `τ : hom 𝑨 𝑩`, `ν : hom 𝑨 𝑪`, `ν` is surjective, and `ker ν ⊆ ker τ`, then there exists `φ : hom 𝑪 𝑩` such that `τ = φ ∘ ν` so the following diagram commutes:
 
@@ -259,13 +259,9 @@ If, in addition to the hypotheses of the last theorem, we assume τ is epic, the
 
 \end{code}
 
-
 --------------------------------------
 
 <span style="float:left;">[← Homomorphisms.Basic](Homomorphisms.Basic.html)</span>
 <span style="float:right;">[Homomorphisms.Isomorphisms →](Homomorphisms.Isomorphisms.html)</span>
 
 {% include UALib.Links.md %}
-
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

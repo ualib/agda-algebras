@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Overture module (Agda Universal Algebra Library)
-date : 2021-01-12
-author: [agda-algebras development team][]
+title : "Overture module (Agda Universal Algebra Library)"
+date : "2021-01-12"
+author: "the agda-algebras development team"
 ---
 
-# <a id="overture">Overture</a>
+## <a id="overture">Overture</a>
 
 This is the [Overture][] module of the [Agda Universal Algebra Library][].
 
@@ -29,5 +29,3 @@ open import Overture.Transformers
 <span style="float:right;">[Overture.Preliminaries →](Overture.Preliminaries.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

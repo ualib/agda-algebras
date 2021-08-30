@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Structures.Graphs module
-date : 2021-06-22
-author: [agda-algebras development team][]
+title : "Structures.Graphs module"
+date : "2021-06-22"
+author: "agda-algebras development team"
 ---
 
-## <a id="graph-structures">Graph Structures</a>
+### <a id="graph-structures">Graph Structures</a>
 
 This is the [Structures.Graphs][] module of the [Agda Universal Algebra Library][].
 
@@ -90,7 +90,6 @@ module _ {𝑨 : structure 𝐹 𝑅 {α} {ρᵃ}}
   ii : is-hom-op (Gr 𝑨) (Gr 𝑩) h
   ii = λ ()
 
-
  Grhom→hom : hom (Gr 𝑨) (Gr 𝑩) → hom 𝑨 𝑩
  Grhom→hom (h , hhom) = h , (i , ii)
   where
@@ -105,7 +104,6 @@ module _ {𝑨 : structure 𝐹 𝑅 {α} {ρᵃ}}
    goal : h (op 𝑨 f a) ≡ op 𝑩 f (λ x → h (a x))
    goal = sym (lower (∣ hhom ∣ (inr f) split (lift refl)))
 
-
 \end{code}
 
 --------------------------------
@@ -114,7 +112,3 @@ module _ {𝑨 : structure 𝐹 𝑅 {α} {ρᵃ}}
 <span style="float:right;">[Structures.Graphs0 →](Structures.Graphs0.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
-
-

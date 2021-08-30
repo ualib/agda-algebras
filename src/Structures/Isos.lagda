@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Structures.Isos module (The Agda Universal Algebra Library)
-date : 2021-07-23
-author: [agda-algebras development team][]
+title : "Structures.Isos module (The Agda Universal Algebra Library)"
+date : "2021-07-23"
+author: "agda-algebras development team"
 ---
 
-## <a id="isomorphisms">Isomorphisms</a>
+### <a id="isomorphisms">Isomorphisms</a>
 
 This is the [Structures.Isos][] module of the [Agda Universal Algebra Library][].
 
@@ -18,14 +18,11 @@ module Structures.Isos where
 
 -- Imports from Agda and the Agda Standard Library ---------------------
 open import Agda.Primitive using ( _⊔_ ; lsuc ) renaming ( Set to Type )
-open import Axiom.Extensionality.Propositional
-                           using () renaming (Extensionality to funext)
-open import Data.Product   using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Level          using ( Level ; Lift )
-open import Function.Base  using ( _∘_ )
-open import Relation.Binary.PropositionalEquality
-                           using ( _≡_ ; refl ; cong ; cong-app ; module ≡-Reasoning )
-
+open import Axiom.Extensionality.Propositional using () renaming (Extensionality to funext)
+open import Data.Product using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Function.Base using ( _∘_ )
+open import Level using ( Level ; Lift )
+open import Relation.Binary.PropositionalEquality using ( cong ; refl ; cong-app ; module ≡-Reasoning )
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
 open import Overture.Preliminaries using ( ∣_∣ ; _≈_ ; ∥_∥ ; _∙_ ; lower∼lift ; lift∼lower )
@@ -43,8 +40,7 @@ private variable
 \end{code}
 
 
-
-### <a id="definition-of-isomorphism">Definition of Isomorphism</a>
+#### <a id="definition-of-isomorphism">Definition of Isomorphism</a>
 
 Recall, `f ≈ g` means f and g are *extensionally* (or pointwise) equal; i.e., `∀ x, f x ≡ g x`.
 We use this notion of equality of functions in the following definition of *isomorphism*.
@@ -70,7 +66,7 @@ That is, two structures are isomorphic provided there are homomorphisms going ba
 
 
 
-### <a id="isomorphism-is-an-equivalence-relation">Isomorphism is an equivalence relation</a>
+#### <a id="isomorphism-is-an-equivalence-relation">Isomorphism is an equivalence relation</a>
 
 \begin{code}
 
@@ -104,7 +100,7 @@ module _ {𝑨 : structure 𝐹 𝑅 {α}{ρᵃ}} where
 
 
 
-### <a id="lift-is-an-algebraic-invariant">Lift is an algebraic invariant</a>
+#### <a id="lift-is-an-algebraic-invariant">Lift is an algebraic invariant</a>
 
 Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic invariant*). As our focus is universal algebra, this is important and is what makes the lift operation a workable solution to the technical problems that arise from the noncumulativity of the universe hierarchy discussed in [Overture.Lifts][].
 
@@ -150,7 +146,7 @@ module _ {𝑨 : structure 𝐹 𝑅{α}{ρᵃ}} {𝑩 : structure 𝐹 𝑅{β}
 
 
 
-### <a id="lift-associativity">Lift associativity</a>
+#### <a id="lift-associativity">Lift associativity</a>
 
 The lift is also associative, up to isomorphism at least.
 
@@ -182,7 +178,7 @@ module _ {𝑨 : structure 𝐹 𝑅 {α}{ρᵃ} } where
 
 
 
-### <a id="products-preserve-isomorphisms">Products preserve isomorphisms</a>
+#### <a id="products-preserve-isomorphisms">Products preserve isomorphisms</a>
 
 Products of isomorphic families of algebras are themselves isomorphic. The proof looks a bit technical, but it is as straightforward as it ought to be.
 
@@ -266,8 +262,3 @@ module _ {I : Type ι}{𝒜 : I → structure 𝐹 𝑅 {α}{ρᵃ}}{ℬ : (Lift
 <span style="float:right;">[Structures.Terms →](Structures.Terms.html)</span>
 
 {% include UALib.Links.md %}
-
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
-
-

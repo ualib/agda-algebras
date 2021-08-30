@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Terms.Setoid.Basic module (The Agda Universal Algebra Library)
-date : 2021-07-17
-author: [agda-algebras development team][]
+title : "Terms.Setoid.Basic module (The Agda Universal Algebra Library)"
+date : "2021-07-17"
+author: "agda-algebras development team"
 ---
 
-## <a id="basic-definitions">Basic definitions</a>
+#### <a id="basic-definitions">Basic definitions</a>
 
 This is the [Terms.Setoid.Basic][] module of the [Agda Universal Algebra Library][].
 
@@ -44,7 +44,7 @@ private variable
 \end{code}
 
 
-### <a id="equality-of-terms">Equality of terms</a>
+##### <a id="equality-of-terms">Equality of terms</a>
 
 We take a different approach here, using Setoids instead of quotient types.
 That is, we will define the collection of terms in a signature as a setoid
@@ -95,7 +95,7 @@ module _ where
 \end{code}
 
 
-### <a id="interpretation-of-terms-in-setoid-algebras">Interpretation of terms in setoid algebras</a>
+##### <a id="interpretation-of-terms-in-setoid-algebras">Interpretation of terms in setoid algebras</a>
 
 The approach to terms and their interpretation in this module was inspired by
 [Andreas Abel's formal proof of Birkhoff's completeness theorem](http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf).
@@ -202,5 +202,3 @@ module Environment (M : SetoidAlgebra α ℓ) where
 <span style="float:right;">[Terms.Setoid.Properties →](Terms.Setoid.Properties.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Residuation.Basic module (The Agda Universal Algebra Library)
-date : 2021-07-12
-author: [agda-algebras development team][]
+title : "Residuation.Basic module (The Agda Universal Algebra Library)"
+date : "2021-07-12"
+author: "agda-algebras development team"
 ---
 
-## <a id="basic-definitions">Basic definitions</a>
+### <a id="basic-definitions">Basic definitions</a>
 
 \begin{code}
 
@@ -47,5 +47,3 @@ module _ {α ιᵃ ρᵃ : Level} (A : Poset α ιᵃ ρᵃ)
 <span style="float:right;">[Residuation.Properties →](Residuation.Properties.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

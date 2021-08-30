@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Varieties.Properties module (The Agda Universal Algebra Library)
-date : 2021-06-24
-author: [agda-algebras development team][]
+title : "Varieties.Properties module (The Agda Universal Algebra Library)"
+date : "2021-06-24"
+author: "agda-algebras development team"
 ---
 
-## <a id="properties-of-the-models-relation">Properties of the models relation</a>
+### <a id="properties-of-the-models-relation">Properties of the models relation</a>
 
 We prove some closure and invariance properties of the relation `⊧`.  In particular, we prove the following facts (which are needed, for example, in the proof the Birkhoff HSP Theorem).
 
@@ -25,13 +25,12 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 module Varieties.Properties {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library -------------------------------------------
-open import Agda.Primitive using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type ; lzero to  ℓ₀ )
-open import Axiom.Extensionality.Propositional using () renaming ( Extensionality to funext )
+open import Agda.Primitive using ( _⊔_ ; lsuc ; Level )   renaming ( Set to Type ; lzero to  ℓ₀ )
+open import Axiom.Extensionality.Propositional using ()   renaming ( Extensionality to funext )
 open import Data.Product   using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
 open import Function.Base  using ( _∘_ )
 open import Relation.Unary using ( Pred ; _∈_ ; _⊆_ ; ⋂ )
-open import Relation.Binary.PropositionalEquality
-                           using ( _≡_ ; refl ; module ≡-Reasoning ; cong )
+open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; module ≡-Reasoning ; cong )
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
 open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
@@ -44,8 +43,7 @@ open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom; ∘-hom )
 open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; mkiso ; Lift-≅ ; ≅-sym ; ≅-trans )
 open import Terms.Basic                {𝑆 = 𝑆} using ( Term ; 𝑻 )
 open import Terms.Properties           {𝑆 = 𝑆} using ( lift-hom )
-open import Terms.Operations           {𝑆 = 𝑆} using ( _⟦_⟧ ; comm-hom-term ; interp-prod
-                                                     ; term-agreement )
+open import Terms.Operations {𝑆 = 𝑆} using ( _⟦_⟧ ; comm-hom-term ; interp-prod ; term-agreement )
 open import Subalgebras.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; SubalgebraOfClass )
 open import Subalgebras.Properties     {𝑆 = 𝑆} using ( iso→injective )
 open import Varieties.EquationalLogic  {𝑆 = 𝑆} using ( _⊧_≈_ ; _⊫_≈_ )
@@ -53,7 +51,7 @@ open import Varieties.EquationalLogic  {𝑆 = 𝑆} using ( _⊧_≈_ ; _⊫_�
 \end{code}
 
 
-### <a id="algebraic-invariance-of-models">Algebraic invariance of ⊧</a>
+#### <a id="algebraic-invariance-of-models">Algebraic invariance of ⊧</a>
 
 The binary relation ⊧ would be practically useless if it were not an *algebraic invariant* (i.e., invariant under isomorphism).
 
@@ -81,7 +79,7 @@ module _ (wd : SwellDef){α β χ : Level}{X : Type χ}{𝑨 : Algebra α 𝑆}
 
  As the proof makes clear, we show 𝑩 ⊧ p ≈ q by showing that `𝑩 ⟦ p ⟧ ≡ 𝑩 ⟦ q ⟧ holds *extensionally*, that is, `∀ x, 𝑩 ⟦ p ⟧ x ≡ 𝑩 ⟦q ⟧ x`.
 
-### <a id="lift-invariance">Lift-invariance of ⊧</a>
+#### <a id="lift-invariance">Lift-invariance of ⊧</a>
 The ⊧ relation is also invariant under the algebraic lift and lower operations.
 
 \begin{code}
@@ -98,7 +96,7 @@ module _ (wd : SwellDef){α β χ : Level}{X : Type χ}{𝑨 : Algebra α 𝑆} 
 
 
 
-### <a id="subalgebraic-invariance">Subalgebraic invariance of ⊧</a>
+#### <a id="subalgebraic-invariance">Subalgebraic invariance of ⊧</a>
 
 Identities modeled by an algebra `𝑨` are also modeled by every subalgebra of `𝑨`, which fact can be formalized as follows.
 
@@ -138,7 +136,7 @@ Next, identities modeled by a class of algebras is also modeled by all subalgebr
 
 
 
-### <a id="product-invariance">Product invariance of ⊧</a>
+#### <a id="product-invariance">Product invariance of ⊧</a>
 
 An identity satisfied by all algebras in an indexed collection is also satisfied by the product of algebras in that collection.
 
@@ -170,7 +168,6 @@ An identity satisfied by all algebras in a class is also satisfied by the produc
 
  ⊧-P-class-invar 𝒦 {p}{q}σ K𝒜 = ⊧-P-invar p q λ i → σ (K𝒜 i)
 
-
 \end{code}
 
 Another fact that will turn out to be useful is that a product of a collection of algebras models p ≈ q if the lift of each algebra in the collection models p ≈ q.
@@ -187,7 +184,7 @@ Another fact that will turn out to be useful is that a product of a collection o
 
 
 
-### <a id="homomorphisc-invariance">Homomorphic invariance of ⊧</a>
+#### <a id="homomorphisc-invariance">Homomorphic invariance of ⊧</a>
 
 If an algebra 𝑨 models an identity p ≈ q, then the pair (p , q) belongs to the kernel of every homomorphism φ : hom (𝑻 X) 𝑨 from the term algebra to 𝑨; that is, every homomorphism from 𝑻 X to 𝑨 maps p and q to the same element of 𝑨.
 
@@ -204,15 +201,12 @@ module _ (wd : SwellDef){α χ : Level}{X : Type χ}{𝑨 : Algebra α 𝑆} whe
                        ∣ φ ∣ ((𝑻 X ⟦ q ⟧) ℊ) ≡⟨(cong ∣ φ ∣ (term-agreement (wd 𝓥 (ov χ)) q))⁻¹ ⟩
                        ∣ φ ∣ q               ∎
 
-
 \end{code}
 
 More generally, an identity is satisfied by all algebras in a class if and only if that identity is invariant under all homomorphisms from the term algebra `𝑻 X` into algebras of the class. More precisely, if `𝒦` is a class of `𝑆`-algebras and `𝑝`, `𝑞` terms in the language of `𝑆`, then,
-
 ```
   𝒦 ⊧ p ≈ q  ⇔  ∀ 𝑨 ∈ 𝒦,  ∀ φ : hom (𝑻 X) 𝑨,  φ ∘ (𝑻 X)⟦ p ⟧ = φ ∘ (𝑻 X)⟦ q ⟧.
 ```
-
 \begin{code}
 
 module _ (wd : SwellDef){α χ : Level}{X : Type χ}{𝒦 : Pred (Algebra α 𝑆)(ov α)}  where
@@ -228,8 +222,7 @@ module _ (wd : SwellDef){α χ : Level}{X : Type χ}{𝒦 : Pred (Algebra α �
          (𝑨 ⟦ q ⟧)(∣ φ ∣ ∘ a)   ≡⟨ (comm-hom-term (wd 𝓥 α) 𝑨 φ q a)⁻¹ ⟩
          ∣ φ ∣ ((𝑻 X ⟦ q ⟧) a)  ∎
 
-
--- ⇐ (the "if" direction)
+ -- ⇐ (the "if" direction)
  ⊧-H-class-coinvar : {p q : Term X}
   →  (∀ 𝑨 φ → 𝑨 ∈ 𝒦 → ∀ a → ∣ φ ∣ ((𝑻 X ⟦ p ⟧) a) ≡ ∣ φ ∣ ((𝑻 X ⟦ q ⟧) a)) → 𝒦 ⊫ p ≈ q
 
@@ -244,7 +237,6 @@ module _ (wd : SwellDef){α χ : Level}{X : Type χ}{𝒦 : Pred (Algebra α �
            (∣ φ a ∣ ∘ (𝑻 X ⟦ q ⟧)) ℊ  ≡⟨ (comm-hom-term (wd 𝓥 α) 𝑨 (φ a) q ℊ) ⟩
            (𝑨 ⟦ q ⟧)(∣ φ a ∣ ∘ ℊ)     ∎
 
-
 \end{code}
 
 ---------------------------------
@@ -253,6 +245,3 @@ module _ (wd : SwellDef){α χ : Level}{X : Type χ}{𝒦 : Pred (Algebra α �
 <span style="float:right;">[Varieties.Preservation →](Varieties.Preservation.html)</span>
 
 {% include UALib.Links.md %}
-
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

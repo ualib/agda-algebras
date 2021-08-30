@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Relations.Quotients module (The Agda Universal Algebra Library)
-date : 2021-01-13
-author: [agda-algebras development team][]
+title : "Relations.Quotients module (The Agda Universal Algebra Library)"
+date : "2021-01-13"
+author: "the agda-algebras development team"
 ---
 
-## <a id="quotients">Quotients</a>
+### <a id="quotients">Quotients</a>
 
 This is the [Relations.Quotients][] module of the [Agda Universal Algebra Library][].
 
@@ -34,7 +34,7 @@ private variable
 
 \end{code}
 
-### <a id="equivalence-relations">Equivalence relations</a>
+#### <a id="equivalence-relations">Equivalence relations</a>
 
 A binary relation is called a *preorder* if it is reflexive and transitive.
 An *equivalence relation* is a symmetric preorder. The property of being
@@ -78,7 +78,7 @@ Thus, if we have `(R ,  p) : Equivalence A`, then `R` denotes a binary
 relation over `A` and `p` is of record type `IsEquivalence R` with fields
 containing the three proofs showing that `R` is an equivalence relation.
 
-### <a id="kernels">Kernels</a>
+#### <a id="kernels">Kernels</a>
 
 A prominent example of an equivalence relation is the kernel of any function.
 
@@ -100,7 +100,7 @@ kerlift-IsEquivalence f = record { refl = lift PE.refl
 \end{code}
 
 
-### <a id="equivalence-classes"> Equivalence classes (blocks) </a>
+#### <a id="equivalence-classes"> Equivalence classes (blocks) </a>
 
 
 If `R` is an equivalence relation on `A`, then for each `u : A` there is
@@ -241,6 +241,4 @@ This is obviously an equivalence relation, as we now confirm.
 <span style="float:right;">[Foundations →](Foundations.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 

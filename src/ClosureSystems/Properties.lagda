@@ -1,11 +1,11 @@
 ---
 layout: default
-title : ClosureSystems.Properties module (The Agda Universal Algebra Library)
-date : 2021-07-08
-author: [agda-algebras development team][]
+title : "ClosureSystems.Properties module (The Agda Universal Algebra Library)"
+date : "2021-07-08"
+author: "agda-algebras development team"
 ---
 
-## <a id="basic-properties">Basic properties</a>
+### <a id="basic-properties">Basic properties</a>
 
 This is the [ClosureSystems.Properties][] module of the [Agda Universal Algebra Library][].
 
@@ -109,5 +109,3 @@ module _ {𝑨 : Poset ℓ ℓ₁ ℓ₂} where
 <span style="float:right;">[Algebras →](Algebras.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

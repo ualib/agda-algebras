@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Terms.Properties module (The Agda Universal Algebra Library)
-date : 2021-07-03
-author: [agda-algebras development team][]
+title : "Terms.Properties module (The Agda Universal Algebra Library)"
+date : "2021-07-03"
+author: "agda-algebras development team"
 ---
 
-## <a id="properties-of-terms-and-the-term-algebra">Properties of Terms and the Term Algebra</a>
+### <a id="properties-of-terms-and-the-term-algebra">Properties of Terms and the Term Algebra</a>
 
 This is the [Terms.Properties][] module of the [Agda Universal Algebra Library][].
 
@@ -46,7 +46,7 @@ private variable α β χ : Level
 \end{code}
 
 
-### <a id="the-universal-property">The universal property</a>
+#### <a id="the-universal-property">The universal property</a>
 
 The term algebra `𝑻 X` is *absolutely free* (or *universal*, or *initial*) for algebras in the signature `𝑆`. That is, for every 𝑆-algebra `𝑨`, the following hold.
 
@@ -126,13 +126,9 @@ lift-of-epi-is-epi 𝑨 {h₀} hE y = Goal
 
 The `lift-hom` and `lift-of-epi-is-epi` types will be called to action when such epimorphisms are needed later (e.g., in the [Varieties][] module).
 
-
 ------------------------------
 
 <span style="float:left;">[← Terms.Basic](Terms.Basic.html)</span>
 <span style="float:right;">[Terms.Operations →](Terms.Operations.html)</span>
 
 {% include UALib.Links.md %}
-
-[the agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
-

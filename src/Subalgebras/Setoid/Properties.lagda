@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Subalgebras.Setoid.Properties module (The Agda Universal Algebra Library)
-date : 2021-07-18
-author: [agda-algebras development team][]
+title : "Subalgebras.Setoid.Properties module (The Agda Universal Algebra Library)"
+date : "2021-07-18"
+author: "agda-algebras development team"
 ---
 
-## <a id="properties-of-the-subalgebra-relation">Properties of the Subalgebra Relation</a>
+#### <a id="properties-of-the-subalgebra-relation">Properties of the subalgebra relation for setoid algebras</a>
 
 This is the [Subalgebras.Setoid.Properties][] module of the [Agda Universal Algebra Library][].
 
@@ -31,7 +31,7 @@ open import Relation.Binary.PropositionalEquality
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------------
 open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ )
 open import Overture.Inverses                  using ( IsInjective ; id-is-injective ; ∘-injective )
-open import Algebras.Setoid.Basic      {𝑆 = 𝑆} using ( SetoidAlgebra ; Lift-SetoidAlg )
+open import Algebras.Setoid.Basic      {𝑆 = 𝑆} using ( SetoidAlgebra ; Lift-Alg )
 open import Algebras.Products          {𝑆 = 𝑆} using ( ov )
 open import Homomorphisms.Setoid.Basic {𝑆 = 𝑆} using ( hom ; ∘-hom )
 open import Homomorphisms.Setoid.Isomorphisms
@@ -118,24 +118,26 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ}{𝑪 : S
 
 \end{code}
 
-### <a id="lifts-of-subalgebras">Lifts of subalgebras</a>
+
+
+#### <a id="lifts-of-subalgebras-of-setoid-algebras">Lifts of subalgebras of setoid algebras</a>
 
 \begin{code}
 
 module _ {𝒦 : Pred (SetoidAlgebra α ρᵃ)(ov α)}{𝑩 : SetoidAlgebra β ρᵇ}{ℓ : Level} where
 
- Lift-is-sub : 𝑩 IsSubalgebraOfClass 𝒦 → (Lift-SetoidAlg 𝑩 ℓ) IsSubalgebraOfClass 𝒦
+ Lift-is-sub : 𝑩 IsSubalgebraOfClass 𝒦 → (Lift-Alg 𝑩 ℓ) IsSubalgebraOfClass 𝒦
  Lift-is-sub (𝑨 , (KA , B≤A)) = 𝑨 , (KA , A≥B×B≅C→A≥C {𝑨 = 𝑨}{𝑩} B≤A Lift-≅)
 
-≤-Lift : (𝑨 : SetoidAlgebra α ρᵃ){𝑩 : SetoidAlgebra β ρᵇ}{ℓ : Level} → 𝑨 ≤ 𝑩 → 𝑨 ≤ Lift-SetoidAlg 𝑩 ℓ
+≤-Lift : (𝑨 : SetoidAlgebra α ρᵃ){𝑩 : SetoidAlgebra β ρᵇ}{ℓ : Level} → 𝑨 ≤ 𝑩 → 𝑨 ≤ Lift-Alg 𝑩 ℓ
 ≤-Lift 𝑨 {𝑩}{ℓ} A≤B = A≤B×B≅C→A≤C{𝑨 = 𝑨}{𝑩}  A≤B Lift-≅
 
-≥-Lift : (𝑨 : SetoidAlgebra α ρᵃ){𝑩 : SetoidAlgebra β ρᵇ}{ℓ : Level} → 𝑨 ≥ 𝑩 → 𝑨 ≥ Lift-SetoidAlg 𝑩 ℓ
+≥-Lift : (𝑨 : SetoidAlgebra α ρᵃ){𝑩 : SetoidAlgebra β ρᵇ}{ℓ : Level} → 𝑨 ≥ 𝑩 → 𝑨 ≥ Lift-Alg 𝑩 ℓ
 ≥-Lift 𝑨 {𝑩}{ℓ} A≥B = A≥B×B≅C→A≥C {𝑨 = 𝑨}{𝑩} A≥B Lift-≅
 
 Lift-≤-Lift : {𝑨 : SetoidAlgebra α ρᵃ}(ℓᵃ : Level){𝑩 : SetoidAlgebra β ρᵇ}(ℓᵇ : Level)
- →             𝑨 ≤ 𝑩 → Lift-SetoidAlg 𝑨 ℓᵃ ≤ Lift-SetoidAlg 𝑩 ℓᵇ
-Lift-≤-Lift {𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ A≤B = ≥-Lift (Lift-SetoidAlg 𝑩 ℓᵇ){𝑨} (≤-Lift 𝑨{𝑩} A≤B)
+ →             𝑨 ≤ 𝑩 → Lift-Alg 𝑨 ℓᵃ ≤ Lift-Alg 𝑩 ℓᵇ
+Lift-≤-Lift {𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ A≤B = ≥-Lift (Lift-Alg 𝑩 ℓᵇ){𝑨} (≤-Lift 𝑨{𝑩} A≤B)
 
 \end{code}
 
@@ -145,5 +147,3 @@ Lift-≤-Lift {𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ A≤B = ≥-Lift (Lift-SetoidAl
 <span style="float:right;">[Varieties →](Varieties.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Algebras.Basic module (Agda Universal Algebra Library)
-date : 2021-04-23
-author: [agda-algebras development team][]
+title : "Algebras.Basic module (Agda Universal Algebra Library)"
+date : "2021-04-23"
+author: "agda-algebras development team"
 ---
 
-## <a id="basic-definitions">Basic definitions</a>
+### <a id="basic-definitions">Basic definitions</a>
 
 This is the [Algebras.Basic][] module of the [Agda Universal Algebra Library][].
 
@@ -37,7 +37,7 @@ variable 𝓞 𝓥 : Level
 The variables `𝓞` and `𝓥` are not private since, as mentioned earlier, throughout the [agda-algebras](https://github.com/ualib/agda-algebras) library `𝓞` denotes the universe level of *operation symbol* types, while `𝓥` denotes the universe level of *arity* types.
 
 
-### <a id="signatures-of-an-algebra">Signatures of an algebra</a>
+#### <a id="signatures-of-an-algebra">Signatures of an algebra</a>
 
 In [model theory](https://en.wikipedia.org/wiki/Model_theory), the *signature* `𝑆 = (𝐶, 𝐹, 𝑅, ρ)` of a structure consists of three (possibly empty) sets `𝐶`, `𝐹`, and `𝑅`---called *constant symbols*, *function symbols*, and *relation symbols*, respectively---along with a function `ρ : 𝐶 + 𝐹 + 𝑅 → 𝑁` that assigns an *arity* to each symbol. Often (but not always) `𝑁 = ℕ`, the natural numbers.
 
@@ -49,7 +49,7 @@ If `A` is a set and `𝑓` is a (`ρ 𝑓`)-ary operation on `A`, we often indic
 
 **Example**. Suppose `𝑔 : (m → A) → A` is an `m`-ary operation on `A`, and `a : m → A` is an `m`-tuple on `A`. Then `𝑔 a` may be viewed as `𝑔 (a 0, a 1, …, a (m-1))`, which has type `A`. Suppose further that `𝑓 : (ρ𝑓 → B) → B` is a `ρ𝑓`-ary operation on `B`, let `a : ρ𝑓 → A` be a `ρ𝑓`-tuple on `A`, and let `h : A → B` be a function.  Then the following typing judgments obtain: `h ∘ a : ρ𝑓 → B` and we `𝑓 (h ∘ a) : B`.
 
-### <a id="signature-type">Signature type</a>
+#### <a id="signature-type">Signature type</a>
 
 In the [agda-algebras](https://github.com/ualib/agda-algebras) library we represent the *signature* of an algebraic structure using the following type.
 
@@ -76,7 +76,7 @@ If `𝑓 : ∣ 𝑆 ∣` is an operation symbol in the signature `𝑆`, then `�
 
 
 
-### <a id="algebras">Algebras</a>
+#### <a id="algebras">Algebras</a>
 
 Our first goal is to develop a working vocabulary and formal library for classical (single-sorted, set-based) universal algebra.  In this section we define the main objects of study.  An *algebraic structure* (or *algebra*) in the signature `𝑆 = (𝐹, ρ)` is denoted by `𝑨 = (A, F`<sup>`𝑨`</sup>`)` and consists of
 
@@ -103,7 +103,7 @@ It would be more precise to refer to inhabitants of this type as ∞-*algebras* 
 We might take this opportunity to define the type of 0-*algebras*, that is, algebras whose domains are sets, which is probably closer to what most of us think of when doing informal universal algebra.  However, in the [agda-algebras](https://github.com/ualib/agda-algebras) library we will only need to know that the domains of certain algebras are sets in a few places, so it seems preferable to work with general (∞-)algebras throughout and then explicitly postulate additional axioms (e.g., [uniquness of identity proofs](https://ualib.github.io/agda-algebras/Foundations.Truncation.html#uniqueness-of-identity-proofs) if and only if necessary.
 
 
-### <a id="algebras-as-record-types">Algebras as record types</a>
+#### <a id="algebras-as-record-types">Algebras as record types</a>
 
 A popular way to represent algebraic structures in type theory is with record types.  The Sigma type defined above provides an equivalent alternative that we happen to prefer and we use it throughout the library, both for consistency and because of its direct connection to the existential quantifier of logic. Recall that the type `Σ x ꞉ X , P x` represents the proposition, "there exists `x` in `X` such that `P x` holds;" in symbols, `∃ x ∈ X , P x`.  Indeed, an inhabitant of `Σ x ꞉ X , P x` is a pair `(x , p)` such that `x` inhabits `X` and `p` is a proof of `P x`. In other terms, the pair `(x , p)` is a witness and proof of the proposition `∃ x ∈ X , P x`.
 
@@ -136,7 +136,7 @@ module _ {𝑆 : Signature 𝓞 𝓥} where
 \end{code}
 
 
-### <a id="operation-interpretation-syntax">Operation interpretation syntax</a>
+#### <a id="operation-interpretation-syntax">Operation interpretation syntax</a>
 
 We now define a convenient shorthand for the interpretation of an operation symbol. This looks more similar to the standard notation one finds in the literature as compared to the double bar notation we started with, so we will use this new notation almost exclusively in the remaining modules of the [agda-algebras][] library.
 
@@ -152,7 +152,7 @@ So, if `𝑓 : ∣ 𝑆 ∣` is an operation symbol in the signature `𝑆`, and
 
 
 
-### <a id="the-universe-level-of-an-algebra">The universe level of an algebra</a>
+#### <a id="the-universe-level-of-an-algebra">The universe level of an algebra</a>
 
 Occasionally we will be given an algebra and we just need to know the universe level of its domain. The following utility function provides this.
 
@@ -167,7 +167,7 @@ Level-of-Carrier {α = α} _ = α
 \end{code}
 
 
-### <a id="lifts-of-algebras">Level lifting algebra types</a>
+#### <a id="lifts-of-algebras">Level lifting algebra types</a>
 
 Recall, in the [section on level lifting and lowering](Overture.Lifts.html#level-lifting-and-lowering), we described the difficulties one may encounter when working with a noncumulative universe hierarchy. We made a promise to provide some domain-specific level lifting and level lowering methods. Here we fulfill this promise by supplying a couple of bespoke tools designed specifically for our operation and algebra types.
 
@@ -198,7 +198,7 @@ What makes the `Lift-Alg` type so useful for resolving type level errors involvi
 + [`Lift-Alg` preserves identities](Varieties.EquationalLogic.html#lift-invariance)) (see [Varieties.EquationalLogic][])
 
 
-### <a id="compatibility-of-binary-relations">Compatibility of binary relations</a>
+#### <a id="compatibility-of-binary-relations">Compatibility of binary relations</a>
 
 We now define the function `compatible` so that, if `𝑨` denotes an algebra and `R` a binary relation, then `compatible 𝑨 R` will represent the assertion that `R` is *compatible* with all basic operations of `𝑨`. The formal definition is immediate since all the work is done by the relation `|:`, which we defined above (see [Relations.Discrete][]).
 
@@ -215,7 +215,7 @@ compatible-pred  𝑨 P = ∀ 𝑓 → (𝑓 ̂ 𝑨) |:pred P
 Recall, the `|:` type was defined in [Relations.Discrete][] module.
 
 
-### <a id="compatibility-of-continuous-relations">Compatibility of continuous relations</a>
+#### <a id="compatibility-of-continuous-relations">Compatibility of continuous relations</a>
 
 In the [Relations.Continuous][] module, we defined a function called `cont-compatible-op` to represent the assertion that a given continuous relation is compatible with a given operation. With that, it is easy to define a function, which we call `cont-compatible`, representing compatibility of a continuous relation with all operations of an algebra.  Similarly, we define the analogous `dep-compatible` function for the (even more general) type of *dependent relations*.
 
@@ -237,6 +237,3 @@ module _ {I : Type 𝓥} {𝑆 : Signature 𝓞 𝓥} where
 <span style="float:right;">[Algebras.Products →](Algebras.Products.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
-

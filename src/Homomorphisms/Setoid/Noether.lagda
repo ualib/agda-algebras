@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Homomorphisms.Setoid.Noether module (The Agda Universal Algebra Library)
-date : 2021-07-17
-author: [agda-algebras development team][]
+title : "Homomorphisms.Setoid.Noether module (The Agda Universal Algebra Library)"
+date : "2021-07-17"
+author: "agda-algebras development team"
 ---
 
-## <a id="homomorphism-theorems-for-setoid-algebras">Homomorphism Theorems for Setoid Algebras</a>
+#### <a id="homomorphism-theorems-for-setoid-algebras">Homomorphism theorems for setoid algebras</a>
 
 This is the [Homomorphisms.Setoid.Noether][] module of the [Agda Universal Algebra Library][].
 
@@ -34,11 +34,10 @@ open import Relations.Discrete                 using ( kernel )
 open import Algebras.Setoid.Basic      {𝑆 = 𝑆} using ( 𝕌[_] ; SetoidAlgebra ; _̂_ )
 open import Homomorphisms.Setoid.Basic {𝑆 = 𝑆} using ( hom ; kercon ; ker[_⇒_]_↾_ ; ∘-hom ; 𝒾𝒹 ; epi
                                                      ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-homomorphism ; ∘-is-hom )
+private variable
+ α ρᵃ β ρᵇ γ ρᶜ : Level
+
 \end{code}
-
-
-### <a id="homomorphism-decomposition-for-setoidalgebras">Homomorphism Decomposition for SetoidAlgebras</a>
-
 
 If `τ : hom 𝑨 𝑩`, `ν : hom 𝑨 𝑪`, `ν` is surjective, and `ker ν ⊆ ker τ`, then there exists `φ : hom 𝑪 𝑩` such that `τ = φ ∘ ν` so the following diagram commutes:
 
@@ -55,17 +54,17 @@ If `τ : hom 𝑨 𝑩`, `ν : hom 𝑨 𝑪`, `ν` is surjective, and `ker ν �
 
 \begin{code}
 
-module _ {α ρᵃ : Level} {𝑨 : SetoidAlgebra α ρᵃ}
-         {β ρᵇ : Level} (𝑩 : SetoidAlgebra β ρᵇ)
-         {γ ρᶜ : Level} {𝑪 : SetoidAlgebra γ ρᶜ} where
+module _ {𝑨 : SetoidAlgebra α ρᵃ}
+         (𝑩 : SetoidAlgebra β ρᵇ)
+         {𝑪 : SetoidAlgebra γ ρᶜ} where
 
  private
   A = 𝕌[ 𝑨 ]
   B = 𝕌[ 𝑩 ]
   C = 𝕌[ 𝑪 ]
 
- open import Axiom.Extensionality.Propositional    using    ()
-                                                  renaming (Extensionality to funext)
+ open import Axiom.Extensionality.Propositional
+             renaming (Extensionality to funext) using ()
 
  HomFactor : swelldef 𝓥 γ
   →          (τ : hom 𝑨 𝑩)(ν : hom 𝑨 𝑪)
@@ -133,5 +132,3 @@ If, in addition to the hypotheses of the last theorem, we assume τ is epic, the
 <span style="float:right;">[Homomorphisms.Setoid.Isomorphisms →](Homomorphisms.Setoid.Isomorphisms.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

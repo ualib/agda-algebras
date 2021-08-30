@@ -1,18 +1,16 @@
 ---
 layout: default
-title : Overture.Transformers module
-date : 2021-07-26
-author: [agda-algebras development team][]
+title : "Overture.Transformers module"
+date : "2021-07-26"
+author: "the agda-algebras development team"
 ---
 
 ### <a id="type-transformers">Type Transformers</a>
 
 This is the [Overture.Transformers][] module of the [agda-algebras][] library.  Here we define functions for tanslating from one type to another.
-
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
-
 
 module Overture.Transformers where
 
@@ -29,13 +27,12 @@ open import Overture.Preliminaries using ( _≈_ )
 
 private variable
  α β : Level
-
 \end{code}
+
 
 #### <a id="bijections-of-nondependent-function-types">Bijections of nondependent function types</a>
 
 In set theory, these would simply be bijections between sets, or "set isomorphisms."
-
 \begin{code}
 
 record Bijection (A : Type α)(B : Type β) : Type (α ⊔ β) where
@@ -45,10 +42,8 @@ record Bijection (A : Type α)(B : Type β) : Type (α ⊔ β) where
   to-from : to ∘ from ≡ id
   from-to : from ∘ to ≡ id
 
--- Notation.
 ∣_∣=∣_∣ : (A : Type α)(B : Type β) → Type (α ⊔ β)
 ∣ A ∣=∣ B ∣ = Bijection A B
-
 
 record PointwiseBijection (A : Type α)(B : Type β) : Type (α ⊔ β) where
  field
@@ -57,10 +52,8 @@ record PointwiseBijection (A : Type α)(B : Type β) : Type (α ⊔ β) where
   to-from : to ∘ from ≈ id
   from-to : from ∘ to ≈ id
 
--- Notation.
 ∣_∣≈∣_∣ : (A : Type α)(B : Type β) → Type (α ⊔ β)
 ∣ A ∣≈∣ B ∣ = PointwiseBijection A B
-
 
 uncurry₀ : {A : Type α} → A → A → (A × A)
 uncurry₀ x y = x , y
@@ -73,13 +66,11 @@ module _ {A : Type α} {B : Type β} where
  Uncurry : (A → A → B) → A × A → B
  Uncurry f (x , y) = f x y
 
-
  A×A→B≅A→A→B : ∣ (A × A → B) ∣=∣ (A → A → B) ∣
  A×A→B≅A→A→B = record { to = Curry
                       ; from = Uncurry
                       ; to-from = refl
                       ; from-to = refl }
-
 \end{code}
 
 #### <a id="non-bijective-transformations">Non-bijective transformations</a>
@@ -100,9 +91,9 @@ module _ {A : Type α} where
  Fin2A~A×A : {A : Type α} → Fin2A→A×A ∘ A×A→Fin2A ≡ id
  Fin2A~A×A = refl
 
- A×A~Fin2A-pointwise : ∀ u → (A×A→Fin2A (Fin2A→A×A u)) ≈ u
- A×A~Fin2A-pointwise u z = refl
- A×A~Fin2A-pointwise u (s z) = refl
+ A×A~Fin2A-ptws : ∀ u → (A×A→Fin2A (Fin2A→A×A u)) ≈ u
+ A×A~Fin2A-ptws u z = refl
+ A×A~Fin2A-ptws u (s z) = refl
 
  A→A→Fin2A : A → A → Fin 2 → A
  A→A→Fin2A x y z = x
@@ -115,13 +106,13 @@ module _ {A : Type α} where
   u z = x
   u (s z) = y
 
- A→A→Fin2A-pointwise-agreement : (x y : A) → ∀ i → (A→A→Fin2A x y) i ≡ (A→A→Fin2A' x y) i
- A→A→Fin2A-pointwise-agreement x y z = refl
- A→A→Fin2A-pointwise-agreement x y (s z) = refl
+ A→A→Fin2A-ptws-agree : (x y : A) → ∀ i → (A→A→Fin2A x y) i ≡ (A→A→Fin2A' x y) i
+ A→A→Fin2A-ptws-agree x y z = refl
+ A→A→Fin2A-ptws-agree x y (s z) = refl
 
- A→A~Fin2A-pointwise : (v : Fin 2 → A) → ∀ i → A→A→Fin2A (v z) (v (s z)) i ≡ v i
- A→A~Fin2A-pointwise v z = refl
- A→A~Fin2A-pointwise v (s z) = refl
+ A→A~Fin2A-ptws : (v : Fin 2 → A) → ∀ i → A→A→Fin2A (v z) (v (s z)) i ≡ v i
+ A→A~Fin2A-ptws v z = refl
+ A→A~Fin2A-ptws v (s z) = refl
 
  Fin2A : (Fin 2 → A) → Fin 2 → A
  Fin2A u z = u z
@@ -178,10 +169,7 @@ module _ {A : Type α} {B : Type β} where
 
  Fin2A→B~A×A→B : Fin2A→B-to-A×A→B ∘ A×A→B-to-Fin2A→B ≡ id
  Fin2A→B~A×A→B = refl
-
 \end{code}
-
-
 
 --------------------------------------
 
@@ -189,6 +177,4 @@ module _ {A : Type α} {B : Type β} where
 <span style="float:right;">[Relations →](Relations.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 

@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Foundations module (The Agda Universal Algebra Library)
-date : 2021-07-26
-author: [agda-algebras development team][]
+title : "Foundations module (The Agda Universal Algebra Library)"
+date : "2021-07-26"
+author: "agda-algebras development team"
 ---
 
-# <a id="foundations">Foundations</a>
+## <a id="foundations">Foundations</a>
 
 This is the [Foundations][] module of the [Agda Universal Algebra Library][].
 
@@ -28,5 +28,3 @@ open import Foundations.Extensionality public
 <span style="float:right;">[Foundations.Welldefined →](Foundations.Welldefined.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

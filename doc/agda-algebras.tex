@@ -1,6 +1,5 @@
 % -*- TeX-master: "agda-algebras.tex" -*-
-\documentclass[a4paper,UKenglish,cleveref,autoref,thm-restate,12pt]{lipics-v2021-wjd}
-\usepackage[wjdsimple,links]{agda}
+\documentclass[a4paper,UKenglish,cleveref,autoref,thm-restate]{lipics-v2021-wjd}
 \usepackage{wjd}
 % \usepackage{fontspec}
 \usepackage{comment}
@@ -31,6 +30,7 @@
     urlcolor=britishracinggreen           % color of external links
 }
 
+\usepackage[wjdsimple,links]{agda}
 
 
 \newif\ifnonbold % comment this line to restore bold universe symbols
@@ -117,7 +117,21 @@
 
 \providecommand{\hypertarget}[2]{#2}
 
+%% This is to make the typewriter font inserted by pandoc look more similar to
+%% the Agda fonts used in the highlighted code.
+\renewcommand\texttt[1]{\textsf{#1}}
 
+% \input{../latex/Preface}
+% \input{../latex/Overture}
+% \input{../latex/Overture.Preliminaries}
+% \input{../latex/Overture.Inverses}
+% \input{../latex/Overture.Transformers}
+
+\let\paragraph\subsubsection
+\let\subsubsection\subsection
+\let\subsection\section
+% \let\section\chapter
+% \let\chapter\part
 
 \input{Everything}
 
@@ -139,7 +153,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Bibliography
-\bibliographystyle{plainurl}% the mandatory bibstyle
+\bibliographystyle{plainurl}
 
 \bibliography{ualib_refs}
 

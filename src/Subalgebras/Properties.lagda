@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Subalgebras.Properties module (The Agda Universal Algebra Library)
-date : 2021-07-18
-author: [agda-algebras development team][]
+title : "Subalgebras.Properties module (The Agda Universal Algebra Library)"
+date : "2021-07-18"
+author: "agda-algebras development team"
 ---
 
-## <a id="properties-of-the-subalgebra-inclusion-relation">Properties of the Subalgebra Inclusion Relation</a>
+### <a id="properties-of-the-subalgebra-inclusion-relation">Properties of the Subalgebra Inclusion Relation</a>
 
 \begin{code}
 
@@ -65,7 +65,7 @@ open _≅_
 
 \end{code}
 
-### <a id="relations-between">Relations between ≤, ≥, and ≅</a>
+#### <a id="relations-between">Relations between ≤, ≥, and ≅</a>
 
 In case all algebras live in the same universe level, we can use some of the definitions
 in the standard library. However, to obtain more general versions, we need to either
@@ -115,7 +115,7 @@ These are essentially equivalent variations on the following obvious fact: If tw
 
 \end{code}
 
-### <a id="relations-between-polymorphic-versions)">Relations between ≤, ≥, and ≅ (universe-polymorphic versions)</a>
+#### <a id="relations-between-polymorphic-versions)">Relations between ≤, ≥, and ≅ (universe-polymorphic versions)</a>
 
 \begin{code}
 
@@ -151,7 +151,7 @@ iso→injective {𝑨 = 𝑨} (mkiso f g f∼g g∼f) {x} {y} fxfy =
 
 \end{code}
 
-### <a id="lifts-of-subalgebras">Lifts of subalgebras</a>
+#### <a id="lifts-of-subalgebras">Lifts of subalgebras</a>
 
 \begin{code}
 
@@ -160,18 +160,18 @@ module _ {𝒦 : Pred (Algebra α 𝑆)(ov α)}{𝑩 : Algebra α 𝑆} where
  Lift-is-sub : 𝑩 IsSubalgebraOfClass 𝒦 → (Lift-Alg 𝑩 α) IsSubalgebraOfClass 𝒦
  Lift-is-sub (𝑨 , (sa , (KA , B≅sa))) = 𝑨 , sa , KA , ≅-trans (≅-sym Lift-≅) B≅sa
 
-
 ≤-Lift : {𝑨 : Algebra α 𝑆}(𝑩 : Algebra β 𝑆){ℓ : Level} → 𝑨 ≤ 𝑩 → 𝑨 ≤ Lift-Alg 𝑩 ℓ
 ≤-Lift 𝑩 a<b = ≤-RESP-≅{𝑩 = 𝑩} a<b Lift-≅
 
 ≥-Lift : (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}{ℓ : Level} → 𝑨 ≥ 𝑩 → 𝑨 ≥ Lift-Alg 𝑩 ℓ
 ≥-Lift 𝑨 a>b = ≥-RESP-≅{𝑨 = 𝑨} a>b Lift-≅
 
-Lift-≤-Lift : {𝑨 : Algebra α 𝑆}(ℓᵃ : Level){𝑩 : Algebra β 𝑆}(ℓᵇ : Level) → 𝑨 ≤ 𝑩 → Lift-Alg 𝑨 ℓᵃ ≤ Lift-Alg 𝑩 ℓᵇ
+Lift-≤-Lift : {𝑨 : Algebra α 𝑆}(ℓᵃ : Level){𝑩 : Algebra β 𝑆}(ℓᵇ : Level)
+ →            𝑨 ≤ 𝑩 → Lift-Alg 𝑨 ℓᵃ ≤ Lift-Alg 𝑩 ℓᵇ
+
 Lift-≤-Lift ℓᵃ {𝑩} ℓᵇ a<b = ≥-Lift (Lift-Alg 𝑩 ℓᵇ) (≤-Lift 𝑩 a<b)
 
 \end{code}
-
 
 ---------------------------------
 
@@ -179,7 +179,3 @@ Lift-≤-Lift ℓᵃ {𝑩} ℓᵇ a<b = ≥-Lift (Lift-Alg 𝑩 ℓᵇ) (≤-Li
 <span style="float:right;">[Subalgebras.Setoid →](Subalgebras.Setoid.html)</span>
 
 {% include UALib.Links.md %}
-
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
-

@@ -1,11 +1,11 @@
 ---
 layout: default
-title : GaloisConnections.Properties module (The Agda Universal Algebra Library)
-date : 2021-07-01
-author: [agda-algebras development team][]
+title : "GaloisConnections.Properties module (The Agda Universal Algebra Library)"
+date : "2021-07-01"
+author: "agda-algebras development team"
 ---
 
-## <a id="basic-properties">Basic properties</a>
+### <a id="basic-properties">Basic properties</a>
 
 This is the [GaloisConnections.Properties][] module of the [Agda Universal Algebra Library][].
 
@@ -32,7 +32,7 @@ open Poset
 
 \end{code}
 
-### <a id="the-poset-of-subsets-of-a-set">The poset of subsets of a set</a>
+#### <a id="the-poset-of-subsets-of-a-set">The poset of subsets of a set</a>
 
 Here we define a type that represents the poset of subsets of a given set equipped with the usual set inclusion relation. (It seems there is no definition in the standard library of this important example of a poset; we should propose adding it.)
 
@@ -97,10 +97,4 @@ module _ {ℓ : Level}{𝒜 : Type ℓ} {ℬ : Type ℓ} where
 <span style="float:right;">[ClosureSystems →](ClosureSystems.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
-
-
-
-
 

@@ -1,14 +1,13 @@
 ---
 layout: default
-title : Terms.Setoid.Properties module (The Agda Universal Algebra Library)
-date : 2021-08-24
-author: [agda-algebras development team][]
+title : "Terms.Setoid.Properties module (The Agda Universal Algebra Library)"
+date : "2021-08-24"
+author: "agda-algebras development team"
 ---
 
-## <a id="basic-properties">Basic properties</a>
+#### <a id="basic-properties">Basic properties</a>
 
 This is the [Terms.Setoid.Properties][] module of the [Agda Universal Algebra Library][].
-
 
 \begin{code}
 
@@ -24,17 +23,17 @@ open import Axiom.Extensionality.Propositional
 open import Agda.Primitive         using ( Level ; _⊔_ ; lsuc ) renaming ( Set to Type )
 open import Data.Product           using ( _,_ ; Σ-syntax ) renaming (proj₂ to snd)
 open import Function.Base          using ( _∘_ )
-open import Function.Bundles using ( Func )
+open import Function.Bundles       using ( Func )
 open import Data.Empty.Polymorphic using ( ⊥ )
 open import Relation.Binary        using ( IsEquivalence ; Setoid )
-open import Relation.Binary.Definitions
-                                   using (Reflexive ; Symmetric ; Transitive )
+open import Relation.Binary.Definitions using (Reflexive ; Symmetric ; Transitive )
 open import Relation.Binary.PropositionalEquality
                                    using ( _≡_ ; refl ; module ≡-Reasoning ; cong )
 
--- Imports from the Agda Universal Algebra Library ----------------------------------------
-open import Overture.Preliminaries             using ( _⁻¹ ; 𝑖𝑑 ; ∣_∣ ; ∥_∥ ; transport )
-open import Overture.Inverses                  using ( IsSurjective ; Inv ; InvIsInv ; Image_∋_ ; eq )
+-- Imports from the Agda Universal Algebra Library ------------------------------------------------
+open import Overture.Preliminaries using ( _⁻¹ ; 𝑖𝑑 ; ∣_∣ ; ∥_∥ ; transport )
+open import Overture.Inverses      using ( IsSurjective ; Inv ; InvIsInv ; Image_∋_ ; eq )
+
 open import Algebras.Setoid.Basic      {𝑆 = 𝑆} using ( SetoidAlgebra ; _̂_ ; ov ; 𝕌[_] )
 open import Homomorphisms.Setoid.Basic {𝑆 = 𝑆} using ( hom )
 open import Terms.Setoid.Basic         {𝑆 = 𝑆} using ( Term ; 𝑻 ; _≐_ )
@@ -43,9 +42,6 @@ open Term
 private variable α ρ χ : Level
 
 \end{code}
-
-
-### <a id="the-universal-property">The universal property</a>
 
 The term algebra `𝑻 X` is *absolutely free* (or *universal*, or *initial*) for algebras in the signature `𝑆`. That is, for every 𝑆-algebra `𝑨`, the following hold.
 
@@ -134,13 +130,9 @@ lift-of-epi-is-epi 𝑨 {h₀} hE y = Goal
 
 The `lift-hom` and `lift-of-epi-is-epi` types will be called to action when such epimorphisms are needed later (e.g., in the [Varieties][] module).
 
-
 ------------------------------
 
 <span style="float:left;">[← Terms.Setoid.Basic](Terms.Setoid.Basic.html)</span>
 <span style="float:right;">[Subalgebras →](Subalgebras.html)</span>
 
 {% include UALib.Links.md %}
-
-[the agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
-

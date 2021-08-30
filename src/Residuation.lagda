@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Residuation module (The Agda Universal Algebra Library)
-date : 2021-07-12
-author: [agda-algebras development team][]
+title : "Residuation module (The Agda Universal Algebra Library)"
+date : "2021-07-12"
+author: "agda-algebras development team"
 ---
 
-# Residuation
+## Residuation
 
 \begin{code}
 
@@ -25,5 +25,3 @@ open import Residuation.Properties
 <span style="float:right;">[Residuation.Basic →](Residuation.Basic.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

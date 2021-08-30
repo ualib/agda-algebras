@@ -519,8 +519,8 @@
 % ----------------------------------------------------------------------
 % The code environment.
 
-\newcommand{\AgdaCodeStyle}{}
-% \newcommand{\AgdaCodeStyle}{\tiny}
+% \newcommand{\AgdaCodeStyle}{}
+\newcommand{\AgdaCodeStyle}{\tiny}
 
 \ifdefined\mathindent
   {}
@@ -698,7 +698,7 @@
 
 % Vertical space used for empty lines. By default \abovedisplayskip.
 \newlength{\AgdaEmptySkip}
-\setlength{\AgdaEmptySkip}{\abovedisplayskip}
+\setlength{\AgdaEmptySkip}{\abovedisplayshortskip}
 
 % Extra space to be inserted for empty lines (the difference between
 % \AgdaEmptySkip and \baselineskip). Used internally.

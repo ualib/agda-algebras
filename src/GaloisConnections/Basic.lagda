@@ -1,11 +1,11 @@
 ---
 layout: default
-title : GaloisConnections.Basic module (The Agda Universal Algebra Library)
-date : 2021-07-01
-author: [agda-algebras development team][]
+title : "GaloisConnections.Basic module (The Agda Universal Algebra Library)"
+date : "2021-07-01"
+author: "agda-algebras development team"
 ---
 
-## <a id="basic-definitions">Basic definitions</a>
+### <a id="basic-definitions">Basic definitions</a>
 
 This is the [GaloisConnections.Basic][] module of the [Agda Universal Algebra Library][].
 
@@ -90,7 +90,4 @@ module _ {α β : Level}{𝒜 : Type α}{ℬ : Type β} where
 <span style="float:right;">[GaloisConnections.Properties →](GaloisConnections.Properties.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
-
 

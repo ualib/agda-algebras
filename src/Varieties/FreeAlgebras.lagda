@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Varieties.FreeAlgebras module (Agda Universal Algebra Library)
-date : 2021-03-01
-author: [agda-algebras development team][]
+title : "Varieties.FreeAlgebras module (Agda Universal Algebra Library)"
+date : "2021-03-01"
+author: "the agda-algebras development team"
 ---
 
-## <a id="free-algebras-and-birkhoffs-theorem">Free Algebras and Birkhoff's Theorem</a>
+### <a id="free-algebras-and-birkhoffs-theorem">Free Algebras and Birkhoff's Theorem</a>
 
 This is the [Varieties.FreeAlgebras][] module of the [Agda Universal Algebra Library][].
 
@@ -68,7 +68,7 @@ open V
 \end{code}
 
 
-### <a id="the-free-algebra-in-theory">The free algebra in theory</a>
+#### <a id="the-free-algebra-in-theory">The free algebra in theory</a>
 
 Recall, we proved in [the universal property](Terms.Basic.html#the-universal-property) section of the [Terms.Basic][] module that the term algebra `𝑻 X` is the absolutely free algebra in the class of all `𝑆`-structures. In this section, we formalize, for a given class `𝒦` of `𝑆`-algebras, the (relatively) free algebra in `S(P 𝒦)` over `X`.
 
@@ -88,7 +88,7 @@ The `𝔉` that we have just defined is called the *free algebra over* `𝒦` *g
 
 
 
-### <a id="the-free-algebra-in-agda">The free algebra in Agda</a>
+#### <a id="the-free-algebra-in-agda">The free algebra in Agda</a>
 
 Before we attempt to represent the free algebra in Agda we construct the congruence `ψ(𝒦, 𝑻 𝑋)` described above.
 First, we represent the congruence relation `ψCon`, modulo which `𝑻 X` yields the relatively free algebra, `𝔉 𝒦 X := 𝑻 X ╱ ψCon`.  We let `ψ` be the collection of identities `(p, q)` satisfied by all subalgebras of algebras in `𝒦`.
@@ -151,7 +151,7 @@ We have collected all the pieces necessary to express the collection of identiti
 
 
 
-### <a id="hsp-theorem">HSP Theorem</a>
+#### <a id="hsp-theorem">HSP Theorem</a>
 
 This section presents a formal proof of the Birkhoff HSP theorem.
 
@@ -168,7 +168,7 @@ We denote by `ℭ` the product of all subalgebras of algebras in `𝒦`, and by 
 Here, `⨅-hom-co` (defined in [Homomorphisms.Basic](Homomorphisms.Basic.html#product-homomorphisms)) takes the term algebra `𝑻 X`, a family `{𝔄s : I → Algebra α 𝑆}` of `𝑆`-algebras, and a family `hom𝔄 : ∀ i → hom (𝑻 X) (𝔄s i)` of homomorphisms and constructs the natural homomorphism `homℭ` from `𝑻 X` to the product `ℭ := ⨅ 𝔄`.  The homomorphism `homℭ : hom (𝑻 X) (⨅ ℭ)` is natural in the sense that the `i`-th component of the image of `𝑡 : Term X` under `homℭ` is the image `∣ hom𝔄 i ∣ 𝑡` of 𝑡 under the i-th homomorphism `hom𝔄 i`.
 
 
-### <a id="F-in-classproduct">𝔽 ≤  ⨅ S(𝒦)</a>
+#### <a id="F-in-classproduct">𝔽 ≤  ⨅ S(𝒦)</a>
 Now we come to a step in the Agda formalization of Birkhoff's theorem that is highly nontrivial. We must prove that the free algebra embeds in the product ℭ of all subalgebras of algebras in the class `𝒦`.  This is really the only stage in the proof of Birkhoff's theorem that requires the truncation assumption that `ℭ` be a *set* (that is, `ℭ` has the [UIP][] property).  We will also need to assume several local function extensionality postulates and, as a result, the next submodule will take as given the parameter `fe : (∀ a b → funext a b)`.  This allows us to postulate local function extensionality when and where we need it in the proof. For example, if we want to assume function extensionality at universe levels 𝓥 and α, we simply apply `fe` to those universes: `fe 𝓥 α`. (Earlier versions of the library used just a single *global* function extensionality postulate at the start of most modules, but we have since decided to exchange that elegant but crude option for greater precision and transparency.)
 
 \begin{code}
@@ -199,7 +199,7 @@ Observe that the inhabitants of `ℭ` are maps from `ℑ` to `{𝔄 i : i ∈ �
 \end{code}
 
 
-### <a id="the-free-algebra">The free algebra</a>
+#### <a id="the-free-algebra">The free algebra</a>
 
  As mentioned, the initial version of the [agda-algebras](https://github.com/ualib/agda-algebras) library used the free algebra `𝔉` developed above.  However, our new, more direct proof uses the algebra `𝔽`, which we now define, along with the natural epimorphism `epi𝔽 : epi (𝑻 X) 𝔽` from `𝑻 X` to `𝔽`.
 
@@ -252,7 +252,7 @@ We now use `ψlemma0-ap` to prove that every map `h : X → ∣ 𝑨 ∣`, from 
 \end{code}
 
 
-### <a id="k-models-psi">𝒦 models ψ</a>
+#### <a id="k-models-psi">𝒦 models ψ</a>
 
 The goal of this subsection is to prove that `𝒦` models `ψ 𝒦`. In other terms, for all pairs `(p , q) ∈ Term X × Term X` of terms, if `(p , q) ∈ ψ 𝒦`, then `𝒦 ⊫ p ≈ q`.
 
@@ -373,7 +373,7 @@ With these results in hand, it is now trivial to prove the main theorem of this 
 
 
 
-### <a id="the-homomorphic-images-of-F">The homomorphic images of 𝔽</a>
+#### <a id="the-homomorphic-images-of-F">The homomorphic images of 𝔽</a>
 
 Finally we come to one of the main theorems of this module; it asserts that every algebra in `Mod X (Th 𝕍𝒦)` is a homomorphic image of 𝔽.  We prove this below as the function (or proof object) `𝔽-ModTh-epi`.  Before that, we prove two auxiliary lemmas.
 
@@ -395,7 +395,7 @@ We do *not* assert that for an arbitrary type `X` such surjective maps exist.  I
 
 
 
-### <a id="F-in-VK">𝔽 ∈ V(𝒦)</a>
+#### <a id="F-in-VK">𝔽 ∈ V(𝒦)</a>
 
 With this result in hand, along with what we proved earlier---namely, `PS(𝒦) ⊆ SP(𝒦) ⊆ HSP(𝒦) ≡ V 𝒦`---it is not hard to show that `𝔽` belongs to `V 𝒦`.
 
@@ -409,7 +409,7 @@ With this result in hand, along with what we proved earlier---namely, `PS(𝒦) 
 
 \end{code}
 
-### The HSP Theorem
+#### The HSP Theorem
 Now that we have all of the necessary ingredients, it is all but trivial to
 combine them to prove Birkhoff's HSP theorem. (Note that since the proof enlists
 the help of the `𝔽-ModTh-epi` theorem, we must assume an environment exists,
@@ -449,15 +449,9 @@ preservation lemmas:
 From these it follows that every equational class is a variety. Thus, our formal
 proof of Birkhoff's theorem is complete.
 
-
-
-
-
 --------------------------------
 
 <span style="float:left;">[← Varieties.Preservation](Varieties.Preservation.html)</span>
 <span style="float:right;">[Varieties.Setoid →](Varieties.Setoid.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

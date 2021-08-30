@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Relations.Properties module (The Agda Universal Algebra Library)
-date : 2021-06-26
-author: [agda-algebras development team][]
+title : "Relations.Properties module (The Agda Universal Algebra Library)"
+date : "2021-06-26"
+author: "the agda-algebras development team"
 ---
 
-## <a id="properties-of-binary-predicates">Properties of binary predicates</a>
+### <a id="properties-of-binary-predicates">Properties of binary predicates</a>
 
 This is the [Relations.Properties][] module of the [Agda Universal Algebra Library][].
 
@@ -90,13 +90,9 @@ Total P = Connex P P
 
 \end{code}
 
-
-
 -----------------------------------------------
 
 <span style="float:left;">[← Relations.Continuous](Relations.Continuous.html)</span>
 <span style="float:right;">[Relations.Quotients →](Relations.Quotients.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

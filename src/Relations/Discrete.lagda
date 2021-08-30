@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Relations.Discrete module (The Agda Universal Algebra Library)
-date : 2021-02-28
-author: [agda-algebras development team][]
+title : "Relations.Discrete module (The Agda Universal Algebra Library)"
+date : "2021-02-28"
+author: "the agda-algebras development team"
 ---
 
-## <a id="discrete-relations">Discrete Relations</a>
+### <a id="discrete-relations">Discrete Relations</a>
 
 This is the [Relations.Discrete][] module of the [Agda Universal Algebra Library][].
 
@@ -60,7 +60,7 @@ Im f ⊆ S = ∀ x → f x ∈ S
 \end{code}
 
 
-### <a id="operation-symbols-unary-relations-binary-relations">Operation symbols, unary relations, binary relations</a>
+#### <a id="operation-symbols-unary-relations-binary-relations">Operation symbols, unary relations, binary relations</a>
 
 The unary relation (or "predicate") type is imported from Relation.Unary of the std lib.
 
@@ -104,7 +104,7 @@ Level-of-Rel {A = A}{ℓ} _ = ℓ
 \end{code}
 
 
-### <a id="kernels">Kernels</a>
+#### <a id="kernels">Kernels</a>
 
 The *kernel* of `f : A → B` is defined informally by `{(x , y) ∈ A × A : f x = f y}`.
 This can be represented in type theory and Agda in a number of ways, each of which
@@ -147,7 +147,7 @@ module _ {A : Type (α ⊔ ρ)} where
 \end{code}
 
 
-## <a id="operation-type-and-compatibility">Operation type and compatibility</a>
+### <a id="operation-type-and-compatibility">Operation type and compatibility</a>
 
 **Notation**. For consistency and readability, we reserve two universe variables for
 special purposes.  The first of these is 𝓞 which shall be reserved for types that
@@ -218,12 +218,9 @@ module _ {A : Type α}{I : Type 𝓥}{f : Op A I}{R : BinRel A ρ} where
 
 \end{code}
 
-
 --------------------------------------
 
 <span style="float:left;">[↑ Relations](Relations.html)</span>
 <span style="float:right;">[Relations.Continuous →](Relations.Continuous.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

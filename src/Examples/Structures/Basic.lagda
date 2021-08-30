@@ -1,8 +1,8 @@
 ---
 layout: default
-title : Examples.Structures.Basic module (Agda Universal Algebra Library)
-date : 2021-07-29
-author: [agda-algebras development team][]
+title : "Examples.Structures.Basic module (Agda Universal Algebra Library)"
+date : "2021-07-29"
+author: "agda-algebras development team"
 ---
 
 ### <a id="examples-of-structures">Examples of Structures</a>
@@ -16,7 +16,6 @@ module Examples.Structures.Basic where
 open import Agda.Primitive  using ( Level ) renaming ( Set to Type ; lzero to ℓ₀ )
 open import Data.Product    using ( _,_ ; _×_  )
 open import Relation.Unary  using ( Pred ; _∈_ )
-
 
 open import Overture.Preliminaries          using ( 𝟘 ; 𝟙 ; 𝟚 ; 𝟛 )
 open import Structures.Basic                using ( signature ; structure )
@@ -58,7 +57,6 @@ data NAE3SAT : Pred (𝟚 × 𝟚 × 𝟚) ℓ₀ where
  r5 : (𝟚.𝟏 , 𝟚.𝟎 , 𝟚.𝟏) ∈ NAE3SAT
  r6 : (𝟚.𝟏 , 𝟚.𝟏 , 𝟚.𝟎) ∈ NAE3SAT
 
-
 nae3sat : structure S∅    -- (no operation symbols)
                     S0001 -- (one ternary relation symbol)
 
@@ -67,14 +65,8 @@ nae3sat = record { carrier = 𝟚
                  ; rel = λ _ x → ((x 𝟛.𝟎) , (x 𝟛.𝟏) , (x 𝟛.𝟐)) ∈ NAE3SAT
                  }
 
-
 \end{code}
-
 
 --------------------------------------
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
-
-

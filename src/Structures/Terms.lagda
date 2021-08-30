@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Structures.Terms (The Agda Universal Algebra Library)
-date : 2021-07-26
-author: [agda-algebras development team][]
+title : "Structures.Terms (The Agda Universal Algebra Library)"
+date : "2021-07-26"
+author: "agda-algebras development team"
 ---
 
-## <a id="interpretation-of-terms-in-general-structures">Interpretation of Terms in General Structures</a>
+### <a id="interpretation-of-terms-in-general-structures">Interpretation of Terms in General Structures</a>
 
 This is the [Structures.Terms][] module of the [Agda Universal Algebra Library][].
 
@@ -32,10 +32,9 @@ Thus interpretation of a term is defined by structural induction.
 module Structures.Terms where
 
 -- Imports from Agda and the Agda Standard Library ---------------------
-open import Agda.Primitive    using ( lsuc ; _⊔_ ; Level ) renaming ( Set to Type )
-open import Structures.Basic  using ( signature ; structure ; _ᵒ_ )
+open import Agda.Primitive   using ( lsuc ; _⊔_ ; Level ) renaming ( Set to Type )
+open import Structures.Basic using ( signature ; structure ; _ᵒ_ )
 open import Terms.Basic
-
 
 private variable
  𝓞₀ 𝓥₀ 𝓞₁ 𝓥₁ χ α ρ : Level
@@ -58,7 +57,3 @@ _⟦_⟧ : (𝑨 : structure 𝐹 𝑅 {α} {ρ}) → Term X → (X → carrier 
 <span style="float:right;">[Structures.Substructures →](Structures.Substructures.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
-
-

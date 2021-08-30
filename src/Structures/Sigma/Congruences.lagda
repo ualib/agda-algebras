@@ -1,16 +1,15 @@
 ---
 layout: default
-title : Structures.Sigma.Congruences module
-date : 2021-05-12
-author: [agda-algebras development team][]
+title : "Structures.Sigma.Congruences module"
+date : "2021-05-12"
+author: "agda-algebras development team"
 ---
 
-## <a id="congruences-of-general-structures">Congruences of general structures</a>
+#### <a id="congruences-of-general-structures">Congruences of general structures</a>
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-} -- cubical #-}
-
 
 module Structures.Sigma.Congruences where
 
@@ -21,8 +20,7 @@ open import Function.Base   using ( _∘_ )
 open import Level           using ( Level ; Lift ; lift ; lower )
 open import Relation.Unary  using ( Pred ; _∈_ )
 open import Relation.Binary using ( IsEquivalence ) renaming ( Rel to BinRel )
-open import Relation.Binary.PropositionalEquality
-                            using ( _≡_ )
+open import Relation.Binary.PropositionalEquality using ( _≡_ )
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------
 open import Overture.Preliminaries  using ( ∣_∣ )
@@ -53,7 +51,8 @@ module _ {α ρ : Level} where
 
 \end{code}
 
-### <a id="quotient-structures">Quotient structures</a>
+
+#### <a id="quotient-structures">Quotients of structures of sigma type</a>
 
 \begin{code}
 
@@ -69,7 +68,7 @@ module _ {α ρ : Level} where
 
 \end{code}
 
-Example. The zero congruence of an arbitrary structure.
+#### <a id="the-zero-congruence-of-an-arbitrary-structure">The zero congruence of an arbitrary structure</a>
 
 \begin{code}
 
@@ -87,5 +86,3 @@ Example. The zero congruence of an arbitrary structure.
 <span style="float:right;">[Structures.Sigma.Homs →](Structures.Sigma.Homs.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

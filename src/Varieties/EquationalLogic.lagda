@@ -1,11 +1,11 @@
 ---
 layout: default
-title : Varieties.EquationalLogic module (The Agda Universal Algebra Library)
-date : 2021-01-14
-author: [agda-algebras development team][]
+title : "Varieties.EquationalLogic module (The Agda Universal Algebra Library)"
+date : "2021-01-14"
+author: "agda-algebras development team"
 ---
 
-## <a id="varieties-model-theory-and-equational-logic">Varieties, Model Theory, and Equational Logic</a>
+### <a id="varieties-model-theory-and-equational-logic">Varieties, Model Theory, and Equational Logic</a>
 
 This is the [Varieties.EquationalLogic][] module of the [Agda Universal Algebra Library][] where the binary "models" relation ⊧, relating algebras (or classes of algebras) to the identities that they satisfy, is defined.
 
@@ -17,23 +17,23 @@ Because a class of structures has a different type than a single structure, we m
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-
 open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Varieties.EquationalLogic {𝑆 : Signature 𝓞 𝓥} where
 
--- Imports from Agda and the Agda Standard Library -------------------------------------------
-open import Agda.Primitive using ( _⊔_ ;  lsuc ; Level ) renaming ( Set to Type )
-open import Data.Product   using ( _×_ ; _,_ ; Σ-syntax) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Relation.Unary using ( Pred ; _∈_ )
+-- Imports from Agda and the Agda Standard Library ----------------
+open import Agda.Primitive using    ( _⊔_ ;  lsuc ; Level )
+                           renaming ( Set to Type )
+open import Data.Product   using    ( _×_ ; _,_ ; Σ-syntax)
+                           renaming ( proj₁ to fst ; proj₂ to snd )
+open import Relation.Unary using    ( Pred ; _∈_ )
 
--- Imports from the Agda Universal Algebra Library ---------------------
+-- Imports from the Agda Universal Algebra Library ----------------
 open import Overture.Preliminaries    using ( _≈_ )
 open import Algebras.Basic            using ( Algebra )
 open import Algebras.Products {𝑆 = 𝑆} using ( ov )
 open import Terms.Basic       {𝑆 = 𝑆} using ( Term ; 𝑻 )
 open import Terms.Operations  {𝑆 = 𝑆} using ( _⟦_⟧ )
-
 private variable
  χ α ρ ι : Level
  X : Type χ
@@ -41,7 +41,7 @@ private variable
 \end{code}
 
 
-### <a id="the-models-relation">The models relation</a>
+#### <a id="the-models-relation">The models relation</a>
 
 We define the binary "models" relation `⊧` using infix syntax so that we may
 write, e.g., `𝑨 ⊧ p ≈ q` or `𝒦 ⊫ p ≈ q`, relating algebras (or classes of
@@ -68,7 +68,7 @@ to the variable symbols in `X`) the (intensional) equality `𝑨 ⟦ p ⟧ η �
 holds.
 
 
-### <a id="equational-theories-and-models">Equational theories and models</a>
+#### <a id="equational-theories-and-models">Equational theories and models</a>
 
 If 𝒦 denotes a class of structures, then `Th 𝒦` represents the set of identities
 modeled by the members of 𝒦.
@@ -93,7 +93,6 @@ module _ {X : Type χ}{𝒦 : Pred (Algebra α 𝑆) (ov α)} where
  ℰ : ℐ → Term X × Term X
  ℰ ((p , q) , _) = (p , q)
 
-
 \end{code}
 
 If `ℰ` denotes a set of identities, then `Mod ℰ` is the class of structures
@@ -115,11 +114,6 @@ Modᵗ ℰ = λ 𝑨 → ∀ i → 𝑨 ⊧ (fst (ℰ i)) ≈ (snd (ℰ i))
 <span style="float:right;">[Varieties.Closure →](Varieties.Closure.html)</span>
 
 {% include UALib.Links.md %}
-
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
-
-
-
 
 
 <!--
