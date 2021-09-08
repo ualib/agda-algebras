@@ -52,13 +52,28 @@ However, with four components, an equivalent record type is easier to work with.
 private variable
  α ρᵃ β ρᵇ γ ρᶜ ι : Level
 
+open SetoidAlgebra
+open Setoid
+
 record _≅_ (𝑨 : SetoidAlgebra α ρᵃ)(𝑩 : SetoidAlgebra β ρᵇ) : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ β) where
+-- module _ {𝑨 : SetoidAlgebra α ρ} where
+--  open SetoidAlgebra 𝑨
+--  open Setoid Domain renaming ( _≈_ to _≈A_ )
+
+-- free-unique : {g h : hom (𝑻 X) 𝑨}
+--  →            (∀ x → ∣ g ∣ (ℊ x) ≈A ∣ h ∣ (ℊ x))
+--               --------------------------------------
+--  →            ∀ (t : Term X) →  ∣ g ∣ t ≈A ∣ h ∣ t
+
  constructor mkiso
  field
   to : hom 𝑨 𝑩
   from : hom 𝑩 𝑨
-  to∼from : ∣ to ∣ ∘ ∣ from ∣ ≋ ∣ 𝒾𝒹 𝑩 ∣
-  from∼to : ∣ from ∣ ∘ ∣ to ∣ ≋ ∣ 𝒾𝒹 𝑨 ∣
+  to∼from : ∀ b → (_≈_ (Domain 𝑩)) (∣ to ∣ (∣ from ∣ b)) b
+  from∼to : ∀ a → (_≈_ (Domain 𝑨)) (∣ from ∣ (∣ to ∣ a)) a
+
+  -- to∼from : ∣ to ∣ ∘ ∣ from ∣ ≋ ∣ 𝒾𝒹 𝑩 ∣
+  -- from∼to : ∣ from ∣ ∘ ∣ to ∣ ≋ ∣ 𝒾𝒹 𝑨 ∣
 
 open _≅_ public
 
@@ -69,7 +84,7 @@ That is, two structures are *isomorphic* provided there are homomorphisms going 
 
 #### <a id="properties-of-isomorphisms-of-setoid-algebras">Properties of isomorphism of setoid algebras</a>
 
-\begin{code}
+begin{code}
 
 ≅-refl : Reflexive (_≅_ {α}{ρᵃ})
 ≅-refl {α}{ρᵃ}{𝑨} = mkiso (𝒾𝒹 𝑨) (𝒾𝒹 𝑨) (λ _ → refl) λ _ → refl
@@ -113,7 +128,7 @@ That is, two structures are *isomorphic* provided there are homomorphisms going 
 
 Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic invariant*). As our focus is universal algebra, this is important and is what makes the lift operation a workable solution to the technical problems that arise from the noncumulativity of Agda's universe hierarchy.
 
-\begin{code}
+begin{code}
 
 open Level
 
@@ -135,7 +150,7 @@ Lift-Alg-iso A≅B = ≅-trans (≅-trans (≅-sym Lift-≅ ) A≅B) Lift-≅
 
 The lift is also associative, up to isomorphism at least.
 
-\begin{code}
+begin{code}
 
 Lift-Alg-assoc : (ℓ₁ ℓ₂ : Level){𝑨 : SetoidAlgebra α ρᵃ}
  →                     Lift-Alg 𝑨 (ℓ₁ ⊔ ℓ₂) ≅  Lift-Alg (Lift-Alg 𝑨 ℓ₁) ℓ₂
@@ -179,7 +194,7 @@ module _ {𝓘 : Level}{I : Type 𝓘}{fiu : funext 𝓘 α}{fiw : funext 𝓘 �
 
 A nearly identical proof goes through for isomorphisms of lifted products (though, just for fun, we use the universal quantifier syntax here to express the dependent function type in the statement of the lemma, instead of the Pi notation we used in the statement of the previous lemma; that is, `∀ i → 𝒜 i ≅ ℬ (lift i)` instead of `Π i ꞉ I , 𝒜 i ≅ ℬ (lift i)`.)
 
-\begin{code}
+begin{code}
 
 module _ {𝓘 : Level}{I : Type 𝓘}{fizw : funext (𝓘 ⊔ γ) β}{fiu : funext 𝓘 α} where
 

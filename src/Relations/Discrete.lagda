@@ -20,6 +20,7 @@ open import Agda.Primitive       using ( _⊔_ ; lsuc ) renaming ( Set to Type )
 open import Data.Product         using ( _,_ ; _×_ )
 open import Function.Base        using ( _∘_ )
 open import Level                using ( Level ; Lift )
+open import Relation.Binary      using ( IsEquivalence )
 open import Relation.Binary.Core using ( _⇒_ ; _=[_]⇒_ ) renaming ( REL to BinREL ; Rel to BinRel )
 open import Relation.Binary.Definitions
                                  using ( Reflexive ; Transitive )
@@ -117,6 +118,14 @@ module _ {A : Type α}{B : Type β} where
 
  ker : (A → B) → BinRel A β
  ker g x y = g x ≡ g y
+
+ kerRel : {ρ : Level} → BinRel B ρ → (A → B) → BinRel A ρ
+ kerRel _≈_ g x y = g x ≈ g y
+
+ open IsEquivalence
+
+ kerRelOfEquiv : {ρ : Level}{R : BinRel B ρ} → IsEquivalence R → (h : A → B) → IsEquivalence (kerRel R h)
+ kerRelOfEquiv eqR h = record { refl = refl eqR ; sym = sym eqR ; trans = trans eqR }
 
  kerlift : (A → B) → (ρ : Level) → BinRel A (β ⊔ ρ)
  kerlift g ρ x y = Lift ρ (g x ≡ g y)

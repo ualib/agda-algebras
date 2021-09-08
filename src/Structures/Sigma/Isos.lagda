@@ -164,7 +164,7 @@ module _ {ι : Level}{I : Type ι}
 --------------------------------
 
 <span style="float:left;">[← Structures.Sigma.Homs](Structures.Sigma.Homs.html)</span>
-<span style="float:right;">[Complexity →](Complexity.html)</span>
+<span style="float:right;">[Categories →](Categories.html)</span>
 
 {% include UALib.Links.md %}
 

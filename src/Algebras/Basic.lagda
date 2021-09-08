@@ -18,7 +18,7 @@ module Algebras.Basic where
 -- Imports from the Agda (Builtin) and the Agda Standard Library -----------------------
 open import Agda.Primitive  using ( _⊔_ ; lsuc ) renaming ( Set to  Type ; lzero to ℓ₀ )
 open import Data.Product    using ( _,_ ; _×_ ; Σ-syntax )
-open import Level           using ( Level ) -- ; Lift )
+open import Level           using ( Level )
 open import Relation.Binary using ( IsEquivalence ) renaming ( Rel to BinRel )
 open import Relation.Unary  using ( _∈_ ; Pred )
 

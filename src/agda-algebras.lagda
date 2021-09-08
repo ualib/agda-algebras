@@ -71,6 +71,7 @@ open import Terms
 open import Subalgebras
 open import Varieties
 open import Structures
+open import Categories
 open import Complexity
 
 \end{code}
