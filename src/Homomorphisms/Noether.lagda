@@ -37,8 +37,8 @@ open import Equality.Truncation     using (is-set;blk-uip;is-embedding;monic-is-
 open import Equality.Extensionality using ( pred-ext ; block-ext|uip )
 open import Algebras.Basic          using ( Algebra ; _̂_)
 open import Algebras.Congruences {𝑆 = 𝑆} using ( Con ; IsCongruence )
-open import Homomorphisms.Basic  {𝑆 = 𝑆} using ( hom ; kercon ; ker[_⇒_]_↾_ ; πker
-                                               ; is-homomorphism ; epi ; epi-to-hom )
+open import Homomorphisms.Basic  {𝑆 = 𝑆} using ( hom ; is-homomorphism ; epi ; epi-to-hom )
+open import Homomorphisms.Kernels {𝑆 = 𝑆} using ( kercon ; ker[_⇒_]_↾_ ; πker )
 private variable α β γ : Level
 
 \end{code}

@@ -31,8 +31,9 @@ open import Overture.Preliminaries
 open import Overture.Inverses                  using ( IsInjective )
 open import Algebras.Setoid.Products   {𝑆 = 𝑆} using ( ⨅ )
 open import Algebras.Setoid.Basic      {𝑆 = 𝑆} using ( SetoidAlgebra ; 𝕌[_] ; _̂_ ; Lift-Alg)
-open import Homomorphisms.Setoid.Basic {𝑆 = 𝑆}
- using ( hom ; kercon ; ker[_⇒_]_↾_ ; ∘-hom ; 𝒾𝒹 ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-homomorphism ; ∘-is-hom )
+open import Homomorphisms.Setoid.Basic {𝑆 = 𝑆} using ( hom ; IsHom ; 𝒾𝒹 ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 )
+open import Homomorphisms.Setoid.Properties {𝑆 = 𝑆} using ( ∘-hom ; ∘-is-hom )
+open import Homomorphisms.Setoid.Kernels {𝑆 = 𝑆} using ( kercon ; ker[_⇒_] )
 
 \end{code}
 

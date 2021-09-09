@@ -218,7 +218,7 @@ begin{code}
 
 --------------------------------
 
-<span style="float:left;">[← Homomorphisms.Setoid.Basic](Homomorphisms.Setoid.Basic.html)</span>
+<span style="float:left;">[← Homomorphisms.Setoid.Kernels](Homomorphisms.Setoid.Kernels.html)</span>
 <span style="float:right;">[Homomorphisms.Setoid.Isomorphisms →](Homomorphisms.Setoid.Isomorphisms.html)</span>
 
 {% include UALib.Links.md %}

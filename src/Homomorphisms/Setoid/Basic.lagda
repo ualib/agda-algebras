@@ -99,6 +99,6 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ} where
 --------------------------------
 
 <span style="float:left;">[↑ Homomorphisms.Setoid](Homomorphisms.Setoid.html)</span>
-<span style="float:right;">[Homomorphisms.Setoid.Noether →](Homomorphisms.Setoid.Noether.html)</span>
+<span style="float:right;">[Homomorphisms.Setoid.Properties →](Homomorphisms.Setoid.Properties.html)</span>
 
 {% include UALib.Links.md %}

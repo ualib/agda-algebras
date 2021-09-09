@@ -35,7 +35,8 @@ open import Relation.Binary.PropositionalEquality
 open import Overture.Preliminaries      using ( ∣_∣ ; ∥_∥ ; _≈_ ; _∙_ ; lower∼lift ; lift∼lower )
 open import Overture.Inverses           using ( IsInjective )
 open import Algebras.Products   {𝑆 = 𝑆} using ( ⨅ )
-open import Homomorphisms.Basic {𝑆 = 𝑆} using ( hom ; 𝒾𝒹 ; ∘-hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-homomorphism )
+open import Homomorphisms.Basic {𝑆 = 𝑆} using ( hom ; 𝒾𝒹 ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-homomorphism )
+open import Homomorphisms.Properties {𝑆 = 𝑆} using ( ∘-hom )
 
 \end{code}
 
