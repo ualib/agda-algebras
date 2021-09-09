@@ -16,6 +16,8 @@ This is the [Homomorphisms.Setoid][] module of the [Agda Universal Algebra Libra
 module Homomorphisms.Setoid where
 
 open import Homomorphisms.Setoid.Basic
+open import Homomorphisms.Setoid.Properties
+open import Homomorphisms.Setoid.Kernels
 open import Homomorphisms.Setoid.Noether
 open import Homomorphisms.Setoid.Isomorphisms
 open import Homomorphisms.Setoid.HomomorphicImages

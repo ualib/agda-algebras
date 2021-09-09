@@ -122,6 +122,9 @@ module _ {A : Type α}{B : Type β} where
  kerRel : {ρ : Level} → BinRel B ρ → (A → B) → BinRel A ρ
  kerRel _≈_ g x y = g x ≈ g y
 
+ kernelRel : {ρ : Level} → BinRel B ρ → (A → B) → Pred (A × A) ρ
+ kernelRel _≈_ g (x , y) = g x ≈ g y
+
  open IsEquivalence
 
  kerRelOfEquiv : {ρ : Level}{R : BinRel B ρ} → IsEquivalence R → (h : A → B) → IsEquivalence (kerRel R h)
