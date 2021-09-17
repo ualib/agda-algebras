@@ -8,28 +8,27 @@ author: "the agda-algebras development team"
 ### <a id="inverses">Inverses</a>
 
 This is the [Overture.Inverses][] module of the [agda-algebras][] library.
+
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 module Overture.Inverses where
 
--- Imports from Agda and the Agda Standard Library -------------------------------------------
-open import Agda.Primitive              using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
-open import Data.Product                using ( _,_ ; _×_ ; Σ )
-open import Function.Base               using ( _∘_ )
-open import Function.Definitions        using ( Injective )
-open import Function.Bundles            using ( _↣_ ; mk↣ )
-open import Function.Construct.Identity using ( id-↣ )
-open import Relation.Binary.PropositionalEquality
-                                        using ( _≡_ ; refl ; module ≡-Reasoning ; cong-app )
+-- Imports from Agda and the Agda Standard Library ---------------------------------------------
+open import Agda.Primitive                        using ( _⊔_ ; Level ) renaming ( Set to Type )
+open import Relation.Binary.PropositionalEquality using ( _≡_ ; sym ; refl )
+open import Relation.Unary    using ( Pred ; _∈_ )
+open import Data.Product      using ( _,_ ; Σ-syntax )
 
 -- Imports from agda-algebras ----------------------------------------------------------------
-open import Overture.Preliminaries using ( _⁻¹ ; _≈_ ; _∙_ )
+open import Overture.Preliminaries using ( ∃-syntax ; ∣_∣ )
 
-private variable α β γ : Level
+private variable α β : Level
 
 \end{code}
+
 We begin by defining an data type that represents the semantic concept of *inverse image* of a function.
+
 \begin{code}
 
 module _ {A : Type α }{B : Type β } where
@@ -37,119 +36,71 @@ module _ {A : Type α }{B : Type β } where
  data Image_∋_ (f : A → B) : B → Type (α ⊔ β) where
   eq : {b : B} → (a : A) → b ≡ f a → Image f ∋ b
 
+ open Image_∋_
+
+ Range : (A → B) → Pred B (α ⊔ β)
+ Range f b = ∃[ a ∈ A ] (f a) ≡ b
+
+ range : (A → B) → Type (α ⊔ β)
+ range f = Σ[ b ∈ B ] ∃[ a ∈ A ](f a) ≡ b
+
+ Image⊆Range : (f : A → B) → ∀ b → Image f ∋ b → b ∈ Range f
+ Image⊆Range f b (eq a x) = a , (sym x)
+
+ Range⊆Image : (f : A → B) → ∀ b → b ∈ Range f → Image f ∋ b
+ Range⊆Image f b (a , x) = eq a (sym x)
+
+ Imagef∋f : {f : A → B}{a : A} → Image f ∋ (f a)
+ Imagef∋f = eq _ refl
+
+ f∈range : {f : A → B}(a : A) → range f
+ f∈range {f} a = (f a) , (a , refl)
+
 \end{code}
+
 An inhabitant of `Image f ∋ b` is a dependent pair `(a , p)`, where `a : A` and `p : b ≡ f a` is a proof that `f` maps `a` to `b`.  Since the proof that `b` belongs to the image of `f` is always accompanied by a witness `a : A`, we can actually *compute* a (pseudo)inverse of `f`. For convenience, we define this inverse function, which we call `Inv`, and which takes an arbitrary `b : B` and a (*witness*, *proof*)-pair, `(a , p) : Image f ∋ b`, and returns the witness `a`.
+
 \begin{code}
 
  Inv : (f : A → B){b : B} → Image f ∋ b  →  A
  Inv f (eq a _) = a
 
-\end{code}
-We can prove that `Inv f` is the *right-inverse* of `f`, as follows.
-\begin{code}
 
- InvIsInv : (f : A → B){b : B}(q : Image f ∋ b) → f(Inv f q) ≡ b
- InvIsInv f (eq _ p) = p ⁻¹
+ [_]⁻¹ : (f : A → B) → range f →  A
+ [ f ]⁻¹ (_ , (a , _)) = a
 
 \end{code}
 
+We can prove that `Inv f` is the (range-restricted) *right-inverse* of `f`, as follows.
 
-#### <a id="injective-functions">Injective functions</a>
-
-We say that a function `f : A → B` is *injective* (or *monic*) if it does not map two distinct elements of the domain to the same point in the codomain. The following type manifests this property.
 \begin{code}
 
-module _ {A : Type α}{B : Type β} where
+ InvIsInverseʳ : {f : A → B}{b : B}(q : Image f ∋ b) → f(Inv f q) ≡ b
+ InvIsInverseʳ (eq _ p) = sym p
 
- IsInjective : (A → B) → Type (α ⊔ β)
- IsInjective f = Injective _≡_ _≡_ f
-
-\end{code}
-Before moving on to discuss surjective functions, let us prove (the obvious facts) that the identity map is injective and that the composition of injectives is injective.
-\begin{code}
-
-id-is-injective : {A : Type α} → A ↣ A
-id-is-injective {A = A} = id-↣ A
-
-∘-injective : {A : Type α}{B : Type β}{C : Type γ}{f : A → B}{g : B → C}
- →            IsInjective f → IsInjective g → IsInjective (g ∘ f)
-∘-injective finj ginj = λ z → finj (ginj z)
+ ⁻¹IsInverseʳ : {f : A → B}{bap : range f} → f ([ f ]⁻¹ bap) ≡ ∣ bap ∣
+ ⁻¹IsInverseʳ {bap = (_ , (_ , p))} = p
 
 \end{code}
 
+Of course, the "range-restricted" qualifier is needed because `Inf f` is not defined outside the range of `f`.
 
+In a certain sense, `Inv f` is also a (range-restricted) *left-inverse*.
 
-#### <a id="epics">Surjective functions</a>
-
-A *surjective function* from `A` to `B` is a function `f : A → B` such that for all `b : B` there exists `a : A` such that `f a ≡ b`.  In other words, the range and codomain of `f` agree.  The following types manifest this notion.
 \begin{code}
 
-module _ {A : Type α}{B : Type β} where
- IsSurjective : (A → B) →  Type (α ⊔ β)
- IsSurjective f = ∀ y → Image f ∋ y
+ InvIsInverseˡ : ∀ {f a} → Inv f {b = f a} Imagef∋f ≡ a
+ InvIsInverseˡ = refl
 
- Surjective : Type (α ⊔ β)
- Surjective = Σ (A → B) IsSurjective
-
-\end{code}
-With the next definition, we can represent a *right-inverse* of a surjective function.
-\begin{code}
-
- SurjInv : (f : A → B) → IsSurjective f → B → A
- SurjInv f fE b = Inv f (fE b)
-
-\end{code}
-Thus, a right-inverse of `f` is obtained by applying `SurjInv` to `f` and a proof of `IsSurjective f`.  Next we prove that this does indeed give the right-inverse.
-\begin{code}
-
-module _ {A : Type α}{B : Type β} where
-
- SurjInvIsRightInv : (f : A → B)(fE : IsSurjective f) → ∀ b → f ((SurjInv f fE) b) ≡ b
- SurjInvIsRightInv f fE b = InvIsInv f (fE b)
-
- open ≡-Reasoning
-
- -- composition law for epics
- epic-factor : {C : Type γ}(f : A → B)(g : A → C)(h : C → B)
-  →            f ≈ h ∘ g → IsSurjective f → IsSurjective h
-
- epic-factor f g h compId fe y = Goal
-  where
-   finv : B → A
-   finv = SurjInv f fe
-
-   ζ : y ≡ f (finv y)
-   ζ = (SurjInvIsRightInv f fe y)⁻¹
-
-   η : y ≡ (h ∘ g) (finv y)
-   η = ζ ∙ compId (finv y)
-
-   Goal : Image h ∋ y
-   Goal = eq (g (finv y)) η
-
- epic-factor-intensional : {C : Type γ}(f : A → B)(g : A → C)(h : C → B)
-  →                        f ≡ h ∘ g → IsSurjective f → IsSurjective h
-
- epic-factor-intensional f g h compId fe y = Goal
-  where
-   finv : B → A
-   finv = SurjInv f fe
-
-   ζ : f (finv y) ≡ y
-   ζ = SurjInvIsRightInv f fe y
-
-   η : (h ∘ g) (finv y) ≡ y
-   η = (cong-app (compId ⁻¹)(finv y)) ∙ ζ
-
-   Goal : Image h ∋ y
-   Goal = eq (g (finv y)) (η ⁻¹)
+ ⁻¹IsInverseˡ : ∀ {f a} → [ f ]⁻¹ (f∈range a) ≡ a
+ ⁻¹IsInverseˡ = refl
 
 \end{code}
 
 --------------------------------------
 
 <span style="float:left;">[← Overture.Preliminaries](Overture.Preliminaries.html)</span>
-<span style="float:right;">[Overture.Transformers →](Overture.Transformers.html)</span>
+<span style="float:right;">[Overture.FuncInverses →](Overture.FuncInverses.html)</span>
 
 {% include UALib.Links.md %}
 

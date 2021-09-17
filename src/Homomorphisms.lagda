@@ -22,7 +22,8 @@ open import Homomorphisms.Products
 open import Homomorphisms.Noether
 open import Homomorphisms.Isomorphisms
 open import Homomorphisms.HomomorphicImages
-open import Homomorphisms.Setoid
+-- open import Homomorphisms.Setoid
+open import Homomorphisms.Func
 
 \end{code}
 

@@ -136,10 +136,10 @@ We represent this characterization of an `R`-block as follows.
 \begin{code}
 
 record IsBlock {A : Type α}{ρ : Level}(P : Pred A ρ){R : BinRel A ρ} : Type(α ⊔ lsuc ρ) where
- constructor R-block
+ constructor mkblk
  field
-  block-u : A
-  P≡[u] : P ≡ [ block-u ]{ρ} R
+  blk : A
+  P≡[blk] : P ≡ [ blk ]{ρ} R
 
 \end{code}
 
@@ -164,7 +164,7 @@ We use the following type to represent an R-block with a designated representati
 \begin{code}
 
 ⟪_⟫ : {α : Level}{A : Type α}{ρ : Level} → A → {R : BinRel A ρ} → A / R
-⟪ a ⟫{R} = [ a ] R , R-block a PE.refl
+⟪ a ⟫{R} = [ a ] R , mkblk a PE.refl
 
 \end{code}
 
@@ -173,7 +173,7 @@ Dually, the next type provides an *elimination rule*.
 \begin{code}
 
 ⌞_⌟ : {α : Level}{A : Type α}{ρ : Level}{R : BinRel A ρ} → A / R  → A
-⌞ _ , R-block a _ ⌟ = a
+⌞ _ , mkblk a _ ⌟ = a
 
 \end{code}
 

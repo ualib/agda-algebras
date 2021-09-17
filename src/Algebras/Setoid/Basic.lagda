@@ -55,13 +55,17 @@ open Setoid using    (_≈_ ; Carrier )
                      ; isEquivalence to isEqv )
 open Func renaming   ( f to _<$>_ ; cong to ≈cong )
 
+
+EqArgs : {𝑆 : Signature 𝓞 𝓥}{ξ : Setoid α ρ}
+ →       ∀ {f g} → f ≡ g → (∥ 𝑆 ∥ f → Carrier ξ) → (∥ 𝑆 ∥ g → Carrier ξ) → Type (𝓥 ⊔ ρ)
+EqArgs {ξ = ξ} refl u v = ∀ i → (_≈_ ξ) (u i) (v i)
+
+
+
 ⟦_⟧ : Signature 𝓞 𝓥 → Setoid α ρ → Setoid _ _
 
 Carrier (⟦ 𝑆 ⟧ ξ) = Σ[ f ∈ ∣ 𝑆 ∣ ] ((∥ 𝑆 ∥ f) → ξ .Carrier)
-_≈_ (⟦ 𝑆 ⟧ ξ) (f , u) (g , v) = Σ[ eqv ∈ f ≡ g ] EqArgs eqv u v
- where
- EqArgs : f ≡ g → (∥ 𝑆 ∥ f → Carrier ξ) → (∥ 𝑆 ∥ g → Carrier ξ) → Type _
- EqArgs refl u v = ∀ i → (_≈_ ξ) (u i) (v i)
+_≈_ (⟦ 𝑆 ⟧ ξ) (f , u) (g , v) = Σ[ eqv ∈ f ≡ g ] EqArgs{ξ = ξ} eqv u v
 
 IsEquivalence.refl  (isEqv (⟦ 𝑆 ⟧ ξ))                     = refl , λ _ → reflS  ξ
 IsEquivalence.sym   (isEqv (⟦ 𝑆 ⟧ ξ))(refl , g)           = refl , λ i → symS   ξ (g i)

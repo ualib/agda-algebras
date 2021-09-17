@@ -32,7 +32,7 @@ open import Relation.Binary.PropositionalEquality
 
 -- Imports from the Agda Universal Algebra Library --------------------------------------
 open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; _≈_ ; transport)
-open import Overture.Inverses      using ( IsInjective )
+open import Overture.Injective     using ( IsInjective )
 open import Relations.Quotients    using ( IsBlock )
 open import Relations.Continuous   using ( Rel ; ΠΡ )
 

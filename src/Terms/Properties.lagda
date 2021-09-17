@@ -34,7 +34,8 @@ open import Relation.Binary.PropositionalEquality
 
 -- Imports from the Agda Universal Algebra Library ----------------------------------------
 open import Overture.Preliminaries      using ( _⁻¹ ; 𝑖𝑑 ; ∣_∣ ; ∥_∥)
-open import Overture.Inverses           using ( IsSurjective ; Inv ; InvIsInv ; Image_∋_; eq )
+open import Overture.Inverses           using ( Inv ; InvIsInv ; Image_∋_; eq )
+open import Overture.Surjective         using ( IsSurjective )
 open import Equality.Welldefined        using ( swelldef )
 open import Algebras.Basic              using ( Algebra ; _̂_ )
 open import Algebras.Products   {𝑆 = 𝑆} using ( ov )

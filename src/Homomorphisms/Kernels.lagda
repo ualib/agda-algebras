@@ -27,10 +27,11 @@ open import Relation.Binary.PropositionalEquality
 
 -- -- Imports from the Agda Universal Algebras Library --------------------------------
 open import Overture.Preliminaries       using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
-open import Overture.Inverses            using ( IsSurjective ; Image_∋_ )
+open import Overture.Inverses            using ( Image_∋_ )
+open import Overture.Surjective          using ( IsSurjective )
 open import Equality.Welldefined         using ( swelldef )
 open import Relations.Discrete           using ( ker )
-open import Relations.Quotients          using ( ker-IsEquivalence ; ⟪_⟫ ; R-block )
+open import Relations.Quotients          using ( ker-IsEquivalence ; ⟪_⟫ ; mkblk )
 open import Algebras.Congruences {𝑆 = 𝑆} using ( Con ; mkcon ; _╱_ ; IsCongruence ; /-≡ )
 open import Homomorphisms.Basic  {𝑆 = 𝑆} using ( hom ; epi ; epi-to-hom )
 
@@ -94,7 +95,7 @@ module _ {α β : Level}{𝑨 : Algebra α 𝑆} where
  πepi : (θ : Con{α}{β} 𝑨) → epi 𝑨 (𝑨 ╱ θ)
  πepi θ = (λ a → ⟪ a ⟫) , (λ _ _ → refl) , cπ-is-epic  where
   cπ-is-epic : IsSurjective (λ a → ⟪ a ⟫)
-  cπ-is-epic (C , R-block a refl ) =  Image_∋_.eq a refl
+  cπ-is-epic (C , mkblk a refl ) =  Image_∋_.eq a refl
 
 \end{code}
 

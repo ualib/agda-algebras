@@ -26,7 +26,8 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl )
 
 -- Imports from the Agda Universal Algebras Library --------------------------------
 open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥ )
-open import Overture.Inverses      using ( IsInjective ; IsSurjective )
+open import Overture.Injective     using ( IsInjective )
+open import Overture.Surjective    using ( IsSurjective )
 
 private variable α β : Level
 

@@ -18,21 +18,18 @@ module Equality.Extensionality where
 -- imports from Agda and the Agda Standard Library ------------------------------------
 open import Axiom.Extensionality.Propositional
                                    using () renaming ( Extensionality to funext )
-open import Agda.Primitive         using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type ; Setω to Typeω )
-open import Data.Product           using ( _,_ ;  _×_ )
-open import Function.Base          using ( _∘_ ; id )
+open import Agda.Primitive         using ( _⊔_ ; lsuc ; Level )
+                                   renaming ( Set to Type ; Setω to Typeω )
+open import Data.Product           using ( _,_ ) renaming ( _×_ to _∧_ )
 open import Relation.Binary        using ( IsEquivalence ) renaming ( Rel to BinRel )
 open import Relation.Unary         using ( Pred ; _⊆_ )
-open import Relation.Binary.PropositionalEquality
-                                   using ( _≡_ ; refl )
+open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl )
 
 
--- imports from agda-algebras --------------------------------------------------------------
-open import Overture.Preliminaries using ( _≈_; _⁻¹ ; _∙_ ; transport )
-open import Overture.Inverses      using ( IsSurjective ; SurjInv ; InvIsInv ; Image_∋_ ; eq )
-open import Relations.Discrete     using ( Op )
+-- -- imports from agda-algebras --------------------------------------------------------------
+open import Overture.Preliminaries using ( transport )
 open import Relations.Quotients    using ( [_] ; []-⊆ ; []-⊇ ; IsBlock ; ⟪_⟫ )
-open import Equality.Truncation using ( blk-uip ; to-Σ-≡ )
+open import Equality.Truncation    using ( blk-uip ; to-Σ-≡ )
 
 
 private variable α β γ ρ 𝓥 : Level
@@ -66,7 +63,7 @@ The principle of *proposition extensionality* asserts that logically equivalent 
 \begin{code}
 
 _≐_ : {α β : Level}{A : Type α}(P Q : Pred A β ) → Type _
-P ≐ Q = (P ⊆ Q) × (Q ⊆ P)
+P ≐ Q = (P ⊆ Q) ∧ (Q ⊆ P)
 
 pred-ext : (α β : Level) → Type (lsuc (α ⊔ β))
 pred-ext α β = ∀ {A : Type α}{P Q : Pred A β } → P ⊆ Q → Q ⊆ P → P ≡ Q

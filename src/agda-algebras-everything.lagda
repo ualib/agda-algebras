@@ -10,13 +10,21 @@ All definitions/theorems in agda-algebras as of 22 June 2021.
 \begin{code}
 
 -- OVERTURE -----------------------------------------------------------------------------------------
-open import Overture.Preliminaries using ( ℓ₁ ; ∣_∣ ; ∥_∥ ; _⁻¹ ; _∙_ ; 𝑖𝑑 ; Π ; Π-syntax
-                                         ; lift∼lower ; lower∼lift ; _≈_ ; ≡-by-parts
-                                         ; transport )
+open import Overture.Preliminaries using ( ℓ₁ ; ∣_∣ ; ∥_∥ ; _⁻¹ ; _∙_ ; 𝑖𝑑 ; Π ; Π-syntax ; ∃-syntax
+                                         ; lift∼lower ; lower∼lift ; _≈_ ; ≡-by-parts ; transport )
 
-open import Overture.Inverses      using ( Image_∋_ ; eq ; Inv ; InvIsInv ; IsInjective
-                                         ; id-is-injective ; ∘-injective ; IsSurjective
-                                         ; Surjective ; SurjInv ; SurjInvIsRightInv
+open import Overture.Inverses      using ( Image_∋_ ; Range ; range ; Image⊆Range ; Range⊆Image
+                                         ; Imagef∋f ; f∈range ; Inv ; [_]⁻¹ ; InvIsInverseʳ
+                                         ; ⁻¹IsInverseʳ ;  InvIsInverseˡ ; ⁻¹IsInverseˡ )
+
+open import Overture.FuncInverses  using ( Image_∋_ ; Range ; Image⊆Range ; Range⊆Image ; Imagef∋f
+                                         ; range ; image ; preimage ; f∈range ; Inv ; Inv' ; [_]⁻¹
+                                         ; InvIsInverseʳ ; ⁻¹IsInverseʳ ; InvIsInverseˡ ; ⁻¹IsInverseˡ )
+
+open import Overture.Injective     using ( id-is-injective ; IsInjective ; module compose )
+open compose                       using ( ∘-injective )
+
+open import Overture.Surjective    using ( IsSurjective ; Surjective ; SurjInv ; SurjInvIsRightInv
                                          ; epic-factor ; epic-factor-intensional )
 
 open import Overture.Transformers  using ( Bijection ; ∣_∣=∣_∣ ; PointwiseBijection
@@ -27,6 +35,35 @@ open import Overture.Transformers  using ( Bijection ; ∣_∣=∣_∣ ; Pointwi
                                          ; UncurryFin2 ; CurryFin2~UncurryFin2 ; CurryFin3
                                          ; UncurryFin3 ; Fin2A→B-to-A×A→B ; A×A→B-to-Fin2A→B
                                          ; Fin2A→B~A×A→B )
+
+open import Overture.Func.Preliminaries using ( _⟶_ ; _∘_ ; 𝑙𝑖𝑓𝑡 ; lift∼lower ; lower∼lift
+                                              ; liftFunc ; preserves≈ )
+
+open import Overture.Func.Inverses      using ( Image_∋_ ; eq ; Range ; Image⊆Range ; Range⊆Image
+                                              ; Imagef∋f ; range ; image ; preimage ; f∈range
+                                              ; Inv ; Inv' ; [_]⁻¹ ; InvIsInverseʳ ; ⁻¹IsInverseʳ
+                                              ; InvIsInverseˡ ; ⁻¹IsInverseˡ )
+
+open import Overture.Func.Injective     using ( IsInjective ; LeftInvPreserves≈ ; ∘-injection )
+
+open import Overture.Func.Surjective    using ( IsSurjective ; SurjectionIsSurjective ; SurjInv
+                                              ; SurjInvIsInverseʳ ; epic-factor )
+
+open import Overture.Func.Bijective     using ( IsBijective ; BijInv )
+
+
+open import Overture.Setoid.Preliminaries using ( preserves≈ )
+
+open import Overture.Setoid.Inverses      using ( Image_∋_ ; Range ; Image⊆Range ; Range⊆Image
+                                                ; Inv ; Inv' ; InvIsInv )
+
+open import Overture.Setoid.Injective     using ( IsInjective ; LeftInvPreserves≈ ; ∘-injection )
+
+open import Overture.Setoid.Surjective    using ( IsSurjective ; SurjectionIsSurjective ; RightInv
+                                                ; RightInvIsRightInv ; epic-factor )
+
+open import Overture.Setoid.Bijective     using ( IsBijective ; BijInv )
+
 
 -- RELATIONS  -----------------------------------------------------------------------------------------
 open import Relations.Discrete   using (Im_⊆_ ; ker ; kerlift ; ker' ; kernel ; 0[_]
@@ -92,12 +129,17 @@ open import Algebras.Setoid.Congruences using ( _∣≈_ ; _∣≋_ ; IsCongruen
 
 
 -- HOMOMORPHISMS ------------------------------------------------------------------------------------------
-open import Homomorphisms.Basic             using ( compatible-op-map ; is-homomorphism ; hom ; ∘-hom
-                                                  ; ∘-is-hom ; 𝒾𝒹 ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-monomorphism
-                                                  ; mon ; is-epimorphism ; epi ; mon-to-hom ; epi-to-hom
-                                                  ; πhom ; homker-comp ; kercon ; kerquo ; ker[_⇒_]_↾_
-                                                  ; πepi ; πker ; ker-in-con ; ⨅-hom-co ; ⨅-hom
-                                                  ; Lift-hom ; ⨅-projection-hom )
+open import Homomorphisms.Basic             using ( compatible-op-map ; is-homomorphism ; hom 
+                                                  ; 𝒾𝒹 ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-monomorphism
+                                                  ; mon ; is-epimorphism ; epi ; mon-to-hom ; epi-to-hom )
+
+open import Homomorphisms.Properties        using ( ∘-hom ; ∘-is-hom ; Lift-hom )
+
+
+open import Homomorphisms.Kernels           using ( homker-comp ; kercon ; kerquo ; ker[_⇒_]_↾_
+                                                  ; πepi ; πhom ; πker ; ker-in-con )
+
+open import Homomorphisms.Products          using (  ⨅-hom-co ; ⨅-hom ; ⨅-projection-hom )
 
 open import Homomorphisms.Noether           using ( FirstHomTheorem|Set ; FirstIsoTheorem|Set
                                                   ; NoetherHomUnique ; NoetherIsoUnique ; HomFactor
@@ -111,11 +153,23 @@ open import Homomorphisms.HomomorphicImages using ( _IsHomImageOf_ ; HomImages ;
                                                   ; HomImageOfClass ; Lift-epi-is-epi
                                                   ; Lift-Alg-hom-image )
 
-open import Homomorphisms.Setoid.Basic      using ( compatible-op-map ; is-homomorphism ; hom
-                                                  ; ∘-hom ; ∘-is-hom ; 𝒾𝒹 ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇
-                                                  ; is-monomorphism ; mon ; epi ; Lift-hom
-                                                  ; is-epimorphism ; homker-comp ;  kercon ; kerquo
-                                                  ; ker[_⇒_]_↾_ )
+open import Homomorphisms.Setoid.Basic      using ( ≈preserving ; compatible-map-op ; compatible-map
+                                                  ; IsHom ; hom ; IsMon ; mon ; IsEpi ; epi )
+
+open import Homomorphisms.Setoid.Properties using ( ∘-is-hom ; ∘-hom ; 𝒾𝒹 ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; 𝓁𝒾𝒻𝓉∼𝓁ℴ𝓌ℯ𝓇
+                                                  ; 𝓁ℴ𝓌ℯ𝓇∼𝓁𝒾𝒻𝓉 ; Lift-hom ; lift-hom-lemma )
+
+open import Homomorphisms.Setoid.Kernels    using ( HomKerComp ; kercon ; kerquo ; ker[_⇒_]_ )
+
+open import Homomorphisms.Setoid.Factor     using ()
+
+open import Homomorphisms.Setoid.Isomorphisms using ( _≅_ ; ≅-refl ; ≅-sym ; ≅-trans ; ≅toInjective
+                                                    ; ≅fromInjective ; Lift-≅ ; Lift-Alg-iso
+                                                    ; Lift-Alg-assoc ; ⨅≅ ; Lift-Alg-⨅≅ )
+
+open import Homomorphisms.Setoid.HomomorphicImages using ( _IsHomImageOf_ ; HomImages ; IsHomImageOfClass
+                                                         ; HomImageOfClass ; Lift-epi-is-epi
+                                                         ; Lift-Alg-hom-image )
 
 open import Homomorphisms.Setoid.Isomorphisms using ( _≅_ ; ≅-refl ; ≅-sym ; ≅-trans ; Lift-≅
                                                     ; Lift-Alg-iso ; Lift-Alg-assoc )

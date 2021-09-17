@@ -25,7 +25,7 @@ open import Data.Product   using ( _,_ )
 open import Level          using ( Level )
 open import Relation.Binary.PropositionalEquality using ( refl )
 
--- -- Imports from the Agda Universal Algebras Library ----------------------
+-- Imports from the Agda Universal Algebras Library ----------------------
 open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥)
 open import Algebras.Products    {𝑆 = 𝑆} using ( ⨅ )
 open import Homomorphisms.Basic  {𝑆 = 𝑆} using ( hom ; epi )

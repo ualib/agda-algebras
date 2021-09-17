@@ -20,20 +20,21 @@ open import Axiom.Extensionality.Propositional using () renaming (Extensionality
 open import Agda.Primitive              using ( _⊔_ ; lsuc ) renaming ( Set to Type )
 open import Data.Product                using ( _,_ ; Σ-syntax ; _×_ )
 open import Function.Base               using ( _∘_ )
-open import Level                       using ( Level ; Lift )
+open import Function.Equality           using ( Π ; _⟶_ )
+open import Level                       using ( Level )
 open import Relation.Binary             using ( Setoid ; REL)
 open import Relation.Binary.Definitions using ( Reflexive ; Sym ; Trans ; Transitive )
-open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; cong ; module ≡-Reasoning ; cong-app )
+open import Relation.Binary.PropositionalEquality as PE using ( module ≡-Reasoning ; _≡_ )
 
 -- Imports from the Agda Universal Algebra Library -----------------------------------------------------
 open import Overture.Preliminaries
  using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; _∙_ ; lower∼lift ; lift∼lower ) renaming ( _≈_ to _≋_ )
-open import Overture.Inverses                  using ( IsInjective )
+open import Overture.Setoid.Injective          using ( IsInjective )
 open import Algebras.Setoid.Products   {𝑆 = 𝑆} using ( ⨅ )
 open import Algebras.Setoid.Basic      {𝑆 = 𝑆} using ( SetoidAlgebra ; 𝕌[_] ; _̂_ ; Lift-Alg)
-open import Homomorphisms.Setoid.Basic {𝑆 = 𝑆} using ( hom ; IsHom ; 𝒾𝒹 ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 )
-open import Homomorphisms.Setoid.Properties {𝑆 = 𝑆} using ( ∘-hom ; ∘-is-hom )
-open import Homomorphisms.Setoid.Kernels {𝑆 = 𝑆} using ( kercon ; ker[_⇒_] )
+open import Homomorphisms.Setoid.Basic {𝑆 = 𝑆} using ( hom ; IsHom )
+open import Homomorphisms.Setoid.Properties {𝑆 = 𝑆} using ( ∘-hom ; ∘-is-hom ; 𝒾𝒹 ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇
+                                                          ;  𝓁𝒾𝒻𝓉∼𝓁ℴ𝓌ℯ𝓇 ; 𝓁ℴ𝓌ℯ𝓇∼𝓁𝒾𝒻𝓉 )
 
 \end{code}
 
@@ -55,26 +56,14 @@ private variable
 
 open SetoidAlgebra
 open Setoid
-
-record _≅_ (𝑨 : SetoidAlgebra α ρᵃ)(𝑩 : SetoidAlgebra β ρᵇ) : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ β) where
--- module _ {𝑨 : SetoidAlgebra α ρ} where
---  open SetoidAlgebra 𝑨
---  open Setoid Domain renaming ( _≈_ to _≈A_ )
-
--- free-unique : {g h : hom (𝑻 X) 𝑨}
---  →            (∀ x → ∣ g ∣ (ℊ x) ≈A ∣ h ∣ (ℊ x))
---               --------------------------------------
---  →            ∀ (t : Term X) →  ∣ g ∣ t ≈A ∣ h ∣ t
-
+open Π
+record _≅_ (𝑨 : SetoidAlgebra α ρᵃ)(𝑩 : SetoidAlgebra β ρᵇ) : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ β ⊔ ρᵃ ⊔ ρᵇ ) where
  constructor mkiso
  field
   to : hom 𝑨 𝑩
   from : hom 𝑩 𝑨
-  to∼from : ∀ b → (_≈_ (Domain 𝑩)) (∣ to ∣ (∣ from ∣ b)) b
-  from∼to : ∀ a → (_≈_ (Domain 𝑨)) (∣ from ∣ (∣ to ∣ a)) a
-
-  -- to∼from : ∣ to ∣ ∘ ∣ from ∣ ≋ ∣ 𝒾𝒹 𝑩 ∣
-  -- from∼to : ∣ from ∣ ∘ ∣ to ∣ ≋ ∣ 𝒾𝒹 𝑨 ∣
+  to∼from : ∀ b → (_≈_ (Domain 𝑩)) (∣ to ∣ ⟨$⟩ (∣ from ∣ ⟨$⟩ b)) b
+  from∼to : ∀ a → (_≈_ (Domain 𝑨)) (∣ from ∣ ⟨$⟩ (∣ to ∣ ⟨$⟩ a)) a
 
 open _≅_ public
 
@@ -85,10 +74,12 @@ That is, two structures are *isomorphic* provided there are homomorphisms going 
 
 #### <a id="properties-of-isomorphisms-of-setoid-algebras">Properties of isomorphism of setoid algebras</a>
 
-begin{code}
+\begin{code}
+
+open Setoid
 
 ≅-refl : Reflexive (_≅_ {α}{ρᵃ})
-≅-refl {α}{ρᵃ}{𝑨} = mkiso (𝒾𝒹 𝑨) (𝒾𝒹 𝑨) (λ _ → refl) λ _ → refl
+≅-refl {α}{ρᵃ}{𝑨} = mkiso 𝒾𝒹 𝒾𝒹 (λ b → refl (Domain 𝑨)) λ a → refl (Domain 𝑨)
 
 ≅-sym : Sym (_≅_{β}{ρᵇ}) (_≅_{α}{ρᵃ})
 ≅-sym φ = mkiso (from φ) (to φ) (from∼to φ) (to∼from φ)
@@ -101,22 +92,35 @@ begin{code}
   g : hom 𝑪 𝑨
   g = ∘-hom 𝑪 𝑩 𝑨 (from bc) (from ab)
 
-  τ : ∣ f ∣ ∘ ∣ g ∣ ≋ ∣ 𝒾𝒹 𝑪 ∣
-  τ x = (cong ∣ to bc ∣(to∼from ab (∣ from bc ∣ x)))∙(to∼from bc) x
+  τ : ∀ b → (_≈_ (Domain 𝑪)) (∣ f ∣ ⟨$⟩ (∣ g ∣ ⟨$⟩ b)) b
+  τ b = trans (Domain 𝑪) (cong ∣ to bc ∣ (to∼from ab (∣ from bc ∣ ⟨$⟩ b))) (to∼from bc b)
 
-  ν : ∣ g ∣ ∘ ∣ f ∣ ≋ ∣ 𝒾𝒹 𝑨 ∣
-  ν x = (cong ∣ from ab ∣(from∼to bc (∣ to ab ∣ x)))∙(from∼to ab) x
+  ν : ∀ a → (_≈_ (Domain 𝑨)) (∣ g ∣ ⟨$⟩ (∣ f ∣ ⟨$⟩ a)) a
+  ν a = trans (Domain 𝑨) (cong ∣ from ab ∣ (from∼to bc (∣ to ab ∣ ⟨$⟩ a))) (from∼to ab a)
 
+module _ {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ} where
+ open SetoidAlgebra
+ open Setoid
+ open Π
 
--- The "to" map of an isomorphism is injective.
-≅toInjective : {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ}
-               (φ : 𝑨 ≅ 𝑩) → IsInjective ∣ to φ ∣
+ private
+  A = Domain 𝑨
+  B = Domain 𝑩
+  _≈A≈_ = _≈_ A
+  _≈B≈_ = _≈_ B
 
-≅toInjective (mkiso (f , _) (g , _) _ g∼f){a}{b} fafb =
- a       ≡⟨ (g∼f a)⁻¹ ⟩
- g (f a) ≡⟨ cong g fafb ⟩
- g (f b) ≡⟨ g∼f b ⟩
- b       ∎ where open ≡-Reasoning
+ -- The "to" map of an isomorphism is injective.
+ ≅toInjective : (φ : 𝑨 ≅ 𝑩) → IsInjective ∣ to φ ∣
+ ≅toInjective (mkiso (f , _) (g , _) _ g∼f){a₀}{a₁} fafb = Goal
+  where
+  lem1 : a₀ ≈A≈ (g ⟨$⟩ (f ⟨$⟩ a₀))
+  lem1 = sym A (g∼f a₀)
+  lem2 : (g ⟨$⟩ (f ⟨$⟩ a₀)) ≈A≈ (g ⟨$⟩ (f ⟨$⟩ a₁))
+  lem2 = cong g fafb
+  lem3 : (g ⟨$⟩ (f ⟨$⟩ a₁)) ≈A≈ a₁
+  lem3 = g∼f a₁
+  Goal : a₀ ≈A≈ a₁
+  Goal = trans A lem1 (trans A lem2 lem3)
 
 
 -- The "from" map of an isomorphism is injective.
@@ -129,20 +133,16 @@ begin{code}
 
 Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic invariant*). As our focus is universal algebra, this is important and is what makes the lift operation a workable solution to the technical problems that arise from the noncumulativity of Agda's universe hierarchy.
 
-begin{code}
+\begin{code}
 
 open Level
 
 Lift-≅ : {ℓ : Level}{𝑨 : SetoidAlgebra α ρᵃ} → 𝑨 ≅ (Lift-Alg 𝑨 ℓ)
-Lift-≅ {ℓ = ℓ} {𝑨} = record { to = 𝓁𝒾𝒻𝓉 {𝑨 = 𝑨}
-                              ; from = 𝓁ℴ𝓌ℯ𝓇  {𝑨 = 𝑨}
-                              ; to∼from = cong-app lift∼lower
-                              ; from∼to = cong-app (lower∼lift {β = ℓ})
-                              }
+Lift-≅ {ℓ = ℓ} {𝑨} = mkiso 𝓁𝒾𝒻𝓉 𝓁ℴ𝓌ℯ𝓇 (𝓁𝒾𝒻𝓉∼𝓁ℴ𝓌ℯ𝓇{𝑨 = 𝑨}) (𝓁ℴ𝓌ℯ𝓇∼𝓁𝒾𝒻𝓉{𝑨 = 𝑨}{ℓ = ℓ})
 
 Lift-Alg-iso : {ℓᵃ : Level}{𝑨 : SetoidAlgebra α ρᵃ}
-                     {ℓᵇ : Level}{𝑩 : SetoidAlgebra β ρᵇ}
-               -------------------------------------------------------------
+               {ℓᵇ : Level}{𝑩 : SetoidAlgebra β ρᵇ}
+               -----------------------------------------
  →             𝑨 ≅ 𝑩 →  Lift-Alg 𝑨 ℓᵃ ≅ Lift-Alg 𝑩 ℓᵇ
 
 Lift-Alg-iso A≅B = ≅-trans (≅-trans (≅-sym Lift-≅ ) A≅B) Lift-≅
@@ -151,7 +151,7 @@ Lift-Alg-iso A≅B = ≅-trans (≅-trans (≅-sym Lift-≅ ) A≅B) Lift-≅
 
 The lift is also associative, up to isomorphism at least.
 
-begin{code}
+\begin{code}
 
 Lift-Alg-assoc : (ℓ₁ ℓ₂ : Level){𝑨 : SetoidAlgebra α ρᵃ}
  →                     Lift-Alg 𝑨 (ℓ₁ ⊔ ℓ₂) ≅  Lift-Alg (Lift-Alg 𝑨 ℓ₁) ℓ₂
@@ -164,66 +164,94 @@ Products of isomorphic families of algebras are themselves isomorphic. The proof
 
 \begin{code}
 
-module _ {𝓘 : Level}{I : Type 𝓘}{fiu : funext 𝓘 α}{fiw : funext 𝓘 β} where
+module _ {𝓘 : Level}{I : Type 𝓘}
+         {𝒜 : I → SetoidAlgebra α ρᵃ}
+         {ℬ : I → SetoidAlgebra β ρᵇ} where
 
-  open SetoidAlgebra
+ open SetoidAlgebra
+ open IsHom
 
-  ⨅≅ : {𝒜 : I → SetoidAlgebra α ρᵃ}{ℬ : I → SetoidAlgebra β ρᵇ} → (∀ (i : I) → 𝒜 i ≅ ℬ i) → ⨅ 𝒜 ≅ ⨅ ℬ
+ private
+  ⨅A = Domain (⨅ 𝒜)
+  ⨅B = Domain (⨅ ℬ)
+  _≈⨅A≈_ = _≈_ ⨅A
+  _≈⨅B≈_ = _≈_ ⨅B
 
-  ⨅≅ {𝒜 = 𝒜}{ℬ} AB = record { to = ϕ , ϕhom ; from = ψ , ψhom ; to∼from = ϕ∼ψ ; from∼to = ψ∼ϕ }
-   where
-   ϕ : 𝕌[ ⨅ 𝒜 ]  → 𝕌[ ⨅ ℬ ]
-   ϕ a i = ∣ to (AB i) ∣ (a i)
+ ⨅≅ : (∀ (i : I) → 𝒜 i ≅ ℬ i) → ⨅ 𝒜 ≅ ⨅ ℬ
 
-   ϕhom : is-homomorphism (⨅ 𝒜) (⨅ ℬ) ϕ
-   ϕhom 𝑓 a = fiw (λ i → ∥ to (AB i) ∥ 𝑓 (λ x → a x i))
+ ⨅≅ AB = mkiso (ϕ , ϕhom) (ψ , ψhom) ϕ∼ψ ψ∼ϕ
+  where
+   ϕ : ⨅A ⟶ ⨅B
+   ϕ = record { _⟨$⟩_ = λ a i → ∣ to (AB i) ∣ ⟨$⟩ (a i)
+              ; cong = λ a i → cong ∣ to (AB i) ∣ (a i) }
 
-   ψ : 𝕌[ ⨅ ℬ ] → 𝕌[ ⨅ 𝒜 ]
-   ψ b i = ∣ from (AB i) ∣ (b i)
+   ϕhom : IsHom (⨅ 𝒜) (⨅ ℬ) ϕ
+   ϕhom = record { compatible = λ f a i → compatible ∥ to (AB i) ∥ f (λ x → a x i)
+                 ; preserves≈ = λ xy i → preserves≈ ∥ to (AB i) ∥ (xy i) }
 
-   ψhom : is-homomorphism (⨅ ℬ) (⨅ 𝒜) ψ
-   ψhom 𝑓 𝒃 = fiu (λ i → ∥ from (AB i) ∥ 𝑓 (λ x → 𝒃 x i))
+   ψ : ⨅B ⟶ ⨅A
+   ψ = record { _⟨$⟩_ = λ b i → ∣ from (AB i) ∣ ⟨$⟩ (b i)
+              ; cong = λ b i → cong ∣ from (AB i) ∣ (b i) }
 
-   ϕ∼ψ : ϕ ∘ ψ ≋ ∣ 𝒾𝒹 (⨅ ℬ) ∣
-   ϕ∼ψ 𝒃 = fiw λ i → to∼from (AB i) (𝒃 i)
+   ψhom : IsHom (⨅ ℬ) (⨅ 𝒜) ψ
+   ψhom = record { compatible = λ f b i → compatible ∥ from (AB i) ∥ f λ x → b x i
+                 ; preserves≈ = λ xy i → preserves≈ ∥ from (AB i) ∥ (xy i) }
 
-   ψ∼ϕ : ψ ∘ ϕ ≋ ∣ 𝒾𝒹 (⨅ 𝒜) ∣
-   ψ∼ϕ a = fiu λ i → from∼to (AB i)(a i)
+   ϕ∼ψ : ∀ b → (ϕ ⟨$⟩ (ψ ⟨$⟩ b)) ≈⨅B≈ b
+   ϕ∼ψ b = λ i → to∼from (AB i) (b i)
+
+   ψ∼ϕ : ∀ a → (ψ ⟨$⟩ (ϕ ⟨$⟩ a)) ≈⨅A≈ a
+   ψ∼ϕ a = λ i → from∼to (AB i)(a i)
 
 \end{code}
 
+A nearly identical proof goes through for isomorphisms of lifted products.
 
-A nearly identical proof goes through for isomorphisms of lifted products (though, just for fun, we use the universal quantifier syntax here to express the dependent function type in the statement of the lemma, instead of the Pi notation we used in the statement of the previous lemma; that is, `∀ i → 𝒜 i ≅ ℬ (lift i)` instead of `Π i ꞉ I , 𝒜 i ≅ ℬ (lift i)`.)
+\begin{code}
 
-begin{code}
+module _ {𝓘 : Level}{I : Type 𝓘}
+         {𝒜 : I → SetoidAlgebra α ρᵃ}
+         {ℬ : (Lift γ I) → SetoidAlgebra β ρᵇ} where
 
-module _ {𝓘 : Level}{I : Type 𝓘}{fizw : funext (𝓘 ⊔ γ) β}{fiu : funext 𝓘 α} where
+ open SetoidAlgebra
+ open IsHom
 
-  Lift-Alg-⨅≅ : {𝒜 : I → SetoidAlgebra α ρᵃ}{ℬ : (Lift γ I) → SetoidAlgebra β ρᵇ}
-   →            (∀ i → 𝒜 i ≅ ℬ (lift i)) → Lift-Alg (⨅ 𝒜) γ ≅ ⨅ ℬ
+ private
+  ⨅A = Domain (⨅ 𝒜)
+  ⨅B = Domain (⨅ ℬ)
+  _≈⨅A≈_ = _≈_ ⨅A
+  _≈⨅B≈_ = _≈_ ⨅B
 
-  Lift-Alg-⨅≅ {𝒜 = 𝒜}{ℬ} AB = Goal
-   where
-   ϕ : 𝕌[ ⨅ 𝒜 ] → 𝕌[ ⨅ ℬ ]
-   ϕ a i = ∣ to (AB  (lower i)) ∣ (a (lower i))
+ open Level
+ Lift-Alg-⨅≅ : (∀ i → 𝒜 i ≅ ℬ (lift i)) → Lift-Alg (⨅ 𝒜) γ ≅ ⨅ ℬ
 
-   ϕhom : is-homomorphism (⨅ 𝒜) (⨅ ℬ) ϕ
-   ϕhom 𝑓 a = fizw (λ i → (∥ to (AB (lower i)) ∥) 𝑓 (λ x → a x (lower i)))
+ Lift-Alg-⨅≅ AB = Goal
+  where
+   ϕ : ⨅A ⟶ ⨅B
+   ϕ = record { _⟨$⟩_ = λ a i → ∣ to (AB (lower i)) ∣ ⟨$⟩ (a (lower i))
+              ; cong = λ a i → cong ∣ to (AB (lower i)) ∣ (a (lower i)) }
 
-   ψ : 𝕌[ ⨅ ℬ ] → 𝕌[ ⨅ 𝒜 ]
-   ψ b i = ∣ from (AB i) ∣ (b (lift i))
 
-   ψhom : is-homomorphism (⨅ ℬ) (⨅ 𝒜) ψ
-   ψhom 𝑓 𝒃 = fiu (λ i → ∥ from (AB i) ∥ 𝑓 (λ x → 𝒃 x (lift i)))
+   ϕhom : IsHom (⨅ 𝒜) (⨅ ℬ) ϕ
+   ϕhom = record { compatible = λ f a i → compatible ∥ to (AB (lower i)) ∥ f (λ x → a x (lower i))
+                 ; preserves≈ = λ xy i → preserves≈ ∥ to (AB (lower i)) ∥ (xy (lower i)) }
 
-   ϕ∼ψ : ϕ ∘ ψ ≋ ∣ 𝒾𝒹 (⨅ ℬ) ∣
-   ϕ∼ψ 𝒃 = fizw λ i → to∼from (AB (lower i)) (𝒃 i)
+   ψ : ⨅B ⟶ ⨅A
+   ψ = record { _⟨$⟩_ = λ b i → ∣ from (AB i) ∣ ⟨$⟩ (b (lift i))
+              ; cong = λ b i → cong ∣ from (AB i) ∣ (b (lift i)) }
 
-   ψ∼ϕ : ψ ∘ ϕ ≋ ∣ 𝒾𝒹 (⨅ 𝒜) ∣
-   ψ∼ϕ a = fiu λ i → from∼to (AB i) (a i)
+   ψhom : IsHom (⨅ ℬ) (⨅ 𝒜) ψ
+   ψhom = record { compatible = λ f b i → compatible ∥ from (AB i) ∥ f λ x → b x (lift i)
+                 ; preserves≈ = λ xy i → preserves≈ ∥ from (AB i) ∥ (xy (lift i)) }
+
+   ϕ∼ψ : ∀ b → (ϕ ⟨$⟩ (ψ ⟨$⟩ b)) ≈⨅B≈ b
+   ϕ∼ψ b = λ i → to∼from (AB (lower i)) (b i)
+
+   ψ∼ϕ : ∀ a → (ψ ⟨$⟩ (ϕ ⟨$⟩ a)) ≈⨅A≈ a
+   ψ∼ϕ a = λ i → from∼to (AB i)(a i)
 
    A≅B : ⨅ 𝒜 ≅ ⨅ ℬ
-   A≅B = record { to = ϕ , ϕhom ; from = ψ , ψhom ; to∼from = ϕ∼ψ ; from∼to = ψ∼ϕ }
+   A≅B = mkiso (ϕ , ϕhom) (ψ , ψhom) ϕ∼ψ ψ∼ϕ
 
    Goal : Lift-Alg (⨅ 𝒜) γ ≅ ⨅ ℬ
    Goal = ≅-trans (≅-sym Lift-≅) A≅B

@@ -23,19 +23,21 @@ open import Axiom.Extensionality.Propositional
 open import Agda.Primitive         using ( Level ; _⊔_ ; lsuc ) renaming ( Set to Type )
 open import Data.Product           using ( _,_ ; Σ-syntax ) renaming (proj₂ to snd)
 open import Function.Base          using ( _∘_ )
+open import Function.Equality using ( Π ; _⟶_ )
 open import Function.Bundles       using ( Func )
 open import Data.Empty.Polymorphic using ( ⊥ )
 open import Relation.Binary        using ( IsEquivalence ; Setoid )
 open import Relation.Binary.Definitions using (Reflexive ; Symmetric ; Transitive )
-open import Relation.Binary.PropositionalEquality
-                                   using ( _≡_ ; refl ; module ≡-Reasoning ; cong )
+open import Relation.Binary.PropositionalEquality as PE
+                                   using ( _≡_ ; refl ; module ≡-Reasoning )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------------
 open import Overture.Preliminaries using ( _⁻¹ ; 𝑖𝑑 ; ∣_∣ ; ∥_∥ ; transport )
-open import Overture.Inverses      using ( IsSurjective ; Inv ; InvIsInv ; Image_∋_ ; eq )
+open import Overture.Setoid.Inverses      using ( Inv ; InvIsInv ; Image_∋_ ; eq )
+open import Overture.Setoid.Surjective    using ( IsSurjective )
 
 open import Algebras.Setoid.Basic      {𝑆 = 𝑆} using ( SetoidAlgebra ; _̂_ ; ov ; 𝕌[_] )
-open import Homomorphisms.Setoid.Basic {𝑆 = 𝑆} using ( hom )
+open import Homomorphisms.Setoid.Basic {𝑆 = 𝑆} using ( hom ; IsHom )
 open import Terms.Setoid.Basic         {𝑆 = 𝑆} using ( Term ; 𝑻 ; _≐_ )
 open Term
 
@@ -54,9 +56,27 @@ We now prove this in [Agda][], starting with the fact that every map from `X` to
 
 private variable X : Type χ
 
-free-lift : (𝑨 : SetoidAlgebra α ρ)(h : X → 𝕌[ 𝑨 ]) → 𝕌[ 𝑻 X ] → 𝕌[ 𝑨 ]
-free-lift _ h (ℊ x) = h x
-free-lift 𝑨 h (node f t) = (f ̂ 𝑨) (λ i → free-lift 𝑨 h (t i))
+open SetoidAlgebra
+open Setoid
+open Π
+
+-- NEXT: use _≐_ from Terms/Setoid/Basic
+
+free-lift : (𝑨 : SetoidAlgebra α ρ)(h : X → 𝕌[ 𝑨 ]) → Domain (𝑻 X) ⟶ Domain 𝑨
+free-lift {X = X} 𝑨 h = record { _⟨$⟩_ = ap ; cong = c }
+ where
+ ap : 𝕌[ 𝑻 X ] → 𝕌[ 𝑨 ]
+ c : ∀ {t₀ t₁} → (_≈_ (Domain (𝑻 X))) t₀ t₁ → (_≈_ (Domain 𝑨)) (ap t₀) (ap t₁)
+ ap (ℊ x) = h x
+ ap (node f t) = (f ̂ 𝑨) (λ i → free-lift 𝑨 h ⟨$⟩ (t i))
+ c {t₀}{t₁} = {!!}
+-- ⟨$⟩ ℊ x = h x
+-- free-lift 𝑨 h ⟨$⟩ node f t = {!!} -- (f ̂ 𝑨) (λ i → (free-lift 𝑨 h) ⟨$⟩ (t i))
+-- cong (free-lift 𝑨 h) = λ x → {!!}
+
+-- free-lift : (𝑨 : SetoidAlgebra α ρ)(h : X → 𝕌[ 𝑨 ]) → 𝕌[ 𝑻 X ] → 𝕌[ 𝑨 ]
+-- free-lift _ h (ℊ x) = h x
+-- free-lift 𝑨 h (node f t) = (f ̂ 𝑨) (λ i → free-lift 𝑨 h (t i))
 
 \end{code}
 
@@ -72,7 +92,7 @@ The free lift so defined is a homomorphism by construction. Indeed, here is the 
 \begin{code}
 
 lift-hom : (𝑨 : SetoidAlgebra α ρ) → (X → 𝕌[ 𝑨 ]) → hom (𝑻 X) 𝑨
-lift-hom 𝑨 h = free-lift 𝑨 h , λ f a → cong (f ̂ 𝑨) refl
+lift-hom 𝑨 h = free-lift 𝑨 h , record { compatible = {!!} ; preserves≈ = {!!} } -- λ f a → cong (f ̂ 𝑨) refl
 
 \end{code}
 
@@ -82,28 +102,33 @@ Finally, we prove that the homomorphism is unique.  Recall, when we proved this 
 
 module _ {𝑨 : SetoidAlgebra α ρ} where
  open SetoidAlgebra 𝑨
- open Setoid Domain renaming ( _≈_ to _≈A_ )
+ open Setoid
+ open IsHom
+ open Π
+ private
+  A = Domain 𝑨
+  _≈A≈_ = _≈_ A
 
  free-unique : {g h : hom (𝑻 X) 𝑨}
-  →            (∀ x → ∣ g ∣ (ℊ x) ≈A ∣ h ∣ (ℊ x))
+  →            (∀ x → (∣ g ∣ ⟨$⟩ (ℊ x)) ≈A≈ (∣ h ∣ ⟨$⟩ (ℊ x)))
                --------------------------------------
-  →            ∀ (t : Term X) →  ∣ g ∣ t ≈A ∣ h ∣ t
+  →            ∀ (t : Term X) →  (∣ g ∣ ⟨$⟩ t) ≈A≈ (∣ h ∣ ⟨$⟩ t)
 
  free-unique p (ℊ x) = p x
 
- free-unique {g = g} {h} p (node f t) = trans (trans geq lem3) (sym heq)
+ free-unique {g = g} {h} p (node f t) = trans A (trans A geq lem3) (sym A heq)
   where
-  lem2 : ∀ i → (∣ g ∣ ∘ t) i ≈A (∣ h ∣ ∘ t) i
+  lem2 : ∀ i → (∣ g ∣ ⟨$⟩ (t i)) ≈A≈ (∣ h ∣ ⟨$⟩ (t i))
   lem2 i = free-unique{g = g}{h} p (t i)
 
-  lem3 : (f ̂ 𝑨)(∣ g ∣ ∘ t) ≈A (f ̂ 𝑨)(∣ h ∣ ∘ t)
-  lem3 = Func.cong Interp (_≡_.refl , lem2)
+  lem3 : (f ̂ 𝑨)(λ i → (∣ g ∣ ⟨$⟩ (t i))) ≈A≈ (f ̂ 𝑨)(λ i → (∣ h ∣ ⟨$⟩ (t i)))
+  lem3 = Func.cong (Interp 𝑨) (_≡_.refl , lem2)
 
-  geq : ∣ g ∣ (node f t) ≈A (f ̂ 𝑨)(∣ g ∣ ∘ t)
-  geq = ≡→≈ (∥ g ∥ f t)
+  geq : (∣ g ∣ ⟨$⟩ (node f t)) ≈A≈ (f ̂ 𝑨)(λ i → (∣ g ∣ ⟨$⟩ (t i)))
+  geq = (compatible ∥ g ∥) f t
 
-  heq : ∣ h ∣ (node f t) ≈A (f ̂ 𝑨)(∣ h ∣ ∘ t)
-  heq = ≡→≈ (∥ h ∥ f t)
+  heq : (∣ h ∣ ⟨$⟩ (node f t)) ≈A≈ (f ̂ 𝑨)(λ i → (∣ h ∣ ⟨$⟩ (t i)))
+  heq = compatible ∥ h ∥ f t
 
 \end{code}
 
@@ -113,18 +138,18 @@ If we further assume that each of the mappings from `X` to `∣ 𝑨 ∣` is *su
 
 \begin{code}
 
-lift-of-epi-is-epi : (𝑨 : SetoidAlgebra α ρ){h₀ : X → 𝕌[ 𝑨 ]}
- →                   IsSurjective h₀ → IsSurjective ∣ lift-hom 𝑨 h₀ ∣
+ lift-of-epi-is-epi : (h₀ : X → 𝕌[ 𝑨 ])
+  →                   IsSurjective (free-lift 𝑨 h₀) → IsSurjective ∣ lift-hom 𝑨 h₀ ∣
 
-lift-of-epi-is-epi 𝑨 {h₀} hE y = Goal
- where
- h₀⁻¹y = Inv h₀ (hE y)
+ lift-of-epi-is-epi h₀ hE y = Goal
+  where
+  h₀⁻¹y = Inv (free-lift 𝑨 h₀) (hE y)
 
- η : y ≡ ∣ lift-hom 𝑨 h₀ ∣ (ℊ h₀⁻¹y)
- η = (InvIsInv h₀ (hE y))⁻¹
+  η : y ≈A≈ (∣ lift-hom 𝑨 h₀ ∣ ⟨$⟩ h₀⁻¹y)
+  η = sym A (InvIsInv (free-lift 𝑨 h₀) (hE y))
 
- Goal : Image ∣ lift-hom 𝑨 h₀ ∣ ∋ y
- Goal = eq (ℊ h₀⁻¹y) η
+  Goal : Image ∣ lift-hom 𝑨 h₀ ∣ ∋ y
+  Goal = eq h₀⁻¹y η
 
 \end{code}
 
