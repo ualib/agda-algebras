@@ -51,19 +51,6 @@ open import Overture.Func.Surjective    using ( IsSurjective ; SurjectionIsSurje
 open import Overture.Func.Bijective     using ( IsBijective ; BijInv )
 
 
-open import Overture.Setoid.Preliminaries using ( preserves≈ )
-
-open import Overture.Setoid.Inverses      using ( Image_∋_ ; Range ; Image⊆Range ; Range⊆Image
-                                                ; Inv ; Inv' ; InvIsInv )
-
-open import Overture.Setoid.Injective     using ( IsInjective ; LeftInvPreserves≈ ; ∘-injection )
-
-open import Overture.Setoid.Surjective    using ( IsSurjective ; SurjectionIsSurjective ; RightInv
-                                                ; RightInvIsRightInv ; epic-factor )
-
-open import Overture.Setoid.Bijective     using ( IsBijective ; BijInv )
-
-
 -- RELATIONS  -----------------------------------------------------------------------------------------
 open import Relations.Discrete   using (Im_⊆_ ; ker ; kerlift ; ker' ; kernel ; 0[_]
                                        ; _⊑_ ; ⊑-refl ; ⊑-trans ; Op ; π ; eval-rel
@@ -116,15 +103,13 @@ open import Algebras.Congruences        using ( IsCongruence ; Con ; IsCongruenc
                                               ; Con→IsCongruence ; 0[_]Compatible ; 0Con[_]
                                               ; _╱_ ; 𝟘[_╱_] ; 𝟎[_╱_] ; /-≡ )
 
-open import Algebras.Setoid.Basic       using ( ⟦_⟧ ; Algebroid ; SetoidAlgebra ; _̂_ ; _∙_
-                                              ; ov ; 𝕌[_] ; 𝔻[_] ; Level-of-Alg
-                                              ; Level-of-Carrier ; Lift-Alg ; Lift-Alg' )
+open import Algebras.Func.Basic       using ( ⟦_⟧ ; SetoidAlgebra ; _̂_ ; ov ; 𝕌[_] ; 𝔻[_]
+                                            ; Level-of-Alg ; Level-of-Carrier ; Lift-Alg ; Lift-Alg' )
 
-open import Algebras.Setoid.Products    using ( ⨅ ; ℑ ; 𝔄 ; class-product ; ⨅oid ; ℑ'
-                                              ; 𝔄' ; class-product' )
+open import Algebras.Func.Products    using ( ⨅ ; ℑ ; 𝔄 ; class-product )
 
-open import Algebras.Setoid.Congruences using ( _∣≈_ ; _∣≋_ ; IsCongruence ; Con ; IsCongruence→Con
-                                              ; Con→IsCongruence ; _╱_ )
+open import Algebras.Func.Congruences using ( _∣≈_ ; IsCongruence ; Con ; IsCongruence→Con
+                                            ; Con→IsCongruence ; _╱_ )
 
 
 -- HOMOMORPHISMS ------------------------------------------------------------------------------------------
@@ -212,18 +197,18 @@ open import Subalgebras.Properties       using ( ≤-refl ; ≥-refl ; ≤-refle
                                                ; ≤-Lift ; ≥-Lift ; Lift-≤-Lift )
 
 
-open import Subalgebras.Setoid.Subuniverses using( Subuniverses ; Subuniverse ; Sg ; sgIsSub
+open import Subalgebras.Func.Subuniverses using( Subuniverses ; Subuniverse ; Sg ; sgIsSub
                                                  ; sgIsSmallest ; ⋂s ; sub-term-closed
                                                  ; TermImage ; TermImageIsSub ; B-onlyif-TermImageB
                                                  ; SgB-onlyif-TermImageB ; hom-unique )
 
-open import Subalgebras.Setoid.Subalgebras  using ( _≥_ ; _IsSupalgebraOf_ ; _≤_ ; _IsSubalgebraOf_
+open import Subalgebras.Func.Subalgebras  using ( _≥_ ; _IsSupalgebraOf_ ; _≤_ ; _IsSubalgebraOf_
                                                   ; SubalgebraOf ; Subalgebra
                                                   ; IsSubalgebraREL ; SubalgebraREL ; _≤c_
                                                   ; _IsSubalgebraOfClass_ ; SubalgebraOfClass
                                                   ; SubalgebraOfClass' ; SubalgebrasOfClass )
 
-open import Subalgebras.Setoid.Properties   using ( ≅→≤ ; ≅→≥ ; ≤-refl ; ≥-refl ; ≤-reflexive
+open import Subalgebras.Func.Properties   using ( ≅→≤ ; ≅→≥ ; ≤-refl ; ≥-refl ; ≤-reflexive
                                                   ; ≤-trans ; ≤-TRANS-≅ ; ≥-trans ; ≤-preorder
                                                   ; A≥B×B≅C→A≥C ; A≤B×B≅C→A≤C ; A≅B×B≥C→A≥C
                                                   ; A≅B×B≤C→A≤C ; ≤-mono ; Lift-is-sub ; ≤-Lift
@@ -258,17 +243,17 @@ open import Varieties.FreeAlgebras       using ( 𝓕 ; 𝓕⁺ ; ψ ; ψRel ; �
                                                ; Birkhoff-converse ; _↠_ )
 
 
-open import Varieties.Setoid.EquationalLogic using ( Eq ; _⊨_ ; _⊧_ ; Mod ; _⊫_ ; _⊃_ ; _⊢_▹_≈_
+open import Varieties.Func.EquationalLogic using ( Eq ; _⊨_ ; _⊧_ ; Mod ; _⊫_ ; _⊃_ ; _⊢_▹_≈_
                                                    ; module Soundness ; module FreeAlgebra )
 open Soundness   using ( sound )
 open FreeAlgebra using ( FreeDomain ; FreeInterp ; 𝔽[_] ; σ₀ ; identity ; evaluation ; satisfies
                        ; completeness )
 
-open import Varieties.Setoid.Closure         using ( H ; hbase ; hhimg ; S ; sbase ; ssub ; siso
+open import Varieties.Func.Closure         using ( H ; hbase ; hhimg ; S ; sbase ; ssub ; siso
                                                    ; P ; pbase ; pprod ; piso ; V ; vbase ; vhimg
                                                    ; vssub ; vpprod ; viso ; is-variety ; variety )
 
-open import Varieties.Setoid.FreeAlgebras    using ( ℐ ; ℰ ; epi𝔽 ; hom𝔽 ; hom𝔽-is-epic )
+open import Varieties.Func.FreeAlgebras    using ( ℐ ; ℰ ; epi𝔽 ; hom𝔽 ; hom𝔽-is-epic )
 
 
 -- GENERAL STRUCTURES ---------------------------------------------------------------------------------
