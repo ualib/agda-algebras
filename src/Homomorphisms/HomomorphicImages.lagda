@@ -27,9 +27,11 @@ open import Relation.Unary using ( Pred ; _∈_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------
 open import Overture.Preliminaries      using ( 𝑖𝑑 ; ∣_∣ ; ∥_∥ ; lower∼lift ; lift∼lower )
-open import Overture.Inverses           using ( IsSurjective ; Image_∋_ ; Inv ; InvIsInv ; eq )
+open import Overture.Inverses           using ( Image_∋_ ; Inv ; InvIsInverseʳ ; eq )
+open import Overture.Surjective         using ( IsSurjective )
 open import Algebras.Products   {𝑆 = 𝑆} using ( ov )
-open import Homomorphisms.Basic {𝑆 = 𝑆} using ( hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; Lift-hom )
+open import Homomorphisms.Basic {𝑆 = 𝑆} using ( hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 )
+open import Homomorphisms.Properties {𝑆 = 𝑆} using ( Lift-hom )
 
 \end{code}
 
@@ -100,7 +102,7 @@ module _ {α β : Level} where
 
    η : y ≡ ∣ lh ∣ (lift a)
    η = y               ≡⟨ (cong-app lift∼lower) y ⟩
-       lift (lower y)  ≡⟨ cong lift (sym (InvIsInv ∣ h ∣ ζ)) ⟩
+       lift (lower y)  ≡⟨ cong lift (sym (InvIsInverseʳ ζ)) ⟩
        lift (∣ h ∣ a)  ≡⟨ ν ⟩
        ∣ lh ∣ (lift a) ∎
 

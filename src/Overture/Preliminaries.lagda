@@ -39,7 +39,7 @@ module Overture.Preliminaries where
 
 -- Imports from Agda and the Agda Standard Library -----------------------------------------------
 open import Agda.Primitive using ( _⊔_ ; lsuc ) renaming ( Set to  Type ; lzero to  ℓ₀ )
-open import Data.Product   using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Data.Product   using ( _,_ ; ∃ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
 open import Function.Base  using ( _∘_ ; id )
 open import Level          using ( Level ; Lift ; lift ; lower )
 open import Relation.Binary.Structures using ( IsEquivalence ; IsPartialOrder )
@@ -106,6 +106,21 @@ p ∙ q = trans p q
 
 infixl 30 _∙_
 \end{code}
+
+#### <a id="sigma-types">Sigma types</a>
+
+\begin{code}
+
+infix 2 ∃-syntax
+
+∃-syntax : ∀ {A : Type α} → (A → Type β) → Set (α ⊔ β)
+∃-syntax = ∃
+
+syntax ∃-syntax (λ x → B) = ∃[ x ∈ A ] B
+
+\end{code}
+
+
 
 
 #### <a id="pi-types">Pi types</a>

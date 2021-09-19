@@ -17,30 +17,28 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Subalgebras.Setoid.Subuniverses {𝑆 : Signature 𝓞 𝓥} where
 
--- Imports from Agda and the Agda Standard Library -----------------------------------------------
-open import Agda.Primitive   using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
-open import Data.Product     using ( _,_ ; Σ-syntax ; Σ ; _×_ )
-open import Function.Base    using ( _∘_ ; id )
-open import Function.Bundles using ( Func ; Injection )
-open import Relation.Binary  using ( Setoid ; REL )
+-- Imports from Agda and the Agda Standard Library ----------------------------------
+open import Agda.Primitive   using ( _⊔_ ; Level ) renaming ( Set to Type )
+open import Data.Product     using ( _,_ )
+open import Function.Base    using ( _∘_ )
+open import Function.Bundles using ( Func )
+open import Relation.Binary  using ( Setoid )
 open import Relation.Unary   using ( Pred ; _∈_ ; _⊆_ ; ⋂ )
-open import Relation.Binary.PropositionalEquality using ( _≡_ ; module ≡-Reasoning )
+import Relation.Binary.Reasoning.Setoid as SetoidReasoning
+open import Relation.Binary.PropositionalEquality using ( refl )
 
--- Imports from the Agda Universal Algebra Library -----------------------------------------------
-open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
-open import Overture.Inverses      using ( ∘-injective ; IsInjective ; id-is-injective )
-open import Relations.Discrete     using ( Im_⊆_ )
-open import Equality.Welldefined   using ( swelldef )
-open import Algebras.Setoid.Basic {𝑆 = 𝑆} using ( SetoidAlgebra ; 𝕌[_] ; _̂_ ; Lift-Alg )
-open import Algebras.Products     {𝑆 = 𝑆} using ( ov )
-open import Terms.Basic           {𝑆 = 𝑆} using ( Term ; ℊ ; node )
-open import Terms.Setoid.Basic    {𝑆 = 𝑆} using ( module Environment )
-open import Homomorphisms.Setoid.Basic
-                                  {𝑆 = 𝑆} using ( hom ; ∘-hom )
-open import Homomorphisms.Setoid.Isomorphisms
-                                  {𝑆 = 𝑆} using ( _≅_ ;  ≅-sym ; ≅-refl ; ≅-trans ; Lift-≅
-                                                ; ≅toInjective ; ≅fromInjective )
-private variable ρ : Level
+-- Imports from the Agda Universal Algebra Library ----------------------------------
+open import Overture.Preliminaries           using ( ∣_∣ ; ∥_∥ )
+open import Relations.Discrete               using ( Im_⊆_ )
+open import Algebras.Setoid.Basic    {𝑆 = 𝑆} using ( SetoidAlgebra ; 𝕌[_] ; _̂_ )
+open import Algebras.Products        {𝑆 = 𝑆} using ( ov )
+open import Terms.Basic              {𝑆 = 𝑆} using ( Term ; ℊ ; node )
+open import Terms.Func.Basic         {𝑆 = 𝑆} using ( module Environment )
+open import Homomorphisms.Func.Basic {𝑆 = 𝑆} using ( hom ; IsHom )
+
+private variable
+ α β γ ρᵃ ρᵇ ρᶜ ℓ χ : Level
+ X : Type χ
 
 \end{code}
 
@@ -48,23 +46,23 @@ We first show how to represent in [Agda][] the collection of subuniverses of an 
 
 \begin{code}
 
-module _ {α ρᵃ : Level}  (𝑨 : SetoidAlgebra α ρᵃ) where
+module _ (𝑨 : SetoidAlgebra α ρᵃ) where
  private
   A = 𝕌[ 𝑨 ] -- (𝕌 = forgetful functor)
 
- Subuniverses : Pred (Pred A ρ) (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ)
+ Subuniverses : Pred (Pred A ℓ) (𝓞 ⊔ 𝓥 ⊔ α ⊔ ℓ )
 
  Subuniverses B = ∀ f a → Im a ⊆ B → (f ̂ 𝑨) a ∈ B
 
  -- Subuniverses as a record type
- record Subuniverse : Type(ov (α ⊔ ρ)) where
+ record Subuniverse : Type(ov (α ⊔ ℓ)) where
   constructor mksub
-  field       sset  : Pred A ρ
+  field       sset  : Pred A ℓ
               isSub : sset ∈ Subuniverses
 
 
  -- Subuniverse Generation
- data Sg (G : Pred A ρ) : Pred A (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ) where
+ data Sg (G : Pred A ℓ) : Pred A (𝓞 ⊔ 𝓥 ⊔ α ⊔ ℓ) where
   var : ∀ {v} → v ∈ G → v ∈ Sg G
   app : ∀ f a → Im a ⊆ Sg G → (f ̂ 𝑨) a ∈ Sg G
 
@@ -76,7 +74,7 @@ Given an arbitrary subset `X` of the domain `∣ 𝑨 ∣` of an `𝑆`-algebra 
 
 \begin{code}
 
- sgIsSub : {G : Pred A ρ} → Sg G ∈ Subuniverses
+ sgIsSub : {G : Pred A ℓ} → Sg G ∈ Subuniverses
  sgIsSub = app
 
 \end{code}
@@ -85,7 +83,7 @@ Next we prove by structural induction that `Sg X` is the smallest subuniverse of
 
 \begin{code}
 
- sgIsSmallest : {ρᵍ ρᵇ : Level}{G : Pred A ρᵍ}(B : Pred A ρᵇ)
+ sgIsSmallest : {G : Pred A ρᵃ}(B : Pred A ρᵇ)
   →             B ∈ Subuniverses  →  G ⊆ B  →  Sg G ⊆ B
 
  sgIsSmallest _ _ G⊆B (var Gx) = G⊆B Gx
@@ -104,7 +102,7 @@ When the element of `Sg G` is constructed as `app f a SgGa`, we may assume (the 
 
 \begin{code}
 
-module _ {α ρᵃ : Level}  {𝑨 : SetoidAlgebra α ρᵃ} where
+module _ {𝑨 : SetoidAlgebra α ρᵃ} where
  private
   A = 𝕌[ 𝑨 ]
 
@@ -131,17 +129,16 @@ yet."  We should fix the implementation to resolve this.
 
 \begin{code}
 
-module _ {χ : Level}{X : Type χ}
-         {α ρᵃ : Level}{𝑨 : SetoidAlgebra α ρᵃ}
+module _ {𝑨 : SetoidAlgebra α ρᵃ}
          where
 
  private A = 𝕌[ 𝑨 ]
- open Setoid
+ open Setoid using ( Carrier )
  open Environment 𝑨
  open Func renaming ( f to _<$>_ )
 
  -- subuniverses are closed under the action of term operations
- sub-term-closed : (B : Pred A ρ)
+ sub-term-closed : (B : Pred A ℓ)
   →                (B ∈ Subuniverses 𝑨)
   →                (t : Term X)
   →                (b : Carrier (Env X))
@@ -172,60 +169,73 @@ Alternatively, we could express the preceeding fact using an inductive type repr
 
 \begin{code}
 
- data TermImage (B : Pred A ρ) : Pred A (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ)
+ data TermImage (B : Pred A ρᵃ) : Pred A (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ)
   where
   var : ∀ {b : A} → b ∈ B → b ∈ TermImage B
   app : ∀ f ts →  ((i : ∥ 𝑆 ∥ f) → ts i ∈ TermImage B)  → (f ̂ 𝑨) ts ∈ TermImage B
 
  -- `TermImage B` is a subuniverse of 𝑨 that contains B.
- TermImageIsSub : {B : Pred A ρ} → TermImage B ∈ Subuniverses 𝑨
+ TermImageIsSub : {B : Pred A ρᵃ} → TermImage B ∈ Subuniverses 𝑨
  TermImageIsSub = app
 
- B-onlyif-TermImageB : {B : Pred A ρ} → B ⊆ TermImage B
+ B-onlyif-TermImageB : {B : Pred A ρᵃ} → B ⊆ TermImage B
  B-onlyif-TermImageB Ba = var Ba
 
  -- Since `Sg B` is the smallest subuniverse containing B, we obtain the following inclusion.
- SgB-onlyif-TermImageB : (B : Pred A ρ) → Sg 𝑨 B ⊆ TermImage B
+ SgB-onlyif-TermImageB : (B : Pred A ρᵃ) → Sg 𝑨 B ⊆ TermImage B
  SgB-onlyif-TermImageB B = sgIsSmallest 𝑨 (TermImage B) TermImageIsSub B-onlyif-TermImageB
 
- module _ {β ρᵇ : Level}{𝑩 : SetoidAlgebra β ρᵇ} where
+\end{code}
 
-  private B = 𝕌[ 𝑩 ]
+A basic but important fact about homomorphisms is that they are uniquely determined by
+the values they take on a generating set. This is the content of the next theorem, which
+we call `hom-unique`.
+
+\begin{code}
+
+ module _ {𝑩 : SetoidAlgebra β ρᵇ} (gh hh : hom 𝑨 𝑩) where
+  open SetoidAlgebra 𝑩 using ( Interp ) renaming (Domain to B )
+  open Setoid B using ( _≈_ ; sym )
+  open SetoidReasoning B
+  open Func using ( cong ) renaming (f to _⟨$⟩_ )
+
+  private
+   g = _⟨$⟩_ ∣ gh ∣
+   h = _⟨$⟩_ ∣ hh ∣
+
+  open IsHom
   open Environment 𝑩
 
-  -- Homomorphisms are uniquely determined by their values on a generating set.
-  hom-unique : swelldef 𝓥 β → (G : Pred A ρ)  (g h : hom 𝑨 𝑩)
-   →           ((x : A) → (x ∈ G → ∣ g ∣ x ≡ ∣ h ∣ x))
+  hom-unique : (G : Pred A ℓ) → ((x : A) → (x ∈ G → g x ≈ h x))
                -------------------------------------------------
-   →           (a : A) → (a ∈ Sg 𝑨 G → ∣ g ∣ a ≡ ∣ h ∣ a)
+   →           (a : A) → (a ∈ Sg 𝑨 G → g a ≈ h a)
 
-  hom-unique _ G g h σ a (var Ga) = σ a Ga
-  hom-unique wd G g h σ .((f ̂ 𝑨) a) (app f a SgGa) = Goal
+  hom-unique G σ a (var Ga) = σ a Ga
+  hom-unique G σ .((f ̂ 𝑨) a) (app f a SgGa) = Goal
    where
-   IH : ∀ x → ∣ g ∣ (a x) ≡ ∣ h ∣ (a x)
-   IH x = hom-unique wd G g h σ (a x) (SgGa x)
-   open ≡-Reasoning
-   Goal : ∣ g ∣ ((f ̂ 𝑨) a) ≡ ∣ h ∣ ((f ̂ 𝑨) a)
-   Goal = ∣ g ∣ ((f ̂ 𝑨) a) ≡⟨ ∥ g ∥ f a ⟩
-          (f ̂ 𝑩)(∣ g ∣ ∘ a ) ≡⟨ wd (f ̂ 𝑩) (∣ g ∣ ∘ a) (∣ h ∣ ∘ a) IH ⟩
-          (f ̂ 𝑩)(∣ h ∣ ∘ a)  ≡⟨ ( ∥ h ∥ f a )⁻¹ ⟩
-          ∣ h ∣ ((f ̂ 𝑨) a )  ∎
+   IH : ∀ i → h (a i) ≈ g (a i)
+   IH i = sym (hom-unique G σ (a i) (SgGa i))
+
+   Goal : g ((f ̂ 𝑨) a) ≈ h ((f ̂ 𝑨) a)
+   Goal = begin
+          g ((f ̂ 𝑨) a)   ≈˘⟨ sym (compatible ∥ gh ∥) ⟩
+          (f ̂ 𝑩)(g ∘ a ) ≈˘⟨ cong Interp (refl , IH) ⟩
+          (f ̂ 𝑩)(h ∘ a)  ≈˘⟨ compatible ∥ hh ∥ ⟩
+          h ((f ̂ 𝑨) a )  ∎
 
 \end{code}
 
 In the induction step, the following typing judgments are assumed:
 ```
 SgGa : Im a ⊆ Sg 𝑨 G
-a    : ∥ 𝑆 ∥ f → Subalgebras.Setoid.A 𝑨
+a    : ∥ 𝑆 ∥ f → Subuniverses 𝑨
 f    : ∣ 𝑆 ∣
-σ    : (x : A) → x ∈ G → ∣ g ∣ x ≡ ∣ h ∣ x
-h    : hom 𝑨 𝑩
-g    : hom 𝑨 𝑩
-G    : Pred A ρ
-wd   : swelldef 𝓥 β
-𝑩    : SetoidAlgebra β ρᵇ
+σ    : (x : A) → x ∈ G → g x ≈ h x
+G    : Pred A ℓ
+hh   : hom 𝑨 𝑩
+gh   : hom 𝑨 𝑩
 ```
-and, under these assumptions, we proved `∣ g ∣ ((f ̂ 𝑨) a) ≡ ∣ h ∣ ((f ̂ 𝑨) a)`.
+and, under these assumptions, we proved `g ((f ̂ 𝑨) a) ≈ h ((f ̂ 𝑨) a)`.
 
 ---------------------------------
 

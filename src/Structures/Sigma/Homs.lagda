@@ -24,7 +24,8 @@ open import Relation.Binary.PropositionalEquality
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
 open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥ ; _∙_ ; _⁻¹)
-open import Overture.Inverses      using ( IsInjective ; IsSurjective )
+open import Overture.Injective     using ( IsInjective )
+open import Overture.Surjective    using ( IsSurjective )
 open import Relations.Discrete     using ( _|:_ ; 0[_] ; ker )
 open import Relations.Quotients    using ( Equivalence ; Quotient ; 0[_]Equivalence
                                          ; ker-IsEquivalence ; kerlift-IsEquivalence

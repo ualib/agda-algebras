@@ -17,28 +17,28 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Homomorphisms.Noether {𝑆 : Signature 𝓞 𝓥} where
 
--- Imports from Agda and the Agda Standard Library ---------------------------------------
+-- -- Imports from Agda and the Agda Standard Library ---------------------------------------
 open import Agda.Primitive  using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
-open import Data.Product    using (Σ-syntax;_,_;_×_) renaming (proj₁ to fst;proj₂ to snd)
+open import Data.Product    using ( Σ-syntax ; _×_ ; _,_ ) renaming (proj₁ to fst;proj₂ to snd)
 open import Function.Base   using ( _∘_ ; id )
 open import Relation.Binary using ( IsEquivalence )
-open import Relation.Binary.PropositionalEquality
-                            using ( _≡_ ; refl ; module ≡-Reasoning ; cong ; cong-app )
+open import Relation.Binary.PropositionalEquality using ( module ≡-Reasoning ; _≡_ ; cong ; refl ; cong-app )
 open import Relation.Unary  using ( _⊆_ )
 
 -- Imports from agda-algebras --------------------------------------------------------------
 open import Overture.Preliminaries  using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
-open import Overture.Inverses       using ( IsInjective ; IsSurjective ; SurjInv ; Image_∋_
-                                          ; SurjInvIsRightInv ; epic-factor )
+open import Overture.Inverses       using ( Image_∋_ )
+open import Overture.Injective      using ( IsInjective )
+open import Overture.Surjective     using ( IsSurjective ; SurjInv ; epic-factor ; SurjInvIsInverseʳ )
 open import Relations.Discrete      using ( kernel )
-open import Relations.Quotients     using ( ⌞_⌟ ; R-block ; ⟪_⟫ )
+open import Relations.Quotients     using ( ⌞_⌟ ; mkblk ; ⟪_⟫ )
 open import Equality.Welldefined    using ( swelldef )
-open import Equality.Truncation     using (is-set;blk-uip;is-embedding;monic-is-embedding|Set)
+open import Equality.Truncation     using ( is-set ; blk-uip ; is-embedding ; monic-is-embedding|Set)
 open import Equality.Extensionality using ( pred-ext ; block-ext|uip )
-open import Algebras.Basic          using ( Algebra ; _̂_)
-open import Algebras.Congruences {𝑆 = 𝑆} using ( Con ; IsCongruence )
-open import Homomorphisms.Basic  {𝑆 = 𝑆} using ( hom ; kercon ; ker[_⇒_]_↾_ ; πker
-                                               ; is-homomorphism ; epi ; epi-to-hom )
+open import Algebras.Basic                using ( Algebra ; _̂_)
+open import Algebras.Congruences {𝑆 = 𝑆}  using ( Con ; IsCongruence )
+open import Homomorphisms.Basic  {𝑆 = 𝑆}  using ( hom ; is-homomorphism ; epi ; epi-to-hom )
+open import Homomorphisms.Kernels {𝑆 = 𝑆} using ( kercon ; ker[_⇒_]_↾_ ; πker )
 private variable α β γ : Level
 
 \end{code}
@@ -91,7 +91,7 @@ FirstHomTheorem|Set 𝑨 𝑩 h pe fe Bset buip = (φ , φhom) , refl , φmon , 
              (𝑓 ̂ 𝑩) (λ x → φ (a x))            ∎
 
   φmon : IsInjective φ
-  φmon {_ , R-block u refl} {_ , R-block v refl} φuv = block-ext|uip pe buip ξ φuv
+  φmon {_ , mkblk u refl} {_ , mkblk v refl} φuv = block-ext|uip pe buip ξ φuv
 
   φemb : is-embedding φ
   φemb = monic-is-embedding|Set φ Bset φmon
@@ -130,7 +130,7 @@ FirstIsoTheorem|Set 𝑨 𝑩 h pe fe Bset buip hE =
    a = SurjInv ∣ h ∣ hE b
 
    bfa : b ≡ fmap ⟪ a ⟫
-   bfa = ((SurjInvIsRightInv ∣ h ∣ hE) b)⁻¹
+   bfa = ((SurjInvIsInverseʳ ∣ h ∣ hE) b)⁻¹
 
    Goal : Image fmap ∋ b
    Goal = Image_∋_.eq ⟪ a ⟫ bfa
@@ -148,10 +148,10 @@ module _ {fe : swelldef 𝓥 β}(𝑨 : Algebra α 𝑆)(𝑩 : Algebra β 𝑆)
   →                 ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker fe{𝑩}h ∣
   →                 ∀ a  →  ∣ f ∣ a ≡ ∣ g ∣ a
 
- NoetherHomUnique f g hfk hgk (_ , R-block a refl) =
-  ∣ f ∣ (_ , R-block a refl) ≡⟨ cong-app(hfk ⁻¹)a ⟩
+ NoetherHomUnique f g hfk hgk (_ , mkblk a refl) =
+  ∣ f ∣ (_ , mkblk a refl) ≡⟨ cong-app(hfk ⁻¹)a ⟩
   ∣ h ∣ a                    ≡⟨ cong-app(hgk)a ⟩
-  ∣ g ∣ (_ , R-block a refl) ∎
+  ∣ g ∣ (_ , mkblk a refl) ∎
 
 \end{code}
 
@@ -212,7 +212,7 @@ module _ {𝑨 : Algebra α 𝑆}{𝑪 : Algebra γ 𝑆} where
    νInv = SurjInv ∣ ν ∣ νE
 
    η : ∀ c → ∣ ν ∣ (νInv c) ≡ c
-   η c = SurjInvIsRightInv ∣ ν ∣ νE c
+   η c = SurjInvIsInverseʳ ∣ ν ∣ νE c
 
    φ : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
    φ = ∣ τ ∣ ∘ νInv

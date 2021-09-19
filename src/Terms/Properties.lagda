@@ -34,7 +34,8 @@ open import Relation.Binary.PropositionalEquality
 
 -- Imports from the Agda Universal Algebra Library ----------------------------------------
 open import Overture.Preliminaries      using ( _⁻¹ ; 𝑖𝑑 ; ∣_∣ ; ∥_∥)
-open import Overture.Inverses           using ( IsSurjective ; Inv ; InvIsInv ; Image_∋_; eq )
+open import Overture.Inverses           using ( Inv ; InvIsInverseʳ ; Image_∋_; eq )
+open import Overture.Surjective         using ( IsSurjective )
 open import Equality.Welldefined        using ( swelldef )
 open import Algebras.Basic              using ( Algebra ; _̂_ )
 open import Algebras.Products   {𝑆 = 𝑆} using ( ov )
@@ -117,7 +118,7 @@ lift-of-epi-is-epi 𝑨 {h₀} hE y = Goal
  h₀⁻¹y = Inv h₀ (hE y)
 
  η : y ≡ ∣ lift-hom 𝑨 h₀ ∣ (ℊ h₀⁻¹y)
- η = (InvIsInv h₀ (hE y))⁻¹
+ η = (InvIsInverseʳ (hE y))⁻¹
 
  Goal : Image ∣ lift-hom 𝑨 h₀ ∣ ∋ y
  Goal = eq (ℊ h₀⁻¹y) η

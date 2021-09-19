@@ -89,15 +89,15 @@ In many areas of abstract mathematics the *quotient* of an algebra `𝑨` with r
 \begin{code}
 
 
-open Func using ( cong ) renaming ( f to _<$>_  )
+open Func using ( cong ) renaming ( f to _⟨$⟩_  )
 
-_╱_ : (𝑨 : SetoidAlgebra α ρ) → Con {α}{ρ} 𝑨 {ℓ} → SetoidAlgebra _ _
+_╱_ : (𝑨 : SetoidAlgebra α ρ) → Con {α}{ρ} 𝑨 {ℓ} → SetoidAlgebra α ℓ
 
 Domain (𝑨 ╱ θ) = record { Carrier = 𝕌[ 𝑨 ]
                         ; _≈_ = ∣ θ ∣
                         ; isEquivalence = is-equivalence ∥ θ ∥
                         }
-(Interp (𝑨 ╱ θ)) <$> (f , a) = (f ̂ 𝑨) a
+(Interp (𝑨 ╱ θ)) ⟨$⟩ (f , a) = (f ̂ 𝑨) a
 cong (Interp (𝑨 ╱ θ)) {f , u} {.f , v} (refl , a) = is-compatible  ∥ θ ∥ f a
 
 \end{code}

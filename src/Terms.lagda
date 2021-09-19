@@ -18,7 +18,7 @@ module Terms where
 open import Terms.Basic
 open import Terms.Properties
 open import Terms.Operations
-open import Terms.Setoid
+open import Terms.Func
 
 \end{code}
 

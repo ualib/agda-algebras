@@ -18,10 +18,11 @@ Finally, in [Relations.Quotients][] we define quotient types.
 
 module Relations where
 
-open import Relations.Discrete public
-open import Relations.Continuous public
-open import Relations.Properties public
-open import Relations.Quotients public
+open import Relations.Discrete
+open import Relations.Continuous
+open import Relations.Properties
+open import Relations.Quotients
+open import Relations.Func
 
 \end{code}
 

@@ -16,10 +16,13 @@ This chapter presents the [Homomorphisms][] module of the [Agda Universal Algebr
 module Homomorphisms where
 
 open import Homomorphisms.Basic
+open import Homomorphisms.Properties
+open import Homomorphisms.Kernels
+open import Homomorphisms.Products
 open import Homomorphisms.Noether
 open import Homomorphisms.Isomorphisms
 open import Homomorphisms.HomomorphicImages
-open import Homomorphisms.Setoid
+open import Homomorphisms.Func
 
 \end{code}
 

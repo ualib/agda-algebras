@@ -34,7 +34,7 @@ open import Relation.Unary  using    ( Pred ; _∈_ ; _⊆_ ; ｛_｝ ; _∪_ )
 
 -- Imports from the Agda Universal Algebra Library -------------------------------------------
 open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ ; _∙_ ; _⁻¹ )
-open import Overture.Inverses                  using ( IsSurjective )
+open import Overture.Surjective                using ( IsSurjective )
 open import Relations.Discrete                 using ( kernel )
 open import Relations.Quotients                using ( ⟪_⟫ )
 open import Equality.Welldefined               using ( SwellDef ; swelldef )
@@ -43,9 +43,10 @@ open import Equality.Extensionality            using ( DFunExt; pred-ext )
 open import Algebras.Basic                     using ( Algebra ; Lift-Alg ; compatible ; _̂_ )
 open import Algebras.Products          {𝑆 = 𝑆} using ( ov ; ⨅ )
 open import Algebras.Congruences       {𝑆 = 𝑆} using ( Con; mkcon ; IsCongruence )
-open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom ; ⨅-hom-co ; ker[_⇒_]_↾_ ; epi
-                                                     ; πker ; epi-to-hom ; ker-in-con
-                                                     ;  kercon ; ∘-hom )
+open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom ; epi ; epi-to-hom )
+open import Homomorphisms.Kernels      {𝑆 = 𝑆} using ( kercon ; ker-in-con ; πker ; ker[_⇒_]_↾_ )
+open import Homomorphisms.Products     {𝑆 = 𝑆} using ( ⨅-hom-co )
+open import Homomorphisms.Properties   {𝑆 = 𝑆} using ( ∘-hom )
 open import Homomorphisms.Noether      {𝑆 = 𝑆} using ( HomFactor ; HomFactorEpi )
 open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅-refl ; ≅-sym ; Lift-≅ )
 open import Terms.Basic                {𝑆 = 𝑆} using ( Term ; 𝑻 )

@@ -16,21 +16,23 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 module Varieties.Setoid.FreeAlgebras {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ------------------------------------------------
-open import Agda.Primitive using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
-open import Data.Product   using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Function.Base  using ( id )
-open import Relation.Unary using ( Pred  ; _∈_ )
-open import Relation.Binary.PropositionalEquality using ( refl )
+open import Agda.Primitive   using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
+open import Data.Product     using ( _,_ ; Σ-syntax ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Function.Bundles using ( Func )
+open import Relation.Binary  using ( Setoid )
+open import Relation.Unary   using ( Pred )
+import Relation.Binary.PropositionalEquality as ≡
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------------
-open import Overture.Preliminaries             using ( ∣_∣ )
-open import Overture.Inverses                  using ( IsSurjective ; Image_∋_ ; Inv ; InvIsInv ; eq )
-open import Algebras.Setoid.Products   {𝑆 = 𝑆} using ( ⨅ )
-open import Algebras.Setoid.Basic      {𝑆 = 𝑆} using ( SetoidAlgebra ; ov ) renaming ( ⟦_⟧ to ⟦_⟧s )
-open import Homomorphisms.Setoid.Basic {𝑆 = 𝑆} using ( hom ; epi )
-open import Terms.Setoid.Basic         {𝑆 = 𝑆} using ( 𝑻 )
-open import Varieties.Setoid.EquationalLogic
-                                       {𝑆 = 𝑆} using ( Eq ; _⊫_ ; module TermModel ; Mod ; Th)
+open import Overture.Preliminaries                   using ( ∣_∣ )
+open import Overture.Func.Preliminaries              using ( _⟶_ )
+open import Overture.Func.Inverses                   using ( Image_∋_ )
+open import Overture.Func.Surjective                 using ( IsSurjective )
+open import Algebras.Setoid.Basic            {𝑆 = 𝑆} using ( SetoidAlgebra ; ov )
+open import Homomorphisms.Func.Basic         {𝑆 = 𝑆} using ( hom ; epi ; IsEpi ; IsHom ; epi-to-hom )
+open import Terms.Basic                      {𝑆 = 𝑆} using ( Term )
+open import Terms.Func.Basic                 {𝑆 = 𝑆} using ( 𝑻 ; _≐_ ; module Environment )
+open import Varieties.Setoid.EquationalLogic {𝑆 = 𝑆} using ( Eq ; _⊫_ ; module FreeAlgebra )
 private variable
  α χ ρ ℓ : Level
 
@@ -49,22 +51,39 @@ We now define the algebra `𝔽`, which plays the role of the relatively free al
 The relatively free algebra (relative to `Th 𝒦`) is called `M` and is derived from `TermSetoid X` and `TermInterp X` and imported from the EquationalLogic module.
 
 \begin{code}
+ open _≐_
+ open FreeAlgebra {X = X}{ι = (ℓ ⊔ ov(α ⊔ χ ⊔ ρ))}{I = ℐ} ℰ
 
- open TermModel {X = X}{ι = (ℓ ⊔ ov(α ⊔ χ ⊔ ρ))}{I = ℐ} ℰ
+ open SetoidAlgebra 𝔽[ X ] using ( Interp ) renaming ( Domain to 𝔽 )
+ open Environment 𝔽[ X ]
+ open Setoid 𝔽 using ( _≈_ ; reflexive ) renaming ( refl to reflF )
+ open SetoidAlgebra (𝑻 X) using () renaming (Domain to 𝕋)
+ open Setoid 𝕋 using () renaming ( _≈_ to _≃_ ; refl to reflT )
+ open Func using ( cong ) renaming ( f to _⟨$⟩_ )
+ open Term
+ epi𝔽 : epi (𝑻 X) 𝔽[ X ]
+ epi𝔽 = h , hepi
+  where
+  c : ∀ {x y} → x ≃ y → x ≈ y
+  c (_≐_.refl {x} {.x} ≡.refl) = reflF
+  c (genl {f}{s}{t} x) = cong Interp (≡.refl , (λ i → c (x i)))
 
- 𝔽 : SetoidAlgebra _ _
- 𝔽 = M X
+  h : 𝕋 ⟶ 𝔽
+  h ⟨$⟩ t = t
+  cong h = c
 
- epi𝔽 : epi (𝑻 X) 𝔽
- epi𝔽 = record { map = id ; is-epi = (λ 𝑓 a → refl) , λ y → eq y refl }
+  open IsEpi
+  hepi : IsEpi (𝑻 X) 𝔽[ X ] h
+  IsHom.compatible (isHom hepi) {f}{a} = cong Interp (≡.refl , (λ i → reflF))
+  IsHom.preserves≈ (isHom hepi) = c
+  isSurjective hepi {y} = Image_∋_.eq y reflF
 
- open epi
 
- hom𝔽 : hom (𝑻 X) 𝔽
- hom𝔽 = epi-to-hom epi𝔽
+ hom𝔽 : hom (𝑻 X) 𝔽[ X ]
+ hom𝔽 = epi-to-hom (𝑻 X) 𝔽[ X ] epi𝔽
 
  hom𝔽-is-epic : IsSurjective ∣ hom𝔽 ∣
- hom𝔽-is-epic = snd (is-epi epi𝔽)
+ hom𝔽-is-epic = IsEpi.isSurjective (snd (epi𝔽))
 
  -- 𝕍𝒦 : Pred (SetoidAlgebra _ _) _
  -- 𝕍𝒦 = V 𝒦

@@ -31,8 +31,8 @@ open import Relation.Unary using ( Pred  ; _∈_ ; _⊆_ )
 open import Overture.Preliminaries                  using ( ∣_∣ ; ∥_∥ )
 open import Algebras.Setoid.Products        {𝑆 = 𝑆} using ( ⨅ )
 open import Algebras.Setoid.Basic           {𝑆 = 𝑆} using ( SetoidAlgebra ; ov )
-open import Homomorphisms.Setoid.Isomorphisms{𝑆 = 𝑆}using ( _≅_ ; ≅-sym ; Lift-≅ ; ≅-trans ; ≅-refl )
-open import Homomorphisms.Setoid.HomomorphicImages{𝑆 = 𝑆}using ( HomImages )
+open import Homomorphisms.Func.Isomorphisms{𝑆 = 𝑆}using ( _≅_ ; ≅-sym ; Lift-≅ ; ≅-trans ; ≅-refl )
+open import Homomorphisms.Func.HomomorphicImages{𝑆 = 𝑆}using ( HomImages )
 open import Subalgebras.Setoid.Subalgebras  {𝑆 = 𝑆} using (_≤_ ; _IsSubalgebraOfClass_ ; Subalgebra )
 
 -- The inductive type H
