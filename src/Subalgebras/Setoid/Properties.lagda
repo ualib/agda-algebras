@@ -21,24 +21,18 @@ module Subalgebras.Setoid.Properties {𝑆 : Signature 𝓞 𝓥} where
 -- Imports from Agda and the Agda Standard Library ------------------------------------
 open import Agda.Primitive   using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
 open import Data.Product     using ( _,_ )
-open import Function.Base    using ( id )
-open import Function.Bundles using ( Injection )
-open import Relation.Binary  using ( Setoid ; REL )
+open import Relation.Binary  using ( Setoid )
 open import Relation.Unary   using ( Pred ; _⊆_ )
-open import Relation.Binary.PropositionalEquality
-                             using ( refl )
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------------
-open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ )
-open import Overture.Inverses                  using ( IsInjective ; id-is-injective ; ∘-injective )
-open import Algebras.Setoid.Basic      {𝑆 = 𝑆} using ( SetoidAlgebra ; Lift-Alg )
-open import Algebras.Products          {𝑆 = 𝑆} using ( ov )
-open import Homomorphisms.Setoid.Basic {𝑆 = 𝑆} using ( hom ; ∘-hom )
-open import Homomorphisms.Setoid.Isomorphisms
-                                       {𝑆 = 𝑆} using ( _≅_ ; ≅toInjective ; ≅fromInjective
-                                                     ;  ≅-sym ; ≅-refl ; ≅-trans ; Lift-≅ )
-open import Subalgebras.Setoid.Subalgebras
-                                       {𝑆 = 𝑆} using ( _≤_ ; _≥_ ; _IsSubalgebraOfClass_ )
+open import Overture.Preliminaries                  using ( ∣_∣ ; ∥_∥ )
+open import Overture.Func.Injective                 using ( id-is-injective ; module compose )
+open import Algebras.Setoid.Basic           {𝑆 = 𝑆} using ( SetoidAlgebra ; Lift-Alg )
+open import Algebras.Products               {𝑆 = 𝑆} using ( ov )
+open import Homomorphisms.Func.Properties   {𝑆 = 𝑆} using ( 𝒾𝒹 ; ∘-hom )
+open import Homomorphisms.Func.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅toInjective ; ≅fromInjective
+                                                          ; ≅-sym ; ≅-refl ; ≅-trans ; Lift-≅ )
+open import Subalgebras.Setoid.Subalgebras  {𝑆 = 𝑆} using ( _≤_ ; _≥_ ; _IsSubalgebraOfClass_ )
 
 private variable α ρᵃ β ρᵇ γ ρᶜ : Level
 
@@ -62,24 +56,31 @@ open _≅_
 ≥-refl : {𝑨 𝑩 : SetoidAlgebra α ρᵃ} → 𝑨 ≅ 𝑩 → 𝑨 ≥ 𝑩
 ≥-refl {𝑨 = 𝑨}{𝑩} A≅B = ≅→≤ (≅-sym A≅B)
 
-
 ≤-reflexive : {𝑨 : SetoidAlgebra α ρᵃ} → 𝑨 ≤ 𝑨
-≤-reflexive {𝑨 = 𝑨} = (id , λ f a → refl) , Injection.injective id-is-injective
+≤-reflexive {𝑨 = 𝑨} = 𝒾𝒹 , id-is-injective{𝑨 = SetoidAlgebra.Domain 𝑨}
 
+module _ (𝑨 : SetoidAlgebra α ρᵃ){𝑩 : SetoidAlgebra β ρᵇ}(𝑪 : SetoidAlgebra γ ρᶜ) where
+ open SetoidAlgebra using ( Domain )
+ open Setoid (Domain 𝑨) using () renaming ( _≈_ to _≈₁_ ; Carrier to ∣A∣ )
+ open Setoid (Domain 𝑩) using () renaming ( _≈_ to _≈₂_ ; Carrier to ∣B∣ )
+ open Setoid (Domain 𝑪) using () renaming ( _≈_ to _≈₃_ ; Carrier to ∣C∣ )
+ open compose {A = ∣A∣}{B = ∣B∣}{C = ∣C∣} _≈₁_ _≈₂_ _≈₃_ using ( ∘-injective-func )
 
-≤-trans : (𝑨 : SetoidAlgebra α ρᵃ){𝑩 : SetoidAlgebra β ρᵇ}(𝑪 : SetoidAlgebra γ ρᶜ)
-  →        𝑨 ≤ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
+ ≤-trans : 𝑨 ≤ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
+ ≤-trans A≤B B≤C = (∘-hom ∣ A≤B ∣ ∣ B≤C ∣ ) , ∘-injective-func ∥ A≤B ∥ ∥ B≤C ∥
 
-≤-trans 𝑨 {𝑩} 𝑪 A≤B B≤C = (∘-hom 𝑨 𝑩 𝑪 ∣ A≤B ∣ ∣ B≤C ∣ ) , ∘-injective ∥ A≤B ∥ ∥ B≤C ∥
+ ≤-TRANS-≅ : 𝑨 ≤ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤ 𝑪
+ ≤-TRANS-≅ (h , hinj) B≅C = (∘-hom h (to B≅C)) , ∘-injective-func hinj (≅toInjective B≅C)
 
 ≥-trans : (𝑨 : SetoidAlgebra α ρᵃ){𝑩 : SetoidAlgebra β ρᵇ}(𝑪 : SetoidAlgebra γ ρᶜ)
-  →        𝑨 ≥ 𝑩 → 𝑩 ≥ 𝑪 → 𝑨 ≥ 𝑪
+ →        𝑨 ≥ 𝑩 → 𝑩 ≥ 𝑪 → 𝑨 ≥ 𝑪
 ≥-trans 𝑨 {𝑩} 𝑪 A≥B B≥C = ≤-trans 𝑪 {𝑩} 𝑨 B≥C A≥B
+
 
 
 module _ {α ρᵃ ρ : Level} where
 
- open import Relation.Binary.Structures {a = ov(α ⊔ ρᵃ)}{ℓ = (𝓞 ⊔ 𝓥 ⊔ α)} (_≅_ {α}{ρᵃ}{α}{ρᵃ})
+ open import Relation.Binary.Structures {a = ov(α ⊔ ρᵃ)}{ℓ = (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ)} (_≅_ {α}{ρᵃ}{α}{ρᵃ})
 
  open IsPreorder
  ≤-preorder : IsPreorder _≤_
@@ -107,9 +108,6 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ}{𝑪 : S
  A≅B×B≤C→A≤C A≅B B≤C = ≤-trans 𝑨{𝑩}𝑪 (≅→≤ A≅B) B≤C
 
 
-≤-TRANS-≅ : (𝑨 : SetoidAlgebra α ρᵃ){𝑩 : SetoidAlgebra β ρᵇ}(𝑪 : SetoidAlgebra γ ρᶜ)
- →          𝑨 ≤ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤ 𝑪
-≤-TRANS-≅ 𝑨 {𝑩} 𝑪 (h , hinj) B≅C = (∘-hom 𝑨 𝑩 𝑪 h (to B≅C)) , ∘-injective hinj (≅toInjective B≅C)
 
 ≤-mono : (𝑩 : SetoidAlgebra β ρᵇ){𝒦 𝒦' : Pred (SetoidAlgebra α ρᵃ) γ}
  →        𝒦 ⊆ 𝒦' → 𝑩 IsSubalgebraOfClass 𝒦 → 𝑩 IsSubalgebraOfClass 𝒦'

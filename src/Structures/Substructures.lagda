@@ -26,7 +26,7 @@ open import Relation.Unary  using ( Pred ; _∈_ ; _⊆_ ; ⋂ )
 
 -- Imports from the Agda Universal Algebra Library -------------------------------------
 open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
-open import Overture.Inverses      using ( IsInjective )
+open import Overture.Injective     using ( IsInjective )
 open import Relations.Discrete     using ( Im_⊆_ ; PredType )
 open import Equality.Welldefined   using ( swelldef )
 open import Terms.Basic

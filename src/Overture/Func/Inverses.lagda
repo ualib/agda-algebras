@@ -15,11 +15,11 @@ This is the [Overture.Func.Inverses][] module of the [agda-algebras][] library.
 
 open import Relation.Binary using ( Setoid )
 
-module Overture.Func.Inverses
- {α ρᵃ β ρᵇ}{𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
+module Overture.Func.Inverses where
+--  {α ρᵃ β ρᵇ}{𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} 
 
 -- Imports from Agda and the Agda Standard Library --------------------
-open import Agda.Primitive    using ( _⊔_ ) renaming ( Set to Type )
+open import Agda.Primitive    using ( _⊔_ ; Level ) renaming ( Set to Type )
 open import Function          using ( id )
 open import Function.Bundles  using ( Func )
 open import Data.Product      using ( _,_ ; Σ-syntax )
@@ -30,76 +30,83 @@ open import Relation.Binary   using ( _Preserves_⟶_ )
 -- Imports from agda-algebras -----------------------------------------
 open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥ ; ∃-syntax )
 
+private variable
+ α ρᵃ β ρᵇ : Level
 
-open Setoid 𝑨 using () renaming ( Carrier to A ; _≈_ to _≈₁_ ; refl to refl₁ ; sym to sym₁ ; trans to trans₁ )
-open Setoid 𝑩 using () renaming ( Carrier to B ; _≈_ to _≈₂_ ; refl to refl₂ ; sym to sym₂ ; trans to trans₂ )
-open Func {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝑨}{To = 𝑩} renaming (f to _⟨$⟩_ )
+module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
+
+ open Setoid 𝑨 using () renaming ( Carrier to A ; _≈_ to _≈₁_ ; refl to refl₁ ; sym to sym₁ ; trans to trans₁ )
+ open Setoid 𝑩 using () renaming ( Carrier to B ; _≈_ to _≈₂_ ; refl to refl₂ ; sym to sym₂ ; trans to trans₂ )
+ open Func {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝑨}{To = 𝑩} renaming (f to _⟨$⟩_ )
 
 \end{code}
-
 
 We begin by defining an data type that represents the semantic concept of *inverse image* of a function.
 
 \begin{code}
 
-data Image_∋_ (F : Func 𝑨 𝑩) : B → Type (α ⊔ β ⊔ ρᵇ) where
- eq : {b : B} → (a : A) → b ≈₂ (F ⟨$⟩ a) → Image F ∋ b
-
-open Image_∋_
-
-IsInRange : (Func 𝑨 𝑩) → Pred B (α ⊔ ρᵇ)
-IsInRange F b = ∃[ a ∈ A ] (F ⟨$⟩ a) ≈₂ b
-
-Image⊆Range : ∀ {F b} → Image F ∋ b → b ∈ IsInRange F
-Image⊆Range (eq a x) = a , (sym₂ x)
-
-IsInRange→IsInImage : ∀ {F b} → b ∈ IsInRange F → Image F ∋ b
-IsInRange→IsInImage (a , x) = eq a (sym₂ x)
-
-Imagef∋f : ∀ {F a} → Image F ∋ (F ⟨$⟩ a)
-Imagef∋f = eq _ refl₂
-
--- Alternative representation of the range of a Func as a setoid
-
--- the carrier
-_range : (Func 𝑨 𝑩) → Type (α ⊔ β ⊔ ρᵇ)
-F range = Σ[ b ∈ B ] ∃[ a ∈ A ](F ⟨$⟩ a) ≈₂ b
-
-_image : (F : Func 𝑨 𝑩) → F range → B
-(F image) (b , (_ , _)) = b
-
-_preimage : (F : Func 𝑨 𝑩) → F range → A
-(F preimage) (_ , (a , _)) = a
-
-f∈range : ∀ {F} → A → F range
-f∈range {F} a = (F ⟨$⟩ a) , (a , refl₂)
-
-⌜_⌝ : (F : Func 𝑨 𝑩) → A → F range
-⌜ F ⌝ a = f∈range{F} a
-
-Ran : (Func 𝑨 𝑩) → Setoid (α ⊔ β ⊔ ρᵇ) ρᵇ
-Ran F = record { Carrier = F range
-               ; _≈_ = λ x y → ((F image) x) ≈₂ ((F image) y)
-               ; isEquivalence = record { refl = refl₂ ; sym = sym₂ ; trans = trans₂ }
-               }
-
-RRan : (Func 𝑨 𝑩) → Setoid (α ⊔ β ⊔ ρᵇ) (ρᵃ ⊔ ρᵇ)
-RRan F = record { Carrier = F range
-               ; _≈_ = λ x y →  ((F preimage) x) ≈₁ ((F preimage) y) ∧ ((F image) x) ≈₂ ((F image) y)
-               ; isEquivalence = record { refl = refl₁ , refl₂
-                                        ; sym = λ x → (sym₁ ∣ x ∣) , (sym₂ ∥ x ∥)
-                                        ; trans = λ x y → (trans₁ ∣ x ∣ ∣ y ∣) , (trans₂ ∥ x ∥ ∥ y ∥) }
-               }
-
-_preimage≈image : ∀ F r → F ⟨$⟩ (F preimage) r ≈₂ (F image) r
-(F preimage≈image) (_ , (_ , p)) = p
+ data image_∋_ (f : A → B) : B → Type (α ⊔ β ⊔ ρᵇ) where
+  eq : {b : B} → (a : A) → b ≈₂ (f a) → image f ∋ b
 
 
-Dom : (Func 𝑨 𝑩) → Setoid α ρᵇ
-Dom F = record { Carrier = A
-               ; _≈_ = λ x y → F ⟨$⟩ x ≈₂ F ⟨$⟩ y
-               ; isEquivalence = record { refl = refl₂ ; sym = sym₂ ; trans = trans₂ }
-               }
+ data Image_∋_ (F : Func 𝑨 𝑩) : B → Type (α ⊔ β ⊔ ρᵇ) where
+  eq : {b : B} → (a : A) → b ≈₂ (F ⟨$⟩ a) → Image F ∋ b
+
+ open Image_∋_
+
+ IsInRange : (Func 𝑨 𝑩) → Pred B (α ⊔ ρᵇ)
+ IsInRange F b = ∃[ a ∈ A ] (F ⟨$⟩ a) ≈₂ b
+
+ Image⊆Range : ∀ {F b} → Image F ∋ b → b ∈ IsInRange F
+ Image⊆Range (eq a x) = a , (sym₂ x)
+
+ IsInRange→IsInImage : ∀ {F b} → b ∈ IsInRange F → Image F ∋ b
+ IsInRange→IsInImage (a , x) = eq a (sym₂ x)
+
+ Imagef∋f : ∀ {F a} → Image F ∋ (F ⟨$⟩ a)
+ Imagef∋f = eq _ refl₂
+
+ -- Alternative representation of the range of a Func as a setoid
+
+ -- the carrier
+ _range : (Func 𝑨 𝑩) → Type (α ⊔ β ⊔ ρᵇ)
+ F range = Σ[ b ∈ B ] ∃[ a ∈ A ](F ⟨$⟩ a) ≈₂ b
+
+ _image : (F : Func 𝑨 𝑩) → F range → B
+ (F image) (b , (_ , _)) = b
+
+ _preimage : (F : Func 𝑨 𝑩) → F range → A
+ (F preimage) (_ , (a , _)) = a
+
+ f∈range : ∀ {F} → A → F range
+ f∈range {F} a = (F ⟨$⟩ a) , (a , refl₂)
+
+ ⌜_⌝ : (F : Func 𝑨 𝑩) → A → F range
+ ⌜ F ⌝ a = f∈range{F} a
+
+ Ran : (Func 𝑨 𝑩) → Setoid (α ⊔ β ⊔ ρᵇ) ρᵇ
+ Ran F = record { Carrier = F range
+                ; _≈_ = λ x y → ((F image) x) ≈₂ ((F image) y)
+                ; isEquivalence = record { refl = refl₂ ; sym = sym₂ ; trans = trans₂ }
+                }
+
+ RRan : (Func 𝑨 𝑩) → Setoid (α ⊔ β ⊔ ρᵇ) (ρᵃ ⊔ ρᵇ)
+ RRan F = record { Carrier = F range
+                ; _≈_ = λ x y →  ((F preimage) x) ≈₁ ((F preimage) y) ∧ ((F image) x) ≈₂ ((F image) y)
+                ; isEquivalence = record { refl = refl₁ , refl₂
+                                         ; sym = λ x → (sym₁ ∣ x ∣) , (sym₂ ∥ x ∥)
+                                         ; trans = λ x y → (trans₁ ∣ x ∣ ∣ y ∣) , (trans₂ ∥ x ∥ ∥ y ∥) }
+                }
+
+ _preimage≈image : ∀ F r → F ⟨$⟩ (F preimage) r ≈₂ (F image) r
+ (F preimage≈image) (_ , (_ , p)) = p
+
+
+ Dom : (Func 𝑨 𝑩) → Setoid α ρᵇ
+ Dom F = record { Carrier = A
+                ; _≈_ = λ x y → F ⟨$⟩ x ≈₂ F ⟨$⟩ y
+                ; isEquivalence = record { refl = refl₂ ; sym = sym₂ ; trans = trans₂ }
+                }
 
 \end{code}
 
@@ -107,24 +114,27 @@ An inhabitant of `Image f ∋ b` is a dependent pair `(a , p)`, where `a : A` an
 
 \begin{code}
 
-Inv : (F : Func 𝑨 𝑩){b : B} → Image F ∋ b → A
-Inv _ (eq a _) = a
+ inv : (f : A → B){b : B} → image f ∋ b → A
+ inv _ (eq a _) = a
 
-Inv' : (F : Func 𝑨 𝑩){b : B} → b ∈ IsInRange F → A
-Inv' _ (a , _) = a
+ Inv : (F : Func 𝑨 𝑩){b : B} → Image F ∋ b → A
+ Inv _ (eq a _) = a
 
-[_]⁻¹ : (F : Func 𝑨 𝑩) → F range → A
-[ F ]⁻¹ = F preimage
+ Inv' : (F : Func 𝑨 𝑩){b : B} → b ∈ IsInRange F → A
+ Inv' _ (a , _) = a
 
-⟦_⟧⁻¹ : (F : Func 𝑨 𝑩) → Func (Ran F) (Dom F)
-⟦ F ⟧⁻¹ = record { f = F preimage ; cong = λ {x}{y} → c{x}{y} }
- where
- c : (F preimage) Preserves
-      (Setoid._≈_ (Ran F)) ⟶ (Setoid._≈_ (Dom F))
- c {x}{y} ix≈iy = Goal
+ [_]⁻¹ : (F : Func 𝑨 𝑩) → F range → A
+ [ F ]⁻¹ = F preimage
+
+ ⟦_⟧⁻¹ : (F : Func 𝑨 𝑩) → Func (Ran F) (Dom F)
+ ⟦ F ⟧⁻¹ = record { f = F preimage ; cong = λ {x}{y} → c{x}{y} }
   where
-  Goal : F ⟨$⟩ ((F preimage) x) ≈₂ F ⟨$⟩ ((F preimage) y)
-  Goal = trans₂ ((F preimage≈image) x) (trans₂ ix≈iy (sym₂ ((F preimage≈image) y)))
+  c : (F preimage) Preserves
+       (Setoid._≈_ (Ran F)) ⟶ (Setoid._≈_ (Dom F))
+  c {x}{y} ix≈iy = Goal
+   where
+   Goal : F ⟨$⟩ ((F preimage) x) ≈₂ F ⟨$⟩ ((F preimage) y)
+   Goal = trans₂ ((F preimage≈image) x) (trans₂ ix≈iy (sym₂ ((F preimage≈image) y)))
 
 
 \end{code}
@@ -133,11 +143,14 @@ We can prove that `Inv f` is the range-restricted right-inverse of `f`, as follo
 
 \begin{code}
 
-InvIsInverseʳ : {F : Func 𝑨 𝑩}{b : B}(q : Image F ∋ b) → (F ⟨$⟩ (Inv F q)) ≈₂ b
-InvIsInverseʳ (eq _ p) = sym₂ p
+ invIsInvʳ : {f : A → B}{b : B}(q : image f ∋ b) → (f (inv f q)) ≈₂ b
+ invIsInvʳ (eq _ p) = sym₂ p
 
-⁻¹IsInverseʳ : {F : Func 𝑨 𝑩}{bap : F range} → (F ⟨$⟩ ([ F ]⁻¹ bap )) ≈₂ ∣ bap ∣
-⁻¹IsInverseʳ {bap = (_ , (_ , p))} = p
+ InvIsInverseʳ : {F : Func 𝑨 𝑩}{b : B}(q : Image F ∋ b) → (F ⟨$⟩ (Inv F q)) ≈₂ b
+ InvIsInverseʳ (eq _ p) = sym₂ p
+
+ ⁻¹IsInverseʳ : {F : Func 𝑨 𝑩}{bap : F range} → (F ⟨$⟩ ([ F ]⁻¹ bap )) ≈₂ ∣ bap ∣
+ ⁻¹IsInverseʳ {bap = (_ , (_ , p))} = p
 
 \end{code}
 
@@ -147,11 +160,11 @@ In a certain sense, `Inv f` is also a (range-restricted) *left-inverse*.
 
 \begin{code}
 
-InvIsInverseˡ : ∀ {F a} → Inv F {b = F ⟨$⟩ a} Imagef∋f ≈₁ a
-InvIsInverseˡ = refl₁
+ InvIsInverseˡ : ∀ {F a} → Inv F {b = F ⟨$⟩ a} Imagef∋f ≈₁ a
+ InvIsInverseˡ = refl₁
 
-⁻¹IsInverseˡ : ∀ {F a} → [ F ]⁻¹ (f∈range{F} a) ≈₁ a
-⁻¹IsInverseˡ = refl₁
+ ⁻¹IsInverseˡ : ∀ {F a} → [ F ]⁻¹ (f∈range{F} a) ≈₁ a
+ ⁻¹IsInverseˡ = refl₁
 
 \end{code}
 

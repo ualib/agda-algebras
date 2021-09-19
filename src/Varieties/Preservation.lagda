@@ -30,7 +30,8 @@ open import Relation.Binary.PropositionalEquality
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
 open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
-open import Overture.Inverses                  using ( Inv ; IsInjective ; InvIsInv )
+open import Overture.Inverses                  using ( Inv ; InvIsInverseʳ )
+open import Overture.Injective                 using ( IsInjective )
 open import Equality.Welldefined               using ( SwellDef )
 open import Equality.Truncation                using ( hfunext )
 open import Equality.Extensionality            using ( DFunExt )
@@ -376,7 +377,7 @@ module _ (wd : SwellDef){X : Type 𝓧} {𝒦 : Pred (Algebra α 𝑆)(ov α)} w
   preim x = Inv φ (φE (b x))
 
   ζ : ∀ x → φ (preim x) ≡ b x
-  ζ x = InvIsInv φ (φE (b x))
+  ζ x = InvIsInverseʳ (φE (b x))
 
   goal : (𝑩 ⟦ p ⟧) b ≡ (𝑩 ⟦ q ⟧) b
   goal = (𝑩 ⟦ p ⟧) b          ≡⟨ wd 𝓧 α (𝑩 ⟦ p ⟧) b (φ ∘ preim )(λ i → (ζ i)⁻¹)⟩
@@ -499,7 +500,7 @@ module Vid (fe : DFunExt)(wd : SwellDef){𝓧 : Level} {X : Type 𝓧} {𝒦 : P
   preim x = Inv φ (φE (b x))
 
   ζ : ∀ x → φ (preim x) ≡ b x
-  ζ x = InvIsInv φ (φE (b x))
+  ζ x = InvIsInverseʳ (φE (b x))
 
   goal : (𝑩 ⟦ p ⟧) b ≡ (𝑩 ⟦ q ⟧) b
   goal = (𝑩 ⟦ p ⟧) b          ≡⟨ wd 𝓧 α (𝑩 ⟦ p ⟧) b (φ ∘ preim )(λ i → (ζ i)⁻¹)⟩
@@ -543,7 +544,7 @@ module Vid' (fe : DFunExt)(wd : SwellDef){𝓧 : Level} {X : Type 𝓧} {𝒦 : 
   preim x = Inv φ (φE (b x))
 
   ζ : ∀ x → φ (preim x) ≡ b x
-  ζ x = InvIsInv φ (φE (b x))
+  ζ x = InvIsInverseʳ (φE (b x))
 
   goal : (𝑩 ⟦ p ⟧) b ≡ (𝑩 ⟦ q ⟧) b
   goal = (𝑩 ⟦ p ⟧) b          ≡⟨ wd 𝓧 _ (𝑩 ⟦ p ⟧) b (φ ∘ preim )(λ i → (ζ i)⁻¹)⟩

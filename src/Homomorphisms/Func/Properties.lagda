@@ -116,15 +116,12 @@ Next we formalize the fact that a homomorphism from `𝑨` to `𝑩` can be lift
 \begin{code}
 
 module _ {𝑨 : SetoidAlgebra α ρᵃ} {𝑩 : SetoidAlgebra β ρᵇ} where
- open SetoidAlgebra 𝑨 using () renaming (Domain to A )
- open SetoidAlgebra 𝑩 using () renaming (Domain to B )
- open SetoidAlgebra using ( Domain ) -- (for the lifted SetoidAlgebras)
 
- open Setoid A using ( reflexive ) renaming ( _≈_ to _≈₁_ )
- open Setoid B using () renaming ( _≈_ to _≈₂_ )
- open Setoid using ( _≈_ ) -- (for domains of the lifted SetoidAlgebras)
-
- open Func using ( cong ) renaming (f to _⟨$⟩_ )
+ open SetoidAlgebra     using ( Domain )
+ open Setoid            using ( _≈_ )
+ open Setoid (Domain 𝑨) using ( reflexive ) renaming ( _≈_ to _≈₁_ )
+ open Setoid (Domain 𝑩) using ()            renaming ( _≈_ to _≈₂_ )
+ open Func              using ( cong )      renaming ( f   to _⟨$⟩_ )
  open Level
 
  Lift-hom : hom 𝑨 𝑩  → (ℓᵃ ℓᵇ : Level) →  hom (Lift-Alg 𝑨 ℓᵃ) (Lift-Alg 𝑩 ℓᵇ)
@@ -135,19 +132,20 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ} {𝑩 : SetoidAlgebra β ρᵇ} where
   lB = Lift-Alg 𝑩 ℓᵇ
 
   ψ : Domain lA ⟶ Domain 𝑩
-  ψ = record { f = λ x → f ⟨$⟩ (lower x) ; cong = λ x → cong f x }
+  ψ = record { f = λ x → f ⟨$⟩ (lower x) ; cong = cong f }
 
   lABh : IsHom lA 𝑩 ψ
   lABh = ∘-is-hom {𝑨 = lA}{𝑩 = 𝑨}{𝑩} (snd 𝓁ℴ𝓌ℯ𝓇) fhom
 
   ϕ : Domain lA ⟶ Domain lB
-  ϕ = record { f = λ x → lift ((f ⟨$⟩ (lower x))) ; cong = λ x → cong f x }
+  ϕ = record { f = λ x → lift ((f ⟨$⟩ (lower x))) ; cong = cong f }
 
   Goal : IsHom lA lB ϕ
   Goal = ∘-is-hom {𝑨 = lA}{𝑩 = 𝑩}{lB} lABh (snd 𝓁𝒾𝒻𝓉)
 
  lift-hom-lemma : (h : hom 𝑨 𝑩)(a : 𝕌[ 𝑨 ])(ℓᵃ ℓᵇ : Level)
-   →               (_≈_ (Domain (Lift-Alg 𝑩 ℓᵇ))) (lift (∣ h ∣ ⟨$⟩ a)) (∣ Lift-hom h ℓᵃ ℓᵇ ∣ ⟨$⟩ lift a)
+  →               (_≈_ (Domain (Lift-Alg 𝑩 ℓᵇ))) (lift (∣ h ∣ ⟨$⟩ a))
+                  (∣ Lift-hom h ℓᵃ ℓᵇ ∣ ⟨$⟩ lift a)
  lift-hom-lemma h a ℓᵃ ℓᵇ = Setoid.refl (Domain 𝑩)
 
 \end{code}

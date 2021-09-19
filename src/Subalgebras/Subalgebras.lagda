@@ -17,27 +17,24 @@ open import Algebras.Basic using (𝓞 ; 𝓥 ; Signature )
 
 module Subalgebras.Subalgebras {𝑆 : Signature 𝓞 𝓥} where
 
--- imports from Agda and the Agda Standard Library ------------------------------------------------
+-- imports from Agda and the Agda Standard Library ------------------------------------
 open import Agda.Primitive   using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
-open import Data.Product     using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Function.Base    using ( _∘_ )
-open import Function.Bundles using ( Injection )
-open import Relation.Unary   using ( _∈_ ; Pred ; _⊆_ )
+open import Data.Product     using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₂ to snd )
+open import Relation.Unary   using ( Pred ; _∈_ )
 
--- Imports from the Agda Universal Algebra Library --------------------------------------------------
-open import Overture.Preliminaries     using ( _∙_ ; _⁻¹ ; ∣_∣ ; ∥_∥ ; 𝑖𝑑 )
-open import Overture.Inverses          using ( ∘-injective ; IsInjective ; id-is-injective )
-open import Equality.Welldefined       using ( swelldef )
-open import Equality.Truncation        using ( is-set ; blk-uip )
-open import Equality.Extensionality    using ( pred-ext )
-open import Algebras.Basic             using ( Algebra ; Lift-Alg )
-open import Algebras.Products  {𝑆 = 𝑆} using ( ov )
-open import Homomorphisms.Basic{𝑆 = 𝑆} using ( hom ; kercon ; ker[_⇒_]_↾_ ; ∘-hom
-                                            ; is-homomorphism ; ∘-is-hom ; 𝒾𝒹 )
+-- Imports from the Agda Universal Algebra Library ------------------------------------
+open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ )
+open import Overture.Injective                 using ( IsInjective )
+open import Equality.Welldefined               using ( swelldef )
+open import Equality.Truncation                using ( is-set ; blk-uip )
+open import Equality.Extensionality            using ( pred-ext )
+open import Algebras.Basic                     using ( Algebra )
+open import Algebras.Products          {𝑆 = 𝑆} using ( ov )
+open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom )
+open import Homomorphisms.Kernels      {𝑆 = 𝑆} using ( kercon ; ker[_⇒_]_↾_ )
 open import Homomorphisms.Noether      {𝑆 = 𝑆} using ( FirstHomTheorem|Set )
-open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; ≅-trans ; Lift-≅ ; mkiso
-                                                     ; ≅toInjective ; ≅fromInjective )
-open import Terms.Basic                {𝑆 = 𝑆} using ( Term ; ℊ ; node ; 𝑻 )
+open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ )
+open import Terms.Basic                {𝑆 = 𝑆} using ( 𝑻 ; Term )
 private variable α β γ 𝓧 : Level
 \end{code}
 

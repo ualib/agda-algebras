@@ -30,7 +30,7 @@ of citation.
 
 ---------------------------------------------------------------------------------
 
-(Version 2.01 of {{ "now" | date: "%d %b %Y" }})
+(Version 2.03 of {{ "now" | date: "%d %b %Y" }})
 
 **Abstract**. The [Agda Universal Algebra Library](https://ualib.github.io/agda-algebras) is a collection of types and programs (theorems and proofs) that formalizes the foundations of universal algebra in dependent type theory using the [Agda](https://wiki.portal.chalmers.se/agda/pmwiki.php) proof assistant language.
 

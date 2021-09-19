@@ -28,11 +28,13 @@ import Function.Definitions as FD
 -- Imports from agda-algebras -----------------------------------------------
 open import Overture.Preliminaries      using ( ∣_∣ ; ∥_∥ ; ∃-syntax )
 open import Overture.Func.Preliminaries using ( _⟶_ ; _∘_ )
-open import Overture.Func.Inverses      using ( Image_∋_ ; Inv ; InvIsInverseʳ )
+open import Overture.Func.Inverses      using ( image_∋_ ; Image_∋_ ; Inv ; InvIsInverseʳ )
+
 
 private variable
  α ρᵃ β ρᵇ γ ρᶜ : Level
 
+open Image_∋_
 
 module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
 
@@ -42,8 +44,17 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
  open Func {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝑨}{To = 𝑩} renaming (f to _⟨$⟩_ )
  open FD _≈₁_ _≈₂_
 
+ isSurj : (A → B) →  Type (α ⊔ β ⊔ ρᵇ)
+ isSurj f = ∀ {y} → image_∋_ {𝑨 = 𝑨}{𝑩 = 𝑩} f y
+
  IsSurjective : (𝑨 ⟶ 𝑩) →  Type (α ⊔ β ⊔ ρᵇ)
- IsSurjective f = ∀ {y} → Image f ∋ y  -- Surjective (_⟨$⟩_ f)
+ IsSurjective F = ∀ {y} → Image F ∋ y  -- Surjective (_⟨$⟩_ f)
+
+ isSurj→IsSurjective : (F : 𝑨 ⟶ 𝑩) → isSurj (_⟨$⟩_ F) → IsSurjective F
+ isSurj→IsSurjective F isSurjF {y} = hyp isSurjF
+  where
+  hyp : image_∋_ (_⟨$⟩_ F) y → Image F ∋ y
+  hyp (image_∋_.eq a x) = eq a x
 
  open Image_∋_
 
@@ -87,7 +98,6 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ}{𝑪 : Setoid γ ρᶜ
  open Setoid 𝑪 using () renaming (Carrier to C; _≈_ to _≈₃_)
  open Func {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝑨}{To = 𝑩} renaming (f to _⟨$⟩_ )
  open FD _≈₁_ _≈₂_
- open Image_∋_
 
  epic-factor : (f : 𝑨 ⟶ 𝑩)(g : 𝑨 ⟶ 𝑪)(h : 𝑪 ⟶ 𝑩)
   →            IsSurjective f → (∀ i → (f ⟨$⟩ i) ≈₂ ((h ∘ g) ⟨$⟩ i)) → IsSurjective h

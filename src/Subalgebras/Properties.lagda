@@ -24,14 +24,16 @@ open import Relation.Unary   using ( Pred ; _⊆_ )
 open import Relation.Binary.Definitions
                              using ( _Respectsʳ_ ; _Respectsˡ_ )
 open import Relation.Binary.PropositionalEquality
-                             using ( refl ; module ≡-Reasoning ; cong )
+                             using ( _≡_ ; refl ; module ≡-Reasoning ; cong )
 
 -- Imports from the Agda Universal Algebra Library --------------------
 open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
-open import Overture.Inverses                  using (  id-is-injective ; ∘-injective ; IsInjective )
+-- open import Overture.Injective                 using ( module compose )
+open import Overture.Injective                 using (  id-is-injective ; IsInjective ; ∘-injective )
 open import Algebras.Basic                     using ( Algebra ; Lift-Alg )
 open import Algebras.Products          {𝑆 = 𝑆} using ( ov )
-open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( ∘-hom ; is-homomorphism ; ∘-is-hom )
+open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( is-homomorphism )
+open import Homomorphisms.Properties   {𝑆 = 𝑆} using ( ∘-hom ; ∘-is-hom )
 open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅toInjective ; ≅fromInjective ; ≅-refl
                                                      ; ≅-sym ; ≅-trans ; Lift-≅ ; mkiso )
 open import Subalgebras.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; _≥_ ; _IsSubalgebraOfClass_ )
@@ -54,14 +56,12 @@ open _≅_
 
 ≤-trans : (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}(𝑪 : Algebra γ 𝑆)
  →        𝑨 ≤ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
-
-≤-trans 𝑨 {𝑩} 𝑪 A≤B B≤C = (∘-hom 𝑨 𝑪 ∣ A≤B ∣ ∣ B≤C ∣) , ∘-injective ∥ A≤B ∥ ∥ B≤C ∥
+≤-trans 𝑨 𝑪 A≤B B≤C = (∘-hom 𝑨 𝑪 ∣ A≤B ∣ ∣ B≤C ∣) , ∘-injective ∥ A≤B ∥ ∥ B≤C ∥
 
 
 ≥-trans : (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}(𝑪 : Algebra γ 𝑆)
  →        𝑨 ≥ 𝑩 → 𝑩 ≥ 𝑪 → 𝑨 ≥ 𝑪
-
-≥-trans 𝑨 {𝑩} 𝑪 A≥B B≥C = ≤-trans 𝑪 {𝑩} 𝑨 B≥C A≥B
+≥-trans 𝑨 𝑪 A≥B B≥C = ≤-trans 𝑪 𝑨 B≥C A≥B
 
 \end{code}
 

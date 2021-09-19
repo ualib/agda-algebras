@@ -29,7 +29,7 @@ open import Relation.Unary  using ( _⊆_ )
 open import Overture.Preliminaries  using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
 open import Overture.Inverses       using ( Image_∋_ )
 open import Overture.Injective      using ( IsInjective )
-open import Overture.Surjective     using ( IsSurjective ; SurjInv ; SurjInvIsRightInv ; epic-factor )
+open import Overture.Surjective     using ( IsSurjective ; SurjInv ; epic-factor ; SurjInvIsInverseʳ )
 open import Relations.Discrete      using ( kernel )
 open import Relations.Quotients     using ( ⌞_⌟ ; mkblk ; ⟪_⟫ )
 open import Equality.Welldefined    using ( swelldef )
@@ -130,7 +130,7 @@ FirstIsoTheorem|Set 𝑨 𝑩 h pe fe Bset buip hE =
    a = SurjInv ∣ h ∣ hE b
 
    bfa : b ≡ fmap ⟪ a ⟫
-   bfa = ((SurjInvIsRightInv ∣ h ∣ hE) b)⁻¹
+   bfa = ((SurjInvIsInverseʳ ∣ h ∣ hE) b)⁻¹
 
    Goal : Image fmap ∋ b
    Goal = Image_∋_.eq ⟪ a ⟫ bfa
@@ -212,7 +212,7 @@ module _ {𝑨 : Algebra α 𝑆}{𝑪 : Algebra γ 𝑆} where
    νInv = SurjInv ∣ ν ∣ νE
 
    η : ∀ c → ∣ ν ∣ (νInv c) ≡ c
-   η c = SurjInvIsRightInv ∣ ν ∣ νE c
+   η c = SurjInvIsInverseʳ ∣ ν ∣ νE c
 
    φ : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
    φ = ∣ τ ∣ ∘ νInv

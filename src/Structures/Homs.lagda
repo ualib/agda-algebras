@@ -28,9 +28,11 @@ open import Relation.Binary.PropositionalEquality
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
 open import Overture.Preliminaries using ( _∙_ ; ∣_∣ ; ∥_∥ ; _⁻¹ ; Π-syntax )
-open import Overture.Inverses      using ( IsInjective ; IsSurjective ; Image_∋_ )
+open import Overture.Inverses      using ( Image_∋_ )
+open import Overture.Surjective    using ( IsSurjective )
+open import Overture.Injective     using ( IsInjective )
 open import Relations.Discrete     using ( ker ; kerlift )
-open import Relations.Quotients    using ( ⟪_⟫ )
+open import Relations.Quotients    using ( ⟪_⟫ ; mkblk )
 open import Equality.Welldefined   using ( swelldef )
 open import Structures.Basic       using ( signature ; structure ; Lift-Struc ; Lift-Strucʳ
                                          ; Lift-Strucˡ ; compatible ; siglʳ ; sigl )
@@ -220,7 +222,7 @@ module _ {𝑨 : structure 𝐹 𝑅 {α}{ρᵃ} } where
   γrel : is-hom-rel 𝑨 (𝑨 ╱ θ) (λ a → ⟪ a ⟫ {fst ∣ θ ∣})
   γrel R a x = x
   cπ-is-epic : IsSurjective (λ a → ⟪ a ⟫ {fst ∣ θ ∣})
-  cπ-is-epic (C , Relations.Quotients.R-block block-u refl) = eq block-u refl
+  cπ-is-epic (C , mkblk a refl) = eq a refl
 
 
  πhom : (θ : con 𝑨) → hom 𝑨 (𝑨 ╱ θ)

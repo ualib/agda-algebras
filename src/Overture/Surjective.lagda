@@ -53,8 +53,8 @@ Thus, a right-inverse of `f` is obtained by applying `SurjInv` to `f` and a proo
 
 module _ {A : Type α}{B : Type β} where
 
- SurjInvIsRightInv : (f : A → B)(fE : IsSurjective f) → ∀ b → f ((SurjInv f fE) b) ≡ b
- SurjInvIsRightInv f fE b = InvIsInverseʳ (fE b)
+ SurjInvIsInverseʳ : (f : A → B)(fE : IsSurjective f) → ∀ b → f ((SurjInv f fE) b) ≡ b
+ SurjInvIsInverseʳ f fE b = InvIsInverseʳ (fE b)
 
  open ≡-Reasoning
  open Image_∋_
@@ -69,7 +69,7 @@ module _ {A : Type α}{B : Type β} where
    finv = SurjInv f fe
 
    ζ : y ≡ f (finv y)
-   ζ = (SurjInvIsRightInv f fe y)⁻¹
+   ζ = (SurjInvIsInverseʳ f fe y)⁻¹
 
    η : y ≡ (h ∘ g) (finv y)
    η = ζ ∙ compId (finv y)
@@ -86,7 +86,7 @@ module _ {A : Type α}{B : Type β} where
    finv = SurjInv f fe
 
    ζ : f (finv y) ≡ y
-   ζ = SurjInvIsRightInv f fe y
+   ζ = SurjInvIsInverseʳ f fe y
 
    η : (h ∘ g) (finv y) ≡ y
    η = (cong-app (compId ⁻¹)(finv y)) ∙ ζ

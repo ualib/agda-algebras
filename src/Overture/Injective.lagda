@@ -44,25 +44,9 @@ Next, we prove that the composition of injective functions is injective.
 
 \begin{code}
 
-module compose {A : Type α}{B : Type β}{C : Type γ}
-               (_≈₁_ : Rel A ℓ₁) -- Equality over A
-               (_≈₂_ : Rel B ℓ₂) -- Equality over B
-               (_≈₃_ : Rel C ℓ₃) -- Equality over C
-               where
-
- open FD {A = A} {B} _≈₁_ _≈₂_ using () renaming ( Injective to InjectiveAB )
- open FD {A = B} {C} _≈₂_ _≈₃_ using () renaming ( Injective to InjectiveBC )
- open FD {A = A} {C} _≈₁_ _≈₃_ using () renaming ( Injective to InjectiveAC )
-
- ∘-injective : {f : A → B}{g : B → C}
-  →            InjectiveAB f → InjectiveBC g → InjectiveAC (g ∘ f)
- ∘-injective finj ginj = λ z → finj (ginj z)
-
- -- -- old version --
- -- ∘-injective : {A : Type α}{B : Type β}{C : Type γ}{f : A → B}{g : B → C}
- --  →            IsInjective f → IsInjective g → IsInjective (g ∘ f)
- -- ∘-injective finj ginj = λ z → finj (ginj z)
-
+∘-injective : {A : Type α}{B : Type β}{C : Type γ}{f : A → B}{g : B → C}
+  →           IsInjective f → IsInjective g → IsInjective (g ∘ f)
+∘-injective fi gi = λ x → fi (gi x)
 
 \end{code}
 

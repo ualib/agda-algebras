@@ -21,10 +21,9 @@ open import Overture.FuncInverses  using ( Image_∋_ ; Range ; Image⊆Range ; 
                                          ; range ; image ; preimage ; f∈range ; Inv ; Inv' ; [_]⁻¹
                                          ; InvIsInverseʳ ; ⁻¹IsInverseʳ ; InvIsInverseˡ ; ⁻¹IsInverseˡ )
 
-open import Overture.Injective     using ( id-is-injective ; IsInjective ; module compose )
-open compose                       using ( ∘-injective )
+open import Overture.Injective     using ( id-is-injective ; IsInjective ; ∘-injective )
 
-open import Overture.Surjective    using ( IsSurjective ; Surjective ; SurjInv ; SurjInvIsRightInv
+open import Overture.Surjective    using ( IsSurjective ; Surjective ; SurjInv ; SurjInvIsInverseʳ
                                          ; epic-factor ; epic-factor-intensional )
 
 open import Overture.Transformers  using ( Bijection ; ∣_∣=∣_∣ ; PointwiseBijection
@@ -39,12 +38,16 @@ open import Overture.Transformers  using ( Bijection ; ∣_∣=∣_∣ ; Pointwi
 open import Overture.Func.Preliminaries using ( _⟶_ ; _∘_ ; 𝑙𝑖𝑓𝑡 ; lift∼lower ; lower∼lift
                                               ; liftFunc ; preserves≈ )
 
-open import Overture.Func.Inverses      using ( Image_∋_ ; eq ; Range ; Image⊆Range ; Range⊆Image
-                                              ; Imagef∋f ; range ; image ; preimage ; f∈range
-                                              ; Inv ; Inv' ; [_]⁻¹ ; InvIsInverseʳ ; ⁻¹IsInverseʳ
+open import Overture.Func.Inverses      using ( image_∋_ ; Image_∋_ ; IsInRange ; Image⊆Range
+                                              ; IsInRange→IsInImage ; Imagef∋f ; _range ; _image
+                                              ; _preimage ; f∈range ; ⌜_⌝ ; Ran ; RRan
+                                              ; _preimage≈image ; Dom ; inv ; Inv ; Inv' ; [_]⁻¹
+                                              ; ⟦_⟧⁻¹ ; invIsInvʳ ; InvIsInverseʳ ; ⁻¹IsInverseʳ
                                               ; InvIsInverseˡ ; ⁻¹IsInverseˡ )
 
-open import Overture.Func.Injective     using ( IsInjective ; LeftInvPreserves≈ ; ∘-injection )
+open import Overture.Func.Injective     using ( IsInjective ; LeftInvPreserves≈ ; module compose
+                                              ; ∘-injection ; id-is-injective )
+open compose using ( ∘-injective-func )
 
 open import Overture.Func.Surjective    using ( IsSurjective ; SurjectionIsSurjective ; SurjInv
                                               ; SurjInvIsInverseʳ ; epic-factor )
@@ -153,26 +156,26 @@ open import Homomorphisms.HomomorphicImages using ( _IsHomImageOf_ ; HomImages ;
                                                   ; HomImageOfClass ; Lift-epi-is-epi
                                                   ; Lift-Alg-hom-image )
 
-open import Homomorphisms.Setoid.Basic      using ( ≈preserving ; compatible-map-op ; compatible-map
-                                                  ; IsHom ; hom ; IsMon ; mon ; IsEpi ; epi )
+open import Homomorphisms.Func.Basic        using ( ≈preserving ; compatible-map-op ; compatible-map
+                                                  ; IsHom ; hom ; IsMon ; mon ; mon-to-hom
+                                                  ; IsEpi ; epi ; epi-to-hom )
 
-open import Homomorphisms.Setoid.Properties using ( ∘-is-hom ; ∘-hom ; 𝒾𝒹 ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; 𝓁𝒾𝒻𝓉∼𝓁ℴ𝓌ℯ𝓇
+open import Homomorphisms.Func.Properties   using ( ∘-is-hom ; ∘-hom ; 𝒾𝒹 ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; 𝓁𝒾𝒻𝓉∼𝓁ℴ𝓌ℯ𝓇
                                                   ; 𝓁ℴ𝓌ℯ𝓇∼𝓁𝒾𝒻𝓉 ; Lift-hom ; lift-hom-lemma )
 
-open import Homomorphisms.Setoid.Kernels    using ( HomKerComp ; kercon ; kerquo ; ker[_⇒_]_ )
+open import Homomorphisms.Func.Kernels      using ( HomKerComp ; kercon ; kerquo ; ker[_⇒_]_ ; πepi
+                                                  ; πhom ; πker ; ker-in-con )
 
-open import Homomorphisms.Setoid.Factor     using ()
+open import Homomorphisms.Func.Factor     using ( hom-factor )
 
-open import Homomorphisms.Setoid.Isomorphisms using ( _≅_ ; ≅-refl ; ≅-sym ; ≅-trans ; ≅toInjective
-                                                    ; ≅fromInjective ; Lift-≅ ; Lift-Alg-iso
-                                                    ; Lift-Alg-assoc ; ⨅≅ ; Lift-Alg-⨅≅ )
+open import Homomorphisms.Func.Isomorphisms using ( _≅_ ; mkiso ; ≅-refl ; ≅-sym ; ≅-trans
+                                                  ; ≅toInjective ; ≅fromInjective ; Lift-≅
+                                                  ; Lift-Alg-iso ; Lift-Alg-assoc ; ⨅≅ ; Lift-Alg-⨅≅ )
 
-open import Homomorphisms.Setoid.HomomorphicImages using ( _IsHomImageOf_ ; HomImages ; IsHomImageOfClass
-                                                         ; HomImageOfClass ; Lift-epi-is-epi
-                                                         ; Lift-Alg-hom-image )
+open import Homomorphisms.Func.HomomorphicImages using ( _IsHomImageOf_ ; HomImages ; HomImageOf[_]
+                                                       ; IsHomImageOfClass ; HomImageOfClass
+                                                       ; Lift-epi-is-epi ; Lift-Alg-hom-image )
 
-open import Homomorphisms.Setoid.Isomorphisms using ( _≅_ ; ≅-refl ; ≅-sym ; ≅-trans ; Lift-≅
-                                                    ; Lift-Alg-iso ; Lift-Alg-assoc )
 
 
 -- TERMS ------------------------------------------------------------------------------------------
@@ -186,13 +189,12 @@ open import Terms.Operations          using ( _⟦_⟧ ; free-lift-interp ; term
                                             ; _∣:_ ; _[_] ; Substerm ; _[_]t ; subst-lemma
                                             ; subst-theorem )
 
-open import Terms.Setoid.Basic        using ( _≐_ ; ≐-isRefl ; ≐-isSym ; ≐-isTrans ; ≐-isEquiv
-                                            ; TermSetoid ; 𝑻 ; Ops ; Sub ; _[_]
-                                            ; module Environment )
+open import Terms.Func.Basic          using ( _≐_ ; ≐-isRefl ; ≐-isSym ; ≐-isTrans ; ≐-isEquiv
+                                            ; TermSetoid ; 𝑻 ; Sub ; _[_] ; module Environment )
+open Environment using ( Env ; ⟦_⟧ ; Equal ; isEquiv ; ⟦_⟧s ; substitution )
 
-open Environment                      using (_≃_ ; Env ; ⟦_⟧ ; Equal ; isEquiv ; ⟦_⟧s ; substitution)
-
-open import Terms.Setoid.Properties   using ( free-lift ; lift-hom ; free-unique ; lift-of-epi-is-epi )
+open import Terms.Func.Properties     using ( free-lift ; free-lift-of-surj-isSurj ; free-lift-func
+                                            ; lift-hom ; lift-of-epi-is-epi ; free-unique )
 
 
 -- SUBALGEBRAS ------------------------------------------------------------------------------------------
@@ -226,9 +228,9 @@ open import Subalgebras.Setoid.Subalgebras  using ( _≥_ ; _IsSupalgebraOf_ ; _
                                                   ; SubalgebraOfClass' ; SubalgebrasOfClass )
 
 open import Subalgebras.Setoid.Properties   using ( ≅→≤ ; ≅→≥ ; ≤-refl ; ≥-refl ; ≤-reflexive
-                                                  ; ≤-trans ; ≥-trans ; ≤-preorder ; A≥B×B≅C→A≥C
-                                                  ; A≤B×B≅C→A≤C ; A≅B×B≥C→A≥C ; A≅B×B≤C→A≤C
-                                                  ; ≤-TRANS-≅ ; ≤-mono ; Lift-is-sub ; ≤-Lift
+                                                  ; ≤-trans ; ≤-TRANS-≅ ; ≥-trans ; ≤-preorder
+                                                  ; A≥B×B≅C→A≥C ; A≤B×B≅C→A≤C ; A≅B×B≥C→A≥C
+                                                  ; A≅B×B≤C→A≤C ; ≤-mono ; Lift-is-sub ; ≤-Lift
                                                   ; ≥-Lift ; Lift-≤-Lift )
 
 
@@ -261,13 +263,16 @@ open import Varieties.FreeAlgebras       using ( 𝓕 ; 𝓕⁺ ; ψ ; ψRel ; �
 
 
 open import Varieties.Setoid.EquationalLogic using ( Eq ; _⊨_ ; _⊧_ ; Mod ; _⊫_ ; _⊃_ ; _⊢_▹_≈_
-                                                   ; module Soundness ; module TermModel
-                                                   ; module Completeness )
-open Soundness    using ( sound        )
-open TermModel    using ( TermSetoid   )
-open Completeness using ( completeness )
+                                                   ; module Soundness ; module FreeAlgebra )
+open Soundness   using ( sound )
+open FreeAlgebra using ( FreeDomain ; FreeInterp ; 𝔽[_] ; σ₀ ; identity ; evaluation ; satisfies
+                       ; completeness )
 
+open import Varieties.Setoid.Closure         using ( H ; hbase ; hhimg ; S ; sbase ; ssub ; siso
+                                                   ; P ; pbase ; pprod ; piso ; V ; vbase ; vhimg
+                                                   ; vssub ; vpprod ; viso ; is-variety ; variety )
 
+open import Varieties.Setoid.FreeAlgebras    using ( ℐ ; ℰ ; epi𝔽 ; hom𝔽 ; hom𝔽-is-epic )
 
 
 -- GENERAL STRUCTURES ---------------------------------------------------------------------------------
@@ -349,9 +354,6 @@ open import Examples.Structures.Basic        using  (SL ; NAE3SAT ; nae3sat )
 open import Exercises.Complexity.FiniteCSP   using  ( module solution-2-1 ; module solution-2-2 )
 
 \end{code}
-
-
-
 
 --------------------------------
 

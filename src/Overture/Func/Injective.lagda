@@ -17,22 +17,24 @@ We say that a function `f : A → B` from one setoid (A , ≈₀) to another (B 
 
 open import Relation.Binary using ( Setoid )
 
-module Overture.Func.Injective
- {α ρᵃ β ρᵇ}{𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
+module Overture.Func.Injective where
+
 
 -- Imports from Agda and the Agda Standard Library -------------
 open import Agda.Primitive       using ( _⊔_ ; Level ) renaming ( Set to Type )
 open import Function.Bundles     using ( Func ; Injection )
+open import Function.Base        using ( _∘_ ; id )
 open import Relation.Binary.Core using ( _Preserves_⟶_ )
+open import Relation.Binary using ( Rel )
 import Function.Definitions as FD
 
 -- Imports from agda-algebras -----------------------------------------------
-open import Overture.Func.Preliminaries using ( _⟶_ )
+open import Overture.Func.Preliminaries using ( _⟶_ ; 𝑖𝑑 )
 open import Overture.Func.Inverses      using ( Image_∋_ ; Inv )
-open import Overture.Injective          using ( module compose )
+-- open import Overture.Injective          using ( module compose )
 
 private variable
- γ ρᶜ : Level
+ α β γ ρᵃ ρᵇ ρᶜ ℓ₁ ℓ₂ ℓ₃ : Level
 
 \end{code}
 
@@ -40,33 +42,56 @@ We can prove that, when `f` is injective, the range-restricted right-inverse `In
 
 \begin{code}
 
-open Injection {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝑨}{To = 𝑩} renaming (f to _⟨$⟩_)
-open Setoid 𝑨 using () renaming (Carrier to A; _≈_ to _≈₁_)
-open Setoid 𝑩 using ( trans ; sym ) renaming (Carrier to B; _≈_ to _≈₂_)
-open Func {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝑨}{To = 𝑩} renaming (f to _⟨$⟩_ )
-open FD _≈₁_ _≈₂_
+module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
 
-IsInjective : (𝑨 ⟶ 𝑩) →  Type (α ⊔ ρᵃ ⊔ ρᵇ)
-IsInjective f = Injective (_⟨$⟩_ f)
+ open Injection {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝑨}{To = 𝑩} renaming (f to _⟨$⟩_)
+ open Setoid 𝑨 using () renaming (Carrier to A; _≈_ to _≈₁_)
+ open Setoid 𝑩 using ( trans ; sym ) renaming (Carrier to B; _≈_ to _≈₂_)
+ open Func {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝑨}{To = 𝑩} renaming (f to _⟨$⟩_ )
+ open FD _≈₁_ _≈₂_
 
-open Image_∋_
+ IsInjective : (𝑨 ⟶ 𝑩) →  Type (α ⊔ ρᵃ ⊔ ρᵇ)
+ IsInjective f = Injective (_⟨$⟩_ f)
+
+ open Image_∋_
 
  -- Inverse of an injective function preserves setoid equalities
-LeftInvPreserves≈ : (F : Injection 𝑨 𝑩)
-                    {b₀ b₁ : B}(u : Image (function F) ∋ b₀)(v : Image (function F) ∋ b₁)
- →                  b₀ ≈₂ b₁ → (Inv (function F) u) ≈₁ (Inv (function F) v)
+ LeftInvPreserves≈ : (F : Injection 𝑨 𝑩)
+                     {b₀ b₁ : B}(u : Image (function F) ∋ b₀)(v : Image (function F) ∋ b₁)
+  →                  b₀ ≈₂ b₁ → (Inv (function F) u) ≈₁ (Inv (function F) v)
 
-LeftInvPreserves≈ F {b₀}{b₁} (eq a₀ x₀) (eq a₁ x₁) bb = Goal
- where
- fa₀≈fa₁ : (F ⟨$⟩ a₀) ≈₂ (F ⟨$⟩ a₁)
- fa₀≈fa₁ = trans (sym x₀) (trans bb x₁)
- Goal : a₀ ≈₁ a₁
- Goal = injective F fa₀≈fa₁
+ LeftInvPreserves≈ F {b₀}{b₁} (eq a₀ x₀) (eq a₁ x₁) bb = Goal
+  where
+  fa₀≈fa₁ : (F ⟨$⟩ a₀) ≈₂ (F ⟨$⟩ a₁)
+  fa₀≈fa₁ = trans (sym x₀) (trans bb x₁)
+  Goal : a₀ ≈₁ a₁
+  Goal = injective F fa₀≈fa₁
 
 
-module _ {𝑪 : Setoid γ ρᶜ} where
+
+module compose {A : Type α}{B : Type β}{C : Type γ}
+               (_≈₁_ : Rel A ℓ₁) -- Equality over A
+               (_≈₂_ : Rel B ℓ₂) -- Equality over B
+               (_≈₃_ : Rel C ℓ₃) -- Equality over C
+               where
+
+ open FD {A = A} {B} _≈₁_ _≈₂_ using () renaming ( Injective to InjectiveAB )
+ open FD {A = B} {C} _≈₂_ _≈₃_ using () renaming ( Injective to InjectiveBC )
+ open FD {A = A} {C} _≈₁_ _≈₃_ using () renaming ( Injective to InjectiveAC )
+
+ ∘-injective-func : {f : A → B}{g : B → C}
+  →            InjectiveAB f → InjectiveBC g → InjectiveAC (g ∘ f)
+ ∘-injective-func finj ginj = λ z → finj (ginj z)
+
+
+module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} {𝑪 : Setoid γ ρᶜ} where
+
+ open Injection {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝑨}{To = 𝑩} renaming (f to _⟨$⟩_)
+ open Setoid 𝑨 using () renaming (Carrier to A; _≈_ to _≈₁_)
+ open Setoid 𝑩 using ( trans ; sym ) renaming (Carrier to B; _≈_ to _≈₂_)
+ open Func {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝑨}{To = 𝑩} renaming (f to _⟨$⟩_ )
  open Setoid 𝑪 using ( sym ) renaming (Carrier to C; _≈_ to _≈₃_)
- open compose {A = A}{B}{C} _≈₁_ _≈₂_ _≈₃_ using ( ∘-injective )
+ open compose {A = A}{B}{C} _≈₁_ _≈₂_ _≈₃_ using ( ∘-injective-func )
 
 
  -- Composition is injective.
@@ -74,7 +99,7 @@ module _ {𝑪 : Setoid γ ρᶜ} where
  ∘-injection : Injection 𝑨 𝑩 → Injection 𝑩 𝑪 → Injection 𝑨 𝑪
  ∘-injection fi gi = record { f = λ x → apg (apf x)
                             ; cong = conggf
-                            ; injective = ∘-injective (injective fi) (injective gi)
+                            ; injective = ∘-injective-func (injective fi) (injective gi)
                             }
   where
   open Injection
@@ -85,7 +110,16 @@ module _ {𝑪 : Setoid γ ρᶜ} where
   conggf : (λ x → apg (apf x)) Preserves _≈₁_ ⟶ _≈₃_
   conggf {x}{y} x≈y = cong gi (cong fi x≈y)
 
+
+
+id-is-injective : {𝑨 : Setoid α ρᵃ} → IsInjective{𝑨 = 𝑨}{𝑨} 𝑖𝑑
+id-is-injective = id
+
+
+
+
 \end{code}
+
 
 --------------------------------------
 
