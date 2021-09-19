@@ -17,10 +17,6 @@ open import Overture.Inverses      using ( Image_∋_ ; Range ; range ; Image⊆
                                          ; Imagef∋f ; f∈range ; Inv ; [_]⁻¹ ; InvIsInverseʳ
                                          ; ⁻¹IsInverseʳ ;  InvIsInverseˡ ; ⁻¹IsInverseˡ )
 
-open import Overture.FuncInverses  using ( Image_∋_ ; Range ; Image⊆Range ; Range⊆Image ; Imagef∋f
-                                         ; range ; image ; preimage ; f∈range ; Inv ; Inv' ; [_]⁻¹
-                                         ; InvIsInverseʳ ; ⁻¹IsInverseʳ ; InvIsInverseˡ ; ⁻¹IsInverseˡ )
-
 open import Overture.Injective     using ( id-is-injective ; IsInjective ; ∘-injective )
 
 open import Overture.Surjective    using ( IsSurjective ; Surjective ; SurjInv ; SurjInvIsInverseʳ
@@ -339,6 +335,9 @@ open import Structures.Sigma.Homs        using ( preserves ; is-hom-rel ; comp-o
 open import Structures.Sigma.Isos        using ( _≅_ ; ≅-refl ; ≅-sym ; ≅-trans ; Lift-≅
                                                ; Lift-Struc-iso ; ⨅≅ )
 
+-- CATS ---------------------------------------------------------------------------------------
+open import Categories.Functors          using ( Functor₀ ; [_]₀ ; Functor ; [_]_ ; μ_ ; list
+                                               ; L ; List ; Option ; _[_] ; _⟦_⟧ )
 
 -- COMPLEXITY ---------------------------------------------------------------------------------------
 open import Complexity.Basic                 using   ()
@@ -346,8 +345,12 @@ open import Complexity.CSP                   using   (Constraint ; CSPInstance )
 
 
 -- EXAMPLES -----------------------------------------------------------------------------------------
-open import Examples.Structures.Signatures   using  ( S∅ ; S1 ; S01 ; S001 ; S0001 ; S021 ; S101 ; S111 )
-open import Examples.Structures.Basic        using  (SL ; NAE3SAT ; nae3sat )
+open import Examples.Structures.Signatures using ( S∅ ; S1 ; S01 ; S001 ; S0001 ; S021 ; S101 ; S111 )
+open import Examples.Structures.Basic      using (SL ; NAE3SAT ; nae3sat )
+open import Examples.Categories.Functors   using ( L₀ ; l₀ ; L₁ ; l₁ ; L₃ ; l₃ ; L₀≡none
+                                                 ; l₀≡none ; L₁[0]≡some3 ; L₁[n>0]≡none
+                                                 ; l₁⟦n>0⟧≡none ; L₃[0]≡some1 ; l₃⟦0⟧≡some1
+                                                 ; L₃[0]≢some2 ; l₃[0]≢some2 ; ℓ₁ )
 
 
 -- EXERCISES -----------------------------------------------------------------------------------------
