@@ -1,11 +1,11 @@
 ---
 layout: default
-title : "Subalgebras.Setoid.Subalgebras module (The Agda Universal Algebra Library)"
+title : "Subalgebras.Func.Subalgebras module (The Agda Universal Algebra Library)"
 date : "2021-07-17"
 author: "agda-algebras development team"
 ---
 
-#### <a id="subalgebras-of SetoidAlgebras">Subalgebras of setoid algebras</a>
+#### <a id="subalgebras-of-setoidalgebras">Subalgebras of setoid algebras</a>
 
 This is the [Subalgebras.Setoid.Subalgebras][] module of the [Agda Universal Algebra Library][].
 
@@ -15,7 +15,7 @@ This is the [Subalgebras.Setoid.Subalgebras][] module of the [Agda Universal Alg
 
 open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
-module Subalgebras.Setoid.Subalgebras {𝑆 : Signature 𝓞 𝓥} where
+module Subalgebras.Func.Subalgebras {𝑆 : Signature 𝓞 𝓥} where
 
 -- imports from Agda and the Agda Standard Library -------------------------------------------------
 open import Agda.Primitive   using ( Level ; _⊔_ ) renaming ( Set to Type )
@@ -111,7 +111,7 @@ SubalgebrasOfClass 𝒦 {β}{ρᵇ} = Σ[ 𝑩 ∈ SetoidAlgebra β ρᵇ ] 𝑩
 
 ---------------------------------
 
-<span style="float:left;">[← Subalgebras.Setoid.Subuniverses](Subalgebras.Setoid.Subuniverses.html)</span>
-<span style="float:right;">[Subalgebras.Setoid.Properties →](Subalgebras.Setoid.Properties.html)</span>
+<span style="float:left;">[← Subalgebras.Func.Subuniverses](Subalgebras.Func.Subuniverses.html)</span>
+<span style="float:right;">[Subalgebras.Func.Properties →](Subalgebras.Func.Properties.html)</span>
 
 {% include UALib.Links.md %}

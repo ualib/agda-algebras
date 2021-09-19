@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Varieties.Setoid.EquationalLogic module (The Agda Universal Algebra Library)"
+title : "Varieties.Func.EquationalLogic module (The Agda Universal Algebra Library)"
 date : "2021-01-14"
 author: "agda-algebras development team"
 ---
 
 #### <a id="entailment-derivation-rules-soundness-and-completeness">Entailment, derivation rules, soundness and completeness</a>
 
-This is the [Varieties.Setoid.EquationalLogic][] module of the [Agda Universal Algebra Library][].
+This is the [Varieties.Func.EquationalLogic][] module of the [Agda Universal Algebra Library][].
 
 This module is based on [Andreas Abel's Agda formalization of Birkhoff's completeness theorem](http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf).
 
@@ -17,7 +17,7 @@ This module is based on [Andreas Abel's Agda formalization of Birkhoff's complet
 
 open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
-module Varieties.Setoid.EquationalLogic {𝑆 : Signature 𝓞 𝓥} where
+module Varieties.Func.EquationalLogic {𝑆 : Signature 𝓞 𝓥} where
 
 -- imports from Agda and the Agda Standard Library -------------------------------------------
 open import Agda.Primitive   using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
@@ -248,7 +248,7 @@ We are finally ready to formally state and prove Birkhoff's Completeness Theorem
 
 --------------------------------
 
-<span style="float:left;">[↑ Varieties.Setoid](Varieties.Setoid.html)</span>
-<span style="float:right;">[Varieties.Setoid.Closure →](Varieties.Setoid.Closure.html)</span>
+<span style="float:left;">[↑ Varieties.Func](Varieties.Func.html)</span>
+<span style="float:right;">[Varieties.Func.Closure →](Varieties.Func.Closure.html)</span>
 
 {% include UALib.Links.md %}

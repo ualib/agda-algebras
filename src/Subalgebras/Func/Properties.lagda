@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Subalgebras.Setoid.Properties module (The Agda Universal Algebra Library)"
+title : "Subalgebras.Func.Properties module (The Agda Universal Algebra Library)"
 date : "2021-07-18"
 author: "agda-algebras development team"
 ---
 
 #### <a id="properties-of-the-subalgebra-relation">Properties of the subalgebra relation for setoid algebras</a>
 
-This is the [Subalgebras.Setoid.Properties][] module of the [Agda Universal Algebra Library][].
+This is the [Subalgebras.Func.Properties][] module of the [Agda Universal Algebra Library][].
 
 
 \begin{code}
@@ -16,7 +16,7 @@ This is the [Subalgebras.Setoid.Properties][] module of the [Agda Universal Alge
 
 open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
-module Subalgebras.Setoid.Properties {𝑆 : Signature 𝓞 𝓥} where
+module Subalgebras.Func.Properties {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ------------------------------------
 open import Agda.Primitive   using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
@@ -31,7 +31,7 @@ open import Algebras.Func.Basic             {𝑆 = 𝑆} using ( SetoidAlgebra 
 open import Homomorphisms.Func.Properties   {𝑆 = 𝑆} using ( 𝒾𝒹 ; ∘-hom )
 open import Homomorphisms.Func.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅toInjective ; ≅fromInjective
                                                           ; ≅-sym ; ≅-refl ; ≅-trans ; Lift-≅ )
-open import Subalgebras.Setoid.Subalgebras  {𝑆 = 𝑆} using ( _≤_ ; _≥_ ; _IsSubalgebraOfClass_ )
+open import Subalgebras.Func.Subalgebras  {𝑆 = 𝑆} using ( _≤_ ; _≥_ ; _IsSubalgebraOfClass_ )
 
 private variable α ρᵃ β ρᵇ γ ρᶜ : Level
 
@@ -140,7 +140,7 @@ Lift-≤-Lift {𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ A≤B = ≥-Lift (Lift-Alg 𝑩
 
 ---------------------------------
 
-<span style="float:left;">[← Subalgebras.Setoid.Subalgebras](Subalgebras.Setoid.Subalgebras.html)</span>
+<span style="float:left;">[← Subalgebras.Func.Subalgebras](Subalgebras.Func.Subalgebras.html)</span>
 <span style="float:right;">[Varieties →](Varieties.html)</span>
 
 {% include UALib.Links.md %}

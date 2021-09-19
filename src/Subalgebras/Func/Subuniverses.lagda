@@ -238,7 +238,7 @@ and, under these assumptions, we proved `g ((f ̂ 𝑨) a) ≈ h ((f ̂ 𝑨) a)
 
 ---------------------------------
 
-<span style="float:left;">[↑ Subalgebras.Setoid](Subalgebras.Setoid.html)</span>
-<span style="float:right;">[Subalgebras.Setoid.Subalgebras →](Subalgebras.Setoid.Subalgebras.html)</span>
+<span style="float:left;">[↑ Subalgebras.Func](Subalgebras.Func.html)</span>
+<span style="float:right;">[Subalgebras.Func.Subalgebras →](Subalgebras.Func.Subalgebras.html)</span>
 
 {% include UALib.Links.md %}

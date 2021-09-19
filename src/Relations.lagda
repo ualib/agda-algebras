@@ -28,7 +28,7 @@ open import Relations.Func
 
 -------------------------------------
 
-<span style="float:left;">[← Overture.Transformers](Overture.Transformers.html)</span>
+<span style="float:left;">[← Overture.Func.Bijective](Overture.Func.Bijective.html)</span>
 <span style="float:right;">[Relations.Discrete →](Relations.Discrete.html)</span>
 
 {% include UALib.Links.md %}

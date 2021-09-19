@@ -1,6 +1,6 @@
 ---
 layout: default
-title : "Varieties.Closure.Setoid module (The Agda Universal Algebra Library)"
+title : "Varieties.Func.Closure module (The Agda Universal Algebra Library)"
 date : "2021-01-14"
 author: "agda-algebras development team"
 ---
@@ -19,7 +19,7 @@ Fix a signature 𝑆, let 𝒦 be a class of 𝑆-algebras, and define
 
 open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
-module Varieties.Setoid.Closure {𝑆 : Signature 𝓞 𝓥} where
+module Varieties.Func.Closure {𝑆 : Signature 𝓞 𝓥} where
 
 -- imports from Agda and the Agda Standard Library -------------------------------------------
 open import Agda.Primitive using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
@@ -31,7 +31,7 @@ open import Algebras.Func.Products               {𝑆 = 𝑆} using ( ⨅ )
 open import Algebras.Func.Basic                  {𝑆 = 𝑆} using ( SetoidAlgebra ; ov )
 open import Homomorphisms.Func.Isomorphisms      {𝑆 = 𝑆} using ( _≅_ )
 open import Homomorphisms.Func.HomomorphicImages {𝑆 = 𝑆} using ( HomImages )
-open import Subalgebras.Setoid.Subalgebras       {𝑆 = 𝑆} using ( _≤_ )
+open import Subalgebras.Func.Subalgebras         {𝑆 = 𝑆} using ( _≤_ )
 
 -- The inductive type H
 data H {α ρ : Level} (𝒦 : Pred (SetoidAlgebra α ρ)(ov α)) : Pred (SetoidAlgebra α ρ) (ov(α ⊔ ρ))
@@ -80,7 +80,7 @@ variety α ρ = Σ[ 𝒱 ∈ (Pred (SetoidAlgebra α ρ)_) ] is-variety 𝒱
 
 --------------------------------
 
-<span style="float:left;">[← Varieties.Setoid.EquationalLogic](Varieties.Setoid.EquationalLogic.html)</span>
-<span style="float:right;">[Varieties.Setoid.FreeAlgebras →](Varieties.Setoid.FreeAlgebras.html)</span>
+<span style="float:left;">[← Varieties.Func.EquationalLogic](Varieties.Func.EquationalLogic.html)</span>
+<span style="float:right;">[Varieties.Func.FreeAlgebras →](Varieties.Func.FreeAlgebras.html)</span>
 
 {% include UALib.Links.md %}
