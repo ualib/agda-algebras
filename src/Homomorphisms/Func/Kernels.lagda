@@ -18,23 +18,21 @@ open import Algebras.Basic using (𝓞 ; 𝓥 ; Signature )
 module Homomorphisms.Func.Kernels {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ------------------------------------------
-open import Agda.Primitive          using ( _⊔_ ) renaming ( Set to Type )
 open import Data.Product      using ( _,_ )
 open import Function          using ( _∘_ ; id )
-open import Function.Bundles          using ( Func )
+open import Function.Bundles  using ( Func )
 open import Level             using ( Level )
 open import Relation.Binary   using ( Setoid )
-open import Relation.Binary.PropositionalEquality using () renaming ( refl to ≡refl)
+open import Relation.Binary.PropositionalEquality as ≡ using ()
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------
-open import Overture.Preliminaries              using ( ∣_∣ ; ∥_∥ )
-open import Overture.Func.Preliminaries              using ( _⟶_ ; 𝑖𝑑 )
-open import Overture.Func.Inverses             using ( Image_∋_ )
-open import Overture.Func.Surjective            using ( IsSurjective )
-open import Relations.Discrete                  using ( kerRel ; kerRelOfEquiv )
-open import Algebras.Setoid.Basic       {𝑆 = 𝑆} using ( SetoidAlgebra ; _̂_ )
-open import Algebras.Func.Congruences {𝑆 = 𝑆} using ( _∣≈_ ; Con ; mkcon ; _╱_ ; IsCongruence ; /-≡ )
-open import Homomorphisms.Func.Basic  {𝑆 = 𝑆} using ( hom ; IsHom ; epi ; IsEpi ; epi-to-hom )
+open import Overture.Preliminaries                using ( ∣_∣ ; ∥_∥ )
+open import Overture.Func.Preliminaries           using ( _⟶_ )
+open import Overture.Func.Inverses                using ( Image_∋_ )
+open import Relations.Discrete                    using ( kerRel ; kerRelOfEquiv )
+open import Algebras.Func.Basic           {𝑆 = 𝑆} using ( SetoidAlgebra ; _̂_ )
+open import Algebras.Func.Congruences     {𝑆 = 𝑆} using ( _∣≈_ ; Con ; mkcon ; _╱_ ; IsCongruence )
+open import Homomorphisms.Func.Basic      {𝑆 = 𝑆} using ( hom ; IsHom ; epi ; IsEpi ; epi-to-hom )
 open import Homomorphisms.Func.Properties {𝑆 = 𝑆} using ( 𝒾𝒹 )
 
 private variable
@@ -63,7 +61,7 @@ That is, if each `(u i, v i)` belongs to the kernel, then so does the pair `((f 
  HomKerComp f {u}{v} kuv = Goal
   where
   fhuv : ((f ̂ 𝑩)(hmap ∘ u)) ≈₂ ((f ̂ 𝑩)(hmap ∘ v))
-  fhuv = cong Interp (≡refl , kuv)
+  fhuv = cong Interp (≡.refl , kuv)
   lem1 : (hmap ((f ̂ 𝑨) u)) ≈₂ ((f ̂ 𝑩) (hmap ∘ u))
   lem1 = IsHom.compatible ∥ h ∥
 
@@ -155,9 +153,6 @@ The kernel of the canonical projection of `𝑨` onto `𝑨 / θ` is equal to `�
  ker-in-con = id
 
 \end{code}
-
-
-
 
 --------------------------------
 

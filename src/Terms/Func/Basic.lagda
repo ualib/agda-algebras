@@ -26,12 +26,12 @@ open import Function.Bundles       using ( Func )
 open import Level                  using ( Level ; Lift )
 open import Relation.Binary        using ( Setoid ; IsEquivalence )
 open import Relation.Binary.Definitions using ( Reflexive ; Symmetric ; Transitive )
-open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ ) -- ; sym ; trans ; refl )
+open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------
-open import Overture.Preliminaries        using ( ∥_∥ )
-open import Algebras.Setoid.Basic {𝑆 = 𝑆} using ( SetoidAlgebra ; ov )
-open import Terms.Basic           {𝑆 = 𝑆} using ( Term )
+open import Overture.Preliminaries      using ( ∥_∥ )
+open import Algebras.Func.Basic {𝑆 = 𝑆} using ( SetoidAlgebra ; ov )
+open import Terms.Basic         {𝑆 = 𝑆} using ( Term )
 open Term
 open Func renaming ( f to _⟨$⟩_ )
 

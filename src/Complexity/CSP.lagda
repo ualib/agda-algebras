@@ -102,8 +102,8 @@ open import Function.Base    using ( _∘_ )
 open import Relation.Binary  using ( Setoid )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Relations.Continuous    using ( ΠΡ ; ΠΡ-syntax )
-open import Algebras.Setoid.Basic {𝑆 = 𝑆} using ( SetoidAlgebra )
+open import Relations.Continuous        using ( ΠΡ ; ΠΡ-syntax )
+open import Algebras.Func.Basic {𝑆 = 𝑆} using ( SetoidAlgebra )
 
 \end{code}
 

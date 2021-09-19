@@ -24,15 +24,15 @@ open import Function        using ( Func ; _on_ ; _∘_ )
 open import Level           using ( Level )
 open import Relation.Binary using ( Setoid ; _Preserves_⟶_ )
 open import Relation.Unary  using ( Pred ; _∈_ )
-open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; cong-app ) renaming (cong to ≡cong ) -- sym  ; trans ; cong ; cong-app ; module ≡-Reasoning )
-
+open import Relation.Binary.PropositionalEquality as ≡ using ()
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
 open import Overture.Preliminaries                using ( ∣_∣ ; ∥_∥ ; transport )
 open import Overture.Func.Preliminaries           using ( lift∼lower )
-open import Overture.Func.Inverses                using ( Image_∋_ ; Inv ; InvIsInverseʳ ; eq ; Ran ; _preimage ; _range ; _image ; _preimage≈image )
+open import Overture.Func.Inverses                using ( Ran ; _range ; _preimage ; _image ; Inv
+                                                        ; _preimage≈image ; InvIsInverseʳ ; Image_∋_ )
 open import Overture.Func.Surjective              using ( IsSurjective )
-open import Algebras.Setoid.Basic         {𝑆 = 𝑆} using ( SetoidAlgebra ; ov ; Lift-Alg ; 𝕌[_] ; _̂_ ; ⟦_⟧ ; EqArgs)
+open import Algebras.Func.Basic           {𝑆 = 𝑆} using ( SetoidAlgebra ; ov ; _̂_ ; ⟦_⟧ ; Lift-Alg ; 𝕌[_] )
 open import Homomorphisms.Func.Basic      {𝑆 = 𝑆} using ( hom ; IsHom )
 open import Homomorphisms.Func.Properties {𝑆 = 𝑆} using ( Lift-hom ; 𝓁𝒾𝒻𝓉 ; lift-hom-lemma )
 
@@ -80,7 +80,7 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ} where
    hhom : ∀ {𝑓}(x : ∥ 𝑆 ∥ 𝑓 → ∣ h ∣ range )
     →     (∣ h ∣ ⟨$⟩ (𝑓 ̂ 𝑨) ((∣ h ∣ preimage) ∘ x)) ≈₂ (𝑓 ̂ 𝑩) ((∣ h ∣ image) ∘ x)
 
-   hhom {𝑓} x = trans₂ (compatible ∥ h ∥) (cong InterpB (refl , (∣ h ∣ preimage≈image) ∘ x))
+   hhom {𝑓} x = trans₂ (compatible ∥ h ∥) (cong InterpB (≡.refl , (∣ h ∣ preimage≈image) ∘ x))
 
    f' : SRanh → ∣ h ∣ range
    f' (𝑓 , x) = (𝑓 ̂ 𝑩)((∣ h ∣ image)∘ x)       -- b : the image in ∣B∣
@@ -88,13 +88,13 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ} where
                 , hhom x                        -- p : proof that `(∣ h ∣ ⟨$⟩ a) ≈₂ b`
 
    cong' : ∀ {x y} → x ≈₃ y → ((∣ h ∣ image) (f' x)) ≈₂ ((∣ h ∣ image) (f' y))
-   cong' {(𝑓 , u)} {(.𝑓 , v)} (refl , EqA) = Goal
+   cong' {(𝑓 , u)} {(.𝑓 , v)} (≡.refl , EqA) = Goal
 
     where
 
     -- Alternative formulation of the goal:
     goal : (𝑓 ̂ 𝑩)(λ i → ((∣ h ∣ image)(u i))) ≈₂ (𝑓 ̂ 𝑩)(λ i → ((∣ h ∣ image) (v i)))
-    goal = cong InterpB (refl , EqA )
+    goal = cong InterpB (≡.refl , EqA )
 
     Goal : (∣ h ∣ image) (f' (𝑓 , u)) ≈₂ (∣ h ∣ image) (f' (𝑓 , v))
     Goal = goal
@@ -162,7 +162,7 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ}
   η = trans lem1 (trans lem2 lem3)
 
   Goal : Image ∣ Lift-hom h ℓᵃ ℓᵇ ∣ ∋ b
-  Goal = eq (lift a) η
+  Goal = Image_∋_.eq (lift a) η
 
 
  Lift-Alg-hom-image : (ℓᵃ ℓᵇ : Level) → 𝑩 IsHomImageOf 𝑨

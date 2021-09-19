@@ -13,6 +13,8 @@ author: "agda-algebras development team"
 
 module Algebras.Func where
 
+open import Algebras.Func.Basic
+open import Algebras.Func.Products
 open import Algebras.Func.Congruences
 
 \end{code}

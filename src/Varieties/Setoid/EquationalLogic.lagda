@@ -31,7 +31,7 @@ import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
 open import Overture.Preliminaries        using ( ∣_∣ )
-open import Algebras.Setoid.Basic {𝑆 = 𝑆} using ( SetoidAlgebra ; ov ) renaming ( ⟦_⟧ to ⟦_⟧s )
+open import Algebras.Func.Basic   {𝑆 = 𝑆} using ( SetoidAlgebra ; ov ) renaming ( ⟦_⟧ to ⟦_⟧s )
 open import Terms.Basic           {𝑆 = 𝑆} using ( Term )
 open import Terms.Func.Basic      {𝑆 = 𝑆} using ( module Environment ; Sub ; _[_] )
 

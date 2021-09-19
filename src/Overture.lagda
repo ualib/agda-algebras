@@ -23,7 +23,6 @@ open import Overture.Injective
 open import Overture.Surjective
 open import Overture.Transformers
 open import Overture.Func
-open import Overture.Setoid
 
 \end{code}
 
