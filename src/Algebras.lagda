@@ -18,7 +18,6 @@ module Algebras where
 open import Algebras.Basic
 open import Algebras.Products
 open import Algebras.Congruences
-open import Algebras.Setoid
 open import Algebras.Func
 
 \end{code}

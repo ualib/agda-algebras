@@ -24,11 +24,11 @@ open import Function.Bundles  using ( Func )
 open import Relation.Binary   using ( Setoid )
 
 -- Imports from the Agda Universal Algebra Library ---------------------------
-open import Overture.Preliminaries        using ( ∣_∣ ; ∥_∥ )
-open import Overture.Func.Preliminaries        using ( _⟶_ )
+open import Overture.Preliminaries      using ( ∣_∣ ; ∥_∥ )
+open import Overture.Func.Preliminaries using ( _⟶_ )
 open import Overture.Func.Injective     using ( IsInjective )
 open import Overture.Func.Surjective    using ( IsSurjective )
-open import Algebras.Setoid.Basic {𝑆 = 𝑆} using ( SetoidAlgebra ; _̂_ )
+open import Algebras.Func.Basic {𝑆 = 𝑆} using ( SetoidAlgebra ; _̂_ )
 
 private variable
  α β ρᵃ ρᵇ : Level
