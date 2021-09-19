@@ -7,7 +7,7 @@ author: "agda-algebras development team"
 
 #### <a id="subalgebras-of-setoidalgebras">Subalgebras of setoid algebras</a>
 
-This is the [Subalgebras.Setoid.Subalgebras][] module of the [Agda Universal Algebra Library][].
+This is the [Subalgebras.Func.Subalgebras][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
