@@ -255,7 +255,7 @@ module _ {𝓘 : Level}{I : Type 𝓘}
 
 ------------------------------
 
-<span style="float:left;">[← Homomorphisms.Func.Noether](Homomorphisms.Func.Noether.html)</span>
+<span style="float:left;">[← Homomorphisms.Func.Factor](Homomorphisms.Func.Factor.html)</span>
 <span style="float:right;">[Homomorphisms.Func.HomomorphicImages →](Homomorphisms.Func.HomomorphicImages.html)</span>
 
 {% include UALib.Links.md %}

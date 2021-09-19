@@ -104,7 +104,7 @@ module _ {A : Type α}{R : Equivalence A{ℓ} } where
 
 -------------------------------------
 
-<span style="float:left;">[← Relations.Properties](Relations.Properties.html)</span>
+<span style="float:left;">[← Relations.Func.Discrete](Relations.Func.Discrete.html)</span>
 <span style="float:right;">[Equality →](Equality.html)</span>
 
 {% include UALib.Links.md %}

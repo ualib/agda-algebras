@@ -88,7 +88,7 @@ informally by `{(x , y) ∈ A × A : f ⟨$⟩ x ≈₂ f ⟨$⟩ y}`.
 
 --------------------------------------
 
-<span style="float:left;">[↑ Relations](Relations.html)</span>
-<span style="float:right;">[Relations.Continuous →](Relations.Continuous.html)</span>
+<span style="float:left;">[↑ Relations.Func](Relations.Func.html)</span>
+<span style="float:right;">[Relations.Func.Quotients →](Relations.Func.Quotients.html)</span>
 
 {% include UALib.Links.md %}

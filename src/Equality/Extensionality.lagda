@@ -106,6 +106,6 @@ module _ {A : Type α}{R : BinRel A ρ} where
 ---------------------------------------
 
 <span style="float:left;">[← Equality.Truncation](Equality.Truncation.html)</span>
-<span style="float:right;">[Residuation →](Residuation.html)</span>
+<span style="float:right;">[Adjunction →](Adjunction.html)</span>
 
 {% include UALib.Links.md %}
