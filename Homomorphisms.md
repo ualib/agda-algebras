@@ -16,10 +16,13 @@ This chapter presents the [Homomorphisms][] module of the [Agda Universal Algebr
 <a id="368" class="Keyword">module</a> <a id="375" href="Homomorphisms.html" class="Module">Homomorphisms</a> <a id="389" class="Keyword">where</a>
 
 <a id="396" class="Keyword">open</a> <a id="401" class="Keyword">import</a> <a id="408" href="Homomorphisms.Basic.html" class="Module">Homomorphisms.Basic</a>
-<a id="428" class="Keyword">open</a> <a id="433" class="Keyword">import</a> <a id="440" href="Homomorphisms.Noether.html" class="Module">Homomorphisms.Noether</a>
-<a id="462" class="Keyword">open</a> <a id="467" class="Keyword">import</a> <a id="474" href="Homomorphisms.Isomorphisms.html" class="Module">Homomorphisms.Isomorphisms</a>
-<a id="501" class="Keyword">open</a> <a id="506" class="Keyword">import</a> <a id="513" href="Homomorphisms.HomomorphicImages.html" class="Module">Homomorphisms.HomomorphicImages</a>
-<a id="545" class="Keyword">open</a> <a id="550" class="Keyword">import</a> <a id="557" href="Homomorphisms.Setoid.html" class="Module">Homomorphisms.Setoid</a>
+<a id="428" class="Keyword">open</a> <a id="433" class="Keyword">import</a> <a id="440" href="Homomorphisms.Properties.html" class="Module">Homomorphisms.Properties</a>
+<a id="465" class="Keyword">open</a> <a id="470" class="Keyword">import</a> <a id="477" href="Homomorphisms.Kernels.html" class="Module">Homomorphisms.Kernels</a>
+<a id="499" class="Keyword">open</a> <a id="504" class="Keyword">import</a> <a id="511" href="Homomorphisms.Products.html" class="Module">Homomorphisms.Products</a>
+<a id="534" class="Keyword">open</a> <a id="539" class="Keyword">import</a> <a id="546" href="Homomorphisms.Noether.html" class="Module">Homomorphisms.Noether</a>
+<a id="568" class="Keyword">open</a> <a id="573" class="Keyword">import</a> <a id="580" href="Homomorphisms.Isomorphisms.html" class="Module">Homomorphisms.Isomorphisms</a>
+<a id="607" class="Keyword">open</a> <a id="612" class="Keyword">import</a> <a id="619" href="Homomorphisms.HomomorphicImages.html" class="Module">Homomorphisms.HomomorphicImages</a>
+<a id="651" class="Keyword">open</a> <a id="656" class="Keyword">import</a> <a id="663" href="Homomorphisms.Func.html" class="Module">Homomorphisms.Func</a>
 
 </pre>
 

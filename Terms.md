@@ -18,7 +18,7 @@ This is the [Terms][] module of the [Agda Universal Algebra Library][].
 <a id="352" class="Keyword">open</a> <a id="357" class="Keyword">import</a> <a id="364" href="Terms.Basic.html" class="Module">Terms.Basic</a>
 <a id="376" class="Keyword">open</a> <a id="381" class="Keyword">import</a> <a id="388" href="Terms.Properties.html" class="Module">Terms.Properties</a>
 <a id="405" class="Keyword">open</a> <a id="410" class="Keyword">import</a> <a id="417" href="Terms.Operations.html" class="Module">Terms.Operations</a>
-<a id="434" class="Keyword">open</a> <a id="439" class="Keyword">import</a> <a id="446" href="Terms.Setoid.html" class="Module">Terms.Setoid</a>
+<a id="434" class="Keyword">open</a> <a id="439" class="Keyword">import</a> <a id="446" href="Terms.Func.html" class="Module">Terms.Func</a>
 
 </pre>
 

@@ -19,6 +19,7 @@ This is the [Algebras][] module of the [Agda Universal Algebra Library][] in whi
 <a id="578" class="Keyword">open</a> <a id="583" class="Keyword">import</a> <a id="590" href="Algebras.Products.html" class="Module">Algebras.Products</a>
 <a id="608" class="Keyword">open</a> <a id="613" class="Keyword">import</a> <a id="620" href="Algebras.Congruences.html" class="Module">Algebras.Congruences</a>
 <a id="641" class="Keyword">open</a> <a id="646" class="Keyword">import</a> <a id="653" href="Algebras.Setoid.html" class="Module">Algebras.Setoid</a>
+<a id="669" class="Keyword">open</a> <a id="674" class="Keyword">import</a> <a id="681" href="Algebras.Func.html" class="Module">Algebras.Func</a>
 
 </pre>
 

@@ -19,7 +19,11 @@ The source code for this module comprises the (literate) [Agda][] program that w
 
 <a id="632" class="Keyword">open</a> <a id="637" class="Keyword">import</a> <a id="644" href="Overture.Preliminaries.html" class="Module">Overture.Preliminaries</a>
 <a id="667" class="Keyword">open</a> <a id="672" class="Keyword">import</a> <a id="679" href="Overture.Inverses.html" class="Module">Overture.Inverses</a>
-<a id="697" class="Keyword">open</a> <a id="702" class="Keyword">import</a> <a id="709" href="Overture.Transformers.html" class="Module">Overture.Transformers</a>
+<a id="697" class="Keyword">open</a> <a id="702" class="Keyword">import</a> <a id="709" href="Overture.Injective.html" class="Module">Overture.Injective</a>
+<a id="728" class="Keyword">open</a> <a id="733" class="Keyword">import</a> <a id="740" href="Overture.Surjective.html" class="Module">Overture.Surjective</a>
+<a id="760" class="Keyword">open</a> <a id="765" class="Keyword">import</a> <a id="772" href="Overture.Transformers.html" class="Module">Overture.Transformers</a>
+<a id="794" class="Keyword">open</a> <a id="799" class="Keyword">import</a> <a id="806" href="Overture.Func.html" class="Module">Overture.Func</a>
+<a id="820" class="Keyword">open</a> <a id="825" class="Keyword">import</a> <a id="832" href="Overture.Setoid.html" class="Module">Overture.Setoid</a>
 
 </pre>
 

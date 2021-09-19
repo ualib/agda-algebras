@@ -18,10 +18,11 @@ Finally, in [Relations.Quotients][] we define quotient types.
 
 <a id="844" class="Keyword">module</a> <a id="851" href="Relations.html" class="Module">Relations</a> <a id="861" class="Keyword">where</a>
 
-<a id="868" class="Keyword">open</a> <a id="873" class="Keyword">import</a> <a id="880" href="Relations.Discrete.html" class="Module">Relations.Discrete</a> <a id="899" class="Keyword">public</a>
-<a id="906" class="Keyword">open</a> <a id="911" class="Keyword">import</a> <a id="918" href="Relations.Continuous.html" class="Module">Relations.Continuous</a> <a id="939" class="Keyword">public</a>
-<a id="946" class="Keyword">open</a> <a id="951" class="Keyword">import</a> <a id="958" href="Relations.Properties.html" class="Module">Relations.Properties</a> <a id="979" class="Keyword">public</a>
-<a id="986" class="Keyword">open</a> <a id="991" class="Keyword">import</a> <a id="998" href="Relations.Quotients.html" class="Module">Relations.Quotients</a> <a id="1018" class="Keyword">public</a>
+<a id="868" class="Keyword">open</a> <a id="873" class="Keyword">import</a> <a id="880" href="Relations.Discrete.html" class="Module">Relations.Discrete</a>
+<a id="899" class="Keyword">open</a> <a id="904" class="Keyword">import</a> <a id="911" href="Relations.Continuous.html" class="Module">Relations.Continuous</a>
+<a id="932" class="Keyword">open</a> <a id="937" class="Keyword">import</a> <a id="944" href="Relations.Properties.html" class="Module">Relations.Properties</a>
+<a id="965" class="Keyword">open</a> <a id="970" class="Keyword">import</a> <a id="977" href="Relations.Quotients.html" class="Module">Relations.Quotients</a>
+<a id="997" class="Keyword">open</a> <a id="1002" class="Keyword">import</a> <a id="1009" href="Relations.Func.html" class="Module">Relations.Func</a>
 
 </pre>
 

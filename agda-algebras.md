@@ -30,7 +30,7 @@ of citation.
 
 ---------------------------------------------------------------------------------
 
-(Version 2.01 of {{ "now" | date: "%d %b %Y" }})
+(Version 2.03 of {{ "now" | date: "%d %b %Y" }})
 
 **Abstract**. The [Agda Universal Algebra Library](https://ualib.github.io/agda-algebras) is a collection of types and programs (theorems and proofs) that formalizes the foundations of universal algebra in dependent type theory using the [Agda](https://wiki.portal.chalmers.se/agda/pmwiki.php) proof assistant language.
 
@@ -64,16 +64,15 @@ The following list of modules imported by the current module, [agda-algebras](ht
 <a id="3767" class="Keyword">open</a> <a id="3772" class="Keyword">import</a> <a id="3779" href="Overture.html" class="Module">Overture</a>
 <a id="3788" class="Keyword">open</a> <a id="3793" class="Keyword">import</a> <a id="3800" href="Relations.html" class="Module">Relations</a>
 <a id="3810" class="Keyword">open</a> <a id="3815" class="Keyword">import</a> <a id="3822" href="Equality.html" class="Module">Equality</a>
-<a id="3831" class="Keyword">open</a> <a id="3836" class="Keyword">import</a> <a id="3843" href="Residuation.html" class="Module">Residuation</a>
-<a id="3855" class="Keyword">open</a> <a id="3860" class="Keyword">import</a> <a id="3867" href="GaloisConnections.html" class="Module">GaloisConnections</a>
-<a id="3885" class="Keyword">open</a> <a id="3890" class="Keyword">import</a> <a id="3897" href="ClosureSystems.html" class="Module">ClosureSystems</a>
-<a id="3912" class="Keyword">open</a> <a id="3917" class="Keyword">import</a> <a id="3924" href="Algebras.html" class="Module">Algebras</a>
-<a id="3933" class="Keyword">open</a> <a id="3938" class="Keyword">import</a> <a id="3945" href="Homomorphisms.html" class="Module">Homomorphisms</a>
-<a id="3959" class="Keyword">open</a> <a id="3964" class="Keyword">import</a> <a id="3971" href="Terms.html" class="Module">Terms</a>
-<a id="3977" class="Keyword">open</a> <a id="3982" class="Keyword">import</a> <a id="3989" href="Subalgebras.html" class="Module">Subalgebras</a>
-<a id="4001" class="Keyword">open</a> <a id="4006" class="Keyword">import</a> <a id="4013" href="Varieties.html" class="Module">Varieties</a>
-<a id="4023" class="Keyword">open</a> <a id="4028" class="Keyword">import</a> <a id="4035" href="Structures.html" class="Module">Structures</a>
-<a id="4046" class="Keyword">open</a> <a id="4051" class="Keyword">import</a> <a id="4058" href="Complexity.html" class="Module">Complexity</a>
+<a id="3831" class="Keyword">open</a> <a id="3836" class="Keyword">import</a> <a id="3843" href="Adjunction.html" class="Module">Adjunction</a>
+<a id="3854" class="Keyword">open</a> <a id="3859" class="Keyword">import</a> <a id="3866" href="Algebras.html" class="Module">Algebras</a>
+<a id="3875" class="Keyword">open</a> <a id="3880" class="Keyword">import</a> <a id="3887" href="Homomorphisms.html" class="Module">Homomorphisms</a>
+<a id="3901" class="Keyword">open</a> <a id="3906" class="Keyword">import</a> <a id="3913" href="Terms.html" class="Module">Terms</a>
+<a id="3919" class="Keyword">open</a> <a id="3924" class="Keyword">import</a> <a id="3931" href="Subalgebras.html" class="Module">Subalgebras</a>
+<a id="3943" class="Keyword">open</a> <a id="3948" class="Keyword">import</a> <a id="3955" href="Varieties.html" class="Module">Varieties</a>
+<a id="3965" class="Keyword">open</a> <a id="3970" class="Keyword">import</a> <a id="3977" href="Structures.html" class="Module">Structures</a>
+<a id="3988" class="Keyword">open</a> <a id="3993" class="Keyword">import</a> <a id="4000" href="Categories.html" class="Module">Categories</a>
+<a id="4011" class="Keyword">open</a> <a id="4016" class="Keyword">import</a> <a id="4023" href="Complexity.html" class="Module">Complexity</a>
 
 </pre>
 
