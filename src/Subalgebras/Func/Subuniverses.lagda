@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Subalgebras.Setoid.Subuniverses module (The Agda Universal Algebra Library)"
+title : "Subalgebras.Func.Subuniverses module (The Agda Universal Algebra Library)"
 date : "2021-07-11"
 author: "agda-algebras development team"
 ---
 
 #### <a id="subuniverses-of-setoid-algebras">Subuniverses of setoid algebras</a>
 
-This is the [Subalgebras.Setoid.Subuniverses][] module of the [Agda Universal Algebra Library][].
+This is the [Subalgebras.Func.Subuniverses][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
@@ -15,7 +15,7 @@ This is the [Subalgebras.Setoid.Subuniverses][] module of the [Agda Universal Al
 
 open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
-module Subalgebras.Setoid.Subuniverses {𝑆 : Signature 𝓞 𝓥} where
+module Subalgebras.Func.Subuniverses {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------------
 open import Agda.Primitive   using ( _⊔_ ; Level ) renaming ( Set to Type )
@@ -30,7 +30,7 @@ open import Relation.Binary.PropositionalEquality using ( refl )
 -- Imports from the Agda Universal Algebra Library ----------------------------------
 open import Overture.Preliminaries           using ( ∣_∣ ; ∥_∥ )
 open import Relations.Discrete               using ( Im_⊆_ )
-open import Algebras.Setoid.Basic    {𝑆 = 𝑆} using ( SetoidAlgebra ; 𝕌[_] ; _̂_ )
+open import Algebras.Func.Basic    {𝑆 = 𝑆} using ( SetoidAlgebra ; 𝕌[_] ; _̂_ )
 open import Algebras.Products        {𝑆 = 𝑆} using ( ov )
 open import Terms.Basic              {𝑆 = 𝑆} using ( Term ; ℊ ; node )
 open import Terms.Func.Basic         {𝑆 = 𝑆} using ( module Environment )
@@ -117,7 +117,7 @@ In the proof above, we assume the following typing judgments:
 
 ```
 ν  : Im a ⊆ ⋂ I 𝒜
-a  : ∥ 𝑆 ∥ f → Subalgebras.Setoid.A 𝑨
+a  : ∥ 𝑆 ∥ f → Subalgebras.Func.A 𝑨
 f  : ∣ 𝑆 ∣
 σ  : (i : I) → 𝒜 i ∈ Subuniverses 𝑨
 ```

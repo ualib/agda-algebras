@@ -17,13 +17,24 @@
 [Overture.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Overture.lagda
 [Overture.Preliminaries]: https://ualib.github.io/agda-algebras/Overture.Preliminaries.html
 [Overture.Inverses]: https://ualib.github.io/agda-algebras/Overture.Inverses.html
+[Overture.Injective]: https://ualib.github.io/agda-algebras/Overture.Injective.html
+[Overture.Surjective]: https://ualib.github.io/agda-algebras/Overture.Surjective.html
 [Overture.Transformers]: https://ualib.github.io/agda-algebras/Overture.Transformers.html
+[Overture.Func]: https://ualib.github.io/agda-algebras/Overture.Func.html
+[Overture.Func.Preliminaries]: https://ualib.github.io/agda-algebras/Overture.Func.Preliminaries.html
+[Overture.Func.Inverses]: https://ualib.github.io/agda-algebras/Overture.Func.Inverses.html
+[Overture.Func.Injective]: https://ualib.github.io/agda-algebras/Overture.Func.Injective.html
+[Overture.Func.Surjective]: https://ualib.github.io/agda-algebras/Overture.Func.Surjective.html
+[Overture.Func.Bijective]: https://ualib.github.io/agda-algebras/Overture.Func.Bijective.html
 
 [Relations]: https://ualib.github.io/agda-algebras/Relations.html
 [Relations.Discrete]: https://ualib.github.io/agda-algebras/Relations.Discrete.html
 [Relations.Continuous]: https://ualib.github.io/agda-algebras/Relations.Continuous.html
 [Relations.Properties]: https://ualib.github.io/agda-algebras/Relations.Properties.html
 [Relations.Quotients]: https://ualib.github.io/agda-algebras/Relations.Quotients.html
+[Relations.Func]: https://ualib.github.io/agda-algebras/Relations.Func.html
+[Relations.Func.Discrete]: https://ualib.github.io/agda-algebras/Relations.Func.Discrete.html
+[Relations.Func.Quotients]: https://ualib.github.io/agda-algebras/Relations.Quotients.html
 
 [Equality]: https://ualib.github.io/agda-algebras/Equality.html
 [Equality.Extensionality]: https://ualib.github.io/agda-algebras/Equality.Extensionality.html
@@ -40,10 +51,10 @@
 [Algebras.Products]: https://ualib.github.io/agda-algebras/Algebras.Products.html
 [Algebras.Congruences]: https://ualib.github.io/agda-algebras/Algebras.Congruences.html
 
-[Algebras.Setoid]: https://ualib.github.io/agda-algebras/Algebras.Setoid.html
-[Algebras.Setoid.Basic]: https://ualib.github.io/agda-algebras/Algebras.Setoid.Basic.html
-[Algebras.Setoid.Congruences]: https://ualib.github.io/agda-algebras/Algebras.Setoid.Congruences.html
-[Algebras.Setoid.Products]: https://ualib.github.io/agda-algebras/Algebras.Setoid.Products.html
+[Algebras.Func]: https://ualib.github.io/agda-algebras/Algebras.Func.html
+[Algebras.Func.Basic]: https://ualib.github.io/agda-algebras/Algebras.Func.Basic.html
+[Algebras.Func.Congruences]: https://ualib.github.io/agda-algebras/Algebras.Func.Congruences.html
+[Algebras.Func.Products]: https://ualib.github.io/agda-algebras/Algebras.Func.Products.html
 
 [Complexity]: https://ualib.github.io/agda-algebras/Complexity.html
 [Complexity.Basic]: https://ualib.github.io/agda-algebras/Complexity.Basic.html
@@ -59,11 +70,11 @@
 [Homomorphisms.Isomorphisms]: https://ualib.github.io/agda-algebras/Homomorphisms.Isomorphisms.html
 [Homomorphisms.HomomorphicImages]: https://ualib.github.io/agda-algebras/Homomorphisms.HomomorphicImages.html
 
-[Homomorphisms.Setoid]: https://ualib.github.io/agda-algebras/Homomorphisms.Setoid.html
-[Homomorphisms.Setoid.Basic]: https://ualib.github.io/agda-algebras/Homomorphisms.Setoid.Basic.html
-[Homomorphisms.Setoid.HomomorphicImages]: https://ualib.github.io/agda-algebras/Homomorphisms.Setoid.HomomorphicImages.html
-[Homomorphisms.Setoid.Isomorphisms]: https://ualib.github.io/agda-algebras/Homomorphisms.Setoid.Isomorphisms.html
-[Homomorphisms.Setoid.Noether]: https://ualib.github.io/agda-algebras/Homomorphisms.Setoid.Noether.html
+[Homomorphisms.Func]: https://ualib.github.io/agda-algebras/Homomorphisms.Func.html
+[Homomorphisms.Func.Basic]: https://ualib.github.io/agda-algebras/Homomorphisms.Func.Basic.html
+[Homomorphisms.Func.HomomorphicImages]: https://ualib.github.io/agda-algebras/Homomorphisms.Func.HomomorphicImages.html
+[Homomorphisms.Func.Isomorphisms]: https://ualib.github.io/agda-algebras/Homomorphisms.Func.Isomorphisms.html
+[Homomorphisms.Func.Noether]: https://ualib.github.io/agda-algebras/Homomorphisms.Func.Noether.html
 
 [Terms]: https://ualib.github.io/agda-algebras/Terms.html
 [Terms.Basic]: https://ualib.github.io/agda-algebras/Terms.Basic.html
@@ -74,19 +85,19 @@
 [Terms.Operations]: https://ualib.github.io/agda-algebras/Terms.Operations.html
 [Terms.Properties]: https://ualib.github.io/agda-algebras/Terms.Properties.html
 
-[Terms.Setoid]: https://ualib.github.io/agda-algebras/Terms.Setoid.html
-[Terms.Setoid.Basic]: https://ualib.github.io/agda-algebras/Terms.Setoid.Basic.html
-[Terms.Setoid.Properties]: https://ualib.github.io/agda-algebras/Terms.Setoid.Properties.html
+[Terms.Func]: https://ualib.github.io/agda-algebras/Terms.Func.html
+[Terms.Func.Basic]: https://ualib.github.io/agda-algebras/Terms.Func.Basic.html
+[Terms.Func.Properties]: https://ualib.github.io/agda-algebras/Terms.Func.Properties.html
 
 [Subalgebras]: https://ualib.github.io/agda-algebras/Subalgebras.html
 [Subalgebras.Properties]: https://ualib.github.io/agda-algebras/Subalgebras.Properties.html
 [Subalgebras.Subalgebras]: https://ualib.github.io/agda-algebras/Subalgebras.Subalgebras.html
 [Subalgebras.Subuniverses]: https://ualib.github.io/agda-algebras/Subalgebras.Subuniverses.html
 
-[Subalgebras.Setoid]: https://ualib.github.io/agda-algebras/Subalgebras.Setoid.html
-[Subalgebras.Setoid.Properties]: https://ualib.github.io/agda-algebras/Subalgebras.Setoid.Properties.html
-[Subalgebras.Setoid.Subalgebras]: https://ualib.github.io/agda-algebras/Subalgebras.Setoid.Subalgebras.html
-[Subalgebras.Setoid.Subuniverses]: https://ualib.github.io/agda-algebras/Subalgebras.Setoid.Subuniverses.html
+[Subalgebras.Func]: https://ualib.github.io/agda-algebras/Subalgebras.Func.html
+[Subalgebras.Func.Properties]: https://ualib.github.io/agda-algebras/Subalgebras.Func.Properties.html
+[Subalgebras.Func.Subalgebras]: https://ualib.github.io/agda-algebras/Subalgebras.Func.Subalgebras.html
+[Subalgebras.Func.Subuniverses]: https://ualib.github.io/agda-algebras/Subalgebras.Func.Subuniverses.html
 
 [Varieties]: https://ualib.github.io/agda-algebras/Varieties.html
 [Varieties.Closure]: https://ualib.github.io/agda-algebras/Varieties.Closure.html
@@ -96,10 +107,10 @@
 [Varieties.Preservation]: https://ualib.github.io/agda-algebras/Varieties.Preservation.html
 [Varieties.Properties]: https://ualib.github.io/agda-algebras/Varieties.Properties.html
 
-[Varieties.Setoid]: https://ualib.github.io/agda-algebras/Varieties.Setoid.html
-[Varieties.Setoid.Closure]: https://ualib.github.io/agda-algebras/Varieties.Setoid.Closure.html
-[Varieties.Setoid.EquationalLogic]: https://ualib.github.io/agda-algebras/Varieties.Setoid.EquationalLogic.html
-[Varieties.Setoid.FreeAlgebras]: https://ualib.github.io/agda-algebras/Varieties.Setoid.FreeAlgebras.html
+[Varieties.Func]: https://ualib.github.io/agda-algebras/Varieties.Func.html
+[Varieties.Func.Closure]: https://ualib.github.io/agda-algebras/Varieties.Func.Closure.html
+[Varieties.Func.EquationalLogic]: https://ualib.github.io/agda-algebras/Varieties.Func.EquationalLogic.html
+[Varieties.Func.FreeAlgebras]: https://ualib.github.io/agda-algebras/Varieties.Func.FreeAlgebras.html
 
 [Structures]: https://ualib.github.io/agda-algebras/Structures.html
 [Structures.Graphs]: https://ualib.github.io/agda-algebras/Structures.Graphs.html
