@@ -115,16 +115,12 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} {𝑪 : Setoid γ ρ�
 id-is-injective : {𝑨 : Setoid α ρᵃ} → IsInjective{𝑨 = 𝑨}{𝑨} 𝑖𝑑
 id-is-injective = id
 
-
-
-
 \end{code}
-
 
 --------------------------------------
 
-<span style="float:left;">[← Overture.Setoid.Inverses](Overture.Func.Inverses.html)</span>
-<span style="float:right;">[Overture.Setoid.Surjective →](Overture.Func.Surjective.html)</span>
+<span style="float:left;">[← Overture.Func.Inverses](Overture.Func.Inverses.html)</span>
+<span style="float:right;">[Overture.Func.Surjective →](Overture.Func.Surjective.html)</span>
 
 {% include UALib.Links.md %}
 

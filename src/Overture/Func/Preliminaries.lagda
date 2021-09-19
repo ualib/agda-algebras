@@ -75,8 +75,8 @@ module _ {𝑨 : Setoid α ρᵃ} where
 
 --------------------------------------
 
-<span style="float:left;">[↑ Overture.Setoid](Overture.Setoid.html)</span>
-<span style="float:right;">[Overture.Setoid.Inverses →](Overture.Setoid.Inverses.html)</span>
+<span style="float:left;">[↑ Overture.Func](Overture.Func.html)</span>
+<span style="float:right;">[Overture.Func.Inverses →](Overture.Func.Inverses.html)</span>
 
 {% include UALib.Links.md %}
 

@@ -118,7 +118,7 @@ module _ (𝑨 : SetoidAlgebra α ρ) where
 
 --------------------------------------
 
-<span style="float:left;">[← Algebras.Setoid.Products](Algebras.Setoid.Products.html)</span>
+<span style="float:left;">[← Algebras.Func.Products](Algebras.Func.Products.html)</span>
 <span style="float:right;">[Homomorphisms →](Homomorphisms.html)</span>
 
 {% include UALib.Links.md %}

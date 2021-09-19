@@ -248,6 +248,6 @@ subst-theorem wd p q σ 𝑨 Apq η = (𝑨 ⟦ p [ σ ] ⟧) η ≡⟨ subst-le
 ----------------------------------
 
 <span style="float:left;">[← Terms.Properties](Terms.Properties.html)</span>
-<span style="float:right;">[Terms.Setoid →](Terms.Setoid.html)</span>
+<span style="float:right;">[Terms.Func →](Terms.Func.html)</span>
 
 {% include UALib.Links.md %}

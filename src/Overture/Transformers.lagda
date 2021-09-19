@@ -174,7 +174,7 @@ module _ {A : Type α} {B : Type β} where
 --------------------------------------
 
 <span style="float:left;">[← Overture.Inverses](Overture.Inverses.html)</span>
-<span style="float:right;">[Overture.Setoid →](Overture.Setoid.html)</span>
+<span style="float:right;">[Overture.Func →](Overture.Func.html)</span>
 
 {% include UALib.Links.md %}
 
