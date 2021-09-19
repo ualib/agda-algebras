@@ -18,13 +18,13 @@ This is the [Subalgebras][] module of the [Agda Universal Algebra Library][].
 <a id="372" class="Keyword">open</a> <a id="377" class="Keyword">import</a> <a id="384" href="Subalgebras.Subuniverses.html" class="Module">Subalgebras.Subuniverses</a>
 <a id="409" class="Keyword">open</a> <a id="414" class="Keyword">import</a> <a id="421" href="Subalgebras.Subalgebras.html" class="Module">Subalgebras.Subalgebras</a>
 <a id="445" class="Keyword">open</a> <a id="450" class="Keyword">import</a> <a id="457" href="Subalgebras.Properties.html" class="Module">Subalgebras.Properties</a>
-<a id="480" class="Keyword">open</a> <a id="485" class="Keyword">import</a> <a id="492" href="Subalgebras.Setoid.html" class="Module">Subalgebras.Setoid</a>
+<a id="480" class="Keyword">open</a> <a id="485" class="Keyword">import</a> <a id="492" href="Subalgebras.Func.html" class="Module">Subalgebras.Func</a>
 
 </pre>
 
 --------------------------------------
 
-<span style="float:left;">[← Terms.Setoid.Properties](Terms.Setoid.Properties.html)</span>
+<span style="float:left;">[← Terms.Func.Properties](Terms.Func.Properties.html)</span>
 <span style="float:right;">[Subalgebras.Subuniverses →](Subalgebras.Subuniverses.html)</span>
 
 {% include UALib.Links.md %}

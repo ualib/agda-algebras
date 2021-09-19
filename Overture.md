@@ -23,7 +23,6 @@ The source code for this module comprises the (literate) [Agda][] program that w
 <a id="728" class="Keyword">open</a> <a id="733" class="Keyword">import</a> <a id="740" href="Overture.Surjective.html" class="Module">Overture.Surjective</a>
 <a id="760" class="Keyword">open</a> <a id="765" class="Keyword">import</a> <a id="772" href="Overture.Transformers.html" class="Module">Overture.Transformers</a>
 <a id="794" class="Keyword">open</a> <a id="799" class="Keyword">import</a> <a id="806" href="Overture.Func.html" class="Module">Overture.Func</a>
-<a id="820" class="Keyword">open</a> <a id="825" class="Keyword">import</a> <a id="832" href="Overture.Setoid.html" class="Module">Overture.Setoid</a>
 
 </pre>
 

@@ -20,13 +20,13 @@ This is the [Varieties][] module of the [Agda Universal Algebra Library][], wher
 <a id="563" class="Keyword">open</a> <a id="568" class="Keyword">import</a> <a id="575" href="Varieties.Properties.html" class="Module">Varieties.Properties</a>
 <a id="596" class="Keyword">open</a> <a id="601" class="Keyword">import</a> <a id="608" href="Varieties.Preservation.html" class="Module">Varieties.Preservation</a>
 <a id="631" class="Keyword">open</a> <a id="636" class="Keyword">import</a> <a id="643" href="Varieties.FreeAlgebras.html" class="Module">Varieties.FreeAlgebras</a>
-<a id="666" class="Keyword">open</a> <a id="671" class="Keyword">import</a> <a id="678" href="Varieties.Setoid.html" class="Module">Varieties.Setoid</a>
+<a id="666" class="Keyword">open</a> <a id="671" class="Keyword">import</a> <a id="678" href="Varieties.Func.html" class="Module">Varieties.Func</a>
 
 </pre>
 
 ---------------------------------
 
-<span style="float:left;">[← Subalgebras.Setoid.Properties](Subalgebras.Setoid.Properties.html)</span>
+<span style="float:left;">[← Subalgebras.Func.Properties](Subalgebras.Func.Properties.html)</span>
 <span style="float:right;">[Varieties.EquationalLogic →](Varieties.EquationalLogic.html)</span>
 
 {% include UALib.Links.md %}

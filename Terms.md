@@ -24,7 +24,7 @@ This is the [Terms][] module of the [Agda Universal Algebra Library][].
 
 -------------------------------------
 
-<span style="float:left;">[← Homomorphisms.Setoid.HomomorphicImages](Homomorphisms.Setoid.HomomorphicImages.html)</span>
+<span style="float:left;">[← Homomorphisms.Func.HomomorphicImages](Homomorphisms.Func.HomomorphicImages.html)</span>
 <span style="float:right;">[Terms.Basic →](Terms.Basic.html)</span>
 
 {% include UALib.Links.md %}
