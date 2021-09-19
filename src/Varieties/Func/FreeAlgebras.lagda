@@ -1,6 +1,6 @@
 ---
 layout: default
-title : "Varieties.Setoid.FreeAlgebras module (Agda Universal Algebra Library)"
+title : "Varieties.Func.FreeAlgebras module (Agda Universal Algebra Library)"
 date : "2021-06-29"
 author: "agda-algebras development team"
 ---
@@ -13,7 +13,7 @@ author: "agda-algebras development team"
 
 open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
-module Varieties.Setoid.FreeAlgebras {𝑆 : Signature 𝓞 𝓥} where
+module Varieties.Func.FreeAlgebras {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ------------------------------------------------
 open import Agda.Primitive   using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
@@ -32,7 +32,7 @@ open import Algebras.Func.Basic              {𝑆 = 𝑆} using ( SetoidAlgebra
 open import Homomorphisms.Func.Basic         {𝑆 = 𝑆} using ( hom ; epi ; IsEpi ; IsHom ; epi-to-hom )
 open import Terms.Basic                      {𝑆 = 𝑆} using ( Term )
 open import Terms.Func.Basic                 {𝑆 = 𝑆} using ( 𝑻 ; _≐_ ; module Environment )
-open import Varieties.Setoid.EquationalLogic {𝑆 = 𝑆} using ( Eq ; _⊫_ ; module FreeAlgebra )
+open import Varieties.Func.EquationalLogic {𝑆 = 𝑆} using ( Eq ; _⊫_ ; module FreeAlgebra )
 private variable
  α χ ρ ℓ : Level
 
@@ -97,7 +97,7 @@ To be continued...
 
 --------------------------------
 
-<span style="float:left;">[← Varieties.Setoid.Closure](Varieties.Setoid.Closure.html)</span>
+<span style="float:left;">[← Varieties.Func.Closure](Varieties.Func.Closure.html)</span>
 <span style="float:right;">[Structures →](Structures.html)</span>
 
 {% include UALib.Links.md %}

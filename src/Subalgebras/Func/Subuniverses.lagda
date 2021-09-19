@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Subalgebras.Setoid.Subuniverses module (The Agda Universal Algebra Library)"
+title : "Subalgebras.Func.Subuniverses module (The Agda Universal Algebra Library)"
 date : "2021-07-11"
 author: "agda-algebras development team"
 ---
 
 #### <a id="subuniverses-of-setoid-algebras">Subuniverses of setoid algebras</a>
 
-This is the [Subalgebras.Setoid.Subuniverses][] module of the [Agda Universal Algebra Library][].
+This is the [Subalgebras.Func.Subuniverses][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
@@ -15,7 +15,7 @@ This is the [Subalgebras.Setoid.Subuniverses][] module of the [Agda Universal Al
 
 open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
-module Subalgebras.Setoid.Subuniverses {𝑆 : Signature 𝓞 𝓥} where
+module Subalgebras.Func.Subuniverses {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------------
 open import Agda.Primitive   using ( _⊔_ ; Level ) renaming ( Set to Type )
@@ -116,7 +116,7 @@ In the proof above, we assume the following typing judgments:
 
 ```
 ν  : Im a ⊆ ⋂ I 𝒜
-a  : ∥ 𝑆 ∥ f → Subalgebras.Setoid.A 𝑨
+a  : ∥ 𝑆 ∥ f → Subalgebras.Func.A 𝑨
 f  : ∣ 𝑆 ∣
 σ  : (i : I) → 𝒜 i ∈ Subuniverses 𝑨
 ```
@@ -238,7 +238,7 @@ and, under these assumptions, we proved `g ((f ̂ 𝑨) a) ≈ h ((f ̂ 𝑨) a)
 
 ---------------------------------
 
-<span style="float:left;">[↑ Subalgebras.Setoid](Subalgebras.Setoid.html)</span>
-<span style="float:right;">[Subalgebras.Setoid.Subalgebras →](Subalgebras.Setoid.Subalgebras.html)</span>
+<span style="float:left;">[↑ Subalgebras.Func](Subalgebras.Func.html)</span>
+<span style="float:right;">[Subalgebras.Func.Subalgebras →](Subalgebras.Func.Subalgebras.html)</span>
 
 {% include UALib.Links.md %}

@@ -18,13 +18,13 @@ module Subalgebras where
 open import Subalgebras.Subuniverses
 open import Subalgebras.Subalgebras
 open import Subalgebras.Properties
-open import Subalgebras.Setoid
+open import Subalgebras.Func
 
 \end{code}
 
 --------------------------------------
 
-<span style="float:left;">[← Terms.Setoid.Properties](Terms.Setoid.Properties.html)</span>
+<span style="float:left;">[← Terms.Func.Properties](Terms.Func.Properties.html)</span>
 <span style="float:right;">[Subalgebras.Subuniverses →](Subalgebras.Subuniverses.html)</span>
 
 {% include UALib.Links.md %}

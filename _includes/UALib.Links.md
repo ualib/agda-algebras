@@ -17,13 +17,24 @@
 [Overture.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Overture.lagda
 [Overture.Preliminaries]: https://ualib.github.io/agda-algebras/Overture.Preliminaries.html
 [Overture.Inverses]: https://ualib.github.io/agda-algebras/Overture.Inverses.html
+[Overture.Injective]: https://ualib.github.io/agda-algebras/Overture.Injective.html
+[Overture.Surjective]: https://ualib.github.io/agda-algebras/Overture.Surjective.html
 [Overture.Transformers]: https://ualib.github.io/agda-algebras/Overture.Transformers.html
+[Overture.Func]: https://ualib.github.io/agda-algebras/Overture.Func.html
+[Overture.Func.Preliminaries]: https://ualib.github.io/agda-algebras/Overture.Func.Preliminaries.html
+[Overture.Func.Inverses]: https://ualib.github.io/agda-algebras/Overture.Func.Inverses.html
+[Overture.Func.Injective]: https://ualib.github.io/agda-algebras/Overture.Func.Injective.html
+[Overture.Func.Surjective]: https://ualib.github.io/agda-algebras/Overture.Func.Surjective.html
+[Overture.Func.Bijective]: https://ualib.github.io/agda-algebras/Overture.Func.Bijective.html
 
 [Relations]: https://ualib.github.io/agda-algebras/Relations.html
 [Relations.Discrete]: https://ualib.github.io/agda-algebras/Relations.Discrete.html
 [Relations.Continuous]: https://ualib.github.io/agda-algebras/Relations.Continuous.html
 [Relations.Properties]: https://ualib.github.io/agda-algebras/Relations.Properties.html
 [Relations.Quotients]: https://ualib.github.io/agda-algebras/Relations.Quotients.html
+[Relations.Func]: https://ualib.github.io/agda-algebras/Relations.Func.html
+[Relations.Func.Discrete]: https://ualib.github.io/agda-algebras/Relations.Func.Discrete.html
+[Relations.Func.Quotients]: https://ualib.github.io/agda-algebras/Relations.Quotients.html
 
 [Equality]: https://ualib.github.io/agda-algebras/Equality.html
 [Equality.Extensionality]: https://ualib.github.io/agda-algebras/Equality.Extensionality.html

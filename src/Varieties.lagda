@@ -20,13 +20,13 @@ open import Varieties.Closure
 open import Varieties.Properties
 open import Varieties.Preservation
 open import Varieties.FreeAlgebras
-open import Varieties.Setoid
+open import Varieties.Func
 
 \end{code}
 
 ---------------------------------
 
-<span style="float:left;">[← Subalgebras.Setoid.Properties](Subalgebras.Setoid.Properties.html)</span>
+<span style="float:left;">[← Subalgebras.Func.Properties](Subalgebras.Func.Properties.html)</span>
 <span style="float:right;">[Varieties.EquationalLogic →](Varieties.EquationalLogic.html)</span>
 
 {% include UALib.Links.md %}

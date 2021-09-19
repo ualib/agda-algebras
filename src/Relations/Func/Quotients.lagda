@@ -15,24 +15,21 @@ This is the [Relations.Func.Quotients][] module of the [Agda Universal Algebra L
 
 module Relations.Func.Quotients where
 
--- Imports from Agda and the Agda Standard Library  ----------------------------------------------
-open import Data.Product    using ( _,_ ; Σ-syntax ) renaming ( _×_ to _∧_ ; proj₁ to fst ; proj₂ to snd )
-open import Agda.Primitive  using ( _⊔_ ; Level ; lsuc ) renaming ( Set to Type )
-open import Level           using ()
-open import Function      using ( id )
-open import Function.Bundles        using ( Func )
-open import Relation.Binary using ( IsEquivalence ; IsPartialEquivalence) renaming ( Rel to BinRel )
-open import Relation.Unary  using ( Pred ; _⊆_ ; _∈_ )
-open import Relation.Binary using ( Setoid )
-open import Relation.Binary.PropositionalEquality as PE
-                            using ( _≡_ )
+-- Imports from Agda and the Agda Standard Library  -------------------------------
+open import Agda.Primitive   using ( _⊔_ ; Level ; lsuc ) renaming ( Set to Type )
+open import Data.Product     using ( _,_ ; Σ-syntax ) renaming ( _×_ to _∧_ )
+open import Function         using ( id )
+open import Function.Bundles using ( Func )
+open import Relation.Binary  using ( IsEquivalence ) renaming ( Rel to BinRel )
+open import Relation.Unary   using ( Pred ; _∈_ ; _⊆_ )
+open import Relation.Binary  using ( Setoid )
+open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
 
--- Imports from agda-algebras ---------------------------------------------------------------------
-open import Overture.Preliminaries  using  ( ∣_∣ ; ∥_∥ )
-open import Overture.Func.Preliminaries  using  ( _⟶_ )
-open import Relations.Func.Discrete      using  ( fker ; 0rel ; fkerlift )
-open import Relations.Properties       using  ( Reflexive ; Symmetric ; Transitive )
-open import Relations.Quotients      using  ( Equivalence ; [_] )
+-- Imports from agda-algebras -----------------------------------------------------
+open import Overture.Preliminaries      using ( ∣_∣ ; ∥_∥ )
+open import Overture.Func.Preliminaries using ( _⟶_ )
+open import Relations.Func.Discrete     using ( fker )
+open import Relations.Quotients         using ( [_] ; Equivalence )
 
 private variable
  α β ρᵃ ρᵇ ℓ : Level
@@ -100,7 +97,7 @@ module _ {A : Type α}{R : Equivalence A{ℓ} } where
  ⟪ u ∼ v ⟫-elim = id
 
 ≡→⊆ : {A : Type α}{ρ : Level}(Q R : Pred A ρ) → Q ≡ R → Q ⊆ R
-≡→⊆ Q .Q PE.refl {x} Qx = Qx
+≡→⊆ Q .Q ≡.refl {x} Qx = Qx
 
 \end{code}
 
