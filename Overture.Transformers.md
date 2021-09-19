@@ -174,7 +174,7 @@ function types, `(Fin 2 → A) → B` and `A × A → B`, nor between the types
 --------------------------------------
 
 <span style="float:left;">[← Overture.Inverses](Overture.Inverses.html)</span>
-<span style="float:right;">[Overture.Setoid →](Overture.Setoid.html)</span>
+<span style="float:right;">[Overture.Func →](Overture.Func.html)</span>
 
 {% include UALib.Links.md %}
 

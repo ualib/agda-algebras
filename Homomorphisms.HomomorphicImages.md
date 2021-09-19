@@ -125,6 +125,6 @@ Here are some tools that have been useful (e.g., in the road to the proof of Bir
 --------------------------------------
 
 <span style="float:left;">[← Homomorphisms.Isomorphisms](Homomorphisms.Isomorphisms.html)</span>
-<span style="float:right;">[Homomorphisms.Setoid →](Homomorphisms.Setoid.html)</span>
+<span style="float:right;">[Homomorphisms.Func →](Homomorphisms.Func.html)</span>
 
 {% include UALib.Links.md %}

@@ -176,6 +176,6 @@ These are essentially equivalent variations on the following obvious fact: If tw
 ---------------------------------
 
 <span style="float:left;">[← Subalgebras.Subalgebras](Subalgebras.Subalgebras.html)</span>
-<span style="float:right;">[Subalgebras.Setoid →](Subalgebras.Setoid.html)</span>
+<span style="float:right;">[Subalgebras.Func →](Subalgebras.Func.html)</span>
 
 {% include UALib.Links.md %}

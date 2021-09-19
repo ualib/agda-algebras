@@ -28,7 +28,7 @@ This chapter presents the [Homomorphisms][] module of the [Agda Universal Algebr
 
 --------------------------------------
 
-<span style="float:left;">[← Algebras.Setoid.Congruences](Algebras.Setoid.Congruences.html)</span>
+<span style="float:left;">[← Algebras.Func.Congruences](Algebras.Func.Congruences.html)</span>
 <span style="float:right;">[Homomorphisms.Basic →](Homomorphisms.Basic.html)</span>
 
 {% include UALib.Links.md %}

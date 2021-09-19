@@ -115,16 +115,12 @@ We can prove that, when `f` is injective, the range-restricted right-inverse `In
 <a id="id-is-injective"></a><a id="4076" href="Overture.Func.Injective.html#4076" class="Function">id-is-injective</a> <a id="4092" class="Symbol">:</a> <a id="4094" class="Symbol">{</a><a id="4095" href="Overture.Func.Injective.html#4095" class="Bound">𝑨</a> <a id="4097" class="Symbol">:</a> <a id="4099" href="Relation.Binary.Bundles.html#1009" class="Record">Setoid</a> <a id="4106" href="Overture.Func.Injective.html#1322" class="Generalizable">α</a> <a id="4108" href="Overture.Func.Injective.html#1328" class="Generalizable">ρᵃ</a><a id="4110" class="Symbol">}</a> <a id="4112" class="Symbol">→</a> <a id="4114" href="Overture.Func.Injective.html#1904" class="Function">IsInjective</a><a id="4125" class="Symbol">{</a><a id="4126" class="Argument">𝑨</a> <a id="4128" class="Symbol">=</a> <a id="4130" href="Overture.Func.Injective.html#4095" class="Bound">𝑨</a><a id="4131" class="Symbol">}{</a><a id="4133" href="Overture.Func.Injective.html#4095" class="Bound">𝑨</a><a id="4134" class="Symbol">}</a> <a id="4136" href="Overture.Func.Preliminaries.html#862" class="Function">𝑖𝑑</a>
 <a id="4139" href="Overture.Func.Injective.html#4076" class="Function">id-is-injective</a> <a id="4155" class="Symbol">=</a> <a id="4157" href="Function.Base.html#615" class="Function">id</a>
 
-
-
-
 </pre>
-
 
 --------------------------------------
 
-<span style="float:left;">[← Overture.Setoid.Inverses](Overture.Func.Inverses.html)</span>
-<span style="float:right;">[Overture.Setoid.Surjective →](Overture.Func.Surjective.html)</span>
+<span style="float:left;">[← Overture.Func.Inverses](Overture.Func.Inverses.html)</span>
+<span style="float:right;">[Overture.Func.Surjective →](Overture.Func.Surjective.html)</span>
 
 {% include UALib.Links.md %}
 

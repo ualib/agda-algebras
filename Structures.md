@@ -31,7 +31,7 @@ This is the [Structures][] module of the [Agda Universal Algebra Library][].
 
 --------------------------------
 
-<span style="float:left;">[← Varieties.Setoid.FreeAlgebras](Varieties.Setoid.FreeAlgebras.html)</span>
+<span style="float:left;">[← Varieties.Func.FreeAlgebras](Varieties.Func.FreeAlgebras.html)</span>
 <span style="float:right;">[Structures.Basic →](Structures.Basic.html)</span>
 
 {% include UALib.Links.md %}

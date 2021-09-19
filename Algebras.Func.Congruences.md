@@ -118,7 +118,7 @@ In many areas of abstract mathematics the *quotient* of an algebra `𝑨` with r
 
 --------------------------------------
 
-<span style="float:left;">[← Algebras.Setoid.Products](Algebras.Setoid.Products.html)</span>
+<span style="float:left;">[← Algebras.Func.Products](Algebras.Func.Products.html)</span>
 <span style="float:right;">[Homomorphisms →](Homomorphisms.html)</span>
 
 {% include UALib.Links.md %}

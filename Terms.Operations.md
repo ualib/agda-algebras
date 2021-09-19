@@ -248,6 +248,6 @@ Next we prove the important Substitution Theorem which asserts that an identity 
 ----------------------------------
 
 <span style="float:left;">[← Terms.Properties](Terms.Properties.html)</span>
-<span style="float:right;">[Terms.Setoid →](Terms.Setoid.html)</span>
+<span style="float:right;">[Terms.Func →](Terms.Func.html)</span>
 
 {% include UALib.Links.md %}
