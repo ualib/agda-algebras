@@ -24,7 +24,7 @@ open import Equality.Extensionality public
 
 -------------------------------------
 
-<span style="float:left;">[← Relations.Quotients](Relations.Quotients.html)</span>
+<span style="float:left;">[← Relations.Func.Quotients](Relations.Func.Quotients.html)</span>
 <span style="float:right;">[Equality.Welldefined →](Equality.Welldefined.html)</span>
 
 {% include UALib.Links.md %}

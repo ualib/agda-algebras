@@ -182,7 +182,7 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ}
 
 --------------------------------------
 
-<span style="float:left;">[← Homomorphisms.Func.Isomoprhisms](Homomorphisms.Func.Isomoprhisms.html)</span>
+<span style="float:left;">[← Homomorphisms.Func.Isomorphisms](Homomorphisms.Func.Isomorphisms.html)</span>
 <span style="float:right;">[Terms →](Terms.html)</span>
 
 {% include UALib.Links.md %}

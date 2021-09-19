@@ -24,7 +24,7 @@ open import Algebras.Func
 
 -------------------------------------
 
-<span style="float:left;">[← ClosureSystems.Properties](ClosureSystems.Properties.html)</span>
+<span style="float:left;">[← Adjunction.Residuation](Adjunction.Residuation.html)</span>
 <span style="float:right;">[Algebras.Basic →](Algebras.Basic.html)</span>
 
 {% include UALib.Links.md %}
