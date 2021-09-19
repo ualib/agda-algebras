@@ -27,6 +27,6 @@ open import Homomorphisms.Func.HomomorphicImages
 --------------------------------
 
 <span style="float:left;">[← Homomorphisms.HomomorphicImages](Homomorphisms.HomomorphicImages.html)</span>
-<span style="float:right;">[Homomorphisms.Setoid.Basic →](Homomorphisms.Setoid.Basic.html)</span>
+<span style="float:right;">[Homomorphisms.Func.Basic →](Homomorphisms.Func.Basic.html)</span>
 
 {% include UALib.Links.md %}
