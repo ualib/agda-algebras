@@ -28,7 +28,7 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ )
 -- Imports from the Agda Universal Algebra Library ------------------------------------------
 open import Overture.Preliminaries           using ( ∣_∣ )
 open import Overture.Func.Preliminaries      using ( _⟶_ ; _∘_ ; 𝑖𝑑 )
-open import Algebras.Setoid.Basic    {𝑆 = 𝑆} using ( SetoidAlgebra ; _̂_ ; Lift-Alg ; 𝕌[_] )
+open import Algebras.Func.Basic      {𝑆 = 𝑆} using ( SetoidAlgebra ; _̂_ ; Lift-Alg ; 𝕌[_] )
 open import Homomorphisms.Func.Basic {𝑆 = 𝑆} using ( IsHom ; compatible-map ; ≈preserving ; hom )
 
 private variable

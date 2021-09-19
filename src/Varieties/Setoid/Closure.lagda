@@ -23,17 +23,15 @@ module Varieties.Setoid.Closure {𝑆 : Signature 𝓞 𝓥} where
 
 -- imports from Agda and the Agda Standard Library -------------------------------------------
 open import Agda.Primitive using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
-open import Axiom.Extensionality.Propositional renaming ( Extensionality to funext ) using () 
-open import Data.Product   using ( _,_ ; Σ-syntax ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Relation.Unary using ( Pred  ; _∈_ ; _⊆_ )
+open import Data.Product   using ( _,_ ; Σ-syntax )
+open import Relation.Unary using ( Pred ; _∈_ ; _⊆_ )
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
-open import Overture.Preliminaries                  using ( ∣_∣ ; ∥_∥ )
-open import Algebras.Setoid.Products        {𝑆 = 𝑆} using ( ⨅ )
-open import Algebras.Setoid.Basic           {𝑆 = 𝑆} using ( SetoidAlgebra ; ov )
-open import Homomorphisms.Func.Isomorphisms{𝑆 = 𝑆}using ( _≅_ ; ≅-sym ; Lift-≅ ; ≅-trans ; ≅-refl )
-open import Homomorphisms.Func.HomomorphicImages{𝑆 = 𝑆}using ( HomImages )
-open import Subalgebras.Setoid.Subalgebras  {𝑆 = 𝑆} using (_≤_ ; _IsSubalgebraOfClass_ ; Subalgebra )
+open import Algebras.Func.Products               {𝑆 = 𝑆} using ( ⨅ )
+open import Algebras.Func.Basic                  {𝑆 = 𝑆} using ( SetoidAlgebra ; ov )
+open import Homomorphisms.Func.Isomorphisms      {𝑆 = 𝑆} using ( _≅_ )
+open import Homomorphisms.Func.HomomorphicImages {𝑆 = 𝑆} using ( HomImages )
+open import Subalgebras.Setoid.Subalgebras       {𝑆 = 𝑆} using ( _≤_ )
 
 -- The inductive type H
 data H {α ρ : Level} (𝒦 : Pred (SetoidAlgebra α ρ)(ov α)) : Pred (SetoidAlgebra α ρ) (ov(α ⊔ ρ))

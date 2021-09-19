@@ -27,11 +27,11 @@ open import Relation.Binary.PropositionalEquality
                                   using ( refl )
 
 -- Imports from the Agda Universal Algebras Library ------------------------------
-open import Overture.Preliminaries        using ( ∣_∣  ; ∥_∥  )
-open import Relations.Discrete            using ( 0[_] ; _|:_ )
-open import Algebras.Setoid.Basic {𝑆 = 𝑆} using ( ov ; SetoidAlgebra ; 𝕌[_] ; _̂_ )
-open import Relations.Quotients      using  ( Equivalence )
-open import Relations.Func.Quotients           using ( ⟪_⟫ ; _/_ ; ⟪_∼_⟫-elim )
+open import Overture.Preliminaries     using ( ∣_∣  ; ∥_∥  )
+open import Relations.Discrete         using ( 0[_] ; _|:_ )
+open import Algebras.Func.Basic {𝑆 = 𝑆} using ( ov ; SetoidAlgebra ; 𝕌[_] ; _̂_ )
+open import Relations.Quotients        using  ( Equivalence )
+open import Relations.Func.Quotients   using ( ⟪_⟫ ; _/_ ; ⟪_∼_⟫-elim )
 
 private variable α ρ ℓ : Level
 

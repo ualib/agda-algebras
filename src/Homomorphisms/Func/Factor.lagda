@@ -22,17 +22,17 @@ open import Data.Product    using ( _,_ ; Σ-syntax )
 open import Function        using ( Func ; _∘_ )
 open import Level           using ( Level )
 open import Relation.Binary using ( Setoid )
-open import Relation.Binary.PropositionalEquality as PE using ()
-import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 open import Relation.Unary  using ( _⊆_ )
+open import Relation.Binary.PropositionalEquality as ≡ using ()
+import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------------
-open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ )
-open import Overture.Func.Preliminaries     using ( _⟶_ )
-open import Overture.Inverses         using ( Image_∋_ )
-open import Overture.Func.Surjective         using ( IsSurjective ; SurjInvIsInverseʳ ; SurjInv )
-open import Relations.Discrete                 using ( kernelRel )
-open import Algebras.Setoid.Basic      {𝑆 = 𝑆} using ( 𝕌[_] ; SetoidAlgebra ; _̂_ )
+open import Overture.Preliminaries           using ( ∣_∣ ; ∥_∥ )
+open import Overture.Func.Preliminaries      using ( _⟶_ )
+open import Overture.Inverses                using ( Image_∋_ )
+open import Overture.Func.Surjective         using ( IsSurjective ; SurjInv ; SurjInvIsInverseʳ )
+open import Relations.Discrete               using ( kernelRel )
+open import Algebras.Func.Basic      {𝑆 = 𝑆} using ( SetoidAlgebra ; 𝕌[_] ; _̂_ )
 open import Homomorphisms.Func.Basic {𝑆 = 𝑆} using ( hom ; IsHom ; compatible-map )
 
 private variable
@@ -110,7 +110,7 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ}
   open Func φmap using () renaming (cong to φcong)
   φcomp : compatible-map 𝑪 𝑩 φmap
   φcomp {f}{c} = begin
-    φmap ⟨$⟩ ((f ̂ 𝑪) c)   ≈˘⟨ φcong (Func.cong Interp (PE.refl , (λ _ → η))) ⟩
+    φmap ⟨$⟩ ((f ̂ 𝑪) c)   ≈˘⟨ φcong (Func.cong Interp (≡.refl , (λ _ → η))) ⟩
     g (h⁻¹ ((f ̂ 𝑪)(h ∘ (h⁻¹ ∘ c))))   ≈˘⟨ φcong (compatible ∥ hh ∥) ⟩
     g (h⁻¹ (h ((f ̂ 𝑨)(h⁻¹ ∘ c))))   ≈˘⟨ gφh ((f ̂ 𝑨)(h⁻¹ ∘ c)) ⟩
     g ((f ̂ 𝑨)(h⁻¹ ∘ c))    ≈˘⟨ sym₂ (compatible ∥ gh ∥) ⟩
@@ -120,9 +120,7 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ}
   φhom = record { compatible = φcomp
                 ; preserves≈ = Func.cong φmap }
 
-
 \end{code}
-
 
 --------------------------------
 
@@ -130,30 +128,4 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ}
 <span style="float:right;">[Homomorphisms.Func.Isomorphisms →](Homomorphisms.Func.Isomorphisms.html)</span>
 
 {% include UALib.Links.md %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

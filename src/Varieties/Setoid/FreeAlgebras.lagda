@@ -17,7 +17,7 @@ module Varieties.Setoid.FreeAlgebras {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ------------------------------------------------
 open import Agda.Primitive   using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
-open import Data.Product     using ( _,_ ; Σ-syntax ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Data.Product     using ( _,_ ; Σ-syntax ) renaming ( proj₂ to snd )
 open import Function.Bundles using ( Func )
 open import Relation.Binary  using ( Setoid )
 open import Relation.Unary   using ( Pred )
@@ -28,7 +28,7 @@ open import Overture.Preliminaries                   using ( ∣_∣ )
 open import Overture.Func.Preliminaries              using ( _⟶_ )
 open import Overture.Func.Inverses                   using ( Image_∋_ )
 open import Overture.Func.Surjective                 using ( IsSurjective )
-open import Algebras.Setoid.Basic            {𝑆 = 𝑆} using ( SetoidAlgebra ; ov )
+open import Algebras.Func.Basic              {𝑆 = 𝑆} using ( SetoidAlgebra ; ov )
 open import Homomorphisms.Func.Basic         {𝑆 = 𝑆} using ( hom ; epi ; IsEpi ; IsHom ; epi-to-hom )
 open import Terms.Basic                      {𝑆 = 𝑆} using ( Term )
 open import Terms.Func.Basic                 {𝑆 = 𝑆} using ( 𝑻 ; _≐_ ; module Environment )

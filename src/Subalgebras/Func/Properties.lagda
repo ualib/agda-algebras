@@ -27,8 +27,7 @@ open import Relation.Unary   using ( Pred ; _⊆_ )
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------------
 open import Overture.Preliminaries                  using ( ∣_∣ ; ∥_∥ )
 open import Overture.Func.Injective                 using ( id-is-injective ; module compose )
-open import Algebras.Setoid.Basic           {𝑆 = 𝑆} using ( SetoidAlgebra ; Lift-Alg )
-open import Algebras.Products               {𝑆 = 𝑆} using ( ov )
+open import Algebras.Func.Basic             {𝑆 = 𝑆} using ( SetoidAlgebra ; Lift-Alg ; ov )
 open import Homomorphisms.Func.Properties   {𝑆 = 𝑆} using ( 𝒾𝒹 ; ∘-hom )
 open import Homomorphisms.Func.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅toInjective ; ≅fromInjective
                                                           ; ≅-sym ; ≅-refl ; ≅-trans ; Lift-≅ )

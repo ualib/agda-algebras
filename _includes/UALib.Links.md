@@ -56,6 +56,9 @@
 [Algebras.Func.Congruences]: https://ualib.github.io/agda-algebras/Algebras.Func.Congruences.html
 [Algebras.Func.Products]: https://ualib.github.io/agda-algebras/Algebras.Func.Products.html
 
+[Categories]: https://ualib.github.io/agda-algebras/Categories.html
+[Categories.Functors]: https://ualib.github.io/agda-algebras/Categories.Functors.html
+  
 [Complexity]: https://ualib.github.io/agda-algebras/Complexity.html
 [Complexity.Basic]: https://ualib.github.io/agda-algebras/Complexity.Basic.html
 [Complexity.CSP]: https://ualib.github.io/agda-algebras/Complexity.CSP.html
@@ -63,6 +66,8 @@
 [Examples.Structures.Basic]: https://ualib.github.io/agda-algebras/Examples.Structures.Basic.html
 [Examples.Structures.Signatures]: https://ualib.github.io/agda-algebras/Examples.Structures.Signatures.html
 [Exercises.Complexity.FiniteCSP]: https://ualib.github.io/agda-algebras/Exercises.Complexity.FiniteCSP.html
+[Examples.Categories]: https://ualib.github.io/agda-algebras/Examples.Categories.html
+[Examples.Categories.Functors]: https://ualib.github.io/agda-algebras/Examples.Categories.Functors.html
 
 [Homomorphisms]: https://ualib.github.io/agda-algebras/Homomorphisms.html
 [Homomorphisms.Basic]: https://ualib.github.io/agda-algebras/Homomorphisms.Basic.html
