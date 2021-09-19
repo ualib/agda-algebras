@@ -104,7 +104,7 @@ We use the following type to represent an R-block with a designated representati
 
 -------------------------------------
 
-<span style="float:left;">[← Relations.Properties](Relations.Properties.html)</span>
+<span style="float:left;">[← Relations.Func.Discrete](Relations.Func.Discrete.html)</span>
 <span style="float:right;">[Equality →](Equality.html)</span>
 
 {% include UALib.Links.md %}

@@ -238,7 +238,7 @@ This is obviously an equivalence relation, as we now confirm.
 -------------------------------------
 
 <span style="float:left;">[← Relations.Properties](Relations.Properties.html)</span>
-<span style="float:right;">[Equality →](Equality.html)</span>
+<span style="float:right;">[Relations.Func →](Relations.Func.html)</span>
 
 {% include UALib.Links.md %}
 

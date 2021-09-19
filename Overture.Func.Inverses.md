@@ -170,8 +170,8 @@ In a certain sense, `Inv f` is also a (range-restricted) *left-inverse*.
 
 --------------------------------------
 
-<span style="float:left;">[← Overture.Inverses](Overture.Inverses.html)</span>
-<span style="float:right;">[Overture.Injective →](Overture.Injective.html)</span>
+<span style="float:left;">[← Overture.Func.Preliminaries](Overture.Func.Preliminaries.html)</span>
+<span style="float:right;">[Overture.Func.Injective →](Overture.Func.Injective.html)</span>
 
 {% include UALib.Links.md %}
 

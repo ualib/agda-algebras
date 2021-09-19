@@ -182,7 +182,7 @@ Here are some tools that have been useful (e.g., in the road to the proof of Bir
 
 --------------------------------------
 
-<span style="float:left;">[← Homomorphisms.Func.Isomoprhisms](Homomorphisms.Func.Isomoprhisms.html)</span>
+<span style="float:left;">[← Homomorphisms.Func.Isomorphisms](Homomorphisms.Func.Isomorphisms.html)</span>
 <span style="float:right;">[Terms →](Terms.html)</span>
 
 {% include UALib.Links.md %}

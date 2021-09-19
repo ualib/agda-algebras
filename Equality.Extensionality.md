@@ -106,6 +106,6 @@ We need an identity type for congruence classes (blocks) over sets so that two d
 ---------------------------------------
 
 <span style="float:left;">[← Equality.Truncation](Equality.Truncation.html)</span>
-<span style="float:right;">[Residuation →](Residuation.html)</span>
+<span style="float:right;">[Adjunction →](Adjunction.html)</span>
 
 {% include UALib.Links.md %}

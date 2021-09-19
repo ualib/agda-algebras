@@ -22,7 +22,7 @@ This is the [Relations.Func][] module of the [Agda Universal Algebra Library][].
 
 -------------------------------------
 
-<span style="float:left;">[← Overture.Transformers](Overture.Transformers.html)</span>
-<span style="float:right;">[Relations.Discrete →](Relations.Discrete.html)</span>
+<span style="float:left;">[← Relations.Quotients](Relations.Quotients.html)</span>
+<span style="float:right;">[Relations.Func.Discrete →](Relations.Func.Discrete.html)</span>
 
 {% include UALib.Links.md %}

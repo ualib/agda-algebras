@@ -24,7 +24,7 @@ This is the [Algebras][] module of the [Agda Universal Algebra Library][] in whi
 
 -------------------------------------
 
-<span style="float:left;">[← ClosureSystems.Properties](ClosureSystems.Properties.html)</span>
+<span style="float:left;">[← Adjunction.Residuation](Adjunction.Residuation.html)</span>
 <span style="float:right;">[Algebras.Basic →](Algebras.Basic.html)</span>
 
 {% include UALib.Links.md %}
