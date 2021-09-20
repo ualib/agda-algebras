@@ -124,7 +124,7 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ}
 
 --------------------------------
 
-<span style="float:left;">[← Homomorphisms.Func.Kernels](Homomorphisms.Func.Kernels.html)</span>
+<span style="float:left;">[← Homomorphisms.Func.Noether](Homomorphisms.Func.Noether.html)</span>
 <span style="float:right;">[Homomorphisms.Func.Isomorphisms →](Homomorphisms.Func.Isomorphisms.html)</span>
 
 {% include UALib.Links.md %}

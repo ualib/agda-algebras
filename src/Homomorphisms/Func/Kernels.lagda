@@ -41,14 +41,14 @@ private variable
 open SetoidAlgebra using ( Domain )
 open Func using ( cong ) renaming (f to _⟨$⟩_ )
 
-module _ {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ} (h : hom 𝑨 𝑩) where
+module _ {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ} (hh : hom 𝑨 𝑩) where
 
  open Setoid (Domain 𝑨) using ( reflexive )                   renaming ( _≈_ to _≈₁_ )
  open SetoidAlgebra 𝑩   using ( Interp )                      renaming (Domain to B )
  open Setoid B          using ( sym ; trans ; isEquivalence ) renaming ( _≈_ to _≈₂_ )
 
  private
-  hmap = _⟨$⟩_ ∣ h ∣
+  h = _⟨$⟩_ ∣ hh ∣
 
 \end{code}
 
@@ -57,17 +57,17 @@ That is, if each `(u i, v i)` belongs to the kernel, then so does the pair `((f 
 
 \begin{code}
 
- HomKerComp : 𝑨 ∣≈ (kerRel _≈₂_ hmap)
+ HomKerComp : 𝑨 ∣≈ (kerRel _≈₂_ h)
  HomKerComp f {u}{v} kuv = Goal
   where
-  fhuv : ((f ̂ 𝑩)(hmap ∘ u)) ≈₂ ((f ̂ 𝑩)(hmap ∘ v))
+  fhuv : ((f ̂ 𝑩)(h ∘ u)) ≈₂ ((f ̂ 𝑩)(h ∘ v))
   fhuv = cong Interp (≡.refl , kuv)
-  lem1 : (hmap ((f ̂ 𝑨) u)) ≈₂ ((f ̂ 𝑩) (hmap ∘ u))
-  lem1 = IsHom.compatible ∥ h ∥
+  lem1 : (h ((f ̂ 𝑨) u)) ≈₂ ((f ̂ 𝑩) (h ∘ u))
+  lem1 = IsHom.compatible ∥ hh ∥
 
-  lem2 : ((f ̂ 𝑩) (hmap ∘ v)) ≈₂ (hmap ((f ̂ 𝑨) v))
-  lem2 = sym (IsHom.compatible ∥ h ∥)
-  Goal : (hmap ((f ̂ 𝑨) u)) ≈₂ (hmap ((f ̂ 𝑨) v))
+  lem2 : ((f ̂ 𝑩) (h ∘ v)) ≈₂ (h ((f ̂ 𝑨) v))
+  lem2 = sym (IsHom.compatible ∥ hh ∥)
+  Goal : (h ((f ̂ 𝑨) u)) ≈₂ (h ((f ̂ 𝑨) v))
   Goal = trans lem1 (trans fhuv lem2)
 
 \end{code}
@@ -77,7 +77,7 @@ The kernel of a homomorphism is a congruence of the domain, which we construct a
 \begin{code}
 
  kercon : Con 𝑨
- kercon = (kerRel _≈₂_ hmap) , mkcon (λ x → cong ∣ h ∣ x) (kerRelOfEquiv isEquivalence hmap) (HomKerComp)
+ kercon = (kerRel _≈₂_ h) , mkcon (λ x → cong ∣ hh ∣ x) (kerRelOfEquiv isEquivalence h) (HomKerComp)
 
 \end{code}
 
@@ -136,8 +136,8 @@ We combine the foregoing to define a function that takes 𝑆-algebras `𝑨` an
 
 \begin{code}
 
- πker : (h : hom 𝑨 𝑩) → epi 𝑨 (ker[ 𝑨 ⇒ 𝑩 ] h)
- πker h = πepi (kercon h)
+ πker : epi 𝑨 (ker[ 𝑨 ⇒ 𝑩 ] h)
+ πker = πepi (kercon h)
 
 \end{code}
 
@@ -157,6 +157,6 @@ The kernel of the canonical projection of `𝑨` onto `𝑨 / θ` is equal to `�
 --------------------------------
 
 <span style="float:left;">[← Homomorphisms.Func.Properties](Homomorphisms.Func.Properties.html)</span>
-<span style="float:right;">[Homomorphisms.Func.Factor →](Homomorphisms.Func.Factor.html)</span>
+<span style="float:right;">[Homomorphisms.Func.Noether →](Homomorphisms.Func.Noether.html)</span>
 
 {% include UALib.Links.md %}
