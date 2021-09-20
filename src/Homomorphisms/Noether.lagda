@@ -17,27 +17,27 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Homomorphisms.Noether {𝑆 : Signature 𝓞 𝓥} where
 
--- -- Imports from Agda and the Agda Standard Library ---------------------------------------
-open import Agda.Primitive  using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
-open import Data.Product    using ( Σ-syntax ; _×_ ; _,_ ) renaming (proj₁ to fst;proj₂ to snd)
+-- Imports from Agda and the Agda Standard Library ---------------------------------------
+open import Agda.Primitive  using ( Level ) renaming ( Set to Type )
+open import Data.Product    using ( Σ-syntax ; _,_ )
+                            renaming ( _×_ to _∧_ ; proj₁ to fst ; proj₂ to snd)
 open import Function.Base   using ( _∘_ ; id )
 open import Relation.Binary using ( IsEquivalence )
-open import Relation.Binary.PropositionalEquality using ( module ≡-Reasoning ; _≡_ ; cong ; refl ; cong-app )
-open import Relation.Unary  using ( _⊆_ )
+open import Relation.Binary.PropositionalEquality
+                            using ( module ≡-Reasoning ; _≡_ ; cong ; refl ; cong-app )
 
 -- Imports from agda-algebras --------------------------------------------------------------
-open import Overture.Preliminaries  using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
-open import Overture.Inverses       using ( Image_∋_ )
-open import Overture.Injective      using ( IsInjective )
-open import Overture.Surjective     using ( IsSurjective ; SurjInv ; epic-factor ; SurjInvIsInverseʳ )
-open import Relations.Discrete      using ( kernel )
-open import Relations.Quotients     using ( ⌞_⌟ ; mkblk ; ⟪_⟫ )
-open import Equality.Welldefined    using ( swelldef )
-open import Equality.Truncation     using ( is-set ; blk-uip ; is-embedding ; monic-is-embedding|Set)
-open import Equality.Extensionality using ( pred-ext ; block-ext|uip )
+open import Overture.Preliminaries        using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
+open import Overture.Inverses             using ( Image_∋_ )
+open import Overture.Injective            using ( IsInjective )
+open import Overture.Surjective           using ( IsSurjective ; SurjInv ; SurjInvIsInverseʳ )
+open import Relations.Quotients           using ( ⌞_⌟ ; mkblk ; ⟪_⟫ )
+open import Equality.Welldefined          using ( swelldef )
+open import Equality.Truncation           using ( is-set ; blk-uip ; is-embedding ; monic-is-embedding|Set )
+open import Equality.Extensionality       using ( pred-ext ; block-ext|uip )
 open import Algebras.Basic                using ( Algebra ; _̂_)
-open import Algebras.Congruences {𝑆 = 𝑆}  using ( Con ; IsCongruence )
-open import Homomorphisms.Basic  {𝑆 = 𝑆}  using ( hom ; is-homomorphism ; epi ; epi-to-hom )
+open import Algebras.Congruences  {𝑆 = 𝑆} using ( Con ; IsCongruence )
+open import Homomorphisms.Basic   {𝑆 = 𝑆} using ( hom ; is-homomorphism ; epi ; epi-to-hom )
 open import Homomorphisms.Kernels {𝑆 = 𝑆} using ( kercon ; ker[_⇒_]_↾_ ; πker )
 private variable α β γ : Level
 
@@ -72,8 +72,7 @@ FirstHomTheorem|Set :
     (Bset : is-set ∣ 𝑩 ∣)(buip : blk-uip ∣ 𝑨 ∣ ∣ kercon fe {𝑩} h ∣) -- truncation assumptions
     ----------------------------------------------------------------
  →  Σ[ φ ∈ hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩  ]
-                            ( ( ∣ h ∣ ≡ ∣ φ ∣ ∘ ∣ πker fe{𝑩}h ∣ )
-                              × IsInjective ∣ φ ∣  ×  is-embedding ∣ φ ∣  )
+      ( ∣ h ∣ ≡ ∣ φ ∣ ∘ ∣ πker fe{𝑩}h ∣ ∧ IsInjective ∣ φ ∣  ∧  is-embedding ∣ φ ∣  )
 
 FirstHomTheorem|Set 𝑨 𝑩 h pe fe Bset buip = (φ , φhom) , refl , φmon , φemb
  where
@@ -110,8 +109,7 @@ FirstIsoTheorem|Set :
  →   IsSurjective ∣ h ∣
      ---------------------------------------------------------------
  →   Σ[ f ∈ (epi (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩)]
-                          ( ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣ )
-                            × IsInjective ∣ f ∣ × is-embedding ∣ f ∣
+       ( ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣  ∧ IsInjective ∣ f ∣ ∧ is-embedding ∣ f ∣ )
 
 FirstIsoTheorem|Set 𝑨 𝑩 h pe fe Bset buip hE =
  (fmap , fhom , fepic) , refl , (snd ∥ FHT ∥)
@@ -143,12 +141,12 @@ Now we prove that the homomorphism `φ`, whose existence is guaranteed by `First
 
 module _ {fe : swelldef 𝓥 β}(𝑨 : Algebra α 𝑆)(𝑩 : Algebra β 𝑆)(h : hom 𝑨 𝑩) where
 
- NoetherHomUnique : (f g : hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩)
+ FirstHomUnique : (f g : hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩)
   →                 ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣
   →                 ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker fe{𝑩}h ∣
   →                 ∀ a  →  ∣ f ∣ a ≡ ∣ g ∣ a
 
- NoetherHomUnique f g hfk hgk (_ , mkblk a refl) =
+ FirstHomUnique f g hfk hgk (_ , mkblk a refl) =
   ∣ f ∣ (_ , mkblk a refl) ≡⟨ cong-app(hfk ⁻¹)a ⟩
   ∣ h ∣ a                    ≡⟨ cong-app(hgk)a ⟩
   ∣ g ∣ (_ , mkblk a refl) ∎
@@ -158,108 +156,30 @@ module _ {fe : swelldef 𝓥 β}(𝑨 : Algebra α 𝑆)(𝑩 : Algebra β 𝑆)
 If, in addition, we postulate extensionality of functions defined on the domain `ker[ 𝑨 ⇒ 𝑩 ] h`, then we obtain the following variation of the last result. (See [Equality.Truncation][] for a discussion of *truncation*, *sets*, and *uniqueness of identity proofs*.)
 
 ```
-fe-NoetherHomUnique : {fuww : funext (α ⊔ lsuc β) β}(f g : hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩)
+fe-FirstHomUnique : {fuww : funext (α ⊔ lsuc β) β}(f g : hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩)
   →                    ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣
   →                    ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker fe{𝑩}h ∣
   →                    ∣ f ∣ ≡ ∣ g ∣
 
- fe-NoetherHomUnique {fuww} f g hfk hgk = fuww (NoetherHomUnique f g hfk hgk)
+ fe-FirstHomUnique {fuww} f g hfk hgk = fuww (NoetherHomUnique f g hfk hgk)
 ```
 
 The proof of `NoetherHomUnique` goes through for the special case of epimorphisms, as we now verify.
 
 \begin{code}
 
- NoetherIsoUnique : (f g : epi (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩)
+ FirstIsoUnique : (f g : epi (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩)
   →                 ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣
   →                 ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker fe{𝑩}h ∣
   →                 ∀ a → ∣ f ∣ a ≡ ∣ g ∣ a
 
- NoetherIsoUnique f g hfk hgk = NoetherHomUnique (epi-to-hom 𝑩 f) (epi-to-hom 𝑩 g) hfk hgk
-
-\end{code}
-
-
-
-#### <a id="homomorphism-decomposition">Homomorphism decomposition</a>
-
-If `τ : hom 𝑨 𝑩`, `ν : hom 𝑨 𝑪`, `ν` is surjective, and `ker ν ⊆ ker τ`, then there exists `φ : hom 𝑪 𝑩` such that `τ = φ ∘ ν` so the following diagram commutes:
-
-```
-𝑨 --- ν ->> 𝑪
- \         .
-  \       .
-   τ     φ
-    \   .
-     \ .
-      V
-      𝑩
-```
-
-\begin{code}
-
-module _ {𝑨 : Algebra α 𝑆}{𝑪 : Algebra γ 𝑆} where
-
- HomFactor : swelldef 𝓥 γ
-  →          (𝑩 : Algebra β 𝑆)(τ : hom 𝑨 𝑩)(ν : hom 𝑨 𝑪)
-  →          kernel ∣ ν ∣ ⊆ kernel ∣ τ ∣ → IsSurjective ∣ ν ∣
-             --------------------------------------------------
-  →          Σ[ φ ∈ (hom 𝑪 𝑩)] ∀ x → ∣ τ ∣ x ≡ ∣ φ ∣ (∣ ν ∣ x)
-
- HomFactor wd 𝑩 τ ν Kντ νE = (φ , φIsHomCB) , τφν
-  where
-   νInv : ∣ 𝑪 ∣ → ∣ 𝑨 ∣
-   νInv = SurjInv ∣ ν ∣ νE
-
-   η : ∀ c → ∣ ν ∣ (νInv c) ≡ c
-   η c = SurjInvIsInverseʳ ∣ ν ∣ νE c
-
-   φ : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
-   φ = ∣ τ ∣ ∘ νInv
-
-   ξ : ∀ a → kernel ∣ ν ∣ (a , νInv (∣ ν ∣ a))
-   ξ a = (η (∣ ν ∣ a))⁻¹
-
-   τφν : ∀ x → ∣ τ ∣ x ≡ φ (∣ ν ∣ x)
-   τφν = λ x → Kντ (ξ x)
-
-   φIsHomCB : ∀ 𝑓 c → φ ((𝑓 ̂ 𝑪) c) ≡ ((𝑓 ̂ 𝑩)(φ ∘ c))
-   φIsHomCB 𝑓 c =
-    φ ((𝑓 ̂ 𝑪) c)                    ≡⟨ cong φ (wd (𝑓 ̂ 𝑪) c (∣ ν ∣ ∘ (νInv ∘ c)) (λ i → (η (c i))⁻¹))⟩
-    φ ((𝑓 ̂ 𝑪)(∣ ν ∣ ∘(νInv ∘ c)))   ≡⟨ cong φ (∥ ν ∥ 𝑓 (νInv ∘ c))⁻¹ ⟩
-    φ (∣ ν ∣((𝑓 ̂ 𝑨)(νInv ∘ c)))     ≡⟨ (τφν ((𝑓 ̂ 𝑨)(νInv ∘ c)))⁻¹ ⟩
-    ∣ τ ∣((𝑓 ̂ 𝑨)(νInv ∘ c))         ≡⟨ ∥ τ ∥ 𝑓 (νInv ∘ c) ⟩
-    (𝑓 ̂ 𝑩)(λ x → ∣ τ ∣(νInv (c x))) ∎
-
-\end{code}
-
-If, in addition to the hypotheses of the last theorem, we assume τ is epic, then so is φ. (Note that the proof also requires an additional local function extensionality postulate, `funext β β`.)
-
-\begin{code}
-
- HomFactorEpi : swelldef 𝓥 γ
-  →             (𝑩 : Algebra β 𝑆)(τ : hom 𝑨 𝑩)(ν : hom 𝑨 𝑪)
-  →             kernel ∣ ν ∣ ⊆ kernel ∣ τ ∣
-  →             IsSurjective ∣ ν ∣ → IsSurjective ∣ τ ∣
-                ---------------------------------------------
-  →             Σ[ φ ∈ epi 𝑪 𝑩 ] ∀ x → ∣ τ ∣ x ≡ ∣ φ ∣ (∣ ν ∣ x)
-
- HomFactorEpi wd 𝑩 τ ν kerincl νe τe = (fst ∣ φF ∣ ,(snd ∣ φF ∣ , φE)), ∥ φF ∥
-  where
-   φF : Σ[ φ ∈ hom 𝑪 𝑩 ] ∀ x → ∣ τ ∣ x ≡ ∣ φ ∣ (∣ ν ∣ x)
-   φF = HomFactor wd 𝑩 τ ν kerincl νe
-
-   φ : ∣ 𝑪 ∣ → ∣ 𝑩 ∣
-   φ = ∣ τ ∣ ∘ (SurjInv ∣ ν ∣ νe)
-
-   φE : IsSurjective φ
-   φE = epic-factor ∣ τ ∣ ∣ ν ∣ φ ∥ φF ∥ τe
+ FirstIsoUnique f g hfk hgk = FirstHomUnique (epi-to-hom 𝑩 f) (epi-to-hom 𝑩 g) hfk hgk
 
 \end{code}
 
 --------------------------------------
 
 <span style="float:left;">[← Homomorphisms.Basic](Homomorphisms.Basic.html)</span>
-<span style="float:right;">[Homomorphisms.Isomorphisms →](Homomorphisms.Isomorphisms.html)</span>
+<span style="float:right;">[Homomorphisms.Factor →](Homomorphisms.Factor.html)</span>
 
 {% include UALib.Links.md %}

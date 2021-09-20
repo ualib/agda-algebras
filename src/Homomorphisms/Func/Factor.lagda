@@ -18,7 +18,7 @@ open import Algebras.Basic using (𝓞 ; 𝓥 ; Signature )
 module Homomorphisms.Func.Factor {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library -------------------------------------------------
-open import Data.Product    using ( _,_ ; Σ-syntax )
+open import Data.Product    using ( _,_ ; Σ-syntax ) renaming ( proj₁ to fst ; proj₂ to snd )
 open import Function        using ( Func ; _∘_ )
 open import Level           using ( Level )
 open import Relation.Binary using ( Setoid )
@@ -29,11 +29,11 @@ import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 -- Imports from the Agda Universal Algebra Library ------------------------------------------------
 open import Overture.Preliminaries           using ( ∣_∣ ; ∥_∥ )
 open import Overture.Func.Preliminaries      using ( _⟶_ )
-open import Overture.Inverses                using ( Image_∋_ )
-open import Overture.Func.Surjective         using ( IsSurjective ; SurjInv ; SurjInvIsInverseʳ )
+open import Overture.Func.Inverses                using ( Image_∋_ )
+open import Overture.Func.Surjective         using ( IsSurjective ; SurjInv ; SurjInvIsInverseʳ ; epic-factor )
 open import Relations.Discrete               using ( kernelRel )
 open import Algebras.Func.Basic      {𝑆 = 𝑆} using ( SetoidAlgebra ; 𝕌[_] ; _̂_ )
-open import Homomorphisms.Func.Basic {𝑆 = 𝑆} using ( hom ; IsHom ; compatible-map )
+open import Homomorphisms.Func.Basic {𝑆 = 𝑆} using ( hom ; IsHom ; compatible-map ; epi ; IsEpi)
 
 private variable
  α ρᵃ β ρᵇ γ ρᶜ : Level
@@ -70,18 +70,19 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ}
  open Func using ( cong ) renaming (f to _⟨$⟩_ )
 
  private
-  g = _⟨$⟩_ ∣ gh ∣
+  gfunc = ∣ gh ∣
   hfunc = ∣ hh ∣
+  g = _⟨$⟩_ gfunc
   h = _⟨$⟩_ hfunc
 
  open IsHom
  open Image_∋_
 
- hom-factor : kernelRel _≈₃_ h ⊆ kernelRel _≈₂_ g → IsSurjective hfunc
+ HomFactor : kernelRel _≈₃_ h ⊆ kernelRel _≈₂_ g → IsSurjective hfunc
               ---------------------------------------------------------
   →           Σ[ φ ∈ hom 𝑪 𝑩 ] ∀ a → (g a) ≈₂ ∣ φ ∣ ⟨$⟩ (h a)
 
- hom-factor Khg hE = (φmap , φhom) , gφh
+ HomFactor Khg hE = (φmap , φhom) , gφh
   where
   kerpres : ∀ a₀ a₁ → h a₀ ≈₃ h a₁ → g a₀ ≈₂ g a₁
   kerpres a₀ a₁ hyp = Khg hyp
@@ -119,6 +120,37 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ}
   φhom : IsHom 𝑪 𝑩 φmap
   φhom = record { compatible = φcomp
                 ; preserves≈ = Func.cong φmap }
+
+\end{code}
+
+
+If, in addition, `g` is surjective, then so will be the factor `φ`.
+
+\begin{code}
+
+
+ HomFactorEpi : kernelRel _≈₃_ h ⊆ kernelRel _≈₂_ g
+  →             IsSurjective hfunc → IsSurjective gfunc
+                -------------------------------------------------
+  →             Σ[ φ ∈ epi 𝑪 𝑩 ] ∀ a → (g a) ≈₂ ∣ φ ∣ ⟨$⟩ (h a)
+
+ HomFactorEpi Khg hE gE = (φmap , φepi) , gφh
+  where
+  homfactor : Σ[ φ ∈ hom 𝑪 𝑩 ] ∀ a → (g a) ≈₂ ∣ φ ∣ ⟨$⟩ (h a)
+  homfactor = HomFactor Khg hE
+
+  φmap : C ⟶ B
+  φmap = fst ∣ homfactor ∣
+
+  gφh : (a : 𝕌[ 𝑨 ]) → g a ≈₂ φmap ⟨$⟩ (h a)
+  gφh = snd homfactor -- Khg ξ
+
+  φhom : IsHom 𝑪 𝑩 φmap
+  φhom = snd ∣ homfactor ∣
+
+  φepi : IsEpi 𝑪 𝑩 φmap
+  φepi = record { isHom = φhom
+                ; isSurjective = epic-factor gfunc hfunc φmap gE gφh }
 
 \end{code}
 

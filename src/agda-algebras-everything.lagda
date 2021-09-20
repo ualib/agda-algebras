@@ -126,8 +126,9 @@ open import Homomorphisms.Kernels           using ( homker-comp ; kercon ; kerqu
 open import Homomorphisms.Products          using (  ⨅-hom-co ; ⨅-hom ; ⨅-projection-hom )
 
 open import Homomorphisms.Noether           using ( FirstHomTheorem|Set ; FirstIsoTheorem|Set
-                                                  ; NoetherHomUnique ; NoetherIsoUnique ; HomFactor
-                                                  ; HomFactorEpi )
+                                                  ; FirstHomUnique ; FirstIsoUnique )
+
+open import Homomorphisms.Factor            using ( HomFactor ; HomFactorEpi )
 
 open import Homomorphisms.Isomorphisms      using ( _≅_ ; ≅-refl ; ≅-sym ; ≅-trans ; Lift-≅
                                                   ; Lift-Alg-iso ; Lift-Alg-assoc
@@ -147,7 +148,9 @@ open import Homomorphisms.Func.Properties   using ( ∘-is-hom ; ∘-hom ; 𝒾�
 open import Homomorphisms.Func.Kernels      using ( HomKerComp ; kercon ; kerquo ; ker[_⇒_]_ ; πepi
                                                   ; πhom ; πker ; ker-in-con )
 
-open import Homomorphisms.Func.Factor     using ( hom-factor )
+open import Homomorphisms.Func.Noether      using ( FirstHomTheorem ; FirstHomUnique )
+
+open import Homomorphisms.Func.Factor       using ( HomFactor ; HomFactorEpi )
 
 open import Homomorphisms.Func.Isomorphisms using ( _≅_ ; mkiso ; ≅-refl ; ≅-sym ; ≅-trans
                                                   ; ≅toInjective ; ≅fromInjective ; Lift-≅
