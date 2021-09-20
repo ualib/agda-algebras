@@ -75,6 +75,7 @@
 [Homomorphisms.Kernels]: https://ualib.github.io/agda-algebras/Homomorphisms.Kernels.html
 [Homomorphisms.Products]: https://ualib.github.io/agda-algebras/Homomorphisms.Products.html
 [Homomorphisms.Noether]: https://ualib.github.io/agda-algebras/Homomorphisms.Noether.html
+[Homomorphisms.Factor]: https://ualib.github.io/agda-algebras/Homomorphisms.Factor.html
 [Homomorphisms.Isomorphisms]: https://ualib.github.io/agda-algebras/Homomorphisms.Isomorphisms.html
 [Homomorphisms.HomomorphicImages]: https://ualib.github.io/agda-algebras/Homomorphisms.HomomorphicImages.html
 
