@@ -235,7 +235,7 @@ A nearly identical proof goes through for isomorphisms of lifted products (thoug
 
 --------------------------------------
 
-<span style="float:left;">[← Homomorphisms.Noether](Homomorphisms.Noether.html)</span>
+<span style="float:left;">[← Homomorphisms.Factor](Homomorphisms.Factor.html)</span>
 <span style="float:right;">[Homomorphisms.HomomorphicImages →](Homomorphisms.HomomorphicImages.html)</span>
 
 {% include UALib.Links.md %}

@@ -20,9 +20,10 @@ This chapter presents the [Homomorphisms][] module of the [Agda Universal Algebr
 <a id="465" class="Keyword">open</a> <a id="470" class="Keyword">import</a> <a id="477" href="Homomorphisms.Kernels.html" class="Module">Homomorphisms.Kernels</a>
 <a id="499" class="Keyword">open</a> <a id="504" class="Keyword">import</a> <a id="511" href="Homomorphisms.Products.html" class="Module">Homomorphisms.Products</a>
 <a id="534" class="Keyword">open</a> <a id="539" class="Keyword">import</a> <a id="546" href="Homomorphisms.Noether.html" class="Module">Homomorphisms.Noether</a>
-<a id="568" class="Keyword">open</a> <a id="573" class="Keyword">import</a> <a id="580" href="Homomorphisms.Isomorphisms.html" class="Module">Homomorphisms.Isomorphisms</a>
-<a id="607" class="Keyword">open</a> <a id="612" class="Keyword">import</a> <a id="619" href="Homomorphisms.HomomorphicImages.html" class="Module">Homomorphisms.HomomorphicImages</a>
-<a id="651" class="Keyword">open</a> <a id="656" class="Keyword">import</a> <a id="663" href="Homomorphisms.Func.html" class="Module">Homomorphisms.Func</a>
+<a id="568" class="Keyword">open</a> <a id="573" class="Keyword">import</a> <a id="580" href="Homomorphisms.Factor.html" class="Module">Homomorphisms.Factor</a>
+<a id="601" class="Keyword">open</a> <a id="606" class="Keyword">import</a> <a id="613" href="Homomorphisms.Isomorphisms.html" class="Module">Homomorphisms.Isomorphisms</a>
+<a id="640" class="Keyword">open</a> <a id="645" class="Keyword">import</a> <a id="652" href="Homomorphisms.HomomorphicImages.html" class="Module">Homomorphisms.HomomorphicImages</a>
+<a id="684" class="Keyword">open</a> <a id="689" class="Keyword">import</a> <a id="696" href="Homomorphisms.Func.html" class="Module">Homomorphisms.Func</a>
 
 </pre>
 
