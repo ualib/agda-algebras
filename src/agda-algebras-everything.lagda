@@ -1,8 +1,8 @@
 ---
 layout: default
-title : Overture.Inverses module
-date : 2021-06-09
-author: [agda-algebras development team][]
+title : "Overture.Inverses module"
+date : "2021-06-09"
+author: "agda-algebras development team"
 ---
 
 All definitions/theorems in agda-algebras as of 22 June 2021.
