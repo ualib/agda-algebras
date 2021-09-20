@@ -2,7 +2,7 @@
 layout: default
 title : "Exercises.Complexity.FiniteCSP module (The Agda Universal Algebra Library)"
 date : "2021-07-26"
-author: "agda-algebras development team][] and Libor Bar"
+author: "agda-algebras development team and Libor Barto"
 ---
 
 All excercises in this module were created by Libor Barto for students at Charles University in Prague. They were formalized in dependent type theory by the [agda-algebras development team][].

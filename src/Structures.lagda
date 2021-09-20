@@ -1,8 +1,8 @@
 ---
 layout: default
-title : ""Structures module (Agda Universal Algebra Library)""
-date : ""2021-07-26""
-author: "[agda-algebras development team]"
+title : "Structures module (Agda Universal Algebra Library)"
+date : "2021-07-26"
+author: "agda-algebras development team"
 ---
 
 ## <a id="types-for-general-mathematical-structures">Types for General Mathematical Structures</a>
