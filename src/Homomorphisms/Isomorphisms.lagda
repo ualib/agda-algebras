@@ -235,7 +235,7 @@ module _ {α β γ ι  : Level}{I : Type ι}{fizw : funext (ι ⊔ γ) β}{fiu :
 
 --------------------------------------
 
-<span style="float:left;">[← Homomorphisms.Noether](Homomorphisms.Noether.html)</span>
+<span style="float:left;">[← Homomorphisms.Factor](Homomorphisms.Factor.html)</span>
 <span style="float:right;">[Homomorphisms.HomomorphicImages →](Homomorphisms.HomomorphicImages.html)</span>
 
 {% include UALib.Links.md %}
