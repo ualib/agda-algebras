@@ -5,7 +5,7 @@ date : "2021-07-26"
 author: "agda-algebras development team][] and Libor Bar"
 ---
 
-⁺All excercises below were made by Libor Barto (for students at Charles University), and formalized in MLTT/Agda by the [agda-algebras development team][].
+All excercises in this module were created by Libor Barto for students at Charles University in Prague. They were formalized in dependent type theory by the [agda-algebras development team][].
 
 ### CSP Exercises
 
