@@ -22,45 +22,53 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 module Varieties.Func.Closure {𝑆 : Signature 𝓞 𝓥} where
 
 -- imports from Agda and the Agda Standard Library -------------------------------------------
-open import Agda.Primitive using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
+open import Agda.Primitive using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type ; lzero to ℓ₀ )
 open import Data.Product   using ( _,_ ; Σ-syntax )
+open import Level
 open import Relation.Unary using ( Pred ; _∈_ ; _⊆_ )
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
 open import Algebras.Func.Products               {𝑆 = 𝑆} using ( ⨅ )
-open import Algebras.Func.Basic                  {𝑆 = 𝑆} using ( SetoidAlgebra ; ov )
-open import Homomorphisms.Func.Isomorphisms      {𝑆 = 𝑆} using ( _≅_ )
+open import Algebras.Func.Basic                  {𝑆 = 𝑆} using ( SetoidAlgebra ; ov ; Lift-Alg ; Lift-Algˡ )
+open import Homomorphisms.Func.Isomorphisms      {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; Lift-≅ )
 open import Homomorphisms.Func.HomomorphicImages {𝑆 = 𝑆} using ( HomImages )
-open import Subalgebras.Func.Subalgebras         {𝑆 = 𝑆} using ( _≤_ )
+open import Subalgebras.Func.Subalgebras         {𝑆 = 𝑆} using ( _≤_ ; _≤c_ )
+open import Subalgebras.Func.Properties          {𝑆 = 𝑆} using ( ≤-Lift ; ≅→≤ ; A≤B×B≅C→A≤C ; ≤→≤c→≤c )
 
 -- The inductive type H
-data H {α ρ : Level} (𝒦 : Pred (SetoidAlgebra α ρ)(ov α)) : Pred (SetoidAlgebra α ρ) (ov(α ⊔ ρ))
+data H {α β : Level}(𝒦 : Pred(SetoidAlgebra α α) (ov α)) :
+                           Pred(SetoidAlgebra (α ⊔ β) (α ⊔ β)) (ov (α ⊔ β))
  where
- hbase : {𝑨 : SetoidAlgebra α ρ} → 𝑨 ∈ 𝒦 → 𝑨 ∈ H 𝒦
- hhimg : {𝑨 𝑩 : SetoidAlgebra _ ρ} → 𝑨 ∈ H 𝒦 → ((𝑩 , _) : HomImages 𝑨) → 𝑩 ∈ H 𝒦
+ hbase : {𝑨 : SetoidAlgebra _ _} → 𝑨 ∈ 𝒦 → Lift-Alg 𝑨 β β ∈ H 𝒦
+ hhimg : {𝑨 𝑩 : SetoidAlgebra _ _} → 𝑨 ∈ H{β = β} 𝒦 → ((𝑩 , _) : HomImages 𝑨) → 𝑩 ∈ H 𝒦
 
 -- The inductive type S
-data S {α ρ : Level}(𝒦 : Pred(SetoidAlgebra α ρ)(ov α)) : Pred(SetoidAlgebra α ρ)(ov(α ⊔ ρ))
+data S {α β : Level}(𝒦 : Pred(SetoidAlgebra α α) (ov α)) :
+                           Pred(SetoidAlgebra (α ⊔ β) (α ⊔ β)) (ov (α ⊔ β))
  where
- sbase : {𝑨 : SetoidAlgebra α ρ} → 𝑨 ∈ 𝒦 → 𝑨 ∈ S 𝒦
- ssub  : {𝑨 𝑩 : SetoidAlgebra _ ρ} → 𝑨 ∈ S 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ S 𝒦
- siso  : {𝑨 𝑩 : SetoidAlgebra _ ρ} → 𝑨 ∈ S 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ S 𝒦
+ sbase : {𝑨 : SetoidAlgebra α α} → 𝑨 ∈ 𝒦 → Lift-Alg 𝑨 β β ∈ S 𝒦
+ ssub  : {𝑨 𝑩 : SetoidAlgebra (α ⊔ β) (α ⊔ β)} → 𝑨 ∈ S{β = β} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ S 𝒦
+-- siso₀  : {𝑨 : SetoidAlgebra α α}{𝑩 : SetoidAlgebra (α ⊔ β)(α ⊔ β)} → 𝑨 ∈ S{α = α}{β = α} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ S 𝒦
+ siso  : {𝑨 𝑩 : SetoidAlgebra _ _} → 𝑨 ∈ S{β = β} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ S 𝒦
 
 -- The inductive type P
-data P {α ρ : Level}(𝒦 : Pred(SetoidAlgebra α ρ)(ov α)) : Pred(SetoidAlgebra α ρ)(ov (α ⊔ ρ))
+data P {α β : Level}(𝒦 : Pred(SetoidAlgebra α α) (ov α)) :
+                           Pred(SetoidAlgebra (α ⊔ β) (α ⊔ β)) (ov (α ⊔ β))
  where
- pbase  : {𝑨 : SetoidAlgebra α ρ} → 𝑨 ∈ 𝒦 → 𝑨 ∈ P 𝒦
- pprod  : {I : Type}{𝒜 : I → SetoidAlgebra _ ρ} → (∀ i → (𝒜 i) ∈ P 𝒦) → ⨅ 𝒜 ∈ P 𝒦
- piso  : {𝑨 𝑩 : SetoidAlgebra _ ρ} → 𝑨 ∈ P 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ P 𝒦
+ pbase  : {𝑨 : SetoidAlgebra α α} → 𝑨 ∈ 𝒦 → Lift-Alg 𝑨 β β ∈ P 𝒦
+ pprod  : {I : Type β}{𝒜 : I → SetoidAlgebra _ _} → (∀ i → (𝒜 i) ∈ P{β = β} 𝒦) → ⨅ 𝒜 ∈ P 𝒦
+ piso  : {𝑨 𝑩 : SetoidAlgebra _ _} → 𝑨 ∈ P{β = β} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ P 𝒦
 
 -- The inductive types V
-data V {α ρ : Level}(𝒦 : Pred(SetoidAlgebra α ρ)(ov α)) : Pred(SetoidAlgebra α ρ)(ov(α ⊔ ρ))
+data V {α β : Level}(𝒦 : Pred(SetoidAlgebra α α) (ov α)) :
+                           Pred(SetoidAlgebra (α ⊔ β) (α ⊔ β)) (ov (α ⊔ β))
  where
- vbase  : {𝑨 : SetoidAlgebra α ρ} → 𝑨 ∈ 𝒦 → 𝑨 ∈ V 𝒦
- vhimg  : {𝑨 𝑩 : SetoidAlgebra _ ρ} → 𝑨 ∈ V 𝒦 → ((𝑩 , _) : HomImages 𝑨) → 𝑩 ∈ V 𝒦
- vssub  : {𝑨 𝑩 : SetoidAlgebra _ ρ} → 𝑨 ∈ V 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ V 𝒦
- vpprod : {I : Type}{𝒜 : I → SetoidAlgebra _ ρ} → (∀ i → (𝒜 i) ∈ V 𝒦) → ⨅ 𝒜 ∈ V 𝒦
- viso   : {𝑨 𝑩 : SetoidAlgebra _ ρ} → 𝑨 ∈ V 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ V 𝒦
+ vbase  : {𝑨 : SetoidAlgebra α α} → 𝑨 ∈ 𝒦 → Lift-Alg 𝑨 β β ∈ V 𝒦
+ vhimg  : {𝑨 𝑩 : SetoidAlgebra _ _} → 𝑨 ∈ V{β = β} 𝒦 → ((𝑩 , _) : HomImages 𝑨) → 𝑩 ∈ V 𝒦
+ vssub  : {𝑨 𝑩 : SetoidAlgebra _ _} → 𝑨 ∈ V{β = β} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ V 𝒦
+ vpprod : {I : Type β}{𝒜 : I → SetoidAlgebra _ _} → (∀ i → (𝒜 i) ∈ V{β = β} 𝒦) → ⨅ 𝒜 ∈ V 𝒦
+-- viso₀  : {𝑨 : SetoidAlgebra α α}{𝑩 : SetoidAlgebra (α ⊔ β)(α ⊔ β)} → 𝑨 ∈ V{α}{α} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ V 𝒦
+ viso   : {𝑨 𝑩 : SetoidAlgebra _ _} → 𝑨 ∈ V{β = β} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ V 𝒦
 
 \end{code}
 
@@ -70,13 +78,172 @@ With the closure operator V representing closure under HSP, we represent formall
 
 \begin{code}
 
-is-variety : {α ρ : Level}(𝒱 : Pred (SetoidAlgebra α ρ)_) → Type _
-is-variety{α}{ρ} 𝒱 = V 𝒱 ⊆ 𝒱
+is-variety : {α : Level}(𝒱 : Pred (SetoidAlgebra α α) (ov α)) → Type _
+is-variety {α} 𝒱 = V{α}{α} 𝒱 ⊆ 𝒱
 
-variety : (α ρ : Level) → Type _
-variety α ρ = Σ[ 𝒱 ∈ (Pred (SetoidAlgebra α ρ)_) ] is-variety 𝒱
+variety : {α : Level} → Type _
+variety {α} = Σ[ 𝒱 ∈ (Pred (SetoidAlgebra α α) (ov α)) ] is-variety 𝒱
 
 \end{code}
+
+#### <a id="closure-properties-of-S">Closure properties of S</a>
+
+`S` is a closure operator.  The fact that S is expansive won't be needed, so we omit the proof, but we will make use of monotonicity and idempotence of `S`.  Here are their proofs.
+
+\begin{code}
+
+module _ {α β : Level} where
+
+ S-mono : {𝒦 𝒦' : Pred (SetoidAlgebra α α)(ov α)}
+  →       𝒦 ⊆ 𝒦' → S{α}{β} 𝒦 ⊆ S{α}{β} 𝒦'
+
+ S-mono kk (sbase x) = sbase (kk x)
+ S-mono kk (ssub sA B≤A) = ssub (S-mono kk sA) B≤A
+ S-mono kk (siso x y) = siso (S-mono kk x) y
+
+
+ S-idemp : {𝒦 : Pred (SetoidAlgebra α α)(ov α)}
+  →        S{α ⊔ β}{β} (S{α}{β} 𝒦) ⊆ S{α}{β} 𝒦
+ S-idemp (sbase x) = siso x Lift-≅
+ S-idemp (ssub x y) = ssub (S-idemp x) y
+ S-idemp (siso x y) = siso (S-idemp x) y
+
+ -- S-idemp : {𝒦 : Pred (SetoidAlgebra α α)(ov α)}
+ --  →        S{α ⊔ β}{α ⊔ β} (S{α}{α ⊔ β} 𝒦) ⊆ S{α}{α ⊔ β} 𝒦
+ -- S-idemp (sbase x) = siso x Lift-≅
+ -- S-idemp (ssub x y) = ssub (S-idemp x) y
+ -- S-idemp (siso x y) = siso (S-idemp x) y
+
+
+
+
+\end{code}
+
+
+#### <a id="closure-properties-of-P">Closure properties of P</a>
+
+`P` is a closure operator.  This is proved by checking that `P` is *monotone*, *expansive*, and *idempotent*. The meaning of these terms will be clear from the definitions of the types that follow.
+
+\begin{code}
+
+P-mono : {α β : Level}{𝒦 𝒦' : Pred(SetoidAlgebra α α)(ov α)}
+ →       𝒦 ⊆ 𝒦' → P{α}{β} 𝒦 ⊆ P{α}{β} 𝒦'
+
+P-mono kk (pbase x) = pbase (kk x)
+P-mono kk (pprod x) = pprod (λ i → P-mono kk (x i))
+P-mono kk (piso x x₁) = piso (P-mono kk x) x₁
+
+
+P-expa : {α : Level}{𝒦 : Pred (SetoidAlgebra α α)(ov α)} → 𝒦 ⊆ P{α}{α} 𝒦
+P-expa{α}{𝒦} {𝑨} KA =  piso {𝑩 = 𝑨} (pbase KA) (≅-sym Lift-≅)
+
+
+module _ {α β : Level} where
+
+ P-idemp : {𝒦 : Pred (SetoidAlgebra α α)(ov α)}
+  →        P{α ⊔ β}{α ⊔ β} (P{α}{α ⊔ β} 𝒦) ⊆ P{α}{α ⊔ β} 𝒦
+
+ P-idemp (pbase x) = piso x Lift-≅
+ P-idemp (pprod x) = pprod (λ i → P-idemp (x i))
+ P-idemp (piso x x₁) = piso (P-idemp x) x₁
+
+\end{code}
+
+We sometimes want to go back and forth between our two representations of subalgebras of algebras in a class. The tools `subalgebra→S` and `S→subalgebra` are made for that purpose.
+
+\begin{code}
+
+module _ {α β : Level}{𝒦 : Pred (SetoidAlgebra α α)(ov α)} where
+
+ subalgebra→S : {𝑩 : SetoidAlgebra (α ⊔ β)(α ⊔ β)} → 𝑩 ≤c 𝒦 → 𝑩 ∈ S{α}{β} 𝒦
+ subalgebra→S {𝑩} (𝑨 , (kA , B≤A)) = ssub (sbase kA) (≤-Lift B≤A)
+
+module _ {α : Level}{𝒦 : Pred (SetoidAlgebra α α)(ov α)} where
+ S→subalgebra : {𝑩 : SetoidAlgebra α α} → 𝑩 ∈ S{α}{α} 𝒦  →  𝑩 ≤c 𝒦
+ S→subalgebra (sbase{𝑩} x) = 𝑩 , (x , ≅→≤ (≅-sym Lift-≅))
+ S→subalgebra {𝑩} (ssub{𝑨}{.𝑩} sA B≤A) = ≤→≤c→≤c B≤A (S→subalgebra sA)
+ -- S→subalgebra (siso₀{𝑨}{𝑩} sA A≅B) = ≤→≤c→≤c (≅→≤ (≅-sym A≅B)) (S→subalgebra sA)
+ S→subalgebra (siso{𝑨}{𝑩} sA A≅B) = ≤→≤c→≤c (≅→≤ (≅-sym A≅B)) (S→subalgebra sA)
+
+\end{code}
+
+\begin{code}
+
+open Level
+
+module _ {α β : Level} {𝑨 : SetoidAlgebra (α ⊔ β)(α ⊔ β)}{𝒦 : Pred (SetoidAlgebra α α)(ov α)} where
+ sk→lsk : 𝑨 ∈ S{α}{β} 𝒦 → Lift-Alg 𝑨 β β ∈ S{α}{β} 𝒦
+ sk→lsk sA = S-idemp sslA
+  where
+  lA : SetoidAlgebra (α ⊔ β)(α ⊔ β)
+  lA = Lift-Alg 𝑨 β β
+  sslA : lA ∈ S{α ⊔ β}{β} (S{α}{β} 𝒦)
+  sslA = sbase sA
+
+  slA : lA ∈ S{α}{β} 𝒦
+  slA = S-idemp sslA
+
+ -- sk→lsk' : {β : Level} → 𝑨 ∈ S{α}{α} 𝒦 → Lift-Alg 𝑨 (α ⊔ β) (α ⊔ β) ∈ S{α}{α ⊔ β} 𝒦
+ -- sk→lsk' {β = β} sA = sk→lsk {β = α ⊔ β} sA
+
+-- module Vlift {α : Level} {𝒦 : Pred (SetoidAlgebra α α)(ov α)} where
+
+
+ -- VlA : {𝑨 : SetoidAlgebra (ov α) (ov α)} → 𝑨 ∈ V{α}{ov α} 𝒦
+ --  →    (Lift-Algˡ 𝑨 (lsuc (ov α))) ∈ (V{α}{lsuc (ov α)} 𝒦)
+ -- VlA x = ?
+ -- (vbase{𝑨} x) = visow (vbase x) (Lift-Alg-assoc _ _ {𝑨})
+ -- VlA (vlift{𝑨} x) = visow (vlift x) (Lift-Alg-assoc _ _ {𝑨})
+ -- VlA (vliftw{𝑨} x) = visow (VlA x) (Lift-Alg-assoc _ _ {𝑨})
+
+ -- VlA (vhimg{𝑨}{𝑩} x hB) = vhimg {𝑩 = Lift-Alg 𝑩 (lsuc (ov α))} (VlA x) (lC , lChi)
+ --  where
+ --  lC : Algebra (lsuc (ov(α))) 𝑆
+ --  lC = Lift-Alg ∣ hB ∣ (lsuc (ov(α)))
+ --  lChi : lC IsHomImageOf _
+ --  lChi = (Lift-Alg-hom-image (lsuc (ov(α))) {∣ hB ∣} (lsuc (ov(α))) ∥ hB ∥)
+
+ -- VlA (vssubw{𝑨}{𝑩} x B≤A) = vssubw (VlA x) (Lift-≤-Lift  (lsuc (ov(α))) {𝑨}  (lsuc (ov(α))) B≤A)
+ -- VlA (vprodu{I}{𝒜} x) = visow (vprodw vlA) (≅-sym B≅A)
+ --  where
+ --  𝑰 : Type (lsuc (ov α))
+ --  𝑰 = Lift (lsuc (ov α)) I
+
+ --  lA : 𝑰 → Algebra (lsuc (ov α)) 𝑆
+ --  lA i = Lift-Alg (𝒜 (lower i)) (lsuc (ov α))
+
+ --  vlA : ∀ i → (lA i) ∈ V{α}{lsuc (ov α)} 𝒦
+ --  vlA i = vlift (x (lower i))
+
+ --  iso-components : ∀ i → 𝒜 i ≅ lA (lift i)
+ --  iso-components i = Lift-≅
+
+ --  B≅A : Lift-Alg (⨅ 𝒜) (lsuc (ov α)) ≅ ⨅ lA
+ --  B≅A = Lift-Alg-⨅≅  {fizw = fe₁}{fiu = fe₀} iso-components
+
+
+ -- VlA (vprodw{I}{𝒜} x) = visow (vprodw vlA) (≅-sym B≅A)
+ --  where
+ --  𝑰 : Type (lsuc (ov α))
+ --  𝑰 = Lift (lsuc (ov α)) I
+
+ --  lA : 𝑰 → Algebra (lsuc (ov α)) 𝑆
+ --  lA i = Lift-Alg (𝒜 (lower i)) (lsuc (ov α))
+
+ --  vlA : ∀ i → (lA i) ∈ V{α}{lsuc (ov α)} 𝒦
+ --  vlA i = VlA (x (lower i))
+
+ --  iso-components : ∀ i → 𝒜 i ≅ lA (lift i)
+ --  iso-components i = Lift-≅
+
+ --  B≅A : Lift-Alg (⨅ 𝒜) (lsuc (ov α)) ≅ ⨅ lA
+ --  B≅A = Lift-Alg-⨅≅ {fizw = fe₁}{fiu = fe₂} iso-components
+
+ -- VlA (visou{𝑨}{𝑩} x A≅B) = visow (vlift x) (Lift-Alg-iso A≅B)
+ -- VlA (visow{𝑨}{𝑩} x A≅B) = visow (VlA x) (Lift-Alg-iso A≅B)
+
+\end{code}
+
 
 --------------------------------
 

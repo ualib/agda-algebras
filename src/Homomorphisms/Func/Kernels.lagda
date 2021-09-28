@@ -18,6 +18,7 @@ open import Algebras.Basic using (𝓞 ; 𝓥 ; Signature )
 module Homomorphisms.Func.Kernels {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ------------------------------------------
+open import Agda.Primitive   using ( _⊔_ ; lsuc ) -- ; Level ) renaming ( Set to Type ; lzero to ℓ₀ )
 open import Data.Product      using ( _,_ )
 open import Function          using ( _∘_ ; id )
 open import Function.Bundles  using ( Func )
@@ -30,7 +31,7 @@ open import Overture.Preliminaries                using ( ∣_∣ ; ∥_∥ )
 open import Overture.Func.Preliminaries           using ( _⟶_ )
 open import Overture.Func.Inverses                using ( Image_∋_ )
 open import Relations.Discrete                    using ( kerRel ; kerRelOfEquiv )
-open import Algebras.Func.Basic           {𝑆 = 𝑆} using ( SetoidAlgebra ; _̂_ )
+open import Algebras.Func.Basic           {𝑆 = 𝑆} using ( SetoidAlgebra ; _̂_ ; ov )
 open import Algebras.Func.Congruences     {𝑆 = 𝑆} using ( _∣≈_ ; Con ; mkcon ; _╱_ ; IsCongruence )
 open import Homomorphisms.Func.Basic      {𝑆 = 𝑆} using ( hom ; IsHom ; epi ; IsEpi ; epi-to-hom )
 open import Homomorphisms.Func.Properties {𝑆 = 𝑆} using ( 𝒾𝒹 )
@@ -85,7 +86,7 @@ Now that we have a congruence, we can construct the quotient relative to the ker
 
 \begin{code}
 
- kerquo : SetoidAlgebra _ _
+ kerquo : SetoidAlgebra α ρᵇ
  kerquo = 𝑨 ╱ kercon
 
 ker[_⇒_]_ : (𝑨 : SetoidAlgebra α ρᵃ) (𝑩 : SetoidAlgebra β ρᵇ)

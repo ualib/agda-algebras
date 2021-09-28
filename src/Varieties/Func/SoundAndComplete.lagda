@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Varieties.Func.EquationalLogic module (The Agda Universal Algebra Library)"
+title : "Varieties.Func.SoundAndComplete module (The Agda Universal Algebra Library)"
 date : "2021-01-14"
 author: "agda-algebras development team"
 ---
 
 #### <a id="entailment-derivation-rules-soundness-and-completeness">Entailment, derivation rules, soundness and completeness</a>
 
-This is the [Varieties.Func.EquationalLogic][] module of the [Agda Universal Algebra Library][].
+This is the [Varieties.Func.SoundAndComplete][] module of the [Agda Universal Algebra Library][].
 
 This module is based on [Andreas Abel's Agda formalization of Birkhoff's completeness theorem](http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf).
 
@@ -17,12 +17,12 @@ This module is based on [Andreas Abel's Agda formalization of Birkhoff's complet
 
 open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
-module Varieties.Func.EquationalLogic {𝑆 : Signature 𝓞 𝓥} where
+module Varieties.Func.SoundAndComplete {𝑆 : Signature 𝓞 𝓥} where
 
 -- imports from Agda and the Agda Standard Library -------------------------------------------
 open import Agda.Primitive   using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
 open import Data.Product     using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Function.Base    using ( _∘_ ; flip )
+open import Function.Base    using ( _∘_ ; flip ; id )
 open import Function.Bundles using ( Func )
 open import Relation.Binary  using ( Setoid ; IsEquivalence )
 open import Relation.Unary   using ( Pred ; _∈_ )
@@ -112,6 +112,9 @@ module _ {χ ι : Level} where
   sym   : ∀ {p q : Term Γ}   → E ⊢ Γ ▹ p ≈ q → E ⊢ Γ ▹ q ≈ p
   trans : ∀ {p q r : Term Γ} → E ⊢ Γ ▹ p ≈ q → E ⊢ Γ ▹ q ≈ r → E ⊢ Γ ▹ p ≈ r
 
+ ⊢▹≈IsEquiv : {I : Type ι}{E : I → Eq} → IsEquivalence (E ⊢ Γ ▹_≈_)
+ ⊢▹≈IsEquiv = record { refl = refl ; sym = sym ; trans = trans }
+
 \end{code}
 
 
@@ -135,13 +138,14 @@ module Soundness {χ α ρ ι : Level}{I : Type ι} (E : I → Eq{χ})
  open IsEquivalence renaming ( refl to refl≈ ; sym to  sym≈ ; trans to trans≈ )
 
  sound : ∀ {p q} → E ⊢ X ▹ p ≈ q → 𝑨 ⊨ (p ≈̇ q)
- sound (hyp i)                      =  V i
- sound (app {f = f} es) ρ           =  Interp .cong (refl , λ i → sound (es i) ρ)
- sound (sub {p = p} {q} Epq σ) ρ    =  begin
-                                       ⟦ p [ σ ] ⟧ ⟨$⟩ ρ       ≈⟨ substitution p σ ρ ⟩
-                                       ⟦ p       ⟧ ⟨$⟩ ⟪ σ ⟫ ρ ≈⟨ sound Epq (⟪ σ ⟫ ρ)  ⟩
-                                       ⟦ q       ⟧ ⟨$⟩ ⟪ σ ⟫ ρ ≈˘⟨ substitution  q σ ρ ⟩
-                                       ⟦ q [ σ ] ⟧ ⟨$⟩ ρ       ∎
+ sound (hyp i)                      = V i
+ sound (app {f = f} es) ρ           = Interp .cong (refl , λ i → sound (es i) ρ)
+ sound (sub {p = p} {q} Epq σ) ρ    =
+  begin
+   ⟦ p [ σ ] ⟧ ⟨$⟩       ρ       ≈⟨ substitution p σ ρ ⟩
+   ⟦ p       ⟧ ⟨$⟩ ⟪ σ ⟫ ρ ≈⟨ sound Epq (⟪ σ ⟫ ρ)  ⟩
+   ⟦ q       ⟧ ⟨$⟩ ⟪ σ ⟫ ρ ≈˘⟨ substitution  q σ ρ ⟩
+   ⟦ q [ σ ] ⟧ ⟨$⟩       ρ ∎
 
  sound (refl {p = p})               = refl≈  isEquiv {x = p}
  sound (sym {p = p} {q} Epq)        = sym≈   isEquiv {x = p}{q}   (sound Epq)
@@ -179,7 +183,7 @@ module FreeAlgebra {χ : Level}{X : Type χ}{ι : Level}{I : Type ι}(E : I → 
  FreeDomain : Type χ → Setoid _ _
  FreeDomain X = record { Carrier       = Term X
                        ; _≈_           = E ⊢ X ▹_≈_
-                       ; isEquivalence = record { refl = refl ; sym = sym ; trans = trans }
+                       ; isEquivalence = ⊢▹≈IsEquiv
                        }
 
  -- The interpretation of an operation is simply the operation itself.
@@ -190,7 +194,7 @@ module FreeAlgebra {χ : Level}{X : Type χ}{ι : Level}{I : Type ι}(E : I → 
 
 
  -- The relatively free algebra
- 𝔽[_] : Type χ → SetoidAlgebra _ _
+ 𝔽[_] : Type χ → SetoidAlgebra (ov χ) (ι ⊔ ov χ)
  Domain 𝔽[ X ] = FreeDomain X
  Interp 𝔽[ X ] = FreeInterp
 
@@ -220,14 +224,11 @@ hold "on the nose" if we had function extensionality.)
  -- The term model satisfies all the equations it started out with.
  satisfies : ∀ i → 𝔽[ X ] ⊨ E i
  satisfies i σ = begin
-                 ⟦ p ⟧ ⟨$⟩ σ  ≈⟨ evaluation p σ ⟩
-                 p [ σ ]        ≈⟨ sub (hyp i) σ ⟩
-                 q [ σ ]        ≈˘⟨ evaluation q σ ⟩
-                 ⟦ q ⟧ ⟨$⟩ σ  ∎
-                 where
-                  open SetoidReasoning 𝔽
-                  p = lhs (E i)
-                  q = rhs (E i)
+                  ⟦ p ⟧ ⟨$⟩ σ  ≈⟨ evaluation p σ ⟩
+                  p [ σ ]      ≈⟨ sub (hyp i) σ ⟩
+                  q [ σ ]      ≈˘⟨ evaluation q σ ⟩
+                  ⟦ q ⟧ ⟨$⟩ σ  ∎
+  where open SetoidReasoning 𝔽 ; p = lhs (E i) ; q = rhs (E i)
 
 \end{code}
 
@@ -236,14 +237,14 @@ We are finally ready to formally state and prove Birkhoff's Completeness Theorem
 \begin{code}
 
  completeness : ∀ p q → Mod E ⊫ (p ≈̇ q) → E ⊢ X ▹ p ≈ q
- completeness p q V = begin
-       p              ≈˘⟨ identity p ⟩
-       p [ σ₀ ]       ≈˘⟨ evaluation p σ₀ ⟩
-       ⟦ p ⟧ ⟨$⟩ σ₀   ≈⟨ V 𝔽[ X ] satisfies σ₀ ⟩
-       ⟦ q ⟧ ⟨$⟩ σ₀   ≈⟨ evaluation q σ₀ ⟩
-       q [ σ₀ ]       ≈⟨ identity q ⟩
-       q              ∎
-  where open SetoidReasoning 𝔽
+ completeness p q V =
+  begin
+   p              ≈˘⟨ identity p ⟩
+   p [ σ₀ ]       ≈˘⟨ evaluation p σ₀ ⟩
+   ⟦ p ⟧ ⟨$⟩ σ₀   ≈⟨ V 𝔽[ X ] satisfies σ₀ ⟩
+   ⟦ q ⟧ ⟨$⟩ σ₀   ≈⟨ evaluation q σ₀ ⟩
+   q [ σ₀ ]       ≈⟨ identity q ⟩
+   q              ∎ where open SetoidReasoning 𝔽
 \end{code}
 
 --------------------------------

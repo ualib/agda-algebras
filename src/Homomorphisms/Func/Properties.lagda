@@ -23,13 +23,14 @@ open import Function        using ( id )
 open import Function.Bundles  using ( Func )
 open import Level           using ( Level )
 open import Relation.Binary using (  Setoid )
-open import Relation.Binary.PropositionalEquality using ( _≡_ )
+open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------
 open import Overture.Preliminaries           using ( ∣_∣ )
 open import Overture.Func.Preliminaries      using ( _⟶_ ; _∘_ ; 𝑖𝑑 )
-open import Algebras.Func.Basic      {𝑆 = 𝑆} using ( SetoidAlgebra ; _̂_ ; Lift-Alg ; 𝕌[_] )
+open import Algebras.Func.Basic      {𝑆 = 𝑆} using ( SetoidAlgebra ; _̂_ ; Lift-Algˡ ; Lift-Algʳ ; Lift-Alg ; 𝕌[_] )
 open import Homomorphisms.Func.Basic {𝑆 = 𝑆} using ( IsHom ; compatible-map ; ≈preserving ; hom )
+open Func using ( cong ) renaming (f to _⟨$⟩_ )
 
 private variable
  α β γ ρᵃ ρᵇ ρᶜ ℓ : Level
@@ -44,33 +45,55 @@ First we define the identity homomorphism for setoid algebras and then we prove 
 
 module _ {𝑨 : SetoidAlgebra α ρᵃ} where
  open SetoidAlgebra 𝑨 using () renaming (Domain to A )
- open Setoid A using ( reflexive ) renaming ( _≈_ to _≈₁_ )
- open Func renaming (f to _⟨$⟩_ )
- open SetoidAlgebra
- open Setoid renaming ( reflexive to rfl ) hiding ( trans )
-
+ open Setoid A using ( reflexive ) renaming ( _≈_ to _≈₁_ ; refl to refl₁ )
 
  𝒾𝒹 :  hom 𝑨 𝑨
- 𝒾𝒹 = 𝑖𝑑 , record { compatible = reflexive _≡_.refl
+ 𝒾𝒹 = 𝑖𝑑 , record { compatible = reflexive ≡.refl
                  ; preserves≈ = id }
 
+
+
+module _ {𝑨 : SetoidAlgebra α ρᵃ}{ℓ : Level} where
+ open SetoidAlgebra 𝑨 using () renaming (Domain to A )
+ open Setoid A using ( reflexive ) renaming ( _≈_ to _≈₁_ ; refl to refl₁ )
+
+ open SetoidAlgebra  using ( Domain )
+ open Setoid (Domain (Lift-Algˡ 𝑨 ℓ)) using () renaming ( _≈_ to _≈ˡ_ ; refl to reflˡ)
+ open Setoid (Domain (Lift-Algʳ 𝑨 ℓ)) using () renaming ( _≈_ to _≈ʳ_ ; refl to reflʳ)
+
  open Level
- 𝓁𝒾𝒻𝓉 : hom 𝑨 (Lift-Alg 𝑨 ℓ)
- 𝓁𝒾𝒻𝓉 = record { f = lift ; cong = id }
-      , record { compatible = reflexive _≡_.refl
-               ; preserves≈ = id }
+ ToLiftˡ : hom 𝑨 (Lift-Algˡ 𝑨 ℓ)
+ ToLiftˡ = record { f = lift ; cong = id }
+         , record { compatible = reflexive ≡.refl
+                  ; preserves≈ = id }
 
- 𝓁ℴ𝓌ℯ𝓇 : hom (Lift-Alg 𝑨 ℓ) 𝑨
- 𝓁ℴ𝓌ℯ𝓇 {ℓ = ℓ} = record { f = lower ; cong = id }
-                , record { compatible = rfl (Domain (Lift-Alg 𝑨 ℓ)) _≡_.refl
-                         ; preserves≈ = id }
+ FromLiftˡ : hom (Lift-Algˡ 𝑨 ℓ) 𝑨
+ FromLiftˡ = record { f = lower ; cong = id }
+                   , record { compatible = reflˡ
+                            ; preserves≈ = id }
+
+ ToFromLiftˡ : ∀ b →  (∣ ToLiftˡ ∣ ⟨$⟩ (∣ FromLiftˡ ∣ ⟨$⟩ b)) ≈ˡ b
+ ToFromLiftˡ b = refl₁
+
+ FromToLiftˡ : ∀ a → (∣ FromLiftˡ ∣ ⟨$⟩ (∣ ToLiftˡ ∣ ⟨$⟩ a)) ≈₁ a
+ FromToLiftˡ a = refl₁
 
 
- 𝓁𝒾𝒻𝓉∼𝓁ℴ𝓌ℯ𝓇 : ∀ b → (_≈_ (Domain (Lift-Alg 𝑨 ℓ))) (∣ 𝓁𝒾𝒻𝓉 ∣ ⟨$⟩ (∣ 𝓁ℴ𝓌ℯ𝓇 ∣ ⟨$⟩ b)) b
- 𝓁𝒾𝒻𝓉∼𝓁ℴ𝓌ℯ𝓇 b = Setoid.refl A
+ ToLiftʳ : hom 𝑨 (Lift-Algʳ 𝑨 ℓ)
+ ToLiftʳ = record { f = id ; cong = lift }
+         , record { compatible = lift (reflexive ≡.refl)
+                  ; preserves≈ = lift }
 
- 𝓁ℴ𝓌ℯ𝓇∼𝓁𝒾𝒻𝓉 : ∀ a → (∣ 𝓁ℴ𝓌ℯ𝓇 {ℓ} ∣ ⟨$⟩ (∣ 𝓁𝒾𝒻𝓉 ∣ ⟨$⟩ a)) ≈₁ a
- 𝓁ℴ𝓌ℯ𝓇∼𝓁𝒾𝒻𝓉 a = Setoid.refl A
+ FromLiftʳ : hom (Lift-Algʳ 𝑨 ℓ) 𝑨
+ FromLiftʳ = record { f = id ; cong = lower }
+           , record { compatible = reflˡ
+                    ; preserves≈ = lower }
+
+ ToFromLiftʳ : ∀ b → (∣ ToLiftʳ ∣ ⟨$⟩ (∣ FromLiftʳ ∣ ⟨$⟩ b)) ≈ʳ b
+ ToFromLiftʳ b = lift refl₁
+
+ FromToLiftʳ : ∀ a → (∣ FromLiftʳ ∣ ⟨$⟩ (∣ ToLiftʳ ∣ ⟨$⟩ a)) ≈₁ a
+ FromToLiftʳ a = refl₁
 
 \end{code}
 
@@ -79,18 +102,22 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ} where
 
 \begin{code}
 
- module _ {𝑩 : SetoidAlgebra β ρᵇ}{𝑪 : SetoidAlgebra γ ρᶜ} where
+module _ {𝑨 : SetoidAlgebra α ρᵃ}
+         {𝑩 : SetoidAlgebra β ρᵇ}
+         {𝑪 : SetoidAlgebra γ ρᶜ} where
 
+  open SetoidAlgebra 𝑨 using () renaming (Domain to A )
   open SetoidAlgebra 𝑩 using () renaming (Domain to B )
   open SetoidAlgebra 𝑪 using () renaming (Domain to C )
-  open Setoid B using () renaming ( _≈_ to _≈₂_ )
-  open Setoid C using (trans) renaming ( _≈_ to _≈₃_ )
+  open Setoid A using ()        renaming ( _≈_ to _≈₁_ )
+  open Setoid B using ()        renaming ( _≈_ to _≈₂_ )
+  open Setoid C using ( trans ) renaming ( _≈_ to _≈₃_ )
+
   open IsHom
 
   -- The composition of homomorphisms is again a homomorphism
   ∘-is-hom : {g : A ⟶ B}{h : B ⟶ C}
    →         IsHom 𝑨 𝑩 g → IsHom 𝑩 𝑪 h
-             -------------------------------------------------
    →         IsHom 𝑨 𝑪 (h ∘ g)
 
   ∘-is-hom {g} {h} ghom hhom = record { compatible = i ; preserves≈ = ii }
@@ -121,30 +148,29 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ} {𝑩 : SetoidAlgebra β ρᵇ} where
  open Setoid            using ( _≈_ )
  open Setoid (Domain 𝑨) using ( reflexive ) renaming ( _≈_ to _≈₁_ )
  open Setoid (Domain 𝑩) using ()            renaming ( _≈_ to _≈₂_ )
- open Func              using ( cong )      renaming ( f   to _⟨$⟩_ )
  open Level
 
- Lift-hom : hom 𝑨 𝑩  → (ℓᵃ ℓᵇ : Level) →  hom (Lift-Alg 𝑨 ℓᵃ) (Lift-Alg 𝑩 ℓᵇ)
+ Lift-hom : hom 𝑨 𝑩  → (ℓᵃ ℓᵇ : Level) →  hom (Lift-Algˡ 𝑨 ℓᵃ) (Lift-Algˡ 𝑩 ℓᵇ)
  Lift-hom (f , fhom) ℓᵃ ℓᵇ = ϕ , Goal
   where
   lA lB : SetoidAlgebra _ _
-  lA = Lift-Alg 𝑨 ℓᵃ
-  lB = Lift-Alg 𝑩 ℓᵇ
+  lA = Lift-Algˡ 𝑨 ℓᵃ
+  lB = Lift-Algˡ 𝑩 ℓᵇ
 
   ψ : Domain lA ⟶ Domain 𝑩
   ψ = record { f = λ x → f ⟨$⟩ (lower x) ; cong = cong f }
 
   lABh : IsHom lA 𝑩 ψ
-  lABh = ∘-is-hom {𝑨 = lA}{𝑩 = 𝑨}{𝑩} (snd 𝓁ℴ𝓌ℯ𝓇) fhom
+  lABh = ∘-is-hom {𝑨 = lA}{𝑩 = 𝑨}{𝑩} (snd FromLiftˡ) fhom
 
   ϕ : Domain lA ⟶ Domain lB
   ϕ = record { f = λ x → lift ((f ⟨$⟩ (lower x))) ; cong = cong f }
 
   Goal : IsHom lA lB ϕ
-  Goal = ∘-is-hom {𝑨 = lA}{𝑩 = 𝑩}{lB} lABh (snd 𝓁𝒾𝒻𝓉)
+  Goal = ∘-is-hom {𝑨 = lA}{𝑩 = 𝑩}{lB} lABh (snd ToLiftˡ)
 
  lift-hom-lemma : (h : hom 𝑨 𝑩)(a : 𝕌[ 𝑨 ])(ℓᵃ ℓᵇ : Level)
-  →               (_≈_ (Domain (Lift-Alg 𝑩 ℓᵇ))) (lift (∣ h ∣ ⟨$⟩ a))
+  →               (_≈_ (Domain (Lift-Algˡ 𝑩 ℓᵇ))) (lift (∣ h ∣ ⟨$⟩ a))
                   (∣ Lift-hom h ℓᵃ ℓᵇ ∣ ⟨$⟩ lift a)
  lift-hom-lemma h a ℓᵃ ℓᵇ = Setoid.refl (Domain 𝑩)
 

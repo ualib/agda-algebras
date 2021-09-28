@@ -32,9 +32,9 @@ open import Overture.Func.Preliminaries           using ( lift∼lower )
 open import Overture.Func.Inverses                using ( Ran ; _range ; _preimage ; _image ; Inv
                                                         ; _preimage≈image ; InvIsInverseʳ ; Image_∋_ )
 open import Overture.Func.Surjective              using ( IsSurjective )
-open import Algebras.Func.Basic           {𝑆 = 𝑆} using ( SetoidAlgebra ; ov ; _̂_ ; ⟦_⟧ ; Lift-Alg ; 𝕌[_] )
+open import Algebras.Func.Basic           {𝑆 = 𝑆} using ( SetoidAlgebra ; ov ; _̂_ ; ⟦_⟧ ; Lift-Algˡ ; 𝕌[_] )
 open import Homomorphisms.Func.Basic      {𝑆 = 𝑆} using ( hom ; IsHom )
-open import Homomorphisms.Func.Properties {𝑆 = 𝑆} using ( Lift-hom ; 𝓁𝒾𝒻𝓉 ; lift-hom-lemma )
+open import Homomorphisms.Func.Properties {𝑆 = 𝑆} using ( Lift-hom ; ToLiftˡ ; lift-hom-lemma )
 
 private variable
  α ρᵃ β ρᵇ : Level
@@ -140,7 +140,7 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ}
 
  Lift-epi-is-epi h ℓᵃ ℓᵇ hepi {b} = Goal
   where
-  open SetoidAlgebra (Lift-Alg 𝑩 ℓᵇ) using () renaming (Domain to lB )
+  open SetoidAlgebra (Lift-Algˡ 𝑩 ℓᵇ) using () renaming (Domain to lB )
   open Setoid lB using () renaming ( _≈_ to _≈ₗ₂_ )
 
   a : 𝕌[ 𝑨 ]
@@ -153,7 +153,7 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ}
   lem2' = sym  (InvIsInverseʳ hepi)
 
   lem2 : (lift (lower b)) ≈ₗ₂ (lift (∣ h ∣ ⟨$⟩ a))
-  lem2 = cong{From = B} ∣ 𝓁𝒾𝒻𝓉{𝑨 = 𝑩}{ℓ = ℓᵇ} ∣ lem2'
+  lem2 = cong{From = B} ∣ ToLiftˡ{𝑨 = 𝑩}{ℓᵇ} ∣ lem2'
 
   lem3 : (lift (∣ h ∣ ⟨$⟩ a)) ≈ₗ₂ ((∣ Lift-hom h ℓᵃ ℓᵇ ∣ ⟨$⟩ lift a))
   lem3 = lift-hom-lemma h a ℓᵃ ℓᵇ
@@ -166,16 +166,16 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ}
 
 
  Lift-Alg-hom-image : (ℓᵃ ℓᵇ : Level) → 𝑩 IsHomImageOf 𝑨
-  →                   (Lift-Alg 𝑩 ℓᵇ) IsHomImageOf (Lift-Alg 𝑨 ℓᵃ)
+  →                   (Lift-Algˡ 𝑩 ℓᵇ) IsHomImageOf (Lift-Algˡ 𝑨 ℓᵃ)
 
  Lift-Alg-hom-image ℓᵃ ℓᵇ ((φ , φhom) , φepic) = Goal
   where
-  lφ : hom (Lift-Alg 𝑨 ℓᵃ) (Lift-Alg 𝑩 ℓᵇ)
+  lφ : hom (Lift-Algˡ 𝑨 ℓᵃ) (Lift-Algˡ 𝑩 ℓᵇ)
   lφ = Lift-hom {𝑨 = 𝑨}{𝑩} (φ , φhom) ℓᵃ ℓᵇ
 
   lφepic : IsSurjective ∣ lφ ∣
   lφepic = Lift-epi-is-epi (φ , φhom) ℓᵃ ℓᵇ φepic
-  Goal : (Lift-Alg 𝑩 ℓᵇ) IsHomImageOf (Lift-Alg 𝑨 ℓᵃ)
+  Goal : (Lift-Algˡ 𝑩 ℓᵇ) IsHomImageOf (Lift-Algˡ 𝑨 ℓᵃ)
   Goal = lφ , lφepic
 
 \end{code}

@@ -46,22 +46,19 @@ private variable
 open Func using ( cong ) renaming ( f to _⟨$⟩_ )
 open SetoidAlgebra using ( Domain )
 
-module _ (𝑨 : SetoidAlgebra α ρᵃ) (𝑩 : SetoidAlgebra β ρᵇ)(hh : hom 𝑨 𝑩) where
- open Setoid (Domain 𝑨) using () renaming ( _≈_ to _≈₁_ )
+module _ {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ}(hh : hom 𝑨 𝑩) where
  open SetoidAlgebra 𝑩 using ( Interp ) renaming ( Domain to B )
- open Setoid B using ( refl ; sym ; trans ) renaming ( _≈_ to _≈₂_ )
+ open Setoid B using ( _≈_ ; refl ; sym ; trans ) -- renaming ( _≈_ to _≈₂_ )
  open SetoidAlgebra (kerquo hh) using () renaming ( Domain to A/hKer )
- open Setoid A/hKer using () renaming ( _≈_ to hKer )
 
- open SetoidReasoning (Domain 𝑩)
  open IsHom
  private
   hfunc = ∣ hh ∣
   h = _⟨$⟩_ hfunc
 
  FirstHomTheorem : Σ[ φ ∈ hom (kerquo hh) 𝑩  ]
-                     (∀ a → h a ≈₂ ∣ φ ∣ ⟨$⟩ (∣ πker hh ∣ ⟨$⟩ a))
-                   ∧ IsInjective ∣ φ ∣
+                    (∀ a → h a ≈ ∣ φ ∣ ⟨$⟩ (∣ πker hh ∣ ⟨$⟩ a))
+                    ∧ IsInjective ∣ φ ∣
 
  FirstHomTheorem = (φ , φhom) , (λ _ → refl) , φmon
   where
@@ -83,12 +80,12 @@ Now we prove that the homomorphism whose existence is guaranteed by `FirstHomThe
 \begin{code}
 
  FirstHomUnique : (f g : hom (kerquo hh) 𝑩)
-  →                 (∀ a →  h a ≈₂ ∣ f ∣ ⟨$⟩ (∣ πker hh ∣ ⟨$⟩ a))
-  →                 (∀ a →  h a ≈₂ ∣ g ∣ ⟨$⟩ (∣ πker hh ∣ ⟨$⟩ a))
-  →                 ∀ [a]  →  ∣ f ∣ ⟨$⟩ [a] ≈₂ ∣ g ∣ ⟨$⟩ [a]
+  →                 (∀ a →  h a ≈ ∣ f ∣ ⟨$⟩ (∣ πker hh ∣ ⟨$⟩ a))
+  →                 (∀ a →  h a ≈ ∣ g ∣ ⟨$⟩ (∣ πker hh ∣ ⟨$⟩ a))
+  →                 ∀ [a]  →  ∣ f ∣ ⟨$⟩ [a] ≈ ∣ g ∣ ⟨$⟩ [a]
 
- FirstHomUnique f g hfk hgk a =
-  begin ∣ f ∣ ⟨$⟩ a ≈˘⟨ hfk a ⟩ h a ≈˘⟨ sym (hgk a)⟩ ∣ g ∣ ⟨$⟩ a ∎
+ FirstHomUnique fh gh hfk hgk a = trans (sym (hfk a)) (hgk a)
+
 \end{code}
 
 --------------------------------------

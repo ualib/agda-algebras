@@ -17,18 +17,19 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Subalgebras.Func.Subalgebras {𝑆 : Signature 𝓞 𝓥} where
 
--- imports from Agda and the Agda Standard Library -------------------------------------------------
+-- imports from Agda and the Agda Standard Library ------------------------------------------
 open import Agda.Primitive   using ( Level ; _⊔_ ) renaming ( Set to Type )
-open import Data.Product     using ( _,_ ; Σ-syntax ) renaming ( _×_ to _∧_ )
+open import Data.Product     using ( _,_ ; Σ-syntax ) renaming ( _×_ to _∧_ ; proj₂ to snd )
 open import Relation.Binary  using ( REL )
 open import Relation.Unary   using ( Pred ; _∈_ )
 
--- Imports from the Agda Universal Algebra Library --------------------------------------------------
-open import Overture.Preliminaries           using ( ∣_∣ )
-open import Overture.Func.Injective          using ( IsInjective )
-open import Algebras.Func.Basic      {𝑆 = 𝑆} using ( SetoidAlgebra ; ov )
-open import Homomorphisms.Func.Basic {𝑆 = 𝑆} using ( hom )
-
+-- Imports from the Agda Universal Algebra Library ------------------------------------------
+open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ )
+open import Overture.Func.Injective            using ( IsInjective )
+open import Algebras.Func.Basic        {𝑆 = 𝑆} using ( SetoidAlgebra ; ov )
+open import Homomorphisms.Func.Basic   {𝑆 = 𝑆} using ( hom )
+open import Homomorphisms.Func.Kernels {𝑆 = 𝑆} using ( kerquo )
+open import Homomorphisms.Func.Noether {𝑆 = 𝑆} using ( FirstHomTheorem )
 private variable
  α ρᵃ β ρᵇ ℓ : Level
 
@@ -37,7 +38,7 @@ _≥_  -- (alias for supalgebra (aka overalgebra))
 𝑨 IsSupalgebraOf 𝑩 = Σ[ h ∈ hom 𝑩 𝑨 ] IsInjective ∣ h ∣
 
 _≤_  -- (alias for subalgebra relation))
- _IsSubalgebraOf_ : SetoidAlgebra α ρᵃ → SetoidAlgebra β ρᵇ → Type _
+ _IsSubalgebraOf_ : SetoidAlgebra α ρᵃ → SetoidAlgebra β ρᵇ → Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
 𝑨 IsSubalgebraOf 𝑩 = Σ[ h ∈ hom 𝑨 𝑩 ] IsInjective ∣ h ∣
 
 -- Syntactic sugar for sup/sub-algebra relations.
@@ -106,6 +107,20 @@ record SubalgebraOfClass' : Type (ov (α ⊔ β ⊔ ρᵃ ⊔ ρᵇ ⊔ ℓ))
 -- The collection of subalgebras of algebras in class 𝒦.
 SubalgebrasOfClass : Pred (SetoidAlgebra α ρᵃ) ℓ → {β ρᵇ : Level} → Type _
 SubalgebrasOfClass 𝒦 {β}{ρᵇ} = Σ[ 𝑩 ∈ SetoidAlgebra β ρᵇ ] 𝑩 ≤c 𝒦
+
+\end{code}
+
+
+
+#### <a id="consequences-of-first-homomorphism-theorem">Consequences of First Homomorphism Theorem</a>
+
+As an example use-case of the `IsSubalgebraOf` type defined above, we prove the following easy but useful corollary of the First Homomorphism Theorem (proved in the [Homomorphisms.Func.Noether][] module): If `𝑨` and `𝑩` are `𝑆`-algebras and `h : hom 𝑨 𝑩` a homomorphism from `𝑨` to `𝑩`, then the quotient `𝑨 ╱ ker h` is (isomorphic to) a subalgebra of `𝑩`.
+
+\begin{code}
+
+FirstHomCorollary : {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ}
+                    (hh : hom 𝑨 𝑩) → (kerquo hh) IsSubalgebraOf 𝑩
+FirstHomCorollary hh = ∣ FirstHomTheorem hh ∣ , snd ∥ FirstHomTheorem hh ∥
 
 \end{code}
 

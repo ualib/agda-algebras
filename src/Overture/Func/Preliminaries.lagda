@@ -23,11 +23,8 @@ open import Function.Bundles        using ( Func )
 import Function.Base as Fun
 open import Relation.Binary         using ( Setoid )
 open import Level
-
 private variable
  α ρᵃ β ρᵇ γ ρᶜ : Level
-
-open Setoid
 
 _⟶_ : Setoid α ρᵃ → Setoid β ρᵇ → Type _
 A ⟶ B = Func A B
@@ -47,19 +44,20 @@ f ∘ g = record { f = Fun._∘_ (_⟨$⟩_ f) (_⟨$⟩_ g)
 
 
 module _ {𝑨 : Setoid α ρᵃ} where
- open Setoid 𝑨 using ( ) renaming (Carrier to A ; _≈_ to _≈₁_ )
+ open Setoid using (_≈_)
+ open Setoid 𝑨 using ( sym ; trans ) renaming (Carrier to A ; _≈_ to _≈ₐ_ ; refl to reflₐ)
 
  𝑙𝑖𝑓𝑡 : ∀ ℓ → Setoid (α ⊔ ℓ) ρᵃ
  𝑙𝑖𝑓𝑡 ℓ = record { Carrier = Lift ℓ A
-               ; _≈_ = λ x y → (lower x) ≈₁ (lower y)
-               ; isEquivalence = record { refl = refl 𝑨 ; sym = sym 𝑨 ; trans = trans 𝑨 }
+               ; _≈_ = λ x y → (lower x) ≈ₐ (lower y)
+               ; isEquivalence = record { refl = reflₐ ; sym = sym ; trans = trans }
                }
 
  lift∼lower : (a : Lift β A) → (_≈_ (𝑙𝑖𝑓𝑡 β)) (lift (lower a)) a
- lift∼lower a = refl 𝑨
+ lift∼lower a = reflₐ
 
- lower∼lift : ∀ a → (lower {α}{β}) (lift a) ≈₁ a
- lower∼lift _ = refl 𝑨
+ lower∼lift : ∀ a → (lower {α}{β}) (lift a) ≈ₐ a
+ lower∼lift _ = reflₐ
 
  liftFunc : {ℓ : Level} → Func 𝑨 (𝑙𝑖𝑓𝑡 ℓ)
  liftFunc = record { f = lift ; cong = id }
@@ -69,9 +67,10 @@ module _ {𝑨 : Setoid α ρᵃ} where
 
   -- This is sometimes known as `cong` (see e.g. `Function.Equality` in the agda-stdlib)
   preserves≈ : (A → B) → Type (α ⊔ ρᵃ ⊔ ρᵇ)
-  preserves≈ f = ∀ {x y} → x ≈₁ y → (f x) ≈₂ (f y)
+  preserves≈ f = ∀ {x y} → x ≈ₐ y → (f x) ≈₂ (f y)
 
 \end{code}
+
 
 --------------------------------------
 

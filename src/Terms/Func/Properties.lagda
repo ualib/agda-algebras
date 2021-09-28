@@ -21,8 +21,10 @@ module Terms.Func.Properties {𝑆 : Signature 𝓞 𝓥} where
 open import Agda.Primitive   using ( Level ) renaming ( Set to Type )
 open import Data.Product     using ( _,_ )
 open import Function.Bundles using ( Func )
+open import Function.Base    using ( _∘_ )
 open import Relation.Binary  using ( Setoid )
 open import Relation.Binary.PropositionalEquality as ≡ using (_≡_)
+import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------------
 open import Overture.Preliminaries           using ( ∣_∣ ; ∥_∥ )
@@ -34,10 +36,11 @@ open import Homomorphisms.Func.Basic {𝑆 = 𝑆} using ( hom ; compatible-map 
 open import Terms.Basic              {𝑆 = 𝑆} using ( Term )
 open import Terms.Func.Basic         {𝑆 = 𝑆} using ( 𝑻 ; _≐_  ; ≐-isRefl )
 open Term
-open _≐_
 open Func using ( cong ) renaming ( f to _⟨$⟩_ )
 
-private variable α ρ χ : Level
+private variable
+ α ρᵃ β ρᵇ ρ χ : Level
+ X : Type χ
 
 \end{code}
 
@@ -49,8 +52,6 @@ The term algebra `𝑻 X` is *absolutely free* (or *universal*, or *initial*) fo
 We now prove this in [Agda][], starting with the fact that every map from `X` to `∣ 𝑨 ∣` lifts to a map from `∣ 𝑻 X ∣` to `∣ 𝑨 ∣` in a natural way, by induction on the structure of the given term.
 
 \begin{code}
-
-private variable X : Type χ
 
 module _ {𝑨 : SetoidAlgebra α ρ}(h : X → 𝕌[ 𝑨 ]) where
  open SetoidAlgebra 𝑨 using ( Interp ) renaming ( Domain to A )
@@ -159,3 +160,5 @@ module _ {𝑨 : SetoidAlgebra α ρ}{gh hh : hom (𝑻 X) 𝑨} where
 <span style="float:right;">[Subalgebras →](Subalgebras.html)</span>
 
 {% include UALib.Links.md %}
+
+

@@ -16,7 +16,10 @@ This is the [Varieties.Func][] module of the [Agda Universal Algebra Library][].
 module Varieties.Func where
 
 open import Varieties.Func.EquationalLogic
+open import Varieties.Func.SoundAndComplete
 open import Varieties.Func.Closure
+open import Varieties.Func.Properties
+open import Varieties.Func.Preservation
 open import Varieties.Func.FreeAlgebras
 
 \end{code}

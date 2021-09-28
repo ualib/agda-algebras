@@ -38,13 +38,14 @@ The `OPTIONS` pragma is usually followed by the start of a module.  For example,
 module Overture.Preliminaries where
 
 -- Imports from Agda and the Agda Standard Library -----------------------------------------------
-open import Agda.Primitive using ( _⊔_ ; lsuc ) renaming ( Set to  Type ; lzero to  ℓ₀ )
-open import Data.Product   using ( _,_ ; ∃ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Function.Base  using ( _∘_ ; id )
-open import Level          using ( Level ; Lift ; lift ; lower )
+open import Agda.Primitive   using ( _⊔_ ; lsuc ) renaming ( Set to  Type ; lzero to  ℓ₀ )
+open import Data.Product     using ( _,_ ; ∃ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Function.Base    using ( _∘_ ; id )
+open import Level            using ( Level ; Lift ; lift ; lower )
+open import Relation.Binary  using ( Decidable )
 open import Relation.Binary.Structures using ( IsEquivalence ; IsPartialOrder )
 open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; sym ; trans )
-
+open import Relation.Nullary using ( Dec ; yes ; no ; Irrelevant )
 private variable α β : Level
 
 ℓ₁ : Level
@@ -213,10 +214,12 @@ respective components are equal.
 
 \end{code}
 Lastly, we will use the following type (instead of `subst`) to transport equality proofs.
+
 \begin{code}
 
 transport : {A : Type α } (B : A → Type β) {x y : A} → x ≡ y → B x → B y
 transport B refl = id
+
 \end{code}
 
 ------------------------------
