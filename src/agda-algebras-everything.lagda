@@ -19,8 +19,10 @@ open import Overture.Inverses      using ( Image_∋_ ; Range ; range ; Image⊆
 
 open import Overture.Injective     using ( id-is-injective ; IsInjective ; ∘-injective )
 
-open import Overture.Surjective    using ( IsSurjective ; Surjective ; SurjInv ; SurjInvIsInverseʳ
-                                         ; epic-factor ; epic-factor-intensional )
+open import Overture.Surjective    using ( IsSurjective ; onto ; IsSurjective→Surjective
+                                         ; Surjective→IsSurjective ; SurjInv ; SurjInvIsInverseʳ
+                                         ; epic-factor ; epic-factor-intensional ; proj ; update
+                                         ; update-id ; proj-is-onto ; projIsOnto )
 
 open import Overture.Transformers  using ( Bijection ; ∣_∣=∣_∣ ; PointwiseBijection
                                          ; ∣_∣≈∣_∣ ; uncurry₀ ; Curry ; Uncurry ; A×A→B≅A→A→B
@@ -103,8 +105,9 @@ open import Algebras.Congruences        using ( IsCongruence ; Con ; IsCongruenc
                                               ; Con→IsCongruence ; 0[_]Compatible ; 0Con[_]
                                               ; _╱_ ; 𝟘[_╱_] ; 𝟎[_╱_] ; /-≡ )
 
-open import Algebras.Func.Basic       using ( ⟦_⟧ ; SetoidAlgebra ; _̂_ ; ov ; 𝕌[_] ; 𝔻[_]
-                                            ; Level-of-Alg ; Level-of-Carrier ; Lift-Alg ; Lift-Alg' )
+open import Algebras.Func.Basic       using ( ov ; EqArgs ; ⟦_⟧ ; SetoidAlgebra ; 𝕌[_] ; 𝔻[_]
+                                            ; Level-of-Alg ; Level-of-Carrier ; _̂_ ; Lift-Algˡ
+                                            ; Lift-Algʳ ; Lift-Alg )
 
 open import Algebras.Func.Products    using ( ⨅ ; ℑ ; 𝔄 ; class-product )
 
@@ -113,17 +116,16 @@ open import Algebras.Func.Congruences using ( _∣≈_ ; IsCongruence ; Con ; Is
 
 
 -- HOMOMORPHISMS ------------------------------------------------------------------------------------------
-open import Homomorphisms.Basic             using ( compatible-op-map ; is-homomorphism ; hom 
-                                                  ; 𝒾𝒹 ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-monomorphism
-                                                  ; mon ; is-epimorphism ; epi ; mon-to-hom ; epi-to-hom )
+open import Homomorphisms.Basic             using ( compatible-op-map ; is-homomorphism ; hom ; 𝒾𝒹
+                                                  ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-monomorphism ; mon
+                                                  ; is-epimorphism ; epi ; mon-to-hom ; epi-to-hom )
 
 open import Homomorphisms.Properties        using ( ∘-hom ; ∘-is-hom ; Lift-hom )
-
 
 open import Homomorphisms.Kernels           using ( homker-comp ; kercon ; kerquo ; ker[_⇒_]_↾_
                                                   ; πepi ; πhom ; πker ; ker-in-con )
 
-open import Homomorphisms.Products          using (  ⨅-hom-co ; ⨅-hom ; ⨅-projection-hom )
+open import Homomorphisms.Products          using ( ⨅-hom-co ; ⨅-hom ; ⨅-projection-hom )
 
 open import Homomorphisms.Noether           using ( FirstHomTheorem|Set ; FirstIsoTheorem|Set
                                                   ; FirstHomUnique ; FirstIsoUnique )
@@ -142,19 +144,24 @@ open import Homomorphisms.Func.Basic        using ( ≈preserving ; compatible-m
                                                   ; IsHom ; hom ; IsMon ; mon ; mon-to-hom
                                                   ; IsEpi ; epi ; epi-to-hom )
 
-open import Homomorphisms.Func.Properties   using ( ∘-is-hom ; ∘-hom ; 𝒾𝒹 ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; 𝓁𝒾𝒻𝓉∼𝓁ℴ𝓌ℯ𝓇
-                                                  ; 𝓁ℴ𝓌ℯ𝓇∼𝓁𝒾𝒻𝓉 ; Lift-hom ; lift-hom-lemma )
+open import Homomorphisms.Func.Properties   using ( 𝒾𝒹 ; ToLiftˡ ; FromLiftˡ ; ToFromLiftˡ ; FromToLiftˡ
+                                                  ; ToLiftʳ ; FromLiftʳ ; ToFromLiftʳ ; FromToLiftʳ
+                                                  ; ∘-is-hom ; ∘-hom ; Lift-hom ; lift-hom-lemma )
 
 open import Homomorphisms.Func.Kernels      using ( HomKerComp ; kercon ; kerquo ; ker[_⇒_]_ ; πepi
                                                   ; πhom ; πker ; ker-in-con )
+
+open import Homomorphisms.Func.Products     using ( ⨅-hom-co )
 
 open import Homomorphisms.Func.Noether      using ( FirstHomTheorem ; FirstHomUnique )
 
 open import Homomorphisms.Func.Factor       using ( HomFactor ; HomFactorEpi )
 
-open import Homomorphisms.Func.Isomorphisms using ( _≅_ ; mkiso ; ≅-refl ; ≅-sym ; ≅-trans
-                                                  ; ≅toInjective ; ≅fromInjective ; Lift-≅
-                                                  ; Lift-Alg-iso ; Lift-Alg-assoc ; ⨅≅ ; Lift-Alg-⨅≅ )
+open import Homomorphisms.Func.Isomorphisms using ( _≅_ ; ≅-refl ; ≅-sym ; ≅-trans ; ≅toInjective
+                                                  ; ≅fromInjective ; Lift-≅ˡ ; Lift-≅ʳ ; Lift-≅
+                                                  ; Lift-Alg-isoˡ ; Lift-Alg-isoʳ ; Lift-Alg-iso
+                                                  ; Lift-assocˡ ; Lift-assocʳ ; Lift-assoc
+                                                  ; ⨅≅ ; Lift-Alg-⨅≅ˡ )
 
 open import Homomorphisms.Func.HomomorphicImages using ( _IsHomImageOf_ ; HomImages ; HomImageOf[_]
                                                        ; IsHomImageOfClass ; HomImageOfClass
@@ -175,11 +182,13 @@ open import Terms.Operations          using ( _⟦_⟧ ; free-lift-interp ; term
 
 open import Terms.Func.Basic          using ( _≐_ ; ≐-isRefl ; ≐-isSym ; ≐-isTrans ; ≐-isEquiv
                                             ; TermSetoid ; 𝑻 ; Sub ; _[_] ; module Environment )
-open Environment using ( Env ; ⟦_⟧ ; Equal ; isEquiv ; ⟦_⟧s ; substitution )
+open Environment                      using ( Env ; ⟦_⟧ ; Equal ; isEquiv ; ⟦_⟧s ; substitution )
 
 open import Terms.Func.Properties     using ( free-lift ; free-lift-of-surj-isSurj ; free-lift-func
                                             ; lift-hom ; lift-of-epi-is-epi ; free-unique )
 
+open import Terms.Func.Operations     using ( free-lift-interp ; term-interp ; term-agreement
+                                            ; interp-prod ; comm-hom-term ; _[_] ; Substerm ; _[_]t )
 
 -- SUBALGEBRAS ------------------------------------------------------------------------------------------
 open import Subalgebras.Subuniverses     using ( Subuniverses ; Subuniverse ; Sg ; sgIsSub
@@ -246,18 +255,27 @@ open import Varieties.FreeAlgebras       using ( 𝓕 ; 𝓕⁺ ; ψ ; ψRel ; �
                                                ; Birkhoff-converse ; _↠_ )
 
 
-open import Varieties.Func.EquationalLogic using ( Eq ; _⊨_ ; _⊧_ ; Mod ; _⊫_ ; _⊃_ ; _⊢_▹_≈_
+open import Varieties.Func.EquationalLogic  using ( _⊧_≈_ ; _⊫_≈_ ; Th ; Th' ; ℐ ; ℰ ; Mod ; Modᵗ )
+
+open import Varieties.Func.SoundAndComplete using ( Eq ; _⊨_ ; _⊧_ ; Mod ; _⊫_ ; _⊃_ ; _⊢_▹_≈_
                                                    ; module Soundness ; module FreeAlgebra )
 open Soundness   using ( sound )
 open FreeAlgebra using ( FreeDomain ; FreeInterp ; 𝔽[_] ; σ₀ ; identity ; evaluation ; satisfies
                        ; completeness )
 
-open import Varieties.Func.Closure         using ( H ; hbase ; hhimg ; S ; sbase ; ssub ; siso
-                                                   ; P ; pbase ; pprod ; piso ; V ; vbase ; vhimg
-                                                   ; vssub ; vpprod ; viso ; is-variety ; variety )
+open import Varieties.Func.Closure         using ( H ; S ; P ; V ; is-variety ; variety ; S-mono
+                                                 ; S-idemp ; P-mono ; P-expa ; P-idemp ; subalgebra→S
+                                                 ; S→subalgebra ; sk→lsk )
 
-open import Varieties.Func.FreeAlgebras    using ( ℐ ; ℰ ; epi𝔽 ; hom𝔽 ; hom𝔽-is-epic )
+open import Varieties.Func.Properties      using ( ⊧-I-invar ; ⊧-Lift-invar ; ⊧-lower-invar ; ⊧-S-invar
+                                                 ; ⊧-S-class-invar ; ⊧-P-invar ; ⊧-P-class-invar
+                                                 ; ⊧-P-lift-invar ; ⊧-H-invar )
 
+open import Varieties.Func.Preservation    using ( S⊆SP ; lemPS⊆SP ; lemPS⊆SP' ; PS⊆SP ; P⊆V ; SP⊆V ; P⨅𝒜  )
+
+open import Varieties.Func.FreeAlgebras    using ( 𝕏 ; ℐ ; ℰ ; hsurj ; ℭ ; homℭ ; epi𝔽 ; hom𝔽
+                                                 ; hom𝔽-is-epic ; 𝔽≤ℭ ; ℓ ; ℓℭ ; 𝔽 ; ℓ𝔽 ; Pℭ
+                                                 ; SPℭ ; SPℓℭ ; ℓ𝔽∈SP )
 
 -- GENERAL STRUCTURES ---------------------------------------------------------------------------------
 open import Structures.Basic             using ( signature ; structure ; _ʳ_ ; _ᵒ_ ; compatible

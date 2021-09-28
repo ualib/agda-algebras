@@ -22,18 +22,18 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 module Varieties.Func.Closure {𝑆 : Signature 𝓞 𝓥} where
 
 -- imports from Agda and the Agda Standard Library -------------------------------------------
-open import Agda.Primitive using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type ; lzero to ℓ₀ )
+open import Agda.Primitive using ( _⊔_ ; lsuc ) renaming ( Set to Type )
 open import Data.Product   using ( _,_ ; Σ-syntax )
 open import Level
 open import Relation.Unary using ( Pred ; _∈_ ; _⊆_ )
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
 open import Algebras.Func.Products               {𝑆 = 𝑆} using ( ⨅ )
-open import Algebras.Func.Basic                  {𝑆 = 𝑆} using ( SetoidAlgebra ; ov ; Lift-Alg ; Lift-Algˡ )
-open import Homomorphisms.Func.Isomorphisms      {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; Lift-≅ )
+open import Algebras.Func.Basic                  {𝑆 = 𝑆} using ( SetoidAlgebra ; ov ; Lift-Alg )
+open import Homomorphisms.Func.Isomorphisms      {𝑆 = 𝑆} using ( _≅_ ; Lift-≅ ; ≅-sym )
 open import Homomorphisms.Func.HomomorphicImages {𝑆 = 𝑆} using ( HomImages )
 open import Subalgebras.Func.Subalgebras         {𝑆 = 𝑆} using ( _≤_ ; _≤c_ )
-open import Subalgebras.Func.Properties          {𝑆 = 𝑆} using ( ≤-Lift ; ≅→≤ ; A≤B×B≅C→A≤C ; ≤→≤c→≤c )
+open import Subalgebras.Func.Properties          {𝑆 = 𝑆} using ( ≤-Lift ; ≅→≤ ; ≤→≤c→≤c )
 
 -- The inductive type H
 data H {α β : Level}(𝒦 : Pred(SetoidAlgebra α α) (ov α)) :
@@ -48,7 +48,6 @@ data S {α β : Level}(𝒦 : Pred(SetoidAlgebra α α) (ov α)) :
  where
  sbase : {𝑨 : SetoidAlgebra α α} → 𝑨 ∈ 𝒦 → Lift-Alg 𝑨 β β ∈ S 𝒦
  ssub  : {𝑨 𝑩 : SetoidAlgebra (α ⊔ β) (α ⊔ β)} → 𝑨 ∈ S{β = β} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ S 𝒦
--- siso₀  : {𝑨 : SetoidAlgebra α α}{𝑩 : SetoidAlgebra (α ⊔ β)(α ⊔ β)} → 𝑨 ∈ S{α = α}{β = α} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ S 𝒦
  siso  : {𝑨 𝑩 : SetoidAlgebra _ _} → 𝑨 ∈ S{β = β} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ S 𝒦
 
 -- The inductive type P
@@ -67,7 +66,6 @@ data V {α β : Level}(𝒦 : Pred(SetoidAlgebra α α) (ov α)) :
  vhimg  : {𝑨 𝑩 : SetoidAlgebra _ _} → 𝑨 ∈ V{β = β} 𝒦 → ((𝑩 , _) : HomImages 𝑨) → 𝑩 ∈ V 𝒦
  vssub  : {𝑨 𝑩 : SetoidAlgebra _ _} → 𝑨 ∈ V{β = β} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ V 𝒦
  vpprod : {I : Type β}{𝒜 : I → SetoidAlgebra _ _} → (∀ i → (𝒜 i) ∈ V{β = β} 𝒦) → ⨅ 𝒜 ∈ V 𝒦
--- viso₀  : {𝑨 : SetoidAlgebra α α}{𝑩 : SetoidAlgebra (α ⊔ β)(α ⊔ β)} → 𝑨 ∈ V{α}{α} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ V 𝒦
  viso   : {𝑨 𝑩 : SetoidAlgebra _ _} → 𝑨 ∈ V{β = β} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ V 𝒦
 
 \end{code}
@@ -101,21 +99,11 @@ module _ {α β : Level} where
  S-mono kk (ssub sA B≤A) = ssub (S-mono kk sA) B≤A
  S-mono kk (siso x y) = siso (S-mono kk x) y
 
-
  S-idemp : {𝒦 : Pred (SetoidAlgebra α α)(ov α)}
   →        S{α ⊔ β}{β} (S{α}{β} 𝒦) ⊆ S{α}{β} 𝒦
  S-idemp (sbase x) = siso x Lift-≅
  S-idemp (ssub x y) = ssub (S-idemp x) y
  S-idemp (siso x y) = siso (S-idemp x) y
-
- -- S-idemp : {𝒦 : Pred (SetoidAlgebra α α)(ov α)}
- --  →        S{α ⊔ β}{α ⊔ β} (S{α}{α ⊔ β} 𝒦) ⊆ S{α}{α ⊔ β} 𝒦
- -- S-idemp (sbase x) = siso x Lift-≅
- -- S-idemp (ssub x y) = ssub (S-idemp x) y
- -- S-idemp (siso x y) = siso (S-idemp x) y
-
-
-
 
 \end{code}
 
@@ -162,12 +150,7 @@ module _ {α : Level}{𝒦 : Pred (SetoidAlgebra α α)(ov α)} where
  S→subalgebra : {𝑩 : SetoidAlgebra α α} → 𝑩 ∈ S{α}{α} 𝒦  →  𝑩 ≤c 𝒦
  S→subalgebra (sbase{𝑩} x) = 𝑩 , (x , ≅→≤ (≅-sym Lift-≅))
  S→subalgebra {𝑩} (ssub{𝑨}{.𝑩} sA B≤A) = ≤→≤c→≤c B≤A (S→subalgebra sA)
- -- S→subalgebra (siso₀{𝑨}{𝑩} sA A≅B) = ≤→≤c→≤c (≅→≤ (≅-sym A≅B)) (S→subalgebra sA)
  S→subalgebra (siso{𝑨}{𝑩} sA A≅B) = ≤→≤c→≤c (≅→≤ (≅-sym A≅B)) (S→subalgebra sA)
-
-\end{code}
-
-\begin{code}
 
 open Level
 
@@ -183,71 +166,12 @@ module _ {α β : Level} {𝑨 : SetoidAlgebra (α ⊔ β)(α ⊔ β)}{𝒦 : Pr
   slA : lA ∈ S{α}{β} 𝒦
   slA = S-idemp sslA
 
- -- sk→lsk' : {β : Level} → 𝑨 ∈ S{α}{α} 𝒦 → Lift-Alg 𝑨 (α ⊔ β) (α ⊔ β) ∈ S{α}{α ⊔ β} 𝒦
- -- sk→lsk' {β = β} sA = sk→lsk {β = α ⊔ β} sA
-
--- module Vlift {α : Level} {𝒦 : Pred (SetoidAlgebra α α)(ov α)} where
-
-
- -- VlA : {𝑨 : SetoidAlgebra (ov α) (ov α)} → 𝑨 ∈ V{α}{ov α} 𝒦
- --  →    (Lift-Algˡ 𝑨 (lsuc (ov α))) ∈ (V{α}{lsuc (ov α)} 𝒦)
- -- VlA x = ?
- -- (vbase{𝑨} x) = visow (vbase x) (Lift-Alg-assoc _ _ {𝑨})
- -- VlA (vlift{𝑨} x) = visow (vlift x) (Lift-Alg-assoc _ _ {𝑨})
- -- VlA (vliftw{𝑨} x) = visow (VlA x) (Lift-Alg-assoc _ _ {𝑨})
-
- -- VlA (vhimg{𝑨}{𝑩} x hB) = vhimg {𝑩 = Lift-Alg 𝑩 (lsuc (ov α))} (VlA x) (lC , lChi)
- --  where
- --  lC : Algebra (lsuc (ov(α))) 𝑆
- --  lC = Lift-Alg ∣ hB ∣ (lsuc (ov(α)))
- --  lChi : lC IsHomImageOf _
- --  lChi = (Lift-Alg-hom-image (lsuc (ov(α))) {∣ hB ∣} (lsuc (ov(α))) ∥ hB ∥)
-
- -- VlA (vssubw{𝑨}{𝑩} x B≤A) = vssubw (VlA x) (Lift-≤-Lift  (lsuc (ov(α))) {𝑨}  (lsuc (ov(α))) B≤A)
- -- VlA (vprodu{I}{𝒜} x) = visow (vprodw vlA) (≅-sym B≅A)
- --  where
- --  𝑰 : Type (lsuc (ov α))
- --  𝑰 = Lift (lsuc (ov α)) I
-
- --  lA : 𝑰 → Algebra (lsuc (ov α)) 𝑆
- --  lA i = Lift-Alg (𝒜 (lower i)) (lsuc (ov α))
-
- --  vlA : ∀ i → (lA i) ∈ V{α}{lsuc (ov α)} 𝒦
- --  vlA i = vlift (x (lower i))
-
- --  iso-components : ∀ i → 𝒜 i ≅ lA (lift i)
- --  iso-components i = Lift-≅
-
- --  B≅A : Lift-Alg (⨅ 𝒜) (lsuc (ov α)) ≅ ⨅ lA
- --  B≅A = Lift-Alg-⨅≅  {fizw = fe₁}{fiu = fe₀} iso-components
-
-
- -- VlA (vprodw{I}{𝒜} x) = visow (vprodw vlA) (≅-sym B≅A)
- --  where
- --  𝑰 : Type (lsuc (ov α))
- --  𝑰 = Lift (lsuc (ov α)) I
-
- --  lA : 𝑰 → Algebra (lsuc (ov α)) 𝑆
- --  lA i = Lift-Alg (𝒜 (lower i)) (lsuc (ov α))
-
- --  vlA : ∀ i → (lA i) ∈ V{α}{lsuc (ov α)} 𝒦
- --  vlA i = VlA (x (lower i))
-
- --  iso-components : ∀ i → 𝒜 i ≅ lA (lift i)
- --  iso-components i = Lift-≅
-
- --  B≅A : Lift-Alg (⨅ 𝒜) (lsuc (ov α)) ≅ ⨅ lA
- --  B≅A = Lift-Alg-⨅≅ {fizw = fe₁}{fiu = fe₂} iso-components
-
- -- VlA (visou{𝑨}{𝑩} x A≅B) = visow (vlift x) (Lift-Alg-iso A≅B)
- -- VlA (visow{𝑨}{𝑩} x A≅B) = visow (VlA x) (Lift-Alg-iso A≅B)
 
 \end{code}
 
-
 --------------------------------
 
-<span style="float:left;">[← Varieties.Func.EquationalLogic](Varieties.Func.EquationalLogic.html)</span>
-<span style="float:right;">[Varieties.Func.FreeAlgebras →](Varieties.Func.FreeAlgebras.html)</span>
+<span style="float:left;">[← Varieties.Func.SoundAndComplete](Varieties.Func.SoundAndComplete.html)</span>
+<span style="float:right;">[Varieties.Func.Properties →](Varieties.Func.Properties.html)</span>
 
 {% include UALib.Links.md %}
