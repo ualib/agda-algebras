@@ -24,7 +24,7 @@ open import Function         using ( _∘_ )
 open import Function.Bundles using ( Func )
 open import Level            using ( Level )
 open import Relation.Binary  using ( Setoid ; IsEquivalence )
-open import Relation.Binary.PropositionalEquality as PE
+open import Relation.Binary.PropositionalEquality as ≡
                              using ( _≡_ ; refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------
@@ -53,7 +53,7 @@ open Setoid using    (_≈_ ; Carrier )
                      ; sym   to symS
                      ; trans to transS
                      ; isEquivalence to isEqv )
-open Func renaming   ( f to _<$>_ ; cong to ≈cong )
+open Func renaming   ( f to _⟨$⟩_ ; cong to ≈cong )
 
 
 EqArgs : {𝑆 : Signature 𝓞 𝓥}{ξ : Setoid α ρ}
@@ -107,7 +107,6 @@ open SetoidAlgebra
 𝔻[_] : SetoidAlgebra α ρ →  Setoid α ρ
 𝔻[ 𝑨 ] = Domain 𝑨
 
-
 -- The universe level of a SetoidAlgebra
 
 Level-of-Alg : {α ρ 𝓞 𝓥 : Level}{𝑆 : Signature 𝓞 𝓥} → SetoidAlgebra α ρ → Level
@@ -121,7 +120,7 @@ open SetoidAlgebra
 
 _̂_ : (f : ∣ 𝑆 ∣)(𝑨 : SetoidAlgebra α ρ) → (∥ 𝑆 ∥ f  →  𝕌[ 𝑨 ]) → 𝕌[ 𝑨 ]
 
-f ̂ 𝑨 = λ a → (Interp 𝑨) <$> (f , a)
+f ̂ 𝑨 = λ a → (Interp 𝑨) ⟨$⟩ (f , a)
 
 \end{code}
 
@@ -130,42 +129,43 @@ f ̂ 𝑨 = λ a → (Interp 𝑨) <$> (f , a)
 
 \begin{code}
 
-open Level
+module _ (𝑨 : SetoidAlgebra α ρ) where
+
+ open SetoidAlgebra 𝑨 using ( Interp ) renaming ( Domain to A )
+ open Setoid A using (sym ; trans ) renaming ( Carrier to ∣A∣ ; _≈_ to _≈₁_ ; refl to refl₁ )
+
+ open Level
 
 
-Lift-Alg : SetoidAlgebra α ρ → (ℓ : Level) → SetoidAlgebra (α ⊔ ℓ) ρ
+ Lift-Algˡ : (ℓ : Level) → SetoidAlgebra (α ⊔ ℓ) ρ
 
-Domain (Lift-Alg 𝑨 ℓ) = record { Carrier = Lift ℓ 𝕌[ 𝑨 ]
-                               ; _≈_ = λ x y → lower x ≈A lower y
-                               ; isEquivalence = record { refl = srefl
-                                                        ; sym = sym
-                                                        ; trans = trans
-                                                        }
-                               } where open Setoid (Domain 𝑨) renaming (_≈_ to _≈A_ ; refl to srefl )
+ Domain (Lift-Algˡ ℓ) = record { Carrier = Lift ℓ ∣A∣
+                                  ; _≈_ = λ x y → lower x ≈₁ lower y
+                                  ; isEquivalence = record { refl = refl₁
+                                                           ; sym = sym
+                                                           ; trans = trans
+                                                           }
+                                  }
 
-Interp (Lift-Alg 𝑨 ℓ) <$> (f , la) = lift ((f ̂ 𝑨) (lower ∘ la))
+ Interp (Lift-Algˡ ℓ) ⟨$⟩ (f , la) = lift ((f ̂ 𝑨) (lower ∘ la))
+ ≈cong (Interp (Lift-Algˡ ℓ)) (refl , la=lb) = ≈cong (Interp 𝑨) ((refl , la=lb))
 
-≈cong (Interp (Lift-Alg 𝑨 ℓ)) (refl , la=lb) = ≈cong (Interp 𝑨) ((refl , la=lb))
 
+ Lift-Algʳ : (ℓ : Level) → SetoidAlgebra α (ρ ⊔ ℓ)
 
-module _ {𝑨 : SetoidAlgebra α ρ} where
+ Domain (Lift-Algʳ ℓ) =
+  record { Carrier = ∣A∣
+         ; _≈_ = λ x y → Lift ℓ (x ≈₁ y)
+         ; isEquivalence = record { refl = lift refl₁
+                                  ; sym = λ x → lift (sym (lower x))
+                                  ; trans = λ x y → lift (trans (lower x) (lower y))  }
+                                  }
 
- open SetoidAlgebra 𝑨
- open Setoid (Domain 𝑨) renaming ( refl to srefl )
- private
-  A = Carrier (Domain 𝑨)
-  _≈A_ = _≈_ (Domain 𝑨)
+ Interp (Lift-Algʳ ℓ ) ⟨$⟩ (f , la) = (f ̂ 𝑨) la
+ ≈cong (Interp (Lift-Algʳ ℓ)) (refl , la≡lb) = lift (≈cong (Interp 𝑨) (≡.refl , λ i → lower (la≡lb i)))
 
- Lift-Alg' : (ℓ : Level) → SetoidAlgebra (α ⊔ ℓ) ρ
-
- Domain (Lift-Alg' ℓ) = record { Carrier = Lift ℓ A
-                                     ; _≈_ = λ x y → lower x ≈A lower y
-                                     ; isEquivalence = record { refl = srefl ; sym = sym ; trans = trans }
-                                     }
-
- Interp (Lift-Alg' ℓ) <$> (f , la) = lift ((f ̂ 𝑨) (lower ∘ la))
-
- ≈cong (Interp (Lift-Alg' ℓ)) (refl , la≡lb) = ≈cong (Interp 𝑨) (PE.refl , la≡lb)
+Lift-Alg : (𝑨 : SetoidAlgebra α ρ)(ℓ₀ ℓ₁ : Level) → SetoidAlgebra (α ⊔ ℓ₀) (ρ ⊔ ℓ₁)
+Lift-Alg 𝑨 ℓ₀ ℓ₁ = Lift-Algʳ (Lift-Algˡ 𝑨 ℓ₀) ℓ₁
 
 \end{code}
 

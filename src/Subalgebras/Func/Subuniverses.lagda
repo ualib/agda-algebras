@@ -217,10 +217,10 @@ we call `hom-unique`.
 
    Goal : g ((f ̂ 𝑨) a) ≈ h ((f ̂ 𝑨) a)
    Goal = begin
-          g ((f ̂ 𝑨) a)   ≈˘⟨ sym (compatible ∥ gh ∥) ⟩
-          (f ̂ 𝑩)(g ∘ a ) ≈˘⟨ cong Interp (refl , IH) ⟩
-          (f ̂ 𝑩)(h ∘ a)  ≈˘⟨ compatible ∥ hh ∥ ⟩
-          h ((f ̂ 𝑨) a )  ∎
+           g ((f ̂ 𝑨) a)   ≈⟨ compatible ∥ gh ∥ ⟩
+           (f ̂ 𝑩)(g ∘ a ) ≈˘⟨ cong Interp (refl , IH) ⟩
+           (f ̂ 𝑩)(h ∘ a)  ≈˘⟨ compatible ∥ hh ∥ ⟩
+           h ((f ̂ 𝑨) a )  ∎
 
 \end{code}
 

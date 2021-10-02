@@ -18,6 +18,7 @@ module Homomorphisms.Func where
 open import Homomorphisms.Func.Basic
 open import Homomorphisms.Func.Properties
 open import Homomorphisms.Func.Kernels
+open import Homomorphisms.Func.Products
 open import Homomorphisms.Func.Noether
 open import Homomorphisms.Func.Factor
 open import Homomorphisms.Func.Isomorphisms

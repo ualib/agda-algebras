@@ -13,17 +13,24 @@ This is the [Overture.Surjective][] module of the [agda-algebras][] library.
 {-# OPTIONS --without-K --exact-split --safe #-}
 module Overture.Surjective where
 
--- Imports from Agda and the Agda Standard Library -------------------------------------------
-open import Agda.Primitive                        using ( _⊔_ ; Level ) renaming ( Set to Type )
-open import Data.Product                          using ( _,_ ; Σ )
-open import Function.Base                         using ( _∘_ )
-open import Relation.Binary.PropositionalEquality using ( _≡_ ; module ≡-Reasoning ; cong-app )
+-- Imports from Agda and the Agda Standard Library --------------------------------
+open import Agda.Primitive   using ( _⊔_ ; Level ) renaming ( Set to Type )
+open import Relation.Nullary using ( Dec ; yes ; no )
+open import Data.Empty       using (⊥-elim)
+open import Function         using ( Surjective ; _∘_ )
+open import Relation.Binary  using ( Decidable )
+open import Data.Product     using ( _,_ ; Σ ; Σ-syntax )
+                             renaming ( proj₁ to fst ; proj₂ to snd )
+open import Axiom.UniquenessOfIdentityProofs using ( module Decidable⇒UIP )
+open import Relation.Binary.PropositionalEquality
+                             using ( _≡_ ; sym ; cong-app ; cong ; refl )
 
--- Imports from agda-algebras ----------------------------------------------------------------
-open import Overture.Preliminaries using ( _≈_ ; _⁻¹ ; _∙_ )
-open import Overture.Inverses      using ( Image_∋_ ; Inv ; InvIsInverseʳ )
 
-private variable α β γ : Level
+-- Imports from agda-algebras -----------------------------------------------------
+open import Overture.Preliminaries using ( _≈_ ; _∙_ ; transport )
+open import Overture.Inverses      using ( Image_∋_ ; eq ; Inv ; InvIsInverseʳ )
+
+private variable α β γ c ι : Level
 
 \end{code}
 
@@ -37,11 +44,22 @@ module _ {A : Type α}{B : Type β} where
  IsSurjective : (A → B) →  Type (α ⊔ β)
  IsSurjective f = ∀ y → Image f ∋ y
 
- Surjective : Type (α ⊔ β)
- Surjective = Σ (A → B) IsSurjective
+ onto : Type (α ⊔ β)
+ onto = Σ (A → B) IsSurjective
+
+ IsSurjective→Surjective : (f : A → B) → IsSurjective f → Surjective{A = A} _≡_ _≡_ f
+ IsSurjective→Surjective f fE y = imgfy→A (fE y)
+  where
+  imgfy→A : Image f ∋ y → Σ[ a ∈ A ] f a ≡ y
+  imgfy→A (eq a p) = a , sym p
+
+ Surjective→IsSurjective : (f : A → B) → Surjective{A = A} _≡_ _≡_ f → IsSurjective f
+ Surjective→IsSurjective f fE y = eq (fst (fE y)) (sym (snd(fE y)))
 
 \end{code}
+
 With the next definition, we can represent a *right-inverse* of a surjective function.
+
 \begin{code}
 
  SurjInv : (f : A → B) → IsSurjective f → B → A
@@ -56,9 +74,6 @@ module _ {A : Type α}{B : Type β} where
  SurjInvIsInverseʳ : (f : A → B)(fE : IsSurjective f) → ∀ b → f ((SurjInv f fE) b) ≡ b
  SurjInvIsInverseʳ f fE b = InvIsInverseʳ (fE b)
 
- open ≡-Reasoning
- open Image_∋_
-
  -- composition law for epics
  epic-factor : {C : Type γ}(f : A → B)(g : A → C)(h : C → B)
   →            f ≈ h ∘ g → IsSurjective f → IsSurjective h
@@ -69,7 +84,7 @@ module _ {A : Type α}{B : Type β} where
    finv = SurjInv f fe
 
    ζ : y ≡ f (finv y)
-   ζ = (SurjInvIsInverseʳ f fe y)⁻¹
+   ζ = sym (SurjInvIsInverseʳ f fe y)
 
    η : y ≡ (h ∘ g) (finv y)
    η = ζ ∙ compId (finv y)
@@ -89,12 +104,49 @@ module _ {A : Type α}{B : Type β} where
    ζ = SurjInvIsInverseʳ f fe y
 
    η : (h ∘ g) (finv y) ≡ y
-   η = (cong-app (compId ⁻¹)(finv y)) ∙ ζ
+   η = (cong-app (sym compId)(finv y)) ∙ ζ
 
    Goal : Image h ∋ y
-   Goal = eq (g (finv y)) (η ⁻¹)
+   Goal = eq (g (finv y)) (sym η)
 
 \end{code}
+
+
+Later we will need the fact that the projection of an arbitrary product onto one (or any number) of its factors is surjective.
+
+\begin{code}
+
+module _ {I : Set ι}(_≟_ : Decidable{A = I} _≡_)
+         {B : I → Set β}
+         (bs₀ : ∀ i → (B i))
+ where
+ open Decidable⇒UIP _≟_ using ( ≡-irrelevant )
+
+ proj : (j : I) → (∀ i → (B i)) → (B j)
+ proj j xs = xs j
+
+ update : (∀ i → B i) → ((j , _) : Σ I B) → (∀ i → Dec (i ≡ j) → B i)
+ update _  (_ , b) i (yes x) = transport B (sym x) b
+ update bs  _      i (no  _) = bs i
+
+ update-id : ∀{j b} → (c : Dec (j ≡ j)) → update bs₀ (j , b) j c ≡ b
+ update-id {j}{b}(yes p) = cong (λ x → transport B x b)(≡-irrelevant (sym p) refl)
+ update-id       (no ¬p) = ⊥-elim (¬p refl)
+
+ proj-is-onto : ∀{j} → Surjective{A = ∀ i → (B i)} _≡_ _≡_ (proj j)
+ proj-is-onto {j} b = bs , pf
+  where
+  bs : (i : I) → B i
+  bs i = update bs₀ (j , b) i (i ≟ j)
+
+  pf : proj j bs ≡ b
+  pf = update-id (j ≟ j)
+
+ projIsOnto : ∀{j} → IsSurjective (proj j)
+ projIsOnto {j} = Surjective→IsSurjective (proj j) proj-is-onto
+
+\end{code}
+
 
 --------------------------------------
 

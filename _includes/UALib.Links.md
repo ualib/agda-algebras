@@ -1,4 +1,5 @@
 <!-- UniversalAlgebra Library links -->
+
 [Agda Universal Algebra Library]: https://ualib.github.io/agda-algebras
 [Agda UniversalAlgebra]: https://ualib.github.io/agda-algebras
 [git repository of the Agda UALib]: https://github.com/ualib/agda-algebras

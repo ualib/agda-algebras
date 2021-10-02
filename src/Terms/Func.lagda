@@ -17,6 +17,7 @@ module Terms.Func where
 
 open import Terms.Func.Basic
 open import Terms.Func.Properties
+open import Terms.Func.Operations
 
 \end{code}
 

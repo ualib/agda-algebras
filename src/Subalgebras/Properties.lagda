@@ -28,7 +28,6 @@ open import Relation.Binary.PropositionalEquality
 
 -- Imports from the Agda Universal Algebra Library --------------------
 open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
--- open import Overture.Injective                 using ( module compose )
 open import Overture.Injective                 using (  id-is-injective ; IsInjective ; ∘-injective )
 open import Algebras.Basic                     using ( Algebra ; Lift-Alg )
 open import Algebras.Products          {𝑆 = 𝑆} using ( ov )

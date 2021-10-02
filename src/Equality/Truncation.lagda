@@ -62,9 +62,6 @@ open ≡-Reasoning
 singleton-is-prop : {α : Level}(X : Type α) → is-singleton X → is-prop X
 singleton-is-prop X (c , φ) x y = x ≡⟨ (φ x)⁻¹ ⟩ c ≡⟨ φ y ⟩ y ∎
 
-is-inhabited : Type α → Type (lsuc α)
-is-inhabited {α = α} X = (P : Type α ) → is-prop P → (X → P) → P
-
 \end{code}
 
 The concept of a [fiber](https://ncatlab.org/nlab/show/fiber) of a function is, in the [Type Topology][] library, defined as a Sigma type whose inhabitants represent inverse images of points in the codomain of the given function.

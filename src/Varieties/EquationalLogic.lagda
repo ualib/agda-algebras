@@ -59,6 +59,8 @@ _⊫_≈_ : Pred(Algebra α 𝑆) ρ → Term X → Term X → Type _
 
 \end{code}
 
+(**Unicode tip**. Type \models to get `⊧` ; type \||= to get `⊫`.)
+
 The expression `𝑨 ⊧ p ≈ q` represents the assertion that the identity `p ≈ q`
 holds when interpreted in the algebra `𝑨`; syntactically, `𝑨 ⟦ p ⟧ ≈ 𝑨 ⟦ q ⟧`.
 

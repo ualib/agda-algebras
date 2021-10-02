@@ -30,7 +30,7 @@ open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------
 open import Overture.Preliminaries      using ( ∥_∥ )
-open import Algebras.Func.Basic {𝑆 = 𝑆} using ( SetoidAlgebra ; ov )
+open import Algebras.Func.Basic {𝑆 = 𝑆} using ( SetoidAlgebra ; ov ; _̂_)
 open import Terms.Basic         {𝑆 = 𝑆} using ( Term )
 open Term
 open Func renaming ( f to _⟨$⟩_ )
@@ -122,7 +122,7 @@ module Environment (𝑨 : SetoidAlgebra α ℓ) where
                                  ; refl to ≃refl ; sym to ≃sym ; trans to ≃trans )
 
  Env : Type χ → Setoid _ _
- Env X = record { Carrier = (x : X) → ∣A∣
+ Env X = record { Carrier = X → ∣A∣
                 ; _≈_ = λ ρ ρ' → (x : X) → ρ x ≃ ρ' x
                 ; isEquivalence =
                    record { refl = λ _ → ≃refl
@@ -130,6 +130,13 @@ module Environment (𝑨 : SetoidAlgebra α ℓ) where
                           ; trans = λ g h x → ≃trans (g x) (h x)
                           }
                 }
+
+ open SetoidAlgebra using ( Domain ) renaming ( Interp to interpretation )
+
+ EnvAlgebra : Type χ → SetoidAlgebra (α ⊔ χ) (ℓ ⊔ χ)
+ Domain (EnvAlgebra X) = Env X
+ (interpretation (EnvAlgebra X) ⟨$⟩ (f , aϕ)) x = (f ̂ 𝑨) (λ i → aϕ i x)
+ cong (interpretation (EnvAlgebra X)) {f , a} {.f , b} (≡.refl , aibi) x = cong Interp (≡.refl , (λ i → aibi i x))
 
 \end{code}
 
@@ -150,6 +157,11 @@ Interpretation of terms is iteration on the W-type. The standard library offers 
  -- if the two terms are equal under all valuations of their free variables.
  Equal : ∀ {X : Type χ} (s t : Term X) → Type _
  Equal {X = X} s t = ∀ (ρ : ∣ Env X ∣) →  ⟦ s ⟧ ⟨$⟩ ρ ≃ ⟦ t ⟧ ⟨$⟩ ρ
+
+ ≐→Equal : {X : Type χ}(s t : Term X) → s ≐ t → Equal s t
+ ≐→Equal .(ℊ _) .(ℊ _) (refl ≡.refl) = λ _ → ≃refl
+ ≐→Equal (node _ s)(node _ t)(genl x) =
+  λ ρ → cong Interp (≡.refl , λ i → ≐→Equal(s i)(t i)(x i)ρ )
 
  -- Equal is an equivalence relation.
  isEquiv : {Γ : Type χ} → IsEquivalence (Equal {X = Γ})
@@ -189,7 +201,7 @@ Interpretation of terms is iteration on the W-type. The standard library offers 
 
 <!--
 
-The following was used in [Andreas Abel's formal proof of Birkhoff's completeness theorem](http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf), but it seems unnecessary.
+The following was used in [Andreas Abel's formal proof of Birkhoff's completeness theorem](http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf), but it seems we don't need it.
 
 -- To obtain terms with free variables, we add nullary operations, each representing a variable.
 -- These are covered in the std lib FreeMonad module, albeit with the restriction that the sets of

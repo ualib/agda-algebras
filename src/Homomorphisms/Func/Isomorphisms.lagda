@@ -25,13 +25,14 @@ open import Relation.Binary.Definitions using ( Reflexive ; Sym ; Trans )
 
 -- Imports from the Agda Universal Algebra Library -----------------------------------------
 open import Overture.Preliminaries                using ( ∣_∣ ; ∥_∥ )
-open import Overture.Func.Preliminaries           using ( _⟶_ )
+open import Overture.Func.Preliminaries           using ( _⟶_ ; _∘_ )
 open import Overture.Func.Injective               using ( IsInjective )
-open import Algebras.Func.Basic           {𝑆 = 𝑆} using ( SetoidAlgebra ; Lift-Alg )
+open import Algebras.Func.Basic           {𝑆 = 𝑆} using ( SetoidAlgebra ; Lift-Alg ; Lift-Algˡ ; Lift-Algʳ )
 open import Algebras.Func.Products        {𝑆 = 𝑆} using ( ⨅ )
 open import Homomorphisms.Func.Basic      {𝑆 = 𝑆} using ( hom ; IsHom )
-open import Homomorphisms.Func.Properties {𝑆 = 𝑆} using ( 𝒾𝒹 ; ∘-hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇
-                                                        ;  𝓁𝒾𝒻𝓉∼𝓁ℴ𝓌ℯ𝓇 ; 𝓁ℴ𝓌ℯ𝓇∼𝓁𝒾𝒻𝓉 )
+open import Homomorphisms.Func.Properties {𝑆 = 𝑆} using ( 𝒾𝒹 ; ∘-hom ; ToLiftˡ ; FromLiftˡ
+                                                        ; ToFromLiftˡ ; FromToLiftˡ ; ToLiftʳ
+                                                        ; FromLiftʳ ; ToFromLiftʳ ; FromToLiftʳ )
 
 \end{code}
 
@@ -134,15 +135,31 @@ Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic 
 
 \begin{code}
 
-Lift-≅ : {ℓ : Level}{𝑨 : SetoidAlgebra α ρᵃ} → 𝑨 ≅ (Lift-Alg 𝑨 ℓ)
-Lift-≅ {ℓ = ℓ} {𝑨} = mkiso 𝓁𝒾𝒻𝓉 𝓁ℴ𝓌ℯ𝓇 (𝓁𝒾𝒻𝓉∼𝓁ℴ𝓌ℯ𝓇{𝑨 = 𝑨}) (𝓁ℴ𝓌ℯ𝓇∼𝓁𝒾𝒻𝓉{𝑨 = 𝑨}{ℓ = ℓ})
+module _ {𝑨 : SetoidAlgebra α ρᵃ}{ℓ : Level} where
+ Lift-≅ˡ : 𝑨 ≅ (Lift-Algˡ 𝑨 ℓ)
+ Lift-≅ˡ = mkiso ToLiftˡ FromLiftˡ (ToFromLiftˡ{𝑨 = 𝑨}) (FromToLiftˡ{𝑨 = 𝑨}{ℓ})
 
-Lift-Alg-iso : {ℓᵃ : Level}{𝑨 : SetoidAlgebra α ρᵃ}
-               {ℓᵇ : Level}{𝑩 : SetoidAlgebra β ρᵇ}
-               -----------------------------------------
- →             𝑨 ≅ 𝑩 →  Lift-Alg 𝑨 ℓᵃ ≅ Lift-Alg 𝑩 ℓᵇ
+ Lift-≅ʳ : 𝑨 ≅ (Lift-Algʳ 𝑨 ℓ)
+ Lift-≅ʳ = mkiso ToLiftʳ FromLiftʳ (ToFromLiftʳ{𝑨 = 𝑨}) (FromToLiftʳ{𝑨 = 𝑨}{ℓ})
 
-Lift-Alg-iso A≅B = ≅-trans (≅-trans (≅-sym Lift-≅ ) A≅B) Lift-≅
+Lift-≅ : {𝑨 : SetoidAlgebra α ρᵃ}{ℓ ρ : Level} → 𝑨 ≅ (Lift-Alg 𝑨 ℓ ρ)
+Lift-≅ = ≅-trans Lift-≅ˡ Lift-≅ʳ
+
+
+module _ {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ}{ℓᵃ ℓᵇ : Level} where
+
+ Lift-Alg-isoˡ : 𝑨 ≅ 𝑩 → Lift-Algˡ 𝑨 ℓᵃ ≅ Lift-Algˡ 𝑩 ℓᵇ
+ Lift-Alg-isoˡ A≅B = ≅-trans (≅-trans (≅-sym Lift-≅ˡ ) A≅B) Lift-≅ˡ
+
+ Lift-Alg-isoʳ : 𝑨 ≅ 𝑩 →  Lift-Algʳ 𝑨 ℓᵃ ≅ Lift-Algʳ 𝑩 ℓᵇ
+ Lift-Alg-isoʳ A≅B = ≅-trans (≅-trans (≅-sym Lift-≅ʳ ) A≅B) Lift-≅ʳ
+
+
+Lift-Alg-iso : {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ}{ℓᵃ rᵃ ℓᵇ rᵇ : Level}
+ →             𝑨 ≅ 𝑩 → Lift-Alg 𝑨 ℓᵃ rᵃ ≅ Lift-Alg 𝑩 ℓᵇ rᵇ
+Lift-Alg-iso {ℓᵇ = ℓᵇ} A≅B =
+  ≅-trans (Lift-Alg-isoʳ{ℓᵇ = ℓᵇ}(≅-trans (Lift-Alg-isoˡ{ℓᵇ = ℓᵇ} A≅B) (≅-sym Lift-≅ˡ)))
+          (Lift-Alg-isoʳ Lift-≅ˡ)
 
 \end{code}
 
@@ -150,10 +167,18 @@ The lift is also associative, up to isomorphism at least.
 
 \begin{code}
 
-Lift-Alg-assoc : (ℓ₁ ℓ₂ : Level){𝑨 : SetoidAlgebra α ρᵃ}
- →               Lift-Alg 𝑨 (ℓ₁ ⊔ ℓ₂) ≅  Lift-Alg (Lift-Alg 𝑨 ℓ₁) ℓ₂
+module _ {𝑨 : SetoidAlgebra α ρᵃ}{ℓ₁ ℓ₂ : Level} where
 
-Lift-Alg-assoc _ _ = ≅-trans (≅-trans (≅-sym Lift-≅) Lift-≅) Lift-≅
+ Lift-assocˡ : Lift-Algˡ 𝑨 (ℓ₁ ⊔ ℓ₂) ≅  Lift-Algˡ (Lift-Algˡ 𝑨 ℓ₁) ℓ₂
+ Lift-assocˡ = ≅-trans (≅-trans (≅-sym Lift-≅ˡ) Lift-≅ˡ) Lift-≅ˡ
+
+ Lift-assocʳ : Lift-Algʳ 𝑨 (ℓ₁ ⊔ ℓ₂) ≅  Lift-Algʳ (Lift-Algʳ 𝑨 ℓ₁) ℓ₂
+ Lift-assocʳ = ≅-trans (≅-trans (≅-sym Lift-≅ʳ) Lift-≅ʳ) Lift-≅ʳ
+
+
+Lift-assoc : {𝑨 : SetoidAlgebra α ρᵃ}{ℓ ρ : Level}
+ →           Lift-Alg 𝑨 ℓ ρ ≅  Lift-Algʳ (Lift-Algˡ 𝑨 ℓ) ρ
+Lift-assoc {𝑨 = 𝑨}{ℓ}{ρ} = ≅-trans (≅-sym Lift-≅) (≅-trans Lift-≅ˡ Lift-≅ʳ)
 
 \end{code}
 
@@ -218,9 +243,9 @@ module _ {𝓘 : Level}{I : Type 𝓘}
  open IsHom
 
 
- Lift-Alg-⨅≅ : (∀ i → 𝒜 i ≅ ℬ (lift i)) → Lift-Alg (⨅ 𝒜) γ ≅ ⨅ ℬ
+ Lift-Alg-⨅≅ˡ : (∀ i → 𝒜 i ≅ ℬ (lift i)) → Lift-Algˡ (⨅ 𝒜) γ ≅ ⨅ ℬ
 
- Lift-Alg-⨅≅ AB = Goal
+ Lift-Alg-⨅≅ˡ AB = Goal
   where
    ϕ : ⨅A ⟶ ⨅B
    ϕ = record { f = λ a i → ∣ to (AB (lower i)) ∣ ⟨$⟩ (a (lower i))
@@ -248,8 +273,8 @@ module _ {𝓘 : Level}{I : Type 𝓘}
    A≅B : ⨅ 𝒜 ≅ ⨅ ℬ
    A≅B = mkiso (ϕ , ϕhom) (ψ , ψhom) ϕ∼ψ ψ∼ϕ
 
-   Goal : Lift-Alg (⨅ 𝒜) γ ≅ ⨅ ℬ
-   Goal = ≅-trans (≅-sym Lift-≅) A≅B
+   Goal : Lift-Algˡ (⨅ 𝒜) γ ≅ ⨅ ℬ
+   Goal = ≅-trans (≅-sym Lift-≅ˡ) A≅B
 
 \end{code}
 

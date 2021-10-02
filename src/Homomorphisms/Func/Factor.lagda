@@ -110,12 +110,13 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ}
 
   open Func φmap using () renaming (cong to φcong)
   φcomp : compatible-map 𝑪 𝑩 φmap
-  φcomp {f}{c} = begin
-    φmap ⟨$⟩ ((f ̂ 𝑪) c)   ≈˘⟨ φcong (Func.cong Interp (≡.refl , (λ _ → η))) ⟩
-    g (h⁻¹ ((f ̂ 𝑪)(h ∘ (h⁻¹ ∘ c))))   ≈˘⟨ φcong (compatible ∥ hh ∥) ⟩
+  φcomp {f}{c} =
+   begin
+    φmap ⟨$⟩ ((f ̂ 𝑪) c)              ≈˘⟨ φcong (Func.cong Interp (≡.refl , (λ _ → η))) ⟩
+    g (h⁻¹ ((f ̂ 𝑪)(h ∘ (h⁻¹ ∘ c)))) ≈˘⟨ φcong (compatible ∥ hh ∥) ⟩
     g (h⁻¹ (h ((f ̂ 𝑨)(h⁻¹ ∘ c))))   ≈˘⟨ gφh ((f ̂ 𝑨)(h⁻¹ ∘ c)) ⟩
-    g ((f ̂ 𝑨)(h⁻¹ ∘ c))    ≈˘⟨ sym₂ (compatible ∥ gh ∥) ⟩
-    (f ̂ 𝑩)(g ∘ (h⁻¹ ∘ c)) ∎
+    g ((f ̂ 𝑨)(h⁻¹ ∘ c))             ≈⟨ compatible ∥ gh ∥ ⟩
+    (f ̂ 𝑩)(g ∘ (h⁻¹ ∘ c))           ∎
 
   φhom : IsHom 𝑪 𝑩 φmap
   φhom = record { compatible = φcomp
