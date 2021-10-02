@@ -43,7 +43,7 @@ open import Terms.Func.Basic                 {𝑆 = 𝑆} using ( 𝑻 ; _≐_ 
 open import Terms.Func.Properties    {𝑆 = 𝑆} using ( lift-hom )
 open import Varieties.Func.EquationalLogic  {𝑆 = 𝑆}  using ( _⊫_≈_ )
 open import Varieties.Func.SoundAndComplete {𝑆 = 𝑆}  using ( module FreeAlgebra ; Eq ; Mod ; Th )
-open import Varieties.Func.Closure          {𝑆 = 𝑆} using ( S ; P ; V )
+open import Varieties.Func.Closure          {𝑆 = 𝑆} using ( S ; P ; V ; P-idemp)
 
 module _ {α : Level} {𝒦 : Pred (SetoidAlgebra α α) (ov α) }
          {𝔄I : ∀ i → 𝕌[ 𝔄{𝒦 = 𝒦} i ] }  -- assume all algebras in 𝒦 are nonempty
@@ -198,10 +198,28 @@ Observe that the inhabitants of `ℭ` are maps from `ℑ` to `{𝔄 i : i ∈ �
   Goal : ℓ𝔽 ∈ S (P 𝒦)
   Goal = ssub SPℓℭ ℓ𝔽≤ℓC
 
- -- SP⊆V : (S{ov α}{ℓ} (P 𝒦)) ⊆ V 𝒦
- -- SP⊆V (sbase{𝑨} x) = {!!}
- -- SP⊆V (ssub x y) = vssub (SP⊆V x) y
- -- SP⊆V (siso x y) = viso (SP⊆V x) y
+ P⊆V : P{α}{ov α} 𝒦 ⊆ V 𝒦
+ P⊆V (pbase x) = vbase x
+ P⊆V (pprod x) = vpprod λ i → P⊆V (x i)
+ P⊆V (piso x y) = viso (P⊆V x) y
+
+ SP⊆V : (S{ov α}{ℓ} (P 𝒦)) ⊆ V{α}{ℓ} 𝒦
+ SP⊆V (sbase{𝑨} x) = Goal
+  where
+  -- ζ : 𝑨 ∈ V{α}{ov α} 𝒦
+  -- ζ = P⊆V x
+
+  η : Lift-Alg 𝑨 ℓ ℓ ∈ P{ov α}{ℓ} (P{α}{ov α} 𝒦)
+  η = pbase x
+  ζ : Lift-Alg 𝑨 ℓ ℓ ∈ P{α}{ℓ} 𝒦
+  ζ = P-idemp {!η!}
+
+  goal : Lift-Alg 𝑨 ℓ ℓ ∈ V{α}{ℓ} 𝒦
+  goal = viso{β = ℓ} {!!} {!!} -- vbase (P⊆V x)
+  Goal : Lift-Alg 𝑨 ℓ ℓ ∈ V 𝒦
+  Goal = {!!}
+ SP⊆V (ssub x y) = vssub (SP⊆V x) y
+ SP⊆V (siso x y) = viso (SP⊆V x) y
 
  -- ℓ𝔽∈V : ℓ𝔽 ∈ V 𝒦
  -- ℓ𝔽∈V = SP⊆V ℓ𝔽∈SP
