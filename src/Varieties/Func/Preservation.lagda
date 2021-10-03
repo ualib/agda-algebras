@@ -27,8 +27,8 @@ open import Relation.Unary  using ( Pred ; _⊆_ ; _∈_ ) -- ; ｛_｝ ; _∪_ 
 open import Overture.Preliminaries                  using ( ∣_∣ ; ∥_∥ )
 open import Algebras.Func.Basic             {𝑆 = 𝑆} using ( SetoidAlgebra ; ov ; Lift-Alg ; Lift-Algˡ )
 open import Algebras.Func.Products          {𝑆 = 𝑆} using ( ⨅ ; ℑ ; 𝔄 )
-open import Homomorphisms.Func.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; Lift-≅ ; ⨅≅ ; Lift-≅ˡ
-                                                          ; Lift-≅ʳ ; Lift-Alg-iso )
+open import Homomorphisms.Func.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; Lift-≅ ; ⨅≅ ; Lift-≅ˡ; ≅-refl
+                                                          ; Lift-≅ʳ ; Lift-Alg-iso ; ≅-trans)
 open import Subalgebras.Func.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; _≤c_ )
 open import Subalgebras.Func.Properties     {𝑆 = 𝑆} using ( A≤B×B≅C→A≤C ; ⨅-≤ ; Lift-≤-Liftˡ )
 open import Varieties.Func.Closure          {𝑆 = 𝑆} using ( H ; S ; P ; V ; subalgebra→S
@@ -53,35 +53,42 @@ The next lemma would be too obvious to care about were it not for the fact that 
 
 \begin{code}
 
-S⊆SP : (𝒦 : Pred (SetoidAlgebra α α)(ov α))
- →     S{α}{β} 𝒦 ⊆ S{α ⊔ β}{α ⊔ β} (P{α}{β} 𝒦)
-
-S⊆SP {α} {β} 𝒦 {.(Lift-Alg 𝑨 β β)} (sbase{𝑨} x) = goal
+S⊆SP' : {α β γ : Level}(𝒦 : Pred (SetoidAlgebra α α)(ov α))
+ →     S{α}{α ⊔ β ⊔ γ} 𝒦 ⊆ S{α ⊔ β ⊔ γ}{α ⊔ β ⊔ γ} (P{α}{β}{γ} 𝒦)
+S⊆SP' {α} {β} {γ} 𝒦 {𝑨} (sbase{𝑩} kB B≅A) = Goal
  where
- llA : SetoidAlgebra (α ⊔ β)(α ⊔ β)
- llA = Lift-Alg 𝑨 β β
+ PB : 𝑩 ∈ P{α}{α}{α} 𝒦
+ PB = pbase kB ≅-refl
+ PlB : Lift-Alg 𝑩 β β ∈ P{α}{β}{β} 𝒦
+ PlB = piso (pbase kB Lift-≅) ≅-refl
 
- PA : Lift-Alg 𝑨 β β ∈ P{α}{β} 𝒦
- PA = pbase x
-
- ξ : Lift-Alg (Lift-Alg 𝑨 β β) (α ⊔ β)(α ⊔ β) ∈ S{α ⊔ β}{α ⊔ β} (P{α}{β} 𝒦)
- ξ = sbase PA
-
- liso : Lift-Alg (Lift-Alg 𝑨 β β) (α ⊔ β)(α ⊔ β) ≅ Lift-Alg 𝑨 β β
- liso = ≅-sym Lift-≅
- goal : Lift-Alg 𝑨 β β ∈ S{α ⊔ β}{α ⊔ β} (P{α}{β} 𝒦)
- goal = siso ξ liso
+ PllB : Lift-Alg 𝑩 (β ⊔ γ) (β ⊔ γ) ∈ P{α}{β}{γ} 𝒦
+ PllB = piso PlB (≅-trans (≅-sym Lift-≅) Lift-≅)
 
 
-S⊆SP {α} {β} 𝒦 {𝑩} (ssub{𝑨} sA B≤A) = ssub splAu B≤A
+ Goal : 𝑨 ∈ S{α ⊔ β ⊔ γ}{α ⊔ β ⊔ γ} (P{α}{β}{γ} 𝒦)
+ Goal = sbase PllB (≅-trans (≅-sym Lift-≅) B≅A)
+
+
+S⊆SP' {α} {β} {γ} 𝒦 {𝑨} (ssub{𝑩} sB A≤B) = ssub (S⊆SP' 𝒦 sB) A≤B
+
+
+S⊆SP : {α β γ : Level}(𝒦 : Pred (SetoidAlgebra α α)(ov α))
+ →     S{α}{α ⊔ β ⊔ γ} 𝒦 ⊆ S{α}{α ⊔ β ⊔ γ} (P{α}{α}{α} 𝒦)
+
+S⊆SP{α}{β}{γ} 𝒦 {𝑨} (sbase{𝑩} kB B≅A) = Goal
  where
-  splAu : 𝑨 ∈ S (P 𝒦)
-  splAu = S⊆SP 𝒦 sA
+ PB : 𝑩 ∈ P{α}{α}{α} 𝒦
+ PB = pbase kB ≅-refl
+ Goal : 𝑨 ∈ S{α}{α ⊔ β ⊔ γ} (P{α}{α}{α} 𝒦)
+ Goal = sbase PB B≅A
 
-S⊆SP {α} {β} 𝒦 {𝑩} (siso{𝑨} sA A≅B) = siso splAu A≅B
+S⊆SP{α}{β}{γ} 𝒦 {𝑨} (ssub{𝑩} x x₁) = Goal
  where
-  splAu : 𝑨 ∈ S (P 𝒦)
-  splAu = S⊆SP 𝒦 sA
+ SPB : 𝑩 ∈ S{α}{α ⊔ β ⊔ γ} (P{α}{α}{α} 𝒦)
+ SPB = S⊆SP{β = β}{γ} 𝒦 x
+ Goal : 𝑨 ∈ S{α}{α ⊔ β ⊔ γ} (P{α}{α}{α} 𝒦)
+ Goal = ssub SPB x₁
 
 \end{code}
 
@@ -90,18 +97,18 @@ We need to formalize one more lemma before arriving the main objective of this s
 
 \begin{code}
 
-module _ {α β : Level}{𝒦 : Pred(SetoidAlgebra α α)(ov α)} where
+module _ {α β γ : Level}{𝒦 : Pred(SetoidAlgebra α α)(ov α)} where
 
  lemPS⊆SP : {I : Type β}{ℬ : I → SetoidAlgebra α α}
-  →         (∀ i → (ℬ i) ≤c 𝒦) → ⨅ ℬ ≤c (P{α}{β} 𝒦)
+  →         (∀ i → (ℬ i) ≤c 𝒦) → ⨅ ℬ ≤c (P{α}{β}{γ} 𝒦)
 
  lemPS⊆SP {I = I}{ℬ} B≤K = ⨅ lA , P⨅lA , ⨅B≤⨅lA
   where
-  lA : I → SetoidAlgebra (α ⊔ β)(α ⊔ β)
-  lA = λ i → Lift-Alg ∣ B≤K i ∣ β β
+  lA : I → SetoidAlgebra (α ⊔ β ⊔ γ)(α ⊔ β ⊔ γ)
+  lA = λ i → Lift-Alg ∣ B≤K i ∣ (β ⊔ γ) (β ⊔ γ)
 
   P⨅lA : ⨅ lA ∈ P 𝒦
-  P⨅lA = pprod (λ i → pbase (fst ∥ B≤K i ∥))
+  P⨅lA = {!!} -- pprod (λ i → pbase (fst ∥ B≤K i ∥))
 
   B≤A : ∀ i → ℬ i ≤ ∣ B≤K i ∣
   B≤A = λ i → snd ∥ B≤K i ∥
@@ -111,7 +118,7 @@ module _ {α β : Level}{𝒦 : Pred(SetoidAlgebra α α)(ov α)} where
 
  lemPS⊆SP' : {I : Type β}{ℬ : I → SetoidAlgebra α α}
   →          (∀ i → (ℬ i) ∈ S{α}{α} 𝒦) → (⨅ ℬ) ∈ S{α ⊔ β}{α ⊔ β} (P{α}{β} 𝒦)
- lemPS⊆SP'{I = I}{ℬ} sB = subalgebra→S (lemPS⊆SP (S→subalgebra ∘ sB))
+ lemPS⊆SP'{I = I}{ℬ} sB = {!!} -- subalgebra→S (lemPS⊆SP (S→subalgebra ∘ sB))
 
 \end{code}
 
@@ -123,34 +130,13 @@ Finally, we are in a position to prove that a product of subalgebras of algebras
 
 \begin{code}
 
-module _ {α : Level} {𝒦 : Pred (SetoidAlgebra α α)(ov α)} where
+module _ {α β γ : Level} {𝒦 : Pred (SetoidAlgebra α α)(ov α)} where
 
- PS⊆SP : P{ov α}{ov α} (S{α}{ov α} 𝒦) ⊆ S{ov α}{ov α} (P{α}{ov α} 𝒦)
+ PS⊆SP : P{α ⊔ β}{β}{γ} (S{α}{β} 𝒦) ⊆ S{α ⊔ β ⊔ γ}{α ⊔ β ⊔ γ} (P{α}{β}{γ} 𝒦)
 
- PS⊆SP (pbase (sbase x)) = sbase (pbase x)
- PS⊆SP (pbase (ssub{𝑨} sA B≤A)) =
-  siso (ssub (S⊆SP 𝒦 slA)(Lift-≤-Liftˡ B≤A)) Lift-≅ʳ
-  where
-  slA : Lift-Algˡ 𝑨 (ov α) ∈ S 𝒦
-  slA = siso sA Lift-≅ˡ
-
- PS⊆SP (pbase (siso{𝑨}{𝑩} sA A≅B)) = siso (S⊆SP 𝒦 slA) (Lift-Alg-iso A≅B)
-  where
-  slA : Lift-Alg 𝑨 (ov α) (ov α) ∈ S 𝒦
-  slA = siso sA Lift-≅
-
- PS⊆SP (pprod{I}{𝒜} x) = goal
-  where
-  spAi : ∀ i → 𝒜 i ∈ S (P 𝒦)
-  spAi i = PS⊆SP (x i)
-
-  spp⨅A : ⨅ 𝒜 ∈ S (P (P 𝒦))
-  spp⨅A = lemPS⊆SP' spAi
-  goal : ⨅ 𝒜 ∈ S (P 𝒦)
-  goal = S-mono P-idemp spp⨅A
-
- PS⊆SP (piso{𝑨}{𝑩} pA A≅B) = siso (PS⊆SP pA) A≅B
-
+ PS⊆SP (pbase{𝑨}{𝑩} sA A≅B) = {!!}
+ PS⊆SP (pprod x) = {!!}
+ PS⊆SP (piso x x₁) = {!!}
 \end{code}
 
 
@@ -163,17 +149,12 @@ We conclude this subsection with three more inclusion relations that will have b
 
 P⊆V : {α β : Level}{𝒦 : Pred (SetoidAlgebra α α)(ov α)} → P{α}{β} 𝒦 ⊆ V{α}{β} 𝒦
 
-P⊆V (pbase x) = vbase x
-P⊆V (pprod x) = vpprod (λ i → P⊆V (x i))
-P⊆V (piso x y) = viso (P⊆V x) y
+P⊆V x = {!!}
 
 SP⊆V : {α β : Level}{𝒦 : Pred (SetoidAlgebra α α)(ov α)}
  →     S{α ⊔ β}{α ⊔ β} (P{α}{β} 𝒦) ⊆ V 𝒦
 
-SP⊆V (sbase x) = P⊆V (piso x Lift-≅)
-SP⊆V (ssub x y) = vssub (SP⊆V x) y
-SP⊆V (siso x y) = viso (SP⊆V x) y
-
+SP⊆V x = {!!}
 \end{code}
 
 
@@ -196,7 +177,7 @@ module _ {α : Level}{𝒦 : Pred (SetoidAlgebra α α) (ov α)} where
  P⨅𝒜 = piso (pprod PAi) (⨅≅ λ _ → ≅-sym Lift-≅)
   where
   PAi : (i : I) → Lift-Alg (𝒜 i) (ov α)(ov α) ∈ P{α}{ov α} 𝒦
-  PAi i = pbase ∥ i ∥
+  PAi i = {!!} -- pbase ∥ i ∥
 
 \end{code}
 

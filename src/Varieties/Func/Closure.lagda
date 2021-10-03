@@ -30,43 +30,42 @@ open import Relation.Unary using ( Pred ; _∈_ ; _⊆_ )
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
 open import Algebras.Func.Products               {𝑆 = 𝑆} using ( ⨅ )
 open import Algebras.Func.Basic                  {𝑆 = 𝑆} using ( SetoidAlgebra ; ov ; Lift-Alg )
-open import Homomorphisms.Func.Isomorphisms      {𝑆 = 𝑆} using ( _≅_ ; Lift-≅ ; ≅-sym )
+open import Homomorphisms.Func.Isomorphisms      {𝑆 = 𝑆} using ( _≅_ ; Lift-≅ ; ≅-sym ; Lift-assoc' ; ≅-trans ; ≅-refl )
 open import Homomorphisms.Func.HomomorphicImages {𝑆 = 𝑆} using ( HomImages )
 open import Subalgebras.Func.Subalgebras         {𝑆 = 𝑆} using ( _≤_ ; _≤c_ )
-open import Subalgebras.Func.Properties          {𝑆 = 𝑆} using ( ≤-Lift ; ≅→≤ ; ≤→≤c→≤c )
+open import Subalgebras.Func.Properties          {𝑆 = 𝑆} using ( ≤-Lift ; ≅→≤ ; ≤→≤c→≤c ; Lift-≤-Lift ; ≅-trans-≤ )
 
 -- The inductive type H
 data H {α β : Level}(𝒦 : Pred(SetoidAlgebra α α) (ov α)) :
                            Pred(SetoidAlgebra (α ⊔ β) (α ⊔ β)) (ov (α ⊔ β))
  where
- hbase : {𝑨 : SetoidAlgebra _ _} → 𝑨 ∈ 𝒦 → Lift-Alg 𝑨 β β ∈ H 𝒦
+ hbase : {𝑨 : SetoidAlgebra α α}{𝑩 : SetoidAlgebra (α ⊔ β) (α ⊔ β)} → 𝑨 ∈ 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ H 𝒦
  hhimg : {𝑨 𝑩 : SetoidAlgebra _ _} → 𝑨 ∈ H{β = β} 𝒦 → ((𝑩 , _) : HomImages 𝑨) → 𝑩 ∈ H 𝒦
 
 -- The inductive type S
 data S {α β : Level}(𝒦 : Pred(SetoidAlgebra α α) (ov α)) :
                            Pred(SetoidAlgebra (α ⊔ β) (α ⊔ β)) (ov (α ⊔ β))
  where
- sbase : {𝑨 : SetoidAlgebra α α} → 𝑨 ∈ 𝒦 → Lift-Alg 𝑨 β β ∈ S 𝒦
+ sbase : {𝑨 : SetoidAlgebra α α}{𝑩 : SetoidAlgebra (α ⊔ β) (α ⊔ β)} → 𝑨 ∈ 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ S 𝒦
  ssub  : {𝑨 𝑩 : SetoidAlgebra (α ⊔ β) (α ⊔ β)} → 𝑨 ∈ S{β = β} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ S 𝒦
- siso  : {𝑨 𝑩 : SetoidAlgebra _ _} → 𝑨 ∈ S{β = β} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ S 𝒦
 
 -- The inductive type P
-data P {α β : Level}(𝒦 : Pred(SetoidAlgebra α α) (ov α)) :
-                           Pred(SetoidAlgebra (α ⊔ β) (α ⊔ β)) (ov (α ⊔ β))
+data P {α β γ : Level}(𝒦 : Pred(SetoidAlgebra α α) (ov α)) :
+                           Pred(SetoidAlgebra (α ⊔ β ⊔ γ) (α ⊔ β ⊔ γ)) (ov (α ⊔ β ⊔ γ))
  where
- pbase  : {𝑨 : SetoidAlgebra α α} → 𝑨 ∈ 𝒦 → Lift-Alg 𝑨 β β ∈ P 𝒦
- pprod  : {I : Type β}{𝒜 : I → SetoidAlgebra _ _} → (∀ i → (𝒜 i) ∈ P{β = β} 𝒦) → ⨅ 𝒜 ∈ P 𝒦
- piso  : {𝑨 𝑩 : SetoidAlgebra _ _} → 𝑨 ∈ P{β = β} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ P 𝒦
+ pbase  : {𝑨 : SetoidAlgebra α α}{𝑩 : SetoidAlgebra (α ⊔ β ⊔ γ) (α ⊔ β ⊔ γ)} → 𝑨 ∈ 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ P 𝒦
+ pprod  : {I : Type γ}{𝒜 : I → SetoidAlgebra _ _} → (∀ i → (𝒜 i) ∈ P{α}{β}{γ} 𝒦) → ⨅ 𝒜 ∈ P 𝒦
+ piso  : {𝑨 : SetoidAlgebra (α ⊔ β) (α ⊔ β)}{𝑩 : SetoidAlgebra (α ⊔ β ⊔ γ)(α ⊔ β ⊔ γ)}
+  →      𝑨 ∈ P{β = β}{γ = β}𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ P 𝒦
 
 -- The inductive types V
 data V {α β : Level}(𝒦 : Pred(SetoidAlgebra α α) (ov α)) :
                            Pred(SetoidAlgebra (α ⊔ β) (α ⊔ β)) (ov (α ⊔ β))
  where
- vbase  : {𝑨 : SetoidAlgebra α α} → 𝑨 ∈ 𝒦 → Lift-Alg 𝑨 β β ∈ V 𝒦
+ vbase  : {𝑨 : SetoidAlgebra α α}{𝑩 : SetoidAlgebra (α ⊔ β) (α ⊔ β)} → 𝑨 ∈ 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ V 𝒦
  vhimg  : {𝑨 𝑩 : SetoidAlgebra _ _} → 𝑨 ∈ V{β = β} 𝒦 → ((𝑩 , _) : HomImages 𝑨) → 𝑩 ∈ V 𝒦
  vssub  : {𝑨 𝑩 : SetoidAlgebra _ _} → 𝑨 ∈ V{β = β} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ V 𝒦
  vpprod : {I : Type β}{𝒜 : I → SetoidAlgebra _ _} → (∀ i → (𝒜 i) ∈ V{β = β} 𝒦) → ⨅ 𝒜 ∈ V 𝒦
- viso   : {𝑨 𝑩 : SetoidAlgebra _ _} → 𝑨 ∈ V{β = β} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ V 𝒦
 
 \end{code}
 
@@ -95,15 +94,15 @@ module _ {α β : Level} where
  S-mono : {𝒦 𝒦' : Pred (SetoidAlgebra α α)(ov α)}
   →       𝒦 ⊆ 𝒦' → S{α}{β} 𝒦 ⊆ S{α}{β} 𝒦'
 
- S-mono kk (sbase x) = sbase (kk x)
+ S-mono kk (sbase x y) = sbase (kk x) y
  S-mono kk (ssub sA B≤A) = ssub (S-mono kk sA) B≤A
- S-mono kk (siso x y) = siso (S-mono kk x) y
 
  S-idemp : {𝒦 : Pred (SetoidAlgebra α α)(ov α)}
   →        S{α ⊔ β}{β} (S{α}{β} 𝒦) ⊆ S{α}{β} 𝒦
- S-idemp (sbase x) = siso x Lift-≅
+ S-idemp (sbase {𝑨} {𝑩} (sbase{𝑪} x x₁) y) = sbase x (≅-trans x₁ y)
+ S-idemp (sbase {𝑨} {𝑩} (ssub{𝑪} x x₁) y) = ssub x (≅-trans-≤ (≅-sym y) x₁)
  S-idemp (ssub x y) = ssub (S-idemp x) y
- S-idemp (siso x y) = siso (S-idemp x) y
+
 
 \end{code}
 
@@ -114,27 +113,29 @@ module _ {α β : Level} where
 
 \begin{code}
 
-P-mono : {α β : Level}{𝒦 𝒦' : Pred(SetoidAlgebra α α)(ov α)}
- →       𝒦 ⊆ 𝒦' → P{α}{β} 𝒦 ⊆ P{α}{β} 𝒦'
+P-mono : {α β γ : Level}{𝒦 𝒦' : Pred(SetoidAlgebra α α)(ov α)}
+ →       𝒦 ⊆ 𝒦' → P{α}{β}{γ} 𝒦 ⊆ P{α}{β}{γ} 𝒦'
 
-P-mono kk (pbase x) = pbase (kk x)
-P-mono kk (pprod x) = pprod (λ i → P-mono kk (x i))
-P-mono kk (piso x x₁) = piso (P-mono kk x) x₁
+P-mono {α} {β} {γ} {𝒦} {𝒦'} kk {x} (pbase x₁ x₂) = pbase (kk x₁) x₂
+P-mono {α} {β} {γ} {𝒦} {𝒦'} kk {.(⨅ 𝒜)} (pprod{𝒜 = 𝒜} x) = pprod (λ i → P-mono kk (x i))
+
+P-mono {α} {β} {γ} {𝒦} {𝒦'} kk {x} (piso x₁ x₂) = piso (P-mono{γ = β} kk x₁) x₂
+-- (pbase x y) = pbase (kk x) y
+-- P-mono kk (pprod x) = pprod (λ i → P-mono kk (x i))
+-- P-mono kk (piso x y) = piso (P-mono kk x) y
 
 
-P-expa : {α : Level}{𝒦 : Pred (SetoidAlgebra α α)(ov α)} → 𝒦 ⊆ P{α}{α} 𝒦
-P-expa{α}{𝒦} {𝑨} KA =  piso {𝑩 = 𝑨} (pbase KA) (≅-sym Lift-≅)
+P-expa : {α : Level}{𝒦 : Pred (SetoidAlgebra α α)(ov α)} → 𝒦 ⊆ P{α}{α}{α} 𝒦
+P-expa{α}{𝒦} {𝑨} KA = pbase KA ≅-refl
 
 
-module _ {α β : Level} where
+P-idemp : {α β γ : Level}{𝒦 : Pred (SetoidAlgebra α α)(ov α)}
+ →        P{α ⊔ β}{β}{γ} (P{α}{β}{β} 𝒦) ⊆ P{α}{β}{γ} 𝒦
 
- P-idemp : {𝒦 : Pred (SetoidAlgebra α α)(ov α)}
-  →        P{α ⊔ β}{α ⊔ β} (P{α}{α ⊔ β} 𝒦) ⊆ P{α}{α ⊔ β} 𝒦
-
- P-idemp (pbase x) = piso x Lift-≅
- P-idemp (pprod x) = pprod (λ i → P-idemp (x i))
- P-idemp (piso x x₁) = piso (P-idemp x) x₁
-
+P-idemp (pbase x x₁) = piso x x₁
+P-idemp (pprod x) = pprod (λ i → P-idemp (x i))
+P-idemp{α}{β}{γ} (piso x x₁) = piso (P-idemp{α}{β}{β} x) x₁
+ 
 \end{code}
 
 We sometimes want to go back and forth between our two representations of subalgebras of algebras in a class. The tools `subalgebra→S` and `S→subalgebra` are made for that purpose.
@@ -144,13 +145,12 @@ We sometimes want to go back and forth between our two representations of subalg
 module _ {α β : Level}{𝒦 : Pred (SetoidAlgebra α α)(ov α)} where
 
  subalgebra→S : {𝑩 : SetoidAlgebra (α ⊔ β)(α ⊔ β)} → 𝑩 ≤c 𝒦 → 𝑩 ∈ S{α}{β} 𝒦
- subalgebra→S {𝑩} (𝑨 , (kA , B≤A)) = ssub (sbase kA) (≤-Lift B≤A)
+ subalgebra→S {𝑩} (𝑨 , (kA , B≤A)) = ssub (sbase kA (Lift-≅{𝑨 = 𝑨}{β}{β})) (≤-Lift B≤A)
 
 module _ {α : Level}{𝒦 : Pred (SetoidAlgebra α α)(ov α)} where
  S→subalgebra : {𝑩 : SetoidAlgebra α α} → 𝑩 ∈ S{α}{α} 𝒦  →  𝑩 ≤c 𝒦
- S→subalgebra (sbase{𝑩} x) = 𝑩 , (x , ≅→≤ (≅-sym Lift-≅))
+ S→subalgebra (sbase{𝑩} x y) = 𝑩 , (x , (≅→≤ (≅-sym y)))
  S→subalgebra {𝑩} (ssub{𝑨}{.𝑩} sA B≤A) = ≤→≤c→≤c B≤A (S→subalgebra sA)
- S→subalgebra (siso{𝑨}{𝑩} sA A≅B) = ≤→≤c→≤c (≅→≤ (≅-sym A≅B)) (S→subalgebra sA)
 
 open Level
 
@@ -161,7 +161,7 @@ module _ {α β : Level} {𝑨 : SetoidAlgebra (α ⊔ β)(α ⊔ β)}{𝒦 : Pr
   lA : SetoidAlgebra (α ⊔ β)(α ⊔ β)
   lA = Lift-Alg 𝑨 β β
   sslA : lA ∈ S{α ⊔ β}{β} (S{α}{β} 𝒦)
-  sslA = sbase sA
+  sslA = sbase sA Lift-≅
 
   slA : lA ∈ S{α}{β} 𝒦
   slA = S-idemp sslA

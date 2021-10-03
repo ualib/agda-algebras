@@ -58,6 +58,9 @@ data 𝟘 : Type ℓ₀ where  -- We could use ⊥ instead.
 data 𝟙 : Type ℓ₀ where
  𝟎 : 𝟙
 
+data 𝟙⁺{ι : Level} : Type ι where
+ 𝟎 : 𝟙⁺
+
 -- the two element type
 data 𝟚 : Type ℓ₀ where  -- We could use Bool instead.
  𝟎 : 𝟚 ;  𝟏 : 𝟚
