@@ -51,15 +51,22 @@ private variable α β : Level
 ℓ₁ : Level
 ℓ₁ = lsuc ℓ₀
 
--- The empty type
-data 𝟘 : Type ℓ₀ where  -- We could use ⊥ instead.
+-- The empty type (deprecated)
+-- data 𝟘 : Type ℓ₀ where
+-- use instead:
+-- Data.Empty.⊥
 
--- The one element type
-data 𝟙 : Type ℓ₀ where
- 𝟎 : 𝟙
+-- The one element type (deprecated)
+-- data 𝟙 : Type ℓ₀ where
+--  𝟎 : 𝟙
+-- use instead:
+-- Data.Unit.Base.T for 𝟙 and tt for 𝟎
 
-data 𝟙⁺{ι : Level} : Type ι where
- 𝟎 : 𝟙⁺
+-- The polymorphic one element type (deprecated)
+-- data 𝟙⁺{ι : Level} : Type ι where
+--  𝟎 : 𝟙⁺
+-- use instead
+-- Data.Unit.Polymorphic.Base.T for 𝟙⁺ and tt for 𝟎
 
 -- the two element type
 data 𝟚 : Type ℓ₀ where  -- We could use Bool instead.

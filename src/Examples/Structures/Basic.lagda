@@ -17,7 +17,7 @@ open import Agda.Primitive  using ( Level ) renaming ( Set to Type ; lzero to �
 open import Data.Product    using ( _,_ ; _×_  )
 open import Relation.Unary  using ( Pred ; _∈_ )
 
-open import Overture.Preliminaries          using ( 𝟘 ; 𝟙 ; 𝟚 ; 𝟛 )
+open import Overture.Preliminaries          using ( 𝟚 ; 𝟛 )
 open import Structures.Basic                using ( signature ; structure )
 open import Examples.Structures.Signatures  using ( S001 ; S∅ ; S0001 )
 

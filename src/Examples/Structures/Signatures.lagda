@@ -11,43 +11,44 @@ author: "agda-algebras development team"
 
 module Examples.Structures.Signatures where
 
-open import Agda.Primitive  using ( ) renaming ( lzero to ℓ₀ )
-
-open import Overture.Preliminaries using ( 𝟘 ; 𝟙 ; 𝟚 ; 𝟛 )
+open import Agda.Primitive         using () renaming ( lzero to ℓ₀ )
+open import Data.Unit.Base         using ( ⊤ ; tt )
+open import Data.Empty             using ( ⊥ )
+open import Overture.Preliminaries using ( 𝟚 ; 𝟛 )
 open import Structures.Basic       using ( signature ; structure )
 
 -- Some examples (of finite signatures)
 -- The signature with...
 -- ... no symbols  (e.g., sets)
 S∅ : signature ℓ₀ ℓ₀
-S∅ = record { symbol = 𝟘 ; arity = λ () }
+S∅ = record { symbol = ⊥ ; arity = λ () }
 
 -- ... one nullary symbol (e.g., pointed sets)
 S1 : signature ℓ₀ ℓ₀
-S1 = record { symbol = 𝟙 ; arity = λ 𝟎 → 𝟘 }
+S1 = record { symbol = ⊤ ; arity = λ _ → ⊥ }
 
 S01 : signature ℓ₀ ℓ₀ -- ...one unary
-S01 = record { symbol = 𝟙 ; arity = λ 𝟎 → 𝟙 }
+S01 = record { symbol = ⊤ ; arity = λ _ → ⊤ }
 
 -- ...one binary symbol (e.g., magmas, semigroups, semilattices)
 S001 : signature ℓ₀ ℓ₀
-S001 = record { symbol = 𝟙 ; arity = λ 𝟎 → 𝟚 }
+S001 = record { symbol = ⊤ ; arity = λ _ → 𝟚 }
 
 -- ...one ternary symbol (e.g., boolean NAE-3-SAT relational structure)
 S0001 : signature ℓ₀ ℓ₀
-S0001 = record { symbol = 𝟙 ; arity = λ 𝟎 → 𝟛 }
+S0001 = record { symbol = ⊤ ; arity = λ _ → 𝟛 }
 
 -- ...0 nullary, 2 unary, and 1 binary
 S021 : signature ℓ₀ ℓ₀
-S021 = record { symbol = 𝟛 ; arity = λ{ 𝟛.𝟎 → 𝟚 ; 𝟛.𝟏 → 𝟙 ; 𝟛.𝟐 → 𝟙 } }
+S021 = record { symbol = 𝟛 ; arity = λ{ 𝟛.𝟎 → 𝟚 ; 𝟛.𝟏 → ⊤ ; 𝟛.𝟐 → ⊤ } }
 
 -- ...one nullary and one binary (e.g., monoids)
 S101 : signature ℓ₀ ℓ₀
-S101 = record { symbol = 𝟚 ; arity = λ{ 𝟚.𝟎 → 𝟘 ; 𝟚.𝟏 → 𝟚 } }
+S101 = record { symbol = 𝟚 ; arity = λ{ 𝟚.𝟎 → ⊥ ; 𝟚.𝟏 → 𝟚 } }
 
 -- ...one nullary, one unary, and one binary (e.g., groups)
 S111 : signature ℓ₀ ℓ₀
-S111 = record { symbol = 𝟛 ; arity = λ{ 𝟛.𝟎 → 𝟘 ; 𝟛.𝟏 → 𝟙 ; 𝟛.𝟐 → 𝟚 } }
+S111 = record { symbol = 𝟛 ; arity = λ{ 𝟛.𝟎 → ⊥ ; 𝟛.𝟏 → ⊤ ; 𝟛.𝟐 → 𝟚 } }
 
 \end{code}
 
