@@ -22,24 +22,23 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 module Varieties.Func.Closure {𝑆 : Signature 𝓞 𝓥} where
 
 -- imports from Agda and the Agda Standard Library -------------------------------------------
-open import Agda.Primitive using ( _⊔_ ; lsuc ) renaming ( Set to Type ; lzero to ℓ₀)
-open import Data.Product   using ( _,_ ; Σ-syntax ) renaming ( _×_ to _∧_ )
+open import Agda.Primitive        using ( _⊔_ ; lsuc ) renaming ( Set to Type )
+open import Data.Product          using ( _,_ ; Σ-syntax ) renaming ( _×_ to _∧_ )
 open import Data.Unit.Polymorphic using ( ⊤ ; tt )
-open import Function.Bundles        using ( Func )
-open import Function.Base       using ( id )
-open import Level
-open import Relation.Binary         using ( Setoid )
-open import Relation.Unary using ( Pred ; _∈_ ; _⊆_ )
+open import Function.Bundles      using ( Func )
+open import Function.Base         using ( id )
+open import Level                 using ( Level ; Lift ; lift ; lower )
+open import Relation.Binary       using ( Setoid )
+open import Relation.Unary        using ( Pred ; _∈_ ; _⊆_ )
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
-open import Algebras.Func.Products               {𝑆 = 𝑆} using ( ⨅ )
 open import Algebras.Func.Basic                  {𝑆 = 𝑆} using ( SetoidAlgebra ; ov ; Lift-Alg )
+open import Algebras.Func.Products               {𝑆 = 𝑆} using ( ⨅ )
 open import Homomorphisms.Func.Basic             {𝑆 = 𝑆} using ( IsHom )
-open import Homomorphisms.Func.Properties        {𝑆 = 𝑆} using ( 𝒾𝒹 )
-open import Homomorphisms.Func.Isomorphisms      {𝑆 = 𝑆} using ( _≅_ ; Lift-≅ ; ≅-sym ; Lift-assoc' ; ≅-trans ; ≅-refl ; ⨅≅ ; ⨅A≅⨅ℓA)
-open import Homomorphisms.Func.HomomorphicImages {𝑆 = 𝑆} using ( HomImages ; _IsHomImageOf_ ; IdHomImage )
+open import Homomorphisms.Func.Isomorphisms      {𝑆 = 𝑆} using ( _≅_ ; ≅-trans ; ≅-sym ; Lift-≅ ; ⨅≅⨅ℓ )
+open import Homomorphisms.Func.HomomorphicImages {𝑆 = 𝑆} using ( _IsHomImageOf_ ; IdHomImage )
 open import Subalgebras.Func.Subalgebras         {𝑆 = 𝑆} using ( _≤_ ; _≤c_ )
-open import Subalgebras.Func.Properties          {𝑆 = 𝑆} using ( ≤-Lift ; ≅→≤ ; ≤→≤c→≤c ; Lift-≤-Lift ; ≅-trans-≤ ; ≤-reflexive )
+open import Subalgebras.Func.Properties          {𝑆 = 𝑆} using ( ≤-reflexive )
 
 Lift-class : {α β γ : Level} → Pred(SetoidAlgebra α α) (ov α) → Pred(SetoidAlgebra γ γ) (γ ⊔ ov (α ⊔ β))
 Lift-class {α}{β}{γ} 𝒦 = λ (𝑩 : SetoidAlgebra γ γ) → Σ[ 𝑨 ∈ SetoidAlgebra α α ] 𝑨 ∈ 𝒦 ∧ Lift-Alg 𝑨 (lsuc β) (lsuc β) ≅ 𝑩
@@ -81,7 +80,7 @@ P-Lift-closed {β = β}{𝒦}{𝑨}(I , (𝒜 , (kA , A≅⨅A))) = Lift β I
  where
  Goal : ((i : Lift β I) → Lift-Alg (𝒜 (lower i)) β β ∈ Lift-class 𝒦)
       ∧ (Lift-Alg 𝑨 β β ≅ ⨅ (λ x → Lift-Alg (𝒜 (lower x)) β β))
- Goal = (λ i → Lift-class-lemma (kA (lower i))) , ≅-trans (≅-sym Lift-≅) (≅-trans A≅⨅A ⨅A≅⨅ℓA) -- ⨅A≅⨅lA)
+ Goal = (λ i → Lift-class-lemma (kA (lower i))) , ≅-trans (≅-sym Lift-≅) (≅-trans A≅⨅A ⨅≅⨅ℓ) -- ⨅A≅⨅lA)
 
 
 \end{code}
@@ -119,48 +118,54 @@ S-mono kk {𝑩} (𝑨 , (kA , B≤A)) = 𝑨 , ((kk kA) , B≤A)
 
 \begin{code}
 
-P-mono : {𝒦 𝒦' : Pred(SetoidAlgebra α α)(ov α)}
- →       𝒦 ⊆ 𝒦' → P 𝒦 ⊆ P 𝒦'
+module _ {𝒦 : Pred (SetoidAlgebra α α)(ov α)} where
 
-P-mono kk {𝑩} (I , 𝒜 , (kA , B≅⨅A)) = I , (𝒜 , ((λ i → kk (kA i)) , B≅⨅A))
+ P-mono : {𝒦' : Pred(SetoidAlgebra α α)(ov α)}
+  →       𝒦 ⊆ 𝒦' → P 𝒦 ⊆ P 𝒦'
 
-open Func renaming ( f to _⟨$⟩_ )
-open _≅_
-open IsHom
+ P-mono kk {𝑩} (I , 𝒜 , (kA , B≅⨅A)) = I , (𝒜 , ((λ i → kk (kA i)) , B≅⨅A))
 
-H-expa : {𝒦 : Pred (SetoidAlgebra α α)(ov α)} → 𝒦 ⊆ H 𝒦
-H-expa {α} {𝒦}{𝑨} kA = 𝑨 , kA , IdHomImage
-S-expa : {𝒦 : Pred (SetoidAlgebra α α)(ov α)} → 𝒦 ⊆ S 𝒦
-S-expa {α} {𝒦}{𝑨} kA = 𝑨 , (kA , ≤-reflexive)
+ open Func renaming ( f to _⟨$⟩_ )
+ open _≅_
+ open IsHom
 
-P-expa : {𝒦 : Pred (SetoidAlgebra α α)(ov α)} → 𝒦 ⊆ P 𝒦
-P-expa {α} {𝒦}{𝑨} kA = ⊤ , (λ x → 𝑨) , ((λ i → kA) , Goal)
- where
- open SetoidAlgebra 𝑨 using () renaming (Domain to A)
- open SetoidAlgebra (⨅ (λ _ → 𝑨)) using () renaming (Domain to ⨅A)
- open Setoid A using ( refl )
- open Setoid ⨅A using () renaming ( refl to refl⨅ )
 
- to⨅ : Func A ⨅A
- (to⨅ ⟨$⟩ x) = λ _ → x
- cong to⨅ xy = λ _ → xy
- to⨅IsHom : IsHom 𝑨 (⨅ (λ _ → 𝑨)) to⨅
- compatible to⨅IsHom =  refl⨅
- preserves≈ to⨅IsHom xy = λ _ → xy
+ H-expa : 𝒦 ⊆ H 𝒦
+ H-expa {𝑨} kA = 𝑨 , kA , IdHomImage
 
- from⨅ : Func ⨅A A
- (from⨅ ⟨$⟩ x) = x tt
- cong from⨅ xy = xy tt
- from⨅IsHom : IsHom (⨅ (λ _ → 𝑨)) 𝑨 from⨅
- compatible from⨅IsHom = refl
- preserves≈ from⨅IsHom xy = xy tt
+ S-expa : 𝒦 ⊆ S 𝒦
+ S-expa {𝑨} kA = 𝑨 , (kA , ≤-reflexive)
 
- Goal : 𝑨 ≅ ⨅ (λ x → 𝑨)
- to Goal = to⨅ , to⨅IsHom
- from Goal = from⨅ , from⨅IsHom
- to∼from Goal = λ _ _ → refl
- from∼to Goal = λ _ → refl
+ P-expa : 𝒦 ⊆ P 𝒦
+ P-expa {𝑨} kA = ⊤ , (λ x → 𝑨) , ((λ i → kA) , Goal)
+  where
+  open SetoidAlgebra 𝑨 using () renaming (Domain to A)
+  open SetoidAlgebra (⨅ (λ _ → 𝑨)) using () renaming (Domain to ⨅A)
+  open Setoid A using ( refl )
+  open Setoid ⨅A using () renaming ( refl to refl⨅ )
 
+  to⨅ : Func A ⨅A
+  (to⨅ ⟨$⟩ x) = λ _ → x
+  cong to⨅ xy = λ _ → xy
+  to⨅IsHom : IsHom 𝑨 (⨅ (λ _ → 𝑨)) to⨅
+  compatible to⨅IsHom =  refl⨅
+
+  from⨅ : Func ⨅A A
+  (from⨅ ⟨$⟩ x) = x tt
+  cong from⨅ xy = xy tt
+  from⨅IsHom : IsHom (⨅ (λ _ → 𝑨)) 𝑨 from⨅
+  compatible from⨅IsHom = refl
+
+  Goal : 𝑨 ≅ ⨅ (λ x → 𝑨)
+  to Goal = to⨅ , to⨅IsHom
+  from Goal = from⨅ , from⨅IsHom
+  to∼from Goal = λ _ _ → refl
+  from∼to Goal = λ _ → refl
+
+
+V-expa : {𝒦 : Pred (SetoidAlgebra α α)(ov α)}
+ →        𝒦 ⊆ V 𝒦
+V-expa {α} {𝒦} {𝑨} x = H-expa (S-expa (P-expa x))
 
 \end{code}
 

@@ -266,16 +266,20 @@ open FreeAlgebra using ( FreeDomain ; FreeInterp ; 𝔽[_] ; σ₀ ; identity ; 
 open import Varieties.Func.Closure         using ( Lift-class ; Lift-class' ; Lift-class-lemma
                                                  ; Lift-class-lemma' ; H ; S ; P ; V ; P-Lift-closed
                                                  ; is-variety ; variety ; S-mono ; P-mono ; H-expa
-                                                 ; S-expa ; P-expa ; subalgebra→S ; S→subalgebra )
+                                                 ; S-expa ; P-expa ; V-expa ; subalgebra→S
+                                                 ; S→subalgebra )
 
-open import Varieties.Func.Properties      using ( ⊧-I-invar ; ⊧-Lift-invar ; ⊧-lower-invar ; ⊧-S-invar
-                                                 ; ⊧-S-class-invar ; ⊧-P-invar ; ⊧-P-class-invar
-                                                 ; ⊧-P-lift-invar ; ⊧-H-invar )
+open import Varieties.Func.Properties      using ( ⊧-I-invar ; ⊧-Lift-invar ; ⊧-lower-invar
+                                                 ; ⊧-S-invar ; ⊧-S-class-invar ; ⊧-P-invar
+                                                 ; ⊧-P-class-invar ; ⊧-P-lift-invar ; ⊧-H-invar )
 
-open import Varieties.Func.Preservation    using ( S⊆SP ; PS⊆SP ; P⊆SP ; P⊆HSP ; P⊆V ; SP⊆V )
+open import Varieties.Func.Preservation    using ( S⊆SP ; PS⊆SP ; P⊆SP ; P⊆HSP ; P⊆V ; SP⊆V
+                                                 ; H-id1 ; H-id2 ; S-id1 ; S-id2 ; P-id1 ; P-id2
+                                                 ; V-id1 ; V-id2 ; classIds-⊆-VIds ; VIds-⊆-classIds )
 
 open import Varieties.Func.FreeAlgebras    using ( 𝕏 ; ℐ ; ℰ ; hsurj ; ℭ ; Pℭ ; SPℭ ; homℭ ; epi𝔽
-                                                 ; hom𝔽 ; hom𝔽-is-epic ; 𝔽 ; 𝔽≤ℭ ; ℓℭ ; ℓ𝔽 ; ℓ𝔽≤ℓC )
+                                                 ; hom𝔽 ; hom𝔽-is-epic ; 𝔽 ; 𝔽≤ℭ ; ℓℭ ; Pℓℭ ; ℓ𝔽
+                                                 ; ℓ𝔽≤ℓℭ ; ℓ𝔽≤ℭ ; ℓ𝔽∈SP ; ℓ𝔽∈V )
 
 -- GENERAL STRUCTURES ---------------------------------------------------------------------------------
 open import Structures.Basic             using ( signature ; structure ; _ʳ_ ; _ᵒ_ ; compatible

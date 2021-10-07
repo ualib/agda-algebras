@@ -22,21 +22,33 @@ open import Agda.Primitive        using ( Level ) renaming ( Set to Type )
 open import Data.Product          using ( _,_ ) renaming ( proj₁ to fst ; proj₂ to snd )
 open import Data.Unit.Polymorphic using ( ⊤ )
 open import Function              using ( _∘_ )
+open import Function.Bundles      using ( Func )
+open import Relation.Binary       using ( Setoid )
 open import Relation.Unary        using ( Pred ; _⊆_ ; _∈_ )
+import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
 open import Overture.Preliminaries                  using ( ∣_∣ ; ∥_∥ )
-open import Algebras.Func.Basic             {𝑆 = 𝑆} using ( SetoidAlgebra ; ov ; Lift-Alg ; Lift-Algˡ )
-open import Algebras.Func.Products          {𝑆 = 𝑆} using ( ⨅ ; ℑ ; 𝔄 )
-open import Homomorphisms.Func.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; Lift-≅ ; ⨅≅ ; Lift-≅ˡ; ≅-refl
-                                                          ; Lift-≅ʳ ; Lift-Alg-iso ; ≅-trans; ≅⨅⁺-refl)
+open import Overture.Func.Surjective                using ( IsSurjective ; SurjInv ; SurjInvIsInverseʳ )
+open import Algebras.Func.Basic             {𝑆 = 𝑆} using ( SetoidAlgebra ; ov ; 𝕌[_] )
+open import Algebras.Func.Products          {𝑆 = 𝑆} using ( ⨅ )
+open import Homomorphisms.Func.Basic        {𝑆 = 𝑆} using ( hom )
+open import Homomorphisms.Func.Isomorphisms {𝑆 = 𝑆} using ( ≅⨅⁺-refl ; ≅-refl ; ≅-sym )
+open import Homomorphisms.Func.HomomorphicImages {𝑆 = 𝑆} using ( IdHomImage )
+open import Terms.Basic                     {𝑆 = 𝑆} using ( Term )
+open import Terms.Func.Basic                {𝑆 = 𝑆} using ( module Environment)
+open import Terms.Func.Operations           {𝑆 = 𝑆} using ( comm-hom-term )
 open import Subalgebras.Func.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; _≤c_ )
-open import Subalgebras.Func.Properties     {𝑆 = 𝑆} using ( A≤B×B≅C→A≤C ; ⨅-≤ ; Lift-≤-Liftˡ ; ≅-trans-≤ )
-open import Varieties.Func.Closure {𝑆 = 𝑆} using ( H ; S ; P ; V ; subalgebra→S ; Lift-class
-                                                 ; S→subalgebra ; S-mono ; H-expa; S-expa) -- ; P-idemp )
-open _≅_
+open import Subalgebras.Func.Properties     {𝑆 = 𝑆} using ( ⨅-≤ ; ≅-trans-≤ ; ≤-reflexive )
+open import Varieties.Func.EquationalLogic  {𝑆 = 𝑆} using ( _⊫_≈_ ; _⊧_≈_ )
+open import Varieties.Func.Closure {𝑆 = 𝑆} using ( H ; S ; P ; V ; S-expa ; H-expa ; P-expa ; V-expa )
+open import Varieties.Func.Properties {𝑆 = 𝑆} using ( ⊧-S-invar ; ⊧-P-invar ; ⊧-I-invar )
+open import Varieties.Func.SoundAndComplete {𝑆 = 𝑆} using ( ThPred )
+
 private variable
- α ρᵃ β ρᵇ : Level
+ α ρᵃ β ρᵇ χ : Level
+
+open SetoidAlgebra using ( Domain )
 
 \end{code}
 
@@ -103,6 +115,129 @@ We conclude this subsection with three more inclusion relations that will have b
 
 \end{code}
 
+#### <a id="h-preserves-identities">H preserves identities</a>
+
+First we prove that the closure operator H is compatible with identities that hold in the given class.
+
+\begin{code}
+
+open Func using ( cong ) renaming ( f to _⟨$⟩_ )
+
+module _ {X : Type χ} {p q : Term X}{𝒦 : Pred (SetoidAlgebra α α)(ov α)} where
+
+ H-id1 : 𝒦 ⊫ p ≈ q → H 𝒦 ⊫ p ≈ q
+ H-id1 σ {𝑩} (𝑨 , (kA , BimgOfA )) ρ = B⊧p≈q
+  where
+  IH : 𝑨 ⊧ p ≈ q
+  IH = σ kA
+  open Setoid (Domain 𝑩) using ( _≈_ )
+  open Environment 𝑨 using () renaming ( ⟦_⟧ to ⟦_⟧₁)
+  open Environment 𝑩 using ( ⟦_⟧ )
+  open SetoidReasoning (Domain 𝑩)
+
+  φ : hom 𝑨 𝑩
+  φ = ∣ BimgOfA ∣
+  φE : IsSurjective ∣ φ ∣
+  φE = ∥ BimgOfA ∥
+  φ⁻¹ : 𝕌[ 𝑩 ] → 𝕌[ 𝑨 ]
+  φ⁻¹ = SurjInv ∣ φ ∣ φE
+
+  ζ : ∀ x → (∣ φ ∣ ⟨$⟩ (φ⁻¹ ∘ ρ) x ) ≈ ρ x
+  ζ = λ _ → SurjInvIsInverseʳ ∣ φ ∣ φE
+
+  B⊧p≈q : (⟦ p ⟧ ⟨$⟩ ρ) ≈ (⟦ q ⟧ ⟨$⟩ ρ)
+  B⊧p≈q = begin
+           ⟦ p ⟧ ⟨$⟩ ρ                               ≈˘⟨ cong ⟦ p ⟧ ζ ⟩
+           ⟦ p ⟧ ⟨$⟩ (λ x → (∣ φ ∣ ⟨$⟩ (φ⁻¹ ∘ ρ) x)) ≈˘⟨ comm-hom-term φ p (φ⁻¹ ∘ ρ) ⟩
+           ∣ φ ∣ ⟨$⟩  (⟦ p ⟧₁ ⟨$⟩ (φ⁻¹ ∘ ρ))         ≈⟨ cong ∣ φ ∣ (IH (φ⁻¹ ∘ ρ)) ⟩
+           ∣ φ ∣ ⟨$⟩  (⟦ q ⟧₁ ⟨$⟩ (φ⁻¹ ∘ ρ))         ≈⟨ comm-hom-term φ q (φ⁻¹ ∘ ρ) ⟩
+           ⟦ q ⟧ ⟨$⟩ (λ x → (∣ φ ∣ ⟨$⟩ (φ⁻¹ ∘ ρ) x)) ≈⟨ cong ⟦ q ⟧ ζ ⟩
+           ⟦ q ⟧ ⟨$⟩ ρ                               ∎
+
+\end{code}
+
+The converse of the foregoing result is almost too obvious to bother with. Nonetheless, we formalize it for completeness.
+
+\begin{code}
+
+ H-id2 : H 𝒦 ⊫ p ≈ q → 𝒦 ⊫ p ≈ q
+ H-id2 Hpq {𝑨} kA = Hpq (𝑨 , (kA , IdHomImage))
+
+\end{code}
+
+
+#### <a id="s-preserves-identities">S preserves identities</a>
+
+\begin{code}
+
+ S-id1 : 𝒦 ⊫ p ≈ q → S 𝒦 ⊫ p ≈ q
+
+ S-id1 σ (_ , kA , B≤A) = ⊧-S-invar {p = p}{q} (σ kA) B≤A
+
+ S-id2 : S 𝒦 ⊫ p ≈ q → 𝒦 ⊫ p ≈ q
+ S-id2 Spq {𝑨} kA = Spq (𝑨 , kA , ≤-reflexive)
+
+\end{code}
+
+
+
+#### <a id="p-preserves-identities">P preserves identities</a>
+
+\begin{code}
+
+
+ P-id1 : 𝒦 ⊫ p ≈ q → P 𝒦 ⊫ p ≈ q
+ P-id1 σ {𝑨} (I , (𝒜 , (kA , A≅⨅A))) ρ = ⊧-I-invar 𝑨 p q IH (≅-sym A≅⨅A) ρ
+  where
+  ih : ∀ i → 𝒜 i ⊧ p ≈ q
+  ih i = σ (kA i)
+  IH : ⨅ 𝒜 ⊧ p ≈ q
+  IH = ⊧-P-invar {p = p}{q} 𝒜 ih
+
+ P-id2 : P 𝒦 ⊫ p ≈ q → 𝒦 ⊫ p ≈ q
+ P-id2 PKpq {𝑨} kA = PKpq (P-expa{𝒦 = 𝒦} kA)
+
+\end{code}
+
+
+#### <a id="v-preserves-identities">V preserves identities</a>
+
+Finally, we prove the analogous preservation lemmas for the closure operator `V`.
+
+\begin{code}
+
+module _ {X : Type χ}{p q : Term X} {𝒦 : Pred (SetoidAlgebra α α)(ov α)} where
+
+ V-id1 : 𝒦 ⊫ p ≈ q → V 𝒦 ⊫ p ≈ q
+ V-id1 σ (𝑨 , (⨅A , p⨅A , A≤⨅A) , BimgOfA) = H-id1{p = p}{q} spK⊧pq (𝑨 , (spA , BimgOfA))
+  where
+  spA : 𝑨 ∈ S (P 𝒦)
+  spA = ⨅A , (p⨅A , A≤⨅A)
+  spK⊧pq : S (P 𝒦) ⊫ p ≈ q
+  spK⊧pq = S-id1{p = p}{q} (P-id1{p = p}{q}{𝒦 = 𝒦} σ)
+
+ V-id2 : V 𝒦 ⊫ p ≈ q → 𝒦 ⊫ p ≈ q
+ V-id2 Vpq {𝑨} kA = Vpq (V-expa{𝒦 = 𝒦} kA)
+
+\end{code}
+
+
+#### <a id="class-identities">Class identities</a>
+
+From `V-id1` it follows that if 𝒦 is a class of structures, then the set of identities modeled by all structures in `𝒦` is equivalent to the set of identities modeled by all structures in `V 𝒦`.  In other terms, `Th (V 𝒦)` is precisely the set of identities modeled by `𝒦`.   We formalize this observation as follows.
+
+\begin{code}
+
+module _ {X : Type χ}{p q : Term X}{𝒦 : Pred (SetoidAlgebra α α)(ov α)} where
+
+ classIds-⊆-VIds : 𝒦 ⊫ p ≈ q  → (p , q) ∈ ThPred (V 𝒦)
+ classIds-⊆-VIds pKq 𝑨 = V-id1{p = p}{q}{𝒦 = 𝒦} pKq
+
+ VIds-⊆-classIds : (p , q) ∈ ThPred (V 𝒦) → 𝒦 ⊫ p ≈ q
+ VIds-⊆-classIds Thpq {𝑨} KA ρ = V-id2{p = p}{q}{𝒦} (Thpq _) KA ρ
+
+\end{code}
+
 
 ----------------------------
 
@@ -113,18 +248,7 @@ We conclude this subsection with three more inclusion relations that will have b
 
 
 
-
-
 <!--
-
-module _ {𝒦 : Pred(SetoidAlgebra α α)(ov α)} where
-
- lemPS⊆SP : {I : Type α}{ℬ : I → SetoidAlgebra α α}
-  →         (∀ i → (ℬ i) ≤c 𝒦) → ⨅ ℬ ≤c (P 𝒦)
-
- lemPS⊆SP {I = I}{ℬ} B≤K = {!!}
-
-
 
 #### <a id="S-in-SP">⨅ S(𝒦) ∈ SP(𝒦)</a>
 
@@ -135,6 +259,6 @@ Finally, we prove a result that plays an important role, e.g., in the formal pro
   𝒜 = 𝔄{𝒦 = 𝒦}
 
  P⨅𝒜 : ⨅ 𝒜 ∈ Lift-class (P 𝒦)
- P⨅𝒜 = {!!} 
+ P⨅𝒜 = {!!}
 
 -->

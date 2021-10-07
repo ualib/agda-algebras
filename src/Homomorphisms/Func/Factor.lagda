@@ -119,8 +119,7 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ}
     (f ̂ 𝑩)(g ∘ (h⁻¹ ∘ c))           ∎
 
   φhom : IsHom 𝑪 𝑩 φmap
-  φhom = record { compatible = φcomp
-                ; preserves≈ = Func.cong φmap }
+  compatible φhom = φcomp
 
 \end{code}
 

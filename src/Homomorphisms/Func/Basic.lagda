@@ -53,7 +53,7 @@ module _ (𝑨 : SetoidAlgebra α ρᵃ)(𝑩 : SetoidAlgebra β ρᵇ) where
  record IsHom (h : A ⟶ B) : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ ⊔ ρᵇ) where
   field
    compatible : compatible-map h
-   preserves≈ : ≈preserving h
+   -- preserves≈ : ≈preserving h
 
  hom : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
  hom = Σ (A ⟶ B) IsHom

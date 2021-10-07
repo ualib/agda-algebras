@@ -208,10 +208,9 @@ module _ {I : Type ι}{𝒜 : I → SetoidAlgebra α ρᵃ}{ℬ : I → SetoidAl
 
    hfunc : ⨅B ⟶ ⨅A
    (hfunc ⟨$⟩ x) i = ∣ hi i ∣ ⟨$⟩ (x i)
-   cong hfunc = λ xy i → preserves≈ ∥ hi i ∥  (xy i)
+   cong hfunc = λ xy i → cong ∣ hi i ∣ (xy i)
    hhom : IsHom (⨅ ℬ) (⨅ 𝒜) hfunc
    compatible hhom = λ i → compatible ∥ hi i ∥
-   preserves≈ hhom = λ xy i → preserves≈ ∥ hi i ∥ (xy i)
 
   hM : IsInjective ∣ h ∣
   hM = λ xy i → ∥ B≤A i ∥ (xy i)

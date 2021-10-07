@@ -34,22 +34,23 @@ open import Relation.Unary   using ( Pred ; _∈_ )
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
-open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ )
-
+open import Overture.Preliminaries                 using ( ∣_∣ ; ∥_∥ )
 open import Algebras.Func.Basic             {𝑆 = 𝑆} using ( SetoidAlgebra ; Lift-Algˡ ; ov )
 open import Algebras.Func.Products          {𝑆 = 𝑆} using ( ⨅ )
 open import Homomorphisms.Func.Basic        {𝑆 = 𝑆} using ( hom )
 open import Homomorphisms.Func.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; mkiso ; Lift-≅ˡ ; ≅-sym )
-open import Terms.Basic                     {𝑆 = 𝑆} using ( Term )
-open import Terms.Func.Basic                {𝑆 = 𝑆} using ( 𝑻 ; _≐_ ; module Environment )
+open import Terms.Basic                     {𝑆 = 𝑆} using ( Term ; ℊ )
+open import Terms.Func.Basic                {𝑆 = 𝑆} using ( 𝑻 ; module Environment )
 open import Terms.Func.Operations           {𝑆 = 𝑆} using ( comm-hom-term ; interp-prod ; term-agreement )
 open import Subalgebras.Func.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; SubalgebrasOfClass )
-open import Varieties.Func.EquationalLogic  {𝑆 = 𝑆}  using ( _⊧_≈_ ; _⊫_≈_ )
+open import Varieties.Func.EquationalLogic  {𝑆 = 𝑆} using ( _⊧_≈_ ; _⊫_≈_ )
 
 private variable
  α ρᵃ β ρᵇ χ ℓ : Level
 
-open Func          renaming ( f to _⟨$⟩_ )
+open Func using ( cong ) renaming (f to _⟨$⟩_ )
+open SetoidAlgebra using ( Domain )
+
 \end{code}
 
 
@@ -59,23 +60,14 @@ The binary relation ⊧ would be practically useless if it were not an *algebrai
 
 \begin{code}
 
-open Term
--- open ≡-Reasoning
-open _≅_
-
-open Func using ( cong ) renaming (f to _⟨$⟩_ )
 
 module _ {X : Type χ}{𝑨 : SetoidAlgebra α ρᵃ}
          (𝑩 : SetoidAlgebra β ρᵇ)(p q : Term X) where
- open SetoidAlgebra 𝑨 using () renaming (Domain to A )
- open Environment 𝑨 using () renaming ( ⟦_⟧ to ⟦_⟧₁ )
- open Setoid A using ( ) renaming ( _≈_ to _≈₁_ )
-
-
- open SetoidAlgebra 𝑩 using () renaming (Domain to B )
- open Environment 𝑩 using () renaming ( ⟦_⟧ to ⟦_⟧₂ )
- open Setoid B using ( _≈_ ; sym )
- open SetoidReasoning B
+ open Environment 𝑨     using () renaming ( ⟦_⟧   to ⟦_⟧₁ )
+ open Environment 𝑩     using () renaming ( ⟦_⟧   to ⟦_⟧₂ )
+ open Setoid (Domain 𝑨) using () renaming ( _≈_   to _≈₁_ )
+ open Setoid (Domain 𝑩) using ( _≈_ ; sym )
+ open SetoidReasoning (Domain 𝑩)
 
  ⊧-I-invar : 𝑨 ⊧ p ≈ q  →  𝑨 ≅ 𝑩  →  𝑩 ⊧ p ≈ q
  ⊧-I-invar Apq (mkiso fh gh f∼g g∼f) ρ =
@@ -117,32 +109,28 @@ Identities modeled by an algebra `𝑨` are also modeled by every subalgebra of 
 
 \begin{code}
 
-module _ {X : Type χ}{𝑨 : SetoidAlgebra α ρᵃ}
-         (𝑩 : SetoidAlgebra β ρᵇ)(p q : Term X) where
- open SetoidAlgebra 𝑨 using () renaming (Domain to A )
+module _ {X : Type χ}{p q : Term X}{𝑨 : SetoidAlgebra α ρᵃ}
+         {𝑩 : SetoidAlgebra β ρᵇ} where
  open Environment 𝑨 using () renaming ( ⟦_⟧ to ⟦_⟧₁ )
- open Setoid A using ( ) renaming ( _≈_ to _≈₁_ )
-
-
- open SetoidAlgebra 𝑩 using () renaming (Domain to B )
  open Environment 𝑩 using () renaming ( ⟦_⟧ to ⟦_⟧₂ )
- open Setoid B using ( _≈_ ; sym )
- open SetoidReasoning A
+ open Setoid (Domain 𝑨) using ( _≈_ )
+ open Setoid (Domain 𝑩) using () renaming ( _≈_ to _≈₂_ )
+ open SetoidReasoning (Domain 𝑨)
 
 
- ⊧-S-invar : 𝑨 ⊧ p ≈ q  →  𝑩 ≤ 𝑨  →  𝑩 ⊧ p ≈ q
+ ⊧-S-invar : 𝑨 ⊧ p ≈ q →  𝑩 ≤ 𝑨  →  𝑩 ⊧ p ≈ q
  ⊧-S-invar Apq B≤A b = goal
   where
   hh : hom 𝑩 𝑨
   hh = ∣ B≤A ∣
   h = _⟨$⟩_ ∣ hh ∣
-  ξ : ∀ b → h (⟦ p ⟧₂ ⟨$⟩ b) ≈₁ h (⟦ q ⟧₂ ⟨$⟩ b)
+  ξ : ∀ b → h (⟦ p ⟧₂ ⟨$⟩ b) ≈ h (⟦ q ⟧₂ ⟨$⟩ b)
   ξ b = begin
          h (⟦ p ⟧₂ ⟨$⟩ b)   ≈⟨ comm-hom-term hh p b ⟩
          ⟦ p ⟧₁ ⟨$⟩ (h ∘ b) ≈⟨ Apq (h ∘ b) ⟩
          ⟦ q ⟧₁ ⟨$⟩ (h ∘ b) ≈˘⟨ comm-hom-term hh q b ⟩
          h (⟦ q ⟧₂ ⟨$⟩ b)   ∎
-  goal : ⟦ p ⟧₂ ⟨$⟩ b ≈ ⟦ q ⟧₂ ⟨$⟩ b
+  goal : ⟦ p ⟧₂ ⟨$⟩ b ≈₂ ⟦ q ⟧₂ ⟨$⟩ b
   goal = ∥ B≤A ∥ (ξ b)
 
 
@@ -151,18 +139,12 @@ module _ {X : Type χ}{𝑨 : SetoidAlgebra α ρᵃ}
 Next, identities modeled by a class of algebras is also modeled by all subalgebras of the class.  In other terms, every term equation `p ≈ q` that is satisfied by all `𝑨 ∈ 𝒦` is also satisfied by every subalgebra of a member of 𝒦.
 
 \begin{code}
-module _ {X : Type χ}{𝑨 : SetoidAlgebra α ρᵃ}
-         (p q : Term X) where
- open SetoidAlgebra 𝑨 using () renaming (Domain to A )
- open Environment 𝑨 using () renaming ( ⟦_⟧ to ⟦_⟧₁ )
- open Setoid A using ( ) renaming ( _≈_ to _≈₁_ )
-
- open SetoidReasoning A
+module _ {X : Type χ}{p q : Term X} where
 
  ⊧-S-class-invar : {𝒦 : Pred (SetoidAlgebra α ρᵃ) ℓ}
   →                (𝒦 ⊫ p ≈ q) → (𝑩 : SubalgebrasOfClass 𝒦 {β}{ρᵇ})
   →                ∣ 𝑩 ∣ ⊧ p ≈ q
- ⊧-S-class-invar Kpq (𝑩 , 𝑨 , kA , B≤A) = ⊧-S-invar 𝑩 p q (Kpq kA) B≤A
+ ⊧-S-class-invar Kpq (_ , _ , kA , B≤A) = ⊧-S-invar{p = p}{q} (Kpq kA) B≤A
 
 \end{code}
 
@@ -174,16 +156,17 @@ An identity satisfied by all algebras in an indexed collection is also satisfied
 
 \begin{code}
 
-module _ {I : Type ℓ}(𝒜 : I → SetoidAlgebra α ρᵃ){X : Type χ} where
+module _ {X : Type χ}{p q : Term X}{I : Type ℓ}(𝒜 : I → SetoidAlgebra α ρᵃ) where
 
- open SetoidAlgebra (⨅ 𝒜) using () renaming ( Domain to ⨅A )
- open Setoid ⨅A using ( _≈_ )
- open Environment (⨅ 𝒜) using () renaming ( ⟦_⟧ to ⟦_⟧₁ )
- open Environment using ( ⟦_⟧ )
- open SetoidReasoning ⨅A
- ⊧-P-invar : (p q : Term X) → (∀ i → 𝒜 i ⊧ p ≈ q) → ⨅ 𝒜 ⊧ p ≈ q
- ⊧-P-invar p q 𝒜pq a = goal
+ ⊧-P-invar : (∀ i → 𝒜 i ⊧ p ≈ q) → ⨅ 𝒜 ⊧ p ≈ q
+ ⊧-P-invar 𝒜pq a = goal
   where
+  open SetoidAlgebra (⨅ 𝒜) using () renaming ( Domain to ⨅A )
+  open Environment   (⨅ 𝒜) using () renaming ( ⟦_⟧ to ⟦_⟧₁ )
+  open Environment using ( ⟦_⟧ )
+  open Setoid ⨅A   using ( _≈_ )
+  open SetoidReasoning ⨅A
+
   ξ : (λ i → (⟦ 𝒜 i ⟧ p) ⟨$⟩ (λ x → (a x) i)) ≈ (λ i → (⟦ 𝒜 i ⟧ q) ⟨$⟩ (λ x → (a x) i))
   ξ = λ i → 𝒜pq i (λ x → (a x) i)
   goal : ⟦ p ⟧₁ ⟨$⟩ a ≈ ⟦ q ⟧₁ ⟨$⟩ a
@@ -199,10 +182,10 @@ An identity satisfied by all algebras in a class is also satisfied by the produc
 
 \begin{code}
 
- ⊧-P-class-invar : (𝒦 : Pred (SetoidAlgebra α ρᵃ)(ov α)){p q : Term X}
+ ⊧-P-class-invar : (𝒦 : Pred (SetoidAlgebra α ρᵃ)(ov α))
   →                𝒦 ⊫ p ≈ q → (∀ i → 𝒜 i ∈ 𝒦) → ⨅ 𝒜 ⊧ p ≈ q
 
- ⊧-P-class-invar 𝒦 {p}{q}σ K𝒜 = ⊧-P-invar p q (λ i ρ → σ (K𝒜 i) ρ)
+ ⊧-P-class-invar 𝒦 σ K𝒜 = ⊧-P-invar (λ i ρ → σ (K𝒜 i) ρ)
 
 \end{code}
 
@@ -210,8 +193,8 @@ Another fact that will turn out to be useful is that a product of a collection o
 
 \begin{code}
 
- ⊧-P-lift-invar : (p q : Term X) → (∀ i → Lift-Algˡ (𝒜 i) β ⊧ p ≈ q)  →  ⨅ 𝒜 ⊧ p ≈ q
- ⊧-P-lift-invar p q α = ⊧-P-invar p q Aipq
+ ⊧-P-lift-invar : (∀ i → Lift-Algˡ (𝒜 i) β ⊧ p ≈ q)  →  ⨅ 𝒜 ⊧ p ≈ q
+ ⊧-P-lift-invar α = ⊧-P-invar Aipq
   where
   Aipq : ∀ i → (𝒜 i) ⊧ p ≈ q
   Aipq i = ⊧-lower-invar{𝑨 = (𝒜 i)} p q (α i)
@@ -226,23 +209,25 @@ If an algebra 𝑨 models an identity p ≈ q, then the pair (p , q) belongs to 
 
  \begin{code}
 
-module _ {X : Type χ}{𝑨 : SetoidAlgebra α ρᵃ}(φh : hom (𝑻 X) 𝑨) where
- open  SetoidAlgebra 𝑨 using () renaming ( Domain to A )
- open Setoid A using ( _≈_ )
- open SetoidReasoning A
- open Environment 𝑨 using () renaming ( ⟦_⟧ to ⟦_⟧₁ )
- open Environment using ( ⟦_⟧ )
+module _ {X : Type χ}{p q : Term X}{𝑨 : SetoidAlgebra α ρᵃ}(φh : hom (𝑻 X) 𝑨) where
+ open Setoid (Domain 𝑨) using ( _≈_ )
  private φ = _⟨$⟩_ ∣ φh ∣
 
- ⊧-H-invar : {p q : Term X} → 𝑨 ⊧ p ≈ q → φ p ≈ φ q
- ⊧-H-invar {p}{q} β =
+ ⊧-H-invar : 𝑨 ⊧ p ≈ q → φ p ≈ φ q
+ ⊧-H-invar β =
   begin
-   φ p                   ≈⟨ cong ∣ φh ∣ (term-agreement p) ⟩
-   φ ((⟦ 𝑻 X ⟧ p) ⟨$⟩ ℊ) ≈⟨ comm-hom-term φh p ℊ ⟩
-   ⟦ p ⟧₁ ⟨$⟩ (φ ∘ ℊ)    ≈⟨ β (φ ∘ ℊ) ⟩
-   ⟦ q ⟧₁ ⟨$⟩ (φ ∘ ℊ)    ≈˘⟨ comm-hom-term φh q ℊ ⟩
-   φ ((⟦ 𝑻 X ⟧ q) ⟨$⟩ ℊ) ≈˘⟨ cong ∣ φh ∣ (term-agreement q) ⟩
-   φ q                   ∎
+   φ p                ≈⟨ cong ∣ φh ∣ (term-agreement p)⟩
+   φ (⟦ p ⟧ ⟨$⟩ ℊ)    ≈⟨ comm-hom-term φh p ℊ ⟩
+   ⟦ p ⟧₂ ⟨$⟩ (φ ∘ ℊ) ≈⟨ β (φ ∘ ℊ) ⟩
+   ⟦ q ⟧₂ ⟨$⟩ (φ ∘ ℊ) ≈˘⟨ comm-hom-term φh q ℊ ⟩
+   φ (⟦ q ⟧ ⟨$⟩ ℊ)    ≈˘⟨ cong ∣ φh ∣ (term-agreement q)⟩
+   φ q                ∎
+
+  where
+  open SetoidReasoning (Domain 𝑨)
+  open Environment 𝑨 using () renaming ( ⟦_⟧ to ⟦_⟧₂ )
+  open Environment (𝑻 X) using ( ⟦_⟧ )
+
 
 \end{code}
 

@@ -16,9 +16,10 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 module Varieties.Func.FreeAlgebras {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ------------------------------------------------
-open import Agda.Primitive   using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type ; lzero to ℓ₀ )
+open import Agda.Primitive   using ( _⊔_ ; lsuc ) renaming ( Set to Type ; lzero to ℓ₀ )
 open import Data.Product     using ( _,_ ; Σ-syntax ) renaming ( proj₂ to snd )
 open import Function.Bundles using ( Func )
+open import Level
 open import Relation.Binary  using ( Setoid ; Decidable )
 open import Relation.Unary   using ( Pred ; _⊆_ ; _∈_ )
 open import Relation.Binary.PropositionalEquality as ≡ using (_≡_)
@@ -29,22 +30,23 @@ open import Overture.Func.Preliminaries             using ( _⟶_ )
 open import Overture.Inverses                       using () renaming ( Image_∋_ to img_∋_ )
 open import Overture.Func.Inverses                  using ( Image_∋_ ) -- ; eq )
 open import Overture.Surjective                     using ( proj ; projIsOnto ) renaming ( IsSurjective to onto )
-open import Overture.Func.Surjective                using ( IsSurjective )
+open import Overture.Func.Surjective                using ( IsSurjective ; isSurj )
+open import Relations.Func.Discrete                 using ( fkerPred )
 open import Algebras.Func.Basic             {𝑆 = 𝑆} using ( SetoidAlgebra ; ov ; 𝕌[_] ; Lift-Alg )
 open import Algebras.Func.Products          {𝑆 = 𝑆} using ( 𝔄 ; ℑ ; ⨅ )
 open import Homomorphisms.Func.Basic        {𝑆 = 𝑆} using ( hom ; epi ; IsEpi ; IsHom ; epi-to-hom )
 open import Homomorphisms.Func.Products     {𝑆 = 𝑆} using ( ⨅-hom-co )
 open import Homomorphisms.Func.Kernels      {𝑆 = 𝑆} using ( kerquo )
-open import Homomorphisms.Func.Isomorphisms {𝑆 = 𝑆} using ( ⨅≅ ; ≅-sym ; Lift-≅ ; ≅-refl ; ≅-trans)
+open import Homomorphisms.Func.Isomorphisms {𝑆 = 𝑆} using ( ⨅≅ ; ⨅≅⨅ℓ ; ≅-sym ; Lift-≅ ; ≅-refl ; ≅-trans)
 open import Subalgebras.Func.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; FirstHomCorollary )
 open import Subalgebras.Func.Properties     {𝑆 = 𝑆} using ( Lift-≤-Lift ; ≤-reflexive ; ≤-trans-≅ )
 open import Terms.Basic                     {𝑆 = 𝑆} using ( Term )
 open import Terms.Func.Basic                {𝑆 = 𝑆} using ( 𝑻 ; _≐_ ; module Environment)
-open import Terms.Func.Properties           {𝑆 = 𝑆} using ( lift-hom )
+open import Terms.Func.Properties           {𝑆 = 𝑆} using ( lift-hom ; lift-of-epi-is-epi)
 open import Varieties.Func.EquationalLogic  {𝑆 = 𝑆} using ( _⊫_≈_ )
-open import Varieties.Func.SoundAndComplete {𝑆 = 𝑆} using ( module FreeAlgebra ; Eq ; Mod ; Th )
+open import Varieties.Func.SoundAndComplete {𝑆 = 𝑆} using ( module FreeAlgebra ; Eq ; Mod ; Th ; ThPred )
 open import Varieties.Func.Closure          {𝑆 = 𝑆} using ( S ; P ; V ; Lift-class ; Lift-class-lemma )
-
+open import Varieties.Func.Preservation     {𝑆 = 𝑆} using ( classIds-⊆-VIds ; SP⊆V )
 module _ {α : Level} {𝒦 : Pred (SetoidAlgebra α α) (ov α)}
          {𝔄I : ∀ i → 𝕌[ 𝔄{𝒦 = 𝒦} i ] }  -- assume all algebras in 𝒦 are nonempty
          {_≟_ : Decidable{A = ℑ{𝒦 = 𝒦}} _≡_}
@@ -137,7 +139,6 @@ Observe that the inhabitants of `ℭ` are maps from `ℑ` to `{𝔄 i : i ∈ �
   open IsHom
   hepi : IsEpi (𝑻 𝕏) 𝔽[ 𝕏 ] h
   compatible (isHom hepi) {f}{a} = cong Interp (≡.refl , (λ i → reflF))
-  preserves≈ (isHom hepi) = c
   isSurjective hepi {y} = Image_∋_.eq y reflF
 
 
@@ -146,6 +147,16 @@ Observe that the inhabitants of `ℭ` are maps from `ℑ` to `{𝔄 i : i ∈ �
 
  hom𝔽-is-epic : IsSurjective ∣ hom𝔽 ∣
  hom𝔽-is-epic = IsEpi.isSurjective (snd (epi𝔽))
+
+ -- class-models-kernel : ∀{p q} → (p , q) ∈ fkerPred ∣ hom𝔽 ∣ → 𝒦 ⊫ p ≈ q
+ -- class-models-kernel {p = p} {q} pKq {𝑨} kA ρ = {!!}
+ -- kernel-in-theory : fkerPred ∣ hom𝔽 ∣ ⊆ ThPred (V 𝒦)
+ -- kernel-in-theory {p , q} pKq vkA x = classIds-⊆-VIds{p = p}{q}{𝒦 = 𝒦} (class-models-kernel pKq) vkA x
+
+
+ ------------------------------------------------------------------------------------------
+ -- Alternative representation of the relatively free algebra is by the quotient
+ -- with respect to the kernel of homℭ.
 
  𝔽 : SetoidAlgebra ooα oα
  𝔽 = kerquo homℭ
@@ -156,47 +167,54 @@ Observe that the inhabitants of `ℭ` are maps from `ℑ` to `{𝔄 i : i ∈ �
  ℓℭ : SetoidAlgebra ooα ooα
  ℓℭ = Lift-Alg ℭ ooα ooα
 
+ Pℓℭ : ℓℭ ∈ P (Lift-class 𝒦)
+ Pℓℭ = Lift ooα ℑ , (λ x → Lift-Alg ∣ lower x ∣ ooα ooα) , (λ i → Lift-class-lemma ∥ lower i ∥)
+                                                          , ≅-trans (≅-sym Lift-≅) ⨅≅⨅ℓ
+
  ℓ𝔽 : SetoidAlgebra ooα ooα
  ℓ𝔽 = Lift-Alg 𝔽 ooα ooα
 
- ℓ𝔽≤ℓC : ℓ𝔽 ≤ ℓℭ
- ℓ𝔽≤ℓC = Lift-≤-Lift 𝔽≤ℭ
+ ℓ𝔽≤ℓℭ : ℓ𝔽 ≤ ℓℭ
+ ℓ𝔽≤ℓℭ = Lift-≤-Lift 𝔽≤ℭ
 
- -- ℓ𝔽∈SP : ℓ𝔽 ∈ S (P (Lift-class 𝒦))
- -- ℓ𝔽∈SP = Goal
- --  where
- --  ℓ𝔽≤C : ℓ𝔽 ≤ ℭ
- --  ℓ𝔽≤C = ≤-trans-≅ ℓ𝔽≤ℓC (≅-sym Lift-≅)
+ ℓ𝔽≤ℭ : ℓ𝔽 ≤ ℭ
+ ℓ𝔽≤ℭ = ≤-trans-≅ ℓ𝔽≤ℓℭ (≅-sym Lift-≅)
 
-  -- Goal : ℓ𝔽 ∈ S (P (Lift-class 𝒦))
-  -- Goal = ℓℭ , ({!!} , {!!}) -- ssub SPℓℭ ℓ𝔽≤ℓC
+ ℓ𝔽∈SP : ℓ𝔽 ∈ S (P (Lift-class 𝒦))
+ ℓ𝔽∈SP = Goal
+  where
+  Goal : ℓ𝔽 ∈ S (P (Lift-class 𝒦))
+  Goal = ℓℭ , (Pℓℭ , ℓ𝔽≤ℓℭ)
 
+ ℓ𝔽∈V : ℓ𝔽 ∈ V (Lift-class 𝒦)
+ ℓ𝔽∈V = SP⊆V{𝒦 = Lift-class 𝒦} ℓ𝔽∈SP
 
- -- ℓ𝔽∈V : ℓ𝔽 ∈ V 𝒦
- -- ℓ𝔽∈V = SP⊆V ℓ𝔽∈SP
+\end{code}
 
+To be continued...
 
+(TODO: complete this module)
 
+\begin{code}
 
+ -- module _ (𝑨 : SetoidAlgebra oα oα)(A∈ModThK : 𝑨 ∈ Mod (Th{X = 𝕏} (V 𝒦))) where
+ --  open Environment 𝑨
+ --  open Setoid (Env 𝕏) using () renaming ( Carrier to X→A )
+ --  𝕏↠A : Σ[ h ∈ X→A ] isSurj{𝑨 = ≡.setoid 𝕏}{𝑩 = Domain 𝑨} h
+ --  𝕏↠A = {!!} -- Goal
+ --   where
+ --   Goal : Σ[ h ∈ X→A ] isSurj{𝑨 = ≡.setoid 𝕏}{𝑩 = Domain 𝑨} h
+ --   Goal = {!!} , {!!}
 
- module _ (𝑨 : SetoidAlgebra oα oα) where
-  open Environment 𝑨
-  open Setoid (Env 𝕏) using () renaming ( Carrier to X→A )
-
-  -- 𝕏↠[_] : 𝑨 ∈ Mod (Th{X = 𝕏}(V 𝒦)) → Σ[ h ∈ X→A ] onto h
-  -- 𝕏↠[ A∈ModK ] = Goal
-  --  where
-  --  Goal : Σ[ h ∈ X→A ] onto h
-  --  Goal = {!!} , {!!}
-
- -- 𝔽-ModTh-epi : (𝑨 : SetoidAlgebra oα oα) → 𝑨 ∈ Mod (Th{X = 𝕏} (V 𝒦)) → epi 𝔽 𝑨
- -- 𝔽-ModTh-epi 𝑨 AinMTV = {!!}
- --  where
- --  η : X → 𝕌[ 𝑨 ]
- --  η = {!!}
- --  φ = lift-hom{𝑨 = 𝑨} η
- --  φE : IsSurjective ∣ φ ∣
- --  φE = {!!} -- lift-of-epi-is-epi ? -- ηE
+ --  𝔽-ModTh-epi : epi 𝔽 𝑨
+ --  𝔽-ModTh-epi = goal
+ --   where
+ --   η : 𝕏 → 𝕌[ 𝑨 ]
+ --   η = ∣ 𝕏↠A ∣
+ --   φ : hom (𝑻 𝕏) 𝑨
+ --   φ = lift-hom{𝑨 = 𝑨} η
+ --   φE : IsSurjective ∣ φ ∣
+ --   φE = lift-of-epi-is-epi η ∥ 𝕏↠A ∥
  --  -- pqlem2 : ∀ p q → (p , q) ∈ kernel ∣ hom𝔽 ∣ → 𝑨 ⊧ p ≈ q
  --  -- pqlem2 p q z = λ x → AinMTV p q (kernel-in-theory z) x
 
@@ -205,8 +223,8 @@ Observe that the inhabitants of `ℭ` are maps from `ℑ` to `{𝔄 i : i ∈ �
  --  --                     (𝑨 ⟦ p ⟧) η  ≡⟨ pqlem2 p q x η ⟩
  --  --                     (𝑨 ⟦ q ⟧) η  ≡⟨ free-lift-interp (wd 𝓥 𝓕⁺) 𝑨 η q ⟩
  --  --                     ∣ φ ∣ q      ∎
- --  goal : epi 𝔽 𝑨
- --  goal = {!!} -- ∣ HomFactorEpi 𝑨 φ hom𝔽 kerincl hom𝔽-is-epic φE)
+ --   goal : epi 𝔽 𝑨
+ --   goal = {!!} -- ∣ HomFactorEpi 𝑨 φ hom𝔽 kerincl hom𝔽-is-epic φE)
 
 
 
@@ -233,16 +251,12 @@ The converse inclusion, `V 𝒦 ⊆ Mod X (Th (V 𝒦))`, is a simple consequenc
 fact that `Mod Th` is a closure operator. Nonetheless, completeness demands
 that we formalize this inclusion as well, however trivial the proof.
 
-begin{code}
+\begin{code}
 
  -- Birkhoff-converse : V{α}{𝓕} 𝒦 ⊆ Mod{X = X} (Th (V 𝒦))
  -- Birkhoff-converse α p q pThq = pThq α
 
 \end{code}
-
-To be continued...
-
-(TODO: complete this module)
 
 
 --------------------------------

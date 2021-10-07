@@ -134,19 +134,19 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ}
  private A = 𝕌[ 𝑨 ]
  open Setoid using ( Carrier )
  open Environment 𝑨
- open Func renaming ( f to _<$>_ )
+ open Func renaming ( f to _⟨$⟩_ )
 
  -- subuniverses are closed under the action of term operations
  sub-term-closed : (B : Pred A ℓ)
   →                (B ∈ Subuniverses 𝑨)
   →                (t : Term X)
   →                (b : Carrier (Env X))
-  →                (∀ x → (b x ∈ B)) → (⟦ t ⟧ <$> b) ∈ B
+  →                (∀ x → (b x ∈ B)) → (⟦ t ⟧ ⟨$⟩ b) ∈ B
 
  sub-term-closed _ _ (ℊ x) b Bb = Bb x
 
  sub-term-closed B B≤A (node f t)b ν =
-  B≤A f  (λ z → ⟦ t z ⟧ <$> b) λ x → sub-term-closed B B≤A (t x) b ν
+  B≤A f  (λ z → ⟦ t z ⟧ ⟨$⟩ b) λ x → sub-term-closed B B≤A (t x) b ν
 
 \end{code}
 
@@ -162,7 +162,7 @@ B  : Pred A ρ
 ρ  : Level
 𝑨  : SetoidAlgebra α ρᵃ
 ```
-and the given proof term establishes the goal `⟦ node f t ⟧ <$> b ∈ B`.
+and the given proof term establishes the goal `⟦ node f t ⟧ ⟨$⟩ b ∈ B`.
 
 Alternatively, we could express the preceeding fact using an inductive type representing images of terms.
 
