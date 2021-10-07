@@ -18,28 +18,37 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 module Varieties.Func.Preservation {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library -----------------------------------------------
-open import Agda.Primitive  using ( _⊔_ ; lsuc ; Level ) renaming ( Set   to Type )
-open import Data.Product    using ( _,_ ) renaming ( proj₁ to fst ; proj₂ to snd ) 
-open import Function.Base   using ( _∘_ )
-open import Relation.Unary  using ( Pred ; _⊆_ ; _∈_ ) -- ; ｛_｝ ; _∪_ )
+open import Agda.Primitive        using ( Level ) renaming ( Set to Type )
+open import Data.Product          using ( _,_ ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Data.Unit.Polymorphic using ( ⊤ )
+open import Function              using ( _∘_ )
+open import Function.Bundles      using ( Func )
+open import Relation.Binary       using ( Setoid )
+open import Relation.Unary        using ( Pred ; _⊆_ ; _∈_ )
+import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
 open import Overture.Preliminaries                  using ( ∣_∣ ; ∥_∥ )
-open import Algebras.Func.Basic             {𝑆 = 𝑆} using ( SetoidAlgebra ; ov ; Lift-Alg ; Lift-Algˡ )
-open import Algebras.Func.Products          {𝑆 = 𝑆} using ( ⨅ ; ℑ ; 𝔄 )
-open import Homomorphisms.Func.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; Lift-≅ ; ⨅≅ ; Lift-≅ˡ
-                                                          ; Lift-≅ʳ ; Lift-Alg-iso )
+open import Overture.Func.Surjective                using ( IsSurjective ; SurjInv ; SurjInvIsInverseʳ )
+open import Algebras.Func.Basic             {𝑆 = 𝑆} using ( SetoidAlgebra ; ov ; 𝕌[_] )
+open import Algebras.Func.Products          {𝑆 = 𝑆} using ( ⨅ )
+open import Homomorphisms.Func.Basic        {𝑆 = 𝑆} using ( hom )
+open import Homomorphisms.Func.Isomorphisms {𝑆 = 𝑆} using ( ≅⨅⁺-refl ; ≅-refl ; ≅-sym )
+open import Homomorphisms.Func.HomomorphicImages {𝑆 = 𝑆} using ( IdHomImage )
+open import Terms.Basic                     {𝑆 = 𝑆} using ( Term )
+open import Terms.Func.Basic                {𝑆 = 𝑆} using ( module Environment)
+open import Terms.Func.Operations           {𝑆 = 𝑆} using ( comm-hom-term )
 open import Subalgebras.Func.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; _≤c_ )
-open import Subalgebras.Func.Properties     {𝑆 = 𝑆} using ( A≤B×B≅C→A≤C ; ⨅-≤ ; Lift-≤-Liftˡ )
-open import Varieties.Func.Closure          {𝑆 = 𝑆} using ( H ; S ; P ; V ; subalgebra→S
-                                                          ; S→subalgebra ; S-mono ; P-idemp )
-open H
-open S
-open P
-open V
-open _≅_
+open import Subalgebras.Func.Properties     {𝑆 = 𝑆} using ( ⨅-≤ ; ≅-trans-≤ ; ≤-reflexive )
+open import Varieties.Func.EquationalLogic  {𝑆 = 𝑆} using ( _⊫_≈_ ; _⊧_≈_ )
+open import Varieties.Func.Closure {𝑆 = 𝑆} using ( H ; S ; P ; V ; S-expa ; H-expa ; P-expa ; V-expa )
+open import Varieties.Func.Properties {𝑆 = 𝑆} using ( ⊧-S-invar ; ⊧-P-invar ; ⊧-I-invar )
+open import Varieties.Func.SoundAndComplete {𝑆 = 𝑆} using ( ThPred )
+
 private variable
- α ρᵃ β ρᵇ : Level
+ α ρᵃ β ρᵇ χ : Level
+
+open SetoidAlgebra using ( Domain )
 
 \end{code}
 
@@ -53,68 +62,15 @@ The next lemma would be too obvious to care about were it not for the fact that 
 
 \begin{code}
 
-S⊆SP : (𝒦 : Pred (SetoidAlgebra α α)(ov α))
- →     S{α}{β} 𝒦 ⊆ S{α ⊔ β}{α ⊔ β} (P{α}{β} 𝒦)
+module _ {𝒦 : Pred(SetoidAlgebra α α)(ov α)} where
 
-S⊆SP {α} {β} 𝒦 {.(Lift-Alg 𝑨 β β)} (sbase{𝑨} x) = goal
- where
- llA : SetoidAlgebra (α ⊔ β)(α ⊔ β)
- llA = Lift-Alg 𝑨 β β
-
- PA : Lift-Alg 𝑨 β β ∈ P{α}{β} 𝒦
- PA = pbase x
-
- ξ : Lift-Alg (Lift-Alg 𝑨 β β) (α ⊔ β)(α ⊔ β) ∈ S{α ⊔ β}{α ⊔ β} (P{α}{β} 𝒦)
- ξ = sbase PA
-
- liso : Lift-Alg (Lift-Alg 𝑨 β β) (α ⊔ β)(α ⊔ β) ≅ Lift-Alg 𝑨 β β
- liso = ≅-sym Lift-≅
- goal : Lift-Alg 𝑨 β β ∈ S{α ⊔ β}{α ⊔ β} (P{α}{β} 𝒦)
- goal = siso ξ liso
-
-
-S⊆SP {α} {β} 𝒦 {𝑩} (ssub{𝑨} sA B≤A) = ssub splAu B≤A
- where
-  splAu : 𝑨 ∈ S (P 𝒦)
-  splAu = S⊆SP 𝒦 sA
-
-S⊆SP {α} {β} 𝒦 {𝑩} (siso{𝑨} sA A≅B) = siso splAu A≅B
- where
-  splAu : 𝑨 ∈ S (P 𝒦)
-  splAu = S⊆SP 𝒦 sA
-
-\end{code}
-
-
-We need to formalize one more lemma before arriving the main objective of this section, which is the proof of the inclusion PS⊆SP.
-
-\begin{code}
-
-module _ {α β : Level}{𝒦 : Pred(SetoidAlgebra α α)(ov α)} where
-
- lemPS⊆SP : {I : Type β}{ℬ : I → SetoidAlgebra α α}
-  →         (∀ i → (ℬ i) ≤c 𝒦) → ⨅ ℬ ≤c (P{α}{β} 𝒦)
-
- lemPS⊆SP {I = I}{ℬ} B≤K = ⨅ lA , P⨅lA , ⨅B≤⨅lA
+ S⊆SP : S 𝒦 ⊆ S (P 𝒦)
+ S⊆SP {𝑩} (𝑨 , (kA , B≤A )) = 𝑨 , (pA , B≤A)
   where
-  lA : I → SetoidAlgebra (α ⊔ β)(α ⊔ β)
-  lA = λ i → Lift-Alg ∣ B≤K i ∣ β β
-
-  P⨅lA : ⨅ lA ∈ P 𝒦
-  P⨅lA = pprod (λ i → pbase (fst ∥ B≤K i ∥))
-
-  B≤A : ∀ i → ℬ i ≤ ∣ B≤K i ∣
-  B≤A = λ i → snd ∥ B≤K i ∥
-
-  ⨅B≤⨅lA : ⨅ ℬ ≤ ⨅ lA
-  ⨅B≤⨅lA = A≤B×B≅C→A≤C (⨅-≤ B≤A) (⨅≅ (λ _ → Lift-≅))
-
- lemPS⊆SP' : {I : Type β}{ℬ : I → SetoidAlgebra α α}
-  →          (∀ i → (ℬ i) ∈ S{α}{α} 𝒦) → (⨅ ℬ) ∈ S{α ⊔ β}{α ⊔ β} (P{α}{β} 𝒦)
- lemPS⊆SP'{I = I}{ℬ} sB = subalgebra→S (lemPS⊆SP (S→subalgebra ∘ sB))
+  pA : 𝑨 ∈ P 𝒦
+  pA = ⊤ , (λ _ → 𝑨) , (λ _ → kA) , ≅⨅⁺-refl
 
 \end{code}
-
 
 
 #### <a id="PS-in-SP">PS(𝒦) ⊆ SP(𝒦)</a>
@@ -123,33 +79,17 @@ Finally, we are in a position to prove that a product of subalgebras of algebras
 
 \begin{code}
 
-module _ {α : Level} {𝒦 : Pred (SetoidAlgebra α α)(ov α)} where
-
- PS⊆SP : P{ov α}{ov α} (S{α}{ov α} 𝒦) ⊆ S{ov α}{ov α} (P{α}{ov α} 𝒦)
-
- PS⊆SP (pbase (sbase x)) = sbase (pbase x)
- PS⊆SP (pbase (ssub{𝑨} sA B≤A)) =
-  siso (ssub (S⊆SP 𝒦 slA)(Lift-≤-Liftˡ B≤A)) Lift-≅ʳ
+ PS⊆SP : P (S 𝒦) ⊆ S (P 𝒦)
+ PS⊆SP {𝑩} (I , ( 𝒜 , sA , B≅⨅A )) = Goal
   where
-  slA : Lift-Algˡ 𝑨 (ov α) ∈ S 𝒦
-  slA = siso sA Lift-≅ˡ
-
- PS⊆SP (pbase (siso{𝑨}{𝑩} sA A≅B)) = siso (S⊆SP 𝒦 slA) (Lift-Alg-iso A≅B)
-  where
-  slA : Lift-Alg 𝑨 (ov α) (ov α) ∈ S 𝒦
-  slA = siso sA Lift-≅
-
- PS⊆SP (pprod{I}{𝒜} x) = goal
-  where
-  spAi : ∀ i → 𝒜 i ∈ S (P 𝒦)
-  spAi i = PS⊆SP (x i)
-
-  spp⨅A : ⨅ 𝒜 ∈ S (P (P 𝒦))
-  spp⨅A = lemPS⊆SP' spAi
-  goal : ⨅ 𝒜 ∈ S (P 𝒦)
-  goal = S-mono P-idemp spp⨅A
-
- PS⊆SP (piso{𝑨}{𝑩} pA A≅B) = siso (PS⊆SP pA) A≅B
+  ℬ : I → SetoidAlgebra α α
+  ℬ i = ∣ sA i ∣
+  kB : (i : I) → ℬ i ∈ 𝒦
+  kB i =  fst ∥ sA i ∥
+  ⨅A≤⨅B : ⨅ 𝒜 ≤ ⨅ ℬ
+  ⨅A≤⨅B = ⨅-≤ λ i → snd ∥ sA i ∥
+  Goal : 𝑩 ∈ S (P 𝒦)
+  Goal = ⨅ ℬ , ((I , (ℬ , (kB , ≅-refl))) , ≅-trans-≤ B≅⨅A ⨅A≤⨅B)
 
 \end{code}
 
@@ -161,42 +101,140 @@ We conclude this subsection with three more inclusion relations that will have b
 
 \begin{code}
 
-P⊆V : {α β : Level}{𝒦 : Pred (SetoidAlgebra α α)(ov α)} → P{α}{β} 𝒦 ⊆ V{α}{β} 𝒦
+ P⊆SP : P 𝒦 ⊆ S (P 𝒦)
+ P⊆SP {𝑩} x = S-expa x
 
-P⊆V (pbase x) = vbase x
-P⊆V (pprod x) = vpprod (λ i → P⊆V (x i))
-P⊆V (piso x y) = viso (P⊆V x) y
+ P⊆HSP : P 𝒦 ⊆ H (S (P 𝒦))
+ P⊆HSP {𝑩} x = H-expa (S-expa x)
 
-SP⊆V : {α β : Level}{𝒦 : Pred (SetoidAlgebra α α)(ov α)}
- →     S{α ⊔ β}{α ⊔ β} (P{α}{β} 𝒦) ⊆ V 𝒦
+ P⊆V : P 𝒦 ⊆ V 𝒦
+ P⊆V = P⊆HSP
 
-SP⊆V (sbase x) = P⊆V (piso x Lift-≅)
-SP⊆V (ssub x y) = vssub (SP⊆V x) y
-SP⊆V (siso x y) = viso (SP⊆V x) y
+ SP⊆V : S (P 𝒦) ⊆ V 𝒦
+ SP⊆V x = H-expa x
+
+\end{code}
+
+#### <a id="h-preserves-identities">H preserves identities</a>
+
+First we prove that the closure operator H is compatible with identities that hold in the given class.
+
+\begin{code}
+
+open Func using ( cong ) renaming ( f to _⟨$⟩_ )
+
+module _ {X : Type χ} {p q : Term X}{𝒦 : Pred (SetoidAlgebra α α)(ov α)} where
+
+ H-id1 : 𝒦 ⊫ p ≈ q → H 𝒦 ⊫ p ≈ q
+ H-id1 σ {𝑩} (𝑨 , (kA , BimgOfA )) ρ = B⊧p≈q
+  where
+  IH : 𝑨 ⊧ p ≈ q
+  IH = σ kA
+  open Setoid (Domain 𝑩) using ( _≈_ )
+  open Environment 𝑨 using () renaming ( ⟦_⟧ to ⟦_⟧₁)
+  open Environment 𝑩 using ( ⟦_⟧ )
+  open SetoidReasoning (Domain 𝑩)
+
+  φ : hom 𝑨 𝑩
+  φ = ∣ BimgOfA ∣
+  φE : IsSurjective ∣ φ ∣
+  φE = ∥ BimgOfA ∥
+  φ⁻¹ : 𝕌[ 𝑩 ] → 𝕌[ 𝑨 ]
+  φ⁻¹ = SurjInv ∣ φ ∣ φE
+
+  ζ : ∀ x → (∣ φ ∣ ⟨$⟩ (φ⁻¹ ∘ ρ) x ) ≈ ρ x
+  ζ = λ _ → SurjInvIsInverseʳ ∣ φ ∣ φE
+
+  B⊧p≈q : (⟦ p ⟧ ⟨$⟩ ρ) ≈ (⟦ q ⟧ ⟨$⟩ ρ)
+  B⊧p≈q = begin
+           ⟦ p ⟧ ⟨$⟩ ρ                               ≈˘⟨ cong ⟦ p ⟧ ζ ⟩
+           ⟦ p ⟧ ⟨$⟩ (λ x → (∣ φ ∣ ⟨$⟩ (φ⁻¹ ∘ ρ) x)) ≈˘⟨ comm-hom-term φ p (φ⁻¹ ∘ ρ) ⟩
+           ∣ φ ∣ ⟨$⟩  (⟦ p ⟧₁ ⟨$⟩ (φ⁻¹ ∘ ρ))         ≈⟨ cong ∣ φ ∣ (IH (φ⁻¹ ∘ ρ)) ⟩
+           ∣ φ ∣ ⟨$⟩  (⟦ q ⟧₁ ⟨$⟩ (φ⁻¹ ∘ ρ))         ≈⟨ comm-hom-term φ q (φ⁻¹ ∘ ρ) ⟩
+           ⟦ q ⟧ ⟨$⟩ (λ x → (∣ φ ∣ ⟨$⟩ (φ⁻¹ ∘ ρ) x)) ≈⟨ cong ⟦ q ⟧ ζ ⟩
+           ⟦ q ⟧ ⟨$⟩ ρ                               ∎
+
+\end{code}
+
+The converse of the foregoing result is almost too obvious to bother with. Nonetheless, we formalize it for completeness.
+
+\begin{code}
+
+ H-id2 : H 𝒦 ⊫ p ≈ q → 𝒦 ⊫ p ≈ q
+ H-id2 Hpq {𝑨} kA = Hpq (𝑨 , (kA , IdHomImage))
 
 \end{code}
 
 
-#### <a id="S-in-SP">⨅ S(𝒦) ∈ SP(𝒦)</a>
-
-Finally, we prove a result that plays an important role, e.g., in the formal proof of Birkhoff's Theorem. As we saw in [Algebras.Products][], the (informal) product `⨅ S(𝒦)` of all subalgebras of algebras in 𝒦 is implemented (formally) in the [agda-algebras](https://github.com/ualib/agda-algebras) library as `⨅ 𝔄 S(𝒦)`. Our goal is to prove that this product belongs to `SP(𝒦)`. We do so by first proving that the product belongs to `PS(𝒦)` and then applying the `PS⊆SP` lemma.
-
-Before doing so, we need to redefine the class product so that each factor comes with a map from the type `X` of variable symbols into that factor.  We will explain the reason for this below.
+#### <a id="s-preserves-identities">S preserves identities</a>
 
 \begin{code}
 
-module _ {α : Level}{𝒦 : Pred (SetoidAlgebra α α) (ov α)} where
+ S-id1 : 𝒦 ⊫ p ≈ q → S 𝒦 ⊫ p ≈ q
 
- private
-  I = ℑ{𝒦 = 𝒦}
-  𝒜 = 𝔄{𝒦 = 𝒦}
- open P
+ S-id1 σ (_ , kA , B≤A) = ⊧-S-invar {p = p}{q} (σ kA) B≤A
 
- P⨅𝒜 : ⨅ 𝒜 ∈ P{α}{ov α} 𝒦
- P⨅𝒜 = piso (pprod PAi) (⨅≅ λ _ → ≅-sym Lift-≅)
+ S-id2 : S 𝒦 ⊫ p ≈ q → 𝒦 ⊫ p ≈ q
+ S-id2 Spq {𝑨} kA = Spq (𝑨 , kA , ≤-reflexive)
+
+\end{code}
+
+
+
+#### <a id="p-preserves-identities">P preserves identities</a>
+
+\begin{code}
+
+
+ P-id1 : 𝒦 ⊫ p ≈ q → P 𝒦 ⊫ p ≈ q
+ P-id1 σ {𝑨} (I , (𝒜 , (kA , A≅⨅A))) ρ = ⊧-I-invar 𝑨 p q IH (≅-sym A≅⨅A) ρ
   where
-  PAi : (i : I) → Lift-Alg (𝒜 i) (ov α)(ov α) ∈ P{α}{ov α} 𝒦
-  PAi i = pbase ∥ i ∥
+  ih : ∀ i → 𝒜 i ⊧ p ≈ q
+  ih i = σ (kA i)
+  IH : ⨅ 𝒜 ⊧ p ≈ q
+  IH = ⊧-P-invar {p = p}{q} 𝒜 ih
+
+ P-id2 : P 𝒦 ⊫ p ≈ q → 𝒦 ⊫ p ≈ q
+ P-id2 PKpq {𝑨} kA = PKpq (P-expa{𝒦 = 𝒦} kA)
+
+\end{code}
+
+
+#### <a id="v-preserves-identities">V preserves identities</a>
+
+Finally, we prove the analogous preservation lemmas for the closure operator `V`.
+
+\begin{code}
+
+module _ {X : Type χ}{p q : Term X} {𝒦 : Pred (SetoidAlgebra α α)(ov α)} where
+
+ V-id1 : 𝒦 ⊫ p ≈ q → V 𝒦 ⊫ p ≈ q
+ V-id1 σ (𝑨 , (⨅A , p⨅A , A≤⨅A) , BimgOfA) = H-id1{p = p}{q} spK⊧pq (𝑨 , (spA , BimgOfA))
+  where
+  spA : 𝑨 ∈ S (P 𝒦)
+  spA = ⨅A , (p⨅A , A≤⨅A)
+  spK⊧pq : S (P 𝒦) ⊫ p ≈ q
+  spK⊧pq = S-id1{p = p}{q} (P-id1{p = p}{q}{𝒦 = 𝒦} σ)
+
+ V-id2 : V 𝒦 ⊫ p ≈ q → 𝒦 ⊫ p ≈ q
+ V-id2 Vpq {𝑨} kA = Vpq (V-expa{𝒦 = 𝒦} kA)
+
+\end{code}
+
+
+#### <a id="class-identities">Class identities</a>
+
+From `V-id1` it follows that if 𝒦 is a class of structures, then the set of identities modeled by all structures in `𝒦` is equivalent to the set of identities modeled by all structures in `V 𝒦`.  In other terms, `Th (V 𝒦)` is precisely the set of identities modeled by `𝒦`.   We formalize this observation as follows.
+
+\begin{code}
+
+module _ {X : Type χ}{p q : Term X}{𝒦 : Pred (SetoidAlgebra α α)(ov α)} where
+
+ classIds-⊆-VIds : 𝒦 ⊫ p ≈ q  → (p , q) ∈ ThPred (V 𝒦)
+ classIds-⊆-VIds pKq 𝑨 = V-id1{p = p}{q}{𝒦 = 𝒦} pKq
+
+ VIds-⊆-classIds : (p , q) ∈ ThPred (V 𝒦) → 𝒦 ⊫ p ≈ q
+ VIds-⊆-classIds Thpq {𝑨} KA ρ = V-id2{p = p}{q}{𝒦} (Thpq _) KA ρ
 
 \end{code}
 
@@ -207,3 +245,20 @@ module _ {α : Level}{𝒦 : Pred (SetoidAlgebra α α) (ov α)} where
 <span style="float:right;">[Varieties.Func.FreeAlgebras →](Varieties.Func.FreeAlgebras.html)</span>
 
 {% include UALib.Links.md %}
+
+
+
+<!--
+
+#### <a id="S-in-SP">⨅ S(𝒦) ∈ SP(𝒦)</a>
+
+Finally, we prove a result that plays an important role, e.g., in the formal proof of Birkhoff's Theorem. As we saw in [Algebras.Products][], the (informal) product `⨅ S(𝒦)` of all subalgebras of algebras in 𝒦 is implemented (formally) in the [agda-algebras](https://github.com/ualib/agda-algebras) library as `⨅ 𝔄 S(𝒦)`. Our goal is to prove that this product belongs to `SP(𝒦)`. We do so by first proving that the product belongs to `PS(𝒦)` and then applying the `PS⊆SP` lemma.
+
+ private
+  I = ℑ{𝒦 = 𝒦}
+  𝒜 = 𝔄{𝒦 = 𝒦}
+
+ P⨅𝒜 : ⨅ 𝒜 ∈ Lift-class (P 𝒦)
+ P⨅𝒜 = {!!}
+
+-->

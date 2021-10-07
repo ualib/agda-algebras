@@ -25,13 +25,14 @@ module Structures.Graphs where
 open import Agda.Primitive using ( _⊔_ ; lsuc ) renaming ( Set to Type ; lzero  to ℓ₀ )
 open import Data.Product   using ( _,_ ; Σ-syntax ; _×_ )
 open import Data.Sum.Base  using ( _⊎_ ) renaming ( inj₁ to inl ; inj₂ to inr )
+open import Data.Unit.Base using ( ⊤ ; tt )
 open import Level          using ( Level ; Lift ; lift ; lower )
 open import Function.Base  using ( _∘_  )
 open import Relation.Binary.PropositionalEquality
                            using ( _≡_ ; refl ; module ≡-Reasoning ; cong ; sym )
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
-open import Overture.Preliminaries   using ( ∣_∣ ; _≈_ ; ∥_∥ ; _∙_ ; lower∼lift ; lift∼lower ; 𝟙)
+open import Overture.Preliminaries   using ( ∣_∣ ; _≈_ ; ∥_∥ ; _∙_ ; lower∼lift ; lift∼lower )
 open import Relations.Continuous     using ( Rel )
 open import Structures.Basic         using ( signature ; structure )
 open import Examples.Structures.Signatures
@@ -50,7 +51,7 @@ Gr-sig 𝐹 𝑅 = record { symbol = symbol 𝑅 ⊎ symbol 𝐹
  where
  ar : symbol 𝑅 ⊎ symbol 𝐹 → Type _
  ar (inl 𝑟) = (arity 𝑅) 𝑟
- ar (inr 𝑓) = (arity 𝐹) 𝑓 ⊎ 𝟙
+ ar (inr 𝑓) = (arity 𝐹) 𝑓 ⊎ ⊤
 
 private variable
  𝐹 𝑅 : signature ℓ₀ ℓ₀
@@ -61,7 +62,7 @@ Gr {𝐹}{𝑅}{α}{ρ} 𝑨 = record { carrier = carrier 𝑨 ; op = λ () ; re
   where
   split : (s : symbol 𝑅 ⊎ symbol 𝐹) → Rel (carrier 𝑨) (arity (Gr-sig 𝐹 𝑅) s) {α ⊔ ρ}
   split (inl 𝑟) arg = Lift α (rel 𝑨 𝑟 arg)
-  split (inr 𝑓) args = Lift ρ (op 𝑨 𝑓 (args ∘ inl) ≡ args (inr 𝟙.𝟎))
+  split (inr 𝑓) args = Lift ρ (op 𝑨 𝑓 (args ∘ inl) ≡ args (inr tt))
 
 
 open ≡-Reasoning
@@ -82,10 +83,10 @@ module _ {𝑨 : structure 𝐹 𝑅 {α} {ρᵃ}}
    homop : h (op 𝑨 𝑓 (a ∘ inl)) ≡ op 𝑩 𝑓 (h ∘ (a ∘ inl))
    homop = ∥ hhom ∥ 𝑓 (a ∘ inl)
 
-   goal : op 𝑩 𝑓 (h ∘ (a ∘ inl)) ≡ h (a (inr 𝟙.𝟎))
+   goal : op 𝑩 𝑓 (h ∘ (a ∘ inl)) ≡ h (a (inr tt))
    goal = op 𝑩 𝑓 (h ∘ (a ∘ inl)) ≡⟨ sym homop ⟩
           h (op 𝑨 𝑓 (a ∘ inl))   ≡⟨ cong h (lower x) ⟩
-          h (a (inr 𝟙.𝟎))         ∎
+          h (a (inr tt))         ∎
 
   ii : is-hom-op (Gr 𝑨) (Gr 𝑩) h
   ii = λ ()
@@ -98,7 +99,7 @@ module _ {𝑨 : structure 𝐹 𝑅 {α} {ρᵃ}}
   ii : is-hom-op 𝑨 𝑩 h
   ii f a = goal -- goal
    where
-   split : arity 𝐹 f ⊎ 𝟙 → carrier 𝑨
+   split : arity 𝐹 f ⊎ ⊤ → carrier 𝑨
    split (inl x) = a x
    split (inr y) = op 𝑨 f a
    goal : h (op 𝑨 f a) ≡ op 𝑩 f (λ x → h (a x))

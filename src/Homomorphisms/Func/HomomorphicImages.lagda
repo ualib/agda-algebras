@@ -20,7 +20,7 @@ module Homomorphisms.Func.HomomorphicImages {𝑆 : Signature 𝓞 𝓥} where
 -- Imports from Agda and the Agda Standard Library ------------------------------------------
 open import Agda.Primitive  using ( _⊔_ ; lsuc )     renaming ( Set to Type )
 open import Data.Product    using ( _,_ ; Σ-syntax ) renaming ( _×_ to _∧_ ; proj₁ to fst ; proj₂ to snd )
-open import Function        using ( Func ; _on_ ; _∘_ )
+open import Function        using ( Func ; _on_ ; _∘_ ; id )
 open import Level           using ( Level )
 open import Relation.Binary using ( Setoid ; _Preserves_⟶_ )
 open import Relation.Unary  using ( Pred ; _∈_ )
@@ -34,22 +34,31 @@ open import Overture.Func.Inverses                using ( Ran ; _range ; _preima
 open import Overture.Func.Surjective              using ( IsSurjective )
 open import Algebras.Func.Basic           {𝑆 = 𝑆} using ( SetoidAlgebra ; ov ; _̂_ ; ⟦_⟧ ; Lift-Algˡ ; 𝕌[_] )
 open import Homomorphisms.Func.Basic      {𝑆 = 𝑆} using ( hom ; IsHom )
-open import Homomorphisms.Func.Properties {𝑆 = 𝑆} using ( Lift-hom ; ToLiftˡ ; lift-hom-lemma )
+open import Homomorphisms.Func.Properties {𝑆 = 𝑆} using ( Lift-hom ; ToLiftˡ ; lift-hom-lemma ; 𝒾𝒹 )
 
 private variable
  α ρᵃ β ρᵇ : Level
+
+open SetoidAlgebra
 
 \end{code}
 
 We begin with what seems, for our purposes, the most useful way to represent the class of *homomorphic images* of an algebra in dependent type theory.
 
 \begin{code}
+open IsHom
+
 
 _IsHomImageOf_ : (𝑩 : SetoidAlgebra β ρᵇ)(𝑨 : SetoidAlgebra α ρᵃ) → Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ β ⊔ ρᵃ ⊔ ρᵇ)
 𝑩 IsHomImageOf 𝑨 = Σ[ φ ∈ hom 𝑨 𝑩 ] IsSurjective ∣ φ ∣
 
 HomImages : SetoidAlgebra α ρᵃ → Type (α ⊔ ρᵃ ⊔ ov (β ⊔ ρᵇ))
 HomImages {β = β}{ρᵇ = ρᵇ} 𝑨 = Σ[ 𝑩 ∈ SetoidAlgebra β ρᵇ ] 𝑩 IsHomImageOf 𝑨
+
+IdHomImage : {𝑨 : SetoidAlgebra α ρᵃ} → 𝑨 IsHomImageOf 𝑨
+IdHomImage {α = α}{𝑨 = 𝑨} = 𝒾𝒹 , λ {y} → Image_∋_.eq y refl
+ where
+ open Setoid (Domain 𝑨) using ( refl )
 
 \end{code}
 

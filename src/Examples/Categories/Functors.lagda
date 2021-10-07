@@ -21,7 +21,7 @@ open import Data.Nat       using ( ℕ ; zero ; suc ; _>_ )
 open import Data.Sum.Base  using ( _⊎_ ) renaming ( inj₁ to inl ;  inj₂ to inr )
 open import Data.Product   using ( Σ-syntax ; _,_ ; _×_ )
 open import Level
-open import Data.Unit      using ( tt ) renaming ( ⊤ to ⊤₀ )
+open import Data.Unit      using () renaming ( tt to 𝟎 )
 open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl ; _≢_ )
 
 open import Categories.Functors using ( List ; list ; _⟦_⟧ ; _[_] ; μ_ ; Option )
@@ -32,7 +32,7 @@ open list
 -- Examples
 -- 1. Empty list
 L₀ : List ℕ
-L₀ = inn (inl (Level.lift tt))
+L₀ = inn (inl (Level.lift 𝟎))
 
 l₀ : list ℕ
 l₀ = []

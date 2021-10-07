@@ -102,9 +102,8 @@ The free lift so defined is a homomorphism by construction. Indeed, here is the 
   hcomp {f}{a} = cong Interp (≡.refl , (λ i → (cong free-lift-func){a i} ≐-isRefl))
 
   hhom : IsHom (𝑻 X) 𝑨 hfunc
-  hhom = record { compatible = λ{f}{a} → hcomp{f}{a}
-                ; preserves≈ = cong free-lift-func }
-
+  hhom = record { compatible = λ{f}{a} → hcomp{f}{a} }
+ 
 \end{code}
 
 If we further assume that each of the mappings from `X` to `∣ 𝑨 ∣` is *surjective*, then the homomorphisms constructed with `free-lift` and `lift-hom` are *epimorphisms*, as we now prove.

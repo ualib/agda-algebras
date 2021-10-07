@@ -27,18 +27,18 @@ open import Data.Product   using ( _,_ ; _×_ ; Σ-syntax )
 open import Data.Sum.Base  using ( _⊎_ ) renaming ( inj₁ to inl ; inj₂ to inr )
 open import Data.Fin.Base  using ( Fin )
 open import Data.Nat       using ( ℕ )
+open import Data.Unit.Base using ( ⊤ ; tt )
 open import Function.Base  using ( _∘_ )
 open import Relation.Unary using ( Pred ; _∈_ )
 open import Relation.Binary.PropositionalEquality
                            using ( _≡_ ; module ≡-Reasoning ; cong ; sym ; refl )
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
-open import Overture.Preliminaries using ( 𝟙 ; ∣_∣ ; ∥_∥ )
-open import Relations.Continuous   using ( Rel )
-open import Structures.Basic       using ( signature ; structure )
-open import Examples.Structures.Signatures
-                                   using ( S∅ )
-open import Structures.Homs        using ( hom ; is-hom-rel ; is-hom-op )
+open import Overture.Preliminaries         using ( ∣_∣ ; ∥_∥ )
+open import Relations.Continuous           using ( Rel )
+open import Structures.Basic               using ( signature ; structure )
+open import Examples.Structures.Signatures using ( S∅ )
+open import Structures.Homs                using ( hom ; is-hom-rel ; is-hom-op )
 
 
 open signature
@@ -52,7 +52,7 @@ Gr-sig 𝐹 𝑅 = record { symbol = symbol 𝑅 ⊎ symbol 𝐹
  where
  ar : symbol 𝑅 ⊎ symbol 𝐹 → Type ℓ₀
  ar (inl 𝑟) = (arity 𝑅) 𝑟
- ar (inr 𝑓) = (arity 𝐹) 𝑓 ⊎ 𝟙
+ ar (inr 𝑓) = (arity 𝐹) 𝑓 ⊎ ⊤
 
 
 private variable
@@ -63,7 +63,7 @@ Gr {𝐹}{𝑅} 𝑨 = record { carrier = carrier 𝑨 ; op = λ () ; rel = spli
   where
   split : (s : symbol 𝑅 ⊎ symbol 𝐹) → Rel (carrier 𝑨) (arity (Gr-sig 𝐹 𝑅) s) {ℓ₀}
   split (inl 𝑟) arg = rel 𝑨 𝑟 arg
-  split (inr 𝑓) args = op 𝑨 𝑓 (args ∘ inl) ≡ args (inr 𝟙.𝟎)
+  split (inr 𝑓) args = op 𝑨 𝑓 (args ∘ inl) ≡ args (inr tt)
 
 
 open ≡-Reasoning
@@ -80,10 +80,10 @@ module _ {𝑨 𝑩 : structure 𝐹 𝑅 {ℓ₀}{ℓ₀}} where
    homop : h (op 𝑨 𝑓 (a ∘ inl)) ≡ op 𝑩 𝑓 (h ∘ (a ∘ inl))
    homop = ∥ hhom ∥ 𝑓 (a ∘ inl)
 
-   goal : op 𝑩 𝑓 (h ∘ (a ∘ inl)) ≡ h (a (inr 𝟙.𝟎))
+   goal : op 𝑩 𝑓 (h ∘ (a ∘ inl)) ≡ h (a (inr tt))
    goal = op 𝑩 𝑓 (h ∘ (a ∘ inl)) ≡⟨ sym homop ⟩
           h (op 𝑨 𝑓 (a ∘ inl))   ≡⟨ cong h x ⟩
-          h (a (inr 𝟙.𝟎))         ∎
+          h (a (inr tt))         ∎
 
   ii : is-hom-op (Gr 𝑨) (Gr 𝑩) h
   ii = λ ()
@@ -97,7 +97,7 @@ module _ {𝑨 𝑩 : structure 𝐹 𝑅 {ℓ₀}{ℓ₀}} where
   ii : is-hom-op 𝑨 𝑩 h
   ii f a = goal
    where
-   split : arity 𝐹 f ⊎ 𝟙 → carrier 𝑨
+   split : arity 𝐹 f ⊎ ⊤ → carrier 𝑨
    split (inl x) = a x
    split (inr y) = op 𝑨 f a
    goal : h (op 𝑨 f a) ≡ op 𝑩 f (λ x → h (a x))

@@ -17,10 +17,11 @@ module Exercises.Complexity.FiniteCSP  where
 
 open import Agda.Primitive  using ( ) renaming (lzero to ℓ₀ )
 open import Data.Product    using ( _,_ ; _×_ )
+open import Data.Unit.Base  using () renaming ( tt to 𝟎 )
 open import Relation.Unary  using ( Pred ; _∈_ )
 
 -- Imports from agda-algebras --------------------------------------------------------------
-open import Overture.Preliminaries         using ( 𝟘 ; 𝟙 ; 𝟚 ; 𝟛 )
+open import Overture.Preliminaries         using ( 𝟚 ; 𝟛 )
 open import Relations.Continuous           using ( Rel )
 open import Structures.Basic               using ( signature ; structure )
 open import Examples.Structures.Signatures using ( S∅ ; S001 ; S021)
@@ -148,8 +149,8 @@ module solution-2-2 where
             where
             rels : (r : 𝟛) → Rel 𝟚 (arity S021 r)
             rels 𝟛.𝟎 x = ((x 𝟚.𝟎) , (x 𝟚.𝟏)) ∈ Rᵃ
-            rels 𝟛.𝟏 x = x 𝟙.𝟎 ∈ C₀ᵃ
-            rels 𝟛.𝟐 x = x 𝟙.𝟎 ∈ C₁ᵃ
+            rels 𝟛.𝟏 x = x 𝟎 ∈ C₀ᵃ
+            rels 𝟛.𝟐 x = x 𝟎 ∈ C₁ᵃ
 
 
  -- Claim: Given an arbitrary 𝑩 in the signatures S∅ S021, we can construct a homomorphism from 𝑩 to 𝑨.

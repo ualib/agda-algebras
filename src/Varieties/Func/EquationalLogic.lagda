@@ -27,15 +27,13 @@ open import Agda.Primitive   using ( _⊔_ ;  lsuc ; Level )
 open import Data.Product     using ( _×_ ; _,_ ; Σ-syntax)
                              renaming ( proj₁ to fst ; proj₂ to snd )
 open import Function.Bundles using ( Func )
-open import Relation.Binary  using ( Setoid ) -- ; IsEquivalence )
+open import Relation.Binary  using ( Setoid )
 open import Relation.Unary   using ( Pred ; _∈_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------
--- open import Overture.Preliminaries    using ( _≈_ )
-open import Algebras.Func.Basic      {𝑆 = 𝑆}       using ( SetoidAlgebra ; ov )
-open import Terms.Basic       {𝑆 = 𝑆} using ( Term )
-open import Terms.Func.Basic       {𝑆 = 𝑆} using ( 𝑻 ; module Environment )
--- open import Terms.Func.Operations  {𝑆 = 𝑆} using ( _⟦_⟧ )
+open import Algebras.Func.Basic {𝑆 = 𝑆} using ( SetoidAlgebra ; ov )
+open import Terms.Basic         {𝑆 = 𝑆} using ( Term )
+open import Terms.Func.Basic    {𝑆 = 𝑆} using ( 𝑻 ; module Environment )
 private variable
  χ α ρᵃ ℓ ι : Level
 

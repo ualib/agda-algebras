@@ -117,8 +117,7 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ} (h : hom
   p = record { f = id ; cong = reflexive ∥ θ ∥ }
 
   pepi : IsEpi 𝑨 (𝑨 ╱ θ) p
-  pepi = record { isHom = record { compatible = sym (compatible ∥ 𝒾𝒹 ∥)
-                                 ; preserves≈ = reflexive ∥ θ ∥ }
+  pepi = record { isHom = record { compatible = sym (compatible ∥ 𝒾𝒹 ∥) }
                 ; isSurjective = λ {y} → Image_∋_.eq y refl }
  
 \end{code}

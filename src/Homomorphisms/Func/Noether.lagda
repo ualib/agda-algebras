@@ -68,7 +68,6 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ}(hh : hom
 
   φhom : IsHom (kerquo hh) 𝑩 φ
   compatible φhom = trans (compatible ∥ hh ∥) (cong Interp (≡.refl , (λ _ → refl)))
-  preserves≈ φhom = id
 
   φmon : IsInjective φ
   φmon = id

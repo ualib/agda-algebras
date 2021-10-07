@@ -48,9 +48,7 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ} where
  open Setoid A using ( reflexive ) renaming ( _≈_ to _≈₁_ ; refl to refl₁ )
 
  𝒾𝒹 :  hom 𝑨 𝑨
- 𝒾𝒹 = 𝑖𝑑 , record { compatible = reflexive ≡.refl
-                 ; preserves≈ = id }
-
+ 𝒾𝒹 = 𝑖𝑑 , record { compatible = reflexive ≡.refl }
 
 
 module _ {𝑨 : SetoidAlgebra α ρᵃ}{ℓ : Level} where
@@ -64,13 +62,11 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ}{ℓ : Level} where
  open Level
  ToLiftˡ : hom 𝑨 (Lift-Algˡ 𝑨 ℓ)
  ToLiftˡ = record { f = lift ; cong = id }
-         , record { compatible = reflexive ≡.refl
-                  ; preserves≈ = id }
+         , record { compatible = reflexive ≡.refl }
 
  FromLiftˡ : hom (Lift-Algˡ 𝑨 ℓ) 𝑨
  FromLiftˡ = record { f = lower ; cong = id }
-                   , record { compatible = reflˡ
-                            ; preserves≈ = id }
+                   , record { compatible = reflˡ }
 
  ToFromLiftˡ : ∀ b →  (∣ ToLiftˡ ∣ ⟨$⟩ (∣ FromLiftˡ ∣ ⟨$⟩ b)) ≈ˡ b
  ToFromLiftˡ b = refl₁
@@ -81,13 +77,11 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ}{ℓ : Level} where
 
  ToLiftʳ : hom 𝑨 (Lift-Algʳ 𝑨 ℓ)
  ToLiftʳ = record { f = id ; cong = lift }
-         , record { compatible = lift (reflexive ≡.refl)
-                  ; preserves≈ = lift }
+         , record { compatible = lift (reflexive ≡.refl) }
 
  FromLiftʳ : hom (Lift-Algʳ 𝑨 ℓ) 𝑨
  FromLiftʳ = record { f = id ; cong = lower }
-           , record { compatible = reflˡ
-                    ; preserves≈ = lower }
+           , record { compatible = reflˡ }
 
  ToFromLiftʳ : ∀ b → (∣ ToLiftʳ ∣ ⟨$⟩ (∣ FromLiftʳ ∣ ⟨$⟩ b)) ≈ʳ b
  ToFromLiftʳ b = lift refl₁
@@ -120,18 +114,18 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ}
    →         IsHom 𝑨 𝑩 g → IsHom 𝑩 𝑪 h
    →         IsHom 𝑨 𝑪 (h ∘ g)
 
-  ∘-is-hom {g} {h} ghom hhom = record { compatible = i ; preserves≈ = ii }
+  ∘-is-hom {g} {h} ghom hhom = record { compatible = c }
    where
-   i : compatible-map 𝑨 𝑪 (h ∘ g)
-   i {f}{a} = trans lemg lemh
+   c : compatible-map 𝑨 𝑪 (h ∘ g)
+   c {f}{a} = trans lemg lemh
     where
     lemg : (h ⟨$⟩ (g ⟨$⟩ ((f ̂ 𝑨) a))) ≈₃ (h ⟨$⟩ ((f ̂ 𝑩) (λ x → g ⟨$⟩ (a x))))
-    lemg = preserves≈ hhom (compatible ghom)
+    lemg = cong h (compatible ghom)
 
     lemh : (h ⟨$⟩ ((f ̂ 𝑩) (λ x → g ⟨$⟩ (a x)))) ≈₃ ((f ̂ 𝑪) (λ x → h ⟨$⟩ (g ⟨$⟩ (a x))))
     lemh = compatible hhom
-   ii : ≈preserving 𝑨 𝑪 (h ∘ g)
-   ii xy = preserves≈ hhom (preserves≈ ghom xy)
+   -- ii : ≈preserving 𝑨 𝑪 (h ∘ g)
+   -- ii xy = preserves≈ hhom (preserves≈ ghom xy)
 
   ∘-hom : hom 𝑨 𝑩 → hom 𝑩 𝑪  → hom 𝑨 𝑪
   ∘-hom (h , hhom) (g , ghom) = (g ∘ h) , ∘-is-hom hhom ghom

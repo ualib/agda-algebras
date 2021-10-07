@@ -50,7 +50,7 @@ module _ {I : Type 𝓘}{𝑨 : SetoidAlgebra α ρᵃ}(ℬ : I → SetoidAlgebr
  open Func using ( cong ) renaming ( f to _⟨$⟩_ )
  open SetoidAlgebra using ( Domain )
  open Setoid using ( refl )
- open IsHom using (compatible ; preserves≈)
+ open IsHom
  ⨅-hom-co : (∀(i : I) → hom 𝑨 (ℬ i)) → hom 𝑨 (⨅ ℬ)
  ⨅-hom-co 𝒽 = h , hhom
   where
@@ -58,8 +58,8 @@ module _ {I : Type 𝓘}{𝑨 : SetoidAlgebra α ρᵃ}(ℬ : I → SetoidAlgebr
   _⟨$⟩_ h = λ a i → ∣ 𝒽 i ∣ ⟨$⟩ a
   cong h xy i = cong ∣ 𝒽 i ∣ xy
   hhom : IsHom 𝑨 (⨅ ℬ) h
-  compatible hhom i = compatible ∥ 𝒽 i ∥
-  preserves≈ hhom = cong h
+  compatible hhom = λ i → compatible ∥ 𝒽 i ∥
+
 
 \end{code}
 

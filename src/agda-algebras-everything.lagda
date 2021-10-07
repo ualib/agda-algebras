@@ -221,7 +221,7 @@ open import Subalgebras.Func.Subalgebras  using ( _≥_ ; _IsSupalgebraOf_ ; _�
                                                   ; SubalgebraOfClass' ; SubalgebrasOfClass )
 
 open import Subalgebras.Func.Properties   using ( ≅→≤ ; ≅→≥ ; ≤-refl ; ≥-refl ; ≤-reflexive
-                                                  ; ≤-trans ; ≤-TRANS-≅ ; ≥-trans ; ≤-preorder
+                                                  ; ≤-trans ; ≤-trans-≅ ; ≥-trans ; ≤-preorder
                                                   ; A≥B×B≅C→A≥C ; A≤B×B≅C→A≤C ; A≅B×B≥C→A≥C
                                                   ; A≅B×B≤C→A≤C ; ≤-mono ; Lift-is-sub ; ≤-Lift
                                                   ; ≥-Lift ; Lift-≤-Lift )
@@ -263,19 +263,23 @@ open Soundness   using ( sound )
 open FreeAlgebra using ( FreeDomain ; FreeInterp ; 𝔽[_] ; σ₀ ; identity ; evaluation ; satisfies
                        ; completeness )
 
-open import Varieties.Func.Closure         using ( H ; S ; P ; V ; is-variety ; variety ; S-mono
-                                                 ; S-idemp ; P-mono ; P-expa ; P-idemp ; subalgebra→S
-                                                 ; S→subalgebra ; sk→lsk )
+open import Varieties.Func.Closure         using ( Lift-class ; Lift-class' ; Lift-class-lemma
+                                                 ; Lift-class-lemma' ; H ; S ; P ; V ; P-Lift-closed
+                                                 ; is-variety ; variety ; S-mono ; P-mono ; H-expa
+                                                 ; S-expa ; P-expa ; V-expa ; subalgebra→S
+                                                 ; S→subalgebra )
 
-open import Varieties.Func.Properties      using ( ⊧-I-invar ; ⊧-Lift-invar ; ⊧-lower-invar ; ⊧-S-invar
-                                                 ; ⊧-S-class-invar ; ⊧-P-invar ; ⊧-P-class-invar
-                                                 ; ⊧-P-lift-invar ; ⊧-H-invar )
+open import Varieties.Func.Properties      using ( ⊧-I-invar ; ⊧-Lift-invar ; ⊧-lower-invar
+                                                 ; ⊧-S-invar ; ⊧-S-class-invar ; ⊧-P-invar
+                                                 ; ⊧-P-class-invar ; ⊧-P-lift-invar ; ⊧-H-invar )
 
-open import Varieties.Func.Preservation    using ( S⊆SP ; lemPS⊆SP ; lemPS⊆SP' ; PS⊆SP ; P⊆V ; SP⊆V ; P⨅𝒜  )
+open import Varieties.Func.Preservation    using ( S⊆SP ; PS⊆SP ; P⊆SP ; P⊆HSP ; P⊆V ; SP⊆V
+                                                 ; H-id1 ; H-id2 ; S-id1 ; S-id2 ; P-id1 ; P-id2
+                                                 ; V-id1 ; V-id2 ; classIds-⊆-VIds ; VIds-⊆-classIds )
 
-open import Varieties.Func.FreeAlgebras    using ( 𝕏 ; ℐ ; ℰ ; hsurj ; ℭ ; homℭ ; epi𝔽 ; hom𝔽
-                                                 ; hom𝔽-is-epic ; 𝔽≤ℭ ; ℓ ; ℓℭ ; 𝔽 ; ℓ𝔽 ; Pℭ
-                                                 ; SPℭ ; SPℓℭ ; ℓ𝔽∈SP )
+open import Varieties.Func.FreeAlgebras    using ( 𝕏 ; ℐ ; ℰ ; hsurj ; ℭ ; Pℭ ; SPℭ ; homℭ ; epi𝔽
+                                                 ; hom𝔽 ; hom𝔽-is-epic ; 𝔽 ; 𝔽≤ℭ ; ℓℭ ; Pℓℭ ; ℓ𝔽
+                                                 ; ℓ𝔽≤ℓℭ ; ℓ𝔽≤ℭ ; ℓ𝔽∈SP ; ℓ𝔽∈V )
 
 -- GENERAL STRUCTURES ---------------------------------------------------------------------------------
 open import Structures.Basic             using ( signature ; structure ; _ʳ_ ; _ᵒ_ ; compatible

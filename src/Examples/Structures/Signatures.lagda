@@ -11,9 +11,10 @@ author: "agda-algebras development team"
 
 module Examples.Structures.Signatures where
 
-open import Agda.Primitive  using ( ) renaming ( lzero to ℓ₀ )
-
-open import Overture.Preliminaries using ( 𝟘 ; 𝟙 ; 𝟚 ; 𝟛 )
+open import Agda.Primitive         using () renaming ( lzero to ℓ₀ )
+open import Data.Unit.Base         using () renaming ( ⊤ to 𝟙 ; tt to 𝟎 )
+open import Data.Empty             using () renaming ( ⊥ to 𝟘 )
+open import Overture.Preliminaries using ( 𝟚 ; 𝟛 )
 open import Structures.Basic       using ( signature ; structure )
 
 -- Some examples (of finite signatures)
@@ -24,18 +25,18 @@ S∅ = record { symbol = 𝟘 ; arity = λ () }
 
 -- ... one nullary symbol (e.g., pointed sets)
 S1 : signature ℓ₀ ℓ₀
-S1 = record { symbol = 𝟙 ; arity = λ 𝟎 → 𝟘 }
+S1 = record { symbol = 𝟙 ; arity = λ _ → 𝟘 }
 
 S01 : signature ℓ₀ ℓ₀ -- ...one unary
-S01 = record { symbol = 𝟙 ; arity = λ 𝟎 → 𝟙 }
+S01 = record { symbol = 𝟙 ; arity = λ _ → 𝟙 }
 
 -- ...one binary symbol (e.g., magmas, semigroups, semilattices)
 S001 : signature ℓ₀ ℓ₀
-S001 = record { symbol = 𝟙 ; arity = λ 𝟎 → 𝟚 }
+S001 = record { symbol = 𝟙 ; arity = λ _ → 𝟚 }
 
 -- ...one ternary symbol (e.g., boolean NAE-3-SAT relational structure)
 S0001 : signature ℓ₀ ℓ₀
-S0001 = record { symbol = 𝟙 ; arity = λ 𝟎 → 𝟛 }
+S0001 = record { symbol = 𝟙 ; arity = λ _ → 𝟛 }
 
 -- ...0 nullary, 2 unary, and 1 binary
 S021 : signature ℓ₀ ℓ₀

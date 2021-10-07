@@ -18,16 +18,19 @@ module Homomorphisms.Func.Isomorphisms {𝑆 : Signature 𝓞 𝓥}  where
 -- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
 open import Agda.Primitive              using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
 open import Data.Product                using ( _,_ )
-open import Function                    using ( Func )
+open import Data.Unit.Polymorphic.Base  using () renaming ( ⊤ to 𝟙 ; tt to ∗ )
+open import Data.Unit.Base              using ( ⊤ ; tt )
+open import Function                    using ( Func ; id )
 open import Level                       using ( Level ; Lift ; lift ; lower )
 open import Relation.Binary             using ( Setoid )
 open import Relation.Binary.Definitions using ( Reflexive ; Sym ; Trans )
+open import Relation.Binary.PropositionalEquality as ≡ using ()
 
 -- Imports from the Agda Universal Algebra Library -----------------------------------------
 open import Overture.Preliminaries                using ( ∣_∣ ; ∥_∥ )
 open import Overture.Func.Preliminaries           using ( _⟶_ ; _∘_ )
 open import Overture.Func.Injective               using ( IsInjective )
-open import Algebras.Func.Basic           {𝑆 = 𝑆} using ( SetoidAlgebra ; Lift-Alg ; Lift-Algˡ ; Lift-Algʳ )
+open import Algebras.Func.Basic           {𝑆 = 𝑆} using ( SetoidAlgebra ; Lift-Alg ; Lift-Algˡ ; Lift-Algʳ ; _̂_)
 open import Algebras.Func.Products        {𝑆 = 𝑆} using ( ⨅ )
 open import Homomorphisms.Func.Basic      {𝑆 = 𝑆} using ( hom ; IsHom )
 open import Homomorphisms.Func.Properties {𝑆 = 𝑆} using ( 𝒾𝒹 ; ∘-hom ; ToLiftˡ ; FromLiftˡ
@@ -180,6 +183,10 @@ Lift-assoc : {𝑨 : SetoidAlgebra α ρᵃ}{ℓ ρ : Level}
  →           Lift-Alg 𝑨 ℓ ρ ≅  Lift-Algʳ (Lift-Algˡ 𝑨 ℓ) ρ
 Lift-assoc {𝑨 = 𝑨}{ℓ}{ρ} = ≅-trans (≅-sym Lift-≅) (≅-trans Lift-≅ˡ Lift-≅ʳ)
 
+Lift-assoc' : {𝑨 : SetoidAlgebra α α}{β γ : Level}
+ →            Lift-Alg 𝑨 (β ⊔ γ) (β ⊔ γ) ≅ Lift-Alg (Lift-Alg 𝑨 β β) γ γ
+Lift-assoc'{𝑨 = 𝑨}{β}{γ} = ≅-trans (≅-sym Lift-≅) (≅-trans Lift-≅ Lift-≅)
+
 \end{code}
 
 Products of isomorphic families of algebras are themselves isomorphic. The proof looks a bit technical, but it is as straightforward as it ought to be.
@@ -208,16 +215,14 @@ module _ {𝓘 : Level}{I : Type 𝓘}
               ; cong = λ a i → cong ∣ to (AB i) ∣ (a i) }
 
    ϕhom : IsHom (⨅ 𝒜) (⨅ ℬ) ϕ
-   ϕhom = record { compatible = λ i → compatible ∥ to (AB i) ∥
-                 ; preserves≈ = λ xy i → preserves≈ ∥ to (AB i) ∥ (xy i) }
+   ϕhom = record { compatible = λ i → compatible ∥ to (AB i) ∥ }
 
    ψ : ⨅B ⟶ ⨅A
    ψ = record { f = λ b i → ∣ from (AB i) ∣ ⟨$⟩ (b i)
               ; cong = λ b i → cong ∣ from (AB i) ∣ (b i) }
 
    ψhom : IsHom (⨅ ℬ) (⨅ 𝒜) ψ
-   ψhom = record { compatible = λ i → compatible ∥ from (AB i) ∥
-                 ; preserves≈ = λ xy i → preserves≈ ∥ from (AB i) ∥ (xy i) }
+   ψhom = record { compatible = λ i → compatible ∥ from (AB i) ∥ }
 
    ϕ∼ψ : ∀ b → (ϕ ⟨$⟩ (ψ ⟨$⟩ b)) ≈₂ b
    ϕ∼ψ b = λ i → to∼from (AB i) (b i)
@@ -245,7 +250,7 @@ module _ {𝓘 : Level}{I : Type 𝓘}
 
  Lift-Alg-⨅≅ˡ : (∀ i → 𝒜 i ≅ ℬ (lift i)) → Lift-Algˡ (⨅ 𝒜) γ ≅ ⨅ ℬ
 
- Lift-Alg-⨅≅ˡ AB = Goal
+ Lift-Alg-⨅≅ˡ AB = ≅-trans (≅-sym Lift-≅ˡ) A≅B
   where
    ϕ : ⨅A ⟶ ⨅B
    ϕ = record { f = λ a i → ∣ to (AB (lower i)) ∣ ⟨$⟩ (a (lower i))
@@ -253,16 +258,14 @@ module _ {𝓘 : Level}{I : Type 𝓘}
 
 
    ϕhom : IsHom (⨅ 𝒜) (⨅ ℬ) ϕ
-   ϕhom = record { compatible = λ i → compatible ∥ to (AB (lower i)) ∥
-                 ; preserves≈ = λ xy i → preserves≈ ∥ to (AB (lower i)) ∥ (xy (lower i)) }
+   ϕhom = record { compatible = λ i → compatible ∥ to (AB (lower i)) ∥ }
 
    ψ : ⨅B ⟶ ⨅A
    ψ = record { f = λ b i → ∣ from (AB i) ∣ ⟨$⟩ (b (lift i))
               ; cong = λ b i → cong ∣ from (AB i) ∣ (b (lift i)) }
 
    ψhom : IsHom (⨅ ℬ) (⨅ 𝒜) ψ
-   ψhom = record { compatible = λ i → compatible ∥ from (AB i) ∥
-                 ; preserves≈ = λ xy i → preserves≈ ∥ from (AB i) ∥ (xy (lift i)) }
+   ψhom = record { compatible = λ i → compatible ∥ from (AB i) ∥ }
 
    ϕ∼ψ : ∀ b → (ϕ ⟨$⟩ (ψ ⟨$⟩ b)) ≈₂ b
    ϕ∼ψ b = λ i → to∼from (AB (lower i)) (b i)
@@ -273,8 +276,112 @@ module _ {𝓘 : Level}{I : Type 𝓘}
    A≅B : ⨅ 𝒜 ≅ ⨅ ℬ
    A≅B = mkiso (ϕ , ϕhom) (ψ , ψhom) ϕ∼ψ ψ∼ϕ
 
-   Goal : Lift-Algˡ (⨅ 𝒜) γ ≅ ⨅ ℬ
-   Goal = ≅-trans (≅-sym Lift-≅ˡ) A≅B
+
+module _ {𝓘 : Level}{I : Type 𝓘}
+         {𝒜 : I → SetoidAlgebra α ρᵃ}
+         where
+
+ open SetoidAlgebra using (Domain)
+ open Setoid using (_≈_ )
+ open SetoidAlgebra (⨅ 𝒜) using () renaming (Domain to ⨅A )
+ open Setoid ⨅A using () renaming ( _≈_ to _≈₁_ )
+ open IsHom
+
+
+ ⨅≅⨅ℓ : ∀ {ℓ} → ⨅ 𝒜 ≅ ⨅ (λ i → Lift-Alg (𝒜 (lower{ℓ = ℓ} i)) ℓ ℓ)
+ ⨅≅⨅ℓ {ℓ} = mkiso (φ , φhom) (ψ , ψhom) φ∼ψ ψ∼φ
+  where
+  open SetoidAlgebra (⨅ (λ i → Lift-Alg (𝒜 (lower i)) ℓ ℓ)) using () renaming (Domain to ⨅ℓA)
+  ⨅ℓ𝒜 : SetoidAlgebra _ _
+  ⨅ℓ𝒜 = ⨅ (λ i → Lift-Alg (𝒜 (lower{ℓ = ℓ} i)) ℓ ℓ)
+  φ : ⨅A ⟶ ⨅ℓA
+  (φ ⟨$⟩ x) i = lift (x (lower i))
+  cong φ x i = lift (x (lower i))
+  φhom : IsHom (⨅ 𝒜) ⨅ℓ𝒜  φ
+  compatible φhom i = lift refl
+   where open Setoid (Domain (𝒜 (lower i))) using ( refl )
+
+  ψ : ⨅ℓA ⟶ ⨅A
+  (ψ ⟨$⟩ x) i = lower (x (lift i))
+  cong ψ x i = lower (x (lift i))
+  ψhom : IsHom ⨅ℓ𝒜 (⨅ 𝒜) ψ
+  compatible ψhom i = refl
+   where open Setoid (Domain (𝒜 i)) using ( refl )
+
+  φ∼ψ : ∀ b i → (Domain (Lift-Alg (𝒜 (lower i)) ℓ ℓ)) ._≈_
+      ((φ ⟨$⟩ (ψ ⟨$⟩ b)) i) (b i)
+  φ∼ψ _ i = lift (reflexive ≡.refl)
+   where open Setoid (Domain (𝒜 (lower i))) using ( reflexive )
+
+  ψ∼φ : ∀ a i → (Domain (𝒜 i)) ._≈_ ((ψ ⟨$⟩ (φ ⟨$⟩ a)) i) (a i)
+  ψ∼φ _ i = (reflexive ≡.refl)
+   where open Setoid (Domain (𝒜  i)) using ( reflexive )
+
+
+
+
+
+module _ {ι : Level}{𝑨 : SetoidAlgebra α ρᵃ} where
+
+ open SetoidAlgebra 𝑨 using () renaming (Domain to A )
+ open SetoidAlgebra (⨅ (λ (i : 𝟙{ι}) → 𝑨)) using () renaming (Domain to ⨅A)
+ open Setoid A using ( refl )
+
+ open Func renaming ( f to _⟨$⟩_ )
+ open _≅_
+ open IsHom
+
+ private
+  to𝟙 : Func A ⨅A
+  (to𝟙 ⟨$⟩ x) ∗ = x
+  cong to𝟙 xy ∗ = xy
+  from𝟙 : Func ⨅A A
+  from𝟙 ⟨$⟩ x = x ∗
+  cong from𝟙 xy = xy ∗
+
+  to𝟙IsHom : IsHom 𝑨 (⨅ (λ _ → 𝑨)) to𝟙
+  compatible to𝟙IsHom = λ _ → refl
+  from𝟙IsHom : IsHom (⨅ (λ _ → 𝑨)) 𝑨 from𝟙
+  compatible from𝟙IsHom = refl
+
+
+ ≅⨅⁺-refl : 𝑨 ≅ ⨅ (λ (i : 𝟙) → 𝑨)
+ to ≅⨅⁺-refl = to𝟙 , to𝟙IsHom
+ from ≅⨅⁺-refl = from𝟙 , from𝟙IsHom
+ to∼from ≅⨅⁺-refl = λ _ _ → refl
+ from∼to ≅⨅⁺-refl = λ _ → refl
+
+
+module _ {𝑨 : SetoidAlgebra α ρᵃ} where
+
+ open SetoidAlgebra 𝑨 using () renaming (Domain to A )
+ open SetoidAlgebra (⨅ (λ (i : ⊤) → 𝑨)) using () renaming (Domain to ⨅A)
+ open Setoid A using ( refl )
+
+ open Func renaming ( f to _⟨$⟩_ )
+ open _≅_
+ open IsHom
+
+ private
+  to⊤ : Func A ⨅A
+  (to⊤ ⟨$⟩ x) = λ _ → x
+  cong to⊤ xy = λ _ → xy
+  from⊤ : Func ⨅A A
+  from⊤ ⟨$⟩ x = x tt
+  cong from⊤ xy = xy tt
+
+  to⊤IsHom : IsHom 𝑨 (⨅ (λ _ → 𝑨)) to⊤
+  compatible to⊤IsHom = λ _ → refl
+  from⊤IsHom : IsHom (⨅ (λ _ → 𝑨)) 𝑨 from⊤
+  compatible from⊤IsHom = refl
+
+
+ ≅⨅-refl : 𝑨 ≅ ⨅ (λ (i : ⊤) → 𝑨)
+ to ≅⨅-refl = to⊤ , to⊤IsHom
+ from ≅⨅-refl = from⊤ , from⊤IsHom
+ to∼from ≅⨅-refl = λ _ _ → refl
+ from∼to ≅⨅-refl = λ _ → refl
+
 
 \end{code}
 

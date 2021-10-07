@@ -65,7 +65,7 @@ open _≅_
 ≤-reflexive : {𝑨 : SetoidAlgebra α ρᵃ} → 𝑨 ≤ 𝑨
 ≤-reflexive {𝑨 = 𝑨} = 𝒾𝒹 , id-is-injective{𝑨 = SetoidAlgebra.Domain 𝑨}
 
-module _ (𝑨 : SetoidAlgebra α ρᵃ){𝑩 : SetoidAlgebra β ρᵇ}(𝑪 : SetoidAlgebra γ ρᶜ) where
+module _ {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ}{𝑪 : SetoidAlgebra γ ρᶜ} where
  open SetoidAlgebra using ( Domain )
  open Setoid (Domain 𝑨) using () renaming ( _≈_ to _≈₁_ ; Carrier to ∣A∣ )
  open Setoid (Domain 𝑩) using () renaming ( _≈_ to _≈₂_ ; Carrier to ∣B∣ )
@@ -75,16 +75,19 @@ module _ (𝑨 : SetoidAlgebra α ρᵃ){𝑩 : SetoidAlgebra β ρᵇ}(𝑪 : S
  ≤-trans : 𝑨 ≤ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
  ≤-trans A≤B B≤C = (∘-hom ∣ A≤B ∣ ∣ B≤C ∣ ) , ∘-injective-func ∥ A≤B ∥ ∥ B≤C ∥
 
- ≤-TRANS-≅ : 𝑨 ≤ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤ 𝑪
- ≤-TRANS-≅ (h , hinj) B≅C = (∘-hom h (to B≅C)) , ∘-injective-func hinj (≅toInjective B≅C)
+ ≤-trans-≅ : 𝑨 ≤ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤ 𝑪
+ ≤-trans-≅ (h , hinj) B≅C = (∘-hom h (to B≅C)) , ∘-injective-func hinj (≅toInjective B≅C)
 
-≥-trans : (𝑨 : SetoidAlgebra α ρᵃ){𝑩 : SetoidAlgebra β ρᵇ}(𝑪 : SetoidAlgebra γ ρᶜ)
- →        𝑨 ≥ 𝑩 → 𝑩 ≥ 𝑪 → 𝑨 ≥ 𝑪
-≥-trans 𝑨 {𝑩} 𝑪 A≥B B≥C = ≤-trans 𝑪 {𝑩} 𝑨 B≥C A≥B
+ ≅-trans-≤ : 𝑨 ≅ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
+ ≅-trans-≤ A≅B (h , hinj) = (∘-hom (to A≅B) h) , (∘-injective-func (≅toInjective A≅B) hinj)
+
+module _ {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ}{𝑪 : SetoidAlgebra γ ρᶜ} where
+ ≥-trans : 𝑨 ≥ 𝑩 → 𝑩 ≥ 𝑪 → 𝑨 ≥ 𝑪
+ ≥-trans A≥B B≥C = ≤-trans B≥C A≥B
 
 ≤→≤c→≤c : {𝑨 : SetoidAlgebra α α}{𝑩 : SetoidAlgebra α α}{𝒦 : Pred(SetoidAlgebra α α) (ov α)}
  →        𝑨 ≤ 𝑩 → 𝑩 ≤c 𝒦 → 𝑨 ≤c 𝒦
-≤→≤c→≤c {𝑨 = 𝑨} A≤B sB = ∣ sB ∣ , (fst ∥ sB ∥ , ≤-trans 𝑨 ∣ sB ∣ A≤B (snd ∥ sB ∥))
+≤→≤c→≤c {𝑨 = 𝑨} A≤B sB = ∣ sB ∣ , (fst ∥ sB ∥ , ≤-trans A≤B (snd ∥ sB ∥))
 
 
 module _ {α ρᵃ ρ : Level} where
@@ -95,7 +98,7 @@ module _ {α ρᵃ ρ : Level} where
  ≤-preorder : IsPreorder _≤_
  isEquivalence ≤-preorder = record { refl = ≅-refl ; sym = ≅-sym ; trans = ≅-trans }
  reflexive ≤-preorder = ≤-refl
- trans ≤-preorder {𝑨}{𝑩}{𝑪} A≤B B≤C = ≤-trans 𝑨 {𝑩} 𝑪 A≤B B≤C
+ trans ≤-preorder {𝑨}{𝑩}{𝑪} A≤B B≤C = ≤-trans A≤B B≤C
 
 
 
@@ -104,17 +107,17 @@ open _≅_
 module _ {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ}{𝑪 : SetoidAlgebra γ ρᶜ} where
 
  A≥B×B≅C→A≥C : 𝑨 ≥ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≥ 𝑪
- A≥B×B≅C→A≥C A≥B B≅C  = ≥-trans 𝑨 {𝑩} 𝑪 A≥B (≅→≥ B≅C)
+ A≥B×B≅C→A≥C A≥B B≅C  = ≥-trans A≥B (≅→≥ B≅C)
 
  A≤B×B≅C→A≤C : 𝑨 ≤ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤ 𝑪
- A≤B×B≅C→A≤C A≤B B≅C = ≤-trans 𝑨{𝑩} 𝑪 A≤B (≅→≤ B≅C)
+ A≤B×B≅C→A≤C A≤B B≅C = ≤-trans  A≤B (≅→≤ B≅C)
 
  A≅B×B≥C→A≥C : 𝑨 ≅ 𝑩 → 𝑩 ≥ 𝑪 → 𝑨 ≥ 𝑪
 
- A≅B×B≥C→A≥C A≅B B≥C = ≥-trans 𝑨{𝑩}𝑪 (≅→≥ A≅B) B≥C
+ A≅B×B≥C→A≥C A≅B B≥C = ≥-trans (≅→≥ A≅B) B≥C
 
  A≅B×B≤C→A≤C : 𝑨 ≅ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
- A≅B×B≤C→A≤C A≅B B≤C = ≤-trans 𝑨{𝑩}𝑪 (≅→≤ A≅B) B≤C
+ A≅B×B≤C→A≤C A≅B B≤C = ≤-trans (≅→≤ A≅B) B≤C
 
 open Func using ( cong ) renaming ( f to _⟨$⟩_ )
 module _ {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ} where
@@ -205,10 +208,9 @@ module _ {I : Type ι}{𝒜 : I → SetoidAlgebra α ρᵃ}{ℬ : I → SetoidAl
 
    hfunc : ⨅B ⟶ ⨅A
    (hfunc ⟨$⟩ x) i = ∣ hi i ∣ ⟨$⟩ (x i)
-   cong hfunc = λ xy i → preserves≈ ∥ hi i ∥  (xy i)
+   cong hfunc = λ xy i → cong ∣ hi i ∣ (xy i)
    hhom : IsHom (⨅ ℬ) (⨅ 𝒜) hfunc
    compatible hhom = λ i → compatible ∥ hi i ∥
-   preserves≈ hhom = λ xy i → preserves≈ ∥ hi i ∥ (xy i)
 
   hM : IsInjective ∣ h ∣
   hM = λ xy i → ∥ B≤A i ∥ (xy i)
