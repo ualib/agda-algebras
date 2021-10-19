@@ -51,6 +51,8 @@ data Term (X : Type χ ) : Type (ov χ)  where
  ℊ : X → Term X    -- (ℊ for "generator")
  node : (f : ∣ 𝑆 ∣)(t : ∥ 𝑆 ∥ f → Term X) → Term X
 
+open Term
+
 \end{code}
 
 This is a very basic inductive type that represents each term as a tree with an operation symbol at each `node` and a variable symbol at each leaf (`generator`).

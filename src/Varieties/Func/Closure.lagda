@@ -38,10 +38,12 @@ open import Homomorphisms.Func.Basic             {𝑆 = 𝑆} using ( IsHom )
 open import Homomorphisms.Func.Isomorphisms      {𝑆 = 𝑆} using ( _≅_ ; ≅-trans ; ≅-sym ; Lift-≅ ; ⨅≅⨅ℓ )
 open import Homomorphisms.Func.HomomorphicImages {𝑆 = 𝑆} using ( _IsHomImageOf_ ; IdHomImage )
 open import Subalgebras.Func.Subalgebras         {𝑆 = 𝑆} using ( _≤_ ; _≤c_ )
-open import Subalgebras.Func.Properties          {𝑆 = 𝑆} using ( ≤-reflexive )
+open import Subalgebras.Func.Properties          {𝑆 = 𝑆} using ( ≤-reflexive ; ≤-trans ; ≅-trans-≤
+                                                               ; Lift-≤-Lift)
 
 Lift-class : {α β γ : Level} → Pred(SetoidAlgebra α α) (ov α) → Pred(SetoidAlgebra γ γ) (γ ⊔ ov (α ⊔ β))
-Lift-class {α}{β}{γ} 𝒦 = λ (𝑩 : SetoidAlgebra γ γ) → Σ[ 𝑨 ∈ SetoidAlgebra α α ] 𝑨 ∈ 𝒦 ∧ Lift-Alg 𝑨 (lsuc β) (lsuc β) ≅ 𝑩
+Lift-class {α}{β}{γ} 𝒦 = λ (𝑩 : SetoidAlgebra γ γ)
+ →  Σ[ 𝑨 ∈ SetoidAlgebra α α ]  (𝑨 ∈ 𝒦)  ∧  (Lift-Alg 𝑨 (lsuc β) (lsuc β) ≅ 𝑩)
 
 Lift-class' : {α β γ : Level} → Pred(SetoidAlgebra α α) (ov α) → Pred(SetoidAlgebra γ γ) (γ ⊔ β ⊔ ov α)
 Lift-class' {α}{β}{γ} 𝒦 = λ (𝑩 : SetoidAlgebra γ γ) → Σ[ 𝑨 ∈ SetoidAlgebra α α ] 𝑨 ∈ 𝒦 ∧ Lift-Alg 𝑨 β β ≅ 𝑩
@@ -55,7 +57,7 @@ Lift-class-lemma' : {α β γ : Level}{𝒦 : Pred(SetoidAlgebra α α) (ov α)}
 Lift-class-lemma' {𝑨 = 𝑨} kA = 𝑨 , (kA , (≅-trans (≅-sym Lift-≅) Lift-≅))
 
 private variable
- α : Level
+ α β γ : Level
 
 
 -- H : {α : Level} → Pred(SetoidAlgebra α α) (ov α) → Pred(SetoidAlgebra (ov α) (ov α)) (ov α)
@@ -108,6 +110,10 @@ variety {α} = Σ[ 𝒱 ∈ (Pred (SetoidAlgebra α α) (ov α)) ] is-variety �
 S-mono : {𝒦 𝒦' : Pred (SetoidAlgebra α α)(ov α)}
   →       𝒦 ⊆ 𝒦' → S 𝒦 ⊆ S 𝒦'
 S-mono kk {𝑩} (𝑨 , (kA , B≤A)) = 𝑨 , ((kk kA) , B≤A)
+
+S-idem : {𝒦 : Pred (SetoidAlgebra α α)(ov α)}
+  →       S (S 𝒦) ⊆ S 𝒦
+S-idem (𝑨 , (𝑩 , sB , A≤B) , x≤A) = 𝑩 , (sB , ≤-trans x≤A A≤B)
 
 \end{code}
 
@@ -169,10 +175,6 @@ V-expa {α} {𝒦} {𝑨} x = H-expa (S-expa (P-expa x))
 
 \end{code}
 
-P-idemp : {𝒦 : Pred (SetoidAlgebra α α)(ov α)}
- →        P (P 𝒦) ⊆ P 𝒦
-P-idemp {α} {𝒦} {𝑨} (I , (𝒜 , (P𝒜 , A≅⨅A))) = {!!}
-
 We sometimes want to go back and forth between our two representations of subalgebras of algebras in a class. The tools `subalgebra→S` and `S→subalgebra` are made for that purpose.
 
 \begin{code}
@@ -186,11 +188,24 @@ module _ {𝒦 : Pred (SetoidAlgebra α α)(ov α)} where
  S→subalgebra = id
 
 
--- open Level
+module _ {𝒦 : Pred (SetoidAlgebra α α)(ov α)} where
 
--- module _ {𝑨 : SetoidAlgebra α α}{𝒦 : Pred (SetoidAlgebra α α)(ov α)} where
---  sk→lsk : {β : Level} → 𝑨 ∈ S 𝒦 → Lift-Alg 𝑨 β β ∈ S (Lift-class {β = (α ⊔ β)} 𝒦)
---  sk→lsk sA = {!!}
+ S-Lift-lemma : {γ : Level}
+  →             Lift-class{β = (α ⊔ γ)}{α ⊔ γ} (S 𝒦) ⊆ S (Lift-class{β = (α ⊔ γ)}{α ⊔ γ} 𝒦)
+
+ S-Lift-lemma {γ} {𝑩} (𝑨 , (𝑪 , (kC , A≤C)) , lA≅B) = Goal
+  where
+  lklC : Lift-Alg 𝑪 γ γ ∈ Lift-class 𝒦
+  lklC = Lift-class-lemma kC
+  slklA : Lift-Alg 𝑨 γ γ ∈ S (Lift-class 𝒦)
+  slklA = (Lift-Alg 𝑪 γ γ) , (lklC , (Lift-≤-Lift A≤C))
+
+
+  Goal : 𝑩 ∈ S (Lift-class 𝒦)
+  Goal = (Lift-Alg 𝑪 γ γ) , (lklC , ≅-trans-≤ (≅-sym lA≅B) (Lift-≤-Lift A≤C))
+
+
+
 
 \end{code}
 
@@ -200,3 +215,27 @@ module _ {𝒦 : Pred (SetoidAlgebra α α)(ov α)} where
 <span style="float:right;">[Varieties.Func.Properties →](Varieties.Func.Properties.html)</span>
 
 {% include UALib.Links.md %}
+
+
+
+
+
+
+
+
+
+
+
+<!-- open Level
+
+-- module _ {𝑨 : SetoidAlgebra α α}{𝒦 : Pred (SetoidAlgebra α α)(ov α)} where
+--  sk→lsk : {β : Level} → 𝑨 ∈ S 𝒦 → Lift-Alg 𝑨 β β ∈ S (Lift-class {β = (α ⊔ β)} 𝒦)
+--  sk→lsk sA = {!!}
+
+
+
+P-idemp : {𝒦 : Pred (SetoidAlgebra α α)(ov α)}
+ →        P (P 𝒦) ⊆ P 𝒦
+P-idemp {α} {𝒦} {𝑨} (I , (𝒜 , (P𝒜 , A≅⨅A))) = {!!}
+
+-->

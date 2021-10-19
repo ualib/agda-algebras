@@ -43,7 +43,7 @@ open import Equality.Extensionality            using ( DFunExt; pred-ext )
 open import Algebras.Basic                     using ( Algebra ; Lift-Alg ; compatible ; _̂_ )
 open import Algebras.Products          {𝑆 = 𝑆} using ( ov ; ⨅ )
 open import Algebras.Congruences       {𝑆 = 𝑆} using ( Con; mkcon ; IsCongruence )
-open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom ; epi ; epi-to-hom )
+open import Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom ; epi ; epi→hom )
 open import Homomorphisms.Kernels      {𝑆 = 𝑆} using ( kercon ; ker-in-con ; πker ; ker[_⇒_]_↾_ )
 open import Homomorphisms.Products     {𝑆 = 𝑆} using ( ⨅-hom-co )
 open import Homomorphisms.Properties   {𝑆 = 𝑆} using ( ∘-hom )
@@ -211,7 +211,7 @@ Observe that the inhabitants of `ℭ` are maps from `ℑ` to `{𝔄 i : i ∈ �
  epi𝔽 = πker (wd 𝓥 (ov α)) {ℭ} homℭ
 
  hom𝔽 : hom (𝑻 X) 𝔽
- hom𝔽 = epi-to-hom 𝔽 epi𝔽
+ hom𝔽 = epi→hom 𝔽 epi𝔽
 
  hom𝔽-is-epic : IsSurjective ∣ hom𝔽 ∣
  hom𝔽-is-epic = snd ∥ epi𝔽 ∥
@@ -415,7 +415,7 @@ which is manifested in the premise `∀ 𝑨 → X ↠ 𝑨`.
 \begin{code}
 
   Birkhoff : hfunext (ov α)(ov α) → (∀ 𝑨 → X ↠ 𝑨) → Mod (Th (V 𝒦)) ⊆ V 𝒦
-  Birkhoff hfe 𝕏 {𝑨} α = vhimg{𝑩 = 𝑨} (𝔽∈𝕍 hfe) (𝑨 , epi-to-hom 𝑨 φE , snd ∥ φE ∥)
+  Birkhoff hfe 𝕏 {𝑨} α = vhimg{𝑩 = 𝑨} (𝔽∈𝕍 hfe) (𝑨 , epi→hom 𝑨 φE , snd ∥ φE ∥)
    where
    φE : epi 𝔽 𝑨
    φE = 𝔽-ModTh-epi 𝑨 (𝕏 𝑨) α

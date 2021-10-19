@@ -48,7 +48,8 @@ open import Overture.Func.Injective     using ( IsInjective ; LeftInvPreserves�
 open compose using ( ∘-injective-func )
 
 open import Overture.Func.Surjective    using ( IsSurjective ; SurjectionIsSurjective ; SurjInv
-                                              ; SurjInvIsInverseʳ ; epic-factor )
+                                              ; SurjInvIsInverseʳ ; ∘-IsSurjective ; ∘-epic
+                                              ; epic-factor )
 
 open import Overture.Func.Bijective     using ( IsBijective ; BijInv )
 
@@ -109,7 +110,7 @@ open import Algebras.Func.Basic       using ( ov ; EqArgs ; ⟦_⟧ ; SetoidAlge
                                             ; Level-of-Alg ; Level-of-Carrier ; _̂_ ; Lift-Algˡ
                                             ; Lift-Algʳ ; Lift-Alg )
 
-open import Algebras.Func.Products    using ( ⨅ ; ℑ ; 𝔄 ; class-product )
+open import Algebras.Func.Products    using ( ⨅ ; ℑ ; 𝔄 ; class-product ; ProjAlgIsOnto )
 
 open import Algebras.Func.Congruences using ( _∣≈_ ; IsCongruence ; Con ; IsCongruence→Con
                                             ; Con→IsCongruence ; _╱_ )
@@ -118,7 +119,7 @@ open import Algebras.Func.Congruences using ( _∣≈_ ; IsCongruence ; Con ; Is
 -- HOMOMORPHISMS ------------------------------------------------------------------------------------------
 open import Homomorphisms.Basic             using ( compatible-op-map ; is-homomorphism ; hom ; 𝒾𝒹
                                                   ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-monomorphism ; mon
-                                                  ; is-epimorphism ; epi ; mon-to-hom ; epi-to-hom )
+                                                  ; is-epimorphism ; epi ; mon→hom ; epi→hom )
 
 open import Homomorphisms.Properties        using ( ∘-hom ; ∘-is-hom ; Lift-hom )
 
@@ -141,12 +142,13 @@ open import Homomorphisms.HomomorphicImages using ( _IsHomImageOf_ ; HomImages ;
                                                   ; Lift-Alg-hom-image )
 
 open import Homomorphisms.Func.Basic        using ( ≈preserving ; compatible-map-op ; compatible-map
-                                                  ; IsHom ; hom ; IsMon ; mon ; mon-to-hom
-                                                  ; IsEpi ; epi ; epi-to-hom )
+                                                  ; IsHom ; hom ; IsMon ; mon ; mon→hom ; IsEpi
+                                                  ; epi ; epi→hom ; mon→intohom ; epi→ontohom )
 
 open import Homomorphisms.Func.Properties   using ( 𝒾𝒹 ; ToLiftˡ ; FromLiftˡ ; ToFromLiftˡ ; FromToLiftˡ
                                                   ; ToLiftʳ ; FromLiftʳ ; ToFromLiftʳ ; FromToLiftʳ
-                                                  ; ∘-is-hom ; ∘-hom ; Lift-hom ; lift-hom-lemma )
+                                                  ; ∘-is-hom ; ∘-hom ; Lift-homˡ ; Lift-homʳ
+                                                  ; lift-hom-lemma ; Lift-hom )
 
 open import Homomorphisms.Func.Kernels      using ( HomKerComp ; kercon ; kerquo ; ker[_⇒_]_ ; πepi
                                                   ; πhom ; πker ; ker-in-con )
@@ -165,7 +167,7 @@ open import Homomorphisms.Func.Isomorphisms using ( _≅_ ; ≅-refl ; ≅-sym ;
 
 open import Homomorphisms.Func.HomomorphicImages using ( _IsHomImageOf_ ; HomImages ; HomImageOf[_]
                                                        ; IsHomImageOfClass ; HomImageOfClass
-                                                       ; Lift-epi-is-epi ; Lift-Alg-hom-image )
+                                                       ; Lift-epi-is-epiˡ ; Lift-Alg-hom-imageˡ )
 
 
 
@@ -215,7 +217,7 @@ open import Subalgebras.Func.Subuniverses using( Subuniverses ; Subuniverse ; Sg
                                                  ; SgB-onlyif-TermImageB ; hom-unique )
 
 open import Subalgebras.Func.Subalgebras  using ( _≥_ ; _IsSupalgebraOf_ ; _≤_ ; _IsSubalgebraOf_
-                                                  ; SubalgebraOf ; Subalgebra
+                                                  ; SubalgebraOf ; Subalgebra ; mon→≤
                                                   ; IsSubalgebraREL ; SubalgebraREL ; _≤c_
                                                   ; _IsSubalgebraOfClass_ ; SubalgebraOfClass
                                                   ; SubalgebraOfClass' ; SubalgebrasOfClass )
@@ -277,9 +279,9 @@ open import Varieties.Func.Preservation    using ( S⊆SP ; PS⊆SP ; P⊆SP ; P
                                                  ; H-id1 ; H-id2 ; S-id1 ; S-id2 ; P-id1 ; P-id2
                                                  ; V-id1 ; V-id2 ; classIds-⊆-VIds ; VIds-⊆-classIds )
 
-open import Varieties.Func.FreeAlgebras    using ( 𝕏 ; ℐ ; ℰ ; hsurj ; ℭ ; Pℭ ; SPℭ ; homℭ ; epi𝔽
-                                                 ; hom𝔽 ; hom𝔽-is-epic ; 𝔽 ; 𝔽≤ℭ ; ℓℭ ; Pℓℭ ; ℓ𝔽
-                                                 ; ℓ𝔽≤ℓℭ ; ℓ𝔽≤ℭ ; ℓ𝔽∈SP ; ℓ𝔽∈V )
+-- open import Varieties.Func.FreeAlgebras    using ( 𝕏 ; ℐ ; ℰ ; hsurj ; ℭ ; Pℭ ; SPℭ ; homℭ ; epi𝔽
+--                                                  ; hom𝔽 ; hom𝔽-is-epic ; 𝔽 ; 𝔽≤ℭ ; ℓℭ ; Pℓℭ ; ℓ𝔽
+--                                                  ; ℓ𝔽≤ℓℭ ; ℓ𝔽≤ℭ ; ℓ𝔽∈SP ; ℓ𝔽∈V )
 
 -- GENERAL STRUCTURES ---------------------------------------------------------------------------------
 open import Structures.Basic             using ( signature ; structure ; _ʳ_ ; _ᵒ_ ; compatible

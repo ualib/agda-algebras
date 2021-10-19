@@ -25,7 +25,7 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 module Varieties.Func.Properties {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library -------------------------------------------
-open import Agda.Primitive   using ( Level ) renaming ( Set to Type )
+open import Agda.Primitive   using ( Level ; _⊔_ ) renaming ( Set to Type )
 open import Data.Product     using ( _,_ )
 open import Function.Base    using ( _∘_ )
 open import Function.Bundles using ( Func )
@@ -43,7 +43,7 @@ open import Terms.Basic                     {𝑆 = 𝑆} using ( Term ; ℊ )
 open import Terms.Func.Basic                {𝑆 = 𝑆} using ( 𝑻 ; module Environment )
 open import Terms.Func.Operations           {𝑆 = 𝑆} using ( comm-hom-term ; interp-prod ; term-agreement )
 open import Subalgebras.Func.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; SubalgebrasOfClass )
-open import Varieties.Func.EquationalLogic  {𝑆 = 𝑆} using ( _⊧_≈_ ; _⊫_≈_ )
+open import Varieties.Func.SoundAndComplete  {𝑆 = 𝑆} using ( _⊧_ ; _⊨_ ; _⊫_ ; Eq ; _≈̇_ ; lhs ; rhs ; _⊢_▹_≈_ )
 
 private variable
  α ρᵃ β ρᵇ χ ℓ : Level
@@ -69,7 +69,7 @@ module _ {X : Type χ}{𝑨 : SetoidAlgebra α ρᵃ}
  open Setoid (Domain 𝑩) using ( _≈_ ; sym )
  open SetoidReasoning (Domain 𝑩)
 
- ⊧-I-invar : 𝑨 ⊧ p ≈ q  →  𝑨 ≅ 𝑩  →  𝑩 ⊧ p ≈ q
+ ⊧-I-invar : 𝑨 ⊧ (p ≈̇ q)  →  𝑨 ≅ 𝑩  →  𝑩 ⊧ (p ≈̇ q)
  ⊧-I-invar Apq (mkiso fh gh f∼g g∼f) ρ =
   begin
    ⟦ p ⟧₂ ⟨$⟩ ρ             ≈˘⟨ cong ⟦ p ⟧₂ (λ x → f∼g (ρ x)) ⟩
@@ -93,10 +93,10 @@ The ⊧ relation is also invariant under the algebraic lift and lower operations
 -- module _ (wd : SwellDef){α β χ : Level}{X : Type χ}{𝑨 : SetoidAlgebra α ρᵃ} where
 module _ {X : Type χ}{𝑨 : SetoidAlgebra α ρᵃ} where
 
- ⊧-Lift-invar : (p q : Term X) → 𝑨 ⊧ p ≈ q → Lift-Algˡ 𝑨 β ⊧ p ≈ q
+ ⊧-Lift-invar : (p q : Term X) → 𝑨 ⊧ (p ≈̇ q) → Lift-Algˡ 𝑨 β ⊧ (p ≈̇ q)
  ⊧-Lift-invar p q Apq = ⊧-I-invar (Lift-Algˡ 𝑨 _) p q Apq Lift-≅ˡ
 
- ⊧-lower-invar : (p q : Term X) → Lift-Algˡ 𝑨 β ⊧ p ≈ q  →  𝑨 ⊧ p ≈ q
+ ⊧-lower-invar : (p q : Term X) → Lift-Algˡ 𝑨 β ⊧ (p ≈̇ q)  →  𝑨 ⊧ (p ≈̇ q)
  ⊧-lower-invar p q lApq = ⊧-I-invar 𝑨 p q lApq (≅-sym Lift-≅ˡ)
 
 \end{code}
@@ -118,7 +118,7 @@ module _ {X : Type χ}{p q : Term X}{𝑨 : SetoidAlgebra α ρᵃ}
  open SetoidReasoning (Domain 𝑨)
 
 
- ⊧-S-invar : 𝑨 ⊧ p ≈ q →  𝑩 ≤ 𝑨  →  𝑩 ⊧ p ≈ q
+ ⊧-S-invar : 𝑨 ⊧ (p ≈̇ q) →  𝑩 ≤ 𝑨  →  𝑩 ⊧ (p ≈̇ q)
  ⊧-S-invar Apq B≤A b = goal
   where
   hh : hom 𝑩 𝑨
@@ -136,15 +136,15 @@ module _ {X : Type χ}{p q : Term X}{𝑨 : SetoidAlgebra α ρᵃ}
 
 \end{code}
 
-Next, identities modeled by a class of algebras is also modeled by all subalgebras of the class.  In other terms, every term equation `p ≈ q` that is satisfied by all `𝑨 ∈ 𝒦` is also satisfied by every subalgebra of a member of 𝒦.
+Next, identities modeled by a class of algebras is also modeled by all subalgebras of the class.  In other terms, every term equation `(p ≈̇ q)` that is satisfied by all `𝑨 ∈ 𝒦` is also satisfied by every subalgebra of a member of 𝒦.
 
 \begin{code}
 module _ {X : Type χ}{p q : Term X} where
 
  ⊧-S-class-invar : {𝒦 : Pred (SetoidAlgebra α ρᵃ) ℓ}
-  →                (𝒦 ⊫ p ≈ q) → (𝑩 : SubalgebrasOfClass 𝒦 {β}{ρᵇ})
-  →                ∣ 𝑩 ∣ ⊧ p ≈ q
- ⊧-S-class-invar Kpq (_ , _ , kA , B≤A) = ⊧-S-invar{p = p}{q} (Kpq kA) B≤A
+  →                (𝒦 ⊫ (p ≈̇ q)) → ((𝑩 , _) : SubalgebrasOfClass 𝒦 {β}{ρᵇ})
+  →                𝑩 ⊧ (p ≈̇ q)
+ ⊧-S-class-invar Kpq (𝑩 , 𝑨 , kA , B≤A) = ⊧-S-invar{p = p}{q} (Kpq 𝑨 kA) B≤A
 
 \end{code}
 
@@ -158,7 +158,7 @@ An identity satisfied by all algebras in an indexed collection is also satisfied
 
 module _ {X : Type χ}{p q : Term X}{I : Type ℓ}(𝒜 : I → SetoidAlgebra α ρᵃ) where
 
- ⊧-P-invar : (∀ i → 𝒜 i ⊧ p ≈ q) → ⨅ 𝒜 ⊧ p ≈ q
+ ⊧-P-invar : (∀ i → 𝒜 i ⊧ (p ≈̇ q)) → ⨅ 𝒜 ⊧ (p ≈̇ q)
  ⊧-P-invar 𝒜pq a = goal
   where
   open SetoidAlgebra (⨅ 𝒜) using () renaming ( Domain to ⨅A )
@@ -183,20 +183,20 @@ An identity satisfied by all algebras in a class is also satisfied by the produc
 \begin{code}
 
  ⊧-P-class-invar : (𝒦 : Pred (SetoidAlgebra α ρᵃ)(ov α))
-  →                𝒦 ⊫ p ≈ q → (∀ i → 𝒜 i ∈ 𝒦) → ⨅ 𝒜 ⊧ p ≈ q
+  →                𝒦 ⊫ (p ≈̇ q) → (∀ i → 𝒜 i ∈ 𝒦) → ⨅ 𝒜 ⊧ (p ≈̇ q)
 
- ⊧-P-class-invar 𝒦 σ K𝒜 = ⊧-P-invar (λ i ρ → σ (K𝒜 i) ρ)
+ ⊧-P-class-invar 𝒦 σ K𝒜 = ⊧-P-invar (λ i ρ → σ (𝒜 i) (K𝒜 i) ρ)
 
 \end{code}
 
-Another fact that will turn out to be useful is that a product of a collection of algebras models p ≈ q if the lift of each algebra in the collection models p ≈ q.
+Another fact that will turn out to be useful is that a product of a collection of algebras models (p ≈̇ q) if the lift of each algebra in the collection models (p ≈̇ q).
 
 \begin{code}
 
- ⊧-P-lift-invar : (∀ i → Lift-Algˡ (𝒜 i) β ⊧ p ≈ q)  →  ⨅ 𝒜 ⊧ p ≈ q
+ ⊧-P-lift-invar : (∀ i → Lift-Algˡ (𝒜 i) β ⊧ (p ≈̇ q))  →  ⨅ 𝒜 ⊧ (p ≈̇ q)
  ⊧-P-lift-invar α = ⊧-P-invar Aipq
   where
-  Aipq : ∀ i → (𝒜 i) ⊧ p ≈ q
+  Aipq : ∀ i → (𝒜 i) ⊧ (p ≈̇ q)
   Aipq i = ⊧-lower-invar{𝑨 = (𝒜 i)} p q (α i)
 
 \end{code}
@@ -205,7 +205,7 @@ Another fact that will turn out to be useful is that a product of a collection o
 
 #### <a id="homomorphisc-invariance">Homomorphic invariance of ⊧</a>
 
-If an algebra 𝑨 models an identity p ≈ q, then the pair (p , q) belongs to the kernel of every homomorphism φ : hom (𝑻 X) 𝑨 from the term algebra to 𝑨; that is, every homomorphism from 𝑻 X to 𝑨 maps p and q to the same element of 𝑨.
+If an algebra 𝑨 models an identity (p ≈̇ q), then the pair (p , q) belongs to the kernel of every homomorphism φ : hom (𝑻 X) 𝑨 from the term algebra to 𝑨; that is, every homomorphism from 𝑻 X to 𝑨 maps p and q to the same element of 𝑨.
 
  \begin{code}
 
@@ -213,7 +213,7 @@ module _ {X : Type χ}{p q : Term X}{𝑨 : SetoidAlgebra α ρᵃ}(φh : hom (�
  open Setoid (Domain 𝑨) using ( _≈_ )
  private φ = _⟨$⟩_ ∣ φh ∣
 
- ⊧-H-invar : 𝑨 ⊧ p ≈ q → φ p ≈ φ q
+ ⊧-H-invar : 𝑨 ⊧ (p ≈̇ q) → φ p ≈ φ q
  ⊧-H-invar β =
   begin
    φ p                ≈⟨ cong ∣ φh ∣ (term-agreement p)⟩

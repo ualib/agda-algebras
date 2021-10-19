@@ -122,11 +122,11 @@ It will be convenient to have a function that takes an inhabitant of `mon` (or `
 
 \begin{code}
 
-mon-to-hom : (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆} → mon 𝑨 𝑩 → hom 𝑨 𝑩
-mon-to-hom 𝑨 ϕ = ∣ ϕ ∣ , fst ∥ ϕ ∥
+mon→hom : (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆} → mon 𝑨 𝑩 → hom 𝑨 𝑩
+mon→hom 𝑨 ϕ = ∣ ϕ ∣ , fst ∥ ϕ ∥
 
-epi-to-hom : {𝑨 : Algebra α 𝑆}(𝑩 : Algebra β 𝑆) → epi 𝑨 𝑩 → hom 𝑨 𝑩
-epi-to-hom _ ϕ = ∣ ϕ ∣ , fst ∥ ϕ ∥
+epi→hom : {𝑨 : Algebra α 𝑆}(𝑩 : Algebra β 𝑆) → epi 𝑨 𝑩 → hom 𝑨 𝑩
+epi→hom _ ϕ = ∣ ϕ ∣ , fst ∥ ϕ ∥
 
 \end{code}
 

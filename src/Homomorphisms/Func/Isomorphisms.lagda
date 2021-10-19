@@ -280,20 +280,25 @@ module _ {𝓘 : Level}{I : Type 𝓘}
 module _ {𝓘 : Level}{I : Type 𝓘}
          {𝒜 : I → SetoidAlgebra α ρᵃ}
          where
-
+ open IsHom
  open SetoidAlgebra using (Domain)
  open Setoid using (_≈_ )
- open SetoidAlgebra (⨅ 𝒜) using () renaming (Domain to ⨅A )
- open Setoid ⨅A using () renaming ( _≈_ to _≈₁_ )
- open IsHom
 
 
  ⨅≅⨅ℓ : ∀ {ℓ} → ⨅ 𝒜 ≅ ⨅ (λ i → Lift-Alg (𝒜 (lower{ℓ = ℓ} i)) ℓ ℓ)
  ⨅≅⨅ℓ {ℓ} = mkiso (φ , φhom) (ψ , ψhom) φ∼ψ ψ∼φ
   where
-  open SetoidAlgebra (⨅ (λ i → Lift-Alg (𝒜 (lower i)) ℓ ℓ)) using () renaming (Domain to ⨅ℓA)
+  -- open SetoidAlgebra using (Domain)
+  -- open Setoid using (_≈_ )
+  open SetoidAlgebra (⨅ 𝒜) using () renaming (Domain to ⨅A )
+  open Setoid ⨅A using () renaming ( _≈_ to _≈₁_ )
+  -- open IsHom
+
   ⨅ℓ𝒜 : SetoidAlgebra _ _
   ⨅ℓ𝒜 = ⨅ (λ i → Lift-Alg (𝒜 (lower{ℓ = ℓ} i)) ℓ ℓ)
+
+  open SetoidAlgebra ⨅ℓ𝒜 using () renaming (Domain to ⨅ℓA)
+
   φ : ⨅A ⟶ ⨅ℓA
   (φ ⟨$⟩ x) i = lift (x (lower i))
   cong φ x i = lift (x (lower i))
@@ -315,6 +320,41 @@ module _ {𝓘 : Level}{I : Type 𝓘}
 
   ψ∼φ : ∀ a i → (Domain (𝒜 i)) ._≈_ ((ψ ⟨$⟩ (φ ⟨$⟩ a)) i) (a i)
   ψ∼φ _ i = (reflexive ≡.refl)
+   where open Setoid (Domain (𝒜  i)) using ( reflexive )
+
+ ℓ⨅≅⨅ℓ : ∀ {ℓ} → Lift-Alg (⨅ 𝒜) ℓ ℓ ≅ ⨅ (λ i → Lift-Alg (𝒜 (lower{ℓ = ℓ} i)) ℓ ℓ)
+ ℓ⨅≅⨅ℓ {ℓ} = mkiso (φ , φhom) (ψ , ψhom) φ∼ψ ψ∼φ -- φ∼ψ ψ∼φ
+  where
+  ℓ⨅𝒜 : SetoidAlgebra _ _
+  ℓ⨅𝒜 = Lift-Alg (⨅ 𝒜) ℓ ℓ
+  ⨅ℓ𝒜 : SetoidAlgebra _ _
+  ⨅ℓ𝒜 = ⨅ (λ i → Lift-Alg (𝒜 (lower{ℓ = ℓ} i)) ℓ ℓ)
+
+  open SetoidAlgebra ℓ⨅𝒜 using () renaming (Domain to ℓ⨅A )
+  open Setoid ℓ⨅A using () renaming ( _≈_ to _≈₁_ )
+  open SetoidAlgebra ⨅ℓ𝒜 using () renaming (Domain to ⨅ℓA)
+  open Setoid ⨅ℓA using () renaming ( _≈_ to _≈₂_ )
+
+  φ : ℓ⨅A ⟶ ⨅ℓA
+  ((φ ⟨$⟩ x) i) = lift((lower x)(lower i))
+  (cong φ x i) = lift((lower x)(lower i))
+  φhom : IsHom ℓ⨅𝒜 ⨅ℓ𝒜  φ
+  compatible φhom i = lift refl
+   where open Setoid (Domain (𝒜 (lower i))) using ( refl )
+
+  ψ : ⨅ℓA ⟶ ℓ⨅A
+  (ψ ⟨$⟩ x) = lift λ i → lower (x (lift i))
+  cong ψ x = lift λ i → lower (x (lift i))
+  ψhom : IsHom ⨅ℓ𝒜 ℓ⨅𝒜 ψ
+  lower (compatible ψhom) i = refl
+   where open Setoid (Domain (𝒜 i)) using ( refl )
+
+  φ∼ψ : ∀ b → (φ ⟨$⟩ (ψ ⟨$⟩ b)) ≈₂ b
+  lower (φ∼ψ b i) = reflexive ≡.refl
+   where open Setoid (Domain (𝒜 (lower i))) using ( reflexive )
+
+  ψ∼φ : ∀ a → (ψ ⟨$⟩ (φ ⟨$⟩ a)) ≈₁ a
+  lower (ψ∼φ a) i = reflexive ≡.refl
    where open Setoid (Domain (𝒜  i)) using ( reflexive )
 
 

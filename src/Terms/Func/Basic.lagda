@@ -31,8 +31,7 @@ open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
 -- Imports from the Agda Universal Algebra Library ------------------------------------
 open import Overture.Preliminaries      using ( ∥_∥ )
 open import Algebras.Func.Basic {𝑆 = 𝑆} using ( SetoidAlgebra ; ov ; _̂_)
-open import Terms.Basic         {𝑆 = 𝑆} using ( Term )
-open Term
+open import Terms.Basic         {𝑆 = 𝑆} using ( Term ; ℊ ; node )
 open Func renaming ( f to _⟨$⟩_ )
 
 private variable
@@ -56,22 +55,22 @@ module _ {X : Type χ } where
 
  -- Equality of terms as an inductive datatype
  data _≐_ : Term X → Term X → Type (ov χ) where
-  refl : {x y : X} → x ≡ y → (ℊ x) ≐ (ℊ y)
-  genl : ∀ {f}{s t : ∥ 𝑆 ∥ f → Term X} → (∀ i → (s i) ≐ (t i)) → (node f s) ≐ (node f t)
+  rfl : {x y : X} → x ≡ y → (ℊ x) ≐ (ℊ y)
+  gnl : ∀ {f}{s t : ∥ 𝑆 ∥ f → Term X} → (∀ i → (s i) ≐ (t i)) → (node f s) ≐ (node f t)
 
  -- Equality of terms is an equivalence relation
  open Level
  ≐-isRefl : Reflexive _≐_
- ≐-isRefl {ℊ _} = refl ≡.refl
- ≐-isRefl {node _ _} = genl (λ _ → ≐-isRefl)
+ ≐-isRefl {ℊ _} = rfl ≡.refl
+ ≐-isRefl {node _ _} = gnl (λ _ → ≐-isRefl)
 
  ≐-isSym : Symmetric _≐_
- ≐-isSym (refl x) = refl (≡.sym x)
- ≐-isSym (genl x) = genl (λ i → ≐-isSym (x i))
+ ≐-isSym (rfl x) = rfl (≡.sym x)
+ ≐-isSym (gnl x) = gnl (λ i → ≐-isSym (x i))
 
  ≐-isTrans : Transitive _≐_
- ≐-isTrans (refl x) (refl y) = refl (≡.trans x y)
- ≐-isTrans (genl x) (genl y) = genl (λ i → ≐-isTrans (x i) (y i))
+ ≐-isTrans (rfl x) (rfl y) = rfl (≡.trans x y)
+ ≐-isTrans (gnl x) (gnl y) = gnl (λ i → ≐-isTrans (x i) (y i))
 
  ≐-isEquiv : IsEquivalence _≐_
  ≐-isEquiv = record { refl = ≐-isRefl ; sym = ≐-isSym ; trans = ≐-isTrans }
@@ -87,7 +86,7 @@ module _ where
  𝑻 : (X : Type χ) → SetoidAlgebra (ov χ) (ov χ)
  Domain (𝑻 X) = TermSetoid X
  Interp (𝑻 X) ⟨$⟩ (f , ts) = node f ts
- cong (Interp (𝑻 X)) (≡.refl , ss≐ts) = genl ss≐ts
+ cong (Interp (𝑻 X)) (≡.refl , ss≐ts) = gnl ss≐ts
 
 \end{code}
 
@@ -118,16 +117,16 @@ An environment for `Γ` maps each variable `x : Γ` to an element of `A`, and eq
 
 module Environment (𝑨 : SetoidAlgebra α ℓ) where
  open SetoidAlgebra 𝑨 using ( Interp ) renaming ( Domain to A )
- open Setoid A using () renaming ( _≈_ to _≃_ ; Carrier to ∣A∣
-                                 ; refl to ≃refl ; sym to ≃sym ; trans to ≃trans )
+ open Setoid A using ( refl ; sym ; trans ) renaming ( _≈_ to _≈ₐ_ ; Carrier to ∣A∣ )
+                                 -- ; refl to reflₐ ; sym to symₐ ; trans to transₐ )
 
  Env : Type χ → Setoid _ _
  Env X = record { Carrier = X → ∣A∣
-                ; _≈_ = λ ρ ρ' → (x : X) → ρ x ≃ ρ' x
+                ; _≈_ = λ ρ ρ' → (x : X) → ρ x ≈ₐ ρ' x
                 ; isEquivalence =
-                   record { refl = λ _ → ≃refl
-                          ; sym = λ h x → ≃sym (h x)
-                          ; trans = λ g h x → ≃trans (g x) (h x)
+                   record { refl = λ _ → refl
+                          ; sym = λ h x → sym (h x)
+                          ; trans = λ g h x → trans (g x) (h x)
                           }
                 }
 
@@ -150,26 +149,23 @@ Interpretation of terms is iteration on the W-type. The standard library offers 
  cong ⟦ ℊ x ⟧ u≈v = u≈v x
  cong ⟦ node f args ⟧ x≈y = cong Interp (≡.refl , λ i → cong ⟦ args i ⟧ x≈y )
 
-
  open Setoid using () renaming ( Carrier to ∣_∣ )
 
  -- An equality between two terms holds in a model
  -- if the two terms are equal under all valuations of their free variables.
  Equal : ∀ {X : Type χ} (s t : Term X) → Type _
- Equal {X = X} s t = ∀ (ρ : ∣ Env X ∣) →  ⟦ s ⟧ ⟨$⟩ ρ ≃ ⟦ t ⟧ ⟨$⟩ ρ
+ Equal {X = X} s t = ∀ (ρ : ∣ Env X ∣) →  ⟦ s ⟧ ⟨$⟩ ρ ≈ₐ ⟦ t ⟧ ⟨$⟩ ρ
 
  ≐→Equal : {X : Type χ}(s t : Term X) → s ≐ t → Equal s t
- ≐→Equal .(ℊ _) .(ℊ _) (refl ≡.refl) = λ _ → ≃refl
- ≐→Equal (node _ s)(node _ t)(genl x) =
+ ≐→Equal .(ℊ _) .(ℊ _) (rfl ≡.refl) = λ _ → refl
+ ≐→Equal (node _ s)(node _ t)(gnl x) =
   λ ρ → cong Interp (≡.refl , λ i → ≐→Equal(s i)(t i)(x i)ρ )
 
  -- Equal is an equivalence relation.
  isEquiv : {Γ : Type χ} → IsEquivalence (Equal {X = Γ})
-
- isEquiv = record { refl  =         λ ρ → ≃refl
-                  ; sym   =     λ x=y ρ → ≃sym (x=y ρ)
-                  ; trans = λ i=j j=k ρ → ≃trans (i=j ρ) (j=k ρ)
-                  }
+ IsEquivalence.refl  isEquiv = λ _ → refl
+ IsEquivalence.sym   isEquiv = λ x=y ρ → sym (x=y ρ)
+ IsEquivalence.trans isEquiv = λ ij jk ρ → trans (ij ρ) (jk ρ)
 
  -- Evaluation of a substitution gives an environment.
  ⟦_⟧s : {X Y : Type χ} → Sub X Y → ∣ Env X ∣ → ∣ Env Y ∣
@@ -177,9 +173,9 @@ Interpretation of terms is iteration on the W-type. The standard library offers 
 
  -- Substitution lemma: ⟦t[σ]⟧ρ ≃ ⟦t⟧⟦σ⟧ρ
  substitution : {X Y : Type χ} → (t : Term Y) (σ : Sub X Y) (ρ : ∣ Env X ∣ )
-  →             ⟦ t [ σ ] ⟧ ⟨$⟩ ρ  ≃  ⟦ t ⟧ ⟨$⟩ (⟦ σ ⟧s ρ)
+  →             ⟦ t [ σ ] ⟧ ⟨$⟩ ρ  ≈ₐ  ⟦ t ⟧ ⟨$⟩ (⟦ σ ⟧s ρ)
 
- substitution (ℊ x) σ ρ = ≃refl
+ substitution (ℊ x) σ ρ = refl
  substitution (node f ts) σ ρ = cong Interp (≡.refl , λ i → substitution (ts i) σ ρ)
 
 \end{code}

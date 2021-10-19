@@ -33,7 +33,7 @@ open import Equality.Welldefined         using ( swelldef )
 open import Relations.Discrete           using ( ker )
 open import Relations.Quotients          using ( ker-IsEquivalence ; ⟪_⟫ ; mkblk )
 open import Algebras.Congruences {𝑆 = 𝑆} using ( Con ; mkcon ; _╱_ ; IsCongruence ; /-≡ )
-open import Homomorphisms.Basic  {𝑆 = 𝑆} using ( hom ; epi ; epi-to-hom )
+open import Homomorphisms.Basic  {𝑆 = 𝑆} using ( hom ; epi ; epi→hom )
 
 private variable α β : Level
 
@@ -104,7 +104,7 @@ In may happen that we don't care about the surjectivity of `πepi`, in which cas
 \begin{code}
 
  πhom : (θ : Con{α}{β} 𝑨) → hom 𝑨 (𝑨 ╱ θ)
- πhom θ = epi-to-hom (𝑨 ╱ θ) (πepi θ)
+ πhom θ = epi→hom (𝑨 ╱ θ) (πepi θ)
 
 \end{code}
 

@@ -33,7 +33,7 @@ open import Overture.Func.Inverses                using ( Image_∋_ )
 open import Relations.Discrete                    using ( kerRel ; kerRelOfEquiv )
 open import Algebras.Func.Basic           {𝑆 = 𝑆} using ( SetoidAlgebra ; _̂_ ; ov )
 open import Algebras.Func.Congruences     {𝑆 = 𝑆} using ( _∣≈_ ; Con ; mkcon ; _╱_ ; IsCongruence )
-open import Homomorphisms.Func.Basic      {𝑆 = 𝑆} using ( hom ; IsHom ; epi ; IsEpi ; epi-to-hom )
+open import Homomorphisms.Func.Basic      {𝑆 = 𝑆} using ( hom ; IsHom ; epi ; IsEpi ; epi→hom )
 open import Homomorphisms.Func.Properties {𝑆 = 𝑆} using ( 𝒾𝒹 )
 
 private variable
@@ -127,7 +127,7 @@ In may happen that we don't care about the surjectivity of `πepi`, in which cas
 \begin{code}
 
  πhom : (θ : Con 𝑨 {ℓ}) → hom 𝑨 (𝑨 ╱ θ)
- πhom θ = epi-to-hom 𝑨 (𝑨 ╱ θ) (πepi θ)
+ πhom θ = epi→hom 𝑨 (𝑨 ╱ θ) (πepi θ)
 
 \end{code}
 
