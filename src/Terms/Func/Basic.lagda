@@ -186,28 +186,3 @@ Interpretation of terms is iteration on the W-type. The standard library offers 
 <span style="float:right;">[Terms.Func.Properties →](Terms.Func.Properties.html)</span>
 
 {% include UALib.Links.md %}
-
-
-
-
-
-
-
-
-
-<!--
-
-The following was used in [Andreas Abel's formal proof of Birkhoff's completeness theorem](http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf), but it seems we don't need it.
-
--- To obtain terms with free variables, we add nullary operations, each representing a variable.
--- These are covered in the std lib FreeMonad module, albeit with the restriction that the sets of
--- operation symbols and variable symbols have the same size.
-
--- Ops : Type χ → Signature (𝓞 ⊔ χ) 𝓥
--- Ops X = ((∣ 𝑆 ∣ ⊎ X) , ar)
---  where
---  ar : ∣ 𝑆 ∣ ⊎ X → Type _
---  ar (inl f) = ∥ 𝑆 ∥ f
---  ar (inr x) = ⊥             -- Add a nullary operation symbol for each variable symbol.
-
--->

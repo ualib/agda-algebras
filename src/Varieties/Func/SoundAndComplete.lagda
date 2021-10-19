@@ -274,27 +274,3 @@ We are finally ready to formally state and prove Birkhoff's Completeness Theorem
 <span style="float:right;">[Varieties.Func.Closure →](Varieties.Func.Closure.html)</span>
 
 {% include UALib.Links.md %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!--
-
-Th'' : Pred (SetoidAlgebra α ρᵃ) ℓ → Pred (Eq{χ}) (ℓ ⊔ χ ⊔ ov (α ⊔ ρᵃ))
-Th'' 𝒦 = λ eq → 𝒦 ⊫ eq
-idx : {χ : Level} → Pred (Eq{χ}) (ℓ ⊔ χ ⊔ ov (α ⊔ ρᵃ)) → Type (ℓ ⊔ ov(α ⊔ ρᵃ ⊔ χ))
-idx {χ = χ} P = Σ[ eqn ∈ Eq{χ} ] P eqn
-
-Th : (𝒦 : Pred(SetoidAlgebra α ρᵃ) ℓ) → idx (Th'' 𝒦) → Eq{χ}
-Th 𝒦 = {!!}
--->

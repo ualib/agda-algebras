@@ -259,18 +259,3 @@ module _ {X : Type χ}{p q : Term X}{𝒦 : Pred (SetoidAlgebra α α)(ov α)} w
 {% include UALib.Links.md %}
 
 
-
-<!--
-
-#### <a id="S-in-SP">⨅ S(𝒦) ∈ SP(𝒦)</a>
-
-Finally, we prove a result that plays an important role, e.g., in the formal proof of Birkhoff's Theorem. As we saw in [Algebras.Products][], the (informal) product `⨅ S(𝒦)` of all subalgebras of algebras in 𝒦 is implemented (formally) in the [agda-algebras](https://github.com/ualib/agda-algebras) library as `⨅ 𝔄 S(𝒦)`. Our goal is to prove that this product belongs to `SP(𝒦)`. We do so by first proving that the product belongs to `PS(𝒦)` and then applying the `PS⊆SP` lemma.
-
- private
-  I = ℑ{𝒦 = 𝒦}
-  𝒜 = 𝔄{𝒦 = 𝒦}
-
- P⨅𝒜 : ⨅ 𝒜 ∈ Lift-class (P 𝒦)
- P⨅𝒜 = {!!}
-
--->

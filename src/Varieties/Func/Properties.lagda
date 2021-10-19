@@ -228,7 +228,6 @@ module _ {X : Type χ}{p q : Term X}{𝑨 : SetoidAlgebra α ρᵃ}(φh : hom (�
   open Environment 𝑨 using () renaming ( ⟦_⟧ to ⟦_⟧₂ )
   open Environment (𝑻 X) using ( ⟦_⟧ )
 
-
 \end{code}
 
 ---------------------------------

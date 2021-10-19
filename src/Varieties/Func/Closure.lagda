@@ -216,26 +216,3 @@ module _ {𝒦 : Pred (SetoidAlgebra α α)(ov α)} where
 
 {% include UALib.Links.md %}
 
-
-
-
-
-
-
-
-
-
-
-<!-- open Level
-
--- module _ {𝑨 : SetoidAlgebra α α}{𝒦 : Pred (SetoidAlgebra α α)(ov α)} where
---  sk→lsk : {β : Level} → 𝑨 ∈ S 𝒦 → Lift-Alg 𝑨 β β ∈ S (Lift-class {β = (α ⊔ β)} 𝒦)
---  sk→lsk sA = {!!}
-
-
-
-P-idemp : {𝒦 : Pred (SetoidAlgebra α α)(ov α)}
- →        P (P 𝒦) ⊆ P 𝒦
-P-idemp {α} {𝒦} {𝑨} (I , (𝒜 , (P𝒜 , A≅⨅A))) = {!!}
-
--->
