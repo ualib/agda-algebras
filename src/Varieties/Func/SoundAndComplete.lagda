@@ -76,23 +76,22 @@ _∥≈_ : Pred (SetoidAlgebra α ρᵃ) ℓ → (I → Eq{χ}) → Type _
 𝒦 ∥≈ ℰ = ∀ i → 𝒦 ⊫ ℰ i
 
 -- ...`Mod ℰ` is the class of algebras that model every equation in ℰ.
-Mod : (I → Eq{χ}) → Pred(SetoidAlgebra α ρᵃ) _
-Mod ℰ = _⊨ ℰ
+ModTuple : (I → Eq{χ}) → Pred(SetoidAlgebra α ρᵃ) _
+ModTuple ℰ = _⊨ ℰ
 
 module _ {α ρᵃ ℓ χ : Level}{X : Type χ} where
 
- ModPred : {χ : Level}{X : Type χ}
-  →        Pred(Term X × Term X) ℓ → Pred (SetoidAlgebra α ρᵃ) (𝓞 ⊔ 𝓥 ⊔ lsuc χ ⊔ ℓ ⊔ α ⊔ ρᵃ)
- ModPred ℰ 𝑨 = ∀ {p q} → (p , q) ∈ ℰ → Equal p q where open Environment 𝑨
+ Mod : Pred(Term X × Term X) ℓ → Pred (SetoidAlgebra α ρᵃ) (𝓞 ⊔ 𝓥 ⊔ lsuc χ ⊔ ℓ ⊔ α ⊔ ρᵃ)
+ Mod ℰ 𝑨 = ∀ {p q} → (p , q) ∈ ℰ → Equal p q where open Environment 𝑨
 
- ThPred : Pred (SetoidAlgebra α ρᵃ) ℓ → Pred(Term X × Term X) (ℓ ⊔ χ ⊔ ov (α ⊔ ρᵃ))
- ThPred 𝒦 = λ (p , q) → 𝒦 ⊫ (p ≈̇ q)
+ Th : Pred (SetoidAlgebra α ρᵃ) ℓ → Pred(Term X × Term X) (ℓ ⊔ χ ⊔ ov (α ⊔ ρᵃ))
+ Th 𝒦 = λ (p , q) → 𝒦 ⊫ (p ≈̇ q)
 
  ℑTh : Pred(Term X × Term X) (ℓ ⊔ χ ⊔ ov (α ⊔ ρᵃ)) → Type (ℓ ⊔ ov (α ⊔ ρᵃ ⊔ χ))
  ℑTh P = Σ[ p ∈ (Term X × Term X) ] p ∈ P
 
- Th : (𝒦 : Pred (SetoidAlgebra α ρᵃ) ℓ) → ℑTh (ThPred 𝒦) → Eq{χ}
- Th 𝒦 = λ i → fst ∣ i ∣ ≈̇ snd ∣ i ∣
+ ThTuple : (𝒦 : Pred (SetoidAlgebra α ρᵃ) ℓ) → ℑTh (Th 𝒦) → Eq{χ}
+ ThTuple 𝒦 = λ i → fst ∣ i ∣ ≈̇ snd ∣ i ∣
 
 module _ {α}{ρᵃ}{ι}{I : Type ι} where
  -- An entailment E ⊃ eq holds iff it holds in all models of E.
@@ -253,7 +252,7 @@ We are finally ready to formally state and prove Birkhoff's Completeness Theorem
 
  module _ {Γ : Type χ} where
 
-  completeness : ∀ p q → Mod E ⊫ (p ≈̇ q) → E ⊢ Γ ▹ p ≈ q
+  completeness : ∀ p q → ModTuple E ⊫ (p ≈̇ q) → E ⊢ Γ ▹ p ≈ q
   completeness p q V =
    begin
     p              ≈˘⟨ identity p ⟩
