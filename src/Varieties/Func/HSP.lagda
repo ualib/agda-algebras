@@ -16,125 +16,92 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 module Varieties.Func.HSP {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ------------------------------------------------
-open import Agda.Primitive   using () renaming ( Set to Type ) --  _⊔_ ; lsuc ); lzero to ℓ₀ )
-open import Data.Product     using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
--- open import Function using ( id ; _∘_ )
+open import Agda.Primitive   using ( lsuc ) renaming ( Set to Type )
+open import Data.Product     using ( _,_ ; Σ-syntax )
+                             renaming ( proj₁ to fst ; proj₂ to snd ; _×_  to _∧_ )
 open import Function.Bundles using ( Func )
 open import Level
-open import Relation.Binary  using ( Setoid ) -- ; Decidable ; _Preserves_⟶_ )
+open import Relation.Binary  using ( Setoid )
 open import Relation.Unary   using ( Pred ; _∈_ ; _⊆_ )
-open import Relation.Binary.PropositionalEquality as ≡ using (_≡_)
 
--- Imports from the Agda Universal Algebra Library ---------------------------------------------------
-open import Overture.Preliminaries                  using ( ∣_∣ ; ∥_∥ ) -- ; Π )
+-- -- Imports from the Agda Universal Algebra Library ---------------------------------------------------
+open import Overture.Preliminaries                  using ( ∣_∣ ; ∥_∥ )
 open import Relations.Func.Discrete                 using ( fkerPred )
-open import Algebras.Func.Basic             {𝑆 = 𝑆} using ( SetoidAlgebra ; ov ; 𝕌[_] ; Lift-Alg )
+open import Algebras.Func.Basic             {𝑆 = 𝑆} using ( SetoidAlgebra ; ov ; Lift-Alg )
 open import Algebras.Func.Products          {𝑆 = 𝑆} using ( ⨅ )
-open import Homomorphisms.Func.Basic        {𝑆 = 𝑆} using ( hom ; mon ; IsMon ; IsHom ; epi→ontohom )
+open import Homomorphisms.Func.Basic        {𝑆 = 𝑆} using ( hom ; mon ; IsMon ; IsHom ; epi ; epi→ontohom )
 open import Homomorphisms.Func.Products     {𝑆 = 𝑆} using ( ⨅-hom-co )
 open import Homomorphisms.Func.Factor       {𝑆 = 𝑆} using ( HomFactor )
-open import Homomorphisms.Func.Isomorphisms {𝑆 = 𝑆} using ( ℓ⨅≅⨅ℓ )
+open import Homomorphisms.Func.Isomorphisms {𝑆 = 𝑆} using ( ≅-refl )
+open import Homomorphisms.Func.HomomorphicImages {𝑆 = 𝑆} using ( _IsHomImageOf_ )
 open import Subalgebras.Func.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; mon→≤ )
-open import Subalgebras.Func.Properties     {𝑆 = 𝑆} using ( ≤-Lift )
-open import Terms.Basic                     {𝑆 = 𝑆} using ( Term ; ℊ ; node )
 open import Terms.Func.Basic                {𝑆 = 𝑆} using ( module Environment ; 𝑻 )
-open import Terms.Func.Properties           {𝑆 = 𝑆} using ( free-lift ; lift-hom )
+open import Terms.Func.Properties           {𝑆 = 𝑆} using ( lift-hom ; free-lift )
 open import Terms.Func.Operations           {𝑆 = 𝑆} using ( free-lift-interp )
-open import Varieties.Func.SoundAndComplete {𝑆 = 𝑆} using ( module FreeAlgebra ; _⊢_▹_≈_ ; ModPred ; ThPred ; _⊫_ ; _≈̇_ )
-open import Varieties.Func.Closure          {𝑆 = 𝑆} using ( S ; V ; P ; Lift-class ; Lift-class-lemma
-                                                          ; S-Lift-lemma ; S-idem )
-open import Varieties.Func.Preservation     {𝑆 = 𝑆} using ( PS⊆SP ; S-id2 )
-open import Varieties.Func.FreeAlgebras {𝑆 = 𝑆} using ( module FreeHom ; 𝔽-ModTh-epi-lift )
+open import Varieties.Func.SoundAndComplete {𝑆 = 𝑆} using ( module FreeAlgebra ; _⊫_ ; _≈̇_
+                                                          ; _⊢_▹_≈_ ; Mod ; Th )
+open import Varieties.Func.Closure          {𝑆 = 𝑆} using ( S ; V ; P ; S-idem ; V-≅-lc )
+open import Varieties.Func.Preservation     {𝑆 = 𝑆} using ( S-id2 ; PS⊆SP )
+open import Varieties.Func.FreeAlgebras     {𝑆 = 𝑆} using ( module FreeHom ; 𝔽-ModTh-epi-lift )
 
 open Func using ( cong ) renaming ( f to _⟨$⟩_ )
 open SetoidAlgebra using ( Domain )
 
-private variable
- χ : Level
+module _ {α ρᵃ ℓ : Level}
+         (𝒦 : Pred(SetoidAlgebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ))
+         {X : Type (α ⊔ ρᵃ ⊔ ℓ)} where
 
-
-module _ {α : Level}{X : Type (α ⊔ χ)}(𝒦 : Pred (SetoidAlgebra α α) (ov α))
- where
  private
-  oα = ov α
-  oαχ = ov (α ⊔ χ)
-  ooα = ov oα
-  ooαχ = ov oαχ
+  a = α ⊔ ρᵃ
+  ι = ov(α ⊔ ρᵃ ⊔ ℓ)
 
- open FreeHom (α ⊔ χ) 𝒦
- open FreeAlgebra {ι = oαχ}{I = ℐ} ℰ using ( 𝔽[_] )
+ open FreeHom (a ⊔ ℓ) {α}{ρᵃ}{ℓ}{𝒦}
+ open FreeAlgebra {ι = ι}{I = ℐ} ℰ using ( 𝔽[_] )
 
 -- We want to pair each `(𝑨 , p)` in `ℑ` with an environment `ρ : X → ∣ 𝑨 ∣` so that we can quantify
 -- over all algebras *and* all assignments of values in the domain `∣ 𝑨 ∣` to variables in `X`.
 
- ℑ⁺ : Type _
- ℑ⁺ = Σ[ 𝑨 ∈ (SetoidAlgebra α α) ] (𝑨 ∈ S 𝒦) × (Setoid.Carrier (Environment.Env 𝑨 X))
+ ℑ⁺ : Type ι
+ ℑ⁺ = Σ[ 𝑨 ∈ (SetoidAlgebra α ρᵃ) ] (𝑨 ∈ S{β = α}{ρᵃ}ℓ 𝒦) ∧ (Setoid.Carrier (Environment.Env 𝑨 X))
 
- 𝔄⁺ : ℑ⁺ → SetoidAlgebra α α
+ 𝔄⁺ : ℑ⁺ → SetoidAlgebra α ρᵃ
  𝔄⁺ i = ∣ i ∣
 
- ℭ : SetoidAlgebra (χ ⊔ oα) (χ ⊔ oα)
+ ℭ : SetoidAlgebra ι ι
  ℭ = ⨅ 𝔄⁺
 
----------------------------------------------------------------------------
+\end{code}
 
- module _ {i : ℑ⁺} where
-  open Setoid (Domain ℭ) using () renaming ( _≈_ to _≈C≈_ ; trans to ctrans; sym to csym)
-  open Environment ℭ using () renaming ( ⟦_⟧ to c⟦_⟧ ; Env to cEnv )
+Next we define a useful type, `skEqual`, which we use to represent a term identity `p ≈ q`
+for any given `i = (𝑨 , sA , ρ)` (where `𝑨` is an algebra, `sA : 𝑨 ∈ S 𝒦` is a proof that
+`𝑨` belongs to `S 𝒦`, and `ρ` is a mapping from `X` to the domain of `𝑨`). Then we prove
+`AllEqual⊆ker𝔽` which asserts that if the identity `p ≈ q` holds in all `𝑨 ∈ S 𝒦` (for
+all environments), then `p ≈ q` holds in the relatively free algebra `𝔽[ X ]`; equivalently,
+the pair `(p , q)` belongs to the kernel of the natural homomorphism from `𝑻 X` onto `𝔽[ X ]`.
+We will use this fact below to prove that there is a monomorphism from `𝔽[ X ]` into `ℭ`,
+and thus `𝔽[ X ]` is a subalgebra of ℭ, so belongs to `S (P 𝒦)`.
 
-  open SetoidAlgebra (𝔄⁺ i) using ( Interp ) renaming ( Domain to A )
-  open Setoid A using ( _≈_ ; refl ; sym ; trans )
-  open Environment (𝔄⁺ i) using () renaming ( ⟦_⟧ to a⟦_⟧ )
+\begin{code}
 
-  lemma0 : ∀ ρ s → a⟦_⟧{X = X} s ⟨$⟩ (λ x → ρ x i) ≈ (c⟦ s ⟧ ⟨$⟩ ρ) i
-  lemma0 ρ (ℊ x) = refl
-  lemma0 ρ (node f t) = goal
-   where
-   goal : a⟦ node f t ⟧ ⟨$⟩ (λ x → ρ x i) ≈ (c⟦ node f t ⟧ ⟨$⟩ ρ) i
-   goal = cong Interp (≡.refl , (λ i₁ → lemma0 ρ (t i₁)))
+ skEqual : (i : ℑ⁺) → ∀{p q} → Type ρᵃ
+ skEqual i {p}{q} = ⟦ p ⟧ ⟨$⟩ snd ∥ i ∥ ≈ ⟦ q ⟧ ⟨$⟩ snd ∥ i ∥
+  where
+  open Setoid (Domain (𝔄⁺ i)) using ( _≈_ )
+  open Environment (𝔄⁺ i) using ( ⟦_⟧ )
 
-
-  lemma1 : ∀ ρ → ∀ {p q} → (c⟦_⟧{X = X} p ⟨$⟩ ρ) ≈C≈ (c⟦ q ⟧ ⟨$⟩ ρ)
-   →       a⟦ p ⟧ ⟨$⟩ (λ x → ρ x i) ≈ a⟦ q ⟧ ⟨$⟩ (λ x → ρ x i)
-  lemma1 ρ {p} {q} pCq = trans (lemma0 ρ p) (trans (pCq i) (sym (lemma0 ρ q)))
-
-
-  fl-lemma0 : ∀ ρ s → (free-lift{X = X}{𝑨 = 𝔄⁺ i} (λ x → ρ x i) s) ≈ (free-lift{𝑨 = ℭ} ρ s i)
-  fl-lemma0 ρ (ℊ x) = refl
-  fl-lemma0 ρ (node f t) = goal
-   where
-   goal : free-lift{X = X}{𝑨 = 𝔄⁺ i} (λ x → ρ x i) (node f t) ≈ free-lift{𝑨 = ℭ} ρ (node f t) i
-   goal = cong Interp (≡.refl , (λ i₁ → fl-lemma0 ρ (t i₁)))
-
-
-  skEqual : (p q : Term X) → Type α
-  skEqual p q = a⟦ p ⟧ ⟨$⟩ snd ∥ i ∥ ≈ a⟦ q ⟧ ⟨$⟩ snd ∥ i ∥
-
- AllEqual⊆ker𝔽 : {p q : Term X}
-  →              (∀ i → skEqual{i = i} p q) → (p , q) ∈ fkerPred ∣ hom𝔽[ X ] ∣
+ AllEqual⊆ker𝔽 : ∀ {p q}
+  →              (∀ i → skEqual i {p}{q}) → (p , q) ∈ fkerPred ∣ hom𝔽[ X ] ∣
  AllEqual⊆ker𝔽 {p} {q} x = Goal
   where
   open SetoidAlgebra 𝔽[ X ] using () renaming ( Domain to F ; Interp to InterpF )
   open Setoid F using () renaming ( _≈_  to _≈F≈_ ; refl to reflF )
-  S𝒦⊫pq : S 𝒦 ⊫ (p ≈̇ q)
+  S𝒦⊫pq : S{β = α}{ρᵃ} ℓ 𝒦 ⊫ (p ≈̇ q)
   S𝒦⊫pq 𝑨 sA ρ = x (𝑨 , sA , ρ)
   Goal : p ≈F≈ q
-  Goal = 𝒦⊫→ℰ⊢ (S-id2{p = p}{q} S𝒦⊫pq)
+  Goal = 𝒦⊫→ℰ⊢ (S-id2{ℓ = ℓ}{p = p}{q} S𝒦⊫pq)
 
 
 --------------------------------------------------------------------------
-
- ℓℭ : SetoidAlgebra oαχ oαχ
- ℓℭ = Lift-Alg ℭ oαχ oαχ
-
- PℓSℓℭ : ℓℭ ∈ P (S (Lift-class 𝒦))
- PℓSℓℭ = (Lift oαχ ℑ⁺) , ((λ x → Lift-Alg (𝔄⁺ (lower x)) oαχ oαχ) , (ξ , ℓ⨅≅⨅ℓ))
-  where
-  ξ : (i : Lift oαχ ℑ⁺) → Lift-Alg (𝔄⁺ (lower i)) oαχ oαχ ∈ S (Lift-class 𝒦)
-  ξ i = S-Lift-lemma (Lift-class-lemma (fst ∥ lower i ∥))
-
- SPℓℭ : ℓℭ ∈ S (P (Lift-class 𝒦))
- SPℓℭ = PS⊆SP PℓSℓℭ
 
  open SetoidAlgebra ℭ using ( Interp ) renaming (Domain to C)
  open Setoid C using ( trans ; sym ; refl ) renaming ( Carrier to ∣C∣ ; _≈_ to _≈C≈_ )
@@ -167,23 +134,11 @@ module _ {α : Level}{X : Type (α ⊔ χ)}(𝒦 : Pred (SetoidAlgebra α α) (o
  hom𝔽ℭ = ∣ HomFactor ℭ homℭ hom𝔽[ X ] ker𝔽⊆kerℭ hom𝔽[ X ]-is-epic ∣
 
  open Environment ℭ
- kerℭlemma : ∀{p q} → (p , q) ∈ fkerPred ∣ homℭ ∣ → ∀ τ → free-lift{𝑨 = ℭ} τ p ≈C≈ free-lift{𝑨 = ℭ} τ q
- kerℭlemma {p} {q} pKq τ (𝑨 , sA , ρ) = Goal
-  where
-  i : ℑ⁺
-  i = (𝑨 , sA , ρ)
-  open Setoid (Domain 𝑨) using () renaming ( _≈_ to _≈ₐ_ ; trans to transₐ ; sym to symₐ )
-  open Environment 𝑨
-  have : (free-lift{𝑨 = 𝑨} (λ x → τ x i) p) ≈ₐ (free-lift{𝑨 = 𝑨} (λ x → τ x i) q)
-  have = pKq (𝑨 , sA , (λ x → τ x i))
-  Goal : (free-lift{𝑨 = ℭ} τ p i) ≈ₐ (free-lift{𝑨 = ℭ} τ q i)
-  Goal = transₐ (symₐ (fl-lemma0{i = i} τ p)) (transₐ have (fl-lemma0{i = i} τ q))
-
 
  kerℭ⊆ker𝔽 : ∀{p q} → (p , q) ∈ fkerPred ∣ homℭ ∣ → (p , q) ∈ fkerPred ∣ hom𝔽[ X ] ∣
  kerℭ⊆ker𝔽 {p}{q} pKq = E⊢pq
   where
-  pqEqual : ∀ i → skEqual{i = i} p q
+  pqEqual : ∀ i → skEqual i {p}{q}
   pqEqual i = goal
    where
    open Environment (𝔄⁺ i) using () renaming ( ⟦_⟧ to ⟦_⟧i )
@@ -199,37 +154,70 @@ module _ {α : Level}{X : Type (α ⊔ χ)}(𝒦 : Pred (SetoidAlgebra α α) (o
  mon𝔽ℭ = ∣ hom𝔽ℭ ∣ , isMon
   where
   open IsMon
-  open Term
   open IsHom
   isMon : IsMon 𝔽[ X ] ℭ ∣ hom𝔽ℭ ∣
   isHom isMon = ∥ hom𝔽ℭ ∥
   isInjective isMon {p} {q} φpq = kerℭ⊆ker𝔽 φpq
 
- 𝔽≤ℓℭ : 𝔽[ X ] ≤ (Lift-Alg ℭ oαχ oαχ)
- 𝔽≤ℓℭ = ≤-Lift (mon→≤ mon𝔽ℭ)
+\end{code}
 
- SP𝔽 : 𝔽[ X ] ∈ S (P (Lift-class 𝒦))
- SP𝔽 = S-idem (ℓℭ , SPℓℭ , 𝔽≤ℓℭ)
+Now that we have proved the existence of a monomorphism from `𝔽[ X ]` to `ℭ` we are in a position
+to prove that `𝔽[ X ]` is a subalgebra of ℭ, so belongs to `S (P 𝒦)`.  In fact, we will show
+that `𝔽[ X ]` is a subalgebra of the *lift* of `ℭ`, denoted `ℓℭ`.
 
-module _ {α : Level}(𝒦 : Pred (SetoidAlgebra α α) (ov α))
-         (𝑨 : SetoidAlgebra α α) where
+\begin{code}
+
+ 𝔽≤ℭ : 𝔽[ X ] ≤ ℭ
+ 𝔽≤ℭ = mon→≤ mon𝔽ℭ
+
+ SP𝔽 : 𝔽[ X ] ∈ S ι (P ℓ ι 𝒦)
+ SP𝔽 = S-idem SSP𝔽
+  where
+  PSℭ : ℭ ∈ P (a ⊔ ℓ) ι (S ℓ 𝒦)
+  PSℭ = ℑ⁺ , (𝔄⁺ , ((λ i → fst ∥ i ∥) , ≅-refl))
+
+  SPℭ : ℭ ∈ S ι (P ℓ ι 𝒦)
+  SPℭ = PS⊆SP {ℓ = ℓ} PSℭ
+
+  SSP𝔽 : 𝔽[ X ] ∈ S ι (S ι (P ℓ ι 𝒦))
+  SSP𝔽 = ℭ , (SPℭ , 𝔽≤ℭ)
+
+
+module _ {α ρᵃ ℓ : Level}
+         {𝒦 : Pred(SetoidAlgebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)}
+         {𝑨 : SetoidAlgebra (α ⊔ ρᵃ ⊔ ℓ) (α ⊔ ρᵃ ⊔ ℓ)} where
+
  private
-  oα = ov α
-  ooα = ov oα
+  ι = ov(α ⊔ ρᵃ ⊔ ℓ)
 
- open FreeHom α 𝒦
- open FreeAlgebra {ι = oα}{I = ℐ} ℰ using ( 𝔽[_] )
-
- open SetoidAlgebra 𝑨 using( Interp ) renaming (Domain to A)
- open Setoid A using ( trans ; sym ; refl ) renaming ( Carrier to ∣A∣ )
+ open FreeHom (α ⊔ ρᵃ ⊔ ℓ) {α}{ρᵃ}{ℓ}{𝒦}
+ open FreeAlgebra {ι = ι}{I = ℐ} ℰ using ( 𝔽[_] )
+ open Setoid (Domain 𝑨) using ( trans ; sym ; refl ) renaming ( Carrier to ∣A∣ )
 
 
- Birkhoff : 𝑨 ∈ ModPred{X = ∣A∣} (ThPred{X = ∣A∣} (V 𝒦))
-  →         Lift-Alg 𝑨 oα oα ∈ V (Lift-class 𝒦)
+ Birkhoff-lemma : 𝑨 ∈ Mod (Th (V ℓ ι 𝒦))
+  →               Lift-Alg 𝑨 ι ι ∈ V ℓ ι 𝒦
 
- Birkhoff A∈ModThK = 𝔽[ ∣A∣ ] , SP𝔽{χ = α} 𝒦
-                   , epi→ontohom 𝔽[ ∣A∣ ] (Lift-Alg 𝑨 oα oα)
-                        (𝔽-ModTh-epi-lift 𝑨 𝒦 (λ {p q} → A∈ModThK{p = p}{q}))
+ Birkhoff-lemma A∈ModThK = 𝔽[ ∣A∣ ] , goal1 , goal2
+  where
+  goal1 : 𝔽[ ∣A∣ ] ∈ S{ι} ι (P ℓ ι 𝒦)
+  goal1 = SP𝔽{ℓ = ℓ} 𝒦
+
+  η : epi 𝔽[ ∣A∣ ] (Lift-Alg 𝑨 ι ι)
+  η = 𝔽-ModTh-epi-lift{ℓ = ℓ} (λ {p q} → A∈ModThK{p = p}{q})
+
+  goal2 : Lift-Alg 𝑨 ι ι IsHomImageOf 𝔽[ ∣A∣ ]
+  goal2 = epi→ontohom 𝔽[ ∣A∣ ] (Lift-Alg 𝑨 ι ι) η
+
+
+ Birkhoff : 𝑨 ∈ Mod (Th (V ℓ ι 𝒦))
+  →         𝑨 ∈ V ℓ ι 𝒦
+
+ Birkhoff A∈ModThK = V-≅-lc{α}{ρᵃ}{ℓ} 𝒦 𝑨 subgoal
+  where
+  subgoal : Lift-Alg 𝑨 ι ι ∈ V ℓ ι 𝒦
+  subgoal = Birkhoff-lemma (λ {p q} → A∈ModThK{p = p}{q})
+
 
 \end{code}
 

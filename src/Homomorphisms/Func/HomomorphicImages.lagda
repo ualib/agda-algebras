@@ -31,10 +31,12 @@ open import Overture.Preliminaries                using ( ∣_∣ ; ∥_∥ ; tr
 open import Overture.Func.Preliminaries           using ( lift∼lower )
 open import Overture.Func.Inverses                using ( Ran ; _range ; _preimage ; _image ; Inv
                                                         ; _preimage≈image ; InvIsInverseʳ ; Image_∋_ )
-open import Overture.Func.Surjective              using ( IsSurjective )
-open import Algebras.Func.Basic           {𝑆 = 𝑆} using ( SetoidAlgebra ; ov ; _̂_ ; ⟦_⟧ ; Lift-Algˡ ; 𝕌[_] )
+open import Overture.Func.Surjective              using ( IsSurjective ; ∘-IsSurjective )
+open import Algebras.Func.Basic           {𝑆 = 𝑆} using ( SetoidAlgebra ; ov ; _̂_ ; ⟦_⟧ ; Lift-Algˡ
+                                                        ; Lift-Alg ; 𝕌[_] )
 open import Homomorphisms.Func.Basic      {𝑆 = 𝑆} using ( hom ; IsHom )
-open import Homomorphisms.Func.Properties {𝑆 = 𝑆} using ( Lift-homˡ ; ToLiftˡ ; lift-hom-lemma ; 𝒾𝒹 )
+open import Homomorphisms.Func.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; Lift-≅ )
+open import Homomorphisms.Func.Properties {𝑆 = 𝑆} using ( Lift-homˡ ; ToLiftˡ ; lift-hom-lemma ; 𝒾𝒹 ; ∘-hom )
 
 private variable
  α ρᵃ β ρᵇ : Level
@@ -134,8 +136,7 @@ Here are some tools that have been useful (e.g., in the road to the proof of Bir
 
 \begin{code}
 
-module _ {𝑨 : SetoidAlgebra α ρᵃ}
-         {𝑩 : SetoidAlgebra β ρᵇ} where
+module _ {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ} where
 
  open SetoidAlgebra 𝑨 using ()              renaming ( Domain to A )
  open SetoidAlgebra 𝑩 using ()              renaming ( Domain to B )
@@ -189,6 +190,24 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ}
 
 \end{code}
 
+
+\begin{code}
+
+module _ {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ} where
+ open _≅_
+ Lift-HomImage-lemma : ∀{γ} → (Lift-Alg 𝑨 γ γ) IsHomImageOf 𝑩 → 𝑨 IsHomImageOf 𝑩
+ Lift-HomImage-lemma {γ} φ = ∘-hom ∣ φ ∣ (from Lift-≅) ,
+                             ∘-IsSurjective ∥ φ ∥ (fromIsSurjective (Lift-≅{𝑨 = 𝑨}))
+
+module _ {𝑨 𝑨' : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ} where
+ open _≅_
+ HomImage-≅ : 𝑨 IsHomImageOf 𝑨' → 𝑨 ≅ 𝑩 → 𝑩 IsHomImageOf 𝑨'
+ HomImage-≅ φ A≅B = ∘-hom ∣ φ ∣ (to A≅B) , ∘-IsSurjective ∥ φ ∥ (toIsSurjective A≅B)
+
+ HomImage-≅' : 𝑨 IsHomImageOf 𝑨' → 𝑨' ≅ 𝑩 → 𝑨 IsHomImageOf 𝑩
+ HomImage-≅' φ A'≅B = (∘-hom (from A'≅B) ∣ φ ∣) , ∘-IsSurjective (fromIsSurjective A'≅B) ∥ φ ∥
+
+\end{code}
 --------------------------------------
 
 <span style="float:left;">[← Homomorphisms.Func.Isomorphisms](Homomorphisms.Func.Isomorphisms.html)</span>

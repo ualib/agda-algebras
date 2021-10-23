@@ -29,7 +29,9 @@ open import Relation.Binary.PropositionalEquality as ≡ using ()
 -- Imports from the Agda Universal Algebra Library -----------------------------------------
 open import Overture.Preliminaries                using ( ∣_∣ ; ∥_∥ )
 open import Overture.Func.Preliminaries           using ( _⟶_ ; _∘_ )
+open import Overture.Func.Inverses                using ( eq )
 open import Overture.Func.Injective               using ( IsInjective )
+open import Overture.Func.Surjective              using ( IsSurjective )
 open import Algebras.Func.Basic           {𝑆 = 𝑆} using ( SetoidAlgebra ; Lift-Alg ; Lift-Algˡ ; Lift-Algʳ ; _̂_)
 open import Algebras.Func.Products        {𝑆 = 𝑆} using ( ⨅ )
 open import Homomorphisms.Func.Basic      {𝑆 = 𝑆} using ( hom ; IsHom )
@@ -60,8 +62,8 @@ open Func using ( cong ) renaming ( f to _⟨$⟩_ )
 open SetoidAlgebra using ( Domain )
 
 module _ (𝑨 : SetoidAlgebra α ρᵃ) (𝑩 : SetoidAlgebra β ρᵇ) where
- open Setoid (Domain 𝑨) using () renaming ( _≈_ to _≈₁_ )
- open Setoid (Domain 𝑩) using () renaming ( _≈_ to _≈₂_ )
+ open Setoid (Domain 𝑨) using ( sym ; trans ) renaming ( _≈_ to _≈₁_ )
+ open Setoid (Domain 𝑩) using () renaming ( _≈_ to _≈₂_ ; sym to sym₂ ; trans to trans₂)
 
  record _≅_ : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ β ⊔ ρᵃ ⊔ ρᵇ ) where
   constructor mkiso
@@ -70,6 +72,31 @@ module _ (𝑨 : SetoidAlgebra α ρᵃ) (𝑩 : SetoidAlgebra β ρᵇ) where
    from : hom 𝑩 𝑨
    to∼from : ∀ b → (∣ to ∣ ⟨$⟩ (∣ from ∣ ⟨$⟩ b)) ≈₂ b
    from∼to : ∀ a → (∣ from ∣ ⟨$⟩ (∣ to ∣ ⟨$⟩ a)) ≈₁ a
+
+  toIsSurjective : IsSurjective ∣ to ∣
+  toIsSurjective {y} = eq (∣ from ∣ ⟨$⟩ y) (sym₂ (to∼from y))
+
+  toIsInjective : IsInjective ∣ to ∣
+  toIsInjective {x} {y} xy = Goal
+   where
+   ξ : ∣ from ∣ ⟨$⟩ (∣ to ∣ ⟨$⟩ x) ≈₁ ∣ from ∣ ⟨$⟩ (∣ to ∣ ⟨$⟩ y)
+   ξ = cong ∣ from ∣ xy
+   Goal : x ≈₁ y
+   Goal = trans (sym (from∼to x)) (trans ξ (from∼to y))
+
+
+  fromIsSurjective : IsSurjective ∣ from ∣
+  fromIsSurjective {y} = eq (∣ to ∣ ⟨$⟩ y) (sym (from∼to y))
+
+  fromIsInjective : IsInjective ∣ from ∣
+  fromIsInjective {x} {y} xy = Goal
+   where
+   ξ : ∣ to ∣ ⟨$⟩ (∣ from ∣ ⟨$⟩ x) ≈₂ ∣ to ∣ ⟨$⟩ (∣ from ∣ ⟨$⟩ y)
+   ξ = cong ∣ to ∣ xy
+   Goal : x ≈₂ y
+   Goal = trans₂ (sym₂ (to∼from x)) (trans₂ ξ (to∼from y))
+
+
 
 \end{code}
 
@@ -288,11 +315,8 @@ module _ {𝓘 : Level}{I : Type 𝓘}
  ⨅≅⨅ℓ : ∀ {ℓ} → ⨅ 𝒜 ≅ ⨅ (λ i → Lift-Alg (𝒜 (lower{ℓ = ℓ} i)) ℓ ℓ)
  ⨅≅⨅ℓ {ℓ} = mkiso (φ , φhom) (ψ , ψhom) φ∼ψ ψ∼φ
   where
-  -- open SetoidAlgebra using (Domain)
-  -- open Setoid using (_≈_ )
   open SetoidAlgebra (⨅ 𝒜) using () renaming (Domain to ⨅A )
   open Setoid ⨅A using () renaming ( _≈_ to _≈₁_ )
-  -- open IsHom
 
   ⨅ℓ𝒜 : SetoidAlgebra _ _
   ⨅ℓ𝒜 = ⨅ (λ i → Lift-Alg (𝒜 (lower{ℓ = ℓ} i)) ℓ ℓ)
@@ -322,6 +346,100 @@ module _ {𝓘 : Level}{I : Type 𝓘}
   ψ∼φ _ i = (reflexive ≡.refl)
    where open Setoid (Domain (𝒜  i)) using ( reflexive )
 
+module _ {ι : Level}{I : Type ι}
+         {𝒜 : I → SetoidAlgebra α ρᵃ}
+         where
+ open IsHom
+ open SetoidAlgebra using (Domain)
+ open Setoid using (_≈_ )
+
+
+ ⨅≅⨅ℓρ : ∀ {ℓ ρ} → ⨅ 𝒜 ≅ ⨅ (λ i → Lift-Alg (𝒜 i) ℓ ρ)
+ ⨅≅⨅ℓρ {ℓ}{ρ} = mkiso φ ψ φ∼ψ ψ∼φ
+  where
+  open SetoidAlgebra (⨅ 𝒜) using () renaming ( Domain to ⨅A )
+  open Setoid ⨅A using () renaming ( _≈_ to _≈⨅A≈_ )
+  open SetoidAlgebra (⨅ (λ i → Lift-Alg (𝒜 i) ℓ ρ)) using () renaming ( Domain to ⨅lA )
+  open Setoid ⨅lA using () renaming ( _≈_ to _≈⨅lA≈_ )
+
+  φfunc : ⨅A ⟶ ⨅lA
+  (φfunc ⟨$⟩ x) i = lift (x i)
+  cong φfunc x i = lift (x i)
+
+  φhom : IsHom (⨅ 𝒜) (⨅ (λ i → Lift-Alg (𝒜 i) ℓ ρ)) φfunc
+  compatible φhom i = refl
+   where open Setoid (Domain (Lift-Alg (𝒜 i) ℓ ρ)) using ( refl )
+
+  φ : hom (⨅ 𝒜) (⨅ (λ i → Lift-Alg (𝒜 i) ℓ ρ))
+  φ = φfunc , φhom
+
+  ψfunc : ⨅lA ⟶ ⨅A
+  (ψfunc ⟨$⟩ x) i = lower (x i)
+  cong ψfunc x i = lower (x i)
+
+  ψhom : IsHom (⨅ (λ i → Lift-Alg (𝒜 i) ℓ ρ)) (⨅ 𝒜) ψfunc
+  compatible ψhom i = refl
+   where open Setoid (Domain (𝒜 i)) using (refl)
+
+  ψ : hom (⨅ (λ i → Lift-Alg (𝒜 i) ℓ ρ)) (⨅ 𝒜)
+  ψ = ψfunc , ψhom
+
+  φ∼ψ : ∀ b → ∣ φ ∣ ⟨$⟩ (∣ ψ ∣ ⟨$⟩ b) ≈⨅lA≈ b
+  φ∼ψ _ i = reflexive ≡.refl
+   where open Setoid (Domain (Lift-Alg (𝒜 i) ℓ ρ)) using (reflexive)
+
+  ψ∼φ : ∀ a → ∣ ψ ∣ ⟨$⟩ (∣ φ ∣ ⟨$⟩ a) ≈⨅A≈ a
+  ψ∼φ _ = reflexive ≡.refl
+   where open Setoid (Domain (⨅ 𝒜)) using (reflexive)
+
+
+module _ {ℓᵃ : Level}{I : Type ℓᵃ}
+         {𝒜 : I → SetoidAlgebra α ρᵃ}
+         where
+ open IsHom
+ open SetoidAlgebra using (Domain)
+ open Setoid using (_≈_ )
+
+
+ ⨅≅⨅lowerℓρ : ∀ {ℓ ρ} → ⨅ 𝒜 ≅ ⨅ (λ i → Lift-Alg (𝒜 (lower{ℓ = α ⊔ ρᵃ} i)) ℓ ρ)
+ ⨅≅⨅lowerℓρ {ℓ}{ρ} = mkiso φ ψ φ∼ψ ψ∼φ
+  where
+  open SetoidAlgebra (⨅ 𝒜) using () renaming ( Domain to ⨅A )
+  open Setoid ⨅A using () renaming ( _≈_ to _≈⨅A≈_ )
+  open SetoidAlgebra (⨅ (λ i → Lift-Alg (𝒜 (lower i)) ℓ ρ)) using () renaming ( Domain to ⨅lA )
+  open Setoid ⨅lA using () renaming ( _≈_ to _≈⨅lA≈_ )
+
+  φfunc : ⨅A ⟶ ⨅lA
+  (φfunc ⟨$⟩ x) i = lift (x (lower i))
+  cong φfunc x i = lift (x (lower i))
+
+  φhom : IsHom (⨅ 𝒜) (⨅ (λ i → Lift-Alg (𝒜 (lower i)) ℓ ρ)) φfunc
+  compatible φhom i = refl
+   where open Setoid (Domain (Lift-Alg (𝒜 (lower i)) ℓ ρ)) using ( refl )
+
+  φ : hom (⨅ 𝒜) (⨅ (λ i → Lift-Alg (𝒜 (lower i)) ℓ ρ))
+  φ = φfunc , φhom
+
+  ψfunc : ⨅lA ⟶ ⨅A
+  (ψfunc ⟨$⟩ x) i = lower (x (lift i))
+  cong ψfunc x i = lower (x (lift i))
+
+  ψhom : IsHom (⨅ (λ i → Lift-Alg (𝒜 (lower i)) ℓ ρ)) (⨅ 𝒜) ψfunc
+  compatible ψhom i = refl
+   where open Setoid (Domain (𝒜 i)) using (refl)
+
+  ψ : hom (⨅ (λ i → Lift-Alg (𝒜 (lower i)) ℓ ρ)) (⨅ 𝒜)
+  ψ = ψfunc , ψhom
+
+  φ∼ψ : ∀ b → ∣ φ ∣ ⟨$⟩ (∣ ψ ∣ ⟨$⟩ b) ≈⨅lA≈ b
+  φ∼ψ _ i = reflexive ≡.refl
+   where open Setoid (Domain (Lift-Alg (𝒜 (lower i)) ℓ ρ)) using (reflexive)
+
+  ψ∼φ : ∀ a → ∣ ψ ∣ ⟨$⟩ (∣ φ ∣ ⟨$⟩ a) ≈⨅A≈ a
+  ψ∼φ _ = reflexive ≡.refl
+   where open Setoid (Domain (⨅ 𝒜)) using (reflexive)
+
+
  ℓ⨅≅⨅ℓ : ∀ {ℓ} → Lift-Alg (⨅ 𝒜) ℓ ℓ ≅ ⨅ (λ i → Lift-Alg (𝒜 (lower{ℓ = ℓ} i)) ℓ ℓ)
  ℓ⨅≅⨅ℓ {ℓ} = mkiso (φ , φhom) (ψ , ψhom) φ∼ψ ψ∼φ -- φ∼ψ ψ∼φ
   where
@@ -350,11 +468,11 @@ module _ {𝓘 : Level}{I : Type 𝓘}
    where open Setoid (Domain (𝒜 i)) using ( refl )
 
   φ∼ψ : ∀ b → (φ ⟨$⟩ (ψ ⟨$⟩ b)) ≈₂ b
-  lower (φ∼ψ b i) = reflexive ≡.refl
+  lower (φ∼ψ _ i) = reflexive ≡.refl
    where open Setoid (Domain (𝒜 (lower i))) using ( reflexive )
 
   ψ∼φ : ∀ a → (ψ ⟨$⟩ (φ ⟨$⟩ a)) ≈₁ a
-  lower (ψ∼φ a) i = reflexive ≡.refl
+  lower (ψ∼φ _) i = reflexive ≡.refl
    where open Setoid (Domain (𝒜  i)) using ( reflexive )
 
 

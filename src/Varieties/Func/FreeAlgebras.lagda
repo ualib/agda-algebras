@@ -1,4 +1,4 @@
-n---
+---
 layout: default
 title : "Varieties.Func.FreeAlgebras module (Agda Universal Algebra Library)"
 date : "2021-06-29"
@@ -25,7 +25,7 @@ open import Relation.Binary  using ( Setoid )
 open import Relation.Unary   using ( Pred ; _∈_ ; _⊆_ )
 open import Relation.Binary.PropositionalEquality as ≡ using (_≡_)
 
--- -- Imports from the Agda Universal Algebra Library ---------------------------------------------------
+-- Imports from the Agda Universal Algebra Library ---------------------------------------------------
 open import Overture.Preliminaries                  using ( ∣_∣ ; ∥_∥ )
 open import Overture.Func.Preliminaries             using ( _⟶_ )
 open import Overture.Func.Inverses                  using ( eq )
@@ -34,23 +34,20 @@ open import Relations.Func.Discrete                 using ( fkerPred )
 open import Algebras.Func.Basic             {𝑆 = 𝑆} using ( SetoidAlgebra ; ov ; Lift-Alg )
 open import Homomorphisms.Func.Basic        {𝑆 = 𝑆} using ( epi ; IsEpi ; IsHom ; hom ; epi→hom )
 open import Homomorphisms.Func.Properties   {𝑆 = 𝑆} using ( ∘-epi ; ToLift-epi )
-open import Terms.Basic                     {𝑆 = 𝑆} using ( Term ; ℊ )
+open import Terms.Basic                     {𝑆 = 𝑆} using ( ℊ )
 open import Terms.Func.Basic                {𝑆 = 𝑆} using ( 𝑻 ; _≐_ ; module Environment )
 open import Terms.Func.Properties           {𝑆 = 𝑆} using ( free-lift )
 open import Terms.Func.Operations           {𝑆 = 𝑆} using ( free-lift-interp )
 open import Varieties.Func.SoundAndComplete {𝑆 = 𝑆} using ( Eq ; _⊫_ ; _≈̇_ ; _⊢_▹_≈_
                                                           ; module Soundness
                                                           ; module FreeAlgebra
-                                                          ; ThPred ; ModPred )
+                                                          ; Th ; Mod )
 open import Varieties.Func.Closure          {𝑆 = 𝑆} using ( V ; S )
-open import Varieties.Func.Preservation  {𝑆 = 𝑆} using ( classIds-⊆-VIds ; S-id1 ; S-id2 )
+open import Varieties.Func.Preservation     {𝑆 = 𝑆} using ( classIds-⊆-VIds ; S-id1 )
 
 open Func using ( cong ) renaming ( f to _⟨$⟩_ )
 open SetoidAlgebra using ( Domain )
 
-
-private variable
- χ : Level
 \end{code}
 
 In the code below, `X` will play the role of an arbitrary collection of variables; it would suffice to take `X` to be the cardinality of the largest algebra in 𝒦, but since we don't know that cardinality, we leave `X` aribtrary for now.
@@ -62,11 +59,10 @@ Alternatively, we could let `X` be the product of all algebras in the class `�
 
 \begin{code}
 
-module FreeHom (χ : Level){α : Level}(𝒦 : Pred (SetoidAlgebra α α) (ov α)) where
+module FreeHom (χ : Level){α ρᵃ ℓ : Level}
+               {𝒦 : Pred(SetoidAlgebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
  private
-  oα = ov α
-  oαχ = ov (α ⊔ χ)
-  ooα = ov oα
+  ι = ov(χ ⊔ α ⊔ ρᵃ ⊔ ℓ)
 
  open Eq
 
@@ -78,7 +74,7 @@ The relatively free algebra (relative to `Th 𝒦`) is called `M` and is derived
 \begin{code}
 
  -- ℐ indexes the collection of equations modeled by 𝒦
- ℐ : Type oαχ
+ ℐ : Type ι
  ℐ = Σ[ eq ∈ Eq{χ} ] 𝒦 ⊫ ((lhs eq) ≈̇ (rhs eq))
 
  ℰ : ℐ → Eq
@@ -89,7 +85,7 @@ The relatively free algebra (relative to `Th 𝒦`) is called `M` and is derived
   where open Soundness ℰ 𝑨
 
  ----------- THE RELATIVELY FREE ALGEBRA -----------
- open FreeAlgebra {ι = oαχ}{I = ℐ} ℰ using ( 𝔽[_] )
+ open FreeAlgebra {ι = ι}{I = ℐ} ℰ using ( 𝔽[_] )
 
 \end{code}
 
@@ -131,15 +127,15 @@ Next we define an epimorphism from `𝑻 X` onto the relatively free algebra `�
  class-models-kernel : ∀{X p q} → (p , q) ∈ fkerPred ∣ hom𝔽[ X ] ∣ → 𝒦 ⊫ (p ≈̇ q)
  class-models-kernel {X = X}{p}{q} pKq = ℰ⊢[ X ]▹Th𝒦 pKq
 
- kernel-in-theory : {X : Type χ} → fkerPred ∣ hom𝔽[ X ] ∣ ⊆ ThPred (V 𝒦)
- kernel-in-theory {X = X} {p , q} pKq vkA x = classIds-⊆-VIds{p = p}{q}
+ kernel-in-theory : {X : Type χ} → fkerPred ∣ hom𝔽[ X ] ∣ ⊆ Th (V ℓ ι 𝒦)
+ kernel-in-theory {X = X} {p , q} pKq vkA x = classIds-⊆-VIds {ℓ = ℓ} {p = p}{q}
                                       (class-models-kernel pKq) vkA x
 
 
- module _  {X : Type χ} {𝑨 : SetoidAlgebra α α}{sA : 𝑨 ∈ S 𝒦} where
+ module _  {X : Type χ} {𝑨 : SetoidAlgebra α ρᵃ}{sA : 𝑨 ∈ S {β = α}{ρᵃ} ℓ 𝒦} where
   open Environment 𝑨 using ( Equal )
   ker𝔽⊆Equal : ∀{p q} → (p , q) ∈ fkerPred ∣ hom𝔽[ X ] ∣ → Equal p q
-  ker𝔽⊆Equal{p = p}{q} x = S-id1{p = p}{q} (ℰ⊢[ X ]▹Th𝒦 x) 𝑨 sA
+  ker𝔽⊆Equal{p = p}{q} x = S-id1{ℓ = ℓ}{p = p}{q} (ℰ⊢[ X ]▹Th𝒦 x) 𝑨 sA
 
 
  𝒦⊫→ℰ⊢ : {X : Type χ} → ∀{p q} → 𝒦 ⊫ (p ≈̇ q) → ℰ ⊢ X ▹ p ≈ q
@@ -148,22 +144,54 @@ Next we define an epimorphism from `𝑻 X` onto the relatively free algebra `�
 
 ------------------------------------------------------------------------------
 
-module _ {α : Level}(𝑨 : SetoidAlgebra α α)(𝒦 : Pred (SetoidAlgebra α α) (ov α)) where
-
+module _ {α ρᵃ ℓ : Level}
+         {𝒦 : Pred(SetoidAlgebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
  private
-  oα = ov α
+  ι = ov(α ⊔ ρᵃ ⊔ ℓ)
 
- open FreeHom α 𝒦
- open FreeAlgebra {ι = oα}{I = ℐ} ℰ using ( 𝔽[_] )
- open SetoidAlgebra 𝑨 using( Interp ) renaming (Domain to A)
- open Setoid A using ( trans ; sym ; refl ) renaming ( Carrier to ∣A∣ )
+  open IsEpi ; open IsHom
 
- 𝔽-ModTh-epi : (𝑨 ∈ ModPred{X = ∣A∣} (ThPred{X = ∣A∣} (V 𝒦))) → epi 𝔽[ ∣A∣ ] 𝑨
- 𝔽-ModTh-epi A∈ModThK = φ , isEpi
+ module lower-universe-version {𝑨 : SetoidAlgebra α ρᵃ} where
+  open FreeHom α {α}{ρᵃ}{ℓ}{𝒦}
+  open FreeAlgebra {ι = ι}{I = ℐ} ℰ using ( 𝔽[_] )
+  open SetoidAlgebra 𝑨 using( Interp ) renaming (Domain to A)
+  open Setoid A using ( trans ; sym ; refl ) renaming ( Carrier to ∣A∣ )
+
+  𝔽-ModTh-epi : 𝑨 ∈ Mod (Th (V ℓ ι 𝒦)) → epi 𝔽[ ∣A∣ ] 𝑨
+  𝔽-ModTh-epi A∈ModThK = φ , isEpi
+    where
+    φ : (Domain 𝔽[ ∣A∣ ]) ⟶ A
+    _⟨$⟩_ φ = free-lift{𝑨 = 𝑨} id
+    cong φ {p} {q} pq =
+     trans (sym (free-lift-interp{𝑨 = 𝑨} id p))
+      (trans (A∈ModThK{p = p}{q} (kernel-in-theory pq) id)
+      (free-lift-interp{𝑨 = 𝑨} id q))
+
+    isEpi : IsEpi 𝔽[ ∣A∣ ] 𝑨 φ
+    compatible (isHom isEpi) = cong Interp (≡.refl , (λ _ → refl))
+    isSurjective isEpi {y} = eq (ℊ y) refl
+
+
+  𝔽-ModTh-epi-lift : 𝑨 ∈ Mod (Th (V ℓ ι 𝒦))
+   →                 epi 𝔽[ ∣A∣ ] (Lift-Alg 𝑨 (ov α) (ov α))
+  𝔽-ModTh-epi-lift A∈ModThK =
+   ∘-epi (𝔽-ModTh-epi (λ {p q} → A∈ModThK{p = p}{q})) ToLift-epi
+
+
+ module _ -- higher-universe-version
+          -- (HSP theorem needs 𝑨 in higher universe level)
+          {𝑨 : SetoidAlgebra (α ⊔ ρᵃ ⊔ ℓ) (α ⊔ ρᵃ ⊔ ℓ)} where
+
+  open FreeHom (α ⊔ ρᵃ ⊔ ℓ) {α}{ρᵃ}{ℓ}{𝒦}
+  open FreeAlgebra {ι = ι}{I = ℐ} ℰ using ( 𝔽[_] )
+
+  open SetoidAlgebra 𝑨 using( Interp ) renaming (Domain to A)
+  open Setoid A using ( trans ; sym ; refl ) renaming ( Carrier to ∣A∣ )
+
+  𝔽-ModTh-epi : 𝑨 ∈ Mod (Th (V ℓ ι 𝒦))
+   →            epi 𝔽[ ∣A∣ ] 𝑨
+  𝔽-ModTh-epi A∈ModThK = φ , isEpi
    where
-   open IsEpi
-   open IsHom
-
    φ : (Domain 𝔽[ ∣A∣ ]) ⟶ A
    _⟨$⟩_ φ = free-lift{𝑨 = 𝑨} id
    cong φ {p} {q} pq = trans (sym (free-lift-interp{𝑨 = 𝑨} id p))
@@ -174,10 +202,9 @@ module _ {α : Level}(𝑨 : SetoidAlgebra α α)(𝒦 : Pred (SetoidAlgebra α 
    compatible (isHom isEpi) = cong Interp (≡.refl , (λ _ → refl))
    isSurjective isEpi {y} = eq (ℊ y) refl
 
-
- 𝔽-ModTh-epi-lift : (𝑨 ∈ ModPred{X = ∣A∣}(ThPred{X = ∣A∣} (V 𝒦)))
-  →                 epi 𝔽[ ∣A∣ ] (Lift-Alg 𝑨 (ov α) (ov α))
- 𝔽-ModTh-epi-lift A∈ModThK = ∘-epi (𝔽-ModTh-epi (λ {p q} → A∈ModThK{p = p}{q})) ToLift-epi
+  𝔽-ModTh-epi-lift : 𝑨 ∈ Mod (Th (V ℓ ι 𝒦)) → epi 𝔽[ ∣A∣ ] (Lift-Alg 𝑨 ι ι)
+  𝔽-ModTh-epi-lift A∈ModThK =
+   ∘-epi (𝔽-ModTh-epi (λ {p q} → A∈ModThK{p = p}{q})) ToLift-epi
 
 \end{code}
 

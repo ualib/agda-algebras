@@ -24,17 +24,7 @@ open import Function.Bundles using ( Func ; Surjection )
 open import Function         using ( IsSurjection )
 open import Relation.Binary using ( Setoid )
 
-
--- (f : A → B) : Set (a ⊔ b ⊔ ℓ₁ ⊔ ℓ₂) where
---   field
---     isCongruent : IsCongruent f
---     surjective  : Surjective _≈₁_ _≈₂_ f
-
---   open IsCongruent isCongruent public
-
-
 open import Function.Construct.Composition using () renaming ( isSurjection to isOnto )
--- open import Function.Surjection using () renaming ( _∘_ to _⟨∘⟩_ )
 
 import Function.Definitions as FD
 
@@ -88,13 +78,6 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
   IsSurjection.isCongruent gE = record { cong = cong g ; isEquivalence₁ = isEqA ; isEquivalence₂ = isEqB }
   IsSurjection.surjective gE y = ∣ (surjective s) y ∣ , ∥ (surjective s) y ∥
 
- -- g , gE
- --  where
- --  g : 𝑨 ⟶ 𝑩
- --  g = (record { f = _⟨$⟩_ s ; cong = cong s })
- --  gE : IsSurjective g
- --  gE {y} = eq ∣ (surjective s) y ∣ (sym ∥ (surjective s) y ∥)
-
 \end{code}
 
 With the next definition, we can represent a *right-inverse* of a surjective function.
@@ -125,7 +108,6 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ}{𝑪 : Setoid γ ρᶜ
  open Setoid 𝑨 using () renaming (Carrier to A; _≈_ to _≈₁_)
  open Setoid 𝑩 using ( trans ; sym ) renaming (Carrier to B; _≈_ to _≈₂_)
  open Setoid 𝑪 using () renaming (Carrier to C; _≈_ to _≈₃_)
- -- open Func {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝑨}{To = 𝑩} renaming (f to _⟨$⟩_ )
  open Func renaming (f to _⟨$⟩_ )
  open FD _≈₁_ _≈₂_
 
