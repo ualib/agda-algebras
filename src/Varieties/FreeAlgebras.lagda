@@ -407,6 +407,7 @@ With this result in hand, along with what we proved earlier---namely, `PS(𝒦) 
 \end{code}
 
 #### The HSP Theorem
+
 Now that we have all of the necessary ingredients, it is all but trivial to
 combine them to prove Birkhoff's HSP theorem. (Note that since the proof enlists
 the help of the `𝔽-ModTh-epi` theorem, we must assume an environment exists,

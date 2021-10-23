@@ -262,26 +262,30 @@ open import Varieties.Func.EquationalLogic  using ( _⊧_≈_ ; _⊫_≈_ ; Th ;
 open import Varieties.Func.SoundAndComplete using ( Eq ; _⊨_ ; _⊧_ ; Mod ; _⊫_ ; _⊃_ ; _⊢_▹_≈_
                                                    ; module Soundness ; module FreeAlgebra )
 open Soundness   using ( sound )
-open FreeAlgebra using ( FreeDomain ; FreeInterp ; 𝔽[_] ; σ₀ ; identity ; evaluation ; satisfies
-                       ; completeness )
+open FreeAlgebra using ( FreeDomain ; FreeInterp ; 𝔽[_] ; σ₀ ; identity ; evaluation ; satisfies ; completeness )
 
-open import Varieties.Func.Closure         using ( Lift-class ; Lift-class' ; Lift-class-lemma
-                                                 ; Lift-class-lemma' ; H ; S ; P ; V ; P-Lift-closed
-                                                 ; is-variety ; variety ; S-mono ; P-mono ; H-expa
-                                                 ; S-expa ; P-expa ; V-expa ; subalgebra→S
-                                                 ; S→subalgebra )
+open import Varieties.Func.Closure         using ( Level-closure ; Lift-closed ; H ; S ; P ; SP
+                                                 ; V ; is-variety ; variety ; S-mono ; S-idem
+                                                 ; H-expa ; S-expa ; P-mono ; P-expa ; V-expa
+                                                 ; S-≅ ; V-≅ ; V-≅-lc ; classP ; classSP
+                                                 ; classHSP ; classS ; classK ; LevelClosure-S
+                                                 ; S-LevelClosure ; S-Lift-lemma ; P-Lift-closed )
 
 open import Varieties.Func.Properties      using ( ⊧-I-invar ; ⊧-Lift-invar ; ⊧-lower-invar
                                                  ; ⊧-S-invar ; ⊧-S-class-invar ; ⊧-P-invar
                                                  ; ⊧-P-class-invar ; ⊧-P-lift-invar ; ⊧-H-invar )
 
-open import Varieties.Func.Preservation    using ( S⊆SP ; PS⊆SP ; P⊆SP ; P⊆HSP ; P⊆V ; SP⊆V
+open import Varieties.Func.Preservation    using ( S⊆SP ; P⊆SP ; P⊆HSP ; P⊆V ; SP⊆V ; PS⊆SP
                                                  ; H-id1 ; H-id2 ; S-id1 ; S-id2 ; P-id1 ; P-id2
-                                                 ; V-id1 ; V-id2 ; classIds-⊆-VIds ; VIds-⊆-classIds )
+                                                 ; V-id1 ; V-id2 ; Lift-id1 ; classIds-⊆-VIds
+                                                 ; VIds-⊆-classIds )
 
--- open import Varieties.Func.FreeAlgebras    using ( 𝕏 ; ℐ ; ℰ ; hsurj ; ℭ ; Pℭ ; SPℭ ; homℭ ; epi𝔽
---                                                  ; hom𝔽 ; hom𝔽-is-epic ; 𝔽 ; 𝔽≤ℭ ; ℓℭ ; Pℓℭ ; ℓ𝔽
---                                                  ; ℓ𝔽≤ℓℭ ; ℓ𝔽≤ℭ ; ℓ𝔽∈SP ; ℓ𝔽∈V )
+open import Varieties.Func.FreeAlgebras    using ( module FreeHom ; 𝔽-ModTh-epi ; 𝔽-ModTh-epi-lift )
+open FreeHom using (ℐ ; ℰ ; ℰ⊢[_]▹Th𝒦 ; epi𝔽[_] ; hom𝔽[_] ; hom𝔽[_]-is-epic ; class-models-kernel ; kernel-in-theory ; 𝒦⊫→ℰ⊢ )
+
+open import Varieties.Func.HSP             using ( ℑ⁺ ; 𝔄⁺ ; ℭ ; skEqual ; AllEqual⊆ker𝔽 ; homℭ
+                                                 ; ker𝔽⊆kerℭ ; hom𝔽ℭ ; kerℭ⊆ker𝔽 ; mon𝔽ℭ ; 𝔽≤ℭ
+                                                 ; SP𝔽 ; Birkhoff ; Birkhoff-converse )
 
 -- GENERAL STRUCTURES ---------------------------------------------------------------------------------
 open import Structures.Basic             using ( signature ; structure ; _ʳ_ ; _ᵒ_ ; compatible

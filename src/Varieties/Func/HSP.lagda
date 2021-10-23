@@ -44,25 +44,30 @@ open import Varieties.Func.Closure          {𝑆 = 𝑆} using ( S ; V ; P ; S-
 open import Varieties.Func.Preservation     {𝑆 = 𝑆} using ( S-id2 ; PS⊆SP )
 open import Varieties.Func.FreeAlgebras     {𝑆 = 𝑆} using ( module FreeHom ; 𝔽-ModTh-epi-lift )
 
-open Func using ( cong ) renaming ( f to _⟨$⟩_ )
+open Func          using ( cong ) renaming ( f to _⟨$⟩_ )
+open Setoid        using ( Carrier )
 open SetoidAlgebra using ( Domain )
+open Environment   using ( Env )
 
 module _ {α ρᵃ ℓ : Level}
          (𝒦 : Pred(SetoidAlgebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ))
          {X : Type (α ⊔ ρᵃ ⊔ ℓ)} where
 
- private
-  a = α ⊔ ρᵃ
-  ι = ov(α ⊔ ρᵃ ⊔ ℓ)
+ private ι = ov(α ⊔ ρᵃ ⊔ ℓ)
 
- open FreeHom (a ⊔ ℓ) {α}{ρᵃ}{ℓ}{𝒦}
+ open FreeHom (α ⊔ ρᵃ ⊔ ℓ) {α}{ρᵃ}{ℓ}{𝒦}
  open FreeAlgebra {ι = ι}{I = ℐ} ℰ using ( 𝔽[_] )
 
--- We want to pair each `(𝑨 , p)` in `ℑ` with an environment `ρ : X → ∣ 𝑨 ∣` so that we can quantify
--- over all algebras *and* all assignments of values in the domain `∣ 𝑨 ∣` to variables in `X`.
+\end{code}
+
+We want to pair each `(𝑨 , p)` (where p : 𝑨 ∈ S 𝒦) with an environment
+`ρ : X → ∣ 𝑨 ∣` so that we can quantify over all algebras *and* all
+assignments of values in the domain `∣ 𝑨 ∣` to variables in `X`.
+
+\begin{code}
 
  ℑ⁺ : Type ι
- ℑ⁺ = Σ[ 𝑨 ∈ (SetoidAlgebra α ρᵃ) ] (𝑨 ∈ S{β = α}{ρᵃ}ℓ 𝒦) ∧ (Setoid.Carrier (Environment.Env 𝑨 X))
+ ℑ⁺ = Σ[ 𝑨 ∈ (SetoidAlgebra α ρᵃ) ] (𝑨 ∈ S ℓ 𝒦) ∧ (Carrier (Env 𝑨 X))
 
  𝔄⁺ : ℑ⁺ → SetoidAlgebra α ρᵃ
  𝔄⁺ i = ∣ i ∣
@@ -72,14 +77,14 @@ module _ {α ρᵃ ℓ : Level}
 
 \end{code}
 
-Next we define a useful type, `skEqual`, which we use to represent a term identity `p ≈ q`
-for any given `i = (𝑨 , sA , ρ)` (where `𝑨` is an algebra, `sA : 𝑨 ∈ S 𝒦` is a proof that
-`𝑨` belongs to `S 𝒦`, and `ρ` is a mapping from `X` to the domain of `𝑨`). Then we prove
-`AllEqual⊆ker𝔽` which asserts that if the identity `p ≈ q` holds in all `𝑨 ∈ S 𝒦` (for
-all environments), then `p ≈ q` holds in the relatively free algebra `𝔽[ X ]`; equivalently,
-the pair `(p , q)` belongs to the kernel of the natural homomorphism from `𝑻 X` onto `𝔽[ X ]`.
-We will use this fact below to prove that there is a monomorphism from `𝔽[ X ]` into `ℭ`,
-and thus `𝔽[ X ]` is a subalgebra of ℭ, so belongs to `S (P 𝒦)`.
+Next we define a useful type, `skEqual`, which we use to represent a term identity `p ≈ q` for any
+given `i = (𝑨 , sA , ρ)` (where `𝑨` is an algebra, `sA : 𝑨 ∈ S 𝒦` is a proof that `𝑨` belongs
+to `S 𝒦`, and `ρ` is a mapping from `X` to the domain of `𝑨`). Then we prove `AllEqual⊆ker𝔽` which
+asserts that if the identity `p ≈ q` holds in all `𝑨 ∈ S 𝒦` (for all environments), then `p ≈ q`
+holds in the relatively free algebra `𝔽[ X ]`; equivalently, the pair `(p , q)` belongs to the
+kernel of the natural homomorphism from `𝑻 X` onto `𝔽[ X ]`. We will use this fact below to prove
+that there is a monomorphism from `𝔽[ X ]` into `ℭ`, and thus `𝔽[ X ]` is a subalgebra of ℭ,
+so belongs to `S (P 𝒦)`.
 
 \begin{code}
 
@@ -100,13 +105,6 @@ and thus `𝔽[ X ]` is a subalgebra of ℭ, so belongs to `S (P 𝒦)`.
   Goal : p ≈F≈ q
   Goal = 𝒦⊫→ℰ⊢ (S-id2{ℓ = ℓ}{p = p}{q} S𝒦⊫pq)
 
-
---------------------------------------------------------------------------
-
- open SetoidAlgebra ℭ using ( Interp ) renaming (Domain to C)
- open Setoid C using ( trans ; sym ; refl ) renaming ( Carrier to ∣C∣ ; _≈_ to _≈C≈_ )
-
- open Environment ℭ using () renaming (⟦_⟧ to c⟦_⟧ ; Env to cEnv)
  homℭ : hom (𝑻 X) ℭ
  homℭ = ⨅-hom-co 𝔄⁺ h
   where
@@ -120,14 +118,14 @@ and thus `𝔽[ X ]` is a subalgebra of ℭ, so belongs to `S (P 𝒦)`.
  ker𝔽⊆kerℭ : fkerPred ∣ hom𝔽[ X ] ∣ ⊆ fkerPred ∣ homℭ ∣
  ker𝔽⊆kerℭ {p , q} pKq (𝑨 , sA , ρ) = Goal
   where
-  open Setoid (Domain 𝑨) using () renaming ( _≈_ to _≈ₐ_ ; trans to transₐ ; sym to symₐ )
-  open Environment 𝑨
-  fl : ∀ t → ⟦ t ⟧ ⟨$⟩ ρ ≈ₐ free-lift ρ t
+  open Setoid (Domain 𝑨) using ( _≈_ ; sym ; trans )
+  open Environment 𝑨 using ( ⟦_⟧ )
+  fl : ∀ t → ⟦ t ⟧ ⟨$⟩ ρ ≈ free-lift ρ t
   fl t = free-lift-interp {𝑨 = 𝑨} ρ t
-  subgoal : ⟦ p ⟧ ⟨$⟩ ρ ≈ₐ ⟦ q ⟧ ⟨$⟩ ρ
+  subgoal : ⟦ p ⟧ ⟨$⟩ ρ ≈ ⟦ q ⟧ ⟨$⟩ ρ
   subgoal = ker𝔽⊆Equal{𝑨 = 𝑨}{sA} pKq ρ
-  Goal : (free-lift{𝑨 = 𝑨} ρ p) ≈ₐ (free-lift{𝑨 = 𝑨} ρ q)
-  Goal = transₐ (symₐ (fl p)) (transₐ subgoal (fl q))
+  Goal : (free-lift{𝑨 = 𝑨} ρ p) ≈ (free-lift{𝑨 = 𝑨} ρ q)
+  Goal = trans (sym (fl p)) (trans subgoal (fl q))
 
 
  hom𝔽ℭ : hom 𝔽[ X ] ℭ
@@ -141,11 +139,11 @@ and thus `𝔽[ X ]` is a subalgebra of ℭ, so belongs to `S (P 𝒦)`.
   pqEqual : ∀ i → skEqual i {p}{q}
   pqEqual i = goal
    where
-   open Environment (𝔄⁺ i) using () renaming ( ⟦_⟧ to ⟦_⟧i )
-   open Setoid (Domain (𝔄⁺ i)) using () renaming ( trans to transi ; sym to symi ; _≈_ to _≈ᵢ_ )
-   goal : ⟦ p ⟧i ⟨$⟩ snd ∥ i ∥ ≈ᵢ ⟦ q ⟧i ⟨$⟩ snd ∥ i ∥
-   goal = transi (free-lift-interp{𝑨 = ∣ i ∣}(snd ∥ i ∥) p)
-                  (transi (pKq i)(symi (free-lift-interp{𝑨 = ∣ i ∣} (snd ∥ i ∥) q)))
+   open Environment (𝔄⁺ i) using () renaming ( ⟦_⟧ to ⟦_⟧ᵢ )
+   open Setoid (Domain (𝔄⁺ i)) using ( _≈_ ; sym ; trans )
+   goal : ⟦ p ⟧ᵢ ⟨$⟩ snd ∥ i ∥ ≈ ⟦ q ⟧ᵢ ⟨$⟩ snd ∥ i ∥
+   goal = trans (free-lift-interp{𝑨 = ∣ i ∣}(snd ∥ i ∥) p)
+                 (trans (pKq i)(sym (free-lift-interp{𝑨 = ∣ i ∣} (snd ∥ i ∥) q)))
   E⊢pq : ℰ ⊢ X ▹ p ≈ q
   E⊢pq = AllEqual⊆ker𝔽 pqEqual
 
@@ -173,7 +171,7 @@ that `𝔽[ X ]` is a subalgebra of the *lift* of `ℭ`, denoted `ℓℭ`.
  SP𝔽 : 𝔽[ X ] ∈ S ι (P ℓ ι 𝒦)
  SP𝔽 = S-idem SSP𝔽
   where
-  PSℭ : ℭ ∈ P (a ⊔ ℓ) ι (S ℓ 𝒦)
+  PSℭ : ℭ ∈ P (α ⊔ ρᵃ ⊔ ℓ) ι (S ℓ 𝒦)
   PSℭ = ℑ⁺ , (𝔄⁺ , ((λ i → fst ∥ i ∥) , ≅-refl))
 
   SPℭ : ℭ ∈ S ι (P ℓ ι 𝒦)
@@ -182,44 +180,75 @@ that `𝔽[ X ]` is a subalgebra of the *lift* of `ℭ`, denoted `ℓℭ`.
   SSP𝔽 : 𝔽[ X ] ∈ S ι (S ι (P ℓ ι 𝒦))
   SSP𝔽 = ℭ , (SPℭ , 𝔽≤ℭ)
 
+\end{code}
+
+#### <a id="proof-of-the-hsp-theorem">Proof of the HSP theorem</a>
+
+Finally, we are in a position to prove Birkhoff's celebrated variety theorem.
+
+\begin{code}
 
 module _ {α ρᵃ ℓ : Level}
-         {𝒦 : Pred(SetoidAlgebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)}
-         {𝑨 : SetoidAlgebra (α ⊔ ρᵃ ⊔ ℓ) (α ⊔ ρᵃ ⊔ ℓ)} where
-
+         {𝒦 : Pred(SetoidAlgebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
  private
   ι = ov(α ⊔ ρᵃ ⊔ ℓ)
 
  open FreeHom (α ⊔ ρᵃ ⊔ ℓ) {α}{ρᵃ}{ℓ}{𝒦}
  open FreeAlgebra {ι = ι}{I = ℐ} ℰ using ( 𝔽[_] )
- open Setoid (Domain 𝑨) using ( trans ; sym ; refl ) renaming ( Carrier to ∣A∣ )
 
-
- Birkhoff-lemma : 𝑨 ∈ Mod (Th (V ℓ ι 𝒦))
-  →               Lift-Alg 𝑨 ι ι ∈ V ℓ ι 𝒦
-
- Birkhoff-lemma A∈ModThK = 𝔽[ ∣A∣ ] , goal1 , goal2
+ Birkhoff : ∀ 𝑨 → 𝑨 ∈ Mod (Th (V ℓ ι 𝒦)) → 𝑨 ∈ V ℓ ι 𝒦
+ Birkhoff 𝑨 ModThA = V-≅-lc{α}{ρᵃ}{ℓ} 𝒦 𝑨 VlA
   where
-  goal1 : 𝔽[ ∣A∣ ] ∈ S{ι} ι (P ℓ ι 𝒦)
-  goal1 = SP𝔽{ℓ = ℓ} 𝒦
+  open Setoid (Domain 𝑨) using () renaming ( Carrier to ∣A∣ )
+  sp𝔽A : 𝔽[ ∣A∣ ] ∈ S{ι} ι (P ℓ ι 𝒦)
+  sp𝔽A = SP𝔽{ℓ = ℓ} 𝒦
 
-  η : epi 𝔽[ ∣A∣ ] (Lift-Alg 𝑨 ι ι)
-  η = 𝔽-ModTh-epi-lift{ℓ = ℓ} (λ {p q} → A∈ModThK{p = p}{q})
+  epi𝔽lA : epi 𝔽[ ∣A∣ ] (Lift-Alg 𝑨 ι ι)
+  epi𝔽lA = 𝔽-ModTh-epi-lift{ℓ = ℓ} (λ {p q} → ModThA{p = p}{q})
 
-  goal2 : Lift-Alg 𝑨 ι ι IsHomImageOf 𝔽[ ∣A∣ ]
-  goal2 = epi→ontohom 𝔽[ ∣A∣ ] (Lift-Alg 𝑨 ι ι) η
+  lAimg𝔽A : Lift-Alg 𝑨 ι ι IsHomImageOf 𝔽[ ∣A∣ ]
+  lAimg𝔽A = epi→ontohom 𝔽[ ∣A∣ ] (Lift-Alg 𝑨 ι ι) epi𝔽lA
 
-
- Birkhoff : 𝑨 ∈ Mod (Th (V ℓ ι 𝒦))
-  →         𝑨 ∈ V ℓ ι 𝒦
-
- Birkhoff A∈ModThK = V-≅-lc{α}{ρᵃ}{ℓ} 𝒦 𝑨 subgoal
-  where
-  subgoal : Lift-Alg 𝑨 ι ι ∈ V ℓ ι 𝒦
-  subgoal = Birkhoff-lemma (λ {p q} → A∈ModThK{p = p}{q})
-
+  VlA : Lift-Alg 𝑨 ι ι ∈ V ℓ ι 𝒦
+  VlA = 𝔽[ ∣A∣ ] , sp𝔽A , lAimg𝔽A
 
 \end{code}
+
+The converse inclusion, `V 𝒦 ⊆ Mod (Th (V 𝒦))`, is a simple consequence of the
+fact that `Mod Th` is a closure operator. Nonetheless, completeness demands
+that we formalize this inclusion as well, however trivial the proof.
+
+\begin{code}
+
+ module _ {𝑨 : SetoidAlgebra α ρᵃ} where
+  open Setoid (Domain 𝑨) using () renaming ( Carrier to ∣A∣ )
+
+  Birkhoff-converse : 𝑨 ∈ V{α}{ρᵃ}{α}{ρᵃ}{α}{ρᵃ} ℓ ι 𝒦 → 𝑨 ∈ Mod{X = ∣A∣} (Th (V ℓ ι 𝒦))
+  Birkhoff-converse vA pThq = pThq 𝑨 vA
+
+\end{code}
+
+We have thus proved that every variety is an equational class.
+
+Readers familiar with the classical formulation of the Birkhoff HSP theorem as an
+"if and only if" assertion might worry that the proof is still incomplete. However,
+recall that in the [Varieties.Func.Preservation][] module we proved the following
+identity preservation lemma:
+
+`V-id1 : 𝒦 ⊫ p ≈̇ q → V 𝒦 ⊫ p ≈̇ q`
+
+Thus, if `𝒦` is an equational class---that is, if 𝒦 is the class of algebras
+satisfying all identities in some set---then `V 𝒦` ⊆ 𝒦`.  On the other hand, we
+proved that `V` is expansive in the [Varieties.Func.Closure][] module:
+
+`V-expa : 𝒦 ⊆ V 𝒦`
+
+so `𝒦` (= `V 𝒦` = `HSP 𝒦`) is a variety.
+
+Taken together, `V-id1` and `V-expa` constitute formal proof that every equational
+class is a variety.
+
+This completes the formal proof of Birkhoff's variety theorem.
 
 --------------------------------
 
