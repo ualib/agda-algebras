@@ -76,8 +76,8 @@ module _ {𝑨 : SetoidAlgebra α ρ}(h : X → 𝕌[ 𝑨 ]) where
  cong free-lift-func = flcong
   where
   flcong : ∀ {s t} → s ≐ t →  free-lift s ≈ free-lift t
-  flcong (_≐_.refl x) = reflexive (≡.cong h x)
-  flcong (_≐_.genl x) = cong Interp (≡.refl , (λ i → flcong (x i)))
+  flcong (_≐_.rfl x) = reflexive (≡.cong h x)
+  flcong (_≐_.gnl x) = cong Interp (≡.refl , (λ i → flcong (x i)))
 
 \end{code}
 

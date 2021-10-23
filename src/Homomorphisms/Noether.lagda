@@ -37,7 +37,7 @@ open import Equality.Truncation           using ( is-set ; blk-uip ; is-embeddin
 open import Equality.Extensionality       using ( pred-ext ; block-ext|uip )
 open import Algebras.Basic                using ( Algebra ; _̂_)
 open import Algebras.Congruences  {𝑆 = 𝑆} using ( Con ; IsCongruence )
-open import Homomorphisms.Basic   {𝑆 = 𝑆} using ( hom ; is-homomorphism ; epi ; epi-to-hom )
+open import Homomorphisms.Basic   {𝑆 = 𝑆} using ( hom ; is-homomorphism ; epi ; epi→hom )
 open import Homomorphisms.Kernels {𝑆 = 𝑆} using ( kercon ; ker[_⇒_]_↾_ ; πker )
 private variable α β γ : Level
 
@@ -173,7 +173,7 @@ The proof of `NoetherHomUnique` goes through for the special case of epimorphism
   →                 ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker fe{𝑩}h ∣
   →                 ∀ a → ∣ f ∣ a ≡ ∣ g ∣ a
 
- FirstIsoUnique f g hfk hgk = FirstHomUnique (epi-to-hom 𝑩 f) (epi-to-hom 𝑩 g) hfk hgk
+ FirstIsoUnique f g hfk hgk = FirstHomUnique (epi→hom 𝑩 f) (epi→hom 𝑩 g) hfk hgk
 
 \end{code}
 

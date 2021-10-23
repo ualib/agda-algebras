@@ -27,7 +27,7 @@ open import Relation.Unary   using ( Pred ; _∈_ )
 open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ )
 open import Overture.Func.Injective            using ( IsInjective )
 open import Algebras.Func.Basic        {𝑆 = 𝑆} using ( SetoidAlgebra ; ov )
-open import Homomorphisms.Func.Basic   {𝑆 = 𝑆} using ( hom )
+open import Homomorphisms.Func.Basic   {𝑆 = 𝑆} using ( hom ; mon ; mon→intohom )
 open import Homomorphisms.Func.Kernels {𝑆 = 𝑆} using ( kerquo )
 open import Homomorphisms.Func.Noether {𝑆 = 𝑆} using ( FirstHomTheorem )
 private variable
@@ -45,6 +45,8 @@ _≤_  -- (alias for subalgebra relation))
 𝑨 ≥ 𝑩 = 𝑨 IsSupalgebraOf 𝑩
 𝑨 ≤ 𝑩 = 𝑨 IsSubalgebraOf 𝑩
 
+mon→≤ : {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ} → mon 𝑨 𝑩 → 𝑨 ≤ 𝑩
+mon→≤ {𝑨 = 𝑨}{𝑩} x = mon→intohom 𝑨 𝑩 x
 
 record SubalgebraOf : Type (ov (α ⊔ β ⊔ ρᵃ ⊔ ρᵇ)) where
  field

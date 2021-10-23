@@ -16,65 +16,59 @@ open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 module Varieties.Func.FreeAlgebras {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ------------------------------------------------
-open import Agda.Primitive   using ( _⊔_ ; lsuc ) renaming ( Set to Type ; lzero to ℓ₀ )
-open import Data.Product     using ( _,_ ; Σ-syntax ) renaming ( proj₂ to snd )
+open import Agda.Primitive   using () renaming ( Set to Type )
+open import Data.Product     using ( Σ-syntax ; _,_ ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Function         using ( _∘_ ; id )
 open import Function.Bundles using ( Func )
 open import Level
-open import Relation.Binary  using ( Setoid ; Decidable )
-open import Relation.Unary   using ( Pred ; _⊆_ ; _∈_ )
+open import Relation.Binary  using ( Setoid )
+open import Relation.Unary   using ( Pred ; _∈_ ; _⊆_ )
 open import Relation.Binary.PropositionalEquality as ≡ using (_≡_)
 
--- Imports from the Agda Universal Algebra Library ---------------------------------------------------
+-- -- Imports from the Agda Universal Algebra Library ---------------------------------------------------
 open import Overture.Preliminaries                  using ( ∣_∣ ; ∥_∥ )
 open import Overture.Func.Preliminaries             using ( _⟶_ )
-open import Overture.Inverses                       using () renaming ( Image_∋_ to img_∋_ )
-open import Overture.Func.Inverses                  using ( Image_∋_ ) -- ; eq )
-open import Overture.Surjective                     using ( proj ; projIsOnto ) renaming ( IsSurjective to onto )
-open import Overture.Func.Surjective                using ( IsSurjective ; isSurj )
+open import Overture.Func.Inverses                  using ( eq )
+open import Overture.Func.Surjective                using ( IsSurjective )
 open import Relations.Func.Discrete                 using ( fkerPred )
-open import Algebras.Func.Basic             {𝑆 = 𝑆} using ( SetoidAlgebra ; ov ; 𝕌[_] ; Lift-Alg )
-open import Algebras.Func.Products          {𝑆 = 𝑆} using ( 𝔄 ; ℑ ; ⨅ )
-open import Homomorphisms.Func.Basic        {𝑆 = 𝑆} using ( hom ; epi ; IsEpi ; IsHom ; epi-to-hom )
-open import Homomorphisms.Func.Products     {𝑆 = 𝑆} using ( ⨅-hom-co )
-open import Homomorphisms.Func.Kernels      {𝑆 = 𝑆} using ( kerquo )
-open import Homomorphisms.Func.Isomorphisms {𝑆 = 𝑆} using ( ⨅≅ ; ⨅≅⨅ℓ ; ≅-sym ; Lift-≅ ; ≅-refl ; ≅-trans)
-open import Subalgebras.Func.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; FirstHomCorollary )
-open import Subalgebras.Func.Properties     {𝑆 = 𝑆} using ( Lift-≤-Lift ; ≤-reflexive ; ≤-trans-≅ )
-open import Terms.Basic                     {𝑆 = 𝑆} using ( Term )
-open import Terms.Func.Basic                {𝑆 = 𝑆} using ( 𝑻 ; _≐_ ; module Environment)
-open import Terms.Func.Properties           {𝑆 = 𝑆} using ( lift-hom ; lift-of-epi-is-epi)
-open import Varieties.Func.EquationalLogic  {𝑆 = 𝑆} using ( _⊫_≈_ )
-open import Varieties.Func.SoundAndComplete {𝑆 = 𝑆} using ( module FreeAlgebra ; Eq ; Mod ; Th ; ThPred )
-open import Varieties.Func.Closure          {𝑆 = 𝑆} using ( S ; P ; V ; Lift-class ; Lift-class-lemma )
-open import Varieties.Func.Preservation     {𝑆 = 𝑆} using ( classIds-⊆-VIds ; SP⊆V )
-module _ {α : Level} {𝒦 : Pred (SetoidAlgebra α α) (ov α)}
-         {𝔄I : ∀ i → 𝕌[ 𝔄{𝒦 = 𝒦} i ] }  -- assume all algebras in 𝒦 are nonempty
-         {_≟_ : Decidable{A = ℑ{𝒦 = 𝒦}} _≡_}
-         where
+open import Algebras.Func.Basic             {𝑆 = 𝑆} using ( SetoidAlgebra ; ov ; Lift-Alg )
+open import Homomorphisms.Func.Basic        {𝑆 = 𝑆} using ( epi ; IsEpi ; IsHom ; hom ; epi→hom )
+open import Homomorphisms.Func.Properties   {𝑆 = 𝑆} using ( ∘-epi ; ToLift-epi )
+open import Terms.Basic                     {𝑆 = 𝑆} using ( Term ; ℊ )
+open import Terms.Func.Basic                {𝑆 = 𝑆} using ( 𝑻 ; _≐_ ; module Environment )
+open import Terms.Func.Properties           {𝑆 = 𝑆} using ( free-lift )
+open import Terms.Func.Operations           {𝑆 = 𝑆} using ( free-lift-interp )
+open import Varieties.Func.SoundAndComplete {𝑆 = 𝑆} using ( Eq ; _⊫_ ; _≈̇_ ; _⊢_▹_≈_
+                                                          ; module Soundness
+                                                          ; module FreeAlgebra
+                                                          ; ThPred ; ModPred )
+open import Varieties.Func.Closure          {𝑆 = 𝑆} using ( V ; S )
+open import Varieties.Func.Preservation  {𝑆 = 𝑆} using ( classIds-⊆-VIds ; S-id1 ; S-id2 )
 
+open Func using ( cong ) renaming ( f to _⟨$⟩_ )
+open SetoidAlgebra using ( Domain )
+
+
+private variable
+ χ : Level
+\end{code}
+
+In the code below, `X` will play the role of an arbitrary collection of variables; it would suffice to take `X` to be the cardinality of the largest algebra in 𝒦, but since we don't know that cardinality, we leave `X` aribtrary for now.
+
+Alternatively, we could let `X` be the product of all algebras in the class `𝒦`, like so.
+
+`𝕏 : Type oα`  
+`𝕏 = Carrier ( Domain (⨅ (𝔄{𝒦 = S 𝒦})) )`
+
+\begin{code}
+
+module FreeHom (χ : Level){α : Level}(𝒦 : Pred (SetoidAlgebra α α) (ov α)) where
  private
   oα = ov α
+  oαχ = ov (α ⊔ χ)
   ooα = ov oα
 
-
- -- X is the "arbitrary" collection of variables; it suffices to take X to be the
- -- cardinality of the largest algebra in 𝒦, but since we don't have the luxury of
- -- knowing that cardinality, we simply let X be the product of all algebras in 𝒦.
- open SetoidAlgebra using (Domain)
- open Setoid using (Carrier)
- open img_∋_
  open Eq
-
- 𝕏 : Type oα
- 𝕏 = Carrier ( Domain (⨅ (𝔄{𝒦 = 𝒦})) )
- -- ℐ indexes the collection of equations modeled by 𝒦
- ℐ : Type ooα
- ℐ = Σ[ eq ∈ Eq{oα} ] 𝒦 ⊫ (lhs eq) ≈ (rhs eq)
- ℰ : ℐ → Eq
- ℰ (eqv , p) = eqv
-
- hsurj : {𝑨 : SetoidAlgebra α α} → 𝑨 ∈ 𝒦 → Σ[ h ∈ (𝕏 → 𝕌[ 𝑨 ]) ] onto h
- hsurj {𝑨 = 𝑨} KA = proj _≟_ 𝔄I (𝑨 , KA) , projIsOnto _≟_ 𝔄I
 
 \end{code}
 
@@ -82,284 +76,115 @@ We now define the algebra `𝔽`, which plays the role of the relatively free al
 The relatively free algebra (relative to `Th 𝒦`) is called `M` and is derived from `TermSetoid 𝕏` and `TermInterp 𝕏` and imported from the EquationalLogic module.
 
 \begin{code}
- open _≐_
- open FreeAlgebra {X = 𝕏}{ι = ooα}{I = ℐ} ℰ
 
- open SetoidAlgebra 𝔽[ 𝕏 ] using ( Interp ) renaming ( Domain to FF )
- open Setoid FF using ( _≈_ ; reflexive ) renaming ( refl to reflF ; Carrier to F )
- -- open Environment 𝔽[ 𝕏 ]
- -- open Setoid (Env 𝕏) using () renaming ( Carrier to 𝕏→F )
- -- open Environment (𝑻 𝕏)
- -- open Setoid (Env 𝕏) using () renaming ( Carrier to 𝕏⇒T )
- open Setoid using (Carrier)
- open SetoidAlgebra (𝑻 𝕏) using () renaming (Domain to 𝕋)
- open Setoid 𝕋 using () renaming ( _≈_ to _≃_ ; refl to reflT )
- open Func using ( cong ) renaming ( f to _⟨$⟩_ )
- open Term
+ -- ℐ indexes the collection of equations modeled by 𝒦
+ ℐ : Type oαχ
+ ℐ = Σ[ eq ∈ Eq{χ} ] 𝒦 ⊫ ((lhs eq) ≈̇ (rhs eq))
 
-\end{code}
+ ℰ : ℐ → Eq
+ ℰ (eqv , p) = eqv
 
-We begin by constructing `ℭ`, using the techniques described in the section on <a href="https://ualib.gitlab.io/Varieties.Varieties.html#products-of-classes">products of classes</a>.
+ ℰ⊢[_]▹Th𝒦 : (X : Type χ) → ∀{p q} → ℰ ⊢ X ▹ p ≈ q → 𝒦 ⊫ (p ≈̇ q)
+ ℰ⊢[ X ]▹Th𝒦 x 𝑨 kA = sound (λ i ρ → ∥ i ∥ 𝑨 kA ρ) x
+  where open Soundness ℰ 𝑨
 
-\begin{code}
-
-  -- ℭ is the product of all subalgebras of algebras in 𝒦.
- ℭ : SetoidAlgebra oα oα
- ℭ = ⨅ (𝔄{α = α}{ρ = α}{𝒦 = 𝒦})
-
- Pℭ : ℭ ∈ P (Lift-class 𝒦)
- Pℭ = ℑ , ((λ x → Lift-Alg ∣ x ∣ oα oα) , (λ i → Lift-class-lemma ∥ i ∥) , ⨅≅ (λ i → Lift-≅))
-
- SPℭ : ℭ ∈ S (P (Lift-class 𝒦))
- SPℭ = ℭ , (Pℭ , ≤-reflexive)
+ ----------- THE RELATIVELY FREE ALGEBRA -----------
+ open FreeAlgebra {ι = oαχ}{I = ℐ} ℰ using ( 𝔽[_] )
 
 \end{code}
 
-Observe that the inhabitants of `ℭ` are maps from `ℑ` to `{𝔄 i : i ∈ ℑ}`.  A homomorphism from `𝑻 𝕏` to `ℭ` is obtained as follows.
+Next we define an epimorphism from `𝑻 X` onto the relatively free algebra `𝔽[ X ]`.  Of course, the kernel of this epimorphism will be the congruence of `𝑻 X` defined by identities modeled by (`S 𝒦`, hence) `𝒦`.
 
 \begin{code}
- homℭ : hom (𝑻 𝕏) ℭ
- homℭ = ⨅-hom-co 𝔄 h
+
+ epi𝔽[_] : (X : Type χ) → epi (𝑻 X) 𝔽[ X ]
+ epi𝔽[ X ] = h , hepi
   where
-  h : ∀ i → hom (𝑻 𝕏) (𝔄 i)
-  h i = lift-hom ∣ hsurj ∥ i ∥ ∣
+  open SetoidAlgebra 𝔽[ X ] using () renaming ( Domain to F ; Interp to InterpF )
+  open Setoid F using () renaming ( _≈_  to _≈F≈_ ; refl to reflF )
 
- epi𝔽 : epi (𝑻 𝕏) 𝔽[ 𝕏 ]
- epi𝔽 = h , hepi
-  where
-  c : ∀ {x y} → x ≃ y → x ≈ y
-  c (_≐_.refl {x} {y} ≡.refl) = reflF
-  c (genl {f}{s}{t} x) = cong Interp (≡.refl , (λ i → c (x i)))
-
-  h : 𝕋 ⟶ FF
-  h ⟨$⟩ t = t
-  cong h = c
-
-  open IsEpi
-  open IsHom
-  hepi : IsEpi (𝑻 𝕏) 𝔽[ 𝕏 ] h
-  compatible (isHom hepi) {f}{a} = cong Interp (≡.refl , (λ i → reflF))
-  isSurjective hepi {y} = Image_∋_.eq y reflF
+  open SetoidAlgebra (𝑻 X) using () renaming (Domain to TX)
+  open Setoid TX using () renaming ( _≈_ to _≈T≈_ ; refl to reflT )
 
 
- hom𝔽 : hom (𝑻 𝕏) 𝔽[ 𝕏 ]
- hom𝔽 = epi-to-hom (𝑻 𝕏) 𝔽[ 𝕏 ] epi𝔽
+  open _≐_ ; open IsEpi ; open IsHom
 
- hom𝔽-is-epic : IsSurjective ∣ hom𝔽 ∣
- hom𝔽-is-epic = IsEpi.isSurjective (snd (epi𝔽))
+  c : ∀ {x y} → x ≈T≈ y → x ≈F≈ y
+  c (rfl {x}{y} ≡.refl) = reflF
+  c (gnl {f}{s}{t} x) = cong InterpF (≡.refl , c ∘ x)
 
- -- class-models-kernel : ∀{p q} → (p , q) ∈ fkerPred ∣ hom𝔽 ∣ → 𝒦 ⊫ p ≈ q
- -- class-models-kernel {p = p} {q} pKq {𝑨} kA ρ = {!!}
- -- kernel-in-theory : fkerPred ∣ hom𝔽 ∣ ⊆ ThPred (V 𝒦)
- -- kernel-in-theory {p , q} pKq vkA x = classIds-⊆-VIds{p = p}{q}{𝒦 = 𝒦} (class-models-kernel pKq) vkA x
+  h : TX ⟶ F
+  h = record { f = id ; cong = c }
 
-
- ------------------------------------------------------------------------------------------
- -- Alternative representation of the relatively free algebra is by the quotient
- -- with respect to the kernel of homℭ.
-
- 𝔽 : SetoidAlgebra ooα oα
- 𝔽 = kerquo homℭ
-
- 𝔽≤ℭ : 𝔽 ≤ ℭ
- 𝔽≤ℭ = FirstHomCorollary homℭ
-
- ℓℭ : SetoidAlgebra ooα ooα
- ℓℭ = Lift-Alg ℭ ooα ooα
-
- Pℓℭ : ℓℭ ∈ P (Lift-class 𝒦)
- Pℓℭ = Lift ooα ℑ , (λ x → Lift-Alg ∣ lower x ∣ ooα ooα) , (λ i → Lift-class-lemma ∥ lower i ∥)
-                                                          , ≅-trans (≅-sym Lift-≅) ⨅≅⨅ℓ
-
- ℓ𝔽 : SetoidAlgebra ooα ooα
- ℓ𝔽 = Lift-Alg 𝔽 ooα ooα
-
- ℓ𝔽≤ℓℭ : ℓ𝔽 ≤ ℓℭ
- ℓ𝔽≤ℓℭ = Lift-≤-Lift 𝔽≤ℭ
-
- ℓ𝔽≤ℭ : ℓ𝔽 ≤ ℭ
- ℓ𝔽≤ℭ = ≤-trans-≅ ℓ𝔽≤ℓℭ (≅-sym Lift-≅)
-
- ℓ𝔽∈SP : ℓ𝔽 ∈ S (P (Lift-class 𝒦))
- ℓ𝔽∈SP = Goal
-  where
-  Goal : ℓ𝔽 ∈ S (P (Lift-class 𝒦))
-  Goal = ℓℭ , (Pℓℭ , ℓ𝔽≤ℓℭ)
-
- ℓ𝔽∈V : ℓ𝔽 ∈ V (Lift-class 𝒦)
- ℓ𝔽∈V = SP⊆V{𝒦 = Lift-class 𝒦} ℓ𝔽∈SP
-
-\end{code}
-
-To be continued...
-
-(TODO: complete this module)
-
-\begin{code}
-
- -- module _ (𝑨 : SetoidAlgebra oα oα)(A∈ModThK : 𝑨 ∈ Mod (Th{X = 𝕏} (V 𝒦))) where
- --  open Environment 𝑨
- --  open Setoid (Env 𝕏) using () renaming ( Carrier to X→A )
- --  𝕏↠A : Σ[ h ∈ X→A ] isSurj{𝑨 = ≡.setoid 𝕏}{𝑩 = Domain 𝑨} h
- --  𝕏↠A = {!!} -- Goal
- --   where
- --   Goal : Σ[ h ∈ X→A ] isSurj{𝑨 = ≡.setoid 𝕏}{𝑩 = Domain 𝑨} h
- --   Goal = {!!} , {!!}
-
- --  𝔽-ModTh-epi : epi 𝔽 𝑨
- --  𝔽-ModTh-epi = goal
- --   where
- --   η : 𝕏 → 𝕌[ 𝑨 ]
- --   η = ∣ 𝕏↠A ∣
- --   φ : hom (𝑻 𝕏) 𝑨
- --   φ = lift-hom{𝑨 = 𝑨} η
- --   φE : IsSurjective ∣ φ ∣
- --   φE = lift-of-epi-is-epi η ∥ 𝕏↠A ∥
- --  -- pqlem2 : ∀ p q → (p , q) ∈ kernel ∣ hom𝔽 ∣ → 𝑨 ⊧ p ≈ q
- --  -- pqlem2 p q z = λ x → AinMTV p q (kernel-in-theory z) x
-
- --  -- kerincl : kernel ∣ hom𝔽 ∣ ⊆ kernel ∣ φ ∣
- --  -- kerincl {p , q} x = ∣ φ ∣ p      ≡⟨ (free-lift-interp (wd 𝓥 𝓕⁺) 𝑨 η p)⁻¹ ⟩
- --  --                     (𝑨 ⟦ p ⟧) η  ≡⟨ pqlem2 p q x η ⟩
- --  --                     (𝑨 ⟦ q ⟧) η  ≡⟨ free-lift-interp (wd 𝓥 𝓕⁺) 𝑨 η q ⟩
- --  --                     ∣ φ ∣ q      ∎
- --   goal : epi 𝔽 𝑨
- --   goal = {!!} -- ∣ HomFactorEpi 𝑨 φ hom𝔽 kerincl hom𝔽-is-epic φE)
+  hepi : IsEpi (𝑻 X) 𝔽[ X ] h
+  compatible (isHom hepi) = cong h reflT
+  isSurjective hepi {y} = eq y reflF
 
 
+ hom𝔽[_] : (X : Type χ) → hom (𝑻 X) 𝔽[ X ]
+ hom𝔽[ X ] = epi→hom (𝑻 X) 𝔽[ X ] epi𝔽[ X ]
+
+ hom𝔽[_]-is-epic : (X : Type χ) → IsSurjective ∣ hom𝔽[ X ] ∣
+ hom𝔽[ X ]-is-epic = IsEpi.isSurjective (snd (epi𝔽[ X ]))
+
+
+ class-models-kernel : ∀{X p q} → (p , q) ∈ fkerPred ∣ hom𝔽[ X ] ∣ → 𝒦 ⊫ (p ≈̇ q)
+ class-models-kernel {X = X}{p}{q} pKq = ℰ⊢[ X ]▹Th𝒦 pKq
+
+ kernel-in-theory : {X : Type χ} → fkerPred ∣ hom𝔽[ X ] ∣ ⊆ ThPred (V 𝒦)
+ kernel-in-theory {X = X} {p , q} pKq vkA x = classIds-⊆-VIds{p = p}{q}
+                                      (class-models-kernel pKq) vkA x
+
+
+ module _  {X : Type χ} {𝑨 : SetoidAlgebra α α}{sA : 𝑨 ∈ S 𝒦} where
+  open Environment 𝑨 using ( Equal )
+  ker𝔽⊆Equal : ∀{p q} → (p , q) ∈ fkerPred ∣ hom𝔽[ X ] ∣ → Equal p q
+  ker𝔽⊆Equal{p = p}{q} x = S-id1{p = p}{q} (ℰ⊢[ X ]▹Th𝒦 x) 𝑨 sA
+
+
+ 𝒦⊫→ℰ⊢ : {X : Type χ} → ∀{p q} → 𝒦 ⊫ (p ≈̇ q) → ℰ ⊢ X ▹ p ≈ q
+ 𝒦⊫→ℰ⊢ {p = p} {q} pKq = hyp ((p ≈̇ q) , pKq) where open _⊢_▹_≈_ using (hyp)
+
+
+------------------------------------------------------------------------------
+
+module _ {α : Level}(𝑨 : SetoidAlgebra α α)(𝒦 : Pred (SetoidAlgebra α α) (ov α)) where
+
+ private
+  oα = ov α
+
+ open FreeHom α 𝒦
+ open FreeAlgebra {ι = oα}{I = ℐ} ℰ using ( 𝔽[_] )
+ open SetoidAlgebra 𝑨 using( Interp ) renaming (Domain to A)
+ open Setoid A using ( trans ; sym ; refl ) renaming ( Carrier to ∣A∣ )
+
+ 𝔽-ModTh-epi : (𝑨 ∈ ModPred{X = ∣A∣} (ThPred{X = ∣A∣} (V 𝒦))) → epi 𝔽[ ∣A∣ ] 𝑨
+ 𝔽-ModTh-epi A∈ModThK = φ , isEpi
+   where
+   open IsEpi
+   open IsHom
+
+   φ : (Domain 𝔽[ ∣A∣ ]) ⟶ A
+   _⟨$⟩_ φ = free-lift{𝑨 = 𝑨} id
+   cong φ {p} {q} pq = trans (sym (free-lift-interp{𝑨 = 𝑨} id p))
+                      (trans (A∈ModThK{p = p}{q} (kernel-in-theory pq) id)
+                      (free-lift-interp{𝑨 = 𝑨} id q))
+
+   isEpi : IsEpi 𝔽[ ∣A∣ ] 𝑨 φ
+   compatible (isHom isEpi) = cong Interp (≡.refl , (λ _ → refl))
+   isSurjective isEpi {y} = eq (ℊ y) refl
+
+
+ 𝔽-ModTh-epi-lift : (𝑨 ∈ ModPred{X = ∣A∣}(ThPred{X = ∣A∣} (V 𝒦)))
+  →                 epi 𝔽[ ∣A∣ ] (Lift-Alg 𝑨 (ov α) (ov α))
+ 𝔽-ModTh-epi-lift A∈ModThK = ∘-epi (𝔽-ModTh-epi (λ {p q} → A∈ModThK{p = p}{q})) ToLift-epi
 
 \end{code}
-
-
-#### The HSP Theorem
-Now that we have all of the necessary ingredients, it is all but trivial to
-combine them to prove Birkhoff's HSP theorem. (Note that since the proof enlists
-the help of the `𝔽-ModTh-epi` theorem, we must assume an environment exists,
-which is manifested in the premise `∀ 𝑨 → X ↠ 𝑨`.
-
-\begin{code}
-
- -- Birkhoff : Mod{X = X}{𝒦 = 𝒦} (Th{α = oα} (V{α}{ℓ} 𝒦)) ⊆ V{α}{ℓ} 𝒦
- -- Birkhoff {𝑨} AMod = vhimg {!ℓ𝔽∈V!} {!!} -- vhimg{𝑩 = 𝑨} (𝔽∈𝕍 hfe) (𝑨 , epi-to-hom 𝑨 φE , snd ∥ φE ∥)
- --   where
- --   φE : epi 𝔽 𝑨
- --   φE = 𝔽-ModTh-epi 𝑨 AMod
-
-\end{code}
-
-The converse inclusion, `V 𝒦 ⊆ Mod X (Th (V 𝒦))`, is a simple consequence of the
-fact that `Mod Th` is a closure operator. Nonetheless, completeness demands
-that we formalize this inclusion as well, however trivial the proof.
-
-\begin{code}
-
- -- Birkhoff-converse : V{α}{𝓕} 𝒦 ⊆ Mod{X = X} (Th (V 𝒦))
- -- Birkhoff-converse α p q pThq = pThq α
-
-\end{code}
-
 
 --------------------------------
 
 <span style="float:left;">[← Varieties.Func.Closure](Varieties.Func.Closure.html)</span>
-<span style="float:right;">[Structures →](Structures.html)</span>
+<span style="float:right;">[Varieties.Func.HSP](Varieties.Func.HSP.html)</span>
 
 {% include UALib.Links.md %}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- 
-
-
-
- -- 𝔽∈SP : (Lift-Alg 𝔽[ X ] (ov (ov (α ⊔ ρ)))) ∈ (S{ov (α ⊔ ρ)}{ov (α ⊔ ρ)} (P{α}{ov (α ⊔ ρ)} 𝒦))
- -- 𝔽∈SP = {!!} -- ssub (class-prod-s-∈-sp hfe) 𝔽≤ℭ
-
- -- 𝕍𝒦 : Pred (SetoidAlgebra _ _) _
- -- 𝕍𝒦 = V 𝒦
- -- 𝔽-ModTh-epi : (𝑨 : SetoidAlgebra _ _) → 𝑨 ∈ Mod (Th 𝕍𝒦) → epi 𝔽 𝑨
- -- 𝔽-ModTh-epi 𝑨 AinMTV = ?
-\end{code}
-
-#### The HSP Theorem
-Now that we have all of the necessary ingredients, it is all but trivial to
-combine them to prove Birkhoff's HSP theorem. (Note that since the proof enlists
-the help of the `𝔽-ModTh-epi` theorem, we must assume an environment exists,
-which is manifested in the premise `∀ 𝑨 → X ↠ 𝑨`.
-
-begin{code}
-
- -- Birkhoff : Mod (Th (V 𝒦)) ⊆ V 𝒦
- -- Birkhoff {𝑨} AMod = vhimg {!!} {!!} -- vhimg{𝑩 = 𝑨} (𝔽∈𝕍 hfe) (𝑨 , epi-to-hom 𝑨 φE , snd ∥ φE ∥)
-   -- where
-   -- φE : epi 𝔽 𝑨
-   -- φE = 𝔽-ModTh-epi 𝑨 (𝕏 𝑨) α
-
-\end{code}
-
-The converse inclusion, `V 𝒦 ⊆ Mod X (Th (V 𝒦))`, is a simple consequence of the
-fact that `Mod Th` is a closure operator. Nonetheless, completeness demands
-that we formalize this inclusion as well, however trivial the proof.
-
-begin{code}
-
- -- Birkhoff-converse : V{α}{𝓕} 𝒦 ⊆ Mod{X = X} (Th (V 𝒦))
- -- Birkhoff-converse α p q pThq = pThq α
-
-\end{code}
-
-We have thus proved that every variety is an equational class.  Readers familiar
-with the classical formulation of the Birkhoff HSP theorem, as an "if and only
-if" result, might worry that we haven't completed the proof.  But recall that
-in the [Varieties.Preservation][] module we proved the following identity
-preservation lemmas:
-
-* `𝒦 ⊫ p ≈ q → H 𝒦 ⊫ p ≈ q`
-* `𝒦 ⊫ p ≈ q → S 𝒦 ⊫ p ≈ q`
-* `𝒦 ⊫ p ≈ q → P 𝒦 ⊫ p ≈ q`
-
-From these it follows that every equational class is a variety. Thus, our formal
-proof of Birkhoff's theorem is complete.
-
-
-
-
-
-
-
- -- recall, 𝔽[ X ] : SetoidAlgebra oα oα
- -- 𝔽∈SP : 𝔽[ X ] ∈ S{ooα}{ooα} (P{α}{ooα} 𝒦)
- -- 𝔽∈SP = ssub {!SPℭ!} {!!}
- 𝔽[X]∈SP : 𝔽[ X ] ∈ S (P 𝒦)
- 𝔽[X]∈SP = Goal -- ssub {!SPℭ!} {!!}
-  where
-  lC : SetoidAlgebra _ _
-  lC = Lift-Alg ℭ oα oα
-  SPlC : lC ∈ S (P 𝒦)
-  SPlC = sk→lsk SPℭ
-   -- A≤B×B≅C→A≤C : 𝑨 ≤ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤ 𝑪
-  C≤lC : ℭ ≤ lC
-  C≤lC = {!!}
-  𝔽≤lC : 𝔽[ X ] ≤ lC
-  𝔽≤lC = ≤-trans 𝔽[ X ]{𝑩 = ℭ} lC {!𝔽≤ℭ!} C≤lC -- A≤B×B≅C→A≤C {!𝔽≤ℭ!} {!!}
-  Goal : 𝔽[ X ] ∈ S (P 𝒦)
-  Goal = ssub {!SPℭ!} {!!}
-
- 𝔽[X]∈V : 𝔽[ X ] ∈ V 𝒦
- 𝔽[X]∈V = {!!}
-
-
-
-
--->

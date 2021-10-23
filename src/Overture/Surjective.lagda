@@ -111,7 +111,6 @@ module _ {A : Type α}{B : Type β} where
 
 \end{code}
 
-
 Later we will need the fact that the projection of an arbitrary product onto one (or any number) of its factors is surjective.
 
 \begin{code}

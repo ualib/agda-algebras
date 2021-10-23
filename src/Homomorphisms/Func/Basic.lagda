@@ -19,7 +19,7 @@ module Homomorphisms.Func.Basic {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ------------------------------
 open import Agda.Primitive    using ( _⊔_ ; Level ) renaming ( Set to Type )
-open import Data.Product      using ( _,_ ; Σ )
+open import Data.Product      using ( _,_ ; Σ ; Σ-syntax )
 open import Function.Bundles  using ( Func )
 open import Relation.Binary   using ( Setoid )
 
@@ -76,8 +76,8 @@ module _ (𝑨 : SetoidAlgebra α ρᵃ)(𝑩 : SetoidAlgebra β ρᵇ) where
  mon : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
  mon = Σ (A ⟶ B) IsMon
 
- mon-to-hom : mon → hom
- mon-to-hom h = ∣ h ∣ , IsMon.isHom ∥ h ∥
+ mon→hom : mon → hom
+ mon→hom h = IsMon.HomReduct ∥ h ∥
 
 
  record IsEpi (h : A ⟶ B) : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ) where
@@ -91,8 +91,18 @@ module _ (𝑨 : SetoidAlgebra α ρᵃ)(𝑩 : SetoidAlgebra β ρᵇ) where
  epi : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
  epi = Σ (A ⟶ B) IsEpi
 
- epi-to-hom : epi → hom
- epi-to-hom h = ∣ h ∣ , (IsEpi.isHom ∥ h ∥)
+ epi→hom : epi → hom
+ epi→hom h = IsEpi.HomReduct ∥ h ∥
+
+module _ (𝑨 : SetoidAlgebra α ρᵃ)(𝑩 : SetoidAlgebra β ρᵇ) where
+ open IsEpi
+ open IsMon
+
+ mon→intohom : mon 𝑨 𝑩 → Σ[ h ∈ hom 𝑨 𝑩 ] IsInjective ∣ h ∣
+ mon→intohom (hh , hhM) = (hh , isHom hhM) , isInjective hhM
+
+ epi→ontohom : epi 𝑨 𝑩 → Σ[ h ∈ hom 𝑨 𝑩 ] IsSurjective ∣ h ∣
+ epi→ontohom (hh , hhE) = (hh , isHom hhE) , isSurjective hhE
 
 \end{code}
 

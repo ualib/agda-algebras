@@ -40,9 +40,10 @@ open Func          renaming ( f to _⟨$⟩_ )
 open Term
 
 private variable
- χ α ρ ℓ : Level
+ χ α ρᵃ ι ℓ : Level
  X Γ Δ : Type χ
  f     : ∣ 𝑆 ∣
+ I : Type ι
 
 -- Equations
 -- An equation is a pair (s , t) of terms in the same context.
@@ -55,42 +56,48 @@ record Eq : Type (ov χ) where
 
 open Eq public
 
--- Equation p ≈̇ q holding in algebra M. (type \~~\^. to get ≈̇) (type \|= to get ⊨)
-_⊨_ : (M : SetoidAlgebra α ℓ)(term-identity : Eq{χ}) → Type _
-M ⊨ (p ≈̇ q) = Equal p q  where open Environment M
+-- Equation p ≈̇ q holding in algebra M. (type \~~\^. to get ≈̇; type \models to get ⊧)
+_⊧_ : (𝑨 : SetoidAlgebra α ρᵃ)(term-identity : Eq{χ}) → Type _
+𝑨 ⊧ (p ≈̇ q) = Equal p q where open Environment 𝑨
 
-module _ {ι : Level}{I : Type ι} where
+_⊫_ : Pred (SetoidAlgebra α ρᵃ) ℓ → Eq{χ} → Type (ℓ ⊔ χ ⊔ ov(α ⊔ ρᵃ))
+𝒦 ⊫ eq = ∀ 𝑨 → 𝒦 𝑨 → 𝑨 ⊧ eq                    -- (type \||= to get ⊫)
 
- -- An I-indexed set of equations inhabits the type I → Eq.
- -- For such `E : I → Eq`...
+-- An I-indexed set of equations inhabits the type I → Eq.
 
- -- ...`𝑨 ⊧ E` is the assertion that algebra 𝑨 models all equations in a set E.
- _⊧_ : (𝑨 : SetoidAlgebra α ρ)(E : I → Eq{χ}) → Type _
- 𝑨 ⊧ E = ∀ i → Equal (lhs (E i))(rhs (E i))       -- (type \models to get ⊧)
-  where open Environment 𝑨
+-- For such `ℰ : I → Eq`...
 
- -- ...`Mod E` is the class of algebras that model all term equations in E.
- Mod : (I → Eq{χ}) → Pred(SetoidAlgebra α ρ) (χ ⊔ ι ⊔ α ⊔ ρ)
- Mod E = _⊧ E
+-- ...`𝑨 ⊨ ℰ` is the assertion that the algebra 𝑨 models every equation in ℰ.
+_⊨_ : (𝑨 : SetoidAlgebra α ρᵃ) → (I → Eq{χ}) → Type _
+𝑨 ⊨ ℰ = ∀ i → Equal (lhs (ℰ i))(rhs (ℰ i)) where open Environment 𝑨  --   (type \|= to get ⊨)
 
-_⊫_ : Pred (SetoidAlgebra α ρ) ℓ → Eq{χ} → Type _
-𝒦 ⊫ eq = ∀ 𝑨 → 𝒦 𝑨 → 𝑨 ⊨ eq                        -- (type \||= to get ⊫)
+-- ...`𝒦 ∥≈ ℰ` is the assertion that every algebra in 𝒦 models every equation in ℰ.
+_∥≈_ : Pred (SetoidAlgebra α ρᵃ) ℓ → (I → Eq{χ}) → Type _
+𝒦 ∥≈ ℰ = ∀ i → 𝒦 ⊫ ℰ i
 
-module _ {α ρ ℓ χ : Level}{X : Type χ} where
+-- ...`Mod ℰ` is the class of algebras that model every equation in ℰ.
+Mod : (I → Eq{χ}) → Pred(SetoidAlgebra α ρᵃ) _
+Mod ℰ = _⊨ ℰ
 
- ThPred : Pred (SetoidAlgebra α ρ) ℓ → Pred(Term X × Term X) (ℓ ⊔ χ ⊔ ov (α ⊔ ρ))
+module _ {α ρᵃ ℓ χ : Level}{X : Type χ} where
+
+ ModPred : {χ : Level}{X : Type χ}
+  →        Pred(Term X × Term X) ℓ → Pred (SetoidAlgebra α ρᵃ) (𝓞 ⊔ 𝓥 ⊔ lsuc χ ⊔ ℓ ⊔ α ⊔ ρᵃ)
+ ModPred ℰ 𝑨 = ∀ {p q} → (p , q) ∈ ℰ → Equal p q where open Environment 𝑨
+
+ ThPred : Pred (SetoidAlgebra α ρᵃ) ℓ → Pred(Term X × Term X) (ℓ ⊔ χ ⊔ ov (α ⊔ ρᵃ))
  ThPred 𝒦 = λ (p , q) → 𝒦 ⊫ (p ≈̇ q)
 
- ℑTh : Pred(Term X × Term X) (ℓ ⊔ χ ⊔ ov (α ⊔ ρ)) → Type (ℓ ⊔ ov (α ⊔ ρ ⊔ χ))
+ ℑTh : Pred(Term X × Term X) (ℓ ⊔ χ ⊔ ov (α ⊔ ρᵃ)) → Type (ℓ ⊔ ov (α ⊔ ρᵃ ⊔ χ))
  ℑTh P = Σ[ p ∈ (Term X × Term X) ] p ∈ P
 
- Th : (𝒦 : Pred (SetoidAlgebra α ρ) ℓ) → ℑTh (ThPred 𝒦) → Eq{χ}
+ Th : (𝒦 : Pred (SetoidAlgebra α ρᵃ) ℓ) → ℑTh (ThPred 𝒦) → Eq{χ}
  Th 𝒦 = λ i → fst ∣ i ∣ ≈̇ snd ∣ i ∣
 
-module _ {α}{ρ}{ι}{I : Type ι} where
+module _ {α}{ρᵃ}{ι}{I : Type ι} where
  -- An entailment E ⊃ eq holds iff it holds in all models of E.
  _⊃_ : (E : I → Eq{χ}) (eq : Eq{χ}) → Type _
- E ⊃ eq = (M : SetoidAlgebra α ρ) → M ⊧ E → M ⊨ eq
+ E ⊃ eq = (M : SetoidAlgebra α ρᵃ) → M ⊨ E → M ⊧ eq
 
 \end{code}
 
@@ -125,9 +132,9 @@ module _ {χ ι : Level} where
 
 \begin{code}
 
-module Soundness {χ α ρ ι : Level}{I : Type ι} (E : I → Eq{χ})
-                 (𝑨 : SetoidAlgebra α ρ)     -- We assume an algebra M
-                 (V : 𝑨 ⊧ E)         -- that models all equations in E.
+module Soundness {χ α ι : Level}{I : Type ι} (E : I → Eq{χ})
+                 (𝑨 : SetoidAlgebra α ρᵃ)     -- We assume an algebra M
+                 (V : 𝑨 ⊨ E)         -- that models all equations in E.
                  where
  open SetoidAlgebra 𝑨 using ( Interp ) renaming (Domain to A)
 
@@ -137,12 +144,12 @@ module Soundness {χ α ρ ι : Level}{I : Type ι} (E : I → Eq{χ})
  open Environment 𝑨 renaming ( ⟦_⟧s to ⟪_⟫ )
  open IsEquivalence renaming ( refl to refl≈ ; sym to  sym≈ ; trans to trans≈ )
 
- sound : ∀ {p q} → E ⊢ X ▹ p ≈ q → 𝑨 ⊨ (p ≈̇ q)
+ sound : ∀ {p q} → E ⊢ X ▹ p ≈ q → 𝑨 ⊧ (p ≈̇ q)
  sound (hyp i)                      = V i
  sound (app {f = f} es) ρ           = Interp .cong (refl , λ i → sound (es i) ρ)
  sound (sub {p = p} {q} Epq σ) ρ    =
   begin
-   ⟦ p [ σ ] ⟧ ⟨$⟩       ρ       ≈⟨ substitution p σ ρ ⟩
+   ⟦ p [ σ ] ⟧ ⟨$⟩       ρ ≈⟨ substitution p σ ρ ⟩
    ⟦ p       ⟧ ⟨$⟩ ⟪ σ ⟫ ρ ≈⟨ sound Epq (⟪ σ ⟫ ρ)  ⟩
    ⟦ q       ⟧ ⟨$⟩ ⟪ σ ⟫ ρ ≈˘⟨ substitution  q σ ρ ⟩
    ⟦ q [ σ ] ⟧ ⟨$⟩       ρ ∎
@@ -176,7 +183,7 @@ We denote by `𝔽[ X ]` the *relatively free algebra* over `X` (relative to `E`
 
 \begin{code}
 
-module FreeAlgebra {χ : Level}{X : Type χ}{ι : Level}{I : Type ι}(E : I → Eq) where
+module FreeAlgebra {χ : Level}{ι : Level}{I : Type ι}(E : I → Eq) where
  open SetoidAlgebra
 
  -- Domain of the relatively free algebra.
@@ -198,8 +205,6 @@ module FreeAlgebra {χ : Level}{X : Type χ}{ι : Level}{I : Type ι}(E : I → 
  Domain 𝔽[ X ] = FreeDomain X
  Interp 𝔽[ X ] = FreeInterp
 
- open Environment 𝔽[ X ]
- open SetoidAlgebra 𝔽[ X ] using ( Interp ) renaming ( Domain to 𝔽 )
 
  -- The identity substitution σ₀ maps variables to themselves.
  σ₀ : {X : Type χ} → Sub X X
@@ -215,20 +220,30 @@ module FreeAlgebra {χ : Level}{X : Type χ}{ι : Level}{I : Type ι}(E : I → 
 Evaluation in the term model is substitution `E ⊢ X ▹ ⟦t⟧σ ≈ t[σ]`. (This would
 hold "on the nose" if we had function extensionality.)
 
+(We put this and the next two lemmas into their own submodules to emphasize
+the fact that these results are independent of the chosen variable symbol
+type `X` (or `Δ`, or `Γ`), which is an arbitrary inhabitant of `Type χ`.)
 \begin{code}
 
- evaluation : (t : Term Δ) (σ : Sub X Δ) → E ⊢ X ▹ (⟦ t ⟧ ⟨$⟩ σ) ≈ (t [ σ ])
- evaluation (ℊ x)    σ = refl
- evaluation (node f ts)  σ = app (flip (evaluation ∘ ts) σ)
+ module _ {X : Type χ} where
+  open Environment 𝔽[ X ]
+  evaluation : (t : Term Δ) (σ : Sub X Δ) → E ⊢ X ▹ (⟦ t ⟧ ⟨$⟩ σ) ≈ (t [ σ ])
+  evaluation (ℊ x) σ = refl
+  evaluation (node f ts) σ = app (flip (evaluation ∘ ts) σ)
 
- -- The term model satisfies all the equations it started out with.
- satisfies : ∀ i → 𝔽[ X ] ⊨ E i
- satisfies i σ = begin
-                  ⟦ p ⟧ ⟨$⟩ σ  ≈⟨ evaluation p σ ⟩
-                  p [ σ ]      ≈⟨ sub (hyp i) σ ⟩
-                  q [ σ ]      ≈˘⟨ evaluation q σ ⟩
-                  ⟦ q ⟧ ⟨$⟩ σ  ∎
-  where open SetoidReasoning 𝔽 ; p = lhs (E i) ; q = rhs (E i)
+
+ module _ {Δ : Type χ} where
+  -- The term model satisfies all the equations it started out with.
+  satisfies : 𝔽[ Δ ] ⊨ E
+  satisfies i σ =
+   begin
+    ⟦ p ⟧ ⟨$⟩ σ  ≈⟨ evaluation p σ ⟩
+    p [ σ ]      ≈⟨ sub (hyp i) σ ⟩
+    q [ σ ]      ≈˘⟨ evaluation q σ ⟩
+    ⟦ q ⟧ ⟨$⟩ σ  ∎
+    where
+    open Environment 𝔽[ Δ ]
+    open SetoidReasoning (Domain 𝔽[ Δ ]) ; p = lhs (E i) ; q = rhs (E i)
 
 \end{code}
 
@@ -236,15 +251,21 @@ We are finally ready to formally state and prove Birkhoff's Completeness Theorem
 
 \begin{code}
 
- completeness : ∀ p q → Mod E ⊫ (p ≈̇ q) → E ⊢ X ▹ p ≈ q
- completeness p q V =
-  begin
-   p              ≈˘⟨ identity p ⟩
-   p [ σ₀ ]       ≈˘⟨ evaluation p σ₀ ⟩
-   ⟦ p ⟧ ⟨$⟩ σ₀   ≈⟨ V 𝔽[ X ] satisfies σ₀ ⟩
-   ⟦ q ⟧ ⟨$⟩ σ₀   ≈⟨ evaluation q σ₀ ⟩
-   q [ σ₀ ]       ≈⟨ identity q ⟩
-   q              ∎ where open SetoidReasoning 𝔽
+ module _ {Γ : Type χ} where
+
+  completeness : ∀ p q → Mod E ⊫ (p ≈̇ q) → E ⊢ Γ ▹ p ≈ q
+  completeness p q V =
+   begin
+    p              ≈˘⟨ identity p ⟩
+    p [ σ₀ ]       ≈˘⟨ evaluation p σ₀ ⟩
+    ⟦ p ⟧ ⟨$⟩ σ₀   ≈⟨ V 𝔽[ Γ ] satisfies σ₀ ⟩
+    ⟦ q ⟧ ⟨$⟩ σ₀   ≈⟨ evaluation q σ₀ ⟩
+    q [ σ₀ ]       ≈⟨ identity q ⟩
+    q              ∎
+   where
+   open Environment 𝔽[ Γ ]
+   open SetoidReasoning (Domain 𝔽[ Γ ])
+
 \end{code}
 
 --------------------------------
