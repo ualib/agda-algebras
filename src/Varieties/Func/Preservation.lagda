@@ -45,6 +45,7 @@ open import Varieties.Func.Closure {𝑆 = 𝑆} using ( H ; S ; P ; V ; S-expa 
 open import Varieties.Func.Properties {𝑆 = 𝑆} using ( ⊧-S-invar ; ⊧-P-invar ; ⊧-I-invar )
 open import Varieties.Func.SoundAndComplete  {𝑆 = 𝑆} using ( _⊧_ ; _⊨_ ; _⊫_ ; Eq ; _≈̇_ ; lhs ; rhs ; _⊢_▹_≈_ ; Th)
 
+open Func          using ( cong ) renaming ( f to _⟨$⟩_ )
 open SetoidAlgebra using ( Domain )
 
 \end{code}
@@ -59,15 +60,14 @@ The next lemma would be too obvious to care about were it not for the fact that 
 
 \begin{code}
 
-module _  {α ρᵃ ℓ ι : Level}{𝒦 : Pred(SetoidAlgebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
+module _  {α ρᵃ ℓ : Level}{𝒦 : Pred(SetoidAlgebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
 
  private
-  αρℓ = α ⊔ ρᵃ ⊔ ℓ
-  oαρℓ = ov αρℓ
-  αρℓι = α ⊔ ρᵃ ⊔ ℓ ⊔ ι
+  a = α ⊔ ρᵃ
+  oaℓ = ov (a ⊔ ℓ)
 
- S⊆SP : S ℓ 𝒦 ⊆ S {β = α}{ρᵃ} αρℓι (P {β = α}{ρᵃ} ℓ ι 𝒦)
- S⊆SP (𝑨 , (kA , B≤A )) = 𝑨 , (pA , B≤A)
+ S⊆SP : ∀{ι} → S ℓ 𝒦 ⊆ S {β = α}{ρᵃ} (a ⊔ ℓ ⊔ ι) (P {β = α}{ρᵃ} ℓ ι 𝒦)
+ S⊆SP {ι} (𝑨 , (kA , B≤A )) = 𝑨 , (pA , B≤A)
   where
   pA : 𝑨 ∈ P ℓ ι 𝒦
   pA = ⊤ , (λ _ → 𝑨) , (λ _ → kA) , ≅⨅⁺-refl
@@ -77,27 +77,6 @@ module _  {α ρᵃ ℓ ι : Level}{𝒦 : Pred(SetoidAlgebra α ρᵃ) (α ⊔ 
 
 #### <a id="PS-in-SP">PS(𝒦) ⊆ SP(𝒦)</a>
 
-Finally, we are in a position to prove that a product of subalgebras of algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
-
-\begin{code}
-
- PS⊆SP' : P{α}{ρᵃ}{α ⊔ ι}{ρᵃ ⊔ ι} αρℓ ι (S {β = α}{ρᵃ}ℓ 𝒦)
-          ⊆ S{β = α ⊔ ι}{ρᵃ ⊔ ι} αρℓι (P {β = α ⊔ ι}{ρᵃ ⊔ ι} ℓ ι 𝒦)
-
- PS⊆SP' {𝑩} (I , ( 𝒜 , sA , B≅⨅A )) = Goal
-  where
-  ℬ : I → SetoidAlgebra α ρᵃ
-  ℬ i = ∣ sA i ∣
-  kB : (i : I) → ℬ i ∈ 𝒦
-  kB i =  fst ∥ sA i ∥
-  ⨅A≤⨅B : ⨅ 𝒜 ≤ ⨅ ℬ
-  ⨅A≤⨅B = ⨅-≤ λ i → snd ∥ sA i ∥
-  Goal : 𝑩 ∈ S{β = α ⊔ ι}{ρᵃ ⊔ ι} αρℓι (P {β = α ⊔ ι}{ρᵃ ⊔ ι}ℓ ι 𝒦)
-  Goal = ⨅ ℬ , ((I , (ℬ , (kB , ≅-refl))) , ≅-trans-≤ B≅⨅A ⨅A≤⨅B)
-
-\end{code}
-
-
 
 #### <a id="more-class-inclusions">More class inclusions</a>
 
@@ -105,27 +84,27 @@ We conclude this subsection with three more inclusion relations that will have b
 
 \begin{code}
 
- P⊆SP : P ℓ ι 𝒦 ⊆ S αρℓι (P {β = α}{ρᵃ}ℓ ι 𝒦)
- P⊆SP {𝑩} x = S-expa αρℓι x
+ P⊆SP : ∀{ι} → P ℓ ι 𝒦 ⊆ S (a ⊔ ℓ ⊔ ι) (P {β = α}{ρᵃ}ℓ ι 𝒦)
+ P⊆SP {ι} x = S-expa{ℓ = a ⊔ ℓ ⊔ ι} x
 
- P⊆HSP : P {β = α}{ρᵃ} ℓ ι 𝒦
-         ⊆ H αρℓι (S {β = α}{ρᵃ}αρℓι (P {β = α}{ρᵃ}ℓ ι 𝒦))
- P⊆HSP {𝑩} x = H-expa αρℓι (S-expa αρℓι x)
 
- P⊆V : P ℓ ι 𝒦 ⊆ V ℓ ι 𝒦
+ P⊆HSP : ∀{ι} → P {β = α}{ρᵃ} ℓ ι 𝒦
+                ⊆ H (a ⊔ ℓ ⊔ ι) (S {β = α}{ρᵃ}(a ⊔ ℓ ⊔ ι) (P {β = α}{ρᵃ}ℓ ι 𝒦))
+ P⊆HSP {ι} x = H-expa{ℓ = a ⊔ ℓ ⊔ ι}  (S-expa{ℓ = a ⊔ ℓ ⊔ ι} x)
+
+ P⊆V : ∀{ι} → P ℓ ι 𝒦 ⊆ V ℓ ι 𝒦
  P⊆V = P⊆HSP
 
- SP⊆V : S{β = α}{ρᵇ = ρᵃ} αρℓι (P {β = α}{ρᵃ} ℓ ι 𝒦) ⊆ V ℓ ι 𝒦
- SP⊆V x = H-expa αρℓι x
+ SP⊆V : ∀{ι} → S{β = α}{ρᵇ = ρᵃ} (a ⊔ ℓ ⊔ ι) (P {β = α}{ρᵃ} ℓ ι 𝒦) ⊆ V ℓ ι 𝒦
+ SP⊆V {ι} x = H-expa{ℓ = a ⊔ ℓ ⊔ ι} x
 
-module _  {α ρᵃ ℓ : Level}{𝒦 : Pred(SetoidAlgebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
+\end{code}
 
- private
-  αρℓ = α ⊔ ρᵃ ⊔ ℓ
-  oαρℓ = ov αρℓ
+Finally, we are in a position to prove that a product of subalgebras of algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
 
- PS⊆SP : P{β = oαρℓ}{oαρℓ} αρℓ oαρℓ (S {β = α}{ρᵃ} ℓ 𝒦)
-          ⊆ S {β = oαρℓ}{oαρℓ} oαρℓ (P {β = oαρℓ}{oαρℓ} ℓ oαρℓ 𝒦)
+\begin{code}
+
+ PS⊆SP : P (a ⊔ ℓ) oaℓ (S{β = α}{ρᵃ} ℓ 𝒦) ⊆ S oaℓ (P ℓ oaℓ 𝒦)
 
  PS⊆SP {𝑩} (I , ( 𝒜 , sA , B≅⨅A )) = Goal
   where
@@ -135,7 +114,7 @@ module _  {α ρᵃ ℓ : Level}{𝒦 : Pred(SetoidAlgebra α ρᵃ) (α ⊔ ρ�
   kB i =  fst ∥ sA i ∥
   ⨅A≤⨅B : ⨅ 𝒜 ≤ ⨅ ℬ
   ⨅A≤⨅B = ⨅-≤ λ i → snd ∥ sA i ∥
-  Goal : 𝑩 ∈ S{β = oαρℓ}{oαρℓ}oαρℓ (P {β = oαρℓ}{oαρℓ} ℓ oαρℓ 𝒦)
+  Goal : 𝑩 ∈ S{β = oaℓ}{oaℓ}oaℓ (P {β = oaℓ}{oaℓ} ℓ oaℓ 𝒦)
   Goal = ⨅ ℬ , (I , (ℬ , (kB , ≅-refl))) , (≅-trans-≤ B≅⨅A ⨅A≤⨅B)
 
 \end{code}
@@ -145,8 +124,6 @@ module _  {α ρᵃ ℓ : Level}{𝒦 : Pred(SetoidAlgebra α ρᵃ) (α ⊔ ρ�
 First we prove that the closure operator H is compatible with identities that hold in the given class.
 
 \begin{code}
-
-open Func using ( cong ) renaming ( f to _⟨$⟩_ )
 
 module _  {α ρᵃ ℓ χ : Level}
           {𝒦 : Pred(SetoidAlgebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)}
@@ -159,9 +136,9 @@ module _  {α ρᵃ ℓ χ : Level}
   where
   IH : 𝑨 ⊧ (p ≈̇ q)
   IH = σ 𝑨 kA
+  open Environment 𝑨     using () renaming ( ⟦_⟧ to ⟦_⟧₁)
+  open Environment 𝑩     using ( ⟦_⟧ )
   open Setoid (Domain 𝑩) using ( _≈_ )
-  open Environment 𝑨 using () renaming ( ⟦_⟧ to ⟦_⟧₁)
-  open Environment 𝑩 using ( ⟦_⟧ )
   open SetoidReasoning (Domain 𝑩)
 
   φ : hom 𝑨 𝑩
@@ -214,14 +191,7 @@ The converse of the foregoing result is almost too obvious to bother with. Nonet
 
 \begin{code}
 
-
-module _  {α ρᵃ ℓ ι χ : Level}
-          {𝒦 : Pred(SetoidAlgebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)}
-          {X : Type χ}
-          {p q : Term X}
-          where
-
- P-id1 : 𝒦 ⊫ (p ≈̇ q) → P {β = α}{ρᵃ}ℓ ι 𝒦 ⊫ (p ≈̇ q)
+ P-id1 : ∀{ι} → 𝒦 ⊫ (p ≈̇ q) → P {β = α}{ρᵃ}ℓ ι 𝒦 ⊫ (p ≈̇ q)
  P-id1 σ 𝑨 (I , 𝒜 , kA , A≅⨅A) = ⊧-I-invar 𝑨 p q IH (≅-sym A≅⨅A)
   where
   ih : ∀ i → 𝒜 i ⊧ (p ≈̇ q)
@@ -229,8 +199,8 @@ module _  {α ρᵃ ℓ ι χ : Level}
   IH : ⨅ 𝒜 ⊧ (p ≈̇ q)
   IH = ⊧-P-invar {p = p}{q} 𝒜 ih
 
- P-id2 : P ℓ ι 𝒦 ⊫ (p ≈̇ q) → 𝒦 ⊫ (p ≈̇ q)
- P-id2 PKpq 𝑨 kA = PKpq 𝑨 (P-expa ℓ ι kA)
+ P-id2 : ∀{ι} → P ℓ ι 𝒦 ⊫ (p ≈̇ q) → 𝒦 ⊫ (p ≈̇ q)
+ P-id2{ι} PKpq 𝑨 kA = PKpq 𝑨 (P-expa {ℓ = ℓ}{ι} kA)
 
 \end{code}
 
@@ -247,34 +217,28 @@ module _  {α ρᵃ ℓ ι χ : Level}
           {p q : Term X} where
 
  private
-  αρℓι = α ⊔ ρᵃ ⊔ ℓ ⊔ ι
+  aℓι = α ⊔ ρᵃ ⊔ ℓ ⊔ ι
 
  V-id1 : 𝒦 ⊫ (p ≈̇ q) → V ℓ ι 𝒦 ⊫ (p ≈̇ q)
  V-id1 σ 𝑩 (𝑨 , (⨅A , p⨅A , A≤⨅A) , BimgA) =
-  H-id1{ℓ = αρℓι}{𝒦 = S αρℓι (P {β = α}{ρᵃ}ℓ ι 𝒦)}{p = p}{q} spK⊧pq 𝑩 (𝑨 , (spA , BimgA))
+  H-id1{ℓ = aℓι}{𝒦 = S aℓι (P {β = α}{ρᵃ}ℓ ι 𝒦)}{p = p}{q} spK⊧pq 𝑩 (𝑨 , (spA , BimgA))
    where
-   spA : 𝑨 ∈ S αρℓι (P {β = α}{ρᵃ}ℓ ι 𝒦)
+   spA : 𝑨 ∈ S aℓι (P {β = α}{ρᵃ}ℓ ι 𝒦)
    spA = ⨅A , (p⨅A , A≤⨅A)
-   spK⊧pq : S αρℓι (P ℓ ι 𝒦) ⊫ (p ≈̇ q)
-   spK⊧pq = S-id1{ℓ = αρℓι}{p = p}{q} (P-id1{ℓ = ℓ} {𝒦 = 𝒦}{p = p}{q} σ)
+   spK⊧pq : S aℓι (P ℓ ι 𝒦) ⊫ (p ≈̇ q)
+   spK⊧pq = S-id1{ℓ = aℓι}{p = p}{q} (P-id1{ℓ = ℓ} {𝒦 = 𝒦}{p = p}{q} σ)
 
  V-id2 : V ℓ ι 𝒦 ⊫ (p ≈̇ q) → 𝒦 ⊫ (p ≈̇ q)
  V-id2 Vpq 𝑨 kA = Vpq 𝑨 (V-expa ℓ ι kA)
 
 
-module _  {α ρᵃ ℓ β ρᵇ ι χ : Level}
-          {𝒦 : Pred(SetoidAlgebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)}
-          {X : Type χ}
-          {p q : Term X} where
-
- Lift-id1 : 𝒦 ⊫ (p ≈̇ q) → Level-closure{α}{ρᵃ}{β}{ρᵇ} ℓ 𝒦 ⊫ (p ≈̇ q)
+ Lift-id1 : ∀{β ρᵇ} → 𝒦 ⊫ (p ≈̇ q) → Level-closure{α}{ρᵃ}{β}{ρᵇ} ℓ 𝒦 ⊫ (p ≈̇ q)
  Lift-id1 pKq 𝑨 (𝑩 , kB , B≅A) ρ = Goal
   where
   open Environment 𝑨
   open Setoid (Domain 𝑨) using (_≈_)
   Goal : ⟦ p ⟧ ⟨$⟩ ρ ≈ ⟦ q ⟧ ⟨$⟩ ρ
   Goal = ⊧-I-invar 𝑨 p q (pKq 𝑩 kB) B≅A ρ
-
 
 \end{code}
 
@@ -285,16 +249,11 @@ From `V-id1` it follows that if 𝒦 is a class of structures, then the set of i
 
 \begin{code}
 
-module _  {α ρᵃ ℓ ι χ : Level}
-          {𝒦 : Pred(SetoidAlgebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)}
-          {X : Type χ}
-          {p q : Term X} where
-
  classIds-⊆-VIds : 𝒦 ⊫ (p ≈̇ q)  → (p , q) ∈ Th (V ℓ ι 𝒦)
- classIds-⊆-VIds pKq 𝑨 = V-id1 {ℓ = ℓ}{𝒦 = 𝒦}{p = p}{q} pKq 𝑨
+ classIds-⊆-VIds pKq 𝑨 = V-id1 pKq 𝑨
 
  VIds-⊆-classIds : (p , q) ∈ Th (V ℓ ι 𝒦) → 𝒦 ⊫ (p ≈̇ q)
- VIds-⊆-classIds Thpq 𝑨 kA = V-id2 {ℓ = ℓ}{𝒦 = 𝒦}{p = p}{q} Thpq 𝑨 kA
+ VIds-⊆-classIds Thpq 𝑨 kA = V-id2 Thpq 𝑨 kA
 
 \end{code}
 

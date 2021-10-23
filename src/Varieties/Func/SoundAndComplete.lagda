@@ -79,19 +79,21 @@ _∥≈_ : Pred (SetoidAlgebra α ρᵃ) ℓ → (I → Eq{χ}) → Type _
 ModTuple : (I → Eq{χ}) → Pred(SetoidAlgebra α ρᵃ) _
 ModTuple ℰ = _⊨ ℰ
 
-module _ {α ρᵃ ℓ χ : Level}{X : Type χ} where
+module _ {α ρᵃ ℓ : Level} where
 
- Mod : Pred(Term X × Term X) ℓ → Pred (SetoidAlgebra α ρᵃ) (𝓞 ⊔ 𝓥 ⊔ lsuc χ ⊔ ℓ ⊔ α ⊔ ρᵃ)
+ Mod : Pred(Term X × Term X) ℓ → Pred (SetoidAlgebra α ρᵃ) _ -- (𝓞 ⊔ 𝓥 ⊔ lsuc χ ⊔ ℓ ⊔ α ⊔ ρᵃ)
  Mod ℰ 𝑨 = ∀ {p q} → (p , q) ∈ ℰ → Equal p q where open Environment 𝑨
 
- Th : Pred (SetoidAlgebra α ρᵃ) ℓ → Pred(Term X × Term X) (ℓ ⊔ χ ⊔ ov (α ⊔ ρᵃ))
+ Th : Pred (SetoidAlgebra α ρᵃ) ℓ → Pred(Term X × Term X) _ -- (ℓ ⊔ χ ⊔ ov (α ⊔ ρᵃ))
  Th 𝒦 = λ (p , q) → 𝒦 ⊫ (p ≈̇ q)
 
- ℑTh : Pred(Term X × Term X) (ℓ ⊔ χ ⊔ ov (α ⊔ ρᵃ)) → Type (ℓ ⊔ ov (α ⊔ ρᵃ ⊔ χ))
- ℑTh P = Σ[ p ∈ (Term X × Term X) ] p ∈ P
+ ℑTh : Pred(Term X × Term X) (ℓ ⊔ χ ⊔ ov (α ⊔ ρᵃ)) → Type _ -- (ℓ ⊔ ov (α ⊔ ρᵃ ⊔ χ))
+ ℑTh P = Σ[ p ∈ (Term _ × Term _) ] p ∈ P
 
- ThTuple : (𝒦 : Pred (SetoidAlgebra α ρᵃ) ℓ) → ℑTh (Th 𝒦) → Eq{χ}
- ThTuple 𝒦 = λ i → fst ∣ i ∣ ≈̇ snd ∣ i ∣
+ module _ {χ : Level}{X : Type χ} where
+
+  ThTuple : (𝒦 : Pred (SetoidAlgebra α ρᵃ) ℓ) → ℑTh{χ = χ} (Th{X = X} 𝒦) → Eq{χ}
+  ThTuple 𝒦 = λ i → fst ∣ i ∣ ≈̇ snd ∣ i ∣
 
 module _ {α}{ρᵃ}{ι}{I : Type ι} where
  -- An entailment E ⊃ eq holds iff it holds in all models of E.

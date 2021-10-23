@@ -109,21 +109,19 @@ module _ {α ρᵃ ℓ ι : Level} where
 `S` is a closure operator.  The fact that S is expansive won't be needed, so we omit the proof, but we will make use of monotonicity and idempotence of `S`.  Here are their proofs.
 
 \begin{code}
-module _ {α ρᵃ ℓ : Level} where
+module _ {α ρᵃ : Level} where
 
- S-mono : {𝒦 𝒦' : Pred (SetoidAlgebra α ρᵃ)(α ⊔ ρᵃ ⊔ ov ℓ)}
+ private a = α ⊔ ρᵃ
+
+ S-mono : ∀{ℓ} → {𝒦 𝒦' : Pred (SetoidAlgebra α ρᵃ)(a ⊔ ov ℓ)}
   →       𝒦 ⊆ 𝒦' → S{β = α}{ρᵃ} ℓ 𝒦 ⊆ S ℓ 𝒦'
+
  S-mono kk {𝑩} (𝑨 , (kA , B≤A)) = 𝑨 , ((kk kA) , B≤A)
 
- S-idem' : {𝒦 : Pred (SetoidAlgebra α ρᵃ)(α ⊔ ρᵃ ⊔ ov ℓ)}
-  →       S{lsuc α}{lsuc ρᵃ}{α}{ρᵃ} ℓ (S ℓ 𝒦) ⊆ S ℓ 𝒦
- S-idem' (𝑨 , (𝑩 , sB , A≤B) , x≤A) = 𝑩 , (sB , ≤-trans x≤A A≤B)
 
+ S-idem : ∀{β ρᵇ γ ρᶜ ℓ} → {𝒦 : Pred (SetoidAlgebra α ρᵃ)(a ⊔ ov ℓ)}
+  →       S{β = γ}{ρᶜ} (a ⊔ ℓ) (S{β = β}{ρᵇ} ℓ 𝒦) ⊆ S{β = γ}{ρᶜ} ℓ 𝒦
 
-module _ {α ρᵃ β ρᵇ γ ρᶜ ℓ : Level} where
-
- S-idem : {𝒦 : Pred (SetoidAlgebra α ρᵃ)(α ⊔ ρᵃ ⊔ ov ℓ)}
-  →       S{β}{ρᵇ}{γ}{ρᶜ} (α ⊔ ρᵃ ⊔ ℓ) (S{β = β}{ρᵇ} ℓ 𝒦) ⊆ S{β = γ}{ρᶜ} ℓ 𝒦
  S-idem (𝑨 , (𝑩 , sB , A≤B) , x≤A) = 𝑩 , (sB , ≤-trans x≤A A≤B)
 
 \end{code}
@@ -135,27 +133,23 @@ module _ {α ρᵃ β ρᵇ γ ρᶜ ℓ : Level} where
 
 \begin{code}
 
-module _ {α ρᵃ : Level} where
+ H-expa : ∀{ℓ} → {𝒦 : Pred (SetoidAlgebra α ρᵃ)(a ⊔ ov ℓ)} → 𝒦 ⊆ H ℓ 𝒦
+ H-expa {ℓ} {𝒦}{𝑨} kA = 𝑨 , kA , IdHomImage
 
- private a = α ⊔ ρᵃ
+ S-expa : ∀{ℓ} → {𝒦 : Pred (SetoidAlgebra α ρᵃ)(a ⊔ ov ℓ)} → 𝒦 ⊆ S ℓ 𝒦
+ S-expa {ℓ}{𝒦}{𝑨} kA = 𝑨 , (kA , ≤-reflexive)
 
- H-expa : ∀ ℓ → {𝒦 : Pred (SetoidAlgebra α ρᵃ)(a ⊔ ov ℓ)} → 𝒦 ⊆ H ℓ 𝒦
- H-expa _ {𝒦}{𝑨} kA = 𝑨 , kA , IdHomImage
-
- S-expa : ∀ ℓ → {𝒦 : Pred (SetoidAlgebra α ρᵃ)(a ⊔ ov ℓ)} → 𝒦 ⊆ S ℓ 𝒦
- S-expa _ {𝒦}{𝑨} kA = 𝑨 , (kA , ≤-reflexive)
-
- P-mono : ∀ ℓ ι → {𝒦 𝒦' : Pred (SetoidAlgebra α ρᵃ)(a ⊔ ov ℓ)}
+ P-mono : ∀{ℓ ι} → {𝒦 𝒦' : Pred (SetoidAlgebra α ρᵃ)(a ⊔ ov ℓ)}
   →       𝒦 ⊆ 𝒦' → P{β = α}{ρᵃ} ℓ ι 𝒦 ⊆ P ℓ ι 𝒦'
 
- P-mono _ _ {𝒦}{𝒦'} kk {𝑩} (I , 𝒜 , (kA , B≅⨅A)) = I , (𝒜 , ((λ i → kk (kA i)) , B≅⨅A))
+ P-mono {ℓ}{ι}{𝒦}{𝒦'} kk {𝑩} (I , 𝒜 , (kA , B≅⨅A)) = I , (𝒜 , ((λ i → kk (kA i)) , B≅⨅A))
 
  open _≅_
  open IsHom
 
 
- P-expa : ∀ ℓ ι → {𝒦 : Pred (SetoidAlgebra α ρᵃ)(a ⊔ ov ℓ)} → 𝒦 ⊆ P{β = α}{ρᵃ} ℓ ι 𝒦
- P-expa _ _ {𝒦}{𝑨} kA = ⊤ , (λ x → 𝑨) , ((λ i → kA) , Goal)
+ P-expa : ∀{ℓ ι} → {𝒦 : Pred (SetoidAlgebra α ρᵃ)(a ⊔ ov ℓ)} → 𝒦 ⊆ P ℓ ι 𝒦
+ P-expa {ℓ}{ι}{𝒦}{𝑨} kA = ⊤ , (λ x → 𝑨) , ((λ i → kA) , Goal)
   where
   open SetoidAlgebra 𝑨 using () renaming (Domain to A)
   open SetoidAlgebra (⨅ (λ _ → 𝑨)) using () renaming (Domain to ⨅A)
@@ -180,9 +174,9 @@ module _ {α ρᵃ : Level} where
   to∼from Goal = λ _ _ → refl
   from∼to Goal = λ _ → refl
 
- V-expa : ∀ ℓ ι → {𝒦 : Pred (SetoidAlgebra α ρᵃ)(a ⊔ ov ℓ)}
-  →       𝒦 ⊆ V ℓ ι 𝒦
- V-expa ℓ ι {𝒦} {𝑨} x = H-expa (a ⊔ ℓ ⊔ ι) (S-expa (a ⊔ ℓ ⊔ ι) (P-expa ℓ ι x) )
+
+ V-expa : ∀ ℓ ι → {𝒦 : Pred (SetoidAlgebra α ρᵃ)(a ⊔ ov ℓ)} → 𝒦 ⊆ V ℓ ι 𝒦
+ V-expa ℓ ι {𝒦} {𝑨} x = H-expa {a ⊔ ℓ ⊔ ι} (S-expa {a ⊔ ℓ ⊔ ι} (P-expa {ℓ}{ι} x) )
 
 \end{code}
 
@@ -214,8 +208,7 @@ module _ {α ρᵃ ℓ : Level}
          (𝒦 : Pred(SetoidAlgebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ))
          (𝑨 : SetoidAlgebra (α ⊔ ρᵃ ⊔ ℓ) (α ⊔ ρᵃ ⊔ ℓ)) where
 
- private
-  ι = ov(α ⊔ ρᵃ ⊔ ℓ)
+ private ι = ov(α ⊔ ρᵃ ⊔ ℓ)
 
  V-≅-lc : Lift-Alg 𝑨 ι ι ∈ V{β = ι}{ι} ℓ ι 𝒦
   →       𝑨 ∈ V{γ = ι}{ι} ℓ ι 𝒦
@@ -243,25 +236,25 @@ module _ {α ρᵃ ℓ ι : Level}{𝒦 : Pred (SetoidAlgebra α ρᵃ)(α ⊔ �
  classHSP : Pred (SetoidAlgebra α ρᵃ) (ov(α ⊔ ρᵃ ⊔ ℓ ⊔ ι))
  classHSP = H{β = α}{ρᵃ}(α ⊔ ρᵃ ⊔ ℓ ⊔ ι) (S{β = α}{ρᵃ}(α ⊔ ρᵃ ⊔ ℓ ⊔ ι) (P{β = α}{ρᵃ}ℓ ι 𝒦))
 
-module _ {α ρᵃ β ρᵇ ℓ : Level}{𝒦 : Pred (SetoidAlgebra α ρᵃ)(α ⊔ ρᵃ ⊔ ov ℓ)} where
- private a = α ⊔ ρᵃ ; b = β ⊔ ρᵇ
-
- -- For reference, some useful type levels:
- classS : Pred (SetoidAlgebra β ρᵇ) (b ⊔ ov(a ⊔ ℓ))
+ classS : ∀{β ρᵇ} → Pred (SetoidAlgebra β ρᵇ) (β ⊔ ρᵇ ⊔ ov(α ⊔ ρᵃ ⊔ ℓ))
  classS = S ℓ 𝒦
- classK : {γ ρᶜ : Level} → Pred (SetoidAlgebra γ ρᶜ) (γ ⊔ ρᶜ ⊔ ov(a ⊔ ℓ))
- classK {γ}{ρᶜ} = Level-closure{α}{ρᵃ} ℓ 𝒦
+ classK : ∀{β ρᵇ} → Pred (SetoidAlgebra β ρᵇ) (β ⊔ ρᵇ ⊔ ov(α ⊔ ρᵃ ⊔ ℓ))
+ classK = Level-closure{α}{ρᵃ} ℓ 𝒦
 
- LevelClosure-S : {γ ρᶜ : Level} → Pred (SetoidAlgebra (α ⊔ γ) (ρᵃ ⊔ ρᶜ)) (γ ⊔ ρᶜ ⊔ ov(a ⊔ b ⊔ ℓ))
- LevelClosure-S {γ}{ρᶜ} = Level-closure{β}{ρᵇ} (a ⊔ ℓ) (S ℓ 𝒦)
 
- S-LevelClosure : {γ ρᶜ : Level} → Pred (SetoidAlgebra (α ⊔ γ) (ρᵃ ⊔ ρᶜ)) (ov(a ⊔ ℓ ⊔ γ ⊔ ρᶜ))
- S-LevelClosure {γ}{ρᶜ} = S{α ⊔ γ}{ρᵃ ⊔ ρᶜ}(a ⊔ ℓ) (Level-closure ℓ 𝒦)
+module _ {α ρᵃ β ρᵇ γ ρᶜ ℓ : Level}{𝒦 : Pred (SetoidAlgebra α ρᵃ)(α ⊔ ρᵃ ⊔ ov ℓ)} where
+ private a = α ⊔ ρᵃ ; b = β ⊔ ρᵇ ; c = γ ⊔ ρᶜ
 
- S-Lift-lemma : {γ ρᶜ : Level} → LevelClosure-S {γ}{ρᶜ} ⊆ S-LevelClosure {γ}{ρᶜ}
- S-Lift-lemma {γ}{ρᶜ} {𝑪} (𝑩 , (𝑨 , (kA , B≤A)) , B≅C) = Lift-Alg 𝑨 γ ρᶜ
-                                                       , (Lift-closed{β = γ}{ρᶜ} ℓ kA)
-                                                       , C≤lA
+ LevelClosure-S : Pred (SetoidAlgebra (α ⊔ γ) (ρᵃ ⊔ ρᶜ)) (c ⊔ ov(a ⊔ b ⊔ ℓ))
+ LevelClosure-S = Level-closure{β}{ρᵇ} (a ⊔ ℓ) (S ℓ 𝒦)
+
+ S-LevelClosure : Pred (SetoidAlgebra (α ⊔ γ) (ρᵃ ⊔ ρᶜ)) (ov(a ⊔ c ⊔ ℓ))
+ S-LevelClosure = S{α ⊔ γ}{ρᵃ ⊔ ρᶜ}(a ⊔ ℓ) (Level-closure ℓ 𝒦)
+
+ S-Lift-lemma : LevelClosure-S ⊆ S-LevelClosure
+ S-Lift-lemma {𝑪} (𝑩 , (𝑨 , (kA , B≤A)) , B≅C) = Lift-Alg 𝑨 γ ρᶜ
+                                               , (Lift-closed{β = γ}{ρᶜ} ℓ kA)
+                                               , C≤lA
   where
   B≤lA : 𝑩 ≤ Lift-Alg 𝑨 γ ρᶜ
   B≤lA = ≤-Lift B≤A
