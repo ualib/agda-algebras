@@ -51,23 +51,6 @@ private variable α β : Level
 ℓ₁ : Level
 ℓ₁ = lsuc ℓ₀
 
--- The empty type (deprecated)
--- data 𝟘 : Type ℓ₀ where
--- use instead:
--- Data.Empty.⊥
-
--- The one element type (deprecated)
--- data 𝟙 : Type ℓ₀ where
---  𝟎 : 𝟙
--- use instead:
--- Data.Unit.Base.T for 𝟙 and tt for 𝟎
-
--- The polymorphic one element type (deprecated)
--- data 𝟙⁺{ι : Level} : Type ι where
---  𝟎 : 𝟙⁺
--- use instead
--- Data.Unit.Polymorphic.Base.T for 𝟙⁺ and tt for 𝟎
-
 -- the two element type
 data 𝟚 : Type ℓ₀ where  -- We could use Bool instead.
  𝟎 : 𝟚 ;  𝟏 : 𝟚
@@ -80,6 +63,7 @@ data 𝟛 : Type ℓ₀ where
 #### <a id="projection-notation">Projection notation</a>
 
 The definition of `Σ` (and thus, of `×`) includes the fields `proj₁` and `proj₂` representing the first and second projections out of the product.  However, we prefer the shorter names `fst` and `snd`.  Sometimes we prefer to denote these projections by `∣_∣` and `∥_∥`, respectively. We define these alternative notations for projections out of pairs as follows.
+
 \begin{code}
 
 module _ {A : Type α }{B : A → Type β} where
@@ -93,11 +77,11 @@ module _ {A : Type α }{B : A → Type β} where
  infix  40 ∣_∣
 
 \end{code}
+
 Here we put the definitions inside an *anonymous module*, which starts with the `module` keyword followed by an underscore (instead of a module name). The purpose is simply to move the postulated typing judgments---the "parameters" of the module (e.g., `A : Type α`)---out of the way so they don't obfuscate the definitions inside the module.
 
-Also note that multiple inhabitants of a single type (e.g., `∣_∣` and `fst`) may be declared on the same line.
-
 Let's define some useful syntactic sugar that will make it easier to apply symmetry and transitivity of `≡` in proofs.
+
 \begin{code}
 
 _⁻¹ : {A : Type α} {x y : A} → x ≡ y → y ≡ x
@@ -106,7 +90,9 @@ p ⁻¹ = sym p
 infix  40 _⁻¹
 
 \end{code}
+
 If we have a proof `p : x ≡ y`, and we need a proof of `y ≡ x`, then instead of `sym p` we can use the more intuitive `p ⁻¹`. Similarly, the following syntactic sugar makes abundant appeals to transitivity easier to stomach.
+
 \begin{code}
 
 _∙_ : {A : Type α}{x y z : A} → x ≡ y → y ≡ z → x ≡ z

@@ -40,8 +40,8 @@ module _ (𝑨 : SetoidAlgebra α ρᵃ)(𝑩 : SetoidAlgebra β ρᵇ) where
  open Setoid B using () renaming ( _≈_ to _≈₂_ )
  open Func {a = α}{ρᵃ}{β}{ρᵇ}{From = A}{To = B} renaming (f to _⟨$⟩_ )
 
- ≈preserving : (A ⟶ B) → Type (α ⊔ ρᵃ ⊔ ρᵇ)
- ≈preserving f = ∀ {x y} → x ≈₁ y → (f ⟨$⟩ x) ≈₂ (f ⟨$⟩ y)
+ -- ≈preserving : (A ⟶ B) → Type (α ⊔ ρᵃ ⊔ ρᵇ)
+ -- ≈preserving f = ∀ {x y} → x ≈₁ y → (f ⟨$⟩ x) ≈₂ (f ⟨$⟩ y)
 
  compatible-map-op : (A ⟶ B) → ∣ 𝑆 ∣ → Type (𝓥 ⊔ α ⊔ ρᵇ)
  compatible-map-op h f = ∀ {a} → (h ⟨$⟩ ((f ̂ 𝑨) a)) ≈₂ ((f ̂ 𝑩) (λ x → (h ⟨$⟩ (a x))))
@@ -53,7 +53,6 @@ module _ (𝑨 : SetoidAlgebra α ρᵃ)(𝑩 : SetoidAlgebra β ρᵇ) where
  record IsHom (h : A ⟶ B) : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ ⊔ ρᵇ) where
   field
    compatible : compatible-map h
-   -- preserves≈ : ≈preserving h
 
  hom : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
  hom = Σ (A ⟶ B) IsHom
