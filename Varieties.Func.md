@@ -16,8 +16,11 @@ This is the [Varieties.Func][] module of the [Agda Universal Algebra Library][].
 <a id="387" class="Keyword">module</a> <a id="394" href="Varieties.Func.html" class="Module">Varieties.Func</a> <a id="409" class="Keyword">where</a>
 
 <a id="416" class="Keyword">open</a> <a id="421" class="Keyword">import</a> <a id="428" href="Varieties.Func.EquationalLogic.html" class="Module">Varieties.Func.EquationalLogic</a>
-<a id="459" class="Keyword">open</a> <a id="464" class="Keyword">import</a> <a id="471" href="Varieties.Func.Closure.html" class="Module">Varieties.Func.Closure</a>
-<a id="494" class="Keyword">open</a> <a id="499" class="Keyword">import</a> <a id="506" href="Varieties.Func.FreeAlgebras.html" class="Module">Varieties.Func.FreeAlgebras</a>
+<a id="459" class="Keyword">open</a> <a id="464" class="Keyword">import</a> <a id="471" href="Varieties.Func.SoundAndComplete.html" class="Module">Varieties.Func.SoundAndComplete</a>
+<a id="503" class="Keyword">open</a> <a id="508" class="Keyword">import</a> <a id="515" href="Varieties.Func.Closure.html" class="Module">Varieties.Func.Closure</a>
+<a id="538" class="Keyword">open</a> <a id="543" class="Keyword">import</a> <a id="550" href="Varieties.Func.Properties.html" class="Module">Varieties.Func.Properties</a>
+<a id="576" class="Keyword">open</a> <a id="581" class="Keyword">import</a> <a id="588" href="Varieties.Func.Preservation.html" class="Module">Varieties.Func.Preservation</a>
+<a id="616" class="Keyword">open</a> <a id="621" class="Keyword">import</a> <a id="628" href="Varieties.Func.FreeAlgebras.html" class="Module">Varieties.Func.FreeAlgebras</a>
 
 </pre>
 

@@ -18,10 +18,11 @@ This is the [Homomorphisms.Func][] module of the [Agda Universal Algebra Library
 <a id="444" class="Keyword">open</a> <a id="449" class="Keyword">import</a> <a id="456" href="Homomorphisms.Func.Basic.html" class="Module">Homomorphisms.Func.Basic</a>
 <a id="481" class="Keyword">open</a> <a id="486" class="Keyword">import</a> <a id="493" href="Homomorphisms.Func.Properties.html" class="Module">Homomorphisms.Func.Properties</a>
 <a id="523" class="Keyword">open</a> <a id="528" class="Keyword">import</a> <a id="535" href="Homomorphisms.Func.Kernels.html" class="Module">Homomorphisms.Func.Kernels</a>
-<a id="562" class="Keyword">open</a> <a id="567" class="Keyword">import</a> <a id="574" href="Homomorphisms.Func.Noether.html" class="Module">Homomorphisms.Func.Noether</a>
-<a id="601" class="Keyword">open</a> <a id="606" class="Keyword">import</a> <a id="613" href="Homomorphisms.Func.Factor.html" class="Module">Homomorphisms.Func.Factor</a>
-<a id="639" class="Keyword">open</a> <a id="644" class="Keyword">import</a> <a id="651" href="Homomorphisms.Func.Isomorphisms.html" class="Module">Homomorphisms.Func.Isomorphisms</a>
-<a id="683" class="Keyword">open</a> <a id="688" class="Keyword">import</a> <a id="695" href="Homomorphisms.Func.HomomorphicImages.html" class="Module">Homomorphisms.Func.HomomorphicImages</a>
+<a id="562" class="Keyword">open</a> <a id="567" class="Keyword">import</a> <a id="574" href="Homomorphisms.Func.Products.html" class="Module">Homomorphisms.Func.Products</a>
+<a id="602" class="Keyword">open</a> <a id="607" class="Keyword">import</a> <a id="614" href="Homomorphisms.Func.Noether.html" class="Module">Homomorphisms.Func.Noether</a>
+<a id="641" class="Keyword">open</a> <a id="646" class="Keyword">import</a> <a id="653" href="Homomorphisms.Func.Factor.html" class="Module">Homomorphisms.Func.Factor</a>
+<a id="679" class="Keyword">open</a> <a id="684" class="Keyword">import</a> <a id="691" href="Homomorphisms.Func.Isomorphisms.html" class="Module">Homomorphisms.Func.Isomorphisms</a>
+<a id="723" class="Keyword">open</a> <a id="728" class="Keyword">import</a> <a id="735" href="Homomorphisms.Func.HomomorphicImages.html" class="Module">Homomorphisms.Func.HomomorphicImages</a>
 
 </pre>
 
