@@ -53,7 +53,7 @@ It turns out that the intepretation of a term is the same as the `free-lift` (mo
 module _ {𝑨 : SetoidAlgebra α ρᵃ} where
  open SetoidAlgebra 𝑨 using ( Interp ) renaming (Domain to A )
  open Setoid A using ( _≈_ ; refl ) renaming ( Carrier to ∣A∣ )
- open Environment 𝑨 using ( ⟦_⟧ ) -- renaming ( ⟦_⟧ to ⟦_⟧₁ )
+ open Environment 𝑨 using ( ⟦_⟧ )
 
  free-lift-interp : (η : X → ∣A∣)(p : Term X)
   →                 ⟦ p ⟧ ⟨$⟩ η ≈ (free-lift{𝑨 = 𝑨} η) p

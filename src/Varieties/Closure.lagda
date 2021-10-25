@@ -7,11 +7,11 @@ author: "agda-algebras development team"
 
 ### <a id="closure-operators">Closure Operators</a>
 
-Fix a signature 𝑆, let 𝒦 be a class of 𝑆-algebras, and define
+Fix a signature `𝑆`, let `𝒦` be a class of `𝑆`-algebras, and define
 
-* H 𝒦 = algebras isomorphic to a homomorphic image of a members of 𝒦;
-* S 𝒦 = algebras isomorphic to a subalgebra of a member of 𝒦;
-* P 𝒦 = algebras isomorphic to a product of members of 𝒦.
+* `H 𝒦` = algebras isomorphic to a homomorphic image of a member of `𝒦`;
+* `S 𝒦` = algebras isomorphic to a subalgebra of a member of `𝒦`;
+* `P 𝒦` = algebras isomorphic to a product of members of `𝒦`.
 
 A straight-forward verification confirms that H, S, and P are *closure operators* (expansive, monotone, and idempotent).  A class 𝒦 of 𝑆-algebras is said to be *closed under the taking of homomorphic images* provided `H 𝒦 ⊆ 𝒦`. Similarly, 𝒦 is *closed under the taking of subalgebras* (resp., *arbitrary products*) provided `S 𝒦 ⊆ 𝒦` (resp., `P 𝒦 ⊆ 𝒦`). The operators H, S, and P can be composed with one another repeatedly, forming yet more closure operators.
 
@@ -64,7 +64,7 @@ data H {α β : Level} (𝒦 : Pred (Algebra α 𝑆) (ov α)) : Pred (Algebra (
 
 #### <a id="the-inductive-type-s">The Inductive Type S</a>
 
-Here we define the inductive type `S` to represent classes of algebras that is closed under the taking of subalgebras.
+Here we define the inductive type `S` to represent classes of algebras closed under the taking of subalgebras.
 
 \begin{code}
 
@@ -79,7 +79,7 @@ data S {α β : Level}(𝒦 : Pred(Algebra α 𝑆)(ov α)) : Pred(Algebra(α �
 
 #### <a id="the-inductive-types-p">The Inductive Type P </a>
 
-Here we define the inductive type `P` to represent classes of algebras that is closed under the taking of arbitrary products.
+Here we define the inductive type `P` to represent classes of algebras closed under the taking of arbitrary products.
 
 \begin{code}
 
@@ -99,7 +99,7 @@ data P {α β : Level}(𝒦 : Pred(Algebra α 𝑆)(ov α)) : Pred(Algebra(α �
 
 A class 𝒦 of 𝑆-algebras is called a *variety* if it is closed under each of the closure operators H, S, and P introduced elsewhere; the corresponding closure operator is often denoted 𝕍, but we will denote it by `V`.
 
-We now define `V` as an inductive type which is hand-crafted to contain all the parts of H, S and P, under different names.
+We now define `V` as an inductive type which is crafted to contain all the parts of H, S and P, under different names.
 
 \begin{code}
 

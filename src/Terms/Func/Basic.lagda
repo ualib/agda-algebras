@@ -118,7 +118,6 @@ An environment for `Γ` maps each variable `x : Γ` to an element of `A`, and eq
 module Environment (𝑨 : SetoidAlgebra α ℓ) where
  open SetoidAlgebra 𝑨 using ( Interp ) renaming ( Domain to A )
  open Setoid A using ( refl ; sym ; trans ) renaming ( _≈_ to _≈ₐ_ ; Carrier to ∣A∣ )
-                                 -- ; refl to reflₐ ; sym to symₐ ; trans to transₐ )
 
  Env : Type χ → Setoid _ _
  Env X = record { Carrier = X → ∣A∣
