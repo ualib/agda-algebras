@@ -141,7 +141,7 @@ open import Homomorphisms.HomomorphicImages using ( _IsHomImageOf_ ; HomImages ;
                                                   ; HomImageOfClass ; Lift-epi-is-epi
                                                   ; Lift-Alg-hom-image )
 
-open import Homomorphisms.Func.Basic        using ( ≈preserving ; compatible-map-op ; compatible-map
+open import Homomorphisms.Func.Basic        using ( compatible-map-op ; compatible-map
                                                   ; IsHom ; hom ; IsMon ; mon ; mon→hom ; IsEpi
                                                   ; epi ; epi→hom ; mon→intohom ; epi→ontohom )
 
