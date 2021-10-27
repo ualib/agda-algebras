@@ -18,8 +18,7 @@ module Varieties.Func.FreeAlgebras {𝑆 : Signature 𝓞 𝓥} where
 -- Imports from Agda and the Agda Standard Library ------------------------------------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
 open import Data.Product     using ( Σ-syntax ; _,_ ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Function         using ( _∘_ ; id )
-open import Function.Bundles using ( Func )
+open import Function         using ( _∘_ ; id ) renaming ( Func to _⟶_ )
 open import Level
 open import Relation.Binary  using ( Setoid )
 open import Relation.Unary   using ( Pred ; _∈_ ; _⊆_ )
@@ -27,7 +26,6 @@ open import Relation.Binary.PropositionalEquality as ≡ using (_≡_)
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------------
 open import Overture.Preliminaries                  using ( ∣_∣ ; ∥_∥ )
-open import Overture.Func.Preliminaries             using ( _⟶_ )
 open import Overture.Func.Inverses                  using ( eq )
 open import Overture.Func.Surjective                using ( IsSurjective )
 open import Relations.Func.Discrete                 using ( fkerPred )
@@ -45,7 +43,7 @@ open import Varieties.Func.SoundAndComplete {𝑆 = 𝑆} using ( Eq ; _⊫_ ; _
 open import Varieties.Func.Closure          {𝑆 = 𝑆} using ( V ; S )
 open import Varieties.Func.Preservation     {𝑆 = 𝑆} using ( classIds-⊆-VIds ; S-id1 )
 
-open Func using ( cong ) renaming ( f to _⟨$⟩_ )
+open _⟶_ using ( cong ) renaming ( f to _⟨$⟩_ )
 open SetoidAlgebra using ( Domain )
 
 \end{code}

@@ -121,9 +121,13 @@
 [Varieties.Properties]: https://ualib.github.io/agda-algebras/Varieties.Properties.html
 
 [Varieties.Func]: https://ualib.github.io/agda-algebras/Varieties.Func.html
-[Varieties.Func.Closure]: https://ualib.github.io/agda-algebras/Varieties.Func.Closure.html
 [Varieties.Func.EquationalLogic]: https://ualib.github.io/agda-algebras/Varieties.Func.EquationalLogic.html
+[Varieties.Func.SoundAndComplete]: https://ualib.github.io/agda-algebras/Varieties.Func.SoundAndComplete.html
+[Varieties.Func.Closure]: https://ualib.github.io/agda-algebras/Varieties.Func.Closure.html
+[Varieties.Func.Properties]: https://ualib.github.io/agda-algebras/Varieties.Func.Properties.html
+[Varieties.Func.Preservation]: https://ualib.github.io/agda-algebras/Varieties.Func.Preservation.html
 [Varieties.Func.FreeAlgebras]: https://ualib.github.io/agda-algebras/Varieties.Func.FreeAlgebras.html
+[Varieties.Func.HSP]: https://ualib.github.io/agda-algebras/Varieties.Func.HSP.html
 
 [Structures]: https://ualib.github.io/agda-algebras/Structures.html
 [Structures.Graphs]: https://ualib.github.io/agda-algebras/Structures.Graphs.html

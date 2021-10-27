@@ -21,20 +21,20 @@ module Homomorphisms.Func.Properties {𝑆 : Signature 𝓞 𝓥} where
 open import Agda.Primitive   using () renaming ( lzero to ℓ₀ )
 open import Data.Product     using ( _,_ ) renaming ( proj₁ to fst ; proj₂ to snd )
 open import Function         using ( id )
-open import Function.Bundles using ( Func )
+open import Function.Bundles using () renaming ( Func to _⟶_ )
 open import Level            using ( Level )
 open import Relation.Binary  using (  Setoid )
 open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------
 open import Overture.Preliminaries           using ( ∣_∣ ; ∥_∥ )
-open import Overture.Func.Preliminaries      using ( _⟶_ ; _∘_ ; 𝑖𝑑 )
+open import Overture.Func.Preliminaries      using ( _∘_ ; 𝑖𝑑 )
 open import Overture.Func.Inverses           using ( Image_∋_ ; eq )
 open import Overture.Func.Surjective         using ( ∘-IsSurjective )
 open import Algebras.Func.Basic      {𝑆 = 𝑆} using ( SetoidAlgebra ; _̂_ ; Lift-Algˡ
                                                    ; Lift-Algʳ ; Lift-Alg ; 𝕌[_] )
 open import Homomorphisms.Func.Basic {𝑆 = 𝑆} using ( hom ; IsHom ; epi ; IsEpi ; compatible-map )
-open Func using ( cong ) renaming (f to _⟨$⟩_ )
+open _⟶_ using ( cong ) renaming (f to _⟨$⟩_ )
 
 private variable
  α β γ ρᵃ ρᵇ ρᶜ ℓ : Level

@@ -20,7 +20,7 @@ module Overture.Func.Surjective where
 -- Imports from Agda and the Agda Standard Library --------------------------
 open import Agda.Primitive   using ( _⊔_ ; Level ) renaming ( Set to Type )
 open import Data.Product     using ( _,_ ; Σ-syntax )
-open import Function.Bundles using ( Func ; Surjection )
+open import Function.Bundles using ( Surjection ) renaming ( Func to _⟶_ )
 open import Function         using ( IsSurjection )
 open import Relation.Binary using ( Setoid )
 
@@ -30,8 +30,8 @@ import Function.Definitions as FD
 
 -- Imports from agda-algebras -----------------------------------------------
 open import Overture.Preliminaries      using ( ∣_∣ ; ∥_∥ ; ∃-syntax ; transport )
-open import Overture.Func.Preliminaries using ( _⟶_ ; _∘_ )
-open import Overture.Func.Inverses      using ( image_∋_ ; Image_∋_ ; Inv ; InvIsInverseʳ )
+open import Overture.Func.Preliminaries using ( _∘_ )
+open import Overture.Func.Inverses      using ( Img_∋_ ; Image_∋_ ; Inv ; InvIsInverseʳ )
 
 
 private variable
@@ -44,11 +44,11 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
  open Surjection {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝑨}{To = 𝑩} renaming (f to _⟨$⟩_)
  open Setoid 𝑨 using () renaming (Carrier to A; _≈_ to _≈₁_; isEquivalence to isEqA )
  open Setoid 𝑩 using ( trans ; sym ) renaming (Carrier to B; _≈_ to _≈₂_; isEquivalence to isEqB )
- open Func {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝑨}{To = 𝑩} renaming (f to _⟨$⟩_ )
+ open _⟶_ {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝑨}{To = 𝑩} renaming (f to _⟨$⟩_ )
  open FD _≈₁_ _≈₂_
 
  isSurj : (A → B) →  Type (α ⊔ β ⊔ ρᵇ)
- isSurj f = ∀ {y} → image_∋_ {𝑨 = 𝑨}{𝑩 = 𝑩} f y
+ isSurj f = ∀ {y} → Img_∋_ {𝑨 = 𝑨}{𝑩 = 𝑩} f y
 
  IsSurjective : (𝑨 ⟶ 𝑩) →  Type (α ⊔ β ⊔ ρᵇ)
  IsSurjective F = ∀ {y} → Image F ∋ y
@@ -56,8 +56,8 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
  isSurj→IsSurjective : (F : 𝑨 ⟶ 𝑩) → isSurj (_⟨$⟩_ F) → IsSurjective F
  isSurj→IsSurjective F isSurjF {y} = hyp isSurjF
   where
-  hyp : image_∋_ (_⟨$⟩_ F) y → Image F ∋ y
-  hyp (image_∋_.eq a x) = eq a x
+  hyp : Img (_⟨$⟩_ F) ∋ y → Image F ∋ y
+  hyp (Img_∋_.eq a x) = eq a x
 
  open Image_∋_
 
@@ -89,7 +89,7 @@ With the next definition, we can represent a *right-inverse* of a surjective fun
 
 \end{code}
 
-Thus, a right-inverse of `f` is obtained by applying `RightInv` to `f` and a proof of `IsSurjective f`.  Next we prove that this does indeed give the right-inverse.
+Thus, a right-inverse of `f` is obtained by applying `Inv` to `f` and a proof of `IsSurjective f`.  Next we prove that this does indeed give the right-inverse.
 
 \begin{code}
 
@@ -108,7 +108,7 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ}{𝑪 : Setoid γ ρᶜ
  open Setoid 𝑨 using () renaming (Carrier to A; _≈_ to _≈₁_)
  open Setoid 𝑩 using ( trans ; sym ) renaming (Carrier to B; _≈_ to _≈₂_)
  open Setoid 𝑪 using () renaming (Carrier to C; _≈_ to _≈₃_)
- open Func renaming (f to _⟨$⟩_ )
+ open _⟶_ renaming (f to _⟨$⟩_ )
  open FD _≈₁_ _≈₂_
 
 

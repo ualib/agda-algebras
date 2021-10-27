@@ -22,23 +22,27 @@ module Overture.Func.Injective where
 
 -- Imports from Agda and the Agda Standard Library -------------
 open import Agda.Primitive       using ( _⊔_ ; Level ) renaming ( Set to Type )
-open import Function.Bundles     using ( Func ; Injection )
+open import Function.Bundles     using ( Injection ) renaming ( Func to _⟶_ )
 open import Function.Base        using ( _∘_ ; id )
 open import Relation.Binary.Core using ( _Preserves_⟶_ )
 open import Relation.Binary using ( Rel )
 import Function.Definitions as FD
 
 -- Imports from agda-algebras -----------------------------------------------
-open import Overture.Func.Preliminaries using ( _⟶_ ; 𝑖𝑑 )
+open import Overture.Func.Preliminaries using ( 𝑖𝑑 )
 open import Overture.Func.Inverses      using ( Image_∋_ ; Inv )
--- open import Overture.Injective          using ( module compose )
 
 private variable
  α β γ ρᵃ ρᵇ ρᶜ ℓ₁ ℓ₂ ℓ₃ : Level
 
 \end{code}
 
-We can prove that, when `f` is injective, the range-restricted right-inverse `Inv`, defined in [Overture.Setoid.Inverse][], is also the (range-restricted) left-inverse.
+A function `f : A ⟶ B` from one setoid `(A , ≈₀)` to another
+`(B , ≈₁)` is called *injective* provided `∀ a₀ a₁`, if `f ⟨$⟩ a₀ ≈₁ f ⟨$⟩
+a₁`, then `a₀ ≈₀ a₁`.  The [Agda Standard Library][] defines a type representing
+injective functions on bare types and we use this type (called `Injective`) to
+define our own type representing the property of being an injective function on
+setoids (called `IsInjective`).
 
 \begin{code}
 
@@ -47,7 +51,7 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
  open Injection {From = 𝑨}{To = 𝑩} renaming (f to _⟨$⟩_)
  open Setoid 𝑨 using () renaming (Carrier to A; _≈_ to _≈₁_)
  open Setoid 𝑩 using ( trans ; sym ) renaming (Carrier to B; _≈_ to _≈₂_)
- open Func {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝑨}{To = 𝑩} renaming (f to _⟨$⟩_ )
+ open _⟶_ {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝑨}{To = 𝑩} renaming (f to _⟨$⟩_ )
  open FD _≈₁_ _≈₂_
 
  IsInjective : (𝑨 ⟶ 𝑩) →  Type (α ⊔ ρᵃ ⊔ ρᵇ)
@@ -89,7 +93,7 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} {𝑪 : Setoid γ ρ�
  open Injection {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝑨}{To = 𝑩} renaming (f to _⟨$⟩_)
  open Setoid 𝑨 using () renaming (Carrier to A; _≈_ to _≈₁_)
  open Setoid 𝑩 using ( trans ; sym ) renaming (Carrier to B; _≈_ to _≈₂_)
- open Func {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝑨}{To = 𝑩} renaming (f to _⟨$⟩_ )
+ open _⟶_ {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝑨}{To = 𝑩} renaming (f to _⟨$⟩_ )
  open Setoid 𝑪 using ( sym ) renaming (Carrier to C; _≈_ to _≈₃_)
  open compose {A = A}{B}{C} _≈₁_ _≈₂_ _≈₃_ using ( ∘-injective-func )
 
@@ -109,7 +113,6 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} {𝑪 : Setoid γ ρ�
   apg = f gi
   conggf : (λ x → apg (apf x)) Preserves _≈₁_ ⟶ _≈₃_
   conggf {x}{y} x≈y = cong gi (cong fi x≈y)
-
 
 
 id-is-injective : {𝑨 : Setoid α ρᵃ} → IsInjective{𝑨 = 𝑨}{𝑨} 𝑖𝑑

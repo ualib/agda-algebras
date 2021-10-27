@@ -33,10 +33,10 @@ open import Overture.Transformers  using ( Bijection ; ∣_∣=∣_∣ ; Pointwi
                                          ; UncurryFin3 ; Fin2A→B-to-A×A→B ; A×A→B-to-Fin2A→B
                                          ; Fin2A→B~A×A→B )
 
-open import Overture.Func.Preliminaries using ( _⟶_ ; _∘_ ; 𝑙𝑖𝑓𝑡 ; lift∼lower ; lower∼lift
+open import Overture.Func.Preliminaries using ( _∘_ ; 𝑙𝑖𝑓𝑡 ; lift∼lower ; lower∼lift
                                               ; liftFunc ; preserves≈ )
 
-open import Overture.Func.Inverses      using ( image_∋_ ; Image_∋_ ; IsInRange ; Image⊆Range
+open import Overture.Func.Inverses      using ( Img_∋_ ; Image_∋_ ; IsInRange ; Image⊆Range
                                               ; IsInRange→IsInImage ; Imagef∋f ; _range ; _image
                                               ; _preimage ; f∈range ; ⌜_⌝ ; Ran ; RRan
                                               ; _preimage≈image ; Dom ; inv ; Inv ; Inv' ; [_]⁻¹

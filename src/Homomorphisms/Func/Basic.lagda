@@ -20,12 +20,11 @@ module Homomorphisms.Func.Basic {𝑆 : Signature 𝓞 𝓥} where
 -- Imports from Agda and the Agda Standard Library ------------------------------
 open import Agda.Primitive    using ( _⊔_ ; Level ) renaming ( Set to Type )
 open import Data.Product      using ( _,_ ; Σ ; Σ-syntax )
-open import Function.Bundles  using ( Func )
+open import Function.Bundles using () renaming ( Func to _⟶_ )
 open import Relation.Binary   using ( Setoid )
 
 -- Imports from the Agda Universal Algebra Library ---------------------------
 open import Overture.Preliminaries      using ( ∣_∣ ; ∥_∥ )
-open import Overture.Func.Preliminaries using ( _⟶_ )
 open import Overture.Func.Injective     using ( IsInjective )
 open import Overture.Func.Surjective    using ( IsSurjective )
 open import Algebras.Func.Basic {𝑆 = 𝑆} using ( SetoidAlgebra ; _̂_ )
@@ -38,10 +37,7 @@ module _ (𝑨 : SetoidAlgebra α ρᵃ)(𝑩 : SetoidAlgebra β ρᵇ) where
  open SetoidAlgebra 𝑩 using () renaming (Domain to B )
  open Setoid A using () renaming ( _≈_ to _≈₁_ )
  open Setoid B using () renaming ( _≈_ to _≈₂_ )
- open Func {a = α}{ρᵃ}{β}{ρᵇ}{From = A}{To = B} renaming (f to _⟨$⟩_ )
-
- -- ≈preserving : (A ⟶ B) → Type (α ⊔ ρᵃ ⊔ ρᵇ)
- -- ≈preserving f = ∀ {x y} → x ≈₁ y → (f ⟨$⟩ x) ≈₂ (f ⟨$⟩ y)
+ open _⟶_ {a = α}{ρᵃ}{β}{ρᵇ}{From = A}{To = B} renaming (f to _⟨$⟩_ )
 
  compatible-map-op : (A ⟶ B) → ∣ 𝑆 ∣ → Type (𝓥 ⊔ α ⊔ ρᵇ)
  compatible-map-op h f = ∀ {a} → (h ⟨$⟩ ((f ̂ 𝑨) a)) ≈₂ ((f ̂ 𝑩) (λ x → (h ⟨$⟩ (a x))))

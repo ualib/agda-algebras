@@ -18,7 +18,7 @@ module Relations.Func.Discrete where
 -- Imports from Agda and the Agda Standard Library ----------------------------------------------
 open import Agda.Primitive       using ( _⊔_ ; lsuc ) renaming ( Set to Type )
 open import Data.Product         using ( _,_ ; _×_ )
-open import Function.Bundles        using ( Func )
+open import Function.Bundles using () renaming ( Func to _⟶_ )
 open import Function.Base        using ( _∘_ )
 open import Level                using ( Level ; Lift )
 open import Relation.Binary      using ( IsEquivalence ; Setoid )
@@ -31,7 +31,6 @@ open import Relation.Binary.PropositionalEquality
 
 -- Imports from agda-algebras -------------------------------------------------------------------
 open import Overture.Preliminaries using ( Π-syntax )
-open import Overture.Func.Preliminaries using ( _⟶_ )
 
 private variable α β ρᵃ ρᵇ ℓ 𝓥 : Level
 \end{code}
@@ -40,7 +39,7 @@ Here is a function that is useful for defining poitwise equality of functions wr
 
 \begin{code}
 
-open Func renaming ( f to _⟨$⟩_ )
+open _⟶_ renaming ( f to _⟨$⟩_ )
 module _ {𝐴 : Setoid α ρᵃ}{𝐵 : Setoid β ρᵇ} where
  open Setoid 𝐴 using () renaming ( Carrier to A ; _≈_ to _≈₁_ )
  open Setoid 𝐵 using () renaming ( Carrier to B ; _≈_ to _≈₂_ )

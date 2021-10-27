@@ -20,7 +20,7 @@ module Terms.Func.Properties {𝑆 : Signature 𝓞 𝓥} where
 -- Imports from Agda and the Agda Standard Library ---------------------
 open import Agda.Primitive   using ( Level ) renaming ( Set to Type )
 open import Data.Product     using ( _,_ )
-open import Function.Bundles using ( Func )
+open import Function.Bundles using () renaming ( Func to _⟶_ )
 open import Function.Base    using ( _∘_ )
 open import Relation.Binary  using ( Setoid )
 open import Relation.Binary.PropositionalEquality as ≡ using (_≡_)
@@ -28,15 +28,14 @@ import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------------
 open import Overture.Preliminaries           using ( ∣_∣ ; ∥_∥ )
-open import Overture.Func.Preliminaries      using ( _⟶_ )
-open import Overture.Func.Inverses           using ( image_∋_ ; eq )
+open import Overture.Func.Inverses           using ( Img_∋_ ; eq )
 open import Overture.Func.Surjective         using ( isSurj ; IsSurjective ; isSurj→IsSurjective )
 open import Algebras.Func.Basic      {𝑆 = 𝑆} using ( SetoidAlgebra ; 𝕌[_] ; _̂_ )
 open import Homomorphisms.Func.Basic {𝑆 = 𝑆} using ( hom ; compatible-map ; IsHom )
 open import Terms.Basic              {𝑆 = 𝑆} using ( Term )
 open import Terms.Func.Basic         {𝑆 = 𝑆} using ( 𝑻 ; _≐_  ; ≐-isRefl )
 open Term
-open Func using ( cong ) renaming ( f to _⟨$⟩_ )
+open _⟶_ using ( cong ) renaming ( f to _⟨$⟩_ )
 
 private variable
  α ρᵃ β ρᵇ ρ χ : Level
@@ -66,9 +65,9 @@ module _ {𝑨 : SetoidAlgebra α ρ}(h : X → 𝕌[ 𝑨 ]) where
  free-lift-of-surj-isSurj : isSurj{𝑨 = ≡.setoid X}{𝑩 = A} h → isSurj{𝑨 = TX}{𝑩 = A} free-lift
  free-lift-of-surj-isSurj hE {y} = mp p
   where
-  p : image h ∋ y
+  p : Img h ∋ y
   p = hE
-  mp : image h ∋ y → image free-lift ∋ y
+  mp : Img h ∋ y → Img free-lift ∋ y
   mp (eq a x) = eq (ℊ a) x
 
  free-lift-func : TX ⟶ A

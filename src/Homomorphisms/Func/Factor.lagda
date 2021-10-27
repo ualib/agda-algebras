@@ -19,7 +19,7 @@ module Homomorphisms.Func.Factor {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library -------------------------------------------------
 open import Data.Product    using ( _,_ ; Σ-syntax ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Function        using ( Func ; _∘_ )
+open import Function        using ( _∘_ ) renaming ( Func to _⟶_ )
 open import Level           using ( Level )
 open import Relation.Binary using ( Setoid )
 open import Relation.Unary  using ( _⊆_ )
@@ -28,7 +28,6 @@ import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------------
 open import Overture.Preliminaries           using ( ∣_∣ ; ∥_∥ )
-open import Overture.Func.Preliminaries      using ( _⟶_ )
 open import Overture.Func.Inverses                using ( Image_∋_ )
 open import Overture.Func.Surjective         using ( IsSurjective ; SurjInv ; SurjInvIsInverseʳ ; epic-factor )
 open import Relations.Discrete               using ( kernelRel )
@@ -67,7 +66,7 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ}
  open Setoid B using () renaming ( _≈_ to _≈₂_ ; sym to sym₂ )
  open Setoid C using ( trans ) renaming ( _≈_ to _≈₃_ ; sym to sym₃ )
  open SetoidReasoning B
- open Func using ( cong ) renaming (f to _⟨$⟩_ )
+ open _⟶_ using ( cong ) renaming (f to _⟨$⟩_ )
 
  private
   gfunc = ∣ gh ∣
@@ -102,17 +101,17 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ}
 
   φmap : C ⟶ B
   _⟨$⟩_ φmap = g ∘ h⁻¹
-  Func.cong φmap = Khg ∘ ζ
+  cong φmap = Khg ∘ ζ
 
   gφh : (a : 𝕌[ 𝑨 ]) → g a ≈₂ φmap ⟨$⟩ (h a)
   gφh a = Khg ξ
 
 
-  open Func φmap using () renaming (cong to φcong)
+  open _⟶_ φmap using () renaming (cong to φcong)
   φcomp : compatible-map 𝑪 𝑩 φmap
   φcomp {f}{c} =
    begin
-    φmap ⟨$⟩ ((f ̂ 𝑪) c)              ≈˘⟨ φcong (Func.cong Interp (≡.refl , (λ _ → η))) ⟩
+    φmap ⟨$⟩ ((f ̂ 𝑪) c)              ≈˘⟨ φcong (cong Interp (≡.refl , (λ _ → η))) ⟩
     g (h⁻¹ ((f ̂ 𝑪)(h ∘ (h⁻¹ ∘ c)))) ≈˘⟨ φcong (compatible ∥ hh ∥) ⟩
     g (h⁻¹ (h ((f ̂ 𝑨)(h⁻¹ ∘ c))))   ≈˘⟨ gφh ((f ̂ 𝑨)(h⁻¹ ∘ c)) ⟩
     g ((f ̂ 𝑨)(h⁻¹ ∘ c))             ≈⟨ compatible ∥ gh ∥ ⟩
