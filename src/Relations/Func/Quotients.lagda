@@ -19,7 +19,7 @@ module Relations.Func.Quotients where
 open import Agda.Primitive   using ( _⊔_ ; Level ; lsuc ) renaming ( Set to Type )
 open import Data.Product     using ( _,_ ; Σ-syntax ) renaming ( _×_ to _∧_ )
 open import Function         using ( id )
-open import Function.Bundles using ( Func )
+open import Function.Bundles using () renaming ( Func to _⟶_ )
 open import Relation.Binary  using ( IsEquivalence ) renaming ( Rel to BinRel )
 open import Relation.Unary   using ( Pred ; _∈_ ; _⊆_ )
 open import Relation.Binary  using ( Setoid )
@@ -27,7 +27,6 @@ open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
 
 -- Imports from agda-algebras -----------------------------------------------------
 open import Overture.Preliminaries      using ( ∣_∣ ; ∥_∥ )
-open import Overture.Func.Preliminaries using ( _⟶_ )
 open import Relations.Func.Discrete     using ( fker )
 open import Relations.Quotients         using ( [_] ; Equivalence )
 
@@ -42,7 +41,7 @@ A prominent example of an equivalence relation is the kernel of any function.
 
 \begin{code}
 
-open Func using ( cong ) renaming ( f to _⟨$⟩_ )
+open _⟶_ using ( cong ) renaming ( f to _⟨$⟩_ )
 
 module _ {𝐴 : Setoid α ρᵃ}{𝐵 : Setoid β ρᵇ} where
  open Setoid 𝐴 using ( refl ) renaming (Carrier to A )

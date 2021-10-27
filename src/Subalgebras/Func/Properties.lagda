@@ -21,15 +21,13 @@ module Subalgebras.Func.Properties {𝑆 : Signature 𝓞 𝓥} where
 -- Imports from Agda and the Agda Standard Library ------------------------------------
 open import Agda.Primitive   using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
 open import Data.Product     using ( _,_ ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Function.Base    using ( _∘_ )
-open import Function.Bundles using ( Func )
+open import Function         using ( _∘_ ) renaming ( Func to _⟶_ )
 open import Relation.Binary  using ( Setoid )
 open import Relation.Unary   using ( Pred ; _⊆_ )
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------------
 open import Overture.Preliminaries                  using ( ∣_∣ ; ∥_∥ )
-open import Overture.Func.Preliminaries             using ( _⟶_ )
 open import Overture.Func.Injective                 using ( id-is-injective ; module compose ; IsInjective )
 open import Algebras.Func.Basic             {𝑆 = 𝑆} using ( SetoidAlgebra ; Lift-Algˡ ; Lift-Algʳ ; Lift-Alg ; ov )
 open import Algebras.Func.Products          {𝑆 = 𝑆} using ( ⨅ )
@@ -119,7 +117,7 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ}{𝑪 : S
  A≅B×B≤C→A≤C : 𝑨 ≅ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
  A≅B×B≤C→A≤C A≅B B≤C = ≤-trans (≅→≤ A≅B) B≤C
 
-open Func using ( cong ) renaming ( f to _⟨$⟩_ )
+open _⟶_ using ( cong ) renaming ( f to _⟨$⟩_ )
 module _ {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ} where
  open SetoidAlgebra 𝑨 using () renaming (Domain to A)
  open SetoidAlgebra 𝑩 using () renaming (Domain to B)

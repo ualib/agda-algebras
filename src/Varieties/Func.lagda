@@ -21,6 +21,7 @@ open import Varieties.Func.Closure
 open import Varieties.Func.Properties
 open import Varieties.Func.Preservation
 open import Varieties.Func.FreeAlgebras
+open import Varieties.Func.HSP
 
 \end{code}
 

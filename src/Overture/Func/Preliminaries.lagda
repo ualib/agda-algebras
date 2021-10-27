@@ -19,20 +19,17 @@ module Overture.Func.Preliminaries where
 -- Imports from Agda and the Agda Standard Library -----------------------
 open import Agda.Primitive          using ( _⊔_ ) renaming ( Set to Type )
 open import Function                using ( id )
-open import Function.Bundles        using ( Func )
+open import Function.Bundles        using () renaming ( Func to _⟶_ )
 import Function.Base as Fun
 open import Relation.Binary         using ( Setoid )
 open import Level
 private variable
  α ρᵃ β ρᵇ γ ρᶜ : Level
 
-_⟶_ : Setoid α ρᵃ → Setoid β ρᵇ → Type _
-A ⟶ B = Func A B
-
 𝑖𝑑 : {A : Setoid α ρᵃ} → A ⟶ A
 𝑖𝑑 {A} = record { f = id ; cong = id }
 
-open Func renaming ( f to _⟨$⟩_ )
+open _⟶_ renaming ( f to _⟨$⟩_ )
 
 _∘_ : {A : Setoid α ρᵃ}
       {B : Setoid β ρᵇ}
@@ -59,7 +56,7 @@ module _ {𝑨 : Setoid α ρᵃ} where
  lower∼lift : ∀ a → (lower {α}{β}) (lift a) ≈ₐ a
  lower∼lift _ = reflₐ
 
- liftFunc : {ℓ : Level} → Func 𝑨 (𝑙𝑖𝑓𝑡 ℓ)
+ liftFunc : {ℓ : Level} → 𝑨 ⟶ 𝑙𝑖𝑓𝑡 ℓ
  liftFunc = record { f = lift ; cong = id }
 
  module _ {𝑩 : Setoid β ρᵇ} where

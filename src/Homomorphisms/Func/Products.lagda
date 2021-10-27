@@ -19,7 +19,7 @@ module Homomorphisms.Func.Products {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library --------------------------
 open import Agda.Primitive   using ( _⊔_ ; lsuc ) renaming ( Set to Type )
-open import Function.Bundles using ( Func )
+open import Function.Bundles using () renaming ( Func to _⟶_ )
 open import Data.Product     using ( _,_ )
 open import Level            using ( Level )
 open import Relation.Binary using ( Setoid )
@@ -27,7 +27,6 @@ open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
 
 -- Imports from the Agda Universal Algebras Library ----------------------
 open import Overture.Preliminaries using ( ∣_∣ ; ∥_∥)
-open import Overture.Func.Preliminaries using ( _⟶_ )
 open import Algebras.Func.Basic       {𝑆 = 𝑆} using ( SetoidAlgebra )
 open import Algebras.Func.Products    {𝑆 = 𝑆} using ( ⨅ )
 open import Homomorphisms.Func.Basic  {𝑆 = 𝑆} using ( hom ; IsHom ; epi )
@@ -47,7 +46,7 @@ module _ {I : Type 𝓘}{𝑨 : SetoidAlgebra α ρᵃ}(ℬ : I → SetoidAlgebr
  open SetoidAlgebra 𝑨 using () renaming ( Domain to A )
  open Setoid A using ( ) renaming ( refl to refl₁ )
  open SetoidAlgebra (⨅ ℬ) using () renaming ( Domain to ⨅B )
- open Func using ( cong ) renaming ( f to _⟨$⟩_ )
+ open _⟶_ using ( cong ) renaming ( f to _⟨$⟩_ )
  open SetoidAlgebra using ( Domain )
  open Setoid using ( refl )
  open IsHom

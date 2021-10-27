@@ -22,9 +22,9 @@ module Overture.Func.Bijective {α ρᵃ β ρᵇ }{𝑨 : Setoid α ρᵃ}{𝑩
 -- Imports from Agda and the Agda Standard Library --------------------------
 open import Agda.Primitive    using ( _⊔_ ; Level ) renaming ( Set to Type )
 open import Data.Product      using ( _,_ ; _×_ )
+open import Function.Bundles using () renaming ( Func to _⟶_ )
 
 -- Imports from agda-algebras -----------------------------------------------
-open import Overture.Func.Preliminaries using ( _⟶_ )
 open import Overture.Func.Inverses using ( Image_∋_ ; Inv )
 open import Overture.Func.Surjective using ( IsSurjective )
 open import Overture.Func.Injective using ( IsInjective )

@@ -21,14 +21,13 @@ module Homomorphisms.Func.Noether {𝑆 : Signature 𝓞 𝓥} where
 open import Agda.Primitive   using ( Level )
 open import Data.Product     using (Σ-syntax ; _,_ ) renaming ( _×_ to _∧_ )
 open import Function.Base    using ( id )
-open import Function.Bundles using ( Func )
+open import Function.Bundles using () renaming ( Func to _⟶_ )
 open import Relation.Binary  using ( Setoid )
 open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from agda-algebras ------------------------------------------------
 open import Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ )
-open import Overture.Func.Preliminaries        using ( _⟶_ )
 open import Overture.Func.Injective            using ( IsInjective )
 open import Algebras.Func.Basic                using ( SetoidAlgebra ; _̂_)
 open import Homomorphisms.Func.Basic   {𝑆 = 𝑆} using ( hom ; IsHom )
@@ -43,7 +42,7 @@ private variable
 
 \begin{code}
 
-open Func using ( cong ) renaming ( f to _⟨$⟩_ )
+open _⟶_ using ( cong ) renaming ( f to _⟨$⟩_ )
 open SetoidAlgebra using ( Domain )
 
 module _ {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ}(hh : hom 𝑨 𝑩) where

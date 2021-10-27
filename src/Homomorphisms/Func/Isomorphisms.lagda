@@ -20,7 +20,7 @@ open import Agda.Primitive              using ( _⊔_ ; lsuc ; Level ) renaming 
 open import Data.Product                using ( _,_ )
 open import Data.Unit.Polymorphic.Base  using () renaming ( ⊤ to 𝟙 ; tt to ∗ )
 open import Data.Unit.Base              using ( ⊤ ; tt )
-open import Function                    using ( Func ; id )
+open import Function                    using ( id ) renaming ( Func to _⟶_ )
 open import Level                       using ( Level ; Lift ; lift ; lower )
 open import Relation.Binary             using ( Setoid )
 open import Relation.Binary.Definitions using ( Reflexive ; Sym ; Trans )
@@ -28,7 +28,7 @@ open import Relation.Binary.PropositionalEquality as ≡ using ()
 
 -- Imports from the Agda Universal Algebra Library -----------------------------------------
 open import Overture.Preliminaries                using ( ∣_∣ ; ∥_∥ )
-open import Overture.Func.Preliminaries           using ( _⟶_ ; _∘_ )
+open import Overture.Func.Preliminaries           using ( _∘_ )
 open import Overture.Func.Inverses                using ( eq )
 open import Overture.Func.Injective               using ( IsInjective )
 open import Overture.Func.Surjective              using ( IsSurjective )
@@ -58,7 +58,7 @@ private variable
  α ρᵃ β ρᵇ γ ρᶜ ι : Level
 
 
-open Func using ( cong ) renaming ( f to _⟨$⟩_ )
+open _⟶_ using ( cong ) renaming ( f to _⟨$⟩_ )
 open SetoidAlgebra using ( Domain )
 
 module _ (𝑨 : SetoidAlgebra α ρᵃ) (𝑩 : SetoidAlgebra β ρᵇ) where
@@ -485,15 +485,14 @@ module _ {ι : Level}{𝑨 : SetoidAlgebra α ρᵃ} where
  open SetoidAlgebra (⨅ (λ (i : 𝟙{ι}) → 𝑨)) using () renaming (Domain to ⨅A)
  open Setoid A using ( refl )
 
- open Func renaming ( f to _⟨$⟩_ )
  open _≅_
  open IsHom
 
  private
-  to𝟙 : Func A ⨅A
+  to𝟙 : A ⟶ ⨅A
   (to𝟙 ⟨$⟩ x) ∗ = x
   cong to𝟙 xy ∗ = xy
-  from𝟙 : Func ⨅A A
+  from𝟙 : ⨅A ⟶ A
   from𝟙 ⟨$⟩ x = x ∗
   cong from𝟙 xy = xy ∗
 
@@ -516,15 +515,14 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ} where
  open SetoidAlgebra (⨅ (λ (i : ⊤) → 𝑨)) using () renaming (Domain to ⨅A)
  open Setoid A using ( refl )
 
- open Func renaming ( f to _⟨$⟩_ )
  open _≅_
  open IsHom
 
  private
-  to⊤ : Func A ⨅A
+  to⊤ : A ⟶ ⨅A
   (to⊤ ⟨$⟩ x) = λ _ → x
   cong to⊤ xy = λ _ → xy
-  from⊤ : Func ⨅A A
+  from⊤ : ⨅A ⟶ A
   from⊤ ⟨$⟩ x = x tt
   cong from⊤ xy = xy tt
 
