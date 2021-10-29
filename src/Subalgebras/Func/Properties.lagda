@@ -28,7 +28,7 @@ import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------------
 open import Overture.Preliminaries                  using ( ∣_∣ ; ∥_∥ )
-open import Overture.Func.Injective                 using ( id-is-injective ; module compose ; IsInjective )
+open import Overture.Func.Injective                 using ( id-is-injective ; module compose ; IsInjective ; ∘-injective )
 open import Algebras.Func.Basic             {𝑆 = 𝑆} using ( SetoidAlgebra ; Lift-Algˡ ; Lift-Algʳ ; Lift-Alg ; ov )
 open import Algebras.Func.Products          {𝑆 = 𝑆} using ( ⨅ )
 open import Homomorphisms.Func.Basic        {𝑆 = 𝑆} using ( hom ; IsHom )
@@ -68,16 +68,16 @@ module _ {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ}{𝑪 : S
  open Setoid (Domain 𝑨) using () renaming ( _≈_ to _≈₁_ ; Carrier to ∣A∣ )
  open Setoid (Domain 𝑩) using () renaming ( _≈_ to _≈₂_ ; Carrier to ∣B∣ )
  open Setoid (Domain 𝑪) using () renaming ( _≈_ to _≈₃_ ; Carrier to ∣C∣ )
- open compose {A = ∣A∣}{B = ∣B∣}{C = ∣C∣} _≈₁_ _≈₂_ _≈₃_ using ( ∘-injective-func )
+
 
  ≤-trans : 𝑨 ≤ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
- ≤-trans A≤B B≤C = (∘-hom ∣ A≤B ∣ ∣ B≤C ∣ ) , ∘-injective-func ∥ A≤B ∥ ∥ B≤C ∥
+ ≤-trans ( f , finj ) ( g , ginj ) = (∘-hom f g) , ∘-injective ∣ f ∣ ∣ g ∣ finj ginj
 
  ≤-trans-≅ : 𝑨 ≤ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤ 𝑪
- ≤-trans-≅ (h , hinj) B≅C = (∘-hom h (to B≅C)) , ∘-injective-func hinj (≅toInjective B≅C)
+ ≤-trans-≅ (h , hinj) B≅C = (∘-hom h (to B≅C)) , ∘-injective ∣ h ∣ ∣ to B≅C ∣ hinj (≅toInjective B≅C)
 
  ≅-trans-≤ : 𝑨 ≅ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
- ≅-trans-≤ A≅B (h , hinj) = (∘-hom (to A≅B) h) , (∘-injective-func (≅toInjective A≅B) hinj)
+ ≅-trans-≤ A≅B (h , hinj) = (∘-hom (to A≅B) h) , (∘-injective ∣ to A≅B ∣ ∣ h ∣ (≅toInjective A≅B) hinj)
 
 module _ {𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ}{𝑪 : SetoidAlgebra γ ρᶜ} where
  ≥-trans : 𝑨 ≥ 𝑩 → 𝑩 ≥ 𝑪 → 𝑨 ≥ 𝑪

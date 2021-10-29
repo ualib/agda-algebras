@@ -29,7 +29,7 @@ open import Relation.Binary using ( Rel )
 import Function.Definitions as FD
 
 -- Imports from agda-algebras -----------------------------------------------
-open import Overture.Func.Preliminaries using ( 𝑖𝑑 )
+open import Overture.Func.Preliminaries using ( 𝑖𝑑 ) renaming ( _∘_ to _⟨∘⟩_ )
 open import Overture.Func.Inverses      using ( Image_∋_ ; Inv )
 
 private variable
@@ -48,7 +48,7 @@ setoids (called `IsInjective`).
 
 module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
 
- open Injection {From = 𝑨}{To = 𝑩} renaming (f to _⟨$⟩_)
+ open Injection {From = 𝑨}{To = 𝑩} using ( function ; injective ) renaming (f to _⟨$⟩_)
  open Setoid 𝑨 using () renaming (Carrier to A; _≈_ to _≈₁_)
  open Setoid 𝑩 using ( trans ; sym ) renaming (Carrier to B; _≈_ to _≈₂_)
  open _⟶_ {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝑨}{To = 𝑩} renaming (f to _⟨$⟩_ )
@@ -71,39 +71,50 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
   Goal : a₀ ≈₁ a₁
   Goal = injective F fa₀≈fa₁
 
+\end{code}
 
+Proving that the composition of injective functions is again injective
+is simply a matter of composing the two assumed witnesses to injectivity.
+(Note that here we are viewing the maps as functions on the underlying carriers
+of the setoids; an alternative for setoid functions, called `∘-injective`, is proved below.)
 
-module compose {A : Type α}{B : Type β}{C : Type γ}
-               (_≈₁_ : Rel A ℓ₁) -- Equality over A
-               (_≈₂_ : Rel B ℓ₂) -- Equality over B
-               (_≈₃_ : Rel C ℓ₃) -- Equality over C
-               where
+\begin{code}
+
+module compose {A : Type α}(_≈₁_ : Rel A ρᵃ)
+               {B : Type β}(_≈₂_ : Rel B ρᵇ)
+               {C : Type γ}(_≈₃_ : Rel C ρᶜ) where
 
  open FD {A = A} {B} _≈₁_ _≈₂_ using () renaming ( Injective to InjectiveAB )
  open FD {A = B} {C} _≈₂_ _≈₃_ using () renaming ( Injective to InjectiveBC )
  open FD {A = A} {C} _≈₁_ _≈₃_ using () renaming ( Injective to InjectiveAC )
 
- ∘-injective-func : {f : A → B}{g : B → C}
-  →            InjectiveAB f → InjectiveBC g → InjectiveAC (g ∘ f)
- ∘-injective-func finj ginj = λ z → finj (ginj z)
+ ∘-injective-bare : {f : A → B}{g : B → C} → InjectiveAB f → InjectiveBC g → InjectiveAC (g ∘ f)
+ ∘-injective-bare finj ginj = finj ∘ ginj
 
+\end{code}
+
+The three lines that begin `open FD` illustrate one of the technical consequences
+of the precision demanded in formal proofs. In the statements of the
+`∘-injective-func` lemma, we must distinguish the (distinct) notions of injectivity, one
+for each domain-codomain pair of setoids, and we do this with the `open FD`
+lines which give each instance of injectivity a different name.
+
+\begin{code}
 
 module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} {𝑪 : Setoid γ ρᶜ} where
+ open Injection using () renaming ( function to fun )
+ open Setoid 𝑨 using () renaming ( Carrier to A ; _≈_ to _≈₁_ )
+ open Setoid 𝑩 using () renaming ( Carrier to B )
+ open Setoid 𝑪 using () renaming ( Carrier to C ; _≈_ to _≈₃_)
 
- open Injection {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝑨}{To = 𝑩} renaming (f to _⟨$⟩_)
- open Setoid 𝑨 using () renaming (Carrier to A; _≈_ to _≈₁_)
- open Setoid 𝑩 using ( trans ; sym ) renaming (Carrier to B; _≈_ to _≈₂_)
- open _⟶_ {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝑨}{To = 𝑩} renaming (f to _⟨$⟩_ )
- open Setoid 𝑪 using ( sym ) renaming (Carrier to C; _≈_ to _≈₃_)
- open compose {A = A}{B}{C} _≈₁_ _≈₂_ _≈₃_ using ( ∘-injective-func )
-
-
- -- Composition is injective.
+ ∘-injective : (f : 𝑨 ⟶ 𝑩)(g : 𝑩 ⟶ 𝑪)
+  →            IsInjective f → IsInjective g → IsInjective (g ⟨∘⟩ f)
+ ∘-injective _ _ finj ginj = finj ∘ ginj
 
  ∘-injection : Injection 𝑨 𝑩 → Injection 𝑩 𝑪 → Injection 𝑨 𝑪
  ∘-injection fi gi = record { f = λ x → apg (apf x)
                             ; cong = conggf
-                            ; injective = ∘-injective-func (injective fi) (injective gi)
+                            ; injective = ∘-injective (fun fi) (fun gi) (injective fi) (injective gi)
                             }
   where
   open Injection
