@@ -57,17 +57,19 @@
 %% ACRONYMS
 \newcommand\uip{{\relsize{-1}UIP}\xspace}
 
-
+\newcommand\abel{\url{http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% macros for module links %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newcommand\am[1]{\AgdaModule{#1}}
 \newcommand\ualibhtml[1]{\href{https://ualib.github.io/agda-algebras/#1.html}{\am{#1}}\xspace}
+\newcommand\ualmodule[1]{\href{https://ualib.github.io/agda-algebras/#1.html}{\am{#1}}\xspace}
 \newcommand\ualiburl[1]{\url{https://ualib.github.io/agda-algebras/#1.html}\xspace}
 % \newcommand\ualibsrcmod[2]{\href{https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/#1.lagda}{\texttt{https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/#1.lagda}}}
 % \newcommand\ualibsrcfile[2]{\href{https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/#1/#2.lagda}{\texttt{https://gitlab.com/ualib/ualib.gitlab.io/-/blob/master/UALib/#1/#2.lagda}}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
+\newcommand\DemosHSP{\href{https://ualib.github.io/agda-algebras/Demos.HSP.html}{Demos.HSP\xspace}}
 
 % -- Algebras
 \newcommand\gitAlgebras{\href{https://github.com/ualib/agda-algebras/-/blob/master/src/Algebras.lagda}{\texttt{Algebras.lagda}}}
@@ -102,28 +104,37 @@
 
 \newcommand{\AgdaTyped}[2]{\AgdaBound{#1}\AgdaSpace{}\AgdaSymbol{:}\AgdaSpace{}\AgdaBound{#2}\xspace}
 \newcommand{\AgdaComma}{\AgdaSpace{}\AgdaInductiveConstructor{,}\AgdaSpace{}}
+\newcommand{\AgdaPair}[2]{\AgdaSymbol{(}\AgdaBound{#1}\AgdaSpace{}\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}\AgdaBound{#2}\AgdaSymbol{)}\AgdaSpace{}}
 
-%% \newcommand\asp{\AgdaSpace{}}
 \newcommand\ab[1]{\AgdaBound{#1}}
-\newcommand\ag[1]{\AgdaGeneralizable{#1}}
 \newcommand\ac{\AgdaComma}
-\newcommand\ak{\AgdaKeyword}
-\newcommand\as[1]{\AgdaSymbol{#1}}
-\newcommand\au{\AgdaUnderscore}
-\newcommand\aic[1]{\AgdaInductiveConstructor{#1}}
+\newcommand\ad[1]{\AgdaDatatype{#1}}
 \newcommand\af[1]{\AgdaFunction{#1}}
 \newcommand\afld[1]{\AgdaField{#1}}
-\newcommand\ar[1]{\AgdaRecord{#1}}
-\newcommand\aof[1]{\AgdaOperator{\AgdaFunction{#1}}}
-\newcommand\ad[1]{\AgdaDatatype{#1}}
-\newcommand\aod[1]{\AgdaOperator{\AgdaDatatype{#1}}}
-\newcommand\apt[1]{\AgdaPrimitiveType{#1}}
-\newcommand\apr[1]{\AgdaPrimitive{#1}}
-\newcommand\aop[1]{\AgdaOperator{\AgdaPrimitive{#1}}}
-\newcommand\ap[1]{\AgdaPostulate{#1}}
+\newcommand\ag[1]{\AgdaGeneralizable{#1}}
 \newcommand\ai[1]{\AgdaOperator{\AgdaFunction{#1\AgdaUnderscore{}#1}}}
-\newcommand\aiab[2]{\AgdaOperator{\AgdaFunction{#1}}\AgdaSpace{}\AgdaBound{#2}\AgdaSpace{}\AgdaOperator{\AgdaFunction{#1}}}
 \newcommand\aia[2]{\AgdaOperator{\AgdaFunction{#1}}\AgdaSpace{}{#2}\AgdaSpace{}\AgdaOperator{\AgdaFunction{#1}}}
+\newcommand\aiab[2]{\AgdaOperator{\AgdaFunction{#1}}\AgdaSpace{}\AgdaBound{#2}\AgdaSpace{}\AgdaOperator{\AgdaFunction{#1}}}
+\newcommand\T[1]{\AgdaFunction{𝑻}\AgdaSpace{}\AgdaBound{#1}}
+\newcommand\Free[1]{\AgdaOperator{\AgdaFunction{𝔽[}}\AgdaSpace{}\AgdaBound{#1}\AgdaSpace{}\AgdaOperator{\AgdaFunction{]}}}
+
+\newcommand\aic[1]{\AgdaInductiveConstructor{#1}}
+\newcommand\ak[1]{\AgdaKeyword{#1}}
+\newcommand\ao[1]{\AgdaOperator{#1}}
+\newcommand\aoic[1]{\AgdaOperator{\AgdaInductiveConstructor{#1}}}
+\newcommand\aod[1]{\AgdaOperator{\AgdaDatatype{#1}}}
+\newcommand\aof[1]{\AgdaOperator{\AgdaFunction{#1}}}
+\newcommand\aofld[1]{\AgdaOperator{\AgdaField{#1}}}
+\newcommand\aop[1]{\AgdaOperator{\AgdaPrimitive{#1}}}
+\newcommand\aor[1]{\AgdaOperator{\AgdaRecord{#1}}}
+\newcommand\ap[1]{\AgdaPostulate{#1}}
+\newcommand\apr[1]{\AgdaPrimitive{#1}}
+\newcommand\apt[1]{\AgdaPrimitiveType{#1}}
+\newcommand\ar[1]{\AgdaRecord{#1}}
+\newcommand\as[1]{\AgdaSymbol{#1}}
+\newcommand\au{\AgdaUnderscore}
+
+
 \newcommand\Mac{\ensuremath{\mathrel{\AgdaComma}}}
 \newcommand\Mas[1]{\ensuremath{\mathrel{\AgdaSymbol{#1}}}}
 \newcommand\Mad[1]{\ensuremath{\mathrel{\AgdaDatatype{#1}}}}

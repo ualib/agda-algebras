@@ -1,29 +1,36 @@
-\section{Introduction}
-The Agda Universal Algebra Library (\agdaalgebras) is a collection of types and programs
+---
+layout: default
+title : "Demos.HSP-markdown module (Agda Universal Algebra Library)"
+date : "2021-10-24"
+author: "agda-algebras development team"
+---
+
+## <a id="introduction">Introduction</a>
+The Agda Universal Algebra Library ([agda-algebras][]) is a collection of types and programs
 (theorems and proofs) formalizing the foundations of universal algebra in dependent type
-theory using the \agda programming language and proof assistant.
+theory using the [Agda][] programming language and proof assistant.
 The agda-algebras library now includes a substantial collection of definitions, theorems, and
 proofs from universal algebra and equational logic and as such provides many
 examples that exhibit the power of inductive and dependent types for
 representing and reasoning about general algebraic and relational structures.
 
-The first major milestone of the \agdaalgebras project is a new formal
-proof of \emph{Birkhoff's variety theorem} (also known as the \emph{HSP theorem}), the first version
-of which was completed in \href{https://github.com/ualib/ualib.github.io/blob/b968e8af1117fc77700d3a588746cbefbd464835/sandbox/birkhoff-exp-new-new.lagda}{January of 2021}.
+The first major milestone of the [agda-algebras][] project is a new formal
+proof of *Birkhoff's variety theorem* (also known as the *HSP theorem*), the first version
+of which was completed in [January of 2021](https://github.com/ualib/ualib.github.io/blob/b968e8af1117fc77700d3a588746cbefbd464835/sandbox/birkhoff-exp-new-new.lagda).
 To the best of our knowledge, this was the first time Birkhoff's theorem had
 been formulated and proved in dependent type theory and verified with a proof
 assistant.
 
-In this paper, we present a single Agda module called \ualmodule{Demos.HSP}.
+In this paper, we present a single Agda module called [Demos.HSP][].
 This module extracts only those parts of the library needed to prove
 Birkhoff's variety theorem. In order to meet page limit guidelines, and to
 reduce strain on the reader, we omit proofs of some routine or technical
 lemmas that do not provide much insight into the overall development.
 However, a long version of this paper, which includes all code in the
-\DemosHSP module, is available on the arXiv. [reference needed]
+[Demos.HSP][] module, is available on the arXiv. [reference needed]
 
 In the course of our exposition of the proof of the HSP theorem, we discuss some of the
-more challenging aspects of formalizing \emph{universal algebra} in type theory and the
+more challenging aspects of formalizing *universal algebra* in type theory and the
 issues that arise when attempting to constructively prove some of the basic
 results in this area.  We demonstrate that dependent type theory and Agda,
 despite the demands they place on the user, are accessible to working
@@ -35,44 +42,44 @@ using the Agda proof assistant. Nonetheless we hope to make a compelling case fo
 investing in these technologies. Indeed, we are excited to share the gratifying
 rewards that come with some mastery of type theory and interactive theorem proving.
 
-\subsection{Prior art}
+### Prior art
 There have been a number of efforts to formalize parts of universal algebra in
 type theory prior to ours, most notably
 
-\begin{enumerate}
-\item 
-In~\cite{Capretta:1999}, Capretta formalized the basics of universal algebra in the
+1. Capretta [@Capretta:1999] (1999) formalized the basics of universal algebra in the
    Calculus of Inductive Constructions using the Coq proof assistant;
-\item In~\cite{Spitters:2011}, Spitters and van der Weegen formalized the basics of universal algebra
+2. Spitters and van der Weegen [@Spitters:2011] (2011) formalized the basics of universal algebra
    and some classical algebraic structures, also in the Calculus of Inductive Constructions using
-   the Coq proof assistant and promoting the use of type classes;
-\item In~\cite{Gunther:2018} Gunther, et al developed what was (prior to the \agdaalgebras library)
-   the most extensive library of formalized universal algebra to date; like \agdaalgebras, that work is based on dependent type theory, is programmed in Agda, and goes beyond the Noether isomorphism theorems to include some basic equational logic; although the coverage is less extensive than that of \agdaalgebras, Gunther et al do treat \emph{multisorted} algebras, whereas \agdaalgebras is currently limited to single sorted structures.
-\item Lynge and Spitters [@Lynge:2019] (2019) formalize basic, mutisorted universal algebra, up to the
+   the Coq proof assistant, promoting the use of type classes;
+3. Gunther, et al [@Gunther:2018] (2018) developed what seems to be (prior to the [agda-algebras][] library)
+   the most extensive library of formal universal algebra to date; this work is based on dependent type
+   theory and programmed in Agda; it treats multisorted algebras and goes beyond the basic Noether
+   isomorphism theorems to include some basic equational logic.
+4. Lynge and Spitters [@Lynge:2019] (2019) formalize basic, mutisorted universal algebra, up to the
    Noether isomorphism theorems, in homotopy type theory; in this setting, the authors can avoid using
-   setoids by postulating a strong extensionality axiom called \textit{univalence}.
-\end{enumerate}
+   setoids by postulating a strong extensionality axiom called univalence.
 
-Some other projects aimed at formalizing mathematics generally, and algebra in particular, have developed into very extensive libraries that include definitions, theorems, and proofs about algebraic structures, such as groups, rings, modules, etc.  However, the goals of these efforts seem to be the formalization of special classical algebraic structures, as opposed to the general theory of (universal) algebras. Moreover, the part of universal algebra and equational logic formalized in the \agdaalgebras library extends beyond the scope of prior efforts.
+Some other projects aimed at formalizing mathematics generally, and algebra in particular, have developed into very extensive libraries that include definitions, theorems, and proofs about algebraic structures, such as groups, rings, modules, etc.  However, the goals of these efforts seem to be the formalization of special classical algebraic structures, as opposed to the general theory of (universal) algebras. Moreover, the part of universal algebra and equational logic formalized in the [agda-algebras][] library extends beyond the scope of prior efforts.
 
-% After completing the formal proof in \agda, we learned about a constructive version of Birkhoff's theorem proved by Carlstr\"om in~\cite{Carlstrom:2008}.  The latter is presented in the informal style of standard mathematical writing, and as far as we know it was never formalized in type theory and type-checked with a proof assistant. Nonetheless, a comparison of Carlstr\"om's proof and the \ualib proof would be interesting.
-
-
+<!-- After completing the formal proof in \agda, we learned about a constructive version of Birkhoff's theorem proved by Carlstr\"om in~\cite{Carlstrom:2008}.  The latter is presented in the informal style of standard mathematical writing, and as far as we know it was never formalized in type theory and type-checked with a proof assistant. Nonetheless, a comparison of Carlstr\"om's proof and the \ualib proof would be interesting.
+-->
 
 
-% <!-- ----------------------------------------------------------------------------------- -->
 
-\section{Preliminaries}
 
-\subsection{Logical foundations}
+<!-- ----------------------------------------------------------------------------------- -->
+
+## <a id="preliminaries">Preliminaries</a>
+
+### <a id="logical-foundations">Logical foundations</a>
 
 An Agda program typically begins by setting some language options and by
 importing types from existing Agda libraries. The language options are specified
-using the \ak{OPTIONS} \emph{pragma} which affect control the way Agda behaves by controlling
+using the `OPTIONS` *pragma* which affect control the way Agda behaves by controlling
 the deduction rules that are available to us and the logical axioms 
 that are assumed when the program is type-checked by Agda to verify its
-correctness. Every Agda program in the agda-algebras library, including the
-present module (\DemosHSP), begins with the following line.
+correctness. Every Agda program in the [agda-algebras](https://github.com/ualib/agda-algebras)
+library, including the present module ([Demos.HSP][]), begins with the following line.
 
 \begin{code}
 
@@ -80,69 +87,55 @@ present module (\DemosHSP), begins with the following line.
 
 \end{code}
 
-We give only very terse descriptions of these options, and refer the reader to
-the accompanying links for more details.
+We will provide only very terse descriptions of these options, but we also give links to more details about them.
 
-\begin{itemize}
-\item 
-\AgdaPragma{without-K} disables \href{https://ncatlab.org/nlab/show/axiom+K+%28type+theory%29}{Streicher's K axiom}; see also the \href{https://agda.readthedocs.io/en/v2.6.1/language/without-k.html}{section on axiom K} in the \href{https://agda.readthedocs.io/en/v2.6.1.3/language}{Agda Language Reference Manual}.
+* `without-K` disables [Streicher's K axiom](https://ncatlab.org/nlab/show/axiom+K+%28type+theory%29) ; see also the [section on axiom K](https://agda.readthedocs.io/en/v2.6.1/language/without-k.html) in the [Agda Language Reference Manual](https://agda.readthedocs.io/en/v2.6.1.3/language).
 
-\item \AgdaPragma{exact-split} makes Agda accept only those definitions that behave
-like so-called {\it judgmental} equalities. See also the \href{https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html#pattern-matching-and-equality}{Pattern matching and
-  equality} section of the \href{https://agda.readthedocs.io/en/v2.6.1.3/tools/}{Agda Tools}
-documentation. 
+* `exact-split` makes Agda accept only those definitions that behave like so-called *judgmental* equalities. See also the [Pattern matching and equality section](https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html#pattern-matching-and-equality) of the [Agda Tools](https://agda.readthedocs.io/en/v2.6.1.3/tools/) documentation.
 
-\item \AgdaPragma{safe} ensures that nothing is postulated outright---every non-MLTT
-axiom has to be an explicit assumption (e.g., an argument to a function or
-module); see also the 
-\href{https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html#cmdoption-safe}{cmdoption-safe}
-section of the \href{https://agda.readthedocs.io/en/v2.6.1.3/tools/}{Agda Tools documentation} and the \href{https://agda.readthedocs.io/en/v2.6.1/language/safe-agda.html#safe-agda}{Safe Agda section} of the \href{https://agda.readthedocs.io/en/v2.6.1.3/language}{Agda Language Reference}.
-\end{itemize}
+* `safe` ensures that nothing is postulated outright---every non-MLTT axiom has to be an explicit assumption (e.g., an argument to a function or module); see also [this section](https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html#cmdoption-safe) of the [Agda Tools](https://agda.readthedocs.io/en/v2.6.1.3/tools/) documentation and the [Safe Agda section](https://agda.readthedocs.io/en/v2.6.1/language/safe-agda.html#safe-agda) of the [Agda Language Reference](https://agda.readthedocs.io/en/v2.6.1.3/language).
 
 
-The \AgdaKeyword{OPTIONS} pragma is usually followed by the start of a module and a list of import directives.
-For example, the collection of imports required for the present (\DemosHSP) module is relatively modest and is shown below.
+<!--
+### <a id="agda-modules">Agda Modules</a>
+-->
 
+The \AgdaKeyword{OPTIONS} pragma is usually followed by the start of a module and a list of `import` directives.
+We won't reproduce all of the imports we use here. Rather we show only those imports that rename objects from the standard library to our own notation which might be less standard.
+
+\begin{code}[hide]
+{-# OPTIONS --without-K --exact-split --safe #-}
+open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+module Demos.HSP-markdown {𝑆 : Signature 𝓞 𝓥} where
+\end{code}
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+open import Agda.Primitive  using (_⊔_ ; lsuc) renaming (Set to Type)
+open import Data.Product    using (Σ-syntax ; _×_ ; _,_ ; Σ) renaming (proj₁ to fst ; proj₂ to snd)
+open import Function        using (id ; _∘_ ; flip ; Injection ; Surjection) renaming (Func to _⟶_)
+open _⟶_                    using (cong) renaming (f to _⟨$⟩_)
 
-open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
-
-module Demos.HSPnew {𝑆 : Signature 𝓞 𝓥} where
-
-open import  Agda.Primitive               using     ( _⊔_ ; lsuc )
-                                          renaming  ( Set to Type )
-open import  Data.Product                 using     ( _×_  ; Σ-syntax ; _,_ ; Σ )
-                                          renaming  ( proj₁ to  fst ; proj₂ to snd )
-open import  Function                     using     ( id ; Surjection ; flip ; Injection ; _∘_ )
-                                          renaming  ( Func to _⟶_  )
-open import  Level                        using     ( Level )
-open import  Relation.Binary              using     ( Setoid ; IsEquivalence ; Rel )
-open import  Relation.Binary.Definitions  using     ( Sym ; Symmetric ; Trans ; Transitive ; Reflexive )
-open import  Relation.Binary.PropositionalEquality
-                                          using     ( _≡_ )
-open import  Relation.Unary               using     ( Pred ; _⊆_ ; _∈_ )
-
-import  Function.Definitions                   as FD
-import  Relation.Binary.PropositionalEquality  as ≡
-import  Relation.Binary.Reasoning.Setoid       as SetoidReasoning
-
-open _⟶_     using ( cong ) renaming ( f to _⟨$⟩_ )
-open Setoid  using ( Carrier ; isEquivalence )
+open import  Relation.Binary.PropositionalEquality  as ≡ using (_≡_)
+import       Relation.Binary.Reasoning.Setoid       as SetoidReasoning
+import       Function.Definitions                   as FD
 
 \end{code}
 \begin{code}[hide]
+open import Level using ( Level )
+open import Relation.Binary using ( Setoid ; Rel ; IsEquivalence )
+open import Relation.Binary.Definitions using ( Reflexive ; Sym ; Trans ; Symmetric ; Transitive )
+open import Relation.Unary using ( Pred ; _⊆_ ; _∈_ )
+open Setoid using ( Carrier ; isEquivalence )
 private variable
  α ρᵃ β ρᵇ γ ρᶜ δ ρᵈ ρ χ ℓ : Level
  Γ Δ : Type χ
  𝑓 : fst 𝑆
 \end{code}
-Note, in particular, we prefer to use \AgdaPrimitive{Type} to denote the built-in \AgdaPrimitive{Set} type, and the infix long arrow symbol \AgdaRecord{\AgdaUnderscore{}⟶\AgdaUnderscore{}} to denote the \AgdaRecord{Func} type of the standard library.  We use \AgdaField{fst} and \AgdaField{snd} in place of \AgdaField{proj₁} and  \AgdaField{proj₂} for the first and second projections out of the product type \ao{\au\aof{×}\au} and, when it improves readability of the code, we use the alternative notation \AgdaOperator{\AgdaFunction{∣\AgdaUnderscore{}∣}} and \AgdaOperator{\AgdaFunction{∥\AgdaUnderscore{}∥}} (resp.) for these projections.
+Note, in particular, we rename the `Set` and `Func` types of the standard library to `Type` and the infix long arrow symbol `_⟶_`, respectively, and we use `fst` and `snd` in place of `proj₁` and  `proj₂` for the first and second projections out of the product type `_×_`. In addition, when it improves readability of the code, we use the alternative notation `∣_∣` and `∥_∥` (defined elsewhere) for the first and second projections.
 
-\subsection{Setoids}
+### <a id="setoids">Setoids</a>
 
-A \emph{setoid} is a type packaged with an equivalence relation on the collection
+A *setoid* is a type packaged with an equivalence relation on the collection
 of inhabitants of that type.  Setoids are useful for representing classical
 (set-theory-based) mathematics in a constructive, type-theoretic way because
 most mathematical structures are assumed to come equipped with some (often
@@ -150,7 +143,7 @@ implicit) equivalence relation manifesting a notion of equality of elements,
 and therefore a type-theoretic representation of such a structure should
 also model its equality relation.
 
-The \agdaalgebras library was first developed without the use of setoids,
+The [agda-algebras][] library was first developed without the use of setoids,
 opting instead for specially constructed experimental quotient types.
 However, this approach resulted in code that was hard to comprehend and
 it became difficult to determine whether the resulting proofs were fully
@@ -165,18 +158,20 @@ no additional axioms beyond MLTT; in particular, no function
 extensionality axioms are postulated in our current formalization of Birkhoff's
 variety theorem.
 
-% Since it plays such a central role in the present development, we
-% reproduce in the appendix the definition of the `Setoid` type of the [Agda
-% Standard Library][]. In addition to `Setoid`, much of our code employs the
-% standard library's `Func` record type which represents a function from one
-% setoid to another and packages such a function with a proof (called `cong`) that
-% the function respects the underlying setoid equalities. In the list
-% of imports above we renamed `Func` to the more visually appealing
-% long-arrow symbol `⟶`, and we will refer to its inhabitants as "setoid
-% functions" throughout the paper.
+<!--
+Since it plays such a central role in the present development, we
+reproduce in the appendix the definition of the `Setoid` type of the [Agda
+Standard Library][]. In addition to `Setoid`, much of our code employs the
+standard library's `Func` record type which represents a function from one
+setoid to another and packages such a function with a proof (called `cong`) that
+the function respects the underlying setoid equalities. In the list
+of imports above we renamed `Func` to the more visually appealing
+long-arrow symbol `⟶`, and we will refer to its inhabitants as "setoid
+functions" throughout the paper.
 
-% A special example of a setoid function is the identity function from a setoid to itself.
-% We define it, along with a binary composition operation for setoid functions, \AgdaOperator{\AgdaFunction{⟨∘⟩}}, as follows.
+A special example of a setoid function is the identity function from a setoid to itself.
+We define it, along with a binary composition operation for setoid functions, `_⟨∘⟩_`, as follows.
+-->
 
 \begin{code}[hide]
 𝑖𝑑 : {A : Setoid α ρᵃ} → A ⟶ A
@@ -197,18 +192,18 @@ module _ {A : Type α }{B : A → Type β} where
  ∥_∥ = snd
 \end{code}
 
+<!--
+(Here we put the definitions inside an *anonymous module*, which starts with the
+`module` keyword followed by an underscore instead of a module name. The
+purpose is simply to move the postulated typing judgments---the "parameters" of
+the module, e.g., `A : Type α`---out of the way so they don't obfuscate the
+definitions inside the module.)
+-->
 
-% (Here we put the definitions inside an \emph{anonymous module}, which starts with the
-% `module` keyword followed by an underscore instead of a module name. The
-% purpose is simply to move the postulated typing judgments---the "parameters" of
-% the module, e.g., `A : Type α`---out of the way so they don't obfuscate the
-% definitions inside the module.)
+### <a id="inverses-of-setoid-functions">Inverses of setoid functions</a>
 
-\subsection{Inverses of setoid functions}
-\label{inverses-of-setoid-functions}
-
-We define a data type that represent the semantic concept of the \emph{image} of a function
-(cf. the \ualmodule{Overture.Func.Inverses} module of the \agdaalgebras library).
+We define a data type that represent the semantic concept of the *image* of a function
+(cf. the [Overture.Func.Inverses][] module of the [agda-algebras][] library).
 
 \begin{code}
 
@@ -220,15 +215,12 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
 
 \end{code}
 
-An inhabitant of \aod{Image} \ab f \aod{∋} \ab b
-is a dependent pair \AgdaPair{a}{p}, where \AgdaTyped{a}{A} and
-\ab p~\as :~\ab b
-\aofld{≈}
-\ab f~\ab a is a proof that \ab f maps \ab a to \ab b.  Since the proof that \ab b
-belongs to the image of \ab f is always accompanied by a witness \AgdaTyped{a}{A}, we can
-actually \emph{compute} a (pseudo)inverse of \ab f. For convenience, we define this
-inverse function, which we call \af{Inv}, and which takes an arbitrary \AgdaTyped{b}{B} and
-a (witness, proof)-pair, \AgdaPair{a}{p}~\as :~\aod{Image}~\ab f~\aod{∋}~\ab b, and returns the witness \ab a.
+An inhabitant of `Image f ∋ b` is a dependent pair `(a , p)`, where `a : A` and
+`p : b ≈ f a` is a proof that `f` maps `a` to `b`.  Since the proof that `b`
+belongs to the image of `f` is always accompanied by a witness `a : A`, we can
+actually *compute* a (pseudo)inverse of `f`. For convenience, we define this
+inverse function, which we call `Inv`, and which takes an arbitrary `b : B` and
+a (witness, proof)-pair, `(a , p) : Image f ∋ b`, and returns the witness `a`.
 
 \begin{code}
 
@@ -240,42 +232,34 @@ a (witness, proof)-pair, \AgdaPair{a}{p}~\as :~\aod{Image}~\ab f~\aod{∋}~\ab b
 
 \end{code}
 
-The latter (\af{InvIsInverseʳ}) proves that \af{Inv} \ab f is the range-restricted right-inverse of the setoid function \ab f.
+`InvIsInverseʳ` proves that `Inv f` is the range-restricted right-inverse of the setoid function `f`.
 
 
-\subsection{Injective and surjective setoid functions}
-\label{injective-and-surjective-setoid-functions}
+### <a id="injective-and-surjective-setoid-functions">Injective and surjective setoid functions</a>
 
-If \ab{f} : \ab{𝑨} \aor{⟶} \ab{𝑩} is a setoid function from
-\ab{𝑨} = (\ab{A} \AgdaComma \aofld{≈₀}) to
-\ab{𝑩} = (\ab{B} \AgdaComma \aofld{≈₁}), then
-we call \ab f \emph{injective} provided
-\as{∀} (\ab{a₀} \ab{a₁} \as : \ab{A}),
-\ab{f} \aofld{⟨\$⟩} \ab{a₀} \aofld{≈₁} \ab{f} \aofld{⟨\$⟩} \ab{a₁}
-implies \ab{a₀} \aofld{≈₀} \ab{a₁};
-we call \ab{f} \emph{surjective} provided
-\as{∀} (\AgdaTyped{b}{B}), \as{∃}~(\AgdaTyped{a}{A}) such that
-\ab{f} \aofld{⟨\$⟩} \ab{a} \aofld{≈₁} \ab{b}.
+If `f : 𝑨 ⟶ 𝑩` is a setoid function from `𝑨 = (A , ≈₀)` to `𝑩 = (B , ≈₁)`, then
+we call `f` *injective* provided `∀ (a₀ a₁ : A)`, `f ⟨$⟩ a₀ ≈₁ f ⟨$⟩ a₁` implies `a₀ ≈₀ a₁`;
+we call `f` *surjective* provided `∀ (b : B)`, `∃ (a : A)` such that `f ⟨$⟩ a ≈₁ b`.
 We codify these definitions in Agda and prove some of their properties
 inside the next submodule where we first set the stage by declaring two
-setoids \ab{𝑨} and \ab{𝑩}, naming their equality relations, and making some
+setoids `𝑨` and `𝑩`, naming their equality relations, and making some
 definitions from the standard library available.
 
 \begin{code}
 
 module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
- open Setoid 𝑨 using () renaming ( _≈_ to _≈₁_ )
- open Setoid 𝑩 using () renaming ( _≈_ to _≈₂_ )
+ open Setoid 𝑨 using () renaming ( _≈_ to _≈₁_ ; Carrier to A )
+ open Setoid 𝑩 using () renaming ( _≈_ to _≈₂_ ; Carrier to B )
  open FD _≈₁_ _≈₂_
 
 \end{code}
 
-The \agdastdlib represents injective functions on bare types by the
-type \af{Injective}, which we now use to define \af{IsInjective} representing the property
-of being an injective setoid function. We then define the type \af{IsSurjective} to
+The [Agda Standard Library][] represents injective functions on bare types by the
+type `Injective`, which we now use to define `IsInjective` representing the property
+of being an injective setoid function. We then define the type `IsSurjective` to
 represent the property of being a surjective setoid function. Finally, we define
-\af{SurjInv} to represent the \emph{right-inverse} of a surjective function.
-The definitions are as follows (cf. \ualmodule{Overture.Func.Injective} and \ualmodule{Overture.Func.Surjective} in the \agdaalgebras library).
+`SurjInv` to represent the *right-inverse* of a surjective function.
+The definitions are as follows (cf. [Overture.Func.Injective][] and [Overture.Func.Surjective][] in the [agda-algebras][] library).
 
 \begin{code}
 
@@ -285,12 +269,11 @@ The definitions are as follows (cf. \ualmodule{Overture.Func.Injective} and \ual
  IsSurjective : (𝑨 ⟶ 𝑩) →  Type (α ⊔ β ⊔ ρᵇ)
  IsSurjective F = ∀ {y} → Image F ∋ y
 
- SurjInv : (f : 𝑨 ⟶ 𝑩) → IsSurjective f → Carrier 𝑩 → Carrier 𝑨
+ SurjInv : (f : 𝑨 ⟶ 𝑩) → IsSurjective f → B → A
  SurjInv f fonto b = Inv f (fonto {b})
 \end{code}
 
-\subsubsection{Composition of injective and surjective setoid functions}
-\label{composition-of-injective-and-surjective-setoid-functions}
+#### <a id="composition-of-injective-and-surjective-setoid-functions">Composition of injective and surjective setoid functions</a>
 
 Proving that the composition of injective setoid functions is again injective
 is simply a matter of composing the two assumed witnesses to injectivity.
@@ -319,14 +302,10 @@ module _  {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ}{𝑪 : Setoid γ ρ�
 \end{code}
 
 
-\subsection{Kernels}
-\label{kernels}
+### <a id="kernels">Kernels</a>
 
-The \emph{kernel} of a function \ab f~\as :~\ab A~\as{→}~\ab B (where \ab A and \ab B are bare types) is defined
-informally by
-\begin{center}
-\{\AgdaPair{x}{y} \aod{∈} \ab A \aof{×} \ab A \as : \ab f \ab x \as{=} \ab f \ab y \}.
-\end{center}
+The *kernel* of a function `f : A → B` (where `A` and `B` are bare types) is defined
+informally by `{(x , y) ∈ A × A : f x = f y}`.
 This can be represented in Agda in a number of ways, but for our purposes we find it most
 convenient to define the kernel as an inhabitant of a (unary) predicate over the square of
 the function's domain.
@@ -340,11 +319,8 @@ module _ {A : Type α}{B : Type β} where
 
 \end{code}
 
-The kernel of a setoid function \ab f \as : \ab{𝐴} \aor{⟶} \ab{𝐵} is defined informally by
-\begin{center}
-\{\AgdaPair{x}{y} \as{∈} \ab A \aof{×} \ab A \as : \ab f \aofld{⟨\$⟩} \ab x \aofld{≈} \ab f \aofld{⟨\$⟩} \ab y\},
-\end{center}
-where \afld{\au{}≈\au} denotes the equality of \ab{𝐵}.
+The kernel of a setoid function `f : 𝐴 ⟶ 𝐵` is defined informally by
+`{(x , y) ∈ A × A : f ⟨$⟩ x ≈ f ⟨$⟩ y}`, where `_≈_` denotes the equality of `𝐵`.
 
 \begin{code}
 
@@ -359,107 +335,42 @@ module _ {𝐴 : Setoid α ρᵃ}{𝐵 : Setoid β ρᵇ} where
 
 
 
-%% -------------------------------------------------------------------------------------
+<!-- ------------------------------------------------------------------------------------- -->
 
-\section{Algebras}
-\label{sec:algebras}
+## Algebras
 
-In this section we define the notion of an algebraic structure whose \emph{domain} (or ``carrier'' or ``universe'') is a setoid. Our first goal is to develop a working vocabulary and formal types for classical (single-sorted, set-based) universal algebra.
+In this section we define the notion of an algebraic structure whose *domain* (or "carrier" or "universe") is a setoid. Our first goal is to develop a working vocabulary and formal types for classical (single-sorted, set-based) universal algebra.
 
-\subsection{Signature of an algebra}
-\label{signatures-of-an-algebra}
+### <a id="signatures-of-an-algebra">Signatures of an algebra</a>
 
-In model theory, the \emph{signature} \ab{𝑆} = (\ab{𝐶}, \ab{𝐹}, \ab{𝑅}, \ab{ρ})
-of a structure consists of three (possibly empty) sets \ab{𝐶}, \ab{𝐹}, and
-\ab{𝑅}---called \emph{constant symbols}, \emph{function symbols}, and
-\emph{relation symbols}, respectively---along with a function \ab{ρ} : \ab{𝐶} \as{+}
-\ab{𝐹} \as{+} \ab{𝑅} \as{→} \ab{𝑁} that assigns an \emph{arity} to each symbol. Often, but
-not always, \ab{𝑁} is taken to be the set of natural numbers.
+In [model theory](https://en.wikipedia.org/wiki/Model_theory), the *signature* `𝑆 = (𝐶, 𝐹, 𝑅, ρ)` of a structure consists of three (possibly empty) sets `𝐶`, `𝐹`, and `𝑅`---called *constant symbols*, *function symbols*, and *relation symbols*, respectively---along with a function `ρ : 𝐶 + 𝐹 + 𝑅 → 𝑁` that assigns an *arity* to each symbol. Often, but not always, `𝑁` is taken to be the set of natural numbers.
 
-As our focus here is universal algebra, we are more concerned with the
-restricted notion of an \emph{algebraic signature} (or \emph{signature} for
-algebraic structures), by which we mean a pair \ab{𝑆} = (\AgdaPair{F}{ρ})
-consisting of a collection \ab{F} of \emph{operation symbols} and an \emph{arity
-  function} \ab{ρ} : \ab{F} \as{→} \ab{N} that maps each operation symbol to its
-arity; here, \ab{𝑁} denotes the \emph{arity type}. Heuristically, the arity
-\ab{ρ} \ab{f} of an operation symbol \ab{f} \as{∈} \ab{F} may be thought of as
-the ``number of arguments'' that \ab{f} takes as ``input.''
+As our focus here is universal algebra, we are more concerned with the restricted notion of an *algebraic signature* (or *signature* for algebraic structures), by which we mean a pair `𝑆 = (F, ρ)` consisting of a collection `𝐹` of *operation symbols* and an *arity function* `ρ : F → N` that maps each operation symbol to its arity; here, 𝑁 denotes the *arity type*. Heuristically, the arity `ρ f` of an operation symbol `f ∈ F` may be thought of as the "number of arguments" that `f` takes as "input".
 
-If the arity of \ab{f} is \ab{n}, then we call \ab{f} an \ab{n}-\emph{ary}
-operation symbol.  In case \ab{n} is 0 (or 1 or 2 or 3, respectively) we call
-the function \emph{nullary} (or \emph{unary} or \emph{binary} or \emph{ternary},
-respectively).
+If the arity of `f` is `n`, then we call `f` an `n`-*ary* operation symbol.  In case `n` is 0 (or 1 or 2 or 3, respectively) we call the function *nullary* (or *unary* or *binary* or *ternary*, respectively).
 
-If \ab{A} is a set and \ab{f} is a (\ab{ρ} \ab{f})-ary operation on \ab{A} then
-the arguments of \ab{f} form a (\ab{ρ}\ab{f})-tuple, say, (\ab{a} 0, \ab{a} 1,
-…, \ab{a} (\ab{ρ}\ab{f} - 1)), which may be viewed as the graph of a function,
-say, \ab{a} : \ab{ρ} \ab{f} \as{→} \ab{A}. When the codomain of \ab{ρ} is ℕ, we
-may view \ab{ρ} \ab{f} as the finite set \{0, 1, …, \ab{ρ}\ab{f} - 1\}. Thus,
-by identifying the \ab{ρ}\ab{f}-th power of \ab A with the type \ab{ρ}\ab{f} \as{→}
-\ab{A} of functions from \{0, 1, …, \ab{ρ}\ab{f} - 1\} to \ab{A}, we identify the collection
-of all tuples of arguments of \ab{f} with the function type (\ab{ρ}\ab{f} \as{→}
-\ab{A}) \as{→} \ab{A}.
+If `A` is a set and `f` is a (`ρ f`)-ary operation on `A`, then the arguments of `f` form a (`ρ f`)-tuple, say, `(a 0, a 1, …, a (ρf-1))`, which may be viewed as the graph of a function, say, `a : ρf → A`. When the codomain of `ρ` is `ℕ`, we may view `ρ f` as the finite set `{0, 1, …, ρf - 1}`. Thus, by identifying the `ρf`-th power of `A` with the type `ρ f → A` of functions from `{0, 1, …, ρf - 1}` to `A`, we identify the collection of all tuples of arguments of `f` with the function type `(ρf → A) → A`.
 
-\subsubsection{Signature type}
-\label{signature-type}
+#### <a id="signature-type">Signature type</a>
 
-The \agdaalgebras library represents a \emph{signature} as an inhabitant of the following dependent pair type.
-\begin{center}
-\AgdaFunction{Signature}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓞}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaPostulate{Level}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaPrimitive{Type}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaPrimitive{lsuc}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝓞}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSymbol{))}\\[4pt]
-\AgdaFunction{Signature}\AgdaSpace{}%
-\AgdaBound{𝓞}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{Σ[}\AgdaSpace{}%
-\AgdaBound{F}\AgdaSpace{}%
-\AgdaFunction{∈}\AgdaSpace{}%
-\AgdaPrimitive{Type}\AgdaSpace{}%
-\AgdaBound{𝓞}\AgdaSpace{}%
-\AgdaFunction{]}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{F}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaPrimitive{Type}\AgdaSpace{}%
-\AgdaBound{𝓥}\AgdaSymbol{)}
-\end{center}
-Using special syntax for the first and second
-projections---\AgdaOperator{\AgdaFunction{∣\AgdaUnderscore{}∣}} and \AgdaOperator{\AgdaFunction{∥\AgdaUnderscore{}∥}} (resp.)---if \ab{𝑆} \as{:} \af{Signature} \ab{𝓞} \ab{𝓥} is a signature, then
+The [agda-algebras][] library represents a *signature* as an inhabitant of the following dependent pair type.
 
-\begin{itemize}
-\item \aof{∣} \ab{𝑆} \aof{∣} denotes the set of operation symbols;
-\item \aof{∥} \ab{𝑆} \aof{∥} denotes the arity function.
-\end{itemize}
+```
+Signature : (𝓞 𝓥 : Level) → Type (lsuc (𝓞 ⊔ 𝓥))
+Signature 𝓞 𝓥 = Σ[ F ∈ Type 𝓞 ] (F → Type 𝓥)
+```
 
-Thus, if \ab{f} \as{:} \aof{∣} \ab{𝑆} \aof{∣} is an operation symbol in the
-signature \ab{𝑆}, then \aof{∥} \ab{𝑆} \aof{∥} \ab{f} is the arity of \ab{f}.
+Using special syntax for the first and second projections---`∣_∣` and `∥_∥`, respectively---if `𝑆 : Signature 𝓞 𝓥` is a signature, then
 
-We need to augment the ordinary \af{Signature} type so that it supports algebras over setoid domains.
-To do so, we define an operator \ao{\af{⟨}\au\af{⟩}} which translates an
-ordinary signature into a setoid signature, that is, a signature over a setoid
-domain.  But first we must resolve a techinical issue involving dependent types
-that we now describe.
+* `∣ 𝑆 ∣` denotes the set of operation symbols;
+* `∥ 𝑆 ∥` denotes the arity function.
 
-Suppose we are given two operations \ab{f} and \ab{g} and we have a tuple of
-arguments for \ab{f}, say, \ab{u} \as{:} \aof{∥} \ab{𝑆} \aof{∥} \ab{f} \as{→}
-\ab{A}, and a tuple of arguments for \ab{g}, say, \ab{v} \as{:} \aof{∥} \ab{𝑆}
-\aof{∥} \ab{g} \as{→} \ab{A}.  If we know that \ab f is identically equal to
-\ab{g}---that is, \ab{f} \aod{≡} \ab{g} (intensionally)---then we should be able to
-check whether \ab u and \ab v are pointwise equal.  The problem here is that
-\ab{u} and \ab{v} ostensibly inhabit different types.  To compare \ab u and \ab v we
-must convince Agda that, from \ab f \aod{≡} \ab g we can deduce that \ab u and
-\ab v are actually of the same type. The type \af{EqArgs} (defined below, and
-adapted from Andreas Abel's development [ref needed]) resolves this technical
-issue nicely.
+Thus, if `𝑓 : ∣ 𝑆 ∣` is an operation symbol in the signature `𝑆`, then `∥ 𝑆 ∥ 𝑓` is the arity of `𝑓`.
+
+We need to augment the ordinary `Signature` type so that it supports algebras over setoid domains.
+To do so, we define an operator `⟨_⟩` which translates an ordinary signature into a setoid signature, that is, a signature over a setoid domain.  But first we must resolve a techinical issue involving dependent types that we now describe.
+
+Suppose we are given two operations `f` and `g` and we have a tuple of arguments for `f`, say, `u : ∥ 𝑆 ∥ f → A`, and a tuple of arguments for `g`, say, `v : ∥ 𝑆 ∥ g → A`.  If we know that `f` is identically equal to `g`---that is, `f ≡ g` (intensionally)---then we should be able to check whether `u` and `v` are pointwise equal.  The problem here is that `u` and `v` ostensibly inhabit different types.  To compare `u` and `v` we must convince Agda that, from `f ≡ g` we can deduce that `u` and `v` are actually of the same type. The type `EqArgs` (defined below, and adapted from Andreas Abel's development [ref needed]) resolves this technical issue nicely.
 
 \begin{code}
 
@@ -470,7 +381,7 @@ EqArgs {ξ = ξ} ≡.refl u v = ∀ i → u i ≈ v i where open Setoid ξ using
 
 \end{code}
 
-Now we are ready to define the \aof{⟨\AgdaUnderscore{}⟩} operator, which translates an ordinary signature into a setoid signature.
+Now we are ready to define the `⟨_⟩` operator, which translates an ordinary signature into a setoid signature.
 
 \begin{code}
 
@@ -489,25 +400,20 @@ module _ where
  trans  (isEquivalence (⟨ 𝑆 ⟩ ξ)) (≡.refl , g)(≡.refl , h)  = ≡.refl , λ i → Setoid.trans  ξ (g i) (h i)
 \end{code}
 
-\subsection{Algebra type}
-\label{algebra-type}
+### <a id="Algebra type">Algebra type</a>
 
-Informally, an \emph{algebraic structure in the signature} \ab{𝑆} = (\ab{F}, \ab{ρ}) (or \ab{𝑆}-\emph{algebra}) is typically denoted by \ab{𝑨} = (\ab{A}, \ab{Fᴬ}) and consists of
+Informally, an *algebraic structure in the signature* `𝑆 = (F, ρ)` (or `𝑆`-*algebra*) is typically denoted by `𝑨 = (A, Fᴬ)` and consists of
 
-\begin{itemize}
-\item \ab A := a \emph{nonempty} set (or type), called the \emph{domain} (or \emph{carrier} or \emph{universe}) of the algebra;
-\item \ab{Fᴬ} := \{ \ab{fᴬ} \as{∣} \ab f \as{∈} \ab F, \ab{fᴬ} \as : (\ab{ρ} \ab f \as{→} \ab A) \as{→} \ab A \}, a collection of \emph{operations} on \ab{𝐴};
-\item a (potentially empty) collection of \emph{identities} satisfied by elements and operations of \ab{𝐴}.
-\end{itemize}
+* `A` := a *nonempty* set (or type), called the *domain* (or *carrier* or *universe*) of the algebra;
+* `Fᴬ` := `{ fᴬ ∣ f ∈ F, fᴬ : (ρf → A) → A }`, a collection of *operations* on `𝐴`;
+* a (potentially empty) collection of *identities* satisfied by elements and operations of `𝐴`.
 
 We represent an algebra in Agda using a record type with two fields:
 
-\begin{itemize}
-\item \afld{Domain} is a setoid denoting the underlying \emph{universe} of the algebra (informally, the set of elements of the algebra);
-\item \afld{Interp} represents the \emph{interpretation} in the algebra of each operation symbol of the given signature.  The record type \ar{Func} from the \agdastdlib provides what we need for an operation on the domain setoid.
-\end{itemize}
+* `Domain` is a setoid denoting the underlying *universe* of the algebra (informally, the set of elements of the algebra);
+* `Interp` represents the *interpretation* in the algebra of each operation symbol of the given signature.  The record type `Func` from the Agda Standard Library provides what we need for an operation on the domain setoid.
 
-Let us present the definition of the \ar{Algebra} type and then discuss the definition of the \ar{Func} type that provides the interpretation of each operation symbol.
+Let us present the definition of the `Algebra` type and then discuss the definition of the `Func` type that provides the interpretation of each operation symbol.
 
 \begin{code}
 
@@ -517,35 +423,29 @@ record Algebra α ρ : Type (𝓞 ⊔ 𝓥 ⊔ lsuc (α ⊔ ρ)) where
 
 \end{code}
 
-The \afld{Interp} field actually has type \ar{Func} (\aof{⟨} \ab{𝑆} \aof{⟩} \afld{Domain}) \afld{Domain} (recall we renamed \ar{Func} as the infix long-arrow symbol).  The \ar{Func} type is from the standard library and is defined as a record type with two fields. In the present instance, the fields are
+The `Interp` field actually has type `Func (⟨ 𝑆 ⟩ Domain) Domain` (recall we renamed `Func` as the infix long-arrow symbol).  The `Func` type is from the standard library and is defined as a record type with two fields. In the present instance, the fields are
 
-\begin{itemize}
-\item a function  \ab{f} : \afld{Carrier} (\aof{⟨} \ab{𝑆} \aof{⟩} \afld{Domain})
-  \as{→} \afld{Carrier} \afld{Domain}
-\item a proof \ab{cong} : \ab f \ao{\af{Preserves} \au\afld{≈₁}\au \ar{⟶}
-  \au\afld{≈₂}\au} that \ab f preserves the underlying setoid equalities.
-\end{itemize}
+1. a function  `f : Carrier (⟨ 𝑆 ⟩ Domain) → Carrier Domain`
+2. a proof `cong : f Preserves _≈₁_ ⟶ _≈₂_` that `f` preserves the underlying setoid equalities.
 
-Thus \afld{Interp} gives, for each operation symbol in the signature \ab{𝑆}, a setoid function \ab f---namely, a function where the domain is a power of \afld{Domain} and the codomain is \afld{Domain}---along with a proof that all operations so interpreted respect the underlying setoid equality on \afld{Domain}.
+Thus `Interp` gives, for each operation symbol in the signature `𝑆`, a setoid function `f`---namely, a function where the domain is a power of `Domain` and the codomain is `Domain`---along with a proof that all operations so interpreted respect the underlying setoid equality on `Domain`.
 
 Next we define some syntactic sugar that will make our Agda code easier to read and comprehend.
-If \ab{𝑨} is an algebra, then
+If `𝑨` is an algebra, then
 
-\begin{itemize}
-\item \aof{𝔻[} \ab{𝑨} \aof ] will denote the setoid \afld{Domain} \ab{𝑨}, and
-\item \aof{𝕌[} \ab{𝑨} \aof ] will be the underlying carrier or ``universe'' of the algebra \ab{𝑨}.
-\item \ab f \aof{̂} \ab{𝑨} will denote the interpretation in the algebra \ab{𝑨} of the operation symbol \ab f,
-\end{itemize}
+* `f ̂ 𝑨` will denote the interpretation in the algebra `𝑨` of the operation symbol `f`,
+* `𝔻[ 𝑨 ]` will denote the setoid `Domain 𝑨`, and
+* `𝕌[ 𝑨 ]` will be the underlying carrier or "universe" of the algebra `𝑨`.
 
 \begin{code}
 
 open Algebra
 
-𝔻[_] : Algebra α ρᵃ →  Setoid α ρᵃ
-𝔻[ 𝑨 ] = Domain 𝑨
-
 𝕌[_] : Algebra α ρᵃ →  Type α
 𝕌[ 𝑨 ] = Carrier (Domain 𝑨)
+
+𝔻[_] : Algebra α ρᵃ →  Setoid α ρᵃ
+𝔻[ 𝑨 ] = Domain 𝑨
 
 _̂_ : (f : ∣ 𝑆 ∣)(𝑨 : Algebra α ρᵃ) → (∥ 𝑆 ∥ f  →  𝕌[ 𝑨 ]) → 𝕌[ 𝑨 ]
 
@@ -553,8 +453,7 @@ f ̂ 𝑨 = λ a → (Interp 𝑨) ⟨$⟩ (f , a)
 \end{code}
 
 
-\subsection{Universe lifting of algebra types}
-\label{universe-lifting-of-algebra-types}
+### <a id="universe-lifting-of-algebra-types">Universe lifting of algebra types</a>
 
 A technical aspect of dealing with the noncumulativity of the hierarchy of type levels in Agda...
 
@@ -587,10 +486,9 @@ Lift-Alg 𝑨 ℓ₀ ℓ₁ = Lift-Algʳ (Lift-Algˡ 𝑨 ℓ₀) ℓ₁
 \end{code}
 
 
-\subsection{Product Algebras}
-\label{product-algebras}
+### <a id="product-algebras">Product Algebras</a>
 
-(cf. the \ualmodule{Algebras.Func.Products} module of the \agdaalgebras library.)
+(cf. the [Algebras.Func.Products][] module of the [Agda Universal Algebra Library][].)
 
 \begin{code}
 
@@ -612,13 +510,11 @@ module _ {ι : Level}{I : Type ι } where
 
 
 
-%% -------------------------------------------------------------------------------------
+<!-- ------------------------------------------------------------------------------------- -->
 
-\section{Homomorphisms}
-\label{homomorphisms}
-\subsection{Basic definitions}
-\label{homomorphism-basic-definitions}
-Here are some useful definitions and theorems extracted from the \ualmodule{Homomorphisms.Func.Basic} module of the \agdaalgebras library.
+## <a id="Homomorphisms">Homomorphisms</a>
+### <a id="homomorphism-basic-definitions">Basic definitions</a>
+Here are some useful definitions and theorems extracted from the [Homomorphisms.Func.Basic][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
@@ -643,8 +539,7 @@ module _ (𝑨 : Algebra α ρᵃ)(𝑩 : Algebra β ρᵇ) where
 \end{code}
 
 
-\subsection{Monomorphisms and epimorphisms}
-\label{monomorphisms-and-epimorphisms}
+### <a id="monomorphisms-and-epimorphisms">Monomorphisms and epimorphisms</a>
 
 \begin{code}
 
@@ -680,14 +575,12 @@ module _ (𝑨 : Algebra α ρᵃ)(𝑩 : Algebra β ρᵇ) where
 \end{code}
 
 
-\subsection{Basic properties of homomorphisms}
-\label{basic-properties-of-homomorphisms}
+### <a id="basic-properties-of-homomorphisms">Basic properties of homomorphisms</a>
 
-Here are some definitions and theorems extracted from the \ualmodule{Homomorphisms.Func.Properties} module of the \agdaalgebras library.
+Here are some definitions and theorems extracted from the [Homomorphisms.Func.Properties][] module of the [Agda Universal Algebra Library][].
 
 
-\subsubsection{Composition of homomorphisms}
-\label{composition-of-homomorphisms}
+#### <a id="composition-of-homomorphisms">Composition of homomorphisms</a>
 
 The composition of homomorphisms is again a homomorphism. Similarly,
 the composition of epimorphisms is again an epimorphism.
@@ -720,8 +613,7 @@ module _ {𝑨 : Algebra α ρᵃ} {𝑩 : Algebra β ρᵇ} {𝑪 : Algebra γ 
 \end{code}
 
 
-\subsubsection{Universe lifting of homomorphisms}
-\label{universe-lifting-of-homomorphisms}
+#### <a id="universe-lifting-of-homomorphisms">Universe lifting of homomorphisms</a>
 
 First we define the identity homomorphism for setoid algebras and then we prove that the operations of lifting and lowering of a setoid algebra are homomorphisms.
 
@@ -781,12 +673,14 @@ module _ {𝑨 : Algebra α ρᵃ}{ℓ r : Level} where
 \end{code}
 
 
-% \subsection{Homomorphisms of product algebras}
-% \label{homomorphisms-of-product-algebras}
-% Suppose we have an algebra \ab{𝑨}, a type \ab I : \apr{Type} \ab 𝓘, and a family \ab ℬ : \ab I \as → \ar{Algebra} \ab β \ab{𝑆} of algebras.
-% We sometimes refer to the inhabitants of `I` as \emph{indices}, and call `ℬ` an \emph{indexed family of algebras}.
-% If in addition we have a family `𝒽 : (i : I) → hom 𝑨 (ℬ i)` of homomorphisms, then we can construct a homomorphism from `𝑨` to the product `⨅ ℬ` in the natural way.  Here is how we implement these notions in dependent type theory (cf. the [Homomorphisms.Func.Products][] module of the \agdaalgebras library).
+<!--
 
+### <a id="homomorphisms-of-product-algebras">Homomorphisms of product algebras</a>
+
+Suppose we have an algebra `𝑨`, a type `I : Type 𝓘`, and a family `ℬ : I → Algebra β 𝑆` of algebras.  We sometimes refer to the inhabitants of `I` as *indices*, and call `ℬ` an *indexed family of algebras*.
+If in addition we have a family `𝒽 : (i : I) → hom 𝑨 (ℬ i)` of homomorphisms, then we can construct a homomorphism from `𝑨` to the product `⨅ ℬ` in the natural way.  Here is how we implement these notions in dependent type theory (cf. the [Homomorphisms.Func.Products][] module of the [Agda Universal Algebra Library][]).
+
+-->
 
 \begin{code}[hide]
 
@@ -803,13 +697,9 @@ module _ {ι : Level}{I : Type ι}{𝑨 : Algebra α ρᵃ}(ℬ : I → Algebra 
 
 
 
-\subsection{Factorization of homomorphisms}
-\label{factorization-of-homomorphisms}
+### <a id="factorization-of-homomorphisms">Factorization of homomorphisms</a>
 
-If \ab g : \af{hom} \ab{𝑨} \ab{𝑩}, \ab h : \af{hom} \ab{𝑨} \ab{𝑪}, \ab h is
-surjective, and \af{ker} \ab h \aof{⊆} \af{ker} \ab g, then there exists
-\ab{φ} : \af{hom} \ab{𝑪} \ab{𝑩} such that \ab g = \ab{φ} \aof{∘} \ab h (cf. the
-\ualmodule{Homomorphisms.Func.Factor} module of the \agdaalgebras library).
+If `g : hom 𝑨 𝑩`, `h : hom 𝑨 𝑪`, `h` is surjective, and `ker h ⊆ ker g`, then there exists `φ : hom 𝑪 𝑩` such that `g = φ ∘ h` (cf. the [Homomorphisms.Func.Factor][] module of the [Agda Universal Algebra Library][]).
 
 \begin{code}
 
@@ -860,12 +750,11 @@ module _ {𝑨 : Algebra α ρᵃ}(𝑩 : Algebra β ρᵇ){𝑪 : Algebra γ ρ
 
 
 
-\subsection{Isomorphisms}
-\label{isomorphisms}
+### <a id="isomorphisms">Isomorphisms</a>
 
-(cf. the \ualmodule{Homomorphisms.Func.Isomorphisms} of the \agdaalgebras library.)
+(cf. the [Homomorphisms.Func.Isomorphisms] of the [Agda Universal Algebra Library][].)
 
-Two structures are \emph{isomorphic} provided there are homomorphisms going back and forth between them which compose to the identity map.
+Two structures are *isomorphic* provided there are homomorphisms going back and forth between them which compose to the identity map.
 
 \begin{code}
 
@@ -907,8 +796,7 @@ open _≅_
 \end{code}
 
 
-\subsubsection{Properties of isomorphisms}
-\label{properties-of-isomorphisms}
+#### <a id="properties-of-isomorphisms">Properties of isomorphisms</a>
 
 \begin{code}
 
@@ -935,7 +823,7 @@ open _≅_
 
 \end{code}
 
-Fortunately, the lift operation preserves isomorphism (i.e., it's an \emph{algebraic invariant}). As our focus is universal algebra, this is important and is what makes the lift operation a workable solution to the technical problems that arise from the noncumulativity of Agda's universe hierarchy.
+Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic invariant*). As our focus is universal algebra, this is important and is what makes the lift operation a workable solution to the technical problems that arise from the noncumulativity of Agda's universe hierarchy.
 
 \begin{code}[hide]
 module _ {𝑨 : Algebra α ρᵃ}{ℓ : Level} where
@@ -950,10 +838,9 @@ Lift-≅ = ≅-trans Lift-≅ˡ Lift-≅ʳ
 \end{code}
 
 
-\subsection{Homomorphic Images}
-\label{homomorphic-images}
+### Homomorphic Images
 
-We begin with what for our purposes is the most useful way to represent the class of \emph{homomorphic images} of an algebra in dependent type theory (cf. the \ualmodule{Homomorphisms.Func.HomomorphicImages} module of the \agdaalgebras library). (The first definition is merely a short-hand.)
+We begin with what for our purposes is the most useful way to represent the class of *homomorphic images* of an algebra in dependent type theory (cf. the [Homomorphisms.Func.HomomorphicImages][] module of the [Agda Universal Algebra Library][]). (The first definition is merely a short-hand.)
 
 \begin{code}
 ov : Level → Level
@@ -967,12 +854,7 @@ HomImages {β = β}{ρᵇ = ρᵇ} 𝑨 = Σ[ 𝑩 ∈ Algebra β ρᵇ ] 𝑩 I
 
 \end{code}
 
-These types should be self-explanatory, but just to be sure, let's describe the
-Sigma type appearing in the second definition. Given an \ab{𝑆}-algebra \ab{𝑨} :
-\ar{Algebra} \ab{α} \ab{ρ}, the type \af{HomImages} \ab{𝑨} denotes the class of
-algebras \ab{𝑩} : \ar{Algebra} \ab{β} \ab{ρ} with a map \ab{φ} : \aof{∣} \ab{𝑨}
-\aof{∣} \as{→} \aof{∣} \ab{𝑩} \aof{∣} such that \ab{φ} is a surjective
-homomorphism.
+These types should be self-explanatory, but just to be sure, let's describe the Sigma type appearing in the second definition. Given an `𝑆`-algebra `𝑨 : Algebra α ρ`, the type `HomImages 𝑨` denotes the class of algebras `𝑩 : Algebra β ρ` with a map `φ : ∣ 𝑨 ∣ → ∣ 𝑩 ∣` such that `φ` is a surjective homomorphism.
 
 \begin{code}[hide]
 module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
@@ -990,11 +872,10 @@ module _ {𝑨 𝑨' : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
 
 
 
-%% -------------------------------------------------------------------------------------
+<!-- ------------------------------------------------------------------------------------- -->
 
-\section{Subalgebras}
-\subsection{Basic definitions}
-\label{subalgebras-basic-definitions}
+## <a id="subalgebras">Subalgebras</a>
+### <a id="subalgebras-basic-definitions">Basic definitions</a>
 
 \begin{code}
 
@@ -1002,8 +883,7 @@ _≤_ : Algebra α ρᵃ → Algebra β ρᵇ → Type (𝓞 ⊔ 𝓥 ⊔ α ⊔
 𝑨 ≤ 𝑩 = Σ[ h ∈ hom 𝑨 𝑩 ] IsInjective ∣ h ∣
 \end{code}
 
-\subsection{Basic properties}
-\label{subalgebras-basic-properties}
+### <a id="subalgebras-basic-properties">Basic properties</a>
 
 \begin{code}
 
@@ -1021,8 +901,7 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}{𝑪 : Algebra γ ρ
  ≅-trans-≤ A≅B (h , hinj) = (∘-hom (to A≅B) h) , (∘-IsInjective ∣ to A≅B ∣ ∣ h ∣ (toIsInjective A≅B) hinj)
 \end{code}
 
-\subsection{Products of subalgebras}
-\label{products-of-subalgebras}
+### <a id="products-of-subalgebras">Products of subalgebras</a>
 
 \begin{code}
 
@@ -1048,28 +927,25 @@ module _ {ι : Level} {I : Type ι}{𝒜 : I → Algebra α ρᵃ}{ℬ : I → A
 
 
 
-%% -------------------------------------------------------------------------------------
+<!-- ------------------------------------------------------------------------------------- -->
 
-\section{Terms}
+## Terms
 
-\subsection{Basic definitions}
-\label{terms-basic-definitions}
+### <a id="terms-basic-definitions">Basic definitions</a>
 
-Fix a signature \ab{𝑆} and let \ab X denote an arbitrary nonempty collection of variable symbols. Assume the symbols in \ab X are distinct from the operation symbols of \ab{𝑆}, that is \ab X \aof{∩} \aof{∣} \ab{𝑆} \aof{∣} = ∅.
+Fix a signature `𝑆` and let `X` denote an arbitrary nonempty collection of variable symbols. Assume the symbols in `X` are distinct from the operation symbols of `𝑆`, that is `X ∩ ∣ 𝑆 ∣ = ∅`.
 
-By a \emph{word} in the language of \ab{𝑆}, we mean a nonempty, finite sequence of members of \ab X \aof{∪} \aof{∣} \ab{𝑆} \aof{∣}. We denote the concatenation of such sequences by simple juxtaposition.
+By a *word* in the language of `𝑆`, we mean a nonempty, finite sequence of members of `X ∪ ∣ 𝑆 ∣`. We denote the concatenation of such sequences by simple juxtaposition.
 
-Let \ab{S₀} denote the set of nullary operation symbols of \ab{𝑆}. We define by induction on \ab n the sets \ab{𝑇ₙ} of \emph{words} over \ab X \aof{∪} \aof{∣} \ab{𝑆} \aof{∣} as follows (cf.~\cite[Def. 4.19]{Bergman:2012}):
-\begin{enumerate}
-\item \ab{𝑇₀} := \ab X \aof{∪} \ab{S₀}, and
-\item \ab{𝑇ₙ₊₁} := \ab{𝑇ₙ} \aof{∪} \ab{𝒯ₙ}.
-\end{enumerate}
-where \ab{𝒯ₙ} is the collection of all \ab f \ab t such that \ab f : \aof{∣} \ab{𝑆} \aof{∣} and \ab t : \aof{∥} \ab{𝑆} \aof{∥} \ab f \as{→} \ab{𝑇ₙ}. (Recall, \aof{∥} \ab{𝑆} \aof{∥} \ab f is the arity of the operation symbol \ab f.)
+Let `S₀` denote the set of nullary operation symbols of `𝑆`. We define by induction on `n` the sets `𝑇ₙ` of *words* over `X ∪ ∣ 𝑆 ∣` as follows (cf. [Bergman (2012)][] Def. 4.19):
 
-We define the collection of \emph{terms} in the signature \ab{𝑆} over \ab X by \ad{Term} \ab X := \aof{⋃ₙ} \ab{𝑇ₙ}. By an 𝑆-\emph{term} we mean a term in the language of \ab{𝑆}.
+`𝑇₀ := X ∪ S₀` and `𝑇ₙ₊₁ := 𝑇ₙ ∪ 𝒯ₙ`
 
-The definition of \ad{Term} \ab X is recursive, indicating that an inductive type could be used to represent the semantic notion of terms in type theory. Indeed, such a representation is given by the following inductive type.
+where `𝒯ₙ` is the collection of all `f t` such that `f : ∣ 𝑆 ∣` and `t : ∥ 𝑆 ∥ f → 𝑇ₙ`. (Recall, `∥ 𝑆 ∥ f` is the arity of the operation symbol f.)
 
+We define the collection of *terms* in the signature `𝑆` over `X` by `Term X := ⋃ₙ 𝑇ₙ`. By an 𝑆-*term* we mean a term in the language of `𝑆`.
+
+The definition of `Term X` is recursive, indicating that an inductive type could be used to represent the semantic notion of terms in type theory. Indeed, such a representation is given by the following inductive type.
 \begin{code}
 
 data Term (X : Type χ ) : Type (ov χ)  where
@@ -1079,11 +955,12 @@ open Term
 
 \end{code}
 
-This is a very basic inductive type that represents each term as a tree with an operation symbol at each \aic{node} and a variable symbol at each leaf (\aic{ℊ}); hence the constructor names (\aic{ℊ} for ``generator'' and \aic{node} for ``node'').
+This is a very basic inductive type that represents each term as a tree with an operation symbol at each `node` and a variable symbol at each leaf (`generator`); hence the constructor names (`ℊ` for "generator" and `node` for node).
 
-\textbf{Notation}. As usual, the type \ab X represents an arbitrary collection of variable symbols. Recall, \af{ov} \ab{χ} is our shorthand notation for the universe level \ab{𝓞} \aop{⊔} \ab{𝓥} \aop{⊔} \ap{lsuc} \ab{χ}.
-\subsection{Equality of terms}
-\label{equality-of-terms}
+**Notation**. As usual, the type `X` represents an arbitrary collection of variable symbols. Recall, `ov χ` is our shorthand notation for the universe level `𝓞 ⊔ 𝓥 ⊔ lsuc χ`.
+
+
+### <a id="equality-of-terms">Equality of terms</a>
 
 We take a different approach here, using Setoids instead of quotient types.
 That is, we will define the collection of terms in a signature as a setoid
@@ -1101,7 +978,7 @@ module _ {X : Type χ } where
 
 \end{code}
 
-It is easy to show that the equality-of-terms relation \AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}≐\AgdaUnderscore{}}} is an equivalence relation, so we omit the formal proof. (See the \ualmodule{Terms.Func.Basic} module of the \agdaalgebras library for details.)
+It is easy to show that the equality-of-terms relation `_≐_` is an equivalence relation, so we omit the formal proof. (See the [Terms.Func.Basic][] module of the [agda-algebras][] library for details.)
 
 \begin{code}[hide]
  ≐-isRefl : Reflexive _≐_
@@ -1121,27 +998,15 @@ It is easy to show that the equality-of-terms relation \AgdaOperator{\AgdaDataty
 \end{code}
 
 
-\subsection{The term algebra}
-\label{the-term-algebra}
+### <a id="the-term-algebra">The term algebra</a>
 
-For a given signature \ab{𝑆}, if the type \ad{Term} \ab X is nonempty
-(equivalently, if \ab X or \aof{∣} \ab{𝑆} \aof{∣} is nonempty), then we can
-define an algebraic structure, denoted by \T{X} and called the \emph{term
-  algebra in the signature} \ab{𝑆} \emph{over} \ab X.  Terms are viewed as
-acting on other terms, so both the domain and basic operations of the algebra
-are the terms themselves. 
+For a given signature `𝑆`, if the type `Term X` is nonempty (equivalently, if `X` or `∣ 𝑆 ∣` is nonempty), then we can define an algebraic structure, denoted by `𝑻 X` and called the *term algebra in the signature* `𝑆` *over* `X`.  Terms are viewed as acting on other terms, so both the domain and basic operations of the algebra are the terms themselves.
 
 
-\begin{itemize}
-\item For each operation symbol \ab f : \aof{∣} \ab{𝑆} \aof{∣}, denote by \ab f
-  \aof{̂} (\T{X}) the operation on \ad{Term} \ab X that maps a tuple \ab t :
-  \aof{∥} \ab{𝑆} \aof{∥} \ab f \as{→} \aof{∣} \T{X} \aof{∣} to the formal term \ab f \ab t.
-\item Define \T{X} to be the algebra with universe \aof{∣} \T{X} \aof{∣} :=
-  \ad{Term} \ab X and operations \ab f \aof{̂} (\T{X}), one for each symbol
-  \ab f in \aof{∣} \ab{𝑆} \aof{∣}. 
-\end{itemize}
++ For each operation symbol `f : ∣ 𝑆 ∣`, denote by `f ̂ (𝑻 X)` the operation on `Term X` that maps a tuple `t : ∥ 𝑆 ∥ f → ∣ 𝑻 X ∣` to the formal term `f t`.
++ Define `𝑻 X` to be the algebra with universe `∣ 𝑻 X ∣ := Term X` and operations `f ̂ (𝑻 X)`, one for each symbol `f` in `∣ 𝑆 ∣`.
 
-In \agda the term algebra can be defined as simply as one might hope.
+In [Agda][] the term algebra can be defined as simply as one might hope.
 
 \begin{code}
 
@@ -1154,13 +1019,12 @@ Algebra.Interp (𝑻 X) ⟨$⟩ (f , ts) = node f ts
 cong (Algebra.Interp (𝑻 X)) (≡.refl , ss≐ts) = gnl ss≐ts
 \end{code}
 
-\subsection{Interpretation of terms}
-\label{interpretation-of-terms}
+### <a id="interpretation-of-terms">Interpretation of terms</a>
 
 The approach to terms and their interpretation in this module was inspired by
-Andreas Abel's formal proof of Birkhoff's completeness theorem.\footnote{See \abel.}
+[Andreas Abel's formal proof of Birkhoff's completeness theorem](http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf).
 
-A substitution from \ab X to \ab Y associates a term in \ab X with each variable in \ab Y.  The definition of \af{Sub} given here is essentially the same as the one given by Andreas Abel, as is the recursive definition of the syntax \ab t \af{[} \ab{σ} \af{]} , which denotes a term \ab t applied to a substitution \ab{σ}.
+A substitution from `X` to `Y` associates a term in `X` with each variable in `Y`.  The definition of `Sub` given here is essentially the same as the one given by Andreas Abel, as is the recursive definition of the syntax `t [ σ ]`, which denotes a term `t` applied to a substitution `σ`.
 
 \begin{code}
 
@@ -1173,7 +1037,7 @@ _[_] : {X Y : Type χ}(t : Term Y) (σ : Sub X Y) → Term X
 
 \end{code}
 
-An environment for an algebra \ab{𝑨} in a context \ab X is a map that assigns to each variable \AgdaTyped{x}{X} an element in the domain of \ab{𝑨}, packaged together with an equality of environments, which is simply pointwise equality (relatively to the setoid equality of the underlying domain of \ab{𝑨}).
+An environment for an algebra `𝑨` in a context `X` is a map that assigns to each variable `x : X` an element in the domain of `𝑨`, packaged together with an equality of environments, which is simply pointwise equality (relatively to the setoid equality of the underlying domain of `𝑨`).
 
 \begin{code}
 
@@ -1188,7 +1052,7 @@ module Environment (𝑨 : Algebra α ℓ) where
 
 \end{code}
 
-Next we define \emph{evaluation of a term} in an environment \ab{ρ}, interpreted in the algebra \ab{𝑨}.
+Next we define *evaluation of a term* in an environment `ρ`, interpreted in the algebra `𝑨`.
 
 \begin{code}
 
@@ -1200,7 +1064,7 @@ Next we define \emph{evaluation of a term} in an environment \ab{ρ}, interprete
 
 \end{code}
 
-An equality between two terms holds in a model if the two terms are equal under all valuations of their free variables (cf. Andreas Abel's formal proof of Birkhoff's completeness theorem).
+An equality between two terms holds in a model if the two terms are equal under all valuations of their free variables (cf. [Andreas Abel's formal proof of Birkhoff's completeness theorem](http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf)).
 
 \begin{code}
 
@@ -1214,7 +1078,7 @@ An equality between two terms holds in a model if the two terms are equal under 
 
 \end{code}
 
-The proof that \af{Equal} is an equivalence relation is trivial, so we omit it. (See the \ualmodule{Varieties.Func.SoundAndComplete} module of the \agdaalgebras library for details.)
+The proof that `Equal` is an equivalence relation is trivial, so we omit it. (See the [Varieties.Func.SoundAndComplete][] module of the [agda-algebras][] library for details.)
 
 \begin{code}[hide]
  EqualIsEquiv : {Γ : Type χ} → IsEquivalence (Equal {X = Γ})
@@ -1232,7 +1096,7 @@ Evaluation of a substitution gives an environment (cf. [Andreas Abel's formal pr
 
 \end{code}
 
-Next we prove that \aof{⟦} \ab{t} \af{[} \ab{σ} \af{]} \aof{⟧} \ab{ρ} ≃ \aof{⟦} \ab t \aof{⟧} \aof{⟦} \ab{σ} \aof{⟧} \ab{ρ} (cf. Andreas Abel's formal proof of Birkhoff's completeness theorem).
+Next we prove that ⟦t[σ]⟧ρ ≃ ⟦t⟧⟦σ⟧ρ (cf. [Andreas Abel's formal proof of Birkhoff's completeness theorem](http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf)).
 
 \begin{code}
 
@@ -1244,8 +1108,7 @@ Next we prove that \aof{⟦} \ab{t} \af{[} \ab{σ} \af{]} \aof{⟧} \ab{ρ} ≃ 
 \end{code}
 
 
-\subsection{Compatibility of terms}
-\label{compatibility-of-terms}
+### <a id="compatibility-of-terms">Compatibility of terms</a>
 
 We now prove two important facts about term operations.  The first of these, which is used very often in the sequel, asserts that every term commutes with every homomorphism.
 
@@ -1270,9 +1133,9 @@ module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}(hh : ho
           (⟦ node f t ⟧ᴮ ⟨$⟩ (h ∘ a))         ∎
 \end{code}
 
-%% \subsection{Interpretation of terms in product algebras}
-%% a id="interpretation-of-terms-in-product-algebras">
-
+<!--
+### <a id="interpretation-of-terms-in-product-algebras">Interpretation of terms in product algebras</a>
+-->
 \begin{code}[hide]
 module _ {X : Type χ}{ι : Level} {I : Type ι} (𝒜 : I → Algebra α ρᵃ) where
  open Setoid 𝔻[ ⨅ 𝒜 ] using ( _≈_ )
@@ -1288,19 +1151,17 @@ module _ {X : Type χ}{ι : Level} {I : Type ι} (𝒜 : I → Algebra α ρᵃ)
 
 
 
-%% -------------------------------------------------------------------------------------
+<!-- ------------------------------------------------------------------------------------- -->
 
-\section{Model Theory and Equational Logic}
-\label{model-theory-and-equational-logic}
+## <a id="model-theory-and-equational-logic">Model Theory and Equational Logic</a>
 
-(cf. the \ualmodule{Varieties.Func.SoundAndComplete} module of the \agdaalgebras library)
+(cf. the [Varieties.Func.SoundAndComplete][] module of the [Agda Universal Algebra Library][])
 
-\subsection{Basic definitions}
-\label{model-theory-basic-definitions}
+### <a id="model-theory-basic-definitions">Basic definitions</a>
 
-Let \ab{𝑆} be a signature. By an \emph{identity} or \emph{equation} in \ab{𝑆} we mean an ordered pair of terms in a given context.  For instance, if the context happens to be the type \ab X : \ap{Type} \ab{χ}, then an equation will be a pair of inhabitants of the domain of term algebra \af{𝑻} \ab X.
+Let `𝑆` be a signature. By an *identity* or *equation* in `𝑆` we mean an ordered pair of terms in a given context.  For instance, if the context happens to be the type `X : Type χ`, then an equation will be a pair of inhabitants of the domain of term algebra `𝑻 X`.
 
-We define an equation in Agda using the following record type with fields denoting the left-hand and right-hand sides of the equation, along with an equation ``context'' representing the underlying collection of variable symbols (cf.~Andreas Abel's formal proof of Birkhoff's completeness theorem).
+We define an equation in Agda using the following record type with fields denoting the left-hand and right-hand sides of the equation, along with an equation "context" representing the underlying collection of variable symbols (cf. [Andreas Abel's formal proof of Birkhoff's completeness theorem](http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf)).
 
 \begin{code}
 
@@ -1314,13 +1175,13 @@ open Eq public
 
 \end{code}
 
-We now define a type representing the notion of an equation \ab p \aoic{≈̇} \ab q holding (when \ab p and \ab q are interpreted) in algebra \ab{𝑨}.
+We now define a type representing the notion of an equation `p ≈̇ q` holding (when `p` and `q` are interpreted) in algebra `𝑨`.
 
-If \ab{𝑨} is an \ab{𝑆}-algebra we say that \ab{𝑨} \emph{satisfies} \ab p \aofld{≈} \ab q provided for all environments \ab{ρ} : \ab X \as{→} \aof{∣} \ab{𝑨} \aof{∣} (assigning values in the domain of \ab{𝑨} to variable symbols in \ab X) we have \aof{⟦} \ab p \aof{⟧} \aofld{⟨\$⟩} \ab{ρ} \aofld{≈} \aof{⟦} \ab q \aof{⟧} \aofld{⟨\$⟩} \ab{ρ}.  In this situation, we write \ab{𝑨} \aof{⊧} (\ab p \aoic{≈̇} \ab q) and say that \ab{𝑨} \emph{models} the identity \ab p \aofld{≈} \ab q.
+If `𝑨` is an `𝑆`-algebra we say that `𝑨` *satisfies* `p ≈ q` provided for all environments `ρ : X → ∣ 𝑨 ∣` (assigning values in the domain of `𝑨` to variable symbols in `X`) we have `⟦ p ⟧⟨$⟩ ρ ≈ ⟦ q ⟧ ⟨$⟩ ρ`.  In this situation, we write `𝑨 ⊧ (p ≈̇ q)` and say that `𝑨` *models* the identity `p ≈ q`.
 
-If \ab{𝒦} is a class of algebras, all of the same signature, we write \ab{𝒦} \aof{⊫} (\ab p \aoic{≈̇} \ab q) if, for every \ab{𝑨} \aof{∈} \ab{𝒦}, we have \ab{𝑨} \aof{⊧} (\ab p \aoic{≈̇} \ab q).
+If `𝒦` is a class of algebras, all of the same signature, we write `𝒦 ⊫ (p ≈̇ q) if, for every `𝑨 ∈ 𝒦`, we have `𝑨 ⊧ (p ≈̇ q)`.
 
-Because a class of structures has a different type than a single structure, we must use a slightly different syntax to avoid overloading the relations \aof{⊧} and \aofld{≈}. As a reasonable alternative to what we would normally express informally as \ab{𝒦} \aof{⊧} \ab p \aofld{≈} \ab q, we have settled on \ab{𝒦} \aof{⊫} (\ab p \aoic{≈̇} \ab q) to denote this relation.  To reiterate, if \ab{𝒦} is a class of \ab{𝑆}-algebras, we write \ab{𝒦} \aof{⊫} (\ab p \aoic{≈̇} \ab q) provided every \ab{𝑨} \aof{∈} \ab{𝒦} satisfies \ab{𝑨} \aof{⊧} (\ab p \aoic{≈̇} \ab q).
+Because a class of structures has a different type than a single structure, we must use a slightly different syntax to avoid overloading the relations `⊧` and `≈`. As a reasonable alternative to what we would normally express informally as `𝒦 ⊧ p ≈ q`, we have settled on `𝒦 ⊫ (p ≈̇ q)` to denote this relation.  To reiterate, if `𝒦` is a class of `𝑆`-algebras, we write `𝒦 ⊫ (p ≈̇ q)` provided every `𝑨 ∈ 𝒦` satisfies `𝑨 ⊧ (p ≈̇ q)`.
 
 \begin{code}
 
@@ -1332,7 +1193,7 @@ _⊫_ : Pred (Algebra α ρᵃ) ℓ → Eq{χ} → Type (ℓ ⊔ χ ⊔ ov(α �
 
 \end{code}
 
-We denote by \ab{𝑨} \aof{⊨} \ab{ℰ} the assertion that the algebra \ab{𝑨} models every equation in a collection \ab{ℰ} of equations.
+We denote by `𝑨 ⊨ ℰ` the assertion that the algebra 𝑨 models every equation in a collection `ℰ` of equations.
 
 \begin{code}
 
@@ -1340,11 +1201,10 @@ _⊨_ : (𝑨 : Algebra α ρᵃ) → {ι : Level}{I : Type ι} → (I → Eq{χ
 𝑨 ⊨ ℰ = ∀ i → Equal (lhs (ℰ i))(rhs (ℰ i)) where open Environment 𝑨
 \end{code}
 
-\subsection{Equational theories and models}
-\label{equational-theories-and-models}
+### <a id="equational-theories-and-models">Equational theories and models</a>
 
-If \ab{𝒦} denotes a class of structures, then \af{Th} \ab{𝒦} represents the set of identities
-modeled by the members of \ab{𝒦}.
+If `𝒦` denotes a class of structures, then `Th 𝒦` represents the set of identities
+modeled by the members of `𝒦`.
 
 \begin{code}
 
@@ -1355,10 +1215,9 @@ Mod : {X : Type χ} → Pred(Term X × Term X) ℓ → Pred (Algebra α ρᵃ) _
 Mod ℰ 𝑨 = ∀ {p q} → (p , q) ∈ ℰ → Equal p q where open Environment 𝑨
 \end{code}
 
-\subsection{The entailment relation}
-\label{the-entailment-relation}
+### <a id="the-entailment-relation">The entailment relation</a>
 
-Based on Andreas Abel's Agda formalization of Birkhoff's completeness theorem.
+Based on [Andreas Abel's Agda formalization of Birkhoff's completeness theorem](http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf).)
 
 \begin{code}
 
@@ -1377,11 +1236,10 @@ module _ {χ ι : Level} where
  ⊢▹≈IsEquiv = record { refl = ⊢refl ; sym = ⊢sym ; trans = ⊢trans }
 \end{code}
 
-\subsection{Soundness}
-\label{soundness}
+### <a id="soundness">Soundness</a>
 
-In any model \ab{𝑨} of the equations \ab{ℰ} derived equality is actual equality
-(cf.~Andreas Abel's Agda formalization of Birkhoff's completeness theorem).
+In any model 𝑨 that satisfies the equations ℰ, derived equality is actual equality
+(cf. [Andreas Abel's Agda formalization of Birkhoff's completeness theorem](http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf).)
 
 \begin{code}
 
@@ -1409,29 +1267,23 @@ module Soundness  {χ α ι : Level}{I : Type ι} (ℰ : I → Eq{χ})
 \end{code}
 
 
-\subsection{The Closure Operators H, S, P and V}
-\label{the-closure-operators-h-s-p-and-v}
+### <a id="the-closure-operators-h-s-p-and-v">The Closure Operators H, S, P and V</a>
 
-Fix a signature \ab{𝑆}, let \ab{𝒦} be a class of \ab{𝑆}-algebras, and define
+Fix a signature `𝑆`, let `𝒦` be a class of `𝑆`-algebras, and define
 
-\begin{itemize}
-\item \af H \ab{𝒦} = algebras isomorphic to a homomorphic image of a member of \ab{𝒦};
-\item \af S \ab{𝒦} = algebras isomorphic to a subalgebra of a member of \ab{𝒦};
-\item \af P \ab{𝒦} = algebras isomorphic to a product of members of \ab{𝒦}.
-\end{itemize}
+* `H 𝒦` = algebras isomorphic to a homomorphic image of a member of `𝒦`;
+* `S 𝒦` = algebras isomorphic to a subalgebra of a member of `𝒦`;
+* `P 𝒦` = algebras isomorphic to a product of members of `𝒦`.
 
-A straight-forward verification confirms that \af H, \af S, and \ab P are \emph{closure operators} (expansive, monotone, and idempotent).  A class \ab{𝒦} of \ab{𝑆}-algebras is said to be \emph{closed under the taking of homomorphic images} provided \af H \ab{𝒦} \aof{⊆} \ab{𝒦}. Similarly, \ab{𝒦} is \emph{closed under the taking of subalgebras} (resp., \emph{arbitrary products}) provided \af S \ab{𝒦} \aof{⊆} \ab{𝒦} (resp., \af P \ab{𝒦} \aof{⊆} \ab{𝒦}). The operators \af H, \af S, and \af P can be composed with one another repeatedly, forming yet more closure operators.
+A straight-forward verification confirms that `H`, `S`, and `P` are *closure operators* (expansive, monotone, and idempotent).  A class `𝒦` of `𝑆`-algebras is said to be *closed under the taking of homomorphic images* provided `H 𝒦 ⊆ 𝒦`. Similarly, `𝒦` is *closed under the taking of subalgebras* (resp., *arbitrary products*) provided `S 𝒦 ⊆ 𝒦` (resp., `P 𝒦 ⊆ 𝒦`). The operators `H`, `S`, and `P` can be composed with one another repeatedly, forming yet more closure operators.
 
-An algebra is a homomorphic image (resp., subalgebra; resp., product) of every algebra to which it is isomorphic. Thus, the class \af H \ab{𝒦} (resp., \af S \ab{𝒦}; resp., \af P \ab{𝒦}) is closed under isomorphism.
+An algebra is a homomorphic image (resp., subalgebra; resp., product) of every algebra to which it is isomorphic. Thus, the class `H 𝒦` (resp., `S 𝒦`; resp., `P 𝒦`) is closed under isomorphism.
 
-A \emph{variety} is a class of \ab{𝑆}-algebras that is closed under the taking of
-homomorphic images, subalgebras, and arbitrary products.  To represent varieties
-we define types for the closure operators \af H, \af S, and \af P that are composable.
-Separately, we define a type \af V which represents closure under all three
-operators, \af H, \af S, and \af P.  Thus, if \ab{𝒦} is a class of \ab{𝑆}-algebras`, then 
-\af V \ab{𝒦} := \af H (\af S (\af P \ab{𝒦})), and \ab{𝒦} is a variety iff \af V \ab{𝒦} \aof{⊆} \ab{𝒦}.
+A *variety* is a class of `𝑆`-algebras that is closed under the taking of homomorphic images, subalgebras, and arbitrary products.  To represent varieties we define types for the closure operators `H`, `S`, and `P` that are composable.  Separately, we define a type `V` which represents closure under all three operators, `H`, `S`, and `P`.
 
-We now define the type \af H to represent classes of algebras that include all homomorphic images of algebras in the class---i.e., classes that are closed under the taking of homomorphic images---the type \af S to represent classes of algebras that closed under the taking of subalgebras, and the type \af P to represent classes of algebras closed under the taking of arbitrary products.
+
+
+We now define the type `H` to represent classes of algebras that include all homomorphic images of algebras in the class---i.e., classes that are closed under the taking of homomorphic images---the type `S` to represent classes of algebras that closed under the taking of subalgebras, and the type `P` to represent classes of algebras closed under the taking of arbitrary products.
 
 \begin{code}
 
@@ -1447,13 +1299,18 @@ module _  {α ρᵃ β ρᵇ : Level} where
  P : ∀ ℓ ι → Pred(Algebra α ρᵃ) (a ⊔ ov ℓ) → Pred(Algebra β ρᵇ) (b ⊔ ov(a ⊔ ℓ ⊔ ι))
  P _ ι 𝒦 𝑩 = Σ[ I ∈ Type ι ] (Σ[ 𝒜 ∈ (I → Algebra α ρᵃ) ] (∀ i → 𝒜 i ∈ 𝒦) × (𝑩 ≅ ⨅ 𝒜))
 
+\end{code}
+
+A class `𝒦` of `𝑆`-algebras is called a *variety* if it is closed under each of the closure operators `H`, `S`, and `P` defined above. The corresponding closure operator is often denoted `𝕍` or `𝒱`, but we will denote it by `V`.
+
+\begin{code}
+
 module _  {α ρᵃ β ρᵇ γ ρᶜ δ ρᵈ : Level} where
  private a = α ⊔ ρᵃ ; b = β ⊔ ρᵇ ; c = γ ⊔ ρᶜ ; d = δ ⊔ ρᵈ
 
  V : ∀ ℓ ι → Pred(Algebra α ρᵃ) (a ⊔ ov ℓ) →  Pred(Algebra δ ρᵈ) (d ⊔ ov(a ⊔ b ⊔ c ⊔ ℓ ⊔ ι))
  V ℓ ι 𝒦 = H{γ}{ρᶜ}{δ}{ρᵈ} (a ⊔ b ⊔ ℓ ⊔ ι) (S{β}{ρᵇ} (a ⊔ ℓ ⊔ ι) (P ℓ ι 𝒦))
-\end{code}
-\begin{code}[hide]
+
 module _ {α ρᵃ ℓ : Level}(𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ))
          (𝑨 : Algebra (α ⊔ ρᵃ ⊔ ℓ) (α ⊔ ρᵃ ⊔ ℓ)) where
  private ι = ov(α ⊔ ρᵃ ⊔ ℓ)
@@ -1466,10 +1323,9 @@ module _ {α ρᵃ ℓ : Level}(𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ 
 \end{code}
 
 
-\subsubsection{Idempotence of S}
-\label{idempotence-of-s}
+#### <a id="idempotence-of-s">Idempotence of S</a>
 
-\af S is a closure operator.  The facts that \af S is monotone and expansive won't be needed, so we omit the proof of these facts.  However, we will make use of idempotence of \af S, so we prove that property as follows.
+`S` is a closure operator.  The facts that S is monotone and expansive won't be needed, so we omit the proof of these facts.  However, we will make use of idempotence of `S`, so we prove that property as follows.
 
 \begin{code}
 
@@ -1479,10 +1335,9 @@ S-idem : {𝒦 : Pred (Algebra α ρᵃ)(α ⊔ ρᵃ ⊔ ov ℓ)}
 S-idem (𝑨 , (𝑩 , sB , A≤B) , x≤A) = 𝑩 , (sB , ≤-trans x≤A A≤B)
 \end{code}
 
-\subsubsection{Algebraic invariance of ⊧}
-\label{algebraic-invariance-of-models}
+#### <a id="algebraic-invariance-of-models">Algebraic invariance of ⊧</a>
 
-The binary relation \aof{⊧} would be practically useless if it were not an \emph{algebraic invariant} (i.e., invariant under isomorphism). Let us now verify that the models relation we defined above has this essential property.
+The binary relation `⊧` would be practically useless if it were not an *algebraic invariant* (i.e., invariant under isomorphism). Let us now verify that the models relation we defined above has this essential property.
 
 \begin{code}
 
@@ -1504,9 +1359,8 @@ module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}(𝑩 : Algebra β ρᵇ)(p q : T
   private f = _⟨$⟩_ ∣ fh ∣ ; g = _⟨$⟩_ ∣ gh ∣
 \end{code}
 
-\subsubsection{Subalgebraic invariance of ⊧}
-\label{subalgebraic-invariance-of-models}
-Identities modeled by an algebra \ab{𝑨} are also modeled by every subalgebra of \ab{𝑨}, which fact can be formalized as follows.
+#### <a id="subalgebraic-invariance-of-models">Subalgebraic invariance of ⊧</a>
+Identities modeled by an algebra `𝑨` are also modeled by every subalgebra of `𝑨`, which fact can be formalized as follows.
 
 \begin{code}
 
@@ -1533,11 +1387,11 @@ module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}{p q : T
   goal = ∥ B≤A ∥ (ξ b)
 \end{code}
 
-\subsubsection{Product invariance of ⊧}
-\label{product-invariance-of-models}
+#### <a id="product-invariance-of-models">Product invariance of ⊧</a>
 An identity satisfied by all algebras in an indexed collection is also satisfied by the product of algebras in that collection.
 
-\begin{code}
+ \begin{code}
+
 
 module _ {X : Type χ}{I : Type ℓ}(𝒜 : I → Algebra α ρᵃ){p q : Term X} where
 
@@ -1559,10 +1413,9 @@ module _ {X : Type χ}{I : Type ℓ}(𝒜 : I → Algebra α ρᵃ){p q : Term X
 \end{code}
 
 
-\subsubsection{PS ⊆ SP}
-\label{PS-subset-SP}
+#### <a id="PS-subset-SP">PS ⊆ SP</a>
 
-Another important fact we will need about the operators \af S and \af P is that a product of subalgebras of algebras in a class \ab{𝒦} is a subalgebra of a product of algebras in \ab{𝒦}. We denote this inclusion by \af{PS⊆SP}, which we state and prove as follows.
+Another important fact we will need about the operators `S` and `P` is that a product of subalgebras of algebras in a class `𝒦` is a subalgebra of a product of algebras in `𝒦`. We denote this inclusion by `PS⊆SP`, which we state and prove as follows.
 
 \begin{code}
 
@@ -1584,17 +1437,15 @@ module _  {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
   Goal = ⨅ ℬ , (I , (ℬ , (kB , ≅-refl))) , (≅-trans-≤ B≅⨅A ⨅A≤⨅B)
 \end{code}
 
-\subsubsection{Identity preservation}
-\label{identity-preservation}
+#### <a id="identity-preservation">Identity preservation</a>
 
-The classes \af H \ab{𝒦}, \af S \ab{𝒦}, \af P \ab{𝒦}, and \af V \ab{𝒦} all satisfy the same set of equations.  We will only use a subset of the inclusions used to prove this fact. (For a complete proof, see the
-\ualmodule{Varieties.Func.Preservation} module of the \agdaalgebras library.)
+The classes `H 𝒦`, `S 𝒦`, `P 𝒦`, and `V 𝒦` all satisfy the same set of equations.  We will only use a subset of the inclusions used to prove this fact. (For a complete proof, see the
+[Varieties.Func.Preservation][] module of the [Agda Universal Algebra Library][].)
 
 
-\paragraph{H preserves identities}
-\label{h-preserves-identities}
+##### <a id="h-preserves-identities">H preserves identities</a>
 
-First we prove that the closure operator \af H is compatible with identities that hold in the given class.
+First we prove that the closure operator H is compatible with identities that hold in the given class.
 
 \begin{code}
 
@@ -1631,8 +1482,7 @@ module _  {X : Type χ}{𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)}
 \end{code}
 
 
-\paragraph{S preserves identities}
-\label{s-preserves-identities}
+##### <a id="s-preserves-identities">S preserves identities</a>
 
 \begin{code}
 
@@ -1650,8 +1500,7 @@ The obvious converse is barely worth the bits needed to formalize it, but we wil
 \end{code}
 
 
-\paragraph{P preserves identities}
-\label{p-preserves-identities}
+##### <a id="p-preserves-identities">P preserves identities</a>
 
 \begin{code}
 
@@ -1665,10 +1514,9 @@ The obvious converse is barely worth the bits needed to formalize it, but we wil
 \end{code}
 
 
-\paragraph{V preserves identities}
-\label{v-preserves-identities}
+##### <a id="v-preserves-identities">V preserves identities</a>
 
-Finally, we prove the analogous preservation lemmas for the closure operator \af V.
+Finally, we prove the analogous preservation lemmas for the closure operator `V`.
 
 \begin{code}
 
@@ -1686,10 +1534,9 @@ module _ {X : Type χ}{ι : Level}{𝒦 : Pred(Algebra α ρᵃ)(α ⊔ ρᵃ �
    spK⊧pq = S-id1{ℓ = aℓι}{p = p}{q} (P-id1{ℓ = ℓ} {𝒦 = 𝒦}{p = p}{q} σ)
 \end{code}
 
-\subsubsection{Th 𝒦 ⊆ Th (V 𝒦)}
-\label{th-k-subset-th-v}
+#### <a id="th-k-subset-th-v">Th 𝒦 ⊆ Th (V 𝒦)</a>
 
-From \af{V-id1} it follows that if \ab{𝒦} is a class of algebras, then the set of identities modeled by the algebras in \ab{𝒦} is contained in the set of identities modeled by the algebras in \af V \ab{𝒦}.  In other terms, \af{Th} \ab{𝒦} \aof{⊆} \af{Th} (\af V \ab{𝒦}).  We formalize this observation as follows.
+From `V-id1` it follows that if 𝒦 is a class of algebras, then the set of identities modeled by the algebras in `𝒦` is contained in the set of identities modeled by the algebras in `V 𝒦`.  In other terms, `Th 𝒦 ⊆ Th (V 𝒦)`.  We formalize this observation as follows.
 
 \begin{code}
 
@@ -1700,27 +1547,18 @@ From \af{V-id1} it follows that if \ab{𝒦} is a class of algebras, then the se
 
 
 
-%% -------------------------------------------------------------------------------------
+<!-- ------------------------------------------------------------------------------------- -->
 
-\section{Free Algebras}
-\label{free-algebras}
+## <a id="free-algebras">Free Algebras</a>
 
-\subsection{The absolutely free algebra 𝑻 X}
-\label{the-absolutely-free-algebra-tx}
+### <a id="the-absolutely-free-algebra-tx">The absolutely free algebra 𝑻 X</a>
 
-The term algebra \af{𝑻} \ab X is \emph{absolutely free} (or \emph{universal}, or
-\emph{initial}) for algebras in the signature \ab{𝑆}. That is, for every
-\ab{𝑆}-algebra \ab{𝑨}, the following hold.
+The term algebra `𝑻 X` is *absolutely free* (or *universal*, or *initial*) for algebras in the signature `𝑆`. That is, for every 𝑆-algebra `𝑨`, the following hold.
 
-\begin{itemize}
-\item Every function from \ab{𝑋} to \aof{∣} \ab{𝑨} \aof{∣} lifts to a
-  homomorphism from \af{𝑻} \ab{X} to \ab{𝑨}.
-\item The homomorphism that exists by item 1 is unique.
-\end{itemize}
+1. Every function from `𝑋` to `∣ 𝑨 ∣` lifts to a homomorphism from `𝑻 X` to `𝑨`.
+2. The homomorphism that exists by item 1 is unique.
 
-We now prove this in \agda, starting with the fact that every map from \ab{X} to
-\aof{∣} \ab{𝑨} \aof{∣} lifts to a map from \aof{∣} \af{𝑻} \ab{X} \aof{∣} to
-\aof{∣} \ab{𝑨} \aof{∣} in a natural way, by induction on the structure of the given term.
+We now prove this in [Agda][], starting with the fact that every map from `X` to `∣ 𝑨 ∣` lifts to a map from `∣ 𝑻 X ∣` to `∣ 𝑨 ∣` in a natural way, by induction on the structure of the given term.
 
 \begin{code}
 
@@ -1741,12 +1579,12 @@ module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}(h : X → 𝕌[ 𝑨 ]) where
 
 \end{code}
 
-Naturally, at the base step of the induction, when the term has the form \aic{ℊ}
-\ab x, the free lift of \ab h agrees with \ab h.  For the inductive step, when the
-given term has the form \aic{node} \ab f \ab t, the free lift is defined as
+Naturally, at the base step of the induction, when the term has the form `generator`
+x, the free lift of `h` agrees with `h`.  For the inductive step, when the
+given term has the form `node f t`, the free lift is defined as
 follows: Assuming (the induction hypothesis) that we know the image of each
-subterm \ab t \ab i under the free lift of \ab h, define the free lift at the
-full term by applying \ab f \aof{̂} \ab{𝑨} to the images of the subterms.
+subterm `t i` under the free lift of `h`, define the free lift at the
+full term by applying `f ̂ 𝑨` to the images of the subterms.
 
 The free lift so defined is a homomorphism by construction. Indeed, here is the trivial proof.
 
@@ -1774,18 +1612,9 @@ module _ {X : Type χ}{𝑨 : Algebra α ρᵃ} where
  free-lift-interp η (node f t) = cong (Interp 𝑨) (≡.refl , (free-lift-interp η) ∘ t)
 \end{code}
 
+### <a id="the-relatively-free-algebra-f">The relatively free algebra 𝔽</a>
 
-
-
-\subsection{The relatively free algebra 𝔽[ X ]}
-\label{the-relatively-free-algebra-f}
-
-We now define the algebra
-\AgdaOperator{\AgdaFunction{𝔽[}}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{]}},
-which represents the relatively free algebra.
-Here, as above, \ab X plays the role of an arbitrary nonempty collection of variables. (It would suffice to take\ab X to be the cardinality of the largest algebra in \ab{𝒦}, but since we don't know that cardinality, we leave \ab X aribtrary for now.)
+We now define the algebra `𝔽[ X ]`, which plays the role of the relatively free algebra, along with the natural epimorphism `epi𝔽 : epi (𝑻 X) 𝔽[ X ]` from `𝑻 X` to `𝔽[ X ]`.
 
 \begin{code}
 
@@ -1799,12 +1628,7 @@ module FreeAlgebra {χ : Level}{ι : Level}{I : Type ι}(ℰ : I → Eq) where
 \end{code}
 
 The interpretation of an operation is simply the operation itself.
-This works since
-\AgdaBound{ℰ}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{⊢}}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{▹\AgdaUnderscore{}≈\AgdaUnderscore{}}}
-is a congruence.
+This works since `ℰ ⊢ X ▹_≈_` is a congruence.
 
 \begin{code}
 
@@ -1817,8 +1641,9 @@ is a congruence.
  Interp 𝔽[ X ] = FreeInterp
 \end{code}
 
-\subsection{Basic properties of free algebras}
-\label{basic-properties-of-free-algebras}
+### <a id="basic-properties-of-free-algebras">Basic properties of free algebras</a>
+
+In the code below, `X` will play the role of an arbitrary collection of variables; it would suffice to take `X` to be the cardinality of the largest algebra in 𝒦, but since we don't know that cardinality, we leave `X` aribtrary for now.
 
 \begin{code}
 
@@ -1839,12 +1664,8 @@ module FreeHom (χ : Level) {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov 
 \end{code}
 
 
-\subsubsection{The natural epimorphism from 𝑻 X to 𝔽[ X ]}
-\label{the-natural-epimorphism-from-tx-to-f}
-We now define the natural epimorphism from
-\T{X} onto the relatively free algebra \Free{X} and prove that 
-the kernel of this morphism is the congruence of \T{X}
-defined by the identities modeled by (\af S \ab{𝒦}, hence by) \ab{𝒦}.
+#### <a id="the-natural-epimorphism-from-tx-to-f">The natural epimorphism from 𝑻 X to 𝔽[ X ]</a>
+Next we define an epimorphism from `𝑻 X` onto the relatively free algebra `𝔽[ X ]`.  Of course, the kernel of this epimorphism will be the congruence of `𝑻 X` defined by identities modeled by (`S 𝒦`, hence) `𝒦`.
 
 \begin{code}
 
@@ -1875,7 +1696,8 @@ defined by the identities modeled by (\af S \ab{𝒦}, hence by) \ab{𝒦}.
  hom𝔽[ X ]-is-epic = IsEpi.isSurjective (snd (epi𝔽[ X ]))
 \end{code}
 
-As promised, we prove that the kernel of the natural epimorphism is the congruence defined by the identities modelled by \ab{𝒦}.
+
+#### <a id="the-kernel-of-the-natural-epimorphism">The kernel of the natural epimorphism</a>
 
 \begin{code}
 
@@ -1895,7 +1717,7 @@ As promised, we prove that the kernel of the natural epimorphism is the congruen
  𝒦⊫→ℰ⊢ {p = p} {q} pKq = hyp ((p ≈̇ q) , pKq) where open _⊢_▹_≈_ using (hyp)
 \end{code}
 
-\subsubsection{The universal property}
+#### <a id="the-universal-property">The universal property</a>
 
 \begin{code}
 
@@ -1926,14 +1748,13 @@ module _  {𝑨 : Algebra (α ⊔ ρᵃ ⊔ ℓ) (α ⊔ ρᵃ ⊔ ℓ)} {𝒦 :
 
 
 
-%% -------------------------------------------------------------------------------------
+<!-- ------------------------------------------------------------------------------------- -->
 
-\subsection{Products of classes of algebras}
-\label{products-of-classes-of-algebras}
+## <a id="products-of-classes-of-algebras">Products of classes of algebras</a>
 
-We want to pair each (\ab{𝑨} , \ab p) (where \ab p : \ab{𝑨} \af{∈} \af S \ab{𝒦}) with an environment
-\ab{ρ} : \ab X \as{→} \aof{∣} \ab{𝑨} \aof{∣} so that we can quantify over all algebras \emph{and} all
-assignments of values in the domain \aof{∣} \ab{𝑨} \aof{∣} to variables in \ab X.
+We want to pair each `(𝑨 , p)` (where p : 𝑨 ∈ S 𝒦) with an environment
+`ρ : X → ∣ 𝑨 ∣` so that we can quantify over all algebras *and* all
+assignments of values in the domain `∣ 𝑨 ∣` to variables in `X`.
 
 \begin{code}
 
@@ -1954,14 +1775,14 @@ module _ (𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)){X : Type (α 
 
 \end{code}
 
-Next we define a useful type, \af{skEqual}, which we use to represent a term identity \ab p \aic{≈} \ab q for any
-given \ab i = (\ab{𝑨} , \ab{sA} , \ab{ρ}) (where \ab{𝑨} is an algebra, \ab{sA} : \ab{𝑨} \af{∈} \af{S} \ab{𝒦} is a proof that \ab{𝑨} belongs to \af{S} \ab{𝒦}, and \ab{ρ} is a mapping from \ab X to the domain of \ab{𝑨}). Then we prove \af{AllEqual⊆ker𝔽} which asserts that if the identity \ab{p} \aic{≈} \ab q holds in all \ab{𝑨} \aof{∈} \af S \ab{𝒦} (for all environments), then \ab p \aic{≈} \ab q
-holds in the relatively free algebra
-\Free{X}; equivalently, the pair (\ab p , \ab q) belongs to the
-kernel of the natural homomorphism from
-\T{X} onto \Free{X}. We will use this fact below to prove
-that there is a monomorphism from \Free{X} into \ab{ℭ}, and thus \Free{X} is a subalgebra of \ab{ℭ},
-so belongs to \af S (\af P \ab{𝒦}).
+Next we define a useful type, `skEqual`, which we use to represent a term identity `p ≈ q` for any
+given `i = (𝑨 , sA , ρ)` (where `𝑨` is an algebra, `sA : 𝑨 ∈ S 𝒦` is a proof that `𝑨` belongs
+to `S 𝒦`, and `ρ` is a mapping from `X` to the domain of `𝑨`). Then we prove `AllEqual⊆ker𝔽` which
+asserts that if the identity `p ≈ q` holds in all `𝑨 ∈ S 𝒦` (for all environments), then `p ≈ q`
+holds in the relatively free algebra `𝔽[ X ]`; equivalently, the pair `(p , q)` belongs to the
+kernel of the natural homomorphism from `𝑻 X` onto `𝔽[ X ]`. We will use this fact below to prove
+that there is a monomorphism from `𝔽[ X ]` into `ℭ`, and thus `𝔽[ X ]` is a subalgebra of ℭ,
+so belongs to `S (P 𝒦)`.
 
 \begin{code}
 
@@ -2025,8 +1846,9 @@ so belongs to \af S (\af P \ab{𝒦}).
 
 \end{code}
 
-Now that we have proved the existence of a monomorphism from \Free{X} to \ab{ℭ} we can
-prove that \Free{X} is a subalgebra of \ab{ℭ}, so belongs to \af S (\af P \ab{𝒦}).
+Now that we have proved the existence of a monomorphism from `𝔽[ X ]` to `ℭ` we are in a position
+to prove that `𝔽[ X ]` is a subalgebra of ℭ, so belongs to `S (P 𝒦)`.  In fact, we will show
+that `𝔽[ X ]` is a subalgebra of the *lift* of `ℭ`, denoted `ℓℭ`.
 
 \begin{code}
 
@@ -2046,9 +1868,9 @@ prove that \Free{X} is a subalgebra of \ab{ℭ}, so belongs to \af S (\af P \ab{
 
 
 
-%% -------------------------------------------------------------------------------------
+<!-- ------------------------------------------------------------------------------------- -->
 
-\section{The HSP Theorem}
+## <a id="the-hsp-theorem">The HSP Theorem</a>
 
 Finally, we are in a position to prove Birkhoff's celebrated variety theorem.
 
@@ -2074,7 +1896,8 @@ module _ {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
 
 \end{code}
 
-The converse inclusion, \af V \ab{𝒦} \aof{⊆} \af{Mod} (\af{Th} (\af V \ab{𝒦})), is a simple consequence of the fact that \af{Mod} \af{Th} is a closure operator. Nonetheless, completeness demands
+The converse inclusion, `V 𝒦 ⊆ Mod (Th (V 𝒦))`, is a simple consequence of the
+fact that `Mod Th` is a closure operator. Nonetheless, completeness demands
 that we formalize this inclusion as well, however trivial the proof.
 
 \begin{code}
@@ -2088,20 +1911,33 @@ that we formalize this inclusion as well, however trivial the proof.
 We have thus proved that every variety is an equational class.
 
 Readers familiar with the classical formulation of the Birkhoff HSP theorem as an
-``if and only if'' assertion might worry that the proof is still incomplete. However,
-recall that in the \ualmodule{Varieties.Func.Preservation} module we proved the following
-identity preservation lemma:\\[4pt]
-\ab{V-id1} : \ab{𝒦} \aof{⊫} \ab p \aic{≈̇} \ab q \as{→} \af{V} \ab{𝒦} \aof{⊫} \ab p \aic{≈̇} \ab q
-\\[4pt]
-Thus, if \ab{𝒦} is an equational class---that is, if \ab{𝒦} is the class of algebras
-satisfying all identities in some set---then \af V \ab{𝒦} \aof{⊆} \ab{𝒦}.  On the other hand, we
-proved that \af V is expansive in the \ualmodule{Varieties.Func.Closure} module:
+"if and only if" assertion might worry that the proof is still incomplete. However,
+recall that in the [Varieties.Func.Preservation][] module we proved the following
+identity preservation lemma:
 
-\ab{V-expa} : \ab{𝒦} \aof{⊆} \af V \ab{𝒦}
+`V-id1 : 𝒦 ⊫ p ≈̇ q → V 𝒦 ⊫ p ≈̇ q`
 
-so \ab{𝒦} (= \af V \ab{𝒦} = \af H \af S \af P \ab{𝒦}) is a variety.
+Thus, if `𝒦` is an equational class---that is, if `𝒦` is the class of algebras
+satisfying all identities in some set---then `V 𝒦` ⊆ 𝒦`.  On the other hand, we
+proved that `V` is expansive in the [Varieties.Func.Closure][] module:
 
-Taken together, \af{V-id1} and \af{V-expa} constitute formal proof that every equational
-class is a variety. This completes the formal proof of Birkhoff's variety theorem.
+`V-expa : 𝒦 ⊆ V 𝒦`
 
+so `𝒦` (= `V 𝒦` = `HSP 𝒦`) is a variety.
+
+Taken together, `V-id1` and `V-expa` constitute formal proof that every equational
+class is a variety.
+
+This completes the formal proof of Birkhoff's variety theorem.
+
+
+
+
+
+--------------------------------
+
+<span style="float:left;">[← Varieties.Func.FreeAlgebras](Varieties.Func.FreeAlgebras.html)</span>
+<span style="float:right;">[Structures →](Structures.html)</span>
+
+{% include UALib.Links.md %}
 
