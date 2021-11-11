@@ -4383,11 +4383,9 @@ The \agdaalgebras library's \ar{\au{}≅\au{}} type codifies the definition of i
 \\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaOperator{\AgdaModule{\AgdaUnderscore{}≅\AgdaUnderscore{}}}\<%
-\end{code}
-
-\begin{code}%
-\>[0]\<%
 \\
+%
+\\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaFunction{≅-refl}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Reflexive}\AgdaSpace{}%
@@ -4809,8 +4807,8 @@ We begin with what for our purposes is the most useful way to represent the clas
 These types should be self-explanatory, but just to be sure, let's describe the
 Sigma type appearing in the second definition. Given an \ab{𝑆}-algebra \ab{𝑨} :
 \ar{Algebra} \ab{α} \ab{ρ}, the type \af{HomImages} \ab{𝑨} denotes the class of
-algebras \ab{𝑩} : \ar{Algebra} \ab{β} \ab{ρ} with a map \ab{φ} : \aof{∣} \ab{𝑨}
-\aof{∣} \as{→} \aof{∣} \ab{𝑩} \aof{∣} such that \ab{φ} is a surjective
+algebras \ab{𝑩} : \ar{Algebra} \ab{β} \ab{ρ} with a map \ab{φ} :
+\aof{∣~\ab{𝑨}~∣} \as{→} \aof{∣~\ab{𝑩}~∣} such that \ab{φ} is a surjective
 homomorphism.
 
 \begin{code}[hide]%
@@ -5416,7 +5414,7 @@ as a Algebra whose carrier is the setoid of terms.
 \\[\AgdaEmptyExtraSkip]%
 \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaKeyword{data}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}≐\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}≃\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaDatatype{Term}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSpace{}%
@@ -5443,7 +5441,7 @@ as a Algebra whose carrier is the setoid of terms.
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{ℊ}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≐}}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≃}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{ℊ}\AgdaSpace{}%
 \AgdaBound{y}\AgdaSymbol{)}\<%
 \\
@@ -5467,14 +5465,14 @@ as a Algebra whose carrier is the setoid of terms.
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{s}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≐}}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≃}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{t}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSymbol{))}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{node}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
 \AgdaBound{s}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≐}}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≃}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{node}\AgdaSpace{}%
 \AgdaBound{f}\AgdaSpace{}%
 \AgdaBound{t}\AgdaSymbol{)}\<%
@@ -5482,17 +5480,17 @@ as a Algebra whose carrier is the setoid of terms.
 \>[0]\<%
 \end{code}
 
-It is easy to show that the equality-of-terms relation \AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}≐\AgdaUnderscore{}}} is an equivalence relation, so we omit the formal proof. (See the \ualmodule{Terms.Func.Basic} module of the \agdaalgebras library for details.)
+It is easy to show that the equality-of-terms relation \AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}≃\AgdaUnderscore{}}} is an equivalence relation, so we omit the formal proof. (See the \ualmodule{Terms.Func.Basic} module of the \agdaalgebras library for details.)
 
 \begin{code}[hide]%
 \>[0][@{}l@{\AgdaIndent{1}}]%
-\>[1]\AgdaFunction{≐-isRefl}\AgdaSpace{}%
+\>[1]\AgdaFunction{≃-isRefl}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Reflexive}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}≐\AgdaUnderscore{}}}\<%
+\AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}≃\AgdaUnderscore{}}}\<%
 \\
 %
-\>[1]\AgdaFunction{≐-isRefl}\AgdaSpace{}%
+\>[1]\AgdaFunction{≃-isRefl}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaInductiveConstructor{ℊ}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}\}}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
@@ -5500,7 +5498,7 @@ It is easy to show that the equality-of-terms relation \AgdaOperator{\AgdaDataty
 \AgdaInductiveConstructor{≡.refl}\<%
 \\
 %
-\>[1]\AgdaFunction{≐-isRefl}\AgdaSpace{}%
+\>[1]\AgdaFunction{≃-isRefl}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaInductiveConstructor{node}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}\}}\AgdaSpace{}%
@@ -5509,18 +5507,18 @@ It is easy to show that the equality-of-terms relation \AgdaOperator{\AgdaDataty
 \AgdaSymbol{(λ}\AgdaSpace{}%
 \AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{≐-isRefl}\AgdaSymbol{)}\<%
+\AgdaFunction{≃-isRefl}\AgdaSymbol{)}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[1]\AgdaFunction{≐-isSym}\AgdaSpace{}%
+\>[1]\AgdaFunction{≃-isSym}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Symmetric}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}≐\AgdaUnderscore{}}}\<%
+\AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}≃\AgdaUnderscore{}}}\<%
 \\
 %
-\>[1]\AgdaFunction{≐-isSym}\AgdaSpace{}%
+\>[1]\AgdaFunction{≃-isSym}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{rfl}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
@@ -5529,7 +5527,7 @@ It is easy to show that the equality-of-terms relation \AgdaOperator{\AgdaDataty
 \AgdaBound{x}\AgdaSymbol{)}\<%
 \\
 %
-\>[1]\AgdaFunction{≐-isSym}\AgdaSpace{}%
+\>[1]\AgdaFunction{≃-isSym}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{gnl}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
@@ -5537,20 +5535,20 @@ It is easy to show that the equality-of-terms relation \AgdaOperator{\AgdaDataty
 \AgdaSymbol{(λ}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{≐-isSym}\AgdaSpace{}%
+\AgdaFunction{≃-isSym}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSymbol{))}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[1]\AgdaFunction{≐-isTrans}\AgdaSpace{}%
+\>[1]\AgdaFunction{≃-isTrans}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{Transitive}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}≐\AgdaUnderscore{}}}\<%
+\AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}≃\AgdaUnderscore{}}}\<%
 \\
 %
-\>[1]\AgdaFunction{≐-isTrans}\AgdaSpace{}%
+\>[1]\AgdaFunction{≃-isTrans}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{rfl}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{rfl}\AgdaSpace{}%
@@ -5562,7 +5560,7 @@ It is easy to show that the equality-of-terms relation \AgdaOperator{\AgdaDataty
 \AgdaBound{y}\AgdaSymbol{)}\<%
 \\
 %
-\>[1]\AgdaFunction{≐-isTrans}\AgdaSpace{}%
+\>[1]\AgdaFunction{≃-isTrans}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{gnl}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{gnl}\AgdaSpace{}%
@@ -5572,7 +5570,7 @@ It is easy to show that the equality-of-terms relation \AgdaOperator{\AgdaDataty
 \AgdaSymbol{(λ}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{≐-isTrans}\AgdaSpace{}%
+\AgdaFunction{≃-isTrans}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{y}\AgdaSpace{}%
@@ -5581,27 +5579,27 @@ It is easy to show that the equality-of-terms relation \AgdaOperator{\AgdaDataty
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[1]\AgdaFunction{≐-isEquiv}\AgdaSpace{}%
+\>[1]\AgdaFunction{≃-isEquiv}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaRecord{IsEquivalence}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}≐\AgdaUnderscore{}}}\<%
+\AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}≃\AgdaUnderscore{}}}\<%
 \\
 %
-\>[1]\AgdaFunction{≐-isEquiv}\AgdaSpace{}%
+\>[1]\AgdaFunction{≃-isEquiv}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaKeyword{record}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaSpace{}%
 \AgdaField{refl}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{≐-isRefl}\AgdaSpace{}%
+\AgdaFunction{≃-isRefl}\AgdaSpace{}%
 \AgdaSymbol{;}\AgdaSpace{}%
 \AgdaField{sym}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{≐-isSym}\AgdaSpace{}%
+\AgdaFunction{≃-isSym}\AgdaSpace{}%
 \AgdaSymbol{;}\AgdaSpace{}%
 \AgdaField{trans}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{≐-isTrans}\AgdaSpace{}%
+\AgdaFunction{≃-isTrans}\AgdaSpace{}%
 \AgdaSymbol{\}}\<%
 \end{code}
 
@@ -5655,11 +5653,11 @@ In \agda the term algebra can be defined as simply as one might hope.
 \AgdaSymbol{;}\AgdaSpace{}%
 \AgdaOperator{\AgdaField{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}≐\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}≃\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{;}\AgdaSpace{}%
 \AgdaField{isEquivalence}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{≐-isEquiv}\AgdaSpace{}%
+\AgdaFunction{≃-isEquiv}\AgdaSpace{}%
 \AgdaSymbol{\}}\<%
 \\
 %
@@ -5702,10 +5700,10 @@ In \agda the term algebra can be defined as simply as one might hope.
 \AgdaBound{X}\AgdaSymbol{))}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{≡.refl}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaBound{ss≐ts}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{ss≃ts}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{gnl}\AgdaSpace{}%
-\AgdaBound{ss≐ts}\<%
+\AgdaBound{ss≃ts}\<%
 \end{code}
 
 \paragraph*{Interpretation of terms}
@@ -6057,7 +6055,7 @@ An equality between two terms holds in a model if the two terms are equal under 
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[1]\AgdaFunction{≐→Equal}\AgdaSpace{}%
+\>[1]\AgdaFunction{≃→Equal}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -6069,7 +6067,7 @@ An equality between two terms holds in a model if the two terms are equal under 
 \AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{s}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≐}}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≃}}\AgdaSpace{}%
 \AgdaBound{t}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{Equal}\AgdaSpace{}%
@@ -6077,7 +6075,7 @@ An equality between two terms holds in a model if the two terms are equal under 
 \AgdaBound{t}\<%
 \\
 %
-\>[1]\AgdaFunction{≐→Equal}\AgdaSpace{}%
+\>[1]\AgdaFunction{≃→Equal}\AgdaSpace{}%
 \AgdaDottedPattern{\AgdaSymbol{.(}}\AgdaDottedPattern{\AgdaInductiveConstructor{ℊ}}\AgdaSpace{}%
 \AgdaDottedPattern{\AgdaSymbol{\AgdaUnderscore{})}}\AgdaSpace{}%
 \AgdaDottedPattern{\AgdaSymbol{.(}}\AgdaDottedPattern{\AgdaInductiveConstructor{ℊ}}\AgdaSpace{}%
@@ -6091,7 +6089,7 @@ An equality between two terms holds in a model if the two terms are equal under 
 \AgdaFunction{refl}\<%
 \\
 %
-\>[1]\AgdaFunction{≐→Equal}\AgdaSpace{}%
+\>[1]\AgdaFunction{≃→Equal}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{node}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaBound{s}\AgdaSymbol{)(}\AgdaInductiveConstructor{node}\AgdaSpace{}%
@@ -6111,7 +6109,7 @@ An equality between two terms holds in a model if the two terms are equal under 
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{≐→Equal}\AgdaSymbol{(}\AgdaBound{s}\AgdaSpace{}%
+\AgdaFunction{≃→Equal}\AgdaSymbol{(}\AgdaBound{s}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSymbol{)(}\AgdaBound{t}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSymbol{)(}\AgdaBound{x}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSymbol{)}\AgdaBound{ρ}\AgdaSpace{}%
@@ -6601,7 +6599,7 @@ We now prove two important facts about term operations.  The first of these, whi
 \AgdaSymbol{(}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟦\AgdaUnderscore{}⟧}}\AgdaSpace{}%
 \AgdaSymbol{;}\AgdaSpace{}%
-\AgdaFunction{≐→Equal}\AgdaSpace{}%
+\AgdaFunction{≃→Equal}\AgdaSpace{}%
 \AgdaSymbol{)}\<%
 \\
 %
@@ -6648,14 +6646,14 @@ We now prove two important facts about term operations.  The first of these, whi
 \AgdaBound{ρ}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
-\AgdaFunction{≐→Equal}\AgdaSpace{}%
+\AgdaFunction{≃→Equal}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{𝒜}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{ℊ}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaInductiveConstructor{ℊ}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaFunction{≐-isRefl}\AgdaSpace{}%
+\AgdaFunction{≃-isRefl}\AgdaSpace{}%
 \AgdaSymbol{λ}\AgdaSpace{}%
 \AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
@@ -6692,9 +6690,6 @@ We now prove two important facts about term operations.  The first of these, whi
 \end{code}
 
 
-
-
-
 %% -------------------------------------------------------------------------------------
 
 \section{Model Theory and Equational Logic}
@@ -6722,7 +6717,7 @@ We define an equation in Agda using the following record type with fields denoti
 \\
 \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaKeyword{constructor}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{\AgdaUnderscore{}≈̇\AgdaUnderscore{}}}\<%
+\AgdaOperator{\AgdaInductiveConstructor{\AgdaUnderscore{}≐\AgdaUnderscore{}}}\<%
 \\
 %
 \>[1]\AgdaKeyword{field}%
@@ -6745,6 +6740,10 @@ We define an equation in Agda using the following record type with fields denoti
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaKeyword{infix}\AgdaSpace{}%
+\AgdaNumber{8}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{\AgdaUnderscore{}≐\AgdaUnderscore{}}}\<%
+\\
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaModule{Eq}\AgdaSpace{}%
 \AgdaKeyword{public}\<%
@@ -6752,13 +6751,13 @@ We define an equation in Agda using the following record type with fields denoti
 \>[0]\<%
 \end{code}
 
-We now define a type representing the notion of an equation \ab p \aoic{≈̇} \ab q holding (when \ab p and \ab q are interpreted) in algebra \ab{𝑨}.
+We now define a type representing the notion of an equation \ab p \aoic{≐} \ab q holding (when \ab p and \ab q are interpreted) in algebra \ab{𝑨}.
 
-If \ab{𝑨} is an \ab{𝑆}-algebra we say that \ab{𝑨} \emph{satisfies} \ab p \aofld{≈} \ab q provided for all environments \ab{ρ} : \ab X \as{→} \aof{∣} \ab{𝑨} \aof{∣} (assigning values in the domain of \ab{𝑨} to variable symbols in \ab X) we have \aof{⟦} \ab p \aof{⟧} \aofld{⟨\$⟩} \ab{ρ} \aofld{≈} \aof{⟦} \ab q \aof{⟧} \aofld{⟨\$⟩} \ab{ρ}.  In this situation, we write \ab{𝑨} \aof{⊧} (\ab p \aoic{≈̇} \ab q) and say that \ab{𝑨} \emph{models} the identity \ab p \aofld{≈} \ab q.
+If \ab{𝑨} is an \ab{𝑆}-algebra we say that \ab{𝑨} \emph{satisfies} \ab p \aofld{≈} \ab q provided for all environments \ab{ρ} : \ab X \as{→} \aof{∣} \ab{𝑨} \aof{∣} (assigning values in the domain of \ab{𝑨} to variable symbols in \ab X) we have \aof{⟦} \ab p \aof{⟧} \aofld{⟨\$⟩} \ab{ρ} \aofld{≈} \aof{⟦} \ab q \aof{⟧} \aofld{⟨\$⟩} \ab{ρ}.  In this situation, we write \ab{𝑨} \aof{⊧} (\ab p \aoic{≐} \ab q) and say that \ab{𝑨} \emph{models} the identity \ab p \aofld{≈} \ab q.
 
-If \ab{𝒦} is a class of algebras, all of the same signature, we write \ab{𝒦} \aof{⊫} (\ab p \aoic{≈̇} \ab q) if, for every \ab{𝑨} \aof{∈} \ab{𝒦}, we have \ab{𝑨} \aof{⊧} (\ab p \aoic{≈̇} \ab q).
+If \ab{𝒦} is a class of algebras, all of the same signature, we write \ab{𝒦} \aof{⊫} (\ab p \aoic{≐} \ab q) if, for every \ab{𝑨} \aof{∈} \ab{𝒦}, we have \ab{𝑨} \aof{⊧} (\ab p \aoic{≐} \ab q).
 
-Because a class of structures has a different type than a single structure, we must use a slightly different syntax to avoid overloading the relations \aof{⊧} and \aofld{≈}. As a reasonable alternative to what we would normally express informally as \ab{𝒦} \aof{⊧} \ab p \aofld{≈} \ab q, we have settled on \ab{𝒦} \aof{⊫} (\ab p \aoic{≈̇} \ab q) to denote this relation.  To reiterate, if \ab{𝒦} is a class of \ab{𝑆}-algebras, we write \ab{𝒦} \aof{⊫} (\ab p \aoic{≈̇} \ab q) provided every \ab{𝑨} \aof{∈} \ab{𝒦} satisfies \ab{𝑨} \aof{⊧} (\ab p \aoic{≈̇} \ab q).
+Because a class of structures has a different type than a single structure, we must use a slightly different syntax to avoid overloading the relations \aof{⊧} and \aofld{≈}. As a reasonable alternative to what we would normally express informally as \ab{𝒦} \aof{⊧} \ab p \aofld{≈} \ab q, we have settled on \ab{𝒦} \aof{⊫} (\ab p \aoic{≐} \ab q) to denote this relation.  To reiterate, if \ab{𝒦} is a class of \ab{𝑆}-algebras, we write \ab{𝒦} \aof{⊫} (\ab p \aoic{≐} \ab q) provided every \ab{𝑨} \aof{∈} \ab{𝒦} satisfies \ab{𝑨} \aof{⊧} (\ab p \aoic{≐} \ab q).
 
 \begin{code}%
 \>[0]\<%
@@ -6779,8 +6778,39 @@ Because a class of structures has a different type than a single structure, we m
 \>[0]\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊧}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{≈̇}}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{≐}}\AgdaSpace{}%
 \AgdaBound{q}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{Equal}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaBound{q}\AgdaSpace{}%
+\AgdaKeyword{where}\AgdaSpace{}%
+\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaModule{Environment}\AgdaSpace{}%
+\AgdaBound{𝑨}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}⊧\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaRecord{Algebra}\AgdaSpace{}%
+\AgdaGeneralizable{α}\AgdaSpace{}%
+\AgdaGeneralizable{ρᵃ}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Term}\AgdaSpace{}%
+\AgdaGeneralizable{Γ}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Term}\AgdaSpace{}%
+\AgdaGeneralizable{Γ}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaPrimitive{Type}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\<%
+\\
+\>[0]\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊧}}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaBound{q}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{Equal}\AgdaSpace{}%
 \AgdaBound{p}\AgdaSpace{}%
@@ -6824,6 +6854,43 @@ Because a class of structures has a different type than a single structure, we m
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊧}}\AgdaSpace{}%
 \AgdaBound{equ}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}⊫\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Pred}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaRecord{Algebra}\AgdaSpace{}%
+\AgdaGeneralizable{α}\AgdaSpace{}%
+\AgdaGeneralizable{ρᵃ}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaGeneralizable{ℓ}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Term}\AgdaSpace{}%
+\AgdaGeneralizable{Γ}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaDatatype{Term}\AgdaSpace{}%
+\AgdaGeneralizable{Γ}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaPrimitive{Type}\AgdaSpace{}%
+\AgdaSymbol{\AgdaUnderscore{}}\<%
+\\
+\>[0]\AgdaBound{𝒦}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊫}}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaBound{q}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{∀}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝒦}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊧}}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaBound{q}\<%
 \\
 \>[0]\<%
 \end{code}
@@ -6872,6 +6939,8 @@ We denote by \ab{𝑨} \aof{⊨} \ab{ℰ} the assertion that the algebra \ab{�
 \AgdaKeyword{open}\AgdaSpace{}%
 \AgdaModule{Environment}\AgdaSpace{}%
 \AgdaBound{𝑨}\<%
+\\
+\>[0]\<%
 \end{code}
 
 \subsection{Equational theories and models}
@@ -6913,9 +6982,9 @@ modeled by the members of \ab{𝒦}.
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝒦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊫}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{≈̇}}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSymbol{)}\<%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaBound{q}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
@@ -7016,7 +7085,7 @@ Based on Andreas Abel's Agda formalization of Birkhoff's completeness theorem.
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaKeyword{let}\AgdaSpace{}%
 \AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{≈̇}}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{≐}}\AgdaSpace{}%
 \AgdaBound{q}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{ℰ}\AgdaSpace{}%
@@ -7305,9 +7374,9 @@ In any model \ab{𝑨} of the equations \ab{ℰ} derived equality is actual equa
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊧}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{≈̇}}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSymbol{)}\<%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaBound{q}\<%
 \\
 %
 \>[1]\AgdaFunction{sound}\AgdaSpace{}%
@@ -7771,7 +7840,7 @@ We now define the type \af H to represent classes of algebras that include all h
 \begin{code}[hide]%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{\AgdaUnderscore{}}%
-\>[4994I]\AgdaSymbol{\{}\AgdaBound{α}\AgdaSpace{}%
+\>[5052I]\AgdaSymbol{\{}\AgdaBound{α}\AgdaSpace{}%
 \AgdaBound{ρᵃ}\AgdaSpace{}%
 \AgdaBound{ℓ}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -7787,7 +7856,7 @@ We now define the type \af H to represent classes of algebras that include all h
 \AgdaFunction{ov}\AgdaSpace{}%
 \AgdaBound{ℓ}\AgdaSymbol{))}\<%
 \\
-\>[.][@{}l@{}]\<[4994I]%
+\>[.][@{}l@{}]\<[5052I]%
 \>[9]\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaRecord{Algebra}\AgdaSpace{}%
@@ -7967,19 +8036,19 @@ The binary relation \aof{⊧} would be practically useless if it were not an \em
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊧}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{≈̇}}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSymbol{)}%
-\>[27]\AgdaSymbol{→}%
-\>[30]\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaBound{q}%
+\>[24]\AgdaSymbol{→}%
+\>[27]\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaOperator{\AgdaRecord{≅}}\AgdaSpace{}%
 \AgdaBound{𝑩}%
-\>[37]\AgdaSymbol{→}%
-\>[40]\AgdaBound{𝑩}\AgdaSpace{}%
+\>[34]\AgdaSymbol{→}%
+\>[37]\AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊧}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{≈̇}}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSymbol{)}\<%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaBound{q}\<%
 \\
 %
 \>[1]\AgdaFunction{⊧-I-invar}\AgdaSpace{}%
@@ -8180,19 +8249,19 @@ Identities modeled by an algebra \ab{𝑨} are also modeled by every subalgebra 
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊧}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{≈̇}}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaBound{q}\AgdaSpace{}%
 \AgdaSymbol{→}%
-\>[29]\AgdaBound{𝑩}\AgdaSpace{}%
+\>[26]\AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{≤}}\AgdaSpace{}%
 \AgdaBound{𝑨}%
-\>[36]\AgdaSymbol{→}%
-\>[39]\AgdaBound{𝑩}\AgdaSpace{}%
+\>[33]\AgdaSymbol{→}%
+\>[36]\AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊧}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{≈̇}}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSymbol{)}\<%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaBound{q}\<%
 \\
 %
 \>[1]\AgdaFunction{⊧-S-invar}\AgdaSpace{}%
@@ -8301,9 +8370,9 @@ Identities modeled by an algebra \ab{𝑨} are also modeled by every subalgebra 
 \>[2]\AgdaFunction{ξ}\AgdaSpace{}%
 \AgdaBound{b}\AgdaSpace{}%
 \AgdaSymbol{=}%
-\>[5333I]\AgdaOperator{\AgdaFunction{begin}}\<%
+\>[5391I]\AgdaOperator{\AgdaFunction{begin}}\<%
 \\
-\>[5333I][@{}l@{\AgdaIndent{0}}]%
+\>[5391I][@{}l@{\AgdaIndent{0}}]%
 \>[9]\AgdaFunction{h}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
 \AgdaBound{p}\AgdaSpace{}%
@@ -8421,16 +8490,16 @@ An identity satisfied by all algebras in an indexed collection is also satisfied
 \AgdaBound{𝒜}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊧}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{≈̇}}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSymbol{))}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaBound{q}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{⨅}\AgdaSpace{}%
 \AgdaBound{𝒜}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊧}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{≈̇}}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSymbol{)}\<%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaBound{q}\<%
 \\
 %
 \>[1]\AgdaFunction{⊧-P-invar}\AgdaSpace{}%
@@ -8827,9 +8896,9 @@ First we prove that the closure operator \af H is compatible with identities tha
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝒦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊫}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{≈̇}}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaBound{q}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{H}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaArgument{β}\AgdaSpace{}%
@@ -8837,9 +8906,9 @@ First we prove that the closure operator \af H is compatible with identities tha
 \AgdaBound{α}\AgdaSymbol{\}\{}\AgdaBound{ρᵃ}\AgdaSymbol{\}}\AgdaBound{ℓ}\AgdaSpace{}%
 \AgdaBound{𝒦}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊫}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{≈̇}}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSymbol{)}\<%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaBound{q}\<%
 \\
 %
 \>[1]\AgdaFunction{H-id1}\AgdaSpace{}%
@@ -8990,8 +9059,12 @@ First we prove that the closure operator \af H is compatible with identities tha
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}%
 \>[24]\AgdaKeyword{using}\AgdaSpace{}%
+\AgdaSymbol{()}\AgdaSpace{}%
+\AgdaKeyword{renaming}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaSpace{}%
 \AgdaOperator{\AgdaField{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaSymbol{to}\AgdaSpace{}%
+\AgdaOperator{\AgdaField{\AgdaUnderscore{}≈ᴮ\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{)}\<%
 \\
 %
@@ -9008,9 +9081,9 @@ First we prove that the closure operator \af H is compatible with identities tha
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊧}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{≈̇}}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSymbol{)}\<%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaBound{q}\<%
 \\
 %
 \>[4]\AgdaFunction{IH}\AgdaSpace{}%
@@ -9097,7 +9170,7 @@ First we prove that the closure operator \af H is compatible with identities tha
 \AgdaOperator{\AgdaFunction{∘}}\AgdaSpace{}%
 \AgdaBound{ρ}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈ᴮ}}\AgdaSpace{}%
 \AgdaBound{ρ}\AgdaSpace{}%
 \AgdaBound{x}\<%
 \\
@@ -9125,9 +9198,9 @@ First we prove that the closure operator \af H is compatible with identities tha
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝒦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊫}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{≈̇}}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaBound{q}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{S}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaArgument{β}\AgdaSpace{}%
@@ -9136,9 +9209,9 @@ First we prove that the closure operator \af H is compatible with identities tha
 \AgdaBound{ℓ}\AgdaSpace{}%
 \AgdaBound{𝒦}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊫}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{≈̇}}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSymbol{)}\<%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaBound{q}\<%
 \\
 %
 \>[1]\AgdaFunction{S-id1}\AgdaSpace{}%
@@ -9173,15 +9246,15 @@ The obvious converse is barely worth the bits needed to formalize it, but we wil
 \AgdaBound{ℓ}\AgdaSpace{}%
 \AgdaBound{𝒦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊫}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{≈̇}}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaBound{q}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝒦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊫}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{≈̇}}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSymbol{)}\<%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaBound{q}\<%
 \\
 %
 \>[1]\AgdaFunction{S-id2}\AgdaSpace{}%
@@ -9211,9 +9284,9 @@ The obvious converse is barely worth the bits needed to formalize it, but we wil
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝒦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊫}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{≈̇}}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaBound{q}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{P}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaArgument{β}\AgdaSpace{}%
@@ -9222,9 +9295,9 @@ The obvious converse is barely worth the bits needed to formalize it, but we wil
 \AgdaBound{ι}\AgdaSpace{}%
 \AgdaBound{𝒦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊫}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{≈̇}}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSymbol{)}\<%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaBound{q}\<%
 \\
 %
 \>[1]\AgdaFunction{P-id1}\AgdaSpace{}%
@@ -9258,9 +9331,9 @@ The obvious converse is barely worth the bits needed to formalize it, but we wil
 \AgdaBound{𝒜}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊧}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{≈̇}}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSymbol{)}\<%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaBound{q}\<%
 \\
 %
 \>[2]\AgdaFunction{ih}\AgdaSpace{}%
@@ -9278,9 +9351,9 @@ The obvious converse is barely worth the bits needed to formalize it, but we wil
 \AgdaFunction{⨅}\AgdaSpace{}%
 \AgdaBound{𝒜}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊧}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{≈̇}}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSymbol{)}\<%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaBound{q}\<%
 \\
 %
 \>[2]\AgdaFunction{IH}\AgdaSpace{}%
@@ -9342,18 +9415,18 @@ Finally, we prove the analogous preservation lemmas for the closure operator \af
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝒦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊫}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{≈̇}}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaBound{q}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{V}\AgdaSpace{}%
 \AgdaBound{ℓ}\AgdaSpace{}%
 \AgdaBound{ι}\AgdaSpace{}%
 \AgdaBound{𝒦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊫}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{≈̇}}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSymbol{)}\<%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaBound{q}\<%
 \\
 %
 \>[1]\AgdaFunction{V-id1}\AgdaSpace{}%
@@ -9429,9 +9502,9 @@ Finally, we prove the analogous preservation lemmas for the closure operator \af
 \AgdaBound{ι}\AgdaSpace{}%
 \AgdaBound{𝒦}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊫}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{≈̇}}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSymbol{)}\<%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaBound{q}\<%
 \\
 %
 \>[3]\AgdaFunction{spK⊧pq}\AgdaSpace{}%
@@ -9463,10 +9536,10 @@ From \af{V-id1} it follows that if \ab{𝒦} is a class of algebras, then the se
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝒦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊫}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{≈̇}}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSymbol{)}%
-\>[33]\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaBound{q}%
+\>[30]\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaBound{q}\AgdaSymbol{)}\AgdaSpace{}%
@@ -9627,7 +9700,7 @@ We now prove this in \agda, starting with the fact that every map from \ab{X} to
 \AgdaBound{t}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{s}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{≐}}\AgdaSpace{}%
+\AgdaOperator{\AgdaDatatype{≃}}\AgdaSpace{}%
 \AgdaBound{t}\AgdaSpace{}%
 \AgdaSymbol{→}%
 \>[30]\AgdaFunction{free-lift}\AgdaSpace{}%
@@ -9638,7 +9711,7 @@ We now prove this in \agda, starting with the fact that every map from \ab{X} to
 \\
 %
 \>[2]\AgdaFunction{flcong}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaInductiveConstructor{\AgdaUnderscore{}≐\AgdaUnderscore{}.rfl}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{\AgdaUnderscore{}≃\AgdaUnderscore{}.rfl}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{reflexive}\AgdaSpace{}%
@@ -9648,7 +9721,7 @@ We now prove this in \agda, starting with the fact that every map from \ab{X} to
 \\
 %
 \>[2]\AgdaFunction{flcong}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaInductiveConstructor{\AgdaUnderscore{}≐\AgdaUnderscore{}.gnl}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaInductiveConstructor{\AgdaUnderscore{}≃\AgdaUnderscore{}.gnl}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaField{cong}\AgdaSpace{}%
@@ -9739,7 +9812,7 @@ The free lift so defined is a homomorphism by construction. Indeed, here is the 
 \AgdaSymbol{(}\AgdaField{cong}\AgdaSpace{}%
 \AgdaFunction{free-lift-func}\AgdaSymbol{)\{}\AgdaBound{a}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaFunction{≐-isRefl}\AgdaSymbol{))}\<%
+\AgdaFunction{≃-isRefl}\AgdaSymbol{))}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
@@ -10071,7 +10144,7 @@ is a congruence.
 \AgdaOperator{\AgdaFunction{⊫}}\AgdaSpace{}%
 \AgdaSymbol{((}\AgdaField{lhs}\AgdaSpace{}%
 \AgdaBound{eq}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{≈̇}}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{≐}}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaField{rhs}\AgdaSpace{}%
 \AgdaBound{eq}\AgdaSymbol{))}\<%
 \\
@@ -10115,9 +10188,9 @@ is a congruence.
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝒦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊫}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{≈̇}}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSymbol{)}\<%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaBound{q}\<%
 \\
 %
 \>[1]\AgdaOperator{\AgdaFunction{ℰ⊢[}}\AgdaSpace{}%
@@ -10262,7 +10335,7 @@ defined by the identities modeled by (\af S \ab{𝒦}, hence by) \ab{𝒦}.
 \\
 %
 \>[2]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaOperator{\AgdaModule{\AgdaUnderscore{}≐\AgdaUnderscore{}}}\<%
+\AgdaOperator{\AgdaModule{\AgdaUnderscore{}≃\AgdaUnderscore{}}}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
@@ -10443,9 +10516,9 @@ As promised, we prove that the kernel of the natural epimorphism is the congruen
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝒦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊫}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{≈̇}}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSymbol{)}\<%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaBound{q}\<%
 \\
 %
 \>[1]\AgdaFunction{class-models-kernel}\AgdaSpace{}%
@@ -10494,14 +10567,14 @@ As promised, we prove that the kernel of the natural epimorphism is the congruen
 \AgdaBound{vkA}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaSymbol{=}%
-\>[6726I]\AgdaFunction{classIds-⊆-VIds}\AgdaSpace{}%
+\>[6788I]\AgdaFunction{classIds-⊆-VIds}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaArgument{ℓ}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{ℓ}\AgdaSymbol{\}\{}\AgdaArgument{p}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{p}\AgdaSymbol{\}\{}\AgdaBound{q}\AgdaSymbol{\}}\<%
 \\
-\>[6726I][@{}l@{\AgdaIndent{0}}]%
+\>[6788I][@{}l@{\AgdaIndent{0}}]%
 \>[47]\AgdaSymbol{(}\AgdaFunction{class-models-kernel}\AgdaSpace{}%
 \AgdaBound{pKq}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{vkA}\AgdaSpace{}%
@@ -10595,9 +10668,9 @@ As promised, we prove that the kernel of the natural epimorphism is the congruen
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{𝒦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊫}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{≈̇}}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaBound{q}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{ℰ}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{⊢}}\AgdaSpace{}%
@@ -10616,9 +10689,9 @@ As promised, we prove that the kernel of the natural epimorphism is the congruen
 \AgdaBound{pKq}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{hyp}\AgdaSpace{}%
-\AgdaSymbol{((}\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{≈̇}}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{≐}}\AgdaSpace{}%
+\AgdaBound{q}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaBound{pKq}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaKeyword{where}\AgdaSpace{}%
@@ -11148,19 +11221,6 @@ so belongs to \af S (\af P \ab{𝒦}).
 \>[2]\AgdaKeyword{where}\<%
 \\
 %
-\>[2]\AgdaKeyword{open}\AgdaSpace{}%
-\AgdaModule{Setoid}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{𝔻[}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{𝔽[}}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
-\AgdaKeyword{using}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaSpace{}%
-\AgdaOperator{\AgdaField{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
-\AgdaSymbol{)}\<%
-\\
-%
 \>[2]\AgdaFunction{S𝒦⊫pq}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{S}\AgdaSymbol{\{}\AgdaArgument{β}\AgdaSpace{}%
@@ -11169,9 +11229,9 @@ so belongs to \af S (\af P \ab{𝒦}).
 \AgdaBound{ℓ}\AgdaSpace{}%
 \AgdaBound{𝒦}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊫}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{≈̇}}\AgdaSpace{}%
-\AgdaBound{q}\AgdaSymbol{)}\<%
+\AgdaBound{p}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≈}}\AgdaSpace{}%
+\AgdaBound{q}\<%
 \\
 %
 \>[2]\AgdaFunction{S𝒦⊫pq}\AgdaSpace{}%
@@ -11185,6 +11245,19 @@ so belongs to \af S (\af P \ab{𝒦}).
 \AgdaBound{sA}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaBound{ρ}\AgdaSymbol{)}\<%
+\\
+%
+\>[2]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaModule{Setoid}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{𝔻[}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{𝔽[}}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
+\AgdaKeyword{using}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaSpace{}%
+\AgdaOperator{\AgdaField{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
+\AgdaSymbol{)}\<%
 \\
 %
 \>[2]\AgdaFunction{Goal}\AgdaSpace{}%
@@ -11518,7 +11591,7 @@ so belongs to \af S (\af P \ab{𝒦}).
 %
 \>[3]\AgdaFunction{goal}\AgdaSpace{}%
 \AgdaSymbol{=}%
-\>[7437I]\AgdaFunction{trans}\AgdaSpace{}%
+\>[7499I]\AgdaFunction{trans}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{free-lift-interp}\AgdaSymbol{\{}\AgdaArgument{𝑨}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
@@ -11529,7 +11602,7 @@ so belongs to \af S (\af P \ab{𝒦}).
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{p}\AgdaSymbol{)}\<%
 \\
-\>[7437I][@{}l@{\AgdaIndent{0}}]%
+\>[7499I][@{}l@{\AgdaIndent{0}}]%
 \>[11]\AgdaSymbol{(}\AgdaFunction{trans}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{pKq}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSymbol{)(}\AgdaFunction{sym}\AgdaSpace{}%
@@ -12013,7 +12086,7 @@ Readers familiar with the classical formulation of the Birkhoff HSP theorem as a
 ``if and only if'' assertion might worry that the proof is still incomplete. However,
 recall that in the \ualmodule{Varieties.Func.Preservation} module we proved the following
 identity preservation lemma:\\[4pt]
-\ab{V-id1} : \ab{𝒦} \aof{⊫} \ab p \aic{≈̇} \ab q \as{→} \af{V} \ab{𝒦} \aof{⊫} \ab p \aic{≈̇} \ab q
+\ab{V-id1} : \ab{𝒦} \aof{⊫} \ab p \aic{≐} \ab q \as{→} \af{V} \ab{𝒦} \aof{⊫} \ab p \aic{≐} \ab q
 \\[4pt]
 Thus, if \ab{𝒦} is an equational class---that is, if \ab{𝒦} is the class of algebras
 satisfying all identities in some set---then \af V \ab{𝒦} \aof{⊆} \ab{𝒦}.  On the other hand, we
