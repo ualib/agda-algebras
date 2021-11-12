@@ -1350,11 +1350,12 @@ module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}(hh : ho
  comm-hom-term (node f t) a = goal
   where
   goal : h (⟦ node f t ⟧ ⟨$⟩ a) ≈ ⟦ node f t ⟧ᴮ ⟨$⟩ (h ∘ a)
-  goal = begin
-          h (  ⟦ node f t ⟧           ⟨$⟩         a  )  ≈⟨  compatible ∥ hh ∥                                     ⟩
-          (f ̂ 𝑩)( λ i → h(  ⟦ t i ⟧   ⟨$⟩         a) )  ≈⟨  cong(Interp 𝑩)(≡.refl , λ i → comm-hom-term (t i) a)  ⟩
-          (f ̂ 𝑩)( λ i →     ⟦ t i ⟧ᴮ  ⟨$⟩  (h  ∘  a) )  ≈⟨  refl                                                  ⟩
-               ⟦ node f t ⟧ᴮ          ⟨$⟩  (h  ∘  a)    ∎
+  goal =
+   begin
+    h (  ⟦ node f t ⟧           ⟨$⟩         a  )  ≈⟨  compatible ∥ hh ∥                                     ⟩
+    (f ̂ 𝑩)( λ i → h(  ⟦ t i ⟧   ⟨$⟩         a) )  ≈⟨  cong(Interp 𝑩)(≡.refl , λ i → comm-hom-term (t i) a)  ⟩
+    (f ̂ 𝑩)( λ i →     ⟦ t i ⟧ᴮ  ⟨$⟩  (h  ∘  a) )  ≈⟨  refl                                                  ⟩
+         ⟦ node f t ⟧ᴮ          ⟨$⟩  (h  ∘  a)    ∎
 \end{code}
 
 %% \subsection{Interpretation of terms in product algebras}
@@ -1390,9 +1391,9 @@ We define an equation in Agda using the following record type with fields denoti
 
 record Eq : Type (ov χ) where
  constructor _≐_
- field  {cxt}  : Type χ
-        lhs    : Term cxt
-        rhs    : Term cxt
+ field
+  {cxt}  : Type χ
+  lhs    : Term cxt   ;   rhs : Term cxt
 
 infix 8 _≐_
 open Eq public
@@ -1409,14 +1410,8 @@ Because a class of structures has a different type than a single structure, we m
 
 \begin{code}
 
-_⊧_ : (𝑨 : Algebra α ρᵃ)(term-identity : Eq{χ}) → Type _
-𝑨 ⊧ (p ≐ q) = Equal p q where open Environment 𝑨
-
 _⊧_≈_ : Algebra α ρᵃ → Term Γ → Term Γ → Type _
 𝑨 ⊧ p ≈ q = Equal p q where open Environment 𝑨
-
-_⊫_ : Pred (Algebra α ρᵃ) ℓ → Eq{χ} → Type (ℓ ⊔ χ ⊔ ov(α ⊔ ρᵃ))
-𝒦 ⊫ equ = ∀ 𝑨 → 𝒦 𝑨 → 𝑨 ⊧ equ
 
 _⊫_≈_ : Pred (Algebra α ρᵃ) ℓ → Term Γ → Term Γ → Type _
 𝒦 ⊫ p ≈ q = ∀ 𝑨 → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
@@ -1467,6 +1462,20 @@ module _ {χ ι : Level} where
 
  ⊢▹≈IsEquiv : {X : Type χ}{I : Type ι}{ℰ : I → Eq} → IsEquivalence (ℰ ⊢ X ▹_≈_)
  ⊢▹≈IsEquiv = record { refl = ⊢refl ; sym = ⊢sym ; trans = ⊢trans }
+
+module _ {χ : Level} where
+ data _⊩_▸_≈_ (ℰ : {Ε : Type χ} → Pred(Term Ε × Term Ε) (ov χ)) : (X : Type χ)(p q : Term X) → Type (ov χ) where
+  hyp : ∀ {Ε : Type χ}{p q : Term Ε} → (p , q) ∈ ℰ → ℰ ⊩ _ ▸ p ≈ q
+  app : ∀ {Ε : Type χ}{ps qs : ∥ 𝑆 ∥ 𝑓 → Term Ε} → (∀ i → ℰ ⊩ Ε ▸ ps i ≈ qs i) → ℰ ⊩ Ε ▸ (node 𝑓 ps) ≈ (node 𝑓 qs)
+  sub : ∀ {p q} → ℰ ⊩ Δ ▸ p ≈ q → ∀ (σ : Sub Γ Δ) → ℰ ⊩ Γ ▸ (p [ σ ]) ≈ (q [ σ ])
+
+  ⊩refl   : ∀ {p}               → ℰ ⊩ Γ ▸ p ≈ p
+  ⊩sym    : ∀ {p q : Term Γ}    → ℰ ⊩ Γ ▸ p ≈ q → ℰ ⊩ Γ ▸ q ≈ p
+  ⊩trans  : ∀ {p q r : Term Γ}  → ℰ ⊩ Γ ▸ p ≈ q → ℰ ⊩ Γ ▸ q ≈ r → ℰ ⊩ Γ ▸ p ≈ r
+
+ ⊩▸≈IsEquiv : {X : Type χ}{ℰ : {Ε : Type χ} → Pred(Term Ε × Term Ε) _} → IsEquivalence (ℰ ⊩ X ▸_≈_)
+ ⊩▸≈IsEquiv = record { refl = ⊩refl ; sym = ⊩sym ; trans = ⊩trans }
+
 \end{code}
 
 \subsection{Soundness}
@@ -1901,7 +1910,7 @@ module FreeHom (χ : Level) {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov 
  open Eq
 
  ℐ : Type ι -- indexes the collection of equations modeled by 𝒦
- ℐ = Σ[ eq ∈ Eq{χ} ] 𝒦 ⊫ ((lhs eq) ≐ (rhs eq))
+ ℐ = Σ[ eq ∈ Eq{χ} ] 𝒦 ⊫ (lhs eq) ≈ (rhs eq)
 
  ℰ : ℐ → Eq
  ℰ (eqv , p) = eqv
@@ -1913,10 +1922,8 @@ module FreeHom (χ : Level) {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov 
 
 
 \paragraph*{The natural epimorphism from 𝑻 X to 𝔽[ X ]}
-We now define the natural epimorphism from
-\T{X} onto the relatively free algebra \Free{X} and prove that 
-the kernel of this morphism is the congruence of \T{X}
-defined by the identities modeled by (\af S \ab{𝒦}, hence by) \ab{𝒦}.
+We now define the natural epimorphism from \T{X} onto the relatively free algebra \Free{X} and prove that
+the kernel of this morphism is the congruence of \T{X} defined by the identities modeled by (\af S \ab{𝒦}, hence by) \ab{𝒦}.
 
 \begin{code}
 
