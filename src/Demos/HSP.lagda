@@ -1127,11 +1127,10 @@ Obviously the subalgebra relation is reflexive by the identity monomorphism, as 
 
 If \ab{𝒜} : \ab I → \af{Algebra} \ab{α} \ab{ρᵃ} and
 \ab{ℬ} : \ab I → \af{Algebra} \ab{β} \ab{ρᵇ} are families of \ab{𝑆}-algebras
-such that \as{∀} \ab i \as{→} \ab{ℬ} \ab i \af{≤} \ab{𝒜} \ab i, then
-the pair of products of these families also belongs to the subalebra relation, that is,
-\af{⨅} \ab{ℬ} \af{≤} \af{⨅} \ab{𝒜}.
+such that \ab{ℬ} \ab i \af{≤} \ab{𝒜} \ab i for every \ab i : \ab I, then
+\af{⨅} \ab{ℬ} is a subalgebra of \af{⨅} \ab{𝒜}.
 \ifshort
-We omit the straightforward proof and merely give the formalization of this result a name for future reference; call it \af{⨅-≤}.
+We omit the straightforward proof and merely assign the formalization of this result the name \af{⨅-≤} for future reference.
 \else
 \begin{code}
 module _ {ι : Level} {I : Type ι}{𝒜 : I → Algebra α ρᵃ}{ℬ : I → Algebra β ρᵇ} where
@@ -1475,7 +1474,10 @@ data _⊢_▹_≈_  (ℰ : {Y : Type χ} → Pred(Term Y × Term Y) (ov χ)) :
 
 \end{code}
 
-Entailment is \defn{sound} in the following sense: for every algebra \ab{𝑨} that models the equations in \ab{ℰ}, derived equality of terms, say, \ab{ℰ} \aod{⊢} \ab X \aod{▹} \ab p \aod{≈} \ab q), implies equality of \ab p and \ab q interpreted in \ab{𝑨}.  We will apply this result---called \af{sound} and borrowed from Andreas Abel's proof of Birkhoff's completeness theorem (\textit{op.~cit.})---only once below (in §\ref{basic-properties-of-free-algebras})%
+Entailment is \defn{sound} in the following sense: % for every algebra \ab{𝑨} that models the equations in \ab{ℰ},
+if \ab{ℰ} entails \ab p \aof{≈} \ab q and \ab{𝑨} \aof{⊨} \ab{ℰ}, then \ab p \aof{≈} \ab q holds in \ab{𝑨}.  In other terms,
+the derivation \ab{ℰ} \aod{⊢} \ab X \aod{▹} \ab p \aod{≈} \ab q implies that \ab p \aof{≈} \ab q holds in every model of \ab{ℰ}.
+We will apply this result---called \af{sound} and borrowed from Andreas Abel's proof of Birkhoff's completeness theorem (\textit{op.~cit.})---only once below (in §\ref{basic-properties-of-free-algebras})%
 \ifshort
 , so we omit its straightforward formalization.
 \else
@@ -1641,39 +1643,24 @@ module _ {X : Type χ}{I : Type ℓ}(𝒜 : I → Algebra α ρᵃ){p q : Term X
 \end{code}
 \fi
 
-\paragraph*{PS ⊆ SP}
-Another important fact we will need about the operators \af S and \af P is that a product of subalgebras of algebras in a class \ab{𝒦} is a subalgebra of a product of algebras in \ab{𝒦}. We denote this inclusion by \af{PS⊆SP}, which we state and prove as follows.
-
-\begin{code}
-
-module _  {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
- private a = α ⊔ ρᵃ ; oaℓ = ov (a ⊔ ℓ)
-
- PS⊆SP : P (a ⊔ ℓ) oaℓ (S{β = α}{ρᵃ} ℓ 𝒦) ⊆ S oaℓ (P ℓ oaℓ 𝒦)
- PS⊆SP {𝑩} (I , ( 𝒜 , sA , B≅⨅A )) = Goal
-  where
-  ℬ : I → Algebra α ρᵃ
-  ℬ i = ∣ sA i ∣
-  kB : (i : I) → ℬ i ∈ 𝒦
-  kB i =  fst ∥ sA i ∥
-  ⨅A≤⨅B : ⨅ 𝒜 ≤ ⨅ ℬ
-  ⨅A≤⨅B = ⨅-≤ λ i → snd ∥ sA i ∥
-  Goal : 𝑩 ∈ S{β = oaℓ}{oaℓ}oaℓ (P {β = oaℓ}{oaℓ} ℓ oaℓ 𝒦)
-  Goal = ⨅ ℬ , (I , (ℬ , (kB , ≅-refl))) , (≅-trans-≤ B≅⨅A ⨅A≤⨅B)
-\end{code}
-
 \paragraph*{Identity preservation}
-The classes \af H \ab{𝒦}, \af S \ab{𝒦}, \af P \ab{𝒦}, and \af V \ab{𝒦} all satisfy the same set of equations.  We will only use a subset of the inclusions used to prove this fact. (For a complete proof, see the
-\ualmodule{Varieties.Func.Preservation} module of the \agdaalgebras library.)
-
-%\paragraph*{H preserves identities}
+The classes \af H \ab{𝒦}, \af S \ab{𝒦}, \af P \ab{𝒦}, and \af V \ab{𝒦} all satisfy the same set of equations.  We will only use a subset of the inclusions used to prove this fact. For complete proofs, see the
+\ualmodule{Varieties.Func.Preservation} module of the \agdaalgebras library.
+\ifshort
+Specifically, we will cite the following facts, whose formal proofs we omit.
+\else
 First we prove that the closure operator \af H is compatible with identities that hold in the given class.
 
 \begin{code}
 
 module _  {X : Type χ}{𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)}{p q : Term X} where
+\end{code}
+\fi
 
+\begin{code}
  H-id1 : 𝒦 ⊫ p ≈ q → (H {β = α}{ρᵃ}ℓ 𝒦) ⊫ p ≈ q
+\end{code}\ifshort\else
+\begin{code}
  H-id1 σ 𝑩 (𝑨 , kA , BimgOfA) ρ =
   begin
    ⟦ p ⟧      ⟨$⟩             ρ   ≈˘⟨  cong ⟦ p ⟧(λ _ → InvIsInverseʳ φE)⟩
@@ -1694,25 +1681,34 @@ module _  {X : Type χ}{𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)}
     private φ = (_⟨$⟩_ ∣ φh ∣)
     open Environment 𝑨  using () renaming ( ⟦_⟧ to ⟦_⟧ᴬ)
     open Environment 𝑩  using ( ⟦_⟧ ) ; open SetoidReasoning 𝔻[ 𝑩 ]
-
 \end{code}
-%\paragraph*{S preserves identities}
-Similarly for \af S and the obvious converse, though barely worth mentioning, must be formally proved as well since we use it below.
 
+Similarly for \af S and the obvious converse, though barely worth mentioning, must be formally proved as well since we use it below.
+\fi
 \begin{code}
 
  S-id1 : 𝒦 ⊫ p ≈ q → (S {β = α}{ρᵃ} ℓ 𝒦) ⊫ p ≈ q
+\end{code}\ifshort\else
+\begin{code}
  S-id1 σ 𝑩 (𝑨 , kA , B≤A) = ⊧-S-invar{p = p}{q} (σ 𝑨 kA) B≤A
+\end{code}
+\fi
+\begin{code}
 
  S-id2 : S ℓ 𝒦 ⊫ p ≈ q → 𝒦 ⊫ p ≈ q
+\end{code}\ifshort\else
+\begin{code}
  S-id2 Spq 𝑨 kA = Spq 𝑨 (𝑨 , (kA , ≤-reflexive))
 
 \end{code}
 Finally, we have analogous pairs of implications for \af P and \af V.  In each case, we will only need the first implication, so we omit the formal proof of the others.
+\fi
 
 \begin{code}
 
  P-id1 : ∀{ι} → 𝒦 ⊫ p ≈ q → P {β = α}{ρᵃ}ℓ ι 𝒦 ⊫ p ≈ q
+\end{code}\ifshort\else
+\begin{code}
  P-id1 σ 𝑨 (I , 𝒜 , kA , A≅⨅A) = ⊧-I-invar 𝑨 p q IH (≅-sym A≅⨅A)
   where
   ih : ∀ i → 𝒜 i ⊧ p ≈ q
@@ -1722,8 +1718,13 @@ Finally, we have analogous pairs of implications for \af P and \af V.  In each c
 
 module _ {X : Type χ}{ι : Level}{𝒦 : Pred(Algebra α ρᵃ)(α ⊔ ρᵃ ⊔ ov ℓ)}{p q : Term X} where
  private aℓι = α ⊔ ρᵃ ⊔ ℓ ⊔ ι
+\end{code}
+\fi
+\begin{code}
 
  V-id1 : 𝒦 ⊫ p ≈ q → V ℓ ι 𝒦 ⊫ p ≈ q
+\end{code}\ifshort\else
+\begin{code}
  V-id1 σ 𝑩 (𝑨 , (⨅A , p⨅A , A≤⨅A) , BimgA) =
   H-id1{ℓ = aℓι}{𝒦 = S aℓι (P {β = α}{ρᵃ}ℓ ι 𝒦)}{p = p}{q} spK⊧pq 𝑩 (𝑨 , (spA , BimgA))
    where
@@ -1732,11 +1733,12 @@ module _ {X : Type χ}{ι : Level}{𝒦 : Pred(Algebra α ρᵃ)(α ⊔ ρᵃ �
    spK⊧pq : S aℓι (P ℓ ι 𝒦) ⊫ p ≈ q
    spK⊧pq = S-id1{ℓ = aℓι}{p = p}{q} (P-id1{ℓ = ℓ} {𝒦 = 𝒦}{p = p}{q} σ)
 \end{code}
+\fi
 
 %% -------------------------------------------------------------------------------------
 
-\section{Free Algebras and the HSP Theorem}
-\label{free-algebras-and-the-hsp-theorem}
+\section{Free Algebras}
+\label{free-algebras}
 
 \subsection{The absolutely free algebra 𝑻 X}
 \label{the-absolutely-free-algebra-tx}
@@ -1827,11 +1829,6 @@ module FreeAlgebra {χ : Level}(ℰ : {Y : Type χ} → Pred (Term Y × Term Y) 
           ; _≈_            = ℰ ⊢ X ▹_≈_
           ; isEquivalence  = record { refl = reflexive ; sym = symmetric ; trans = transitive } }
 
-\end{code}
-
-
-\begin{code}
-
  𝔽[_] : Type χ → Algebra (ov χ) _
  Domain 𝔽[ X ] = FreeDomain X
  Interp 𝔽[ X ] = FreeInterp
@@ -1842,24 +1839,19 @@ module FreeAlgebra {χ : Level}(ℰ : {Y : Type χ} → Pred (Term Y × Term Y) 
 
 \end{code}
 
-\subsection{Basic properties of free algebras}
-\label{basic-properties-of-free-algebras}
-
-\begin{code}
-
-module FreeHom {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
- private c = α ⊔ ρᵃ ⊔ ℓ ; ι = ov c
-
- Th𝒦⊢[_]▹Th𝒦 : (X : Type c) → ∀{p q} → (Th 𝒦) ⊢ X ▹ p ≈ q → 𝒦 ⊫ p ≈ q
- Th𝒦⊢[ X ]▹Th𝒦 x 𝑨 kA = sound (λ y ρ → y 𝑨 kA ρ) x where open Soundness (Th 𝒦) 𝑨
- open FreeAlgebra {χ = c} (Th 𝒦) using ( 𝔽[_] )
-\end{code}
+%\subsection{Basic properties of free algebras}
+%\label{basic-properties-of-free-algebras}
 
 \paragraph*{The natural epimorphism from 𝑻 X to 𝔽[ X ]}
 We now define the natural epimorphism from \T{X} onto the relatively free algebra \Free{X} and prove that
 the kernel of this morphism is the congruence of \T{X} defined by the identities modeled by (\af S \ab{𝒦}, hence by) \ab{𝒦}.
 
 \begin{code}
+
+module FreeHom {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
+ private c = α ⊔ ρᵃ ⊔ ℓ ; ι = ov c
+
+ open FreeAlgebra {χ = c} (Th 𝒦) using ( 𝔽[_] )
 
  epi𝔽[_] : (X : Type c) → epi (𝑻 X) 𝔽[ X ]
  epi𝔽[ X ] = h , hepi
@@ -1888,7 +1880,10 @@ As promised, we prove that the kernel of the natural epimorphism is the congruen
 \begin{code}
 
  kernel-in-theory : {X : Type c} → ker ∣ hom𝔽[ X ] ∣ ⊆ Th (V ℓ ι 𝒦)
- kernel-in-theory {X = X} {p , q} pKq 𝑨 vkA = V-id1{ℓ = ℓ}{p = p}{q} (Th𝒦⊢[ X ]▹Th𝒦 pKq) 𝑨 vkA
+ kernel-in-theory {X = X} {p , q} pKq 𝑨 vkA = V-id1{ℓ = ℓ}{p = p}{q} (ζ pKq) 𝑨 vkA
+  where
+  ζ : ∀{p q} → (Th 𝒦) ⊢ X ▹ p ≈ q → 𝒦 ⊫ p ≈ q
+  ζ x 𝑨 kA = sound (λ y ρ → y 𝑨 kA ρ) x where open Soundness (Th 𝒦) 𝑨
 \end{code}
 
 \paragraph*{The universal property}
@@ -1897,7 +1892,6 @@ As promised, we prove that the kernel of the natural epimorphism is the congruen
 
 module _  {𝑨 : Algebra (α ⊔ ρᵃ ⊔ ℓ) (α ⊔ ρᵃ ⊔ ℓ)} {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
  private c = α ⊔ ρᵃ ⊔ ℓ ; ι = ov c
-
  open FreeHom {ℓ = ℓ} {𝒦}
  open FreeAlgebra {χ = c}(Th 𝒦)  using ( 𝔽[_] )
  open Setoid 𝔻[ 𝑨 ]              using ( refl ; sym ; trans ) renaming  ( Carrier  to A )
@@ -1922,8 +1916,18 @@ module _  {𝑨 : Algebra (α ⊔ ρᵃ ⊔ ℓ) (α ⊔ ρᵃ ⊔ ℓ)} {𝒦 :
 
 %% -------------------------------------------------------------------------------------
 
-\subsection{Products of classes of algebras}
-\label{products-of-classes-of-algebras}
+\section{Birkhoff's Variety Theorem}
+
+\paragraph*{Informal statement of the theorem}
+
+
+
+
+\paragraph*{Formal statement and structure of the proof}
+
+
+
+\paragraph*{Products of classes of algebras}
 
 We want to pair each (\ab{𝑨} , \ab p) (where \ab p : \ab{𝑨} \af{∈} \af S \ab{𝒦}) with an environment
 \ab{ρ} : \ab X \as{→} \aof{𝕌[ \ab{𝑨} ]} so that we can quantify over all algebras \emph{and} all
@@ -1950,7 +1954,17 @@ module _ (𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)){X : Type (α 
 \end{code}
 
 Next we define a useful type, \af{skEqual}, which we use to represent a term identity \ab p \aic{≈} \ab q for any
-given \ab i = (\ab{𝑨} , \ab{sA} , \ab{ρ}) (where \ab{𝑨} is an algebra, \ab{sA} : \ab{𝑨} \af{∈} \af{S} \ab{𝒦} is a proof that \ab{𝑨} belongs to \af{S} \ab{𝒦}, and \ab{ρ} is a mapping from \ab X to the domain of \ab{𝑨}).
+given \ab i = (\ab{𝑨} , \ab{sA} , \ab{ρ}), where \ab{𝑨} is an algebra, \ab{sA} is a proof that \ab{𝑨} belongs to \af{S} \ab{𝒦}, and \ab{ρ} is an environment map
+(assigning values in the domain of \ab{𝑨} to variable symbols in \ab X).
+\begin{code}
+
+ skEqual : (i : ℑ⁺) → ∀{p q} → Type ρᵃ
+ skEqual i {p}{q} = ⟦ p ⟧ ⟨$⟩ snd ∥ i ∥ ≈ ⟦ q ⟧ ⟨$⟩ snd ∥ i ∥
+  where  open Setoid 𝔻[ 𝔄⁺ i ] using ( _≈_ )
+         open Environment (𝔄⁺ i)  using ( ⟦_⟧ )
+
+\end{code}
+
 Later we prove that if the identity \ab{p} \af{≈} \ab q holds in all \ab{𝑨} \aof{∈} \af S \ab{𝒦} (for all environments), then \ab p \af{≈} \ab q
 holds in the relatively free algebra \Free{X}; equivalently, the pair (\ab p , \ab q) belongs to the
 kernel of the natural homomorphism from \T{X} onto \Free{X}. We will use that fact to prove
@@ -1960,17 +1974,14 @@ so belongs to \af S (\af P \ab{𝒦}).
 
 \begin{code}
 
- skEqual : (i : ℑ⁺) → ∀{p q} → Type ρᵃ
- skEqual i {p}{q} = ⟦ p ⟧ ⟨$⟩ snd ∥ i ∥ ≈ ⟦ q ⟧ ⟨$⟩ snd ∥ i ∥
-  where
-  open Setoid 𝔻[ 𝔄⁺ i ]    using ( _≈_ )
-  open Environment (𝔄⁺ i)  using ( ⟦_⟧ )
-
  homℭ : hom (𝑻 X) ℭ
  homℭ = ⨅-hom-co 𝔄⁺ h
   where
   h : ∀ i → hom (𝑻 X) (𝔄⁺ i)
   h i = lift-hom (snd ∥ i ∥)
+\end{code}
+\ifshort\else
+\begin{code}
 
  ker𝔽⊆kerℭ : ker ∣ hom𝔽[ X ] ∣ ⊆ ker ∣ homℭ ∣
  ker𝔽⊆kerℭ {p , q} pKq (𝑨 , sA , ρ) = Goal
@@ -1979,11 +1990,17 @@ so belongs to \af S (\af P \ab{𝒦}).
   open Environment 𝑨  using ( ⟦_⟧ )
   fl : ∀ t → ⟦ t ⟧ ⟨$⟩ ρ ≈ free-lift ρ t
   fl t = free-lift-interp {𝑨 = 𝑨} ρ t
+
+  ζ : ∀{p q} → (Th 𝒦) ⊢ X ▹ p ≈ q → 𝒦 ⊫ p ≈ q
+  ζ x 𝑨 kA = sound (λ y ρ → y 𝑨 kA ρ) x where open Soundness (Th 𝒦) 𝑨
+
   subgoal : ⟦ p ⟧ ⟨$⟩ ρ ≈ ⟦ q ⟧ ⟨$⟩ ρ
-  subgoal = S-id1{ℓ = ℓ}{p = p}{q} (Th𝒦⊢[ X ]▹Th𝒦 pKq) 𝑨 sA ρ
+  subgoal = S-id1{ℓ = ℓ}{p = p}{q} (ζ pKq) 𝑨 sA ρ
   Goal : (free-lift{𝑨 = 𝑨} ρ p) ≈ (free-lift{𝑨 = 𝑨} ρ q)
   Goal = trans (sym (fl p)) (trans subgoal (fl q))
-
+\end{code}
+\fi
+\begin{code}
 
  hom𝔽ℭ : hom 𝔽[ X ] ℭ
  hom𝔽ℭ = ∣ HomFactor ℭ homℭ hom𝔽[ X ] ker𝔽⊆kerℭ (isSurjective ∥ epi𝔽[ X ] ∥) ∣
@@ -1992,11 +2009,18 @@ so belongs to \af S (\af P \ab{𝒦}).
 If \AgdaPair{p}{q} belongs to the kernel of \af{homℭ}, then
 \af{Th} \ab{𝒦} includes the identity \ab{p} \af{≈} \ab{q}---that is,
 \af{Th} \ab{𝒦} \af{⊢} \ab X \af{▹} \ab{p} \af{≈} \ab{q}. Equivalently,
-if the kernel of \af{homℭ} is contained in that of \af{hom𝔽[ X ]}, as we now prove.
+if the kernel of \af{homℭ} is contained in that of \af{hom𝔽[ X ]}.
+\ifshort
+We omit the formal proof of this lemma and merely display its formal statement, which is the following.
+\else
+We formalize this fact as follows.
 
 \begin{code}
 
  kerℭ⊆ker𝔽 : ∀{p q} → (p , q) ∈ ker ∣ homℭ ∣ → (p , q) ∈ ker ∣ hom𝔽[ X ] ∣
+\end{code}
+\ifshortelse
+\begin{code}
  kerℭ⊆ker𝔽 {p}{q} pKq = S𝒦⊫→ker𝔽 (S𝒦⊫ pqEqual)
   where
   S𝒦⊫ : (∀ i → skEqual i {p}{q}) → S{β = α}{ρᵃ} ℓ 𝒦 ⊫ p ≈ q
@@ -2014,8 +2038,8 @@ if the kernel of \af{homℭ} is contained in that of \af{hom𝔽[ X ]}, as we no
          ( trans (pKq i)(sym (free-lift-interp{𝑨 = ∣ i ∣} (snd ∥ i ∥) q)))
 
 \end{code}
-From the foregoing we deduce that the homomorphism from \Free{X} to \af{ℭ} is injective, whence it follows that \Free{X} is (isomorphic to) a subalgebra of \af{ℭ}.
-Consequently, \Free{X} belongs to \af{S} (\af{P} \ab{𝒦}).
+\fi
+We conclude that the homomorphism from \Free{X} to \af{ℭ} is injective, whence it follows that \Free{X} is (isomorphic to) a subalgebra of \af{ℭ}.
 
 \begin{code}
 
@@ -2029,47 +2053,74 @@ Consequently, \Free{X} belongs to \af{S} (\af{P} \ab{𝒦}).
  𝔽≤ℭ : 𝔽[ X ] ≤ ℭ
  𝔽≤ℭ = mon→≤ mon𝔽ℭ
 
+\end{code}
+
+Using the last result we will prove that \Free{X} belongs to \af{S} (\af{P} \ab{𝒦}). This requires one more technical lemma concerning the classes \af{S} and \af{P};
+specifically,
+\ifshort
+\af{P} (\af{S} \ab{𝒦}) \aof{⊆} \af{S} (\af{P} \ab{𝒦}) holds for every class \ab{𝒦}.
+The \ualmodule{Varieties.Func.Preservation.lagda} module contains the formal statement and proof of this result, called \af{PS⊆SP}, which we omit.
+\else
+a product of subalgebras of algebras in a class is a subalgebra of a product of algebras in the class;
+in other terms, \af{P} (\af{S} \ab{𝒦}) \aof{⊆} \af{S} (\af{P} \ab{𝒦}), for every class \ab{𝒦}.
+We state and prove this in Agda as follows.
+
+\begin{code}
+
+ private a = α ⊔ ρᵃ ; oaℓ = ov (a ⊔ ℓ)
+
+ PS⊆SP : P (a ⊔ ℓ) oaℓ (S{β = α}{ρᵃ} ℓ 𝒦) ⊆ S oaℓ (P ℓ oaℓ 𝒦)
+ PS⊆SP {𝑩} (I , ( 𝒜 , sA , B≅⨅A )) = Goal
+  where
+  ℬ : I → Algebra α ρᵃ
+  ℬ i = ∣ sA i ∣
+  kB : (i : I) → ℬ i ∈ 𝒦
+  kB i =  fst ∥ sA i ∥
+  ⨅A≤⨅B : ⨅ 𝒜 ≤ ⨅ ℬ
+  ⨅A≤⨅B = ⨅-≤ λ i → snd ∥ sA i ∥
+  Goal : 𝑩 ∈ S{β = oaℓ}{oaℓ}oaℓ (P {β = oaℓ}{oaℓ} ℓ oaℓ 𝒦)
+  Goal = ⨅ ℬ , (I , (ℬ , (kB , ≅-refl))) , (≅-trans-≤ B≅⨅A ⨅A≤⨅B)
+\end{code}
+\fi
+
+We conclude this subsection with the proof that \Free{X} belongs to \af{S} (\af{P} \ab{𝒦}).
+
+\begin{code}
+
  SP𝔽 : 𝔽[ X ] ∈ S ι (P ℓ ι 𝒦)
  SP𝔽 = S-idem (ℭ , (SPℭ , 𝔽≤ℭ))
   where
   PSℭ : ℭ ∈ P (α ⊔ ρᵃ ⊔ ℓ) ι (S ℓ 𝒦)
   PSℭ = ℑ⁺ , (𝔄⁺ , ((λ i → fst ∥ i ∥) , ≅-refl))
   SPℭ : ℭ ∈ S ι (P ℓ ι 𝒦)
-  SPℭ = PS⊆SP {ℓ = ℓ} PSℭ
+  SPℭ = PS⊆SP PSℭ
 \end{code}
-
-
 
 %% -------------------------------------------------------------------------------------
 
-\subsection{The HSP Theorem}
+%% \paragraph*{The HSP Theorem}
 
-Finally, we are in a position to prove Birkhoff's celebrated variety theorem.
+Finally, we are ready to present the formal statement and proof of Birkhoff's celebrated variety theorem.
 
 \begin{code}
 
-Lift-HomImage-lemma :  {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} → ∀{γ}
- →                     (Lift-Alg 𝑨 γ γ) IsHomImageOf 𝑩 → 𝑨 IsHomImageOf 𝑩
-Lift-HomImage-lemma {𝑨 = 𝑨} {γ = γ} φ =
- ∘-hom ∣ φ ∣ (from Lift-≅) , ∘-IsSurjective _ _ ∥ φ ∥ (fromIsSurjective (Lift-≅{𝑨 = 𝑨}))
-
 module _ {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
  private c = α ⊔ ρᵃ ⊔ ℓ ; ι = ov c
+ open FreeAlgebra {χ = c}(Th 𝒦) using ( 𝔽[_] )
 
  Birkhoff : ∀ 𝑨 → 𝑨 ∈ Mod (Th (V ℓ ι 𝒦)) → 𝑨 ∈ V ℓ ι 𝒦
- Birkhoff 𝑨 ModThA = 𝔽[ A ] , (sp𝔽A , (Lift-HomImage-lemma lAimg𝔽A))
+ Birkhoff 𝑨 ModThA = 𝔽[ 𝕌[ 𝑨 ] ] , (sp𝔽A , AimgF)
   where
-  open FreeHom {ℓ = ℓ} {𝒦}
-  open FreeAlgebra {χ = c}(Th 𝒦) using ( 𝔽[_] )
-  open Setoid 𝔻[ 𝑨 ] using () renaming ( Carrier to A )
-  sp𝔽A : 𝔽[ A ] ∈ S{ι} ι (P ℓ ι 𝒦)
+  sp𝔽A : 𝔽[ 𝕌[ 𝑨 ] ] ∈ S{ι} ι (P ℓ ι 𝒦)
   sp𝔽A = SP𝔽{ℓ = ℓ} 𝒦
-  epi𝔽lA : epi 𝔽[ A ] (Lift-Alg 𝑨 ι ι)
+  epi𝔽lA : epi 𝔽[ 𝕌[ 𝑨 ] ] (Lift-Alg 𝑨 ι ι)
   epi𝔽lA = 𝔽-ModTh-epi-lift{ℓ = ℓ} (λ {p q} → ModThA{p = p}{q})
-  lAimg𝔽A : Lift-Alg 𝑨 ι ι IsHomImageOf 𝔽[ A ]
-  lAimg𝔽A = epi→ontohom 𝔽[ A ] (Lift-Alg 𝑨 ι ι) epi𝔽lA
-  VlA : Lift-Alg 𝑨 ι ι ∈ V ℓ ι 𝒦
-  VlA = 𝔽[ A ] , sp𝔽A , lAimg𝔽A
+  φ : Lift-Alg 𝑨 ι ι IsHomImageOf 𝔽[ 𝕌[ 𝑨 ] ]
+  φ = epi→ontohom 𝔽[ 𝕌[ 𝑨 ] ] (Lift-Alg 𝑨 ι ι) epi𝔽lA
+  AimgF : 𝑨 IsHomImageOf 𝔽[ 𝕌[ 𝑨 ] ]
+  AimgF = ∘-hom ∣ φ ∣ (from Lift-≅) ,
+          ∘-IsSurjective _ _ ∥ φ ∥ (fromIsSurjective (Lift-≅{𝑨 = 𝑨}))
+
 
 \end{code}
 
@@ -2079,8 +2130,7 @@ that we formalize this inclusion as well, however trivial the proof.
 \begin{code}
 
  Birkhoff-converse :  {𝑨 : Algebra α ρᵃ}
-  →                   𝑨 ∈ V{α}{ρᵃ}{α}{ρᵃ}{α}{ρᵃ} ℓ ι 𝒦
-                      ------------------------------------
+  →                   𝑨 ∈ V{β = α}{ρᵃ}{α}{ρᵃ} ℓ ι 𝒦
   →                   𝑨 ∈ Mod{X = 𝕌[ 𝑨 ]} (Th (V ℓ ι 𝒦))
 
  Birkhoff-converse {𝑨 = 𝑨} vA pThq = pThq 𝑨 vA
