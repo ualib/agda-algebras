@@ -80,7 +80,6 @@ present module (\DemosHSP), begins with the following line.
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 \end{code}
-
 We give only very terse descriptions of these options, and refer the reader to
 the accompanying links for more details.
 
@@ -104,93 +103,102 @@ section of the \href{https://agda.readthedocs.io/en/v2.6.1.3/tools/}{Agda Tools 
 The \AgdaKeyword{OPTIONS} pragma is usually followed by the start of a module and a list of import directives.
 For example, the collection of imports required for the present module, \DemosHSP, is relatively modest and appears below.
 
+\begin{code}[hide]
+{-# OPTIONS --without-K --exact-split --safe #-}
+\end{code}
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
-
+-- Import 3 definitions from the agda-algebras library.
 open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
-
+\end{code}
+\begin{code}[hide]
 module Demos.HSP {𝑆 : Signature 𝓞 𝓥} where
+\end{code}
+\begin{code}
 
-open import  Agda.Primitive               using     ( _⊔_ ; lsuc )
-                                          renaming  ( Set to Type )
-open import  Data.Product                 using     ( _×_  ; Σ-syntax ; _,_ ; Σ )
-                                          renaming  ( proj₁ to  fst ; proj₂ to snd )
-open import  Function                     using     ( id ; Surjection ; flip ; Injection ; _∘_ )
-                                          renaming  ( Func to _⟶_ )
-open import  Level                        using     ( Level )
-open import  Relation.Binary              using     ( Setoid ; IsEquivalence ; Rel )
-open import  Relation.Binary.Definitions  using     ( Sym ; Symmetric ; Trans ; Transitive ; Reflexive )
-open import  Relation.Binary.PropositionalEquality
-                                          using     ( _≡_ )
-open import  Relation.Unary               using     ( Pred ; _⊆_ ; _∈_ )
+-- Import 16 definitions from the Agda Standard Library.
+open import  Function                                        using ( id ; flip ; _∘_               )
+open import  Level                                           using ( Level                         )
+open import  Relation.Binary                                 using ( Rel ; Setoid ; IsEquivalence  )
+open import  Relation.Binary.Definitions                     using ( Reflexive ; Symmetric         )
+                                                             using ( Transitive ; Sym ; Trans      )
+open import  Relation.Binary.PropositionalEquality           using ( _≡_                           )
+open import  Relation.Unary                                  using ( Pred ; _⊆_ ; _∈_              )
 
-import  Function.Definitions                   as FD
-import  Relation.Binary.PropositionalEquality  as ≡
-import  Relation.Binary.Reasoning.Setoid       as SetoidReasoning
+-- Import 23 definitions from the Agda Standard Library and rename 12 of them.
+open import  Agda.Primitive  renaming ( Set    to Type    )  using ( _⊔_ ; lsuc                    )
+open import  Data.Product    renaming ( proj₁  to fst     )
+                             renaming ( proj₂  to snd     )  using ( _×_ ; _,_ ; Σ ; Σ-syntax      )
+open import  Function        renaming ( Func   to _⟶_     )  using ( Injection ; Surjection        )
+open         _⟶_             renaming ( f      to _⟨$⟩_   )  using ( cong                          )
+open         Setoid          renaming ( refl   to reflˢ   )
+                             renaming ( sym    to symˢ    )
+                             renaming ( trans  to transˢ  )
+                             renaming ( _≈_    to _≈ˢ_    )  using ( Carrier ; isEquivalence       )
+open         IsEquivalence   renaming ( refl   to reflᵉ   )
+                             renaming ( sym    to symᵉ    )
+                             renaming ( trans  to transᵉ  )  using ()
 
-open _⟶_     using ( cong ) renaming ( f to _⟨$⟩_ )
+-- Assign handles to 3 modules of the Agda Standard Library.
+import       Function.Definitions                   as FD
+import       Relation.Binary.PropositionalEquality  as ≡
+import       Relation.Binary.Reasoning.Setoid       as SetoidReasoning
 
 \end{code}
 \ifshort\else
 \begin{code}
-open Setoid  using ( Carrier ; isEquivalence )
 private variable
  α ρᵃ β ρᵇ γ ρᶜ δ ρᵈ ρ χ ℓ : Level
  Γ Δ : Type χ
  𝑓 : fst 𝑆
 \end{code}
 \fi
-Note, in particular, we prefer to use \AgdaPrimitive{Type} to denote the
-built-in \AgdaPrimitive{Set} type, and the infix long arrow symbol,
-\AgdaRecord{\AgdaUnderscore{}⟶\AgdaUnderscore{}}, to denote the \AgdaRecord{Func}
-type of the standard library.  We use \AgdaField{fst} and \AgdaField{snd} in
-place of \AgdaField{proj₁} and  \AgdaField{proj₂} for the first and second
-projections out of the product type,
-\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}×\AgdaUnderscore{}}}, and,
-when it improves readability of the code, we use the alternative notation
-\AgdaOperator{\AgdaFunction{∣\AgdaUnderscore{}∣}} and
-\AgdaOperator{\AgdaFunction{∥\AgdaUnderscore{}∥}} (resp.) for these projections.
-\ifshort
-\else
-\begin{code}
+Note that the above imports include some of the minor adjustments to ``standard Agda'' syntax to suite our own taste. Take special note of the following conventions used throughout the \agdaalgebras library and this paper: we use \AgdaPrimitive{Type} in place of \AgdaPrimitive{Set}, the infix long arrow symbol,
+\AgdaRecord{\AgdaUnderscore{}⟶\AgdaUnderscore{}}, instead of \AgdaRecord{Func} (the type of ``setoid functions'' discussed in §\ref{setoid-functions} below), and the symbol \aofld{\au{}⟨\$⟩\au{}} in place of \afld{f} (application of the map of a setoid function); we use
+\AgdaField{fst} and \AgdaField{snd}, and sometimes \AgdaOperator{\AgdaFunction{∣\AgdaUnderscore{}∣}} and
+\AgdaOperator{\AgdaFunction{∥\AgdaUnderscore{}∥}}, to denote the first and second projections out of the product type \AgdaOperator{\AgdaFunction{\AgdaUnderscore{}×\AgdaUnderscore{}}}.
+\begin{code}[hide]
 module _ {A : Type α }{B : A → Type β} where
-
  ∣_∣ : Σ[ x ∈ A ] B x → A
  ∣_∣ = fst
-
  ∥_∥ : (z : Σ[ a ∈ A ] B a) → B ∣ z ∣
  ∥_∥ = snd
 \end{code}
-\fi
 
 %% -----------------------------------------------------------------------------
 \subsection{Setoids}
-A \emph{setoid} is a type packaged with an equivalence relation on the collection
-of inhabitants of that type.  Setoids are useful for representing classical
-(set-theory-based) mathematics in a constructive, type-theoretic way because
-most mathematical structures are assumed to come equipped with some (often
-implicit) equivalence relation manifesting a notion of equality of elements,
-and therefore a type-theoretic representation of such a structure should
-also model its equality relation.
+\label{setoids}
+A \defn{setoid} is a pair (\ab A, \af{≈}) where \ab A is a type and \af{≈}
+is an equivalence relation on \ab A. Setoids seem to have gotten a bad wrap
+in some parts of the interactive theorem proving community because of the extra
+overhead that their use requires. However, we feel they are ideally suited to
+the task of representing the basic objects of informal mathematics (i.e., sets)
+in a constructive, type-theoretic way.
 
-The \agdaalgebras library was first developed without the use of setoids,
-opting instead for specially constructed experimental quotient types.
-However, this approach resulted in code that was hard to comprehend and
-it became difficult to determine whether the resulting proofs were fully
-constructive.  In particular, our initial proof of the Birkhoff variety theorem
-required postulating function extensionality, an axiom that is not provable in
-pure Martin-Löf type theory (MLTT). [reference needed]
+A set used informally typically comes equipped with an equivalence relation manifesting
+the notion of equality of elements of the set. When working informally, we
+often take the equivalence for granted or view it as self-evident; rarely do we
+take the time to define it explicitly. While this approach is well-suited to informal
+mathematics, formalization using a machine demands that we make nearly everything
+explicit, including notions of equality.
+
+Actually, the \agdaalgebras library was first developed without setoids, relying exclusively
+on the inductively defined equality type \ad{\au{}≡\au{}} from \am{Agda.Builtin.Equality},
+along with some experimental, domain-specific types for equivalence classes, quotients, etc.
+One notable consequence of this design decision was that our formalization of many
+theorem required postulating function extensionality, an axiom that is not provable
+in pure Martin-Löf type theory (MLTT). [reference needed]
 
 In contrast, our current approach using setoids makes the equality relation
-of a given type explicit and this transparency can make it easier to determine the
-correctness and constructivity of the proofs. Using setiods we need
-no additional axioms beyond MLTT; in particular, no function
-extensionality axioms are postulated in our current formalization of Birkhoff's
-variety theorem.
+of a given type explicit.  A primary motivation for taking this approach is to make it
+clear that the library is fully constructive and confined to pure Martin-Löf dependent type theory
+(as defined, e.g., in [ref needed]). In particular, there are no appeals to function extensionality in the present work. Finally, we are confident that the current version\footnote{[ref. with version information needed]}  of the \agdaalgebras library is free of hidden assumptions or inconsistencies that could be
+used to ``fool'' the type-checker.
+
 
 %% -----------------------------------------------------------------------------
 \subsection{Setoid functions}
+\label{setoid-functions}
 In addition to the \ar{Setoid} type, much of our code employs the
 standard library's \ar{Func} type which represents a function from one
 setoid to another and packages such a function with a proof (called \afld{cong}) that
@@ -201,7 +209,8 @@ refer to inhabitants of this type as ``setoid functions.''
 
 \ifshort\else
 An example of a setoid function is the identity function from a setoid to itself.
-We define it, along with a binary composition operation for setoid functions, \AgdaOperator{\AgdaFunction{⟨∘⟩}}, as follows.
+We define it, along with a binary composition operation for setoid functions,
+\AgdaOperator{\AgdaFunction{⟨∘⟩}}, as follows.
 
 \begin{code}
 
@@ -217,7 +226,7 @@ f ⟨∘⟩ g = record  { f = (_⟨$⟩_ f) ∘ (_⟨$⟩_ g)
 \fi
 
 \paragraph*{Inverses of setoid functions}
-We define a data type that represents the semantic concept of the \emph{image} of a function.\footnote{cf.~the \ualmodule{Overture.Func.Inverses} module of the \agdaalgebras library.}
+We begin by defining an inductive type that represents the semantic concept of the \emph{image} of a function.\footnote{cf.~the \ualmodule{Overture.Func.Inverses} module of the \agdaalgebras library.}
 
 \begin{code}
 
@@ -229,32 +238,38 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
 
 \end{code}
 An inhabitant of \aod{Image} \ab f \aod{∋} \ab b is a dependent pair \AgdaPair{a}{p},
-where \AgdaTyped{a}{A} and \ab p~\as :~\ab b \aofld{≈} \ab f~\ab a is a proof that
+where \AgdaTyped{a}{A} and \ab p~\as :~\ab b \af{≈} \ab f~\ab a is a proof that
 \ab f maps \ab a to \ab b.  Since the proof that \ab b
 belongs to the image of \ab f is always accompanied by a witness \AgdaTyped{a}{A}, we can
-actually \emph{compute} a (pseudo)inverse of \ab f. For convenience, we define this
-inverse function, which we call \af{Inv}, and which takes an arbitrary \AgdaTyped{b}{B} and
-a (witness, proof)-pair, \AgdaPair{a}{p}~\as :~\aod{Image}~\ab f~\aod{∋}~\ab b, and returns the witness \ab a.
+actually \emph{compute} a range-restricted right-inverse of \ab f. For convenience, we define this
+inverse function and give it the name \af{Inv}.
 
 \begin{code}
 
  Inv : (f : 𝑨 ⟶ 𝑩){b : B} → Image f ∋ b → Carrier 𝑨
  Inv _ (eq a _) = a
 
+\end{code}
+For each \ab b : \afld{B}, given a pair \AgdaPair{a}{p}~\as :~\aod{Image}~\ab f~\aod{∋}~\ab b witnessing the fact that \ab b belongs to the image of \ab f, the function \af{Inv} simply returns the witness \ab a, which is a preimage of \ab b under \ab f.
+We can formally verify that \af{Inv} \ab f is indeed the (range-restricted) right-inverse of \ab f, as follows.
+
+\begin{code}
+
  InvIsInverseʳ : {f : 𝑨 ⟶ 𝑩}{b : B}(q : Image f ∋ b) → f ⟨$⟩ (Inv f q) ≈ b
  InvIsInverseʳ (eq _ p) = sym p
 
 \end{code}
-The latter (\af{InvIsInverseʳ}) proves that \af{Inv} \ab f is the range-restricted right-inverse of the setoid function \ab f.
-
 
 
 \paragraph*{Injective and surjective setoid functions}
-If \ab{f} : \ab{𝑨} \aor{⟶} \ab{𝑩} is a setoid function from \ab{𝑨} = (\ab{A} \AgdaComma \aofld{≈₀}) to
-\ab{𝑩} = (\ab{B} \AgdaComma \aofld{≈₁}), then we call \ab f \emph{injective} provided \as{∀} (\ab{a₀} \ab{a₁} \as : \ab{A}),
-\ab{f} \aofld{⟨\$⟩} \ab{a₀} \aofld{≈₁} \ab{f} \aofld{⟨\$⟩} \ab{a₁} implies \ab{a₀} \aofld{≈₀} \ab{a₁};
-we call \ab{f} \emph{surjective} provided \as{∀} (\AgdaTyped{b}{B}), \as{∃}~(\AgdaTyped{a}{A}) such that
-\ab{f} \aofld{⟨\$⟩} \ab{a} \aofld{≈₁} \ab{b}.
+If \ab{f} % : \ab{𝑨} \aor{⟶} \ab{𝑩}
+is a setoid function from % \ab{𝑨} =
+(\ab A, \af{≈₀}) to
+% \ab{𝑩} =
+(\ab B, \af{≈₁}), then we call \ab f \defn{injective} provided
+\as{∀} (\ab{a₀} \ab{a₁} \as : \ab{A}), \ab{f} \aofld{⟨\$⟩} \ab{a₀} \af{≈₁} \ab{f} \aofld{⟨\$⟩} \ab{a₁}
+implies \ab{a₀} \af{≈₀} \ab{a₁}; we call \ab{f} \defn{surjective} provided
+\as{∀} (\AgdaTyped{b}{B}), \as{∃}~(\AgdaTyped{a}{A}) such that \ab{f} \aofld{⟨\$⟩} \ab{a} \af{≈₁} \ab{b}.
 The \agdastdlib represents injective functions on bare types by the
 type \af{Injective}, and uses this to define the \af{IsInjective} type to represent
 the property of being an injective setoid function. Similarly, the type \af{IsSurjective}
@@ -320,24 +335,18 @@ module _  {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ}{𝑪 : Setoid γ ρ�
          %%%
 
 \paragraph*{Kernels of setoid functions}
-The \emph{kernel} of a function \ab f~\as :~\ab A~\as{→}~\ab B (where \ab A and \ab B are bare types) is defined
-informally by
-\begin{center}
-\{\AgdaPair{x}{y} \aod{∈} \ab A \aof{×} \ab A \as : \ab f \ab x \as{=} \ab f \ab y \}.
-\end{center}
+The \defn{kernel} of a function \ab f~\as :~\ab A~\as{→}~\ab B (where \ab A and \ab B are bare types) is defined
+informally by \{\AgdaPair{x}{y} \aod{∈} \ab A \aof{×} \ab A \as : \ab f \ab x \as{=} \ab f \ab y \}.
 This can be represented in Agda in a number of ways, but for our purposes it is most
 convenient to define the kernel as an inhabitant of a (unary) predicate over the square of
 the function's domain, as follows.
 
 \begin{code}
 
-module _ {A : Type α}{B : Type β} where
-
- kernel : Rel B ρ → (A → B) → Pred (A × A) ρ
- kernel _≈_ f (x , y) = f x ≈ f y
+kernel : {A : Type α}{B : Type β} → Rel B ρ → (A → B) → Pred (A × A) ρ
+kernel _≈_ f (x , y) = f x ≈ f y
 
 \end{code}
-
 The kernel of a \emph{setoid} function \ab f \as : \ab{𝐴} \aor{⟶} \ab{𝐵} is \{\AgdaPair{x}{y} \as{∈} \ab A \aof{×} \ab A \as : \ab f \aofld{⟨\$⟩} \ab x \aofld{≈} \ab f \aofld{⟨\$⟩} \ab y\},
 where \afld{\au{}≈\au} denotes equality in \ab{𝐵}. This can be formalized in Agda as follows.
 
@@ -375,7 +384,7 @@ for \emph{algebraic structures} and \emph{product algebras}, respectively;
 \subsection{Signatures and signature types}
 \label{signatures-and-signature-types}
 
-In model theory, the \emph{signature} \ab{𝑆} = (\ab{𝐶}, \ab{𝐹}, \ab{𝑅}, \ab{ρ})
+In model theory, the \defn{signature} \ab{𝑆} = (\ab{𝐶}, \ab{𝐹}, \ab{𝑅}, \ab{ρ})
 of a structure consists of three (possibly empty) sets \ab{𝐶}, \ab{𝐹}, and
 \ab{𝑅}---called \emph{constant}, \emph{function}, and
 \emph{relation} symbols, respectively---along with a function \ab{ρ} : \ab{𝐶} \as{+}
@@ -383,14 +392,13 @@ of a structure consists of three (possibly empty) sets \ab{𝐶}, \ab{𝐹}, and
 not always, \ab{𝑁} is taken to be the set of natural numbers.
 
 As our focus here is universal algebra, we are more concerned with the
-restricted notion of an \emph{algebraic signature}, that is, a signature for
+restricted notion of an \defn{algebraic signature}, that is, a signature for
 ``purely algebraic'' structures, by which is meant a pair \ab{𝑆} = \AgdaPair{F}{ρ}
-consisting of a collection \ab{F} of \emph{operation symbols} and a function
+consisting of a collection \ab{F} of \defn{operation symbols} and an \defn{arity function}
 \ab{ρ} : \ab{F} \as{→} \ab{N} which maps each operation symbol to its arity.
 Here, \ab{𝑁} denotes the \emph{arity type}. Heuristically, the arity
 \ab{ρ} \ab{f} of an operation symbol \ab{f} \as{∈} \ab{F} may be thought of as
 the number of arguments that \ab{f} takes as ``input.''
-
 
 The \agdaalgebras library represents an (algebraic) signature as an
 inhabitant of the following dependent pair type:
@@ -464,25 +472,20 @@ We denote this operator by \aof{⟨\AgdaUnderscore{}⟩} and define it as follow
 
 \begin{code}
 
-module _ where
- open Setoid        using ( _≈_ )
- open IsEquivalence using ( refl ; sym ; trans )
+⟨_⟩ : Signature 𝓞 𝓥 → Setoid α ρᵃ → Setoid _ _
 
- ⟨_⟩ : Signature 𝓞 𝓥 → Setoid α ρᵃ → Setoid _ _
+Carrier  (⟨ 𝑆 ⟩ ξ)                = Σ[ f ∈ ∣ 𝑆 ∣ ] (∥ 𝑆 ∥ f → ξ .Carrier)
+_≈ˢ_     (⟨ 𝑆 ⟩ ξ)(f , u)(g , v)  = Σ[ eqv ∈ f ≡ g ] EqArgs{ξ = ξ} eqv u v
 
- Carrier (⟨ 𝑆 ⟩ ξ)              = Σ[ f ∈ ∣ 𝑆 ∣ ] (∥ 𝑆 ∥ f → ξ .Carrier)
-
- _≈_ (⟨ 𝑆 ⟩ ξ) (f , u) (g , v)  = Σ[ eqv ∈ f ≡ g ] EqArgs{ξ = ξ} eqv u v
-
- refl   (isEquivalence (⟨ 𝑆 ⟩ ξ))                           = ≡.refl , λ i → Setoid.refl   ξ
- sym    (isEquivalence (⟨ 𝑆 ⟩ ξ)) (≡.refl , g)              = ≡.refl , λ i → Setoid.sym    ξ (g i)
- trans  (isEquivalence (⟨ 𝑆 ⟩ ξ)) (≡.refl , g)(≡.refl , h)  = ≡.refl , λ i → Setoid.trans  ξ (g i) (h i)
+reflᵉ   (isEquivalence (⟨ 𝑆 ⟩ ξ))                           = ≡.refl , λ i → reflˢ   ξ
+symᵉ    (isEquivalence (⟨ 𝑆 ⟩ ξ)) (≡.refl , g)              = ≡.refl , λ i → symˢ    ξ (g i)
+transᵉ  (isEquivalence (⟨ 𝑆 ⟩ ξ)) (≡.refl , g)(≡.refl , h)  = ≡.refl , λ i → transˢ  ξ (g i) (h i)
 \end{code}
 
 %% -----------------------------------------------------------------------------
 \subsection{Algebras and algebra types}
 \label{algebras-and-algebra-types}
-Informally, an \emph{algebraic structure in the signature} \ab{𝑆} = (\ab{F}, \ab{ρ}) (or \ab{𝑆}-\emph{algebra}) is denoted by \ab{𝑨} = (\ab{A}, \ab{Fᴬ}) and consists of
+Informally, an \defn{algebraic structure in the signature} \ab{𝑆} = (\ab{F}, \ab{ρ}) (or \ab{𝑆}-\defn{algebra}) is denoted by \ab{𝑨} = (\ab{A}, \ab{Fᴬ}) and consists of
 \begin{itemize}
 \item a \emph{nonempty} set (or type) \ab A, called the \emph{domain} of the algebra;
 \item a collection \ab{Fᴬ} := \{ \ab{fᴬ} \as{∣} \ab f \as{∈} \ab F, \ab{fᴬ} \as : (\ab{ρ} \ab f \as{→} \ab A) \as{→} \ab A \} of \emph{operations} on \ab{A};
@@ -493,12 +496,16 @@ The \agdaalgebras library represents algebras as the inhabitants of a record typ
 \item \afld{Domain}, representing the domain of the algebra;
 \item \afld{Interp}, representing the \emph{interpretation} in the algebra of each operation symbol in \ab{𝑆}.
 \end{itemize}
-We now present the definition of the \ar{Algebra} type and explain how the standard library's \ar{Func} type is used to represent the interpretation of operation symbols in an algebra.\footnote{We postpone introducing identities until they are needed (e.g., for equational logic); see~§\ref{model-theory-and-equational-logic}.}
+The \afld{Domain} is a actually a setoid whose \afld{Carrier} denotes the carrier of the algebra and whose equivalence relation denotes equality of elements of the domain.
+
+Here is the definition of the \ar{Algebra} type followed by an explaination of how the standard library's \ar{Func} type is used to represent the interpretation of operation symbols in an algebra.
+%\footnote{We postpone introducing identities until they are needed (e.g., for equational logic); see~§\ref{model-theory-and-equational-logic}.}
+
 \begin{code}
 
 record Algebra α ρ : Type (𝓞 ⊔ 𝓥 ⊔ lsuc (α ⊔ ρ)) where
- field  Domain : Setoid α ρ
-        Interp : (⟨ 𝑆 ⟩ Domain) ⟶ Domain
+ field  Domain  : Setoid α ρ
+        Interp  : ⟨ 𝑆 ⟩ Domain ⟶ Domain
 
 \end{code}
 Recall, we renamed Agda's \ar{Func} type, prefering instead the long-arrow symbol \AgdaRecord{⟶}, so
@@ -506,10 +513,9 @@ the \afld{Interp} field has type \ar{Func} (\aof{⟨} \ab{𝑆} \aof{⟩} \afld{
 \begin{itemize}
 \item a function  \ab{f} \as : \afld{Carrier} (\aof{⟨} \ab{𝑆} \aof{⟩} \afld{Domain})
   \as{→} \afld{Carrier} \afld{Domain} representing the operation;
-\item a proof \afld{cong} \as : \ab f \ao{\af{Preserves}} \ao{\afld{\au{}≈₁\au}} \ao{\ar{⟶}}
-  \ao{\afld{\au{}≈₂\au}} that the operation preserves the relevant setoid equalities.
+\item a proof \af{cong} \as : \ab f \aof{Preserves \au{}≈₁\au{} ⟶ \au{}≈₂\au{}} that the operation preserves the relevant setoid equalities.
 \end{itemize}
-Thus, for each operation symbol in the signature \ab{𝑆}, we have a setoid function \ab f---with domain a power of \afld{Domain} and codomain \afld{Domain}---along with a proof that this function respects the setoid equalities.  The latter means that the operation \ab{f} is accompanied by a proof of the following: ∀ \ab u \ab v in \afld{Carrier} (\aof{⟨} \ab{𝑆} \aof{⟩} \afld{Domain}), if \ab u \afld{≈₁} \ab v, then \ab{f} \aofld{⟨\$⟩} \ab{u} \aofld{≈₂} \ab{f} \aofld{⟨\$⟩} \ab{v}.
+Thus, for each operation symbol in the signature \ab{𝑆}, we have a setoid function \ab f---with domain a power of \afld{Domain} and codomain \afld{Domain}---along with a proof that this function respects the setoid equalities.  The latter means that the operation \ab{f} is accompanied by a proof of the following: ∀ \ab u \ab v in \afld{Carrier} (\aof{⟨} \ab{𝑆} \aof{⟩} \afld{Domain}), if \ab u \af{≈₁} \ab v, then \ab{f} \aofld{⟨\$⟩} \ab{u} \af{≈₂} \ab{f} \aofld{⟨\$⟩} \ab{v}.
 
 In the \agdaalgebras library is defined some syntactic sugar that helps to make our formalizations easier to read and
 comprehend.
@@ -517,7 +523,7 @@ comprehend.
 The following are three examples of such syntax that we use below: if \ab{𝑨} is an algebra, then
 \begin{itemize}
 \item \aof{𝔻[ \ab{𝑨} ]} denotes the setoid \afld{Domain} \ab{𝑨},
-\item \aof{𝕌[ \ab{𝑨} ]} is the underlying carrier or ``universe'' of the algebra \ab{𝑨}, and
+\item \aof{𝕌[ \ab{𝑨} ]} is the underlying carrier of the algebra \ab{𝑨}, and
 \item \ab f \aof{̂} \ab{𝑨} denotes the interpretation in the algebra \ab{𝑨} of the operation symbol \ab f.
 \end{itemize}
          %%%
@@ -537,9 +543,6 @@ open Algebra
 _̂_ : (f : ∣ 𝑆 ∣)(𝑨 : Algebra α ρᵃ) → (∥ 𝑆 ∥ f  →  𝕌[ 𝑨 ]) → 𝕌[ 𝑨 ]
 f ̂ 𝑨 = λ a → (Interp 𝑨) ⟨$⟩ (f , a)
 \end{code}
-         %%%
-\fi      %%% END LONG VERSION ONLY SECTION
-         %%%
 
 %% -----------------------------------------------------------------------------
 \paragraph*{Universe levels of algebra types}
@@ -610,6 +613,9 @@ takes an algebra---one whose carrier set inhabits \ap{Type \ab{α}} and has an e
 Of course, this lifting operation would be useless if we couldn't establish a connection (beyond universe levels) between the input and output algebras.
 Fortunately, we can prove that universe lifting is an \defn{algebraic invariant}, which is to say that the lifted algebra
 has the same algebraic properties as the original algebra; more precisely, the input algebra and the lifted algebra are \defn{isomorphic}, as we prove below. (See \af{Lift-≅}.)
+         %%%
+\fi      %%% END LONG VERSION ONLY SECTION
+         %%%
 
 \subsection{Product Algebras}
 \label{product-algebras}
@@ -628,24 +634,30 @@ i~꞉~\ab I~\af{,}~\ab J~\as{→}~\aof{𝔻[~\ab{𝒜}~\ab i~]} is, for each \ab
 i~:~\ab I, a \ab J-tuple of elements of the domain \aof{𝔻[~\ab{𝒜}~\ab i~]}, then
 we define the interpretation of \ab f in \af{⨅}~\ab{𝒜} by (\ab{f}~\af{̂}~\af{⨅}~\ab{𝒜}) \ab a := \as{λ}~(\ab i~:~\ab I)~\as{→} (\ab{f}~\af{̂}~\ab{𝒜}~\ab i)(\ab{a}~\ab i).
 
-The following type definition formalizes the foregoing notion of \defn{product algebra} in Martin-Löf type theory.\footnote{cf.~the \ualmodule{Algebras.Func.Products} module of the \agdaalgebras library.}
+The \agdaalgebras library defines a function called \af{⨅} which formalizes the foregoing notion of \defn{product algebra} in Martin-Löf type theory.
+\ifshort
+Here we merely display this function's interface, but see the \ualmodule{Algebras.Func.Products} module for the complete definition.
 
+\else
+\fi
 \begin{code}
 
 module _ {ι : Level}{I : Type ι } where
-
  ⨅ : (𝒜 : I → Algebra α ρᵃ) → Algebra (α ⊔ ι) (ρᵃ ⊔ ι)
+\end{code}
+\ifshort\else
+\begin{code}
  Domain (⨅ 𝒜) =
-  record  { Carrier = ∀ i → 𝕌[ 𝒜 i ]
-          ; _≈_ = λ a b → ∀ i → (Setoid._≈_ 𝔻[ 𝒜 i ]) (a i)(b i)
-          ; isEquivalence =
-            record  { refl   = λ i →      IsEquivalence.refl   (isEquivalence 𝔻[ 𝒜 i ])
-                    ; sym    = λ x i →    IsEquivalence.sym    (isEquivalence 𝔻[ 𝒜 i ])(x i)
-                    ; trans  = λ x y i →  IsEquivalence.trans  (isEquivalence 𝔻[ 𝒜 i ])(x i)(y i) }}
+  record { Carrier = ∀ i → 𝕌[ 𝒜 i ]
+         ; _≈_ = λ a b → ∀ i → (_≈ˢ_ 𝔻[ 𝒜 i ]) (a i)(b i)
+         ; isEquivalence =
+            record  { refl   = λ i →      reflᵉ   (isEquivalence 𝔻[ 𝒜 i ])
+                    ; sym    = λ x i →    symᵉ    (isEquivalence 𝔻[ 𝒜 i ])(x i)
+                    ; trans  = λ x y i →  transᵉ  (isEquivalence 𝔻[ 𝒜 i ])(x i)(y i) }}
  Interp (⨅ 𝒜) ⟨$⟩ (f , a) = λ i → (f ̂ (𝒜 i)) (flip a i)
  cong (Interp (⨅ 𝒜)) (≡.refl , f=g ) = λ i → cong (Interp (𝒜 i)) (≡.refl , flip f=g i )
 \end{code}
-
+\fi
 
 
 
@@ -664,7 +676,7 @@ Suppose \ab{𝑨} and \ab{𝑩} are \ab{𝑆}-algebras. A \defn{homomorphism} (o
 (or \defn{commutes}) with all basic operations; that is,
 for every operation symbol \ab{f}~:~\af{∣ \ab{𝑆} ∣} and all tuples
 \ab{a}~:~\af{∥ \ab{𝑆} ∥}~\ab{f} \as{→} \aof{𝔻[ \ab{𝑨} ]}, the following
-equality holds: \ab{h} \aofld{⟨\$⟩} (\ab{f}~\af{̂}~\ab{𝑨}) \ab{a} \aofld{≈}
+equality holds: \ab{h} \aofld{⟨\$⟩} (\ab{f}~\af{̂}~\ab{𝑨}) \ab{a} \af{≈}
 (\ab{f}~\af{̂}~\ab{𝑩}) \as{λ} \ab{x} \as{→} \ab{h} \aofld{⟨\$⟩} (\ab{a} \ab{x}).
 
 To formalize this concept in Agda, we first define a type \af{compatible-map-op}
@@ -675,18 +687,17 @@ basic operation \ab{f}.
 \begin{code}
 
 module _ (𝑨 : Algebra α ρᵃ)(𝑩 : Algebra β ρᵇ) where
- private ov = 𝓞 ⊔ 𝓥 ; a = α ⊔ ρᵃ ; b = β ⊔ ρᵇ ; c = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ
-
- compatible-map-op : (𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]) → ∣ 𝑆 ∣ → Type (𝓥 ⊔ α ⊔ ρᵇ)
+ compatible-map-op : (𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]) → ∣ 𝑆 ∣ → Type _
  compatible-map-op h f = ∀ {a} → h ⟨$⟩ (f ̂ 𝑨) a ≈ (f ̂ 𝑩) λ x → h ⟨$⟩ (a x)
   where open Setoid 𝔻[ 𝑩 ] using ( _≈_ )
 
 \end{code}
 Generalizing over operation symbols gives the following type of compatible maps
 from (the domain of) \ab{𝐴} to (the domain of) \ab{𝑩}.
+
 \begin{code}
 
- compatible-map : (𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]) → Type (ov ⊔ α ⊔ ρᵇ)
+ compatible-map : (𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]) → Type _
  compatible-map h = ∀ {f} → compatible-map-op h f
 
 \end{code}
@@ -694,17 +705,16 @@ With this we define a record type \ar{IsHom} representing the property of being
 a homomorphism, and finally the type \af{hom} of homomorphisms from \ab{𝑨} to \ab{𝐵}.
 \begin{code}
 
- record IsHom (h : 𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]) : Type (ov ⊔ α ⊔ ρᵇ) where
-  constructor mkhom
-  field compatible : compatible-map h
+ record IsHom (h : 𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]) : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵇ) where
+  constructor mkhom ; field compatible : compatible-map h
 
- hom : Type c
+ hom : Type _
  hom = Σ (𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]) IsHom
+
 \end{code}
+Observe that an inhabitant of \af{hom} is a pair (\ab h , \ab p) whose first component is a setoid function from the domain of \ab{𝑨} to that of \ab{𝑩} and whose second component is \ab p : \ar{IsHom} \ab h, a proof that \ab h is a homomorphism.
 
-Observe that an inhabitant of \af{hom} is a pair (\ab h , \ab p) whose first component is a setoid function from the domain of \ab{𝑨} to the domain of \ab{𝐵} and whose second component is a proof, \ab p : \ar{IsHom} \ab h, that \ab h is a homomorphism.
-
-A \defn{monomorphism} (resp. \emph{epimorphism}) is an injective (resp. surjective) homomorphism.  The \agdaalgebras library defines types \ar{IsMon} and \ar{IsEpi} to represent these properties, as well as
+A \defn{monomorphism} (resp. \defn{epimorphism}) is an injective (resp. surjective) homomorphism.  The \agdaalgebras library defines types \ar{IsMon} and \ar{IsEpi} to represent these properties, as well as
 \af{mon} and \af{epi}, the types of monomorphisms and epimorphisms, respectively.
          %%%
 \ifshort %%% BEGIN SHORT VERSION ONLY
@@ -716,14 +726,14 @@ A \defn{monomorphism} (resp. \emph{epimorphism}) is an injective (resp. surjecti
          %%%
 \begin{code}
 
- record IsMon (h : 𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]) : Type (ov ⊔ a ⊔ ρᵇ) where
+ record IsMon (h : 𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]) : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ ⊔ ρᵇ) where
   field  isHom : IsHom h
          isInjective : IsInjective h
 
   HomReduct : hom
   HomReduct = h , isHom
 
- mon : Type c
+ mon : Type _
  mon = Σ (𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]) IsMon
 
 \end{code}
@@ -731,22 +741,19 @@ As with \af{hom}, the type \af{mon} is a dependent product type; each inhabitant
 
 \begin{code}
 
- record IsEpi (h : 𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]) : Type (ov ⊔ α ⊔ b) where
+ record IsEpi (h : 𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]) : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ β ⊔ ρᵇ) where
   field  isHom : IsHom h
          isSurjective : IsSurjective h
 
   HomReduct : hom
   HomReduct = h , isHom
 
- epi : Type c
+ epi : Type _
  epi = Σ (𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]) IsEpi
 \end{code}
-         %%%
-\fi      %%% END LONG VERSION ONLY SECTION
-         %%%
-%%%
-%%% BEGIN NO VERSION SECTION (the next block of code will appear in neither version of the paper)
-%%%
+
+Here are two mere utilities that are useful for translating between types.
+
 \begin{code}[hide]
 open IsHom ; open IsMon ; open IsEpi
 
@@ -758,16 +765,16 @@ module _ (𝑨 : Algebra α ρᵃ)(𝑩 : Algebra β ρᵇ) where
  epi→ontohom : epi 𝑨 𝑩 → Σ[ h ∈ hom 𝑨 𝑩 ] IsSurjective ∣ h ∣
  epi→ontohom (hh , hhE) = (hh , isHom hhE) , isSurjective hhE
 \end{code}
-%%%
-%%% END NO VERSION SECTION
-%%%
 
+\paragraph*{Composition of homomorphisms}
+         %%%
+\fi      %%% END LONG VERSION ONLY SECTION
+         %%%
 
-%\subsubsection*{Basic properties of homomorphisms}
-%Some definitions and theorems extracted from the \ualmodule{Homomorphisms.Func.Properties} module of the \agdaalgebras library.
-
-\paragraph*{Composition of homomorphisms} The composition of homomorphisms is again a homomorphism. Similarly,
-the composition of epimorphisms is again an epimorphism.
+The composition of homomorphisms is again a homomorphism, and similarly for epimorphisms (and monomorphisms).
+\ifshort
+The proofs of these facts are relatively straightforward so we omit them. When applied below, they are called \af{∘-hom} and \af{∘-epi}.
+\else
 
 \begin{code}
 
@@ -785,12 +792,6 @@ module _  {𝑨 : Algebra α ρᵃ} {𝑩 : Algebra β ρᵇ} {𝑪 : Algebra γ
   ∘-is-epi : IsEpi 𝑨 𝑩 g → IsEpi 𝑩 𝑪 h → IsEpi 𝑨 𝑪 (h ⟨∘⟩ g)
   ∘-is-epi gE hE = record  { isHom = ∘-is-hom (isHom gE) (isHom hE)
                            ; isSurjective = ∘-IsSurjective g h (isSurjective gE) (isSurjective hE) }
-\end{code}
-\ifshort\else
-         %%%
-         %%% BEGIN LONG VERSION ONLY SECTION
-         %%%
-\begin{code}
 
 module _ {𝑨 : Algebra α ρᵃ} {𝑩 : Algebra β ρᵇ} {𝑪 : Algebra γ ρᶜ} where
 
@@ -801,7 +802,8 @@ module _ {𝑨 : Algebra α ρᵃ} {𝑩 : Algebra β ρᵇ} {𝑪 : Algebra γ 
   ∘-epi (h , hepi) (g , gepi) = (g ⟨∘⟩ h) , ∘-is-epi hepi gepi
 \end{code}
 
-\paragraph*{Universe lifting of homomorphisms} First we define the identity homomorphism for setoid algebras and then we prove that the operations of lifting and lowering of a setoid algebra are homomorphisms.
+\paragraph*{Universe lifting of homomorphisms}
+Here we define the identity homomorphism for setoid algebras. Then we prove that the operations of lifting and lowering of a setoid algebra are homomorphisms.
 
 \begin{code}
 
@@ -860,9 +862,8 @@ module _ {𝑨 : Algebra α ρᵃ}{ℓ r : Level} where
 
 \paragraph*{Homomorphisms of product algebras}
 %\label{homomorphisms-of-product-algebras}
-Suppose we have an algebra \ab{𝑨}, a type \ab I : \apr{Type} \ab 𝓘, and a family \ab ℬ : \ab I \as → \ar{Algebra} \ab β \ab{𝑆} of algebras.
-We sometimes refer to the inhabitants of `I` as \emph{indices}, and call `ℬ` an \emph{indexed family of algebras}.
-If in addition we have a family `𝒽 : (i : I) → hom 𝑨 (ℬ i)` of homomorphisms, then we can construct a homomorphism from `𝑨` to the product `⨅ ℬ` in the natural way.  Here is how we implement these notions in dependent type theory.\footnote{cf.~the [Homomorphisms.Func.Products][] module of the \agdaalgebras library.}
+Suppose we have an algebra \ab{𝑨}, a type \ab I : \ap{Type} \ab{𝓘}, and a family \ab{ℬ} : \ab I \as{→} \ar{Algebra} \ab{β} \ab{ρᵇ} of algebras.
+We sometimes refer to the inhabitants of \ab{I} as \emph{indices}, and call \ab{ℬ} an \defn{indexed family of algebras}. If in addition we have a family \ab{𝒽} : (\ab i : \ab I) → \af{hom} \ab{𝑨} (\ab{ℬ} \ab i) of homomorphisms, then we can construct a homomorphism from \ab{𝑨} to the product \af{⨅} \ab{ℬ} in the natural way.  The latter is codified in dependent type theory by the function \af{⨅-hom-co} defined below.\footnote{cf.~the \ualmodule{Homomorphisms.Func.Products} module of the \agdaalgebras library.}
 
 \begin{code}
 
@@ -876,31 +877,34 @@ module _ {ι : Level}{I : Type ι}{𝑨 : Algebra α ρᵃ}(ℬ : I → Algebra 
   hhom : IsHom 𝑨 (⨅ ℬ) h
   compatible hhom = λ i → compatible ∥ 𝒽 i ∥
 \end{code}
+
+\paragraph*{Factorization of homomorphisms}
          %%%
 \fi      %%% END LONG VERSION ONLY SECTION
          %%%
 
-\paragraph*{Factorization of homomorphisms} If \ab g : \af{hom} \ab{𝑨} \ab{𝑩}, \ab h : \af{hom} \ab{𝑨} \ab{𝑪}, \ab h is
-surjective, and \af{ker} \ab h \aof{⊆} \af{ker} \ab g, then there exists
-\ab{φ} : \af{hom} \ab{𝑪} \ab{𝑩} such that \ab g = \ab{φ} \aof{∘} \ab h.
-
+Another basic but important fact about homomorphisms is the following factorization theorem: if \ab g : \af{hom} \ab{𝑨} \ab{𝑩}, \ab h : \af{hom} \ab{𝑨} \ab{𝑪}, \ab h is surjective,
+and \af{ker} \ab h \aof{⊆} \af{ker} \ab g, then there exists \ab{φ} : \af{hom} \ab{𝑪} \ab{𝑩}
+such that \ab g = \ab{φ} \aof{∘} \ab h.  The type \af{HomFactor}, defined below, formalizes this result in MLTT.
          %%%
 \ifshort %%% BEGIN SHORT VERSION ONLY
          %%%
-Here we merely give the formal statement of this theorem, but \seeunabridged or the
-\ualmodule{Homomorphisms.Func.Factor} module of the \agdaalgebras library.
+Here we merely give a formal statement of this theorem.
+%, but \seeunabridged or the\ualmodule{Homomorphisms.Func.Factor} module of the \agdaalgebras library.
          %%%
 \else\fi %%% END SHORT VERSION ONLY
 
+\begin{AgdaAlign}
 \begin{code}
 
 module _ {𝑨 : Algebra α ρᵃ}(𝑩 : Algebra β ρᵇ){𝑪 : Algebra γ ρᶜ}
          (gh : hom 𝑨 𝑩)(hh : hom 𝑨 𝑪) where
- open Setoid 𝔻[ 𝑩 ] using ()         renaming ( _≈_ to _≈₂_ ; sym to sym₂ )
- open Setoid 𝔻[ 𝑪 ] using ( trans )  renaming ( _≈_ to _≈₃_ ; sym to sym₃ )
+ open Setoid 𝔻[ 𝑩 ] using () renaming ( _≈_ to _≈₂_ )
+ open Setoid 𝔻[ 𝑪 ] using () renaming ( _≈_ to _≈₃_ )
  private gfunc = ∣ gh ∣ ; g = _⟨$⟩_ gfunc ; hfunc = ∣ hh ∣ ; h = _⟨$⟩_ hfunc
 
- HomFactor :  kernel _≈₃_ h ⊆ kernel _≈₂_ g → IsSurjective hfunc
+ HomFactor :  kernel _≈₃_ h ⊆ kernel _≈₂_ g
+  →           IsSurjective hfunc
   →           Σ[ φ ∈ hom 𝑪 𝑩 ] ∀ a → g a ≈₂ ∣ φ ∣ ⟨$⟩ h a
 \end{code}
 \ifshort %%%
@@ -918,18 +922,19 @@ module _ {𝑨 : Algebra α ρᵃ}(𝑩 : Algebra β ρᵇ){𝑪 : Algebra γ ρ
   η : ∀ {c} → h (h⁻¹ c) ≈₃ c
   η = InvIsInverseʳ hE
 
+  open Setoid 𝔻[ 𝑪 ] using ( sym ; trans )
   ζ : ∀{x y} → x ≈₃ y → h (h⁻¹ x) ≈₃ h (h⁻¹ y)
-  ζ xy = trans η (trans xy (sym₃ η))
+  ζ xy = trans η (trans xy (sym η))
 
   φmap : 𝔻[ 𝑪 ] ⟶ 𝔻[ 𝑩 ]
   _⟨$⟩_ φmap = g ∘ h⁻¹
   cong φmap = Khg ∘ ζ
+
   open _⟶_ φmap using () renaming (cong to φcong)
 
   gφh : (a : 𝕌[ 𝑨 ]) → g a ≈₂ φmap ⟨$⟩ h a
-  gφh a = Khg (sym₃ η)
+  gφh a = Khg (sym η)
 
-  open SetoidReasoning 𝔻[ 𝑩 ]
   φcomp : compatible-map 𝑪 𝑩 φmap
   φcomp {f}{c} =
    begin
@@ -937,7 +942,7 @@ module _ {𝑨 : Algebra α ρᵃ}(𝑩 : Algebra β ρᵇ){𝑪 : Algebra γ ρ
     g(h⁻¹(    (f ̂ 𝑪)  (h ∘    h⁻¹  ∘  c  )))   ≈˘⟨  φcong (compatible ∥ hh ∥)                   ⟩
     g(h⁻¹(h(  (f ̂ 𝑨)  (       h⁻¹  ∘  c  ))))  ≈˘⟨  gφh ((f ̂ 𝑨)(h⁻¹ ∘ c))                      ⟩
     g(        (f ̂ 𝑨)  (       h⁻¹  ∘  c  ))    ≈⟨   compatible ∥ gh ∥                           ⟩
-              (f ̂ 𝑩)  (g ∘ (  h⁻¹  ∘  c  ))    ∎
+              (f ̂ 𝑩)  (g ∘ (  h⁻¹  ∘  c  ))    ∎ where open SetoidReasoning 𝔻[ 𝑩 ]
 
   φhom : IsHom 𝑪 𝑩 φmap
   compatible φhom = φcomp
@@ -945,90 +950,93 @@ module _ {𝑨 : Algebra α ρᵃ}(𝑩 : Algebra β ρᵇ){𝑪 : Algebra γ ρ
          %%%
 \fi      %%% END LONG VERSION ONLY SECTION
          %%%
-
+\end{AgdaAlign}
 
 \paragraph*{Isomorphisms}
 %\label{isomorphisms}
 
-Two structures are \emph{isomorphic} provided there are homomorphisms going back and forth between them which compose to the identity map.
-
+Two structures are \defn{isomorphic} provided there are homomorphisms going back and forth between them which compose to the identity map.
          %%%
 \ifshort %%% BEGIN SHORT VERSION ONLY
          %%%
 The \agdaalgebras library's \ar{\au{}≅\au{}} type codifies the definition of isomorphism, as well as some obvious consequences.  Here we display only the core part of this record type, but \seeunabridged or the \ualmodule{Homomorphisms.Func.Isomorphisms} module of the \agdaalgebras library.
          %%%
-\else\fi %%% END SHORT VERSION ONLY
+\else    %%% BEGIN LONG VERSION ONLY
          %%%
-
+This notion is formalized in the \agdaalgebras library as the record type \ar{\au{}≅\au{}}, whose definition we present below.  Note that the definition includes statements and proofs of some easy consequences---namely, that the maps back-and-forth are bijective. This makes it easy to apply these facts when they are needed.
+\fi %%% END SHORT VERSION ONLY
+    %%%
 \begin{code}
 
 module _ (𝑨 : Algebra α ρᵃ) (𝑩 : Algebra β ρᵇ) where
- open Setoid 𝔻[ 𝑨 ] using ( _≈_ ; sym ; trans )
- open Setoid 𝔻[ 𝑩 ] using () renaming ( _≈_ to _≈ᴮ_ ; sym to symᵇ ; trans to transᵇ)
+ open Setoid 𝔻[ 𝑨 ] using ( _≈_ )
+ open Setoid 𝔻[ 𝑩 ] using () renaming ( _≈_ to _≈ᴮ_ )
 
- record _≅_ : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ β ⊔ ρᵃ ⊔ ρᵇ ) where
-  constructor mkiso
-  field
-   to : hom 𝑨 𝑩
-   from : hom 𝑩 𝑨
-   to∼from : ∀ b → ∣ to ∣    ⟨$⟩ (∣ from ∣  ⟨$⟩ b)  ≈ᴮ b
-   from∼to : ∀ a → ∣ from ∣  ⟨$⟩ (∣ to ∣    ⟨$⟩ a)  ≈ a
+ record _≅_ : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ ) where
+  constructor  mkiso
+  field        to : hom 𝑨 𝑩
+               from : hom 𝑩 𝑨
+               to∼from : ∀ b → ∣ to ∣    ⟨$⟩ (∣ from ∣  ⟨$⟩ b)  ≈ᴮ b
+               from∼to : ∀ a → ∣ from ∣  ⟨$⟩ (∣ to ∣    ⟨$⟩ a)  ≈ a
+
 \end{code}
 \ifshort %%%
 \else    %%% BEGIN LONG VERSION ONLY
          %%%
 \begin{code}
-
   toIsSurjective : IsSurjective ∣ to ∣
-  toIsSurjective {y} = eq (∣ from ∣ ⟨$⟩ y) (symᵇ (to∼from y))
+  toIsSurjective {y} = eq (∣ from ∣ ⟨$⟩ y) (sym (to∼from y))
+   where open Setoid 𝔻[ 𝑩 ] using ( sym )
 
   toIsInjective : IsInjective ∣ to ∣
-  toIsInjective {x} {y} xy = Goal
+  toIsInjective {x}{y} xy = trans (sym (from∼to x)) (trans ξ (from∼to y))
    where
+   open Setoid 𝔻[ 𝑨 ] using ( sym ; trans )
    ξ : ∣ from ∣ ⟨$⟩ (∣ to ∣ ⟨$⟩ x) ≈ ∣ from ∣ ⟨$⟩ (∣ to ∣ ⟨$⟩ y)
    ξ = cong ∣ from ∣ xy
-   Goal : x ≈ y
-   Goal = trans (sym (from∼to x)) (trans ξ (from∼to y))
 
   fromIsSurjective : IsSurjective ∣ from ∣
-  fromIsSurjective {y} = eq (∣ to ∣ ⟨$⟩ y) (sym (from∼to y))
+  fromIsSurjective {x} = eq (∣ to ∣ ⟨$⟩ x) (sym (from∼to x))
+   where open Setoid 𝔻[ 𝑨 ] using ( sym )
 
   fromIsInjective : IsInjective ∣ from ∣
-  fromIsInjective {x} {y} xy = Goal
+  fromIsInjective {x}{y} xy = trans (sym (to∼from x)) (trans ξ (to∼from y))
    where
+   open Setoid 𝔻[ 𝑩 ] using ( sym ; trans )
    ξ : ∣ to ∣ ⟨$⟩ (∣ from ∣ ⟨$⟩ x) ≈ᴮ ∣ to ∣ ⟨$⟩ (∣ from ∣ ⟨$⟩ y)
    ξ = cong ∣ to ∣ xy
-   Goal : x ≈ᴮ y
-   Goal = transᵇ (symᵇ (to∼from x)) (transᵇ ξ (to∼from y))
 
 open _≅_
 
 ≅-refl : Reflexive (_≅_ {α}{ρᵃ})
-≅-refl {α}{ρᵃ}{𝑨} = mkiso 𝒾𝒹 𝒾𝒹 (λ b → refl) λ a → refl
- where open Setoid 𝔻[ 𝑨 ] using ( refl )
-
+≅-refl {α}{ρᵃ}{𝑨} = mkiso 𝒾𝒹 𝒾𝒹 (λ b → refl) λ a → refl where open Setoid 𝔻[ 𝑨 ] using ( refl )
 ≅-sym : Sym (_≅_{β}{ρᵇ}) (_≅_{α}{ρᵃ})
 ≅-sym φ = mkiso (from φ) (to φ) (from∼to φ) (to∼from φ)
 
-≅-trans : Trans (_≅_ {α}{ρᵃ})(_≅_{β}{ρᵇ})(_≅_{α}{ρᵃ}{γ}{ρᶜ})
+≅-trans : Trans (_≅_ {α}{ρᵃ}) (_≅_{β}{ρᵇ}) (_≅_{α}{ρᵃ}{γ}{ρᶜ})
 ≅-trans {ρᶜ = ρᶜ}{𝑨}{𝑩}{𝑪} ab bc = mkiso f g τ ν
  where
+  f : hom 𝑨 𝑪                ;  g : hom 𝑪 𝑨
+  f = ∘-hom (to ab) (to bc)  ;  g = ∘-hom (from bc) (from ab)
+
   open Setoid 𝔻[ 𝑨 ] using ( _≈_ ; trans )
   open Setoid 𝔻[ 𝑪 ] using () renaming ( _≈_ to _≈ᶜ_ ; trans to transᶜ )
-  f : hom 𝑨 𝑪
-  f = ∘-hom (to ab) (to bc)
-  g : hom 𝑪 𝑨
-  g = ∘-hom (from bc) (from ab)
+
   τ : ∀ b → ∣ f ∣ ⟨$⟩ (∣ g ∣ ⟨$⟩ b) ≈ᶜ b
   τ b = transᶜ (cong ∣ to bc ∣ (to∼from ab (∣ from bc ∣ ⟨$⟩ b))) (to∼from bc b)
+
   ν : ∀ a → ∣ g ∣ ⟨$⟩ (∣ f ∣ ⟨$⟩ a) ≈ a
   ν a = trans (cong ∣ from ab ∣ (from∼to bc (∣ to ab ∣ ⟨$⟩ a))) (from∼to ab a)
 
 \end{code}
 
-Fortunately, the lift operation preserves isomorphism (i.e., it's an \emph{algebraic invariant}). As our focus is universal algebra, this is important and is what makes the lift operation a workable solution to the technical problems that arise from the noncumulativity of Agda's universe hierarchy.
+Fortunately, the lift operation \af{Lift-Alg} that we defined above is an \emph{algebraic invariant}, by which we mean that isomorphism classes of algebras are closed under \af{Lift-Alg}.
+As our focus is universal algebra, this crucial property is why we can use the lift operation
+to solve the technical problems arising from the noncumulativity of Agda's universe
+hierarchy without changing the algebraic semantics.
 
-\begin{code}[hide]
+\begin{code}
+
 module _ {𝑨 : Algebra α ρᵃ}{ℓ : Level} where
  Lift-≅ˡ : 𝑨 ≅ (Lift-Algˡ 𝑨 ℓ)
  Lift-≅ˡ = mkiso ToLiftˡ FromLiftˡ (ToFromLiftˡ{𝑨 = 𝑨}) (FromToLiftˡ{𝑨 = 𝑨}{ℓ})
@@ -1038,48 +1046,41 @@ module _ {𝑨 : Algebra α ρᵃ}{ℓ : Level} where
 
 Lift-≅ : {𝑨 : Algebra α ρᵃ}{ℓ ρ : Level} → 𝑨 ≅ (Lift-Alg 𝑨 ℓ ρ)
 Lift-≅ = ≅-trans Lift-≅ˡ Lift-≅ʳ
+
 \end{code}
          %%%
 \fi      %%% END LONG VERSION ONLY SECTION
          %%%
 
-\paragraph*{Homomorphic Images}
-%\label{homomorphic-images}
-We begin with what for our purposes is the most useful way to represent the class of \emph{homomorphic images} of an algebra in dependent type theory.\footnote{cf.~the \ualmodule{Homomorphisms.Func.HomomorphicImages} module of the \agdaalgebras library.}
+We conclude this section on homomorphisms with what seems, for our purposes, the most useful way to represent the class of \emph{homomorphic images} of an algebra in dependent type theory.
+(The first function, \af{ov}, merely provides a handy shorthand for universe levels.)
+%\footnote{cf.~the \ualmodule{Homomorphisms.Func.HomomorphicImages} module of the \agdaalgebras library.}
 
 \begin{code}
+
 ov : Level → Level
 ov α = 𝓞 ⊔ 𝓥 ⊔ lsuc α
 
-_IsHomImageOf_ : (𝑩 : Algebra β ρᵇ)(𝑨 : Algebra α ρᵃ) → Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ β ⊔ ρᵃ ⊔ ρᵇ)
+_IsHomImageOf_ : (𝑩 : Algebra β ρᵇ)(𝑨 : Algebra α ρᵃ) → Type _
 𝑩 IsHomImageOf 𝑨 = Σ[ φ ∈ hom 𝑨 𝑩 ] IsSurjective ∣ φ ∣
 
 HomImages : Algebra α ρᵃ → Type (α ⊔ ρᵃ ⊔ ov (β ⊔ ρᵇ))
 HomImages {β = β}{ρᵇ = ρᵇ} 𝑨 = Σ[ 𝑩 ∈ Algebra β ρᵇ ] 𝑩 IsHomImageOf 𝑨
-
 \end{code}
-These types should be self-explanatory, but just to be sure, let's describe the
-Sigma type appearing in the second definition. Given an \ab{𝑆}-algebra \ab{𝑨} :
-\ar{Algebra} \ab{α} \ab{ρ}, the type \af{HomImages} \ab{𝑨} denotes the class of
-algebras \ab{𝑩} : \ar{Algebra} \ab{β} \ab{ρ} with a map \ab{φ} :
-\aof{∣~\ab{𝑨}~∣} \as{→} \aof{∣~\ab{𝑩}~∣} such that \ab{φ} is a surjective
-homomorphism.
+\ifshort %%%
+\else    %%% BEGIN LONG VERSION ONLY
+         %%%
 
-\begin{code}[hide]
-module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
+\medskip
 
- Lift-HomImage-lemma : ∀{γ} → (Lift-Alg 𝑨 γ γ) IsHomImageOf 𝑩 → 𝑨 IsHomImageOf 𝑩
- Lift-HomImage-lemma {γ} φ = ∘-hom ∣ φ ∣ (from Lift-≅) ,
-                             ∘-IsSurjective _ _ ∥ φ ∥ (fromIsSurjective (Lift-≅{𝑨 = 𝑨}))
-
-module _ {𝑨 𝑨' : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
-
- HomImage-≅ : 𝑨 IsHomImageOf 𝑨' → 𝑨 ≅ 𝑩 → 𝑩 IsHomImageOf 𝑨'
- HomImage-≅ φ A≅B = ∘-hom ∣ φ ∣ (to A≅B) , ∘-IsSurjective _ _ ∥ φ ∥ (toIsSurjective A≅B)
-\end{code}
-
-
-
+\noindent These types should be self-explanatory, but just to be sure, we pause
+to describe the semantics of the Sigma type appearing in the definition of \af{HomImages}.
+If \ab{𝑨} : \af{Algebra} \ab{α} \ab{ρᵃ} is an \ab{𝑆}-algebra, then \af{HomImages} \ab{𝑨}
+denotes the type of pairs (\ab{𝑩} \aic{,} \ab p) such that \ab{𝑩} : \ar{Algebra} \ab{β} \ab{ρᵇ}
+and \ab p is a proof that there exists a homomorphism from \ab{𝑨} onto \ab{𝑩}.
+         %%%
+\fi      %%% END LONG VERSION ONLY SECTION
+         %%%
 
 %% -------------------------------------------------------------------------------------
 
@@ -1087,96 +1088,115 @@ module _ {𝑨 𝑨' : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
 \label{subalgebras}
 \paragraph*{Basic definitions}
 %\label{subalgebras-basic-definitions}
+Given \ab{𝑆}-algebras \ab{𝑨} and \ab{𝑩}, we say that \ab{𝑨} is a \defn{subalgebra} of \ab{𝑨} and write
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≤}}\AgdaSpace{}%
+\AgdaBound{𝑩}
+just in case \ab{𝑨} can be \emph{homomorphically embedded} in \ab{𝑩}; in other terms,
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{≤}}\AgdaSpace{}%
+\AgdaBound{𝑩}
+iff there exists a monomorphism \ab{h} : \af{mon} \ab{𝑨} \ab{𝑩} from \ab{𝑨} to \ab{𝑩}.
+
+The following definition codifies the binary subalgebra relation
+\AgdaOperator{\AgdaFunction{\au{}≤\au{}}} on the class of \ab{𝑆}-algebras in MLTT.
 
 \begin{code}
 
-_≤_ : Algebra α ρᵃ → Algebra β ρᵇ → Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
+_≤_ : Algebra α ρᵃ → Algebra β ρᵇ → Type _
 𝑨 ≤ 𝑩 = Σ[ h ∈ hom 𝑨 𝑩 ] IsInjective ∣ h ∣
 \end{code}
 
-\paragraph*{Basic properties}
-%\label{subalgebras-basic-properties}
+%\paragraph*{Basic properties}
+Obviously the subalgebra relation is reflexive by the identity monomorphism, as well as transitive since composition of monomorphisms is a monomorphism.  Here we merely give the formal statements, but omit the easy proofs, of these results.
 
 \begin{code}
 
-≤-reflexive : {𝑨 : Algebra α ρᵃ} → 𝑨 ≤ 𝑨
+≤-reflexive   :  {𝑨 : Algebra α ρᵃ} → 𝑨 ≤ 𝑨
+
+≤-transitive  :  {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}{𝑪 : Algebra γ ρᶜ}
+ →               𝑨 ≤ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
+
+\end{code}
+\begin{code}[hide]
 ≤-reflexive {𝑨 = 𝑨} = 𝒾𝒹 , id
 
-mon→≤ : {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} → mon 𝑨 𝑩 → 𝑨 ≤ 𝑩
-mon→≤ {𝑨 = 𝑨}{𝑩} x = mon→intohom 𝑨 𝑩 x
-
-module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}{𝑪 : Algebra γ ρᶜ} where
- ≤-trans : 𝑨 ≤ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
- ≤-trans ( f , finj ) ( g , ginj ) = (∘-hom f g ) , ∘-IsInjective ∣ f ∣ ∣ g ∣ finj ginj
-
- ≅-trans-≤ : 𝑨 ≅ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
- ≅-trans-≤ A≅B (h , hinj) = (∘-hom (to A≅B) h) , (∘-IsInjective ∣ to A≅B ∣ ∣ h ∣ (toIsInjective A≅B) hinj)
+≤-transitive ( f , finj ) ( g , ginj ) = (∘-hom f g ) , ∘-IsInjective ∣ f ∣ ∣ g ∣ finj ginj
 \end{code}
 
-\paragraph*{Products of subalgebras}
-%\label{products-of-subalgebras}
-
+If \ab{𝒜} : \ab I → \af{Algebra} \ab{α} \ab{ρᵃ} and
+\ab{ℬ} : \ab I → \af{Algebra} \ab{β} \ab{ρᵇ} are families of \ab{𝑆}-algebras
+such that \ab{ℬ} \ab i \af{≤} \ab{𝒜} \ab i for every \ab i : \ab I, then
+\af{⨅} \ab{ℬ} is a subalgebra of \af{⨅} \ab{𝒜}.
+\ifshort
+We omit the straightforward proof and merely assign the formalization of this result the name \af{⨅-≤} for future reference.
+\else
 \begin{code}
-
 module _ {ι : Level} {I : Type ι}{𝒜 : I → Algebra α ρᵃ}{ℬ : I → Algebra β ρᵇ} where
-
  ⨅-≤ : (∀ i → ℬ i ≤ 𝒜 i) → ⨅ ℬ ≤ ⨅ 𝒜
  ⨅-≤ B≤A = (hfunc , hhom) , hM
   where
   hi : ∀ i → hom (ℬ i) (𝒜 i)
   hi i = ∣ B≤A i ∣
-
   hfunc : 𝔻[ ⨅ ℬ ] ⟶ 𝔻[ ⨅ 𝒜 ]
   (hfunc ⟨$⟩ x) i = ∣ hi i ∣ ⟨$⟩ x i
   cong hfunc = λ xy i → cong ∣ hi i ∣ (xy i)
-
   hhom : IsHom (⨅ ℬ) (⨅ 𝒜) hfunc
   compatible hhom = λ i → compatible ∥ hi i ∥
-
   hM : IsInjective hfunc
   hM = λ xy i → ∥ B≤A i ∥ (xy i)
+
 \end{code}
+\fi
+We conclude this brief subsection on subalgebras with two easy facts that will be useful later, when we prove the HSP theorem. The first merely converts a monomorphism into a pair in the subalgebra relation
+ while the second is an algebraic invariance property of \AgdaOperator{\AgdaFunction{\au{}≤\au{}}}.
+\ifshort
+(Proofs omitted.)
+\else\fi
 
+\begin{code}
 
+mon→≤      :  {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} → mon 𝑨 𝑩 → 𝑨 ≤ 𝑩
 
+≅-trans-≤  :  {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}{𝑪 : Algebra γ ρᶜ}
+ →            𝑨 ≅ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
+\end{code}
+\ifshort\else
+\begin{code}
+≅-trans-≤ A≅B (h , hinj) = (∘-hom (to A≅B) h) , (∘-IsInjective ∣ to A≅B ∣ ∣ h ∣ (toIsInjective A≅B) hinj)
+
+mon→≤ {𝑨 = 𝑨}{𝑩} x = mon→intohom 𝑨 𝑩 x
+\end{code}
+\fi
 
 %% -------------------------------------------------------------------------------------
 
 \subsection{Terms}
 \label{terms}
 \paragraph*{Basic definitions}
-Fix a signature \ab{𝑆} and let \ab X denote an arbitrary nonempty collection of variable symbols. Assume the symbols in \ab X are distinct from the operation symbols of \ab{𝑆}, that is \ab X \aof{∩} \aof{∣} \ab{𝑆} \aof{∣} = ∅.
-By a \emph{word} in the language of \ab{𝑆}, we mean a nonempty, finite sequence of members of \ab X \aof{∪} \aof{∣} \ab{𝑆} \aof{∣}. We denote the concatenation of such sequences by simple juxtaposition.
-Let \ab{S₀} denote the set of nullary operation symbols of \ab{𝑆}. We define by induction on \ab n the sets \ab{𝑇ₙ} of \emph{words} over \ab X \aof{∪} \aof{∣} \ab{𝑆} \aof{∣} as follows (cf.~\cite[Def. 4.19]{Bergman:2012}):
-\begin{enumerate}
-\item \ab{𝑇₀} := \ab X \aof{∪} \ab{S₀}, and
-\item \ab{𝑇ₙ₊₁} := \ab{𝑇ₙ} \aof{∪} \ab{𝒯ₙ}.
-\end{enumerate}
-where \ab{𝒯ₙ} is the collection of all \ab f \ab t such that \ab f : \aof{∣} \ab{𝑆} \aof{∣} and \ab t : \aof{∥} \ab{𝑆} \aof{∥} \ab f \as{→} \ab{𝑇ₙ}. (Recall, \aof{∥} \ab{𝑆} \aof{∥} \ab f is the arity of the operation symbol \ab f.)
+Fix a signature \ab{𝑆} and let \ab X denote an arbitrary nonempty collection of variable symbols.
+(The chosen collection of variable symbols is sometimes called the \defn{context}.)
+Assume the symbols in \ab X are distinct from the operation symbols of \ab{𝑆}, that is \ab X \aof{∩} \aof{∣} \ab{𝑆} \aof{∣} = ∅.
 
-We define the collection of \emph{terms} in the signature \ab{𝑆} over \ab X by \ad{Term} \ab X := \aof{⋃ₙ} \ab{𝑇ₙ}. By an 𝑆-\emph{term} we mean a term in the language of \ab{𝑆}.
+A \defn{word} in the language of \ab{𝑆} is a finite sequence of members of \ab X \aof{∪} \aof{∣} \ab{𝑆} \aof{∣}. We denote the concatenation of such sequences by simple juxtaposition.
+Let \ab{S₀} denote the set of nullary operation symbols of \ab{𝑆}. We define by induction on \ab n the sets \ab{𝑇ₙ} of \emph{words} over \ab X \aof{∪} \aof{∣} \ab{𝑆} \aof{∣} as follows (cf.~\cite[Def. 4.19]{Bergman:2012}): \ab{𝑇₀} := \ab X \aof{∪} \ab{S₀} and \ab{𝑇ₙ₊₁} := \ab{𝑇ₙ} \aof{∪} \ab{𝒯ₙ},
+where \ab{𝒯ₙ} is the collection of all \ab f \ab t such that \ab f : \aof{∣} \ab{𝑆} \aof{∣} and \ab t : \aof{∥} \ab{𝑆} \aof{∥} \ab f \as{→} \ab{𝑇ₙ}. (Recall, \aof{∥} \ab{𝑆} \aof{∥} \ab f is the arity of the operation symbol \ab f.) An \ab{𝑆}-\defn{term} is a term in the language of \ab{𝑆} and the collection of all \ab{𝑆}-\defn{terms} in the context \ab X is given by \ad{Term} \ab X := \aof{⋃ₙ} \ab{𝑇ₙ}.
 
-The definition of \ad{Term} \ab X is recursive, indicating that an inductive type could be used to represent the semantic notion of terms in type theory. Indeed, such a representation is given by the following inductive type.
+As even its informal definition of \ad{Term} \ab X is recursive, it should come as no surprise that
+the semantics of terms can be faithfully represented in type theory as an inductive type.
+Indeed, here is such a representation.
 
 \begin{code}
 
 data Term (X : Type χ ) : Type (ov χ)  where
  ℊ : X → Term X
  node : (f : ∣ 𝑆 ∣)(t : ∥ 𝑆 ∥ f → Term X) → Term X
-open Term
 
 \end{code}
+This is a very basic inductive type that represents each term as a tree with an operation symbol at each \aic{node} and a variable symbol at each leaf (\aic{ℊ}); hence the constructor names (\aic{ℊ} for ``generator'' and \aic{node} for ``node''). We will enrich this type with an inductive type \ad{\au{}≃\au{}} representing equality of terms, and then we will package up \ad{Term}, \ad{\au{}≃\au{}}, and a proof that \ad{\au{}≃\au{}} is an equivalence relation into a setoid of \ab{𝑆}-terms.
+Ultimately we will use this term setoid as the domain of an algebra---the (absolutely free) \emph{term algebra} in the signature \ab{𝑆}.
 
-This is a very basic inductive type that represents each term as a tree with an operation symbol at each \aic{node} and a variable symbol at each leaf (\aic{ℊ}); hence the constructor names (\aic{ℊ} for ``generator'' and \aic{node} for ``node'').
-
-\textbf{Notation}. As usual, the type \ab X represents an arbitrary collection of variable symbols. Recall, \af{ov} \ab{χ} is our shorthand notation for the universe level \ab{𝓞} \aop{⊔} \ab{𝓥} \aop{⊔} \ap{lsuc} \ab{χ}.
-\paragraph*{Equality of terms}
-%\label{equality-of-terms}
-We take a different approach here, using Setoids instead of quotient types.
-That is, we will define the collection of terms in a signature as a setoid
-with a particular equality-of-terms relation, which we must define.
-Ultimately we will use this to define the (absolutely free) term algebra
-as a Algebra whose carrier is the setoid of terms.
+First, the equality-of-terms type is defined as follows.
 
 \begin{code}
 
@@ -1187,23 +1207,24 @@ module _ {X : Type χ } where
   gnl : ∀ {f}{s t : ∥ 𝑆 ∥ f → Term X} → (∀ i → (s i) ≃ (t i)) → (node f s) ≃ (node f t)
 
 \end{code}
-
-It is easy to show that the equality-of-terms relation \AgdaOperator{\AgdaDatatype{\AgdaUnderscore{}≃\AgdaUnderscore{}}} is an equivalence relation, so we omit the formal proof. (See the \ualmodule{Terms.Func.Basic} module of the \agdaalgebras library for details.)
+Next, we would show that equality of terms so defined is an equivalence relation, but the proof
+of this fact is trivial, so we omit it and merely give the fact a name; call it \af{≃-isEquiv}.
 
 \begin{code}[hide]
- ≃-isRefl : Reflexive _≃_
+
+ ≃-isRefl   : Reflexive      _≃_
  ≃-isRefl {ℊ _} = rfl ≡.refl
  ≃-isRefl {node _ _} = gnl (λ _ → ≃-isRefl)
 
- ≃-isSym : Symmetric _≃_
+ ≃-isSym    : Symmetric      _≃_
  ≃-isSym (rfl x) = rfl (≡.sym x)
  ≃-isSym (gnl x) = gnl (λ i → ≃-isSym (x i))
 
- ≃-isTrans : Transitive _≃_
+ ≃-isTrans  : Transitive     _≃_
  ≃-isTrans (rfl x) (rfl y) = rfl (≡.trans x y)
  ≃-isTrans (gnl x) (gnl y) = gnl (λ i → ≃-isTrans (x i) (y i))
 
- ≃-isEquiv : IsEquivalence _≃_
+ ≃-isEquiv  : IsEquivalence  _≃_
  ≃-isEquiv = record { refl = ≃-isRefl ; sym = ≃-isSym ; trans = ≃-isTrans }
 \end{code}
 
@@ -1212,26 +1233,20 @@ It is easy to show that the equality-of-terms relation \AgdaOperator{\AgdaDataty
 %\label{the-term-algebra}
 For a given signature \ab{𝑆}, if the type \ad{Term} \ab X is nonempty
 (equivalently, if \ab X or \aof{∣} \ab{𝑆} \aof{∣} is nonempty), then we can
-define an algebraic structure, denoted by \T{X} and called the \emph{term
-  algebra in the signature} \ab{𝑆} \emph{over} \ab X.  Terms are viewed as
+define an algebraic structure, denoted by \T{X} and called the \defn{term
+  algebra in the signature} \ab{𝑆} \defn{over} \ab X.  Terms are viewed as
 acting on other terms, so both the domain and basic operations of the algebra
 are the terms themselves.
 
-
-\begin{itemize}
-\item For each operation symbol \ab f : \aof{∣} \ab{𝑆} \aof{∣}, denote by \ab f
-  \aof{̂} (\T{X}) the operation on \ad{Term} \ab X that maps a tuple \ab t :
-  \aof{∥} \ab{𝑆} \aof{∥} \ab f \as{→} \aof{∣} \T{X} \aof{∣} to the formal term \ab f \ab t.
-\item Define \T{X} to be the algebra with universe \aof{∣} \T{X} \aof{∣} :=
-  \ad{Term} \ab X and operations \ab f \aof{̂} (\T{X}), one for each symbol
-  \ab f in \aof{∣} \ab{𝑆} \aof{∣}.
-\end{itemize}
-
-In \agda the term algebra can be defined as simply as one might hope.
+For each operation symbol \ab f : \aof{∣} \ab{𝑆} \aof{∣}, we denote by \ab f
+\aof{̂} \T{X} the operation on \ad{Term} \ab X that maps each tuple of terms, say, \ab t :
+  \aof{∥} \ab{𝑆} \aof{∥} \ab f \as{→} \ad{Term} \ab X, to the formal term \ab f \ab t.
+We let \T{X} denote the term algebra
+ in \ab{𝑆} over \ab X; it has universe \ad{Term} \ab X and operations \ab f \aof{̂} \T{X}, one for each symbol \ab f in \aof{∣} \ab{𝑆} \aof{∣}. Finally, we formalize this notion of term algebra in \agda as follows.
 
 \begin{code}
 
-TermSetoid : (X : Type χ) → Setoid (ov χ) (ov χ)
+TermSetoid : (X : Type χ) → Setoid _ _
 TermSetoid X = record { Carrier = Term X ; _≈_ = _≃_ ; isEquivalence = ≃-isEquiv }
 
 𝑻 : (X : Type χ) → Algebra (ov χ) (ov χ)
@@ -1240,17 +1255,21 @@ Algebra.Interp (𝑻 X) ⟨$⟩ (f , ts) = node f ts
 cong (Algebra.Interp (𝑻 X)) (≡.refl , ss≃ts) = gnl ss≃ts
 \end{code}
 
-\paragraph*{Interpretation of terms}
-%\label{interpretation-of-terms}
+\paragraph*{Environments and the interpretation of terms therein}
+In this section, we formalize the notions \emph{environment} and \emph{interpretation of terms} in an algebra, evaluated in an environment. The approach to formalizing these notions, as well as the Agda code presented in this subsection, is based on similar code developed by Andreas Abel to formalize Birkhoff's completeness theorem.\footnote{See \abel.}
 
-The approach to terms and their interpretation in this module was inspired by
-Andreas Abel's formal proof of Birkhoff's completeness theorem.\footnote{See \abel.}
+\ifshort\else
+Recall that the domain of an algebra \ab{𝑨} is a setoid, which we denote by \af{𝔻[ \ab{𝑨} ]}, whose \afld{Carrier} is the universe of the algebra, \af{𝕌[ \ab{𝑨} ]}, and whose equivalence relation represents equality of elements in \af{𝕌[ \ab{𝑨} ]}.
+\fi
 
-A substitution from \ab X to \ab Y associates a term in \ab X with each variable in \ab Y.  The definition of \af{Sub} given here is essentially the same as the one given by Andreas Abel, as is the recursive definition of the syntax \ab t \af{[} \ab{σ} \af{]} , which denotes a term \ab t applied to a substitution \ab{σ}.
+Fix a signature \ab{𝑆}, a context of variable symbols \ab X, and an \ab{𝑆}-algebra \ab{𝑨}. An \defn{environment} for these data is a function \ab{ρ} : \ab X \as{→} \af{𝕌[ \ab{𝑨} ]} which assigns a value in the universe to each variable symbol in the context.
+We represent the notion of environment in Agda using a function, \af{Env}, which takes an algebra \ab{𝑨} and a context \ab{X} and returns a setoid whose \afld{Carrier} has type \ab X \as{→} \af{𝕌[ \ab{𝑨} ]} and whose equivalence relation is pointwise equality of functions in \ab X \as{→} \af{𝕌[ \ab{𝑨} ]} (relative to the setoid equality of \af{𝔻[ \ab{𝑨} ]}).
+
+Before defining the \af{Env} function (which will depend on a specific algebra) we first define a substitution from one context, say, \ab X, to another \ab Y, which assigns a term in \ab X to each symbol in \ab Y.  The definition of \af{Sub} (which does not depend on a specific algebra) is a slight modification of the one given by Andreas Abel (\textit{op.~cit.}), as is the recursive definition of the syntax \ab t \af{[} \ab{σ} \af{]}, which denotes a term \ab t applied to a substitution \ab{σ}.
 
 \begin{code}
 
-Sub : Type χ → Type χ → Type (ov χ)
+Sub : Type χ → Type χ → Type _
 Sub X Y = (y : Y) → Term X
 
 _[_] : {X Y : Type χ}(t : Term Y) (σ : Sub X Y) → Term X
@@ -1259,7 +1278,8 @@ _[_] : {X Y : Type χ}(t : Term Y) (σ : Sub X Y) → Term X
 
 \end{code}
 
-An environment for an algebra \ab{𝑨} in a context \ab X is a map that assigns to each variable \AgdaTyped{x}{X} an element in the domain of \ab{𝑨}, packaged together with an equality of environments, which is simply pointwise equality (relatively to the setoid equality of the underlying domain of \ab{𝑨}).
+Now we are ready to define the aforementioned environment function \af{Env}
+as well as the recursive function \af{⟦\au{}⟧} which defines the \defn{interpretation} of a term in a given algebra, \emph{evaluated} in a given environment.  Since the next few definitions are relative to a certain fixed algebra, we put them inside a submodule called \am{Environment} so that later, when we load the environment, we can associate its definitions with different algebras.
 
 \begin{code}
 
@@ -1267,31 +1287,29 @@ module Environment (𝑨 : Algebra α ℓ) where
  open Setoid 𝔻[ 𝑨 ] using ( _≈_ ; refl ; sym ; trans )
  Env : Type χ → Setoid _ _
  Env X = record  { Carrier = X → 𝕌[ 𝑨 ]
-                 ; _≈_ = λ ρ ρ' → (x : X) → ρ x ≈ ρ' x
-                 ; isEquivalence = record  { refl   = λ _ → refl
-                                           ; sym    = λ h x → sym (h x)
-                                           ; trans  = λ g h x → trans (g x)(h x) }}
-
-\end{code}
-
-Next we define \emph{evaluation of a term} in an environment \ab{ρ}, interpreted in the algebra \ab{𝑨}.
-
-\begin{code}
+                 ; _≈_ = λ ρ τ → (x : X) → ρ x ≈ τ x
+                 ; isEquivalence = record  { refl   = λ _      → refl
+                                           ; sym    = λ h x    → sym (h x)
+                                           ; trans  = λ g h x  → trans (g x)(h x) }}
 
  ⟦_⟧ : {X : Type χ}(t : Term X) → (Env X) ⟶ 𝔻[ 𝑨 ]
- ⟦ ℊ x ⟧          ⟨$⟩ ρ = ρ x
- ⟦ node f args ⟧  ⟨$⟩ ρ = (Interp 𝑨) ⟨$⟩ (f , λ i → ⟦ args i ⟧ ⟨$⟩ ρ)
- cong ⟦ ℊ x ⟧ u≈v = u≈v x
- cong ⟦ node f args ⟧ x≈y = cong (Interp 𝑨)(≡.refl , λ i → cong ⟦ args i ⟧ x≈y )
+ ⟦ ℊ x ⟧          ⟨$⟩ ρ    = ρ x
+ ⟦ node f args ⟧  ⟨$⟩ ρ    = (Interp 𝑨) ⟨$⟩ (f , λ i → ⟦ args i ⟧ ⟨$⟩ ρ)
+ cong ⟦ ℊ x ⟧ u≈v          = u≈v x
+ cong ⟦ node f args ⟧ x≈y  = cong (Interp 𝑨)(≡.refl , λ i → cong ⟦ args i ⟧ x≈y )
 
 \end{code}
 
-An equality between two terms holds in a model if the two terms are equal under all valuations of their free variables.\footnote{cf.~Andreas Abel's formal proof of Birkhoff's completeness theorem [reference needed].}
+Two terms interpreted in \ab{𝑨} are proclaimed \defn{equal} if they are equal for all environments.  This equivalence of terms%
+\ifshort\else
+, and proof that it is an equivalence relation,
+\fi
+ is formalized in Agda as follows.
 
 \begin{code}
 
- Equal : ∀ {X : Type χ} (s t : Term X) → Type _
- Equal {X = X} s t = ∀ (ρ : Carrier (Env X)) →  ⟦ s ⟧ ⟨$⟩ ρ ≈ ⟦ t ⟧ ⟨$⟩ ρ
+ Equal : {X : Type χ}(s t : Term X) → Type _
+ Equal {X = X} s t = ∀ (ρ : Carrier (Env X)) → ⟦ s ⟧ ⟨$⟩ ρ ≈ ⟦ t ⟧ ⟨$⟩ ρ
 
  ≃→Equal : {X : Type χ}(s t : Term X) → s ≃ t → Equal s t
  ≃→Equal .(ℊ _) .(ℊ _) (rfl ≡.refl) = λ _ → refl
@@ -1299,18 +1317,19 @@ An equality between two terms holds in a model if the two terms are equal under 
   λ ρ → cong (Interp 𝑨)(≡.refl , λ i → ≃→Equal(s i)(t i)(x i)ρ )
 
 \end{code}
-
-The proof that \af{Equal} is an equivalence relation is trivial, so we omit it. (See the \ualmodule{Varieties.Func.SoundAndComplete} module of the \agdaalgebras library for details.)
-
-\begin{code}[hide]
+\ifshort
+The proof that \af{Equal} is an equivalence relation is trivial, so we omit it.
+\else
+\begin{code}
  EqualIsEquiv : {Γ : Type χ} → IsEquivalence (Equal {X = Γ})
- IsEquivalence.refl  EqualIsEquiv = λ _ → refl
- IsEquivalence.sym   EqualIsEquiv = λ x=y ρ → sym (x=y ρ)
- IsEquivalence.trans EqualIsEquiv = λ ij jk ρ → trans (ij ρ) (jk ρ)
-\end{code}
+ reflᵉ   EqualIsEquiv = λ _        → refl
+ symᵉ    EqualIsEquiv = λ x=y ρ    → sym (x=y ρ)
+ transᵉ  EqualIsEquiv = λ ij jk ρ  → trans (ij ρ) (jk ρ)
 
-Evaluation of a substitution gives an environment.\footnote{cf.~Andreas Abel's formal proof of Birkhoff's completeness theorem [reference needed].}
-%(http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf))
+\end{code}
+\fi
+
+A substitution from one context \ab X to another \ab Y is used to transport an environment from \ab X to \ab Y and the function \af{⟦\au{}⟧} defined below carries out this transportation of environments.
 
 \begin{code}
 
@@ -1319,8 +1338,7 @@ Evaluation of a substitution gives an environment.\footnote{cf.~Andreas Abel's f
 
 \end{code}
 
-Next we prove that \aof{⟦} \ab{t} \af{[} \ab{σ} \af{]} \aof{⟧} \ab{ρ} ≃ \aof{⟦} \ab t \aof{⟧} \aof{⟦} \ab{σ} \aof{⟧} \ab{ρ}.
-%(cf. Andreas Abel's formal proof of Birkhoff's completeness theorem).
+Finally, we have a \af{substitution} lemma says that \aof{⟦} \ab{t} \af{[} \ab{σ} \af{]} \aof{⟧} \ab{ρ}, a term applied to a substitution and evaluated in the evironment \ab{ρ}, is the same as the term evaluated in the transported environment \aof{⟦} \ab{σ} \aof{⟧} \ab{ρ}.
 
 \begin{code}
 
@@ -1329,114 +1347,104 @@ Next we prove that \aof{⟦} \ab{t} \af{[} \ab{σ} \af{]} \aof{⟧} \ab{ρ} ≃ 
 
  substitution (ℊ x)        σ ρ = refl
  substitution (node f ts)  σ ρ = cong (Interp 𝑨)(≡.refl , λ i → substitution (ts i) σ ρ)
+
 \end{code}
+This concludes the definition of the \am{Environment} module (based on Abel's Agda proof of the completeness theorem; \textit{op.~cit.}).
 
-
+\ifshort\else
 \paragraph*{Compatibility of terms}
 %\label{compatibility-of-terms}
-We now prove two important facts about term operations.  The first of these, which is used very often in the sequel, asserts that every term commutes with every homomorphism.
+\fi
+Later we will need two important facts about term operations.  The first, called \af{comm-hom-term}, asserts that every term commutes with every homomorphism.  The second, \af{interp-prod}, shows how to express the interpretation of a term in a product algebra.
+\ifshort
+We omit the formal definitions and proofs of these types, but see the \ualmodule{Types.Func.Properties} module of the \agdaalgebras library for details.
+\else
 
 \begin{code}
 
 module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}(hh : hom 𝑨 𝑩) where
- open Setoid 𝔻[ 𝑩 ] using ( _≈_ ; refl )
- open SetoidReasoning 𝔻[ 𝑩 ]
- private hfunc = ∣ hh ∣ ; h = _⟨$⟩_ hfunc
  open Environment 𝑨 using ( ⟦_⟧ )
  open Environment 𝑩 using () renaming ( ⟦_⟧ to ⟦_⟧ᴮ )
+ open Setoid 𝔻[ 𝑩 ] using ( _≈_ ; refl )
+ private hfunc = ∣ hh ∣ ; h = _⟨$⟩_ hfunc
 
  comm-hom-term : (t : Term X) (a : X → 𝕌[ 𝑨 ]) → h (⟦ t ⟧ ⟨$⟩ a) ≈ ⟦ t ⟧ᴮ ⟨$⟩ (h ∘ a)
- comm-hom-term (ℊ x) a = refl
- comm-hom-term (node f t) a = goal
-  where
-  goal : h (⟦ node f t ⟧ ⟨$⟩ a) ≈ ⟦ node f t ⟧ᴮ ⟨$⟩ (h ∘ a)
-  goal = begin
-          h (  ⟦ node f t ⟧           ⟨$⟩         a  )  ≈⟨  compatible ∥ hh ∥                                     ⟩
-          (f ̂ 𝑩)( λ i → h(  ⟦ t i ⟧   ⟨$⟩         a) )  ≈⟨  cong(Interp 𝑩)(≡.refl , λ i → comm-hom-term (t i) a)  ⟩
-          (f ̂ 𝑩)( λ i →     ⟦ t i ⟧ᴮ  ⟨$⟩  (h  ∘  a) )  ≈⟨  refl                                                  ⟩
-               ⟦ node f t ⟧ᴮ          ⟨$⟩  (h  ∘  a)    ∎
-\end{code}
+ comm-hom-term (ℊ x) a       = refl
+ comm-hom-term (node f t) a  =
+  begin
+   h(⟦ node f t ⟧ ⟨$⟩ a)            ≈⟨ compatible ∥ hh ∥ ⟩
+   (f ̂ 𝑩)(λ i → h(⟦ t i ⟧ ⟨$⟩ a))  ≈⟨ cong(Interp 𝑩)(≡.refl , λ i → comm-hom-term (t i) a)⟩
+   ⟦ node f t ⟧ᴮ ⟨$⟩ (h ∘ a)        ∎ where  open SetoidReasoning 𝔻[ 𝑩 ]
 
-%% \subsection{Interpretation of terms in product algebras}
-%% a id="interpretation-of-terms-in-product-algebras">
-
-\begin{code}[hide]
 module _ {X : Type χ}{ι : Level} {I : Type ι} (𝒜 : I → Algebra α ρᵃ) where
- open Setoid 𝔻[ ⨅ 𝒜 ]    using ( _≈_ )
- open Environment (⨅ 𝒜)  using () renaming ( ⟦_⟧ to ⟦_⟧₁ )
- open Environment        using ( ⟦_⟧ ; ≃→Equal )
+ open Setoid 𝔻[ ⨅ 𝒜 ]  using ( _≈_ )
+ open Environment      using ( ⟦_⟧ ; ≃→Equal )
 
- interp-prod : (p : Term X) → ∀ ρ → ⟦ p ⟧₁ ⟨$⟩ ρ ≈ λ i → (⟦ 𝒜 i ⟧ p) ⟨$⟩ λ x → (ρ x) i
- interp-prod (ℊ x) = λ ρ i → ≃→Equal (𝒜 i) (ℊ x) (ℊ x) ≃-isRefl λ _ → (ρ x) i
- interp-prod (node f t) = λ ρ → cong (Interp (⨅ 𝒜)) ( ≡.refl , λ j k → interp-prod (t j) ρ k )
+ interp-prod : (p : Term X) → ∀ ρ →  (⟦ ⨅ 𝒜 ⟧ p) ⟨$⟩ ρ   ≈   λ i → (⟦ 𝒜 i ⟧ p) ⟨$⟩ λ x → (ρ x) i
+ interp-prod (ℊ x)       = λ ρ i  → ≃→Equal (𝒜 i) (ℊ x) (ℊ x) ≃-isRefl λ _ → (ρ x) i
+ interp-prod (node f t)  = λ ρ    → cong (Interp (⨅ 𝒜)) ( ≡.refl , λ j k → interp-prod (t j) ρ k )
 \end{code}
-
+\fi
 
 %% -------------------------------------------------------------------------------------
 
 \section{Model Theory and Equational Logic}
 \label{model-theory-and-equational-logic}
 
-(cf. the \ualmodule{Varieties.Func.SoundAndComplete} module of the \agdaalgebras library)
-
 \subsection{Basic definitions}
 \label{model-theory-basic-definitions}
 
-Let \ab{𝑆} be a signature. By an \emph{identity} or \emph{equation} in \ab{𝑆} we mean an ordered pair of terms in a given context.  For instance, if the context happens to be the type \ab X : \ap{Type} \ab{χ}, then an equation will be a pair of inhabitants of the domain of term algebra \af{𝑻} \ab X.
+\subsubsection*{Term identities and the ⊧ relation}
+Given a  signature \ab{𝑆} and a context of variable symbols \ab X, a \defn{term equation} or \defn{identity}
+(in this signature and context) is an ordered pair (\ab p , \ab q) of 𝑆-terms.
+(Informally, such an equation is often denoted by \ab p \af{≈} \ab q.)
 
-We define an equation in Agda using the following record type with fields denoting the left-hand and right-hand sides of the equation, along with an equation ``context'' representing the underlying collection of variable symbols.\footnote{cf.~Andreas Abel's formal proof of Birkhoff's completeness theorem [reference needed].}
+For instance, if the context is the type \ab X : \ap{Type} \ab{χ}, then a term equation
+is a pair inhabiting the Cartesian product type \ad{Term}~\ab{X} \aof{×} \ad{Term}~\ab{X}.
 
-\begin{code}
-
-record Eq : Type (ov χ) where
- constructor _≐_
- field  {cxt}  : Type χ
-        lhs    : Term cxt
-        rhs    : Term cxt
-
-infix 8 _≐_
-open Eq public
-
-\end{code}
-
-We now define a type representing the notion of an equation \ab p \aoic{≐} \ab q holding (when \ab p and \ab q are interpreted) in algebra \ab{𝑨}.
-
-If \ab{𝑨} is an \ab{𝑆}-algebra we say that \ab{𝑨} \emph{satisfies} \ab p \aofld{≈} \ab q provided for all environments \ab{ρ} : \ab X \as{→} \aof{∣} \ab{𝑨} \aof{∣} (assigning values in the domain of \ab{𝑨} to variable symbols in \ab X) we have \aof{⟦} \ab p \aof{⟧} \aofld{⟨\$⟩} \ab{ρ} \aofld{≈} \aof{⟦} \ab q \aof{⟧} \aofld{⟨\$⟩} \ab{ρ}.  In this situation, we write \ab{𝑨} \aof{⊧} (\ab p \aoic{≐} \ab q) and say that \ab{𝑨} \emph{models} the identity \ab p \aofld{≈} \ab q.
-
-If \ab{𝒦} is a class of algebras, all of the same signature, we write \ab{𝒦} \aof{⊫} (\ab p \aoic{≐} \ab q) if, for every \ab{𝑨} \aof{∈} \ab{𝒦}, we have \ab{𝑨} \aof{⊧} (\ab p \aoic{≐} \ab q).
-
-Because a class of structures has a different type than a single structure, we must use a slightly different syntax to avoid overloading the relations \aof{⊧} and \aofld{≈}. As a reasonable alternative to what we would normally express informally as \ab{𝒦} \aof{⊧} \ab p \aofld{≈} \ab q, we have settled on \ab{𝒦} \aof{⊫} (\ab p \aoic{≐} \ab q) to denote this relation.  To reiterate, if \ab{𝒦} is a class of \ab{𝑆}-algebras, we write \ab{𝒦} \aof{⊫} (\ab p \aoic{≐} \ab q) provided every \ab{𝑨} \aof{∈} \ab{𝒦} satisfies \ab{𝑨} \aof{⊧} (\ab p \aoic{≐} \ab q).
+If \ab{𝑨} is an \ab{𝑆}-algebra we say that \ab{𝑨} \emph{satisfies} \ab p \af{≈} \ab q if
+for all environments \ab{ρ} : \ab X \as{→} \aof{𝔻[~\ab{𝑨}~]} (assigning values in the domain of
+\ab{𝑨} to variable symbols in \ab X) we have \aof{⟦~\ab{p}~⟧} \aofld{⟨\$⟩} \ab{ρ} \af{≈}
+\aof{⟦~\ab{q}~⟧} \aofld{⟨\$⟩} \ab{ρ}.  In other words, when they are interpreted in the algebra \ab{𝑨},
+the terms \ab{p} and \ab{q} are equal (no matter what values in \ab{𝑨} are assigned to variable symbols in \ab{X}).
+In this situation, we write
+%\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}⊧\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
+\ab{𝑨}~\aof{⊧}~\ab{p}~\aof{≈}~\ab{q} and say that \ab{𝑨} \defn{models} the identity \ab{p}~\af{≈}~\ab{q}.
+If \ab{𝒦} is a class of algebras, all of the same signature, we write \ab{𝒦}~\aof{⊫}~\ab{p}~\aof{≈}~\ab{q}
+and say that \ab{𝒦} \defn{models} the identity \ab{p}~\af{≈}~\ab{q} provided for every \ab{𝑨} \aof{∈} \ab{𝒦},
+we have \ab{𝑨}~\aof{⊧}~\ab{p}~\aof{≈}~\ab{q}.
 
 \begin{code}
-
-_⊧_ : (𝑨 : Algebra α ρᵃ)(term-identity : Eq{χ}) → Type _
-𝑨 ⊧ (p ≐ q) = Equal p q where open Environment 𝑨
 
 _⊧_≈_ : Algebra α ρᵃ → Term Γ → Term Γ → Type _
 𝑨 ⊧ p ≈ q = Equal p q where open Environment 𝑨
-
-_⊫_ : Pred (Algebra α ρᵃ) ℓ → Eq{χ} → Type (ℓ ⊔ χ ⊔ ov(α ⊔ ρᵃ))
-𝒦 ⊫ equ = ∀ 𝑨 → 𝒦 𝑨 → 𝑨 ⊧ equ
 
 _⊫_≈_ : Pred (Algebra α ρᵃ) ℓ → Term Γ → Term Γ → Type _
 𝒦 ⊫ p ≈ q = ∀ 𝑨 → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
 
 \end{code}
-
-We denote by \ab{𝑨} \aof{⊨} \ab{ℰ} the assertion that the algebra \ab{𝑨} models every equation in a collection \ab{ℰ} of equations.
+%% \AgdaFunction{Pred}\AgdaSymbol{(}\AgdaDatatype{Term}\AgdaSpace{}%
+%% \AgdaBound{X}\AgdaSpace{}%
+%% \AgdaOperator{\AgdaFunction{×}}\AgdaSpace{}%
+%% \AgdaDatatype{Term}\AgdaSpace{}%
+%% \AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
+%% \AgdaSymbol{\AgdaUnderscore{}}\<%
+We represent a collection of identities as a predicate over pairs of terms---for example,
+\ab{ℰ}~:~\af{Pred}(\ad{Term}~\ab{X}~\aof{×}~\ad{Term}~\ab{X})~\au---and we denote by
+\ab{𝑨}~\aof{⊨}~\ab{ℰ} the assertion that the algebra \ab{𝑨} models every equation
+\ab{p}~\afld{≈}~\ab{q} % (i.e., every \AgdaPair{p}{q}) in \ab{ℰ}.
 
 \begin{code}
 
-_⊨_ : (𝑨 : Algebra α ρᵃ) → {ι : Level}{I : Type ι} → (I → Eq{χ}) → Type _
-𝑨 ⊨ ℰ = ∀ i → Equal (lhs (ℰ i))(rhs (ℰ i)) where open Environment 𝑨
-
+_⊨_ : (𝑨 : Algebra α ρᵃ) → Pred(Term Γ × Term Γ) (ov χ) → Type _
+𝑨 ⊨ ℰ = ∀ {p q} → (p , q) ∈ ℰ → Equal p q where open Environment 𝑨
 \end{code}
 
-\subsection{Equational theories and models}
-\label{equational-theories-and-models}
-
-If \ab{𝒦} denotes a class of structures, then \af{Th} \ab{𝒦} represents the set of identities
-modeled by the members of \ab{𝒦}.
+\subsubsection*{Equational theories and classes}
+In (informal) equational logic, if \ab{𝒦} is a class of structures and \ab{ℰ} a set of term identities, then
+the set of term equations modeled by \ab{𝒦} is denoted \af{Th}~\ab{𝒦} and called the \defn{equational theory} of \ab{𝒦},
+while the class of structures modeling \ab{ℰ} is denoted by \af{Mod}~\ab{ℰ} and is called the \defn{equational class axiomatized} by \ab{ℰ}.
+These notions may be formalize in type theory as follows.
 
 \begin{code}
 
@@ -1447,43 +1455,42 @@ Mod : {X : Type χ} → Pred(Term X × Term X) ℓ → Pred (Algebra α ρᵃ) _
 Mod ℰ 𝑨 = ∀ {p q} → (p , q) ∈ ℰ → Equal p q where open Environment 𝑨
 \end{code}
 
-\subsection{The entailment relation}
-\label{the-entailment-relation}
-
-Based on Andreas Abel's Agda formalization of Birkhoff's completeness theorem.
+\subsubsection*{The entailment relation}
+We represent entailment in type theory by defining an inductive type that is similar to the one Andreas Abel defined for formalizing Birkhoff's completeness theorem (\textit{op.~cit.}).
 
 \begin{code}
 
-module _ {χ ι : Level} where
+data _⊢_▹_≈_  (ℰ : {Y : Type χ} → Pred(Term Y × Term Y) (ov χ)) :
+              (X : Type χ)(p q : Term X) → Type (ov χ) where
 
- data _⊢_▹_≈_ {I : Type ι}(ℰ : I → Eq) : (X : Type χ)(p q : Term X) → Type (ι ⊔ ov χ) where
-  hyp : ∀ i → let p ≐ q = ℰ i in ℰ ⊢ _ ▹ p ≈ q
-  app : ∀ {ps qs} → (∀ i → ℰ ⊢ Γ ▹ ps i ≈ qs i) → ℰ ⊢ Γ ▹ (node 𝑓 ps) ≈ (node 𝑓 qs)
-  sub : ∀ {p q} → ℰ ⊢ Δ ▹ p ≈ q → ∀ (σ : Sub Γ Δ) → ℰ ⊢ Γ ▹ (p [ σ ]) ≈ (q [ σ ])
+ hyp         :  ∀{Y}{p q : Term Y} → (p , q) ∈ ℰ → ℰ ⊢ _ ▹ p ≈ q
+ app         :  ∀{Y}{ps qs : ∥ 𝑆 ∥ 𝑓 → Term Y}
+                          → (∀ i → ℰ ⊢ Y ▹ ps i ≈ qs i) → ℰ ⊢ Y ▹ (node 𝑓 ps) ≈ (node 𝑓 qs)
+ sub         :  ∀{p q}    → ℰ ⊢ Γ ▹ p ≈ q → (σ : Sub Δ Γ) → ℰ ⊢ Δ ▹ (p [ σ ]) ≈ (q [ σ ])
+ reflexive   :  ∀{p}      → ℰ ⊢ Γ ▹ p ≈ p
+ symmetric   :  ∀{p q}    → ℰ ⊢ Γ ▹ p ≈ q → ℰ ⊢ Γ ▹ q ≈ p
+ transitive  :  ∀{p q r}  → ℰ ⊢ Γ ▹ p ≈ q → ℰ ⊢ Γ ▹ q ≈ r → ℰ ⊢ Γ ▹ p ≈ r
 
-  ⊢refl   : ∀ {p}               → ℰ ⊢ Γ ▹ p ≈ p
-  ⊢sym    : ∀ {p q : Term Γ}    → ℰ ⊢ Γ ▹ p ≈ q → ℰ ⊢ Γ ▹ q ≈ p
-  ⊢trans  : ∀ {p q r : Term Γ}  → ℰ ⊢ Γ ▹ p ≈ q → ℰ ⊢ Γ ▹ q ≈ r → ℰ ⊢ Γ ▹ p ≈ r
-
- ⊢▹≈IsEquiv : {X : Type χ}{I : Type ι}{ℰ : I → Eq} → IsEquivalence (ℰ ⊢ X ▹_≈_)
- ⊢▹≈IsEquiv = record { refl = ⊢refl ; sym = ⊢sym ; trans = ⊢trans }
 \end{code}
 
-\subsection{Soundness}
-\label{soundness}
-
-In any model \ab{𝑨} of the equations \ab{ℰ} derived equality is actual equality.\footnote{cf.~Andreas Abel's Agda formalization of Birkhoff's completeness theorem [ref needed].}
+Entailment is \defn{sound} in the following sense: % for every algebra \ab{𝑨} that models the equations in \ab{ℰ},
+if \ab{ℰ} entails \ab p \aof{≈} \ab q and \ab{𝑨} \aof{⊨} \ab{ℰ}, then \ab p \aof{≈} \ab q holds in \ab{𝑨}.  In other terms,
+the derivation \ab{ℰ} \aod{⊢} \ab X \aod{▹} \ab p \aod{≈} \ab q implies that \ab p \aof{≈} \ab q holds in every model of \ab{ℰ}.
+We will apply this result---called \af{sound} and borrowed from Andreas Abel's proof of Birkhoff's completeness theorem (\textit{op.~cit.})---only once below (in §\ref{basic-properties-of-free-algebras})%
+\ifshort
+, so we omit its straightforward formalization.
+\else
+; nonetheless, here is the formalization due to Abel.
 
 \begin{code}
 
-module Soundness  {χ α ι : Level}{I : Type ι} (ℰ : I → Eq{χ})
-                  (𝑨 : Algebra α ρᵃ)     -- We assume an algebra 𝑨
-                  (V : 𝑨 ⊨ ℰ)            -- that models all equations in ℰ.
+module Soundness  (ℰ : {Y : Type χ} → Pred(Term Y × Term Y) (ov χ))
+                  (𝑨 : Algebra α ρᵃ)                -- We assume an algebra 𝑨
+                  (V : ∀{Y} → _⊨_{χ = χ} 𝑨 (ℰ{Y}))  -- that models all equations in ℰ.
                   where
 
  open SetoidReasoning 𝔻[ 𝑨 ]
  open Environment 𝑨
- open IsEquivalence using ( refl ; sym ; trans )
 
  sound : ∀ {p q} → ℰ ⊢ Γ ▹ p ≈ q → 𝑨 ⊧ p ≈ q
  sound (hyp i) = V i
@@ -1494,15 +1501,15 @@ module Soundness  {χ α ι : Level}{I : Type ι} (ℰ : I → Eq{χ})
    ⟦ p         ⟧ ⟨$⟩ ⟦ σ ⟧s  ρ  ≈⟨   sound Epq (⟦ σ ⟧s ρ)  ⟩
    ⟦ q         ⟧ ⟨$⟩ ⟦ σ ⟧s  ρ  ≈˘⟨  substitution q σ ρ    ⟩
    ⟦ q  [ σ ]  ⟧ ⟨$⟩         ρ  ∎
- sound (⊢refl   {p = p}                 ) = refl   EqualIsEquiv {x = p}
- sound (⊢sym    {p = p}{q}     Epq      ) = sym    EqualIsEquiv {x = p}{q}     (sound Epq)
- sound (⊢trans  {p = p}{q}{r}  Epq Eqr  ) = trans  EqualIsEquiv {i = p}{q}{r}  (sound Epq)(sound Eqr)
+ sound (reflexive   {p = p}                 ) = reflᵉ   EqualIsEquiv {x = p}
+ sound (symmetric   {p = p}{q}     Epq      ) = symᵉ    EqualIsEquiv {x = p}{q}     (sound Epq)
+ sound (transitive  {p = p}{q}{r}  Epq Eqr  ) = transᵉ  EqualIsEquiv {i = p}{q}{r}  (sound Epq)(sound Eqr)
 \end{code}
+\fi
 
 
 \subsection{The Closure Operators H, S, P and V}
 \label{the-closure-operators-h-s-p-and-v}
-
 Fix a signature \ab{𝑆}, let \ab{𝒦} be a class of \ab{𝑆}-algebras, and define
 
 \begin{itemize}
@@ -1526,34 +1533,23 @@ We now define the type \af H to represent classes of algebras that include all h
 
 \begin{code}
 
-module _  {α ρᵃ β ρᵇ : Level} where
- private a = α ⊔ ρᵃ ; b = β ⊔ ρᵇ
+module _ {α ρᵃ β ρᵇ : Level} where
+ private a = α ⊔ ρᵃ
 
- H : ∀ ℓ → Pred(Algebra α ρᵃ) (a ⊔ ov ℓ) → Pred(Algebra β ρᵇ) (b ⊔ ov(a ⊔ ℓ))
+ H : ∀ ℓ → Pred(Algebra α ρᵃ) (a ⊔ ov ℓ) → Pred(Algebra β ρᵇ) _
  H _ 𝒦 𝑩 = Σ[ 𝑨 ∈ Algebra α ρᵃ ] 𝑨 ∈ 𝒦 × 𝑩 IsHomImageOf 𝑨
 
- S : ∀ ℓ → Pred(Algebra α ρᵃ) (a ⊔ ov ℓ) → Pred(Algebra β ρᵇ) (b ⊔ ov(a ⊔ ℓ))
+ S : ∀ ℓ → Pred(Algebra α ρᵃ) (a ⊔ ov ℓ) → Pred(Algebra β ρᵇ) _
  S _ 𝒦 𝑩 = Σ[ 𝑨 ∈ Algebra α ρᵃ ] 𝑨 ∈ 𝒦 × 𝑩 ≤ 𝑨
 
- P : ∀ ℓ ι → Pred(Algebra α ρᵃ) (a ⊔ ov ℓ) → Pred(Algebra β ρᵇ) (b ⊔ ov(a ⊔ ℓ ⊔ ι))
+ P : ∀ ℓ ι → Pred(Algebra α ρᵃ) (a ⊔ ov ℓ) → Pred(Algebra β ρᵇ) _
  P _ ι 𝒦 𝑩 = Σ[ I ∈ Type ι ] (Σ[ 𝒜 ∈ (I → Algebra α ρᵃ) ] (∀ i → 𝒜 i ∈ 𝒦) × (𝑩 ≅ ⨅ 𝒜))
 
 module _  {α ρᵃ β ρᵇ γ ρᶜ δ ρᵈ : Level} where
- private a = α ⊔ ρᵃ ; b = β ⊔ ρᵇ ; c = γ ⊔ ρᶜ ; d = δ ⊔ ρᵈ
+ private a = α ⊔ ρᵃ ; b = β ⊔ ρᵇ
 
- V : ∀ ℓ ι → Pred(Algebra α ρᵃ) (a ⊔ ov ℓ) →  Pred(Algebra δ ρᵈ) (d ⊔ ov(a ⊔ b ⊔ c ⊔ ℓ ⊔ ι))
+ V : ∀ ℓ ι → Pred(Algebra α ρᵃ) (a ⊔ ov ℓ) →  Pred(Algebra δ ρᵈ) _
  V ℓ ι 𝒦 = H{γ}{ρᶜ}{δ}{ρᵈ} (a ⊔ b ⊔ ℓ ⊔ ι) (S{β}{ρᵇ} (a ⊔ ℓ ⊔ ι) (P ℓ ι 𝒦))
-\end{code}
-\begin{code}[hide]
-module _ {α ρᵃ ℓ : Level}(𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ))
-         (𝑨 : Algebra (α ⊔ ρᵃ ⊔ ℓ) (α ⊔ ρᵃ ⊔ ℓ)) where
- private ι = ov(α ⊔ ρᵃ ⊔ ℓ)
-
- V-≅-lc : Lift-Alg 𝑨 ι ι ∈ V{β = ι}{ι} ℓ ι 𝒦 → 𝑨 ∈ V{γ = ι}{ι} ℓ ι 𝒦
- V-≅-lc (𝑨' , spA' , lAimgA') = 𝑨' , (spA' , AimgA')
-  where
-  AimgA' : 𝑨 IsHomImageOf 𝑨'
-  AimgA' = Lift-HomImage-lemma lAimgA'
 \end{code}
 
 
@@ -1561,10 +1557,10 @@ module _ {α ρᵃ ℓ : Level}(𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ 
 
 \begin{code}
 
-S-idem : {𝒦 : Pred (Algebra α ρᵃ)(α ⊔ ρᵃ ⊔ ov ℓ)}
- →       S{β = γ}{ρᶜ} (α ⊔ ρᵃ  ⊔ ℓ) (S{β = β}{ρᵇ} ℓ 𝒦) ⊆ S{β = γ}{ρᶜ} ℓ 𝒦
+S-idem :  {𝒦 : Pred (Algebra α ρᵃ)(α ⊔ ρᵃ ⊔ ov ℓ)}
+ →        S{β = γ}{ρᶜ} (α ⊔ ρᵃ  ⊔ ℓ) (S{β = β}{ρᵇ} ℓ 𝒦) ⊆ S{β = γ}{ρᶜ} ℓ 𝒦
 
-S-idem (𝑨 , (𝑩 , sB , A≤B) , x≤A) = 𝑩 , (sB , ≤-trans x≤A A≤B)
+S-idem (𝑨 , (𝑩 , sB , A≤B) , x≤A) = 𝑩 , (sB , ≤-transitive x≤A A≤B)
 \end{code}
 
 \paragraph*{Algebraic invariance of ⊧}
@@ -1577,49 +1573,55 @@ module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}(𝑩 : Algebra β ρᵇ)(p q : T
  ⊧-I-invar : 𝑨 ⊧ p ≈ q  →  𝑨 ≅ 𝑩  →  𝑩 ⊧ p ≈ q
  ⊧-I-invar Apq (mkiso fh gh f∼g g∼f) ρ =
   begin
-   ⟦ p ⟧₂    ⟨$⟩               ρ    ≈˘⟨  cong ⟦ p ⟧₂ (f∼g ∘ ρ)       ⟩
-   ⟦ p ⟧₂    ⟨$⟩ (f  ∘  (g  ∘  ρ))  ≈˘⟨  comm-hom-term fh p (g ∘ ρ)  ⟩
-   f(⟦ p ⟧₁  ⟨$⟩        (g  ∘  ρ))  ≈⟨   cong ∣ fh ∣ (Apq (g ∘ ρ))   ⟩
-   f(⟦ q ⟧₁  ⟨$⟩        (g  ∘  ρ))  ≈⟨   comm-hom-term fh q (g ∘ ρ)  ⟩
-   ⟦ q ⟧₂    ⟨$⟩ (f  ∘  (g  ∘  ρ))  ≈⟨   cong ⟦ q ⟧₂ (f∼g ∘ ρ)       ⟩
-   ⟦ q ⟧₂    ⟨$⟩               ρ    ∎
+   ⟦ p ⟧     ⟨$⟩            ρ    ≈˘⟨  cong ⟦ p ⟧ (f∼g ∘ ρ)        ⟩
+   ⟦ p ⟧     ⟨$⟩ (f  ∘ (g ∘ ρ))  ≈˘⟨  comm-hom-term fh p (g ∘ ρ)  ⟩
+   f(⟦ p ⟧ᴬ  ⟨$⟩       (g ∘ ρ))  ≈⟨   cong ∣ fh ∣ (Apq (g ∘ ρ))   ⟩
+   f(⟦ q ⟧ᴬ  ⟨$⟩       (g ∘ ρ))  ≈⟨   comm-hom-term fh q (g ∘ ρ)  ⟩
+   ⟦ q ⟧     ⟨$⟩ (f  ∘ (g ∘ ρ))  ≈⟨   cong ⟦ q ⟧ (f∼g ∘ ρ)        ⟩
+   ⟦ q ⟧     ⟨$⟩            ρ    ∎
   where
   private f = _⟨$⟩_ ∣ fh ∣ ; g = _⟨$⟩_ ∣ gh ∣
-  open Environment 𝑨     using () renaming ( ⟦_⟧ to ⟦_⟧₁ )
-  open Environment 𝑩     using () renaming ( ⟦_⟧ to ⟦_⟧₂ )
+  open Environment 𝑨     using () renaming ( ⟦_⟧ to ⟦_⟧ᴬ )
+  open Environment 𝑩     using ( ⟦_⟧ )
   open SetoidReasoning 𝔻[ 𝑩 ]
 \end{code}
 
+\ifshort\else
 \paragraph*{Subalgebraic invariance of ⊧}
-Identities modeled by an algebra \ab{𝑨} are also modeled by every subalgebra of \ab{𝑨}, which fact can be formalized as follows.
+\fi
+Identities modeled by an algebra \ab{𝑨} are also modeled by every subalgebra of \ab{𝑨}.
+\ifshort
+We will refer to this fact as \af{⊧-S-invar}. We omit its proof since it is similar to the proof of
+\af{⊧-I-invar}.
+\else
+This fact is formalized in Agda as follows.
 
 \begin{code}
 
 module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}{p q : Term X} where
 
  ⊧-S-invar : 𝑨 ⊧ p ≈ q →  𝑩 ≤ 𝑨  →  𝑩 ⊧ p ≈ q
- ⊧-S-invar Apq B≤A b = goal
+ ⊧-S-invar Apq B≤A b = ∥ B≤A ∥ (ξ b)
   where
-  private hh = ∣ B≤A ∣ ; h = _⟨$⟩_ ∣ hh ∣
   open Setoid 𝔻[ 𝑨 ]  using ( _≈_ )
-  open Setoid 𝔻[ 𝑩 ]  using () renaming ( _≈_ to _≈ᴮ_ )
   open Environment 𝑨  using () renaming ( ⟦_⟧ to ⟦_⟧ᴬ )
   open Environment 𝑩  using ( ⟦_⟧ )
-  open SetoidReasoning 𝔻[ 𝑨 ]
+  private hh = ∣ B≤A ∣ ; h = _⟨$⟩_ ∣ hh ∣
 
   ξ : ∀ b → h (⟦ p ⟧ ⟨$⟩ b) ≈ h (⟦ q ⟧ ⟨$⟩ b)
   ξ b = begin
          h (⟦ p ⟧  ⟨$⟩         b)  ≈⟨   comm-hom-term hh p b  ⟩
          ⟦ p ⟧ᴬ    ⟨$⟩  (h  ∘  b)  ≈⟨   Apq (h ∘ b)           ⟩
          ⟦ q ⟧ᴬ    ⟨$⟩  (h  ∘  b)  ≈˘⟨  comm-hom-term hh q b  ⟩
-         h (⟦ q ⟧  ⟨$⟩         b)  ∎
-
-  goal : ⟦ p ⟧ ⟨$⟩ b ≈ᴮ ⟦ q ⟧ ⟨$⟩ b
-  goal = ∥ B≤A ∥ (ξ b)
+         h (⟦ q ⟧  ⟨$⟩         b)  ∎ where open SetoidReasoning 𝔻[ 𝑨 ]
 \end{code}
 
 \paragraph*{Product invariance of ⊧}
-An identity satisfied by all algebras in an indexed collection is also satisfied by the product of algebras in that collection.
+\fi
+Next, an identity satisfied by all algebras in an indexed collection is also satisfied by the product of algebras in that collection.
+\ifshort
+We omit the formal proof of this fact, and refer to it as \af{⊧-P-invar} below.
+\else
 
 \begin{code}
 
@@ -1629,7 +1631,7 @@ module _ {X : Type χ}{I : Type ℓ}(𝒜 : I → Algebra α ρᵃ){p q : Term X
  ⊧-P-invar 𝒜pq a =
   begin
    ⟦ p ⟧₁               ⟨$⟩  a                ≈⟨   interp-prod 𝒜 p a  ⟩
-   ( λ i → (⟦ 𝒜 i ⟧ p)  ⟨$⟩  λ x → (a x) i )  ≈⟨   ξ                  ⟩
+   ( λ i → (⟦ 𝒜 i ⟧ p)  ⟨$⟩  λ x → (a x) i )  ≈⟨ (λ i → 𝒜pq i (λ x → (a x) i)) ⟩
    ( λ i → (⟦ 𝒜 i ⟧ q)  ⟨$⟩  λ x → (a x) i )  ≈˘⟨  interp-prod 𝒜 q a  ⟩
    ⟦ q ⟧₁               ⟨$⟩  a                ∎
   where
@@ -1637,122 +1639,91 @@ module _ {X : Type χ}{I : Type ℓ}(𝒜 : I → Algebra α ρᵃ){p q : Term X
   open Environment        using ( ⟦_⟧ )
   open Setoid 𝔻[ ⨅ 𝒜 ]    using ( _≈_ )
   open SetoidReasoning 𝔻[ ⨅ 𝒜 ]
-  ξ : ( λ i → (⟦ 𝒜 i ⟧ p) ⟨$⟩ λ x → (a x) i ) ≈ ( λ i → (⟦ 𝒜 i ⟧ q) ⟨$⟩ λ x → (a x) i )
-  ξ = λ i → 𝒜pq i (λ x → (a x) i)
 \end{code}
-
-
-\paragraph*{PS ⊆ SP}
-Another important fact we will need about the operators \af S and \af P is that a product of subalgebras of algebras in a class \ab{𝒦} is a subalgebra of a product of algebras in \ab{𝒦}. We denote this inclusion by \af{PS⊆SP}, which we state and prove as follows.
-
-\begin{code}
-
-module _  {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
- private
-  a = α ⊔ ρᵃ
-  oaℓ = ov (a ⊔ ℓ)
-
- PS⊆SP : P (a ⊔ ℓ) oaℓ (S{β = α}{ρᵃ} ℓ 𝒦) ⊆ S oaℓ (P ℓ oaℓ 𝒦)
- PS⊆SP {𝑩} (I , ( 𝒜 , sA , B≅⨅A )) = Goal
-  where
-  ℬ : I → Algebra α ρᵃ
-  ℬ i = ∣ sA i ∣
-  kB : (i : I) → ℬ i ∈ 𝒦
-  kB i =  fst ∥ sA i ∥
-  ⨅A≤⨅B : ⨅ 𝒜 ≤ ⨅ ℬ
-  ⨅A≤⨅B = ⨅-≤ λ i → snd ∥ sA i ∥
-  Goal : 𝑩 ∈ S{β = oaℓ}{oaℓ}oaℓ (P {β = oaℓ}{oaℓ} ℓ oaℓ 𝒦)
-  Goal = ⨅ ℬ , (I , (ℬ , (kB , ≅-refl))) , (≅-trans-≤ B≅⨅A ⨅A≤⨅B)
-\end{code}
+\fi
 
 \paragraph*{Identity preservation}
-The classes \af H \ab{𝒦}, \af S \ab{𝒦}, \af P \ab{𝒦}, and \af V \ab{𝒦} all satisfy the same set of equations.  We will only use a subset of the inclusions used to prove this fact. (For a complete proof, see the
-\ualmodule{Varieties.Func.Preservation} module of the \agdaalgebras library.)
-
-
-\paragraph*{H preserves identities}
+The classes \af H \ab{𝒦}, \af S \ab{𝒦}, \af P \ab{𝒦}, and \af V \ab{𝒦} all satisfy the same set of equations.  We will only use a subset of the inclusions used to prove this fact. For complete proofs, see the
+\ualmodule{Varieties.Func.Preservation} module of the \agdaalgebras library.
+\ifshort
+Specifically, we will cite the following facts, whose formal proofs we omit.
+\else
 First we prove that the closure operator \af H is compatible with identities that hold in the given class.
 
 \begin{code}
 
 module _  {X : Type χ}{𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)}{p q : Term X} where
+\end{code}
+\fi
 
+\begin{code}
  H-id1 : 𝒦 ⊫ p ≈ q → (H {β = α}{ρᵃ}ℓ 𝒦) ⊫ p ≈ q
+\end{code}\ifshort\else
+\begin{code}
  H-id1 σ 𝑩 (𝑨 , kA , BimgOfA) ρ =
   begin
-   ⟦ p ⟧       ⟨$⟩                 ρ     ≈˘⟨  cong ⟦ p ⟧ ζ                  ⟩
-   ⟦ p ⟧       ⟨$⟩  (φ  ∘  φ⁻¹  ∘  ρ)    ≈˘⟨  comm-hom-term φh p (φ⁻¹ ∘ ρ)  ⟩
-   φ ( ⟦ p ⟧ᴬ  ⟨$⟩  (      φ⁻¹  ∘  ρ) )  ≈⟨   cong ∣ φh ∣ (IH (φ⁻¹ ∘ ρ))    ⟩
-   φ ( ⟦ q ⟧ᴬ  ⟨$⟩  (      φ⁻¹  ∘  ρ) )  ≈⟨   comm-hom-term φh q (φ⁻¹ ∘ ρ)  ⟩
-   ⟦ q ⟧       ⟨$⟩  (φ  ∘  φ⁻¹  ∘  ρ)    ≈⟨   cong ⟦ q ⟧ ζ                  ⟩
-   ⟦ q ⟧       ⟨$⟩                 ρ     ∎
+   ⟦ p ⟧      ⟨$⟩             ρ   ≈˘⟨  cong ⟦ p ⟧(λ _ → InvIsInverseʳ φE)⟩
+   ⟦ p ⟧      ⟨$⟩ (φ ∘ φ⁻¹  ∘ ρ)  ≈˘⟨  comm-hom-term φh p (φ⁻¹ ∘ ρ)      ⟩
+   φ (⟦ p ⟧ᴬ  ⟨$⟩ (    φ⁻¹  ∘ ρ)) ≈⟨   cong ∣ φh ∣ (IH (φ⁻¹ ∘ ρ))        ⟩
+   φ (⟦ q ⟧ᴬ  ⟨$⟩ (    φ⁻¹  ∘ ρ)) ≈⟨   comm-hom-term φh q (φ⁻¹ ∘ ρ)      ⟩
+   ⟦ q ⟧      ⟨$⟩ (φ ∘ φ⁻¹  ∘ ρ)  ≈⟨   cong ⟦ q ⟧(λ _ → InvIsInverseʳ φE)⟩
+   ⟦ q ⟧      ⟨$⟩             ρ   ∎
     where
-    open Environment 𝑨  using () renaming ( ⟦_⟧ to ⟦_⟧ᴬ)
-    open Environment 𝑩  using ( ⟦_⟧ )
-    open Setoid 𝔻[ 𝑩 ]  using () renaming ( _≈_ to _≈ᴮ_ )
-    open SetoidReasoning 𝔻[ 𝑩 ]
-
     IH : 𝑨 ⊧ p ≈ q
     IH = σ 𝑨 kA
-
     φh : hom 𝑨 𝑩
     φh = ∣ BimgOfA ∣
-    private φ = (_⟨$⟩_ ∣ φh ∣)
-
     φE : IsSurjective ∣ φh ∣
     φE = ∥ BimgOfA ∥
-
     φ⁻¹ : 𝕌[ 𝑩 ] → 𝕌[ 𝑨 ]
     φ⁻¹ = SurjInv ∣ φh ∣ φE
-
-    ζ : ∀ x → (φ ∘ φ⁻¹ ∘ ρ) x ≈ᴮ ρ x
-    ζ = λ _ → InvIsInverseʳ φE
-
-
+    private φ = (_⟨$⟩_ ∣ φh ∣)
+    open Environment 𝑨  using () renaming ( ⟦_⟧ to ⟦_⟧ᴬ)
+    open Environment 𝑩  using ( ⟦_⟧ ) ; open SetoidReasoning 𝔻[ 𝑩 ]
 \end{code}
 
-\paragraph*{S preserves identities}
-
+Similarly for \af S and the obvious converse, though barely worth mentioning, must be formally proved as well since we use it below.
+\fi
 \begin{code}
 
  S-id1 : 𝒦 ⊫ p ≈ q → (S {β = α}{ρᵃ} ℓ 𝒦) ⊫ p ≈ q
+\end{code}\ifshort\else
+\begin{code}
  S-id1 σ 𝑩 (𝑨 , kA , B≤A) = ⊧-S-invar{p = p}{q} (σ 𝑨 kA) B≤A
-
 \end{code}
-
-The obvious converse is barely worth the bits needed to formalize it, but we will use it below, so let's prove it now.
-
+\fi
 \begin{code}
 
  S-id2 : S ℓ 𝒦 ⊫ p ≈ q → 𝒦 ⊫ p ≈ q
+\end{code}\ifshort\else
+\begin{code}
  S-id2 Spq 𝑨 kA = Spq 𝑨 (𝑨 , (kA , ≤-reflexive))
+
 \end{code}
-
-
-\paragraph*{P preserves identities}
+Finally, we have analogous pairs of implications for \af P and \af V.  In each case, we will only need the first implication, so we omit the formal proof of the others.
+\fi
 
 \begin{code}
 
  P-id1 : ∀{ι} → 𝒦 ⊫ p ≈ q → P {β = α}{ρᵃ}ℓ ι 𝒦 ⊫ p ≈ q
+\end{code}\ifshort\else
+\begin{code}
  P-id1 σ 𝑨 (I , 𝒜 , kA , A≅⨅A) = ⊧-I-invar 𝑨 p q IH (≅-sym A≅⨅A)
   where
   ih : ∀ i → 𝒜 i ⊧ p ≈ q
   ih i = σ (𝒜 i) (kA i)
   IH : ⨅ 𝒜 ⊧ p ≈ q
   IH = ⊧-P-invar 𝒜 {p}{q} ih
-\end{code}
-
-
-\paragraph*{V preserves identities}
-Finally, we prove the analogous preservation lemmas for the closure operator \af V.
-
-\begin{code}
 
 module _ {X : Type χ}{ι : Level}{𝒦 : Pred(Algebra α ρᵃ)(α ⊔ ρᵃ ⊔ ov ℓ)}{p q : Term X} where
- private
-  aℓι = α ⊔ ρᵃ ⊔ ℓ ⊔ ι
+ private aℓι = α ⊔ ρᵃ ⊔ ℓ ⊔ ι
+\end{code}
+\fi
+\begin{code}
 
  V-id1 : 𝒦 ⊫ p ≈ q → V ℓ ι 𝒦 ⊫ p ≈ q
+\end{code}\ifshort\else
+\begin{code}
  V-id1 σ 𝑩 (𝑨 , (⨅A , p⨅A , A≤⨅A) , BimgA) =
   H-id1{ℓ = aℓι}{𝒦 = S aℓι (P {β = α}{ρᵃ}ℓ ι 𝒦)}{p = p}{q} spK⊧pq 𝑩 (𝑨 , (spA , BimgA))
    where
@@ -1761,23 +1732,12 @@ module _ {X : Type χ}{ι : Level}{𝒦 : Pred(Algebra α ρᵃ)(α ⊔ ρᵃ �
    spK⊧pq : S aℓι (P ℓ ι 𝒦) ⊫ p ≈ q
    spK⊧pq = S-id1{ℓ = aℓι}{p = p}{q} (P-id1{ℓ = ℓ} {𝒦 = 𝒦}{p = p}{q} σ)
 \end{code}
-
-\paragraph*{Th 𝒦 ⊆ Th (V 𝒦)}
-From \af{V-id1} it follows that if \ab{𝒦} is a class of algebras, then the set of identities modeled by the algebras in \ab{𝒦} is contained in the set of identities modeled by the algebras in \af V \ab{𝒦}.  In other terms, \af{Th} \ab{𝒦} \aof{⊆} \af{Th} (\af V \ab{𝒦}).  We formalize this observation as follows.
-
-\begin{code}
-
- classIds-⊆-VIds : 𝒦 ⊫ p ≈ q  → (p , q) ∈ Th (V ℓ ι 𝒦)
- classIds-⊆-VIds pKq 𝑨 = V-id1 pKq 𝑨
-\end{code}
-
-
-
+\fi
 
 %% -------------------------------------------------------------------------------------
 
-\section{Free Algebras and the HSP Theorem}
-\label{free-algebras-and-the-hsp-theorem}
+\section{Free Algebras}
+\label{free-algebras}
 
 \subsection{The absolutely free algebra 𝑻 X}
 \label{the-absolutely-free-algebra-tx}
@@ -1799,8 +1759,6 @@ We now prove this in \agda, starting with the fact that every map from \ab{X} to
 \begin{code}
 
 module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}(h : X → 𝕌[ 𝑨 ]) where
- open Setoid 𝔻[ 𝑨 ] using ( _≈_ ; reflexive ; refl ; trans )
-
  free-lift : 𝕌[ 𝑻 X ] → 𝕌[ 𝑨 ]
  free-lift (ℊ x) = h x
  free-lift (node f t) = (f ̂ 𝑨) (λ i → free-lift (t i))
@@ -1809,8 +1767,9 @@ module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}(h : X → 𝕌[ 𝑨 ]) where
  free-lift-func ⟨$⟩ x = free-lift x
  cong free-lift-func = flcong
   where
-  flcong : ∀ {s t} → s ≃ t →  free-lift s ≈ free-lift t
-  flcong (_≃_.rfl x) = reflexive (≡.cong h x)
+  open Setoid 𝔻[ 𝑨 ] using ( _≈_ ) renaming ( reflexive to reflexiveᴬ )
+  flcong : ∀ {s t} → s ≃ t → free-lift s ≈ free-lift t
+  flcong (_≃_.rfl x) = reflexiveᴬ (≡.cong h x)
   flcong (_≃_.gnl x) = cong (Interp 𝑨) (≡.refl , (λ i → flcong (x i)))
 
 \end{code}
@@ -1821,7 +1780,6 @@ given term has the form \aic{node} \ab f \ab t, the free lift is defined as
 follows: Assuming (the induction hypothesis) that we know the image of each
 subterm \ab t \ab i under the free lift of \ab h, define the free lift at the
 full term by applying \ab f \aof{̂} \ab{𝑨} to the images of the subterms.
-
 The free lift so defined is a homomorphism by construction. Indeed, here is the trivial proof.
 
 \begin{code}
@@ -1843,13 +1801,10 @@ module _ {X : Type χ}{𝑨 : Algebra α ρᵃ} where
  open Setoid 𝔻[ 𝑨 ]  using ( _≈_ ; refl )
  open Environment 𝑨  using ( ⟦_⟧ )
 
- free-lift-interp : (η : X → 𝕌[ 𝑨 ])(p : Term X) → ⟦ p ⟧ ⟨$⟩ η ≈ (free-lift {𝑨 = 𝑨} η) p
- free-lift-interp η (ℊ x) = refl
- free-lift-interp η (node f t) = cong (Interp 𝑨) (≡.refl , (free-lift-interp η) ∘ t)
+ free-lift-interp : (η : X → 𝕌[ 𝑨 ])(p : Term X) → ⟦ p ⟧ ⟨$⟩ η ≈ (free-lift{𝑨 = 𝑨} η) p
+ free-lift-interp η (ℊ x)       = refl
+ free-lift-interp η (node f t)  = cong (Interp 𝑨) (≡.refl , (free-lift-interp η) ∘ t)
 \end{code}
-
-
-
 
 \subsection{The relatively free algebra 𝔽[ X ]}
 \label{the-relatively-free-algebra-f}
@@ -1858,113 +1813,76 @@ We now define the algebra
 \AgdaOperator{\AgdaFunction{𝔽[}}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}},
-which represents the relatively free algebra.
-Here, as above, \ab X plays the role of an arbitrary nonempty collection of variables. (It would suffice to take\ab X to be the cardinality of the largest algebra in \ab{𝒦}, but since we don't know that cardinality, we leave \ab X aribtrary for now.)
+which represents the \defn{relatively free algebra} over \ab X.
+The domain of the free algebra is a setoid whose \afld{Carrier} is the type \ad{Term} \ab X of {𝑆}-terms
+in \ab X. The interpretation of an operation in the free algebra is simply the operation itself.
+%This works since \ab{ℰ} \aod{⊢} \ab X \aod{▹\au{}≈\{}} is a congruence.
 
 \begin{code}
 
-module FreeAlgebra {χ : Level}{ι : Level}{I : Type ι}(ℰ : I → Eq) where
- open Algebra
+module FreeAlgebra {χ : Level}(ℰ : {Y : Type χ} → Pred (Term Y × Term Y) _) where
 
  FreeDomain : Type χ → Setoid _ _
- FreeDomain X = record  { Carrier        = Term X
-                        ; _≈_            = ℰ ⊢ X ▹_≈_
-                        ; isEquivalence  = ⊢▹≈IsEquiv }
-\end{code}
+ FreeDomain X =
+  record  { Carrier        = Term X
+          ; _≈_            = ℰ ⊢ X ▹_≈_
+          ; isEquivalence  = record { refl = reflexive ; sym = symmetric ; trans = transitive } }
 
-The interpretation of an operation is simply the operation itself.
-This works since
-\AgdaBound{ℰ}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{⊢}}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaOperator{\AgdaDatatype{▹\AgdaUnderscore{}≈\AgdaUnderscore{}}}
-is a congruence.
-
-\begin{code}
-
- FreeInterp : ∀ {X} → ⟨ 𝑆 ⟩ (FreeDomain X) ⟶ FreeDomain X
- FreeInterp ⟨$⟩ (f , ts) = node f ts
- cong FreeInterp (≡.refl , h) = app h
-
- 𝔽[_] : Type χ → Algebra (ov χ) (ι ⊔ ov χ)
+ 𝔽[_] : Type χ → Algebra (ov χ) _
  Domain 𝔽[ X ] = FreeDomain X
  Interp 𝔽[ X ] = FreeInterp
+  where
+  FreeInterp : ∀ {X} → ⟨ 𝑆 ⟩ (FreeDomain X) ⟶ FreeDomain X
+  FreeInterp ⟨$⟩ (f , ts)       = node f ts
+  cong FreeInterp (≡.refl , h)  = app h
+
 \end{code}
 
-\subsection{Basic properties of free algebras}
-\label{basic-properties-of-free-algebras}
-
-\begin{code}
-
-module FreeHom (χ : Level) {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
- private ι = ov(χ ⊔ α ⊔ ρᵃ ⊔ ℓ)
- open Eq
-
- ℐ : Type ι -- indexes the collection of equations modeled by 𝒦
- ℐ = Σ[ eq ∈ Eq{χ} ] 𝒦 ⊫ ((lhs eq) ≐ (rhs eq))
-
- ℰ : ℐ → Eq
- ℰ (eqv , p) = eqv
-
- ℰ⊢[_]▹Th𝒦 : (X : Type χ) → ∀{p q} → ℰ ⊢ X ▹ p ≈ q → 𝒦 ⊫ p ≈ q
- ℰ⊢[ X ]▹Th𝒦 x 𝑨 kA = sound (λ i ρ → ∥ i ∥ 𝑨 kA ρ) x where open Soundness ℰ 𝑨
- open FreeAlgebra {ι = ι}{I = ℐ} ℰ using ( 𝔽[_] )
-\end{code}
-
+%\subsection{Basic properties of free algebras}
+%\label{basic-properties-of-free-algebras}
 
 \paragraph*{The natural epimorphism from 𝑻 X to 𝔽[ X ]}
-We now define the natural epimorphism from
-\T{X} onto the relatively free algebra \Free{X} and prove that 
-the kernel of this morphism is the congruence of \T{X}
-defined by the identities modeled by (\af S \ab{𝒦}, hence by) \ab{𝒦}.
+We now define the natural epimorphism from \T{X} onto the relatively free algebra \Free{X} and prove that
+the kernel of this morphism is the congruence of \T{X} defined by the identities modeled by (\af S \ab{𝒦}, hence by) \ab{𝒦}.
 
 \begin{code}
 
- epi𝔽[_] : (X : Type χ) → epi (𝑻 X) 𝔽[ X ]
+module FreeHom {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
+ private c = α ⊔ ρᵃ ⊔ ℓ ; ι = ov c
+
+ open FreeAlgebra {χ = c} (Th 𝒦) using ( 𝔽[_] )
+
+ epi𝔽[_] : (X : Type c) → epi (𝑻 X) 𝔽[ X ]
  epi𝔽[ X ] = h , hepi
   where
-  open Algebra (𝑻 X)   using () renaming ( Domain  to TX    )
-  open Algebra 𝔽[ X ]  using () renaming ( Domain  to F     )
-  open Setoid TX       using () renaming ( _≈_     to _≈₀_  ; refl to refl₀ )
-  open Setoid F        using () renaming ( _≈_     to _≈₁_  ; refl to refl₁ )
-  open _≃_
+  open Setoid 𝔻[ 𝑻 X ]     using ()        renaming ( _≈_ to _≈₀_  ; refl to reflᵀ )
+  open Setoid 𝔻[ 𝔽[ X ] ]  using ( refl )  renaming ( _≈_ to _≈₁_  )
 
-  c : ∀ {x y} → x ≈₀ y → x ≈₁ y
-  c (rfl {x}{y} ≡.refl) = refl₁
-  c (gnl {f}{s}{t} x) = cong (Interp 𝔽[ X ]) (≡.refl , c ∘ x)
+  con : ∀ {x y} → x ≈₀ y → x ≈₁ y
+  con (rfl {x}{y} ≡.refl) = refl
+  con (gnl {f}{s}{t} x) = cong (Interp 𝔽[ X ]) (≡.refl , con ∘ x)
 
-  h : TX ⟶ F
-  h = record { f = id ; cong = c }
+  h : 𝔻[ 𝑻 X ] ⟶ 𝔻[ 𝔽[ X ] ]
+  h = record { f = id ; cong = con }
 
   hepi : IsEpi (𝑻 X) 𝔽[ X ] h
-  compatible (isHom hepi) = cong h refl₀
-  isSurjective hepi {y} = eq y refl₁
+  compatible (isHom hepi) = cong h reflᵀ
+  isSurjective hepi {y} = eq y refl
 
- hom𝔽[_] : (X : Type χ) → hom (𝑻 X) 𝔽[ X ]
+ hom𝔽[_] : (X : Type c) → hom (𝑻 X) 𝔽[ X ]
  hom𝔽[ X ] = IsEpi.HomReduct ∥ epi𝔽[ X ] ∥
 
- hom𝔽[_]-is-epic : (X : Type χ) → IsSurjective ∣ hom𝔽[ X ] ∣
- hom𝔽[ X ]-is-epic = IsEpi.isSurjective (snd (epi𝔽[ X ]))
 \end{code}
 
 As promised, we prove that the kernel of the natural epimorphism is the congruence defined by the identities modelled by \ab{𝒦}.
 
 \begin{code}
 
- class-models-kernel : ∀{X p q} → (p , q) ∈ ker ∣ hom𝔽[ X ] ∣ → 𝒦 ⊫ p ≈ q
- class-models-kernel {X = X}{p}{q} pKq = ℰ⊢[ X ]▹Th𝒦 pKq
-
- kernel-in-theory : {X : Type χ} → ker ∣ hom𝔽[ X ] ∣ ⊆ Th (V ℓ ι 𝒦)
- kernel-in-theory {X = X} {p , q} pKq vkA x = classIds-⊆-VIds {ℓ = ℓ}{p = p}{q}
-                                               (class-models-kernel pKq) vkA x
-
- module _ {X : Type χ} {𝑨 : Algebra α ρᵃ}{sA : 𝑨 ∈ S {β = α}{ρᵃ} ℓ 𝒦} where
-  open Environment 𝑨 using ( Equal )
-  ker𝔽⊆Equal : ∀{p q} → (p , q) ∈ ker ∣ hom𝔽[ X ] ∣ → Equal p q
-  ker𝔽⊆Equal{p = p}{q} x = S-id1{ℓ = ℓ}{p = p}{q} (ℰ⊢[ X ]▹Th𝒦 x) 𝑨 sA
-
- 𝒦⊫→ℰ⊢ : {X : Type χ} → ∀{p q} → 𝒦 ⊫ p ≈ q → ℰ ⊢ X ▹ p ≈ q
- 𝒦⊫→ℰ⊢ {p = p} {q} pKq = hyp (p ≐ q , pKq) where open _⊢_▹_≈_ using (hyp)
+ kernel-in-theory : {X : Type c} → ker ∣ hom𝔽[ X ] ∣ ⊆ Th (V ℓ ι 𝒦)
+ kernel-in-theory {X = X} {p , q} pKq 𝑨 vkA = V-id1{ℓ = ℓ}{p = p}{q} (ζ pKq) 𝑨 vkA
+  where
+  ζ : ∀{p q} → (Th 𝒦) ⊢ X ▹ p ≈ q → 𝒦 ⊫ p ≈ q
+  ζ x 𝑨 kA = sound (λ y ρ → y 𝑨 kA ρ) x where open Soundness (Th 𝒦) 𝑨
 \end{code}
 
 \paragraph*{The universal property}
@@ -1972,25 +1890,22 @@ As promised, we prove that the kernel of the natural epimorphism is the congruen
 \begin{code}
 
 module _  {𝑨 : Algebra (α ⊔ ρᵃ ⊔ ℓ) (α ⊔ ρᵃ ⊔ ℓ)} {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
- private ι = ov(α ⊔ ρᵃ ⊔ ℓ)
+ private c = α ⊔ ρᵃ ⊔ ℓ ; ι = ov c
+ open FreeHom {ℓ = ℓ} {𝒦}
+ open FreeAlgebra {χ = c}(Th 𝒦)  using ( 𝔽[_] )
+ open Setoid 𝔻[ 𝑨 ]              using ( refl ; sym ; trans ) renaming  ( Carrier  to A )
 
- open FreeHom {ℓ = ℓ}(α ⊔ ρᵃ ⊔ ℓ) {𝒦}
- open FreeAlgebra {ι = ι}{I = ℐ} ℰ  using ( 𝔽[_] )
- open Setoid 𝔻[ 𝑨 ]                 using ( trans ; sym ; refl ) renaming ( Carrier to A )
-
-
- 𝔽-ModTh-epi : 𝑨 ∈ Mod (Th (V ℓ ι 𝒦))
-  →            epi 𝔽[ A ] 𝑨
+ 𝔽-ModTh-epi : 𝑨 ∈ Mod (Th (V ℓ ι 𝒦)) → epi 𝔽[ A ] 𝑨
  𝔽-ModTh-epi A∈ModThK = φ , isEpi
   where
-   φ : 𝔻[ 𝔽[ A ] ] ⟶ 𝔻[ 𝑨 ]
-   _⟨$⟩_ φ = free-lift{𝑨 = 𝑨} id
-   cong φ {p} {q} pq  = trans  ( sym (free-lift-interp{𝑨 = 𝑨} id p) )
-                      ( trans  ( A∈ModThK{p = p}{q} (kernel-in-theory pq) id )
+  φ : 𝔻[ 𝔽[ A ] ] ⟶ 𝔻[ 𝑨 ]
+  _⟨$⟩_ φ = free-lift{𝑨 = 𝑨} id
+  cong φ {p} {q} pq  = trans  ( sym (free-lift-interp{𝑨 = 𝑨} id p) )
+                     ( trans  ( A∈ModThK{p = p}{q} (kernel-in-theory pq) id )
                                ( free-lift-interp{𝑨 = 𝑨} id q ) )
-   isEpi : IsEpi 𝔽[ A ] 𝑨 φ
-   compatible (isHom isEpi) = cong (Interp 𝑨) (≡.refl , (λ _ → refl))
-   isSurjective isEpi {y} = eq (ℊ y) refl
+  isEpi : IsEpi 𝔽[ A ] 𝑨 φ
+  compatible (isHom isEpi) = cong (Interp 𝑨) (≡.refl , (λ _ → refl))
+  isSurjective isEpi {y} = eq (ℊ y) refl
 
  𝔽-ModTh-epi-lift : 𝑨 ∈ Mod (Th (V ℓ ι 𝒦)) → epi 𝔽[ A ] (Lift-Alg 𝑨 ι ι)
  𝔽-ModTh-epi-lift A∈ModThK = ∘-epi (𝔽-ModTh-epi (λ {p q} → A∈ModThK{p = p}{q})) ToLift-epi
@@ -2000,20 +1915,51 @@ module _  {𝑨 : Algebra (α ⊔ ρᵃ ⊔ ℓ) (α ⊔ ρᵃ ⊔ ℓ)} {𝒦 :
 
 %% -------------------------------------------------------------------------------------
 
-\subsection{Products of classes of algebras}
-\label{products-of-classes-of-algebras}
+\section{Birkhoff's Variety Theorem}
+
+\paragraph*{Informal statement and proof}
+Let \ab{𝒦} be a class of algebras. Recall that \ab{𝒦} is a \emph{variety} provided it is closed under homomorphisms, subalgebras and products; equivalently, \af{H} (\af{S} (\af{P} \ab{𝒦})) ⊆ \ab{𝒦}.
+(As \af{H}, \af{S}, and \af{P} are closure operators, the inclusion \ab{𝒦} ⊆ \af{H} (\af{S} (\af{P} \ab{𝒦}))
+is always valid, for every class \ab{𝒦}.)
+We call \ab{𝒦} an \emph{equational class} if it is precisely the class of all models of some set of term identities.
+
+It is easy to prove that \emph{every equational class is a variety}.  Indeed, suppose \ab{𝒦} is an equational
+class and suppose the set \ab{ℰ} of term identities \defn{axiomatizes} \ab{𝒦}. That is, \ab{𝒦} \af{⊫} \ab{ℰ} and for all \ab{𝑨} we have \ab{𝑨} \af{⊨} \ab{ℰ} \as{→} \ab{𝑨} \af{∈} \ab{𝒦}. Then, since the classes \af H \ab{𝒦}, \af S \ab{𝒦}, \af P \ab{𝒦} and \ab{𝒦} all satisfy the same set of equations, we have \af{H} (\af{S} (\af{P} \ab{𝒦})) ⊫ \ab{ℰ}, so \af{V} \ab{𝒦} = \af{H} (\af{S} (\af{P} \ab{𝒦})) ⊆ \ab{𝒦}; that is, \ab{𝒦} is a variety. The converse assertion---that \emph{every variety is an equational class}---is more difficult to prove and is known as Birkhoff's variety theorem.
+
+We now describe the standard informal proof of Birkhoff's theorem and then present a formal, constructive, type-theoretic proof of this theorem in Agda.
+
+Let \ab{𝒦} be an arbitrary variety.  We will describe a set of equations that axiomatizes \ab{𝒦}, thus showing that \ab{𝒦} is an equational class.  A natural choice is the set \af{Th} \ab{𝒦} of all equations that hold in \ab{𝒦}. We will prove that \ab{𝒦} is precisely the class of structures
+modeling \af{Th} \ab{𝒦}
+.
+Define \ab{𝒦⁺} = \af{Mod} (\af{Th} \ab{𝒦}).  Clearly, \ab{𝒦} \aof{⊆} \ab{𝒦⁺}. We prove the reverse inclusion. Let \ab{𝑨} \af{∈} \ab{𝒦⁺}.
+To complete the proof it suffices to find an algebra \ab{𝑭} belonging to \af{S} (\af{P} \ab{𝒦}) such that
+\ab{𝑨} is the homomorphic image of \ab{𝑭}. Indeed, this will prove that \ab{𝑨} belongs to
+\af{H} (\af{S} (\af{P} \ab{𝒦})), which is \ab{𝒦}, since we assumed that \ab{𝒦} is a variety.
+
+Let \ab{X} be a set of cardinality max(|A|, ω), and let \ab{ρ} : \ab{X} \as{→} \af{𝕌[ \ab{𝑨} ]} be a surjective valuation of variable symbols in the domain of \ab{𝑨}. By the \af{lift-hom} lemma that we formalized above, the map \ab{ρ} extends to an epimorphism \ab{ρ⁺} from \T{X} onto \ab{𝕌[ \ab{𝑨} ]}.
+Furthermore, since \ab{𝔽} := \T{X}/Θ, there is an epimorphism \ab{g} : \T{X} \as{→} \ab{𝔽}.
+We claim that \af{ker} \ab g \af{⊆} \af{ker} \ab h. If the claim is true, then there is a map \ab{f} : \ab{𝔽} \as{→} \ab{𝑨} such that \ab f \af{∘} \ab g = \ab h.
+Since \ab h is epic, so is \ab f. Hence \ab{𝑨} \af{∈} \af{𝖧} (\af{𝔽} \ab X) \aof{⊆} \ab{𝒦⁺} completing the proof.
+
+
+\paragraph*{Formal statement and overview of the formal proof}
+
+TODO: complete this section
+
+\paragraph*{Products of classes of algebras}
 
 We want to pair each (\ab{𝑨} , \ab p) (where \ab p : \ab{𝑨} \af{∈} \af S \ab{𝒦}) with an environment
-\ab{ρ} : \ab X \as{→} \aof{∣} \ab{𝑨} \aof{∣} so that we can quantify over all algebras \emph{and} all
-assignments of values in the domain \aof{∣} \ab{𝑨} \aof{∣} to variables in \ab X.
+\ab{ρ} : \ab X \as{→} \aof{𝕌[ \ab{𝑨} ]} so that we can quantify over all algebras \emph{and} all
+assignments of values in the domain of \ab{𝑨} to variables in \ab X.
 
 \begin{code}
 
 module _ (𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)){X : Type (α ⊔ ρᵃ ⊔ ℓ)} where
- private ι = ov(α ⊔ ρᵃ ⊔ ℓ)
- open FreeHom {ℓ = ℓ} (α ⊔ ρᵃ ⊔ ℓ){𝒦}
- open FreeAlgebra {ι = ι}{I = ℐ} ℰ  using ( 𝔽[_] )
- open Environment                   using ( Env )
+ private c = α ⊔ ρᵃ ⊔ ℓ ; ι = ov c
+
+ open FreeHom {ℓ = ℓ} {𝒦}
+ open FreeAlgebra {χ = c}(Th 𝒦)  using ( 𝔽[_] )
+ open Environment                using ( Env )
 
  ℑ⁺ : Type ι
  ℑ⁺ = Σ[ 𝑨 ∈ (Algebra α ρᵃ) ] (𝑨 ∈ S ℓ 𝒦) × (Carrier (Env 𝑨 X))
@@ -2027,36 +1973,34 @@ module _ (𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)){X : Type (α 
 \end{code}
 
 Next we define a useful type, \af{skEqual}, which we use to represent a term identity \ab p \aic{≈} \ab q for any
-given \ab i = (\ab{𝑨} , \ab{sA} , \ab{ρ}) (where \ab{𝑨} is an algebra, \ab{sA} : \ab{𝑨} \af{∈} \af{S} \ab{𝒦} is a proof that \ab{𝑨} belongs to \af{S} \ab{𝒦}, and \ab{ρ} is a mapping from \ab X to the domain of \ab{𝑨}). Then we prove \af{AllEqual⊆ker𝔽} which asserts that if the identity \ab{p} \aic{≈} \ab q holds in all \ab{𝑨} \aof{∈} \af S \ab{𝒦} (for all environments), then \ab p \aic{≈} \ab q
-holds in the relatively free algebra
-\Free{X}; equivalently, the pair (\ab p , \ab q) belongs to the
-kernel of the natural homomorphism from
-\T{X} onto \Free{X}. We will use this fact below to prove
-that there is a monomorphism from \Free{X} into \ab{ℭ}, and thus \Free{X} is a subalgebra of \ab{ℭ},
-so belongs to \af S (\af P \ab{𝒦}).
-
+given \ab i = (\ab{𝑨} , \ab{sA} , \ab{ρ}), where \ab{𝑨} is an algebra, \ab{sA} is a proof that \ab{𝑨} belongs to \af{S} \ab{𝒦}, and \ab{ρ} is an environment map
+(assigning values in the domain of \ab{𝑨} to variable symbols in \ab X).
 \begin{code}
 
  skEqual : (i : ℑ⁺) → ∀{p q} → Type ρᵃ
  skEqual i {p}{q} = ⟦ p ⟧ ⟨$⟩ snd ∥ i ∥ ≈ ⟦ q ⟧ ⟨$⟩ snd ∥ i ∥
-  where
-  open Setoid 𝔻[ 𝔄⁺ i ]    using ( _≈_ )
-  open Environment (𝔄⁺ i)  using ( ⟦_⟧ )
+  where  open Setoid 𝔻[ 𝔄⁺ i ] using ( _≈_ )
+         open Environment (𝔄⁺ i)  using ( ⟦_⟧ )
 
- AllEqual⊆ker𝔽 : ∀ {p q} → (∀ i → skEqual i {p}{q}) → (p , q) ∈ ker ∣ hom𝔽[ X ] ∣
- AllEqual⊆ker𝔽 {p} {q} x = Goal
-  where
-  S𝒦⊫pq : S{β = α}{ρᵃ} ℓ 𝒦 ⊫ p ≈ q
-  S𝒦⊫pq 𝑨 sA ρ = x (𝑨 , sA , ρ)
-  open Setoid 𝔻[ 𝔽[ X ] ] using ( _≈_ )
-  Goal : p ≈ q
-  Goal = 𝒦⊫→ℰ⊢ (S-id2{ℓ = ℓ}{p = p}{q} S𝒦⊫pq)
+\end{code}
+
+Later we prove that if the identity \ab{p} \af{≈} \ab q holds in all \ab{𝑨} \aof{∈} \af S \ab{𝒦} (for all environments), then \ab p \af{≈} \ab q
+holds in the relatively free algebra \Free{X}; equivalently, the pair (\ab p , \ab q) belongs to the
+kernel of the natural homomorphism from \T{X} onto \Free{X}. We will use that fact to prove
+that the kernel of the natural hom from \T{X} to \ab{ℭ} is contained in the kernel of the natural hom from \T{X} onto \Free{X},
+whence we construct a monomorphism from \Free{X} into \ab{ℭ}, and thus \Free{X} is a subalgebra of \ab{ℭ},
+so belongs to \af S (\af P \ab{𝒦}).
+
+\begin{code}
 
  homℭ : hom (𝑻 X) ℭ
  homℭ = ⨅-hom-co 𝔄⁺ h
   where
   h : ∀ i → hom (𝑻 X) (𝔄⁺ i)
   h i = lift-hom (snd ∥ i ∥)
+\end{code}
+\ifshort\else
+\begin{code}
 
  ker𝔽⊆kerℭ : ker ∣ hom𝔽[ X ] ∣ ⊆ ker ∣ homℭ ∣
  ker𝔽⊆kerℭ {p , q} pKq (𝑨 , sA , ρ) = Goal
@@ -2065,84 +2009,137 @@ so belongs to \af S (\af P \ab{𝒦}).
   open Environment 𝑨  using ( ⟦_⟧ )
   fl : ∀ t → ⟦ t ⟧ ⟨$⟩ ρ ≈ free-lift ρ t
   fl t = free-lift-interp {𝑨 = 𝑨} ρ t
+
+  ζ : ∀{p q} → (Th 𝒦) ⊢ X ▹ p ≈ q → 𝒦 ⊫ p ≈ q
+  ζ x 𝑨 kA = sound (λ y ρ → y 𝑨 kA ρ) x where open Soundness (Th 𝒦) 𝑨
+
   subgoal : ⟦ p ⟧ ⟨$⟩ ρ ≈ ⟦ q ⟧ ⟨$⟩ ρ
-  subgoal = ker𝔽⊆Equal{𝑨 = 𝑨}{sA} pKq ρ
+  subgoal = S-id1{ℓ = ℓ}{p = p}{q} (ζ pKq) 𝑨 sA ρ
   Goal : (free-lift{𝑨 = 𝑨} ρ p) ≈ (free-lift{𝑨 = 𝑨} ρ q)
   Goal = trans (sym (fl p)) (trans subgoal (fl q))
-
+\end{code}
+\fi
+\begin{code}
 
  hom𝔽ℭ : hom 𝔽[ X ] ℭ
- hom𝔽ℭ = ∣ HomFactor ℭ homℭ hom𝔽[ X ] ker𝔽⊆kerℭ hom𝔽[ X ]-is-epic ∣
+ hom𝔽ℭ = ∣ HomFactor ℭ homℭ hom𝔽[ X ] ker𝔽⊆kerℭ (isSurjective ∥ epi𝔽[ X ] ∥) ∣
+
+\end{code}
+If \AgdaPair{p}{q} belongs to the kernel of \af{homℭ}, then
+\af{Th} \ab{𝒦} includes the identity \ab{p} \af{≈} \ab{q}---that is,
+\af{Th} \ab{𝒦} \af{⊢} \ab X \af{▹} \ab{p} \af{≈} \ab{q}. Equivalently,
+if the kernel of \af{homℭ} is contained in that of \af{hom𝔽[ X ]}.
+\ifshort
+We omit the formal proof of this lemma and merely display its formal statement, which is the following.
+\else
+We formalize this fact as follows.
+
+\begin{code}
 
  kerℭ⊆ker𝔽 : ∀{p q} → (p , q) ∈ ker ∣ homℭ ∣ → (p , q) ∈ ker ∣ hom𝔽[ X ] ∣
- kerℭ⊆ker𝔽 {p}{q} pKq = E⊢pq
+\end{code}
+\ifshortelse
+\begin{code}
+ kerℭ⊆ker𝔽 {p}{q} pKq = S𝒦⊫→ker𝔽 (S𝒦⊫ pqEqual)
   where
+  S𝒦⊫ : (∀ i → skEqual i {p}{q}) → S{β = α}{ρᵃ} ℓ 𝒦 ⊫ p ≈ q
+  S𝒦⊫ x 𝑨 sA ρ = x (𝑨 , sA , ρ)
+  S𝒦⊫→ker𝔽 : S{β = α}{ρᵃ} ℓ 𝒦 ⊫ p ≈ q → (p , q) ∈ ker ∣ hom𝔽[ X ] ∣
+  S𝒦⊫→ker𝔽 x = hyp (S-id2{ℓ = ℓ}{p = p}{q} x)
+
   pqEqual : ∀ i → skEqual i {p}{q}
   pqEqual i = goal
    where
    open Environment (𝔄⁺ i)  using ( ⟦_⟧ )
    open Setoid 𝔻[ 𝔄⁺ i ]    using ( _≈_ ; sym ; trans )
    goal : ⟦ p ⟧ ⟨$⟩ snd ∥ i ∥ ≈ ⟦ q ⟧ ⟨$⟩ snd ∥ i ∥
-   goal = trans (free-lift-interp{𝑨 = ∣ i ∣}(snd ∥ i ∥) p)
-           (trans (pKq i)(sym (free-lift-interp{𝑨 = ∣ i ∣} (snd ∥ i ∥) q)))
-  E⊢pq : ℰ ⊢ X ▹ p ≈ q
-  E⊢pq = AllEqual⊆ker𝔽 pqEqual
+   goal  = trans (free-lift-interp{𝑨 = ∣ i ∣}(snd ∥ i ∥) p)
+         ( trans (pKq i)(sym (free-lift-interp{𝑨 = ∣ i ∣} (snd ∥ i ∥) q)))
+
+\end{code}
+\fi
+We conclude that the homomorphism from \Free{X} to \af{ℭ} is injective, whence it follows that \Free{X} is (isomorphic to) a subalgebra of \af{ℭ}.
+
+\begin{code}
 
  mon𝔽ℭ : mon 𝔽[ X ] ℭ
  mon𝔽ℭ = ∣ hom𝔽ℭ ∣ , isMon
   where
   isMon : IsMon 𝔽[ X ] ℭ ∣ hom𝔽ℭ ∣
   isHom isMon = ∥ hom𝔽ℭ ∥
-  isInjective isMon {p} {q} φpq = kerℭ⊆ker𝔽 φpq
-
-\end{code}
-
-Now that we have proved the existence of a monomorphism from \Free{X} to \ab{ℭ} we can
-prove that \Free{X} is a subalgebra of \ab{ℭ}, so belongs to \af S (\af P \ab{𝒦}).
-
-\begin{code}
+  isInjective isMon {p}{q} φpq = kerℭ⊆ker𝔽 φpq
 
  𝔽≤ℭ : 𝔽[ X ] ≤ ℭ
  𝔽≤ℭ = mon→≤ mon𝔽ℭ
 
+\end{code}
+
+Using the last result we will prove that \Free{X} belongs to \af{S} (\af{P} \ab{𝒦}). This requires one more technical lemma concerning the classes \af{S} and \af{P};
+specifically,
+\ifshort
+\af{P} (\af{S} \ab{𝒦}) \aof{⊆} \af{S} (\af{P} \ab{𝒦}) holds for every class \ab{𝒦}.
+The \ualmodule{Varieties.Func.Preservation.lagda} module contains the formal statement and proof of this result, called \af{PS⊆SP}, which we omit.
+\else
+a product of subalgebras of algebras in a class is a subalgebra of a product of algebras in the class;
+in other terms, \af{P} (\af{S} \ab{𝒦}) \aof{⊆} \af{S} (\af{P} \ab{𝒦}), for every class \ab{𝒦}.
+We state and prove this in Agda as follows.
+
+\begin{code}
+
+ private a = α ⊔ ρᵃ ; oaℓ = ov (a ⊔ ℓ)
+
+ PS⊆SP : P (a ⊔ ℓ) oaℓ (S{β = α}{ρᵃ} ℓ 𝒦) ⊆ S oaℓ (P ℓ oaℓ 𝒦)
+ PS⊆SP {𝑩} (I , ( 𝒜 , sA , B≅⨅A )) = Goal
+  where
+  ℬ : I → Algebra α ρᵃ
+  ℬ i = ∣ sA i ∣
+  kB : (i : I) → ℬ i ∈ 𝒦
+  kB i =  fst ∥ sA i ∥
+  ⨅A≤⨅B : ⨅ 𝒜 ≤ ⨅ ℬ
+  ⨅A≤⨅B = ⨅-≤ λ i → snd ∥ sA i ∥
+  Goal : 𝑩 ∈ S{β = oaℓ}{oaℓ}oaℓ (P {β = oaℓ}{oaℓ} ℓ oaℓ 𝒦)
+  Goal = ⨅ ℬ , (I , (ℬ , (kB , ≅-refl))) , (≅-trans-≤ B≅⨅A ⨅A≤⨅B)
+\end{code}
+\fi
+
+We conclude this subsection with the proof that \Free{X} belongs to \af{S} (\af{P} \ab{𝒦}).
+
+\begin{code}
+
  SP𝔽 : 𝔽[ X ] ∈ S ι (P ℓ ι 𝒦)
- SP𝔽 = S-idem SSP𝔽
+ SP𝔽 = S-idem (ℭ , (SPℭ , 𝔽≤ℭ))
   where
   PSℭ : ℭ ∈ P (α ⊔ ρᵃ ⊔ ℓ) ι (S ℓ 𝒦)
   PSℭ = ℑ⁺ , (𝔄⁺ , ((λ i → fst ∥ i ∥) , ≅-refl))
   SPℭ : ℭ ∈ S ι (P ℓ ι 𝒦)
-  SPℭ = PS⊆SP {ℓ = ℓ} PSℭ
-  SSP𝔽 : 𝔽[ X ] ∈ S ι (S ι (P ℓ ι 𝒦))
-  SSP𝔽 = ℭ , (SPℭ , 𝔽≤ℭ)
+  SPℭ = PS⊆SP PSℭ
 \end{code}
-
-
 
 %% -------------------------------------------------------------------------------------
 
-\subsection{The HSP Theorem}
+%% \paragraph*{The HSP Theorem}
 
-Finally, we are in a position to prove Birkhoff's celebrated variety theorem.
+Finally, we are ready to present the formal statement and proof of Birkhoff's celebrated variety theorem.
 
 \begin{code}
 
 module _ {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
- private ι = ov(α ⊔ ρᵃ ⊔ ℓ)
- open FreeHom {ℓ = ℓ}(α ⊔ ρᵃ ⊔ ℓ){𝒦}
- open FreeAlgebra {ι = ι}{I = ℐ} ℰ using ( 𝔽[_] )
+ private c = α ⊔ ρᵃ ⊔ ℓ ; ι = ov c
+ open FreeAlgebra {χ = c}(Th 𝒦) using ( 𝔽[_] )
 
  Birkhoff : ∀ 𝑨 → 𝑨 ∈ Mod (Th (V ℓ ι 𝒦)) → 𝑨 ∈ V ℓ ι 𝒦
- Birkhoff 𝑨 ModThA = V-≅-lc{α}{ρᵃ}{ℓ} 𝒦 𝑨 VlA
+ Birkhoff 𝑨 ModThA = 𝔽[ 𝕌[ 𝑨 ] ] , (sp𝔽A , AimgF)
   where
-  open Setoid 𝔻[ 𝑨 ] using () renaming ( Carrier to A )
-  sp𝔽A : 𝔽[ A ] ∈ S{ι} ι (P ℓ ι 𝒦)
+  sp𝔽A : 𝔽[ 𝕌[ 𝑨 ] ] ∈ S{ι} ι (P ℓ ι 𝒦)
   sp𝔽A = SP𝔽{ℓ = ℓ} 𝒦
-  epi𝔽lA : epi 𝔽[ A ] (Lift-Alg 𝑨 ι ι)
+  epi𝔽lA : epi 𝔽[ 𝕌[ 𝑨 ] ] (Lift-Alg 𝑨 ι ι)
   epi𝔽lA = 𝔽-ModTh-epi-lift{ℓ = ℓ} (λ {p q} → ModThA{p = p}{q})
-  lAimg𝔽A : Lift-Alg 𝑨 ι ι IsHomImageOf 𝔽[ A ]
-  lAimg𝔽A = epi→ontohom 𝔽[ A ] (Lift-Alg 𝑨 ι ι) epi𝔽lA
-  VlA : Lift-Alg 𝑨 ι ι ∈ V ℓ ι 𝒦
-  VlA = 𝔽[ A ] , sp𝔽A , lAimg𝔽A
+  φ : Lift-Alg 𝑨 ι ι IsHomImageOf 𝔽[ 𝕌[ 𝑨 ] ]
+  φ = epi→ontohom 𝔽[ 𝕌[ 𝑨 ] ] (Lift-Alg 𝑨 ι ι) epi𝔽lA
+  AimgF : 𝑨 IsHomImageOf 𝔽[ 𝕌[ 𝑨 ] ]
+  AimgF = ∘-hom ∣ φ ∣ (from Lift-≅) ,
+          ∘-IsSurjective _ _ ∥ φ ∥ (fromIsSurjective (Lift-≅{𝑨 = 𝑨}))
+
 
 \end{code}
 
@@ -2151,29 +2148,38 @@ that we formalize this inclusion as well, however trivial the proof.
 
 \begin{code}
 
- module _ {𝑨 : Algebra α ρᵃ} where
-  Birkhoff-converse : 𝑨 ∈ V{α}{ρᵃ}{α}{ρᵃ}{α}{ρᵃ} ℓ ι 𝒦 → 𝑨 ∈ Mod{X = 𝕌[ 𝑨 ]} (Th (V ℓ ι 𝒦))
-  Birkhoff-converse vA pThq = pThq 𝑨 vA
+ Birkhoff-converse :  {𝑨 : Algebra α ρᵃ}
+  →                   𝑨 ∈ V{β = α}{ρᵃ}{α}{ρᵃ} ℓ ι 𝒦
+  →                   𝑨 ∈ Mod{X = 𝕌[ 𝑨 ]} (Th (V ℓ ι 𝒦))
+
+ Birkhoff-converse {𝑨 = 𝑨} vA pThq = pThq 𝑨 vA
 
 \end{code}
-
 We have thus proved that every variety is an equational class.
 
 Readers familiar with the classical formulation of the Birkhoff HSP theorem as an
 ``if and only if'' assertion might worry that the proof is still incomplete. However,
-recall that in the \ualmodule{Varieties.Func.Preservation} module we proved the following
-identity preservation lemma:\\[4pt]
-\ab{V-id1} : \ab{𝒦} \aof{⊫} \ab p \aic{≐} \ab q \as{→} \af{V} \ab{𝒦} \aof{⊫} \ab p \aic{≐} \ab q
-\\[4pt]
+recall that we already proved the identity preservation lemma
+%in the \ualmodule{Varieties.Func.Preservation} module
+\ab{V-id1} : \ab{𝒦} \aof{⊫} \ab p \aic{≐} \ab q \as{→} \af{V} \ab{𝒦} \aof{⊫} \ab p \aic{≐} \ab q.
 Thus, if \ab{𝒦} is an equational class---that is, if \ab{𝒦} is the class of algebras
 satisfying all identities in some set---then \af V \ab{𝒦} \aof{⊆} \ab{𝒦}.  On the other hand, we
-proved that \af V is expansive in the \ualmodule{Varieties.Func.Closure} module:
-
-\ab{V-expa} : \ab{𝒦} \aof{⊆} \af V \ab{𝒦}
-
+also proved that \af V is expansive, that is, \ab{V-expa} : \ab{𝒦} \aof{⊆} \af V \ab{𝒦},
 so \ab{𝒦} (= \af V \ab{𝒦} = \af H \af S \af P \ab{𝒦}) is a variety.
-
-Taken together, \af{V-id1} and \af{V-expa} constitute formal proof that every equational
+Thus, taken together, \af{V-id1} and \af{V-expa} constitute formal proof that every equational
 class is a variety. This completes the formal proof of Birkhoff's variety theorem.
+
+
+
+
+%% \paragraph*{Th 𝒦 ⊆ Th (V 𝒦)}
+%% From \af{V-id1} it follows that if \ab{𝒦} is a class of algebras, then the set of identities
+%% modeled by the algebras in \ab{𝒦} is contained in the set of identities modeled by the algebras
+%% in \af V \ab{𝒦}.  In other terms, \af{Th} \ab{𝒦} \aof{⊆} \af{Th} (\af V \ab{𝒦}).  We formalize
+%% this observation as follows.
+%% begin{code}[hide]
+%% classIds-⊆-VIds : 𝒦 ⊫ p ≈ q  → (p , q) ∈ Th (V ℓ ι 𝒦)
+%% classIds-⊆-VIds pKq 𝑨 = V-id1 pKq 𝑨
+%% end{code}
 
 
