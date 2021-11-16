@@ -127,17 +127,17 @@ open import  Relation.Unary                                  using ( Pred ; _⊆
 
 -- Import 23 definitions from the Agda Standard Library and rename 12 of them.
 open import  Agda.Primitive  renaming ( Set    to Type    )  using ( _⊔_ ; lsuc                    )
-open import  Data.Product    renaming ( proj₁  to fst     )  using ( _×_ ; _,_ ; Σ ; Σ-syntax      )
-                             renaming ( proj₂  to snd     )
+open import  Data.Product    renaming ( proj₁  to fst     )
+                             renaming ( proj₂  to snd     )  using ( _×_ ; _,_ ; Σ ; Σ-syntax      )
 open import  Function        renaming ( Func   to _⟶_     )  using ( Injection ; Surjection        )
 open         _⟶_             renaming ( f      to _⟨$⟩_   )  using ( cong                          )
-open         Setoid          renaming ( refl   to reflˢ   )  using ( Carrier ; isEquivalence       )
+open         Setoid          renaming ( refl   to reflˢ   )
                              renaming ( sym    to symˢ    )
                              renaming ( trans  to transˢ  )
-                             renaming ( _≈_    to _≈ˢ_    )
-open         IsEquivalence   renaming ( refl   to reflᵉ   )  using (                               )
+                             renaming ( _≈_    to _≈ˢ_    )  using ( Carrier ; isEquivalence       )
+open         IsEquivalence   renaming ( refl   to reflᵉ   )
                              renaming ( sym    to symᵉ    )
-                             renaming ( trans  to transᵉ  )
+                             renaming ( trans  to transᵉ  )  using ()
 
 -- Assign handles to 3 modules of the Agda Standard Library.
 import       Function.Definitions                   as FD
@@ -153,8 +153,7 @@ private variable
  𝑓 : fst 𝑆
 \end{code}
 \fi
-Note that the above imports include some of the minor adjustments to ``standard Agda'' syntax (e.g., that of the \agdastdlib) to suite our own tastes.
-Take special note of the following conventions used throughout the \agdaalgebras library and this paper: we use \AgdaPrimitive{Type} in place of \AgdaPrimitive{Set}, the infix long arrow symbol,
+Note that the above imports include some of the minor adjustments to ``standard Agda'' syntax to suite our own taste. Take special note of the following conventions used throughout the \agdaalgebras library and this paper: we use \AgdaPrimitive{Type} in place of \AgdaPrimitive{Set}, the infix long arrow symbol,
 \AgdaRecord{\AgdaUnderscore{}⟶\AgdaUnderscore{}}, instead of \AgdaRecord{Func} (the type of ``setoid functions'' discussed in §\ref{setoid-functions} below), and the symbol \aofld{\au{}⟨\$⟩\au{}} in place of \afld{f} (application of the map of a setoid function); we use
 \AgdaField{fst} and \AgdaField{snd}, and sometimes \AgdaOperator{\AgdaFunction{∣\AgdaUnderscore{}∣}} and
 \AgdaOperator{\AgdaFunction{∥\AgdaUnderscore{}∥}}, to denote the first and second projections out of the product type \AgdaOperator{\AgdaFunction{\AgdaUnderscore{}×\AgdaUnderscore{}}}.
@@ -184,7 +183,7 @@ mathematics, formalization using a machine demands that we make nearly everythin
 explicit, including notions of equality.
 
 Actually, the \agdaalgebras library was first developed without setoids, relying exclusively
-on the \agdastdlib's inductively defined equality type, \ad{\au{}≡\au{}},
+on the inductively defined equality type \ad{\au{}≡\au{}} from \am{Agda.Builtin.Equality},
 along with some experimental, domain-specific types for equivalence classes, quotients, etc.
 One notable consequence of this design decision was that our formalization of many
 theorem required postulating function extensionality, an axiom that is not provable
@@ -1918,14 +1917,34 @@ module _  {𝑨 : Algebra (α ⊔ ρᵃ ⊔ ℓ) (α ⊔ ρᵃ ⊔ ℓ)} {𝒦 :
 
 \section{Birkhoff's Variety Theorem}
 
-\paragraph*{Informal statement of the theorem}
+\paragraph*{Informal statement and proof}
+Let \ab{𝒦} be a class of algebras. Recall that \ab{𝒦} is a \emph{variety} provided it is closed under homomorphisms, subalgebras and products; equivalently, \af{H} (\af{S} (\af{P} \ab{𝒦})) ⊆ \ab{𝒦}.
+(As \af{H}, \af{S}, and \af{P} are closure operators, the inclusion \ab{𝒦} ⊆ \af{H} (\af{S} (\af{P} \ab{𝒦}))
+is always valid, for every class \ab{𝒦}.)
+We call \ab{𝒦} an \emph{equational class} if it is precisely the class of all models of some set of term identities.
+
+It is easy to prove that \emph{every equational class is a variety}.  Indeed, suppose \ab{𝒦} is an equational
+class and suppose the set \ab{ℰ} of term identities \defn{axiomatizes} \ab{𝒦}. That is, \ab{𝒦} \af{⊫} \ab{ℰ} and for all \ab{𝑨} we have \ab{𝑨} \af{⊨} \ab{ℰ} \as{→} \ab{𝑨} \af{∈} \ab{𝒦}. Then, since the classes \af H \ab{𝒦}, \af S \ab{𝒦}, \af P \ab{𝒦} and \ab{𝒦} all satisfy the same set of equations, we have \af{H} (\af{S} (\af{P} \ab{𝒦})) ⊫ \ab{ℰ}, so \af{V} \ab{𝒦} = \af{H} (\af{S} (\af{P} \ab{𝒦})) ⊆ \ab{𝒦}; that is, \ab{𝒦} is a variety. The converse assertion---that \emph{every variety is an equational class}---is more difficult to prove and is known as Birkhoff's variety theorem.
+
+We now describe the standard informal proof of Birkhoff's theorem and then present a formal, constructive, type-theoretic proof of this theorem in Agda.
+
+Let \ab{𝒦} be an arbitrary variety.  We will describe a set of equations that axiomatizes \ab{𝒦}, thus showing that \ab{𝒦} is an equational class.  A natural choice is the set \af{Th} \ab{𝒦} of all equations that hold in \ab{𝒦}. We will prove that \ab{𝒦} is precisely the class of structures
+modeling \af{Th} \ab{𝒦}
+.
+Define \ab{𝒦⁺} = \af{Mod} (\af{Th} \ab{𝒦}).  Clearly, \ab{𝒦} \aof{⊆} \ab{𝒦⁺}. We prove the reverse inclusion. Let \ab{𝑨} \af{∈} \ab{𝒦⁺}.
+To complete the proof it suffices to find an algebra \ab{𝑭} belonging to \af{S} (\af{P} \ab{𝒦}) such that
+\ab{𝑨} is the homomorphic image of \ab{𝑭}. Indeed, this will prove that \ab{𝑨} belongs to
+\af{H} (\af{S} (\af{P} \ab{𝒦})), which is \ab{𝒦}, since we assumed that \ab{𝒦} is a variety.
+
+Let \ab{X} be a set of cardinality max(|A|, ω), and let \ab{ρ} : \ab{X} \as{→} \af{𝕌[ \ab{𝑨} ]} be a surjective valuation of variable symbols in the domain of \ab{𝑨}. By the \af{lift-hom} lemma that we formalized above, the map \ab{ρ} extends to an epimorphism \ab{ρ⁺} from \T{X} onto \ab{𝕌[ \ab{𝑨} ]}.
+Furthermore, since \ab{𝔽} := \T{X}/Θ, there is an epimorphism \ab{g} : \T{X} \as{→} \ab{𝔽}.
+We claim that \af{ker} \ab g \af{⊆} \af{ker} \ab h. If the claim is true, then there is a map \ab{f} : \ab{𝔽} \as{→} \ab{𝑨} such that \ab f \af{∘} \ab g = \ab h.
+Since \ab h is epic, so is \ab f. Hence \ab{𝑨} \af{∈} \af{𝖧} (\af{𝔽} \ab X) \aof{⊆} \ab{𝒦⁺} completing the proof.
 
 
+\paragraph*{Formal statement and overview of the formal proof}
 
-
-\paragraph*{Formal statement and structure of the proof}
-
-
+TODO: complete this section
 
 \paragraph*{Products of classes of algebras}
 
