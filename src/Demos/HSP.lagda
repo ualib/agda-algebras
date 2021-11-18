@@ -374,15 +374,15 @@ followed by a formal implementation of the definition in Martin-Löf dependent
 type theory using the Agda language.
 
 This section is organized into the following subsections:
-§\ref{signatures-and-signature-types} defines a general notion of \emph{signature} of a structure and then defines a type that represent signatures;
-§\ref{algebras-and-algebra-types} does the same for \emph{algebraic structures} and \emph{product algebras};
+§\ref{signatures} defines a general notion of \emph{signature} of a structure and then defines a type that represent signatures;
+§\ref{algebras} does the same for \emph{algebraic structures} and \emph{product algebras};
 §\ref{homomorphisms} defines \emph{homomorphisms}, \emph{monomorphisms}, and \emph{epimorphisms}, presents types that codify these concepts and formally verifies some of their basic properties;
 §§\ref{subalgebras}--\ref{terms} do the same for \emph{subalgebras} and \emph{terms}, respectively.
 
 
 %% -----------------------------------------------------------------------------
-\subsection{Signatures and signature types}
-\label{signatures-and-signature-types}
+\subsection{Signatures}
+\label{signatures}
 
 In model theory, the \defn{signature} \ab{𝑆} = (\ab{𝐶}, \ab{𝐹}, \ab{𝑅}, \ab{ρ})
 of a structure consists of three (possibly empty) sets \ab{𝐶}, \ab{𝐹}, and
@@ -483,8 +483,8 @@ transᵉ  (isEquivalence (⟨ 𝑆 ⟩ ξ)) (≡.refl , g)(≡.refl , h)  = ≡.
 \end{code}
 
 %% -----------------------------------------------------------------------------
-\subsection{Algebras and algebra types}
-\label{algebras-and-algebra-types}
+\subsection{Algebras}
+\label{algebras}
 Informally, an \defn{algebraic structure in the signature} \ab{𝑆} = (\ab{F}, \ab{ρ}) (or \ab{𝑆}-\defn{algebra}) is denoted by \ab{𝑨} = (\ab{A}, \ab{Fᴬ}) and consists of
 \begin{itemize}
 \item a \emph{nonempty} set (or type) \ab A, called the \emph{domain} of the algebra;
@@ -2051,15 +2051,17 @@ environments assigning values in the domain of \ab{𝑨} to variables in \ab X. 
   where open Setoid 𝔻[ 𝔄⁺ i ] using ( _≈_ ) ; open Environment (𝔄⁺ i) using ( ⟦_⟧ )
 
 \end{code}
-The type \af{skEqual} provides a term identity \ab p \af{≈} \ab q for each index \ab i = (\ab{𝑨} , \ab{p} , \ab{ρ}) of the product \ab{𝑪}.
+The type \af{skEqual} provides a term identity \ab p \af{≈} \ab q for each index \ab i = (\ab{𝑨} , \ab{p} , \ab{ρ}) of the product.
 %(here, as above, \ab{𝑨} is an algebra, \ab{sA} is a proof that \ab{𝑨} belongs to \af{S} \ab{𝒦}, and \ab{ρ} is an environment).
 %map assigning values in the domain of \ab{𝑨} to variable symbols in \ab X).
+\ifshort\else
 Later we prove that if the identity \ab{p} \af{≈} \ab q holds in all \ab{𝑨} \aof{∈} \af S \ab{𝒦} (for all environments), then \ab p \af{≈} \ab q
 holds in the relatively free algebra \Free{X}; equivalently, the pair (\ab p , \ab q) belongs to the
 kernel of the natural homomorphism from \T{X} onto \Free{X}. We will use that fact to prove
 that the kernel of the natural hom from \T{X} to \ab{𝑪} is contained in the kernel of the natural hom from \T{X} onto \Free{X},
 whence we construct a monomorphism from \Free{X} into \ab{𝑪}, and thus \Free{X} is a subalgebra of \ab{𝑪},
 so belongs to \af S (\af P \ab{𝒦}).
+\fi
 
 \begin{code}
 
@@ -2143,11 +2145,11 @@ We conclude that the homomorphism from \Free{X} to \af{𝑪} is injective, whenc
  F≤C = mon→≤ monFC
 
 \end{code}
-Using the last result we will prove that \Free{X} belongs to \af{S} (\af{P} \ab{𝒦}). This requires one more technical lemma concerning the classes \af{S} and \af{P};
+Using the last result we prove that \Free{X} belongs to \af{S} (\af{P} \ab{𝒦}). This requires one more technical lemma concerning the classes \af{S} and \af{P};
 specifically,
 \ifshort
 \af{P} (\af{S} \ab{𝒦}) \aof{⊆} \af{S} (\af{P} \ab{𝒦}) holds for every class \ab{𝒦}.
-The \ualmodule{Varieties.Func.Preservation.lagda} module contains the formal statement and proof of this result, called \af{PS⊆SP}, which we omit.
+The \ualmodule{Varieties.Func.Preservation.lagda} module contains the formal statement and proof of that result (called \af{PS⊆SP}) which we omit.
 \else
 a product of subalgebras of algebras in a class is a subalgebra of a product of algebras in the class;
 in other terms, \af{P} (\af{S} \ab{𝒦}) \aof{⊆} \af{S} (\af{P} \ab{𝒦}), for every class \ab{𝒦}.
