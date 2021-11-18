@@ -152,6 +152,16 @@ For example, the collection of imports required for the present module, \DemosHS
 \\
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}%
+\>[13]\AgdaModule{Data.Unit.Polymorphic}%
+\>[61]\AgdaKeyword{using}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaSpace{}%
+\AgdaFunction{⊤}\AgdaSpace{}%
+\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaFunction{tt}%
+\>[99]\AgdaSymbol{)}\<%
+\\
+\>[0]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaKeyword{import}%
 \>[13]\AgdaModule{Function}%
 \>[61]\AgdaKeyword{using}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaSpace{}%
@@ -1252,10 +1262,9 @@ type theory using the Agda language.
 
 This section is organized into the following subsections:
 §\ref{signatures-and-signature-types} defines a general notion of \emph{signature} of a structure and then defines a type that represent signatures;
-§§\ref{algebras-and-algebra-types}--\ref{product-algebras} do the same for
-for \emph{algebraic structures} and \emph{product algebras}, respectively;
-§\ref{homomorphisms} defines \emph{homomorphism}, \emph{monomorphism}, and \emph{epimorphism}, presents types that codify these concepts and formally verifies some of their basic properties;
-§§\ref{subalgebras}--\ref{terms} do the same for \emph{subalgebra} and \emph{term}, respectively.
+§\ref{algebras-and-algebra-types} does the same for \emph{algebraic structures} and \emph{product algebras};
+§\ref{homomorphisms} defines \emph{homomorphisms}, \emph{monomorphisms}, and \emph{epimorphisms}, presents types that codify these concepts and formally verifies some of their basic properties;
+§§\ref{subalgebras}--\ref{terms} do the same for \emph{subalgebras} and \emph{terms}, respectively.
 
 
 %% -----------------------------------------------------------------------------
@@ -2032,8 +2041,7 @@ has the same algebraic properties as the original algebra; more precisely, the i
 \fi      %%% END LONG VERSION ONLY SECTION
          %%%
 
-\subsection{Product Algebras}
-\label{product-algebras}
+\paragraph*{Product Algebras}
 We give an informal description of the \defn{product} of a family of \ab{𝑆}-algebras and then define a type which formalizes this notion.
 
 Let \ab{ι} be a universe and \ab I~:~\ap{Type}~\ab{ι} a type (which, in the
@@ -2098,7 +2106,7 @@ Here we merely display this function's interface, but see the \ualmodule{Algebra
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaKeyword{record}%
-\>[1107I]\AgdaSymbol{\{}\AgdaSpace{}%
+\>[1112I]\AgdaSymbol{\{}\AgdaSpace{}%
 \AgdaField{Carrier}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaSymbol{∀}\AgdaSpace{}%
@@ -2109,7 +2117,7 @@ Here we merely display this function's interface, but see the \ualmodule{Algebra
 \AgdaBound{i}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\<%
 \\
-\>[.][@{}l@{}]\<[1107I]%
+\>[.][@{}l@{}]\<[1112I]%
 \>[9]\AgdaSymbol{;}\AgdaSpace{}%
 \AgdaOperator{\AgdaField{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
@@ -2131,10 +2139,10 @@ Here we merely display this function's interface, but see the \ualmodule{Algebra
 \\
 %
 \>[9]\AgdaSymbol{;}%
-\>[1134I]\AgdaField{isEquivalence}\AgdaSpace{}%
+\>[1139I]\AgdaField{isEquivalence}\AgdaSpace{}%
 \AgdaSymbol{=}\<%
 \\
-\>[1134I][@{}l@{\AgdaIndent{0}}]%
+\>[1139I][@{}l@{\AgdaIndent{0}}]%
 \>[12]\AgdaKeyword{record}%
 \>[20]\AgdaSymbol{\{}\AgdaSpace{}%
 \AgdaField{refl}%
@@ -2238,9 +2246,7 @@ Here we merely display this function's interface, but see the \ualmodule{Algebra
 \subsection{Homomorphisms}
 \label{homomorphisms}
 
-\paragraph*{Basic definitions}
-\label{homomorphisms-basic-definitions}
-
+%\paragraph*{Basic definitions}
 Suppose \ab{𝑨} and \ab{𝑩} are \ab{𝑆}-algebras. A \defn{homomorphism} (or
 ``hom'') from \ab{𝑨} to \ab{𝑩} is a setoid function
 \ab{h}~:~\aof{𝔻[ \ab{𝑨} ]} \as{→} \aof{𝔻[ \ab{𝑩} ]} that is \defn{compatible}
@@ -3582,7 +3588,7 @@ Here we merely give a formal statement of this theorem.
 \\
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{\AgdaUnderscore{}}%
-\>[2093I]\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
+\>[2098I]\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaRecord{Algebra}\AgdaSpace{}%
 \AgdaGeneralizable{α}\AgdaSpace{}%
@@ -3596,7 +3602,7 @@ Here we merely give a formal statement of this theorem.
 \AgdaGeneralizable{γ}\AgdaSpace{}%
 \AgdaGeneralizable{ρᶜ}\AgdaSymbol{\}}\<%
 \\
-\>[.][@{}l@{}]\<[2093I]%
+\>[.][@{}l@{}]\<[2098I]%
 \>[9]\AgdaSymbol{(}\AgdaBound{gh}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{hom}\AgdaSpace{}%
@@ -4029,13 +4035,15 @@ Here we merely give a formal statement of this theorem.
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{φcomp}\<%
 \end{code}
+
+\paragraph*{Isomorphisms}
+%\label{isomorphisms}
          %%%
 \fi      %%% END LONG VERSION ONLY SECTION
          %%%
 \end{AgdaAlign}
 
-\paragraph*{Isomorphisms}
-%\label{isomorphisms}
+\ifshort \medskip \else \fi
 
 Two structures are \defn{isomorphic} provided there are homomorphisms going back and forth between them which compose to the identity map.
          %%%
@@ -4810,6 +4818,52 @@ We conclude this section on homomorphisms with what seems, for our purposes, the
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{IsHomImageOf}}\AgdaSpace{}%
 \AgdaBound{𝑨}\<%
+\\
+\>[0]\<%
+\end{code}
+For future reference we record the fact that an algebra is its own homomorphic image.
+
+\begin{code}%
+\>[0]\<%
+\\
+\>[0]\AgdaFunction{IdHomImage}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaRecord{Algebra}\AgdaSpace{}%
+\AgdaGeneralizable{α}\AgdaSpace{}%
+\AgdaGeneralizable{ρᵃ}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{IsHomImageOf}}\AgdaSpace{}%
+\AgdaBound{𝑨}\<%
+\\
+\>[0]\AgdaFunction{IdHomImage}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{α}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{α}\AgdaSymbol{\}\{}\AgdaArgument{𝑨}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{𝒾𝒹}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaSymbol{λ}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{y}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaInductiveConstructor{Image\AgdaUnderscore{}∋\AgdaUnderscore{}.eq}\AgdaSpace{}%
+\AgdaBound{y}\AgdaSpace{}%
+\AgdaFunction{refl}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaKeyword{where}\AgdaSpace{}%
+\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaModule{Setoid}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaField{Domain}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaKeyword{using}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaSpace{}%
+\AgdaFunction{refl}\AgdaSpace{}%
+\AgdaSymbol{)}\<%
 \end{code}
 \ifshort %%%
 \else    %%% BEGIN LONG VERSION ONLY
@@ -4830,7 +4884,7 @@ and \ab p is a proof that there exists a homomorphism from \ab{𝑨} onto \ab{�
 
 \subsection{Subalgebras}
 \label{subalgebras}
-\paragraph*{Basic definitions}
+%\paragraph*{Basic definitions}
 %\label{subalgebras-basic-definitions}
 Given \ab{𝑆}-algebras \ab{𝑨} and \ab{𝑩}, we say that \ab{𝑨} is a \defn{subalgebra} of \ab{𝑨} and write
 \AgdaBound{𝑨}\AgdaSpace{}%
@@ -5247,7 +5301,7 @@ We conclude this brief subsection on subalgebras with two easy facts that will b
 
 \subsection{Terms}
 \label{terms}
-\paragraph*{Basic definitions}
+%\paragraph*{Basic definitions}
 Fix a signature \ab{𝑆} and let \ab X denote an arbitrary nonempty collection of variable symbols.
 (The chosen collection of variable symbols is sometimes called the \defn{context}.)
 Assume the symbols in \ab X are distinct from the operation symbols of \ab{𝑆}, that is \ab X \aof{∩} \aof{∣} \ab{𝑆} \aof{∣} = ∅.
@@ -6124,7 +6178,7 @@ A substitution from one context \ab X to another \ab Y is used to transport an e
 \>[0]\<%
 \end{code}
 
-Finally, we have a \af{substitution} lemma says that \aof{⟦} \ab{t} \af{[} \ab{σ} \af{]} \aof{⟧} \ab{ρ}, a term applied to a substitution and evaluated in the evironment \ab{ρ}, is the same as the term evaluated in the transported environment \aof{⟦} \ab{σ} \aof{⟧} \ab{ρ}.
+Finally, we have a substitution lemma which says that \aof{⟦} \ab{t} \af{[} \ab{σ} \af{]} \aof{⟧} \aofld{⟨\$⟩} \ab{ρ} (= the term \ab{t} applied to a substitution \ab{σ} and evaluated in an evironment \ab{ρ}) is the same as \aof{⟦ \ab{t} ⟧} \aofld{⟨\$⟩} \aof{⟦ \ab{σ} ⟧s} \ab{ρ} (= the term \ab{t} evaluated in the \ab{σ}-transported environment). %\aof{⟦} \ab{σ} \aof{⟧} \ab{ρ}.
 
 \begin{code}%
 \>[0]\<%
@@ -6536,13 +6590,13 @@ We omit the formal definitions and proofs of these types, but see the \ualmodule
 
 %% -------------------------------------------------------------------------------------
 
-\section{Model Theory and Equational Logic}
-\label{model-theory-and-equational-logic}
+\section{Equational Logic}
+\label{equational-logic}
 
-\subsection{Basic definitions}
-\label{model-theory-basic-definitions}
+\paragraph*{Basic definitions}
+%\label{model-theory-basic-definitions}
 
-\subsubsection*{Term identities and the ⊧ relation}
+%\subsubsection*{Term identities and the ⊧ relation}
 Given a  signature \ab{𝑆} and a context of variable symbols \ab X, a \defn{term equation} or \defn{identity}
 (in this signature and context) is an ordered pair (\ab p , \ab q) of 𝑆-terms.
 (Informally, such an equation is often denoted by \ab p \af{≈} \ab q.)
@@ -6687,9 +6741,11 @@ We represent a collection of identities as a predicate over pairs of terms---for
 \AgdaKeyword{open}\AgdaSpace{}%
 \AgdaModule{Environment}\AgdaSpace{}%
 \AgdaBound{𝑨}\<%
+\\
+\>[0]\<%
 \end{code}
 
-\subsubsection*{Equational theories and classes}
+%\subsubsection*{Equational theories and classes}
 In (informal) equational logic, if \ab{𝒦} is a class of structures and \ab{ℰ} a set of term identities, then
 the set of term equations modeled by \ab{𝒦} is denoted \af{Th}~\ab{𝒦} and called the \defn{equational theory} of \ab{𝒦},
 while the class of structures modeling \ab{ℰ} is denoted by \af{Mod}~\ab{ℰ} and is called the \defn{equational class axiomatized} by \ab{ℰ}.
@@ -6775,9 +6831,11 @@ These notions may be formalize in type theory as follows.
 \AgdaKeyword{open}\AgdaSpace{}%
 \AgdaModule{Environment}\AgdaSpace{}%
 \AgdaBound{𝑨}\<%
+\\
+\>[0]\<%
 \end{code}
 
-\subsubsection*{The entailment relation}
+%\subsubsection*{The entailment relation}
 We represent entailment in type theory by defining an inductive type that is similar to the one Andreas Abel defined for formalizing Birkhoff's completeness theorem (\textit{op.~cit.}).
 
 \begin{code}%
@@ -6845,7 +6903,7 @@ We represent entailment in type theory by defining an inductive type that is sim
 \>[1]\AgdaInductiveConstructor{app}%
 \>[13]\AgdaSymbol{:}%
 \>[16]\AgdaSymbol{∀\{}\AgdaBound{Y}\AgdaSymbol{\}\{}\AgdaBound{ps}%
-\>[4268I]\AgdaBound{qs}\AgdaSpace{}%
+\>[4305I]\AgdaBound{qs}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
 \AgdaBound{𝑆}\AgdaSpace{}%
@@ -6855,7 +6913,7 @@ We represent entailment in type theory by defining an inductive type that is sim
 \AgdaDatatype{Term}\AgdaSpace{}%
 \AgdaBound{Y}\AgdaSymbol{\}}\<%
 \\
-\>[4268I][@{}l@{\AgdaIndent{0}}]%
+\>[4305I][@{}l@{\AgdaIndent{0}}]%
 \>[26]\AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{(∀}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSpace{}%
@@ -6988,7 +7046,7 @@ We represent entailment in type theory by defining an inductive type that is sim
 Entailment is \defn{sound} in the following sense: % for every algebra \ab{𝑨} that models the equations in \ab{ℰ},
 if \ab{ℰ} entails \ab p \aof{≈} \ab q and \ab{𝑨} \aof{⊨} \ab{ℰ}, then \ab p \aof{≈} \ab q holds in \ab{𝑨}.  In other terms,
 the derivation \ab{ℰ} \aod{⊢} \ab X \aod{▹} \ab p \aod{≈} \ab q implies that \ab p \aof{≈} \ab q holds in every model of \ab{ℰ}.
-We will apply this result---called \af{sound} and borrowed from Andreas Abel's proof of Birkhoff's completeness theorem (\textit{op.~cit.})---only once below (in §\ref{basic-properties-of-free-algebras})%
+We will apply this result---called \af{sound} and borrowed from Andreas Abel's proof of Birkhoff's completeness theorem (\textit{op.~cit.})---only once below %(in §\ref{basic-properties-of-free-algebras})%
 \ifshort
 , so we omit its straightforward formalization.
 \else
@@ -7229,25 +7287,23 @@ We will apply this result---called \af{sound} and borrowed from Andreas Abel's p
 \fi
 
 
-\subsection{The Closure Operators H, S, P and V}
-\label{the-closure-operators-h-s-p-and-v}
+\paragraph*{The Closure Operators H, S, P and V}
+%\label{the-closure-operators-h-s-p-and-v}
 Fix a signature \ab{𝑆}, let \ab{𝒦} be a class of \ab{𝑆}-algebras, and define
-
 \begin{itemize}
-\item \af H \ab{𝒦} = algebras isomorphic to a homomorphic image of a member of \ab{𝒦};
-\item \af S \ab{𝒦} = algebras isomorphic to a subalgebra of a member of \ab{𝒦};
-\item \af P \ab{𝒦} = algebras isomorphic to a product of members of \ab{𝒦}.
+\item \af H \ab{𝒦} = algebras isomorphic to homomorphic images of members of \ab{𝒦};
+\item \af S \ab{𝒦} = algebras isomorphic to subalgebras of a members of \ab{𝒦};
+\item \af P \ab{𝒦} = algebras isomorphic to products of members of \ab{𝒦}.
 \end{itemize}
+A straight-forward verification confirms that \af H, \af S, and \af P are \emph{closure operators} (expansive, monotone, and idempotent).  A class \ab{𝒦} of \ab{𝑆}-algebras is said to be \emph{closed under the taking of homomorphic images} provided \af H \ab{𝒦} \aof{⊆} \ab{𝒦}. Similarly, \ab{𝒦} is \emph{closed under the taking of subalgebras} (resp., \emph{arbitrary products}) provided \af S \ab{𝒦} \aof{⊆} \ab{𝒦} (resp., \af P \ab{𝒦} \aof{⊆} \ab{𝒦}). The operators \af H, \af S, and \af P can be composed with one another repeatedly, forming yet more closure operators.
 
-A straight-forward verification confirms that \af H, \af S, and \ab P are \emph{closure operators} (expansive, monotone, and idempotent).  A class \ab{𝒦} of \ab{𝑆}-algebras is said to be \emph{closed under the taking of homomorphic images} provided \af H \ab{𝒦} \aof{⊆} \ab{𝒦}. Similarly, \ab{𝒦} is \emph{closed under the taking of subalgebras} (resp., \emph{arbitrary products}) provided \af S \ab{𝒦} \aof{⊆} \ab{𝒦} (resp., \af P \ab{𝒦} \aof{⊆} \ab{𝒦}). The operators \af H, \af S, and \af P can be composed with one another repeatedly, forming yet more closure operators.
-
-An algebra is a homomorphic image (resp., subalgebra; resp., product) of every algebra to which it is isomorphic. Thus, the class \af H \ab{𝒦} (resp., \af S \ab{𝒦}; resp., \af P \ab{𝒦}) is closed under isomorphism.
+% An algebra is a homomorphic image (resp., subalgebra; resp., product) of every algebra to which it is isomorphic. Thus, the class \af H \ab{𝒦} (resp., \af S \ab{𝒦}; resp., \af P \ab{𝒦}) is closed under isomorphism.
 
 A \emph{variety} is a class of \ab{𝑆}-algebras that is closed under the taking of
 homomorphic images, subalgebras, and arbitrary products.  To represent varieties
 we define types for the closure operators \af H, \af S, and \af P that are composable.
 Separately, we define a type \af V which represents closure under all three
-operators, \af H, \af S, and \af P.  Thus, if \ab{𝒦} is a class of \ab{𝑆}-algebras`, then 
+operators, \af H, \af S, and \af P.  Thus, if \ab{𝒦} is a class of \ab{𝑆}-algebras, then
 \af V \ab{𝒦} := \af H (\af S (\af P \ab{𝒦})), and \ab{𝒦} is a variety iff \af V \ab{𝒦} \aof{⊆} \ab{𝒦}.
 
 We now define the type \af H to represent classes of algebras that include all homomorphic images of algebras in the class---i.e., classes that are closed under the taking of homomorphic images---the type \af S to represent classes of algebras that closed under the taking of subalgebras, and the type \af P to represent classes of algebras closed under the taking of arbitrary products.
@@ -7414,8 +7470,79 @@ We now define the type \af H to represent classes of algebras that include all h
 \AgdaFunction{⨅}\AgdaSpace{}%
 \AgdaBound{𝒜}\AgdaSymbol{))}\<%
 \\
+\>[0]\<%
+\end{code}
+
+As mentioned, \af S is a closure operator.  The facts that \af S is monotone and expansive won't be needed, so we omit their proofs.
+However, we do make use of idempotence of \af S, so let us pause to prove that property here.
+
+\begin{code}%
+\>[0]\<%
+\\
+\>[0]\AgdaFunction{S-idem}\AgdaSpace{}%
+\AgdaSymbol{:}%
+\>[10]\AgdaSymbol{\{}\AgdaBound{𝒦}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Pred}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaRecord{Algebra}\AgdaSpace{}%
+\AgdaGeneralizable{α}\AgdaSpace{}%
+\AgdaGeneralizable{ρᵃ}\AgdaSymbol{)(}\AgdaGeneralizable{α}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaGeneralizable{ρᵃ}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaFunction{ov}\AgdaSpace{}%
+\AgdaGeneralizable{ℓ}\AgdaSymbol{)\}}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaSymbol{→}%
+\>[10]\AgdaFunction{S}\AgdaSymbol{\{}\AgdaArgument{β}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaGeneralizable{γ}\AgdaSymbol{\}\{}\AgdaGeneralizable{ρᶜ}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaGeneralizable{α}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaGeneralizable{ρᵃ}%
+\>[32]\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaGeneralizable{ℓ}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{S}\AgdaSymbol{\{}\AgdaArgument{β}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaGeneralizable{β}\AgdaSymbol{\}\{}\AgdaGeneralizable{ρᵇ}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaGeneralizable{ℓ}\AgdaSpace{}%
+\AgdaBound{𝒦}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊆}}\AgdaSpace{}%
+\AgdaFunction{S}\AgdaSymbol{\{}\AgdaArgument{β}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaGeneralizable{γ}\AgdaSymbol{\}\{}\AgdaGeneralizable{ρᶜ}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaGeneralizable{ℓ}\AgdaSpace{}%
+\AgdaBound{𝒦}\<%
+\\
 %
 \\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaFunction{S-idem}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝑩}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{sB}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{A≤B}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaBound{x≤A}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{𝑩}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{sB}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaFunction{≤-transitive}\AgdaSpace{}%
+\AgdaBound{x≤A}\AgdaSpace{}%
+\AgdaBound{A≤B}\AgdaSymbol{)}\<%
+\\
+\>[0]\<%
+\end{code}
+Finally, we define the \defn{varietal closure} of a class \ab{𝒦} to be the class \af{V} \ab{𝒦} := \af{H} (\af{S} (\af{P} \ab{𝒦})).
+(Recall, \ab{𝒦} is called a \defn{variety} if \af{V} \ab{𝒦} = \ab{𝒦}.)
+\begin{code}%
+\>[0]\<%
+\\
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{\AgdaUnderscore{}}%
 \>[10]\AgdaSymbol{\{}\AgdaBound{α}\AgdaSpace{}%
@@ -7490,73 +7617,10 @@ We now define the type \af H to represent classes of algebras that include all h
 \AgdaBound{ℓ}\AgdaSpace{}%
 \AgdaBound{ι}\AgdaSpace{}%
 \AgdaBound{𝒦}\AgdaSymbol{))}\<%
-\end{code}
-
-
-\paragraph*{Idempotence of S} \af S is a closure operator.  The facts that \af S is monotone and expansive won't be needed, so we omit the proof of these facts.  However, we will make use of idempotence of \af S, so we prove that property as follows.
-
-\begin{code}%
+\\
 \>[0]\<%
-\\
-\>[0]\AgdaFunction{S-idem}\AgdaSpace{}%
-\AgdaSymbol{:}%
-\>[10]\AgdaSymbol{\{}\AgdaBound{𝒦}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{Pred}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaRecord{Algebra}\AgdaSpace{}%
-\AgdaGeneralizable{α}\AgdaSpace{}%
-\AgdaGeneralizable{ρᵃ}\AgdaSymbol{)(}\AgdaGeneralizable{α}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaGeneralizable{ρᵃ}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaFunction{ov}\AgdaSpace{}%
-\AgdaGeneralizable{ℓ}\AgdaSymbol{)\}}\<%
-\\
-\>[0][@{}l@{\AgdaIndent{0}}]%
-\>[1]\AgdaSymbol{→}%
-\>[10]\AgdaFunction{S}\AgdaSymbol{\{}\AgdaArgument{β}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaGeneralizable{γ}\AgdaSymbol{\}\{}\AgdaGeneralizable{ρᶜ}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaGeneralizable{α}\AgdaSpace{}%
-\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaGeneralizable{ρᵃ}%
-\>[32]\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
-\AgdaGeneralizable{ℓ}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{S}\AgdaSymbol{\{}\AgdaArgument{β}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaGeneralizable{β}\AgdaSymbol{\}\{}\AgdaGeneralizable{ρᵇ}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaGeneralizable{ℓ}\AgdaSpace{}%
-\AgdaBound{𝒦}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{⊆}}\AgdaSpace{}%
-\AgdaFunction{S}\AgdaSymbol{\{}\AgdaArgument{β}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaGeneralizable{γ}\AgdaSymbol{\}\{}\AgdaGeneralizable{ρᶜ}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaGeneralizable{ℓ}\AgdaSpace{}%
-\AgdaBound{𝒦}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaFunction{S-idem}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝑩}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaBound{sB}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaBound{A≤B}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaBound{x≤A}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{𝑩}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{sB}\AgdaSpace{}%
-\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaFunction{≤-transitive}\AgdaSpace{}%
-\AgdaBound{x≤A}\AgdaSpace{}%
-\AgdaBound{A≤B}\AgdaSymbol{)}\<%
 \end{code}
 
-\paragraph*{Algebraic invariance of ⊧}
 The binary relation \aof{⊧} would be practically useless if it were not an \emph{algebraic invariant} (i.e., invariant under isomorphism). Let us now verify that the models relation we defined above has this essential property.
 
 \begin{code}%
@@ -7763,11 +7827,9 @@ The binary relation \aof{⊧} would be practically useless if it were not an \em
 \AgdaOperator{\AgdaFunction{𝔻[}}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\<%
+\\
+\>[0]\<%
 \end{code}
-
-\ifshort\else
-\paragraph*{Subalgebraic invariance of ⊧}
-\fi
 Identities modeled by an algebra \ab{𝑨} are also modeled by every subalgebra of \ab{𝑨}.
 \ifshort
 We will refer to this fact as \af{⊧-S-invar}. We omit its proof since it is similar to the proof of
@@ -7908,9 +7970,9 @@ This fact is formalized in Agda as follows.
 \>[2]\AgdaFunction{ξ}\AgdaSpace{}%
 \AgdaBound{b}\AgdaSpace{}%
 \AgdaSymbol{=}%
-\>[4962I]\AgdaOperator{\AgdaFunction{begin}}\<%
+\>[4999I]\AgdaOperator{\AgdaFunction{begin}}\<%
 \\
-\>[4962I][@{}l@{\AgdaIndent{0}}]%
+\>[4999I][@{}l@{\AgdaIndent{0}}]%
 \>[9]\AgdaFunction{h}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
 \AgdaBound{p}\AgdaSpace{}%
@@ -7968,9 +8030,9 @@ This fact is formalized in Agda as follows.
 \AgdaOperator{\AgdaFunction{𝔻[}}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\<%
+\\
+\>[0]\<%
 \end{code}
-
-\paragraph*{Product invariance of ⊧}
 \fi
 Next, an identity satisfied by all algebras in an indexed collection is also satisfied by the product of algebras in that collection.
 \ifshort
@@ -8157,7 +8219,7 @@ We omit the formal proof of this fact, and refer to it as \af{⊧-P-invar} below
 \end{code}
 \fi
 
-\paragraph*{Identity preservation}
+%\paragraph*{Identity preservation}
 The classes \af H \ab{𝒦}, \af S \ab{𝒦}, \af P \ab{𝒦}, and \af V \ab{𝒦} all satisfy the same set of equations.  We will only use a subset of the inclusions used to prove this fact. For complete proofs, see the
 \ualmodule{Varieties.Func.Preservation} module of the \agdaalgebras library.
 \ifshort
@@ -8193,6 +8255,8 @@ First we prove that the closure operator \af H is compatible with identities tha
 \fi
 
 \begin{code}%
+\>[0]\<%
+\\
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{H-id1}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -8434,14 +8498,14 @@ First we prove that the closure operator \af H is compatible with identities tha
 \AgdaOperator{\AgdaFunction{𝔻[}}\AgdaSpace{}%
 \AgdaBound{𝑩}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\<%
+\\
+\>[0]\<%
 \end{code}
 
 Similarly for \af S and the obvious converse, though barely worth mentioning, must be formally proved as well since we use it below.
 \fi
 \begin{code}%
-\>[0]\<%
-\\
-%
+\>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{S-id1}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝒦}\AgdaSpace{}%
@@ -8479,12 +8543,12 @@ Similarly for \af S and the obvious converse, though barely worth mentioning, mu
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{kA}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaBound{B≤A}\<%
+\\
+\>[0]\<%
 \end{code}
 \fi
 \begin{code}%
-\>[0]\<%
-\\
-%
+\>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{S-id2}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{S}\AgdaSpace{}%
@@ -8519,11 +8583,10 @@ Similarly for \af S and the obvious converse, though barely worth mentioning, mu
 \>[0]\<%
 \end{code}
 Finally, we have analogous pairs of implications for \af P and \af V.  In each case, we will only need the first implication, so we omit the formal proof of the others.
+
 \fi
 
 \begin{code}%
-\>[0]\<%
-\\
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{P-id1}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -8647,12 +8710,12 @@ Finally, we have analogous pairs of implications for \af P and \af V.  In each c
 \AgdaBound{ℓ}\AgdaSpace{}%
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
 \AgdaBound{ι}\<%
+\\
+\>[0]\<%
 \end{code}
 \fi
 \begin{code}%
-\>[0]\<%
-\\
-%
+\>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{V-id1}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝒦}\AgdaSpace{}%
@@ -8773,23 +8836,20 @@ Finally, we have analogous pairs of implications for \af P and \af V.  In each c
 
 \section{Free Algebras}
 \label{free-algebras}
-
-\subsection{The absolutely free algebra 𝑻 X}
-\label{the-absolutely-free-algebra-tx}
-
+\paragraph*{The absolutely free algebra}
 The term algebra \af{𝑻} \ab X is \emph{absolutely free} (or \emph{universal}, or
 \emph{initial}) for algebras in the signature \ab{𝑆}. That is, for every
 \ab{𝑆}-algebra \ab{𝑨}, the following hold.
 
 \begin{itemize}
-\item Every function from \ab{𝑋} to \aof{∣} \ab{𝑨} \aof{∣} lifts to a
-  homomorphism from \af{𝑻} \ab{X} to \ab{𝑨}.
-\item The homomorphism that exists by item 1 is unique.
+\item Every function from \ab{X} to \af{𝕌[ \ab{𝑨} ]} lifts to a homomorphism from \af{𝑻} \ab{X} to \ab{𝑨}.
+\item The homomorphism that exists by the previous item is unique.
 \end{itemize}
 
-We now prove this in \agda, starting with the fact that every map from \ab{X} to
-\aof{∣} \ab{𝑨} \aof{∣} lifts to a map from \aof{∣} \af{𝑻} \ab{X} \aof{∣} to
-\aof{∣} \ab{𝑨} \aof{∣} in a natural way, by induction on the structure of the given term.
+We now prove the first of these facts in \agda.\footnote{For the proof of uniqueness, see the \ualmodule{Terms.Func.Properties} module of the \agdaalgebras library.}
+%, starting with the fact that every map from \ab{X} to
+%\af{𝕌[ \ab{𝑨} ]} lifts to a map from \af{𝕌[ \T{X} ]} (= \af{Term} \ab{X}) to
+%\af{𝕌[ \ab{𝑨} ]} in a natural way, by induction on the structure of the given term.
 
 \begin{code}%
 \>[0]\<%
@@ -8942,7 +9002,6 @@ We now prove this in \agda, starting with the fact that every map from \ab{X} to
 \\
 \>[0]\<%
 \end{code}
-
 Naturally, at the base step of the induction, when the term has the form \aic{ℊ}
 \ab x, the free lift of \ab h agrees with \ab h.  For the inductive step, when the
 given term has the form \aic{node} \ab f \ab t, the free lift is defined as
@@ -9038,8 +9097,6 @@ The free lift so defined is a homomorphism by construction. Indeed, here is the 
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
-%
-\\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{X}\AgdaSpace{}%
@@ -9128,11 +9185,8 @@ The free lift so defined is a homomorphism by construction. Indeed, here is the 
 \AgdaBound{t}\AgdaSymbol{)}\<%
 \end{code}
 
-\subsection{The relatively free algebra 𝔽[ X ]}
-\label{the-relatively-free-algebra-f}
-
-We now define the algebra
-\AgdaOperator{\AgdaFunction{𝔽[}}\AgdaSpace{}%
+\paragraph*{The relatively free algebra}
+We now define the algebra \AgdaOperator{\AgdaFunction{𝔽[}}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}},
 which represents the \defn{relatively free algebra} over \ab X.
@@ -9160,7 +9214,8 @@ in \ab X. The interpretation of an operation in the free algebra is simply the o
 \AgdaOperator{\AgdaFunction{×}}\AgdaSpace{}%
 \AgdaDatatype{Term}\AgdaSpace{}%
 \AgdaBound{Y}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaSymbol{\AgdaUnderscore{})}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{ov}\AgdaSpace{}%
+\AgdaBound{χ}\AgdaSymbol{))}\AgdaSpace{}%
 \AgdaKeyword{where}\<%
 \\
 %
@@ -9285,14 +9340,9 @@ in \ab X. The interpretation of an operation in the free algebra is simply the o
 \>[32]\AgdaSymbol{=}\AgdaSpace{}%
 \AgdaInductiveConstructor{app}\AgdaSpace{}%
 \AgdaBound{h}\<%
-\\
-\>[0]\<%
 \end{code}
 
-%\subsection{Basic properties of free algebras}
-%\label{basic-properties-of-free-algebras}
-
-\paragraph*{The natural epimorphism from 𝑻 X to 𝔽[ X ]}
+\paragraph*{The natural epimorphism} % from 𝑻 X to 𝔽[ X ]}
 We now define the natural epimorphism from \T{X} onto the relatively free algebra \Free{X} and prove that
 the kernel of this morphism is the congruence of \T{X} defined by the identities modeled by (\af S \ab{𝒦}, hence by) \ab{𝒦}.
 
@@ -9347,7 +9397,7 @@ the kernel of this morphism is the congruence of \T{X} defined by the identities
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[1]\AgdaOperator{\AgdaFunction{epi𝔽[\AgdaUnderscore{}]}}\AgdaSpace{}%
+\>[1]\AgdaOperator{\AgdaFunction{epiF[\AgdaUnderscore{}]}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{X}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -9362,7 +9412,7 @@ the kernel of this morphism is the congruence of \T{X} defined by the identities
 \AgdaOperator{\AgdaFunction{]}}\<%
 \\
 %
-\>[1]\AgdaOperator{\AgdaFunction{epi𝔽[}}\AgdaSpace{}%
+\>[1]\AgdaOperator{\AgdaFunction{epiF[}}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
@@ -9518,7 +9568,7 @@ the kernel of this morphism is the congruence of \T{X} defined by the identities
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[1]\AgdaOperator{\AgdaFunction{hom𝔽[\AgdaUnderscore{}]}}\AgdaSpace{}%
+\>[1]\AgdaOperator{\AgdaFunction{homF[\AgdaUnderscore{}]}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{X}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -9533,13 +9583,13 @@ the kernel of this morphism is the congruence of \T{X} defined by the identities
 \AgdaOperator{\AgdaFunction{]}}\<%
 \\
 %
-\>[1]\AgdaOperator{\AgdaFunction{hom𝔽[}}\AgdaSpace{}%
+\>[1]\AgdaOperator{\AgdaFunction{homF[}}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{IsEpi.HomReduct}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{epi𝔽[}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{epiF[}}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\<%
@@ -9562,7 +9612,7 @@ As promised, we prove that the kernel of the natural epimorphism is the congruen
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaFunction{ker}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{hom𝔽[}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{homF[}}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
@@ -9735,7 +9785,7 @@ As promised, we prove that the kernel of the natural epimorphism is the congruen
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[1]\AgdaFunction{𝔽-ModTh-epi}\AgdaSpace{}%
+\>[1]\AgdaFunction{F-ModTh-epi}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
@@ -9753,7 +9803,7 @@ As promised, we prove that the kernel of the natural epimorphism is the congruen
 \AgdaBound{𝑨}\<%
 \\
 %
-\>[1]\AgdaFunction{𝔽-ModTh-epi}\AgdaSpace{}%
+\>[1]\AgdaFunction{F-ModTh-epi}\AgdaSpace{}%
 \AgdaBound{A∈ModThK}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{φ}\AgdaSpace{}%
@@ -9862,7 +9912,7 @@ As promised, we prove that the kernel of the natural epimorphism is the congruen
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[1]\AgdaFunction{𝔽-ModTh-epi-lift}\AgdaSpace{}%
+\>[1]\AgdaFunction{F-ModTh-epi-lift}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
@@ -9883,11 +9933,11 @@ As promised, we prove that the kernel of the natural epimorphism is the congruen
 \AgdaFunction{ι}\AgdaSymbol{)}\<%
 \\
 %
-\>[1]\AgdaFunction{𝔽-ModTh-epi-lift}\AgdaSpace{}%
+\>[1]\AgdaFunction{F-ModTh-epi-lift}\AgdaSpace{}%
 \AgdaBound{A∈ModThK}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{∘-epi}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{𝔽-ModTh-epi}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{F-ModTh-epi}\AgdaSpace{}%
 \AgdaSymbol{(λ}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{p}\AgdaSpace{}%
 \AgdaBound{q}\AgdaSymbol{\}}\AgdaSpace{}%
@@ -9904,7 +9954,7 @@ As promised, we prove that the kernel of the natural epimorphism is the congruen
 
 \section{Birkhoff's Variety Theorem}
 
-\paragraph*{Informal statement and proof}
+\subsection{Informal statement and proof}
 Let \ab{𝒦} be a class of algebras. Recall that \ab{𝒦} is a \emph{variety} provided it is closed under homomorphisms, subalgebras and products; equivalently, \af{H} (\af{S} (\af{P} \ab{𝒦})) ⊆ \ab{𝒦}.
 (As \af{H}, \af{S}, and \af{P} are closure operators, the inclusion \ab{𝒦} ⊆ \af{H} (\af{S} (\af{P} \ab{𝒦}))
 is always valid, for every class \ab{𝒦}.)
@@ -9929,15 +9979,19 @@ We claim that \af{ker} \ab g \af{⊆} \af{ker} \ab h. If the claim is true, then
 Since \ab h is epic, so is \ab f. Hence \ab{𝑨} \af{∈} \af{𝖧} (\af{𝔽} \ab X) \aof{⊆} \ab{𝒦⁺} completing the proof.
 
 
-\paragraph*{Formal statement and overview of the formal proof}
+\subsection{Formal statement and proof}
 
-TODO: complete this section
+We now show how to formally express and prove the twin assertions that
+(i) every equational class is a variety and (ii) every variety is an equational class.
 
-\paragraph*{Products of classes of algebras}
+\paragraph*{Every equational class is a variety}
+For (i), we need an arbitrary equational class. To obtain one, we start with an arbitrary
+collection \ab{ℰ} of equations and let \ab{𝒦} = \af{Mod} \ab{ℰ}, the equational class determined by \ab{ℰ}.
+We prove that \ab{𝒦} is a variety by showing that \ab{𝒦} = \af{V} \ab{𝒦}.
+The inclusion \ab{𝒦} \aof{⊆} \af V \ab{𝒦}, which holds for all classes \ab{𝒦}, is called the \defn{expansive} property of \af{V}.
+The converse inclusion \af V \ab{𝒦} \aof{⊆} \ab{𝒦}, on the other hand, requires the hypothesis that \ab{𝒦} is an equation class.
+We now formalize each of these inclusions.
 
-We want to pair each (\ab{𝑨} , \ab p) (where \ab p : \ab{𝑨} \af{∈} \af S \ab{𝒦}) with an environment
-\ab{ρ} : \ab X \as{→} \aof{𝕌[ \ab{𝑨} ]} so that we can quantify over all algebras \emph{and} all
-assignments of values in the domain of \ab{𝑨} to variables in \ab X.
 
 \begin{code}%
 \>[0]\<%
@@ -9982,6 +10036,382 @@ assignments of values in the domain of \ab{𝑨} to variables in \ab X.
 %
 \\[\AgdaEmptyExtraSkip]%
 %
+\>[1]\AgdaFunction{V-expa}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝒦}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊆}}\AgdaSpace{}%
+\AgdaFunction{V}\AgdaSpace{}%
+\AgdaBound{ℓ}\AgdaSpace{}%
+\AgdaFunction{ι}\AgdaSpace{}%
+\AgdaBound{𝒦}\<%
+\\
+%
+\>[1]\AgdaFunction{V-expa}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{x}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{kA}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{⊤}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{kA}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaFunction{Goal}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaFunction{≤-reflexive}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaFunction{IdHomImage}\<%
+\\
+\>[1][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaKeyword{where}\<%
+\\
+%
+\>[2]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaModule{Setoid}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{𝔻[}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
+\AgdaKeyword{using}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaSpace{}%
+\AgdaFunction{refl}\AgdaSpace{}%
+\AgdaSymbol{)}\<%
+\\
+%
+\>[2]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaModule{Setoid}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{𝔻[}}\AgdaSpace{}%
+\AgdaFunction{⨅}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
+\AgdaKeyword{using}\AgdaSpace{}%
+\AgdaSymbol{()}\AgdaSpace{}%
+\AgdaKeyword{renaming}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaSpace{}%
+\AgdaFunction{refl}\AgdaSpace{}%
+\AgdaSymbol{to}\AgdaSpace{}%
+\AgdaFunction{refl⨅}\AgdaSpace{}%
+\AgdaSymbol{)}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[2]\AgdaFunction{to⨅}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{𝔻[}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
+\AgdaOperator{\AgdaRecord{⟶}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{𝔻[}}\AgdaSpace{}%
+\AgdaFunction{⨅}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{]}}\<%
+\\
+%
+\>[2]\AgdaSymbol{(}\AgdaFunction{to⨅}\AgdaSpace{}%
+\AgdaOperator{\AgdaField{⟨\$⟩}}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{λ}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{x}\<%
+\\
+%
+\>[2]\AgdaField{cong}\AgdaSpace{}%
+\AgdaFunction{to⨅}\AgdaSpace{}%
+\AgdaBound{xy}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaSymbol{λ}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{xy}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[2]\AgdaFunction{from⨅}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{𝔻[}}\AgdaSpace{}%
+\AgdaFunction{⨅}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
+\AgdaOperator{\AgdaRecord{⟶}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{𝔻[}}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{]}}\<%
+\\
+%
+\>[2]\AgdaSymbol{(}\AgdaFunction{from⨅}\AgdaSpace{}%
+\AgdaOperator{\AgdaField{⟨\$⟩}}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaFunction{tt}\<%
+\\
+%
+\>[2]\AgdaField{cong}\AgdaSpace{}%
+\AgdaFunction{from⨅}\AgdaSpace{}%
+\AgdaBound{xy}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{xy}\AgdaSpace{}%
+\AgdaFunction{tt}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[2]\AgdaFunction{Goal}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaOperator{\AgdaRecord{≅}}\AgdaSpace{}%
+\AgdaFunction{⨅}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSymbol{)}\<%
+\\
+%
+\>[2]\AgdaFunction{Goal}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaInductiveConstructor{mkiso}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{to⨅}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaInductiveConstructor{mkhom}\AgdaSpace{}%
+\AgdaFunction{refl⨅}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{from⨅}\AgdaSpace{}%
+\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
+\AgdaInductiveConstructor{mkhom}\AgdaSpace{}%
+\AgdaFunction{refl}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{refl}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{refl}\AgdaSymbol{)}\<%
+\\
+\>[0]\<%
+\end{code}
+Earlier we proved the following identity preservation lemma:
+\af{V-id1} : \ab{𝒦} \aof{⊫} \ab p \aof{≈} \ab q \as{→} \af{V} \ab{ℓ} \ab{ι} \ab{𝒦} \aof{⊫} \ab p \aof{≈} \ab q.
+Thus, if \ab{𝒦} is an equational class, then \af V \ab{𝒦} \aof{⊆} \ab{𝒦}.  The
+\af{Birkhoff|eqcl→var} lemma below formalizes this fact.
+
+\begin{code}%
+\>[0]\<%
+\\
+\>[0]\AgdaKeyword{module}\AgdaSpace{}%
+\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{ℓ}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPostulate{Level}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPrimitive{Type}\AgdaSpace{}%
+\AgdaBound{ℓ}\AgdaSymbol{\}\{}\AgdaBound{ℰ}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{Y}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPrimitive{Type}\AgdaSpace{}%
+\AgdaBound{ℓ}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaFunction{Pred}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaDatatype{Term}\AgdaSpace{}%
+\AgdaBound{Y}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{×}}\AgdaSpace{}%
+\AgdaDatatype{Term}\AgdaSpace{}%
+\AgdaBound{Y}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{ov}\AgdaSpace{}%
+\AgdaBound{ℓ}\AgdaSymbol{)\}}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaKeyword{private}\AgdaSpace{}%
+\AgdaFunction{ι}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{ov}\AgdaSpace{}%
+\AgdaBound{ℓ}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[1]\AgdaKeyword{private}\AgdaSpace{}%
+\AgdaFunction{𝒦}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{Mod}\AgdaSymbol{\{}\AgdaArgument{α}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{ℓ}\AgdaSymbol{\}\{}\AgdaBound{ℓ}\AgdaSymbol{\}\{}\AgdaBound{X}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{ℰ}%
+\>[36]\AgdaComment{--\ an\ arbitrary\ equational\ class}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[1]\AgdaFunction{EqCl⇒Var}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{V}\AgdaSpace{}%
+\AgdaBound{ℓ}\AgdaSpace{}%
+\AgdaFunction{ι}\AgdaSpace{}%
+\AgdaFunction{𝒦}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊆}}\AgdaSpace{}%
+\AgdaFunction{𝒦}\<%
+\\
+%
+\>[1]\AgdaFunction{EqCl⇒Var}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSymbol{\}}\AgdaBound{vA}\AgdaSymbol{\{}\AgdaBound{p}\AgdaSymbol{\}\{}\AgdaBound{q}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{pℰq}\AgdaSpace{}%
+\AgdaBound{ρ}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{V-id1}\AgdaSymbol{\{}\AgdaArgument{ℓ}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{ℓ}\AgdaSymbol{\}\{}\AgdaArgument{𝒦}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{𝒦}\AgdaSymbol{\}\{}\AgdaBound{p}\AgdaSymbol{\}\{}\AgdaBound{q}\AgdaSymbol{\}(λ}\AgdaSpace{}%
+\AgdaBound{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{τ}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{pℰq}\AgdaSpace{}%
+\AgdaBound{τ}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaBound{vA}\AgdaSpace{}%
+\AgdaBound{ρ}\<%
+\\
+\>[0]\<%
+\end{code}
+Together, \af{V-expa} and \af{Eqcl⇒Var} prove that every equational class is a variety.
+
+
+\paragraph*{Every variety is an equational class}
+To prove statement (ii), we need an arbitrary variety; to obtain one, we start with an arbitrary class
+\ab{𝒦} of \ab{𝑆}-algebras and take its \emph{varietal closure}, \af{V} \ab{𝒦}.
+We prove that \af{V} \ab{𝒦} is an equational class by showing it is precisely the collection of
+algebras that model the equations in \af{Th} (\af{V} \ab{𝒦}); that is, we prove
+\af{V} \ab{𝒦} = \af{Mod} (\af{Th} (\af{V} \ab{𝒦})).
+The inclusion \af{V} \ab{𝒦} \aof{⊆} \af{Mod} (\af{Th} (\af{V} \ab{𝒦})) is a simple consequence of the fact that \af{Mod} \af{Th} is a closure operator. Nonetheless, completeness demands
+that we formalize this fact, however trivial is its proof.
+
+\begin{code}%
+\>[0]\<%
+\\
+\>[0]\AgdaKeyword{module}\AgdaSpace{}%
+\AgdaModule{\AgdaUnderscore{}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{𝒦}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{Pred}\AgdaSymbol{(}\AgdaRecord{Algebra}\AgdaSpace{}%
+\AgdaGeneralizable{α}\AgdaSpace{}%
+\AgdaGeneralizable{ρᵃ}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaGeneralizable{α}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaGeneralizable{ρᵃ}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaFunction{ov}\AgdaSpace{}%
+\AgdaGeneralizable{ℓ}\AgdaSymbol{))\{}\AgdaBound{X}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaPrimitive{Type}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaGeneralizable{α}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaGeneralizable{ρᵃ}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaGeneralizable{ℓ}\AgdaSymbol{)\}}\AgdaSpace{}%
+\AgdaKeyword{where}\<%
+\\
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[1]\AgdaKeyword{private}\AgdaSpace{}%
+\AgdaFunction{c}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{α}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{ρᵃ}\AgdaSpace{}%
+\AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
+\AgdaBound{ℓ}\AgdaSpace{}%
+\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaFunction{ι}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{ov}\AgdaSpace{}%
+\AgdaFunction{c}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[1]\AgdaFunction{ModTh-closure}\AgdaSpace{}%
+\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaFunction{V}\AgdaSymbol{\{}\AgdaArgument{β}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaGeneralizable{β}\AgdaSymbol{\}\{}\AgdaGeneralizable{ρᵇ}\AgdaSymbol{\}\{}\AgdaGeneralizable{γ}\AgdaSymbol{\}\{}\AgdaGeneralizable{ρᶜ}\AgdaSymbol{\}\{}\AgdaGeneralizable{δ}\AgdaSymbol{\}\{}\AgdaGeneralizable{ρᵈ}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{ℓ}\AgdaSpace{}%
+\AgdaFunction{ι}\AgdaSpace{}%
+\AgdaBound{𝒦}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{⊆}}\AgdaSpace{}%
+\AgdaFunction{Mod}\AgdaSymbol{\{}\AgdaArgument{X}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{X}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{Th}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{V}\AgdaSpace{}%
+\AgdaBound{ℓ}\AgdaSpace{}%
+\AgdaFunction{ι}\AgdaSpace{}%
+\AgdaBound{𝒦}\AgdaSymbol{))}\<%
+\\
+%
+\>[1]\AgdaFunction{ModTh-closure}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaArgument{x}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{vA}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{p}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaBound{q}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{ρ}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaBound{vA}\AgdaSpace{}%
+\AgdaBound{ρ}\<%
+\\
+\>[0]\<%
+\end{code}
+
+It remains to prove the converse inclusion, \af{Mod} (\af{Th} (V 𝒦)) \aof{⊆} \af{V} \ab{𝒦},
+which is the main focus of the rest of the paper.  We proceed as follows:
+
+\begin{enumerate}
+\item Construct an algebra \ab{𝑪} that is a product of algebras in \af{S} \ab{𝒦}, hence belongs to \af{P} \af{S} \ab{𝒦} ⊆ \af{S} \af{P} \ab{𝒦}.
+\item Prove that \aof{𝔽[ \ab{X} ]} is a subalgebra of \ab{𝑪}, which puts \aof{𝔽[ \ab{X} ]} in \af{S} (\af{S} (\af{P} \ab{𝒦})) (= \af{S} (\af{P} \ab{𝒦})).
+\item Prove that every algebra in \af{Mod} (\af{Th} (V 𝒦)) is a homomorphic image of
+\aof{𝔽[ \ab{X} ]} and thus belongs to \af{H} (\af{S} (\af{P} \ab{𝒦})) (= \af{V} \ab{𝒦}).
+\end{enumerate}
+
+We will define the algebra \ab{𝑪} to be the product of \emph{all} algebras in \af{S} \ab{𝒦}, and this requires that we index the algebras in \af{S} \ab{𝒦}.
+In fact, we will need to associate each ``indexing pair'' (\ab{𝑨} , \ab p) (where \ab p : \ab{𝑨} \af{∈} \af{S} \ab{𝒦}) with an arbitrary environment
+\ab{ρ} : \ab X \as{→} \aof{𝕌[ \ab{𝑨} ]}. Consequently, the indices of the product will be triples (\ab{𝑨} , \ab p, \ab{ρ}) ranging over all algebras in \af{S} \ab{𝒦} and all
+environments assigning values in the domain of \ab{𝑨} to variables in \ab X.  Here is the construction of \ab{𝑪}.
+
+\begin{code}%
+\>[0]\<%
+\\
+\>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaModule{FreeHom}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaArgument{ℓ}\AgdaSpace{}%
@@ -10060,28 +10490,21 @@ assignments of values in the domain of \ab{𝑨} to variables in \ab X.
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[1]\AgdaFunction{ℭ}\AgdaSpace{}%
+\>[1]\AgdaFunction{𝑪}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaRecord{Algebra}\AgdaSpace{}%
 \AgdaFunction{ι}\AgdaSpace{}%
 \AgdaFunction{ι}\<%
 \\
 %
-\>[1]\AgdaFunction{ℭ}\AgdaSpace{}%
+\>[1]\AgdaFunction{𝑪}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{⨅}\AgdaSpace{}%
 \AgdaFunction{𝔄⁺}\<%
 \\
-\>[0]\<%
-\end{code}
-
-Next we define a useful type, \af{skEqual}, which we use to represent a term identity \ab p \aic{≈} \ab q for any
-given \ab i = (\ab{𝑨} , \ab{sA} , \ab{ρ}), where \ab{𝑨} is an algebra, \ab{sA} is a proof that \ab{𝑨} belongs to \af{S} \ab{𝒦}, and \ab{ρ} is an environment map
-(assigning values in the domain of \ab{𝑨} to variable symbols in \ab X).
-\begin{code}%
-\>[0]\<%
-\\
-\>[0][@{}l@{\AgdaIndent{1}}]%
+%
+\\[\AgdaEmptyExtraSkip]%
+%
 \>[1]\AgdaFunction{skEqual}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{i}\AgdaSpace{}%
@@ -10118,8 +10541,8 @@ given \ab i = (\ab{𝑨} , \ab{sA} , \ab{ρ}), where \ab{𝑨} is an algebra, \a
 \AgdaOperator{\AgdaFunction{∥}}\<%
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaKeyword{where}%
-\>[9]\AgdaKeyword{open}\AgdaSpace{}%
+\>[2]\AgdaKeyword{where}\AgdaSpace{}%
+\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaModule{Setoid}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{𝔻[}}\AgdaSpace{}%
 \AgdaFunction{𝔄⁺}\AgdaSpace{}%
@@ -10128,41 +10551,42 @@ given \ab i = (\ab{𝑨} , \ab{sA} , \ab{ρ}), where \ab{𝑨} is an algebra, \a
 \AgdaKeyword{using}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaSpace{}%
 \AgdaOperator{\AgdaField{\AgdaUnderscore{}≈\AgdaUnderscore{}}}\AgdaSpace{}%
-\AgdaSymbol{)}\<%
-\\
-%
-\>[9]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaModule{Environment}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{𝔄⁺}\AgdaSpace{}%
-\AgdaBound{i}\AgdaSymbol{)}%
-\>[34]\AgdaKeyword{using}\AgdaSpace{}%
+\AgdaBound{i}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaKeyword{using}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟦\AgdaUnderscore{}⟧}}\AgdaSpace{}%
 \AgdaSymbol{)}\<%
 \\
 \>[0]\<%
 \end{code}
-
+The type \af{skEqual} provides a term identity \ab p \af{≈} \ab q for each index \ab i = (\ab{𝑨} , \ab{p} , \ab{ρ}) of the product \ab{𝑪}.
+%(here, as above, \ab{𝑨} is an algebra, \ab{sA} is a proof that \ab{𝑨} belongs to \af{S} \ab{𝒦}, and \ab{ρ} is an environment).
+%map assigning values in the domain of \ab{𝑨} to variable symbols in \ab X).
 Later we prove that if the identity \ab{p} \af{≈} \ab q holds in all \ab{𝑨} \aof{∈} \af S \ab{𝒦} (for all environments), then \ab p \af{≈} \ab q
 holds in the relatively free algebra \Free{X}; equivalently, the pair (\ab p , \ab q) belongs to the
 kernel of the natural homomorphism from \T{X} onto \Free{X}. We will use that fact to prove
-that the kernel of the natural hom from \T{X} to \ab{ℭ} is contained in the kernel of the natural hom from \T{X} onto \Free{X},
-whence we construct a monomorphism from \Free{X} into \ab{ℭ}, and thus \Free{X} is a subalgebra of \ab{ℭ},
+that the kernel of the natural hom from \T{X} to \ab{𝑪} is contained in the kernel of the natural hom from \T{X} onto \Free{X},
+whence we construct a monomorphism from \Free{X} into \ab{𝑪}, and thus \Free{X} is a subalgebra of \ab{𝑪},
 so belongs to \af S (\af P \ab{𝒦}).
 
 \begin{code}%
 \>[0]\<%
 \\
 \>[0][@{}l@{\AgdaIndent{1}}]%
-\>[1]\AgdaFunction{homℭ}\AgdaSpace{}%
+\>[1]\AgdaFunction{homC}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{hom}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{𝑻}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaFunction{ℭ}\<%
+\AgdaFunction{𝑪}\<%
 \\
 %
-\>[1]\AgdaFunction{homℭ}\AgdaSpace{}%
+\>[1]\AgdaFunction{homC}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{⨅-hom-co}\AgdaSpace{}%
 \AgdaFunction{𝔄⁺}\AgdaSpace{}%
@@ -10198,22 +10622,22 @@ so belongs to \af S (\af P \ab{𝒦}).
 \>[0]\<%
 \\
 %
-\>[1]\AgdaFunction{ker𝔽⊆kerℭ}\AgdaSpace{}%
+\>[1]\AgdaFunction{kerF⊆kerC}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{ker}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{hom𝔽[}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{homF[}}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⊆}}\AgdaSpace{}%
 \AgdaFunction{ker}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{homℭ}\AgdaSpace{}%
+\AgdaFunction{homC}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\<%
 \\
 %
-\>[1]\AgdaFunction{ker𝔽⊆kerℭ}\AgdaSpace{}%
+\>[1]\AgdaFunction{kerF⊆kerC}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{p}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaBound{q}\AgdaSymbol{\}}\AgdaSpace{}%
@@ -10389,28 +10813,28 @@ so belongs to \af S (\af P \ab{𝒦}).
 \>[0]\<%
 \\
 %
-\>[1]\AgdaFunction{hom𝔽ℭ}\AgdaSpace{}%
+\>[1]\AgdaFunction{homFC}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{hom}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{𝔽[}}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
-\AgdaFunction{ℭ}\<%
+\AgdaFunction{𝑪}\<%
 \\
 %
-\>[1]\AgdaFunction{hom𝔽ℭ}\AgdaSpace{}%
+\>[1]\AgdaFunction{homFC}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaFunction{HomFactor}\AgdaSpace{}%
-\AgdaFunction{ℭ}\AgdaSpace{}%
-\AgdaFunction{homℭ}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{hom𝔽[}}\AgdaSpace{}%
+\AgdaFunction{𝑪}\AgdaSpace{}%
+\AgdaFunction{homC}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{homF[}}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
-\AgdaFunction{ker𝔽⊆kerℭ}\AgdaSpace{}%
+\AgdaFunction{kerF⊆kerC}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaField{isSurjective}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{epi𝔽[}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{epiF[}}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSymbol{)}\AgdaSpace{}%
@@ -10418,10 +10842,10 @@ so belongs to \af S (\af P \ab{𝒦}).
 \\
 \>[0]\<%
 \end{code}
-If \AgdaPair{p}{q} belongs to the kernel of \af{homℭ}, then
+If \AgdaPair{p}{q} belongs to the kernel of \af{hom𝑪}, then
 \af{Th} \ab{𝒦} includes the identity \ab{p} \af{≈} \ab{q}---that is,
 \af{Th} \ab{𝒦} \af{⊢} \ab X \af{▹} \ab{p} \af{≈} \ab{q}. Equivalently,
-if the kernel of \af{homℭ} is contained in that of \af{hom𝔽[ X ]}.
+if the kernel of \af{hom𝑪} is contained in that of \af{hom𝔽[ X ]}.
 \ifshort
 We omit the formal proof of this lemma and merely display its formal statement, which is the following.
 \else
@@ -10431,7 +10855,7 @@ We formalize this fact as follows.
 \>[0]\<%
 \\
 \>[0][@{}l@{\AgdaIndent{1}}]%
-\>[1]\AgdaFunction{kerℭ⊆ker𝔽}\AgdaSpace{}%
+\>[1]\AgdaFunction{kerC⊆kerF}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{∀\{}\AgdaBound{p}\AgdaSpace{}%
 \AgdaBound{q}\AgdaSymbol{\}}\AgdaSpace{}%
@@ -10442,7 +10866,7 @@ We formalize this fact as follows.
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
 \AgdaFunction{ker}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{homℭ}\AgdaSpace{}%
+\AgdaFunction{homC}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{p}\AgdaSpace{}%
@@ -10451,7 +10875,7 @@ We formalize this fact as follows.
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
 \AgdaFunction{ker}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{hom𝔽[}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{homF[}}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\<%
@@ -10459,7 +10883,7 @@ We formalize this fact as follows.
 \ifshortelse
 \begin{code}%
 %
-\>[1]\AgdaFunction{kerℭ⊆ker𝔽}\AgdaSpace{}%
+\>[1]\AgdaFunction{kerC⊆kerF}\AgdaSpace{}%
 \AgdaSymbol{\{}\AgdaBound{p}\AgdaSymbol{\}\{}\AgdaBound{q}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{pKq}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
@@ -10523,7 +10947,7 @@ We formalize this fact as follows.
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
 \AgdaFunction{ker}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{hom𝔽[}}\AgdaSpace{}%
+\AgdaOperator{\AgdaFunction{homF[}}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\<%
@@ -10641,25 +11065,25 @@ We formalize this fact as follows.
 \>[0]\<%
 \end{code}
 \fi
-We conclude that the homomorphism from \Free{X} to \af{ℭ} is injective, whence it follows that \Free{X} is (isomorphic to) a subalgebra of \af{ℭ}.
+We conclude that the homomorphism from \Free{X} to \af{𝑪} is injective, whence it follows that \Free{X} is (isomorphic to) a subalgebra of \af{𝑪}.
 
 \begin{code}%
 \>[0]\<%
 \\
 \>[0][@{}l@{\AgdaIndent{1}}]%
-\>[1]\AgdaFunction{mon𝔽ℭ}\AgdaSpace{}%
+\>[1]\AgdaFunction{monFC}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{mon}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{𝔽[}}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
-\AgdaFunction{ℭ}\<%
+\AgdaFunction{𝑪}\<%
 \\
 %
-\>[1]\AgdaFunction{mon𝔽ℭ}\AgdaSpace{}%
+\>[1]\AgdaFunction{monFC}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{hom𝔽ℭ}\AgdaSpace{}%
+\AgdaFunction{homFC}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaFunction{isMon}\<%
@@ -10674,9 +11098,9 @@ We conclude that the homomorphism from \Free{X} to \af{ℭ} is injective, whence
 \AgdaOperator{\AgdaFunction{𝔽[}}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
-\AgdaFunction{ℭ}\AgdaSpace{}%
+\AgdaFunction{𝑪}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
-\AgdaFunction{hom𝔽ℭ}\AgdaSpace{}%
+\AgdaFunction{homFC}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\<%
 \\
 %
@@ -10684,7 +11108,7 @@ We conclude that the homomorphism from \Free{X} to \af{ℭ} is injective, whence
 \AgdaFunction{isMon}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\AgdaSpace{}%
-\AgdaFunction{hom𝔽ℭ}\AgdaSpace{}%
+\AgdaFunction{homFC}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∥}}\<%
 \\
 %
@@ -10693,29 +11117,28 @@ We conclude that the homomorphism from \Free{X} to \af{ℭ} is injective, whence
 \AgdaSymbol{\{}\AgdaBound{p}\AgdaSymbol{\}\{}\AgdaBound{q}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{φpq}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{kerℭ⊆ker𝔽}\AgdaSpace{}%
+\AgdaFunction{kerC⊆kerF}\AgdaSpace{}%
 \AgdaBound{φpq}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[1]\AgdaFunction{𝔽≤ℭ}\AgdaSpace{}%
+\>[1]\AgdaFunction{F≤C}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{𝔽[}}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{≤}}\AgdaSpace{}%
-\AgdaFunction{ℭ}\<%
+\AgdaFunction{𝑪}\<%
 \\
 %
-\>[1]\AgdaFunction{𝔽≤ℭ}\AgdaSpace{}%
+\>[1]\AgdaFunction{F≤C}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{mon→≤}\AgdaSpace{}%
-\AgdaFunction{mon𝔽ℭ}\<%
+\AgdaFunction{monFC}\<%
 \\
 \>[0]\<%
 \end{code}
-
 Using the last result we will prove that \Free{X} belongs to \af{S} (\af{P} \ab{𝒦}). This requires one more technical lemma concerning the classes \af{S} and \af{P};
 specifically,
 \ifshort
@@ -10883,13 +11306,13 @@ We state and prove this in Agda as follows.
 \end{code}
 \fi
 
-We conclude this subsection with the proof that \Free{X} belongs to \af{S} (\af{P} \ab{𝒦}).
+%We conclude this subsection with the proof that \Free{X} belongs to \af{S} (\af{P} \ab{𝒦}).
 
 \begin{code}%
 \>[0]\<%
 \\
 %
-\>[1]\AgdaFunction{SP𝔽}\AgdaSpace{}%
+\>[1]\AgdaFunction{SPF}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{𝔽[}}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSpace{}%
@@ -10903,22 +11326,22 @@ We conclude this subsection with the proof that \Free{X} belongs to \af{S} (\af{
 \AgdaBound{𝒦}\AgdaSymbol{)}\<%
 \\
 %
-\>[1]\AgdaFunction{SP𝔽}\AgdaSpace{}%
+\>[1]\AgdaFunction{SPF}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{S-idem}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{ℭ}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{𝑪}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{SPℭ}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{spC}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaFunction{𝔽≤ℭ}\AgdaSymbol{))}\<%
+\AgdaFunction{F≤C}\AgdaSymbol{))}\<%
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaKeyword{where}\<%
 \\
 %
-\>[2]\AgdaFunction{PSℭ}\AgdaSpace{}%
+\>[2]\AgdaFunction{psC}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{ℭ}\AgdaSpace{}%
+\AgdaFunction{𝑪}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
 \AgdaFunction{P}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{α}\AgdaSpace{}%
@@ -10932,7 +11355,7 @@ We conclude this subsection with the proof that \Free{X} belongs to \af{S} (\af{
 \AgdaBound{𝒦}\AgdaSymbol{)}\<%
 \\
 %
-\>[2]\AgdaFunction{PSℭ}\AgdaSpace{}%
+\>[2]\AgdaFunction{psC}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{ℑ⁺}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
@@ -10949,9 +11372,9 @@ We conclude this subsection with the proof that \Free{X} belongs to \af{S} (\af{
 \AgdaFunction{≅-refl}\AgdaSymbol{))}\<%
 \\
 %
-\>[2]\AgdaFunction{SPℭ}\AgdaSpace{}%
+\>[2]\AgdaFunction{spC}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaFunction{ℭ}\AgdaSpace{}%
+\AgdaFunction{𝑪}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
 \AgdaFunction{S}\AgdaSpace{}%
 \AgdaFunction{ι}\AgdaSpace{}%
@@ -10961,17 +11384,14 @@ We conclude this subsection with the proof that \Free{X} belongs to \af{S} (\af{
 \AgdaBound{𝒦}\AgdaSymbol{)}\<%
 \\
 %
-\>[2]\AgdaFunction{SPℭ}\AgdaSpace{}%
+\>[2]\AgdaFunction{spC}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{PS⊆SP}\AgdaSpace{}%
-\AgdaFunction{PSℭ}\<%
+\AgdaFunction{psC}\<%
+\\
+\>[0]\<%
 \end{code}
-
-%% -------------------------------------------------------------------------------------
-
-%% \paragraph*{The HSP Theorem}
-
-Finally, we are ready to present the formal statement and proof of Birkhoff's celebrated variety theorem.
+Finally, we prove that every algebra in \af{Mod} (\af{Th} (\af{V} \ab{𝒦})) is a homomorphic image of \af{𝔽[ \ab{X} ]}, for some \ab{X}.
 
 \begin{code}%
 \>[0]\<%
@@ -11021,7 +11441,7 @@ Finally, we are ready to present the formal statement and proof of Birkhoff's ce
 %
 \\[\AgdaEmptyExtraSkip]%
 %
-\>[1]\AgdaFunction{Birkhoff}\AgdaSpace{}%
+\>[1]\AgdaFunction{Var⇒EqCl}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{∀}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
@@ -11043,7 +11463,7 @@ Finally, we are ready to present the formal statement and proof of Birkhoff's ce
 \AgdaBound{𝒦}\<%
 \\
 %
-\>[1]\AgdaFunction{Birkhoff}\AgdaSpace{}%
+\>[1]\AgdaFunction{Var⇒EqCl}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{ModThA}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
@@ -11053,7 +11473,7 @@ Finally, we are ready to present the formal statement and proof of Birkhoff's ce
 \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{]}}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{sp𝔽A}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{spFA}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaFunction{AimgF}\AgdaSymbol{)}\<%
 \\
@@ -11061,7 +11481,7 @@ Finally, we are ready to present the formal statement and proof of Birkhoff's ce
 \>[2]\AgdaKeyword{where}\<%
 \\
 %
-\>[2]\AgdaFunction{sp𝔽A}\AgdaSpace{}%
+\>[2]\AgdaFunction{spFA}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{𝔽[}}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{𝕌[}}\AgdaSpace{}%
@@ -11077,15 +11497,17 @@ Finally, we are ready to present the formal statement and proof of Birkhoff's ce
 \AgdaBound{𝒦}\AgdaSymbol{)}\<%
 \\
 %
-\>[2]\AgdaFunction{sp𝔽A}\AgdaSpace{}%
+\>[2]\AgdaFunction{spFA}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{SP𝔽}\AgdaSymbol{\{}\AgdaArgument{ℓ}\AgdaSpace{}%
+\AgdaFunction{SPF}\AgdaSymbol{\{}\AgdaArgument{ℓ}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{ℓ}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaBound{𝒦}\<%
 \\
 %
-\>[2]\AgdaFunction{epi𝔽lA}\AgdaSpace{}%
+\\[\AgdaEmptyExtraSkip]%
+%
+\>[2]\AgdaFunction{epiFlA}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{epi}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{𝔽[}}\AgdaSpace{}%
@@ -11099,9 +11521,9 @@ Finally, we are ready to present the formal statement and proof of Birkhoff's ce
 \AgdaFunction{ι}\AgdaSymbol{)}\<%
 \\
 %
-\>[2]\AgdaFunction{epi𝔽lA}\AgdaSpace{}%
+\>[2]\AgdaFunction{epiFlA}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaFunction{𝔽-ModTh-epi-lift}\AgdaSymbol{\{}\AgdaArgument{ℓ}\AgdaSpace{}%
+\AgdaFunction{F-ModTh-epi-lift}\AgdaSymbol{\{}\AgdaArgument{ℓ}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{ℓ}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaSymbol{(λ}\AgdaSpace{}%
@@ -11112,6 +11534,8 @@ Finally, we are ready to present the formal statement and proof of Birkhoff's ce
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{p}\AgdaSymbol{\}\{}\AgdaBound{q}\AgdaSymbol{\})}\<%
 \\
+%
+\\[\AgdaEmptyExtraSkip]%
 %
 \>[2]\AgdaFunction{φ}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -11139,8 +11563,10 @@ Finally, we are ready to present the formal statement and proof of Birkhoff's ce
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaFunction{ι}\AgdaSpace{}%
 \AgdaFunction{ι}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaFunction{epi𝔽lA}\<%
+\AgdaFunction{epiFlA}\<%
 \\
+%
+\\[\AgdaEmptyExtraSkip]%
 %
 \>[2]\AgdaFunction{AimgF}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -11155,7 +11581,7 @@ Finally, we are ready to present the formal statement and proof of Birkhoff's ce
 %
 \>[2]\AgdaFunction{AimgF}\AgdaSpace{}%
 \AgdaSymbol{=}%
-\>[7093I]\AgdaFunction{∘-hom}\AgdaSpace{}%
+\>[7386I]\AgdaFunction{∘-hom}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
 \AgdaFunction{φ}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{∣}}\AgdaSpace{}%
@@ -11163,7 +11589,7 @@ Finally, we are ready to present the formal statement and proof of Birkhoff's ce
 \AgdaFunction{Lift-≅}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\<%
 \\
-\>[.][@{}l@{}]\<[7093I]%
+\>[.][@{}l@{}]\<[7386I]%
 \>[10]\AgdaFunction{∘-IsSurjective}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
 \AgdaSymbol{\AgdaUnderscore{}}\AgdaSpace{}%
@@ -11175,83 +11601,12 @@ Finally, we are ready to present the formal statement and proof of Birkhoff's ce
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSymbol{\}))}\<%
 \\
-%
-\\[\AgdaEmptyExtraSkip]%
 \>[0]\<%
 \end{code}
 
-The converse inclusion, \af V \ab{𝒦} \aof{⊆} \af{Mod} (\af{Th} (\af V \ab{𝒦})), is a simple consequence of the fact that \af{Mod} \af{Th} is a closure operator. Nonetheless, completeness demands
-that we formalize this inclusion as well, however trivial the proof.
-
-\begin{code}%
-\>[0]\<%
-\\
-\>[0][@{}l@{\AgdaIndent{1}}]%
-\>[1]\AgdaFunction{Birkhoff-converse}\AgdaSpace{}%
-\AgdaSymbol{:}%
-\>[22]\AgdaSymbol{\{}\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaRecord{Algebra}\AgdaSpace{}%
-\AgdaBound{α}\AgdaSpace{}%
-\AgdaBound{ρᵃ}\AgdaSymbol{\}}\<%
-\\
-\>[1][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaSymbol{→}%
-\>[22]\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaFunction{V}\AgdaSymbol{\{}\AgdaArgument{β}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{α}\AgdaSymbol{\}\{}\AgdaBound{ρᵃ}\AgdaSymbol{\}\{}\AgdaBound{α}\AgdaSymbol{\}\{}\AgdaBound{ρᵃ}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{ℓ}\AgdaSpace{}%
-\AgdaFunction{ι}\AgdaSpace{}%
-\AgdaBound{𝒦}\<%
-\\
-%
-\>[2]\AgdaSymbol{→}%
-\>[22]\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{∈}}\AgdaSpace{}%
-\AgdaFunction{Mod}\AgdaSymbol{\{}\AgdaArgument{X}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{𝕌[}}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{]}}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{Th}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaFunction{V}\AgdaSpace{}%
-\AgdaBound{ℓ}\AgdaSpace{}%
-\AgdaFunction{ι}\AgdaSpace{}%
-\AgdaBound{𝒦}\AgdaSymbol{))}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-%
-\>[1]\AgdaFunction{Birkhoff-converse}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaArgument{𝑨}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaBound{vA}\AgdaSpace{}%
-\AgdaBound{pThq}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaBound{pThq}\AgdaSpace{}%
-\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaBound{vA}\<%
-\\
-\>[0]\<%
-\end{code}
-We have thus proved that every variety is an equational class.
-
-Readers familiar with the classical formulation of the Birkhoff HSP theorem as an
-``if and only if'' assertion might worry that the proof is still incomplete. However,
-recall that we already proved the identity preservation lemma
-%in the \ualmodule{Varieties.Func.Preservation} module
-\ab{V-id1} : \ab{𝒦} \aof{⊫} \ab p \aic{≐} \ab q \as{→} \af{V} \ab{𝒦} \aof{⊫} \ab p \aic{≐} \ab q.
-Thus, if \ab{𝒦} is an equational class---that is, if \ab{𝒦} is the class of algebras
-satisfying all identities in some set---then \af V \ab{𝒦} \aof{⊆} \ab{𝒦}.  On the other hand, we
-also proved that \af V is expansive, that is, \ab{V-expa} : \ab{𝒦} \aof{⊆} \af V \ab{𝒦},
-so \ab{𝒦} (= \af V \ab{𝒦} = \af H \af S \af P \ab{𝒦}) is a variety.
-Thus, taken together, \af{V-id1} and \af{V-expa} constitute formal proof that every equational
-class is a variety. This completes the formal proof of Birkhoff's variety theorem.
-
-
+It follows immediately from \af{ModTh-closure} and \af{Var⇒EqCl} that
+\af{V} \ab{𝒦} = \af{Mod} (\af{Th} (\af{V} \ab{𝒦})) holds for every class \ab{𝒦} of \ab{𝑆}-algebras.
+Thus, every variety is an equational class. This completes the formal proof of Birkhoff's variety theorem.
 
 
 %% \paragraph*{Th 𝒦 ⊆ Th (V 𝒦)}
