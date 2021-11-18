@@ -384,19 +384,18 @@ This section is organized into the following subsections:
 \subsection{Signatures}
 \label{signatures}
 
-In model theory, the \defn{signature} \ab{𝑆} = (\ab{𝐶}, \ab{𝐹}, \ab{𝑅}, \ab{ρ})
-of a structure consists of three (possibly empty) sets \ab{𝐶}, \ab{𝐹}, and
-\ab{𝑅}---called \emph{constant}, \emph{function}, and
-\emph{relation} symbols, respectively---along with a function \ab{ρ} : \ab{𝐶} \as{+}
-\ab{𝐹} \as{+} \ab{𝑅} \as{→} \ab{𝑁} that assigns an \emph{arity} to each symbol. Often, but
-not always, \ab{𝑁} is taken to be the set of natural numbers.
+In model theory, the \defn{signature} \ab{𝑆} = (\ab{C}, \ab{F}, \ab{R}, \ab{ρ})
+of a structure consists of three (possibly empty) sets \ab{C}, \ab{F}, and
+\ab{R}---called \emph{constant}, \emph{function}, and
+\emph{relation} symbols, respectively---along with a function \ab{ρ} : \ab{C} \as{+}
+\ab{F} \as{+} \ab{R} \as{→} \ab{N} that assigns an \emph{arity} to each symbol. Often, but
+not always, \ab{N} is taken to be the set of natural numbers.
 
 As our focus here is universal algebra, we are more concerned with the
-restricted notion of an \defn{algebraic signature}, that is, a signature for
-``purely algebraic'' structures, by which is meant a pair \ab{𝑆} = \AgdaPair{F}{ρ}
-consisting of a collection \ab{F} of \defn{operation symbols} and an \defn{arity function}
-\ab{ρ} : \ab{F} \as{→} \ab{N} which maps each operation symbol to its arity.
-Here, \ab{𝑁} denotes the \emph{arity type}. Heuristically, the arity
+restricted notion of an \emph{algebraic signature}, that is, a signature for
+``purely algebraic'' structures. Such a signature is a pair \ab{𝑆} = \AgdaPair{F}{ρ}
+where \ab{F} is a collection of \defn{operation symbols} and \ab{ρ} : \ab{F} \as{→} \ab{N} is an \defn{arity function} which maps each operation symbol to its arity.
+Here, \ab{N} denotes the \emph{arity type}. Heuristically, the arity
 \ab{ρ} \ab{f} of an operation symbol \ab{f} \as{∈} \ab{F} may be thought of as
 the number of arguments that \ab{f} takes as ``input.''
 
