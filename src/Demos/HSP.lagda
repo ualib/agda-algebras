@@ -1,39 +1,31 @@
 \section{Introduction}
-The Agda Universal Algebra Library (\agdaalgebras) is a collection of types and programs
-(theorems and proofs) formalizing the foundations of universal algebra in dependent type
-theory using the \agda programming language and proof assistant.
-The agda-algebras library now includes a substantial collection of definitions, theorems, and
-proofs from universal algebra and equational logic and as such provides many
-examples that exhibit the power of inductive and dependent types for
-representing and reasoning about general algebraic and relational structures.
+The \agdaalgebras library is a repository of types and programs
+(theorems and proofs) formalizing the foundations of universal algebra in Martin-Löf dependent type
+theory using the \agda programming language.
+The library now includes an fairly extensive collection of formal definitions, theorems, and
+proofs that codify, in the formal language of type theory, the analogous definitions, theorems, and proofs of classical, informal universal algebra and equational logic based on set theory. As such, the library
+provides many examples that exhibit the power of inductive and dependent types for
+representing and reasoning about general algebraic and relational structures in a formal, machine-checkable language.
 
-The first major milestone of the \agdaalgebras project is a new formal
-proof of \emph{Birkhoff's variety theorem} (also known as the \emph{HSP theorem}), the first version
-of which was completed in \href{https://github.com/ualib/ualib.github.io/blob/b968e8af1117fc77700d3a588746cbefbd464835/sandbox/birkhoff-exp-new-new.lagda}{January of 2021}.
-To the best of our knowledge, this was the first time Birkhoff's theorem had
-been formulated and proved in dependent type theory and verified with a proof
-assistant.
+The first major milestone of this project is a new constructive proof of \emph{Birkhoff's variety theorem} (also known as the \emph{HSP theorem}), the first version of which was completed in January of 2021.\footnote{See \url{https://github.com/ualib/ualib.github.io/blob/b968e8af1117fc77700d3a588746cbefbd464835/sandbox/birkhoff-exp-new-new.lagda}}
+To the best of our knowledge, this was the first formulation of Birkhoff's theorem in dependent type theory, and it was the first formal, machine-checked verification of the celebrated result of Birkhoff, first published in 1935~\cite{Birkhoff:1935}.
 
-In this paper, we present a single Agda module called \ualmodule{Demos.HSP}.
-This module extracts only those parts of the library needed to prove
-Birkhoff's variety theorem. In order to meet page limit guidelines, and to
-reduce strain on the reader, we omit proofs of some routine or technical
-lemmas that do not provide much insight into the overall development.
-However, a long version of this paper, which includes all code in the
-\DemosHSP module, is available on the arXiv. [reference needed]
+In this paper, we present a self-contained formal proof of Birkhoff's variety theorem by extracting into a single Agda module only those parts of the \agdaalgebras library that we needed for the proof of this classical result.  To keep the paper to a reasonable length, we have omit some of the formal proofs, but only those that are routine or overly technical and those that do not provide valuable insight into the important ideas of the proof. For those readers desiring more details, we have posted on the arXiv a long version of this paper, which includes every line of code of our formal proof of Birkhoff's theorem.
 
-In the course of our exposition of the proof of the HSP theorem, we discuss some of the
-more challenging aspects of formalizing \emph{universal algebra} in type theory and the
-issues that arise when attempting to constructively prove some of the basic
-results in this area.  We demonstrate that dependent type theory and Agda,
-despite the demands they place on the user, are accessible to working
-mathematicians who have sufficient patience and a strong enough desire to
-constructively codify their work and formally verify the correctness of their
-results.  Perhpas our presentation will be viewed as a sobering glimpse of the
-painstaking process of doing mathematics in the languages of dependent type theory
-using the Agda proof assistant. Nonetheless we hope to make a compelling case for
-investing in these technologies. Indeed, we are excited to share the gratifying
-rewards that come with some mastery of type theory and interactive theorem proving.
+In the course presenting our formalization of the HSP theorem, we will highlight some of the more
+challenging aspects of formalizing the basic definitions and theorems of \emph{universal algebra}
+in type theory. In particular, we touch on some of the technical issues that arise when attempting
+to constructively prove the foundational results of our field.  We believe this project provides
+strong evidence in support of the claim that dependent type theory and the Agda language, despite
+the technical demands they place on the user, are accessible to working mathematicians with sufficient
+patience and a strong desire to codify their work in order to formally verify the their results.
+
+Instead of encouragment, perhaps our presentation is more likely to provide a sobering glimpse of the
+technical hurdles that must be overcome to conduct research in mathematics using dependent type theory
+and the Agda language. Nonetheless we hope our work does not discourage anyone from investing in these
+technologies and we remain wholeheartedly dedicated to the use of type theory in our research.
+Indeed, we are excited to share the gratifying outcomes and achievements
+that have resulted from attaining a modest degree of mastery of type theory, interactive theorem proving, and the Agda language.
 
 %% -----------------------------------------------------------------------------
 \subsection{Prior art}
@@ -1187,9 +1179,9 @@ Assume the symbols in \ab X are distinct from the operation symbols of \ab{𝑆}
 
 A \defn{word} in the language of \ab{𝑆} is a finite sequence of members of \ab X \aof{∪} \aof{∣} \ab{𝑆} \aof{∣}. We denote the concatenation of such sequences by simple juxtaposition.
 Let \ab{S₀} denote the set of nullary operation symbols of \ab{𝑆}. We define by induction on \ab n the sets \ab{𝑇ₙ} of \emph{words} over \ab X \aof{∪} \aof{∣} \ab{𝑆} \aof{∣} as follows (cf.~\cite[Def. 4.19]{Bergman:2012}): \ab{𝑇₀} := \ab X \aof{∪} \ab{S₀} and \ab{𝑇ₙ₊₁} := \ab{𝑇ₙ} \aof{∪} \ab{𝒯ₙ},
-where \ab{𝒯ₙ} is the collection of all \ab f \ab t such that \ab f : \aof{∣} \ab{𝑆} \aof{∣} and \ab t : \aof{∥} \ab{𝑆} \aof{∥} \ab f \as{→} \ab{𝑇ₙ}. (Recall, \aof{∥} \ab{𝑆} \aof{∥} \ab f is the arity of the operation symbol \ab f.) An \ab{𝑆}-\defn{term} is a term in the language of \ab{𝑆} and the collection of all \ab{𝑆}-\defn{terms} in the context \ab X is given by \ad{Term} \ab X := \aof{⋃ₙ} \ab{𝑇ₙ}.
+where \ab{𝒯ₙ} is the collection of all \ab f \ab t such that \ab f : \aof{∣} \ab{𝑆} \aof{∣} and \ab t : \aof{∥} \ab{𝑆} \aof{∥} \ab f \as{→} \ab{𝑇ₙ}. (Recall, \aof{∥} \ab{𝑆} \aof{∥} \ab f is the arity of the operation symbol \ab f.) An \ab{𝑆}-\defn{term} is a term in the language of \ab{𝑆} and the collection of all \ab{𝑆}-\defn{terms} in the context \ab X is given by \Term{X} := \aof{⋃ₙ} \ab{𝑇ₙ}.
 
-As even its informal definition of \ad{Term} \ab X is recursive, it should come as no surprise that
+As even its informal definition of \Term{X} is recursive, it should come as no surprise that
 the semantics of terms can be faithfully represented in type theory as an inductive type.
 Indeed, here is such a representation.
 
@@ -1238,7 +1230,7 @@ of this fact is trivial, so we omit it and merely give the fact a name; call it 
 
 \paragraph*{The term algebra}
 %\label{the-term-algebra}
-For a given signature \ab{𝑆}, if the type \ad{Term} \ab X is nonempty
+For a given signature \ab{𝑆}, if the type \Term{X} is nonempty
 (equivalently, if \ab X or \aof{∣} \ab{𝑆} \aof{∣} is nonempty), then we can
 define an algebraic structure, denoted by \T{X} and called the \defn{term
   algebra in the signature} \ab{𝑆} \defn{over} \ab X.  Terms are viewed as
@@ -1246,10 +1238,10 @@ acting on other terms, so both the domain and basic operations of the algebra
 are the terms themselves.
 
 For each operation symbol \ab f : \aof{∣} \ab{𝑆} \aof{∣}, we denote by \ab f
-\aof{̂} \T{X} the operation on \ad{Term} \ab X that maps each tuple of terms, say, \ab t :
-  \aof{∥} \ab{𝑆} \aof{∥} \ab f \as{→} \ad{Term} \ab X, to the formal term \ab f \ab t.
+\aof{̂} \T{X} the operation on \Term{X} that maps each tuple of terms, say, \ab t :
+  \aof{∥} \ab{𝑆} \aof{∥} \ab f \as{→} \Term{X}, to the formal term \ab f \ab t.
 We let \T{X} denote the term algebra
- in \ab{𝑆} over \ab X; it has universe \ad{Term} \ab X and operations \ab f \aof{̂} \T{X}, one for each symbol \ab f in \aof{∣} \ab{𝑆} \aof{∣}. Finally, we formalize this notion of term algebra in \agda as follows.
+ in \ab{𝑆} over \ab X; it has universe \Term{X} and operations \ab f \aof{̂} \T{X}, one for each symbol \ab f in \aof{∣} \ab{𝑆} \aof{∣}. Finally, we formalize this notion of term algebra in \agda as follows.
 
 \begin{code}
 
@@ -1336,7 +1328,14 @@ The proof that \af{Equal} is an equivalence relation is trivial, so we omit it.
 \end{code}
 \fi
 
-A substitution from one context \ab X to another \ab Y is used to transport an environment from \ab X to \ab Y and the function \af{⟦\au{}⟧} defined below carries out this transportation of environments.
+A substitution from one context \ab X to another \ab Y is used to transport an environment from \ab X to \ab Y and the function \af{⟦\au{}⟧}
+\ifshort
+(definition omitted)
+\else
+defined below
+\fi
+carries out this transportation of environments.
+\ifshort\else
 
 \begin{code}
 
@@ -1344,18 +1343,26 @@ A substitution from one context \ab X to another \ab Y is used to transport an e
  ⟦ σ ⟧s ρ x = ⟦ σ x ⟧ ⟨$⟩ ρ
 
 \end{code}
+\fi
+An easy substitution lemma says that \aof{⟦} \ab{t} \af{[} \ab{σ} \af{]} \aof{⟧} \aofld{⟨\$⟩} \ab{ρ} (the term \ab{t} applied to a substitution \ab{σ} and evaluated in an evironment \ab{ρ}) is the same as \aof{⟦ \ab{t} ⟧} \aofld{⟨\$⟩} \aof{⟦ \ab{σ} ⟧s} \ab{ρ} (the term \ab{t} evaluated in the \ab{σ}-transported environment).
 
-Finally, we have a substitution lemma which says that \aof{⟦} \ab{t} \af{[} \ab{σ} \af{]} \aof{⟧} \aofld{⟨\$⟩} \ab{ρ} (= the term \ab{t} applied to a substitution \ab{σ} and evaluated in an evironment \ab{ρ}) is the same as \aof{⟦ \ab{t} ⟧} \aofld{⟨\$⟩} \aof{⟦ \ab{σ} ⟧s} \ab{ρ} (= the term \ab{t} evaluated in the \ab{σ}-transported environment). %\aof{⟦} \ab{σ} \aof{⟧} \ab{ρ}.
+\ifshort
+As the proof is a simple recursive argument, we merely display the formal statement of the lemma.
+\else\fi
 
 \begin{code}
 
  substitution :  {X Y : Type χ} → (t : Term Y) (σ : Sub X Y) (ρ : Carrier( Env X ) )
   →              ⟦ t [ σ ] ⟧ ⟨$⟩ ρ ≈ ⟦ t ⟧ ⟨$⟩ ⟦ σ ⟧s ρ
 
+\end{code}
+\ifshort\else
+\begin{code}
  substitution (ℊ x)        σ ρ = refl
  substitution (node f ts)  σ ρ = cong (Interp 𝑨)(≡.refl , λ i → substitution (ts i) σ ρ)
 
 \end{code}
+\fi
 This concludes the definition of the \am{Environment} module (based on Abel's Agda proof of the completeness theorem; \textit{op.~cit.}).
 
 \ifshort\else
@@ -1405,11 +1412,10 @@ module _ {X : Type χ}{ι : Level} {I : Type ι} (𝒜 : I → Algebra α ρᵃ)
 Given a  signature \ab{𝑆} and a context of variable symbols \ab X, a \defn{term equation} or \defn{identity}
 (in this signature and context) is an ordered pair (\ab p , \ab q) of 𝑆-terms.
 (Informally, such an equation is often denoted by \ab p \af{≈} \ab q.)
-
 For instance, if the context is the type \ab X : \ap{Type} \ab{χ}, then a term equation
 is a pair inhabiting the Cartesian product type \ad{Term}~\ab{X} \aof{×} \ad{Term}~\ab{X}.
 
-If \ab{𝑨} is an \ab{𝑆}-algebra we say that \ab{𝑨} \emph{satisfies} \ab p \af{≈} \ab q if
+We say that the algebra \ab{𝑨} \emph{satisfies} \ab p \af{≈} \ab q if
 for all environments \ab{ρ} : \ab X \as{→} \aof{𝔻[~\ab{𝑨}~]} (assigning values in the domain of
 \ab{𝑨} to variable symbols in \ab X) we have \aof{⟦~\ab{p}~⟧} \aofld{⟨\$⟩} \ab{ρ} \af{≈}
 \aof{⟦~\ab{q}~⟧} \aofld{⟨\$⟩} \ab{ρ}.  In other words, when they are interpreted in the algebra \ab{𝑨},
@@ -1811,14 +1817,30 @@ module _ {X : Type χ}{𝑨 : Algebra α ρᵃ} where
  free-lift-interp η (node f t)  = cong (Interp 𝑨) (≡.refl , (free-lift-interp η) ∘ t)
 \end{code}
 
-\paragraph*{The relatively free algebra}
-We now define the algebra \AgdaOperator{\AgdaFunction{𝔽[}}\AgdaSpace{}%
-\AgdaBound{X}\AgdaSpace{}%
-\AgdaOperator{\AgdaFunction{]}},
-which represents the \defn{relatively free algebra} over \ab X.
-The domain of the free algebra is a setoid whose \afld{Carrier} is the type \ad{Term} \ab X of {𝑆}-terms
-in \ab X. The interpretation of an operation in the free algebra is simply the operation itself.
-%This works since \ab{ℰ} \aod{⊢} \ab X \aod{▹\au{}≈\{}} is a congruence.
+\paragraph*{The relatively free algebra in theory}
+
+In this subsection, we describe, for a given class \ab{𝒦} of \ab{𝑆}-algebras, the \emph{relatively free algebra} in \af{S} (\af{P} \ab{𝒦}) over \ab X, using the standard, informal language that is typically used in mathematics literature. In the next section we will present the same material using Agda and the formal language of type theory.
+
+Above we defined the term algebra \T{X}, which is free in the class of all \ab{𝑆}-algebras; that is, \T{X} has the universal property and belongs to the class of \ab{𝑆}-algebras.  Given an arbitrary class \ab{𝒦} of \ab{𝑆}-algebras, we can't expect that \T{X} belongs to \ab{𝒦}, so, in general, we say that \T{X} is free \emph{for} \ab{𝒦}.  Indeed, it might not be possible to find a free algebra that belongs to \ab{𝒦}.  However, for any class \ab{𝒦} we can construct an algebra that is free \emph{for} \ab{𝒦} and belongs to the class \af{S} (\af{P} \ab{𝒦}), and this often suffices.
+
+The informal construction of the free algebra in \af{S} (\af{P} \ab{𝒦}), for an arbitrary class \ab{𝒦} of \ab{𝑆}-algebras, often proceeds by way of a quotient.  We let \af{Θ} := \af{⋂}\{\ab{θ} \af{∈} \af{Con} (\T{X}) : \T{X} \af{/} \ab{θ} \af{∈} \af{S} \ab{𝒦}\},\footnote{\af{Con} (\T{X}) is the set of congruences of \T{X}.} and define the \defn{relatively free algebra over} \ab{X} (relative to \ab{𝒦}) to be the quotient of \T{X} modulo the congruence \af{Θ}, which we denote by \Free{X} := \T{X} \af{/} \ab{Θ}. It's not hard to see that \Free{X} is a subdirect product of the algebras in \{\T{X} \af{/} \ab{θ}\}, where \ab{θ} ranges over all
+congruences modulo which \T{X} belongs to \af{S}~\ab{𝒦}.
+Thus \Free{X} belongs to \af{P}(\af{S}~\ab{𝒦}) ⊆ \af{S}(\af{P}~\ab{𝒦}), and it follows that \Free{X} satisfies the identities in \af{Th} \ab{𝒦} (those modeled by all members of \ab{𝒦}).  Indeed, for each pair \ab p \ab q : \Term{X}, if \ab{𝒦} \af{⊫} \ab p \af{≈} \ab q, then \ab p and \ab q must belong to the same \ab{Θ}-class, so \ab p and \ab q are identified in \Free{X}.
+
+\ifshort\else (Notice that \af{Θ} may be empty, in which case \af{ψ} = \T{X} \af{×} \T{X} and then \T{X} \af{/} \ab{ψ} is trivial.) \fi
+
+
+%The algebra \Free{X} that we have just defined is called the \defn{relatively free algebra for} \ab{𝒦} \defn{over} \ab{X} and (because of what we just observed) we may say that \aof{𝔽[ \ab{X} ]} is free \emph{in} \af{S}(\af{P} \ab{𝒦}).
+
+
+\paragraph*{The relatively free algebra in Agda}
+
+
+We now define the relatively free algebra in Agda using the language of type theory.
+Our approach will be different from the informal one described above in that we start with a set (or, rather, a type) \ab{ℰ} of identities, instead of a class of algebras, and we avoid quotients altogether, in favor of setoids.
+The domain of the free algebra will be a setoid whose \afld{Carrier} is the type \Term{X} of {𝑆}-terms
+in \ab X and whose equivalence relation will include all pairs (\ab p , \ab q) \af{∈} \Term{X} \af{×} \Term{X}
+such that \ab p \aod{≈} \ab q is derivable from \ab{ℰ}; that is, \ab{ℰ} \aod{⊢} \ab X \aod{▹} \ab p \aod{≈} \ab q. Finally, the interpretation of an operation in the free algebra is simply the operation itself, which works since \ab{ℰ} \aod{⊢} \ab X \aod{▹\au{}≈\au{}} is a congruence relation.
 
 \begin{code}
 
@@ -1870,20 +1892,15 @@ module FreeHom {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
  homF[_] : (X : Type c) → hom (𝑻 X) 𝔽[ X ]
  homF[ X ] = IsEpi.HomReduct ∥ epiF[ X ] ∥
 
-\end{code}
-
-As promised, we prove that the kernel of the natural epimorphism is the congruence defined by the identities modelled by \ab{𝒦}.
-
-\begin{code}
-
  kernel-in-theory : {X : Type c} → ker ∣ homF[ X ] ∣ ⊆ Th (V ℓ ι 𝒦)
  kernel-in-theory {X = X} {p , q} pKq 𝑨 vkA = V-id1{ℓ = ℓ}{p = p}{q} (ζ pKq) 𝑨 vkA
   where
   ζ : ∀{p q} → (Th 𝒦) ⊢ X ▹ p ≈ q → 𝒦 ⊫ p ≈ q
   ζ x 𝑨 kA = sound (λ y ρ → y 𝑨 kA ρ) x where open Soundness (Th 𝒦) 𝑨
+
 \end{code}
 
-\paragraph*{The universal property}
+Next we prove an important property of the relatively free algebra (relative to \ab{𝒦} and satisfying the identities in \af{Th} \ab{𝒦}), which will be used in the formalization of the HSP theorem; this is the assertion that for every algebra 𝑨, if \ab{𝑨} \af{⊨} \ab{Th} (\af{V} \ab{𝒦}), then there exists an epimorphism from \Free{A} onto \ab{𝑨}.
 
 \begin{code}
 
@@ -1904,11 +1921,19 @@ module _  {𝑨 : Algebra (α ⊔ ρᵃ ⊔ ℓ) (α ⊔ ρᵃ ⊔ ℓ)} {𝒦 :
   isEpi : IsEpi 𝔽[ A ] 𝑨 φ
   compatible (isHom isEpi) = cong (Interp 𝑨) (≡.refl , (λ _ → refl))
   isSurjective isEpi {y} = eq (ℊ y) refl
+\end{code}
+\ifshort\else
+
+\medskip
+
+\noindent Actually, we will need the following lifted version of this result.
+
+\begin{code}
 
  F-ModTh-epi-lift : 𝑨 ∈ Mod (Th (V ℓ ι 𝒦)) → epi 𝔽[ A ] (Lift-Alg 𝑨 ι ι)
  F-ModTh-epi-lift A∈ModThK = ∘-epi (F-ModTh-epi (λ {p q} → A∈ModThK{p = p}{q})) ToLift-epi
 \end{code}
-
+\fi
 
 
 %% -------------------------------------------------------------------------------------
@@ -1934,9 +1959,8 @@ To complete the proof it suffices to find an algebra \ab{𝑭} belonging to \af{
 \ab{𝑨} is the homomorphic image of \ab{𝑭}. Indeed, this will prove that \ab{𝑨} belongs to
 \af{H} (\af{S} (\af{P} \ab{𝒦})), which is \ab{𝒦}, since we assumed that \ab{𝒦} is a variety.
 
-Let \ab{X} be a set of cardinality max(|A|, ω), and let \ab{ρ} : \ab{X} \as{→} \af{𝕌[ \ab{𝑨} ]} be a surjective valuation of variable symbols in the domain of \ab{𝑨}. By the \af{lift-hom} lemma that we formalized above, the map \ab{ρ} extends to an epimorphism \ab{ρ⁺} from \T{X} onto \ab{𝕌[ \ab{𝑨} ]}.
-Furthermore, since \ab{𝔽} := \T{X}/Θ, there is an epimorphism \ab{g} : \T{X} \as{→} \ab{𝔽}.
-We claim that \af{ker} \ab g \af{⊆} \af{ker} \ab h. If the claim is true, then there is a map \ab{f} : \ab{𝔽} \as{→} \ab{𝑨} such that \ab f \af{∘} \ab g = \ab h.
+Let \ab{X} be a set of cardinality max(|A|, ω), and let \ab{ρ} : \ab{X} \as{→} \af{𝕌[ \ab{𝑨} ]} be a surjective valuation of variable symbols in the domain of \ab{𝑨}. By the \af{lift-hom} lemma that we formalized above, there is an epimorphism \ab{h} from \T{X} onto \ab{𝕌[ \ab{𝑨} ]} that \emph{extends} \ab{ρ} (that is, \ab{h} \ab x ≈ \ab{ρ} \ab x for all \ab x : \ab X).
+Now, put \aof{𝔽[ \ab{X} ]}~:=~\T{X}/\ab{Θ}, and let \ab{g} : \T{X} \as{→} \aof{𝔽[ \ab{X} ]} be the natural epimorphism with kernel \ab{Θ}. We claim that \af{ker} \ab g \af{⊆} \af{ker} \ab h. If the claim is true, then there is a map \ab{f} : \ab{𝔽} \as{→} \ab{𝑨} such that \ab f \af{∘} \ab g = \ab h.
 Since \ab h is epic, so is \ab f. Hence \ab{𝑨} \af{∈} \af{𝖧} (\af{𝔽} \ab X) \aof{⊆} \ab{𝒦⁺} completing the proof.
 
 
