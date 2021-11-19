@@ -104,20 +104,20 @@
 
 \newcommand{\AgdaTyped}[2]{\AgdaBound{#1}\AgdaSpace{}\AgdaSymbol{:}\AgdaSpace{}\AgdaBound{#2}\xspace}
 \newcommand{\AgdaComma}{\AgdaSpace{}\AgdaInductiveConstructor{,}\AgdaSpace{}}
-\newcommand{\AgdaPair}[2]{\AgdaSymbol{(}\AgdaBound{#1}\AgdaSpace{}\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}\AgdaBound{#2}\AgdaSymbol{)}\AgdaSpace{}}
+\newcommand{\AgdaPair}[2]{\AgdaSymbol{(}\AgdaBound{#1}\AgdaSpace{}\AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}\AgdaBound{#2}\AgdaSymbol{)}\xspace}
 
-\newcommand\ab[1]{\AgdaBound{#1}}
+\newcommand\ab[1]{\AgdaBound{#1}\xspace}
 \newcommand\ac{\AgdaComma}
-\newcommand\ad[1]{\AgdaDatatype{#1}}
-\newcommand\af[1]{\AgdaFunction{#1}}
-\newcommand\afld[1]{\AgdaField{#1}}
-\newcommand\ag[1]{\AgdaGeneralizable{#1}}
-\newcommand\ai[1]{\AgdaOperator{\AgdaFunction{#1\AgdaUnderscore{}#1}}}
-\newcommand\aia[2]{\AgdaOperator{\AgdaFunction{#1}}\AgdaSpace{}{#2}\AgdaSpace{}\AgdaOperator{\AgdaFunction{#1}}}
-\newcommand\aiab[2]{\AgdaOperator{\AgdaFunction{#1}}\AgdaSpace{}\AgdaBound{#2}\AgdaSpace{}\AgdaOperator{\AgdaFunction{#1}}}
-\newcommand\T[1]{\AgdaFunction{𝑻}\AgdaSpace{}\AgdaBound{#1}}
-\newcommand\Free[1]{\AgdaOperator{\AgdaFunction{𝔽[}}\AgdaSpace{}\AgdaBound{#1}\AgdaSpace{}\AgdaOperator{\AgdaFunction{]}}}
-
+\newcommand\ad[1]{\AgdaDatatype{#1}\xspace}
+\newcommand\af[1]{\AgdaFunction{#1}\xspace}
+\newcommand\afld[1]{\AgdaField{#1}\xspace}
+\newcommand\ag[1]{\AgdaGeneralizable{#1}\xspace}
+\newcommand\ai[1]{\AgdaOperator{\AgdaFunction{#1\AgdaUnderscore{}#1}}\xspace}
+\newcommand\aia[2]{\AgdaOperator{\AgdaFunction{#1}}\AgdaSpace{}{#2}\AgdaSpace{}\AgdaOperator{\AgdaFunction{#1}}\xspace}
+\newcommand\aiab[2]{\AgdaOperator{\AgdaFunction{#1}}\AgdaSpace{}\AgdaBound{#2}\AgdaSpace{}\AgdaOperator{\AgdaFunction{#1}}\xspace}
+\newcommand\T[1]{\AgdaFunction{𝑻}~\AgdaBound{#1}\xspace}
+\newcommand\Free[1]{\AgdaOperator{\AgdaFunction{𝔽[}}~\AgdaBound{#1}~\AgdaOperator{\AgdaFunction{]}}\xspace}
+\newcommand\Term[1]{\AgdaDatatype{Term}~\AgdaBound{#1}\xspace}
 \newcommand\aic[1]{\AgdaInductiveConstructor{#1}}
 \newcommand\ak[1]{\AgdaKeyword{#1}}
 \newcommand\ao[1]{\AgdaOperator{#1}}
@@ -132,7 +132,7 @@
 \newcommand\apt[1]{\AgdaPrimitiveType{#1}}
 \newcommand\ar[1]{\AgdaRecord{#1}}
 \newcommand\as[1]{\AgdaSymbol{#1}}
-\newcommand\au{\AgdaUnderscore{}\xspace}
+\newcommand\au{\AgdaUnderscore{}}
 
 
 \newcommand\Mac{\ensuremath{\mathrel{\AgdaComma}}}
