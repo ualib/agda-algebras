@@ -20,38 +20,12 @@ strong evidence in support of the claim that dependent type theory and the Agda 
 the technical demands they place on the user, are accessible to working mathematicians with sufficient
 patience and a strong desire to codify their work in order to formally verify the their results.
 
-Instead of encouragment, perhaps our presentation is more likely to provide a sobering glimpse of the
-technical hurdles that must be overcome to conduct research in mathematics using dependent type theory
-and the Agda language. Nonetheless we hope our work does not discourage anyone from investing in these
-technologies and we remain wholeheartedly dedicated to the use of type theory in our research.
+Our presentation gives a sobering glimpse of the technical hurdles that must be overcome
+to conduct research in mathematics using dependent type theory and the Agda language. Nonetheless we hope our work does not discourage anyone from investing in these technologies and we remain committed to the
+use and promotion of type theory and proof assistants in general and in our own research.
 Indeed, we are excited to share the gratifying outcomes and achievements
-that have resulted from attaining a modest degree of mastery of type theory, interactive theorem proving, and the Agda language.
-
-%% -----------------------------------------------------------------------------
-\subsection{Prior art}
-There have been a number of efforts to formalize parts of universal algebra in
-type theory prior to ours, most notably
-
-\begin{enumerate}
-\item
-In~\cite{Capretta:1999}, Capretta formalized the basics of universal algebra in the
-   Calculus of Inductive Constructions using the Coq proof assistant;
-\item In~\cite{Spitters:2011}, Spitters and van der Weegen formalized the basics of universal algebra
-   and some classical algebraic structures, also in the Calculus of Inductive Constructions using
-   the Coq proof assistant and promoting the use of type classes;
-\item In~\cite{Gunther:2018} Gunther, et al developed what was (prior to the \agdaalgebras library)
-   the most extensive library of formalized universal algebra to date; like \agdaalgebras, that work is based on dependent type theory, is programmed in Agda, and goes beyond the Noether isomorphism theorems to include some basic equational logic; although the coverage is less extensive than that of \agdaalgebras, Gunther et al do treat \emph{multisorted} algebras, whereas \agdaalgebras is currently limited to single sorted structures.
-\item Lynge and Spitters [@Lynge:2019] (2019) formalize basic, mutisorted universal algebra, up to the
-   Noether isomorphism theorems, in homotopy type theory; in this setting, the authors can avoid using
-   setoids by postulating a strong extensionality axiom called \textit{univalence}.
-\end{enumerate}
-
-Some other projects aimed at formalizing mathematics generally, and algebra in particular, have developed into very extensive libraries that include definitions, theorems, and proofs about algebraic structures, such as groups, rings, modules, etc.  However, the goals of these efforts seem to be the formalization of special classical algebraic structures, as opposed to the general theory of (universal) algebras. Moreover, the part of universal algebra and equational logic formalized in the \agdaalgebras library extends beyond the scope of prior efforts.
-
-% After completing the formal proof in \agda, we learned about a constructive version of Birkhoff's theorem proved by Carlstr\"om in~\cite{Carlstrom:2008}.  The latter is presented in the informal style of standard mathematical writing, and as far as we know it was never formalized in type theory and type-checked with a proof assistant. Nonetheless, a comparison of Carlstr\"om's proof and the \ualib proof would be interesting.
-
-
-
+that resulted from attaining some degree of mastery of type theory, interactive theorem proving,
+and the Agda language.
 
 % <!-- ----------------------------------------------------------------------------------- -->
 
@@ -132,21 +106,23 @@ open         IsEquivalence   renaming ( refl   to reflᵉ   )
                              renaming ( sym    to symᵉ    )
                              renaming ( trans  to transᵉ  )  using ()
 
+\end{code}
+\ifshort\else
+\begin{code}
 -- Assign handles to 3 modules of the Agda Standard Library.
 import       Function.Definitions                   as FD
 import       Relation.Binary.PropositionalEquality  as ≡
 import       Relation.Binary.Reasoning.Setoid       as SetoidReasoning
 
-\end{code}
-\ifshort\else
-\begin{code}
 private variable
  α ρᵃ β ρᵇ γ ρᶜ δ ρᵈ ρ χ ℓ : Level
  Γ Δ : Type χ
  𝑓 : fst 𝑆
+
 \end{code}
 \fi
-Note that the above imports include some of the minor adjustments to ``standard Agda'' syntax to suite our own taste. Take special note of the following conventions used throughout the \agdaalgebras library and this paper: we use \AgdaPrimitive{Type} in place of \AgdaPrimitive{Set}, the infix long arrow symbol,
+Note that the above imports include some adjustments to ``standard Agda'' syntax to suite our own taste.
+In particular, the following conventions used throughout the \agdaalgebras library and this paper: we use \AgdaPrimitive{Type} in place of \AgdaPrimitive{Set}, the infix long arrow symbol,
 \AgdaRecord{\AgdaUnderscore{}⟶\AgdaUnderscore{}}, instead of \AgdaRecord{Func} (the type of ``setoid functions'' discussed in §\ref{setoid-functions} below), and the symbol \aofld{\au{}⟨\$⟩\au{}} in place of \afld{f} (application of the map of a setoid function); we use
 \AgdaField{fst} and \AgdaField{snd}, and sometimes \AgdaOperator{\AgdaFunction{∣\AgdaUnderscore{}∣}} and
 \AgdaOperator{\AgdaFunction{∥\AgdaUnderscore{}∥}}, to denote the first and second projections out of the product type \AgdaOperator{\AgdaFunction{\AgdaUnderscore{}×\AgdaUnderscore{}}}.
@@ -250,7 +226,6 @@ We can formally verify that \af{Inv} \ab f is indeed the (range-restricted) righ
 
  InvIsInverseʳ : {f : 𝑨 ⟶ 𝑩}{b : B}(q : Image f ∋ b) → f ⟨$⟩ (Inv f q) ≈ b
  InvIsInverseʳ (eq _ p) = sym p
-
 \end{code}
 
 
@@ -1042,14 +1017,16 @@ Lift-≅ = ≅-trans Lift-≅ˡ Lift-≅ʳ
 \fi      %%% END LONG VERSION ONLY SECTION
          %%%
 
-We conclude this section on homomorphisms with what seems, for our purposes, the most useful way to represent the class of \emph{homomorphic images} of an algebra in dependent type theory.
-(The first function, \af{ov}, merely provides a handy shorthand for universe levels.)
+We conclude this section on homomorphisms with what seems, for our purposes, the most useful way to represent the class of \emph{homomorphic images} of an algebra in dependent type theory.\footnote{Here and throughout the \agdaalgebras library, we use the following shorthand: for any level \ab{α}, let \af{ov} \ab{α} = \ab{𝒪} \ap{⊔} \ab{𝒱} \ap{⊔} \ab{α}.}
+%%The first function, \af{ov}, merely provides a handy shorthand for universe levels.)
 %\footnote{cf.~the \ualmodule{Homomorphisms.Func.HomomorphicImages} module of the \agdaalgebras library.}
 
-\begin{code}
-
+\begin{code}[hide]
 ov : Level → Level
 ov α = 𝓞 ⊔ 𝓥 ⊔ lsuc α
+\end{code}
+
+\begin{code}
 
 _IsHomImageOf_ : (𝑩 : Algebra β ρᵇ)(𝑨 : Algebra α ρᵃ) → Type _
 𝑩 IsHomImageOf 𝑨 = Σ[ φ ∈ hom 𝑨 𝑩 ] IsSurjective ∣ φ ∣
@@ -1095,10 +1072,9 @@ just in case \ab{𝑨} can be \emph{homomorphically embedded} in \ab{𝑩}; in o
 \AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{≤}}\AgdaSpace{}%
 \AgdaBound{𝑩}
-iff there exists a monomorphism \ab{h} : \af{mon} \ab{𝑨} \ab{𝑩} from \ab{𝑨} to \ab{𝑩}.
-
-The following definition codifies the binary subalgebra relation
-\AgdaOperator{\AgdaFunction{\au{}≤\au{}}} on the class of \ab{𝑆}-algebras in MLTT.
+iff there exists an injective homomorphism from \ab{𝑨} to \ab{𝑩}.
+The following definition codifies this binary subalgebra relation
+on the class of \ab{𝑆}-algebras.
 
 \begin{code}
 
@@ -1147,7 +1123,7 @@ module _ {ι : Level} {I : Type ι}{𝒜 : I → Algebra α ρᵃ}{ℬ : I → A
 
 \end{code}
 \fi
-We conclude this brief subsection on subalgebras with two easy facts that will be useful later, when we prove the HSP theorem. The first merely converts a monomorphism into a pair in the subalgebra relation
+We conclude this brief subsection on subalgebras with two easy facts that will be useful later. The first merely converts a monomorphism into a pair in the subalgebra relation
  while the second is an algebraic invariance property of \AgdaOperator{\AgdaFunction{\au{}≤\au{}}}.
 \ifshort
 (Proofs omitted.)
@@ -1206,8 +1182,8 @@ module _ {X : Type χ } where
   gnl : ∀ {f}{s t : ∥ 𝑆 ∥ f → Term X} → (∀ i → (s i) ≃ (t i)) → (node f s) ≃ (node f t)
 
 \end{code}
-Next, we would show that equality of terms so defined is an equivalence relation, but the proof
-of this fact is trivial, so we omit it and merely give the fact a name; call it \af{≃-isEquiv}.
+Next, one shows that equality of terms so defined is an equivalence relation; since the proof
+of this is trivial, so we omit it and settle for giving it a name; call it \af{≃-isEquiv}.
 
 \begin{code}[hide]
 
@@ -1234,7 +1210,7 @@ For a given signature \ab{𝑆}, if the type \Term{X} is nonempty
 (equivalently, if \ab X or \aof{∣} \ab{𝑆} \aof{∣} is nonempty), then we can
 define an algebraic structure, denoted by \T{X} and called the \defn{term
   algebra in the signature} \ab{𝑆} \defn{over} \ab X.  Terms are viewed as
-acting on other terms, so both the domain and basic operations of the algebra
+acting on other terms, so both the elements of the carrier of \T{X} and its basic operations
 are the terms themselves.
 
 For each operation symbol \ab f : \aof{∣} \ab{𝑆} \aof{∣}, we denote by \ab f
@@ -1255,7 +1231,8 @@ cong (Algebra.Interp (𝑻 X)) (≡.refl , ss≃ts) = gnl ss≃ts
 \end{code}
 
 \paragraph*{Environments and the interpretation of terms therein}
-In this section, we formalize the notions \emph{environment} and \emph{interpretation of terms} in an algebra, evaluated in an environment. The approach to formalizing these notions, as well as the Agda code presented in this subsection, is based on similar code developed by Andreas Abel to formalize Birkhoff's completeness theorem.\footnote{See \abel.}
+In this section, we formalize the notions \emph{environment} and \emph{interpretation of terms} in an algebra, evaluated in an environment. The approach to formalizing these notions, as well as the Agda code presented in this subsection, is based on similar code developed by Andreas Abel to formalize Birkhoff's completeness theorem~\cite{Abel:2021}.
+%\footnote{See \abel.}
 
 \ifshort\else
 Recall that the domain of an algebra \ab{𝑨} is a setoid, which we denote by \af{𝔻[ \ab{𝑨} ]}, whose \afld{Carrier} is the universe of the algebra, \af{𝕌[ \ab{𝑨} ]}, and whose equivalence relation represents equality of elements in \af{𝕌[ \ab{𝑨} ]}.
@@ -1303,7 +1280,7 @@ Two terms interpreted in \ab{𝑨} are proclaimed \defn{equal} if they are equal
 \ifshort\else
 , and proof that it is an equivalence relation,
 \fi
- is formalized in Agda as follows.
+~is formalized in Agda as follows.
 
 \begin{code}
 
@@ -1317,7 +1294,7 @@ Two terms interpreted in \ab{𝑨} are proclaimed \defn{equal} if they are equal
 
 \end{code}
 \ifshort
-The proof that \af{Equal} is an equivalence relation is trivial, so we omit it.
+%The proof that \af{Equal} is an equivalence relation is trivial, so we omit it.
 \else
 \begin{code}
  EqualIsEquiv : {Γ : Type χ} → IsEquivalence (Equal {X = Γ})
@@ -1560,8 +1537,12 @@ module _ {α ρᵃ β ρᵇ : Level} where
 
 \end{code}
 
-As mentioned, \af S is a closure operator.  The facts that \af S is monotone and expansive won't be needed, so we omit their proofs.
-However, we do make use of idempotence of \af S, so let us pause to prove that property here.
+As mentioned, \af S is a closure operator. In particular, it is idempotent,
+%The facts that \af S is monotone and expansive won't be needed, so we omit their proofs.
+\ifshort
+\af{S-idem} : \af{S} (\af{S} \ab{𝒦}) \af{⊆} \af{S} \ab{𝒦}, but we omit the proof.
+\else
+a fact we formalize as follows.
 
 \begin{code}
 
@@ -1571,6 +1552,8 @@ S-idem :  {𝒦 : Pred (Algebra α ρᵃ)(α ⊔ ρᵃ ⊔ ov ℓ)}
 S-idem (𝑨 , (𝑩 , sB , A≤B) , x≤A) = 𝑩 , (sB , ≤-transitive x≤A A≤B)
 
 \end{code}
+\fi
+
 Finally, we define the \defn{varietal closure} of a class \ab{𝒦} to be the class \af{V} \ab{𝒦} := \af{H} (\af{S} (\af{P} \ab{𝒦})).
 (Recall, \ab{𝒦} is called a \defn{variety} if \af{V} \ab{𝒦} = \ab{𝒦}.)
 \begin{code}
@@ -1583,7 +1566,8 @@ module _  {α ρᵃ β ρᵇ γ ρᶜ δ ρᵈ : Level} where
 
 \end{code}
 
-The binary relation \aof{⊧} would be practically useless if it were not an \emph{algebraic invariant} (i.e., invariant under isomorphism). Let us now verify that the models relation we defined above has this essential property.
+The binary relation \aof{⊧} would be practically useless if it were not an \emph{algebraic invariant} (i.e., invariant under isomorphism).
+Fortunately, it does have this essential property, as we now verify.
 
 \begin{code}
 
@@ -1808,9 +1792,19 @@ The free lift so defined is a homomorphism by construction. Indeed, here is the 
   hhom : IsHom (𝑻 X) 𝑨 hfunc
   hhom = mkhom (λ{f}{a} → hcomp{f}{a})
 
+\end{code}
+
+It turns out, the interpretation of a term \ab p in an environment \ab{η} is the same as the free lift of \ab{η} evaluated at \ab p.
+
+\ifshort\else
+\begin{code}
+
 module _ {X : Type χ}{𝑨 : Algebra α ρᵃ} where
  open Setoid 𝔻[ 𝑨 ]  using ( _≈_ ; refl )
  open Environment 𝑨  using ( ⟦_⟧ )
+\end{code}
+\fi
+\begin{code}
 
  free-lift-interp : (η : X → 𝕌[ 𝑨 ])(p : Term X) → ⟦ p ⟧ ⟨$⟩ η ≈ (free-lift{𝑨 = 𝑨} η) p
  free-lift-interp η (ℊ x)       = refl
@@ -1865,12 +1859,16 @@ module FreeAlgebra {χ : Level}(ℰ : {Y : Type χ} → Pred (Term Y × Term Y) 
 We now define the natural epimorphism from \T{X} onto the relatively free algebra \Free{X} and prove that
 the kernel of this morphism is the congruence of \T{X} defined by the identities modeled by (\af S \ab{𝒦}, hence by) \ab{𝒦}.
 
+\ifshort\else
 \begin{code}
 
 module FreeHom {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
  private c = α ⊔ ρᵃ ⊔ ℓ ; ι = ov c
 
  open FreeAlgebra {χ = c} (Th 𝒦) using ( 𝔽[_] )
+\end{code}
+\fi
+\begin{code}
 
  epiF[_] : (X : Type c) → epi (𝑻 X) 𝔽[ X ]
  epiF[ X ] = h , hepi
@@ -1899,9 +1897,9 @@ module FreeHom {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
   ζ x 𝑨 kA = sound (λ y ρ → y 𝑨 kA ρ) x where open Soundness (Th 𝒦) 𝑨
 
 \end{code}
-
 Next we prove an important property of the relatively free algebra (relative to \ab{𝒦} and satisfying the identities in \af{Th} \ab{𝒦}), which will be used in the formalization of the HSP theorem; this is the assertion that for every algebra 𝑨, if \ab{𝑨} \af{⊨} \ab{Th} (\af{V} \ab{𝒦}), then there exists an epimorphism from \Free{A} onto \ab{𝑨}.
 
+\ifshort\else
 \begin{code}
 
 module _  {𝑨 : Algebra (α ⊔ ρᵃ ⊔ ℓ) (α ⊔ ρᵃ ⊔ ℓ)} {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
@@ -1909,6 +1907,9 @@ module _  {𝑨 : Algebra (α ⊔ ρᵃ ⊔ ℓ) (α ⊔ ρᵃ ⊔ ℓ)} {𝒦 :
  open FreeHom {ℓ = ℓ} {𝒦}
  open FreeAlgebra {χ = c}(Th 𝒦)  using ( 𝔽[_] )
  open Setoid 𝔻[ 𝑨 ]              using ( refl ; sym ; trans ) renaming  ( Carrier  to A )
+\end{code}
+\fi
+\begin{code}
 
  F-ModTh-epi : 𝑨 ∈ Mod (Th (V ℓ ι 𝒦)) → epi 𝔽[ A ] 𝑨
  F-ModTh-epi A∈ModThK = φ , isEpi
@@ -2001,18 +2002,14 @@ module _ (𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)){X : Type (α 
   Goal = mkiso (to⨅ , mkhom refl⨅) (from⨅ , mkhom refl) (λ _ _ → refl) (λ _ → refl)
 
 \end{code}
-Earlier we proved the following identity preservation lemma:
-\af{V-id1} : \ab{𝒦} \aof{⊫} \ab p \aof{≈} \ab q \as{→} \af{V} \ab{ℓ} \ab{ι} \ab{𝒦} \aof{⊫} \ab p \aof{≈} \ab q.
-Thus, if \ab{𝒦} is an equational class, then \af V \ab{𝒦} \aof{⊆} \ab{𝒦}.  The
-\af{Birkhoff|eqcl→var} lemma below formalizes this fact.
+Earlier we proved the identity preservation lemma, \af{V-id1} : \ab{𝒦} \aof{⊫} \ab p \aof{≈} \ab q \as{→} \af{V} \ab{ℓ} \ab{ι} \ab{𝒦} \aof{⊫} \ab p \aof{≈} \ab q.
+Thus, if \ab{𝒦} is an equational class, then \af V \ab{𝒦} \aof{⊆} \ab{𝒦}, as we now confirm.
 
 \begin{code}
 
 module _ {ℓ : Level}{X : Type ℓ}{ℰ : {Y : Type ℓ} → Pred (Term Y × Term Y) (ov ℓ)} where
  private ι = ov ℓ
-
  private 𝒦 = Mod{α = ℓ}{ℓ}{X} ℰ     -- an arbitrary equational class
-
  EqCl⇒Var : V ℓ ι 𝒦 ⊆ 𝒦
  EqCl⇒Var {𝑨}vA{p}{q} pℰq ρ = V-id1{ℓ = ℓ}{𝒦 = 𝒦}{p}{q}(λ _ x τ → x pℰq τ) 𝑨 vA ρ
 
@@ -2029,10 +2026,14 @@ algebras that model the equations in \af{Th} (\af{V} \ab{𝒦}); that is, we pro
 The inclusion \af{V} \ab{𝒦} \aof{⊆} \af{Mod} (\af{Th} (\af{V} \ab{𝒦})) is a simple consequence of the fact that \af{Mod} \af{Th} is a closure operator. Nonetheless, completeness demands
 that we formalize this fact, however trivial is its proof.
 
+\ifshort\else
 \begin{code}
 
 module _ (𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)){X : Type (α ⊔ ρᵃ ⊔ ℓ)} where
  private c = α ⊔ ρᵃ ⊔ ℓ ; ι = ov c
+\end{code}
+\fi
+\begin{code}
 
  ModTh-closure : V{β = β}{ρᵇ}{γ}{ρᶜ}{δ}{ρᵈ} ℓ ι 𝒦 ⊆ Mod{X = X} (Th (V ℓ ι 𝒦))
  ModTh-closure {x = 𝑨} vA {p} {q} x ρ = x 𝑨 vA ρ
@@ -2043,22 +2044,27 @@ It remains to prove the converse inclusion, \af{Mod} (\af{Th} (V 𝒦)) \aof{⊆
 which is the main focus of the rest of the paper.  We proceed as follows:
 
 \begin{enumerate}
-\item Construct an algebra \ab{𝑪} that is a product of algebras in \af{S} \ab{𝒦}, hence belongs to \af{P} \af{S} \ab{𝒦} ⊆ \af{S} \af{P} \ab{𝒦}.
+\item Construct an algebra \ab{𝑪} that is a product of algebras in \af{S} \ab{𝒦}, hence belongs to \af{P} (\af{S} \ab{𝒦}).
+\item Prove that \af{P} (\af{S} \ab{𝒦}) ⊆ \af{S} (\af{P} \ab{𝒦}), so \ab{𝑪} ∈ \af{S} (\af{P} \ab{𝒦}) by the first item.
 \item Prove that \aof{𝔽[ \ab{X} ]} is a subalgebra of \ab{𝑪}, which puts \aof{𝔽[ \ab{X} ]} in \af{S} (\af{S} (\af{P} \ab{𝒦})) (= \af{S} (\af{P} \ab{𝒦})).
 \item Prove that every algebra in \af{Mod} (\af{Th} (V 𝒦)) is a homomorphic image of
 \aof{𝔽[ \ab{X} ]} and thus belongs to \af{H} (\af{S} (\af{P} \ab{𝒦})) (= \af{V} \ab{𝒦}).
 \end{enumerate}
 
-We will define the algebra \ab{𝑪} to be the product of \emph{all} algebras in \af{S} \ab{𝒦}, and this requires that we index the algebras in \af{S} \ab{𝒦}.
+We define the algebra \ab{𝑪} to be the product of \emph{all} algebras in \af{S} \ab{𝒦}, and this requires indexing the class \af{S} \ab{𝒦}.
 In fact, we will need to associate each ``indexing pair'' (\ab{𝑨} , \ab p) (where \ab p : \ab{𝑨} \af{∈} \af{S} \ab{𝒦}) with an arbitrary environment
 \ab{ρ} : \ab X \as{→} \aof{𝕌[ \ab{𝑨} ]}. Consequently, the indices of the product will be triples (\ab{𝑨} , \ab p, \ab{ρ}) ranging over all algebras in \af{S} \ab{𝒦} and all
 environments assigning values in the domain of \ab{𝑨} to variables in \ab X.  Here is the construction of \ab{𝑪}.
 
+\ifshort\else
 \begin{code}
 
  open FreeHom {ℓ = ℓ} {𝒦}
  open FreeAlgebra {χ = c}(Th 𝒦)  using ( 𝔽[_] )
  open Environment                using ( Env )
+\end{code}
+\fi
+\begin{code}
 
  ℑ⁺ : Type ι
  ℑ⁺ = Σ[ 𝑨 ∈ (Algebra α ρᵃ) ] (𝑨 ∈ S ℓ 𝒦) × (Carrier (Env 𝑨 X))
@@ -2068,6 +2074,10 @@ environments assigning values in the domain of \ab{𝑨} to variables in \ab X. 
 
  𝑪 : Algebra ι ι
  𝑪 = ⨅ 𝔄⁺
+\end{code}
+
+\ifshort\else
+\begin{code}
 
  skEqual : (i : ℑ⁺) → ∀{p q} → Type ρᵃ
  skEqual i {p}{q} = ⟦ p ⟧ ⟨$⟩ snd ∥ i ∥ ≈ ⟦ q ⟧ ⟨$⟩ snd ∥ i ∥
@@ -2077,7 +2087,6 @@ environments assigning values in the domain of \ab{𝑨} to variables in \ab X. 
 The type \af{skEqual} provides a term identity \ab p \af{≈} \ab q for each index \ab i = (\ab{𝑨} , \ab{p} , \ab{ρ}) of the product.
 %(here, as above, \ab{𝑨} is an algebra, \ab{sA} is a proof that \ab{𝑨} belongs to \af{S} \ab{𝒦}, and \ab{ρ} is an environment).
 %map assigning values in the domain of \ab{𝑨} to variable symbols in \ab X).
-\ifshort\else
 Later we prove that if the identity \ab{p} \af{≈} \ab q holds in all \ab{𝑨} \aof{∈} \af S \ab{𝒦} (for all environments), then \ab p \af{≈} \ab q
 holds in the relatively free algebra \Free{X}; equivalently, the pair (\ab p , \ab q) belongs to the
 kernel of the natural homomorphism from \T{X} onto \Free{X}. We will use that fact to prove
@@ -2115,7 +2124,6 @@ so belongs to \af S (\af P \ab{𝒦}).
 \end{code}
 \fi
 \begin{code}
-
  homFC : hom 𝔽[ X ] 𝑪
  homFC = ∣ HomFactor 𝑪 homC homF[ X ] kerF⊆kerC (isSurjective ∥ epiF[ X ] ∥) ∣
 
@@ -2211,24 +2219,25 @@ We state and prove this in Agda as follows.
 \end{code}
 Finally, we prove that every algebra in \af{Mod} (\af{Th} (\af{V} \ab{𝒦})) is a homomorphic image of \af{𝔽[ \ab{X} ]}, for some \ab{X}.
 
+\ifshort\else
 \begin{code}
 
 module _ {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
  private c = α ⊔ ρᵃ ⊔ ℓ ; ι = ov c
  open FreeAlgebra {χ = c}(Th 𝒦) using ( 𝔽[_] )
+\end{code}
+\fi
+\begin{code}
 
  Var⇒EqCl : ∀ 𝑨 → 𝑨 ∈ Mod (Th (V ℓ ι 𝒦)) → 𝑨 ∈ V ℓ ι 𝒦
  Var⇒EqCl 𝑨 ModThA = 𝔽[ 𝕌[ 𝑨 ] ] , (spFA , AimgF)
   where
   spFA : 𝔽[ 𝕌[ 𝑨 ] ] ∈ S{ι} ι (P ℓ ι 𝒦)
   spFA = SPF{ℓ = ℓ} 𝒦
-
   epiFlA : epi 𝔽[ 𝕌[ 𝑨 ] ] (Lift-Alg 𝑨 ι ι)
   epiFlA = F-ModTh-epi-lift{ℓ = ℓ} (λ {p q} → ModThA{p = p}{q})
-
   φ : Lift-Alg 𝑨 ι ι IsHomImageOf 𝔽[ 𝕌[ 𝑨 ] ]
   φ = epi→ontohom 𝔽[ 𝕌[ 𝑨 ] ] (Lift-Alg 𝑨 ι ι) epiFlA
-
   AimgF : 𝑨 IsHomImageOf 𝔽[ 𝕌[ 𝑨 ] ]
   AimgF = ∘-hom ∣ φ ∣ (from Lift-≅) ,
           ∘-IsSurjective _ _ ∥ φ ∥ (fromIsSurjective (Lift-≅{𝑨 = 𝑨}))
@@ -2251,3 +2260,31 @@ Thus, every variety is an equational class. This completes the formal proof of B
 %% end{code}
 
 
+%% -----------------------------------------------------------------------------
+\section{Related work}
+There have been a number of efforts to formalize parts of universal algebra in
+type theory besides ours, most notably
+
+\begin{enumerate}
+\item
+In~\cite{Capretta:1999}, Capretta formalized the basics of universal algebra in the
+   Calculus of Inductive Constructions using the Coq proof assistant;
+\item In~\cite{Spitters:2011}, Spitters and van der Weegen formalized the basics of universal algebra
+   and some classical algebraic structures, also in the Calculus of Inductive Constructions using
+   the Coq proof assistant and promoting the use of type classes;
+\item In~\cite{Gunther:2018} Gunther et al developed what seemed (prior to the \agdaalgebras library) to be
+   the most extensive library of formalized universal algebra to date; like \agdaalgebras, that work is based on dependent type theory, is programmed in Agda, and goes beyond the Noether isomorphism theorems to include some basic equational logic; although the coverage is less extensive than that of \agdaalgebras, Gunther et al do treat \emph{multisorted} algebras, whereas \agdaalgebras is currently limited to single sorted structures.
+   \item In~\cite{Amato:2021}, ``Amato et al formalize multi-sorted algebras with finitary operators in UniMath. Limiting to finitary operators is due to the restrictions of the UniMath type theory, which does not have W-types nor user-defined inductive types. These restrictions also prompt the authors to code terms as lists of stack machine instructions rather than trees'' (quoting~\cite{Abel:2021}).
+\item In~\cite{Lynge:2019}, ``Lynge and Spitters formalize multi-sorted algebras in HoTT, also restricting to finitary operators. Using HoTT they can define quotients as types, obsoleting setoids. They prove three isomorphism theorems concerning sub- and quotient algebras. A universal algebra or varieties are not formalized'' (quoting~\cite{Abel:2021}).
+\item In~\cite{Abel:2021}, Abel gives a new formal proof of the soundness theorem and Birkhoff's completeness theorem for multi-sorted algebraic structures.
+\end{enumerate}
+
+%Some other projects aimed at formalizing mathematics generally, and algebra in particular, have developed into very extensive libraries that include definitions, theorems, and proofs about algebraic structures, such as groups, rings, modules, etc.  However, the goals of these efforts seem to be the formalization of special classical algebraic structures, as opposed to the general theory of (universal) algebras. Moreover, the part of universal algebra and equational logic formalized in the \agdaalgebras library extends beyond the scope of prior efforts.
+
+%Prior to our work, a constructive version of Birkhoff's theorem was published by Carlstr\"om in~\cite{Carlstrom:2008}.  However, the logical foundations of that work is constructive set theory and, as far as we know, there was no attempt to formalized it in type theory and verify it with a proof assistant.
+
+
+\paragraph*{Acknowledgments}
+This work would not have been possible without the wonderful \agda language, which is developed and maintained by The Agda Team (Andreas Abel, Guillaume Allais, Liang-Ting Chen, Jesper Cockx, Nils Anders Danielsson, Víctor López Juan, Ulf Norell, Andrés Sicard-Ramírez,Andrea Vezzosi, and Tesla Ice Zhang), and the \agdastdlib, maintained by Matthew Daggitt and Guillaume Allais.
+The manuscript was generated from the literate \agda file \HSPlagda and the \LaTeX2e file \agdahsp (processed with the commands
+\texttt{agda --latex} and \texttt{pdflatex}, respectively), which are available in the \agdaalgebras GitHub repository ({\small \url{https://github.com/ualib/agda-algebras}}).
