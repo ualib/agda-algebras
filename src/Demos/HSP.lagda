@@ -1375,20 +1375,28 @@ module _ {X : Type χ}{ι : Level} {I : Type ι} (𝒜 : I → Algebra α ρᵃ)
 \section{Equational Logic}
 \label{equational-logic}
 
-\paragraph*{Term identities and the ⊧ relation}
-Given a  signature \ab{𝑆} and a context of variable symbols \ab X, a \defn{term equation} or \defn{identity}
-(in this signature and context) is an ordered pair (\ab p , \ab q) of 𝑆-terms.
-(Informally, such an equation is often denoted by \ab p \af{≈} \ab q.)
+\paragraph*{Term identities, equational theories, and the ⊧ relation}
+Given a signature \ab{𝑆} and a context \ab X, an \ab{𝑆}-\defn{term equation} or \ab{𝑆}-\defn{term identity}
+is an ordered pair (\ab p , \ab q) of 𝑆-terms.\footnote{Such pairs of terms are also denoted by \ab p \af{≈} \ab
+q and are often simply called equations or identities, especially when the signature \ab{𝑆} is obvious.}
 For instance, if the context is the type \ab X : \ap{Type} \ab{χ}, then a term equation
 is a pair inhabiting the Cartesian product type \ad{Term}~\ab{X} \aof{×} \ad{Term}~\ab{X}.
 
-We say that the algebra \ab{𝑨} \emph{satisfies} \ab p \af{≈} \ab q if
-for all environments \ab{ρ} : \ab X \as{→} \aof{𝔻[~\ab{𝑨}~]} (assigning values in the domain of
-\ab{𝑨} to variable symbols in \ab X) we have \aof{⟦~\ab{p}~⟧} \aofld{⟨\$⟩} \ab{ρ} \af{≈}
-\aof{⟦~\ab{q}~⟧} \aofld{⟨\$⟩} \ab{ρ}.  In other words, when they are interpreted in the algebra \ab{𝑨},
-the terms \ab{p} and \ab{q} are equal (no matter what values in \ab{𝑨} are assigned to variable symbols in \ab{X}).
+We define an \defn{equational theory} (or \defn{algebraic theory}) to be a pair \ab{T} =
+(\ab{𝑆} , \ab{ℰᵀ}) consisting of a signature \ab{𝑆} and a collection \ab{ℰᵀ} of
+\ab{𝑆}-term equations. Some authors reserve the term \defn{theory} for
+a \emph{deductively closed} set of equations, that is, a set of equations that is closed
+under \emph{entailment} (defined below).
+
+We say that the algebra \ab{𝑨} \emph{satisfies} the equation \ab p \af{≈} \ab q if,
+for all \ab{ρ} : \ab X \as{→} \aof{𝔻[~\ab{𝑨}~]},
+%(assigning values in the domain of \ab{𝑨} to variable symbols in \ab X)
+we have \aof{⟦~\ab{p}~⟧} \aofld{⟨\$⟩} \ab{ρ} \af{≈} \aof{⟦~\ab{q}~⟧} \aofld{⟨\$⟩} \ab{ρ}.
+In other words, when they are interpreted in the algebra \ab{𝑨},
+the terms \ab{p} and \ab{q} are equal no matter what values in \ab{𝑨} are assigned to variable symbols in \ab{X}.
 In this situation, we write
-\ab{𝑨}~\aof{⊧}~\ab{p}~\aof{≈}~\ab{q} and say that \ab{𝑨} \defn{models} the identity \ab{p}~\af{≈}~\ab{q}.
+\ab{𝑨}~\aof{⊧}~\ab{p}~\aof{≈}~\ab{q} and say that \ab{𝑨} \defn{models} \ab{p}~\af{≈}~\ab{q},
+or that \ab{𝑨} is a \defn{model} of \ab{p}~\af{≈}~\ab{q}
 If \ab{𝒦} is a class of algebras, all of the same signature, we write \ab{𝒦}~\aof{⊫}~\ab{p}~\aof{≈}~\ab{q}
 and say that \ab{𝒦} \defn{models} the identity \ab{p}~\af{≈}~\ab{q} provided for every \ab{𝑨} \aof{∈} \ab{𝒦},
 we have \ab{𝑨}~\aof{⊧}~\ab{p}~\aof{≈}~\ab{q}.
@@ -1403,21 +1411,28 @@ _⊫_≈_ : Pred (Algebra α ρᵃ) ℓ → Term Γ → Term Γ → Type _
 
 \end{code}
 We represent a collection of identities as a predicate over pairs of
-terms and we denote by \ab{𝑨}~\aof{⊨}~\ab{ℰ} the assertion that
-the algebra \ab{𝑨} models \ab{p}~\afld{≈}~\ab{q} for all pairs
-(\ab{p} , \ab{q}) ∈ \ab{ℰ}.
+terms, say, \ab{ℰ} : \af{Pred}(\ad{Term} \ab{X} \af{×} \ad{Term} \ab{X})  and we denote by
+\ab{𝑨}~\aof{⊨}~\ab{ℰ} the assertion that the algebra \ab{𝑨} models \ab{p}~\af{≈}~\ab{q}
+for all pairs (\ab{p} , \ab{q}) \af{∈} \ab{ℰ}.\footnote{Notice that \af{⊨} is
+a stretched version of the models symbol, \af{⊧}; this makes it easier to distinguish the types
+\af{\au{}⊨\au{}} and \af{\au{}⊧\au{}≈\au{}}. The first denotes models of \emph{collections} of equations,
+while the latter denotes models of a \emph{single} equation. In Emacs
+\texttt{agda2-mode}, the unicode symbol \af{⊧} is produced by typing
+\textbackslash{}models, while \af{⊨} is produced with \textbackslash\textbar{}=.}
 
 \begin{code}
 
-_⊨_ : (𝑨 : Algebra α ρᵃ) → Pred(Term Γ × Term Γ) (ov χ) → Type _
+_⊨_ : (𝑨 : Algebra α ρᵃ) → Pred(Term Γ × Term Γ)(ov χ) → Type _
 𝑨 ⊨ ℰ = ∀ {p q} → (p , q) ∈ ℰ → Equal p q where open Environment 𝑨
 
 \end{code}
 
-In (informal) equational logic, if \ab{𝒦} is a class of structures and \ab{ℰ} a set of term identities, then
-the set of term equations modeled by \ab{𝒦} is denoted \af{Th}~\ab{𝒦} and called the \defn{equational theory} of \ab{𝒦},
-while the class of structures modeling \ab{ℰ} is denoted by \af{Mod}~\ab{ℰ} and is called the \defn{equational class axiomatized} by \ab{ℰ}.
-These notions may be formalize in type theory as follows.
+In (informal) equational logic, if \ab{𝒦} is a class of structures and \ab{ℰ} a set of
+term identities, then the set of term equations modeled by \ab{𝒦} is denoted
+\af{Th}~\ab{𝒦} and called the \defn{equational theory} of \ab{𝒦}, while the class of
+structures modeling \ab{ℰ} is denoted by \af{Mod}~\ab{ℰ} and is called the
+\defn{equational class axiomatized} by \ab{ℰ}. These notions may be formalize in type
+theory as follows.
 
 \begin{code}
 
@@ -1429,8 +1444,16 @@ Mod ℰ 𝑨 = ∀ {p q} → (p , q) ∈ ℰ → Equal p q where open Environmen
 
 \end{code}
 
-We represent entailment in type theory by defining an inductive type that is similar to
-the one Andreas Abel defined in~\cite{Abel:2021} when formalizing Birkhoff's completeness theorem.
+\paragraph*{Entailment}
+
+If \ab{ℰ} is a set of \ab{𝑆}-term equations and \ab{p} and \ab{q} are \ab{𝑆}-terms,
+we say that \ab{ℰ} \defn{entails} the equation \ab{p}~\aof{≈}~\ab{q}, and we write
+\ab{ℰ}~\ad{⊢}~\ab{p}~\ad{≈}~\ab{q}, just in case every model of \ab{ℰ} also models
+\ab{p}~\aof{≈}~\ab{q}.
+
+We represent entailment in type theory using an inductive type that is similar to
+the one defined by Andreas Abel, which he used in~\cite{Abel:2021} to formalizing
+Birkhoff's completeness theorem.  We call this the \defn{entailment type} and define it as follows.
 
 \begin{code}
 
@@ -1447,15 +1470,21 @@ data _⊢_▹_≈_  (ℰ : {Y : Type χ} → Pred(Term Y × Term Y) (ov χ)) :
 
 \end{code}
 
-Entailment is \defn{sound} in the following sense: if \ab{ℰ} entails \ab p \aof{≈} \ab q
-and \ab{𝑨} \aof{⊨} \ab{ℰ}, then \ab p \aof{≈} \ab q holds in \ab{𝑨}.  In other terms, the 
-derivation \ab{ℰ} \aod{⊢} \ab X \aod{▹} \ab p \aod{≈} \ab q implies that
-\ab p \aof{≈} \ab q holds in every model of \ab{ℰ}. We will apply this result---called
-\af{sound} and borrowed from~\cite{Abel:2021}---only once below%
+The fact that this type represents the informal semantic notion of entailment
+given at the start of this subsection is called the \defn{soundness} and
+\defn{completeness} of entailment.
+More precisely, \defn{the entailment type is sound} means that
+\ab{ℰ}~\ad{⊢}~\ab p~\ad{≈}~\ab q implies \ab p \aof{≈} \ab q holds in
+every algebra that models \ab{ℰ}.
+\defn{The entailment type is complete} means
+that if \ab p \aof{≈} \ab q holds in every algebra that models of \ab{ℰ},
+then \ab{ℰ}~\ad{⊢}~\ab p~\aof{≈}~\ab q.
+
+We will invoke soundness of the entailment type only once below%
 \ifshort
-, so we omit its straightforward formalization.
+~(by the name \af{sound}), so we omit its straightforward formalization.
 \else
-; nonetheless, here is the formalization.
+; nonetheless, here is its formalization, due to Abel~\cite{Abel:2021}.
 
 \begin{code}
 
