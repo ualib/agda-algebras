@@ -106,7 +106,7 @@ module _ {α ρᵃ ℓ ι : Level} where
 
 #### <a id="closure-properties-of-S">Closure properties of S</a>
 
-`S` is a closure operator.  The fact that S is expansive won't be needed, so we omit the proof, but we will make use of monotonicity and idempotence of `S`.  Here are their proofs.
+`S` is a closure operator.  The fact that S is expansive won't be needed, so we omit the proof, but we will make use of monotonicity and idempotence of `S`.
 
 \begin{code}
 module _ {α ρᵃ : Level} where
@@ -118,6 +118,12 @@ module _ {α ρᵃ : Level} where
 
  S-mono kk {𝑩} (𝑨 , (kA , B≤A)) = 𝑨 , ((kk kA) , B≤A)
 
+\end{code}
+
+We say `S` is *idempotent* provided \af{S} (\af{S} \ab{𝒦}) \as{=} \af{S} \ab{𝒦}.
+Of course, this is proved by establishing two inclusions, but one of them is trivial, so only the other need be formalized, which we do as follows.
+
+\begin{code}
 
  S-idem : ∀{β ρᵇ γ ρᶜ ℓ} → {𝒦 : Pred (SetoidAlgebra α ρᵃ)(a ⊔ ov ℓ)}
   →       S{β = γ}{ρᶜ} (a ⊔ ℓ) (S{β = β}{ρᵇ} ℓ 𝒦) ⊆ S{β = γ}{ρᶜ} ℓ 𝒦

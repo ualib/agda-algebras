@@ -15,7 +15,8 @@
     pdfmenubar=true,        % show Acrobat’s menu?
     pdffitwindow=false,     % window fit to page when opened
 %    pdfstartview={FitW},    % fits the width of the page to the window
-    pdftitle={A Machine-checked Proof of Birkhoff's Variety Theorem in Martin-L\"of Type Theory},    % title
+    % pdftitle={A Machine-checked Proof of Birkhoff's Variety Theorem in Martin-L\"of Type Theory},    % title
+    pdftitle={Birkhoff's Variety Theorem Formalized in Agda},    % title
     pdfauthor={William DeMeo},     % author
     pdfsubject={},   % subject of the document
     pdfcreator={pdflatex with hyperref},
@@ -40,7 +41,9 @@
 %\shortfalse % (to compile long version of the paper)
 % USAGE: 
 % \ifshort <stuff included in short version goes here> \else <stuff included in long version goes here> \fi
-\newcommand\seeunabridged{see the unabridged version of this paper for the complete formalization\xspace}
+\newcommand\seeunabridged{see the unabridged version of this paper,~\cite{DeMeo:2021b}, for the complete formalization\xspace}
+\newcommand\seemedium{see~\cite{DeMeo:2021b} for the complete formalization\xspace}
+\newcommand\seeshort{see~\cite{DeMeo:2021b}\xspace}
 
 % \usepackage[x11names, rgb]{xcolor}
 \usepackage{tikz}
@@ -50,7 +53,11 @@
 \crefformat{footnote}{#2\footnotemark[#1]#3}
 
 %%%%%%%%%%%%%% TITLE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ifshort
+\title{Birkhoff's Variety Theorem formalized in Agda}
+\else
 \title{A Machine-checked Proof of Birkhoff's Variety Theorem in Martin-L\"of Type Theory}
+\fi
 
 %%%%%%%%%%%%%% AUTHOR %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\author{name}{affil}{email}{orcid}{funding}.
