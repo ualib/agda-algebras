@@ -712,15 +712,15 @@ module _ {ι : Level}{I : Type ι } where
 %% -------------------------------------------------------------------------------------
 \subsection{Homomorphisms}\label{homomorphisms}
 Suppose \ab{𝑨} and \ab{𝑩} are \ab{𝑆}-algebras. A \defn{homomorphism} (or ``hom'') from
-\ab{𝑨} to \ab{𝑩} is a setoid function \ab{h}~:~\aof{𝔻[ \ab{𝑨} ]} \as{→} \aof{𝔻[ \ab{𝑩} ]}
+\ab{𝑨} to \ab{𝑩} is a setoid function \ab{h}~:~\aof{𝔻[~\ab{𝑨}~]} \as{→} \aof{𝔻[~\ab{𝑩}~]}
 that is \defn{compatible} with all basic operations; that is, for
-every operation symbol \ab{f}~:~\af{∣ \ab{𝑆} ∣} and all tuples
-\ab{a}~:~\af{∥ \ab{𝑆} ∥}~\ab{f} \as{→} \aof{𝔻[ \ab{𝑨} ]}, the following
+every operation symbol \ab{f} : \af{∣~\ab{𝑆}~∣} and all tuples
+\ab{a} : \af{∥~\ab{𝑆}~∥}~\ab{f} \as{→} \aof{𝔻[~\ab{𝑨}~]}, the following
 equality holds: \ab{h} \aofld{⟨\$⟩} (\ab{f}~\af{̂}~\ab{𝑨}) \ab{a} \af{≈}
 (\ab{f}~\af{̂}~\ab{𝑩}) \as{λ} \ab{x} \as{→} \ab{h} \aofld{⟨\$⟩} (\ab{a} \ab{x}).
-To formalize this concept in Agda, we first define a type \af{compatible-map-op}
+To formalize this concept in Agda, we first define the type \af{compatible-map-op}
 representing the assertion that a given setoid function
-\ab{h}~:~\aof{𝔻[ \ab{𝑨} ]} \as{→} \aof{𝔻[ \ab{𝑩} ]} commutes with a given
+\ab{h}~:~\aof{𝔻[~\ab{𝑨}~]} \as{→} \aof{𝔻[~\ab{𝑩}~]} commutes with a given
 basic operation \ab{f}. Then we generalize over operation symbols in the definition
 of \af{compatible-map}, the type of compatible maps from (the domain of) \ab{𝐴} to
 (the domain of) \ab{𝑩}.
@@ -1476,7 +1476,7 @@ In other words, when they are interpreted in the algebra \ab{𝑨},
 the terms \ab{p} and \ab{q} are equal no matter what values in \ab{𝑨} are assigned to variable symbols in \ab{X}.
 In this situation, we write
 \ab{𝑨}~\aof{⊧}~\ab{p}~\aof{≈}~\ab{q} and say that \ab{𝑨} \defn{models} \ab{p}~\af{≈}~\ab{q},
-or that \ab{𝑨} is a \defn{model} of \ab{p}~\af{≈}~\ab{q}
+or that \ab{𝑨} is a \defn{model} of \ab{p}~\af{≈}~\ab{q}.
 If \ab{𝒦} is a class of algebras, all of the same signature, we write \ab{𝒦}~\aof{⊫}~\ab{p}~\aof{≈}~\ab{q}
 and say that \ab{𝒦} \defn{models} the identity \ab{p}~\af{≈}~\ab{q} provided for every \ab{𝑨} \aof{∈} \ab{𝒦},
 we have \ab{𝑨}~\aof{⊧}~\ab{p}~\aof{≈}~\ab{q}.
@@ -1567,7 +1567,6 @@ every model of \ab{ℰ}.
 \defn{The entailment type is complete} means the following:
 if \ab p \aof{≈} \ab q holds in every model of \ab{ℰ},
 then \ab{ℰ}~\ad{⊢}~\ab{X}~\ad{▹}~\ab p~\aof{≈}~\ab q.
-
 Soundness and completeness of an entailment type similar to the one defined above was
 proved by Abel in~\cite{Abel:2021}.  We will invoke soundness of the entailment type only once below%
 \ifshort
@@ -2046,32 +2045,62 @@ module _  {𝑨 : Algebra (α ⊔ ρᵃ ⊔ ℓ) (α ⊔ ρᵃ ⊔ ℓ)} {𝒦 :
 
 \section{Birkhoff's Variety Theorem}
 
-\paragraph*{Informal statement and proof}
-Let \ab{𝒦} be a class of algebras. Recall that \ab{𝒦} is a \emph{variety} provided it is closed under homomorphisms, subalgebras and products; equivalently, \af{H} (\af{S} (\af{P} \ab{𝒦})) ⊆ \ab{𝒦}.
-(As \af{H}, \af{S}, and \af{P} are closure operators, the inclusion \ab{𝒦} ⊆ \af{H} (\af{S} (\af{P} \ab{𝒦}))
-is always valid, for every class \ab{𝒦}.)
-We call \ab{𝒦} an \emph{equational class} if it is precisely the class of all models of some set of term identities.
+Birkhoff's variety theorem, also know as the HSP theorem, asserts that a class of algebras
+is a variety if and only if it is an equational class.  In this section, we present the
+statement and proof of the HSP theorem---first in the familiar, informal style similar to
+what one finds in standard textbooks (see, e.g.,~\cite[Theorem 4.41]{Bergman:2012}),
+and then in the formal language of Martin-Löf type theory using Agda.
+
+\subsection{Informal proof}
+Let \ab{𝒦} be a class of algebras and recall that \ab{𝒦} is a \emph{variety} provided
+\ifshort\else
+it is closed under homomorphisms, subalgebras and products; equivalently,
+\fi
+\af{V} \ab{𝒦} ⊆ \ab{𝒦}.\footnote{Recall, \af{V} \ab{𝒦} := \af{H} (\af{S} (\af{P} \ab{𝒦})),
+and observe that \ab{𝒦} ⊆ \af{V} \ab{𝒦} holds for all \ab{𝒦} since
+\af{V} is a closure operator.}
+We call \ab{𝒦} an \emph{equational class} if it is precisely the class of all models of some set of identities.
 
 It is easy to prove that \emph{every equational class is a variety}.  Indeed, suppose \ab{𝒦} is an equational
-class and suppose the set \ab{ℰ} of term identities \defn{axiomatizes} \ab{𝒦}. That is, \ab{𝒦} \af{⊫} \ab{ℰ} and for all \ab{𝑨} we have \ab{𝑨} \af{⊨} \ab{ℰ} \as{→} \ab{𝑨} \af{∈} \ab{𝒦}. Then, since the classes \af H \ab{𝒦}, \af S \ab{𝒦}, \af P \ab{𝒦} and \ab{𝒦} all satisfy the same set of equations, we have \af{H} (\af{S} (\af{P} \ab{𝒦})) ⊫ \ab{ℰ}, so \af{V} \ab{𝒦} = \af{H} (\af{S} (\af{P} \ab{𝒦})) ⊆ \ab{𝒦}; that is, \ab{𝒦} is a variety. The converse assertion---that \emph{every variety is an equational class}---is more difficult to prove and is known as Birkhoff's variety theorem.
+class axiomatized by the set \ab{ℰ} of term identities; that is, \ab{𝑨} ∈ \ab{𝒦} iff
+\ab{𝑨} \af{⊨} \ab{ℰ}. Since the classes \af H \ab{𝒦}, \af S \ab{𝒦}, \af P \ab{𝒦} and
+\ab{𝒦} all satisfy the same set of equations, we have \af{V} \ab{𝒦} \af{⊫} \ab p
+\af{≈} \ab q for all (\ab p , \ab q) \af{∈} \ab{ℰ}, so \af{V} \ab{𝒦} ⊆ \ab{𝒦}.
 
-We now describe the standard informal proof of Birkhoff's theorem and then present a formal, constructive, type-theoretic proof of this theorem in Agda.
+The converse assertion---that \emph{every variety is an equational class}---is less obvious.
+Let \ab{𝒦} be an arbitrary variety.  We will describe a set of equations that axiomatizes
+\ab{𝒦}.  A natural choice is the set
+\af{Th} \ab{𝒦} of all equations that hold in \ab{𝒦}. Define \ab{𝒦⁺} = \af{Mod} (\af{Th}
+\ab{𝒦}).  Clearly, \ab{𝒦} \aof{⊆} \ab{𝒦⁺}. We prove the reverse inclusion. Let \ab{𝑨}
+\af{∈} \ab{𝒦⁺}; it suffices to find an algebra \ab{𝑭} \af{∈} \af{S} (\af{P} \ab{𝒦}) such
+that \ab{𝑨} is a homomorphic image of \ab{𝑭}, as this will show that \ab{𝑨}
+\af{∈} \af{H} (\af{S} (\af{P} \ab{𝒦})) = \ab{𝒦}.
 
-Let \ab{𝒦} be an arbitrary variety.  We will describe a set of equations that axiomatizes \ab{𝒦}, thus showing that \ab{𝒦} is an equational class.  A natural choice is the set \af{Th} \ab{𝒦} of all equations that hold in \ab{𝒦}. We will prove that \ab{𝒦} is precisely the class of structures
-modeling \af{Th} \ab{𝒦}
-.
-Define \ab{𝒦⁺} = \af{Mod} (\af{Th} \ab{𝒦}).  Clearly, \ab{𝒦} \aof{⊆} \ab{𝒦⁺}. We prove the reverse inclusion. Let \ab{𝑨} \af{∈} \ab{𝒦⁺}.
-To complete the proof it suffices to find an algebra \ab{𝑭} belonging to \af{S} (\af{P} \ab{𝒦}) such that
-\ab{𝑨} is the homomorphic image of \ab{𝑭}. Indeed, this will prove that \ab{𝑨} belongs to
-\af{H} (\af{S} (\af{P} \ab{𝒦})), which is \ab{𝒦}, since we assumed that \ab{𝒦} is a variety.
+Let \ab{X} be such that there exists a \emph{surjective} environment
+\ab{ρ} : \ab{X} \as{→} \af{𝕌[~\ab{𝑨}~]}.
+%\footnote{This is usually done by assuming \ab{X} has cardinality at least max(|~\af{𝕌[~\ab{𝑨}~]}~|, ω).}
+By the \af{lift-hom} lemma, there is an epimorphism \ab{h} from \T{X} onto \af{𝕌[~\ab{𝑨}~]}
+that extends \ab{ρ}.
+Now, put \aof{𝔽[~\ab{X}~]}~:=~\T{X}/\ab{Θ}, and let \ab{g} : \T{X} \as{→} \aof{𝔽[~\ab{X}~]}
+be the natural epimorphism with kernel \ab{Θ}. We claim that \af{ker} \ab g \af{⊆}
+\af{ker} \ab h. If the claim is true, then there is a map \ab{f} : \aof{𝔽[~\ab{X}~]} \as{→} \ab{𝑨}
+such that \ab f \af{∘} \ab g = \ab h. Since \ab h is surjective, so is \ab f. Hence \ab{𝑨}
+\af{∈} \af{𝖧} (\af{𝔽} \ab X) \aof{⊆} \ab{𝒦⁺} completing the proof.
+To prove the claim, let \ab u , \ab v \af{∈} \T{X} and assume that \ab g \ab u =
+\ab g \ab v. Since \T{X} is generated by \ab X, there are terms \ab p, \ab q ∈
+\T{X} such that \ab u = \af{⟦~\T{X}~⟧} \ab p and v = \af{⟦~\T{X}~⟧} \ab
+q.\footnote{Recall, \af{⟦~\ab{𝑨}~⟧} \ab t denotes the interpretation of the term
+\ab t in the algebra \ab{𝑨}.} Therefore,\\[-4pt]
 
-Let \ab{X} be a set of cardinality max(|A|, ω), and let \ab{ρ} : \ab{X} \as{→} \af{𝕌[ \ab{𝑨} ]} be a surjective valuation of variable symbols in the domain of \ab{𝑨}. By the \af{lift-hom} lemma that we formalized above, there is an epimorphism \ab{h} from \T{X} onto \ab{𝕌[ \ab{𝑨} ]} that \emph{extends} \ab{ρ} (that is, \ab{h} \ab x ≈ \ab{ρ} \ab x for all \ab x : \ab X).
-Now, put \aof{𝔽[ \ab{X} ]}~:=~\T{X}/\ab{Θ}, and let \ab{g} : \T{X} \as{→} \aof{𝔽[ \ab{X} ]} be the natural epimorphism with kernel \ab{Θ}. We claim that \af{ker} \ab g \af{⊆} \af{ker} \ab h. If the claim is true, then there is a map \ab{f} : \ab{𝔽} \as{→} \ab{𝑨} such that \ab f \af{∘} \ab g = \ab h.
-Since \ab h is epic, so is \ab f. Hence \ab{𝑨} \af{∈} \af{𝖧} (\af{𝔽} \ab X) \aof{⊆} \ab{𝒦⁺} completing the proof.
+\af{⟦~\Free{X}~⟧} \ab p = \ab g (\af{⟦~\T{X}~⟧} \ab p) = \ab g \ab u = \ab g \ab v =
+\ab g (\af{⟦~\T{X}~⟧} \ab q) = \af{⟦~\Free{X}~⟧} \ab q,\\[8pt]
+so \ab{𝒦} \af{⊫} \ab p \af{≈} \ab q, so (\ab p , \ab q) \af{∈} \af{Th}
+\ab{𝒦}. Since \ab{𝑨} \af{∈} \ab{𝒦⁺} =
+\af{Mod} (\af{Th} \ab{𝒦}), we obtain \ab{𝑨} \af{⊧} \ab p \af{≈} \ab q, so \ab h
+\ab u = (\af{⟦~\ab{𝑨}~⟧} \ab p) \aofld{⟨\$⟩} \ab{ρ} = (\af{⟦~\ab{𝑨}~⟧} \ab q)
+\aofld{⟨\$⟩} \ab{ρ} = \ab h \ab v, as desired.
 
-
-\subsection{Formal statement and proof}
-
+\subsection{Formal proof}
 We now show how to formally express and prove the twin assertions that
 (i) every equational class is a variety and (ii) every variety is an equational class.
 
