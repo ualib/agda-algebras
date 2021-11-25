@@ -53,8 +53,8 @@ formalizing the basic definitions and theorems of universal algebra in type theo
 One positive contribution of this project is that it lends support to the claim that
 dependent type theory and the Agda language, despite the technical demands they place on
 the user, are accessible to working mathematicians (such as ourselves) who possess
-sufficient patience and resolve to codify their work in order to formally verify
-the their results.
+sufficient patience and resolve to codify their work in type theory in order to formally verify
+the their results with a proof assistant.
 
 \ifshort\else
 Our presentation gives a sobering glimpse of the technical hurdles that must be overcome
@@ -72,48 +72,62 @@ of type theory, interactive theorem proving, and the Agda language.
 
 An Agda program typically begins by setting some language options and by
 importing types from existing Agda libraries. The language options are specified
-using the \ak{OPTIONS} \emph{pragma} which affects the way Agda behaves by controlling
+using the {\footnotesize \ak{OPTIONS}} \emph{pragma} which affects the way Agda behaves by controlling
 the deduction rules that are available and the logical axioms
 that are assumed when the program is type-checked to verify its
 correctness. Every Agda program in the \agdaalgebras library, including the
-module described in this paper,\footnote{\url{https://github.com/ualib/agda-algebras/blob/master/src/Demos/HSP.lagda}} begins with the following line.
-
-\begin{code}
-
+module \DemosHSPlagda described in this paper,\footnote{available at \url{https://github.com/ualib/agda-algebras/blob/master/src/Demos/HSP.lagda}} begins with the line
+\begin{code}[inline]
 {-# OPTIONS --without-K --exact-split --safe #-}
-
 \end{code}
-Here are brief descriptions of these options, accompanied by links to related documentation.
+. Here are brief descriptions of these options, accompanied by links to related documentation.
 
 \begin{itemize}
 \item
 \AgdaPragma{without-K} disables \href{https://ncatlab.org/nlab/show/axiom+K+%28type+theory%29}{Streicher's K axiom}.
-See the \href{https://agda.readthedocs.io/en/v2.6.1/language/without-k.html}{section on axiom K} in the \href{https://agda.readthedocs.io/en/v2.6.1.3/language}{Agda Language Reference Manual}~\cite{agdaref-axiomk}.
+See the \href{https://agda.readthedocs.io/en/v2.6.1/language/without-k.html}{section on axiom K} in
+\ifshort
+\cite{agdaref-axiomk}.
+\else
+the \href{https://agda.readthedocs.io/en/v2.6.1.3/language}{Agda Language Reference Manual}~\cite{agdaref-axiomk}.
+\fi
 
 \item
 \AgdaPragma{exact-split} makes Agda accept only those definitions that behave like so-called {\it judgmental} equalities.
 See the \href{https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html#pattern-matching-and-equality}%
-{Pattern matching and equality} section of the \href{https://agda.readthedocs.io/en/v2.6.1.3/tools/}{Agda Tools} documentation~\cite{agdatools-patternmatching}.
+{Pattern matching and equality} section of
+\ifshort
+\cite{agdatools-patternmatching}.
+\else
+the \href{https://agda.readthedocs.io/en/v2.6.1.3/tools/}{Agda Tools} documentation~\cite{agdatools-patternmatching}.
+\fi
 
 \item
 \AgdaPragma{safe} ensures that nothing is postulated outright---every non-MLTT axiom has to be an explicit assumption (e.g., an argument to a function or module).
-See the \href{https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html#cmdoption-safe}{cmdoption-safe}
-section of the \href{https://agda.readthedocs.io/en/v2.6.1.3/tools/}{Agda Tools documentation} and the \href{https://agda.readthedocs.io/en/v2.6.1/language/safe-agda.html#safe-agda}{Safe Agda section} of the \href{https://agda.readthedocs.io/en/v2.6.1.3/language}{Agda Language Reference}~\cite{agdaref-safeagda}.
+See the \href{https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html#cmdoption-safe}{cmdoption-safe} section of~\cite{agdaref-safeagda}.
 \end{itemize}
 
 
-The \AgdaKeyword{OPTIONS} pragma is usually followed by the start of a module and a list of import directives.
-For example, the present module (\DemosHSPlagda) begins as follows.
+The {\footnotesize \AgdaKeyword{OPTIONS}} pragma is usually followed by the start of a module and a list of
+import directives. For example, the present module (\DemosHSPlagda)
+\ifshort includes the following imports.
+\else
+begins as follows.
+\fi
 
 \begin{code}[hide]
 {-# OPTIONS --without-K --exact-split --safe #-}
 \end{code}
+\ifshort\else
 \begin{code}
 
 -- Import universe levels and Signature type (described below) from the agda-algebras library.
 open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Demos.HSP {𝑆 : Signature 𝓞 𝓥} where
+\end{code}
+\fi
+\begin{code}
 
 -- Import 16 definitions from the Agda Standard Library.
 open import  Data.Unit.Polymorphic                           using ( ⊤ ; tt                        )
@@ -178,31 +192,32 @@ module _ {A : Type α }{B : A → Type β} where
 A \defn{setoid} is a pair (\ab A, \af{≈}) where \ab A is a type and \af{≈}
 is an equivalence relation on \ab A. Setoids seem to have gotten a bad wrap
 in some parts of the interactive theorem proving community because of the extra
-overhead that their use requires. However, we feel they are ideally suited to
-the task of representing the basic objects of informal mathematics (i.e., sets)
+overhead they require. However, we feel they are ideally suited to
+representing the basic objects of informal mathematics (i.e., sets)
 in a constructive, type-theoretic way.
 
-A set used informally typically comes equipped with an equivalence relation manifesting
-the notion of equality of elements of the set. When working informally, we
-often take the equivalence for granted or view it as self-evident; rarely do we
-take the time to define it explicitly. While this approach is well-suited to informal
-mathematics, formalization using a machine demands that we make nearly everything
-explicit, including notions of equality.
+In informal mathematical discourse, a set typically comes equipped with an equivalence
+relation manifesting the notion of equality of elements of the set. We
+often take this equivalence for granted or view it as self-evident; rarely do we
+take pains to define it explicitly. While well-suited to informal
+mathematics, this approach is inadequate for formal, machine-checked proofs.
 
-Actually, the \agdaalgebras library was first developed without setoids, relying exclusively
-on the inductively defined equality type \ad{\au{}≡\au{}} from \am{Agda.Builtin.Equality},
+The \agdaalgebras library was first developed without setoids, relying exclusively
+on the inductive equality type \ad{\au{}≡\au{}}, defined in \am{Agda.Builtin.Equality},
 along with some experimental, domain-specific types for equivalence classes, quotients, etc.
-One notable consequence of this design decision was that our formalization of many
-theorem required postulating function extensionality, an axiom that is not provable
-in pure Martin-Löf type theory (MLTT). [reference needed]
+One consequence of this design decision was that the formalization of many
+theorems required postulating function extensionality, an axiom that is not provable
+in pure Martin-Löf type theory (MLTT). [REFERENCE NEEDED]
 
 In contrast, our current approach using setoids makes the equality relation
-of a given type explicit.  A primary motivation for taking this approach is to make it
-clear that the library is fully constructive and confined to pure Martin-Löf dependent
-type theory (as defined, e.g., in [ref needed]). In particular, there are no appeals to
-function extensionality in the present work. Finally, we are confident that the current
-version of the \agdaalgebras library\footnote{[ref. with version information needed]} is
-free of hidden assumptions or inconsistencies that could be used to fool the type-checker.
+of a given type explicit.  A primary motivation for this is to avoid additional axioms
+(like function extensionality) and to make it clear that the formal proofs in the
+library are fully constructive and confined to pure Martin-Löf dependent type theory
+(as defined, e.g., in [REFERENCE NEEDED]).
+%In particular, there are no appeals to function extensionality in the present work.
+We are confident that the current version of the \agdaalgebras library\footnote{[REFERENCE
+WITH VERSION INFORMATION NEEDED]} is fully constructive and free from any hidden
+assumptions or inconsistencies that might be used to fool a type-checker.
 
 
 %% -----------------------------------------------------------------------------
@@ -235,7 +250,7 @@ f ⟨∘⟩ g = record  { f = (_⟨$⟩_ f) ∘ (_⟨$⟩_ g)
 \fi
 
 \paragraph*{Inverses of setoid functions}
-We begin by defining an inductive type that represents the semantic concept of the \emph{image} of a function.\footnote{cf.~the \ualmodule{Overture.Func.Inverses} module of the \agdaalgebras library.}
+We begin by defining an inductive type that represents the \emph{image} of a function.\footnote{cf.~the \ualmodule{Overture.Func.Inverses} module of the \agdaalgebras library.}
 
 \begin{code}
 
@@ -250,8 +265,9 @@ An inhabitant of \aod{Image} \ab f \aod{∋} \ab b is a dependent pair \AgdaPair
 where \AgdaTyped{a}{A} and \ab p~\as :~\ab b \af{≈} \ab f~\ab a is a proof that
 \ab f maps \ab a to \ab b.  Since the proof that \ab b
 belongs to the image of \ab f is always accompanied by a witness \AgdaTyped{a}{A}, we can
-actually \emph{compute} a range-restricted right-inverse of \ab f. For convenience, we define this
-inverse function and give it the name \af{Inv}.
+actually \emph{compute} a range-restricted right-inverse of \ab f, as follows.
+%. For convenience, we define this
+%inverse function and give it the name \af{Inv}.
 
 \begin{code}
 
@@ -260,7 +276,8 @@ inverse function and give it the name \af{Inv}.
 
 \end{code}
 For each \ab b : \afld{B}, given a pair \AgdaPair{a}{p}~\as :~\aod{Image}~\ab f~\aod{∋}~\ab b witnessing the fact that \ab b belongs to the image of \ab f, the function \af{Inv} simply returns the witness \ab a, which is a preimage of \ab b under \ab f.
-We can formally verify that \af{Inv} \ab f is indeed the (range-restricted) right-inverse of \ab f, as follows.
+Let's formally verify that \af{Inv} \ab f is indeed the (range-restricted) right-inverse of \ab f.
+
 
 \begin{code}
 
@@ -272,12 +289,12 @@ We can formally verify that \af{Inv} \ab f is indeed the (range-restricted) righ
 \paragraph*{Injective and surjective setoid functions}
 If \ab{f} % : \ab{𝑨} \aor{⟶} \ab{𝑩}
 is a setoid function from % \ab{𝑨} =
-(\ab A, \af{≈₀}) to
+(\ab A, \af{≈ᴬ}) to
 % \ab{𝑩} =
-(\ab B, \af{≈₁}), then we call \ab f \defn{injective} provided
-\as{∀} (\ab{a₀} \ab{a₁} \as : \ab{A}), \ab{f} \aofld{⟨\$⟩} \ab{a₀} \af{≈₁} \ab{f} \aofld{⟨\$⟩} \ab{a₁}
-implies \ab{a₀} \af{≈₀} \ab{a₁}; we call \ab{f} \defn{surjective} provided
-\as{∀} (\AgdaTyped{b}{B}), \as{∃}~(\AgdaTyped{a}{A}) such that \ab{f} \aofld{⟨\$⟩} \ab{a} \af{≈₁} \ab{b}.
+(\ab B, \af{≈ᴮ}), then we call \ab f \defn{injective} provided
+\as{∀} (\ab{a₀} \ab{a₁} \as : \ab{A}), \ab{f} \aofld{⟨\$⟩} \ab{a₀} \af{≈ᴮ} \ab{f} \aofld{⟨\$⟩} \ab{a₁}
+implies \ab{a₀} \af{≈ᴬ} \ab{a₁}; we call \ab{f} \defn{surjective} provided
+\as{∀} (\AgdaTyped{b}{B}), \as{∃}~(\AgdaTyped{a}{A}) such that \ab{f} \aofld{⟨\$⟩} \ab{a} \af{≈ᴮ} \ab{b}.
 The \agdastdlib represents injective functions on bare types by the
 type \af{Injective}, and uses this to define the \af{IsInjective} type to represent
 the property of being an injective setoid function. Similarly, the type \af{IsSurjective}
@@ -294,9 +311,9 @@ represents the property of being a surjective setoid function. \af{SurjInv} repr
 \begin{code}
 
 module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
- open Setoid 𝑨 using () renaming ( _≈_ to _≈₁_ )
- open Setoid 𝑩 using () renaming ( _≈_ to _≈₂_ )
- open FD _≈₁_ _≈₂_
+ open Setoid 𝑨 using () renaming ( _≈_ to _≈ᴬ_ )
+ open Setoid 𝑩 using () renaming ( _≈_ to _≈ᴮ_ )
+ open FD _≈ᴬ_ _≈ᴮ_
 
  IsInjective : (𝑨 ⟶ 𝑩) →  Type (α ⊔ ρᵃ ⊔ ρᵇ)
  IsInjective f = Injective (_⟨$⟩_ f)
@@ -349,8 +366,8 @@ kernel : {A : Type α}{B : Type β} → Rel B ρ → (A → B) → Pred (A × A)
 kernel _≈_ f (x , y) = f x ≈ f y
 
 \end{code}
-The kernel of a \emph{setoid} function \ab f \as : \ab{𝐴} \aor{⟶} \ab{𝐵} is \{\AgdaPair{x}{y} \as{∈} \ab A \aof{×} \ab A \as : \ab f \aofld{⟨\$⟩} \ab x \aofld{≈} \ab f \aofld{⟨\$⟩} \ab y\},
-where \afld{\au{}≈\au} denotes equality in \ab{𝐵}. This can be formalized in Agda as follows.
+The kernel of a \emph{setoid} function \ab f \as : \ab{𝐴} \aor{⟶} \ab{𝐵} is \{\AgdaPair{x}{y} \as{∈} \ab A \aof{×} \ab A \as : \ab f \aofld{⟨\$⟩} \ab x \af{≈} \ab f \aofld{⟨\$⟩} \ab y\},
+where \af{\au{}≈\au} denotes equality in \ab{𝐵}. This can be formalized in Agda as follows.
 
 \begin{code}
 
@@ -386,6 +403,9 @@ This section is organized into the following subsections:
 \subsection{Signatures}
 \label{signatures}
 
+\ifshort
+An (algebraic) \defn{signature}
+\else
 In model theory, the \defn{signature} of a structure is a quadruple \ab{𝑆} = (\ab{C},
 \ab{F}, \ab{R}, \ab{ρ}) consisting of three (possibly empty) sets \ab{C}, \ab{F}, and
 \ab{R}---called \emph{constant}, \emph{function}, and \emph{relation} symbols,
@@ -395,13 +415,15 @@ is taken to be the set of natural numbers.
 
 As our focus here is universal algebra, we consider the restricted notion of an
 \emph{algebraic signature}, that is, a signature for ``purely algebraic'' structures. Such
-a signature is a pair \ab{𝑆} = \AgdaPair{F}{ρ} where \ab{F} is a collection of
+a signature
+\fi
+is a pair \ab{𝑆} = \AgdaPair{F}{ρ} where \ab{F} is a collection of
 \defn{operation symbols} and \ab{ρ} : \ab{F} \as{→} \ab{N} is an \defn{arity function}
 which maps each operation symbol to its arity. Here, \ab{N} denotes the \emph{arity type}.
 Heuristically, the arity \ab{ρ} \ab{f} of an operation symbol \ab{f} \as{∈} \ab{F} may be
 thought of as the number of arguments that \ab{f} takes as ``input.''
 
-The \agdaalgebras library represents an (algebraic) signature as an
+The \agdaalgebras library represents an algebraic signature as an
 inhabitant of the following dependent pair type:
 
 \begin{center}
@@ -443,12 +465,19 @@ projections---\AgdaOperator{\AgdaFunction{∣\AgdaUnderscore{}∣}} and
 Thus, if \ab{f} \as{:} \aof{∣} \ab{𝑆} \aof{∣} is an operation symbol in the
 signature \ab{𝑆}, then \aof{∥} \ab{𝑆} \aof{∥} \ab{f} is the arity of \ab{f}.
 
-We need to augment the ordinary \af{Signature} type so that it supports algebras over setoid domains.
-To do so, following Andreas Abel's lead, we define an operator that translates an
-ordinary signature into a \defn{setoid signature}, that is, a signature over a setoid
-domain (cf.~\cite{Abel:2021}). This raises a minor technical issue concerning the
-dependent types involved in the definition; some readers might find the resolution of this
-issue instructive, so let's discuss it briefly.
+We need to augment the ordinary \af{Signature} type so that it supports algebras over
+setoid domains.
+\ifshort\else
+To do so---following Andreas Abel's lead (cf.~\cite{Abel:2021})---we
+define an operator that translates an ordinary signature into a \defn{setoid signature},
+that is, a signature over a setoid domain.
+\fi
+This raises a minor technical issue concerning
+the dependent types involved in the definition.
+\ifshort\else
+Some readers might find the resolution of
+this issue instructive, so let's discuss it briefly.
+\fi
 If we are given two operations \ab{f} and \ab{g}, a tuple \ab{u} \as{:} \aof{∥} \ab{𝑆} \aof{∥} \ab{f} \as{→}
 \ab{A} of arguments for \ab{f}, and a tuple \ab{v} \as{:} \aof{∥} \ab{𝑆}
 \aof{∥} \ab{g} \as{→} \ab{A} of arguments for \ab{g}, and if we know that \ab f is identically equal to
@@ -471,7 +500,9 @@ EqArgs {ξ = ξ} ≡.refl u v = ∀ i → u i ≈ v i where open Setoid ξ using
 
 Finally, we are ready to define an operator which
 translates an ordinary (algebraic) signature into a signature of algebras over setoids.
+\ifshort\else
 We denote this operator by \aof{⟨\AgdaUnderscore{}⟩} and define it as follows.
+\fi
 
 \begin{code}
 
@@ -606,6 +637,7 @@ Specializing the \ar{Lift} type to our domain of interest, the \agdaalgebras lib
 defines a function called \af{Lift-Alg}%
 \ifshort
 , whose interface is the following.
+\vskip-2mm
 \else
 .
 
@@ -678,8 +710,7 @@ whose operations are those arising by point-wise interpretation in the obvious w
 we define the interpretation of \ab f in \af{⨅}~\ab{𝒜} by\\[-2mm]
 
 (\ab{f}~\af{̂}~\af{⨅}~\ab{𝒜}) \ab a := \as{λ}~(\ab i~:~\ab I)~\as{→}
-(\ab{f}~\af{̂}~\ab{𝒜}~\ab i)(\ab{a}~\ab i).
-
+(\ab{f}~\af{̂}~\ab{𝒜}~\ab i)(\ab{a}~\ab i).\\[8pt]
 In the \agdaalgebras library we define a function called \af{⨅} which formalizes the
 foregoing notion of \defn{product algebra} in Martin-Löf type theory.
 \ifshort
@@ -1635,7 +1666,7 @@ module _ {α ρᵃ β ρᵇ : Level} where
 
 \end{code}
 Finally, we define the \defn{varietal closure} of a class \ab{𝒦} to be the class \af{V} \ab{𝒦} := \af{H} (\af{S} (\af{P} \ab{𝒦})).
-(Recall, \ab{𝒦} is called a \defn{variety} if \af{V} \ab{𝒦} = \ab{𝒦}.)
+%(Recall, \ab{𝒦} is called a \defn{variety} if \af{V} \ab{𝒦} = \ab{𝒦}.)
 \begin{code}
 
 module _  {α ρᵃ β ρᵇ γ ρᶜ δ ρᵈ : Level} where
@@ -1751,7 +1782,7 @@ module _ {X : Type χ}{I : Type ℓ}(𝒜 : I → Algebra α ρᵃ){p q : Term X
 \fi
 
 The classes \af H \ab{𝒦}, \af S \ab{𝒦}, \af P \ab{𝒦}, and \af V \ab{𝒦} all satisfy the
-same set of equations.  We will only use a subset of the inclusions needed to prove this
+same term identities.  We will only use a subset of the inclusions needed to prove this
 assertion, and we present here only the facts we need.\footnote{For more details, see the
 \ualmodule{Varieties.Func.Preservation} module of the \agdaalgebras library.}
 First, the closure operator \af H preserves the identities modeled by the
@@ -1763,7 +1794,7 @@ given class; this follows almost immediately from the invariance lemma
 
 module _  {X : Type χ}{𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)}{p q : Term X} where
  H-id1 : 𝒦 ⊫ p ≈ q → H{β = α}{ρᵃ}ℓ 𝒦 ⊫ p ≈ q
- H-id1 σ 𝑩 (𝑨 , kA , BimgOfA) ρ = ⊧-H-invar{p = p}{q} (σ 𝑨 kA) BimgOfA ρ
+ H-id1 σ 𝑩 (𝑨 , kA , BimgA) = ⊧-H-invar{p = p}{q} (σ 𝑨 kA) BimgA
 
 \end{code}
 The analogous preservation result for \af S is a simple consequence of
@@ -1910,24 +1941,40 @@ Above we defined the term algebra \T{X}, which is free in the class of all
 \ifshort\else
 Indeed, it might not be possible to find a free algebra that belongs to \ab{𝒦}.
 \fi
-However, for any class \ab{𝒦} we can construct an algebra that is free \emph{for} \ab{𝒦}
+However, for any class \ab{𝒦} we can construct an algebra that is free for \ab{𝒦}
 and belongs to the class \af{S} (\af{P} \ab{𝒦}), and for most applications this suffices.
 
 The informal construction of the free algebra in \af{S} (\af{P} \ab{𝒦}), for an arbitrary
-class \ab{𝒦} of \ab{𝑆}-algebras, often proceeds by way of a quotient; letting \af{Θ} :=
-\af{⋂}\{\ab{θ} \af{∈} \af{Con} (\T{X}) : \T{X} \af{/} \ab{θ} \af{∈} \af{S}
-\ab{𝒦}\},\footnote{\af{Con} (\T{X}) is the set of congruences of \T{X}.} we define the
-\defn{relatively free algebra over} \ab{X} (relative to \ab{𝒦}) to be
-\T{X} modulo the congruence \af{Θ}, which we denote by \Free{X} := \T{X}~\af{/}~\ab{Θ}.
-Evidently, \Free{X} is a subdirect product of the algebras in \{\T{X}~\af{/}~\ab{θ}\},
-where \ab{θ} ranges over all congruences modulo which \T{X} belongs to \af{S}~\ab{𝒦}.
-Thus \Free{X} belongs to \af{P}(\af{S}~\ab{𝒦}) ⊆ \af{S}(\af{P}~\ab{𝒦}), and it follows
+class \ab{𝒦} of \ab{𝑆}-algebras, proceeds by taking the quotient of \T{X} modulo a congruence relation
+that we will denote by \afld{≈}.  One approach is to let
+\afld{≈} := \af{⋂}\{\ab{θ} \af{∈} \af{Con} (\T{X}) : \T{X} \af{/} \ab{θ} \af{∈} \af{S}
+\ab{𝒦}\},\footnote{\af{Con} (\T{X}) is the set of congruences of \T{X}.}.
+Alternatively we could let \ab{ℰ} = \af{Th} \ab{𝒦} and take \afld{≈} to be the least equivalence relation
+on the domain of \T{X} such that
+\begin{enumerate}
+\item for every equation (\ab p , \ab q) \af{∈} \af{Th} \ab{𝒦} and every
+environment \ab{ρ} : \ab X \as{→} \Term{X}, we have\\
+\af{⟦~\ab p~⟧} \afld{⟨\$⟩} \ab{ρ} \afld{≈} \af{⟦~\ab q~⟧} \afld{⟨\$⟩} \ab{ρ}, and
+\item \afld{≈} is a congruence of \T{X}; that is, for every operation symbol \ab
+f : \af{∣~\ab{𝑆}~∣}, and for all tuples \ab{s} \ab{t} : \af{∥~\ab{𝑆}~∥} \ab f
+→ \Term{X}, the following implication holds:\footnote{Here all
+interpretations, denoted by \af{⟦\au{}⟧}, are with respect to \T{X}.}\\[-8pt]
+
+(∀ i → \af{⟦~\ab{s}~\ab i~⟧}~\afld{⟨\$⟩}~\ab{ρ}~\afld{≈}~\af{⟦~\ab{t}~\ab
+i~⟧}~\afld{⟨\$⟩}~\ab{ρ})
+\as{→} \af{⟦~\ab f~\ab s~⟧}~\afld{⟨\$⟩}~\ab{ρ}~\afld{≈}~\af{⟦~\ab f~\ab
+t~⟧}~\afld{⟨\$⟩}~\ab{ρ}\\[-4pt]
+\end{enumerate}
+Whichever approach we choose, the \defn{relatively free algebra over} \ab{X} (relative to \ab{𝒦}) is defined by \Free{X} := \T{X}~\af{/}~\afld{≈}. %; that is, \T{X} modulo the congruence \afld{≈}, denoted by
+
+Evidently \Free{X} is a subdirect product of the algebras in \{\T{X}~\af{/}~\ab{θ}\},
+where \ab{θ} ranges over congruences modulo which \T{X} belongs to \af{S}~\ab{𝒦}.
+Thus, \Free{X} \af{∈} \af{P}(\af{S}~\ab{𝒦}) ⊆ \af{S}(\af{P}~\ab{𝒦}), and it follows
 that \Free{X} satisfies the identities in \af{Th} \ab{𝒦} (those modeled by all members of
 \ab{𝒦}).  Indeed, for each pair \ab p \ab q : \Term{X}, if \ab{𝒦} \af{⊫} \ab p \af{≈} \ab
-q, then \ab p and \ab q must belong to the same \ab{Θ}-class, so \ab p and \ab q are
-identified in \Free{X}. \ifshort\else (Notice that \af{Θ} may be empty, in which case
-\af{ψ} = \T{X} \af{×} \T{X} and then \T{X}~\af{/}~\ab{ψ} is trivial.) \fi
-
+q, then \ab p and \ab q must belong to the same \afld{≈}-class, so \ab p and \ab q are
+identified in \Free{X}. \ifshort\else (Notice that \afld{≈} may be empty, in which case
+\T{X}~\af{/}~\afld{≈} is trivial.) \fi
 
 \paragraph*{The relatively free algebra in Agda}
 We now define the relatively free algebra in Agda using the language of type theory.
@@ -2264,12 +2311,12 @@ so belongs to \af S (\af P \ab{𝒦}).
  homFC = ∣ HomFactor 𝑪 homC homF[ X ] kerF⊆kerC (isSurjective ∥ epiF[ X ] ∥) ∣
 
 \end{code}
-If \AgdaPair{p}{q} belongs to the kernel of \af{hom𝑪}, then
+If \AgdaPair{p}{q} belongs to the kernel of \af{homC}, then
 \af{Th} \ab{𝒦} includes the identity \ab{p} \af{≈} \ab{q}---that is,
 \af{Th} \ab{𝒦} \af{⊢} \ab X \af{▹} \ab{p} \af{≈} \ab{q}. Equivalently,
-if the kernel of \af{hom𝑪} is contained in that of \af{hom𝔽[ X ]}.
+if the kernel of \af{homC} is contained in that of \af{homF[ X ]}.
 \ifshort
-We omit the formal proof of this lemma and merely display its formal statement.
+We omit the proof of this lemma and merely display its formal statement.
 \else
 We formalize this fact as follows.
 \fi

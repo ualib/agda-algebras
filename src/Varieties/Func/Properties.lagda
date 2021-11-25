@@ -34,11 +34,14 @@ open import Relation.Unary   using ( Pred ; _∈_ )
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
-open import Overture.Preliminaries                 using ( ∣_∣ ; ∥_∥ )
-open import Algebras.Func.Basic             {𝑆 = 𝑆} using ( SetoidAlgebra ; Lift-Algˡ ; ov )
+open import Overture.Preliminaries                  using ( ∣_∣ ; ∥_∥ )
+open import Overture.Func.Inverses                  using ( InvIsInverseʳ )
+open import Overture.Func.Surjective                using ( SurjInv )
+open import Algebras.Func.Basic             {𝑆 = 𝑆} using ( SetoidAlgebra ; Lift-Algˡ ; ov ; 𝕌[_] ; 𝔻[_] )
 open import Algebras.Func.Products          {𝑆 = 𝑆} using ( ⨅ )
 open import Homomorphisms.Func.Basic        {𝑆 = 𝑆} using ( hom )
 open import Homomorphisms.Func.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; mkiso ; Lift-≅ˡ ; ≅-sym )
+open import Homomorphisms.Func.HomomorphicImages {𝑆 = 𝑆} using ( _IsHomImageOf_ )
 open import Terms.Basic                     {𝑆 = 𝑆} using ( Term ; ℊ )
 open import Terms.Func.Basic                {𝑆 = 𝑆} using ( 𝑻 ; module Environment )
 open import Terms.Func.Operations           {𝑆 = 𝑆} using ( comm-hom-term ; interp-prod ; term-agreement )
@@ -103,8 +106,33 @@ module _ {X : Type χ}{𝑨 : SetoidAlgebra α ρᵃ} where
 
 
 
-#### <a id="subalgebraic-invariance">Subalgebraic invariance of ⊧</a>
+#### <a id="homomorphic-invariance">Homomorphic invariance of ⊧</a>
+Identities modeled by an algebra `𝑨` are also modeled by every homomorphic image of `𝑨`, which fact can be formalized as follows.
 
+\begin{code}
+
+module _ {X : Type χ}{𝑨 : SetoidAlgebra α ρᵃ}{𝑩 : SetoidAlgebra β ρᵇ}{p q : Term X} where
+
+ ⊧-H-invar : 𝑨 ⊧ (p ≈̇ q) → 𝑩 IsHomImageOf 𝑨 → 𝑩 ⊧ (p ≈̇ q)
+ ⊧-H-invar Apq (φh , φE) ρ =
+  begin
+       ⟦ p ⟧   ⟨$⟩               ρ    ≈˘⟨  cong ⟦ p ⟧(λ _ → InvIsInverseʳ φE)  ⟩
+       ⟦ p ⟧   ⟨$⟩ (φ ∘  φ⁻¹  ∘  ρ)   ≈˘⟨  comm-hom-term φh p (φ⁻¹ ∘ ρ)        ⟩
+   φ(  ⟦ p ⟧ᴬ  ⟨$⟩ (     φ⁻¹  ∘  ρ))  ≈⟨   cong ∣ φh ∣ (Apq (φ⁻¹ ∘ ρ))         ⟩
+   φ(  ⟦ q ⟧ᴬ  ⟨$⟩ (     φ⁻¹  ∘  ρ))  ≈⟨   comm-hom-term φh q (φ⁻¹ ∘ ρ)        ⟩
+       ⟦ q ⟧   ⟨$⟩ (φ ∘  φ⁻¹  ∘  ρ)   ≈⟨   cong ⟦ q ⟧(λ _ → InvIsInverseʳ φE)  ⟩
+       ⟦ q ⟧   ⟨$⟩               ρ    ∎
+  where
+  φ⁻¹ : 𝕌[ 𝑩 ] → 𝕌[ 𝑨 ]
+  φ⁻¹ = SurjInv ∣ φh ∣ φE
+  private φ = (_⟨$⟩_ ∣ φh ∣)
+  open Environment 𝑨  using () renaming ( ⟦_⟧ to ⟦_⟧ᴬ)
+  open Environment 𝑩  using ( ⟦_⟧ )
+  open SetoidReasoning 𝔻[ 𝑩 ]
+\end{code}
+
+
+#### <a id="subalgebraic-invariance">Subalgebraic invariance of ⊧</a>
 Identities modeled by an algebra `𝑨` are also modeled by every subalgebra of `𝑨`, which fact can be formalized as follows.
 
 \begin{code}
@@ -213,8 +241,8 @@ module _ {X : Type χ}{p q : Term X}{𝑨 : SetoidAlgebra α ρᵃ}(φh : hom (�
  open Setoid (Domain 𝑨) using ( _≈_ )
  private φ = _⟨$⟩_ ∣ φh ∣
 
- ⊧-H-invar : 𝑨 ⊧ (p ≈̇ q) → φ p ≈ φ q
- ⊧-H-invar β =
+ ⊧-H-ker : 𝑨 ⊧ (p ≈̇ q) → φ p ≈ φ q
+ ⊧-H-ker β =
   begin
    φ p                ≈⟨ cong ∣ φh ∣ (term-agreement p)⟩
    φ (⟦ p ⟧ ⟨$⟩ ℊ)    ≈⟨ comm-hom-term φh p ℊ ⟩
