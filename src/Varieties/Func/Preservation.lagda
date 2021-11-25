@@ -7,7 +7,9 @@ author: "agda-algebras development team"
 
 ### <a id="Equation preservation">Equation preservation for setoid algebras</a>
 
-This is the [Varieties.Func.Preservation][] module of the [Agda Universal Algebra Library][]. In this module we show that identities are preserved by closure operators H, S, and P.  This will establish the easy direction of Birkhoff's HSP Theorem.
+This is the [Varieties.Func.Preservation][] module of the [Agda Universal Algebra Library][] where we show
+that the classes \af H \ab{𝒦}, \af S \ab{𝒦}, \af P \ab{𝒦}, and \af V \ab{𝒦} all satisfy the
+same identities.
 
 \begin{code}
 
@@ -42,7 +44,7 @@ open import Subalgebras.Func.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; _≤c_
 open import Subalgebras.Func.Properties     {𝑆 = 𝑆} using ( ⨅-≤ ; ≅-trans-≤ ; ≤-reflexive )
 open import Varieties.Func.Closure {𝑆 = 𝑆} using ( H ; S ; P ; V ; S-expa ; H-expa ; P-expa
                                                  ; V-expa ; Level-closure )
-open import Varieties.Func.Properties {𝑆 = 𝑆} using ( ⊧-S-invar ; ⊧-P-invar ; ⊧-I-invar )
+open import Varieties.Func.Properties {𝑆 = 𝑆} using ( ⊧-H-invar ; ⊧-S-invar ; ⊧-P-invar ; ⊧-I-invar )
 open import Varieties.Func.SoundAndComplete  {𝑆 = 𝑆} using ( _⊧_ ; _⊨_ ; _⊫_ ; Eq ; _≈̇_ ; lhs ; rhs ; _⊢_▹_≈_ ; Th)
 
 open Func          using ( cong ) renaming ( f to _⟨$⟩_ )
@@ -131,34 +133,8 @@ module _  {α ρᵃ ℓ χ : Level}
           {p q : Term X}
           where
 
- H-id1 : 𝒦 ⊫ (p ≈̇ q) → (H {β = α}{ρᵃ}ℓ 𝒦) ⊫ (p ≈̇ q)
- H-id1 σ 𝑩 (𝑨 , kA , BimgOfA) ρ = B⊧pq
-  where
-  IH : 𝑨 ⊧ (p ≈̇ q)
-  IH = σ 𝑨 kA
-  open Environment 𝑨     using () renaming ( ⟦_⟧ to ⟦_⟧₁)
-  open Environment 𝑩     using ( ⟦_⟧ )
-  open Setoid (Domain 𝑩) using ( _≈_ )
-  open SetoidReasoning (Domain 𝑩)
-
-  φ : hom 𝑨 𝑩
-  φ = ∣ BimgOfA ∣
-  φE : IsSurjective ∣ φ ∣
-  φE = ∥ BimgOfA ∥
-  φ⁻¹ : 𝕌[ 𝑩 ] → 𝕌[ 𝑨 ]
-  φ⁻¹ = SurjInv ∣ φ ∣ φE
-
-  ζ : ∀ x → (∣ φ ∣ ⟨$⟩ (φ⁻¹ ∘ ρ) x ) ≈ ρ x
-  ζ = λ _ → SurjInvIsInverseʳ ∣ φ ∣ φE
-
-  B⊧pq : (⟦ p ⟧ ⟨$⟩ ρ) ≈ (⟦ q ⟧ ⟨$⟩ ρ)
-  B⊧pq = begin
-           ⟦ p ⟧ ⟨$⟩ ρ                               ≈˘⟨ cong ⟦ p ⟧ ζ ⟩
-           ⟦ p ⟧ ⟨$⟩ (λ x → (∣ φ ∣ ⟨$⟩ (φ⁻¹ ∘ ρ) x)) ≈˘⟨ comm-hom-term φ p (φ⁻¹ ∘ ρ) ⟩
-           ∣ φ ∣ ⟨$⟩  (⟦ p ⟧₁ ⟨$⟩ (φ⁻¹ ∘ ρ))         ≈⟨ cong ∣ φ ∣ (IH (φ⁻¹ ∘ ρ)) ⟩
-           ∣ φ ∣ ⟨$⟩  (⟦ q ⟧₁ ⟨$⟩ (φ⁻¹ ∘ ρ))         ≈⟨ comm-hom-term φ q (φ⁻¹ ∘ ρ) ⟩
-           ⟦ q ⟧ ⟨$⟩ (λ x → (∣ φ ∣ ⟨$⟩ (φ⁻¹ ∘ ρ) x)) ≈⟨ cong ⟦ q ⟧ ζ ⟩
-           ⟦ q ⟧ ⟨$⟩ ρ                               ∎
+ H-id1 : 𝒦 ⊫ (p ≈̇ q) → H {β = α}{ρᵃ}ℓ 𝒦 ⊫ (p ≈̇ q)
+ H-id1 σ 𝑩 (𝑨 , kA , BimgA) = ⊧-H-invar{p = p}{q} (σ 𝑨 kA) BimgA
 
 \end{code}
 
