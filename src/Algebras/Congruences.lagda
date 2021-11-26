@@ -141,6 +141,6 @@ open IsCongruence
 -------------------------------------------------
 
 <span style="float:left;">[← Algebras.Products](Algebras.Products.html)</span>
-<span style="float:right;">[Algebras.Func →](Algebras.Func.html)</span>
+<span style="float:right;">[Algebras.Setoid →](Algebras.Setoid.html)</span>
 
 {% include UALib.Links.md %}

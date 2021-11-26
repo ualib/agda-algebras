@@ -175,6 +175,6 @@ Lift-≤-Lift ℓᵃ {𝑩} ℓᵇ a<b = ≥-Lift (Lift-Alg 𝑩 ℓᵇ) (≤-Li
 ---------------------------------
 
 <span style="float:left;">[← Subalgebras.Subalgebras](Subalgebras.Subalgebras.html)</span>
-<span style="float:right;">[Subalgebras.Func →](Subalgebras.Func.html)</span>
+<span style="float:right;">[Subalgebras.Setoid →](Subalgebras.Setoid.html)</span>
 
 {% include UALib.Links.md %}
