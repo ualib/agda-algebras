@@ -102,6 +102,8 @@ Finally, the official [Agda Wiki][], [Agda User's Manual][], [Agda Language Refe
 
 ### How to cite the Agda Universal Algebra Library
 
+[![DOI](https://zenodo.org/badge/360493064.svg)](https://zenodo.org/badge/latestdoi/360493064)
+
 To cite the [agda-algebras][] library and its documentation in a publication or on a web page, please use the following BibTeX data:
 
 ```bibtex

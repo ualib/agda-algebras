@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "DeMeo"
+  given-names: "William"
+  orcid: "https://orcid.org/0000-0003-1832-5690"
+- family-names: "Carette"
+  given-names: "Jacques"
+  orcid: "https://orcid.org/0000-0001-8993-9804"
+title: "agda-algebras"
+version: 2.0.0
+doi: 10.5281/zenodo.5730534
+date-released: 2021-11-26
+url: "https://github.com/ualib/agda-algebras"
+
