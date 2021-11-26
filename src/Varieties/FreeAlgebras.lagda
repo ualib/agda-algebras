@@ -450,6 +450,6 @@ proof of Birkhoff's theorem is complete.
 --------------------------------
 
 <span style="float:left;">[← Varieties.Preservation](Varieties.Preservation.html)</span>
-<span style="float:right;">[Varieties.Func →](Varieties.Func.html)</span>
+<span style="float:right;">[Varieties.Setoid →](Varieties.Setoid.html)</span>
 
 {% include UALib.Links.md %}

@@ -102,8 +102,8 @@ open import Function.Base    using ( _∘_ )
 open import Relation.Binary  using ( Setoid )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Relations.Continuous        using ( ΠΡ ; ΠΡ-syntax )
-open import Algebras.Func.Basic {𝑆 = 𝑆} using ( SetoidAlgebra )
+open import Relations.Continuous           using ( ΠΡ ; ΠΡ-syntax )
+open import Algebras.Setoid.Basic {𝑆 = 𝑆}  using ( Algebra )
 
 \end{code}
 
@@ -138,17 +138,17 @@ where,
 
 \begin{code}
 
-module _ -- levels for...
-         {ι : Level} -- ...arity (or argument index) types
-         {ν : Level} -- ...variable symbol types
-         {α ℓ : Level} -- ... domain types
+module _                -- levels for...
+         {ι : Level}    -- ...arity (or argument index) types
+         {ν : Level}    -- ...variable symbol types
+         {α ℓ : Level}  -- ... domain types
          where
  open Setoid
  record Constraint (var : Type ν) (dom : var → Setoid α ℓ) : Type (ν ⊔ α ⊔ lsuc ι) where
   field
    arity  : Type ι               -- The "number" of variables involved in the constraint.
    scope  : arity → var          -- Which variables are involved in the constraint.
-   rel    : ΠΡ[ i ∈ arity ] (Carrier (dom (scope i)))     -- The constraint relation.
+   rel    : ΠΡ[ i ∈ arity ] (Carrier (dom (scope i)))   -- The constraint relation.
 
   satisfies : (∀ v → Carrier (dom v)) → Type  -- An assignment 𝑓 : var → dom of values to variables
   satisfies f = rel (f ∘ scope)      -- *satisfies* the constraint 𝐶 = (σ , 𝑅) provided
@@ -160,7 +160,7 @@ module _ -- levels for...
 
 A CSP "template" restricts the relations that may occur in instances of the problem.
 A convenient way to specify a template is to give an indexed family
-𝒜 : var → SetoidAlgebra α ρ of algebras (one for each variable symbol in var)
+𝒜 : var → Algebra α ρ of algebras (one for each variable symbol in var)
 and require that relations be subalgebras of the product ⨅ var 𝒜.
 
 To construct a CSP instance, then, we just have to give a family 𝒜 of algebras, specify
@@ -175,9 +175,9 @@ An instance of a constraint satisfaction problem is a triple 𝑃 = (𝑉, 𝐷,
 
 \begin{code}
 
- open SetoidAlgebra
+ open Algebra
  open Setoid
- record CSPInstance (var : Type ν)(𝒜 : var → SetoidAlgebra α ℓ) : Type (ν ⊔ α ⊔ lsuc ι) where
+ record CSPInstance (var : Type ν)(𝒜 : var → Algebra α ℓ) : Type (ν ⊔ α ⊔ lsuc ι) where
   field
    ar : Type ι       -- ar indexes the contraints in the instance
    cs : (i : ar) → Constraint var (λ v → Domain (𝒜 v))
