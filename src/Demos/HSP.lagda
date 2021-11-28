@@ -558,7 +558,7 @@ Recall, we renamed Agda's \ar{Func} type, preferring instead the long-arrow symb
 \begin{itemize}
 \item a function  \ab{f} \as : \afld{Carrier} (\aof{⟨} \ab{𝑆} \aof{⟩} \afld{Domain})
   \as{→} \afld{Carrier} \afld{Domain} representing the operation;
-\item a proof \af{cong} \as : \ab f \aof{Preserves \au{}≈₁\au{} ⟶ \au{}≈₂\au{}} that the
+\item a proof \af{cong} \as : \ab f \aof{Preserves \au{}≈₁\au{} \aor{⟶} \au{}≈₂\au{}} that the
 operation preserves the relevant setoid equalities.
 \end{itemize}
 Thus, for each operation symbol in the signature \ab{𝑆}, we have a setoid function
@@ -719,14 +719,13 @@ we define the interpretation of \ab f in \af{⨅}~\ab{𝒜} by\\[-2mm]
 In the \agdaalgebras library we define the function \af{⨅} which formalizes this
 notion of \defn{product algebra} in MLTT.
 \ifshort
-Here we merely display this function's interface, but \seeshort for the complete definition.
+Here we just show the interface, but \seeshort for the complete definition of \af{⨅}.
 
 \else
 Here is the formal definition.
 
 \fi
 \begin{code}
-
 module _ {ι : Level}{I : Type ι } where
  ⨅ : (𝒜 : I → Algebra α ρᵃ) → Algebra (α ⊔ ι) (ρᵃ ⊔ ι)
 \end{code}
@@ -754,16 +753,16 @@ will denote \ab{𝑆}-algebras inhabiting the types \af{Algebra} \ab{α} \ab{ρ�
 \af{Algebra} \ab{β} \ab{ρᵇ}, respectively.
 
 A \defn{homomorphism} (or ``hom'') from
-\ab{𝑨} to \ab{𝑩} is a setoid function \ab{h}~:~\aof{𝔻[~\ab{𝑨}~]} \as{→} \aof{𝔻[~\ab{𝑩}~]}
+\ab{𝑨} to \ab{𝑩} is a setoid function \ab{h}~:~\aof{𝔻[~\ab{𝑨}~]} \aor{⟶} \aof{𝔻[~\ab{𝑩}~]}
 that is \defn{compatible} with all basic operations; that is, for
 every operation symbol \ab{f} : \af{∣~\ab{𝑆}~∣} and all tuples
-\ab{a} : \af{∥~\ab{𝑆}~∥}~\ab{f} \as{→} \aof{𝔻[~\ab{𝑨}~]}, the following
-equality holds: \ab{h} \aofld{⟨\$⟩} (\ab{f}~\af{̂}~\ab{𝑨}) \ab{a} \af{≈}
-(\ab{f}~\af{̂}~\ab{𝑩}) \as{λ} \ab{x} \as{→} \ab{h} \aofld{⟨\$⟩} (\ab{a} \ab{x}).
+\ab{a} : \af{∥~\ab{𝑆}~∥}~\ab{f} \as{→} \aof{𝕌[~\ab{𝑨}~]}, we have \ab{h} \aofld{⟨\$⟩}
+(\ab{f}~\af{̂}~\ab{𝑨}) \ab{a} \af{≈}
+(\ab{f}~\af{̂}~\ab{𝑩}) \ab{h} \aofld{⟨\$⟩} (\ab{a} \au{}).
 To formalize this concept in Agda, we first define the type \af{compatible-map-op}
 representing the assertion that a given setoid function
-\ab{h}~:~\aof{𝔻[~\ab{𝑨}~]} \as{→} \aof{𝔻[~\ab{𝑩}~]} commutes with a given
-basic operation \ab{f}. Then we generalize over operation symbols in the definition
+\ab{h}~:~\aof{𝔻[~\ab{𝑨}~]} \aor{⟶} \aof{𝔻[~\ab{𝑩}~]} commutes with a given
+operation symbol \ab{f}. Then we generalize over operation symbols in the definition
 of \af{compatible-map}, the type of compatible maps from (the domain of) \ab{𝐴} to
 (the domain of) \ab{𝑩}.
 
@@ -778,7 +777,6 @@ module _ (𝑨 : Algebra α ρᵃ)(𝑩 : Algebra β ρᵇ) where
  compatible-map-op : (𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]) → ∣ 𝑆 ∣ → Type _
  compatible-map-op h f = ∀ {a} → h ⟨$⟩ (f ̂ 𝑨) a ≈ (f ̂ 𝑩) λ x → h ⟨$⟩ (a x)
   where open Setoid 𝔻[ 𝑩 ] using ( _≈_ )
-
  compatible-map : (𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]) → Type _
  compatible-map h = ∀ {f} → compatible-map-op h f
 
@@ -790,7 +788,6 @@ a homomorphism, and finally the type \af{hom} of homomorphisms from \ab{𝑨} to
 
  record IsHom (h : 𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]) : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵇ) where
   constructor mkhom ; field compatible : compatible-map h
-
  hom : Type _
  hom = Σ (𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]) IsHom
 
@@ -1048,10 +1045,10 @@ module _ (𝑨 : Algebra α ρᵃ) (𝑩 : Algebra β ρᵇ) where
                from : hom 𝑩 𝑨
                to∼from : ∀ b → ∣ to ∣    ⟨$⟩ (∣ from ∣  ⟨$⟩ b)  ≈ᴮ b
                from∼to : ∀ a → ∣ from ∣  ⟨$⟩ (∣ to ∣    ⟨$⟩ a)  ≈ᴬ a
-
 \end{code}
 \ifshort\else    %%% BEGIN LONG VERSION ONLY
 \begin{code}
+
   toIsSurjective : IsSurjective ∣ to ∣
   toIsSurjective {y} = eq (∣ from ∣ ⟨$⟩ y) (sym (to∼from y))
    where open Setoid 𝔻[ 𝑩 ] using ( sym )
@@ -1101,7 +1098,6 @@ It is easy to prove that \ar{_≅_} is an equivalence relation, as follows.
 
   ν : ∀ a → ∣ g ∣ ⟨$⟩ (∣ f ∣ ⟨$⟩ a) ≈ a
   ν a = trans (cong ∣ from ab ∣ (from∼to bc (∣ to ab ∣ ⟨$⟩ a))) (from∼to ab a)
-
 \end{code}
 \fi
 
@@ -1156,7 +1152,8 @@ HomImages : Algebra α ρᵃ → Type (α ⊔ ρᵃ ⊔ ov (β ⊔ ρᵇ))
 HomImages {β = β}{ρᵇ = ρᵇ} 𝑨 = Σ[ 𝑩 ∈ Algebra β ρᵇ ] 𝑩 IsHomImageOf 𝑨
 
 IdHomImage : {𝑨 : Algebra α ρᵃ} → 𝑨 IsHomImageOf 𝑨
-IdHomImage {α = α}{𝑨 = 𝑨} = 𝒾𝒹 , λ {y} → Image_∋_.eq y refl where open Setoid 𝔻[ 𝑨 ] using ( refl )
+IdHomImage {α = α}{𝑨 = 𝑨} = 𝒾𝒹 , λ {y} → Image_∋_.eq y refl
+ where open Setoid 𝔻[ 𝑨 ] using ( refl )
 \end{code}
 \ifshort\else    %%% BEGIN LONG VERSION ONLY
 
@@ -1273,10 +1270,9 @@ mon→≤ {𝑨 = 𝑨}{𝑩} x = mon→intohom 𝑨 𝑩 x
 \subsection{Terms}
 \label{terms}
 Fix a signature \ab{𝑆} and let \ab X denote an arbitrary nonempty collection of variable
-symbols. The chosen collection of variable symbols is called the \defn{context}.)
+symbols. Such a collection of variable symbols is called a \defn{context}.
 Assume the symbols in \ab X are distinct from the operation symbols of
 \ab{𝑆}, that is \ab X \aof{∩} \aof{∣} \ab{𝑆} \aof{∣} = ∅.
-
 A \defn{word} in the language of \ab{𝑆} is a finite sequence of members of \ab X \aof{∪}
 \aof{∣~\ab{𝑆}~∣}. We denote the concatenation of such sequences by simple juxtaposition.
 Let \ab{S₀} denote the set of nullary operation symbols of \ab{𝑆}. We define by induction
@@ -1292,7 +1288,7 @@ An \ab{𝑆}-\defn{term} is a term in the language of \ab{𝑆} and the collecti
 \ab{𝑆}-\defn{terms} in the context \ab X is given by \Term{X} := \aof{⋃ₙ} \ab{𝑇ₙ}.
 
 As even its informal definition of \Term{X} is recursive, it should come as no surprise
-that the semantics of terms can be faithfully represented in type theory as an inductive
+that the semantics of terms can be usefully represented in type theory as an inductive
 type. Indeed, here is such a representation.
 
 \begin{code}
@@ -1310,12 +1306,14 @@ This basic inductive type represents each term as a tree with an operation symbo
 ; hence the constructor names
 (\aic{ℊ} for ``generator'' and \aic{node} for ``node'').
 \fi
+
+\paragraph*{The term algebra}
 We enrich the \ad{Term} type with
-an inductive type \ad{\au{}≃\au{}} representing equality of terms, and then we package
-up \ad{Term}, \ad{\au{}≃\au{}}, and a proof that \ad{\au{}≃\au{}} is an equivalence
-relation into a setoid of \ab{𝑆}-terms. Ultimately we use this term setoid as the domain
-of an algebra, called the \emph{term algebra in the signature} \ab{𝑆} (defined below).
-The equality type on terms is defined as follows.
+an inductive type \ad{\au{}≃\au{}} representing equality of terms, then we roll up
+into a setoid the types \ad{Term} and \ad{\au{}≃\au{}} along with a proof that
+\ad{\au{}≃\au{}} is an equivalence relation. Ultimately we use this setoid of \ab{𝑆}-terms
+as the domain of an algebra, called the \emph{term algebra in the signature} \ab{𝑆}.
+Here is the equality type on terms.
 
 \ifshort\else
 \begin{code}
@@ -1330,9 +1328,9 @@ module _ {X : Type χ } where
   gnl : ∀ {f}{s t : ∥ 𝑆 ∥ f → Term X} → (∀ i → (s i) ≃ (t i)) → (node f s) ≃ (node f t)
 
 \end{code}
-It's easy to show that this equality of terms is an equivalence relation%
+It's easy to show that this is an equivalence relation on terms%
 \ifshort
-; the proof, called \af{≃-isEquiv} in the \agdaalgebras library, is trivial.
+; the proof is called \af{≃-isEquiv} in the \agdaalgebras library.
 \else
 , as follows.
 
@@ -1355,21 +1353,18 @@ It's easy to show that this equality of terms is an equivalence relation%
 \end{code}
 \fi
 
-\paragraph*{The term algebra}
-For a given signature \ab{𝑆}, and context \ab X,
-\ifshort\else
-if the type \Term{X} is nonempty (equivalently, if \ab X or
-\aof{∣~\ab{𝑆}~∣} is nonempty), then
-\fi
-we define an algebraic structure, denoted by \T{X}
-and called the \defn{term algebra in} \ab{𝑆} \defn{over} \ab X.  Terms are
-viewed as acting on other terms, so both the elements of the domain of \T{X} and its
-basic operations are the terms themselves. That is, for each operation symbol \ab f : \aof{∣~\ab{𝑆}~∣}, we denote by \ab f~\aof{̂}~\T{X} the
-operation on \Term{X} that maps each tuple of terms, say,
-\ab t : \aof{∥~\ab{𝑆}~∥} \ab f \as{→} \Term{X}, to the formal term \ab f \ab t.
+We now define, for a given signature \ab{𝑆} and context \ab X,
+%if the type \Term{X} is nonempty (equivalently, if \ab X or
+%\aof{∣~\ab{𝑆}~∣} is nonempty), then
+the algebraic structure \T{X}, known as the \defn{term algebra in} \ab{𝑆} \defn{over} \ab
+X.  Terms are viewed as acting on other terms, so both the elements of the domain of \T{X}
+and its basic operations are the terms themselves. That is, for each operation symbol \ab
+f : \aof{∣~\ab{𝑆}~∣}, we denote by \ab f~\aof{̂}~\T{X} the operation on \Term{X} that maps
+each tuple of terms, say, \ab t : \aof{∥~\ab{𝑆}~∥} \ab f \as{→} \Term{X}, to the formal
+term \ab f \ab t.
 %We let \T{X} denote the term algebra in \ab{𝑆} over \ab X; it has universe \Term{X} and
 %operations \ab f \aof{̂} \T{X}, one for each symbol \ab f in \aof{∣~\ab{𝑆}~∣}.
-We formalize these concepts in \agda as follows.
+We codify these notions in Agda as follows.
 
 \begin{code}
 
@@ -1577,16 +1572,14 @@ module _ {X : Type χ} where
  𝒦 ⊫ p ≈ q = ∀ 𝑨 → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
 
 \end{code}
-We represent a collection of identities as a predicate over pairs of
+We represent a set of identities as a predicate over pairs of
 terms, say, \ab{ℰ} : \af{Pred}(\ad{Term} \ab{X} \af{×} \ad{Term} \ab{X})~\au{}  and we denote by
 \ab{𝑨}~\aof{⊨}~\ab{ℰ} the assertion that the algebra \ab{𝑨} models \ab{p}~\af{≈}~\ab{q}
-for all pairs (\ab{p} , \ab{q}) \af{∈} \ab{ℰ}.\footnote{Notice that \af{⊨} is
-a stretched version of the models symbol, \af{⊧}; this makes it possible for Agda to
-parse expressions involving the types \af{\au{}⊨\au{}} and \af{\au{}⊧\au{}≈\au{}}.
+for all (\ab{p} , \ab{q}) \af{∈} \ab{ℰ}.\footnote{Notice that \af{⊨} is
+a stretched version of the models symbol, \af{⊧};
 \ifshort\else
-The first denotes
-models of \emph{collections} of equations, while the latter denotes models of a
-\emph{single} equation.
+this makes it possible for Agda to distinguish and parse expressions involving the types
+\af{\au{}⊨\au{}} and \af{\au{}⊧\au{}≈\au{}}.
 \fi
 In Emacs \texttt{agda2-mode}, the symbol \af{⊨} is produced by typing
 \textbackslash\textbar{}=, while \af{⊧} is
@@ -1620,9 +1613,8 @@ If \ab{ℰ} is a set of \ab{𝑆}-term equations and \ab{p} and \ab{q} are \ab{�
 we say that \ab{ℰ} \defn{entails} the equation \ab{p}~\aof{≈}~\ab{q}, and we write
 \ab{ℰ}~\ad{⊢}~\ab{p}~\ad{≈}~\ab{q}, just in case every model of \ab{ℰ} also models
 \ab{p}~\aof{≈}~\ab{q}.
-
 We represent entailment in type theory using an inductive type that is similar to
-the one defined by Andreas Abel in~\cite{Abel:2021}.  We call this the \defn{entailment type}
+the one defined by Abel in~\cite{Abel:2021}.  We call this the \defn{entailment type}
 and define it as follows.
 
 \begin{code}
@@ -1687,24 +1679,36 @@ Fix a signature \ab{𝑆}, let \ab{𝒦} be a class of \ab{𝑆}-algebras, and d
 \item \af S \ab{𝒦} = algebras isomorphic to subalgebras of a members of \ab{𝒦};
 \item \af P \ab{𝒦} = algebras isomorphic to products of members of \ab{𝒦}.
 \end{itemize}
-A straight-forward verification confirms that \af H, \af S, and \af P are \emph{closure operators} (expansive, monotone, and idempotent).  A class \ab{𝒦} of \ab{𝑆}-algebras is said to be \emph{closed under the taking of homomorphic images} provided \af H \ab{𝒦} \aof{⊆} \ab{𝒦}. Similarly, \ab{𝒦} is \emph{closed under the taking of subalgebras} (resp., \emph{arbitrary products}) provided \af S \ab{𝒦} \aof{⊆} \ab{𝒦} (resp., \af P \ab{𝒦} \aof{⊆} \ab{𝒦}). The operators \af H, \af S, and \af P can be composed with one another repeatedly, forming yet more closure operators.
+\ifshort\else
+A straight-forward verification confirms that
+\fi
+\af H, \af S, and \af P are \emph{closure operators} (expansive, monotone, and
+idempotent).  A class \ab{𝒦} of \ab{𝑆}-algebras is said to be \emph{closed under
+the taking of homomorphic images} provided \af H \ab{𝒦} \aof{⊆} \ab{𝒦}. Similarly, \ab{𝒦} is
+\emph{closed under the taking of subalgebras} (resp., \emph{arbitrary products}) provided
+\af S \ab{𝒦} \aof{⊆} \ab{𝒦} (resp., \af P \ab{𝒦} \aof{⊆} \ab{𝒦}). The operators \af H, \af
+S, and \af P can be composed with one another repeatedly, forming yet more closure
+operators.
 
 % An algebra is a homomorphic image (resp., subalgebra; resp., product) of every algebra to which it is isomorphic. Thus, the class \af H \ab{𝒦} (resp., \af S \ab{𝒦}; resp., \af P \ab{𝒦}) is closed under isomorphism.
 
 A \emph{variety} is a class of \ab{𝑆}-algebras that is closed under the taking of
 homomorphic images, subalgebras, and arbitrary products.  To represent varieties
 we define types for the closure operators \af H, \af S, and \af P that are composable; we
-then define a type \af V which represents closure under all three operators, \af H, \af S,
-and \af P. Thus, if \ab{𝒦} is a class of \ab{𝑆}-algebras, then
+then define a type \af V which represents closure under all three of these operators.
+Thus, if \ab{𝒦} is a class of \ab{𝑆}-algebras, then
 \af V \ab{𝒦} := \af H (\af S (\af P \ab{𝒦})), and \ab{𝒦} is a variety iff \af V \ab{𝒦} \aof{⊆} \ab{𝒦}.
 \ifshort\else
 
 We now define the type \af H to represent classes of algebras that include all homomorphic images of algebras in the class---i.e., classes that are closed under the taking of homomorphic images---the type \af S to represent classes of algebras that closed under the taking of subalgebras, and the type \af P to represent classes of algebras closed under the taking of arbitrary products.
-\fi
 
 \begin{code}
 
 module _ {α ρᵃ β ρᵇ : Level} where
+\end{code}
+\fi
+\begin{code}
+
  private a = α ⊔ ρᵃ
  H : ∀ ℓ → Pred(Algebra α ρᵃ) (a ⊔ ov ℓ) → Pred(Algebra β ρᵇ) _
  H _ 𝒦 𝑩 = Σ[ 𝑨 ∈ Algebra α ρᵃ ] 𝑨 ∈ 𝒦 × 𝑩 IsHomImageOf 𝑨
@@ -1716,11 +1720,16 @@ module _ {α ρᵃ β ρᵇ : Level} where
  P _ ι 𝒦 𝑩 = Σ[ I ∈ Type ι ] (Σ[ 𝒜 ∈ (I → Algebra α ρᵃ) ] (∀ i → 𝒜 i ∈ 𝒦) × (𝑩 ≅ ⨅ 𝒜))
 
 \end{code}
-Finally, we define the \defn{varietal closure} of a class \ab{𝒦} to be the class \af{V} \ab{𝒦} := \af{H} (\af{S} (\af{P} \ab{𝒦})).
-%(Recall, \ab{𝒦} is called a \defn{variety} if \af{V} \ab{𝒦} = \ab{𝒦}.)
+Finally, we define the \defn{varietal closure} of a class \ab{𝒦} to be the class \af{V}
+\ab{𝒦} := \af{H} (\af{S} (\af{P} \ab{𝒦})).
+\ifshort\else
 \begin{code}
 
 module _  {α ρᵃ β ρᵇ γ ρᶜ δ ρᵈ : Level} where
+\end{code}
+\fi
+\begin{code}
+
  private a = α ⊔ ρᵃ ; b = β ⊔ ρᵇ
  V : ∀ ℓ ι → Pred(Algebra α ρᵃ) (a ⊔ ov ℓ) →  Pred(Algebra δ ρᵈ) _
  V ℓ ι 𝒦 = H{γ}{ρᶜ}{δ}{ρᵈ} (a ⊔ b ⊔ ℓ ⊔ ι) (S{β}{ρᵇ} (a ⊔ ℓ ⊔ ι) (P ℓ ι 𝒦))
@@ -1999,7 +2008,7 @@ The informal construction of the free algebra in \af{S} (\af{P} \ab{𝒦}), for 
 class \ab{𝒦} of \ab{𝑆}-algebras, proceeds by taking the quotient of \T{X} modulo a congruence relation
 that we will denote by \afld{≈}.  One approach is to let
 \afld{≈} := \af{⋂}\{\ab{θ} \af{∈} \af{Con} (\T{X}) : \T{X} \af{/} \ab{θ} \af{∈} \af{S}
-\ab{𝒦}\},\footnote{\af{Con} (\T{X}) is the set of congruences of \T{X}.}.
+\ab{𝒦}\}.\footnote{\af{Con} (\T{X}) is the set of congruences of \T{X}.}
 Alternatively we could let \ab{ℰ} = \af{Th} \ab{𝒦} and take \afld{≈} to be the least equivalence relation
 on the domain of \T{X} such that
 \begin{enumerate}
@@ -2014,11 +2023,12 @@ interpretations, denoted by \af{⟦\au{}⟧}, are with respect to \T{X}.}\\[-8pt
 (∀ i → \af{⟦~\ab{s}~\ab i~⟧}~\afld{⟨\$⟩}~\ab{ρ}~\afld{≈}~\af{⟦~\ab{t}~\ab
 i~⟧}~\afld{⟨\$⟩}~\ab{ρ})
 \as{→} \af{⟦~\ab f~\ab s~⟧}~\afld{⟨\$⟩}~\ab{ρ}~\afld{≈}~\af{⟦~\ab f~\ab
-t~⟧}~\afld{⟨\$⟩}~\ab{ρ}\\[-4pt]
+t~⟧}~\afld{⟨\$⟩}~\ab{ρ}\\[-8pt]
 \end{enumerate}
-Whichever approach we choose, the \defn{relatively free algebra over} \ab{X} (relative to \ab{𝒦}) is defined by \Free{X} := \T{X}~\af{/}~\afld{≈}. %; that is, \T{X} modulo the congruence \afld{≈}, denoted by
+Whichever approach we choose, the \defn{relatively free algebra over} \ab{X} (relative to
+\ab{𝒦}) is defined to be the quotient \Free{X} := \T{X}~\af{/}~\afld{≈}.
 
-Evidently \Free{X} is a subdirect product of the algebras in \{\T{X}~\af{/}~\ab{θ}\},
+Evidently \Free{X} is a subdirect product of the algebras in \{\T{X}~\af{/}~\ab{θ}\!\},
 where \ab{θ} ranges over congruences modulo which \T{X} belongs to \af{S}~\ab{𝒦}.
 Thus, \Free{X} \af{∈} \af{P}(\af{S}~\ab{𝒦}) ⊆ \af{S}(\af{P}~\ab{𝒦}), and it follows
 that \Free{X} satisfies the identities in \af{Th} \ab{𝒦} (those modeled by all members of
@@ -2029,15 +2039,18 @@ identified in \Free{X}. \ifshort\else (Notice that \afld{≈} may be empty, in w
 
 \paragraph*{The relatively free algebra in Agda}
 We now define the relatively free algebra in Agda using the language of type theory.
-Our approach will be different from the informal one described in the appendix.
-In particular, we start with a set (or, rather, a type) \ab{ℰ} of identities, instead of a
-class of algebras, and we avoid quotients altogether, in favor of setoids. The domain of
-the free algebra will be a setoid whose \afld{Carrier} is the type \Term{X} of {𝑆}-terms
-in \ab X and whose equivalence relation will include all pairs (\ab p , \ab q) \af{∈}
-\Term{X} \af{×} \Term{X} such that \ab p \aod{≈} \ab q is derivable from \ab{ℰ}; that is,
-\ab{ℰ} \aod{⊢} \ab X \aod{▹} \ab p \aod{≈} \ab q. Finally, the interpretation of an
-operation in the free algebra is simply the operation itself, which works since \ab{ℰ}
-\aod{⊢} \ab X \aod{▹\au{}≈\au{}} is a congruence relation.
+Our approach will be different from the informal one described above, but the end result
+will be the same.
+We start with a type \ab{ℰ} representing a collection of identities and, instead of
+forming a quotient, we take the domain of the free algebra to be a setoid whose
+\afld{Carrier} is the type \Term{X} of {𝑆}-terms in \ab X and whose equivalence relation
+includes all pairs (\ab p , \ab q) \af{∈} \Term{X} \af{×} \Term{X} such that \ab p \aod{≈}
+\ab q is derivable from \ab{ℰ}; that is, \ab{ℰ} \aod{⊢} \ab X \aod{▹} \ab p \aod{≈} \ab q.
+Observe that elements of this setoid are equal iff they belong to the same equivalence
+class of the congruence \afld{≈} defined above.  Therefore, the setoid so defined represents
+the quotient \T{X}~\af{/}~\afld{≈}.
+Finally, the interpretation of an operation in the free algebra is simply the operation
+itself, which works since \ab{ℰ} \aod{⊢} \ab X \aod{▹\au{}≈\au{}} is a congruence relation.
 
 \begin{code}
 
@@ -2051,8 +2064,7 @@ module FreeAlgebra {χ : Level}(ℰ : {Y : Type χ} → Pred (Term Y × Term Y) 
 
  𝔽[_] : Type χ → Algebra (ov χ) _
  Domain 𝔽[ X ] = FreeDomain X
- Interp 𝔽[ X ] = FreeInterp
-  where
+ Interp 𝔽[ X ] = FreeInterp where
   FreeInterp : ∀ {X} → ⟨ 𝑆 ⟩ (FreeDomain X) ⟶ FreeDomain X
   FreeInterp ⟨$⟩ (f , ts)       = node f ts
   cong FreeInterp (≡.refl , h)  = app h
@@ -2060,7 +2072,7 @@ module FreeAlgebra {χ : Level}(ℰ : {Y : Type χ} → Pred (Term Y × Term Y) 
 
 \paragraph*{The natural epimorphism} % from 𝑻 X to 𝔽[ X ]}
 We now define the natural epimorphism from \T{X} onto the relatively free algebra \Free{X} and prove that
-the kernel of this morphism is the congruence of \T{X} defined by the identities modeled by (\af S \ab{𝒦}, hence by) \ab{𝒦}.
+its kernel is the congruence of \T{X} defined by the identities modeled by (\af S \ab{𝒦}, hence by) \ab{𝒦}.
 
 \ifshort\else
 \begin{code}
