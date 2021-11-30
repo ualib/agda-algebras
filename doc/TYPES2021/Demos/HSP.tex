@@ -15,11 +15,12 @@ The first major milestone of the \agdaalgebras project is a formal proof of \emp
 variety theorem} (also known as the \emph{HSP theorem})~\cite{Birkhoff:1935} in dependent
 type theory. Our first formal proof of the theorem, completed in January of 2021,
 contained some flaws and there were concerns that the proof was not truly
-constructive.
-%\footnote{See \url{https://github.com/ualib/ualib.github.io/blob/b968e8af1117fc77700d3a588746cbefbd464835/sandbox/birkhoff-exp-new-new.lagda}.}
+constructive.\footnote{See the \href{https://github.com/ualib/ualib.github.io/blob/71f173858701398d56224dd79d152c380c0c2b5e/src/lagda/UALib/Birkhoff.lagda}{Birkhoff} module
+from the
+\href{https://github.com/ualib/ualib.github.io/commit/71f173858701398d56224dd79d152c380c0c2b5e}{15 Jan 2021 commit (71f1738)} of the \href{https://github.com/ualib/ualib.github.io}{ualib/ualib.gitlab.io} repository~\cite{ualib_v1.0.0}.}
 We are confident that the version we present here---based on version 2.0.0 of the
-library,~\cite{DeMeo_agda-algebras:2021}---is fully constructive and correct.  To the
-best of our knowledge, ours is the first formulation of the HSP theorem in MLTT, and the
+\agdaalgebras library---is fully constructive and correct.\footnote{Specifically, see the \href{https://github.com/ualib/agda-algebras/commit/ab859caf814566fe32205f76bd0a4ac1e6007147}{30 Nov 2021 commit (ab859ca)} of the \agdaalgebras library~\cite{ualib_v2.0.0}.}
+To the best of our knowledge, ours is the first formulation of the HSP theorem in MLTT, and the
 first formal, machine-verified proof of Birkhoff's celebrated 1935 result.
 
 In this paper, we present a self-contained formal proof of the HSP theorem by
@@ -42,8 +43,8 @@ every line of code of our formal proof of Birkhoff's theorem in a single, self-c
 We include here every line of code of our formal proof of Birkhoff's theorem
 in a single, self-contained (apart from a few dozen imports from the \agdastdlib) Agda
 module.
-For readers preferring a more concise presentation, an abridged version of this paper is also
-available~\cite{DeMeo:2021c}.
+%For readers preferring a more concise presentation, an abridged version of this paper is also
+%available~\cite{DeMeo:2021c}.
 \fi
 
 In the course of this presentation we highlight some of the challenging aspects of
@@ -54,7 +55,7 @@ One positive contribution of this project is that it lends support to the claim 
 dependent type theory and the Agda language, despite the technical demands they place on
 the user, are accessible to working mathematicians (such as ourselves) who possess
 sufficient patience and resolve to codify their work in type theory in order to formally verify
-the their results with a proof assistant.
+their results with a proof assistant.
 
 \ifshort\else
 Our presentation gives a sobering glimpse of the technical hurdles that must be overcome
@@ -533,17 +534,22 @@ The \agdaalgebras library was first developed without setoids, relying exclusive
 on the inductive equality type \ad{\au{}≡\au{}}, defined in \am{Agda.Builtin.Equality},
 along with some experimental, domain-specific types for equivalence classes, quotients, etc.
 One consequence of this design decision was that the formalization of many
-theorems required postulating function extensionality, an axiom that is neither provable
-nor disprovable in pure Martin-Löf type theory~(\cite{MHE}).
+theorems required postulating function extensionality, an axiom that is known to be neither provable
+nor refutable in pure Martin-Löf type theory.\footnote{See the section
+\href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#funextfromua}
+{\textit{Function extensionality from univalence}} in~\cite{MHE, MHE:2019}.}
 
 In contrast, our current approach using setoids makes the equality relation
-of a given type explicit.  A primary motivation for this is to avoid additional axioms
-(like function extensionality) and to make it clear that the formal proofs in the
-library are fully constructive and confined to pure Martin-Löf dependent type theory
-(as defined, e.g., in [REF NEEDED]).
-%In particular, there are no appeals to function extensionality in the present work.
+of a given type explicit.  A primary motivation for this choice is to avoid the need for
+additional axioms and to make it clearer that the formal proofs in the \agdaalgebras
+library are fully \emph{constructive} (as defined in~\cite{nlab:constructive_mathematics})
+and confined to \emph{Martin-Löf dependent type theory} (as defined in~\cite{nlab:martin-löf_dependent_type_theory}).
+In particular, we make no appeals to classical axioms like Choice or Excluded Middle, nor
+do we postulate function extensionality at any point in the present work.\footnote{The \defn{function extensionality
+axiom} asserts that two point-wise equal functions are equal. There remain some modules in the \agdaalgebras library that
+occasionally postulate this axiom, but we don't make use of the axiom here.}
 We are confident that the \agdaalgebras library is now fully constructive and free from any hidden
-assumptions or inconsistencies that could be used to fool a type-checker.\footnote{As of 26 Nov 2021, the latest version of \agdaalgebras is 2.0.0; see~\cite{DeMeo_agda-algebras:2021}.}
+assumptions or inconsistencies that could be used to fool a type-checker.\footnote{As of 26 Nov 2021, the latest version of \agdaalgebras is 2.0.0; see~\cite{ualib_v2.0.0}.}
 
 
 %% -----------------------------------------------------------------------------
@@ -4463,7 +4469,7 @@ Note that the definition, shown below, includes a proof of the fact that the map
 \>[0]\<%
 \end{code}
 
-It is easy to prove that \ar{_≅_} is an equivalence relation, as follows.
+It is easy to prove that \ar{\au{}≅\au{}} is an equivalence relation, as follows.
 
 \begin{code}%
 \>[0]\<%
@@ -11755,16 +11761,5 @@ In~\cite{Capretta:1999}, Capretta formalized the basics of universal algebra in 
 %Some other projects aimed at formalizing mathematics generally, and algebra in particular, have developed into very extensive libraries that include definitions, theorems, and proofs about algebraic structures, such as groups, rings, modules, etc.  However, the goals of these efforts seem to be the formalization of special classical algebraic structures, as opposed to the general theory of (universal) algebras. Moreover, the part of universal algebra and equational logic formalized in the \agdaalgebras library extends beyond the scope of prior efforts.
 
 %Prior to our work, a constructive version of Birkhoff's theorem was published by Carlstr\"om in~\cite{Carlstrom:2008}.  However, the logical foundations of that work is constructive set theory and, as far as we know, there was no attempt to formalized it in type theory and verify it with a proof assistant.
-
-
-\paragraph*{Acknowledgments}
-This work would not have been possible without the wonderful \agda language and the
-\agdastdlib, developed and
-maintained by The Agda Team~\cite{agdastdlib}.
-%(Andreas Abel, Guillaume Allais, Liang-Ting Chen, Jesper Cockx, Nils Anders Danielsson,
-%Víctor López Juan, Ulf Norell, Andrés Sicard-Ramírez,Andrea Vezzosi, and Tesla Ice Zhang)
-%, maintained by Matthew Daggitt and Guillaume Allais.
-Most of the content of this paper was generated from the literate \agda file \HSPlagda and the \LaTeX2e file \agdahsp (processed with the commands
-\texttt{agda --latex} and \texttt{pdflatex}), which are available in the \agdaalgebras GitHub repository ({\small \url{https://github.com/ualib/agda-algebras}}).
 
 

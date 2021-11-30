@@ -36,9 +36,11 @@
 \AgdaNoSpaceAroundCode{}
 
 \newif\ifnonbold % comment this line to restore bold universe symbols
+
+%%% HERE IS HOW WE CONTROL WHETHER LONG OR SHORT VERSION OF THE PAPER IS COMPILED
 \newif\ifshort
 \shorttrue % (to compile short version of the paper)
-%\shortfalse % (to compile long version of the paper)
+\shortfalse % (to compile long version of the paper)
 % USAGE: 
 % \ifshort <stuff included in short version goes here> \else <stuff included in long version goes here> \fi
 \newcommand\seeunabridged{see the unabridged version of this paper,~\cite{DeMeo:2021b}, for the complete formalization\xspace}
@@ -62,8 +64,9 @@
 %%%%%%%%%%%%%% AUTHOR %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\author{name}{affil}{email}{orcid}{funding}.
 \author{William DeMeo}
-       {\url{https://williamdemeo.org}}
-       {williamdemeo@gmail.com}{https://orcid.org/0000-0003-1832-5690}{}
+       {Thmpr Research}
+       {williamdemeo@gmail.com}{https://orcid.org/0000-0003-1832-5690}{supported
+         by the CoCoSym project under ERC Consolidator Grant No.~771005.}
 \author{Jacques Carette}{McMaster University}{carette@mcmaster.ca}{https://orcid.org/0000-0001-8993-9804}{}
 \authorrunning{DeMeo and Carette}
 
@@ -121,12 +124,9 @@
 % \setcounter{tocdepth}{2}
 % \tableofcontents
 
-% \begin{abstract}
-% \input{abstract}
-% \end{abstract}
-
-% \input{0Acknowledgements}
-
+\begin{abstract}
+\input{abstract}
+\end{abstract}
 
 
 \providecommand{\hypertarget}[2]{#2}
@@ -148,6 +148,7 @@
 % \let\chapter\part
 
 \input{Demos/HSP}
+%\input{HSP} %% for arXiv version (where no subdirectories are allowed)
 
 % \input{1Introduction}
 % \input{2Overture}
@@ -161,6 +162,7 @@
 % \include{5Conclusion}
 
 
+\input{acknowledgments}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
