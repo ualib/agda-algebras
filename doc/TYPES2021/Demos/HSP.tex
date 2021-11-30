@@ -36,15 +36,13 @@ In order to present the proof in under 20 pages, we omit some of the formalities
 but strive to preserve the essential content and character of the development.
 We leave out the routine or overly technical components, as well as anything that does not
 seem to offer any insight into the central ideas of the proof. For readers wishing to see all the
-details, we have posted on the arXiv an unabridged version of the paper, which includes
-every line of code of our formal proof of Birkhoff's theorem in a single, self-contained
-(apart from a few dozen imports from the \agdastdlib) Agda module~\cite{DeMeo:2021b}.
+details, we have posted on the arXiv an unabridged version of the paper, which presents
+every line of code of the proof of Birkhoff's theorem in a single Agda module~\cite{DeMeo:2021}
+and which, apart from a few dozen imports from the \agdastdlib, is self-contained.
 \else
 We include here every line of code of our formal proof of Birkhoff's theorem
 in a single, self-contained (apart from a few dozen imports from the \agdastdlib) Agda
 module.
-%For readers preferring a more concise presentation, an abridged version of this paper is also
-%available~\cite{DeMeo:2021c}.
 \fi
 
 In the course of this presentation we highlight some of the challenging aspects of
@@ -543,7 +541,7 @@ In contrast, our current approach using setoids makes the equality relation
 of a given type explicit.  A primary motivation for this choice is to avoid the need for
 additional axioms and to make it clearer that the formal proofs in the \agdaalgebras
 library are fully \emph{constructive} (as defined in~\cite{nlab:constructive_mathematics})
-and confined to \emph{Martin-Löf dependent type theory} (as defined in~\cite{nlab:martin-löf_dependent_type_theory}).
+and confined to \emph{Martin-Löf dependent type theory} (as defined in~\cite{nlab:martin-loef_dependent_type_theory}).
 In particular, we make no appeals to classical axioms like Choice or Excluded Middle, nor
 do we postulate function extensionality at any point in the present work.\footnote{The \defn{function extensionality
 axiom} asserts that two point-wise equal functions are equal. There remain some modules in the \agdaalgebras library that
@@ -7172,7 +7170,7 @@ Soundness and completeness of an entailment type similar to the one defined abov
 proved by Abel in~\cite{Abel:2021}.  We will invoke soundness of the entailment type only once below%
 \ifshort
 ~(by the name \af{sound}), so we omit its proof, but see~\cite{Abel:2021}
-or~\cite{DeMeo:2021c} for the complete formalization.
+or~\cite{DeMeo:2021} for the complete formalization.
 \else
 ; nonetheless, here is its formalization (due to Abel, \textit{op. cit.}):
 
