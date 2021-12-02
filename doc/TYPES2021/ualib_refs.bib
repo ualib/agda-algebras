@@ -1,5 +1,5 @@
 @article{Amato:2021,
-TITLE         = {Universal Algebra in UniMath}, 
+TITLE         = {Universal Algebra in {U}ni{M}ath}, 
 AUTHOR        = {Gianluca Amato and Marco Maggesi and Cosimo Perini Brogi},
 YEAR          = {2021},
 EPRINT        = {2102.05952},
@@ -10,7 +10,7 @@ VOLUME        = {abs/2102.05952},
 TIMESTAMP     = {Thu, 11 Feb 2021 11:29:53 UTC}
 }
 @article{Abel:2021,
-TITLE={Birkhoff's Completeness Theorem for Multi-Sorted Algebras Formalized in Agda}, 
+TITLE={Birkhoff's {C}ompleteness {T}heorem for Multi-Sorted Algebras Formalized in {A}gda}, 
 AUTHOR={Andreas Abel},
 YEAR={2021},
 EPRINT={2111.07936},
@@ -30,7 +30,7 @@ url = {https://lirias.kuleuven.be/retrieve/456787},
 abstract = {Dependent type theory is a powerful language for writing functional programs with very precise types. It is used to write not only programs but also mathematical proofs that these programs satisfy certain properties. Because of this, languages based on dependent types – such as Coq, Agda, and Idris – are used both as programming languages and as interactive proof assistants. While dependent types give strong guarantees about your programs and proofs, they also impose equally strong requirements on them. This often makes it harder to write programs in a dependently typed language compared to one with a simpler type system. For this reason certain techniques have been developed, such as dependent pattern matching and specialization by unification. These techniques provide an intuitive way to write programs and proofs in dependently typed languages. Previously, dependent pattern matching had only been shown to work in a limited setting. In particular, it relied on the K axiom – also known as the uniqueness of identity proofs – to remove equations of the form x = x. This axiom is inadmissible in many type theories, particularly in the new and promising branch known as homotopy type theory (HoTT). As a result, programs and proofs in these new theories cannot make use of dependent pattern matching and are as a result much harder to write, modify, and understand. Additionally, the interaction of dependent pattern matching with small but practical features such as eta-equality for record types and postponing of unification constraints was poorly understood, resulting in subtle bugs and inconsistencies. In this thesis, we develop dependent pattern matching and unification in a general setting that does not require the K axiom, both from a theoretical perspective and a practical one. In particular, we present a proof-relevant unification algorithm, where each unification rule produces evidence of its correctness. This evidence guarantees that all unification rules are correct by construction, and also gives a computational characterization to each unification rule. To ensure that these techniques are sound and will stay so in face of future extensions to type theory, we show how to translate them to more basic primitive constructs, i.e. the standard datatype eliminators. During this translation, we pay special attention to the computational content of all constructions involved. This guarantees that the intuitions from regular pattern matching carry over to a dependently typed setting. Based on our work, we implemented a complete overhaul of the algorithm for checking definitions by dependent pattern matching in Agda. Our new implementation fixes a substantial number of issues in the old implementation, and is at the same time less restrictive than the old ad-hoc restrictions. Thus it puts the whole system back on a strong foundation. In addition, our work has already been used as the basis for other implementations of dependent pattern matching, such as the Equations package for Coq and the Lean theorem prover. The work in this thesis eliminates all implicit assumptions introduced to the type theory by pattern matching and unification. In the future, we may also want to integrate new principles with pattern matching, for example the higher inductive types introduced by HoTT. The framework presented in this thesis also provides a solid basis for such extensions to be built on.}
 }
 @article{Cohen:2016,
-TITLE={Cubical Type Theory: a constructive interpretation of the univalence axiom}, 
+TITLE={{C}ubical {T}ype {T}heory: a constructive interpretation of the univalence axiom}, 
 AUTHOR={Cyril Cohen and Thierry Coquand and Simon Huber and Anders Mörtberg},
 YEAR={2016},
 EPRINT={1611.02108},
@@ -41,7 +41,7 @@ VOLUME = {abs/1611.02108}
 }
 @INPROCEEDINGS{Norell09dependentlytyped,
 author = {Ulf Norell and James Chapman},
-title = {Dependently typed programming in Agda},
+title = {Dependently typed programming in {A}gda},
 booktitle = {Advanced Functional Programming, volume 5832 of LNCS},
 year = {2009},
 pages = {230--266},
@@ -62,14 +62,14 @@ publisher = {Springer}
   MRNUMBER = {2757312},
   MRREVIEWER = {Walter Tholen}
 }
-@online{agdaref,
+@manual{agdaref,
   author = {The Agda Team},
   title = {{A}gda {L}anguage {R}eference},
   year = 2021,
   url = {https://agda.readthedocs.io/en/v2.6.1/language/index.html},
   urldate = {2021-01-29}
 }
-@online{agda-fin,
+@manual{agda-fin,
   author = {The Agda Team},
   title = {The \texttt{{F}in} type of the {A}gda {S}tandard {L}ibrary},
   year = 2021,
@@ -77,7 +77,7 @@ publisher = {Springer}
   urldate = {2021-04-05}
 }
 
-@online{agdaref-axiomk,
+@manual{agdaref-axiomk,
   author = {The Agda Team},
   title = {{A}gda {L}anguage {R}eference section on {A}xiom {K}},
   year = 2021,
@@ -85,7 +85,7 @@ publisher = {Springer}
   urldate = {2021-01-29}
 }
 
-@online{agdaref-safeagda,
+@manual{agdaref-safeagda,
   author = {The Agda Team},
   title = {{A}gda {L}anguage {R}eference section on {S}afe {A}gda},
   year = 2021,
@@ -93,7 +93,7 @@ publisher = {Springer}
   urldate = {2021-01-29}
 }
 
-@online{agdatools-patternmatching,
+@manual{agdatools-patternmatching,
   author = {The Agda Team},
   title = {{A}gda {T}ools {D}ocumentation section on {P}attern matching and equality},
   year = 2021,
@@ -111,21 +111,21 @@ publisher = {Springer}
 @Comment Andrés Sicard-Ramírez and
 @Comment Andrea Vezzosi and
 @Comment Tesla Ice Zhang
-@online{agdatools,
+@manual{agdatools,
   author = {The Agda Team},
   title = {{A}gda {T}ools {D}ocumentation},
   year = 2021,
   url = {https://agda.readthedocs.io/en/v2.6.1/tools/index.html},
   urldate = {2021-01-29}
 }
-@online{agdastdlib,
+@manual{agdastdlib,
   author = {The Agda Team},
   title = {The {A}gda {S}tandard {L}ibrary},
   year = 2021,
   url = {https://github.com/agda/agda-stdlib},
   urldate = {2021-03-18}
 }
-@online{Brunerie:2012,
+@manual{Brunerie:2012,
 title = {Truncations and truncated higher inductive types},
 year = {2012},
 month = {September},
@@ -378,46 +378,34 @@ year = {2008}
   ABSTRACT = {We present C-CoRN, the Constructive Coq Repository at Nijmegen. It consists of a mathematical library of constructive algebra and analysis formalized in the theorem prover Coq. We explain the structure and the contents of the library and we discuss the motivation and some (possible) applications of such a library.},
   ISBN = {978-3-540-27818-4}
 }
-@software{DeMeo_agda-algebras:2021,
+@misc{ualib_v2.0.0,
 author = {DeMeo, William and Carette, Jacques},
 doi = {10.5281/zenodo.5730534},
-month = {11},
-title = {{agda-algebras}},
-url = {https://github.com/ualib/agda-algebras},
-version = {2.0.0},
-year = {2021}
+howpublished = {{G}it{H}ub.com},
+year = {2021},
+title = {The {A}gda {U}niversal {A}lgebra {L}ibrary},
+note = {Ver.~2.0.0; source code: \href{https://github.com/ualib/agda-algebras}{https://github.com/ualib/agda-algebras}},
+version = {2.0.0}
 }
-@MISC {ualib,
+@misc{ualib_v1.0.0,
  author        = {William DeMeo},
  title         = {The {A}gda {U}niversal {A}lgebra {L}ibrary},
  HOWPUBLISHED = {{G}it{H}ub.com},
  year          = {2020},
  primaryClass  = {cs.LO},
  url           = {https://ualib.gitlab.io},
- note          = {source code: \href{https://gitlab.com/ualib/ualib.gitlab.io}{https://gitlab.com/ualib/ualib.gitlab.io}},
+ note          = {Ver.~1.0.0; source code: \href{https://gitlab.com/ualib/ualib.gitlab.io}{https://gitlab.com/ualib/ualib.gitlab.io}}
 }
 @article{DeMeo:2021,
- author        = {William DeMeo},
- title         = {The {A}gda {U}niversal {A}lgebra {L}ibrary and 
-                  {B}irkhoff's {T}heorem in {D}ependent {T}ype {T}heory}, 
+ author        = {William DeMeo and Jacques Carette},
+ title         = {A {M}achine-checked {P}roof of {B}irkhoff's {V}ariety {T}heorem in {M}artin-{L}\"of {T}ype {T}heory}, 
  journal       = {CoRR},
  volume        = {abs/2101.10166},
  year          = {2021},
- eprint        = {2101.10166},
+ eprint        = {2101.2101.10166},
  archivePrefix = {arXiv},
  primaryClass  = {cs.LO},
- note          = {source code: \href{https://gitlab.com/ualib/ualib.gitlab.io}{https://gitlab.com/ualib/ualib.gitlab.io}}
-}
-@article{DeMeo:2021b,
- author        = {William DeMeo},
- title         = {A {M}achine-checked {P}roof of {B}irkhoff's {V}ariety {T}heorem in {M}artin-{L}\"of {T}ype {T}heory}, 
- journal       = {CoRR},
- volume        = {abs/XXXX},
- year          = {2021},
- eprint        = {XXXX},
- archivePrefix = {arXiv},
- primaryClass  = {cs.LO},
- note          = {source code: \href{https://github.com/ualib/agda-algebras/blob/master/src/Demos/HSP.lagda}{https://github.com/ualib/agda-algebras/blob/master/src/Demos/HSP.lagda}}
+ note          = {Source code available at \href{https://github.com/ualib/agda-algebras/blob/master/src/Demos/HSP.lagda}{https://github.com/ualib/agda-algebras/blob/master/src/Demos/HSP.lagda}}
 }
 @article{DeMeo:2021c,
  author        = {William DeMeo},
@@ -428,7 +416,7 @@ year = {2021}
  eprint        = {XXXX},
  archivePrefix = {arXiv},
  primaryClass  = {cs.LO},
- note          = {source code: \href{https://github.com/ualib/agda-algebras/blob/master/src/Demos/HSP.lagda}{https://github.com/ualib/agda-algebras/blob/master/src/Demos/HSP.lagda}}
+ note          = {Source code available at \href{https://github.com/ualib/agda-algebras/blob/master/src/Demos/HSP.lagda}{https://github.com/ualib/agda-algebras/blob/master/src/Demos/HSP.lagda}}
 }
  @Comment url           = {https://arxiv.org/abs/2101.10166},
  @Comment biburl        = {https://dblp.org/rec/journals/corr/abs-2101-10166.bib},
@@ -473,16 +461,6 @@ note          = {Source code: \href{https://gitlab.com/ualib/ualib.gitlab.io}{ht
   YEAR = {2014},
   HOWPUBLISHED = {{G}it{H}ub.com},
   URL = {http://leanprover.github.io/files/system.pdf}
-}
-@article{MHE:2019,
-  author    = {Mart{\'{\i}}n H{\"{o}}tzel Escard{\'{o}}},
-  title     = {Introduction to Univalent Foundations of Mathematics with {A}gda},
-  journal   = {CoRR},
-  volume    = {abs/1911.00580},
-  year      = {2019},
-  archivePrefix = {arXiv},
-  eprint    = {1911.00580},
-  timestamp = {Mon, 11 Nov 2019 18:38:09 +0100},
 }
 @MISC {Finster:2018,
   AUTHOR = {Eric Finster},
@@ -646,15 +624,23 @@ This thesis is about quotient types. A quotient type is a new type whose equalit
   MRREVIEWER = {S. Comer},
   DOI = {10.1016/0304-3975(92)90310-C}
 }
-@article{MHE,
-  author    = {Mart{\'{\i}}n H{\"{o}}tzel Escard{\'{o}}},
-  title     = {Introduction to Univalent Foundations of Mathematics with {A}gda},
-  journal   = {CoRR},
-  volume    = {abs/1911.00580},
-  year      = {2019},
-  archivePrefix = {arXiv},
-  eprint    = {1911.00580},
-  timestamp = {Mon, 11 Nov 2019 18:38:09 +0100},
+@article{MHE:2019,
+  author         = {Mart{\'{\i}}n H{\"{o}}tzel Escard{\'{o}}},
+  title          = {Introduction to {U}nivalent {F}oundations of Mathematics with {A}gda},
+  journal        = {CoRR},
+  volume         = {abs/1911.00580},
+  year           = {2019},
+  archivePrefix  = {arXiv},
+  eprint         = {1911.00580},
+  timestamp      = {Mon, 11 Nov 2019 18:38:09 +0100},
+}
+@misc{MHE,
+  author        = {Mart{\'{\i}}n H{\"{o}}tzel Escard{\'{o}}},
+  title         = {Introduction to {U}nivalent {F}oundations of Mathematics with {A}gda},
+  howpublished  = {\url{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/}},
+  year          = {2019},
+  month         = {May},
+  note          = {Accessed on 30 Nov 2021},
 }
 @BOOK {Mitchell:1996,
   AUTHOR = {Mitchell, John C.},
@@ -698,6 +684,14 @@ This thesis is about quotient types. A quotient type is a new type whose equalit
   month = apr,
   year = 2021
 }
+@misc{nlab:martin-loef_dependent_type_theory,
+  author = {{nLab authors}},
+  title = {{{M}}artin-{{L}}\"of dependent type theory},
+  howpublished = {\url{http://ncatlab.org/nlab/show/Martin-L%C3%B6f%20dependent%20type%20theory}},
+  note = {\href{http://ncatlab.org/nlab/revision/Martin-L%C3%B6f%20dependent%20type%20theory/28}{Revision 28}},
+  month = nov,
+  year = 2021
+}
 @misc{nlab:constructive_mathematics,
   author = {{nLab authors}},
   title = {{C}onstructive {M}athematics},
@@ -723,7 +717,7 @@ This thesis is about quotient types. A quotient type is a new type whose equalit
   year = 2021
 }
 @inproceedings{Norell:2008,
-  title={Dependently typed programming in Agda},
+  title={Dependently typed programming in {A}gda},
   author={Norell, Ulf},
   booktitle={International school on advanced functional programming},
   pages={230--266},
