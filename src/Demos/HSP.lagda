@@ -30,7 +30,7 @@ Our first formal proof of the HSP theorem, completed in January of
  repository~\cite{ualib_v1.0.0}.}
 suffered from a few flaws that raised two concerns. First, it was not clear whether the
 proof was fully constructive. Second, it was shown that if one (say, a subversive
-adversary) were to take the type \ab{X}---used to represent an arbitrary collection of
+adversary) were to take the type \ab{X}---which we use to represent an arbitrary collection of
 variable symbols---to be just the two element type, then one could combine this with our
 proof and derive a contradiction. To resolve these issues, as well as improve the
 \agdaalgebras library more generally, we have rewritten parts of the library and have
@@ -2029,9 +2029,9 @@ and belongs to the class \af{S} (\af{P} \ab{𝒦}), and for most applications th
 The informal construction of the free algebra in \af{S} (\af{P} \ab{𝒦}), for an arbitrary
 class \ab{𝒦} of \ab{𝑆}-algebras, proceeds by taking the quotient of \T{X} modulo a congruence relation
 that we will denote by \afld{≈}.  One approach is to let
-\afld{≈} := \af{⋂}\{\ab{θ} \af{∈} \af{Con} (\T{X}) : \T{X} \af{/} \ab{θ} \af{∈} \af{S}
+\afld{≈} be \af{⋂}\{\ab{θ} \af{∈} \af{Con} (\T{X}) : \T{X} \af{/} \ab{θ} \af{∈} \af{S}
 \ab{𝒦}\}.\footnote{\af{Con} (\T{X}) is the set of congruences of \T{X}.}
-Alternatively we could let \ab{ℰ} = \af{Th} \ab{𝒦} and take \afld{≈} to be the least equivalence relation
+Equivalently, we let \ab{ℰ} = \af{Th} \ab{𝒦} and take \afld{≈} to be the least equivalence relation
 on the domain of \T{X} such that
 \begin{enumerate}
 \item for every equation (\ab p , \ab q) \af{∈} \af{Th} \ab{𝒦} and every
@@ -2047,9 +2047,8 @@ i~⟧}~\afld{⟨\$⟩}~\ab{ρ})
 \as{→} \af{⟦~\ab f~\ab s~⟧}~\afld{⟨\$⟩}~\ab{ρ}~\afld{≈}~\af{⟦~\ab f~\ab
 t~⟧}~\afld{⟨\$⟩}~\ab{ρ}\\[-8pt]
 \end{enumerate}
-Whichever approach we choose, the \defn{relatively free algebra over} \ab{X} (relative to
+The \defn{relatively free algebra over} \ab{X} (relative to
 \ab{𝒦}) is defined to be the quotient \Free{X} := \T{X}~\af{/}~\afld{≈}.
-
 Evidently \Free{X} is a subdirect product of the algebras in \{\T{X}~\af{/}~\ab{θ}\!\},
 where \ab{θ} ranges over congruences modulo which \T{X} belongs to \af{S}~\ab{𝒦}.
 Thus, \Free{X} \af{∈} \af{P}(\af{S}~\ab{𝒦}) ⊆ \af{S}(\af{P}~\ab{𝒦}), and it follows
@@ -2061,16 +2060,16 @@ identified in \Free{X}. \ifshort\else (Notice that \afld{≈} may be empty, in w
 
 \paragraph*{The relatively free algebra in Agda}
 We now define the relatively free algebra in Agda using the language of type theory.
-Our approach will be different from the informal one described above, but the end result
-will be the same.
+%Our approach looks a bit different from the informal one described above, because we
+%represent quotients as setoids, but the end result is the same.
 We start with a type \ab{ℰ} representing a collection of identities and, instead of
 forming a quotient, we take the domain of the free algebra to be a setoid whose
 \afld{Carrier} is the type \Term{X} of {𝑆}-terms in \ab X and whose equivalence relation
 includes all pairs (\ab p , \ab q) \af{∈} \Term{X} \af{×} \Term{X} such that \ab p \aod{≈}
 \ab q is derivable from \ab{ℰ}; that is, \ab{ℰ} \aod{⊢} \ab X \aod{▹} \ab p \aod{≈} \ab q.
 Observe that elements of this setoid are equal iff they belong to the same equivalence
-class of the congruence \afld{≈} defined above.  Therefore, the setoid so defined represents
-the quotient \T{X}~\af{/}~\afld{≈}.
+class of the congruence \afld{≈} defined above.  Therefore, the setoid so defined, which
+we denote by \Free{X}, represents the quotient \T{X}~\af{/}~\afld{≈}.
 Finally, the interpretation of an operation in the free algebra is simply the operation
 itself, which works since \ab{ℰ} \aod{⊢} \ab X \aod{▹\au{}≈\au{}} is a congruence relation.
 
@@ -2093,8 +2092,8 @@ module FreeAlgebra {χ : Level}(ℰ : {Y : Type χ} → Pred (Term Y × Term Y) 
 \end{code}
 
 \paragraph*{The natural epimorphism} % from 𝑻 X to 𝔽[ X ]}
-We now define the natural epimorphism from \T{X} onto the relatively free algebra \Free{X} and prove that
-its kernel is the congruence of \T{X} defined by the identities modeled by (\af S \ab{𝒦}, hence by) \ab{𝒦}.
+We now define the natural epimorphism from \T{X} onto \Free{X} %(= \T{X}~\af{/}~\afld{≈})
+and prove that its kernel is contained in the collection of identities modeled by \af{V} \ab{𝒦}. % (which we represent by \af{Th} (\af{V} \ab{𝒦})).
 
 \ifshort\else
 \begin{code}
@@ -2237,8 +2236,8 @@ We now show how to formally express and prove the twin assertions that
 (i) every equational class is a variety and (ii) every variety is an equational class.
 
 \paragraph*{Every equational class is a variety}
-For (i), we need an arbitrary equational class. To obtain one, we start with an arbitrary
-collection \ab{ℰ} of equations and let \ab{𝒦} = \af{Mod} \ab{ℰ}, the equational class
+For (i), we need an arbitrary equational class, which we obtain by starting with an arbitrary
+collection \ab{ℰ} of equations and then defining \ab{𝒦} = \af{Mod} \ab{ℰ}, the equational class
 determined by \ab{ℰ}. We prove that \ab{𝒦} is a variety by showing that
 \ab{𝒦} = \af{V} \ab{𝒦}. The inclusion \ab{𝒦} \aof{⊆} \af V \ab{𝒦}, which holds for all
 classes \ab{𝒦}, is called the \defn{expansive} property of \af{V}. The converse inclusion
@@ -2288,30 +2287,31 @@ Together, \af{V-expa} and \af{Eqcl⇒Var} prove that every equational class is a
 
 
 \paragraph*{Every variety is an equational class}
-To prove statement (ii), we need an arbitrary variety; to obtain one, we start with an arbitrary class
-\ab{𝒦} of \ab{𝑆}-algebras and take its \emph{varietal closure}, \af{V} \ab{𝒦}.
+For (ii), we need an arbitrary variety, which we obtain by starting with an arbitrary class
+\ab{𝒦} of \ab{𝑆}-algebras and taking the \emph{varietal closure}, \af{V} \ab{𝒦}.
 We prove that \af{V} \ab{𝒦} is an equational class by showing it is precisely the collection of
 algebras that model the equations in \af{Th} (\af{V} \ab{𝒦}); that is, we prove
 \af{V} \ab{𝒦} = \af{Mod} (\af{Th} (\af{V} \ab{𝒦})).
-The inclusion \af{V} \ab{𝒦} \aof{⊆} \af{Mod} (\af{Th} (\af{V} \ab{𝒦})) is a simple consequence of the fact that \af{Mod} \af{Th} is a closure operator. Nonetheless, completeness demands
-that we formalize this fact, however trivial is its proof.
+The inclusion \af{V} \ab{𝒦} \aof{⊆} \af{Mod} (\af{Th} (\af{V} \ab{𝒦})) is a simple
+consequence of the fact that \af{Mod} \af{Th} is a closure operator%
+\ifshort
+, so we omit the proof and later refer to this fact as \af{ModTh-closure}.
+\else
+. Nonetheless, completeness demands that we formalize this fact, however trivial its proof.
 
-\ifshort\else
 \begin{code}
 
 module _ (𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)){X : Type (α ⊔ ρᵃ ⊔ ℓ)} where
  private c = α ⊔ ρᵃ ⊔ ℓ ; ι = ov c
-\end{code}
-\fi
-\begin{code}
 
  ModTh-closure : V{β = β}{ρᵇ}{γ}{ρᶜ}{δ}{ρᵈ} ℓ ι 𝒦 ⊆ Mod{X = X} (Th (V ℓ ι 𝒦))
  ModTh-closure {x = 𝑨} vA {p}{q} x ρ = x 𝑨 vA ρ
 
 \end{code}
+\fi
 
-It remains to prove the converse inclusion, \af{Mod} (\af{Th} (V 𝒦)) \aof{⊆} \af{V} \ab{𝒦},
-which is the main focus of the rest of the paper.  We proceed as follows:
+It remains to prove the inclusion \af{Mod} (\af{Th} (V 𝒦)) \aof{⊆} \af{V} \ab{𝒦},
+and this task occupies the remainder of the paper.  We proceed as follows:
 
 \begin{enumerate}
 \item \label{item:1} Let \ab{𝑪} be the product of all algebras in \af{S} \ab{𝒦}, so that \ab{𝑪} \af{∈} \af{P} (\af{S} \ab{𝒦}).
