@@ -20,10 +20,10 @@ type theory.
 To the best of our knowledge, this constitutes the first formalization in MLTT, and the
 first machine-verified proof, of Birkoff's celebrated 1935 result.
 
-Our first formal proof of the HSP theorem, completed in January of
-2021\footnote{See the
+Our first proof of the HSP theorem, completed in January of
+2021,\footnote{See the
  \href{https://github.com/ualib/ualib.github.io/blob/71f173858701398d56224dd79d152c380c0c2b5e/src/lagda/UALib/Birkhoff.lagda}{Birkhoff}
- module from
+ module of the
  \href{https://github.com/ualib/ualib.github.io/commit/71f173858701398d56224dd79d152c380c0c2b5e}{15
  Jan 2021  commit (71f1738)} of the
  \href{https://github.com/ualib/ualib.github.io}{ualib/ualib.gitlab.io}
@@ -35,10 +35,7 @@ variable symbols---to be just the two element type, then one could combine this 
 proof and derive a contradiction. To resolve these issues, as well as improve the
 \agdaalgebras library more generally, we have rewritten parts of the library and have
 developed a new formal proof of the HSP theorem. We are confident that the new proof,
-based on version 2.0.0 of the \agdaalgebras library\footnote{See the
-\href{https://github.com/ualib/agda-algebras/commit/ab859caf814566fe32205f76bd0a4ac1e6007147}{30
-Nov 2021 commit (ab859ca)} of the \agdaalgebras library~\cite{ualib_v2.0.0}.} is fully
-constructive and correct, a conviction we justify in the course of this presentation.
+based on version 2.0.0 of the \agdaalgebras library\footnote{\href{https://github.com/ualib/agda-algebras/commit/ab859caf814566fe32205f76bd0a4ac1e6007147}{30 Nov 2021 commit (ab859ca)} of the \agdaalgebras library~\cite{ualib_v2.0.0}.} is fully constructive and correct, a conviction we justify in due course (q.v.).
 
 What follows is a self-contained formal proof of the HSP theorem which is achieved by
 extracting into a single Agda module a subset of the \agdaalgebras library, including only
