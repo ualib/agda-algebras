@@ -20,25 +20,22 @@ type theory.
 To the best of our knowledge, this constitutes the first formalization in MLTT, and the
 first machine-verified proof, of Birkoff's celebrated 1935 result.
 
-Our first formal proof of the HSP theorem, completed in January of
-2021\footnote{See the
+Our first proof of the HSP theorem, completed in January of
+2021,\footnote{See the
  \href{https://github.com/ualib/ualib.github.io/blob/71f173858701398d56224dd79d152c380c0c2b5e/src/lagda/UALib/Birkhoff.lagda}{Birkhoff}
- module from
+ module of the
  \href{https://github.com/ualib/ualib.github.io/commit/71f173858701398d56224dd79d152c380c0c2b5e}{15
  Jan 2021  commit (71f1738)} of the
  \href{https://github.com/ualib/ualib.github.io}{ualib/ualib.gitlab.io}
  repository~\cite{ualib_v1.0.0}.}
 suffered from a few flaws that raised two concerns. First, it was not clear whether the
 proof was fully constructive. Second, it was shown that if one (say, a subversive
-adversary) were to take the type \ab{X}---used to represent an arbitrary collection of
+adversary) were to take the type \ab{X}---which we use to represent an arbitrary collection of
 variable symbols---to be just the two element type, then one could combine this with our
 proof and derive a contradiction. To resolve these issues, as well as improve the
 \agdaalgebras library more generally, we have rewritten parts of the library and have
 developed a new formal proof of the HSP theorem. We are confident that the new proof,
-based on version 2.0.0 of the \agdaalgebras library\footnote{See the
-\href{https://github.com/ualib/agda-algebras/commit/ab859caf814566fe32205f76bd0a4ac1e6007147}{30
-Nov 2021 commit (ab859ca)} of the \agdaalgebras library~\cite{ualib_v2.0.0}.} is fully
-constructive and correct, a conviction we justify in the course of this presentation.
+based on version 2.0.0 of the \agdaalgebras library\footnote{\href{https://github.com/ualib/agda-algebras/commit/ab859caf814566fe32205f76bd0a4ac1e6007147}{30 Nov 2021 commit (ab859ca)} of the \agdaalgebras library~\cite{ualib_v2.0.0}.} is fully constructive and correct, a conviction we justify in due course (q.v.).
 
 What follows is a self-contained formal proof of the HSP theorem which is achieved by
 extracting into a single Agda module a subset of the \agdaalgebras library, including only
@@ -1906,7 +1903,7 @@ In each case, we will only need the first implication, so we omit the others fro
   IH : ⨅ 𝒜 ⊧ p ≈ q
   IH = ⊧-P-invar 𝒜 {p}{q} (λ i → σ (𝒜 i) (kA i))
 
-module _ {X : Type χ}{ι : Level}{𝒦 : Pred(Algebra α ρᵃ)(α ⊔ ρᵃ ⊔ ov ℓ)}{p q : Term X} where
+module _ {X : Type χ}{ι : Level}(ℓ : Level){𝒦 : Pred(Algebra α ρᵃ)(α ⊔ ρᵃ ⊔ ov ℓ)}{p q : Term X} where
  private aℓι = α ⊔ ρᵃ ⊔ ℓ ⊔ ι
 
  V-id1 : 𝒦 ⊫ p ≈ q → V ℓ ι 𝒦 ⊫ p ≈ q
@@ -2029,9 +2026,9 @@ and belongs to the class \af{S} (\af{P} \ab{𝒦}), and for most applications th
 The informal construction of the free algebra in \af{S} (\af{P} \ab{𝒦}), for an arbitrary
 class \ab{𝒦} of \ab{𝑆}-algebras, proceeds by taking the quotient of \T{X} modulo a congruence relation
 that we will denote by \afld{≈}.  One approach is to let
-\afld{≈} := \af{⋂}\{\ab{θ} \af{∈} \af{Con} (\T{X}) : \T{X} \af{/} \ab{θ} \af{∈} \af{S}
+\afld{≈} be \af{⋂}\{\ab{θ} \af{∈} \af{Con} (\T{X}) : \T{X} \af{/} \ab{θ} \af{∈} \af{S}
 \ab{𝒦}\}.\footnote{\af{Con} (\T{X}) is the set of congruences of \T{X}.}
-Alternatively we could let \ab{ℰ} = \af{Th} \ab{𝒦} and take \afld{≈} to be the least equivalence relation
+Equivalently, we let \ab{ℰ} = \af{Th} \ab{𝒦} and take \afld{≈} to be the least equivalence relation
 on the domain of \T{X} such that
 \begin{enumerate}
 \item for every equation (\ab p , \ab q) \af{∈} \af{Th} \ab{𝒦} and every
@@ -2047,9 +2044,8 @@ i~⟧}~\afld{⟨\$⟩}~\ab{ρ})
 \as{→} \af{⟦~\ab f~\ab s~⟧}~\afld{⟨\$⟩}~\ab{ρ}~\afld{≈}~\af{⟦~\ab f~\ab
 t~⟧}~\afld{⟨\$⟩}~\ab{ρ}\\[-8pt]
 \end{enumerate}
-Whichever approach we choose, the \defn{relatively free algebra over} \ab{X} (relative to
+The \defn{relatively free algebra over} \ab{X} (relative to
 \ab{𝒦}) is defined to be the quotient \Free{X} := \T{X}~\af{/}~\afld{≈}.
-
 Evidently \Free{X} is a subdirect product of the algebras in \{\T{X}~\af{/}~\ab{θ}\!\},
 where \ab{θ} ranges over congruences modulo which \T{X} belongs to \af{S}~\ab{𝒦}.
 Thus, \Free{X} \af{∈} \af{P}(\af{S}~\ab{𝒦}) ⊆ \af{S}(\af{P}~\ab{𝒦}), and it follows
@@ -2061,16 +2057,16 @@ identified in \Free{X}. \ifshort\else (Notice that \afld{≈} may be empty, in w
 
 \paragraph*{The relatively free algebra in Agda}
 We now define the relatively free algebra in Agda using the language of type theory.
-Our approach will be different from the informal one described above, but the end result
-will be the same.
+%Our approach looks a bit different from the informal one described above, because we
+%represent quotients as setoids, but the end result is the same.
 We start with a type \ab{ℰ} representing a collection of identities and, instead of
 forming a quotient, we take the domain of the free algebra to be a setoid whose
 \afld{Carrier} is the type \Term{X} of {𝑆}-terms in \ab X and whose equivalence relation
 includes all pairs (\ab p , \ab q) \af{∈} \Term{X} \af{×} \Term{X} such that \ab p \aod{≈}
 \ab q is derivable from \ab{ℰ}; that is, \ab{ℰ} \aod{⊢} \ab X \aod{▹} \ab p \aod{≈} \ab q.
 Observe that elements of this setoid are equal iff they belong to the same equivalence
-class of the congruence \afld{≈} defined above.  Therefore, the setoid so defined represents
-the quotient \T{X}~\af{/}~\afld{≈}.
+class of the congruence \afld{≈} defined above.  Therefore, the setoid so defined, which
+we denote by \Free{X}, represents the quotient \T{X}~\af{/}~\afld{≈}.
 Finally, the interpretation of an operation in the free algebra is simply the operation
 itself, which works since \ab{ℰ} \aod{⊢} \ab X \aod{▹\au{}≈\au{}} is a congruence relation.
 
@@ -2093,8 +2089,8 @@ module FreeAlgebra {χ : Level}(ℰ : {Y : Type χ} → Pred (Term Y × Term Y) 
 \end{code}
 
 \paragraph*{The natural epimorphism} % from 𝑻 X to 𝔽[ X ]}
-We now define the natural epimorphism from \T{X} onto the relatively free algebra \Free{X} and prove that
-its kernel is the congruence of \T{X} defined by the identities modeled by (\af S \ab{𝒦}, hence by) \ab{𝒦}.
+We now define the natural epimorphism from \T{X} onto \Free{X} %(= \T{X}~\af{/}~\afld{≈})
+and prove that its kernel is contained in the collection of identities modeled by \af{V} \ab{𝒦}. % (which we represent by \af{Th} (\af{V} \ab{𝒦})).
 
 \ifshort\else
 \begin{code}
@@ -2127,7 +2123,7 @@ module FreeHom {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
  homF[ X ] = IsEpi.HomReduct ∥ epiF[ X ] ∥
 
  kernel-in-theory : {X : Type c} → ker ∣ homF[ X ] ∣ ⊆ Th (V ℓ ι 𝒦)
- kernel-in-theory {X = X} {p , q} pKq 𝑨 vkA = V-id1{ℓ = ℓ}{p = p}{q} (ζ pKq) 𝑨 vkA
+ kernel-in-theory {X = X} {p , q} pKq 𝑨 vkA = V-id1 ℓ {p = p}{q} (ζ pKq) 𝑨 vkA
   where
   ζ : ∀{p q} → (Th 𝒦) ⊢ X ▹ p ≈ q → 𝒦 ⊫ p ≈ q
   ζ x 𝑨 kA = sound (λ y ρ → y 𝑨 kA ρ) x where open Soundness (Th 𝒦) 𝑨
@@ -2201,20 +2197,19 @@ class axiomatized by the set \ab{ℰ} of term identities; that is, \ab{𝑨} ∈
 
 The converse assertion---that \emph{every variety is an equational class}---is less obvious.
 Let \ab{𝒦} be an arbitrary variety.  We will describe a set of equations that axiomatizes
-\ab{𝒦}.  A natural choice is the set
-\af{Th} \ab{𝒦} of all equations that hold in \ab{𝒦}. Define \ab{𝒦⁺} = \af{Mod} (\af{Th}
-\ab{𝒦}).  Clearly, \ab{𝒦} \aof{⊆} \ab{𝒦⁺}. We prove the reverse inclusion. Let \ab{𝑨}
-\af{∈} \ab{𝒦⁺}; it suffices to find an algebra \ab{𝑭} \af{∈} \af{S} (\af{P} \ab{𝒦}) such
-that \ab{𝑨} is a homomorphic image of \ab{𝑭}, as this will show that \ab{𝑨}
-\af{∈} \af{H} (\af{S} (\af{P} \ab{𝒦})) = \ab{𝒦}.
+\ab{𝒦}.  A natural choice is \af{Th} \ab{𝒦}, all equations that hold in \ab{𝒦}.
+Let \ab{𝒦⁺} := \af{Mod} (\af{Th} \ab{𝒦}). Clearly, then \ab{𝒦} \aof{⊆} \ab{𝒦⁺}.  We prove the
+reverse inclusion. Let \ab{𝑨} \af{∈} \ab{𝒦⁺}; it suffices to find an algebra \ab{𝑭} \af{∈}
+\af{S} (\af{P} \ab{𝒦}) such that \ab{𝑨} is a homomorphic image of \ab{𝑭}, as this will
+show that \ab{𝑨} \af{∈} \af{H} (\af{S} (\af{P} \ab{𝒦})) = \ab{𝒦}.
 
 Let \ab{X} be such that there exists a \emph{surjective} environment
 \ab{ρ} : \ab{X} \as{→} \af{𝕌[~\ab{𝑨}~]}.
 %\footnote{This is usually done by assuming \ab{X} has cardinality at least max(|~\af{𝕌[~\ab{𝑨}~]}~|, ω).}
 By the \af{lift-hom} lemma, there is an epimorphism \ab{h} from \T{X} onto \af{𝕌[~\ab{𝑨}~]}
 that extends \ab{ρ}.
-Now, put \aof{𝔽[~\ab{X}~]}~:=~\T{X}/\ab{Θ}, and let \ab{g} : \T{X} \as{→} \aof{𝔽[~\ab{X}~]}
-be the natural epimorphism with kernel \ab{Θ}. We claim that \af{ker} \ab g \af{⊆}
+Now, put \aof{𝔽[~\ab{X}~]}~:=~\T{X}/\afld{≈}, and let \ab{g} : \T{X} \as{→} \aof{𝔽[~\ab{X}~]}
+be the natural epimorphism with kernel \afld{≈}. We claim that \af{ker} \ab g \af{⊆}
 \af{ker} \ab h. If the claim is true, then there is a map \ab{f} : \aof{𝔽[~\ab{X}~]} \as{→} \ab{𝑨}
 such that \ab f \af{∘} \ab g = \ab h. Since \ab h is surjective, so is \ab f. Hence \ab{𝑨}
 \af{∈} \af{𝖧} (\af{𝔽} \ab X) \aof{⊆} \ab{𝒦⁺} completing the proof.
@@ -2237,13 +2232,11 @@ We now show how to formally express and prove the twin assertions that
 (i) every equational class is a variety and (ii) every variety is an equational class.
 
 \paragraph*{Every equational class is a variety}
-For (i), we need an arbitrary equational class. To obtain one, we start with an arbitrary
-collection \ab{ℰ} of equations and let \ab{𝒦} = \af{Mod} \ab{ℰ}, the equational class
+For (i), we need an arbitrary equational class, which we obtain by starting with an arbitrary
+collection \ab{ℰ} of equations and then defining \ab{𝒦} = \af{Mod} \ab{ℰ}, the equational class
 determined by \ab{ℰ}. We prove that \ab{𝒦} is a variety by showing that
 \ab{𝒦} = \af{V} \ab{𝒦}. The inclusion \ab{𝒦} \aof{⊆} \af V \ab{𝒦}, which holds for all
-classes \ab{𝒦}, is called the \defn{expansive} property of \af{V}. The converse inclusion
-\af V \ab{𝒦} \aof{⊆} \ab{𝒦}, on the other hand, requires the hypothesis that \ab{𝒦} is an
-equation class. We now formalize each of these inclusions.
+classes \ab{𝒦}, is called the \defn{expansive} property of \af{V}.
 
 \ifshort\else
 \begin{code}
@@ -2272,46 +2265,50 @@ module _ (𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)){X : Type (α 
   Goal = mkiso (to⨅ , mkhom refl⨅) (from⨅ , mkhom refl) (λ _ _ → refl) (λ _ → refl)
 
 \end{code}
-Earlier we proved the identity preservation lemma,
-\af{V-id1} : \ab{𝒦} \aof{⊫} \ab p \aof{≈} \ab q \as{→} \af{V} \ab{ℓ} \ab{ι} \ab{𝒦} \aof{⊫} \ab p \aof{≈} \ab q.
-Thus, if \ab{𝒦} is an equational class, then \af V \ab{𝒦} \aof{⊆} \ab{𝒦}, as we now confirm.
+
+The converse inclusion, \af V \ab{𝒦} \aof{⊆} \ab{𝒦}, requires the
+hypothesis that \ab{𝒦} is an equation class. Recall lemma
+\af{V-id1}, which asserts that \ab{𝒦} \aof{⊫} \ab p \aof{≈} \ab q implies \af{V}
+\ab{ℓ} \ab{ι} \ab{𝒦} \aof{⊫} \ab p \aof{≈} \ab q. Whence, if \ab{𝒦} is an equational
+class, then \af V \ab{𝒦} \aof{⊆} \ab{𝒦}, as we now confirm.
 
 \begin{code}
 
 module _ {ℓ : Level}{X : Type ℓ}{ℰ : {Y : Type ℓ} → Pred (Term Y × Term Y) (ov ℓ)} where
  private 𝒦 = Mod{α = ℓ}{ℓ}{X} ℰ     -- an arbitrary equational class
  EqCl⇒Var : V ℓ (ov ℓ) 𝒦 ⊆ 𝒦
- EqCl⇒Var {𝑨}vA{p}{q} pℰq ρ = V-id1{ℓ = ℓ}{𝒦 = 𝒦}{p}{q}(λ _ x τ → x pℰq τ)𝑨 vA ρ
+ EqCl⇒Var {𝑨}vA{p}{q} pℰq ρ = V-id1 ℓ {𝒦}{p}{q}(λ _ x τ → x pℰq τ)𝑨 vA ρ
 
 \end{code}
 Together, \af{V-expa} and \af{Eqcl⇒Var} prove that every equational class is a variety.
 
 
 \paragraph*{Every variety is an equational class}
-To prove statement (ii), we need an arbitrary variety; to obtain one, we start with an arbitrary class
-\ab{𝒦} of \ab{𝑆}-algebras and take its \emph{varietal closure}, \af{V} \ab{𝒦}.
+For (ii), we need an arbitrary variety, which we obtain by starting with an arbitrary class
+\ab{𝒦} of \ab{𝑆}-algebras and taking the \emph{varietal closure}, \af{V} \ab{𝒦}.
 We prove that \af{V} \ab{𝒦} is an equational class by showing it is precisely the collection of
 algebras that model the equations in \af{Th} (\af{V} \ab{𝒦}); that is, we prove
 \af{V} \ab{𝒦} = \af{Mod} (\af{Th} (\af{V} \ab{𝒦})).
-The inclusion \af{V} \ab{𝒦} \aof{⊆} \af{Mod} (\af{Th} (\af{V} \ab{𝒦})) is a simple consequence of the fact that \af{Mod} \af{Th} is a closure operator. Nonetheless, completeness demands
-that we formalize this fact, however trivial is its proof.
+The inclusion \af{V} \ab{𝒦} \aof{⊆} \af{Mod} (\af{Th} (\af{V} \ab{𝒦})) is a simple
+consequence of the fact that \af{Mod} \af{Th} is a closure operator%
+\ifshort
+, so we omit the proof and later refer to this fact as \af{ModTh-closure}.
+\else
+. Nonetheless, completeness demands that we formalize this fact, however trivial its proof.
 
-\ifshort\else
 \begin{code}
 
 module _ (𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)){X : Type (α ⊔ ρᵃ ⊔ ℓ)} where
  private c = α ⊔ ρᵃ ⊔ ℓ ; ι = ov c
-\end{code}
-\fi
-\begin{code}
 
  ModTh-closure : V{β = β}{ρᵇ}{γ}{ρᶜ}{δ}{ρᵈ} ℓ ι 𝒦 ⊆ Mod{X = X} (Th (V ℓ ι 𝒦))
  ModTh-closure {x = 𝑨} vA {p}{q} x ρ = x 𝑨 vA ρ
 
 \end{code}
+\fi
 
-It remains to prove the converse inclusion, \af{Mod} (\af{Th} (V 𝒦)) \aof{⊆} \af{V} \ab{𝒦},
-which is the main focus of the rest of the paper.  We proceed as follows:
+It remains to prove the inclusion \af{Mod} (\af{Th} (V 𝒦)) \aof{⊆} \af{V} \ab{𝒦},
+and this task occupies the remainder of the paper.  We proceed as follows:
 
 \begin{enumerate}
 \item \label{item:1} Let \ab{𝑪} be the product of all algebras in \af{S} \ab{𝒦}, so that \ab{𝑪} \af{∈} \af{P} (\af{S} \ab{𝒦}).
@@ -2324,8 +2321,8 @@ which is the main focus of the rest of the paper.  We proceed as follows:
 To define \ab{𝑪} as the product of all algebras in \af{S} \ab{𝒦}, we must first contrive
 an index type for the class \af{S} \ab{𝒦}.  We do so by letting the indices be the algebras
 belonging to \ab{𝒦}. Actually, each index will consist of a triple (\ab{𝑨} , \ab p ,
-\ab{ρ}) where \ab{𝑨} is an algebra, \ab p : \ab{𝑨} \af{∈} \af{S} \ab{𝒦}) is a proof of membership in \ab{𝒦},
-\ab{ρ} : \ab X \as{→} \aof{𝕌[ \ab{𝑨} ]} is an arbitrary environment.
+\ab{ρ}) where \ab{𝑨} is an algebra, \ab p : \ab{𝑨} \af{∈} \af{S} \ab{𝒦} is a proof of membership in \ab{𝒦},
+and \ab{ρ} : \ab X \as{→} \aof{𝕌[ \ab{𝑨} ]} is an arbitrary environment.
 Using this indexing scheme, we construct \ab{𝑪}, the product of all algebras in \ab{𝒦}
 and all environments, as follows.
 
@@ -2339,22 +2336,22 @@ and all environments, as follows.
 \fi
 \begin{code}
 
- ℑ⁺ : Type ι
- ℑ⁺ = Σ[ 𝑨 ∈ (Algebra α ρᵃ) ] (𝑨 ∈ S ℓ 𝒦) × (Carrier (Env 𝑨 X))
+ ℑ : Type ι
+ ℑ = Σ[ 𝑨 ∈ (Algebra α ρᵃ) ] (𝑨 ∈ S ℓ 𝒦) × (Carrier (Env 𝑨 X))
 
- 𝔄⁺ : ℑ⁺ → Algebra α ρᵃ
- 𝔄⁺ i = ∣ i ∣
+ 𝔄 : ℑ → Algebra α ρᵃ
+ 𝔄 i = ∣ i ∣
 
  𝑪 : Algebra ι ι
- 𝑪 = ⨅ 𝔄⁺
+ 𝑪 = ⨅ 𝔄
 \end{code}
 
 \ifshort\else
 \begin{code}
 
- skEqual : (i : ℑ⁺) → ∀{p q} → Type ρᵃ
+ skEqual : (i : ℑ) → ∀{p q} → Type ρᵃ
  skEqual i {p}{q} = ⟦ p ⟧ ⟨$⟩ snd ∥ i ∥ ≈ ⟦ q ⟧ ⟨$⟩ snd ∥ i ∥
-  where open Setoid 𝔻[ 𝔄⁺ i ] using ( _≈_ ) ; open Environment (𝔄⁺ i) using ( ⟦_⟧ )
+  where open Setoid 𝔻[ 𝔄 i ] using ( _≈_ ) ; open Environment (𝔄 i) using ( ⟦_⟧ )
 
 \end{code}
 The type \af{skEqual} provides a term identity \ab p \af{≈} \ab q for each index \ab i = (\ab{𝑨} , \ab{p} , \ab{ρ}) of the product.
@@ -2371,7 +2368,7 @@ so belongs to \af S (\af P \ab{𝒦}).
 \begin{code}
 
  homC : hom (𝑻 X) 𝑪
- homC = ⨅-hom-co 𝔄⁺ (λ i → lift-hom (snd ∥ i ∥))
+ homC = ⨅-hom-co 𝔄 (λ i → lift-hom (snd ∥ i ∥))
 \end{code}
 \ifshort\else
 \begin{code}
@@ -2400,13 +2397,13 @@ so belongs to \af S (\af P \ab{𝒦}).
 
 \end{code}
 If \AgdaPair{p}{q} belongs to the kernel of \af{homC}, then
-\af{Th} \ab{𝒦} includes the identity \ab{p} \af{≈} \ab{q}---that is,
-\af{Th} \ab{𝒦} \af{⊢} \ab X \af{▹} \ab{p} \af{≈} \ab{q}. Equivalently,
-if the kernel of \af{homC} is contained in that of \af{homF[ X ]}.
+\af{Th} \ab{𝒦} includes the identity \ab{p} \af{≈} \ab{q}.
+%---that is, \af{Th} \ab{𝒦} \af{⊢} \ab X \af{▹} \ab{p} \af{≈} \ab{q}.
+Equivalently,
+the kernel of \af{homC} is contained in that of \af{homF[ X ]}.
 \ifshort
 We omit the proof of this lemma and merely display its formal statement.
 \else
-We formalize this fact as follows.
 \fi
 
 \begin{code}
@@ -2427,8 +2424,8 @@ We formalize this fact as follows.
   pqEqual : ∀ i → skEqual i {p}{q}
   pqEqual i = goal
    where
-   open Environment (𝔄⁺ i)  using ( ⟦_⟧ )
-   open Setoid 𝔻[ 𝔄⁺ i ]    using ( _≈_ ; sym ; trans )
+   open Environment (𝔄 i)  using ( ⟦_⟧ )
+   open Setoid 𝔻[ 𝔄 i ]    using ( _≈_ ; sym ; trans )
    goal : ⟦ p ⟧ ⟨$⟩ snd ∥ i ∥ ≈ ⟦ q ⟧ ⟨$⟩ snd ∥ i ∥
    goal  = trans (free-lift-interp{𝑨 = ∣ i ∣}(snd ∥ i ∥) p)
          ( trans (pKq i)(sym (free-lift-interp{𝑨 = ∣ i ∣} (snd ∥ i ∥) q)))
@@ -2487,7 +2484,7 @@ With this we can prove that \Free{X} belongs to \af{S} (\af{P} \ab{𝒦}).
  SPF = ∣ spC ∣ , (fst ∥ spC ∥) , (≤-transitive F≤C (snd ∥ spC ∥))
   where
   psC : 𝑪 ∈ P (α ⊔ ρᵃ ⊔ ℓ) ι (S ℓ 𝒦)
-  psC = ℑ⁺ , (𝔄⁺ , ((λ i → fst ∥ i ∥) , ≅-refl))
+  psC = ℑ , (𝔄 , ((λ i → fst ∥ i ∥) , ≅-refl))
   spC : 𝑪 ∈ S ι (P ℓ ι 𝒦)
   spC = PS⊆SP psC
 
@@ -2524,9 +2521,7 @@ Thus, every variety is an equational class. This completes the formal proof of B
 %% -----------------------------------------------------------------------------
 \section{Related work}
 There have been a number of efforts to formalize parts of universal algebra in
-type theory besides ours%
-\ifshort
-.
+type theory besides ours.
 In~\cite{Capretta:1999}, Capretta formalized the basics of universal algebra in the
    Calculus of Inductive Constructions using the Coq proof assistant.
 In~\cite{Spitters:2011}, Spitters and van der Weegen formalized the basics of universal algebra
@@ -2539,33 +2534,18 @@ In~\cite{Gunther:2018} Gunther et al developed what seemed (prior to the \agdaal
    coverage is less extensive than that of \agdaalgebras, Gunther et al do treat
    \emph{multi-sorted} algebras, whereas \agdaalgebras is currently limited to single
    sorted structures.
-In~\cite{Amato:2021}, ``Amato et al formalize multi-sorted algebras with finitary
-   operators in UniMath. Limiting to finitary operators is due to the restrictions of the
-   UniMath type theory, which does not have W-types nor user-defined inductive types.
-   These restrictions also prompt the authors to code terms as lists of stack machine
-   instructions rather than trees'' (quoting~\cite{Abel:2021}).
-In~\cite{Lynge:2019}, ``Lynge and Spitters formalize multi-sorted algebras in HoTT, also
-   restricting to finitary operators. Using HoTT they can define quotients as
-   types,obsoleting setoids. They prove three isomorphism theorems concerning sub- and
-   quotient algebras. A universal algebra or varieties are not formalized'' (quoting~\cite{Abel:2021}).
-In~\cite{Abel:2021}, Abel gives a new formal proof of the soundness theorem and Birkhoff's
-   completeness theorem for multi-sorted algebraic structures.
-\else
-, most notably
-\begin{enumerate}
-\item
-In~\cite{Capretta:1999}, Capretta formalized the basics of universal algebra in the
-   Calculus of Inductive Constructions using the Coq proof assistant;
-\item In~\cite{Spitters:2011}, Spitters and van der Weegen formalized the basics of universal algebra
-   and some classical algebraic structures, also in the Calculus of Inductive Constructions using
-   the Coq proof assistant and promoting the use of type classes;
-\item In~\cite{Gunther:2018} Gunther et al developed what seemed (prior to the \agdaalgebras library) to be
-   the most extensive library of formalized universal algebra to date; like \agdaalgebras, that work is based on dependent type theory, is programmed in Agda, and goes beyond the Noether isomorphism theorems to include some basic equational logic; although the coverage is less extensive than that of \agdaalgebras, Gunther et al do treat \emph{multi-sorted} algebras, whereas \agdaalgebras is currently limited to single sorted structures.
-   \item In~\cite{Amato:2021}, ``Amato et al formalize multi-sorted algebras with finitary operators in UniMath. Limiting to finitary operators is due to the restrictions of the UniMath type theory, which does not have W-types nor user-defined inductive types. These restrictions also prompt the authors to code terms as lists of stack machine instructions rather than trees'' (quoting~\cite{Abel:2021}).
-\item In~\cite{Lynge:2019}, ``Lynge and Spitters formalize multi-sorted algebras in HoTT, also restricting to finitary operators. Using HoTT they can define quotients as types, obsoleting setoids. They prove three isomorphism theorems concerning sub- and quotient algebras. A universal algebra or varieties are not formalized'' (quoting~\cite{Abel:2021}).
-\item In~\cite{Abel:2021}, Abel gives a new formal proof of the soundness theorem and Birkhoff's completeness theorem for multi-sorted algebraic structures.
-\end{enumerate}
-\fi
+
+As noted by Abel~\cite{Abel:2021}, Amato et al, in \cite{Amato:2021}, have
+   formalized multi-sorted algebras with finitary operators in UniMath. The restriction to
+   finitary operations was due to limitations of the UniMath type theory, which does
+   not have W-types nor user-defined inductive types.
+Abel also notes that Lynge and Spitters, in~\cite{Lynge:2019}, formalize multi-sorted
+   algebras with finitary operators in \emph{Homotopy type theory} (\cite{HoTT}) using
+   Coq.  HoTT's higher inductive types enable them to define quotients as types, without
+   the need for setoids.  Lynge and Spitters prove three isomorphism theorems concerning
+   subalgebras and quotient algebras, but do not formalize universal algebras nor varieties.
+Finally, in~\cite{Abel:2021}, Abel gives a new formal proof of the soundness theorem and
+   Birkhoff's completeness theorem for multi-sorted algebraic structures.
 
 %Some other projects aimed at formalizing mathematics generally, and algebra in particular, have developed into very extensive libraries that include definitions, theorems, and proofs about algebraic structures, such as groups, rings, modules, etc.  However, the goals of these efforts seem to be the formalization of special classical algebraic structures, as opposed to the general theory of (universal) algebras. Moreover, the part of universal algebra and equational logic formalized in the \agdaalgebras library extends beyond the scope of prior efforts.
 
