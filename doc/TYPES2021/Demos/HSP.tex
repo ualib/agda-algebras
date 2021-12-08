@@ -1,27 +1,17 @@
 \section{Introduction}
-The \agdaalgebras library \cite{ualib_v2.0.1} is a repository of types and programs
-(theorems and proofs) formalizing the foundations of universal algebra in Martin-Löf
-dependent type theory (\mltt) using the \agda programming language \cite{Norell:2007,agdaref}.
-The library now includes an fairly extensive collection of formal definitions, theorems, and
-proofs that codify, in the formal language of type theory, the analogous definitions,
-theorems, and proofs of classical, set-theory-based universal algebra and equational
-logic. As such, the \agdaalgebras library provides many examples exhibiting the
-expressiveness of inductive and dependent types for representing and reasoning about
-general algebraic and relational structures in a formal language.
-\ifshort\else
-The main advantage of
-formalizing mathematics in type theory using a proof assistant (like \agda) is that
-the software checks the correctness of our proofs by a process known as ``type-checking.''
-\fi
+The \agdaalgebras library \cite{ualib_v2.0.1} formalizes the foundations of universal algebra
+in intensional Martin-Löf type theory (\mltt) using \agda~{Norell:2007,agdaref}.
+The library includes a wide collection of definitions and verified theorems that appropriately codify
+classical set-theory-based universal algebra and equational
+logic.
 
-The first major milestone of the \agdaalgebras project is a formal proof of \emph{Birkhoff's
-variety theorem} (also known as the \emph{HSP theorem})~\cite{Birkhoff:1935} in dependent
-type theory.
-To the best of our knowledge, this constitutes the first formalization in \mltt, and the
-first machine-verified proof, of Birkoff's celebrated 1935 result.
+The first major milestone of the \agdaalgebras project is a proof of \emph{Birkhoff's
+variety theorem} (also known as the \emph{HSP theorem})~\cite{Birkhoff:1935}.
+To the best of our knowledge, this constitutes the first machine-verified proof of Birkoff's
+celebrated 1935 result.
 
-Our first proof of the HSP theorem, completed in January of
-2021,\footnote{See the
+The proof presented here is the second proof. The first proof%
+\footnote{See the
  \href{https://github.com/ualib/ualib.github.io/blob/71f173858701398d56224dd79d152c380c0c2b5e/src/lagda/UALib/Birkhoff.lagda}{Birkhoff}
  module of the
  \href{https://github.com/ualib/ualib.github.io/commit/71f173858701398d56224dd79d152c380c0c2b5e}{15
@@ -29,14 +19,15 @@ Our first proof of the HSP theorem, completed in January of
  \href{https://github.com/ualib/ualib.github.io}{ualib/ualib.gitlab.io}
  repository~\cite{ualib_v1.0.0}.}
 suffered from a few flaws that raised two concerns. First, it was not clear whether the
-proof was fully constructive. Second, it was shown that if one (say, a subversive
-adversary) were to take the type \ab{X}---which we use to represent an arbitrary collection of
-variable symbols---to be just the two element type, then one could combine this with our
-proof and derive a contradiction. To resolve these issues, as well as improve the
-\agdaalgebras library more generally, we have rewritten parts of the library and have
-developed a new formal proof of the HSP theorem. We are confident that the new
-proof---based on the \agdaalgebras library, ver.~2.0.1~\cite{ualib_v2.0.1}---is fully
-constructive and correct, a conviction we justify in due course (q.v.).
+proof was fully constructive (because of its use of univalence in \mltt). Second,
+it was shown that if one were to take the type
+\ab{X}---which we use to represent an arbitrary collection of
+variable symbols---to be  the two element type, then one could combine this with our
+proof and derive a contradiction. To resolve these issues, as well as general improvements,
+we have rewritten parts of the library and have
+developed a new proof of the HSP theorem. We are confident that the new
+proof---in the \agdaalgebras library, ver.~2.0.1~\cite{ualib_v2.0.1}---is
+constructive and correct.
 
 What follows is a self-contained formal proof of the HSP theorem which is achieved by
 extracting into a single \agda module a subset of the \agdaalgebras library, including only
@@ -11786,5 +11777,3 @@ Finally, in~\cite{Abel:2021}, Abel gives a new formal proof of the soundness the
 %Some other projects aimed at formalizing mathematics generally, and algebra in particular, have developed into very extensive libraries that include definitions, theorems, and proofs about algebraic structures, such as groups, rings, modules, etc.  However, the goals of these efforts seem to be the formalization of special classical algebraic structures, as opposed to the general theory of (universal) algebras. Moreover, the part of universal algebra and equational logic formalized in the \agdaalgebras library extends beyond the scope of prior efforts.
 
 %Prior to our work, a constructive version of Birkhoff's theorem was published by Carlstr\"om in~\cite{Carlstrom:2008}.  However, the logical foundations of that work is constructive set theory and, as far as we know, there was no attempt to formalized it in type theory and verify it with a proof assistant.
-
-
