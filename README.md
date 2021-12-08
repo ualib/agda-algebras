@@ -107,21 +107,17 @@ Finally, the official [Agda Wiki][], [Agda User's Manual][], [Agda Language Refe
 To cite the [agda-algebras][] software library in a publication or on a web page, please use the following BibTeX entry:
 
 ```bibtex
-@software{DeMeo:2021_5730534,
-  author       = {William DeMeo and
-                  Jacques Carette and
-                  Siva Somayyajula and
-                  Andreas Abel and
-                  Kartik Singhal and
-                  Hyeyoung Shin},
-  title        = {{ualib/agda-algebras: v.2.0: Release for citing, 
-                   doi, and TYPES2021 postproc}},
-  month        = nov,
+@software{demeo_william_2021_5765793,
+  author       = {DeMeo, William and
+                  Carette, Jacques},
+  title        = {agda-algebras},
+  month        = dec,
   year         = 2021,
+  note         = {Documentation available at \url{https://ualib.org}},
   publisher    = {Zenodo},
-  version      = {v.2.0.0},
-  doi          = {10.5281/zenodo.5730534},
-  url          = {https://doi.org/10.5281/zenodo.5730534}
+  version      = {2.0.1},
+  doi          = {10.5281/zenodo.5765793},
+  url          = {https://doi.org/10.5281/zenodo.5765793}
 }
 ```
 
