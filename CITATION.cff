@@ -8,8 +8,8 @@ authors:
   given-names: "Jacques"
   orcid: "https://orcid.org/0000-0001-8993-9804"
 title: "agda-algebras"
-version: 2.0.0
+version: 2.0.1
 doi: 10.5281/zenodo.5730534
-date-released: 2021-11-26
+date-released: 2021-12-07
 url: "https://github.com/ualib/agda-algebras"
 
