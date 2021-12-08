@@ -104,21 +104,42 @@ Finally, the official [Agda Wiki][], [Agda User's Manual][], [Agda Language Refe
 
 [![DOI](https://zenodo.org/badge/360493064.svg)](https://zenodo.org/badge/latestdoi/360493064)
 
-To cite the [agda-algebras][] library and its documentation in a publication or on a web page, please use the following BibTeX data:
+To cite the [agda-algebras][] software library in a publication or on a web page, please use the following BibTeX entry:
+
+```bibtex
+@software{DeMeo:2021_5730534,
+  author       = {William DeMeo and
+                  Jacques Carette and
+                  Siva Somayyajula and
+                  Andreas Abel and
+                  Kartik Singhal and
+                  Hyeyoung Shin},
+  title        = {{ualib/agda-algebras: v.2.0: Release for citing, 
+                   doi, and TYPES2021 postproc}},
+  month        = nov,
+  year         = 2021,
+  publisher    = {Zenodo},
+  version      = {v.2.0.0},
+  doi          = {10.5281/zenodo.5730534},
+  url          = {https://doi.org/10.5281/zenodo.5730534}
+}
+```
+
+To cite the [agda-algebras][] documentation, please use the following BibTeX entry:
 
 ```bibtex
 @article{DeMeo:2021,
- author        = {William DeMeo},
- title         = {The {A}gda {U}niversal {A}lgebra {L}ibrary and
-                 {B}irkhoff's {T}heorem in {D}ependent {T}ype {T}heory},
- journal       = {CoRR},
- volume        = {abs/2101.10166},
- year          = {2021},
- eprint        = {2101.10166},
- archivePrefix = {arXiv},
- primaryClass  = {cs.LO},
- url           = {https://arxiv.org/abs/2101.10166},
- note          = {source code: \url{https://gitlab.com/ualib/ualib.gitlab.io}}
+  author         = {William DeMeo and Jacques Carette},
+  title          = {A Machine-checked proof of {B}irkhoff's Variety Theorem
+                    in {M}artin-{L}\"of Dependent Type Theory},
+  year           = {2021},
+  journal        = {CoRR},
+  volume         = {abs/2101.10166},
+  primaryClass   = {cs.LO}
+  eprinttype     = {arXiv},
+  archivePrefix  = {arXiv},
+  eprint         = {2101.10166},
+  url            = {https://arxiv.org/abs/2101.10166}
 }
 ```
 
