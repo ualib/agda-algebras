@@ -383,10 +383,8 @@ is a pair \ab{𝑆} = \AgdaPair{F}{ρ} where \ab{F} is a collection of
 \defn{operation symbols} and \ab{ρ} : \ab{F} \as{→} \ab{N} is an \defn{arity function}
 which maps each operation symbol to its arity. Here, \ab{N} denotes the \emph{arity type}.
 Heuristically, the arity \ab{ρ} \ab{f} of an operation symbol \ab{f} \as{∈} \ab{F} may be
-thought of as the number of arguments that \ab{f} takes as ``input.''
-
-The \agdaalgebras library represents an algebraic signature as an
-inhabitant of the following dependent pair type:
+thought of as the number of arguments that \ab{f} takes as ``input.''. This can be
+represented as follows:
 
 \begin{center}
 
@@ -419,55 +417,43 @@ inhabitant of the following dependent pair type:
 
 \end{center}
 
-Using special syntax for the first and second
-projections---\AgdaOperator{\AgdaFunction{∣\AgdaUnderscore{}∣}} and
-\AgdaOperator{\AgdaFunction{∥\AgdaUnderscore{}∥}} (resp.)---if
+Recall that we defined special syntax for the first and second
+projections so that if
 \ab{𝑆} \as{:} \af{Signature} \ab{𝓞} \ab{𝓥} is a signature, then
 \aof{∣} \ab{𝑆} \aof{∣} denotes the set of operation symbols and \aof{∥} \ab{𝑆} \aof{∥} denotes the arity function.
 Thus, if \ab{f} \as{:} \aof{∣} \ab{𝑆} \aof{∣} is an operation symbol in the
 signature \ab{𝑆}, then \aof{∥} \ab{𝑆} \aof{∥} \ab{f} is the arity of \ab{f}.
 
-We need to augment the ordinary \af{Signature} type so that it supports algebras over
-setoid domains.
+We need to augment \af{Signature} for setoid domains.
 \ifshort\else
 To do so---following Andreas Abel's lead (cf.~\cite{Abel:2021})---we
 define an operator that translates an ordinary signature into a \defn{setoid signature},
 that is, a signature over a setoid domain.
 \fi
-This raises a minor technical issue concerning
-the dependent types involved in the definition.
-\ifshort\else
-Some readers might find the resolution of
-this issue instructive, so let's discuss it briefly.
-\fi
+This raises a minor technical issue:
 If we are given two operations \ab{f} and \ab{g}, a tuple \ab{u} \as{:} \aof{∥} \ab{𝑆} \aof{∥} \ab{f} \as{→}
 \ab{A} of arguments for \ab{f}, and a tuple \ab{v} \as{:} \aof{∥} \ab{𝑆}
 \aof{∥} \ab{g} \as{→} \ab{A} of arguments for \ab{g}, and if we know that \ab f is identically equal to
 \ab{g}---that is, \ab{f} \aod{≡} \ab{g} (intensionally)---then we should be able to
 check whether \ab u and \ab v are pointwise equal.  Technically, though, \ab{u} and
 \ab{v} inhabit different types, so, in order to compare them, we must convince Agda
-that \ab u and \ab v inhabit the same type. Of course, this requires an appeal to the
+that \ab u and \ab v inhabit the same type. This requires an appeal to the
 hypothesis \ab f \aod{≡} \ab g, as we see in the definition of \af{EqArgs} below (adapted
 from Andreas Abel's development~\cite{Abel:2021}), which neatly resolves this minor
 technicality.
 
 \begin{code}
-
 EqArgs :  {𝑆 : Signature 𝓞 𝓥}{ξ : Setoid α ρᵃ}
  →        ∀ {f g} → f ≡ g → (∥ 𝑆 ∥ f → Carrier ξ) → (∥ 𝑆 ∥ g → Carrier ξ) → Type (𝓥 ⊔ ρᵃ)
-
 EqArgs {ξ = ξ} ≡.refl u v = ∀ i → u i ≈ v i where open Setoid ξ using ( _≈_ )
-
 \end{code}
 
-Finally, we are ready to define an operator which
-translates an ordinary (algebraic) signature into a signature of algebras over setoids.
+This enables us to define an operator from a signature to one over setoids.
 \ifshort\else
 We denote this operator by \aof{⟨\AgdaUnderscore{}⟩} and define it as follows.
 \fi
 
 \begin{code}
-
 ⟨_⟩ : Signature 𝓞 𝓥 → Setoid α ρᵃ → Setoid _ _
 
 Carrier  (⟨ 𝑆 ⟩ ξ)                = Σ[ f ∈ ∣ 𝑆 ∣ ] (∥ 𝑆 ∥ f → ξ .Carrier)
