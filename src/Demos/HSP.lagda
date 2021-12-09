@@ -1464,7 +1464,9 @@ we say that \ab{ℰ} \defn{entails} the equation \ab{p}~\aof{≈}~\ab{q}, and we
 \ab{ℰ}~\ad{⊢}~\ab{p}~\ad{≈}~\ab{q}, just in case every model of \ab{ℰ} also models
 \ab{p}~\aof{≈}~\ab{q}.
 We model our definition of \defn{entailment type} by the one defined by Abel
-in~\cite{Abel:2021}.
+in~\cite{Abel:2021}.  It contains cases for representing hypotheses, congruence of term
+application, that substitution respects entailment, and that entailment is
+an equivalence.
 
 \begin{code}
 
@@ -1481,22 +1483,21 @@ data _⊢_▹_≈_  (ℰ : {Y : Type χ} → Pred(Term Y × Term Y) (ov χ)) :
 
 \end{code}
 
-The fact that this type represents the informal semantic notion of entailment
-given at the start of this subsection is called \defn{soundness} and
+The fact that this exactly represents the informal semantic notion of entailment
+given earlier is called \defn{soundness} and
 \defn{completeness}.
-More precisely, \defn{the entailment type is sound} means the following:
+More precisely, \defn{the entailment type is sound} means that
 if \ab{ℰ}~\ad{⊢}~\ab{X}~\ad{▹}~\ab p~\ad{≈}~\ab q, then \ab p \aof{≈} \ab q holds in
 every model of \ab{ℰ}.
-\defn{The entailment type is complete} means the following:
+\defn{The entailment type is complete} means that
 if \ab p \aof{≈} \ab q holds in every model of \ab{ℰ},
 then \ab{ℰ}~\ad{⊢}~\ab{X}~\ad{▹}~\ab p~\aof{≈}~\ab q.
-Soundness and completeness of an entailment type similar to the one defined above was
-proved by Abel in~\cite{Abel:2021}.  We will invoke soundness of the entailment type only once below%
+We will use soundness of entailment only once below%
 \ifshort
 ~(by the name \af{sound}), so we omit its proof, but see~\cite{Abel:2021}
-or~\cite{DeMeo:2021} for the complete formalization.
+or~\cite{DeMeo:2021}.
 \else
-; nonetheless, here is its formalization (due to Abel, \textit{op. cit.}):
+; nonetheless, here is its formalization (essentially due to Abel, \textit{op. cit.}):
 
 \begin{code}
 
@@ -1525,7 +1526,7 @@ module Soundness  (ℰ : {Y : Type χ} → Pred(Term Y × Term Y) (ov χ))
 Fix a signature \ab{𝑆}, let \ab{𝒦} be a class of \ab{𝑆}-algebras, and define
 \begin{itemize}
 \item \af H \ab{𝒦} = algebras isomorphic to homomorphic images of members of \ab{𝒦};
-\item \af S \ab{𝒦} = algebras isomorphic to subalgebras of a members of \ab{𝒦};
+\item \af S \ab{𝒦} = algebras isomorphic to subalgebras of members of \ab{𝒦};
 \item \af P \ab{𝒦} = algebras isomorphic to products of members of \ab{𝒦}.
 \end{itemize}
 \ifshort\else
@@ -1539,17 +1540,21 @@ the taking of homomorphic images} provided \af H \ab{𝒦} \aof{⊆} \ab{𝒦}. 
 S, and \af P can be composed with one another repeatedly, forming yet more closure
 operators.
 
-% An algebra is a homomorphic image (resp., subalgebra; resp., product) of every algebra to which it is isomorphic. Thus, the class \af H \ab{𝒦} (resp., \af S \ab{𝒦}; resp., \af P \ab{𝒦}) is closed under isomorphism.
+% An algebra is a homomorphic image (resp., subalgebra; resp., product) of every algebra to which it is isomorphic.
+% Thus, the class \af H \ab{𝒦} (resp., \af S \ab{𝒦}; resp., \af P \ab{𝒦}) is closed under isomorphism.
 
 A \emph{variety} is a class of \ab{𝑆}-algebras that is closed under the taking of
 homomorphic images, subalgebras, and arbitrary products.  To represent varieties
-we define types for the closure operators \af H, \af S, and \af P that are composable; we
-then define a type \af V which represents closure under all three of these operators.
+we define closure operators \af H, \af S, and \af P that are composable; we
+then define a type \af V which represents closure under all three.
 Thus, if \ab{𝒦} is a class of \ab{𝑆}-algebras, then
 \af V \ab{𝒦} := \af H (\af S (\af P \ab{𝒦})), and \ab{𝒦} is a variety iff \af V \ab{𝒦} \aof{⊆} \ab{𝒦}.
 \ifshort\else
 
-We now define the type \af H to represent classes of algebras that include all homomorphic images of algebras in the class---i.e., classes that are closed under the taking of homomorphic images---the type \af S to represent classes of algebras that closed under the taking of subalgebras, and the type \af P to represent classes of algebras closed under the taking of arbitrary products.
+We now define the type \af H to represent classes of algebras that include all homomorphic images
+of algebras in the class---i.e., classes that are closed under the taking of homomorphic
+images---the type \af S to represent classes of algebras that closed under the taking of subalgebras,
+and the type \af P to represent classes of algebras closed under the taking of arbitrary products.
 
 \begin{code}
 
@@ -1570,15 +1575,11 @@ module _ {α ρᵃ β ρᵇ : Level} where
 
 \end{code}
 Finally, we define the \defn{varietal closure} of a class \ab{𝒦} to be the class \af{V}
-\ab{𝒦} := \af{H} (\af{S} (\af{P} \ab{𝒦})).
-\ifshort\else
+\ab{𝒦} := \af{H} (\af{S} (\af{P} \ab{𝒦})).  The explicit universe level declarations
+are needed for disambiguation.
 \begin{code}
 
 module _  {α ρᵃ β ρᵇ γ ρᶜ δ ρᵈ : Level} where
-\end{code}
-\fi
-\begin{code}
-
  private a = α ⊔ ρᵃ ; b = β ⊔ ρᵇ
  V : ∀ ℓ ι → Pred(Algebra α ρᵃ) (a ⊔ ov ℓ) →  Pred(Algebra δ ρᵈ) _
  V ℓ ι 𝒦 = H{γ}{ρᶜ}{δ}{ρᵈ} (a ⊔ b ⊔ ℓ ⊔ ι) (S{β}{ρᵇ} (a ⊔ ℓ ⊔ ι) (P ℓ ι 𝒦))
@@ -1587,23 +1588,11 @@ module _  {α ρᵃ β ρᵇ γ ρᶜ δ ρᵈ : Level} where
 
 An important property of the binary relation \aof{⊧} is \emph{algebraic invariance} (i.e.,
 invariance under isomorphism).
-\ifshort
-Here is the formal statement of this property, without proof.
-\else
-We formalize this property as follows.
-
 \begin{code}
 
 module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}(𝑩 : Algebra β ρᵇ)(p q : Term X) where
-\end{code}
-\fi
-\begin{code}
-
  ⊧-I-invar : 𝑨 ⊧ p ≈ q  →  𝑨 ≅ 𝑩  →  𝑩 ⊧ p ≈ q
 
-\end{code}
-\ifshort\else
-\begin{code}
  ⊧-I-invar Apq (mkiso fh gh f∼g g∼f) ρ =
   begin
       ⟦ p ⟧   ⟨$⟩               ρ    ≈˘⟨  cong ⟦ p ⟧ (f∼g ∘ ρ)        ⟩
@@ -1619,7 +1608,6 @@ module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}(𝑩 : Algebra β ρᵇ)(p q : T
   open SetoidReasoning 𝔻[ 𝑩 ]
 
 \end{code}
-\fi
 Identities modeled by an algebra \ab{𝑨} are also modeled by every homomorphic image of
 \ab{𝑨} and by every subalgebra of \ab{𝑨}.
 \ifshort
@@ -1692,11 +1680,11 @@ module _ {X : Type χ}{I : Type ℓ}(𝒜 : I → Algebra α ρᵃ){p q : Term X
 
 The classes \af H \ab{𝒦}, \af S \ab{𝒦}, \af P \ab{𝒦}, and \af V \ab{𝒦} all satisfy the
 same term identities.  We will only use a subset of the inclusions needed to prove this
-assertion, and we present here only the facts we need.\footnote{For more details, see the
-\ualmodule{Varieties.Setoid.Preservation} module of the \agdaalgebras library.}
+assertion, and we present here only the facts we need.\footnote{For more details, see
+\ualmodule{Varieties.Setoid.Preservation} .}
 First, the closure operator \af H preserves the identities modeled by the
 given class; this follows almost immediately from the invariance lemma
-\af{⊧-H-invar} proved above.
+\af{⊧-H-invar}.
 
 \begin{AgdaAlign}
 \begin{code}
@@ -1706,21 +1694,22 @@ module _  {X : Type χ}{𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)}
  H-id1 σ 𝑩 (𝑨 , kA , BimgA) = ⊧-H-invar{p = p}{q} (σ 𝑨 kA) BimgA
 
 \end{code}
-The analogous preservation result for \af S is a simple consequence of
-the invariance lemma \af{⊧-S-invar}; the obvious converse, which we call
+The analogous preservation result for \af S is a consequence of
+the invariance lemma \af{⊧-S-invar}; the converse, which we call
 \af{S-id2}, has an equally straightforward proof.
 
 \begin{code}
 
  S-id1 : 𝒦 ⊫ p ≈ q → S{β = α}{ρᵃ}ℓ 𝒦 ⊫ p ≈ q
  S-id1 σ 𝑩 (𝑨 , kA , B≤A) = ⊧-S-invar{p = p}{q} (σ 𝑨 kA) B≤A
+
  S-id2 : S ℓ 𝒦 ⊫ p ≈ q → 𝒦 ⊫ p ≈ q
  S-id2 Spq 𝑨 kA = Spq 𝑨 (𝑨 , (kA , ≤-reflexive))
 
 \end{code}
 Finally, we have analogous pairs of implications for \af P and \af V,
 \ifshort
-called P-id1 and V-id1 in the \agdaalgebras library.
+called P-id1 and V-id1.
 \else
 In each case, we will only need the first implication, so we omit the others from this presentation.
 
