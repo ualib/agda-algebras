@@ -444,8 +444,8 @@ from Andreas Abel's development~\cite{Abel:2021}).
 EqArgs :  {𝑆 : Signature 𝓞 𝓥}{ξ : Setoid α ρᵃ}
  →        ∀ {f g} → f ≡ g → (∥ 𝑆 ∥ f → Carrier ξ) → (∥ 𝑆 ∥ g → Carrier ξ) → Type (𝓥 ⊔ ρᵃ)
 EqArgs {ξ = ξ} ≡.refl u v = ∀ i → u i ≈ v i where open Setoid ξ using ( _≈_ )
-\end{code}
 
+\end{code}
 \noindent
 This enables us to define an operator from a signature to one over setoids.
 \ifshort\else
@@ -467,10 +467,10 @@ transᵉ  (isEquivalence (⟨ 𝑆 ⟩ ξ)) (≡.refl , g)(≡.refl , h)  = ≡.
 
 %% -----------------------------------------------------------------------------
 \subsection{Algebras}\label{algebras}
-Informally, an \defn{algebraic structure in the signature} \ab{𝑆} = (\ab{F}, \ab{ρ}), or
-\ab{𝑆}-\defn{algebra}, is denoted by \ab{𝑨} = (\ab{A}, \ab{Fᴬ}) and consists of
+Informally, an \defn{algebraic structure} \ab{𝑨} = (\ab{A}, \ab{Fᴬ}) \defn{in the signature}
+\ab{𝑆} = (\ab{F}, \ab{ρ}), or\ab{𝑆}-\defn{algebra}, is consists of
 \begin{itemize}
-\item a \emph{nonempty} set (or type) \ab A, called the \defn{domain} (or \defn{carrier} or
+\item a \emph{nonempty} type \ab A, called the \defn{domain} (or \defn{carrier} or
 \defn{universe}) of the algebra;
 \item a collection \ab{Fᴬ} :=
   \{ \ab{fᴬ} \as{∣} \ab f \as{∈} \ab F, \ab{fᴬ} \as :
@@ -478,19 +478,9 @@ Informally, an \defn{algebraic structure in the signature} \ab{𝑆} = (\ab{F}, 
 \item a (potentially empty) collection of \defn{identities} satisfied by elements and
 operations of \ab{𝑨}.
 \end{itemize}
-The \agdaalgebras library represents algebras as inhabitants of a record type with two
-fields:\footnote{We postpone introducing identities until~§\ref{equational-logic}.}
-\begin{itemize}
-\item \afld{Domain}, representing the domain of the algebra;
-\item \afld{Interp}, representing the \emph{interpretation} in the algebra of each
-operation symbol in \ab{𝑆}.
-\end{itemize}
-The \afld{Domain} is a setoid whose \afld{Carrier} denotes the domain of the algebra and
-whose equivalence relation denotes equality of elements of the domain.
-
-Here is the definition of the \ar{Algebra} type followed by an explanation of how the
-standard library's \ar{Func} type is used to represent the interpretation of operation
-symbols in an algebra.
+For our implementation, we postpone introducing identities until~§\ref{equational-logic}.
+The \afld{Domain} setoid represents the domain of the algebras, and \afld{Interp} the
+interpretation of each operation symbol in \ab{𝑆}.
 
 \begin{code}
 
@@ -499,25 +489,12 @@ record Algebra α ρ : Type (𝓞 ⊔ 𝓥 ⊔ lsuc (α ⊔ ρ)) where
         Interp  : ⟨ 𝑆 ⟩ Domain ⟶ Domain
 
 \end{code}
-Recall, we renamed \agda's \ar{Func} type, preferring instead the long-arrow symbol
-\AgdaRecord{⟶}, so the \afld{Interp} field has type \ar{Func} (\aof{⟨} \ab{𝑆} \aof{⟩}
-\afld{Domain}) \afld{Domain}, a record type with two fields:
-\begin{itemize}
-\item a function  \ab{f} \as : \afld{Carrier} (\aof{⟨} \ab{𝑆} \aof{⟩} \afld{Domain})
-  \as{→} \afld{Carrier} \afld{Domain} representing the operation;
-\item a proof \af{cong} \as : \ab f \aof{Preserves \au{}≈₁\au{} \aor{⟶} \au{}≈₂\au{}} that the
-operation preserves the relevant setoid equalities.
-\end{itemize}
-Thus, for each operation symbol in the signature \ab{𝑆}, we have a setoid function
-\ab f---with domain a power of \afld{Domain} and codomain \afld{Domain}---along with
-a proof that this function respects the setoid equalities.  The latter means that the
-operation \ab{f} is accompanied by a proof of the following: ∀ \ab u \ab v in
-\afld{Carrier} (\aof{⟨} \ab{𝑆} \aof{⟩} \afld{Domain}), if \ab u \af{≈₁} \ab v, then \ab{f}
-\aofld{⟨\$⟩} \ab{u} \af{≈₂} \ab{f} \aofld{⟨\$⟩} \ab{v}.
+Thus, for each operation symbol in \ab{𝑆}, we have a setoid function
+\ab f with domain a power of \afld{Domain} and codomain \afld{Domain}.
 
-In the \agdaalgebras library is defined some syntactic sugar that helps to make our
-formalizations easier to read and comprehend.
-The following are three examples of such syntax that we use below: if \ab{𝑨} is an algebra, then
+We also define some syntactic sugar to make our
+formalizations easier to read and hopefully to comprehend.
+For example, if \ab{𝑨} is an algebra, then
 \begin{itemize}
 \item \aof{𝔻[ \ab{𝑨} ]} denotes the setoid \afld{Domain} \ab{𝑨},
 \item \aof{𝕌[ \ab{𝑨} ]} is the underlying carrier of the algebra \ab{𝑨}, and
@@ -540,20 +517,16 @@ f ̂ 𝑨 = λ a → (Interp 𝑨) ⟨$⟩ (f , a)
 
 %% -----------------------------------------------------------------------------
 \paragraph*{Universe levels of algebra types}
-The hierarchy of type universes in \agda is structured as follows:
+Types belong to \emph{universes}, which are structured as follows:
 \ap{Type} \ab{ℓ} : \ap{Type} (\ap{lsuc} \ab{ℓ}), \ap{Type} (\ap{lsuc} \ab{ℓ}) : \ap{Type}
-(\ap{lsuc} (\ap{lsuc} \ab{ℓ})), …. This means that \ap{Type} \ab{ℓ} has type \ap{Type}
-(\ap{lsuc} \ab{ℓ}), etc.  However, this does \emph{not} imply that \ap{Type} \ab{ℓ} :
-\ap{Type} (\ap{lsuc} (\ap{lsuc} \ab{ℓ})). In other words, \agda's universe hierarchy is
-\emph{noncumulative}.
-\ifshort
-An
-\else
-This can be advantageous as it becomes possible to treat universe
-levels more generally and precisely. On the other hand, an
-\fi
-unfortunate side-effect of this noncumulativity is that it can sometimes seem unreasonably
-difficult to convince \agda that a program or proof is correct.
+(\ap{lsuc} (\ap{lsuc} \ab{ℓ})), …. While this means that \ap{Type} \ab{ℓ} has type \ap{Type}
+(\ap{lsuc} \ab{ℓ}), this does \emph{not} imply that \ap{Type} \ab{ℓ} :
+\ap{Type} (\ap{lsuc} (\ap{lsuc} \ab{ℓ})). In other words, \agda's universes are
+\emph{not cumulative}.
+This can be advantageous as it becomes possible to treat size issues
+more generally and precisely.  But because there is no guidance from the
+standard literature (which usually make uniform smallness assumptions), dealing with explicit
+universe levels can be daunting.
 \ifshort\else
 This aspect of the language was one of the few stumbling
 blocks we encountered while learning how to use \agda for formalizing universal algebra in
@@ -561,9 +534,11 @@ type theory. Although some may consider this to be one of the least interesting 
 technical aspects of this paper, others might find the presentation more helpful if we
 resist the urge to gloss over these technicalities.
 \fi
+While in some settings, such as Category Theory, formalizing it in \agda~\cite{agda-categories}
+works smoothly with respect to universe levels, Universal Algebra seems to be bumpier.
 Therefore, it seems worthwhile to explain how we make use
-of the general universe lifting and lowering functions, available in the \agdastdlib, to
-develop domain-specific tools for dealing with \agda's noncumulative universe hierarchy.
+of universe lifting and lowering functions, available in the \agdastdlib, to
+develop domain-specific tools for dealing with \agda's universe hierarchy.
 
 \ifshort\else
 Let us be more concrete about what is at issue by considering a typical example. \agda
@@ -580,12 +555,11 @@ the HSP module, where it was expecting level \ab{𝓞}~\aop{⊔}~\ab{𝓥}~\aop{
 \ab{α} \ab{ρᵃ} whereas \agda expected an inhabitant of the type \ar{Algebra} (\ab{𝓞}
 \aop{⊔} \ab{𝓥} \aop{⊔} (\ap{lsuc} \ab{α})) \ab{ρᵃ}.
 \fi
-To resolve such problems, we use the \AgdaRecord{Lift} record type of the \agdastdlib,
-which takes a type inhabiting a particular universe and embeds it into a higher universe.
-Specializing the \ar{Lift} type to our domain of interest, the \agdaalgebras library
-defines a function called \af{Lift-Alg}%
+\agda provides \ar{Lift} to embed a type into a higher universe.
+Specializing \ar{Lift} to our situation, we
+define a function \af{Lift-Alg}%
 \ifshort
-, whose interface is the following.
+, with interface as follows.
 \vskip-2mm
 \else
 .
@@ -628,30 +602,27 @@ Lift-Alg 𝑨 ℓ₀ ℓ₁ = Lift-Algʳ (Lift-Algˡ 𝑨 ℓ₀) ℓ₁
 
 \end{code}
 \fi
-\noindent To see why the \af{Lift-Alg} function is useful, recall that our definition of the algebra
-record type uses two universe level parameters corresponding to those of the algebra's
-underlying domain setoid.
+\noindent Recall that our definition of algebra uses two universe levels, corresponding
+to those of the domain setoid.
 \ifshort\else
 Concretely, an algebra of type \ar{Algebra} \ab{α} \ab{ρᵃ} has a
 \afld{Domain} of type \ar{Setoid} \ab{α} \ab{ρᵃ}. This packages a ``carrier set''
 (\afld{Carrier}), inhabiting \ap{Type} \ab{α}, with an equality on \afld{Carrier} of type
 \af{Rel} \afld{Carrier} \ab{ρᵃ}.
 \fi
-The \af{Lift-Alg} function takes an algebra---one whose carrier inhabits \ap{Type \ab{α}}
-with equality of type \af{Rel} \afld{Carrier} \ab{ρᵃ}---and constructs a new algebra whose
+\af{Lift-Alg} takes an algebra parametrized by levels \ab{a} and \ab{ρᵃ}
+and constructs a new algebra whose
 carrier inhabits \ap{Type} (\ab{α} \ap{⊔} \ab{ℓ₀}) with equality of type \af{Rel}
-\afld{Carrier} (\ab{ρᵃ} \ap{⊔} \ab{ℓ₁}). This lifting operation would be worthless without
-a useful semantic connection between the input and output algebras.
-Fortunately, it is easy to prove that \af{Lift-Alg} is an \defn{algebraic invariant},
-which is to say that the resulting ``lifted'' algebra has the same algebraic properties as
-the original algebra, a fact we will codify later in a type called \af{Lift-≅}.
+\afld{Carrier} (\ab{ρᵃ} \ap{⊔} \ab{ℓ₁}). To be useful, the resulting algebra should
+have the same semantic properties as the input algebra, which is indeed the case,
+as we will show later.
 
 \paragraph*{Product Algebras}
-Here we review the (informal) definition of the \defn{product} of a family of
-\ab{𝑆}-algebras and then define a type which formalizes this notion in \agda.
+Let us first give the (informal) definition of the \defn{product} of a family of
+\ab{𝑆}-algebras.
 Let \ab{ι} be a universe and \ab I~:~\ap{Type}~\ab{ι} a type (the ``indexing type'').
-Then the dependent function type \ab{𝒜}~:~\ab
-I~\as{→}~\ab{Algebra}~\ab{α}~\ab{ρᵃ} represents an \defn{indexed family of algebras}.
+Then \ab{𝒜}~:~\ab I~\as{→}~\ab{Algebra}~\ab{α}~\ab{ρᵃ} represents
+an \defn{indexed family of algebras}.
 Denote by \af{⨅}~\ab{𝒜} the \defn{product of algebras} in \ab{𝒜} (or \defn{product
 algebra}), by which we mean the algebra whose domain is the Cartesian product \af{Π}~\ab
 i~꞉~\ab I~\af{,}~\aof{𝔻[~\ab{𝒜}~\ab i~]} of the domains of the algebras in \ab{𝒜}, and
@@ -663,21 +634,10 @@ we define the interpretation of \ab f in \af{⨅}~\ab{𝒜} by\\[-2mm]
 
 (\ab{f}~\af{̂}~\af{⨅}~\ab{𝒜}) \ab a := \as{λ}~(\ab i~:~\ab I)~\as{→}
 (\ab{f}~\af{̂}~\ab{𝒜}~\ab i)(\ab{a}~\ab i).\\[8pt]
-In the \agdaalgebras library we define the function \af{⨅} which formalizes this
-notion of \defn{product algebra} in \mltt.
-\ifshort
-Here we just show the interface, but \seeshort for the complete definition.
-
-\else
-The formal definition follows.
-
-\fi
+This can be formalized as follows.
 \begin{code}
 module _ {ι : Level}{I : Type ι } where
  ⨅ : (𝒜 : I → Algebra α ρᵃ) → Algebra (α ⊔ ι) (ρᵃ ⊔ ι)
-\end{code}
-\ifshort\else
-\begin{code}
  Domain (⨅ 𝒜) =
   record { Carrier = ∀ i → 𝕌[ 𝒜 i ]
          ; _≈_ = λ a b → ∀ i → (_≈ˢ_ 𝔻[ 𝒜 i ]) (a i)(b i)
@@ -688,10 +648,9 @@ module _ {ι : Level}{I : Type ι } where
  Interp (⨅ 𝒜) ⟨$⟩ (f , a) = λ i → (f ̂ (𝒜 i)) (flip a i)
  cong (Interp (⨅ 𝒜)) (≡.refl , f=g ) = λ i → cong (Interp (𝒜 i)) (≡.refl , flip f=g i )
 \end{code}
-\fi
-
-
-
+\noindent where we can see that the \af{Carrier} is indeed the (dependent) product
+of the carriers. The rest of the definitions are the ``pointwise'' versions of the
+underlying ones.
 
 %% -------------------------------------------------------------------------------------
 \subsection{Homomorphisms}\label{homomorphisms}
