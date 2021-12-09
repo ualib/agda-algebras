@@ -176,49 +176,31 @@ module _ {A : Type α }{B : A → Type β} where
 
 %% -----------------------------------------------------------------------------
 \subsection{Setoids}\label{setoids}
-A \defn{setoid} is a pair (\ab A, \af{≈}) where \ab A is a type and \af{≈}
-is an equivalence relation on \ab A. Setoids seem to have gotten a bad wrap
-in some parts of the interactive theorem proving community because of the extra
-overhead they require. However, we feel they are ideally suited to
-representing the basic objects of informal mathematics (i.e., sets)
-in a constructive, type-theoretic way.
+A \defn{setoid} is a pair of a type \ab A and
+an equivalence relation \af{≈} on \ab A.  They are useful to represent a
+carrier with a ``local'' notion of equivalence, instead of always relying on
+the global one as is usually done in set theory. Dealing with setoids has
+somewhat of a bad reputation for being overly tedious. We have not found
+this to be an issue.
 
-In informal mathematical discourse, a set typically comes equipped with an equivalence
-relation manifesting the notion of equality of elements of the set. We
-often take this equivalence for granted or view it as self-evident; rarely do we
-take pains to define it explicitly. While well-suited to informal
-mathematics, this approach is inadequate for formal, machine-checked proofs.
-
-The \agdaalgebras library was first developed without setoids, relying exclusively
-on the inductive equality type \ad{\au{}≡\au{}}, defined in \am{Agda.Builtin.Equality},
+The \agdaalgebras library was first developed without setoids, relying on
+propositional equality \ad{\au{}≡\au{}} instead,
 along with some experimental, domain-specific types for equivalence classes, quotients, etc.
-One consequence of this design decision was that the formalization of many
-theorems required postulating function extensionality, an axiom that is known to be neither provable
-nor refutable in pure Martin-Löf type theory.\footnote{See the section
-\href{https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html\#funextfromua}
-{\textit{Function extensionality from univalence}} in~\cite{MHE, MHE:2019}.}
-
-In contrast, our current approach using setoids makes the equality relation
-of a given type explicit.  A primary motivation for this choice is to avoid the need for
-additional axioms and to make it clearer that the formal proofs in the \agdaalgebras
-library are fully \emph{constructive} (as defined in~\cite{nlab:constructive_mathematics})
-and confined to \emph{Martin-Löf dependent type theory} (as defined in~\cite{nlab:martin-loef_dependent_type_theory}).
-In particular, we make no appeals to classical axioms like Choice or Excluded Middle, nor
-do we postulate function extensionality at any point in the present work.\footnote{The \defn{function extensionality
-axiom} asserts that two point-wise equal functions are equal. There remain some modules in
-\agdaalgebras that postulate this axiom, but we don't use them here.}
-We are confident that the \agdaalgebras library is now fully constructive and free from any hidden
-assumptions or inconsistencies that could be used to fool a type-checker.\footnote{As of 7 Dec 2021, the latest version of \agdaalgebras is 2.0.1; see~\cite{ualib_v2.0.1}.}
+This furthermore required postulating function extensionality%
+\footnote{An axiom that asserts that two point-wise equal functions are equal.}, which is
+known to be independent from \mltt~\cite{MHE, MHE:2019}. We felt that this was
+an unsatisfactory state of affairs, as we were curious to see if the theorems
+held directly in \mltt without extra axioms.
+In particular, we make no appeals to classical axioms like Choice or Excluded Middle.
 
 
 %% -----------------------------------------------------------------------------
 \subsection{Setoid functions}
 \label{setoid-functions}
-In addition to the \ar{Setoid} type, much of our code employs the
-standard library's \ar{Func} type which represents a function from one
-setoid to another and packages such a function with a proof (called \afld{cong}) that
-the function respects the underlying setoid equalities. As mentioned above, we renamed
-\ar{Func} to the more visually appealing infix long arrow symbol,
+We also use the standard library's \ar{Func} type which represents a function from
+a setoid \ab A to another setoid \ab B that respects the underlying equivalences,
+witnessed by a field called \afld{cong}.  Rather than
+\ar{Func}, we use the more visually appealing infix long arrow symbol,
 \AgdaRecord{\AgdaUnderscore{}⟶\AgdaUnderscore{}}, and  throughout the paper we
 refer to inhabitants of this type as ``setoid functions.''
 
@@ -240,65 +222,53 @@ f ⟨∘⟩ g = record  { f = (_⟨$⟩_ f) ∘ (_⟨$⟩_ g)
 \end{code}
 \fi
 
-\paragraph*{Inverses of setoid functions}
-We begin by defining an inductive type that represents the \emph{image} of a function.
-%\footnote{cf.~the \ualmodule{Overture.Setoid.Inverses} module of the \agdaalgebras library.}
+\paragraph*{Inverses}
+We frequently need to deal with inverses. These are most easily defined via the
+\emph{image} of a function.
 
 \begin{code}
-
 module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
  open Setoid 𝑩 using ( _≈_ ; sym ) renaming ( Carrier to B )
 
  data Image_∋_ (f : 𝑨 ⟶ 𝑩) : B → Type (α ⊔ β ⊔ ρᵇ) where
   eq : {b : B} → ∀ a → b ≈ f ⟨$⟩ a → Image f ∋ b
-
 \end{code}
-An inhabitant of \aod{Image} \ab f \aod{∋} \ab b is a dependent pair \AgdaPair{a}{p},
-where \AgdaTyped{a}{A} and \ab p~\as :~\ab b \af{≈} \ab f~\ab a is a proof that
-\ab f maps \ab a to \ab b.  Since the proof that \ab b
-belongs to the image of \ab f is always accompanied by a witness \AgdaTyped{a}{A}, we can
-actually \emph{compute} a range-restricted right-inverse of \ab f, as follows.
-%. For convenience, we define this
-%inverse function and give it the name \af{Inv}.
+
+An inhabitant of \aod{Image} \ab f \aod{∋} \ab b is a point \ab
+where \AgdaTyped{a}{A} and a proof \ab p~\as :~\ab b \af{≈} \ab f~\ab a that
+\ab f maps \ab a to \ab b.
+Since the witness that \ab b
+belongs to the image of \ab f is always accompanied by a concrete witness \AgdaTyped{a}{A}, we can
+\emph{compute} a range-restricted right-inverse of \ab f.  For extra certainty, we also verify
+that your witness really is an inverse.
 
 \begin{code}
-
  Inv : (f : 𝑨 ⟶ 𝑩){b : B} → Image f ∋ b → Carrier 𝑨
  Inv _ (eq a _) = a
-
-\end{code}
-For each \ab b : \afld{B}, given a pair \AgdaPair{a}{p}~\as :~\aod{Image}~\ab f~\aod{∋}~\ab b witnessing the fact that \ab b belongs to the image of \ab f, the function \af{Inv} simply returns the witness \ab a, which is a preimage of \ab b under \ab f.
-Let's formally verify that \af{Inv} \ab f is indeed the (range-restricted) right-inverse of \ab f.
-
-
-\begin{code}
 
  InvIsInverseʳ : {f : 𝑨 ⟶ 𝑩}{b : B}(q : Image f ∋ b) → f ⟨$⟩ (Inv f q) ≈ b
  InvIsInverseʳ (eq _ p) = sym p
 \end{code}
 
-
 \paragraph*{Injective and surjective setoid functions}
 If \ab{f} % : \ab{𝑨} \aor{⟶} \ab{𝑩}
-is a setoid function from % \ab{𝑨} =
-(\ab A, \af{≈ᴬ}) to
-% \ab{𝑩} =
-(\ab B, \af{≈ᴮ}), then we call \ab f \defn{injective} provided
+then we call \ab f \defn{injective} provided
 \as{∀} (\ab{a₀} \ab{a₁} \as : \ab{A}), \ab{f} \aofld{⟨\$⟩} \ab{a₀} \af{≈ᴮ} \ab{f} \aofld{⟨\$⟩} \ab{a₁}
 implies \ab{a₀} \af{≈ᴬ} \ab{a₁}; we call \ab{f} \defn{surjective} provided
 \as{∀} (\AgdaTyped{b}{B}), \as{∃}~(\AgdaTyped{a}{A}) such that \ab{f} \aofld{⟨\$⟩} \ab{a} \af{≈ᴮ} \ab{b}.
+\ifshort
+We omit the straightforward \agda definitions.
+\else
+
 The \agdastdlib represents injective functions on bare types by the
 type \af{Injective}, and uses this to define the \af{IsInjective} type to represent
 the property of being an injective setoid function. Similarly, the type \af{IsSurjective}
 represents the property of being a surjective setoid function. \af{SurjInv} represents the \emph{right-inverse} of a surjective function.
-\ifshort %%% BEGIN SHORT VERSION ONLY
- We omit the straightforward definitions and proofs of these types, but \seeshort for details.
-\else    %%% END SHORT VERSION ONLY
-         %%% BEGIN LONG VERSION ONLY SECTION
- We reproduce the definitions and prove some of their properties
- inside the next submodule where we first set the stage by declaring two
- setoids \ab{𝑨} and \ab{𝑩}, naming their equality relations, and making some
- definitions from the standard library available.
+
+We reproduce the definitions and prove some of their properties
+inside the next submodule where we first set the stage by declaring two
+setoids \ab{𝑨} and \ab{𝑩}, naming their equality relations, and making some
+definitions from the standard library available.
 
 \begin{code}
 
@@ -343,33 +313,30 @@ module _  {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ}{𝑪 : Setoid γ ρ�
   Goal : Image g ⟨∘⟩ f ∋ y
   Goal = mp gonto
 \end{code}
-\fi      %%% END LONG VERSION ONLY SECTION
+\fi
 
 \paragraph*{Kernels of setoid functions}
 The \defn{kernel} of a function \ab f~\as :~\ab A~\as{→}~\ab B (where \ab A and \ab B are bare types) is defined
 informally by \{\AgdaPair{x}{y} \aod{∈} \ab A \aof{×} \ab A \as : \ab f \ab x \as{=} \ab f \ab y \}.
-This can be represented in \agda in a number of ways, but for our purposes it is most
-convenient to define the kernel as an inhabitant of a (unary) predicate over the square of
+This can be represented in \agda in a number of ways, but for our purposes it is
+convenient to define the kernel as inhabitant of a (unary) predicate over \ab A \aof{×} \ab A where \ab is
 the function's domain, as follows.
 
 \begin{code}
-
 kernel : {A : Type α}{B : Type β} → Rel B ρ → (A → B) → Pred (A × A) ρ
 kernel _≈_ f (x , y) = f x ≈ f y
-
 \end{code}
-The kernel of a \emph{setoid} function \ab f \as : \ab{𝐴} \aor{⟶} \ab{𝐵} is \{\AgdaPair{x}{y} \as{∈} \ab A \aof{×} \ab A \as : \ab f \aofld{⟨\$⟩} \ab x \af{≈} \ab f \aofld{⟨\$⟩} \ab y\},
-where \af{\au{}≈\au} denotes equality in \ab{𝐵}. This can be formalized in \agda as follows.
 
+The kernel of a \emph{setoid} function \ab f \as : \ab{𝐴} \aor{⟶} \ab{𝐵} is
+defined similarly.
 \ifshort\else
-\begin{code}
 
+\begin{code}
 module _ {𝐴 : Setoid α ρᵃ}{𝐵 : Setoid β ρᵇ} where
  open Setoid 𝐴 using () renaming ( Carrier to A )
 \end{code}
 \fi
 \begin{code}
-
  ker : (𝐴 ⟶ 𝐵) → Pred (A × A) ρᵇ
  ker g (x , y) = g ⟨$⟩ x ≈ g ⟨$⟩ y where open Setoid 𝐵 using ( _≈_ )
 \end{code}
@@ -377,22 +344,22 @@ module _ {𝐴 : Setoid α ρᵃ}{𝐵 : Setoid β ρᵇ} where
 
 %% -------------------------------------------------------------------------------------
 
-\section{Types for Basic Universal Algebra}
-\label{types-for-basic-universal-algebra}
-In this section we develop a working vocabulary and formal types for classical,
+\section{Basic Universal Algebra}
+\label{basic-universal-algebra}
+We now develop a working vocabulary in \mltt corresponding to classical,
 single-sorted, set-based universal algebra.
-We cover a number of important concepts, but we limit ourselves to those
-concepts required in our formal proof of Birkhoff's HSP theorem.
+We cover a number of important concepts, but limit ourselves to those
+required in our proof of Birkhoff's HSP theorem.
 In each case, we give a type-theoretic version of the informal definition,
-followed by a formal implementation of the definition in \mltt using the \agda language.
+followed by an \agda implementation.
 
-\ifshort\else
 This section is organized into the following subsections:
-§\ref{signatures} defines a general notion of \emph{signature} of a structure and then defines a type that represent signatures;
+§\ref{signatures} defines a general notion of \emph{signature} of a structure and
+then defines a type that represent signatures;
 §\ref{algebras} does the same for \emph{algebraic structures} and \emph{product algebras};
-§\ref{homomorphisms} defines \emph{homomorphisms}, \emph{monomorphisms}, and \emph{epimorphisms}, presents types that codify these concepts and formally verifies some of their basic properties;
+§\ref{homomorphisms} defines \emph{homomorphisms}, \emph{monomorphisms}, and \emph{epimorphisms},
+presents types that codify these concepts and formally verifies some of their basic properties;
 §§\ref{subalgebras}--\ref{terms} do the same for \emph{subalgebras} and \emph{terms}, respectively.
-\fi
 
 %% -----------------------------------------------------------------------------
 \subsection{Signatures}
