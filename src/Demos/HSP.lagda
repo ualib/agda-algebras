@@ -431,16 +431,14 @@ define an operator that translates an ordinary signature into a \defn{setoid sig
 that is, a signature over a setoid domain.
 \fi
 This raises a minor technical issue:
-If we are given two operations \ab{f} and \ab{g}, a tuple \ab{u} \as{:} \aof{∥} \ab{𝑆} \aof{∥} \ab{f} \as{→}
-\ab{A} of arguments for \ab{f}, and a tuple \ab{v} \as{:} \aof{∥} \ab{𝑆}
-\aof{∥} \ab{g} \as{→} \ab{A} of arguments for \ab{g}, and if we know that \ab f is identically equal to
-\ab{g}---that is, \ab{f} \aod{≡} \ab{g} (intensionally)---then we should be able to
-check whether \ab u and \ab v are pointwise equal.  Technically, though, \ab{u} and
-\ab{v} inhabit different types, so, in order to compare them, we must convince Agda
-that \ab u and \ab v inhabit the same type. This requires an appeal to the
-hypothesis \ab f \aod{≡} \ab g, as we see in the definition of \af{EqArgs} below (adapted
-from Andreas Abel's development~\cite{Abel:2021}), which neatly resolves this minor
-technicality.
+If we are given an operation \ab{f} with arguments
+\ab{u} \as{:} \aof{∥} \ab{𝑆} \aof{∥} \ab{f} \as{→}\ab{A}
+and \ab{g} with arguments \ab{v} \as{:} \aof{∥} \ab{𝑆} \aof{∥} \ab{g} \as{→} \ab{A},
+and a proof that \ab{f} \aod{≡} \ab{g} (i.e. intensionally), then we should be able to
+check whether \ab u and \ab v are pointwise equal.  Technically, \ab{u} and
+\ab{v} appear to inhabit different types; this is where the
+hypothesis \ab f \aod{≡} \ab g is used, as we see in the definition of \af{EqArgs} below (adapted
+from Andreas Abel's development~\cite{Abel:2021}).
 
 \begin{code}
 EqArgs :  {𝑆 : Signature 𝓞 𝓥}{ξ : Setoid α ρᵃ}
@@ -448,12 +446,14 @@ EqArgs :  {𝑆 : Signature 𝓞 𝓥}{ξ : Setoid α ρᵃ}
 EqArgs {ξ = ξ} ≡.refl u v = ∀ i → u i ≈ v i where open Setoid ξ using ( _≈_ )
 \end{code}
 
+\noindent
 This enables us to define an operator from a signature to one over setoids.
 \ifshort\else
 We denote this operator by \aof{⟨\AgdaUnderscore{}⟩} and define it as follows.
 \fi
 
 \begin{code}
+
 ⟨_⟩ : Signature 𝓞 𝓥 → Setoid α ρᵃ → Setoid _ _
 
 Carrier  (⟨ 𝑆 ⟩ ξ)                = Σ[ f ∈ ∣ 𝑆 ∣ ] (∥ 𝑆 ∥ f → ξ .Carrier)
@@ -462,6 +462,7 @@ _≈ˢ_     (⟨ 𝑆 ⟩ ξ)(f , u)(g , v)  = Σ[ eqv ∈ f ≡ g ] EqArgs{ξ =
 reflᵉ   (isEquivalence (⟨ 𝑆 ⟩ ξ))                           = ≡.refl , λ i → reflˢ   ξ
 symᵉ    (isEquivalence (⟨ 𝑆 ⟩ ξ)) (≡.refl , g)              = ≡.refl , λ i → symˢ    ξ (g i)
 transᵉ  (isEquivalence (⟨ 𝑆 ⟩ ξ)) (≡.refl , g)(≡.refl , h)  = ≡.refl , λ i → transˢ  ξ (g i) (h i)
+
 \end{code}
 
 %% -----------------------------------------------------------------------------
