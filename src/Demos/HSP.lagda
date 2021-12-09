@@ -654,7 +654,7 @@ underlying ones.
 
 %% -------------------------------------------------------------------------------------
 \subsection{Homomorphisms}\label{homomorphisms}
-Throughout this section, and the rest of the paper unless stated otherwise, \ab{𝑨} and \ab{𝑩}
+Throughout the rest of the paper, unless stated otherwise, \ab{𝑨} and \ab{𝑩}
 will denote \ab{𝑆}-algebras inhabiting the types \af{Algebra} \ab{α} \ab{ρᵃ} and
 \af{Algebra} \ab{β} \ab{ρᵇ}, respectively.
 
@@ -665,11 +665,12 @@ every operation symbol \ab{f} : \af{∣~\ab{𝑆}~∣} and all tuples
 \ab{a} : \af{∥~\ab{𝑆}~∥}~\ab{f} \as{→} \aof{𝕌[~\ab{𝑨}~]}, we have \ab{h} \aofld{⟨\$⟩}
 (\ab{f}~\af{̂}~\ab{𝑨}) \ab{a} \af{≈}
 (\ab{f}~\af{̂}~\ab{𝑩}) \ab{h} \aofld{⟨\$⟩} (\ab{a} \au{}).
-To formalize this concept in \agda, we first define the type \af{compatible-map-op}
-representing the assertion that a given setoid function
+
+It is convenient to first formalize ``compatible'' (\af{compatible-map-op})
+saying that a given setoid function
 \ab{h}~:~\aof{𝔻[~\ab{𝑨}~]} \aor{⟶} \aof{𝔻[~\ab{𝑩}~]} commutes with a given
-operation symbol \ab{f}. Then we generalize over operation symbols in the definition
-of \af{compatible-map}, the type of compatible maps from (the domain of) \ab{𝐴} to
+operation symbol \ab{f}. Then we generalize over operation symbols (\af{compatible-map}),
+getting the type of compatible maps from (the domain of) \ab{𝐴} to
 (the domain of) \ab{𝑩}.
 
 \ifshort\else
@@ -687,8 +688,8 @@ module _ (𝑨 : Algebra α ρᵃ)(𝑩 : Algebra β ρᵇ) where
  compatible-map h = ∀ {f} → compatible-map-op h f
 
 \end{code}
-Using these we define a record type \ar{IsHom} representing the property of being
-a homomorphism, and finally the type \af{hom} of homomorphisms from \ab{𝑨} to \ab{𝐵}.
+Using these we define the property (\as{IsHom}) of being a homomorphism, and
+finally the type \af{hom} of homomorphisms from \ab{𝑨} to \ab{𝐵}.
 
 \begin{code}
 
@@ -698,14 +699,13 @@ a homomorphism, and finally the type \af{hom} of homomorphisms from \ab{𝑨} to
  hom = Σ (𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]) IsHom
 
 \end{code}
-Thus, an inhabitant of \af{hom} is a pair (\ab h , \ab p) whose first component is
-a setoid function from the domain of \ab{𝑨} to that of \ab{𝑩} and whose second component
-is \ab p : \ar{IsHom} \ab h, a proof that \ab h is a homomorphism.
+Thus, an inhabitant of \af{hom} is a pair (\ab h , \ab p) of
+a setoid function \ab h from the domain of \ab{𝑨} to that of \ab{𝑩} and
+a proof that \ab h is a homomorphism.
 
 A \defn{monomorphism} (resp. \defn{epimorphism}) is an injective (resp. surjective)
-homomorphism.  The \agdaalgebras library defines types \ar{IsMon} and \ar{IsEpi} to
-represent these properties, as well as \af{mon} and \af{epi}, the types of monomorphisms
-and epimorphisms, respectively.
+homomorphism. We define predicates \ar{IsMon} and \ar{IsEpi} for these,
+ well as \af{mon} and \af{epi} for the corresponding types.
 \ifshort %%% BEGIN SHORT VERSION ONLY
 \else    %%% BEGIN LONG VERSION ONLY
 
@@ -739,7 +739,7 @@ monomorphism.
  epi = Σ (𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]) IsEpi
 \end{code}
 
-Here are two mere utilities that are useful for translating between types.
+Here are two utilities that are useful for translating between types.
 
 \begin{code}
 open IsHom ; open IsMon ; open IsEpi
@@ -755,7 +755,7 @@ module _ (𝑨 : Algebra α ρᵃ)(𝑩 : Algebra β ρᵇ) where
 
 \paragraph*{Composition of homomorphisms}
 \fi      %%% END LONG VERSION ONLY SECTION
-The composition of homomorphisms is again a homomorphism, and similarly for epimorphisms (and monomorphisms).
+The composition of homomorphisms is again a homomorphism, and similarly for epimorphisms and monomorphisms.
 \ifshort
 The proofs of these facts are straightforward so we omit them, but give them names,
 \af{∘-hom} and \af{∘-epi}, so we can refer to them below.
@@ -870,8 +870,7 @@ module _ {ι : Level}{I : Type ι}{𝑨 : Algebra α ρᵃ}(ℬ : I → Algebra 
 
 \paragraph*{Factorization of homomorphisms}
 \fi      %%% END LONG VERSION ONLY SECTION
-Another basic fact about homomorphisms that we formalize in the \agdaalgebras library
-(as the type \af{HomFactor}) is the following factorization theorem: if \ab g : \af{hom}
+We also formalize (as \af{HomFactor}) the following factorization theorem: if \ab g : \af{hom}
 \ab{𝑨} \ab{𝑩}, \ab h : \af{hom} \ab{𝑨} \ab{𝑪}, \ab h is surjective, and \af{ker} \ab h
 \aof{⊆} \af{ker} \ab g, then there exists \ab{φ} : \af{hom} \ab{𝑪} \ab{𝑩} such that \ab g
 = \ab{φ} \aof{∘} \ab h.
@@ -890,9 +889,6 @@ module _ {𝑨 : Algebra α ρᵃ}(𝑩 : Algebra β ρᵇ){𝑪 : Algebra γ ρ
   →           Σ[ φ ∈ hom 𝑪 𝑩 ] ∀ a → g a ≈₂ ∣ φ ∣ ⟨$⟩ h a
  HomFactor Khg hE = (φmap , φhom) , gφh
   where
-  kerpres : ∀ a₀ a₁ → h a₀ ≈₃ h a₁ → g a₀ ≈₂ g a₁
-  kerpres a₀ a₁ hyp = Khg hyp
-
   h⁻¹ : 𝕌[ 𝑪 ] → 𝕌[ 𝑨 ]
   h⁻¹ = SurjInv hfunc hE
 
@@ -928,10 +924,11 @@ module _ {𝑨 : Algebra α ρᵃ}(𝑩 : Algebra β ρᵇ){𝑪 : Algebra γ ρ
 \fi      %%% END LONG VERSION ONLY SECTION
 
 Two structures are \defn{isomorphic} provided there are homomorphisms from each to the
-other that compose to the identity. In the \agdaalgebras library we codify this notion as
-well as some of its obvious consequences, as a record type called \ar{\au{}≅\au{}}.
+other that compose to the identity. We codify this notion as
+well as some of its obvious consequences, as the type \ar{\au{}≅\au{}}.
 \ifshort
-Here we display only the essential part of the defition, but \seemedium.
+We also have that \afld{to} and \afld{from} are bijections
+and that \ar{\au{}≅\au{}} is an equivalence relation~\seemedium.
 \else
 Note that the definition, shown below, includes a proof of the fact that the maps \afld{to} and
 \afld{from} are bijective, which makes this fact more accessible.
@@ -1008,13 +1005,9 @@ It is easy to prove that \ar{\au{}≅\au{}} is an equivalence relation, as follo
 \fi
 
 \paragraph*{Lift-Alg is an algebraic invariant}
-The \af{Lift-Alg} operation neatly resolves the technical problem arising from the
-noncumulativity of \agda's universe hierarchy. It does so without changing the algebraic
-semantics because isomorphism classes of algebras are closed under \af{Lift-Alg}.
-\ifshort
-The \agdaalgebras library formalizes this fact by proving the following typing judgment.
-
-\else
+The \af{Lift-Alg} operation neatly resolves the technical problem of
+non-cumulativity because isomorphism classes of algebras are closed under \af{Lift-Alg}.
+\ifshort\else
 
 \begin{code}
 
@@ -1036,10 +1029,10 @@ Lift-≅ = ≅-trans Lift-≅ˡ Lift-≅ʳ
 \fi
 
 \paragraph*{Homomorphic images}
-Here we describe what we have found to be the most useful
-way to represent the class of \emph{homomorphic images} of an algebra in \mltt. For future
-reference, we also record the fact that an algebra is its own homomorphic
-image. (Here and in \agdaalgebras we use the shorthand \af{ov}~\ab{α} := \ab{𝒪}
+We have found that the most useful way to represent \emph{homomorphic images}
+is as surjective homomorphisms. We also record that the identity homomorphism
+induces that an algebra is its own homomorphic
+image. (We use the shorthand \af{ov}~\ab{α} := \ab{𝒪}
 \ap{⊔} \ab{𝒱} \ap{⊔} \ab{α}, for any level \ab{α}.)
 
 \ifshort\else
@@ -1076,10 +1069,9 @@ and \ab p is a proof that there exists a homomorphism from \ab{𝑨} onto \ab{�
 \subsection{Subalgebras}
 \label{subalgebras}
 Given \ab{𝑆}-algebras \ab{𝑨} and \ab{𝑩}, we say that \ab{𝑨} is a \defn{subalgebra} of
-\ab{𝑨} and write \ab{𝑨}~\aof{≤}~\ab{𝑩} just in case \ab{𝑨} can be \emph{homomorphically
-embedded} in \ab{𝑩}; in other terms, \ab{𝑨}~\aof{≤}~\ab{𝑩} iff there exists an injective
-homomorphism from \ab{𝑨} to \ab{𝑩}. The following definition codifies the \defn{binary
-subalgebra relation}, \aof{\au{}≤\au{}}, on the class of \ab{𝑆}-algebras.
+\ab{𝑨}, \ab{𝑨}~\aof{≤}~\ab{𝑩} when \ab{𝑨} can be \emph{homomorphically
+embedded} in \ab{𝑩}; in other terms, if and only if there exists an injective
+homomorphism from \ab{𝑨} to \ab{𝑩}.
 
 \begin{code}
 
@@ -1087,44 +1079,24 @@ _≤_ : Algebra α ρᵃ → Algebra β ρᵇ → Type _
 𝑨 ≤ 𝑩 = Σ[ h ∈ hom 𝑨 𝑩 ] IsInjective ∣ h ∣
 
 \end{code}
-Obviously the subalgebra relation is reflexive by the identity monomorphism; it is also
+The subalgebra relation is reflexive by the identity monomorphism, and
 transitive since composition of monomorphisms is a monomorphism.
-\ifshort
-Here we merely give the formal statements of these assertions, omitting the easy proofs,
-but \seeshort for details.
-\else\fi
-
 \begin{code}
 
 ≤-reflexive   :  {𝑨 : Algebra α ρᵃ} → 𝑨 ≤ 𝑨
-\end{code}
-\ifshort
-\vskip2mm
-\else
-\begin{code}
 ≤-reflexive {𝑨 = 𝑨} = 𝒾𝒹 , id
-\end{code}
-\fi
-\begin{code}
+
 ≤-transitive  :  {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}{𝑪 : Algebra γ ρᶜ}
  →               𝑨 ≤ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
-\end{code}
-
-\ifshort
-\vskip2mm
-\else
-\begin{code}
 ≤-transitive ( f , finj ) ( g , ginj ) = (∘-hom f g ) , ∘-IsInjective ∣ f ∣ ∣ g ∣ finj ginj
+
 \end{code}
-\fi
 \noindent If
 \ab{𝒜} : \ab I → \af{Algebra} \ab{α} \ab{ρᵃ},
 \ab{ℬ} : \ab I → \af{Algebra} \ab{β} \ab{ρᵇ} (families of \ab{𝑆}-algebras) and
 \ab{ℬ} \ab i \af{≤} \ab{𝒜} \ab i for all \ab i~:~\ab I, then \af{⨅} \ab{ℬ} is a subalgebra
 of \af{⨅} \ab{𝒜}.
-\ifshort
-Here is how we express this fact in \agda.
-\else
+\ifshort\else
 \begin{code}
 module _ {ι : Level} {I : Type ι}{𝒜 : I → Algebra α ρᵃ}{ℬ : I → Algebra β ρᵇ} where
 \end{code}
@@ -1140,7 +1112,7 @@ module _ {ι : Level} {I : Type ι}{𝒜 : I → Algebra α ρᵃ}{ℬ : I → A
  ⨅-≤ B≤A = (hfunc , hhom) , hM
   where
   hi : ∀ i → hom (ℬ i) (𝒜 i)
-  hi i = ∣ B≤A i ∣
+  hi = fst ∘ B≤A
   hfunc : 𝔻[ ⨅ ℬ ] ⟶ 𝔻[ ⨅ 𝒜 ]
   (hfunc ⟨$⟩ x) i = ∣ hi i ∣ ⟨$⟩ x i
   cong hfunc = λ xy i → cong ∣ hi i ∣ (xy i)
@@ -1152,12 +1124,12 @@ module _ {ι : Level} {I : Type ι}{𝒜 : I → Algebra α ρᵃ}{ℬ : I → A
 \end{code}
 \fi
 
-We conclude this brief subsection on subalgebras
+Let us
 \ifshort
-by mentioning the function \af{mon→≤}, which we apply once below; it merely converts a monomorphism into a pair in \aof{≤}.
+mention the function \af{mon→≤} which upgrades a monomorphism to a subalgebra witness.
 \else
-with two easy facts
-that will be useful later. The first merely converts a monomorphism into a pair in the subalgebra relation
+close with two easy facts
+that will be useful later. The first converts a monomorphism to a subalgebra witness
 while the second is an algebraic invariance property of \aof{≤}.
 
 \begin{code}
@@ -1176,7 +1148,7 @@ mon→≤ {𝑨 = 𝑨}{𝑩} x = mon→intohom 𝑨 𝑩 x
 \subsection{Terms}
 \label{terms}
 Fix a signature \ab{𝑆} and let \ab X denote an arbitrary nonempty collection of variable
-symbols. Such a collection of variable symbols is called a \defn{context}.
+symbols. Such a collection is called a \defn{context}.
 Assume the symbols in \ab X are distinct from the operation symbols of
 \ab{𝑆}, that is \ab X \aof{∩} \aof{∣} \ab{𝑆} \aof{∣} = ∅.
 A \defn{word} in the language of \ab{𝑆} is a finite sequence of members of \ab X \aof{∪}
@@ -1193,10 +1165,11 @@ such that \ab f : \aof{∣~\ab{𝑆}~∣} and \ab t : \aof{∥~\ab{𝑆}~∥} \a
 An \ab{𝑆}-\defn{term} is a term in the language of \ab{𝑆} and the collection of all
 \ab{𝑆}-\defn{terms} in the context \ab X is given by \Term{X} := \aof{⋃ₙ} \ab{𝑇ₙ}.
 
-As even its informal definition of \Term{X} is recursive, it should come as no surprise
-that the semantics of terms can be usefully represented in type theory as an inductive
-type. Indeed, here is such a representation.
-
+In type theory, this translates to two cases: variable injection and applying a
+algebra symbol to the correct ``set'' of terms, according to the symbol's arity.
+In other words, this represents each term as a tree with an operation symbol at each
+\aic{node} and a variable symbol at each leaf \aic{ℊ}; hence the constructor names
+(\aic{ℊ} for ``generator'' and \aic{node} for ``node'').
 \begin{code}
 
 data Term (X : Type χ ) : Type (ov χ)  where
@@ -1204,22 +1177,10 @@ data Term (X : Type χ ) : Type (ov χ)  where
  node : (f : ∣ 𝑆 ∣)(t : ∥ 𝑆 ∥ f → Term X) → Term X
 
 \end{code}
-This basic inductive type represents each term as a tree with an operation symbol at each
-\aic{node} and a variable symbol at each leaf \aic{ℊ}%
-\ifshort
-.
-\else
-; hence the constructor names
-(\aic{ℊ} for ``generator'' and \aic{node} for ``node'').
-\fi
 
 \paragraph*{The term algebra}
-We enrich the \ad{Term} type with
-an inductive type \ad{\au{}≃\au{}} representing equality of terms, then we roll up
-into a setoid the types \ad{Term} and \ad{\au{}≃\au{}} along with a proof that
-\ad{\au{}≃\au{}} is an equivalence relation. Ultimately we use this setoid of \ab{𝑆}-terms
-as the domain of an algebra, called the \emph{term algebra in the signature} \ab{𝑆}.
-Here is the equality type on terms.
+We enrich the \ad{Term} type to a setoid of  \ab{𝑆}-terms, which will ultimately
+be used as the domain of an algebra, called the \emph{term algebra in the signature} \ab{𝑆}.
 
 \ifshort\else
 \begin{code}
@@ -1234,9 +1195,9 @@ module _ {X : Type χ } where
   gnl : ∀ {f}{s t : ∥ 𝑆 ∥ f → Term X} → (∀ i → (s i) ≃ (t i)) → (node f s) ≃ (node f t)
 
 \end{code}
-It's easy to show that this is an equivalence relation on terms%
+It is straightforward to show that this is an equivalence relation on terms%
 \ifshort
-; the proof is called \af{≃-isEquiv} in the \agdaalgebras library.
+.
 \else
 , as follows.
 
@@ -1264,13 +1225,12 @@ We now define, for a given signature \ab{𝑆} and context \ab X,
 %\aof{∣~\ab{𝑆}~∣} is nonempty), then
 the algebraic structure \T{X}, known as the \defn{term algebra in} \ab{𝑆} \defn{over} \ab
 X.  Terms are viewed as acting on other terms, so both the elements of the domain of \T{X}
-and its basic operations are the terms themselves. That is, for each operation symbol \ab
+and its basic operations are terms themselves. That is, for each operation symbol \ab
 f : \aof{∣~\ab{𝑆}~∣}, we denote by \ab f~\aof{̂}~\T{X} the operation on \Term{X} that maps
 each tuple of terms, say, \ab t : \aof{∥~\ab{𝑆}~∥} \ab f \as{→} \Term{X}, to the formal
 term \ab f \ab t.
 %We let \T{X} denote the term algebra in \ab{𝑆} over \ab X; it has universe \Term{X} and
 %operations \ab f \aof{̂} \T{X}, one for each symbol \ab f in \aof{∣~\ab{𝑆}~∣}.
-We codify these notions in \agda as follows.
 
 \begin{code}
 
@@ -1284,9 +1244,7 @@ cong (Algebra.Interp (𝑻 X)) (≡.refl , ss≃ts) = gnl ss≃ts
 \end{code}
 
 \paragraph*{Substitution, environments and interpretation of terms}
-In this section, we formalize the notions of \emph{substitution}, \emph{environment}, and
-\emph{interpretation of terms} in an algebra. The approach to formalizing these concepts,
-and the \agda code presented in this subsection, is based on similar code developed by
+The approach to formalizing these three concepts is based on similar code developed by
 Andreas Abel to formalize Birkhoff's completeness theorem~\cite{Abel:2021}.
 
 \ifshort\else
@@ -1295,13 +1253,10 @@ Recall that the domain of an algebra \ab{𝑨} is a setoid, which we denote by
 and whose equivalence relation represents equality of elements in \af{𝕌[~\ab{𝑨}~]}.
 \fi
 
-%Before defining the \af{Env} function (which will depend on a specific algebra) we first
-The function \af{Sub} performs substitution from one context to
+\af{Sub} performs substitution from one context to
 another.  Specifically, if \ab X and \ab Y are contexts, then \af{Sub} \ab X \ab Y
 assigns a term in \ab X to each symbol in \ab Y.
-The definition of \af{Sub} is a slight modification of the one given by Andreas Abel
-(\textit{op.~cit.}), as is the recursive definition of \af{[~\ab{σ}~]} \ab t,
-which denotes a substitution applied to a term.
+\af{[~\ab{σ}~]} \ab t denotes a substitution applied to a term.
 
 \begin{code}
 
@@ -1315,12 +1270,8 @@ Sub X Y = (y : Y) → Term X
 \end{code}
 
 Fix a signature \ab{𝑆}, a context \ab X, and an \ab{𝑆}-algebra \ab{𝑨}.
-An \defn{environment} for these data consists of the function type \ab X \as{→}
-\af{𝕌[~\ab{𝑨}~]} along with an equality on this type.
-The function \af{Env} manifests this notion by taking an \ab{𝑆}-algebra \ab{𝑨} and a
-context \ab{X} and returning a setoid whose \afld{Carrier} is the type
-\ab X~\as{→}~\af{𝕌[~\ab{𝑨}~]} and whose equivalence relation
-is pointwise equality of functions in \ab X \as{→} \af{𝕌[~\ab{𝑨}~]}.
+An \defn{environment} \ab{𝑨} for \ab X is an \ab X indexed family of setoids,
+where the equivalence is taken pointwise.
 
 \begin{code}
 
@@ -1334,13 +1285,10 @@ module Environment (𝑨 : Algebra α ℓ) where
                                            ; trans  = λ g h x  → trans (g x)(h x) }}
 
 \end{code}
-\ifshort\else
-Notice that this definition, as well as the next, are relative to a certain fixed algebra,
-so we put them inside a submodule called \am{Environment}. This allows us to load the
-submodule and associate its definitions with a number of different algebras simultaneously.
-\fi
+As the above definition, as well as the next, are relative a fixed algebra, we use
+a submodule to succinctly capture this commonality in the definitions.
 
-Next, the recursive function \af{⟦\au{}⟧} denotes \defn{interpretation} of
+The function \af{⟦\au{}⟧} then denotes the \defn{interpretation} of
 a term in a given algebra, \emph{evaluated} in a given environment.
 
 \begin{code}
@@ -1353,12 +1301,12 @@ a term in a given algebra, \emph{evaluated} in a given environment.
 
 \end{code}
 
-Two terms interpreted in \ab{𝑨} are proclaimed \defn{equal} if they are equal for all
+Two terms are proclaimed \defn{equal} if they are equal for all
 environments.  This equivalence of terms%
 \ifshort\else
 , and proof that it is an equivalence relation,
 \fi
-~is formalized in \agda as follows.
+~is as follows.
 
 \begin{code}
 
@@ -1369,8 +1317,8 @@ environments.  This equivalence of terms%
 \ifshort
 Proof that \af{Equal} is an equivalence relation, and that the implication \ab
 s~\af{≃}~\ab t \as{→} \af{Equal} \ab s \ab t holds for all terms \ab s and \ab t, is
-trivial (\seeshort for details).
-We denote these facts by \af{EqualIsEquiv} and \af{≃→Equal} in the sequel.
+straightforward (\seemedium).
+We denote these by \af{EqualIsEquiv} and \af{≃→Equal} in the sequel.
 \else
 \begin{code}
  ≃→Equal : {X : Type χ}(s t : Term X) → s ≃ t → Equal s t
@@ -1386,9 +1334,10 @@ We denote these facts by \af{EqualIsEquiv} and \af{≃→Equal} in the sequel.
 \end{code}
 \fi
 
-The next lemma says that applying a substitution \ab{σ} to a term \ab{t}
-and evaluating the result in the environment \ab{ρ} has the same effect as evaluating
-\ab{t} the a new environment, specifically, in the environment \as{λ} \ab x \as{→} \aof{⟦~\ab{σ}~\ab{x}~⟧}~\aofld{⟨\$⟩}
+We can then prove that substitution and evaluation commute.  More precisely,
+applying substitution \ab{σ} to a term \ab{t}
+and evaluating the result in environment \ab{ρ} has the same effect as evaluating
+\ab{t} in the environment \as{λ} \ab x \as{→} \aof{⟦~\ab{σ}~\ab{x}~⟧}~\aofld{⟨\$⟩}
 \ab{ρ} (see~\cite{Abel:2021} or~\cite[Lem.~3.3.11]{Mitchell:1996}).
 
 \begin{code}
@@ -1399,18 +1348,13 @@ and evaluating the result in the environment \ab{ρ} has the same effect as eval
  substitution (node f ts)  σ ρ = cong (Interp 𝑨)(≡.refl , λ i → substitution (ts i) σ ρ)
 
 \end{code}
-This concludes the definition of the \am{Environment} module based on~\cite{Abel:2021}.
 
 \ifshort\else
 \paragraph*{Compatibility of terms}
 \fi
-We will need two more facts about term operations.  The first, called
-\af{comm-hom-term}, asserts that every term commutes with every homomorphism.  The second,
-\af{interp-prod}, shows how to express the interpretation of a term in a product algebra.
-\ifshort
-We omit the formalization of these facts, but \seeshort for details.
-\else
-
+We will need two more facts about term operations:
+every term commutes with every homomorphism (\af{comm-hom-term}), and
+how to express the interpretation of a term in a product algebra (\af{interp-prod}).
 \begin{code}
 
 module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}(hh : hom 𝑨 𝑩) where
@@ -1433,20 +1377,17 @@ module _ {X : Type χ}{ι : Level} {I : Type ι} (𝒜 : I → Algebra α ρᵃ)
  interp-prod (ℊ x)       = λ ρ i  → ≃→Equal (𝒜 i) (ℊ x) (ℊ x) ≃-isRefl λ _ → (ρ x) i
  interp-prod (node f t)  = λ ρ    → cong (Interp (⨅ 𝒜)) ( ≡.refl , λ j k → interp-prod (t j) ρ k )
 \end{code}
-\fi
 
 \section{Equational Logic}
 \label{equational-logic}
 
 \paragraph*{Term identities, equational theories, and the ⊧ relation}
 Given a signature \ab{𝑆} and a context \ab X, an \ab{𝑆}-\defn{term equation} or \ab{𝑆}-\defn{term identity}
-is an ordered pair (\ab p , \ab q) of 𝑆-terms. For instance, if the context is \ab X :
-\ap{Type} \ab{χ}, then a term equation is a pair inhabiting the Cartesian product type
-\ad{Term}~\ab{X} \aof{×} \ad{Term}~\ab{X}. Such pairs of terms are also denoted by \ab p \af{≈} \ab
-q and are often simply called equations or identities, especially when the signature \ab{𝑆} is obvious.
+is an ordered pair (\ab p , \ab q) of 𝑆-terms, also denoted by \ab p \af{≈} \ab q.
+They are often simply called equations or identities, especially when the signature \ab{𝑆} is clear.
 
 We define an \defn{equational theory} (or \defn{algebraic theory}) to be a pair \ab{T} =
-(\ab{𝑆} , \ab{ℰᵀ}) consisting of a signature \ab{𝑆} and a collection \ab{ℰᵀ} of
+(\ab{𝑆} , \ab{ℰᵀ}) of a signature \ab{𝑆} and a collection \ab{ℰᵀ} of
 \ab{𝑆}-term equations. Some authors reserve the term \defn{theory} for
 a \emph{deductively closed} set of equations, that is, a set of equations that is closed
 under \emph{entailment} (defined below).
@@ -1482,14 +1423,17 @@ We represent a set of identities as a predicate over pairs of
 terms, say, \ab{ℰ} : \af{Pred}(\ad{Term} \ab{X} \af{×} \ad{Term} \ab{X})~\au{}  and we denote by
 \ab{𝑨}~\aof{⊨}~\ab{ℰ} the assertion that the algebra \ab{𝑨} models \ab{p}~\af{≈}~\ab{q}
 for all (\ab{p} , \ab{q}) \af{∈} \ab{ℰ}.\footnote{Notice that \af{⊨} is
-a stretched version of the models symbol, \af{⊧};
-\ifshort\else
-this makes it possible for \agda to distinguish and parse expressions involving the types
+a stretched version of the models symbol, \af{⊧}%
+\ifshort
+.
+\else
+; this makes it possible for \agda to distinguish and parse expressions involving the types
 \af{\au{}⊨\au{}} and \af{\au{}⊧\au{}≈\au{}}.
-\fi
 In Emacs \texttt{agda2-mode}, the symbol \af{⊨} is produced by typing
 \textbackslash\textbar{}=, while \af{⊧} is
-produced with \textbackslash{}models.}
+produced with \textbackslash{}models.
+\fi
+}
 
 \begin{code}
 
@@ -1502,7 +1446,7 @@ If \ab{𝒦} is a class of structures and \ab{ℰ} a set of term identities, the
 term equations modeled by \ab{𝒦} is denoted by \af{Th}~\ab{𝒦} and is called the
 \defn{equational theory} of \ab{𝒦}, while the class of structures modeling \ab{ℰ} is
 denoted by \af{Mod}~\ab{ℰ} and is called the \defn{equational class axiomatized} by
-\ab{ℰ}. We formalize these concepts in \agda with the following types.
+\ab{ℰ}.
 
 \begin{code}
 
@@ -1519,9 +1463,8 @@ If \ab{ℰ} is a set of \ab{𝑆}-term equations and \ab{p} and \ab{q} are \ab{�
 we say that \ab{ℰ} \defn{entails} the equation \ab{p}~\aof{≈}~\ab{q}, and we write
 \ab{ℰ}~\ad{⊢}~\ab{p}~\ad{≈}~\ab{q}, just in case every model of \ab{ℰ} also models
 \ab{p}~\aof{≈}~\ab{q}.
-We represent entailment in type theory using an inductive type that is similar to
-the one defined by Abel in~\cite{Abel:2021}.  We call this the \defn{entailment type}
-and define it as follows.
+We model our definition of \defn{entailment type} by the one defined by Abel
+in~\cite{Abel:2021}.
 
 \begin{code}
 
