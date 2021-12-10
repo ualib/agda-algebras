@@ -99,8 +99,7 @@ See the \href{https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.h
 \end{itemize}
 \fi
 
-We make use of a variety of definitions that can be found in Agda's standard library.
-In more details,
+We make use of a variety of definitions that can be found in Agda's standard library; specifically,
 \begin{code}[hide]
 {-# OPTIONS --without-K --exact-split --safe #-}
 \end{code}
@@ -129,7 +128,7 @@ open import  Relation.Unary                                  using ( Pred ; _⊆
 open import  Agda.Primitive  renaming ( Set    to Type    )  using ( _⊔_ ; lsuc                    )
 open import  Data.Product    renaming ( proj₁  to fst     )
                              renaming ( proj₂  to snd     )  using ( _×_ ; _,_ ; Σ ; Σ-syntax      )
-open import  Function        renaming ( Func   to _⟶_    )  using ( Injection ; Surjection        )
+open import  Function        renaming ( Func   to _⟶_     )  using ( Injection ; Surjection        )
 open         _⟶_             renaming ( f      to _⟨$⟩_   )  using ( cong                          )
 open         Setoid          renaming ( refl   to reflˢ   )
                              renaming ( sym    to symˢ    )
@@ -226,11 +225,13 @@ We frequently need to deal with the \defn{inverse} of a functions. This is most 
 \emph{image} of the function's domain.
 
 \begin{code}
+
 module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
  open Setoid 𝑩 using ( _≈_ ; sym ) renaming ( Carrier to B )
 
  data Image_∋_ (f : 𝑨 ⟶ 𝑩) : B → Type (α ⊔ β ⊔ ρᵇ) where
   eq : {b : B} → ∀ a → b ≈ f ⟨$⟩ a → Image f ∋ b
+
 \end{code}
 
 An inhabitant of \aod{Image} \ab f \aod{∋} \ab b is a point \ab a
@@ -242,6 +243,7 @@ belongs to the image of \ab f is always accompanied by a concrete witness \AgdaT
 that our witness really is an inverse.
 
 \begin{code}
+
  Inv : (f : 𝑨 ⟶ 𝑩){b : B} → Image f ∋ b → Carrier 𝑨
  Inv _ (eq a _) = a
 
@@ -322,14 +324,15 @@ convenient to define the kernel as an inhabitant of a (unary) predicate over \ab
 the function's domain, as follows.
 
 \begin{code}
+
 kernel : {A : Type α}{B : Type β} → Rel B ρ → (A → B) → Pred (A × A) ρ
 kernel _≈_ f (x , y) = f x ≈ f y
-\end{code}
 
+\end{code}
 The kernel of a \emph{setoid} function \ab f \as : \ab{𝐴} \aor{⟶} \ab{𝐵} is
 defined similarly.
-\ifshort\else
 
+\ifshort\else
 \begin{code}
 module _ {𝐴 : Setoid α ρᵃ}{𝐵 : Setoid β ρᵇ} where
  open Setoid 𝐴 using () renaming ( Carrier to A )
@@ -382,7 +385,7 @@ is a pair \ab{𝑆} = \AgdaPair{F}{ρ} where \ab{F} is a collection of
 \defn{operation symbols} and \ab{ρ} : \ab{F} \as{→} \ab{N} is an \defn{arity function}
 which maps each operation symbol to its arity. Here, \ab{N} denotes the \emph{arity type}.
 Heuristically, the arity \ab{ρ} \ab{f} of an operation symbol \ab{f} \as{∈} \ab{F} may be
-thought of as the number of arguments that \ab{f} takes as ``input.''. This can be
+thought of as the number of arguments that \ab{f} takes as ``input.'' This can be
 represented as follows:
 
 \begin{center}
@@ -418,7 +421,8 @@ represented as follows:
 
 Recall that we defined special syntax for the first and second
 projections so that if
-\ab{𝑆} \as{:} \af{Signature} \ab{𝓞} \ab{𝓥} is a signature, then
+\ab{𝑆} %\as{:} \af{Signature} \ab{𝓞} \ab{𝓥}
+is a signature, then
 \aof{∣} \ab{𝑆} \aof{∣} denotes the set of operation symbols and \aof{∥} \ab{𝑆} \aof{∥} denotes the arity function.
 Thus, if \ab{f} \as{:} \aof{∣} \ab{𝑆} \aof{∣} is an operation symbol in the
 signature \ab{𝑆}, then \aof{∥} \ab{𝑆} \aof{∥} \ab{f} is the arity of \ab{f}.
@@ -440,6 +444,7 @@ hypothesis \ab f \aod{≡} \ab g is used, as we see in the definition of \af{EqA
 from Andreas Abel's development~\cite{Abel:2021}).
 
 \begin{code}
+
 EqArgs :  {𝑆 : Signature 𝓞 𝓥}{ξ : Setoid α ρᵃ}
  →        ∀ {f g} → f ≡ g → (∥ 𝑆 ∥ f → Carrier ξ) → (∥ 𝑆 ∥ g → Carrier ξ) → Type (𝓥 ⊔ ρᵃ)
 EqArgs {ξ = ξ} ≡.refl u v = ∀ i → u i ≈ v i where open Setoid ξ using ( _≈_ )
@@ -461,7 +466,6 @@ _≈ˢ_     (⟨ 𝑆 ⟩ ξ)(f , u)(g , v)  = Σ[ eqv ∈ f ≡ g ] EqArgs{ξ =
 reflᵉ   (isEquivalence (⟨ 𝑆 ⟩ ξ))                           = ≡.refl , λ i → reflˢ   ξ
 symᵉ    (isEquivalence (⟨ 𝑆 ⟩ ξ)) (≡.refl , g)              = ≡.refl , λ i → symˢ    ξ (g i)
 transᵉ  (isEquivalence (⟨ 𝑆 ⟩ ξ)) (≡.refl , g)(≡.refl , h)  = ≡.refl , λ i → transˢ  ξ (g i) (h i)
-
 \end{code}
 
 %% -----------------------------------------------------------------------------
@@ -634,7 +638,9 @@ we define the interpretation of \ab f in \af{⨅}~\ab{𝒜} by\\[-2mm]
 (\ab{f}~\af{̂}~\af{⨅}~\ab{𝒜}) \ab a := \as{λ}~(\ab i~:~\ab I)~\as{→}
 (\ab{f}~\af{̂}~\ab{𝒜}~\ab i)(\ab{a}~\ab i).\\[8pt]
 This can be formalized as follows.
+
 \begin{code}
+
 module _ {ι : Level}{I : Type ι } where
  ⨅ : (𝒜 : I → Algebra α ρᵃ) → Algebra (α ⊔ ι) (ρᵃ ⊔ ι)
  Domain (⨅ 𝒜) =
@@ -646,6 +652,7 @@ module _ {ι : Level}{I : Type ι } where
                     ; trans  = λ x y i →  transᵉ  (isEquivalence 𝔻[ 𝒜 i ])(x i)(y i) }}
  Interp (⨅ 𝒜) ⟨$⟩ (f , a) = λ i → (f ̂ (𝒜 i)) (flip a i)
  cong (Interp (⨅ 𝒜)) (≡.refl , f=g ) = λ i → cong (Interp (𝒜 i)) (≡.refl , flip f=g i )
+
 \end{code}
 \noindent where we can see that the \af{Carrier} is indeed the (dependent) product
 of the carriers. The rest of the definitions are the ``pointwise'' versions of the
@@ -1174,7 +1181,6 @@ In other words, this represents each term as a tree with an operation symbol at 
 data Term (X : Type χ ) : Type (ov χ)  where
  ℊ : X → Term X
  node : (f : ∣ 𝑆 ∣)(t : ∥ 𝑆 ∥ f → Term X) → Term X
-
 \end{code}
 
 \paragraph*{The term algebra}
@@ -1547,7 +1553,7 @@ homomorphic images, subalgebras, and arbitrary products.  To represent varieties
 we define closure operators \af H, \af S, and \af P that are composable; we
 then define a type \af V which represents closure under all three.
 Thus, if \ab{𝒦} is a class of \ab{𝑆}-algebras, then
-\af V \ab{𝒦} := \af H (\af S (\af P \ab{𝒦})), and \ab{𝒦} is a variety iff \af V \ab{𝒦} \aof{⊆} \ab{𝒦}.
+\af V \ab{𝒦} := \af H (\af S (\af P \ab{𝒦})), and \ab{𝒦} is a variety if and only if \af V \ab{𝒦} \aof{⊆} \ab{𝒦}.
 \ifshort\else
 
 We now define the type \af H to represent classes of algebras that include all homomorphic images
@@ -1708,7 +1714,7 @@ the invariance lemma \af{⊧-S-invar}; the converse, which we call
 \end{code}
 Finally, we have analogous pairs of implications for \af P and \af V,
 \ifshort
-called P-id1 and V-id1.
+  called \af{P-id1}, \af{P-id2}, \af{V-id1} and \af{V-id2}, but we omit the formalizations (\seeshort).
 \else
 In each case, we will only need the first implication, so we omit the others from this presentation.
 
