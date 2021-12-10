@@ -99,7 +99,7 @@ See the \href{https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.h
 \end{itemize}
 \fi
 
-We make use of a variety of standard definitions that can be found in Agda's standard library.
+We make use of a variety of definitions that can be found in Agda's standard library.
 In more details,
 \begin{code}[hide]
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -175,7 +175,7 @@ module _ {A : Type α }{B : A → Type β} where
 
 %% -----------------------------------------------------------------------------
 \subsection{Setoids}\label{setoids}
-A \defn{setoid} is a pair of a type \ab A and
+A \defn{setoid} is a pair consisting of a type \ab A and
 an equivalence relation \af{≈} on \ab A.  They are useful to represent a
 carrier with a ``local'' notion of equivalence, instead of always relying on
 the global one as is usually done in set theory. Dealing with setoids has
