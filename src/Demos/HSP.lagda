@@ -63,11 +63,11 @@ For the most part, we assume that the reader is familiar with \mltt, and can dec
 
 \subsection{Logical foundations}
 
-To best emulate \mltt, we use some \agda \emph{pragmas}.
+To best emulate \mltt, we use
 \begin{code}[inline]
 {-# OPTIONS --without-K --exact-split --safe #-}
 \end{code}
-.
+; these options affect the logical foundations with respect to which our code is type-checked.
 \ifshort
 Briefly,
 \AgdaPragma{without-K} disables
@@ -94,7 +94,7 @@ See the \href{https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.h
 \end{itemize}
 \fi
 
-We make use of a variety of definitions that can be found in Agda's standard library; specifically,
+We also make use of a variety of definitions that can be found in Agda's standard library; specifically,
 \begin{code}[hide]
 {-# OPTIONS --without-K --exact-split --safe #-}
 \end{code}
@@ -148,8 +148,7 @@ private variable
 
 \end{code}
 \fi
-Note that the above imports include some adjustments to ``standard \agda'' syntax to suit our own taste.
-In particular, the following conventions used throughout the \agdaalgebras library and this paper:
+The above imports include some adjustments to ``standard \agda'' syntax; in particular,
 we use \AgdaPrimitive{Type} in place of \AgdaPrimitive{Set}, the infix long arrow symbol,
 \AgdaRecord{\AgdaUnderscore{}⟶\AgdaUnderscore{}}, instead of \AgdaRecord{Func} (the type of ``setoid functions'' discussed in §\ref{setoid-functions} below), and the symbol \aofld{\au{}⟨\$⟩\au{}} in place of \afld{f} (application of the map of a setoid function); we use
 \AgdaField{fst} and \AgdaField{snd}, and sometimes \AgdaOperator{\AgdaFunction{∣\AgdaUnderscore{}∣}} and
@@ -924,7 +923,7 @@ module _ {𝑨 : Algebra α ρᵃ}(𝑩 : Algebra β ρᵇ){𝑪 : Algebra γ ρ
 \fi      %%% END LONG VERSION ONLY SECTION
 
 Two structures are \defn{isomorphic} provided there are homomorphisms from each to the
-other that compose to the identity. We codify this notion as
+other that compose to the identity. We codify this notion, as
 well as some of its obvious consequences, as the type \ar{\au{}≅\au{}}.
 \ifshort
 We also have that \afld{to} and \afld{from} are bijections
@@ -1030,9 +1029,8 @@ Lift-≅ = ≅-trans Lift-≅ˡ Lift-≅ʳ
 
 \paragraph*{Homomorphic images}
 We have found that the most useful way to represent \emph{homomorphic images}
-is as surjective homomorphisms. We also record that the identity homomorphism
-induces that an algebra is its own homomorphic
-image. (We use the shorthand \af{ov}~\ab{α} := \ab{𝒪}
+is as surjective hom. We also record the fact that an algebra is its own homomorphic
+image via the identity hom. (We use the shorthand \af{ov}~\ab{α} := \ab{𝒪}
 \ap{⊔} \ab{𝒱} \ap{⊔} \ab{α}, for any level \ab{α}.)
 
 \ifshort\else
@@ -1062,16 +1060,16 @@ IdHomImage {α = α}{𝑨 = 𝑨} = 𝒾𝒹 , λ {y} → Image_∋_.eq y refl
 to describe the semantics of the Sigma type appearing in the definition of \af{HomImages}.
 If \ab{𝑨} : \af{Algebra} \ab{α} \ab{ρᵃ} is an \ab{𝑆}-algebra, then \af{HomImages} \ab{𝑨}
 denotes the type of pairs (\ab{𝑩} \aic{,} \ab p) such that \ab{𝑩} : \ar{Algebra} \ab{β} \ab{ρᵇ}
-and \ab p is a proof that there exists a homomorphism from \ab{𝑨} onto \ab{𝑩}.
+and \ab p is a proof that there exists a hom from \ab{𝑨} onto \ab{𝑩}.
 \fi      %%% END LONG VERSION ONLY SECTION
 
 %% -------------------------------------------------------------------------------------
 \subsection{Subalgebras}
 \label{subalgebras}
 Given \ab{𝑆}-algebras \ab{𝑨} and \ab{𝑩}, we say that \ab{𝑨} is a \defn{subalgebra} of
-\ab{𝑨}, \ab{𝑨}~\aof{≤}~\ab{𝑩} when \ab{𝑨} can be \emph{homomorphically
-embedded} in \ab{𝑩}; in other terms, if and only if there exists an injective
-homomorphism from \ab{𝑨} to \ab{𝑩}.
+\ab{𝑨}, and we write \ab{𝑨}~\aof{≤}~\ab{𝑩}, just in case \ab{𝑨} can be \emph{homomorphically
+embedded} in \ab{𝑩}; in other terms, \ab{𝑨}~\aof{≤}~\ab{𝑩} if and only if there exists an injective
+hom from \ab{𝑨} to \ab{𝑩}.
 
 \begin{code}
 
@@ -1095,8 +1093,12 @@ transitive since composition of monomorphisms is a monomorphism.
 \ab{𝒜} : \ab I → \af{Algebra} \ab{α} \ab{ρᵃ},
 \ab{ℬ} : \ab I → \af{Algebra} \ab{β} \ab{ρᵇ} (families of \ab{𝑆}-algebras) and
 \ab{ℬ} \ab i \af{≤} \ab{𝒜} \ab i for all \ab i~:~\ab I, then \af{⨅} \ab{ℬ} is a subalgebra
-of \af{⨅} \ab{𝒜}.
-\ifshort\else
+of \af{⨅} \ab{𝒜}%
+\ifshort
+; that is,
+\else
+.
+
 \begin{code}
 module _ {ι : Level} {I : Type ι}{𝒜 : I → Algebra α ρᵃ}{ℬ : I → Algebra β ρᵇ} where
 \end{code}
@@ -1124,7 +1126,7 @@ module _ {ι : Level} {I : Type ι}{𝒜 : I → Algebra α ρᵃ}{ℬ : I → A
 \end{code}
 \fi
 
-Let us
+Finally, we
 \ifshort
 mention the function \af{mon→≤} which upgrades a monomorphism to a subalgebra witness.
 \else
