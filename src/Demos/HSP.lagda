@@ -10,7 +10,7 @@ variety theorem} (also known as the \emph{HSP theorem})~\cite{Birkhoff:1935}.
 To the best of our knowledge, this constitutes the first machine-verified proof of Birkoff's
 celebrated 1935 result.
 
-The proof presented here is the second proof. The first proof%
+Presented here is our second proof of the HSP theorem. The first proof%
 \footnote{See the
  \href{https://github.com/ualib/ualib.github.io/blob/71f173858701398d56224dd79d152c380c0c2b5e/src/lagda/UALib/Birkhoff.lagda}{Birkhoff}
  module of the
@@ -19,12 +19,11 @@ The proof presented here is the second proof. The first proof%
  \href{https://github.com/ualib/ualib.github.io}{ualib/ualib.gitlab.io}
  repository~\cite{ualib_v1.0.0}.}
 suffered from a few flaws that raised two concerns. First, it was not clear whether the
-proof was fully constructive (because of its use of univalence in \mltt). Second,
+proof was fully constructive (because of its use of function extensionality in \mltt). Second,
 it was shown that if one were to take the type
 \ab{X}---which we use to represent an arbitrary collection of
 variable symbols---to be  the two element type, then one could combine this with our
-proof and derive a contradiction. To resolve these issues, as well as general improvements,
-we have rewritten parts of the library and have
+proof and derive a contradiction. To resolve these issues, we have rewritten parts of the library and
 developed a new proof of the HSP theorem. We are confident that the new
 proof---in the \agdaalgebras library, ver.~2.0.1~\cite{ualib_v2.0.1}---is
 constructive and correct.
@@ -47,8 +46,8 @@ is self-contained.
 \fi
 
 We highlight some of the challenging aspects of formalizing universal algebra in type theory.
-On the positive side, the patient mathematician with enough resolve and the will to learn
-dependent type theory can reap the rewards of the further insights that mechanization provide.
+Nonetheless, we hope to show that the patient mathematician with enough resolve and the will to learn
+dependent type theory can reap the rewards of the further insights that mechanization provides.
 % One positive contribution of this project is that it lends support to the claim that
 % dependent type theory and the \agda language, despite the technical demands they place on
 % the user, are accessible to working mathematicians (such as ourselves) who possess
@@ -260,7 +259,7 @@ implies \ab{a₀} \af{≈ᴬ} \ab{a₁}; we call \ab{f} \defn{surjective} provid
 We omit the straightforward \agda definitions.
 \else
 
-The \agdastdlib represents injective functions on bare types by the
+We represent injective functions on bare types by the
 type \af{Injective}, and uses this to define the \af{IsInjective} type to represent
 the property of being an injective setoid function. Similarly, the type \af{IsSurjective}
 represents the property of being a surjective setoid function. \af{SurjInv} represents the \emph{right-inverse} of a surjective function.
@@ -319,7 +318,7 @@ module _  {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ}{𝑪 : Setoid γ ρ�
 The \defn{kernel} of a function \ab f~\as :~\ab A~\as{→}~\ab B (where \ab A and \ab B are bare types) is defined
 informally by \{\AgdaPair{x}{y} \aod{∈} \ab A \aof{×} \ab A \as : \ab f \ab x \as{=} \ab f \ab y \}.
 This can be represented in \agda in a number of ways, but for our purposes it is
-convenient to define the kernel as inhabitant of a (unary) predicate over \ab A \aof{×} \ab A where \ab is
+convenient to define the kernel as an inhabitant of a (unary) predicate over \ab A \aof{×} \ab A where \ab A is
 the function's domain, as follows.
 
 \begin{code}
@@ -618,7 +617,7 @@ have the same semantic properties as the input algebra, which is indeed the case
 as we will show later.
 
 \paragraph*{Product Algebras}
-Let us first give the (informal) definition of the \defn{product} of a family of
+Recall the (informal) definition of the \defn{product} of a family of
 \ab{𝑆}-algebras.
 Let \ab{ι} be a universe and \ab I~:~\ap{Type}~\ab{ι} a type (the ``indexing type'').
 Then \ab{𝒜}~:~\ab I~\as{→}~\ab{Algebra}~\ab{α}~\ab{ρᵃ} represents
