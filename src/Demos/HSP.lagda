@@ -476,9 +476,8 @@ Informally, an \defn{algebraic structure} \ab{𝑨} = (\ab{A}, \ab{Fᴬ}) \defn{
 \item a (potentially empty) collection of \defn{identities} satisfied by elements and
 operations of \ab{𝑨}.
 \end{itemize}
-For our implementation, we postpone introducing identities until~§\ref{equational-logic}.
-The \afld{Domain} setoid represents the domain of the algebras, and \afld{Interp} the
-interpretation of each operation symbol in \ab{𝑆}.
+Our \agda implementation represents algebras as inhabitants of a record type with two
+fields---a \afld{Domain} setoid denoting the domain of the algebras, and an \afld{Interp} function denoting the interpretation of each operation symbol in \ab{𝑆}. We postpone introducing identities until~§\ref{equational-logic}.
 
 \begin{code}
 
@@ -499,7 +498,7 @@ For example, if \ab{𝑨} is an algebra, then
 \item \ab f \aof{̂} \ab{𝑨} denotes the interpretation in the algebra \ab{𝑨} of the operation symbol \ab f.
 \end{itemize}
 \ifshort %%% BEGIN SHORT VERSION ONLY
- We omit the straightforward formal definitions of these types.
+ We omit the straightforward formal definitions of these types (\seemedium).
 \else    %%% END SHORT VERSION ONLY
          %%% BEGIN LONG VERSION ONLY SECTION
 \begin{code}
@@ -515,7 +514,7 @@ f ̂ 𝑨 = λ a → (Interp 𝑨) ⟨$⟩ (f , a)
 
 %% -----------------------------------------------------------------------------
 \paragraph*{Universe levels of algebra types}
-Types belong to \emph{universes}, which are structured as follows:
+Types belong to \emph{universes}, which (in \agda) are structured as follows:
 \ap{Type} \ab{ℓ} : \ap{Type} (\ap{lsuc} \ab{ℓ}), \ap{Type} (\ap{lsuc} \ab{ℓ}) : \ap{Type}
 (\ap{lsuc} (\ap{lsuc} \ab{ℓ})), …. While this means that \ap{Type} \ab{ℓ} has type \ap{Type}
 (\ap{lsuc} \ab{ℓ}), this does \emph{not} imply that \ap{Type} \ab{ℓ} :
