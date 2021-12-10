@@ -1747,13 +1747,13 @@ The term algebra \af{𝑻} \ab X is \emph{absolutely free} (or \emph{universal},
 
 \begin{itemize}
 \item Every function from \ab{X} to \af{𝕌[ \ab{𝑨} ]} lifts to a homomorphism from \af{𝑻} \ab{X} to \ab{𝑨}.
-\item The homomorphism that exists by the previous item is unique.
+\item That homomorphism is unique.
 \end{itemize}
 
-We now prove the first of these facts in \agda which we call \af{free-lift}.\footnote{\agdaalgebras also defines
+We prove the first of these facts (\af{free-lift}\footnote{\agdaalgebras also defines
  \af{free-lift-func} \as{:} \aof{𝔻[~\af{𝑻}~\ab X~]}~\aor{⟶}~\aof{𝔻[~\ab{𝑨}~]}
  for the analogous setoid function.}$^,$\footnote{For the proof of uniqueness,
-see the \ualmodule{Terms.Setoid.Properties} module of the \agdaalgebras library.}
+see \ualmodule{Terms.Setoid.Properties}.}).
 
 \begin{code}
 
@@ -1776,7 +1776,6 @@ module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}(h : X → 𝕌[ 𝑨 ]) where
 
 \end{code}
 \fi
-Evidently, the proof is a straightforward structural induction argument.
 \ifshort\else
 At the base step, when the term has the form \aic{ℊ}
 \ab x, the free lift of \ab h agrees with \ab h; at the inductive step, when the
@@ -1784,28 +1783,13 @@ term has the form \aic{node} \ab f \ab t, we assume (the induction hypothesis)
 that the image of each subterm \ab t \ab i under the free lift of \ab h is known
 and the free lift is defined by applying \ab f \aof{̂} \ab{𝑨} to these images.
 \fi
-Moreover, the free lift so defined is a homomorphism by construction;
-\ifshort
-for the proof---which is called \af{lift-hom} in the \agdaalgebras library---\seeshort.
-\else
-indeed, here is the trivial proof.
-
+Moreover, the free lift so defined is a homomorphism by construction:
 \begin{code}
 
  lift-hom : hom (𝑻 X) 𝑨
- lift-hom = free-lift-func , hhom
-  where
-  hfunc : 𝔻[ 𝑻 X ] ⟶ 𝔻[ 𝑨 ]
-  hfunc = free-lift-func
-
-  hcomp : compatible-map (𝑻 X) 𝑨 free-lift-func
-  hcomp {f}{a} = cong (Interp 𝑨) (≡.refl , (λ i → (cong free-lift-func){a i} ≃-isRefl))
-
-  hhom : IsHom (𝑻 X) 𝑨 hfunc
-  hhom = mkhom (λ{f}{a} → hcomp{f}{a})
-
+ lift-hom = free-lift-func ,
+   mkhom (λ{_}{a} → cong (Interp 𝑨) (≡.refl , (λ i → (cong free-lift-func){a i} ≃-isRefl)))
 \end{code}
-\fi
 
 It turns out that the interpretation of a term \ab p in an environment \ab{η} is the same
 as the free lift of \ab{η} evaluated at \ab p.
@@ -1826,14 +1810,12 @@ module _ {X : Type χ}{𝑨 : Algebra α ρᵃ} where
 \end{code}
 
 \paragraph*{The relatively free algebra in theory}
-In this subsection, we describe, for a given class \ab{𝒦} of \ab{𝑆}-algebras, the
-\emph{relatively free algebra} in \af{S} (\af{P} \ab{𝒦}) over \ab X, using the informal
-language that is typical of mathematics literature. In the next section we will present
-the relatively free algebra in \agda using the formal language of type theory.
+Here we mathematically describe, for a given class \ab{𝒦} of \ab{𝑆}-algebras, the
+\emph{relatively free algebra} in \af{S} (\af{P} \ab{𝒦}) over \ab X, with the
+type theoretic version in the next section.
 
-Above we defined the term algebra \T{X}, which is free in the class of all
-\ab{𝑆}-algebras; that is, \T{X} has the universal property and belongs to the class of
-\ab{𝑆}-algebras.  Given an arbitrary class \ab{𝒦} of \ab{𝑆}-algebras, we can't expect that
+Recall that the term algebra \T{X} is the \emph{free} class of all
+\ab{𝑆}-algebras. Given an arbitrary class \ab{𝒦} of \ab{𝑆}-algebras, we can't expect that
 \T{X} belongs to \ab{𝒦}, so, in general, we say that \T{X} is free \emph{for} \ab{𝒦}.
 \ifshort\else
 Indeed, it might not be possible to find a free algebra that belongs to \ab{𝒦}.
@@ -1841,11 +1823,11 @@ Indeed, it might not be possible to find a free algebra that belongs to \ab{𝒦
 However, for any class \ab{𝒦} we can construct an algebra that is free for \ab{𝒦}
 and belongs to the class \af{S} (\af{P} \ab{𝒦}), and for most applications this suffices.
 
-The informal construction of the free algebra in \af{S} (\af{P} \ab{𝒦}), for an arbitrary
-class \ab{𝒦} of \ab{𝑆}-algebras, proceeds by taking the quotient of \T{X} modulo a congruence relation
+The construction of the free algebra in \af{S} (\af{P} \ab{𝒦})
+proceeds by taking the quotient of \T{X} modulo a congruence relation
 that we will denote by \afld{≈}.  One approach is to let
 \afld{≈} be \af{⋂}\{\ab{θ} \af{∈} \af{Con} (\T{X}) : \T{X} \af{/} \ab{θ} \af{∈} \af{S}
-\ab{𝒦}\}.\footnote{\af{Con} (\T{X}) is the set of congruences of \T{X}.}
+\ab{𝒦}\}\footnote{\af{Con} (\T{X}) is the set of congruences of \T{X}.}.
 Equivalently, we let \ab{ℰ} = \af{Th} \ab{𝒦} and take \afld{≈} to be the least equivalence relation
 on the domain of \T{X} such that
 \begin{enumerate}
@@ -1864,7 +1846,7 @@ t~⟧}~\afld{⟨\$⟩}~\ab{ρ}\\[-8pt]
 \end{enumerate}
 The \defn{relatively free algebra over} \ab{X} (relative to
 \ab{𝒦}) is defined to be the quotient \Free{X} := \T{X}~\af{/}~\afld{≈}.
-Evidently \Free{X} is a subdirect product of the algebras in \{\T{X}~\af{/}~\ab{θ}\!\},
+\Free{X} is a subdirect product of the algebras in \{\T{X}~\af{/}~\ab{θ}\!\},
 where \ab{θ} ranges over congruences modulo which \T{X} belongs to \af{S}~\ab{𝒦}.
 Thus, \Free{X} \af{∈} \af{P}(\af{S}~\ab{𝒦}) ⊆ \af{S}(\af{P}~\ab{𝒦}), and it follows
 that \Free{X} satisfies the identities in \af{Th} \ab{𝒦} (those modeled by all members of
@@ -1874,7 +1856,6 @@ identified in \Free{X}. \ifshort\else (Notice that \afld{≈} may be empty, in w
 \T{X}~\af{/}~\afld{≈} is trivial.) \fi
 
 \paragraph*{The relatively free algebra in \agda}
-We now define the relatively free algebra in \agda using the language of type theory.
 %Our approach looks a bit different from the informal one described above, because we
 %represent quotients as setoids, but the end result is the same.
 We start with a type \ab{ℰ} representing a collection of identities and, instead of
@@ -1908,7 +1889,8 @@ module FreeAlgebra {χ : Level}(ℰ : {Y : Type χ} → Pred (Term Y × Term Y) 
 
 \paragraph*{The natural epimorphism} % from 𝑻 X to 𝔽[ X ]}
 We now define the natural epimorphism from \T{X} onto \Free{X} %(= \T{X}~\af{/}~\afld{≈})
-and prove that its kernel is contained in the collection of identities modeled by \af{V} \ab{𝒦}. % (which we represent by \af{Th} (\af{V} \ab{𝒦})).
+and prove that its kernel is contained in the collection of identities modeled
+by \af{V} \ab{𝒦}. % (which we represent by \af{Th} (\af{V} \ab{𝒦})).
 
 \ifshort\else
 \begin{code}
@@ -1947,7 +1929,11 @@ module FreeHom {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
   ζ x 𝑨 kA = sound (λ y ρ → y 𝑨 kA ρ) x where open Soundness (Th 𝒦) 𝑨
 
 \end{code}
-Next we prove an important property of the relatively free algebra (relative to \ab{𝒦} and satisfying the identities in \af{Th} \ab{𝒦}), which will be used in the formalization of the HSP theorem; this is the assertion that for every algebra 𝑨, if \ab{𝑨} \af{⊨} \ab{Th} (\af{V} \ab{𝒦}), then there exists an epimorphism from \Free{A} onto \ab{𝑨}.
+Next we prove an important property of the relatively free algebra
+(relative to \ab{𝒦} and satisfying the identities in \af{Th} \ab{𝒦}),
+which will be used in the formalization of the HSP theorem; namely
+that for every algebra \ab{𝑨}, if \ab{𝑨} \af{⊨} \ab{Th} (\af{V} \ab{𝒦}),
+then there exists an epimorphism from \Free{A} onto \ab{𝑨}.
 
 \ifshort\else
 \begin{code}
@@ -1993,27 +1979,27 @@ module _  {𝑨 : Algebra (α ⊔ ρᵃ ⊔ ℓ) (α ⊔ ρᵃ ⊔ ℓ)} {𝒦 :
 
 Birkhoff's variety theorem, also known as the HSP theorem, asserts that a class of algebras
 is a variety if and only if it is an equational class.  In this section, we present the
-statement and proof of the HSP theorem---first in the familiar, informal style similar to
-what one finds in standard textbooks (see, e.g.,~\cite[Theorem 4.41]{Bergman:2012}),
-and then in the formal language of Martin-Löf type theory using \agda.
+statement and proof of the HSP theorem---first a the style similar to
+what one finds in textbooks (e.g.,~\cite[Theorem 4.41]{Bergman:2012}),
+and then formally.
 
 \subsection{Informal proof}
 Let \ab{𝒦} be a class of algebras and recall that \ab{𝒦} is a \emph{variety} provided
 \ifshort\else
 it is closed under homomorphisms, subalgebras and products; equivalently,
 \fi
-\af{V} \ab{𝒦} ⊆ \ab{𝒦}.\footnote{Recall, \af{V} \ab{𝒦} := \af{H} (\af{S} (\af{P} \ab{𝒦})),
-and observe that \ab{𝒦} ⊆ \af{V} \ab{𝒦} holds for all \ab{𝒦} since
-\af{V} is a closure operator.}
+\af{V} \ab{𝒦} ⊆ \ab{𝒦}.
+Observe that \ab{𝒦} ⊆ \af{V} \ab{𝒦} holds for all \ab{𝒦} since
+\af{V} is a closure operator.
 We call \ab{𝒦} an \emph{equational class} if it is precisely the class of all models of some set of identities.
 
-It is easy to prove that \emph{every equational class is a variety}.  Indeed, suppose \ab{𝒦} is an equational
-class axiomatized by the set \ab{ℰ} of term identities; that is, \ab{𝑨} ∈ \ab{𝒦} iff
+\emph{Every equational class is a variety}: Indeed, suppose \ab{𝒦} is an equational
+class axiomatized by term identities \ab{ℰ}; that is, \ab{𝑨} ∈ \ab{𝒦} iff
 \ab{𝑨} \af{⊨} \ab{ℰ}. Since the classes \af H \ab{𝒦}, \af S \ab{𝒦}, \af P \ab{𝒦} and
 \ab{𝒦} all satisfy the same set of equations, we have \af{V} \ab{𝒦} \af{⊫} \ab p
 \af{≈} \ab q for all (\ab p , \ab q) \af{∈} \ab{ℰ}, so \af{V} \ab{𝒦} ⊆ \ab{𝒦}.
 
-The converse assertion---that \emph{every variety is an equational class}---is less obvious.
+The converse assertion---that \emph{every variety is an equational class}---takes more work.
 Let \ab{𝒦} be an arbitrary variety.  We will describe a set of equations that axiomatizes
 \ab{𝒦}.  A natural choice is \af{Th} \ab{𝒦}, all equations that hold in \ab{𝒦}.
 Let \ab{𝒦⁺} := \af{Mod} (\af{Th} \ab{𝒦}). Clearly, then \ab{𝒦} \aof{⊆} \ab{𝒦⁺}.  We prove the
@@ -2034,19 +2020,21 @@ such that \ab f \af{∘} \ab g = \ab h. Since \ab h is surjective, so is \ab f. 
 To prove the claim, let \ab u , \ab v \af{∈} \T{X} and assume that \ab g \ab u =
 \ab g \ab v. Since \T{X} is generated by \ab X, there are terms \ab p, \ab q ∈
 \T{X} such that \ab u = \af{⟦~\T{X}~⟧} \ab p and v = \af{⟦~\T{X}~⟧} \ab
-q.\footnote{Recall, \af{⟦~\ab{𝑨}~⟧} \ab t denotes the interpretation of the term
-\ab t in the algebra \ab{𝑨}.} Therefore,\\[-4pt]
+q.
+%\footnote{Recall, \af{⟦~\ab{𝑨}~⟧} \ab t denotes the interpretation of the term
+%\ab t in the algebra \ab{𝑨}.}
+Therefore,\\[-4pt]
 
 \af{⟦~\Free{X}~⟧} \ab p = \ab g (\af{⟦~\T{X}~⟧} \ab p) = \ab g \ab u = \ab g \ab v =
 \ab g (\af{⟦~\T{X}~⟧} \ab q) = \af{⟦~\Free{X}~⟧} \ab q,\\[8pt]
-so \ab{𝒦} \af{⊫} \ab p \af{≈} \ab q, so (\ab p , \ab q) \af{∈} \af{Th}
+so \ab{𝒦} \af{⊫} \ab p \af{≈} \ab q, thus (\ab p , \ab q) \af{∈} \af{Th}
 \ab{𝒦}. Since \ab{𝑨} \af{∈} \ab{𝒦⁺} =
-\af{Mod} (\af{Th} \ab{𝒦}), we obtain \ab{𝑨} \af{⊧} \ab p \af{≈} \ab q, so \ab h
-\ab u = (\af{⟦~\ab{𝑨}~⟧} \ab p) \aofld{⟨\$⟩} \ab{ρ} = (\af{⟦~\ab{𝑨}~⟧} \ab q)
+\af{Mod} (\af{Th} \ab{𝒦}), we obtain \ab{𝑨} \af{⊧} \ab p \af{≈} \ab q, which implies
+that \ab h \ab u = (\af{⟦~\ab{𝑨}~⟧} \ab p) \aofld{⟨\$⟩} \ab{ρ} = (\af{⟦~\ab{𝑨}~⟧} \ab q)
 \aofld{⟨\$⟩} \ab{ρ} = \ab h \ab v, as desired.
 
 \subsection{Formal proof}
-We now show how to formally express and prove the twin assertions that
+We now show how to express and prove the twin assertions that
 (i) every equational class is a variety and (ii) every variety is an equational class.
 
 \paragraph*{Every equational class is a variety}
@@ -2066,26 +2054,24 @@ module _ (𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)){X : Type (α 
 \begin{code}
 
  V-expa : 𝒦 ⊆ V ℓ ι 𝒦
- V-expa {x = 𝑨} kA = 𝑨 ,(𝑨 ,(⊤ ,(λ _ → 𝑨), (λ _ → kA), Goal), ≤-reflexive), IdHomImage
+ V-expa {x = 𝑨} kA = 𝑨 , (𝑨 , (⊤ , (λ _ → 𝑨) , (λ _ → kA), Goal), ≤-reflexive), IdHomImage
   where
   open Setoid 𝔻[ 𝑨 ] using ( refl )
   open Setoid 𝔻[ ⨅ (λ _ → 𝑨) ] using () renaming ( refl to refl⨅ )
 
   to⨅ : 𝔻[ 𝑨 ] ⟶ 𝔻[ ⨅ (λ _ → 𝑨) ]
-  (to⨅ ⟨$⟩ x) = λ _ → x
-  cong to⨅ xy = λ _ → xy
+  to⨅ = record { f = λ x _ → x ; cong = λ xy _ → xy }
 
   from⨅ : 𝔻[ ⨅ (λ _ → 𝑨) ] ⟶ 𝔻[ 𝑨 ]
-  (from⨅ ⟨$⟩ x) = x tt
-  cong from⨅ xy = xy tt
+  from⨅ = record { f = λ x → x tt ; cong = λ xy → xy tt }
 
   Goal : 𝑨 ≅ ⨅ (λ x → 𝑨)
   Goal = mkiso (to⨅ , mkhom refl⨅) (from⨅ , mkhom refl) (λ _ _ → refl) (λ _ → refl)
 
 \end{code}
 
-The converse inclusion, \af V \ab{𝒦} \aof{⊆} \ab{𝒦}, requires the
-hypothesis that \ab{𝒦} is an equation class. Recall lemma
+The converse inclusion, \af V \ab{𝒦} \aof{⊆} \ab{𝒦}, requires
+that \ab{𝒦} is an equation class. Recall lemma
 \af{V-id1}, which asserts that \ab{𝒦} \aof{⊫} \ab p \aof{≈} \ab q implies \af{V}
 \ab{ℓ} \ab{ι} \ab{𝒦} \aof{⊫} \ab p \aof{≈} \ab q. Whence, if \ab{𝒦} is an equational
 class, then \af V \ab{𝒦} \aof{⊆} \ab{𝒦}, as we now confirm.
@@ -2095,7 +2081,7 @@ class, then \af V \ab{𝒦} \aof{⊆} \ab{𝒦}, as we now confirm.
 module _ {ℓ : Level}{X : Type ℓ}{ℰ : {Y : Type ℓ} → Pred (Term Y × Term Y) (ov ℓ)} where
  private 𝒦 = Mod{α = ℓ}{ℓ}{X} ℰ     -- an arbitrary equational class
  EqCl⇒Var : V ℓ (ov ℓ) 𝒦 ⊆ 𝒦
- EqCl⇒Var {𝑨}vA{p}{q} pℰq ρ = V-id1 ℓ {𝒦}{p}{q}(λ _ x τ → x pℰq τ)𝑨 vA ρ
+ EqCl⇒Var {𝑨} vA {p} {q} pℰq ρ = V-id1 ℓ {𝒦} {p} {q} (λ _ x τ → x pℰq τ)𝑨 vA ρ
 
 \end{code}
 Together, \af{V-expa} and \af{Eqcl⇒Var} prove that every equational class is a variety.
@@ -2107,26 +2093,17 @@ For (ii), we need an arbitrary variety, which we obtain by starting with an arbi
 We prove that \af{V} \ab{𝒦} is an equational class by showing it is precisely the collection of
 algebras that model the equations in \af{Th} (\af{V} \ab{𝒦}); that is, we prove
 \af{V} \ab{𝒦} = \af{Mod} (\af{Th} (\af{V} \ab{𝒦})).
-The inclusion \af{V} \ab{𝒦} \aof{⊆} \af{Mod} (\af{Th} (\af{V} \ab{𝒦})) is a simple
-consequence of the fact that \af{Mod} \af{Th} is a closure operator%
-\ifshort
-, so we omit the proof and later refer to this fact as \af{ModTh-closure}.
-\else
-. Nonetheless, completeness demands that we formalize this fact, however trivial its proof.
-
+The inclusion \af{V} \ab{𝒦} \aof{⊆} \af{Mod} (\af{Th} (\af{V} \ab{𝒦})) is a
+consequence of the fact that \af{Mod} \af{Th} is a closure operator.
 \begin{code}
-
 module _ (𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)){X : Type (α ⊔ ρᵃ ⊔ ℓ)} where
  private c = α ⊔ ρᵃ ⊔ ℓ ; ι = ov c
 
  ModTh-closure : V{β = β}{ρᵇ}{γ}{ρᶜ}{δ}{ρᵈ} ℓ ι 𝒦 ⊆ Mod{X = X} (Th (V ℓ ι 𝒦))
- ModTh-closure {x = 𝑨} vA {p}{q} x ρ = x 𝑨 vA ρ
-
+ ModTh-closure {x = 𝑨} vA {p} {q} x ρ = x 𝑨 vA ρ
 \end{code}
-\fi
 
-It remains to prove the inclusion \af{Mod} (\af{Th} (V 𝒦)) \aof{⊆} \af{V} \ab{𝒦},
-and this task occupies the remainder of the paper.  We proceed as follows:
+Now we must prove the inclusion \af{Mod} (\af{Th} (V 𝒦)) \aof{⊆} \af{V} \ab{𝒦}.  We proceed as follows:
 
 \begin{enumerate}
 \item \label{item:1} Let \ab{𝑪} be the product of all algebras in \af{S} \ab{𝒦}, so that \ab{𝑪} \af{∈} \af{P} (\af{S} \ab{𝒦}).
@@ -2152,8 +2129,9 @@ and all environments, as follows.
  open Environment                using ( Env )
 \end{code}
 \fi
+We define \ab{ℑ} as the indexing type, \ab{𝔄} as the underlying algebra and then
+\ab{𝑪} the resulting product.
 \begin{code}
-
  ℑ : Type ι
  ℑ = Σ[ 𝑨 ∈ (Algebra α ρᵃ) ] (𝑨 ∈ S ℓ 𝒦) × (Carrier (Env 𝑨 X))
 
@@ -2162,6 +2140,7 @@ and all environments, as follows.
 
  𝑪 : Algebra ι ι
  𝑪 = ⨅ 𝔄
+
 \end{code}
 
 \ifshort\else
@@ -2183,32 +2162,27 @@ whence we construct a monomorphism from \Free{X} into \ab{𝑪}, and thus \Free{
 so belongs to \af S (\af P \ab{𝒦}).
 \fi
 
+\noindent
+We can then construct homomorphisms from \ab{𝑻} \ab{X} to \ab{𝑪} and \Free{X} to \ab{𝑪},
+with the latter needing the kernel condition mentioned above.
 \begin{code}
 
  homC : hom (𝑻 X) 𝑪
  homC = ⨅-hom-co 𝔄 (λ i → lift-hom (snd ∥ i ∥))
-\end{code}
-\ifshort\else
-\begin{code}
 
  kerF⊆kerC : ker ∣ homF[ X ] ∣ ⊆ ker ∣ homC ∣
- kerF⊆kerC {p , q} pKq (𝑨 , sA , ρ) = Goal
+ kerF⊆kerC {p , q} pKq (𝑨 , sA , ρ) = begin
+   free-lift ρ p   ≈˘⟨ free-lift-interp {𝑨 = 𝑨} ρ p ⟩
+   ⟦ p ⟧ ⟨$⟩ ρ      ≈⟨ S-id1 {ℓ = ℓ} {p = p} {q} (ζ pKq) 𝑨 sA ρ ⟩
+   ⟦ q ⟧ ⟨$⟩ ρ      ≈⟨ free-lift-interp {𝑨 = 𝑨} ρ q ⟩
+   free-lift ρ q   ∎
   where
-  open Setoid 𝔻[ 𝑨 ]  using ( _≈_ ; sym ; trans )
+  open Setoid 𝔻[ 𝑨 ]  using ( _≈_ )
+  open SetoidReasoning 𝔻[ 𝑨 ]
   open Environment 𝑨  using ( ⟦_⟧ )
-  fl : ∀ t → ⟦ t ⟧ ⟨$⟩ ρ ≈ free-lift ρ t
-  fl t = free-lift-interp {𝑨 = 𝑨} ρ t
 
   ζ : ∀{p q} → (Th 𝒦) ⊢ X ▹ p ≈ q → 𝒦 ⊫ p ≈ q
   ζ x 𝑨 kA = sound (λ y ρ → y 𝑨 kA ρ) x where open Soundness (Th 𝒦) 𝑨
-
-  subgoal : ⟦ p ⟧ ⟨$⟩ ρ ≈ ⟦ q ⟧ ⟨$⟩ ρ
-  subgoal = S-id1{ℓ = ℓ}{p = p}{q} (ζ pKq) 𝑨 sA ρ
-  Goal : (free-lift{𝑨 = 𝑨} ρ p) ≈ (free-lift{𝑨 = 𝑨} ρ q)
-  Goal = trans (sym (fl p)) (trans subgoal (fl q))
-\end{code}
-\fi
-\begin{code}
 
  homFC : hom 𝔽[ X ] 𝑪
  homFC = ∣ HomFactor 𝑪 homC homF[ X ] kerF⊆kerC (isSurjective ∥ epiF[ X ] ∥) ∣
@@ -2255,11 +2229,7 @@ We omit the proof of this lemma and merely display its formal statement.
 \begin{code}
 
  monFC : mon 𝔽[ X ] 𝑪
- monFC = ∣ homFC ∣ , isMon
-  where
-  isMon : IsMon 𝔽[ X ] 𝑪 ∣ homFC ∣
-  isHom isMon = ∥ homFC ∥
-  isInjective isMon {p}{q} φpq = kerC⊆kerF φpq
+ monFC = ∣ homFC ∣ , record { isHom = ∥ homFC ∥ ; isInjective = kerC⊆kerF }
 
  F≤C : 𝔽[ X ] ≤ 𝑪
  F≤C = mon→≤ monFC
@@ -2269,8 +2239,7 @@ Using the last result we prove that \Free{X} belongs to \af{S} (\af{P} \ab{𝒦}
 requires one more technical lemma concerning the classes \af{S} and \af{P}; specifically,
 \ifshort
 \af{P} (\af{S} \ab{𝒦}) \aof{⊆} \af{S} (\af{P} \ab{𝒦}) holds for every class \ab{𝒦}.
-The \agdaalgebras library contains the formal statement and proof of this result, where
-it is called \af{PS⊆SP} (\seeshort).
+The \agdaalgebras library has this result as \af{PS⊆SP} (\seeshort).
 \else
 a product of subalgebras of algebras in a class is a subalgebra of a product of algebras in the class;
 in other terms, \af{P} (\af{S} \ab{𝒦}) \aof{⊆} \af{S} (\af{P} \ab{𝒦}), for every class \ab{𝒦}.
@@ -2299,12 +2268,11 @@ With this we can prove that \Free{X} belongs to \af{S} (\af{P} \ab{𝒦}).
 \begin{code}
 
  SPF : 𝔽[ X ] ∈ S ι (P ℓ ι 𝒦)
- SPF = ∣ spC ∣ , (fst ∥ spC ∥) , (≤-transitive F≤C (snd ∥ spC ∥))
+ SPF = let (alg , ∈𝒦 , ≤SP) = PS⊆SP psC in
+       (alg , ∈𝒦 , ≤-transitive F≤C ≤SP)
   where
   psC : 𝑪 ∈ P (α ⊔ ρᵃ ⊔ ℓ) ι (S ℓ 𝒦)
   psC = ℑ , (𝔄 , ((λ i → fst ∥ i ∥) , ≅-refl))
-  spC : 𝑪 ∈ S ι (P ℓ ι 𝒦)
-  spC = PS⊆SP psC
 
 \end{code}
 Finally, we prove that every algebra in \af{Mod} (\af{Th} (\af{V} \ab{𝒦})) is a homomorphic image of \af{𝔽[~\ab{X}~]}.
@@ -2365,6 +2333,14 @@ Abel also notes that Lynge and Spitters, in~\cite{Lynge:2019}, formalize multi-s
 Finally, in~\cite{Abel:2021}, Abel gives a new formal proof of the soundness theorem and
    Birkhoff's completeness theorem for multi-sorted algebraic structures.
 
-%Some other projects aimed at formalizing mathematics generally, and algebra in particular, have developed into very extensive libraries that include definitions, theorems, and proofs about algebraic structures, such as groups, rings, modules, etc.  However, the goals of these efforts seem to be the formalization of special classical algebraic structures, as opposed to the general theory of (universal) algebras. Moreover, the part of universal algebra and equational logic formalized in the \agdaalgebras library extends beyond the scope of prior efforts.
+%Some other projects aimed at formalizing mathematics generally, and algebra in particular,
+have developed into very extensive libraries that include definitions, theorems, and proofs
+about algebraic structures, such as groups, rings, modules, etc.  However, the goals of these
+efforts seem to be the formalization of special classical algebraic structures, as opposed
+to the general theory of (universal) algebras. Moreover, the part of universal algebra and
+equational logic formalized in the \agdaalgebras library extends beyond the scope of prior efforts.
 
-%Prior to our work, a constructive version of Birkhoff's theorem was published by Carlstr\"om in~\cite{Carlstrom:2008}.  However, the logical foundations of that work is constructive set theory and, as far as we know, there was no attempt to formalized it in type theory and verify it with a proof assistant.
+%Prior to our work, a constructive version of Birkhoff's theorem was published by Carlstr\"om
+in~\cite{Carlstrom:2008}.  However, the logical foundations of that work is constructive set
+theory and, as far as we know, there was no attempt to formalize it in type theory and verify
+it with a proof assistant.
