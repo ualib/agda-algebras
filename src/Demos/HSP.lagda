@@ -222,8 +222,8 @@ f ⟨∘⟩ g = record  { f = (_⟨$⟩_ f) ∘ (_⟨$⟩_ g)
 \fi
 
 \paragraph*{Inverses}
-We frequently need to deal with inverses. These are most easily defined via the
-\emph{image} of a function.
+We frequently need to deal with the \defn{inverse} of a functions. This is most easily defined in terms of the
+\emph{image} of the function's domain.
 
 \begin{code}
 module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
@@ -239,7 +239,7 @@ where \AgdaTyped{a}{A} and a proof \ab p~\as :~\ab b \af{≈} \ab f~\ab a that
 Since the witness that \ab b
 belongs to the image of \ab f is always accompanied by a concrete witness \AgdaTyped{a}{A}, we can
 \emph{compute} a range-restricted right-inverse of \ab f.  For extra certainty, we also verify
-that your witness really is an inverse.
+that our witness really is an inverse.
 
 \begin{code}
  Inv : (f : 𝑨 ⟶ 𝑩){b : B} → Image f ∋ b → Carrier 𝑨
