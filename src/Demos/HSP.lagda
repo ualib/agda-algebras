@@ -2348,10 +2348,6 @@ it with a proof assistant.
 
 \section{Conclusion}
 
-(do we need one)
+(do we need one?)
 
-% One positive contribution of this project is that it lends support to the claim that
-% dependent type theory and the \agda language, despite the technical demands they place on
-% the user, are accessible to working mathematicians (such as ourselves) who possess
-% sufficient patience and resolve to codify their work in type theory in order to formally verify
-% their results with a proof assistant.
+One positive outcome of this project is further evidence that dependent type theory and the \agda language, despite the technical demands they place on the user, are accessible to universal algebraists who possess sufficient patience and resolve to codify their work in type theory and verify their results with a proof assistant.
