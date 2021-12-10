@@ -1,6 +1,6 @@
 \section{Introduction}
 The \agdaalgebras library \cite{ualib_v2.0.1} formalizes the foundations of universal algebra
-in intensional Martin-Löf type theory (\mltt) using \agda~{Norell:2007,agdaref}.
+in intensional Martin-Löf type theory (\mltt) using \agda~\cite{Norell:2007,agdaref}.
 The library includes a wide collection of definitions and verified theorems that faithfully codify
 classical, set-theory-based universal algebra and equational
 logic.
@@ -10,44 +10,41 @@ variety theorem} (also known as the \emph{HSP theorem})~\cite{Birkhoff:1935}.
 To the best of our knowledge, this constitutes the first machine-verified proof of Birkoff's
 celebrated 1935 result.
 
-Presented here is our second proof of the HSP theorem. The first proof%
-\footnote{See the
- \href{https://github.com/ualib/ualib.github.io/blob/71f173858701398d56224dd79d152c380c0c2b5e/src/lagda/UALib/Birkhoff.lagda}{Birkhoff}
- module of the
- \href{https://github.com/ualib/ualib.github.io/commit/71f173858701398d56224dd79d152c380c0c2b5e}{15
- Jan 2021  commit (71f1738)} of the
- \href{https://github.com/ualib/ualib.github.io}{ualib/ualib.gitlab.io}
- repository~\cite{ualib_v1.0.0}.}
-suffered from a few flaws that raised two concerns. First, it was not clear whether the
+Presented here is our second proof of the HSP theorem. The first proof\footnote{see the
+ \href{https://github.com/ualib/ualib.github.io/blob/71f173858701398d56224dd79d152c380c0c2b5e/src/lagda/UALib/Birkhoff.lagda}{\textsf{Birkhoff.lagda}} file
+ in the \href{https://github.com/ualib/ualib.github.io}{\textsf{ualib/ualib.gitlab.io}}
+ repository (\href{https://github.com/ualib/ualib.github.io/commit/71f173858701398d56224dd79d152c380c0c2b5e}{15
+ Jan 2021 commit 71f1738})~\cite{ualib_v1.0.0}}
+suffered from flaws that raised two concerns. First, it was not clear whether the
 proof was fully constructive (because of its use of function extensionality in \mltt). Second,
 it was shown that if one were to take the type
 \ab{X}---which we use to represent an arbitrary collection of
 variable symbols---to be  the two element type, then one could combine this with our
 proof and derive a contradiction. To resolve these issues, we have rewritten parts of the library and
 developed a new proof of the HSP theorem. We are confident that the new
-proof---in the \agdaalgebras library, ver.~2.0.1~\cite{ualib_v2.0.1}---is
-constructive and correct.
+proof presented here\footnote{based on \agdaalgebras, ver.~2.0.1~\cite{ualib_v2.0.1}, \agda ver.2.6.2 and \agdastdlib ver.1.7} is constructive and
+ correct, a conviction we justify in the sequel (\qv).
 
-What follows is a self-contained \agda proof of the HSP theorem.  This is achieved by
-extracting into a single module, as a literate \agda document\footnote{See the file
-(src/Demoes/\HSPlagda) in the repository, using \agda ver.2.6.2 and \agdastdlib ver.1.7.},
-a subset of the \agdaalgebras library, including only
-the pieces needed for the proof.
+What follows is a self-contained formal proof of the HSP theorem in \agda.  This is achieved by
+extracting a subset of the \agdaalgebras library, including only the
+pieces needed for the proof, into a literate \agda document,\footnote{see
+\HSPlagda in the \agdaalgebras repository: \agdaalgebrasrepo}.
 \ifshort
-For spaces reasons, we do elide some inessential parts,
+For spaces reasons, we elide some inessential parts,
 but strive to preserve the essential content and character of the development.
-More specifically,routine or overly technical components, as well as anything that does not
-seem to offer any insight into the central ideas of the proof.\footnote{The unabridged
-version~\cite{DeMeo:2021} presents the full proof.}
+More specifically, routine or overly technical components, as well as anything that does not
+seem to offer any insight into the central ideas of the proof.\footnote{The entire proof
+appears in the unabridged version of the present paper~\cite{DeMeo:2021}.}
 \else
-We include here every line of code of our proof of Birkhoff's theorem
-in a single \agda module.  Apart from a few dozen imports from the \agdastdlib, the module
-is self-contained.
+We include here every line of code of our new proof of Birkhoff's theorem
+in a single \agda module, presented as a literate \agda document,\footnote{see
+\HSPlagda in the \agdaalgebras repository: \agdaalgebrasrepo}.  Apart from a few dozen
+imports from the \agdastdlib, the module is self-contained.
 \fi
 
 We highlight some of the challenging aspects of formalizing universal algebra in type theory.
-Nonetheless, we hope to show that the patient mathematician with enough resolve and the will to learn
-dependent type theory can reap the rewards of the further insights that mechanization provides.
+Nonetheless, we hope to show that the patient mathematician, with enough resolve and the will to learn
+dependent type theory, can reap the rewards of the further insights that mechanization provides.
 
 \ifshort\else
 We give a sobering glimpse of the technical hurdles that must be overcome
@@ -56,6 +53,10 @@ The results are rather gratifying and enlightening, and we feel are worth
 the investment. Users of Coq and Lean have recently reported similar feelings
 from the outcome of their formalization efforts.
 \fi
+
+Our main contribution is the representation of algebraic structures and their signatures
+in dependent type theory in a way that is not only very general, but also practical, as we
+demonstrate by formalizing one of the deepest results in the field.
 
 \section{Preliminaries}
 
@@ -1184,6 +1185,8 @@ defined similarly.
 \end{code}
 \fi
 \begin{code}%
+\>[0]\<%
+\\
 %
 \>[1]\AgdaFunction{ker}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -1229,7 +1232,7 @@ defined similarly.
 We now develop a working vocabulary in \mltt corresponding to classical,
 single-sorted, set-based universal algebra.
 We cover a number of important concepts, but limit ourselves to those
-required in our proof of Birkhoff's HSP theorem.
+required to prove Birkhoff's HSP theorem.
 In each case, we give a type-theoretic version of the informal definition,
 followed by an \agda implementation.
 
@@ -1263,8 +1266,9 @@ is a pair \ab{𝑆} = \AgdaPair{F}{ρ} where \ab{F} is a collection of
 \defn{operation symbols} and \ab{ρ} : \ab{F} \as{→} \ab{N} is an \defn{arity function}
 which maps each operation symbol to its arity. Here, \ab{N} denotes the \emph{arity type}.
 Heuristically, the arity \ab{ρ} \ab{f} of an operation symbol \ab{f} \as{∈} \ab{F} may be
-thought of as the number of arguments that \ab{f} takes as ``input.'' This can be
-represented as follows:
+thought of as the number of arguments that \ab{f} takes as ``input.''
+Here (and in the Agda Universal Algebra Library) we represent signatures in a very general way, as the
+inhabitants of the folloiwng dependent pair type.
 
 \begin{center}
 
@@ -1296,10 +1300,8 @@ represented as follows:
 \AgdaBound{𝓥}\AgdaSymbol{)}
 
 \end{center}
-
-Recall that we defined special syntax for the first and second
-projections so that if
-\ab{𝑆} %\as{:} \af{Signature} \ab{𝓞} \ab{𝓥}
+Recalling our syntax for the first and second
+projections, if \ab{𝑆} %\as{:} \af{Signature} \ab{𝓞} \ab{𝓥}
 is a signature, then
 \aof{∣} \ab{𝑆} \aof{∣} denotes the set of operation symbols and \aof{∥} \ab{𝑆} \aof{∥} denotes the arity function.
 Thus, if \ab{f} \as{:} \aof{∣} \ab{𝑆} \aof{∣} is an operation symbol in the
@@ -1694,9 +1696,9 @@ type theory. Although some may consider this to be one of the least interesting 
 technical aspects of this paper, others might find the presentation more helpful if we
 resist the urge to gloss over these technicalities.
 \fi
-While in some settings, such as Category Theory, formalizing it in \agda~\cite{agda-categories}
-works smoothly with respect to universe levels, Universal Algebra seems to be bumpier.
-Therefore, it seems worthwhile to explain how we make use
+While in some settings, such as category theory, formalizing it in \agda~\cite{agda-categories}
+works smoothly with respect to universe levels, in universal algebra the terrain seems bumpier.
+Therefore, it is worthwhile to explain how we make use
 of universe lifting and lowering functions, available in the \agdastdlib, to
 develop domain-specific tools for dealing with \agda's universe hierarchy.
 
@@ -1715,7 +1717,7 @@ the HSP module, where it was expecting level \ab{𝓞}~\aop{⊔}~\ab{𝓥}~\aop{
 \ab{α} \ab{ρᵃ} whereas \agda expected an inhabitant of the type \ar{Algebra} (\ab{𝓞}
 \aop{⊔} \ab{𝓥} \aop{⊔} (\ap{lsuc} \ab{α})) \ab{ρᵃ}.
 \fi
-\agda provides \ar{Lift} to embed a type into a higher universe.
+The \ar{Lift} operation of the standard library embeds a type into a higher universe.
 Specializing \ar{Lift} to our situation, we
 define a function \af{Lift-Alg}%
 \ifshort
@@ -1976,11 +1978,11 @@ define a function \af{Lift-Alg}%
 \\
 \>[0]\AgdaFunction{Lift-Alg}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaBound{𝑨}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaRecord{Algebra}\AgdaSpace{}%
 \AgdaGeneralizable{α}\AgdaSpace{}%
-\AgdaGeneralizable{ρᵃ}\AgdaSymbol{)(}\AgdaBound{ℓ₀}\AgdaSpace{}%
+\AgdaGeneralizable{ρᵃ}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaBound{ℓ₀}\AgdaSpace{}%
 \AgdaBound{ℓ₁}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPostulate{Level}\AgdaSymbol{)}\AgdaSpace{}%
@@ -2011,7 +2013,7 @@ define a function \af{Lift-Alg}%
 \>[0]\<%
 \end{code}
 \fi
-\noindent Recall that our definition of algebra uses two universe levels, corresponding
+\noindent Recall that our \ar{Algebra} type has two universe level parameters, corresponding
 to those of the domain setoid.
 \ifshort\else
 Concretely, an algebra of type \ar{Algebra} \ab{α} \ab{ρᵃ} has a
@@ -2022,9 +2024,13 @@ Concretely, an algebra of type \ar{Algebra} \ab{α} \ab{ρᵃ} has a
 \af{Lift-Alg} takes an algebra parametrized by levels \ab{a} and \ab{ρᵃ}
 and constructs a new algebra whose
 carrier inhabits \ap{Type} (\ab{α} \ap{⊔} \ab{ℓ₀}) with equality of type \af{Rel}
-\afld{Carrier} (\ab{ρᵃ} \ap{⊔} \ab{ℓ₁}). To be useful, the resulting algebra should
-have the same semantic properties as the input algebra, which is indeed the case,
-as we will show later.
+\afld{Carrier} (\ab{ρᵃ} \ap{⊔} \ab{ℓ₁}). To be useful, the lifting should result in an algebra
+with the same semantic properties as the input algebra, which is indeed the case
+\ifshort
+(q.v.)
+\else
+as we will see in §\ref{isomorphisms}.
+\fi
 
 \paragraph*{Product Algebras}
 Recall the (informal) definition of the \defn{product} of a family of
@@ -2043,7 +2049,7 @@ we define the interpretation of \ab f in \af{⨅}~\ab{𝒜} by\\[-2mm]
 
 (\ab{f}~\af{̂}~\af{⨅}~\ab{𝒜}) \ab a := \as{λ}~(\ab i~:~\ab I)~\as{→}
 (\ab{f}~\af{̂}~\ab{𝒜}~\ab i)(\ab{a}~\ab i).\\[8pt]
-This can be formalized as follows.
+Here is how we formalize this notion of product algebra.
 
 \begin{code}%
 \>[0]\<%
@@ -2059,6 +2065,8 @@ This can be formalized as follows.
 \AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaKeyword{where}\<%
 \\
+%
+\\[\AgdaEmptyExtraSkip]%
 \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{⨅}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -2078,6 +2086,8 @@ This can be formalized as follows.
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
 \AgdaBound{ι}\AgdaSymbol{)}\<%
 \\
+%
+\\[\AgdaEmptyExtraSkip]%
 %
 \>[1]\AgdaField{Domain}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{⨅}\AgdaSpace{}%
@@ -2173,6 +2183,8 @@ This can be formalized as follows.
 \AgdaSymbol{\}\}}\<%
 \\
 %
+\\[\AgdaEmptyExtraSkip]%
+%
 \>[1]\AgdaField{Interp}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{⨅}\AgdaSpace{}%
 \AgdaBound{𝒜}\AgdaSymbol{)}\AgdaSpace{}%
@@ -2192,6 +2204,8 @@ This can be formalized as follows.
 \AgdaBound{a}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSymbol{)}\<%
 \\
+%
+\\[\AgdaEmptyExtraSkip]%
 %
 \>[1]\AgdaField{cong}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaField{Interp}\AgdaSpace{}%
@@ -2218,7 +2232,7 @@ This can be formalized as follows.
 \\
 \>[0]\<%
 \end{code}
-\noindent where we can see that the \af{Carrier} is indeed the (dependent) product
+\noindent where we can see that the \afld{Carrier} is indeed the (dependent) product
 of the carriers. The rest of the definitions are the ``pointwise'' versions of the
 underlying ones.
 
@@ -2321,6 +2335,8 @@ getting the type of compatible maps from (the domain of) \ab{𝐴} to
 \AgdaSymbol{)}\<%
 \\
 %
+\\[\AgdaEmptyExtraSkip]%
+%
 \>[1]\AgdaFunction{compatible-map}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaOperator{\AgdaFunction{𝔻[}}\AgdaSpace{}%
@@ -2387,6 +2403,8 @@ finally the type \af{hom} of homomorphisms from \ab{𝑨} to \ab{𝐵}.
 \AgdaBound{h}\<%
 \\
 %
+\\[\AgdaEmptyExtraSkip]%
+%
 \>[1]\AgdaFunction{hom}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPrimitive{Type}\AgdaSpace{}%
@@ -2407,7 +2425,7 @@ finally the type \af{hom} of homomorphisms from \ab{𝑨} to \ab{𝐵}.
 \\
 \>[0]\<%
 \end{code}
-Thus, an inhabitant of \af{hom} is a pair (\ab h , \ab p) of
+Thus, an inhabitant of \af{hom} is a pair (\ab h , \ab p) consisting of
 a setoid function \ab h from the domain of \ab{𝑨} to that of \ab{𝑩} and
 a proof that \ab h is a homomorphism.
 
@@ -3973,9 +3991,10 @@ We also formalize (as \af{HomFactor}) the following factorization theorem: if \a
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaFunction{φcomp}\<%
 \end{code}
-\paragraph*{Isomorphisms}
-\fi      %%% END LONG VERSION ONLY SECTION
 
+\subsection{Isomorphisms}
+\label{isomorphisms}
+\fi      %%% END LONG VERSION ONLY SECTION
 Two structures are \defn{isomorphic} provided there are homomorphisms from each to the
 other that compose to the identity. We codify this notion, as
 well as some of its obvious consequences, as the type \ar{\au{}≅\au{}}.
@@ -4111,7 +4130,9 @@ Note that the definition, shown below, includes a proof of the fact that the map
 \>[64]\AgdaOperator{\AgdaFunction{≈ᴬ}}\AgdaSpace{}%
 \AgdaBound{a}\<%
 \end{code}
-\ifshort\else    %%% BEGIN LONG VERSION ONLY
+\ifshort
+\vskip-3mm
+\else
 \begin{code}%
 \>[0]\<%
 \\
@@ -4567,10 +4588,9 @@ It is easy to prove that \ar{\au{}≅\au{}} is an equivalence relation, as follo
 \AgdaBound{a}\AgdaSymbol{)}\<%
 \end{code}
 \fi
-
 \paragraph*{Lift-Alg is an algebraic invariant}
 The \af{Lift-Alg} operation neatly resolves the technical problem of
-non-cumulativity because isomorphism classes of algebras are closed under \af{Lift-Alg}.
+non-cumulativity because isomorphism classes of algebras are closed under \af{Lift-Alg}; that is,
 \ifshort\else
 
 \begin{code}%
@@ -4664,9 +4684,11 @@ non-cumulativity because isomorphism classes of algebras are closed under \af{Li
 \fi
 
 \paragraph*{Homomorphic images}
-We have found that the most useful way to represent \emph{homomorphic images}
-is as surjective hom. We also record the fact that an algebra is its own homomorphic
-image via the identity hom. (We use the shorthand \af{ov}~\ab{α} := \ab{𝒪}
+We have found that the most useful way to encode the concept of \emph{homomorphic image}
+is to produce a witness, that is, a surjective hom.  Thus we define the type of surjective homs
+and also record the fact that an algebra is its own homomorphic image via the identity
+hom.
+(Here and elsewhere we use the shorthand \af{ov}~\ab{α} := \ab{𝒪}
 \ap{⊔} \ab{𝒱} \ap{⊔} \ab{α}, for any level \ab{α}.)
 
 \ifshort\else
@@ -4856,8 +4878,8 @@ hom from \ab{𝑨} to \ab{𝑩}.
 \\
 \>[0]\<%
 \end{code}
-The subalgebra relation is reflexive by the identity monomorphism, and
-transitive since composition of monomorphisms is a monomorphism.
+The subalgebra relation is a \defn{preorder}, that is, a reflexive (by the identity monomorphism), and
+transitive (by composition of monomorphisms) relation.
 \begin{code}%
 \>[0]\<%
 \\
@@ -4978,9 +5000,7 @@ of \af{⨅} \ab{𝒜}%
 \AgdaKeyword{where}\<%
 \end{code}
 \fi
-\begin{code}%
-\>[0]\<%
-\\
+\begin{code}[inline]%
 \>[0][@{}l@{\AgdaIndent{1}}]%
 \>[1]\AgdaFunction{⨅-≤}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -5124,14 +5144,10 @@ of \af{⨅} \ab{𝒜}%
 \>[0]\<%
 \end{code}
 \fi
-
-Finally, we
 \ifshort
-mention the function \af{mon→≤} which upgrades a monomorphism to a subalgebra witness.
 \else
-close with two easy facts
-that will be useful later. The first converts a monomorphism to a subalgebra witness
-while the second is an algebraic invariance property of \aof{≤}.
+We close with two easy facts that will be useful later. The first converts a monomorphism
+to a subalgebra witness while the second is an algebraic invariance property of \aof{≤}.
 
 \begin{code}%
 \>[0]\<%
@@ -10929,7 +10945,9 @@ We omit the proof of this lemma and merely display its formal statement.
 \>[0]\<%
 \end{code}
 \fi
-\noindent We conclude that the homomorphism from \Free{X} to \af{𝑪} is injective, whence \Free{X} is (isomorphic to) a subalgebra of \af{𝑪}.
+\noindent We conclude that the homomorphism from \Free{X} to \af{𝑪} is injective, whence
+\Free{X} is (isomorphic to) a subalgebra of \af{𝑪}.\footnote{The proof of \af{F≤C} uses
+the utility function \af{mon→≤} which upgrades a monomorphism to a subalgebra witness.}
 
 \begin{code}%
 \>[0]\<%
@@ -10982,7 +11000,7 @@ We omit the proof of this lemma and merely display its formal statement.
 \\
 \>[0]\<%
 \end{code}
-Using the last result we prove that \Free{X} belongs to \af{S} (\af{P} \ab{𝒦}). This
+From \af{F≤C} it follows that \Free{X} belongs to \af{S} (\af{P} \ab{𝒦}). This
 requires one more technical lemma concerning the classes \af{S} and \af{P}; specifically,
 \ifshort
 \af{P} (\af{S} \ab{𝒦}) \aof{⊆} \af{S} (\af{P} \ab{𝒦}) holds for every class \ab{𝒦}.
