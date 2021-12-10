@@ -2,7 +2,7 @@
 The \agdaalgebras library \cite{ualib_v2.0.1} formalizes the foundations of universal algebra
 in intensional Martin-Löf type theory (\mltt) using \agda~{Norell:2007,agdaref}.
 The library includes a wide collection of definitions and verified theorems that appropriately codify
-classical set-theory-based universal algebra and equational
+classical, set-theory-based universal algebra and equational
 logic.
 
 The first major milestone of the \agdaalgebras project is a proof of \emph{Birkhoff's
@@ -233,7 +233,7 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
   eq : {b : B} → ∀ a → b ≈ f ⟨$⟩ a → Image f ∋ b
 \end{code}
 
-An inhabitant of \aod{Image} \ab f \aod{∋} \ab b is a point \ab
+An inhabitant of \aod{Image} \ab f \aod{∋} \ab b is a point \ab a
 where \AgdaTyped{a}{A} and a proof \ab p~\as :~\ab b \af{≈} \ab f~\ab a that
 \ab f maps \ab a to \ab b.
 Since the witness that \ab b
