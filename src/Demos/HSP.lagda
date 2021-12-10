@@ -2350,4 +2350,4 @@ it with a proof assistant.
 
 (do we need one?)
 
-One positive outcome of this project is further that dependent type theory and the \agda language, despite the technical demands they place on the user, are accessible to universal algebraists who possess sufficient patience and resolve to codify their work in type theory and verify their results with a proof assistant.
+One positive outcome of this project is further evidence in support of dependent type theory and the \agda language. We have shown that, despite the technical demands they place on the user, these technologies are accessible to universal algebraists who possess sufficient patience and resolve to codify their work in type theory and verify their results with a proof assistant.
