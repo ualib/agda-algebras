@@ -28,7 +28,7 @@ developed a new proof of the HSP theorem. We are confident that the new
 proof---in the \agdaalgebras library, ver.~2.0.1~\cite{ualib_v2.0.1}---is
 constructive and correct.
 
-What follows is a self-contained \agda proof of the HSP theorem.  This is done by
+What follows is a self-contained \agda proof of the HSP theorem.  This is achieved by
 extracting into a single module, as a literate \agda document\footnote{See the file
 (src/Demoes/\HSPlagda) in the repository, using \agda ver.2.6.2 and \agdastdlib ver.1.7.},
 a subset of the \agdaalgebras library, including only
@@ -48,11 +48,6 @@ is self-contained.
 We highlight some of the challenging aspects of formalizing universal algebra in type theory.
 Nonetheless, we hope to show that the patient mathematician with enough resolve and the will to learn
 dependent type theory can reap the rewards of the further insights that mechanization provides.
-% One positive contribution of this project is that it lends support to the claim that
-% dependent type theory and the \agda language, despite the technical demands they place on
-% the user, are accessible to working mathematicians (such as ourselves) who possess
-% sufficient patience and resolve to codify their work in type theory in order to formally verify
-% their results with a proof assistant.
 
 \ifshort\else
 We give a sobering glimpse of the technical hurdles that must be overcome
@@ -64,7 +59,7 @@ from the outcome of their formalization efforts.
 
 \section{Preliminaries}
 
-We assume that the reader is familiar with \mltt, and can decipher its encoding in \agda.
+For the most part, we assume that the reader is familiar with \mltt, and can decipher its encoding in \agda.
 
 \subsection{Logical foundations}
 
@@ -513,8 +508,8 @@ along with some experimental, domain-specific types for equivalence classes, quo
 This furthermore required postulating function extensionality%
 \footnote{An axiom that asserts that two point-wise equal functions are equal.}, which is
 known to be independent from \mltt~\cite{MHE, MHE:2019}. We felt that this was
-an unsatisfactory state of affairs, as we were curious to see if the theorems
-held directly in \mltt without extra axioms.
+an unsatisfactory state of affairs, as %we were curious to see if
+our aim is to show that the theorems hold directly in \mltt without extra axioms.
 In particular, we make no appeals to classical axioms like Choice or Excluded Middle.
 
 
@@ -1311,7 +1306,7 @@ is a signature, then
 Thus, if \ab{f} \as{:} \aof{∣} \ab{𝑆} \aof{∣} is an operation symbol in the
 signature \ab{𝑆}, then \aof{∥} \ab{𝑆} \aof{∥} \ab{f} is the arity of \ab{f}.
 
-We need to augment \af{Signature} for setoid domains.
+We need to augment the \af{Signature} type so that it supports algebras over setoid domains.
 \ifshort\else
 To do so---following Andreas Abel's lead (cf.~\cite{Abel:2021})---we
 define an operator that translates an ordinary signature into a \defn{setoid signature},
@@ -1401,7 +1396,7 @@ from Andreas Abel's development~\cite{Abel:2021}).
 \>[0]\<%
 \end{code}
 \noindent
-This enables us to define an operator from a signature to one over setoids.
+This enables us to define an operator which translates a signature for algebras over bare types into a signature for algebras over setoids.
 \ifshort\else
 We denote this operator by \aof{⟨\AgdaUnderscore{}⟩} and define it as follows.
 \fi
@@ -6511,7 +6506,7 @@ is an ordered pair (\ab p , \ab q) of 𝑆-terms, also denoted by \ab p \af{≈}
 They are often simply called equations or identities, especially when the signature \ab{𝑆} is clear.
 
 We define an \defn{equational theory} (or \defn{algebraic theory}) to be a pair \ab{T} =
-(\ab{𝑆} , \ab{ℰᵀ}) of a signature \ab{𝑆} and a collection \ab{ℰᵀ} of
+(\ab{𝑆} , \ab{ℰᵀ}) consisting of a signature \ab{𝑆} and a collection \ab{ℰᵀ} of
 \ab{𝑆}-term equations. Some authors reserve the term \defn{theory} for
 a \emph{deductively closed} set of equations, that is, a set of equations that is closed
 under \emph{entailment} (defined below).
@@ -6773,7 +6768,7 @@ If \ab{ℰ} is a set of \ab{𝑆}-term equations and \ab{p} and \ab{q} are \ab{�
 we say that \ab{ℰ} \defn{entails} the equation \ab{p}~\aof{≈}~\ab{q}, and we write
 \ab{ℰ}~\ad{⊢}~\ab{p}~\ad{≈}~\ab{q}, just in case every model of \ab{ℰ} also models
 \ab{p}~\aof{≈}~\ab{q}.
-We model our definition of \defn{entailment type} by the one defined by Abel
+We model our definition of \defn{entailment type} on the one defined by Abel
 in~\cite{Abel:2021}.  It contains cases for representing hypotheses, congruence of term
 application, that substitution respects entailment, and that entailment is
 an equivalence.
@@ -11483,3 +11478,14 @@ equational logic formalized in the \agdaalgebras library extends beyond the scop
 in~\cite{Carlstrom:2008}.  However, the logical foundations of that work is constructive set
 theory and, as far as we know, there was no attempt to formalize it in type theory and verify
 it with a proof assistant.
+
+
+\section{Conclusion}
+
+(do we need one)
+
+% One positive contribution of this project is that it lends support to the claim that
+% dependent type theory and the \agda language, despite the technical demands they place on
+% the user, are accessible to working mathematicians (such as ourselves) who possess
+% sufficient patience and resolve to codify their work in type theory in order to formally verify
+% their results with a proof assistant.
