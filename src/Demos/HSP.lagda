@@ -382,7 +382,7 @@ which maps each operation symbol to its arity. Here, \ab{N} denotes the \emph{ar
 Heuristically, the arity \ab{ρ} \ab{f} of an operation symbol \ab{f} \as{∈} \ab{F} may be
 thought of as the number of arguments that \ab{f} takes as ``input.''
 Here (and in the Agda Universal Algebra Library) we represent signatures in a very general way, as the
-inhabitants of the folloiwng dependent pair type.
+inhabitants of the following dependent pair type.
 
 \begin{center}
 
@@ -521,7 +521,7 @@ follows:
 This can be advantageous as it becomes possible to treat size issues
 more generally and precisely.  However, dealing with explicit
 universe levels can be daunting, and the standard literature
-(which usually make uniform smallness assumptions) offers no guidance.
+(in which uniform smallness is typically assumed) offers little guidance.
 \ifshort\else
 This aspect of the language was one of the few stumbling
 blocks we encountered while learning how to use \agda for formalizing universal algebra in
@@ -677,7 +677,7 @@ It is convenient to first formalize ``compatible'' (\af{compatible-map-op}),
 representing the assertion that a given setoid function
 \ab{h}~:~\aof{𝔻[~\ab{𝑨}~]} \aor{⟶} \aof{𝔻[~\ab{𝑩}~]} commutes with a given
 operation symbol \ab{f}, and then generalize over operation symbols (\af{compatible-map}),
-to yeild the type of compatible maps from (the domain of) \ab{𝑨} to (the domain of) \ab{𝑩}.
+to yield the type of compatible maps from (the domain of) \ab{𝑨} to (the domain of) \ab{𝑩}.
 
 \ifshort\else
 \begin{code}
@@ -1302,9 +1302,9 @@ a term in a given algebra, \emph{evaluated} in a given environment.
 \end{code}
 
 Two terms are proclaimed \defn{equal} if they are equal for all
-environments.  We represent this equivalence of terms%
+environments.  We represent this equivalence of terms
 \ifshort\else
-, and proof that it is an equivalence relation,
+and proof that it is an equivalence relation,
 \fi
 as follows.
 
@@ -1755,17 +1755,14 @@ module _ {X : Type χ}{ι : Level}(ℓ : Level){𝒦 : Pred(Algebra α ρᵃ)(α
 \paragraph*{The absolutely free algebra}
 The term algebra \af{𝑻} \ab X is \emph{absolutely free} (or \emph{initial}) for algebras
 in the signature \ab{𝑆}. That is, for every \ab{𝑆}-algebra \ab{𝑨}, the following hold.
-
 \begin{itemize}
 \item Every function from \ab{X} to \af{𝕌[ \ab{𝑨} ]} lifts to a homomorphism from \af{𝑻} \ab{X} to \ab{𝑨}.
 \item That homomorphism is unique.
 \end{itemize}
-
-We prove the first of these facts (\af{free-lift}).\footnote{\agdaalgebras also defines
+We formalize the first of these in two steps.\footnote{\agdaalgebras also defines
  \af{free-lift-func} \as{:} \aof{𝔻[~\af{𝑻}~\ab X~]}~\aor{⟶}~\aof{𝔻[~\ab{𝑨}~]}
  for the analogous setoid function.}$^,$\footnote{For the proof of uniqueness,
-see \ualmodule{Terms.Setoid.Properties}.}
-
+see \ualmodule{Terms.Setoid.Properties}.}  First is the lifting (\af{free-lift}).
 \begin{code}
 
 module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}(h : X → 𝕌[ 𝑨 ]) where
@@ -1794,7 +1791,7 @@ term has the form \aic{node} \ab f \ab t, we assume (the induction hypothesis)
 that the image of each subterm \ab t \ab i under the free lift of \ab h is known
 and the free lift is defined by applying \ab f \aof{̂} \ab{𝑨} to these images.
 \fi
-Moreover, the free lift so defined is a homomorphism by construction:
+Then the lift so defined is shown to be a homomorphism.
 
 \begin{code}
 
@@ -1805,7 +1802,7 @@ Moreover, the free lift so defined is a homomorphism by construction:
 \end{code}
 
 It turns out that the interpretation of a term \ab p in an environment \ab{η} is the same
-as the free lift of \ab{η} evaluated at \ab p.
+as the free lift of \ab{η} evaluated at \ab p. We apply this fact a number of times in the sequel.
 
 \ifshort\else
 \begin{code}
@@ -1837,10 +1834,9 @@ However, for any class \ab{𝒦} we can construct an algebra that is free for \a
 and belongs to the class \af{S} (\af{P} \ab{𝒦}), and for most applications this suffices.
 
 The construction of the free algebra in \af{S} (\af{P} \ab{𝒦})
-proceeds by taking the quotient of \T{X} modulo a congruence relation
-that we will denote by \afld{≈}.  One approach is to let
+proceeds by taking the quotient of \T{X} modulo a congruence relation \afld{≈}.  One approach is to let
 \afld{≈} be \af{⋂}\{\ab{θ} \af{∈} \af{Con} (\T{X}) : \T{X} \af{/} \ab{θ} \af{∈} \af{S}
-\ab{𝒦}\}.\footnote{\af{Con} (\T{X}) denotes the congruences of \T{X}.}.
+\ab{𝒦}\}.\footnote{\af{Con} (\T{X}) denotes the congruences of \T{X}.}
 Equivalently, we let \ab{ℰ} = \af{Th} \ab{𝒦} and take \afld{≈} to be the least equivalence relation
 on the domain of \T{X} such that
 \begin{enumerate}
@@ -1993,7 +1989,7 @@ module _  {𝑨 : Algebra (α ⊔ ρᵃ ⊔ ℓ) (α ⊔ ρᵃ ⊔ ℓ)} {𝒦 :
 
 Birkhoff's variety theorem, also known as the HSP theorem, asserts that a class of algebras
 is a variety if and only if it is an equational class.  In this section, we present the
-statement and proof of the HSP theorem---first a the style similar to
+statement and proof of the HSP theorem---first in a the style similar to
 what one finds in textbooks (e.g.,~\cite[Theorem 4.41]{Bergman:2012}),
 and then formally in the language of \mltt.
 
@@ -2139,7 +2135,7 @@ and \ab{ρ} : \ab X \as{→} \aof{𝕌[ \ab{𝑨} ]} is an arbitrary environment
 Using this indexing scheme, we construct \ab{𝑪}, the product of all algebras in \ab{𝒦}
 and all environments.
 
-The indexing type \ab{ℑ}, the family of algebras \ab{𝔄}, and the produc \ab{𝑪} are defined
+The indexing type \ab{ℑ}, the family of algebras \ab{𝔄}, and the product \ab{𝑪} are defined
 as follows.
 
 \ifshort\else
@@ -2245,8 +2241,8 @@ We omit the proof of this lemma and merely display its formal statement.
 \end{code}
 \fi
 \noindent We conclude that the homomorphism from \Free{X} to \af{𝑪} is injective, whence
-\Free{X} is (isomorphic to) a subalgebra of \af{𝑪}.\footnote{The proof of \af{F≤C} uses
-the utility function \af{mon→≤} which upgrades a monomorphism to a subalgebra witness.}
+\Free{X} is (isomorphic to) a subalgebra of \af{𝑪}.\footnote{The function \af{mon→≤} in
+the proof of \af{F≤C} merely extracts a subalgebra witness from a monomorphism.}
 
 \begin{code}
 
@@ -2329,47 +2325,42 @@ Thus, every variety is an equational class. This completes the formal proof of B
 %% -----------------------------------------------------------------------------
 \section{Related work}
 There have been a number of efforts to formalize parts of universal algebra in
-type theory besides ours.
-In~\cite{Capretta:1999}, Capretta formalized the basics of universal algebra in the
-   Calculus of Inductive Constructions using the Coq proof assistant.
-In~\cite{Spitters:2011}, Spitters and van der Weegen formalized the basics of universal algebra
-   and some classical algebraic structures, also in the Calculus of Inductive Constructions using
-   the Coq proof assistant and promoting the use of type classes.
-In~\cite{Gunther:2018} Gunther et al developed what seemed (prior to the \agdaalgebras library) to be
-   the most extensive library of formalized universal algebra to date; like \agdaalgebras,
-   that work is based on dependent type theory, is programmed in \agda, and goes beyond the
-   Noether isomorphism theorems to include some basic equational logic; although the
-   coverage is less extensive than that of \agdaalgebras, Gunther et al do treat
-   \emph{multi-sorted} algebras, whereas \agdaalgebras is currently limited to single
-   sorted structures.
+type theory besides ours. The Coq proof assistant, based on the Calculus of
+Inductive Constructions, was used by Capretta, in~\cite{Capretta:1999}, and
+Spitters and Van der Weegen, in~\cite{Spitters:2011}, to formalized the basics
+of universal algebra and some classical algebraic structures.
+In~\cite{Gunther:2018} Gunther et al developed what seemed (prior to the \agdaalgebras
+library) the most extensive library of formalized universal algebra to date.
+Like \agdaalgebras,~\cite{Gunther:2018} is based on dependent type theory, is programmed
+in \agda, and goes beyond the basic isomorphism theorems to include some equational logic.
+Although their coverage is less extensive than that of \agdaalgebras, Gunther et al do treat
+\emph{multi-sorted} algebras, whereas \agdaalgebras is currently limited to single-sorted structures.
 
 As noted by Abel~\cite{Abel:2021}, Amato et al, in \cite{Amato:2021}, have
-   formalized multi-sorted algebras with finitary operators in UniMath. The restriction to
-   finitary operations was due to limitations of the UniMath type theory, which does
-   not have W-types nor user-defined inductive types.
+formalized multi-sorted algebras with finitary operators in UniMath. The restriction to
+finitary operations was due to limitations of the UniMath type theory, which does
+not have W-types nor user-defined inductive types.
 Abel also notes that Lynge and Spitters, in~\cite{Lynge:2019}, formalize multi-sorted
-   algebras with finitary operators in \emph{Homotopy type theory} (\cite{HoTT}) using
-   Coq.  HoTT's higher inductive types enable them to define quotients as types, without
-   the need for setoids.  Lynge and Spitters prove three isomorphism theorems concerning
-   subalgebras and quotient algebras, but do not formalize universal algebras nor varieties.
+algebras with finitary operators in \emph{Homotopy type theory} (\cite{HoTT}) using
+Coq.  HoTT's higher inductive types enable them to define quotients as types, without
+the need for setoids.  Lynge and Spitters prove three isomorphism theorems concerning
+subalgebras and quotient algebras, but do not formalize universal algebras nor varieties.
 Finally, in~\cite{Abel:2021}, Abel gives a new formal proof of the soundness theorem and
-   Birkhoff's completeness theorem for multi-sorted algebraic structures.
+Birkhoff's completeness theorem for multi-sorted algebraic structures.
 
 %Some other projects aimed at formalizing mathematics generally, and algebra in particular,
-have developed into very extensive libraries that include definitions, theorems, and proofs
-about algebraic structures, such as groups, rings, modules, etc.  However, the goals of these
-efforts seem to be the formalization of special classical algebraic structures, as opposed
-to the general theory of (universal) algebras. Moreover, the part of universal algebra and
-equational logic formalized in the \agdaalgebras library extends beyond the scope of prior efforts.
+% have developed into very extensive libraries that include definitions, theorems, and proofs
+% about algebraic structures, such as groups, rings, modules, etc.  However, the goals of these
+% efforts seem to be the formalization of special classical algebraic structures, as opposed
+% to the general theory of (universal) algebras. Moreover, the part of universal algebra and
+% equational logic formalized in the \agdaalgebras library extends beyond the scope of prior efforts.
 
-%Prior to our work, a constructive version of Birkhoff's theorem was published by Carlstr\"om
-in~\cite{Carlstrom:2008}.  However, the logical foundations of that work is constructive set
-theory and, as far as we know, there was no attempt to formalize it in type theory and verify
-it with a proof assistant.
+%Prior to our work, a constructive version of Birkhoff's theorem was published by
+% Carlstr\"om in~\cite{Carlstrom:2008}.  However, the logical foundations of that work is constructive set
+% theory and, as far as we know, there was no attempt to formalize it in type theory and verify
+% it with a proof assistant.
 
 
-\section{Conclusion}
+% \section{Conclusion}
 
-(do we need one?)
-
-One positive outcome of this project is further evidence in support of dependent type theory and the \agda language. We have shown that, despite the technical demands they place on the user, these technologies are accessible to universal algebraists who possess sufficient patience and resolve to codify their work in type theory and verify their results with a proof assistant.
+% One positive outcome of this project is further evidence in support of dependent type theory and the \agda language. We have shown that, despite the technical demands they place on the user, these technologies are accessible to universal algebraists who possess sufficient patience and resolve to codify their work in type theory and verify their results with a proof assistant.
