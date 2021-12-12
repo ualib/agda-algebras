@@ -100,7 +100,7 @@ See the \href{https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.h
 \end{itemize}
 \fi
 
-We also make use of a variety of definitions that can be found in Agda's standard library; specifically,
+We also make use of a variety of definitions from Agda's standard library; these are imported as follows.
 \begin{code}[hide]%
 \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
 \AgdaKeyword{OPTIONS}\AgdaSpace{}%
@@ -4128,7 +4128,6 @@ Note that the definition, shown below, includes a proof of the fact that the map
 \AgdaBound{a}\<%
 \end{code}
 \ifshort
-
 Moreover, \afld{to} and \afld{from} are bijections
 and \ar{\au{}≅\au{}} is an equivalence relation (\seemedium).
 \else
@@ -4969,7 +4968,7 @@ transitive (by composition of monomorphisms) relation.
 \ab{ℬ} \ab i \af{≤} \ab{𝒜} \ab i for all \ab i~:~\ab I, then \af{⨅} \ab{ℬ} is a subalgebra
 of \af{⨅} \ab{𝒜}.
 \ifshort
-Below we \af{⨅-≤} to denote this fact.
+Below we use \af{⨅-≤} to denote this fact.
 \else
 
 \begin{code}%
@@ -9847,7 +9846,7 @@ then there exists an epimorphism from \Free{A} onto \ab{𝑨}.
 
 Birkhoff's variety theorem, also known as the HSP theorem, asserts that a class of algebras
 is a variety if and only if it is an equational class.  In this section, we present the
-statement and proof of the HSP theorem---first in a the style similar to
+statement and proof of the HSP theorem---first in a style similar to
 what one finds in textbooks (e.g.,~\cite[Theorem 4.41]{Bergman:2012}),
 and then formally in the language of \mltt.
 
@@ -10312,7 +10311,7 @@ consequence of the fact that \af{Mod} \af{Th} is a closure operator.
 \>[0]\<%
 \end{code}
 
-Our proof of the inclusion \af{Mod} (\af{Th} (V 𝒦)) \aof{⊆} \af{V} \ab{𝒦} proceeds as follows.
+\noindent Our proof of the inclusion \af{Mod} (\af{Th} (V 𝒦)) \aof{⊆} \af{V} \ab{𝒦} proceeds as follows.
 
 \begin{enumerate}
 \item Let \ab{𝑪} be the product of all algebras in \af{S} \ab{𝒦}, so that \ab{𝑪} \af{∈} \af{P} (\af{S} \ab{𝒦}).
