@@ -23,7 +23,7 @@ open import Homomorphisms.Noether
 open import Homomorphisms.Factor
 open import Homomorphisms.Isomorphisms
 open import Homomorphisms.HomomorphicImages
-open import Homomorphisms.Func
+open import Homomorphisms.Setoid
 
 \end{code}
 

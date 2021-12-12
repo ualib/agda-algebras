@@ -95,7 +95,7 @@ See the \href{https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.h
 \end{itemize}
 \fi
 
-We also make use of a variety of definitions that can be found in Agda's standard library; specifically,
+We also make use of a variety of definitions from Agda's standard library; these are imported as follows.
 \begin{code}[hide]
 {-# OPTIONS --without-K --exact-split --safe #-}
 \end{code}
@@ -958,7 +958,6 @@ module _ (𝑨 : Algebra α ρᵃ) (𝑩 : Algebra β ρᵇ) where
                from∼to : ∀ a → ∣ from ∣  ⟨$⟩ (∣ to ∣    ⟨$⟩ a)  ≈ᴬ a
 \end{code}
 \ifshort
-
 Moreover, \afld{to} and \afld{from} are bijections
 and \ar{\au{}≅\au{}} is an equivalence relation (\seemedium).
 \else
@@ -1108,7 +1107,7 @@ transitive (by composition of monomorphisms) relation.
 \ab{ℬ} \ab i \af{≤} \ab{𝒜} \ab i for all \ab i~:~\ab I, then \af{⨅} \ab{ℬ} is a subalgebra
 of \af{⨅} \ab{𝒜}.
 \ifshort
-Below we \af{⨅-≤} to denote this fact.
+Below we use \af{⨅-≤} to denote this fact.
 \else
 
 \begin{code}
@@ -1989,7 +1988,7 @@ module _  {𝑨 : Algebra (α ⊔ ρᵃ ⊔ ℓ) (α ⊔ ρᵃ ⊔ ℓ)} {𝒦 :
 
 Birkhoff's variety theorem, also known as the HSP theorem, asserts that a class of algebras
 is a variety if and only if it is an equational class.  In this section, we present the
-statement and proof of the HSP theorem---first in a the style similar to
+statement and proof of the HSP theorem---first in a style similar to
 what one finds in textbooks (e.g.,~\cite[Theorem 4.41]{Bergman:2012}),
 and then formally in the language of \mltt.
 
@@ -2117,7 +2116,7 @@ module _ (𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)){X : Type (α 
 
 \end{code}
 
-Our proof of the inclusion \af{Mod} (\af{Th} (V 𝒦)) \aof{⊆} \af{V} \ab{𝒦} proceeds as follows.
+\noindent Our proof of the inclusion \af{Mod} (\af{Th} (V 𝒦)) \aof{⊆} \af{V} \ab{𝒦} proceeds as follows.
 
 \begin{enumerate}
 \item Let \ab{𝑪} be the product of all algebras in \af{S} \ab{𝒦}, so that \ab{𝑪} \af{∈} \af{P} (\af{S} \ab{𝒦}).
