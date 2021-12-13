@@ -14,8 +14,8 @@ module Examples.Structures.Signatures where
 open import Agda.Primitive         using () renaming ( lzero to ℓ₀ )
 open import Data.Unit.Base         using () renaming ( ⊤ to 𝟙 ; tt to 𝟎 )
 open import Data.Empty             using () renaming ( ⊥ to 𝟘 )
-open import Overture.Preliminaries using ( 𝟚 ; 𝟛 )
-open import Structures.Basic       using ( signature ; structure )
+open import Base.Overture.Preliminaries using ( 𝟚 ; 𝟛 )
+open import Base.Structures.Basic       using ( signature ; structure )
 
 -- Some examples (of finite signatures)
 -- The signature with...
