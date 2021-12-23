@@ -103,7 +103,7 @@ We also make use of a variety of definitions from Agda's standard library; these
 \begin{code}
 
 -- Import universe levels and Signature type (described below) from the agda-algebras library.
-open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Demos.HSP {𝑆 : Signature 𝓞 𝓥} where
 \end{code}
