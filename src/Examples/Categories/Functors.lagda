@@ -24,7 +24,7 @@ open import Level
 open import Data.Unit      using () renaming ( tt to 𝟎 )
 open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl ; _≢_ )
 
-open import Categories.Functors using ( List ; list ; _⟦_⟧ ; _[_] ; μ_ ; Option )
+open import Base.Categories.Functors using ( List ; list ; _⟦_⟧ ; _[_] ; μ_ ; Option )
 
 open μ_
 open list
