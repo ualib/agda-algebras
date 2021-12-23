@@ -1,11 +1,7 @@
 # agda-algebras
 
 This is a copy of the Agda Universal Algebra Library which depends the [Standard Library](https://github.com/agda/agda-stdlib) of the [Agda](https://wiki.portal.chalmers.se/agda/pmwiki.php) proof assistant language.
-It is currently under active reconstruction, and should be regarded as alpha software.  (The previous version of the Agda Universal Algebra Library, which was called UALib, was based on the [Type Topology](https://github.com/martinescardo/TypeTopology) library of [Martín Escardó][].
-
-If problems arise when attempting to follow these steps, please 
-[email the development team](mailto:williamdemeo@gmail.com) or create new issue on the
-[git repo](https://github.com/ualib/agda-algebras) for this library.
+It is currently under active reconstruction, and should be regarded as alpha software.  (The previous version of the Agda Universal Algebra Library, which was called UALib, was based on the [Type Topology](https://github.com/martinescardo/TypeTopology) library of [Martín Escardó][].)
 
 ---------------------------
 
@@ -21,7 +17,7 @@ the [documentation](https://ualib.guthub.io/agda-algebras), for (this version of
 
 Agda was used to generate html pages for each module. These pages are now served at
 
-[https://ualib.github.io/agda-algebras/](https://ualib.github.io/agda-algebras/)
+[https://ualib.org](https://ualib.org)
 
 (The previous version of the agda-algebras library, called UALib, is documented at [ualib.org](https://ualib.gitlab.io).)
 
@@ -34,7 +30,7 @@ Agda ([version 2.6.1](https://agda.readthedocs.io/en/v2.6.1/getting-started/inst
 If you don't have it, follow the [official Agda installation instructions](https://agda.readthedocs.io/en/v2.6.0/getting-started/installation.html).
 
 
-For reference, the following is a list of commands that should Agda version 2.6.2 on a Ubuntu 18.04 distro. Please submit an issue or pull request if these commands don't work for you.
+For reference, the following is a list of commands that should correctly install Agda version 2.6.2 on a Ubuntu 18.04 machine. Please submit an issue or pull request if these commands don't work for you.
 
 ```
 cabal update
@@ -64,10 +60,8 @@ Now invoking the command `agdamacs` will launch emacs with Agda 2.6.2 and agda-m
 ## Contributing to this repository
 
 If you wish to contribute to this repository, the best way is to use the
-standard
-[fork-clone-pull-request](https://gist.github.com/Chaser324/ce0505fbed06b947d962)
-workflow.  This is described nicely on [this page](https://gist.github.com/Chaser324/ce0505fbed06b947d962).
-More extensive instructions, that still apply, can be found on [the original project's page](https://ualib.gitlab.io).
+standard [fork-clone-pull-request](https://gist.github.com/Chaser324/ce0505fbed06b947d962)
+workflow.
 
 -------------------------------------
 
