@@ -42,7 +42,7 @@ We hope the library is useful to mathematicians and computer scientists who wish
 
 **Keywords and phrases**. Universal algebra, Equational logic, Martin-Löf Type Theory, Birkhoff’s HSP Theorem, Formalization of mathematics, Agda
 
-**Software Repository**. [github.com/ualib/agda-algebras](https://gitub.com/ualib/agda-algebras)
+**Software Repository**. [github.com/ualib/agda-algebras](https://github.com/ualib/agda-algebras)
 
 **Citing this work**. See the instructions at [agda-algebras/Preface.html](https://ualib.github.io/agda-algebras/Preface.html#how-to-cite-the-agda-algebras-library).
 
