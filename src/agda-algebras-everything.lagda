@@ -9,6 +9,9 @@ All definitions and theorems in agda-algebras as of 12 Dec 2021.
 
 \begin{code}
 
+{-# OPTIONS --without-K --exact-split --safe --cubical #-}
+
+
 -- ================================================================================================
 -- ===============================  Version 1  ====================================================
 -- Ver. 1 of the agda-algebras library was based on "bare" types
@@ -382,38 +385,45 @@ open import
 
 -- SETOID.VARIETIES --------------------------------------------------------------------------
 open import
- Setoid.Varieties.EquationalLogic   using ( _⊧_≈_ ; _⊫_≈_ ; Th ; Th' ; ℐ ; ℰ ; Mod ; Modᵗ )
+ Setoid.Varieties.EquationalLogic   using ( _⊧_≈_ ; _⊫_≈_ ; Th ; Th' ; ℐ ; ℰ ; Mod ; Modᵗ    )
 open import
- Setoid.Varieties.SoundAndComplete  using ( Eq ; _⊨_ ; _⊧_ ; Mod ; _⊫_ ; _⊃_ ; _⊢_▹_≈_  )
-                                    using ( module Soundness ; module FreeAlgebra )
-open Soundness                      using ( sound )
-open FreeAlgebra                    using ( FreeDomain ; FreeInterp ; 𝔽[_] ; σ₀ ; identity  )
-                                    using ( evaluation ; satisfies ; completeness )
+ Setoid.Varieties.SoundAndComplete  using ( Eq ; _⊨_ ; _⊧_ ; Mod ; _⊫_ ; _⊃_ ; _⊢_▹_≈_       )
+                                    using ( module Soundness ; module FreeAlgebra            )
+open Soundness                      using ( sound                                            )
+open FreeAlgebra                    using ( FreeDomain ; FreeInterp ; 𝔽[_] ; σ₀ ; identity   )
+                                    using ( evaluation ; satisfies ; completeness            )
 open import
- Setoid.Varieties.Closure           using ( Level-closure ; Lift-closed ; H ; S ; P ; SP   )
-                                    using ( V ; is-variety ; variety ; S-mono ; S-idem     )
-                                    using ( H-expa ; S-expa ; P-mono ; P-expa ; V-expa     )
-                                    using ( S-≅ ; V-≅ ; V-≅-lc ; classP ; classSP          )
-                                    using ( classHSP ; classS ; classK ; LevelClosure-S    )
-                                    using ( S-LevelClosure ; S-Lift-lemma ; P-Lift-closed  )
+ Setoid.Varieties.Closure           using ( Level-closure ; Lift-closed ; H ; S ; P ; SP     )
+                                    using ( V ; is-variety ; variety ; S-mono ; S-idem       )
+                                    using ( H-expa ; S-expa ; P-mono ; P-expa ; V-expa       )
+                                    using ( S-≅ ; V-≅ ; V-≅-lc ; classP ; classSP            )
+                                    using ( classHSP ; classS ; classK ; LevelClosure-S      )
+                                    using ( S-LevelClosure ; S-Lift-lemma ; P-Lift-closed    )
 open import
- Setoid.Varieties.Properties        using ( ⊧-I-invar ; ⊧-Lift-invar ; ⊧-lower-invar      )
-                                    using ( ⊧-S-invar ; ⊧-S-class-invar ; ⊧-P-invar       )
-                                    using ( ⊧-P-class-invar ; ⊧-P-lift-invar ; ⊧-H-invar  )
+ Setoid.Varieties.Properties        using ( ⊧-I-invar ; ⊧-Lift-invar ; ⊧-lower-invar         )
+                                    using ( ⊧-S-invar ; ⊧-S-class-invar ; ⊧-P-invar          )
+                                    using ( ⊧-P-class-invar ; ⊧-P-lift-invar ; ⊧-H-invar     )
 open import
- Setoid.Varieties.Preservation      using ( S⊆SP ; P⊆SP ; P⊆HSP ; P⊆V ; SP⊆V ; PS⊆SP       )
-                                    using ( H-id1 ; H-id2 ; S-id1 ; S-id2 ; P-id1 ; P-id2  )
-                                    using ( V-id1 ; V-id2 ; Lift-id1 ; classIds-⊆-VIds     )
-                                    using ( VIds-⊆-classIds                                )
+ Setoid.Varieties.Preservation      using ( S⊆SP ; P⊆SP ; P⊆HSP ; P⊆V ; SP⊆V ; PS⊆SP         )
+                                    using ( H-id1 ; H-id2 ; S-id1 ; S-id2 ; P-id1 ; P-id2    )
+                                    using ( V-id1 ; V-id2 ; Lift-id1 ; classIds-⊆-VIds       )
+                                    using ( VIds-⊆-classIds                                  )
 open import
- Setoid.Varieties.FreeAlgebras      using ( module FreeHom ; 𝔽-ModTh-epi ; 𝔽-ModTh-epi-lift )
-open FreeHom                        using ( ℐ ; ℰ ; ℰ⊢[_]▹Th𝒦 ; epi𝔽[_] ; hom𝔽[_]           )
-                                    using ( hom𝔽[_]-is-epic ; class-models-kernel           )
-                                    using ( kernel-in-theory ; 𝒦⊫→ℰ⊢                        )
+ Setoid.Varieties.FreeAlgebras      using ( module FreeHom ; 𝔽-ModTh-epi ; 𝔽-ModTh-epi-lift  )
+open FreeHom                        using ( ℐ ; ℰ ; ℰ⊢[_]▹Th𝒦 ; epi𝔽[_] ; hom𝔽[_]            )
+                                    using ( hom𝔽[_]-is-epic ; class-models-kernel            )
+                                    using ( kernel-in-theory ; 𝒦⊫→ℰ⊢                         )
 open import
- Setoid.Varieties.HSP               using ( ℑ⁺ ; 𝔄⁺ ; ℭ ; skEqual ; AllEqual⊆ker𝔽 ; homℭ  )
-                                    using ( ker𝔽⊆kerℭ ; hom𝔽ℭ ; kerℭ⊆ker𝔽 ; mon𝔽ℭ ; 𝔽≤ℭ   )
-                                    using ( SP𝔽 ; Birkhoff ; Birkhoff-converse            )
+ Setoid.Varieties.HSP               using ( ℑ⁺ ; 𝔄⁺ ; ℭ ; skEqual ; AllEqual⊆ker𝔽 ; homℭ     )
+                                    using ( ker𝔽⊆kerℭ ; hom𝔽ℭ ; kerℭ⊆ker𝔽 ; mon𝔽ℭ ; 𝔽≤ℭ      )
+                                    using ( SP𝔽 ; Birkhoff ; Birkhoff-converse               )
+
+
+-- CUBICAL.OVERTURE --------------------------------------------------------------------------
+
+open import
+ Cubical.Overture.Preliminaries     using ( Π ; Π-syntax ; ∣_∣ ; ∥_∥ ; _⁻¹ ; id ; 𝑖𝑑        )
+                                    using ( lift∼lower ; lower∼lift ; _≈_                   )
 
 
 

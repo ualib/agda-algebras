@@ -55,7 +55,7 @@ We hope the library is useful to mathematicians and computer scientists who wish
 The following list of modules imported by the current module, [agda-algebras](https://ualib.github.io/agda-algebras/agda-algebras.html), serves as a brief table of contents.
 
 \begin{code}[hide]
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe --cubical #-}
 \end{code}
 \begin{code}
 module agda-algebras where
@@ -63,6 +63,7 @@ module agda-algebras where
 open import Preface
 open import Base
 open import Setoid
+open import Cubical
 
 \end{code}
 
