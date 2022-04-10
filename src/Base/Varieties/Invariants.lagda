@@ -1,6 +1,6 @@
 ---
 layout: default
-title : "Varieties.Invariants module (Agda Universal Algebra Library)"
+title : "Base.Varieties.Invariants module (Agda Universal Algebra Library)"
 date : "2021-06-29"
 author: "the ualib/agda-algebras development team"
 ---
@@ -13,16 +13,18 @@ These are properties that are preserved under isomorphism.
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature ; Algebra )
+open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
-module Varieties.Invariants (𝑆 : Signature 𝓞 𝓥) where
+module Base.Varieties.Invariants (𝑆 : Signature 𝓞 𝓥) where
 
 -- Imports from Agda and the Agda Standard Library ---------------------
 open import Agda.Primitive using ( Level ) renaming ( Set to Type )
 open import Relation.Unary using ( Pred )
 
 -- Imports from the Agda Universal Algebra Library -------------------------------------------
-open import Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ )
+open import Base.Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ )
+open import Base.Algebras.Basic                     using ( Algebra )
+
 private variable α ℓ : Level
 
 AlgebraicInvariant : Pred (Algebra α 𝑆) ℓ → Type _

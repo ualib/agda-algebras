@@ -13,7 +13,7 @@ This module collects all submodule of that part of the library based on setoids,
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Setoid.Overture where
+module Setoid where
 
 open import Setoid.Overture
 open import Setoid.Relations

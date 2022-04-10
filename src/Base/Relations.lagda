@@ -16,7 +16,7 @@ Finally, in [Base.Relations.Quotients][] we define quotient types.
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Relations where
+module Base.Relations where
 
 open import Base.Relations.Discrete
 open import Base.Relations.Continuous

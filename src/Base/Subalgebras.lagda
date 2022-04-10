@@ -13,7 +13,7 @@ This is the [Base.Subalgebras][] module of the [Agda Universal Algebra Library][
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Subalgebras where
+module Base.Subalgebras where
 
 open import Base.Subalgebras.Subuniverses
 open import Base.Subalgebras.Subalgebras

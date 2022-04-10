@@ -105,7 +105,7 @@ We won't reproduce all of the imports we use here. Rather we show only those imp
 
 \begin{code}[hide]
 {-# OPTIONS --without-K --exact-split --safe #-}
-open import Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 module Demos.HSP-markdown {𝑆 : Signature 𝓞 𝓥} where
 \end{code}
 \begin{code}

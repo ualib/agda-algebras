@@ -5,15 +5,15 @@ date : "2021-12-12"
 author: "the agda-algebras development team"
 ---
 
-### <a id="the-agda-universal-algebra-library-base-module">The Base Module of the Agda Universal Algebra Library</a>
+### <a id="the-base-module-of-the-agda-universal-algebra-library">The Base Module of the Agda Universal Algebra Library</a>
 
-This module collects all submodule of that part of the library that use "bare" types, as opposed to Setoids (see Setoid.lagda) or Cubical Agda (see Cubical.lagda).
+This module collects all submodules the library that use "bare" types, as opposed to Setoids (see Setoid.lagda) or Cubical Agda (see Cubical.lagda).
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Base.Overture where
+module Base where
 
 open import Base.Overture
 open import Base.Relations
