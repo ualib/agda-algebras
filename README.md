@@ -48,7 +48,7 @@ cp ~/.emacs ~/bin
 cp ~/.emacs.backup ~/.emacs
 cd ~/bin
 echo '#!/bin/bash' > agdamacs
-echo 'PATH=~/.cabal/bin:$PATH emacs --no-init-file --load ~/bin/.emacs \$@' >> agdamacs
+echo 'PATH=~/.cabal/bin:$PATH emacs --no-init-file --load ~/bin/.emacs $@' >> agdamacs
 chmod +x agdamacs
 echo 'export PATH=~/bin:~/.cabal/bin:$PATH' >> ~/.profile
 ```
