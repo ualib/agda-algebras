@@ -30,7 +30,7 @@ of citation.
 
 ---------------------------------------------------------------------------------
 
-(Version 2.03 of {{ "now" | date: "%d %b %Y" }})
+(Version 2.04 of {{ "now" | date: "%d %b %Y" }})
 
 **Abstract**. The [Agda Universal Algebra Library](https://ualib.github.io/agda-algebras) is a collection of types and programs (theorems and proofs) that formalizes the foundations of universal algebra in dependent type theory using the [Agda](https://wiki.portal.chalmers.se/agda/pmwiki.php) proof assistant language.
 
@@ -61,18 +61,8 @@ The following list of modules imported by the current module, [agda-algebras](ht
 module agda-algebras where
 
 open import Preface
-open import Overture
-open import Relations
-open import Equality
-open import Adjunction
-open import Algebras
-open import Homomorphisms
-open import Terms
-open import Subalgebras
-open import Varieties
-open import Structures
-open import Categories
-open import Complexity
+open import Base
+open import Setoid
 
 \end{code}
 

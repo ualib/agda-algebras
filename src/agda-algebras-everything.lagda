@@ -285,6 +285,18 @@ open import
 open import
  Setoid.Overture.Bijective     using ( IsBijective ; BijInv                                  )
 
+
+
+
+-- SETOID.RELATIONS --------------------------------------------------------------------------
+open import
+ Setoid.Relations.Discrete     using ( function-equality ; Im_⊆_ ; fker ; fkerPred           )
+                               using ( fkerlift ; 0rel )
+
+open import
+ Setoid.Relations.Quotients    using ( ker-IsEquivalence ; IsBlock ; Quotient ; _/_ ; ⟪_⟫    )
+                               using ( ⟪_∼_⟫-intro ; ⟪_∼_⟫-elim ; ≡→⊆                        )
+
 -- SETOID.ALGEBRAS --------------------------------------------------------------------------
 open import
  Setoid.Algebras.Basic       using ( ov ; EqArgs ; ⟦_⟧ ; Algebra ; 𝕌[_] ; 𝔻[_]              )
@@ -295,6 +307,7 @@ open import
 open import
  Setoid.Algebras.Congruences using ( _∣≈_ ; IsCongruence ; Con ; IsCongruence→Con            )
                              using ( Con→IsCongruence ; _╱_                                  )
+
 
 -- SETOID.HOMOMORPHISMS ---------------------------------------------------------------------
 open import
@@ -327,6 +340,7 @@ open import
  Setoid.Homomorphisms.HomomorphicImages  using ( _IsHomImageOf_ ; HomImages ; HomImageOf[_]  )
                                          using ( IsHomImageOfClass ; HomImageOfClass         )
                                          using ( Lift-epi-is-epiˡ ; Lift-Alg-hom-imageˡ      )
+
 
 -- SETOID.TERMS --------------------------------------------------------------------------
 open import
@@ -400,6 +414,9 @@ open import
  Setoid.Varieties.HSP               using ( ℑ⁺ ; 𝔄⁺ ; ℭ ; skEqual ; AllEqual⊆ker𝔽 ; homℭ  )
                                     using ( ker𝔽⊆kerℭ ; hom𝔽ℭ ; kerℭ⊆ker𝔽 ; mon𝔽ℭ ; 𝔽≤ℭ   )
                                     using ( SP𝔽 ; Birkhoff ; Birkhoff-converse            )
+
+
+
 
 -- EXAMPLES -----------------------------------------------------------------------------------------
 open import
