@@ -30,7 +30,7 @@ of citation.
 
 ---------------------------------------------------------------------------------
 
-(Version 2.03 of {{ "now" | date: "%d %b %Y" }})
+(Version 2.04 of {{ "now" | date: "%d %b %Y" }})
 
 **Abstract**. The [Agda Universal Algebra Library](https://ualib.github.io/agda-algebras) is a collection of types and programs (theorems and proofs) that formalizes the foundations of universal algebra in dependent type theory using the [Agda](https://wiki.portal.chalmers.se/agda/pmwiki.php) proof assistant language.
 
@@ -55,24 +55,15 @@ We hope the library is useful to mathematicians and computer scientists who wish
 The following list of modules imported by the current module, [agda-algebras](https://ualib.github.io/agda-algebras/agda-algebras.html), serves as a brief table of contents.
 
 <pre class="Agda">
-<a id="3646" class="Symbol">{-#</a> <a id="3650" class="Keyword">OPTIONS</a> <a id="3658" class="Pragma">--without-K</a> <a id="3670" class="Pragma">--exact-split</a> <a id="3684" class="Pragma">--safe</a> <a id="3691" class="Symbol">#-}</a>
+<a id="3647" class="Symbol">{-#</a> <a id="3651" class="Keyword">OPTIONS</a> <a id="3659" class="Pragma">--without-K</a> <a id="3671" class="Pragma">--exact-split</a> <a id="3685" class="Pragma">--safe</a> <a id="3692" class="Pragma">--cubical</a> <a id="3702" class="Symbol">#-}</a>
 </pre>
 <pre class="Agda">
-<a id="3719" class="Keyword">module</a> <a id="3726" href="agda-algebras.html" class="Module">agda-algebras</a> <a id="3740" class="Keyword">where</a>
+<a id="3730" class="Keyword">module</a> <a id="3737" href="agda-algebras.html" class="Module">agda-algebras</a> <a id="3751" class="Keyword">where</a>
 
-<a id="3747" class="Keyword">open</a> <a id="3752" class="Keyword">import</a> <a id="3759" href="Preface.html" class="Module">Preface</a>
-<a id="3767" class="Keyword">open</a> <a id="3772" class="Keyword">import</a> <a id="3779" href="Overture.html" class="Module">Overture</a>
-<a id="3788" class="Keyword">open</a> <a id="3793" class="Keyword">import</a> <a id="3800" href="Relations.html" class="Module">Relations</a>
-<a id="3810" class="Keyword">open</a> <a id="3815" class="Keyword">import</a> <a id="3822" href="Equality.html" class="Module">Equality</a>
-<a id="3831" class="Keyword">open</a> <a id="3836" class="Keyword">import</a> <a id="3843" href="Adjunction.html" class="Module">Adjunction</a>
-<a id="3854" class="Keyword">open</a> <a id="3859" class="Keyword">import</a> <a id="3866" href="Algebras.html" class="Module">Algebras</a>
-<a id="3875" class="Keyword">open</a> <a id="3880" class="Keyword">import</a> <a id="3887" href="Homomorphisms.html" class="Module">Homomorphisms</a>
-<a id="3901" class="Keyword">open</a> <a id="3906" class="Keyword">import</a> <a id="3913" href="Terms.html" class="Module">Terms</a>
-<a id="3919" class="Keyword">open</a> <a id="3924" class="Keyword">import</a> <a id="3931" href="Subalgebras.html" class="Module">Subalgebras</a>
-<a id="3943" class="Keyword">open</a> <a id="3948" class="Keyword">import</a> <a id="3955" href="Varieties.html" class="Module">Varieties</a>
-<a id="3965" class="Keyword">open</a> <a id="3970" class="Keyword">import</a> <a id="3977" href="Structures.html" class="Module">Structures</a>
-<a id="3988" class="Keyword">open</a> <a id="3993" class="Keyword">import</a> <a id="4000" href="Categories.html" class="Module">Categories</a>
-<a id="4011" class="Keyword">open</a> <a id="4016" class="Keyword">import</a> <a id="4023" href="Complexity.html" class="Module">Complexity</a>
+<a id="3758" class="Keyword">open</a> <a id="3763" class="Keyword">import</a> <a id="3770" href="Preface.html" class="Module">Preface</a>
+<a id="3778" class="Keyword">open</a> <a id="3783" class="Keyword">import</a> <a id="3790" href="Base.html" class="Module">Base</a>
+<a id="3795" class="Keyword">open</a> <a id="3800" class="Keyword">import</a> <a id="3807" href="Setoid.html" class="Module">Setoid</a>
+<a id="3814" class="Keyword">open</a> <a id="3819" class="Keyword">import</a> <a id="3826" href="Cubical.html" class="Module">Cubical</a>
 
 </pre>
 
