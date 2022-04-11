@@ -7,9 +7,9 @@ author: "the agda-algebras development team"
 
 ### <a id="the-base-module-of-the-agda-universal-algebra-library">The Base Module of the Agda Universal Algebra Library</a>
 
-This module collects all submodules the library that use "bare" types, as opposed to similar versions of these submodules based on Setoids (see the [Setoid][] module).
+This module collects all submodules the library that use "bare" types, as opposed to similar versions of these submodules based on Setoids (see the [Setoid](Setoid.html) module).
 
-(We are also developing a version of the library based on Cubical Agda, which will consist of submodules of the the [Cubical][] module, but this work has only just begun).
+(We are also developing a version of the library based on Cubical Agda, which will consist of submodules of the the [Cubical](Cubical.html) module, but this work has only just begun.)
 
 \begin{code}
 

@@ -52,7 +52,8 @@ We hope the library is useful to mathematicians and computer scientists who wish
 
 ### Organization
 
-We have organized the library into three main modules, called [Base][], [Setoid][], and [Cubical][], which are imported below (after the [Preface][] module, which doesn't contain any Agda code).  These three modules are independent of one another.  The [Base][] module contains submodules that comprise the first version of the library.  The [Setoid][] contains the second version of the library that is based on setoids.  Finally, we have begun work on a third version of the library, which is based on Cubical Agda and will consist of submodules of the [Cubical][] module.
+We have organized the library into three main modules, called
+[Base](Base.html), [Setoid](Setoid.html), and [Cubical](Cubical.html), which are imported below (after the [Preface][] module, which doesn't contain any Agda code).  These three modules are independent of one another.  The [Base](Base.html) module contains submodules that comprise the first version of the library.  The [Setoid](Setoid.html) contains the second version of the library that is based on setoids.  Finally, we have begun work on a third version of the library, which is based on Cubical Agda and will consist of submodules of the [Cubical](Cubical.html) module.
 
 \begin{code}[hide]
 {-# OPTIONS --without-K --exact-split --safe --cubical #-}
