@@ -27,7 +27,7 @@ The source code for this module comprises the (literate) [Agda][] program that w
 
 --------------------------------------
 
-<span style="float:left;">[← Preface](Preface.html)</span>
+<span style="float:left;">[← Base](Base.html)</span>
 <span style="float:right;">[Base.Overture.Preliminaries →](Base.Overture.Preliminaries.html)</span>
 
 {% include UALib.Links.md %}
