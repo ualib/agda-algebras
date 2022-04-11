@@ -52,8 +52,8 @@ We hope the library is useful to mathematicians and computer scientists who wish
 
 ### Organization
 
-We have organized the library into three main modules, called
-[Base](Base.html), [Setoid](Setoid.html), and [Cubical](Cubical.html), which are imported below (after the [Preface][] module, which doesn't contain any Agda code).  These three modules are independent of one another.  The [Base](Base.html) module contains submodules that comprise the first version of the library.  The [Setoid](Setoid.html) contains the second version of the library that is based on setoids.  Finally, we have begun work on a third version of the library, which is based on Cubical Agda and will consist of submodules of the [Cubical](Cubical.html) module.
+We have organized the library into three main modules, called [Base](Base.html), [Setoid](Setoid.html), and [Cubical](Cubical.html), which are imported below (after the [Preface][] module, which doesn't contain any Agda code).  These three modules are independent of one another.  The [Base](Base.html) module contains submodules that comprise the first version of the library.  The [Setoid](Setoid.html) contains the second version of the library that is based on setoids.  Finally, we have begun work on a third version of the library, which is based on Cubical Agda and will consist of submodules of the [Cubical](Cubical.html) module.
+
 
 \begin{code}[hide]
 {-# OPTIONS --without-K --exact-split --safe --cubical #-}
@@ -67,6 +67,10 @@ open import Setoid   -- setoid-based version of the library
 open import Cubical  -- forthcoming version of the library based on Cubical Agda
 
 \end{code}
+
+
+If you're looking for our latest (setoid-based) formalization of Brkhoff's Theorem, see the [Birkhoff HSP Theorem Section](https://ualib.org/Setoid.Varieties.HSP.html#proof-of-the-hsp-theorem) of the documentation, or the source code of the [Setoid.Varieties.HSP][] module, which is in the file [Setoid/Varieties/HSP.lagda][] in the [agda-algebras][] GitHub repository.
+
 
 ------------------------------
 
