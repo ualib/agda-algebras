@@ -9,7 +9,7 @@ author: "agda-algebras development team"
 
 This is the [Base.Structures.Graphs0][] module of the [Agda Universal Algebra Library][].
 
-N.B. This module differs from Graphs.lagda in that here we assume some universes are level zero (i.e., ℓ₀). This simplifies some things; e.g., we avoid having to use lift and lower (cf. Graphs.lagda)
+N.B. This module differs from Graphs.lagda in that here we assume some universes are level zero (i.e., ℓ₀). This simplifies some things; e.g., we avoid having to use lift and lower (cf. [Base/Structures/Graphs.lagda][])
 
 Definition [Graph of a structure]. Let 𝑨 be an (𝑅,𝐹)-structure (relations from 𝑅 and operations from 𝐹).
 The *graph* of 𝑨 is the structure Gr 𝑨 with the same domain as 𝑨 with relations from 𝑅 and together with a (k+1)-ary relation symbol G 𝑓 for each 𝑓 ∈ 𝐹 of arity k, which is interpreted in Gr 𝑨 as all tuples (t , y) ∈ Aᵏ⁺¹ such that 𝑓 t ≡ y. (See also Definition 2 of https://arxiv.org/pdf/2010.04958v2.pdf)

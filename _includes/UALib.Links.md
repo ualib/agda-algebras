@@ -12,8 +12,7 @@
 [merge request]: https://github.com/ualib/agda-algebras/compare
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 
-[Preface]: https://ualib.github.io/agda-algebras/Preface.html
-
+[Preface]: https://ualib.org/Preface.html
 [Base]: https://ualib.org/Base.html
 [Base.Adjunction]: https://ualib.org/Base.Adjunction.html
 [Base.Adjunction.Closure]: https://ualib.org/Base.Adjunction.Closure.html
@@ -93,7 +92,6 @@
 [Examples.Structures.Basic]: https://ualib.org/Examples.Structures.Basic.html
 [Examples.Structures.Signatures]: https://ualib.org/Examples.Structures.Signatures.html
 [Exercises.Complexity.FiniteCSP]: https://ualib.org/Exercises.Complexity.FiniteCSP.html
-[Preface]: https://ualib.org/Preface.html
 [Setoid]: https://ualib.org/Setoid.html
 [Setoid.Algebras]: https://ualib.org/Setoid.Algebras.html
 [Setoid.Algebras.Basic]: https://ualib.org/Setoid.Algebras.Basic.html
