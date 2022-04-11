@@ -125,7 +125,7 @@ lift-of-epi-is-epi 𝑨 {h₀} hE y = Goal
 
 \end{code}
 
-The `lift-hom` and `lift-of-epi-is-epi` types will be called to action when such epimorphisms are needed later (e.g., in the [Varieties][] module).
+The `lift-hom` and `lift-of-epi-is-epi` types will be called to action when such epimorphisms are needed later (e.g., in the [Base.Varieties][] module).
 
 ------------------------------
 

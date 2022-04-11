@@ -9,7 +9,7 @@ author: "the agda-algebras development team"
 
 This is the [Base.Overture][] module of the [Agda Universal Algebra Library][].
 
-The source code for this module comprises the (literate) [Agda][] program that was used to generate the html page displaying the sentence you are now reading. This source code inhabits the file [Overture.lagda][], which resides in the [git repository of the agda-algebras library][].
+The source code for this module comprises the (literate) [Agda][] program that was used to generate the html page displaying the sentence you are now reading. This source code inhabits the file [Base/Overture.lagda][], which resides in the [git repository of the agda-algebras library][].
 
 \begin{code}
 

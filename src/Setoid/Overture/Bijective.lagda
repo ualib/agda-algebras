@@ -9,7 +9,7 @@ author: "the agda-algebras development team"
 
 This is the [Setoid.Overture.Bijective][] module of the [agda-algebras][] library.
 
-A *bijective function* from a setoid `𝑨 = (A, ≈₀)` to a setoid `𝑩 = (B, ≈₁)` is a function `f : 𝑨 ⟶ 𝑩` that is both injective and surjective. (See the definitions in the modules [Overture.Setoid.Injective][] and [Overture.Setoid.Surjective][].
+A *bijective function* from a setoid `𝑨 = (A, ≈₀)` to a setoid `𝑩 = (B, ≈₁)` is a function `f : 𝑨 ⟶ 𝑩` that is both injective and surjective. (See the definitions in [Setoid.Overture.Injective][] and [Setoid.Overture.Surjective][].
 
 \begin{code}
 

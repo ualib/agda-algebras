@@ -71,7 +71,7 @@ open V
 
 #### <a id="the-free-algebra-in-theory">The free algebra in theory</a>
 
-Recall, we proved in the [Terms.Basic][] module that the term algebra `𝑻 X` is absolutely free in the class of all `𝑆`-structures.
+Recall, we proved in the [Base.Terms.Basic][] module that the term algebra `𝑻 X` is absolutely free in the class of all `𝑆`-structures.
 In this section, we formalize, for a given class `𝒦` of `𝑆`-algebras, the (relatively) free algebra in `S(P 𝒦)` over `X`.
 
 We use the next definition to take a free algebra *for* a class `𝒦` and produce the free algebra *in* `𝒦`.
@@ -162,7 +162,7 @@ We accomplish this goal by constructing an algebra `𝔽` with the following pro
 
 2. Every `𝑨 ∈ Mod X (Th (V 𝒦))` is a homomorphic image of `𝔽`.
 
-We denote by `ℭ` the product of all subalgebras of algebras in `𝒦`, and by `homℭ` the homomorphism from `𝑻 X` to `ℭ` defined as follows: `homℭ := ⨅-hom-co (𝑻 X) 𝔄 hom𝔄`. Here, `⨅-hom-co` (defined in the [Homomorphisms.Properties][] module) takes the term algebra `𝑻 X`, a family `{𝔄 : I → Algebra α 𝑆}` of `𝑆`-algebras, and a family `hom𝔄 : ∀ i → hom (𝑻 X) (𝔄 i)` of homomorphisms and constructs the natural homomorphism `homℭ` from `𝑻 X` to the product `ℭ := ⨅ 𝔄`.  The homomorphism `homℭ : hom (𝑻 X) (⨅ ℭ)` is "natural" in the sense that the `i`-th component of the image of `𝑡 : Term X` under `homℭ` is the image `∣ hom𝔄 i ∣ 𝑡` of 𝑡 under the i-th homomorphism `hom𝔄 i`.
+We denote by `ℭ` the product of all subalgebras of algebras in `𝒦`, and by `homℭ` the homomorphism from `𝑻 X` to `ℭ` defined as follows: `homℭ := ⨅-hom-co (𝑻 X) 𝔄 hom𝔄`. Here, `⨅-hom-co` (defined in the [Base.Homomorphisms.Properties][] module) takes the term algebra `𝑻 X`, a family `{𝔄 : I → Algebra α 𝑆}` of `𝑆`-algebras, and a family `hom𝔄 : ∀ i → hom (𝑻 X) (𝔄 i)` of homomorphisms and constructs the natural homomorphism `homℭ` from `𝑻 X` to the product `ℭ := ⨅ 𝔄`.  The homomorphism `homℭ : hom (𝑻 X) (⨅ ℭ)` is "natural" in the sense that the `i`-th component of the image of `𝑡 : Term X` under `homℭ` is the image `∣ hom𝔄 i ∣ 𝑡` of 𝑡 under the i-th homomorphism `hom𝔄 i`.
 
 
 #### <a id="F-in-classproduct">𝔽 ≤  ⨅ S(𝒦)</a>

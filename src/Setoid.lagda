@@ -5,7 +5,7 @@ date : "2021-12-12"
 author: "the agda-algebras development team"
 ---
 
-### <a id="">The Setoid Module of the Agda Universal Algebra Library</a>
+### <a id="the-setoid-module-of-the-agda-universal-algebra-library">The Setoid Module of the Agda Universal Algebra Library</a>
 
 This module collects all submodule of that part of the library based on setoids, as opposed to "bare" types (see Base.lagda) or Cubical Agda (see Cubical.lagda).
 

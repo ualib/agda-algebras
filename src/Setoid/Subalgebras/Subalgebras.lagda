@@ -117,7 +117,7 @@ SubalgebrasOfClass 𝒦 {β}{ρᵇ} = Σ[ 𝑩 ∈ Algebra β ρᵇ ] 𝑩 ≤c 
 
 #### <a id="consequences-of-first-homomorphism-theorem">Consequences of First Homomorphism Theorem</a>
 
-As an example use-case of the `IsSubalgebraOf` type defined above, we prove the following easy but useful corollary of the First Homomorphism Theorem (proved in the [Homomorphisms.Setoid.Noether][] module): If `𝑨` and `𝑩` are `𝑆`-algebras and `h : hom 𝑨 𝑩` a homomorphism from `𝑨` to `𝑩`, then the quotient `𝑨 ╱ ker h` is (isomorphic to) a subalgebra of `𝑩`.
+As an example use-case of the `IsSubalgebraOf` type defined above, we prove the following easy but useful corollary of the First Homomorphism Theorem (proved in the [Setoid.Homomorphisms.Noether][] module): If `𝑨` and `𝑩` are `𝑆`-algebras and `h : hom 𝑨 𝑩` a homomorphism from `𝑨` to `𝑩`, then the quotient `𝑨 ╱ ker h` is (isomorphic to) a subalgebra of `𝑩`.
 
 \begin{code}
 
