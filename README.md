@@ -113,7 +113,7 @@ To cite the [agda-algebras][] software library in a publication or on a web page
 }                  
 ```
 
-To cite the [agda-algebras][] documentation, please use the following BibTeX entry:
+To cite the [formalization of Birkhoff's HSP Theorem](https://ualib.org/Setoid.Varieties.HSP.html#proof-of-the-hsp-theorem), please use the following BibTeX entry:
 
 ```bibtex
 @article{DeMeo:2021,
@@ -126,10 +126,12 @@ To cite the [agda-algebras][] documentation, please use the following BibTeX ent
  eprint        = {2101.2101.10166},
  archivePrefix = {arXiv},
  primaryClass  = {cs.LO},
+ url           = {https://arxiv.org/abs/2101.10166}
  note          = {Source code: \href{https://github.com/ualib/agda-algebras/blob/master/src/Demos/HSP.lagda}{https://github.com/ualib/agda-algebras/blob/master/src/Demos/HSP.lagda}}
 }
 ```
 
+If you're looking for the latest (setoid-based) formalization of Brkhoff's Theorem, see the [Proof of the HSP Theorem](https://ualib.org/Setoid.Varieties.HSP.html#proof-of-the-hsp-theorem) in the html documentation, or the source code of the [Setoid.Varieties.HSP][] module in the file [Setoid/Varieties/HSP.lagda][] in the [agda-algebras][] GitHub repository.
 
 -------------------------------
 
