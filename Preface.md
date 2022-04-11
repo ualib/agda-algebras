@@ -87,7 +87,7 @@ If you find the [agda-algebras](https://github.com/ualib/agda-algebras) library 
 ```
 @misc{ualib_v2.0.1,
   author       = {De{M}eo, William and Carette, Jacques},
-  title        = {{T}he {A}gda {U}niversal {A}lgebra {L}ibrary (agda-algebras)},
+  title        = {The {A}gda {U}niversal {A}lgebra {L}ibrary (agda-algebras)},
   year         = 2021,
   note         = {{D}ocumentation available at https://ualib.org},
   version      = {2.0.1},
