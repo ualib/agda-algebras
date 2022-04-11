@@ -21,7 +21,7 @@ This module collects all submodules of the library that depend on the Cubical Ag
 
 --------------------------------------
 
-<span style="float:left;">[← Setoid](Setoid.html)</span>
+<span style="float:left;">[↑ top](index.html)</span>
 <span style="float:right;">[Cubical.Overture →](Cubical.Overture.html)</span>
 
 
