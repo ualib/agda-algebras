@@ -126,7 +126,7 @@ To cite the [formalization of Birkhoff's HSP Theorem](https://ualib.org/Setoid.V
  eprint        = {2101.2101.10166},
  archivePrefix = {arXiv},
  primaryClass  = {cs.LO},
- url           = {https://arxiv.org/abs/2101.10166}
+ url           = {https://arxiv.org/abs/2101.10166},
  note          = {Source code: \href{https://github.com/ualib/agda-algebras/blob/master/src/Demos/HSP.lagda}{https://github.com/ualib/agda-algebras/blob/master/src/Demos/HSP.lagda}}
 }
 ```
