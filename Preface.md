@@ -85,15 +85,15 @@ Finally, the official [Agda Wiki][], [Agda User's Manual][], [Agda Language Refe
 If you find the [agda-algebras](https://github.com/ualib/agda-algebras) library useful, please cite it using the following BibTeX entry:
 
 ```
-@misc{ualib_v2.0.1,
+@misc{ualib-v2.0.1,
   author       = {De{M}eo, William and Carette, Jacques},
   title        = {The {A}gda {U}niversal {A}lgebra {L}ibrary (agda-algebras)},
-  year         = 2021,
-  note         = {{D}ocumentation available at https://ualib.org},
+  year         = {2021},
+  note         = {Documentation available at https://ualib.org},
   version      = {2.0.1},
   doi          = {10.5281/zenodo.5765793},
-  howpublished = {{G}it{H}ub.com},
-  note         = {{V}er.~2.0.1; source code: \href{https://zenodo.org/record/5765793/files/ualib/agda-algebras-v.2.0.1.zip?download=1}{agda-algebras-v.2.0.1.zip}, {G}it{H}ub repo: \href{https://github.com/ualib/agda-algebras}{github.com/ualib/agda-algebras}}
+  howpublished = {Git{H}ub.com},
+  note         = {Ver.~2.0.1; source code: \href{https://zenodo.org/record/5765793/files/ualib/agda-algebras-v.2.0.1.zip?download=1}{agda-algebras-v.2.0.1.zip}, {G}it{H}ub repo: \href{https://github.com/ualib/agda-algebras}{github.com/ualib/agda-algebras}}
 }
 ```
 
