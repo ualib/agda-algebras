@@ -52,21 +52,25 @@ We hope the library is useful to mathematicians and computer scientists who wish
 
 ### Organization
 
-We have organized the library into three main modules, called
-[Base](Base.html), [Setoid](Setoid.html), and [Cubical](Cubical.html), which are imported below (after the [Preface][] module, which doesn't contain any Agda code).  These three modules are independent of one another.  The [Base](Base.html) module contains submodules that comprise the first version of the library.  The [Setoid](Setoid.html) contains the second version of the library that is based on setoids.  Finally, we have begun work on a third version of the library, which is based on Cubical Agda and will consist of submodules of the [Cubical](Cubical.html) module.
+We have organized the library into three main modules, called [Base](Base.html), [Setoid](Setoid.html), and [Cubical](Cubical.html), which are imported below (after the [Preface][] module, which doesn't contain any Agda code).  These three modules are independent of one another.  The [Base](Base.html) module contains submodules that comprise the first version of the library.  The [Setoid](Setoid.html) contains the second version of the library that is based on setoids.  Finally, we have begun work on a third version of the library, which is based on Cubical Agda and will consist of submodules of the [Cubical](Cubical.html) module.
+
 
 <pre class="Agda">
-<a id="4110" class="Symbol">{-#</a> <a id="4114" class="Keyword">OPTIONS</a> <a id="4122" class="Pragma">--without-K</a> <a id="4134" class="Pragma">--exact-split</a> <a id="4148" class="Pragma">--safe</a> <a id="4155" class="Pragma">--cubical</a> <a id="4165" class="Symbol">#-}</a>
+<a id="4111" class="Symbol">{-#</a> <a id="4115" class="Keyword">OPTIONS</a> <a id="4123" class="Pragma">--without-K</a> <a id="4135" class="Pragma">--exact-split</a> <a id="4149" class="Pragma">--safe</a> <a id="4156" class="Pragma">--cubical</a> <a id="4166" class="Symbol">#-}</a>
 </pre>
 <pre class="Agda">
-<a id="4193" class="Keyword">module</a> <a id="4200" href="agda-algebras.html" class="Module">agda-algebras</a> <a id="4214" class="Keyword">where</a>
+<a id="4194" class="Keyword">module</a> <a id="4201" href="agda-algebras.html" class="Module">agda-algebras</a> <a id="4215" class="Keyword">where</a>
 
-<a id="4221" class="Keyword">open</a> <a id="4226" class="Keyword">import</a> <a id="4233" href="Preface.html" class="Module">Preface</a>
-<a id="4241" class="Keyword">open</a> <a id="4246" class="Keyword">import</a> <a id="4253" href="Base.html" class="Module">Base</a>     <a id="4262" class="Comment">-- standard version of the library</a>
-<a id="4297" class="Keyword">open</a> <a id="4302" class="Keyword">import</a> <a id="4309" href="Setoid.html" class="Module">Setoid</a>   <a id="4318" class="Comment">-- setoid-based version of the library</a>
-<a id="4357" class="Keyword">open</a> <a id="4362" class="Keyword">import</a> <a id="4369" href="Cubical.html" class="Module">Cubical</a>  <a id="4378" class="Comment">-- forthcoming version of the library based on Cubical Agda</a>
+<a id="4222" class="Keyword">open</a> <a id="4227" class="Keyword">import</a> <a id="4234" href="Preface.html" class="Module">Preface</a>
+<a id="4242" class="Keyword">open</a> <a id="4247" class="Keyword">import</a> <a id="4254" href="Base.html" class="Module">Base</a>     <a id="4263" class="Comment">-- standard version of the library</a>
+<a id="4298" class="Keyword">open</a> <a id="4303" class="Keyword">import</a> <a id="4310" href="Setoid.html" class="Module">Setoid</a>   <a id="4319" class="Comment">-- setoid-based version of the library</a>
+<a id="4358" class="Keyword">open</a> <a id="4363" class="Keyword">import</a> <a id="4370" href="Cubical.html" class="Module">Cubical</a>  <a id="4379" class="Comment">-- forthcoming version of the library based on Cubical Agda</a>
 
 </pre>
+
+
+If you're looking for our latest (setoid-based) formalization of Brkhoff's Theorem, see the [Birkhoff HSP Theorem Section](https://ualib.org/Setoid.Varieties.HSP.html#proof-of-the-hsp-theorem) of the documentation, or the source code of the [Setoid.Varieties.HSP][] module, which is in the file [Setoid/Varieties/HSP.lagda][] in the [agda-algebras][] GitHub repository.
+
 
 ------------------------------
 

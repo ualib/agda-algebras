@@ -15,7 +15,7 @@ author: "the agda-algebras development team"
 
 </pre>
 
-To support formalization in type theory of research level mathematics in universal algebra and related fields, we present the [Agda Universal Algebra Library](https://github.com/ualib/agda-algebras) (or [agda-algebras](https://github.com/ualib/agda-algebras) for short), a library for the [Agda][] proof assistant which contains definitions, theorems and proofs from the foundations of universal algebra. In particular, the library formalizes the First (Noether) Isomorphism Theorem and the Birkhoff HSP Theorem asserting that every variety is an equational class.
+To support formalization in type theory of research level mathematics in universal algebra and related fields, we present the [Agda Universal Algebra Library](https://github.com/ualib/agda-algebras) (or [agda-algebras](https://github.com/ualib/agda-algebras) for short), a library for the [Agda][] proof assistant which contains definitions, theorems and proofs from the foundations of universal algebra. In particular, the library formalizes the First (Noether) Isomorphism Theorem and the [Birkhoff HSP Theorem](https://ualib.org/Setoid.Varieties.HSP.html#proof-of-the-hsp-theorem) asserting that every variety is an equational class.
 
 ### <a id="vision-and-goals">Vision and goals</a>
 
@@ -80,29 +80,49 @@ The following Agda documentation and tutorials helped inform and improve the [ag
 Finally, the official [Agda Wiki][], [Agda User's Manual][], [Agda Language Reference][], and the (open source) [Agda Standard Library][] source code are also quite useful.
 
 
-#### <a id="how-to-cite-the-agda-algebras-library">How to cite the agda-algebras library</a>
+#### <a id="citing-the-agda-algebras-library">Citing the agda-algebras library</a>
 
-If you find the [agda-algebras](https://github.com/ualib/agda-algebras) library useful, please refer to it or its documentation using the following BibTeX data:
+If you find the [agda-algebras](https://github.com/ualib/agda-algebras) library useful, please cite it using the following BibTeX entry:
 
-```
-@article{DeMeo:2021,
- author        = {William DeMeo},
- title         = {The {A}gda {U}niversal {A}lgebra {L}ibrary},
- journal       = {CoRR},
- volume        = {abs/2101.10166},
- year          = {2021},
- eprint        = {2101.10166},
- archivePrefix = {arXiv},
- primaryClass  = {cs.LO},
- url           = {https://arxiv.org/abs/2101.10166},
- note          = {source code: \url{https://github.com/ualib/agda-algebras}}
+```bibtex
+@misc{ualib_v2.0.1,
+  author       = {De{M}eo, William and Carette, Jacques},
+  title        = {{T}he {A}gda {U}niversal {A}lgebra {L}ibrary (agda-algebras)},
+  year         = 2021,
+  note         = {{D}ocumentation available at https://ualib.org},
+  version      = {2.0.1},
+  doi          = {10.5281/zenodo.5765793},
+  howpublished = {{G}it{H}ub.com},
+  note         = {{V}er.~2.0.1; source code: \href{https://zenodo.org/record/5765793/files/ualib/agda-algebras-v.2.0.1.zip?download=1}{agda-algebras-v.2.0.1.zip}, {G}it{H}ub repo: \href{https://github.com/ualib/agda-algebras}{github.com/ualib/agda-algebras}},
 }
 ```
 
-See also: [dblp record](https://dblp.uni-trier.de/rec/journals/corr/abs-2101-10166.html), [dblp BibTeX record](https://dblp.uni-trier.de/rec/journals/corr/abs-2101-10166.html?view=bibtex).
+#### <a id="citing-our-formalization-of-the-Birkhoff-theorem">Citing our formalization of the Birkhoff Theorem </a>
+
+To cite the [formalization of Birkhoff's HSP Theorem](https://ualib.org/Setoid.Varieties.HSP.html#proof-of-the-hsp-theorem), please use the following BibTeX entry:
+
+```bibtex
+@article{DeMeo:2021,
+ author        = {De{M}eo, William and Carette, Jacques},
+ title         = {A {M}achine-checked {P}roof of {B}irkhoff's {V}ariety {T}heorem
+                  in {M}artin-{L}\"of {T}ype {T}heory}, 
+ journal       = {CoRR},
+ volume        = {abs/2101.10166},
+ year          = {2021},
+ eprint        = {2101.2101.10166},
+ archivePrefix = {arXiv},
+ primaryClass  = {cs.LO},
+ url           = {https://arxiv.org/abs/2101.10166}
+ note          = {Source code: \href{https://github.com/ualib/agda-algebras/blob/master/src/Demos/HSP.lagda}{https://github.com/ualib/agda-algebras/blob/master/src/Demos/HSP.lagda}}
+}
+```
+
+[![DOI](https://zenodo.org/badge/360493064.svg)](https://zenodo.org/badge/latestdoi/360493064)
+
 
 
 #### <a id="contributions-welcomed">Contributions welcomed</a>
+
 Readers and users are encouraged to suggest improvements to the Agda [agda-algebras](https://github.com/ualib/agda-algebras) library and/or its documentation by submitting a [new issue](https://github.com/ualib/agda-algebras/issues/new/choose) or [merge request](https://github.com/ualib/agda-algebras/compare) to [github.com/ualib/agda-algebras/](https://github.com/ualib/agda-algebras).
 
 
