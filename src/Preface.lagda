@@ -84,7 +84,7 @@ Finally, the official [Agda Wiki][], [Agda User's Manual][], [Agda Language Refe
 
 If you find the [agda-algebras](https://github.com/ualib/agda-algebras) library useful, please cite it using the following BibTeX entry:
 
-```bibtex
+```
 @misc{ualib_v2.0.1,
   author       = {De{M}eo, William and Carette, Jacques},
   title        = {{T}he {A}gda {U}niversal {A}lgebra {L}ibrary (agda-algebras)},
@@ -101,7 +101,7 @@ If you find the [agda-algebras](https://github.com/ualib/agda-algebras) library 
 
 To cite the [formalization of Birkhoff's HSP Theorem](https://ualib.org/Setoid.Varieties.HSP.html#proof-of-the-hsp-theorem), please use the following BibTeX entry:
 
-```bibtex
+```
 @article{DeMeo:2021,
  author        = {De{M}eo, William and Carette, Jacques},
  title         = {A {M}achine-checked {P}roof of {B}irkhoff's {V}ariety {T}heorem
