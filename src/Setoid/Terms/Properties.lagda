@@ -116,7 +116,7 @@ If we further assume that each of the mappings from `X` to `∣ 𝑨 ∣` is *su
 
 \end{code}
 
-Finally, we prove that the homomorphism is unique.  Recall, when we proved this in the module [Terms.Properties][], we needed function extensionality. Here, by using setoid equality, we can omit the `swelldef` hypothesis used to prove `free-unique` in the [Terms.Properties][] module.
+Finally, we prove that the homomorphism is unique.  Recall, when we proved this in the module [Setoid.Terms.Properties][], we needed function extensionality. Here, by using setoid equality, we can omit the `swelldef` hypothesis used to prove `free-unique` in the [Terms.Properties][] module.
 
 \begin{code}
 

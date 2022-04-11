@@ -112,7 +112,7 @@ List A = μ (L A)
 
 \end{code}
 
-To see some examples demonstrating that both formulations of the polymorphic list type give what we expect, see the [Examples.Base.Categories.Functors][] module. The examples will use "getter" functions, which take a list `l` and a natural number `n` and return the element of `l` at index `n`.  (Since such an element doesn't always exist, we first define the `Option` type.)
+To see some examples demonstrating that both formulations of the polymorphic list type give what we expect, see the [Examples.Categories.Functors][] module. The examples will use "getter" functions, which take a list `l` and a natural number `n` and return the element of `l` at index `n`.  (Since such an element doesn't always exist, we first define the `Option` type.)
 
 \begin{code}
 

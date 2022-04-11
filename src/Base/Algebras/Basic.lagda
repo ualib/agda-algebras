@@ -86,7 +86,7 @@ Our first goal is to develop a working vocabulary and formal library for classic
 
 Note that to each operation symbol `𝑓 ∈ 𝐹` corresponds an operation `𝑓`<sup>`𝑨`</sup> on `𝐴` of arity `ρ𝑓`; we call such `𝑓`<sup>`𝑨`</sup> the *interpretation* of the symbol `𝑓` in the algebra `𝑨`. We call an algebra in the signature `𝑆` an `𝑆`-*algebra*.  An algebra is called *finite* if it has a finite domain, and is called *trivial* if its universe is a singleton.  Given two algebras `𝑨` and `𝑩`, we say that `𝑩` is a *reduct* of `𝑨` if both algebras have the same domain and `𝑩` can be obtained from `𝑨` by simply removing some of the operations.
 
-Recall, we defined the type `Signature 𝓞 𝓥` above as the dependent pair type `Σ F ꞉ Type 𝓞 , (F → Type 𝓥)`, and the type `Op` of operation symbols is the function type `Op I A = (I → A) → A` (see [Relations.Discrete][]).
+Recall, we defined the type `Signature 𝓞 𝓥` above as the dependent pair type `Σ F ꞉ Type 𝓞 , (F → Type 𝓥)`, and the type `Op` of operation symbols is the function type `Op I A = (I → A) → A` (see [Base.Relations.Discrete][]).
 
 For a fixed signature `𝑆 : Signature 𝓞 𝓥` and universe level `α`, we define the *type of algebras in the signature* `𝑆` (or *type of* `𝑆`-*algebras*) *with domain type* `Type α` as follows.
 
@@ -98,7 +98,7 @@ Algebra α 𝑆 = Σ[ A ∈ Type α ]                   -- the domain
 
 \end{code}
 
-It would be more precise to refer to inhabitants of this type as ∞-*algebras* because their domains can be of arbitrary type and need not be truncated at some level and, in particular, need to be a set. (See the [Equality.Truncation](https://ualib.github.io/agda-algebras/Equality.Truncation.html) module.)
+It would be more precise to refer to inhabitants of this type as ∞-*algebras* because their domains can be of arbitrary type and need not be truncated at some level and, in particular, need to be a set. (See [Base.Equality.Truncation][].)
 
 We might take this opportunity to define the type of 0-*algebras*, that is, algebras whose domains are sets, which is probably closer to what most of us think of when doing informal universal algebra.  However, in the [agda-algebras](https://github.com/ualib/agda-algebras) library we will only need to know that the domains of certain algebras are sets in a few places, so it seems preferable to work with general (∞-)algebras throughout and then explicitly postulate additional axioms (e.g., [uniquness of identity proofs](https://ualib.github.io/agda-algebras/Equality.Truncation.html#uniqueness-of-identity-proofs) if and only if necessary.
 
@@ -192,15 +192,15 @@ Lift-algebra {𝑆 = 𝑆} 𝑨 β = mkalg (Lift β (carrier 𝑨)) (λ (f : ∣
 
 What makes the `Lift-Alg` type so useful for resolving type level errors involving algebras is the nice properties it possesses.  Indeed, the [agda-algebras][] library contains formal proofs of the following facts.
 
-+ [`Lift-Alg` is a homomorphism](Homomorphisms.Basic.html#exmples-of-homomorphisms) (see [Homomorphisms.Basic][])
-+ [`Lift-Alg` is an algebraic invariant](Homomorphisms.Isomorphisms.html#lift-is-an-algebraic-invariant") (see [Homomorphisms.Isomorphisms][])
-+ [`Lift-Alg` of a subalgebra is a subalgebra](Subalgebras.Subalgebras.html#lifts-of-subalgebras) (see [Subalgebras.Subalgebras][])
-+ [`Lift-Alg` preserves identities](Varieties.EquationalLogic.html#lift-invariance)) (see [Varieties.EquationalLogic][])
++ [`Lift-Alg` is a homomorphism](Base.Homomorphisms.Basic.html#exmples-of-homomorphisms) (see [Base.Homomorphisms.Basic][])
++ [`Lift-Alg` is an algebraic invariant](Base.Homomorphisms.Isomorphisms.html#lift-is-an-algebraic-invariant") (see [Base.Homomorphisms.Isomorphisms][])
++ [`Lift-Alg` of a subalgebra is a subalgebra](Base.Subalgebras.Subalgebras.html#lifts-of-subalgebras) (see [Base.Subalgebras.Subalgebras][])
++ [`Lift-Alg` preserves identities](Base.Varieties.EquationalLogic.html#lift-invariance)) (see [Base.Varieties.EquationalLogic][])
 
 
 #### <a id="compatibility-of-binary-relations">Compatibility of binary relations</a>
 
-We now define the function `compatible` so that, if `𝑨` denotes an algebra and `R` a binary relation, then `compatible 𝑨 R` will represent the assertion that `R` is *compatible* with all basic operations of `𝑨`. The formal definition is immediate since all the work is done by the relation `|:`, which we defined above (see [Relations.Discrete][]).
+We now define the function `compatible` so that, if `𝑨` denotes an algebra and `R` a binary relation, then `compatible 𝑨 R` will represent the assertion that `R` is *compatible* with all basic operations of `𝑨`. The formal definition is immediate since all the work is done by the relation `|:`, which we defined above (see [Base.Relations.Discrete][]).
 
 \begin{code}
 
@@ -212,12 +212,12 @@ compatible-pred  𝑨 P = ∀ 𝑓 → (𝑓 ̂ 𝑨) |:pred P
 
 \end{code}
 
-Recall, the `|:` type was defined in [Relations.Discrete][] module.
+Recall, the `|:` type was defined in [Base.Relations.Discrete][] module.
 
 
 #### <a id="compatibility-of-continuous-relations">Compatibility of continuous relations</a>
 
-In the [Relations.Continuous][] module, we defined a function called `cont-compatible-op` to represent the assertion that a given continuous relation is compatible with a given operation. With that, it is easy to define a function, which we call `cont-compatible`, representing compatibility of a continuous relation with all operations of an algebra.  Similarly, we define the analogous `dep-compatible` function for the (even more general) type of *dependent relations*.
+In the [Base.Relations.Continuous][] module, we defined a function called `cont-compatible-op` to represent the assertion that a given continuous relation is compatible with a given operation. With that, it is easy to define a function, which we call `cont-compatible`, representing compatibility of a continuous relation with all operations of an algebra.  Similarly, we define the analogous `dep-compatible` function for the (even more general) type of *dependent relations*.
 
 \begin{code}
 

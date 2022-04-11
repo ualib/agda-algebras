@@ -100,7 +100,7 @@ Now, perhaps we have two proofs, say, `r s : p ≡₁ q` that the proofs `p` and
 
 In [homotopy type theory](https://homotopytypetheory.org), a type `A` with an identity relation `≡₀` is called a *set* (or *0-groupoid*) if for every pair `x y : A` there is at most one proof of `x ≡₀ y`. In other words, the type `A`, along with it's equality type `≡₀`, form a *set* if for all `x y : A` there is at most one proof of `x ≡₀ y`.
 
-This notion is formalized in the [Type Topology][] library, using the `is-subsingleton` type that we saw earlier ([Overture.Inverses][]), as follows.
+This notion is formalized in the [Type Topology][] library, using the `is-subsingleton` type that we saw earlier ([Base.Overture.Inverses][]), as follows.
 
 \begin{code}
 
@@ -138,7 +138,7 @@ singleton-type {α}{A} x = Σ[ y ∈ A ] y ≡ x
 
 \end{code}
 
-Thus, `is-embedding f` asserts that `f` is a function all of whose fibers are subsingletons. Observe that an embedding is not simply an injective map. However, if we assume that the codomain `B` has *unique identity proofs* (UIP), then we can prove that a monic function into `B` is an embedding.  We will do exactly that in the [Relations.Truncation][] module when we take up the topic of *sets* and the UIP.
+Thus, `is-embedding f` asserts that `f` is a function all of whose fibers are subsingletons. Observe that an embedding is not simply an injective map. However, if we assume that the codomain `B` has *unique identity proofs* (UIP), then we can prove that a monic function into `B` is an embedding.  We will do exactly that in the [Base.Relations.Truncation][] module when we take up the topic of *sets* and the UIP.
 
 Finding a proof that a function is an embedding isn't always easy, but one approach that is often fairly straightforward is to first prove that the function is invertible and then invoke the `invertible-is-embedding` theorem from the [Type Topology][] library.
 
@@ -158,7 +158,7 @@ We will use `is-embedding`, `is-set`, and `to-Σ-≡` in the next subsection to 
 
 #### Injective functions are set embeddings
 
-Before moving on to define [propositions](Overture.Truncation.html#propositions), we discharge an obligation we mentioned but left unfulfilled in the [embeddings](Overture.Inverses.html#embeddings) section of the [Overture.Inverses][] module.  Recall, we described and imported the `is-embedding` type, and we remarked that an embedding is not simply a monic function.  However, if we assume that the codomain is truncated so as to have unique identity proofs (i.e., is a set), then we can prove that any monic function into that codomain will be an embedding.  On the other hand, embeddings are always monic, so we will end up with an equivalence.
+Before moving on to define [propositions](Overture.Truncation.html#propositions), we discharge an obligation we mentioned but left unfulfilled in the [embeddings](Overture.Inverses.html#embeddings) section of the [Base.Overture.Inverses][] module.  Recall, we described and imported the `is-embedding` type, and we remarked that an embedding is not simply a monic function.  However, if we assume that the codomain is truncated so as to have unique identity proofs (i.e., is a set), then we can prove that any monic function into that codomain will be an embedding.  On the other hand, embeddings are always monic, so we will end up with an equivalence.
 
 \begin{code}
 
@@ -188,7 +188,7 @@ In stating the previous result, we introduce a new convention to which we will t
 
 #### <a id="equivalence-class-truncation">Equivalence class truncation</a>
 
-Recall, `IsBlock` was defined in the [Relations.Quotients][] module as follows:
+Recall, `IsBlock` was defined in the [Base.Relations.Quotients][] module as follows:
 
 ```
  IsBlock : {A : Type α}(C : Pred A β){R : Rel A β} → Type(α ⊔ lsuc β)
@@ -209,7 +209,7 @@ It might seem unreasonable to postulate that there is at most one inhabitant of 
 
 #### <a id="general-propositions">General propositions</a>
 
-This section defines more general truncated predicates which we call *continuous propositions* and *dependent propositions*. Recall, above (in the [Relations.Continuous][] module) we defined types called `ContRel` and `DepRel` to represent relations of arbitrary arity over arbitrary collections of sorts.
+This section defines more general truncated predicates which we call *continuous propositions* and *dependent propositions*. Recall, above (in the [Base.Relations.Continuous][] module) we defined types called `ContRel` and `DepRel` to represent relations of arbitrary arity over arbitrary collections of sorts.
 
 Naturally, we define the corresponding *truncated continuous relation type* and *truncated dependent relation type*, the inhabitants of which we will call *continuous propositions* and *dependent propositions*, respectively.
 

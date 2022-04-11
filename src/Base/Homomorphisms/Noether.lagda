@@ -50,7 +50,7 @@ Here we formalize a version of the *first homomorphism theorem*, sometimes calle
 
 Informally, the theorem states that every homomorphism from `𝑨` to `𝑩` (`𝑆`-algebras) factors through the quotient algebra `𝑨 ╱ ker h` (`𝑨` modulo the kernel of the given homomorphism).  In other terms, given `h : hom 𝑨 𝑩` there exists `φ : hom (𝑨 ╱ ker h) 𝑩` which, when composed with the canonical projection `πker : 𝑨 ↠ 𝑨 ╱ ker h`, is equal to `h`; that is, `h = φ ∘ πker`.  Moreover, `φ` is a *monomorphism* (injective homomorphism) and is unique.
 
-Our formal proof of this theorem will require function extensionality, proposition extensionality, and a couple of truncation assumptions.  The extensionality assumptions are postulated using `swelldef` and `pred-ext` which were defined in [Equality.Welldefined][] and [Equality.Extensionality][]. As for truncation, to prove that `φ` is injective we require
+Our formal proof of this theorem will require function extensionality, proposition extensionality, and a couple of truncation assumptions.  The extensionality assumptions are postulated using `swelldef` and `pred-ext` which were defined in [Base.Equality.Welldefined][] and [Base.Equality.Extensionality][]. As for truncation, to prove that `φ` is injective we require
 
 + `buip`: *uniqueness of (block) identity proofs*; given two blocks of the kernel there is at most one proof that the blocks are equal;
 
@@ -153,7 +153,7 @@ module _ {fe : swelldef 𝓥 β}(𝑨 : Algebra α 𝑆)(𝑩 : Algebra β 𝑆)
 
 \end{code}
 
-If, in addition, we postulate extensionality of functions defined on the domain `ker[ 𝑨 ⇒ 𝑩 ] h`, then we obtain the following variation of the last result. (See [Equality.Truncation][] for a discussion of *truncation*, *sets*, and *uniqueness of identity proofs*.)
+If, in addition, we postulate extensionality of functions defined on the domain `ker[ 𝑨 ⇒ 𝑩 ] h`, then we obtain the following variation of the last result. (See [Base.Equality.Truncation][] for a discussion of *truncation*, *sets*, and *uniqueness of identity proofs*.)
 
 ```
 fe-FirstHomUnique : {fuww : funext (α ⊔ lsuc β) β}(f g : hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩)

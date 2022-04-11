@@ -191,7 +191,7 @@ module _ {α β : Level}{X : Type α} where
 
 \end{code}
 
-**WARNING!** The compatibility relation for terms `∣:` is typed as \|:, whereas the compatibility type for functions `|:` (defined in the [Relations.Discrete][] module) is typed as `|:`.
+**WARNING!** The compatibility relation for terms `∣:` is typed as \|:, whereas the compatibility type for functions `|:` (defined in the [Base.Relations.Discrete][] module) is typed as `|:`.
 
 
 

@@ -32,7 +32,7 @@ Note that if we wish to type-check a file that imports another file that still h
 
 #### <a id="agda-modules">Agda Modules</a>
 
-The `OPTIONS` pragma is usually followed by the start of a module.  For example, the [Overture.Preliminaries][] module begins with the following line, and then a list of imports of things used in the module.
+The `OPTIONS` pragma is usually followed by the start of a module.  For example, the [Base.Overture.Preliminaries][] module begins with the following line, and then a list of imports of things used in the module.
 \begin{code}
 
 module Base.Overture.Preliminaries where
@@ -151,7 +151,7 @@ and so on. This means that the universe `Type α` has type `Type(lsuc α)`, and 
 
 #### <a id="lifting-and-lowering">Lifting and lowering</a>
 
-Here we describe a general `Lift` type that help us overcome the technical issue described in the previous subsection.  In the [Lifts of algebras section](Algebras.Basic.html#lifts-of-algebras) of the [Algebras.Basic][] module we will define a couple domain-specific lifting types which have certain properties that make them useful for resolving universe level problems when working with algebra types.
+Here we describe a general `Lift` type that help us overcome the technical issue described in the previous subsection.  In the [Lifts of algebras section](Base.Algebras.Basic.html#lifts-of-algebras) of the [Base.Algebras.Basic][] module we will define a couple domain-specific lifting types which have certain properties that make them useful for resolving universe level problems when working with algebra types.
 
 Let us be more concrete about what is at issue here by considering a typical example. Agda will often complain with errors like the following:
 ```
@@ -185,7 +185,7 @@ The proofs are trivial. Nonetheless, we'll come across some holes these lemmas c
 
 #### <a id="pointwise-equality-of-dependent-functions">Pointwise equality of dependent functions</a>
 
-We conclude this module with a definition that conveniently represents te assertion that two functions are (extensionally) the same in the sense that they produce the same output when given the same input.  (We will have more to say about this notion of equality in the [Equality.Extensionality][] module.)
+We conclude this module with a definition that conveniently represents te assertion that two functions are (extensionally) the same in the sense that they produce the same output when given the same input.  (We will have more to say about this notion of equality in the [Base.Equality.Extensionality][] module.)
 \begin{code}
 
 module _ {α : Level}{A : Type α}{β : Level}{B : A → Type β } where

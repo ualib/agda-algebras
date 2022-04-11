@@ -7,7 +7,7 @@ author: "[agda-algebras development team][]"
 
 ### <a id="continuous-relations">Continuous Relations</a>
 
-This is the [Relations.Continuous][] module of the [Agda Universal Algebra Library][].
+This is the [Base.Relations.Continuous][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 

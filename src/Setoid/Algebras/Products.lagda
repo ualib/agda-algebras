@@ -20,7 +20,7 @@ module Setoid.Algebras.Products {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library --------------------------------
 open import Agda.Primitive                         using ( lsuc ; _⊔_ ; Level ) renaming ( Set to Type )
-open import Data.Product                           using ( _,_ ; Σ-syntax ; _×_ )
+open import Data.Product                           using ( _,_ ; Σ-syntax )
 open import Function.Base                          using ( flip )
 open import Function.Bundles                       using ( Func )
 open import Relation.Binary                        using ( Setoid ;  IsEquivalence ; Decidable )
@@ -91,7 +91,7 @@ Let `⨅ 𝒜` be the product algebra defined above.  Given `i : I`, consider th
 onto the `i-th` coordinate.  Of course this projection ought to be a surjective map from `⨅ 𝒜` onto
 `𝒜 i`.  However, this is impossible if `I` is just an arbitrary type.  Indeed, we must have an
 equality defined on `I` and this equality must be decidable, and we must assume that
-each factor of the product is nonempty.  In the [Overture.Surjective][] module
+each factor of the product is nonempty.  In the [Setoid.Overture.Surjective][] module
 we showed how to define a *decidable index type* in Agda. Here we use this to prove that the
 projection of a product of algebras over such an index type is surjective.
 
