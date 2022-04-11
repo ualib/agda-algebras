@@ -359,6 +359,8 @@
 [proof assistant]: https://en.wikipedia.org/wiki/Proof_assistant
 [proof tactics]: https://en.wikipedia.org/wiki/Tactic_(proof_assistant)
 
+[A Machine-checked proof of Birkhoff's Variety Theorem in Martin-Löf Type Theory](https://arxiv.org/abs/2101.10166)
+
 [Ralph Freese]: https://math.hawaii.edu/~ralph/
 [reading material]: https://arxiv.org/abs/1807.05923
 [Riehl (2017)]: http://www.math.jhu.edu/~eriehl/context/
