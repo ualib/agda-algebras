@@ -50,9 +50,9 @@ We hope the library is useful to mathematicians and computer scientists who wish
 
 --------------------------------
 
-### Brief Contents
+### Organization
 
-The following list of modules imported by the current module, [agda-algebras](https://ualib.github.io/agda-algebras/agda-algebras.html), serves as a brief table of contents.
+We have organized the library into three main modules, called [Base][], [Setoid][], and [Cubical][], which are imported below (after the [Preface][] module, which doesn't contain any Agda code).  These three modules are independent of one another.  The [Base][] module contains submodules that comprise the first version of the library.  The [Setoid][] contains the second version of the library that is based on setoids.  Finally, we have begun work on a third version of the library, which is based on Cubical Agda and will consist of submodules of the [Cubical][] module.
 
 \begin{code}[hide]
 {-# OPTIONS --without-K --exact-split --safe --cubical #-}
@@ -61,9 +61,9 @@ The following list of modules imported by the current module, [agda-algebras](ht
 module agda-algebras where
 
 open import Preface
-open import Base
-open import Setoid
-open import Cubical
+open import Base     -- standard version of the library
+open import Setoid   -- setoid-based version of the library
+open import Cubical  -- forthcoming version of the library based on Cubical Agda
 
 \end{code}
 
