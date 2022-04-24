@@ -10,11 +10,11 @@ variety theorem} (also known as the \emph{HSP theorem})~\cite{Birkhoff:1935}.
 To the best of our knowledge, this constitutes the first machine-verified proof of Birkoff's
 celebrated 1935 result.
 
-Presented here is our second proof of the HSP theorem. The first proof\footnote{see the
+Presented here is our second proof of the HSP theorem. The first proof\footnote{See the
  \href{https://github.com/ualib/ualib.github.io/blob/71f173858701398d56224dd79d152c380c0c2b5e/src/lagda/UALib/Birkhoff.lagda}{\textsf{Birkhoff.lagda}} file
  in the \href{https://github.com/ualib/ualib.github.io}{\textsf{ualib/ualib.gitlab.io}}
  repository (\href{https://github.com/ualib/ualib.github.io/commit/71f173858701398d56224dd79d152c380c0c2b5e}{15
- Jan 2021 commit 71f1738})~\cite{ualib_v1.0.0}}
+ Jan 2021 commit 71f1738})~\cite{ualib_v1.0.0}.}
 suffered from flaws that raised two concerns. First, it was not clear whether the
 proof was fully constructive (because of its use of function extensionality in \mltt). Second,
 it was shown that if one were to take the type
@@ -22,13 +22,13 @@ it was shown that if one were to take the type
 variable symbols---to be  the two element type, then one could combine this with our
 proof and derive a contradiction. To resolve these issues, we have rewritten parts of the library and
 developed a new proof of the HSP theorem. We are confident that the
-proof presented here\footnote{based on \agdaalgebras, ver.~2.0.1~\cite{ualib_v2.0.1}, \agda ver.2.6.2 and \agdastdlib ver.1.7} is constructive and
+proof presented here\footnote{based on \agdaalgebras, ver.~2.0.1~\cite{ualib_v2.0.1}, \agda ver.2.6.2 and \agdastdlib ver.1.7.} is constructive and
  correct. %, a conviction we justify in the sequel (\qv).
 
 What follows is a self-contained formal proof of the HSP theorem in \agda.  This is achieved by
 extracting a subset of the \agdaalgebras library, including only the
-pieces needed for the proof, into a literate \agda document.\footnote{see
-\HSPlagda in the \agdaalgebras repository: \agdaalgebrasrepo}
+pieces needed for the proof, into a literate \agda document.\footnote{See
+\HSPlagda in the \agdaalgebras repository: \agdaalgebrasrepo .}
 \ifshort
 For spaces reasons, we elide some inessential parts,
 but strive to preserve the essential content and character of the development.
@@ -37,8 +37,8 @@ seem to offer insight into the central ideas of the proof are omitted.\footnote{
 appears in the unabridged version of the present paper~\cite{DeMeo:2021}.}
 \else
 We include here every line of code of our new proof of Birkhoff's theorem
-in a single \agda module, presented as a literate \agda document,\footnote{see
-\HSPlagda in the \agdaalgebras repository: \agdaalgebrasrepo}.  Apart from a few dozen
+in a single \agda module, presented as a literate \agda document,\footnote{See
+\HSPlagda in the \agdaalgebras repository: \agdaalgebrasrepo .}.  Apart from a few dozen
 imports from the \agdastdlib, the module is self-contained.
 \fi
 
@@ -1679,7 +1679,7 @@ Specifically, if \ab{𝑨} is an algebra, then
 Types belong to \emph{universes}, which are structured in \agda as
 follows:
 \ap{Type} \ab{ℓ} : \ap{Type} (\ap{suc} \ab{ℓ}), \ap{Type} (\ap{suc} \ab{ℓ}) : \ap{Type}
-(\ap{suc} (\ap{suc} \ab{ℓ})), ….\footnote{\ap{suc} \ab{ℓ} denotes the successor of \ab{ℓ} in the universe hierarchy} While this means that \ap{Type} \ab{ℓ} has type \ap{Type}
+(\ap{suc} (\ap{suc} \ab{ℓ})), ….\footnote{\ap{suc} \ab{ℓ} denotes the successor of \ab{ℓ} in the universe hierarchy.} While this means that \ap{Type} \ab{ℓ} has type \ap{Type}
 (\ap{suc} \ab{ℓ}), it does \emph{not} imply that \ap{Type} \ab{ℓ} has type
 \ap{Type} (\ap{suc} (\ap{suc} \ab{ℓ})). In other words, \agda's universes are
 \emph{non-cumulative}.
@@ -5821,7 +5821,7 @@ where the equivalence is taken pointwise.
 \\
 \>[0]\<%
 \end{code}
-As the above definition, as well as the next, are relative a fixed algebra, we use
+As the above definition, as well as the next, are relative to a fixed algebra, we use
 a submodule to succinctly capture this commonality in the definitions.
 The function \af{⟦\au{}⟧} then denotes the \defn{interpretation} of
 a term in a given algebra, \emph{evaluated} in a given environment.
@@ -8317,7 +8317,7 @@ We refer to this fact as \af{⊧-P-invar}.
 The classes \af H \ab{𝒦}, \af S \ab{𝒦}, \af P \ab{𝒦}, and \af V \ab{𝒦} all satisfy the
 same term identities.  We will only use a subset of the inclusions needed to prove this
 assertion, and we present here just the facts we need.\footnote{For more details, see
-\ualmodule{Varieties.Setoid.Preservation}.}
+\ualmodule{Setoid.Varieties.Preservation}.}
 First, the closure operator \af H preserves the identities modeled by the
 given class; this follows almost immediately from the invariance lemma
 \af{⊧-H-invar}.
@@ -8717,7 +8717,7 @@ in the signature \ab{𝑆}. That is, for every \ab{𝑆}-algebra \ab{𝑨}, the 
 We formalize the first of these in two steps.\footnote{\agdaalgebras also defines
  \af{free-lift-func} \as{:} \aof{𝔻[~\af{𝑻}~\ab X~]}~\aor{⟶}~\aof{𝔻[~\ab{𝑨}~]}
  for the analogous setoid function.}$^,$\footnote{For the proof of uniqueness,
-see \ualmodule{Terms.Setoid.Properties}.}  First is the lifting (\af{free-lift}).
+see \ualmodule{Setoid.Terms.Properties}.}  First is the lifting (\af{free-lift}).
 \begin{code}%
 \>[0]\<%
 \\
@@ -10213,7 +10213,7 @@ class, then \af V \ab{𝒦} \aof{⊆} \ab{𝒦}, as we now confirm.
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaBound{pℰq}\AgdaSpace{}%
-\AgdaBound{τ}\AgdaSymbol{)}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaBound{τ}\AgdaSymbol{)}\AgdaSpace{}\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{vA}\AgdaSpace{}%
 \AgdaBound{ρ}\<%
 \\
