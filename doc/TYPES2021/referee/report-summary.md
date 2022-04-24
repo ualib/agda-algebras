@@ -43,7 +43,7 @@
        Referee suggests ("was hoping for") the following argument:
        
        Define F[X] as T X / ~, where x ~ y iff given any homomorphism f into an element of K, f x = f y 
-       (in other words, x ~ y iff (x,y) ∈ Th K). Then, if A is in Mod (Th K), the surjective morphism 
+           (in other words, x ~ y iff (x,y) ∈ Th K). Then, if A is in Mod (Th K), the surjective morphism 
        T A → A factors through T X → F[X], so it remains to show that F[X] ∈ SP K (then, A ∈ HSP K). 
        
        F[X] is easily shown to be a sd prod of all algebras in K. However, because of size issues, this 
@@ -53,7 +53,8 @@
 
        This argument is close to ours, but might be more understandable (provided it's correct)...?
 
-2.  ~~Some links are broken, in particular in the footnotes~~ (https://ualib.github.io/..), ~~or in the bibliography item [8] (link to arxiv).~~ (fixed)
+2.  ~~Some links are broken, in particular in the footnotes~~ (https://ualib.github.io/..),
+    ~~or in the bibliography item [8] (link to arxiv).~~ (fixed)
 
 3.  > The library includes a wide collection of definitions and verified
     > theorems that faithfully codify classical, set-theory-based universal
@@ -70,13 +71,14 @@
     algebras in S K, as in §6.2, would be forbidden because of size issues (e.g., let K be the class of all 
     algebras with empty signature).
 
-4.  > To the best of our knowledge, this constitutes
-    > the first machine-verified proof of Birkoff’s celebrated 1935 result.
+4.  > ~~To the best of our knowledge, this constitutes~~
+    > ~~the first machine-verified proof of Birkoff's celebrated 1935 result.~~
 
-    There is a typo in Birk[h]off. Moreover, there's a 1997 Mizar formalisation:
-    http://www.mizar.org/JFM/Vol9/birkhoff.html that we should cite in related work. 
-    (though ours is still likely the first formalisation in Martin-Löf type theory)
+    ~~There is a typo in Birk[h]off. Moreover, there's a 1997 Mizar formalisation:~~
+    http://www.mizar.org/JFM/Vol9/birkhoff.html ~~that we should cite in related work. 
+    (though ours is still likely the first formalisation in Martin-Löf type theory)~~
 
+    (fixed)
 
 5.  > We are confident that the proof presented here is constructive and correct
 
