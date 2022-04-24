@@ -10,14 +10,15 @@
 3.  In the introduction (e.g. 3rd ¶) and §2.1, we claim to take great care with foundational 
     aspects. Further explanation of the following would make clearer the relevance of our work:
     
-    *  How does this attention to foundational details affect our coding choices? 
-    *  What is the difference from the foundational view-point between our code and other work cited in 
-       sect.7? 
-    *  At start of §2.2, our claims about setoids seem a bit bold (or "gnomic"). We don't cite work on 
-       the so-called "setoid hell", and we miss the point of the bad reputation of setoids. Referee asserts:
-       setoids do not make implementation *tedious*, but, in a sense, *unnatural* w.r.t. informal mathematical 
-       practice, since any setoid-based reasoning depends on specific implementation details. Some parts of our
-       code (omitted from the paper) suffer from this aspects of using setoids.
+    a.  How does this attention to foundational details affect our coding choices? 
+    b.  What's the difference from the foundational view-point between our code and work cited in sect.7? 
+    c.  At start of §2.2, our claims about setoids seem a bit bold (or "gnomic"). We don't cite work on 
+        the so-called "setoid hell", and we miss the point of the bad reputation of setoids. Referee asserts:
+        setoids do not make implementation *tedious*, but, in a sense, *unnatural* wrt informal mathematical 
+        practice, since any setoid-based reasoning depends on specific implementation details. Some parts of 
+        our code (omitted from the paper) suffer from these aspects of using setoids.
+    
+    (wd: made an first attempt to address point c.)
 
 4.  ~~Some links are broken (e.g. in [8]); some footnotes need to have first letters capitalised.~~ (fixed)
 

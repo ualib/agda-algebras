@@ -498,9 +498,22 @@ projections out of the product type
 A \defn{setoid} is a pair consisting of a type \ab A and
 an equivalence relation \af{≈} on \ab A.  Setoids are useful for representing a
 set with a ``local'' notion of equivalence, instead of always relying on
-the global one as is usually done in set theory. Dealing with setoids has
-somewhat of a bad reputation for being overly tedious. We have not found
-this to be an issue.
+the global one as is usually done in set theory. Formal proofs based on setoids
+may seem like an unnatural departure from informal mathematical practice, where
+notions of equality are left implicit and do not distract from what may seem
+like more important, higher-level aspects of the mathematics. However, in our
+view, notions of equality ought to be elevated to a status that obliges us to
+make them explicit in any mathematical argument.  While we acknowledge that formal
+proofs based on setoids may sometimes seem complicated or overly technical, we
+believe that informal arguments, which elide such formalisms, are
+oversimplifications.  We believe it is a bug, not a feature, of informal
+mathematics that proofs need not be explicit about the meaning of equality.
+
+\ddmmyydate
+
+\wjd{I tried to make a case for Setoids; JC, can you make this more convincing, or
+  propose something else entirely.}
+
 
 The \agdaalgebras library was first developed without setoids, relying on
 propositional equality \ad{\au{}≡\au{}} instead,

@@ -6,6 +6,11 @@
 \usepackage{proof-dashed}
 \usepackage{unixode}
 
+
+
+
+
+
 \usepackage[dvipsnames]{xcolor}
 \definecolor{britishracinggreen}{rgb}{0.0, 0.26, 0.15}
 \hypersetup{
@@ -14,15 +19,14 @@
     pdftoolbar=true,        % show Acrobat’s toolbar?
     pdfmenubar=true,        % show Acrobat’s menu?
     pdffitwindow=false,     % window fit to page when opened
-%    pdfstartview={FitW},    % fits the width of the page to the window
-    % pdftitle={A Machine-checked Proof of Birkhoff's Variety Theorem in Martin-L\"of Type Theory},    % title
-    pdftitle={Birkhoff's Variety Theorem Formalized in Agda},    % title
+    pdftitle={A Machine-checked Proof of Birkhoff's Variety Theorem},    % title
     pdfauthor={William DeMeo},     % author
-    pdfsubject={},   % subject of the document
+    pdfsubject={formal verification},                 % subject of the document
     pdfcreator={pdflatex with hyperref},
     pdfproducer={},  % producer of the document
     pdfkeywords= {Agda} {Birkhoff’s HSP theorem} {equational logic}
     {Formalization of mathematics} {Martin-Löf Type Theory} {model theory}
+    {formal verification}
     {universal algebra},
     pdfnewwindow=true,      % links in new window
     colorlinks=true,       % false: boxed links; true: colored links
@@ -52,15 +56,62 @@
 \usetikzlibrary{snakes,arrows,shapes}
 \usepackage{amsmath}
 
+
+
+
+
+
+
+%% VVVVVVVVVVVV BEGIN BETTER MARGIN NOTES  VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
+%%
+%% This section of macros provides for better margin notes.
+%% For details, see:  http://tex.stackexchange.com/questions/9796/how-to-add-todo-notes
+%%
+\usepackage{xargs}    % for more than one optional parameter in a new
+                      % command, use \newcommandx
+
+\usepackage{datetime}
+\usepackage[prependcaption,textsize=tiny]{todonotes}
+
+
+
+%%  To make a simple, in-line note that appears within the text (not in the margin), use:
+\newcommand{\wnote}[1]{\textcolor{Plum}{\noindent (WD: #1)}}
+\newcommand{\jnote}[1]{\textcolor{blue}{\noindent (JC: #1)}}
+
+% Otherwise, to make a (very brief) note that appears in a small box in the
+% margin with a line pointing to nearby text, use 
+\ddmmyydate
+%% William's margin notes:  \wd{this is a note}
+\newcommandx{\wjd}[2][1=]{%
+  \todo[linecolor=purple,backgroundcolor=Plum!25,bordercolor=Plum,#1]%
+       {{\bf wd} \today: #2}
+}
+
+%% Jacques' margin notes:  \jc{this is a note}
+\newcommandx{\jc}[2][1=]{
+  \todo[linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]%
+       {{\bf jc} \today: #2}
+}
+
+\newcommandx{\thiswillnotshow}[2][1=]{\todo[disable,#1]{#2}}
+%% ^^^^^^^^^ END BETTER MARGIN NOTES ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+%%
+
+
+
+
+
+
 \crefformat{footnote}{#2\footnotemark[#1]#3}
 
 %%%%%%%%%%%%%% TITLE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \ifshort
 % \title{Birkhoff's Variety Theorem formalized in Agda}
 % \else
-\title{A Machine-checked Proof of\\ Birkhoff's Variety Theorem} % in
+\title{A Machine-checked Proof of Birkhoff's Theorem} % in
                                 % Martin-L\"of Type Theory}
-\titlerunning{A Machine-checked Proof of Birkhoff's Variety Theorem}
+%\titlerunning{A Machine-checked Proof of Birkhoff's Variety Theorem}
 % \fi
 
 %%%%%%%%%%%%%% AUTHOR %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -87,7 +138,8 @@
 % \ccsdesc[300]{Theory of computation~Type structures}
 % \ccsdesc[300]{Theory of computation~Constructive mathematics}
 
-\keywords{Agda, constructive mathematics, dependent types, equational logic, formalization of mathematics, Martin-L\"of type theory, model theory, universal algebra}
+\keywords{Agda, constructive mathematics, dependent types, equational logic,
+  formal verification, Martin-L\"of type theory, model theory, universal algebra}
 
 \category{} %optional, e.g. invited paper
 
