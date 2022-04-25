@@ -97,7 +97,7 @@ See the \href{https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.h
 \end{itemize}
 \fi
 
-We also make use of a variety of definitions from Agda's standard library; these are imported as follows.
+We also make use of some definitions from Agda's standard library (ver.~1.7), imported as follows.
 \begin{code}[hide]
 {-# OPTIONS --without-K --exact-split --safe #-}
 \end{code}
@@ -113,44 +113,31 @@ module Demos.HSP {𝑆 : Signature 𝓞 𝓥} where
 \begin{code}
 
 -- Import 16 definitions from the Agda Standard Library.
-open import  Data.Unit.Polymorphic                           using ( ⊤ ; tt                        )
-open import  Function                                        using ( id ; flip ; _∘_               )
-open import  Level                                           using ( Level                         )
-open import  Relation.Binary                                 using ( Rel ; Setoid ; IsEquivalence  )
-open import  Relation.Binary.Definitions                     using ( Reflexive ; Symmetric         )
-                                                             using ( Transitive ; Sym ; Trans      )
-open import  Relation.Binary.PropositionalEquality           using ( _≡_                           )
-open import  Relation.Unary                                  using ( Pred ; _⊆_ ; _∈_              )
+open import  Data.Unit.Polymorphic                   using ( ⊤ ; tt                                            )
+open import  Function                                using ( id ; flip ; _∘_                                   )
+open import  Level                                   using ( Level                                             )
+open import  Relation.Binary                         using ( Rel ; Setoid ; IsEquivalence                      )
+open import  Relation.Binary.Definitions             using ( Reflexive ; Symmetric ; Transitive ; Sym ; Trans  )
+open import  Relation.Binary.PropositionalEquality   using ( _≡_                                               )
+open import  Relation.Unary                          using ( Pred ; _⊆_ ; _∈_                                  )
 
 -- Import 23 definitions from the Agda Standard Library and rename 12 of them.
-open import  Agda.Primitive  renaming ( Set    to Type    )  using ( _⊔_ ; lsuc                    )
-open import  Data.Product    renaming ( proj₁  to fst     )
-                             renaming ( proj₂  to snd     )  using ( _×_ ; _,_ ; Σ ; Σ-syntax      )
-open import  Function        renaming ( Func   to _⟶_     )  using ( Injection ; Surjection        )
-open         _⟶_             renaming ( f      to _⟨$⟩_   )  using ( cong                          )
-open         Setoid          renaming ( refl   to reflˢ   )
-                             renaming ( sym    to symˢ    )
-                             renaming ( trans  to transˢ  )
-                             renaming ( _≈_    to _≈ˢ_    )  using ( Carrier ; isEquivalence       )
-open         IsEquivalence   renaming ( refl   to reflᵉ   )
-                             renaming ( sym    to symᵉ    )
-                             renaming ( trans  to transᵉ  )  using ()
+open import  Agda.Primitive  renaming  ( Set to Type )                  using ( _⊔_ ; lsuc                     )
+open import  Data.Product    renaming  ( proj₁ to fst ; proj₂ to snd )  using ( _×_ ; _,_ ; Σ ; Σ-syntax       )
+open import  Function        renaming  ( Func to _⟶_ )                  using ( Injection ; Surjection         )
+open         _⟶_             renaming  ( f      to _⟨$⟩_   )            using ( cong                           )
+open         IsEquivalence   renaming  ( refl to reflᵉ  ; sym to symᵉ  ; trans  to transᵉ )  using (           )
+open         Setoid          renaming  ( refl to reflˢ  ; sym to symˢ  ; trans  to transˢ ; _≈_ to _≈ˢ_        )
+                             using     ( Carrier ; isEquivalence                                               )
 
-\end{code}
-\ifshort\else
-\begin{code}
 -- Assign handles to 3 modules of the Agda Standard Library.
-import       Function.Definitions                   as FD
-import       Relation.Binary.PropositionalEquality  as ≡
-import       Relation.Binary.Reasoning.Setoid       as SetoidReasoning
+import       Function.Definitions                   as   FD
+import       Relation.Binary.PropositionalEquality  as   ≡
+import       Relation.Binary.Reasoning.Setoid       as   SetoidReasoning
 
-private variable
- α ρᵃ β ρᵇ γ ρᶜ δ ρᵈ ρ χ ℓ : Level
- Γ Δ : Type χ
- 𝑓 : fst 𝑆
-
+private variable α ρᵃ β ρᵇ γ ρᶜ δ ρᵈ ρ χ ℓ : Level ;     Γ Δ : Type χ ;         𝑓  : fst 𝑆
 \end{code}
-\fi
+
 The above imports include some adjustments to ``standard \agda'' syntax; in particular,
 we use \AgdaPrimitive{Type} in place of \AgdaPrimitive{Set}, the infix long arrow symbol,
 \AgdaRecord{\AgdaUnderscore{}⟶\AgdaUnderscore{}}, instead of \AgdaRecord{Func} (the type of ``setoid functions,'' discussed in §\ref{setoid-functions} below), and the symbol \aofld{\au{}⟨\$⟩\au{}} in place of \afld{f} (application of the map of a setoid function); we use
@@ -174,16 +161,21 @@ module _ {A : Type α }{B : A → Type β} where
 A \defn{setoid} is a pair consisting of a type \ab A and
 an equivalence relation \af{≈} on \ab A.  Setoids are useful for representing a
 set with a ``local'' notion of equivalence, instead of always relying on
-the global one as is usually done in set theory. In reality, informal
-mathematial practice uses equivalence relations quite pervasively, and
-takes great care to only define equivalence-preserving functions, while
-eliding the actual details. To be fully formal, such details must be given.
-While there are many different approaches for doing that, the one that requires
-no additional meta-theory is based on setoids, which is why we adopt it here.
-While in some settings this has been found by others to be burdensome, we have not
-found it to be so for universal algebra.
+the global one as is usually done in set theory. Formal proofs based on setoids
+may seem like an unnatural departure from informal mathematical practice, where
+notions of equality are left implicit and do not distract from what may seem
+like more important, higher-level aspects of the mathematics. However, in our
+view, notions of equality ought to be elevated to a status that obliges us to
+make them explicit in any mathematical argument.  While we acknowledge that formal
+proofs based on setoids may sometimes seem complicated or overly technical, we
+believe that informal arguments, which elide such formalisms, are
+oversimplifications.  We believe it is a bug, not a feature, of informal
+mathematics that proofs need not be explicit about the meaning of equality.
 
 \ddmmyydate
+
+\wjd{I tried to make a case for Setoids; JC, can you make this more convincing, or
+  propose something else entirely.}
 
 The \agdaalgebras library was first developed without setoids, relying on
 propositional equality \ad{\au{}≡\au{}} instead,
@@ -2034,7 +2026,7 @@ Let \ab{𝒦} be an arbitrary variety.  We will describe a set of equations that
 % Let \ab{𝒦⁺} := \af{Mod} (\af{Th} \ab{𝒦}). Clearly, \ab{𝒦} \aof{⊆} \ab{𝒦⁺}.  We prove the
 for this choice, we must prove \ab{𝒦} \aof{=} \af{Mod} (\af{Th} \ab{𝒦}).
 Clearly, \ab{𝒦} \aof{⊆} \af{Mod} (\af{Th} \ab{𝒦}).  We prove the
-converse inclusion. Let \ab{𝑨} \af{∈} \af{Mod} (\af{Th} \ab{𝒦});
+converse inclusion. Let \ab{𝑨} \af{∈} \af{Mod} (\af{Th} \ab{𝒦}); 
 it suffices to find an algebra \ab{𝑭} \af{∈} \af{S} (\af{P} \ab{𝒦}) such that
 \ab{𝑨} is a homomorphic image of \ab{𝑭}, as this will show that \ab{𝑨} \af{∈}
 \af{H} (\af{S} (\af{P} \ab{𝒦})) = \ab{𝒦}.
@@ -2161,7 +2153,7 @@ From \ref{item:1} and \ref{item:2} will follow \af{Mod} (\af{Th} (V 𝒦))
 ⊆ \af{H} (\af{S} (\af{P} \ab{𝒦})) (= \af{V} \ab{𝒦}), as desired.
 
 \begin{itemize}
-\item
+\item 
 \noindent \ref{item:1.1}. To define \ab{𝑪} as the product of all algebras in \af{S} \ab{𝒦}, we must first contrive
 an index type for the class \af{S} \ab{𝒦}.  We do so by letting the indices be the algebras
 belonging to \ab{𝒦}. Actually, each index will consist of a triple (\ab{𝑨} , \ab p ,
@@ -2318,7 +2310,7 @@ the proof of \af{F≤C} merely extracts a subalgebra witness from a monomorphism
 
 \end{code}
 Recall, from \ref{item:1.1} and \ref{item:1.2}, we have \ab{𝑪} \af{∈}
-\af{P} (\af{S} \ab{𝒦}) \af{⊆} \af{S} (\af{P} \ab{𝒦}). We now use this, along with
+\af{P} (\af{S} \ab{𝒦}) \af{⊆} \af{S} (\af{P} \ab{𝒦}). We now use this, along with 
 what we just proved (\af{F≤C}), to conclude that \Free{X} belongs to \af{S}
 (\af{P} \ab{𝒦}).
 \begin{code}
@@ -2335,7 +2327,7 @@ This completes stage \ref{item:1} of the proof.
 \end{itemize}
 
 \begin{itemize}
-\item
+\item 
 \noindent \ref{item:2}. We show that every algebra in \af{Mod} (\af{Th} (\af{V}
 \ab{𝒦})) is a homomorphic image of \af{𝔽[~\ab{X}~]}, as follows.
 \ifshort\else
@@ -2363,7 +2355,7 @@ module _ {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
 \end{code}
 \af{ModTh-closure} and \af{Var⇒EqCl} show that
 \af{V} \ab{𝒦} = \af{Mod} (\af{Th} (\af{V} \ab{𝒦})) holds for every class \ab{𝒦} of \ab{𝑆}-algebras.
-Thus, every variety is an equational class.
+Thus, every variety is an equational class. 
 \end{itemize}
 
 This completes the formal proof of Birkhoff's variety theorem.
