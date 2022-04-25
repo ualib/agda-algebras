@@ -2045,8 +2045,6 @@ Here is how we formalize the concept of product algebra in \agda.
 \AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaKeyword{where}\<%
 \\
-%
-\\[\AgdaEmptyExtraSkip]%
 \>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{⨅}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -2066,8 +2064,6 @@ Here is how we formalize the concept of product algebra in \agda.
 \AgdaOperator{\AgdaPrimitive{⊔}}\AgdaSpace{}%
 \AgdaBound{ι}\AgdaSymbol{)}\<%
 \\
-%
-\\[\AgdaEmptyExtraSkip]%
 %
 \>[1]\AgdaField{Domain}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{⨅}\AgdaSpace{}%
@@ -2163,8 +2159,6 @@ Here is how we formalize the concept of product algebra in \agda.
 \AgdaSymbol{\}\}}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
 \>[1]\AgdaField{Interp}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaFunction{⨅}\AgdaSpace{}%
 \AgdaBound{𝒜}\AgdaSymbol{)}\AgdaSpace{}%
@@ -2184,8 +2178,6 @@ Here is how we formalize the concept of product algebra in \agda.
 \AgdaBound{a}\AgdaSpace{}%
 \AgdaBound{i}\AgdaSymbol{)}\<%
 \\
-%
-\\[\AgdaEmptyExtraSkip]%
 %
 \>[1]\AgdaField{cong}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaField{Interp}\AgdaSpace{}%
@@ -7267,6 +7259,7 @@ We now define the type \af H to represent classes of algebras that include all h
 of algebras in the class---i.e., classes that are closed under the taking of homomorphic
 images---the type \af S to represent classes of algebras that closed under the taking of subalgebras,
 and the type \af P to represent classes of algebras closed under the taking of arbitrary products.
+\fi
 
 \begin{code}%
 \>[0]\<%
@@ -7280,12 +7273,8 @@ and the type \af P to represent classes of algebras closed under the taking of a
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPostulate{Level}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaKeyword{where}\<%
-\end{code}
-\fi
-\begin{code}%
-\>[0]\<%
 \\
-\>[0][@{}l@{\AgdaIndent{1}}]%
+\>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaKeyword{private}\AgdaSpace{}%
 \AgdaFunction{a}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
@@ -7519,7 +7508,6 @@ are needed for disambiguation.
 An important property of the binary relation \aof{⊧} is \emph{algebraic invariance} (i.e.,
 invariance under isomorphism).  We formalize this result as follows.
 
-\ifshort\else
 \begin{code}%
 \>[0]\<%
 \\
@@ -7542,12 +7530,8 @@ invariance under isomorphism).  We formalize this result as follows.
 \AgdaDatatype{Term}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSymbol{)}\AgdaSpace{}%
 \AgdaKeyword{where}\<%
-\end{code}
-\fi
-\begin{code}%
-\>[0]\<%
 \\
-\>[0][@{}l@{\AgdaIndent{1}}]%
+\>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{⊧-I-invar}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
@@ -7699,21 +7683,20 @@ invariance under isomorphism).  We formalize this result as follows.
 %
 \>[2]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaModule{Environment}\AgdaSpace{}%
-\AgdaBound{𝑨}%
-\>[25]\AgdaKeyword{using}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaKeyword{using}\AgdaSpace{}%
 \AgdaSymbol{()}\AgdaSpace{}%
 \AgdaKeyword{renaming}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟦\AgdaUnderscore{}⟧}}\AgdaSpace{}%
 \AgdaSymbol{to}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟦\AgdaUnderscore{}⟧ᴬ}}\AgdaSpace{}%
-\AgdaSymbol{)}\<%
-\\
-%
-\>[2]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaSymbol{;}\AgdaSpace{}%
+\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaModule{Environment}\AgdaSpace{}%
-\AgdaBound{𝑩}%
-\>[25]\AgdaKeyword{using}\AgdaSpace{}%
+\AgdaBound{𝑩}\AgdaSpace{}%
+\AgdaKeyword{using}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{⟦\AgdaUnderscore{}⟧}}\AgdaSpace{}%
 \AgdaSymbol{)}\<%
@@ -7735,7 +7718,6 @@ statements and proofs, which are analogous to those of \af{⊧-I-invar}.
 \else
 These facts are formalized in \agda as follows.
 
-\ifshort\else
 \begin{code}%
 \>[0]\<%
 \\
@@ -7758,12 +7740,8 @@ These facts are formalized in \agda as follows.
 \AgdaDatatype{Term}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaKeyword{where}\<%
-\end{code}
-\fi
-\begin{code}%
-\>[0]\<%
 \\
-\>[0][@{}l@{\AgdaIndent{1}}]%
+\>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{⊧-H-invar}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝑨}\AgdaSpace{}%
@@ -7992,9 +7970,9 @@ These facts are formalized in \agda as follows.
 \\
 \>[1][@{}l@{\AgdaIndent{0}}]%
 \>[2]\AgdaSymbol{(}%
-\>[4976I]\AgdaOperator{\AgdaFunction{begin}}\<%
+\>[4980I]\AgdaOperator{\AgdaFunction{begin}}\<%
 \\
-\>[.][@{}l@{}]\<[4976I]%
+\>[.][@{}l@{}]\<[4980I]%
 \>[4]\AgdaFunction{h}\AgdaSpace{}%
 \AgdaSymbol{(}%
 \>[9]\AgdaOperator{\AgdaFunction{⟦}}\AgdaSpace{}%
@@ -8114,7 +8092,7 @@ These facts are formalized in \agda as follows.
 An identity satisfied by all algebras in an indexed collection is
 also satisfied by the product of algebras in the collection.
 \ifshort
-We refer to this fact as \af{⊧-P-invar}.
+We refer to this fact as \af{⊧-P-invar} in the sequel.
 \else
 
 \begin{code}%
@@ -8305,7 +8283,6 @@ First, the closure operator \af H preserves the identities modeled by the
 given class; this follows almost immediately from the invariance lemma
 \af{⊧-H-invar}.
 
-\ifshort\else
 \begin{code}%
 \>[0]\<%
 \\
@@ -8330,12 +8307,8 @@ given class; this follows almost immediately from the invariance lemma
 \AgdaDatatype{Term}\AgdaSpace{}%
 \AgdaBound{X}\AgdaSymbol{\}}\AgdaSpace{}%
 \AgdaKeyword{where}\<%
-\end{code}
-\fi
-\begin{code}%
-\>[0]\<%
 \\
-\>[0][@{}l@{\AgdaIndent{1}}]%
+\>[0][@{}l@{\AgdaIndent{0}}]%
 \>[1]\AgdaFunction{H-id1}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaBound{𝒦}\AgdaSpace{}%
@@ -10004,8 +9977,6 @@ classes \ab{𝒦}, is called the \defn{expansive} property of \af{V}.
 \AgdaSymbol{)}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
 \>[2]\AgdaFunction{to⨅}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{𝔻[}}\AgdaSpace{}%
@@ -10043,8 +10014,6 @@ classes \ab{𝒦}, is called the \defn{expansive} property of \af{V}.
 \AgdaSymbol{\}}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
 \>[2]\AgdaFunction{from⨅}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{𝔻[}}\AgdaSpace{}%
@@ -10081,8 +10050,6 @@ classes \ab{𝒦}, is called the \defn{expansive} property of \af{V}.
 \AgdaFunction{tt}\AgdaSpace{}%
 \AgdaSymbol{\}}\<%
 \\
-%
-\\[\AgdaEmptyExtraSkip]%
 %
 \>[2]\AgdaFunction{Goal}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -10256,8 +10223,6 @@ consequence of the fact that \af{Mod} \af{Th} is a closure operator.
 \AgdaFunction{c}\<%
 \\
 %
-\\[\AgdaEmptyExtraSkip]%
-%
 \>[1]\AgdaFunction{ModTh-closure}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{V}\AgdaSymbol{\{}\AgdaArgument{β}\AgdaSpace{}%
@@ -10335,8 +10300,6 @@ as follows.
 \AgdaFunction{Env}\AgdaSpace{}%
 \AgdaSymbol{)}\<%
 \\
-%
-\\[\AgdaEmptyExtraSkip]%
 %
 \>[1]\AgdaFunction{ℑ}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -10745,7 +10708,7 @@ We state and prove this in \agda as follows.
 \\
 %
 \>[2]\AgdaKeyword{where}%
-\>[6711I]\AgdaKeyword{open}\AgdaSpace{}%
+\>[6715I]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaModule{Environment}\AgdaSpace{}%
 \AgdaBound{𝑨}%
 \>[28]\AgdaKeyword{using}\AgdaSpace{}%
@@ -10753,7 +10716,7 @@ We state and prove this in \agda as follows.
 \AgdaOperator{\AgdaFunction{⟦\AgdaUnderscore{}⟧}}\AgdaSpace{}%
 \AgdaSymbol{)}\<%
 \\
-\>[.][@{}l@{}]\<[6711I]%
+\>[.][@{}l@{}]\<[6715I]%
 \>[8]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaModule{Setoid}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{𝔻[}}\AgdaSpace{}%
@@ -11265,8 +11228,6 @@ This completes stage \ref{item:1} of the proof.
 \AgdaOperator{\AgdaFunction{𝔽[\AgdaUnderscore{}]}}\AgdaSpace{}%
 \AgdaSymbol{)}\<%
 \\
-%
-\\[\AgdaEmptyExtraSkip]%
 %
 \>[1]\AgdaFunction{Var⇒EqCl}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%

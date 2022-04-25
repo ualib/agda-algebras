@@ -640,9 +640,7 @@ Here is how we formalize the concept of product algebra in \agda.
 \begin{code}
 
 module _ {ι : Level}{I : Type ι } where
-
  ⨅ : (𝒜 : I → Algebra α ρᵃ) → Algebra (α ⊔ ι) (ρᵃ ⊔ ι)
-
  Domain (⨅ 𝒜) =
   record { Carrier = ∀ i → 𝕌[ 𝒜 i ]
          ; _≈_ = λ a b → ∀ i → (_≈ˢ_ 𝔻[ 𝒜 i ]) (a i)(b i)
@@ -650,9 +648,7 @@ module _ {ι : Level}{I : Type ι } where
             record  { refl   = λ i →      reflᵉ   (isEquivalence 𝔻[ 𝒜 i ])
                     ; sym    = λ x i →    symᵉ    (isEquivalence 𝔻[ 𝒜 i ])(x i)
                     ; trans  = λ x y i →  transᵉ  (isEquivalence 𝔻[ 𝒜 i ])(x i)(y i) }}
-
  Interp (⨅ 𝒜) ⟨$⟩ (f , a) = λ i → (f ̂ (𝒜 i)) (flip a i)
-
  cong (Interp (⨅ 𝒜)) (≡.refl , f=g ) = λ i → cong (Interp (𝒜 i)) (≡.refl , flip f=g i )
 
 \end{code}
@@ -1558,14 +1554,11 @@ We now define the type \af H to represent classes of algebras that include all h
 of algebras in the class---i.e., classes that are closed under the taking of homomorphic
 images---the type \af S to represent classes of algebras that closed under the taking of subalgebras,
 and the type \af P to represent classes of algebras closed under the taking of arbitrary products.
+\fi
 
 \begin{code}
 
 module _ {α ρᵃ β ρᵇ : Level} where
-\end{code}
-\fi
-\begin{code}
-
  private a = α ⊔ ρᵃ
  H : ∀ ℓ → Pred(Algebra α ρᵃ) (a ⊔ ov ℓ) → Pred(Algebra β ρᵇ) _
  H _ 𝒦 𝑩 = Σ[ 𝑨 ∈ Algebra α ρᵃ ] 𝑨 ∈ 𝒦 × 𝑩 IsHomImageOf 𝑨
@@ -1592,14 +1585,9 @@ module _  {α ρᵃ β ρᵇ γ ρᶜ δ ρᵈ : Level} where
 An important property of the binary relation \aof{⊧} is \emph{algebraic invariance} (i.e.,
 invariance under isomorphism).  We formalize this result as follows.
 
-\ifshort\else
 \begin{code}
 
 module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}(𝑩 : Algebra β ρᵇ)(p q : Term X) where
-\end{code}
-\fi
-\begin{code}
-
  ⊧-I-invar : 𝑨 ⊧ p ≈ q  →  𝑨 ≅ 𝑩  →  𝑩 ⊧ p ≈ q
  ⊧-I-invar Apq (mkiso fh gh f∼g g∼f) ρ = begin
       ⟦ p ⟧   ⟨$⟩               ρ    ≈˘⟨  cong ⟦ p ⟧ (f∼g ∘ ρ)        ⟩
@@ -1610,8 +1598,7 @@ module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}(𝑩 : Algebra β ρᵇ)(p q : T
       ⟦ q ⟧   ⟨$⟩               ρ    ∎
   where
   private f = _⟨$⟩_ ∣ fh ∣ ; g = _⟨$⟩_ ∣ gh ∣
-  open Environment 𝑨     using () renaming ( ⟦_⟧ to ⟦_⟧ᴬ )
-  open Environment 𝑩     using ( ⟦_⟧ )
+  open Environment 𝑨 using () renaming ( ⟦_⟧ to ⟦_⟧ᴬ ) ; open Environment 𝑩 using ( ⟦_⟧ )
   open SetoidReasoning 𝔻[ 𝑩 ]
 
 \end{code}
@@ -1623,14 +1610,9 @@ statements and proofs, which are analogous to those of \af{⊧-I-invar}.
 \else
 These facts are formalized in \agda as follows.
 
-\ifshort\else
 \begin{code}
 
 module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}{p q : Term X} where
-\end{code}
-\fi
-\begin{code}
-
  ⊧-H-invar : 𝑨 ⊧ p ≈ q → 𝑩 IsHomImageOf 𝑨 → 𝑩 ⊧ p ≈ q
  ⊧-H-invar Apq (φh , φE) ρ =
   begin
@@ -1667,7 +1649,7 @@ module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}{p q : T
 An identity satisfied by all algebras in an indexed collection is
 also satisfied by the product of algebras in the collection.
 \ifshort
-We refer to this fact as \af{⊧-P-invar}.
+We refer to this fact as \af{⊧-P-invar} in the sequel.
 \else
 
 \begin{code}
@@ -1697,14 +1679,9 @@ First, the closure operator \af H preserves the identities modeled by the
 given class; this follows almost immediately from the invariance lemma
 \af{⊧-H-invar}.
 
-\ifshort\else
 \begin{code}
 
 module _  {X : Type χ}{𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)}{p q : Term X} where
-\end{code}
-\fi
-\begin{code}
-
  H-id1 : 𝒦 ⊫ p ≈ q → H{β = α}{ρᵃ}ℓ 𝒦 ⊫ p ≈ q
  H-id1 σ 𝑩 (𝑨 , kA , BimgA) = ⊧-H-invar{p = p}{q} (σ 𝑨 kA) BimgA
 
@@ -2074,13 +2051,10 @@ module _ (𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)) where
   where
   open Setoid 𝔻[ 𝑨 ] using ( refl )
   open Setoid 𝔻[ ⨅ (λ _ → 𝑨) ] using () renaming ( refl to refl⨅ )
-
   to⨅ : 𝔻[ 𝑨 ] ⟶ 𝔻[ ⨅ (λ _ → 𝑨) ]
   to⨅ = record { f = λ x _ → x ; cong = λ xy _ → xy }
-
   from⨅ : 𝔻[ ⨅ (λ _ → 𝑨) ] ⟶ 𝔻[ 𝑨 ]
   from⨅ = record { f = λ x → x tt ; cong = λ xy → xy tt }
-
   Goal : 𝑨 ≅ ⨅ (λ x → 𝑨)
   Goal = mkiso (to⨅ , mkhom refl⨅) (from⨅ , mkhom refl) (λ _ _ → refl) (λ _ → refl)
 
@@ -2118,7 +2092,6 @@ consequence of the fact that \af{Mod} \af{Th} is a closure operator.
 
 module _ (𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)){X : Type (α ⊔ ρᵃ ⊔ ℓ)} where
  private c = α ⊔ ρᵃ ⊔ ℓ ; ι = ov c
-
  ModTh-closure : V{β = β}{ρᵇ}{γ}{ρᶜ}{δ}{ρᵈ} ℓ ι 𝒦 ⊆ Mod{X = X} (Th (V ℓ ι 𝒦))
  ModTh-closure {x = 𝑨} vA {p} {q} x ρ = x 𝑨 vA ρ
 
@@ -2156,7 +2129,6 @@ as follows.
 \begin{code}
 
  open Environment using ( Env )
-
  ℑ : Type ι
  ℑ = Σ[ 𝑨 ∈ (Algebra α ρᵃ) ] (𝑨 ∈ S ℓ 𝒦) × (Carrier (Env 𝑨 X))
 
@@ -2308,7 +2280,6 @@ This completes stage \ref{item:1} of the proof.
 
 module _ {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
  private c = α ⊔ ρᵃ ⊔ ℓ ; ι = ov c ; open FreeAlgebra {χ = c}(Th 𝒦) using ( 𝔽[_] )
-
  Var⇒EqCl : ∀ 𝑨 → 𝑨 ∈ Mod (Th (V ℓ ι 𝒦)) → 𝑨 ∈ V ℓ ι 𝒦
  Var⇒EqCl 𝑨 ModThA = 𝔽[ 𝕌[ 𝑨 ] ] , (spFA , Aim)
   where
