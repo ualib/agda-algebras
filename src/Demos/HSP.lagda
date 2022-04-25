@@ -2327,8 +2327,12 @@ This completes stage \ref{item:1} of the proof.
 \end{itemize}
 
 \begin{itemize}
+<<<<<<< HEAD
 \item 
 \noindent \ref{item:2}. We show that every algebra in \af{Mod} (\af{Th} (\af{V}
+=======
+\item \ref{item:2}. We show that every algebra in \af{Mod} (\af{Th} (\af{V}
+>>>>>>> master
 \ab{𝒦})) is a homomorphic image of \af{𝔽[~\ab{X}~]}, as follows.
 \ifshort\else
 \begin{code}
