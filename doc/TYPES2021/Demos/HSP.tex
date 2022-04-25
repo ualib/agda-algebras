@@ -8482,9 +8482,10 @@ the invariance lemma \af{⊧-S-invar}; the converse, which we call
 \\
 \>[0]\<%
 \end{code}
-Finally, we have analogous pairs of implications for \af P and \af V,
+Finally, we have analogous pairs of implications for \af P, \af H, and \af V,
+  called \af{P-id1}, \af{P-id2}, \af{H-id1}, etc.
 \ifshort
-  called \af{P-id1}, \af{P-id2}, \af{V-id1} and \af{V-id2}, but we omit the formalizations (\seeshort).
+We omit the formalizations (\seeshort).
 \else
 In each case, we will only need the first implication, so we omit the others from this presentation.
 
@@ -8722,8 +8723,8 @@ In each case, we will only need the first implication, so we omit the others fro
 \section{Free Algebras}
 \label{free-algebras}
 \paragraph*{The absolutely free algebra}
-The term algebra \af{𝑻} \ab X is \emph{absolutely free} (or \emph{initial}) for algebras
-in the signature \ab{𝑆}. That is, for every \ab{𝑆}-algebra \ab{𝑨}, the following hold.
+The term algebra \af{𝑻} \ab X is the \emph{absolutely free} (or \emph{initial})
+\ab{S}-algebra. That is, for every \ab{𝑆}-algebra \ab{𝑨}, the following hold.
 \begin{itemize}
 \item Every function from \ab{X} to \af{𝕌[ \ab{𝑨} ]} lifts to a homomorphism from \af{𝑻} \ab{X} to \ab{𝑨}.
 \item That homomorphism is unique.
@@ -9047,7 +9048,9 @@ The construction of the free algebra in \af{S} (\af{P} \ab{𝒦})
 proceeds by taking the quotient of \T{X} modulo a congruence relation \afld{≈}.  One approach is to let
 \afld{≈} be \af{⋂}\{\ab{θ} \af{∈} \af{Con} (\T{X}) : \T{X} \af{/} \ab{θ} \af{∈} \af{S}
 \ab{𝒦}\}.\footnote{\af{Con} (\T{X}) denotes the congruences of \T{X}.}
-Equivalently, we let \ab{ℰ} = \af{Th} \ab{𝒦} and take \afld{≈} to be the least equivalence relation
+
+\ifshort\else
+Equivalently, we could let \ab{ℰ} = \af{Th} \ab{𝒦} and take \afld{≈} to be the least equivalence relation
 on the domain of \T{X} such that
 \begin{enumerate}
 \item for every equation (\ab p , \ab q) \af{∈} \af{Th} \ab{𝒦} and every
@@ -9063,14 +9066,17 @@ i~⟧}~\afld{⟨\$⟩}~\ab{ρ})
 \as{→} \af{⟦~\ab f~\ab s~⟧}~\afld{⟨\$⟩}~\ab{ρ}~\afld{≈}~\af{⟦~\ab f~\ab
 t~⟧}~\afld{⟨\$⟩}~\ab{ρ}\\[-8pt]
 \end{enumerate}
+\fi
+
 The \defn{relatively free algebra over} \ab{X} (relative to
 \ab{𝒦}) is defined to be the quotient \Free{X} := \T{X}~\af{/}~\afld{≈}.
 Evidently, \Free{X} is a subdirect product of the algebras in \{\T{X}~\af{/}~\ab{θ}\!\},
 where \ab{θ} ranges over congruences modulo which \T{X} belongs to \af{S}~\ab{𝒦}.
-Thus, \Free{X} \af{∈} \af{P}(\af{S}~\ab{𝒦}) ⊆ \af{S}(\af{P}~\ab{𝒦}), and it follows
+In particular, \Free{X} embeds in a product of members of \af{S}~\ab{𝒦}, so
+\Free{X} \af{∈} \af{S}(\af{P}(\af{S}~\ab{𝒦})) ⊆ \af{S}(\af{P}~\ab{𝒦}). It follows
 that \Free{X} satisfies the identities in \af{Th} \ab{𝒦} (those modeled by all members of
 \ab{𝒦}).  Indeed, for each pair \ab p \ab q : \Term{X}, if \ab{𝒦} \af{⊫} \ab p \af{≈} \ab
-q, then \ab p and \ab q must belong to the same \afld{≈}-class, so \ab p and \ab q are
+q, then \ab p and \ab q belong to the same \afld{≈}-class, so \ab p and \ab q are
 identified in \Free{X}. \ifshort\else (Notice that \afld{≈} may be empty, in which case
 \T{X}~\af{/}~\afld{≈} is trivial.) \fi
 

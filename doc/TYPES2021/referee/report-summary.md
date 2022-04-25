@@ -100,30 +100,38 @@
 8.  > Finally, we have analogous pairs of implications for P and V, called P-id1,
     > P-id2, V-id1 and V-id2, but we omit the formalizations (see [8]).
 
-    It might be worth mentioning H-id2 as well (although it is not needed).
+    ~~It might be worth mentioning H-id2 as well (although it is not needed).~~
+    
+    (done; added as suggested)
 
 9.  > The term algebra T X is absolutely free (or initial) for algebras in the
     > signature S.
 
-    I feel that "T X is the absolutely free S-algebra on X" is better since it is
-    closer to the standard terminology "T X is the free S-algebra on X".
+    ~~I feel that "T X is the absolutely free S-algebra on X" is better since it is
+    closer to the standard terminology "T X is the free S-algebra on X".~~
+    
+    (done; reworded as suggested)
 
 10.  > One approach is to let ~ be {θ ∈ Con (T X) : T X / Theta \in S K }. 
      > Equivalently, we let E = Th K and take ~ to be the least
 
-     Why is the second definition is equivalent to the first one, and what is the motivation 
+     ~~Why is the second definition is equivalent to the first one, and what is the motivation 
      for introducing it since it doesn't seemed to be used in the formal definition. Moreover, 
      inserting the alternative definition may make the claim that F[X] is a subdirect product 
      of the algebras more confusing, since it follows obviously from the first definition and 
-     not the second.
+     not the second.~~
+     
+     (done; the extraneous definition was removed)
 
 11.  > Evidently, F[ X ] is a subdirect product of the algebras in {T X / Theta },
      > where Theta ranges over congruences modulo which T X belongs to S K. Thus, 
      > F[ X ] ∈ P (S K) 
 
-     Can we detail the argument? Since F[X] is a subdirect product of algebras in S
+     ~~Can we detail the argument? Since F[X] is a subdirect product of algebras in S
      K, F[X] injectively embeds into a product of elements of S K, so we should expect
-     F[X] ∈ S (P (S K)), rather than F[ X ] ∈ P (S K).
+     F[X] ∈ S (P (S K)), rather than F[ X ] ∈ P (S K).~~
+     
+     (fixed; there was a missing S, as noted; also, more details are now included as requested)
 
 12.  > Let A ∈ K⁺; it suffices to find an algebra F ∈ S (P K) such that A is a
      > homomorphic image of F, as this will show that A ∈ H (S (P K)) = K.
