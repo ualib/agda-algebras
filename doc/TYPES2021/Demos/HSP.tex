@@ -2,7 +2,8 @@
 The \agdaalgebras library \cite{ualib_v2.0.1} formalizes the foundations of universal algebra
 in intensional Martin-Löf type theory (\mltt) using \agda~\cite{Norell:2007,agdaref}.
 The library includes a wide collection of definitions and verified theorems that faithfully codify
-classical, set-theory-based universal algebra and equational logic.
+classical, set-theory-based universal algebra and equational
+logic.
 
 The first major milestone of the \agdaalgebras project is a proof of \emph{Birkhoff's
 variety theorem} (also known as the \emph{HSP theorem})~\cite{Birkhoff:1935}.
@@ -28,7 +29,7 @@ proof presented here\footnote{based on \agdaalgebras, ver.~2.0.1~\cite{ualib_v2.
 
 What follows is a self-contained formal proof of the HSP theorem in \agda.  This is achieved by
 extracting a subset of the \agdaalgebras library, including only the
-pieces needed for the proof, into a literate \agda document.\footnote{See
+pieces needed for the proof, into a literate \agda document.\footnote{see
 \HSPlagda in the \agdaalgebras repository: \agdaalgebrasrepo .}
 \ifshort
 For spaces reasons, we elide some inessential parts,
@@ -118,7 +119,7 @@ We also make use of a variety of definitions from Agda's standard library; these
 \\
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
-\AgdaModule{Algebras.Basic}\AgdaSpace{}%
+\AgdaModule{Base.Algebras.Basic}\AgdaSpace{}%
 \AgdaKeyword{using}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaSpace{}%
 \AgdaGeneralizable{𝓞}\AgdaSpace{}%
@@ -514,7 +515,6 @@ mathematics that proofs need not be explicit about the meaning of equality.
 
 \wjd{I tried to make a case for Setoids; JC, can you make this more convincing, or
   propose something else entirely.}
-
 
 The \agdaalgebras library was first developed without setoids, relying on
 propositional equality \ad{\au{}≡\au{}} instead,
@@ -9050,7 +9050,7 @@ proceeds by taking the quotient of \T{X} modulo a congruence relation \afld{≈}
 \ab{𝒦}\}.\footnote{\af{Con} (\T{X}) denotes the congruences of \T{X}.}
 
 \ifshort\else
-Equivalently, we could let \ab{ℰ} = \af{Th} \ab{𝒦} and take \afld{≈} to be the least equivalence relation
+Equivalently, we let \ab{ℰ} = \af{Th} \ab{𝒦} and take \afld{≈} to be the least equivalence relation
 on the domain of \T{X} such that
 \begin{enumerate}
 \item for every equation (\ab p , \ab q) \af{∈} \af{Th} \ab{𝒦} and every
@@ -10233,7 +10233,8 @@ class, then \af V \ab{𝒦} \aof{⊆} \ab{𝒦}, as we now confirm.
 \AgdaSymbol{→}\AgdaSpace{}%
 \AgdaBound{x}\AgdaSpace{}%
 \AgdaBound{pℰq}\AgdaSpace{}%
-\AgdaBound{τ}\AgdaSymbol{)}\AgdaSpace{}\AgdaBound{𝑨}\AgdaSpace{}%
+\AgdaBound{τ}\AgdaSymbol{)}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSpace{}%
 \AgdaBound{vA}\AgdaSpace{}%
 \AgdaBound{ρ}\<%
 \\
@@ -11220,7 +11221,7 @@ With this we can prove that \Free{X} belongs to \af{S} (\af{P} \ab{𝒦}).
 %
 \>[1]\AgdaFunction{SPF}\AgdaSpace{}%
 \AgdaSymbol{=}%
-\>[7019I]\AgdaKeyword{let}\AgdaSpace{}%
+\>[7020I]\AgdaKeyword{let}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{alg}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaBound{∈𝒦}\AgdaSpace{}%
@@ -11231,7 +11232,7 @@ With this we can prove that \Free{X} belongs to \af{S} (\af{P} \ab{𝒦}).
 \AgdaFunction{psC}\AgdaSpace{}%
 \AgdaKeyword{in}\<%
 \\
-\>[.][@{}l@{}]\<[7019I]%
+\>[.][@{}l@{}]\<[7020I]%
 \>[7]\AgdaSymbol{(}\AgdaBound{alg}\AgdaSpace{}%
 \AgdaOperator{\AgdaInductiveConstructor{,}}\AgdaSpace{}%
 \AgdaBound{∈𝒦}\AgdaSpace{}%

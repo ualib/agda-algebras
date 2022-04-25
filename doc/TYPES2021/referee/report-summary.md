@@ -144,9 +144,12 @@
 13.  > We now define the natural epimorphism from T X onto F[ X ] and prove that its
      > kernel is contained in the collection of identities modeled by V K
 
-     Isn't it an equality rather than a mere inclusion? By definition, this kernel is
+     ~~Isn't it an equality rather than a mere inclusion? By definition, this kernel is
      the collection of identities modeled by K, but K and V K define the same
-     collection of identities, right?
+     collection of identities, right?~~
+     
+     (unchanged; it is equality, but that's not required in the proof of the HSP Theorem and, as 
+     our main goal is to prove that theorem as expediently as possible, we'll leave this unchanged)
 
 14.  > Let C be the product of all algebras in S K, so that C ∈ P (S K).
 

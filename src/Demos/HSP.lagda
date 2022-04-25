@@ -7,14 +7,16 @@ logic.
 
 The first major milestone of the \agdaalgebras project is a proof of \emph{Birkhoff's
 variety theorem} (also known as the \emph{HSP theorem})~\cite{Birkhoff:1935}.
-To the best of our knowledge, this constitutes the first machine-verified proof of Birkoff's
-celebrated 1935 result.
+To the best of our knowledge, this constitutes the first ever formal proof of
+Birkhoff's in Martin-Löf Type Theory, and it is the first such machine-verified proof of Birkhoff's
+celebrated 1935 result.  An alternative formalization, based on classical
+set-theory, was achieved in~\cite{birkhoff-in-mizar:1999}; see \href{http://www.mizar.org/JFM/Vol9/birkhoff.html\#BIB21}{mizar.org/JFM/Vol9/birkhoff.html}.
 
-Presented here is our second proof of the HSP theorem. The first proof\footnote{see the
+Presented here is our second proof of the HSP theorem. The first proof\footnote{See the
  \href{https://github.com/ualib/ualib.github.io/blob/71f173858701398d56224dd79d152c380c0c2b5e/src/lagda/UALib/Birkhoff.lagda}{\textsf{Birkhoff.lagda}} file
  in the \href{https://github.com/ualib/ualib.github.io}{\textsf{ualib/ualib.gitlab.io}}
  repository (\href{https://github.com/ualib/ualib.github.io/commit/71f173858701398d56224dd79d152c380c0c2b5e}{15
- Jan 2021 commit 71f1738})~\cite{ualib_v1.0.0}}
+ Jan 2021 commit 71f1738})~\cite{ualib_v1.0.0}.}
 suffered from flaws that raised two concerns. First, it was not clear whether the
 proof was fully constructive (because of its use of function extensionality in \mltt). Second,
 it was shown that if one were to take the type
@@ -22,13 +24,13 @@ it was shown that if one were to take the type
 variable symbols---to be  the two element type, then one could combine this with our
 proof and derive a contradiction. To resolve these issues, we have rewritten parts of the library and
 developed a new proof of the HSP theorem. We are confident that the
-proof presented here\footnote{based on \agdaalgebras, ver.~2.0.1~\cite{ualib_v2.0.1}, \agda ver.2.6.2 and \agdastdlib ver.1.7} is constructive and
+proof presented here\footnote{based on \agdaalgebras, ver.~2.0.1~\cite{ualib_v2.0.1}, \agda ver.2.6.2 and \agdastdlib ver.1.7.} is constructive and
  correct. %, a conviction we justify in the sequel (\qv).
 
 What follows is a self-contained formal proof of the HSP theorem in \agda.  This is achieved by
 extracting a subset of the \agdaalgebras library, including only the
-pieces needed for the proof, into a literate \agda document.\footnote{see
-\HSPlagda in the \agdaalgebras repository: \agdaalgebrasrepo}
+pieces needed for the proof, into a literate \agda document.\footnote{See
+\HSPlagda in the \agdaalgebras repository: \agdaalgebrasrepo .}
 \ifshort
 For spaces reasons, we elide some inessential parts,
 but strive to preserve the essential content and character of the development.
@@ -37,8 +39,8 @@ seem to offer insight into the central ideas of the proof are omitted.\footnote{
 appears in the unabridged version of the present paper~\cite{DeMeo:2021}.}
 \else
 We include here every line of code of our new proof of Birkhoff's theorem
-in a single \agda module, presented as a literate \agda document,\footnote{see
-\HSPlagda in the \agdaalgebras repository: \agdaalgebrasrepo}.  Apart from a few dozen
+in a single \agda module, presented as a literate \agda document,\footnote{See
+\HSPlagda in the \agdaalgebras repository: \agdaalgebrasrepo .}.  Apart from a few dozen
 imports from the \agdastdlib, the module is self-contained.
 \fi
 
@@ -172,9 +174,21 @@ module _ {A : Type α }{B : A → Type β} where
 A \defn{setoid} is a pair consisting of a type \ab A and
 an equivalence relation \af{≈} on \ab A.  Setoids are useful for representing a
 set with a ``local'' notion of equivalence, instead of always relying on
-the global one as is usually done in set theory. Dealing with setoids has
-somewhat of a bad reputation for being overly tedious. We have not found
-this to be an issue.
+the global one as is usually done in set theory. Formal proofs based on setoids
+may seem like an unnatural departure from informal mathematical practice, where
+notions of equality are left implicit and do not distract from what may seem
+like more important, higher-level aspects of the mathematics. However, in our
+view, notions of equality ought to be elevated to a status that obliges us to
+make them explicit in any mathematical argument.  While we acknowledge that formal
+proofs based on setoids may sometimes seem complicated or overly technical, we
+believe that informal arguments, which elide such formalisms, are
+oversimplifications.  We believe it is a bug, not a feature, of informal
+mathematics that proofs need not be explicit about the meaning of equality.
+
+\ddmmyydate
+
+\wjd{I tried to make a case for Setoids; JC, can you make this more convincing, or
+  propose something else entirely.}
 
 The \agdaalgebras library was first developed without setoids, relying on
 propositional equality \ad{\au{}≡\au{}} instead,
@@ -514,7 +528,7 @@ f ̂ 𝑨 = λ a → (Interp 𝑨) ⟨$⟩ (f , a)
 Types belong to \emph{universes}, which are structured in \agda as
 follows:
 \ap{Type} \ab{ℓ} : \ap{Type} (\ap{suc} \ab{ℓ}), \ap{Type} (\ap{suc} \ab{ℓ}) : \ap{Type}
-(\ap{suc} (\ap{suc} \ab{ℓ})), ….\footnote{\ap{suc} \ab{ℓ} denotes the successor of \ab{ℓ} in the universe hierarchy} While this means that \ap{Type} \ab{ℓ} has type \ap{Type}
+(\ap{suc} (\ap{suc} \ab{ℓ})), ….\footnote{\ap{suc} \ab{ℓ} denotes the successor of \ab{ℓ} in the universe hierarchy.} While this means that \ap{Type} \ab{ℓ} has type \ap{Type}
 (\ap{suc} \ab{ℓ}), it does \emph{not} imply that \ap{Type} \ab{ℓ} has type
 \ap{Type} (\ap{suc} (\ap{suc} \ab{ℓ})). In other words, \agda's universes are
 \emph{non-cumulative}.
@@ -1285,7 +1299,7 @@ module Environment (𝑨 : Algebra α ℓ) where
                                            ; trans  = λ g h x  → trans (g x)(h x) }}
 
 \end{code}
-As the above definition, as well as the next, are relative a fixed algebra, we use
+As the above definition, as well as the next, are relative to a fixed algebra, we use
 a submodule to succinctly capture this commonality in the definitions.
 The function \af{⟦\au{}⟧} then denotes the \defn{interpretation} of
 a term in a given algebra, \emph{evaluated} in a given environment.
@@ -1689,7 +1703,7 @@ module _ {X : Type χ}{I : Type ℓ}(𝒜 : I → Algebra α ρᵃ){p q : Term X
 The classes \af H \ab{𝒦}, \af S \ab{𝒦}, \af P \ab{𝒦}, and \af V \ab{𝒦} all satisfy the
 same term identities.  We will only use a subset of the inclusions needed to prove this
 assertion, and we present here just the facts we need.\footnote{For more details, see
-\ualmodule{Varieties.Setoid.Preservation}.}
+\ualmodule{Setoid.Varieties.Preservation}.}
 First, the closure operator \af H preserves the identities modeled by the
 given class; this follows almost immediately from the invariance lemma
 \af{⊧-H-invar}.
@@ -1719,9 +1733,10 @@ the invariance lemma \af{⊧-S-invar}; the converse, which we call
  S-id2 Spq 𝑨 kA = Spq 𝑨 (𝑨 , (kA , ≤-reflexive))
 
 \end{code}
-Finally, we have analogous pairs of implications for \af P and \af V,
+Finally, we have analogous pairs of implications for \af P, \af H, and \af V,
+  called \af{P-id1}, \af{P-id2}, \af{H-id1}, etc.
 \ifshort
-  called \af{P-id1}, \af{P-id2}, \af{V-id1} and \af{V-id2}, but we omit the formalizations (\seeshort).
+We omit the formalizations (\seeshort).
 \else
 In each case, we will only need the first implication, so we omit the others from this presentation.
 
@@ -1752,8 +1767,8 @@ module _ {X : Type χ}{ι : Level}(ℓ : Level){𝒦 : Pred(Algebra α ρᵃ)(α
 \section{Free Algebras}
 \label{free-algebras}
 \paragraph*{The absolutely free algebra}
-The term algebra \af{𝑻} \ab X is \emph{absolutely free} (or \emph{initial}) for algebras
-in the signature \ab{𝑆}. That is, for every \ab{𝑆}-algebra \ab{𝑨}, the following hold.
+The term algebra \af{𝑻} \ab X is the \emph{absolutely free} (or \emph{initial})
+\ab{S}-algebra. That is, for every \ab{𝑆}-algebra \ab{𝑨}, the following hold.
 \begin{itemize}
 \item Every function from \ab{X} to \af{𝕌[ \ab{𝑨} ]} lifts to a homomorphism from \af{𝑻} \ab{X} to \ab{𝑨}.
 \item That homomorphism is unique.
@@ -1761,7 +1776,7 @@ in the signature \ab{𝑆}. That is, for every \ab{𝑆}-algebra \ab{𝑨}, the 
 We formalize the first of these in two steps.\footnote{\agdaalgebras also defines
  \af{free-lift-func} \as{:} \aof{𝔻[~\af{𝑻}~\ab X~]}~\aor{⟶}~\aof{𝔻[~\ab{𝑨}~]}
  for the analogous setoid function.}$^,$\footnote{For the proof of uniqueness,
-see \ualmodule{Terms.Setoid.Properties}.}  First is the lifting (\af{free-lift}).
+see \ualmodule{Setoid.Terms.Properties}.}  First is the lifting (\af{free-lift}).
 \begin{code}
 
 module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}(h : X → 𝕌[ 𝑨 ]) where
@@ -1836,7 +1851,9 @@ The construction of the free algebra in \af{S} (\af{P} \ab{𝒦})
 proceeds by taking the quotient of \T{X} modulo a congruence relation \afld{≈}.  One approach is to let
 \afld{≈} be \af{⋂}\{\ab{θ} \af{∈} \af{Con} (\T{X}) : \T{X} \af{/} \ab{θ} \af{∈} \af{S}
 \ab{𝒦}\}.\footnote{\af{Con} (\T{X}) denotes the congruences of \T{X}.}
-Equivalently, we let \ab{ℰ} = \af{Th} \ab{𝒦} and take \afld{≈} to be the least equivalence relation
+
+\ifshort\else
+Equivalently, we could let \ab{ℰ} = \af{Th} \ab{𝒦} and take \afld{≈} to be the least equivalence relation
 on the domain of \T{X} such that
 \begin{enumerate}
 \item for every equation (\ab p , \ab q) \af{∈} \af{Th} \ab{𝒦} and every
@@ -1852,14 +1869,17 @@ i~⟧}~\afld{⟨\$⟩}~\ab{ρ})
 \as{→} \af{⟦~\ab f~\ab s~⟧}~\afld{⟨\$⟩}~\ab{ρ}~\afld{≈}~\af{⟦~\ab f~\ab
 t~⟧}~\afld{⟨\$⟩}~\ab{ρ}\\[-8pt]
 \end{enumerate}
+\fi
+
 The \defn{relatively free algebra over} \ab{X} (relative to
 \ab{𝒦}) is defined to be the quotient \Free{X} := \T{X}~\af{/}~\afld{≈}.
 Evidently, \Free{X} is a subdirect product of the algebras in \{\T{X}~\af{/}~\ab{θ}\!\},
 where \ab{θ} ranges over congruences modulo which \T{X} belongs to \af{S}~\ab{𝒦}.
-Thus, \Free{X} \af{∈} \af{P}(\af{S}~\ab{𝒦}) ⊆ \af{S}(\af{P}~\ab{𝒦}), and it follows
+In particular, \Free{X} embeds in a product of members of \af{S}~\ab{𝒦}, so
+\Free{X} \af{∈} \af{S}(\af{P}(\af{S}~\ab{𝒦})) ⊆ \af{S}(\af{P}~\ab{𝒦}). It follows
 that \Free{X} satisfies the identities in \af{Th} \ab{𝒦} (those modeled by all members of
 \ab{𝒦}).  Indeed, for each pair \ab p \ab q : \Term{X}, if \ab{𝒦} \af{⊫} \ab p \af{≈} \ab
-q, then \ab p and \ab q must belong to the same \afld{≈}-class, so \ab p and \ab q are
+q, then \ab p and \ab q belong to the same \afld{≈}-class, so \ab p and \ab q are
 identified in \Free{X}. \ifshort\else (Notice that \afld{≈} may be empty, in which case
 \T{X}~\af{/}~\afld{≈} is trivial.) \fi
 
@@ -2091,7 +2111,7 @@ class, then \af V \ab{𝒦} \aof{⊆} \ab{𝒦}, as we now confirm.
 module _ {ℓ : Level}{X : Type ℓ}{ℰ : {Y : Type ℓ} → Pred (Term Y × Term Y) (ov ℓ)} where
  private 𝒦 = Mod{α = ℓ}{ℓ}{X} ℰ     -- an arbitrary equational class
  EqCl⇒Var : V ℓ (ov ℓ) 𝒦 ⊆ 𝒦
- EqCl⇒Var {𝑨} vA {p} {q} pℰq ρ = V-id1 ℓ {𝒦} {p} {q} (λ _ x τ → x pℰq τ)𝑨 vA ρ
+ EqCl⇒Var {𝑨} vA {p} {q} pℰq ρ = V-id1 ℓ {𝒦} {p} {q} (λ _ x τ → x pℰq τ) 𝑨 vA ρ
 
 \end{code}
 Together, \af{V-expa} and \af{Eqcl⇒Var} prove that every equational class is a variety.
