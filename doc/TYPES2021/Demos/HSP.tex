@@ -29,7 +29,7 @@ proof presented here\footnote{based on \agdaalgebras, ver.~2.0.1~\cite{ualib_v2.
 
 What follows is a self-contained formal proof of the HSP theorem in \agda.  This is achieved by
 extracting a subset of the \agdaalgebras library, including only the
-pieces needed for the proof, into a literate \agda document.\footnote{see
+pieces needed for the proof, into a literate \agda document.\footnote{See
 \HSPlagda in the \agdaalgebras repository: \agdaalgebrasrepo .}
 \ifshort
 For spaces reasons, we elide some inessential parts,
@@ -2261,7 +2261,9 @@ that is \defn{compatible} with all basic operations; that is, for
 every operation symbol \ab{f} : \af{∣~\ab{𝑆}~∣} and all tuples
 \ab{a} : \af{∥~\ab{𝑆}~∥}~\ab{f} \as{→} \aof{𝕌[~\ab{𝑨}~]}, we have \ab{h} \aofld{⟨\$⟩}
 (\ab{f}~\af{̂}~\ab{𝑨}) \ab{a} \af{≈}
-(\ab{f}~\af{̂}~\ab{𝑩}) \ab{h} \aofld{⟨\$⟩} (\ab{a} \au{}).
+(\ab{f}~\af{̂}~\ab{𝑩}) \ab{h} \aofld{⟨\$⟩} (\ab{a} \au{}).\footnote{Here we use
+\ab{h} \aofld{⟨\$⟩} (\ab{a} \au{}) as a shorthand for
+\as{λ} \ab x \as{→} \ab h \AgdaOperator{\AgdaField{⟨\$⟩}} (\ab a \ab x).}
 
 It is convenient to first formalize ``compatible'' (\af{compatible-map-op}),
 representing the assertion that a given setoid function
@@ -9050,7 +9052,7 @@ proceeds by taking the quotient of \T{X} modulo a congruence relation \afld{≈}
 \ab{𝒦}\}.\footnote{\af{Con} (\T{X}) denotes the congruences of \T{X}.}
 
 \ifshort\else
-Equivalently, we let \ab{ℰ} = \af{Th} \ab{𝒦} and take \afld{≈} to be the least equivalence relation
+Equivalently, we could let \ab{ℰ} = \af{Th} \ab{𝒦} and take \afld{≈} to be the least equivalence relation
 on the domain of \T{X} such that
 \begin{enumerate}
 \item for every equation (\ab p , \ab q) \af{∈} \af{Th} \ab{𝒦} and every
@@ -9244,9 +9246,11 @@ relation (see also~\cite{Abel:2021}).
 \paragraph*{The natural epimorphism} % from 𝑻 X to 𝔽[ X ]}
 We now define the natural epimorphism from \T{X} onto \Free{X} %(= \T{X}~\af{/}~\afld{≈})
 and prove that its kernel is contained in the collection of identities modeled
-by \af{V} \ab{𝒦}. % (which we represent by \af{Th} (\af{V} \ab{𝒦})).
+by \af{V} \ab{𝒦}.%(which we represent by \af{Th} (\af{V} \ab{𝒦})).
+\ifshort%
+\footnote{The \AgdaFunction{HomReduct} method of the \ar{IsEpi} record type merely extracts the \af{hom} part of an epimorphism.}
+\else
 
-\ifshort\else
 \begin{code}%
 \>[0]\<%
 \\
@@ -9931,7 +9935,6 @@ collection \ab{ℰ} of equations and then defining \ab{𝒦} = \af{Mod} \ab{ℰ}
 determined by \ab{ℰ}. We prove that \ab{𝒦} is a variety by showing that
 \ab{𝒦} = \af{V} \ab{𝒦}. The inclusion \ab{𝒦} \aof{⊆} \af V \ab{𝒦}, which holds for all
 classes \ab{𝒦}, is called the \defn{expansive} property of \af{V}.
-
 \ifshort\else
 \begin{code}%
 \>[0]\<%
@@ -10157,6 +10160,13 @@ classes \ab{𝒦}, is called the \defn{expansive} property of \af{V}.
 \\
 \>[0]\<%
 \end{code}
+Observe how \ab{𝑨} is expressed as (isomorphic to) a product with just one factor (\ab{𝑨} itself); that is, the product
+\AgdaFunction{⨅}\AgdaSpace{}%
+\AgdaSymbol{(λ}\AgdaSpace{}%
+\AgdaBound{x}\AgdaSpace{}%
+\AgdaSymbol{→}\AgdaSpace{}%
+\AgdaBound{𝑨}\AgdaSymbol{)}
+indexed over the one-element type \af{⊤}.)
 
 The converse inclusion, \af V \ab{𝒦} \aof{⊆} \ab{𝒦}, requires the assumption
 that \ab{𝒦} is an equational class. Recall lemma

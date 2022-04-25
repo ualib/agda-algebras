@@ -12,13 +12,14 @@
     
     a.  How does this attention to foundational details affect our coding choices? 
     b.  What's the difference from the foundational view-point between our code and work cited in sect.7? 
-    c.  At start of §2.2, our claims about setoids seem a bit bold (or "gnomic"). We don't cite work on 
-        the so-called "setoid hell", and we miss the point of the bad reputation of setoids. Referee asserts:
-        setoids do not make implementation *tedious*, but, in a sense, *unnatural* wrt informal mathematical 
-        practice, since any setoid-based reasoning depends on specific implementation details. Some parts of 
-        our code (omitted from the paper) suffer from these aspects of using setoids.
+    c.  ~~At start of §2.2, our claims about setoids seem a bit bold (or "gnomic"). We don't cite work on~~
+        ~~the so-called "setoid hell", and we miss the point of the bad reputation of setoids.~~
+        ~~Referee asserts: setoids do not make implementation tedious, but, in a sense, unnatural~~ 
+        ~~wrt informal mathematical practice, since any setoid-based reasoning depends on specific~~
+        ~~implementation details. Some parts of our code (omitted from the paper) suffer from these~~
+        ~~aspects of using setoids.~~
     
-    (wd: made an first attempt to address point c.)
+    (addressed point c)
 
 4.  ~~Some links are broken (e.g. in [8]); some footnotes need to have first letters capitalised.~~ (fixed)
 
@@ -54,7 +55,9 @@
        This argument is close to ours, but might be more understandable (provided it's correct)...?
 
 2.  ~~Some links are broken, in particular in the footnotes~~ (https://ualib.github.io/..),
-    ~~or in the bibliography item [8] (link to arxiv).~~ (fixed)
+    ~~or in the bibliography item [8] (link to arxiv).~~
+    
+    (fixed)
 
 3.  > The library includes a wide collection of definitions and verified
     > theorems that faithfully codify classical, set-theory-based universal
@@ -75,8 +78,8 @@
     > ~~the first machine-verified proof of Birkoff's celebrated 1935 result.~~
 
     ~~There is a typo in Birk[h]off. Moreover, there's a 1997 Mizar formalisation:~~
-    http://www.mizar.org/JFM/Vol9/birkhoff.html ~~that we should cite in related work. 
-    (though ours is still likely the first formalisation in Martin-Löf type theory)~~
+    http://www.mizar.org/JFM/Vol9/birkhoff.html ~~that we should cite in related work.~~
+    ~~(though ours is still likely the first formalisation in Martin-Löf type theory)~~
 
     (fixed)
 
@@ -174,8 +177,12 @@
     (Probably we can disregard this; I think the link is to the old version, and the comments don't 
     apply to the new version.)
 
-2.  (p. 8) aren't `_IsHomImageOf_` and `epi` almost synonyms? Why do we have both, why don't we define 
-    `_IsHomImageOf_` in terms of `epi`? (same comment for `subalgebras` and `mon`).
+2.  (p. 8) ~~aren't~~ `_IsHomImageOf_` and `epi` ~~almost synonyms? Why do we have both, why don't we define~~ 
+    `_IsHomImageOf_` ~~in terms of~~ `epi`? ~~(same comment for~~ `subalgebras` and `mon`).
+    
+    (unchanged; yes, they are conceptually the same, so *practically* synonyms; we have both for the 
+    same reason we have both in informal math; they are two sides of the same coin and one will be more 
+    natural in some circumstances, and the other more natural in others)
 
 3.  (p. 8) we say that contexts are nonempty: Why should a context be nonempty? One can get closed 
     terms by using the empty context. Do we enforce the nonemptiness condition for contexts? 
@@ -195,7 +202,9 @@
 7.  (p. 14, 15) It would be informative to mention how are quotients defined in `agda-algebras`. 
     Are they obtained by changing the equivalence relation of the setoid?
 
-8.  (p. 16) It might be useful to explain (in a footnote?) what is `HomReduct`.
+8.  (p. 16) ~~It might be useful to explain (in a footnote?) what is~~ `HomReduct`
+
+    (fixed; added a footnote to explain)
 
 9.  (p. 17) To prove `K⁺ ⊆ K` we need to construct an `F ∈ S(P(K))`. In the paragraph explaining that 
     we start by "Let X be such that there exists a surjective environment ρ : X → U[ A ]." 
@@ -203,15 +212,20 @@
 
     (Referee's first guess: define X = Σ[ A ∈ K] U⟦ A ⟧.)
 
-10.  (p. 17) It might be useful to comment that ⊤ is the index set for showing that A is in P K.
+10.  (p. 17) ~~It might be useful to comment that ⊤ is the index set for showing that A is in P K.~~
 
+     (done; added a sentence after the code clarifying this)
 
-11.  (p. 7) When we describe the compatibility condition we have an agda expression different from 
-     the definition. Are they equivalent? The expression in the explanation is unclear. (What is `(a _)`?)
+11.  (p. 7) ~~When we describe the compatibility condition we have an agda expression different from~~ 
+     ~~the definition. Are they equivalent? The expression in the explanation is unclear. (What is~~ `(a _)`?)
+     
+     (fixed; added footnote to explain what the shorthand `(a _)` means)
 
 12.  ~~(p. 10) "relative a fixed algebra..." should be "relative to a fixed algebra..."~~  (fixed)
 
-13.  ~~(p. 17) It seems there is a missing space between~~ `...τ )` ~~and~~ `A` ~~in the definition of~~ `EqCl⇒Var` (fixed; actually, no space needed after parenthesis, but we added one anyway)
+13.  ~~(p. 17) It seems there is a missing space between~~ `...τ )` ~~and~~ `A` ~~in the definition of~~ `EqCl⇒Var` 
+
+     (fixed; actually, no space needed after parenthesis, but we added one anyway)
 
 14.  ~~(p. 20) The arXiv link for the reference [8] is incorrect (2101. is repeated).~~
 
