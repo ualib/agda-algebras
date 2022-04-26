@@ -2,7 +2,7 @@
 The \agdaalgebras library \cite{ualib_v2.0.1} formalizes the foundations of universal algebra
 in intensional Martin-Löf type theory (\mltt) using \agda~\cite{Norell:2007,agdaref}.
 The library includes a wide collection of definitions and verified theorems originated in classical
-set-theory based universal algebra and universal logic, but have been adapted to fit within MLTT.
+set-theory based universal algebra and equational logic, but have been adapted to fit within MLTT.
 
 The first major milestone of the \agdaalgebras project is a proof of \emph{Birkhoff's
 variety theorem} (also known as the \emph{HSP theorem})~\cite{Birkhoff:1935}.
