@@ -104,6 +104,8 @@
 
     Can we be more specific? It seems (to the referee) our signatures are "nothing but containers."
 
+    (Fixed. Main contribution is to show that this straightforward representation (indeed, containers)
+    is quite practical.)
 
 7.  > An environment A for X is an X indexed family of setoids
 

@@ -1,9 +1,8 @@
 \section{Introduction}
 The \agdaalgebras library \cite{ualib_v2.0.1} formalizes the foundations of universal algebra
 in intensional Martin-Löf type theory (\mltt) using \agda~\cite{Norell:2007,agdaref}.
-The library includes a wide collection of definitions and verified theorems that faithfully codify
-classical, set-theory-based universal algebra and equational
-logic.
+The library includes a wide collection of definitions and verified theorems originated in classical
+set-theory based universal algebra and universal logic, but have been adapted to fit within MLTT.
 
 The first major milestone of the \agdaalgebras project is a proof of \emph{Birkhoff's
 variety theorem} (also known as the \emph{HSP theorem})~\cite{Birkhoff:1935}.
@@ -56,9 +55,9 @@ the investment. Users of Coq and Lean have recently reported similar feelings
 from the outcome of their formalization efforts.
 \fi
 
-Our main contribution is the representation of algebraic structures and their signatures
-in dependent type theory in a way that is not only very general, but also practical, as we
-demonstrate by formalizing one of the deepest results in the field.
+Our main contribution is to show that a straightforward but very general representation of algebraic structures
+and their signatures in dependent type theory is quite practical,
+as we demonstrate by formalizing one of the deepest results in the field.
 
 \section{Preliminaries}
 
@@ -75,9 +74,8 @@ To best emulate \mltt, we use
 \AgdaPragma{--safe}\AgdaSpace{}%
 \AgdaSymbol{\#-\}}\<%
 \end{code}
-; these options affect the logical foundations with respect to which our code is type-checked.
+.
 \ifshort
-Briefly,
 \AgdaPragma{without-K} disables
 \href{https://ncatlab.org/nlab/show/axiom+K+%28type+theory%29}{Streicher's K axiom},
 \AgdaPragma{exact-split} directs \agda to accept only definitions behaving like
@@ -102,7 +100,7 @@ See the \href{https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.h
 \end{itemize}
 \fi
 
-We also make use of some definitions from Agda's standard library (ver.~1.7), imported as follows.
+We also make use of some definitions from Agda's standard library (ver.~1.7).
 \begin{code}[hide]%
 \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
 \AgdaKeyword{OPTIONS}\AgdaSpace{}%
@@ -466,38 +464,35 @@ projections out of the product type
 \subsection{Setoids}\label{setoids}
 A \defn{setoid} is a pair consisting of a type \ab A and
 an equivalence relation \af{≈} on \ab A.  Setoids are useful for representing a
-set with a ``local'' notion of equivalence, instead of always relying on
-the global one as is usually done in set theory. In reality, informal
+set with a ``local'' notion of equivalence, instead of relying on
+the global one as is usual in set theory. In reality,
 mathematial practice uses equivalence relations quite pervasively, and
 takes great care to only define equivalence-preserving functions, while
-eliding the actual details. To be fully formal, such details must be given.
-While there are many different approaches for doing that, the one that requires
+eliding the actual details. To be properly formal, such details must be given.
+While there are many different workable approaches, the one that requires
 no additional meta-theory is based on setoids, which is why we adopt it here.
 While in some settings this has been found by others to be burdensome, we have not
 found it to be so for universal algebra.
 
-\ddmmyydate
+% \ddmmyydate
 
 The \agdaalgebras library was first developed without setoids, relying on
 propositional equality \ad{\au{}≡\au{}} instead,
 along with some experimental, domain-specific types for equivalence classes, quotients, etc.
-This furthermore required postulating function extensionality,%
+This required postulating function extensionality,%
 \footnote{An axiom that asserts that two point-wise equal functions are equal.} which is
 known to be independent from \mltt~\cite{MHE, MHE:2019}. This was
 an unsatisfactory state of affairs, as %we were curious to see if
 our aim is to show that the theorems hold directly in \mltt without extra axioms.
-In particular, the present exposition makes no appeals to classical axioms like Choice or Excluded Middle.
+In particular, we make no appeal to classical axioms like Choice or Excluded Middle.
 
 
 %% -----------------------------------------------------------------------------
 \subsection{Setoid functions}
 \label{setoid-functions}
-We use the \ar{Func} type from the \agdastdlib for representing a function from
-a setoid \ab A to another setoid \ab B that respects the underlying equivalences,
-witnessed by a field called \afld{cong}.  However, we rename \ar{Func}, using
-the more visually appealing infix long arrow symbol,
-\AgdaRecord{\AgdaUnderscore{}⟶\AgdaUnderscore{}}, instead. Throughout the
-paper we refer to inhabitants of this type as ``setoid functions.''
+A ``setoid function'' (denoted by
+\AgdaRecord{\AgdaUnderscore{}⟶\AgdaUnderscore{}}) is a function from
+a setoid \ab A to another setoid \ab B that respects the underlying equivalences.
 
 \ifshort\else
 An example of a setoid function is the identity function from a setoid to itself.
@@ -1079,11 +1074,11 @@ Proving that surjectivity is preserved under composition is only slightly more i
 \fi
 
 \paragraph*{Kernels of setoid functions}
-The \defn{kernel} of a function \ab f~\as :~\ab A~\as{→}~\ab B (where \ab A and \ab B are
-bare types) is defined informally by \{\AgdaPair{x}{y} \aod{∈} \ab A \aof{×} \ab A \as :
-\ab f \ab x \as{=} \ab f \ab y \}. This can be represented in \agda in a number of ways,
+The \defn{kernel} of a function \ab f~\as :~\ab A~\as{→}~\ab B is defined informally
+by \{\AgdaPair{x}{y} \aod{∈} \ab A \aof{×} \ab A \as :
+\ab f \ab x \as{=} \ab f \ab y \}. This can be represented in a number of ways,
 but for our purposes it is convenient to define the kernel as an inhabitant of a (unary)
-predicate over \ab A \aof{×} \ab A, where \ab A is the function's domain, as follows.
+predicate over \ab A \aof{×} \ab A.
 
 \begin{code}%
 \>[0]\<%
@@ -11348,6 +11343,14 @@ Thus, every variety is an equational class.
 \end{itemize}
 
 This completes the formal proof of Birkhoff's variety theorem.
+
+%% -----------------------------------------------------------------------------
+\section{Discussion}\label{sec:discuss}
+How do we differ from the classical, set-theoretic approach? Most noticeable is
+our avoidance of all \emph{size} issues. By using universe levels and level
+polymorphism, we always make sure we are in a \emph{large enough} universe.
+So we can easily talk about ``all algebras such that \ldots'' because these are
+always taken from a bounded (but arbitrary) universe.
 
 %% -----------------------------------------------------------------------------
 \section{Related work}
