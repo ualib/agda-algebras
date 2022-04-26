@@ -21,6 +21,15 @@
     
     (addressed point c)
 
+    (Other than 'choosing setoids', very little, for part a.  Our setup is the same as that of 
+     Abel [1]. Capretta [5] uses setoids as well, but not universes since Coq doesn't "really".
+     It is hard to compare with [2], since their aim and ours are quite different, but it would be useful
+     to do so in the future.  Our work is strictly more general than that of [11], which also uses
+     setoids, but restricts itself to finitary arities, which makes things "messy".  [14] is quite
+     different, being in HoTT-UniMath, multi-sorted yet finitary.  And yet, a lot of the 'results'
+     end up involving very similar statements. In other words, universal algebra seems to be quite
+     foundations-independent, at some level that should be investigated in the future)
+
 4.  ~~Some links are broken (e.g. in [8]); some footnotes need to have first letters capitalised.~~ (fixed)
 
 
@@ -73,6 +82,8 @@
     e.g., in set theory, we consider sets and classes. As a consequence, constructing the product of all 
     algebras in S K, as in §6.2, would be forbidden because of size issues (e.g., let K be the class of all 
     algebras with empty signature).
+
+   (A discussion section has been added for this)
 
 4.  > ~~To the best of our knowledge, this constitutes~~
     > ~~the first machine-verified proof of Birkoff's celebrated 1935 result.~~
