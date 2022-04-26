@@ -50,18 +50,16 @@
 
     *  Second half of the paper (starting with § on relatively free algebra) is confusing.
     
-       Referee suggests ("was hoping for") the following argument:
+       Reviewer was hoping for the following argument:
        
-       Define F[X] as T X / ~, where x ~ y iff given any homomorphism f into an element of K, f x = f y 
-           (in other words, x ~ y iff (x,y) ∈ Th K). Then, if A is in Mod (Th K), the surjective morphism 
-       T A → A factors through T X → F[X], so it remains to show that F[X] ∈ SP K (then, A ∈ HSP K). 
+       Define 𝔽[X] as 𝑻(X)/≈, where x ≈ y iff given any homomorphism f into an element of K, f x = f y 
+       (in other words, x ≈ y iff (x,y) ∈ Th 𝒦). Then, if 𝑨 is in Mod (Th 𝒦), the surjective morphism 
+       𝑻(X) → 𝑨 factors through 𝑻(X) → 𝔽[X], so it remains to show that 𝔽[X] ∈ S (P 𝒦) (then, 𝑨 ∈ HSP 𝒦). 
        
-       F[X] is easily shown to be a sd prod of all algebras in K. However, because of size issues, this 
-       product may not exist. Fortunately, it's also a subproduct of the algebras in {T X / Θ}, because 
-       any hom factors as an epimorphism followed by a monomorphism, so that x ~ y iff for any epimorphism 
-       f into an element of S K, f x = f y.
-
-       This argument is close to ours, but might be more understandable (provided it's correct)...?
+       𝔽[X] is easily shown to be a sd prod of all algebras in 𝒦. However, because of size issues, this 
+       product may not exist. Fortunately, it's also a subproduct of the algebras in \{ 𝑻(X)/Θ \}, because 
+       any hom factors as an epimorphism followed by a monomorphism, so that x ≈ y iff for any epimorphism 
+       f into an element of S 𝒦, f x = f y.
 
 2.  ~~Some links are broken, in particular in the footnotes~~ (https://ualib.github.io/..),
     ~~or in the bibliography item [8] (link to arxiv).~~
@@ -149,12 +147,12 @@
      
      (fixed; there was a missing S, as noted; also, more details are now included as requested)
 
-12.  > Let A ∈ K⁺; it suffices to find an algebra F ∈ S (P K) such that A is a
-     > homomorphic image of F, as this will show that A ∈ H (S (P K)) = K.
+12.  > Let 𝑨 ∈ 𝒦⁺; it suffices to find an algebra 𝑭 ∈ S (P 𝒦) such that 𝑨 is a
+     > homomorphic image of 𝑭, as this will show that 𝑨 ∈ H (S (P 𝒦)) = 𝒦.
 
-     Why can't we conclude the proof here by choosing F = F[A], since we already
-     showed that A is an homomorphic image of F[A] before §6 and that F[A] ∈ S P K 
-     (in § on relatively free algebra in theory)?
+     Why can't we conclude the proof here by choosing 𝑭 = 𝔽[A], since we already
+     showed that 𝑨 is an homomorphic image of 𝔽[A] before §6 and that 𝔽[A] ∈ S (P 𝒦) 
+     (in the § on relatively free algebra in theory)?
 
 
 13.  > We now define the natural epimorphism from T X onto F[ X ] and prove that its
@@ -167,7 +165,7 @@
      (unchanged; it is equality, but that's not required in the proof of the HSP Theorem and, as 
      our main goal is to prove that theorem as expediently as possible, we'll leave this unchanged)
 
-14.  > Let C be the product of all algebras in S K, so that C ∈ P (S K).
+14.  > Let 𝑪 be the product of all algebras in S 𝒦, so that 𝑪 ∈ P (S 𝒦).
 
      Can we comment on the reason we chose a different route from the mathematical proof that we 
      describe informally? (see also: comment on the universe hierarchy).
@@ -219,8 +217,8 @@
 
     (fixed; added a footnote to explain)
 
-9.  (p. 17) To prove `K⁺ ⊆ K` we need to construct an `F ∈ S(P(K))`. In the paragraph explaining that 
-    we start by "Let X be such that there exists a surjective environment ρ : X → U[ A ]." 
+9.  (p. 17) To prove 𝒦⁺ ⊆ 𝒦 we need to construct an 𝑭 ∈ S(P 𝒦). In the paragraph explaining that 
+    we start by "Let X be such that there exists a surjective environment ρ : X → U[ 𝑨 ]." 
     It seems important to explain whether we can construct such an X or if we *assume* such an X.
 
     (Referee's first guess: define X = Σ[ A ∈ K] U⟦ A ⟧.)
@@ -245,3 +243,16 @@
 
 
     
+### Other Responses
+
+*  **Response to Review 2 (points 1, 12, 14)**.
+
+   Finding an F in S (P K) that is the domain of an epimorphism onto an arbitrary algebra in 
+   Mod (Th K) proved exceedingly difficult. It was the hardest part of the formalization of the 
+   HSP theorem. The suggestions of the referee concerning this point out (correctly) that in 
+   theory it's easy to show the F's they suggest are in S (P K). However, formalizing this turns 
+   out to be hard. We made many, many attempts at getting all parts of the proof to work and 
+   type-check, and the result presented in the paper is the most straightforward one we could 
+   find.  Nonetheless, we did improve the presentation of the text surrounding the code, as 
+   mentioned in the other responses, and hopefully this helps to clarify the potentially confusing 
+   parts of the formalization.
