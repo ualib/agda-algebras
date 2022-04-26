@@ -1342,19 +1342,25 @@ The first is the assertion that every term commutes with every homomorphism (\af
 the second is the interpretation of a term in a product algebra (\af{interp-prod}).
 \begin{code}
 
-module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}  {𝑩 : Algebra β ρᵇ}(hh : hom 𝑨 𝑩) where
- open Environment 𝑨 using ( ⟦_⟧ )  ;     open Environment 𝑩 renaming ( ⟦_⟧ to ⟦_⟧ᴮ )  using ()
- open Setoid 𝔻[ 𝑩 ] using ( _≈_ ; refl  )
+module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}(hh : hom 𝑨 𝑩) where
+ open Environment 𝑨  using ( ⟦_⟧ )
+ open Environment 𝑩  using () renaming ( ⟦_⟧ to ⟦_⟧ᴮ )
+ open Setoid 𝔻[ 𝑩 ]  using ( _≈_ ; refl  )
  private hfunc = ∣ hh ∣ ; h = _⟨$⟩_ hfunc
+
  comm-hom-term : (t : Term X) (a : X → 𝕌[ 𝑨 ]) → h (⟦ t ⟧ ⟨$⟩ a) ≈ ⟦ t ⟧ᴮ ⟨$⟩ (h ∘ a)
- comm-hom-term (ℊ x) a       =     refl
- comm-hom-term (node f t) a  =     begin
-  h(⟦ node f t ⟧ ⟨$⟩ a)            ≈⟨ compatible ∥ hh ∥ ⟩
-  (f ̂ 𝑩)(λ i → h(⟦ t i ⟧ ⟨$⟩ a))    ≈⟨ cong(Interp 𝑩)(≡.refl , λ i → comm-hom-term(t i) a)⟩
-  ⟦ node f t ⟧ᴮ ⟨$⟩ (h ∘ a)        ∎ where  open SetoidReasoning 𝔻[ 𝑩 ]
+ comm-hom-term (ℊ x) a = refl
+ comm-hom-term (node f t) a =
+  begin
+   h(⟦ node f t ⟧ ⟨$⟩ a)            ≈⟨ compatible ∥ hh ∥ ⟩
+   (f ̂ 𝑩)(λ i → h(⟦ t i ⟧ ⟨$⟩ a))  ≈⟨ cong(Interp 𝑩)(≡.refl , λ i → comm-hom-term(t i) a) ⟩
+   ⟦ node f t ⟧ᴮ ⟨$⟩ (h ∘ a)
+  ∎ where open SetoidReasoning 𝔻[ 𝑩 ]
 
 module _ {X : Type χ}{ι : Level} {I : Type ι} (𝒜 : I → Algebra α ρᵃ) where
- open Setoid 𝔻[ ⨅ 𝒜 ] using ( _≈_ ) ; open Environment using ( ⟦_⟧ ; ≃→Equal )
+ open Setoid 𝔻[ ⨅ 𝒜 ]  using ( _≈_ )
+ open Environment      using ( ⟦_⟧ ; ≃→Equal )
+
  interp-prod : (p : Term X) → ∀ ρ →  (⟦ ⨅ 𝒜 ⟧ p) ⟨$⟩ ρ   ≈   λ i → (⟦ 𝒜 i ⟧ p) ⟨$⟩ λ x → (ρ x) i
  interp-prod (ℊ x)       = λ ρ i  → ≃→Equal (𝒜 i) (ℊ x) (ℊ x) ≃-isRefl λ _ → (ρ x) i
  interp-prod (node f t)  = λ ρ    → cong (Interp (⨅ 𝒜)) ( ≡.refl , λ j k → interp-prod (t j) ρ k )
@@ -1561,27 +1567,23 @@ module _  {α ρᵃ β ρᵇ γ ρᶜ δ ρᵈ : Level} where
 An important property of the binary relation \aof{⊧} is \emph{algebraic invariance} (i.e.,
 invariance under isomorphism).  We formalize this result as follows.
 
-\ifshort\else
 \begin{code}
 
 module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}(𝑩 : Algebra β ρᵇ)(p q : Term X) where
-\end{code}
-\fi
-\begin{code}
-
  ⊧-I-invar : 𝑨 ⊧ p ≈ q  →  𝑨 ≅ 𝑩  →  𝑩 ⊧ p ≈ q
- ⊧-I-invar Apq (mkiso fh gh f∼g g∼f) ρ = begin
-      ⟦ p ⟧   ⟨$⟩               ρ    ≈˘⟨  cong ⟦ p ⟧ (f∼g ∘ ρ)        ⟩
-      ⟦ p ⟧   ⟨$⟩ (f  ∘  (g  ∘  ρ))  ≈˘⟨  comm-hom-term fh p (g ∘ ρ)  ⟩
-    f(⟦ p ⟧ᴬ  ⟨$⟩        (g  ∘  ρ))  ≈⟨   cong ∣ fh ∣ (Apq (g ∘ ρ))   ⟩
-    f(⟦ q ⟧ᴬ  ⟨$⟩        (g  ∘  ρ))  ≈⟨   comm-hom-term fh q (g ∘ ρ)  ⟩
-      ⟦ q ⟧   ⟨$⟩ (f  ∘  (g  ∘  ρ))  ≈⟨   cong ⟦ q ⟧ (f∼g ∘ ρ)        ⟩
-      ⟦ q ⟧   ⟨$⟩               ρ    ∎
+ ⊧-I-invar Apq (mkiso fh gh f∼g g∼f) ρ =
+  begin
+  ⟦ p ⟧     ⟨$⟩             ρ    ≈˘⟨  cong ⟦ p ⟧ (f∼g ∘ ρ)        ⟩
+  ⟦ p ⟧     ⟨$⟩ (f ∘  (g ∘  ρ))  ≈˘⟨  comm-hom-term fh p (g ∘ ρ)  ⟩
+  f(⟦ p ⟧ᴬ  ⟨$⟩       (g ∘  ρ))  ≈⟨   cong ∣ fh ∣ (Apq (g ∘ ρ))   ⟩
+  f(⟦ q ⟧ᴬ  ⟨$⟩       (g ∘  ρ))  ≈⟨   comm-hom-term fh q (g ∘ ρ)  ⟩
+  ⟦ q ⟧     ⟨$⟩ (f ∘  (g ∘  ρ))  ≈⟨   cong ⟦ q ⟧ (f∼g ∘ ρ)        ⟩
+  ⟦ q ⟧     ⟨$⟩             ρ    ∎
   where
-  private f = _⟨$⟩_ ∣ fh ∣ ; g = _⟨$⟩_ ∣ gh ∣
-  open Environment 𝑨     using () renaming ( ⟦_⟧ to ⟦_⟧ᴬ )
-  open Environment 𝑩     using ( ⟦_⟧ )
-  open SetoidReasoning 𝔻[ 𝑩 ]
+   private f = _⟨$⟩_ ∣ fh ∣ ; g = _⟨$⟩_ ∣ gh ∣
+   open Environment 𝑨  using () renaming ( ⟦_⟧ to ⟦_⟧ᴬ )
+   open Environment 𝑩  using ( ⟦_⟧ )
+   open SetoidReasoning 𝔻[ 𝑩 ]
 
 \end{code}
 Identities modeled by an algebra \ab{𝑨} are also modeled by every homomorphic image of
@@ -1922,20 +1924,22 @@ then there exists an epimorphism from \Free{A} onto \ab{𝑨}.
 
 \begin{code}
 
-module _  {𝑨 : Algebra (α ⊔ ρᵃ ⊔ ℓ) (α ⊔ ρᵃ ⊔ ℓ)} {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
- open Setoid 𝔻[ 𝑨 ] using ( refl ; sym  ; trans )  renaming  ( Carrier  to A )
- private c = α ⊔ ρᵃ ⊔ ℓ ; ι = ov c       ;          open FreeAlgebra {χ = c}(Th 𝒦)  using ( 𝔽[_] )
+module _ {𝑨 : Algebra (α ⊔ ρᵃ ⊔ ℓ)(α ⊔ ρᵃ ⊔ ℓ)}{𝒦 : Pred(Algebra α ρᵃ)(α ⊔ ρᵃ ⊔ ov ℓ)} where
+ private c = α ⊔ ρᵃ ⊔ ℓ ; ι = ov c
+ open FreeAlgebra {χ = c}(Th 𝒦)    using ( 𝔽[_] )
+ open Setoid 𝔻[ 𝑨 ]                using ( refl ; sym ; trans ) renaming ( Carrier to A )
+
  F-ModTh-epi : 𝑨 ∈ Mod (Th (V ℓ ι 𝒦)) → epi 𝔽[ A ] 𝑨
  F-ModTh-epi A∈ModThK = φ , isEpi
-  where open FreeHom {ℓ = ℓ} {𝒦}
-        φ : 𝔻[ 𝔽[ A ] ] ⟶ 𝔻[ 𝑨 ]
-        _⟨$⟩_ φ = free-lift{𝑨 = 𝑨} id
-        cong φ {p} {q} pq  =  trans  ( sym (free-lift-interp{𝑨 = 𝑨} id p) )
-                           (  trans  ( A∈ModThK{p = p}{q} (kernel-in-theory pq) id )
-                                     ( free-lift-interp{𝑨 = 𝑨} id q ) )
-        isEpi : IsEpi 𝔽[ A ] 𝑨 φ
-        compatible (isHom isEpi) = cong (Interp 𝑨) (≡.refl , (λ _ → refl))
-        isSurjective isEpi {y} = eq (ℊ y) refl
+  where  open FreeHom {ℓ = ℓ} {𝒦}
+         φ : 𝔻[ 𝔽[ A ] ] ⟶ 𝔻[ 𝑨 ]
+         _⟨$⟩_ φ            = free-lift{𝑨 = 𝑨} id
+         cong φ {p} {q} pq  =  trans  ( sym (free-lift-interp{𝑨 = 𝑨} id p) )
+                            (  trans  ( A∈ModThK{p = p}{q} (kernel-in-theory pq) id )
+                                      ( free-lift-interp{𝑨 = 𝑨} id q ) )
+         isEpi : IsEpi 𝔽[ A ] 𝑨 φ
+         compatible (isHom isEpi) = cong (Interp 𝑨) (≡.refl , (λ _ → refl))
+         isSurjective isEpi {y} = eq (ℊ y) refl
 \end{code}
 \ifshort\else
 
@@ -2011,7 +2015,7 @@ Therefore,\\[-4pt]
 \ab g (\af{⟦~\T{X}~⟧} \ab q) = \af{⟦~\Free{X}~⟧} \ab q,\\[8pt]
 so \ab{𝒦} \af{⊫} \ab p \af{≈} \ab q, thus (\ab p , \ab q) \af{∈} \af{Th}
 \ab{𝒦}. Since \ab{𝑨} \af{∈} \af{Mod} (\af{Th} \ab{𝒦}) =
-\af{Mod} (\af{Th} \ab{𝒦}), we obtain \ab{𝑨} \af{⊧} \ab p \af{≈} \ab q, which implies
+\af{Mod} (\af{Th} \ab{𝒦}), we obtain \ab{𝑨}~\af{⊧}~\ab p~\af{≈}~\ab q, which implies
 that \ab h \ab u = (\af{⟦~\ab{𝑨}~⟧} \ab p) \aofld{⟨\$⟩} \ab{ρ} = (\af{⟦~\ab{𝑨}~⟧} \ab q)
 \aofld{⟨\$⟩} \ab{ρ} = \ab h \ab v, as desired.
 
@@ -2029,18 +2033,20 @@ classes \ab{𝒦}, is called the \defn{expansive} property of \af{V}.
 \begin{code}
 
 module _ (𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)) where
+
  V-expa : 𝒦 ⊆ V ℓ (ov (α ⊔ ρᵃ ⊔ ℓ)) 𝒦
  V-expa {x = 𝑨} kA = 𝑨 , (𝑨 , (⊤ , (λ _ → 𝑨) , (λ _ → kA), Goal), ≤-reflexive), IdHomImage
   where
-  open Setoid 𝔻[ 𝑨 ] using ( refl )
-  open Setoid 𝔻[ ⨅ (λ _ → 𝑨) ] using () renaming ( refl to refl⨅ )
+  open Setoid 𝔻[ 𝑨 ]            using ( refl )
+  open Setoid 𝔻[ ⨅ (λ _ → 𝑨) ]  using () renaming ( refl to refl⨅ )
+
   to⨅    : 𝔻[ 𝑨 ]            ⟶ 𝔻[ ⨅ (λ _ → 𝑨) ]
-  from⨅  : 𝔻[ ⨅ (λ _ → 𝑨) ]  ⟶ 𝔻[ 𝑨 ]
   to⨅    = record { f = λ x _ → x   ; cong = λ xy _ → xy }
+  from⨅  : 𝔻[ ⨅ (λ _ → 𝑨) ]  ⟶ 𝔻[ 𝑨 ]
   from⨅  = record { f = λ x → x tt  ; cong = λ xy → xy tt }
 
   Goal   : 𝑨 ≅ ⨅ (λ x → 𝑨)
-  Goal   = mkiso (to⨅ , mkhom refl⨅) (from⨅ , mkhom refl) (λ _ _ → refl) (λ _ → refl)
+  Goal   = mkiso(to⨅ , mkhom refl⨅)(from⨅ , mkhom refl)(λ _ _ → refl)(λ _ → refl)
 
 \end{code}
 Observe how \ab{𝑨} is expressed as (isomorphic to) a product with just one factor (\ab{𝑨} itself); that is, the product
@@ -2056,6 +2062,7 @@ class, then \af V \ab{𝒦} \aof{⊆} \ab{𝒦}, as we now confirm.
 
 module _ {ℓ : Level}{X : Type ℓ}{ℰ : {Y : Type ℓ} → Pred (Term Y × Term Y) (ov ℓ)} where
  private 𝒦 = Mod{α = ℓ}{ℓ}{X} ℰ     -- an arbitrary equational class
+
  EqCl⇒Var : V ℓ (ov ℓ) 𝒦 ⊆ 𝒦
  EqCl⇒Var {𝑨} vA {p} {q} pℰq ρ = V-id1 ℓ {𝒦} {p} {q} (λ _ x τ → x pℰq τ) 𝑨 vA ρ
 
@@ -2076,6 +2083,7 @@ consequence of the fact that \af{Mod} \af{Th} is a closure operator.
 
 module _ (𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)){X : Type (α ⊔ ρᵃ ⊔ ℓ)} where
  private c = α ⊔ ρᵃ ⊔ ℓ ; ι = ov c
+
  ModTh-closure : V{β = β}{ρᵇ}{γ}{ρᶜ}{δ}{ρᵈ} ℓ ι 𝒦 ⊆ Mod{X = X} (Th (V ℓ ι 𝒦))
  ModTh-closure {x = 𝑨} vA {p} {q} x ρ = x 𝑨 vA ρ
 
@@ -2180,14 +2188,14 @@ We state and prove this in \agda as follows.
  open FreeHom {ℓ = ℓ}{𝒦}
  kerF⊆kerC : ker ∣ homF[ X ] ∣ ⊆ ker ∣ homC ∣
  kerF⊆kerC {p , q} pKq (𝑨 , sA , ρ) = begin
-  free-lift ρ p   ≈˘⟨ free-lift-interp {𝑨 = 𝑨} ρ p ⟩
-  ⟦ p ⟧ ⟨$⟩ ρ      ≈⟨ S-id1 {ℓ = ℓ} {p = p} {q} (ζ pKq) 𝑨 sA ρ ⟩
-  ⟦ q ⟧ ⟨$⟩ ρ      ≈⟨ free-lift-interp {𝑨 = 𝑨} ρ q ⟩
+  free-lift ρ p   ≈˘⟨  free-lift-interp {𝑨 = 𝑨} ρ p              ⟩
+  ⟦ p ⟧ ⟨$⟩ ρ     ≈⟨   S-id1 {ℓ = ℓ} {p = p} {q} (ζ pKq) 𝑨 sA ρ  ⟩
+  ⟦ q ⟧ ⟨$⟩ ρ     ≈⟨   free-lift-interp {𝑨 = 𝑨} ρ q              ⟩
   free-lift ρ q   ∎
-  where open Environment 𝑨  using ( ⟦_⟧ )
-        open Setoid 𝔻[ 𝑨 ]  using ( _≈_ )  ;  open SetoidReasoning 𝔻[ 𝑨 ]
-        ζ : ∀{p q} → (Th 𝒦) ⊢ X ▹ p ≈ q → 𝒦 ⊫ p ≈ q
-        ζ x 𝑨 kA = sound (λ y ρ → y 𝑨 kA ρ) x where open Soundness (Th 𝒦) 𝑨
+  where  open Environment 𝑨  using ( ⟦_⟧ )
+         open Setoid 𝔻[ 𝑨 ]  using ( _≈_ )  ;  open SetoidReasoning 𝔻[ 𝑨 ]
+         ζ : ∀{p q} → (Th 𝒦) ⊢ X ▹ p ≈ q → 𝒦 ⊫ p ≈ q
+         ζ x 𝑨 kA = sound (λ y ρ → y 𝑨 kA ρ) x where open Soundness (Th 𝒦) 𝑨
 
  open FreeAlgebra{χ = c}(Th 𝒦) using ( 𝔽[_] )
  homFC : hom 𝔽[ X ] 𝑪
@@ -2256,20 +2264,22 @@ This completes stage \ref{item:1} of the proof.
 \end{itemize}
 \begin{itemize}
 \item \ref{item:2}. We show that every algebra in \af{Mod} (\af{Th} (\af{V}
-\ab{𝒦})) is a homomorphic image of \af{𝔽[~\ab{X}~]}, as follows.
+\ab{𝒦})) is a homomorphic image of \af{𝔽[~\ab{X}~]}.
 \begin{code}
 
 module _ {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
- private c = α ⊔ ρᵃ ⊔ ℓ ; ι = ov c ; open FreeAlgebra {χ = c}(Th 𝒦) using ( 𝔽[_] )
+ private c = α ⊔ ρᵃ ⊔ ℓ ; ι = ov c
+
  Var⇒EqCl : ∀ 𝑨 → 𝑨 ∈ Mod (Th (V ℓ ι 𝒦)) → 𝑨 ∈ V ℓ ι 𝒦
- Var⇒EqCl 𝑨 ModThA = 𝔽[ 𝕌[ 𝑨 ] ] , (spFA , Aim)
+ Var⇒EqCl 𝑨 ModThA = 𝔽[ 𝕌[ 𝑨 ] ] , (SPF{ℓ = ℓ} 𝒦 , Aim)
   where
-  spFA : 𝔽[ 𝕌[ 𝑨 ] ] ∈ S{ι} ι (P ℓ ι 𝒦)
-  spFA = SPF{ℓ = ℓ} 𝒦
+  open FreeAlgebra {χ = c}(Th 𝒦) using ( 𝔽[_] )
   epiFlA : epi 𝔽[ 𝕌[ 𝑨 ] ] (Lift-Alg 𝑨 ι ι)
   epiFlA = F-ModTh-epi-lift{ℓ = ℓ} (λ {p q} → ModThA{p = p}{q})
+
   φ : Lift-Alg 𝑨 ι ι IsHomImageOf 𝔽[ 𝕌[ 𝑨 ] ]
   φ = epi→ontohom 𝔽[ 𝕌[ 𝑨 ] ] (Lift-Alg 𝑨 ι ι) epiFlA
+
   Aim : 𝑨 IsHomImageOf 𝔽[ 𝕌[ 𝑨 ] ]
   Aim = ∘-hom ∣ φ ∣(from Lift-≅), ∘-IsSurjective _ _ ∥ φ ∥(fromIsSurjective(Lift-≅{𝑨 = 𝑨}))
 
