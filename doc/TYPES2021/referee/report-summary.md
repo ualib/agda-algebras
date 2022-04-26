@@ -232,7 +232,7 @@
     
 ### Other Responses
 
-*  **Response to Review 1 (point 12, 14) and Review 2 (point 1)**.
+*  **Response to Review 2 (points 1, 12, 14)**.
 
    Finding an F in S (P K) that is the domain of an epimorphism onto an arbitrary algebra in 
    Mod (Th K) proved exceedingly difficult. It was the hardest part of the formalization of the 
