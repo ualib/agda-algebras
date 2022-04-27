@@ -7,11 +7,13 @@
 2.  We pull some interesting bits from Abel's code; we should add some discussion (e.g. in §7) 
     of differences/similarities between our implementation and Abel's
    
-3.  In the introduction (e.g. 3rd ¶) and §2.1, we claim to take great care with foundational 
-    aspects. Further explanation of the following would make clearer the relevance of our work:
+3.  ~~In the introduction (e.g. 3rd ¶) and §2.1, we claim to take great care with foundational 
+    aspects. Further explanation of the following would make clearer the relevance of our work:~~
     
-    a.  How does this attention to foundational details affect our coding choices? 
-    b.  What's the difference from the foundational view-point between our code and work cited in sect.7? 
+    a.  ~~How does this attention to foundational details affect our coding choices?~~
+
+    b.  ~~Whats the difference from the foundational view point between our code and work cited in Sec 7?~~
+
     c.  ~~At start of §2.2, our claims about setoids seem a bit bold (or "gnomic"). We don't cite work on~~
         ~~the so-called "setoid hell", and we miss the point of the bad reputation of setoids.~~
         ~~Referee asserts: setoids do not make implementation tedious, but, in a sense, unnatural~~ 
@@ -19,18 +21,23 @@
         ~~implementation details. Some parts of our code (omitted from the paper) suffer from these~~
         ~~aspects of using setoids.~~
     
-    (addressed point c)
-
-    (Other than 'choosing setoids', very little, for part a.  Our setup is the same as that of 
-     Abel [1]. Capretta [5] uses setoids as well, but not universes since Coq doesn't "really".
-     It is hard to compare with [2], since their aim and ours are quite different, but it would be useful
-     to do so in the future.  Our work is strictly more general than that of [11], which also uses
-     setoids, but restricts itself to finitary arities, which makes things "messy".  [14] is quite
-     different, being in HoTT-UniMath, multi-sorted yet finitary.  And yet, a lot of the 'results'
-     end up involving very similar statements. In other words, universal algebra seems to be quite
-     foundations-independent, at some level that should be investigated in the future)
-
 4.  ~~Some links are broken (e.g. in [8]); some footnotes need to have first letters capitalised.~~ (fixed)
+
+
+#### Response to Review 1
+
+*  **Point 3** (items a and b)  
+   Other than 'choosing setoids', very little, for part a.  Our setup is the same as that of 
+   Abel [1]. Capretta [5] uses setoids as well, but not universes since Coq doesn't "really".
+   It is hard to compare with [2], since their aim and ours are quite different, but it would be useful
+   to do so in the future.  Our work is strictly more general than that of [11], which also uses
+   setoids, but restricts itself to finitary arities, which makes things "messy".  [14] is quite
+   different, being in HoTT-UniMath, multi-sorted yet finitary.  And yet, a lot of the 'results'
+   end up involving very similar statements. In other words, universal algebra seems to be quite
+   foundations-independent, at some level that should be investigated in the future)
+
+*  **Point 3** (item c)  
+   The paragraph in questions, about Setoids, was rewritten to reflect the referee's constructive criticism.
 
 
 ### Review 2
@@ -172,6 +179,22 @@
 
 
 
+#### Response to Review 2
+
+*  **points 1, 12, 14**.  
+   Finding an F in S (P K) that is the domain of an epimorphism onto an arbitrary algebra in 
+   Mod (Th K) proved exceedingly difficult. It was the hardest part of the formalization of the 
+   HSP theorem. The suggestions of the referee concerning this point out (correctly) that in 
+   theory it's easy to show the F's they suggest are in S (P K). However, formalizing this turns 
+   out to be hard. We made many, many attempts at getting all parts of the proof to work and 
+   type-check, and the result presented in the paper is the most straightforward one we could 
+   find.  Nonetheless, we did improve the presentation of the text surrounding the code, as 
+   mentioned in the other responses, and hopefully this helps to clarify the potentially confusing 
+   parts of the formalization.
+
+
+
+
 ### Review 3
 
 1.  (p. 1) We mention flaws of our previous attempt. It's perplexing that we say it was a proof but 
@@ -242,17 +265,3 @@
 
 
 
-    
-### Other Responses
-
-*  **Response to Review 2 (points 1, 12, 14)**.
-
-   Finding an F in S (P K) that is the domain of an epimorphism onto an arbitrary algebra in 
-   Mod (Th K) proved exceedingly difficult. It was the hardest part of the formalization of the 
-   HSP theorem. The suggestions of the referee concerning this point out (correctly) that in 
-   theory it's easy to show the F's they suggest are in S (P K). However, formalizing this turns 
-   out to be hard. We made many, many attempts at getting all parts of the proof to work and 
-   type-check, and the result presented in the paper is the most straightforward one we could 
-   find.  Nonetheless, we did improve the presentation of the text surrounding the code, as 
-   mentioned in the other responses, and hopefully this helps to clarify the potentially confusing 
-   parts of the formalization.
