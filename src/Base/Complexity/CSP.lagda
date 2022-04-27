@@ -102,7 +102,7 @@ open import Function.Base    using ( _∘_ )
 open import Relation.Binary  using ( Setoid )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Base.Relations.Continuous       using ( ΠΡ ; ΠΡ-syntax )
+open import Base.Relations.Continuous       using ( REL ; REL-syntax )
 open import Setoid.Algebras.Basic  {𝑆 = 𝑆}  using ( Algebra )
 
 \end{code}
@@ -148,7 +148,7 @@ module _                -- levels for...
   field
    arity  : Type ι               -- The "number" of variables involved in the constraint.
    scope  : arity → var          -- Which variables are involved in the constraint.
-   rel    : ΠΡ[ i ∈ arity ] (Carrier (dom (scope i)))   -- The constraint relation.
+   rel    : REL[ i ∈ arity ] (Carrier (dom (scope i)))   -- The constraint relation.
 
   satisfies : (∀ v → Carrier (dom v)) → Type  -- An assignment 𝑓 : var → dom of values to variables
   satisfies f = rel (f ∘ scope)      -- *satisfies* the constraint 𝐶 = (σ , 𝑅) provided

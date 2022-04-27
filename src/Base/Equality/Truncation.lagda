@@ -34,7 +34,7 @@ open import Relation.Binary.PropositionalEquality
 open import Base.Overture.Preliminaries using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; _≈_ ; transport)
 open import Base.Overture.Injective     using ( IsInjective )
 open import Base.Relations.Quotients    using ( IsBlock )
-open import Base.Relations.Continuous   using ( Rel ; ΠΡ )
+open import Base.Relations.Continuous   using ( Rel ; REL )
 
 private variable α β ρ 𝓥 : Level
 
@@ -226,14 +226,14 @@ module _ {I : Type 𝓥} where
  RelPropExt : Type α → (ρ : Level) → Type (𝓥 ⊔ α ⊔ lsuc ρ)
  RelPropExt A ρ = {P Q : RelProp A ρ } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
 
- IsΠΡProp : {ρ : Level} (𝒜 : I → Type α) → ΠΡ I 𝒜 {ρ}  → Type (𝓥 ⊔ α ⊔ ρ)
- IsΠΡProp 𝒜 P = ∀ (a : ((i : I) → 𝒜 i)) → is-prop (P a)
+ IsRELProp : {ρ : Level} (𝒜 : I → Type α) → REL I 𝒜 {ρ}  → Type (𝓥 ⊔ α ⊔ ρ)
+ IsRELProp 𝒜 P = ∀ (a : ((i : I) → 𝒜 i)) → is-prop (P a)
 
- ΠΡProp : (I → Type α) → (ρ : Level) → Type (𝓥 ⊔ α ⊔ lsuc ρ)
- ΠΡProp 𝒜 ρ = Σ[ P ∈ ΠΡ I 𝒜 {ρ} ] IsΠΡProp 𝒜 P
+ RELProp : (I → Type α) → (ρ : Level) → Type (𝓥 ⊔ α ⊔ lsuc ρ)
+ RELProp 𝒜 ρ = Σ[ P ∈ REL I 𝒜 {ρ} ] IsRELProp 𝒜 P
 
- ΠΡPropExt : (I → Type α) → (ρ : Level) → Type (𝓥 ⊔ α ⊔ lsuc ρ)
- ΠΡPropExt 𝒜 ρ = {P Q : ΠΡProp 𝒜 ρ} → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
+ RELPropExt : (I → Type α) → (ρ : Level) → Type (𝓥 ⊔ α ⊔ lsuc ρ)
+ RELPropExt 𝒜 ρ = {P Q : RELProp 𝒜 ρ} → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
 
 \end{code}
 

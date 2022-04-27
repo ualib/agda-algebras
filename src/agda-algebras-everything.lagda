@@ -51,8 +51,8 @@ open import
                             using (  _|:_ ; compatibility-agreement ; arity[_]               )
                             using ( compatibility-agreement'                                 )
 open import
- Base.Relations.Continuous  using ( ar ; Rel ; Rel-syntax ; ΠΡ ; ΠΡ-syntax ; eval-Rel        )
-                            using ( compatible-Rel ; eval-ΠΡ ; compatible-ΠΡ                 )
+ Base.Relations.Continuous  using ( ar ; Rel ; Rel-syntax ; REL ; REL-syntax ; eval-Rel      )
+                            using ( compatible-Rel ; eval-REL ; compatible-REL               )
 open import
  Base.Relations.Quotients   using ( Equivalence ; ker-IsEquivalence ; kerlift-IsEquivalence  )
                             using ( [_] ; [_/_] ; Block ; IsBlock ; Quotient ; _/_ ; ⟪_⟫     )
@@ -69,8 +69,8 @@ open import
                                using ( fiber ; singleton-is-prop ; is-equiv ; hfunext        )
                                using ( is-set ; to-Σ-≡ ; is-embedding ; singleton-type       )
                                using ( invertible ; blk-uip ; equiv-is-embedding             )
-                               using ( monic-is-embedding|Set ; IsRelProp ; ΠΡPropExt        )
-                               using ( RelProp ; RelPropExt ; IsΠΡProp ; ΠΡProp              )
+                               using ( monic-is-embedding|Set ; IsRelProp ; RELPropExt       )
+                               using ( RelProp ; RelPropExt ; IsRELProp ; RELProp            )
 open import
  Base.Equality.Extensionality  using ( DFunExt ; _≐_ ; pred-ext ; block-ext ; block-ext|uip  )
 
@@ -90,9 +90,9 @@ open import
  Base.Algebras.Basic        using ( Signature ; compatible ; Algebra ; Level-of-Alg          )
                             using ( Level-of-Carrier ; algebra ; algebra→Algebra             )
                             using ( Algebra→algebra ; _̂_ ; Lift-alg-op ; Lift-algebra        )
-                            using ( Lift-Alg ; compatible-Rel-alg ; compatible-ΠΡ-alg        )
+                            using ( Lift-Alg ; compatible-Rel-alg ; compatible-REL-alg       )
 open import
- Base.Algebras.Products     using ( ⨅ ; ⨅' ; ov ; ℑ ; 𝔄 ; class-product                      )
+ Base.Algebras.Products     using ( ⨅ ; ⨅' ; ov ; ℑ ; 𝔄 ; class-product                     )
 open import
  Base.Algebras.Congruences  using ( IsCongruence ; Con ; IsCongruence→Con                    )
                             using ( Con→IsCongruence ; 0[_]Compatible ; 0Con[_]              )
