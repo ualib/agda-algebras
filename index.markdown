@@ -44,7 +44,7 @@ We hope the library is useful to mathematicians and computer scientists who wish
 
 **Software Repository**. [github.com/ualib/agda-algebras](https://github.com/ualib/agda-algebras)
 
-**Citing this work**. See the instructions at [agda-algebras/Preface.html](https://ualib.github.io/agda-algebras/Preface.html#how-to-cite-the-agda-algebras-library).
+**Citing this work**. See the instructions at [agda-algebras/Preface.html](https://ualib.github.io/agda-algebras/Preface.html#citing-the-agda-algebras-library).
 
 **Primary Contributors**. [William DeMeo](https://williamdemeo.gitlab.io) and [Jacques Carette](http://www.cas.mcmaster.ca/~carette/)
 
@@ -56,20 +56,27 @@ We have organized the library into three main modules, called [Base](Base.html),
 
 
 <pre class="Agda">
-<a id="4111" class="Symbol">{-#</a> <a id="4115" class="Keyword">OPTIONS</a> <a id="4123" class="Pragma">--without-K</a> <a id="4135" class="Pragma">--exact-split</a> <a id="4149" class="Pragma">--safe</a> <a id="4156" class="Pragma">--cubical</a> <a id="4166" class="Symbol">#-}</a>
+<a id="4106" class="Symbol">{-#</a> <a id="4110" class="Keyword">OPTIONS</a> <a id="4118" class="Pragma">--without-K</a> <a id="4130" class="Pragma">--exact-split</a> <a id="4144" class="Pragma">--safe</a> <a id="4151" class="Pragma">--cubical</a> <a id="4161" class="Symbol">#-}</a>
 </pre>
 <pre class="Agda">
-<a id="4194" class="Keyword">module</a> <a id="4201" href="agda-algebras.html" class="Module">agda-algebras</a> <a id="4215" class="Keyword">where</a>
+<a id="4189" class="Keyword">module</a> <a id="4196" href="agda-algebras.html" class="Module">agda-algebras</a> <a id="4210" class="Keyword">where</a>
 
-<a id="4222" class="Keyword">open</a> <a id="4227" class="Keyword">import</a> <a id="4234" href="Preface.html" class="Module">Preface</a>
-<a id="4242" class="Keyword">open</a> <a id="4247" class="Keyword">import</a> <a id="4254" href="Base.html" class="Module">Base</a>     <a id="4263" class="Comment">-- standard version of the library</a>
-<a id="4298" class="Keyword">open</a> <a id="4303" class="Keyword">import</a> <a id="4310" href="Setoid.html" class="Module">Setoid</a>   <a id="4319" class="Comment">-- setoid-based version of the library</a>
-<a id="4358" class="Keyword">open</a> <a id="4363" class="Keyword">import</a> <a id="4370" href="Cubical.html" class="Module">Cubical</a>  <a id="4379" class="Comment">-- forthcoming version of the library based on Cubical Agda</a>
+<a id="4217" class="Keyword">open</a> <a id="4222" class="Keyword">import</a> <a id="4229" href="Preface.html" class="Module">Preface</a>
+<a id="4237" class="Keyword">open</a> <a id="4242" class="Keyword">import</a> <a id="4249" href="Base.html" class="Module">Base</a>     <a id="4258" class="Comment">-- standard version of the library</a>
+<a id="4293" class="Keyword">open</a> <a id="4298" class="Keyword">import</a> <a id="4305" href="Setoid.html" class="Module">Setoid</a>   <a id="4314" class="Comment">-- setoid-based version of the library</a>
+<a id="4353" class="Keyword">open</a> <a id="4358" class="Keyword">import</a> <a id="4365" href="Demos.html" class="Module">Demos</a>    <a id="4374" class="Comment">-- demonstrations (e.g., proof of the HSP Theorem in a single module)</a>
+<a id="4444" class="Keyword">open</a> <a id="4449" class="Keyword">import</a> <a id="4456" href="Cubical.html" class="Module">Cubical</a>  <a id="4465" class="Comment">-- forthcoming version of the library based on Cubical Agda</a>
 
 </pre>
 
 
-If you're looking for our latest (setoid-based) formalization of Brkhoff's Theorem, see the [Birkhoff HSP Theorem Section](https://ualib.org/Setoid.Varieties.HSP.html#proof-of-the-hsp-theorem) of the documentation, or the source code of the [Setoid.Varieties.HSP][] module, which is in the file [Setoid/Varieties/HSP.lagda][] in the [agda-algebras][] GitHub repository.
+### The formalization of Brkhoff's Theorem
+
+The [Demos/HSP][] module presents a fairly self-contained formal proof of Birkhoff's HSP Theorem in a single module.
+
+An earlier version of the proof is described in the [Birkhoff HSP Theorem Section](https://ualib.org/Setoid.Varieties.HSP.html#proof-of-the-hsp-theorem) of the documentation; specifically, see [Setoid.Varieties.HSP][].
+
+The source code containing the complete formal proof of Birkhoff's Theorem is available in the [agda-algebras][] GitHub repository; see [Demos/HSP.lagda][] or [Setoid/Varieties/HSP.lagda][].
 
 
 ------------------------------
