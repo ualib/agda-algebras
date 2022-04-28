@@ -2,28 +2,35 @@
 
 ### Review 1
 
-1.  ~~Some paragraphs explaining specific coding choice should be expanded a bit.~~
+1.  Some paragraphs explaining specific coding choice should be expanded a bit.
 
-    (done)
+    (done; see comments below)
 
-2.  ~~We pull some interesting bits from Abel's code; we should add some discussion (e.g. in §7) 
-    of differences/similarities between our implementation and Abel's~~
+2.  We pull some interesting bits from Abel's code; we should add some discussion (e.g. in §7) 
+    of differences/similarities between our implementation and Abel's
    
-3.  ~~In the introduction (e.g. 3rd ¶) and §2.1, we claim to take great care with foundational 
-    aspects. Further explanation of the following would make clearer the relevance of our work:~~
-    
-    a.  ~~How does this attention to foundational details affect our coding choices?~~
+    (done; see comments below)
 
-    b.  ~~Whats the difference from the foundational view point between our code and work cited in Sec 7?~~
-
-    c.  ~~At start of §2.2, our claims about setoids seem a bit bold (or "gnomic"). We don't cite work on~~
-        ~~the so-called "setoid hell", and we miss the point of the bad reputation of setoids.~~
-        ~~Referee asserts: setoids do not make implementation tedious, but, in a sense, unnatural~~ 
-        ~~wrt informal mathematical practice, since any setoid-based reasoning depends on specific~~
-        ~~implementation details. Some parts of our code (omitted from the paper) suffer from these~~
-        ~~aspects of using setoids.~~
+3.  In the introduction (e.g. 3rd ¶) and §2.1, we claim to take great care with foundational 
+    aspects. Further explanation of the following would make clearer the relevance of our work:
     
-4.  ~~Some links are broken (e.g. in [8]); some footnotes need to have first letters capitalised.~~ (fixed)
+    a.  How does this attention to foundational details affect our coding choices?
+
+    b.  Whats the difference from the foundational view point between our code and work cited in Sec 7?
+
+    c.  At start of §2.2, our claims about setoids seem a bit bold (or "gnomic"). We don't cite work on
+        the so-called "setoid hell", and we miss the point of the bad reputation of setoids.
+        Referee asserts: setoids do not make implementation tedious, but, in a sense, unnatural 
+        wrt informal mathematical practice, since any setoid-based reasoning depends on specific
+        implementation details. Some parts of our code (omitted from the paper) suffer from these
+        aspects of using setoids.
+    
+    (done; see comments below)
+
+4.  Some links are broken (e.g. in [8]); some footnotes need to have first letters capitalised.
+
+    (done; fixed links)
+
 
 
 #### Response to Review 1
@@ -48,20 +55,22 @@
    The paragraph in questions, about Setoids, was rewritten to reflect the referee's constructive criticism.
 
 
+------------------------------
+
 ### Review 2
 
-"I have the feeling that the proofs could be simplified before, both in the article and in the formalisation."
+Referee: "I have the feeling that the proofs could be simplified before, both in the article and in the formalisation."
 
 1.  Some definitions and proofs look unnecessary and therefore lack motivation. In particular,
 
-    *  ~~The referee says we could parameterize FreeAlgebra by a class of algebras K rather than by a 
+    *  The referee says we could parameterize FreeAlgebra by a class of algebras K rather than by a 
        relation E on terms, and defines the FreeDomain F[X] as the quotient of Term X by Th K; then
-       the inductive relation~~ _⊢_▹_≈_ ~~(and related proofs, soundness) are unnecessary for the proof of~~
-       ~~Birkhoff to carry on.~~
+       the inductive relation _⊢_▹_≈_ (and related proofs, soundness) are unnecessary for the proof of
+       ~~Birkhoff to carry on.
        
-    *  ~~Second half of the paper (starting with § on relatively free algebra) is confusing.~~
+    *  Second half of the paper (starting with § on relatively free algebra) is confusing.
     
-       ~~The reviewer was hoping for the following argument~~
+       The reviewer was hoping for the following argument
        
        Define 𝔽[X] as 𝑻(X)/≈, where x ≈ y iff given any homomorphism f into an element of K, f x = f y 
        (in other words, x ≈ y iff (x,y) ∈ Th 𝒦). Then, if 𝑨 is in Mod (Th 𝒦), the surjective morphism 
@@ -72,10 +81,13 @@
        any hom factors as an epimorphism followed by a monomorphism, so that x ≈ y iff for any epimorphism 
        f into an element of S 𝒦, f x = f y.
 
-2.  ~~Some links are broken, in particular in the footnotes~~ (https://ualib.github.io/..),
-    ~~or in the bibliography item [8] (link to arxiv).~~
+    (NOT DONE; we address this below, but maybe should add a sentence or two in the paper)
+
+
+2.  Some links are broken, in particular in the footnotes~~ (https://ualib.github.io/..), or in the 
+    bibliography item [8] (link to arxiv).
     
-    (fixed)
+    (done; fixed links)
 
 3.  > The library includes a wide collection of definitions and verified
     > theorems that faithfully codify classical, set-theory-based universal
@@ -92,29 +104,27 @@
     algebras in S K, as in §6.2, would be forbidden because of size issues (e.g., let K be the class of all 
     algebras with empty signature).
 
-   (A discussion section has been added for this)
+    (done; see comments below)
 
-4.  > ~~To the best of our knowledge, this constitutes~~
-    > ~~the first machine-verified proof of Birkoff's celebrated 1935 result.~~
+4.  > To the best of our knowledge, this constitutes
+    > the first machine-verified proof of Birkoff's celebrated 1935 result.
 
-    ~~There is a typo in Birk[h]off. Moreover, there's a 1997 Mizar formalisation:~~
-    http://www.mizar.org/JFM/Vol9/birkhoff.html ~~that we should cite in related work.~~
-    ~~(though ours is still likely the first formalisation in Martin-Löf type theory)~~
-
-    (fixed)
+    There is a typo in Birk[h]off. Moreover, there's a 1997 Mizar formalisation:
+    http://www.mizar.org/JFM/Vol9/birkhoff.html that we should cite in related work.
+    (though ours is still likely the first formalisation in Martin-Löf type theory)
 
 5.  > We are confident that the proof presented here is constructive and correct
 
     What made our previous formalisation contradictory and how did we fix it?
 
+    (done; see comments below)
 
 6.  > Our main contribution is the representation of algebraic structures and their
     > signatures in dependent type theory
 
     Can we be more specific? It seems (to the referee) our signatures are "nothing but containers."
 
-    (Fixed. Main contribution is to show that this straightforward representation (indeed, containers)
-    is quite practical.)
+    (done; see comments below)
 
 7.  > An environment A for X is an X indexed family of setoids
 
@@ -122,39 +132,41 @@
     is not *any* X-indexed family of setoids (as the sentence suggests), but rather a constant indexed 
     family of A.
 
+    (done; see comments below)
+
 8.  > Finally, we have analogous pairs of implications for P and V, called P-id1,
     > P-id2, V-id1 and V-id2, but we omit the formalizations (see [8]).
 
-    ~~It might be worth mentioning H-id2 as well (although it is not needed).~~
+    It might be worth mentioning H-id2 as well (although it is not needed).
     
     (done; added as suggested)
 
 9.  > The term algebra T X is absolutely free (or initial) for algebras in the
     > signature S.
 
-    ~~I feel that "T X is the absolutely free S-algebra on X" is better since it is
-    closer to the standard terminology "T X is the free S-algebra on X".~~
+    I feel that "T X is the absolutely free S-algebra on X" is better since it is
+    closer to the standard terminology "T X is the free S-algebra on X".
     
     (done; reworded as suggested)
 
 10.  > One approach is to let ~ be {θ ∈ Con (T X) : T X / Theta \in S K }. 
      > Equivalently, we let E = Th K and take ~ to be the least
 
-     ~~Why is the second definition is equivalent to the first one, and what is the motivation 
+     Why is the second definition is equivalent to the first one, and what is the motivation 
      for introducing it since it doesn't seemed to be used in the formal definition. Moreover, 
      inserting the alternative definition may make the claim that F[X] is a subdirect product 
      of the algebras more confusing, since it follows obviously from the first definition and 
-     not the second.~~
+     not the second.
      
-     (done; the extraneous definition was removed)
+     (done; the offending definition was relegated to a minor footnote)
 
 11.  > Evidently, F[ X ] is a subdirect product of the algebras in {T X / Theta },
      > where Theta ranges over congruences modulo which T X belongs to S K. Thus, 
      > F[ X ] ∈ P (S K) 
 
-     ~~Can we detail the argument? Since F[X] is a subdirect product of algebras in S
+     Can we detail the argument? Since F[X] is a subdirect product of algebras in S
      K, F[X] injectively embeds into a product of elements of S K, so we should expect
-     F[X] ∈ S (P (S K)), rather than F[ X ] ∈ P (S K).~~
+     F[X] ∈ S (P (S K)), rather than F[ X ] ∈ P (S K).
      
      (fixed; there was a missing S, as noted; also, more details are now included as requested)
 
@@ -165,22 +177,24 @@
      showed that 𝑨 is an homomorphic image of 𝔽[A] before §6 and that 𝔽[A] ∈ S (P 𝒦) 
      (in the § on relatively free algebra in theory)?
 
+     (done; see responses to **point 1** above)
 
 13.  > We now define the natural epimorphism from T X onto F[ X ] and prove that its
      > kernel is contained in the collection of identities modeled by V K
 
-     ~~Isn't it an equality rather than a mere inclusion? By definition, this kernel is
+     Isn't it an equality rather than a mere inclusion? By definition, this kernel is
      the collection of identities modeled by K, but K and V K define the same
-     collection of identities, right?~~
+     collection of identities, right?
      
-     (unchanged; it is equality, but that's not required in the proof of the HSP Theorem and, as 
-     our main goal is to prove that theorem as expediently as possible, we'll leave this unchanged)
+     (unchanged; see comments below)
+
 
 14.  > Let 𝑪 be the product of all algebras in S 𝒦, so that 𝑪 ∈ P (S 𝒦).
 
      Can we comment on the reason we chose a different route from the mathematical proof that we 
      describe informally? (see also: comment on the universe hierarchy).
 
+     (done; see responses to **point 1** above)
 
 
 #### Response to Review 2
@@ -190,7 +204,7 @@
    the approach based on Setoids and requires Abel's _⊢_▹_≈_ relation because, using the former approach, 
    we could not seem to avoid introducing the inconsistency described in ¶3 of the introduction.
    
-*  **point 1** (bullet point 2) and **points 12, 14**
+*  **point 1** (bullet point 2) (and **points 12, 14**)
    Finding an F in S (P K) that is the domain of an epimorphism onto an arbitrary algebra in 
    Mod (Th K) proved exceedingly difficult. It was the hardest part of the formalization of the 
    HSP theorem. The suggestions of the referee concerning this point out (correctly) that in 
@@ -201,7 +215,39 @@
    mentioned in the other responses, and hopefully this helps to clarify the potentially confusing 
    parts of the formalization.
 
+*  **point 2** Links are fixed.
 
+*  **point 3** Several comments about this have been added or expanded.
+
+*  **point 4** While we maintain that this is the first formal proof of Birkhoff in MLTT, we
+   deleted the claim that this is the first formal, machine-checked proof of Birkhoff, citing the Mizar
+   proof found by the referee.
+
+*  **point 5** We had already stated in ¶3 of the intro what led to the inconsistency. We add a 
+   sentence explaining that extra care in handling the type X of variable symbols using the context
+   and environment types used by Andreas Abel in his recent formalization of Birkhoff’s Completeness 
+   Theorem (citation included).
+
+*  **point 6** We revised the description of our main contribution, which is to show that our
+   representations of algebraic objects in type theory (using, e.g., containers) are quite practical.
+
+*  **point 7** This was a typo, which was fixed; in fact, the whole paragraph was rewritten for clarity.
+
+*  **point 8** done; added as suggested
+
+*  **point 9** done; reworded as suggested
+
+*  **point 10** done; the offending definition was relegated to a minor footnote
+
+*  **point 11** fixed; there was a missing S, as noted; also, more details are now included as requested
+
+*  **point 12** (see responses to **point 1** above)
+
+*  **point 13** It is, indeed, equality, but that fact is not needed for the proof, so we feel justified 
+   in leaving this part of the development unchanged.
+
+
+*  **point 14** (see responses to **point 1** above)
 
 
 ### Review 3
@@ -217,8 +263,7 @@
     
     Do we still need this local assumptions? If so, we need to explain.
     
-    (Probably we can disregard this; I think the link is to the old version, and the comments don't 
-    apply to the new version.)
+
 
 2.  (p. 8) ~~aren't~~ `_IsHomImageOf_` and `epi` ~~almost synonyms? Why do we have both, why don't we define~~ 
     `_IsHomImageOf_` ~~in terms of~~ `epi`? ~~(same comment for~~ `subalgebras` and `mon`).
@@ -271,6 +316,16 @@
      (fixed; actually, no space needed after parenthesis, but we added one anyway)
 
 14.  ~~(p. 20) The arXiv link for the reference [8] is incorrect (2101. is repeated).~~
+
+
+#### Response to Review 3
+
+*  **point 1**. We now refer to our first effort as an "attempted proof" or just a "formalization."  
+   Also, the link mentioned by the referee does, indeed, refer to an earlier version.  We no longer 
+   use function extensionality anywhere in the Setoid-based version of the agda-algebras library. 
+   The updated link to the page in question is https://ualib.org/Setoid.Varieties.FreeAlgebras.html, 
+   although we now also have a complete formal proof of Birkhoff's theorem in a single, essentially 
+   self-contained module called Demos.HSP (see: https://ualib.org/Demos.HSP-markdown.html).
 
 
 
