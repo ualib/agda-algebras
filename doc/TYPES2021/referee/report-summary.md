@@ -2,10 +2,12 @@
 
 ### Review 1
 
-1.  Some paragraphs explaining specific coding choice should be expanded a bit.
+1.  ~~Some paragraphs explaining specific coding choice should be expanded a bit.~~
 
-2.  We pull some interesting bits from Abel's code; we should add some discussion (e.g. in §7) 
-    of differences/similarities between our implementation and Abel's
+    (done)
+
+2.  ~~We pull some interesting bits from Abel's code; we should add some discussion (e.g. in §7) 
+    of differences/similarities between our implementation and Abel's~~
    
 3.  ~~In the introduction (e.g. 3rd ¶) and §2.1, we claim to take great care with foundational 
     aspects. Further explanation of the following would make clearer the relevance of our work:~~
@@ -25,6 +27,12 @@
 
 
 #### Response to Review 1
+
+*  **Point 1**  
+   Discussions of coding choices were expanded.
+
+*  **Point 2**  
+   Included more details about code borrowed from Abel and adapted to suit our purposes.
 
 *  **Point 3** (items a and b)  
    Other than 'choosing setoids', very little, for part a.  Our setup is the same as that of 
@@ -46,18 +54,14 @@
 
 1.  Some definitions and proofs look unnecessary and therefore lack motivation. In particular,
 
-    *  The referee says we could parameterize FreeAlgebra by a class of algebras K rather than by a 
+    *  ~~The referee says we could parameterize FreeAlgebra by a class of algebras K rather than by a 
        relation E on terms, and defines the FreeDomain F[X] as the quotient of Term X by Th K; then
-       the inductive relation _⊢_▹_≈_ (and related proofs, soundness) are unnecessary for the proof of Birkhoff
-       to carry on.
+       the inductive relation~~ _⊢_▹_≈_ ~~(and related proofs, soundness) are unnecessary for the proof of~~
+       ~~Birkhoff to carry on.~~
        
-       (The original proof did what the referee suggests, but we switched to the approach that requires 
-       Abel's _⊢_▹_≈_ relation because (I think) with the former approach we ran into trouble completing
-       the proof and actually introduced an inconsistency.)
-
-    *  Second half of the paper (starting with § on relatively free algebra) is confusing.
+    *  ~~Second half of the paper (starting with § on relatively free algebra) is confusing.~~
     
-       Reviewer was hoping for the following argument:
+       ~~The reviewer was hoping for the following argument~~
        
        Define 𝔽[X] as 𝑻(X)/≈, where x ≈ y iff given any homomorphism f into an element of K, f x = f y 
        (in other words, x ≈ y iff (x,y) ∈ Th 𝒦). Then, if 𝑨 is in Mod (Th 𝒦), the surjective morphism 
@@ -181,7 +185,12 @@
 
 #### Response to Review 2
 
-*  **points 1, 12, 14**.  
+*  **point 1** (bullet point 1)
+   Our initial proof attempt was very similar to what the referee is suggesting. However, we switched to 
+   the approach based on Setoids and requires Abel's _⊢_▹_≈_ relation because, using the former approach, 
+   we could not seem to avoid introducing the inconsistency described in ¶3 of the introduction.
+   
+*  **point 1** (bullet point 2) and **points 12, 14**
    Finding an F in S (P K) that is the domain of an epimorphism onto an arbitrary algebra in 
    Mod (Th K) proved exceedingly difficult. It was the hardest part of the formalization of the 
    HSP theorem. The suggestions of the referee concerning this point out (correctly) that in 
