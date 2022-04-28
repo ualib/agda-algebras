@@ -19,7 +19,7 @@ suffered from two flaws. First, it was not clear that the
 formalization was fully constructive (because of its use of function extensionality in \mltt). Second,
 it was shown that if we take the type
 \ab{X}---which we use to represent an arbitrary collection of
-variable symbols---to be the two element type, then one could contrive a contradiction from our formalization.  To resolve these two issues, we developed a new formalization of the HSP theorem by rewriting much of the library and basing it on Setoids.  This allowed us to avoid function extensionality completely.  The type \ab{X} of variable symbols is also treated with greater care using the \textit{context} and \textit{environment} types shown to us by Andreas Abel in his recent formalization of Birkhoff's Completeness Theorem (\cite{Abel:2021}). These design choices are discussed in more details below (see Sections~\ref{setoids} and ~\ref{setoid-functions}.)
+variable symbols---to be the two element type, then one could contrive a contradiction from our formalization.  To resolve these two issues, we developed a new formalization of the HSP theorem by rewriting much of the library and basing it on Setoids.  This allowed us to avoid function extensionality completely.  The type \ab{X} of variable symbols is also treated with more care by using the \textit{context} and \textit{environment} types that Andreas Abel used in his recent formalization of Birkhoff's Completeness Theorem~(\cite{Abel:2021}). These design choices are discussed in more detail below (see Sections~\ref{setoids} and ~\ref{setoid-functions}.)
 
 Having made the revisions summarized above and discussed in greater detail below, we are confident that the
 proof we present here\footnote{based on \agdaalgebras, ver.~2.0.1~\cite{ualib_v2.0.1}, \agda ver.2.6.2 and \agdastdlib ver.1.7.} is constructive and correct.
@@ -1245,9 +1245,12 @@ Sub X Y = (y : Y) → Term X
 
 \end{code}
 
-Fix a signature \ab{𝑆}, a context \ab X, and an \ab{𝑆}-algebra \ab{𝑨}.
-An \defn{environment} \ab{𝑨} for \ab X is an \ab X indexed family of setoids,
-where the equivalence is taken pointwise.
+Fix a signature \ab{𝑆}, a context \ab X.
+The next two types are defined relative to a fixed \ab{𝑆}-algebra, say, \ab{𝑨}, so
+we place them in a submodule that takes the algebra as given.
+
+An \defn{environment} for \ab{𝑨} and \ab X is a setoid whose carrier is a mapping from variable
+symbols (\ab X) to the domain of \ab{𝑨} (\AgdaOperator{\AgdaFunction{𝕌[}}~\AgdaBound{𝑨}~\AgdaOperator{\AgdaFunction{]}}) and whose equivalence relation is pointwise equality.
 
 \begin{code}
 
@@ -1261,10 +1264,10 @@ module Environment (𝑨 : Algebra α ℓ) where
                                            ; trans  = λ g h x  → trans (g x)(h x) }}
 
 \end{code}
-As the above definition, as well as the next, are relative to a fixed algebra, we use
-a submodule to succinctly capture this commonality in the definitions.
-The function \af{⟦\au{}⟧} then denotes the \defn{interpretation} of
-a term in a given algebra, \emph{evaluated} in a given environment.
+
+The function \af{⟦\au{}⟧} is also defined relative to the ambient algebra \ab{𝑨}
+and denotes the \defn{interpretation} of
+a term \emph{evaluated} in a particular environment of the algebra.
 
 \begin{code}
 

@@ -203,7 +203,7 @@ definitions inside the module.)
 ### <a id="inverses-of-setoid-functions">Inverses of setoid functions</a>
 
 We define a data type that represent the semantic concept of the *image* of a function
-(cf. the [Overture.Func.Inverses][] module of the [agda-algebras][] library).
+(cf. the [Setoid.Overture.Inverses][] module of the [agda-algebras][] library).
 
 \begin{code}
 
@@ -259,7 +259,7 @@ type `Injective`, which we now use to define `IsInjective` representing the prop
 of being an injective setoid function. We then define the type `IsSurjective` to
 represent the property of being a surjective setoid function. Finally, we define
 `SurjInv` to represent the *right-inverse* of a surjective function.
-The definitions are as follows (cf. [Overture.Func.Injective][] and [Overture.Func.Surjective][] in the [agda-algebras][] library).
+The definitions are as follows (cf. [Setoid.Overture.Injective][] and [Setoid.Overture.Surjective][] in the [agda-algebras][] library).
 
 \begin{code}
 
@@ -488,7 +488,7 @@ Lift-Alg 𝑨 ℓ₀ ℓ₁ = Lift-Algʳ (Lift-Algˡ 𝑨 ℓ₀) ℓ₁
 
 ### <a id="product-algebras">Product Algebras</a>
 
-(cf. the [Algebras.Func.Products][] module of the [Agda Universal Algebra Library][].)
+(cf. the [Setoid.Algebras.Products][] module of the [agda-algebras][] library.)
 
 \begin{code}
 
@@ -514,7 +514,7 @@ module _ {ι : Level}{I : Type ι } where
 
 ## <a id="Homomorphisms">Homomorphisms</a>
 ### <a id="homomorphism-basic-definitions">Basic definitions</a>
-Here are some useful definitions and theorems extracted from the [Homomorphisms.Func.Basic][] module of the [Agda Universal Algebra Library][].
+Here are some useful definitions and theorems extracted from the [Setoid.Homomorphisms.Basic][] module of the [agda-algebras][] library.
 
 \begin{code}
 
@@ -577,7 +577,7 @@ module _ (𝑨 : Algebra α ρᵃ)(𝑩 : Algebra β ρᵇ) where
 
 ### <a id="basic-properties-of-homomorphisms">Basic properties of homomorphisms</a>
 
-Here are some definitions and theorems extracted from the [Homomorphisms.Func.Properties][] module of the [Agda Universal Algebra Library][].
+Here are some definitions and theorems extracted from the [Setoid.Homomorphisms.Properties][] module of the [agda-algebras][] library.
 
 
 #### <a id="composition-of-homomorphisms">Composition of homomorphisms</a>
@@ -678,7 +678,7 @@ module _ {𝑨 : Algebra α ρᵃ}{ℓ r : Level} where
 ### <a id="homomorphisms-of-product-algebras">Homomorphisms of product algebras</a>
 
 Suppose we have an algebra `𝑨`, a type `I : Type 𝓘`, and a family `ℬ : I → Algebra β 𝑆` of algebras.  We sometimes refer to the inhabitants of `I` as *indices*, and call `ℬ` an *indexed family of algebras*.
-If in addition we have a family `𝒽 : (i : I) → hom 𝑨 (ℬ i)` of homomorphisms, then we can construct a homomorphism from `𝑨` to the product `⨅ ℬ` in the natural way.  Here is how we implement these notions in dependent type theory (cf. the [Homomorphisms.Func.Products][] module of the [Agda Universal Algebra Library][]).
+If in addition we have a family `𝒽 : (i : I) → hom 𝑨 (ℬ i)` of homomorphisms, then we can construct a homomorphism from `𝑨` to the product `⨅ ℬ` in the natural way.  Here is how we implement these notions in dependent type theory (cf. the [Setoid.Homomorphisms.Products][] module of the [agda-algebras][] library).
 
 -->
 
@@ -699,7 +699,7 @@ module _ {ι : Level}{I : Type ι}{𝑨 : Algebra α ρᵃ}(ℬ : I → Algebra 
 
 ### <a id="factorization-of-homomorphisms">Factorization of homomorphisms</a>
 
-If `g : hom 𝑨 𝑩`, `h : hom 𝑨 𝑪`, `h` is surjective, and `ker h ⊆ ker g`, then there exists `φ : hom 𝑪 𝑩` such that `g = φ ∘ h` (cf. the [Homomorphisms.Func.Factor][] module of the [Agda Universal Algebra Library][]).
+If `g : hom 𝑨 𝑩`, `h : hom 𝑨 𝑪`, `h` is surjective, and `ker h ⊆ ker g`, then there exists `φ : hom 𝑪 𝑩` such that `g = φ ∘ h` (cf. the [Setoid.Homomorphisms.Factor][] module of the [agda-algebras][] library).
 
 \begin{code}
 
@@ -752,7 +752,7 @@ module _ {𝑨 : Algebra α ρᵃ}(𝑩 : Algebra β ρᵇ){𝑪 : Algebra γ ρ
 
 ### <a id="isomorphisms">Isomorphisms</a>
 
-(cf. the [Homomorphisms.Func.Isomorphisms] of the [Agda Universal Algebra Library][].)
+(cf. the [Setoid.Homomorphisms.Isomorphisms] of the [agda-algebras][] library).
 
 Two structures are *isomorphic* provided there are homomorphisms going back and forth between them which compose to the identity map.
 
@@ -840,7 +840,8 @@ Lift-≅ = ≅-trans Lift-≅ˡ Lift-≅ʳ
 
 ### Homomorphic Images
 
-We begin with what for our purposes is the most useful way to represent the class of *homomorphic images* of an algebra in dependent type theory (cf. the [Homomorphisms.Func.HomomorphicImages][] module of the [Agda Universal Algebra Library][]). (The first definition is merely a short-hand.)
+We begin with what for our purposes is the most useful way to represent the class of *homomorphic images* of an algebra in dependent type theory (cf. the [Setoid.Homomorphisms.HomomorphicImages][] module of
+the [agda-algebras][] library). (The first definition is merely a short-hand.)
 
 \begin{code}
 ov : Level → Level
@@ -978,7 +979,7 @@ module _ {X : Type χ } where
 
 \end{code}
 
-It is easy to show that the equality-of-terms relation `_≐_` is an equivalence relation, so we omit the formal proof. (See the [Terms.Func.Basic][] module of the [agda-algebras][] library for details.)
+It is easy to show that the equality-of-terms relation `_≐_` is an equivalence relation, so we omit the formal proof. (See the [Setoid.Terms.Basic][] module of the [agda-algebras][] library for details.)
 
 \begin{code}[hide]
  ≐-isRefl : Reflexive _≐_
@@ -1078,7 +1079,7 @@ An equality between two terms holds in a model if the two terms are equal under 
 
 \end{code}
 
-The proof that `Equal` is an equivalence relation is trivial, so we omit it. (See the [Varieties.Func.SoundAndComplete][] module of the [agda-algebras][] library for details.)
+The proof that `Equal` is an equivalence relation is trivial, so we omit it. (See the [Setoid.Varieties.SoundAndComplete][] module of the [agda-algebras][] library for details.)
 
 \begin{code}[hide]
  EqualIsEquiv : {Γ : Type χ} → IsEquivalence (Equal {X = Γ})
@@ -1155,7 +1156,7 @@ module _ {X : Type χ}{ι : Level} {I : Type ι} (𝒜 : I → Algebra α ρᵃ)
 
 ## <a id="model-theory-and-equational-logic">Model Theory and Equational Logic</a>
 
-(cf. the [Varieties.Func.SoundAndComplete][] module of the [Agda Universal Algebra Library][])
+(cf. the [Setoid.Varieties.SoundAndComplete][] module of the [agda-algebras][] library)
 
 ### <a id="model-theory-basic-definitions">Basic definitions</a>
 
@@ -1440,7 +1441,7 @@ module _  {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
 #### <a id="identity-preservation">Identity preservation</a>
 
 The classes `H 𝒦`, `S 𝒦`, `P 𝒦`, and `V 𝒦` all satisfy the same set of equations.  We will only use a subset of the inclusions used to prove this fact. (For a complete proof, see the
-[Varieties.Func.Preservation][] module of the [Agda Universal Algebra Library][].)
+[Setoid.Varieties.Preservation][] module of the [agda-algebras][] library.)
 
 
 ##### <a id="h-preserves-identities">H preserves identities</a>
@@ -1912,14 +1913,14 @@ We have thus proved that every variety is an equational class.
 
 Readers familiar with the classical formulation of the Birkhoff HSP theorem as an
 "if and only if" assertion might worry that the proof is still incomplete. However,
-recall that in the [Varieties.Func.Preservation][] module we proved the following
+recall that in the [Setoid.Varieties.Preservation][] module we proved the following
 identity preservation lemma:
 
 `V-id1 : 𝒦 ⊫ p ≈̇ q → V 𝒦 ⊫ p ≈̇ q`
 
 Thus, if `𝒦` is an equational class---that is, if `𝒦` is the class of algebras
 satisfying all identities in some set---then `V 𝒦` ⊆ 𝒦`.  On the other hand, we
-proved that `V` is expansive in the [Varieties.Func.Closure][] module:
+proved that `V` is expansive in the [Setoid.Varieties.Closure][] module:
 
 `V-expa : 𝒦 ⊆ V 𝒦`
 
@@ -1936,7 +1937,7 @@ This completes the formal proof of Birkhoff's variety theorem.
 
 --------------------------------
 
-<span style="float:left;">[← Varieties.Func.FreeAlgebras](Varieties.Func.FreeAlgebras.html)</span>
+<span style="float:left;">[← Setoid.Varieties.FreeAlgebras](Setoid.Varieties.FreeAlgebras.html)</span>
 <span style="float:right;">[Structures →](Structures.html)</span>
 
 {% include UALib.Links.md %}
