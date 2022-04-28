@@ -2,29 +2,27 @@
 The \agdaalgebras library \cite{ualib_v2.0.1} formalizes the foundations of universal algebra
 in intensional Martin-Löf type theory (\mltt) using \agda~\cite{Norell:2007,agdaref}.
 The library includes a wide collection of definitions and verified theorems originated in classical
-set-theory based universal algebra and equational logic, but have been adapted to fit within MLTT.
+set-theory based universal algebra and equational logic, but adapted to \mltt.
 
-The first major milestone of the \agdaalgebras project is a proof of \emph{Birkhoff's
+The first major milestone of this project is a formalization of \emph{Birkhoff's
 variety theorem} (also known as the \emph{HSP theorem})~\cite{Birkhoff:1935}.
 To the best of our knowledge, this constitutes the first formal proof of
-Birkhoff's in Martin-Löf Type Theory, and it is the first such machine-verified proof of Birkhoff's
-celebrated 1935 result.  An alternative formalization, based on classical
+the HSP theorem in Martin-Löf Type Theory.  An alternative formalization, based on classical
 set-theory, was achieved in~\cite{birkhoff-in-mizar:1999}; see \href{http://www.mizar.org/JFM/Vol9/birkhoff.html\#BIB21}{mizar.org/JFM/Vol9/birkhoff.html}.
 
-Presented here is our second proof of the HSP theorem. The first proof\footnote{See the
+Our first attempt to formalize and verify Birkhoff's celebrated 1935 result\footnote{See the
  \href{https://github.com/ualib/ualib.github.io/blob/71f173858701398d56224dd79d152c380c0c2b5e/src/lagda/UALib/Birkhoff.lagda}{\textsf{Birkhoff.lagda}} file
  in the \href{https://github.com/ualib/ualib.github.io}{\textsf{ualib/ualib.gitlab.io}}
  repository (\href{https://github.com/ualib/ualib.github.io/commit/71f173858701398d56224dd79d152c380c0c2b5e}{15
  Jan 2021 commit 71f1738})~\cite{ualib_v1.0.0}.}
-suffered from flaws that raised two concerns. First, it was not clear whether the
-proof was fully constructive (because of its use of function extensionality in \mltt). Second,
-it was shown that if one were to take the type
+suffered from two flaws. First, it was not clear that the
+formalization was fully constructive (because of its use of function extensionality in \mltt). Second,
+it was shown that if we take the type
 \ab{X}---which we use to represent an arbitrary collection of
-variable symbols---to be  the two element type, then one could combine this with our
-proof and derive a contradiction. To resolve these issues, we have rewritten parts of the library and
-developed a new proof of the HSP theorem. We are confident that the
-proof presented here\footnote{based on \agdaalgebras, ver.~2.0.1~\cite{ualib_v2.0.1}, \agda ver.2.6.2 and \agdastdlib ver.1.7.} is constructive and
- correct. %, a conviction we justify in the sequel (\qv).
+variable symbols---to be the two element type, then one could contrive a contradiction from our formalization.  To resolve these two issues, we developed a new formalization of the HSP theorem by rewriting much of the library and basing it on Setoids.  This allowed us to avoid function extensionality completely.  The type \ab{X} of variable symbols is also treated with greater care using the \textit{context} and \textit{environment} types shown to us by Andreas Abel in his recent formalization of Birkhoff's Completeness Theorem (\cite{Abel:2021}). These design choices are discussed in more details below (see Sections~\ref{setoids} and ~\ref{setoid-functions}.)
+
+Having made the revisions summarized above and discussed in greater detail below, we are confident that the
+proof we present here\footnote{based on \agdaalgebras, ver.~2.0.1~\cite{ualib_v2.0.1}, \agda ver.2.6.2 and \agdastdlib ver.1.7.} is constructive and correct.
 
 What follows is a self-contained formal proof of the HSP theorem in \agda.  This is achieved by
 extracting a subset of the \agdaalgebras library, including only the
@@ -167,8 +165,6 @@ While there are many different workable approaches, the one that requires
 no additional meta-theory is based on setoids, which is why we adopt it here.
 While in some settings this has been found by others to be burdensome, we have not
 found it to be so for universal algebra.
-
-% \ddmmyydate
 
 The \agdaalgebras library was first developed without setoids, relying on
 propositional equality \ad{\au{}≡\au{}} instead,
@@ -412,20 +408,19 @@ is a signature, then
 Thus, if \ab{f} \as{:} \aof{∣} \ab{𝑆} \aof{∣} is an operation symbol in the
 signature \ab{𝑆}, then \aof{∥} \ab{𝑆} \aof{∥} \ab{f} is the arity of \ab{f}.
 
-We need to augment the \af{Signature} type so that it supports algebras over setoid domains.
-\ifshort\else
-To do so---following Andreas Abel's lead (cf.~\cite{Abel:2021})---we
+We need to augment our \af{Signature} type so that it supports algebras over setoid domains.
+To do so---following Andreas Abel (\cite{Abel:2021})---we
 define an operator that translates an ordinary signature into a \defn{setoid signature},
 that is, a signature over a setoid domain.
-\fi
+
 This raises a minor technical issue:
 given operations \ab{f} and \ab{g}, with arguments
 \ab{u} \as{:} \aof{∥} \ab{𝑆} \aof{∥} \ab{f} \as{→}\ab{A} and \ab{v} \as{:} \aof{∥} \ab{𝑆}
 \aof{∥} \ab{g} \as{→} \ab{A}, respectively, and a proof that \ab{f} \aod{≡} \ab{g} (i.e.
 intensionally), we ought to be able to check whether \ab u and \ab v are pointwise
 equal. Technically, \ab{u} and \ab{v} appear to inhabit different types; this is where the
-hypothesis \ab f \aod{≡} \ab g comes in, as we see in the definition of \af{EqArgs} below (adapted
-from Andreas Abel's development~\cite{Abel:2021}).
+hypothesis \ab f \aod{≡} \ab g comes in, as we see in the definition of \af{EqArgs} below
+(borrowed from Abel~\cite{Abel:2021}).
 
 \begin{code}
 
