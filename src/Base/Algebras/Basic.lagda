@@ -26,7 +26,7 @@ open import Relation.Unary  using ( _∈_ ; Pred )
 -- Imports from the Agda Universal Algebra Library -------------------------------------
 open import Base.Overture.Preliminaries using ( ∣_∣ ; ∥_∥ )
 open import Base.Relations.Discrete     using ( Op ; _|:_ ; _|:pred_ )
-open import Base.Relations.Continuous   using ( Rel ; compatible-Rel ; ΠΡ ; compatible-ΠΡ )
+open import Base.Relations.Continuous   using ( Rel ; compatible-Rel ; REL ; compatible-REL )
 
 private variable α β ρ : Level
 
@@ -217,7 +217,7 @@ Recall, the `|:` type was defined in [Base.Relations.Discrete][] module.
 
 #### <a id="compatibility-of-continuous-relations">Compatibility of continuous relations</a>
 
-In the [Base.Relations.Continuous][] module, we defined a function called `cont-compatible-op` to represent the assertion that a given continuous relation is compatible with a given operation. With that, it is easy to define a function, which we call `cont-compatible`, representing compatibility of a continuous relation with all operations of an algebra.  Similarly, we define the analogous `dep-compatible` function for the (even more general) type of *dependent relations*.
+In the [Base.Relations.Continuous][] module, we defined a function called `compatible-Rel` to represent the assertion that a given continuous relation is compatible with a given operation. With that, it is easy to define a function, which we call `compatible-Rel-alg`, representing compatibility of a continuous relation with all operations of an algebra.  Similarly, we define the analogous `compatible-REL-alg` function for the (even more general) type of *dependent relations*.
 
 \begin{code}
 
@@ -226,8 +226,8 @@ module _ {I : Type 𝓥} {𝑆 : Signature 𝓞 𝓥} where
  compatible-Rel-alg : (𝑨 : Algebra α 𝑆) → Rel ∣ 𝑨 ∣ I{ρ} → Type(𝓞 ⊔ α ⊔ 𝓥 ⊔ ρ)
  compatible-Rel-alg 𝑨 R = ∀ (𝑓 : ∣ 𝑆 ∣ ) →  compatible-Rel (𝑓 ̂ 𝑨) R
 
- compatible-ΠΡ-alg : (𝒜 : I → Algebra α 𝑆) → ΠΡ I (λ i → ∣ 𝒜  i ∣) {ρ} → Type(𝓞 ⊔ α ⊔ 𝓥 ⊔ ρ)
- compatible-ΠΡ-alg 𝒜 R = ∀ ( 𝑓 : ∣ 𝑆 ∣ ) →  compatible-ΠΡ (λ i → 𝑓 ̂ (𝒜 i)) R
+ compatible-REL-alg : (𝒜 : I → Algebra α 𝑆) → REL I (λ i → ∣ 𝒜  i ∣) {ρ} → Type(𝓞 ⊔ α ⊔ 𝓥 ⊔ ρ)
+ compatible-REL-alg 𝒜 R = ∀ ( 𝑓 : ∣ 𝑆 ∣ ) →  compatible-REL (λ i → 𝑓 ̂ (𝒜 i)) R
 
 \end{code}
 

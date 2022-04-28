@@ -64,12 +64,19 @@ module agda-algebras where
 open import Preface
 open import Base     -- standard version of the library
 open import Setoid   -- setoid-based version of the library
+open import Demos    -- demonstrations (e.g., proof of the HSP Theorem in a single module)
 open import Cubical  -- forthcoming version of the library based on Cubical Agda
 
 \end{code}
 
 
-If you're looking for our latest (setoid-based) formalization of Brkhoff's Theorem, see the [Birkhoff HSP Theorem Section](https://ualib.org/Setoid.Varieties.HSP.html#proof-of-the-hsp-theorem) of the documentation, or the source code of the [Setoid.Varieties.HSP][] module, which is in the file [Setoid/Varieties/HSP.lagda][] in the [agda-algebras][] GitHub repository.
+### The formalization of Brkhoff's Theorem
+
+The [Demos/HSP][] module presents a fairly self-contained formal proof of Birkhoff's HSP Theorem in a single module.
+
+An earlier version of the proof is described in the [Birkhoff HSP Theorem Section](https://ualib.org/Setoid.Varieties.HSP.html#proof-of-the-hsp-theorem) of the documentation; specifically, see [Setoid.Varieties.HSP][].
+
+The source code containing the complete formal proof of Birkhoff's Theorem is available in the [agda-algebras][] GitHub repository; see [Demos/HSP.lagda][] or [Setoid/Varieties/HSP.lagda][].
 
 
 ------------------------------
