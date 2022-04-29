@@ -41,32 +41,32 @@
 *  **Point 2**  
    Included more details about code borrowed from Abel and adapted to suit our purposes.
 
-*  **Point 3** (items a and b)  
-   Other than 'choosing setoids', very little, for part a.  Our setup is the same as that of 
-   Abel [1]. Capretta [5] uses setoids as well, but not universes since Coq doesn't "really".
-   It is hard to compare with [2], since their aim and ours are quite different, but it would be useful
-   to do so in the future.  Our work is strictly more general than that of [11], which also uses
-   setoids, but restricts itself to finitary arities, which makes things "messy".  [14] is quite
-   different, being in HoTT-UniMath, multi-sorted yet finitary.  And yet, a lot of the 'results'
-   end up involving very similar statements. In other words, universal algebra seems to be quite
-   foundations-independent, at some level that should be investigated in the future)
+*  **Point 3**
 
-*  **Point 3** (item c)  
-   The paragraph in questions, about Setoids, was rewritten to reflect the referee's constructive criticism.
+   +  items a and b  
+      Other than 'choosing setoids', very little, for part a.  Our setup is the same as that of 
+      Abel [1]. Capretta [5] uses setoids as well, but not universes since Coq doesn't "really".
+      It is hard to compare with [2], since their aim and ours are quite different, but it would be useful
+      to do so in the future.  Our work is strictly more general than that of [11], which also uses
+      setoids, but restricts itself to finitary arities, which makes things "messy".  [14] is quite
+      different, being in HoTT-UniMath, multi-sorted yet finitary.  And yet, a lot of the 'results'
+      end up involving very similar statements. In other words, universal algebra seems to be quite
+      foundations-independent, at some level that should be investigated in the future)
+
+   +  item c  
+      The paragraph in questions, about Setoids, was rewritten to reflect the referee's constructive criticism.
 
 
 ------------------------------
 
 ### Review 2
 
-Referee: "I have the feeling that the proofs could be simplified before, both in the article and in the formalisation."
-
 1.  Some definitions and proofs look unnecessary and therefore lack motivation. In particular,
 
     *  The referee says we could parameterize FreeAlgebra by a class of algebras K rather than by a 
        relation E on terms, and defines the FreeDomain F[X] as the quotient of Term X by Th K; then
        the inductive relation _⊢_▹_≈_ (and related proofs, soundness) are unnecessary for the proof of
-       ~~Birkhoff to carry on.
+       Birkhoff to carry on.
        
     *  Second half of the paper (starting with § on relatively free algebra) is confusing.
     
@@ -81,7 +81,7 @@ Referee: "I have the feeling that the proofs could be simplified before, both in
        any hom factors as an epimorphism followed by a monomorphism, so that x ≈ y iff for any epimorphism 
        f into an element of S 𝒦, f x = f y.
 
-    (NOT DONE; we address this below, but maybe should add a sentence or two in the paper)
+    **XXXXXXXX** YET TO DO: though we address this below, maybe should add a sentence or two in the paper **XXXXXXXX**
 
 
 2.  Some links are broken, in particular in the footnotes~~ (https://ualib.github.io/..), or in the 
@@ -263,18 +263,18 @@ Referee: "I have the feeling that the proofs could be simplified before, both in
     
     Do we still need this local assumptions? If so, we need to explain.
     
+    (fixed; see comments below)
 
-
-2.  (p. 8) ~~aren't~~ `_IsHomImageOf_` and `epi` ~~almost synonyms? Why do we have both, why don't we define~~ 
-    `_IsHomImageOf_` ~~in terms of~~ `epi`? ~~(same comment for~~ `subalgebras` and `mon`).
+2.  (p. 8) aren't `_IsHomImageOf_` and `epi` almost synonyms? Why do we have both, why don't we define
+    `_IsHomImageOf_` in terms of `epi`? (same comment for `subalgebras` and `mon`).
     
-    (unchanged; yes, they are conceptually the same, so *practically* synonyms; we have both for the 
-    same reason we have both in informal math; they are two sides of the same coin and one will be more 
-    natural in some circumstances, and the other more natural in others)
+    (unchanged; please see comments below)
 
 3.  (p. 8) we say that contexts are nonempty: Why should a context be nonempty? One can get closed 
     terms by using the empty context. Do we enforce the nonemptiness condition for contexts? 
     (In the presentation it seems we don't.)
+
+    (unchanged; please see comments below)
 
 4.  (p. 9) "An environment A for X is an X indexed family of setoids." seems misleading, perhaps 
     because it's unclear whether we refer to "Environment" or to "Env".
@@ -282,15 +282,23 @@ Referee: "I have the feeling that the proofs could be simplified before, both in
     The most natural reading: we want to describe "Env" which is not an indexed family of setoids 
     but the setoid of functions with the pointwise equality.
 
+    (fixed; see comments below)
+
 5.  (p. 12) In the definition of `_⊢_‣_`, shouldn't `Γ` and `Δ` be mentioned as implicit parameters in the 
-    clauses where they appear? 
+    clauses where they appear?
+
+    (unchanged; please see comments below)
 
 6.  (p. 14) Why don't we define `free-lift-func` as `⟦_⟧` with `h` as the environment?
+
+    (unchanged; please see comments below)
 
 7.  (p. 14, 15) It would be informative to mention how are quotients defined in `agda-algebras`. 
     Are they obtained by changing the equivalence relation of the setoid?
 
-8.  (p. 16) ~~It might be useful to explain (in a footnote?) what is~~ `HomReduct`
+    (unchanged; please see comments below)
+
+8.  (p. 16) It might be useful to explain (in a footnote?) what is `HomReduct`
 
     (fixed; added a footnote to explain)
 
@@ -300,32 +308,74 @@ Referee: "I have the feeling that the proofs could be simplified before, both in
 
     (Referee's first guess: define X = Σ[ A ∈ K] U⟦ A ⟧.)
 
-10.  (p. 17) ~~It might be useful to comment that ⊤ is the index set for showing that A is in P K.~~
+10.  (p. 17) It might be useful to comment that ⊤ is the index set for showing that A is in P K.
 
      (done; added a sentence after the code clarifying this)
 
-11.  (p. 7) ~~When we describe the compatibility condition we have an agda expression different from~~ 
-     ~~the definition. Are they equivalent? The expression in the explanation is unclear. (What is~~ `(a _)`?)
+11.  (p. 7) When we describe the compatibility condition we have an agda expression different from 
+     the definition. Are they equivalent? The expression in the explanation is unclear. (What is `(a _)`?)
      
      (fixed; added footnote to explain what the shorthand `(a _)` means)
 
-12.  ~~(p. 10) "relative a fixed algebra..." should be "relative to a fixed algebra..."~~  (fixed)
+12.  (p. 10) "relative a fixed algebra..." should be "relative to a fixed algebra..."
 
-13.  ~~(p. 17) It seems there is a missing space between~~ `...τ )` ~~and~~ `A` ~~in the definition of~~ `EqCl⇒Var` 
+     (fixed)
+
+13.  (p. 17) It seems there is a missing space between `...τ )` and `A` in the definition of `EqCl⇒Var` 
 
      (fixed; actually, no space needed after parenthesis, but we added one anyway)
 
-14.  ~~(p. 20) The arXiv link for the reference [8] is incorrect (2101. is repeated).~~
+14.  (p. 20) The arXiv link for the reference [8] is incorrect (2101. is repeated).~~
 
 
 #### Response to Review 3
 
-*  **point 1**. We now refer to our first effort as an "attempted proof" or just a "formalization."  
-   Also, the link mentioned by the referee does, indeed, refer to an earlier version.  We no longer 
-   use function extensionality anywhere in the Setoid-based version of the agda-algebras library. 
-   The updated link to the page in question is https://ualib.org/Setoid.Varieties.FreeAlgebras.html, 
-   although we now also have a complete formal proof of Birkhoff's theorem in a single, essentially 
-   self-contained module called Demos.HSP (see: https://ualib.org/Demos.HSP-markdown.html).
+*  **point 1**. We now refer to the first version of the library and its application to Birkhoff's 
+   Theorem as an "attempted proof" or just a "formalization."
 
+   The link mentioned does, indeed, refer to an earlier version.  We don't use function 
+   extensionality in the Setoid-based version of the agda-algebras library.
+   
+   The updated link to the web page in question is https://ualib.org/Setoid.Varieties.FreeAlgebras.html, 
+   although we also have a self-contained module [Demos.HSP](https://ualib.org/Demos.HSP-markdown.html),
+   which contains the complete formal proof of the HSP theorem in a single module.
 
+*  **point 2**. Well, even if they are conceptually the same, and *practically* synonyms, we might still
+   want both for same reason we want both in informal math; even if we have two sides of the same, one
+   side might seem more natural in one circumstances, while the other maybe more natural in another.
+
+*  **point 3**. Typically in universal algebra we assume the collection X of variable symbols is
+   nonempty, but the referee is correct to observe that we don't need the contexts to be empty, 
+   and in fact we don't enforce non-emptiness.
+
+*  **point 4** This was a typo, which was fixed; in fact, the whole paragraph was rewritten for clarity.
+
+*  **point 5** The referee is correct, `Γ` and `Δ` should be mentioned as implicit parameters in the 
+    clauses where they appear.  However, Agda allows us to instead declare them as private variables
+    and handles such details for us in an intelligent way.
+    
+    (If one consults the source code, one finds `private variable Γ Δ : Type χ`.)
+
+*  **point 6** The referee's suggestion might be possible, but it would require a number of other 
+   modifications to make the proof work; perhaps we will try to do it that way in future versions
+   and see whether it simplifies the overall formalization.
+
+*  ** point 7** Quotients are now "automatic" in a sense, since we use setoids which carry the equivalence
+   relation around with them. In this sense, every setoid represents a quotient type.
+   
+   **XXXXXXXX** YET TO DO: maybe we should add this remark in the paper somewhere. **XXXXXXXX**
+
+*  **point 8** Added an explanation in a footnote.
+
+*  **point 9** YET TO DO.
+
+*  **point 10** Added a sentence after the code clarifying this.
+
+*  **point 11** Added footnote to explain what the shorthand `(a _)` means.
+
+*  **point 12** Fixed typo.
+
+*  **point 13** We fixed this (although no space is required before or after parentheses in Agda)
+
+*  **point 14** We believe all broken links have been fixed.
 
