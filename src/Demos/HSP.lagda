@@ -1754,6 +1754,8 @@ t~⟧}~\afld{⟨\$⟩}~\ab{ρ}\\[-8pt]
 %
 The \defn{relatively free algebra over} \ab{X} (relative to
 \ab{𝒦}) is defined to be the quotient \Free{X} := \T{X}~\af{/}~\afld{≈}.
+As we are using setoids, this can be done by changing the equivalence relation
+used to be as defined above.
 Evidently, \Free{X} is a subdirect product of the algebras in \{\T{X}~\af{/}~\ab{θ}\!\},
 where \ab{θ} ranges over congruences modulo which \T{X} belongs to \af{S}~\ab{𝒦}.
 In particular, \Free{X} embeds in a product of members of \af{S}~\ab{𝒦}, so
