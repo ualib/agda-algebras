@@ -296,7 +296,8 @@
 7.  (p. 14, 15) It would be informative to mention how are quotients defined in `agda-algebras`. 
     Are they obtained by changing the equivalence relation of the setoid?
 
-    (unchanged; please see comments below)
+    (yes; comment "As we are using setoids, this can be done by changing the equivalence relation
+used to be as defined above." added)
 
 8.  (p. 16) It might be useful to explain (in a footnote?) what is `HomReduct`
 
@@ -363,7 +364,7 @@
 *  ** point 7** Quotients are now "automatic" in a sense, since we use setoids which carry the equivalence
    relation around with them. In this sense, every setoid represents a quotient type.
    
-   **XXXXXXXX** YET TO DO: maybe we should add this remark in the paper somewhere. **XXXXXXXX**
+   A clarifying sentence was added to the paper.
 
 *  **point 8** Added an explanation in a footnote.
 
