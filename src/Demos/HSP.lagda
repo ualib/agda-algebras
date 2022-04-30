@@ -1,39 +1,39 @@
 \section{Introduction}
-The \agdaalgebras library \cite{ualib_v2.0.1} formalizes the foundations of universal algebra
+The Agda Universal Algebra Library (\agdaalgebras) \cite{ualib_v2.0.1} formalizes the foundations of universal algebra
 in intensional Martin-Löf type theory (\mltt) using \agda~\cite{Norell:2007,agdaref}.
-The library includes a wide collection of definitions and verified theorems originated in classical
-set-theory based universal algebra and equational logic, but adapted to \mltt.
+The library includes a collection of definitions and verified theorems originated in classical
+(set-theory based) universal algebra and equational logic, but adapted to \mltt.
 
-The first major milestone of this project is a formalization of \emph{Birkhoff's
+The first major milestone of the project is a complete formalization of \emph{Birkhoff's
 variety theorem} (also known as the \emph{HSP theorem})~\cite{Birkhoff:1935}.
-To the best of our knowledge, this constitutes the first formal proof of
-the HSP theorem in Martin-Löf Type Theory.  An alternative formalization, based on classical
-set-theory, was achieved in~\cite{birkhoff-in-mizar:1999}; see \href{http://www.mizar.org/JFM/Vol9/birkhoff.html\#BIB21}{mizar.org/JFM/Vol9/birkhoff.html}.
+To the best of our knowledge, this is the first time Birkhoff's celebrated 1935 result
+has been formalized in \mltt.\footnote{An alternative formalization based on classical
+set-theory was achieved in~\cite{birkhoff-in-mizar:1999}}
+%; see \href{http://www.mizar.org/JFM/Vol9/birkhoff.html\#BIB21}{mizar.org/JFM/Vol9/birkhoff.html}.}
 
-Our first attempt to formalize and verify Birkhoff's celebrated 1935 result\footnote{See the
+Our first attempt to formalize Birkhoff's theorem\footnote{See the
  \href{https://github.com/ualib/ualib.github.io/blob/71f173858701398d56224dd79d152c380c0c2b5e/src/lagda/UALib/Birkhoff.lagda}{\textsf{Birkhoff.lagda}} file
  in the \href{https://github.com/ualib/ualib.github.io}{\textsf{ualib/ualib.gitlab.io}}
  repository (\href{https://github.com/ualib/ualib.github.io/commit/71f173858701398d56224dd79d152c380c0c2b5e}{15
  Jan 2021 commit 71f1738})~\cite{ualib_v1.0.0}.}
-suffered from two flaws. First, it was not clear that the
-formalization was fully constructive (because of its use of function extensionality in \mltt). Second,
-it was shown that if we take the type
-\ab{X}---which we use to represent an arbitrary collection of
-variable symbols---to be the two element type, then one could contrive a contradiction from our formalization.  To resolve these two issues, we developed a new formalization of the HSP theorem by rewriting much of the library and basing it on Setoids.  This allowed us to avoid function extensionality completely.  The type \ab{X} of variable symbols is also treated with more care by using the \textit{context} and \textit{environment} types that Andreas Abel used in his recent formalization of Birkhoff's Completeness Theorem~(\cite{Abel:2021}). These design choices are discussed in more detail below (see Sections~\ref{setoids} and ~\ref{setoid-functions}.)
+suffered from two flaws. First, in we assumed function extensionality in \mltt and, consequently, it was unclear whether the formalization was fully constructive.  Second, an inconsistency could be
+contrived by taking the type \ab{X}---which we used to represent an arbitrary collection of
+variable symbols---to be the two element type.  To resolve these issues, we developed a new formalization of the HSP theorem by rewriting most of the \agdaalgebras library and basing it on \textit{setoids}.  This allowed us to avoid function extensionality altogether.  Moreover, the type \ab{X} of variable symbols is now treated with more care using the \textit{context} and \textit{environment} types that Andreas Abel uses in his recent formalization of Birkhoff's completeness theorem~(\cite{Abel:2021}). These design choices are discussed in more detail below (see §\ref{setoids}--§\ref{setoid-functions}.)
 
-Having made the revisions summarized above and discussed in greater detail below, we are confident that the
-proof we present here\footnote{based on \agdaalgebras, ver.~2.0.1~\cite{ualib_v2.0.1}, \agda ver.2.6.2 and \agdastdlib ver.1.7.} is constructive and correct.
-
-What follows is a self-contained formal proof of the HSP theorem in \agda.  This is achieved by
+What follows is a self-contained formal proof of the HSP theorem in \agda.
+%\footnote{The proof presented here is based on \agdaalgebras, ver.~2.0.1~\cite{ualib_v2.0.1}, \agda ver.2.6.2 a%nd \agdastdlib ver.1.7.}
+%is constructive and correct.
+This is achieved by
 extracting a subset of the \agdaalgebras library, including only the
-pieces needed for the proof, into a literate \agda document.\footnote{See
+pieces needed for the proof, into a single literate \agda file.\footnote{See
 \HSPlagda in the \agdaalgebras repository: \agdaalgebrasrepo .}
 \ifshort
 For spaces reasons, we elide some inessential parts,
 but strive to preserve the essential content and character of the development.
-More specifically, routine or overly technical components, as well as anything that does not
+Specifically, routine or overly technical components, as well as anything that does not
 seem to offer insight into the central ideas of the proof are omitted.\footnote{The full proof
-appears in the unabridged version of the present paper~\cite{DeMeo:2021}.}
+can be found in the file \HSPlagda in the \agdaalgebras repository.}
+%or in the unabridged version of the present paper~\cite{DeMeo:2021}.}
 \else
 We include here every line of code of our new proof of Birkhoff's theorem
 in a single \agda module, presented as a literate \agda document,\footnote{See
@@ -41,10 +41,8 @@ in a single \agda module, presented as a literate \agda document,\footnote{See
 imports from the \agdastdlib, the module is self-contained.
 \fi
 
-We highlight some of the challenging aspects of formalizing universal algebra in type theory.
-Nonetheless, we hope to show that the patient mathematician, with enough resolve and the will to learn
+While the present paper highlights some of the challenging aspects of formalizing universal algebra in type theory, we also hope to show that patient mathematicians, with enough resolve and the will to learn
 dependent type theory, can reap the rewards of the further insights that mechanization provides.
-
 \ifshort\else
 We give a sobering glimpse of the technical hurdles that must be overcome
 to conduct research in mathematics using dependent type theory in \agda.
@@ -52,10 +50,8 @@ The results are rather gratifying and enlightening, and we feel are worth
 the investment. Users of Coq and Lean have recently reported similar feelings
 from the outcome of their formalization efforts.
 \fi
-
 Our main contribution is to show that a straightforward but very general representation of algebraic structures
-and their signatures in dependent type theory is quite practical,
-as we demonstrate by formalizing one of the deepest results in the field.
+in dependent type theory is quite practical, as we demonstrate by formalizing a major seminal result in the field.
 
 \section{Preliminaries}
 
@@ -92,8 +88,7 @@ the \href{https://agda.readthedocs.io/en/v2.6.1.3/tools/}{Agda Tools} documentat
 See the \href{https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html#cmdoption-safe}{cmdoption-safe} section of~\cite{agdaref-safeagda}.
 \end{itemize}
 \fi
-
-We also make use of some definitions from \agda's standard library (ver.~1.7).
+We also make use of some definitions from \agda's standard library (ver.~1.7), shown below.
 \begin{code}[hide]
 {-# OPTIONS --without-K --exact-split --safe #-}
 \end{code}
@@ -136,7 +131,7 @@ private variable α ρᵃ β ρᵇ γ ρᶜ δ ρᵈ ρ χ ℓ : Level ;     Γ 
 
 The above imports include some adjustments to ``standard \agda'' syntax; in particular,
 we use \AgdaPrimitive{Type} in place of \AgdaPrimitive{Set}, the infix long arrow symbol,
-\AgdaRecord{\AgdaUnderscore{}⟶\AgdaUnderscore{}}, instead of \AgdaRecord{Func} (the type of ``setoid functions,'' discussed in §\ref{setoid-functions} below), and the symbol \aofld{\au{}⟨\$⟩\au{}} in place of \afld{f} (application of the map of a setoid function); we use
+\AgdaRecord{\AgdaUnderscore{}⟶\AgdaUnderscore{}}, in place of \AgdaRecord{Func} (the type of ``setoid functions,'' discussed in §\ref{setoid-functions} below), and the symbol \aofld{\au{}⟨\$⟩\au{}} in place of \afld{f} (application of the map of a setoid function); we use
 \AgdaField{fst} and \AgdaField{snd}, and sometimes \AgdaOperator{\AgdaFunction{∣\AgdaUnderscore{}∣}} and
 \AgdaOperator{\AgdaFunction{∥\AgdaUnderscore{}∥}}, to denote the first and second
 projections out of the product type
@@ -1821,7 +1816,7 @@ module FreeHom {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
 Next we prove an important property of the relatively free algebra
 %(relative to \ab{𝒦} and satisfying the identities in \af{Th}~\ab{𝒦}),
 which will be used in the formalization of the HSP theorem below. Specifically,
-we prove, for every algebra \ab{𝑨}, if \ab{𝑨}~\af{⊨}~\ab{Th} (\af{V} \ab{𝒦}),
+we prove for every algebra \ab{𝑨}, if \ab{𝑨}~\af{⊨}~\ab{Th} (\af{V} \ab{𝒦}),
 then there exists an epimorphism from \Free{A} onto \ab{𝑨}.
 
 \begin{code}
@@ -1916,10 +1911,15 @@ q.
 %\footnote{Recall, \af{⟦~\ab{𝑨}~⟧} \ab t denotes the interpretation of the term
 %\ab t in the algebra \ab{𝑨}.}
 Therefore,
+\ifshort
+\af{⟦~\Free{X}~⟧} \ab p = \ab g (\af{⟦~\T{X}~⟧} \ab p) = \ab g \ab u = \ab g \ab v =
+\ab g (\af{⟦~\T{X}~⟧} \ab q) = \af{⟦~\Free{X}~⟧} \ab q,
+\else
 \begin{center}
 \af{⟦~\Free{X}~⟧} \ab p = \ab g (\af{⟦~\T{X}~⟧} \ab p) = \ab g \ab u = \ab g \ab v =
 \ab g (\af{⟦~\T{X}~⟧} \ab q) = \af{⟦~\Free{X}~⟧} \ab q,
 \end{center}
+\fi
 so \ab{𝒦} \af{⊫} \ab p \af{≈} \ab q, thus (\ab p , \ab q) \af{∈} \af{Th}
 \ab{𝒦}. Since \ab{𝑨} \af{∈} \af{Mod} (\af{Th} \ab{𝒦}), we obtain \ab{𝑨}~\af{⊧}~\ab p~\af{≈}~\ab q, which implies
 that \ab h \ab u = (\af{⟦~\ab{𝑨}~⟧} \ab p) \aofld{⟨\$⟩} \ab{ρ} = (\af{⟦~\ab{𝑨}~⟧} \ab q)
@@ -2181,7 +2181,7 @@ module _ {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
 Thus, every variety is an equational class.
 \end{itemize}
 
-This completes the formal proof of Birkhoff's variety theorem. \hfill ∎
+This completes the formal proof of Birkhoff's variety theorem. \hfill \qedsymbol
 
 %% -----------------------------------------------------------------------------
 \section{Discussion}\label{sec:discuss}
@@ -2217,8 +2217,8 @@ algebras with finitary operators in \emph{Homotopy type theory} (\cite{HoTT}) us
 Coq.  HoTT's higher inductive types enable them to define quotients as types, without
 the need for setoids.  Lynge and Spitters prove three isomorphism theorems concerning
 subalgebras and quotient algebras, but do not formalize universal algebras nor varieties.
-Finally, in~\cite{Abel:2021}, Abel gives a new formal proof of the soundness theorem and
-Birkhoff's completeness theorem for multi-sorted algebraic structures.
+Finally, in~\cite{Abel:2021}, Abel gives a new formal proof of the soundness and completeness
+theorem for multi-sorted algebraic structures.
 
 %Some other projects aimed at formalizing mathematics generally, and algebra in particular,
 % have developed into very extensive libraries that include definitions, theorems, and proofs
