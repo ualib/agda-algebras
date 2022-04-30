@@ -93,7 +93,7 @@ See the \href{https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.h
 \end{itemize}
 \fi
 
-We also make use of some definitions from Agda's standard library (ver.~1.7).
+We also make use of some definitions from \agda's standard library (ver.~1.7).
 \begin{code}[hide]
 {-# OPTIONS --without-K --exact-split --safe #-}
 \end{code}
@@ -201,7 +201,7 @@ f ⟨∘⟩ g = record  { f = (_⟨$⟩_ f) ∘ (_⟨$⟩_ g)
                   ; cong = (cong f) ∘ (cong g) }
 \end{code}
 \fi
-
+%
 \paragraph*{Inverses}
 We frequently need to deal with the \defn{inverse} of a function. This is most easily defined in terms of the
 \emph{image} of the function's domain, as follows.
@@ -231,7 +231,7 @@ that our witness really is an inverse.
  InvIsInverseʳ : {f : 𝑨 ⟶ 𝑩}{b : B}(q : Image f ∋ b) → f ⟨$⟩ (Inv f q) ≈ b
  InvIsInverseʳ (eq _ p) = sym p
 \end{code}
-
+%
 \paragraph*{Injective and surjective setoid functions}
 If \ab{f} : \ab{𝑨} \aor{⟶} \ab{𝑩}
 then we call \ab f \defn{injective} provided
@@ -294,7 +294,7 @@ module _  {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ}{𝑪 : Setoid γ ρ�
   Goal = mp gonto
 \end{code}
 \fi
-
+%
 \paragraph*{Kernels of setoid functions}
 The \defn{kernel} of a function \ab f~\as :~\ab A~\as{→}~\ab B is defined informally
 by \{\AgdaPair{x}{y} \aod{∈} \ab A \aof{×} \ab A \as :
@@ -366,7 +366,7 @@ is a pair \ab{𝑆} = \AgdaPair{F}{ρ} where \ab{F} is a collection of
 which maps each operation symbol to its arity. Here, \ab{N} denotes the \emph{arity type}.
 Heuristically, the arity \ab{ρ} \ab{f} of an operation symbol \ab{f} \as{∈} \ab{F} may be
 thought of as the number of arguments that \ab{f} takes as ``input.''
-Here (and in the Agda Universal Algebra Library) we represent signatures in a very general way, as the
+Here (and in the \agdaalgebras library) we represent signatures in a very general way, as the
 inhabitants of the following dependent pair type.
 
 \begin{center}
@@ -492,7 +492,7 @@ _̂_ : (f : ∣ 𝑆 ∣)(𝑨 : Algebra α ρᵃ) → (∥ 𝑆 ∥ f  →  �
 f ̂ 𝑨 = λ a → (Interp 𝑨) ⟨$⟩ (f , a)
 \end{code}
 \fi
-
+%
 %% -----------------------------------------------------------------------------
 \paragraph*{Universe levels of algebra types}
 Types belong to \emph{universes}, which are structured in \agda as
@@ -600,7 +600,7 @@ indeed the case
 \else
 as we will see in §\ref{isomorphisms}.
 \fi
-
+%% -----------------------------------------------------------------------------
 \paragraph*{Product Algebras}
 Recall the (informal) definition of the \defn{product} of a family of
 \ab{𝑆}-algebras.
@@ -635,7 +635,7 @@ module _ {ι : Level}{I : Type ι } where
  cong (Interp (⨅ 𝒜)) (≡.refl , f=g ) = λ i → cong (Interp (𝒜 i)) (≡.refl , flip f=g i )
 
 \end{code}
-\noindent Evidently, the \afld{Carrier} of the product algebra type is indeed the (dependent)
+\noindent Evidently, the carrier of the product algebra type is indeed the (dependent)
 product of the carriers in the indexed family. The rest of the definitions are the ``pointwise''
 versions of the underlying ones.
 
@@ -738,7 +738,7 @@ module _ (𝑨 : Algebra α ρᵃ)(𝑩 : Algebra β ρᵇ) where
  epi→ontohom : epi 𝑨 𝑩 → Σ[ h ∈ hom 𝑨 𝑩 ] IsSurjective ∣ h ∣
  epi→ontohom (hh , hhE) = (hh , isHom hhE) , isSurjective hhE
 \end{code}
-
+%% -----------------------------------------------------------------------------
 \paragraph*{Composition of homomorphisms}
 \fi      %%% END LONG VERSION ONLY SECTION
 The composition of homomorphisms is again a homomorphism, and similarly for epimorphisms and monomorphisms.
@@ -768,7 +768,7 @@ module _ {𝑨 : Algebra α ρᵃ} {𝑩 : Algebra β ρᵇ} {𝑪 : Algebra γ 
   ∘-epi : epi 𝑨 𝑩 → epi 𝑩 𝑪  → epi 𝑨 𝑪
   ∘-epi (h , hepi) (g , gepi) = (g ⟨∘⟩ h) , ∘-is-epi hepi gepi
 \end{code}
-
+%% -----------------------------------------------------------------------------
 \paragraph*{Universe lifting of homomorphisms}
 Here we define the identity homomorphism for setoid algebras. Then we prove that the
 operations of lifting and lowering of a setoid algebra are homomorphisms.
@@ -826,7 +826,7 @@ module _ {𝑨 : Algebra α ρᵃ}{ℓ r : Level} where
  ToLift-epi = ∣ ToLift ∣ ,  record { isHom = ∥ ToLift ∥
                             ; isSurjective = λ {y} → eq (∣ FromLift ∣ ⟨$⟩ y) (ToFromLift y) }
 \end{code}
-
+%% -----------------------------------------------------------------------------
 \paragraph*{Homomorphisms of product algebras}
 Suppose we have an algebra \ab{𝑨}, a type \ab I : \ap{Type} \ab{𝓘}, and a family \ab{ℬ} :
 \ab I \as{→} \ar{Algebra} \ab{β} \ab{ρᵇ} of algebras.
@@ -846,7 +846,7 @@ module _ {ι : Level}{I : Type ι}{𝑨 : Algebra α ρᵃ}(ℬ : I → Algebra 
                               hhom : IsHom 𝑨 (⨅ ℬ) h
                               compatible hhom = λ i → compatible ∥ 𝒽 i ∥
 \end{code}
-
+%% -----------------------------------------------------------------------------
 \paragraph*{Factorization of homomorphisms}
 \fi      %%% END LONG VERSION ONLY SECTION
 We also formalize (as \af{HomFactor}) the following factorization theorem: if \ab g : \af{hom}
@@ -972,6 +972,7 @@ It is easy to prove that \ar{\au{}≅\au{}} is an equivalence relation, as follo
   ν a = trans (cong ∣ from ab ∣ (from∼to bc (∣ to ab ∣ ⟨$⟩ a))) (from∼to ab a)
 \end{code}
 \fi
+%% -----------------------------------------------------------------------------
 \paragraph*{Lift-Alg is an algebraic invariant}
 The \af{Lift-Alg} operation neatly resolves the technical problem of
 universe non-cumulativity because isomorphism classes of algebras are closed under \af{Lift-Alg}; that is,
@@ -995,7 +996,7 @@ Lift-≅ : {𝑨 : Algebra α ρᵃ}{ℓ ρ : Level} → 𝑨 ≅ (Lift-Alg 𝑨
 Lift-≅ = ≅-trans Lift-≅ˡ Lift-≅ʳ
 \end{code}
 \fi
-
+%% -----------------------------------------------------------------------------
 \paragraph*{Homomorphic images}
 We have found that the most useful way to encode the concept of \emph{homomorphic image}
 is to produce a witness, that is, a surjective hom.  Thus we define the type of surjective homs
@@ -1132,7 +1133,7 @@ data Term (X : Type χ ) : Type (ov χ)  where
  ℊ : X → Term X
  node : (f : ∣ 𝑆 ∣)(t : ∥ 𝑆 ∥ f → Term X) → Term X
 \end{code}
-
+%% -----------------------------------------------------------------------------
 \paragraph*{The term algebra}
 We enrich the \ad{Term} type to a setoid of  \ab{𝑆}-terms, which will ultimately
 be used as the domain of an algebra, called the \emph{term algebra in the signature} \ab{𝑆}.
@@ -1193,14 +1194,14 @@ Algebra.Domain (𝑻 X) = TermSetoid X
 Algebra.Interp (𝑻 X) ⟨$⟩ (f , ts) = node f ts
 cong (Algebra.Interp (𝑻 X)) (≡.refl , ss≃ts) = gnl ss≃ts
 \end{code}
-
+%% -----------------------------------------------------------------------------
 \paragraph*{Substitution, environments and interpretation of terms}
 The approach to formalizing these three concepts is based on similar code developed by
 Andreas Abel to formalize Birkhoff's completeness theorem~\cite{Abel:2021}.
 \ifshort\else
 
 Recall that the domain of an algebra \ab{𝑨} is a setoid, which we denote by
-\af{𝔻[~\ab{𝑨}~]}, whose \afld{Carrier} is the carrier of the algebra, \af{𝕌[~\ab{𝑨}~]},
+\af{𝔻[~\ab{𝑨}~]}, whose carrier is that of \ab{𝑨} (denoted \af{𝕌[~\ab{𝑨}~]})
 and whose equivalence relation represents equality of elements in \af{𝕌[~\ab{𝑨}~]}.
 \fi
 \af{Sub} performs substitution from one context to
@@ -1300,8 +1301,8 @@ and evaluating the result in environment \ab{ρ} has the same effect as evaluati
  substitution    (node f ts)  σ ρ = cong (Interp 𝑨)(≡.refl , λ i → substitution (ts i) σ ρ)
 
 \end{code}
-
 \ifshort\else
+%% -----------------------------------------------------------------------------
 \paragraph*{Compatibility of terms}
 \fi
 We need to formalize two more concepts involving terms.
@@ -1330,7 +1331,7 @@ module _ {X : Type χ}{ι : Level} {I : Type ι} (𝒜 : I → Algebra α ρᵃ)
 
 \section{Equational Logic}
 \label{equational-logic}
-
+%% -----------------------------------------------------------------------------
 \paragraph*{Term identities, equational theories, and the ⊧ relation}
 Given a signature \ab{𝑆} and a context \ab X, an \ab{𝑆}-\defn{term equation} or \ab{𝑆}-\defn{term identity}
 is an ordered pair (\ab p , \ab q) of 𝑆-terms, also denoted by \ab p \af{≈} \ab q.
@@ -1396,7 +1397,7 @@ Th 𝒦 = λ (p , q) → 𝒦 ⊫ p ≈ q
 Mod : {X : Type χ} → Pred(Term X × Term X) ℓ → Pred (Algebra α ρᵃ) _
 Mod ℰ 𝑨 = ∀ {p q} → (p , q) ∈ ℰ → Equal p q where open Environment 𝑨
 \end{code}
-
+%% -----------------------------------------------------------------------------
 \paragraph*{Entailment}
 
 If \ab{ℰ} is a set of \ab{𝑆}-term identities and \ab{p} and \ab{q} are \ab{𝑆}-terms,
@@ -1458,7 +1459,7 @@ module Soundness  (ℰ : {Y : Type χ} → Pred(Term Y × Term Y) (ov χ))
  sound (transitive  {p = p}{q}{r}  Epq Eqr  ) = transᵉ  EqualIsEquiv {i = p}{q}{r}  (sound Epq)(sound Eqr)
 \end{code}
 \fi
-
+%% -----------------------------------------------------------------------------
 \paragraph*{The Closure Operators H, S, P and V}
 Fix a signature \ab{𝑆}, let \ab{𝒦} be a class of \ab{𝑆}-algebras, and define
 \begin{itemize}
@@ -1660,14 +1661,13 @@ module _ {X : Type χ}{ι : Level}(ℓ : Level){𝒦 : Pred(Algebra α ρᵃ)(α
    spK⊧pq = S-id1{ℓ = aℓι}{p = p}{q} (P-id1{ℓ = ℓ} {𝒦 = 𝒦}{p = p}{q} σ)
 \end{code}
 \fi
-
 %% -------------------------------------------------------------------------------------
-
 \section{Free Algebras}
 \label{free-algebras}
+%% -----------------------------------------------------------------------------
 \paragraph*{The absolutely free algebra}
 The term algebra \af{𝑻} \ab X is the \emph{absolutely free} (or \emph{initial})
-\ab{S}-algebra. That is, for every \ab{𝑆}-algebra \ab{𝑨}, the following hold.
+\ab{𝑆}-algebra. That is, for every \ab{𝑆}-algebra \ab{𝑨}, the following hold.
 \begin{itemize}
 \item Every function from \ab{X} to \af{𝕌[ \ab{𝑨} ]} lifts to a homomorphism from \af{𝑻} \ab{X} to \ab{𝑨}.
 \item That homomorphism is unique.
@@ -1713,73 +1713,60 @@ module _  {X : Type χ} {𝑨 : Algebra α ρᵃ}   where
  free-lift-interp η (ℊ x)       = refl
  free-lift-interp η (node f t)  = cong (Interp 𝑨) (≡.refl , (free-lift-interp η) ∘ t)
 \end{code}
-
+%% -----------------------------------------------------------------------------
 \paragraph*{The relatively free algebra in theory}
-Here we mathematically describe, for a given class \ab{𝒦} of \ab{𝑆}-algebras, the
-\emph{relatively free algebra} in \af{S} (\af{P} \ab{𝒦}) over \ab X, with the
-type theoretic version to follow in the next section.
-
+Here we describe, for a given class \ab{𝒦} of \ab{𝑆}-algebras, the
+\emph{relatively free algebra} in \af{S} (\af{P} \ab{𝒦}) over \ab X. The
+type theoretic version will follow in the next section.
 Recall that the term algebra \T{X} is the \emph{free} class of all
-\ab{𝑆}-algebras. Given an arbitrary class \ab{𝒦} of \ab{𝑆}-algebras, we can't expect that
-\T{X} belongs to \ab{𝒦}, so, in general, we say that \T{X} is free \emph{for} \ab{𝒦}.
+\ab{𝑆}-algebras. Given an arbitrary class \ab{𝒦} of \ab{𝑆}-algebras,
 \ifshort\else
+we can't expect that
+\T{X} belongs to \ab{𝒦}, so, in general, we say that \T{X} is free \emph{for} \ab{𝒦}.
 Indeed, it might not be possible to find a free algebra that belongs to \ab{𝒦}.
+However, for any class \ab{𝒦}
 \fi
-However, for any class \ab{𝒦} we can construct an algebra that is free for \ab{𝒦}
-and belongs to the class \af{S} (\af{P} \ab{𝒦}), and for most applications this suffices.
+we can construct an algebra that is free for \ab{𝒦}
+and belongs to the class \af{S} (\af{P} \ab{𝒦})%
+\ifshort
+.
+\else
+, and for most applications this suffices.
+\fi
+Such an algebra is called a \defn{relatively free algebra over} \ab{X} (relative to
+\ab{𝒦}).
+There are several informal approaches to defining this algebra. The one on which our \agda formalization is based proceeds as follows: let \ab{ℰ} = \af{Th} \ab{𝒦} (the set of equations modeled by all structures in \ab{𝒦}) and let \afld{≈} be the equivalence relation on \Term{X} generated by \ab{ℰ}. Define the relatively free algebra over \ab{X}
+%(relative to \ab{𝒦})
+to be the algebra whose domain is the quotient \Term{X}~\af{/}~\afld{≈} and whose operations are those of the term algebra \T{X}.\footnote{The equivalence relation \afld{≈} on \Term{X} generated by \ab{ℰ} is defined to be the least congruence relation on \T{X} containing \ab{ℰ}; as a congruence, \afld{≈} is closed under the operations of \T{X}, which is why the same operations can be use to construct an algebra on the quotient.}
+We denote the free algebra so defined by \Free{X}.
+%Below we will see how to construct the equivalence \afld{≈} and the quotient \Term{X}~\af{/}~\afld{≈} in \agda. as the setoid with carrier \Term{X} and equivalence relation~\afld{≈}.
 
-Construction of the free algebra in \af{S} (\af{P} \ab{𝒦}) usually
-proceeds by taking the quotient of \T{X} modulo the congruence relation \afld{≈} := \af{⋂}\{\ab{θ} \af{∈} \af{Con} (\T{X}) : \T{X} \af{/} \ab{θ} \af{∈} \af{S}
-\ab{𝒦}\}.\footnote{\af{Con} (\T{X}) denotes the congruences of \T{X}.}$^,$\footnote{Alternatively,
-we could let \ab{ℰ} = \af{Th} \ab{𝒦} and take \afld{≈} to be the least equivalence relation
-on T(X) such that (1) ∀ (\ab p , \ab q) \af{∈} \af{Th} \ab{𝒦}, ∀ \ab{ρ} : \ab X \as{→} \Term{X}, \af{⟦~\ab p~⟧} \afld{⟨\$⟩} \ab{ρ} \afld{≈} \af{⟦~\ab q~⟧} \afld{⟨\$⟩} \ab{ρ}, and (2) \afld{≈} ∈ \af{Con} \T{X}}
-%
-\begin{comment}
-Equivalently, we could let \ab{ℰ} = \af{Th} \ab{𝒦} and take \afld{≈} to be the least equivalence relation
-on the domain of \T{X} such that
-\begin{enumerate}
-\item for every equation (\ab p , \ab q) \af{∈} \af{Th} \ab{𝒦} and every
-environment \ab{ρ} : \ab X \as{→} \Term{X}, we have\\
-\af{⟦~\ab p~⟧} \afld{⟨\$⟩} \ab{ρ} \afld{≈} \af{⟦~\ab q~⟧} \afld{⟨\$⟩} \ab{ρ}, and
-\item \afld{≈} is a congruence of \T{X}; that is, for every operation symbol \ab
-f : \af{∣~\ab{𝑆}~∣}, and for all tuples \ab{s} \ab{t} : \af{∥~\ab{𝑆}~∥} \ab f
-→ \Term{X}, the following implication holds:\footnote{Here all
-interpretations, denoted by \af{⟦\au{}⟧}, are with respect to \T{X}.}\\[-8pt]
-
-(∀ i → \af{⟦~\ab{s}~\ab i~⟧}~\afld{⟨\$⟩}~\ab{ρ}~\afld{≈}~\af{⟦~\ab{t}~\ab
-i~⟧}~\afld{⟨\$⟩}~\ab{ρ})
-\as{→} \af{⟦~\ab f~\ab s~⟧}~\afld{⟨\$⟩}~\ab{ρ}~\afld{≈}~\af{⟦~\ab f~\ab
-t~⟧}~\afld{⟨\$⟩}~\ab{ρ}\\[-8pt]
-\end{comment}
-%
-The \defn{relatively free algebra over} \ab{X} (relative to
-\ab{𝒦}) is defined to be the quotient \Free{X} := \T{X}~\af{/}~\afld{≈}.
-As we are using setoids, this can be done by changing the equivalence relation
-used to be as defined above.
-Evidently, \Free{X} is a subdirect product of the algebras in \{\T{X}~\af{/}~\ab{θ}\!\},
-where \ab{θ} ranges over congruences modulo which \T{X} belongs to \af{S}~\ab{𝒦}.
+It is easy to see that \Free{X} is a subdirect product of the algebras
+\{\T{X}~\af{/}~\ab{θ}\!\}, where \ab{θ} ranges over congruences modulo which \T{X} belongs to \af{S}~\ab{𝒦}.
 In particular, \Free{X} embeds in a product of members of \af{S}~\ab{𝒦}, so
 \Free{X} \af{∈} \af{S}(\af{P}(\af{S}~\ab{𝒦})) ⊆ \af{S}(\af{P}~\ab{𝒦}). It follows
-that \Free{X} satisfies the identities in \af{Th} \ab{𝒦} (those modeled by all members of
-\ab{𝒦}).  Indeed, for each pair \ab p \ab q : \Term{X}, if \ab{𝒦} \af{⊫} \ab p \af{≈} \ab
+that \Free{X} satisfies the identities in \af{Th} \ab{𝒦}%
+\ifshort
+.
+\else
+(those modeled by all members of \ab{𝒦}).
+\fi
+Indeed, for each pair \ab p \ab q : \Term{X}, if \ab{𝒦} \af{⊫} \ab p \af{≈} \ab
 q, then \ab p and \ab q belong to the same \afld{≈}-class, so \ab p and \ab q are
-identified in \Free{X}. \ifshort\else (Notice that \afld{≈} may be empty, in which case
-\T{X}~\af{/}~\afld{≈} is trivial.) \fi
+identified in \Free{X}.
+%\ifshort\else (Notice that \afld{≈} may be empty, in which case
+%\T{X}~\af{/}~\afld{≈} is trivial.) \fi
 
+While the steps of the argument above are straightforward, some of them are not very easy to formalize in \mltt. In particular, proving that \Free{X} belongs to \af{S}(\af{P}~\ab{𝒦}) in \agda turned out to be more challenging than we anticipated.
+%% -----------------------------------------------------------------------------
 \paragraph*{The relatively free algebra in \agda}
-%Our approach looks a bit different from the informal one described above, because we
-%represent quotients as setoids, but the end result is the same.
-We start with a type \ab{ℰ} representing a collection of identities and, instead of
-forming a quotient, we take the domain of the free algebra to be a setoid whose
-\afld{Carrier} is the type \Term{X} of {𝑆}-terms in \ab X and whose equivalence relation
-includes all pairs (\ab p , \ab q) \af{∈} \Term{X} \af{×} \Term{X} such that \ab p \aod{≈}
-\ab q is derivable from \ab{ℰ}; that is, \ab{ℰ} \aod{⊢} \ab X \aod{▹} \ab p \aod{≈} \ab q.
-Observe that elements of this setoid are equal iff they belong to the same equivalence
-class of the congruence \afld{≈} defined above.  Therefore, the setoid so defined, which
-we denote by \Free{X}, represents the quotient \T{X}~\af{/}~\afld{≈}.
-Finally, the interpretation of an operation in the free algebra is simply the operation
-itself, which works since \ab{ℰ} \aod{⊢} \ab X \aod{▹\au{}≈\au{}} is a congruence
-relation (see also~\cite{Abel:2021}).
+%Our approach to constructing free algebras in \agda may seem different from the informal one described above, %but the end result is the same.
+We define a type \ab{ℰ} to represent the collection of identities modeled by \ab{𝒦}, and we represent the quotient \Term{X}~\af{/}~\afld{≈} in \agda as a setoid whose carrier is \Term{X}, the type of \ab{𝑆}-terms in \ab X, and whose equivalence relation
+is the one generated by the pairs (\ab p , \ab q) in \Term{X} \af{×} \Term{X} satisfying \ab p \aod{≈}
+\ab q.   More precisely, the equivalence relation generated by \ab{ℰ} includes all pairs (\ab p , \ab q) of \ab{𝑆}-terms such that \ab p \aod{≈} \ab q is derivable from \ab{ℰ}; that is, \ab{ℰ} \aod{⊢} \ab X \aod{▹} \ab p \aod{≈} \ab q.
+
+The setoid so defined, denoted below by \af{FreeDomain} \ab{X}, has elements that are equal iff they belong to the same equivalence class of the relation \afld{≈} defined above. Thus, \af{FreeDomain} \ab{X} represents the quotient \Term{X}~\af{/}~\afld{≈}, as desired.
+Furthermore, Since \ab{ℰ} \aod{⊢} \ab X \aod{▹\au{}≈\au{}} is a congruence relation of the absolutely free algebra \T{X}, the operations of \T{X} are also operations on the quotient, and we use them to define the relatively free algebra \Free{X}.
 
 \begin{code}
 
@@ -1796,7 +1783,7 @@ module FreeAlgebra {χ : Level}(ℰ : {Y : Type χ} → Pred (Term Y × Term Y) 
                                    FreeInterp ⟨$⟩ (f , ts)       = node f ts
                                    cong FreeInterp (≡.refl , h)  = app h
 \end{code}
-
+%% -----------------------------------------------------------------------------
 \paragraph*{The natural epimorphism} % from 𝑻 X to 𝔽[ X ]}
 We now define the natural epimorphism from \T{X} onto \Free{X} %(= \T{X}~\af{/}~\afld{≈})
 and prove that its kernel is contained in the collection of identities modeled
@@ -1832,9 +1819,9 @@ module FreeHom {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
 
 \end{code}
 Next we prove an important property of the relatively free algebra
-(relative to \ab{𝒦} and satisfying the identities in \af{Th} \ab{𝒦}),
-which will be used in the formalization of the HSP theorem. Specifically,
-we prove that for every algebra \ab{𝑨}, if \ab{𝑨} \af{⊨} \ab{Th} (\af{V} \ab{𝒦}),
+%(relative to \ab{𝒦} and satisfying the identities in \af{Th}~\ab{𝒦}),
+which will be used in the formalization of the HSP theorem below. Specifically,
+we prove, for every algebra \ab{𝑨}, if \ab{𝑨}~\af{⊨}~\ab{Th} (\af{V} \ab{𝒦}),
 then there exists an epimorphism from \Free{A} onto \ab{𝑨}.
 
 \begin{code}
@@ -1876,9 +1863,9 @@ module _ {𝑨 : Algebra (α ⊔ ρᵃ ⊔ ℓ)(α ⊔ ρᵃ ⊔ ℓ)}{𝒦 : Pr
 Birkhoff's variety theorem, also known as the HSP theorem, asserts that a class of algebras
 is a variety if and only if it is an equational class.  In this section, we present the
 statement and proof of the HSP theorem---first in a style similar to
-what one finds in textbooks (e.g.,~\cite[Theorem 4.41]{Bergman:2012}),
+what one finds in textbooks (see, e.g.,~\cite[Theorem 4.41]{Bergman:2012}),
 and then formally in the language of \mltt.
-
+%--------------------------------------
 \subsection{Informal proof}
 Let \ab{𝒦} be a class of algebras and recall that \ab{𝒦} is a \emph{variety} provided
 \ifshort\else
@@ -1889,13 +1876,17 @@ it is closed under homomorphisms, subalgebras and products; equivalently,
 \af{V} is a closure operator.)
 We call \ab{𝒦} an \emph{equational class} if it is precisely the class of all models of some set of identities.
 
-\emph{Every equational class is a variety}. Indeed, suppose \ab{𝒦} is an equational
+%--------------------------------------
+\noindent (⇐) \textit{Every equational class is a variety}. Indeed, suppose \ab{𝒦} is an equational
 class axiomatized by term identities \ab{ℰ}; that is, \ab{𝑨} ∈ \ab{𝒦} iff
 \ab{𝑨} \af{⊨} \ab{ℰ}. Since the classes \af H \ab{𝒦}, \af S \ab{𝒦}, \af P \ab{𝒦} and
 \ab{𝒦} all satisfy the same set of equations, we have \af{V} \ab{𝒦} \af{⊫} \ab p
 \af{≈} \ab q for all (\ab p , \ab q) \af{∈} \ab{ℰ}, so \af{V} \ab{𝒦} ⊆ \ab{𝒦}.
 
-The converse assertion---that \emph{every variety is an equational class}---takes more
+\medskip
+
+%--------------------------------------
+\noindent (⇒) \textit{Every variety is an equational class}.  This takes more
 work.\footnote{The proof we present here is based on that of~\cite[Theorem 4.41]{Bergman:2012}.}
 Let \ab{𝒦} be an arbitrary variety.  We will describe a set of equations that axiomatizes
 \ab{𝒦}.  A natural choice is \af{Th} \ab{𝒦}, all equations that hold in \ab{𝒦};
@@ -1907,38 +1898,39 @@ it suffices to find an algebra \ab{𝑭} \af{∈} \af{S} (\af{P} \ab{𝒦}) such
 \ab{𝑨} is a homomorphic image of \ab{𝑭}, as this will show that \ab{𝑨} \af{∈}
 \af{H} (\af{S} (\af{P} \ab{𝒦})) = \ab{𝒦}.
 
-Let \ab{X} be such that there exists a \emph{surjective} environment
-\ab{ρ} : \ab{X} \as{→} \af{𝕌[~\ab{𝑨}~]}.
-%\footnote{This is usually done by assuming \ab{X} has cardinality at least max(|~\af{𝕌[~\ab{𝑨}~]}~|, ω).}
-By the \af{lift-hom} lemma, there is an epimorphism \ab{h} from \T{X} onto \af{𝕌[~\ab{𝑨}~]}
+Let \ab{X} is such that there exists a \emph{surjective} environment
+\ab{ρ} : \ab{X} \as{→} \af{𝕌[~\ab{𝑨}~]}.\footnote{We could do this (informally) by assuming \ab{X} has cardinality at least max(|~\af{𝕌[~\ab{𝑨}~]}~|, ω). Later we will see how to construct an \ab{X} with the required property in type theory.}
+By the \af{lift-hom} lemma, there is an epimorphism \ab{h} : \T{X} \as{→} \aof{𝕌[~\ab{𝑨}~]}
 that extends \ab{ρ}.
-Now, put \aof{𝔽[~\ab{X}~]}~:=~\T{X}/\afld{≈}, and let \ab{g} : \T{X} \as{→} \aof{𝔽[~\ab{X}~]}
-be the natural epimorphism with kernel \afld{≈}. We claim that \af{ker} \ab g \af{⊆}
-\af{ker} \ab h. If the claim is true, then there is a map \ab{f} : \aof{𝔽[~\ab{X}~]} \as{→} \ab{𝑨}
+Put \aof{𝔽[~\ab{X}~]}~:=~\T{X}/\afld{≈}, and let \ab{g} : \T{X} \as{→} \aof{𝔽[~\ab{X}~]}
+be the natural epimorphism with kernel \afld{≈}. We claim \af{ker} \ab g \af{⊆}
+\af{ker} \ab h. If the claim were true, then there would be a map \ab{f} : \aof{𝔽[~\ab{X}~]} \as{→} \ab{𝑨}
 such that \ab f \af{∘} \ab g = \ab h. Since \ab h is surjective, so is \ab f. Hence \ab{𝑨}
-\af{∈} \af{𝖧} (\af{𝔽} \ab X) \aof{⊆} \af{Mod} (\af{Th} \ab{𝒦}) completing the proof.
-To prove the claim, let \ab u , \ab v \af{∈} \T{X} and assume that \ab g \ab u =
-\ab g \ab v. Since \T{X} is generated by \ab X, there are terms \ab p, \ab q ∈
-\T{X} such that \ab u = \af{⟦~\T{X}~⟧} \ab p and v = \af{⟦~\T{X}~⟧} \ab
+\af{∈} \af{𝖧} (\af{𝔽} \ab X) \aof{⊆} \af{Mod} (\af{Th} \ab{𝒦}) which would complete the proof.
+
+So, it remains to prove \af{ker} \ab g \af{⊆}
+\af{ker} \ab h. Let \ab u and \ab v be \ab{𝑆}-terms over \ab X and assume \ab g \ab u =
+\ab g \ab v. Since \T{X} is generated by \ab X, there are terms
+\ab p, \ab q such that \ab u = \af{⟦~\T{X}~⟧} \ab p and v = \af{⟦~\T{X}~⟧} \ab
 q.
 %\footnote{Recall, \af{⟦~\ab{𝑨}~⟧} \ab t denotes the interpretation of the term
 %\ab t in the algebra \ab{𝑨}.}
-Therefore,\\[-4pt]
-
+Therefore,
+\begin{center}
 \af{⟦~\Free{X}~⟧} \ab p = \ab g (\af{⟦~\T{X}~⟧} \ab p) = \ab g \ab u = \ab g \ab v =
-\ab g (\af{⟦~\T{X}~⟧} \ab q) = \af{⟦~\Free{X}~⟧} \ab q,\\[8pt]
+\ab g (\af{⟦~\T{X}~⟧} \ab q) = \af{⟦~\Free{X}~⟧} \ab q,
+\end{center}
 so \ab{𝒦} \af{⊫} \ab p \af{≈} \ab q, thus (\ab p , \ab q) \af{∈} \af{Th}
-\ab{𝒦}. Since \ab{𝑨} \af{∈} \af{Mod} (\af{Th} \ab{𝒦}) =
-\af{Mod} (\af{Th} \ab{𝒦}), we obtain \ab{𝑨}~\af{⊧}~\ab p~\af{≈}~\ab q, which implies
+\ab{𝒦}. Since \ab{𝑨} \af{∈} \af{Mod} (\af{Th} \ab{𝒦}), we obtain \ab{𝑨}~\af{⊧}~\ab p~\af{≈}~\ab q, which implies
 that \ab h \ab u = (\af{⟦~\ab{𝑨}~⟧} \ab p) \aofld{⟨\$⟩} \ab{ρ} = (\af{⟦~\ab{𝑨}~⟧} \ab q)
 \aofld{⟨\$⟩} \ab{ρ} = \ab h \ab v, as desired.
 
 \subsection{Formal proof}
-We now show how to express and prove the twin assertions that
-(i) every equational class is a variety and (ii) every variety is an equational class.
-
-\paragraph*{Every equational class is a variety}
-For (i), we need an arbitrary equational class, which we obtain by starting with an arbitrary
+%We now show how to express and prove the twin assertions that
+%(⇐) every equational class is a variety and (⇒) every variety is an equational class.
+%% -----------------------------------------------------------------------------
+(⇐) \textit{Every equational class is a variety}.
+We need an arbitrary equational class, which we obtain by starting with an arbitrary
 collection \ab{ℰ} of equations and then defining \ab{𝒦} = \af{Mod} \ab{ℰ}, the equational class
 determined by \ab{ℰ}. We prove that \ab{𝒦} is a variety by showing that
 \ab{𝒦} = \af{V} \ab{𝒦}. The inclusion \ab{𝒦} \aof{⊆} \af V \ab{𝒦}, which holds for all
@@ -1977,10 +1969,12 @@ module _ {ℓ : Level}{X : Type ℓ}{ℰ : {Y : Type ℓ} → Pred (Term Y × Te
 
 \end{code}
 Together, \af{V-expa} and \af{Eqcl⇒Var} prove that every equational class is a variety.
+%% -----------------------------------------------------------------------------
 
+\bigskip
 
-\paragraph*{Every variety is an equational class}
-For (ii), we need an arbitrary variety, which we obtain by starting with an arbitrary class
+\noindent (⇒) \textit{Every variety is an equational class}.
+We need an arbitrary variety, which we obtain by starting with an arbitrary class
 \ab{𝒦} of \ab{𝑆}-algebras and taking the \emph{varietal closure}, \af{V} \ab{𝒦}.
 We prove that \af{V} \ab{𝒦} is an equational class by showing it is precisely the collection of
 algebras that model the equations in \af{Th} (\af{V} \ab{𝒦}); that is, we prove
@@ -2163,7 +2157,6 @@ what we just proved (\af{F≤C}), to conclude that \Free{X} belongs to \af{S}
   psC = ℑ , (𝔄 , ((λ i → fst ∥ i ∥) , ≅-refl))
 
 \end{code}
-This completes stage \ref{item:1} of the proof.
 \end{itemize}
 \begin{itemize}
 \item \ref{item:2}. We show that every algebra in \af{Mod} (\af{Th} (\af{V}
@@ -2243,3 +2236,47 @@ Birkhoff's completeness theorem for multi-sorted algebraic structures.
 % \section{Conclusion}
 
 % One positive outcome of this project is further evidence in support of dependent type theory and the \agda language. We have shown that, despite the technical demands they place on the user, these technologies are accessible to universal algebraists who possess sufficient patience and resolve to codify their work in type theory and verify their results with a proof assistant.
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{comment}
+
+%The \defn{relatively free algebra over} \ab{X} (relative to
+%\ab{𝒦}) is defined to be the quotient \Free{X} := \T{X}~\af{/}~\afld{≈}.
+
+
+is the least equivalence relation on \T{X} such that
+on such that (1) ∀ (\ab p , \ab q) \af{∈} \af{Th} \ab{𝒦}, ∀ \ab{ρ} : \ab X \as{→} \Term{X}, \af{⟦~\ab p~⟧} \afld{⟨\$⟩} \ab{ρ} \afld{≈} \af{⟦~\ab q~⟧} \afld{⟨\$⟩} \ab{ρ}, and (2) \afld{≈} ∈ \af{Con} \T{X}.  Alternatively, }
+\footnote{More precisely, the equivalence relation on \T{X} generated by \ab{ℰ} is the least equivalence relation on \T{X} such that
+on such that (1) ∀ (\ab p , \ab q) \af{∈} \af{Th} \ab{𝒦}, ∀ \ab{ρ} : \ab X \as{→} \Term{X}, \af{⟦~\ab p~⟧} \afld{⟨\$⟩} \ab{ρ} \afld{≈} \af{⟦~\ab q~⟧} \afld{⟨\$⟩} \ab{ρ}, and (2) \afld{≈} ∈ \af{Con} \T{X}.  Alternatively, }
+proceeds by taking the quotient of \T{X} modulo the congruence relation \afld{≈} := \af{⋂}\{\ab{θ} \af{∈} \af{Con} (\T{X}) : \T{X} \af{/} \ab{θ} \af{∈} \af{S}
+\ab{𝒦}\}.\footnote{\af{Con} (\T{X}) denotes the congruences of \T{X}.}$^,$\footnote{Alternatively,
+we could let \ab{ℰ} = \af{Th} \ab{𝒦} and take \afld{≈} to be the least equivalence relation
+on T(X) such that (1) ∀ (\ab p , \ab q) \af{∈} \af{Th} \ab{𝒦}, ∀ \ab{ρ} : \ab X \as{→} \Term{X}, \af{⟦~\ab p~⟧} \afld{⟨\$⟩} \ab{ρ} \afld{≈} \af{⟦~\ab q~⟧} \afld{⟨\$⟩} \ab{ρ}, and (2) \afld{≈} ∈ \af{Con} \T{X}}
+Equivalently, we could let \ab{ℰ} = \af{Th} \ab{𝒦} and take \afld{≈} to be the least equivalence relation
+on the domain of \T{X} such that
+\begin{enumerate}
+\item for every equation (\ab p , \ab q) \af{∈} \af{Th} \ab{𝒦} and every
+environment \ab{ρ} : \ab X \as{→} \Term{X}, we have\\
+\af{⟦~\ab p~⟧} \afld{⟨\$⟩} \ab{ρ} \afld{≈} \af{⟦~\ab q~⟧} \afld{⟨\$⟩} \ab{ρ}, and
+\item \afld{≈} is a congruence of \T{X}; that is, for every operation symbol \ab
+f : \af{∣~\ab{𝑆}~∣}, and for all tuples \ab{s} \ab{t} : \af{∥~\ab{𝑆}~∥} \ab f
+→ \Term{X}, the following implication holds:\footnote{Here all
+interpretations, denoted by \af{⟦\au{}⟧}, are with respect to \T{X}.}\\[-8pt]
+
+(∀ i → \af{⟦~\ab{s}~\ab i~⟧}~\afld{⟨\$⟩}~\ab{ρ}~\afld{≈}~\af{⟦~\ab{t}~\ab
+i~⟧}~\afld{⟨\$⟩}~\ab{ρ})
+\as{→} \af{⟦~\ab f~\ab s~⟧}~\afld{⟨\$⟩}~\ab{ρ}~\afld{≈}~\af{⟦~\ab f~\ab
+t~⟧}~\afld{⟨\$⟩}~\ab{ρ}\\[-8pt]
+\end{comment}
+%
