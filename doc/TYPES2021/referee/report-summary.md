@@ -29,7 +29,7 @@
 
 4.  Some links are broken (e.g. in [8]); some footnotes need to have first letters capitalised.
 
-    (done; fixed links)
+    (done; fixed links; capitalized some footnotes, with the exception of relative clauses which should not be punctuated)
 
 
 #### Responses to issues raised by Referee 1
@@ -313,7 +313,7 @@ used to be as defined above." added)
 11.  (p. 7) When we describe the compatibility condition we have an agda expression different from 
      the definition. Are they equivalent? The expression in the explanation is unclear. (What is `(a _)`?)
      
-     (fixed; added footnote to explain what the shorthand `(a _)` means)
+     (fixed; removed the shorthand `(a _)` and replaced it with the syntactically correct expression)
 
 12.  (p. 10) "relative a fixed algebra..." should be "relative to a fixed algebra..."
 
