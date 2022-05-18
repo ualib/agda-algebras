@@ -1939,7 +1939,7 @@ module _ (𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)){X : Type (α 
 \begin{enumerate}
 \item \label{item:1} Prove \aof{𝔽[ \ab{X} ]} \af{∈} \af{S} (\af{P} \ab{𝒦}).
 \begin{enumerate}
-\item \label{item:1.1} Let \ab{𝑪} be the product of all algebras in \af{S} \ab{𝒦}, so \ab{𝑪} \af{∈} \af{P} (\af{S} \ab{𝒦}).
+\item \label{item:1.1} Let \ab{𝑪} be the product of algebras in \af{S} \ab{𝒦}, so \ab{𝑪} \af{∈} \af{P} (\af{S} \ab{𝒦}).
 \item \label{item:1.2} Prove \af{P} (\af{S} \ab{𝒦}) \af{⊆} \af{S} (\af{P} \ab{𝒦}), so \ab{𝑪} \af{∈} \af{S} (\af{P} \ab{𝒦}).
 \item \label{item:1.3} Prove \aof{𝔽[ \ab{X} ]} \af{≤} \ab{𝑪}, so \aof{𝔽[ \ab{X} ]} \af{∈} \af{S} (\af{S} (\af{P} \ab{𝒦})) (= \af{S} (\af{P} \ab{𝒦})).
 \end{enumerate}
@@ -1951,12 +1951,12 @@ From \ref{item:1} and \ref{item:2} will follow \af{Mod} (\af{Th} (V 𝒦))
 
 \begin{itemize}
 \item
-\noindent \ref{item:1.1}. To define \ab{𝑪} as the product of all algebras in \af{S} \ab{𝒦}, we must first contrive
+\noindent \ref{item:1.1}. To define \ab{𝑪} as the product of algebras in \af{S} \ab{𝒦}, we must first contrive
 an index type for the class \af{S} \ab{𝒦}.  We do so by letting the indices be the algebras
 in \af{S} \ab{𝒦}. Actually, each index will consist of a triple (\ab{𝑨} , \ab p ,
 \ab{ρ}) where \ab{𝑨} is an algebra, \ab p is a proof that \ab{𝑨} belongs to \af{S} \ab{𝒦},
 and \ab{ρ} : \ab X \as{→} \aof{𝕌[ \ab{𝑨} ]} is an arbitrary environment.
-Using this indexing scheme, we construct \ab{𝑪}, the product of all algebras in \af{S} \ab{𝒦}
+Using this indexing scheme, we construct \ab{𝑪}, the product of algebras in \af{S} \ab{𝒦}
 and all environments.
 The indexing type \ab{ℑ}, the family of algebras \ab{𝔄}, and the product \ab{𝑪} are defined
 as follows.
@@ -2019,7 +2019,8 @@ the proof of \af{F≤C} merely extracts a subalgebra witness from a monomorphism
 \begin{code}
 
  monFC : mon 𝔽[ X ] (𝑪 X)
- monFC = ∣ homFC ∣ , record { isHom = ∥ homFC ∥ ; isInjective =  λ {x}{y}→ fromIm-inj ∣ homC X ∣ {x}{y}   }
+ monFC = ∣ homFC ∣ , record { isHom = ∥ homFC ∥
+                            ; isInjective =  λ {x}{y}→ fromIm-inj ∣ homC X ∣ {x}{y}   }
  F≤C : 𝔽[ X ] ≤ 𝑪 X
  F≤C = mon→≤ monFC
 

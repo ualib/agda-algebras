@@ -8,5 +8,8 @@ _build/
 *.out
 *.vtc
 *.ptb
+*.bbl
 *.tar.gz
 auto/
+doc/TYPES2021/*.pdf
+doc/TYPES2021/Demos
