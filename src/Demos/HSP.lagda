@@ -189,7 +189,6 @@ to denote the type of setoid functions from \ab{𝑨} to \ab{𝑩}.
 \ifshort
 \else %%% BEGIN LONG VERSION ONLY
 
-
 An example of a setoid function is the identity function from a setoid to itself.
 We define it, along with a binary composition operation for setoid functions,
 \AgdaOperator{\AgdaFunction{⟨∘⟩}}, as follows.
@@ -207,7 +206,6 @@ f ⟨∘⟩ g = record  { f = (_⟨$⟩_ f) ∘ (_⟨$⟩_ g)
 \end{code}
 \paragraph*{Inverses}
 \fi %%% END LONG VERSION ONLY
-
 We define the \defn{inverse} of such a function in terms of the image of the function's domain, as follows.
 
 \begin{code}
@@ -318,11 +316,10 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
   where open Setoid 𝑩
 
  toIm : (f : 𝑨 ⟶ 𝑩) → 𝑨 ⟶ Im f
- toIm f = record { f = id ; cong = λ x → cong f x } -- record { f = id ; cong = λ x → cong f x }
+ toIm f = record { f = id ; cong = cong f }
 
  fromIm : (f : 𝑨 ⟶ 𝑩) → Im f ⟶ 𝑩
- fromIm f ⟨$⟩ a = f ⟨$⟩ a
- cong (fromIm f) e = e
+ fromIm f = record { f = λ x → f ⟨$⟩ x ; cong = id }
 
  fromIm-inj : (f : 𝑨 ⟶ 𝑩) → IsInjective (fromIm f)
  fromIm-inj _ = id
@@ -421,7 +418,6 @@ We need to augment our \af{Signature} type so that it supports algebras over set
 To do so, following Abel~\cite{Abel:2021}, we
 define an operator that translates an ordinary signature into a \defn{setoid signature},
 that is, a signature over a setoid domain.
-
 This raises a minor technical issue:
 given operations \ab{f} and \ab{g}, with arguments
 \ab{u}~\as{:}~\aof{∥}~\ab{𝑆}~\aof{∥}~\ab{f}~\as{→}~\ab{A} and \ab{v}~\as{:}~\aof{∥}~\ab{𝑆}~\aof{∥}~\ab{g}~\as{→}~\ab{A}, respectively, and a proof of \ab{f}~\aod{≡}~\ab{g} (\textit{intensional} equality), we ought to be able to check whether \ab u and \ab v are pointwise
@@ -2032,7 +2028,19 @@ Our use of setoids introduces nothing new: all the equivalence relations we
 use were already present in the classical proofs. The only ``new'' material is
 that we have to prove that functions respect those equivalences.
 
-The inconsistency in our first effort to formalize Birkhoff's theorem was due to careless handling of the type \ab X of variable symbols.  Specifically, we had allowed \ab X to be any type whatever. Informally, \ab X is a ``sufficiently large'' collection of variable symbols and, in our first formal statement of Birkhoff's theorem, we made the following assumption: (h1) there exist surjections from \ab X to the domain of every algebra in the class under consideration.  Informally, this isn't a problem if we view (h1) as implicitly requiring that \ab X be a type for which such surjections could possibly exist.  Technically, however, by exploiting the freedom to choose \ab X arbitrarily, a contradiction can be contrived.  Specifically, if we take \ab X to be the empty type and take the one-element \ab{𝑆}-algebra. By (h1), there is a surjective map from the empty type to a nonempty type, which is clearly a contradiction. (See the \href{https://github.com/ualib/agda-algebras/blob/master/src/Demos/ContraX.lagda}{\am{Demos.ContraX}} module in the \agdaalgebrasrepo repository for the formal counterexample.)
+Our first attempt to formalize Birkhoff's theorem was not sufficiently
+careful in its handling of variable symbols \ab X. Specifically, this
+type was unconstrained; it is meant to represent the informal notion of a ``sufficiently large'' collection of variable symbols. Consequently, we postulated that there exists surjections from \ab X to the
+domains of all algebras in the class under consideration. The
+quantifiers are in the wrong order! By choosing a small \ab X (such as
+the empty type \ab{⊥}), then for a signature \ab{𝑆} and a one-element
+\ab{𝑆}-algebra \ab{𝑨}, our surjectivity postulate gives a map from \ab{⊥} onto
+\ab{𝑨}. (For more details, see the \href{https://github.com/ualib/agda-algebras/blob/master/src/Demos/ContraX.lagda}{\am{Demos.ContraX}} module which constructs the counterexample in \agda.)
+
+\begin{comment}
+The inconsistency in our first effort to formalize Birkhoff's theorem was due to careless handling of the type \ab X of variable symbols.  Specifically, we had allowed \ab X to be any type whatever. Informally, \ab X is a ``sufficiently large'' collection of variable symbols and, in our first formal statement of Birkhoff's theorem, we made the following assumption: (h1) there exist surjections from \ab X to the domain of every algebra in the class under consideration.  Informally, this isn't a problem if we view (h1) as implicitly requiring that \ab X be a type for which such surjections could possibly exist.  Technically, however, by exploiting the freedom to choose \ab X arbitrarily, a contradiction can be contrived.  Specifically, if we take \ab X to be the empty type and take the one-element \ab{𝑆}-algebra. By (h1), there is a surjective map from the empty type to a nonempty type, which is clearly a contradiction.
+(See the \href{https://github.com/ualib/agda-algebras/blob/master/src/Demos/ContraX.lagda}{\am{Demos.ContraX}} module in the \agdaalgebrasrepo repository for the formal counterexample.)
+\end{comment}
 
 %% -----------------------------------------------------------------------------
 \section{Related work}
