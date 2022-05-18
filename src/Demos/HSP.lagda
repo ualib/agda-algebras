@@ -1,3 +1,8 @@
+% Workflow for TYPES 2021 paper:
+% 1. Edit/improve the literate Agda file `src/Demos/HSP.lagda`.
+% 2. Invoke `agda --latex --latex-dir=doc/TYPES2021 src/Demos/HSP.lagda` from the main `agda-algebras` directory.
+% 3. Invoke `pdflatex agda-hsp` from within the `doc/TYPES2021` directory.
+
 \section{Introduction}
 The Agda Universal Algebra Library (\agdaalgebras) \cite{ualib_v2.0.1} formalizes the foundations of universal algebra
 in intensional Martin-Löf type theory (\mltt) using \agda~\cite{Norell:2007,agdaref}.
@@ -56,28 +61,28 @@ To best emulate \mltt, we use
 \end{code}
 ;
 \ifshort
-\AgdaPragma{without-K} disables
-\href{https://ncatlab.org/nlab/show/axiom+K+%28type+theory%29}{Streicher's K axiom};
-\AgdaPragma{exact-split} directs \agda to accept only definitions behaving like
-{\it judgmental} equalities;
-\AgdaPragma{safe} ensures that nothing is postulated outright.
-(See~\cite{agdaref-axiomk,agdaref-safeagda,agdatools-patternmatching}.)
+  \AgdaPragma{without-K} disables
+  \href{https://ncatlab.org/nlab/show/axiom+K+%28type+theory%29}{Streicher's K axiom};
+  \AgdaPragma{exact-split} directs \agda to accept only definitions behaving like
+  {\it judgmental} equalities;
+  \AgdaPragma{safe} ensures that nothing is postulated outright.
+  (See~\cite{agdaref-axiomk,agdaref-safeagda,agdatools-patternmatching}.)
 \else
-Here are brief descriptions of these options, accompanied by links to related documentation.
-\begin{itemize}
-\item
-\AgdaPragma{without-K} disables \href{https://ncatlab.org/nlab/show/axiom+K+%28type+theory%29}{Streicher's K axiom}.
-See the \href{https://agda.readthedocs.io/en/v2.6.1/language/without-k.html}{section on axiom K} in
-the \href{https://agda.readthedocs.io/en/v2.6.1.3/language}{Agda Language Reference Manual}~\cite{agdaref-axiomk}.
-\item
-\AgdaPragma{exact-split} makes \agda accept only those definitions that behave like so-called {\it judgmental} equalities.
-See the \href{https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html#pattern-matching-and-equality}%
-{Pattern matching and equality} section of
-the \href{https://agda.readthedocs.io/en/v2.6.1.3/tools/}{Agda Tools} documentation~\cite{agdatools-patternmatching}.
-\item
-\AgdaPragma{safe} ensures that nothing is postulated outright---every non-\mltt axiom has to be an explicit assumption (e.g., an argument to a function or module).
-See the \href{https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html#cmdoption-safe}{cmdoption-safe} section of~\cite{agdaref-safeagda}.
-\end{itemize}
+  Here are brief descriptions of these options, accompanied by links to related documentation.
+  \begin{itemize}
+  \item
+  \AgdaPragma{without-K} disables \href{https://ncatlab.org/nlab/show/axiom+K+%28type+theory%29}{Streicher's K axiom}.
+  See the \href{https://agda.readthedocs.io/en/v2.6.1/language/without-k.html}{section on axiom K} in
+  the \href{https://agda.readthedocs.io/en/v2.6.1.3/language}{Agda Language Reference Manual}~\cite{agdaref-axiomk}.
+  \item
+  \AgdaPragma{exact-split} makes \agda accept only those definitions that behave like so-called {\it judgmental} equalities.
+  See the \href{https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html#pattern-matching-and-equality}%
+  {Pattern matching and equality} section of
+  the \href{https://agda.readthedocs.io/en/v2.6.1.3/tools/}{Agda Tools} documentation~\cite{agdatools-patternmatching}.
+  \item
+  \AgdaPragma{safe} ensures that nothing is postulated outright---every non-\mltt axiom has to be an explicit assumption (e.g., an argument to a function or module).
+  See the \href{https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html#cmdoption-safe}{cmdoption-safe} section of~\cite{agdaref-safeagda}.
+  \end{itemize}
 \fi
 We also make use of the following definitions from \agda's standard library (ver.~1.7).
 \begin{code}[hide]
@@ -97,18 +102,18 @@ module Demos.HSP {𝑆 : Signature 𝓞 𝓥} where
 
 -- Import 16 definitions from the Agda Standard Library.
 open import  Data.Unit.Polymorphic        using ( ⊤ ; tt                                            )
-open import  Function                     using ( id ; flip ; _∘_                                   )
+open import  Function                     using ( id ; _∘_ ; flip                                   )
 open import  Level                        using ( Level                                             )
 open import  Relation.Binary              using ( Rel ; Setoid ; IsEquivalence                      )
 open import  Relation.Binary.Definitions  using ( Reflexive ; Symmetric ; Transitive ; Sym ; Trans  )
 open import  Relation.Binary.PropositionalEquality  using ( _≡_                                     )
 open import  Relation.Unary               using ( Pred ; _⊆_ ; _∈_                                  )
 
--- Import 23 definitions from the Agda Standard Library and rename 12 of them.
+-- -- Import 23 definitions from the Agda Standard Library and rename 12 of them.
 open import  Agda.Primitive  renaming  ( Set    to Type    )  using  ( _⊔_ ; lsuc                   )
 open import  Data.Product    renaming  ( proj₁  to fst     )  using  ( _×_ ; _,_ ; Σ ; Σ-syntax     )
                              renaming  ( proj₂  to snd     )
-open import  Function        renaming  ( Func   to _⟶_     )  using  ( Injection ; Surjection       )
+open import  Function        renaming  ( Func   to _⟶_     )  using  (                              )
 open         _⟶_             renaming  ( f      to _⟨$⟩_   )  using  ( cong                         )
 open         IsEquivalence   renaming  ( refl   to reflᵉ   )
                              renaming  ( sym    to symᵉ    )
@@ -116,18 +121,18 @@ open         IsEquivalence   renaming  ( refl   to reflᵉ   )
 open         Setoid          renaming  ( refl   to reflˢ   )
                              renaming  ( sym    to symˢ    )
                              renaming  ( trans  to transˢ  )
-                             renaming  ( _≈_ to _≈ˢ_       )  using  ( Carrier  ; isEquivalence      )
+                             renaming  ( _≈_ to _≈ˢ_       )  using  ( Carrier  ; isEquivalence     )
 
 -- Assign handles to 3 modules of the Agda Standard Library.
 import       Function.Definitions                   as   FD
 import       Relation.Binary.PropositionalEquality  as   ≡
 import       Relation.Binary.Reasoning.Setoid       as   SetoidReasoning
 
-private variable α ρᵃ β ρᵇ γ ρᶜ δ ρᵈ ρ χ ℓ : Level ;       Γ Δ : Type χ ;       𝑓  : fst 𝑆
+private variable α ρᵃ β ρᵇ γ ρᶜ δ ρᵈ ρ χ ℓ : Level ;       Γ Δ : Type χ
+
 \end{code}
 }
-
-The above imports include some adjustments to ``standard'' \agda syntax; in particular,
+\noindent The above imports include some adjustments to ``standard'' \agda syntax; in particular,
 we use \AgdaPrimitive{Type} in place of \AgdaPrimitive{Set}, the infix long arrow symbol,
 \AgdaRecord{\AgdaUnderscore{}⟶\AgdaUnderscore{}}, in place of \AgdaRecord{Func} (the type of ``setoid functions,'' discussed in §\ref{setoid-functions} below), and the symbol \aofld{\au{}⟨\$⟩\au{}} in place of \afld{f} (application of the map of a setoid function); we use
 \AgdaField{fst} and \AgdaField{snd}, and sometimes \AgdaOperator{\AgdaFunction{∣\AgdaUnderscore{}∣}} and
@@ -211,8 +216,7 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
 
 An inhabitant of the \aod{Image} \ab f \aod{∋} \ab b type is a point \ab a~\as :~\afld{Carrier}\ab{𝑨},
 along with a proof \ab p~\as :~\ab b~\af{≈}~\ab f~\ab a, that \ab f maps \ab a to \ab b.
-Since a proof of \aod{Image} \ab f \aod{∋} \ab b must include a concrete witness \ab a~\as :~\afld{Carrier}\ab{𝑨}, we can actually \emph{compute} a range-restricted right-inverse of \ab f.
-
+Since a proof of \aod{Image} \ab f \aod{∋} \ab b must include a concrete witness \ab a~\as :~\afld{Carrier}~\ab{𝑨}, we can actually \emph{compute} a range-restricted right-inverse of \ab f.
 Here is the definition of \af{Inv} which, for extra certainty, is accompanied by a proof that it gives a right-inverse.
 
 \begin{code}
@@ -265,35 +269,6 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
 
 \end{code}
 
-\begin{code}
-{-
-
-Image factorisation: any map f : A ⟶ B factors as a surjective map
-toIm : A ⟶ Im f followed by an injective map fromIm : Im f ⟶ B
-
--}
-module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
- Im : (f : 𝑨 ⟶ 𝑩) → Setoid _ _
- Carrier (Im f) = Carrier 𝑨
- _≈ˢ_ (Im f) b1 b2 = f ⟨$⟩ b1 ≈ f ⟨$⟩ b2 where open Setoid 𝑩
- isEquivalence (Im f) = record { refl = refl  ; sym =  sym; trans = trans }
-    where open Setoid 𝑩
-
- toIm : (f : 𝑨 ⟶ 𝑩) → 𝑨 ⟶ Im f
- toIm f ⟨$⟩ a = a
- cong (toIm f) e = cong f e
-
- fromIm : (f : 𝑨 ⟶ 𝑩) → Im f ⟶ 𝑩
- fromIm f ⟨$⟩ a = f ⟨$⟩ a
- cong (fromIm f) e = e
-
- fromIm-inj : (f : 𝑨 ⟶ 𝑩) → IsInjective (fromIm f)
- fromIm-inj f = λ z → z
-
- toIm-surj : (f : 𝑨 ⟶ 𝑩) → IsSurjective (toIm f)
- toIm-surj f = eq _ (reflˢ 𝑩)
-\end{code}
-
 Proving that the composition of injective setoid functions is again injective
 is simply a matter of composing the two assumed witnesses to injectivity.
 Proving that surjectivity is preserved under composition is only slightly more involved.
@@ -317,14 +292,47 @@ module _  {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ}{𝑪 : Setoid γ ρ�
   Goal : Image g ⟨∘⟩ f ∋ y
   Goal = mp gonto
 \end{code}
-\paragraph*{Kernels of setoid functions}
+
 \fi
 
-The \defn{kernel} of a function \ab f~\as :~\ab A~\as{→}~\ab B is defined informally
-by \{\AgdaPair{x}{y} \aod{∈} \ab A \aof{×} \ab A \as :
-\ab f \ab x \as{=} \ab f \ab y\}. This can be represented in a number of ways,
-but for our purposes it is convenient to define the kernel as an inhabitant of a (unary)
-predicate over \ab A \aof{×} \ab A.
+\paragraph*{Factorization of setoid functions\protect\footnote{The code in this paragraph was suggested by an anonymous referee.}}
+
+Any (setoid) function \ab f : \ab A \aor{⟶} \ab B factors as a surjective map
+\ab{toIm} : \ab A \aor{⟶} \ab{Im} \ab f followed by an injective map \ab{fromIm} : \ab{Im} \ab f \aor{⟶} \ab B.
+
+\begin{code}
+
+module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
+
+ Im : (f : 𝑨 ⟶ 𝑩) → Setoid _ _
+ Carrier (Im f) = Carrier 𝑨
+ _≈ˢ_ (Im f) b1 b2 = f ⟨$⟩ b1 ≈ f ⟨$⟩ b2 where open Setoid 𝑩
+
+ isEquivalence (Im f) = record { refl = refl ; sym = sym; trans = trans }
+    where open Setoid 𝑩
+
+ toIm : (f : 𝑨 ⟶ 𝑩) → 𝑨 ⟶ Im f
+ toIm f ⟨$⟩ a = a
+ cong (toIm f) e = cong f e
+
+ fromIm : (f : 𝑨 ⟶ 𝑩) → Im f ⟶ 𝑩
+ fromIm f ⟨$⟩ a = f ⟨$⟩ a
+ cong (fromIm f) e = e
+
+ fromIm-inj : (f : 𝑨 ⟶ 𝑩) → IsInjective (fromIm f)
+ fromIm-inj f = λ z → z
+
+ toIm-surj : (f : 𝑨 ⟶ 𝑩) → IsSurjective (toIm f)
+ toIm-surj f = eq _ (reflˢ 𝑩)
+
+\end{code}
+
+%\paragraph*{Kernels of setoid functions}
+%The \defn{kernel} of a function \ab f~\as :~\ab A~\as{→}~\ab B is defined informally
+%by \{\AgdaPair{x}{y} \aod{∈} \ab A \aof{×} \ab A \as :
+%\ab f \ab x \as{=} \ab f \ab y\}. This can be represented in a number of ways,
+%but for our purposes it is convenient to define the kernel as an inhabitant of a (unary)
+%predicate over \ab A \aof{×} \ab A.
 
 %% -------------------------------------------------------------------------------------
 
@@ -580,21 +588,17 @@ Lift-Alg 𝑨 ℓ₀ ℓ₁ = Lift-Algʳ (Lift-Algˡ 𝑨 ℓ₀) ℓ₁
 \fi
 \noindent Recall that our \ar{Algebra} type has two universe level parameters, corresponding
 to those of the domain setoid.
-\ifshort\else
 Concretely, an algebra of type \ar{Algebra} \ab{α} \ab{ρᵃ} has a
 \afld{Domain} of type \ar{Setoid} \ab{α} \ab{ρᵃ}. This packages a ``carrier set''
 (\afld{Carrier}), inhabiting \ap{Type} \ab{α}, with an equality on \afld{Carrier} of type
-\af{Rel} \afld{Carrier} \ab{ρᵃ}.
-\fi
-\af{Lift-Alg} takes an algebra parametrized by levels \ab{a} and \ab{ρᵃ}
+\af{Rel} \afld{Carrier} \ab{ρᵃ}. \af{Lift-Alg} takes an algebra parametrized by levels \ab{a} and \ab{ρᵃ}
 and constructs a new algebra whose carrier inhabits \ap{Type} (\ab{α} \ap{⊔} \ab{ℓ₀}) and
 whose equivalence inhabits \af{Rel}~\afld{Carrier}~(\ab{ρᵃ}~\ap{⊔}~\ab{ℓ₁}).
 To be useful, this lifting operation should result in an algebra with the same semantic properties
 as the one we started with. We will see in §\ref{sec:lift-alg} that this is indeed the case.
+
 %% -----------------------------------------------------------------------------
 \paragraph*{Product Algebras}
-%Recall the (informal) definition of the \defn{product} of a family of
-%\ab{𝑆}-algebras.
 We define the \defn{product} of a family of algebras as follows.
 Let \ab{ι} be a universe and \ab I~:~\ap{Type}~\ab{ι} a type (the ``indexing type'').
 Then \ab{𝒜}~:~\ab I~\as{→}~\ab{Algebra}~\ab{α}~\ab{ρᵃ} represents
@@ -647,9 +651,6 @@ every operation symbol \ab{f} : \af{∣~\ab{𝑆}~∣} and all tuples
 \ab{a} : \af{∥~\ab{𝑆}~∥}~\ab{f} \as{→} \aof{𝕌[~\ab{𝑨}~]}, we have \ab{h} \aofld{⟨\$⟩}
 (\ab{f}~\af{̂}~\ab{𝑨}) \ab{a} \af{≈}
 (\ab{f}~\af{̂}~\ab{𝑩}) \as{λ} \ab x \as{→} \ab h \AgdaOperator{\AgdaField{⟨\$⟩}} (\ab a \ab x).
-%\ab{h} \aofld{⟨\$⟩} (\ab{a} \au{}).\footnote{Here we use
-%\ab{h} \aofld{⟨\$⟩} (\ab{a} \au{}) as a shorthand for
-%\as{λ} \ab x \as{→} \ab h \AgdaOperator{\AgdaField{⟨\$⟩}} (\ab a \ab x).}
 
 It is convenient to first formalize ``compatible'' (\af{compatible-map-op}),
 representing the assertion that a given setoid function
@@ -658,13 +659,9 @@ operation symbol \ab{f}, and then generalize over operation symbols
 to yield the type (\af{compatible-map}) of compatible maps from (the domain of)
 \ab{𝑨} to (the domain of) \ab{𝑩}.
 
-\ifshort\else
 \begin{code}
 
 module _ (𝑨 : Algebra α ρᵃ)(𝑩 : Algebra β ρᵇ) where
-\end{code}
-\fi
-\begin{code}
 
  compatible-map-op : (𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]) → ∣ 𝑆 ∣ → Type _
  compatible-map-op h f = ∀ {a} → h ⟨$⟩ (f ̂ 𝑨) a ≈ (f ̂ 𝑩) λ x → h ⟨$⟩ (a x)
@@ -694,8 +691,6 @@ a proof \ab p that \ab h is a homomorphism.
 A \defn{monomorphism} (resp. \defn{epimorphism}) is an injective (resp. surjective)
 homomorphism. The \agdaalgebras library defines predicates \ar{IsMon} and \ar{IsEpi} for these,
 as well as \af{mon} and \af{epi} for the corresponding types.
-\ifshort %%% BEGIN SHORT VERSION ONLY
-\else    %%% BEGIN LONG VERSION ONLY
 
 \begin{code}
 
@@ -709,9 +704,8 @@ as well as \af{mon} and \af{epi} for the corresponding types.
  mon = Σ (𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]) IsMon
 
 \end{code}
-As with \af{hom}, the type \af{mon} is a dependent product type; each inhabitant is a pair
-consisting of a setoid function, say, \ab h, along with a proof that \ab h is a
-monomorphism.
+\noindent As with \af{hom}, the type \af{mon} is a dependent product type; each inhabitant is a pair
+consisting of a setoid function, say, \ab h, along with a proof that \ab h is a monomorphism.
 
 \begin{code}
 
@@ -738,31 +732,8 @@ module _ (𝑨 : Algebra α ρᵃ)(𝑩 : Algebra β ρᵇ) where
 \end{code}
 %% -----------------------------------------------------------------------------
 
-\begin{code}
--- image factorisation lifts to algebras
-module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
-
- HomIm : (h : hom 𝑨 𝑩) → Algebra _ _
- Domain (HomIm h) = Im ∣ h ∣
- Interp (HomIm h) ⟨$⟩ (f , la) = (f ̂ 𝑨) la
- cong (Interp (HomIm h)) {x1 , x2} {.x1 , y2} (_≡_.refl , e) = begin
-      ∣ h ∣ ⟨$⟩ (Interp 𝑨 ⟨$⟩ (x1 , x2))       ≈⟨ h-compatible ⟩
-      Interp 𝑩 ⟨$⟩ (x1 , λ x → ∣ h ∣ ⟨$⟩ x2 x) ≈⟨ cong (Interp 𝑩) (_≡_.refl , e)  ⟩
-      Interp 𝑩 ⟨$⟩ (x1 , λ x → ∣ h ∣ ⟨$⟩ y2 x) ≈˘⟨ h-compatible ⟩
-      ∣ h ∣ ⟨$⟩ (Interp 𝑨 ⟨$⟩ (x1 , y2)) ∎
-    where open Setoid 𝔻[ 𝑩 ]
-          open IsHom ∥ h ∥ renaming (compatible to h-compatible)
-          open SetoidReasoning 𝔻[ 𝑩 ]
-
- toHomIm : (h : hom 𝑨 𝑩) → hom 𝑨 (HomIm h)
- toHomIm h = (toIm ∣ h ∣) , mkhom (reflˢ 𝔻[ 𝑩 ])
-
- fromHomIm : (h : hom 𝑨 𝑩) → hom (HomIm h) 𝑩
- fromHomIm h = (fromIm ∣ h ∣) , mkhom (IsHom.compatible ∥ h ∥)
-\end{code}
 
 \paragraph*{Composition of homomorphisms}
-\fi      %%% END LONG VERSION ONLY SECTION
 The composition of homomorphisms is again a homomorphism, and similarly for epimorphisms and monomorphisms.
 \ifshort
 The proofs of these facts are straightforward so we omit them, but give them the names
@@ -868,19 +839,7 @@ module _ {ι : Level}{I : Type ι}{𝑨 : Algebra α ρᵃ}(ℬ : I → Algebra 
                               hhom : IsHom 𝑨 (⨅ ℬ) h
                               compatible hhom = λ i → compatible ∥ 𝒽 i ∥
 \end{code}
-%% -----------------------------------------------------------------------------
-\paragraph*{Factorization of homomorphisms}
-\fi      %%% END LONG VERSION ONLY SECTION
-Another theorem in the \agdaalgebras library that we use below is called \af{HomFactor}; it formalizes the following factorization result: if \ab g : \af{hom}
-\ab{𝑨} \ab{𝑩}, \ab h : \af{hom} \ab{𝑨} \ab{𝑪}, \ab h is surjective, and \af{ker} \ab h
-\aof{⊆} \af{ker} \ab g, then there exists \ab{φ} : \af{hom} \ab{𝑪} \ab{𝑩} such that \ab g
-= \ab{φ} \aof{∘} \ab h.
-\ifshort\else
-
-
-\subsection{Isomorphisms}
-\label{isomorphisms}
-\fi      %%% END LONG VERSION ONLY SECTION
+\fi
 
 Two structures are \defn{isomorphic} provided there are homomorphisms from each to the
 other that compose to the identity. We define the following record type to represent this concept.
@@ -958,7 +917,7 @@ It is easy to prove that \ar{\au{}≅\au{}} is an equivalence relation, as follo
 \fi
 %% -----------------------------------------------------------------------------
 \paragraph*{Homomorphic images}
-We have found that the most useful way to encode the concept of \emph{homomorphic image}
+We have found that a useful way to encode the concept of \emph{homomorphic image}
 is to produce a witness, that is, a surjective hom.  Thus we define the type of surjective homs
 and also record the fact that an algebra is its own homomorphic image via the identity
 hom.\footnote{Here and elsewhere we use the shorthand \af{ov}~\ab{α} := \ab{𝒪}
@@ -993,6 +952,43 @@ If \ab{𝑨} : \af{Algebra} \ab{α} \ab{ρᵃ} is an \ab{𝑆}-algebra, then \af
 denotes the type of pairs (\ab{𝑩} \aic{,} \ab p) such that \ab{𝑩} : \ar{Algebra} \ab{β} \ab{ρᵇ}
 and \ab p is a proof that there exists a hom from \ab{𝑨} onto \ab{𝑩}.
 \fi      %%% END LONG VERSION ONLY SECTION
+
+\ab f : \ab A \aor{⟶} \ab B factors as a surjective map
+\ab{toIm} : \ab A \aor{⟶} \ab{Im} \ab f followed by an injective map \ab{fromIm} : \ab{Im} \ab f \aor{⟶} \ab B.
+
+%% -----------------------------------------------------------------------------
+\paragraph*{Factorization of homomorphisms}
+Another theorem in the \agdaalgebras library is called \af{HomFactor}; it formalizes the following factorization result: if \ab g : \af{hom}
+\ab{𝑨} \ab{𝑩}, \ab h : \af{hom} \ab{𝑨} \ab{𝑪}, \ab h is surjective, and \af{ker} \ab h
+\aof{⊆} \af{ker} \ab g, then there exists \ab{φ} : \af{hom} \ab{𝑪} \ab{𝑩} such that \ab g = \ab{φ} \aof{∘} \ab h.
+A special case of this result that we use below is the fact that the setoid function factorization we saw above %---\ab f = %: \ab A \aor{⟶} \ab B factors as a surjective map
+%\ab{fromIm} \aof{∘} \ab{toIm}---% : \ab A \aor{⟶} \ab{Im} \ab f followed by an injective map \ab{fromIm} : \ab{Im} \ab f \aor{⟶} \ab B.
+lifts to factorization of homomorphisms. Moreover, we associate a homomorphism \ab h with its image---which is (the domain of) a subalgebra of the codomain of \ab h---using the function \ab{HomIm} defined below.\footnote{The definition of \ab{HomIm} was provided by an anonymous referee; it is indeed simpler than the general \af{HomFactor} theorem.}
+
+\begin{code}
+
+module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
+
+ HomIm : (h : hom 𝑨 𝑩) → Algebra _ _
+ Domain (HomIm h) = Im ∣ h ∣
+ Interp (HomIm h) ⟨$⟩ (f , la) = (f ̂ 𝑨) la
+ cong (Interp (HomIm h)) {x1 , x2} {.x1 , y2} (_≡_.refl , e) = begin
+      ∣ h ∣ ⟨$⟩ (Interp 𝑨 ⟨$⟩ (x1 , x2))       ≈⟨ h-compatible ⟩
+      Interp 𝑩 ⟨$⟩ (x1 , λ x → ∣ h ∣ ⟨$⟩ x2 x) ≈⟨ cong (Interp 𝑩) (_≡_.refl , e)  ⟩
+      Interp 𝑩 ⟨$⟩ (x1 , λ x → ∣ h ∣ ⟨$⟩ y2 x) ≈˘⟨ h-compatible ⟩
+      ∣ h ∣ ⟨$⟩ (Interp 𝑨 ⟨$⟩ (x1 , y2)) ∎
+    where open Setoid 𝔻[ 𝑩 ]
+          open IsHom ∥ h ∥ renaming (compatible to h-compatible)
+          open SetoidReasoning 𝔻[ 𝑩 ]
+
+ toHomIm : (h : hom 𝑨 𝑩) → hom 𝑨 (HomIm h)
+ toHomIm h = (toIm ∣ h ∣) , mkhom (reflˢ 𝔻[ 𝑩 ])
+
+ fromHomIm : (h : hom 𝑨 𝑩) → hom (HomIm h) 𝑩
+ fromHomIm h = (fromIm ∣ h ∣) , mkhom (IsHom.compatible ∥ h ∥)
+\end{code}
+
+
 
 %% -----------------------------------------------------------------------------
 \subsection{Lift-Alg is an algebraic invariant}\label{sec:lift-alg}
@@ -1160,40 +1156,26 @@ Algebra.Interp (𝑻 X) ⟨$⟩ (f , ts) = node f ts
 cong (Algebra.Interp (𝑻 X)) (≡.refl , ss≃ts) = gnl ss≃ts
 \end{code}
 %% -----------------------------------------------------------------------------
-\paragraph*{Substitution, environments and interpretation of terms}
-Our formalization of these three concepts is based on code used in~\cite{Abel:2021}
-to formalize Birkhoff's completeness theorem.
-\ifshort\else
+%\paragraph*{Substitution, environments and interpretation of terms}
+\paragraph*{Environments and interpretation of terms}
 
-Recall that the domain of an algebra \ab{𝑨} is a setoid, which we denote by
-\af{𝔻[~\ab{𝑨}~]}, whose carrier is that of \ab{𝑨} (denoted \af{𝕌[~\ab{𝑨}~]})
-and whose equivalence relation represents equality of elements in \af{𝕌[~\ab{𝑨}~]}.
-\fi
-\af{Sub} performs substitution from one context to
-another; specifically, if \ab X, \ab Y are contexts, then \af{Sub} \ab X \ab Y
-assigns a term in \ab X to each symbol in \ab Y.
-
-\begin{code}
-
-Sub : Type χ → Type χ → Type _
-Sub X Y = (y : Y) → Term X
-\end{code}
-
+\begin{comment}
+Recall that the domain of an algebra \ab{𝑨} is a setoid, which we denote by \af{𝔻[~\ab{𝑨}~]}, whose carrier is that of \ab{𝑨} (denoted \af{𝕌[~\ab{𝑨}~]}) and whose equivalence relation represents equality of elements in \af{𝕌[~\ab{𝑨}~]}. \af{Sub} performs substitution from one context to another; specifically, if \ab X, \ab Y are contexts, then \af{Sub} \ab X \ab Y assigns a term in \ab X to each symbol in \ab Y.
+begin{code}
+-- Sub : Type χ → Type χ → Type _
+-- Sub X Y = (y : Y) → Term X
+end{code}
 A substitution \ab{σ} applied to a term \ab t is denoted by \af{[~\ab{σ}~]} \ab t.
-
-\begin{code}
-
-[_]_ : {X Y : Type χ} → Sub X Y → Term Y → Term X
-[ σ ] (ℊ x) = σ x
-[ σ ] (node f ts) = node f λ i → [ σ ] (ts i)
-
-\end{code}
-
+begin{code}
+-- [_]_ : {X Y : Type χ} → Sub X Y → Term Y → Term X
+-- [ σ ] (ℊ x) = σ x
+-- [ σ ] (node f ts) = node f λ i → [ σ ] (ts i)
+end{code}
+\end{comment}
 Fix a signature \ab{𝑆} and a context \ab X.
 %The next two types are defined relative to a fixed \ab{𝑆}-algebra, say, \ab{𝑨}, so
 %we place them in a submodule that takes the algebra as given.
-An \defn{environment} for \ab{𝑨} and \ab X is a setoid whose carrier is a mapping from the variable
-symbols \ab X to the domain \AgdaOperator{\AgdaFunction{𝕌[}}~\AgdaBound{𝑨}~\AgdaOperator{\AgdaFunction{]}} and whose equivalence relation is pointwise equality.
+An \defn{environment} for \ab{𝑨} and \ab X is a setoid whose carrier is a mapping from the variable symbols \ab X to the domain \AgdaOperator{\AgdaFunction{𝕌[}}~\AgdaBound{𝑨}~\AgdaOperator{\AgdaFunction{]}} and whose equivalence relation is pointwise equality. (Our formalization of this concept is the same as that of~\cite{Abel:2021}, which Abel uses to formalize Birkhoff's completeness theorem.)
 
 \begin{code}
 
@@ -1209,9 +1191,7 @@ module Environment (𝑨 : Algebra α ℓ) where
 
 \end{code}
 
-The function \af{⟦\au{}⟧} is also defined relative to the ambient algebra \ab{𝑨}
-and denotes the \defn{interpretation} of
-a term \emph{evaluated} in a particular environment.
+The function \af{⟦\au{}⟧} is also defined relative to the ambient algebra \ab{𝑨} and denotes the \defn{interpretation} of a term \emph{evaluated} in a particular environment.
 
 \begin{code}
 
@@ -1223,8 +1203,7 @@ a term \emph{evaluated} in a particular environment.
 
 \end{code}
 
-Two terms are proclaimed \defn{equal} if they are equal for all
-environments.
+Two terms are proclaimed \defn{equal} if they are equal for all environments.
 
 \begin{code}
 
@@ -1232,12 +1211,12 @@ environments.
  Equal {X = X} s t = ∀ (ρ : Carrier (Env X)) → ⟦ s ⟧ ⟨$⟩ ρ ≈ ⟦ t ⟧ ⟨$⟩ ρ
 
 \end{code}
-\ifshort
+
 Proof that \af{Equal} is an equivalence relation, and that the implication \ab
 s~\af{≃}~\ab t \as{→} \af{Equal} \ab s \ab t holds for all terms \ab s and \ab t,
-can be found in~\cite{Abel:2021} and \agdaalgebras.
-We denote the proofs of these facts by \af{EqualIsEquiv} and \af{≃→Equal} in the sequel.
-\else
+is also found in~\cite{Abel:2021}. We reproduce them here to keep the paper self-contained.
+%We denote the proofs of these facts by \af{EqualIsEquiv} and \af{≃→Equal} in the sequel.
+
 \begin{code}
  ≃→Equal : {X : Type χ}(s t : Term X) → s ≃ t → Equal s t
  ≃→Equal .(ℊ _) .(ℊ _) (rfl ≡.refl) = λ _ → refl
@@ -1248,31 +1227,23 @@ We denote the proofs of these facts by \af{EqualIsEquiv} and \af{≃→Equal} in
  reflᵉ   EqualIsEquiv = λ _        → refl
  symᵉ    EqualIsEquiv = λ x=y ρ    → sym (x=y ρ)
  transᵉ  EqualIsEquiv = λ ij jk ρ  → trans (ij ρ) (jk ρ)
-
 \end{code}
-\fi
 
-Another useful fact we will need is that substitution and evaluation commute; that is,
-applying substitution \ab{σ} to a term \ab{t}
-and evaluating the result in environment \ab{ρ} has the same effect as evaluating
-\ab{t} in the environment \as{λ} \ab x \as{→} \aof{⟦~\ab{σ}~\ab{x}~⟧}~\aofld{⟨\$⟩}
-\ab{ρ} (see~\cite{Abel:2021} or~\cite[Lem.~3.3.11]{Mitchell:1996}).
-
-\begin{code}
-
- substitution :  {X Y : Type χ} → (t : Term Y) (σ : Sub X Y) (ρ : Carrier( Env X ) )
-  →              ⟦ [ σ ] t ⟧ ⟨$⟩ ρ ≈ ⟦ t ⟧ ⟨$⟩ (λ x → ⟦ σ x ⟧ ⟨$⟩ ρ)
- substitution    (ℊ x)        σ ρ = refl
- substitution    (node f ts)  σ ρ = cong (Interp 𝑨)(≡.refl , λ i → substitution (ts i) σ ρ)
-
-\end{code}
-\ifshort\else
+\begin{comment}
+Another useful fact we will need is that substitution and evaluation commute; that is, applying substitution \ab{σ} to a term \ab{t} and evaluating the result in environment \ab{ρ} has the same effect as evaluating \ab{t} in the environment \as{λ} \ab x \as{→} \aof{⟦~\ab{σ}~\ab{x}~⟧}~\aofld{⟨\$⟩} \ab{ρ} (see~\cite{Abel:2021} or~\cite[Lem.~3.3.11]{Mitchell:1996}).
+begin{code}
+ -- substitution :  {X Y : Type χ} → (t : Term Y) (σ : Sub X Y) (ρ : Carrier( Env X ) )
+ --  →              ⟦ [ σ ] t ⟧ ⟨$⟩ ρ ≈ ⟦ t ⟧ ⟨$⟩ (λ x → ⟦ σ x ⟧ ⟨$⟩ ρ)
+ -- substitution    (ℊ x)        σ ρ = refl
+ -- substitution    (node f ts)  σ ρ = cong (Interp 𝑨)(≡.refl , λ i → substitution (ts i) σ ρ)
+end{code}
+\end{comment}
 %% -----------------------------------------------------------------------------
 \paragraph*{Compatibility of terms}
-\fi
 We need to formalize two more concepts involving terms.
 The first (\af{comm-hom-term}) is the assertion that every term commutes with every homomorphism, and
 the second (\af{interp-prod}) is the interpretation of a term in a product algebra.
+
 \begin{code}
 
 module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}(hh : hom 𝑨 𝑩) where
@@ -1361,9 +1332,9 @@ Th 𝒦 = λ (p , q) → 𝒦 ⊫ p ≈ q
 Mod : {X : Type χ} → Pred(Term X × Term X) ℓ → Pred (Algebra α ρᵃ) _
 Mod ℰ 𝑨 = ∀ {p q} → (p , q) ∈ ℰ → Equal p q where open Environment 𝑨
 \end{code}
-%% -----------------------------------------------------------------------------
-\paragraph*{Entailment}
 
+\begin{comment}
+\paragraph*{Entailment}
 If \ab{ℰ} is a set of identities and \ab{p} and \ab{q} are terms,
 we say that \ab{ℰ} \defn{entails} \ab{p}~\aof{≈}~\ab{q} and write
 \ab{ℰ}~\ad{⊢}~\ab{p}~\ad{≈}~\ab{q} just in case every model of \ab{ℰ} also models
@@ -1371,28 +1342,12 @@ we say that \ab{ℰ} \defn{entails} \ab{p}~\aof{≈}~\ab{q} and write
 We base our definition of \defn{entailment type} on the one in~\cite{Abel:2021}.  It contains cases for representing hypotheses, congruence of term
 application, that substitution respects entailment, and that entailment is
 an equivalence.
+begin{code}
+end{code}
+The fact that this represents the informal semantic notion of entailment given earlier is called \defn{soundness} and \defn{completeness}. More precisely, \defn{the entailment type is sound} means that \ab{ℰ}~\ad{⊢}~\ab{X}~\ad{▹}~\ab p~\ad{≈}~\ab q only if \ab p \aof{≈} \ab q in every model of \ab{ℰ}. \defn{The entailment type is complete} means \ab p \aof{≈} \ab q in every model of \ab{ℰ} only if \ab{ℰ}~\ad{⊢}~\ab{X}~\ad{▹}~\ab p~\aof{≈}~\ab q.
+We will use soundness of entailment only once below~(by the name \af{sound}), so we omit its proof (but see~\cite{Abel:2021} for details).
+\end{comment}
 
-\begin{code}
-
-
-\end{code}
-
-The fact that this represents the informal semantic notion of entailment
-given earlier is called \defn{soundness} and
-\defn{completeness}.
-More precisely, \defn{the entailment type is sound} means that
-\ab{ℰ}~\ad{⊢}~\ab{X}~\ad{▹}~\ab p~\ad{≈}~\ab q only if \ab p \aof{≈} \ab q in
-every model of \ab{ℰ}.
-\defn{The entailment type is complete} means
-\ab p \aof{≈} \ab q in every model of \ab{ℰ} only if \ab{ℰ}~\ad{⊢}~\ab{X}~\ad{▹}~\ab p~\aof{≈}~\ab q.
-We will use soundness of entailment only once below%
-\ifshort
-~(by the name \af{sound}), so we omit its proof (but see~\cite{Abel:2021} for details).
-%or~\cite{DeMeo:2021}.
-\else
-; nonetheless, here is its formalization (essentially due to Abel, \textit{op. cit.}):
-
-\fi
 %% -----------------------------------------------------------------------------
 \paragraph*{The Closure Operators H, S, P and V}
 Fix a signature \ab{𝑆}, let \ab{𝒦} be a class of \ab{𝑆}-algebras, and define
@@ -1430,6 +1385,7 @@ module _ {α ρᵃ β ρᵇ : Level} where
 
  P : ∀ ℓ ι → Pred(Algebra α ρᵃ) (a ⊔ ov ℓ) → Pred(Algebra β ρᵇ) _
  P _ ι 𝒦 𝑩 = Σ[ I ∈ Type ι ] (Σ[ 𝒜 ∈ (I → Algebra α ρᵃ) ] (∀ i → 𝒜 i ∈ 𝒦) × (𝑩 ≅ ⨅ 𝒜))
+
 \end{code}
 
 A \emph{variety} is a class of \ab{𝑆}-algebras that is closed under the taking of
@@ -1439,11 +1395,9 @@ homomorphic images, subalgebras, and arbitrary products.
 %If \ab{𝒦} is a class of \ab{𝑆}-algebras, then
 If we define \af V \ab{𝒦} := \af H (\af S (\af P \ab{𝒦})), then \ab{𝒦} is a variety iff \af V \ab{𝒦} \aof{⊆} \ab{𝒦}.
 %(The converse inclusion holds by virtue of the fact that \af V is a composition of closure operators.)
-The class \af{V}~\ab{𝒦} is called
-the \defn{varietal closure} of \ab{𝒦}.
-
-Here is how we define \af{V} in type theory.
+The class \af{V}~\ab{𝒦} is called the \defn{varietal closure} of \ab{𝒦}. Here is how we define \af{V} in type theory.
 (The explicit universe level declarations that appear in the definition are needed for disambiguation.)
+
 \begin{code}
 
 module _  {α ρᵃ β ρᵇ γ ρᶜ δ ρᵈ : Level} where
@@ -1473,6 +1427,7 @@ module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}(𝑩 : Algebra β ρᵇ)(p q : T
          open SetoidReasoning 𝔻[ 𝑩 ]
 
 \end{code}
+
 Identities modeled by an algebra \ab{𝑨} are also modeled by every homomorphic image of
 \ab{𝑨} and by every subalgebra of \ab{𝑨}.
 \ifshort
@@ -2075,7 +2030,7 @@ Our use of setoids introduces nothing new: all the equivalence relations we
 use were already present in the classical proofs. The only ``new'' material is
 that we have to prove that functions respect those equivalences.
 
-The inconsistency in our first effort to formalize Birkhoff's theorem was due to careless handling of the type \ab X of variable symbols.  Specifically, we had allowed \ab X to be any type whatever. Informally, \ab X is a ``sufficiently large'' collection of variable symbols and, in our first formal statement of Birkhoff's theorem, we made the following assumption: (h1) there exist surjections from \ab X to the domain of every algebra in the class under consideration.  Informally, this isn't a problem if we think of (h1) as implicitly requiring that \ab X be a type such that such surjections could exist.  Technically, however, one can derive a contradiction from (h1) by exploiting the freedom to choose \ab X arbitrarily.  Indeed, one could insist that \ab X be the empty type \ab{⊥} and take the one-element \ab{𝑆}-algebra \ab{𝑨}. By (h1), there is a surjective map from \ab{⊥} onto \ab{𝑨}, which is clearly a contradiction.  (See the \am{Demos.ContraX} module for more details.)
+The inconsistency in our first effort to formalize Birkhoff's theorem was due to careless handling of the type \ab X of variable symbols.  Specifically, we had allowed \ab X to be any type whatever. Informally, \ab X is a ``sufficiently large'' collection of variable symbols and, in our first formal statement of Birkhoff's theorem, we made the following assumption: (h1) there exist surjections from \ab X to the domain of every algebra in the class under consideration.  Informally, this isn't a problem if we view (h1) as implicitly requiring that \ab X be a type for which such surjections could possibly exist.  Technically, however, by exploiting the freedom to choose \ab X arbitrarily, a contradiction can be contrived.  Specifically, if we take \ab X to be the empty type and take the one-element \ab{𝑆}-algebra. By (h1), there is a surjective map from the empty type to a nonempty type, which is clearly a contradiction. (See the \href{https://github.com/ualib/agda-algebras/blob/master/src/Demos/ContraX.lagda}{\am{Demos.ContraX}} module in the \agdaalgebrasrepo repository for the formal counterexample.)
 
 %% -----------------------------------------------------------------------------
 \section{Related work}
