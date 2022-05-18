@@ -19,7 +19,7 @@ suffered from two flaws.\footnote{See the
  Jan 2021 commit 71f1738})~\cite{ualib_v1.0.0}.}
 First, we assumed function extensionality in \mltt; consequently, it was unclear whether the formalization was fully constructive.  Second, an inconsistency could be
 contrived by taking the type \ab{X}, representing an arbitrary collection of
-variable symbols, to be the two element type.  To resolve these issues, we developed a new formalization of the HSP theorem based on \textit{setoids} and rewrote much of the \agdaalgebras library to support this approach.  This enabled us to avoid function extensionality altogether.  Moreover, the type \ab{X} of variable symbols was treated with more care using the \textit{context} and \textit{environment} types that Andreas Abel uses in~\cite{Abel:2021} to formalize Birkhoff's completeness theorem. These design choices are discussed further in §\ref{setoids}--\ref{setoid-functions}.
+variable symbols, to be the two element type (see §\ref{sec:discuss} for details).  To resolve these issues, we developed a new formalization of the HSP theorem based on \textit{setoids} and rewrote much of the \agdaalgebras library to support this approach.  This enabled us to avoid function extensionality altogether.  Moreover, the type \ab{X} of variable symbols was treated with more care using the \textit{context} and \textit{environment} types that Andreas Abel uses in~\cite{Abel:2021} to formalize Birkhoff's completeness theorem. These design choices are discussed further in §\ref{setoids}--\ref{setoid-functions}.
 
 What follows is a self-contained formal proof of the HSP theorem in \agda.
 %\footnote{The proof presented here is based on \agdaalgebras, ver.~2.0.1~\cite{ualib_v2.0.1}, \agda ver.2.6.2 a%nd \agdastdlib ver.1.7.}
@@ -2182,6 +2182,9 @@ always taken from a bounded (but arbitrary) universe.
 Our use of setoids introduces nothing new: all the equivalence relations we
 use were already present in the classical proofs. The only ``new'' material is
 that we have to prove that functions respect those equivalences.
+
+The inconsistency in our first effort to formalize Birkhoff's theorem was due to careless handling of the type \ab X of variable symbols.  Specifically, we had allowed \ab X to be any type whatever. Informally, \ab X is a ``sufficiently large'' collection of variable symbols and, in our first formal statement of Birkhoff's theorem, we made the following assumption: (h1) there exist surjections from \ab X to the domain of every algebra in the class under consideration.  Informally, this isn't a problem if we think of (h1) as implicitly requiring that \ab X be a type such that such surjections could exist.  Technically, however, one can derive a contradiction from (h1) by exploiting the freedom to choose \ab X arbitrarily.  Indeed, one could insist that \ab X be the empty type \ab{⊥} and take the one-element \ab{𝑆}-algebra \ab{𝑨}. By (h1), there is a surjective map from \ab{⊥} onto \ab{𝑨}, which is clearly a contradiction.  (See the \am{Demos.ContraX} module for more details.)
+
 %% -----------------------------------------------------------------------------
 \section{Related work}
 There have been a number of efforts to formalize parts of universal algebra in

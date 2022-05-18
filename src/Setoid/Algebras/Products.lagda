@@ -35,7 +35,7 @@ open IsEquivalence  using ()                 renaming ( refl to reflE ; sym to s
 -- Imports from agda-algebras -----------------------------------------------------
 open import Base.Overture.Preliminaries    using ( ∣_∣; ∥_∥)
 open import Base.Overture.Surjective       using ( proj ; projIsOnto ) renaming ( IsSurjective to onto )
-open import Setoid.Algebras.Basic {𝑆 = 𝑆}  using ( ⟦_⟧ ; Algebra ; _̂_ ; ov ; 𝕌[_])
+open import Setoid.Algebras.Basic {𝑆 = 𝑆}  using ( Algebra ; _̂_ ; ov ; 𝕌[_])
 
 private variable α ρ ι : Level
 

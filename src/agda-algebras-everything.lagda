@@ -302,7 +302,7 @@ open import
 
 -- SETOID.ALGEBRAS --------------------------------------------------------------------------
 open import
- Setoid.Algebras.Basic       using ( ov ; EqArgs ; ⟦_⟧ ; Algebra ; 𝕌[_] ; 𝔻[_]              )
+ Setoid.Algebras.Basic       using ( ov ; EqArgs ; ⟨_⟩ ; Algebra ; 𝕌[_] ; 𝔻[_]              )
                              using ( Level-of-Alg ; Level-of-Carrier ; _̂_ ; Lift-Algˡ        )
                              using ( Lift-Algʳ ; Lift-Alg                                    )
 open import
