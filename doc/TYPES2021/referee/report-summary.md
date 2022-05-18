@@ -1,6 +1,6 @@
-## Consolidated summary of issues raised by referees
+## Consolidated summary of issues raised by the referees
 
-### Review 1
+### Issues raised by Referee 1 (paraphrased)
 
 1.  Some paragraphs explaining specific coding choice should be expanded a bit.
 
@@ -29,11 +29,10 @@
 
 4.  Some links are broken (e.g. in [8]); some footnotes need to have first letters capitalised.
 
-    (done; fixed links)
+    (done; fixed links; capitalized some footnotes, with the exception of relative clauses which should not be punctuated)
 
 
-
-#### Response to Review 1
+#### Responses to issues raised by Referee 1
 
 *  **Point 1**  
    Discussions of coding choices were expanded.
@@ -59,7 +58,7 @@
 
 ------------------------------
 
-### Review 2
+### Issues raised by Referee 2
 
 1.  Some definitions and proofs look unnecessary and therefore lack motivation. In particular,
 
@@ -80,9 +79,6 @@
        product may not exist. Fortunately, it's also a subproduct of the algebras in \{ 𝑻(X)/Θ \}, because 
        any hom factors as an epimorphism followed by a monomorphism, so that x ≈ y iff for any epimorphism 
        f into an element of S 𝒦, f x = f y.
-
-    **XXXXXXXX** YET TO DO: though we address this below, maybe should add a sentence or two in the paper **XXXXXXXX**
-
 
 2.  Some links are broken, in particular in the footnotes~~ (https://ualib.github.io/..), or in the 
     bibliography item [8] (link to arxiv).
@@ -158,7 +154,7 @@
      of the algebras more confusing, since it follows obviously from the first definition and 
      not the second.
      
-     (done; the offending definition was relegated to a minor footnote)
+     (done; we present only one of the definitions now)
 
 11.  > Evidently, F[ X ] is a subdirect product of the algebras in {T X / Theta },
      > where Theta ranges over congruences modulo which T X belongs to S K. Thus, 
@@ -197,7 +193,7 @@
      (done; see responses to **point 1** above)
 
 
-#### Response to Review 2
+#### Responses to issues raised by Referee 2
 
 *  **point 1** (bullet point 1)
    Our initial proof attempt was very similar to what the referee is suggesting. However, we switched to 
@@ -209,9 +205,9 @@
    Mod (Th K) proved exceedingly difficult. It was the hardest part of the formalization of the 
    HSP theorem. The suggestions of the referee concerning this point out (correctly) that in 
    theory it's easy to show the F's they suggest are in S (P K). However, formalizing this turns 
-   out to be hard. We made many, many attempts at getting all parts of the proof to work and 
+   out to be hard. We made many attempts at getting all parts of the proof to work and 
    type-check, and the result presented in the paper is the most straightforward one we could 
-   find.  Nonetheless, we did improve the presentation of the text surrounding the code, as 
+   come up with.  Nonetheless, we did completely rewrite the section of the text surrounding the code, as 
    mentioned in the other responses, and hopefully this helps to clarify the potentially confusing 
    parts of the formalization.
 
@@ -246,11 +242,12 @@
 *  **point 13** It is, indeed, equality, but that fact is not needed for the proof, so we feel justified 
    in leaving this part of the development unchanged.
 
-
 *  **point 14** (see responses to **point 1** above)
 
 
-### Review 3
+----------------------------------------------------------
+
+#### Issues raised by Referee 3
 
 1.  (p. 1) We mention flaws of our previous attempt. It's perplexing that we say it was a proof but 
     also say that the assumptions made lead to a contradiction. Can we explain the nature of the 
@@ -296,7 +293,8 @@
 7.  (p. 14, 15) It would be informative to mention how are quotients defined in `agda-algebras`. 
     Are they obtained by changing the equivalence relation of the setoid?
 
-    (unchanged; please see comments below)
+    (yes; comment "As we are using setoids, this can be done by changing the equivalence relation
+used to be as defined above." added)
 
 8.  (p. 16) It might be useful to explain (in a footnote?) what is `HomReduct`
 
@@ -315,7 +313,7 @@
 11.  (p. 7) When we describe the compatibility condition we have an agda expression different from 
      the definition. Are they equivalent? The expression in the explanation is unclear. (What is `(a _)`?)
      
-     (fixed; added footnote to explain what the shorthand `(a _)` means)
+     (fixed; removed the shorthand `(a _)` and replaced it with the syntactically correct expression)
 
 12.  (p. 10) "relative a fixed algebra..." should be "relative to a fixed algebra..."
 
@@ -328,7 +326,8 @@
 14.  (p. 20) The arXiv link for the reference [8] is incorrect (2101. is repeated).~~
 
 
-#### Response to Review 3
+#### Responses to issues raised by Referee 3
+
 
 *  **point 1**. We now refer to the first version of the library and its application to Birkhoff's 
    Theorem as an "attempted proof" or just a "formalization."
@@ -363,11 +362,14 @@
 *  ** point 7** Quotients are now "automatic" in a sense, since we use setoids which carry the equivalence
    relation around with them. In this sense, every setoid represents a quotient type.
    
-   **XXXXXXXX** YET TO DO: maybe we should add this remark in the paper somewhere. **XXXXXXXX**
+   A clarifying sentence was added to the paper.
 
 *  **point 8** Added an explanation in a footnote.
 
-*  **point 9** YET TO DO.
+*  **point 9** We elide this question in the informal treatment, as well as in the first part of the formal
+   treatment, where we define a "parametric" free algebra (which takes X as an argument), but the referee 
+   is correct that, eventually, we must construct an `X` that works for the concrete case of Birkhoff's
+   theorem. We do this not using Σ[ A ∈ K] U⟦ A ⟧, but essentially we use Σ[ A ∈ (S K)] U⟦ A ⟧.
 
 *  **point 10** Added a sentence after the code clarifying this.
 
