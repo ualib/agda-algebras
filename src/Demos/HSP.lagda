@@ -969,20 +969,20 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
  HomIm : (h : hom 𝑨 𝑩) → Algebra _ _
  Domain (HomIm h) = Im ∣ h ∣
  Interp (HomIm h) ⟨$⟩ (f , la) = (f ̂ 𝑨) la
- cong (Interp (HomIm h)) {x1 , x2} {.x1 , y2} (_≡_.refl , e) = begin
-      ∣ h ∣ ⟨$⟩ (Interp 𝑨 ⟨$⟩ (x1 , x2))       ≈⟨ h-compatible ⟩
-      Interp 𝑩 ⟨$⟩ (x1 , λ x → ∣ h ∣ ⟨$⟩ x2 x) ≈⟨ cong (Interp 𝑩) (_≡_.refl , e)  ⟩
-      Interp 𝑩 ⟨$⟩ (x1 , λ x → ∣ h ∣ ⟨$⟩ y2 x) ≈˘⟨ h-compatible ⟩
-      ∣ h ∣ ⟨$⟩ (Interp 𝑨 ⟨$⟩ (x1 , y2)) ∎
-    where open Setoid 𝔻[ 𝑩 ]
+ cong (Interp (HomIm h)) {x1 , x2} {.x1 , y2} (≡.refl , e) =
+  begin
+      ∣ h ∣  ⟨$⟩         (Interp 𝑨  ⟨$⟩ (x1 , x2))  ≈⟨ h-compatible                  ⟩
+   Interp 𝑩  ⟨$⟩ (x1 , λ x → ∣ h ∣  ⟨$⟩ x2 x)       ≈⟨ cong (Interp 𝑩) (≡.refl , e)  ⟩
+   Interp 𝑩  ⟨$⟩ (x1 , λ x → ∣ h ∣  ⟨$⟩ y2 x)       ≈˘⟨ h-compatible                 ⟩
+      ∣ h ∣  ⟨$⟩         (Interp 𝑨  ⟨$⟩ (x1 , y2))  ∎
+   where  open Setoid 𝔻[ 𝑩 ] ; open SetoidReasoning 𝔻[ 𝑩 ]
           open IsHom ∥ h ∥ renaming (compatible to h-compatible)
-          open SetoidReasoning 𝔻[ 𝑩 ]
 
  toHomIm : (h : hom 𝑨 𝑩) → hom 𝑨 (HomIm h)
- toHomIm h = (toIm ∣ h ∣) , mkhom (reflˢ 𝔻[ 𝑩 ])
+ toHomIm h = toIm ∣ h ∣ , mkhom (reflˢ 𝔻[ 𝑩 ])
 
  fromHomIm : (h : hom 𝑨 𝑩) → hom (HomIm h) 𝑩
- fromHomIm h = (fromIm ∣ h ∣) , mkhom (IsHom.compatible ∥ h ∥)
+ fromHomIm h = fromIm ∣ h ∣ , mkhom (IsHom.compatible ∥ h ∥)
 \end{code}
 
 
@@ -1187,7 +1187,6 @@ module Environment (𝑨 : Algebra α ℓ) where
                                            ; trans  = λ g h x  → trans (g x)(h x) }}
 
 \end{code}
-
 The \defn{interpretation} of a term \emph{evaluated} in a particular environment is defined as follows.
 
 \begin{code}
@@ -1199,7 +1198,6 @@ The \defn{interpretation} of a term \emph{evaluated} in a particular environment
  cong ⟦ node f args ⟧ x≈y  = cong (Interp 𝑨)(≡.refl , λ i → cong ⟦ args i ⟧ x≈y )
 
 \end{code}
-
 Two terms are proclaimed \defn{equal} if they are equal for all environments.
 
 \begin{code}
@@ -1208,8 +1206,7 @@ Two terms are proclaimed \defn{equal} if they are equal for all environments.
  Equal {X = X} s t = ∀ (ρ : Carrier (Env X)) → ⟦ s ⟧ ⟨$⟩ ρ ≈ ⟦ t ⟧ ⟨$⟩ ρ
 
 \end{code}
-
-\noindent Proof that \af{Equal} is an equivalence relation, and that the implication \ab
+Proof that \af{Equal} is an equivalence relation, and that the implication \ab
 s~\af{≃}~\ab t \as{→} \af{Equal} \ab s \ab t holds for all terms \ab s and \ab t,
 is also found in~\cite{Abel:2021}.
 \ifshort
@@ -1320,7 +1317,25 @@ In Emacs \texttt{agda2-mode}, the symbol \af{⊨} is produced by typing
  𝑨 ⊨ ℰ = ∀ {p q} → (p , q) ∈ ℰ → Equal p q where open Environment 𝑨
 
 \end{code}
+An important property of the binary relation \aof{⊧} is \emph{algebraic invariance} (i.e.,
+invariance under isomorphism).  We formalize this result as follows.
 
+\begin{code}
+
+module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}(𝑩 : Algebra β ρᵇ)(p q : Term X) where
+ ⊧-I-invar : 𝑨 ⊧ p ≈ q  →  𝑨 ≅ 𝑩  →  𝑩 ⊧ p ≈ q
+ ⊧-I-invar Apq (mkiso fh gh f∼g g∼f) ρ = begin
+  ⟦ p ⟧     ⟨$⟩             ρ    ≈˘⟨  cong ⟦ p ⟧ (f∼g ∘ ρ)        ⟩
+  ⟦ p ⟧     ⟨$⟩ (f ∘  (g ∘  ρ))  ≈˘⟨  comm-hom-term fh p (g ∘ ρ)  ⟩
+  f(⟦ p ⟧ᴬ  ⟨$⟩       (g ∘  ρ))  ≈⟨   cong ∣ fh ∣ (Apq (g ∘ ρ))   ⟩
+  f(⟦ q ⟧ᴬ  ⟨$⟩       (g ∘  ρ))  ≈⟨   comm-hom-term fh q (g ∘ ρ)  ⟩
+  ⟦ q ⟧     ⟨$⟩ (f ∘  (g ∘  ρ))  ≈⟨   cong ⟦ q ⟧ (f∼g ∘ ρ)        ⟩
+  ⟦ q ⟧     ⟨$⟩             ρ    ∎
+  where  private f = _⟨$⟩_ ∣ fh ∣ ; g = _⟨$⟩_ ∣ gh ∣
+         open Environment 𝑨  using () renaming ( ⟦_⟧ to ⟦_⟧ᴬ )
+         open Environment 𝑩  using ( ⟦_⟧ ) ; open SetoidReasoning 𝔻[ 𝑩 ]
+
+\end{code}
 If \ab{𝒦} is a class of \ab{𝑆}-algebras, the set of identities modeled by \ab{𝒦}, denoted \af{Th}~\ab{𝒦}, is called the \defn{equational theory} of \ab{𝒦}. If \ab{ℰ} is a set of \ab{𝑆}-term identities,
 the class of algebras modeling \ab{ℰ}, denoted \af{Mod}~\ab{ℰ}, is called the \defn{equational class axiomatized} by \ab{ℰ}. We codify these notions in the next two definitions.
 
@@ -1387,47 +1402,6 @@ module _ {α ρᵃ β ρᵇ : Level} where
  P _ ι 𝒦 𝑩 = Σ[ I ∈ Type ι ] (Σ[ 𝒜 ∈ (I → Algebra α ρᵃ) ] (∀ i → 𝒜 i ∈ 𝒦) × (𝑩 ≅ ⨅ 𝒜))
 
 \end{code}
-
-A \emph{variety} is a class of \ab{𝑆}-algebras that is closed under the taking of
-homomorphic images, subalgebras, and arbitrary products.
-%To represent varieties
-%we define composable types representing \af H, \af S, and \af P and we define the type \af V to be the compos%ition of all three.
-%If \ab{𝒦} is a class of \ab{𝑆}-algebras, then
-If we define \af V \ab{𝒦} := \af H (\af S (\af P \ab{𝒦})), then \ab{𝒦} is a variety iff \af V \ab{𝒦} \aof{⊆} \ab{𝒦}.
-%(The converse inclusion holds by virtue of the fact that \af V is a composition of closure operators.)
-The class \af{V}~\ab{𝒦} is called the \defn{varietal closure} of \ab{𝒦}. Here is how we define \af{V} in type theory.
-(The explicit universe level declarations that appear in the definition are needed for disambiguation.)
-
-\begin{code}
-
-module _  {α ρᵃ β ρᵇ γ ρᶜ δ ρᵈ : Level} where
- private a = α ⊔ ρᵃ ; b = β ⊔ ρᵇ
- V : ∀ ℓ ι → Pred(Algebra α ρᵃ) (a ⊔ ov ℓ) →  Pred(Algebra δ ρᵈ) _
- V ℓ ι 𝒦 = H{γ}{ρᶜ}{δ}{ρᵈ} (a ⊔ b ⊔ ℓ ⊔ ι) (S{β}{ρᵇ} (a ⊔ ℓ ⊔ ι) (P ℓ ι 𝒦))
-
-\end{code}
-
-An important property of the binary relation \aof{⊧} is \emph{algebraic invariance} (i.e.,
-invariance under isomorphism).  We formalize this result as follows.
-
-\begin{code}
-
-module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}(𝑩 : Algebra β ρᵇ)(p q : Term X) where
- ⊧-I-invar : 𝑨 ⊧ p ≈ q  →  𝑨 ≅ 𝑩  →  𝑩 ⊧ p ≈ q
- ⊧-I-invar Apq (mkiso fh gh f∼g g∼f) ρ = begin
-  ⟦ p ⟧     ⟨$⟩             ρ    ≈˘⟨  cong ⟦ p ⟧ (f∼g ∘ ρ)        ⟩
-  ⟦ p ⟧     ⟨$⟩ (f ∘  (g ∘  ρ))  ≈˘⟨  comm-hom-term fh p (g ∘ ρ)  ⟩
-  f(⟦ p ⟧ᴬ  ⟨$⟩       (g ∘  ρ))  ≈⟨   cong ∣ fh ∣ (Apq (g ∘ ρ))   ⟩
-  f(⟦ q ⟧ᴬ  ⟨$⟩       (g ∘  ρ))  ≈⟨   comm-hom-term fh q (g ∘ ρ)  ⟩
-  ⟦ q ⟧     ⟨$⟩ (f ∘  (g ∘  ρ))  ≈⟨   cong ⟦ q ⟧ (f∼g ∘ ρ)        ⟩
-  ⟦ q ⟧     ⟨$⟩             ρ    ∎
-  where  private f = _⟨$⟩_ ∣ fh ∣ ; g = _⟨$⟩_ ∣ gh ∣
-         open Environment 𝑨  using () renaming ( ⟦_⟧ to ⟦_⟧ᴬ )
-         open Environment 𝑩  using ( ⟦_⟧ )
-         open SetoidReasoning 𝔻[ 𝑩 ]
-
-\end{code}
-
 Identities modeled by an algebra \ab{𝑨} are also modeled by every homomorphic image of
 \ab{𝑨} and by every subalgebra of \ab{𝑨}.
 \ifshort
@@ -1491,6 +1465,27 @@ module _ {X : Type χ}{I : Type ℓ}(𝒜 : I → Algebra α ρᵃ){p q : Term X
 
 \end{code}
 \fi
+
+A \emph{variety} is a class of \ab{𝑆}-algebras that is closed under the taking of
+homomorphic images, subalgebras, and arbitrary products.
+%To represent varieties
+%we define composable types representing \af H, \af S, and \af P and we define the type \af V to be the compos%ition of all three.
+%If \ab{𝒦} is a class of \ab{𝑆}-algebras, then
+If we define \af V \ab{𝒦} := \af H (\af S (\af P \ab{𝒦})), then \ab{𝒦} is a variety iff \af V \ab{𝒦} \aof{⊆} \ab{𝒦}.
+%(The converse inclusion holds by virtue of the fact that \af V is a composition of closure operators.)
+The class \af{V}~\ab{𝒦} is called the \defn{varietal closure} of \ab{𝒦}. Here is how we define \af{V} in type theory.
+(The explicit universe level declarations that appear in the definition are needed for disambiguation.)
+
+\begin{code}
+
+module _  {α ρᵃ β ρᵇ γ ρᶜ δ ρᵈ : Level} where
+ private a = α ⊔ ρᵃ ; b = β ⊔ ρᵇ
+ V : ∀ ℓ ι → Pred(Algebra α ρᵃ) (a ⊔ ov ℓ) →  Pred(Algebra δ ρᵈ) _
+ V ℓ ι 𝒦 = H{γ}{ρᶜ}{δ}{ρᵈ} (a ⊔ b ⊔ ℓ ⊔ ι) (S{β}{ρᵇ} (a ⊔ ℓ ⊔ ι) (P ℓ ι 𝒦))
+
+\end{code}
+
+
 
 The classes \af H \ab{𝒦}, \af S \ab{𝒦}, \af P \ab{𝒦}, and \af V \ab{𝒦} all satisfy the
 same term identities.  We will only use a subset of the inclusions needed to prove this
@@ -1653,18 +1648,18 @@ Furthermore, Since \ab{ℰ} \aod{⊢} \ab X \aod{▹\au{}≈\au{}} is a congruen
 \begin{code}
 
 module FreeAlgebra (𝒦 : Pred (Algebra α ρᵃ) ℓ) where
+ private c = α ⊔ ρᵃ ; ι = ov c ⊔ ℓ
 
- ℑ : {χ : Level} → Type χ → Type _
-   -- not S K but K directly
+ ℑ : {χ : Level} → Type χ → Type (ι ⊔ χ)
  ℑ X = Σ[ 𝑨 ∈ Algebra α ρᵃ ] 𝑨 ∈ 𝒦 × (X → 𝕌[ 𝑨 ])
 
- 𝑪 : {χ : Level} → Type χ → Algebra _ _
+ 𝑪 : {χ : Level} → Type χ → Algebra (ι ⊔ χ)(ι ⊔ χ)
  𝑪 X = ⨅ {I = ℑ X} ∣_∣
 
  homC : (X : Type χ) → hom (𝑻 X) (𝑪 X)
  homC X = ⨅-hom-co _ (λ i → lift-hom (snd ∥ i ∥))
 
- 𝔽[_] : {χ : Level} → Type χ → Algebra (ov χ) _
+ 𝔽[_] : {χ : Level} → Type χ → Algebra (ov χ) (ι ⊔ χ)
  𝔽[_] X = HomIm (homC X)
 
 \end{code}
@@ -1681,12 +1676,12 @@ is then defined as follows.%
 \begin{code}
 
 module FreeHom {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
- private c = α ⊔ ρᵃ ⊔ ℓ ; ι = ov c
+ private c = α ⊔ ρᵃ ; ι = ov c ⊔ ℓ
  open FreeAlgebra 𝒦 using ( 𝔽[_] ; homC )
 
  epiF[_] : (X : Type c) → epi (𝑻 X) 𝔽[ X ]
- epiF[ X ] = ∣ toHomIm (homC X) ∣ , record { isHom = ∥ toHomIm (homC X) ∥
-                 ; isSurjective = toIm-surj ∣ homC X ∣ }
+ epiF[ X ] = ∣ toHomIm (homC X) ∣ , record  { isHom = ∥ toHomIm (homC X) ∥
+                                            ; isSurjective = toIm-surj ∣ homC X ∣ }
 
  homF[_] : (X : Type c) → hom (𝑻 X) 𝔽[ X ]
  homF[ X ] = IsEpi.HomReduct ∥ epiF[ X ] ∥
@@ -1703,36 +1698,33 @@ then there exists an epimorphism from \Free{A} onto \ab{𝑨}.
 module _ {𝑨 : Algebra (α ⊔ ρᵃ ⊔ ℓ)(α ⊔ ρᵃ ⊔ ℓ)}{𝒦 : Pred(Algebra α ρᵃ)(α ⊔ ρᵃ ⊔ ov ℓ)} where
  private c = α ⊔ ρᵃ ⊔ ℓ ; ι = ov c
  open FreeAlgebra 𝒦 using ( 𝔽[_] ; 𝑪 )
- open Setoid 𝔻[ 𝑨 ] using ( refl ; sym ; trans ) renaming ( Carrier to A )
-
+ open Setoid 𝔻[ 𝑨 ] using ( refl ; sym ; trans ) renaming ( Carrier to A ; _≈_ to _≈ᴬ_ )
 
  F-ModTh-epi : 𝑨 ∈ Mod (Th 𝒦) → epi 𝔽[ A ]  𝑨
  F-ModTh-epi A∈ModThK = φ , isEpi where
-  open FreeHom {ℓ = ℓ} {𝒦}
-  open Environment 𝑨 using (⟦_⟧)
+
   φ : 𝔻[ 𝔽[ A ] ] ⟶ 𝔻[ 𝑨 ]
   _⟨$⟩_ φ            = free-lift{𝑨 = 𝑨} id
-  cong φ {p} {q} pq  = let open SetoidReasoning 𝔻[ 𝑨 ] in begin
-   free-lift id p  ≈˘⟨ free-lift-interp {𝑨 = 𝑨} id p   ⟩
-   ⟦ p ⟧ ⟨$⟩ id    ≈⟨ A∈ModThK {p = p} {q} lift-pq id  ⟩
-   ⟦ q ⟧ ⟨$⟩ id    ≈⟨ free-lift-interp {𝑨 = 𝑨} id q    ⟩
-   free-lift id q  ∎
+  cong φ {p} {q} pq  = Goal
    where
    lift-pq : (p , q) ∈ Th 𝒦
    lift-pq 𝑩 x ρ = begin
-    ⟦ p ⟧ᴮ ⟨$⟩ ρ   ≈⟨ free-lift-interp {𝑨 = 𝑩} ρ p  ⟩
+    ⟦ p ⟧ ⟨$⟩ ρ    ≈⟨ free-lift-interp {𝑨 = 𝑩} ρ p  ⟩
     free-lift ρ p  ≈⟨ pq (𝑩 , x , ρ)                ⟩
     free-lift ρ q  ≈˘⟨ free-lift-interp{𝑨 = 𝑩} ρ q  ⟩
-    ⟦ q ⟧ᴮ ⟨$⟩ ρ   ∎
-    where
-    open SetoidReasoning 𝔻[ 𝑩 ]
-    open Environment 𝑩 renaming (⟦_⟧ to ⟦_⟧ᴮ)
+    ⟦ q ⟧ ⟨$⟩ ρ    ∎
+     where open SetoidReasoning 𝔻[ 𝑩 ] ; open Environment 𝑩 using ( ⟦_⟧ )
 
+   Goal : free-lift id p ≈ᴬ free-lift id q
+   Goal = begin
+    free-lift id p  ≈˘⟨ free-lift-interp {𝑨 = 𝑨} id p   ⟩
+    ⟦ p ⟧ ⟨$⟩ id    ≈⟨ A∈ModThK {p = p} {q} lift-pq id  ⟩
+    ⟦ q ⟧ ⟨$⟩ id    ≈⟨ free-lift-interp {𝑨 = 𝑨} id q    ⟩
+    free-lift id q  ∎
+     where open SetoidReasoning 𝔻[ 𝑨 ] ; open Environment 𝑨 using ( ⟦_⟧ )
 
   isEpi : IsEpi 𝔽[ A ] 𝑨 φ
-  compatible (isHom isEpi) = refl
-  isSurjective isEpi {y} = eq (ℊ y) refl
-
+  isEpi = record { isHom = mkhom refl ; isSurjective = eq (ℊ _) refl }
 
  F-ModThV-epi : 𝑨 ∈ Mod (Th (V ℓ ι 𝒦)) → epi 𝔽[ A ]  𝑨
  F-ModThV-epi A∈ModThVK = F-ModTh-epi λ {p}{q} → Goal {p}{q}
@@ -2030,12 +2022,11 @@ that we have to prove that functions respect those equivalences.
 
 Our first attempt to formalize Birkhoff's theorem was not sufficiently
 careful in its handling of variable symbols \ab X. Specifically, this
-type was unconstrained; it is meant to represent the informal notion of a ``sufficiently large'' collection of variable symbols. Consequently, we postulated that there exists surjections from \ab X to the
-domains of all algebras in the class under consideration. The
-quantifiers are in the wrong order! By choosing a small \ab X (such as
-the empty type \ab{⊥}), then for a signature \ab{𝑆} and a one-element
-\ab{𝑆}-algebra \ab{𝑨}, our surjectivity postulate gives a map from \ab{⊥} onto
-\ab{𝑨}. (For more details, see the \href{https://github.com/ualib/agda-algebras/blob/master/src/Demos/ContraX.lagda}{\am{Demos.ContraX}} module which constructs the counterexample in \agda.)
+type was unconstrained; it is meant to represent the informal notion of a ``sufficiently large'' collection of variable symbols. Consequently, we postulated surjections from \ab X onto the
+domains of all algebras in the class under consideration.
+%The quantifiers were in the wrong order!
+But then, given a signature \ab{𝑆} and a one-element \ab{𝑆}-algebra \ab{𝑨},
+by choosing \ab X to be the empty type \ab{⊥}, our surjectivity postulate gives a map from \ab{⊥} onto the singleton domain of \ab{𝑨}. (For more details, see the \href{https://github.com/ualib/agda-algebras/blob/master/src/Demos/ContraX.lagda}{\am{Demos.ContraX}} module which constructs the counterexample in \agda.)
 
 \begin{comment}
 The inconsistency in our first effort to formalize Birkhoff's theorem was due to careless handling of the type \ab X of variable symbols.  Specifically, we had allowed \ab X to be any type whatever. Informally, \ab X is a ``sufficiently large'' collection of variable symbols and, in our first formal statement of Birkhoff's theorem, we made the following assumption: (h1) there exist surjections from \ab X to the domain of every algebra in the class under consideration.  Informally, this isn't a problem if we view (h1) as implicitly requiring that \ab X be a type for which such surjections could possibly exist.  Technically, however, by exploiting the freedom to choose \ab X arbitrarily, a contradiction can be contrived.  Specifically, if we take \ab X to be the empty type and take the one-element \ab{𝑆}-algebra. By (h1), there is a surjective map from the empty type to a nonempty type, which is clearly a contradiction.
