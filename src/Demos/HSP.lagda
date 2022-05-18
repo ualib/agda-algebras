@@ -33,14 +33,15 @@ This is achieved by
 extracting a subset of the \agdaalgebras library, including only the
 pieces needed for the proof, into a single literate \agda file.\footnote{%
 \HSPlagda in the \agdaalgebras repository: \agdaalgebrasrepo}
-\ifshort
+\ifshort %%% BEGIN SHORT VERSION ONLY
 For spaces reasons, we elide some inessential parts,
 but strive to preserve the essential content and character of the development.
 Specifically, routine or overly technical components, as well as anything that does not
 seem to offer insight into the central ideas of the proof are omitted. (The file \HSPlagda mentioned above includes the full proof.)
 %can be found in the file \HSPlagda in the \agdaalgebras repository.}
 %or in the unabridged version of the present paper~\cite{DeMeo:2021}.}
-\else
+       %%% END SHORT VERSION ONLY
+\else  %%% BEGIN LONG VERSION ONLY
 We include here every line of code of our new proof of Birkhoff's theorem
 in a single \agda module, presented as a literate \agda document,\footnote{See
 \HSPlagda in the \agdaalgebras repository: \agdaalgebrasrepo .}.  Apart from a few dozen
@@ -60,14 +61,16 @@ To best emulate \mltt, we use
 {-# OPTIONS --without-K --exact-split --safe #-}
 \end{code}
 ;
-\ifshort
+\ifshort  %%% BEGIN SHORT VERSION ONLY
   \AgdaPragma{without-K} disables
   \href{https://ncatlab.org/nlab/show/axiom+K+%28type+theory%29}{Streicher's K axiom};
   \AgdaPragma{exact-split} directs \agda to accept only definitions behaving like
   {\it judgmental} equalities;
   \AgdaPragma{safe} ensures that nothing is postulated outright.
   (See~\cite{agdaref-axiomk,agdaref-safeagda,agdatools-patternmatching}.)
-\else
+       %%% END SHORT VERSION ONLY
+\else  %%% BEGIN LONG VERSION ONLY
+
   Here are brief descriptions of these options, accompanied by links to related documentation.
   \begin{itemize}
   \item
@@ -83,20 +86,19 @@ To best emulate \mltt, we use
   \AgdaPragma{safe} ensures that nothing is postulated outright---every non-\mltt axiom has to be an explicit assumption (e.g., an argument to a function or module).
   See the \href{https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html#cmdoption-safe}{cmdoption-safe} section of~\cite{agdaref-safeagda}.
   \end{itemize}
-\fi
+\fi    %%% END LONG VERSION ONLY
 We also make use of the following definitions from \agda's standard library (ver.~1.7).
 \begin{code}[hide]
 {-# OPTIONS --without-K --exact-split --safe #-}
 \end{code}
-\ifshort\else
+\ifshort
+\else  %%% BEGIN LONG VERSION ONLY
 \begin{code}
-
 -- Import universe levels and Signature type (described below) from the agda-algebras library.
 open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
-
 module Demos.HSP {𝑆 : Signature 𝓞 𝓥} where
 \end{code}
-\fi
+\fi    %%% END LONG VERSION ONLY
 {\small
 \begin{code}
 
@@ -139,7 +141,8 @@ we use \AgdaPrimitive{Type} in place of \AgdaPrimitive{Set}, the infix long arro
 \AgdaOperator{\AgdaFunction{∥\AgdaUnderscore{}∥}}, to denote the first and second
 projections out of the product type
 \AgdaOperator{\AgdaFunction{\AgdaUnderscore{}×\AgdaUnderscore{}}}.
-\ifshort\else
+\ifshort
+\else  %%% BEGIN LONG VERSION ONLY
 
 \begin{code}
 module _ {A : Type α }{B : A → Type β} where
@@ -148,7 +151,8 @@ module _ {A : Type α }{B : A → Type β} where
  ∥_∥ : (z : Σ[ a ∈ A ] B a) → B ∣ z ∣
  ∥_∥ = snd
 \end{code}
-\fi
+\fi       %%% END LONG VERSION ONLY
+
 
 %% -----------------------------------------------------------------------------
 \subsection{Setoids}\label{setoids}
@@ -182,7 +186,9 @@ A \textit{setoid function} is a function from
 one setoid to another that respects the underlying equivalences.
 If \ab{𝑨} and \ab{𝑩} are setoids, we use \ab{𝑨}~\AgdaRecord{⟶}~\ab{𝑩}
 to denote the type of setoid functions from \ab{𝑨} to \ab{𝑩}.
-\ifshort\else
+\ifshort
+\else %%% BEGIN LONG VERSION ONLY
+
 
 An example of a setoid function is the identity function from a setoid to itself.
 We define it, along with a binary composition operation for setoid functions,
@@ -200,8 +206,8 @@ f ⟨∘⟩ g = record  { f = (_⟨$⟩_ f) ∘ (_⟨$⟩_ g)
                   ; cong = (cong f) ∘ (cong g) }
 \end{code}
 \paragraph*{Inverses}
-\fi
-%
+\fi %%% END LONG VERSION ONLY
+
 We define the \defn{inverse} of such a function in terms of the image of the function's domain, as follows.
 
 \begin{code}
@@ -309,30 +315,25 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
  _≈ˢ_ (Im f) b1 b2 = f ⟨$⟩ b1 ≈ f ⟨$⟩ b2 where open Setoid 𝑩
 
  isEquivalence (Im f) = record { refl = refl ; sym = sym; trans = trans }
-    where open Setoid 𝑩
+  where open Setoid 𝑩
 
  toIm : (f : 𝑨 ⟶ 𝑩) → 𝑨 ⟶ Im f
- toIm f ⟨$⟩ a = a
- cong (toIm f) e = cong f e
+ toIm f = record { f = id ; cong = λ x → cong f x } -- record { f = id ; cong = λ x → cong f x }
 
  fromIm : (f : 𝑨 ⟶ 𝑩) → Im f ⟶ 𝑩
  fromIm f ⟨$⟩ a = f ⟨$⟩ a
  cong (fromIm f) e = e
 
  fromIm-inj : (f : 𝑨 ⟶ 𝑩) → IsInjective (fromIm f)
- fromIm-inj f = λ z → z
+ fromIm-inj _ = id
 
  toIm-surj : (f : 𝑨 ⟶ 𝑩) → IsSurjective (toIm f)
- toIm-surj f = eq _ (reflˢ 𝑩)
+ toIm-surj _ = eq _ (reflˢ 𝑩)
 
 \end{code}
 
 %\paragraph*{Kernels of setoid functions}
-%The \defn{kernel} of a function \ab f~\as :~\ab A~\as{→}~\ab B is defined informally
-%by \{\AgdaPair{x}{y} \aod{∈} \ab A \aof{×} \ab A \as :
-%\ab f \ab x \as{=} \ab f \ab y\}. This can be represented in a number of ways,
-%but for our purposes it is convenient to define the kernel as an inhabitant of a (unary)
-%predicate over \ab A \aof{×} \ab A.
+%The \defn{kernel} of a function \ab f~\as :~\ab A~\as{→}~\ab B is defined informally by \{\AgdaPair{x}{y} \aod{∈} \ab A \aof{×} \ab A \as : \ab f \ab x \as{=} \ab f \ab y\}. This can be represented in a number of ways, but for our purposes it is convenient to define the kernel as an inhabitant of a (unary) predicate over \ab A \aof{×} \ab A.
 
 %% -------------------------------------------------------------------------------------
 
@@ -436,8 +437,11 @@ EqArgs {ξ = ξ} ≡.refl u v = ∀ i → u i ≈ v i where open Setoid ξ using
 \end{code}
 \noindent
 This makes it possible to define an operator which translates a signature for algebras over bare types into a signature for algebras over setoids.
-\ifshort\else
-We denote this operator by \aof{⟨\AgdaUnderscore{}⟩} and define it as follows.
+We denote this operator by \aof{⟨\AgdaUnderscore{}⟩}%
+\ifshort
+.
+\else
+ and define it as follows.
 \fi
 
 \begin{code}
@@ -454,7 +458,7 @@ transᵉ  (isEquivalence (⟨ 𝑆 ⟩ ξ)) (≡.refl , g)(≡.refl , h)  = ≡.
 
 %% -----------------------------------------------------------------------------
 \subsection{Algebras}\label{algebras}
-Informally, an \defn{algebraic structure} \ab{𝑨} = (\ab{A}, \ab{Fᴬ}) \defn{in the signature}
+An \defn{algebraic structure} \ab{𝑨} = (\ab{A}, \ab{Fᴬ}) \defn{in the signature}
 \ab{𝑆} = (\ab{F}, \ab{ρ}), or \ab{𝑆}-\defn{algebra}, consists of
 \begin{itemize}
 \item a type \ab A, called the \defn{domain} of the algebra;
@@ -585,13 +589,14 @@ Lift-Alg : Algebra α ρᵃ → (ℓ₀ ℓ₁ : Level) → Algebra (α ⊔ ℓ�
 Lift-Alg 𝑨 ℓ₀ ℓ₁ = Lift-Algʳ (Lift-Algˡ 𝑨 ℓ₀) ℓ₁
 
 \end{code}
-\fi
 \noindent Recall that our \ar{Algebra} type has two universe level parameters, corresponding
 to those of the domain setoid.
 Concretely, an algebra of type \ar{Algebra} \ab{α} \ab{ρᵃ} has a
 \afld{Domain} of type \ar{Setoid} \ab{α} \ab{ρᵃ}. This packages a ``carrier set''
 (\afld{Carrier}), inhabiting \ap{Type} \ab{α}, with an equality on \afld{Carrier} of type
-\af{Rel} \afld{Carrier} \ab{ρᵃ}. \af{Lift-Alg} takes an algebra parametrized by levels \ab{a} and \ab{ρᵃ}
+\af{Rel} \afld{Carrier} \ab{ρᵃ}.
+\fi
+\noindent \af{Lift-Alg} takes an algebra parametrized by levels \ab{a} and \ab{ρᵃ}
 and constructs a new algebra whose carrier inhabits \ap{Type} (\ab{α} \ap{⊔} \ab{ℓ₀}) and
 whose equivalence inhabits \af{Rel}~\afld{Carrier}~(\ab{ρᵃ}~\ap{⊔}~\ab{ℓ₁}).
 To be useful, this lifting operation should result in an algebra with the same semantic properties
@@ -719,6 +724,7 @@ consisting of a setoid function, say, \ab h, along with a proof that \ab h is a 
  epi = Σ (𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]) IsEpi
 \end{code}
 
+\ifshort\else
 Here are two utilities that are useful for translating between types.
 
 \begin{code}
@@ -731,7 +737,7 @@ module _ (𝑨 : Algebra α ρᵃ)(𝑩 : Algebra β ρᵇ) where
  epi→ontohom (hh , hhE) = (hh , isHom hhE) , isSurjective hhE
 \end{code}
 %% -----------------------------------------------------------------------------
-
+\fi
 
 \paragraph*{Composition of homomorphisms}
 The composition of homomorphisms is again a homomorphism, and similarly for epimorphisms and monomorphisms.
@@ -944,8 +950,6 @@ IdHomImage {α = α}{𝑨 = 𝑨} = 𝒾𝒹 , λ {y} → Image_∋_.eq y refl
 \end{code}
 \ifshort\else    %%% BEGIN LONG VERSION ONLY
 
-\medskip
-
 \noindent These types should be self-explanatory, but just to be sure, we pause
 to describe the semantics of the Sigma type appearing in the definition of \af{HomImages}.
 If \ab{𝑨} : \af{Algebra} \ab{α} \ab{ρᵃ} is an \ab{𝑆}-algebra, then \af{HomImages} \ab{𝑨}
@@ -953,12 +957,9 @@ denotes the type of pairs (\ab{𝑩} \aic{,} \ab p) such that \ab{𝑩} : \ar{Al
 and \ab p is a proof that there exists a hom from \ab{𝑨} onto \ab{𝑩}.
 \fi      %%% END LONG VERSION ONLY SECTION
 
-\ab f : \ab A \aor{⟶} \ab B factors as a surjective map
-\ab{toIm} : \ab A \aor{⟶} \ab{Im} \ab f followed by an injective map \ab{fromIm} : \ab{Im} \ab f \aor{⟶} \ab B.
-
 %% -----------------------------------------------------------------------------
 \paragraph*{Factorization of homomorphisms}
-Another theorem in the \agdaalgebras library is called \af{HomFactor}; it formalizes the following factorization result: if \ab g : \af{hom}
+Another theorem in the \agdaalgebras library, called \af{HomFactor}, formalizes the following factorization result: if \ab g : \af{hom}
 \ab{𝑨} \ab{𝑩}, \ab h : \af{hom} \ab{𝑨} \ab{𝑪}, \ab h is surjective, and \af{ker} \ab h
 \aof{⊆} \af{ker} \ab g, then there exists \ab{φ} : \af{hom} \ab{𝑪} \ab{𝑩} such that \ab g = \ab{φ} \aof{∘} \ab h.
 A special case of this result that we use below is the fact that the setoid function factorization we saw above %---\ab f = %: \ab A \aor{⟶} \ab B factors as a surjective map
@@ -1175,7 +1176,7 @@ end{code}
 Fix a signature \ab{𝑆} and a context \ab X.
 %The next two types are defined relative to a fixed \ab{𝑆}-algebra, say, \ab{𝑨}, so
 %we place them in a submodule that takes the algebra as given.
-An \defn{environment} for \ab{𝑨} and \ab X is a setoid whose carrier is a mapping from the variable symbols \ab X to the domain \AgdaOperator{\AgdaFunction{𝕌[}}~\AgdaBound{𝑨}~\AgdaOperator{\AgdaFunction{]}} and whose equivalence relation is pointwise equality. (Our formalization of this concept is the same as that of~\cite{Abel:2021}, which Abel uses to formalize Birkhoff's completeness theorem.)
+An \defn{environment} for \ab{𝑨} and \ab X is a setoid whose carrier is a mapping from the variable symbols \ab X to the domain \AgdaOperator{\AgdaFunction{𝕌[}}~\AgdaBound{𝑨}~\AgdaOperator{\AgdaFunction{]}} and whose equivalence relation is pointwise equality. Our formalization of this concept is the same as that of~\cite{Abel:2021}, which Abel uses to formalize Birkhoff's completeness theorem.
 
 \begin{code}
 
@@ -1191,7 +1192,7 @@ module Environment (𝑨 : Algebra α ℓ) where
 
 \end{code}
 
-The function \af{⟦\au{}⟧} is also defined relative to the ambient algebra \ab{𝑨} and denotes the \defn{interpretation} of a term \emph{evaluated} in a particular environment.
+The \defn{interpretation} of a term \emph{evaluated} in a particular environment is defined as follows.
 
 \begin{code}
 
@@ -1212,11 +1213,13 @@ Two terms are proclaimed \defn{equal} if they are equal for all environments.
 
 \end{code}
 
-Proof that \af{Equal} is an equivalence relation, and that the implication \ab
+\noindent Proof that \af{Equal} is an equivalence relation, and that the implication \ab
 s~\af{≃}~\ab t \as{→} \af{Equal} \ab s \ab t holds for all terms \ab s and \ab t,
-is also found in~\cite{Abel:2021}. We reproduce them here to keep the paper self-contained.
-%We denote the proofs of these facts by \af{EqualIsEquiv} and \af{≃→Equal} in the sequel.
-
+is also found in~\cite{Abel:2021}.
+\ifshort
+We denote the proofs of these facts by \af{EqualIsEquiv} and \af{≃→Equal} in the sequel.
+\else
+We reproduce them here to keep the paper self-contained.
 \begin{code}
  ≃→Equal : {X : Type χ}(s t : Term X) → s ≃ t → Equal s t
  ≃→Equal .(ℊ _) .(ℊ _) (rfl ≡.refl) = λ _ → refl
@@ -1228,7 +1231,7 @@ is also found in~\cite{Abel:2021}. We reproduce them here to keep the paper self
  symᵉ    EqualIsEquiv = λ x=y ρ    → sym (x=y ρ)
  transᵉ  EqualIsEquiv = λ ij jk ρ  → trans (ij ρ) (jk ρ)
 \end{code}
-
+\fi
 \begin{comment}
 Another useful fact we will need is that substitution and evaluation commute; that is, applying substitution \ab{σ} to a term \ab{t} and evaluating the result in environment \ab{ρ} has the same effect as evaluating \ab{t} in the environment \as{λ} \ab x \as{→} \aof{⟦~\ab{σ}~\ab{x}~⟧}~\aofld{⟨\$⟩} \ab{ρ} (see~\cite{Abel:2021} or~\cite[Lem.~3.3.11]{Mitchell:1996}).
 begin{code}
@@ -1239,6 +1242,7 @@ begin{code}
 end{code}
 \end{comment}
 %% -----------------------------------------------------------------------------
+
 \paragraph*{Compatibility of terms}
 We need to formalize two more concepts involving terms.
 The first (\af{comm-hom-term}) is the assertion that every term commutes with every homomorphism, and
@@ -1507,7 +1511,7 @@ module _  {X : Type χ}{𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)}
  H-id1 σ 𝑩 (𝑨 , kA , BimgA) = ⊧-H-invar{p = p}{q} (σ 𝑨 kA) BimgA
 
 \end{code}
-\noindent The analogous preservation result for \af S is a consequence of the invariance lemma \af{⊧-S-invar}; the converse, which we call \af{S-id2}, has an equally straightforward proof.
+The analogous preservation result for \af S is a consequence of the invariance lemma \af{⊧-S-invar}; the converse, which we call \af{S-id2}, has an equally straightforward proof.
 
 \begin{code}
 
@@ -1516,9 +1520,9 @@ module _  {X : Type χ}{𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)}
 
  S-id2 : S ℓ 𝒦 ⊫ p ≈ q → 𝒦 ⊫ p ≈ q
  S-id2 Spq 𝑨 kA = Spq 𝑨 (𝑨 , (kA , ≤-reflexive))
-\end{code}
 
-\noindent The \agdaalgebras library includes analogous pairs of implications for \af P, \af H, and \af V, called \af{P-id1}, \af{P-id2}, \af{H-id1}, etc.
+\end{code}
+The \agdaalgebras library includes analogous pairs of implications for \af P, \af H, and \af V, called \af{P-id1}, \af{P-id2}, \af{H-id1}, etc.
 \ifshort
 whose formalizations we suppress.
 \else
@@ -1640,7 +1644,7 @@ identified in \Free{X}.
 %\ifshort\else (Notice that \afld{≈} may be empty, in which case
 %\T{X}~\af{/}~\afld{≈} is trivial.) \fi
 
-While all of the steps in the argument above seem straightforward, some are not so easy to formalize in \mltt. In particular, proving that \Free{X} belongs to \af{S}(\af{P}~\ab{𝒦}) in \agda turns out to be especially challenging.
+%While all of the steps in the argument above seem straightforward, some are not so easy to formalize in \mltt. In particular, proving that \Free{X} belongs to \af{S}(\af{P}~\ab{𝒦}) in \agda turns out to be especially challenging.
 %% -----------------------------------------------------------------------------
 \paragraph*{The relatively free algebra in \agda}
 %Our approach to constructing free algebras in \agda may seem different from the informal one described above, %but the end result is the same.
@@ -1667,14 +1671,13 @@ module FreeAlgebra (𝒦 : Pred (Algebra α ρᵃ) ℓ) where
  𝔽[_] : {χ : Level} → Type χ → Algebra (ov χ) _
  𝔽[_] X = HomIm (homC X)
 
-
 \end{code}
 %% -----------------------------------------------------------------------------
 %\paragraph*{The natural epimorphism} % from 𝑻 X to 𝔽[ X ]}
-
-We now define the natural epimorphism from \T{X} onto \Free{X} %(= \T{X}~\af{/}~\afld{≈})
-and prove that its kernel is contained in the collection of identities modeled
-by \af{V} \ab{𝒦}.%(which we represent by \af{Th} (\af{V} \ab{𝒦})).
+The natural epimorphism from \T{X} onto \Free{X} %(= \T{X}~\af{/}~\afld{≈})
+is then defined as follows.%
+%and prove that its kernel is contained in the collection of identities modeled
+%by \af{V} \ab{𝒦}.%(which we represent by \af{Th} (\af{V} \ab{𝒦})).
 \ifshort%
 \footnote{The \AgdaFunction{HomReduct} method of the \ar{IsEpi} record type merely extracts the \af{hom} part of an epimorphism.}
 \fi
@@ -1692,7 +1695,6 @@ module FreeHom {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
  homF[_] : (X : Type c) → hom (𝑻 X) 𝔽[ X ]
  homF[ X ] = IsEpi.HomReduct ∥ epiF[ X ] ∥
 
-
 \end{code}
 Finally, we prove an important property of the relatively free algebra
 %(relative to \ab{𝒦} and satisfying the identities in \af{Th}~\ab{𝒦}),
@@ -1708,27 +1710,27 @@ module _ {𝑨 : Algebra (α ⊔ ρᵃ ⊔ ℓ)(α ⊔ ρᵃ ⊔ ℓ)}{𝒦 : Pr
  open Setoid 𝔻[ 𝑨 ] using ( refl ; sym ; trans ) renaming ( Carrier to A )
 
 
- F-ModTh-epi' : 𝑨 ∈ Mod (Th 𝒦) → epi 𝔽[ A ]  𝑨
- F-ModTh-epi' A∈ModThK = φ , isEpi where
+ F-ModTh-epi : 𝑨 ∈ Mod (Th 𝒦) → epi 𝔽[ A ]  𝑨
+ F-ModTh-epi A∈ModThK = φ , isEpi where
   open FreeHom {ℓ = ℓ} {𝒦}
   open Environment 𝑨 using (⟦_⟧)
   φ : 𝔻[ 𝔽[ A ] ] ⟶ 𝔻[ 𝑨 ]
   _⟨$⟩_ φ            = free-lift{𝑨 = 𝑨} id
   cong φ {p} {q} pq  = let open SetoidReasoning 𝔻[ 𝑨 ] in begin
-    free-lift id p ≈˘⟨ free-lift-interp {𝑨 = 𝑨} id p ⟩
-    ⟦ p ⟧ ⟨$⟩ id ≈⟨ A∈ModThK {p = p} {q} lift-pq id ⟩
-    ⟦ q ⟧ ⟨$⟩ id ≈⟨ free-lift-interp {𝑨 = 𝑨} id q ⟩
-    free-lift id q ∎
+   free-lift id p  ≈˘⟨ free-lift-interp {𝑨 = 𝑨} id p   ⟩
+   ⟦ p ⟧ ⟨$⟩ id    ≈⟨ A∈ModThK {p = p} {q} lift-pq id  ⟩
+   ⟦ q ⟧ ⟨$⟩ id    ≈⟨ free-lift-interp {𝑨 = 𝑨} id q    ⟩
+   free-lift id q  ∎
+   where
+   lift-pq : (p , q) ∈ Th 𝒦
+   lift-pq 𝑩 x ρ = begin
+    ⟦ p ⟧ᴮ ⟨$⟩ ρ   ≈⟨ free-lift-interp {𝑨 = 𝑩} ρ p  ⟩
+    free-lift ρ p  ≈⟨ pq (𝑩 , x , ρ)                ⟩
+    free-lift ρ q  ≈˘⟨ free-lift-interp{𝑨 = 𝑩} ρ q  ⟩
+    ⟦ q ⟧ᴮ ⟨$⟩ ρ   ∎
     where
-      lift-pq : (p , q) ∈ Th 𝒦
-      lift-pq 𝑩 x ρ = begin
-        ⟦ p ⟧𝑩 ⟨$⟩ ρ   ≈⟨ free-lift-interp {𝑨 = 𝑩} ρ p ⟩
-        free-lift ρ p ≈⟨ pq (𝑩 , x , ρ) ⟩
-        free-lift ρ q ≈˘⟨ free-lift-interp{𝑨 = 𝑩} ρ q ⟩
-        ⟦ q ⟧𝑩 ⟨$⟩ ρ   ∎
-        where
-          open SetoidReasoning 𝔻[ 𝑩 ]
-          open Environment 𝑩 renaming (⟦_⟧ to ⟦_⟧𝑩)
+    open SetoidReasoning 𝔻[ 𝑩 ]
+    open Environment 𝑩 renaming (⟦_⟧ to ⟦_⟧ᴮ)
 
 
   isEpi : IsEpi 𝔽[ A ] 𝑨 φ
@@ -1736,21 +1738,20 @@ module _ {𝑨 : Algebra (α ⊔ ρᵃ ⊔ ℓ)(α ⊔ ρᵃ ⊔ ℓ)}{𝒦 : Pr
   isSurjective isEpi {y} = eq (ℊ y) refl
 
 
- F-ModTh-epi : 𝑨 ∈ Mod (Th (V ℓ ι 𝒦)) → epi 𝔽[ A ]  𝑨
- F-ModTh-epi A∈ModThK = F-ModTh-epi' (λ {p}{q} x ρ → A∈ModThK {p = p} {q = q}
-                                     (V-id1 ℓ {p = p}{q = q} x)
-                                     ρ)
+ F-ModThV-epi : 𝑨 ∈ Mod (Th (V ℓ ι 𝒦)) → epi 𝔽[ A ]  𝑨
+ F-ModThV-epi A∈ModThVK = F-ModTh-epi λ {p}{q} → Goal {p}{q}
+  where
+  Goal : 𝑨 ∈ Mod (Th 𝒦)
+  Goal {p}{q} x ρ = A∈ModThVK{p}{q} (V-id1 ℓ {p = p}{q} x) ρ
 \end{code}
 \ifshort\else
-
-\medskip
 
 \noindent Actually, we will need the following lifted version of this result.
 
 \begin{code}
 
  F-ModTh-epi-lift : 𝑨 ∈ Mod (Th (V ℓ ι 𝒦)) → epi 𝔽[ A ] (Lift-Alg 𝑨 ι ι)
- F-ModTh-epi-lift A∈ModThK = ∘-epi (F-ModTh-epi λ {p q} → A∈ModThK{p = p}{q} ) ToLift-epi
+ F-ModTh-epi-lift A∈ModThK = ∘-epi (F-ModThV-epi λ {p q} → A∈ModThK{p = p}{q} ) ToLift-epi
 \end{code}
 \fi
 
