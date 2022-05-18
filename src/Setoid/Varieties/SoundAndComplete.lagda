@@ -32,7 +32,7 @@ import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
 open import Base.Overture.Preliminaries     using ( ∣_∣ )
 open import Base.Terms.Basic       {𝑆 = 𝑆}  using ( Term )
-open import Setoid.Algebras.Basic  {𝑆 = 𝑆}  using ( Algebra ; ov ) renaming ( ⟦_⟧ to ⟦_⟧s )
+open import Setoid.Algebras.Basic  {𝑆 = 𝑆}  using ( Algebra ; ov ; ⟨_⟩ )
 open import Setoid.Terms.Basic     {𝑆 = 𝑆}  using ( module Environment ; Sub ; _[_] )
 
 open Setoid  using ( Carrier ; _≈_ ; isEquivalence )
@@ -196,7 +196,7 @@ module FreeAlgebra {χ : Level}{ι : Level}{I : Type ι}(E : I → Eq) where
 
  -- The interpretation of an operation is simply the operation itself.
  -- This works since E ⊢ X ▹_≈_ is a congruence.
- FreeInterp : ∀ {X} → (⟦ 𝑆 ⟧s (FreeDomain X)) ⟶ (FreeDomain X)
+ FreeInterp : ∀ {X} → (⟨ 𝑆 ⟩ (FreeDomain X)) ⟶ (FreeDomain X)
  FreeInterp ⟨$⟩ (f , ts) = node f ts
  cong FreeInterp (refl , h) = app h
 

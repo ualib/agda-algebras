@@ -1,4 +1,4 @@
-## Consolidated summary of issues raised by the referees
+## Summary of issues raised by referees and author responses
 
 ### Issues raised by Referee 1 (paraphrased)
 
@@ -58,7 +58,7 @@
 
 ------------------------------
 
-### Issues raised by Referee 2
+### Issues raised by Referee 2 (paraphrased)
 
 1.  Some definitions and proofs look unnecessary and therefore lack motivation. In particular,
 
@@ -247,7 +247,7 @@
 
 ----------------------------------------------------------
 
-#### Issues raised by Referee 3
+#### Issues raised by Referee 3 (paraphrased)
 
 1.  (p. 1) We mention flaws of our previous attempt. It's perplexing that we say it was a proof but 
     also say that the assumptions made lead to a contradiction. Can we explain the nature of the 
@@ -359,7 +359,7 @@ used to be as defined above." added)
    modifications to make the proof work; perhaps we will try to do it that way in future versions
    and see whether it simplifies the overall formalization.
 
-*  ** point 7** Quotients are now "automatic" in a sense, since we use setoids which carry the equivalence
+*  **point 7** Quotients are now "automatic" in a sense, since we use setoids which carry the equivalence
    relation around with them. In this sense, every setoid represents a quotient type.
    
    A clarifying sentence was added to the paper.
