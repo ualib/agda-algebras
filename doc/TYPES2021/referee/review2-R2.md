@@ -57,7 +57,9 @@ A. > > The file src/Demos/HSP.lagda mentioned above
    > It would be safer to link to the exact commit that corresponds to the
    > paper in the final version (rather than master).
    
-   XXXX YET TO DO XXXX
+   AUTHOR RESPONSE:
+   
+   Fixed. (We now link to the exact commit, as suggested.)
 
 
 B. > > The term algebra T X is the absolutely free (or initial) S-algebra.
@@ -84,5 +86,5 @@ C. > > Let C be the product of all algebras in S K, so C ∈ P (S K).
 
    AUTHOR RESPONSE:
    
-   Fixed by removing the word "all," as suggested.
+   Fixed (by removing the word "all," as suggested).
 
