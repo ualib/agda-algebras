@@ -870,9 +870,6 @@ module _ (𝑨 : Algebra α ρᵃ) (𝑩 : Algebra β ρᵇ) where
 The \agdaalgebras library also includes formal proof that the \afld{to} and \afld{from} maps are bijections and that \ar{\au{}≅\au{}} is an equivalence relation, but we suppress these details.
 \else
 \begin{code}
-  toIsSurjective : IsSurjective ∣ to ∣
-  toIsSurjective {y} = eq (∣ from ∣ ⟨$⟩ y) (sym (to∼from y))
-   where open Setoid 𝔻[ 𝑩 ] using ( sym )
 
   toIsInjective : IsInjective ∣ to ∣
   toIsInjective {x}{y} xy = trans (sym (from∼to x)) (trans ξ (from∼to y))
@@ -883,12 +880,6 @@ The \agdaalgebras library also includes formal proof that the \afld{to} and \afl
   fromIsSurjective : IsSurjective ∣ from ∣
   fromIsSurjective {x} = eq (∣ to ∣ ⟨$⟩ x) (sym (from∼to x))
    where open Setoid 𝔻[ 𝑨 ] using ( sym )
-
-  fromIsInjective : IsInjective ∣ from ∣
-  fromIsInjective {x}{y} xy = trans (sym (to∼from x)) (trans ξ (to∼from y))
-   where  open Setoid 𝔻[ 𝑩 ] using ( sym ; trans )
-          ξ : ∣ to ∣ ⟨$⟩ (∣ from ∣ ⟨$⟩ x) ≈ᴮ ∣ to ∣ ⟨$⟩ (∣ from ∣ ⟨$⟩ y)
-          ξ = cong ∣ to ∣ xy
 
 open _≅_
 
@@ -937,21 +928,15 @@ ov α = 𝓞 ⊔ 𝓥 ⊔ lsuc α
 _IsHomImageOf_ : (𝑩 : Algebra β ρᵇ)(𝑨 : Algebra α ρᵃ) → Type _
 𝑩 IsHomImageOf 𝑨 = Σ[ φ ∈ hom 𝑨 𝑩 ] IsSurjective ∣ φ ∣
 
-HomImages : Algebra α ρᵃ → Type (α ⊔ ρᵃ ⊔ ov (β ⊔ ρᵇ))
-HomImages {β = β}{ρᵇ = ρᵇ} 𝑨 = Σ[ 𝑩 ∈ Algebra β ρᵇ ] 𝑩 IsHomImageOf 𝑨
-
 IdHomImage : {𝑨 : Algebra α ρᵃ} → 𝑨 IsHomImageOf 𝑨
 IdHomImage {α = α}{𝑨 = 𝑨} = 𝒾𝒹 , λ {y} → Image_∋_.eq y refl
  where open Setoid 𝔻[ 𝑨 ] using ( refl )
 \end{code}
-\ifshort\else    %%% BEGIN LONG VERSION ONLY
-
-\noindent These types should be self-explanatory, but just to be sure, we pause
-to describe the semantics of the Sigma type appearing in the definition of \af{HomImages}.
-If \ab{𝑨} : \af{Algebra} \ab{α} \ab{ρᵃ} is an \ab{𝑆}-algebra, then \af{HomImages} \ab{𝑨}
-denotes the type of pairs (\ab{𝑩} \aic{,} \ab p) such that \ab{𝑩} : \ar{Algebra} \ab{β} \ab{ρᵇ}
-and \ab p is a proof that there exists a hom from \ab{𝑨} onto \ab{𝑩}.
-\fi      %%% END LONG VERSION ONLY SECTION
+%\noindent These types should be self-explanatory, but just to be sure, we pause
+%to describe the semantics of the Sigma type appearing in the definition of \af{HomImages}.
+%If \ab{𝑨} : \af{Algebra} \ab{α} \ab{ρᵃ} is an \ab{𝑆}-algebra, then \af{HomImages} \ab{𝑨}
+%denotes the type of pairs (\ab{𝑩} \aic{,} \ab p) such that \ab{𝑩} : \ar{Algebra} \ab{β} \ab{ρᵇ}
+%and \ab p is a proof that there exists a hom from \ab{𝑨} onto \ab{𝑩}.
 
 %% -----------------------------------------------------------------------------
 \paragraph*{Factorization of homomorphisms}
@@ -1018,40 +1003,34 @@ _≤_ : Algebra α ρᵃ → Algebra β ρᵇ → Type _
 𝑨 ≤ 𝑩 = Σ[ h ∈ hom 𝑨 𝑩 ] IsInjective ∣ h ∣
 
 \end{code}
-The subalgebra relation is reflexive (by the identity monomorphism) and transitive (by composition of monomorphisms), hence, a \defn{preorder}.
+The subalgebra relation is reflexive, by the identity monomorphism (and transitive by composition of monomorphisms, hence, a \defn{preorder}, though we won't need this fact here).
+
 \begin{code}
 
 ≤-reflexive   :  {𝑨 : Algebra α ρᵃ} → 𝑨 ≤ 𝑨
 ≤-reflexive = 𝒾𝒹 , id
 
-≤-transitive  :  {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}{𝑪 : Algebra γ ρᶜ}
- →               𝑨 ≤ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
-≤-transitive ( f , finj ) ( g , ginj ) = (∘-hom f g ) , ∘-IsInjective ∣ f ∣ ∣ g ∣ finj ginj
-
 \end{code}
-\noindent If
+%≤-transitive  :  {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}{𝑪 : Algebra γ ρᶜ} → 𝑨 ≤ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
+%≤-transitive ( f , finj ) ( g , ginj ) = (∘-hom f g ) , ∘-IsInjective ∣ f ∣ ∣ g ∣ finj ginj
+If
 \ab{𝒜} : \ab I → \af{Algebra} \ab{α} \ab{ρᵃ},
 \ab{ℬ} : \ab I → \af{Algebra} \ab{β} \ab{ρᵇ} (families of \ab{𝑆}-algebras) and if
 \ab{ℬ} \ab i \af{≤} \ab{𝒜} \ab i for all \ab i~:~\ab I, then \af{⨅} \ab{ℬ} is a subalgebra
-of \af{⨅} \ab{𝒜}.
-\ifshort
-Below we use \af{⨅-≤} to denote this fact.
-\else
+of \af{⨅} \ab{𝒜}. Below we will use \af{⨅-≤} to denote this fact.
 
-
-We conclude this section with two easy facts that will be useful later. The first converts a monomorphism
-to a subalgebra witness while the second is an algebraic invariance property of \aof{≤}.
+We conclude this section with an easy fact that will be useful later;
+it simply converts a monomorphism into a proof of a subalgebra relationship.
+%The first converts a monomorphism to a subalgebra witness while the second is an algebraic invariance property of \aof{≤}.
 
 \begin{code}
 
 mon→≤ : {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} → mon 𝑨 𝑩 → 𝑨 ≤ 𝑩
 mon→≤ {𝑨 = 𝑨}{𝑩} x = mon→intohom 𝑨 𝑩 x
-
-≅-trans-≤ :  {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}{𝑪 : Algebra γ ρᶜ}
- →           𝑨 ≅ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
-≅-trans-≤ A≅B (h , hinj) = (∘-hom (to A≅B) h) , (∘-IsInjective ∣ to A≅B ∣ ∣ h ∣ (toIsInjective A≅B) hinj)
 \end{code}
-\fi
+%≅-trans-≤ :  {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}{𝑪 : Algebra γ ρᶜ} → 𝑨 ≅ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
+%≅-trans-≤ A≅B (h , hinj) = (∘-hom (to A≅B) h) , (∘-IsInjective ∣ to A≅B ∣ ∣ h ∣ (toIsInjective A≅B) hinj)
+
 
 %% -------------------------------------------------------------------------------------
 
@@ -1210,7 +1189,8 @@ Proof that \af{Equal} is an equivalence relation, and that the implication \ab
 s~\af{≃}~\ab t \as{→} \af{Equal} \ab s \ab t holds for all terms \ab s and \ab t,
 is also found in~\cite{Abel:2021}.
 \ifshort
-We denote the proofs of these facts by \af{EqualIsEquiv} and \af{≃→Equal} in the sequel.
+We denote the latter %-- proofs of these facts by \af{EqualIsEquiv} and 
+by \af{≃→Equal} in the sequel.
 \else
 We reproduce them here to keep the paper self-contained.
 \begin{code}
@@ -1881,8 +1861,8 @@ Our proof of the inclusion \af{Mod} (\af{Th} (\af V \ab{𝒦})) \aof{⊆} \af{V}
 \begin{itemize}
 \item \noindent \ref{item:1}. To prove \Free{X} \af{≤} \ab{𝑪} \ab X, we construct a homomorphism from
 \Free{X} to \ab{𝑪}~\ab X and then show it is injective,
-so \Free{X} is (isomorphic to) a subalgebra of \af{𝑪}~\ab X.\footnote{The function \af{mon→≤} in
-the proof of \af{F≤C} merely extracts a subalgebra witness from a monomorphism.}
+so \Free{X} is (isomorphic to) a subalgebra of \af{𝑪}~\ab X.
+%\footnote{The function \af{mon→≤} in the proof of \af{F≤C} merely extracts a subalgebra witness from a monomorphism.}
 
 %\T{X} to \ab{𝑪} whose kernel contains the kernel \afld{≈} of \aof{homF[}~\ab X~\aof{]} (the natural hom from \T{X} onto \Free{X}).
 
