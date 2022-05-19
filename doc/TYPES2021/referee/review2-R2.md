@@ -82,5 +82,7 @@ C. > > Let C be the product of all algebras in S K, so C ∈ P (S K).
    > signature), because there is no environment for it. Therefore I suggest removing the word 'all' here, 
    > as it is misleading.
 
-   XXXX YET TO DO XXXX
+   AUTHOR RESPONSE:
+   
+   Fixed by removing the word "all," as suggested.
 
