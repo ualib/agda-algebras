@@ -1548,12 +1548,8 @@ That is, for every \ab{𝑆}-algebra \ab{𝑨}, the following hold.
 \item Every function from \ab{X} to \af{𝕌[ \ab{𝑨} ]} lifts to a homomorphism from \af{𝑻} \ab{X} to \ab{𝑨}.
 \item That homomorphism is unique.
 \end{itemize}
-Here we formalize the first of these
-% in two steps.% \footnote{\agdaalgebras also defines
-% \af{free-lift-func} \as{:} \aof{𝔻[~\af{𝑻}~\ab X~]}~\aor{⟶}~\aof{𝔻[~\ab{𝑨}~]}
-% for the analogous setoid function.}$^,$
-by defining the lifting function \af{free-lift}
-and its setoid analog \af{free-lift-func}, and then proving the latter is a homomorphisms.%
+Here we formalize the first of these properties by defining the lifting function \af{free-lift}
+and its setoid analog \af{free-lift-func}, and then proving the latter is a homomorphism.%
 \footnote{For the proof of uniqueness, see the \ualmodule{Setoid.Terms.Properties} module of the \agdaalgebras library.}
 
 \begin{code}
@@ -1600,49 +1596,70 @@ Such an algebra is called a \defn{relatively free algebra over} \ab{X} (relative
 There are several informal approaches to defining this algebra.
 We now describe the approach on which our formal construction is based and then we present the formalization.
 
-We denote the relatively free algebra over \ab{X} by \Free{X} and we represent it as the quotient
+Let \Free{X} denote the relatively free algebra over \ab{X}.  We represent
+\Free{X} as the quotient
 \T{X}~\af{/}~\afld{≈} where \ab x~\afld{≈}~\ab y if and only if
-(\ab x, \ab y) belongs to the kernel of every homomorphism into a member of \ab{𝒦}.
-If \ab{𝑩}~\aof{∈}~\ab{𝒦} and if there exists a homomorphism \ab h~\as{:}~\af{hom}~\ab{𝑨}~\ab{𝑩},
-then \ab h factors as \ab{𝑨} $\overset{\text{\ab h}}{\twoheadrightarrow}$ \af{HomIm}~\ab h $\overset{⊆}{↣}$ \ab{𝑩}.
-%\ab{𝑨}~\af{/}~\af{ker}~\ab h ≅ \af{HomIm}~\ab h ≤ \ab{𝑩}
-Thus, \ab{𝑨}~\af{/}~\af{ker}~\ab h is (isomorphic to) an algebra in \af{S}~\ab{𝒦}.
+\ab h \ab x = \ab h \ab y for every homomorphism \ab h from \T{X} into a member of \ab{𝒦}.
+%Then \Free{X} satisfies the identities in \af{Th} \ab{𝒦}.
+%Indeed, for each pair \ab p \ab q : \Term{X}, if \ab{𝒦} \af{⊫} \ab p \af{≈} \ab
+%q, then \ab p and \ab q belong to the same \afld{≈}-class, so \ab p and \ab q are
+%identified in \Free{X}.
+More precisely, if \ab{𝑨}~\aof{∈}~\ab{𝒦} and \ab h~\as{:}~\af{hom}~(\T{X})~\ab{𝑨}, then \ab h factors as \T{X} $\overset{\text{\ab h}}{\twoheadrightarrow}$ \af{HomIm}~\ab h $\overset{⊆}{↣}$ \ab{𝑨} and \T{X}~\af{/}~\af{ker}~\ab h ≅ \af{HomIm}~\ab h ≤ \ab{𝑨}; that is, \T{X}~\af{/}~\af{ker}~\ab h is (isomorphic to) an algebra in \af{S}~\ab{𝒦}. Letting
+\afld{≈} := ⋂ \{\ab{θ}~\aof{∈}~\ab{Con}~\T{X}~∣~\T{X}~\af{/}~\ab{θ}~\aof{∈}~\af{S} \ab{𝒦}\},
+observe that \Free{X} := \T{X}~\af{/}~\afld{≈} is a subdirect product of the algebras \{\T{X}~\af{/}~\af{ker}~\ab h\!\}
+as \ab h ranges over all homomorphisms from \T{X} to algebras in \ab{𝒦}.  Thus, \Free{X} \af{∈}
+\af{P} (\af{S} \ab{𝒦}) \aof{⊆} \af{S} (\af{P} \ab{𝒦}).
+As we have seen,
+%if \ab{𝑨}~\aof{∈}~\ab{𝒦}, then
+every map \ab{ρ} : \ab X → \aof{𝕌[}~\ab{𝑨}~\aof{]}
+extends uniquely to a homomorphism \ab h~\as{:}~\af{hom}~(\T{X})~\ab{𝑨} and \ab h
+factors through the natural projection \T{X}~\as{→}~\Free{X} (since \afld{≈}~\aof{⊆}~\af{ker}~\ab h) yielding a unique homomorphism from \Free{X} to \ab{𝑨} extending ρ.
+%≅ \af{HomIm}~\ab h ≤ \ab{𝑩}
+%~\ab{θ}~\aof{∈}~\ab{Con}~\ab{𝑨} and
+
+%\T{X}~\af{/}~\af{ker}~\ab h
 %Moreover, \ab x~\afld{≈}~\ab y if and only if the pair (\ab x,~\ab y) belongs to all congruences \ab{θ}~\aof{∈}~\ab{Con}~\ab{𝑨} where \ab{𝑨} ranges over homomorphic images of algebras in \af{S}~\ab{𝒦}.
-%Define
-%\afld{≈} := ⋂ \{\ab{θ}~∣~\ab{𝑨}~\af{/}~\ab{θ}~\aof{∈}~\af{S} \ab{𝒦}\}. %~\ab{θ}~\aof{∈}~\ab{Con}~\ab{𝑨} and 
+
+
 %Evidently \Free{X} is a subdirect product of all the algebras in \ab{𝒦}.
 
-For every \ab{𝑨}~\aof{∈}~\af{Mod}(\af{Th}~\ab{𝒦}), the epimorphism \T{A}~\as{→}~\ab{A}
-factors through \T{X}~\as{→}~\Free{X}.
-%(Here, \ab{A} denotes the carrier \aof{𝕌[}~\ab{𝑨}~\aof{]} of the algebra \ab{𝑨}.)  
-Thus, \Free{X} is a subdirect product of the algebras in \{\T{X}~\af{/}~\afld{≈}\} and
-it follows that \Free{X} satisfies the identities in \af{Th} \ab{𝒦}.
-Indeed, for each pair \ab p \ab q : \Term{X}, if \ab{𝒦} \af{⊫} \ab p \af{≈} \ab
-q, then \ab p and \ab q belong to the same \afld{≈}-class, so \ab p and \ab q are
-identified in \Free{X}.
+In \agda we construct \Free{X} as a homomorphic image of \T{X} in the following way.
+First, given \ab X we define \ab{𝑪} as the product of pairs (\ab{𝑨}, \ab{ρ}) of
+algebras \ab{𝑨}~\aof{∈}~\ab{𝒦} along with environments \ab{ρ}~\as{:}~\ab X~\as{→}~\aof{𝕌[}~\ab{𝑨}~\aof{]}.
+To do so, we contrive an index type for the product;
+%class \ab{𝒦} by letting the indices be the algebras in \ab{𝒦}. Actually,
+each index is a triple (\ab{𝑨}, \ab p, \ab{ρ}) where \ab{𝑨} is an algebra, \ab p is proof of \ab{𝑨}~\aof{∈}~\ab{𝒦}, and \ab{ρ}~\as{:}~\ab X~\as{→}~\aof{𝕌[}~\ab{𝑨}~\aof{]} is an arbitrary environment.
+%Using this indexing scheme, we construct \ab{𝑪}, as follows.
+%The indexing type \ab{ℑ} %, the family of algebras \ab{𝔄},
+%and the product \ab{𝑪} are defined as follows.
 
 \begin{code}
 
 module FreeAlgebra (𝒦 : Pred (Algebra α ρᵃ) ℓ) where
  private c = α ⊔ ρᵃ ; ι = ov c ⊔ ℓ
-
  ℑ : {χ : Level} → Type χ → Type (ι ⊔ χ)
  ℑ X = Σ[ 𝑨 ∈ Algebra α ρᵃ ] 𝑨 ∈ 𝒦 × (X → 𝕌[ 𝑨 ])
 
  𝑪 : {χ : Level} → Type χ → Algebra (ι ⊔ χ)(ι ⊔ χ)
  𝑪 X = ⨅ {I = ℑ X} ∣_∣
 
+\end{code}
+We then define \Free{X} to be the image of a homomorphism from \T{X} to \ab{𝑪} as follows.
+
+\begin{code}
+
  homC : (X : Type χ) → hom (𝑻 X) (𝑪 X)
  homC X = ⨅-hom-co _ (λ i → lift-hom (snd ∥ i ∥))
 
  𝔽[_] : {χ : Level} → Type χ → Algebra (ov χ) (ι ⊔ χ)
- 𝔽[_] X = HomIm (homC X)
+ 𝔽[ X ] = HomIm (homC X)
 
 \end{code}
-%% -----------------------------------------------------------------------------
-%\paragraph*{The natural epimorphism} % from 𝑻 X to 𝔽[ X ]}
-The natural epimorphism from \T{X} onto \Free{X} %(= \T{X}~\af{/}~\afld{≈})
-is then defined as follows.%
+
+Observe that if the identity \ab{p} \af{≈} \ab q holds in all \ab{𝑨} \aof{∈} \ab{𝒦} (for all environments), then \ab p \af{≈} \ab q holds in \Free{X}; equivalently, the pair (\ab p , \ab q) belongs to the
+kernel of the natural homomorphism from \T{X} onto \Free{X}.
+This natural epimorphism %from \T{X} onto \Free{X} %(= \T{X}~\af{/}~\afld{≈})
+is defined as follows.%
 %and prove that its kernel is contained in the collection of identities modeled
 %by \af{V} \ab{𝒦}.%(which we represent by \af{Th} (\af{V} \ab{𝒦})).
 \ifshort%
@@ -1663,11 +1680,11 @@ module FreeHom {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
  homF[ X ] = IsEpi.HomReduct ∥ epiF[ X ] ∥
 
 \end{code}
-Finally, we prove an important property of the relatively free algebra
+
+Before formalizing the HSP theorem in the next section, we need to prove the following important property of the relatively free algebra:
 %(relative to \ab{𝒦} and satisfying the identities in \af{Th}~\ab{𝒦}),
-which will be used in the formalization of the HSP theorem. Specifically,
-we prove for every algebra \ab{𝑨}, if \ab{𝑨}~\af{⊨}~\ab{Th}~(\af{V}~\ab{𝒦}),
-then there exists an epimorphism from \Free{A} onto \ab{𝑨}.
+For every algebra \ab{𝑨}, if \ab{𝑨}~\af{⊨}~\ab{Th}~(\af{V}~\ab{𝒦}),
+then there exists an epimorphism from \Free{A} onto \ab{𝑨}, where \ab{A} denotes the carrier of \ab{𝑨}.
 
 \begin{code}
 
@@ -1724,8 +1741,7 @@ module _ {𝑨 : Algebra (α ⊔ ρᵃ ⊔ ℓ)(α ⊔ ρᵃ ⊔ ℓ)}{𝒦 : Pr
 
 \section{Birkhoff's Variety Theorem}
 
-Let \ab{𝒦} be a class of algebras and recall that \ab{𝒦
-} is a \emph{variety} provided
+Let \ab{𝒦} be a class of algebras and recall that \ab{𝒦} is a \emph{variety} provided
 it is closed under homomorphisms, subalgebras and products; equivalently,
 \af{V} \ab{𝒦} ⊆ \ab{𝒦}.
 (Observe that \ab{𝒦} ⊆ \af{V} \ab{𝒦} holds for all \ab{𝒦} since \af{V} is a closure operator.)
@@ -1737,7 +1753,7 @@ statement and proof of this theorem---first in a style similar to
 what one finds in textbooks (e.g.,~\cite[Theorem 4.41]{Bergman:2012}),
 and then formally in the language of \mltt.
 %--------------------------------------
-\subsection{Informal proof}
+\paragraph*{Informal proof}
 
 %--------------------------------------
 \noindent (⇒) \textit{Every equational class is a variety}. Indeed, suppose \ab{𝒦} is an equational
@@ -1755,8 +1771,8 @@ Let \ab{𝒦} be an arbitrary variety.  We will describe a set of equations that
 \ab{𝑨} is a homomorphic image of \ab{𝑭}, as this will show that \ab{𝑨} \af{∈}
 \af{H} (\af{S} (\af{P} \ab{𝒦})) = \ab{𝒦}.
 
-Let \ab{X} be such that there exists a \emph{surjective} environment
-\ab{ρ} : \ab{X} \as{→} \af{𝕌[~\ab{𝑨}~]}.\footnote{We could do this (informally) by assuming \ab{X} has cardinality at least max(|~\af{𝕌[~\ab{𝑨}~]}~|, ω). Later we will see how to construct an \ab{X} with the required property in type theory.}
+Let \ab{X} be such that there exists a surjective environment
+\ab{ρ} : \ab{X} \as{→} \af{𝕌[~\ab{𝑨}~]}.\footnote{Informally, this is done by assuming \ab{X} has cardinality at least max(|~\af{𝕌[~\ab{𝑨}~]}~|, ω). Later we will see how to construct an \ab{X} with the required property in type theory.}
 By the \af{lift-hom} lemma, there is an epimorphism \ab{h} : \T{X} \as{→} \aof{𝕌[~\ab{𝑨}~]}
 that extends \ab{ρ}.
 Put \aof{𝔽[~\ab{X}~]}~:=~\T{X}/\afld{≈} and let \ab{g} : \T{X} \as{→} \aof{𝔽[~\ab{X}~]}
@@ -1785,7 +1801,7 @@ so \ab{𝒦}~\af{⊫}~\ab p~\af{≈}~\ab q; thus, (\ab p , \ab q) \af{∈} \af{T
 that \ab h \ab u = (\af{⟦~\ab{𝑨}~⟧} \ab p) \aofld{⟨\$⟩} \ab{ρ} = (\af{⟦~\ab{𝑨}~⟧} \ab q)
 \aofld{⟨\$⟩} \ab{ρ} = \ab h \ab v, as desired.
 
-\subsection{Formal proof}
+\paragraph*{Formal proof}
 %We now show how to express and prove the twin assertions that
 %(⇐) every equational class is a variety and (⇒) every variety is an equational class.
 %% -----------------------------------------------------------------------------
@@ -1828,9 +1844,9 @@ module _ {ℓ : Level}{X : Type ℓ}{ℰ : {Y : Type ℓ} → Pred (Term Y × Te
 
  EqCl⇒Var : V ℓ (ov ℓ) 𝒦 ⊆ 𝒦
  EqCl⇒Var {𝑨} vA {p} {q} pℰq ρ = V-id1 ℓ {𝒦} {p} {q} (λ _ x τ → x pℰq τ) 𝑨 vA ρ
-\end{code}
 
-\noindent By \af{V-expa} and \af{Eqcl⇒Var}, every equational class is a variety.
+\end{code}
+By \af{V-expa} and \af{Eqcl⇒Var}, every equational class is a variety.
 %% -----------------------------------------------------------------------------
 
 \bigskip
@@ -1852,62 +1868,23 @@ module _ (𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)){X : Type (α 
  ModTh-closure {x = 𝑨} vA {p} {q} x ρ = x 𝑨 vA ρ
 
 \end{code}
-
-\noindent Our proof of the inclusion \af{Mod} (\af{Th} (V 𝒦)) \aof{⊆}
-\af{V} \ab{𝒦} proceeds according to the following plan.
+Our proof of the inclusion \af{Mod} (\af{Th} (\af V \ab{𝒦})) \aof{⊆} \af{V} \ab{𝒦} is carried out in two steps.
 
 \begin{enumerate}
-\item \label{item:1} Prove \aof{𝔽[ \ab{X} ]} \af{∈} \af{S} (\af{P} \ab{𝒦}).
-\begin{enumerate}
-\item \label{item:1.1} Let \ab{𝑪} be the product of algebras in \af{S} \ab{𝒦}, so \ab{𝑪} \af{∈} \af{P} (\af{S} \ab{𝒦}).
-\item \label{item:1.2} Prove \af{P} (\af{S} \ab{𝒦}) \af{⊆} \af{S} (\af{P} \ab{𝒦}), so \ab{𝑪} \af{∈} \af{S} (\af{P} \ab{𝒦}).
-\item \label{item:1.3} Prove \aof{𝔽[ \ab{X} ]} \af{≤} \ab{𝑪}, so \aof{𝔽[ \ab{X} ]} \af{∈} \af{S} (\af{S} (\af{P} \ab{𝒦})) (= \af{S} (\af{P} \ab{𝒦})).
-\end{enumerate}
-\item \label{item:2} Prove that every algebra in \af{Mod} (\af{Th} (V 𝒦)) is a homomorphic image of
+\item \label{item:1} Prove \aof{𝔽[ \ab{X} ]} \af{≤} \ab{𝑪} \ab X.
+\item \label{item:2} Prove that every algebra in \af{Mod} (\af{Th} (\af{V}~\ab{𝒦})) is a homomorphic image of
 \aof{𝔽[ \ab{X} ]}.
 \end{enumerate}
-From \ref{item:1} and \ref{item:2} will follow \af{Mod} (\af{Th} (V 𝒦))
-⊆ \af{H} (\af{S} (\af{P} \ab{𝒦})) (= \af{V} \ab{𝒦}), as desired.
+
+\noindent From \ref{item:1} we have \aof{𝔽[ \ab{X} ]} \af{∈} \af{S} (\af{P} \ab{𝒦})), since \ab{𝑪}~\ab X is a product of algebras in \ab{𝒦}. From this and \ref{item:2} will follow \af{Mod}~(\af{Th}~(\af{V}~\ab{𝒦})) ⊆ \af{H}~(\af{S}~(\af{P}~\ab{𝒦})) (= \af{V} \ab{𝒦}), as desired.
 
 \begin{itemize}
-\item
-\noindent \ref{item:1.1}. To define \ab{𝑪} as the product of algebras in \af{S} \ab{𝒦}, we must first contrive
-an index type for the class \af{S} \ab{𝒦}.  We do so by letting the indices be the algebras
-in \af{S} \ab{𝒦}. Actually, each index will consist of a triple (\ab{𝑨} , \ab p ,
-\ab{ρ}) where \ab{𝑨} is an algebra, \ab p is a proof that \ab{𝑨} belongs to \af{S} \ab{𝒦},
-and \ab{ρ} : \ab X \as{→} \aof{𝕌[ \ab{𝑨} ]} is an arbitrary environment.
-Using this indexing scheme, we construct \ab{𝑪}, the product of algebras in \af{S} \ab{𝒦}
-and all environments.
-The indexing type \ab{ℑ}, the family of algebras \ab{𝔄}, and the product \ab{𝑪} are defined
-as follows.
+\item \noindent \ref{item:1}. To prove \Free{X} \af{≤} \ab{𝑪} \ab X, we construct a homomorphism from
+\Free{X} to \ab{𝑪}~\ab X and then show it is injective,
+so \Free{X} is (isomorphic to) a subalgebra of \af{𝑪}~\ab X.\footnote{The function \af{mon→≤} in
+the proof of \af{F≤C} merely extracts a subalgebra witness from a monomorphism.}
 
-\ifshort\else
-
-The type \af{skEqual} provides a term identity \ab p \af{≈} \ab q for each index \ab i = (\ab{𝑨} , \ab{p} , \ab{ρ}) of the product.
-%(here, as above, \ab{𝑨} is an algebra, \ab{sA} is a proof that \ab{𝑨} belongs to \af{S} \ab{𝒦}, and \ab{ρ} is an environment).
-%map assigning values in the domain of \ab{𝑨} to variable symbols in \ab X).
-Later we prove that if the identity \ab{p} \af{≈} \ab q holds in all \ab{𝑨} \aof{∈} \af S \ab{𝒦} (for all environments), then \ab p \af{≈} \ab q
-holds in the relatively free algebra \Free{X}; equivalently, the pair (\ab p , \ab q) belongs to the
-kernel of the natural homomorphism from \T{X} onto \Free{X}. We will use that fact to prove
-that the kernel of the natural hom from \T{X} to \ab{𝑪} is contained in the kernel of the natural hom from \T{X} onto \Free{X},
-whence we construct a monomorphism from \Free{X} into \ab{𝑪}, and thus \Free{X} is a subalgebra of \ab{𝑪},
-so belongs to \af S (\af P \ab{𝒦}).
-
-\fi
-
-\item \noindent \ref{item:1.2}. We need to show that a product of subalgebras of algebras in a class is a subalgebra of a product of algebras in the class;
-in other terms, \af{P} (\af{S} \ab{𝒦}) \aof{⊆} \af{S} (\af{P} \ab{𝒦}), for every class \ab{𝒦}.
-% We need \af{P} (\af{S} \ab{𝒦}) \aof{⊆} \af{S} (\af{P}
-% \ab{𝒦}) for every class \ab{𝒦},.
-\ifshort
-The \agdaalgebras library denotes this fact by \af{PS⊆SP}.
-As the proof is not illuminating, we omit it (\seemedium).
-\else
-We state and prove this in \agda as follows.
-
-\fi
-
-\item \noindent \ref{item:1.3}. To prove \Free{X} \af{≤} \ab{𝑪}, we construct a homomorphism from \T{X} to \ab{𝑪} whose kernel contains the kernel \afld{≈} of \aof{homF[}~\ab X~\aof{]} (the natural hom from \T{X} onto \Free{X}).
+%\T{X} to \ab{𝑪} whose kernel contains the kernel \afld{≈} of \aof{homF[}~\ab X~\aof{]} (the natural hom from \T{X} onto \Free{X}).
 
 \begin{code}
 
@@ -1915,28 +1892,6 @@ We state and prove this in \agda as follows.
  open FreeAlgebra 𝒦 using (homC ;  𝔽[_] ; 𝑪 )
  homFC : hom 𝔽[ X ] (𝑪 X)
  homFC = fromHomIm (homC X)
-\end{code}
-
-If \AgdaPair{p}{q} belongs to the kernel of \af{homC}, then
-\af{Th} \ab{𝒦} includes the identity \ab{p} \af{≈} \ab{q}.
-%---that is, \af{Th} \ab{𝒦} \af{⊢} \ab X \af{▹} \ab{p} \af{≈} \ab{q}.
-Equivalently,
-the kernel of \af{homC} is contained in that of \af{homF[ X ]}.
-\ifshort
-We omit the proof of this lemma and merely display its formal statement, which is the following:
-\else
-\fi
-
-\ifshort
-\vskip2mm
-\else
-
-\fi
-\noindent We conclude that the homomorphism from \Free{X} to \af{𝑪} is injective, so
-\Free{X} is (isomorphic to) a subalgebra of \af{𝑪}.\footnote{The function \af{mon→≤} in
-the proof of \af{F≤C} merely extracts a subalgebra witness from a monomorphism.}
-
-\begin{code}
 
  monFC : mon 𝔽[ X ] (𝑪 X)
  monFC = ∣ homFC ∣ , record { isHom = ∥ homFC ∥
@@ -1944,17 +1899,13 @@ the proof of \af{F≤C} merely extracts a subalgebra witness from a monomorphism
  F≤C : 𝔽[ X ] ≤ 𝑪 X
  F≤C = mon→≤ monFC
 
-\end{code}
-Recall, from \ref{item:1.1} and \ref{item:1.2}, we have \ab{𝑪} \af{∈}
-\af{P} (\af{S} \ab{𝒦}) \af{⊆} \af{S} (\af{P} \ab{𝒦}). We use this, along with
-\af{F≤C}, to conclude that \Free{X} belongs to \af{S} (\af{P} \ab{𝒦}).
-\begin{code}
  open FreeAlgebra 𝒦 using ( ℑ )
 
  SPF : 𝔽[ X ] ∈ S ι (P ℓ ι 𝒦)
  SPF = 𝑪 X , ((ℑ X) , (∣_∣ , ((λ i → fst ∥ i ∥) , ≅-refl))) ,  F≤C
 \end{code}
 \end{itemize}
+
 \begin{itemize}
 \item \ref{item:2}. Every algebra in \af{Mod} (\af{Th} (\af{V}
 \ab{𝒦})) is a homomorphic image of \af{𝔽[~\ab{X}~]}. Indeed,
@@ -2002,7 +1953,7 @@ type was unconstrained; it is meant to represent the informal notion of a ``suff
 domains of all algebras in the class under consideration.
 %The quantifiers were in the wrong order!
 But then, given a signature \ab{𝑆} and a one-element \ab{𝑆}-algebra \ab{𝑨},
-by choosing \ab X to be the empty type \ab{⊥}, our surjectivity postulate gives a map from \ab{⊥} onto the singleton domain of \ab{𝑨}. (For more details, see the \href{https://github.com/ualib/agda-algebras/blob/master/src/Demos/ContraX.lagda}{\am{Demos.ContraX}} module which constructs the counterexample in \agda.)
+by choosing \ab X to be the empty type \ab{⊥}, our surjectivity postulate gives a map from \ab{⊥} onto the singleton domain of \ab{𝑨}. (For details, see the \href{https://github.com/ualib/agda-algebras/blob/master/src/Demos/ContraX.lagda}{\am{Demos.ContraX}} module which constructs the counterexample in \agda.)
 
 \begin{comment}
 The inconsistency in our first effort to formalize Birkhoff's theorem was due to careless handling of the type \ab X of variable symbols.  Specifically, we had allowed \ab X to be any type whatever. Informally, \ab X is a ``sufficiently large'' collection of variable symbols and, in our first formal statement of Birkhoff's theorem, we made the following assumption: (h1) there exist surjections from \ab X to the domain of every algebra in the class under consideration.  Informally, this isn't a problem if we view (h1) as implicitly requiring that \ab X be a type for which such surjections could possibly exist.  Technically, however, by exploiting the freedom to choose \ab X arbitrarily, a contradiction can be contrived.  Specifically, if we take \ab X to be the empty type and take the one-element \ab{𝑆}-algebra. By (h1), there is a surjective map from the empty type to a nonempty type, which is clearly a contradiction.
