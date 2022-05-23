@@ -9,7 +9,7 @@ author: "the agda-algebras development team"
 
 This module collects all submodules the library that use "bare" types, as opposed to similar versions of these submodules based on Setoids (see the [Setoid](Setoid.html) module).
 
-(We are also developing a version of the library based on Cubical Agda, which will consist of submodules of the the [Cubical](Cubical.html) module, but this work has only just begun.)
+(We have also started developing in parallel the `cubical-agda-algebras` library, based on Cubical Agda.)
 
 \begin{code}
 

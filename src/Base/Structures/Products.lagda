@@ -11,7 +11,7 @@ This is the [Base.Structures.Products][] module of the [Agda Universal Algebra L
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-} -- cubical #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Base.Structures.Products where
 

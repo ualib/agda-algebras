@@ -52,11 +52,11 @@ We hope the library is useful to mathematicians and computer scientists who wish
 
 ### Organization
 
-We have organized the library into three main modules, called [Base](Base.html), [Setoid](Setoid.html), and [Cubical](Cubical.html), which are imported below (after the [Preface][] module, which doesn't contain any Agda code).  These three modules are independent of one another.  The [Base](Base.html) module contains submodules that comprise the first version of the library.  The [Setoid](Setoid.html) contains the second version of the library that is based on setoids.  Finally, we have begun work on a third version of the library, which is based on Cubical Agda and will consist of submodules of the [Cubical](Cubical.html) module.
+We have organized the library into two main modules, called [Base](Base.html) and [Setoid](Setoid.html), which are imported below (after the [Preface][] module, which contains no Agda code).  These two modules are mostly independent of one another.  The [Base](Base.html) module contains submodules that comprise the first version of the library.  The [Setoid](Setoid.html) contains an alternative version of the library that is based on setoids.  Finally, we have begun work on a third alternative version of the library, called `cubical-agda-algebras`, based on Cubical Agda.
 
 
 \begin{code}[hide]
-{-# OPTIONS --without-K --exact-split --safe --cubical #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 \end{code}
 \begin{code}
 module agda-algebras where
@@ -65,7 +65,6 @@ open import Preface
 open import Base     -- standard version of the library
 open import Setoid   -- setoid-based version of the library
 open import Demos    -- demonstrations (e.g., proof of the HSP Theorem in a single module)
-open import Cubical  -- forthcoming version of the library based on Cubical Agda
 
 \end{code}
 
