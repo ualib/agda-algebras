@@ -31,8 +31,7 @@ What follows is a self-contained formal proof of the HSP theorem in \agda.
 %is constructive and correct.
 This is achieved by
 extracting a subset of the \agdaalgebras library, including only the
-pieces needed for the proof, into a single literate \agda file.\footnote{%
-\HSPlagda in the \agdaalgebras repository: \agdaalgebrasrepo}
+pieces needed for the proof, into a single literate \agda file.\footnote{\HSPlagda in the \agdaalgebras repository: \agdaalgebrasrepo}
 \ifshort %%% BEGIN SHORT VERSION ONLY
 For spaces reasons, we elide some inessential parts,
 but strive to preserve the essential content and character of the development.
