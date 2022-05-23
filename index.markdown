@@ -52,20 +52,19 @@ We hope the library is useful to mathematicians and computer scientists who wish
 
 ### Organization
 
-We have organized the library into three main modules, called [Base](Base.html), [Setoid](Setoid.html), and [Cubical](Cubical.html), which are imported below (after the [Preface][] module, which doesn't contain any Agda code).  These three modules are independent of one another.  The [Base](Base.html) module contains submodules that comprise the first version of the library.  The [Setoid](Setoid.html) contains the second version of the library that is based on setoids.  Finally, we have begun work on a third version of the library, which is based on Cubical Agda and will consist of submodules of the [Cubical](Cubical.html) module.
+We have organized the library into two main modules, called [Base](Base.html) and [Setoid](Setoid.html), which are imported below (after the [Preface][] module, which contains no Agda code).  These two modules are mostly independent of one another.  The [Base](Base.html) module contains submodules that comprise the first version of the library.  The [Setoid](Setoid.html) contains an alternative version of the library that is based on setoids.  Finally, we have begun work on a third alternative version of the library, called `cubical-agda-algebras`, based on Cubical Agda.
 
 
 <pre class="Agda">
-<a id="4106" class="Symbol">{-#</a> <a id="4110" class="Keyword">OPTIONS</a> <a id="4118" class="Pragma">--without-K</a> <a id="4130" class="Pragma">--exact-split</a> <a id="4144" class="Pragma">--safe</a> <a id="4151" class="Pragma">--cubical</a> <a id="4161" class="Symbol">#-}</a>
+<a id="4045" class="Symbol">{-#</a> <a id="4049" class="Keyword">OPTIONS</a> <a id="4057" class="Pragma">--without-K</a> <a id="4069" class="Pragma">--exact-split</a> <a id="4083" class="Pragma">--safe</a> <a id="4090" class="Symbol">#-}</a>
 </pre>
 <pre class="Agda">
-<a id="4189" class="Keyword">module</a> <a id="4196" href="agda-algebras.html" class="Module">agda-algebras</a> <a id="4210" class="Keyword">where</a>
+<a id="4118" class="Keyword">module</a> <a id="4125" href="agda-algebras.html" class="Module">agda-algebras</a> <a id="4139" class="Keyword">where</a>
 
-<a id="4217" class="Keyword">open</a> <a id="4222" class="Keyword">import</a> <a id="4229" href="Preface.html" class="Module">Preface</a>
-<a id="4237" class="Keyword">open</a> <a id="4242" class="Keyword">import</a> <a id="4249" href="Base.html" class="Module">Base</a>     <a id="4258" class="Comment">-- standard version of the library</a>
-<a id="4293" class="Keyword">open</a> <a id="4298" class="Keyword">import</a> <a id="4305" href="Setoid.html" class="Module">Setoid</a>   <a id="4314" class="Comment">-- setoid-based version of the library</a>
-<a id="4353" class="Keyword">open</a> <a id="4358" class="Keyword">import</a> <a id="4365" href="Demos.html" class="Module">Demos</a>    <a id="4374" class="Comment">-- demonstrations (e.g., proof of the HSP Theorem in a single module)</a>
-<a id="4444" class="Keyword">open</a> <a id="4449" class="Keyword">import</a> <a id="4456" href="Cubical.html" class="Module">Cubical</a>  <a id="4465" class="Comment">-- forthcoming version of the library based on Cubical Agda</a>
+<a id="4146" class="Keyword">open</a> <a id="4151" class="Keyword">import</a> <a id="4158" href="Preface.html" class="Module">Preface</a>
+<a id="4166" class="Keyword">open</a> <a id="4171" class="Keyword">import</a> <a id="4178" href="Base.html" class="Module">Base</a>     <a id="4187" class="Comment">-- standard version of the library</a>
+<a id="4222" class="Keyword">open</a> <a id="4227" class="Keyword">import</a> <a id="4234" href="Setoid.html" class="Module">Setoid</a>   <a id="4243" class="Comment">-- setoid-based version of the library</a>
+<a id="4282" class="Keyword">open</a> <a id="4287" class="Keyword">import</a> <a id="4294" href="Demos.html" class="Module">Demos</a>    <a id="4303" class="Comment">-- demonstrations (e.g., proof of the HSP Theorem in a single module)</a>
 
 </pre>
 

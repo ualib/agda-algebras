@@ -9,26 +9,26 @@ author: "the agda-algebras development team"
 
 This module collects all submodules the library that use "bare" types, as opposed to similar versions of these submodules based on Setoids (see the [Setoid](Setoid.html) module).
 
-(We are also developing a version of the library based on Cubical Agda, which will consist of submodules of the the [Cubical](Cubical.html) module, but this work has only just begun.)
+(We have also started developing in parallel the `cubical-agda-algebras` library, based on Cubical Agda.)
 
 <pre class="Agda">
 
-<a id="617" class="Symbol">{-#</a> <a id="621" class="Keyword">OPTIONS</a> <a id="629" class="Pragma">--without-K</a> <a id="641" class="Pragma">--exact-split</a> <a id="655" class="Pragma">--safe</a> <a id="662" class="Symbol">#-}</a>
+<a id="539" class="Symbol">{-#</a> <a id="543" class="Keyword">OPTIONS</a> <a id="551" class="Pragma">--without-K</a> <a id="563" class="Pragma">--exact-split</a> <a id="577" class="Pragma">--safe</a> <a id="584" class="Symbol">#-}</a>
 
-<a id="667" class="Keyword">module</a> <a id="674" href="Base.html" class="Module">Base</a> <a id="679" class="Keyword">where</a>
+<a id="589" class="Keyword">module</a> <a id="596" href="Base.html" class="Module">Base</a> <a id="601" class="Keyword">where</a>
 
-<a id="686" class="Keyword">open</a> <a id="691" class="Keyword">import</a> <a id="698" href="Base.Overture.html" class="Module">Base.Overture</a>
-<a id="712" class="Keyword">open</a> <a id="717" class="Keyword">import</a> <a id="724" href="Base.Relations.html" class="Module">Base.Relations</a>
-<a id="739" class="Keyword">open</a> <a id="744" class="Keyword">import</a> <a id="751" href="Base.Algebras.html" class="Module">Base.Algebras</a>
-<a id="765" class="Keyword">open</a> <a id="770" class="Keyword">import</a> <a id="777" href="Base.Equality.html" class="Module">Base.Equality</a>
-<a id="791" class="Keyword">open</a> <a id="796" class="Keyword">import</a> <a id="803" href="Base.Homomorphisms.html" class="Module">Base.Homomorphisms</a>
-<a id="822" class="Keyword">open</a> <a id="827" class="Keyword">import</a> <a id="834" href="Base.Terms.html" class="Module">Base.Terms</a>
-<a id="845" class="Keyword">open</a> <a id="850" class="Keyword">import</a> <a id="857" href="Base.Subalgebras.html" class="Module">Base.Subalgebras</a>
-<a id="874" class="Keyword">open</a> <a id="879" class="Keyword">import</a> <a id="886" href="Base.Varieties.html" class="Module">Base.Varieties</a>
-<a id="901" class="Keyword">open</a> <a id="906" class="Keyword">import</a> <a id="913" href="Base.Structures.html" class="Module">Base.Structures</a>
-<a id="929" class="Keyword">open</a> <a id="934" class="Keyword">import</a> <a id="941" href="Base.Adjunction.html" class="Module">Base.Adjunction</a>
-<a id="957" class="Keyword">open</a> <a id="962" class="Keyword">import</a> <a id="969" href="Base.Categories.html" class="Module">Base.Categories</a>
-<a id="985" class="Keyword">open</a> <a id="990" class="Keyword">import</a> <a id="997" href="Base.Complexity.html" class="Module">Base.Complexity</a>
+<a id="608" class="Keyword">open</a> <a id="613" class="Keyword">import</a> <a id="620" href="Base.Overture.html" class="Module">Base.Overture</a>
+<a id="634" class="Keyword">open</a> <a id="639" class="Keyword">import</a> <a id="646" href="Base.Relations.html" class="Module">Base.Relations</a>
+<a id="661" class="Keyword">open</a> <a id="666" class="Keyword">import</a> <a id="673" href="Base.Algebras.html" class="Module">Base.Algebras</a>
+<a id="687" class="Keyword">open</a> <a id="692" class="Keyword">import</a> <a id="699" href="Base.Equality.html" class="Module">Base.Equality</a>
+<a id="713" class="Keyword">open</a> <a id="718" class="Keyword">import</a> <a id="725" href="Base.Homomorphisms.html" class="Module">Base.Homomorphisms</a>
+<a id="744" class="Keyword">open</a> <a id="749" class="Keyword">import</a> <a id="756" href="Base.Terms.html" class="Module">Base.Terms</a>
+<a id="767" class="Keyword">open</a> <a id="772" class="Keyword">import</a> <a id="779" href="Base.Subalgebras.html" class="Module">Base.Subalgebras</a>
+<a id="796" class="Keyword">open</a> <a id="801" class="Keyword">import</a> <a id="808" href="Base.Varieties.html" class="Module">Base.Varieties</a>
+<a id="823" class="Keyword">open</a> <a id="828" class="Keyword">import</a> <a id="835" href="Base.Structures.html" class="Module">Base.Structures</a>
+<a id="851" class="Keyword">open</a> <a id="856" class="Keyword">import</a> <a id="863" href="Base.Adjunction.html" class="Module">Base.Adjunction</a>
+<a id="879" class="Keyword">open</a> <a id="884" class="Keyword">import</a> <a id="891" href="Base.Categories.html" class="Module">Base.Categories</a>
+<a id="907" class="Keyword">open</a> <a id="912" class="Keyword">import</a> <a id="919" href="Base.Complexity.html" class="Module">Base.Complexity</a>
 
 </pre>
 
