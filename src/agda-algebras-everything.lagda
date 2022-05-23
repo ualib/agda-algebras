@@ -9,7 +9,7 @@ All definitions and theorems in agda-algebras as of 12 Dec 2021.
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe --cubical #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 
 -- ================================================================================================
@@ -419,15 +419,6 @@ open import
                                     using ( SP𝔽 ; Birkhoff ; Birkhoff-converse               )
 
 
--- CUBICAL.OVERTURE --------------------------------------------------------------------------
-
-open import
- Cubical.Overture.Preliminaries     using ( Π ; Π-syntax ; ∣_∣ ; ∥_∥ ; _⁻¹ ; id ; 𝑖𝑑        )
-                                    using ( lift∼lower ; lower∼lift ; _≈_                   )
-
-
-
-
 -- EXAMPLES -----------------------------------------------------------------------------------------
 open import
  Examples.Structures.Signatures     using ( S∅ ; S1 ; S01 ; S001 ; S0001 ; S021 ; S101 ; S111  )
@@ -442,6 +433,25 @@ open import
 -- EXERCISES -----------------------------------------------------------------------------------------
 open import
  Exercises.Complexity.FiniteCSP     using  ( module solution-2-1 ; module solution-2-2         )
+
+-- DEMOS ------------------------------------------------------------------------------------------------
+open import
+ Demos.HSP   using ( ∣_∣ ; ∥_∥ ; 𝑖𝑑 ; _⟨∘⟩_ ; Image_∋_ ; Inv ; InvIsInverseʳ ; IsInjective
+                   ; IsSurjective ; SurjInv ; ∘-IsInjective ; ∘-IsSurjective ; Im ; toIm ; fromIm
+                   ; fromIm-inj ; toIm-surj ; EqArgs ; ⟨_⟩ ; Algebra ; 𝔻[_] ; 𝕌[_] ; _̂_
+                   ; Lift-Algˡ ; Lift-Algʳ ; Lift-Alg ; ⨅ ; compatible-map-op ; compatible-map
+                   ; IsHom ; hom ; IsMon ; mon ; IsEpi ; epi ; mon→intohom ; epi→ontohom
+                   ; ∘-is-hom ; ∘-is-epi ; ∘-hom ; ∘-epi ; 𝒾𝒹 ; ToLiftˡ ; FromLiftˡ ; ToFromLiftˡ
+                   ; FromToLiftˡ ; ToLiftʳ ; FromLiftʳ ; ToFromLiftʳ ; FromToLiftʳ ; ToLift
+                   ; FromLift ; ToFromLift ; ToLift-epi ; ⨅-hom-co ; _≅_ ; ≅-refl ; ≅-sym ; ≅-trans
+                   ; ov ; _IsHomImageOf_ ; IdHomImage ; HomIm ; toHomIm ; fromHomIm ; Lift-≅ˡ
+                   ; Lift-≅ʳ ; Lift-≅ ; _≤_ ; ≤-reflexive ; mon→≤ ; Term ; _≃_ ; ≃-isRefl ; ≃-isSym
+                   ; ≃-isTrans ; ≃-isEquiv ; TermSetoid ; 𝑻 ; comm-hom-term ; interp-prod
+                   ; _⊧_≈_ ; _⊫_≈_ ; _⊨_ ; ⊧-I-invar ; Th ; Mod ; H ; S ; P ; ⊧-H-invar ; ⊧-S-invar
+                   ; ⊧-P-invar ; V ; H-id1 ; S-id1 ; S-id2 ; P-id1 ; V-id1 ; free-lift ; free-lift-func
+                   ; lift-hom ; free-lift-interp ; module FreeAlgebra ; module FreeHom ; F-ModTh-epi
+                   ; F-ModThV-epi ; F-ModTh-epi-lift ; V-expa ; EqCl⇒Var ; ModTh-closure ; homFC
+                   ; monFC ; F≤C ; SPF ; Var⇒EqCl )
 
 \end{code}
 

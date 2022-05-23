@@ -11,7 +11,7 @@ This is the [Base.Structures.Homs][] module of the [Agda Universal Algebra Libra
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-} -- cubical #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Base.Structures.Homs where
 

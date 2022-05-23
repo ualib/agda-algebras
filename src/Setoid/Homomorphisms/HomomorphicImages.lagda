@@ -86,7 +86,7 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
  HomImageOf[ h ] =
   record { Domain = Ran ∣ h ∣ ; Interp = record { f = f' ; cong = cong' } }
    where
-   open Setoid (⟦ 𝑆 ⟧ (Ran ∣ h ∣)) using () renaming (Carrier to SRanh ; _≈_ to _≈₃_ ; refl to refl₃ )
+   open Setoid (⟨ 𝑆 ⟩ (Ran ∣ h ∣)) using () renaming (Carrier to SRanh ; _≈_ to _≈₃_ ; refl to refl₃ )
 
    hhom : ∀ {𝑓}(x : ∥ 𝑆 ∥ 𝑓 → ∣ h ∣ range )
     →     (∣ h ∣ ⟨$⟩ (𝑓 ̂ 𝑨) ((∣ h ∣ preimage) ∘ x)) ≈₂ (𝑓 ̂ 𝑩) ((∣ h ∣ image) ∘ x)

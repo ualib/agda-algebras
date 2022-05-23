@@ -10,7 +10,7 @@ author: "agda-algebras development team"
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-} -- cubical #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Base.Structures.Sigma.Homs where
 
