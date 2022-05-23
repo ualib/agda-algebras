@@ -71,7 +71,7 @@ We have organized the library into two main modules, called [Base](Base.html) an
 
 ### The formalization of Brkhoff's Theorem
 
-The [Demos/HSP][] module presents a fairly self-contained formal proof of Birkhoff's HSP Theorem in a single module.
+The [Demos.HSP][] module presents a fairly self-contained formal proof of Birkhoff's HSP Theorem in a single module.
 
 An earlier version of the proof is described in the [Birkhoff HSP Theorem Section](https://ualib.org/Setoid.Varieties.HSP.html#proof-of-the-hsp-theorem) of the documentation; specifically, see [Setoid.Varieties.HSP][].
 
