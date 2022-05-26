@@ -11,28 +11,26 @@ bibliography: ualib_refs.bib
 Introduction
 ============
 
-The Agda Universal Algebra Library ([agda-algebras][]) formalizes the foundations of universal 
-algebra in intensional Martin-Löf type theory ([MLTT][]) using [Agda][] ()  [@Norell:2007; @agdaref].
-The library includes a collection of definitions and verified theorems originated in classical 
+The Agda Universal Algebra Library ([agda-algebras][]) formalizes the foundations of universal
+algebra in intensional Martin-Löf type theory ([MLTT][]) using [Agda][] [@Norell:2007; @agdaref].
+The library includes a collection of definitions and verified theorems originated in classical
 (set-theory based) universal algebra and equational logic, but adapted to [MLTT][].
 
 The first major milestone of the project is a complete formalization of *Birkhoff's variety
 theorem* (also known as the *HSP theorem*) [@Birkhoff:1935]. To the best of our knowledge, this
 is the first time Birkhoff's celebrated 1935 result has been formalized in [MLTT][].[^1]
 
-Our first attempt to formalize Birkhoff's theorem suffered from two flaws.[^2] First, we 
+Our first attempt to formalize Birkhoff's theorem suffered from two flaws.[^2] First, we
 assumed function extensionality in [MLTT][]; consequently, it was unclear whether the
 formalization was fully constructive. Second, an inconsistency could be contrived by taking the
 type `X`, representing an arbitrary collection of variable symbols, to be the two element type
-(see §[7](#sec:discuss){reference-type="ref" reference="sec:discuss"} for details). To resolve
+(see §[7](#sec:discuss) for details). To resolve
 these issues, we developed a new formalization of the HSP theorem based on *setoids* and
 rewrote much of the [agda-algebras][] library to support this approach. This enabled us to
 avoid function extensionality altogether. Moreover, the type `X` of variable symbols was
 treated with more care using the *context* and *environment* types that Andreas Abel uses
 in [@Abel:2021] to formalize Birkhoff's completeness theorem. These design choices are
-discussed further in §[2.2](#setoids){reference-type="ref"
-reference="setoids"}--[2.3](#setoid-functions){reference-type="ref"
-reference="setoid-functions"}.
+discussed further in §[2.2](#setoids)--[2.3](#setoid-functions).
 
 What follows is a self-contained formal proof of the HSP theorem in [Agda][]. This is achieved
 by extracting a subset of the library, including only the pieces needed for the proof, into a
@@ -110,8 +108,7 @@ private variable α ρᵃ β ρᵇ γ ρᶜ δ ρᵈ ρ χ ℓ : Level ;       �
 \end{code}
 
 The above imports include some adjustments to "standard" [Agda][] syntax; in particular, we use `Type` in place of `Set`, the infix long arrow symbol, `_⟶_`, in place of `Func` (the type of "setoid functions," discussed in
-§[2.3](#setoid-functions){reference-type="ref"
-reference="setoid-functions"} below), and the symbol `_⟨$⟩_` in place of `f` (application of the map of a setoid function); we use `fst` and `snd`, and sometimes `∣_∣` and `∥_∥`, to denote the first and second projections out of the product type `_×_`.
+§[2.3](#setoid-functions) below), and the symbol `_⟨$⟩_` in place of `f` (application of the map of a setoid function); we use `fst` and `snd`, and sometimes `∣_∣` and `∥_∥`, to denote the first and second projections out of the product type `_×_`.
 
 \begin{code}
 module _ {A : Type α }{B : A → Type β} where
@@ -263,17 +260,10 @@ Basic Universal Algebra
 We now develop a working vocabulary in [MLTT][] corresponding to classical, single-sorted, set-based universal algebra. We cover a number of important concepts, but limit ourselves to those required to prove Birkhoff's HSP theorem. In each case, we give a type-theoretic version of the informal definition, followed by its implementation in [Agda][].
 
 This section is organized into the following subsections:
-§[3.1](#signatures){reference-type="ref" reference="signatures"} defines
-a general type of *signatures* of algebraic structures;
-§[3.2](#algebras){reference-type="ref" reference="algebras"} does the
-same for structures and their products;
-§[3.3](#homomorphisms){reference-type="ref" reference="homomorphisms"}
-defines *homomorphisms*, *monomorphisms*, and *epimorphisms*, presents
-types that codify these concepts, and formally verifies some of their
-basic properties; §[3.5](#subalgebras){reference-type="ref"
-reference="subalgebras"}--[3.6](#terms){reference-type="ref"
-reference="terms"} do the same for *subalgebras* and *terms*,
-respectively.
+§[3.1](#signatures) defines a general type of *signatures* of algebraic structures;
+§[3.2](#algebras) does the same for structures and their products;
+§[3.3](#homomorphisms) defines *homomorphisms*, *monomorphisms*, and *epimorphisms*, presents types that codify these concepts, and formally verifies some of their basic properties;
+§[3.5](#subalgebras)--[3.6](#terms) do the same for *subalgebras* and *terms*, respectively.
 
 Signatures
 ----------
@@ -320,7 +310,7 @@ An *algebraic structure* `𝑨 = (A, Fᴬ)` *in the signature* `𝑆 = (F, ρ)`,
 *  a type `A`, called the *domain* of the algebra;
 *  a collection `Fᴬ := {fᴬ ∣ f ∈ F, fᴬ : (ρ f → A) → A}` of *operations* on `A`;
 *  a (potentially empty) collection of *identities* satisfied by elements and operations of `𝑨`.
-Our [Agda][] implementation represents algebras as inhabitants of a record type with two fields---a `Domain` setoid denoting the domain of the algebra, and an `Interp` function denoting the interpretation in the algebra of each operation symbol in `𝑆`. We postpone introducing identities until §[4](#equational-logic){reference-type="ref" reference="equational-logic"}.
+Our [Agda][] implementation represents algebras as inhabitants of a record type with two fields---a `Domain` setoid denoting the domain of the algebra, and an `Interp` function denoting the interpretation in the algebra of each operation symbol in `𝑆`. We postpone introducing identities until §[4](#equational-logic).
 
 \begin{code}
 
@@ -402,8 +392,7 @@ Concretely, an algebra of type `Algebra α ρᵃ` has a `Domain` of type `Setoid
 `Lift-Alg` takes an algebra parametrized by levels `α` and `ρᵃ` and constructs a new algebra whose carrier 
 inhabits `Type (α ⊔ ℓ₀)` and whose equivalence inhabits `Rel Carrier (ρᵃ ⊔ ℓ₁)`.
 To be useful, this lifting operation should result in an algebra with the same semantic properties
-as the one we started with. We will see in §[3.4](#sec:lift-alg){reference-type="ref"
-reference="sec:lift-alg"} that this is indeed the case.
+as the one we started with. We will see in §[3.4](#sec:lift-alg) that this is indeed the case.
 
 
 #### <a id="product-algebras">Product Algebras</a>
@@ -1464,7 +1453,7 @@ As noted by Abel [@Abel:2021], Amato et al, in [@Amato:2021], have formalized m
 
 
 Footnotes
-=========
+-----------
 
 [^1]: An alternative formalization based on classical set-theory was achieved in [@birkhoff-in-mizar:1999].
 
@@ -1490,10 +1479,12 @@ Footnotes
 
 [^12]: `⟦ 𝑨 ⟧ t` denotes the interpretation of the term `t` in the algebra `𝑨`.
 
---------------------------------
+References
+-----------
 
-<span style="float:left;">[↑ Demos](Demos.html)</span>
-<span style="float:right;">[Demos.ContraX →](Demos.ContraX.html)</span>
+<div id="refs"></div>
+
+--------------------------------
 
 {% include UALib.Links.md %}
 
