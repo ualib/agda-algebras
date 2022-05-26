@@ -1,6 +1,7 @@
 # agda-algebras
 
-This is a copy of the Agda Universal Algebra Library which depends the [Standard Library](https://github.com/agda/agda-stdlib) of the [Agda](https://wiki.portal.chalmers.se/agda/pmwiki.php) proof assistant language.
+This is a copy of the Agda Universal Algebra Library which depends the [Standard Library](https://github.com/agd
+a/agda-stdlib) of the [Agda](https://wiki.portal.chalmers.se/agda/pmwiki.php) proof assistant language.
 It is currently under active reconstruction, and should be regarded as alpha software.  (The previous version of the Agda Universal Algebra Library, which was called UALib, was based on the [Type Topology](https://github.com/martinescardo/TypeTopology) library of [Martín Escardó][].)
 
 ---------------------------
@@ -20,6 +21,34 @@ Agda was used to generate html pages for each module. These pages are now served
 [https://ualib.org](https://ualib.org)
 
 (The previous version of the agda-algebras library, called UALib, is documented at [ualib.org](https://ualib.gitlab.io).)
+
+1.  **Html generation**  
+    Here is how the html pages are generated.
+    a.  Its best to start with the `generate-html` branch of the repository, to ensure that the text surrounding Agda code in all .lagda files are written in markdown (as opposed to tex).
+        ```
+        git checkout generate-html
+        ```
+    b.  Edit the literate Agda files, e.g., `src/Demos/HSP.lagda`, as needed.  The text surrounding the code should be written in markdown.
+    c.  Invoke the `generate-html` script from the main `agda-algebras` directory.  Assuming everything type-checks, this will generate html documentation files in the `html` directory.
+
+2.  **Html website**  
+    GitHub uses the content residing in the `gh-pages` branch of the repository when serving the documentation web pages, so that's where we want to push the new html pages we generated in Step 1 above.
+    a.  After completing Step 1, checkout the `gh-pages` branch.
+        ```
+        git checkout gh-pages
+        ```
+    b.  Copy all of the new documentation files into the main `agda-algebras` directory.
+        ```
+        \cp html/* .
+        ```
+    c.  Stage, commit, and push.
+        ```
+        git add .
+        git commit -m "update html documentation pages"
+        git push remote gh-pages
+        ```
+    Finally, visit to the [gh-pages](https://github.com/ualib/agda-algebras/tree/gh-pages) page at GitHub to check that the new files were deployed correctly.  (There should be a green check mark next to the latest commit number; if there's a bronze circle, click on it to monitor the deployment job progress.)
+
 
 ----------------------------------
 
