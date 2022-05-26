@@ -53,11 +53,6 @@ To best emulate [MLTT][], we use
 \begin{code}[inline]
 {-# OPTIONS --without-K --exact-split --safe #-}
 \end{code}
- disables [Streicher's K axiom](https://ncatlab.org/nlab/show/axiom+K+%28type+theory%29); 
-directs [Agda][] to accept only definitions behaving like *judgmental* equalities;
-**safe** ensures that nothing is postulated outright.
-(See [@agdaref-axiomk; @agdaref-safeagda; @agdatools-patternmatching].)
-
 Here are brief descriptions of these options, accompanied by links to
 related documentation.
 
