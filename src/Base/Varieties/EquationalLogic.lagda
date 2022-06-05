@@ -5,13 +5,13 @@ date : "2021-01-14"
 author: "agda-algebras development team"
 ---
 
-### <a id="varieties-model-theory-and-equational-logic">Varieties, Model Theory, and Equational Logic</a>
+### <a id="equational-logic">Equational Logic</a>
 
-This is the [Base.Varieties.EquationalLogic][] module of the [Agda Universal Algebra Library][] where the binary "models" relation ⊧, relating algebras (or classes of algebras) to the identities that they satisfy, is defined.
+This is the [Base.Varieties.EquationalLogic][] module of the [Agda Universal Algebra Library][] where the binary "models" relation `⊧`, relating algebras (or classes of algebras) to the identities that they satisfy, is defined.
 
-Let 𝑆 be a signature. By an *identity* or *equation* in 𝑆 we mean an ordered pair of terms, written 𝑝 ≈ 𝑞, from the term algebra 𝑻 X. If 𝑨 is an 𝑆-algebra we say that 𝑨 *satisfies* 𝑝 ≈ 𝑞 provided 𝑝 ̇ 𝑨 ≡ 𝑞 ̇ 𝑨 holds. In this situation, we write 𝑨 ⊧ 𝑝 ≈ 𝑞 and say that 𝑨 *models* the identity 𝑝 ≈ q. If 𝒦 is a class of algebras, all of the same signature, we write 𝒦 ⊧ p ≈ q if, for every 𝑨 ∈ 𝒦, 𝑨 ⊧ 𝑝 ≈ 𝑞.
+Let `𝑆` be a signature. By an *identity* or *equation* in `𝑆` we mean an ordered pair of terms, written `p ≈ q`, from the term algebra `𝑻 X`. If `𝑨` is an `𝑆`-algebra we say that `𝑨` *satisfies* `p ≈ q` provided `p ̇ 𝑨 ≡ q ̇ 𝑨` holds. In this situation, we write `𝑨 ⊧ p ≈ q` and say that `𝑨` *models* the identity `p ≈ q`. If `𝒦` is a class of `𝑆`-algebras, then we write `𝒦 ⊧ p ≈ q` iff, for every `𝑨 ∈ 𝒦`, `𝑨 ⊧ p ≈ q`.
 
-Because a class of structures has a different type than a single structure, we must use a slightly different syntax to avoid overloading the relations ⊧ and ≈. As a reasonable alternative to what we would normally express informally as 𝒦 ⊧ 𝑝 ≈ 𝑞, we have settled on 𝒦 ⊫ p ≈ q to denote this relation.  To reiterate, if 𝒦 is a class of 𝑆-algebras, we write 𝒦 ⊫ 𝑝 ≈ 𝑞 if every 𝑨 ∈ 𝒦 satisfies 𝑨 ⊧ 𝑝 ≈ 𝑞.
+Because a class of structures has a different type than a single structure, we must use a slightly different syntax to avoid overloading the relations `⊧` and `≈`. As a reasonable alternative to what we would normally express informally as `𝒦 ⊧ p ≈ q`, we have settled on `𝒦 ⊫ p ≈ q` to denote this relation.  To reiterate, if `𝒦` is a class of `𝑆`-algebras, we write `𝒦 ⊫ p ≈ q` iff every `𝑨 ∈ 𝒦` satisfies `𝑨 ⊧ p ≈ q`.
 
 \begin{code}
 
@@ -22,32 +22,28 @@ open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 module Base.Varieties.EquationalLogic {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ----------------
-open import Agda.Primitive using    ( _⊔_ ;  lsuc ; Level )
-                           renaming ( Set to Type )
-open import Data.Product   using    ( _×_ ; _,_ ; Σ-syntax)
-                           renaming ( proj₁ to fst ; proj₂ to snd )
-open import Relation.Unary using    ( Pred ; _∈_ )
+open import Agda.Primitive  using ( _⊔_ ;  lsuc ; Level )  renaming ( Set to Type )
+open import Data.Product    using ( _×_ ; _,_ ; Σ-syntax)  renaming ( proj₁ to fst ; proj₂ to snd )
+open import Relation.Unary  using ( Pred ; _∈_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------
-open import Base.Overture.Preliminaries    using ( _≈_ )
-open import Base.Algebras.Basic            using ( Algebra )
-open import Base.Algebras.Products {𝑆 = 𝑆} using ( ov )
-open import Base.Terms.Basic       {𝑆 = 𝑆} using ( Term ; 𝑻 )
-open import Base.Terms.Operations  {𝑆 = 𝑆} using ( _⟦_⟧ )
+open import Base.Overture.Preliminaries      using ( _≈_ )
+open import Base.Algebras.Basic              using ( Algebra )
+open import Base.Algebras.Products  {𝑆 = 𝑆}  using ( ov )
+open import Base.Terms.Basic        {𝑆 = 𝑆}  using ( Term ; 𝑻 )
+open import Base.Terms.Operations   {𝑆 = 𝑆}  using ( _⟦_⟧ )
 private variable
  χ α ρ ι : Level
  X : Type χ
 
 \end{code}
 
-
 #### <a id="the-models-relation">The models relation</a>
 
 We define the binary "models" relation `⊧` using infix syntax so that we may
 write, e.g., `𝑨 ⊧ p ≈ q` or `𝒦 ⊫ p ≈ q`, relating algebras (or classes of
 algebras) to the identities that they satisfy. We also prove a couple of useful
-facts about ⊧.  More will be proved about ⊧ in the next module,
-Base.Varieties.EquationalLogic.
+facts about `⊧`.
 
 \begin{code}
 
@@ -59,7 +55,7 @@ _⊫_≈_ : Pred(Algebra α 𝑆) ρ → Term X → Term X → Type _
 
 \end{code}
 
-(**Unicode tip**. Type \models to get `⊧` ; type \||= to get `⊫`.)
+**Unicode tip**. Type `\models` to get `⊧` ; type `\||=` to get `⊫`.
 
 The expression `𝑨 ⊧ p ≈ q` represents the assertion that the identity `p ≈ q`
 holds when interpreted in the algebra `𝑨`; syntactically, `𝑨 ⟦ p ⟧ ≈ 𝑨 ⟦ q ⟧`.
@@ -72,8 +68,8 @@ holds.
 
 #### <a id="equational-theories-and-models">Equational theories and models</a>
 
-If 𝒦 denotes a class of structures, then `Th 𝒦` represents the set of identities
-modeled by the members of 𝒦.
+If `𝒦` denotes a class of structures, then `Th 𝒦` represents the set of identities
+modeled by the members of `𝒦`.
 
 \begin{code}
 
@@ -82,8 +78,8 @@ Th 𝒦 = λ (p , q) → 𝒦 ⊫ p ≈ q
 
 \end{code}
 
-Perhaps we want to represent Th 𝒦 as an indexed collection.  We do so
-essentially by taking `Th 𝒦` itself to be the index set, as follows.
+We represent ``Th 𝒦`` as an indexed collection of algebras by taking `Th 𝒦`,
+itself, to be the index set.
 
 \begin{code}
 

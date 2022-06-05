@@ -9,62 +9,64 @@ author: "the agda-algebras development team"
 
 This is the [Base.Varieties.FreeAlgebras][] module of the [Agda Universal Algebra Library][].
 
-First we will define the relatively free algebra in a variety, which is the "freest" algebra among (universal for) those algebras that model all identities holding in the variety. Then we give a formal proof of Birkhoff's theorem which says that a variety is an equational class. In other terms, a class `𝒦` of algebras is closed under the operators `H`, `S`, and `P` if and only if 𝒦 is the class of algebras that satisfy some set of identities.
+First we will define the relatively free algebra in a variety, which is the "freest" algebra among (universal for) those algebras that model all identities holding in the variety. Then we give a formal proof of Birkhoff's theorem which says that a variety is an equational class. In other terms, a class `𝒦` of algebras is closed under the operators `H`, `S`, and `P` if and only if `𝒦` is the class of algebras that satisfy some set of identities.
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-
-open import Level renaming ( suc to lsuc )
-open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Level                using ( Level ) renaming ( suc to lsuc )
+open import Base.Algebras.Basic  using ( 𝓞 ; 𝓥 ; Signature )
 
 module Base.Varieties.FreeAlgebras {α 𝓞 𝓥 : Level} (𝑆 : Signature 𝓞 𝓥) where
 
 -- Imports from Agda and the Agda Standard Library ---------------------
-open import Axiom.Extensionality.Propositional
-                            using () renaming (Extensionality to funext)
-open import Agda.Primitive  using ( _⊔_ ) renaming ( Set to Type )
-open import Data.Product    using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Function.Base   using ( _∘_ )
-open import Relation.Binary using ( IsEquivalence ) renaming ( Rel to BinRel )
-open import Relation.Binary.PropositionalEquality
-                            using ( _≡_ ; refl ; cong ; cong-app ; module ≡-Reasoning )
-open import Relation.Unary  using    ( Pred ; _∈_ ; _⊆_ ; ｛_｝ ; _∪_ )
+open import Axiom.Extensionality.Propositional        renaming  (Extensionality to funext)
+                                                      using     ()
+open import Agda.Primitive                            renaming  ( Set to Type )
+                                                      using     ( _⊔_ )
+open import Data.Product                              renaming  ( proj₁ to fst ; proj₂ to snd )
+                                                      using     ( _,_ ; Σ-syntax ; _×_ )
+open import Function.Base                             using     ( _∘_ )
+open import Relation.Binary                           renaming  ( Rel to BinRel )
+                                                      using     ( IsEquivalence )
+open import Relation.Binary.PropositionalEquality     using     ( _≡_ ; refl ; cong ; cong-app )
+                                                      using     ( module ≡-Reasoning )
+open import Relation.Unary                            using     ( Pred ; _∈_ ; _⊆_ ; ｛_｝ ; _∪_ )
 
 -- Imports from the Agda Universal Algebra Library -------------------------------------------
-open import Base.Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ ; _∙_ ; _⁻¹ )
-open import Base.Overture.Surjective                using ( IsSurjective )
-open import Base.Relations.Discrete                 using ( kernel )
-open import Base.Relations.Quotients                using ( ⟪_⟫ )
-open import Base.Equality.Welldefined               using ( SwellDef ; swelldef )
-open import Base.Equality.Truncation                using ( is-set ; blk-uip ; hfunext )
-open import Base.Equality.Extensionality            using ( DFunExt; pred-ext )
-open import Base.Algebras.Basic                     using ( Algebra ; Lift-Alg ; compatible ; _̂_ )
-open import Base.Algebras.Products          {𝑆 = 𝑆} using ( ov ; ⨅ )
-open import Base.Algebras.Congruences       {𝑆 = 𝑆} using ( Con; mkcon ; IsCongruence )
-open import Base.Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom ; epi ; epi→hom )
-open import Base.Homomorphisms.Kernels      {𝑆 = 𝑆} using ( kercon ; ker-in-con ; πker ; ker[_⇒_]_↾_ )
-open import Base.Homomorphisms.Products     {𝑆 = 𝑆} using ( ⨅-hom-co )
-open import Base.Homomorphisms.Properties   {𝑆 = 𝑆} using ( ∘-hom )
-open import Base.Homomorphisms.Factor       {𝑆 = 𝑆} using ( HomFactor ; HomFactorEpi )
-open import Base.Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅-refl ; ≅-sym ; Lift-≅ )
-open import Base.Terms.Basic                {𝑆 = 𝑆} using ( Term ; 𝑻 )
-open import Base.Terms.Properties           {𝑆 = 𝑆} using ( free-lift ; lift-hom )
-                                                    using ( free-unique ; lift-of-epi-is-epi )
-open import Base.Terms.Operations           {𝑆 = 𝑆} using ( _⟦_⟧; comm-hom-term; free-lift-interp )
-open import Base.Subalgebras.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; FirstHomCorollary|Set )
-open import Base.Varieties.EquationalLogic  {𝑆 = 𝑆} using ( _⊫_≈_; _⊧_≈_; Th; Mod )
-open import Base.Varieties.Closure          {𝑆 = 𝑆} using ( S ; P ; V )
-open import Base.Varieties.Preservation     {𝑆 = 𝑆} using ( module class-products-with-maps )
-                                                    using ( class-ids-⇒ ; class-ids ; SP⊆V')
+open import Base.Overture.Preliminaries               using     ( ∣_∣ ; ∥_∥ ; _∙_ ; _⁻¹ )
+open import Base.Overture.Surjective                  using     ( IsSurjective )
+open import Base.Relations.Discrete                   using     ( kernel )
+open import Base.Relations.Quotients                  using     ( ⟪_⟫ )
+open import Base.Equality.Welldefined                 using     ( SwellDef ; swelldef )
+open import Base.Equality.Truncation                  using     ( is-set ; blk-uip ; hfunext )
+open import Base.Equality.Extensionality              using     ( DFunExt; pred-ext )
+open import Base.Algebras.Basic                       using     ( Algebra ; Lift-Alg ; compatible ; _̂_ )
+open import Base.Algebras.Products           {𝑆 = 𝑆}  using     ( ov ; ⨅ )
+open import Base.Algebras.Congruences        {𝑆 = 𝑆}  using     ( Con; mkcon ; IsCongruence )
+open import Base.Homomorphisms.Basic         {𝑆 = 𝑆}  using     ( hom ; epi ; epi→hom )
+open import Base.Homomorphisms.Kernels       {𝑆 = 𝑆}  using     ( kercon ; ker-in-con ; πker ; ker[_⇒_]_↾_ )
+open import Base.Homomorphisms.Products      {𝑆 = 𝑆}  using     ( ⨅-hom-co )
+open import Base.Homomorphisms.Properties    {𝑆 = 𝑆}  using     ( ∘-hom )
+open import Base.Homomorphisms.Factor        {𝑆 = 𝑆}  using     ( HomFactor ; HomFactorEpi )
+open import Base.Homomorphisms.Isomorphisms  {𝑆 = 𝑆}  using     ( _≅_ ; ≅-refl ; ≅-sym ; Lift-≅ )
+open import Base.Terms.Basic                 {𝑆 = 𝑆}  using     ( Term ; 𝑻 )
+open import Base.Terms.Properties            {𝑆 = 𝑆}  using     ( free-lift ; lift-hom )
+                                                      using     ( free-unique ; lift-of-epi-is-epi )
+open import Base.Terms.Operations            {𝑆 = 𝑆}  using     ( _⟦_⟧; comm-hom-term; free-lift-interp )
+open import Base.Subalgebras.Subalgebras     {𝑆 = 𝑆}  using     ( _≤_ ; FirstHomCorollary|Set )
+open import Base.Varieties.EquationalLogic   {𝑆 = 𝑆}  using     ( _⊫_≈_; _⊧_≈_; Th; Mod )
+open import Base.Varieties.Closure           {𝑆 = 𝑆}  using     ( S ; P ; V )
+open import Base.Varieties.Preservation      {𝑆 = 𝑆}  using     ( module class-products-with-maps )
+                                                      using     ( class-ids-⇒ ; class-ids ; SP⊆V')
 open Term
 open S
 open V
 
 𝓕 𝓕⁺ : Level
 𝓕 = ov α
-𝓕⁺ = lsuc (ov α)    -- (this will be the level of the relatively free algebra)
+𝓕⁺ = lsuc (ov α)    -- (this will be the level of the free algebra)
 
 \end{code}
 
@@ -83,7 +85,7 @@ Since `𝑻 X` is free for (and in) the class of all `𝑆`-algebras, it follows
 
 The `𝔽[ X ]` that we have just defined is called the *free algebra over* `𝒦` *generated by* `X` and (because of what we just observed) we may say that `𝔽[ X ]` is free *in* `SP(𝒦)`.
 
-**Remarks**. Since `X` is not a subset of `𝔽[ X ]`, technically it doesn't make sense to say "`X` generates `𝔽[ X ]`." But as long as 𝒦 contains a nontrivial algebra, we will have `ψ(𝒦, 𝑻 𝑋) ∩ X² ≠ ∅`, and we can identify `X` with `X / ψ(𝒦, 𝑻 X)` which *is* a subset of `𝔽[ X ]`.
+**Remarks**. Since `X` is not a subset of `𝔽[ X ]`, technically it doesn't make sense to say "`X` generates `𝔽[ X ]`." But as long as `𝒦` contains a nontrivial algebra, we will have `ψ(𝒦, 𝑻 𝑋) ∩ X² ≠ ∅`, and we can identify `X` with `X / ψ(𝒦, 𝑻 X)` which *is* a subset of `𝔽[ X ]`.
 
 
 
@@ -102,7 +104,7 @@ module _ {X : Type α}(𝒦 : Pred (Algebra α 𝑆) 𝓕) where
 
 \end{code}
 
-We convert the predicate ψ into a relation by [currying](https://en.wikipedia.org/wiki/Currying).
+We convert the predicate `ψ` into a relation by [currying](https://en.wikipedia.org/wiki/Currying).
 
 \begin{code}
 
@@ -134,9 +136,9 @@ To express `ψRel` as a congruence of the term algebra `𝑻 X`, we must prove t
       ∣ φ ∣ ((𝑓 ̂ 𝑻 X) q)  ∎
 
  ψIsEquivalence : IsEquivalence ψRel
- ψIsEquivalence = record { refl = λ 𝑨 sA h → refl
-                         ; sym = λ x 𝑨 sA h → (x 𝑨 sA h)⁻¹
-                         ; trans = λ pψq qψr 𝑨 sA h → (pψq 𝑨 sA h) ∙ (qψr 𝑨 sA h) }
+ ψIsEquivalence = record  { refl = λ 𝑨 sA h → refl
+                          ; sym = λ x 𝑨 sA h → (x 𝑨 sA h)⁻¹
+                          ; trans = λ pψq qψr 𝑨 sA h → (pψq 𝑨 sA h) ∙ (qψr 𝑨 sA h) }
 \end{code}
 
 We have collected all the pieces necessary to express the collection of identities satisfied by all subalgebras of algebras in the class as a congruence relation of the term algebra. We call this congruence `ψCon` and define it using the Congruence constructor `mkcon`.
@@ -152,9 +154,7 @@ We have collected all the pieces necessary to express the collection of identiti
 
 #### <a id="hsp-theorem">HSP Theorem</a>
 
-This section presents a formal proof of the Birkhoff HSP theorem.
-
-To complete the proof of Birkhoff's HSP theorem, it remains to show that `Mod X (Th (V 𝒦))` is contained in `V 𝒦`; that is, every algebra that models the equations in `Th (V 𝒦)` belongs to `V 𝒦`.  This will prove that `V 𝒦` is an equational class.  (The converse, that every equational class is a variety was already proved; see the remarks at the end of this module.)
+To complete the proof of the HSP theorem, it remains to show that `Mod X (Th (V 𝒦))` is contained in `V 𝒦`; that is, every algebra that models the equations in `Th (V 𝒦)` belongs to `V 𝒦`.  This will prove that `V 𝒦` is an equational class.  (The converse, that every equational class is a variety was already proved; see the remarks at the end of this module.)
 
 We accomplish this goal by constructing an algebra `𝔽` with the following properties:
 
@@ -162,11 +162,11 @@ We accomplish this goal by constructing an algebra `𝔽` with the following pro
 
 2. Every `𝑨 ∈ Mod X (Th (V 𝒦))` is a homomorphic image of `𝔽`.
 
-We denote by `ℭ` the product of all subalgebras of algebras in `𝒦`, and by `homℭ` the homomorphism from `𝑻 X` to `ℭ` defined as follows: `homℭ := ⨅-hom-co (𝑻 X) 𝔄 hom𝔄`. Here, `⨅-hom-co` (defined in the [Base.Homomorphisms.Properties][] module) takes the term algebra `𝑻 X`, a family `{𝔄 : I → Algebra α 𝑆}` of `𝑆`-algebras, and a family `hom𝔄 : ∀ i → hom (𝑻 X) (𝔄 i)` of homomorphisms and constructs the natural homomorphism `homℭ` from `𝑻 X` to the product `ℭ := ⨅ 𝔄`.  The homomorphism `homℭ : hom (𝑻 X) (⨅ ℭ)` is "natural" in the sense that the `i`-th component of the image of `𝑡 : Term X` under `homℭ` is the image `∣ hom𝔄 i ∣ 𝑡` of 𝑡 under the i-th homomorphism `hom𝔄 i`.
+We denote by `ℭ` the product of all subalgebras of algebras in `𝒦`, and by `homℭ` the homomorphism from `𝑻 X` to `ℭ` defined as follows: `homℭ := ⨅-hom-co (𝑻 X) 𝔄 hom𝔄`. Here, `⨅-hom-co` (defined in the [Base.Homomorphisms.Properties][] module) takes the term algebra `𝑻 X`, a family `{𝔄 : I → Algebra α 𝑆}` of `𝑆`-algebras, and a family `hom𝔄 : ∀ i → hom (𝑻 X) (𝔄 i)` of homomorphisms and constructs the natural homomorphism `homℭ` from `𝑻 X` to the product `ℭ := ⨅ 𝔄`.  The homomorphism `homℭ : hom (𝑻 X) (⨅ ℭ)` is "natural" in the sense that the `i`-th component of the image of `t : Term X` under `homℭ` is the image `∣ hom𝔄 i ∣ t` of `t` under the i-th homomorphism `hom𝔄 i`.
 
 
 #### <a id="F-in-classproduct">𝔽 ≤  ⨅ S(𝒦)</a>
-Now we come to a step in the Agda formalization of Birkhoff's theorem that is presents the greatest technical challenge.  We must prove that the free algebra embeds in the product ℭ of all subalgebras of algebras in the class `𝒦`.  This is really the only stage in the proof of Birkhoff's theorem that requires the truncation assumption that `ℭ` be a *set* (that is, `ℭ` has the [UIP][] property).  We will also need to assume several local function extensionality postulates and, as a result, the next submodule will take as given the parameter `fe : (∀ a b → funext a b)`.  This allows us to postulate local function extensionality when and where we need it in the proof. For example, if we want to assume function extensionality at universe levels 𝓥 and α, we simply apply `fe` to those universes: `fe 𝓥 α`. (Earlier versions of the library used just a single *global* function extensionality postulate at the start of most modules, but we have since decided to exchange that elegant but crude option for greater precision and transparency.)
+Now we come to a step in our approach to formalizing the HSP theorem that turned out to be more technically challenging than we anticipated.  We must prove that the free algebra embeds in the product `ℭ` of all subalgebras of algebras in the class `𝒦`.  This is really the only stage in the proof of Birkhoff's theorem that requires the truncation assumption that `ℭ` be a *set* (that is, `ℭ` has the [UIP][] property).  We will also need to assume several local function extensionality postulates and, as a result, the next submodule will take as given the parameter `fe : (∀ a b → funext a b)`.  This allows us to postulate local function extensionality when and where we need it in the proof. For example, if we want to assume function extensionality at universe levels `𝓥` and `α`, we simply apply `fe` to those universes: `fe 𝓥 α`. (Earlier versions of the library used just a single *global* function extensionality postulate at the start of most modules, but we have since decided to exchange that elegant but crude option for greater precision and transparency.)
 
 \begin{code}
 
@@ -180,7 +180,7 @@ We begin by constructing `ℭ`, using the techniques described in the section on
 
 \begin{code}
 
-  -- ℭ is the product of all subalgebras of algebras in 𝒦.
+ -- ℭ is the product of all subalgebras of algebras in 𝒦.
  ℭ : Algebra 𝓕 𝑆
  ℭ = ⨅ 𝔄'
 
@@ -253,7 +253,7 @@ We now use `ψlemma0-ap` to prove that every map `h : X → ∣ 𝑨 ∣`, from 
 
 The goal of this subsection is to prove that `𝒦` models `ψ 𝒦`. In other terms, for all pairs `(p , q) ∈ Term X × Term X` of terms, if `(p , q) ∈ ψ 𝒦`, then `𝒦 ⊫ p ≈ q`.
 
-Next we define the lift of the natural embedding from `X` into 𝔽. We denote this homomorphism by `𝔑 : hom (𝑻 X) 𝔽` and define it as follows.
+Next we define the lift of the natural embedding from `X` into `𝔽`. We denote this homomorphism by `𝔑 : hom (𝑻 X) 𝔽` and define it as follows.
 
 \begin{code}
 
@@ -372,7 +372,7 @@ With these results in hand, it is now trivial to prove the main theorem of this 
 
 #### <a id="the-homomorphic-images-of-F">The homomorphic images of 𝔽</a>
 
-Finally we come to one of the main theorems of this module; it asserts that every algebra in `Mod X (Th 𝕍𝒦)` is a homomorphic image of 𝔽.  We prove this below as the function (or proof object) `𝔽-ModTh-epi`.  Before that, we prove two auxiliary lemmas.
+Finally we come to one of the main theorems of this module; it asserts that every algebra in `Mod X (Th 𝕍𝒦)` is a homomorphic image of `𝔽`.  We prove this below as the function (or proof object) `𝔽-ModTh-epi`.  Before that, we prove two auxiliary lemmas.
 
 \begin{code}
 

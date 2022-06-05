@@ -16,35 +16,31 @@ This is the [Base.Structures.Sigma.Basic][] module of the [Agda Universal Algebr
 module Base.Structures.Sigma.Basic where
 
 -- Imports from the Agda Standard Library ------------------------------------------------
-open import Agda.Primitive       using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type ; lzero to ℓ₀ )
-open import Data.Product         using ( _,_ ; _×_ ; Σ-syntax ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Level                using ()
-open import Relation.Binary.Core using ( _⇒_ ; _=[_]⇒_ ) renaming ( REL to BinREL ; Rel to BinRel )
+open import Agda.Primitive        using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type ; lzero to ℓ₀ )
+open import Data.Product          using ( _,_ ; _×_ ; Σ-syntax ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Level                 using ()
+open import Relation.Binary.Core  using ( _⇒_ ; _=[_]⇒_ ) renaming ( REL to BinREL ; Rel to BinRel )
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
-open import Base.Overture.Preliminaries using ( ∣_∣ ; ∥_∥ ; ℓ₁)
-open import Base.Relations.Discrete     using ( Op ; _|:_ ; _preserves_ )
-open import Base.Relations.Continuous   using ( Rel )
-
+open import Base.Overture.Preliminaries  using ( ∣_∣ ; ∥_∥ ; ℓ₁)
+open import Base.Relations.Discrete      using ( Op ; _|:_ ; _preserves_ )
+open import Base.Relations.Continuous    using ( Rel )
 
 -- Inhabitants of Signature type are pairs, (s , ar), where s is an operation symbol,
-Signature : Type ℓ₁                                -- OR a relation symbol (new!),
+Signature : Type ℓ₁                               -- OR a relation symbol (new!),
 Signature = Σ[ F ∈ Type ℓ₀ ] (F → Type ℓ₀)        -- and ar the arity of s.
-
 
 Structure : (𝑅 F : Signature){α ρ : Level} → Type (lsuc (α ⊔ ρ))
 Structure 𝑅 𝐹 {α}{ρ} =
   Σ[ A ∈ Type α ]                        -- the domain of the structure is A
    ( ((r : ∣ 𝑅 ∣) → Rel A (snd 𝑅 r){ρ})  -- the interpretations of the relation symbols
-   × ((f : ∣ 𝐹 ∣) → Op A (snd 𝐹 f)) )     -- the interpretations of the operation symbols
-
+   × ((f : ∣ 𝐹 ∣) → Op A (snd 𝐹 f)) )    -- the interpretations of the operation symbols
 
 RStructure : Signature → {α ρ : Level} → Type (lsuc (α ⊔ ρ))
 RStructure 𝑅 {α} {ρ} = Σ[ A ∈ Type α ] ∀(r : ∣ 𝑅 ∣) → Rel A (snd 𝑅 r) {ρ}
 
 AStructure : Signature → {α : Level} → Type (lsuc α)
 AStructure 𝐹 {α} = Σ[ A ∈ Type α ] ∀ (f : ∣ 𝐹 ∣) → Op A (snd 𝐹 f)
-
 
 module _ {𝑅 𝐹 : Signature} {α ρ : Level} where
 

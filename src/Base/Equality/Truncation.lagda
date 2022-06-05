@@ -158,7 +158,7 @@ We will use `is-embedding`, `is-set`, and `to-Σ-≡` in the next subsection to 
 
 #### Injective functions are set embeddings
 
-Before moving on to define [propositions](Overture.Truncation.html#propositions), we discharge an obligation we mentioned but left unfulfilled in the [embeddings](Overture.Inverses.html#embeddings) section of the [Base.Overture.Inverses][] module.  Recall, we described and imported the `is-embedding` type, and we remarked that an embedding is not simply a monic function.  However, if we assume that the codomain is truncated so as to have unique identity proofs (i.e., is a set), then we can prove that any monic function into that codomain will be an embedding.  On the other hand, embeddings are always monic, so we will end up with an equivalence.
+Before moving on to define [propositions](#general-propositions), we discharge an obligation we mentioned but left unfulfilled in the [embeddings](Base.Overture.Inverses.html#embeddings) section of the [Base.Overture.Inverses][] module.  Recall, we described and imported the `is-embedding` type, and we remarked that an embedding is not simply a monic function.  However, if we assume that the codomain is truncated so as to have unique identity proofs (i.e., is a set), then we can prove that any monic function into that codomain will be an embedding.  On the other hand, embeddings are always monic, so we will end up with an equivalence.
 
 \begin{code}
 
@@ -209,7 +209,7 @@ It might seem unreasonable to postulate that there is at most one inhabitant of 
 
 #### <a id="general-propositions">General propositions</a>
 
-This section defines more general truncated predicates which we call *continuous propositions* and *dependent propositions*. Recall, above (in the [Base.Relations.Continuous][] module) we defined types called `ContRel` and `DepRel` to represent relations of arbitrary arity over arbitrary collections of sorts.
+This section defines more general truncated predicates which we call *continuous propositions* and *dependent propositions*. Recall, above (in the [Base.Relations.Continuous][] module) we defined types called `Rel` and `REL` to represent relations of arbitrary arity over arbitrary collections of sorts.
 
 Naturally, we define the corresponding *truncated continuous relation type* and *truncated dependent relation type*, the inhabitants of which we will call *continuous propositions* and *dependent propositions*, respectively.
 

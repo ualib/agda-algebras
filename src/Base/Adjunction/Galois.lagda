@@ -16,34 +16,32 @@ This is the [Base.Adjunction.Galois][] module of the [Agda Universal Algebra Lib
 module Base.Adjunction.Galois where
 
 -- Imports from Agda and the Agda Standard Library --------------------------------------
-open import Agda.Primitive          using ( _⊔_ ;  Level ; lsuc) renaming ( Set to Type )
-open import Data.Product            using ( _,_ ; _×_ ; swap ) renaming ( proj₁ to fst )
-open import Function.Base           using ( _∘_ ; id )
-open import Relation.Binary.Bundles using ( Poset )
-open import Relation.Binary.Core    using ( REL ; Rel ; _⇒_ ; _Preserves_⟶_ )
-open import Relation.Unary          using ( _⊆_ ;  _∈_ ; Pred   )
+open import Agda.Primitive           using ( _⊔_ ;  Level ; lsuc) renaming ( Set to Type )
+open import Data.Product             using ( _,_ ; _×_ ; swap ) renaming ( proj₁ to fst )
+open import Function.Base            using ( _∘_ ; id )
+open import Relation.Binary.Bundles  using ( Poset )
+open import Relation.Binary.Core     using ( REL ; Rel ; _⇒_ ; _Preserves_⟶_ )
+open import Relation.Unary           using ( _⊆_ ;  _∈_ ; Pred   )
+
 import Relation.Binary.Structures as BS
 
-private variable
- α β ℓᵃ ρᵃ ℓᵇ ρᵇ : Level
+private variable α β ℓᵃ ρᵃ ℓᵇ ρᵇ : Level
 
 \end{code}
 
-If 𝑨 = (A, ≤) and 𝑩 = (B, ≤) are two partially ordered sets (posets), then a
-*Galois connection* between 𝑨 and 𝑩 is a pair (F , G) of functions such that
+If `𝑨 = (A, ≤)` and `𝑩 = (B, ≤)` are two partially ordered sets (posets), then a
+*Galois connection* between `𝑨` and `𝑩` is a pair `(F , G)` of functions such that
 
-1. F : A → B
-2. G : B → A
-3. ∀ (a : A)(b : B)  →  F(a) ≤   b   →    a  ≤ G(b)
-r. ∀ (a : A)(b : B)  →    a  ≤ G(b)  →  F(a) ≤   b
+1. `F : A → B`
+2. `G : B → A`
+3. `∀ (a : A)(b : B)  →  F(a) ≤   b   →    a  ≤ G(b)`
+r. `∀ (a : A)(b : B)  →    a  ≤ G(b)  →  F(a) ≤   b`
 
-In other terms, F is a left adjoint of G and G is a right adjoint of F.
+In other terms, `F` is a *left adjoint* of `G` and `G` is a *right adjoint* of `F`.
 
 \begin{code}
 
-module _ (A : Poset α ℓᵃ ρᵃ)
-         (B : Poset β ℓᵇ ρᵇ)
-         where
+module _ (A : Poset α ℓᵃ ρᵃ)(B : Poset β ℓᵇ ρᵇ) where
  open Poset
  private
   _≤A_ = _≤_ A
@@ -97,10 +95,6 @@ Here we define a type that represents the poset of subsets of a given set equipp
 \begin{code}
 open Poset
 
-\end{code}
-
-\begin{code}
-
 module _ {α ρ : Level} {𝒜 : Type α} where
 
  _≐_ : Pred 𝒜 ρ → Pred 𝒜 ρ → Type (α ⊔ ρ)
@@ -121,12 +115,12 @@ module _ {α : Level} (ρ : Level) (𝒜 : Type α) where
  _≈_ PosetOfSubsets = _≐_
  _≤_ PosetOfSubsets = _⊆_
  isPartialOrder PosetOfSubsets =
-  record { isPreorder = record { isEquivalence = ≐-iseqv
-                               ; reflexive = fst
-                               ; trans = λ u v → v ∘ u
-                               }
-         ; antisym = _,_
-         }
+  record  { isPreorder = record  { isEquivalence = ≐-iseqv
+                                 ; reflexive = fst
+                                 ; trans = λ u v → v ∘ u
+                                 }
+          ; antisym = _,_
+          }
 
 \end{code}
 
@@ -146,10 +140,10 @@ module _ {ℓ : Level}{𝒜 : Type ℓ} {ℬ : Type ℓ} where
 
  -- Every binary relation from one poset to another induces a Galois connection.
  Rel→Gal : (R : REL 𝒜 ℬ ℓ) → Galois 𝒫𝒜 𝒫ℬ
- Rel→Gal R = record { F = _⃗ R
-                    ; G = R ⃖_
-                    ; GF≥id = λ _ → ←→≥id
-                    ; FG≥id = λ _ → →←≥id }
+ Rel→Gal R = record  { F = _⃗ R
+                     ; G = R ⃖_
+                     ; GF≥id = λ _ → ←→≥id
+                     ; FG≥id = λ _ → →←≥id }
 
 \end{code}
 

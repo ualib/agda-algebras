@@ -138,11 +138,11 @@ where,
 
 \begin{code}
 
-module _                -- levels for...
-         {ι : Level}    -- ...arity (or argument index) types
-         {ν : Level}    -- ...variable symbol types
-         {α ℓ : Level}  -- ... domain types
-         where
+module  _              -- levels for...
+        {ι : Level}    -- ...arity (or argument index) types
+        {ν : Level}    -- ...variable symbol types
+        {α ℓ : Level}  -- ... domain types
+ where
  open Setoid
  record Constraint (var : Type ν) (dom : var → Setoid α ℓ) : Type (ν ⊔ α ⊔ lsuc ι) where
   field

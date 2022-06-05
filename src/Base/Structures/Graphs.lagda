@@ -9,11 +9,9 @@ author: "agda-algebras development team"
 
 This is the [Base.Structures.Graphs][] module of the [Agda Universal Algebra Library][].
 
-N.B. This module differs from 0Graphs.lagda in that this module is universe polymorphic; i.e., we do not restrict universe levels (to, e.g., ℓ₀). This complicates some things; e.g., we must use lift and lower in some places (cf. [Base/Structures/Graphs0.lagda][]).
+N.B. This module differs from 0Graphs.lagda in that this module is universe polymorphic; i.e., we do not restrict universe levels (to, e.g., `ℓ₀`). This complicates some things; e.g., we must use lift and lower in some places (cf. [Base/Structures/Graphs0.lagda][]).
 
-**Definition** (Graph of a structure). Let 𝑨 be an (𝑅,𝐹)-structure (relations from 𝑅 and operations from 𝐹).
-The *graph* of 𝑨 is the structure Gr 𝑨 with the same domain as 𝑨 with relations from 𝑅 and together with a (k+1)-ary relation symbol G 𝑓 for each 𝑓 ∈ 𝐹 of arity k, which is interpreted in Gr 𝑨 as all tuples (t , y) ∈ Aᵏ⁺¹ such that 𝑓 t ≡ y. (See also Definition 2 of https://arxiv.org/pdf/2010.04958v2.pdf)
-
+**Definition** (Graph of a structure). Let `𝑨` be an `(𝑅, 𝐹)`-structure (relations from `𝑅` and operations from `𝐹`). The *graph* of `𝑨` is the structure `Gr 𝑨` with the same domain as `𝑨` with relations from `𝑅` together with a (`k+1`)-ary relation symbol `G 𝑓` for each `𝑓 ∈ 𝐹` of arity `k`, which is interpreted in `Gr 𝑨` as all tuples `(t , y) ∈ Aᵏ⁺¹` such that `𝑓 t ≡ y`. (See also Definition 2 of https://arxiv.org/pdf/2010.04958v2.pdf)
 
 \begin{code}
 
@@ -22,14 +20,15 @@ The *graph* of 𝑨 is the structure Gr 𝑨 with the same domain as 𝑨 with r
 module Base.Structures.Graphs where
 
 -- imports from Agda and the Agda Standard Library -------------------------------------------
-open import Agda.Primitive using ( _⊔_ ; lsuc ) renaming ( Set to Type ; lzero  to ℓ₀ )
-open import Data.Product   using ( _,_ ; Σ-syntax ; _×_ )
-open import Data.Sum.Base  using ( _⊎_ ) renaming ( inj₁ to inl ; inj₂ to inr )
-open import Data.Unit.Base using ( ⊤ ; tt )
-open import Level          using ( Level ; Lift ; lift ; lower )
-open import Function.Base  using ( _∘_  )
-open import Relation.Binary.PropositionalEquality
-                           using ( _≡_ ; refl ; module ≡-Reasoning ; cong ; sym )
+open import Agda.Primitive                         using     ( _⊔_ ; lsuc )
+                                                   renaming  ( Set to Type ; lzero  to ℓ₀ )
+open import Data.Product                           using     ( _,_ ; Σ-syntax ; _×_ )
+open import Data.Sum.Base                          using     ( _⊎_ )
+                                                   renaming  ( inj₁ to inl ; inj₂ to inr )
+open import Data.Unit.Base                         using     ( ⊤ ; tt )
+open import Level                                  using     ( Level ; Lift ; lift ; lower )
+open import Function.Base                          using     ( _∘_  )
+open import Relation.Binary.PropositionalEquality  using     ( _≡_ ; refl ; module ≡-Reasoning ; cong ; sym )
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
 open import Base.Overture.Preliminaries     using ( ∣_∣ ; _≈_ ; ∥_∥ ; _∙_ ; lower∼lift ; lift∼lower )

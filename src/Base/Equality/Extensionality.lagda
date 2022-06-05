@@ -26,7 +26,7 @@ open import Relation.Unary         using ( Pred ; _⊆_ )
 open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl )
 
 
--- -- imports from agda-algebras --------------------------------------------------------------
+-- imports from agda-algebras --------------------------------------------------------------
 open import Base.Overture.Preliminaries using ( transport )
 open import Base.Relations.Quotients    using ( [_] ; []-⊆ ; []-⊇ ; IsBlock ; ⟪_⟫ )
 open import Base.Equality.Truncation    using ( blk-uip ; to-Σ-≡ )

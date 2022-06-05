@@ -84,7 +84,7 @@ module _ {𝑨 : Algebra α 𝑆}{𝑪 : Algebra γ 𝑆} where
 
 \end{code}
 
-If, in addition to the hypotheses of the last theorem, we assume τ is epic, then so is φ. (Note that the proof also requires an additional local function extensionality postulate, `funext β β`.)
+If, in addition to the hypotheses of the last theorem, we assume `τ` is epic, then so is `φ`.
 
 \begin{code}
 

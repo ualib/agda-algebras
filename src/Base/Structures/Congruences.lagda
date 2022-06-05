@@ -16,10 +16,10 @@ This is the [Base.Structures.Congruences][] module of the [Agda Universal Algebr
 module Base.Structures.Congruences where
 
 -- Imports from Agda and the Agda Standard Library --------------------------------------
-open import Agda.Primitive using ( _⊔_ ; lsuc ) renaming ( Set  to Type )
-open import Data.Product   using ( _,_ ; _×_ ; Σ-syntax ) renaming ( proj₁ to fst )
-open import Function.Base  using ( _∘_ )
-open import Level          using ( Level ; Lift ; lift ; lower )
+open import Agda.Primitive  using ( _⊔_ ; lsuc ) renaming ( Set  to Type )
+open import Data.Product    using ( _,_ ; _×_ ; Σ-syntax ) renaming ( proj₁ to fst )
+open import Function.Base   using ( _∘_ )
+open import Level           using ( Level ; Lift ; lift ; lower )
 open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl )
 
 -- Imports from the Agda Universal Algebra Library --------------------------------------

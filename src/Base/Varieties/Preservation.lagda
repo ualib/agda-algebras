@@ -165,15 +165,13 @@ module _ {α β : Level} {𝒦 : Pred(Algebra α 𝑆)(ov α)} where
 
   ξ : ⨅ 𝒜 ∈ P 𝒦
   ξ = produ (λ i → P-expa (∣ snd ∥ B≤K i ∥ ∣))
-
-
 \end{code}
 
 
 
 #### <a id="PS-in-SP">PS(𝒦) ⊆ SP(𝒦)</a>
 
-Finally, we are in a position to prove that a product of subalgebras of algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
+Finally, we are in a position to prove that a product of subalgebras of algebras in a class `𝒦` is a subalgebra of a product of algebras in `𝒦`.
 
 \begin{code}
 
@@ -208,10 +206,7 @@ module _ {α : Level} {fovu : funext (ov α) (ov α)}{𝒦 : Pred (Algebra α �
    η = lemPS⊆SP hfe fovu  {I} {𝒜} ξ
 
  PS⊆SP hfe (pisow{𝑨}{𝑩} pA A≅B) = siso (PS⊆SP hfe pA) A≅B
-
 \end{code}
-
-
 
 #### <a id="more-class-inclusions">More class inclusions</a>
 
@@ -242,7 +237,7 @@ SP⊆V (siso x x₁) = visow (SP⊆V x) x₁
 
 #### <a id="V-is-closed-under-lift">V is closed under lift</a>
 
-As mentioned earlier, a technical hurdle that must be overcome when formalizing proofs in Agda is the proper handling of universe levels. In particular, in the proof of the Birkhoff's theorem, for example, we will need to know that if an algebra 𝑨 belongs to the variety V 𝒦, then so does the lift of 𝑨.  Let us get the tedious proof of this technical lemma out of the way.
+As mentioned earlier, a technical hurdle that must be overcome when formalizing proofs in Agda is the proper handling of universe levels. In particular, in the proof of the Birkhoff's theorem, for example, we will need to know that if an algebra `𝑨` belongs to the variety `V 𝒦`, then so does the lift of `𝑨`.  Let us get the tedious proof of this technical lemma out of the way.
 
 Above we proved that `SP(𝒦) ⊆ V(𝒦)`, and we did so under fairly general assumptions about the universe level parameters.  Unfortunately, this is sometimes not quite general enough, so we now prove the inclusion again for the specific universe parameters that align with subsequent applications of this result.
 
@@ -307,7 +302,7 @@ Taking the product over the index type `ℑ` requires a function that maps an in
 
 \end{code}
 
-Finally, we define `class-product` which represents the product of all members of 𝒦.
+Finally, we define `class-product` which represents the product of all members of `𝒦`.
 
 \begin{code}
 
@@ -355,7 +350,7 @@ So, since `PS⊆SP`, we see that that the product of all subalgebras of a class 
 
 #### <a id="h-preserves-identities">H preserves identities</a>
 
-First we prove that the closure operator H is compatible with identities that hold in the given class.
+First we prove that the closure operator `H` is compatible with identities that hold in the given class.
 
 \begin{code}
 
@@ -477,7 +472,6 @@ module _  (wd : SwellDef){X : Type 𝓧} {𝒦 : Pred (Algebra α 𝑆)(ov α)} 
 
 \end{code}
 
-
 #### <a id="v-preserves-identities">V preserves identities</a>
 
 Finally, we prove the analogous preservation lemmas for the closure operator `V`.
@@ -590,9 +584,7 @@ module _ (fe : DFunExt)(wd : SwellDef){𝓧 : Level} {X : Type 𝓧} {𝒦 : Pre
  class-ids-⇐ : (p q : ∣ 𝑻 X ∣) → (p , q) ∈ Th 𝒱 →  𝒦 ⊫ p ≈ q
  class-ids-⇐ p q Thpq {𝑨} KA = ⊧-lower-invar wd p q (Thpq (vbase KA))
 
-
 \end{code}
-
 
 Once again, and for the last time, completeness dictates that we formalize the coverse of `V-id1`, however obvious it may be.
 

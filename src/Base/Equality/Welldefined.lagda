@@ -56,14 +56,13 @@ A stronger form of well-definedness of operations is to suppose that point-wise 
 \begin{code}
 
 swelldef : ∀ ι α → Type (lsuc (α ⊔ ι))
-swelldef ι α = ∀ {I : Type ι}{A : Type α}(f : Op A I)(u v : I → A)
- →             u ≈ v → f u ≡ f v
+swelldef ι α =  ∀ {I : Type ι}{A : Type α}(f : Op A I)(u v : I → A)
+ →              u ≈ v → f u ≡ f v
 
 funext→swelldef : {α 𝓥 : Level} → funext 𝓥 α → swelldef 𝓥 α
 funext→swelldef fe f u v ptweq = welldef f u v (fe ptweq)
 
-
--- universe-level-polymorphic version
+-- level-polymorphic version
 SwellDef : Typeω
 SwellDef = (α β : Level) → swelldef α β
 
@@ -129,46 +128,46 @@ swelldef-proof : ∀ {I : Type ι}{A : Type α}{B : Type β}
 swelldef-proof {I = I}{A}{B} f {u}{v} x = {!!}  --   <== we are stuck
 ```
 
-
-HOWEVER, we *can* prove swelldef in MLTT for certain types at least, using a zipper argument.
+However, we *can* prove swelldef in MLTT for certain types at least, using a zipper argument.
 
 This certainly works in the special case of *finitary* functions, say,
-`f : (Fin n → A) → B` for some n.
+`f : (Fin n → A) → B` for some `n`.
 
 I expect this proof will generalize to countable arities, but I have yet to formally prove it.
 
-If f is finitary, then we can Curry and work instead with the function
+If `f` is finitary, then we can Curry and work instead with the function
 
+```
 (Curry f) : A → A → A → ... → A → B
+```
 
 (for some appropriate number of arrow; i.e., number of arguments).
 
 The idea is to partially apply f, and inductively build up a proof of f u ≡ f v, like so.
 
-1.     f (u 0)            ≡ f (v 0)            (by u 0 ≡ v 0),
-2.     f (u 0)(u 1)       ≡ f (v 0)(v 1)       (by 1. and u 1 ≡ v 1),
-...
-n.     f (u 0)...(u(n-1)) ≡ f (v 0)...(v(n-1)) (by n-1 and u(n-1) ≡ v(n-1)).
-...
+1.     `f (u 0)       ≡ f (v 0)`                  (by `u 0 ≡ v 0`),
+2.     `f (u 0)(u 1)  ≡ f (v 0)(v 1)`             (by 1. and u 1 ≡ v 1),
+⋮
+n.     `f (u 0) … (u(n-1)) ≡ f (v 0) … (v(n-1))`  (by n-1 and `u(n-1) ≡ v(n-1)`).
+⋮
+
+Actually, the proof should probably go in the other direction,
+
+⋮
+n.     `f (u 0) … (u(n-2))(u(n-1)) ≡ f (u 0) … (u(n-2))(v(n-1))`
+n-1.   `f (u 0)   (u(n-2))(u(n-1)) ≡ f (v 0) … (v(n-2))(v(n-1))`
+⋮
+2.     `f (u 0)(u 1)  ≡ f (v 0)(v 1)`
+1.     `f (u 0)       ≡ f (v 0)`
 
 
-Actually, the proof would probably go in the other direction, like so.
+To formalize this, let's begin with the simplest case, that is, when `f : A → A
+→ B`, so `f` is essentially of type `(Fin 2 → A) → B`.
 
-...
-n.     f (u 0)...(u(n-2))(u(n-1)) ≡ f (u0)...(u(n-2))(v(n-1))
-n-1.   f (u 0)   (u(n-2))(u(n-1)) ≡ f (v 0)  (v(n-2))(v(n-1))
-...
-1.     f (u 0)(u 1)...            ≡ f (v 0)(v 1)...
-...
-
-To formalize this, let's begin with the simplest case, that is, when f : A → A → B,
-so f is essentially of type (Fin 2 → A) → B.
-
-(HOWEVER, we still need to establish a one-to-one correspondence between the types
-(Fin 2 → A) → B and A → A → B, (and A × A → B), which turns out to be nontrivial.)
+However, we still need to establish a one-to-one correspondence between the types
+`(Fin 2 → A) → B` and `A → A → B`, (and `A × A → B`), which turns out to be nontrivial.
 
 \begin{code}
-
 
 module _ {A : Type α}{B : Type β} where
 

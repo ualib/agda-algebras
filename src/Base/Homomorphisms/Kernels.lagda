@@ -25,7 +25,7 @@ open import Level          using ( Level )
 open import Relation.Binary.PropositionalEquality
                            using ( _≡_ ; module ≡-Reasoning ; refl )
 
--- -- Imports from the Agda Universal Algebras Library --------------------------------
+-- Imports from the Agda Universal Algebras Library --------------------------------
 open import Base.Overture.Preliminaries       using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
 open import Base.Overture.Inverses            using ( Image_∋_ )
 open import Base.Overture.Surjective          using ( IsSurjective )
@@ -40,7 +40,7 @@ private variable α β : Level
 \end{code}
 
 
-#### <a id="kernels-of-homomorphisms">Kernels of homomorphisms</a>
+#### <a id="definition">Definition</a>
 
 The kernel of a homomorphism is a congruence relation and conversely for every congruence relation θ, there exists a homomorphism with kernel θ (namely, that canonical projection onto the quotient modulo θ).
 
@@ -124,8 +124,8 @@ The kernel of the canonical projection of `𝑨` onto `𝑨 / θ` is equal to `�
 
  open IsCongruence
 
- ker-in-con : {wd : swelldef 𝓥 (α ⊔ lsuc β)}(θ : Con 𝑨)
-  →           ∀ {x}{y} → ∣ kercon wd {𝑨 ╱ θ} (πhom θ) ∣ x y →  ∣ θ ∣ x y
+ ker-in-con :  {wd : swelldef 𝓥 (α ⊔ lsuc β)}(θ : Con 𝑨)
+  →            ∀ {x}{y} → ∣ kercon wd {𝑨 ╱ θ} (πhom θ) ∣ x y →  ∣ θ ∣ x y
 
  ker-in-con θ hyp = /-≡ θ hyp
 

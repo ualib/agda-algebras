@@ -13,7 +13,7 @@ Fix a signature `𝑆`, let `𝒦` be a class of `𝑆`-algebras, and define
 * `S 𝒦` = algebras isomorphic to a subalgebra of a member of `𝒦`;
 * `P 𝒦` = algebras isomorphic to a product of members of `𝒦`.
 
-A straight-forward verification confirms that H, S, and P are *closure operators* (expansive, monotone, and idempotent).  A class 𝒦 of 𝑆-algebras is said to be *closed under the taking of homomorphic images* provided `H 𝒦 ⊆ 𝒦`. Similarly, 𝒦 is *closed under the taking of subalgebras* (resp., *arbitrary products*) provided `S 𝒦 ⊆ 𝒦` (resp., `P 𝒦 ⊆ 𝒦`). The operators H, S, and P can be composed with one another repeatedly, forming yet more closure operators.
+A straight-forward verification confirms that `H`, `S`, and `P` are *closure operators* (expansive, monotone, and idempotent).  A class `𝒦` of `𝑆`-algebras is said to be *closed under the taking of homomorphic images* provided `H 𝒦 ⊆ 𝒦`. Similarly, `𝒦` is *closed under the taking of subalgebras* (resp., *arbitrary products*) provided `S 𝒦 ⊆ 𝒦` (resp., `P 𝒦 ⊆ 𝒦`). The operators `H`, `S`, and `P` can be composed with one another repeatedly, forming yet more closure operators.
 
 An algebra is a homomorphic image (resp., subalgebra; resp., product) of every algebra to which it is isomorphic. Thus, the class `H 𝒦` (resp., `S 𝒦`; resp., `P 𝒦`) is closed under isomorphism.
 
@@ -29,12 +29,11 @@ open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 module Base.Varieties.Closure {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ---------------------------------------
-open import Axiom.Extensionality.Propositional
-                            using () renaming ( Extensionality to funext )
-open import Agda.Primitive  using ( _⊔_ ; lsuc ) renaming ( Set to Type )
-open import Data.Product    using ( _,_ ; Σ-syntax ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Level           using ( Level ;  Lift )
-open import Relation.Unary  using ( Pred  ; _∈_ ; _⊆_ )
+open import Axiom.Extensionality.Propositional  using ()                  renaming ( Extensionality to funext )
+open import Agda.Primitive                      using ( _⊔_ ; lsuc )      renaming ( Set to Type )
+open import Data.Product                        using ( _,_ ; Σ-syntax )  renaming ( proj₁ to fst ; proj₂ to snd )
+open import Level                               using ( Level ;  Lift )
+open import Relation.Unary                      using ( Pred ; _∈_ ; _⊆_ )
 
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------
@@ -100,9 +99,9 @@ data P {α β : Level}(𝒦 : Pred(Algebra α 𝑆)(ov α)) : Pred(Algebra(α �
 
 #### <a id="the-inductive-types-v">The Inductive Types V</a>
 
-A class 𝒦 of 𝑆-algebras is called a *variety* if it is closed under each of the closure operators H, S, and P introduced elsewhere; the corresponding closure operator is often denoted 𝕍, but we will denote it by `V`.
+A class `𝒦` of `𝑆`-algebras is called a *variety* if it is closed under each of the closure operators `H`, `S`, and `P` introduced elsewhere; the corresponding closure operator is often denoted `𝕍`, but we will denote it by `V`.
 
-We now define `V` as an inductive type which is crafted to contain all the parts of H, S and P, under different names.
+We now define `V` as an inductive type which is crafted to contain all the parts of `H`, `S` and `P`, under different names.
 
 \begin{code}
 
@@ -246,6 +245,7 @@ module _ {α β : Level} where
 Next we observe that lifting to a higher universe does not break the property of being a subalgebra of an algebra of a class.  In other words, if we lift a subalgebra of an algebra in a class, the result is still a subalgebra of an algebra in the class.
 
 \begin{code}
+
 module _ {α β : Level}{𝒦 : Pred (Algebra α 𝑆)(ov α)} where
 
  Lift-Alg-subP : {𝑩 : Algebra β 𝑆}
@@ -277,9 +277,7 @@ module _ {α β : Level}{𝒦 : Pred (Algebra α 𝑆)(ov α)} where
    lC≤lB = Lift-≤-Lift β {𝑩} β C≤B
    plB : lB ∈ P{α}{β} 𝒦
    plB = pliftu pB
-
 \end{code}
-
 
 #### <a id="V-is-closed-under-lift">V is closed under lift</a>
 

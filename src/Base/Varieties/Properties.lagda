@@ -7,7 +7,7 @@ author: "agda-algebras development team"
 
 ### <a id="properties-of-the-models-relation">Properties of the models relation</a>
 
-We prove some closure and invariance properties of the relation `⊧`.  In particular, we prove the following facts (which are needed, for example, in the proof the Birkhoff HSP Theorem).
+We prove some closure and invariance properties of the relation `⊧`.  In particular, we prove the following facts (which we use later in our proof of Birkhoff's HSP Theorem).
 
 * [Algebraic invariance](#algebraic-invariance). `⊧` is an *algebraic invariant* (stable under isomorphism).
 
@@ -55,7 +55,7 @@ open import Base.Varieties.EquationalLogic   {𝑆 = 𝑆}  using ( _⊧_≈_ ; 
 
 #### <a id="algebraic-invariance-of-models">Algebraic invariance of ⊧</a>
 
-The binary relation ⊧ would be practically useless if it were not an *algebraic invariant* (i.e., invariant under isomorphism).
+The binary relation ⊧ would be practically useless if it were not an *algebraic invariant* (invariant under isomorphism).
 
 \begin{code}
 
@@ -79,10 +79,11 @@ module _ (wd : SwellDef){α β χ : Level}{X : Type χ}{𝑨 : Algebra α 𝑆}
 \end{code}
 
 
- As the proof makes clear, we show 𝑩 ⊧ p ≈ q by showing that `𝑩 ⟦ p ⟧ ≡ 𝑩 ⟦ q ⟧ holds *extensionally*, that is, `∀ x, 𝑩 ⟦ p ⟧ x ≡ 𝑩 ⟦q ⟧ x`.
+In the above proof we showed `𝑩 ⊧ p ≈ q` by showing that `𝑩 ⟦ p ⟧ ≡ 𝑩 ⟦ q ⟧` holds *extensionally*,
+that is, `∀ x, 𝑩 ⟦ p ⟧ x ≡ 𝑩 ⟦q ⟧ x`.
 
-#### <a id="lift-invariance">Lift-invariance of ⊧</a>
-The ⊧ relation is also invariant under the algebraic lift and lower operations.
+#### <a id="lift-invariance-of-models">Lift-invariance of ⊧</a>
+The `⊧` relation is also invariant under the algebraic lift and lower operations.
 
 \begin{code}
 
@@ -121,7 +122,7 @@ module _ (wd : SwellDef){χ : Level}{𝓤 𝓦 : Level}{X : Type χ} where
 
 \end{code}
 
-Next, identities modeled by a class of algebras is also modeled by all subalgebras of the class.  In other terms, every term equation `p ≈ q` that is satisfied by all `𝑨 ∈ 𝒦` is also satisfied by every subalgebra of a member of 𝒦.
+Next, identities modeled by a class of algebras is also modeled by all subalgebras of the class.  In other terms, every term equation `p ≈ q` that is satisfied by all `𝑨 ∈ 𝒦` is also satisfied by every subalgebra of a member of `𝒦`.
 
  \begin{code}
 
@@ -138,7 +139,7 @@ Next, identities modeled by a class of algebras is also modeled by all subalgebr
 
 
 
-#### <a id="product-invariance">Product invariance of ⊧</a>
+#### <a id="product-invariance-of-models">Product invariance of ⊧</a>
 
 An identity satisfied by all algebras in an indexed collection is also satisfied by the product of algebras in that collection.
 
@@ -172,7 +173,7 @@ An identity satisfied by all algebras in a class is also satisfied by the produc
 
 \end{code}
 
-Another fact that will turn out to be useful is that a product of a collection of algebras models p ≈ q if the lift of each algebra in the collection models p ≈ q.
+Another fact that will turn out to be useful is that a product of a collection of algebras models ``p ≈ q`` if the lift of each algebra in the collection models ``p ≈ q``.
 
 \begin{code}
 
@@ -180,15 +181,16 @@ Another fact that will turn out to be useful is that a product of a collection o
  ⊧-P-lift-invar p q α = ⊧-P-invar p q Aipq
   where
   Aipq : ∀ i → (𝒜 i) ⊧ p ≈ q
-  Aipq i = ⊧-lower-invar wd p q (α i) --  (≅-sym Lift-≅)
+  Aipq i = ⊧-lower-invar wd p q (α i)
 
 \end{code}
 
+#### <a id="homomorphisc-invariance-of-models">Homomorphic invariance of ⊧</a>
 
-
-#### <a id="homomorphisc-invariance">Homomorphic invariance of ⊧</a>
-
-If an algebra 𝑨 models an identity p ≈ q, then the pair (p , q) belongs to the kernel of every homomorphism φ : hom (𝑻 X) 𝑨 from the term algebra to 𝑨; that is, every homomorphism from 𝑻 X to 𝑨 maps p and q to the same element of 𝑨.
+If an algebra `𝑨` models an identity `p ≈ q`, then the pair `(p , q)`
+belongs to the kernel of every homomorphism `φ : hom (𝑻 X) 𝑨` from the term
+algebra to `𝑨`; that is, every homomorphism from `𝑻 X` to `𝑨` maps `p` and
+`q` to the same element of `𝑨`.
 
  \begin{code}
 

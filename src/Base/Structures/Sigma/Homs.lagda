@@ -61,7 +61,6 @@ module _ {α ρᵃ : Level}
  hom = Σ[ h ∈ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ] is-hom h
 
 
-
 module _ {𝑅 𝐹 : Signature}
          {α ρᵃ : Level}(𝑨 : Structure 𝑅 𝐹 {α}{ρᵃ})
          {β ρᵇ : Level}{𝑩 : Structure 𝑅 𝐹 {β}{ρᵇ}}
@@ -117,17 +116,13 @@ module _ {α ρᵃ : Level}
  epi→hom : epi → hom 𝑨 𝑩
  epi→hom ϕ = (fst ϕ) , fst (snd ϕ)
 
-
 \end{code}
 
 Next, `lift` and `lower` are (the maps of) homomorphisms.
 
 \begin{code}
 
-
-module _ {𝑅 𝐹 : Signature}
-         {α ρᵃ : Level} where
-
+module _ {𝑅 𝐹 : Signature}{α ρᵃ : Level} where
  open Lift
 
  𝓁𝒾𝒻𝓉 : (ℓ ρ : Level)(𝑨 : Structure  𝑅 𝐹{α}{ρᵃ}) → hom 𝑨 (Lift-Struc ℓ ρ 𝑨)
@@ -136,9 +131,8 @@ module _ {𝑅 𝐹 : Signature}
  𝓁ℴ𝓌ℯ𝓇 : (ℓ ρ : Level)(𝑨 : Structure  𝑅 𝐹{α}{ρᵃ}) → hom (Lift-Struc ℓ ρ 𝑨) 𝑨
  𝓁ℴ𝓌ℯ𝓇 = λ ℓ ρ 𝑨 → lower , (λ R a x → lower x) , (λ f a → refl)
 
-module _ {𝑅 𝐹 : Signature}
-         {α ρᵃ β ρᵇ : Level}{𝑅 𝐹 : Signature}
-         {𝑨 : Structure 𝑅 𝐹 {α}{ρᵃ}}{𝑩 : Structure 𝑅 𝐹 {β}{ρᵇ}} where
+module _  {𝑅 𝐹 : Signature}{α ρᵃ β ρᵇ : Level}{𝑅 𝐹 : Signature}
+          {𝑨 : Structure 𝑅 𝐹 {α}{ρᵃ}}{𝑩 : Structure 𝑅 𝐹 {β}{ρᵇ}} where
 
  Lift-Hom : (ℓ ρ ℓ' ρ' : Level) → hom 𝑨 𝑩 → hom (Lift-Struc ℓ ρ 𝑨) (Lift-Struc ℓ' ρ' 𝑩)
  Lift-Hom ℓ ρ ℓ' ρ' (h , hhom) = lift ∘ h ∘ lower , Goal
@@ -147,8 +141,8 @@ module _ {𝑅 𝐹 : Signature}
   lABh = ∘-is-hom{𝑅 = 𝑅}{𝐹} (Lift-Struc ℓ ρ 𝑨) 𝑩{lower}{h} ((λ R a x → lower x) , (λ f a → refl)) hhom
 
   Goal : is-hom (Lift-Struc ℓ ρ 𝑨) (Lift-Struc ℓ' ρ' 𝑩) (lift ∘ h ∘ lower)
-  Goal = ∘-is-hom{𝑅 = 𝑅}{𝐹} (Lift-Struc ℓ ρ 𝑨) (Lift-Struc ℓ' ρ' 𝑩)
-                {h ∘ lower}{lift} lABh ((λ R a x → lift x) , (λ f a → refl))
+  Goal = ∘-is-hom  {𝑅 = 𝑅}{𝐹} (Lift-Struc ℓ ρ 𝑨) (Lift-Struc ℓ' ρ' 𝑩)
+                   {h ∘ lower}{lift} lABh ((λ R a x → lift x) , (λ f a → refl))
 
 \end{code}
 
@@ -156,23 +150,20 @@ module _ {𝑅 𝐹 : Signature}
 
 #### <a id="kernels-of-homomorphisms-of-structures-of-sigma-type">Kernels of homomorphisms of structures of sigma type</a>
 
-The kernel of a homomorphism is a congruence relation and conversely for every congruence relation θ, there exists a homomorphism with kernel θ (namely, that canonical projection onto the quotient modulo θ).
+The kernel of a homomorphism is a congruence relation and conversely for every congruence relation `θ`, there exists a homomorphism with kernel `θ` (namely, that canonical projection onto the quotient modulo `θ`).
 
 \begin{code}
 
 open ≡-Reasoning
-module _ {𝑅 𝐹 : Signature}
-         {α ρᵃ β ρᵇ : Level}
-         {𝑨 : Structure 𝑅 𝐹 {α}{ρᵃ}}{𝑩 : Structure 𝑅 𝐹{β}{ρᵇ}} where
+module _  {𝑅 𝐹 : Signature} {α ρᵃ β ρᵇ : Level}
+          {𝑨 : Structure 𝑅 𝐹 {α}{ρᵃ}}{𝑩 : Structure 𝑅 𝐹{β}{ρᵇ}} where
 
  Homker-comp : swelldef ℓ₀ β → (h : hom 𝑨 𝑩) → Compatible 𝑨 (ker ∣ h ∣)
- Homker-comp wd h f {u}{v} kuv = (∣ h ∣ ((f ᵒ 𝑨) u))  ≡⟨(snd ∥ h ∥) f u ⟩
-                              ((f ᵒ 𝑩)(∣ h ∣ ∘ u)) ≡⟨ wd (f ᵒ 𝑩) (∣ h ∣ ∘ u) (∣ h ∣ ∘ v) kuv ⟩
-                              ((f ᵒ 𝑩)(∣ h ∣ ∘ v)) ≡⟨((snd ∥ h ∥) f v)⁻¹ ⟩
-                              (∣ h ∣((f ᵒ 𝑨) v))   ∎
-
+ Homker-comp wd h f {u}{v} kuv =  (∣ h ∣ ((f ᵒ 𝑨) u))   ≡⟨(snd ∥ h ∥) f u ⟩
+                                  ((f ᵒ 𝑩)(∣ h ∣ ∘ u))  ≡⟨ wd (f ᵒ 𝑩) (∣ h ∣ ∘ u) (∣ h ∣ ∘ v) kuv ⟩
+                                  ((f ᵒ 𝑩)(∣ h ∣ ∘ v))  ≡⟨((snd ∥ h ∥) f v)⁻¹ ⟩
+                                  (∣ h ∣((f ᵒ 𝑨) v))    ∎
 \end{code}
-
 
 --------------------------------
 

@@ -63,6 +63,7 @@ Note that the classical, informal statement of the first homomorphism theorem do
 Without further ado, we present our formalization of the first homomorphism theorem.
 
 \begin{code}
+
 open ≡-Reasoning
 
 FirstHomTheorem|Set :
@@ -141,25 +142,25 @@ Now we prove that the homomorphism `φ`, whose existence is guaranteed by `First
 
 module _ {fe : swelldef 𝓥 β}(𝑨 : Algebra α 𝑆)(𝑩 : Algebra β 𝑆)(h : hom 𝑨 𝑩) where
 
- FirstHomUnique : (f g : hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩)
-  →                 ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣
-  →                 ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker fe{𝑩}h ∣
-  →                 ∀ a  →  ∣ f ∣ a ≡ ∣ g ∣ a
+ FirstHomUnique :  (f g : hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩)
+  →                ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣
+  →                ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker fe{𝑩}h ∣
+  →                ∀ a  →  ∣ f ∣ a ≡ ∣ g ∣ a
 
  FirstHomUnique f g hfk hgk (_ , mkblk a refl) =
-  ∣ f ∣ (_ , mkblk a refl) ≡⟨ cong-app(hfk ⁻¹)a ⟩
-  ∣ h ∣ a                    ≡⟨ cong-app(hgk)a ⟩
-  ∣ g ∣ (_ , mkblk a refl) ∎
+  ∣ f ∣ (_ , mkblk a refl)  ≡⟨ cong-app(hfk ⁻¹)a ⟩
+  ∣ h ∣ a                   ≡⟨ cong-app(hgk)a ⟩
+  ∣ g ∣ (_ , mkblk a refl)  ∎
 
 \end{code}
 
 If, in addition, we postulate extensionality of functions defined on the domain `ker[ 𝑨 ⇒ 𝑩 ] h`, then we obtain the following variation of the last result. (See [Base.Equality.Truncation][] for a discussion of *truncation*, *sets*, and *uniqueness of identity proofs*.)
 
 ```
-fe-FirstHomUnique : {fuww : funext (α ⊔ lsuc β) β}(f g : hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩)
-  →                    ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣
-  →                    ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker fe{𝑩}h ∣
-  →                    ∣ f ∣ ≡ ∣ g ∣
+fe-FirstHomUnique :  {fuww : funext (α ⊔ lsuc β) β}(f g : hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩)
+  →                  ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣
+  →                  ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker fe{𝑩}h ∣
+  →                  ∣ f ∣ ≡ ∣ g ∣
 
  fe-FirstHomUnique {fuww} f g hfk hgk = fuww (NoetherHomUnique f g hfk hgk)
 ```
@@ -168,10 +169,10 @@ The proof of `NoetherHomUnique` goes through for the special case of epimorphism
 
 \begin{code}
 
- FirstIsoUnique : (f g : epi (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩)
-  →                 ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣
-  →                 ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker fe{𝑩}h ∣
-  →                 ∀ a → ∣ f ∣ a ≡ ∣ g ∣ a
+ FirstIsoUnique :  (f g : epi (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩)
+  →                ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣
+  →                ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker fe{𝑩}h ∣
+  →                ∀ a → ∣ f ∣ a ≡ ∣ g ∣ a
 
  FirstIsoUnique f g hfk hgk = FirstHomUnique (epi→hom 𝑩 f) (epi→hom 𝑩 g) hfk hgk
 
