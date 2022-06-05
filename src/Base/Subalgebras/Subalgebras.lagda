@@ -74,7 +74,7 @@ Subalgebra  𝑨 {β} = Σ[ 𝑩 ∈ (Algebra β 𝑆) ] 𝑩 ≤ 𝑨
 Note the order of the arguments.  The universe `β` comes first because in certain situations we must explicitly specify this universe, whereas we can almost always leave the universe `α` implicit. (See, for example, the definition of `_IsSubalgebraOfClass_` below.)
 
 
-#### <a id="consequences-of-first-homomorphism-theorem">Consequences of First Homomorphism Theorem</a>
+#### <a id="consequences-of-the-first-homomorphism-theorem">Consequences of the First Homomorphism Theorem</a>
 
 We take this opportunity to prove an important lemma that makes use of the `IsSubalgebraOf` type defined above.  It is the following: If `𝑨` and `𝑩` are `𝑆`-algebras and `h : hom 𝑨 𝑩` a homomorphism from `𝑨` to `𝑩`, then the quotient `𝑨 ╱ ker h` is (isomorphic to) a subalgebra of `𝑩`.  This is an easy corollary of the First Homomorphism Theorem proved in the [Base.Homomorphisms.Noether][] module.
 
@@ -121,7 +121,7 @@ module _ (X : Type 𝓧)(𝑩 : Algebra β 𝑆)(h : hom (𝑻 X) 𝑩)
 
 #### <a id="subalgebras-of-a-class">Subalgebras of a class</a>
 
-One of our goals is to formally express and prove properties of classes of algebraic structures.  Fixing a signature `𝑆` and a universe `α`, we represent classes of `𝑆`-algebras with domains of type `Type α` as predicates over the `Algebra α 𝑆` type. In the syntax of the [agda-algebras](https://github.com/ualib/agda-algebras) library, such predicates inhabit the type `Pred (Algebra α 𝑆) γ`, for some universe γ.
+One of our goals is to formally express and prove properties of classes of algebraic structures.  Fixing a signature `𝑆` and a universe `α`, we represent classes of `𝑆`-algebras with domains of type `Type α` as predicates over the `Algebra α 𝑆` type. In the syntax of the [agda-algebras](https://github.com/ualib/agda-algebras) library, such predicates inhabit the type `Pred (Algebra α 𝑆) γ`, for some universe `γ`.
 
 Suppose `𝒦 : Pred (Algebra α 𝑆) γ` denotes a class of `𝑆`-algebras and `𝑩 : Algebra β 𝑆` denotes an arbitrary `𝑆`-algebra. Then we might wish to consider the assertion that `𝑩` is a subalgebra of an algebra in the class `𝒦`.  The next type we define allows us to express this assertion as `𝑩 IsSubalgebraOfClass 𝒦`.
 

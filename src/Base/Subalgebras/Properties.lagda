@@ -40,7 +40,7 @@ open import Base.Subalgebras.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; _≥_ 
 private variable α β γ 𝓧 : Level
 
 
--- The subalgebra relation is a *preorder*, i.e., a reflexive transitive binary relation.
+-- The subalgebra relation is a *preorder* (a reflexive, transitive, binary relation).
 
 open _≅_
 

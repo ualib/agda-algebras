@@ -16,17 +16,16 @@ This is the [Base.Structures.Basic][] module of the [Agda Universal Algebra Libr
 module Base.Structures.Basic  where
 
 -- Imports from Agda and the Agda Standard Library -----------------------------
-open import Agda.Primitive       using ( _⊔_ ; lsuc ) renaming ( Set to Type )
-open import Function.Base        using ( flip ; _∘_ )
-open import Level                using ( Level ; Lift ; lift ; lower )
-open import Relation.Binary.Core using () renaming ( Rel to BinRel )
+open import Agda.Primitive        using ( _⊔_ ; lsuc ) renaming ( Set to Type )
+open import Function.Base         using ( flip ; _∘_ )
+open import Level                 using ( Level ; Lift ; lift ; lower )
+open import Relation.Binary.Core  using () renaming ( Rel to BinRel )
 
 -- Imports from the Agda Universal Algebra Library -----------------------------
-open import Base.Relations.Discrete     using ( Op ; _|:_ ; _preserves_ )
-open import Base.Relations.Continuous   using ( Rel )
+open import Base.Relations.Discrete    using ( Op ; _|:_ ; _preserves_ )
+open import Base.Relations.Continuous  using ( Rel )
 
-private variable
- 𝓞₀ 𝓥₀ 𝓞₁ 𝓥₁ : Level
+private variable 𝓞₀ 𝓥₀ 𝓞₁ 𝓥₁ : Level
 
 -- Signature as a record type
 record signature (𝓞 𝓥 : Level) : Type (lsuc (𝓞 ⊔ 𝓥)) where

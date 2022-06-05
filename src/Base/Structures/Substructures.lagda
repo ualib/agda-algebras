@@ -114,7 +114,6 @@ and we must prove `(f ᵒ 𝑨) a ∈ ⋂ I 𝒜`.   Agda can fill in the proof 
 
 \begin{code}
 
-
  -- subuniverses are closed under the action of term operations
  sub-term-closed : (B : Pred (carrier 𝑨) ρ) → (B ∈ Subuniverses)
   →                (t : Term X)(b : X → (carrier 𝑨))

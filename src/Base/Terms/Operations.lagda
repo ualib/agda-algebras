@@ -87,7 +87,7 @@ Now, assume `ϕ : hom 𝑻 𝑨`. Then by `comm-hom-term`, we have `∣ ϕ ∣ (
 
 * if `p = node f t`, then
 
-   ∣ ϕ ∣ p ≡ ∣ ϕ ∣ (𝑻 X)⟦ p ⟧ s = (𝑻 X)⟦ node f t ⟧ s = (f ̂ 𝑻 X) λ i → (𝑻 X)⟦ t i ⟧ s
+   `∣ ϕ ∣ p ≡ ∣ ϕ ∣ (𝑻 X)⟦ p ⟧ s = (𝑻 X)⟦ node f t ⟧ s = (f ̂ 𝑻 X) λ i → (𝑻 X)⟦ t i ⟧ s`
 
 We claim that for all `p : Term X` there exists `q : Term X` and `t : X → ∣ 𝑻 X ∣` such that `p ≡ (𝑻 X)⟦ q ⟧ t`. We prove this fact as follows.
 
@@ -96,27 +96,26 @@ We claim that for all `p : Term X` there exists `q : Term X` and `t : X → ∣ 
 term-interp : {X : Type χ} (f : ∣ 𝑆 ∣){s t : ∥ 𝑆 ∥ f → Term X} → s ≡ t → node f s ≡ (f ̂ 𝑻 X) t
 term-interp f {s}{t} st = cong (node f) st
 
-term-interp' : swelldef 𝓥 (ov χ) → {X : Type χ} (f : ∣ 𝑆 ∣){s t : ∥ 𝑆 ∥ f → Term X}
- →             (∀ i → s i ≡ t i) → node f s ≡ (f ̂ 𝑻 X) t
+term-interp' :  swelldef 𝓥 (ov χ) → {X : Type χ} (f : ∣ 𝑆 ∣){s t : ∥ 𝑆 ∥ f → Term X}
+ →              (∀ i → s i ≡ t i) → node f s ≡ (f ̂ 𝑻 X) t
 term-interp' wd f {s}{t} st = wd (node f) s t st
 
 term-gen : swelldef 𝓥 (ov χ) → {X : Type χ}(p : ∣ 𝑻 X ∣) → Σ[ q ∈ ∣ 𝑻 X ∣ ] p ≡ (𝑻 X ⟦ q ⟧) ℊ
 term-gen _ (ℊ x) = (ℊ x) , refl
-term-gen wd (node f t) = (node f (λ i → ∣ term-gen wd (t i) ∣)) ,
-                         term-interp' wd f λ i → ∥ term-gen wd (t i) ∥
+term-gen wd (node f t) =  (node f (λ i → ∣ term-gen wd (t i) ∣)) ,
+                          term-interp' wd f λ i → ∥ term-gen wd (t i) ∥
 
-term-gen-agreement : (wd : swelldef 𝓥 (ov χ)){X : Type χ}(p : ∣ 𝑻 X ∣) → (𝑻 X ⟦ p ⟧) ℊ ≡ (𝑻 X ⟦ ∣ term-gen wd p ∣ ⟧) ℊ
+term-gen-agreement :  (wd : swelldef 𝓥 (ov χ)){X : Type χ}(p : ∣ 𝑻 X ∣)
+ →                    (𝑻 X ⟦ p ⟧) ℊ ≡ (𝑻 X ⟦ ∣ term-gen wd p ∣ ⟧) ℊ
 term-gen-agreement _ (ℊ x) = refl
-term-gen-agreement wd {X} (node f t) = wd (f ̂ 𝑻 X) (λ x → (𝑻 X ⟦ t x ⟧) ℊ)
-                                          (λ x → (𝑻 X ⟦ ∣ term-gen wd (t x) ∣ ⟧) ℊ) λ i → term-gen-agreement wd (t i)
+term-gen-agreement wd {X} (node f t) = wd  ( f ̂ 𝑻 X) (λ x → (𝑻 X ⟦ t x ⟧) ℊ)
+                                           (λ x → (𝑻 X ⟦ ∣ term-gen wd (t x) ∣ ⟧) ℊ)
+                                           λ i → term-gen-agreement wd (t i)
 
 term-agreement : swelldef 𝓥 (ov χ) → {X : Type χ}(p : ∣ 𝑻 X ∣) → p ≡  (𝑻 X ⟦ p ⟧) ℊ
 term-agreement wd {X} p = ∥ term-gen wd p ∥ ∙ (term-gen-agreement wd p)⁻¹
 
-
 \end{code}
-
-
 
 #### <a id="interpretation-of-terms-in-product-algebras">Interpretation of terms in product algebras</a>
 
@@ -225,7 +224,6 @@ _[_]t : {X Y : Type χ } → Term Y → Substerm X Y → Term X
 Next we prove the important Substitution Theorem which asserts that an identity `p ≈ q` holds in an algebra `𝑨` iff it holds in `𝑨` after applying any substitution.
 
 \begin{code}
-
 
 subst-lemma : swelldef 𝓥 α → {X Y : Type χ }(p : Term Y)(σ : Y → X)(𝑨 : Algebra α 𝑆)(η : X → ∣ 𝑨 ∣)
  →            (𝑨 ⟦ p [ σ ] ⟧) η ≡ (𝑨 ⟦ p ⟧) (η ∘ σ)

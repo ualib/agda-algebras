@@ -16,10 +16,10 @@ This is the [Base.Structures.Products][] module of the [Agda Universal Algebra L
 module Base.Structures.Products where
 
 -- Imports from the Agda Standard Library ----------------------------------
-open import Agda.Primitive using ( _⊔_ ; lsuc ) renaming ( Set to Type )
-open import Data.Product   using ( _,_ ; Σ-syntax )
-open import Level          using ( Level )
-open import Relation.Unary using ( _∈_ ; Pred )
+open import Agda.Primitive  using ( _⊔_ ; lsuc ) renaming ( Set to Type )
+open import Data.Product    using ( _,_ ; Σ-syntax )
+open import Level           using ( Level )
+open import Relation.Unary  using ( _∈_ ; Pred )
 
 -- Imports from the Agda Universal Algebra Library -------------------------
 open import Base.Overture.Preliminaries  using ( ∣_∣ ; Π-syntax )

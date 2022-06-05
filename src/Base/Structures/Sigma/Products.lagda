@@ -14,10 +14,10 @@ author: "agda-algebras development team"
 module Base.Structures.Sigma.Products where
 
 -- Imports from the Agda Standard Library ------------------------------------
-open import Agda.Primitive using ( _⊔_ ; lsuc ) renaming ( Set to Type )
-open import Data.Product   using ( _,_ ; _×_ ; Σ-syntax )
-open import Level          using ( Level ; Lift )
-open import Relation.Unary using ( _∈_ ; Pred )
+open import Agda.Primitive  using ( _⊔_ ; lsuc ) renaming ( Set to Type )
+open import Data.Product    using ( _,_ ; _×_ ; Σ-syntax )
+open import Level           using ( Level ; Lift )
+open import Relation.Unary  using ( _∈_ ; Pred )
 
 -- Imports from the Agda Universal Algebra Library ---------------------------
 open import Base.Overture.Preliminaries  using ( ∣_∣ ; ∥_∥ ; Π ; Π-syntax )
@@ -28,9 +28,9 @@ private variable
  α ρ ι : Level
 
 ⨅ : {ℑ : Type ι}(𝒜 : ℑ → Structure  𝑅 𝐹{α}{ρ}) → Structure 𝑅 𝐹 {α ⊔ ι} {ρ ⊔ ι}
-⨅ {ℑ = ℑ} 𝒜 = Π[ 𝔦 ∈ ℑ ] ∣ 𝒜 𝔦 ∣ ,               -- domain of the product structure
-         ( λ r a → ∀ 𝔦 → (r ʳ 𝒜 𝔦) λ x → a x 𝔦 ) , -- interpretations of relations
-         ( λ 𝑓 a 𝔦 → (𝑓 ᵒ 𝒜 𝔦) λ x → a x 𝔦 )        -- interpretations of  operations
+⨅ {ℑ = ℑ} 𝒜 =  Π[ 𝔦 ∈ ℑ ] ∣ 𝒜 𝔦 ∣                         -- domain of the product structure
+               , ( λ r a → ∀ 𝔦 → (r ʳ 𝒜 𝔦) λ x → a x 𝔦 )  -- interpretations of relations
+               , ( λ 𝑓 a 𝔦 → (𝑓 ᵒ 𝒜 𝔦) λ x → a x 𝔦 )      -- interpretations of  operations
 
 module _ {α ρ τ : Level}{𝒦 : Pred (Structure 𝑅 𝐹 {α}{ρ}) τ} where
 

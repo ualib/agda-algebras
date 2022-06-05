@@ -16,15 +16,15 @@ This is the [Base.Structures.Homs][] module of the [Agda Universal Algebra Libra
 module Base.Structures.Homs where
 
 -- Imports from Agda and the Agda Standard Library -------------------------------------------
-open import Agda.Primitive  using ( _⊔_ ; lsuc ) renaming ( lzero to ℓ₀ ; Set to Type )
+open import Agda.Primitive   using ( _⊔_ ; lsuc ) renaming ( lzero to ℓ₀ ; Set to Type )
 open import Axiom.Extensionality.Propositional
-                            using () renaming (Extensionality to funext)
-open import Data.Product    using ( _×_ ; Σ-syntax ; _,_ ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Function.Base   using ( _∘_ ; id )
-open import Level           using ( Level ; Lift ; lift ; lower )
-open import Relation.Binary using ( IsEquivalence )
+                             using () renaming (Extensionality to funext)
+open import Data.Product     using ( _×_ ; Σ-syntax ; _,_ ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Function.Base    using ( _∘_ ; id )
+open import Level            using ( Level ; Lift ; lift ; lower )
+open import Relation.Binary  using ( IsEquivalence )
 open import Relation.Binary.PropositionalEquality
-                            using ( _≡_ ; refl ; sym ; cong ; module ≡-Reasoning ; trans )
+                             using ( _≡_ ; refl ; sym ; cong ; module ≡-Reasoning ; trans )
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
 open import Base.Overture.Preliminaries     using ( _∙_ ; ∣_∣ ; ∥_∥ ; _⁻¹ ; Π-syntax )
@@ -202,9 +202,7 @@ module _ {𝑨 : structure 𝐹 𝑅  {α}{β ⊔ ρᵃ}}{𝑩 : structure 𝐹 
 ker[_⇒_] : (𝑨 : structure 𝐹 𝑅 {α} {β ⊔ ρᵃ} )(𝑩 : structure 𝐹 𝑅 {β}{ρᵇ} )
  →         hom 𝑨 𝑩 → {wd : swelldef (siglʳ 𝐹) β} → structure 𝐹 𝑅
 ker[_⇒_] {ρᵃ = ρᵃ} 𝑨 𝑩 h {wd} = kerquo{ρᵃ = ρᵃ}{𝑨 = 𝑨}{𝑩} h {wd}
-
 \end{code}
-
 
 
 #### <a id="canonical-projections">Canonical projections</a>

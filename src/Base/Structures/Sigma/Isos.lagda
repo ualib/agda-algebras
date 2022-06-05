@@ -13,21 +13,21 @@ author: "agda-algebras development team"
 
 module Base.Structures.Sigma.Isos where
 
-
 -- Imports from the Agda Standard Library ------------------------------------------------------
 open import Axiom.Extensionality.Propositional
-                           using () renaming (Extensionality to funext)
-open import Agda.Primitive using ( _⊔_ ; lsuc ) renaming ( Set to Type )
-open import Data.Product   using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Function.Base  using ( _∘_ )
-open import Level          using ( Level ; Lift ; lift ; lower )
+                            using () renaming (Extensionality to funext)
+open import Agda.Primitive  using ( _⊔_ ; lsuc ) renaming ( Set to Type )
+open import Data.Product    using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Function.Base   using ( _∘_ )
+open import Level           using ( Level ; Lift ; lift ; lower )
 open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; cong ; cong-app )
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
 open import Base.Overture.Preliminaries     using ( ∣_∣ ; _≈_ ; ∥_∥ ; _∙_ ; lower∼lift ; lift∼lower )
 open import Base.Structures.Sigma.Basic     using ( Signature ; Structure ; Lift-Struc )
 open import Base.Structures.Sigma.Homs      using ( hom ; 𝒾𝒹 ; ∘-hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-hom)
-open import Base.Structures.Sigma.Products  using    (  ⨅ ; ℓp ; ℑ ; 𝔖 ; class-prod )
+open import Base.Structures.Sigma.Products  using ( ⨅ ; ℓp ; ℑ ; 𝔖 ; class-prod )
+
 private variable 𝑅 𝐹 : Signature
 
 \end{code}
@@ -52,7 +52,6 @@ module _ {α ρᵃ β ρᵇ : Level} where
 That is, two structures are **isomorphic** provided there are homomorphisms going back and forth between them which compose to the identity map.
 
 
-
 #### <a id="properties-of-isomorphism-of-structures-of-sigma-type">Properties of isomorphism of structures of sigma type</a>
 
 \begin{code}
@@ -63,17 +62,15 @@ module _ {α ρᵃ : Level} where
  ≅-refl {𝑨 = 𝑨} =
   record { to = 𝒾𝒹 𝑨 ; from = 𝒾𝒹 𝑨 ; to∼from = λ _ → refl ; from∼to = λ _ → refl }
 
-
-
 module _ {α ρᵃ β ρᵇ : Level} where
 
- ≅-sym : {𝑨 : Structure 𝑅 𝐹 {α}{ρᵃ}}{𝑩 : Structure 𝑅 𝐹 {β}{ρᵇ}}
-  →      𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑨
+ ≅-sym :  {𝑨 : Structure 𝑅 𝐹 {α}{ρᵃ}}{𝑩 : Structure 𝑅 𝐹 {β}{ρᵇ}}
+  →       𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑨
  ≅-sym A≅B = record { to = from A≅B ; from = to A≅B ; to∼from = from∼to A≅B ; from∼to = to∼from A≅B }
 
-module _ {α ρᵃ β ρᵇ γ ρᶜ : Level}
-         (𝑨 : Structure 𝑅 𝐹 {α}{ρᵃ}){𝑩 : Structure 𝑅 𝐹 {β}{ρᵇ}}
-         (𝑪 : Structure 𝑅 𝐹 {γ}{ρᶜ}) where
+module _  {α ρᵃ β ρᵇ γ ρᶜ : Level}
+          (𝑨 : Structure 𝑅 𝐹 {α}{ρᵃ}){𝑩 : Structure 𝑅 𝐹 {β}{ρᵇ}}
+          (𝑪 : Structure 𝑅 𝐹 {γ}{ρᶜ}) where
 
  ≅-trans : 𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≅ 𝑪
 
@@ -101,7 +98,7 @@ module _ {α ρᵃ β ρᵇ γ ρᶜ : Level}
 
 \end{code}
 
-Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic invariant*). As our focus is universal algebra, this is important and is what makes the lift operation a workable solution to the technical problems that arise from the noncumulativity of the universe hierarchy discussed in [Base.Overture.Lifts][].
+Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic invariant*). As our focus is universal algebra, this is important and is what makes the lift operation a workable solution to the technical problems that arise from the noncumulativity of Agda's universe hierarchy.
 
 \begin{code}
 
@@ -110,20 +107,19 @@ open Level
 module _ {α ρᵃ : Level} where
 
  Lift-≅ : (ℓ ρ : Level) → {𝑨 : Structure 𝑅 𝐹 {α}{ρᵃ}} → 𝑨 ≅ (Lift-Struc ℓ ρ 𝑨)
- Lift-≅ ℓ ρ {𝑨} = record { to = 𝓁𝒾𝒻𝓉 ℓ ρ 𝑨
-                         ; from = 𝓁ℴ𝓌ℯ𝓇 ℓ ρ 𝑨
-                         ; to∼from = cong-app lift∼lower
-                         ; from∼to = cong-app (lower∼lift{α}{ρ})
-                         }
+ Lift-≅ ℓ ρ {𝑨} = record  { to = 𝓁𝒾𝒻𝓉 ℓ ρ 𝑨
+                          ; from = 𝓁ℴ𝓌ℯ𝓇 ℓ ρ 𝑨
+                          ; to∼from = cong-app lift∼lower
+                          ; from∼to = cong-app (lower∼lift{α}{ρ}) }
 
-module _ {α ρᵃ β ρᵇ : Level}
-         {𝑨 : Structure 𝑅 𝐹 {α}{ρᵃ}}{𝑩 : Structure 𝑅 𝐹 {β}{ρᵇ}} where
+module _  {α ρᵃ β ρᵇ : Level}
+          {𝑨 : Structure 𝑅 𝐹 {α}{ρᵃ}}{𝑩 : Structure 𝑅 𝐹 {β}{ρᵇ}} where
 
  Lift-Struc-iso : (ℓ ρ ℓ' ρ' : Level) → 𝑨 ≅ 𝑩 → Lift-Struc ℓ ρ 𝑨 ≅ Lift-Struc ℓ' ρ' 𝑩
 
- Lift-Struc-iso ℓ ρ ℓ' ρ' A≅B = ≅-trans (Lift-Struc ℓ ρ 𝑨) (Lift-Struc ℓ' ρ' 𝑩)
+ Lift-Struc-iso ℓ ρ ℓ' ρ' A≅B =  ≅-trans (Lift-Struc ℓ ρ 𝑨) (Lift-Struc ℓ' ρ' 𝑩)
                                  ( ≅-trans (Lift-Struc ℓ ρ 𝑨) 𝑩 (≅-sym (Lift-≅ ℓ ρ)) A≅B )
-                                  (Lift-≅ ℓ' ρ')
+                                 (Lift-≅ ℓ' ρ')
 
 \end{code}
 
@@ -131,9 +127,9 @@ Products of isomorphic families of algebras are themselves isomorphic. The proof
 
 \begin{code}
 
-module _ {ι : Level}{I : Type ι}
-         {α ρᵃ β ρᵇ : Level} {fe : funext ρᵇ ρᵇ}
-         {fiu : funext ι α}{fiw : funext ι β} where
+module _  {ι : Level}{I : Type ι}
+          {α ρᵃ β ρᵇ : Level} {fe : funext ρᵇ ρᵇ}
+          {fiu : funext ι α} {fiw : funext ι β} where
 
   ⨅≅ : {𝒜 : I → Structure 𝑅 𝐹 {α}{ρᵃ}}{ℬ : I → Structure 𝑅 𝐹 {β}{ρᵇ}} → (∀ (i : I) → 𝒜 i ≅ ℬ i) → ⨅ 𝒜 ≅ ⨅ ℬ
 
@@ -143,15 +139,15 @@ module _ {ι : Level}{I : Type ι}
    ϕ a i = ∣ to (AB i) ∣ (a i)
 
    ϕhom : is-hom (⨅ 𝒜) (⨅ ℬ) ϕ
-   ϕhom = (λ r a x 𝔦 → fst ∥ to (AB 𝔦) ∥ r (λ z → a z 𝔦) (x 𝔦)) ,
-           λ f a → fiw (λ i → snd ∥ to (AB i) ∥ f (λ z → a z i))
+   ϕhom =  ( λ r a x 𝔦 → fst ∥ to (AB 𝔦) ∥ r (λ z → a z 𝔦) (x 𝔦))
+           , λ f a → fiw (λ i → snd ∥ to (AB i) ∥ f (λ z → a z i) )
 
    ψ : ∣ ⨅ ℬ ∣ → ∣ ⨅ 𝒜 ∣
    ψ b i = ∣ from (AB i) ∣ (b i)
 
    ψhom : is-hom (⨅ ℬ) (⨅ 𝒜) ψ
-   ψhom = (λ r a x 𝔦 → fst ∥ from (AB 𝔦) ∥ r (λ z → a z 𝔦) (x 𝔦)) ,
-           (λ f a → fiu (λ i → snd ∥ from (AB i) ∥ f (λ z → a z i)))
+   ψhom =  ( λ r a x 𝔦 → fst ∥ from (AB 𝔦) ∥ r (λ z → a z 𝔦) (x 𝔦))
+           , λ f a → fiu (λ i → snd ∥ from (AB i) ∥ f (λ z → a z i) )
 
    ϕ~ψ : ϕ ∘ ψ ≈ ∣ 𝒾𝒹 (⨅ ℬ) ∣
    ϕ~ψ 𝒃 = fiw λ i → (to∼from (AB i)) (𝒃 i)

@@ -13,7 +13,6 @@ This is the [Base.Algebras.Products][] module of the [Agda Universal Algebra Lib
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-
 open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 
 module Base.Algebras.Products {𝑆 : Signature 𝓞 𝓥} where
@@ -41,12 +40,10 @@ In the [agda-algebras](https://github.com/ualib/agda-algebras) library a *produc
 
 ⨅ : {I : Type 𝓘 }(𝒜 : I → Algebra α 𝑆 ) → Algebra (𝓘 ⊔ α) 𝑆
 
-⨅ {I = I} 𝒜 = ( ∀ (i : I) → ∣ 𝒜 i ∣ ) ,           -- domain of the product algebra
-               λ 𝑓 𝑎 i → (𝑓 ̂ 𝒜 i) λ x → 𝑎 x i   -- basic operations of the product algebra
+⨅ {I = I} 𝒜 =  ( ∀ (i : I) → ∣ 𝒜 i ∣ ) ,        -- domain of the product algebra
+                λ 𝑓 𝑎 i → (𝑓 ̂ 𝒜 i) λ x → 𝑎 x i  -- basic operations of the product algebra
 
 \end{code}
-
-(Alternative acceptable notation for the domain of the product is `∀ i → ∣ 𝒜 i ∣`.)
 
 The type just defined is the one that will be used throughout the [agda-algebras](https://github.com/ualib/agda-algebras) library whenever the product of an indexed collection of algebras (of type `Algebra`) is required.  However, for the sake of completeness, here is how one could define a type representing the product of algebras inhabiting the record type `algebra`.
 

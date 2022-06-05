@@ -7,7 +7,7 @@ author: "agda-algebras development team"
 
 ### <a id="properties-of-homomorphisms">Properties of Homomorphisms</a>
 
-This is the [Base.Homomorphisms.Properties] module of the [Agda Universal Algebra Library][].
+This is the [Base.Homomorphisms.Properties][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
@@ -24,9 +24,10 @@ open import Level          using ( Level )
 open import Relation.Binary.PropositionalEquality
                            using ( _≡_ ; module ≡-Reasoning ; cong ; refl )
 
--- -- Imports from the Agda Universal Algebras Library --------------------------------
+-- Imports from the Agda Universal Algebras Library --------------------------------
 open import Base.Overture.Preliminaries       using ( ∣_∣ ; ∥_∥ )
 open import Base.Homomorphisms.Basic  {𝑆 = 𝑆} using ( hom ; is-homomorphism )
+
 private variable α β γ ρ : Level
 
 \end{code}

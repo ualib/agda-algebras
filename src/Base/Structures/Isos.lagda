@@ -15,7 +15,6 @@ This is the [Base.Structures.Isos][] module of the [Agda Universal Algebra Libra
 
 module Base.Structures.Isos where
 
-
 -- Imports from Agda and the Agda Standard Library ---------------------
 open import Agda.Primitive                         using ( _⊔_ ; lsuc ) renaming ( Set to Type )
 open import Axiom.Extensionality.Propositional     using () renaming (Extensionality to funext)

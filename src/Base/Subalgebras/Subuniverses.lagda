@@ -9,7 +9,7 @@ author: "agda-algebras development team"
 
 This is the [Base.Subalgebras.Subuniverses][] module of the [Agda Universal Algebra Library][].
 
-We start by defining a type that represents the important concept of *subuniverse*. Suppose 𝑨 is an algebra.  A subset B ⊆ ∣ 𝑨 ∣ is said to be *closed under the operations of* 𝑨 if for each 𝑓 ∈ ∣ 𝑆 ∣ and all tuples 𝒃 : ∥ 𝑆 ∥ 𝑓 → 𝐵 the element (𝑓 ̂ 𝑨) 𝒃 belongs to B. If a subset B ⊆ 𝐴 is closed under the operations of 𝑨, then we call B a *subuniverse* of 𝑨.
+We start by defining a type that represents the important concept of *subuniverse*. Suppose `𝑨` is an algebra.  A subset `B ⊆ ∣ 𝑨 ∣` is said to be *closed under the operations of* `𝑨` if for each `𝑓 ∈ ∣ 𝑆 ∣` and all tuples `𝒃 : ∥ 𝑆 ∥ 𝑓 → 𝐵` the element `(𝑓 ̂ 𝑨) 𝒃` belongs to `B`. If a subset `B ⊆ 𝐴` is closed under the operations of `𝑨`, then we call B a *subuniverse* of `𝑨`.
 
 \begin{code}
 
@@ -20,23 +20,21 @@ open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 module Base.Subalgebras.Subuniverses {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library -----------------------------
-open import Agda.Primitive using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
-open import Axiom.Extensionality.Propositional
-                           using () renaming (Extensionality to funext)
-open import Function.Base  using ( _∘_ )
-open import Relation.Binary.PropositionalEquality
-                           using ( module ≡-Reasoning ; _≡_ )
-open import Relation.Unary using ( Pred ; _∈_ ; _⊆_ ; ⋂ )
+open import Agda.Primitive                         using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
+open import Axiom.Extensionality.Propositional     using () renaming (Extensionality to funext)
+open import Function.Base                          using ( _∘_ )
+open import Relation.Binary.PropositionalEquality  using ( module ≡-Reasoning ; _≡_ )
+open import Relation.Unary                         using ( Pred ; _∈_ ; _⊆_ ; ⋂ )
 
 -- Imports from the Agda Universal Algebra Library -----------------------------
-open import Base.Overture.Preliminaries      using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
-open import Base.Relations.Discrete          using ( Im_⊆_ )
-open import Base.Equality.Welldefined        using ( swelldef )
-open import Base.Algebras.Basic              using ( Algebra ; _̂_ )
-open import Base.Algebras.Products   {𝑆 = 𝑆} using ( ov )
-open import Base.Terms.Basic         {𝑆 = 𝑆} using ( Term ; ℊ ; node )
-open import Base.Terms.Operations    {𝑆 = 𝑆} using ( _⟦_⟧ )
-open import Base.Homomorphisms.Basic {𝑆 = 𝑆} using ( hom )
+open import Base.Overture.Preliminaries            using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
+open import Base.Relations.Discrete                using ( Im_⊆_ )
+open import Base.Equality.Welldefined              using ( swelldef )
+open import Base.Algebras.Basic                    using ( Algebra ; _̂_ )
+open import Base.Algebras.Products        {𝑆 = 𝑆}  using ( ov )
+open import Base.Terms.Basic              {𝑆 = 𝑆}  using ( Term ; ℊ ; node )
+open import Base.Terms.Operations         {𝑆 = 𝑆}  using ( _⟦_⟧ )
+open import Base.Homomorphisms.Basic      {𝑆 = 𝑆}  using ( hom )
 
 private variable α β 𝓧 : Level
 
@@ -180,7 +178,7 @@ data TermImage (𝑨 : Algebra α 𝑆)(Y : Pred ∣ 𝑨 ∣ β) : Pred ∣ �
 
 \end{code}
 
-By what we proved above, it should come as no surprise that `TermImage 𝑨 Y` is a subuniverse of 𝑨 that contains Y.
+By what we proved above, it should come as no surprise that `TermImage 𝑨 Y` is a subuniverse of `𝑨` that contains `Y`.
 
 \begin{code}
 

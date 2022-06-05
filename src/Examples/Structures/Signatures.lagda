@@ -11,14 +11,20 @@ author: "agda-algebras development team"
 
 module Examples.Structures.Signatures where
 
-open import Agda.Primitive         using () renaming ( lzero to ℓ₀ )
-open import Data.Unit.Base         using () renaming ( ⊤ to 𝟙 ; tt to 𝟎 )
-open import Data.Empty             using () renaming ( ⊥ to 𝟘 )
-open import Base.Overture.Preliminaries using ( 𝟚 ; 𝟛 )
-open import Base.Structures.Basic       using ( signature ; structure )
+open import Agda.Primitive               using () renaming ( lzero to ℓ₀ )
+open import Data.Unit.Base               using () renaming ( ⊤ to 𝟙 ; tt to 𝟎 )
+open import Data.Empty                   using () renaming ( ⊥ to 𝟘 )
+open import Base.Overture.Preliminaries  using ( 𝟚 ; 𝟛 )
+open import Base.Structures.Basic        using ( signature ; structure )
 
--- Some examples (of finite signatures)
+\end{code}
+
+#### <a id="examples-of-finite-signatures">Examples of finite signatures</a>
+
+\begin{code}
+
 -- The signature with...
+
 -- ... no symbols  (e.g., sets)
 S∅ : signature ℓ₀ ℓ₀
 S∅ = record { symbol = 𝟘 ; arity = λ () }
