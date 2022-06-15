@@ -20,34 +20,29 @@ We prove some closure and invariance properties of the relation `⊧`.  In parti
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Base.Signatures using ( 𝓞 ; 𝓥 ; Signature )
 
 module Base.Varieties.Properties {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library -------------------------------------------
-open import Agda.Primitive using ( _⊔_ ; lsuc ; Level )   renaming ( Set to Type ; lzero to  ℓ₀ )
-open import Axiom.Extensionality.Propositional using ()   renaming ( Extensionality to funext )
-open import Data.Product   using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Function.Base  using ( _∘_ )
-open import Relation.Unary using ( Pred ; _∈_ ; _⊆_ ; ⋂ )
-open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; module ≡-Reasoning ; cong )
+open import Agda.Primitive                         using () renaming ( Set to Type )
+open import Axiom.Extensionality.Propositional     using () renaming ( Extensionality to funext )
+open import Data.Product                           using ( _,_ ; Σ-syntax ; _×_ )
+                                                   renaming ( proj₁ to fst ; proj₂ to snd )
+open import Function                               using ( _∘_ )
+open import Level                                  using ( Level ; _⊔_ )
+open import Relation.Unary                         using ( Pred ; _∈_ ; _⊆_ ; ⋂ )
+open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl ; module ≡-Reasoning ; cong )
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
-open import Base.Overture.Preliminaries               using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
-open import Base.Overture.Injective                   using ( IsInjective ; ∘-injective )
-open import Base.Equality.Welldefined                 using ( SwellDef )
-open import Base.Equality.Extensionality              using ( DFunExt )
-open import Base.Algebras.Basic                       using ( Algebra ; Lift-Alg )
-open import Base.Algebras.Products           {𝑆 = 𝑆}  using ( ov ; ⨅ )
-open import Base.Homomorphisms.Basic         {𝑆 = 𝑆}  using ( hom )
-open import Base.Homomorphisms.Properties    {𝑆 = 𝑆}  using ( ∘-hom )
-open import Base.Homomorphisms.Isomorphisms  {𝑆 = 𝑆}  using ( _≅_ ; mkiso ; Lift-≅ ; ≅-sym ; ≅-trans )
-open import Base.Terms.Basic                 {𝑆 = 𝑆}  using ( Term ; 𝑻 )
-open import Base.Terms.Properties            {𝑆 = 𝑆}  using ( lift-hom )
-open import Base.Terms.Operations            {𝑆 = 𝑆}  using ( _⟦_⟧ ; comm-hom-term ; interp-prod )
-                                                      using ( term-agreement )
-open import Base.Subalgebras.Subalgebras     {𝑆 = 𝑆}  using ( _≤_ ; SubalgebraOfClass )
-open import Base.Subalgebras.Properties      {𝑆 = 𝑆}  using ( iso→injective )
+open import Base.Overture  using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; IsInjective ; ∘-injective )
+open import Base.Equality  using ( SwellDef ; DFunExt )
+
+open import Base.Algebras       {𝑆 = 𝑆}  using ( Algebra ; Lift-Alg ; ov ; ⨅ )
+open import Base.Homomorphisms  {𝑆 = 𝑆}  using ( hom ; ∘-hom ; _≅_ ; mkiso ; Lift-≅ ; ≅-sym ; ≅-trans )
+open import Base.Terms          {𝑆 = 𝑆}  using ( Term ; 𝑻 ; lift-hom ; _⟦_⟧ ; comm-hom-term ; interp-prod ; term-agreement )
+open import Base.Subalgebras    {𝑆 = 𝑆}  using ( _≤_ ; SubalgebraOfClass ; iso→injective )
+
 open import Base.Varieties.EquationalLogic   {𝑆 = 𝑆}  using ( _⊧_≈_ ; _⊫_≈_ )
 
 \end{code}

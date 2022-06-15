@@ -13,38 +13,29 @@ This is the [Base.Varieties.Preservation][] module of the [Agda Universal Algebr
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Base.Signatures using ( 𝓞 ; 𝓥 ; Signature )
 
 module Base.Varieties.Preservation {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library -----------------------------------------------
-open import Agda.Primitive  using ( _⊔_ ; lsuc ; Level ) renaming ( Set   to Type )
-open import Axiom.Extensionality.Propositional
-                            using () renaming (Extensionality to funext)
-open import Data.Product    using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Data.Sum.Base   using ( _⊎_ ) renaming ( inj₁  to inl ; inj₂  to inr )
-open import Function.Base   using ( _∘_ )
-open import Relation.Unary  using ( Pred ; _⊆_ ; _∈_ ; ｛_｝ ; _∪_ )
-open import Relation.Binary.PropositionalEquality
-                            using ( _≡_ ; refl ; module ≡-Reasoning ; cong-app ; cong )
+open import Agda.Primitive                         using () renaming ( Set to Type )
+open import Axiom.Extensionality.Propositional     using () renaming (Extensionality to funext)
+open import Data.Product                           using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Data.Sum                               using ( _⊎_ ) renaming ( inj₁  to inl ; inj₂  to inr )
+open import Function                               using ( _∘_ )
+open import Level                                  using ( Level ; _⊔_ ; suc )
+open import Relation.Unary                         using ( Pred ; _⊆_ ; _∈_ ; ｛_｝ ; _∪_ )
+open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl ; module ≡-Reasoning ; cong-app ; cong )
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
-open import Base.Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
-open import Base.Overture.Inverses                  using ( Inv ; InvIsInverseʳ )
-open import Base.Overture.Injective                 using ( IsInjective )
-open import Base.Equality.Welldefined               using ( SwellDef )
-open import Base.Equality.Truncation                using ( hfunext )
-open import Base.Equality.Extensionality            using ( DFunExt )
-open import Base.Algebras.Basic                     using ( Algebra ; Lift-Alg )
-open import Base.Algebras.Products          {𝑆 = 𝑆} using ( ov ; ⨅ ; 𝔄 ; class-product)
-open import Base.Homomorphisms.Basic        {𝑆 = 𝑆} using ( is-homomorphism )
-open import Base.Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; Lift-≅ ; ≅-trans ; ⨅≅ ; ≅-refl )
-                                                    using ( Lift-Alg-iso ; Lift-Alg-assoc )
-open import Base.Terms.Basic                {𝑆 = 𝑆} using ( Term ; 𝑻 )
-open import Base.Terms.Operations           {𝑆 = 𝑆} using ( _⟦_⟧; comm-hom-term )
-open import Base.Subalgebras.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; _IsSubalgebraOf_ ; _IsSubalgebraOfClass_ )
-                                                    using ( SubalgebraOfClass )
-open import Base.Subalgebras.Properties     {𝑆 = 𝑆} using ( ≤-Lift ; Lift-≤-Lift )
+open import Base.Overture using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; Inv ; InvIsInverseʳ ; IsInjective )
+open import Base.Equality using ( SwellDef ; hfunext ; DFunExt )
+
+open import Base.Algebras       {𝑆 = 𝑆} using ( Algebra ; Lift-Alg ; ov ; ⨅ ; 𝔄 ; class-product)
+open import Base.Homomorphisms  {𝑆 = 𝑆} using ( is-homomorphism ; _≅_ ; ≅-sym ; Lift-≅ ; ≅-trans ; ⨅≅ ; ≅-refl ; Lift-Alg-iso ; Lift-Alg-assoc )
+open import Base.Terms          {𝑆 = 𝑆} using ( Term ; 𝑻 ; _⟦_⟧; comm-hom-term )
+open import Base.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; _IsSubalgebraOf_ ; _IsSubalgebraOfClass_ ; SubalgebraOfClass ; ≤-Lift ; Lift-≤-Lift )
+
 open import Base.Varieties.EquationalLogic  {𝑆 = 𝑆} using ( _⊫_≈_ ; _⊧_≈_ ; Th )
 open import Base.Varieties.Properties       {𝑆 = 𝑆} using ( ⊧-Lift-invar ; ⊧-lower-invar ; ⊧-S-class-invar )
                                                     using ( ⊧-I-invar ; ⊧-P-lift-invar ; ⊧-P-invar ; ⊧-S-invar)
@@ -245,25 +236,25 @@ Above we proved that `SP(𝒦) ⊆ V(𝒦)`, and we did so under fairly general 
 \begin{code}
 
 module _ {α : Level}  {fe₀ : funext (ov α) α}
-         {fe₁ : funext ((ov α) ⊔ (lsuc (ov α))) (lsuc (ov α))}
+         {fe₁ : funext ((ov α) ⊔ (suc (ov α))) (suc (ov α))}
          {fe₂ : funext (ov α) (ov α)}
          {𝒦 : Pred (Algebra α 𝑆)(ov α)} where
 
  open Vlift {α}{fe₀}{fe₁}{fe₂}{𝒦}
 
- SP⊆V' : S{ov α}{lsuc (ov α)} (P{α}{ov α} 𝒦) ⊆ V 𝒦
+ SP⊆V' : S{ov α}{suc (ov α)} (P{α}{ov α} 𝒦) ⊆ V 𝒦
 
  SP⊆V' (sbase{𝑨} x) = visow (VlA (SP⊆V (sbase x))) (≅-sym (Lift-Alg-assoc _ _{𝑨}))
  SP⊆V' (slift x) = VlA (SP⊆V x)
 
  SP⊆V' (ssub{𝑨}{𝑩} spA B≤A) = vssubw (VlA (SP⊆V spA)) B≤lA
   where
-   B≤lA : 𝑩 ≤ Lift-Alg 𝑨 (lsuc (ov α))
+   B≤lA : 𝑩 ≤ Lift-Alg 𝑨 (suc (ov α))
    B≤lA = ≤-Lift 𝑨 B≤A
 
  SP⊆V' (siso{𝑨}{𝑩} x A≅B) = visow (VlA (SP⊆V x)) Goal
   where
-   Goal : Lift-Alg 𝑨 (lsuc (ov α)) ≅ 𝑩
+   Goal : Lift-Alg 𝑨 (suc (ov α)) ≅ 𝑩
    Goal = ≅-trans (≅-sym Lift-≅) A≅B
 
 \end{code}
@@ -280,7 +271,7 @@ Before doing so, we need to redefine the class product so that each factor comes
 module class-products-with-maps {α : Level}
  {X : Type α}
  {fe𝓕α : funext (ov α) α}
- {fe₁ : funext ((ov α) ⊔ (lsuc (ov α))) (lsuc (ov α))}
+ {fe₁ : funext ((ov α) ⊔ (suc (ov α))) (suc (ov α))}
  {fe₂ : funext (ov α) (ov α)}
  (𝒦 : Pred (Algebra α 𝑆)(ov α))
  where
@@ -567,8 +558,8 @@ module _ (fe : DFunExt)(wd : SwellDef){𝓧 : Level} {X : Type 𝓧} {𝒦 : Pre
 
  ovu lovu : Level
  ovu = ov α
- lovu = lsuc (ov α)
- 𝕍 : Pred (Algebra lovu 𝑆) (lsuc lovu)
+ lovu = suc (ov α)
+ 𝕍 : Pred (Algebra lovu 𝑆) (suc lovu)
  𝕍 = V{α}{lovu} 𝒦
  𝒱 : Pred (Algebra ovu 𝑆) lovu
  𝒱 = V{β = ovu} 𝒦

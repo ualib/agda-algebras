@@ -72,14 +72,14 @@ module Demos.HSP {𝑆 : Signature 𝓞 𝓥} where
 -- Import 16 definitions from the Agda Standard Library.
 open import  Data.Unit.Polymorphic        using ( ⊤ ; tt                                            )
 open import  Function                     using ( id ; _∘_ ; flip                                   )
-open import  Level                        using ( Level                                             )
+open import  Level                        using ( Level ;  _⊔_ ; suc                                )
 open import  Relation.Binary              using ( Rel ; Setoid ; IsEquivalence                      )
 open import  Relation.Binary.Definitions  using ( Reflexive ; Symmetric ; Transitive ; Sym ; Trans  )
 open import  Relation.Binary.PropositionalEquality  using ( _≡_                                     )
 open import  Relation.Unary               using ( Pred ; _⊆_ ; _∈_                                  )
 
--- -- Import 23 definitions from the Agda Standard Library and rename 12 of them.
-open import  Agda.Primitive  renaming  ( Set    to Type    )  using  ( _⊔_ ; lsuc                   )
+-- Import 23 definitions from the Agda Standard Library and rename 12 of them.
+open import  Agda.Primitive  renaming  ( Set to Type       )  using ()
 open import  Data.Product    renaming  ( proj₁  to fst     )  using  ( _×_ ; _,_ ; Σ ; Σ-syntax     )
                              renaming  ( proj₂  to snd     )
 open import  Function        renaming  ( Func   to _⟶_     )  using  (                              )
@@ -316,7 +316,7 @@ Our [Agda][] implementation represents algebras as inhabitants of a record type 
 
 \begin{code}
 
-record Algebra α ρ : Type (𝓞 ⊔ 𝓥 ⊔ lsuc (α ⊔ ρ)) where
+record Algebra α ρ : Type (𝓞 ⊔ 𝓥 ⊔ suc (α ⊔ ρ)) where
  field  Domain  : Setoid α ρ
         Interp  : ⟨ 𝑆 ⟩ Domain ⟶ Domain
 
@@ -688,7 +688,7 @@ We have found that a useful way to encode the concept of *homomorphic image* is 
 \begin{code}
 
 ov : Level → Level         -- shorthand for a common level transformation
-ov α = 𝓞 ⊔ 𝓥 ⊔ lsuc α
+ov α = 𝓞 ⊔ 𝓥 ⊔ suc α
 
 _IsHomImageOf_ : (𝑩 : Algebra β ρᵇ)(𝑨 : Algebra α ρᵃ) → Type _
 𝑩 IsHomImageOf 𝑨 = Σ[ φ ∈ hom 𝑨 𝑩 ] IsSurjective ∣ φ ∣

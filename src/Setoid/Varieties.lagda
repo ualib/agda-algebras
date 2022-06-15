@@ -13,15 +13,17 @@ This is the [Setoid.Varieties][] module of the [Agda Universal Algebra Library][
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Setoid.Varieties where
+open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
 
-open import Setoid.Varieties.EquationalLogic
-open import Setoid.Varieties.SoundAndComplete
-open import Setoid.Varieties.Closure
-open import Setoid.Varieties.Properties
-open import Setoid.Varieties.Preservation
-open import Setoid.Varieties.FreeAlgebras
-open import Setoid.Varieties.HSP
+module Setoid.Varieties {𝑆 : Signature 𝓞 𝓥} where
+
+open import Setoid.Varieties.EquationalLogic   {𝑆 = 𝑆} public
+open import Setoid.Varieties.SoundAndComplete  {𝑆 = 𝑆} public
+open import Setoid.Varieties.Closure           {𝑆 = 𝑆} public
+open import Setoid.Varieties.Properties        {𝑆 = 𝑆} public
+open import Setoid.Varieties.Preservation      {𝑆 = 𝑆} public
+open import Setoid.Varieties.FreeAlgebras      {𝑆 = 𝑆} public
+open import Setoid.Varieties.HSP               {𝑆 = 𝑆} public
 
 \end{code}
 

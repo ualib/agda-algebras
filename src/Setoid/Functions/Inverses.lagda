@@ -7,31 +7,26 @@ author: "the agda-algebras development team"
 
 ### <a id="inverses-for-functions-with-structure">Inverses for functions with structure</a>
 
-This is the [Setoid.Overture.Inverses][] module of the [agda-algebras][] library.
+This is the [Setoid.Functions.Inverses][] module of the [agda-algebras][] library.
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Relation.Binary using ( Setoid )
-
-module Setoid.Overture.Inverses where
---  {α ρᵃ β ρᵇ}{𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} 
+module Setoid.Functions.Inverses where
 
 -- Imports from Agda and the Agda Standard Library --------------------
 open import Agda.Primitive    using ( _⊔_ ; Level ) renaming ( Set to Type )
-open import Function          using ( id )
-open import Function.Bundles  using () renaming ( Func to _⟶_ )
+open import Function          using ( id )   renaming ( Func to _⟶_ )
 open import Data.Product      using ( _,_ ; Σ-syntax )
                               renaming ( proj₁ to fst ; proj₂ to snd ; _×_ to _∧_)
 open import Relation.Unary    using ( Pred ; _∈_ )
-open import Relation.Binary   using ( _Preserves_⟶_ )
+open import Relation.Binary   using ( Setoid ; _Preserves_⟶_ )
 
 -- Imports from agda-algebras -----------------------------------------
-open import Base.Overture.Preliminaries using ( ∣_∣ ; ∥_∥ ; ∃-syntax )
+open import Base.Overture     using ( ∣_∣ ; ∥_∥ ; ∃-syntax )
 
-private variable
- α ρᵃ β ρᵇ : Level
+private variable α ρᵃ β ρᵇ : Level
 
 module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
 
@@ -170,8 +165,8 @@ In a certain sense, `Inv f` is also a (range-restricted) *left-inverse*.
 
 --------------------------------------
 
-<span style="float:left;">[← Setoid.Overture.Preliminaries](Setoid.Overture.Preliminaries.html)</span>
-<span style="float:right;">[Setoid.Overture.Injective →](Setoid.Overture.Injective.html)</span>
+<span style="float:left;">[← Setoid.Functions.Basic](Setoid.Functions.Basic.html)</span>
+<span style="float:right;">[Setoid.Functions.Injective →](Setoid.Functions.Injective.html)</span>
 
 {% include UALib.Links.md %}
 

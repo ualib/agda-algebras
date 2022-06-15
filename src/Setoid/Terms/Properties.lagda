@@ -13,7 +13,7 @@ This is the [Setoid.Terms.Properties][] module of the [Agda Universal Algebra Li
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Terms.Properties {𝑆 : Signature 𝓞 𝓥} where
 
@@ -27,14 +27,13 @@ open import Relation.Binary.PropositionalEquality as ≡ using (_≡_)
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------------
-open import Base.Overture.Preliminaries          using ( ∣_∣ ; ∥_∥ )
-open import Base.Terms.Basic            {𝑆 = 𝑆}  using ( Term )
+open import Base.Overture     using ( ∣_∣ ; ∥_∥ )
+open import Setoid.Functions  using ( Img_∋_ ; eq ; isSurj ; IsSurjective ; isSurj→IsSurjective )
 
-open import Setoid.Overture.Inverses             using ( Img_∋_ ; eq )
-open import Setoid.Overture.Surjective           using ( isSurj ; IsSurjective ; isSurj→IsSurjective )
-open import Setoid.Algebras.Basic       {𝑆 = 𝑆}  using ( Algebra ; 𝕌[_] ; _̂_ )
-open import Setoid.Homomorphisms.Basic  {𝑆 = 𝑆}  using ( hom ; compatible-map ; IsHom )
-open import Setoid.Terms.Basic          {𝑆 = 𝑆}  using ( 𝑻 ; _≐_  ; ≐-isRefl )
+open import Base.Terms            {𝑆 = 𝑆} using ( Term )
+open import Setoid.Algebras       {𝑆 = 𝑆} using ( Algebra ; 𝕌[_] ; _̂_ )
+open import Setoid.Homomorphisms  {𝑆 = 𝑆} using ( hom ; compatible-map ; IsHom )
+open import Setoid.Terms.Basic    {𝑆 = 𝑆}  using ( 𝑻 ; _≐_  ; ≐-isRefl )
 
 open Term
 open _⟶_ using ( cong ) renaming ( f to _⟨$⟩_ )

@@ -13,27 +13,22 @@ This is the [Base.Homomorphisms.Kernels] module of the [Agda Universal Algebra L
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic
+open import Base.Signatures using ( Signature; 𝓞 ; 𝓥 )
 
 module Base.Homomorphisms.Kernels {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library --------------------------------
-open import Agda.Primitive using ( _⊔_ ; lsuc )
-open import Data.Product   using ( _,_ )
-open import Function.Base  using ( _∘_ )
-open import Level          using ( Level )
-open import Relation.Binary.PropositionalEquality
-                           using ( _≡_ ; module ≡-Reasoning ; refl )
+open import Data.Product                           using ( _,_ )
+open import Function.Base                          using ( _∘_ )
+open import Level                                  using ( Level ; _⊔_ ; suc )
+open import Relation.Binary.PropositionalEquality  using ( _≡_ ; module ≡-Reasoning ; refl )
 
 -- Imports from the Agda Universal Algebras Library --------------------------------
-open import Base.Overture.Preliminaries       using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
-open import Base.Overture.Inverses            using ( Image_∋_ )
-open import Base.Overture.Surjective          using ( IsSurjective )
-open import Base.Equality.Welldefined         using ( swelldef )
-open import Base.Relations.Discrete           using ( ker )
-open import Base.Relations.Quotients          using ( ker-IsEquivalence ; ⟪_⟫ ; mkblk )
-open import Base.Algebras.Congruences {𝑆 = 𝑆} using ( Con ; mkcon ; _╱_ ; IsCongruence ; /-≡ )
-open import Base.Homomorphisms.Basic  {𝑆 = 𝑆} using ( hom ; epi ; epi→hom )
+open import Base.Overture                     using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; Image_∋_ ; IsSurjective )
+open import Base.Equality                     using ( swelldef )
+open import Base.Relations                    using ( ker ; ker-IsEquivalence ; ⟪_⟫ ; mkblk )
+open import Base.Algebras {𝑆 = 𝑆}             using ( Algebra ; compatible ; _̂_ ; Con ; mkcon ; _╱_ ; IsCongruence ; /-≡ )
+open import Base.Homomorphisms.Basic {𝑆 = 𝑆}  using ( hom ; epi ; epi→hom )
 
 private variable α β : Level
 
@@ -72,11 +67,11 @@ With this congruence we construct the corresponding quotient, along with some sy
 
 \begin{code}
 
- kerquo : swelldef 𝓥 β → {𝑩 : Algebra β 𝑆} → hom 𝑨 𝑩 → Algebra (α ⊔ lsuc β) 𝑆
+ kerquo : swelldef 𝓥 β → {𝑩 : Algebra β 𝑆} → hom 𝑨 𝑩 → Algebra (α ⊔ suc β) 𝑆
  kerquo wd {𝑩} h = 𝑨 ╱ (kercon wd {𝑩} h)
 
 
-ker[_⇒_]_↾_ : (𝑨 : Algebra α 𝑆)(𝑩 : Algebra β 𝑆) → hom 𝑨 𝑩 → swelldef 𝓥 β → Algebra (α ⊔ lsuc β) 𝑆
+ker[_⇒_]_↾_ : (𝑨 : Algebra α 𝑆)(𝑩 : Algebra β 𝑆) → hom 𝑨 𝑩 → swelldef 𝓥 β → Algebra (α ⊔ suc β) 𝑆
 ker[ 𝑨 ⇒ 𝑩 ] h ↾ wd = kerquo wd {𝑩} h
 
 \end{code}
@@ -124,7 +119,7 @@ The kernel of the canonical projection of `𝑨` onto `𝑨 / θ` is equal to `�
 
  open IsCongruence
 
- ker-in-con :  {wd : swelldef 𝓥 (α ⊔ lsuc β)}(θ : Con 𝑨)
+ ker-in-con :  {wd : swelldef 𝓥 (α ⊔ suc β)}(θ : Con 𝑨)
   →            ∀ {x}{y} → ∣ kercon wd {𝑨 ╱ θ} (πhom θ) ∣ x y →  ∣ θ ∣ x y
 
  ker-in-con θ hyp = /-≡ θ hyp

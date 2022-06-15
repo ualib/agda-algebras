@@ -13,32 +13,27 @@ This is the [Base.Homomorphisms.Noether][] module of the [Agda Universal Algebra
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Base.Signatures using ( 𝓞 ; 𝓥 ; Signature )
 
 module Base.Homomorphisms.Noether {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ---------------------------------------
-open import Agda.Primitive  using ( Level ) renaming ( Set to Type )
-open import Data.Product    using ( Σ-syntax ; _,_ )
-                            renaming ( _×_ to _∧_ ; proj₁ to fst ; proj₂ to snd)
-open import Function.Base   using ( _∘_ ; id )
-open import Relation.Binary using ( IsEquivalence )
-open import Relation.Binary.PropositionalEquality
-                            using ( module ≡-Reasoning ; _≡_ ; cong ; refl ; cong-app )
+open import Data.Product                                 using ( Σ-syntax ; _,_ ; _×_ )
+                                                         renaming ( proj₁ to fst ; proj₂ to snd )
+open import Function                                     using ( _∘_ ; id )
+open import Level                                        using (Level )
+open import Relation.Binary                              using ( IsEquivalence )
+open import Relation.Binary.PropositionalEquality  as ≡  using ( module ≡-Reasoning ; _≡_ )
 
 -- Imports from agda-algebras --------------------------------------------------------------
-open import Base.Overture.Preliminaries        using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
-open import Base.Overture.Inverses             using ( Image_∋_ )
-open import Base.Overture.Injective            using ( IsInjective )
-open import Base.Overture.Surjective           using ( IsSurjective ; SurjInv ; SurjInvIsInverseʳ )
-open import Base.Relations.Quotients           using ( ⌞_⌟ ; mkblk ; ⟪_⟫ )
-open import Base.Equality.Welldefined          using ( swelldef )
-open import Base.Equality.Truncation           using ( is-set ; blk-uip ; is-embedding ; monic-is-embedding|Set )
-open import Base.Equality.Extensionality       using ( pred-ext ; block-ext|uip )
-open import Base.Algebras.Basic                using ( Algebra ; _̂_)
-open import Base.Algebras.Congruences  {𝑆 = 𝑆} using ( Con ; IsCongruence )
-open import Base.Homomorphisms.Basic   {𝑆 = 𝑆} using ( hom ; is-homomorphism ; epi ; epi→hom )
-open import Base.Homomorphisms.Kernels {𝑆 = 𝑆} using ( kercon ; ker[_⇒_]_↾_ ; πker )
+open import Base.Overture                        using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; Image_∋_ ; IsInjective )
+                                                 using ( IsSurjective ; SurjInv ; SurjInvIsInverseʳ )
+open import Base.Relations                       using ( ⌞_⌟ ; mkblk ; ⟪_⟫ )
+open import Base.Equality                        using ( swelldef ; is-set ; blk-uip ; is-embedding )
+                                                 using ( monic-is-embedding|Set ; pred-ext ; block-ext|uip )
+open import Base.Algebras               {𝑆 = 𝑆}  using ( Algebra ; _̂_ ; Con ; IsCongruence )
+open import Base.Homomorphisms.Basic    {𝑆 = 𝑆}  using ( hom ; is-homomorphism ; epi ; epi→hom )
+open import Base.Homomorphisms.Kernels  {𝑆 = 𝑆}  using ( kercon ; ker[_⇒_]_↾_ ; πker )
 private variable α β γ : Level
 
 \end{code}
@@ -73,9 +68,9 @@ FirstHomTheorem|Set :
     (Bset : is-set ∣ 𝑩 ∣)(buip : blk-uip ∣ 𝑨 ∣ ∣ kercon fe {𝑩} h ∣) -- truncation assumptions
     ----------------------------------------------------------------
  →  Σ[ φ ∈ hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩  ]
-      ( ∣ h ∣ ≡ ∣ φ ∣ ∘ ∣ πker fe{𝑩}h ∣ ∧ IsInjective ∣ φ ∣  ∧  is-embedding ∣ φ ∣  )
+      ( ∣ h ∣ ≡ ∣ φ ∣ ∘ ∣ πker fe{𝑩}h ∣ × IsInjective ∣ φ ∣  ×  is-embedding ∣ φ ∣  )
 
-FirstHomTheorem|Set 𝑨 𝑩 h pe fe Bset buip = (φ , φhom) , refl , φmon , φemb
+FirstHomTheorem|Set 𝑨 𝑩 h pe fe Bset buip = (φ , φhom) , ≡.refl , φmon , φemb
  where
   θ : Con 𝑨
   θ = kercon fe{𝑩} h
@@ -87,11 +82,11 @@ FirstHomTheorem|Set 𝑨 𝑩 h pe fe Bset buip = (φ , φhom) , refl , φmon , 
 
   φhom : is-homomorphism (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩 φ
   φhom 𝑓 a = ∣ h ∣ ( (𝑓 ̂ 𝑨) (λ x → ⌞ a x ⌟) ) ≡⟨ ∥ h ∥ 𝑓 (λ x → ⌞ a x ⌟)  ⟩
-             (𝑓 ̂ 𝑩) (∣ h ∣ ∘ (λ x → ⌞ a x ⌟))  ≡⟨ cong (𝑓 ̂ 𝑩) refl ⟩
+             (𝑓 ̂ 𝑩) (∣ h ∣ ∘ (λ x → ⌞ a x ⌟))  ≡⟨ ≡.cong (𝑓 ̂ 𝑩) ≡.refl ⟩
              (𝑓 ̂ 𝑩) (λ x → φ (a x))            ∎
 
   φmon : IsInjective φ
-  φmon {_ , mkblk u refl} {_ , mkblk v refl} φuv = block-ext|uip pe buip ξ φuv
+  φmon {_ , mkblk u ≡.refl} {_ , mkblk v ≡.refl} φuv = block-ext|uip pe buip ξ φuv
 
   φemb : is-embedding φ
   φemb = monic-is-embedding|Set φ Bset φmon
@@ -110,10 +105,10 @@ FirstIsoTheorem|Set :
  →   IsSurjective ∣ h ∣
      ---------------------------------------------------------------
  →   Σ[ f ∈ (epi (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩)]
-       ( ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣  ∧ IsInjective ∣ f ∣ ∧ is-embedding ∣ f ∣ )
+       ( ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣  × IsInjective ∣ f ∣ × is-embedding ∣ f ∣ )
 
 FirstIsoTheorem|Set 𝑨 𝑩 h pe fe Bset buip hE =
- (fmap , fhom , fepic) , refl , (snd ∥ FHT ∥)
+ (fmap , fhom , fepic) , ≡.refl , (snd ∥ FHT ∥)
   where
   FHT = FirstHomTheorem|Set 𝑨 𝑩 h pe fe Bset buip
 
@@ -147,10 +142,10 @@ module _ {fe : swelldef 𝓥 β}(𝑨 : Algebra α 𝑆)(𝑩 : Algebra β 𝑆)
   →                ∣ h ∣ ≡ ∣ g ∣ ∘ ∣ πker fe{𝑩}h ∣
   →                ∀ a  →  ∣ f ∣ a ≡ ∣ g ∣ a
 
- FirstHomUnique f g hfk hgk (_ , mkblk a refl) =
-  ∣ f ∣ (_ , mkblk a refl)  ≡⟨ cong-app(hfk ⁻¹)a ⟩
-  ∣ h ∣ a                   ≡⟨ cong-app(hgk)a ⟩
-  ∣ g ∣ (_ , mkblk a refl)  ∎
+ FirstHomUnique f g hfk hgk (_ , mkblk a ≡.refl) =
+  ∣ f ∣ (_ , mkblk a ≡.refl)  ≡⟨ ≡.cong-app(hfk ⁻¹)a ⟩
+  ∣ h ∣ a                   ≡⟨ ≡.cong-app(hgk)a ⟩
+  ∣ g ∣ (_ , mkblk a ≡.refl)  ∎
 
 \end{code}
 

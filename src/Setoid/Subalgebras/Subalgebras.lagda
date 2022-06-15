@@ -13,7 +13,7 @@ This is the [Setoid.Subalgebras.Subalgebras][] module of the [Agda Universal Alg
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Subalgebras.Subalgebras {𝑆 : Signature 𝓞 𝓥} where
 
@@ -24,12 +24,11 @@ open import Relation.Binary  using ( REL )
 open import Relation.Unary   using ( Pred ; _∈_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------
-open import Base.Overture.Preliminaries            using ( ∣_∣ ; ∥_∥ )
-open import Setoid.Overture.Injective              using ( IsInjective )
-open import Setoid.Algebras.Basic         {𝑆 = 𝑆}  using ( Algebra ; ov )
-open import Setoid.Homomorphisms.Basic    {𝑆 = 𝑆}  using ( hom ; mon ; mon→intohom )
-open import Setoid.Homomorphisms.Kernels  {𝑆 = 𝑆}  using ( kerquo )
-open import Setoid.Homomorphisms.Noether  {𝑆 = 𝑆}  using ( FirstHomTheorem )
+open import Base.Overture     using ( ∣_∣ ; ∥_∥ )
+open import Setoid.Functions  using ( IsInjective )
+
+open import Setoid.Algebras       {𝑆 = 𝑆} using ( Algebra ; ov )
+open import Setoid.Homomorphisms  {𝑆 = 𝑆} using ( hom ; mon ; mon→intohom ; kerquo ; FirstHomTheorem )
 
 private variable
  α ρᵃ β ρᵇ ℓ : Level

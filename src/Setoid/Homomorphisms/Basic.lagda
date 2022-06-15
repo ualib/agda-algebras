@@ -13,7 +13,7 @@ This is the [Setoid.Homomorphisms.Basic][] module of the [Agda Universal Algebra
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using (𝓞 ; 𝓥 ; Signature )
+open import Base.Signatures using (𝓞 ; 𝓥 ; Signature )
 
 module Setoid.Homomorphisms.Basic {𝑆 : Signature 𝓞 𝓥} where
 
@@ -24,13 +24,11 @@ open import Function.Bundles  using ()               renaming ( Func to _⟶_ )
 open import Relation.Binary   using ( Setoid )
 
 -- Imports from the Agda Universal Algebra Library ---------------------------
-open import Base.Overture.Preliminaries    using ( ∣_∣ ; ∥_∥ )
-open import Setoid.Overture.Injective      using ( IsInjective )
-open import Setoid.Overture.Surjective     using ( IsSurjective )
-open import Setoid.Algebras.Basic {𝑆 = 𝑆}  using ( Algebra ; _̂_ )
+open import Base.Overture            using ( ∣_∣ ; ∥_∥ )
+open import Setoid.Functions         using ( IsInjective ; IsSurjective )
+open import Setoid.Algebras {𝑆 = 𝑆}  using ( Algebra ; _̂_ )
 
-private variable
- α β ρᵃ ρᵇ : Level
+private variable α β ρᵃ ρᵇ : Level
 
 module _ (𝑨 : Algebra α ρᵃ)(𝑩 : Algebra β ρᵇ) where
  open Algebra 𝑨  using () renaming (Domain to A )

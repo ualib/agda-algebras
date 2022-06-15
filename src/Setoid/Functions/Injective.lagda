@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Setoid.Overture.Injective module"
+title : "Setoid.Functions.Injective module"
 date : "2021-09-13"
 author: "the agda-algebras development team"
 ---
 
 ### <a id="injective-functions-on-setoids">Injective functions on setoids</a>
 
-This is the [Setoid.Overture.Injective][] module of the [agda-algebras][] library.
+This is the [Setoid.Functions.Injective][] module of the [agda-algebras][] library.
 
 We say that a function `f : A → B` from one setoid (A , ≈₀) to another (B , ≈₁) is *injective* (or *monic*) provided the following implications hold:  ∀ a₀ a₁ if f ⟨$⟩ a₀ ≈₁ f ⟨$⟩ a₁, then a₀ ≈₀ a₁.
 
@@ -17,23 +17,23 @@ We say that a function `f : A → B` from one setoid (A , ≈₀) to another (B 
 
 open import Relation.Binary using ( Setoid )
 
-module Setoid.Overture.Injective where
+module Setoid.Functions.Injective where
 
 
 -- Imports from Agda and the Agda Standard Library -------------
-open import Agda.Primitive        using ( _⊔_ ; Level )  renaming ( Set to Type )
-open import Function.Bundles      using ( Injection )    renaming ( Func to _⟶_ )
-open import Function.Base         using ( _∘_ ; id )
-open import Relation.Binary.Core  using ( _Preserves_⟶_ )
-open import Relation.Binary       using ( Rel )
+open import Agda.Primitive    using ( _⊔_ ; Level )  renaming ( Set to Type )
+open import Function.Bundles  using ( Injection )    renaming ( Func to _⟶_ )
+open import Function.Base     using ( _∘_ ; id )
+open import Relation.Binary   using ( _Preserves_⟶_ )
+open import Relation.Binary   using ( Rel )
+
 import Function.Definitions as FD
 
 -- Imports from agda-algebras -----------------------------------------------
-open import Setoid.Overture.Preliminaries  using ( 𝑖𝑑 )  renaming ( _∘_ to _⟨∘⟩_ )
-open import Setoid.Overture.Inverses       using ( Image_∋_ ; Inv )
+open import Setoid.Functions.Basic  using ( 𝑖𝑑 ) renaming ( _∘_ to _⟨∘⟩_ )
+open import Setoid.Functions.Inverses       using ( Image_∋_ ; Inv )
 
-private variable
- α β γ ρᵃ ρᵇ ρᶜ ℓ₁ ℓ₂ ℓ₃ : Level
+private variable α β γ ρᵃ ρᵇ ρᶜ ℓ₁ ℓ₂ ℓ₃ : Level
 
 \end{code}
 

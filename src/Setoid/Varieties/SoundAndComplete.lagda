@@ -15,25 +15,27 @@ This module is based on [Andreas Abel's Agda formalization of Birkhoff's complet
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Varieties.SoundAndComplete {𝑆 : Signature 𝓞 𝓥} where
 
 -- imports from Agda and the Agda Standard Library -------------------------------------------
-open import Agda.Primitive   using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
+open import Agda.Primitive   using () renaming ( Set to Type )
 open import Data.Product     using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Function.Base    using ( _∘_ ; flip ; id )
-open import Function.Bundles using () renaming ( Func to _⟶_ )
+open import Function         using ( _∘_ ; flip ; id ) renaming ( Func to _⟶_ )
+open import Level            using ( Level ; _⊔_ )
 open import Relation.Binary  using ( Setoid ; IsEquivalence )
 open import Relation.Unary   using ( Pred ; _∈_ )
+
 open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl )
+
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
-open import Base.Overture.Preliminaries     using ( ∣_∣ )
-open import Base.Terms.Basic       {𝑆 = 𝑆}  using ( Term )
-open import Setoid.Algebras.Basic  {𝑆 = 𝑆}  using ( Algebra ; ov ; ⟨_⟩ )
-open import Setoid.Terms.Basic     {𝑆 = 𝑆}  using ( module Environment ; Sub ; _[_] )
+open import Base.Overture             using ( ∣_∣ )
+open import Base.Terms       {𝑆 = 𝑆}  using ( Term )
+open import Setoid.Algebras  {𝑆 = 𝑆}  using ( Algebra ; ov ; ⟨_⟩ )
+open import Setoid.Terms     {𝑆 = 𝑆}  using ( module Environment ; Sub ; _[_] )
 
 open Setoid  using ( Carrier ; _≈_ ; isEquivalence )
 open _⟶_     renaming ( f to _⟨$⟩_ )

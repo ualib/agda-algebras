@@ -15,7 +15,7 @@ Here we define *term operations* which are simply terms interpreted in a particu
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Terms.Operations {𝑆 : Signature 𝓞 𝓥} where
 
@@ -29,14 +29,12 @@ import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
 
 -- Imports from Agda Universal Algebra Library ----------------------------------------------
-open import Base.Overture.Preliminaries          using ( ∣_∣ ; ∥_∥ )
-open import Base.Terms.Basic            {𝑆 = 𝑆}  using ( Term )
-
-open import Setoid.Algebras.Basic       {𝑆 = 𝑆}  using ( Algebra ; _̂_ ; ov )
-open import Setoid.Algebras.Products    {𝑆 = 𝑆}  using ( ⨅ )
-open import Setoid.Homomorphisms.Basic  {𝑆 = 𝑆}  using ( hom ; IsHom )
-open import Setoid.Terms.Basic          {𝑆 = 𝑆}  using ( module Environment ; 𝑻 ; _≐_ ; ≐-isRefl )
-open import Setoid.Terms.Properties     {𝑆 = 𝑆}  using ( free-lift )
+open import Base.Overture                     using ( ∣_∣ ; ∥_∥ )
+open import Base.Terms               {𝑆 = 𝑆}  using ( Term )
+open import Setoid.Algebras          {𝑆 = 𝑆}  using ( Algebra ; _̂_ ; ov ; ⨅ )
+open import Setoid.Homomorphisms     {𝑆 = 𝑆}  using ( hom ; IsHom )
+open import Setoid.Terms.Basic       {𝑆 = 𝑆}  using ( module Environment ; 𝑻 ; _≐_ ; ≐-isRefl ; _[_])
+open import Setoid.Terms.Properties  {𝑆 = 𝑆}  using ( free-lift )
 
 open Term
 open _⟶_ using ( cong ) renaming ( f to _⟨$⟩_ )
@@ -146,9 +144,9 @@ A substitution from `Y` to `X` is simply a function from `Y` to `X`, and the app
 
 \begin{code}
 
-_[_] : {χ : Level}{X Y : Type χ} → Term Y → (Y → X) → Term X
-(ℊ y) [ σ ] = ℊ (σ y)
-(node f t)  [ σ ] = node f λ i → t i [ σ ]
+_[_]s : {χ : Level}{X Y : Type χ} → Term Y → (Y → X) → Term X
+(ℊ y) [ σ ]s = ℊ (σ y)
+(node f t)  [ σ ]s = node f λ i → t i [ σ ]s
 
 \end{code}
 

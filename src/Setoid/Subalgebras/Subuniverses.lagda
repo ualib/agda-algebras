@@ -13,27 +13,29 @@ This is the [Setoid.Subalgebras.Subuniverses][] module of the [Agda Universal Al
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Subalgebras.Subuniverses {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------------
-open import Agda.Primitive   using ( _⊔_ ; Level ) renaming ( Set to Type )
-open import Data.Product     using ( _,_ )
-open import Function.Base    using ( _∘_ )
-open import Function.Bundles using ( Func )
-open import Relation.Binary  using ( Setoid )
-open import Relation.Unary   using ( Pred ; _∈_ ; _⊆_ ; ⋂ )
+open import Agda.Primitive    using ( _⊔_ ; Level ) renaming ( Set to Type )
+open import Data.Product      using ( _,_ )
+open import Function.Base     using ( _∘_ )
+open import Function.Bundles  using ( Func )
+open import Relation.Binary   using ( Setoid )
+open import Relation.Unary    using ( Pred ; _∈_ ; _⊆_ ; ⋂ )
+
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 open import Relation.Binary.PropositionalEquality using ( refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------------
-open import Base.Overture.Preliminaries          using ( ∣_∣ ; ∥_∥ )
-open import Base.Relations.Discrete              using ( Im_⊆_ )
-open import Base.Terms.Basic             {𝑆 = 𝑆} using ( Term ; ℊ ; node )
-open import Setoid.Algebras.Basic        {𝑆 = 𝑆} using ( Algebra ; 𝕌[_] ; _̂_ ; ov )
-open import Setoid.Terms.Basic           {𝑆 = 𝑆} using ( module Environment )
-open import Setoid.Homomorphisms.Basic   {𝑆 = 𝑆} using ( hom ; IsHom )
+open import Base.Overture   using ( ∣_∣ ; ∥_∥ )
+open import Base.Relations  using ( Im_⊆_ )
+
+open import Base.Terms            {𝑆 = 𝑆} using ( Term ; ℊ ; node )
+open import Setoid.Algebras       {𝑆 = 𝑆} using ( Algebra ; 𝕌[_] ; _̂_ ; ov )
+open import Setoid.Terms          {𝑆 = 𝑆} using ( module Environment )
+open import Setoid.Homomorphisms  {𝑆 = 𝑆} using ( hom ; IsHom )
 
 private variable
  α β γ ρᵃ ρᵇ ρᶜ ℓ χ : Level

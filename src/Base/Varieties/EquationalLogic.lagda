@@ -17,21 +17,21 @@ Because a class of structures has a different type than a single structure, we m
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Base.Signatures using ( 𝓞 ; 𝓥 ; Signature )
 
 module Base.Varieties.EquationalLogic {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ----------------
-open import Agda.Primitive  using ( _⊔_ ;  lsuc ; Level )  renaming ( Set to Type )
+open import Agda.Primitive  using ()                       renaming ( Set to Type )
 open import Data.Product    using ( _×_ ; _,_ ; Σ-syntax)  renaming ( proj₁ to fst ; proj₂ to snd )
+open import Level           using ( Level ;  _⊔_ )
 open import Relation.Unary  using ( Pred ; _∈_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------
-open import Base.Overture.Preliminaries      using ( _≈_ )
-open import Base.Algebras.Basic              using ( Algebra )
-open import Base.Algebras.Products  {𝑆 = 𝑆}  using ( ov )
-open import Base.Terms.Basic        {𝑆 = 𝑆}  using ( Term ; 𝑻 )
-open import Base.Terms.Operations   {𝑆 = 𝑆}  using ( _⟦_⟧ )
+open import Base.Overture           using ( _≈_ )
+open import Base.Algebras  {𝑆 = 𝑆}  using ( Algebra ; ov )
+open import Base.Terms     {𝑆 = 𝑆}  using ( Term ; 𝑻 ; _⟦_⟧ )
+
 private variable
  χ α ρ ι : Level
  X : Type χ

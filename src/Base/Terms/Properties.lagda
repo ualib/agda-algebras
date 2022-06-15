@@ -14,38 +14,33 @@ This is the [Base.Terms.Properties][] module of the [Agda Universal Algebra Libr
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Base.Signatures using ( 𝓞 ; 𝓥 ; Signature )
 
 module Base.Terms.Properties {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library --------------------------------------
-open import Axiom.Extensionality.Propositional
-                                   using () renaming (Extensionality to funext)
-open import Agda.Primitive         using ( Level ; _⊔_ ; lsuc ) renaming ( Set to Type )
-open import Data.Product           using ( _,_ ; Σ-syntax )
-open import Function.Base          using ( _∘_ )
-open import Data.Empty.Polymorphic using ( ⊥ )
-open import Relation.Binary        using ( IsEquivalence ; Setoid )
-open import Relation.Binary.Definitions
-                                   using (Reflexive ; Symmetric ; Transitive )
-open import Relation.Binary.PropositionalEquality
-                                   using ( _≡_ ; refl ; module ≡-Reasoning ; cong )
+open import Axiom.Extensionality.Propositional          using ()  renaming (Extensionality to funext)
+open import Agda.Primitive                              using ()  renaming ( Set to Type )
+open import Data.Product                                using ( _,_ ; Σ-syntax )
+open import Function                                    using ( _∘_ )
+open import Data.Empty.Polymorphic                      using ( ⊥ )
+open import Level                                       using ( Level )
+open import Relation.Binary                             using ( IsEquivalence ; Setoid ; Reflexive )
+                                                        using ( Symmetric ; Transitive )
+open import Relation.Binary.PropositionalEquality as ≡  using ( _≡_ ; module ≡-Reasoning )
 
 
 -- Imports from the Agda Universal Algebra Library ----------------------------------------
-open import Base.Overture.Preliminaries      using ( _⁻¹ ; 𝑖𝑑 ; ∣_∣ ; ∥_∥)
-open import Base.Overture.Inverses           using ( Inv ; InvIsInverseʳ ; Image_∋_; eq )
-open import Base.Overture.Surjective         using ( IsSurjective )
-open import Base.Equality.Welldefined        using ( swelldef )
-open import Base.Algebras.Basic              using ( Algebra ; _̂_ )
-open import Base.Algebras.Products   {𝑆 = 𝑆} using ( ov )
-open import Base.Homomorphisms.Basic {𝑆 = 𝑆} using ( hom )
-open import Base.Terms.Basic         {𝑆 = 𝑆}
+open import Base.Overture               using ( _⁻¹ ; 𝑖𝑑 ; ∣_∣ ; ∥_∥ ; Inv ; InvIsInverseʳ ; Image_∋_; eq ; IsSurjective )
+open import Base.Equality               using ( swelldef )
+open import Base.Algebras {𝑆 = 𝑆}       using ( Algebra ; _̂_  ; ov )
+open import Base.Homomorphisms {𝑆 = 𝑆}  using ( hom )
+open import Base.Terms.Basic {𝑆 = 𝑆}    using ( Term ; 𝑻 )
+
+open Term
 
 private variable α β χ : Level
-
 \end{code}
-
 
 #### <a id="the-universal-property">The universal property</a>
 
@@ -78,7 +73,7 @@ The free lift so defined is a homomorphism by construction. Indeed, here is the 
 \begin{code}
 
 lift-hom : (𝑨 : Algebra α 𝑆) → (X → ∣ 𝑨 ∣) → hom (𝑻 X) 𝑨
-lift-hom 𝑨 h = free-lift 𝑨 h , λ f a → cong (f ̂ 𝑨) refl
+lift-hom 𝑨 h = free-lift 𝑨 h , λ f a → ≡.cong (f ̂ 𝑨) ≡.refl
 
 \end{code}
 

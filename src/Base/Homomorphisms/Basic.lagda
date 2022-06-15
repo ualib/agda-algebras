@@ -13,21 +13,20 @@ This is the [Base.Homomorphisms.Basic] module of the [Agda Universal Algebra Lib
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic
+open import Base.Signatures using ( Signature; 𝓞 ; 𝓥 )
 
 module Base.Homomorphisms.Basic {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library --------------------------------
-open import Agda.Primitive using ( _⊔_ ; lsuc ) renaming ( Set to Type )
-open import Data.Product   using ( _,_ ; Σ ;  _×_ ; Σ-syntax) renaming ( proj₁ to fst )
-open import Function.Base  using ( _∘_ ; id )
-open import Level          using ( Level )
-open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl )
+open import Agda.Primitive renaming ( Set to Type )   using ()
+open import Data.Product   renaming ( proj₁ to fst )  using ( _,_ ; Σ ;  _×_ ; Σ-syntax)
+open import Function                                  using ( _∘_ ; id )
+open import Level                                     using ( Level ; _⊔_ )
+open import Relation.Binary.PropositionalEquality     using ( _≡_ ; refl )
 
 -- Imports from the Agda Universal Algebras Library --------------------------------
-open import Base.Overture.Preliminaries using ( ∣_∣ ; ∥_∥ )
-open import Base.Overture.Injective     using ( IsInjective )
-open import Base.Overture.Surjective    using ( IsSurjective )
+open import Base.Overture  using ( ∣_∣ ; ∥_∥ ; IsInjective ; IsSurjective )
+open import Base.Algebras  {𝑆 = 𝑆} using ( Algebra ; _̂_ ; Lift-Alg )
 
 private variable α β : Level
 

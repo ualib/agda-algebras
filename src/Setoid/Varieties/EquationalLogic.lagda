@@ -17,26 +17,24 @@ Because a class of structures has a different type than a single structure, we m
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Varieties.EquationalLogic {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ----------------
-open import Agda.Primitive    using     ( _⊔_ ;  lsuc ; Level )
-                              renaming  ( Set to Type )
-open import Data.Product      using     ( _×_ ; _,_ ; Σ-syntax)
-                              renaming  ( proj₁ to fst ; proj₂ to snd )
-open import Function.Bundles  using     ()
-                              renaming  ( Func to _⟶_ )
-open import Relation.Binary   using     ( Setoid )
-open import Relation.Unary    using     ( Pred ; _∈_ )
+open import Agda.Primitive   using () renaming ( Set to Type )
+open import Data.Product     using ( _×_ ; _,_ ; Σ-syntax) renaming  ( proj₁ to fst ; proj₂ to snd )
+open import Function         using () renaming ( Func to _⟶_ )
+open import Level            using ( _⊔_ ; Level )
+open import Relation.Binary  using ( Setoid )
+open import Relation.Unary   using ( Pred ; _∈_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------
-open import Setoid.Algebras.Basic  {𝑆 = 𝑆} using ( Algebra ; ov )
-open import Base.Terms.Basic       {𝑆 = 𝑆} using ( Term )
-open import Setoid.Terms.Basic     {𝑆 = 𝑆} using ( 𝑻 ; module Environment )
-private variable
- χ α ρᵃ ℓ ι : Level
+open import Setoid.Algebras  {𝑆 = 𝑆} using ( Algebra ; ov )
+open import Base.Terms       {𝑆 = 𝑆} using ( Term )
+open import Setoid.Terms     {𝑆 = 𝑆} using ( 𝑻 ; module Environment )
+
+private variable χ α ρᵃ ℓ ι : Level
 
 \end{code}
 
@@ -84,12 +82,12 @@ modeled by the members of 𝒦.
 
 \begin{code}
 
- Th : Pred (Algebra α ρᵃ) ℓ → Pred(Term X × Term X) (χ ⊔ ℓ ⊔ ov(α ⊔ ρᵃ))
- Th 𝒦 = λ (p , q) → 𝒦 ⊫ p ≈ q
+ Th' : Pred (Algebra α ρᵃ) ℓ → Pred(Term X × Term X) (χ ⊔ ℓ ⊔ ov(α ⊔ ρᵃ))
+ Th' 𝒦 = λ (p , q) → 𝒦 ⊫ p ≈ q
 
-Th' : {χ α : Level}{X : Type χ} → Pred (Algebra α α) (ov α)
- →    Pred(Term X × Term X) (χ ⊔ ov α)
-Th' 𝒦 = λ (p , q) → 𝒦 ⊫ p ≈ q
+Th'' :  {χ α : Level}{X : Type χ} → Pred (Algebra α α) (ov α)
+ →      Pred(Term X × Term X) (χ ⊔ ov α)
+Th'' 𝒦 = λ (p , q) → 𝒦 ⊫ p ≈ q
 
 \end{code}
 
@@ -113,8 +111,8 @@ satisfying the identities in `ℰ`.
 
 \begin{code}
 
- Mod : Pred(Term X × Term X) (ov α) → Pred(Algebra α ρᵃ) (ρᵃ ⊔ ov(α ⊔ χ))
- Mod ℰ = λ 𝑨 → ∀ p q → (p , q) ∈ ℰ → 𝑨 ⊧ p ≈ q
+ Mod' : Pred(Term X × Term X) (ov α) → Pred(Algebra α ρᵃ) (ρᵃ ⊔ ov(α ⊔ χ))
+ Mod' ℰ = λ 𝑨 → ∀ p q → (p , q) ∈ ℰ → 𝑨 ⊧ p ≈ q
 
 \end{code}
 

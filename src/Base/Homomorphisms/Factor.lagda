@@ -26,24 +26,24 @@ If `τ : hom 𝑨 𝑩`, `ν : hom 𝑨 𝑪`, `ν` is surjective, and `ker ν �
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Base.Signatures using ( 𝓞 ; 𝓥 ; Signature )
 
 module Base.Homomorphisms.Factor {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ---------------------------------------
-open import Agda.Primitive using ( Level )
-open import Data.Product   using ( Σ-syntax ; _,_ ) renaming (proj₁ to fst ; proj₂ to snd)
-open import Function.Base  using ( _∘_ )
-open import Relation.Binary.PropositionalEquality using ( module ≡-Reasoning ; _≡_ ; cong )
-open import Relation.Unary using ( _⊆_ )
+open import Data.Product renaming ( proj₁ to fst ; proj₂ to snd )  using ( Σ-syntax ; _,_ )
+open import Function                                               using ( _∘_ )
+open import Level                                                  using ( Level )
+open import Relation.Binary.PropositionalEquality as ≡             using ( module ≡-Reasoning ; _≡_ )
+open import Relation.Unary                                         using ( _⊆_ )
 
 -- Imports from agda-algebras --------------------------------------------------------------
-open import Base.Overture.Preliminaries      using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
-open import Base.Overture.Surjective         using ( IsSurjective ; SurjInv ; SurjInvIsInverseʳ ; epic-factor )
-open import Base.Relations.Discrete          using ( kernel )
-open import Base.Equality.Welldefined        using ( swelldef )
-open import Base.Algebras.Basic              using ( Algebra ; _̂_)
-open import Base.Homomorphisms.Basic {𝑆 = 𝑆} using ( hom ; epi )
+open import Base.Algebras             {𝑆 = 𝑆}  using ( Algebra ; _̂_)
+open import Base.Equality                      using ( swelldef )
+open import Base.Homomorphisms.Basic  {𝑆 = 𝑆}  using ( hom ; epi )
+open import Base.Overture                      using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; IsSurjective ; SurjInv )
+                                               using ( SurjInvIsInverseʳ ; epic-factor )
+open import Base.Relations                     using ( kernel )
 
 private variable α β γ : Level
 
@@ -76,8 +76,8 @@ module _ {𝑨 : Algebra α 𝑆}{𝑪 : Algebra γ 𝑆} where
 
    φIsHomCB : ∀ 𝑓 c → φ ((𝑓 ̂ 𝑪) c) ≡ ((𝑓 ̂ 𝑩)(φ ∘ c))
    φIsHomCB 𝑓 c =
-    φ ((𝑓 ̂ 𝑪) c)                    ≡⟨ cong φ (wd (𝑓 ̂ 𝑪) c (∣ ν ∣ ∘ (νInv ∘ c)) (λ i → (η (c i))⁻¹))⟩
-    φ ((𝑓 ̂ 𝑪)(∣ ν ∣ ∘(νInv ∘ c)))   ≡⟨ cong φ (∥ ν ∥ 𝑓 (νInv ∘ c))⁻¹ ⟩
+    φ ((𝑓 ̂ 𝑪) c)                    ≡⟨ ≡.cong φ (wd (𝑓 ̂ 𝑪) c (∣ ν ∣ ∘ (νInv ∘ c)) (λ i → (η (c i))⁻¹))⟩
+    φ ((𝑓 ̂ 𝑪)(∣ ν ∣ ∘(νInv ∘ c)))   ≡⟨ ≡.cong φ (∥ ν ∥ 𝑓 (νInv ∘ c))⁻¹ ⟩
     φ (∣ ν ∣((𝑓 ̂ 𝑨)(νInv ∘ c)))     ≡⟨ (τφν ((𝑓 ̂ 𝑨)(νInv ∘ c)))⁻¹ ⟩
     ∣ τ ∣((𝑓 ̂ 𝑨)(νInv ∘ c))         ≡⟨ ∥ τ ∥ 𝑓 (νInv ∘ c) ⟩
     (𝑓 ̂ 𝑩)(λ x → ∣ τ ∣(νInv (c x))) ∎

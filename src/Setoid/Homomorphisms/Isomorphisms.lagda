@@ -11,7 +11,7 @@ author: "agda-algebras development team"
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Homomorphisms.Isomorphisms {𝑆 : Signature 𝓞 𝓥}  where
 
@@ -22,22 +22,19 @@ open import Data.Unit.Polymorphic.Base  using ()                      renaming (
 open import Data.Unit.Base              using ( ⊤ ; tt )
 open import Function                    using ( id )                  renaming ( Func to _⟶_ )
 open import Level                       using ( Level ; Lift ; lift ; lower )
-open import Relation.Binary             using ( Setoid )
-open import Relation.Binary.Definitions using ( Reflexive ; Sym ; Trans )
+open import Relation.Binary             using ( Setoid ; Reflexive ; Sym ; Trans )
 open import Relation.Binary.PropositionalEquality as ≡ using ()
 
 -- Imports from the Agda Universal Algebra Library -----------------------------------------
-open import Base.Overture.Preliminaries               using ( ∣_∣ ; ∥_∥ )
-open import Setoid.Overture.Preliminaries             using ( _∘_ )
-open import Setoid.Overture.Inverses                  using ( eq )
-open import Setoid.Overture.Injective                 using ( IsInjective )
-open import Setoid.Overture.Surjective                using ( IsSurjective )
-open import Setoid.Algebras.Basic            {𝑆 = 𝑆}  using ( Algebra ; Lift-Alg ; _̂_ ; Lift-Algˡ ; Lift-Algʳ )
-open import Setoid.Algebras.Products         {𝑆 = 𝑆}  using ( ⨅ )
-open import Setoid.Homomorphisms.Basic       {𝑆 = 𝑆}  using ( hom ; IsHom )
-open import Setoid.Homomorphisms.Properties  {𝑆 = 𝑆}  using ( 𝒾𝒹 ; ∘-hom ; ToLiftˡ ; FromLiftˡ )
-                                                      using ( ToFromLiftˡ ; FromToLiftˡ ; ToLiftʳ )
-                                                      using ( FromLiftʳ ; ToFromLiftʳ ; FromToLiftʳ )
+open import Base.Overture            using ( ∣_∣ ; ∥_∥ )
+open import Setoid.Functions         using ( _∘_ ; eq ; IsInjective ; IsSurjective )
+
+open import Setoid.Algebras {𝑆 = 𝑆}  using ( Algebra ; Lift-Alg ; _̂_ ; Lift-Algˡ ; Lift-Algʳ ; ⨅ )
+
+open import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}       using  ( hom ; IsHom )
+open import Setoid.Homomorphisms.Properties {𝑆 = 𝑆}  using  ( 𝒾𝒹 ; ∘-hom ; ToLiftˡ ; FromLiftˡ
+                                                            ; ToFromLiftˡ ; FromToLiftˡ ; ToLiftʳ
+                                                            ; FromLiftʳ ; ToFromLiftʳ ; FromToLiftʳ )
 
 \end{code}
 

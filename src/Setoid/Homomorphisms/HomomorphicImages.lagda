@@ -13,7 +13,7 @@ This is the [Setoid.Homomorphisms.HomomorphicImages][] module of the [Agda Unive
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using (𝓞 ; 𝓥 ; Signature )
+open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Homomorphisms.HomomorphicImages {𝑆 : Signature 𝓞 𝓥} where
 
@@ -27,13 +27,12 @@ open import Relation.Unary   using ( Pred ; _∈_ )
 open import Relation.Binary.PropositionalEquality as ≡ using ()
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
-open import Base.Overture.Preliminaries                 using ( ∣_∣ ; ∥_∥ ; transport )
-open import Setoid.Overture.Preliminaries               using ( lift∼lower )
-open import Setoid.Overture.Inverses                    using ( Ran ; _range ; _preimage ; _image ; Inv )
-                                                        using ( _preimage≈image ; InvIsInverseʳ ; Image_∋_ )
-open import Setoid.Overture.Surjective                  using ( IsSurjective ; ∘-IsSurjective )
-open import Setoid.Algebras.Basic              {𝑆 = 𝑆}  using ( Algebra ; ov ; _̂_ ; ⟨_⟩ ; Lift-Algˡ )
-                                                        using ( Lift-Alg ; 𝕌[_] )
+open import Base.Overture     using  ( ∣_∣ ; ∥_∥ ; transport )
+open import Setoid.Functions  using  ( lift∼lower ; Ran ; _range ; _preimage ; _image ; Inv ; Image_∋_
+                                     ; _preimage≈image ; InvIsInverseʳ ; IsSurjective ; ∘-IsSurjective )
+
+open import Setoid.Algebras {𝑆 = 𝑆}  using ( Algebra ; ov ; _̂_ ; ⟨_⟩ ; Lift-Algˡ ; Lift-Alg ; 𝕌[_] )
+
 open import Setoid.Homomorphisms.Basic         {𝑆 = 𝑆}  using ( hom ; IsHom )
 open import Setoid.Homomorphisms.Isomorphisms  {𝑆 = 𝑆}  using ( _≅_ ; Lift-≅ )
 open import Setoid.Homomorphisms.Properties    {𝑆 = 𝑆}  using ( Lift-homˡ ; ToLiftˡ ; lift-hom-lemma )

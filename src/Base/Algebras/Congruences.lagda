@@ -13,7 +13,7 @@ This is the [Base.Algebras.Congruences][] module of the [Agda Universal Algebra 
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic
+open import Base.Signatures using ( 𝓞 ; 𝓥 ; Signature )
 
 module Base.Algebras.Congruences {𝑆 : Signature 𝓞 𝓥} where
 
@@ -27,11 +27,11 @@ open import Relation.Binary.PropositionalEquality
                             using ( _≡_ ; refl )
 
 -- Imports from agda-algebras ---------------------------------------------------
-open import Base.Overture.Preliminaries     using ( ∣_∣  ; ∥_∥  )
-open import Base.Relations.Discrete         using ( _|:_ ; 0[_] )
-open import Base.Relations.Quotients        using ( 0[_]Equivalence ; _/_ ; ⟪_⟫ ; IsBlock )
-open import Base.Equality.Welldefined       using ( swelldef )
-open import Base.Algebras.Products {𝑆 = 𝑆}  using ( ov )
+open import Base.Overture                    using ( ∣_∣  ; ∥_∥  )
+open import Base.Relations                   using ( _|:_ ; 0[_] ; 0[_]Equivalence ; _/_ ; ⟪_⟫ ; IsBlock )
+open import Base.Equality                    using ( swelldef )
+open import Base.Algebras.Basic     {𝑆 = 𝑆}  using ( Algebra ; compatible ; _̂_ )
+open import Base.Algebras.Products  {𝑆 = 𝑆}  using ( ov )
 
 
 

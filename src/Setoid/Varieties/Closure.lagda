@@ -17,30 +17,26 @@ Fix a signature 𝑆, let 𝒦 be a class of 𝑆-algebras, and define
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Varieties.Closure {𝑆 : Signature 𝓞 𝓥} where
 
 -- imports from Agda and the Agda Standard Library -------------------------------------------
-open import Agda.Primitive         using ( _⊔_ ; lsuc )      renaming ( Set to Type ; lzero to ℓ₀)
-open import Data.Product           using ( _,_ ; Σ-syntax )  renaming ( _×_ to _∧_ )
+open import Agda.Primitive         using () renaming ( Set to Type )
+open import Data.Product           using ( _,_ ; Σ-syntax ) renaming ( _×_ to _∧_ )
 open import Data.Unit.Polymorphic  using ( ⊤ ; tt )
-open import Function.Base          using ( id )
-open import Function.Bundles       using ()                  renaming ( Func to _⟶_ )
-open import Level                  using ( Level ; Lift ; lift ; lower )
+open import Function               using ( id ) renaming ( Func to _⟶_ )
+open import Level                  using ( Level ;  _⊔_ ; Lift ; lift ; lower )
 open import Relation.Binary        using ( Setoid )
 open import Relation.Unary         using ( Pred ; _∈_ ; _⊆_ )
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
-open import Setoid.Algebras.Basic                   {𝑆 = 𝑆}  using ( Algebra ; ov ; Lift-Alg )
-open import Setoid.Algebras.Products                {𝑆 = 𝑆}  using ( ⨅ )
-open import Setoid.Homomorphisms.Basic              {𝑆 = 𝑆}  using ( IsHom )
-open import Setoid.Homomorphisms.Isomorphisms       {𝑆 = 𝑆}  using ( _≅_ ; ≅-trans ; ≅-sym ; Lift-≅ ; ⨅≅⨅ℓρ )
-open import Setoid.Homomorphisms.HomomorphicImages  {𝑆 = 𝑆}  using ( _IsHomImageOf_ ; IdHomImage ; HomImage-≅ )
-                                                             using ( HomImage-≅' ; Lift-HomImage-lemma )
-open import Setoid.Subalgebras.Subalgebras          {𝑆 = 𝑆}  using ( _≤_ ; _≤c_ )
-open import Setoid.Subalgebras.Properties           {𝑆 = 𝑆}  using ( ≤-reflexive ; ≤-trans ; ≅-trans-≤ )
-                                                             using ( ≤-trans-≅ ; Lift-≤-Lift ; ≤-Lift )
+open import Setoid.Algebras       {𝑆 = 𝑆}  using ( Algebra ; ov ; Lift-Alg ; ⨅ )
+open import Setoid.Homomorphisms  {𝑆 = 𝑆}  using ( IsHom ; _≅_ ; ≅-trans ; ≅-sym ; Lift-≅ ; ⨅≅⨅ℓρ )
+                                           using ( _IsHomImageOf_ ; IdHomImage ; HomImage-≅ )
+                                           using ( HomImage-≅' ; Lift-HomImage-lemma )
+open import Setoid.Subalgebras    {𝑆 = 𝑆}  using ( _≤_ ; _≤c_ ; ≤-reflexive ; ≤-trans ; ≅-trans-≤ )
+                                           using ( ≤-trans-≅ ; Lift-≤-Lift ; ≤-Lift )
 
 open _⟶_ renaming ( f to _⟨$⟩_ )
 

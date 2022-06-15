@@ -20,38 +20,32 @@ We prove some closure and invariance properties of the relation `⊧`.  In parti
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Varieties.Properties {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library -------------------------------------------
-open import Agda.Primitive    using ( Level ; _⊔_ ) renaming ( Set to Type )
-open import Data.Product      using ( _,_ )
-open import Function.Base     using ( _∘_ )
-open import Function.Bundles  using ( Func )
-open import Relation.Binary   using ( Setoid )
-open import Relation.Unary    using ( Pred ; _∈_ )
+open import Agda.Primitive   using ( Level ; _⊔_ ) renaming ( Set to Type )
+open import Data.Product     using ( _,_ )
+open import Function         using ( _∘_ ; Func )
+open import Relation.Binary  using ( Setoid )
+open import Relation.Unary   using ( Pred ; _∈_ )
+
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
-open import Base.Overture.Preliminaries                     using ( ∣_∣ ; ∥_∥ )
-open import Base.Terms.Basic                        {𝑆 = 𝑆} using ( Term ; ℊ )
-open import Setoid.Overture.Inverses                        using ( InvIsInverseʳ )
-open import Setoid.Overture.Surjective                      using ( SurjInv )
-open import Setoid.Algebras.Basic                   {𝑆 = 𝑆} using ( Algebra ; Lift-Algˡ ; ov ; 𝕌[_] ; 𝔻[_] )
-open import Setoid.Algebras.Products                {𝑆 = 𝑆} using ( ⨅ )
-open import Setoid.Homomorphisms.Basic              {𝑆 = 𝑆} using ( hom )
-open import Setoid.Homomorphisms.Isomorphisms       {𝑆 = 𝑆} using ( _≅_ ; mkiso ; Lift-≅ˡ ; ≅-sym )
-open import Setoid.Homomorphisms.HomomorphicImages  {𝑆 = 𝑆} using ( _IsHomImageOf_ )
-open import Setoid.Terms.Basic                      {𝑆 = 𝑆} using ( 𝑻 ; module Environment )
-open import Setoid.Terms.Operations                 {𝑆 = 𝑆} using ( comm-hom-term ; interp-prod )
-                                                            using ( term-agreement )
-open import Setoid.Subalgebras.Subalgebras          {𝑆 = 𝑆} using ( _≤_ ; SubalgebrasOfClass )
-open import Setoid.Varieties.SoundAndComplete       {𝑆 = 𝑆} using ( _⊧_ ; _⊨_ ; _⊫_ ; Eq ; _≈̇_ )
-                                                            using ( lhs ; rhs ; _⊢_▹_≈_ )
+open import Base.Overture                  using  ( ∣_∣ ; ∥_∥ )
+open import Setoid.Functions               using  ( InvIsInverseʳ ; SurjInv )
+open import Base.Terms            {𝑆 = 𝑆}  using  ( Term ; ℊ )
+open import Setoid.Algebras       {𝑆 = 𝑆}  using  ( Algebra ; Lift-Algˡ ; ov ; 𝕌[_] ; 𝔻[_] ; ⨅ )
+open import Setoid.Homomorphisms  {𝑆 = 𝑆}  using  ( hom ; _≅_ ; mkiso ; Lift-≅ˡ ; ≅-sym ; _IsHomImageOf_ )
+open import Setoid.Terms          {𝑆 = 𝑆}  using  ( 𝑻 ; module Environment ; comm-hom-term ; interp-prod
+                                                  ; term-agreement )
+open import Setoid.Subalgebras    {𝑆 = 𝑆}  using  ( _≤_ ; SubalgebrasOfClass )
 
-private variable
- α ρᵃ β ρᵇ χ ℓ : Level
+open import Setoid.Varieties.SoundAndComplete {𝑆 = 𝑆} using ( _⊧_ ; _⊨_ ; _⊫_ ; Eq ; _≈̇_ ; lhs ; rhs ; _⊢_▹_≈_ )
+
+private variable α ρᵃ β ρᵇ χ ℓ : Level
 
 open Func using ( cong ) renaming (f to _⟨$⟩_ )
 open Algebra using ( Domain )

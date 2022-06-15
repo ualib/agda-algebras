@@ -13,30 +13,27 @@ This is the [Setoid.Homomorphisms.Kernels][] module of the [Agda Universal Algeb
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using (𝓞 ; 𝓥 ; Signature )
+open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Homomorphisms.Kernels {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ------------------------------------------
 open import Agda.Primitive    using ( _⊔_ ; lsuc )
 open import Data.Product      using ( _,_ )
-open import Function          using ( _∘_ ; id )
-open import Function.Bundles  using () renaming ( Func to _⟶_ )
+open import Function          using ( _∘_ ; id ) renaming ( Func to _⟶_ )
 open import Level             using ( Level )
 open import Relation.Binary   using ( Setoid )
 open import Relation.Binary.PropositionalEquality as ≡ using ()
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------
-open import Base.Overture.Preliminaries               using ( ∣_∣ ; ∥_∥ )
-open import Setoid.Overture.Inverses             using ( Image_∋_ )
-open import Base.Relations.Discrete                   using ( kerRel ; kerRelOfEquiv )
-open import Setoid.Algebras.Basic            {𝑆 = 𝑆}  using ( Algebra ; _̂_ ; ov )
-open import Setoid.Algebras.Congruences      {𝑆 = 𝑆}  using ( _∣≈_ ; Con ; mkcon ; _╱_ ; IsCongruence )
+open import Base.Overture            using ( ∣_∣ ; ∥_∥ )
+open import Base.Relations           using ( kerRel ; kerRelOfEquiv )
+open import Setoid.Functions         using ( Image_∋_ )
+open import Setoid.Algebras {𝑆 = 𝑆}  using ( Algebra ; _̂_ ; ov ; _∣≈_ ; Con ; mkcon ; _╱_ ; IsCongruence )
 open import Setoid.Homomorphisms.Basic       {𝑆 = 𝑆}  using ( hom ; IsHom ; epi ; IsEpi ; epi→hom )
 open import Setoid.Homomorphisms.Properties  {𝑆 = 𝑆}  using ( 𝒾𝒹 )
 
-private variable
- α β ρᵃ ρᵇ ℓ : Level
+private variable  α β ρᵃ ρᵇ ℓ : Level
 
 open Algebra  using ( Domain )
 open _⟶_      using ( cong ) renaming (f to _⟨$⟩_ )

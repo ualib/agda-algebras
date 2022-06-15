@@ -13,22 +13,21 @@ This is the [Base.Homomorphisms.Products] module of the [Agda Universal Algebra 
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic
+open import Base.Signatures using (Signature ; 𝓞 ; 𝓥 )
 
 module Base.Homomorphisms.Products {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library --------------------------
-open import Agda.Primitive using ( _⊔_ ; lsuc ) renaming ( Set to Type )
-open import Axiom.Extensionality.Propositional
-                           using () renaming (Extensionality to funext)
-open import Data.Product   using ( _,_ )
-open import Level          using ( Level )
-open import Relation.Binary.PropositionalEquality using ( refl )
+open import Agda.Primitive                         using () renaming ( Set to Type )
+open import Axiom.Extensionality.Propositional     using () renaming (Extensionality to funext)
+open import Data.Product                           using ( _,_ )
+open import Level                                  using ( Level ;  _⊔_ ; suc )
+open import Relation.Binary.PropositionalEquality  using ( refl )
 
 -- Imports from the Agda Universal Algebras Library ----------------------
-open import Base.Overture.Preliminaries using ( ∣_∣ ; ∥_∥)
-open import Base.Algebras.Products    {𝑆 = 𝑆} using ( ⨅ )
-open import Base.Homomorphisms.Basic  {𝑆 = 𝑆} using ( hom ; epi )
+open import Base.Overture                          using ( ∣_∣ ; ∥_∥)
+open import Base.Algebras                 {𝑆 = 𝑆}  using ( Algebra ; ⨅ )
+open import Base.Homomorphisms.Basic      {𝑆 = 𝑆}  using ( hom ; epi )
 
 private variable 𝓘 β : Level
 

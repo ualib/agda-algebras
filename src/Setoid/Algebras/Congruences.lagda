@@ -13,24 +13,22 @@ This is the [Setoid.Algebras.Congruences][] module of the [Agda Universal Algebr
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using (𝓞 ; 𝓥 ; Signature)
+open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Algebras.Congruences {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from the Agda Standard Library ---------------------------------------
-open import Function                               using ( id )
-open import Function.Bundles                       using ( Func )
+open import Function                               using ( id ; Func )
 open import Agda.Primitive                         using ( _⊔_ ; Level )             renaming ( Set to Type )
 open import Data.Product                           using ( _,_ ; Σ-syntax )
 open import Relation.Binary                        using ( Setoid ; IsEquivalence )  renaming ( Rel to BinRel )
 open import Relation.Binary.PropositionalEquality  using ( refl )
 
 -- Imports from the Agda Universal Algebras Library ------------------------------
-open import Base.Overture.Preliminaries    using ( ∣_∣  ; ∥_∥  )
-open import Base.Relations.Discrete        using ( 0[_] ; _|:_ )
+open import Base.Overture                  using ( ∣_∣  ; ∥_∥  )
+open import Base.Relations                 using ( 0[_] ; _|:_ ; Equivalence )
+open import Setoid.Relations               using ( ⟪_⟫ ; _/_ ; ⟪_∼_⟫-elim )
 open import Setoid.Algebras.Basic {𝑆 = 𝑆}  using ( ov ; Algebra ; 𝕌[_] ; _̂_ )
-open import Base.Relations.Quotients       using ( Equivalence )
-open import Setoid.Relations.Quotients     using ( ⟪_⟫ ; _/_ ; ⟪_∼_⟫-elim )
 
 private variable α ρ ℓ : Level
 

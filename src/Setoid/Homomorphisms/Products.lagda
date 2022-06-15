@@ -13,26 +13,24 @@ This is the [Setoid.Homomorphisms.Products] module of the [Agda Universal Algebr
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Homomorphisms.Products {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library --------------------------
-open import Agda.Primitive    using ( _⊔_ ; lsuc )  renaming ( Set to Type )
-open import Function.Bundles  using ()              renaming ( Func to _⟶_ )
-open import Data.Product      using ( _,_ )
-open import Level             using ( Level )
-open import Relation.Binary   using ( Setoid )
+open import Agda.Primitive   using ( _⊔_ ; lsuc )  renaming ( Set to Type )
+open import Function         using ()              renaming ( Func to _⟶_ )
+open import Data.Product     using ( _,_ )
+open import Level            using ( Level )
+open import Relation.Binary  using ( Setoid )
 open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
 
 -- Imports from the Agda Universal Algebras Library ----------------------
-open import Base.Overture.Preliminaries               using ( ∣_∣ ; ∥_∥)
-open import Setoid.Algebras.Basic       {𝑆 = 𝑆}  using ( Algebra )
-open import Setoid.Algebras.Products    {𝑆 = 𝑆}  using ( ⨅ )
-open import Setoid.Homomorphisms.Basic  {𝑆 = 𝑆}  using ( hom ; IsHom ; epi )
+open import Base.Overture                       using ( ∣_∣ ; ∥_∥)
+open import Setoid.Algebras {𝑆 = 𝑆}             using ( Algebra ; ⨅ )
+open import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}  using ( hom ; IsHom ; epi )
 
-private variable
- α ρᵃ β ρᵇ 𝓘 : Level
+private variable α ρᵃ β ρᵇ 𝓘 : Level
 
 \end{code}
 
@@ -43,12 +41,12 @@ If in addition we have a family `𝒽 : (i : I) → hom 𝑨 (ℬ i)` of homomor
 \begin{code}
 
 module _ {I : Type 𝓘}{𝑨 : Algebra α ρᵃ}(ℬ : I → Algebra β ρᵇ)  where
- open Algebra 𝑨      using ()       renaming ( Domain to A )
- open Setoid A             using ()       renaming ( refl to refl₁ )
- open Algebra (⨅ ℬ)  using ()       renaming ( Domain to ⨅B )
- open _⟶_                 using ( cong )  renaming ( f to _⟨$⟩_ )
+ open Algebra 𝑨      using ()        renaming ( Domain to A )
+ open Setoid A       using ()        renaming ( refl to refl₁ )
+ open Algebra (⨅ ℬ)  using ()        renaming ( Domain to ⨅B )
+ open _⟶_            using ( cong )  renaming ( f to _⟨$⟩_ )
  open Algebra        using ( Domain )
- open Setoid               using ( refl )
+ open Setoid         using ( refl )
  open IsHom
 
  ⨅-hom-co : (∀(i : I) → hom 𝑨 (ℬ i)) → hom 𝑨 (⨅ ℬ)

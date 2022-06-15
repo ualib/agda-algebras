@@ -14,24 +14,22 @@ Here we formalize the informal notion of isomorphism between algebraic structure
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic
+open import Base.Signatures using ( Signature ; 𝓞 ; 𝓥 )
 
 module Base.Homomorphisms.Isomorphisms {𝑆 : Signature 𝓞 𝓥}  where
 
 -- Imports from Agda and the Agda Standard Library -----------------------------------------------
-open import Agda.Primitive                          using ( _⊔_ ; lsuc ) renaming ( Set to Type )
+open import Agda.Primitive                          using () renaming ( Set to Type )
 open import Axiom.Extensionality.Propositional      using () renaming (Extensionality to funext )
 open import Data.Product                            using ( _,_ ; Σ-syntax ; _×_ )
-open import Function.Base                           using ( _∘_ )
-open import Level                                   using ( Level )
-open import Relation.Binary.Definitions             using ( Reflexive ; Sym ; Symmetric; Trans; Transitive )
-open import Relation.Binary.PropositionalEquality   using ( _≡_ ; refl ; cong ;  sym
-                                                          ; module ≡-Reasoning ; cong-app )
+open import Function                                using ( _∘_ )
+open import Level                                   using ( Level ; _⊔_ )
+open import Relation.Binary                         using ( Reflexive ; Sym ; Symmetric; Trans; Transitive )
+open import Relation.Binary.PropositionalEquality as ≡  using ( _≡_ ; module ≡-Reasoning )
 
 -- Imports from the Agda Universal Algebra Library -----------------------------------------------
-open import Base.Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ ; _≈_ ; _∙_ ; lower∼lift ; lift∼lower )
-open import Base.Overture.Injective                 using ( IsInjective )
-open import Base.Algebras.Products         {𝑆 = 𝑆}  using ( ⨅ )
+open import Base.Overture  using ( ∣_∣ ; ∥_∥ ; _≈_ ; _∙_ ; lower∼lift ; lift∼lower ; IsInjective )
+open import Base.Algebras                  {𝑆 = 𝑆}  using ( Algebra ; Lift-Alg ; ⨅ )
 open import Base.Homomorphisms.Basic       {𝑆 = 𝑆}  using ( hom ; 𝒾𝒹 ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-homomorphism )
 open import Base.Homomorphisms.Properties  {𝑆 = 𝑆}  using ( ∘-hom )
 
@@ -73,7 +71,7 @@ However, with four components, an equivalent record type is easier to work with.
 private variable α β γ ι : Level
 
 ≅-refl : Reflexive (_≅_ {α})
-≅-refl {α}{𝑨} = mkiso (𝒾𝒹 𝑨) (𝒾𝒹 𝑨) (λ _ → refl) λ _ → refl
+≅-refl {α}{𝑨} = mkiso (𝒾𝒹 𝑨) (𝒾𝒹 𝑨) (λ _ → ≡.refl) λ _ → ≡.refl
 
 ≅-sym : Sym (_≅_ {α}) (_≅_ {β})
 ≅-sym φ = mkiso (from φ) (to φ) (from∼to φ) (to∼from φ)
@@ -87,10 +85,10 @@ private variable α β γ ι : Level
   g = ∘-hom 𝑪 𝑨 (from bc) (from ab)
 
   τ : ∣ f ∣ ∘ ∣ g ∣ ≈ ∣ 𝒾𝒹 𝑪 ∣
-  τ x = (cong ∣ to bc ∣(to∼from ab (∣ from bc ∣ x)))∙(to∼from bc) x
+  τ x = (≡.cong ∣ to bc ∣(to∼from ab (∣ from bc ∣ x)))∙(to∼from bc) x
 
   ν : ∣ g ∣ ∘ ∣ f ∣ ≈ ∣ 𝒾𝒹 𝑨 ∣
-  ν x = (cong ∣ from ab ∣(from∼to bc (∣ to ab ∣ x)))∙(from∼to ab) x
+  ν x = (≡.cong ∣ from ab ∣(from∼to bc (∣ to ab ∣ x)))∙(from∼to ab) x
 
 
 -- The "to" map of an isomorphism is injective.
@@ -98,8 +96,8 @@ private variable α β γ ι : Level
                (φ : 𝑨 ≅ 𝑩) → IsInjective ∣ to φ ∣
 
 ≅toInjective (mkiso (f , _) (g , _) _ g∼f){a}{b} fafb =
- a       ≡⟨ sym (g∼f a) ⟩
- g (f a) ≡⟨ cong g fafb ⟩
+ a       ≡⟨ ≡.sym (g∼f a) ⟩
+ g (f a) ≡⟨ ≡.cong g fafb ⟩
  g (f b) ≡⟨ g∼f b ⟩
  b       ∎ where open ≡-Reasoning
 
@@ -124,8 +122,8 @@ open Level
 Lift-≅ : {α β : Level}{𝑨 : Algebra α 𝑆} → 𝑨 ≅ (Lift-Alg 𝑨 β)
 Lift-≅{β = β}{𝑨 = 𝑨} = record { to = 𝓁𝒾𝒻𝓉 𝑨
                               ; from = 𝓁ℴ𝓌ℯ𝓇 𝑨
-                              ; to∼from = cong-app lift∼lower
-                              ; from∼to = cong-app (lower∼lift {β = β})
+                              ; to∼from = ≡.cong-app lift∼lower
+                              ; from∼to = ≡.cong-app (lower∼lift {β = β})
                               }
 
 Lift-Alg-iso : {α β : Level}{𝑨 : Algebra α 𝑆}{𝓧 : Level}

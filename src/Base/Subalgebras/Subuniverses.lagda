@@ -15,26 +15,26 @@ We start by defining a type that represents the important concept of *subunivers
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Base.Signatures using ( 𝓞 ; 𝓥 ; Signature )
 
 module Base.Subalgebras.Subuniverses {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library -----------------------------
-open import Agda.Primitive                         using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
-open import Axiom.Extensionality.Propositional     using () renaming (Extensionality to funext)
-open import Function.Base                          using ( _∘_ )
+open import Agda.Primitive                         using () renaming ( Set to Type )
+open import Axiom.Extensionality.Propositional     using () renaming ( Extensionality to funext )
+open import Function                               using ( _∘_ )
+open import Level                                  using ( Level ; _⊔_ )
 open import Relation.Binary.PropositionalEquality  using ( module ≡-Reasoning ; _≡_ )
 open import Relation.Unary                         using ( Pred ; _∈_ ; _⊆_ ; ⋂ )
 
 -- Imports from the Agda Universal Algebra Library -----------------------------
-open import Base.Overture.Preliminaries            using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
-open import Base.Relations.Discrete                using ( Im_⊆_ )
-open import Base.Equality.Welldefined              using ( swelldef )
-open import Base.Algebras.Basic                    using ( Algebra ; _̂_ )
-open import Base.Algebras.Products        {𝑆 = 𝑆}  using ( ov )
-open import Base.Terms.Basic              {𝑆 = 𝑆}  using ( Term ; ℊ ; node )
-open import Base.Terms.Operations         {𝑆 = 𝑆}  using ( _⟦_⟧ )
-open import Base.Homomorphisms.Basic      {𝑆 = 𝑆}  using ( hom )
+open import Base.Overture                using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
+open import Base.Relations               using ( Im_⊆_ )
+open import Base.Equality                using ( swelldef )
+
+open import Base.Algebras       {𝑆 = 𝑆}  using ( Algebra ; _̂_ ; ov )
+open import Base.Homomorphisms  {𝑆 = 𝑆}  using ( hom )
+open import Base.Terms          {𝑆 = 𝑆}  using ( Term ; ℊ ; node ; _⟦_⟧ )
 
 private variable α β 𝓧 : Level
 

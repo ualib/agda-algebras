@@ -38,26 +38,25 @@ The `OPTIONS` pragma is usually followed by the start of a module.  For example,
 module Base.Overture.Preliminaries where
 
 -- Imports from Agda and the Agda Standard Library -----------------------------------------------
-open import Agda.Primitive   using ( _⊔_ ; lsuc ) renaming ( Set to  Type ; lzero to  ℓ₀ )
-open import Data.Product     using ( _,_ ; ∃ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Function.Base    using ( _∘_ ; id )
-open import Level            using ( Level ; Lift ; lift ; lower )
-open import Relation.Binary  using ( Decidable )
-open import Relation.Binary.Structures using ( IsEquivalence ; IsPartialOrder )
+open import Agda.Primitive    using ( _⊔_ ; lsuc ) renaming ( Set to  Type ; lzero to  ℓ₀ )
+open import Data.Product      using ( _,_ ; ∃ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Function.Base     using ( _∘_ ; id )
+open import Level             using ( Level ; Lift ; lift ; lower )
+open import Relation.Binary   using ( Decidable )
+open import Relation.Binary   using ( IsEquivalence ; IsPartialOrder )
+open import Relation.Nullary  using ( Dec ; yes ; no ; Irrelevant )
+
 open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; sym ; trans )
-open import Relation.Nullary using ( Dec ; yes ; no ; Irrelevant )
 private variable α β : Level
 
 ℓ₁ : Level
 ℓ₁ = lsuc ℓ₀
 
 -- the two element type
-data 𝟚 : Type ℓ₀ where  -- We could use Bool instead.
- 𝟎 : 𝟚 ;  𝟏 : 𝟚
+data 𝟚 : Type ℓ₀ where 𝟎 : 𝟚 ;  𝟏 : 𝟚
 
 -- the three element type
-data 𝟛 : Type ℓ₀ where
- 𝟎 : 𝟛 ;  𝟏 : 𝟛 ;  𝟐 : 𝟛
+data 𝟛 : Type ℓ₀ where 𝟎 : 𝟛 ;  𝟏 : 𝟛 ;  𝟐 : 𝟛
 \end{code}
 
 #### <a id="projection-notation">Projection notation</a>
@@ -116,9 +115,6 @@ infix 2 ∃-syntax
 syntax ∃-syntax (λ x → B) = ∃[ x ∈ A ] B
 
 \end{code}
-
-
-
 
 #### <a id="pi-types">Pi types</a>
 

@@ -17,19 +17,19 @@ module Base.Equality.Extensionality where
 
 -- imports from Agda and the Agda Standard Library ------------------------------------
 open import Axiom.Extensionality.Propositional
-                                   using () renaming ( Extensionality to funext )
-open import Agda.Primitive         using ( _⊔_ ; lsuc ; Level )
-                                   renaming ( Set to Type ; Setω to Typeω )
-open import Data.Product           using ( _,_ ) renaming ( _×_ to _∧_ )
-open import Relation.Binary        using ( IsEquivalence ) renaming ( Rel to BinRel )
-open import Relation.Unary         using ( Pred ; _⊆_ )
-open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl )
+                                   renaming ( Extensionality to funext )     using ()
+open import Agda.Primitive         renaming ( Set to Type ; Setω to Typeω )  using ()
+open import Data.Product           renaming ( _×_ to _∧_ )                   using ( _,_ )
+open import Level                                                            using ( _⊔_ ; Level )
+open import Relation.Binary        renaming ( Rel to BinRel )                using ( IsEquivalence )
+open import Relation.Binary.PropositionalEquality                            using ( _≡_ ; refl )
+open import Relation.Unary                                                   using ( Pred ; _⊆_ )
 
 
 -- imports from agda-algebras --------------------------------------------------------------
-open import Base.Overture.Preliminaries using ( transport )
-open import Base.Relations.Quotients    using ( [_] ; []-⊆ ; []-⊇ ; IsBlock ; ⟪_⟫ )
-open import Base.Equality.Truncation    using ( blk-uip ; to-Σ-≡ )
+open import Base.Overture             using ( transport )
+open import Base.Relations            using ( [_] ; []-⊆ ; []-⊇ ; IsBlock ; ⟪_⟫ )
+open import Base.Equality.Truncation  using ( blk-uip ; to-Σ-≡ )
 
 
 private variable α β γ ρ 𝓥 : Level
@@ -65,7 +65,7 @@ The principle of *proposition extensionality* asserts that logically equivalent 
 _≐_ : {α β : Level}{A : Type α}(P Q : Pred A β ) → Type _
 P ≐ Q = (P ⊆ Q) ∧ (Q ⊆ P)
 
-pred-ext : (α β : Level) → Type (lsuc (α ⊔ β))
+pred-ext : (α β : Level) → Type _
 pred-ext α β = ∀ {A : Type α}{P Q : Pred A β } → P ⊆ Q → Q ⊆ P → P ≡ Q
 
 \end{code}

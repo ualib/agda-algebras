@@ -13,7 +13,7 @@ The [Base.Subalgebras.Subalgebras][] module of the [Agda Universal Algebra Libra
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using (𝓞 ; 𝓥 ; Signature )
+open import Base.Signatures using (𝓞 ; 𝓥 ; Signature )
 
 module Base.Subalgebras.Subalgebras {𝑆 : Signature 𝓞 𝓥} where
 
@@ -23,18 +23,12 @@ open import Data.Product     using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₂
 open import Relation.Unary   using ( Pred ; _∈_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------
-open import Base.Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ )
-open import Base.Overture.Injective                 using ( IsInjective )
-open import Base.Equality.Welldefined               using ( swelldef )
-open import Base.Equality.Truncation                using ( is-set ; blk-uip )
-open import Base.Equality.Extensionality            using ( pred-ext )
-open import Base.Algebras.Basic                     using ( Algebra )
-open import Base.Algebras.Products          {𝑆 = 𝑆} using ( ov )
-open import Base.Homomorphisms.Basic        {𝑆 = 𝑆} using ( hom )
-open import Base.Homomorphisms.Kernels      {𝑆 = 𝑆} using ( kercon ; ker[_⇒_]_↾_ )
-open import Base.Homomorphisms.Noether      {𝑆 = 𝑆} using ( FirstHomTheorem|Set )
-open import Base.Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ )
-open import Base.Terms.Basic                {𝑆 = 𝑆} using ( 𝑻 ; Term )
+open import Base.Overture                using ( ∣_∣ ; ∥_∥ ; IsInjective )
+open import Base.Equality                using ( swelldef ; is-set ; blk-uip ; pred-ext )
+open import Base.Algebras       {𝑆 = 𝑆}  using ( Algebra ; ov )
+open import Base.Homomorphisms  {𝑆 = 𝑆}  using ( hom ; kercon ; ker[_⇒_]_↾_ ; FirstHomTheorem|Set ; _≅_ )
+open import Base.Terms          {𝑆 = 𝑆}  using ( 𝑻 ; Term )
+
 private variable α β γ 𝓧 : Level
 \end{code}
 

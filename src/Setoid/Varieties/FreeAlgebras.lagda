@@ -11,7 +11,7 @@ author: "agda-algebras development team"
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Varieties.FreeAlgebras {𝑆 : Signature 𝓞 𝓥} where
 
@@ -19,28 +19,26 @@ module Setoid.Varieties.FreeAlgebras {𝑆 : Signature 𝓞 𝓥} where
 open import Agda.Primitive   using ()                  renaming ( Set to Type )
 open import Data.Product     using ( Σ-syntax ; _,_ )  renaming ( proj₁ to fst ; proj₂ to snd )
 open import Function         using ( _∘_ ; id )        renaming ( Func to _⟶_ )
-open import Level
+open import Level            using ( Level ; _⊔_)
 open import Relation.Binary  using ( Setoid )
 open import Relation.Unary   using ( Pred ; _∈_ ; _⊆_ )
+
 open import Relation.Binary.PropositionalEquality as ≡ using (_≡_)
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------------
-open import Base.Overture.Preliminaries                 using ( ∣_∣ ; ∥_∥ )
-open import Base.Terms.Basic                   {𝑆 = 𝑆}  using ( ℊ )
-open import Setoid.Overture.Inverses                    using ( eq )
-open import Setoid.Overture.Surjective                  using ( IsSurjective )
-open import Setoid.Relations.Discrete                   using ( fkerPred )
-open import Setoid.Algebras.Basic              {𝑆 = 𝑆}  using ( Algebra ; ov ; Lift-Alg )
-open import Setoid.Homomorphisms.Basic         {𝑆 = 𝑆}  using ( epi ; IsEpi ; IsHom ; hom ; epi→hom )
-open import Setoid.Homomorphisms.Properties    {𝑆 = 𝑆}  using ( ∘-epi ; ToLift-epi )
-open import Setoid.Terms.Basic                 {𝑆 = 𝑆}  using ( 𝑻 ; _≐_ ; module Environment )
-open import Setoid.Terms.Properties            {𝑆 = 𝑆}  using ( free-lift )
-open import Setoid.Terms.Operations            {𝑆 = 𝑆}  using ( free-lift-interp )
-open import Setoid.Varieties.SoundAndComplete  {𝑆 = 𝑆}  using ( Eq ; _⊫_ ; _≈̇_ ; _⊢_▹_≈_ )
-                                                        using ( module Soundness ; module FreeAlgebra )
-                                                        using ( Th ; Mod )
+open import Base.Overture        using ( ∣_∣ ; ∥_∥ )
+open import Setoid.Relations     using ( fkerPred )
+open import Setoid.Functions     using ( eq ; IsSurjective )
+
+open import Base.Terms            {𝑆 = 𝑆}  using ( ℊ )
+open import Setoid.Algebras       {𝑆 = 𝑆} using ( Algebra ; ov ; Lift-Alg )
+open import Setoid.Homomorphisms  {𝑆 = 𝑆} using ( epi ; IsEpi ; IsHom ; hom ; epi→hom ; ∘-epi ; ToLift-epi )
+open import Setoid.Terms          {𝑆 = 𝑆} using ( 𝑻 ; _≐_ ; module Environment ; free-lift ; free-lift-interp )
+
 open import Setoid.Varieties.Closure           {𝑆 = 𝑆}  using ( V ; S )
 open import Setoid.Varieties.Preservation      {𝑆 = 𝑆}  using ( classIds-⊆-VIds ; S-id1 )
+open import Setoid.Varieties.SoundAndComplete  {𝑆 = 𝑆}
+ using ( Eq ; _⊫_ ; _≈̇_ ; _⊢_▹_≈_ ; module Soundness ; module FreeAlgebra ; Th ; Mod )
 
 open _⟶_      using ( cong ) renaming ( f to _⟨$⟩_ )
 open Algebra  using ( Domain )

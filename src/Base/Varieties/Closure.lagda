@@ -24,30 +24,26 @@ A *variety* is a class of algebras, in the same signature, that is closed under 
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Base.Signatures using ( 𝓞 ; 𝓥 ; Signature )
 
 module Base.Varieties.Closure {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ---------------------------------------
-open import Axiom.Extensionality.Propositional  using ()                  renaming ( Extensionality to funext )
-open import Agda.Primitive                      using ( _⊔_ ; lsuc )      renaming ( Set to Type )
-open import Data.Product                        using ( _,_ ; Σ-syntax )  renaming ( proj₁ to fst ; proj₂ to snd )
-open import Level                               using ( Level ;  Lift )
+open import Agda.Primitive                      using () renaming ( Set to Type )
+open import Axiom.Extensionality.Propositional  using () renaming ( Extensionality to funext )
+open import Data.Product                        using ( _,_ ; Σ-syntax ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Level                               using ( Level ;  Lift ; _⊔_ ; suc )
 open import Relation.Unary                      using ( Pred ; _∈_ ; _⊆_ )
 
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------
-open import Base.Overture.Preliminaries                    using ( ∣_∣ ; ∥_∥ )
-open import Base.Algebras.Basic                            using ( Algebra ; Lift-Alg )
-open import Base.Algebras.Products                {𝑆 = 𝑆}  using ( ov ; ⨅ )
-open import Base.Homomorphisms.Isomorphisms       {𝑆 = 𝑆}  using ( _≅_ ; ≅-sym ; Lift-≅ ; ≅-trans ; ≅-refl )
-                                                           using ( Lift-Alg-iso ; Lift-Alg-⨅≅ )
-                                                           using (  Lift-Alg-assoc )
-open import Base.Homomorphisms.HomomorphicImages  {𝑆 = 𝑆}  using ( HomImages ; _IsHomImageOf_ )
-                                                           using ( Lift-Alg-hom-image )
-open import Base.Subalgebras.Subalgebras          {𝑆 = 𝑆}  using (_≤_ ; _IsSubalgebraOfClass_ ; Subalgebra )
-open import Base.Subalgebras.Properties           {𝑆 = 𝑆}  using ( ≤-refl ; ≅-RESP-≤ ; ≤-RESP-≅ ; ≤-trans )
-                                                           using ( Lift-≤-Lift )
+open import Base.Overture                using  ( ∣_∣ ; ∥_∥ )
+open import Base.Algebras       {𝑆 = 𝑆}  using  ( Algebra ; Lift-Alg ; ov ; ⨅ )
+open import Base.Homomorphisms  {𝑆 = 𝑆}  using  ( _≅_ ; ≅-sym ; Lift-≅ ; ≅-trans ; ≅-refl
+                                                ; Lift-Alg-iso ; Lift-Alg-⨅≅ ;  Lift-Alg-assoc
+                                                ; HomImages ; _IsHomImageOf_ ; Lift-Alg-hom-image )
+open import Base.Subalgebras    {𝑆 = 𝑆}  using  (_≤_ ; _IsSubalgebraOfClass_ ; Subalgebra ; ≤-refl
+                                                ; ≅-RESP-≤ ; ≤-RESP-≅ ; ≤-trans ; Lift-≤-Lift )
 
 \end{code}
 
@@ -128,7 +124,7 @@ With the closure operator V representing closure under HSP, we represent formall
 is-variety : {α : Level}(𝒱 : Pred (Algebra α 𝑆)(ov α)) → Type(ov α)
 is-variety{α} 𝒱 = V{α}{α} 𝒱 ⊆ 𝒱
 
-variety : (α : Level) → Type(lsuc (𝓞 ⊔ 𝓥 ⊔ (lsuc α)))
+variety : (α : Level) → Type(suc (𝓞 ⊔ 𝓥 ⊔ (suc α)))
 variety α = Σ[ 𝒱 ∈ (Pred (Algebra α 𝑆)(ov α)) ] is-variety 𝒱
 
 \end{code}
@@ -288,57 +284,57 @@ As mentioned earlier, a technical hurdle that must be overcome when formalizing 
 open Level
 
 module Vlift {α : Level} {fe₀ : funext (ov α) α}
-             {fe₁ : funext ((ov α) ⊔ (lsuc (ov α))) (lsuc (ov α))}
+             {fe₁ : funext ((ov α) ⊔ (suc (ov α))) (suc (ov α))}
              {fe₂ : funext (ov α) (ov α)}
              {𝒦 : Pred (Algebra α 𝑆)(ov α)} where
 
  VlA : {𝑨 : Algebra (ov α) 𝑆} → 𝑨 ∈ V{α}{ov α} 𝒦
-  →    Lift-Alg 𝑨 (lsuc (ov α)) ∈ V{α}{lsuc (ov α)} 𝒦
+  →    Lift-Alg 𝑨 (suc (ov α)) ∈ V{α}{suc (ov α)} 𝒦
  VlA (vbase{𝑨} x) = visow (vbase x) (Lift-Alg-assoc _ _ {𝑨})
  VlA (vlift{𝑨} x) = visow (vlift x) (Lift-Alg-assoc _ _ {𝑨})
  VlA (vliftw{𝑨} x) = visow (VlA x) (Lift-Alg-assoc _ _ {𝑨})
 
- VlA (vhimg{𝑨}{𝑩} x hB) = vhimg {𝑩 = Lift-Alg 𝑩 (lsuc (ov α))} (VlA x) (lC , lChi)
+ VlA (vhimg{𝑨}{𝑩} x hB) = vhimg {𝑩 = Lift-Alg 𝑩 (suc (ov α))} (VlA x) (lC , lChi)
   where
-  lC : Algebra (lsuc (ov(α))) 𝑆
-  lC = Lift-Alg ∣ hB ∣ (lsuc (ov(α)))
+  lC : Algebra (suc (ov(α))) 𝑆
+  lC = Lift-Alg ∣ hB ∣ (suc (ov(α)))
   lChi : lC IsHomImageOf _
-  lChi = (Lift-Alg-hom-image (lsuc (ov(α))) {∣ hB ∣} (lsuc (ov(α))) ∥ hB ∥)
+  lChi = (Lift-Alg-hom-image (suc (ov(α))) {∣ hB ∣} (suc (ov(α))) ∥ hB ∥)
 
- VlA (vssubw{𝑨}{𝑩} x B≤A) = vssubw (VlA x) (Lift-≤-Lift  (lsuc (ov(α))) {𝑨}  (lsuc (ov(α))) B≤A)
+ VlA (vssubw{𝑨}{𝑩} x B≤A) = vssubw (VlA x) (Lift-≤-Lift  (suc (ov(α))) {𝑨}  (suc (ov(α))) B≤A)
  VlA (vprodu{I}{𝒜} x) = visow (vprodw vlA) (≅-sym B≅A)
   where
-  𝑰 : Type (lsuc (ov α))
-  𝑰 = Lift (lsuc (ov α)) I
+  𝑰 : Type (suc (ov α))
+  𝑰 = Lift (suc (ov α)) I
 
-  lA : 𝑰 → Algebra (lsuc (ov α)) 𝑆
-  lA i = Lift-Alg (𝒜 (lower i)) (lsuc (ov α))
+  lA : 𝑰 → Algebra (suc (ov α)) 𝑆
+  lA i = Lift-Alg (𝒜 (lower i)) (suc (ov α))
 
-  vlA : ∀ i → (lA i) ∈ V{α}{lsuc (ov α)} 𝒦
+  vlA : ∀ i → (lA i) ∈ V{α}{suc (ov α)} 𝒦
   vlA i = vlift (x (lower i))
 
   iso-components : ∀ i → 𝒜 i ≅ lA (lift i)
   iso-components i = Lift-≅
 
-  B≅A : Lift-Alg (⨅ 𝒜) (lsuc (ov α)) ≅ ⨅ lA
+  B≅A : Lift-Alg (⨅ 𝒜) (suc (ov α)) ≅ ⨅ lA
   B≅A = Lift-Alg-⨅≅  {fizw = fe₁}{fiu = fe₀} iso-components
 
 
  VlA (vprodw{I}{𝒜} x) = visow (vprodw vlA) (≅-sym B≅A)
   where
-  𝑰 : Type (lsuc (ov α))
-  𝑰 = Lift (lsuc (ov α)) I
+  𝑰 : Type (suc (ov α))
+  𝑰 = Lift (suc (ov α)) I
 
-  lA : 𝑰 → Algebra (lsuc (ov α)) 𝑆
-  lA i = Lift-Alg (𝒜 (lower i)) (lsuc (ov α))
+  lA : 𝑰 → Algebra (suc (ov α)) 𝑆
+  lA i = Lift-Alg (𝒜 (lower i)) (suc (ov α))
 
-  vlA : ∀ i → (lA i) ∈ V{α}{lsuc (ov α)} 𝒦
+  vlA : ∀ i → (lA i) ∈ V{α}{suc (ov α)} 𝒦
   vlA i = VlA (x (lower i))
 
   iso-components : ∀ i → 𝒜 i ≅ lA (lift i)
   iso-components i = Lift-≅
 
-  B≅A : Lift-Alg (⨅ 𝒜) (lsuc (ov α)) ≅ ⨅ lA
+  B≅A : Lift-Alg (⨅ 𝒜) (suc (ov α)) ≅ ⨅ lA
   B≅A = Lift-Alg-⨅≅ {fizw = fe₁}{fiu = fe₂} iso-components
 
  VlA (visou{𝑨}{𝑩} x A≅B) = visow (vlift x) (Lift-Alg-iso A≅B)

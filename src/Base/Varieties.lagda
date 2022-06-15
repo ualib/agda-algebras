@@ -13,13 +13,20 @@ This is the [Base.Varieties][] module of the [Agda Universal Algebra Library][],
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Base.Varieties where
+open import Base.Signatures using ( Signature ; 𝓞 ; 𝓥 )
 
-open import Base.Varieties.EquationalLogic
-open import Base.Varieties.Closure
-open import Base.Varieties.Properties
-open import Base.Varieties.Preservation
-open import Base.Varieties.FreeAlgebras
+module Base.Varieties {𝑆 : Signature 𝓞 𝓥} where
+
+open import Base.Varieties.EquationalLogic  {𝑆 = 𝑆} public
+open import Base.Varieties.Closure          {𝑆 = 𝑆} public
+open import Base.Varieties.Properties       {𝑆 = 𝑆} public
+open import Base.Varieties.Preservation     {𝑆 = 𝑆} public
+
+open import Level using ( Level )
+
+module _ {α : Level} where
+
+ open import Base.Varieties.FreeAlgebras  {α = α} {𝑆 = 𝑆} public
 
 \end{code}
 

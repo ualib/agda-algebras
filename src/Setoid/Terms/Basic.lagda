@@ -13,7 +13,7 @@ This is the [Setoid.Terms.Basic][] module of the [Agda Universal Algebra Library
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Terms.Basic {𝑆 : Signature 𝓞 𝓥} where
 
@@ -29,10 +29,12 @@ open import Relation.Binary.Definitions using ( Reflexive ; Symmetric ; Transiti
 open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------
-open import Base.Overture.Preliminaries      using ( ∥_∥ )
-open import Setoid.Algebras.Basic {𝑆 = 𝑆} using ( Algebra ; ov ; _̂_)
-open import Base.Terms.Basic         {𝑆 = 𝑆} using ( Term ; ℊ ; node )
+open import Base.Overture             using ( ∥_∥ )
+open import Setoid.Algebras  {𝑆 = 𝑆}  using ( Algebra ; ov ; _̂_)
+open import Base.Terms       {𝑆 = 𝑆}  using ( Term )
+
 open _⟶_ renaming ( f to _⟨$⟩_ )
+open Term
 
 private variable
  χ α ℓ : Level

@@ -15,41 +15,40 @@ same identities.
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Varieties.Preservation {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library -----------------------------------------------
-open import Agda.Primitive         using ( Level ; _⊔_ ; lsuc )  renaming ( Set to Type )
-open import Data.Product           using ( _,_ )                 renaming ( proj₁ to fst ; proj₂ to snd )
+open import Agda.Primitive         using ()       renaming ( Set to Type )
+open import Data.Product           using ( _,_ )  renaming ( proj₁ to fst ; proj₂ to snd )
 open import Data.Unit.Polymorphic  using ( ⊤ )
-open import Function               using ( _∘_ )
-open import Function.Bundles       using ()                      renaming ( Func to _⟶_ )
+open import Function               using ( _∘_ )  renaming ( Func to _⟶_ )
+open import Level                  using ( Level ; _⊔_ )
 open import Relation.Binary        using ( Setoid )
 open import Relation.Unary         using ( Pred ; _⊆_ ; _∈_ )
+
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
-open import Base.Overture.Preliminaries                      using ( ∣_∣ ; ∥_∥ )
-open import Base.Terms.Basic                        {𝑆 = 𝑆}  using ( Term )
-open import Setoid.Overture.Surjective                       using ( IsSurjective ; SurjInv )
-                                                             using ( SurjInvIsInverseʳ )
-open import Setoid.Algebras.Basic                   {𝑆 = 𝑆}  using ( Algebra ; ov ; 𝕌[_] ; Lift-Alg )
-open import Setoid.Algebras.Products                {𝑆 = 𝑆}  using ( ⨅ )
-open import Setoid.Homomorphisms.Basic              {𝑆 = 𝑆}  using ( hom )
-open import Setoid.Homomorphisms.Isomorphisms       {𝑆 = 𝑆}  using ( ≅⨅⁺-refl ; ≅-refl ; ≅-sym )
-                                                             using ( _≅_ ; ≅-trans ; Lift-≅ )
-open import Setoid.Homomorphisms.HomomorphicImages  {𝑆 = 𝑆}  using ( IdHomImage )
-open import Setoid.Terms.Basic                      {𝑆 = 𝑆}  using ( module Environment)
-open import Setoid.Terms.Operations                 {𝑆 = 𝑆}  using ( comm-hom-term )
-open import Setoid.Subalgebras.Subalgebras          {𝑆 = 𝑆}  using ( _≤_ ; _≤c_ )
-open import Setoid.Subalgebras.Properties           {𝑆 = 𝑆}  using ( ⨅-≤ ; ≅-trans-≤ ; ≤-reflexive )
-open import Setoid.Varieties.Closure                {𝑆 = 𝑆}  using ( H ; S ; P ; V ; S-expa ; H-expa )
-                                                             using ( P-expa ; V-expa ; Level-closure )
-open import Setoid.Varieties.Properties             {𝑆 = 𝑆}  using ( ⊧-H-invar ; ⊧-S-invar )
-                                                             using ( ⊧-P-invar ; ⊧-I-invar )
-open import Setoid.Varieties.SoundAndComplete        {𝑆 = 𝑆} using ( _⊧_ ; _⊨_ ; _⊫_ ; Eq ; _≈̇_ )
-                                                             using ( lhs ; rhs ; _⊢_▹_≈_ ; Th)
+open import Base.Overture     using ( ∣_∣ ; ∥_∥ )
+open import Setoid.Functions  using ( IsSurjective ; SurjInv ; SurjInvIsInverseʳ )
+
+open import Base.Terms              {𝑆 = 𝑆} using ( Term )
+open import Setoid.Algebras         {𝑆 = 𝑆} using ( Algebra ; ov ; 𝕌[_] ; Lift-Alg ; ⨅ )
+open import Setoid.Homomorphisms    {𝑆 = 𝑆} using  ( hom ; ≅⨅⁺-refl ; ≅-refl ; ≅-sym ; _≅_
+                                                 ; ≅-trans ; Lift-≅ ; IdHomImage )
+open import Setoid.Terms            {𝑆 = 𝑆} using ( module Environment; comm-hom-term )
+open import Setoid.Subalgebras      {𝑆 = 𝑆} using ( _≤_ ; _≤c_ ; ⨅-≤ ; ≅-trans-≤ ; ≤-reflexive )
+
+open import Setoid.Varieties.Closure           {𝑆 = 𝑆}
+  using ( H ; S ; P ; V ; S-expa ; H-expa ; P-expa ; V-expa ; Level-closure )
+
+open import Setoid.Varieties.Properties        {𝑆 = 𝑆}
+  using ( ⊧-H-invar ; ⊧-S-invar ; ⊧-P-invar ; ⊧-I-invar )
+
+open import Setoid.Varieties.SoundAndComplete  {𝑆 = 𝑆}
+  using ( _⊧_ ; _⊨_ ; _⊫_ ; Eq ; _≈̇_ ; lhs ; rhs ; _⊢_▹_≈_ ; Th)
 
 open _⟶_      using ( cong ) renaming ( f to _⟨$⟩_ )
 open Algebra  using ( Domain )

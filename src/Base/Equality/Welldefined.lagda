@@ -14,25 +14,21 @@ author: "agda-algebras development team"
 module Base.Equality.Welldefined where
 
 -- Imports from Agda and the Agda Standard Library  -------------------------------------
-open import Agda.Primitive        using ( _⊔_ ; lsuc ; Level )
-                                  renaming ( Set to Type ; Setω to Typeω )
-open import Axiom.Extensionality.Propositional
-                                  using () renaming ( Extensionality to funext )
-open import Data.Fin.Base         using ( Fin ; toℕ)
-open import Data.Product          using ( _,_ ; _×_ )
-open import Data.List.Base        using ( List ; [] ; [_] ; _∷_ ; _++_ )
-open import Function.Base         using ( _$_ ; _∘_ ; id )
-open import Relation.Binary.PropositionalEquality
-                                  using ( _≡_ ; refl ; module ≡-Reasoning ; cong )
+open import Agda.Primitive  using () renaming ( Set to Type ; Setω to Typeω )
+open import Data.Fin        using ( Fin ; toℕ )
+open import Data.Product    using ( _,_ ; _×_ )
+open import Data.List       using ( List ; [] ; [_] ; _∷_ ; _++_ )
+open import Function        using ( _$_ ; _∘_ ; id )
+open import Level           using ( _⊔_ ; suc ; Level )
 
+open import Axiom.Extensionality.Propositional     using () renaming ( Extensionality to funext )
+open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl ; module ≡-Reasoning ; cong )
 
 -- Imports from agda-algebras -----------------------------------------------------------
-open import Base.Overture.Preliminaries using ( _≈_ ; _⁻¹)
-open import Base.Relations.Discrete     using ( Op )
-open import Base.Overture.Transformers  using ( A×A→B-to-Fin2A→B ;  UncurryFin2 ; UncurryFin3 )
+open import Base.Overture   using ( _≈_ ; _⁻¹ ; A×A→B-to-Fin2A→B ;  UncurryFin2 ; UncurryFin3 )
+open import Base.Relations  using ( Op )
 
-private variable
- ι α β 𝓥 ρ : Level
+private variable  ι α β 𝓥 ρ : Level
 
 \end{code}
 
@@ -55,7 +51,7 @@ A stronger form of well-definedness of operations is to suppose that point-wise 
 
 \begin{code}
 
-swelldef : ∀ ι α → Type (lsuc (α ⊔ ι))
+swelldef : ∀ ι α → Type (suc (α ⊔ ι))
 swelldef ι α =  ∀ {I : Type ι}{A : Type α}(f : Op A I)(u v : I → A)
  →              u ≈ v → f u ≡ f v
 
@@ -74,13 +70,13 @@ Here are the more general versions of the foregoing that are not restricted to (
 
 \begin{code}
 
-swelldef' : ∀ ι α β → Type (lsuc (ι ⊔ α ⊔ β))
+swelldef' : ∀ ι α β → Type (suc (ι ⊔ α ⊔ β))
 swelldef' ι α β = ∀ {I : Type ι} {A : Type α} {B : Type β}
  →                (f : (I → A) → B) {u v : I → A}
  →                u ≈ v → f u ≡ f v
 
 
-funext' : ∀ α β → Type (lsuc (α ⊔ β))
+funext' : ∀ α β → Type (suc (α ⊔ β))
 funext' α β = ∀ {A : Type α } {B : Type β } {f g : A → B}
  →            f ≈ g → f ≡ g
 

@@ -13,11 +13,13 @@ This is the [Setoid.Terms][] module of the [Agda Universal Algebra Library][].
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Setoid.Terms where
+open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
 
-open import Setoid.Terms.Basic
-open import Setoid.Terms.Properties
-open import Setoid.Terms.Operations
+module Setoid.Terms {𝑆 : Signature 𝓞 𝓥} where
+
+open import Setoid.Terms.Basic       {𝑆 = 𝑆} public
+open import Setoid.Terms.Properties  {𝑆 = 𝑆} public
+open import Setoid.Terms.Operations  {𝑆 = 𝑆} public
 
 \end{code}
 

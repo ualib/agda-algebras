@@ -13,7 +13,7 @@ This is the [Base.Algebras.Products][] module of the [Agda Universal Algebra Lib
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Base.Signatures using ( 𝓞 ; 𝓥 ; Signature )
 
 module Base.Algebras.Products {𝑆 : Signature 𝓞 𝓥} where
 
@@ -23,8 +23,8 @@ open import Data.Product    using ( _,_ ; Σ ; Σ-syntax )
 open import Relation.Unary  using ( Pred ; _⊆_ ; _∈_ )
 
 -- Imports from agda-algebras ---------------------------------------------------
-open import Base.Overture.Preliminaries using (_⁻¹; 𝑖𝑑; ∣_∣; ∥_∥)
-open import Base.Algebras.Basic         using ( Algebra ; _̂_ ; algebra )
+open import Base.Overture                using (_⁻¹; 𝑖𝑑; ∣_∣; ∥_∥)
+open import Base.Algebras.Basic {𝑆 = 𝑆}  using ( Algebra ; _̂_ ; algebra )
 
 private variable α β ρ 𝓘 : Level
 

@@ -14,7 +14,7 @@ This is the [Setoid.Subalgebras.Properties][] module of the [Agda Universal Alge
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Subalgebras.Properties {𝑆 : Signature 𝓞 𝓥} where
 
@@ -24,21 +24,19 @@ open import Data.Product     using ( _,_ ) renaming ( proj₁ to fst ; proj₂ t
 open import Function         using ( _∘_ ) renaming ( Func to _⟶_ )
 open import Relation.Binary  using ( Setoid )
 open import Relation.Unary   using ( Pred ; _⊆_ )
+
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------------
-open import Base.Overture.Preliminaries                 using ( ∣_∣ ; ∥_∥ )
-open import Setoid.Overture.Injective              using ( id-is-injective ; module compose )
-                                                        using ( IsInjective ; ∘-injective )
-open import Setoid.Algebras.Basic              {𝑆 = 𝑆}  using ( Algebra ; Lift-Algˡ )
-                                                        using ( Lift-Algʳ ; Lift-Alg ; ov )
-open import Setoid.Algebras.Products           {𝑆 = 𝑆}  using ( ⨅ )
-open import Setoid.Homomorphisms.Basic         {𝑆 = 𝑆}  using ( hom ; IsHom )
-open import Setoid.Homomorphisms.Properties    {𝑆 = 𝑆}  using ( 𝒾𝒹 ; ∘-hom )
-open import Setoid.Homomorphisms.Isomorphisms  {𝑆 = 𝑆}  using ( _≅_ ; ≅toInjective ; ≅fromInjective )
-                                                        using ( mkiso ; ≅-sym ; ≅-refl ; ≅-trans )
-                                                        using ( Lift-≅ˡ ; Lift-≅ ; Lift-≅ʳ)
-open import Setoid.Subalgebras.Subalgebras     {𝑆 = 𝑆}  using ( _≤_ ; _≥_ ; _IsSubalgebraOfClass_ ; _≤c_ )
+open import Base.Overture     using ( ∣_∣ ; ∥_∥ )
+open import Setoid.Functions  using ( id-is-injective ; module compose ; IsInjective ; ∘-injective )
+
+open import Setoid.Algebras       {𝑆 = 𝑆} using  ( Algebra ; Lift-Algˡ ; Lift-Algʳ ; Lift-Alg ; ov ; ⨅ )
+open import Setoid.Homomorphisms  {𝑆 = 𝑆} using  ( hom ; IsHom ; 𝒾𝒹 ; ∘-hom ; _≅_ ; ≅toInjective
+                                                 ; ≅fromInjective ; mkiso ; ≅-sym ; ≅-refl
+                                                 ; ≅-trans ; Lift-≅ˡ ; Lift-≅ ; Lift-≅ʳ)
+
+open import Setoid.Subalgebras.Subalgebras {𝑆 = 𝑆}  using ( _≤_ ; _≥_ ; _IsSubalgebraOfClass_ ; _≤c_ )
 
 private variable
  α ρᵃ β ρᵇ γ ρᶜ ι : Level
