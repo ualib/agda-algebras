@@ -25,15 +25,12 @@ open import Relation.Binary        renaming ( Rel to BinRel )                usi
 open import Relation.Binary.PropositionalEquality                            using ( _≡_ ; refl )
 open import Relation.Unary                                                   using ( Pred ; _⊆_ )
 
-
 -- imports from agda-algebras --------------------------------------------------------------
 open import Base.Overture             using ( transport )
 open import Base.Relations            using ( [_] ; []-⊆ ; []-⊇ ; IsBlock ; ⟪_⟫ )
 open import Base.Equality.Truncation  using ( blk-uip ; to-Σ-≡ )
 
-
 private variable α β γ ρ 𝓥 : Level
-
 \end{code}
 
 #### <a id="function-extensionality">Function Extensionality</a>
@@ -49,14 +46,12 @@ The following definition is useful for postulating function extensionality when 
 
 DFunExt : Typeω
 DFunExt = (𝓤 𝓥 : Level) → funext 𝓤 𝓥
-
 \end{code}
 
 
 #### <a id="an-alternative-way-to-express-function-extensionality">An alternative way to express function extensionality</a>
 
 A useful alternative for expressing dependent function extensionality, which is essentially equivalent to `dfunext`, is to assert that the `happly` function is actually an *equivalence*.
-
 
 The principle of *proposition extensionality* asserts that logically equivalent propositions are equivalent.  That is, if `P` and `Q` are propositions and if `P ⊆ Q` and `Q ⊆ P`, then `P ≡ Q`. For our purposes, it will suffice to formalize this notion for general predicates, rather than for propositions (i.e., truncated predicates).
 
@@ -81,26 +76,24 @@ We need an identity type for congruence classes (blocks) over sets so that two d
 
 module _ {A : Type α}{R : BinRel A ρ} where
 
- block-ext : pred-ext α ρ → IsEquivalence{a = α}{ℓ = ρ} R
-  →          {u v : A} → R u v → [ u ] R ≡ [ v ] R
+ block-ext :  pred-ext α ρ → IsEquivalence{a = α}{ℓ = ρ} R
+  →           {u v : A} → R u v → [ u ] R ≡ [ v ] R
 
- block-ext pe Req {u}{v} Ruv = pe ([]-⊆ {R = (R , Req)} u v Ruv)
-                                  ([]-⊇ {R = (R , Req)} u v Ruv)
-
+ block-ext pe Req {u}{v} Ruv = pe  ([]-⊆ {R = (R , Req)} u v Ruv)
+                                   ([]-⊇ {R = (R , Req)} u v Ruv)
 
  private
-   to-subtype|uip : blk-uip A R
-    →               {C D : Pred A ρ}{c : IsBlock C {R}}{d : IsBlock D {R}}
-    →               C ≡ D → (C , c) ≡ (D , d)
+   to-subtype|uip :  blk-uip A R
+    →                {C D : Pred A ρ}{c : IsBlock C {R}}{d : IsBlock D {R}}
+    →                C ≡ D → (C , c) ≡ (D , d)
 
    to-subtype|uip buip {C}{D}{c}{d} CD =
     to-Σ-≡ (CD , buip D (transport (λ B → IsBlock B) CD c) d)
 
- block-ext|uip : pred-ext α ρ → blk-uip A R
-  →              IsEquivalence R → ∀{u}{v} → R u v → ⟪ u ⟫ ≡ ⟪ v ⟫
+ block-ext|uip :  pred-ext α ρ → blk-uip A R
+  →               IsEquivalence R → ∀{u}{v} → R u v → ⟪ u ⟫ ≡ ⟪ v ⟫
 
  block-ext|uip pe buip Req Ruv = to-subtype|uip buip (block-ext pe Req Ruv)
-
 \end{code}
 
 ---------------------------------------

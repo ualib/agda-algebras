@@ -32,7 +32,8 @@ open IsEquivalence  using ()                 renaming ( refl to reflE ; sym to s
 
 
 -- Imports from agda-algebras -----------------------------------------------------
-open import Base.Overture using ( ∣_∣; ∥_∥ ; proj ; projIsOnto ) renaming ( IsSurjective to onto )
+open import Base.Overture                  using ( ∣_∣; ∥_∥ ; proj ; projIsOnto )
+                                           renaming ( IsSurjective to onto )
 open import Setoid.Algebras.Basic {𝑆 = 𝑆}  using ( Algebra ; _̂_ ; ov ; 𝕌[_])
 
 private variable α ρ ι : Level
@@ -53,7 +54,6 @@ Domain (⨅ {I} 𝒜) =
 
 (Interp (⨅ {I} 𝒜)) ⟨$⟩ (f , a) = λ i → (f ̂ (𝒜 i)) (flip a i)
 cong (Interp (⨅ {I} 𝒜)) (refl , f=g ) = λ i → cong  (Interp (𝒜 i)) (refl , flip f=g i )
-
 \end{code}
 
 #### <a id="products-of-classes-of-setoidalgebras">Products of classes of Algebras</a>
@@ -78,7 +78,6 @@ If `p : 𝑨 ∈ 𝒦`, we view the pair `(𝑨 , p) ∈ ℑ` as an *index* over
 so we can think of `𝔄 (𝑨 , p)` (which is simply `𝑨`) as the projection of the
 product `⨅ 𝔄` onto the `(𝑨 , p)`-th component.
 
-
 #### Surjectivity of coordinate projections
 
 Suppose `I` is an index type and `𝒜 : I → Algebra α ρ` is an indexed collection of algebras.
@@ -100,7 +99,6 @@ module _  {I : Type ι}                  -- index type
 
  ProjAlgIsOnto : ∀{i} → Σ[ h ∈ (𝕌[ ⨅ 𝒜 ] → 𝕌[ 𝒜 i ]) ] onto h
  ProjAlgIsOnto {i} = (proj _≟_ 𝒜I i) , projIsOnto _≟_ 𝒜I
-
 \end{code}
 
 --------------------------------

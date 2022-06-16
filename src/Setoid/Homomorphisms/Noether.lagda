@@ -18,10 +18,11 @@ open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
 module Setoid.Homomorphisms.Noether {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ---------------------------
-open import Agda.Primitive   using ( Level )
 open import Data.Product     using (Σ-syntax ; _,_ )  renaming ( _×_ to _∧_ ; proj₁ to fst)
 open import Function         using ( id )             renaming ( Func to _⟶_ )
+open import Level            using ( Level )
 open import Relation.Binary  using ( Setoid )
+
 open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
 
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
@@ -34,7 +35,6 @@ open import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}    using ( hom ; IsHom )
 open import Setoid.Homomorphisms.Kernels {𝑆 = 𝑆}  using ( kerquo ; πker )
 
 private variable α ρᵃ β ρᵇ γ ρᶜ ι : Level
-
 \end{code}
 
 #### <a id="the-first-homomorphism-theorem">The First Homomorphism Theorem for setoid algebras</a>
@@ -82,7 +82,6 @@ Now we prove that the homomorphism whose existence is guaranteed by `FirstHomThe
   →                 ∀ [a]  →  ∣ f ∣ ⟨$⟩ [a] ≈ ∣ g ∣ ⟨$⟩ [a]
 
  FirstHomUnique fh gh hfk hgk a = trans (sym (hfk a)) (hgk a)
-
 \end{code}
 
 --------------------------------------

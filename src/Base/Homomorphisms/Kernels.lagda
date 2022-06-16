@@ -18,20 +18,24 @@ open import Base.Signatures using ( Signature; 𝓞 ; 𝓥 )
 module Base.Homomorphisms.Kernels {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library --------------------------------
-open import Data.Product                           using ( _,_ )
-open import Function.Base                          using ( _∘_ )
-open import Level                                  using ( Level ; _⊔_ ; suc )
-open import Relation.Binary.PropositionalEquality  using ( _≡_ ; module ≡-Reasoning ; refl )
+open import Data.Product   using ( _,_ )
+open import Function.Base  using ( _∘_ )
+open import Level          using ( Level ; _⊔_ ; suc )
+
+open  import Relation.Binary.PropositionalEquality
+      using ( _≡_ ; module ≡-Reasoning ; refl )
 
 -- Imports from the Agda Universal Algebras Library --------------------------------
-open import Base.Overture                     using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; Image_∋_ ; IsSurjective )
-open import Base.Equality                     using ( swelldef )
-open import Base.Relations                    using ( ker ; ker-IsEquivalence ; ⟪_⟫ ; mkblk )
-open import Base.Algebras {𝑆 = 𝑆}             using ( Algebra ; compatible ; _̂_ ; Con ; mkcon ; _╱_ ; IsCongruence ; /-≡ )
+open import Base.Overture   using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; Image_∋_ ; IsSurjective )
+open import Base.Equality   using ( swelldef )
+open import Base.Relations  using ( ker ; ker-IsEquivalence ; ⟪_⟫ ; mkblk )
+
+open  import Base.Algebras {𝑆 = 𝑆}
+      using ( Algebra ; compatible ; _̂_ ; Con ; mkcon ; _╱_ ; IsCongruence ; /-≡ )
+
 open import Base.Homomorphisms.Basic {𝑆 = 𝑆}  using ( hom ; epi ; epi→hom )
 
 private variable α β : Level
-
 \end{code}
 
 
@@ -43,12 +47,14 @@ The kernel of a homomorphism is a congruence relation and conversely for every c
 
 module _ {𝑨 : Algebra α 𝑆} where
  open ≡-Reasoning
- homker-comp : swelldef 𝓥 β → {𝑩 : Algebra β 𝑆}(h : hom 𝑨 𝑩) → compatible 𝑨 (ker ∣ h ∣)
- homker-comp wd {𝑩} h f {u}{v} kuv = ∣ h ∣((f ̂ 𝑨) u)   ≡⟨ ∥ h ∥ f u ⟩
-                                     (f ̂ 𝑩)(∣ h ∣ ∘ u) ≡⟨ wd(f ̂ 𝑩)(∣ h ∣ ∘ u)(∣ h ∣ ∘ v)kuv ⟩
-                                     (f ̂ 𝑩)(∣ h ∣ ∘ v) ≡⟨ (∥ h ∥ f v)⁻¹ ⟩
-                                     ∣ h ∣((f ̂ 𝑨) v)   ∎
+ homker-comp :  swelldef 𝓥 β → {𝑩 : Algebra β 𝑆}(h : hom 𝑨 𝑩)
+  →             compatible 𝑨 (ker ∣ h ∣)
 
+ homker-comp wd {𝑩} h f {u}{v} kuv =
+  ∣ h ∣((f ̂ 𝑨) u)    ≡⟨ ∥ h ∥ f u ⟩
+  (f ̂ 𝑩)(∣ h ∣ ∘ u)  ≡⟨ wd(f ̂ 𝑩)(∣ h ∣ ∘ u)(∣ h ∣ ∘ v)kuv ⟩
+  (f ̂ 𝑩)(∣ h ∣ ∘ v)  ≡⟨ (∥ h ∥ f v)⁻¹ ⟩
+  ∣ h ∣((f ̂ 𝑨) v)    ∎
 
 \end{code}
 
@@ -70,14 +76,14 @@ With this congruence we construct the corresponding quotient, along with some sy
  kerquo : swelldef 𝓥 β → {𝑩 : Algebra β 𝑆} → hom 𝑨 𝑩 → Algebra (α ⊔ suc β) 𝑆
  kerquo wd {𝑩} h = 𝑨 ╱ (kercon wd {𝑩} h)
 
+ker[_⇒_]_↾_ :  (𝑨 : Algebra α 𝑆)(𝑩 : Algebra β 𝑆) → hom 𝑨 𝑩 → swelldef 𝓥 β
+ →             Algebra (α ⊔ suc β) 𝑆
 
-ker[_⇒_]_↾_ : (𝑨 : Algebra α 𝑆)(𝑩 : Algebra β 𝑆) → hom 𝑨 𝑩 → swelldef 𝓥 β → Algebra (α ⊔ suc β) 𝑆
 ker[ 𝑨 ⇒ 𝑩 ] h ↾ wd = kerquo wd {𝑩} h
 
 \end{code}
 
 Thus, given `h : hom 𝑨 𝑩`, we can construct the quotient of `𝑨` modulo the kernel of `h`, and the syntax for this quotient in the [agda-algebras](https://github.com/ualib/agda-algebras) library is `𝑨 [ 𝑩 ]/ker h ↾ fe`.
-
 
 
 #### <a id="the-canonical-projection">The canonical projection</a>
@@ -103,12 +109,13 @@ In may happen that we don't care about the surjectivity of `πepi`, in which cas
 
 \end{code}
 
-
 We combine the foregoing to define a function that takes 𝑆-algebras `𝑨` and `𝑩`, and a homomorphism `h : hom 𝑨 𝑩` and returns the canonical epimorphism from `𝑨` onto `𝑨 [ 𝑩 ]/ker h`. (Recall, the latter is the special notation we defined above for the quotient of `𝑨` modulo the kernel of `h`.)
 
 \begin{code}
 
- πker : (wd : swelldef 𝓥 β){𝑩 : Algebra β 𝑆}(h : hom 𝑨 𝑩) → epi 𝑨 (ker[ 𝑨 ⇒ 𝑩 ] h ↾ wd)
+ πker :  (wd : swelldef 𝓥 β){𝑩 : Algebra β 𝑆}(h : hom 𝑨 𝑩)
+  →      epi 𝑨 (ker[ 𝑨 ⇒ 𝑩 ] h ↾ wd)
+
  πker wd {𝑩} h = πepi (kercon wd {𝑩} h)
 
 \end{code}
@@ -123,7 +130,6 @@ The kernel of the canonical projection of `𝑨` onto `𝑨 / θ` is equal to `�
   →            ∀ {x}{y} → ∣ kercon wd {𝑨 ╱ θ} (πhom θ) ∣ x y →  ∣ θ ∣ x y
 
  ker-in-con θ hyp = /-≡ θ hyp
-
 \end{code}
 
 ---------------------------------

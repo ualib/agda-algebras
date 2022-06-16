@@ -16,9 +16,10 @@ This is the [Base.Adjunction.Galois][] module of the [Agda Universal Algebra Lib
 module Base.Adjunction.Galois where
 
 -- Imports from Agda and the Agda Standard Library --------------------------------------
-open import Agda.Primitive           using ( _⊔_ ;  Level ; lsuc) renaming ( Set to Type )
+open import Agda.Primitive           using () renaming ( Set to Type )
 open import Data.Product             using ( _,_ ; _×_ ; swap ) renaming ( proj₁ to fst )
 open import Function.Base            using ( _∘_ ; id )
+open import Level                    using ( _⊔_ ;  Level ; suc )
 open import Relation.Binary.Bundles  using ( Poset )
 open import Relation.Binary.Core     using ( REL ; Rel ; _⇒_ ; _Preserves_⟶_ )
 open import Relation.Unary           using ( _⊆_ ;  _∈_ ; Pred   )
@@ -47,7 +48,7 @@ module _ (A : Poset α ℓᵃ ρᵃ)(B : Poset β ℓᵇ ρᵇ) where
   _≤A_ = _≤_ A
   _≤B_ = _≤_ B
 
- record Galois : Type (lsuc (α ⊔ β ⊔ ρᵃ ⊔ ρᵇ))  where
+ record Galois : Type (suc (α ⊔ β ⊔ ρᵃ ⊔ ρᵇ))  where
   field
    F : Carrier A → Carrier B
    G : Carrier B → Carrier A
@@ -84,7 +85,6 @@ module _ {𝒜 : Type α}{ℬ : Type β} where
  -- Definition of "closed" with respect to the closure operator λ B → (R ⃖ B) ⃗ R
  →←Closed : ∀ {ρᵇ ρʳ} {B : Pred ℬ ρᵇ}{R : REL 𝒜 ℬ ρʳ} → Type _
  →←Closed {B = B}{R} = (R ⃖ B) ⃗ R ⊆ B
-
 \end{code}
 
 
@@ -110,7 +110,7 @@ module _ {α ρ : Level} {𝒜 : Type α} where
 
 module _ {α : Level} (ρ : Level) (𝒜 : Type α) where
 
- PosetOfSubsets : Poset (α ⊔ lsuc ρ) (α ⊔ ρ) (α ⊔ ρ)
+ PosetOfSubsets : Poset (α ⊔ suc ρ) (α ⊔ ρ) (α ⊔ ρ)
  Carrier PosetOfSubsets = Pred 𝒜 ρ
  _≈_ PosetOfSubsets = _≐_
  _≤_ PosetOfSubsets = _⊆_
@@ -133,8 +133,8 @@ unit/counit definition that is more level polymorphic.
 
 module _ {ℓ : Level}{𝒜 : Type ℓ} {ℬ : Type ℓ} where
 
- 𝒫𝒜 : Poset (lsuc ℓ) ℓ ℓ
- 𝒫ℬ : Poset (lsuc ℓ) ℓ ℓ
+ 𝒫𝒜 : Poset (suc ℓ) ℓ ℓ
+ 𝒫ℬ : Poset (suc ℓ) ℓ ℓ
  𝒫𝒜 = PosetOfSubsets ℓ 𝒜
  𝒫ℬ = PosetOfSubsets ℓ ℬ
 
@@ -144,7 +144,6 @@ module _ {ℓ : Level}{𝒜 : Type ℓ} {ℬ : Type ℓ} where
                      ; G = R ⃖_
                      ; GF≥id = λ _ → ←→≥id
                      ; FG≥id = λ _ → →←≥id }
-
 \end{code}
 
 --------------------

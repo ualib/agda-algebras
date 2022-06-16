@@ -22,7 +22,6 @@ open import Setoid.Homomorphisms   public
 open import Setoid.Terms           public
 open import Setoid.Subalgebras     public
 open import Setoid.Varieties       public
-
 \end{code}
 
 --------------------------------------

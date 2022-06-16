@@ -18,17 +18,18 @@ open import Base.Signatures  using ( 𝓞 ; 𝓥 ; Signature )
 module Base.Algebras.Basic {𝑆 : Signature 𝓞 𝓥 } where
 
 -- Imports from the Agda (Builtin) and the Agda Standard Library -----------------------
-open import Agda.Primitive  using ( _⊔_ ; lsuc ) renaming ( Set to  Type ; lzero to ℓ₀ )
-open import Data.Product    using ( _,_ ; _×_ ; Σ-syntax )
-open import Level           using ( Level )
-open import Relation.Binary using ( IsEquivalence ) renaming ( Rel to BinRel )
-open import Relation.Unary  using ( _∈_ ; Pred )
+open import Agda.Primitive   using () renaming ( Set to  Type ; lzero to ℓ₀ )
+open import Data.Product     using ( _,_ ; _×_ ; Σ-syntax )
+open import Level            using ( Level ; _⊔_ ; suc )
+open import Relation.Binary  using ( IsEquivalence ) renaming ( Rel to BinRel )
+open import Relation.Unary   using ( _∈_ ; Pred )
 
 
 -- Imports from the Agda Universal Algebra Library -------------------------------------
-open import Base.Overture.Preliminaries using ( ∣_∣ ; ∥_∥ )
-open import Base.Relations.Discrete     using ( Op ; _|:_ ; _|:pred_ )
-open import Base.Relations.Continuous   using ( Rel ; compatible-Rel ; REL ; compatible-REL )
+open  import Base.Overture.Preliminaries  using ( ∣_∣ ; ∥_∥ )
+open  import Base.Relations.Discrete      using ( Op ; _|:_ ; _|:pred_ )
+open  import Base.Relations.Continuous
+      using ( Rel ; compatible-Rel ; REL ; compatible-REL )
 
 private variable α β ρ : Level
 
@@ -53,9 +54,9 @@ For a fixed signature `𝑆 : Signature 𝓞 𝓥` and universe level `α`, we d
 
 \begin{code}
 
-Algebra : (α : Level)(𝑆 : Signature 𝓞 𝓥) → Type (𝓞 ⊔ 𝓥 ⊔ lsuc α)
-Algebra α 𝑆 = Σ[ A ∈ Type α ]                   -- the domain
-              ∀ (f : ∣ 𝑆 ∣) → Op A (∥ 𝑆 ∥ f)    -- the basic operations
+Algebra : (α : Level)(𝑆 : Signature 𝓞 𝓥) → Type (𝓞 ⊔ 𝓥 ⊔ suc α)
+Algebra α 𝑆 =  Σ[ A ∈ Type α ]                 -- the domain
+               ∀ (f : ∣ 𝑆 ∣) → Op A (∥ 𝑆 ∥ f)  -- the basic operations
 
 \end{code}
 
@@ -72,7 +73,7 @@ Nonetheless, for those who prefer to represent algebraic structures in type theo
 
 \begin{code}
 
-record algebra (α : Level) (𝑆 : Signature 𝓞 𝓥) : Type(lsuc(𝓞 ⊔ 𝓥 ⊔ α)) where
+record algebra (α : Level) (𝑆 : Signature 𝓞 𝓥) : Type(suc(𝓞 ⊔ 𝓥 ⊔ α)) where
  constructor mkalg
  field
   carrier : Type α
@@ -85,7 +86,6 @@ This representation of algebras as inhabitants of a record type is equivalent to
 \begin{code}
 
 module _ {𝑆 : Signature 𝓞 𝓥} where
-
  open algebra
 
  algebra→Algebra : algebra α 𝑆 → Algebra α 𝑆
@@ -93,7 +93,6 @@ module _ {𝑆 : Signature 𝓞 𝓥} where
 
  Algebra→algebra : Algebra α 𝑆 → algebra α 𝑆
  Algebra→algebra 𝑨 = mkalg ∣ 𝑨 ∣ ∥ 𝑨 ∥
-
 \end{code}
 
 
@@ -112,7 +111,6 @@ We now define a convenient shorthand for the interpretation of an operation symb
 So, if `𝑓 : ∣ 𝑆 ∣` is an operation symbol in the signature `𝑆`, and if `𝑎 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣` is a tuple of the appropriate arity, then `(𝑓 ̂ 𝑨) 𝑎` denotes the operation `𝑓` interpreted in `𝑨` and evaluated at `𝑎`.
 
 
-
 #### <a id="the-universe-level-of-an-algebra">The universe level of an algebra</a>
 
 Occasionally we will be given an algebra and we just need to know the universe level of its domain. The following utility function provides this.
@@ -120,11 +118,10 @@ Occasionally we will be given an algebra and we just need to know the universe l
 \begin{code}
 
 Level-of-Alg : {α : Level}{𝑆 : Signature 𝓞 𝓥} → Algebra α 𝑆 → Level
-Level-of-Alg {α = α} _ = 𝓞 ⊔ 𝓥 ⊔ lsuc α
+Level-of-Alg {α = α} _ = 𝓞 ⊔ 𝓥 ⊔ suc α
 
 Level-of-Carrier : {α  : Level}{𝑆 : Signature 𝓞 𝓥} → Algebra α 𝑆 → Level
 Level-of-Carrier {α = α} _ = α
-
 \end{code}
 
 
@@ -134,7 +131,6 @@ Recall, in the [section on level lifting and lowering](Overture.Lifts.html#level
 
 \begin{code}
 
-
 open Level
 
 Lift-alg-op : {I : Type 𝓥} {A : Type α} → Op A I → (β : Level) → Op (Lift β A) I
@@ -143,11 +139,11 @@ Lift-alg-op f β = λ x → lift (f (λ i → lower (x i)))
 Lift-Alg : {𝑆 : Signature 𝓞 𝓥} → Algebra α 𝑆 → (β : Level) → Algebra (α ⊔ β) 𝑆
 Lift-Alg {𝑆 = 𝑆} 𝑨 β = Lift β ∣ 𝑨 ∣ , (λ (𝑓 : ∣ 𝑆 ∣) → Lift-alg-op (𝑓 ̂ 𝑨) β)
 
-
 open algebra
 
 Lift-algebra : {𝑆 : Signature 𝓞 𝓥} → algebra α 𝑆 → (β : Level) → algebra (α ⊔ β) 𝑆
-Lift-algebra {𝑆 = 𝑆} 𝑨 β = mkalg (Lift β (carrier 𝑨)) (λ (f : ∣ 𝑆 ∣) → Lift-alg-op ((opsymbol 𝑨) f) β)
+Lift-algebra {𝑆 = 𝑆} 𝑨 β =  mkalg (Lift β (carrier 𝑨)) (λ (f : ∣ 𝑆 ∣)
+ →                          Lift-alg-op ((opsymbol 𝑨) f) β)
 
 \end{code}
 
@@ -165,10 +161,10 @@ We now define the function `compatible` so that, if `𝑨` denotes an algebra an
 
 \begin{code}
 
-compatible : {𝑆 : Signature 𝓞 𝓥}(𝑨 : Algebra α 𝑆) → BinRel ∣ 𝑨 ∣ ρ → Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ)
+compatible : ∀{𝑆}(𝑨 : Algebra α 𝑆) → BinRel ∣ 𝑨 ∣ ρ → Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ)
 compatible  𝑨 R = ∀ 𝑓 → (𝑓 ̂ 𝑨) |: R
 
-compatible-pred : {𝑆 : Signature 𝓞 𝓥}(𝑨 : Algebra α 𝑆) → Pred (∣ 𝑨 ∣ × ∣ 𝑨 ∣)ρ → Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ)
+compatible-pred : ∀{𝑆}(𝑨 : Algebra α 𝑆) → Pred (∣ 𝑨 ∣ × ∣ 𝑨 ∣)ρ → Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ)
 compatible-pred  𝑨 P = ∀ 𝑓 → (𝑓 ̂ 𝑨) |:pred P
 
 \end{code}
@@ -187,7 +183,7 @@ module _ {I : Type 𝓥} {𝑆 : Signature 𝓞 𝓥} where
  compatible-Rel-alg : (𝑨 : Algebra α 𝑆) → Rel ∣ 𝑨 ∣ I{ρ} → Type(𝓞 ⊔ α ⊔ 𝓥 ⊔ ρ)
  compatible-Rel-alg 𝑨 R = ∀ (𝑓 : ∣ 𝑆 ∣ ) →  compatible-Rel (𝑓 ̂ 𝑨) R
 
- compatible-REL-alg : (𝒜 : I → Algebra α 𝑆) → REL I (λ i → ∣ 𝒜  i ∣) {ρ} → Type(𝓞 ⊔ α ⊔ 𝓥 ⊔ ρ)
+ compatible-REL-alg : (𝒜 : I → Algebra α 𝑆) → REL I (λ i → ∣ 𝒜  i ∣) {ρ} → Type _
  compatible-REL-alg 𝒜 R = ∀ ( 𝑓 : ∣ 𝑆 ∣ ) →  compatible-REL (λ i → 𝑓 ̂ (𝒜 i)) R
 
 \end{code}

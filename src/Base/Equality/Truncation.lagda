@@ -116,8 +116,6 @@ module _ {A : Type α}{B : A → Type β} where
 
  to-Σ-≡ : {σ τ : Σ[ x ∈ A ] B x} → (Σ[ p ∈ (fst σ ≡ fst τ) ] (transport B p ∥ σ ∥) ≡ ∥ τ ∥) → σ ≡ τ
  to-Σ-≡ (≡.refl , ≡.refl) = ≡.refl
-
-
 \end{code}
 
 
@@ -142,6 +140,7 @@ Finding a proof that a function is an embedding isn't always easy, but one appro
 \begin{code}
 
 module _ {A : Type α}{B : Type β} where
+
  invertible : (A → B) → Type (α ⊔ β)
  invertible f = Σ[ g ∈ (B → A) ] ((g ∘ f ≈ id) × (f ∘ g ≈ id))
 
@@ -231,7 +230,6 @@ module _ {I : Type 𝓥} where
 
  RELPropExt : (I → Type α) → (ρ : Level) → Type (𝓥 ⊔ α ⊔ suc ρ)
  RELPropExt 𝒜 ρ = {P Q : RELProp 𝒜 ρ} → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
-
 \end{code}
 
 ----------------------------

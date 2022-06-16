@@ -29,7 +29,6 @@ open import Base.Overture  using ( ∣_∣ ; ∥_∥ ; IsInjective ; IsSurjectiv
 open import Base.Algebras  {𝑆 = 𝑆} using ( Algebra ; _̂_ ; Lift-Alg )
 
 private variable α β : Level
-
 \end{code}
 
 #### <a id="homomorphisms">Homomorphisms</a>
@@ -62,9 +61,7 @@ We now define the type `hom 𝑨 𝑩` of homomorphisms from `𝑨` to `𝑩` by
 
  hom : Type(𝓞 ⊔ 𝓥 ⊔ α ⊔ β)
  hom = Σ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) is-homomorphism
-
 \end{code}
-
 
 
 #### <a id="important-exmples-of-homomorphisms">Important examples of homomorphisms</a>
@@ -91,10 +88,7 @@ open Level
 
 𝓁ℴ𝓌ℯ𝓇 : {β : Level}(𝑨 : Algebra α 𝑆) → hom (Lift-Alg 𝑨 β) 𝑨
 𝓁ℴ𝓌ℯ𝓇 _ = lower , λ 𝑓 𝑎 → refl
-
 \end{code}
-
-
 
 
 #### <a id="monomorphisms-and-epimorphisms">Monomorphisms and epimorphisms</a>
@@ -126,7 +120,6 @@ mon→hom 𝑨 ϕ = ∣ ϕ ∣ , fst ∥ ϕ ∥
 
 epi→hom : {𝑨 : Algebra α 𝑆}(𝑩 : Algebra β 𝑆) → epi 𝑨 𝑩 → hom 𝑨 𝑩
 epi→hom _ ϕ = ∣ ϕ ∣ , fst ∥ ϕ ∥
-
 \end{code}
 
 ---------------------------------

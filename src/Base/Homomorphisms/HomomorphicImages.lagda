@@ -18,20 +18,24 @@ open import Base.Signatures using ( Signature ; 𝓞 ; 𝓥 )
 module Base.Homomorphisms.HomomorphicImages {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ------------------------------------------
-open import Agda.Primitive                              using () renaming ( Set to Type )
-open import Data.Product                                using ( _,_ ; Σ-syntax ; Σ ; _×_ )
-open import Level                                       using ( Level ;  _⊔_ ; suc )
-open import Relation.Binary.PropositionalEquality as ≡  using ( _≡_ ; module ≡-Reasoning )
-open import Relation.Unary                              using ( Pred ; _∈_ )
+open import Agda.Primitive  using () renaming ( Set to Type )
+open import Data.Product    using ( _,_ ; Σ-syntax ; Σ ; _×_ )
+open import Level           using ( Level ;  _⊔_ ; suc )
+open import Relation.Unary  using ( Pred ; _∈_ )
+
+open  import Relation.Binary.PropositionalEquality as ≡
+      using ( _≡_ ; module ≡-Reasoning )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------
-open import Base.Overture                           using ( 𝑖𝑑 ; ∣_∣ ; ∥_∥ ; lower∼lift )
-                                                    using ( lift∼lower ; Image_∋_ ; Inv )
-                                                    using ( InvIsInverseʳ ; eq ; IsSurjective )
-open import Base.Algebras                  {𝑆 = 𝑆}  using ( Algebra ; Level-of-Carrier ; Lift-Alg ; ov )
-open import Base.Homomorphisms.Basic       {𝑆 = 𝑆}  using ( hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 )
-open import Base.Homomorphisms.Properties  {𝑆 = 𝑆}  using ( Lift-hom )
+open  import Base.Overture
+      using ( 𝑖𝑑 ; ∣_∣ ; ∥_∥ ; lower∼lift ; lift∼lower ; Image_∋_ )
+      using (  Inv ; InvIsInverseʳ ; eq ; IsSurjective )
 
+open  import Base.Algebras {𝑆 = 𝑆}
+      using ( Algebra ; Level-of-Carrier ; Lift-Alg ; ov )
+
+open  import Base.Homomorphisms.Basic       {𝑆 = 𝑆} using ( hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 )
+open  import Base.Homomorphisms.Properties  {𝑆 = 𝑆} using ( Lift-hom )
 \end{code}
 
 
@@ -67,7 +71,6 @@ module _ {α : Level} where
 
  HomImageOfClass : Pred (Algebra α 𝑆) (suc α) → Type(ov α)
  HomImageOfClass 𝒦 = Σ[ 𝑩 ∈ Algebra α 𝑆 ] IsHomImageOfClass{𝒦} 𝑩
-
 \end{code}
 
 
@@ -118,7 +121,6 @@ module _ {α β : Level} where
   lφepic = Lift-epi-is-epi ℓᵃ {𝑩} ℓᵇ (φ , φhom) φepic
   Goal : (Lift-Alg 𝑩 ℓᵇ) IsHomImageOf _
   Goal = lφ , lφepic
-
 \end{code}
 
 --------------------------------------

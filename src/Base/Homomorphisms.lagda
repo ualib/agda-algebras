@@ -25,7 +25,6 @@ open import Base.Homomorphisms.Noether            {𝑆 = 𝑆} public
 open import Base.Homomorphisms.Factor             {𝑆 = 𝑆} public
 open import Base.Homomorphisms.Isomorphisms       {𝑆 = 𝑆} public
 open import Base.Homomorphisms.HomomorphicImages  {𝑆 = 𝑆} public
-
 \end{code}
 
 --------------------------------------

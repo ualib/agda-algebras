@@ -18,42 +18,69 @@ open import Base.Signatures using ( 𝓞 ; 𝓥 ; Signature )
 module Base.Homomorphisms.Noether {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ---------------------------------------
-open import Data.Product                                 using ( Σ-syntax ; _,_ ; _×_ )
-                                                         renaming ( proj₁ to fst ; proj₂ to snd )
-open import Function                                     using ( _∘_ ; id )
-open import Level                                        using (Level )
-open import Relation.Binary                              using ( IsEquivalence )
-open import Relation.Binary.PropositionalEquality  as ≡  using ( module ≡-Reasoning ; _≡_ )
+open import Data.Product     using ( Σ-syntax ; _,_ ; _×_ )
+                             renaming ( proj₁ to fst ; proj₂ to snd )
+open import Function         using ( _∘_ ; id )
+open import Level            using (Level )
+open import Relation.Binary  using ( IsEquivalence )
+
+open import Relation.Binary.PropositionalEquality as ≡ using ( module ≡-Reasoning ; _≡_ )
 
 -- Imports from agda-algebras --------------------------------------------------------------
-open import Base.Overture                        using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; Image_∋_ ; IsInjective )
-                                                 using ( IsSurjective ; SurjInv ; SurjInvIsInverseʳ )
-open import Base.Relations                       using ( ⌞_⌟ ; mkblk ; ⟪_⟫ )
-open import Base.Equality                        using ( swelldef ; is-set ; blk-uip ; is-embedding )
-                                                 using ( monic-is-embedding|Set ; pred-ext ; block-ext|uip )
-open import Base.Algebras               {𝑆 = 𝑆}  using ( Algebra ; _̂_ ; Con ; IsCongruence )
-open import Base.Homomorphisms.Basic    {𝑆 = 𝑆}  using ( hom ; is-homomorphism ; epi ; epi→hom )
-open import Base.Homomorphisms.Kernels  {𝑆 = 𝑆}  using ( kercon ; ker[_⇒_]_↾_ ; πker )
-private variable α β γ : Level
+open  import Base.Overture
+      using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; Image_∋_ ; IsInjective ; SurjInv )
+      using ( IsSurjective ; SurjInvIsInverseʳ )
 
+open  import Base.Relations
+      using ( ⌞_⌟ ; mkblk ; ⟪_⟫ )
+open  import Base.Equality
+      using ( swelldef ; is-set ; blk-uip ; is-embedding )
+      using ( monic-is-embedding|Set ; pred-ext ; block-ext|uip )
+
+open  import Base.Algebras {𝑆 = 𝑆}
+      using ( Algebra ; _̂_ ; Con ; IsCongruence )
+
+open  import Base.Homomorphisms.Basic {𝑆 = 𝑆}
+      using ( hom ; is-homomorphism ; epi ; epi→hom )
+
+open  import Base.Homomorphisms.Kernels {𝑆 = 𝑆}
+      using ( kercon ; ker[_⇒_]_↾_ ; πker )
+
+private variable α β γ : Level
 \end{code}
 
 
 #### <a id="the-first-homomorphism-theorem">The First Homomorphism Theorem</a>
 
-Here we formalize a version of the *first homomorphism theorem*, sometimes called *Noether's first homomorphism theorem*, after Emmy Noether who was among the first proponents of the abstract approach to the subject that we now call "modern algebra").
+Here we formalize a version of the *first homomorphism theorem*, sometimes called
+*Noether's first homomorphism theorem*, after Emmy Noether who was among the first
+proponents of the abstract approach to the subject that we now call "modern algebra").
 
-Informally, the theorem states that every homomorphism from `𝑨` to `𝑩` (`𝑆`-algebras) factors through the quotient algebra `𝑨 ╱ ker h` (`𝑨` modulo the kernel of the given homomorphism).  In other terms, given `h : hom 𝑨 𝑩` there exists `φ : hom (𝑨 ╱ ker h) 𝑩` which, when composed with the canonical projection `πker : 𝑨 ↠ 𝑨 ╱ ker h`, is equal to `h`; that is, `h = φ ∘ πker`.  Moreover, `φ` is a *monomorphism* (injective homomorphism) and is unique.
+Informally, the theorem states that every homomorphism from `𝑨` to `𝑩` (`𝑆`-algebras)
+factors through the quotient algebra `𝑨 ╱ ker h` (`𝑨` modulo the kernel of the given
+homomorphism).  In other terms, given `h : hom 𝑨 𝑩` there exists `φ : hom (𝑨 ╱ ker h) 𝑩`
+which, when composed with the canonical projection `πker : 𝑨 ↠ 𝑨 ╱ ker h`, is equal to
+`h`; that is, `h = φ ∘ πker`.  Moreover, `φ` is a *monomorphism* (injective homomorphism)
+and is unique.
 
-Our formal proof of this theorem will require function extensionality, proposition extensionality, and a couple of truncation assumptions.  The extensionality assumptions are postulated using `swelldef` and `pred-ext` which were defined in [Base.Equality.Welldefined][] and [Base.Equality.Extensionality][]. As for truncation, to prove that `φ` is injective we require
+Our formal proof of this theorem will require function extensionality, proposition
+extensionality, and a couple of truncation assumptions.  The extensionality
+assumptions are postulated using `swelldef` and `pred-ext` which were defined
+in [Base.Equality.Welldefined][] and [Base.Equality.Extensionality][]. As for
+truncation, to prove that `φ` is injective we require
 
-+ `buip`: *uniqueness of (block) identity proofs*; given two blocks of the kernel there is at most one proof that the blocks are equal;
++   `buip`: *uniqueness of (block) identity proofs*; given two blocks of the kernel
+    there is at most one proof that the blocks are equal;
 
 To prove that `φ` is an embedding we require
 
-+ `Bset`: *uniqueness of identity proofs* in the codomain; that is, the codomain `∣ 𝑩 ∣` is assumed to be a *set*.
++  `Bset`: *uniqueness of identity proofs* in the codomain; that is, the codomain
+   `∣ 𝑩 ∣` is assumed to be a *set*.
 
-Note that the classical, informal statement of the first homomorphism theorem does not demand that `φ` be an embedding (in our sense of having subsingleton fibers), and if we left this out of the consequent of our formal theorem statement, then we could omit from the antecedent the assumption that `∣ 𝑩 ∣` is a set.
+Note that the classical, informal statement of the first homomorphism theorem does not
+demand that `φ` be an embedding (in our sense of having subsingleton fibers), and if
+we left this out of the consequent of our formal theorem statement, then we could omit
+from the antecedent the assumption that `∣ 𝑩 ∣` is a set.
 
 Without further ado, we present our formalization of the first homomorphism theorem.
 
@@ -61,14 +88,13 @@ Without further ado, we present our formalization of the first homomorphism theo
 
 open ≡-Reasoning
 
-FirstHomTheorem|Set :
-
-    (𝑨 : Algebra α 𝑆)(𝑩 : Algebra β 𝑆)(h : hom 𝑨 𝑩)
-    (pe : pred-ext α β)(fe : swelldef 𝓥 β)                          -- extensionality assumptions
-    (Bset : is-set ∣ 𝑩 ∣)(buip : blk-uip ∣ 𝑨 ∣ ∣ kercon fe {𝑩} h ∣) -- truncation assumptions
-    ----------------------------------------------------------------
- →  Σ[ φ ∈ hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩  ]
-      ( ∣ h ∣ ≡ ∣ φ ∣ ∘ ∣ πker fe{𝑩}h ∣ × IsInjective ∣ φ ∣  ×  is-embedding ∣ φ ∣  )
+FirstHomTheorem|Set : (𝑨 : Algebra α 𝑆)(𝑩 : Algebra β 𝑆)(h : hom 𝑨 𝑩)
+ {- extensionality assumptions -}  (pe : pred-ext α β)(fe : swelldef 𝓥 β)
+ {- truncation assumptions -}      (Bset : is-set ∣ 𝑩 ∣)
+                                   (buip : blk-uip ∣ 𝑨 ∣ ∣ kercon fe {𝑩} h ∣)
+     -------------------------------------------------------------------------
+ →   Σ[ φ ∈ hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩  ]
+     ( ∣ h ∣ ≡ ∣ φ ∣ ∘ ∣ πker fe{𝑩}h ∣ × IsInjective ∣ φ ∣  ×  is-embedding ∣ φ ∣  )
 
 FirstHomTheorem|Set 𝑨 𝑩 h pe fe Bset buip = (φ , φhom) , ≡.refl , φmon , φemb
  where
@@ -81,9 +107,9 @@ FirstHomTheorem|Set 𝑨 𝑩 h pe fe Bset buip = (φ , φhom) , ≡.refl , φmo
   φ a = ∣ h ∣ ⌞ a ⌟
 
   φhom : is-homomorphism (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩 φ
-  φhom 𝑓 a = ∣ h ∣ ( (𝑓 ̂ 𝑨) (λ x → ⌞ a x ⌟) ) ≡⟨ ∥ h ∥ 𝑓 (λ x → ⌞ a x ⌟)  ⟩
-             (𝑓 ̂ 𝑩) (∣ h ∣ ∘ (λ x → ⌞ a x ⌟))  ≡⟨ ≡.cong (𝑓 ̂ 𝑩) ≡.refl ⟩
-             (𝑓 ̂ 𝑩) (λ x → φ (a x))            ∎
+  φhom 𝑓 a =  ∣ h ∣ ( (𝑓 ̂ 𝑨) (λ x → ⌞ a x ⌟) )  ≡⟨ ∥ h ∥ 𝑓 (λ x → ⌞ a x ⌟)  ⟩
+              (𝑓 ̂ 𝑩) (∣ h ∣ ∘ (λ x → ⌞ a x ⌟))  ≡⟨ ≡.cong (𝑓 ̂ 𝑩) ≡.refl     ⟩
+              (𝑓 ̂ 𝑩) (λ x → φ (a x))            ∎
 
   φmon : IsInjective φ
   φmon {_ , mkblk u ≡.refl} {_ , mkblk v ≡.refl} φuv = block-ext|uip pe buip ξ φuv
@@ -93,19 +119,21 @@ FirstHomTheorem|Set 𝑨 𝑩 h pe fe Bset buip = (φ , φhom) , ≡.refl , φmo
 
 \end{code}
 
-Below we will prove that the homomorphism `φ`, whose existence we just proved, is unique (see `NoetherHomUnique`), but first we show that if we add to the hypotheses of the first homomorphism theorem the assumption that `h` is surjective, then we obtain the so-called *first isomorphism theorem*.  Naturally, we let `FirstHomTheorem|Set` do most of the work.
+Below we will prove that the homomorphism `φ`, whose existence we just proved, is
+unique (see `NoetherHomUnique`), but first we show that if we add to the hypotheses
+of the first homomorphism theorem the assumption that `h` is surjective, then we
+obtain the so-called *first isomorphism theorem*.  Naturally, we let
+`FirstHomTheorem|Set` do most of the work.
 
 \begin{code}
 
-FirstIsoTheorem|Set :
-
-     (𝑨 : Algebra α 𝑆) (𝑩 : Algebra β 𝑆) (h : hom 𝑨 𝑩)
-     (pe : pred-ext α β) (fe : swelldef 𝓥 β)                        -- extensionality assumptions
-     (Bset : is-set ∣ 𝑩 ∣)(buip : blk-uip ∣ 𝑨 ∣ ∣ kercon fe{𝑩}h ∣)  -- truncation assumptions
- →   IsSurjective ∣ h ∣
-     ---------------------------------------------------------------
- →   Σ[ f ∈ (epi (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩)]
-       ( ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣  × IsInjective ∣ f ∣ × is-embedding ∣ f ∣ )
+FirstIsoTheorem|Set : (𝑨 : Algebra α 𝑆) (𝑩 : Algebra β 𝑆) (h : hom 𝑨 𝑩)
+ {- extensionality assumptions -}  (pe : pred-ext α β) (fe : swelldef 𝓥 β)
+ {- truncation assumptions -}      (Bset : is-set ∣ 𝑩 ∣)
+                                   (buip : blk-uip ∣ 𝑨 ∣ ∣ kercon fe{𝑩}h ∣)
+ →                                 IsSurjective ∣ h ∣
+ →                                 Σ[ f ∈ (epi (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩)]
+                                   ( ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣  × IsInjective ∣ f ∣ × is-embedding ∣ f ∣ )
 
 FirstIsoTheorem|Set 𝑨 𝑩 h pe fe Bset buip hE =
  (fmap , fhom , fepic) , ≡.refl , (snd ∥ FHT ∥)
@@ -144,12 +172,15 @@ module _ {fe : swelldef 𝓥 β}(𝑨 : Algebra α 𝑆)(𝑩 : Algebra β 𝑆)
 
  FirstHomUnique f g hfk hgk (_ , mkblk a ≡.refl) =
   ∣ f ∣ (_ , mkblk a ≡.refl)  ≡⟨ ≡.cong-app(hfk ⁻¹)a ⟩
-  ∣ h ∣ a                   ≡⟨ ≡.cong-app(hgk)a ⟩
+  ∣ h ∣ a                     ≡⟨ ≡.cong-app(hgk)a ⟩
   ∣ g ∣ (_ , mkblk a ≡.refl)  ∎
 
 \end{code}
 
-If, in addition, we postulate extensionality of functions defined on the domain `ker[ 𝑨 ⇒ 𝑩 ] h`, then we obtain the following variation of the last result. (See [Base.Equality.Truncation][] for a discussion of *truncation*, *sets*, and *uniqueness of identity proofs*.)
+If, in addition, we postulate extensionality of functions defined on the domain
+`ker[ 𝑨 ⇒ 𝑩 ] h`, then we obtain the following variation of the last result.
+(See [Base.Equality.Truncation][] for a discussion of *truncation*, *sets*,
+and *uniqueness of identity proofs*.)
 
 ```
 fe-FirstHomUnique :  {fuww : funext (α ⊔ lsuc β) β}(f g : hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩)
@@ -170,7 +201,6 @@ The proof of `NoetherHomUnique` goes through for the special case of epimorphism
   →                ∀ a → ∣ f ∣ a ≡ ∣ g ∣ a
 
  FirstIsoUnique f g hfk hgk = FirstHomUnique (epi→hom 𝑩 f) (epi→hom 𝑩 g) hfk hgk
-
 \end{code}
 
 --------------------------------------

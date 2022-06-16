@@ -80,28 +80,29 @@ We begin by defining two data types that represent the semantic concept of the *
  ⌜ F ⌝ a = f∈range{F} a
 
  Ran : (𝑨 ⟶ 𝑩) → Setoid (α ⊔ β ⊔ ρᵇ) ρᵇ
- Ran F = record { Carrier = F range
-                ; _≈_ = λ x y → ((F image) x) ≈₂ ((F image) y)
-                ; isEquivalence = record { refl = refl₂ ; sym = sym₂ ; trans = trans₂ }
-                }
+ Ran F = record  { Carrier = F range
+                 ; _≈_ = λ x y → ((F image) x) ≈₂ ((F image) y)
+                 ; isEquivalence = record { refl = refl₂ ; sym = sym₂ ; trans = trans₂ }
+                 }
 
  RRan : (𝑨 ⟶ 𝑩) → Setoid (α ⊔ β ⊔ ρᵇ) (ρᵃ ⊔ ρᵇ)
- RRan F = record { Carrier = F range
-                ; _≈_ = λ x y →  ((F preimage) x) ≈₁ ((F preimage) y) ∧ ((F image) x) ≈₂ ((F image) y)
-                ; isEquivalence = record { refl = refl₁ , refl₂
-                                         ; sym = λ x → (sym₁ ∣ x ∣) , (sym₂ ∥ x ∥)
-                                         ; trans = λ x y → (trans₁ ∣ x ∣ ∣ y ∣) , (trans₂ ∥ x ∥ ∥ y ∥) }
-                }
+ RRan F = record  { Carrier = F range
+                  ; _≈_ = λ x y →  ((F preimage) x) ≈₁ ((F preimage) y) ∧ ((F image) x) ≈₂ ((F image) y)
+                  ; isEquivalence = record  { refl = refl₁ , refl₂
+                                            ; sym = λ x → (sym₁ ∣ x ∣) , (sym₂ ∥ x ∥)
+                                            ; trans = λ x y → (trans₁ ∣ x ∣ ∣ y ∣) , (trans₂ ∥ x ∥ ∥ y ∥)
+                                            }
+                  }
 
  _preimage≈image : ∀ F r → F ⟨$⟩ (F preimage) r ≈₂ (F image) r
  (F preimage≈image) (_ , (_ , p)) = p
 
 
  Dom : (𝑨 ⟶ 𝑩) → Setoid α ρᵇ
- Dom F = record { Carrier = A
-                ; _≈_ = λ x y → F ⟨$⟩ x ≈₂ F ⟨$⟩ y
-                ; isEquivalence = record { refl = refl₂ ; sym = sym₂ ; trans = trans₂ }
-                }
+ Dom F = record  { Carrier = A
+                 ; _≈_ = λ x y → F ⟨$⟩ x ≈₂ F ⟨$⟩ y
+                 ; isEquivalence = record { refl = refl₂ ; sym = sym₂ ; trans = trans₂ }
+                 }
 
 \end{code}
 

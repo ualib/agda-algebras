@@ -15,18 +15,19 @@ This is the [Base.Overture.Transformers][] module of the [agda-algebras][] libra
 module Base.Overture.Transformers where
 
 -- Imports from Agda and the Agda Standard Library ---------------------------------
-open import Agda.Primitive using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
-open import Data.Product   using ( _,_ ; _×_ )
-open import Data.Fin.Base  using ( Fin )
-open import Function.Base  using ( _∘_ ; id )
+open import Agda.Primitive  using () renaming ( Set to Type )
+open import Data.Product    using ( _,_ ; _×_ )
+open import Data.Fin.Base   using ( Fin )
+open import Function.Base   using ( _∘_ ; id )
+open import Level           using ( _⊔_ ; Level )
+
 open import Relation.Binary.PropositionalEquality
-                           using ( _≡_ ; refl ; module ≡-Reasoning )
+                            using ( _≡_ ; refl ; module ≡-Reasoning )
 
 -- Imports from agda-algebras ------------------------------------------------------
 open import Base.Overture.Preliminaries using ( _≈_ )
 
-private variable
- α β : Level
+private variable α β : Level
 \end{code}
 
 
@@ -67,10 +68,8 @@ module _ {A : Type α} {B : Type β} where
  Uncurry f (x , y) = f x y
 
  A×A→B≅A→A→B : ∣ (A × A → B) ∣=∣ (A → A → B) ∣
- A×A→B≅A→A→B = record { to = Curry
-                      ; from = Uncurry
-                      ; to-from = refl
-                      ; from-to = refl }
+ A×A→B≅A→A→B = record  { to = Curry ; from = Uncurry
+                       ; to-from = refl ; from-to = refl }
 \end{code}
 
 #### <a id="non-bijective-transformations">Non-bijective transformations</a>
@@ -78,7 +77,6 @@ module _ {A : Type α} {B : Type β} where
 \begin{code}
 
 module _ {A : Type α} where
-
  open Fin renaming (zero to z ; suc to s)
 
  A×A→Fin2A : A × A → Fin 2 → A
@@ -132,7 +130,6 @@ function types, `(Fin 2 → A) → B` and `A × A → B`, nor between the types
 \begin{code}
 
 module _ {A : Type α} {B : Type β} where
-
  open Fin renaming (zero to z ; suc to s)
 
  lemma : (u : Fin 2 → A) → u ≈ (λ {z → u z ; (s z) → u (s z)})

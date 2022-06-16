@@ -31,30 +31,28 @@ open import Relation.Unary         using ( Pred ; _⊆_ ; _∈_ )
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
-open import Base.Overture     using ( ∣_∣ ; ∥_∥ )
-open import Setoid.Functions  using ( IsSurjective ; SurjInv ; SurjInvIsInverseʳ )
+open  import Base.Overture     using ( ∣_∣ ; ∥_∥ )
+open  import Setoid.Functions  using ( IsSurjective ; SurjInv ; SurjInvIsInverseʳ )
 
-open import Base.Terms              {𝑆 = 𝑆} using ( Term )
-open import Setoid.Algebras         {𝑆 = 𝑆} using ( Algebra ; ov ; 𝕌[_] ; Lift-Alg ; ⨅ )
-open import Setoid.Homomorphisms    {𝑆 = 𝑆} using  ( hom ; ≅⨅⁺-refl ; ≅-refl ; ≅-sym ; _≅_
+open  import Base.Terms              {𝑆 = 𝑆} using ( Term )
+open  import Setoid.Algebras         {𝑆 = 𝑆} using ( Algebra ; ov ; 𝕌[_] ; Lift-Alg ; ⨅ )
+open  import Setoid.Homomorphisms    {𝑆 = 𝑆} using  ( hom ; ≅⨅⁺-refl ; ≅-refl ; ≅-sym ; _≅_
                                                  ; ≅-trans ; Lift-≅ ; IdHomImage )
-open import Setoid.Terms            {𝑆 = 𝑆} using ( module Environment; comm-hom-term )
-open import Setoid.Subalgebras      {𝑆 = 𝑆} using ( _≤_ ; _≤c_ ; ⨅-≤ ; ≅-trans-≤ ; ≤-reflexive )
+open  import Setoid.Terms            {𝑆 = 𝑆} using ( module Environment; comm-hom-term )
+open  import Setoid.Subalgebras      {𝑆 = 𝑆} using ( _≤_ ; _≤c_ ; ⨅-≤ ; ≅-trans-≤ ; ≤-reflexive )
 
-open import Setoid.Varieties.Closure           {𝑆 = 𝑆}
-  using ( H ; S ; P ; V ; S-expa ; H-expa ; P-expa ; V-expa ; Level-closure )
+open  import Setoid.Varieties.Closure           {𝑆 = 𝑆}
+      using ( H ; S ; P ; V ; S-expa ; H-expa ; P-expa ; V-expa ; Level-closure )
 
-open import Setoid.Varieties.Properties        {𝑆 = 𝑆}
-  using ( ⊧-H-invar ; ⊧-S-invar ; ⊧-P-invar ; ⊧-I-invar )
+open  import Setoid.Varieties.Properties        {𝑆 = 𝑆}
+      using ( ⊧-H-invar ; ⊧-S-invar ; ⊧-P-invar ; ⊧-I-invar )
 
-open import Setoid.Varieties.SoundAndComplete  {𝑆 = 𝑆}
-  using ( _⊧_ ; _⊨_ ; _⊫_ ; Eq ; _≈̇_ ; lhs ; rhs ; _⊢_▹_≈_ ; Th)
+open  import Setoid.Varieties.SoundAndComplete  {𝑆 = 𝑆}
+      using ( _⊧_ ; _⊨_ ; _⊫_ ; Eq ; _≈̇_ ; lhs ; rhs ; _⊢_▹_≈_ ; Th)
 
 open _⟶_      using ( cong ) renaming ( f to _⟨$⟩_ )
 open Algebra  using ( Domain )
-
 \end{code}
-
 
 
 #### <a id="closure-properties">Closure properties</a>
@@ -66,7 +64,6 @@ The next lemma would be too obvious to care about were it not for the fact that 
 \begin{code}
 
 module _  {α ρᵃ ℓ : Level}{𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
-
  private
   a = α ⊔ ρᵃ
   oaℓ = ov (a ⊔ ℓ)
@@ -76,13 +73,9 @@ module _  {α ρᵃ ℓ : Level}{𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔
   where
   pA : 𝑨 ∈ P ℓ ι 𝒦
   pA = ⊤ , (λ _ → 𝑨) , (λ _ → kA) , ≅⨅⁺-refl
-
 \end{code}
 
-
 #### <a id="PS-in-SP">PS(𝒦) ⊆ SP(𝒦)</a>
-
-
 #### <a id="more-class-inclusions">More class inclusions</a>
 
 We conclude this subsection with three more inclusion relations that will have bit parts to play later (e.g., in the formal proof of Birkhoff's Theorem).
@@ -93,8 +86,8 @@ We conclude this subsection with three more inclusion relations that will have b
  P⊆SP {ι} x = S-expa{ℓ = a ⊔ ℓ ⊔ ι} x
 
 
- P⊆HSP : ∀{ι} → P {β = α}{ρᵃ} ℓ ι 𝒦
-                ⊆ H (a ⊔ ℓ ⊔ ι) (S {β = α}{ρᵃ}(a ⊔ ℓ ⊔ ι) (P {β = α}{ρᵃ}ℓ ι 𝒦))
+ P⊆HSP : ∀{ι} →  P {β = α}{ρᵃ} ℓ ι 𝒦
+                 ⊆ H (a ⊔ ℓ ⊔ ι) (S {β = α}{ρᵃ}(a ⊔ ℓ ⊔ ι) (P {β = α}{ρᵃ}ℓ ι 𝒦))
  P⊆HSP {ι} x = H-expa{ℓ = a ⊔ ℓ ⊔ ι}  (S-expa{ℓ = a ⊔ ℓ ⊔ ι} x)
 
  P⊆V : ∀{ι} → P ℓ ι 𝒦 ⊆ V ℓ ι 𝒦
@@ -105,12 +98,12 @@ We conclude this subsection with three more inclusion relations that will have b
 
 \end{code}
 
-Finally, we are in a position to prove that a product of subalgebras of algebras in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
+Finally, we are in a position to prove that a product of subalgebras of algebras
+in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
 
 \begin{code}
 
  PS⊆SP : P (a ⊔ ℓ) oaℓ (S{β = α}{ρᵃ} ℓ 𝒦) ⊆ S oaℓ (P ℓ oaℓ 𝒦)
-
  PS⊆SP {𝑩} (I , ( 𝒜 , sA , B≅⨅A )) = Goal
   where
   ℬ : I → Algebra α ρᵃ
@@ -121,7 +114,6 @@ Finally, we are in a position to prove that a product of subalgebras of algebras
   ⨅A≤⨅B = ⨅-≤ λ i → snd ∥ sA i ∥
   Goal : 𝑩 ∈ S{β = oaℓ}{oaℓ}oaℓ (P {β = oaℓ}{oaℓ} ℓ oaℓ 𝒦)
   Goal = ⨅ ℬ , (I , (ℬ , (kB , ≅-refl))) , (≅-trans-≤ B≅⨅A ⨅A≤⨅B)
-
 \end{code}
 
 #### <a id="h-preserves-identities">H preserves identities</a>
@@ -130,11 +122,11 @@ First we prove that the closure operator H is compatible with identities that ho
 
 \begin{code}
 
-module _  {α ρᵃ ℓ χ : Level}
-          {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)}
-          {X : Type χ}
-          {p q : Term X}
-          where
+module _   {α ρᵃ ℓ χ : Level}
+           {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)}
+           {X : Type χ}
+           {p q : Term X}
+           where
 
  H-id1 : 𝒦 ⊫ (p ≈̇ q) → H {β = α}{ρᵃ}ℓ 𝒦 ⊫ (p ≈̇ q)
  H-id1 σ 𝑩 (𝑨 , kA , BimgA) = ⊧-H-invar{p = p}{q} (σ 𝑨 kA) BimgA
@@ -147,7 +139,6 @@ The converse of the foregoing result is almost too obvious to bother with. Nonet
 
  H-id2 : H ℓ 𝒦 ⊫ (p ≈̇ q) → 𝒦 ⊫ (p ≈̇ q)
  H-id2 Hpq 𝑨 kA = Hpq 𝑨 (𝑨 , (kA , IdHomImage))
-
 \end{code}
 
 
@@ -160,8 +151,6 @@ The converse of the foregoing result is almost too obvious to bother with. Nonet
 
  S-id2 : S ℓ 𝒦 ⊫ (p ≈̇ q) → 𝒦 ⊫ (p ≈̇ q)
  S-id2 Spq 𝑨 kA = Spq 𝑨 (𝑨 , (kA , ≤-reflexive))
-
-
 \end{code}
 
 
@@ -180,7 +169,6 @@ The converse of the foregoing result is almost too obvious to bother with. Nonet
 
  P-id2 : ∀{ι} → P ℓ ι 𝒦 ⊫ (p ≈̇ q) → 𝒦 ⊫ (p ≈̇ q)
  P-id2{ι} PKpq 𝑨 kA = PKpq 𝑨 (P-expa {ℓ = ℓ}{ι} kA)
-
 \end{code}
 
 
@@ -195,8 +183,7 @@ module _  {α ρᵃ ℓ ι χ : Level}
           {X : Type χ}
           {p q : Term X} where
 
- private
-  aℓι = α ⊔ ρᵃ ⊔ ℓ ⊔ ι
+ private aℓι = α ⊔ ρᵃ ⊔ ℓ ⊔ ι
 
  V-id1 : 𝒦 ⊫ (p ≈̇ q) → V ℓ ι 𝒦 ⊫ (p ≈̇ q)
  V-id1 σ 𝑩 (𝑨 , (⨅A , p⨅A , A≤⨅A) , BimgA) =
@@ -210,7 +197,6 @@ module _  {α ρᵃ ℓ ι χ : Level}
  V-id2 : V ℓ ι 𝒦 ⊫ (p ≈̇ q) → 𝒦 ⊫ (p ≈̇ q)
  V-id2 Vpq 𝑨 kA = Vpq 𝑨 (V-expa ℓ ι kA)
 
-
  Lift-id1 : ∀{β ρᵇ} → 𝒦 ⊫ (p ≈̇ q) → Level-closure{α}{ρᵃ}{β}{ρᵇ} ℓ 𝒦 ⊫ (p ≈̇ q)
  Lift-id1 pKq 𝑨 (𝑩 , kB , B≅A) ρ = Goal
   where
@@ -218,13 +204,15 @@ module _  {α ρᵃ ℓ ι χ : Level}
   open Setoid (Domain 𝑨) using (_≈_)
   Goal : ⟦ p ⟧ ⟨$⟩ ρ ≈ ⟦ q ⟧ ⟨$⟩ ρ
   Goal = ⊧-I-invar 𝑨 p q (pKq 𝑩 kB) B≅A ρ
-
 \end{code}
 
 
 #### <a id="class-identities">Class identities</a>
 
-From `V-id1` it follows that if 𝒦 is a class of structures, then the set of identities modeled by all structures in `𝒦` is equivalent to the set of identities modeled by all structures in `V 𝒦`.  In other terms, `Th (V 𝒦)` is precisely the set of identities modeled by `𝒦`.   We formalize this observation as follows.
+From `V-id1` it follows that if 𝒦 is a class of structures, then the set of identities
+modeled by all structures in `𝒦` is equivalent to the set of identities modeled by all
+structures in `V 𝒦`.  In other terms, `Th (V 𝒦)` is precisely the set of identities
+modeled by `𝒦`.   We formalize this observation as follows.
 
 \begin{code}
 
@@ -233,7 +221,6 @@ From `V-id1` it follows that if 𝒦 is a class of structures, then the set of i
 
  VIds-⊆-classIds : (p , q) ∈ Th (V ℓ ι 𝒦) → 𝒦 ⊫ (p ≈̇ q)
  VIds-⊆-classIds Thpq 𝑨 kA = V-id2 Thpq 𝑨 kA
-
 \end{code}
 
 ----------------------------

@@ -27,7 +27,6 @@ open import Base.Overture          using ( ∣_∣ ; ∥_∥ )
 open import Base.Algebras {𝑆 = 𝑆}  using ( Algebra ; ov )
 
 private variable χ : Level
-
 \end{code}
 
 #### <a id="the-type-of-terms">The type of terms</a>
@@ -75,7 +74,6 @@ In [Agda][] the term algebra can be defined as simply as one could hope.
 
 𝑻 : (X : Type χ ) → Algebra (ov χ) 𝑆
 𝑻 X = Term X , node
-
 \end{code}
 
 ------------------------------

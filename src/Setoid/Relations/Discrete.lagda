@@ -41,8 +41,8 @@ Here is a function that is useful for defining poitwise equality of functions wr
 
 open _⟶_ renaming ( f to _⟨$⟩_ )
 module _ {𝐴 : Setoid α ρᵃ}{𝐵 : Setoid β ρᵇ} where
- open Setoid 𝐴 using () renaming ( Carrier to A ; _≈_ to _≈₁_ )
- open Setoid 𝐵 using () renaming ( Carrier to B ; _≈_ to _≈₂_ )
+ open Setoid 𝐴  using () renaming ( Carrier to A ; _≈_ to _≈₁_ )
+ open Setoid 𝐵  using () renaming ( Carrier to B ; _≈_ to _≈₂_ )
 
  function-equality : BinRel (𝐴 ⟶ 𝐵) (α ⊔ ρᵇ)
  function-equality f g = ∀ x → f ⟨$⟩ x ≈₂ g ⟨$⟩ x

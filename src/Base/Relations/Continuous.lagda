@@ -16,8 +16,8 @@ This is the [Base.Relations.Continuous][] module of the [Agda Universal Algebra 
 module Base.Relations.Continuous where
 
 -- Imports from Agda and the Agda Standard Library -------------------------------
-open import Agda.Primitive using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
-
+open import Agda.Primitive using () renaming ( Set to Type )
+open import Level using ( _⊔_ ; suc ; Level  )
 -- Imports from agda-algebras ----------------------------------------------------
 open import Base.Overture.Preliminaries using ( Π ; Π-syntax )
 open import Base.Relations.Discrete     using ( Op ; arity[_] )
@@ -54,25 +54,24 @@ Here, the tuples of a relation of type `REL I 𝒜 β` inhabit the dependent fun
 \begin{code}
 
 module _ {𝓥 : Level} where
-
- ar : Type (lsuc 𝓥)
+ ar : Type (suc 𝓥)
  ar = Type 𝓥
 
 -- Relations of arbitrary arity over a single sort.
- Rel : Type α → ar → {ρ : Level} → Type (α ⊔ 𝓥 ⊔ lsuc ρ)
+ Rel : Type α → ar → {ρ : Level} → Type (α ⊔ 𝓥 ⊔ suc ρ)
  Rel A I {ρ} = (I → A) → Type ρ
 
- Rel-syntax : Type α → ar → (ρ : Level) → Type (𝓥 ⊔ α ⊔ lsuc ρ)
+ Rel-syntax : Type α → ar → (ρ : Level) → Type (𝓥 ⊔ α ⊔ suc ρ)
  Rel-syntax A I ρ = Rel A I {ρ}
 
  syntax Rel-syntax A I ρ = Rel[ A ^ I ] ρ
  infix 6 Rel-syntax
 
  -- The type of arbitrarily multisorted relations of arbitrary arity
- REL : (I : ar) → (I → Type α) → {ρ : Level} → Type (𝓥 ⊔ α ⊔ lsuc ρ)
+ REL : (I : ar) → (I → Type α) → {ρ : Level} → Type (𝓥 ⊔ α ⊔ suc ρ)
  REL I 𝒜 {ρ} = ((i : I) → 𝒜 i) → Type ρ
 
- REL-syntax : (I : ar) → (I → Type α) → {ρ : Level} → Type (𝓥 ⊔ α ⊔ lsuc ρ)
+ REL-syntax : (I : ar) → (I → Type α) → {ρ : Level} → Type (𝓥 ⊔ α ⊔ suc ρ)
  REL-syntax I 𝒜 {ρ} = REL I 𝒜 {ρ}
 
  syntax REL-syntax I (λ i → 𝒜) = REL[ i ∈ I ] 𝒜
@@ -112,6 +111,7 @@ sections of `t` also belongs to `R`.
                                   -- (where Π[ i ∈ I ] 𝒜 i is a type of dependent functions or "tuples")
   →          ((i : I) → J → 𝒜 i)  -- an I-tuple of (𝒥 i)-tuples
   →          Type (𝓥 ⊔ ρ)
+
  eval-REL{I = I}{J}{𝒜} R t = ∀ j → R λ i → (t i) j
 
  compatible-REL :  {I J : ar}{𝒜 : I → Type α}

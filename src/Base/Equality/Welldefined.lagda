@@ -71,28 +71,20 @@ Here are the more general versions of the foregoing that are not restricted to (
 \begin{code}
 
 swelldef' : ∀ ι α β → Type (suc (ι ⊔ α ⊔ β))
-swelldef' ι α β = ∀ {I : Type ι} {A : Type α} {B : Type β}
- →                (f : (I → A) → B) {u v : I → A}
- →                u ≈ v → f u ≡ f v
-
+swelldef' ι α β =  ∀ {I : Type ι} {A : Type α} {B : Type β}
+ →                 (f : (I → A) → B) {u v : I → A} → u ≈ v → f u ≡ f v
 
 funext' : ∀ α β → Type (suc (α ⊔ β))
-funext' α β = ∀ {A : Type α } {B : Type β } {f g : A → B}
- →            f ≈ g → f ≡ g
-
+funext' α β = ∀ {A : Type α } {B : Type β } {f g : A → B} → f ≈ g → f ≡ g
 
 -- `funext ι α` implies `swelldef ι α β`        (Note the universe levels!)
 funext'→swelldef' : funext' ι α → swelldef' ι α β
 funext'→swelldef' fe f ptweq = cong f (fe ptweq)
 
-
  -- `swelldef ι α (ι ⊔ α)` implies `funext ι α`   (Note the universe levels!)
 swelldef'→funext' : swelldef' ι α (ι ⊔ α) → funext' ι α
 swelldef'→funext' wd ptweq = wd _$_ ptweq
-
 \end{code}
-
-
 
 #### <a id="questions">Questions</a>
 
@@ -166,11 +158,10 @@ However, we still need to establish a one-to-one correspondence between the type
 \begin{code}
 
 module _ {A : Type α}{B : Type β} where
-
  open Fin renaming ( zero to z ; suc to s )
  open ≡-Reasoning
 
- A×A-wd : (f : A × A → B)(u v : Fin 2 → A)
+ A×A-wd :  (f : A × A → B)(u v : Fin 2 → A)
   →        u ≈ v → (A×A→B-to-Fin2A→B f) u ≡ (A×A→B-to-Fin2A→B f) v
 
  A×A-wd f u v u≈v = Goal
@@ -182,14 +173,14 @@ module _ {A : Type α}{B : Type β} where
   zip2 refl = refl
 
   Goal : (A×A→B-to-Fin2A→B f) u ≡ (A×A→B-to-Fin2A→B f) v
-  Goal = (A×A→B-to-Fin2A→B f) u     ≡⟨ refl ⟩
-         f (u z , u (s z)) ≡⟨ zip1 (u≈v (s z)) ⟩
-         f (u z , v (s z)) ≡⟨ zip2 (u≈v z) ⟩
-         f (v z , v (s z)) ≡⟨ refl ⟩
-         (A×A→B-to-Fin2A→B f) v ∎
+  Goal =  (A×A→B-to-Fin2A→B f) u  ≡⟨ refl ⟩
+          f (u z , u (s z))       ≡⟨ zip1 (u≈v (s z)) ⟩
+          f (u z , v (s z))       ≡⟨ zip2 (u≈v z) ⟩
+          f (v z , v (s z))       ≡⟨ refl ⟩
+          (A×A→B-to-Fin2A→B f) v  ∎
 
- Fin2-wd : (f : A → A → B)(u v : Fin 2 → A)
-  →        u ≈ v → (UncurryFin2 f) u ≡ (UncurryFin2 f) v
+ Fin2-wd :  (f : A → A → B)(u v : Fin 2 → A)
+  →         u ≈ v → (UncurryFin2 f) u ≡ (UncurryFin2 f) v
 
  Fin2-wd f u v u≈v = Goal
   where
@@ -200,19 +191,18 @@ module _ {A : Type α}{B : Type β} where
   zip2 refl = refl
 
   Goal : (UncurryFin2 f) u ≡ (UncurryFin2 f) v
-  Goal = (UncurryFin2 f) u     ≡⟨ refl ⟩
-         f (u z) (u (s z)) ≡⟨ zip1 (u≈v (s z)) ⟩
-         f (u z) (v (s z)) ≡⟨ zip2 (u≈v z) ⟩
-         f (v z) (v (s z)) ≡⟨ refl ⟩
-         (UncurryFin2 f) v ∎
+  Goal = (UncurryFin2 f) u  ≡⟨ refl ⟩
+         f (u z) (u (s z))  ≡⟨ zip1 (u≈v (s z)) ⟩
+         f (u z) (v (s z))  ≡⟨ zip2 (u≈v z) ⟩
+         f (v z) (v (s z))  ≡⟨ refl ⟩
+         (UncurryFin2 f) v  ∎
 
 
- Fin3-wd : (f : A → A → A → B)(u v : Fin 3 → A)
-  →        u ≈ v → (UncurryFin3 f) u ≡ (UncurryFin3 f) v
+ Fin3-wd :  (f : A → A → A → B)(u v : Fin 3 → A)
+  →         u ≈ v → (UncurryFin3 f) u ≡ (UncurryFin3 f) v
 
  Fin3-wd f u v u≈v = Goal
   where
-
   zip1 : ∀ {a b x y} → x ≡ y → f a b x ≡ f a b y
   zip1 refl = refl
 
@@ -223,24 +213,19 @@ module _ {A : Type α}{B : Type β} where
   zip3 refl = refl
 
   Goal : (UncurryFin3 f) u ≡ (UncurryFin3 f) v
-  Goal = (UncurryFin3 f) u               ≡⟨ refl ⟩
-         f (u z) (u (s z)) (u (s (s z))) ≡⟨ zip1 (u≈v (s (s z))) ⟩
-         f (u z) (u (s z)) (v (s (s z))) ≡⟨ zip2 (u≈v (s z)) ⟩
-         f (u z) (v (s z)) (v (s (s z))) ≡⟨ zip3 (u≈v z) ⟩
-         f (v z) (v (s z)) (v (s (s z))) ≡⟨ refl ⟩
-         (UncurryFin3 f) v               ∎
-
+  Goal = (UncurryFin3 f) u                ≡⟨ refl ⟩
+         f (u z) (u (s z)) (u (s (s z)))  ≡⟨ zip1 (u≈v (s (s z))) ⟩
+         f (u z) (u (s z)) (v (s (s z)))  ≡⟨ zip2 (u≈v (s z)) ⟩
+         f (u z) (v (s z)) (v (s (s z)))  ≡⟨ zip3 (u≈v z) ⟩
+         f (v z) (v (s z)) (v (s (s z)))  ≡⟨ refl ⟩
+         (UncurryFin3 f) v                ∎
 
  -- NEXT: try to prove (f : (Fin 2 → A) → B)(u v : Fin 2 → A) →  u ≈ v → f u ≡ f v
 
-
 module _ {A : Type α}{B : Type β} where
 
-
- ListA→B : (f : List A → B)(u v : List A)
-  →        u ≡ v → f u ≡ f v
+ ListA→B :  (f : List A → B)(u v : List A) → u ≡ v → f u ≡ f v
  ListA→B f u .u refl = refl
-
 
  CurryListA : (List A → B) → (List A → A → B)
  CurryListA f [] a = f [ a ]
@@ -249,10 +234,7 @@ module _ {A : Type α}{B : Type β} where
  CurryListA' : (List A → B) → (A → List A → B)
  CurryListA' f a [] = f [ a ]
  CurryListA' f a (x ∷ l) = f ([ a ] ++ (x ∷ l))
-
-
 \end{code}
-
 
 -------------------------------------
 

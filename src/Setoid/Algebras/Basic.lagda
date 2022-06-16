@@ -18,16 +18,16 @@ open import Base.Signatures using (𝓞 ; 𝓥 ; Signature )
 module Setoid.Algebras.Basic {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from the Agda and the Agda Standard Library --------------------
-open import Agda.Primitive    using ( _⊔_ ; lsuc ) renaming ( Set to Type )
-open import Data.Product      using ( _,_ ; _×_ ; Σ-syntax )
-open import Function          using ( _∘_ ; Func )
-open import Level             using ( Level )
-open import Relation.Binary   using ( Setoid ; IsEquivalence )
+open import Agda.Primitive   using ( _⊔_ ; lsuc ) renaming ( Set to Type )
+open import Data.Product     using ( _,_ ; _×_ ; Σ-syntax )
+open import Function         using ( _∘_ ; Func )
+open import Level            using ( Level )
+open import Relation.Binary  using ( Setoid ; IsEquivalence )
 
 open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ ; refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------
-open import Base.Overture     using ( ∥_∥ ; ∣_∣ )
+open import Base.Overture    using ( ∥_∥ ; ∣_∣ )
 
 private variable α ρ ι : Level
 
@@ -51,7 +51,7 @@ open Setoid using (_≈_ ; Carrier ) renaming  ( refl   to reflS
                                              ; trans  to transS
                                              ; isEquivalence to isEqv )
 
-open Func renaming   ( f to _⟨$⟩_ ; cong to ≈cong )
+open Func renaming ( f to _⟨$⟩_ ; cong to ≈cong )
 
 
 EqArgs :  {𝑆 : Signature 𝓞 𝓥}{ξ : Setoid α ρ}
@@ -113,8 +113,8 @@ f ̂ 𝑨 = λ a → (Interp 𝑨) ⟨$⟩ (f , a)
 
 \end{code}
 
-Sometimes we want to extract the universe level of a given algebra or its carrier.  The
-following functions provide that information.
+Sometimes we want to extract the universe level of a given algebra or its carrier.
+The following functions provide that information.
 
 \begin{code}
 
@@ -125,8 +125,6 @@ Level-of-Alg {α = α}{ρ}{𝓞}{𝓥} _ = 𝓞 ⊔ 𝓥 ⊔ lsuc (α ⊔ ρ)
 -- The universe level of the carrier of an algebra
 Level-of-Carrier : {α ρ 𝓞 𝓥  : Level}{𝑆 : Signature 𝓞 𝓥} → Algebra α ρ → Level
 Level-of-Carrier {α = α} _ = α
-
-
 \end{code}
 
 
@@ -155,9 +153,7 @@ module _ (𝑨 : Algebra α ρ) where
  Interp (Lift-Algˡ ℓ) ⟨$⟩ (f , la) = lift ((f ̂ 𝑨) (lower ∘ la))
  ≈cong (Interp (Lift-Algˡ ℓ)) (refl , la=lb) = ≈cong (Interp 𝑨) ((refl , la=lb))
 
-
  Lift-Algʳ : (ℓ : Level) → Algebra α (ρ ⊔ ℓ)
-
  Domain (Lift-Algʳ ℓ) =
   record  { Carrier = ∣A∣
           ; _≈_ = λ x y → Lift ℓ (x ≈₁ y)
@@ -172,7 +168,6 @@ module _ (𝑨 : Algebra α ρ) where
 
 Lift-Alg : (𝑨 : Algebra α ρ)(ℓ₀ ℓ₁ : Level) → Algebra (α ⊔ ℓ₀) (ρ ⊔ ℓ₁)
 Lift-Alg 𝑨 ℓ₀ ℓ₁ = Lift-Algʳ (Lift-Algˡ 𝑨 ℓ₀) ℓ₁
-
 \end{code}
 
 

@@ -18,10 +18,10 @@ open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
 module Setoid.Homomorphisms.Properties {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ------------------------------------------
-open import Data.Product      using ( _,_ ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Function          using ( id ) renaming ( Func to _⟶_ )
+open import Data.Product      using ( _,_ )  renaming ( proj₁ to fst ; proj₂ to snd )
+open import Function          using ( id )   renaming ( Func to _⟶_ )
 open import Level             using ( Level )
-open import Relation.Binary   using (  Setoid )
+open import Relation.Binary   using ( Setoid )
 
 open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
 
@@ -83,8 +83,8 @@ module _  {𝑨 : Algebra α ρᵃ} {𝑩 : Algebra β ρᵇ} {𝑪 : Algebra γ
 
   ∘-epi : epi 𝑨 𝑩 → epi 𝑩 𝑪  → epi 𝑨 𝑪
   ∘-epi (h , hepi) (g , gepi) = (g ∘ h) , ∘-is-epi hepi gepi
-
 \end{code}
+
 
 ##### <a id="lifting-and-lowering">Lifting and lowering of homs</a>
 
@@ -100,16 +100,17 @@ module _ {𝑨 : Algebra α ρᵃ} where
  𝒾𝒹 = 𝑖𝑑 , record { compatible = reflexive ≡.refl }
 
 module _ {𝑨 : Algebra α ρᵃ}{ℓ : Level} where
- open Algebra 𝑨 using () renaming (Domain to A )
- open Setoid A using ( reflexive ) renaming ( _≈_ to _≈₁_ ; refl to refl₁ )
+ open Algebra 𝑨  using ()             renaming (Domain to A )
+ open Setoid A   using ( reflexive )  renaming ( _≈_ to _≈₁_ ; refl to refl₁ )
 
  open Algebra  using ( Domain )
- open Setoid (Domain (Lift-Algˡ 𝑨 ℓ)) using () renaming ( _≈_ to _≈ˡ_ ; refl to reflˡ)
- open Setoid (Domain (Lift-Algʳ 𝑨 ℓ)) using () renaming ( _≈_ to _≈ʳ_ ; refl to reflʳ)
+ open Setoid (Domain (Lift-Algˡ 𝑨 ℓ))  using () renaming ( _≈_ to _≈ˡ_ ; refl to reflˡ)
+ open Setoid (Domain (Lift-Algʳ 𝑨 ℓ))  using () renaming ( _≈_ to _≈ʳ_ ; refl to reflʳ)
 
  open Level
  ToLiftˡ : hom 𝑨 (Lift-Algˡ 𝑨 ℓ)
- ToLiftˡ = record { f = lift ; cong = id } , record { compatible = reflexive ≡.refl }
+ ToLiftˡ =  record { f = lift ; cong = id } ,
+            record { compatible = reflexive ≡.refl }
 
  FromLiftˡ : hom (Lift-Algˡ 𝑨 ℓ) 𝑨
  FromLiftˡ = record { f = lower ; cong = id } , record { compatible = reflˡ }
@@ -121,10 +122,11 @@ module _ {𝑨 : Algebra α ρᵃ}{ℓ : Level} where
  FromToLiftˡ a = refl₁
 
  ToLiftʳ : hom 𝑨 (Lift-Algʳ 𝑨 ℓ)
- ToLiftʳ = record { f = id ; cong = lift } , record { compatible = lift (reflexive ≡.refl) }
+ ToLiftʳ =  record { f = id ; cong = lift } ,
+            record { compatible = lift (reflexive ≡.refl) }
 
  FromLiftʳ : hom (Lift-Algʳ 𝑨 ℓ) 𝑨
- FromLiftʳ = record { f = id ; cong = lower } , record { compatible = reflˡ }
+ FromLiftʳ =  record { f = id ; cong = lower } , record { compatible = reflˡ }
 
  ToFromLiftʳ : ∀ b → (∣ ToLiftʳ ∣ ⟨$⟩ (∣ FromLiftʳ ∣ ⟨$⟩ b)) ≈ʳ b
  ToFromLiftʳ b = lift refl₁
@@ -149,8 +151,10 @@ module _ {𝑨 : Algebra α ρᵃ}{ℓ r : Level} where
 
 
  ToLift-epi : epi 𝑨 (Lift-Alg 𝑨 ℓ r)
- ToLift-epi = ∣ ToLift ∣ , record  { isHom = ∥ ToLift ∥
-                                   ; isSurjective = λ {y} → eq (∣ FromLift ∣ ⟨$⟩ y) (ToFromLift y) }
+ ToLift-epi = ∣ ToLift ∣ ,
+              record  { isHom = ∥ ToLift ∥
+                      ; isSurjective = λ {y} → eq (∣ FromLift ∣ ⟨$⟩ y) (ToFromLift y)
+                      }
 
 \end{code}
 
@@ -211,7 +215,10 @@ module _ {𝑨 : Algebra α ρᵃ} {𝑩 : Algebra β ρᵇ} where
  lift-hom-lemma h a ℓᵃ ℓᵇ = Setoid.refl (Domain 𝑩)
 
 module _ {𝑨 : Algebra α ρᵃ} {𝑩 : Algebra β ρᵇ} where
- Lift-hom : hom 𝑨 𝑩  → (ℓᵃ rᵃ ℓᵇ rᵇ : Level) →  hom (Lift-Alg 𝑨 ℓᵃ rᵃ) (Lift-Alg 𝑩 ℓᵇ rᵇ)
+
+ Lift-hom :  hom 𝑨 𝑩  → (ℓᵃ rᵃ ℓᵇ rᵇ : Level)
+  →          hom (Lift-Alg 𝑨 ℓᵃ rᵃ) (Lift-Alg 𝑩 ℓᵇ rᵇ)
+
  Lift-hom φ ℓᵃ rᵃ ℓᵇ rᵇ = Lift-homʳ (Lift-homˡ φ ℓᵃ ℓᵇ) rᵃ rᵇ
 
  Lift-hom-fst : hom 𝑨 𝑩  → (ℓ r : Level) →  hom (Lift-Alg 𝑨 ℓ r) 𝑩
@@ -219,7 +226,6 @@ module _ {𝑨 : Algebra α ρᵃ} {𝑩 : Algebra β ρᵇ} where
 
  Lift-hom-snd : hom 𝑨 𝑩  → (ℓ r : Level) →  hom 𝑨 (Lift-Alg 𝑩 ℓ r)
  Lift-hom-snd φ _ _ = ∘-hom φ ToLift 
-
 \end{code}
 
 --------------------------------

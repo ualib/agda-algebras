@@ -20,39 +20,46 @@ open import Base.Signatures  using ( 𝓞 ; 𝓥 ; Signature )
 module Base.Varieties.FreeAlgebras {α : Level} {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ---------------------
-open import Agda.Primitive   using ( _⊔_ )renaming  ( Set to Type )
-open import Data.Product     using ( _,_ ; Σ-syntax ; _×_ ) renaming  ( proj₁ to fst ; proj₂ to snd )
-open import Function         using ( _∘_ )
-open import Level            using ( suc )
-open import Relation.Binary  using ( IsEquivalence ) renaming  ( Rel to BinRel ) 
-open import Relation.Unary   using ( Pred ; _∈_ ; _⊆_ ; ｛_｝ ; _∪_ )
+open  import Agda.Primitive   using ( _⊔_ )renaming  ( Set to Type )
+open  import Data.Product     using ( _,_ ; Σ-syntax ; _×_ )
+                              renaming  ( proj₁ to fst ; proj₂ to snd )
+open  import Function         using ( _∘_ )
+open  import Level            using ( suc )
+open  import Relation.Binary  using ( IsEquivalence ) renaming  ( Rel to BinRel )
+open  import Relation.Unary   using ( Pred ; _∈_ ; _⊆_ ; ｛_｝ ; _∪_ )
 
-open import Axiom.Extensionality.Propositional  using () renaming  (Extensionality to funext)
-open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ ; module ≡-Reasoning )
+open  import Axiom.Extensionality.Propositional
+      using () renaming  (Extensionality to funext)
+open  import Relation.Binary.PropositionalEquality as ≡
+      using ( _≡_ ; module ≡-Reasoning )
 
 -- Imports from the Agda Universal Algebra Library -------------------------------------------
-open import Base.Overture    using  ( ∣_∣ ; ∥_∥ ; _∙_ ; _⁻¹ ; IsSurjective )
-open import Base.Relations   using  ( kernel ; ⟪_⟫ )
-open import Base.Equality    using  ( SwellDef ; swelldef ; is-set ; blk-uip
-                                    ; hfunext ; DFunExt; pred-ext )
+open  import Base.Overture
+      using ( ∣_∣ ; ∥_∥ ; _∙_ ; _⁻¹ ; IsSurjective )
+open  import Base.Relations
+      using ( kernel ; ⟪_⟫ )
+open  import Base.Equality
+      using ( SwellDef ; swelldef ; is-set ; blk-uip ; hfunext ; DFunExt; pred-ext )
 
-open import Base.Algebras       {𝑆 = 𝑆}  using  ( Algebra ; Lift-Alg ; compatible
-                                                ; _̂_ ; ov ; ⨅ ; Con; mkcon ; IsCongruence )
-open import Base.Homomorphisms  {𝑆 = 𝑆}  using  ( hom ; epi ; epi→hom ; kercon ; ker-in-con
-                                                ; πker ; ker[_⇒_]_↾_ ; ⨅-hom-co ; ∘-hom ; HomFactor
-                                                ; HomFactorEpi ; _≅_ ; ≅-refl ; ≅-sym ; Lift-≅ )
-open import Base.Terms          {𝑆 = 𝑆}  using  ( Term ; 𝑻 ; free-lift ; lift-hom ; free-unique
-                                                ; lift-of-epi-is-epi ; _⟦_⟧; comm-hom-term; free-lift-interp )
-open import Base.Subalgebras    {𝑆 = 𝑆}  using  ( _≤_ ; FirstHomCorollary|Set )
+open  import Base.Algebras {𝑆 = 𝑆}
+      using ( Algebra ; Lift-Alg ; compatible;  _̂_ ; ov ; ⨅ ; Con; mkcon ; IsCongruence )
+open  import Base.Homomorphisms {𝑆 = 𝑆}
+      using ( hom ; epi ; epi→hom ; kercon ; ker-in-con ; πker ; ker[_⇒_]_↾_ ; ∘-hom )
+      using ( ⨅-hom-co ; HomFactor ; HomFactorEpi ; _≅_ ; ≅-refl ; ≅-sym ; Lift-≅ )
+open  import Base.Terms {𝑆 = 𝑆}
+      using ( Term ; 𝑻 ; free-lift ; lift-hom ; free-unique ; _⟦_⟧ )
+      using ( lift-of-epi-is-epi ; comm-hom-term; free-lift-interp )
+open  import Base.Subalgebras {𝑆 = 𝑆}
+      using ( _≤_ ; FirstHomCorollary|Set )
 
-open import Base.Varieties.EquationalLogic   {𝑆 = 𝑆}  using     ( _⊫_≈_; _⊧_≈_; Th; Mod )
-open import Base.Varieties.Closure           {𝑆 = 𝑆}  using     ( S ; P ; V )
-open import Base.Varieties.Preservation      {𝑆 = 𝑆}  using     ( module class-products-with-maps )
-                                                      using     ( class-ids-⇒ ; class-ids ; SP⊆V')
-open Term
-open S
-open V
+open  import Base.Varieties.EquationalLogic {𝑆 = 𝑆}
+      using ( _⊫_≈_; _⊧_≈_; Th; Mod )
+open  import Base.Varieties.Closure {𝑆 = 𝑆}
+      using ( S ; P ; V )
+open  import Base.Varieties.Preservation {𝑆 = 𝑆}
+      using ( module class-products-with-maps ; class-ids-⇒ ; class-ids ; SP⊆V')
 
+open Term ; open S ; open V
 
 𝓕 𝓕⁺ : Level
 𝓕 = ov α

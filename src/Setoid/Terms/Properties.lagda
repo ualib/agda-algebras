@@ -18,10 +18,11 @@ open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
 module Setoid.Terms.Properties {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ---------------------
-open import Agda.Primitive   using ( Level ) renaming ( Set to Type )
+open import Agda.Primitive   using () renaming ( Set to Type )
 open import Data.Product     using ( _,_ )
 open import Function.Bundles using () renaming ( Func to _⟶_ )
 open import Function.Base    using ( _∘_ )
+open import Level            using ( Level )
 open import Relation.Binary  using ( Setoid )
 open import Relation.Binary.PropositionalEquality as ≡ using (_≡_)
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
@@ -54,16 +55,18 @@ We now prove this in [Agda][], starting with the fact that every map from `X` to
 \begin{code}
 
 module _ {𝑨 : Algebra α ρ}(h : X → 𝕌[ 𝑨 ]) where
- open Algebra 𝑨 using ( Interp ) renaming ( Domain to A )
- open Setoid A using ( _≈_ ; reflexive ; trans ) renaming ( Carrier to ∣A∣ )
- open Algebra (𝑻 X) using () renaming ( Domain to TX )
- open Setoid TX using () renaming ( Carrier to ∣TX∣ )
+ open Algebra 𝑨      using ( Interp )                   renaming ( Domain to A )
+ open Setoid A       using ( _≈_ ; reflexive ; trans )  renaming ( Carrier to ∣A∣ )
+ open Algebra (𝑻 X)  using ()                           renaming ( Domain to TX )
+ open Setoid TX      using ()                           renaming ( Carrier to ∣TX∣ )
 
  free-lift : 𝕌[ 𝑻 X ] → 𝕌[ 𝑨 ]
  free-lift (ℊ x) = h x
  free-lift (node f t) = (f ̂ 𝑨) (λ i → free-lift (t i))
 
- free-lift-of-surj-isSurj : isSurj{𝑨 = ≡.setoid X}{𝑩 = A} h → isSurj{𝑨 = TX}{𝑩 = A} free-lift
+ free-lift-of-surj-isSurj :  isSurj{𝑨 = ≡.setoid X}{𝑩 = A} h
+  →                          isSurj{𝑨 = TX}{𝑩 = A} free-lift
+
  free-lift-of-surj-isSurj hE {y} = mp p
   where
   p : Img h ∋ y
@@ -82,11 +85,10 @@ module _ {𝑨 : Algebra α ρ}(h : X → 𝕌[ 𝑨 ]) where
 \end{code}
 
 Naturally, at the base step of the induction, when the term has the form `generator`
-x, the free lift of `h` agrees with `h`.  For the inductive step, when the
-given term has the form `node f t`, the free lift is defined as
-follows: Assuming (the induction hypothesis) that we know the image of each
-subterm `t i` under the free lift of `h`, define the free lift at the
-full term by applying `f ̂ 𝑨` to the images of the subterms.
+x, the free lift of `h` agrees with `h`.  For the inductive step, when the given term
+has the form `node f t`, the free lift is defined as follows: Assuming (the induction
+hypothesis) that we know the image of each subterm `t i` under the free lift of `h`,
+define the free lift at the full term by applying `f ̂ 𝑨` to the images of the subterms.
 
 The free lift so defined is a homomorphism by construction. Indeed, here is the trivial proof.
 
@@ -103,7 +105,7 @@ The free lift so defined is a homomorphism by construction. Indeed, here is the 
 
   hhom : IsHom (𝑻 X) 𝑨 hfunc
   hhom = record { compatible = λ{f}{a} → hcomp{f}{a} }
- 
+
 \end{code}
 
 If we further assume that each of the mappings from `X` to `∣ 𝑨 ∣` is *surjective*, then the homomorphisms constructed with `free-lift` and `lift-hom` are *epimorphisms*, as we now prove.
@@ -115,15 +117,16 @@ If we further assume that each of the mappings from `X` to `∣ 𝑨 ∣` is *su
 
 \end{code}
 
-Finally, we prove that the homomorphism is unique.  Recall, when we proved this in the module [Setoid.Terms.Properties][], we needed function extensionality. Here, by using setoid equality, we can omit the `swelldef` hypothesis used to prove `free-unique` in the [Terms.Properties][] module.
+Finally, we prove that the homomorphism is unique.  Recall, when we proved this in the module
+[Setoid.Terms.Properties][], we needed function extensionality. Here, by using setoid equality,
+we can omit the `swelldef` hypothesis used to prove `free-unique` in the [Terms.Properties][] module.
 
 \begin{code}
 
 module _ {𝑨 : Algebra α ρ}{gh hh : hom (𝑻 X) 𝑨} where
-
- open Algebra 𝑨 using ( Interp ) renaming ( Domain to A )
- open Setoid A using ( _≈_ ; trans ; sym )
- open Algebra (𝑻 X) using () renaming ( Domain to TX )
+ open Algebra 𝑨      using ( Interp )  renaming ( Domain to A )
+ open Setoid A       using ( _≈_ ; trans ; sym )
+ open Algebra (𝑻 X)  using ()          renaming ( Domain to TX )
  open _≐_
  open IsHom
 
@@ -131,12 +134,8 @@ module _ {𝑨 : Algebra α ρ}{gh hh : hom (𝑻 X) 𝑨} where
   g = _⟨$⟩_ ∣ gh ∣
   h = _⟨$⟩_ ∣ hh ∣
 
- free-unique : (∀ x → g (ℊ x) ≈ h (ℊ x))
-               ----------------------------
-  →            ∀ (t : Term X) →  g t ≈ h t
-
+ free-unique : (∀ x → g (ℊ x) ≈ h (ℊ x)) → ∀ (t : Term X) →  g t ≈ h t
  free-unique p (ℊ x) = p x
-
  free-unique p (node f t) = trans (trans geq lem3) (sym heq)
   where
   lem2 : ∀ i → (g (t i)) ≈ (h (t i))
@@ -150,7 +149,6 @@ module _ {𝑨 : Algebra α ρ}{gh hh : hom (𝑻 X) 𝑨} where
 
   heq : h (node f t) ≈ (f ̂ 𝑨)(λ i → h (t i))
   heq = compatible ∥ hh ∥
-
 \end{code}
 
 ------------------------------

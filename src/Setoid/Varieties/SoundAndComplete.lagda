@@ -52,9 +52,9 @@ private variable
 record Eq : Type (ov χ) where
  constructor _≈̇_
  field
-  {cxt} : Type χ
-  lhs   : Term cxt
-  rhs   : Term cxt
+  {cxt}  : Type χ
+  lhs    : Term cxt
+  rhs    : Term cxt
 
 open Eq public
 
@@ -101,7 +101,6 @@ module _ {α}{ρᵃ}{ι}{I : Type ι} where
  -- An entailment E ⊃ eq holds iff it holds in all models of E.
  _⊃_ : (E : I → Eq{χ}) (eq : Eq{χ}) → Type _
  E ⊃ eq = (M : Algebra α ρᵃ) → M ⊨ E → M ⊧ eq
-
 \end{code}
 
 
@@ -114,20 +113,16 @@ module _ {α}{ρᵃ}{ι}{I : Type ι} where
 module _ {χ ι : Level} where
 
  data _⊢_▹_≈_ {I : Type ι}(E : I → Eq) : (X : Type χ)(p q : Term X) → Type (ι ⊔ ov χ) where
-  hyp   : ∀ i → let p ≈̇ q = E i in E ⊢ _ ▹ p ≈ q
-  app   : ∀ {ps qs} → (∀ i → E ⊢ Γ ▹ ps i ≈ qs i) → E ⊢ Γ ▹ (node f ps) ≈ (node f qs)
-  sub   : ∀ {p q} → E ⊢ Δ ▹ p ≈ q → ∀ (σ : Sub Γ Δ) → E ⊢ Γ ▹ (p [ σ ]) ≈ (q [ σ ])
-
-  refl  : ∀ {p}              → E ⊢ Γ ▹ p ≈ p
-  sym   : ∀ {p q : Term Γ}   → E ⊢ Γ ▹ p ≈ q → E ⊢ Γ ▹ q ≈ p
-  trans : ∀ {p q r : Term Γ} → E ⊢ Γ ▹ p ≈ q → E ⊢ Γ ▹ q ≈ r → E ⊢ Γ ▹ p ≈ r
+  hyp    : ∀ i → let p ≈̇ q = E i in E ⊢ _ ▹ p ≈ q
+  app    : ∀ {ps qs} → (∀ i → E ⊢ Γ ▹ ps i ≈ qs i) → E ⊢ Γ ▹ (node f ps) ≈ (node f qs)
+  sub    : ∀ {p q} → E ⊢ Δ ▹ p ≈ q → ∀ (σ : Sub Γ Δ) → E ⊢ Γ ▹ (p [ σ ]) ≈ (q [ σ ])
+  refl   : ∀ {p}              → E ⊢ Γ ▹ p ≈ p
+  sym    : ∀ {p q : Term Γ}   → E ⊢ Γ ▹ p ≈ q → E ⊢ Γ ▹ q ≈ p
+  trans  : ∀ {p q r : Term Γ} → E ⊢ Γ ▹ p ≈ q → E ⊢ Γ ▹ q ≈ r → E ⊢ Γ ▹ p ≈ r
 
  ⊢▹≈IsEquiv : {I : Type ι}{E : I → Eq} → IsEquivalence (E ⊢ Γ ▹_≈_)
  ⊢▹≈IsEquiv = record { refl = refl ; sym = sym ; trans = trans }
-
 \end{code}
-
-
 
 ##### <a id="soundness-of-the-inference-rules">Soundness of the inference rules</a>
 
@@ -135,10 +130,10 @@ module _ {χ ι : Level} where
 
 \begin{code}
 
-module Soundness {χ α ι : Level}{I : Type ι} (E : I → Eq{χ})
-                 (𝑨 : Algebra α ρᵃ)     -- We assume an algebra M
-                 (V : 𝑨 ⊨ E)         -- that models all equations in E.
-                 where
+module Soundness  {χ α ι : Level}{I : Type ι} (E : I → Eq{χ})
+                  (𝑨 : Algebra α ρᵃ)     -- We assume an algebra M
+                  (V : 𝑨 ⊨ E)         -- that models all equations in E.
+ where
  open Algebra 𝑨 using ( Interp ) renaming (Domain to A)
 
  -- In any model M that satisfies the equations E, derived equality is actual equality.
@@ -148,18 +143,18 @@ module Soundness {χ α ι : Level}{I : Type ι} (E : I → Eq{χ})
  open IsEquivalence renaming ( refl to refl≈ ; sym to  sym≈ ; trans to trans≈ )
 
  sound : ∀ {p q} → E ⊢ X ▹ p ≈ q → 𝑨 ⊧ (p ≈̇ q)
- sound (hyp i)                      = V i
- sound (app {f = f} es) ρ           = Interp .cong (refl , λ i → sound (es i) ρ)
- sound (sub {p = p} {q} Epq σ) ρ    =
+ sound (hyp i)                    = V i
+ sound (app {f = f} es) ρ         = Interp .cong (refl , λ i → sound (es i) ρ)
+ sound (sub {p = p} {q} Epq σ) ρ  =
   begin
    ⟦ p [ σ ] ⟧ ⟨$⟩       ρ ≈⟨ substitution p σ ρ ⟩
    ⟦ p       ⟧ ⟨$⟩ ⟪ σ ⟫ ρ ≈⟨ sound Epq (⟪ σ ⟫ ρ)  ⟩
    ⟦ q       ⟧ ⟨$⟩ ⟪ σ ⟫ ρ ≈˘⟨ substitution  q σ ρ ⟩
    ⟦ q [ σ ] ⟧ ⟨$⟩       ρ ∎
 
- sound (refl {p = p})               = refl≈  isEquiv {x = p}
- sound (sym {p = p} {q} Epq)        = sym≈   isEquiv {x = p}{q}   (sound Epq)
- sound (trans{p = p}{q}{r} Epq Eqr) = trans≈ isEquiv {i = p}{q}{r}(sound Epq)(sound Eqr)
+ sound (refl {p = p})                = refl≈   isEquiv {x = p}
+ sound (sym {p = p} {q} Epq)         = sym≈    isEquiv {x = p}{q}     (sound Epq)
+ sound (trans{p = p}{q}{r} Epq Eqr)  = trans≈  isEquiv {i = p}{q}{r}  (sound Epq)(sound Eqr)
 
 \end{code}
 
@@ -171,7 +166,6 @@ That is,  ∀ X → E ⊢ X ▹ p ≈ q → Mod E ⊫ p ≈ q.
 The converse is Birkhoff's completeness theorem: if Mod E ⊫ p ≈ q, then E ⊢ X ▹ p ≈ q.
 
 We will prove that result next.
-
 
 
 ##### <a id="birkhoffs-completeness-theorem">Birkhoff's completeness theorem</a>
@@ -191,10 +185,10 @@ module FreeAlgebra {χ : Level}{ι : Level}{I : Type ι}(E : I → Eq) where
 
  -- Domain of the relatively free algebra.
  FreeDomain : Type χ → Setoid _ _
- FreeDomain X = record { Carrier       = Term X
-                       ; _≈_           = E ⊢ X ▹_≈_
-                       ; isEquivalence = ⊢▹≈IsEquiv
-                       }
+ FreeDomain X = record  { Carrier       = Term X
+                        ; _≈_           = E ⊢ X ▹_≈_
+                        ; isEquivalence = ⊢▹≈IsEquiv
+                        }
 
  -- The interpretation of an operation is simply the operation itself.
  -- This works since E ⊢ X ▹_≈_ is a congruence.
@@ -202,12 +196,10 @@ module FreeAlgebra {χ : Level}{ι : Level}{I : Type ι}(E : I → Eq) where
  FreeInterp ⟨$⟩ (f , ts) = node f ts
  cong FreeInterp (refl , h) = app h
 
-
  -- The relatively free algebra
  𝔽[_] : Type χ → Algebra (ov χ) (ι ⊔ ov χ)
  Domain 𝔽[ X ] = FreeDomain X
  Interp 𝔽[ X ] = FreeInterp
-
 
  -- The identity substitution σ₀ maps variables to themselves.
  σ₀ : {X : Type χ} → Sub X X
@@ -268,7 +260,6 @@ We are finally ready to formally state and prove Birkhoff's Completeness Theorem
    where
    open Environment 𝔽[ Γ ]
    open SetoidReasoning (Domain 𝔽[ Γ ])
-
 \end{code}
 
 --------------------------------

@@ -49,7 +49,7 @@ In the code below, `X` will play the role of an arbitrary collection of variable
 
 Alternatively, we could let `X` be the product of all algebras in the class `𝒦`, like so.
 
-`𝕏 : Type oα`  
+`𝕏 : Type oα`
 `𝕏 = Carrier ( Domain (⨅ (𝔄{𝒦 = S 𝒦})) )`
 
 \begin{code}
@@ -91,12 +91,10 @@ Next we define an epimorphism from `𝑻 X` onto the relatively free algebra `�
  epi𝔽[_] : (X : Type χ) → epi (𝑻 X) 𝔽[ X ]
  epi𝔽[ X ] = h , hepi
   where
-  open Algebra 𝔽[ X ] using () renaming ( Domain to F ; Interp to InterpF )
-  open Setoid F using () renaming ( _≈_  to _≈F≈_ ; refl to reflF )
-
-  open Algebra (𝑻 X) using () renaming (Domain to TX)
-  open Setoid TX using () renaming ( _≈_ to _≈T≈_ ; refl to reflT )
-
+  open Algebra 𝔽[ X ]  using() renaming ( Domain to F ; Interp to InterpF )
+  open Setoid F        using() renaming ( _≈_  to _≈F≈_ ; refl to reflF )
+  open Algebra (𝑻 X)   using() renaming (Domain to TX)
+  open Setoid TX       using() renaming ( _≈_ to _≈T≈_ ; refl to reflT )
 
   open _≐_ ; open IsEpi ; open IsHom
 
@@ -123,8 +121,8 @@ Next we define an epimorphism from `𝑻 X` onto the relatively free algebra `�
  class-models-kernel {X = X}{p}{q} pKq = ℰ⊢[ X ]▹Th𝒦 pKq
 
  kernel-in-theory : {X : Type χ} → fkerPred ∣ hom𝔽[ X ] ∣ ⊆ Th (V ℓ ι 𝒦)
- kernel-in-theory {X = X} {p , q} pKq vkA x = classIds-⊆-VIds {ℓ = ℓ} {p = p}{q}
-                                      (class-models-kernel pKq) vkA x
+ kernel-in-theory {X = X} {p , q} pKq vkA x =
+  classIds-⊆-VIds {ℓ = ℓ} {p = p}{q} (class-models-kernel pKq) vkA x
 
 
  module _  {X : Type χ} {𝑨 : Algebra α ρᵃ}{sA : 𝑨 ∈ S {β = α}{ρᵃ} ℓ 𝒦} where
@@ -132,75 +130,63 @@ Next we define an epimorphism from `𝑻 X` onto the relatively free algebra `�
   ker𝔽⊆Equal : ∀{p q} → (p , q) ∈ fkerPred ∣ hom𝔽[ X ] ∣ → Equal p q
   ker𝔽⊆Equal{p = p}{q} x = S-id1{ℓ = ℓ}{p = p}{q} (ℰ⊢[ X ]▹Th𝒦 x) 𝑨 sA
 
-
  𝒦⊫→ℰ⊢ : {X : Type χ} → ∀{p q} → 𝒦 ⊫ (p ≈̇ q) → ℰ ⊢ X ▹ p ≈ q
  𝒦⊫→ℰ⊢ {p = p} {q} pKq = hyp ((p ≈̇ q) , pKq) where open _⊢_▹_≈_ using (hyp)
 
-
 ------------------------------------------------------------------------------
 
-module _ {α ρᵃ ℓ : Level}
-         {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
- private
-  ι = ov(α ⊔ ρᵃ ⊔ ℓ)
-
-  open IsEpi ; open IsHom
+module _ {α ρᵃ ℓ : Level} {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
+ private ι = ov(α ⊔ ρᵃ ⊔ ℓ)
+ open IsEpi ; open IsHom
 
  module lower-universe-version {𝑨 : Algebra α ρᵃ} where
   open FreeHom α {α}{ρᵃ}{ℓ}{𝒦}
-  open FreeAlgebra {ι = ι}{I = ℐ} ℰ using ( 𝔽[_] )
-  open Algebra 𝑨 using( Interp ) renaming (Domain to A)
-  open Setoid A using ( trans ; sym ; refl ) renaming ( Carrier to ∣A∣ )
+  open FreeAlgebra {ι = ι}{I = ℐ} ℰ            using ( 𝔽[_] )
+  open Algebra 𝑨  renaming (Domain to A)       using( Interp )
+  open Setoid A   renaming ( Carrier to ∣A∣ )  using ( trans ; sym ; refl )
 
   𝔽-ModTh-epi : 𝑨 ∈ Mod (Th (V ℓ ι 𝒦)) → epi 𝔽[ ∣A∣ ] 𝑨
   𝔽-ModTh-epi A∈ModThK = φ , isEpi
     where
     φ : (Domain 𝔽[ ∣A∣ ]) ⟶ A
     _⟨$⟩_ φ = free-lift{𝑨 = 𝑨} id
-    cong φ {p} {q} pq =
-     trans (sym (free-lift-interp{𝑨 = 𝑨} id p))
-      (trans (A∈ModThK{p = p}{q} (kernel-in-theory pq) id)
-      (free-lift-interp{𝑨 = 𝑨} id q))
+    cong φ {p} {q} pq =  trans (sym (free-lift-interp{𝑨 = 𝑨} id p))
+                         ( trans (A∈ModThK{p = p}{q} (kernel-in-theory pq) id )
+                         ( free-lift-interp{𝑨 = 𝑨} id q) )
 
     isEpi : IsEpi 𝔽[ ∣A∣ ] 𝑨 φ
     compatible (isHom isEpi) = cong Interp (≡.refl , (λ _ → refl))
     isSurjective isEpi {y} = eq (ℊ y) refl
 
 
-  𝔽-ModTh-epi-lift : 𝑨 ∈ Mod (Th (V ℓ ι 𝒦))
-   →                 epi 𝔽[ ∣A∣ ] (Lift-Alg 𝑨 (ov α) (ov α))
-  𝔽-ModTh-epi-lift A∈ModThK =
-   ∘-epi (𝔽-ModTh-epi (λ {p q} → A∈ModThK{p = p}{q})) ToLift-epi
+  𝔽-ModTh-epi-lift :  𝑨 ∈ Mod (Th (V ℓ ι 𝒦))
+   →                  epi 𝔽[ ∣A∣ ] (Lift-Alg 𝑨 (ov α) (ov α))
 
+  𝔽-ModTh-epi-lift A∈ModThK = ∘-epi (𝔽-ModTh-epi (λ {p q} → A∈ModThK{p = p}{q})) ToLift-epi
 
- module _ -- higher-universe-version
-          -- (HSP theorem needs 𝑨 in higher universe level)
-          {𝑨 : Algebra (α ⊔ ρᵃ ⊔ ℓ) (α ⊔ ρᵃ ⊔ ℓ)} where
+ module _  -- higher-universe-version
+           -- (HSP theorem needs 𝑨 in higher universe level)
+           {𝑨 : Algebra (α ⊔ ρᵃ ⊔ ℓ) (α ⊔ ρᵃ ⊔ ℓ)} where
 
   open FreeHom (α ⊔ ρᵃ ⊔ ℓ) {α}{ρᵃ}{ℓ}{𝒦}
-  open FreeAlgebra {ι = ι}{I = ℐ} ℰ using ( 𝔽[_] )
+  open FreeAlgebra {ι = ι}{I = ℐ} ℰ            using ( 𝔽[_] )
+  open Algebra 𝑨  renaming (Domain to A)       using( Interp )
+  open Setoid A   renaming ( Carrier to ∣A∣ )  using ( trans ; sym ; refl )
 
-  open Algebra 𝑨 using( Interp ) renaming (Domain to A)
-  open Setoid A using ( trans ; sym ; refl ) renaming ( Carrier to ∣A∣ )
-
-  𝔽-ModTh-epi : 𝑨 ∈ Mod (Th (V ℓ ι 𝒦))
-   →            epi 𝔽[ ∣A∣ ] 𝑨
+  𝔽-ModTh-epi : 𝑨 ∈ Mod (Th (V ℓ ι 𝒦)) → epi 𝔽[ ∣A∣ ] 𝑨
   𝔽-ModTh-epi A∈ModThK = φ , isEpi
    where
    φ : (Domain 𝔽[ ∣A∣ ]) ⟶ A
    _⟨$⟩_ φ = free-lift{𝑨 = 𝑨} id
-   cong φ {p} {q} pq = trans (sym (free-lift-interp{𝑨 = 𝑨} id p))
-                      (trans (A∈ModThK{p = p}{q} (kernel-in-theory pq) id)
-                      (free-lift-interp{𝑨 = 𝑨} id q))
-
+   cong φ {p} {q} pq =  trans (sym (free-lift-interp{𝑨 = 𝑨} id p))
+                        ( trans (A∈ModThK{p = p}{q} (kernel-in-theory pq) id )
+                        ( free-lift-interp{𝑨 = 𝑨} id q) )
    isEpi : IsEpi 𝔽[ ∣A∣ ] 𝑨 φ
    compatible (isHom isEpi) = cong Interp (≡.refl , (λ _ → refl))
    isSurjective isEpi {y} = eq (ℊ y) refl
 
   𝔽-ModTh-epi-lift : 𝑨 ∈ Mod (Th (V ℓ ι 𝒦)) → epi 𝔽[ ∣A∣ ] (Lift-Alg 𝑨 ι ι)
-  𝔽-ModTh-epi-lift A∈ModThK =
-   ∘-epi (𝔽-ModTh-epi (λ {p q} → A∈ModThK{p = p}{q})) ToLift-epi
-
+  𝔽-ModTh-epi-lift A∈ModThK = ∘-epi (𝔽-ModTh-epi (λ {p q} → A∈ModThK{p = p}{q})) ToLift-epi
 \end{code}
 
 --------------------------------

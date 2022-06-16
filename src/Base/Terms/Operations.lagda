@@ -20,20 +20,25 @@ open import Base.Signatures using ( 𝓞 ; 𝓥 ; Signature )
 module Base.Terms.Operations {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ---------------------
-open import Agda.Primitive                      using ()  renaming ( Set to Type )
-open import Axiom.Extensionality.Propositional  using ()  renaming (Extensionality to funext)
-open import Data.Product                        using ( _,_ ; Σ-syntax ; Σ )
-open import Function                            using ( _∘_ )
-open import Level                               using ( Level ; _⊔_ )
+open import Agda.Primitive  using ()  renaming ( Set to Type )
+open import Data.Product    using ( _,_ ; Σ-syntax ; Σ )
+open import Function        using ( _∘_ )
+open import Level            using ( Level ; _⊔_ )
 
-open import Relation.Binary.PropositionalEquality as ≡  using ( _≡_ ; module ≡-Reasoning )
+open  import Relation.Binary.PropositionalEquality as ≡
+      using ( _≡_ ; module ≡-Reasoning )
+
+open  import Axiom.Extensionality.Propositional
+      using () renaming (Extensionality to funext)
 
 -- Imports from Agda Universal Algebra Library ----------------------------------------------
 open import Base.Overture   using ( _∙_ ; _⁻¹ ; ∣_∣ ; ∥_∥ ; Π ; Π-syntax ; _≈_ )
 open import Base.Relations  using ( _|:_ )
 open import Base.Equality   using ( swelldef )
 
-open import Base.Algebras          {𝑆 = 𝑆} using ( Algebra ; ov ; ⨅ ; Con ; IsCongruence ; _̂_ )
+open  import Base.Algebras {𝑆 = 𝑆}
+      using ( Algebra ; ov ; ⨅ ; Con ; IsCongruence ; _̂_ )
+
 open import Base.Homomorphisms     {𝑆 = 𝑆} using ( hom )
 open import Base.Terms.Basic       {𝑆 = 𝑆} using ( Term ; 𝑻 )
 open import Base.Terms.Properties  {𝑆 = 𝑆} using ( free-lift )
@@ -44,13 +49,20 @@ private variable α β γ ρ χ : Level
 
 \end{code}
 
-When we interpret a term in an algebra we call the resulting function a *term operation*.  Given a term `p` and an algebra `𝑨`, we denote by `𝑨 ⟦ p ⟧` the *interpretation* of `p` in `𝑨`.  This is defined inductively as follows.
+When we interpret a term in an algebra we call the resulting function a
+*term operation*. Given a term `p` and an algebra `𝑨`, we denote by `𝑨 ⟦ p ⟧`
+the *interpretation* of `p` in `𝑨`.  This is defined inductively as follows.
 
-1. If `p` is a variable symbol `x : X` and if `a : X → ∣ 𝑨 ∣` is a tuple of elements of `∣ 𝑨 ∣`, then `𝑨 ⟦ p ⟧ a := a x`.
+1.  If `p` is a variable symbol `x : X` and if `a : X → ∣ 𝑨 ∣` is a tuple of
+    elements of `∣ 𝑨 ∣`, then `𝑨 ⟦ p ⟧ a := a x`.
 
-2. If `p = f t`, where `f : ∣ 𝑆 ∣` is an operation symbol, if `t : ∥ 𝑆 ∥ f → 𝑻 X` is a tuple of terms, and if `a : X → ∣ 𝑨 ∣` is a tuple from `𝑨`, then we define `𝑨 ⟦ p ⟧ a = 𝑨 ⟦ f t ⟧ a := (f ̂ 𝑨) (λ i → 𝑨 ⟦ t i ⟧ a)`.
+2.  If `p = f t`, where `f : ∣ 𝑆 ∣` is an operation symbol, if `t : ∥ 𝑆 ∥ f → 𝑻 X`
+    is a tuple of terms, and if `a : X → ∣ 𝑨 ∣` is a tuple from `𝑨`, then we
+    define `𝑨 ⟦ p ⟧ a = 𝑨 ⟦ f t ⟧ a := (f ̂ 𝑨) (λ i → 𝑨 ⟦ t i ⟧ a)`.
 
-Thus the interpretation of a term is defined by induction on the structure of the term, and the definition is formally implemented in the [agda-algebras](https://github.com/ualib/agda-algebras) library as follows.
+Thus the interpretation of a term is defined by induction on the structure of the
+term, and the definition is formally implemented in the [agda-algebras][]
+library as follows.
 
 \begin{code}
 
@@ -60,26 +72,32 @@ _⟦_⟧ : (𝑨 : Algebra α 𝑆){X : Type χ } → Term X → (X → ∣ 𝑨
 
 \end{code}
 
-It turns out that the intepretation of a term is the same as the `free-lift` (modulo argument order and assuming function extensionality).
+It turns out that the intepretation of a term is the same as the `free-lift`
+(modulo argument order and assuming function extensionality).
 
 \begin{code}
 
-free-lift-interp :  swelldef 𝓥 α → (𝑨 : Algebra α 𝑆){X : Type χ }(η : X → ∣ 𝑨 ∣)(p : Term X)
- →                  (𝑨 ⟦ p ⟧) η ≡ (free-lift 𝑨 η) p
+free-lift-interp :  swelldef 𝓥 α → (𝑨 : Algebra α 𝑆){X : Type χ }
+                    (η : X → ∣ 𝑨 ∣)(p : Term X) → (𝑨 ⟦ p ⟧) η ≡ (free-lift 𝑨 η) p
 
 free-lift-interp _ 𝑨 η (ℊ x) = ≡.refl
-free-lift-interp wd 𝑨 η (node f t) =  wd (f ̂ 𝑨) (λ z → (𝑨 ⟦ t z ⟧) η)
-                                      ((free-lift 𝑨 η) ∘ t)((free-lift-interp wd 𝑨 η) ∘ t)
+free-lift-interp wd 𝑨 η (node f t) =
+ wd (f ̂ 𝑨) (λ z → (𝑨 ⟦ t z ⟧) η)
+ ((free-lift 𝑨 η) ∘ t)((free-lift-interp wd 𝑨 η) ∘ t)
 
 \end{code}
 
-If the algebra in question happens to be `𝑻 X`, then we expect that `∀ s` we have `(𝑻 X)⟦ p ⟧ s ≡ p s`. But what is `(𝑻 X)⟦ p ⟧ s` exactly? By definition, it depends on the form of `p` as follows:
+If the algebra in question happens to be `𝑻 X`, then we expect that `∀ s`
+we have `(𝑻 X)⟦ p ⟧ s ≡ p s`. But what is `(𝑻 X)⟦ p ⟧ s` exactly? By
+definition, it depends on the form of `p` as follows:
 
-* if `p = ℊ x`, then `(𝑻 X)⟦ p ⟧ s := (𝑻 X)⟦ ℊ x ⟧ s ≡ s x`
+*  if `p = ℊ x`, then `(𝑻 X)⟦ p ⟧ s := (𝑻 X)⟦ ℊ x ⟧ s ≡ s x`
 
-* if `p = node f t`, then `(𝑻 X)⟦ p ⟧ s := (𝑻 X)⟦ node f t ⟧ s = (f ̂ 𝑻 X) λ i → (𝑻 X)⟦ t i ⟧ s`
+*  if `p = node f t`, then
+   `(𝑻 X)⟦ p ⟧ s := (𝑻 X)⟦ node f t ⟧ s = (f ̂ 𝑻 X) λ i → (𝑻 X)⟦ t i ⟧ s`
 
-Now, assume `ϕ : hom 𝑻 𝑨`. Then by `comm-hom-term`, we have `∣ ϕ ∣ (𝑻 X)⟦ p ⟧ s = 𝑨 ⟦ p ⟧ ∣ ϕ ∣ ∘ s`.
+Now, assume `ϕ : hom 𝑻 𝑨`. Then by `comm-hom-term`, we have
+`∣ ϕ ∣ (𝑻 X)⟦ p ⟧ s = 𝑨 ⟦ p ⟧ ∣ ϕ ∣ ∘ s`.
 
 * if `p = ℊ x` (and `t : X → ∣ 𝑻 X ∣`), then
 
@@ -89,18 +107,26 @@ Now, assume `ϕ : hom 𝑻 𝑨`. Then by `comm-hom-term`, we have `∣ ϕ ∣ (
 
    `∣ ϕ ∣ p ≡ ∣ ϕ ∣ (𝑻 X)⟦ p ⟧ s = (𝑻 X)⟦ node f t ⟧ s = (f ̂ 𝑻 X) λ i → (𝑻 X)⟦ t i ⟧ s`
 
-We claim that for all `p : Term X` there exists `q : Term X` and `t : X → ∣ 𝑻 X ∣` such that `p ≡ (𝑻 X)⟦ q ⟧ t`. We prove this fact as follows.
+We claim that for all `p : Term X` there exists `q : Term X` and `t : X → ∣ 𝑻 X ∣`
+such that `p ≡ (𝑻 X)⟦ q ⟧ t`. We prove this fact as follows.
 
 \begin{code}
 
-term-interp : {X : Type χ} (f : ∣ 𝑆 ∣){s t : ∥ 𝑆 ∥ f → Term X} → s ≡ t → node f s ≡ (f ̂ 𝑻 X) t
+term-interp :  {X : Type χ} (f : ∣ 𝑆 ∣){s t : ∥ 𝑆 ∥ f → Term X}
+ →             s ≡ t → node f s ≡ (f ̂ 𝑻 X) t
+
 term-interp f {s}{t} st = ≡.cong (node f) st
+
 
 term-interp' :  swelldef 𝓥 (ov χ) → {X : Type χ} (f : ∣ 𝑆 ∣){s t : ∥ 𝑆 ∥ f → Term X}
  →              (∀ i → s i ≡ t i) → node f s ≡ (f ̂ 𝑻 X) t
+
 term-interp' wd f {s}{t} st = wd (node f) s t st
 
-term-gen : swelldef 𝓥 (ov χ) → {X : Type χ}(p : ∣ 𝑻 X ∣) → Σ[ q ∈ ∣ 𝑻 X ∣ ] p ≡ (𝑻 X ⟦ q ⟧) ℊ
+
+term-gen :  swelldef 𝓥 (ov χ) → {X : Type χ}(p : ∣ 𝑻 X ∣)
+ →          Σ[ q ∈ ∣ 𝑻 X ∣ ] p ≡ (𝑻 X ⟦ q ⟧) ℊ
+
 term-gen _ (ℊ x) = (ℊ x) , ≡.refl
 term-gen wd (node f t) =  (node f (λ i → ∣ term-gen wd (t i) ∣)) ,
                           term-interp' wd f λ i → ∥ term-gen wd (t i) ∥
@@ -137,6 +163,7 @@ module _ (wd : swelldef 𝓥 (β ⊔ α)){X : Type χ }{I : Type β} where
 
  interp-prod2 :  funext (α ⊔ β ⊔ χ) (α ⊔ β) → (p : Term X)(𝒜 : I → Algebra α 𝑆)
   →              ⨅ 𝒜 ⟦ p ⟧ ≡ (λ a i → (𝒜 i ⟦ p ⟧) λ x → a x i)
+
  interp-prod2 _ (ℊ x₁) 𝒜 = ≡.refl
  interp-prod2 fe (node f t) 𝒜 = fe λ a → wd (f ̂ ⨅ 𝒜)(u a) (v a) (IH a)
   where
@@ -163,13 +190,13 @@ comm-hom-term :  swelldef 𝓥 β → {𝑨 : Algebra α 𝑆} (𝑩 : Algebra �
   →              ∣ h ∣ ((𝑨 ⟦ t ⟧) a) ≡ (𝑩 ⟦ t ⟧) (∣ h ∣ ∘ a)
 
 comm-hom-term _ 𝑩 h (ℊ x) a = ≡.refl
-comm-hom-term wd {𝑨} 𝑩 h (node f t) a =  ∣ h ∣((f ̂ 𝑨) λ i →  (𝑨 ⟦ t i ⟧) a)    ≡⟨ i  ⟩
-                                          (f ̂ 𝑩)(λ i →  ∣ h ∣ ((𝑨 ⟦ t i ⟧) a))  ≡⟨ ii ⟩
-                                          (f ̂ 𝑩)(λ r → (𝑩 ⟦ t r ⟧) (∣ h ∣ ∘ a)) ∎
+comm-hom-term wd {𝑨} 𝑩 h (node f t) a =  ∣ h ∣((f ̂ 𝑨) λ i →  (𝑨 ⟦ t i ⟧) a)      ≡⟨ i  ⟩
+                                          (f ̂ 𝑩)(λ i →  ∣ h ∣ ((𝑨 ⟦ t i ⟧) a))   ≡⟨ ii ⟩
+                                          (f ̂ 𝑩)(λ r → (𝑩 ⟦ t r ⟧) (∣ h ∣ ∘ a))  ∎
  where i  = ∥ h ∥ f λ r → (𝑨 ⟦ t r ⟧) a
        ii = wd (f ̂ 𝑩)  (λ i₁ → ∣ h ∣ ((𝑨 ⟦ t i₁ ⟧) a))
-                        (λ r → (𝑩 ⟦ t r ⟧) (λ x → ∣ h ∣ (a x)))
-                        λ j → comm-hom-term wd 𝑩 h (t j) a
+                       (λ r → (𝑩 ⟦ t r ⟧) (λ x → ∣ h ∣ (a x)))
+                       λ j → comm-hom-term wd 𝑩 h (t j) a
 
 \end{code}
 
@@ -223,7 +250,8 @@ Next we prove the important Substitution Theorem which asserts that an identity 
 
 \begin{code}
 
-subst-lemma :  swelldef 𝓥 α → {X Y : Type χ }(p : Term Y)(σ : Y → X)(𝑨 : Algebra α 𝑆)(η : X → ∣ 𝑨 ∣)
+subst-lemma :  swelldef 𝓥 α → {X Y : Type χ }(p : Term Y)(σ : Y → X)
+               (𝑨 : Algebra α 𝑆)(η : X → ∣ 𝑨 ∣)
  →             (𝑨 ⟦ p [ σ ] ⟧) η ≡ (𝑨 ⟦ p ⟧) (η ∘ σ)
 
 subst-lemma _ (ℊ x) σ 𝑨 η = ≡.refl
@@ -239,7 +267,6 @@ subst-theorem wd p q σ 𝑨 Apq η =  (𝑨 ⟦ p [ σ ] ⟧) η  ≡⟨ subst-
                                   (𝑨 ⟦ p ⟧) (η ∘ σ)  ≡⟨ Apq (η ∘ σ) ⟩
                                   (𝑨 ⟦ q ⟧) (η ∘ σ)  ≡⟨ ≡.sym (subst-lemma wd q σ 𝑨 η) ⟩
                                   (𝑨 ⟦ q [ σ ] ⟧) η  ∎
-
 \end{code}
 
 ----------------------------------

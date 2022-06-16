@@ -24,14 +24,14 @@ open import Function          using ( Surjection ; IsSurjection )   renaming ( F
 open import Level             using ( _⊔_ ; Level )
 open import Relation.Binary   using ( Setoid )
 
-open import Function.Construct.Composition using ()  renaming ( isSurjection to isOnto )
+open import Function.Construct.Composition using () renaming ( isSurjection to isOnto )
 
 import Function.Definitions as FD
 
 -- Imports from agda-algebras -----------------------------------------------
-open import Base.Overture                using ( ∣_∣ ; ∥_∥ ; ∃-syntax ; transport )
-open import Setoid.Functions.Basic       using ( _∘_ )
-open import Setoid.Functions.Inverses    using ( Img_∋_ ; Image_∋_ ; Inv ; InvIsInverseʳ )
+open import Base.Overture              using ( ∣_∣ ; ∥_∥ ; ∃-syntax ; transport )
+open import Setoid.Functions.Basic     using ( _∘_ )
+open import Setoid.Functions.Inverses  using ( Img_∋_ ; Image_∋_ ; Inv ; InvIsInverseʳ )
 
 
 private variable
@@ -48,10 +48,10 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
  open _⟶_ {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝑨}{To = 𝑩}         renaming (f to _⟨$⟩_ )
  open FD _≈₁_ _≈₂_
 
- isSurj : (A → B) →  Type (α ⊔ β ⊔ ρᵇ)
+ isSurj : (A → B) → Type (α ⊔ β ⊔ ρᵇ)
  isSurj f = ∀ {y} → Img_∋_ {𝑨 = 𝑨}{𝑩 = 𝑩} f y
 
- IsSurjective : (𝑨 ⟶ 𝑩) →  Type (α ⊔ β ⊔ ρᵇ)
+ IsSurjective : (𝑨 ⟶ 𝑩) → Type (α ⊔ β ⊔ ρᵇ)
  IsSurjective F = ∀ {y} → Image F ∋ y
 
  isSurj→IsSurjective : (F : 𝑨 ⟶ 𝑩) → isSurj (_⟨$⟩_ F) → IsSurjective F
@@ -76,7 +76,10 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
   g : 𝑨 ⟶ 𝑩
   g = (record { f = _⟨$⟩_ s ; cong = cong s })
   gE : IsSurjection _≈₁_ _≈₂_ (_⟨$⟩_ g)
-  IsSurjection.isCongruent gE = record { cong = cong g ; isEquivalence₁ = isEqA ; isEquivalence₂ = isEqB }
+  IsSurjection.isCongruent gE = record  { cong = cong g
+                                        ; isEquivalence₁ = isEqA
+                                        ; isEquivalence₂ = isEqB
+                                        }
   IsSurjection.surjective gE y = ∣ (surjective s) y ∣ , ∥ (surjective s) y ∥
 
 \end{code}
@@ -94,7 +97,9 @@ Thus, a right-inverse of `f` is obtained by applying `Inv` to `f` and a proof of
 
 \begin{code}
 
- SurjInvIsInverseʳ : (f : 𝑨 ⟶ 𝑩)(fE : IsSurjective f) → ∀ {b} → (f ⟨$⟩ ((SurjInv f fE) b)) ≈₂ b
+ SurjInvIsInverseʳ :  (f : 𝑨 ⟶ 𝑩)(fE : IsSurjective f)
+  →                   ∀ {b} → (f ⟨$⟩ ((SurjInv f fE) b)) ≈₂ b
+
  SurjInvIsInverseʳ f fE = InvIsInverseʳ fE
 
 \end{code}
@@ -114,7 +119,9 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ}{𝑪 : Setoid γ ρᶜ
  open FD _≈₁_ _≈₂_
 
 
- ∘-IsSurjective : {G : 𝑨 ⟶ 𝑪}{H : 𝑪 ⟶ 𝑩} → IsSurjective G → IsSurjective H → IsSurjective (H ∘ G)
+ ∘-IsSurjective :  {G : 𝑨 ⟶ 𝑪}{H : 𝑪 ⟶ 𝑩}
+  →                IsSurjective G → IsSurjective H → IsSurjective (H ∘ G)
+
  ∘-IsSurjective {G} {H} gE hE {y} = Goal
   where
   mp : Image H ∋ y → Image H ∘ G ∋ y

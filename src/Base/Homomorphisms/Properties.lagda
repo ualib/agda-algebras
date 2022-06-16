@@ -18,10 +18,12 @@ open import Base.Signatures using (Signature ; 𝓞 ; 𝓥 )
 module Base.Homomorphisms.Properties {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library --------------------------------
-open import Data.Product                                using ( _,_ )
-open import Function                                    using ( _∘_ )
-open import Level                                       using ( Level )
-open import Relation.Binary.PropositionalEquality as ≡  using ( _≡_ ; module ≡-Reasoning )
+open import Data.Product  using ( _,_ )
+open import Function      using ( _∘_ )
+open import Level         using ( Level )
+
+open  import Relation.Binary.PropositionalEquality as ≡
+      using ( _≡_ ; module ≡-Reasoning )
 
 -- Imports from the Agda Universal Algebras Library --------------------------------
 open import Base.Overture                      using ( ∣_∣ ; ∥_∥ )
@@ -29,7 +31,6 @@ open import Base.Algebras             {𝑆 = 𝑆}  using ( Algebra ; _̂_ ; Li
 open import Base.Homomorphisms.Basic  {𝑆 = 𝑆}  using ( hom ; is-homomorphism )
 
 private variable α β γ ρ : Level
-
 \end{code}
 
 
@@ -53,7 +54,8 @@ module _ (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}(𝑪 : Algebra γ 𝑆
 
 
   ∘-is-hom :  {f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣}{g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣}
-   →          is-homomorphism 𝑨 𝑩 f → is-homomorphism 𝑩 𝑪 g → is-homomorphism 𝑨 𝑪 (g ∘ f)
+   →          is-homomorphism 𝑨 𝑩 f → is-homomorphism 𝑩 𝑪 g
+   →          is-homomorphism 𝑨 𝑪 (g ∘ f)
 
   ∘-is-hom {f} {g} fhom ghom = ∥ ∘-hom (f , fhom) (g , ghom) ∥
 
@@ -78,7 +80,10 @@ Lift-hom {𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ (f , fhom) = lift ∘ f ∘ lower , 
 
 \end{code}
 
-We should probably point out that while the lifting and lowering homomorphisms are important for our formal treatment of algebras in type theory, they never arise---in fact, they are not even definable---in classical universal algebra based on set theory.
+We should probably point out that while the lifting and lowering homomorphisms are
+important for our formal treatment of algebras in type theory, they never
+arise---in fact, they are not even definable---in classical universal algebra
+based on set theory.
 
 ---------------------------------
 

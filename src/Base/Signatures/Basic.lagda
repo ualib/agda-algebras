@@ -52,3 +52,4 @@ module of the [agda-algebras](https://github.com/ualib/agda-algebras) library, s
 If `𝑓 : ∣ 𝑆 ∣` is an operation symbol in the signature `𝑆`, then `∥ 𝑆 ∥ 𝑓` is the arity of `𝑓`.
 
 
+{% include UALib.Links.md %}

@@ -35,7 +35,6 @@ open import Base.Terms       {𝑆 = 𝑆} using ( Term )
 open import Setoid.Terms     {𝑆 = 𝑆} using ( 𝑻 ; module Environment )
 
 private variable χ α ρᵃ ℓ ι : Level
-
 \end{code}
 
 
@@ -53,14 +52,14 @@ open _⟶_ using () renaming ( f to _⟨$⟩_ )
 
 module _  {X : Type χ} where
 
- open Setoid using () renaming (Carrier to ∣_∣ )
- open Algebra using ( Domain )
+ open Setoid   using () renaming (Carrier to ∣_∣ )
+ open Algebra  using ( Domain )
 
  _⊧_≈_ : Algebra α ρᵃ → Term X → Term X → Type _
  𝑨 ⊧ p ≈ q = ∀ (ρ : ∣ Env X ∣) → ⟦ p ⟧ ⟨$⟩ ρ ≈ ⟦ q ⟧ ⟨$⟩ ρ
   where
-  open Setoid ( Domain 𝑨 ) using ( _≈_ )
-  open Environment 𝑨 using ( Env ; ⟦_⟧ )
+  open Setoid ( Domain 𝑨 )  using ( _≈_ )
+  open Environment 𝑨        using ( Env ; ⟦_⟧ )
 
  _⊫_≈_ : Pred(Algebra α ρᵃ) ℓ → Term X → Term X → Type (χ ⊔ ℓ ⊔ ov(α ⊔ ρᵃ))
  𝒦 ⊫ p ≈ q = {𝑨 : Algebra _ _} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
@@ -122,9 +121,7 @@ It is sometimes more convenient to have a "tupled" version of the previous defin
 
  Modᵗ : {I : Type ι} → (I → Term X × Term X) → {α : Level} → Pred(Algebra α ρᵃ) (χ ⊔ ρᵃ ⊔ ι ⊔ α)
  Modᵗ ℰ = λ 𝑨 → ∀ i → 𝑨 ⊧ fst (ℰ i) ≈ snd (ℰ i)
-
 \end{code}
-
 
 -------------------------------------
 

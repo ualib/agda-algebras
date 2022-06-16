@@ -7,7 +7,9 @@ author: "agda-algebras development team"
 
 ## <a id="equations-and-varieties">Equations and Varieties</a>
 
-This is the [Base.Varieties][] module of the [Agda Universal Algebra Library][], where we define types for theories and their models, and for equational logic, and we prove properties of these types.
+This is the [Base.Varieties][] module of the [Agda Universal Algebra Library][],
+where we define types for theories and their models, and for equational logic,
+and we prove properties of these types.
 
 \begin{code}
 
@@ -27,7 +29,6 @@ open import Level using ( Level )
 module _ {α : Level} where
 
  open import Base.Varieties.FreeAlgebras  {α = α} {𝑆 = 𝑆} public
-
 \end{code}
 
 ---------------------------------
