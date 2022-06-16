@@ -13,17 +13,18 @@ This chapter presents the [Base.Homomorphisms][] module of the [Agda Universal A
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Base.Homomorphisms where
+open import Base.Signatures using (Signature ; 𝓞 ; 𝓥 )
 
-open import Base.Homomorphisms.Basic
-open import Base.Homomorphisms.Properties
-open import Base.Homomorphisms.Kernels
-open import Base.Homomorphisms.Products
-open import Base.Homomorphisms.Noether
-open import Base.Homomorphisms.Factor
-open import Base.Homomorphisms.Isomorphisms
-open import Base.Homomorphisms.HomomorphicImages
+module Base.Homomorphisms {𝑆 : Signature 𝓞 𝓥} where
 
+open import Base.Homomorphisms.Basic              {𝑆 = 𝑆} public
+open import Base.Homomorphisms.Properties         {𝑆 = 𝑆} public
+open import Base.Homomorphisms.Kernels            {𝑆 = 𝑆} public
+open import Base.Homomorphisms.Products           {𝑆 = 𝑆} public
+open import Base.Homomorphisms.Noether            {𝑆 = 𝑆} public
+open import Base.Homomorphisms.Factor             {𝑆 = 𝑆} public
+open import Base.Homomorphisms.Isomorphisms       {𝑆 = 𝑆} public
+open import Base.Homomorphisms.HomomorphicImages  {𝑆 = 𝑆} public
 \end{code}
 
 --------------------------------------

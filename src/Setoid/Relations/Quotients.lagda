@@ -31,8 +31,7 @@ open import Base.Overture.Preliminaries  using ( ∣_∣ ; ∥_∥ )
 open import Setoid.Relations.Discrete    using ( fker )
 open import Base.Relations.Quotients     using ( [_] ; Equivalence )
 
-private variable
- α β ρᵃ ρᵇ ℓ : Level
+private variable α β ρᵃ ρᵇ ℓ : Level
 
 \end{code}
 
@@ -45,13 +44,13 @@ A prominent example of an equivalence relation is the kernel of any function.
 open _⟶_ using ( cong ) renaming ( f to _⟨$⟩_ )
 
 module _ {𝐴 : Setoid α ρᵃ}{𝐵 : Setoid β ρᵇ} where
- open Setoid 𝐴 using ( refl ) renaming (Carrier to A )
- open Setoid 𝐵 using ( sym ; trans ) renaming (Carrier to B )
+ open Setoid 𝐴  using ( refl ) renaming (Carrier to A )
+ open Setoid 𝐵  using ( sym ; trans ) renaming (Carrier to B )
 
  ker-IsEquivalence : (f : 𝐴 ⟶ 𝐵) → IsEquivalence (fker f)
- IsEquivalence.refl (ker-IsEquivalence f) = cong f refl
- IsEquivalence.sym (ker-IsEquivalence f) = sym
- IsEquivalence.trans (ker-IsEquivalence f) = trans
+ IsEquivalence.refl   (ker-IsEquivalence f) = cong f refl
+ IsEquivalence.sym    (ker-IsEquivalence f) = sym
+ IsEquivalence.trans  (ker-IsEquivalence f) = trans
 
 record IsBlock {A : Type α}{ρ : Level}(P : Pred A ρ){R : BinRel A ρ} : Type(α ⊔ lsuc ρ) where
  constructor mkblk

@@ -13,16 +13,18 @@ This is the [Setoid.Homomorphisms][] module of the [Agda Universal Algebra Libra
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Setoid.Homomorphisms where
+open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
 
-open import Setoid.Homomorphisms.Basic
-open import Setoid.Homomorphisms.Properties
-open import Setoid.Homomorphisms.Kernels
-open import Setoid.Homomorphisms.Products
-open import Setoid.Homomorphisms.Noether
-open import Setoid.Homomorphisms.Factor
-open import Setoid.Homomorphisms.Isomorphisms
-open import Setoid.Homomorphisms.HomomorphicImages
+module Setoid.Homomorphisms {𝑆 : Signature 𝓞 𝓥} where
+
+open import Setoid.Homomorphisms.Basic              {𝑆 = 𝑆} public
+open import Setoid.Homomorphisms.Properties         {𝑆 = 𝑆} public
+open import Setoid.Homomorphisms.Kernels            {𝑆 = 𝑆} public
+open import Setoid.Homomorphisms.Products           {𝑆 = 𝑆} public
+open import Setoid.Homomorphisms.Noether            {𝑆 = 𝑆} public
+open import Setoid.Homomorphisms.Factor             {𝑆 = 𝑆} public
+open import Setoid.Homomorphisms.Isomorphisms       {𝑆 = 𝑆} public
+open import Setoid.Homomorphisms.HomomorphicImages  {𝑆 = 𝑆} public
 
 \end{code}
 

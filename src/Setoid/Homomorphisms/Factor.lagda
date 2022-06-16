@@ -13,7 +13,7 @@ This is the [Setoid.Homomorphisms.Factor][] module of the [Agda Universal Algebr
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using (𝓞 ; 𝓥 ; Signature )
+open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Homomorphisms.Factor {𝑆 : Signature 𝓞 𝓥} where
 
@@ -23,20 +23,19 @@ open import Function         using ( _∘_ )             renaming ( Func to _⟶
 open import Level            using ( Level )
 open import Relation.Binary  using ( Setoid )
 open import Relation.Unary   using ( _⊆_ )
-open import Relation.Binary.PropositionalEquality as ≡ using ()
-import Relation.Binary.Reasoning.Setoid as SetoidReasoning
+
+open import Relation.Binary.PropositionalEquality  as ≡           using ()
+import Relation.Binary.Reasoning.Setoid            as SReasoning  using ( begin_ ; step-≈˘; step-≈; _∎)
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------------
-open import Base.Overture.Preliminaries          using ( ∣_∣ ; ∥_∥ )
-open import Setoid.Overture.Inverses             using ( Image_∋_ )
-open import Setoid.Overture.Surjective           using ( IsSurjective ; SurjInv )
-                                                 using ( SurjInvIsInverseʳ ; epic-factor )
-open import Base.Relations.Discrete                   using ( kernelRel )
-open import Setoid.Algebras.Basic       {𝑆 = 𝑆}  using ( Algebra ; 𝕌[_] ; _̂_ )
-open import Setoid.Homomorphisms.Basic  {𝑆 = 𝑆}  using ( hom ; IsHom ; compatible-map ; epi ; IsEpi)
+open import Base.Overture    using ( ∣_∣ ; ∥_∥ )
+open import Setoid.Functions using ( Image_∋_ ; IsSurjective ; SurjInv ; SurjInvIsInverseʳ ; epic-factor )
+open import Base.Relations   using ( kernelRel )
 
-private variable
- α ρᵃ β ρᵇ γ ρᶜ : Level
+open import Setoid.Algebras {𝑆 = 𝑆}             using ( Algebra ; 𝕌[_] ; _̂_ )
+open import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}  using ( hom ; IsHom ; compatible-map ; epi ; IsEpi)
+
+private variable α ρᵃ β ρᵇ γ ρᶜ : Level
 
 \end{code}
 
@@ -57,17 +56,16 @@ We will prove this in case h is both surjective and injective.
 
 \begin{code}
 
-module _ {𝑨 : Algebra α ρᵃ}
-         (𝑩 : Algebra β ρᵇ)
-         {𝑪 : Algebra γ ρᶜ}
-         (gh : hom 𝑨 𝑩)(hh : hom 𝑨 𝑪) where
+module _  {𝑨 : Algebra α ρᵃ} (𝑩 : Algebra β ρᵇ) {𝑪 : Algebra γ ρᶜ}
+          (gh : hom 𝑨 𝑩)(hh : hom 𝑨 𝑪) where
 
- open Algebra 𝑩 using () renaming (Domain to B )
- open Algebra 𝑪 using ( Interp ) renaming (Domain to C )
- open Setoid B using () renaming ( _≈_ to _≈₂_ ; sym to sym₂ )
- open Setoid C using ( trans ) renaming ( _≈_ to _≈₃_ ; sym to sym₃ )
- open SetoidReasoning B
- open _⟶_ using ( cong ) renaming (f to _⟨$⟩_ )
+ open Algebra 𝑩  using ()          renaming (Domain to B )
+ open Algebra 𝑪  using ( Interp )  renaming (Domain to C )
+ open Setoid B   using ()          renaming ( _≈_ to _≈₂_ ; sym to sym₂ )
+ open Setoid C   using ( trans )   renaming ( _≈_ to _≈₃_ ; sym to sym₃ )
+ open _⟶_        using ( cong )    renaming (f to _⟨$⟩_ )
+
+ open SReasoning B
 
  private
   gfunc = ∣ gh ∣
@@ -78,7 +76,7 @@ module _ {𝑨 : Algebra α ρᵃ}
  open IsHom
  open Image_∋_
 
- HomFactor : kernelRel _≈₃_ h ⊆ kernelRel _≈₂_ g → IsSurjective hfunc
+ HomFactor :  kernelRel _≈₃_ h ⊆ kernelRel _≈₂_ g → IsSurjective hfunc
               ---------------------------------------------------------
   →           Σ[ φ ∈ hom 𝑪 𝑩 ] ∀ a → (g a) ≈₂ ∣ φ ∣ ⟨$⟩ (h a)
 
@@ -112,27 +110,26 @@ module _ {𝑨 : Algebra α ρᵃ}
   φcomp : compatible-map 𝑪 𝑩 φmap
   φcomp {f}{c} =
    begin
-    φmap ⟨$⟩ ((f ̂ 𝑪) c)              ≈˘⟨ φcong (cong Interp (≡.refl , (λ _ → η))) ⟩
-    g (h⁻¹ ((f ̂ 𝑪)(h ∘ (h⁻¹ ∘ c)))) ≈˘⟨ φcong (compatible ∥ hh ∥) ⟩
-    g (h⁻¹ (h ((f ̂ 𝑨)(h⁻¹ ∘ c))))   ≈˘⟨ gφh ((f ̂ 𝑨)(h⁻¹ ∘ c)) ⟩
-    g ((f ̂ 𝑨)(h⁻¹ ∘ c))             ≈⟨ compatible ∥ gh ∥ ⟩
-    (f ̂ 𝑩)(g ∘ (h⁻¹ ∘ c))           ∎
+    φmap ⟨$⟩ ((f ̂ 𝑪) c)              ≈˘⟨ φcong (cong Interp (≡.refl , (λ _ → η)))  ⟩
+    g (h⁻¹ ((f ̂ 𝑪)(h ∘ (h⁻¹ ∘ c))))  ≈˘⟨ φcong (compatible ∥ hh ∥)                 ⟩
+    g (h⁻¹ (h ((f ̂ 𝑨)(h⁻¹ ∘ c))))    ≈˘⟨ gφh ((f ̂ 𝑨)(h⁻¹ ∘ c))                     ⟩
+    g ((f ̂ 𝑨)(h⁻¹ ∘ c))              ≈⟨ compatible ∥ gh ∥                          ⟩
+    (f ̂ 𝑩)(g ∘ (h⁻¹ ∘ c))            ∎
 
   φhom : IsHom 𝑪 𝑩 φmap
   compatible φhom = φcomp
 
 \end{code}
 
-
 If, in addition, `g` is surjective, then so will be the factor `φ`.
 
 \begin{code}
 
 
- HomFactorEpi : kernelRel _≈₃_ h ⊆ kernelRel _≈₂_ g
-  →             IsSurjective hfunc → IsSurjective gfunc
-                -------------------------------------------------
-  →             Σ[ φ ∈ epi 𝑪 𝑩 ] ∀ a → (g a) ≈₂ ∣ φ ∣ ⟨$⟩ (h a)
+ HomFactorEpi :  kernelRel _≈₃_ h ⊆ kernelRel _≈₂_ g
+  →              IsSurjective hfunc → IsSurjective gfunc
+                 -------------------------------------------------
+  →              Σ[ φ ∈ epi 𝑪 𝑩 ] ∀ a → (g a) ≈₂ ∣ φ ∣ ⟨$⟩ (h a)
 
  HomFactorEpi Khg hE gE = (φmap , φepi) , gφh
   where
@@ -149,9 +146,9 @@ If, in addition, `g` is surjective, then so will be the factor `φ`.
   φhom = snd ∣ homfactor ∣
 
   φepi : IsEpi 𝑪 𝑩 φmap
-  φepi = record { isHom = φhom
-                ; isSurjective = epic-factor gfunc hfunc φmap gE gφh }
-
+  φepi = record  { isHom = φhom
+                 ; isSurjective = epic-factor gfunc hfunc φmap gE gφh
+                 }
 \end{code}
 
 --------------------------------

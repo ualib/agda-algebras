@@ -18,17 +18,14 @@ We say that a function `f : A → B` is *injective* (or *monic*) if it does not 
 module Base.Overture.Injective where
 
 -- Imports from Agda and the Agda Standard Library ---------------------------------------------
-open import Agda.Primitive   using ( _⊔_ ; Level ) renaming ( Set to Type )
-open import Function.Bundles                      using ( _↣_ )
-open import Function.Construct.Identity           using ( id-↣ )
-open import Function.Base                         using ( _∘_ )
-open import Function.Definitions as FD            using ( Injective )
-open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl )
-open import Relation.Binary  using ( Rel )
-
+open import Agda.Primitive                         using () renaming ( Set to Type )
+open import Function                               using ( _↣_ ;  _∘_ ; Injective )
+open import Function.Construct.Identity            using ( id-↣ )
+open import Level                                  using ( _⊔_ ; Level )
+open import Relation.Binary                        using ( Rel )
+open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl )
 
 private variable α β γ ℓ₁ ℓ₂ ℓ₃ : Level
-
 
 id-is-injective : {A : Type α} → A ↣ A
 id-is-injective {A = A} = id-↣ A
@@ -44,10 +41,10 @@ Next, we prove that the composition of injective functions is injective.
 
 \begin{code}
 
-∘-injective : {A : Type α}{B : Type β}{C : Type γ}{f : A → B}{g : B → C}
-  →           IsInjective f → IsInjective g → IsInjective (g ∘ f)
-∘-injective fi gi = λ x → fi (gi x)
+∘-injective :  {A : Type α}{B : Type β}{C : Type γ}{f : A → B}{g : B → C}
+  →            IsInjective f → IsInjective g → IsInjective (g ∘ f)
 
+∘-injective fi gi = λ x → fi (gi x)
 \end{code}
 
 --------------------------------------

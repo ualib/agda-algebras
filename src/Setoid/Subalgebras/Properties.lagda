@@ -14,34 +14,36 @@ This is the [Setoid.Subalgebras.Properties][] module of the [Agda Universal Alge
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Subalgebras.Properties {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ------------------------------------
-open import Agda.Primitive   using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
-open import Data.Product     using ( _,_ ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Function         using ( _∘_ ) renaming ( Func to _⟶_ )
+open import Agda.Primitive   using ()       renaming ( Set to Type )
+open import Data.Product     using ( _,_ )  renaming ( proj₁ to fst ; proj₂ to snd )
+open import Function         using ( _∘_ )  renaming ( Func to _⟶_ )
+open import Level            using ( Level ; _⊔_ )
 open import Relation.Binary  using ( Setoid )
 open import Relation.Unary   using ( Pred ; _⊆_ )
+
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------------
-open import Base.Overture.Preliminaries                 using ( ∣_∣ ; ∥_∥ )
-open import Setoid.Overture.Injective              using ( id-is-injective ; module compose )
-                                                        using ( IsInjective ; ∘-injective )
-open import Setoid.Algebras.Basic              {𝑆 = 𝑆}  using ( Algebra ; Lift-Algˡ )
-                                                        using ( Lift-Algʳ ; Lift-Alg ; ov )
-open import Setoid.Algebras.Products           {𝑆 = 𝑆}  using ( ⨅ )
-open import Setoid.Homomorphisms.Basic         {𝑆 = 𝑆}  using ( hom ; IsHom )
-open import Setoid.Homomorphisms.Properties    {𝑆 = 𝑆}  using ( 𝒾𝒹 ; ∘-hom )
-open import Setoid.Homomorphisms.Isomorphisms  {𝑆 = 𝑆}  using ( _≅_ ; ≅toInjective ; ≅fromInjective )
-                                                        using ( mkiso ; ≅-sym ; ≅-refl ; ≅-trans )
-                                                        using ( Lift-≅ˡ ; Lift-≅ ; Lift-≅ʳ)
-open import Setoid.Subalgebras.Subalgebras     {𝑆 = 𝑆}  using ( _≤_ ; _≥_ ; _IsSubalgebraOfClass_ ; _≤c_ )
+open  import Base.Overture using ( ∣_∣ ; ∥_∥ )
+open  import Setoid.Functions
+      using ( id-is-injective ; module compose ; IsInjective ; ∘-injective )
 
-private variable
- α ρᵃ β ρᵇ γ ρᶜ ι : Level
+open  import Setoid.Algebras {𝑆 = 𝑆}
+      using ( Algebra ; Lift-Algˡ ; Lift-Algʳ ; Lift-Alg ; ov ; ⨅ )
+
+open  import Setoid.Homomorphisms {𝑆 = 𝑆}
+      using ( hom ; IsHom ; 𝒾𝒹 ; ∘-hom ; _≅_ ; ≅toInjective ; ≅fromInjective )
+      using ( mkiso ; ≅-sym ; ≅-refl ; ≅-trans ; Lift-≅ˡ ; Lift-≅ ; Lift-≅ʳ)
+
+open  import Setoid.Subalgebras.Subalgebras {𝑆 = 𝑆}
+      using ( _≤_ ; _≥_ ; _IsSubalgebraOfClass_ ; _≤c_ )
+
+private variable α ρᵃ β ρᵇ γ ρᶜ ι : Level
 
 \end{code}
 
@@ -72,36 +74,35 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}{𝑪 : Algebra γ ρ
  open Setoid (Domain 𝑩) using () renaming ( _≈_ to _≈₂_ ; Carrier to ∣B∣ )
  open Setoid (Domain 𝑪) using () renaming ( _≈_ to _≈₃_ ; Carrier to ∣C∣ )
 
-
  ≤-trans : 𝑨 ≤ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
  ≤-trans ( f , finj ) ( g , ginj ) = (∘-hom f g) , ∘-injective ∣ f ∣ ∣ g ∣ finj ginj
 
  ≤-trans-≅ : 𝑨 ≤ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤ 𝑪
- ≤-trans-≅ (h , hinj) B≅C = (∘-hom h (to B≅C)) , ∘-injective ∣ h ∣ ∣ to B≅C ∣ hinj (≅toInjective B≅C)
+ ≤-trans-≅ (h , hinj) B≅C =  ∘-hom h (to B≅C) ,
+                             ∘-injective ∣ h ∣ ∣ to B≅C ∣ hinj (≅toInjective B≅C)
 
  ≅-trans-≤ : 𝑨 ≅ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
- ≅-trans-≤ A≅B (h , hinj) = (∘-hom (to A≅B) h) , (∘-injective ∣ to A≅B ∣ ∣ h ∣ (≅toInjective A≅B) hinj)
+ ≅-trans-≤ A≅B (h , hinj) =  ∘-hom (to A≅B) h ,
+                             ∘-injective ∣ to A≅B ∣ ∣ h ∣ (≅toInjective A≅B) hinj
 
 module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}{𝑪 : Algebra γ ρᶜ} where
  ≥-trans : 𝑨 ≥ 𝑩 → 𝑩 ≥ 𝑪 → 𝑨 ≥ 𝑪
  ≥-trans A≥B B≥C = ≤-trans B≥C A≥B
 
-≤→≤c→≤c : {𝑨 : Algebra α α}{𝑩 : Algebra α α}{𝒦 : Pred(Algebra α α) (ov α)}
- →        𝑨 ≤ 𝑩 → 𝑩 ≤c 𝒦 → 𝑨 ≤c 𝒦
-≤→≤c→≤c {𝑨 = 𝑨} A≤B sB = ∣ sB ∣ , (fst ∥ sB ∥ , ≤-trans A≤B (snd ∥ sB ∥))
+≤→≤c→≤c :  {𝑨 : Algebra α α}{𝑩 : Algebra α α}{𝒦 : Pred(Algebra α α) (ov α)}
+ →         𝑨 ≤ 𝑩 → 𝑩 ≤c 𝒦 → 𝑨 ≤c 𝒦
 
+≤→≤c→≤c {𝑨 = 𝑨} A≤B sB = ∣ sB ∣ , (fst ∥ sB ∥ , ≤-trans A≤B (snd ∥ sB ∥))
 
 module _ {α ρᵃ ρ : Level} where
 
- open import Relation.Binary.Structures {a = ov(α ⊔ ρᵃ)}{ℓ = (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ)} (_≅_ {α}{ρᵃ}{α}{ρᵃ})
-
+ open import Relation.Binary.Structures
+  {a = ov(α ⊔ ρᵃ)}{ℓ = (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ)} (_≅_ {α}{ρᵃ}{α}{ρᵃ})
  open IsPreorder
  ≤-preorder : IsPreorder _≤_
- isEquivalence ≤-preorder = record { refl = ≅-refl ; sym = ≅-sym ; trans = ≅-trans }
- reflexive ≤-preorder = ≤-refl
- trans ≤-preorder {𝑨}{𝑩}{𝑪} A≤B B≤C = ≤-trans A≤B B≤C
-
-
+ isEquivalence  ≤-preorder = record { refl = ≅-refl ; sym = ≅-sym ; trans = ≅-trans }
+ reflexive      ≤-preorder = ≤-refl
+ trans          ≤-preorder A≤B B≤C = ≤-trans A≤B B≤C
 
 open _≅_
 
@@ -122,25 +123,22 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}{𝑪 : Algebra γ ρ
 
 open _⟶_ using ( cong ) renaming ( f to _⟨$⟩_ )
 module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
- open Algebra 𝑨 using () renaming (Domain to A)
- open Algebra 𝑩 using () renaming (Domain to B)
- open Setoid A using ( sym )
--- open ≡-Reasoning
+ open Algebra 𝑨  using () renaming (Domain to A)
+ open Algebra 𝑩  using () renaming (Domain to B)
+ open Setoid A   using ( sym )
  open SetoidReasoning A
 
  iso→injective : (φ : 𝑨 ≅ 𝑩) → IsInjective ∣ to φ ∣
  iso→injective (mkiso f g f∼g g∼f) {x}{y} fxfy =
   begin
-   x                        ≈˘⟨ g∼f x ⟩
-   ∣ g ∣ ⟨$⟩ (∣ f ∣ ⟨$⟩ x)  ≈⟨ cong ∣ g ∣ fxfy ⟩
-   ∣ g ∣ ⟨$⟩ (∣ f ∣ ⟨$⟩ y)  ≈⟨ g∼f y ⟩
-   y
-  ∎
+         x                        ≈˘⟨ g∼f x ⟩
+         ∣ g ∣ ⟨$⟩ (∣ f ∣ ⟨$⟩ x)  ≈⟨ cong ∣ g ∣ fxfy ⟩
+         ∣ g ∣ ⟨$⟩ (∣ f ∣ ⟨$⟩ y)  ≈⟨ g∼f y ⟩
+         y                        ∎
 
-≤-mono : (𝑩 : Algebra β ρᵇ){𝒦 𝒦' : Pred (Algebra α ρᵃ) γ}
+≤-mono :  (𝑩 : Algebra β ρᵇ){𝒦 𝒦' : Pred (Algebra α ρᵃ) γ}
  →        𝒦 ⊆ 𝒦' → 𝑩 ≤c 𝒦 → 𝑩 ≤c 𝒦'
 ≤-mono 𝑩 KK' (𝑨 , (KA , B≤A)) = 𝑨 , ((KK' KA) , B≤A)
-
 \end{code}
 
 
@@ -181,10 +179,9 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
  Lift-≤-Liftʳ : {rᵃ rᵇ : Level} → 𝑨 ≤ 𝑩 → Lift-Algʳ 𝑨 rᵃ ≤ Lift-Algʳ 𝑩 rᵇ
  Lift-≤-Liftʳ A≤B = ≥-Liftʳ (≤-Liftʳ A≤B)
 
- Lift-≤-Lift : {a rᵃ b rᵇ : Level}
+ Lift-≤-Lift :  {a rᵃ b rᵇ : Level}
   →             𝑨 ≤ 𝑩 → Lift-Alg 𝑨 a rᵃ ≤ Lift-Alg 𝑩 b rᵇ
  Lift-≤-Lift A≤B = ≥-Lift (≤-Lift A≤B)
-
 \end{code}
 
 
@@ -193,11 +190,11 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
 \begin{code}
 
 module _ {I : Type ι}{𝒜 : I → Algebra α ρᵃ}{ℬ : I → Algebra β ρᵇ} where
-
- open Algebra (⨅ 𝒜) using () renaming ( Domain to ⨅A )
- open Algebra (⨅ ℬ) using () renaming ( Domain to ⨅B )
- open Setoid ⨅A using ( refl )
+ open Algebra (⨅ 𝒜)  using () renaming ( Domain to ⨅A )
+ open Algebra (⨅ ℬ)  using () renaming ( Domain to ⨅B )
+ open Setoid ⨅A      using ( refl )
  open IsHom
+
  ⨅-≤ : (∀ i → ℬ i ≤ 𝒜 i) → ⨅ ℬ ≤ ⨅ 𝒜
  ⨅-≤ B≤A = h , hM
   where
@@ -215,9 +212,7 @@ module _ {I : Type ι}{𝒜 : I → Algebra α ρᵃ}{ℬ : I → Algebra β ρ�
 
   hM : IsInjective ∣ h ∣
   hM = λ xy i → ∥ B≤A i ∥ (xy i)
-
 \end{code}
-
 
 ---------------------------------
 

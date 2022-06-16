@@ -17,11 +17,11 @@ The source code for this module comprises the (literate) [Agda][] program that w
 
 module Base.Overture where
 
-open import Base.Overture.Preliminaries
-open import Base.Overture.Inverses
-open import Base.Overture.Injective
-open import Base.Overture.Surjective
-open import Base.Overture.Transformers
+open import Base.Overture.Preliminaries  public
+open import Base.Overture.Inverses       public
+open import Base.Overture.Injective      public
+open import Base.Overture.Surjective     public
+open import Base.Overture.Transformers   public
 
 \end{code}
 

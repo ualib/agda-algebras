@@ -14,38 +14,38 @@ This is the [Base.Terms.Properties][] module of the [Agda Universal Algebra Libr
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Base.Signatures using ( 𝓞 ; 𝓥 ; Signature )
 
 module Base.Terms.Properties {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library --------------------------------------
-open import Axiom.Extensionality.Propositional
-                                   using () renaming (Extensionality to funext)
-open import Agda.Primitive         using ( Level ; _⊔_ ; lsuc ) renaming ( Set to Type )
-open import Data.Product           using ( _,_ ; Σ-syntax )
-open import Function.Base          using ( _∘_ )
-open import Data.Empty.Polymorphic using ( ⊥ )
-open import Relation.Binary        using ( IsEquivalence ; Setoid )
-open import Relation.Binary.Definitions
-                                   using (Reflexive ; Symmetric ; Transitive )
-open import Relation.Binary.PropositionalEquality
-                                   using ( _≡_ ; refl ; module ≡-Reasoning ; cong )
+open import Agda.Primitive          using ()  renaming ( Set to Type )
+open import Data.Product            using ( _,_ ; Σ-syntax )
+open import Function                using ( _∘_ )
+open import Data.Empty.Polymorphic  using ( ⊥ )
+open import Level                   using ( Level )
+
+open  import Relation.Binary
+      using ( IsEquivalence ; Setoid ; Reflexive ; Symmetric ; Transitive )
+
+open  import Relation.Binary.PropositionalEquality as ≡
+      using ( _≡_ ; module ≡-Reasoning )
+
+open  import Axiom.Extensionality.Propositional
+      using ()  renaming (Extensionality to funext)
 
 
 -- Imports from the Agda Universal Algebra Library ----------------------------------------
-open import Base.Overture.Preliminaries      using ( _⁻¹ ; 𝑖𝑑 ; ∣_∣ ; ∥_∥)
-open import Base.Overture.Inverses           using ( Inv ; InvIsInverseʳ ; Image_∋_; eq )
-open import Base.Overture.Surjective         using ( IsSurjective )
-open import Base.Equality.Welldefined        using ( swelldef )
-open import Base.Algebras.Basic              using ( Algebra ; _̂_ )
-open import Base.Algebras.Products   {𝑆 = 𝑆} using ( ov )
-open import Base.Homomorphisms.Basic {𝑆 = 𝑆} using ( hom )
-open import Base.Terms.Basic         {𝑆 = 𝑆}
+open  import Base.Overture
+      using ( _⁻¹ ; 𝑖𝑑 ; ∣_∣ ; ∥_∥ ; Inv ; InvIsInverseʳ ; Image_∋_; eq ; IsSurjective )
+open  import Base.Equality               using ( swelldef )
+open  import Base.Algebras {𝑆 = 𝑆}       using ( Algebra ; _̂_  ; ov )
+open  import Base.Homomorphisms {𝑆 = 𝑆}  using ( hom )
+open  import Base.Terms.Basic {𝑆 = 𝑆}    using ( Term ; 𝑻 )
 
+open Term
 private variable α β χ : Level
-
 \end{code}
-
 
 #### <a id="the-universal-property">The universal property</a>
 
@@ -78,7 +78,7 @@ The free lift so defined is a homomorphism by construction. Indeed, here is the 
 \begin{code}
 
 lift-hom : (𝑨 : Algebra α 𝑆) → (X → ∣ 𝑨 ∣) → hom (𝑻 X) 𝑨
-lift-hom 𝑨 h = free-lift 𝑨 h , λ f a → cong (f ̂ 𝑨) refl
+lift-hom 𝑨 h = free-lift 𝑨 h , λ f a → ≡.cong (f ̂ 𝑨) ≡.refl
 
 \end{code}
 
@@ -88,19 +88,20 @@ Finally, we prove that the homomorphism is unique.  This requires `funext 𝓥 �
 
 open ≡-Reasoning
 
-free-unique : swelldef 𝓥 α → (𝑨 : Algebra α 𝑆)(g h : hom (𝑻 X) 𝑨)
- →            (∀ x → ∣ g ∣ (ℊ x) ≡ ∣ h ∣ (ℊ x))
-              ----------------------------------------
- →            ∀ (t : Term X) →  ∣ g ∣ t ≡ ∣ h ∣ t
+free-unique :  swelldef 𝓥 α → (𝑨 : Algebra α 𝑆)(g h : hom (𝑻 X) 𝑨)
+ →             (∀ x → ∣ g ∣ (ℊ x) ≡ ∣ h ∣ (ℊ x))
+ →             ∀(t : Term X) →  ∣ g ∣ t ≡ ∣ h ∣ t
 
 free-unique _ _ _ _ p (ℊ x) = p x
 
 free-unique wd 𝑨 g h p (node 𝑓 𝑡) =
-
  ∣ g ∣ (node 𝑓 𝑡)    ≡⟨ ∥ g ∥ 𝑓 𝑡 ⟩
- (𝑓 ̂ 𝑨)(∣ g ∣ ∘ 𝑡)  ≡⟨ wd (𝑓 ̂ 𝑨)(∣ g ∣ ∘ 𝑡)(∣ h ∣ ∘ 𝑡)(λ i → free-unique wd 𝑨 g h p (𝑡 i)) ⟩
+ (𝑓 ̂ 𝑨)(∣ g ∣ ∘ 𝑡)  ≡⟨ Goal ⟩
  (𝑓 ̂ 𝑨)(∣ h ∣ ∘ 𝑡)  ≡⟨ (∥ h ∥ 𝑓 𝑡)⁻¹ ⟩
  ∣ h ∣ (node 𝑓 𝑡)    ∎
+  where
+  Goal : (𝑓 ̂ 𝑨) (λ x → ∣ g ∣ (𝑡 x)) ≡ (𝑓 ̂ 𝑨) (λ x → ∣ h ∣ (𝑡 x))
+  Goal = wd (𝑓 ̂ 𝑨)(∣ g ∣ ∘ 𝑡)(∣ h ∣ ∘ 𝑡)(λ i → free-unique wd 𝑨 g h p (𝑡 i))
 
 \end{code}
 
@@ -110,8 +111,8 @@ If we further assume that each of the mappings from `X` to `∣ 𝑨 ∣` is *su
 
 \begin{code}
 
-lift-of-epi-is-epi : (𝑨 : Algebra α 𝑆){h₀ : X → ∣ 𝑨 ∣}
- →                   IsSurjective h₀ → IsSurjective ∣ lift-hom 𝑨 h₀ ∣
+lift-of-epi-is-epi :  (𝑨 : Algebra α 𝑆){h₀ : X → ∣ 𝑨 ∣}
+ →                    IsSurjective h₀ → IsSurjective ∣ lift-hom 𝑨 h₀ ∣
 
 lift-of-epi-is-epi 𝑨 {h₀} hE y = Goal
  where
@@ -122,7 +123,6 @@ lift-of-epi-is-epi 𝑨 {h₀} hE y = Goal
 
  Goal : Image ∣ lift-hom 𝑨 h₀ ∣ ∋ y
  Goal = eq (ℊ h₀⁻¹y) η
-
 \end{code}
 
 The `lift-hom` and `lift-of-epi-is-epi` types will be called to action when such epimorphisms are needed later (e.g., in the [Base.Varieties][] module).

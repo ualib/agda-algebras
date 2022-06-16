@@ -13,46 +13,45 @@ This is the [Setoid.Homomorphisms.Basic][] module of the [Agda Universal Algebra
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using (𝓞 ; 𝓥 ; Signature )
+open import Base.Signatures using (𝓞 ; 𝓥 ; Signature )
 
 module Setoid.Homomorphisms.Basic {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ------------------------------
-open import Agda.Primitive    using ( _⊔_ ; Level )  renaming ( Set to Type )
+open import Agda.Primitive    using () renaming ( Set to Type )
 open import Data.Product      using ( _,_ ; Σ ; Σ-syntax )
-open import Function.Bundles  using ()               renaming ( Func to _⟶_ )
+open import Function.Bundles  using () renaming ( Func to _⟶_ )
+open import Level             using ( Level ; _⊔_ )
 open import Relation.Binary   using ( Setoid )
 
 -- Imports from the Agda Universal Algebra Library ---------------------------
-open import Base.Overture.Preliminaries    using ( ∣_∣ ; ∥_∥ )
-open import Setoid.Overture.Injective      using ( IsInjective )
-open import Setoid.Overture.Surjective     using ( IsSurjective )
-open import Setoid.Algebras.Basic {𝑆 = 𝑆}  using ( Algebra ; _̂_ )
+open import Base.Overture            using ( ∣_∣ ; ∥_∥ )
+open import Setoid.Functions         using ( IsInjective ; IsSurjective )
+open import Setoid.Algebras {𝑆 = 𝑆}  using ( Algebra ; _̂_ )
 
-private variable
- α β ρᵃ ρᵇ : Level
+private variable α β ρᵃ ρᵇ : Level
 
 module _ (𝑨 : Algebra α ρᵃ)(𝑩 : Algebra β ρᵇ) where
  open Algebra 𝑨  using () renaming (Domain to A )
  open Algebra 𝑩  using () renaming (Domain to B )
  open Setoid A   using () renaming ( _≈_ to _≈₁_ )
  open Setoid B   using () renaming ( _≈_ to _≈₂_ )
+
  open _⟶_ {a = α}{ρᵃ}{β}{ρᵇ}{From = A}{To = B} renaming (f to _⟨$⟩_ )
 
  compatible-map-op : (A ⟶ B) → ∣ 𝑆 ∣ → Type (𝓥 ⊔ α ⊔ ρᵇ)
- compatible-map-op h f = ∀ {a} → (h ⟨$⟩ ((f ̂ 𝑨) a)) ≈₂ ((f ̂ 𝑩) (λ x → (h ⟨$⟩ (a x))))
+ compatible-map-op h f =  ∀ {a}
+  →                       h ⟨$⟩ (f ̂ 𝑨) a ≈₂ (f ̂ 𝑩) λ x → h ⟨$⟩ (a x)
 
  compatible-map : (A ⟶ B) → Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵇ)
  compatible-map h = ∀ {f} → compatible-map-op h f
 
  -- The property of being a homomorphism.
  record IsHom (h : A ⟶ B) : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ ⊔ ρᵇ) where
-  field
-   compatible : compatible-map h
+  field compatible : compatible-map h
 
  hom : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
  hom = Σ (A ⟶ B) IsHom
-
 \end{code}
 
 
@@ -73,7 +72,6 @@ module _ (𝑨 : Algebra α ρᵃ)(𝑩 : Algebra β ρᵇ) where
 
  mon→hom : mon → hom
  mon→hom h = IsMon.HomReduct ∥ h ∥
-
 
  record IsEpi (h : A ⟶ B) : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ) where
   field
@@ -98,7 +96,6 @@ module _ (𝑨 : Algebra α ρᵃ)(𝑩 : Algebra β ρᵇ) where
 
  epi→ontohom : epi 𝑨 𝑩 → Σ[ h ∈ hom 𝑨 𝑩 ] IsSurjective ∣ h ∣
  epi→ontohom (hh , hhE) = (hh , isHom hhE) , isSurjective hhE
-
 \end{code}
 
 --------------------------------

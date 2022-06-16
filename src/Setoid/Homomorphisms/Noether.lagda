@@ -13,29 +13,28 @@ This is the [Setoid.Homomorphisms.Noether][] module of the [Agda Universal Algeb
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Homomorphisms.Noether {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ---------------------------
-open import Agda.Primitive    using ( Level )
-open import Data.Product      using (Σ-syntax ; _,_ )  renaming ( _×_ to _∧_ )
-open import Function.Base     using ( id )
-open import Function.Bundles  using ()                 renaming ( Func to _⟶_ )
-open import Relation.Binary   using ( Setoid )
+open import Data.Product     using (Σ-syntax ; _,_ )  renaming ( _×_ to _∧_ ; proj₁ to fst)
+open import Function         using ( id )             renaming ( Func to _⟶_ )
+open import Level            using ( Level )
+open import Relation.Binary  using ( Setoid )
+
 open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
+
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from agda-algebras ------------------------------------------------
-open import Base.Overture.Preliminaries                 using ( ∣_∣ ; ∥_∥ )
-open import Setoid.Overture.Injective              using ( IsInjective )
-open import Setoid.Algebras.Basic                  using ( Algebra ; _̂_)
-open import Setoid.Homomorphisms.Basic    {𝑆 = 𝑆}  using ( hom ; IsHom )
-open import Setoid.Homomorphisms.Kernels  {𝑆 = 𝑆}  using ( kerquo ; πker )
+open import Base.Overture                         using ( ∣_∣ ; ∥_∥ )
+open import Setoid.Functions                      using ( IsInjective )
+open import Setoid.Algebras {𝑆 = 𝑆}               using ( Algebra ; _̂_)
+open import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}    using ( hom ; IsHom )
+open import Setoid.Homomorphisms.Kernels {𝑆 = 𝑆}  using ( kerquo ; πker )
 
-private variable
- α ρᵃ β ρᵇ γ ρᶜ ι : Level
-
+private variable α ρᵃ β ρᵇ γ ρᶜ ι : Level
 \end{code}
 
 #### <a id="the-first-homomorphism-theorem">The First Homomorphism Theorem for setoid algebras</a>
@@ -55,9 +54,9 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}(hh : hom 𝑨 𝑩) 
   hfunc = ∣ hh ∣
   h = _⟨$⟩_ hfunc
 
- FirstHomTheorem : Σ[ φ ∈ hom (kerquo hh) 𝑩  ]
-                    (∀ a → h a ≈ ∣ φ ∣ ⟨$⟩ (∣ πker hh ∣ ⟨$⟩ a))
-                    ∧ IsInjective ∣ φ ∣
+ FirstHomTheorem :  Σ[ φ ∈ hom (kerquo hh) 𝑩  ]
+                    ( ∀ a → h a ≈ ∣ φ ∣ ⟨$⟩ (∣ πker hh ∣ ⟨$⟩ a) )
+                     ∧ IsInjective ∣ φ ∣
 
  FirstHomTheorem = (φ , φhom) , (λ _ → refl) , φmon
   where
@@ -83,7 +82,6 @@ Now we prove that the homomorphism whose existence is guaranteed by `FirstHomThe
   →                 ∀ [a]  →  ∣ f ∣ ⟨$⟩ [a] ≈ ∣ g ∣ ⟨$⟩ [a]
 
  FirstHomUnique fh gh hfk hgk a = trans (sym (hfk a)) (hgk a)
-
 \end{code}
 
 --------------------------------------

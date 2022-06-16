@@ -14,27 +14,26 @@ This is the [Setoid.Algebras.Products][] module of the [Agda Universal Algebra L
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 
-open import Base.Algebras.Basic using (𝓞 ; 𝓥 ; Signature)
+open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Algebras.Products {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library --------------------------------
 open import Agda.Primitive                         using ( lsuc ; _⊔_ ; Level ) renaming ( Set to Type )
 open import Data.Product                           using ( _,_ ; Σ-syntax )
-open import Function.Base                          using ( flip )
-open import Function.Bundles                       using ( Func )
+open import Function                               using ( flip ; Func )
 open import Relation.Binary                        using ( Setoid ;  IsEquivalence ; Decidable )
 open import Relation.Binary.PropositionalEquality  using ( refl ; _≡_ )
 open import Relation.Unary                         using ( Pred ; _⊆_ ; _∈_ )
 
-open Func           using ( cong )           renaming ( f to _<$>_ )
+open Func           using ( cong )           renaming ( f to _⟨$⟩_ )
 open Setoid         using ( Carrier ; _≈_ )  renaming ( isEquivalence to isEqv )
 open IsEquivalence  using ()                 renaming ( refl to reflE ; sym to symE ; trans to transE )
 
 
 -- Imports from agda-algebras -----------------------------------------------------
-open import Base.Overture.Preliminaries    using ( ∣_∣; ∥_∥)
-open import Base.Overture.Surjective       using ( proj ; projIsOnto ) renaming ( IsSurjective to onto )
+open import Base.Overture                  using ( ∣_∣; ∥_∥ ; proj ; projIsOnto )
+                                           renaming ( IsSurjective to onto )
 open import Setoid.Algebras.Basic {𝑆 = 𝑆}  using ( Algebra ; _̂_ ; ov ; 𝕌[_])
 
 private variable α ρ ι : Level
@@ -44,21 +43,17 @@ open Algebra
 ⨅ : {I : Type ι }(𝒜 : I → Algebra α ρ) → Algebra (α ⊔ ι) (ρ ⊔ ι)
 
 Domain (⨅ {I} 𝒜) =
+ record  { Carrier = ∀ i → Carrier (Domain (𝒜 i))
+         ; _≈_ = λ a b → ∀ i → Domain (𝒜 i) ._≈_ (a i) (b i)
+         ; isEquivalence =
+            record  { refl   = λ i      → reflE   (isEqv (Domain (𝒜 i)))
+                    ; sym    = λ x i    → symE    (isEqv (Domain (𝒜 i)))(x i)
+                    ; trans  = λ x y i  → transE  (isEqv (Domain (𝒜 i)))(x i)(y i)
+                    }
+         }
 
- record { Carrier = ∀ i → Carrier (Domain (𝒜 i))
-
-        ; _≈_ = λ a b → ∀ i → Domain (𝒜 i) ._≈_ (a i) (b i)
-
-        ; isEquivalence =
-           record { refl  =     λ i → reflE  (isEqv (Domain (𝒜 i)))
-                  ; sym   =   λ x i → symE   (isEqv (Domain (𝒜 i)))(x i)
-                  ; trans = λ x y i → transE (isEqv (Domain (𝒜 i)))(x i)(y i)
-                  }
-        }
-
-(Interp (⨅ {I} 𝒜)) <$> (f , a) = λ i → (f ̂ (𝒜 i)) (flip a i)
+(Interp (⨅ {I} 𝒜)) ⟨$⟩ (f , a) = λ i → (f ̂ (𝒜 i)) (flip a i)
 cong (Interp (⨅ {I} 𝒜)) (refl , f=g ) = λ i → cong  (Interp (𝒜 i)) (refl , flip f=g i )
-
 \end{code}
 
 #### <a id="products-of-classes-of-setoidalgebras">Products of classes of Algebras</a>
@@ -83,8 +78,7 @@ If `p : 𝑨 ∈ 𝒦`, we view the pair `(𝑨 , p) ∈ ℑ` as an *index* over
 so we can think of `𝔄 (𝑨 , p)` (which is simply `𝑨`) as the projection of the
 product `⨅ 𝔄` onto the `(𝑨 , p)`-th component.
 
-
-#### Proving the coordinate projections are surjective
+#### Surjectivity of coordinate projections
 
 Suppose `I` is an index type and `𝒜 : I → Algebra α ρ` is an indexed collection of algebras.
 Let `⨅ 𝒜` be the product algebra defined above.  Given `i : I`, consider the projection of `⨅ 𝒜`
@@ -97,16 +91,14 @@ projection of a product of algebras over such an index type is surjective.
 
 \begin{code}
 
-module _ {I : Type ι}                    -- index type
-         {_≟_ : Decidable{A = I} _≡_}    -- with decidable equality
-
-         {𝒜 : I → Algebra α ρ}     -- indexed collection of algebras
-         {𝒜I : ∀ i → 𝕌[ 𝒜 i ] }          -- each of which is nonempty
-         where
+module _  {I : Type ι}                  -- index type
+          {_≟_ : Decidable{A = I} _≡_}  -- with decidable equality
+          {𝒜 : I → Algebra α ρ}         -- indexed collection of algebras
+          {𝒜I : ∀ i → 𝕌[ 𝒜 i ] }        -- each of which is nonempty
+          where
 
  ProjAlgIsOnto : ∀{i} → Σ[ h ∈ (𝕌[ ⨅ 𝒜 ] → 𝕌[ 𝒜 i ]) ] onto h
  ProjAlgIsOnto {i} = (proj _≟_ 𝒜I i) , projIsOnto _≟_ 𝒜I
-
 \end{code}
 
 --------------------------------

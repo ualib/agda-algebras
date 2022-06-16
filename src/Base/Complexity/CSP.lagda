@@ -92,7 +92,7 @@ algebra, 𝑨(R) := (A , ∣: ⃖ R).
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Base.Signatures using ( 𝓞 ; 𝓥 ; Signature )
 
 module Base.Complexity.CSP {𝑆 : Signature 𝓞 𝓥} where
 

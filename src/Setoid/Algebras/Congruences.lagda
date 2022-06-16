@@ -13,24 +13,23 @@ This is the [Setoid.Algebras.Congruences][] module of the [Agda Universal Algebr
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using (𝓞 ; 𝓥 ; Signature)
+open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Algebras.Congruences {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from the Agda Standard Library ---------------------------------------
-open import Function                               using ( id )
-open import Function.Bundles                       using ( Func )
-open import Agda.Primitive                         using ( _⊔_ ; Level )             renaming ( Set to Type )
-open import Data.Product                           using ( _,_ ; Σ-syntax )
-open import Relation.Binary                        using ( Setoid ; IsEquivalence )  renaming ( Rel to BinRel )
-open import Relation.Binary.PropositionalEquality  using ( refl )
+open import Function         using ( id ; Func )
+open import Agda.Primitive   using ( _⊔_ ; Level )             renaming ( Set to Type )
+open import Data.Product     using ( _,_ ; Σ-syntax )
+open import Relation.Binary  using ( Setoid ; IsEquivalence )  renaming ( Rel to BinRel )
+
+open import Relation.Binary.PropositionalEquality using ( refl )
 
 -- Imports from the Agda Universal Algebras Library ------------------------------
-open import Base.Overture.Preliminaries    using ( ∣_∣  ; ∥_∥  )
-open import Base.Relations.Discrete        using ( 0[_] ; _|:_ )
+open import Base.Overture                  using ( ∣_∣  ; ∥_∥  )
+open import Base.Relations                 using ( 0[_] ; _|:_ ; Equivalence )
+open import Setoid.Relations               using ( ⟪_⟫ ; _/_ ; ⟪_∼_⟫-elim )
 open import Setoid.Algebras.Basic {𝑆 = 𝑆}  using ( ov ; Algebra ; 𝕌[_] ; _̂_ )
-open import Base.Relations.Quotients       using ( Equivalence )
-open import Setoid.Relations.Quotients     using ( ⟪_⟫ ; _/_ ; ⟪_∼_⟫-elim )
 
 private variable α ρ ℓ : Level
 
@@ -54,15 +53,15 @@ Congruences should obviously contain the equality relation on the underlying set
 \begin{code}
 
 module _ (𝑨 : Algebra α ρ) where
-
  open Algebra 𝑨  using ()  renaming (Domain to A )
- open Setoid A using ( _≈_ )
+ open Setoid A   using ( _≈_ )
 
  record IsCongruence (θ : BinRel 𝕌[ 𝑨 ] ℓ) : Type (𝓞 ⊔ 𝓥 ⊔ ρ ⊔ ℓ ⊔ α)  where
   constructor mkcon
-  field       reflexive : ∀ {a₀ a₁} → a₀ ≈ a₁ → θ a₀ a₁
-              is-equivalence : IsEquivalence θ
-              is-compatible  : 𝑨 ∣≈ θ
+  field
+   reflexive : ∀ {a₀ a₁} → a₀ ≈ a₁ → θ a₀ a₁
+   is-equivalence : IsEquivalence θ
+   is-compatible  : 𝑨 ∣≈ θ
 
   Eqv : Equivalence 𝕌[ 𝑨 ] {ℓ}
   Eqv = θ , is-equivalence
@@ -83,20 +82,21 @@ IsCongruence→Con θ p = θ , p
 
 Con→IsCongruence : {𝑨 : Algebra α ρ}((θ , _) : Con 𝑨 {ℓ}) → IsCongruence 𝑨 θ
 Con→IsCongruence θ = ∥ θ ∥
-
 \end{code}
-
 
 
 #### <a id="quotient-algebras">Quotient algebras</a>
 
-In many areas of abstract mathematics the *quotient* of an algebra `𝑨` with respect to a congruence relation `θ` of `𝑨` plays an important role. This quotient is typically denoted by `𝑨 / θ` and Agda allows us to define and express quotients using this standard notation.
+In many areas of abstract mathematics the *quotient* of an algebra `𝑨` with
+respect to a congruence relation `θ` of `𝑨` plays an important role. This quotient
+is typically denoted by `𝑨 / θ` and Agda allows us to define and express quotients
+using this standard notation.
 
 \begin{code}
 
-open Algebra using ( Domain ; Interp )
-open Setoid using ( Carrier )
-open Func using ( cong ) renaming ( f to _⟨$⟩_  )
+open Algebra  using ( Domain ; Interp )
+open Setoid   using ( Carrier )
+open Func     using ( cong ) renaming ( f to _⟨$⟩_  )
 
 _╱_ : (𝑨 : Algebra α ρ) → Con 𝑨 {ℓ} → Algebra α ℓ
 Domain (𝑨 ╱ θ) = 𝕌[ 𝑨 ] / (Eqv ∥ θ ∥)
@@ -104,15 +104,16 @@ Domain (𝑨 ╱ θ) = 𝕌[ 𝑨 ] / (Eqv ∥ θ ∥)
 cong (Interp (𝑨 ╱ θ)) {f , u} {.f , v} (refl , a) = is-compatible ∥ θ ∥ f a
 
 module _ (𝑨 : Algebra α ρ) where
- open Algebra 𝑨   using ( )                      renaming (Domain to A )
- open Setoid A using ( _≈_ ) renaming (refl to refl₁)
+ open Algebra 𝑨  using ( )      renaming (Domain to A )
+ open Setoid A   using ( _≈_ )  renaming (refl to refl₁)
 
  _/∙_ : 𝕌[ 𝑨 ] → (θ : Con 𝑨{ℓ}) → Carrier (Domain (𝑨 ╱ θ))
  a /∙ θ = a
 
- /-≡ : (θ : Con 𝑨{ℓ}){u v : 𝕌[ 𝑨 ]} → ⟪ u ⟫{Eqv ∥ θ ∥} ≈ ⟪ v ⟫{Eqv ∥ θ ∥} → ∣ θ ∣ u v
- /-≡ θ {u}{v} uv = reflexive ∥ θ ∥ uv
+ /-≡ :  (θ : Con 𝑨{ℓ}){u v : 𝕌[ 𝑨 ]}
+  →     ⟪ u ⟫{Eqv ∥ θ ∥} ≈ ⟪ v ⟫{Eqv ∥ θ ∥} → ∣ θ ∣ u v
 
+ /-≡ θ {u}{v} uv = reflexive ∥ θ ∥ uv
 \end{code}
 
 --------------------------------------

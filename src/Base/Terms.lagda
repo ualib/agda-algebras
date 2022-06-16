@@ -13,11 +13,13 @@ This is the [Base.Terms][] module of the [Agda Universal Algebra Library][].
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Base.Terms where
+open import Base.Signatures using (Signature ; 𝓞 ; 𝓥 )
 
-open import Base.Terms.Basic
-open import Base.Terms.Properties
-open import Base.Terms.Operations
+module Base.Terms {𝑆 : Signature 𝓞 𝓥} where
+
+open import Base.Terms.Basic       {𝑆 = 𝑆} public
+open import Base.Terms.Properties  {𝑆 = 𝑆} public
+open import Base.Terms.Operations  {𝑆 = 𝑆} public
 
 \end{code}
 

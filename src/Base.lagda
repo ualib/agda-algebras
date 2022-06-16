@@ -19,14 +19,15 @@ module Base where
 
 open import Base.Overture
 open import Base.Relations
-open import Base.Algebras
 open import Base.Equality
+open import Base.Adjunction
+open import Base.Signatures
+open import Base.Algebras
 open import Base.Homomorphisms
 open import Base.Terms
 open import Base.Subalgebras
 open import Base.Varieties
 open import Base.Structures
-open import Base.Adjunction
 open import Base.Categories
 open import Base.Complexity
 

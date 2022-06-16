@@ -21,20 +21,17 @@ Readers who want to learn more about "proof-relevant mathematics" and other conc
 module Base.Equality.Truncation where
 
 -- Imports from Agda and the Agda Standard Library  -------------------------------------
-open import Agda.Primitive   using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
-open import Data.Product     using ( _,_ ; Σ ; Σ-syntax ; _×_ )
-                             renaming ( proj₁ to fst ; proj₂ to snd )
-open import Function.Base    using ( _∘_ ; id )
-open import Relation.Binary  using ( IsEquivalence ) renaming ( Rel to BinRel )
-open import Relation.Unary   using ( Pred ; _⊆_ )
-open import Relation.Binary.PropositionalEquality
-                             using ( _≡_ ; refl ; module ≡-Reasoning ; cong-app ; trans )
+open import Agda.Primitive   renaming ( Set to Type )                  using ()
+open import Data.Product     renaming ( proj₁ to fst ; proj₂ to snd )  using ( _,_ ; Σ ; Σ-syntax ; _×_ )
+open import Function                                                   using ( _∘_ ; id )
+open import Level                                                      using ( _⊔_ ; suc ; Level )
+open import Relation.Binary  renaming ( Rel to BinRel )                using ( IsEquivalence )
+open import Relation.Binary.PropositionalEquality as ≡                 using ( _≡_ ; module ≡-Reasoning )
+open import Relation.Unary                                             using ( Pred ; _⊆_ )
 
 -- Imports from the Agda Universal Algebra Library --------------------------------------
-open import Base.Overture.Preliminaries using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; _≈_ ; transport)
-open import Base.Overture.Injective     using ( IsInjective )
-open import Base.Relations.Quotients    using ( IsBlock )
-open import Base.Relations.Continuous   using ( Rel ; REL )
+open import Base.Overture    using ( _⁻¹ ; transport ; ∥_∥ ; _≈_ ; IsInjective ; ∣_∣ )
+open import Base.Relations   using ( IsBlock ; Rel ; REL )
 
 private variable α β ρ 𝓥 : Level
 
@@ -76,8 +73,8 @@ is-equiv : {A : Type α } {B : Type β } → (A → B) → Type (α ⊔ β)
 is-equiv f = ∀ y → is-singleton (fiber f y)
 
 -- An alternative means of postulating function extensionality.
-hfunext :  ∀ α β → Type (lsuc (α ⊔ β))
-hfunext α β = {A : Type α}{B : A → Type β} (f g : (x : A) → B x) → is-equiv (cong-app{f = f}{g})
+hfunext :  ∀ α β → Type (suc (α ⊔ β))
+hfunext α β = {A : Type α}{B : A → Type β} (f g : (x : A) → B x) → is-equiv (≡.cong-app{f = f}{g})
 
 \end{code}
 
@@ -118,9 +115,7 @@ We will also need the function [to-Σ-≡](https://www.cs.bham.ac.uk/~mhe/HoTT-U
 module _ {A : Type α}{B : A → Type β} where
 
  to-Σ-≡ : {σ τ : Σ[ x ∈ A ] B x} → (Σ[ p ∈ (fst σ ≡ fst τ) ] (transport B p ∥ σ ∥) ≡ ∥ τ ∥) → σ ≡ τ
- to-Σ-≡ (refl , refl) = refl
-
-
+ to-Σ-≡ (≡.refl , ≡.refl) = ≡.refl
 \end{code}
 
 
@@ -145,6 +140,7 @@ Finding a proof that a function is an embedding isn't always easy, but one appro
 \begin{code}
 
 module _ {A : Type α}{B : Type β} where
+
  invertible : (A → B) → Type (α ⊔ β)
  invertible f = Σ[ g ∈ (B → A) ] ((g ∘ f ≈ id) × (f ∘ g ≈ id))
 
@@ -170,7 +166,7 @@ monic-is-embedding|Set : (f : A → B) → is-set B → IsInjective f → is-emb
 monic-is-embedding|Set f Bset fmon b (u , fu≡b) (v , fv≡b) = γ
  where
  fuv : f u ≡ f v
- fuv = trans fu≡b (fv≡b ⁻¹)
+ fuv = ≡.trans fu≡b (fv≡b ⁻¹)
 
  uv : u ≡ v
  uv = fmon fuv
@@ -199,7 +195,7 @@ In the next module we will define a *quotient extensionality* principle that wil
 
 \begin{code}
 
-blk-uip : (A : Type α)(R : BinRel A ρ ) → Type(α ⊔ lsuc ρ)
+blk-uip : (A : Type α)(R : BinRel A ρ ) → Type(α ⊔ suc ρ)
 blk-uip A R = ∀ (C : Pred A _) → is-prop (IsBlock C {R})
 
 \end{code}
@@ -220,21 +216,20 @@ module _ {I : Type 𝓥} where
  IsRelProp : {ρ : Level}(A : Type α) → Rel A I{ρ}  → Type (𝓥 ⊔ α ⊔ ρ)
  IsRelProp B P = ∀ (b : (I → B)) → is-prop (P b)
 
- RelProp : Type α → (ρ : Level) → Type (𝓥 ⊔ α ⊔ lsuc ρ)
+ RelProp : Type α → (ρ : Level) → Type (𝓥 ⊔ α ⊔ suc ρ)
  RelProp A ρ = Σ[ P ∈ Rel A I{ρ} ] IsRelProp A P
 
- RelPropExt : Type α → (ρ : Level) → Type (𝓥 ⊔ α ⊔ lsuc ρ)
+ RelPropExt : Type α → (ρ : Level) → Type (𝓥 ⊔ α ⊔ suc ρ)
  RelPropExt A ρ = {P Q : RelProp A ρ } → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
 
  IsRELProp : {ρ : Level} (𝒜 : I → Type α) → REL I 𝒜 {ρ}  → Type (𝓥 ⊔ α ⊔ ρ)
  IsRELProp 𝒜 P = ∀ (a : ((i : I) → 𝒜 i)) → is-prop (P a)
 
- RELProp : (I → Type α) → (ρ : Level) → Type (𝓥 ⊔ α ⊔ lsuc ρ)
+ RELProp : (I → Type α) → (ρ : Level) → Type (𝓥 ⊔ α ⊔ suc ρ)
  RELProp 𝒜 ρ = Σ[ P ∈ REL I 𝒜 {ρ} ] IsRELProp 𝒜 P
 
- RELPropExt : (I → Type α) → (ρ : Level) → Type (𝓥 ⊔ α ⊔ lsuc ρ)
+ RELPropExt : (I → Type α) → (ρ : Level) → Type (𝓥 ⊔ α ⊔ suc ρ)
  RELPropExt 𝒜 ρ = {P Q : RELProp 𝒜 ρ} → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
-
 \end{code}
 
 ----------------------------

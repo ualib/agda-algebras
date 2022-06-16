@@ -13,18 +13,19 @@ This is the [Base.Algebras.Products][] module of the [Agda Universal Algebra Lib
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Base.Signatures using ( 𝓞 ; 𝓥 ; Signature )
 
 module Base.Algebras.Products {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ------------------------------
-open import Agda.Primitive  using ( lsuc ; _⊔_ ; Level ) renaming ( Set to Type )
+open import Agda.Primitive  using () renaming ( Set to Type )
 open import Data.Product    using ( _,_ ; Σ ; Σ-syntax )
+open import Level           using ( Level ; _⊔_ ; suc )
 open import Relation.Unary  using ( Pred ; _⊆_ ; _∈_ )
 
 -- Imports from agda-algebras ---------------------------------------------------
-open import Base.Overture.Preliminaries using (_⁻¹; 𝑖𝑑; ∣_∣; ∥_∥)
-open import Base.Algebras.Basic         using ( Algebra ; _̂_ ; algebra )
+open import Base.Overture                using (_⁻¹; 𝑖𝑑; ∣_∣; ∥_∥)
+open import Base.Algebras.Basic {𝑆 = 𝑆}  using ( Algebra ; _̂_ ; algebra )
 
 private variable α β ρ 𝓘 : Level
 
@@ -52,23 +53,17 @@ The type just defined is the one that will be used throughout the [agda-algebras
 open algebra
 
 ⨅' : {I : Type 𝓘 }(𝒜 : I → algebra α 𝑆) → algebra (𝓘 ⊔ α) 𝑆
-
-⨅' {I} 𝒜 = record { carrier = ∀ i → carrier (𝒜 i) ;                 -- domain
-                     opsymbol = λ 𝑓 𝑎 i → (opsymbol (𝒜 i)) 𝑓 λ x → 𝑎 x i } -- basic operations
-
+⨅' {I} 𝒜 = record  { carrier = ∀ i → carrier (𝒜 i)                         -- domain
+                    ; opsymbol = λ 𝑓 𝑎 i → (opsymbol (𝒜 i)) 𝑓 λ x → 𝑎 x i }  -- basic operations
 \end{code}
-
-
 
 **Notation**. Given a signature `𝑆 : Signature 𝓞 𝓥`, the type `Algebra α 𝑆` has type `Type(𝓞 ⊔ 𝓥 ⊔ lsuc α)`.  Such types occur so often in the [agda-algebras](https://github.com/ualib/agda-algebras) library that we define the following shorthand for their universes.
 
 \begin{code}
 
 ov : Level → Level
-ov α = 𝓞 ⊔ 𝓥 ⊔ lsuc α
-
+ov α = 𝓞 ⊔ 𝓥 ⊔ suc α
 \end{code}
-
 
 
 ### <a id="products-of-classes-of-algebras">Products of classes of algebras</a>

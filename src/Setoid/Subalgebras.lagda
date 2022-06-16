@@ -13,12 +13,13 @@ This is the [Setoid.Subalgebras][] module of the [Agda Universal Algebra Library
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Setoid.Subalgebras where
+open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
 
-open import Setoid.Subalgebras.Subuniverses
-open import Setoid.Subalgebras.Subalgebras
-open import Setoid.Subalgebras.Properties
+module Setoid.Subalgebras {𝑆 : Signature 𝓞 𝓥} where
 
+open import Setoid.Subalgebras.Subuniverses  {𝑆 = 𝑆} public
+open import Setoid.Subalgebras.Subalgebras   {𝑆 = 𝑆} public
+open import Setoid.Subalgebras.Properties    {𝑆 = 𝑆} public
 \end{code}
 
 ---------------------------------

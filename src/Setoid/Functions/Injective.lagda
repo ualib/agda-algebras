@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Setoid.Overture.Injective module"
+title : "Setoid.Functions.Injective module"
 date : "2021-09-13"
 author: "the agda-algebras development team"
 ---
 
 ### <a id="injective-functions-on-setoids">Injective functions on setoids</a>
 
-This is the [Setoid.Overture.Injective][] module of the [agda-algebras][] library.
+This is the [Setoid.Functions.Injective][] module of the [agda-algebras][] library.
 
 We say that a function `f : A → B` from one setoid (A , ≈₀) to another (B , ≈₁) is *injective* (or *monic*) provided the following implications hold:  ∀ a₀ a₁ if f ⟨$⟩ a₀ ≈₁ f ⟨$⟩ a₁, then a₀ ≈₀ a₁.
 
@@ -17,23 +17,23 @@ We say that a function `f : A → B` from one setoid (A , ≈₀) to another (B 
 
 open import Relation.Binary using ( Setoid )
 
-module Setoid.Overture.Injective where
+module Setoid.Functions.Injective where
 
 
 -- Imports from Agda and the Agda Standard Library -------------
-open import Agda.Primitive        using ( _⊔_ ; Level )  renaming ( Set to Type )
-open import Function.Bundles      using ( Injection )    renaming ( Func to _⟶_ )
-open import Function.Base         using ( _∘_ ; id )
-open import Relation.Binary.Core  using ( _Preserves_⟶_ )
-open import Relation.Binary       using ( Rel )
+open import Agda.Primitive    using ( _⊔_ ; Level )  renaming ( Set to Type )
+open import Function.Bundles  using ( Injection )    renaming ( Func to _⟶_ )
+open import Function.Base     using ( _∘_ ; id )
+open import Relation.Binary   using ( _Preserves_⟶_ )
+open import Relation.Binary   using ( Rel )
+
 import Function.Definitions as FD
 
 -- Imports from agda-algebras -----------------------------------------------
-open import Setoid.Overture.Preliminaries  using ( 𝑖𝑑 )  renaming ( _∘_ to _⟨∘⟩_ )
-open import Setoid.Overture.Inverses       using ( Image_∋_ ; Inv )
+open import Setoid.Functions.Basic     using ( 𝑖𝑑 ) renaming ( _∘_ to _⟨∘⟩_ )
+open import Setoid.Functions.Inverses  using ( Image_∋_ ; Inv )
 
-private variable
- α β γ ρᵃ ρᵇ ρᶜ ℓ₁ ℓ₂ ℓ₃ : Level
+private variable α β γ ρᵃ ρᵇ ρᶜ ℓ₁ ℓ₂ ℓ₃ : Level
 
 \end{code}
 
@@ -61,9 +61,9 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
  open Image_∋_
 
  -- Inverse of an injective function preserves setoid equalities
- LeftInvPreserves≈ : (F : Injection 𝑨 𝑩)
-                     {b₀ b₁ : B}(u : Image (function F) ∋ b₀)(v : Image (function F) ∋ b₁)
-  →                  b₀ ≈₂ b₁ → (Inv (function F) u) ≈₁ (Inv (function F) v)
+ LeftInvPreserves≈ :  (F : Injection 𝑨 𝑩)
+                      {b₀ b₁ : B}(u : Image (function F) ∋ b₀)(v : Image (function F) ∋ b₁)
+  →                   b₀ ≈₂ b₁ → (Inv (function F) u) ≈₁ (Inv (function F) v)
 
  LeftInvPreserves≈ F {b₀}{b₁} (eq a₀ x₀) (eq a₁ x₁) bb = Goal
   where
@@ -81,13 +81,13 @@ of the setoids; an alternative for setoid functions, called `∘-injective`, is 
 
 \begin{code}
 
-module compose {A : Type α}(_≈₁_ : Rel A ρᵃ)
-               {B : Type β}(_≈₂_ : Rel B ρᵇ)
-               {C : Type γ}(_≈₃_ : Rel C ρᶜ) where
+module compose  {A : Type α}(_≈₁_ : Rel A ρᵃ)
+                {B : Type β}(_≈₂_ : Rel B ρᵇ)
+                {C : Type γ}(_≈₃_ : Rel C ρᶜ) where
 
- open FD {A = A} {B} _≈₁_ _≈₂_ using () renaming ( Injective to InjectiveAB )
- open FD {A = B} {C} _≈₂_ _≈₃_ using () renaming ( Injective to InjectiveBC )
- open FD {A = A} {C} _≈₁_ _≈₃_ using () renaming ( Injective to InjectiveAC )
+ open FD {A = A} {B} _≈₁_ _≈₂_ using() renaming ( Injective to InjectiveAB )
+ open FD {A = B} {C} _≈₂_ _≈₃_ using() renaming ( Injective to InjectiveBC )
+ open FD {A = A} {C} _≈₁_ _≈₃_ using() renaming ( Injective to InjectiveAC )
 
  ∘-injective-bare : {f : A → B}{g : B → C} → InjectiveAB f → InjectiveBC g → InjectiveAC (g ∘ f)
  ∘-injective-bare finj ginj = finj ∘ ginj
@@ -103,20 +103,20 @@ lines which give each instance of injectivity a different name.
 \begin{code}
 
 module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} {𝑪 : Setoid γ ρᶜ} where
- open Setoid 𝑨   using () renaming ( Carrier to A ; _≈_ to _≈₁_ )
- open Setoid 𝑩   using () renaming ( Carrier to B )
- open Setoid 𝑪   using () renaming ( Carrier to C ; _≈_ to _≈₃_)
- open Injection  using () renaming ( function to fun )
+ open Setoid 𝑨   using() renaming ( Carrier to A ; _≈_ to _≈₁_ )
+ open Setoid 𝑩   using() renaming ( Carrier to B )
+ open Setoid 𝑪   using() renaming ( Carrier to C ; _≈_ to _≈₃_)
+ open Injection  using() renaming ( function to fun )
 
  ∘-injective : (f : 𝑨 ⟶ 𝑩)(g : 𝑩 ⟶ 𝑪)
   →            IsInjective f → IsInjective g → IsInjective (g ⟨∘⟩ f)
  ∘-injective _ _ finj ginj = finj ∘ ginj
 
  ∘-injection : Injection 𝑨 𝑩 → Injection 𝑩 𝑪 → Injection 𝑨 𝑪
- ∘-injection fi gi = record { f = λ x → apg (apf x)
-                            ; cong = conggf
-                            ; injective = ∘-injective (fun fi) (fun gi) (injective fi) (injective gi)
-                            }
+ ∘-injection fi gi = record  { f = λ x → apg (apf x)
+                             ; cong = conggf
+                             ; injective = ∘-injective (fun fi) (fun gi) (injective fi) (injective gi)
+                             }
   where
   open Injection
   apf : A → B

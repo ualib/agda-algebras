@@ -13,53 +13,56 @@ This is the [Base.Varieties.Preservation][] module of the [Agda Universal Algebr
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Base.Signatures using ( 𝓞 ; 𝓥 ; Signature )
 
 module Base.Varieties.Preservation {𝑆 : Signature 𝓞 𝓥} where
 
--- Imports from Agda and the Agda Standard Library -----------------------------------------------
-open import Agda.Primitive  using ( _⊔_ ; lsuc ; Level ) renaming ( Set   to Type )
-open import Axiom.Extensionality.Propositional
-                            using () renaming (Extensionality to funext)
-open import Data.Product    using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Data.Sum.Base   using ( _⊎_ ) renaming ( inj₁  to inl ; inj₂  to inr )
-open import Function.Base   using ( _∘_ )
-open import Relation.Unary  using ( Pred ; _⊆_ ; _∈_ ; ｛_｝ ; _∪_ )
-open import Relation.Binary.PropositionalEquality
-                            using ( _≡_ ; refl ; module ≡-Reasoning ; cong-app ; cong )
+-- Imports from Agda and the Agda Standard Library ----------------------
+open  import Agda.Primitive
+      using () renaming  ( Set to Type )
+open  import Data.Product
+      using ( _,_ ; Σ-syntax ; _×_ ) renaming  ( proj₁ to fst ; proj₂ to snd )
+open  import Data.Sum
+      using ( _⊎_ ) renaming  ( inj₁  to inl ; inj₂  to inr )
+open  import Function
+      using ( _∘_ )
+open  import Level
+      using ( Level ; _⊔_ ; suc )
+open  import Relation.Unary
+      using ( Pred ; _⊆_ ; _∈_ ; ｛_｝ ; _∪_ )
+open  import Axiom.Extensionality.Propositional
+      using () renaming (Extensionality to funext)
+open  import Relation.Binary.PropositionalEquality as ≡
+      using ( _≡_ ; module ≡-Reasoning )
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
-open import Base.Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
-open import Base.Overture.Inverses                  using ( Inv ; InvIsInverseʳ )
-open import Base.Overture.Injective                 using ( IsInjective )
-open import Base.Equality.Welldefined               using ( SwellDef )
-open import Base.Equality.Truncation                using ( hfunext )
-open import Base.Equality.Extensionality            using ( DFunExt )
-open import Base.Algebras.Basic                     using ( Algebra ; Lift-Alg )
-open import Base.Algebras.Products          {𝑆 = 𝑆} using ( ov ; ⨅ ; 𝔄 ; class-product)
-open import Base.Homomorphisms.Basic        {𝑆 = 𝑆} using ( is-homomorphism )
-open import Base.Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅-sym ; Lift-≅ ; ≅-trans ; ⨅≅ ; ≅-refl )
-                                                    using ( Lift-Alg-iso ; Lift-Alg-assoc )
-open import Base.Terms.Basic                {𝑆 = 𝑆} using ( Term ; 𝑻 )
-open import Base.Terms.Operations           {𝑆 = 𝑆} using ( _⟦_⟧; comm-hom-term )
-open import Base.Subalgebras.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; _IsSubalgebraOf_ ; _IsSubalgebraOfClass_ )
-                                                    using ( SubalgebraOfClass )
-open import Base.Subalgebras.Properties     {𝑆 = 𝑆} using ( ≤-Lift ; Lift-≤-Lift )
-open import Base.Varieties.EquationalLogic  {𝑆 = 𝑆} using ( _⊫_≈_ ; _⊧_≈_ ; Th )
-open import Base.Varieties.Properties       {𝑆 = 𝑆} using ( ⊧-Lift-invar ; ⊧-lower-invar ; ⊧-S-class-invar )
-                                                    using ( ⊧-I-invar ; ⊧-P-lift-invar ; ⊧-P-invar ; ⊧-S-invar)
-open import Base.Varieties.Closure          {𝑆 = 𝑆} using ( H ; S ; P ; V ; P-expa ; S→subalgebra )
-                                                    using ( Lift-Alg-subP' ; subalgebra→S ; S-mono )
-                                                    using ( P-idemp ; module Vlift )
-open H
-open S
-open P
-open V
+open  import Base.Overture
+      using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; Inv ; InvIsInverseʳ ; IsInjective )
+open  import Base.Equality
+      using ( SwellDef ; hfunext ; DFunExt )
+open  import Base.Algebras {𝑆 = 𝑆}
+      using ( Algebra ; Lift-Alg ; ov ; ⨅ ; 𝔄 ; class-product )
+open  import Base.Homomorphisms {𝑆 = 𝑆}
+      using ( is-homomorphism ; _≅_ ; ≅-sym ; Lift-≅ ; ≅-trans ; ⨅≅ ; ≅-refl )
+      using ( Lift-Alg-iso ; Lift-Alg-assoc )
+open  import Base.Terms {𝑆 = 𝑆}
+      using ( Term ; 𝑻 ; _⟦_⟧; comm-hom-term )
+open  import Base.Subalgebras {𝑆 = 𝑆}
+      using ( _≤_ ; _IsSubalgebraOf_ ; ≤-Lift ; Lift-≤-Lift )
+      using ( _IsSubalgebraOfClass_ ; SubalgebraOfClass )
+open  import Base.Varieties.EquationalLogic {𝑆 = 𝑆}
+      using ( _⊫_≈_ ; _⊧_≈_ ; Th )
+open  import Base.Varieties.Properties {𝑆 = 𝑆}
+      using ( ⊧-Lift-invar ; ⊧-lower-invar ; ⊧-I-invar ; ⊧-S-invar)
+      using ( ⊧-S-class-invar ; ⊧-P-lift-invar ; ⊧-P-invar )
+open  import Base.Varieties.Closure {𝑆 = 𝑆}
+      using ( H ; S ; P ; V ; P-expa ; S→subalgebra ; Lift-Alg-subP' )
+      using ( subalgebra→S ; S-mono ; P-idemp ; module Vlift )
+
+open H ; open S ; open P ; open V
 
 private variable α β : Level
-
 \end{code}
-
 
 
 #### <a id="closure-properties">Closure properties</a>
@@ -70,8 +73,8 @@ The next lemma would be too obvious to care about were it not for the fact that 
 
 \begin{code}
 
-S⊆SP : (𝒦 : Pred (Algebra α 𝑆)(ov α))
- →     S{α}{β} 𝒦 ⊆ S{α ⊔ β}{α ⊔ β} (P{α}{β} 𝒦)
+S⊆SP :  (𝒦 : Pred (Algebra α 𝑆)(ov α))
+ →      S{α}{β} 𝒦 ⊆ S{α ⊔ β}{α ⊔ β} (P{α}{β} 𝒦)
 
 S⊆SP {α} {β} 𝒦 {.(Lift-Alg 𝑨 β)}(sbase{𝑨} x) = siso spllA(≅-sym Lift-≅)
  where
@@ -91,6 +94,7 @@ S⊆SP {α} {β} 𝒦 {.(Lift-Alg 𝑨 β)}(slift{𝑨} x) = subalgebra→S lAsc
 
  lAsc : (Lift-Alg 𝑨 β) IsSubalgebraOfClass (P 𝒦)
  lAsc = Lift-Alg-subP' Asc
+
 S⊆SP {α} {β} 𝒦 {𝑩}(ssub{𝑨} sA B≤A) = ssub (subalgebra→S lAsc) (≤-Lift 𝑨 B≤A )
  where
   lA : Algebra (α ⊔ β) 𝑆
@@ -121,18 +125,18 @@ S⊆SP {α = α}{β} 𝒦 {𝑩}(siso{𝑨} sA A≅B) = siso{α ⊔ β}{α ⊔ �
 
 \end{code}
 
-
 We need to formalize one more lemma before arriving the main objective of this section, which is the proof of the inclusion PS⊆SP.
 
 \begin{code}
 
 module _ {α β : Level} {𝒦 : Pred(Algebra α 𝑆)(ov α)} where
 
- lemPS⊆SP : hfunext β α → funext β α → {I : Type β}{ℬ : I → Algebra α 𝑆}
-  →         (∀ i → (ℬ i) IsSubalgebraOfClass 𝒦)
-  →         ⨅ ℬ IsSubalgebraOfClass (P{α}{β} 𝒦)
+ lemPS⊆SP :  hfunext β α → funext β α → {I : Type β}{ℬ : I → Algebra α 𝑆}
+  →          (∀ i → (ℬ i) IsSubalgebraOfClass 𝒦)
+  →          ⨅ ℬ IsSubalgebraOfClass (P{α}{β} 𝒦)
 
- lemPS⊆SP hwu fwu {I}{ℬ} B≤K = ⨅ 𝒜 , (⨅ SA , ⨅SA≤⨅𝒜) , ξ , (⨅≅ {fiu = fwu}{fiw = fwu} B≅SA)
+ lemPS⊆SP hwu fwu {I}{ℬ} B≤K =  ⨅ 𝒜 , (⨅ SA , ⨅SA≤⨅𝒜) ,
+                                 ξ , (⨅≅ {fiu = fwu}{fiw = fwu} B≅SA)
   where
   𝒜 : I → Algebra α 𝑆
   𝒜 = λ i → ∣ B≤K i ∣
@@ -158,7 +162,7 @@ module _ {α β : Level} {𝒦 : Pred(Algebra α 𝑆)(ov α)} where
   ν = λ 𝑓 𝒂 → fwu λ i → (snd ∣ SA≤𝒜 i ∣) 𝑓 (λ x → 𝒂 x i)
 
   σinj : IsInjective σ
-  σinj σxσy = fwu λ i → (hinj i)(cong-app σxσy i)
+  σinj σxσy = fwu λ i → (hinj i)(≡.cong-app σxσy i)
 
   ⨅SA≤⨅𝒜 : ⨅ SA ≤ ⨅ 𝒜
   ⨅SA≤⨅𝒜 = (σ , ν) , σinj
@@ -168,19 +172,20 @@ module _ {α β : Level} {𝒦 : Pred(Algebra α 𝑆)(ov α)} where
 \end{code}
 
 
-
 #### <a id="PS-in-SP">PS(𝒦) ⊆ SP(𝒦)</a>
 
-Finally, we are in a position to prove that a product of subalgebras of algebras in a class `𝒦` is a subalgebra of a product of algebras in `𝒦`.
+Finally, we are in a position to prove that a product of subalgebras of algebras
+in a class `𝒦` is a subalgebra of a product of algebras in `𝒦`.
 
 \begin{code}
 
-module _ {α : Level} {fovu : funext (ov α) (ov α)}{𝒦 : Pred (Algebra α 𝑆)(ov α)} where
+module _  {α : Level} {fovu : funext (ov α) (ov α)}
+          {𝒦 : Pred (Algebra α 𝑆)(ov α)} where
 
- PS⊆SP : -- extensionality assumptions:
-            hfunext (ov α)(ov α)
+ PS⊆SP :  -- extensionality assumptions:
+          hfunext (ov α)(ov α)
 
-  →      P{ov α}{ov α} (S{α}{ov α} 𝒦) ⊆ S{ov α}{ov α} (P{α}{ov α} 𝒦)
+  →       P{ov α}{ov α} (S{α}{ov α} 𝒦) ⊆ S{ov α}{ov α} (P{α}{ov α} 𝒦)
 
  PS⊆SP _ (pbase (sbase x)) = sbase (pbase x)
  PS⊆SP _ (pbase (slift{𝑨} x)) = slift (S⊆SP{α}{ov α} 𝒦 (slift x))
@@ -210,7 +215,8 @@ module _ {α : Level} {fovu : funext (ov α) (ov α)}{𝒦 : Pred (Algebra α �
 
 #### <a id="more-class-inclusions">More class inclusions</a>
 
-We conclude this subsection with three more inclusion relations that will have bit parts to play later (e.g., in the formal proof of Birkhoff's Theorem).
+We conclude this subsection with three more inclusion relations that will have
+bit parts to play later (e.g., in the formal proof of Birkhoff's Theorem).
 
 \begin{code}
 
@@ -223,64 +229,72 @@ P⊆V (produ x) = vprodu (λ i → P⊆V (x i))
 P⊆V (prodw x) = vprodw (λ i → P⊆V (x i))
 P⊆V (pisow x x₁) = visow (P⊆V x) x₁
 
-
-SP⊆V : {α β : Level}{𝒦 : Pred (Algebra α 𝑆)(ov α)}
- →     S{α ⊔ β}{α ⊔ β} (P{α}{β} 𝒦) ⊆ V 𝒦
+SP⊆V :  {α β : Level}{𝒦 : Pred (Algebra α 𝑆)(ov α)}
+ →      S{α ⊔ β}{α ⊔ β} (P{α}{β} 𝒦) ⊆ V 𝒦
 
 SP⊆V (sbase{𝑨} PCloA) = P⊆V (pisow PCloA Lift-≅)
 SP⊆V (slift{𝑨} x) = vliftw (SP⊆V x)
 SP⊆V (ssub{𝑨}{𝑩} spA B≤A) = vssubw (SP⊆V spA) B≤A
 SP⊆V (siso x x₁) = visow (SP⊆V x) x₁
-
 \end{code}
 
 
 #### <a id="V-is-closed-under-lift">V is closed under lift</a>
 
-As mentioned earlier, a technical hurdle that must be overcome when formalizing proofs in Agda is the proper handling of universe levels. In particular, in the proof of the Birkhoff's theorem, for example, we will need to know that if an algebra `𝑨` belongs to the variety `V 𝒦`, then so does the lift of `𝑨`.  Let us get the tedious proof of this technical lemma out of the way.
+As mentioned earlier, a technical hurdle that must be overcome when formalizing
+proofs in Agda is the proper handling of universe levels. In particular, in the
+proof of the Birkhoff's theorem, for example, we will need to know that if an
+algebra `𝑨` belongs to the variety `V 𝒦`, then so does the lift of `𝑨`.  Let
+us get the tedious proof of this technical lemma out of the way.
 
-Above we proved that `SP(𝒦) ⊆ V(𝒦)`, and we did so under fairly general assumptions about the universe level parameters.  Unfortunately, this is sometimes not quite general enough, so we now prove the inclusion again for the specific universe parameters that align with subsequent applications of this result.
-
+Above we proved that `SP(𝒦) ⊆ V(𝒦)`, and we did so under fairly general
+assumptions about the universe level parameters.  Unfortunately, this is sometimes
+not quite general enough, so we now prove the inclusion again for the specific
+universe parameters that align with subsequent applications of this result.
 
 \begin{code}
 
-module _ {α : Level}  {fe₀ : funext (ov α) α}
-         {fe₁ : funext ((ov α) ⊔ (lsuc (ov α))) (lsuc (ov α))}
-         {fe₂ : funext (ov α) (ov α)}
-         {𝒦 : Pred (Algebra α 𝑆)(ov α)} where
-
+module _  {α : Level}  {fe₀ : funext (ov α) α}
+          {fe₁ : funext ((ov α) ⊔ (suc (ov α))) (suc (ov α))}
+          {fe₂ : funext (ov α) (ov α)}
+          {𝒦 : Pred (Algebra α 𝑆)(ov α)} where
  open Vlift {α}{fe₀}{fe₁}{fe₂}{𝒦}
 
- SP⊆V' : S{ov α}{lsuc (ov α)} (P{α}{ov α} 𝒦) ⊆ V 𝒦
-
+ SP⊆V' : S{ov α}{suc (ov α)} (P{α}{ov α} 𝒦) ⊆ V 𝒦
  SP⊆V' (sbase{𝑨} x) = visow (VlA (SP⊆V (sbase x))) (≅-sym (Lift-Alg-assoc _ _{𝑨}))
  SP⊆V' (slift x) = VlA (SP⊆V x)
 
  SP⊆V' (ssub{𝑨}{𝑩} spA B≤A) = vssubw (VlA (SP⊆V spA)) B≤lA
   where
-   B≤lA : 𝑩 ≤ Lift-Alg 𝑨 (lsuc (ov α))
+   B≤lA : 𝑩 ≤ Lift-Alg 𝑨 (suc (ov α))
    B≤lA = ≤-Lift 𝑨 B≤A
 
  SP⊆V' (siso{𝑨}{𝑩} x A≅B) = visow (VlA (SP⊆V x)) Goal
   where
-   Goal : Lift-Alg 𝑨 (lsuc (ov α)) ≅ 𝑩
+   Goal : Lift-Alg 𝑨 (suc (ov α)) ≅ 𝑩
    Goal = ≅-trans (≅-sym Lift-≅) A≅B
-
 \end{code}
 
 
 #### <a id="S-in-SP">⨅ S(𝒦) ∈ SP(𝒦)</a>
 
-Finally, we prove a result that plays an important role, e.g., in the formal proof of Birkhoff's Theorem. As we saw in [Base.Algebras.Products][], the (informal) product `⨅ S(𝒦)` of all subalgebras of algebras in 𝒦 is implemented (formally) in the [agda-algebras](https://github.com/ualib/agda-algebras) library as `⨅ 𝔄 S(𝒦)`. Our goal is to prove that this product belongs to `SP(𝒦)`. We do so by first proving that the product belongs to `PS(𝒦)` and then applying the `PS⊆SP` lemma.
+Finally, we prove a result that plays an important role, e.g., in the formal proof
+of Birkhoff's Theorem. As we saw in [Base.Algebras.Products][], the (informal)
+product `⨅ S(𝒦)` of all subalgebras of algebras in 𝒦 is implemented (formally)
+in the [agda-algebras](https://github.com/ualib/agda-algebras) library as
+`⨅ 𝔄 S(𝒦)`. Our goal is to prove that this product belongs to `SP(𝒦)`. We do so by
+first proving that the product belongs to `PS(𝒦)` and then applying the `PS⊆SP` lemma.
 
-Before doing so, we need to redefine the class product so that each factor comes with a map from the type `X` of variable symbols into that factor.  We will explain the reason for this below.
+Before doing so, we need to redefine the class product so that each factor comes
+with a map from the type `X` of variable symbols into that factor.  We will
+explain the reason for this below.
 
 \begin{code}
 
 module class-products-with-maps {α : Level}
  {X : Type α}
  {fe𝓕α : funext (ov α) α}
- {fe₁ : funext ((ov α) ⊔ (lsuc (ov α))) (lsuc (ov α))}
+ {fe₁ : funext ((ov α) ⊔ (suc (ov α))) (suc (ov α))}
  {fe₂ : funext (ov α) (ov α)}
  (𝒦 : Pred (Algebra α 𝑆)(ov α))
  where
@@ -290,10 +304,22 @@ module class-products-with-maps {α : Level}
 
 \end{code}
 
-Notice that the second component of this dependent pair type is  `(𝑨 ∈ 𝒦) × (X → ∣ 𝑨 ∣)`. In previous versions of the [UALib][] this second component was simply `𝑨 ∈ 𝒦`, until we realized that adding the type `X → ∣ 𝑨 ∣` is quite useful. Later we will see exactly why, but for now suffice it to say that a map of type `X → ∣ 𝑨 ∣` may be viewed abstractly as an *ambient context*, or more concretely, as an assignment of *values* in `∣ 𝑨 ∣` to *variable symbols* in `X`.  When computing with or reasoning about products, while we don't want to rigidly impose a context in advance, want do want to lay our hands on whatever context is ultimately assumed.  Including the "context map" inside the index type `ℑ` of the product turns out to be a convenient way to achieve this flexibility.
+Notice that the second component of this dependent pair type is
+`(𝑨 ∈ 𝒦) × (X → ∣ 𝑨 ∣)`. In previous versions of the [UALib][] this second
+component was simply `𝑨 ∈ 𝒦`, until we realized that adding the type `X → ∣ 𝑨 ∣`
+is quite useful. Later we will see exactly why, but for now suffice it to say that
+a map of type `X → ∣ 𝑨 ∣` may be viewed abstractly as an *ambient context*, or
+more concretely, as an assignment of *values* in `∣ 𝑨 ∣` to *variable symbols* in
+`X`.  When computing with or reasoning about products, while we don't want to
+rigidly impose a context in advance, want do want to lay our hands on whatever
+context is ultimately assumed.  Including the "context map" inside the index type
+`ℑ` of the product turns out to be a convenient way to achieve this flexibility.
 
 
-Taking the product over the index type `ℑ` requires a function that maps an index `i : ℑ` to the corresponding algebra.  Each `i : ℑ` is a triple, say, `(𝑨 , p , h)`, where `𝑨 : Algebra α 𝑆`, `p : 𝑨 ∈ 𝒦`, and `h : X → ∣ 𝑨 ∣`, so the function mapping an index to the corresponding algebra is simply the first projection.
+Taking the product over the index type `ℑ` requires a function that maps an index
+`i : ℑ` to the corresponding algebra.  Each `i : ℑ` is a triple, say,
+`(𝑨 , p , h)`, where `𝑨 : Algebra α 𝑆`, `p : 𝑨 ∈ 𝒦`, and `h : X → ∣ 𝑨 ∣`, so the
+function mapping an index to the corresponding algebra is simply the first projection.
 
 \begin{code}
 
@@ -302,7 +328,8 @@ Taking the product over the index type `ℑ` requires a function that maps an in
 
 \end{code}
 
-Finally, we define `class-product` which represents the product of all members of `𝒦`.
+Finally, we define `class-product` which represents the product of all members of
+`𝒦`.
 
 \begin{code}
 
@@ -311,13 +338,14 @@ Finally, we define `class-product` which represents the product of all members o
 
 \end{code}
 
-If `p : 𝑨 ∈ 𝒦` and `h : X → ∣ 𝑨 ∣`, we view the triple `(𝑨 , p , h) ∈ ℑ` as an index over the class, and so we can think of `𝔄 (𝑨 , p , h)` (which is simply `𝑨`) as the projection of the product `⨅ 𝔄` onto the `(𝑨 , p, h)`-th component.
+If `p : 𝑨 ∈ 𝒦` and `h : X → ∣ 𝑨 ∣`, we view the triple `(𝑨 , p , h) ∈ ℑ` as an
+index over the class, and so we can think of `𝔄 (𝑨 , p , h)` (which is simply `𝑨`)
+as the projection of the product `⨅ 𝔄` onto the `(𝑨 , p, h)`-th component.
 
 \begin{code}
 
  class-prod-s-∈-ps : class-product' ∈ P{ov α}{ov α}(S 𝒦)
  class-prod-s-∈-ps = pisow psPllA (⨅≅ {fiu = fe₂}{fiw = fe𝓕α} llA≅A)
-
   where
   lA llA : ℑ' → Algebra (ov α) 𝑆
   lA i =  Lift-Alg (𝔄 i) (ov α)
@@ -338,19 +366,20 @@ If `p : 𝑨 ∈ 𝒦` and `h : X → ∣ 𝑨 ∣`, we view the triple `(𝑨 ,
 \end{code}
 
 
-So, since `PS⊆SP`, we see that that the product of all subalgebras of a class `𝒦` belongs to `SP(𝒦)`.
+So, since `PS⊆SP`, we see that that the product of all subalgebras of a class `𝒦`
+belongs to `SP(𝒦)`.
 
 \begin{code}
 
  class-prod-s-∈-sp : hfunext (ov α) (ov α) → class-product ∈ S(P 𝒦)
  class-prod-s-∈-sp hfe = PS⊆SP {fovu = fe₂} hfe class-prod-s-∈-ps
-
 \end{code}
 
 
 #### <a id="h-preserves-identities">H preserves identities</a>
 
-First we prove that the closure operator `H` is compatible with identities that hold in the given class.
+First we prove that the closure operator `H` is compatible with identities that
+hold in the given class.
 
 \begin{code}
 
@@ -375,23 +404,22 @@ module _ (wd : SwellDef){X : Type 𝓧} {𝒦 : Pred (Algebra α 𝑆)(ov α)} w
   ζ x = InvIsInverseʳ (φE (b x))
 
   goal : (𝑩 ⟦ p ⟧) b ≡ (𝑩 ⟦ q ⟧) b
-  goal = (𝑩 ⟦ p ⟧) b          ≡⟨ wd 𝓧 α (𝑩 ⟦ p ⟧) b (φ ∘ preim )(λ i → (ζ i)⁻¹)⟩
-      (𝑩 ⟦ p ⟧)(φ ∘ preim) ≡⟨(comm-hom-term (wd 𝓥 α) 𝑩 (φ , φh) p preim)⁻¹ ⟩
-      φ((𝑨 ⟦ p ⟧) preim)   ≡⟨ cong φ (IH preim) ⟩
-      φ((𝑨 ⟦ q ⟧) preim)   ≡⟨ comm-hom-term (wd 𝓥 α) 𝑩 (φ , φh) q preim ⟩
-      (𝑩 ⟦ q ⟧)(φ ∘ preim) ≡⟨ wd 𝓧 α (𝑩 ⟦ q ⟧)(φ ∘ preim) b ζ ⟩
-      (𝑩 ⟦ q ⟧) b          ∎
+  goal =  (𝑩 ⟦ p ⟧) b           ≡⟨ wd 𝓧 α (𝑩 ⟦ p ⟧) b (φ ∘ preim )(λ i → (ζ i)⁻¹)⟩
+          (𝑩 ⟦ p ⟧)(φ ∘ preim)  ≡⟨(comm-hom-term (wd 𝓥 α) 𝑩 (φ , φh) p preim)⁻¹ ⟩
+          φ((𝑨 ⟦ p ⟧) preim)    ≡⟨ ≡.cong φ (IH preim) ⟩
+          φ((𝑨 ⟦ q ⟧) preim)    ≡⟨ comm-hom-term (wd 𝓥 α) 𝑩 (φ , φh) q preim ⟩
+          (𝑩 ⟦ q ⟧)(φ ∘ preim)  ≡⟨ wd 𝓧 α (𝑩 ⟦ q ⟧)(φ ∘ preim) b ζ ⟩
+          (𝑩 ⟦ q ⟧) b           ∎
 
 \end{code}
 
-The converse of the foregoing result is almost too obvious to bother with. Nonetheless, we formalize it for completeness.
+The converse of the foregoing result is almost too obvious to bother with.
+Nonetheless, we formalize it for completeness.
 
 \begin{code}
 
  H-id2 : ∀ {β} → (p q : Term X) → H{β = β} 𝒦 ⊫ p ≈ q → 𝒦 ⊫ p ≈ q
-
  H-id2 p q Hpq KA = ⊧-lower-invar wd p q (Hpq (hbase KA))
-
 \end{code}
 
 
@@ -400,24 +428,24 @@ The converse of the foregoing result is almost too obvious to bother with. Nonet
 \begin{code}
 
  S-id1 : (p q : Term X) → 𝒦 ⊫ p ≈ q → S{β = α} 𝒦 ⊫ p ≈ q
-
  S-id1 p q σ (sbase x) = ⊧-Lift-invar wd p q (σ x)
  S-id1 p q σ (slift x) = ⊧-Lift-invar wd p q ((S-id1 p q σ) x)
-
  S-id1 p q σ (ssub{𝑨}{𝑩} sA B≤A) = ⊧-S-class-invar wd p q goal ν
   where --Apply S-⊧ to the class 𝒦 ∪ ｛ 𝑨 ｝
   τ : 𝑨 ⊧ p ≈ q
   τ = S-id1 p q σ sA
 
   Apq : ｛ 𝑨 ｝ ⊫ p ≈ q
-  Apq refl = τ
+  Apq ≡.refl = τ
 
   goal : (𝒦 ∪ ｛ 𝑨 ｝) ⊫ p ≈ q
   goal {𝑩} (inl x) = σ x
   goal {𝑩} (inr y) = Apq y
 
-  ν : SubalgebraOfClass (λ z → (𝒦 ∪ ｛ 𝑨 ｝) (Data.Product.proj₁ z , Data.Product.proj₂ z))
-  ν = (𝑩 , 𝑨 , (𝑩 , B≤A) , _⊎_.inj₂ refl , ≅-refl)
+  ν : SubalgebraOfClass  (λ z → (𝒦 ∪ ｛ 𝑨 ｝)
+                         (Data.Product.proj₁ z , Data.Product.proj₂ z))
+
+  ν = (𝑩 , 𝑨 , (𝑩 , B≤A) , _⊎_.inj₂ ≡.refl , ≅-refl)
 
  S-id1 p q σ (siso{𝑨}{𝑩} x x₁) = ⊧-I-invar wd 𝑩 p q (S-id1 p q σ x) x₁
 
@@ -428,18 +456,16 @@ Again, the obvious converse is barely worth the bits needed to formalize it.
 \begin{code}
 
  S-id2 : ∀{β}(p q : Term X) → S{β = β}𝒦 ⊫ p ≈ q → 𝒦 ⊫ p ≈ q
-
  S-id2 p q Spq {𝑨} KA = ⊧-lower-invar wd p q (Spq (sbase KA))
-
 \end{code}
-
 
 
 #### <a id="p-preserves-identities">P preserves identities</a>
 
 \begin{code}
 
-module _ (fe : DFunExt) (wd : SwellDef){X : Type 𝓧} {𝒦 : Pred (Algebra α 𝑆)(ov α)} where
+module _  (fe : DFunExt)(wd : SwellDef){X : Type 𝓧}
+          {𝒦 : Pred (Algebra α 𝑆)(ov α)} where
 
  P-id1 : (p q : Term X) → 𝒦 ⊫ p ≈ q → P{β = α} 𝒦 ⊫ p ≈ q
 
@@ -461,7 +487,7 @@ module _ (fe : DFunExt) (wd : SwellDef){X : Type 𝓧} {𝒦 : Pred (Algebra α 
 
 \end{code}
 
-...and conversely...
+and conversely,
 
 \begin{code}
 
@@ -469,7 +495,6 @@ module _  (wd : SwellDef){X : Type 𝓧} {𝒦 : Pred (Algebra α 𝑆)(ov α)} 
 
  P-id2 : ∀ {β}(p q : Term X) → P{β = β} 𝒦 ⊫ p ≈ q → 𝒦 ⊫ p ≈ q
  P-id2 p q PKpq KA = ⊧-lower-invar wd p q (PKpq (pbase KA))
-
 \end{code}
 
 #### <a id="v-preserves-identities">V preserves identities</a>
@@ -478,13 +503,13 @@ Finally, we prove the analogous preservation lemmas for the closure operator `V`
 
 \begin{code}
 
-module Vid (fe : DFunExt)(wd : SwellDef){𝓧 : Level} {X : Type 𝓧} {𝒦 : Pred (Algebra α 𝑆)(ov α)} where
+module Vid  (fe : DFunExt)(wd : SwellDef)
+            {𝓧 : Level} {X : Type 𝓧}{𝒦 : Pred (Algebra α 𝑆)(ov α)} where
 
  V-id1 : (p q : Term X) → 𝒦 ⊫ p ≈ q → V{β = α} 𝒦 ⊫ p ≈ q
  V-id1 p q σ (vbase x) = ⊧-Lift-invar wd p q (σ x)
  V-id1 p q σ (vlift{𝑨} x) = ⊧-Lift-invar wd p q ((V-id1 p q σ) x)
  V-id1 p q σ (vliftw{𝑨} x) = ⊧-Lift-invar wd p q ((V-id1 p q σ) x)
-
  V-id1 p q σ (vhimg{𝑨}{𝑪}VA (𝑩 , ((φ , φh) , φE))) b = goal
   where
   IH : 𝑨 ⊧ p ≈ q
@@ -497,21 +522,21 @@ module Vid (fe : DFunExt)(wd : SwellDef){𝓧 : Level} {X : Type 𝓧} {𝒦 : P
   ζ x = InvIsInverseʳ (φE (b x))
 
   goal : (𝑩 ⟦ p ⟧) b ≡ (𝑩 ⟦ q ⟧) b
-  goal = (𝑩 ⟦ p ⟧) b          ≡⟨ wd 𝓧 α (𝑩 ⟦ p ⟧) b (φ ∘ preim )(λ i → (ζ i)⁻¹)⟩
-      (𝑩 ⟦ p ⟧)(φ ∘ preim) ≡⟨(comm-hom-term (wd 𝓥 α) 𝑩 (φ , φh) p preim)⁻¹ ⟩
-      φ((𝑨 ⟦ p ⟧) preim)   ≡⟨ cong φ (IH preim) ⟩
-      φ((𝑨 ⟦ q ⟧) preim)   ≡⟨ comm-hom-term (wd 𝓥 α) 𝑩 (φ , φh) q preim ⟩
-      (𝑩 ⟦ q ⟧)(φ ∘ preim) ≡⟨ wd 𝓧 α (𝑩 ⟦ q ⟧)(φ ∘ preim) b ζ ⟩
-      (𝑩 ⟦ q ⟧) b          ∎
+  goal =  (𝑩 ⟦ p ⟧) b           ≡⟨ wd 𝓧 α (𝑩 ⟦ p ⟧) b (φ ∘ preim )(λ i → (ζ i)⁻¹)⟩
+          (𝑩 ⟦ p ⟧)(φ ∘ preim)  ≡⟨(comm-hom-term (wd 𝓥 α) 𝑩 (φ , φh) p preim)⁻¹ ⟩
+          φ((𝑨 ⟦ p ⟧) preim)    ≡⟨ ≡.cong φ (IH preim) ⟩
+          φ((𝑨 ⟦ q ⟧) preim)    ≡⟨ comm-hom-term (wd 𝓥 α) 𝑩 (φ , φh) q preim ⟩
+          (𝑩 ⟦ q ⟧)(φ ∘ preim)  ≡⟨ wd 𝓧 α (𝑩 ⟦ q ⟧)(φ ∘ preim) b ζ ⟩
+          (𝑩 ⟦ q ⟧) b           ∎
 
  V-id1 p q σ ( vssubw {𝑨}{𝑩} VA B≤A ) =
-  ⊧-S-class-invar wd p q goal (𝑩 , 𝑨 , (𝑩 , B≤A) , inr refl , ≅-refl)
+  ⊧-S-class-invar wd p q goal (𝑩 , 𝑨 , (𝑩 , B≤A) , inr ≡.refl , ≅-refl)
    where
    IH : 𝑨 ⊧ p ≈ q
    IH = V-id1 p q σ VA
 
    Asinglepq : ｛ 𝑨 ｝ ⊫ p ≈ q
-   Asinglepq refl = IH
+   Asinglepq ≡.refl = IH
 
    goal : (𝒦 ∪ ｛ 𝑨 ｝) ⊫ p ≈ q
    goal {𝑩} (inl x) = σ x
@@ -522,8 +547,8 @@ module Vid (fe : DFunExt)(wd : SwellDef){𝓧 : Level} {X : Type 𝓧} {𝒦 : P
  V-id1 p q σ (visou{𝑨}{𝑩} VA A≅B) = ⊧-I-invar wd 𝑩 p q (V-id1 p q σ VA) A≅B
  V-id1 p q σ (visow{𝑨}{𝑩} VA A≅B) = ⊧-I-invar wd 𝑩 p q (V-id1 p q σ VA) A≅B
 
-module Vid' (fe : DFunExt)(wd : SwellDef){𝓧 : Level} {X : Type 𝓧} {𝒦 : Pred (Algebra α 𝑆)(ov α)} where
-
+module Vid'  (fe : DFunExt)(wd : SwellDef)
+             {𝓧 : Level}{X : Type 𝓧}{𝒦 : Pred (Algebra α 𝑆)(ov α)} where
  open Vid fe wd {𝓧}{X}{𝒦} public
  V-id1' : (p q : Term X) → 𝒦 ⊫ p ≈ q → V{β = β} 𝒦 ⊫ p ≈ q
  V-id1' p q σ (vbase x) = ⊧-Lift-invar wd p q (σ x)
@@ -541,34 +566,36 @@ module Vid' (fe : DFunExt)(wd : SwellDef){𝓧 : Level} {X : Type 𝓧} {𝒦 : 
   ζ x = InvIsInverseʳ (φE (b x))
 
   goal : (𝑩 ⟦ p ⟧) b ≡ (𝑩 ⟦ q ⟧) b
-  goal = (𝑩 ⟦ p ⟧) b          ≡⟨ wd 𝓧 _ (𝑩 ⟦ p ⟧) b (φ ∘ preim )(λ i → (ζ i)⁻¹)⟩
-      (𝑩 ⟦ p ⟧)(φ ∘ preim) ≡⟨(comm-hom-term (wd 𝓥 _) 𝑩 (φ , φh) p preim)⁻¹ ⟩
-      φ((𝑨 ⟦ p ⟧) preim)   ≡⟨ cong φ (IH preim) ⟩
-      φ((𝑨 ⟦ q ⟧) preim)   ≡⟨ comm-hom-term (wd 𝓥 _) 𝑩 (φ , φh) q preim ⟩
-      (𝑩 ⟦ q ⟧)(φ ∘ preim) ≡⟨ wd 𝓧 _ (𝑩 ⟦ q ⟧)(φ ∘ preim) b ζ ⟩
-      (𝑩 ⟦ q ⟧) b          ∎
+  goal =  (𝑩 ⟦ p ⟧) b           ≡⟨ wd 𝓧 _ (𝑩 ⟦ p ⟧) b (φ ∘ preim )(λ i → (ζ i)⁻¹)⟩
+          (𝑩 ⟦ p ⟧)(φ ∘ preim)  ≡⟨(comm-hom-term (wd 𝓥 _) 𝑩 (φ , φh) p preim)⁻¹ ⟩
+          φ((𝑨 ⟦ p ⟧) preim)    ≡⟨ ≡.cong φ (IH preim) ⟩
+          φ((𝑨 ⟦ q ⟧) preim)    ≡⟨ comm-hom-term (wd 𝓥 _) 𝑩 (φ , φh) q preim ⟩
+          (𝑩 ⟦ q ⟧)(φ ∘ preim)  ≡⟨ wd 𝓧 _ (𝑩 ⟦ q ⟧)(φ ∘ preim) b ζ ⟩
+          (𝑩 ⟦ q ⟧) b           ∎
 
  V-id1' p q σ (vssubw {𝑨}{𝑩} VA B≤A) = ⊧-S-invar wd 𝑩 {p}{q}(V-id1' p q σ VA) B≤A
  V-id1' p q σ (vprodu{I}{𝒜} V𝒜) = ⊧-P-invar fe wd 𝒜  p q λ i → V-id1 p q σ (V𝒜 i)
  V-id1' p q σ (vprodw{I}{𝒜} V𝒜) = ⊧-P-invar fe wd 𝒜  p q λ i → V-id1' p q σ (V𝒜 i)
  V-id1' p q σ (visou {𝑨}{𝑩} VA A≅B) = ⊧-I-invar wd 𝑩 p q (V-id1 p q σ VA) A≅B
  V-id1' p q σ (visow{𝑨}{𝑩} VA A≅B) = ⊧-I-invar wd 𝑩 p q (V-id1' p q σ VA)A≅B
-
 \end{code}
 
 
 #### <a id="class-identities">Class identities</a>
 
-From `V-id1` it follows that if 𝒦 is a class of structures, then the set of identities modeled by all structures in `𝒦` is equivalent to the set of identities modeled by all structures in `V 𝒦`.  In other terms, `Th (V 𝒦)` is precisely the set of identities modeled by `𝒦`.   We formalize this observation as follows.
+From `V-id1` it follows that if 𝒦 is a class of structures, then the set of
+identities modeled by all structures in `𝒦` is equivalent to the set of identities
+modeled by all structures in `V 𝒦`.  In other terms, `Th (V 𝒦)` is precisely the
+set of identities modeled by `𝒦`.   We formalize this observation as follows.
 
 \begin{code}
 
-module _ (fe : DFunExt)(wd : SwellDef){𝓧 : Level} {X : Type 𝓧} {𝒦 : Pred (Algebra α 𝑆)(ov α)} where
-
+module _  (fe : DFunExt)(wd : SwellDef)
+          {𝓧 : Level}{X : Type 𝓧} {𝒦 : Pred (Algebra α 𝑆)(ov α)} where
  ovu lovu : Level
  ovu = ov α
- lovu = lsuc (ov α)
- 𝕍 : Pred (Algebra lovu 𝑆) (lsuc lovu)
+ lovu = suc (ov α)
+ 𝕍 : Pred (Algebra lovu 𝑆) (suc lovu)
  𝕍 = V{α}{lovu} 𝒦
  𝒱 : Pred (Algebra ovu 𝑆) lovu
  𝒱 = V{β = ovu} 𝒦
@@ -586,7 +613,8 @@ module _ (fe : DFunExt)(wd : SwellDef){𝓧 : Level} {X : Type 𝓧} {𝒦 : Pre
 
 \end{code}
 
-Once again, and for the last time, completeness dictates that we formalize the coverse of `V-id1`, however obvious it may be.
+Once again, and for the last time, completeness dictates that we formalize the
+coverse of `V-id1`, however obvious it may be.
 
 \begin{code}
 
@@ -594,7 +622,6 @@ module _ (wd : SwellDef){X : Type 𝓧}{𝒦 : Pred (Algebra α 𝑆)(ov α)} wh
 
  V-id2 : (p q : Term X) → (V{β = β} 𝒦 ⊫ p ≈ q) → (𝒦 ⊫ p ≈ q)
  V-id2 p q Vpq {𝑨} KA = ⊧-lower-invar wd p q (Vpq (vbase KA))
-
 \end{code}
 
 ----------------------------
