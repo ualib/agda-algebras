@@ -22,7 +22,7 @@ The *graph* of `𝑨` is the structure `Gr 𝑨` with the same domain as `𝑨` 
 module Base.Structures.Graphs0 where
 
 -- Imports from Agda and the Agda Standard Library -------------------------------------------
-open import Agda.Primitive  using ( _⊔_ ; Level ) renaming ( Set to Type ; lzero to ℓ₀ )
+open import Agda.Primitive  using () renaming ( Set to Type ; lzero to ℓ₀ )
 open import Data.Product    using ( _,_ ; _×_ ; Σ-syntax )
 open import Data.Sum.Base   using ( _⊎_ ) renaming ( inj₁ to inl ; inj₂ to inr )
 open import Data.Fin.Base   using ( Fin )
@@ -34,15 +34,13 @@ open import Relation.Binary.PropositionalEquality
                             using ( _≡_ ; module ≡-Reasoning ; cong ; sym ; refl )
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
-open import Base.Overture.Preliminaries     using ( ∣_∣ ; ∥_∥ )
-open import Base.Relations.Continuous       using ( Rel )
+open import Overture                        using ( ∣_∣ ; ∥_∥ )
+open import Base.Relations                  using ( Rel )
 open import Base.Structures.Basic           using ( signature ; structure )
 open import Base.Structures.Homs            using ( hom ; is-hom-rel ; is-hom-op )
 open import Examples.Structures.Signatures  using ( S∅ )
 
-open signature
-open structure
-open _⊎_
+open signature ; open structure ; open _⊎_
 
 Gr-sig : signature ℓ₀ ℓ₀ → signature ℓ₀ ℓ₀ → signature ℓ₀ ℓ₀
 

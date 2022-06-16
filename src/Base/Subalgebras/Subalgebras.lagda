@@ -18,20 +18,20 @@ open import Base.Signatures using (𝓞 ; 𝓥 ; Signature )
 module Base.Subalgebras.Subalgebras {𝑆 : Signature 𝓞 𝓥} where
 
 -- imports from Agda and the Agda Standard Library ------------------------------------
-open import Agda.Primitive   using () renaming ( Set to Type )
-open import Data.Product     using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₂ to snd )
-open import Level            using ( Level ; _⊔_ )
-open import Relation.Unary   using ( Pred ; _∈_ )
+open import Agda.Primitive  using () renaming ( Set to Type )
+open import Data.Product    using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₂ to snd )
+open import Level           using ( Level ; _⊔_ )
+open import Relation.Unary  using ( Pred ; _∈_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------
-open  import Base.Overture  using ( ∣_∣ ; ∥_∥ ; IsInjective )
+open  import Overture       using ( ∣_∣ ; ∥_∥ )
+open  import Base.Functions using ( IsInjective )
 open  import Base.Equality  using ( swelldef ; is-set ; blk-uip ; pred-ext )
 
-open  import Base.Algebras  {𝑆 = 𝑆} using ( Algebra ; ov )
-open  import Base.Terms     {𝑆 = 𝑆} using ( 𝑻 ; Term )
-
-open  import Base.Homomorphisms {𝑆 = 𝑆}
-      using ( hom ; kercon ; ker[_⇒_]_↾_ ; FirstHomTheorem|Set ; _≅_ )
+open  import Base.Algebras       {𝑆 = 𝑆} using ( Algebra ; ov )
+open  import Base.Terms          {𝑆 = 𝑆} using ( 𝑻 ; Term )
+open  import Base.Homomorphisms  {𝑆 = 𝑆} using ( hom ; kercon ; ker[_⇒_]_↾_ )
+                                         using ( FirstHomTheorem|Set ; _≅_ )
 
 private variable α β γ 𝓧 : Level
 \end{code}

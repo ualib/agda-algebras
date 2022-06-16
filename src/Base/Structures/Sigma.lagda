@@ -15,12 +15,11 @@ This is the [Base.Structures.Sigma][] module of the [Agda Universal Algebra Libr
 
 module Base.Structures.Sigma where
 
-open import Base.Structures.Sigma.Basic
-open import Base.Structures.Sigma.Products
-open import Base.Structures.Sigma.Congruences
-open import Base.Structures.Sigma.Homs
-open import Base.Structures.Sigma.Isos
-
+open import Base.Structures.Sigma.Basic        public
+open import Base.Structures.Sigma.Products     public
+open import Base.Structures.Sigma.Congruences  public
+open import Base.Structures.Sigma.Homs         public
+open import Base.Structures.Sigma.Isos         public
 \end{code}
 
 --------------------------------

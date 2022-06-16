@@ -23,7 +23,7 @@ open import Level           using ( Level ; Lift ; lift ; lower )
 open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; cong ; cong-app )
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
-open import Base.Overture.Preliminaries     using ( ∣_∣ ; _≈_ ; ∥_∥ ; _∙_ ; lower∼lift ; lift∼lower )
+open import Overture        using ( ∣_∣ ; _≈_ ; ∥_∥ ; _∙_ ; lower∼lift ; lift∼lower )
 open import Base.Structures.Sigma.Basic     using ( Signature ; Structure ; Lift-Struc )
 open import Base.Structures.Sigma.Homs      using ( hom ; 𝒾𝒹 ; ∘-hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-hom)
 open import Base.Structures.Sigma.Products  using ( ⨅ ; ℓp ; ℑ ; 𝔖 ; class-prod )
@@ -32,7 +32,9 @@ private variable 𝑅 𝐹 : Signature
 
 \end{code}
 
-Recall, `f ≈ g` means f and g are *extensionally* (or pointwise) equal; i.e., `∀ x, f x ≡ g x`. We use this notion of equality of functions in the following definition of **isomorphism**.
+Recall, `f ≈ g` means f and g are *extensionally* (or pointwise) equal; i.e.,
+`∀ x, f x ≡ g x`. We use this notion of equality of functions in the following
+definition of **isomorphism**.
 
 \begin{code}
 
@@ -49,7 +51,8 @@ module _ {α ρᵃ β ρᵇ : Level} where
 
 \end{code}
 
-That is, two structures are **isomorphic** provided there are homomorphisms going back and forth between them which compose to the identity map.
+That is, two structures are **isomorphic** provided there are homomorphisms going
+back and forth between them which compose to the identity map.
 
 
 #### <a id="properties-of-isomorphism-of-structures-of-sigma-type">Properties of isomorphism of structures of sigma type</a>
@@ -131,9 +134,14 @@ module _  {ι : Level}{I : Type ι}
           {α ρᵃ β ρᵇ : Level} {fe : funext ρᵇ ρᵇ}
           {fiu : funext ι α} {fiw : funext ι β} where
 
-  ⨅≅ : {𝒜 : I → Structure 𝑅 𝐹 {α}{ρᵃ}}{ℬ : I → Structure 𝑅 𝐹 {β}{ρᵇ}} → (∀ (i : I) → 𝒜 i ≅ ℬ i) → ⨅ 𝒜 ≅ ⨅ ℬ
+  ⨅≅ :  {𝒜 : I → Structure 𝑅 𝐹 {α}{ρᵃ}}{ℬ : I → Structure 𝑅 𝐹 {β}{ρᵇ}}
+   →    (∀ (i : I) → 𝒜 i ≅ ℬ i) → ⨅ 𝒜 ≅ ⨅ ℬ
 
-  ⨅≅ {𝒜 = 𝒜}{ℬ} AB = record { to = ϕ , ϕhom ; from = ψ , ψhom ; to∼from = ϕ~ψ ; from∼to = ψ~ϕ }
+  ⨅≅ {𝒜 = 𝒜}{ℬ} AB = record  { to = ϕ , ϕhom
+                             ; from = ψ , ψhom
+                             ; to∼from = ϕ~ψ
+                             ; from∼to = ψ~ϕ
+                             }
    where
    ϕ : ∣ ⨅ 𝒜 ∣ → ∣ ⨅ ℬ ∣
    ϕ a i = ∣ to (AB i) ∣ (a i)
@@ -154,7 +162,6 @@ module _  {ι : Level}{I : Type ι}
 
    ψ~ϕ : ψ ∘ ϕ ≈ ∣ 𝒾𝒹 (⨅ 𝒜) ∣
    ψ~ϕ a = fiu λ i → (from∼to (AB i)) (a i)
-
 \end{code}
 
 --------------------------------

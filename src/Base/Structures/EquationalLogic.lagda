@@ -16,17 +16,18 @@ This is the [Base.Structures.EquationalLogic][] module of the [Agda Universal Al
 module Base.Structures.EquationalLogic where
 
 -- Imports from Agda and the Agda Standard Library --------------------------------------
-open import Agda.Primitive               using ( lsuc ; _⊔_ ; Level ) renaming ( Set to Type )
-open import Data.Fin.Base                using ( Fin )
-open import Data.Nat                     using ( ℕ )
-open import Data.Product                 using ( _,_ ;  _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Relation.Unary               using ( Pred ; _∈_ )
+open import Agda.Primitive  using () renaming ( Set to Type )
+open import Data.Fin.Base   using ( Fin )
+open import Data.Nat        using ( ℕ )
+open import Data.Product    using ( _×_ ; _,_ ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Level           using ( Level )
+open import Relation.Unary  using ( Pred ; _∈_ )
 
 -- Imports from the Agda Universal Algebra Library --------------------------------------
-open import Base.Overture.Preliminaries  using ( _≈_ )
-open import Base.Structures.Basic        using ( signature ; structure ; _ᵒ_ )
-open import Base.Structures.Terms
-open import Base.Terms.Basic
+open import Overture               using ( _≈_ )
+open import Base.Terms             using ( Term )
+open import Base.Structures.Basic  using ( signature ; structure ; _ᵒ_ )
+open import Base.Structures.Terms  using ( _⟦_⟧ )
 
 private variable
  𝓞₀ 𝓥₀ 𝓞₁ 𝓥₁ χ α ρ ℓ : Level

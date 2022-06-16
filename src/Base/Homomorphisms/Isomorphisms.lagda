@@ -32,13 +32,13 @@ open  import Axiom.Extensionality.Propositional
       using () renaming (Extensionality to funext )
 
 -- Imports from the Agda Universal Algebra Library -----------------------------------------------
-open  import Base.Overture
-      using ( ∣_∣ ; ∥_∥ ; _≈_ ; _∙_ ; lower∼lift ; lift∼lower ; IsInjective )
+open import Overture using ( ∣_∣ ; ∥_∥ ; _≈_ ; _∙_ ; lower∼lift ; lift∼lower )
+open import Base.Functions using ( IsInjective )
 
-open  import Base.Algebras {𝑆 = 𝑆}  using ( Algebra ; Lift-Alg ; ⨅ )
+open import Base.Algebras {𝑆 = 𝑆} using ( Algebra ; Lift-Alg ; ⨅ )
 
-open  import Base.Homomorphisms.Basic {𝑆 = 𝑆}
-      using ( hom ; 𝒾𝒹 ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-homomorphism )
+open import Base.Homomorphisms.Basic {𝑆 = 𝑆}
+ using ( hom ; 𝒾𝒹 ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-homomorphism )
 
 open import Base.Homomorphisms.Properties  {𝑆 = 𝑆}  using ( ∘-hom )
 

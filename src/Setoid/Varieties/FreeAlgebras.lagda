@@ -26,9 +26,9 @@ open import Relation.Unary   using ( Pred ; _∈_ ; _⊆_ )
 open import Relation.Binary.PropositionalEquality as ≡ using (_≡_)
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------------
-open import Base.Overture        using ( ∣_∣ ; ∥_∥ )
-open import Setoid.Relations     using ( fkerPred )
-open import Setoid.Functions     using ( eq ; IsSurjective )
+open import Overture          using ( ∣_∣ ; ∥_∥ )
+open import Setoid.Relations  using ( fkerPred )
+open import Setoid.Functions  using ( eq ; IsSurjective )
 
 open import Base.Terms            {𝑆 = 𝑆}  using ( ℊ )
 open import Setoid.Algebras       {𝑆 = 𝑆} using ( Algebra ; ov ; Lift-Alg )

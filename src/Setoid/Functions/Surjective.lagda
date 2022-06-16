@@ -18,18 +18,20 @@ A *surjective function* from a setoid `𝑨 = (A, ≈₀)` to a setoid `𝑩 = (
 module Setoid.Functions.Surjective where
 
 -- Imports from Agda and the Agda Standard Library --------------------------
-open import Agda.Primitive    using ()  renaming ( Set to Type )
-open import Data.Product      using ( _,_ ; Σ-syntax )
-open import Function          using ( Surjection ; IsSurjection )   renaming ( Func to _⟶_ )
-open import Level             using ( _⊔_ ; Level )
-open import Relation.Binary   using ( Setoid )
+open import Agda.Primitive   using () renaming ( Set to Type )
+open import Data.Product     using ( _,_ ; Σ-syntax )
+open import Function         using ( Surjection ; IsSurjection )
+                             renaming ( Func to _⟶_ )
+open import Level            using ( _⊔_ ; Level )
+open import Relation.Binary  using ( Setoid )
 
-open import Function.Construct.Composition using () renaming ( isSurjection to isOnto )
+open import Function.Construct.Composition renaming ( isSurjection to isOnto )
+ using ()
 
 import Function.Definitions as FD
 
 -- Imports from agda-algebras -----------------------------------------------
-open import Base.Overture              using ( ∣_∣ ; ∥_∥ ; ∃-syntax ; transport )
+open import Overture                   using ( ∣_∣ ; ∥_∥ ; ∃-syntax ; transport )
 open import Setoid.Functions.Basic     using ( _∘_ )
 open import Setoid.Functions.Inverses  using ( Img_∋_ ; Image_∋_ ; Inv ; InvIsInverseʳ )
 
@@ -41,8 +43,9 @@ open Image_∋_
 
 module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
 
- open Setoid 𝑨  using ()               renaming (Carrier to A; _≈_ to _≈₁_; isEquivalence to isEqA )
- open Setoid 𝑩  using ( trans ; sym )  renaming (Carrier to B; _≈_ to _≈₂_; isEquivalence to isEqB )
+ open Setoid 𝑨  renaming (Carrier to A; _≈_ to _≈₁_; isEquivalence to isEqA ) using ()
+ open Setoid 𝑩  renaming (Carrier to B; _≈_ to _≈₂_; isEquivalence to isEqB )
+                using ( trans ; sym )
 
  open Surjection {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝑨}{To = 𝑩}  renaming (f to _⟨$⟩_)
  open _⟶_ {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝑨}{To = 𝑩}         renaming (f to _⟨$⟩_ )

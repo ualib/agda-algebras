@@ -26,16 +26,16 @@ open  import Relation.Binary.PropositionalEquality as ≡
       using ( _≡_ ; module ≡-Reasoning )
 
 -- Imports from the Agda Universal Algebra Library --------------------
-open  import Base.Overture
-      using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; id-is-injective ; IsInjective ; ∘-injective )
+open  import Overture        using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
+open  import Base.Functions  using ( id-is-injective ; IsInjective ; ∘-injective )
 
-open  import Base.Algebras {𝑆 = 𝑆} using ( Algebra ; Lift-Alg ; ov )
-open  import Base.Homomorphisms {𝑆 = 𝑆}
-      using ( is-homomorphism ; ∘-hom ; ∘-is-hom ; _≅_ ; ≅toInjective )
-      using ( ≅fromInjective ; ≅-refl ; ≅-sym ; ≅-trans ; Lift-≅ ; mkiso )
-
-open  import Base.Subalgebras.Subalgebras {𝑆 = 𝑆}
-      using  ( _≤_ ; _≥_ ; _IsSubalgebraOfClass_ )
+open  import Base.Algebras       {𝑆 = 𝑆}  using ( Algebra ; Lift-Alg ; ov )
+open  import Base.Homomorphisms  {𝑆 = 𝑆}  using ( is-homomorphism ; ∘-hom )
+                                          using ( ∘-is-hom ; _≅_ ; ≅toInjective )
+                                          using ( ≅fromInjective ; ≅-refl ; ≅-sym )
+                                          using ( ≅-trans ; Lift-≅ ; mkiso )
+open  import Base.Subalgebras.Subalgebras
+                                 {𝑆 = 𝑆}  using  ( _≤_ ; _≥_ ; _IsSubalgebraOfClass_ )
 
 private variable α β γ 𝓧 : Level
 

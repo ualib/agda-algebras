@@ -36,10 +36,10 @@ open  import Relation.Binary.PropositionalEquality as ≡
       using ( _≡_ ; module ≡-Reasoning )
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
-open  import Base.Overture
-      using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; Inv ; InvIsInverseʳ ; IsInjective )
-open  import Base.Equality
-      using ( SwellDef ; hfunext ; DFunExt )
+open import Overture        using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
+open import Base.Functions  using ( Inv ; InvIsInverseʳ ; IsInjective )
+open import Base.Equality   using ( SwellDef ; hfunext ; DFunExt )
+
 open  import Base.Algebras {𝑆 = 𝑆}
       using ( Algebra ; Lift-Alg ; ov ; ⨅ ; 𝔄 ; class-product )
 open  import Base.Homomorphisms {𝑆 = 𝑆}
@@ -48,19 +48,18 @@ open  import Base.Homomorphisms {𝑆 = 𝑆}
 open  import Base.Terms {𝑆 = 𝑆}
       using ( Term ; 𝑻 ; _⟦_⟧; comm-hom-term )
 open  import Base.Subalgebras {𝑆 = 𝑆}
-      using ( _≤_ ; _IsSubalgebraOf_ ; ≤-Lift ; Lift-≤-Lift )
-      using ( _IsSubalgebraOfClass_ ; SubalgebraOfClass )
+      using ( _IsSubalgebraOfClass_ ; ≤-Lift ; _IsSubalgebraOf_ ; _≤_ )
+      using ( Lift-≤-Lift ; SubalgebraOfClass )
 open  import Base.Varieties.EquationalLogic {𝑆 = 𝑆}
       using ( _⊫_≈_ ; _⊧_≈_ ; Th )
 open  import Base.Varieties.Properties {𝑆 = 𝑆}
-      using ( ⊧-Lift-invar ; ⊧-lower-invar ; ⊧-I-invar ; ⊧-S-invar)
-      using ( ⊧-S-class-invar ; ⊧-P-lift-invar ; ⊧-P-invar )
+      using ( ⊧-Lift-invar ; ⊧-lower-invar ; ⊧-I-invar ; ⊧-S-invar ; ⊧-P-invar )
+      using ( ⊧-S-class-invar ; ⊧-P-lift-invar )
 open  import Base.Varieties.Closure {𝑆 = 𝑆}
-      using ( H ; S ; P ; V ; P-expa ; S→subalgebra ; Lift-Alg-subP' )
-      using ( subalgebra→S ; S-mono ; P-idemp ; module Vlift )
+      using ( H ; S ; P ; V ; P-expa ; S-mono ; S→subalgebra ; Lift-Alg-subP' )
+      using ( subalgebra→S ; P-idemp ; module Vlift )
 
 open H ; open S ; open P ; open V
-
 private variable α β : Level
 \end{code}
 

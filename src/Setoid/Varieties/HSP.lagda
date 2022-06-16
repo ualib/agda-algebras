@@ -24,10 +24,11 @@ open import Relation.Binary  using ( Setoid )
 open import Relation.Unary   using ( Pred ; _∈_ ; _⊆_ )
 
 -- -- Imports from the Agda Universal Algebra Library ---------------------------------------------------
-open import Base.Overture                               using ( ∣_∣ ; ∥_∥ )
-open import Setoid.Relations                            using ( fkerPred )
-open import Setoid.Algebras                    {𝑆 = 𝑆}  using ( Algebra ; ov ; Lift-Alg ; ⨅ )
-open import Setoid.Homomorphisms               {𝑆 = 𝑆}
+open import Overture          using ( ∣_∣ ; ∥_∥ )
+open import Setoid.Relations  using ( fkerPred )
+
+open import Setoid.Algebras       {𝑆 = 𝑆}  using ( Algebra ; ov ; Lift-Alg ; ⨅ )
+open import Setoid.Homomorphisms  {𝑆 = 𝑆}
  using ( hom ; mon ; IsMon ; IsHom ; epi ; epi→ontohom ; ⨅-hom-co ; HomFactor ; ≅-refl ; _IsHomImageOf_ )
 
 open import Setoid.Subalgebras                 {𝑆 = 𝑆}  using ( _≤_ ; mon→≤ )

@@ -26,7 +26,8 @@ open  import Relation.Binary.PropositionalEquality
       using ( _≡_ ; module ≡-Reasoning ; refl )
 
 -- Imports from the Agda Universal Algebras Library --------------------------------
-open import Base.Overture   using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; Image_∋_ ; IsSurjective )
+open import Overture        using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
+open import Base.Functions  using ( Image_∋_ ; IsSurjective )
 open import Base.Equality   using ( swelldef )
 open import Base.Relations  using ( ker ; ker-IsEquivalence ; ⟪_⟫ ; mkblk )
 
@@ -41,7 +42,9 @@ private variable α β : Level
 
 #### <a id="definition">Definition</a>
 
-The kernel of a homomorphism is a congruence relation and conversely for every congruence relation θ, there exists a homomorphism with kernel θ (namely, that canonical projection onto the quotient modulo θ).
+The kernel of a homomorphism is a congruence relation and conversely for every
+congruence relation θ, there exists a homomorphism with kernel θ (namely, that
+canonical projection onto the quotient modulo θ).
 
 \begin{code}
 
@@ -58,9 +61,12 @@ module _ {𝑨 : Algebra α 𝑆} where
 
 \end{code}
 
-(Notice, it is here that the `swelldef` postulate comes into play, and because it is needed to prove `homker-comp`, it is postulated by all the lemmas below that depend upon `homker-comp`.)
+(Notice, it is here that the `swelldef` postulate comes into play, and because it
+is needed to prove `homker-comp`, it is postulated by all the lemmas below that
+depend upon `homker-comp`.)
 
-It is convenient to define a function that takes a homomorphism and constructs a congruence from its kernel.  We call this function `kercon`.
+It is convenient to define a function that takes a homomorphism and constructs a
+congruence from its kernel.  We call this function `kercon`.
 
 \begin{code}
 
@@ -69,7 +75,8 @@ It is convenient to define a function that takes a homomorphism and constructs a
 
 \end{code}
 
-With this congruence we construct the corresponding quotient, along with some syntactic sugar to denote it.
+With this congruence we construct the corresponding quotient, along with some
+syntactic sugar to denote it.
 
 \begin{code}
 
@@ -83,12 +90,15 @@ ker[ 𝑨 ⇒ 𝑩 ] h ↾ wd = kerquo wd {𝑩} h
 
 \end{code}
 
-Thus, given `h : hom 𝑨 𝑩`, we can construct the quotient of `𝑨` modulo the kernel of `h`, and the syntax for this quotient in the [agda-algebras](https://github.com/ualib/agda-algebras) library is `𝑨 [ 𝑩 ]/ker h ↾ fe`.
-
+Thus, given `h : hom 𝑨 𝑩`, we can construct the quotient of `𝑨` modulo the kernel
+of `h`, and the syntax for this quotient in the
+[agda-algebras](https://github.com/ualib/agda-algebras) library is
+`𝑨 [ 𝑩 ]/ker h ↾ fe`.
 
 #### <a id="the-canonical-projection">The canonical projection</a>
 
-Given an algebra `𝑨` and a congruence `θ`, the *canonical projection* is a map from `𝑨` onto `𝑨 ╱ θ` that is constructed, and proved epimorphic, as follows.
+Given an algebra `𝑨` and a congruence `θ`, the *canonical projection* is a map
+from `𝑨` onto `𝑨 ╱ θ` that is constructed, and proved epimorphic, as follows.
 
 \begin{code}
 
@@ -100,7 +110,9 @@ module _ {α β : Level}{𝑨 : Algebra α 𝑆} where
 
 \end{code}
 
-In may happen that we don't care about the surjectivity of `πepi`, in which case would might prefer to work with the *homomorphic reduct* of `πepi`. This is obtained by applying `epi-to-hom`, like so.
+In may happen that we don't care about the surjectivity of `πepi`, in which case
+would might prefer to work with the *homomorphic reduct* of `πepi`. This is
+obtained by applying `epi-to-hom`, like so.
 
 \begin{code}
 
@@ -109,7 +121,10 @@ In may happen that we don't care about the surjectivity of `πepi`, in which cas
 
 \end{code}
 
-We combine the foregoing to define a function that takes 𝑆-algebras `𝑨` and `𝑩`, and a homomorphism `h : hom 𝑨 𝑩` and returns the canonical epimorphism from `𝑨` onto `𝑨 [ 𝑩 ]/ker h`. (Recall, the latter is the special notation we defined above for the quotient of `𝑨` modulo the kernel of `h`.)
+We combine the foregoing to define a function that takes 𝑆-algebras `𝑨` and `𝑩`,
+and a homomorphism `h : hom 𝑨 𝑩` and returns the canonical epimorphism from `𝑨`
+onto `𝑨 [ 𝑩 ]/ker h`. (Recall, the latter is the special notation we defined above
+for the quotient of `𝑨` modulo the kernel of `h`.)
 
 \begin{code}
 
@@ -120,7 +135,11 @@ We combine the foregoing to define a function that takes 𝑆-algebras `𝑨` an
 
 \end{code}
 
-The kernel of the canonical projection of `𝑨` onto `𝑨 / θ` is equal to `θ`, but since equality of inhabitants of certain types (like `Congruence` or `Rel`) can be a tricky business, we settle for proving the containment `𝑨 / θ ⊆ θ`. Of the two containments, this is the easier one to prove; luckily it is also the one we need later.
+The kernel of the canonical projection of `𝑨` onto `𝑨 / θ` is equal to `θ`, but
+since equality of inhabitants of certain types (like `Congruence` or `Rel`) can be
+a tricky business, we settle for proving the containment `𝑨 / θ ⊆ θ`. Of the two
+containments, this is the easier one to prove; luckily it is also the one we need
+later.
 
 \begin{code}
 

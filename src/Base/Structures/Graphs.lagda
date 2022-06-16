@@ -20,32 +20,29 @@ N.B. This module differs from 0Graphs.lagda in that this module is universe poly
 module Base.Structures.Graphs where
 
 -- imports from Agda and the Agda Standard Library -------------------------------------------
-open import Agda.Primitive                         using     ( _⊔_ ; lsuc )
-                                                   renaming  ( Set to Type ; lzero  to ℓ₀ )
-open import Data.Product                           using     ( _,_ ; Σ-syntax ; _×_ )
-open import Data.Sum.Base                          using     ( _⊎_ )
-                                                   renaming  ( inj₁ to inl ; inj₂ to inr )
-open import Data.Unit.Base                         using     ( ⊤ ; tt )
-open import Level                                  using     ( Level ; Lift ; lift ; lower )
-open import Function.Base                          using     ( _∘_  )
-open import Relation.Binary.PropositionalEquality  using     ( _≡_ ; refl ; module ≡-Reasoning ; cong ; sym )
+open import Agda.Primitive  using () renaming  ( Set to Type ; lzero  to ℓ₀ )
+open import Data.Product    using ( _,_ ; Σ-syntax ; _×_ )
+open import Data.Sum.Base   using ( _⊎_ ) renaming  ( inj₁ to inl ; inj₂ to inr )
+open import Data.Unit.Base  using ( ⊤ ; tt )
+open import Level           using (  _⊔_ ; Level ; Lift ; lift ; lower )
+open import Function.Base   using ( _∘_  )
+open import Relation.Binary.PropositionalEquality as ≡
+                            using ( _≡_ ; module ≡-Reasoning )
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
-open import Base.Overture.Preliminaries     using ( ∣_∣ ; _≈_ ; ∥_∥ ; _∙_ ; lower∼lift ; lift∼lower )
-open import Base.Relations.Continuous       using ( Rel )
-open import Base.Structures.Basic           using ( signature ; structure )
-open import Base.Structures.Homs            using ( hom ; 𝒾𝒹 ; ∘-hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 ; is-hom-rel; is-hom-op)
+open import Overture               using ( ∣_∣ ; ∥_∥ )
+open import Base.Relations         using ( Rel )
+open import Base.Structures.Basic  using ( signature ; structure )
+open import Base.Structures.Homs   using ( hom ; ∘-hom ; is-hom-rel ; is-hom-op)
 open import Examples.Structures.Signatures  using ( S∅ )
 
-open signature
-open structure
-open _⊎_
-
+open signature ; open structure ; open _⊎_
 
 Gr-sig : signature ℓ₀ ℓ₀ → signature ℓ₀ ℓ₀ → signature ℓ₀ ℓ₀
 
-Gr-sig 𝐹 𝑅 = record { symbol = symbol 𝑅 ⊎ symbol 𝐹
-                    ; arity  = ar }
+Gr-sig 𝐹 𝑅 = record  { symbol = symbol 𝑅 ⊎ symbol 𝐹
+                     ; arity  = ar
+                     }
  where
  ar : symbol 𝑅 ⊎ symbol 𝐹 → Type _
  ar (inl 𝑟) = (arity 𝑅) 𝑟
@@ -62,14 +59,11 @@ Gr {𝐹}{𝑅}{α}{ρ} 𝑨 = record { carrier = carrier 𝑨 ; op = λ () ; re
   split (inl 𝑟) arg = Lift α (rel 𝑨 𝑟 arg)
   split (inr 𝑓) args = Lift ρ (op 𝑨 𝑓 (args ∘ inl) ≡ args (inr tt))
 
-
 open ≡-Reasoning
 
-private variable
- ρᵃ β ρᵇ : Level
+private variable ρᵃ β ρᵇ : Level
 
-module _ {𝑨 : structure 𝐹 𝑅 {α} {ρᵃ}}
-         {𝑩 : structure 𝐹 𝑅 {β} {ρᵇ}} where
+module _ {𝑨 : structure 𝐹 𝑅 {α} {ρᵃ}} {𝑩 : structure 𝐹 𝑅 {β} {ρᵇ}} where
 
  hom→Grhom : hom 𝑨 𝑩 → hom (Gr 𝑨) (Gr 𝑩)
  hom→Grhom (h , hhom) = h , (i , ii)
@@ -82,9 +76,9 @@ module _ {𝑨 : structure 𝐹 𝑅 {α} {ρᵃ}}
    homop = ∥ hhom ∥ 𝑓 (a ∘ inl)
 
    goal : op 𝑩 𝑓 (h ∘ (a ∘ inl)) ≡ h (a (inr tt))
-   goal = op 𝑩 𝑓 (h ∘ (a ∘ inl)) ≡⟨ sym homop ⟩
-          h (op 𝑨 𝑓 (a ∘ inl))   ≡⟨ cong h (lower x) ⟩
-          h (a (inr tt))         ∎
+   goal =  op 𝑩 𝑓 (h ∘ (a ∘ inl))  ≡⟨ ≡.sym homop ⟩
+           h (op 𝑨 𝑓 (a ∘ inl))    ≡⟨ ≡.cong h (lower x) ⟩
+           h (a (inr tt))          ∎
 
   ii : is-hom-op (Gr 𝑨) (Gr 𝑩) h
   ii = λ ()
@@ -95,14 +89,13 @@ module _ {𝑨 : structure 𝐹 𝑅 {α} {ρᵃ}}
   i : is-hom-rel 𝑨 𝑩 h
   i R a x = lower (∣ hhom ∣ (inl R) a (lift x))
   ii : is-hom-op 𝑨 𝑩 h
-  ii f a = goal -- goal
+  ii f a = goal
    where
    split : arity 𝐹 f ⊎ ⊤ → carrier 𝑨
    split (inl x) = a x
    split (inr y) = op 𝑨 f a
    goal : h (op 𝑨 f a) ≡ op 𝑩 f (λ x → h (a x))
-   goal = sym (lower (∣ hhom ∣ (inr f) split (lift refl)))
-
+   goal = ≡.sym (lower (∣ hhom ∣ (inr f) split (lift ≡.refl)))
 \end{code}
 
 --------------------------------

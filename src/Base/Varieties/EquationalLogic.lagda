@@ -29,7 +29,7 @@ open import Level           using ( Level ;  _⊔_ )
 open import Relation.Unary  using ( Pred ; _∈_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------
-open import Base.Overture           using ( _≈_ )
+open import Overture                using ( _≈_ )
 open import Base.Algebras  {𝑆 = 𝑆}  using ( Algebra ; ov )
 open import Base.Terms     {𝑆 = 𝑆}  using ( Term ; 𝑻 ; _⟦_⟧ )
 

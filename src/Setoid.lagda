@@ -27,6 +27,6 @@ open import Setoid.Varieties       public
 --------------------------------------
 
 <span style="float:left;">[↑ Top](index.html)</span>
-<span style="float:right;">[Setoid.Overture →](Setoid.Overture.html)</span>
+<span style="float:right;">[Setoid.Functions →](Setoid.Overture.html)</span>
 
 

@@ -26,7 +26,7 @@ open import Relation.Binary  using ( REL )
 open import Relation.Unary   using ( Pred ; _∈_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------
-open import Base.Overture     using ( ∣_∣ ; ∥_∥ )
+open import Overture          using ( ∣_∣ ; ∥_∥ )
 open import Setoid.Functions  using ( IsInjective )
 
 open import Setoid.Algebras       {𝑆 = 𝑆} using ( Algebra ; ov )

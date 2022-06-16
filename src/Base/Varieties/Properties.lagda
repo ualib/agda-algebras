@@ -25,25 +25,31 @@ open import Base.Signatures using ( 𝓞 ; 𝓥 ; Signature )
 module Base.Varieties.Properties {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library -------------------------------------------
-open import Agda.Primitive                         using () renaming ( Set to Type )
-open import Axiom.Extensionality.Propositional     using () renaming ( Extensionality to funext )
-open import Data.Product                           using ( _,_ ; Σ-syntax ; _×_ )
-                                                   renaming ( proj₁ to fst ; proj₂ to snd )
-open import Function                               using ( _∘_ )
-open import Level                                  using ( Level ; _⊔_ )
-open import Relation.Unary                         using ( Pred ; _∈_ ; _⊆_ ; ⋂ )
-open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl ; module ≡-Reasoning ; cong )
+open import Agda.Primitive  using () renaming ( Set to Type )
+open import Data.Product    using ( _,_ ; Σ-syntax ; _×_ )
+                            renaming ( proj₁ to fst ; proj₂ to snd )
+open import Function        using ( _∘_ )
+open import Level           using ( Level ; _⊔_ )
+open import Relation.Unary  using ( Pred ; _∈_ ; _⊆_ ; ⋂ )
+open import Axiom.Extensionality.Propositional
+                            using () renaming ( Extensionality to funext )
+open import Relation.Binary.PropositionalEquality
+                            using ( _≡_ ; refl ; module ≡-Reasoning ; cong )
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
-open import Base.Overture  using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; IsInjective ; ∘-injective )
-open import Base.Equality  using ( SwellDef ; DFunExt )
-
+open import Overture                     using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
+open import Base.Functions               using ( IsInjective ; ∘-injective )
+open import Base.Equality                using ( SwellDef ; DFunExt )
 open import Base.Algebras       {𝑆 = 𝑆}  using ( Algebra ; Lift-Alg ; ov ; ⨅ )
-open import Base.Homomorphisms  {𝑆 = 𝑆}  using ( hom ; ∘-hom ; _≅_ ; mkiso ; Lift-≅ ; ≅-sym ; ≅-trans )
-open import Base.Terms          {𝑆 = 𝑆}  using ( Term ; 𝑻 ; lift-hom ; _⟦_⟧ ; comm-hom-term ; interp-prod ; term-agreement )
-open import Base.Subalgebras    {𝑆 = 𝑆}  using ( _≤_ ; SubalgebraOfClass ; iso→injective )
-
-open import Base.Varieties.EquationalLogic   {𝑆 = 𝑆}  using ( _⊧_≈_ ; _⊫_≈_ )
+open import Base.Homomorphisms  {𝑆 = 𝑆}  using ( hom ; ∘-hom ; _≅_ ; mkiso )
+                                         using ( Lift-≅ ; ≅-sym ; ≅-trans )
+open import Base.Terms          {𝑆 = 𝑆}  using ( Term ; 𝑻 ; lift-hom ; _⟦_⟧ )
+                                         using ( comm-hom-term ; interp-prod )
+                                         using ( term-agreement )
+open import Base.Subalgebras    {𝑆 = 𝑆}  using ( _≤_ ; SubalgebraOfClass )
+                                         using ( iso→injective )
+open import Base.Varieties.EquationalLogic
+                                {𝑆 = 𝑆}  using ( _⊧_≈_ ; _⊫_≈_ )
 \end{code}
 
 

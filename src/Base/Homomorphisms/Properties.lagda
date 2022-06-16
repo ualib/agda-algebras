@@ -26,7 +26,7 @@ open  import Relation.Binary.PropositionalEquality as ≡
       using ( _≡_ ; module ≡-Reasoning )
 
 -- Imports from the Agda Universal Algebras Library --------------------------------
-open import Base.Overture                      using ( ∣_∣ ; ∥_∥ )
+open import Overture                           using ( ∣_∣ ; ∥_∥ )
 open import Base.Algebras             {𝑆 = 𝑆}  using ( Algebra ; _̂_ ; Lift-Alg )
 open import Base.Homomorphisms.Basic  {𝑆 = 𝑆}  using ( hom ; is-homomorphism )
 
@@ -36,7 +36,8 @@ private variable α β γ ρ : Level
 
 #### <a id="homomorphism-composition">Homomorphism composition</a>
 
-The composition of homomorphisms is again a homomorphism.  We formalize this in a number of alternative ways.
+The composition of homomorphisms is again a homomorphism.  We formalize this in a
+number of alternative ways.
 
 \begin{code}
 
@@ -52,7 +53,6 @@ module _ (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}(𝑪 : Algebra γ 𝑆
                h ((𝑓 ̂ 𝑩)(g ∘ a))  ≡⟨ hhom 𝑓 ( g ∘ a )       ⟩
                (𝑓 ̂ 𝑪)(h ∘ g ∘ a)  ∎
 
-
   ∘-is-hom :  {f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣}{g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣}
    →          is-homomorphism 𝑨 𝑩 f → is-homomorphism 𝑩 𝑪 g
    →          is-homomorphism 𝑨 𝑪 (g ∘ f)
@@ -61,7 +61,8 @@ module _ (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}(𝑪 : Algebra γ 𝑆
 
 \end{code}
 
-A homomorphism from `𝑨` to `𝑩` can be lifted to a homomorphism from `Lift-Alg 𝑨 ℓᵃ` to `Lift-Alg 𝑩 ℓᵇ`.
+A homomorphism from `𝑨` to `𝑩` can be lifted to a homomorphism from
+`Lift-Alg 𝑨 ℓᵃ` to `Lift-Alg 𝑩 ℓᵇ`.
 
 \begin{code}
 
@@ -76,12 +77,13 @@ Lift-hom {𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ (f , fhom) = lift ∘ f ∘ lower , 
  lABh = ∘-is-hom (Lift-Alg 𝑨 ℓᵃ) 𝑩 {lower}{f} (λ _ _ → ≡.refl) fhom
 
  Goal : is-homomorphism(Lift-Alg 𝑨 ℓᵃ)(Lift-Alg 𝑩 ℓᵇ) (lift ∘ (f ∘ lower))
- Goal = ∘-is-hom (Lift-Alg 𝑨 ℓᵃ) (Lift-Alg 𝑩 ℓᵇ){f ∘ lower}{lift} lABh λ _ _ → ≡.refl
+ Goal = ∘-is-hom  (Lift-Alg 𝑨 ℓᵃ) (Lift-Alg 𝑩 ℓᵇ)
+                  {f ∘ lower}{lift} lABh λ _ _ → ≡.refl
 
 \end{code}
 
-We should probably point out that while the lifting and lowering homomorphisms are
-important for our formal treatment of algebras in type theory, they never
+We should probably point out that while the lifting and lowering homomorphisms
+are important for our formal treatment of algebras in type theory, they never
 arise---in fact, they are not even definable---in classical universal algebra
 based on set theory.
 

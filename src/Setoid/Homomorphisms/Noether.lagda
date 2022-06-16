@@ -28,8 +28,9 @@ open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from agda-algebras ------------------------------------------------
-open import Base.Overture                         using ( ∣_∣ ; ∥_∥ )
-open import Setoid.Functions                      using ( IsInjective )
+open import Overture          using ( ∣_∣ ; ∥_∥ )
+open import Setoid.Functions  using ( IsInjective )
+
 open import Setoid.Algebras {𝑆 = 𝑆}               using ( Algebra ; _̂_)
 open import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}    using ( hom ; IsHom )
 open import Setoid.Homomorphisms.Kernels {𝑆 = 𝑆}  using ( kerquo ; πker )
@@ -76,10 +77,10 @@ Now we prove that the homomorphism whose existence is guaranteed by `FirstHomThe
 
 \begin{code}
 
- FirstHomUnique : (f g : hom (kerquo hh) 𝑩)
-  →                 (∀ a →  h a ≈ ∣ f ∣ ⟨$⟩ (∣ πker hh ∣ ⟨$⟩ a))
-  →                 (∀ a →  h a ≈ ∣ g ∣ ⟨$⟩ (∣ πker hh ∣ ⟨$⟩ a))
-  →                 ∀ [a]  →  ∣ f ∣ ⟨$⟩ [a] ≈ ∣ g ∣ ⟨$⟩ [a]
+ FirstHomUnique :  (f g : hom (kerquo hh) 𝑩)
+  →                ( ∀ a →  h a ≈ ∣ f ∣ ⟨$⟩ (∣ πker hh ∣ ⟨$⟩ a) )
+  →                ( ∀ a →  h a ≈ ∣ g ∣ ⟨$⟩ (∣ πker hh ∣ ⟨$⟩ a) )
+  →                ∀ [a]  →  ∣ f ∣ ⟨$⟩ [a] ≈ ∣ g ∣ ⟨$⟩ [a]
 
  FirstHomUnique fh gh hfk hgk a = trans (sym (hfk a)) (hgk a)
 \end{code}

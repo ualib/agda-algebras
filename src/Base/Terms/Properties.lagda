@@ -19,29 +19,28 @@ open import Base.Signatures using ( 𝓞 ; 𝓥 ; Signature )
 module Base.Terms.Properties {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library --------------------------------------
-open import Agda.Primitive          using ()  renaming ( Set to Type )
+open import Agda.Primitive          using () renaming ( Set to Type )
 open import Data.Product            using ( _,_ ; Σ-syntax )
 open import Function                using ( _∘_ )
 open import Data.Empty.Polymorphic  using ( ⊥ )
 open import Level                   using ( Level )
-
-open  import Relation.Binary
-      using ( IsEquivalence ; Setoid ; Reflexive ; Symmetric ; Transitive )
-
-open  import Relation.Binary.PropositionalEquality as ≡
-      using ( _≡_ ; module ≡-Reasoning )
-
-open  import Axiom.Extensionality.Propositional
-      using ()  renaming (Extensionality to funext)
+open import Relation.Binary         using ( IsEquivalence ; Setoid ; Reflexive )
+                                    using ( Symmetric ; Transitive )
+open import Relation.Binary.PropositionalEquality as ≡
+                                    using ( _≡_ ; module ≡-Reasoning )
+open import Axiom.Extensionality.Propositional
+                                    using () renaming (Extensionality to funext)
 
 
 -- Imports from the Agda Universal Algebra Library ----------------------------------------
-open  import Base.Overture
-      using ( _⁻¹ ; 𝑖𝑑 ; ∣_∣ ; ∥_∥ ; Inv ; InvIsInverseʳ ; Image_∋_; eq ; IsSurjective )
-open  import Base.Equality               using ( swelldef )
-open  import Base.Algebras {𝑆 = 𝑆}       using ( Algebra ; _̂_  ; ov )
-open  import Base.Homomorphisms {𝑆 = 𝑆}  using ( hom )
-open  import Base.Terms.Basic {𝑆 = 𝑆}    using ( Term ; 𝑻 )
+open import Overture                using ( _⁻¹ ; 𝑖𝑑 ; ∣_∣ ; ∥_∥ )
+open import Base.Functions          using ( Inv ; InvIsInverseʳ ; Image_∋_)
+                                    using ( eq ; IsSurjective )
+open  import Base.Equality          using ( swelldef )
+
+open  import Base.Algebras       {𝑆 = 𝑆} using ( Algebra ; _̂_  ; ov )
+open  import Base.Homomorphisms  {𝑆 = 𝑆} using ( hom )
+open  import Base.Terms.Basic    {𝑆 = 𝑆} using ( Term ; 𝑻 )
 
 open Term
 private variable α β χ : Level

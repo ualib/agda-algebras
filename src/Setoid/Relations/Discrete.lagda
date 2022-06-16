@@ -30,7 +30,7 @@ open import Relation.Binary.PropositionalEquality
                                   using ( _≡_ )
 
 -- Imports from agda-algebras -------------------------------------------------------------------
-open import Base.Overture.Preliminaries using ( Π-syntax )
+open import Overture using ( Π-syntax )
 
 private variable α β ρᵃ ρᵇ ℓ 𝓥 : Level
 \end{code}

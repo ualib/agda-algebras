@@ -39,8 +39,8 @@ open  import Axiom.Extensionality.Propositional
       using () renaming ( Extensionality to funext )
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------
-open import Base.Overture  using  ( ∣_∣ ; ∥_∥ )
-open import Base.Algebras {𝑆 = 𝑆} using  ( Algebra ; Lift-Alg ; ov ; ⨅ )
+open import Overture               using ( ∣_∣ ; ∥_∥ )
+open import Base.Algebras {𝑆 = 𝑆}  using ( Algebra ; Lift-Alg ; ov ; ⨅ )
 
 open  import Base.Homomorphisms {𝑆 = 𝑆}
       using ( _≅_ ; ≅-sym ; Lift-≅ ; ≅-trans ; ≅-refl ; Lift-Alg-iso ; Lift-Alg-⨅≅ )

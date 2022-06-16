@@ -28,8 +28,9 @@ open import Relation.Binary.PropositionalEquality  as ≡           using ()
 import Relation.Binary.Reasoning.Setoid            as SReasoning  using ( begin_ ; step-≈˘; step-≈; _∎)
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------------
-open import Base.Overture    using ( ∣_∣ ; ∥_∥ )
-open import Setoid.Functions using ( Image_∋_ ; IsSurjective ; SurjInv ; SurjInvIsInverseʳ ; epic-factor )
+open import Overture         using ( ∣_∣ ; ∥_∥ )
+open import Setoid.Functions using ( Image_∋_ ; IsSurjective ; SurjInv )
+                             using ( SurjInvIsInverseʳ ; epic-factor )
 open import Base.Relations   using ( kernelRel )
 
 open import Setoid.Algebras {𝑆 = 𝑆}             using ( Algebra ; 𝕌[_] ; _̂_ )

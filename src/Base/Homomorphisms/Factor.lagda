@@ -41,9 +41,10 @@ open  import Relation.Binary.PropositionalEquality as ≡
       using ( module ≡-Reasoning ; _≡_ )
 
 -- Imports from agda-algebras --------------------------------------------------------------
+open import Overture        using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
 open import Base.Equality   using ( swelldef )
 open import Base.Relations  using ( kernel )
-open import Base.Overture   using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; IsSurjective ; SurjInv )
+open import Base.Functions  using ( IsSurjective ; SurjInv )
                             using ( SurjInvIsInverseʳ ; epic-factor )
 
 open import Base.Algebras             {𝑆 = 𝑆}  using ( Algebra ; _̂_)

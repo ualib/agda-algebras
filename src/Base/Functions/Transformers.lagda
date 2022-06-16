@@ -1,18 +1,18 @@
 ---
 layout: default
-title : "Base.Overture.Transformers module"
+title : "Base.Functions.Transformers module"
 date : "2021-07-26"
 author: "the agda-algebras development team"
 ---
 
 ### <a id="type-transformers">Type Transformers</a>
 
-This is the [Base.Overture.Transformers][] module of the [agda-algebras][] library.  Here we define functions for tanslating from one type to another.
+This is the [Base.Functions.Transformers][] module of the [agda-algebras][] library.  Here we define functions for tanslating from one type to another.
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Base.Overture.Transformers where
+module Base.Functions.Transformers where
 
 -- Imports from Agda and the Agda Standard Library ---------------------------------
 open import Agda.Primitive  using () renaming ( Set to Type )
@@ -25,7 +25,7 @@ open import Relation.Binary.PropositionalEquality
                             using ( _≡_ ; refl ; module ≡-Reasoning )
 
 -- Imports from agda-algebras ------------------------------------------------------
-open import Base.Overture.Preliminaries using ( _≈_ )
+open import Overture using ( _≈_ )
 
 private variable α β : Level
 \end{code}
@@ -170,7 +170,7 @@ module _ {A : Type α} {B : Type β} where
 
 --------------------------------------
 
-<span style="float:left;">[← Base.Overture.Inverses](Base.Overture.Inverses.html)</span>
+<span style="float:left;">[← Base.Functions.Inverses](Base.Functions.Inverses.html)</span>
 <span style="float:right;">[Base.Relations →](Base.Relations.html)</span>
 
 {% include UALib.Links.md %}

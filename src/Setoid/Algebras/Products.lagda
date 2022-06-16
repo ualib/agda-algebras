@@ -19,10 +19,11 @@ open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
 module Setoid.Algebras.Products {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library --------------------------------
-open import Agda.Primitive                         using ( lsuc ; _⊔_ ; Level ) renaming ( Set to Type )
-open import Data.Product                           using ( _,_ ; Σ-syntax )
-open import Function                               using ( flip ; Func )
-open import Relation.Binary                        using ( Setoid ;  IsEquivalence ; Decidable )
+open import Agda.Primitive    using () renaming ( Set to Type )
+open import Data.Product      using ( _,_ ; Σ-syntax )
+open import Function          using ( flip ; Func )
+open import Level             using( _⊔_ ; Level )
+open import Relation.Binary   using ( Setoid ;  IsEquivalence ; Decidable )
 open import Relation.Binary.PropositionalEquality  using ( refl ; _≡_ )
 open import Relation.Unary                         using ( Pred ; _⊆_ ; _∈_ )
 
@@ -32,8 +33,9 @@ open IsEquivalence  using ()                 renaming ( refl to reflE ; sym to s
 
 
 -- Imports from agda-algebras -----------------------------------------------------
-open import Base.Overture                  using ( ∣_∣; ∥_∥ ; proj ; projIsOnto )
-                                           renaming ( IsSurjective to onto )
+open import Overture        using ( ∣_∣; ∥_∥ )
+open import Base.Functions  using ( proj ; projIsOnto ) renaming ( IsSurjective to onto )
+
 open import Setoid.Algebras.Basic {𝑆 = 𝑆}  using ( Algebra ; _̂_ ; ov ; 𝕌[_])
 
 private variable α ρ ι : Level
