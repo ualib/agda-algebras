@@ -1,5 +1,11 @@
-Introduction
-============
+---
+layout: default
+title : "Demos.HSP module"
+date : "2022-04-27"
+author: "the agda-algebras development team"
+---
+
+### <a id="introduction">Introduction</a>
 
 The Agda Universal Algebra Library ([agda-algebras][]) formalizes the foundations of universal 
 algebra in intensional Martin-Löf type theory ([MLTT][]) using [Agda][] ()  [@Norell:2007; @agdaref].
@@ -37,11 +43,9 @@ central ideas of the proof are omitted. (The file [[src/Demos/HSP.lagda]{.sans-s
 In this paper, we highlight some of the more challenging aspects of formalizing universal algebra in type theory. To some extent, this is a sobering glimpse of the significant technical hurdles that must be overcome to do mathematics in dependent type theory. Nonetheless, we hope to demonstrate that [MLTT][] is a relatively natural language for formalizing universal algebra. Indeed, we believe that researchers with sufficient patience and resolve can reap the substantial rewards of deeper insight and greater confidence in their results by using type
 theory and a proof assistant like [Agda][]. On the other hand, this paper is probably not the best place to learn about the latter, since we assume the reader is already familiar with [MLTT][] and [Agda][]. In summary, our main contribution is to show that a straightforward but very general representation of algebraic structures in dependent type theory is quite practical, as we demonstrate by formalizing a major seminal result of universal algebra.
 
-Preliminaries
-=============
+### <a id="preliminaries">Preliminaries</a>
 
-Logical foundations
--------------------
+#### <a id="logical-foundations">Logical foundations</a>
 
 To best emulate [MLTT][], we use
 \begin{code}[inline]
@@ -66,38 +70,40 @@ We also make use of the following definitions from [Agda][]'s standard library (
 
 \begin{code}
 -- Import universe levels and Signature type (described below) from the agda-algebras library.
-open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 module Demos.HSP {𝑆 : Signature 𝓞 𝓥} where
 
 -- Import 16 definitions from the Agda Standard Library.
-open import  Data.Unit.Polymorphic        using ( ⊤ ; tt                                            )
-open import  Function                     using ( id ; _∘_ ; flip                                   )
-open import  Level                        using ( Level ;  _⊔_ ; suc                                )
-open import  Relation.Binary              using ( Rel ; Setoid ; IsEquivalence                      )
-open import  Relation.Binary.Definitions  using ( Reflexive ; Symmetric ; Transitive ; Sym ; Trans  )
-open import  Relation.Binary.PropositionalEquality  using ( _≡_                                     )
-open import  Relation.Unary               using ( Pred ; _⊆_ ; _∈_                                  )
+open import Data.Unit.Polymorphic  using  ( ⊤ ; tt )
+open import Function               using  ( id ; _∘_ ; flip )
+open import Level                  using  ( Level ;  _⊔_ ; suc )
+open import Relation.Binary        using  ( Rel ; Setoid ; IsEquivalence
+                                          ; Reflexive ; Symmetric ; Transitive
+                                          ; Sym ; Trans )
+open import Relation.Unary         using  ( Pred ; _⊆_ ; _∈_ )
+
+open import Relation.Binary.PropositionalEquality using ( _≡_ )
 
 -- Import 23 definitions from the Agda Standard Library and rename 12 of them.
-open import  Agda.Primitive  renaming  ( Set to Type       )  using ()
-open import  Data.Product    renaming  ( proj₁  to fst     )  using  ( _×_ ; _,_ ; Σ ; Σ-syntax     )
-                             renaming  ( proj₂  to snd     )
-open import  Function        renaming  ( Func   to _⟶_     )  using  (                              )
-open         _⟶_             renaming  ( f      to _⟨$⟩_   )  using  ( cong                         )
-open         IsEquivalence   renaming  ( refl   to reflᵉ   )
-                             renaming  ( sym    to symᵉ    )
-                             renaming  ( trans  to transᵉ  )  using  (                              )
-open         Setoid          renaming  ( refl   to reflˢ   )
-                             renaming  ( sym    to symˢ    )
-                             renaming  ( trans  to transˢ  )
-                             renaming  ( _≈_ to _≈ˢ_       )  using  ( Carrier  ; isEquivalence     )
+open import Agda.Primitive  using () renaming ( Set to Type )
+open import Data.Product    using ( _×_ ; _,_ ; Σ ; Σ-syntax )
+                            renaming ( proj₁ to fst ; proj₂ to snd )
+open import Function        using () renaming ( Func to _⟶_ )
+
+open  _⟶_           using ( cong ) renaming ( f to _⟨$⟩_ )
+open IsEquivalence  using ()
+                    renaming ( refl to reflᵉ ; sym to symᵉ ; trans to transᵉ )
+open Setoid         using ( Carrier ; isEquivalence ) renaming ( _≈_ to _≈ˢ_ )
+                    renaming ( refl to reflˢ ; sym to symˢ ; trans to transˢ )
 
 -- Assign handles to 3 modules of the Agda Standard Library.
-import       Function.Definitions                   as   FD
-import       Relation.Binary.PropositionalEquality  as   ≡
-import       Relation.Binary.Reasoning.Setoid       as   SetoidReasoning
+import Function.Definitions                   as FD
+import Relation.Binary.PropositionalEquality  as ≡
+import Relation.Binary.Reasoning.Setoid       as SetoidReasoning
 
-private variable α ρᵃ β ρᵇ γ ρᶜ δ ρᵈ ρ χ ℓ : Level ;       Γ Δ : Type χ
+private variable
+ α ρᵃ β ρᵇ γ ρᶜ δ ρᵈ ρ χ ℓ : Level
+ Γ Δ : Type χ
 
 \end{code}
 
@@ -114,16 +120,14 @@ module _ {A : Type α }{B : A → Type β} where
 \end{code}
 
 
-Setoids
--------
+#### <a id="setoids">Setoids</a>
 
 A *setoid* is a pair consisting of a type and an equivalence relation on that type. Setoids are useful for representing a set with an explicit, "local" notion of equivalence, instead of relying on an implicit, "global" one as is more common in set theory. In reality, informal mathematical practice relies on equivalence relations quite pervasively, taking great care to define only functions that preserve equivalences, while eliding the details. To be properly formal, such details must be made explicit. While there are many different workable approaches, the one that requires no additional meta-theory is based on setoids, which is why we adopt it here. While in some settings setoids are found by others to be burdensome, we have not found them to be so for universal algebra.
 
 The [agda-algebras][] library was first developed without setoids, relying on propositional equality instead, along with some experimental, domain-specific types for equivalence classes, quotients, etc. This
 required postulating function extensionality,[^4] which is known to be independent from [MLTT][] [@MHE; @MHE:2019]; this was unsatisfactory as we aimed to show that the theorems hold directly in [MLTT][] without extra axioms. The present work makes no appeal to functional extensionality or classical axioms like Choice or Excluded Middle.[^5]
 
-Setoid functions
-----------------
+##### <a id="setoid-functions">Setoid functions</a>
 
 A *setoid function* is a function from one setoid to another that respects the underlying equivalences. If [𝑨]{.ab} and [𝑩]{.ab} are setoids, we use [𝑨]{.ab}_[⟶]{.aor}_[𝑩]{.ab} to denote the type of setoid functions from [𝑨]{.ab} to [𝑩]{.ab}.
 
@@ -142,7 +146,8 @@ f ⟨∘⟩ g = record  { f = (_⟨$⟩_ f) ∘ (_⟨$⟩_ g)
 \end{code}
 
 
-#### Inverses {#inverses .unnumbered}
+#### <a id="inverses">Inverses</a>
+<!-- {#inverses .unnumbered} -->
 
 We define the *inverse* of a setoid function in terms of the image of the function's domain, as follows.
 
@@ -169,7 +174,8 @@ certainty, is accompanied by a proof that it gives such a right-inverse.
 \end{code}
 
 
-#### Injective and surjective setoid functions {#injective-and-surjective-setoid-functions .unnumbered}
+#### <a id="injective-and-surjective-setoid-functions">Injective and surjective setoid functions</a>
+<!-- {#injective-and-surjective-setoid-functions .unnumbered} -->
 
 If `f : 𝑨 ⟶ 𝑩` then we call `f` *injective* provided `∀(a₀ a₁ : A)`, `f ⟨$⟩ a₀ ≈ᴮ f ⟨$⟩ a₁` implies `a₀ ≈ᴬ a₁`; we call `f` *surjective* provided `∀(b : B) ∃(a : A)` such that `f ⟨$⟩ a ≈ᴮ b`.
 
@@ -220,7 +226,8 @@ module _  {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ}{𝑪 : Setoid γ ρ�
 
 
 
-#### Factorization of setoid functions[^6] {#factorization-of-setoid-functions .unnumbered}
+#### <a id="factorization-of-setoid-functions">Factorization of setoid functions[^6]</a>
+<!-- {#factorization-of-setoid-functions .unnumbered} -->
 
 Every (setoid) function `f : A ⟶ B` factors as a surjective map `toIm : A ⟶ Im f` followed
 by an injective map `fromIm : Im f ⟶ B`.
@@ -249,8 +256,8 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
  toIm-surj _ = eq _ (reflˢ 𝑩)
 \end{code}
 
-Basic Universal Algebra
-=======================
+
+### <a id="basic-universal-algebra">Basic Universal Algebra</a>
 
 We now develop a working vocabulary in [MLTT][] corresponding to classical, single-sorted, set-based universal algebra. We cover a number of important concepts, but limit ourselves to those required to prove Birkhoff's HSP theorem. In each case, we give a type-theoretic version of the informal definition, followed by its implementation in [Agda][].
 
@@ -267,8 +274,7 @@ reference="subalgebras"}--[3.6](#terms){reference-type="ref"
 reference="terms"} do the same for *subalgebras* and *terms*,
 respectively.
 
-Signatures
-----------
+#### <a id="signatures">Signatures</a>
 
 An (algebraic) *signature* is a pair `𝑆 = (F, ρ)` where `F` is a collection of *operation symbols* and `ρ : F → N` is an *arity function* which maps each operation symbol to its arity. Here, `N` denotes the *arity type*. Heuristically, the arity of an operation symbol may be thought of as the number of arguments that takes as
 "input."  We represent signatures as inhabitants of the following dependent pair type.
@@ -305,8 +311,7 @@ transᵉ  (isEquivalence (⟨ 𝑆 ⟩ ξ)) (≡.refl , g)(≡.refl , h)  = ≡.
 \end{code}
 
 
-Algebras
---------
+#### <a id="algebras">Algebras</a>
 
 An *algebraic structure* `𝑨 = (A, Fᴬ)` *in the signature* `𝑆 = (F, ρ)`, or `𝑆`-*algebra*, consists of
 *  a type `A`, called the *domain* of the algebra;
@@ -340,7 +345,8 @@ _̂_ : (f : ∣ 𝑆 ∣)(𝑨 : Algebra α ρᵃ) → (∥ 𝑆 ∥ f  →  �
 f ̂ 𝑨 = λ a → (Interp 𝑨) ⟨$⟩ (f , a)
 \end{code}
 
-#### Universe levels of algebra types {#universe-levels-of-algebra-types .unnumbered}
+#### <a id="universe-levels-of-algebra-types">Universe levels of algebra types</a>
+<!-- {#universe-levels-of-algebra-types .unnumbered} -->
 
 Types belong to *universes*, which are structured in [Agda][] as follows: 
 `Type ℓ : Type (suc ℓ)`, `Type (suc ℓ) : Type (suc (suc ℓ))`.[^7] 
@@ -367,8 +373,8 @@ module _ (𝑨 : Algebra α ρᵃ) where
  Domain (Lift-Algˡ ℓ) =
   record  { Carrier        = Lift ℓ 𝕌[ 𝑨 ]
           ; _≈_            = λ x y → lower x ≈ lower y
-          ; isEquivalence  = record { refl = refl ; sym = sym ; trans = trans }}
-
+          ; isEquivalence  = record { refl = refl ; sym = sym ; trans = trans }
+          }
  Interp (Lift-Algˡ ℓ) ⟨$⟩ (f , la) = lift ((f ̂ 𝑨) (lower ∘ la))
  cong (Interp (Lift-Algˡ ℓ)) (≡.refl , lab) = cong (Interp 𝑨) ((≡.refl , lab))
 
@@ -378,34 +384,42 @@ module _ (𝑨 : Algebra α ρᵃ) where
           ; _≈_            = λ x y → Lift ℓ (x ≈ y)
           ; isEquivalence  = record  { refl  = lift refl
                                      ; sym   = lift ∘ sym ∘ lower
-                                     ; trans = λ x y → lift (trans (lower x)(lower y)) }}
-
+                                     ; trans = λ x y → lift (trans (lower x)(lower y))
+                                     }
+          }
  Interp (Lift-Algʳ ℓ ) ⟨$⟩ (f , la) = (f ̂ 𝑨) la
- cong (Interp (Lift-Algʳ ℓ))(≡.refl , lab) = lift(cong(Interp 𝑨)(≡.refl , λ i → lower (lab i)))
+ cong (Interp (Lift-Algʳ ℓ))(≡.refl , lab) =
+  lift ( cong (Interp 𝑨) ( ≡.refl , λ i → lower (lab i) ) )
 
 Lift-Alg : Algebra α ρᵃ → (ℓ₀ ℓ₁ : Level) → Algebra (α ⊔ ℓ₀) (ρᵃ ⊔ ℓ₁)
 Lift-Alg 𝑨 ℓ₀ ℓ₁ = Lift-Algʳ (Lift-Algˡ 𝑨 ℓ₀) ℓ₁
 
 \end{code}
 
-Recall that our `Algebra` type has two universe level parameters corresponding to those of the domain setoid.
-Concretely, an algebra of type `Algebra α ρᵃ` has a `Domain` of type `Setoid α ρᵃ`. This packages a 
-"carrier set" (`Carrier`), inhabiting `Type α`, with an equality on `Carrier` of type `Rel Carrier ρᵃ`.
-`Lift-Alg` takes an algebra parametrized by levels `α` and `ρᵃ` and constructs a new algebra whose carrier 
-inhabits `Type (α ⊔ ℓ₀)` and whose equivalence inhabits `Rel Carrier (ρᵃ ⊔ ℓ₁)`.
-To be useful, this lifting operation should result in an algebra with the same semantic properties
-as the one we started with. We will see in §[3.4](#sec:lift-alg){reference-type="ref"
-reference="sec:lift-alg"} that this is indeed the case.
+Recall that our `Algebra` type has two universe level parameters corresponding to
+those of the domain setoid. Concretely, an algebra of type `Algebra α ρᵃ` has a
+`Domain` of type `Setoid α ρᵃ`. This packages a  "carrier set" (`Carrier`),
+inhabiting `Type α`, with an equality on `Carrier` of type `Rel Carrier ρᵃ`.
+`Lift-Alg` takes an algebra parametrized by levels `α` and `ρᵃ` and constructs a
+new algebra whose carrier  inhabits `Type (α ⊔ ℓ₀)` and whose equivalence inhabits
+`Rel Carrier (ρᵃ ⊔ ℓ₁)`. To be useful, this lifting operation should result in an
+algebra with the same semantic properties as the one we started with. We will see
+in §[3.4](#sec:lift-alg){reference-type="ref" reference="sec:lift-alg"} that this
+is indeed the case.
 
 
-#### Product Algebras {#product-algebras .unnumbered}
+#### <a id="product-algebras">Product Algebras</a>
+ <!-- {#product-algebras .unnumbered} -->
 
-We define the *product* of a family of algebras as follows. Let `ι` be a universe and
-`I : Type ι` a type (the "indexing type"). Then `𝒜 : I → Algebra α ρᵃ` represents an *indexed family of algebras*. Denote by `⨅ 𝒜` the *product of algebras* in `𝒜` (or *product algebra*), by which we mean the algebra 
-whose domain is the Cartesian product `∏[i ∈ I] 𝔻[ 𝒜 i ]` of the domains of the algebras in `𝒜`, and
-whose operations are those arising from the point-wise interpretation of the operation symbols in the obvious way: if `f` is a `J`-ary operation symbol and if `a : Π[ i ∈ I ] J → 𝔻[ 𝒜 i ]` is, for each
-`i : I`, a `J`-tuple of elements of the domain `𝔻[ 𝒜 i ]`, then we define the interpretation of `f` 
-in `⨅ 𝒜` by
+We define the *product* of a family of algebras as follows. Let `ι` be a universe
+and `I : Type ι` a type (the "indexing type"). Then `𝒜 : I → Algebra α ρᵃ`
+represents an *indexed family of algebras*. Denote by `⨅ 𝒜` the *product of
+algebras* in `𝒜` (or *product algebra*), by which we mean the algebra whose domain
+is the Cartesian product `∏[i ∈ I] 𝔻[ 𝒜 i ]` of the domains of the algebras in
+`𝒜`, and whose operations are those arising from the point-wise interpretation of
+the operation symbols in the obvious way: if `f` is a `J`-ary operation symbol and
+if `a : Π[ i ∈ I ] J → 𝔻[ 𝒜 i ]` is, for each `i : I`, a `J`-tuple of elements of
+the domain `𝔻[ 𝒜 i ]`, then we define the interpretation of `f` in `⨅ 𝒜` by
 
 `(f ̂ ⨅ 𝒜) a := λ (i : I) → (f ̂ 𝒜 i)(a i)`.
 
@@ -416,36 +430,41 @@ Here is the formal definition of the product algebra type in [Agda][].
 module _ {ι : Level}{I : Type ι } where
 
  ⨅ : (𝒜 : I → Algebra α ρᵃ) → Algebra (α ⊔ ι) (ρᵃ ⊔ ι)
-
- Domain (⨅ 𝒜) = record  { Carrier = ∀ i → 𝕌[ 𝒜 i ]
-                        ; _≈_ = λ a b → ∀ i → (_≈ˢ_ 𝔻[ 𝒜 i ]) (a i)(b i)
-                        ; isEquivalence =
-                           record  { refl = λ i → reflᵉ (isEquivalence 𝔻[ 𝒜 i ])
-                                   ; sym = λ x i → symᵉ (isEquivalence 𝔻[ 𝒜 i ])(x i)
-                                   ; trans = λ x y i → transᵉ (isEquivalence 𝔻[ 𝒜 i ])(x i)(y i) }}
+ Domain (⨅ 𝒜) =
+  record  { Carrier = ∀ i → 𝕌[ 𝒜 i ]
+          ; _≈_ = λ a b → ∀ i → (_≈ˢ_ 𝔻[ 𝒜 i ]) (a i)(b i)
+          ; isEquivalence =
+             record  { refl = λ i → reflᵉ (isEquivalence 𝔻[ 𝒜 i ])
+                     ; sym = λ x i → symᵉ (isEquivalence 𝔻[ 𝒜 i ])(x i)
+                     ; trans = λ x y i → transᵉ (isEquivalence 𝔻[ 𝒜 i ])(x i)(y i)
+                     }
+          }
 
  Interp (⨅ 𝒜) ⟨$⟩ (f , a) = λ i → (f ̂ (𝒜 i)) (flip a i)
- cong (Interp (⨅ 𝒜)) (≡.refl , f=g ) = λ i → cong (Interp (𝒜 i)) (≡.refl , flip f=g i )
+ cong (Interp (⨅ 𝒜)) (≡.refl , f=g ) = λ i → cong  ( Interp (𝒜 i) )
+                                                   ( ≡.refl , flip f=g i )
 
 \end{code}
 
-Evidently, the carrier of the product algebra type is indeed the (dependent) product of the carriers in the indexed family. The rest of the definitions are the point-wise versions of the underlying ones.
+Evidently, the carrier of the product algebra type is indeed the (dependent)
+product of the carriers in the indexed family. The rest of the definitions are the
+point-wise versions of the underlying ones.
 
-Structure preserving maps and isomorphism {#homomorphisms}
------------------------------------------
+#### <a id="structure-preserving-maps-and-isomorphism">Structure preserving maps and isomorphism</a>
 
-Throughout the rest of the paper, unless stated otherwise, `𝑨` and `𝑩` will denote `𝑆`-algebras inhabiting the types `Algebra α ρᵃ` and `Algebra β ρᵇ`, respectively.
+Throughout the rest of the paper, unless stated otherwise, `𝑨` and `𝑩` will denote
+`𝑆`-algebras inhabiting the types `Algebra α ρᵃ` and `Algebra β ρᵇ`, respectively.
 
-A *homomorphism* (or "hom") from `𝑨` to `𝑩` is a setoid function `h : 𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]`
-that is *compatible* with all basic operations; that is, for
-every operation symbol `f : ∣ 𝑆 ∣` and all tuples `a : ∥ 𝑆 ∥ f → 𝕌[ 𝑨 ]`, we have 
+A *homomorphism* (or "hom") from `𝑨` to `𝑩` is a setoid function
+`h : 𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]` that is *compatible* with all basic operations; that is, for
+every operation symbol `f : ∣ 𝑆 ∣` and all tuples `a : ∥ 𝑆 ∥ f → 𝕌[ 𝑨 ]`, we have
 `h ⟨$⟩ (f ̂ 𝑨) a ≈ (f ̂ 𝑩) λ x → h ⟨$⟩ (a x)`.
 
 It is convenient to first formalize "compatible" (`compatible-map-op`),
-representing the assertion that a given setoid function
-`h : 𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]` commutes with a given operation symbol `f`, and then generalize over 
-operation symbols to yield the type (`compatible-map`) of compatible maps from (the domain of)
-`𝑨` to (the domain of) `𝑩`.
+representing the assertion that a given setoid function `h : 𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]`
+commutes with a given operation symbol `f`, and then generalize over operation
+symbols to yield the type (`compatible-map`) of compatible maps from (the domain
+of) `𝑨` to (the domain of) `𝑩`.
 
 \begin{code}
 
@@ -474,11 +493,13 @@ finally the type (`hom`) of homomorphisms from `𝑨` to `𝑩`.
 
 \end{code}
 
-Thus, an inhabitant of `hom 𝑨 𝑩` is a pair `(h , p)` consisting of a setoid function
-`h`, from the domain of `𝑨` to that of `𝑩`, along with a proof `p` that `h` is a homomorphism.
+Thus, an inhabitant of `hom 𝑨 𝑩` is a pair `(h , p)` consisting of a setoid
+function `h`, from the domain of `𝑨` to that of `𝑩`, along with a proof `p` that
+`h` is a homomorphism.
 
-A *monomorphism* (resp. *epimorphism*) is an injective (resp. surjective) homomorphism. The [agda-algebras][] 
-library defines predicates and for these, as well as and for the corresponding types.
+A *monomorphism* (resp. *epimorphism*) is an injective (resp. surjective)
+homomorphism. The [agda-algebras][] library defines predicates and for these, as
+well as and for the corresponding types.
 
 \begin{code}
 
@@ -493,8 +514,9 @@ library defines predicates and for these, as well as and for the corresponding t
 
 \end{code}
 
-As with `hom`, the type `mon` is a dependent product type; each inhabitant is a pair
-consisting of a setoid function, say, `h`, along with a proof that `h` is a monomorphism.
+As with `hom`, the type `mon` is a dependent product type; each inhabitant is a
+pair consisting of a setoid function, say, `h`, along with a proof that `h` is a
+monomorphism.
 
 \begin{code}
 
@@ -522,7 +544,8 @@ module _ (𝑨 : Algebra α ρᵃ)(𝑩 : Algebra β ρᵇ) where
  epi→ontohom (hh , hhE) = (hh , isHom hhE) , isSurjective hhE
 \end{code}
 
-#### Composition of homomorphisms {#composition-of-homomorphisms .unnumbered}
+##### <a id="composition-of-homomorphisms">Composition of homomorphisms</a>
+ <!-- {#composition-of-homomorphisms .unnumbered} -->
 
 The composition of homomorphisms is again a homomorphism, and similarly
 for epimorphisms and monomorphisms. The proofs of these facts are
@@ -539,8 +562,10 @@ module _  {𝑨 : Algebra α ρᵃ} {𝑩 : Algebra β ρᵇ} {𝑪 : Algebra γ
    c = trans (cong h (compatible ghom)) (compatible hhom)
 
   ∘-is-epi : IsEpi 𝑨 𝑩 g → IsEpi 𝑩 𝑪 h → IsEpi 𝑨 𝑪 (h ⟨∘⟩ g)
-  ∘-is-epi gE hE = record  { isHom = ∘-is-hom (isHom gE) (isHom hE)
-                           ; isSurjective = ∘-IsSurjective g h (isSurjective gE) (isSurjective hE) }
+  ∘-is-epi gE hE =
+    record  { isHom = ∘-is-hom (isHom gE) (isHom hE)
+            ; isSurjective = ∘-IsSurjective g h (isSurjective gE) (isSurjective hE)
+            }
 
 module _ {𝑨 : Algebra α ρᵃ} {𝑩 : Algebra β ρᵇ} {𝑪 : Algebra γ ρᶜ} where
   ∘-hom : hom 𝑨 𝑩 → hom 𝑩 𝑪  → hom 𝑨 𝑪
@@ -550,19 +575,22 @@ module _ {𝑨 : Algebra α ρᵃ} {𝑩 : Algebra β ρᵇ} {𝑪 : Algebra γ 
   ∘-epi (h , hepi) (g , gepi) = (g ⟨∘⟩ h) , ∘-is-epi hepi gepi
 \end{code}
 
-#### Universe lifting of homomorphisms {#universe-lifting-of-homomorphisms .unnumbered}
+##### <a id="universe-lifting-of-homomorphisms">Universe lifting of homomorphisms</a>
+ <!-- {#universe-lifting-of-homomorphisms .unnumbered} -->
 
-Here we define the identity homomorphism for setoid algebras. Then we prove that the operations of lifting and lowering of a setoid algebra are homomorphisms.
+Here we define the identity homomorphism for setoid algebras. Then we prove that
+the operations of lifting and lowering of a setoid algebra are homomorphisms.
 
 \begin{code}
 
 𝒾𝒹 : {𝑨 : Algebra α ρᵃ} → hom 𝑨 𝑨
-𝒾𝒹 {𝑨 = 𝑨} = 𝑖𝑑 , mkhom (reflexive ≡.refl) where open Setoid ( Domain 𝑨 ) using ( reflexive )
+𝒾𝒹 {𝑨 = 𝑨} =  𝑖𝑑 , mkhom (reflexive ≡.refl)
+              where open Setoid ( Domain 𝑨 ) using ( reflexive )
 
 module _ {𝑨 : Algebra α ρᵃ}{ℓ : Level} where
- open Setoid 𝔻[ 𝑨 ]              using ( reflexive )  renaming ( _≈_ to _≈₁_ ; refl to refl₁ )
- open Setoid 𝔻[ Lift-Algˡ 𝑨 ℓ ]  using ()             renaming ( _≈_ to _≈ˡ_ ; refl to reflˡ)
- open Setoid 𝔻[ Lift-Algʳ 𝑨 ℓ ]  using ()             renaming ( _≈_ to _≈ʳ_ ; refl to reflʳ)
+ open Setoid 𝔻[ 𝑨 ] using ( reflexive ) renaming ( _≈_ to _≈₁_ ; refl to refl₁ )
+ open Setoid 𝔻[ Lift-Algˡ 𝑨 ℓ ]  using () renaming ( _≈_ to _≈ˡ_ ; refl to reflˡ)
+ open Setoid 𝔻[ Lift-Algʳ 𝑨 ℓ ]  using () renaming ( _≈_ to _≈ʳ_ ; refl to reflʳ)
  open Level
 
  ToLiftˡ : hom 𝑨 (Lift-Algˡ 𝑨 ℓ)
@@ -604,17 +632,21 @@ module _ {𝑨 : Algebra α ρᵃ}{ℓ r : Level} where
  ToFromLift b = lift refl
 
  ToLift-epi : epi 𝑨 (Lift-Alg 𝑨 ℓ r)
- ToLift-epi = ∣ ToLift ∣ ,  record { isHom = ∥ ToLift ∥
-                            ; isSurjective = λ {y} → eq (∣ FromLift ∣ ⟨$⟩ y) (ToFromLift y) }
+ ToLift-epi =
+  ∣ ToLift ∣ , record  { isHom = ∥ ToLift ∥
+                       ; isSurjective = λ{y} → eq(∣ FromLift ∣ ⟨$⟩ y)(ToFromLift y)
+                       }
 \end{code}
 
 
-#### Homomorphisms of product algebras {#homomorphisms-of-product-algebras .unnumbered}
+##### <a id="homomorphisms-of-product-algebras">Homomorphisms of product algebras</a>
+ <!-- {#homomorphisms-of-product-algebras .unnumbered} -->
 
-Suppose we have an algebra `𝑨`, a type `I : Type 𝓘`, and a family `ℬ : I → Algebra β ρᵇ` of algebras.
-We sometimes refer to the inhabitants of `I` as *indices*, and call `ℬ` an
-*indexed family of algebras*. If in addition we have a family `𝒽 : (i : I) → hom 𝑨 (ℬ i)` of homomorphisms, 
-then we can construct a homomorphism from `𝑨` to the product `⨅ ℬ` in the natural way.  We codify the 
+Suppose we have an algebra `𝑨`, a type `I : Type 𝓘`, and a family
+`ℬ : I → Algebra β ρᵇ` of algebras. We sometimes refer to the inhabitants of `I`
+as *indices*, and call `ℬ` an *indexed family of algebras*. If in addition we have
+a family `𝒽 : (i : I) → hom 𝑨 (ℬ i)` of homomorphisms, then we can construct a
+homomorphism from `𝑨` to the product `⨅ ℬ` in the natural way.  We codify the
 latter in dependent type theory as follows.
 
 \begin{code}
@@ -628,8 +660,11 @@ module _ {ι : Level}{I : Type ι}{𝑨 : Algebra α ρᵃ}(ℬ : I → Algebra 
                               compatible hhom = λ i → compatible ∥ 𝒽 i ∥
 \end{code}
 
-Two structures are *isomorphic* provided there are homomorphisms from each to the other that compose to the identity. We define the following record type to represent this concept. Note that the definition, shown below,
-includes a proof of the fact that the maps `to` and `from` are bijective, which makes this fact more accessible.
+Two structures are *isomorphic* provided there are homomorphisms from each to the
+other that compose to the identity. We define the following record type to
+represent this concept. Note that the definition, shown below, includes a proof of
+the fact that the maps `to` and `from` are bijective, which makes this fact more
+accessible.
 
 \begin{code}
 
@@ -663,7 +698,9 @@ It is easy to prove that \ar{\au{}≅\au{}} is an equivalence relation, as follo
 \begin{code}
 
 ≅-refl : Reflexive (_≅_ {α}{ρᵃ})
-≅-refl {α}{ρᵃ}{𝑨} = mkiso 𝒾𝒹 𝒾𝒹 (λ b → refl) λ a → refl where open Setoid 𝔻[ 𝑨 ] using ( refl )
+≅-refl {α}{ρᵃ}{𝑨} =
+ mkiso 𝒾𝒹 𝒾𝒹 (λ b → refl) λ a → refl where open Setoid 𝔻[ 𝑨 ] using ( refl )
+
 ≅-sym : Sym (_≅_{β}{ρᵇ}) (_≅_{α}{ρᵃ})
 ≅-sym φ = mkiso (from φ) (to φ) (from∼to φ) (to∼from φ)
 
@@ -681,9 +718,13 @@ It is easy to prove that \ar{\au{}≅\au{}} is an equivalence relation, as follo
   ν a = trans (cong ∣ from ab ∣ (from∼to bc (∣ to ab ∣ ⟨$⟩ a))) (from∼to ab a)
 \end{code}
 
-#### Homomorphic images {#homomorphic-images .unnumbered}
+##### <a id="homomorphic-images">Homomorphic images</a>
+ <!-- {#homomorphic-images .unnumbered} -->
 
-We have found that a useful way to encode the concept of *homomorphic image* is to produce a witness, that is, a surjective hom. Thus we define the type of surjective homs and also record the fact that an algebra is its own homomorphic image via the identity hom.
+We have found that a useful way to encode the concept of *homomorphic image* is to
+produce a witness, that is, a surjective hom. Thus we define the type of
+surjective homs and also record the fact that an algebra is its own homomorphic
+image via the identity hom.
 
 \begin{code}
 
@@ -699,15 +740,17 @@ IdHomImage {α = α}{𝑨 = 𝑨} = 𝒾𝒹 , λ {y} → Image_∋_.eq y refl
 \end{code}
 
 
-#### Factorization of homomorphisms {#factorization-of-homomorphisms .unnumbered}
+##### <a id="factorization-of-homomorphisms">Factorization of homomorphisms</a>
+ <!-- {#factorization-of-homomorphisms .unnumbered} -->
 
-Another theorem in the [agda-algebras][] library, called `HomFactor`, formalizes the following
-factorization result: if `g : hom 𝑨 𝑩`, `h : hom 𝑨 𝑪`, `h` is surjective, and `ker h ⊆ ker g`, then
-there exists `φ : hom 𝑪 𝑩` such that `g = φ ∘ h`. A special case of this result that we
-use below is the fact that the setoid function factorization we saw
-above lifts to factorization of homomorphisms. Moreover, we associate a
-homomorphism `h` with its image---which is (the domain of) a subalgebra of
-the codomain of `h`---using the function `HomIm` defined below.[^8]
+Another theorem in the [agda-algebras][] library, called `HomFactor`, formalizes
+the following factorization result: if `g : hom 𝑨 𝑩`, `h : hom 𝑨 𝑪`, `h` is
+surjective, and `ker h ⊆ ker g`, then there exists `φ : hom 𝑪 𝑩` such that `g = φ
+∘ h`. A special case of this result that we use below is the fact that the setoid
+function factorization we saw above lifts to factorization of homomorphisms.
+Moreover, we associate a homomorphism `h` with its image---which is (the domain
+of) a subalgebra of the codomain of `h`---using the function `HomIm` defined
+below.[^8]
 
 \begin{code}
 
@@ -733,10 +776,12 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
 \end{code}
 
 
-Lift-Alg is an algebraic invariant {#sec:lift-alg}
-----------------------------------
+##### <a id="sec:lift-al">Lift-Alg is an algebraic invariant</a>
+ <!-- {#sec:lift-alg} -->
 
-The `Lift-Alg` operation neatly resolves the technical problem of universe non-cumulativity because isomorphism classes of algebras are closed under `Lift-Alg`.
+The `Lift-Alg` operation neatly resolves the technical problem of universe
+non-cumulativity because isomorphism classes of algebras are closed under
+`Lift-Alg`. 
 
 \begin{code}
 
@@ -750,8 +795,7 @@ Lift-≅ : {𝑨 : Algebra α ρᵃ}{ℓ ρ : Level} → 𝑨 ≅ (Lift-Alg 𝑨
 Lift-≅ = ≅-trans Lift-≅ˡ Lift-≅ʳ
 \end{code}
 
-Subalgebras
------------
+#### <a id="subalgebras">Subalgebras</a>
 
 We say that `𝑨` is a *subalgebra* of `𝑩` and write `𝑨 ≤ 𝑩` just in case `𝑨` can be *homomorphically
 embedded* in `𝑩`; in other terms, `𝑨 ≤ 𝑩` iff there exists an injective hom from `𝑨` to `𝑩`.
@@ -781,8 +825,7 @@ mon→≤ : {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} → mon 𝑨 𝑩
 mon→≤ {𝑨 = 𝑨}{𝑩} x = mon→intohom 𝑨 𝑩 x
 \end{code}
 
-Terms
------
+#### <a id="terms">Terms</a>
 
 Fix a signature `𝑆` and let `X` denote an arbitrary nonempty collection of variable symbols. Such a collection is called a *context*. Assume the symbols in `X` are distinct from the operation symbols of `𝑆`, that is `X ∩ ∣ 𝑆 ∣ = ∅`. A *word* in the language of `𝑆` is a finite sequence of members of `X ∪ ∣ 𝑆 ∣`. We denote the
 concatenation of such sequences by simple juxtaposition. Let `S₀` denote the set of nullary operation symbols of `𝑆`. We define by induction on `n` the sets `Tₙ` of *words* over `X ∪ ∣ 𝑆 ∣` as follows: `T₀ := X ∪ S₀` and 
@@ -800,7 +843,8 @@ data Term (X : Type χ) : Type (ov χ)  where
  node : (f : ∣ 𝑆 ∣)(t : ∥ 𝑆 ∥ f → Term X) → Term X
 \end{code}
 
-#### The term algebra {#the-term-algebra .unnumbered}
+##### <a id="the-term-algebra">The term algebra</a>
+ <!-- {#the-term-algebra .unnumbered} -->
 
 We enrich the `Term` type to a setoid of `𝑆`-terms, which will ultimately be the domain of an algebra, called the *term algebra in the signature* `𝑆`. For this we need an equivalence relation on terms.
 
@@ -850,9 +894,8 @@ Algebra.Interp (𝑻 X) ⟨$⟩ (f , ts) = node f ts
 cong (Algebra.Interp (𝑻 X)) (≡.refl , ss≃ts) = gnl ss≃ts
 \end{code}
 
-
-
-#### Environments and interpretation of terms {#environments-and-interpretation-of-terms .unnumbered}
+##### <a id="environments-and-interpretation-of-terms">Environments and interpretation of terms</a>
+ <!-- {#environments-and-interpretation-of-terms .unnumbered} -->
 
 Fix a signature `𝑆` and a context `X`. An *environment* for `𝑨` and `X` is a setoid whose carrier
 is a mapping from the variable symbols `X` to the domain `𝕌[ 𝐴 ]` and whose equivalence relation is 
@@ -908,7 +951,8 @@ Proof that `Equal` is an equivalence relation, and that the implication `s ≃ t
 
 
 
-#### Compatibility of terms {#compatibility-of-terms .unnumbered}
+##### <a id="compatibility-of-terms">Compatibility of terms</a>
+ <!-- {#compatibility-of-terms .unnumbered} -->
 
 We need to formalize two more concepts involving terms.
 The first (`comm-hom-term`) is the assertion that every term commutes with every homomorphism, and
@@ -938,10 +982,10 @@ module _ {X : Type χ}{ι : Level} {I : Type ι} (𝒜 : I → Algebra α ρᵃ)
  interp-prod (node f t)  = λ ρ    → cong (Interp (⨅ 𝒜)) ( ≡.refl , λ j k → interp-prod (t j) ρ k )
 \end{code}
 
-Equational Logic
-================
+### <a id="equational-logic">Equational Logic</a>
 
-#### Term identities, equational theories, and the ⊧ relation {#term-identities-equational-theories-and-the-relation .unnumbered}
+#### <a id="term-identities-equational-theories-and-the-relation">Term identities, equational theories, and the ⊧ relation</a>
+ <!-- {#term-identities-equational-theories-and-the-relation .unnumbered} -->
 
 An `𝑆`-*term equation* (or `𝑆`-*term identity*) is an ordered pair `(p , q)` of `𝑆`-terms, also denoted by `p ≈ q`. They are often simply called *equations* or *identities*, especially when the signature `𝑆` is evident.
 We define an *equational theory* (or *algebraic theory*) to be a pair `T = (𝑆 , ℰ)` consisting of a signature `𝑆` and a collection `ℰ` of `𝑆`-term equations.[^9]
@@ -1006,7 +1050,8 @@ Mod : {X : Type χ} → Pred(Term X × Term X) ℓ → Pred (Algebra α ρᵃ) _
 Mod ℰ 𝑨 = ∀ {p q} → (p , q) ∈ ℰ → Equal p q where open Environment 𝑨
 \end{code}
 
-#### The Closure Operators H, S, P and V {#the-closure-operators-h-s-p-and-v .unnumbered}
+#### <a id="the-closure-operators-h-s-p-and-v">The Closure Operators H, S, P and V</a>
+ <!-- {#the-closure-operators-h-s-p-and-v .unnumbered} -->
 
 Fix a signature `𝑆`, let `𝒦` be a class of `𝑆`-algebras, and define
 * `H 𝒦` := the class of all homomorphic images of members of `𝒦`;
@@ -1141,10 +1186,10 @@ module _ {X : Type χ}{ι : Level}(ℓ : Level){𝒦 : Pred(Algebra α ρᵃ)(α
 \end{code}
 
 
-Free Algebras
-=============
+### <a id="free-algebras">Free Algebras</a>
 
-#### The absolutely free algebra {#the-absolutely-free-algebra .unnumbered}
+#### <a id="the-absolutely-free-algebra">The absolutely free algebra</a>
+ <!-- {#the-absolutely-free-algebra .unnumbered} -->
 
 The term algebra `𝑻 X` is the *absolutely free* `𝑆`-algebra over `X`.
 That is, for every `𝑆`-algebra `𝑨`, the following hold.
@@ -1189,7 +1234,9 @@ module _  {X : Type χ} {𝑨 : Algebra α ρᵃ}   where
  free-lift-interp η (node f t)  = cong (Interp 𝑨) (≡.refl , (free-lift-interp η) ∘ t)
 \end{code}
 
-#### The relatively free algebra {#the-relatively-free-algebra .unnumbered}
+#### <a id="the-relatively-free-algebra">The relatively free algebra</a>
+ <!-- {#the-relatively-free-algebra .unnumbered} -->
+
 Given an arbitrary class `𝒦` of `𝑆`-algebras, we cannot expect that `𝑻 X` belongs to `𝒦`.
 Indeed, there may be no free algebra in `𝒦`.
 Nonetheless, it is always possible to construct an algebra that is free for `𝒦` and belongs to the class `S (P 𝒦`).
@@ -1304,8 +1351,7 @@ Actually, we will need the following lifted version of this result.
 \end{code}
 
 
-Birkhoff's Variety Theorem
-==========================
+### <a id="birkhoffs-variety-theorem">Birkhoff's Variety Theorem</a>
 
 Let `𝒦` be a class of algebras and recall that `𝒦` is a *variety* provided
 it is closed under homomorphisms, subalgebras and products; equivalently,
@@ -1316,7 +1362,8 @@ We call `𝒦` an *equational class* if it is the class of all models of some se
 Birkhoff's variety theorem, also known as the HSP theorem, asserts that `𝒦` is an equational class if and only if it is a variety.  In this section, we present the statement and proof of this theorem---first in a style similar to what one finds in textbooks (e.g., [@Bergman:2012 Theorem 4.41]), and then formally in the language of [MLTT][].
 
 
-#### Informal proof {#informal-proof .unnumbered}
+#### <a id="informal-proof">Informal proof</a>
+ <!-- {#informal-proof .unnumbered} -->
 
 (⇒) *Every equational class is a variety*. Indeed, suppose `𝒦` is an equational class axiomatized by term identities `ℰ`; that is, `𝑨 ∈ 𝒦` iff `𝑨 ⊨ ℰ`. Since the classes `H 𝒦`, `S 𝒦`, `P 𝒦` and `𝒦` all satisfy the same set of equations, we have `V 𝒦 ⊫ p ≈ q` for all `(p , q) ∈ ℰ`, so `V 𝒦 ⊆ 𝒦`.
 
@@ -1332,7 +1379,8 @@ Therefore, `⟦ 𝔽[ X ] ⟧ p = g (⟦ 𝑻 X ⟧ p) = g u = g v = g (⟦ 𝑻
 so `𝒦 ⊫ p ≈ q`; thus, `(p , q) ∈ Th 𝒦`. Since `𝑨 ∈ Mod (Th 𝒦)`, we obtain `𝑨 ⊧ p ≈ q`, which implies
 that `h u = (⟦ 𝑨 ⟧ p) ⟨$⟩ ρ = (⟦ 𝑨 ⟧ q) ⟨$⟩ ρ = h v`, as desired.
 
-#### Formal proof {#formal-proof .unnumbered}
+#### <a id="formal-proof">Formal proof</a>
+ <!-- {#formal-proof .unnumbered} -->
 
 (⇒) *Every equational class is a variety*.
 We need an arbitrary equational class, which we obtain by starting with an arbitrary collection `ℰ` of equations and then defining `𝒦 = Mod ℰ`, the class axiomatized by `ℰ`. We prove that `𝒦` is a variety by showing that `𝒦 = V 𝒦`. The inclusion `𝒦 ⊆ V 𝒦`, which holds for all classes `𝒦`, is called the *expansive* property of `V`.
@@ -1438,8 +1486,9 @@ Thus, every variety is an equational class.
 
 This completes the formal proof of Birkhoff's variety theorem. ∎
 
-Discussion {#sec:discuss}
-==========
+### <a id="discussion">Discussion</a>
+ <!-- {#sec:discussion} -->
+
 
 How do we differ from the classical, set-theoretic approach? Most noticeable is our avoidance of all *size* issues. By using universe levels and level polymorphism, we always make sure we are in a *large enough* universe. So we can easily talk about "all algebras such that..." because these are always taken from a bounded (but arbitrary) universe.
 
@@ -1447,16 +1496,15 @@ Our use of setoids introduces nothing new: all the equivalence relations we use 
 
 Our first attempt to formalize Birkhoff's theorem was not sufficiently careful in its handling of variable symbols `X`. Specifically, this type was unconstrained; it is meant to represent the informal notion of a "sufficiently large" collection of variable symbols. Consequently, we postulated surjections from `X` onto the domains of all algebras in the class under consideration. But then, given a signature `𝑺` and a one-element `𝑆`-algebra `𝑨`, by choosing `X` to be the empty type `⊥`, our surjectivity postulate gives a map from `⊥` onto the singleton domain of `𝑨`. (For details, see the [Demos.ContraX](https://github.com/ualib/agda-algebras/blob/master/src/Demos/ContraX.lagda) module which constructs the counterexample in [Agda][].)
 
-Related work
-============
+### <a id="related-work">Related work</a>
 
 There have been a number of efforts to formalize parts of universal algebra in type theory besides ours. The Coq proof assistant, based on the Calculus of Inductive Constructions, was used by Capretta, in [@Capretta:1999], and Spitters and Van der Weegen, in [@Spitters:2011], to formalized the basics of universal algebra and some classical algebraic structures. In [@Gunther:2018] Gunther et al developed what seemed (prior to the library) the most extensive libraryof formalized universal algebra to date. Like , [@Gunther:2018] is based on dependent type theory, is programmed in , and goes beyond the basic isomorphism theorems to include some equational logic. Although their coverage is less extensive than that of , Gunther et al do treat *multi-sorted* algebras, whereas is currently limited to single-sorted structures.
 
 As noted by Abel [@Abel:2021], Amato et al, in [@Amato:2021], have formalized multi-sorted algebras with finitary operators in UniMath. The restriction to finitary operations was due to limitations of the UniMath type theory, which does not have W-types nor user-defined inductive types. Abel also notes that Lynge and Spitters, in [@Lynge:2019], formalize multi-sorted algebras with finitary operators in *Homotopy type theory* ([@HoTT]) using Coq. HoTT's higher inductive types enable them to define quotients as types, without the need for setoids. Lynge and Spitters prove three isomorphism theorems concerning subalgebras and quotient algebras, but do not formalize universal algebras nor varieties. Finally, in [@Abel:2021], Abel gives a new formal proof of the soundness and completeness theorem for multi-sorted algebraic structures.
 
+-----------------------------------
 
-Footnotes
-=========
+### <a id="footnotes">Footnotes</a>
 
 [^1]: An alternative formalization based on classical set-theory was achieved in [@birkhoff-in-mizar:1999].
 
@@ -1481,3 +1529,7 @@ Footnotes
 [^11]: Informally, this is done by assuming `X` has cardinality at least `max(| 𝕌[ 𝑨 ] |, ω)`. Later we will see how to construct an `X` with the required property in type theory.
 
 [^12]: `⟦ 𝑨 ⟧ t` denotes the interpretation of the term `t` in the algebra `𝑨`.
+
+
+{% include UALib.Links.md %}
+

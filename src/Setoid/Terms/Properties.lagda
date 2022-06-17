@@ -13,7 +13,7 @@ This is the [Setoid.Terms.Properties][] module of the [Agda Universal Algebra Li
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
+open import Overture using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Terms.Properties {𝑆 : Signature 𝓞 𝓥} where
 

@@ -13,7 +13,7 @@ This is the [Base.Terms.Basic][] module of the [Agda Universal Algebra Library][
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Signatures using (Signature ; 𝓞 ; 𝓥 )
+open import Overture using (Signature ; 𝓞 ; 𝓥 )
 
 module Base.Terms.Basic {𝑆 : Signature 𝓞 𝓥} where
 

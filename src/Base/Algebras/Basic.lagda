@@ -13,7 +13,7 @@ This is the [Base.Algebras.Basic][] module of the [Agda Universal Algebra Librar
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Signatures  using ( 𝓞 ; 𝓥 ; Signature )
+open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 
 module Base.Algebras.Basic {𝑆 : Signature 𝓞 𝓥 } where
 
@@ -26,8 +26,8 @@ open import Relation.Unary   using ( _∈_ ; Pred )
 
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open  import Overture                 using ( ∣_∣ ; ∥_∥ )
-open  import Base.Relations.Discrete  using ( Op ; _|:_ ; _|:pred_ )
+open  import Overture                 using ( ∣_∣ ; ∥_∥ ; Op )
+open  import Base.Relations.Discrete  using ( _|:_ ; _|:pred_ )
 open  import Base.Relations.Continuous
       using ( Rel ; compatible-Rel ; REL ; compatible-REL )
 

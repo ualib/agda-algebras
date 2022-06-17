@@ -14,7 +14,7 @@ This is the [Setoid.Subalgebras.Properties][] module of the [Agda Universal Alge
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
+open import Overture using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Subalgebras.Properties {𝑆 : Signature 𝓞 𝓥} where
 

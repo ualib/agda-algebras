@@ -13,7 +13,7 @@ This is the [Setoid.Homomorphisms.Basic][] module of the [Agda Universal Algebra
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Signatures using (𝓞 ; 𝓥 ; Signature )
+open import Overture using (𝓞 ; 𝓥 ; Signature )
 
 module Setoid.Homomorphisms.Basic {𝑆 : Signature 𝓞 𝓥} where
 
@@ -33,10 +33,10 @@ open import Setoid.Algebras {𝑆 = 𝑆} using ( Algebra ; _̂_ )
 private variable α β ρᵃ ρᵇ : Level
 
 module _ (𝑨 : Algebra α ρᵃ)(𝑩 : Algebra β ρᵇ) where
- open Algebra 𝑨  using () renaming (Domain to A )
- open Algebra 𝑩  using () renaming (Domain to B )
- open Setoid A   using () renaming ( _≈_ to _≈₁_ )
- open Setoid B   using () renaming ( _≈_ to _≈₂_ )
+ open Algebra 𝑨  using() renaming (Domain to A )
+ open Algebra 𝑩  using() renaming (Domain to B )
+ open Setoid A   using() renaming ( _≈_ to _≈₁_ )
+ open Setoid B   using() renaming ( _≈_ to _≈₂_ )
 
  open _⟶_ {a = α}{ρᵃ}{β}{ρᵇ}{From = A}{To = B} renaming (f to _⟨$⟩_ )
 

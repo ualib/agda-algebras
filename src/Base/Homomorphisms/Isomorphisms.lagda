@@ -14,7 +14,7 @@ Here we formalize the informal notion of isomorphism between algebraic structure
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Signatures using ( Signature ; 𝓞 ; 𝓥 )
+open import Overture using ( Signature ; 𝓞 ; 𝓥 )
 
 module Base.Homomorphisms.Isomorphisms {𝑆 : Signature 𝓞 𝓥}  where
 

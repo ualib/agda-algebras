@@ -17,7 +17,7 @@ Because a class of structures has a different type than a single structure, we m
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Signatures using ( 𝓞 ; 𝓥 ; Signature )
+open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 
 module Base.Varieties.EquationalLogic {𝑆 : Signature 𝓞 𝓥} where
 

@@ -17,19 +17,20 @@ Because a class of structures has a different type than a single structure, we m
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
+open import Overture using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Varieties.EquationalLogic {𝑆 : Signature 𝓞 𝓥} where
 
--- Imports from Agda and the Agda Standard Library ----------------
+-- Imports from Agda and the Agda Standard Library -------------------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
-open import Data.Product     using ( _×_ ; _,_ ; Σ-syntax) renaming  ( proj₁ to fst ; proj₂ to snd )
+open import Data.Product     using ( _×_ ; _,_ ; Σ-syntax)
+                             renaming ( proj₁ to fst ; proj₂ to snd )
 open import Function         using () renaming ( Func to _⟶_ )
 open import Level            using ( _⊔_ ; Level )
 open import Relation.Binary  using ( Setoid )
 open import Relation.Unary   using ( Pred ; _∈_ )
 
--- Imports from the Agda Universal Algebra Library ----------------
+-- Imports from the Agda Universal Algebra Library -------------------------------
 open import Setoid.Algebras  {𝑆 = 𝑆} using ( Algebra ; ov )
 open import Base.Terms       {𝑆 = 𝑆} using ( Term )
 open import Setoid.Terms     {𝑆 = 𝑆} using ( 𝑻 ; module Environment )

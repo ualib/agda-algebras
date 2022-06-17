@@ -15,7 +15,7 @@ Here we define *term operations* which are simply terms interpreted in a particu
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Signatures using ( 𝓞 ; 𝓥 ; Signature )
+open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 
 module Base.Terms.Operations {𝑆 : Signature 𝓞 𝓥} where
 

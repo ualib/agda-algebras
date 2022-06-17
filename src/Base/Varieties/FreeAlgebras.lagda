@@ -16,7 +16,7 @@ First we will define the relatively free algebra in a variety, which is the "fre
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 open import Level            using ( Level )
-open import Base.Signatures  using ( 𝓞 ; 𝓥 ; Signature )
+open import Overture  using ( 𝓞 ; 𝓥 ; Signature )
 module Base.Varieties.FreeAlgebras {α : Level} {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ---------------------

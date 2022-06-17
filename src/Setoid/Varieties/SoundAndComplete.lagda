@@ -15,13 +15,14 @@ This module is based on [Andreas Abel's Agda formalization of Birkhoff's complet
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
+open import Overture using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Varieties.SoundAndComplete {𝑆 : Signature 𝓞 𝓥} where
 
--- imports from Agda and the Agda Standard Library -------------------------------------------
+-- imports from Agda and the Agda Standard Library -------------------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
-open import Data.Product     using ( _,_ ; Σ-syntax ; _×_ ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Data.Product     using ( _,_ ; Σ-syntax ; _×_ )
+                             renaming ( proj₁ to fst ; proj₂ to snd )
 open import Function         using ( _∘_ ; flip ; id ) renaming ( Func to _⟶_ )
 open import Level            using ( Level ; _⊔_ )
 open import Relation.Binary  using ( Setoid ; IsEquivalence )
@@ -31,7 +32,7 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl )
 
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
--- Imports from the Agda Universal Algebra Library ---------------------------------------------
+-- Imports from the Agda Universal Algebra Library -------------------------------
 open import Overture                  using ( ∣_∣ )
 open import Base.Terms       {𝑆 = 𝑆}  using ( Term )
 open import Setoid.Algebras  {𝑆 = 𝑆}  using ( Algebra ; ov ; ⟨_⟩ )

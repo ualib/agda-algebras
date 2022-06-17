@@ -27,7 +27,7 @@ open import Relation.Unary               using ( _∈_; Pred )
 open import Relation.Binary.PropositionalEquality using ( _≡_ )
 
 -- Imports from agda-algebras -------------------------------------------------------------------
-open import Overture using (_≈_ ; Π-syntax)
+open import Overture using (_≈_ ; Π-syntax ; Op)
 
 private variable α β ρ 𝓥 : Level
 \end{code}
@@ -160,38 +160,16 @@ module _ {A : Type (α ⊔ ρ)} where
 \end{code}
 
 
-### <a id="operation-type-and-compatibility">Operation type and compatibility</a>
+### <a id="compatibility-of-operations-and-relations">Compatibility of operations and relations</a>
 
-**Notation**. For consistency and readability, we reserve two universe variables for
-special purposes.  The first of these is 𝓞 which shall be reserved for types that
-represent *operation symbols*. The second is 𝓥 which we
-reserve for types representing *arities* of relations or operations.
+Recall, from the [Overture.Signatures][] and [Overture.Operations][] modules which established
+our convention of reserving the sybmols `𝓞` and `𝓥` for types that
+represent operation symbols and arities, respectively.
 
-In the next subsection, we define types that are useful for asserting and proving
-facts about *compatibility* of *operations* with relations, but first we need a
-general type with which to represent operations.  Here is the definition, which we
-justify below.
-
-The type `Op` encodes the arity of an operation as an arbitrary type `I : Type 𝓥`,
-which gives us a very general way to represent an operation as a function type with
-domain `I → A` (the type of "tuples") and codomain `A`. For example, the `I`-*ary
-projection operations* on `A` are represented as inhabitants of the type `Op I A` as
-follows.
+In the present subsection, we define types that are useful for asserting and proving
+facts about *compatibility* of operations and relations
 
 \begin{code}
-
--- The type of operations on A of arity I
-Op : Type α → Type 𝓥 → Type (α ⊔ 𝓥)
-Op A I = (I → A) → A
-
--- Example (projections)
-π : {I : Type 𝓥} {A : Type α } → I → Op A I
-π i x = x i
-
--- return the arity of a given operation symbol
-
-arity[_] : {I : Type 𝓥} {A : Type α } → Op A I → Type 𝓥
-arity[_] {I = I} f = I
 
 -- lift a binary relation to the corresponding `I`-ary relation.
 

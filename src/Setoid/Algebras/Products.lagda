@@ -14,7 +14,7 @@ This is the [Setoid.Algebras.Products][] module of the [Agda Universal Algebra L
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 
-open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
+open import Overture using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Algebras.Products {𝑆 : Signature 𝓞 𝓥} where
 

@@ -25,9 +25,8 @@ open import Axiom.Extensionality.Propositional     using () renaming ( Extension
 open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl ; module ≡-Reasoning ; cong )
 
 -- Imports from agda-algebras -----------------------------------------------------------
-open import Overture        using ( _≈_ ; _⁻¹ )
-open import Base.Functions  using ( A×A→B-to-Fin2A→B ;  UncurryFin2 ; UncurryFin3 )
-open import Base.Relations  using ( Op )
+open import Overture        using ( _≈_ ; _⁻¹ ; Op )
+open import Base.Functions  using ( A×A→B-to-Fin2A→B ; UncurryFin2 ; UncurryFin3 )
 
 private variable  ι α β 𝓥 ρ : Level
 
@@ -35,11 +34,18 @@ private variable  ι α β 𝓥 ρ : Level
 
 #### <a id="strongly-well-defined-operations">Strongly well-defined operations</a>
 
-We now describe an extensionality principle that seems weaker than function extensionality, but still (probably) not provable in [MLTT][]. (We address this and other questions  below.)  We call this the principle *strong well-definedness of operations*. We will encounter situations in which this weaker extensionality principle suffices as a substitute for function extensionality.
+We now describe an extensionality principle that seems weaker than function
+extensionality, but still (probably) not provable in [MLTT][]. (We address this
+and other questions  below.)  We call this the principle *strong well-definedness
+of operations*. We will encounter situations in which this weaker extensionality
+principle suffices as a substitute for function extensionality.
 
-Suppose we have a function whose domain is a function type, say, `I → A`.  For example, inhabitants of the type `Op` defined above are such functions.  (Recall, the domain of inhabitants of type `Op I A := (I → A) → A` is `I → A`.)
+Suppose we have a function whose domain is a function type, say, `I → A`.  For
+example, inhabitants of the type `Op` defined above are such functions.  (Recall,
+the domain of inhabitants of type `Op I A := (I → A) → A` is `I → A`.)
 
-Of course, operations of type `Op I A` are well-defined in the sense that equal inputs result in equal outputs.
+Of course, operations of type `Op I A` are well-defined in the sense that equal
+inputs result in equal outputs.
 
 \begin{code}
 
@@ -48,7 +54,10 @@ welldef f u v = cong f
 
 \end{code}
 
-A stronger form of well-definedness of operations is to suppose that point-wise equal inputs lead to the same output.  In other terms, we could suppose that  for all `f : Op I A`, we have `f u ≡ f v` whenever `∀ i → u i ≡ v i` holds.  We call this formalize this notation in the following type.
+A stronger form of well-definedness of operations is to suppose that point-wise
+equal inputs lead to the same output.  In other terms, we could suppose that  for
+all `f : Op I A`, we have `f u ≡ f v` whenever `∀ i → u i ≡ v i` holds.  We call
+this formalize this notation in the following type.
 
 \begin{code}
 
@@ -65,9 +74,12 @@ SwellDef = (α β : Level) → swelldef α β
 
 \end{code}
 
-There are certain situations in which a (seemingly) weaker principle than function extensionality suffices.
+There are certain situations in which a (seemingly) weaker principle than function
+extensionality suffices.
 
-Here are the more general versions of the foregoing that are not restricted to (I-ary) *operations* on A (of type (I → A) → A), but handle also (I-ary) *functions* from A^I to B (of type (I → A) → B).
+Here are the more general versions of the foregoing that are not restricted to
+(I-ary) *operations* on A (of type (I → A) → A), but handle also (I-ary)
+*functions* from A^I to B (of type (I → A) → B).
 
 \begin{code}
 
@@ -89,20 +101,25 @@ swelldef'→funext' wd ptweq = wd _$_ ptweq
 
 #### <a id="questions">Questions</a>
 
-1. Does the converse `swelldef→funext` hold or is `swelldef` is strictly weaker than `funext`?
-2. If `swelldef` is strictly weaker than `funext`, then can we prove it in MLTT?
-3. If the answer to 2 is no in general, then for what types `I` can we prove `swelldef 𝓥 _ {I}`?
+1.  Does the converse `swelldef→funext` hold or is `swelldef` is strictly weaker
+    than `funext`?
+2.  If `swelldef` is strictly weaker than `funext`, then can we prove it in MLTT?
+3.  If the answer to 2 is no in general, then for what types `I` can we prove
+    `swelldef 𝓥 _ {I}`?
 
-Notice that the implication swelldef → funext holds *if* we restrict the universe level β to be `ι ⊔ α`.
-This is because to go from swelldef to funext, we must apply the swelldef premise to the special case
-in which `f` is the identify function on `I → A`, which of course has type `(I → A) → (I → A)`.
+Notice that the implication swelldef → funext holds *if* we restrict the universe
+level β to be `ι ⊔ α`. This is because to go from swelldef to funext, we must
+apply the swelldef premise to the special case in which `f` is the identify
+function on `I → A`, which of course has type `(I → A) → (I → A)`.
 
-This is possible if we take `swelldef ι α (ι ⊔ α)` as the premise (so that we can assume `B` is `I → A`).
+This is possible if we take `swelldef ι α (ι ⊔ α)` as the premise (so that we can
+assume `B` is `I → A`).
 
-It is NOT possible if we merely assume `swelldef ι α β` for *some* β (not necessarily `ι ⊔ α`) and for some B (not necessarily `I → A`).
+It is NOT possible if we merely assume `swelldef ι α β` for *some* β (not
+necessarily `ι ⊔ α`) and for some B (not necessarily `I → A`).
 
-In the agda-algebras library, swelldef is used exclusively on operation type, so that B ≡ A.
-I believe there is no way to prove that `swelldef ι α α` implies funext ι α.
+In the agda-algebras library, swelldef is used exclusively on operation type, so
+that B ≡ A. I believe there is no way to prove that `swelldef ι α α` implies funext ι α.
 
 
 #### <a id="some-new-ideas">Some new ideas</a>
@@ -117,12 +134,14 @@ swelldef-proof : ∀ {I : Type ι}{A : Type α}{B : Type β}
 swelldef-proof {I = I}{A}{B} f {u}{v} x = {!!}  --   <== we are stuck
 ```
 
-However, we *can* prove swelldef in MLTT for certain types at least, using a zipper argument.
+However, we *can* prove swelldef in MLTT for certain types at least, using a
+zipper argument.
 
 This certainly works in the special case of *finitary* functions, say,
 `f : (Fin n → A) → B` for some `n`.
 
-I expect this proof will generalize to countable arities, but I have yet to formally prove it.
+I expect this proof will generalize to countable arities, but I have yet to
+formally prove it.
 
 If `f` is finitary, then we can Curry and work instead with the function
 

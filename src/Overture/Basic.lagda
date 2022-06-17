@@ -286,8 +286,8 @@ transport B refl = id
 
 ------------------------------
 
-<span style="float:left;">[↑ Base.Overture](Base.Overture.html)</span>
-<span style="float:right;">[Base.Overture.Inverses →](Base.Overture.Inverses.html)</span>
+<span style="float:left;">[← Overture.Preface](Overture.Preface.html)</span>
+<span style="float:right;">[Overture.Signatures →](Overture.Signatures.html)</span>
 
 {% include UALib.Links.md %}
 
