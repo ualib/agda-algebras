@@ -4,7 +4,7 @@ title : "Demos/HSP" (The Agda Universal Algebra Library)"
 date : "2022-05-26"
 author: "the agda-algebras development team"
 output: html_document
-bibliography: ualib_refs.bib
+bibliography: _includes/ualib_refs.bib
 ---
 
 
