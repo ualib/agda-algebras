@@ -26,9 +26,11 @@ open import Relation.Binary  using ( Setoid )
 open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
 
 -- Imports from the Agda Universal Algebras Library ----------------------
-open import Base.Overture                       using ( ∣_∣ ; ∥_∥)
-open import Setoid.Algebras {𝑆 = 𝑆}             using ( Algebra ; _̂_ ; ⨅ )
-open import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}  using ( hom ; IsHom ; epi )
+open import Overture         using ( ∣_∣ ; ∥_∥)
+open import Setoid.Algebras {𝑆 = 𝑆}
+                             using ( Algebra ; _̂_ ; ⨅ )
+open import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}
+                             using ( hom ; IsHom ; epi )
 
 private variable α ρᵃ β ρᵇ 𝓘 : Level
 

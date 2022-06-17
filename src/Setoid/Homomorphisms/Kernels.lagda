@@ -25,7 +25,7 @@ open  import Relation.Binary   using ( Setoid )
 open  import Relation.Binary.PropositionalEquality as ≡ using ()
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------
-open  import Base.Overture     using  ( ∣_∣ ; ∥_∥ )
+open  import Overture          using  ( ∣_∣ ; ∥_∥ )
 open  import Base.Relations    using  ( kerRel ; kerRelOfEquiv )
 open  import Setoid.Functions  using  ( Image_∋_ )
 

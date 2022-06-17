@@ -27,7 +27,7 @@ open import Relation.Unary               using ( _∈_; Pred )
 open import Relation.Binary.PropositionalEquality using ( _≡_ )
 
 -- Imports from agda-algebras -------------------------------------------------------------------
-open import Base.Overture.Preliminaries using (_≈_ ; Π-syntax)
+open import Overture using (_≈_ ; Π-syntax)
 
 private variable α β ρ 𝓥 : Level
 \end{code}

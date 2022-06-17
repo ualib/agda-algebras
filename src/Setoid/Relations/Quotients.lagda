@@ -27,9 +27,9 @@ open import Relation.Binary.PropositionalEquality as ≡
                               using ( _≡_ )
 
 -- Imports from agda-algebras -----------------------------------------------------
-open import Base.Overture.Preliminaries  using ( ∣_∣ ; ∥_∥ )
-open import Setoid.Relations.Discrete    using ( fker )
-open import Base.Relations.Quotients     using ( [_] ; Equivalence )
+open import Overture                   using ( ∣_∣ ; ∥_∥ )
+open import Base.Relations             using ( [_] ; Equivalence )
+open import Setoid.Relations.Discrete  using ( fker )
 
 private variable α β ρᵃ ρᵇ ℓ : Level
 

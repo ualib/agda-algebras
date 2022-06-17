@@ -20,7 +20,7 @@ open import Level           using ( Level ; Lift )
 open import Relation.Unary  using ( _∈_ ; Pred )
 
 -- Imports from the Agda Universal Algebra Library ---------------------------
-open import Base.Overture.Preliminaries  using ( ∣_∣ ; ∥_∥ ; Π ; Π-syntax )
+open import Overture                     using ( ∣_∣ ; ∥_∥ ; Π ; Π-syntax )
 open import Base.Structures.Sigma.Basic  using ( Signature ; Structure ; _ʳ_ ; _ᵒ_ )
 
 private variable

@@ -20,18 +20,19 @@ open import Base.Signatures using ( 𝓞 ; 𝓥 ; Signature )
 module Base.Subalgebras.Subuniverses {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library -----------------------------
-open import Agda.Primitive                         using () renaming ( Set to Type )
-open import Axiom.Extensionality.Propositional     using () renaming ( Extensionality to funext )
-open import Function                               using ( _∘_ )
-open import Level                                  using ( Level ; _⊔_ )
-open import Relation.Binary.PropositionalEquality  using ( module ≡-Reasoning ; _≡_ )
-open import Relation.Unary                         using ( Pred ; _∈_ ; _⊆_ ; ⋂ )
+open import Agda.Primitive       using () renaming ( Set to Type )
+open import Function             using ( _∘_ )
+open import Level                using ( Level ; _⊔_ )
+open import Relation.Unary       using ( Pred ; _∈_ ; _⊆_ ; ⋂ )
+open import Axiom.Extensionality.Propositional
+                                 using () renaming ( Extensionality to funext )
+open import Relation.Binary.PropositionalEquality
+                                 using ( module ≡-Reasoning ; _≡_ )
 
 -- Imports from the Agda Universal Algebra Library -----------------------------
-open import Base.Overture                using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
+open import Overture                     using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
 open import Base.Relations               using ( Im_⊆_ )
 open import Base.Equality                using ( swelldef )
-
 open import Base.Algebras       {𝑆 = 𝑆}  using ( Algebra ; _̂_ ; ov )
 open import Base.Homomorphisms  {𝑆 = 𝑆}  using ( hom )
 open import Base.Terms          {𝑆 = 𝑆}  using ( Term ; ℊ ; node ; _⟦_⟧ )

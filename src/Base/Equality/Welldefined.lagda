@@ -25,7 +25,8 @@ open import Axiom.Extensionality.Propositional     using () renaming ( Extension
 open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl ; module ≡-Reasoning ; cong )
 
 -- Imports from agda-algebras -----------------------------------------------------------
-open import Base.Overture   using ( _≈_ ; _⁻¹ ; A×A→B-to-Fin2A→B ;  UncurryFin2 ; UncurryFin3 )
+open import Overture        using ( _≈_ ; _⁻¹ )
+open import Base.Functions  using ( A×A→B-to-Fin2A→B ;  UncurryFin2 ; UncurryFin3 )
 open import Base.Relations  using ( Op )
 
 private variable  ι α β 𝓥 ρ : Level

@@ -22,20 +22,18 @@ open import Agda.Primitive  using () renaming ( Set to Type )
 open import Data.Product    using ( _,_ ; Σ-syntax ; Σ ; _×_ )
 open import Level           using ( Level ;  _⊔_ ; suc )
 open import Relation.Unary  using ( Pred ; _∈_ )
-
-open  import Relation.Binary.PropositionalEquality as ≡
-      using ( _≡_ ; module ≡-Reasoning )
+open import Relation.Binary.PropositionalEquality as ≡
+                            using ( _≡_ ; module ≡-Reasoning )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------
-open  import Base.Overture
-      using ( 𝑖𝑑 ; ∣_∣ ; ∥_∥ ; lower∼lift ; lift∼lower ; Image_∋_ )
-      using (  Inv ; InvIsInverseʳ ; eq ; IsSurjective )
+open import Overture  using ( 𝑖𝑑 ; ∣_∣ ; ∥_∥ ; lower∼lift ; lift∼lower )
+open import Base.Functions
+                      using ( Image_∋_ ; Inv ; InvIsInverseʳ ; eq ; IsSurjective )
+open import Base.Algebras {𝑆 = 𝑆}
+                      using ( Algebra ; Level-of-Carrier ; Lift-Alg ; ov )
 
-open  import Base.Algebras {𝑆 = 𝑆}
-      using ( Algebra ; Level-of-Carrier ; Lift-Alg ; ov )
-
-open  import Base.Homomorphisms.Basic       {𝑆 = 𝑆} using ( hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 )
-open  import Base.Homomorphisms.Properties  {𝑆 = 𝑆} using ( Lift-hom )
+open import Base.Homomorphisms.Basic       {𝑆 = 𝑆} using ( hom ; 𝓁𝒾𝒻𝓉 ; 𝓁ℴ𝓌ℯ𝓇 )
+open import Base.Homomorphisms.Properties  {𝑆 = 𝑆} using ( Lift-hom )
 \end{code}
 
 

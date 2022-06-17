@@ -27,10 +27,11 @@ open import Relation.Binary             using ( Setoid ; Reflexive ; Sym ; Trans
 open import Relation.Binary.PropositionalEquality as ≡ using ()
 
 -- Imports from the Agda Universal Algebra Library -----------------------------------------
-open import Base.Overture               using ( ∣_∣ ; ∥_∥ )
-open import Setoid.Functions            using ( _∘_ ; eq ; IsInjective ; IsSurjective )
-open import Setoid.Algebras     {𝑆 = 𝑆} using
- ( Algebra ; Lift-Alg ; _̂_ ; Lift-Algˡ ; Lift-Algʳ ; ⨅ )
+open import Overture          using ( ∣_∣ ; ∥_∥ )
+open import Setoid.Functions  using ( _∘_ ; eq ; IsInjective ; IsSurjective )
+
+open import Setoid.Algebras {𝑆 = 𝑆}  using ( Algebra ; Lift-Alg ; _̂_ )
+                                     using ( Lift-Algˡ ; Lift-Algʳ ; ⨅ )
 
 open import Setoid.Homomorphisms.Basic       {𝑆 = 𝑆} using  ( hom ; IsHom )
 open import Setoid.Homomorphisms.Properties  {𝑆 = 𝑆} using

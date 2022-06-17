@@ -25,9 +25,9 @@ open import Relation.Binary.PropositionalEquality as PE
                             using ( _≡_ )
 
 -- Imports from agda-algebras ---------------------------------------------------------------------
-open import Base.Overture.Preliminaries  using ( ∣_∣ )
-open import Base.Relations.Discrete      using ( ker ; 0[_] ; kerlift )
-open import Base.Relations.Properties    using ( Reflexive ; Symmetric ; Transitive )
+open import Overture                   using ( ∣_∣ )
+open import Base.Relations.Discrete    using ( ker ; 0[_] ; kerlift )
+open import Base.Relations.Properties  using ( Reflexive ; Symmetric ; Transitive )
 
 private variable α β χ : Level
 \end{code}

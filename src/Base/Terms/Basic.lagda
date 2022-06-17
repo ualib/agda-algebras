@@ -23,7 +23,7 @@ open import Data.Product           using ( _,_ )
 open import Level                  using ( Level )
 
 -- Imports from the Agda Universal Algebra Library ----------------
-open import Base.Overture          using ( ∣_∣ ; ∥_∥ )
+open import Overture          using ( ∣_∣ ; ∥_∥ )
 open import Base.Algebras {𝑆 = 𝑆}  using ( Algebra ; ov )
 
 private variable χ : Level

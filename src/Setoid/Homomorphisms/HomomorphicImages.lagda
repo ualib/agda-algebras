@@ -18,8 +18,9 @@ open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
 module Setoid.Homomorphisms.HomomorphicImages {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ------------------------------------------
-open import Agda.Primitive   using ()      renaming ( Set to Type )
-open import Data.Product     using ( _,_ ; Σ-syntax )  renaming ( _×_ to _∧_ ; proj₁ to fst ; proj₂ to snd )
+open import Agda.Primitive   using () renaming ( Set to Type )
+open import Data.Product     using ( _,_ ; Σ-syntax )
+                             renaming ( _×_ to _∧_ ; proj₁ to fst ; proj₂ to snd )
 open import Function         using ( Func ; _on_ ; _∘_ ; id )
 open import Level            using ( Level ; _⊔_ ; suc )
 open import Relation.Binary  using ( Setoid ; _Preserves_⟶_ )
@@ -27,7 +28,7 @@ open import Relation.Unary   using ( Pred ; _∈_ )
 open import Relation.Binary.PropositionalEquality as ≡ using ()
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
-open import Base.Overture     using  ( ∣_∣ ; ∥_∥ ; transport )
+open import Overture          using  ( ∣_∣ ; ∥_∥ ; transport )
 open import Setoid.Functions  using  ( lift∼lower ; Ran ; _range ; _preimage ; _image ; Inv ; Image_∋_
                                      ; _preimage≈image ; InvIsInverseʳ ; IsSurjective ; ∘-IsSurjective )
 

@@ -27,9 +27,10 @@ open import Relation.Binary  using ( Setoid )
 open import Relation.Binary.PropositionalEquality as ≡ using (_≡_)
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
--- Imports from the Agda Universal Algebra Library ------------------------------------------------
-open import Base.Overture     using ( ∣_∣ ; ∥_∥ )
-open import Setoid.Functions  using ( Img_∋_ ; eq ; isSurj ; IsSurjective ; isSurj→IsSurjective )
+-- Imports from the Agda Universal Algebra Library ----------------------------
+open import Overture          using ( ∣_∣ ; ∥_∥ )
+open import Setoid.Functions  using ( Img_∋_ ; eq ; isSurj ; IsSurjective )
+                              using ( isSurj→IsSurjective )
 
 open import Base.Terms            {𝑆 = 𝑆} using ( Term )
 open import Setoid.Algebras       {𝑆 = 𝑆} using ( Algebra ; 𝕌[_] ; _̂_ )

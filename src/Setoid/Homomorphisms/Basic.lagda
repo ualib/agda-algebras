@@ -25,9 +25,10 @@ open import Level             using ( Level ; _⊔_ )
 open import Relation.Binary   using ( Setoid )
 
 -- Imports from the Agda Universal Algebra Library ---------------------------
-open import Base.Overture            using ( ∣_∣ ; ∥_∥ )
-open import Setoid.Functions         using ( IsInjective ; IsSurjective )
-open import Setoid.Algebras {𝑆 = 𝑆}  using ( Algebra ; _̂_ )
+open import Overture          using ( ∣_∣ ; ∥_∥ )
+open import Setoid.Functions  using ( IsInjective ; IsSurjective )
+
+open import Setoid.Algebras {𝑆 = 𝑆} using ( Algebra ; _̂_ )
 
 private variable α β ρᵃ ρᵇ : Level
 

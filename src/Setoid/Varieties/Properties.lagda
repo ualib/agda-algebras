@@ -35,7 +35,7 @@ open import Relation.Unary   using ( Pred ; _∈_ )
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
-open  import Base.Overture                  using  ( ∣_∣ ; ∥_∥ )
+open  import Overture                       using  ( ∣_∣ ; ∥_∥ )
 open  import Setoid.Functions               using  ( InvIsInverseʳ ; SurjInv )
 open  import Base.Terms            {𝑆 = 𝑆}  using  ( Term ; ℊ )
 open  import Setoid.Algebras       {𝑆 = 𝑆}

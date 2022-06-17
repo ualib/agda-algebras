@@ -34,10 +34,9 @@ open  import Relation.Binary.PropositionalEquality as ≡
       using ( _≡_ ; module ≡-Reasoning )
 
 -- Imports from the Agda Universal Algebra Library -------------------------------------------
-open  import Base.Overture
-      using ( ∣_∣ ; ∥_∥ ; _∙_ ; _⁻¹ ; IsSurjective )
-open  import Base.Relations
-      using ( kernel ; ⟪_⟫ )
+open  import Overture        using ( ∣_∣ ; ∥_∥ ; _∙_ ; _⁻¹ )
+open  import Base.Functions  using ( IsSurjective )
+open  import Base.Relations  using ( kernel ; ⟪_⟫ )
 open  import Base.Equality
       using ( SwellDef ; swelldef ; is-set ; blk-uip ; hfunext ; DFunExt; pred-ext )
 

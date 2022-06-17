@@ -30,7 +30,8 @@ open import Relation.Binary.PropositionalEquality as ≡                 using (
 open import Relation.Unary                                             using ( Pred ; _⊆_ )
 
 -- Imports from the Agda Universal Algebra Library --------------------------------------
-open import Base.Overture    using ( _⁻¹ ; transport ; ∥_∥ ; _≈_ ; IsInjective ; ∣_∣ )
+open import Overture         using ( _⁻¹ ; transport ; ∥_∥ ; _≈_ ; ∣_∣ )
+open import Base.Functions    using ( IsInjective )
 open import Base.Relations   using ( IsBlock ; Rel ; REL )
 
 private variable α β ρ 𝓥 : Level
@@ -97,7 +98,7 @@ Now, perhaps we have two proofs, say, `r s : p ≡₁ q` that the proofs `p` and
 
 In [homotopy type theory](https://homotopytypetheory.org), a type `A` with an identity relation `≡₀` is called a *set* (or *0-groupoid*) if for every pair `x y : A` there is at most one proof of `x ≡₀ y`. In other words, the type `A`, along with it's equality type `≡₀`, form a *set* if for all `x y : A` there is at most one proof of `x ≡₀ y`.
 
-This notion is formalized in the [Type Topology][] library, using the `is-subsingleton` type that we saw earlier ([Base.Overture.Inverses][]), as follows.
+This notion is formalized in the [Type Topology][] library, using the `is-subsingleton` type that we saw earlier ([Base.Functions.Inverses][]), as follows.
 
 \begin{code}
 
@@ -154,7 +155,7 @@ We will use `is-embedding`, `is-set`, and `to-Σ-≡` in the next subsection to 
 
 #### Injective functions are set embeddings
 
-Before moving on to define [propositions](#general-propositions), we discharge an obligation we mentioned but left unfulfilled in the [embeddings](Base.Overture.Inverses.html#embeddings) section of the [Base.Overture.Inverses][] module.  Recall, we described and imported the `is-embedding` type, and we remarked that an embedding is not simply a monic function.  However, if we assume that the codomain is truncated so as to have unique identity proofs (i.e., is a set), then we can prove that any monic function into that codomain will be an embedding.  On the other hand, embeddings are always monic, so we will end up with an equivalence.
+Before moving on to define [propositions](#general-propositions), we discharge an obligation we mentioned but left unfulfilled in the [embeddings](Base.Functions.Inverses.html#embeddings) section of the [Base.Functions.Inverses][] module.  Recall, we described and imported the `is-embedding` type, and we remarked that an embedding is not simply a monic function.  However, if we assume that the codomain is truncated so as to have unique identity proofs (i.e., is a set), then we can prove that any monic function into that codomain will be an embedding.  On the other hand, embeddings are always monic, so we will end up with an equivalence.
 
 \begin{code}
 

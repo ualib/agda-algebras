@@ -18,33 +18,32 @@ open import Base.Signatures using ( 𝓞 ; 𝓥 ; Signature )
 module Base.Homomorphisms.Noether {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ---------------------------------------
-open import Data.Product     using ( Σ-syntax ; _,_ ; _×_ )
-                             renaming ( proj₁ to fst ; proj₂ to snd )
-open import Function         using ( _∘_ ; id )
-open import Level            using (Level )
-open import Relation.Binary  using ( IsEquivalence )
+open  import Data.Product     using ( Σ-syntax ; _,_ ; _×_ )
+                              renaming ( proj₁ to fst ; proj₂ to snd )
+open  import Function         using ( _∘_ ; id )
+open  import Level            using (Level )
+open  import Relation.Binary  using ( IsEquivalence )
 
-open import Relation.Binary.PropositionalEquality as ≡ using ( module ≡-Reasoning ; _≡_ )
+open  import Relation.Binary.PropositionalEquality as ≡
+      using ( module ≡-Reasoning ; _≡_ )
 
 -- Imports from agda-algebras --------------------------------------------------------------
-open  import Base.Overture
-      using ( ∣_∣ ; ∥_∥ ; _⁻¹ ; Image_∋_ ; IsInjective ; SurjInv )
-      using ( IsSurjective ; SurjInvIsInverseʳ )
+open import Base.Relations         using ( ⌞_⌟ ; mkblk ; ⟪_⟫ )
+open import Overture               using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
+open import Base.Functions         using ( Image_∋_ ; IsInjective ; SurjInv )
+                                   using ( IsSurjective ; SurjInvIsInverseʳ )
 
-open  import Base.Relations
-      using ( ⌞_⌟ ; mkblk ; ⟪_⟫ )
-open  import Base.Equality
-      using ( swelldef ; is-set ; blk-uip ; is-embedding )
-      using ( monic-is-embedding|Set ; pred-ext ; block-ext|uip )
-
-open  import Base.Algebras {𝑆 = 𝑆}
-      using ( Algebra ; _̂_ ; Con ; IsCongruence )
-
-open  import Base.Homomorphisms.Basic {𝑆 = 𝑆}
-      using ( hom ; is-homomorphism ; epi ; epi→hom )
+open import Base.Algebras {𝑆 = 𝑆}  using ( Algebra ; _̂_ ; Con ; IsCongruence )
 
 open  import Base.Homomorphisms.Kernels {𝑆 = 𝑆}
       using ( kercon ; ker[_⇒_]_↾_ ; πker )
+
+open  import Base.Equality
+      using ( swelldef ; is-set ; blk-uip ; is-embedding ; monic-is-embedding|Set )
+      using ( pred-ext ; block-ext|uip )
+
+open  import Base.Homomorphisms.Basic {𝑆 = 𝑆}
+      using ( hom ; is-homomorphism ; epi ; epi→hom )
 
 private variable α β γ : Level
 \end{code}

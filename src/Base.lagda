@@ -17,7 +17,7 @@ This module collects all submodules the library that use "bare" types, as oppose
 
 module Base where
 
-open import Base.Overture
+open import Base.Functions
 open import Base.Relations
 open import Base.Equality
 open import Base.Adjunction
@@ -36,6 +36,6 @@ open import Base.Complexity
 --------------------------------------
 
 <span style="float:left;">[← Preface](Preface.html)</span>
-<span style="float:right;">[Base.Overture →](Base.Overture.html)</span>
+<span style="float:right;">[Base.Functions →](Base.Functions.html)</span>
 
 

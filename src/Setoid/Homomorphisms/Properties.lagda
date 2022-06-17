@@ -26,15 +26,16 @@ open import Relation.Binary   using ( Setoid )
 open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------
-open import Base.Overture                       using ( ∣_∣ ; ∥_∥ )
-open import Setoid.Functions                    using ( _∘_ ; 𝑖𝑑 ; Image_∋_ ; eq ; ∘-IsSurjective )
-open import Setoid.Algebras {𝑆 = 𝑆}             using ( Algebra ; _̂_; Lift-Algˡ; Lift-Algʳ; Lift-Alg; 𝕌[_])
-open import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}  using ( hom ; IsHom ; epi ; IsEpi ; compatible-map )
+open import Overture          using ( ∣_∣ ; ∥_∥ )
+open import Setoid.Functions  using ( _∘_ ; 𝑖𝑑 ; Image_∋_ ; eq ; ∘-IsSurjective )
+open import Setoid.Algebras {𝑆 = 𝑆}
+                              using ( Algebra ; _̂_; Lift-Algˡ; Lift-Algʳ; Lift-Alg; 𝕌[_])
+open import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}
+                              using ( hom ; IsHom ; epi ; IsEpi ; compatible-map )
 
 open _⟶_ using ( cong ) renaming (f to _⟨$⟩_ )
 
 private variable α β γ ρᵃ ρᵇ ρᶜ ℓ : Level
-
 \end{code}
 
 ##### <a id="composition-of-homs">Composition of homs</a>

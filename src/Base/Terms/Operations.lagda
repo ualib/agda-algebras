@@ -23,28 +23,24 @@ module Base.Terms.Operations {𝑆 : Signature 𝓞 𝓥} where
 open import Agda.Primitive  using ()  renaming ( Set to Type )
 open import Data.Product    using ( _,_ ; Σ-syntax ; Σ )
 open import Function        using ( _∘_ )
-open import Level            using ( Level ; _⊔_ )
-
-open  import Relation.Binary.PropositionalEquality as ≡
-      using ( _≡_ ; module ≡-Reasoning )
-
-open  import Axiom.Extensionality.Propositional
-      using () renaming (Extensionality to funext)
+open import Level           using ( Level ; _⊔_ )
+open import Relation.Binary.PropositionalEquality as ≡
+                            using ( _≡_ ; module ≡-Reasoning )
+open import Axiom.Extensionality.Propositional
+                            using () renaming (Extensionality to funext)
 
 -- Imports from Agda Universal Algebra Library ----------------------------------------------
-open import Base.Overture   using ( _∙_ ; _⁻¹ ; ∣_∣ ; ∥_∥ ; Π ; Π-syntax ; _≈_ )
+open import Overture        using ( _∙_ ; _⁻¹ ; ∣_∣ ; ∥_∥ ; Π ; Π-syntax ; _≈_ )
 open import Base.Relations  using ( _|:_ )
 open import Base.Equality   using ( swelldef )
 
-open  import Base.Algebras {𝑆 = 𝑆}
-      using ( Algebra ; ov ; ⨅ ; Con ; IsCongruence ; _̂_ )
-
-open import Base.Homomorphisms     {𝑆 = 𝑆} using ( hom )
-open import Base.Terms.Basic       {𝑆 = 𝑆} using ( Term ; 𝑻 )
-open import Base.Terms.Properties  {𝑆 = 𝑆} using ( free-lift )
+open import Base.Algebras          {𝑆 = 𝑆}  using ( Algebra ; _̂_ ; ov ; ⨅ )
+                                            using ( IsCongruence ; Con )
+open import Base.Homomorphisms     {𝑆 = 𝑆}  using ( hom )
+open import Base.Terms.Basic       {𝑆 = 𝑆}  using ( Term ; 𝑻 )
+open import Base.Terms.Properties  {𝑆 = 𝑆}  using ( free-lift )
 
 open Term
-
 private variable α β γ ρ χ : Level
 
 \end{code}

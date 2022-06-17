@@ -1,17 +1,17 @@
 ---
 layout: default
-title : "Base.Overture.Surjective module"
+title : "Base.Functions.Surjective module"
 date : "2021-01-12"
 author: "the agda-algebras development team"
 ---
 
 ### <a id="surjective-functions">Surjective functions</a>
 
-This is the [Base.Overture.Surjective][] module of the [agda-algebras][] library.
+This is the [Base.Functions.Surjective][] module of the [agda-algebras][] library.
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
-module Base.Overture.Surjective where
+module Base.Functions.Surjective where
 
 -- Imports from Agda and the Agda Standard Library --------------------------------
 open import Agda.Primitive    using () renaming ( Set to Type )
@@ -28,8 +28,8 @@ open import Relation.Binary.PropositionalEquality
                               using ( _≡_ ; sym ; cong-app ; cong ; refl )
 
 -- Imports from agda-algebras -----------------------------------------------------
-open import Base.Overture.Preliminaries using ( _≈_ ; _∙_ ; transport )
-open import Base.Overture.Inverses      using ( Image_∋_ ; eq ; Inv ; InvIsInverseʳ )
+open import Overture.Basic     using ( _≈_ ; _∙_ ; transport )
+open import Base.Functions.Inverses  using ( Image_∋_ ; eq ; Inv ; InvIsInverseʳ )
 
 private variable α β γ c ι : Level
 \end{code}
@@ -148,8 +148,8 @@ module _  {I : Set ι}(_≟_ : Decidable{A = I} _≡_)
 
 --------------------------------------
 
-<span style="float:left;">[← Base.Overture.Injective](Base.Overture.Injective.html)</span>
-<span style="float:right;">[Base.Overture.Transformers →](Base.Overture.Transformers.html)</span>
+<span style="float:left;">[← Base.Functions.Injective](Base.Functions.Injective.html)</span>
+<span style="float:right;">[Base.Functions.Transformers →](Base.Functions.Transformers.html)</span>
 
 {% include UALib.Links.md %}
 

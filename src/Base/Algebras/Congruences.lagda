@@ -26,7 +26,7 @@ open import Relation.Binary  using ( IsEquivalence ) renaming ( Rel to BinRel )
 open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl )
 
 -- Imports from agda-algebras ---------------------------------------------------
-open import Base.Overture   using ( ∣_∣  ; ∥_∥  )
+open import Overture        using ( ∣_∣ ; ∥_∥ )
 open import Base.Relations  using ( _|:_ ; 0[_] ; 0[_]Equivalence ; _/_ ; ⟪_⟫ ; IsBlock )
 open import Base.Equality   using ( swelldef )
 
@@ -37,8 +37,12 @@ private variable α β ρ : Level
 
 \end{code}
 
-A *congruence relation* of an algebra `𝑨` is defined to be an equivalence relation that is compatible with the basic operations of `𝑨`.  This concept can be represented in a number of alternative but equivalent ways.
-Formally, we define a record type (`IsCongruence`) to represent the property of being a congruence, and we define a Sigma type (`Con`) to represent the type of congruences of a given algebra.
+A *congruence relation* of an algebra `𝑨` is defined to be an equivalence relation
+that is compatible with the basic operations of `𝑨`.  This concept can be
+represented in a number of alternative but equivalent ways.
+Formally, we define a record type (`IsCongruence`) to represent the property of
+being a congruence, and we define a Sigma type (`Con`) to represent the type of
+congruences of a given algebra.
 
 \begin{code}
 
@@ -53,7 +57,9 @@ Con {α}{ρ}𝑨 = Σ[ θ ∈ ( BinRel ∣ 𝑨 ∣ ρ ) ] IsCongruence 𝑨 θ
 
 \end{code}
 
-Each of these types captures what it means to be a congruence and they are equivalent in the sense that each implies the other. One implication is the "uncurry" operation and the other is the second projection.
+Each of these types captures what it means to be a congruence and they are
+equivalent in the sense that each implies the other. One implication is the
+"uncurry" operation and the other is the second projection.
 
 \begin{code}
 
@@ -67,7 +73,9 @@ Con→IsCongruence θ = ∥ θ ∥
 
 #### <a id="example">Example</a>
 
-We now defined the *zero relation* `0[_]` and build the *trivial congruence*, which has `0[_]` as its underlying relation. Observe that `0[_]` is equivalent to the identity relation `≡` and is obviously an equivalence relation.
+We now defined the *zero relation* `0[_]` and build the *trivial congruence*,
+which has `0[_]` as its underlying relation. Observe that `0[_]` is equivalent to
+the identity relation `≡` and is obviously an equivalence relation.
 
 \begin{code}
 
@@ -91,7 +99,10 @@ A concrete example is `⟪𝟎⟫[ 𝑨 ╱ θ ]`, presented in the next subsect
 
 #### <a id="quotient-algebras">Quotient algebras</a>
 
-In many areas of abstract mathematics the *quotient* of an algebra `𝑨` with respect to a congruence relation `θ` of `𝑨` plays an important role. This quotient is typically denoted by `𝑨 / θ` and Agda allows us to define and express quotients using this standard notation.
+In many areas of abstract mathematics the *quotient* of an algebra `𝑨` with
+respect to a congruence relation `θ` of `𝑨` plays an important role. This quotient
+is typically denoted by `𝑨 / θ` and Agda allows us to define and express quotients
+using this standard notation.
 
 \begin{code}
 
@@ -101,7 +112,9 @@ _╱_ : (𝑨 : Algebra α 𝑆) → Con{α}{ρ} 𝑨 → Algebra (α ⊔ suc ρ
 
 \end{code}
 
-**Example**. If we adopt the notation `𝟎[ 𝑨 ╱ θ ]` for the zero (or identity) relation on the quotient algebra `𝑨 ╱ θ`, then we define the zero relation as follows.
+**Example**. If we adopt the notation `𝟎[ 𝑨 ╱ θ ]` for the zero (or identity)
+  relation on the quotient algebra `𝑨 ╱ θ`, then we define the zero relation as
+  follows.
 
 \begin{code}
 
@@ -110,7 +123,8 @@ _╱_ : (𝑨 : Algebra α 𝑆) → Con{α}{ρ} 𝑨 → Algebra (α ⊔ suc ρ
 
 \end{code}
 
-From this we easily obtain the zero congruence of `𝑨 ╱ θ` by applying the `Δ` function defined above.
+From this we easily obtain the zero congruence of `𝑨 ╱ θ` by applying the `Δ`
+function defined above.
 
 \begin{code}
 
@@ -122,14 +136,16 @@ From this we easily obtain the zero congruence of `𝑨 ╱ θ` by applying the 
 
 \end{code}
 
-Finally, the following elimination rule is sometimes useful (but it 'cheats' a lot by baking in
-a large amount of extensionality that is miraculously true).
+Finally, the following elimination rule is sometimes useful (but it 'cheats' a lot
+by baking in a large amount of extensionality that is miraculously true).
 
 \begin{code}
 
 open IsCongruence
 
-/-≡ : {𝑨 : Algebra α 𝑆}(θ : Con{α}{ρ} 𝑨){u v : ∣ 𝑨 ∣} → ⟪ u ⟫ {∣ θ ∣} ≡ ⟪ v ⟫ → ∣ θ ∣ u v
+/-≡ :  {𝑨 : Algebra α 𝑆}(θ : Con{α}{ρ} 𝑨){u v : ∣ 𝑨 ∣}
+ →     ⟪ u ⟫ {∣ θ ∣} ≡ ⟪ v ⟫ → ∣ θ ∣ u v
+
 /-≡ θ refl = IsEquivalence.refl (is-equivalence ∥ θ ∥)
 \end{code}
 

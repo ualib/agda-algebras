@@ -23,24 +23,21 @@ open import Relation.Binary.PropositionalEquality
                             using ( _≡_ ;  cong ; refl ; module ≡-Reasoning )
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
-open import Base.Overture.Preliminaries  using ( ∣_∣ ; ∥_∥ ; _∙_ ; _⁻¹)
-open import Base.Overture.Injective      using ( IsInjective )
-open import Base.Overture.Surjective     using ( IsSurjective )
-open import Base.Relations.Discrete      using ( _|:_ ; 0[_] ; ker )
-open import Base.Relations.Quotients     using ( Equivalence ; Quotient ; 0[_]Equivalence )
-                                         using ( ker-IsEquivalence ; kerlift-IsEquivalence )
-                                         using ( ⟪_⟫ ; ⌞_⌟ ; ⟪_∼_⟫-elim ; _/_ )
-open import Base.Equality.Welldefined    using ( swelldef )
-open import Base.Structures.Sigma.Basic  using ( Signature ; Structure ; Compatible ; _ʳ_ ; _ᵒ_ )
-                                         using ( Lift-Strucʳ ; Lift-Strucˡ ; Lift-Struc )
+open import Overture        using ( ∣_∣ ; ∥_∥ ; _∙_ ; _⁻¹)
+open import Base.Functions  using ( IsInjective ; IsSurjective )
+open import Base.Relations  using ( _|:_ ; 0[_] ; ker ; Equivalence ; Quotient )
+                            using ( 0[_]Equivalence ; ker-IsEquivalence ; ⟪_⟫ )
+                            using ( kerlift-IsEquivalence ; ⌞_⌟ ; ⟪_∼_⟫-elim ; _/_ )
+open import Base.Equality   using ( swelldef )
+open import Base.Structures.Sigma.Basic
+                            using ( Signature ; Structure ; Compatible ; _ʳ_ ; _ᵒ_ )
+                            using ( Lift-Strucʳ ; Lift-Strucˡ ; Lift-Struc )
+
 private variable 𝑅 𝐹 : Signature
 
 -- Development for Structures (Sigma type representation)
-
-module _ {α ρᵃ : Level}
-         (𝑨 : Structure  𝑅 𝐹 {α}{ρᵃ})
-         {β ρᵇ : Level}
-         (𝑩 : Structure 𝑅 𝐹 {β}{ρᵇ}) where
+module _  {α ρᵃ : Level} (𝑨 : Structure  𝑅 𝐹 {α}{ρᵃ})
+          {β ρᵇ : Level} (𝑩 : Structure 𝑅 𝐹 {β}{ρᵇ}) where
 
  preserves : ∣ 𝑅 ∣ → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Type (α ⊔ ρᵃ ⊔ ρᵇ)
  preserves r h = ∀ a → ((r ʳ 𝑨) a) → ((r ʳ 𝑩) (h ∘ a))
@@ -60,22 +57,26 @@ module _ {α ρᵃ : Level}
  hom : Type (α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
  hom = Σ[ h ∈ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ] is-hom h
 
+module _  {𝑅 𝐹 : Signature}
+          {α ρᵃ : Level}(𝑨 : Structure 𝑅 𝐹 {α}{ρᵃ})
+          {β ρᵇ : Level}{𝑩 : Structure 𝑅 𝐹 {β}{ρᵇ}}
+          {γ ρᶜ : Level}(𝑪 : Structure 𝑅 𝐹 {γ}{ρᶜ}) where
 
-module _ {𝑅 𝐹 : Signature}
-         {α ρᵃ : Level}(𝑨 : Structure 𝑅 𝐹 {α}{ρᵃ})
-         {β ρᵇ : Level}{𝑩 : Structure 𝑅 𝐹 {β}{ρᵇ}}
-         {γ ρᶜ : Level}(𝑪 : Structure 𝑅 𝐹 {γ}{ρᶜ}) where
+ ∘-is-hom-rel :  {f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣}{g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣}
+  →              is-hom-rel 𝑨 𝑩 f → is-hom-rel 𝑩 𝑪 g → is-hom-rel 𝑨 𝑪 (g ∘ f)
 
- ∘-is-hom-rel : {f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣}{g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣}
-  →             is-hom-rel 𝑨 𝑩 f → is-hom-rel 𝑩 𝑪 g → is-hom-rel 𝑨 𝑪 (g ∘ f)
  ∘-is-hom-rel {f}{g} fhr ghr R a = λ z → ghr R (λ z₁ → f (a z₁)) (fhr R a z)
 
- ∘-is-hom-op : {f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣}{g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣}
-  →            is-hom-op 𝑨 𝑩 f → is-hom-op 𝑩 𝑪 g → is-hom-op 𝑨 𝑪 (g ∘ f)
+
+ ∘-is-hom-op :  {f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣}{g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣}
+  →             is-hom-op 𝑨 𝑩 f → is-hom-op 𝑩 𝑪 g → is-hom-op 𝑨 𝑪 (g ∘ f)
+
  ∘-is-hom-op {f}{g} fho gho 𝑓 a = cong g (fho 𝑓 a) ∙ gho 𝑓 (f ∘ a)
 
- ∘-is-hom : {f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣}{g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣}
-  →         is-hom 𝑨 𝑩 f → is-hom 𝑩 𝑪 g → is-hom 𝑨 𝑪 (g ∘ f)
+
+ ∘-is-hom :  {f : ∣ 𝑨 ∣ → ∣ 𝑩 ∣}{g : ∣ 𝑩 ∣ → ∣ 𝑪 ∣}
+  →          is-hom 𝑨 𝑩 f → is-hom 𝑩 𝑪 g → is-hom 𝑨 𝑪 (g ∘ f)
+
  ∘-is-hom {f} {g} fhro ghro = ihr , iho
   where
   ihr : is-hom-rel 𝑨 𝑪 (g ∘ f)
@@ -93,10 +94,8 @@ module _ {α ρ : Level} where
  𝒾𝒹 : (𝑨 : Structure 𝑅 𝐹 {α}{ρ}) → hom 𝑨 𝑨
  𝒾𝒹 _ = id , (λ R a z → z)  , (λ f a → refl)
 
-module _ {α ρᵃ : Level}
-         (𝑨 : Structure 𝑅 𝐹 {α}{ρᵃ})
-         {β ρᵇ : Level}
-         (𝑩 : Structure 𝑅 𝐹 {β}{ρᵇ}) where
+module _  {α ρᵃ : Level} (𝑨 : Structure 𝑅 𝐹 {α}{ρᵃ})
+          {β ρᵇ : Level} (𝑩 : Structure 𝑅 𝐹 {β}{ρᵇ}) where
 
  is-mon : (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Type (α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
  is-mon g = is-hom 𝑨 𝑩 g × IsInjective g
@@ -143,14 +142,14 @@ module _  {𝑅 𝐹 : Signature}{α ρᵃ β ρᵇ : Level}{𝑅 𝐹 : Signatu
   Goal : is-hom (Lift-Struc ℓ ρ 𝑨) (Lift-Struc ℓ' ρ' 𝑩) (lift ∘ h ∘ lower)
   Goal = ∘-is-hom  {𝑅 = 𝑅}{𝐹} (Lift-Struc ℓ ρ 𝑨) (Lift-Struc ℓ' ρ' 𝑩)
                    {h ∘ lower}{lift} lABh ((λ R a x → lift x) , (λ f a → refl))
-
 \end{code}
-
 
 
 #### <a id="kernels-of-homomorphisms-of-structures-of-sigma-type">Kernels of homomorphisms of structures of sigma type</a>
 
-The kernel of a homomorphism is a congruence relation and conversely for every congruence relation `θ`, there exists a homomorphism with kernel `θ` (namely, that canonical projection onto the quotient modulo `θ`).
+The kernel of a homomorphism is a congruence relation and conversely for
+every congruence relation `θ`, there exists a homomorphism with kernel `θ`
+(namely, that canonical projection onto the quotient modulo `θ`).
 
 \begin{code}
 

@@ -24,19 +24,24 @@ open import Relation.Unary    using ( Pred ; _∈_ )
 open import Relation.Binary   using ( Setoid ; _Preserves_⟶_ )
 
 -- Imports from agda-algebras -----------------------------------------
-open import Base.Overture     using ( ∣_∣ ; ∥_∥ ; ∃-syntax )
+open import Overture using ( ∣_∣ ; ∥_∥ ; ∃-syntax )
 
 private variable α ρᵃ β ρᵇ : Level
 
 module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
 
- open Setoid 𝑨 using () renaming ( Carrier to A ; _≈_ to _≈₁_ ; refl to refl₁ ; sym to sym₁ ; trans to trans₁ )
- open Setoid 𝑩 using () renaming ( Carrier to B ; _≈_ to _≈₂_ ; refl to refl₂ ; sym to sym₂ ; trans to trans₂ )
+ open Setoid 𝑨 using()  renaming ( Carrier to A ; _≈_ to _≈₁_ )
+                        renaming ( refl to refl₁ ; sym to sym₁ ; trans to trans₁ )
+ open Setoid 𝑩 using()  renaming ( Carrier to B ; _≈_ to _≈₂_ )
+                        renaming ( refl to refl₂ ; sym to sym₂ ; trans to trans₂ )
+
  open _⟶_ {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝑨}{To = 𝑩} renaming (f to _⟨$⟩_ )
 
 \end{code}
 
-We begin by defining two data types that represent the semantic concept of the *image* of a function.  The first of these is for functions on bare types, while the second is for functions on setoids.
+We begin by defining two data types that represent the semantic concept of the
+*image* of a function.  The first of these is for functions on bare types, while
+the second is for functions on setoids.
 
 \begin{code}
 
@@ -82,16 +87,22 @@ We begin by defining two data types that represent the semantic concept of the *
  Ran : (𝑨 ⟶ 𝑩) → Setoid (α ⊔ β ⊔ ρᵇ) ρᵇ
  Ran F = record  { Carrier = F range
                  ; _≈_ = λ x y → ((F image) x) ≈₂ ((F image) y)
-                 ; isEquivalence = record { refl = refl₂ ; sym = sym₂ ; trans = trans₂ }
+                 ; isEquivalence = record  { refl = refl₂
+                                           ; sym = sym₂
+                                           ; trans = trans₂
+                                           }
                  }
 
  RRan : (𝑨 ⟶ 𝑩) → Setoid (α ⊔ β ⊔ ρᵇ) (ρᵃ ⊔ ρᵇ)
  RRan F = record  { Carrier = F range
-                  ; _≈_ = λ x y →  ((F preimage) x) ≈₁ ((F preimage) y) ∧ ((F image) x) ≈₂ ((F image) y)
-                  ; isEquivalence = record  { refl = refl₁ , refl₂
-                                            ; sym = λ x → (sym₁ ∣ x ∣) , (sym₂ ∥ x ∥)
-                                            ; trans = λ x y → (trans₁ ∣ x ∣ ∣ y ∣) , (trans₂ ∥ x ∥ ∥ y ∥)
-                                            }
+                  ; _≈_ = λ x y →  ( (F preimage) x ) ≈₁ ( (F preimage) y )
+                                   ∧ ( (F image) x) ≈₂ ( (F image) y )
+
+                  ; isEquivalence =
+                     record  { refl = refl₁ , refl₂
+                             ; sym = λ x → (sym₁ ∣ x ∣) , (sym₂ ∥ x ∥)
+                             ; trans = λ x y → (trans₁ ∣ x ∣ ∣ y ∣) , (trans₂ ∥ x ∥ ∥ y ∥)
+                             }
                   }
 
  _preimage≈image : ∀ F r → F ⟨$⟩ (F preimage) r ≈₂ (F image) r
@@ -101,7 +112,10 @@ We begin by defining two data types that represent the semantic concept of the *
  Dom : (𝑨 ⟶ 𝑩) → Setoid α ρᵇ
  Dom F = record  { Carrier = A
                  ; _≈_ = λ x y → F ⟨$⟩ x ≈₂ F ⟨$⟩ y
-                 ; isEquivalence = record { refl = refl₂ ; sym = sym₂ ; trans = trans₂ }
+                 ; isEquivalence = record  { refl = refl₂
+                                           ; sym = sym₂
+                                           ; trans = trans₂
+                                           }
                  }
 
 \end{code}
@@ -161,7 +175,6 @@ In a certain sense, `Inv f` is also a (range-restricted) *left-inverse*.
 
  ⁻¹IsInverseˡ : ∀ {F a} → [ F ]⁻¹ (f∈range{F} a) ≈₁ a
  ⁻¹IsInverseˡ = refl₁
-
 \end{code}
 
 --------------------------------------

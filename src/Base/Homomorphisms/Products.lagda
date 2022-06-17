@@ -17,18 +17,21 @@ open import Base.Signatures using (Signature ; 𝓞 ; 𝓥 )
 
 module Base.Homomorphisms.Products {𝑆 : Signature 𝓞 𝓥} where
 
--- Imports from Agda and the Agda Standard Library --------------------------
-open import Agda.Primitive                         using () renaming ( Set to Type )
-open import Data.Product                           using ( _,_ )
-open import Level                                  using ( Level ;  _⊔_ ; suc )
-open import Relation.Binary.PropositionalEquality  using ( refl )
-open import Axiom.Extensionality.Propositional     using ()
-                                                   renaming (Extensionality to funext)
+-- Imports from Agda and the Agda Standard Library -----------------------
+open import Agda.Primitive  using () renaming ( Set to Type )
+open import Data.Product    using ( _,_ )
+open import Level           using ( Level ;  _⊔_ ; suc )
+
+open import Relation.Binary.PropositionalEquality using ( refl )
+
+open import Axiom.Extensionality.Propositional renaming (Extensionality to funext)
+  using ()
 
 -- Imports from the Agda Universal Algebras Library ----------------------
-open import Base.Overture                          using ( ∣_∣ ; ∥_∥)
-open import Base.Algebras                 {𝑆 = 𝑆}  using ( Algebra ; ⨅ )
-open import Base.Homomorphisms.Basic      {𝑆 = 𝑆}  using ( hom ; epi )
+open import Overture using ( ∣_∣ ; ∥_∥)
+
+open import Base.Algebras             {𝑆 = 𝑆}  using ( Algebra ; ⨅ )
+open import Base.Homomorphisms.Basic  {𝑆 = 𝑆}  using ( hom ; epi )
 
 private variable 𝓘 β : Level
 
@@ -42,8 +45,10 @@ If in addition we have a family `𝒽 : (i : I) → hom 𝑨 (ℬ i)` of homomor
 
 module _ {I : Type 𝓘}(ℬ : I → Algebra β 𝑆) where
 
- ⨅-hom-co : funext 𝓘 β → {α : Level}(𝑨 : Algebra α 𝑆) → (∀(i : I) → hom 𝑨 (ℬ i)) → hom 𝑨 (⨅ ℬ)
- ⨅-hom-co fe 𝑨 𝒽 = (λ a i → ∣ 𝒽 i ∣ a) , (λ 𝑓 𝒶 → fe λ i → ∥ 𝒽 i ∥ 𝑓 𝒶)
+ ⨅-hom-co :  funext 𝓘 β → {α : Level}(𝑨 : Algebra α 𝑆)
+  →           (∀(i : I) → hom 𝑨 (ℬ i)) → hom 𝑨 (⨅ ℬ)
+
+ ⨅-hom-co fe 𝑨 𝒽 = (λ a i → ∣ 𝒽 i ∣ a) , λ 𝑓 𝒶 → fe λ i → ∥ 𝒽 i ∥ 𝑓 𝒶
 
 \end{code}
 
@@ -56,15 +61,16 @@ construct a homomorphism from `⨅ 𝒜` to `⨅ ℬ` in the following natural w
 \begin{code}
 
  ⨅-hom :  funext 𝓘 β → {α : Level}(𝒜 : I → Algebra α 𝑆)
-  →        (∀ (i : I) → hom (𝒜 i) (ℬ i)) → hom (⨅ 𝒜)(⨅ ℬ)
+  →        (∀(i : I) → hom (𝒜 i) (ℬ i)) → hom (⨅ 𝒜)(⨅ ℬ)
 
- ⨅-hom fe 𝒜 𝒽 = (λ x i → ∣ 𝒽 i ∣ (x i)) , (λ 𝑓 𝒶 → fe λ i → ∥ 𝒽 i ∥ 𝑓 (λ x → 𝒶 x i))
+ ⨅-hom fe 𝒜 𝒽 = (λ x i → ∣ 𝒽 i ∣ (x i)) , λ 𝑓 𝒶 → fe λ i → ∥ 𝒽 i ∥ 𝑓 λ x → 𝒶 x i
 \end{code}
 
 
 #### <a id="projections-out-of-products">Projection out of products</a>
 
-Later we will need a proof of the fact that projecting out of a product algebra onto one of its factors is a homomorphism.
+Later we will need a proof of the fact that projecting out of a product algebra
+onto one of its factors is a homomorphism.
 
 \begin{code}
 
@@ -73,7 +79,8 @@ Later we will need a proof of the fact that projecting out of a product algebra 
 
 \end{code}
 
-We could prove a more general result involving projections onto multiple factors, but so far the single-factor result has sufficed.
+We could prove a more general result involving projections onto multiple factors,
+but so far the single-factor result has sufficed.
 
 ---------------------------------
 

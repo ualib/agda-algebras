@@ -42,14 +42,15 @@ Level-of-Signature {𝓞}{𝓥} _ = suc (𝓞 ⊔ 𝓥)
 
 \end{code}
 
-In the
-[Overture](https://ualib.github.io/agda-algebras/Overture.html)
-module of the [agda-algebras](https://github.com/ualib/agda-algebras) library, special syntax is defined for the first and second projections---namely, `∣_∣` and `∥_∥`, resp. Consequently, if `𝑆 : Signature 𝓞 𝓥` is a signature, then
+In the [Base.Functions][] module of the [agda-algebras][] library, special syntax
+is defined for the first and second projections---namely, `∣_∣` and `∥_∥`, resp.
+Consequently, if `𝑆 : Signature 𝓞 𝓥` is a signature, then
 
 * `∣ 𝑆 ∣` denotes the set of operation symbols, and
 * `∥ 𝑆 ∥` denotes the arity function.
 
 If `𝑓 : ∣ 𝑆 ∣` is an operation symbol in the signature `𝑆`, then `∥ 𝑆 ∥ 𝑓` is the arity of `𝑓`.
 
+----------------------
 
 {% include UALib.Links.md %}

@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Overture.Injective module"
+title : "Base.Functions.Injective module"
 date : "2021-09-10"
 author: "the agda-algebras development team"
 ---
 
 ### <a id="injective-functions">Injective functions</a>
 
-This is the [Base.Overture.Injective][] module of the [agda-algebras][] library.
+This is the [Base.Functions.Injective][] module of the [agda-algebras][] library.
 
 We say that a function `f : A → B` is *injective* (or *monic*) if it does not map two distinct elements of the domain to the same point in the codomain. The following type manifests this property.
 
@@ -15,7 +15,7 @@ We say that a function `f : A → B` is *injective* (or *monic*) if it does not 
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Base.Overture.Injective where
+module Base.Functions.Injective where
 
 -- Imports from Agda and the Agda Standard Library ---------------------------------------------
 open import Agda.Primitive                         using () renaming ( Set to Type )
@@ -49,8 +49,8 @@ Next, we prove that the composition of injective functions is injective.
 
 --------------------------------------
 
-<span style="float:left;">[← Base.Overture.FuncInverses](Base.Overture.FuncInverses.html)</span>
-<span style="float:right;">[Base.Overture.Surjective →](Base.Overture.Surjective.html)</span>
+<span style="float:left;">[← Base.Functions.FuncInverses](Base.Functions.FuncInverses.html)</span>
+<span style="float:right;">[Base.Functions.Surjective →](Base.Functions.Surjective.html)</span>
 
 {% include UALib.Links.md %}
 
