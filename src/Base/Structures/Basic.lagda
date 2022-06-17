@@ -22,7 +22,8 @@ open import Level                 using ( _⊔_ ; suc ; Level )
 open import Relation.Binary.Core  using () renaming ( Rel to BinRel )
 
 -- Imports from the Agda Universal Algebra Library -----------------------------
-open import Base.Relations        using ( Op ; _|:_ ; _preserves_ ; Rel )
+open import Overture              using ( Op )
+open import Base.Relations        using ( _|:_ ; _preserves_ ; Rel )
 
 private variable 𝓞₀ 𝓥₀ 𝓞₁ 𝓥₁ : Level
 

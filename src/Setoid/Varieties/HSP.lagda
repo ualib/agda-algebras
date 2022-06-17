@@ -11,35 +11,43 @@ author: "agda-algebras development team"
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
+open import Overture using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Varieties.HSP {𝑆 : Signature 𝓞 𝓥} where
 
--- Imports from Agda and the Agda Standard Library ------------------------------------------------
-open import Agda.Primitive   using ()                  renaming ( Set to Type )
-open import Data.Product     using ( _,_ ; Σ-syntax )  renaming ( proj₁ to fst ; proj₂ to snd ; _×_  to _∧_ )
-open import Function         using ()                  renaming ( Func to _⟶_ )
+-- Imports from Agda and the Agda Standard Library -------------------------------
+open import Agda.Primitive   using () renaming ( Set to Type )
+open import Data.Product     using ( _,_ ; Σ-syntax ; _×_ )
+                             renaming ( proj₁ to fst ; proj₂ to snd )
+open import Function         using () renaming ( Func to _⟶_ )
 open import Level            using ( Level ; _⊔_ )
 open import Relation.Binary  using ( Setoid )
 open import Relation.Unary   using ( Pred ; _∈_ ; _⊆_ )
 
--- -- Imports from the Agda Universal Algebra Library ---------------------------------------------------
-open import Overture          using ( ∣_∣ ; ∥_∥ )
-open import Setoid.Relations  using ( fkerPred )
+-- -- Imports from the Agda Universal Algebra Library ----------------------------
+open  import Overture          using ( ∣_∣ ; ∥_∥ )
+open  import Setoid.Relations  using ( fkerPred )
 
-open import Setoid.Algebras       {𝑆 = 𝑆}  using ( Algebra ; ov ; Lift-Alg ; ⨅ )
-open import Setoid.Homomorphisms  {𝑆 = 𝑆}
- using ( hom ; mon ; IsMon ; IsHom ; epi ; epi→ontohom ; ⨅-hom-co ; HomFactor ; ≅-refl ; _IsHomImageOf_ )
+open  import Setoid.Algebras {𝑆 = 𝑆}     using ( Algebra ; ov ; Lift-Alg ; ⨅ )
+open  import Setoid.Subalgebras {𝑆 = 𝑆}  using ( _≤_ ; mon→≤ )
+open  import Setoid.Homomorphisms {𝑆 = 𝑆}
+      using  ( hom ; mon ; IsMon ; IsHom ; epi ; epi→ontohom ; ⨅-hom-co
+             ; HomFactor ; ≅-refl ; _IsHomImageOf_ )
 
-open import Setoid.Subalgebras                 {𝑆 = 𝑆}  using ( _≤_ ; mon→≤ )
-open import Setoid.Terms                       {𝑆 = 𝑆}
- using ( module Environment ; 𝑻 ; lift-hom ; free-lift ; free-lift-interp )
+open  import Setoid.Terms {𝑆 = 𝑆}
+      using ( module Environment ; 𝑻 ; lift-hom ; free-lift ; free-lift-interp )
 
-open import Setoid.Varieties.Closure           {𝑆 = 𝑆}  using ( S ; V ; P ; S-idem ; V-≅-lc )
-open import Setoid.Varieties.Preservation      {𝑆 = 𝑆}  using ( S-id2 ; PS⊆SP )
-open import Setoid.Varieties.FreeAlgebras      {𝑆 = 𝑆}  using ( module FreeHom ; 𝔽-ModTh-epi-lift )
-open import Setoid.Varieties.SoundAndComplete  {𝑆 = 𝑆}
- using ( module FreeAlgebra ; _⊫_ ; _≈̇_ ;  _⊢_▹_≈_ ; Mod ; Th )
+open  import Setoid.Varieties.Closure {𝑆 = 𝑆}
+      using ( S ; V ; P ; S-idem ; V-≅-lc )
+
+open  import Setoid.Varieties.Preservation {𝑆 = 𝑆}
+      using ( S-id2 ; PS⊆SP )
+
+open  import Setoid.Varieties.FreeAlgebras {𝑆 = 𝑆}
+      using ( module FreeHom ; 𝔽-ModTh-epi-lift )
+
+open  import Setoid.Varieties.SoundAndComplete  {𝑆 = 𝑆}
+      using ( module FreeAlgebra ; _⊫_ ; _≈̇_ ;  _⊢_▹_≈_ ; Mod ; Th )
 
 open _⟶_          using () renaming ( f to _⟨$⟩_ )
 open Setoid       using ( Carrier )
@@ -64,7 +72,7 @@ assignments of values in the domain `∣ 𝑨 ∣` to variables in `X`.
 \begin{code}
 
  ℑ⁺ : Type ι
- ℑ⁺ = Σ[ 𝑨 ∈ (Algebra α ρᵃ) ] (𝑨 ∈ S ℓ 𝒦) ∧ (Carrier (Env 𝑨 X))
+ ℑ⁺ = Σ[ 𝑨 ∈ (Algebra α ρᵃ) ] (𝑨 ∈ S ℓ 𝒦) × (Carrier (Env 𝑨 X))
 
  𝔄⁺ : ℑ⁺ → Algebra α ρᵃ
  𝔄⁺ i = ∣ i ∣

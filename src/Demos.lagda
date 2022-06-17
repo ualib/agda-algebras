@@ -5,8 +5,7 @@ date : "2022-04-27"
 author: "the agda-algebras development team"
 ---
 
-### <a id="the-demos-module-of-the-agda-universal-algebra-library">The Demos Module of the Agda Universal Algebra Library</a>
-
+## <a id="demos-of-the-agda-algebras-library">Demos of the Agda Algebras Library</a>
 
 \begin{code}
 

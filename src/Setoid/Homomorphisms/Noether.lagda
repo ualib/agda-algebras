@@ -13,7 +13,7 @@ This is the [Setoid.Homomorphisms.Noether][] module of the [Agda Universal Algeb
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
+open import Overture using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Homomorphisms.Noether {𝑆 : Signature 𝓞 𝓥} where
 

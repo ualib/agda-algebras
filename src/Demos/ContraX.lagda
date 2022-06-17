@@ -1,7 +1,16 @@
+---
+layout: default
+title : "Demos.HSP module"
+date : "2022-04-27"
+author: "the agda-algebras development team"
+---
+
+### <a id="inconsistency-in-first-formalization-attempt">Inconsistency in first formalization attempt</a>
+
 \begin{code}
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 
 module Demos.ContraX {𝑆 : Signature 𝓞 𝓥} where
 open import  Data.Unit.Polymorphic                  using ( ⊤ ; tt )
@@ -10,11 +19,12 @@ open import  Level                                  using ( 0ℓ )
 open import  Relation.Binary                        using ( Setoid )
 open import  Relation.Binary.PropositionalEquality  using ( setoid )
 open import  Data.Product                           using ( Σ-syntax )
-open import  Function    renaming (Func to _⟶_ )    using  ( )
-open import Base.Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ )
-open import Setoid.Algebras.Basic           {𝑆 = 𝑆} using ( Algebra ; 𝔻[_] )
-open import Setoid.Overture.Surjective              using (IsSurjective)
-open import Setoid.Overture.Inverses                using (Image_∋_)
+open import  Function    renaming (Func to _⟶_ )    using ()
+
+
+open import Overture                 using ( ∣_∣ ; ∥_∥ )
+open import Setoid.Algebras {𝑆 = 𝑆}  using ( Algebra ; 𝔻[_] )
+open import Setoid.Functions         using (IsSurjective ; Image_∋_)
 
 open Algebra
 

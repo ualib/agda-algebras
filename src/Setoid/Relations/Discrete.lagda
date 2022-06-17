@@ -16,13 +16,13 @@ This is the [Setoid.Relations.Discrete][] module of the [Agda Universal Algebra 
 module Setoid.Relations.Discrete where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------------------------
-open import Agda.Primitive        using ( _⊔_ ; lsuc ) renaming ( Set to Type )
+open import Agda.Primitive        using () renaming ( Set to Type )
 open import Data.Product          using ( _,_ ; _×_ )
-open import Function.Bundles      using () renaming ( Func to _⟶_ )
-open import Function.Base         using ( _∘_ )
-open import Level                 using ( Level ; Lift )
+open import Function              using ( _∘_ ) renaming ( Func to _⟶_ )
+open import Level                 using ( Level ;  _⊔_ ; Lift )
 open import Relation.Binary       using ( IsEquivalence ; Setoid )
-open import Relation.Binary.Core  using ( _⇒_ ; _=[_]⇒_ ) renaming ( REL to BinREL ; Rel to BinRel )
+open import Relation.Binary.Core  using ( _⇒_ ; _=[_]⇒_ )
+                                  renaming ( REL to BinREL ; Rel to BinRel )
 open import Relation.Binary.Definitions
                                   using ( Reflexive ; Transitive )
 open import Relation.Unary        using ( _∈_; Pred )

@@ -15,7 +15,7 @@ We start by defining a type that represents the important concept of *subunivers
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Signatures using ( 𝓞 ; 𝓥 ; Signature )
+open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 
 module Base.Subalgebras.Subuniverses {𝑆 : Signature 𝓞 𝓥} where
 

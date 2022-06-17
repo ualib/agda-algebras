@@ -13,7 +13,7 @@ This is the [Setoid.Subalgebras.Subuniverses][] module of the [Agda Universal Al
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
+open import Overture using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Subalgebras.Subuniverses {𝑆 : Signature 𝓞 𝓥} where
 

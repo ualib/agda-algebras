@@ -13,7 +13,7 @@ This is the [Setoid.Homomorphisms.Kernels][] module of the [Agda Universal Algeb
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open  import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
+open import Overture using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Homomorphisms.Kernels {𝑆 : Signature 𝓞 𝓥} where
 

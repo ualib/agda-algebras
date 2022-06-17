@@ -13,7 +13,7 @@ This is the [Setoid.Algebras.Congruences][] module of the [Agda Universal Algebr
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
+open import Overture using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Algebras.Congruences {𝑆 : Signature 𝓞 𝓥} where
 
@@ -31,7 +31,7 @@ open import Relation.Binary.PropositionalEquality using ( refl )
 open import Overture          using ( ∣_∣  ; ∥_∥  )
 open import Base.Relations    using ( 0[_] ; _|:_ ; Equivalence )
 open import Setoid.Relations  using ( ⟪_⟫ ; _/_ ; ⟪_∼_⟫-elim )
-open import Setoid.Algebras.Basic {𝑆 = 𝑆}  using ( ov ; Algebra ; 𝕌[_] ; _̂_ )
+open import Setoid.Algebras.Basic {𝑆 = 𝑆} using ( ov ; Algebra ; 𝕌[_] ; _̂_ )
 
 private variable α ρ ℓ : Level
 
@@ -47,10 +47,19 @@ _∣≈_ : (𝑨 : Algebra α ρ) → BinRel 𝕌[ 𝑨 ] ℓ → Type _
 
 \end{code}
 
-A *congruence relation* of an algebra `𝑨` is defined to be an equivalence relation that is compatible with the basic operations of `𝑨`.  This concept can be represented in a number of alternative but equivalent ways.
-Formally, we define a record type (`IsCongruence`) to represent the property of being a congruence, and we define a Sigma type (`Con`) to represent the type of congruences of a given algebra.
+A *congruence relation* of an algebra `𝑨` is defined to be an equivalence relation
+that is compatible with the basic operations of `𝑨`.  This concept can be
+represented in a number of alternative but equivalent ways. Formally, we define a
+record type (`IsCongruence`) to represent the property of being a congruence, and
+we define a Sigma type (`Con`) to represent the type of congruences of a given
+algebra.
 
-Congruences should obviously contain the equality relation on the underlying setoid. That is, they must be reflexive. Unfortunately this doesn't come for free (e.g., as part of the definition of `IsEquivalence` on Setoid), so we must add the field `reflexive` to the definition of `IsCongruence`. (In fact, we should probably redefine equivalence relation on setiods to be reflexive with respect to the underying setoid equality (and not just with respect to _≡_).)
+Congruences should obviously contain the equality relation on the underlying
+setoid. That is, they must be reflexive. Unfortunately this doesn't come for free
+(e.g., as part of the definition of `IsEquivalence` on Setoid), so we must add the
+field `reflexive` to the definition of `IsCongruence`. (In fact, we should
+probably redefine equivalence relation on setiods to be reflexive with respect to
+the underying setoid equality (and not just with respect to _≡_).)
 
 \begin{code}
 
@@ -75,7 +84,9 @@ module _ (𝑨 : Algebra α ρ) where
 
 \end{code}
 
-Each of these types captures what it means to be a congruence and they are equivalent in the sense that each implies the other. One implication is the "uncurry" operation and the other is the second projection.
+Each of these types captures what it means to be a congruence and they are
+equivalent in the sense that each implies the other. One implication is the
+"uncurry" operation and the other is the second projection.
 
 \begin{code}
 

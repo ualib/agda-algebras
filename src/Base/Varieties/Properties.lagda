@@ -20,7 +20,7 @@ We prove some closure and invariance properties of the relation `⊧`.  In parti
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Signatures using ( 𝓞 ; 𝓥 ; Signature )
+open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 
 module Base.Varieties.Properties {𝑆 : Signature 𝓞 𝓥} where
 

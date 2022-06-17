@@ -13,7 +13,7 @@ This chapter presents the [Base.Homomorphisms][] module of the [Agda Universal A
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Signatures using (Signature ; 𝓞 ; 𝓥 )
+open import Overture using (Signature ; 𝓞 ; 𝓥 )
 
 module Base.Homomorphisms {𝑆 : Signature 𝓞 𝓥} where
 

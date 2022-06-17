@@ -24,7 +24,7 @@ A *variety* is a class of algebras, in the same signature, that is closed under 
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Signatures using ( 𝓞 ; 𝓥 ; Signature )
+open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 
 module Base.Varieties.Closure {𝑆 : Signature 𝓞 𝓥} where
 

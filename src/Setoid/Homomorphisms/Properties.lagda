@@ -13,25 +13,26 @@ This is the [Setoid.Homomorphisms.Properties][] module of the [Agda Universal Al
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
+open import Overture using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Homomorphisms.Properties {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ------------------------------------------
-open import Data.Product      using ( _,_ )  renaming ( proj₁ to fst ; proj₂ to snd )
-open import Function          using ( id )   renaming ( Func to _⟶_ )
-open import Level             using ( Level )
-open import Relation.Binary   using ( Setoid )
+open import Data.Product     using ( _,_ ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Function         using ( id ) renaming ( Func to _⟶_ )
+open import Level            using ( Level )
+open import Relation.Binary  using ( Setoid )
 
 open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------
 open import Overture          using ( ∣_∣ ; ∥_∥ )
 open import Setoid.Functions  using ( _∘_ ; 𝑖𝑑 ; Image_∋_ ; eq ; ∘-IsSurjective )
-open import Setoid.Algebras {𝑆 = 𝑆}
-                              using ( Algebra ; _̂_; Lift-Algˡ; Lift-Algʳ; Lift-Alg; 𝕌[_])
-open import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}
-                              using ( hom ; IsHom ; epi ; IsEpi ; compatible-map )
+
+open  import Setoid.Algebras {𝑆 = 𝑆}
+      using ( Algebra ; _̂_; Lift-Algˡ; Lift-Algʳ; Lift-Alg; 𝕌[_])
+open  import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}
+      using ( hom ; IsHom ; epi ; IsEpi ; compatible-map )
 
 open _⟶_ using ( cong ) renaming (f to _⟨$⟩_ )
 
@@ -43,7 +44,6 @@ private variable α β γ ρᵃ ρᵇ ρᶜ ℓ : Level
 \begin{code}
 
 module _  {𝑨 : Algebra α ρᵃ} {𝑩 : Algebra β ρᵇ} {𝑪 : Algebra γ ρᶜ} where
-
   open Algebra 𝑨  renaming (Domain to A )   using ()
   open Algebra 𝑩  renaming (Domain to B )   using ()
   open Algebra 𝑪  renaming (Domain to C )   using ()

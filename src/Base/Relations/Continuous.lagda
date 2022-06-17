@@ -16,11 +16,11 @@ This is the [Base.Relations.Continuous][] module of the [Agda Universal Algebra 
 module Base.Relations.Continuous where
 
 -- Imports from Agda and the Agda Standard Library -------------------------------
-open import Agda.Primitive using () renaming ( Set to Type )
-open import Level using ( _⊔_ ; suc ; Level  )
+open import Agda.Primitive  using () renaming ( Set to Type )
+open import Level           using ( _⊔_ ; suc ; Level  )
+
 -- Imports from agda-algebras ----------------------------------------------------
-open import Overture                 using ( Π ; Π-syntax )
-open import Base.Relations.Discrete  using ( Op ; arity[_] )
+open import Overture        using ( Π ; Π-syntax ; Op ; arity[_] )
 
 private variable α ρ : Level
 

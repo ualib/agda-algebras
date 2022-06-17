@@ -13,7 +13,7 @@ This is the [Base.Homomorphisms.Properties][] module of the [Agda Universal Alge
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Signatures using (Signature ; 𝓞 ; 𝓥 )
+open import Overture using (Signature ; 𝓞 ; 𝓥 )
 
 module Base.Homomorphisms.Properties {𝑆 : Signature 𝓞 𝓥} where
 

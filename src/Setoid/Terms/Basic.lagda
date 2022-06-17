@@ -13,22 +13,24 @@ This is the [Setoid.Terms.Basic][] module of the [Agda Universal Algebra Library
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
+open import Overture using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Terms.Basic {𝑆 : Signature 𝓞 𝓥} where
 
--- imports from Agda and the Agda Standard Library -------------------------------------
-open import Agda.Primitive         using ()       renaming ( Set to Type )
+-- imports from Agda and the Agda Standard Library -------------------------------
+open import Agda.Primitive         using () renaming ( Set to Type )
 open import Data.Empty.Polymorphic using ( ⊥ )
 open import Data.Product           using ( _,_ )
-open import Data.Sum.Base          using ( _⊎_ )  renaming ( inj₁ to inl ; inj₂ to inr )
-open import Function.Bundles       using ( )      renaming ( Func to _⟶_ )
+open import Data.Sum               using ( _⊎_ )
+                                   renaming ( inj₁ to inl ; inj₂ to inr )
+open import Function               using () renaming ( Func to _⟶_ )
 open import Level                  using ( Level ; Lift ; _⊔_ )
 open import Relation.Binary        using ( Setoid ; IsEquivalence )
-open import Relation.Binary.Definitions using ( Reflexive ; Symmetric ; Transitive )
+                                   using ( Reflexive ; Symmetric ; Transitive )
+
 open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
 
--- Imports from the Agda Universal Algebra Library ------------------------------------
+-- Imports from the Agda Universal Algebra Library -------------------------------
 open import Overture using ( ∥_∥ )
 open import Setoid.Algebras  {𝑆 = 𝑆}  using ( Algebra ; ov ; _̂_)
 open import Base.Terms       {𝑆 = 𝑆}  using ( Term )

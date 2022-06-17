@@ -13,7 +13,7 @@ This is the [Setoid.Varieties][] module of the [Agda Universal Algebra Library][
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Signatures using (𝓞 ; 𝓥 ; Signature)
+open import Overture using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Varieties {𝑆 : Signature 𝓞 𝓥} where
 
