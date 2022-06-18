@@ -5,9 +5,13 @@ date : "2021-07-26"
 author: "agda-algebras development team and Libor Barto"
 ---
 
-All excercises in this module were created by Libor Barto for students at Charles University in Prague. They were formalized in dependent type theory by the [agda-algebras development team][].
+### <a id="csp-exercises">CSP Exercises</a>
 
-### CSP Exercises
+This is the [Exercises.Complexity.FiniteCSP][] module of the [Agda Universal Algebra Library][].
+
+Excercises in this module were created by Libor Barto for students at Charles
+University in Prague. They were formalized in dependent type theory by the
+[agda-algebras development team][].
 
 \begin{code}
 
