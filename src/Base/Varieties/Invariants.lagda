@@ -13,17 +13,18 @@ These are properties that are preserved under isomorphism.
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 
 module Base.Varieties.Invariants (𝑆 : Signature 𝓞 𝓥) where
 
 -- Imports from Agda and the Agda Standard Library ---------------------
-open import Agda.Primitive using ( Level ) renaming ( Set to Type )
-open import Relation.Unary using ( Pred )
+open import Agda.Primitive  using () renaming ( Set to Type )
+open import Level           using ( Level )
+open import Relation.Unary  using ( Pred )
 
 -- Imports from the Agda Universal Algebra Library -------------------------------------------
-open import Base.Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ )
-open import Base.Algebras.Basic                     using ( Algebra )
+open import Base.Homomorphisms   {𝑆 = 𝑆} using ( _≅_ )
+open import Base.Algebras.Basic  {𝑆 = 𝑆} using ( Algebra )
 
 private variable α ℓ : Level
 

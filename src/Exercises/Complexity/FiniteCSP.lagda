@@ -21,11 +21,11 @@ open import Data.Unit.Base  using () renaming ( tt to 𝟎 )
 open import Relation.Unary  using ( Pred ; _∈_ )
 
 -- Imports from agda-algebras --------------------------------------------------------------
-open import Base.Overture.Preliminaries         using ( 𝟚 ; 𝟛 )
-open import Base.Relations.Continuous           using ( Rel )
-open import Base.Structures.Basic               using ( signature ; structure )
-open import Examples.Structures.Signatures using ( S∅ ; S001 ; S021)
-open import Base.Structures.Homs                using ( hom )
+open import Overture.Basic                  using ( 𝟚 ; 𝟛 )
+open import Base.Relations.Continuous       using ( Rel )
+open import Base.Structures.Basic           using ( signature ; structure )
+open import Examples.Structures.Signatures  using ( S∅ ; S001 ; S021)
+open import Base.Structures.Homs            using ( hom )
 open signature
 open structure
 

@@ -21,22 +21,30 @@ All definitions and theorems in agda-algebras as of 12 Dec 2021.
 
 -- OVERTURE -----------------------------------------------------------------------------------------
 open import
- Base.Overture.Preliminaries  using ( ℓ₁ ; ∣_∣ ; ∥_∥ ; _⁻¹ ; _∙_ ; 𝑖𝑑 ; Π ; Π-syntax         )
-                              using ( ∃-syntax  ; lift∼lower ; lower∼lift ; _≈_              )
-                              using ( ≡-by-parts ; transport                                 )
+ Overture.Basic               using ( ℓ₁ ; 𝟚 ; 𝟛 ; ∣_∣ ; ∥_∥ ; _⁻¹ ; _∙_ ; 𝑖𝑑 ; ∃-syntax )
+                              using ( Π ; Π-syntax ; lift∼lower ; lower∼lift ; _≈_ )
+                              using ( ≈IsEquivalence ; ≡-by-parts ; transport )
+
 open import
- Base.Overture.Inverses       using ( Image_∋_ ; Range ; range ; Image⊆Range ; Range⊆Image   )
+ Overture.Signatures          using ( 𝓞 ; 𝓥 ; Signature ; Level-of-Signature )
+
+open import
+ Overture.Operations          using ( Op ; π ; arity[_] )
+
+
+open import
+ Base.Functions.Inverses       using ( Image_∋_ ; Range ; range ; Image⊆Range ; Range⊆Image   )
                               using ( Imagef∋f ; f∈range ; Inv ; [_]⁻¹ ; InvIsInverseʳ       )
                               using ( ⁻¹IsInverseʳ ;  InvIsInverseˡ ; ⁻¹IsInverseˡ           )
 open import
- Base.Overture.Injective      using ( id-is-injective ; IsInjective ; ∘-injective            )
+ Base.Functions.Injective      using ( id-is-injective ; IsInjective ; ∘-injective            )
 open import
- Base.Overture.Surjective     using ( IsSurjective ; onto ; IsSurjective→Surjective          )
+ Base.Functions.Surjective     using ( IsSurjective ; onto ; IsSurjective→Surjective          )
                               using ( Surjective→IsSurjective ; SurjInv ; SurjInvIsInverseʳ  )
                               using ( epic-factor ; epic-factor-intensional ; proj ; update  )
                               using ( update-id ; proj-is-onto ; projIsOnto                  )
 open import
- Base.Overture.Transformers   using ( Bijection ; ∣_∣=∣_∣ ; PointwiseBijection ; ∣_∣≈∣_∣     )
+ Base.Functions.Transformers   using ( Bijection ; ∣_∣=∣_∣ ; PointwiseBijection ; ∣_∣≈∣_∣     )
                               using ( Curry ; Uncurry ; A×A→B≅A→A→B ; A→A→Fin2A ; A→A→Fin2A' )
                               using ( A→A→Fin2A-ptws-agree ; A×A→Fin2A ; Fin2A→A×A           )
                               using ( Fin2A~A×A ; A×A~Fin2A-ptws ; A→A~Fin2A-ptws            )
@@ -47,9 +55,8 @@ open import
 -- RELATIONS  -------------------------------------------------------------------------------------------
 open import
  Base.Relations.Discrete    using ( Im_⊆_ ; ker ; kerlift ; ker' ; kernel ; 0[_] ; _⊑_       )
-                            using ( ⊑-refl ; ⊑-trans ; Op ; π ; eval-rel ; _preserves_       )
-                            using (  _|:_ ; compatibility-agreement ; arity[_]               )
-                            using ( compatibility-agreement'                                 )
+                            using ( ⊑-refl ; ⊑-trans ; eval-rel ; _preserves_ ; _|:_         )
+                            using ( compatibility-agreement ; compatibility-agreement'       )
 open import
  Base.Relations.Continuous  using ( ar ; Rel ; Rel-syntax ; REL ; REL-syntax ; eval-Rel      )
                             using ( compatible-Rel ; eval-REL ; compatible-REL               )
@@ -87,10 +94,10 @@ open import
 
 -- BASE.ALGEBRAS ----------------------------------------------------------------------------------------
 open import
- Base.Algebras.Basic        using ( Signature ; compatible ; Algebra ; Level-of-Alg          )
-                            using ( Level-of-Carrier ; algebra ; algebra→Algebra             )
-                            using ( Algebra→algebra ; _̂_ ; Lift-alg-op ; Lift-algebra        )
-                            using ( Lift-Alg ; compatible-Rel-alg ; compatible-REL-alg       )
+ Base.Algebras.Basic        using ( compatible ; Algebra ; Level-of-Alg ; Level-of-Carrier   )
+                            using ( algebra ; algebra→Algebra ; Algebra→algebra ; _̂_         )
+                            using ( Lift-alg-op ; Lift-algebra ; Lift-Alg                    )
+                            using ( compatible-Rel-alg ; compatible-REL-alg       )
 open import
  Base.Algebras.Products     using ( ⨅ ; ⨅' ; ov ; ℑ ; 𝔄 ; class-product                     )
 open import
@@ -269,24 +276,24 @@ open import
 -- SETOID.OVERTURE --------------------------------------------------------------------------
 
 open import
- Setoid.Overture.Preliminaries using ( _∘_ ; 𝑙𝑖𝑓𝑡 ; lift∼lower ; lower∼lift ; liftFunc       )
+ Setoid.Functions.Basic        using ( 𝑖𝑑 ; _∘_ ; 𝑙𝑖𝑓𝑡 ; lift∼lower ; lower∼lift ; liftFunc )
 open import
- Setoid.Overture.Inverses      using ( Img_∋_ ; Image_∋_ ; IsInRange ; Image⊆Range           )
+ Setoid.Functions.Inverses     using ( Img_∋_ ; Image_∋_ ; IsInRange ; Image⊆Range           )
                                using ( IsInRange→IsInImage ; Imagef∋f ; _range ; _image      )
                                using ( _preimage ; f∈range ; ⌜_⌝ ; Ran ; RRan                )
                                using ( _preimage≈image ; Dom ; inv ; Inv ; Inv' ; [_]⁻¹      )
                                using ( ⟦_⟧⁻¹ ; invIsInvʳ ; InvIsInverseʳ ; ⁻¹IsInverseʳ      )
                                using ( InvIsInverseˡ ; ⁻¹IsInverseˡ                          )
 open import
- Setoid.Overture.Injective     using ( IsInjective ; LeftInvPreserves≈ ; module compose      )
+ Setoid.Functions.Injective    using ( IsInjective ; LeftInvPreserves≈ ; module compose      )
                                using ( ∘-injection ; id-is-injective                         )
 open compose                   using ( ∘-injective-bare                                      )
 open import
- Setoid.Overture.Surjective    using ( IsSurjective ; SurjectionIsSurjective ; SurjInv       )
+ Setoid.Functions.Surjective   using ( IsSurjective ; SurjectionIsSurjective ; SurjInv       )
                                using ( SurjInvIsInverseʳ ; ∘-IsSurjective ; ∘-epic           )
                                using ( epic-factor                                           )
 open import
- Setoid.Overture.Bijective     using ( IsBijective ; BijInv                                  )
+ Setoid.Functions.Bijective    using ( IsBijective ; BijInv                                  )
 
 
 
@@ -358,7 +365,7 @@ open import
                                          using ( lift-of-epi-is-epi                          )
 open import
  Setoid.Terms.Operations                 using ( free-lift-interp ; term-interp              )
-                                         using ( term-agreement ; interp-prod ; _[_]         )
+                                         using ( term-agreement ; interp-prod ; _[_]s        )
                                          using ( comm-hom-term ; Substerm ; _[_]t            )
 
 -- SETOID.SUBALGEBRAS --------------------------------------------------------------------------
@@ -385,7 +392,7 @@ open import
 
 -- SETOID.VARIETIES --------------------------------------------------------------------------
 open import
- Setoid.Varieties.EquationalLogic   using ( _⊧_≈_ ; _⊫_≈_ ; Th ; Th' ; ℐ ; ℰ ; Mod ; Modᵗ    )
+ Setoid.Varieties.EquationalLogic   using ( _⊧_≈_ ; _⊫_≈_ ; Th' ; Th'' ; ℐ ; ℰ ; Mod' ; Modᵗ )
 open import
  Setoid.Varieties.SoundAndComplete  using ( Eq ; _⊨_ ; _⊧_ ; Mod ; _⊫_ ; _⊃_ ; _⊢_▹_≈_       )
                                     using ( module Soundness ; module FreeAlgebra            )

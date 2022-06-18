@@ -20,7 +20,7 @@ echo " "
 echo "STEP 1. Generating agda program Everything.agda which imports all modules..."
 echo " "
 
-echo "{-# OPTIONS --without-K --exact-split --safe --cubical #-}" > $SRCDIR/$TARGET.agda
+echo "{-# OPTIONS --without-K --exact-split --safe #-}" > $SRCDIR/$TARGET.agda
 echo " " >> $SRCDIR/$TARGET.agda
 
 git ls-tree --full-tree -r --name-only HEAD | grep '^src/[^\.]*.lagda' | sed -e 's|^src/[/]*|import |' -e 's|/|.|g' -e 's/.lagda//' -e '/import Everything/d' | LC_COLLATE='C' sort >> $SRCDIR/$TARGET.agda
