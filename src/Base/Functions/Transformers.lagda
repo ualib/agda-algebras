@@ -7,14 +7,16 @@ author: "the agda-algebras development team"
 
 ### <a id="type-transformers">Type Transformers</a>
 
-This is the [Base.Functions.Transformers][] module of the [agda-algebras][] library.  Here we define functions for tanslating from one type to another.
+This is the [Base.Functions.Transformers][] module of the [agda-algebras][]
+library.  Here we define functions for translating from one type to another.
+
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 module Base.Functions.Transformers where
 
--- Imports from Agda and the Agda Standard Library ---------------------------------
+-- Imports from Agda and the Agda Standard Library -------------------------------
 open import Agda.Primitive  using () renaming ( Set to Type )
 open import Data.Product    using ( _,_ ; _×_ )
 open import Data.Fin.Base   using ( Fin )
@@ -24,7 +26,7 @@ open import Level           using ( _⊔_ ; Level )
 open import Relation.Binary.PropositionalEquality
                             using ( _≡_ ; refl ; module ≡-Reasoning )
 
--- Imports from agda-algebras ------------------------------------------------------
+-- Imports from agda-algebras ----------------------------------------------------
 open import Overture using ( _≈_ )
 
 private variable α β : Level
@@ -38,20 +40,20 @@ In set theory, these would simply be bijections between sets, or "set isomorphis
 
 record Bijection (A : Type α)(B : Type β) : Type (α ⊔ β) where
  field
-  to : A → B
-  from : B → A
-  to-from : to ∘ from ≡ id
-  from-to : from ∘ to ≡ id
+  to       : A → B
+  from     : B → A
+  to-from  : to ∘ from ≡ id
+  from-to  : from ∘ to ≡ id
 
 ∣_∣=∣_∣ : (A : Type α)(B : Type β) → Type (α ⊔ β)
 ∣ A ∣=∣ B ∣ = Bijection A B
 
 record PointwiseBijection (A : Type α)(B : Type β) : Type (α ⊔ β) where
  field
-  to : A → B
-  from : B → A
-  to-from : to ∘ from ≈ id
-  from-to : from ∘ to ≈ id
+  to       : A → B
+  from     : B → A
+  to-from  : to ∘ from ≈ id
+  from-to  : from ∘ to ≈ id
 
 ∣_∣≈∣_∣ : (A : Type α)(B : Type β) → Type (α ⊔ β)
 ∣ A ∣≈∣ B ∣ = PointwiseBijection A B

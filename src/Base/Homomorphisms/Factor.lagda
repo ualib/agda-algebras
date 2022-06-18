@@ -52,12 +52,12 @@ open import Base.Homomorphisms.Basic  {𝑆 = 𝑆}  using ( hom ; epi )
 
 private variable α β γ : Level
 
-module _ {𝑨 : Algebra α 𝑆}{𝑪 : Algebra γ 𝑆} where
+module _ {𝑨 : Algebra α}{𝑪 : Algebra γ} where
 
  open ≡-Reasoning
 
  HomFactor :  swelldef 𝓥 γ
-  →           (𝑩 : Algebra β 𝑆)(τ : hom 𝑨 𝑩)(ν : hom 𝑨 𝑪)
+  →           (𝑩 : Algebra β)(τ : hom 𝑨 𝑩)(ν : hom 𝑨 𝑪)
   →           kernel ∣ ν ∣ ⊆ kernel ∣ τ ∣ → IsSurjective ∣ ν ∣
               -----------------------------------------------------
   →           Σ[ φ ∈ (hom 𝑪 𝑩)] ∀ x → ∣ τ ∣ x ≡ ∣ φ ∣ (∣ ν ∣ x)
@@ -97,7 +97,7 @@ If, in addition to the hypotheses of the last theorem, we assume `τ` is epic, t
 \begin{code}
 
  HomFactorEpi :  swelldef 𝓥 γ
-  →              (𝑩 : Algebra β 𝑆)(τ : hom 𝑨 𝑩)(ν : hom 𝑨 𝑪)
+  →              (𝑩 : Algebra β)(τ : hom 𝑨 𝑩)(ν : hom 𝑨 𝑪)
   →              kernel ∣ ν ∣ ⊆ kernel ∣ τ ∣
   →              IsSurjective ∣ ν ∣ → IsSurjective ∣ τ ∣
                  ---------------------------------------------

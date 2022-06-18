@@ -59,7 +59,7 @@ We now prove this in [Agda][], starting with the fact that every map from `X` to
 
 private variable X : Type χ
 
-free-lift : (𝑨 : Algebra α 𝑆)(h : X → ∣ 𝑨 ∣) → ∣ 𝑻 X ∣ → ∣ 𝑨 ∣
+free-lift : (𝑨 : Algebra α)(h : X → ∣ 𝑨 ∣) → ∣ 𝑻 X ∣ → ∣ 𝑨 ∣
 free-lift _ h (ℊ x) = h x
 free-lift 𝑨 h (node f 𝑡) = (f ̂ 𝑨) (λ i → free-lift 𝑨 h (𝑡 i))
 
@@ -76,7 +76,7 @@ The free lift so defined is a homomorphism by construction. Indeed, here is the 
 
 \begin{code}
 
-lift-hom : (𝑨 : Algebra α 𝑆) → (X → ∣ 𝑨 ∣) → hom (𝑻 X) 𝑨
+lift-hom : (𝑨 : Algebra α) → (X → ∣ 𝑨 ∣) → hom (𝑻 X) 𝑨
 lift-hom 𝑨 h = free-lift 𝑨 h , λ f a → ≡.cong (f ̂ 𝑨) ≡.refl
 
 \end{code}
@@ -87,7 +87,7 @@ Finally, we prove that the homomorphism is unique.  This requires `funext 𝓥 �
 
 open ≡-Reasoning
 
-free-unique :  swelldef 𝓥 α → (𝑨 : Algebra α 𝑆)(g h : hom (𝑻 X) 𝑨)
+free-unique :  swelldef 𝓥 α → (𝑨 : Algebra α)(g h : hom (𝑻 X) 𝑨)
  →             (∀ x → ∣ g ∣ (ℊ x) ≡ ∣ h ∣ (ℊ x))
  →             ∀(t : Term X) →  ∣ g ∣ t ≡ ∣ h ∣ t
 
@@ -110,7 +110,7 @@ If we further assume that each of the mappings from `X` to `∣ 𝑨 ∣` is *su
 
 \begin{code}
 
-lift-of-epi-is-epi :  (𝑨 : Algebra α 𝑆){h₀ : X → ∣ 𝑨 ∣}
+lift-of-epi-is-epi :  (𝑨 : Algebra α){h₀ : X → ∣ 𝑨 ∣}
  →                    IsSurjective h₀ → IsSurjective ∣ lift-hom 𝑨 h₀ ∣
 
 lift-of-epi-is-epi 𝑨 {h₀} hE y = Goal

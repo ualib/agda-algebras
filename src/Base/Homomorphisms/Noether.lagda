@@ -87,7 +87,7 @@ Without further ado, we present our formalization of the first homomorphism theo
 
 open ≡-Reasoning
 
-FirstHomTheorem|Set : (𝑨 : Algebra α 𝑆)(𝑩 : Algebra β 𝑆)(h : hom 𝑨 𝑩)
+FirstHomTheorem|Set : (𝑨 : Algebra α)(𝑩 : Algebra β)(h : hom 𝑨 𝑩)
  {- extensionality assumptions -}  (pe : pred-ext α β)(fe : swelldef 𝓥 β)
  {- truncation assumptions -}      (Bset : is-set ∣ 𝑩 ∣)
                                    (buip : blk-uip ∣ 𝑨 ∣ ∣ kercon fe {𝑩} h ∣)
@@ -126,7 +126,7 @@ obtain the so-called *first isomorphism theorem*.  Naturally, we let
 
 \begin{code}
 
-FirstIsoTheorem|Set : (𝑨 : Algebra α 𝑆) (𝑩 : Algebra β 𝑆) (h : hom 𝑨 𝑩)
+FirstIsoTheorem|Set : (𝑨 : Algebra α) (𝑩 : Algebra β) (h : hom 𝑨 𝑩)
  {- extensionality assumptions -}  (pe : pred-ext α β) (fe : swelldef 𝓥 β)
  {- truncation assumptions -}      (Bset : is-set ∣ 𝑩 ∣)
                                    (buip : blk-uip ∣ 𝑨 ∣ ∣ kercon fe{𝑩}h ∣)
@@ -162,7 +162,7 @@ Now we prove that the homomorphism `φ`, whose existence is guaranteed by `First
 
 \begin{code}
 
-module _ {fe : swelldef 𝓥 β}(𝑨 : Algebra α 𝑆)(𝑩 : Algebra β 𝑆)(h : hom 𝑨 𝑩) where
+module _ {fe : swelldef 𝓥 β}(𝑨 : Algebra α)(𝑩 : Algebra β)(h : hom 𝑨 𝑩) where
 
  FirstHomUnique :  (f g : hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩)
   →                ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣

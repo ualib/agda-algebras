@@ -7,6 +7,8 @@ author: "the agda-algebras development team"
 
 ## <a id="overture">Overture</a>
 
+This is the [Overture][] module of the [Agda Universal Algebra Library][].
+
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}

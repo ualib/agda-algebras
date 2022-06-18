@@ -7,6 +7,8 @@ author: "the agda-algebras development team"
 
 ### <a id="preface">Preface</a>
 
+This is the [Overture.Preface][] module of the [Agda Universal Algebra Library][].
+
 \begin{code}[hide]
 
 {-# OPTIONS --without-K --exact-split --safe #-}

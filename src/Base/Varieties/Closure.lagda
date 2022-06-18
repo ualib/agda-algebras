@@ -60,10 +60,10 @@ under the taking of homomorphic images.
 
 \begin{code}
 
-data H{α β : Level}(𝒦 : Pred(Algebra α 𝑆)(ov α)) : Pred(Algebra (α ⊔ β) 𝑆)(ov(α ⊔ β))
+data H{α β : Level}(𝒦 : Pred(Algebra α)(ov α)) : Pred(Algebra (α ⊔ β))(ov(α ⊔ β))
  where
- hbase : {𝑨 : Algebra α 𝑆} → 𝑨 ∈ 𝒦 → Lift-Alg 𝑨 β ∈ H 𝒦
- hhimg : {𝑨 𝑩 : Algebra (α ⊔ β) 𝑆} → 𝑨 ∈ H {α} {β} 𝒦 → ((𝑩 , _) : HomImages 𝑨) → 𝑩 ∈ H 𝒦
+ hbase : {𝑨 : Algebra α} → 𝑨 ∈ 𝒦 → Lift-Alg 𝑨 β ∈ H 𝒦
+ hhimg : {𝑨 𝑩 : Algebra (α ⊔ β)} → 𝑨 ∈ H {α} {β} 𝒦 → ((𝑩 , _) : HomImages 𝑨) → 𝑩 ∈ H 𝒦
 \end{code}
 
 #### <a id="the-inductive-type-s">The Inductive Type S</a>
@@ -72,12 +72,12 @@ Here we define the inductive type `S` to represent classes of algebras closed un
 
 \begin{code}
 
-data S {α β : Level}(𝒦 : Pred(Algebra α 𝑆)(ov α)) : Pred(Algebra(α ⊔ β)𝑆)(ov(α ⊔ β))
+data S {α β : Level}(𝒦 : Pred(Algebra α)(ov α)) : Pred(Algebra(α ⊔ β))(ov(α ⊔ β))
  where
- sbase : {𝑨 : Algebra α 𝑆} → 𝑨 ∈ 𝒦 → Lift-Alg 𝑨 β ∈ S 𝒦
- slift : {𝑨 : Algebra α 𝑆} → 𝑨 ∈ S{α}{α} 𝒦 → Lift-Alg 𝑨 β ∈ S 𝒦
- ssub  : {𝑨 : Algebra α 𝑆}{𝑩 : Algebra _ 𝑆} → 𝑨 ∈ S{α}{α} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ S 𝒦
- siso  : {𝑨 : Algebra α 𝑆}{𝑩 : Algebra _ 𝑆} → 𝑨 ∈ S{α}{α} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ S 𝒦
+ sbase : {𝑨 : Algebra α} → 𝑨 ∈ 𝒦 → Lift-Alg 𝑨 β ∈ S 𝒦
+ slift : {𝑨 : Algebra α} → 𝑨 ∈ S{α}{α} 𝒦 → Lift-Alg 𝑨 β ∈ S 𝒦
+ ssub  : {𝑨 : Algebra α}{𝑩 : Algebra _} → 𝑨 ∈ S{α}{α} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ S 𝒦
+ siso  : {𝑨 : Algebra α}{𝑩 : Algebra _} → 𝑨 ∈ S{α}{α} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ S 𝒦
 \end{code}
 
 #### <a id="the-inductive-types-p">The Inductive Type P </a>
@@ -86,14 +86,14 @@ Here we define the inductive type `P` to represent classes of algebras closed un
 
 \begin{code}
 
-data P {α β : Level}(𝒦 : Pred(Algebra α 𝑆)(ov α)) : Pred(Algebra(α ⊔ β)𝑆)(ov(α ⊔ β))
+data P {α β : Level}(𝒦 : Pred(Algebra α)(ov α)) : Pred(Algebra(α ⊔ β))(ov(α ⊔ β))
  where
- pbase  : {𝑨 : Algebra α 𝑆} → 𝑨 ∈ 𝒦 → Lift-Alg 𝑨 β ∈ P 𝒦
- pliftu : {𝑨 : Algebra α 𝑆} → 𝑨 ∈ P{α}{α} 𝒦 → Lift-Alg 𝑨 β ∈ P 𝒦
- pliftw : {𝑨 : Algebra (α ⊔ β) 𝑆} → 𝑨 ∈ P{α}{β} 𝒦 → Lift-Alg 𝑨 (α ⊔ β) ∈ P 𝒦
- produ  : {I : Type β }{𝒜 : I → Algebra α 𝑆} → (∀ i → (𝒜 i) ∈ P{α}{α} 𝒦) → ⨅ 𝒜 ∈ P 𝒦
- prodw  : {I : Type β }{𝒜 : I → Algebra _ 𝑆} → (∀ i → (𝒜 i) ∈ P{α}{β} 𝒦) → ⨅ 𝒜 ∈ P 𝒦
- pisow  : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ P{α}{β} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ P 𝒦
+ pbase  : {𝑨 : Algebra α} → 𝑨 ∈ 𝒦 → Lift-Alg 𝑨 β ∈ P 𝒦
+ pliftu : {𝑨 : Algebra α} → 𝑨 ∈ P{α}{α} 𝒦 → Lift-Alg 𝑨 β ∈ P 𝒦
+ pliftw : {𝑨 : Algebra (α ⊔ β)} → 𝑨 ∈ P{α}{β} 𝒦 → Lift-Alg 𝑨 (α ⊔ β) ∈ P 𝒦
+ produ  : {I : Type β }{𝒜 : I → Algebra α} → (∀ i → (𝒜 i) ∈ P{α}{α} 𝒦) → ⨅ 𝒜 ∈ P 𝒦
+ prodw  : {I : Type β }{𝒜 : I → Algebra _} → (∀ i → (𝒜 i) ∈ P{α}{β} 𝒦) → ⨅ 𝒜 ∈ P 𝒦
+ pisow  : {𝑨 𝑩 : Algebra _} → 𝑨 ∈ P{α}{β} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ P 𝒦
 \end{code}
 
 
@@ -108,17 +108,17 @@ of `H`, `S` and `P`, under different names.
 
 \begin{code}
 
-data V {α β : Level}(𝒦 : Pred(Algebra α 𝑆)(ov α)) : Pred(Algebra(α ⊔ β)𝑆)(ov(α ⊔ β))
+data V {α β : Level}(𝒦 : Pred(Algebra α)(ov α)) : Pred(Algebra(α ⊔ β))(ov(α ⊔ β))
  where
- vbase   : {𝑨 : Algebra α 𝑆} → 𝑨 ∈ 𝒦 → Lift-Alg 𝑨 β ∈ V 𝒦
- vlift   : {𝑨 : Algebra α 𝑆} → 𝑨 ∈ V{α}{α} 𝒦 → Lift-Alg 𝑨 β ∈ V 𝒦
- vliftw  : {𝑨 : Algebra _ 𝑆} → 𝑨 ∈ V{α}{β} 𝒦 → Lift-Alg 𝑨 (α ⊔ β) ∈ V 𝒦
- vhimg   : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{α}{β} 𝒦 → ((𝑩 , _) : HomImages 𝑨) → 𝑩 ∈ V 𝒦
- vssubw  : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{α}{β} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ V 𝒦
- vprodu  : {I : Type β}{𝒜 : I → Algebra α 𝑆} → (∀ i → (𝒜 i) ∈ V{α}{α} 𝒦) → ⨅ 𝒜 ∈ V 𝒦
- vprodw  : {I : Type β}{𝒜 : I → Algebra _ 𝑆} → (∀ i → (𝒜 i) ∈ V{α}{β} 𝒦) → ⨅ 𝒜 ∈ V 𝒦
- visou   : {𝑨 : Algebra α 𝑆}{𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{α}{α} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ V 𝒦
- visow   : {𝑨 𝑩 : Algebra _ 𝑆} → 𝑨 ∈ V{α}{β} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ V 𝒦
+ vbase   : {𝑨 : Algebra α} → 𝑨 ∈ 𝒦 → Lift-Alg 𝑨 β ∈ V 𝒦
+ vlift   : {𝑨 : Algebra α} → 𝑨 ∈ V{α}{α} 𝒦 → Lift-Alg 𝑨 β ∈ V 𝒦
+ vliftw  : {𝑨 : Algebra _} → 𝑨 ∈ V{α}{β} 𝒦 → Lift-Alg 𝑨 (α ⊔ β) ∈ V 𝒦
+ vhimg   : {𝑨 𝑩 : Algebra _} → 𝑨 ∈ V{α}{β} 𝒦 → ((𝑩 , _) : HomImages 𝑨) → 𝑩 ∈ V 𝒦
+ vssubw  : {𝑨 𝑩 : Algebra _} → 𝑨 ∈ V{α}{β} 𝒦 → 𝑩 ≤ 𝑨 → 𝑩 ∈ V 𝒦
+ vprodu  : {I : Type β}{𝒜 : I → Algebra α} → (∀ i → (𝒜 i) ∈ V{α}{α} 𝒦) → ⨅ 𝒜 ∈ V 𝒦
+ vprodw  : {I : Type β}{𝒜 : I → Algebra _} → (∀ i → (𝒜 i) ∈ V{α}{β} 𝒦) → ⨅ 𝒜 ∈ V 𝒦
+ visou   : {𝑨 : Algebra α}{𝑩 : Algebra _} → 𝑨 ∈ V{α}{α} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ V 𝒦
+ visow   : {𝑨 𝑩 : Algebra _} → 𝑨 ∈ V{α}{β} 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ V 𝒦
 
 \end{code}
 
@@ -131,11 +131,11 @@ what it means to be a variety of algebras as follows.
 
 \begin{code}
 
-is-variety : {α : Level}(𝒱 : Pred (Algebra α 𝑆)(ov α)) → Type(ov α)
+is-variety : {α : Level}(𝒱 : Pred (Algebra α)(ov α)) → Type(ov α)
 is-variety{α} 𝒱 = V{α}{α} 𝒱 ⊆ 𝒱
 
 variety : (α : Level) → Type(suc (𝓞 ⊔ 𝓥 ⊔ (suc α)))
-variety α = Σ[ 𝒱 ∈ (Pred (Algebra α 𝑆)(ov α)) ] is-variety 𝒱
+variety α = Σ[ 𝒱 ∈ (Pred (Algebra α)(ov α)) ] is-variety 𝒱
 \end{code}
 
 
@@ -147,7 +147,7 @@ proof of the latter.
 
 \begin{code}
 
-S-mono :  {α β : Level}{𝒦 𝒦' : Pred (Algebra α 𝑆)(ov α)}
+S-mono :  {α β : Level}{𝒦 𝒦' : Pred (Algebra α)(ov α)}
  →        𝒦 ⊆ 𝒦' → S{α}{β} 𝒦 ⊆ S{α}{β} 𝒦'
 
 S-mono kk (sbase x)            = sbase (kk x)
@@ -163,9 +163,9 @@ that purpose.
 
 \begin{code}
 
-module _ {α β : Level}{𝒦 : Pred (Algebra α 𝑆)(ov α)} where
+module _ {α β : Level}{𝒦 : Pred (Algebra α)(ov α)} where
 
- subalgebra→S : {𝑩 : Algebra (α ⊔ β) 𝑆} → 𝑩 IsSubalgebraOfClass 𝒦 → 𝑩 ∈ S{α}{β} 𝒦
+ subalgebra→S : {𝑩 : Algebra (α ⊔ β)} → 𝑩 IsSubalgebraOfClass 𝒦 → 𝑩 ∈ S{α}{β} 𝒦
  subalgebra→S {𝑩} (𝑨 , ((𝑪 , C≤A) , KA , B≅C)) = ssub sA B≤A
   where
    B≤A : 𝑩 ≤ 𝑨
@@ -178,9 +178,9 @@ module _ {α β : Level}{𝒦 : Pred (Algebra α 𝑆)(ov α)} where
    sA = siso slAu (≅-sym Lift-≅)
 
 
-module _ {α : Level}{𝒦 : Pred (Algebra α 𝑆)(ov α)} where
+module _ {α : Level}{𝒦 : Pred (Algebra α)(ov α)} where
 
- S→subalgebra : {𝑩 : Algebra α 𝑆} → 𝑩 ∈ S{α}{α} 𝒦  →  𝑩 IsSubalgebraOfClass 𝒦
+ S→subalgebra : {𝑩 : Algebra α} → 𝑩 ∈ S{α}{α} 𝒦  →  𝑩 IsSubalgebraOfClass 𝒦
  S→subalgebra (sbase{𝑩} x) =  𝑩 , ((𝑩 , (≤-refl ≅-refl)) , x , ≅-sym Lift-≅)
  S→subalgebra (slift{𝑩} x) =  ∣ BS ∣ ,
                               SA , ∣ snd ∥ BS ∥ ∣ , ≅-trans (≅-sym Lift-≅) B≅SA
@@ -224,7 +224,7 @@ the definitions of the types that follow.
 
 \begin{code}
 
-P-mono :  {α β : Level}{𝒦 𝒦' : Pred(Algebra α 𝑆)(ov α)}
+P-mono :  {α β : Level}{𝒦 𝒦' : Pred(Algebra α)(ov α)}
  →        𝒦 ⊆ 𝒦' → P{α}{β} 𝒦 ⊆ P{α}{β} 𝒦'
 
 P-mono kk' (pbase x)     = pbase (kk' x)
@@ -235,12 +235,12 @@ P-mono kk' (prodw x)     = prodw (λ i → P-mono kk' (x i))
 P-mono kk' (pisow x x₁)  = pisow (P-mono kk' x) x₁
 
 
-P-expa : {α : Level}{𝒦 : Pred (Algebra α 𝑆)(ov α)} → 𝒦 ⊆ P{α}{α} 𝒦
+P-expa : {α : Level}{𝒦 : Pred (Algebra α)(ov α)} → 𝒦 ⊆ P{α}{α} 𝒦
 P-expa{α}{𝒦} {𝑨} KA = pisow {𝑩 = 𝑨} (pbase KA) (≅-sym Lift-≅)
 
 module _ {α β : Level} where
 
- P-idemp :  {𝒦 : Pred (Algebra α 𝑆)(ov α)}
+ P-idemp :  {𝒦 : Pred (Algebra α)(ov α)}
   →         P{α ⊔ β}{α ⊔ β} (P{α}{α ⊔ β} 𝒦) ⊆ P{α}{α ⊔ β} 𝒦
 
  P-idemp (pbase x)     = pliftw x
@@ -256,9 +256,9 @@ Next we observe that lifting to a higher universe does not break the property of
 
 \begin{code}
 
-module _ {α β : Level}{𝒦 : Pred (Algebra α 𝑆)(ov α)} where
+module _ {α β : Level}{𝒦 : Pred (Algebra α)(ov α)} where
 
- Lift-Alg-subP :  {𝑩 : Algebra β 𝑆}
+ Lift-Alg-subP :  {𝑩 : Algebra β}
   →               𝑩 IsSubalgebraOfClass (P{α}{β} 𝒦)
   →               (Lift-Alg 𝑩 α) IsSubalgebraOfClass (P{α}{β} 𝒦)
 
@@ -266,7 +266,7 @@ module _ {α β : Level}{𝒦 : Pred (Algebra α 𝑆)(ov α)} where
                                               (lC , lC≤lA) ,
                                               plA , (Lift-Alg-iso B≅C)
    where
-   lA lC : Algebra (α ⊔ β)  𝑆
+   lA lC : Algebra (α ⊔ β)
    lA = Lift-Alg 𝑨 (α ⊔ β)
    lC = Lift-Alg 𝑪 α
 
@@ -275,13 +275,13 @@ module _ {α β : Level}{𝒦 : Pred (Algebra α 𝑆)(ov α)} where
    plA : lA ∈ P{α}{β} 𝒦
    plA = pliftw pA
 
- Lift-Alg-subP' :  {𝑨 : Algebra α 𝑆}
+ Lift-Alg-subP' :  {𝑨 : Algebra α}
   →                𝑨 IsSubalgebraOfClass (P{α}{α} 𝒦)
   →                (Lift-Alg 𝑨 β) IsSubalgebraOfClass (P{α}{β} 𝒦)
 
  Lift-Alg-subP' (𝑩 , (𝑪 , C≤B) , pB , A≅C ) = lB , (lC , lC≤lB) , plB , (Lift-Alg-iso A≅C)
    where
-   lB lC : Algebra (α ⊔ β)  𝑆
+   lB lC : Algebra (α ⊔ β)
    lB = Lift-Alg 𝑩 β
    lC = Lift-Alg 𝑪 β
 
@@ -302,9 +302,9 @@ open Level
 module Vlift  {α : Level} {fe₀ : funext (ov α) α}
               {fe₁ : funext ((ov α) ⊔ (suc (ov α))) (suc (ov α))}
               {fe₂ : funext (ov α) (ov α)}
-              {𝒦 : Pred (Algebra α 𝑆)(ov α)} where
+              {𝒦 : Pred (Algebra α)(ov α)} where
 
- VlA :  {𝑨 : Algebra (ov α) 𝑆} → 𝑨 ∈ V{α}{ov α} 𝒦
+ VlA :  {𝑨 : Algebra (ov α)} → 𝑨 ∈ V{α}{ov α} 𝒦
   →     Lift-Alg 𝑨 (suc (ov α)) ∈ V{α}{suc (ov α)} 𝒦
  VlA (vbase{𝑨} x) = visow (vbase x) (Lift-Alg-assoc _ _ {𝑨})
  VlA (vlift{𝑨} x) = visow (vlift x) (Lift-Alg-assoc _ _ {𝑨})
@@ -312,8 +312,8 @@ module Vlift  {α : Level} {fe₀ : funext (ov α) α}
 
  VlA (vhimg{𝑨}{𝑩} x hB) = vhimg {𝑩 = Lift-Alg 𝑩 (suc (ov α))} (VlA x) (lC , lChi)
   where
-  lC : Algebra (suc (ov(α))) 𝑆
-  lC = Lift-Alg ∣ hB ∣ (suc (ov(α)))
+  lC : Algebra (suc (ov α))
+  lC = Lift-Alg ∣ hB ∣ (suc (ov α))
   lChi : lC IsHomImageOf _
   lChi = (Lift-Alg-hom-image (suc (ov(α))) {∣ hB ∣} (suc (ov(α))) ∥ hB ∥)
 
@@ -325,7 +325,7 @@ module Vlift  {α : Level} {fe₀ : funext (ov α) α}
   𝑰 : Type (suc (ov α))
   𝑰 = Lift (suc (ov α)) I
 
-  lA : 𝑰 → Algebra (suc (ov α)) 𝑆
+  lA : 𝑰 → Algebra (suc (ov α))
   lA i = Lift-Alg (𝒜 (lower i)) (suc (ov α))
 
   vlA : ∀ i → (lA i) ∈ V{α}{suc (ov α)} 𝒦
@@ -342,7 +342,7 @@ module Vlift  {α : Level} {fe₀ : funext (ov α) α}
   𝑰 : Type (suc (ov α))
   𝑰 = Lift (suc (ov α)) I
 
-  lA : 𝑰 → Algebra (suc (ov α)) 𝑆
+  lA : 𝑰 → Algebra (suc (ov α))
   lA i = Lift-Alg (𝒜 (lower i)) (suc (ov α))
 
   vlA : ∀ i → (lA i) ∈ V{α}{suc (ov α)} 𝒦

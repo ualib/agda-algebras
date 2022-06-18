@@ -5,6 +5,12 @@ date : "2021-04-23"
 author: "agda-algebras development team"
 ---
 
+
+### <a id="signatures">Signatures</a>
+
+This is the Overture.Signatures`_ module of the `Agda Universal Algebra Library`_.
+
+
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -24,8 +30,7 @@ The variables `𝓞` and `𝓥` are not private since, as mentioned earlier, thr
 the [agda-algebras][] library `𝓞` denotes the universe level of *operation symbol*
 types, while `𝓥` denotes the universe level of *arity* types.
 
-
-### <a id="signatures-of-an-algebra">Signatures of an algebra</a>
+#### <a id="theoretical-background">Theoretical background</a>
 
 In [model theory](https://en.wikipedia.org/wiki/Model_theory), the *signature*
 `𝑆 = (𝐶, 𝐹, 𝑅, ρ)` of a structure consists of three (possibly empty) sets `𝐶`, `𝐹`,
@@ -61,7 +66,7 @@ function (or "functional") type `(ρ𝑓 → A) → A`.
 `ρ𝑓`-tuple on `A`, and let `h : A → B` be a function.  Then the following
 typing judgments obtain: `h ∘ a : ρ𝑓 → B` and we `𝑓 (h ∘ a) : B`.
 
-#### <a id="signature-type">Signature type</a>
+#### <a id="the-signature-type">The signature type</a>
 
 In the [agda-algebras][] library we represent the *signature* of an algebraic
 structure using the following type.

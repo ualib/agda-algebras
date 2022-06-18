@@ -36,7 +36,7 @@ From now on, the modules of the
 fixed signature `𝑆 : Signature 𝓞 𝓥`.
 
 Recall the informal definition of a *product* of `𝑆`-algebras. Given a type `I :
-Type 𝓘` and a family `𝒜 : I → Algebra α 𝑆`, the *product* `⨅ 𝒜` is the algebra
+Type 𝓘` and a family `𝒜 : I → Algebra α`, the *product* `⨅ 𝒜` is the algebra
 whose domain is the Cartesian product `Π 𝑖 ꞉ I , ∣ 𝒜 𝑖 ∣` of the domains of the
 algebras in `𝒜`, and whose operations are defined as follows: if `𝑓` is a `J`-ary
 operation symbol and if `𝑎 : Π 𝑖 ꞉ I , J → 𝒜 𝑖` is an `I`-tuple of `J`-tuples such
@@ -48,7 +48,7 @@ of* `𝑆`-*algebras* is represented by the following type.
 
 \begin{code}
 
-⨅ : {I : Type 𝓘 }(𝒜 : I → Algebra α 𝑆 ) → Algebra (𝓘 ⊔ α) 𝑆
+⨅ : {I : Type 𝓘 }(𝒜 : I → Algebra α ) → Algebra (𝓘 ⊔ α)
 
 ⨅ {I = I} 𝒜 =  ( ∀ (i : I) → ∣ 𝒜 i ∣ ) ,        -- domain of the product algebra
                 λ 𝑓 𝑎 i → (𝑓 ̂ 𝒜 i) λ x → 𝑎 x i  -- basic operations of the product algebra
@@ -65,12 +65,12 @@ representing the product of algebras inhabiting the record type `algebra`.
 
 open algebra
 
-⨅' : {I : Type 𝓘 }(𝒜 : I → algebra α 𝑆) → algebra (𝓘 ⊔ α) 𝑆
+⨅' : {I : Type 𝓘 }(𝒜 : I → algebra α) → algebra (𝓘 ⊔ α)
 ⨅' {I} 𝒜 = record  { carrier = ∀ i → carrier (𝒜 i)                         -- domain
                     ; opsymbol = λ 𝑓 𝑎 i → (opsymbol (𝒜 i)) 𝑓 λ x → 𝑎 x i }  -- basic operations
 \end{code}
 
-**Notation**. Given a signature `𝑆 : Signature 𝓞 𝓥`, the type `Algebra α 𝑆` has
+**Notation**. Given a signature `𝑆 : Signature 𝓞 𝓥`, the type `Algebra α` has
 type `Type(𝓞 ⊔ 𝓥 ⊔ lsuc α)`.  Such types occur so often in the
 [agda-algebras](https://github.com/ualib/agda-algebras) library that we define
 the following shorthand for their universes.
@@ -85,39 +85,39 @@ ov α = 𝓞 ⊔ 𝓥 ⊔ suc α
 ### <a id="products-of-classes-of-algebras">Products of classes of algebras</a>
 
 An arbitrary class `𝒦` of algebras is represented as a predicate over the type
-`Algebra α 𝑆`, for some universe level `α` and signature `𝑆`. That is, `𝒦 : Pred
-(Algebra α 𝑆) β`, for some type `β`. Later we will formally state and prove that
+`Algebra α`, for some universe level `α` and signature `𝑆`. That is, `𝒦 : Pred
+(Algebra α) β`, for some type `β`. Later we will formally state and prove that
 the product of all subalgebras of algebras in `𝒦` belongs to the class `SP(𝒦)` of
 subalgebras of products of algebras in `𝒦`. That is, `⨅ S(𝒦) ∈ SP(𝒦 )`. This turns
 out to be a nontrivial exercise.
 
 To begin, we need to define types that represent products over arbitrary
 (nonindexed) families such as `𝒦` or `S(𝒦)`. Observe that `Π 𝒦` is certainly not
-what we want.  For recall that `Pred (Algebra α 𝑆) β` is just an alias for the
-function type `Algebra α 𝑆 → Type β`, and the semantics of the latter takes `𝒦 𝑨`
+what we want.  For recall that `Pred (Algebra α) β` is just an alias for the
+function type `Algebra α → Type β`, and the semantics of the latter takes `𝒦 𝑨`
 (and `𝑨 ∈ 𝒦`) to mean that `𝑨` belongs to the class `𝒦`. Thus, by definition,
 
 ```agda
- Π 𝒦   :=   Π 𝑨 ꞉ (Algebra α 𝑆) , 𝒦 𝑨   :=   ∀ (𝑨 : Algebra α 𝑆) → 𝑨 ∈ 𝒦,
+ Π 𝒦   :=   Π 𝑨 ꞉ (Algebra α) , 𝒦 𝑨   :=   ∀ (𝑨 : Algebra α) → 𝑨 ∈ 𝒦,
 ```
 
-which asserts that every inhabitant of the type `Algebra α 𝑆` belongs to `𝒦`.
+which asserts that every inhabitant of the type `Algebra α` belongs to `𝒦`.
 Evidently this is not the product algebra that we seek.
 
 What we need is a type that serves to index the class `𝒦`, and a function `𝔄` that
 maps an index to the inhabitant of `𝒦` at that index. But `𝒦` is a predicate (of
-type `(Algebra α 𝑆) → Type β`) and the type `Algebra α 𝑆` seems rather nebulous in
+type `(Algebra α) → Type β`) and the type `Algebra α` seems rather nebulous in
 that there is no natural indexing class with which to "enumerate" all inhabitants
-of `Algebra α 𝑆` belonging to `𝒦`.
+of `Algebra α` belonging to `𝒦`.
 
 The solution is to essentially take `𝒦` itself to be the indexing type, at least
 heuristically that is how one can view the type `ℑ` that we now define.
 
 \begin{code}
 
-module _ {𝒦 : Pred (Algebra α 𝑆)(ov α)} where
+module _ {𝒦 : Pred (Algebra α)(ov α)} where
  ℑ : Type (ov α)
- ℑ = Σ[ 𝑨 ∈ Algebra α 𝑆 ] 𝑨 ∈ 𝒦
+ ℑ = Σ[ 𝑨 ∈ Algebra α ] 𝑨 ∈ 𝒦
 
 \end{code}
 
@@ -128,7 +128,7 @@ mapping an index to the corresponding algebra is simply the first projection.
 
 \begin{code}
 
- 𝔄 : ℑ → Algebra α 𝑆
+ 𝔄 : ℑ → Algebra α
  𝔄 i = ∣ i ∣
 
 \end{code}
@@ -138,7 +138,7 @@ Finally, we define `class-product` which represents the product of all members o
 
 \begin{code}
 
- class-product : Algebra (ov α) 𝑆
+ class-product : Algebra (ov α)
  class-product = ⨅ 𝔄
 
 \end{code}

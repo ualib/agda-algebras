@@ -43,9 +43,9 @@ If in addition we have a family `𝒽 : (i : I) → hom 𝑨 (ℬ i)` of homomor
 
 \begin{code}
 
-module _ {I : Type 𝓘}(ℬ : I → Algebra β 𝑆) where
+module _ {I : Type 𝓘}(ℬ : I → Algebra β) where
 
- ⨅-hom-co :  funext 𝓘 β → {α : Level}(𝑨 : Algebra α 𝑆)
+ ⨅-hom-co :  funext 𝓘 β → {α : Level}(𝑨 : Algebra α)
   →           (∀(i : I) → hom 𝑨 (ℬ i)) → hom 𝑨 (⨅ ℬ)
 
  ⨅-hom-co fe 𝑨 𝒽 = (λ a i → ∣ 𝒽 i ∣ a) , λ 𝑓 𝒶 → fe λ i → ∥ 𝒽 i ∥ 𝑓 𝒶
@@ -53,14 +53,14 @@ module _ {I : Type 𝓘}(ℬ : I → Algebra β 𝑆) where
 \end{code}
 
 The foregoing generalizes easily to the case in which the domain is also a product
-of a family of algebras. That is, if we are given `𝒜 : I → Algebra α 𝑆` and
+of a family of algebras. That is, if we are given `𝒜 : I → Algebra α` and
 `ℬ : I → Algebra β 𝑆` (two families of `𝑆`-algebras), and
 `𝒽 :  Π i ꞉ I , hom (𝒜 i)(ℬ i)` (a family of homomorphisms), then we can
 construct a homomorphism from `⨅ 𝒜` to `⨅ ℬ` in the following natural way.
 
 \begin{code}
 
- ⨅-hom :  funext 𝓘 β → {α : Level}(𝒜 : I → Algebra α 𝑆)
+ ⨅-hom :  funext 𝓘 β → {α : Level}(𝒜 : I → Algebra α)
   →        (∀(i : I) → hom (𝒜 i) (ℬ i)) → hom (⨅ 𝒜)(⨅ ℬ)
 
  ⨅-hom fe 𝒜 𝒽 = (λ x i → ∣ 𝒽 i ∣ (x i)) , λ 𝑓 𝒶 → fe λ i → ∥ 𝒽 i ∥ 𝑓 λ x → 𝒶 x i

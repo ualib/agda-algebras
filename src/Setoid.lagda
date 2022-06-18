@@ -15,13 +15,13 @@ This module collects all submodule of that part of the library based on setoids,
 
 module Setoid where
 
-open import Setoid.Relations       public
-open import Setoid.Functions       public
-open import Setoid.Algebras        public
-open import Setoid.Homomorphisms   public
-open import Setoid.Terms           public
-open import Setoid.Subalgebras     public
-open import Setoid.Varieties       public
+open import Setoid.Relations
+open import Setoid.Functions
+open import Setoid.Algebras
+open import Setoid.Homomorphisms
+open import Setoid.Terms
+open import Setoid.Subalgebras
+open import Setoid.Varieties
 \end{code}
 
 --------------------------------------
