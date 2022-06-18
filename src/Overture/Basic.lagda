@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Functions.Basic module"
+title : "Overture.Basic module"
 date : "2021-01-13"
 author: "the agda-algebras development team"
 ---
 
 ### <a id="preliminaries">Preliminaries</a>
 
-This is the [Base.Functions.Basic][] module of the [agda-algebras][] library.
+This is the [Overture.Basic][] module of the [Agda Universal Algebra Library][].
 
 #### <a id="logical-foundations">Logical foundations</a>
 
@@ -17,7 +17,7 @@ An Agda program typically begins by setting some options and by importing types
 from existing Agda libraries. Options are specified with the `OPTIONS` *pragma*
 and control the way Agda behaves by, for example, specifying the logical axioms
 and deduction rules we wish to assume when the program is type-checked to verify
-its correctness. Every Agda program in [agda-algebras][] line.
+its correctness. Every Agda program in [agda-algebras][] begins with the following line.
 
 \begin{code}
 
@@ -54,7 +54,7 @@ has some unmet proof obligations, we must replace the `--safe` flag with
  of) the [agda-algebras][].
 
 
-#### <a id="agda-modules">Agda Modules</a>
+#### <a id="agda-modules">Agda modules</a>
 
 The `OPTIONS` pragma is usually followed by the start of a module.  For example,
 the [Base.Functions.Basic][] module begins with the following line, and then a

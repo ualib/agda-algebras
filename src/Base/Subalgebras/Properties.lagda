@@ -43,22 +43,22 @@ private variable α β γ 𝓧 : Level
 
 open _≅_
 
-≤-refl : {𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆} → 𝑨 ≅ 𝑩 → 𝑨 ≤ 𝑩
+≤-refl : {𝑨 : Algebra α}{𝑩 : Algebra β} → 𝑨 ≅ 𝑩 → 𝑨 ≤ 𝑩
 ≤-refl φ = (to φ) , ≅toInjective φ
 
-≥-refl : {𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆} → 𝑨 ≅ 𝑩 → 𝑨 ≥ 𝑩
+≥-refl : {𝑨 : Algebra α}{𝑩 : Algebra β} → 𝑨 ≅ 𝑩 → 𝑨 ≥ 𝑩
 ≥-refl φ = (from φ) , ≅fromInjective φ
 
-≤-reflexive : (𝑨 : Algebra α 𝑆) → 𝑨 ≤ 𝑨
+≤-reflexive : (𝑨 : Algebra α) → 𝑨 ≤ 𝑨
 ≤-reflexive 𝑨 = (id , λ 𝑓 𝑎 → ≡.refl) , Injection.injective id-is-injective
 
-≤-trans :  (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}(𝑪 : Algebra γ 𝑆)
+≤-trans :  (𝑨 : Algebra α){𝑩 : Algebra β}(𝑪 : Algebra γ)
  →         𝑨 ≤ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
 
 ≤-trans 𝑨 𝑪 A≤B B≤C = (∘-hom 𝑨 𝑪 ∣ A≤B ∣ ∣ B≤C ∣) , ∘-injective ∥ A≤B ∥ ∥ B≤C ∥
 
 
-≥-trans :  (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}(𝑪 : Algebra γ 𝑆)
+≥-trans :  (𝑨 : Algebra α){𝑩 : Algebra β}(𝑪 : Algebra γ)
  →         𝑨 ≥ 𝑩 → 𝑩 ≥ 𝑪 → 𝑨 ≥ 𝑪
 
 ≥-trans 𝑨 𝑪 A≥B B≥C = ≤-trans 𝑪 𝑨 B≥C A≥B
@@ -118,14 +118,14 @@ If two algebras are isomorphic and one of them is a subalgebra, then so is the o
 
 \begin{code}
 
-module _ {𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆}{𝑪 : Algebra γ 𝑆} where
+module _ {𝑨 : Algebra α}{𝑩 : Algebra β}{𝑪 : Algebra γ} where
  ≤-RESP-≅ : 𝑨 ≤ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤ 𝑪
  ≤-RESP-≅ a<b bc = ≤-trans 𝑨 𝑪 a<b (≤-refl bc)
 
  ≥-RESP-≅ : 𝑨 ≥ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≥ 𝑪
  ≥-RESP-≅ a<b ac = ≤-trans 𝑪 𝑨 (≤-refl (≅-sym ac)) a<b
 
-module _ {𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆}{𝑪 : Algebra γ 𝑆} where
+module _ {𝑨 : Algebra α}{𝑩 : Algebra β}{𝑪 : Algebra γ} where
 
  ≅-RESP-≤ : 𝑨 ≅ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
  ≅-RESP-≤ ab b<c = ≥-RESP-≅{𝑨 = 𝑪} b<c (≅-sym ab)
@@ -135,7 +135,7 @@ module _ {𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆}{𝑪 : Algebra γ 𝑆
 
 
 open ≡-Reasoning
-iso→injective :  {𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆}
+iso→injective :  {𝑨 : Algebra α}{𝑩 : Algebra β}
  →               (φ : 𝑨 ≅ 𝑩) → IsInjective ∣ to φ ∣
 
 iso→injective {𝑨 = 𝑨} (mkiso f g f∼g g∼f) {x} {y} fxfy =
@@ -144,7 +144,7 @@ iso→injective {𝑨 = 𝑨} (mkiso f g f∼g g∼f) {x} {y} fxfy =
  (∣ g ∣ ∘ ∣ f ∣) y  ≡⟨ g∼f y ⟩
  y                  ∎
 
-≤-mono :  (𝑩 : Algebra β 𝑆){𝒦 𝒦' : Pred (Algebra α 𝑆) γ}
+≤-mono :  (𝑩 : Algebra β){𝒦 𝒦' : Pred (Algebra α) γ}
  →        𝒦 ⊆ 𝒦' → 𝑩 IsSubalgebraOfClass 𝒦 → 𝑩 IsSubalgebraOfClass 𝒦'
 
 ≤-mono 𝑩 KK' KB = ∣ KB ∣ , fst ∥ KB ∥ , KK' (∣ snd ∥ KB ∥ ∣) , ∥ (snd ∥ KB ∥) ∥
@@ -154,18 +154,18 @@ iso→injective {𝑨 = 𝑨} (mkiso f g f∼g g∼f) {x} {y} fxfy =
 
 \begin{code}
 
-module _ {𝒦 : Pred (Algebra α 𝑆)(ov α)}{𝑩 : Algebra α 𝑆} where
+module _ {𝒦 : Pred (Algebra α)(ov α)}{𝑩 : Algebra α} where
 
  Lift-is-sub : 𝑩 IsSubalgebraOfClass 𝒦 → (Lift-Alg 𝑩 α) IsSubalgebraOfClass 𝒦
  Lift-is-sub (𝑨 , (sa , (KA , B≅sa))) = 𝑨 , sa , KA , ≅-trans (≅-sym Lift-≅) B≅sa
 
-≤-Lift : {𝑨 : Algebra α 𝑆}(𝑩 : Algebra β 𝑆){ℓ : Level} → 𝑨 ≤ 𝑩 → 𝑨 ≤ Lift-Alg 𝑩 ℓ
+≤-Lift : {𝑨 : Algebra α}(𝑩 : Algebra β){ℓ : Level} → 𝑨 ≤ 𝑩 → 𝑨 ≤ Lift-Alg 𝑩 ℓ
 ≤-Lift 𝑩 a<b = ≤-RESP-≅{𝑩 = 𝑩} a<b Lift-≅
 
-≥-Lift : (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}{ℓ : Level} → 𝑨 ≥ 𝑩 → 𝑨 ≥ Lift-Alg 𝑩 ℓ
+≥-Lift : (𝑨 : Algebra α){𝑩 : Algebra β}{ℓ : Level} → 𝑨 ≥ 𝑩 → 𝑨 ≥ Lift-Alg 𝑩 ℓ
 ≥-Lift 𝑨 a>b = ≥-RESP-≅{𝑨 = 𝑨} a>b Lift-≅
 
-Lift-≤-Lift :  {𝑨 : Algebra α 𝑆}(ℓᵃ : Level){𝑩 : Algebra β 𝑆}(ℓᵇ : Level)
+Lift-≤-Lift :  {𝑨 : Algebra α}(ℓᵃ : Level){𝑩 : Algebra β}(ℓᵇ : Level)
  →             𝑨 ≤ 𝑩 → Lift-Alg 𝑨 ℓᵃ ≤ Lift-Alg 𝑩 ℓᵇ
 
 Lift-≤-Lift ℓᵃ {𝑩} ℓᵇ a<b = ≥-Lift (Lift-Alg 𝑩 ℓᵇ) (≤-Lift 𝑩 a<b)

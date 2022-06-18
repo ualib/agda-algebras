@@ -29,7 +29,8 @@ private variable α β : Level
 
 \end{code}
 
-We begin by defining an data type that represents the semantic concept of *inverse image* of a function.
+We begin by defining an data type that represents the semantic concept of *inverse
+image* of a function.
 
 \begin{code}
 
@@ -60,7 +61,12 @@ module _ {A : Type α }{B : Type β } where
 
 \end{code}
 
-An inhabitant of `Image f ∋ b` is a dependent pair `(a , p)`, where `a : A` and `p : b ≡ f a` is a proof that `f` maps `a` to `b`.  Since the proof that `b` belongs to the image of `f` is always accompanied by a witness `a : A`, we can actually *compute* a (pseudo)inverse of `f`. For convenience, we define this inverse function, which we call `Inv`, and which takes an arbitrary `b : B` and a (*witness*, *proof*)-pair, `(a , p) : Image f ∋ b`, and returns the witness `a`.
+An inhabitant of `Image f ∋ b` is a dependent pair `(a , p)`, where `a : A` and
+`p : b ≡ f a` is a proof that `f` maps `a` to `b`.  Since the proof that `b` belongs
+to the image of `f` is always accompanied by a witness `a : A`, we can actually
+*compute* a (pseudo)inverse of `f`. For convenience, we define this inverse
+function, which we call `Inv`, and which takes an arbitrary `b : B` and a
+(*witness*, *proof*)-pair, `(a , p) : Image f ∋ b`, and returns the witness `a`.
 
 \begin{code}
 
@@ -73,7 +79,8 @@ An inhabitant of `Image f ∋ b` is a dependent pair `(a , p)`, where `a : A` an
 
 \end{code}
 
-We can prove that `Inv f` is the (range-restricted) *right-inverse* of `f`, as follows.
+We can prove that `Inv f` is the (range-restricted) *right-inverse* of `f`, as
+follows.
 
 \begin{code}
 

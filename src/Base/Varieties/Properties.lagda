@@ -63,8 +63,8 @@ open Term
 open ≡-Reasoning
 open _≅_
 
-module _  (wd : SwellDef){α β χ : Level}{X : Type χ}{𝑨 : Algebra α 𝑆}
-          (𝑩 : Algebra β 𝑆)(p q : Term X) where
+module _  (wd : SwellDef){α β χ : Level}{X : Type χ}{𝑨 : Algebra α}
+          (𝑩 : Algebra β)(p q : Term X) where
 
  ⊧-I-invar : 𝑨 ⊧ p ≈ q  →  𝑨 ≅ 𝑩  →  𝑩 ⊧ p ≈ q
 
@@ -87,7 +87,7 @@ The `⊧` relation is also invariant under the algebraic lift and lower operatio
 
 \begin{code}
 
-module _ (wd : SwellDef){α β χ : Level}{X : Type χ}{𝑨 : Algebra α 𝑆} where
+module _ (wd : SwellDef){α β χ : Level}{X : Type χ}{𝑨 : Algebra α} where
 
  ⊧-Lift-invar : (p q : Term X) → 𝑨 ⊧ p ≈ q → Lift-Alg 𝑨 β ⊧ p ≈ q
  ⊧-Lift-invar p q Apq = ⊧-I-invar wd (Lift-Alg 𝑨 _) p q Apq Lift-≅
@@ -106,7 +106,7 @@ Identities modeled by an algebra `𝑨` are also modeled by every subalgebra of 
 
 module _ (wd : SwellDef){χ : Level}{𝓤 𝓦 : Level}{X : Type χ} where
 
- ⊧-S-invar : {𝑨 : Algebra 𝓤 𝑆}(𝑩 : Algebra 𝓦 𝑆){p q : Term X}
+ ⊧-S-invar : {𝑨 : Algebra 𝓤}(𝑩 : Algebra 𝓦){p q : Term X}
   →          𝑨 ⊧ p ≈ q  →  𝑩 ≤ 𝑨  →  𝑩 ⊧ p ≈ q
  ⊧-S-invar {𝑨} 𝑩 {p}{q} Apq B≤A b = (∥ B≤A ∥) (ξ b)
   where
@@ -127,7 +127,7 @@ of the class.  In other terms, every term equation `p ≈ q` that is satisfied b
 
  \begin{code}
 
- ⊧-S-class-invar :  {𝒦 : Pred (Algebra 𝓤 𝑆)(ov 𝓤)}(p q : Term X)
+ ⊧-S-class-invar :  {𝒦 : Pred (Algebra 𝓤)(ov 𝓤)}(p q : Term X)
   →                 𝒦 ⊫ p ≈ q → (𝑩 : SubalgebraOfClass 𝒦) → ∣ 𝑩 ∣ ⊧ p ≈ q
 
  ⊧-S-class-invar p q Kpq (𝑩 , 𝑨 , SA , (ka , B≅SA)) =
@@ -148,7 +148,7 @@ An identity satisfied by all algebras in an indexed collection is also satisfied
 
 module _  (fe : DFunExt)(wd : SwellDef)
           {α β χ : Level}{I : Type β}
-          (𝒜 : I → Algebra α 𝑆){X : Type χ} where
+          (𝒜 : I → Algebra α){X : Type χ} where
 
  ⊧-P-invar : (p q : Term X) → (∀ i → 𝒜 i ⊧ p ≈ q) → ⨅ 𝒜 ⊧ p ≈ q
  ⊧-P-invar p q 𝒜pq a = goal
@@ -169,7 +169,7 @@ An identity satisfied by all algebras in a class is also satisfied by the produc
 
 \begin{code}
 
- ⊧-P-class-invar :  (𝒦 : Pred (Algebra α 𝑆)(ov α)){p q : Term X}
+ ⊧-P-class-invar :  (𝒦 : Pred (Algebra α)(ov α)){p q : Term X}
   →                 𝒦 ⊫ p ≈ q → (∀ i → 𝒜 i ∈ 𝒦) → ⨅ 𝒜 ⊧ p ≈ q
 
  ⊧-P-class-invar 𝒦 {p}{q}σ K𝒜 = ⊧-P-invar p q λ i → σ (K𝒜 i)
@@ -197,7 +197,7 @@ algebra to `𝑨`; that is, every homomorphism from `𝑻 X` to `𝑨` maps `p` 
 
  \begin{code}
 
-module _ (wd : SwellDef){α χ : Level}{X : Type χ}{𝑨 : Algebra α 𝑆} where
+module _ (wd : SwellDef){α χ : Level}{X : Type χ}{𝑨 : Algebra α} where
 
  ⊧-H-invar : {p q : Term X}(φ : hom (𝑻 X) 𝑨) → 𝑨 ⊧ p ≈ q  →  ∣ φ ∣ p ≡ ∣ φ ∣ q
 
@@ -219,7 +219,7 @@ into algebras of the class. More precisely, if `𝒦` is a class of `𝑆`-algeb
 ```
 \begin{code}
 
-module _ (wd : SwellDef){α χ : Level}{X : Type χ}{𝒦 : Pred (Algebra α 𝑆)(ov α)}  where
+module _ (wd : SwellDef){α χ : Level}{X : Type χ}{𝒦 : Pred (Algebra α)(ov α)}  where
 
  -- ⇒ (the "only if" direction)
  ⊧-H-class-invar :  {p q : Term X}

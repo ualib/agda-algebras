@@ -8,6 +8,7 @@ author: "the agda-algebras development team"
 ### <a id="surjective-functions">Surjective functions</a>
 
 This is the [Base.Functions.Surjective][] module of the [agda-algebras][] library.
+
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -34,9 +35,9 @@ open import Base.Functions.Inverses  using ( Image_∋_ ; eq ; Inv ; InvIsInvers
 private variable α β γ c ι : Level
 \end{code}
 
-#### <a id="epics">Surjective functions</a>
-
-A *surjective function* from `A` to `B` is a function `f : A → B` such that for all `b : B` there exists `a : A` such that `f a ≡ b`.  In other words, the range and codomain of `f` agree.  The following types manifest this notion.
+A *surjective function* from `A` to `B` is a function `f : A → B` such that for
+all `b : B` there exists `a : A` such that `f a ≡ b`.  In other words, the range
+and codomain of `f` agree.  The following types manifest this notion.
 
 \begin{code}
 
@@ -48,18 +49,23 @@ module _ {A : Type α}{B : Type β} where
  onto : Type (α ⊔ β)
  onto = Σ (A → B) IsSurjective
 
- IsSurjective→Surjective : (f : A → B) → IsSurjective f → Surjective{A = A} _≡_ _≡_ f
+ IsSurjective→Surjective :  (f : A → B) → IsSurjective f
+  →                         Surjective{A = A} _≡_ _≡_ f
+
  IsSurjective→Surjective f fE y = imgfy→A (fE y)
   where
   imgfy→A : Image f ∋ y → Σ[ a ∈ A ] f a ≡ y
   imgfy→A (eq a p) = a , sym p
 
- Surjective→IsSurjective : (f : A → B) → Surjective{A = A} _≡_ _≡_ f → IsSurjective f
+ Surjective→IsSurjective :  (f : A → B) → Surjective{A = A} _≡_ _≡_ f
+  →                         IsSurjective f
+
  Surjective→IsSurjective f fE y = eq (fst (fE y)) (sym (snd(fE y)))
 
 \end{code}
 
-With the next definition, we can represent a *right-inverse* of a surjective function.
+With the next definition, we can represent a *right-inverse* of a surjective
+function.
 
 \begin{code}
 
@@ -67,12 +73,16 @@ With the next definition, we can represent a *right-inverse* of a surjective fun
  SurjInv f fE b = Inv f (fE b)
 
 \end{code}
-Thus, a right-inverse of `f` is obtained by applying `SurjInv` to `f` and a proof of `IsSurjective f`.  Next we prove that this does indeed give the right-inverse.
+Thus, a right-inverse of `f` is obtained by applying `SurjInv` to `f` and a proof
+of `IsSurjective f`.  Next we prove that this does indeed give the right-inverse.
+
 \begin{code}
 
 module _ {A : Type α}{B : Type β} where
 
- SurjInvIsInverseʳ : (f : A → B)(fE : IsSurjective f) → ∀ b → f ((SurjInv f fE) b) ≡ b
+ SurjInvIsInverseʳ :  (f : A → B)(fE : IsSurjective f)
+  →                   ∀ b → f ((SurjInv f fE) b) ≡ b
+
  SurjInvIsInverseʳ f fE b = InvIsInverseʳ (fE b)
 
  -- composition law for epics

@@ -45,15 +45,15 @@ We begin with what seems, for our purposes, the most useful way to represent the
 
 module _ {α β : Level } where
 
- _IsHomImageOf_ : (𝑩 : Algebra β 𝑆)(𝑨 : Algebra α 𝑆) → Type _
+ _IsHomImageOf_ : (𝑩 : Algebra β)(𝑨 : Algebra α) → Type _
  𝑩 IsHomImageOf 𝑨 = Σ[ φ ∈ hom 𝑨 𝑩 ] IsSurjective ∣ φ ∣
 
- HomImages : Algebra α 𝑆 → Type(𝓞 ⊔ 𝓥 ⊔ α ⊔ suc β)
- HomImages 𝑨 = Σ[ 𝑩 ∈ Algebra β 𝑆 ] 𝑩 IsHomImageOf 𝑨
+ HomImages : Algebra α → Type(𝓞 ⊔ 𝓥 ⊔ α ⊔ suc β)
+ HomImages 𝑨 = Σ[ 𝑩 ∈ Algebra β ] 𝑩 IsHomImageOf 𝑨
 
 \end{code}
 
-These types should be self-explanatory, but just to be sure, let's describe the Sigma type appearing in the second definition. Given an `𝑆`-algebra `𝑨 : Algebra α 𝑆`, the type `HomImages 𝑨` denotes the class of algebras `𝑩 : Algebra β 𝑆` with a map `φ : ∣ 𝑨 ∣ → ∣ 𝑩 ∣` such that `φ` is a surjective homomorphism.
+These types should be self-explanatory, but just to be sure, let's describe the Sigma type appearing in the second definition. Given an `𝑆`-algebra `𝑨 : Algebra α`, the type `HomImages 𝑨` denotes the class of algebras `𝑩 : Algebra β` with a map `φ : ∣ 𝑨 ∣ → ∣ 𝑩 ∣` such that `φ` is a surjective homomorphism.
 
 
 #### <a id="images-of-a-class-of-algebras">Images of a class of algebras</a>
@@ -64,11 +64,11 @@ Given a class `𝒦` of `𝑆`-algebras, we need a type that expresses the asser
 
 module _ {α : Level} where
 
- IsHomImageOfClass : {𝒦 : Pred (Algebra α 𝑆)(suc α)} → Algebra α 𝑆 → Type(ov α)
- IsHomImageOfClass {𝒦 = 𝒦} 𝑩 = Σ[ 𝑨 ∈ Algebra α 𝑆 ] ((𝑨 ∈ 𝒦) × (𝑩 IsHomImageOf 𝑨))
+ IsHomImageOfClass : {𝒦 : Pred (Algebra α)(suc α)} → Algebra α → Type(ov α)
+ IsHomImageOfClass {𝒦 = 𝒦} 𝑩 = Σ[ 𝑨 ∈ Algebra α ] ((𝑨 ∈ 𝒦) × (𝑩 IsHomImageOf 𝑨))
 
- HomImageOfClass : Pred (Algebra α 𝑆) (suc α) → Type(ov α)
- HomImageOfClass 𝒦 = Σ[ 𝑩 ∈ Algebra α 𝑆 ] IsHomImageOfClass{𝒦} 𝑩
+ HomImageOfClass : Pred (Algebra α) (suc α) → Type(ov α)
+ HomImageOfClass 𝒦 = Σ[ 𝑩 ∈ Algebra α ] IsHomImageOfClass{𝒦} 𝑩
 \end{code}
 
 
@@ -83,7 +83,7 @@ module _ {α β : Level} where
  open Level
  open ≡-Reasoning
 
- Lift-epi-is-epi :  {𝑨 : Algebra α 𝑆}(ℓᵃ : Level){𝑩 : Algebra β 𝑆}(ℓᵇ : Level)(h : hom 𝑨 𝑩)
+ Lift-epi-is-epi :  {𝑨 : Algebra α}(ℓᵃ : Level){𝑩 : Algebra β}(ℓᵇ : Level)(h : hom 𝑨 𝑩)
   →                 IsSurjective ∣ h ∣ → IsSurjective ∣ Lift-hom ℓᵃ {𝑩} ℓᵇ h ∣
 
  Lift-epi-is-epi {𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ h hepi y = eq (lift a) η
@@ -106,7 +106,7 @@ module _ {α β : Level} where
         lift (∣ h ∣ a)   ≡⟨ ν                                      ⟩
         ∣ lh ∣ (lift a)  ∎
 
- Lift-Alg-hom-image :  {𝑨 : Algebra α 𝑆}(ℓᵃ : Level){𝑩 : Algebra β 𝑆}(ℓᵇ : Level)
+ Lift-Alg-hom-image :  {𝑨 : Algebra α}(ℓᵃ : Level){𝑩 : Algebra β}(ℓᵇ : Level)
   →                    𝑩 IsHomImageOf 𝑨
   →                    (Lift-Alg 𝑩 ℓᵇ) IsHomImageOf (Lift-Alg 𝑨 ℓᵃ)
 

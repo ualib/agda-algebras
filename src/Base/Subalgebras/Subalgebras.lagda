@@ -44,11 +44,11 @@ Given algebras `𝑨 : Algebra α 𝑆` and `𝑩 : Algebra 𝓦 𝑆`, we say t
 \begin{code}
 
 _≤_  -- (alias for subalgebra relation))
- _IsSubalgebraOf_ : Algebra α 𝑆 → Algebra β 𝑆 → Type _
+ _IsSubalgebraOf_ : Algebra α → Algebra β → Type _
 𝑨 IsSubalgebraOf 𝑩 = Σ[ h ∈ hom 𝑨 𝑩 ] IsInjective ∣ h ∣
 
 _≥_  -- (alias for supalgebra (aka overalgebra))
- _IsSupalgebraOf_ : Algebra α 𝑆 → Algebra β 𝑆 → Type _
+ _IsSupalgebraOf_ : Algebra α → Algebra β → Type _
 𝑨 IsSupalgebraOf 𝑩 = Σ[ h ∈ hom 𝑩 𝑨 ] IsInjective ∣ h ∣
 
 -- Syntactic sugar for sub/sup-algebra relations.
@@ -58,12 +58,12 @@ _≥_  -- (alias for supalgebra (aka overalgebra))
 -- From now on we use `𝑨 ≤ 𝑩` to express the assertion that `𝑨` is a subalgebra of `𝑩`.
 record SubalgebraOf : Type (ov (α ⊔ β)) where
  field
-  algebra : Algebra α 𝑆
-  subalgebra : Algebra β 𝑆
+  algebra : Algebra α
+  subalgebra : Algebra β
   issubalgebra : subalgebra ≤ algebra
 
-Subalgebra : Algebra α 𝑆 → {β : Level} → Type _
-Subalgebra  𝑨 {β} = Σ[ 𝑩 ∈ (Algebra β 𝑆) ] 𝑩 ≤ 𝑨
+Subalgebra : Algebra α → {β : Level} → Type _
+Subalgebra  𝑨 {β} = Σ[ 𝑩 ∈ (Algebra β) ] 𝑩 ≤ 𝑨
 
 \end{code}
 
@@ -84,7 +84,7 @@ the [Base.Homomorphisms.Noether][] module.
 
 \begin{code}
 
-module _  (𝑨 : Algebra α 𝑆)(𝑩 : Algebra β 𝑆)(h : hom 𝑨 𝑩)
+module _  (𝑨 : Algebra α)(𝑩 : Algebra β)(h : hom 𝑨 𝑩)
           -- extensionality assumptions:
           (pe : pred-ext α β)(fe : swelldef 𝓥 β)
 
@@ -110,7 +110,7 @@ algebra `𝑻 X`, we obtain the following result which will be useful later.
 
 \begin{code}
 
-module _  (X : Type 𝓧)(𝑩 : Algebra β 𝑆)(h : hom (𝑻 X) 𝑩)
+module _  (X : Type 𝓧)(𝑩 : Algebra β)(h : hom (𝑻 X) 𝑩)
           -- extensionality assumptions:
           (pe : pred-ext (ov 𝓧) β)(fe : swelldef 𝓥 β)
 
@@ -128,10 +128,10 @@ module _  (X : Type 𝓧)(𝑩 : Algebra β 𝑆)(h : hom (𝑻 X) 𝑩)
 One of our goals is to formally express and prove properties of classes of
 algebraic structures.  Fixing a signature `𝑆` and a universe `α`, we represent
 classes of `𝑆`-algebras with domains of type `Type α` as predicates over the
-`Algebra α 𝑆` type. In the syntax of the [agda-algebras][] library, such
-predicates inhabit the type `Pred (Algebra α 𝑆) γ`, for some universe `γ`.
+`Algebra α` type. In the syntax of the [agda-algebras][] library, such
+predicates inhabit the type `Pred (Algebra α) γ`, for some universe `γ`.
 
-Suppose `𝒦 : Pred (Algebra α 𝑆) γ` denotes a class of `𝑆`-algebras and
+Suppose `𝒦 : Pred (Algebra α) γ` denotes a class of `𝑆`-algebras and
 `𝑩 : Algebra β 𝑆` denotes an arbitrary `𝑆`-algebra. Then we might wish
 to consider the assertion that `𝑩` is a subalgebra of an algebra in the
 class `𝒦`.  The next type we define allows us to express this assertion
@@ -141,8 +141,8 @@ as `𝑩 IsSubalgebraOfClass 𝒦`.
 
 module _ {α β : Level} where
 
- _IsSubalgebraOfClass_ : Algebra β 𝑆 → Pred (Algebra α 𝑆) γ → Type _
- 𝑩 IsSubalgebraOfClass 𝒦 =  Σ[ 𝑨 ∈ Algebra α 𝑆 ]
+ _IsSubalgebraOfClass_ : Algebra β → Pred (Algebra α) γ → Type _
+ 𝑩 IsSubalgebraOfClass 𝒦 =  Σ[ 𝑨 ∈ Algebra α ]
                             Σ[ sa ∈ Subalgebra 𝑨 {β} ] ((𝑨 ∈ 𝒦) × (𝑩 ≅ ∣ sa ∣))
 
 \end{code}
@@ -151,8 +151,8 @@ Using this type, we express the collection of all subalgebras of algebras in a c
 
 \begin{code}
 
- SubalgebraOfClass : Pred (Algebra α 𝑆)(ov α) → Type (ov (α ⊔ β))
- SubalgebraOfClass 𝒦 = Σ[ 𝑩 ∈ Algebra β 𝑆 ] 𝑩 IsSubalgebraOfClass 𝒦
+ SubalgebraOfClass : Pred (Algebra α)(ov α) → Type (ov (α ⊔ β))
+ SubalgebraOfClass 𝒦 = Σ[ 𝑩 ∈ Algebra β ] 𝑩 IsSubalgebraOfClass 𝒦
 \end{code}
 
 ---------------------------------

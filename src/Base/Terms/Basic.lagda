@@ -72,7 +72,7 @@ In [Agda][] the term algebra can be defined as simply as one could hope.
 
 \begin{code}
 
-𝑻 : (X : Type χ ) → Algebra (ov χ) 𝑆
+𝑻 : (X : Type χ ) → Algebra (ov χ)
 𝑻 X = Term X , node
 \end{code}
 
