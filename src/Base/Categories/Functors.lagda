@@ -9,10 +9,10 @@ author: "agda-algebras development team"
 
 This is the [Base.Categories.Functors][] module of the [Agda Universal Algebra Library][].
 
-Recall, a *functor* `F` is a function that maps the objects and morphisms of one category 𝒞 to the objects and morphisms of a category 𝒟 in such a way that the following *functor laws* are satisfied:
+Recall, a *functor* `F` is a function that maps the objects and morphisms of one category `𝒞` to the objects and morphisms of a category `𝒟` in such a way that the following *functor laws* are satisfied:
 
-* ∀ f g, F(f ∘ g) = F(f) ∘ F(g)
-* ∀ A, F(id A) = id (F A)  (where id X denotes the identity map on X)
+* `∀ f g, F(f ∘ g) = F(f) ∘ F(g)`
+* `∀ A, F(id A) = id (F A)`  (where `id X` denotes the identity morphism on X)
 
 
 #### <a id="polynomial-functors">Polynomial functors</a>
@@ -33,20 +33,21 @@ An important class of functors for our domain is the class of so called *polynom
 module Base.Categories.Functors where
 
 -- Imports from Agda and the Agda Standard Library  ---------------------------------------
-open import Agda.Primitive using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type ; lzero to ℓ₀ )
-open import Data.Nat       using ( ℕ ; zero ; suc ; _>_ )
-open import Data.Sum.Base  using ( _⊎_ ) renaming ( inj₁ to inl ;  inj₂ to inr )
-open import Data.Product   using ( Σ-syntax ; _,_ ; _×_ )
-open import Data.Unit      using ( tt ) renaming ( ⊤ to ⊤₀ )
-open import Data.Unit.Polymorphic  using ( ⊤ )
+open import Agda.Primitive                         using ( _⊔_ ; lsuc ; Level )
+                                                   renaming ( Set to Type ; lzero to ℓ₀ )
+open import Data.Nat                               using ( ℕ ; zero ; suc ; _>_ )
+open import Data.Sum.Base                          using ( _⊎_ ) renaming ( inj₁ to inl ;  inj₂ to inr )
+open import Data.Product                           using ( Σ-syntax ; _,_ ; _×_ )
+open import Data.Unit                              using ( tt ) renaming ( ⊤ to ⊤₀ )
+open import Data.Unit.Polymorphic                  using ( ⊤ )
 open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl ; _≢_ )
 open import Level
 
-private variable
- α β : Level
+private variable α β : Level
 
 infixl 6 _⊕_
 infixr 7 _⊗_
+
 data Functor₀ : Type (lsuc ℓ₀) where
  Id : Functor₀
  Const : Type → Functor₀

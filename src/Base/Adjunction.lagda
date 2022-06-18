@@ -14,9 +14,9 @@ This is the [Base.Adjunction][] module of the [Agda Universal Algebra Library][]
 
 module Base.Adjunction where
 
-open import Base.Adjunction.Closure
-open import Base.Adjunction.Galois
-open import Base.Adjunction.Residuation
+open import Base.Adjunction.Closure      public
+open import Base.Adjunction.Galois       public
+open import Base.Adjunction.Residuation  public
 
 \end{code}
 

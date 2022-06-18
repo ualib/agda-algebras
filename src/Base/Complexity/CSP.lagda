@@ -92,7 +92,7 @@ algebra, 𝑨(R) := (A , ∣: ⃖ R).
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 
 module Base.Complexity.CSP {𝑆 : Signature 𝓞 𝓥} where
 
@@ -138,11 +138,11 @@ where,
 
 \begin{code}
 
-module _                -- levels for...
-         {ι : Level}    -- ...arity (or argument index) types
-         {ν : Level}    -- ...variable symbol types
-         {α ℓ : Level}  -- ... domain types
-         where
+module  _              -- levels for...
+        {ι : Level}    -- ...arity (or argument index) types
+        {ν : Level}    -- ...variable symbol types
+        {α ℓ : Level}  -- ... domain types
+ where
  open Setoid
  record Constraint (var : Type ν) (dom : var → Setoid α ℓ) : Type (ν ⊔ α ⊔ lsuc ι) where
   field

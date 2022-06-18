@@ -16,14 +16,14 @@ This is the [Base.Relations.Properties][] module of the [Agda Universal Algebra 
 module Base.Relations.Properties where
 
 -- imports from Agda and the Agda Standard Library  ---------------------------------------
-open import Agda.Primitive        using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
+open import Agda.Primitive        using () renaming ( Set to Type )
 open import Data.Product          using ( _,_ ; _×_ )
 open import Data.Sum.Base         using ( _⊎_ )
+open import Level                 using ( Level )
 open import Relation.Binary.Core  using ( ) renaming ( REL to BinREL ; Rel to BinRel )
 open import Relation.Unary        using ( Pred ; _∈_ ; _∉_ )
 open import Relation.Binary.PropositionalEquality
                                   using ( _≡_ )
-
 
 private variable
  α β γ ℓ ℓ₁ ℓ₂ ℓ₃ : Level
@@ -87,7 +87,6 @@ Connex P Q = ∀ x y → (x , y) ∈ P ⊎ (y , x) ∈ Q
 
 Total : Pred (A × A) ℓ → Type _
 Total P = Connex P P
-
 \end{code}
 
 -----------------------------------------------

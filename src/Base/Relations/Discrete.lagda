@@ -16,10 +16,10 @@ This is the [Base.Relations.Discrete][] module of the [Agda Universal Algebra Li
 module Base.Relations.Discrete where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------------------------
-open import Agda.Primitive               using ( _⊔_ ; lsuc ) renaming ( Set to Type )
+open import Agda.Primitive               using () renaming ( Set to Type )
 open import Data.Product                 using ( _,_ ; _×_ )
 open import Function.Base                using ( _∘_ )
-open import Level                        using ( Level ; Lift )
+open import Level                        using ( _⊔_ ; Level ; Lift )
 open import Relation.Binary              using ( IsEquivalence ; _⇒_ ; _=[_]⇒_ )
                                       renaming ( REL to BinREL ; Rel to BinRel )
 open import Relation.Binary.Definitions  using ( Reflexive ; Transitive )
@@ -27,7 +27,7 @@ open import Relation.Unary               using ( _∈_; Pred )
 open import Relation.Binary.PropositionalEquality using ( _≡_ )
 
 -- Imports from agda-algebras -------------------------------------------------------------------
-open import Base.Overture.Preliminaries using (_≈_ ; Π-syntax)
+open import Overture using (_≈_ ; Π-syntax ; Op)
 
 private variable α β ρ 𝓥 : Level
 \end{code}
@@ -37,14 +37,15 @@ Here is a function that is useful for defining poitwise equality of functions wr
 
 \begin{code}
 
-PointWise : {A : Type α}{B : Type β }
-            (_≋_ : BinRel B ρ) → BinRel (A → B) _
-PointWise {A = A}{B} _≋_ = λ (f g : A → B) → ∀ x → f x ≋ g x
+module _ {A : Type α} where
 
-depPointWise : {A : Type α}{B : A → Type β }
-               (_≋_ : {γ : Level}{C : Type γ} → BinRel C ρ)
- →             BinRel ((a : A) → B a) _
-depPointWise {A = A}{B} _≋_ = λ (f g : (a : A) → B a) → ∀ x → f x ≋ g x
+ PointWise : {B : Type β } (_≋_ : BinRel B ρ) → BinRel (A → B) _
+ PointWise {B = B} _≋_ = λ (f g : A → B) → ∀ x → f x ≋ g x
+
+ depPointWise :  {B : A → Type β }
+                 (_≋_ : {γ : Level}{C : Type γ} → BinRel C ρ)
+  →              BinRel ((a : A) → B a) _
+ depPointWise {B = B} _≋_ = λ (f g : (a : A) → B a) → ∀ x → f x ≋ g x
 
 \end{code}
 
@@ -53,8 +54,8 @@ is contained in a predicate, the second argument (a "subset" of the codomain).
 
 \begin{code}
 
-Im_⊆_ : {A : Type α}{B : Type β} → (A → B) → Pred B ρ → Type (α ⊔ ρ)
-Im f ⊆ S = ∀ x → f x ∈ S
+ Im_⊆_ : {B : Type β} → (A → B) → Pred B ρ → Type (α ⊔ ρ)
+ Im f ⊆ S = ∀ x → f x ∈ S
 
 \end{code}
 
@@ -71,8 +72,8 @@ Sometimes it is useful to obtain the underlying type of a predicate.
 
 \begin{code}
 
-PredType : {A : Type α} → Pred A ρ → Type α
-PredType {A = A} _ = A
+ PredType : Pred A ρ → Type α
+ PredType _ = A
 
 \end{code}
 
@@ -97,9 +98,8 @@ BinRel A ℓ' = REL A A ℓ'
 
 \begin{code}
 
-Level-of-Rel : {A : Type α}{ℓ : Level} → BinRel A ℓ → Level
-Level-of-Rel {A = A}{ℓ} _ = ℓ
-
+ Level-of-Rel : {ℓ : Level} → BinRel A ℓ → Level
+ Level-of-Rel {ℓ} _ = ℓ
 \end{code}
 
 
@@ -125,8 +125,13 @@ module _ {A : Type α}{B : Type β} where
 
  open IsEquivalence
 
- kerRelOfEquiv : {ρ : Level}{R : BinRel B ρ} → IsEquivalence R → (h : A → B) → IsEquivalence (kerRel R h)
- kerRelOfEquiv eqR h = record { refl = refl eqR ; sym = sym eqR ; trans = trans eqR }
+ kerRelOfEquiv :  {ρ : Level}{R : BinRel B ρ}
+  →               IsEquivalence R → (h : A → B) → IsEquivalence (kerRel R h)
+
+ kerRelOfEquiv eqR h = record  { refl = refl eqR
+                               ; sym = sym eqR
+                               ; trans = trans eqR
+                               }
 
  kerlift : (A → B) → (ρ : Level) → BinRel A (β ⊔ ρ)
  kerlift g ρ x y = Lift ρ (g x ≡ g y)
@@ -136,7 +141,6 @@ module _ {A : Type α}{B : Type β} where
 
  kernel : (A → B) → Pred (A × A) β
  kernel g (x , y) = g x ≡ g y
-
 
 -- The *identity relation* (equivalently, the kernel of a 1-to-1 function)
 0[_] : (A : Type α) → {ρ : Level} → BinRel A (α ⊔ ρ)
@@ -153,42 +157,19 @@ module _ {A : Type (α ⊔ ρ)} where
 
  ⊑-trans : Transitive _⊑_
  ⊑-trans P⊑Q Q⊑R x y Pxy = Q⊑R x y (P⊑Q x y Pxy)
-
 \end{code}
 
 
-### <a id="operation-type-and-compatibility">Operation type and compatibility</a>
+### <a id="compatibility-of-operations-and-relations">Compatibility of operations and relations</a>
 
-**Notation**. For consistency and readability, we reserve two universe variables for
-special purposes.  The first of these is 𝓞 which shall be reserved for types that
-represent *operation symbols*. The second is 𝓥 which we
-reserve for types representing *arities* of relations or operations.
+Recall, from the [Overture.Signatures][] and [Overture.Operations][] modules which established
+our convention of reserving the sybmols `𝓞` and `𝓥` for types that
+represent operation symbols and arities, respectively.
 
-In the next subsection, we define types that are useful for asserting and proving
-facts about *compatibility* of *operations* with relations, but first we need a
-general type with which to represent operations.  Here is the definition, which we
-justify below.
-
-The type `Op` encodes the arity of an operation as an arbitrary type `I : Type 𝓥`,
-which gives us a very general way to represent an operation as a function type with
-domain `I → A` (the type of "tuples") and codomain `A`. For example, the `I`-*ary
-projection operations* on `A` are represented as inhabitants of the type `Op I A` as
-follows.
+In the present subsection, we define types that are useful for asserting and proving
+facts about *compatibility* of operations and relations
 
 \begin{code}
-
--- The type of operations on A of arity I
-Op : Type α → Type 𝓥 → Type (α ⊔ 𝓥)
-Op A I = (I → A) → A
-
--- Example (projections)
-π : {I : Type 𝓥} {A : Type α } → I → Op A I
-π i x = x i
-
--- return the arity of a given operation symbol
-
-arity[_] : {I : Type 𝓥} {A : Type α } → Op A I → Type 𝓥
-arity[_] {I = I} f = I
 
 -- lift a binary relation to the corresponding `I`-ary relation.
 
@@ -225,7 +206,6 @@ module _ {A : Type α}{I : Type 𝓥}{f : Op A I}{R : BinRel A ρ} where
  compatibility-agreement c {x}{y} Rxy = c x y Rxy
  compatibility-agreement' : f |: R → f preserves R
  compatibility-agreement' c = λ u v x → c x
-
 \end{code}
 
 --------------------------------------

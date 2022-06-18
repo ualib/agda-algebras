@@ -1,27 +1,29 @@
 ---
 layout: default
-title : "Base.Overture.Inverses module"
+title : "Base.Functions.Inverses module"
 date : "2021-01-12"
 author: "the agda-algebras development team"
 ---
 
 ### <a id="inverses">Inverses</a>
 
-This is the [Base.Overture.Inverses][] module of the [agda-algebras][] library.
+This is the [Base.Functions.Inverses][] module of the [agda-algebras][] library.
 
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
-module Base.Overture.Inverses where
+module Base.Functions.Inverses where
 
 -- Imports from Agda and the Agda Standard Library ---------------------------------------------
-open import Agda.Primitive                        using ( _⊔_ ; Level ) renaming ( Set to Type )
-open import Relation.Binary.PropositionalEquality using ( _≡_ ; sym ; refl )
-open import Relation.Unary    using ( Pred ; _∈_ )
+open import Agda.Primitive    using () renaming ( Set to Type )
 open import Data.Product      using ( _,_ ; Σ-syntax )
+open import Level             using ( Level ; _⊔_ )
+open import Relation.Binary.PropositionalEquality
+                              using ( _≡_ ; sym ; refl )
+open import Relation.Unary    using ( Pred ; _∈_ )
 
 -- Imports from agda-algebras ----------------------------------------------------------------
-open import Base.Overture.Preliminaries using ( ∃-syntax ; ∣_∣ )
+open import Overture.Basic using ( ∃-syntax ; ∣_∣ )
 
 private variable α β : Level
 
@@ -94,13 +96,12 @@ In a certain sense, `Inv f` is also a (range-restricted) *left-inverse*.
 
  ⁻¹IsInverseˡ : ∀ {f a} → [ f ]⁻¹ (f∈range a) ≡ a
  ⁻¹IsInverseˡ = refl
-
 \end{code}
 
 --------------------------------------
 
-<span style="float:left;">[← Base.Overture.Preliminaries](Base.Overture.Preliminaries.html)</span>
-<span style="float:right;">[Base.Overture.Injective →](Base.Overture.Injective.html)</span>
+<span style="float:left;">[← Base.Functions.Preliminaries](Base.Functions.Preliminaries.html)</span>
+<span style="float:right;">[Base.Functions.Injective →](Base.Functions.Injective.html)</span>
 
 {% include UALib.Links.md %}
 

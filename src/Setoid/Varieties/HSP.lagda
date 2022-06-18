@@ -11,47 +11,52 @@ author: "agda-algebras development team"
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Overture using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Varieties.HSP {𝑆 : Signature 𝓞 𝓥} where
 
--- Imports from Agda and the Agda Standard Library ------------------------------------------------
-open import Agda.Primitive    using ( lsuc )            renaming ( Set to Type )
-open import Data.Product      using ( _,_ ; Σ-syntax )  renaming ( proj₁ to fst ; proj₂ to snd ; _×_  to _∧_ )
-open import Function.Bundles  using ()                  renaming ( Func to _⟶_ )
-open import Level
-open import Relation.Binary   using ( Setoid )
-open import Relation.Unary    using ( Pred ; _∈_ ; _⊆_ )
+-- Imports from Agda and the Agda Standard Library -------------------------------
+open import Agda.Primitive   using () renaming ( Set to Type )
+open import Data.Product     using ( _,_ ; Σ-syntax ; _×_ )
+                             renaming ( proj₁ to fst ; proj₂ to snd )
+open import Function         using () renaming ( Func to _⟶_ )
+open import Level            using ( Level ; _⊔_ )
+open import Relation.Binary  using ( Setoid )
+open import Relation.Unary   using ( Pred ; _∈_ ; _⊆_ )
 
--- -- Imports from the Agda Universal Algebra Library ---------------------------------------------------
-open import Base.Overture.Preliminaries                     using ( ∣_∣ ; ∥_∥ )
-open import Setoid.Relations.Discrete                       using ( fkerPred )
-open import Setoid.Algebras.Basic                   {𝑆 = 𝑆} using ( Algebra ; ov ; Lift-Alg )
-open import Setoid.Algebras.Products                {𝑆 = 𝑆} using ( ⨅ )
-open import Setoid.Homomorphisms.Basic              {𝑆 = 𝑆} using ( hom ; mon ; IsMon ; IsHom )
-                                                            using ( epi ; epi→ontohom )
-open import Setoid.Homomorphisms.Products           {𝑆 = 𝑆} using ( ⨅-hom-co )
-open import Setoid.Homomorphisms.Factor             {𝑆 = 𝑆} using ( HomFactor )
-open import Setoid.Homomorphisms.Isomorphisms       {𝑆 = 𝑆} using ( ≅-refl )
-open import Setoid.Homomorphisms.HomomorphicImages  {𝑆 = 𝑆} using ( _IsHomImageOf_ )
-open import Setoid.Subalgebras.Subalgebras          {𝑆 = 𝑆} using ( _≤_ ; mon→≤ )
-open import Setoid.Terms.Basic                      {𝑆 = 𝑆} using ( module Environment ; 𝑻 )
-open import Setoid.Terms.Properties                 {𝑆 = 𝑆} using ( lift-hom ; free-lift )
-open import Setoid.Terms.Operations                 {𝑆 = 𝑆} using ( free-lift-interp )
-open import Setoid.Varieties.SoundAndComplete       {𝑆 = 𝑆} using ( module FreeAlgebra ; _⊫_ ; _≈̇_ )
-                                                            using ( _⊢_▹_≈_ ; Mod ; Th )
-open import Setoid.Varieties.Closure                {𝑆 = 𝑆} using ( S ; V ; P ; S-idem ; V-≅-lc )
-open import Setoid.Varieties.Preservation           {𝑆 = 𝑆} using ( S-id2 ; PS⊆SP )
-open import Setoid.Varieties.FreeAlgebras           {𝑆 = 𝑆} using ( module FreeHom ; 𝔽-ModTh-epi-lift )
+-- -- Imports from the Agda Universal Algebra Library ----------------------------
+open  import Overture          using ( ∣_∣ ; ∥_∥ )
+open  import Setoid.Relations  using ( fkerPred )
+
+open  import Setoid.Algebras {𝑆 = 𝑆}     using ( Algebra ; ov ; Lift-Alg ; ⨅ )
+open  import Setoid.Subalgebras {𝑆 = 𝑆}  using ( _≤_ ; mon→≤ )
+open  import Setoid.Homomorphisms {𝑆 = 𝑆}
+      using  ( hom ; mon ; IsMon ; IsHom ; epi ; epi→ontohom ; ⨅-hom-co
+             ; HomFactor ; ≅-refl ; _IsHomImageOf_ )
+
+open  import Setoid.Terms {𝑆 = 𝑆}
+      using ( module Environment ; 𝑻 ; lift-hom ; free-lift ; free-lift-interp )
+
+open  import Setoid.Varieties.Closure {𝑆 = 𝑆}
+      using ( S ; V ; P ; S-idem ; V-≅-lc )
+
+open  import Setoid.Varieties.Preservation {𝑆 = 𝑆}
+      using ( S-id2 ; PS⊆SP )
+
+open  import Setoid.Varieties.FreeAlgebras {𝑆 = 𝑆}
+      using ( module FreeHom ; 𝔽-ModTh-epi-lift )
+
+open  import Setoid.Varieties.SoundAndComplete  {𝑆 = 𝑆}
+      using ( module FreeAlgebra ; _⊫_ ; _≈̇_ ;  _⊢_▹_≈_ ; Mod ; Th )
 
 open _⟶_          using () renaming ( f to _⟨$⟩_ )
 open Setoid       using ( Carrier )
 open Algebra      using ( Domain )
 open Environment  using ( Env )
 
-module _ {α ρᵃ ℓ : Level}
-         (𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ))
-         {X : Type (α ⊔ ρᵃ ⊔ ℓ)} where
+module _  {α ρᵃ ℓ : Level}
+          (𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ))
+          {X : Type (α ⊔ ρᵃ ⊔ ℓ)} where
 
  private ι = ov(α ⊔ ρᵃ ⊔ ℓ)
 
@@ -67,7 +72,7 @@ assignments of values in the domain `∣ 𝑨 ∣` to variables in `X`.
 \begin{code}
 
  ℑ⁺ : Type ι
- ℑ⁺ = Σ[ 𝑨 ∈ (Algebra α ρᵃ) ] (𝑨 ∈ S ℓ 𝒦) ∧ (Carrier (Env 𝑨 X))
+ ℑ⁺ = Σ[ 𝑨 ∈ (Algebra α ρᵃ) ] (𝑨 ∈ S ℓ 𝒦) × (Carrier (Env 𝑨 X))
 
  𝔄⁺ : ℑ⁺ → Algebra α ρᵃ
  𝔄⁺ i = ∣ i ∣
@@ -94,12 +99,13 @@ so belongs to `S (P 𝒦)`.
   open Setoid (Domain (𝔄⁺ i)) using ( _≈_ )
   open Environment (𝔄⁺ i) using ( ⟦_⟧ )
 
- AllEqual⊆ker𝔽 : ∀ {p q}
-  →              (∀ i → skEqual i {p}{q}) → (p , q) ∈ fkerPred ∣ hom𝔽[ X ] ∣
+ AllEqual⊆ker𝔽 :  ∀ {p q}
+  →               (∀ i → skEqual i {p}{q}) → (p , q) ∈ fkerPred ∣ hom𝔽[ X ] ∣
+
  AllEqual⊆ker𝔽 {p} {q} x = Goal
   where
-  open Algebra 𝔽[ X ] using () renaming ( Domain to F ; Interp to InterpF )
-  open Setoid F using () renaming ( _≈_  to _≈F≈_ ; refl to reflF )
+  open Algebra 𝔽[ X ]  using () renaming ( Domain to F ; Interp to InterpF )
+  open Setoid F        using () renaming ( _≈_  to _≈F≈_ ; refl to reflF )
   S𝒦⊫pq : S{β = α}{ρᵃ} ℓ 𝒦 ⊫ (p ≈̇ q)
   S𝒦⊫pq 𝑨 sA ρ = x (𝑨 , sA , ρ)
   Goal : p ≈F≈ q
@@ -111,15 +117,15 @@ so belongs to `S (P 𝒦)`.
   h : ∀ i → hom (𝑻 X) (𝔄⁺ i)
   h i = lift-hom (snd ∥ i ∥)
 
- open Algebra 𝔽[ X ] using () renaming ( Domain to F ; Interp to InterpF )
- open Setoid F using () renaming (refl to reflF ; _≈_ to _≈F≈_ ; Carrier to ∣F∣)
+ open Algebra 𝔽[ X ]  using () renaming ( Domain to F ; Interp to InterpF )
+ open Setoid F        using () renaming (refl to reflF ; _≈_ to _≈F≈_ ; Carrier to ∣F∣)
 
 
  ker𝔽⊆kerℭ : fkerPred ∣ hom𝔽[ X ] ∣ ⊆ fkerPred ∣ homℭ ∣
  ker𝔽⊆kerℭ {p , q} pKq (𝑨 , sA , ρ) = Goal
   where
-  open Setoid (Domain 𝑨) using ( _≈_ ; sym ; trans )
-  open Environment 𝑨 using ( ⟦_⟧ )
+  open Setoid (Domain 𝑨)  using ( _≈_ ; sym ; trans )
+  open Environment 𝑨      using ( ⟦_⟧ )
   fl : ∀ t → ⟦ t ⟧ ⟨$⟩ ρ ≈ free-lift ρ t
   fl t = free-lift-interp {𝑨 = 𝑨} ρ t
   subgoal : ⟦ p ⟧ ⟨$⟩ ρ ≈ ⟦ q ⟧ ⟨$⟩ ρ
@@ -139,10 +145,10 @@ so belongs to `S (P 𝒦)`.
   pqEqual : ∀ i → skEqual i {p}{q}
   pqEqual i = goal
    where
-   open Environment (𝔄⁺ i) using () renaming ( ⟦_⟧ to ⟦_⟧ᵢ )
-   open Setoid (Domain (𝔄⁺ i)) using ( _≈_ ; sym ; trans )
+   open Environment (𝔄⁺ i)      using () renaming ( ⟦_⟧ to ⟦_⟧ᵢ )
+   open Setoid (Domain (𝔄⁺ i))  using ( _≈_ ; sym ; trans )
    goal : ⟦ p ⟧ᵢ ⟨$⟩ snd ∥ i ∥ ≈ ⟦ q ⟧ᵢ ⟨$⟩ snd ∥ i ∥
-   goal = trans (free-lift-interp{𝑨 = ∣ i ∣}(snd ∥ i ∥) p)
+   goal = trans  (free-lift-interp{𝑨 = ∣ i ∣}(snd ∥ i ∥) p)
                  (trans (pKq i)(sym (free-lift-interp{𝑨 = ∣ i ∣} (snd ∥ i ∥) q)))
   E⊢pq : ℰ ⊢ X ▹ p ≈ q
   E⊢pq = AllEqual⊆ker𝔽 pqEqual
@@ -188,10 +194,8 @@ Finally, we are in a position to prove Birkhoff's celebrated variety theorem.
 
 \begin{code}
 
-module _ {α ρᵃ ℓ : Level}
-         {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
- private
-  ι = ov(α ⊔ ρᵃ ⊔ ℓ)
+module _ {α ρᵃ ℓ : Level}{𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
+ private ι = ov(α ⊔ ρᵃ ⊔ ℓ)
 
  open FreeHom (α ⊔ ρᵃ ⊔ ℓ) {α}{ρᵃ}{ℓ}{𝒦}
  open FreeAlgebra {ι = ι}{I = ℐ} ℰ using ( 𝔽[_] )

@@ -20,42 +20,42 @@ We prove some closure and invariance properties of the relation `⊧`.  In parti
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
+open import Overture using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Varieties.Properties {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library -------------------------------------------
-open import Agda.Primitive    using ( Level ; _⊔_ ) renaming ( Set to Type )
-open import Data.Product      using ( _,_ )
-open import Function.Base     using ( _∘_ )
-open import Function.Bundles  using ( Func )
-open import Relation.Binary   using ( Setoid )
-open import Relation.Unary    using ( Pred ; _∈_ )
+open import Agda.Primitive   using () renaming ( Set to Type )
+open import Data.Product     using ( _,_ )
+open import Function         using ( _∘_ ; Func )
+open import Level            using ( Level )
+open import Relation.Binary  using ( Setoid )
+open import Relation.Unary   using ( Pred ; _∈_ )
+
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
-open import Base.Overture.Preliminaries                     using ( ∣_∣ ; ∥_∥ )
-open import Base.Terms.Basic                        {𝑆 = 𝑆} using ( Term ; ℊ )
-open import Setoid.Overture.Inverses                        using ( InvIsInverseʳ )
-open import Setoid.Overture.Surjective                      using ( SurjInv )
-open import Setoid.Algebras.Basic                   {𝑆 = 𝑆} using ( Algebra ; Lift-Algˡ ; ov ; 𝕌[_] ; 𝔻[_] )
-open import Setoid.Algebras.Products                {𝑆 = 𝑆} using ( ⨅ )
-open import Setoid.Homomorphisms.Basic              {𝑆 = 𝑆} using ( hom )
-open import Setoid.Homomorphisms.Isomorphisms       {𝑆 = 𝑆} using ( _≅_ ; mkiso ; Lift-≅ˡ ; ≅-sym )
-open import Setoid.Homomorphisms.HomomorphicImages  {𝑆 = 𝑆} using ( _IsHomImageOf_ )
-open import Setoid.Terms.Basic                      {𝑆 = 𝑆} using ( 𝑻 ; module Environment )
-open import Setoid.Terms.Operations                 {𝑆 = 𝑆} using ( comm-hom-term ; interp-prod )
-                                                            using ( term-agreement )
-open import Setoid.Subalgebras.Subalgebras          {𝑆 = 𝑆} using ( _≤_ ; SubalgebrasOfClass )
-open import Setoid.Varieties.SoundAndComplete       {𝑆 = 𝑆} using ( _⊧_ ; _⊨_ ; _⊫_ ; Eq ; _≈̇_ )
-                                                            using ( lhs ; rhs ; _⊢_▹_≈_ )
+open  import Overture                       using  ( ∣_∣ ; ∥_∥ )
+open  import Setoid.Functions               using  ( InvIsInverseʳ ; SurjInv )
+open  import Base.Terms            {𝑆 = 𝑆}  using  ( Term ; ℊ )
+open  import Setoid.Algebras       {𝑆 = 𝑆}
+      using  ( Algebra ; Lift-Algˡ ; ov ; 𝕌[_] ; 𝔻[_] ; ⨅ )
 
-private variable
- α ρᵃ β ρᵇ χ ℓ : Level
+open  import Setoid.Homomorphisms  {𝑆 = 𝑆}
+      using  ( hom ; _≅_ ; mkiso ; Lift-≅ˡ ; ≅-sym ; _IsHomImageOf_ )
 
-open Func using ( cong ) renaming (f to _⟨$⟩_ )
-open Algebra using ( Domain )
+open  import Setoid.Terms          {𝑆 = 𝑆}
+      using  ( 𝑻 ; module Environment ; comm-hom-term ; interp-prod ; term-agreement )
 
+open  import Setoid.Subalgebras    {𝑆 = 𝑆}  using  ( _≤_ ; SubalgebrasOfClass )
+
+open  import Setoid.Varieties.SoundAndComplete {𝑆 = 𝑆}
+      using ( _⊧_ ; _⊨_ ; _⊫_ ; Eq ; _≈̇_ ; lhs ; rhs ; _⊢_▹_≈_ )
+
+private variable α ρᵃ β ρᵇ χ ℓ : Level
+
+open Func     using ( cong ) renaming (f to _⟨$⟩_ )
+open Algebra  using ( Domain )
 \end{code}
 
 
@@ -65,37 +65,33 @@ The binary relation ⊧ would be practically useless if it were not an *algebrai
 
 \begin{code}
 
-
-module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}
-         (𝑩 : Algebra β ρᵇ)(p q : Term X) where
- open Environment 𝑨     using () renaming ( ⟦_⟧   to ⟦_⟧₁ )
- open Environment 𝑩     using () renaming ( ⟦_⟧   to ⟦_⟧₂ )
- open Setoid (Domain 𝑨) using () renaming ( _≈_   to _≈₁_ )
- open Setoid (Domain 𝑩) using ( _≈_ ; sym )
+module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}(𝑩 : Algebra β ρᵇ)(p q : Term X) where
+ open Environment 𝑨      using () renaming ( ⟦_⟧   to ⟦_⟧₁ )
+ open Environment 𝑩      using () renaming ( ⟦_⟧   to ⟦_⟧₂ )
+ open Setoid (Domain 𝑨)  using () renaming ( _≈_   to _≈₁_ )
+ open Setoid (Domain 𝑩)  using ( _≈_ ; sym )
  open SetoidReasoning (Domain 𝑩)
 
  ⊧-I-invar : 𝑨 ⊧ (p ≈̇ q)  →  𝑨 ≅ 𝑩  →  𝑩 ⊧ (p ≈̇ q)
  ⊧-I-invar Apq (mkiso fh gh f∼g g∼f) ρ =
   begin
-   ⟦ p ⟧₂ ⟨$⟩ ρ             ≈˘⟨ cong ⟦ p ⟧₂ (λ x → f∼g (ρ x)) ⟩
-   ⟦ p ⟧₂ ⟨$⟩ (f ∘ (g ∘ ρ)) ≈˘⟨ comm-hom-term fh p (g ∘ ρ) ⟩
-   f (⟦ p ⟧₁ ⟨$⟩ (g ∘ ρ))   ≈⟨ cong ∣ fh ∣ (Apq (g ∘ ρ)) ⟩
-   f (⟦ q ⟧₁ ⟨$⟩ (g ∘ ρ))   ≈⟨ comm-hom-term fh q (g ∘ ρ) ⟩
-   ⟦ q ⟧₂ ⟨$⟩ (f ∘ (g ∘ ρ)) ≈⟨ cong ⟦ q ⟧₂ (λ x → f∼g (ρ x)) ⟩
-   ⟦ q ⟧₂ ⟨$⟩ ρ             ∎
+   ⟦ p ⟧₂ ⟨$⟩ ρ              ≈˘⟨ cong ⟦ p ⟧₂ (λ x → f∼g (ρ x)) ⟩
+   ⟦ p ⟧₂ ⟨$⟩ (f ∘ (g ∘ ρ))  ≈˘⟨ comm-hom-term fh p (g ∘ ρ) ⟩
+   f (⟦ p ⟧₁ ⟨$⟩ (g ∘ ρ))    ≈⟨ cong ∣ fh ∣ (Apq (g ∘ ρ)) ⟩
+   f (⟦ q ⟧₁ ⟨$⟩ (g ∘ ρ))    ≈⟨ comm-hom-term fh q (g ∘ ρ) ⟩
+   ⟦ q ⟧₂ ⟨$⟩ (f ∘ (g ∘ ρ))  ≈⟨ cong ⟦ q ⟧₂ (λ x → f∼g (ρ x)) ⟩
+   ⟦ q ⟧₂ ⟨$⟩ ρ              ∎
   where private f = _⟨$⟩_ ∣ fh ∣ ; g = _⟨$⟩_ ∣ gh ∣
 
 \end{code}
 
-
- As the proof makes clear, we show 𝑩 ⊧ p ≈ q by showing that `𝑩 ⟦ p ⟧ ≡ 𝑩 ⟦ q ⟧ holds *extensionally*, that is, `∀ x, 𝑩 ⟦ p ⟧ x ≡ 𝑩 ⟦q ⟧ x`.
+As the proof makes clear, we show 𝑩 ⊧ p ≈ q by showing that `𝑩 ⟦ p ⟧ ≡ 𝑩 ⟦ q ⟧ holds *extensionally*, that is, `∀ x, 𝑩 ⟦ p ⟧ x ≡ 𝑩 ⟦q ⟧ x`.
 
 #### <a id="lift-invariance">Lift-invariance of ⊧</a>
 The ⊧ relation is also invariant under the algebraic lift and lower operations.
 
 \begin{code}
 
--- module _ (wd : SwellDef){α β χ : Level}{X : Type χ}{𝑨 : Algebra α ρᵃ} where
 module _ {X : Type χ}{𝑨 : Algebra α ρᵃ} where
 
  ⊧-Lift-invar : (p q : Term X) → 𝑨 ⊧ (p ≈̇ q) → Lift-Algˡ 𝑨 β ⊧ (p ≈̇ q)
@@ -103,10 +99,7 @@ module _ {X : Type χ}{𝑨 : Algebra α ρᵃ} where
 
  ⊧-lower-invar : (p q : Term X) → Lift-Algˡ 𝑨 β ⊧ (p ≈̇ q)  →  𝑨 ⊧ (p ≈̇ q)
  ⊧-lower-invar p q lApq = ⊧-I-invar 𝑨 p q lApq (≅-sym Lift-≅ˡ)
-
 \end{code}
-
-
 
 #### <a id="homomorphic-invariance">Homomorphic invariance of ⊧</a>
 Identities modeled by an algebra `𝑨` are also modeled by every homomorphic image of `𝑨`, which fact can be formalized as follows.
@@ -139,14 +132,12 @@ Identities modeled by an algebra `𝑨` are also modeled by every subalgebra of 
 
 \begin{code}
 
-module _ {X : Type χ}{p q : Term X}{𝑨 : Algebra α ρᵃ}
-         {𝑩 : Algebra β ρᵇ} where
- open Environment 𝑨 using () renaming ( ⟦_⟧ to ⟦_⟧₁ )
- open Environment 𝑩 using () renaming ( ⟦_⟧ to ⟦_⟧₂ )
- open Setoid (Domain 𝑨) using ( _≈_ )
- open Setoid (Domain 𝑩) using () renaming ( _≈_ to _≈₂_ )
+module _ {X : Type χ}{p q : Term X}{𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
+ open Environment 𝑨      using () renaming ( ⟦_⟧ to ⟦_⟧₁ )
+ open Environment 𝑩      using () renaming ( ⟦_⟧ to ⟦_⟧₂ )
+ open Setoid (Domain 𝑨)  using ( _≈_ )
+ open Setoid (Domain 𝑩)  using () renaming ( _≈_ to _≈₂_ )
  open SetoidReasoning (Domain 𝑨)
-
 
  ⊧-S-invar : 𝑨 ⊧ (p ≈̇ q) →  𝑩 ≤ 𝑨  →  𝑩 ⊧ (p ≈̇ q)
  ⊧-S-invar Apq B≤A b = goal
@@ -156,28 +147,29 @@ module _ {X : Type χ}{p q : Term X}{𝑨 : Algebra α ρᵃ}
   h = _⟨$⟩_ ∣ hh ∣
   ξ : ∀ b → h (⟦ p ⟧₂ ⟨$⟩ b) ≈ h (⟦ q ⟧₂ ⟨$⟩ b)
   ξ b = begin
-         h (⟦ p ⟧₂ ⟨$⟩ b)   ≈⟨ comm-hom-term hh p b ⟩
-         ⟦ p ⟧₁ ⟨$⟩ (h ∘ b) ≈⟨ Apq (h ∘ b) ⟩
-         ⟦ q ⟧₁ ⟨$⟩ (h ∘ b) ≈˘⟨ comm-hom-term hh q b ⟩
-         h (⟦ q ⟧₂ ⟨$⟩ b)   ∎
+         h (⟦ p ⟧₂ ⟨$⟩ b)    ≈⟨ comm-hom-term hh p b ⟩
+         ⟦ p ⟧₁ ⟨$⟩ (h ∘ b)  ≈⟨ Apq (h ∘ b) ⟩
+         ⟦ q ⟧₁ ⟨$⟩ (h ∘ b)  ≈˘⟨ comm-hom-term hh q b ⟩
+         h (⟦ q ⟧₂ ⟨$⟩ b)    ∎
+
   goal : ⟦ p ⟧₂ ⟨$⟩ b ≈₂ ⟦ q ⟧₂ ⟨$⟩ b
   goal = ∥ B≤A ∥ (ξ b)
 
-
 \end{code}
 
-Next, identities modeled by a class of algebras is also modeled by all subalgebras of the class.  In other terms, every term equation `(p ≈̇ q)` that is satisfied by all `𝑨 ∈ 𝒦` is also satisfied by every subalgebra of a member of 𝒦.
+Next, identities modeled by a class of algebras is also modeled by all subalgebras
+of the class.  In other terms, every term equation `(p ≈̇ q)` that is satisfied by
+all `𝑨 ∈ 𝒦` is also satisfied by every subalgebra of a member of `𝒦`.
 
 \begin{code}
+
 module _ {X : Type χ}{p q : Term X} where
 
- ⊧-S-class-invar : {𝒦 : Pred (Algebra α ρᵃ) ℓ}
-  →                (𝒦 ⊫ (p ≈̇ q)) → ((𝑩 , _) : SubalgebrasOfClass 𝒦 {β}{ρᵇ})
-  →                𝑩 ⊧ (p ≈̇ q)
+ ⊧-S-class-invar :  {𝒦 : Pred (Algebra α ρᵃ) ℓ}
+  →                 (𝒦 ⊫ (p ≈̇ q)) → ((𝑩 , _) : SubalgebrasOfClass 𝒦 {β}{ρᵇ})
+  →                 𝑩 ⊧ (p ≈̇ q)
  ⊧-S-class-invar Kpq (𝑩 , 𝑨 , kA , B≤A) = ⊧-S-invar{p = p}{q} (Kpq 𝑨 kA) B≤A
-
 \end{code}
-
 
 
 #### <a id="product-invariance">Product invariance of ⊧</a>
@@ -191,20 +183,20 @@ module _ {X : Type χ}{p q : Term X}{I : Type ℓ}(𝒜 : I → Algebra α ρᵃ
  ⊧-P-invar : (∀ i → 𝒜 i ⊧ (p ≈̇ q)) → ⨅ 𝒜 ⊧ (p ≈̇ q)
  ⊧-P-invar 𝒜pq a = goal
   where
-  open Algebra (⨅ 𝒜) using () renaming ( Domain to ⨅A )
-  open Environment   (⨅ 𝒜) using () renaming ( ⟦_⟧ to ⟦_⟧₁ )
-  open Environment using ( ⟦_⟧ )
-  open Setoid ⨅A   using ( _≈_ )
+  open Algebra (⨅ 𝒜)      using () renaming ( Domain to ⨅A )
+  open Environment (⨅ 𝒜)  using () renaming ( ⟦_⟧ to ⟦_⟧₁ )
+  open Environment        using ( ⟦_⟧ )
+  open Setoid ⨅A          using ( _≈_ )
   open SetoidReasoning ⨅A
 
   ξ : (λ i → (⟦ 𝒜 i ⟧ p) ⟨$⟩ (λ x → (a x) i)) ≈ (λ i → (⟦ 𝒜 i ⟧ q) ⟨$⟩ (λ x → (a x) i))
   ξ = λ i → 𝒜pq i (λ x → (a x) i)
   goal : ⟦ p ⟧₁ ⟨$⟩ a ≈ ⟦ q ⟧₁ ⟨$⟩ a
   goal = begin
-          ⟦ p ⟧₁ ⟨$⟩ a ≈⟨ interp-prod 𝒜 p a ⟩
-          (λ i → (⟦ 𝒜 i ⟧ p) ⟨$⟩ (λ x → (a x) i)) ≈⟨ ξ ⟩
-          (λ i → (⟦ 𝒜 i ⟧ q) ⟨$⟩ (λ x → (a x) i)) ≈˘⟨ interp-prod 𝒜 q a ⟩
-          ⟦ q ⟧₁ ⟨$⟩ a ∎
+          ⟦ p ⟧₁ ⟨$⟩ a                             ≈⟨ interp-prod 𝒜 p a ⟩
+          (λ i → (⟦ 𝒜 i ⟧ p) ⟨$⟩ (λ x → (a x) i))  ≈⟨ ξ ⟩
+          (λ i → (⟦ 𝒜 i ⟧ q) ⟨$⟩ (λ x → (a x) i))  ≈˘⟨ interp-prod 𝒜 q a ⟩
+          ⟦ q ⟧₁ ⟨$⟩ a                             ∎
 
 \end{code}
 
@@ -212,8 +204,8 @@ An identity satisfied by all algebras in a class is also satisfied by the produc
 
 \begin{code}
 
- ⊧-P-class-invar : (𝒦 : Pred (Algebra α ρᵃ)(ov α))
-  →                𝒦 ⊫ (p ≈̇ q) → (∀ i → 𝒜 i ∈ 𝒦) → ⨅ 𝒜 ⊧ (p ≈̇ q)
+ ⊧-P-class-invar :  (𝒦 : Pred (Algebra α ρᵃ)(ov α))
+  →                 𝒦 ⊫ (p ≈̇ q) → (∀ i → 𝒜 i ∈ 𝒦) → ⨅ 𝒜 ⊧ (p ≈̇ q)
 
  ⊧-P-class-invar 𝒦 σ K𝒜 = ⊧-P-invar (λ i ρ → σ (𝒜 i) (K𝒜 i) ρ)
 
@@ -228,14 +220,14 @@ Another fact that will turn out to be useful is that a product of a collection o
   where
   Aipq : ∀ i → (𝒜 i) ⊧ (p ≈̇ q)
   Aipq i = ⊧-lower-invar{𝑨 = (𝒜 i)} p q (α i)
-
 \end{code}
-
 
 
 #### <a id="homomorphisc-invariance">Homomorphic invariance of ⊧</a>
 
-If an algebra 𝑨 models an identity (p ≈̇ q), then the pair (p , q) belongs to the kernel of every homomorphism φ : hom (𝑻 X) 𝑨 from the term algebra to 𝑨; that is, every homomorphism from 𝑻 X to 𝑨 maps p and q to the same element of 𝑨.
+If an algebra 𝑨 models an identity (p ≈̇ q), then the pair (p , q) belongs to the
+kernel of every homomorphism φ : hom (𝑻 X) 𝑨 from the term algebra to 𝑨; that is,
+every homomorphism from 𝑻 X to 𝑨 maps p and q to the same element of 𝑨.
 
  \begin{code}
 
@@ -246,18 +238,17 @@ module _ {X : Type χ}{p q : Term X}{𝑨 : Algebra α ρᵃ}(φh : hom (𝑻 X)
  ⊧-H-ker : 𝑨 ⊧ (p ≈̇ q) → φ p ≈ φ q
  ⊧-H-ker β =
   begin
-   φ p                ≈⟨ cong ∣ φh ∣ (term-agreement p)⟩
-   φ (⟦ p ⟧ ⟨$⟩ ℊ)    ≈⟨ comm-hom-term φh p ℊ ⟩
-   ⟦ p ⟧₂ ⟨$⟩ (φ ∘ ℊ) ≈⟨ β (φ ∘ ℊ) ⟩
-   ⟦ q ⟧₂ ⟨$⟩ (φ ∘ ℊ) ≈˘⟨ comm-hom-term φh q ℊ ⟩
-   φ (⟦ q ⟧ ⟨$⟩ ℊ)    ≈˘⟨ cong ∣ φh ∣ (term-agreement q)⟩
-   φ q                ∎
+   φ p                 ≈⟨ cong ∣ φh ∣ (term-agreement p)⟩
+   φ (⟦ p ⟧ ⟨$⟩ ℊ)     ≈⟨ comm-hom-term φh p ℊ ⟩
+   ⟦ p ⟧₂ ⟨$⟩ (φ ∘ ℊ)  ≈⟨ β (φ ∘ ℊ) ⟩
+   ⟦ q ⟧₂ ⟨$⟩ (φ ∘ ℊ)  ≈˘⟨ comm-hom-term φh q ℊ ⟩
+   φ (⟦ q ⟧ ⟨$⟩ ℊ)     ≈˘⟨ cong ∣ φh ∣ (term-agreement q)⟩
+   φ q                 ∎
 
   where
   open SetoidReasoning (Domain 𝑨)
-  open Environment 𝑨 using () renaming ( ⟦_⟧ to ⟦_⟧₂ )
-  open Environment (𝑻 X) using ( ⟦_⟧ )
-
+  open Environment 𝑨      using () renaming ( ⟦_⟧ to ⟦_⟧₂ )
+  open Environment (𝑻 X)  using ( ⟦_⟧ )
 \end{code}
 
 ---------------------------------

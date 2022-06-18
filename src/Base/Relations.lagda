@@ -18,10 +18,10 @@ Finally, in [Base.Relations.Quotients][] we define quotient types.
 
 module Base.Relations where
 
-open import Base.Relations.Discrete
-open import Base.Relations.Continuous
-open import Base.Relations.Properties
-open import Base.Relations.Quotients
+open import Base.Relations.Discrete    public
+open import Base.Relations.Continuous  public
+open import Base.Relations.Properties  public
+open import Base.Relations.Quotients   public
 
 \end{code}
 

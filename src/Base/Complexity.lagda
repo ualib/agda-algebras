@@ -15,8 +15,8 @@ This is the [Base.Complexity][] module of the [Agda Universal Algebra Library][]
 
 module Base.Complexity where
 
-open import Base.Complexity.Basic
-open import Base.Complexity.CSP
+open import Base.Complexity.Basic  public
+open import Base.Complexity.CSP    public
 
 \end{code}
 

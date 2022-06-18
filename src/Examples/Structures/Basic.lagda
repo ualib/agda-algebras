@@ -13,19 +13,19 @@ author: "agda-algebras development team"
 
 module Examples.Structures.Basic where
 
-open import Agda.Primitive  using ( Level ) renaming ( Set to Type ; lzero to ℓ₀ )
-open import Data.Product    using ( _,_ ; _×_  )
-open import Relation.Unary  using ( Pred ; _∈_ )
+open import Agda.Primitive                  using ( Level ) renaming ( Set to Type ; lzero to ℓ₀ )
+open import Data.Product                    using ( _,_ ; _×_  )
+open import Relation.Unary                  using ( Pred ; _∈_ )
 
-open import Base.Overture.Preliminaries          using ( 𝟚 ; 𝟛 )
-open import Base.Structures.Basic                using ( signature ; structure )
+open import Overture                        using ( 𝟚 ; 𝟛 )
+open import Base.Structures                 using ( signature ; structure )
 open import Examples.Structures.Signatures  using ( S001 ; S∅ ; S0001 )
 
 -- An example of a (purely) algebraic structure is a 3-element meet semilattice.
 
-SL : structure S001   -- (one binary operation symbol)
-               S∅     -- (no relation symbols)
-               {ρ = ℓ₀}
+SL : structure  S001   -- (one binary operation symbol)
+                S∅     -- (no relation symbols)
+                {ρ = ℓ₀}
 
 SL = record { carrier = 𝟛
             ; op = λ _ x → meet (x 𝟚.𝟎) (x 𝟚.𝟏)

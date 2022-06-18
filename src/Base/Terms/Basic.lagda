@@ -13,20 +13,20 @@ This is the [Base.Terms.Basic][] module of the [Agda Universal Algebra Library][
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic
+open import Overture using (Signature ; 𝓞 ; 𝓥 )
 
 module Base.Terms.Basic {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ----------------
-open import Agda.Primitive using ( Level ) renaming ( Set to Type )
-open import Data.Product   using ( _,_ )
+open import Agda.Primitive         using () renaming ( Set to Type )
+open import Data.Product           using ( _,_ )
+open import Level                  using ( Level )
 
 -- Imports from the Agda Universal Algebra Library ----------------
-open import Base.Overture.Preliminaries    using ( ∣_∣ ; ∥_∥ )
-open import Base.Algebras.Products {𝑆 = 𝑆} using ( ov )
+open import Overture          using ( ∣_∣ ; ∥_∥ )
+open import Base.Algebras {𝑆 = 𝑆}  using ( Algebra ; ov )
 
 private variable χ : Level
-
 \end{code}
 
 #### <a id="the-type-of-terms">The type of terms</a>
@@ -39,7 +39,7 @@ Let `S₀` denote the set of nullary operation symbols of `𝑆`. We define by i
 
 `𝑇₀ := X ∪ S₀` and `𝑇ₙ₊₁ := 𝑇ₙ ∪ 𝒯ₙ`
 
-where `𝒯ₙ` is the collection of all `f t` such that `f : ∣ 𝑆 ∣` and `t : ∥ 𝑆 ∥ f → 𝑇ₙ`. (Recall, `∥ 𝑆 ∥ f` is the arity of the operation symbol f.)
+where `𝒯ₙ` is the collection of all `f t` such that `f : ∣ 𝑆 ∣` and `t : ∥ 𝑆 ∥ f → 𝑇ₙ`. (Recall, `∥ 𝑆 ∥ f` is the arity of the operation symbol `f`.)
 
 We define the collection of *terms* in the signature `𝑆` over `X` by `Term X := ⋃ₙ 𝑇ₙ`. By an 𝑆-*term* we mean a term in the language of `𝑆`.
 
@@ -74,7 +74,6 @@ In [Agda][] the term algebra can be defined as simply as one could hope.
 
 𝑻 : (X : Type χ ) → Algebra (ov χ) 𝑆
 𝑻 X = Term X , node
-
 \end{code}
 
 ------------------------------

@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Setoid.Overture.Surjective module"
+title : "Setoid.Functions.Surjective module"
 date : "2021-09-13"
 author: "the agda-algebras development team"
 ---
 
 ### <a id="surjective-functions-on-setoids">Surjective functions on setoids</a>
 
-This is the [Setoid.Overture.Surjective][] module of the [agda-algebras][] library.
+This is the [Setoid.Functions.Surjective][] module of the [agda-algebras][] library.
 
 A *surjective function* from a setoid `𝑨 = (A, ≈₀)` to a setoid `𝑩 = (B, ≈₁)` is a function `f : 𝑨 ⟶ 𝑩` such that for all `b : B` there exists `a : A` such that `(f ⟨$⟩ a) ≈₁ b`.  In other words, the range and codomain of `f` agree.
 
@@ -15,23 +15,25 @@ A *surjective function* from a setoid `𝑨 = (A, ≈₀)` to a setoid `𝑩 = (
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Setoid.Overture.Surjective where
+module Setoid.Functions.Surjective where
 
 -- Imports from Agda and the Agda Standard Library --------------------------
-open import Agda.Primitive    using ( _⊔_ ; Level )  renaming ( Set to Type )
-open import Data.Product      using ( _,_ ; Σ-syntax )
-open import Function.Bundles  using ( Surjection )   renaming ( Func to _⟶_ )
-open import Function          using ( IsSurjection )
-open import Relation.Binary   using ( Setoid )
+open import Agda.Primitive   using () renaming ( Set to Type )
+open import Data.Product     using ( _,_ ; Σ-syntax )
+open import Function         using ( Surjection ; IsSurjection )
+                             renaming ( Func to _⟶_ )
+open import Level            using ( _⊔_ ; Level )
+open import Relation.Binary  using ( Setoid )
 
-open import Function.Construct.Composition using ()  renaming ( isSurjection to isOnto )
+open import Function.Construct.Composition renaming ( isSurjection to isOnto )
+ using ()
 
 import Function.Definitions as FD
 
 -- Imports from agda-algebras -----------------------------------------------
-open import Base.Overture.Preliminaries         using ( ∣_∣ ; ∥_∥ ; ∃-syntax ; transport )
-open import Setoid.Overture.Preliminaries  using ( _∘_ )
-open import Setoid.Overture.Inverses       using ( Img_∋_ ; Image_∋_ ; Inv ; InvIsInverseʳ )
+open import Overture                   using ( ∣_∣ ; ∥_∥ ; ∃-syntax ; transport )
+open import Setoid.Functions.Basic     using ( _∘_ )
+open import Setoid.Functions.Inverses  using ( Img_∋_ ; Image_∋_ ; Inv ; InvIsInverseʳ )
 
 
 private variable
@@ -41,17 +43,18 @@ open Image_∋_
 
 module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
 
- open Setoid 𝑨  using ()               renaming (Carrier to A; _≈_ to _≈₁_; isEquivalence to isEqA )
- open Setoid 𝑩  using ( trans ; sym )  renaming (Carrier to B; _≈_ to _≈₂_; isEquivalence to isEqB )
+ open Setoid 𝑨  renaming (Carrier to A; _≈_ to _≈₁_; isEquivalence to isEqA ) using ()
+ open Setoid 𝑩  renaming (Carrier to B; _≈_ to _≈₂_; isEquivalence to isEqB )
+                using ( trans ; sym )
 
  open Surjection {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝑨}{To = 𝑩}  renaming (f to _⟨$⟩_)
  open _⟶_ {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝑨}{To = 𝑩}         renaming (f to _⟨$⟩_ )
  open FD _≈₁_ _≈₂_
 
- isSurj : (A → B) →  Type (α ⊔ β ⊔ ρᵇ)
+ isSurj : (A → B) → Type (α ⊔ β ⊔ ρᵇ)
  isSurj f = ∀ {y} → Img_∋_ {𝑨 = 𝑨}{𝑩 = 𝑩} f y
 
- IsSurjective : (𝑨 ⟶ 𝑩) →  Type (α ⊔ β ⊔ ρᵇ)
+ IsSurjective : (𝑨 ⟶ 𝑩) → Type (α ⊔ β ⊔ ρᵇ)
  IsSurjective F = ∀ {y} → Image F ∋ y
 
  isSurj→IsSurjective : (F : 𝑨 ⟶ 𝑩) → isSurj (_⟨$⟩_ F) → IsSurjective F
@@ -76,12 +79,15 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
   g : 𝑨 ⟶ 𝑩
   g = (record { f = _⟨$⟩_ s ; cong = cong s })
   gE : IsSurjection _≈₁_ _≈₂_ (_⟨$⟩_ g)
-  IsSurjection.isCongruent gE = record { cong = cong g ; isEquivalence₁ = isEqA ; isEquivalence₂ = isEqB }
+  IsSurjection.isCongruent gE = record  { cong = cong g
+                                        ; isEquivalence₁ = isEqA
+                                        ; isEquivalence₂ = isEqB
+                                        }
   IsSurjection.surjective gE y = ∣ (surjective s) y ∣ , ∥ (surjective s) y ∥
 
 \end{code}
 
-With the next definition, we can represent a *right-inverse* of a surjective function.
+With the next definition we represent a *right-inverse* of a surjective setoid function.
 
 \begin{code}
 
@@ -94,7 +100,9 @@ Thus, a right-inverse of `f` is obtained by applying `Inv` to `f` and a proof of
 
 \begin{code}
 
- SurjInvIsInverseʳ : (f : 𝑨 ⟶ 𝑩)(fE : IsSurjective f) → ∀ {b} → (f ⟨$⟩ ((SurjInv f fE) b)) ≈₂ b
+ SurjInvIsInverseʳ :  (f : 𝑨 ⟶ 𝑩)(fE : IsSurjective f)
+  →                   ∀ {b} → (f ⟨$⟩ ((SurjInv f fE) b)) ≈₂ b
+
  SurjInvIsInverseʳ f fE = InvIsInverseʳ fE
 
 \end{code}
@@ -114,7 +122,9 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ}{𝑪 : Setoid γ ρᶜ
  open FD _≈₁_ _≈₂_
 
 
- ∘-IsSurjective : {G : 𝑨 ⟶ 𝑪}{H : 𝑪 ⟶ 𝑩} → IsSurjective G → IsSurjective H → IsSurjective (H ∘ G)
+ ∘-IsSurjective :  {G : 𝑨 ⟶ 𝑪}{H : 𝑪 ⟶ 𝑩}
+  →                IsSurjective G → IsSurjective H → IsSurjective (H ∘ G)
+
  ∘-IsSurjective {G} {H} gE hE {y} = Goal
   where
   mp : Image H ∋ y → Image H ∘ G ∋ y
@@ -141,8 +151,8 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ}{𝑪 : Setoid γ ρᶜ
   hgSurj = isOnto ∥ gSurj ∥ ∥ hSurj ∥
 
 
- epic-factor : (f : 𝑨 ⟶ 𝑩)(g : 𝑨 ⟶ 𝑪)(h : 𝑪 ⟶ 𝑩)
-  →            IsSurjective f → (∀ i → (f ⟨$⟩ i) ≈₂ ((h ∘ g) ⟨$⟩ i)) → IsSurjective h
+ epic-factor :  (f : 𝑨 ⟶ 𝑩)(g : 𝑨 ⟶ 𝑪)(h : 𝑪 ⟶ 𝑩)
+  →             IsSurjective f → (∀ i → (f ⟨$⟩ i) ≈₂ ((h ∘ g) ⟨$⟩ i)) → IsSurjective h
 
  epic-factor f g h fE compId {y} = Goal
   where
@@ -162,8 +172,8 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ}{𝑪 : Setoid γ ρᶜ
 
 --------------------------------------
 
-<span style="float:left;">[← Setoid.Overture.Injective](Setoid.Overture.Injective.html)</span>
-<span style="float:right;">[Setoid.Overture.Bijective →](Setoid.Overture.Bijective.html)</span>
+<span style="float:left;">[← Setoid.Functions.Injective](Setoid.Functions.Injective.html)</span>
+<span style="float:right;">[Setoid.Functions.Bijective →](Setoid.Functions.Bijective.html)</span>
 
 {% include UALib.Links.md %}
 

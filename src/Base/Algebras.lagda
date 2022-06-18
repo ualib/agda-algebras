@@ -13,11 +13,13 @@ This is the [Base.Algebras][] module of the [Agda Universal Algebra Library][] i
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Base.Algebras where
+open import Overture  using ( 𝓞 ; 𝓥 ; Signature )
 
-open import Base.Algebras.Basic
-open import Base.Algebras.Products
-open import Base.Algebras.Congruences
+module Base.Algebras {𝑆 : Signature 𝓞 𝓥 } where
+
+open import Base.Algebras.Basic        {𝑆 = 𝑆} public
+open import Base.Algebras.Products     {𝑆 = 𝑆} public
+open import Base.Algebras.Congruences  {𝑆 = 𝑆} public
 
 \end{code}
 

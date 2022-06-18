@@ -11,36 +11,35 @@ author: "agda-algebras development team"
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-open import Base.Algebras.Basic using (𝓞 ; 𝓥 ; Signature )
+open import Overture using (𝓞 ; 𝓥 ; Signature )
 
 module Base.Subalgebras.Properties {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library -------------------------------
-open import Agda.Primitive   using ( _⊔_ ; lsuc ; Level ) renaming ( Set to Type )
 open import Data.Product     using ( _,_ ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Function.Base    using ( _∘_ ; id ; flip )
-open import Function.Bundles using ( Injection )
+open import Function         using ( _∘_ ; id ; flip ; Injection )
+open import Level            using ( Level; _⊔_ )
 open import Relation.Unary   using ( Pred ; _⊆_ )
-open import Relation.Binary.Definitions
-                             using ( _Respectsʳ_ ; _Respectsˡ_ )
-open import Relation.Binary.PropositionalEquality
-                             using ( _≡_ ; refl ; module ≡-Reasoning ; cong )
+open import Relation.Binary  using ( _Respectsʳ_ ; _Respectsˡ_ )
+
+open  import Relation.Binary.PropositionalEquality as ≡
+      using ( _≡_ ; module ≡-Reasoning )
 
 -- Imports from the Agda Universal Algebra Library --------------------
-open import Base.Overture.Preliminaries             using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
-open import Base.Overture.Injective                 using (  id-is-injective ; IsInjective ; ∘-injective )
-open import Base.Algebras.Basic                     using ( Algebra ; Lift-Alg )
-open import Base.Algebras.Products          {𝑆 = 𝑆} using ( ov )
-open import Base.Homomorphisms.Basic        {𝑆 = 𝑆} using ( is-homomorphism )
-open import Base.Homomorphisms.Properties   {𝑆 = 𝑆} using ( ∘-hom ; ∘-is-hom )
-open import Base.Homomorphisms.Isomorphisms {𝑆 = 𝑆} using ( _≅_ ; ≅toInjective ; ≅fromInjective ; ≅-refl
-                                                     ; ≅-sym ; ≅-trans ; Lift-≅ ; mkiso )
-open import Base.Subalgebras.Subalgebras    {𝑆 = 𝑆} using ( _≤_ ; _≥_ ; _IsSubalgebraOfClass_ )
+open  import Overture        using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
+open  import Base.Functions  using ( id-is-injective ; IsInjective ; ∘-injective )
+
+open  import Base.Algebras       {𝑆 = 𝑆}  using ( Algebra ; Lift-Alg ; ov )
+open  import Base.Homomorphisms  {𝑆 = 𝑆}  using ( is-homomorphism ; ∘-hom )
+                                          using ( ∘-is-hom ; _≅_ ; ≅toInjective )
+                                          using ( ≅fromInjective ; ≅-refl ; ≅-sym )
+                                          using ( ≅-trans ; Lift-≅ ; mkiso )
+open  import Base.Subalgebras.Subalgebras
+                                 {𝑆 = 𝑆}  using  ( _≤_ ; _≥_ ; _IsSubalgebraOfClass_ )
 
 private variable α β γ 𝓧 : Level
 
-
--- The subalgebra relation is a *preorder*, i.e., a reflexive transitive binary relation.
+-- The subalgebra relation is a *preorder* (a reflexive, transitive, binary relation).
 
 open _≅_
 
@@ -51,17 +50,18 @@ open _≅_
 ≥-refl φ = (from φ) , ≅fromInjective φ
 
 ≤-reflexive : (𝑨 : Algebra α 𝑆) → 𝑨 ≤ 𝑨
-≤-reflexive 𝑨 = (id , λ 𝑓 𝑎 → refl) , Injection.injective id-is-injective
+≤-reflexive 𝑨 = (id , λ 𝑓 𝑎 → ≡.refl) , Injection.injective id-is-injective
 
-≤-trans : (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}(𝑪 : Algebra γ 𝑆)
- →        𝑨 ≤ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
+≤-trans :  (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}(𝑪 : Algebra γ 𝑆)
+ →         𝑨 ≤ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
+
 ≤-trans 𝑨 𝑪 A≤B B≤C = (∘-hom 𝑨 𝑪 ∣ A≤B ∣ ∣ B≤C ∣) , ∘-injective ∥ A≤B ∥ ∥ B≤C ∥
 
 
-≥-trans : (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}(𝑪 : Algebra γ 𝑆)
- →        𝑨 ≥ 𝑩 → 𝑩 ≥ 𝑪 → 𝑨 ≥ 𝑪
-≥-trans 𝑨 𝑪 A≥B B≥C = ≤-trans 𝑪 𝑨 B≥C A≥B
+≥-trans :  (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}(𝑪 : Algebra γ 𝑆)
+ →         𝑨 ≥ 𝑩 → 𝑩 ≥ 𝑪 → 𝑨 ≥ 𝑪
 
+≥-trans 𝑨 𝑪 A≥B B≥C = ≤-trans 𝑪 𝑨 B≥C A≥B
 \end{code}
 
 #### <a id="relations-between">Relations between ≤, ≥, and ≅</a>
@@ -91,8 +91,9 @@ module _ {α : Level} where
 
 \end{code}
 
-Here are some consequences of the fact that `_≤_` and `_≥_` are preorders relative to `_≅_`.
-These are essentially equivalent variations on the following obvious fact: If two algebras are isomorphic and one of them is a subalgebra, then so is the other.
+Here are some consequences of the fact that `_≤_` and `_≥_` are preorders relative
+to `_≅_`. These are essentially equivalent variations on the following obvious fact:
+If two algebras are isomorphic and one of them is a subalgebra, then so is the other.
 
 \begin{code}
 
@@ -111,7 +112,6 @@ These are essentially equivalent variations on the following obvious fact: If tw
  -- 2b. If 𝑩 ≅ 𝑪  and 𝑩 ≤ 𝑨, then  𝑪 ≤ 𝑨
  ≅-resp-≤ : _≤_ Respectsˡ _≅_
  ≅-resp-≤ {𝑨} = ≥-resp-≅ {𝑨}
-
 \end{code}
 
 #### <a id="relations-between-polymorphic-versions)">Relations between ≤, ≥, and ≅ (universe-polymorphic versions)</a>
@@ -135,19 +135,19 @@ module _ {𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆}{𝑪 : Algebra γ 𝑆
 
 
 open ≡-Reasoning
-iso→injective : {𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆}
- →              (φ : 𝑨 ≅ 𝑩) → IsInjective ∣ to φ ∣
+iso→injective :  {𝑨 : Algebra α 𝑆}{𝑩 : Algebra β 𝑆}
+ →               (φ : 𝑨 ≅ 𝑩) → IsInjective ∣ to φ ∣
+
 iso→injective {𝑨 = 𝑨} (mkiso f g f∼g g∼f) {x} {y} fxfy =
  x                  ≡⟨ (g∼f x)⁻¹ ⟩
- (∣ g ∣ ∘ ∣ f ∣) x  ≡⟨ cong ∣ g ∣ fxfy ⟩
+ (∣ g ∣ ∘ ∣ f ∣) x  ≡⟨ ≡.cong ∣ g ∣ fxfy ⟩
  (∣ g ∣ ∘ ∣ f ∣) y  ≡⟨ g∼f y ⟩
  y                  ∎
 
-≤-mono : (𝑩 : Algebra β 𝑆){𝒦 𝒦' : Pred (Algebra α 𝑆) γ}
- →       𝒦 ⊆ 𝒦' → 𝑩 IsSubalgebraOfClass 𝒦 → 𝑩 IsSubalgebraOfClass 𝒦'
+≤-mono :  (𝑩 : Algebra β 𝑆){𝒦 𝒦' : Pred (Algebra α 𝑆) γ}
+ →        𝒦 ⊆ 𝒦' → 𝑩 IsSubalgebraOfClass 𝒦 → 𝑩 IsSubalgebraOfClass 𝒦'
 
 ≤-mono 𝑩 KK' KB = ∣ KB ∣ , fst ∥ KB ∥ , KK' (∣ snd ∥ KB ∥ ∣) , ∥ (snd ∥ KB ∥) ∥
-
 \end{code}
 
 #### <a id="lifts-of-subalgebras">Lifts of subalgebras</a>
@@ -165,11 +165,10 @@ module _ {𝒦 : Pred (Algebra α 𝑆)(ov α)}{𝑩 : Algebra α 𝑆} where
 ≥-Lift : (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}{ℓ : Level} → 𝑨 ≥ 𝑩 → 𝑨 ≥ Lift-Alg 𝑩 ℓ
 ≥-Lift 𝑨 a>b = ≥-RESP-≅{𝑨 = 𝑨} a>b Lift-≅
 
-Lift-≤-Lift : {𝑨 : Algebra α 𝑆}(ℓᵃ : Level){𝑩 : Algebra β 𝑆}(ℓᵇ : Level)
- →            𝑨 ≤ 𝑩 → Lift-Alg 𝑨 ℓᵃ ≤ Lift-Alg 𝑩 ℓᵇ
+Lift-≤-Lift :  {𝑨 : Algebra α 𝑆}(ℓᵃ : Level){𝑩 : Algebra β 𝑆}(ℓᵇ : Level)
+ →             𝑨 ≤ 𝑩 → Lift-Alg 𝑨 ℓᵃ ≤ Lift-Alg 𝑩 ℓᵇ
 
 Lift-≤-Lift ℓᵃ {𝑩} ℓᵇ a<b = ≥-Lift (Lift-Alg 𝑩 ℓᵇ) (≤-Lift 𝑩 a<b)
-
 \end{code}
 
 ---------------------------------

@@ -13,12 +13,13 @@ This is the [Base.Subalgebras][] module of the [Agda Universal Algebra Library][
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-module Base.Subalgebras where
+open import Overture using ( Signature ; 𝓞 ; 𝓥 )
 
-open import Base.Subalgebras.Subuniverses
-open import Base.Subalgebras.Subalgebras
-open import Base.Subalgebras.Properties
+module Base.Subalgebras {𝑆 : Signature 𝓞 𝓥} where
 
+open import Base.Subalgebras.Subuniverses  {𝑆 = 𝑆} public
+open import Base.Subalgebras.Subalgebras   {𝑆 = 𝑆} public
+open import Base.Subalgebras.Properties    {𝑆 = 𝑆} public
 \end{code}
 
 --------------------------------------

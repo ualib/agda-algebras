@@ -11,8 +11,8 @@ This is the [Base.Structures.Graphs0][] module of the [Agda Universal Algebra Li
 
 N.B. This module differs from Graphs.lagda in that here we assume some universes are level zero (i.e., ℓ₀). This simplifies some things; e.g., we avoid having to use lift and lower (cf. [Base/Structures/Graphs.lagda][])
 
-Definition [Graph of a structure]. Let 𝑨 be an (𝑅,𝐹)-structure (relations from 𝑅 and operations from 𝐹).
-The *graph* of 𝑨 is the structure Gr 𝑨 with the same domain as 𝑨 with relations from 𝑅 and together with a (k+1)-ary relation symbol G 𝑓 for each 𝑓 ∈ 𝐹 of arity k, which is interpreted in Gr 𝑨 as all tuples (t , y) ∈ Aᵏ⁺¹ such that 𝑓 t ≡ y. (See also Definition 2 of https://arxiv.org/pdf/2010.04958v2.pdf)
+Definition [Graph of a structure]. Let `𝑨` be an `(𝑅,𝐹)`-structure (relations from `𝑅` and operations from `𝐹`).
+The *graph* of `𝑨` is the structure `Gr 𝑨` with the same domain as `𝑨` with relations from `𝑅` and together with a `(k+1)`-ary relation symbol `G 𝑓` for each `𝑓 ∈ 𝐹` of arity `k`, which is interpreted in `Gr 𝑨` as all tuples `(t , y) ∈ Aᵏ⁺¹` such that `𝑓 t ≡ y`. (See also Definition 2 of https://arxiv.org/pdf/2010.04958v2.pdf)
 
 
 \begin{code}
@@ -22,41 +22,36 @@ The *graph* of 𝑨 is the structure Gr 𝑨 with the same domain as 𝑨 with r
 module Base.Structures.Graphs0 where
 
 -- Imports from Agda and the Agda Standard Library -------------------------------------------
-open import Agda.Primitive using ( _⊔_ ; Level ) renaming ( Set to Type ; lzero to ℓ₀ )
-open import Data.Product   using ( _,_ ; _×_ ; Σ-syntax )
-open import Data.Sum.Base  using ( _⊎_ ) renaming ( inj₁ to inl ; inj₂ to inr )
-open import Data.Fin.Base  using ( Fin )
-open import Data.Nat       using ( ℕ )
-open import Data.Unit.Base using ( ⊤ ; tt )
-open import Function.Base  using ( _∘_ )
-open import Relation.Unary using ( Pred ; _∈_ )
+open import Agda.Primitive  using () renaming ( Set to Type ; lzero to ℓ₀ )
+open import Data.Product    using ( _,_ ; _×_ ; Σ-syntax )
+open import Data.Sum.Base   using ( _⊎_ ) renaming ( inj₁ to inl ; inj₂ to inr )
+open import Data.Fin.Base   using ( Fin )
+open import Data.Nat        using ( ℕ )
+open import Data.Unit.Base  using ( ⊤ ; tt )
+open import Function.Base   using ( _∘_ )
+open import Relation.Unary  using ( Pred ; _∈_ )
 open import Relation.Binary.PropositionalEquality
-                           using ( _≡_ ; module ≡-Reasoning ; cong ; sym ; refl )
+                            using ( _≡_ ; module ≡-Reasoning ; cong ; sym ; refl )
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
-open import Base.Overture.Preliminaries     using ( ∣_∣ ; ∥_∥ )
-open import Base.Relations.Continuous       using ( Rel )
+open import Overture                        using ( ∣_∣ ; ∥_∥ )
+open import Base.Relations                  using ( Rel )
 open import Base.Structures.Basic           using ( signature ; structure )
 open import Base.Structures.Homs            using ( hom ; is-hom-rel ; is-hom-op )
 open import Examples.Structures.Signatures  using ( S∅ )
 
-
-open signature
-open structure
-open _⊎_
+open signature ; open structure ; open _⊎_
 
 Gr-sig : signature ℓ₀ ℓ₀ → signature ℓ₀ ℓ₀ → signature ℓ₀ ℓ₀
 
-Gr-sig 𝐹 𝑅 = record { symbol = symbol 𝑅 ⊎ symbol 𝐹
-                    ; arity  = ar }
+Gr-sig 𝐹 𝑅 = record  { symbol = symbol 𝑅 ⊎ symbol 𝐹
+                     ; arity  = ar }
  where
  ar : symbol 𝑅 ⊎ symbol 𝐹 → Type ℓ₀
  ar (inl 𝑟) = (arity 𝑅) 𝑟
  ar (inr 𝑓) = (arity 𝐹) 𝑓 ⊎ ⊤
 
-
-private variable
- 𝐹 𝑅 : signature ℓ₀ ℓ₀
+private variable 𝐹 𝑅 : signature ℓ₀ ℓ₀
 
 Gr : structure 𝐹 𝑅 {ℓ₀} {ℓ₀} → structure S∅ (Gr-sig 𝐹 𝑅) {ℓ₀} {ℓ₀}
 Gr {𝐹}{𝑅} 𝑨 = record { carrier = carrier 𝑨 ; op = λ () ; rel = split }
@@ -64,7 +59,6 @@ Gr {𝐹}{𝑅} 𝑨 = record { carrier = carrier 𝑨 ; op = λ () ; rel = spli
   split : (s : symbol 𝑅 ⊎ symbol 𝐹) → Rel (carrier 𝑨) (arity (Gr-sig 𝐹 𝑅) s) {ℓ₀}
   split (inl 𝑟) arg = rel 𝑨 𝑟 arg
   split (inr 𝑓) args = op 𝑨 𝑓 (args ∘ inl) ≡ args (inr tt)
-
 
 open ≡-Reasoning
 
@@ -81,13 +75,12 @@ module _ {𝑨 𝑩 : structure 𝐹 𝑅 {ℓ₀}{ℓ₀}} where
    homop = ∥ hhom ∥ 𝑓 (a ∘ inl)
 
    goal : op 𝑩 𝑓 (h ∘ (a ∘ inl)) ≡ h (a (inr tt))
-   goal = op 𝑩 𝑓 (h ∘ (a ∘ inl)) ≡⟨ sym homop ⟩
-          h (op 𝑨 𝑓 (a ∘ inl))   ≡⟨ cong h x ⟩
-          h (a (inr tt))         ∎
+   goal =  op 𝑩 𝑓 (h ∘ (a ∘ inl))  ≡⟨ sym homop ⟩
+           h (op 𝑨 𝑓 (a ∘ inl))    ≡⟨ cong h x ⟩
+           h (a (inr tt))          ∎
 
   ii : is-hom-op (Gr 𝑨) (Gr 𝑩) h
   ii = λ ()
-
 
  Grhom→hom : hom (Gr 𝑨) (Gr 𝑩) → hom 𝑨 𝑩
  Grhom→hom (h , hhom) = h , (i , ii)

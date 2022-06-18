@@ -15,14 +15,13 @@ This is the [Setoid.Relations][] module of the [Agda Universal Algebra Library][
 
 module Setoid.Relations where
 
-open import Setoid.Relations.Discrete public
-open import Setoid.Relations.Quotients public
-
+open import Setoid.Relations.Discrete   public
+open import Setoid.Relations.Quotients  public
 \end{code}
 
 -------------------------------------
 
-<span style="float:left;">[← Setoid.Overture.Transformers](Setoid.Overture.Transformers.html)</span>
+<span style="float:left;">[↑ Setoid](Setoid.html)</span>
 <span style="float:right;">[Setoid.Relations.Discrete →](Setoid.Relations.Discrete.html)</span>
 
 {% include UALib.Links.md %}

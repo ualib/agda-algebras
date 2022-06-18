@@ -16,22 +16,20 @@ This is the [Base.Relations.Quotients][] module of the [Agda Universal Algebra L
 module Base.Relations.Quotients where
 
 -- Imports from Agda and the Agda Standard Library  ----------------------------------------------
+open import Agda.Primitive  using () renaming ( Set to Type )
 open import Data.Product    using ( _,_ ; _×_ ; Σ-syntax ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Agda.Primitive  using ( _⊔_ ; Level ; lsuc ) renaming ( Set to Type )
-open import Level           using ()
+open import Level           using ( Level ; _⊔_ ; suc )
 open import Relation.Binary using ( IsEquivalence ; IsPartialEquivalence) renaming ( Rel to BinRel )
 open import Relation.Unary  using ( Pred ; _⊆_ )
 open import Relation.Binary.PropositionalEquality as PE
                             using ( _≡_ )
 
 -- Imports from agda-algebras ---------------------------------------------------------------------
-open import Base.Overture.Preliminaries  using  ( ∣_∣ )
-open import Base.Relations.Discrete      using  ( ker ; 0[_] ; kerlift )
-open import Base.Relations.Properties       using  ( Reflexive ; Symmetric ; Transitive )
+open import Overture                   using ( ∣_∣ )
+open import Base.Relations.Discrete    using ( ker ; 0[_] ; kerlift )
+open import Base.Relations.Properties  using ( Reflexive ; Symmetric ; Transitive )
 
-private variable
- α β χ : Level
-
+private variable α β χ : Level
 \end{code}
 
 #### <a id="equivalence-relations">Equivalence relations</a>
@@ -45,7 +43,7 @@ is a proof that `r` satisfies `IsEquivalence`.
 
 \begin{code}
 
-Equivalence : Type α → {ρ : Level} → Type (α ⊔ lsuc ρ)
+Equivalence : Type α → {ρ : Level} → Type (α ⊔ suc ρ)
 Equivalence A {ρ} = Σ[ r ∈ BinRel A ρ ] IsEquivalence r
 
 \end{code}
@@ -86,17 +84,18 @@ A prominent example of an equivalence relation is the kernel of any function.
 
 open Level
 ker-IsEquivalence : {A : Type α}{B : Type β}(f : A → B) → IsEquivalence (ker f)
-ker-IsEquivalence f = record { refl = PE.refl
-                             ; sym = λ x → PE.sym x
-                             ; trans = λ x y → PE.trans x y
-                             }
+ker-IsEquivalence f = record  { refl = PE.refl
+                              ; sym = λ x → PE.sym x
+                              ; trans = λ x y → PE.trans x y
+                              }
 
-kerlift-IsEquivalence : {A : Type α}{B : Type β}(f : A → B){ρ : Level} → IsEquivalence (kerlift f ρ)
-kerlift-IsEquivalence f = record { refl = lift PE.refl
-                                 ; sym = λ x → lift (PE.sym (lower x))
-                                 ; trans = λ x y → lift (PE.trans (lower x) (lower y))
-                                 }
+kerlift-IsEquivalence :  {A : Type α}{B : Type β}(f : A → B){ρ : Level}
+ →                       IsEquivalence (kerlift f ρ)
 
+kerlift-IsEquivalence f = record  { refl = lift PE.refl
+                                  ; sym = λ x → lift (PE.sym (lower x))
+                                  ; trans = λ x y → lift (PE.trans (lower x) (lower y))
+                                  }
 \end{code}
 
 
@@ -135,7 +134,8 @@ We represent this characterization of an `R`-block as follows.
 
 \begin{code}
 
-record IsBlock {A : Type α}{ρ : Level}(P : Pred A ρ){R : BinRel A ρ} : Type(α ⊔ lsuc ρ) where
+record IsBlock  {A : Type α}{ρ : Level}
+                (P : Pred A ρ){R : BinRel A ρ} : Type(α ⊔ suc ρ) where
  constructor mkblk
  field
   blk : A
@@ -149,10 +149,10 @@ denoted by `A / R` and is defined to be the collection `{[ u ] ∣  y : A}` of a
 
 \begin{code}
 
-Quotient : (A : Type α){ρ : Level} → Equivalence A{ρ} → Type(α ⊔ lsuc ρ)
+Quotient : (A : Type α){ρ : Level} → Equivalence A{ρ} → Type(α ⊔ suc ρ)
 Quotient A R = Σ[ P ∈ Pred A _ ] IsBlock P {∣ R ∣}
 
-_/_ : (A : Type α){ρ : Level} → BinRel A ρ → Type(α ⊔ lsuc ρ)
+_/_ : (A : Type α){ρ : Level} → BinRel A ρ → Type(α ⊔ suc ρ)
 A / R = Σ[ P ∈ Pred A _ ] IsBlock P {R}
 
 infix -1 _/_
@@ -181,9 +181,9 @@ Here `C` is a predicate and `p` is a proof of `C ≡ [ a ] R`.
 
 \begin{code}
 
-module _ {A : Type α}
-         {ρ : Level}    -- note: ρ is an implicit parameter
-         {R : Equivalence A {ρ}} where
+module _  {A : Type α}
+          {ρ : Level}    -- note: ρ is an implicit parameter
+          {R : Equivalence A {ρ}} where
 
  open IsEquivalence
  []-⊆ : (x y : A) → ∣ R ∣ x y → [ x ]{ρ} ∣ R ∣ ⊆  [ y ] ∣ R ∣
@@ -214,10 +214,10 @@ This is obviously an equivalence relation, as we now confirm.
 \begin{code}
 
 0[_]IsEquivalence : (A : Type α){ρ : Level} → IsEquivalence (0[ A ] {ρ})
-0[ A ]IsEquivalence {ρ} = record { refl = lift PE.refl
-                                 ; sym = λ p → lift (PE.sym (lower p))
-                                 ; trans = λ p q → lift (PE.trans (lower p) (lower q))
-                                 }
+0[ A ]IsEquivalence {ρ} = record  { refl = lift PE.refl
+                                  ; sym = λ p → lift (PE.sym (lower p))
+                                  ; trans = λ p q → lift (PE.trans (lower p) (lower q))
+                                  }
 
 0[_]Equivalence : (A : Type α) {ρ : Level} → Equivalence A {α ⊔ ρ}
 0[ A ]Equivalence {ρ} = 0[ A ] {ρ} , 0[ A ]IsEquivalence
@@ -228,10 +228,8 @@ This is obviously an equivalence relation, as we now confirm.
 
 ⟪ u ∼ .u ⟫-elim {ρ} {R} PE.refl = IsEquivalence.refl (snd R)
 
-
 ≡→⊆ : {A : Type α}{ρ : Level}(Q R : Pred A ρ) → Q ≡ R → Q ⊆ R
 ≡→⊆ Q .Q PE.refl {x} Qx = Qx
-
 \end{code}
 
 

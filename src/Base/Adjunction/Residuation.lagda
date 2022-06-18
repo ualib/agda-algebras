@@ -16,10 +16,11 @@ This is the [Base.Adjunction.Residuation][] module of the [Agda Universal Algebr
 module Base.Adjunction.Residuation where
 
 -- Imports from Agda and the Agda Standard Library --------------------------------------
-open import Agda.Primitive          using ( _⊔_ ;  Level ; lsuc) renaming ( Set to Type )
-open import Function.Base           using ( _on_ ; _∘_ )
-open import Relation.Binary.Bundles using ( Poset )
-open import Relation.Binary.Core    using ( _Preserves_⟶_ )
+open import Agda.Primitive           using () renaming ( Set to Type )
+open import Function.Base            using ( _on_ ; _∘_ )
+open import Level                    using ( Level ; _⊔_ ; suc )
+open import Relation.Binary.Bundles  using ( Poset )
+open import Relation.Binary.Core     using ( _Preserves_⟶_ )
 
 -- Imports from the Agda Universal Algebra Library --------------------------------------
 open import Base.Relations.Discrete using ( PointWise )
@@ -33,15 +34,14 @@ module _ (A : Poset α ιᵃ ρᵃ)(B : Poset β ιᵇ ρᵇ) where
   _≤A_ = _≤_ A
   _≤B_ = _≤_ B
 
- record Residuation : Type (lsuc (α ⊔ ρᵃ ⊔ β ⊔ ρᵇ))  where
+ record Residuation : Type (suc (α ⊔ ρᵃ ⊔ β ⊔ ρᵇ))  where
   field
-   f     : Carrier A → Carrier B
-   g     : Carrier B → Carrier A
-   fhom  : f Preserves _≤A_ ⟶ _≤B_
-   ghom  : g Preserves _≤B_ ⟶ _≤A_
-   gf≥id : ∀ a → a ≤A g (f a)
-   fg≤id : ∀ b → f (g b) ≤B b
-
+   f      : Carrier A → Carrier B
+   g      : Carrier B → Carrier A
+   fhom   : f Preserves _≤A_ ⟶ _≤B_
+   ghom   : g Preserves _≤B_ ⟶ _≤A_
+   gf≥id  : ∀ a → a ≤A g (f a)
+   fg≤id  : ∀ b → f (g b) ≤B b
 \end{code}
 
 
@@ -90,7 +90,6 @@ In a ring `R`, if `x y : R` and if `x y x = x`, then `y` is called a *weak inver
   lt = ghom R (fg≤id R b)
   gt : 𝑔 b ≤A 𝑔 (𝑓 (𝑔 b))
   gt = gf≥id R (𝑔 b)
-
 \end{code}
 
 ------------------------------------------

@@ -19,7 +19,7 @@ The purpose of this effort twofold. First, we hope it makes the types defined in
 
 module Base.Categories where
 
-open import Base.Categories.Functors
+open import Base.Categories.Functors  public
 
 \end{code}
 
