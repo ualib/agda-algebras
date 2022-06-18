@@ -13,11 +13,13 @@ This is the [Base.Terms][] module of the [Agda Universal Algebra Library][].
 
 <a id="292" class="Symbol">{-#</a> <a id="296" class="Keyword">OPTIONS</a> <a id="304" class="Pragma">--without-K</a> <a id="316" class="Pragma">--exact-split</a> <a id="330" class="Pragma">--safe</a> <a id="337" class="Symbol">#-}</a>
 
-<a id="342" class="Keyword">module</a> <a id="349" href="Base.Terms.html" class="Module">Base.Terms</a> <a id="360" class="Keyword">where</a>
+<a id="342" class="Keyword">open</a> <a id="347" class="Keyword">import</a> <a id="354" href="Overture.html" class="Module">Overture</a> <a id="363" class="Keyword">using</a> <a id="369" class="Symbol">(</a><a id="370" href="Overture.Signatures.html#3171" class="Function">Signature</a> <a id="380" class="Symbol">;</a> <a id="382" href="Overture.Signatures.html#520" class="Generalizable">𝓞</a> <a id="384" class="Symbol">;</a> <a id="386" href="Overture.Signatures.html#522" class="Generalizable">𝓥</a> <a id="388" class="Symbol">)</a>
 
-<a id="367" class="Keyword">open</a> <a id="372" class="Keyword">import</a> <a id="379" href="Base.Terms.Basic.html" class="Module">Base.Terms.Basic</a>
-<a id="396" class="Keyword">open</a> <a id="401" class="Keyword">import</a> <a id="408" href="Base.Terms.Properties.html" class="Module">Base.Terms.Properties</a>
-<a id="430" class="Keyword">open</a> <a id="435" class="Keyword">import</a> <a id="442" href="Base.Terms.Operations.html" class="Module">Base.Terms.Operations</a>
+<a id="391" class="Keyword">module</a> <a id="398" href="Base.Terms.html" class="Module">Base.Terms</a> <a id="409" class="Symbol">{</a><a id="410" href="Base.Terms.html#410" class="Bound">𝑆</a> <a id="412" class="Symbol">:</a> <a id="414" href="Overture.Signatures.html#3171" class="Function">Signature</a> <a id="424" href="Overture.Signatures.html#520" class="Generalizable">𝓞</a> <a id="426" href="Overture.Signatures.html#522" class="Generalizable">𝓥</a><a id="427" class="Symbol">}</a> <a id="429" class="Keyword">where</a>
+
+<a id="436" class="Keyword">open</a> <a id="441" class="Keyword">import</a> <a id="448" href="Base.Terms.Basic.html" class="Module">Base.Terms.Basic</a>       <a id="471" class="Symbol">{</a><a id="472" class="Argument">𝑆</a> <a id="474" class="Symbol">=</a> <a id="476" href="Base.Terms.html#410" class="Bound">𝑆</a><a id="477" class="Symbol">}</a> <a id="479" class="Keyword">public</a>
+<a id="486" class="Keyword">open</a> <a id="491" class="Keyword">import</a> <a id="498" href="Base.Terms.Properties.html" class="Module">Base.Terms.Properties</a>  <a id="521" class="Symbol">{</a><a id="522" class="Argument">𝑆</a> <a id="524" class="Symbol">=</a> <a id="526" href="Base.Terms.html#410" class="Bound">𝑆</a><a id="527" class="Symbol">}</a> <a id="529" class="Keyword">public</a>
+<a id="536" class="Keyword">open</a> <a id="541" class="Keyword">import</a> <a id="548" href="Base.Terms.Operations.html" class="Module">Base.Terms.Operations</a>  <a id="571" class="Symbol">{</a><a id="572" class="Argument">𝑆</a> <a id="574" class="Symbol">=</a> <a id="576" href="Base.Terms.html#410" class="Bound">𝑆</a><a id="577" class="Symbol">}</a> <a id="579" class="Keyword">public</a>
 
 </pre>
 

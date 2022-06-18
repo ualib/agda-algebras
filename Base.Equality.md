@@ -15,12 +15,10 @@ This is the [Base.Equality][] module of the [Agda Universal Algebra Library][].
 
 <a id="334" class="Keyword">module</a> <a id="341" href="Base.Equality.html" class="Module">Base.Equality</a> <a id="355" class="Keyword">where</a>
 
-<a id="362" class="Keyword">open</a> <a id="367" class="Keyword">import</a> <a id="374" href="Base.Equality.Welldefined.html" class="Module">Base.Equality.Welldefined</a> <a id="400" class="Keyword">public</a>
-<a id="407" class="Keyword">open</a> <a id="412" class="Keyword">import</a> <a id="419" href="Base.Equality.Truncation.html" class="Module">Base.Equality.Truncation</a> <a id="444" class="Keyword">public</a>
-<a id="451" class="Keyword">open</a> <a id="456" class="Keyword">import</a> <a id="463" href="Base.Equality.Extensionality.html" class="Module">Base.Equality.Extensionality</a> <a id="492" class="Keyword">public</a>
-
+<a id="362" class="Keyword">open</a> <a id="367" class="Keyword">import</a> <a id="374" href="Base.Equality.Welldefined.html" class="Module">Base.Equality.Welldefined</a>     <a id="404" class="Keyword">public</a>
+<a id="411" class="Keyword">open</a> <a id="416" class="Keyword">import</a> <a id="423" href="Base.Equality.Truncation.html" class="Module">Base.Equality.Truncation</a>      <a id="453" class="Keyword">public</a>
+<a id="460" class="Keyword">open</a> <a id="465" class="Keyword">import</a> <a id="472" href="Base.Equality.Extensionality.html" class="Module">Base.Equality.Extensionality</a>  <a id="502" class="Keyword">public</a>
 </pre>
-
 
 -------------------------------------
 

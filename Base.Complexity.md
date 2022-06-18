@@ -15,8 +15,8 @@ This is the [Base.Complexity][] module of the [Agda Universal Algebra Library][]
 
 <a id="386" class="Keyword">module</a> <a id="393" href="Base.Complexity.html" class="Module">Base.Complexity</a> <a id="409" class="Keyword">where</a>
 
-<a id="416" class="Keyword">open</a> <a id="421" class="Keyword">import</a> <a id="428" href="Base.Complexity.Basic.html" class="Module">Base.Complexity.Basic</a>
-<a id="450" class="Keyword">open</a> <a id="455" class="Keyword">import</a> <a id="462" href="Base.Complexity.CSP.html" class="Module">Base.Complexity.CSP</a>
+<a id="416" class="Keyword">open</a> <a id="421" class="Keyword">import</a> <a id="428" href="Base.Complexity.Basic.html" class="Module">Base.Complexity.Basic</a>  <a id="451" class="Keyword">public</a>
+<a id="458" class="Keyword">open</a> <a id="463" class="Keyword">import</a> <a id="470" href="Base.Complexity.CSP.html" class="Module">Base.Complexity.CSP</a>    <a id="493" class="Keyword">public</a>
 
 </pre>
 

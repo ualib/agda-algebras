@@ -1,0 +1,57 @@
+---
+layout: default
+title : "Base.Functions.Injective module"
+date : "2021-09-10"
+author: "the agda-algebras development team"
+---
+
+### <a id="injective-functions">Injective functions</a>
+
+This is the [Base.Functions.Injective][] module of the [agda-algebras][] library.
+
+We say that a function `f : A → B` is *injective* (or *monic*) if it does not map two distinct elements of the domain to the same point in the codomain. The following type manifests this property.
+
+<pre class="Agda">
+
+<a id="485" class="Symbol">{-#</a> <a id="489" class="Keyword">OPTIONS</a> <a id="497" class="Pragma">--without-K</a> <a id="509" class="Pragma">--exact-split</a> <a id="523" class="Pragma">--safe</a> <a id="530" class="Symbol">#-}</a>
+
+<a id="535" class="Keyword">module</a> <a id="542" href="Base.Functions.Injective.html" class="Module">Base.Functions.Injective</a> <a id="567" class="Keyword">where</a>
+
+<a id="574" class="Comment">-- Imports from Agda and the Agda Standard Library ---------------------------------------------</a>
+<a id="671" class="Keyword">open</a> <a id="676" class="Keyword">import</a> <a id="683" href="Agda.Primitive.html" class="Module">Agda.Primitive</a>                         <a id="722" class="Keyword">using</a> <a id="728" class="Symbol">()</a> <a id="731" class="Keyword">renaming</a> <a id="740" class="Symbol">(</a> <a id="742" href="Agda.Primitive.html#326" class="Primitive">Set</a> <a id="746" class="Symbol">to</a> <a id="749" class="Primitive">Type</a> <a id="754" class="Symbol">)</a>
+<a id="756" class="Keyword">open</a> <a id="761" class="Keyword">import</a> <a id="768" href="Function.html" class="Module">Function</a>                               <a id="807" class="Keyword">using</a> <a id="813" class="Symbol">(</a> <a id="815" href="Function.Bundles.html#8289" class="Function Operator">_↣_</a> <a id="819" class="Symbol">;</a>  <a id="822" href="Function.Base.html#1031" class="Function Operator">_∘_</a> <a id="826" class="Symbol">;</a> <a id="828" href="Function.Definitions.html#889" class="Function">Injective</a> <a id="838" class="Symbol">)</a>
+<a id="840" class="Keyword">open</a> <a id="845" class="Keyword">import</a> <a id="852" href="Function.Construct.Identity.html" class="Module">Function.Construct.Identity</a>            <a id="891" class="Keyword">using</a> <a id="897" class="Symbol">(</a> <a id="899" href="Function.Construct.Identity.html#3966" class="Function">id-↣</a> <a id="904" class="Symbol">)</a>
+<a id="906" class="Keyword">open</a> <a id="911" class="Keyword">import</a> <a id="918" href="Level.html" class="Module">Level</a>                                  <a id="957" class="Keyword">using</a> <a id="963" class="Symbol">(</a> <a id="965" href="Agda.Primitive.html#810" class="Primitive Operator">_⊔_</a> <a id="969" class="Symbol">;</a> <a id="971" href="Agda.Primitive.html#597" class="Postulate">Level</a> <a id="977" class="Symbol">)</a>
+<a id="979" class="Keyword">open</a> <a id="984" class="Keyword">import</a> <a id="991" href="Relation.Binary.html" class="Module">Relation.Binary</a>                        <a id="1030" class="Keyword">using</a> <a id="1036" class="Symbol">(</a> <a id="1038" href="Relation.Binary.Core.html#882" class="Function">Rel</a> <a id="1042" class="Symbol">)</a>
+<a id="1044" class="Keyword">open</a> <a id="1049" class="Keyword">import</a> <a id="1056" href="Relation.Binary.PropositionalEquality.html" class="Module">Relation.Binary.PropositionalEquality</a>  <a id="1095" class="Keyword">using</a> <a id="1101" class="Symbol">(</a> <a id="1103" href="Agda.Builtin.Equality.html#151" class="Datatype Operator">_≡_</a> <a id="1107" class="Symbol">;</a> <a id="1109" href="Agda.Builtin.Equality.html#208" class="InductiveConstructor">refl</a> <a id="1114" class="Symbol">)</a>
+
+<a id="1117" class="Keyword">private</a> <a id="1125" class="Keyword">variable</a> <a id="1134" href="Base.Functions.Injective.html#1134" class="Generalizable">α</a> <a id="1136" href="Base.Functions.Injective.html#1136" class="Generalizable">β</a> <a id="1138" href="Base.Functions.Injective.html#1138" class="Generalizable">γ</a> <a id="1140" href="Base.Functions.Injective.html#1140" class="Generalizable">ℓ₁</a> <a id="1143" href="Base.Functions.Injective.html#1143" class="Generalizable">ℓ₂</a> <a id="1146" href="Base.Functions.Injective.html#1146" class="Generalizable">ℓ₃</a> <a id="1149" class="Symbol">:</a> <a id="1151" href="Agda.Primitive.html#597" class="Postulate">Level</a>
+
+<a id="id-is-injective"></a><a id="1158" href="Base.Functions.Injective.html#1158" class="Function">id-is-injective</a> <a id="1174" class="Symbol">:</a> <a id="1176" class="Symbol">{</a><a id="1177" href="Base.Functions.Injective.html#1177" class="Bound">A</a> <a id="1179" class="Symbol">:</a> <a id="1181" href="Base.Functions.Injective.html#749" class="Primitive">Type</a> <a id="1186" href="Base.Functions.Injective.html#1134" class="Generalizable">α</a><a id="1187" class="Symbol">}</a> <a id="1189" class="Symbol">→</a> <a id="1191" href="Base.Functions.Injective.html#1177" class="Bound">A</a> <a id="1193" href="Function.Bundles.html#8289" class="Function Operator">↣</a> <a id="1195" href="Base.Functions.Injective.html#1177" class="Bound">A</a>
+<a id="1197" href="Base.Functions.Injective.html#1158" class="Function">id-is-injective</a> <a id="1213" class="Symbol">{</a><a id="1214" class="Argument">A</a> <a id="1216" class="Symbol">=</a> <a id="1218" href="Base.Functions.Injective.html#1218" class="Bound">A</a><a id="1219" class="Symbol">}</a> <a id="1221" class="Symbol">=</a> <a id="1223" href="Function.Construct.Identity.html#3966" class="Function">id-↣</a> <a id="1228" href="Base.Functions.Injective.html#1218" class="Bound">A</a>
+
+<a id="1231" class="Keyword">module</a> <a id="1238" href="Base.Functions.Injective.html#1238" class="Module">_</a> <a id="1240" class="Symbol">{</a><a id="1241" href="Base.Functions.Injective.html#1241" class="Bound">A</a> <a id="1243" class="Symbol">:</a> <a id="1245" href="Base.Functions.Injective.html#749" class="Primitive">Type</a> <a id="1250" href="Base.Functions.Injective.html#1134" class="Generalizable">α</a><a id="1251" class="Symbol">}{</a><a id="1253" href="Base.Functions.Injective.html#1253" class="Bound">B</a> <a id="1255" class="Symbol">:</a> <a id="1257" href="Base.Functions.Injective.html#749" class="Primitive">Type</a> <a id="1262" href="Base.Functions.Injective.html#1136" class="Generalizable">β</a><a id="1263" class="Symbol">}</a> <a id="1265" class="Keyword">where</a>
+
+ <a id="1273" href="Base.Functions.Injective.html#1273" class="Function">IsInjective</a> <a id="1285" class="Symbol">:</a> <a id="1287" class="Symbol">(</a><a id="1288" href="Base.Functions.Injective.html#1241" class="Bound">A</a> <a id="1290" class="Symbol">→</a> <a id="1292" href="Base.Functions.Injective.html#1253" class="Bound">B</a><a id="1293" class="Symbol">)</a> <a id="1295" class="Symbol">→</a> <a id="1297" href="Base.Functions.Injective.html#749" class="Primitive">Type</a> <a id="1302" class="Symbol">(</a><a id="1303" href="Base.Functions.Injective.html#1250" class="Bound">α</a> <a id="1305" href="Agda.Primitive.html#810" class="Primitive Operator">⊔</a> <a id="1307" href="Base.Functions.Injective.html#1262" class="Bound">β</a><a id="1308" class="Symbol">)</a>
+ <a id="1311" href="Base.Functions.Injective.html#1273" class="Function">IsInjective</a> <a id="1323" href="Base.Functions.Injective.html#1323" class="Bound">f</a> <a id="1325" class="Symbol">=</a> <a id="1327" href="Function.Definitions.html#889" class="Function">Injective</a> <a id="1337" href="Agda.Builtin.Equality.html#151" class="Datatype Operator">_≡_</a> <a id="1341" href="Agda.Builtin.Equality.html#151" class="Datatype Operator">_≡_</a> <a id="1345" href="Base.Functions.Injective.html#1323" class="Bound">f</a>
+
+</pre>
+
+Next, we prove that the composition of injective functions is injective.
+
+<pre class="Agda">
+
+<a id="∘-injective"></a><a id="1448" href="Base.Functions.Injective.html#1448" class="Function">∘-injective</a> <a id="1460" class="Symbol">:</a>  <a id="1463" class="Symbol">{</a><a id="1464" href="Base.Functions.Injective.html#1464" class="Bound">A</a> <a id="1466" class="Symbol">:</a> <a id="1468" href="Base.Functions.Injective.html#749" class="Primitive">Type</a> <a id="1473" href="Base.Functions.Injective.html#1134" class="Generalizable">α</a><a id="1474" class="Symbol">}{</a><a id="1476" href="Base.Functions.Injective.html#1476" class="Bound">B</a> <a id="1478" class="Symbol">:</a> <a id="1480" href="Base.Functions.Injective.html#749" class="Primitive">Type</a> <a id="1485" href="Base.Functions.Injective.html#1136" class="Generalizable">β</a><a id="1486" class="Symbol">}{</a><a id="1488" href="Base.Functions.Injective.html#1488" class="Bound">C</a> <a id="1490" class="Symbol">:</a> <a id="1492" href="Base.Functions.Injective.html#749" class="Primitive">Type</a> <a id="1497" href="Base.Functions.Injective.html#1138" class="Generalizable">γ</a><a id="1498" class="Symbol">}{</a><a id="1500" href="Base.Functions.Injective.html#1500" class="Bound">f</a> <a id="1502" class="Symbol">:</a> <a id="1504" href="Base.Functions.Injective.html#1464" class="Bound">A</a> <a id="1506" class="Symbol">→</a> <a id="1508" href="Base.Functions.Injective.html#1476" class="Bound">B</a><a id="1509" class="Symbol">}{</a><a id="1511" href="Base.Functions.Injective.html#1511" class="Bound">g</a> <a id="1513" class="Symbol">:</a> <a id="1515" href="Base.Functions.Injective.html#1476" class="Bound">B</a> <a id="1517" class="Symbol">→</a> <a id="1519" href="Base.Functions.Injective.html#1488" class="Bound">C</a><a id="1520" class="Symbol">}</a>
+  <a id="1524" class="Symbol">→</a>            <a id="1537" href="Base.Functions.Injective.html#1273" class="Function">IsInjective</a> <a id="1549" href="Base.Functions.Injective.html#1500" class="Bound">f</a> <a id="1551" class="Symbol">→</a> <a id="1553" href="Base.Functions.Injective.html#1273" class="Function">IsInjective</a> <a id="1565" href="Base.Functions.Injective.html#1511" class="Bound">g</a> <a id="1567" class="Symbol">→</a> <a id="1569" href="Base.Functions.Injective.html#1273" class="Function">IsInjective</a> <a id="1581" class="Symbol">(</a><a id="1582" href="Base.Functions.Injective.html#1511" class="Bound">g</a> <a id="1584" href="Function.Base.html#1031" class="Function Operator">∘</a> <a id="1586" href="Base.Functions.Injective.html#1500" class="Bound">f</a><a id="1587" class="Symbol">)</a>
+
+<a id="1590" href="Base.Functions.Injective.html#1448" class="Function">∘-injective</a> <a id="1602" href="Base.Functions.Injective.html#1602" class="Bound">fi</a> <a id="1605" href="Base.Functions.Injective.html#1605" class="Bound">gi</a> <a id="1608" class="Symbol">=</a> <a id="1610" class="Symbol">λ</a> <a id="1612" href="Base.Functions.Injective.html#1612" class="Bound">x</a> <a id="1614" class="Symbol">→</a> <a id="1616" href="Base.Functions.Injective.html#1602" class="Bound">fi</a> <a id="1619" class="Symbol">(</a><a id="1620" href="Base.Functions.Injective.html#1605" class="Bound">gi</a> <a id="1623" href="Base.Functions.Injective.html#1612" class="Bound">x</a><a id="1624" class="Symbol">)</a>
+</pre>
+
+--------------------------------------
+
+<span style="float:left;">[← Base.Functions.FuncInverses](Base.Functions.FuncInverses.html)</span>
+<span style="float:right;">[Base.Functions.Surjective →](Base.Functions.Surjective.html)</span>
+
+{% include UALib.Links.md %}
+
+

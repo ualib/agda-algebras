@@ -14,9 +14,9 @@ This is the [Base.Adjunction][] module of the [Agda Universal Algebra Library][]
 
 <a id="341" class="Keyword">module</a> <a id="348" href="Base.Adjunction.html" class="Module">Base.Adjunction</a> <a id="364" class="Keyword">where</a>
 
-<a id="371" class="Keyword">open</a> <a id="376" class="Keyword">import</a> <a id="383" href="Base.Adjunction.Closure.html" class="Module">Base.Adjunction.Closure</a>
-<a id="407" class="Keyword">open</a> <a id="412" class="Keyword">import</a> <a id="419" href="Base.Adjunction.Galois.html" class="Module">Base.Adjunction.Galois</a>
-<a id="442" class="Keyword">open</a> <a id="447" class="Keyword">import</a> <a id="454" href="Base.Adjunction.Residuation.html" class="Module">Base.Adjunction.Residuation</a>
+<a id="371" class="Keyword">open</a> <a id="376" class="Keyword">import</a> <a id="383" href="Base.Adjunction.Closure.html" class="Module">Base.Adjunction.Closure</a>      <a id="412" class="Keyword">public</a>
+<a id="419" class="Keyword">open</a> <a id="424" class="Keyword">import</a> <a id="431" href="Base.Adjunction.Galois.html" class="Module">Base.Adjunction.Galois</a>       <a id="460" class="Keyword">public</a>
+<a id="467" class="Keyword">open</a> <a id="472" class="Keyword">import</a> <a id="479" href="Base.Adjunction.Residuation.html" class="Module">Base.Adjunction.Residuation</a>  <a id="508" class="Keyword">public</a>
 
 </pre>
 

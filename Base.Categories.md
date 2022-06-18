@@ -19,7 +19,7 @@ The purpose of this effort twofold. First, we hope it makes the types defined in
 
 <a id="1143" class="Keyword">module</a> <a id="1150" href="Base.Categories.html" class="Module">Base.Categories</a> <a id="1166" class="Keyword">where</a>
 
-<a id="1173" class="Keyword">open</a> <a id="1178" class="Keyword">import</a> <a id="1185" href="Base.Categories.Functors.html" class="Module">Base.Categories.Functors</a>
+<a id="1173" class="Keyword">open</a> <a id="1178" class="Keyword">import</a> <a id="1185" href="Base.Categories.Functors.html" class="Module">Base.Categories.Functors</a>  <a id="1211" class="Keyword">public</a>
 
 </pre>
 
