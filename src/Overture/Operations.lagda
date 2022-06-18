@@ -26,14 +26,11 @@ follows.
 
 module Overture.Operations where
 
--- Imports from Agda and the Agda Standard Library ----------------------------------------------
+-- Imports from Agda and the Agda Standard Library -----------------------------
 open import Agda.Primitive               using () renaming ( Set to Type )
 open import Level                        using ( Level ; _⊔_ )
 
 private variable α β ρ 𝓥 : Level
-\end{code}
-
-\begin{code}
 
 -- The type of operations on A of arity I
 Op : Type α → Type 𝓥 → Type (α ⊔ 𝓥)
@@ -44,10 +41,8 @@ Op A I = (I → A) → A
 π i x = x i
 
 -- return the arity of a given operation symbol
-
 arity[_] : {I : Type 𝓥} {A : Type α } → Op A I → Type 𝓥
 arity[_] {I = I} f = I
-
 \end{code}
 
 -----------

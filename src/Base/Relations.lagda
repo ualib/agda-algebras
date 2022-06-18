@@ -27,7 +27,7 @@ open import Base.Relations.Quotients   public
 
 -------------------------------------
 
-<span style="float:left;">[← Base.Overture.Transformers](Base.Overture.Transformers.html)</span>
+<span style="float:left;">[↑ Base](Base.html)</span>
 <span style="float:right;">[Base.Relations.Discrete →](Base.Relations.Discrete.html)</span>
 
 {% include UALib.Links.md %}

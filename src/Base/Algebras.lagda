@@ -7,7 +7,10 @@ author: "agda-algebras development team"
 
 ## <a id="algebra-types">Algebra Types</a>
 
-This is the [Base.Algebras][] module of the [Agda Universal Algebra Library][] in which we use type theory and [Agda][] to codify the most basic objects of universal algebra, such as *signatures*, *algebras*, *product algebras*, *congruence relations*, and *quotient algebras*.
+This is the [Base.Algebras][] module of the [Agda Universal Algebra Library][]
+in which we use type theory and [Agda][] to codify the most basic objects of
+universal algebra, such as *signatures*, *algebras*, *product algebras*,
+*congruence relations*, and *quotient algebras*.
 
 \begin{code}
 

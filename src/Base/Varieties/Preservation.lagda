@@ -72,12 +72,12 @@ The next lemma would be too obvious to care about were it not for the fact that 
 
 \begin{code}
 
-S⊆SP :  (𝒦 : Pred (Algebra α 𝑆)(ov α))
+S⊆SP :  (𝒦 : Pred (Algebra α)(ov α))
  →      S{α}{β} 𝒦 ⊆ S{α ⊔ β}{α ⊔ β} (P{α}{β} 𝒦)
 
 S⊆SP {α} {β} 𝒦 {.(Lift-Alg 𝑨 β)}(sbase{𝑨} x) = siso spllA(≅-sym Lift-≅)
  where
- llA : Algebra (α ⊔ β) 𝑆
+ llA : Algebra (α ⊔ β)
  llA = Lift-Alg (Lift-Alg 𝑨 β) (α ⊔ β)
 
  spllA : llA ∈ S (P 𝒦)
@@ -96,7 +96,7 @@ S⊆SP {α} {β} 𝒦 {.(Lift-Alg 𝑨 β)}(slift{𝑨} x) = subalgebra→S lAsc
 
 S⊆SP {α} {β} 𝒦 {𝑩}(ssub{𝑨} sA B≤A) = ssub (subalgebra→S lAsc) (≤-Lift 𝑨 B≤A )
  where
-  lA : Algebra (α ⊔ β) 𝑆
+  lA : Algebra (α ⊔ β)
   lA = Lift-Alg 𝑨 β
 
   splAu : 𝑨 ∈ S (P 𝒦)
@@ -110,7 +110,7 @@ S⊆SP {α} {β} 𝒦 {𝑩}(ssub{𝑨} sA B≤A) = ssub (subalgebra→S lAsc) (
 
 S⊆SP {α = α}{β} 𝒦 {𝑩}(siso{𝑨} sA A≅B) = siso{α ⊔ β}{α ⊔ β} lAsp lA≅B
  where
- lA : Algebra (α ⊔ β) 𝑆
+ lA : Algebra (α ⊔ β)
  lA = Lift-Alg 𝑨 β
 
  lAsc : lA IsSubalgebraOfClass (P 𝒦)
@@ -128,19 +128,19 @@ We need to formalize one more lemma before arriving the main objective of this s
 
 \begin{code}
 
-module _ {α β : Level} {𝒦 : Pred(Algebra α 𝑆)(ov α)} where
+module _ {α β : Level} {𝒦 : Pred(Algebra α)(ov α)} where
 
- lemPS⊆SP :  hfunext β α → funext β α → {I : Type β}{ℬ : I → Algebra α 𝑆}
+ lemPS⊆SP :  hfunext β α → funext β α → {I : Type β}{ℬ : I → Algebra α}
   →          (∀ i → (ℬ i) IsSubalgebraOfClass 𝒦)
   →          ⨅ ℬ IsSubalgebraOfClass (P{α}{β} 𝒦)
 
  lemPS⊆SP hwu fwu {I}{ℬ} B≤K =  ⨅ 𝒜 , (⨅ SA , ⨅SA≤⨅𝒜) ,
                                  ξ , (⨅≅ {fiu = fwu}{fiw = fwu} B≅SA)
   where
-  𝒜 : I → Algebra α 𝑆
+  𝒜 : I → Algebra α
   𝒜 = λ i → ∣ B≤K i ∣
 
-  SA : I → Algebra α 𝑆
+  SA : I → Algebra α
   SA = λ i → ∣ fst ∥ B≤K i ∥ ∣
 
   B≅SA : ∀ i → ℬ i ≅ SA i
@@ -179,7 +179,7 @@ in a class `𝒦` is a subalgebra of a product of algebras in `𝒦`.
 \begin{code}
 
 module _  {α : Level} {fovu : funext (ov α) (ov α)}
-          {𝒦 : Pred (Algebra α 𝑆)(ov α)} where
+          {𝒦 : Pred (Algebra α)(ov α)} where
 
  PS⊆SP :  -- extensionality assumptions:
           hfunext (ov α)(ov α)
@@ -219,7 +219,7 @@ bit parts to play later (e.g., in the formal proof of Birkhoff's Theorem).
 
 \begin{code}
 
-P⊆V : {α β : Level}{𝒦 : Pred (Algebra α 𝑆)(ov α)} → P{α}{β} 𝒦 ⊆ V{α}{β} 𝒦
+P⊆V : {α β : Level}{𝒦 : Pred (Algebra α)(ov α)} → P{α}{β} 𝒦 ⊆ V{α}{β} 𝒦
 
 P⊆V (pbase x) = vbase x
 P⊆V{α} (pliftu x) = vlift (P⊆V{α}{α} x)
@@ -228,7 +228,7 @@ P⊆V (produ x) = vprodu (λ i → P⊆V (x i))
 P⊆V (prodw x) = vprodw (λ i → P⊆V (x i))
 P⊆V (pisow x x₁) = visow (P⊆V x) x₁
 
-SP⊆V :  {α β : Level}{𝒦 : Pred (Algebra α 𝑆)(ov α)}
+SP⊆V :  {α β : Level}{𝒦 : Pred (Algebra α)(ov α)}
  →      S{α ⊔ β}{α ⊔ β} (P{α}{β} 𝒦) ⊆ V 𝒦
 
 SP⊆V (sbase{𝑨} PCloA) = P⊆V (pisow PCloA Lift-≅)
@@ -256,7 +256,7 @@ universe parameters that align with subsequent applications of this result.
 module _  {α : Level}  {fe₀ : funext (ov α) α}
           {fe₁ : funext ((ov α) ⊔ (suc (ov α))) (suc (ov α))}
           {fe₂ : funext (ov α) (ov α)}
-          {𝒦 : Pred (Algebra α 𝑆)(ov α)} where
+          {𝒦 : Pred (Algebra α)(ov α)} where
  open Vlift {α}{fe₀}{fe₁}{fe₂}{𝒦}
 
  SP⊆V' : S{ov α}{suc (ov α)} (P{α}{ov α} 𝒦) ⊆ V 𝒦
@@ -295,11 +295,11 @@ module class-products-with-maps {α : Level}
  {fe𝓕α : funext (ov α) α}
  {fe₁ : funext ((ov α) ⊔ (suc (ov α))) (suc (ov α))}
  {fe₂ : funext (ov α) (ov α)}
- (𝒦 : Pred (Algebra α 𝑆)(ov α))
+ (𝒦 : Pred (Algebra α)(ov α))
  where
 
  ℑ' : Type (ov α)
- ℑ' = Σ[ 𝑨 ∈ (Algebra α 𝑆) ] ((𝑨 ∈ S{α}{α} 𝒦) × (X → ∣ 𝑨 ∣))
+ ℑ' = Σ[ 𝑨 ∈ (Algebra α) ] ((𝑨 ∈ S{α}{α} 𝒦) × (X → ∣ 𝑨 ∣))
 
 \end{code}
 
@@ -317,12 +317,12 @@ context is ultimately assumed.  Including the "context map" inside the index typ
 
 Taking the product over the index type `ℑ` requires a function that maps an index
 `i : ℑ` to the corresponding algebra.  Each `i : ℑ` is a triple, say,
-`(𝑨 , p , h)`, where `𝑨 : Algebra α 𝑆`, `p : 𝑨 ∈ 𝒦`, and `h : X → ∣ 𝑨 ∣`, so the
+`(𝑨 , p , h)`, where `𝑨 : Algebra α`, `p : 𝑨 ∈ 𝒦`, and `h : X → ∣ 𝑨 ∣`, so the
 function mapping an index to the corresponding algebra is simply the first projection.
 
 \begin{code}
 
- 𝔄' : ℑ' → Algebra α 𝑆
+ 𝔄' : ℑ' → Algebra α
  𝔄' = λ (i : ℑ') → ∣ i ∣
 
 \end{code}
@@ -332,7 +332,7 @@ Finally, we define `class-product` which represents the product of all members o
 
 \begin{code}
 
- class-product' : Algebra (ov α) 𝑆
+ class-product' : Algebra (ov α)
  class-product' = ⨅ 𝔄'
 
 \end{code}
@@ -346,7 +346,7 @@ as the projection of the product `⨅ 𝔄` onto the `(𝑨 , p, h)`-th componen
  class-prod-s-∈-ps : class-product' ∈ P{ov α}{ov α}(S 𝒦)
  class-prod-s-∈-ps = pisow psPllA (⨅≅ {fiu = fe₂}{fiw = fe𝓕α} llA≅A)
   where
-  lA llA : ℑ' → Algebra (ov α) 𝑆
+  lA llA : ℑ' → Algebra (ov α)
   lA i =  Lift-Alg (𝔄 i) (ov α)
   llA i = Lift-Alg (lA i) (ov α)
 
@@ -387,7 +387,7 @@ open ≡-Reasoning
 private variable 𝓧 : Level
 open Term
 
-module _ (wd : SwellDef){X : Type 𝓧} {𝒦 : Pred (Algebra α 𝑆)(ov α)} where
+module _ (wd : SwellDef){X : Type 𝓧} {𝒦 : Pred (Algebra α)(ov α)} where
 
  H-id1 : (p q : Term X) → 𝒦 ⊫ p ≈ q → H{β = α} 𝒦 ⊫ p ≈ q
  H-id1 p q σ (hbase x) = ⊧-Lift-invar wd p q (σ x)
@@ -464,7 +464,7 @@ Again, the obvious converse is barely worth the bits needed to formalize it.
 \begin{code}
 
 module _  (fe : DFunExt)(wd : SwellDef){X : Type 𝓧}
-          {𝒦 : Pred (Algebra α 𝑆)(ov α)} where
+          {𝒦 : Pred (Algebra α)(ov α)} where
 
  P-id1 : (p q : Term X) → 𝒦 ⊫ p ≈ q → P{β = α} 𝒦 ⊫ p ≈ q
 
@@ -490,7 +490,7 @@ and conversely,
 
 \begin{code}
 
-module _  (wd : SwellDef){X : Type 𝓧} {𝒦 : Pred (Algebra α 𝑆)(ov α)} where
+module _  (wd : SwellDef){X : Type 𝓧} {𝒦 : Pred (Algebra α)(ov α)} where
 
  P-id2 : ∀ {β}(p q : Term X) → P{β = β} 𝒦 ⊫ p ≈ q → 𝒦 ⊫ p ≈ q
  P-id2 p q PKpq KA = ⊧-lower-invar wd p q (PKpq (pbase KA))
@@ -503,7 +503,7 @@ Finally, we prove the analogous preservation lemmas for the closure operator `V`
 \begin{code}
 
 module Vid  (fe : DFunExt)(wd : SwellDef)
-            {𝓧 : Level} {X : Type 𝓧}{𝒦 : Pred (Algebra α 𝑆)(ov α)} where
+            {𝓧 : Level} {X : Type 𝓧}{𝒦 : Pred (Algebra α)(ov α)} where
 
  V-id1 : (p q : Term X) → 𝒦 ⊫ p ≈ q → V{β = α} 𝒦 ⊫ p ≈ q
  V-id1 p q σ (vbase x) = ⊧-Lift-invar wd p q (σ x)
@@ -547,7 +547,7 @@ module Vid  (fe : DFunExt)(wd : SwellDef)
  V-id1 p q σ (visow{𝑨}{𝑩} VA A≅B) = ⊧-I-invar wd 𝑩 p q (V-id1 p q σ VA) A≅B
 
 module Vid'  (fe : DFunExt)(wd : SwellDef)
-             {𝓧 : Level}{X : Type 𝓧}{𝒦 : Pred (Algebra α 𝑆)(ov α)} where
+             {𝓧 : Level}{X : Type 𝓧}{𝒦 : Pred (Algebra α)(ov α)} where
  open Vid fe wd {𝓧}{X}{𝒦} public
  V-id1' : (p q : Term X) → 𝒦 ⊫ p ≈ q → V{β = β} 𝒦 ⊫ p ≈ q
  V-id1' p q σ (vbase x) = ⊧-Lift-invar wd p q (σ x)
@@ -590,13 +590,13 @@ set of identities modeled by `𝒦`.   We formalize this observation as follows.
 \begin{code}
 
 module _  (fe : DFunExt)(wd : SwellDef)
-          {𝓧 : Level}{X : Type 𝓧} {𝒦 : Pred (Algebra α 𝑆)(ov α)} where
+          {𝓧 : Level}{X : Type 𝓧} {𝒦 : Pred (Algebra α)(ov α)} where
  ovu lovu : Level
  ovu = ov α
  lovu = suc (ov α)
- 𝕍 : Pred (Algebra lovu 𝑆) (suc lovu)
+ 𝕍 : Pred (Algebra lovu) (suc lovu)
  𝕍 = V{α}{lovu} 𝒦
- 𝒱 : Pred (Algebra ovu 𝑆) lovu
+ 𝒱 : Pred (Algebra ovu) lovu
  𝒱 = V{β = ovu} 𝒦
 
  open Vid' fe wd {𝓧}{X}{𝒦} public
@@ -617,7 +617,7 @@ coverse of `V-id1`, however obvious it may be.
 
 \begin{code}
 
-module _ (wd : SwellDef){X : Type 𝓧}{𝒦 : Pred (Algebra α 𝑆)(ov α)} where
+module _ (wd : SwellDef){X : Type 𝓧}{𝒦 : Pred (Algebra α)(ov α)} where
 
  V-id2 : (p q : Term X) → (V{β = β} 𝒦 ⊫ p ≈ q) → (𝒦 ⊫ p ≈ q)
  V-id2 p q Vpq {𝑨} KA = ⊧-lower-invar wd p q (Vpq (vbase KA))

@@ -91,10 +91,10 @@ First, we represent the congruence relation `ψCon`, modulo which `𝑻 X` yield
 
 \begin{code}
 
-module _ {X : Type α}(𝒦 : Pred (Algebra α 𝑆) 𝓕) where
+module _ {X : Type α}(𝒦 : Pred (Algebra α) 𝓕) where
 
  ψ : Pred (∣ 𝑻 X ∣ × ∣ 𝑻 X ∣) 𝓕
- ψ (p , q) = ∀(𝑨 : Algebra α 𝑆)(sA : 𝑨 ∈ S{α}{α} 𝒦)(h : X → ∣ 𝑨 ∣ )
+ ψ (p , q) = ∀(𝑨 : Algebra α)(sA : 𝑨 ∈ S{α}{α} 𝒦)(h : X → ∣ 𝑨 ∣ )
                  →  (free-lift 𝑨 h) p ≡ (free-lift 𝑨 h) q
 
 \end{code}
@@ -155,7 +155,7 @@ We accomplish this goal by constructing an algebra `𝔽` with the following pro
 
 2. Every `𝑨 ∈ Mod X (Th (V 𝒦))` is a homomorphic image of `𝔽`.
 
-We denote by `ℭ` the product of all subalgebras of algebras in `𝒦`, and by `homℭ` the homomorphism from `𝑻 X` to `ℭ` defined as follows: `homℭ := ⨅-hom-co (𝑻 X) 𝔄 hom𝔄`. Here, `⨅-hom-co` (defined in the [Base.Homomorphisms.Properties][] module) takes the term algebra `𝑻 X`, a family `{𝔄 : I → Algebra α 𝑆}` of `𝑆`-algebras, and a family `hom𝔄 : ∀ i → hom (𝑻 X) (𝔄 i)` of homomorphisms and constructs the natural homomorphism `homℭ` from `𝑻 X` to the product `ℭ := ⨅ 𝔄`.  The homomorphism `homℭ : hom (𝑻 X) (⨅ ℭ)` is "natural" in the sense that the `i`-th component of the image of `t : Term X` under `homℭ` is the image `∣ hom𝔄 i ∣ t` of `t` under the i-th homomorphism `hom𝔄 i`.
+We denote by `ℭ` the product of all subalgebras of algebras in `𝒦`, and by `homℭ` the homomorphism from `𝑻 X` to `ℭ` defined as follows: `homℭ := ⨅-hom-co (𝑻 X) 𝔄 hom𝔄`. Here, `⨅-hom-co` (defined in the [Base.Homomorphisms.Properties][] module) takes the term algebra `𝑻 X`, a family `{𝔄 : I → Algebra α}` of `𝑆`-algebras, and a family `hom𝔄 : ∀ i → hom (𝑻 X) (𝔄 i)` of homomorphisms and constructs the natural homomorphism `homℭ` from `𝑻 X` to the product `ℭ := ⨅ 𝔄`.  The homomorphism `homℭ : hom (𝑻 X) (⨅ ℭ)` is "natural" in the sense that the `i`-th component of the image of `t : Term X` under `homℭ` is the image `∣ hom𝔄 i ∣ t` of `t` under the i-th homomorphism `hom𝔄 i`.
 
 
 #### <a id="F-in-classproduct">𝔽 ≤  ⨅ S(𝒦)</a>
@@ -163,7 +163,7 @@ Now we come to a step in our approach to formalizing the HSP theorem that turned
 
 \begin{code}
 
-module _ {fe : DFunExt}{wd : SwellDef}{X : Type α} {𝒦 : Pred (Algebra α 𝑆) 𝓕} where
+module _ {fe : DFunExt}{wd : SwellDef}{X : Type α} {𝒦 : Pred (Algebra α) 𝓕} where
 
  open class-products-with-maps {X = X}{fe 𝓕 α}{fe 𝓕⁺ 𝓕⁺}{fe 𝓕 𝓕} 𝒦
 
@@ -174,7 +174,7 @@ We begin by constructing `ℭ`, using the techniques described in the section on
 \begin{code}
 
  -- ℭ is the product of all subalgebras of algebras in 𝒦.
- ℭ : Algebra 𝓕 𝑆
+ ℭ : Algebra 𝓕
  ℭ = ⨅ 𝔄'
 
 \end{code}
@@ -196,7 +196,7 @@ Observe that the inhabitants of `ℭ` are maps from `ℑ` to `{𝔄 i : i ∈ �
 
 \begin{code}
 
- 𝔽 : Algebra 𝓕⁺ 𝑆
+ 𝔽 : Algebra 𝓕⁺
  𝔽 = ker[ 𝑻 X ⇒ ℭ ] homℭ ↾ (wd 𝓥 (ov α))
 
  epi𝔽 : epi (𝑻 X) 𝔽
@@ -217,7 +217,7 @@ We will need the following facts relating `homℭ`, `hom𝔽`, `and ψ`.
  ψlemma0 : ∀ p q →  ∣ homℭ ∣ p ≡ ∣ homℭ ∣ q  → (p , q) ∈ ψ 𝒦
  ψlemma0 p q phomℭq 𝑨 sA h = ≡.cong-app phomℭq (𝑨 , sA , h)
 
- ψlemma0-ap : {𝑨 : Algebra α 𝑆}{h : X → ∣ 𝑨 ∣} → 𝑨 ∈ S{α}{α} 𝒦
+ ψlemma0-ap : {𝑨 : Algebra α}{h : X → ∣ 𝑨 ∣} → 𝑨 ∈ S{α}{α} 𝒦
   →           kernel ∣ hom𝔽 ∣ ⊆ kernel (free-lift 𝑨 h)
 
  ψlemma0-ap {𝑨}{h} skA {p , q} x = γ where
@@ -234,7 +234,7 @@ We now use `ψlemma0-ap` to prove that every map `h : X → ∣ 𝑨 ∣`, from 
 
 \begin{code}
 
- 𝔽-lift-hom : (𝑨 : Algebra α 𝑆) → 𝑨 ∈ S{α}{α} 𝒦 → (X → ∣ 𝑨 ∣) → hom 𝔽 𝑨
+ 𝔽-lift-hom : (𝑨 : Algebra α) → 𝑨 ∈ S{α}{α} 𝒦 → (X → ∣ 𝑨 ∣) → hom 𝔽 𝑨
  𝔽-lift-hom 𝑨 skA h = fst(HomFactor (wd 𝓥 (suc (ov α)))  𝑨 (lift-hom 𝑨 h) hom𝔽 (ψlemma0-ap skA) hom𝔽-is-epic)
 \end{code}
 
@@ -323,7 +323,7 @@ With these results in hand, it is now trivial to prove the main theorem of this 
  class-models-kernel : ∀ p q → (p , q) ∈ kernel ∣ hom𝔽 ∣ → 𝒦 ⊫ p ≈ q
  class-models-kernel p q x = ψlemma3 p q (ψlemma2 x)
 
- 𝕍𝒦 : Pred (Algebra 𝓕⁺ 𝑆) (suc 𝓕⁺)
+ 𝕍𝒦 : Pred (Algebra 𝓕⁺) (suc 𝓕⁺)
  𝕍𝒦 = V{α = α}{β = 𝓕⁺} 𝒦
 
  kernel-in-theory' : kernel ∣ hom𝔽 ∣ ⊆ Th (V 𝒦)
@@ -332,10 +332,10 @@ With these results in hand, it is now trivial to prove the main theorem of this 
  kernel-in-theory : kernel ∣ hom𝔽 ∣ ⊆ Th 𝕍𝒦
  kernel-in-theory {p , q} pKq vkA x = class-ids fe wd p q (class-models-kernel p q pKq) vkA x
 
- _↠_ : Type α → Algebra 𝓕⁺ 𝑆 → Type 𝓕⁺
+ _↠_ : Type α → Algebra 𝓕⁺ → Type 𝓕⁺
  X ↠ 𝑨 = Σ[ h ∈ (X → ∣ 𝑨 ∣) ] IsSurjective h
 
- 𝔽-ModTh-epi : (𝑨 : Algebra 𝓕⁺ 𝑆) → (X ↠ 𝑨) → 𝑨 ∈ Mod (Th 𝕍𝒦) → epi 𝔽 𝑨
+ 𝔽-ModTh-epi : (𝑨 : Algebra 𝓕⁺) → (X ↠ 𝑨) → 𝑨 ∈ Mod (Th 𝕍𝒦) → epi 𝔽 𝑨
  𝔽-ModTh-epi 𝑨 (η , ηE) AinMTV = goal
   where
   φ : hom (𝑻 X) 𝑨

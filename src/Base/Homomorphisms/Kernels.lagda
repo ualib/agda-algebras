@@ -48,9 +48,9 @@ canonical projection onto the quotient modulo θ).
 
 \begin{code}
 
-module _ {𝑨 : Algebra α 𝑆} where
+module _ {𝑨 : Algebra α} where
  open ≡-Reasoning
- homker-comp :  swelldef 𝓥 β → {𝑩 : Algebra β 𝑆}(h : hom 𝑨 𝑩)
+ homker-comp :  swelldef 𝓥 β → {𝑩 : Algebra β}(h : hom 𝑨 𝑩)
   →             compatible 𝑨 (ker ∣ h ∣)
 
  homker-comp wd {𝑩} h f {u}{v} kuv =
@@ -70,7 +70,7 @@ congruence from its kernel.  We call this function `kercon`.
 
 \begin{code}
 
- kercon : swelldef 𝓥 β → {𝑩 : Algebra β 𝑆} → hom 𝑨 𝑩 → Con{α}{β} 𝑨
+ kercon : swelldef 𝓥 β → {𝑩 : Algebra β} → hom 𝑨 𝑩 → Con{α}{β} 𝑨
  kercon wd {𝑩} h = ker ∣ h ∣ , mkcon (ker-IsEquivalence ∣ h ∣)(homker-comp wd {𝑩} h)
 
 \end{code}
@@ -80,11 +80,11 @@ syntactic sugar to denote it.
 
 \begin{code}
 
- kerquo : swelldef 𝓥 β → {𝑩 : Algebra β 𝑆} → hom 𝑨 𝑩 → Algebra (α ⊔ suc β) 𝑆
+ kerquo : swelldef 𝓥 β → {𝑩 : Algebra β} → hom 𝑨 𝑩 → Algebra (α ⊔ suc β)
  kerquo wd {𝑩} h = 𝑨 ╱ (kercon wd {𝑩} h)
 
-ker[_⇒_]_↾_ :  (𝑨 : Algebra α 𝑆)(𝑩 : Algebra β 𝑆) → hom 𝑨 𝑩 → swelldef 𝓥 β
- →             Algebra (α ⊔ suc β) 𝑆
+ker[_⇒_]_↾_ :  (𝑨 : Algebra α)(𝑩 : Algebra β) → hom 𝑨 𝑩 → swelldef 𝓥 β
+ →             Algebra (α ⊔ suc β)
 
 ker[ 𝑨 ⇒ 𝑩 ] h ↾ wd = kerquo wd {𝑩} h
 
@@ -102,7 +102,7 @@ from `𝑨` onto `𝑨 ╱ θ` that is constructed, and proved epimorphic, as fo
 
 \begin{code}
 
-module _ {α β : Level}{𝑨 : Algebra α 𝑆} where
+module _ {α β : Level}{𝑨 : Algebra α} where
  πepi : (θ : Con{α}{β} 𝑨) → epi 𝑨 (𝑨 ╱ θ)
  πepi θ = (λ a → ⟪ a ⟫) , (λ _ _ → refl) , cπ-is-epic  where
   cπ-is-epic : IsSurjective (λ a → ⟪ a ⟫)
@@ -128,7 +128,7 @@ for the quotient of `𝑨` modulo the kernel of `h`.)
 
 \begin{code}
 
- πker :  (wd : swelldef 𝓥 β){𝑩 : Algebra β 𝑆}(h : hom 𝑨 𝑩)
+ πker :  (wd : swelldef 𝓥 β){𝑩 : Algebra β}(h : hom 𝑨 𝑩)
   →      epi 𝑨 (ker[ 𝑨 ⇒ 𝑩 ] h ↾ wd)
 
  πker wd {𝑩} h = πepi (kercon wd {𝑩} h)

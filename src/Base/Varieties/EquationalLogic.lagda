@@ -47,11 +47,11 @@ facts about `⊧`.
 
 \begin{code}
 
-_⊧_≈_ : Algebra α 𝑆 → Term X → Term X → Type _
+_⊧_≈_ : Algebra α → Term X → Term X → Type _
 𝑨 ⊧ p ≈ q = 𝑨 ⟦ p ⟧ ≈ 𝑨 ⟦ q ⟧
 
-_⊫_≈_ : Pred(Algebra α 𝑆) ρ → Term X → Term X → Type _
-𝒦 ⊫ p ≈ q = {𝑨 : Algebra _ 𝑆} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
+_⊫_≈_ : Pred(Algebra α) ρ → Term X → Term X → Type _
+𝒦 ⊫ p ≈ q = {𝑨 : Algebra _} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
 
 \end{code}
 
@@ -73,7 +73,7 @@ modeled by the members of `𝒦`.
 
 \begin{code}
 
-Th : Pred (Algebra α 𝑆) (ov α) → Pred(Term X × Term X) _
+Th : Pred (Algebra α) (ov α) → Pred(Term X × Term X) _
 Th 𝒦 = λ (p , q) → 𝒦 ⊫ p ≈ q
 
 \end{code}
@@ -83,7 +83,7 @@ itself, to be the index set.
 
 \begin{code}
 
-module _ {X : Type χ}{𝒦 : Pred (Algebra α 𝑆) (ov α)} where
+module _ {X : Type χ}{𝒦 : Pred (Algebra α) (ov α)} where
 
  ℐ : Type (ov(α ⊔ χ))
  ℐ = Σ[ (p , q) ∈ (Term X × Term X) ] 𝒦 ⊫ p ≈ q
@@ -98,10 +98,10 @@ satisfying the identities in `ℰ`.
 
 \begin{code}
 
-Mod : Pred(Term X × Term X) (ov α) → Pred(Algebra α 𝑆) _
+Mod : Pred(Term X × Term X) (ov α) → Pred(Algebra α) _
 Mod ℰ = λ 𝑨 → ∀ p q → (p , q) ∈ ℰ → 𝑨 ⊧ p ≈ q
 -- (tupled version)
-Modᵗ : {I : Type ι} → (I → Term X × Term X) → {α : Level} → Pred(Algebra α 𝑆) _
+Modᵗ : {I : Type ι} → (I → Term X × Term X) → {α : Level} → Pred(Algebra α) _
 Modᵗ ℰ = λ 𝑨 → ∀ i → 𝑨 ⊧ (fst (ℰ i)) ≈ (snd (ℰ i))
 \end{code}
 

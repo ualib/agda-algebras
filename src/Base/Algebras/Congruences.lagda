@@ -46,13 +46,13 @@ congruences of a given algebra.
 
 \begin{code}
 
-record IsCongruence (𝑨 : Algebra α 𝑆)(θ : BinRel ∣ 𝑨 ∣ ρ) : Type(ov ρ ⊔ α)  where
+record IsCongruence (𝑨 : Algebra α)(θ : BinRel ∣ 𝑨 ∣ ρ) : Type(ov ρ ⊔ α)  where
  constructor mkcon
  field
   is-equivalence : IsEquivalence θ
   is-compatible  : compatible 𝑨 θ
 
-Con : (𝑨 : Algebra α 𝑆) → Type(α ⊔ ov ρ)
+Con : (𝑨 : Algebra α) → Type(α ⊔ ov ρ)
 Con {α}{ρ}𝑨 = Σ[ θ ∈ ( BinRel ∣ 𝑨 ∣ ρ ) ] IsCongruence 𝑨 θ
 
 \end{code}
@@ -63,10 +63,10 @@ equivalent in the sense that each implies the other. One implication is the
 
 \begin{code}
 
-IsCongruence→Con : {𝑨 : Algebra α 𝑆}(θ : BinRel ∣ 𝑨 ∣ ρ) → IsCongruence 𝑨 θ → Con 𝑨
+IsCongruence→Con : {𝑨 : Algebra α}(θ : BinRel ∣ 𝑨 ∣ ρ) → IsCongruence 𝑨 θ → Con 𝑨
 IsCongruence→Con θ p = θ , p
 
-Con→IsCongruence : {𝑨 : Algebra α 𝑆} → ((θ , _) : Con{α}{ρ} 𝑨) → IsCongruence 𝑨 θ
+Con→IsCongruence : {𝑨 : Algebra α} → ((θ , _) : Con{α}{ρ} 𝑨) → IsCongruence 𝑨 θ
 Con→IsCongruence θ = ∥ θ ∥
 \end{code}
 
@@ -82,14 +82,14 @@ the identity relation `≡` and is obviously an equivalence relation.
 open Level
 
 -- Example. The zero congruence of a structure.
-0[_]Compatible : {α : Level}(𝑨 : Algebra α 𝑆){ρ : Level} → swelldef 𝓥 α → (𝑓 : ∣ 𝑆 ∣) → (𝑓 ̂ 𝑨) |: (0[ ∣ 𝑨 ∣ ]{ρ})
+0[_]Compatible : {α : Level}(𝑨 : Algebra α){ρ : Level} → swelldef 𝓥 α → (𝑓 : ∣ 𝑆 ∣) → (𝑓 ̂ 𝑨) |: (0[ ∣ 𝑨 ∣ ]{ρ})
 0[ 𝑨 ]Compatible wd 𝑓 {i}{j} ptws0  = lift γ
   where
   γ : (𝑓 ̂ 𝑨) i ≡ (𝑓 ̂ 𝑨) j
   γ = wd (𝑓 ̂ 𝑨) i j (lower ∘ ptws0)
 
 open IsCongruence
-0Con[_] : {α : Level}(𝑨 : Algebra α 𝑆){ρ : Level} → swelldef 𝓥 α → Con{α}{α ⊔ ρ} 𝑨
+0Con[_] : {α : Level}(𝑨 : Algebra α){ρ : Level} → swelldef 𝓥 α → Con{α}{α ⊔ ρ} 𝑨
 0Con[ 𝑨 ]{ρ} wd = let  0eq = 0[ ∣ 𝑨 ∣ ]Equivalence{ρ}  in
                        ∣ 0eq ∣ , mkcon ∥ 0eq ∥ (0[ 𝑨 ]Compatible wd)
 \end{code}
@@ -106,7 +106,7 @@ using this standard notation.
 
 \begin{code}
 
-_╱_ : (𝑨 : Algebra α 𝑆) → Con{α}{ρ} 𝑨 → Algebra (α ⊔ suc ρ) 𝑆
+_╱_ : (𝑨 : Algebra α) → Con{α}{ρ} 𝑨 → Algebra (α ⊔ suc ρ)
 𝑨 ╱ θ =  (∣ 𝑨 ∣ / ∣ θ ∣)  ,                              -- domain of quotient algebra
          λ 𝑓 𝑎 → ⟪ (𝑓 ̂ 𝑨)(λ i →  IsBlock.blk ∥ 𝑎 i ∥) ⟫  -- ops of quotient algebra
 
@@ -118,7 +118,7 @@ _╱_ : (𝑨 : Algebra α 𝑆) → Con{α}{ρ} 𝑨 → Algebra (α ⊔ suc ρ
 
 \begin{code}
 
-𝟘[_╱_] : (𝑨 : Algebra α 𝑆)(θ : Con{α}{ρ} 𝑨) → BinRel (∣ 𝑨 ∣ / ∣ θ ∣)(α ⊔ suc ρ)
+𝟘[_╱_] : (𝑨 : Algebra α)(θ : Con{α}{ρ} 𝑨) → BinRel (∣ 𝑨 ∣ / ∣ θ ∣)(α ⊔ suc ρ)
 𝟘[ 𝑨 ╱ θ ] = λ u v → u ≡ v
 
 \end{code}
@@ -128,7 +128,7 @@ function defined above.
 
 \begin{code}
 
-𝟎[_╱_] :  {α : Level}(𝑨 : Algebra α 𝑆){ρ : Level}(θ : Con {α}{ρ}𝑨)
+𝟎[_╱_] :  {α : Level}(𝑨 : Algebra α){ρ : Level}(θ : Con {α}{ρ}𝑨)
  →        swelldef 𝓥 (α ⊔ suc ρ)  → Con (𝑨 ╱ θ)
 
 𝟎[_╱_] {α} 𝑨 {ρ} θ wd = let 0eq = 0[ ∣ 𝑨 ╱ θ ∣ ]Equivalence  in
@@ -143,7 +143,7 @@ by baking in a large amount of extensionality that is miraculously true).
 
 open IsCongruence
 
-/-≡ :  {𝑨 : Algebra α 𝑆}(θ : Con{α}{ρ} 𝑨){u v : ∣ 𝑨 ∣}
+/-≡ :  {𝑨 : Algebra α}(θ : Con{α}{ρ} 𝑨){u v : ∣ 𝑨 ∣}
  →     ⟪ u ⟫ {∣ θ ∣} ≡ ⟪ v ⟫ → ∣ θ ∣ u v
 
 /-≡ θ refl = IsEquivalence.refl (is-equivalence ∥ θ ∥)

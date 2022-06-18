@@ -9,7 +9,9 @@ author: "the agda-algebras development team"
 
 This is the [Base.Functions.Injective][] module of the [agda-algebras][] library.
 
-We say that a function `f : A → B` is *injective* (or *monic*) if it does not map two distinct elements of the domain to the same point in the codomain. The following type manifests this property.
+We say that a function `f : A → B` is *injective* (or *monic*) if it
+does not map two distinct elements of the domain to the same point in
+the codomain. The following type manifests this property.
 
 \begin{code}
 
@@ -17,7 +19,7 @@ We say that a function `f : A → B` is *injective* (or *monic*) if it does not 
 
 module Base.Functions.Injective where
 
--- Imports from Agda and the Agda Standard Library ---------------------------------------------
+-- Imports from Agda and the Agda Standard Library -------------------------------
 open import Agda.Primitive                         using () renaming ( Set to Type )
 open import Function                               using ( _↣_ ;  _∘_ ; Injective )
 open import Function.Construct.Identity            using ( id-↣ )
@@ -37,7 +39,7 @@ module _ {A : Type α}{B : Type β} where
 
 \end{code}
 
-Next, we prove that the composition of injective functions is injective.
+The composition of injective functions is injective.
 
 \begin{code}
 

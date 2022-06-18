@@ -5,13 +5,13 @@ date : "2021-01-12"
 author: "the agda-algebras development team"
 ---
 
-## <a id="overture">Overture</a>
+## <a id="functions">Functions</a>
 
 This is the [Base.Functions][] module of the [Agda Universal Algebra Library][].
 
 The source code for this module comprises the (literate) [Agda][] program that was
 used to generate the html page displaying the sentence you are now reading. This
-source code inhabits the file [Base/Overture.lagda][], which resides in the
+source code inhabits the file [Base/Functions.lagda][], which resides in the
 [git repository of the agda-algebras library][].
 
 \begin{code}
@@ -29,7 +29,7 @@ open import Base.Functions.Transformers   public
 
 --------------------------------------
 
-<span style="float:left;">[← Base](Base.html)</span>
-<span style="float:right;">[Base.Functions.Preliminaries →](Base.Functions.Basic.html)</span>
+<span style="float:left;">[↑ Base](Base.html)</span>
+<span style="float:right;">[Base.Functions.Inverses →](Base.Functions.Inverses.html)</span>
 
 {% include UALib.Links.md %}

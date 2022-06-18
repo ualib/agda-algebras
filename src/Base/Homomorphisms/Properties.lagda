@@ -43,7 +43,7 @@ number of alternative ways.
 
 open ≡-Reasoning
 
-module _ (𝑨 : Algebra α 𝑆){𝑩 : Algebra β 𝑆}(𝑪 : Algebra γ 𝑆) where
+module _ (𝑨 : Algebra α){𝑩 : Algebra β}(𝑪 : Algebra γ) where
 
   ∘-hom : hom 𝑨 𝑩  →  hom 𝑩 𝑪  →  hom 𝑨 𝑪
   ∘-hom (g , ghom) (h , hhom) = h ∘ g , Goal where
@@ -68,7 +68,7 @@ A homomorphism from `𝑨` to `𝑩` can be lifted to a homomorphism from
 
 open Level
 
-Lift-hom :  {𝑨 : Algebra α 𝑆}(ℓᵃ : Level){𝑩 : Algebra β 𝑆} (ℓᵇ : Level)
+Lift-hom :  {𝑨 : Algebra α}(ℓᵃ : Level){𝑩 : Algebra β} (ℓᵇ : Level)
  →          hom 𝑨 𝑩  →  hom (Lift-Alg 𝑨 ℓᵃ) (Lift-Alg 𝑩 ℓᵇ)
 
 Lift-hom {𝑨 = 𝑨} ℓᵃ {𝑩} ℓᵇ (f , fhom) = lift ∘ f ∘ lower , Goal
