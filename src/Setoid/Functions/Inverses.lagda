@@ -146,7 +146,6 @@ An inhabitant of `Image f ∋ b` is a dependent pair `(a , p)`, where `a : A` an
    Goal : F ⟨$⟩ ((F preimage) x) ≈₂ F ⟨$⟩ ((F preimage) y)
    Goal = trans₂ ((F preimage≈image) x) (trans₂ ix≈iy (sym₂ ((F preimage≈image) y)))
 
-
 \end{code}
 
 We can prove that `Inv f` is the range-restricted right-inverse of `f`, as follows.
@@ -166,7 +165,7 @@ We can prove that `Inv f` is the range-restricted right-inverse of `f`, as follo
 
 Of course, the "range-restricted" qualifier is needed because `Inf f` is not defined outside the range of `f`.
 
-In a certain sense, `Inv f` is also a (range-restricted) *left-inverse*.
+In the following sense, `Inv f` is also a (range-restricted) *left-inverse*.
 
 \begin{code}
 

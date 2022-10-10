@@ -37,7 +37,7 @@ private variable 𝓘 β : Level
 
 \end{code}
 
-Suppose we have an algebra `𝑨`, a type `I : Type 𝓘`, and a family `ℬ : I → Algebra β 𝑆` of algebras.  We sometimes refer to the inhabitants of `I` as *indices*, and call `ℬ` an *indexed family of algebras*.
+Suppose we have an algebra `𝑨`, a type `I : Type 𝓘`, and a family `ℬ : I → Algebra β` of algebras.  We sometimes refer to the inhabitants of `I` as *indices*, and call `ℬ` an *indexed family of algebras*.
 
 If in addition we have a family `𝒽 : (i : I) → hom 𝑨 (ℬ i)` of homomorphisms, then we can construct a homomorphism from `𝑨` to the product `⨅ ℬ` in the natural way.
 
@@ -54,7 +54,7 @@ module _ {I : Type 𝓘}(ℬ : I → Algebra β) where
 
 The foregoing generalizes easily to the case in which the domain is also a product
 of a family of algebras. That is, if we are given `𝒜 : I → Algebra α` and
-`ℬ : I → Algebra β 𝑆` (two families of `𝑆`-algebras), and
+`ℬ : I → Algebra β` (two families of `𝑆`-algebras), and
 `𝒽 :  Π i ꞉ I , hom (𝒜 i)(ℬ i)` (a family of homomorphisms), then we can
 construct a homomorphism from `⨅ 𝒜` to `⨅ ℬ` in the following natural way.
 

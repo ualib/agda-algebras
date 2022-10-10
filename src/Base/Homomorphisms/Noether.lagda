@@ -132,7 +132,8 @@ FirstIsoTheorem|Set : (𝑨 : Algebra α) (𝑩 : Algebra β) (h : hom 𝑨 𝑩
                                    (buip : blk-uip ∣ 𝑨 ∣ ∣ kercon fe{𝑩}h ∣)
  →                                 IsSurjective ∣ h ∣
  →                                 Σ[ f ∈ (epi (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩)]
-                                   ( ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣  × IsInjective ∣ f ∣ × is-embedding ∣ f ∣ )
+                                   ( ∣ h ∣ ≡ ∣ f ∣ ∘ ∣ πker fe{𝑩}h ∣
+                                   × IsInjective ∣ f ∣ × is-embedding ∣ f ∣ )
 
 FirstIsoTheorem|Set 𝑨 𝑩 h pe fe Bset buip hE =
  (fmap , fhom , fepic) , ≡.refl , (snd ∥ FHT ∥)

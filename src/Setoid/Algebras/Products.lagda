@@ -13,7 +13,6 @@ This is the [Setoid.Algebras.Products][] module of the [Agda Universal Algebra L
 
 {-# OPTIONS --without-K --exact-split --safe #-}
 
-
 open import Overture using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Algebras.Products {𝑆 : Signature 𝓞 𝓥} where
@@ -66,7 +65,6 @@ module _ {𝒦 : Pred (Algebra α ρ) (ov α)} where
 
  ℑ : Type (ov(α ⊔ ρ))
  ℑ = Σ[ 𝑨 ∈ (Algebra α ρ) ] 𝑨 ∈ 𝒦
-
 
  𝔄 : ℑ → Algebra α ρ
  𝔄 i = ∣ i ∣

@@ -94,3 +94,9 @@ l₃[0]≢some2 = λ ()
 ℓ₁ = lsuc ℓ₀
 
 \end{code}
+
+
+--------------------------------
+
+{% include UALib.Links.md %}
+

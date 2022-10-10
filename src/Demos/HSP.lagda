@@ -817,7 +817,7 @@ The subalgebra relation is reflexive, by the identity monomorphism (and transiti
 
 <!-- If `𝒜 : I → Algebra α ρᵃ`, `ℬ : I → Algebra β ρᵇ` (families of -algebras) and if `ℬ i ≤ 𝒜 i` for all `i : I`, then `⨅ ℬ` is a subalgebra of `⨅ 𝒜`. Below we will use to denote this fact. -->
 
-We conclude this section with an easy fact that will be useful later; it simply converts a monomorphism into a proof of a subalgebra relationship.
+We conclude this section with a definition that will be useful later; it simply converts a monomorphism into a proof of a subalgebra relationship.
 
 \begin{code}
 

@@ -46,12 +46,15 @@ private variable
 
 \end{code}
 
-The term algebra `𝑻 X` is *absolutely free* (or *universal*, or *initial*) for algebras in the signature `𝑆`. That is, for every 𝑆-algebra `𝑨`, the following hold.
+The term algebra `𝑻 X` is *absolutely free* (or *universal*, or *initial*) for
+algebras in the signature `𝑆`. That is, for every 𝑆-algebra `𝑨`, the following hold.
 
 1. Every function from `𝑋` to `∣ 𝑨 ∣` lifts to a homomorphism from `𝑻 X` to `𝑨`.
 2. The homomorphism that exists by item 1 is unique.
 
-We now prove this in [Agda][], starting with the fact that every map from `X` to `∣ 𝑨 ∣` lifts to a map from `∣ 𝑻 X ∣` to `∣ 𝑨 ∣` in a natural way, by induction on the structure of the given term.
+We now prove this in [Agda][], starting with the fact that every map from `X` to
+`∣ 𝑨 ∣` lifts to a map from `∣ 𝑻 X ∣` to `∣ 𝑨 ∣` in a natural way, by induction
+on the structure of the given term.
 
 \begin{code}
 
@@ -119,8 +122,8 @@ If we further assume that each of the mappings from `X` to `∣ 𝑨 ∣` is *su
 \end{code}
 
 Finally, we prove that the homomorphism is unique.  Recall, when we proved this in the module
-[Setoid.Terms.Properties][], we needed function extensionality. Here, by using setoid equality,
-we can omit the `swelldef` hypothesis used to prove `free-unique` in the [Terms.Properties][] module.
+[Basic.Terms.Properties][], we needed function extensionality. Here, by using setoid equality,
+we can omit the `swelldef` hypothesis we needed previously to prove `free-unique`.
 
 \begin{code}
 

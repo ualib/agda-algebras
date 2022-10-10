@@ -126,7 +126,6 @@ If, in addition, `g` is surjective, then so will be the factor `φ`.
 
 \begin{code}
 
-
  HomFactorEpi :  kernelRel _≈₃_ h ⊆ kernelRel _≈₂_ g
   →              IsSurjective hfunc → IsSurjective gfunc
                  -------------------------------------------------

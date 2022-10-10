@@ -40,15 +40,11 @@ open  import Setoid.Functions               using  ( InvIsInverseʳ ; SurjInv )
 open  import Base.Terms            {𝑆 = 𝑆}  using  ( Term ; ℊ )
 open  import Setoid.Algebras       {𝑆 = 𝑆}
       using  ( Algebra ; Lift-Algˡ ; ov ; 𝕌[_] ; 𝔻[_] ; ⨅ )
-
 open  import Setoid.Homomorphisms  {𝑆 = 𝑆}
       using  ( hom ; _≅_ ; mkiso ; Lift-≅ˡ ; ≅-sym ; _IsHomImageOf_ )
-
 open  import Setoid.Terms          {𝑆 = 𝑆}
       using  ( 𝑻 ; module Environment ; comm-hom-term ; interp-prod ; term-agreement )
-
 open  import Setoid.Subalgebras    {𝑆 = 𝑆}  using  ( _≤_ ; SubalgebrasOfClass )
-
 open  import Setoid.Varieties.SoundAndComplete {𝑆 = 𝑆}
       using ( _⊧_ ; _⊨_ ; _⊫_ ; Eq ; _≈̇_ ; lhs ; rhs ; _⊢_▹_≈_ )
 
@@ -85,7 +81,8 @@ module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}(𝑩 : Algebra β ρᵇ)(p q : T
 
 \end{code}
 
-As the proof makes clear, we show 𝑩 ⊧ p ≈ q by showing that `𝑩 ⟦ p ⟧ ≡ 𝑩 ⟦ q ⟧ holds *extensionally*, that is, `∀ x, 𝑩 ⟦ p ⟧ x ≡ 𝑩 ⟦q ⟧ x`.
+As the proof makes clear, we show `𝑩 ⊧ p ≈ q` by showing that `𝑩 ⟦ p ⟧ ≡ 𝑩 ⟦ q ⟧`
+holds *extensionally*, that is, `∀ x, 𝑩 ⟦ p ⟧ x ≡ 𝑩 ⟦q ⟧ x`.
 
 #### <a id="lift-invariance">Lift-invariance of ⊧</a>
 The ⊧ relation is also invariant under the algebraic lift and lower operations.
@@ -102,7 +99,8 @@ module _ {X : Type χ}{𝑨 : Algebra α ρᵃ} where
 \end{code}
 
 #### <a id="homomorphic-invariance">Homomorphic invariance of ⊧</a>
-Identities modeled by an algebra `𝑨` are also modeled by every homomorphic image of `𝑨`, which fact can be formalized as follows.
+Identities modeled by an algebra `𝑨` are also modeled by every homomorphic image
+of `𝑨`, which fact can be formalized as follows.
 
 \begin{code}
 
@@ -174,7 +172,8 @@ module _ {X : Type χ}{p q : Term X} where
 
 #### <a id="product-invariance">Product invariance of ⊧</a>
 
-An identity satisfied by all algebras in an indexed collection is also satisfied by the product of algebras in that collection.
+An identity satisfied by all algebras in an indexed collection is also satisfied
+by the product of algebras in that collection.
 
 \begin{code}
 
@@ -200,7 +199,8 @@ module _ {X : Type χ}{p q : Term X}{I : Type ℓ}(𝒜 : I → Algebra α ρᵃ
 
 \end{code}
 
-An identity satisfied by all algebras in a class is also satisfied by the product of algebras in the class.
+An identity satisfied by all algebras in a class is also satisfied by the product
+of algebras in the class.
 
 \begin{code}
 
@@ -211,7 +211,9 @@ An identity satisfied by all algebras in a class is also satisfied by the produc
 
 \end{code}
 
-Another fact that will turn out to be useful is that a product of a collection of algebras models (p ≈̇ q) if the lift of each algebra in the collection models (p ≈̇ q).
+Another fact that will turn out to be useful is that a product of a collection of
+algebras models (p ≈̇ q) if the lift of each algebra in the collection models
+(p ≈̇ q).
 
 \begin{code}
 

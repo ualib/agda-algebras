@@ -11,7 +11,9 @@ LICENSE:
 
 The software in this file is subject to the GNU General Public License v3.0.
 
-See the LICENSE file at https://gitlhub.com/ualib/agda-universal-algebra/-/blob/master/LICENSE
+The [LICENSE file](https://github.com/ualib/agda-algebras/raw/master/LICENSE)
+is available at
+[github.com/ualib/agda-algebras](https://github.com/ualib/agda-algebras/blob/master/LICENSE).
 
 The text other than software is copyright of the author. It can be
 used for scholarly purposes subject to the usual academic conventions

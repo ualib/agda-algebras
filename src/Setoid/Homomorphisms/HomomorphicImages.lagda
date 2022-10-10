@@ -25,31 +25,38 @@ open import Function         using ( Func ; _on_ ; _∘_ ; id )
 open import Level            using ( Level ; _⊔_ ; suc )
 open import Relation.Binary  using ( Setoid ; _Preserves_⟶_ )
 open import Relation.Unary   using ( Pred ; _∈_ )
+
 open import Relation.Binary.PropositionalEquality as ≡ using ()
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
 open import Overture          using  ( ∣_∣ ; ∥_∥ ; transport )
-open import Setoid.Functions  using  ( lift∼lower ; Ran ; _range ; _preimage ; _image ; Inv ; Image_∋_
-                                     ; _preimage≈image ; InvIsInverseʳ ; IsSurjective ; ∘-IsSurjective )
+open  import Setoid.Functions
+      using ( lift∼lower ; Ran ; _range ; _preimage ; _image ; Inv ; Image_∋_ )
+      using ( _preimage≈image ; InvIsInverseʳ ; IsSurjective ; ∘-IsSurjective )
 
-open import Setoid.Algebras {𝑆 = 𝑆}  using ( Algebra ; ov ; _̂_ ; ⟨_⟩ ; Lift-Algˡ ; Lift-Alg ; 𝕌[_] )
+open  import Setoid.Algebras {𝑆 = 𝑆}
+      using ( Algebra ; ov ; _̂_ ; ⟨_⟩ ; Lift-Algˡ ; Lift-Alg ; 𝕌[_] )
 
-open import Setoid.Homomorphisms.Basic         {𝑆 = 𝑆}  using ( hom ; IsHom )
-open import Setoid.Homomorphisms.Isomorphisms  {𝑆 = 𝑆}  using ( _≅_ ; Lift-≅ )
-open import Setoid.Homomorphisms.Properties    {𝑆 = 𝑆}  using ( Lift-homˡ ; ToLiftˡ ; lift-hom-lemma )
-                                                        using ( 𝒾𝒹 ; ∘-hom )
+open import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}         using ( hom ; IsHom )
+open import Setoid.Homomorphisms.Isomorphisms {𝑆 = 𝑆}  using ( _≅_ ; Lift-≅ )
+
+open  import Setoid.Homomorphisms.Properties {𝑆 = 𝑆}
+      using ( Lift-homˡ ; ToLiftˡ ; lift-hom-lemma ; 𝒾𝒹 ; ∘-hom )
+
 open Algebra
 
 private variable α ρᵃ β ρᵇ : Level
 
 \end{code}
 
-We begin with what seems, for our purposes, the most useful way to represent the class of *homomorphic images* of an algebra in dependent type theory.
+We begin with what seems, for our purposes, the most useful way to represent the
+class of *homomorphic images* of an algebra in dependent type theory.
 
 \begin{code}
+
 open IsHom
 
-_IsHomImageOf_ : (𝑩 : Algebra β ρᵇ)(𝑨 : Algebra α ρᵃ) → Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ β ⊔ ρᵃ ⊔ ρᵇ)
+_IsHomImageOf_ : (𝑩 : Algebra β ρᵇ)(𝑨 : Algebra α ρᵃ) → Type _
 𝑩 IsHomImageOf 𝑨 = Σ[ φ ∈ hom 𝑨 𝑩 ] IsSurjective ∣ φ ∣
 
 HomImages : Algebra α ρᵃ → Type (α ⊔ ρᵃ ⊔ ov (β ⊔ ρᵇ))
@@ -61,21 +68,25 @@ IdHomImage {α = α}{𝑨 = 𝑨} = 𝒾𝒹 , λ {y} → Image_∋_.eq y refl
 
 \end{code}
 
-These types should be self-explanatory, but just to be sure, let's describe the Sigma type appearing in the second definition. Given an `𝑆`-algebra `𝑨 : Algebra α ρ`, the type `HomImages 𝑨` denotes the class of algebras `𝑩 : Algebra β ρ` with a map `φ : ∣ 𝑨 ∣ → ∣ 𝑩 ∣` such that `φ` is a surjective homomorphism.
+These types should be self-explanatory, but just to be sure, let's describe the
+Sigma type appearing in the second definition. Given an `𝑆`-algebra
+`𝑨 : Algebra α ρ`, the type `HomImages 𝑨` denotes the class `𝒦` of algebras such
+that `𝑩 ∈ 𝒦` provided there is a surjective homomorphism from `𝑨` to `𝑩`.
 
 #### <a id="constructing an algebra from the image of a hom">The image algebra of a hom</a>
 
-Here we show how to construct a Algebra (called `ImageAlgebra` below) that is the image of given hom.
+Here we show how to construct a Algebra (called `ImageAlgebra` below) that is
+the image of given hom.
 
 \begin{code}
 
 module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
- open Algebra 𝑨  using (Interp)       renaming (Domain to A )
- open Setoid A   using ( )            renaming ( _≈_ to _≈₁_ ; Carrier to ∣A∣)
- open Algebra 𝑩  using ()             renaming (Domain to B ; Interp to InterpB )
- open Setoid B   using ( reflexive )  renaming ( _≈_ to _≈₂_ ; refl to refl₂ )
-                                      renaming ( sym to sym₂ ; trans to trans₂ ; Carrier to ∣B∣)
- open Func       using ( cong )       renaming (f to _⟨$⟩_ )
+ open Algebra 𝑨  renaming (Domain to A )                      using (Interp)
+ open Setoid A   renaming ( _≈_ to _≈₁_ ; Carrier to ∣A∣)     using ()
+ open Algebra 𝑩  renaming (Domain to B ; Interp to InterpB )  using ()
+ open Setoid B   renaming ( _≈_ to _≈₂_ ; refl to refl₂ )     using ( reflexive )
+                 renaming ( sym to sym₂ ; trans to trans₂ ; Carrier to ∣B∣)
+ open Func       renaming (f to _⟨$⟩_ )                       using ( cong )
  open IsHom
 
  HomImageOf[_] : hom 𝑨 𝑩 → Algebra (α ⊔ β ⊔ ρᵇ) ρᵇ

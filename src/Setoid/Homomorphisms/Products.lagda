@@ -7,7 +7,7 @@ author: "agda-algebras development team"
 
 #### <a id="products-of-homomorphisms">Products of Homomorphisms of Algebras</a>
 
-This is the [Setoid.Homomorphisms.Products] module of the [Agda Universal Algebra Library][].
+This is the [Setoid.Homomorphisms.Products][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}
 
@@ -96,7 +96,8 @@ a homomorphism from `⨅ 𝒜` to `⨅ ℬ` in the following natural way.
 
 #### <a id="projections-out-of-products">Projection out of products</a>
 
-Later we will need a proof of the fact that projecting out of a product algebra onto one of its factors is a homomorphism.
+Later we will need a proof of the fact that projecting out of a product algebra
+onto one of its factors is a homomorphism.
 
 \begin{code}
 

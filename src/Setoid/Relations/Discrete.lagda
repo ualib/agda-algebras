@@ -33,6 +33,7 @@ open import Relation.Binary.PropositionalEquality
 open import Overture using ( Π-syntax )
 
 private variable α β ρᵃ ρᵇ ℓ 𝓥 : Level
+
 \end{code}
 
 Here is a function that is useful for defining poitwise equality of functions wrt a given equality.
@@ -56,7 +57,6 @@ is contained in a predicate, the second argument (a "subset" of the codomain).
 
  Im_⊆_ : (𝐴 ⟶ 𝐵) → Pred B ℓ → Type (α ⊔ ℓ)
  Im f ⊆ S = ∀ x → f ⟨$⟩ x ∈ S
-
 \end{code}
 
 
@@ -81,8 +81,6 @@ informally by `{(x , y) ∈ A × A : f ⟨$⟩ x ≈₂ f ⟨$⟩ y}`.
  -- The *identity relation* (equivalently, the kernel of a 1-to-1 function)
  0rel : {ℓ : Level} → BinRel A (ρᵃ ⊔ ℓ)
  0rel {ℓ} = λ x y → Lift ℓ (x ≈₁ y)
-
-
 \end{code}
 
 --------------------------------------

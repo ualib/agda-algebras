@@ -294,7 +294,6 @@ Suppose `𝒦 : Pred (Algebra α 𝑆) γ` denotes a class of `𝑆`-algebras an
   →                      Type (sigl 𝐹 ⊔ sigl 𝑅 ⊔ suc (α ⊔ ρᵃ ⊔ β ⊔ ρᵇ) ⊔ ρ)
 
  SubstructuresOfClass 𝒦 {β}{ρᵇ} = Σ[ 𝑩 ∈ structure 𝐹 𝑅 {β}{ρᵇ} ] 𝑩 ≤c 𝒦
-
 \end{code}
 
 --------------------------------

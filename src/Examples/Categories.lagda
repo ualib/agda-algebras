@@ -19,3 +19,6 @@ open import Examples.Categories.Functors public
 
 \end{code}
 
+--------------------------------
+
+{% include UALib.Links.md %}

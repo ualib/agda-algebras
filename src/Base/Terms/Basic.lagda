@@ -31,19 +31,28 @@ private variable χ : Level
 
 #### <a id="the-type-of-terms">The type of terms</a>
 
-Fix a signature `𝑆` and let `X` denote an arbitrary nonempty collection of variable symbols. Assume the symbols in `X` are distinct from the operation symbols of `𝑆`, that is `X ∩ ∣ 𝑆 ∣ = ∅`.
+Fix a signature `𝑆` and let `X` denote an arbitrary nonempty collection of variable
+symbols. Assume the symbols in `X` are distinct from the operation symbols of `𝑆`,
+that is `X ∩ ∣ 𝑆 ∣ = ∅`.
 
-By a *word* in the language of `𝑆`, we mean a nonempty, finite sequence of members of `X ∪ ∣ 𝑆 ∣`. We denote the concatenation of such sequences by simple juxtaposition.
+By a *word* in the language of `𝑆`, we mean a nonempty, finite sequence of members
+of `X ∪ ∣ 𝑆 ∣`. We denote the concatenation of such sequences by simple juxtaposition.
 
-Let `S₀` denote the set of nullary operation symbols of `𝑆`. We define by induction on `n` the sets `𝑇ₙ` of *words* over `X ∪ ∣ 𝑆 ∣` as follows (cf. [Bergman (2012)][] Def. 4.19):
+Let `S₀` denote the set of nullary operation symbols of `𝑆`. We define by induction
+on `n` the sets `𝑇ₙ` of *words* over `X ∪ ∣ 𝑆 ∣` as follows
+(cf. [Bergman (2012)][] Def. 4.19):
 
 `𝑇₀ := X ∪ S₀` and `𝑇ₙ₊₁ := 𝑇ₙ ∪ 𝒯ₙ`
 
-where `𝒯ₙ` is the collection of all `f t` such that `f : ∣ 𝑆 ∣` and `t : ∥ 𝑆 ∥ f → 𝑇ₙ`. (Recall, `∥ 𝑆 ∥ f` is the arity of the operation symbol `f`.)
+where `𝒯ₙ` is the collection of all `f t` such that `f : ∣ 𝑆 ∣` and `t : ∥ 𝑆 ∥ f → 𝑇ₙ`.
+(Recall, `∥ 𝑆 ∥ f` is the arity of the operation symbol `f`.)
 
-We define the collection of *terms* in the signature `𝑆` over `X` by `Term X := ⋃ₙ 𝑇ₙ`. By an 𝑆-*term* we mean a term in the language of `𝑆`.
+We define the collection of *terms* in the signature `𝑆` over `X` by `Term X := ⋃ₙ 𝑇ₙ`.
+By an 𝑆-*term* we mean a term in the language of `𝑆`.
 
-The definition of `Term X` is recursive, indicating that an inductive type could be used to represent the semantic notion of terms in type theory. Indeed, such a representation is given by the following inductive type.
+The definition of `Term X` is recursive, indicating that an inductive type could be used
+to represent the semantic notion of terms in type theory. Indeed, such a representation
+is given by the following inductive type.
 
 \begin{code}
 
@@ -57,7 +66,7 @@ open Term
 
 This is a very basic inductive type that represents each term as a tree with an operation symbol at each `node` and a variable symbol at each leaf (`generator`).
 
-**Notation**. As usual, the type `X` represents an arbitrary collection of variable symbols. Recall, `ov χ` is our shorthand notation for the universe level `𝓞 ⊔ 𝓥 ⊔ lsuc χ`.
+**Notation**. As usual, the type `X` represents an arbitrary collection of variable symbols. Recall, `ov χ` is our shorthand notation for the universe level `𝓞 ⊔ 𝓥 ⊔ suc χ`.
 
 
 #### <a id="the-term-algebra">The term algebra</a>

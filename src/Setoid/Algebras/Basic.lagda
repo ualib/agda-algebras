@@ -5,7 +5,7 @@ date : "2021-04-23"
 author: "agda-algebras development team"
 ---
 
-#### <a id="basic-definitions">Basic definitions for algebras over setoids</a>
+#### <a id="basic-definitions">Basic definitions</a>
 
 This is the [Setoid.Algebras.Basic][] module of the [Agda Universal Algebra Library][].
 
@@ -60,7 +60,6 @@ EqArgs :  {𝑆 : Signature 𝓞 𝓥}{ξ : Setoid α ρ}
 EqArgs {ξ = ξ} refl u v = ∀ i → (_≈_ ξ) (u i) (v i)
 
 
-
 ⟨_⟩ : Signature 𝓞 𝓥 → Setoid α ρ → Setoid _ _
 Carrier (⟨ 𝑆 ⟩ ξ) = Σ[ f ∈ ∣ 𝑆 ∣ ] ((∥ 𝑆 ∥ f) → ξ .Carrier)
 _≈_ (⟨ 𝑆 ⟩ ξ) (f , u) (g , v) = Σ[ eqv ∈ f ≡ g ] EqArgs{ξ = ξ} eqv u v
@@ -70,7 +69,6 @@ IsEquivalence.sym    (isEqv (⟨ 𝑆 ⟩ ξ))(refl , g)            = refl , λ 
 IsEquivalence.trans  (isEqv (⟨ 𝑆 ⟩ ξ))(refl , g)(refl , h)  = refl , λ i → transS  ξ (g i) (h i)
 
 \end{code}
-
 
 A setoid algebra is just like an algebra but we require that all basic operations
 of the algebra respect the underlying setoid equality. The `Func` record packs a

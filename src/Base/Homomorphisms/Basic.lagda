@@ -121,13 +121,13 @@ types.
 is-monomorphism : (𝑨 : Algebra α)(𝑩 : Algebra β) → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Type _
 is-monomorphism 𝑨 𝑩 g = is-homomorphism 𝑨 𝑩 g × IsInjective g
 
-mon : Algebra α → Algebra β  → Type(𝓞 ⊔ 𝓥 ⊔ α ⊔ β)
+mon : Algebra α → Algebra β → Type(𝓞 ⊔ 𝓥 ⊔ α ⊔ β)
 mon 𝑨 𝑩 = Σ[ g ∈ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ] is-monomorphism 𝑨 𝑩 g
 
 is-epimorphism : (𝑨 : Algebra α)(𝑩 : Algebra β) → (∣ 𝑨 ∣ → ∣ 𝑩 ∣) → Type _
 is-epimorphism 𝑨 𝑩 g = is-homomorphism 𝑨 𝑩 g × IsSurjective g
 
-epi : Algebra α → Algebra β  → Type(𝓞 ⊔ 𝓥 ⊔ α ⊔ β)
+epi : Algebra α → Algebra β → Type(𝓞 ⊔ 𝓥 ⊔ α ⊔ β)
 epi 𝑨 𝑩 = Σ[ g ∈ (∣ 𝑨 ∣ → ∣ 𝑩 ∣) ] is-epimorphism 𝑨 𝑩 g
 
 \end{code}

@@ -49,7 +49,6 @@ open  import Base.Homomorphisms {𝑆 = 𝑆}
 open  import Base.Subalgebras {𝑆 = 𝑆}
       using ( _≤_ ; _IsSubalgebraOfClass_ ; Subalgebra ; ≤-refl ; ≅-RESP-≤ )
       using ( ≤-RESP-≅ ; ≤-trans ; Lift-≤-Lift )
-
 \end{code}
 
 #### <a id="the-inductive-type-h">The Inductive Type H</a>

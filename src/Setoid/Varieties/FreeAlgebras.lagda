@@ -92,7 +92,9 @@ The relatively free algebra (relative to `Th 𝒦`) is called `M` and is derived
 
 \end{code}
 
-Next we define an epimorphism from `𝑻 X` onto the relatively free algebra `𝔽[ X ]`.  Of course, the kernel of this epimorphism will be the congruence of `𝑻 X` defined by identities modeled by (`S 𝒦`, hence) `𝒦`.
+Finally, we define an epimorphism from `𝑻 X` onto the relatively free algebra
+`𝔽[ X ]`. Of course, the kernel of this epimorphism will be the congruence of
+`𝑻 X` defined by identities modeled by (`S 𝒦`, hence) `𝒦`.
 
 \begin{code}
 
