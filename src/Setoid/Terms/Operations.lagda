@@ -49,7 +49,8 @@ private variable
 
 \end{code}
 
-It turns out that the intepretation of a term is the same as the `free-lift` (modulo argument order and assuming function extensionality).
+It turns out that the intepretation of a term is the same as the `free-lift`
+(modulo argument order and assuming function extensionality).
 
 \begin{code}
 

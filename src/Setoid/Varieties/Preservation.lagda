@@ -32,30 +32,22 @@ open import Relation.Unary         using ( Pred ; _⊆_ ; _∈_ )
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library -------------------------------
-open  import Overture using ( ∣_∣ ; ∥_∥ )
-open  import Setoid.Functions
-      using ( IsSurjective ; SurjInv ; SurjInvIsInverseʳ )
+open import Overture          using ( ∣_∣ ; ∥_∥ )
+open import Setoid.Functions  using ( IsSurjective ; SurjInv ; SurjInvIsInverseʳ )
 
-open  import Base.Terms {𝑆 = 𝑆} using ( Term )
-
-open  import Setoid.Algebras {𝑆 = 𝑆}
-      using ( Algebra ; ov ; 𝕌[_] ; Lift-Alg ; ⨅ )
+open import Base.Terms       {𝑆 = 𝑆} using ( Term )
+open import Setoid.Algebras  {𝑆 = 𝑆} using ( Algebra ; ov ; 𝕌[_] ; Lift-Alg ; ⨅ )
 
 open  import Setoid.Homomorphisms {𝑆 = 𝑆}
       using ( ≅⨅⁺-refl ; ≅-refl ; IdHomImage ; ≅-sym )
-
 open  import Setoid.Terms {𝑆 = 𝑆}
       using ( module Environment; comm-hom-term )
-
 open  import Setoid.Subalgebras {𝑆 = 𝑆}
       using ( _≤_ ; _≤c_ ; ⨅-≤ ; ≅-trans-≤ ; ≤-reflexive )
-
 open  import Setoid.Varieties.Closure {𝑆 = 𝑆}
       using ( H ; S ; P ; S-expa ; H-expa ; V ; P-expa ; V-expa ;Level-closure )
-
 open  import Setoid.Varieties.Properties {𝑆 = 𝑆}
       using ( ⊧-H-invar ; ⊧-S-invar ; ⊧-P-invar ; ⊧-I-invar )
-
 open  import Setoid.Varieties.SoundAndComplete {𝑆 = 𝑆}
       using ( _⊧_ ; _⊨_ ; _⊫_ ; Eq ; _≈̇_ ; lhs ; rhs ; _⊢_▹_≈_ ; Th)
 
@@ -66,9 +58,8 @@ open Algebra  using ( Domain )
 
 #### <a id="closure-properties">Closure properties</a>
 
-The types defined above represent operators with useful closure properties. We now prove a handful of such properties that we need later.
-
-The next lemma would be too obvious to care about were it not for the fact that we'll need it later, so it too must be formalized.
+The types defined above represent operators with useful closure properties. We now
+prove a handful of such properties that we need later.
 
 \begin{code}
 
@@ -82,14 +73,6 @@ module _  {α ρᵃ ℓ : Level}{𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔
   where
   pA : 𝑨 ∈ P ℓ ι 𝒦
   pA = ⊤ , (λ _ → 𝑨) , (λ _ → kA) , ≅⨅⁺-refl
-\end{code}
-
-#### <a id="PS-in-SP">PS(𝒦) ⊆ SP(𝒦)</a>
-#### <a id="more-class-inclusions">More class inclusions</a>
-
-We conclude this subsection with three more inclusion relations that will have bit parts to play later (e.g., in the formal proof of Birkhoff's Theorem).
-
-\begin{code}
 
  P⊆SP : ∀{ι} → P ℓ ι 𝒦 ⊆ S (a ⊔ ℓ ⊔ ι) (P {β = α}{ρᵃ}ℓ ι 𝒦)
  P⊆SP {ι} x = S-expa{ℓ = a ⊔ ℓ ⊔ ι} x

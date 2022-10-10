@@ -606,7 +606,6 @@ module _  (fe : DFunExt)(wd : SwellDef)
  class-ids : (p q : ∣ 𝑻 X ∣) → 𝒦 ⊫ p ≈ q  →  (p , q) ∈ Th 𝕍
  class-ids p q pKq VCloA = V-id1' p q pKq VCloA
 
-
  class-ids-⇐ : (p q : ∣ 𝑻 X ∣) → (p , q) ∈ Th 𝒱 →  𝒦 ⊫ p ≈ q
  class-ids-⇐ p q Thpq {𝑨} KA = ⊧-lower-invar wd p q (Thpq (vbase KA))
 

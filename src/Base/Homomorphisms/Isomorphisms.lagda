@@ -70,7 +70,7 @@ That is, two structures are *isomorphic* provided there are homomorphisms going 
 We could define this using Sigma types, like this.
 
 ```agda
-_≅_ : {α β : Level}(𝑨 : Algebra α 𝑆)(𝑩 : Algebra β) → Type(𝓞 ⊔ 𝓥 ⊔ α ⊔ β)
+_≅_ : {α β : Level}(𝑨 : Algebra α)(𝑩 : Algebra β) → Type(𝓞 ⊔ 𝓥 ⊔ α ⊔ β)
 𝑨 ≅ 𝑩 =  Σ[ f ∈ (hom 𝑨 𝑩)] Σ[ g ∈ hom 𝑩 𝑨 ] ((∣ f ∣ ∘ ∣ g ∣ ≈ ∣ 𝒾𝒹 𝑩 ∣) × (∣ g ∣ ∘ ∣ f ∣ ≈ ∣ 𝒾𝒹 𝑨 ∣))
 ```
 

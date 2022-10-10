@@ -17,7 +17,8 @@ module Base.Structures.Congruences where
 
 -- Imports from Agda and the Agda Standard Library --------------------------------------
 open import Agda.Primitive  using () renaming ( Set  to Type )
-open import Data.Product    using ( _,_ ; _×_ ; Σ-syntax ) renaming ( proj₁ to fst )
+open import Data.Product    using ( _,_ ; _×_ ; Σ-syntax )
+                            renaming ( proj₁ to fst )
 open import Function.Base   using ( _∘_ )
 open import Level           using ( Level ; suc ; _⊔_ ; lower ; lift )
 
@@ -25,8 +26,8 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ )
 
 -- Imports from the Agda Universal Algebra Library --------------------------------------
 open import Overture        using ( ∣_∣ )
-open import Base.Relations  using ( _|:_ ; 0[_] ; Equivalence ; Quotient )
-                            using ( 0[_]Equivalence ; ⟪_⟫ ; ⌞_⌟ ; ⟪_∼_⟫-elim ; _/_ )
+open import Base.Relations  using ( _|:_ ; 0[_] ; Equivalence ; Quotient ; ⟪_⟫ )
+                            using ( 0[_]Equivalence ; ⌞_⌟ ; ⟪_∼_⟫-elim ; _/_ )
 open import Base.Equality   using ( swelldef )
 
 open import Base.Structures.Basic  using ( signature ; structure ; sigl )
@@ -37,8 +38,7 @@ private variable
  𝑅 : signature 𝓞₁ 𝓥₁
  α ρ : Level
 
-open signature
-open structure
+open signature ; open structure
 
 con : ∀ {α ρ} → structure 𝐹 𝑅 {α}{ρ} → Type (sigl 𝐹 ⊔ suc α ⊔ suc ρ)
 con {α = α}{ρ} 𝑨 = Σ[ θ ∈ Equivalence (carrier 𝑨){α ⊔ ρ} ] (compatible 𝑨 ∣ θ ∣)

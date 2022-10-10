@@ -7,6 +7,8 @@ author: "agda-algebras development team"
 
 #### <a id="isomorphisms-of-setoid-algebras">Isomorphisms of setoid algebras</a>
 
+This is the [Setoid.Homomorphisms.Factor][] module of the [Agda Universal Algebra Library][].
+
 \begin{code}
 
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -151,7 +153,10 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
 
 \end{code}
 
-Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic invariant*). As our focus is universal algebra, this is important and is what makes the lift operation a workable solution to the technical problems that arise from the noncumulativity of Agda's universe hierarchy.
+Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic
+invariant*). As our focus is universal algebra, this is important and is what
+makes the lift operation a workable solution to the technical problems that arise
+from the noncumulativity of Agda's universe hierarchy.
 
 \begin{code}
 
@@ -205,7 +210,8 @@ Lift-assoc'{𝑨 = 𝑨}{β}{γ} = ≅-trans (≅-sym Lift-≅) (≅-trans Lift-
 
 \end{code}
 
-Products of isomorphic families of algebras are themselves isomorphic. The proof looks a bit technical, but it is as straightforward as it ought to be.
+Products of isomorphic families of algebras are themselves isomorphic. The proof
+looks a bit technical, but it is as straightforward as it ought to be.
 
 \begin{code}
 

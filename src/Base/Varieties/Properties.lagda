@@ -7,14 +7,17 @@ author: "agda-algebras development team"
 
 ### <a id="properties-of-the-models-relation">Properties of the models relation</a>
 
-We prove some closure and invariance properties of the relation `⊧`.  In particular, we prove the following facts (which we use later in our proof of Birkhoff's HSP Theorem).
+We prove some closure and invariance properties of the relation `⊧`.  In particular,
+we prove the following facts (which we use later in our proof of Birkhoff's HSP Theorem).
 
-* [Algebraic invariance](#algebraic-invariance). `⊧` is an *algebraic invariant* (stable under isomorphism).
+*  [Algebraic invariance](#algebraic-invariance). `⊧` is an *algebraic invariant*
+   (stable under isomorphism).
 
-* [Subalgebraic invariance](#subalgebraic-invariance). Identities modeled by a class of algebras are also modeled by all subalgebras of algebras in the class.
+*  [Subalgebraic invariance](#subalgebraic-invariance). Identities modeled by a
+   class of algebras are also modeled by all subalgebras of algebras in the class.
 
-* [Product invariance](#product-invariance). Identities modeled by a class of algebras are also modeled by all products of algebras in the class.
-
+*  [Product invariance](#product-invariance). Identities modeled by a class of
+   algebras are also modeled by all products of algebras in the class.
 
 \begin{code}
 
@@ -24,7 +27,7 @@ open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 
 module Base.Varieties.Properties {𝑆 : Signature 𝓞 𝓥} where
 
--- Imports from Agda and the Agda Standard Library -------------------------------------------
+-- Imports from Agda and the Agda Standard Library -------------------------------
 open import Agda.Primitive  using () renaming ( Set to Type )
 open import Data.Product    using ( _,_ ; Σ-syntax ; _×_ )
                             renaming ( proj₁ to fst ; proj₂ to snd )
@@ -36,7 +39,7 @@ open import Axiom.Extensionality.Propositional
 open import Relation.Binary.PropositionalEquality
                             using ( _≡_ ; refl ; module ≡-Reasoning ; cong )
 
--- Imports from the Agda Universal Algebra Library ---------------------------------------------
+-- Imports from the Agda Universal Algebra Library -------------------------------
 open import Overture                     using ( ∣_∣ ; ∥_∥ ; _⁻¹ )
 open import Base.Functions               using ( IsInjective ; ∘-injective )
 open import Base.Equality                using ( SwellDef ; DFunExt )
@@ -55,7 +58,8 @@ open import Base.Varieties.EquationalLogic
 
 #### <a id="algebraic-invariance-of-models">Algebraic invariance of ⊧</a>
 
-The binary relation ⊧ would be practically useless if it were not an *algebraic invariant* (invariant under isomorphism).
+The binary relation ⊧ would be practically useless if it were not an *algebraic
+invariant* (invariant under isomorphism).
 
 \begin{code}
 
@@ -69,18 +73,24 @@ module _  (wd : SwellDef){α β χ : Level}{X : Type χ}{𝑨 : Algebra α}
  ⊧-I-invar : 𝑨 ⊧ p ≈ q  →  𝑨 ≅ 𝑩  →  𝑩 ⊧ p ≈ q
 
  ⊧-I-invar Apq (mkiso f g f∼g g∼f) x =
-  (𝑩 ⟦ p ⟧) x                       ≡⟨ wd χ β (𝑩 ⟦ p ⟧) x (∣ f ∣ ∘ ∣ g ∣ ∘ x) (λ i → ( f∼g (x i))⁻¹) ⟩
-  (𝑩 ⟦ p ⟧) ((∣ f ∣ ∘ ∣ g ∣) ∘ x)   ≡⟨ (comm-hom-term (wd 𝓥 β) 𝑩 f p (∣ g ∣ ∘ x))⁻¹ ⟩
+  (𝑩 ⟦ p ⟧) x                       ≡⟨ i p ⟩
+  (𝑩 ⟦ p ⟧) ((∣ f ∣ ∘ ∣ g ∣) ∘ x)   ≡⟨ (ii p) ⁻¹ ⟩
   ∣ f ∣ ((𝑨 ⟦ p ⟧) (∣ g ∣ ∘ x))     ≡⟨ cong ∣ f ∣ (Apq (∣ g ∣ ∘ x))  ⟩
-  ∣ f ∣ ((𝑨 ⟦ q ⟧) (∣ g ∣ ∘ x))     ≡⟨ comm-hom-term (wd 𝓥 β) 𝑩 f q (∣ g ∣ ∘ x) ⟩
-  (𝑩 ⟦ q ⟧) ((∣ f ∣ ∘ ∣ g ∣) ∘  x)  ≡⟨ wd χ β (𝑩 ⟦ q ⟧) (∣ f ∣ ∘ ∣ g ∣ ∘ x) x (λ i → ( f∼g (x i))) ⟩
+  ∣ f ∣ ((𝑨 ⟦ q ⟧) (∣ g ∣ ∘ x))     ≡⟨ ii q ⟩
+  (𝑩 ⟦ q ⟧) ((∣ f ∣ ∘ ∣ g ∣) ∘  x)  ≡⟨ (i q)⁻¹ ⟩
   (𝑩 ⟦ q ⟧) x                       ∎
+  where
+  i : ∀ t → (𝑩 ⟦ t ⟧) x ≡ (𝑩 ⟦ t ⟧) λ x₁ → ∣ f ∣ (∣ g ∣ (x x₁))
+  i t = wd χ β (𝑩 ⟦ t ⟧) x (∣ f ∣ ∘ ∣ g ∣ ∘ x) λ i → ( f∼g (x i))⁻¹
 
+  ii :  ∀ t
+   →    ∣ f ∣((𝑨 ⟦ t ⟧) λ x₁ → ∣ g ∣(x x₁)) ≡ (𝑩 ⟦ t ⟧) λ x₁ → ∣ f ∣(∣ g ∣(x x₁))
+  ii t = comm-hom-term (wd 𝓥 β) 𝑩 f t (∣ g ∣ ∘ x)
 \end{code}
 
 
-In the above proof we showed `𝑩 ⊧ p ≈ q` by showing that `𝑩 ⟦ p ⟧ ≡ 𝑩 ⟦ q ⟧` holds *extensionally*,
-that is, `∀ x, 𝑩 ⟦ p ⟧ x ≡ 𝑩 ⟦q ⟧ x`.
+In the above proof we showed `𝑩 ⊧ p ≈ q` by showing that `𝑩 ⟦ p ⟧ ≡ 𝑩 ⟦ q ⟧` holds
+*extensionally*, that is, `∀ x, 𝑩 ⟦ p ⟧ x ≡ 𝑩 ⟦q ⟧ x`.
 
 #### <a id="lift-invariance-of-models">Lift-invariance of ⊧</a>
 The `⊧` relation is also invariant under the algebraic lift and lower operations.
@@ -100,7 +110,8 @@ module _ (wd : SwellDef){α β χ : Level}{X : Type χ}{𝑨 : Algebra α} where
 
 #### <a id="subalgebraic-invariance">Subalgebraic invariance of ⊧</a>
 
-Identities modeled by an algebra `𝑨` are also modeled by every subalgebra of `𝑨`, which fact can be formalized as follows.
+Identities modeled by an algebra `𝑨` are also modeled by every subalgebra of `𝑨`,
+which fact can be formalized as follows.
 
 \begin{code}
 
@@ -142,7 +153,8 @@ of the class.  In other terms, every term equation `p ≈ q` that is satisfied b
 
 #### <a id="product-invariance-of-models">Product invariance of ⊧</a>
 
-An identity satisfied by all algebras in an indexed collection is also satisfied by the product of algebras in that collection.
+An identity satisfied by all algebras in an indexed collection is also satisfied
+by the product of algebras in that collection.
 
 \begin{code}
 
@@ -165,7 +177,8 @@ module _  (fe : DFunExt)(wd : SwellDef)
 
 \end{code}
 
-An identity satisfied by all algebras in a class is also satisfied by the product of algebras in the class.
+An identity satisfied by all algebras in a class is also satisfied by the product
+of algebras in the class.
 
 \begin{code}
 
@@ -201,13 +214,18 @@ module _ (wd : SwellDef){α χ : Level}{X : Type χ}{𝑨 : Algebra α} where
 
  ⊧-H-invar : {p q : Term X}(φ : hom (𝑻 X) 𝑨) → 𝑨 ⊧ p ≈ q  →  ∣ φ ∣ p ≡ ∣ φ ∣ q
 
- ⊧-H-invar {p}{q}φ β =  ∣ φ ∣ p                ≡⟨ cong ∣ φ ∣(term-agreement(wd 𝓥 (ov χ)) p)⟩
-                        ∣ φ ∣((𝑻 X ⟦ p ⟧) ℊ)   ≡⟨ comm-hom-term (wd 𝓥 α) 𝑨 φ p ℊ ⟩
+ ⊧-H-invar {p}{q}φ β =  ∣ φ ∣ p                ≡⟨ i p ⟩
+                        ∣ φ ∣((𝑻 X ⟦ p ⟧) ℊ)   ≡⟨ ii p ⟩
                         (𝑨 ⟦ p ⟧) (∣ φ ∣ ∘ ℊ)  ≡⟨ β (∣ φ ∣ ∘ ℊ ) ⟩
-                        (𝑨 ⟦ q ⟧) (∣ φ ∣ ∘ ℊ)  ≡⟨ (comm-hom-term (wd 𝓥 α)  𝑨 φ q ℊ )⁻¹ ⟩
-                        ∣ φ ∣ ((𝑻 X ⟦ q ⟧) ℊ)  ≡⟨(cong ∣ φ ∣ (term-agreement (wd 𝓥 (ov χ)) q))⁻¹ ⟩
+                        (𝑨 ⟦ q ⟧) (∣ φ ∣ ∘ ℊ)  ≡⟨ (ii q)⁻¹ ⟩
+                        ∣ φ ∣ ((𝑻 X ⟦ q ⟧) ℊ)  ≡⟨ (i q)⁻¹ ⟩
                         ∣ φ ∣ q                ∎
 
+  where
+  i : ∀ t → ∣ φ ∣ t ≡ ∣ φ ∣ ((𝑻 X ⟦ t ⟧) ℊ)
+  i t = cong ∣ φ ∣(term-agreement(wd 𝓥 (ov χ)) t)
+  ii : ∀ t → ∣ φ ∣ ((𝑻 X ⟦ t ⟧) ℊ) ≡ (𝑨 ⟦ t ⟧) (λ x → ∣ φ ∣ (ℊ x))
+  ii t = comm-hom-term (wd 𝓥 α) 𝑨 φ t ℊ
 \end{code}
 
 More generally, an identity is satisfied by all algebras in a class if and only if
