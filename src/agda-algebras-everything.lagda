@@ -186,6 +186,10 @@ open import
                                  using ( class-models-kernel ; 𝕍𝒦 ; kernel-in-theory       )
                                  using ( 𝔽-ModTh-epi ; 𝔽≤ℭ ; 𝔽∈SP ; 𝔽∈𝕍 ; Birkhoff         )
                                  using ( Birkhoff-converse ; _↠_                           )
+open import
+ Base.Varieties.Invariants       using ( AlgebraicInvariant )
+
+
 
 -- BASE.STRUCTURES ---------------------------------------------------------------------------------
 open import
