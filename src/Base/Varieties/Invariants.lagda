@@ -28,7 +28,7 @@ open import Base.Algebras.Basic  {𝑆 = 𝑆} using ( Algebra )
 
 private variable α ℓ : Level
 
-AlgebraicInvariant : Pred (Algebra α 𝑆) ℓ → Type _
+AlgebraicInvariant : Pred (Algebra α) ℓ → Type _
 AlgebraicInvariant P = ∀ 𝑨 𝑩 → P 𝑨 → 𝑨 ≅ 𝑩 → P 𝑩
 
 \end{code}
