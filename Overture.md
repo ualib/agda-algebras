@@ -7,16 +7,18 @@ author: "the agda-algebras development team"
 
 ## <a id="overture">Overture</a>
 
+This is the [Overture][] module of the [Agda Universal Algebra Library][].
+
 <pre class="Agda">
 
-<a id="165" class="Symbol">{-#</a> <a id="169" class="Keyword">OPTIONS</a> <a id="177" class="Pragma">--without-K</a> <a id="189" class="Pragma">--exact-split</a> <a id="203" class="Pragma">--safe</a> <a id="210" class="Symbol">#-}</a>
+<a id="241" class="Symbol">{-#</a> <a id="245" class="Keyword">OPTIONS</a> <a id="253" class="Pragma">--without-K</a> <a id="265" class="Pragma">--exact-split</a> <a id="279" class="Pragma">--safe</a> <a id="286" class="Symbol">#-}</a>
 
-<a id="215" class="Keyword">module</a> <a id="222" href="Overture.html" class="Module">Overture</a> <a id="231" class="Keyword">where</a>
+<a id="291" class="Keyword">module</a> <a id="298" href="Overture.html" class="Module">Overture</a> <a id="307" class="Keyword">where</a>
 
-<a id="238" class="Keyword">open</a> <a id="243" class="Keyword">import</a> <a id="250" href="Overture.Preface.html" class="Module">Overture.Preface</a>     <a id="271" class="Keyword">public</a>
-<a id="278" class="Keyword">open</a> <a id="283" class="Keyword">import</a> <a id="290" href="Overture.Basic.html" class="Module">Overture.Basic</a>       <a id="311" class="Keyword">public</a>
-<a id="318" class="Keyword">open</a> <a id="323" class="Keyword">import</a> <a id="330" href="Overture.Signatures.html" class="Module">Overture.Signatures</a>  <a id="351" class="Keyword">public</a>
-<a id="358" class="Keyword">open</a> <a id="363" class="Keyword">import</a> <a id="370" href="Overture.Operations.html" class="Module">Overture.Operations</a>  <a id="391" class="Keyword">public</a>
+<a id="314" class="Keyword">open</a> <a id="319" class="Keyword">import</a> <a id="326" href="Overture.Preface.html" class="Module">Overture.Preface</a>     <a id="347" class="Keyword">public</a>
+<a id="354" class="Keyword">open</a> <a id="359" class="Keyword">import</a> <a id="366" href="Overture.Basic.html" class="Module">Overture.Basic</a>       <a id="387" class="Keyword">public</a>
+<a id="394" class="Keyword">open</a> <a id="399" class="Keyword">import</a> <a id="406" href="Overture.Signatures.html" class="Module">Overture.Signatures</a>  <a id="427" class="Keyword">public</a>
+<a id="434" class="Keyword">open</a> <a id="439" class="Keyword">import</a> <a id="446" href="Overture.Operations.html" class="Module">Overture.Operations</a>  <a id="467" class="Keyword">public</a>
 </pre>
 
 --------------------------------------

@@ -27,7 +27,7 @@ Finally, in [Base.Relations.Quotients][] we define quotient types.
 
 -------------------------------------
 
-<span style="float:left;">[← Base.Overture.Transformers](Base.Overture.Transformers.html)</span>
+<span style="float:left;">[↑ Base](Base.html)</span>
 <span style="float:right;">[Base.Relations.Discrete →](Base.Relations.Discrete.html)</span>
 
 {% include UALib.Links.md %}

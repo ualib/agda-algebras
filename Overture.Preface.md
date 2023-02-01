@@ -7,11 +7,13 @@ author: "the agda-algebras development team"
 
 ### <a id="preface">Preface</a>
 
+This is the [Overture.Preface][] module of the [Agda Universal Algebra Library][].
+
 <pre class="Agda">
 
-<a id="215" class="Symbol">{-#</a> <a id="219" class="Keyword">OPTIONS</a> <a id="227" class="Pragma">--without-K</a> <a id="239" class="Pragma">--exact-split</a> <a id="253" class="Pragma">--safe</a> <a id="260" class="Symbol">#-}</a>
+<a id="299" class="Symbol">{-#</a> <a id="303" class="Keyword">OPTIONS</a> <a id="311" class="Pragma">--without-K</a> <a id="323" class="Pragma">--exact-split</a> <a id="337" class="Pragma">--safe</a> <a id="344" class="Symbol">#-}</a>
 
-<a id="265" class="Keyword">module</a> <a id="272" href="Overture.Preface.html" class="Module">Overture.Preface</a> <a id="289" class="Keyword">where</a>
+<a id="349" class="Keyword">module</a> <a id="356" href="Overture.Preface.html" class="Module">Overture.Preface</a> <a id="373" class="Keyword">where</a>
 
 </pre>
 

@@ -5,18 +5,24 @@ date : "2021-04-23"
 author: "agda-algebras development team"
 ---
 
+
+### <a id="signatures">Signatures</a>
+
+This is the Overture.Signatures`_ module of the `Agda Universal Algebra Library`_.
+
+
 <pre class="Agda">
 
-<a id="171" class="Symbol">{-#</a> <a id="175" class="Keyword">OPTIONS</a> <a id="183" class="Pragma">--without-K</a> <a id="195" class="Pragma">--exact-split</a> <a id="209" class="Pragma">--safe</a> <a id="216" class="Symbol">#-}</a>
+<a id="296" class="Symbol">{-#</a> <a id="300" class="Keyword">OPTIONS</a> <a id="308" class="Pragma">--without-K</a> <a id="320" class="Pragma">--exact-split</a> <a id="334" class="Pragma">--safe</a> <a id="341" class="Symbol">#-}</a>
 
-<a id="221" class="Keyword">module</a> <a id="228" href="Overture.Signatures.html" class="Module">Overture.Signatures</a> <a id="248" class="Keyword">where</a>
+<a id="346" class="Keyword">module</a> <a id="353" href="Overture.Signatures.html" class="Module">Overture.Signatures</a> <a id="373" class="Keyword">where</a>
 
-<a id="255" class="Comment">-- Imports from the Agda (Builtin) and the Agda Standard Library -----------------------</a>
-<a id="344" class="Keyword">open</a> <a id="349" class="Keyword">import</a> <a id="356" href="Agda.Primitive.html" class="Module">Agda.Primitive</a>  <a id="372" class="Keyword">using</a> <a id="378" class="Symbol">()</a> <a id="381" class="Keyword">renaming</a> <a id="390" class="Symbol">(</a> <a id="392" href="Agda.Primitive.html#326" class="Primitive">Set</a> <a id="396" class="Symbol">to</a>  <a id="400" class="Primitive">Type</a> <a id="405" class="Symbol">)</a>
-<a id="407" class="Keyword">open</a> <a id="412" class="Keyword">import</a> <a id="419" href="Data.Product.html" class="Module">Data.Product</a>    <a id="435" class="Keyword">using</a> <a id="441" class="Symbol">(</a> <a id="443" href="Data.Product.html#916" class="Function">Σ-syntax</a> <a id="452" class="Symbol">)</a>
-<a id="454" class="Keyword">open</a> <a id="459" class="Keyword">import</a> <a id="466" href="Level.html" class="Module">Level</a>           <a id="482" class="Keyword">using</a> <a id="488" class="Symbol">(</a> <a id="490" href="Agda.Primitive.html#597" class="Postulate">Level</a> <a id="496" class="Symbol">;</a> <a id="498" href="Agda.Primitive.html#780" class="Primitive">suc</a> <a id="502" class="Symbol">;</a> <a id="504" href="Agda.Primitive.html#810" class="Primitive Operator">_⊔_</a> <a id="508" class="Symbol">)</a>
+<a id="380" class="Comment">-- Imports from the Agda (Builtin) and the Agda Standard Library -----------------------</a>
+<a id="469" class="Keyword">open</a> <a id="474" class="Keyword">import</a> <a id="481" href="Agda.Primitive.html" class="Module">Agda.Primitive</a>  <a id="497" class="Keyword">using</a> <a id="503" class="Symbol">()</a> <a id="506" class="Keyword">renaming</a> <a id="515" class="Symbol">(</a> <a id="517" href="Agda.Primitive.html#326" class="Primitive">Set</a> <a id="521" class="Symbol">to</a>  <a id="525" class="Primitive">Type</a> <a id="530" class="Symbol">)</a>
+<a id="532" class="Keyword">open</a> <a id="537" class="Keyword">import</a> <a id="544" href="Data.Product.html" class="Module">Data.Product</a>    <a id="560" class="Keyword">using</a> <a id="566" class="Symbol">(</a> <a id="568" href="Data.Product.html#916" class="Function">Σ-syntax</a> <a id="577" class="Symbol">)</a>
+<a id="579" class="Keyword">open</a> <a id="584" class="Keyword">import</a> <a id="591" href="Level.html" class="Module">Level</a>           <a id="607" class="Keyword">using</a> <a id="613" class="Symbol">(</a> <a id="615" href="Agda.Primitive.html#597" class="Postulate">Level</a> <a id="621" class="Symbol">;</a> <a id="623" href="Agda.Primitive.html#780" class="Primitive">suc</a> <a id="627" class="Symbol">;</a> <a id="629" href="Agda.Primitive.html#810" class="Primitive Operator">_⊔_</a> <a id="633" class="Symbol">)</a>
 
-<a id="511" class="Keyword">variable</a> <a id="520" href="Overture.Signatures.html#520" class="Generalizable">𝓞</a> <a id="522" href="Overture.Signatures.html#522" class="Generalizable">𝓥</a> <a id="524" class="Symbol">:</a> <a id="526" href="Agda.Primitive.html#597" class="Postulate">Level</a>
+<a id="636" class="Keyword">variable</a> <a id="645" href="Overture.Signatures.html#645" class="Generalizable">𝓞</a> <a id="647" href="Overture.Signatures.html#647" class="Generalizable">𝓥</a> <a id="649" class="Symbol">:</a> <a id="651" href="Agda.Primitive.html#597" class="Postulate">Level</a>
 
 </pre>
 
@@ -24,8 +30,7 @@ The variables `𝓞` and `𝓥` are not private since, as mentioned earlier, thr
 the [agda-algebras][] library `𝓞` denotes the universe level of *operation symbol*
 types, while `𝓥` denotes the universe level of *arity* types.
 
-
-### <a id="signatures-of-an-algebra">Signatures of an algebra</a>
+#### <a id="theoretical-background">Theoretical background</a>
 
 In [model theory](https://en.wikipedia.org/wiki/Model_theory), the *signature*
 `𝑆 = (𝐶, 𝐹, 𝑅, ρ)` of a structure consists of three (possibly empty) sets `𝐶`, `𝐹`,
@@ -61,18 +66,18 @@ function (or "functional") type `(ρ𝑓 → A) → A`.
 `ρ𝑓`-tuple on `A`, and let `h : A → B` be a function.  Then the following
 typing judgments obtain: `h ∘ a : ρ𝑓 → B` and we `𝑓 (h ∘ a) : B`.
 
-#### <a id="signature-type">Signature type</a>
+#### <a id="the-signature-type">The signature type</a>
 
 In the [agda-algebras][] library we represent the *signature* of an algebraic
 structure using the following type.
 
 <pre class="Agda">
 
-<a id="Signature"></a><a id="3171" href="Overture.Signatures.html#3171" class="Function">Signature</a> <a id="3181" class="Symbol">:</a> <a id="3183" class="Symbol">(</a><a id="3184" href="Overture.Signatures.html#3184" class="Bound">𝓞</a> <a id="3186" href="Overture.Signatures.html#3186" class="Bound">𝓥</a> <a id="3188" class="Symbol">:</a> <a id="3190" href="Agda.Primitive.html#597" class="Postulate">Level</a><a id="3195" class="Symbol">)</a> <a id="3197" class="Symbol">→</a> <a id="3199" href="Overture.Signatures.html#400" class="Primitive">Type</a> <a id="3204" class="Symbol">(</a><a id="3205" href="Agda.Primitive.html#780" class="Primitive">suc</a> <a id="3209" class="Symbol">(</a><a id="3210" href="Overture.Signatures.html#3184" class="Bound">𝓞</a> <a id="3212" href="Agda.Primitive.html#810" class="Primitive Operator">⊔</a> <a id="3214" href="Overture.Signatures.html#3186" class="Bound">𝓥</a><a id="3215" class="Symbol">))</a>
-<a id="3218" href="Overture.Signatures.html#3171" class="Function">Signature</a> <a id="3228" href="Overture.Signatures.html#3228" class="Bound">𝓞</a> <a id="3230" href="Overture.Signatures.html#3230" class="Bound">𝓥</a> <a id="3232" class="Symbol">=</a> <a id="3234" href="Data.Product.html#916" class="Function">Σ[</a> <a id="3237" href="Overture.Signatures.html#3237" class="Bound">F</a> <a id="3239" href="Data.Product.html#916" class="Function">∈</a> <a id="3241" href="Overture.Signatures.html#400" class="Primitive">Type</a> <a id="3246" href="Overture.Signatures.html#3228" class="Bound">𝓞</a> <a id="3248" href="Data.Product.html#916" class="Function">]</a> <a id="3250" class="Symbol">(</a><a id="3251" href="Overture.Signatures.html#3237" class="Bound">F</a> <a id="3253" class="Symbol">→</a> <a id="3255" href="Overture.Signatures.html#400" class="Primitive">Type</a> <a id="3260" href="Overture.Signatures.html#3230" class="Bound">𝓥</a><a id="3261" class="Symbol">)</a>
+<a id="Signature"></a><a id="3300" href="Overture.Signatures.html#3300" class="Function">Signature</a> <a id="3310" class="Symbol">:</a> <a id="3312" class="Symbol">(</a><a id="3313" href="Overture.Signatures.html#3313" class="Bound">𝓞</a> <a id="3315" href="Overture.Signatures.html#3315" class="Bound">𝓥</a> <a id="3317" class="Symbol">:</a> <a id="3319" href="Agda.Primitive.html#597" class="Postulate">Level</a><a id="3324" class="Symbol">)</a> <a id="3326" class="Symbol">→</a> <a id="3328" href="Overture.Signatures.html#525" class="Primitive">Type</a> <a id="3333" class="Symbol">(</a><a id="3334" href="Agda.Primitive.html#780" class="Primitive">suc</a> <a id="3338" class="Symbol">(</a><a id="3339" href="Overture.Signatures.html#3313" class="Bound">𝓞</a> <a id="3341" href="Agda.Primitive.html#810" class="Primitive Operator">⊔</a> <a id="3343" href="Overture.Signatures.html#3315" class="Bound">𝓥</a><a id="3344" class="Symbol">))</a>
+<a id="3347" href="Overture.Signatures.html#3300" class="Function">Signature</a> <a id="3357" href="Overture.Signatures.html#3357" class="Bound">𝓞</a> <a id="3359" href="Overture.Signatures.html#3359" class="Bound">𝓥</a> <a id="3361" class="Symbol">=</a> <a id="3363" href="Data.Product.html#916" class="Function">Σ[</a> <a id="3366" href="Overture.Signatures.html#3366" class="Bound">F</a> <a id="3368" href="Data.Product.html#916" class="Function">∈</a> <a id="3370" href="Overture.Signatures.html#525" class="Primitive">Type</a> <a id="3375" href="Overture.Signatures.html#3357" class="Bound">𝓞</a> <a id="3377" href="Data.Product.html#916" class="Function">]</a> <a id="3379" class="Symbol">(</a><a id="3380" href="Overture.Signatures.html#3366" class="Bound">F</a> <a id="3382" class="Symbol">→</a> <a id="3384" href="Overture.Signatures.html#525" class="Primitive">Type</a> <a id="3389" href="Overture.Signatures.html#3359" class="Bound">𝓥</a><a id="3390" class="Symbol">)</a>
 
-<a id="Level-of-Signature"></a><a id="3264" href="Overture.Signatures.html#3264" class="Function">Level-of-Signature</a> <a id="3283" class="Symbol">:</a> <a id="3285" class="Symbol">{</a><a id="3286" href="Overture.Signatures.html#3286" class="Bound">𝓞</a> <a id="3288" href="Overture.Signatures.html#3288" class="Bound">𝓥</a> <a id="3290" class="Symbol">:</a> <a id="3292" href="Agda.Primitive.html#597" class="Postulate">Level</a><a id="3297" class="Symbol">}</a> <a id="3299" class="Symbol">→</a> <a id="3301" href="Overture.Signatures.html#3171" class="Function">Signature</a> <a id="3311" href="Overture.Signatures.html#3286" class="Bound">𝓞</a> <a id="3313" href="Overture.Signatures.html#3288" class="Bound">𝓥</a> <a id="3315" class="Symbol">→</a> <a id="3317" href="Agda.Primitive.html#597" class="Postulate">Level</a>
-<a id="3323" href="Overture.Signatures.html#3264" class="Function">Level-of-Signature</a> <a id="3342" class="Symbol">{</a><a id="3343" href="Overture.Signatures.html#3343" class="Bound">𝓞</a><a id="3344" class="Symbol">}{</a><a id="3346" href="Overture.Signatures.html#3346" class="Bound">𝓥</a><a id="3347" class="Symbol">}</a> <a id="3349" class="Symbol">_</a> <a id="3351" class="Symbol">=</a> <a id="3353" href="Agda.Primitive.html#780" class="Primitive">suc</a> <a id="3357" class="Symbol">(</a><a id="3358" href="Overture.Signatures.html#3343" class="Bound">𝓞</a> <a id="3360" href="Agda.Primitive.html#810" class="Primitive Operator">⊔</a> <a id="3362" href="Overture.Signatures.html#3346" class="Bound">𝓥</a><a id="3363" class="Symbol">)</a>
+<a id="Level-of-Signature"></a><a id="3393" href="Overture.Signatures.html#3393" class="Function">Level-of-Signature</a> <a id="3412" class="Symbol">:</a> <a id="3414" class="Symbol">{</a><a id="3415" href="Overture.Signatures.html#3415" class="Bound">𝓞</a> <a id="3417" href="Overture.Signatures.html#3417" class="Bound">𝓥</a> <a id="3419" class="Symbol">:</a> <a id="3421" href="Agda.Primitive.html#597" class="Postulate">Level</a><a id="3426" class="Symbol">}</a> <a id="3428" class="Symbol">→</a> <a id="3430" href="Overture.Signatures.html#3300" class="Function">Signature</a> <a id="3440" href="Overture.Signatures.html#3415" class="Bound">𝓞</a> <a id="3442" href="Overture.Signatures.html#3417" class="Bound">𝓥</a> <a id="3444" class="Symbol">→</a> <a id="3446" href="Agda.Primitive.html#597" class="Postulate">Level</a>
+<a id="3452" href="Overture.Signatures.html#3393" class="Function">Level-of-Signature</a> <a id="3471" class="Symbol">{</a><a id="3472" href="Overture.Signatures.html#3472" class="Bound">𝓞</a><a id="3473" class="Symbol">}{</a><a id="3475" href="Overture.Signatures.html#3475" class="Bound">𝓥</a><a id="3476" class="Symbol">}</a> <a id="3478" class="Symbol">_</a> <a id="3480" class="Symbol">=</a> <a id="3482" href="Agda.Primitive.html#780" class="Primitive">suc</a> <a id="3486" class="Symbol">(</a><a id="3487" href="Overture.Signatures.html#3472" class="Bound">𝓞</a> <a id="3489" href="Agda.Primitive.html#810" class="Primitive Operator">⊔</a> <a id="3491" href="Overture.Signatures.html#3475" class="Bound">𝓥</a><a id="3492" class="Symbol">)</a>
 
 </pre>
 

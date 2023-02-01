@@ -11,7 +11,9 @@ LICENSE:
 
 The software in this file is subject to the GNU General Public License v3.0.
 
-See the LICENSE file at https://gitlhub.com/ualib/agda-universal-algebra/-/blob/master/LICENSE
+The [LICENSE file](https://github.com/ualib/agda-algebras/raw/master/LICENSE)
+is available at
+[github.com/ualib/agda-algebras](https://github.com/ualib/agda-algebras/blob/master/LICENSE).
 
 The text other than software is copyright of the author. It can be
 used for scholarly purposes subject to the usual academic conventions
@@ -84,16 +86,16 @@ Cubical Agda.
 
 
 <pre class="Agda">
-<a id="3923" class="Symbol">{-#</a> <a id="3927" class="Keyword">OPTIONS</a> <a id="3935" class="Pragma">--without-K</a> <a id="3947" class="Pragma">--exact-split</a> <a id="3961" class="Pragma">--safe</a> <a id="3968" class="Symbol">#-}</a>
+<a id="4016" class="Symbol">{-#</a> <a id="4020" class="Keyword">OPTIONS</a> <a id="4028" class="Pragma">--without-K</a> <a id="4040" class="Pragma">--exact-split</a> <a id="4054" class="Pragma">--safe</a> <a id="4061" class="Symbol">#-}</a>
 </pre>
 <pre class="Agda">
-<a id="3996" class="Keyword">module</a> <a id="4003" href="agda-algebras.html" class="Module">agda-algebras</a> <a id="4017" class="Keyword">where</a>
+<a id="4089" class="Keyword">module</a> <a id="4096" href="agda-algebras.html" class="Module">agda-algebras</a> <a id="4110" class="Keyword">where</a>
 
-<a id="4024" class="Keyword">open</a> <a id="4029" class="Keyword">import</a> <a id="4036" href="Overture.html" class="Module">Overture</a>  <a id="4046" class="Comment">-- preliminaries</a>
-<a id="4063" class="Keyword">open</a> <a id="4068" class="Keyword">import</a> <a id="4075" href="Base.html" class="Module">Base</a>      <a id="4085" class="Comment">-- version 1 of the library (based on standard dependent types)</a>
-<a id="4149" class="Keyword">open</a> <a id="4154" class="Keyword">import</a> <a id="4161" href="Setoid.html" class="Module">Setoid</a>    <a id="4171" class="Comment">-- version 2 of the library (based on setoids)</a>
-<a id="4218" class="Keyword">open</a> <a id="4223" class="Keyword">import</a> <a id="4230" href="Demos.html" class="Module">Demos</a>     <a id="4240" class="Comment">-- demonstrations (e.g., proof of the HSP Theorem in a single module)</a>
-<a id="4310" class="Keyword">open</a> <a id="4315" class="Keyword">import</a> <a id="4322" href="Examples.html" class="Module">Examples</a>
+<a id="4117" class="Keyword">open</a> <a id="4122" class="Keyword">import</a> <a id="4129" href="Overture.html" class="Module">Overture</a>  <a id="4139" class="Comment">-- preliminaries</a>
+<a id="4156" class="Keyword">open</a> <a id="4161" class="Keyword">import</a> <a id="4168" href="Base.html" class="Module">Base</a>      <a id="4178" class="Comment">-- version 1 of the library (based on standard dependent types)</a>
+<a id="4242" class="Keyword">open</a> <a id="4247" class="Keyword">import</a> <a id="4254" href="Setoid.html" class="Module">Setoid</a>    <a id="4264" class="Comment">-- version 2 of the library (based on setoids)</a>
+<a id="4311" class="Keyword">open</a> <a id="4316" class="Keyword">import</a> <a id="4323" href="Demos.html" class="Module">Demos</a>     <a id="4333" class="Comment">-- demonstrations (e.g., proof of the HSP Theorem in a single module)</a>
+<a id="4403" class="Keyword">open</a> <a id="4408" class="Keyword">import</a> <a id="4415" href="Examples.html" class="Module">Examples</a>
 
 </pre>
 

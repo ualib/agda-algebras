@@ -94,3 +94,9 @@ This is the [Examples.Categories.Functors][] module of the [Agda Universal Algeb
 <a id="1864" href="Examples.Categories.Functors.html#1853" class="Function">ℓ₁</a> <a id="1867" class="Symbol">=</a> <a id="1869" href="Agda.Primitive.html#780" class="Primitive">lsuc</a> <a id="1874" href="Examples.Categories.Functors.html#497" class="Primitive">ℓ₀</a>
 
 </pre>
+
+
+--------------------------------
+
+{% include UALib.Links.md %}
+
