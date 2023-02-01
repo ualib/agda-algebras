@@ -5,7 +5,7 @@ date : "2021-06-09"
 author: "agda-algebras development team"
 ---
 
-All definitions and theorems in agda-algebras as of 12 Dec 2021.
+All definitions and theorems in agda-algebras as of 9 Oct 2022.
 
 \begin{code}
 

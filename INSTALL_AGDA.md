@@ -188,3 +188,25 @@ Try adding
 ```
 to the file `~/ualib/.emacs`.
 
+### Example Agda section of Emacs config file 
+
+;; BEGIN AGDA-config ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  (setq load-path (cons "~/.cabal/bin" load-path))
+  (setenv "LD_LIBRARY_PATH"
+    (let ((current (getenv "LD_LIBRARY_PATH"))
+          (new "/usr/local/lib:~/.cabal/lib"))
+    (if current (concat new ":" current) new)))
+  (load-file (let ((coding-system-for-read 'utf-8))
+             (shell-command-to-string "agda-mode locate")))
+  (set-fontset-font "fontset-default" nil
+                  (font-spec :name "DejaVu Sans"))
+  (setq auto-mode-alist
+    (append
+     '(("\\.agda\\'" . agda2-mode)
+       ("\\.lagda.md\\'" . agda2-mode))
+     auto-mode-alist))
+  (add-hook 'agda2-mode-hook (lambda ()
+       (setq smartparens-mode nil)
+       (setq electric-indent-mode nil) ) )
+;; END AGDA-config ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
