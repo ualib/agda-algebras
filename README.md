@@ -1,15 +1,20 @@
 # agda-algebras
 
 This is a copy of the Agda Universal Algebra Library which depends the [Standard Library](https://github.com/agda/agda-stdlib) of the [Agda](https://wiki.portal.chalmers.se/agda/pmwiki.php) proof assistant language.
-It is currently under active reconstruction, and should be regarded as alpha software.  (The previous version of the Agda Universal Algebra Library, which was called UALib, was based on the [Type Topology](https://github.com/martinescardo/TypeTopology) library of [Martín Escardó][].)
+It is currently under active reconstruction, and should be regarded as α software.
+
+The **previous version** of the library (which was called `UALib` and relied more heavily on the [Type Topology](https://github.com/martinescardo/TypeTopology) library of [Martín Escardó][]) is no longer maintained, but is still available at the following urls.
+
++  [UALib source code repository](https://gitlab.com/ualib/ualib.gitlab.io): [https://gitlab.com/ualib/ualib.gitlab.io](https://gitlab.com/ualib/ualib.gitlab.io)
++  [UALib documentation](https://ualib.gitlab.io): [https://ualib.gitlab.io](https://ualib.gitlab.io)
 
 ---------------------------
 
 ## Introduction
 
 This repository contains the source code, as well as the files used to generate 
-the [documentation](https://ualib.guthub.io/agda-algebras), for (this version of) the 
-[Agda Universal Algebra Library](https://github.com/ualib/agda-algebras).  (Documentation for the previous version is available at [ualib.org](https://ualib.gitlab.io).)
+the [documentation](https://ualib.guthub.io/agda-algebras), of the 
+[Agda Universal Algebra Library](https://github.com/ualib/agda-algebras).
 
 -----------------------------
 
@@ -19,18 +24,17 @@ Agda was used to generate html pages for each module. These pages are now served
 
 [https://ualib.org](https://ualib.org)
 
-(The previous version of the agda-algebras library, called UALib, is documented at [ualib.org](https://ualib.gitlab.io).)
-
 ----------------------------------
 
-## Install Agda
+## Installation
 
-Agda ([version 2.6.1](https://agda.readthedocs.io/en/v2.6.1/getting-started/installation.html) or greater) is required. 
+### Install Agda
 
-If you don't have it, follow the [official Agda installation instructions](https://agda.readthedocs.io/en/v2.6.0/getting-started/installation.html).
+The library has been developed and tested with [Agda version 2.6.2](https://agda.readthedocs.io/en/v2.6.1/getting-started/installation.html) and the [Agda Standard Library][] version 1.7.  (It may work with more recent versions, but there are no guarantees.)
 
+If you don't have [Agda][], follow the [official Agda installation instructions](https://agda.readthedocs.io/en/v2.6.0/getting-started/installation.html).
 
-For reference, the following is a list of commands that should correctly install Agda version 2.6.2 on a Ubuntu 18.04 machine. Please submit an issue or pull request if these commands don't work for you.
+For reference, the following is a list of commands that should correctly install Agda version 2.6.2 on a Linux machine. These commands were tested on a Ubuntu 22.04 machine. Please submit a [new issue][] or [merge request][] if these commands don't work for you.
 
 ```
 cabal update
@@ -54,6 +58,8 @@ echo 'export PATH=~/bin:~/.cabal/bin:$PATH' >> ~/.profile
 ```
 
 Now invoking the command `agdamacs` will launch emacs with Agda 2.6.2 and agda-mode installed.)
+
+For more details, see also: [INSTALL_AGDA.md](INSTALL_AGDA.md)
 
 -----------------------------
 
@@ -151,14 +157,6 @@ href="https://gitlab.com/ualib/ualib.gitlab.io"
 rel="dct:source">https://gitlab.com/ualib/ualib.gitlab.io</a>.
 
 
-<!-- ---------------- -->
-
-<!-- **Author**. [William DeMeo](https://williamdemeo.gitlab.io) -->
-
-<!-- **Affiliation**. [Department of Algebra](https://www.mff.cuni.cz/en/ka), [Charles University in Prague](https://cuni.cz/UKEN-1.html) -->
-
-
-
 [Jeremy Avigad]: http://www.andrew.cmu.edu/user/avigad/
 [Andreas Abel]: http://www.cse.chalmers.se/~abela/
 [Andrej Bauer]: http://www.andrej.com/index.html
@@ -191,3 +189,5 @@ rel="dct:source">https://gitlab.com/ualib/ualib.gitlab.io</a>.
 [agda2-mode]: https://agda.readthedocs.io/en/v2.6.1.3/tools/emacs-mode.html
 [Algebraic Effects and Handlers]: https://www.cs.uoregon.edu/research/summerschool/summer18/topics.php#Bauer
 [Bergman (2012)]: https://www.amazon.com/gp/product/1439851298/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1439851298&linkCode=as2&tag=typefunc-20&linkId=440725c9b1e60817d071c1167dff95fa
+[new issue]: https://github.com/ualib/agda-algebras/issues/new/choose
+[merge request]: https://github.com/ualib/agda-algebras/compare
