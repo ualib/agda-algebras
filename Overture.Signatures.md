@@ -36,15 +36,18 @@ In [model theory](https://en.wikipedia.org/wiki/Model_theory), the *signature*
 `𝑆 = (𝐶, 𝐹, 𝑅, ρ)` of a structure consists of three (possibly empty) sets `𝐶`, `𝐹`,
 and `𝑅`---called *constant symbols*, *function symbols*, and *relation symbols*,
 respectively---along with a function `ρ : 𝐶 + 𝐹 + 𝑅 → 𝑁` that assigns an
-*arity* to each symbol. Often (but not always) `𝑁 = ℕ`, the natural numbers.
+*arity* to each symbol.
+
+Often (but not always) `𝑁 = ℕ`, the natural numbers.
 
 As our focus here is universal algebra, we are more concerned with the restricted
 notion of an *algebraic signature* (or *signature* for algebraic structures), by
 which we mean a pair `𝑆 = (𝐹, ρ)` consisting of a collection `𝐹` of *operation
 symbols* and an *arity function* `ρ : 𝐹 → 𝑁` that maps each operation symbol to
-its arity; here, 𝑁 denotes the *arity type*. Heuristically, the arity `ρ 𝑓` of an
-operation symbol `𝑓 ∈ 𝐹` may be thought of as the "number of arguments" that `𝑓`
-takes as "input".
+its arity; here, 𝑁 denotes the *arity type*.
+
+Heuristically, the arity `ρ 𝑓` of an operation symbol `𝑓 ∈ 𝐹` may be thought of as
+the "number of arguments" that `𝑓` takes as "input".
 
 If the arity of `𝑓` is `n`, then we call `𝑓` an `n`-*ary* operation symbol.  In
 case `n` is 0 (or 1 or 2 or 3, respectively) we call the function *nullary* (or
@@ -53,18 +56,31 @@ case `n` is 0 (or 1 or 2 or 3, respectively) we call the function *nullary* (or
 If `A` is a set and `𝑓` is a (`ρ 𝑓`)-ary operation on `A`, we often indicate this
 by writing `𝑓 : A`<sup>ρ 𝑓</sup> `→ A`. On the other hand, the arguments of such
 an operation form a (`ρ 𝑓`)-tuple, say, `(a 0, a 1, …, a (ρf-1))`, which may be
-viewed as the graph of the function `a : ρ𝑓 → A`. When the codomain of `ρ` is `ℕ`,
-we may view `ρ 𝑓` as the finite set `{0, 1, …, ρ𝑓 - 1}`. Thus, by identifying the
-`ρ𝑓`-th power `A`<sup>ρ 𝑓</sup> with the type `ρ 𝑓 → A` of functions from `{0, 1,
-…, ρ𝑓 - 1}` to `A`, we identify the function type `A`<sup>ρ f</sup> `→ A` with the
-function (or "functional") type `(ρ𝑓 → A) → A`.
+viewed as the graph of the function `a : ρ𝑓 → A`.
 
-**Example**. Suppose `𝑔 : (m → A) → A` is an `m`-ary operation on `A`, and
-`a : m → A` is an `m`-tuple on `A`. Then `𝑔 a` may be viewed as
-`𝑔 (a 0, a 1, …, a (m-1))`, which has type `A`. Suppose further that
-`𝑓 : (ρ𝑓 → B) → B` is a `ρ𝑓`-ary operation on `B`, let `a : ρ𝑓 → A` be a
-`ρ𝑓`-tuple on `A`, and let `h : A → B` be a function.  Then the following
-typing judgments obtain: `h ∘ a : ρ𝑓 → B` and we `𝑓 (h ∘ a) : B`.
+When the codomain of `ρ` is `ℕ`, we may view `ρ 𝑓` as the finite set `{0, 1, …, ρ𝑓 - 1}`.
+
+Thus, by identifying the `ρ𝑓`-th power `A`<sup>ρ 𝑓</sup> with the type `ρ 𝑓 → A` of
+functions from `{0, 1, …, ρ𝑓 - 1}` to `A`, we identify the function type
+`A`<sup>ρ f</sup> `→ A` with the function (or "functional") type `(ρ𝑓 → A) → A`.
+
+**Example**.
+
+Suppose `𝑔 : (m → A) → A` is an `m`-ary operation on `A`.
+
+Let `a : m → A` be an `m`-tuple on `A`.
+
+Then `𝑔 a` may be viewed as `𝑔 (a 0, a 1, …, a (m-1))`, which has type `A`.
+
+Suppose further that `𝑓 : (ρ𝑓 → B) → B` is a `ρ𝑓`-ary operation on `B`.
+
+Let `a : ρ𝑓 → A` be a `ρ𝑓`-tuple on `A`, and let `h : A → B` be a function.
+
+Then the following typing judgments obtain:
+
+`h ∘ a : ρ𝑓 → B` and `𝑓 (h ∘ a) : B`.
+
+
 
 #### <a id="the-signature-type">The signature type</a>
 
@@ -73,16 +89,23 @@ structure using the following type.
 
 <pre class="Agda">
 
-<a id="Signature"></a><a id="3282" href="Overture.Signatures.html#3282" class="Function">Signature</a> <a id="3292" class="Symbol">:</a> <a id="3294" class="Symbol">(</a><a id="3295" href="Overture.Signatures.html#3295" class="Bound">𝓞</a> <a id="3297" href="Overture.Signatures.html#3297" class="Bound">𝓥</a> <a id="3299" class="Symbol">:</a> <a id="3301" href="Agda.Primitive.html#597" class="Postulate">Level</a><a id="3306" class="Symbol">)</a> <a id="3308" class="Symbol">→</a> <a id="3310" href="Overture.Signatures.html#528" class="Primitive">Type</a> <a id="3315" class="Symbol">(</a><a id="3316" href="Agda.Primitive.html#780" class="Primitive">suc</a> <a id="3320" class="Symbol">(</a><a id="3321" href="Overture.Signatures.html#3295" class="Bound">𝓞</a> <a id="3323" href="Agda.Primitive.html#810" class="Primitive Operator">⊔</a> <a id="3325" href="Overture.Signatures.html#3297" class="Bound">𝓥</a><a id="3326" class="Symbol">))</a>
-<a id="3329" href="Overture.Signatures.html#3282" class="Function">Signature</a> <a id="3339" href="Overture.Signatures.html#3339" class="Bound">𝓞</a> <a id="3341" href="Overture.Signatures.html#3341" class="Bound">𝓥</a> <a id="3343" class="Symbol">=</a> <a id="3345" href="Data.Product.html#916" class="Function">Σ[</a> <a id="3348" href="Overture.Signatures.html#3348" class="Bound">F</a> <a id="3350" href="Data.Product.html#916" class="Function">∈</a> <a id="3352" href="Overture.Signatures.html#528" class="Primitive">Type</a> <a id="3357" href="Overture.Signatures.html#3339" class="Bound">𝓞</a> <a id="3359" href="Data.Product.html#916" class="Function">]</a> <a id="3361" class="Symbol">(</a><a id="3362" href="Overture.Signatures.html#3348" class="Bound">F</a> <a id="3364" class="Symbol">→</a> <a id="3366" href="Overture.Signatures.html#528" class="Primitive">Type</a> <a id="3371" href="Overture.Signatures.html#3341" class="Bound">𝓥</a><a id="3372" class="Symbol">)</a>
+<a id="Signature"></a><a id="3291" href="Overture.Signatures.html#3291" class="Function">Signature</a> <a id="3301" class="Symbol">:</a> <a id="3303" class="Symbol">(</a><a id="3304" href="Overture.Signatures.html#3304" class="Bound">𝓞</a> <a id="3306" href="Overture.Signatures.html#3306" class="Bound">𝓥</a> <a id="3308" class="Symbol">:</a> <a id="3310" href="Agda.Primitive.html#597" class="Postulate">Level</a><a id="3315" class="Symbol">)</a> <a id="3317" class="Symbol">→</a> <a id="3319" href="Overture.Signatures.html#528" class="Primitive">Type</a> <a id="3324" class="Symbol">(</a><a id="3325" href="Agda.Primitive.html#780" class="Primitive">suc</a> <a id="3329" class="Symbol">(</a><a id="3330" href="Overture.Signatures.html#3304" class="Bound">𝓞</a> <a id="3332" href="Agda.Primitive.html#810" class="Primitive Operator">⊔</a> <a id="3334" href="Overture.Signatures.html#3306" class="Bound">𝓥</a><a id="3335" class="Symbol">))</a>
+<a id="3338" href="Overture.Signatures.html#3291" class="Function">Signature</a> <a id="3348" href="Overture.Signatures.html#3348" class="Bound">𝓞</a> <a id="3350" href="Overture.Signatures.html#3350" class="Bound">𝓥</a> <a id="3352" class="Symbol">=</a> <a id="3354" href="Data.Product.html#916" class="Function">Σ[</a> <a id="3357" href="Overture.Signatures.html#3357" class="Bound">F</a> <a id="3359" href="Data.Product.html#916" class="Function">∈</a> <a id="3361" href="Overture.Signatures.html#528" class="Primitive">Type</a> <a id="3366" href="Overture.Signatures.html#3348" class="Bound">𝓞</a> <a id="3368" href="Data.Product.html#916" class="Function">]</a> <a id="3370" class="Symbol">(</a><a id="3371" href="Overture.Signatures.html#3357" class="Bound">F</a> <a id="3373" class="Symbol">→</a> <a id="3375" href="Overture.Signatures.html#528" class="Primitive">Type</a> <a id="3380" href="Overture.Signatures.html#3350" class="Bound">𝓥</a><a id="3381" class="Symbol">)</a>
 
-<a id="Level-of-Signature"></a><a id="3375" href="Overture.Signatures.html#3375" class="Function">Level-of-Signature</a> <a id="3394" class="Symbol">:</a> <a id="3396" class="Symbol">{</a><a id="3397" href="Overture.Signatures.html#3397" class="Bound">𝓞</a> <a id="3399" href="Overture.Signatures.html#3399" class="Bound">𝓥</a> <a id="3401" class="Symbol">:</a> <a id="3403" href="Agda.Primitive.html#597" class="Postulate">Level</a><a id="3408" class="Symbol">}</a> <a id="3410" class="Symbol">→</a> <a id="3412" href="Overture.Signatures.html#3282" class="Function">Signature</a> <a id="3422" href="Overture.Signatures.html#3397" class="Bound">𝓞</a> <a id="3424" href="Overture.Signatures.html#3399" class="Bound">𝓥</a> <a id="3426" class="Symbol">→</a> <a id="3428" href="Agda.Primitive.html#597" class="Postulate">Level</a>
-<a id="3434" href="Overture.Signatures.html#3375" class="Function">Level-of-Signature</a> <a id="3453" class="Symbol">{</a><a id="3454" href="Overture.Signatures.html#3454" class="Bound">𝓞</a><a id="3455" class="Symbol">}{</a><a id="3457" href="Overture.Signatures.html#3457" class="Bound">𝓥</a><a id="3458" class="Symbol">}</a> <a id="3460" class="Symbol">_</a> <a id="3462" class="Symbol">=</a> <a id="3464" href="Agda.Primitive.html#780" class="Primitive">suc</a> <a id="3468" class="Symbol">(</a><a id="3469" href="Overture.Signatures.html#3454" class="Bound">𝓞</a> <a id="3471" href="Agda.Primitive.html#810" class="Primitive Operator">⊔</a> <a id="3473" href="Overture.Signatures.html#3457" class="Bound">𝓥</a><a id="3474" class="Symbol">)</a>
+</pre>
+
+Occasionally it is useful to obtain the universe level over which a signature is defined.
+
+<pre class="Agda">
+
+<a id="Level-of-Signature"></a><a id="3501" href="Overture.Signatures.html#3501" class="Function">Level-of-Signature</a> <a id="3520" class="Symbol">:</a> <a id="3522" class="Symbol">{</a><a id="3523" href="Overture.Signatures.html#3523" class="Bound">𝓞</a> <a id="3525" href="Overture.Signatures.html#3525" class="Bound">𝓥</a> <a id="3527" class="Symbol">:</a> <a id="3529" href="Agda.Primitive.html#597" class="Postulate">Level</a><a id="3534" class="Symbol">}</a> <a id="3536" class="Symbol">→</a> <a id="3538" href="Overture.Signatures.html#3291" class="Function">Signature</a> <a id="3548" href="Overture.Signatures.html#3523" class="Bound">𝓞</a> <a id="3550" href="Overture.Signatures.html#3525" class="Bound">𝓥</a> <a id="3552" class="Symbol">→</a> <a id="3554" href="Agda.Primitive.html#597" class="Postulate">Level</a>
+<a id="3560" href="Overture.Signatures.html#3501" class="Function">Level-of-Signature</a> <a id="3579" class="Symbol">{</a><a id="3580" href="Overture.Signatures.html#3580" class="Bound">𝓞</a><a id="3581" class="Symbol">}{</a><a id="3583" href="Overture.Signatures.html#3583" class="Bound">𝓥</a><a id="3584" class="Symbol">}</a> <a id="3586" class="Symbol">_</a> <a id="3588" class="Symbol">=</a> <a id="3590" href="Agda.Primitive.html#780" class="Primitive">suc</a> <a id="3594" class="Symbol">(</a><a id="3595" href="Overture.Signatures.html#3580" class="Bound">𝓞</a> <a id="3597" href="Agda.Primitive.html#810" class="Primitive Operator">⊔</a> <a id="3599" href="Overture.Signatures.html#3583" class="Bound">𝓥</a><a id="3600" class="Symbol">)</a>
 
 </pre>
 
 In the [Base.Functions][] module of the [agda-algebras][] library, special syntax
 is defined for the first and second projections---namely, `∣_∣` and `∥_∥`, resp.
+
 Consequently, if `𝑆 : Signature 𝓞 𝓥` is a signature, then
 
 * `∣ 𝑆 ∣` denotes the set of operation symbols, and
