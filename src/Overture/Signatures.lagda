@@ -8,7 +8,7 @@ author: "agda-algebras development team"
 
 ### <a id="signatures">Signatures</a>
 
-This is the Overture.Signatures`_ module of the `Agda Universal Algebra Library`_.
+This is the [Overture.Signatures][] module of the [Agda Universal Algebra Library][].
 
 
 \begin{code}
