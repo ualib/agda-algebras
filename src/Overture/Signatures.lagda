@@ -26,9 +26,9 @@ variable 𝓞 𝓥 : Level
 
 \end{code}
 
-The variables `𝓞` and `𝓥` are not private since, as mentioned earlier, throughout
-the [agda-algebras][] library `𝓞` denotes the universe level of *operation symbol*
-types, while `𝓥` denotes the universe level of *arity* types.
+The variables `𝓞` and `𝓥` are not private since, throughout the [agda-algebras][] library,
+`𝓞` denotes the universe level of *operation symbol* types, while `𝓥` denotes the universe
+level of *arity* types.
 
 #### <a id="theoretical-background">Theoretical background</a>
 

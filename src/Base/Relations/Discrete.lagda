@@ -32,8 +32,8 @@ open import Overture using (_≈_ ; Π-syntax ; Op)
 private variable α β ρ 𝓥 : Level
 \end{code}
 
-Here is a function that is useful for defining poitwise equality of functions wrt a given equality
-(see, e.g., the definition of `_≈̇_` in the [Residuation.Properties][] module).
+We begin with a definition that is useful for defining poitwise "equality" of functions
+with respect to a given "equality" relation (see also the definition of `_≈̇_` in the [Base.Adjunction.Residuation][] module).
 
 \begin{code}
 
@@ -42,6 +42,15 @@ module _ {A : Type α} where
  PointWise : {B : Type β } (_≋_ : BinRel B ρ) → BinRel (A → B) _
  PointWise {B = B} _≋_ = λ (f g : A → B) → ∀ x → f x ≋ g x
 
+\end{code}
+
+Thus, given a binary relation `≋` on ‵B`, and a pair of functions `f, g : A → B`,
+we have `f (Pointwise _≋_) g` provided `∀ x → f x ≋ g x`.
+
+Here is the analogous definition for dependent functions.
+
+\begin{code}
+
  depPointWise :  {B : A → Type β }
                  (_≋_ : {γ : Level}{C : Type γ} → BinRel C ρ)
   →              BinRel ((a : A) → B a) _
@@ -49,8 +58,8 @@ module _ {A : Type α} where
 
 \end{code}
 
-Here is useful notation for asserting that the image of a function (the first argument)
-is contained in a predicate, the second argument (a "subset" of the codomain).
+Next we define a type that is useful for asserting that the image of a function
+is contained in a particular "subset" (predicate) of the codomain.
 
 \begin{code}
 
@@ -62,13 +71,17 @@ is contained in a predicate, the second argument (a "subset" of the codomain).
 
 #### <a id="operation-symbols-unary-relations-binary-relations">Operation symbols, unary relations, binary relations</a>
 
-The unary relation (or "predicate") type is imported from Relation.Unary of the std lib.
+The unary relation (or "predicate") type is imported from Relation.Unary of the [Agda Standard Library][].
 
 ```agda
-Pred : ∀ {a} → Set a → (ℓ : Level) → Set (a ⊔ suc ℓ)
-Pred A ℓ = A → Set ℓ
+Pred : ∀ {a} → Type a → (ℓ : Level) → Type (a ⊔ suc ℓ)
+Pred A ℓ = A → Type ℓ
 ```
-Sometimes it is useful to obtain the underlying type of a predicate.
+We represent "sets" as inhabitants of such predicate types.
+
+(In the definition of `Pred` above, we replaced `Set` with `Type` for consistency with our notation.)
+
+Sometimes it is useful to obtain the underlying type over which a type of predicates is defined.
 
 \begin{code}
 
@@ -78,23 +91,24 @@ Sometimes it is useful to obtain the underlying type of a predicate.
 \end{code}
 
 The binary relation types are called `Rel` and `REL` in the standard library, but we
-will call them `BinRel` and `BinREL` and reserve the names `Rel` and `REL` for the more
-general types of relations we define below and in the Base.Relations.Continuous module.
+will call them `BinRel` and `BinREL` and reserve the names `Rel` and `REL` for the relation
+types we define below and in the [Base.Relations.Continuous][] module.
 
-The heterogeneous binary relation type is imported from the standard library and renamed `BinREL`.
+We import the "heterogeneous" binary relation type from the standard library and renamed `BinREL`.
 
 ```agda
 BinREL : ∀ {ℓ} (A B : Type ℓ) (ℓ' : Level) → Type (ℓ-max ℓ (ℓ-suc ℓ'))
 BinREL A B ℓ' = A → B → Type ℓ'
 ```
 
-The homogeneous binary relation type is imported from the standard
-library and renamed BinRel.
+A special case, the homogeneous binary relation type is also imported and renamed `BinRel`.
 
 ```agda
 BinRel : ∀{ℓ} → Type ℓ → (ℓ' : Level) → Type (ℓ ⊔ lsuc ℓ')
 BinRel A ℓ' = REL A A ℓ'
 ```
+
+Occasionally it is useful to extract the universe level over which a binary relation is defined.
 
 \begin{code}
 
