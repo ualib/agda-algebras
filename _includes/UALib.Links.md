@@ -12,25 +12,45 @@
 [merge request]: https://github.com/ualib/agda-algebras/compare
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 
-[Preface]: https://ualib.org/Preface.html
+<!-- ///////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+[Overture]: https://ualib.org/Overture.html
+
+[Overture.Preface]: https://ualib.org/Overture.Preface.html
+[Overture.Basic]: https://ualib.org/Overture.Basic.html
+[Overture.Signatures]: https://ualib.org/Overture.Signatures.html
+[Overture.Levels]: https://ualib.org/Overture.Levels.html
+[Overture.Operations]: https://ualib.org/Overture.Operations.html
+
 [Base]: https://ualib.org/Base.html
-[Base.Adjunction]: https://ualib.org/Base.Adjunction.html
-[Base.Adjunction.Closure]: https://ualib.org/Base.Adjunction.Closure.html
-[Base.Adjunction.Galois]: https://ualib.org/Base.Adjunction.Galois.html
-[Base.Adjunction.Residuation]: https://ualib.org/Base.Adjunction.Residuation.html
-[Base.Algebras]: https://ualib.org/Base.Algebras.html
-[Base.Algebras.Basic]: https://ualib.org/Base.Algebras.Basic.html
-[Base.Algebras.Congruences]: https://ualib.org/Base.Algebras.Congruences.html
-[Base.Algebras.Products]: https://ualib.org/Base.Algebras.Products.html
-[Base.Categories]: https://ualib.org/Base.Categories.html
-[Base.Categories.Functors]: https://ualib.org/Base.Categories.Functors.html
-[Base.Complexity]: https://ualib.org/Base.Complexity.html
-[Base.Complexity.Basic]: https://ualib.org/Base.Complexity.Basic.html
-[Base.Complexity.CSP]: https://ualib.org/Base.Complexity.CSP.html
+
+[Base.Relations]: https://ualib.org/Base.Relations.html
+[Base.Relations.Continuous]: https://ualib.org/Base.Relations.Continuous.html
+[Base.Relations.Discrete]: https://ualib.org/Base.Relations.Discrete.html
+[Base.Relations.Properties]: https://ualib.org/Base.Relations.Properties.html
+[Base.Relations.Quotients]: https://ualib.org/Base.Relations.Quotients.html
+
+[Base.Functions]: https://ualib.org/Base.Functions.html
+[Base.Functions.Inverses]: https://ualib.org/Base.Functions.Inverses.html
+[Base.Functions.Injective]: https://ualib.org/Base.Functions.Injective.html
+[Base.Functions.Surjective]: https://ualib.org/Base.Functions.Surjective.html
+[Base.Functions.Transformers]: https://ualib.org/Base.Functions.Transformers.html
+
 [Base.Equality]: https://ualib.org/Base.Equality.html
 [Base.Equality.Extensionality]: https://ualib.org/Base.Equality.Extensionality.html
 [Base.Equality.Truncation]: https://ualib.org/Base.Equality.Truncation.html
 [Base.Equality.Welldefined]: https://ualib.org/Base.Equality.Welldefined.html
+
+[Base.Adjunction]: https://ualib.org/Base.Adjunction.html
+[Base.Adjunction.Closure]: https://ualib.org/Base.Adjunction.Closure.html
+[Base.Adjunction.Galois]: https://ualib.org/Base.Adjunction.Galois.html
+[Base.Adjunction.Residuation]: https://ualib.org/Base.Adjunction.Residuation.html
+
+[Base.Algebras]: https://ualib.org/Base.Algebras.html
+[Base.Algebras.Basic]: https://ualib.org/Base.Algebras.Basic.html
+[Base.Algebras.Congruences]: https://ualib.org/Base.Algebras.Congruences.html
+[Base.Algebras.Products]: https://ualib.org/Base.Algebras.Products.html
+
 [Base.Homomorphisms]: https://ualib.org/Base.Homomorphisms.html
 [Base.Homomorphisms.Basic]: https://ualib.org/Base.Homomorphisms.Basic.html
 [Base.Homomorphisms.Factor]: https://ualib.org/Base.Homomorphisms.Factor.html
@@ -40,17 +60,25 @@
 [Base.Homomorphisms.Noether]: https://ualib.org/Base.Homomorphisms.Noether.html
 [Base.Homomorphisms.Products]: https://ualib.org/Base.Homomorphisms.Products.html
 [Base.Homomorphisms.Properties]: https://ualib.org/Base.Homomorphisms.Properties.html
-[Base.Overture]: https://ualib.org/Base.Overture.html
-[Base.Overture.Injective]: https://ualib.org/Base.Overture.Injective.html
-[Base.Overture.Inverses]: https://ualib.org/Base.Overture.Inverses.html
-[Base.Overture.Preliminaries]: https://ualib.org/Base.Overture.Preliminaries.html
-[Base.Overture.Surjective]: https://ualib.org/Base.Overture.Surjective.html
-[Base.Overture.Transformers]: https://ualib.org/Base.Overture.Transformers.html
-[Base.Relations]: https://ualib.org/Base.Relations.html
-[Base.Relations.Continuous]: https://ualib.org/Base.Relations.Continuous.html
-[Base.Relations.Discrete]: https://ualib.org/Base.Relations.Discrete.html
-[Base.Relations.Properties]: https://ualib.org/Base.Relations.Properties.html
-[Base.Relations.Quotients]: https://ualib.org/Base.Relations.Quotients.html
+
+[Base.Terms]: https://ualib.org/Base.Terms.html
+[Base.Terms.Basic]: https://ualib.org/Base.Terms.Basic.html
+[Base.Terms.Operations]: https://ualib.org/Base.Terms.Operations.html
+[Base.Terms.Properties]: https://ualib.org/Base.Terms.Properties.html
+
+[Base.Subalgebras]: https://ualib.org/Base.Subalgebras.html
+[Base.Subalgebras.Properties]: https://ualib.org/Base.Subalgebras.Properties.html
+[Base.Subalgebras.Subalgebras]: https://ualib.org/Base.Subalgebras.Subalgebras.html
+[Base.Subalgebras.Subuniverses]: https://ualib.org/Base.Subalgebras.Subuniverses.html
+
+[Base.Varieties]: https://ualib.org/Base.Varieties.html
+[Base.Varieties.Closure]: https://ualib.org/Base.Varieties.Closure.html
+[Base.Varieties.EquationalLogic]: https://ualib.org/Base.Varieties.EquationalLogic.html
+[Base.Varieties.FreeAlgebras]: https://ualib.org/Base.Varieties.FreeAlgebras.html
+[Base.Varieties.Invariants]: https://ualib.org/Base.Varieties.Invariants.html
+[Base.Varieties.Preservation]: https://ualib.org/Base.Varieties.Preservation.html
+[Base.Varieties.Properties]: https://ualib.org/Base.Varieties.Properties.html
+
 [Base.Structures]: https://ualib.org/Base.Structures.html
 [Base.Structures.Basic]: https://ualib.org/Base.Structures.Basic.html
 [Base.Structures.Congruences]: https://ualib.org/Base.Structures.Congruences.html
@@ -68,35 +96,34 @@
 [Base.Structures.Sigma.Products]: https://ualib.org/Base.Structures.Sigma.Products.html
 [Base.Structures.Substructures]: https://ualib.org/Base.Structures.Substructures.html
 [Base.Structures.Terms]: https://ualib.org/Base.Structures.Terms.html
-[Base.Subalgebras]: https://ualib.org/Base.Subalgebras.html
-[Base.Subalgebras.Properties]: https://ualib.org/Base.Subalgebras.Properties.html
-[Base.Subalgebras.Subalgebras]: https://ualib.org/Base.Subalgebras.Subalgebras.html
-[Base.Subalgebras.Subuniverses]: https://ualib.org/Base.Subalgebras.Subuniverses.html
-[Base.Terms]: https://ualib.org/Base.Terms.html
-[Base.Terms.Basic]: https://ualib.org/Base.Terms.Basic.html
-[Base.Terms.Operations]: https://ualib.org/Base.Terms.Operations.html
-[Base.Terms.Properties]: https://ualib.org/Base.Terms.Properties.html
-[Base.Varieties]: https://ualib.org/Base.Varieties.html
-[Base.Varieties.Closure]: https://ualib.org/Base.Varieties.Closure.html
-[Base.Varieties.EquationalLogic]: https://ualib.org/Base.Varieties.EquationalLogic.html
-[Base.Varieties.FreeAlgebras]: https://ualib.org/Base.Varieties.FreeAlgebras.html
-[Base.Varieties.Invariants]: https://ualib.org/Base.Varieties.Invariants.html
-[Base.Varieties.Preservation]: https://ualib.org/Base.Varieties.Preservation.html
-[Base.Varieties.Properties]: https://ualib.org/Base.Varieties.Properties.html
-[Cubical]: https://ualib.org/Cubical.html
-[Cubical.Overture]: https://ualib.org/Cubical.Overture.html
-[Cubical.Overture.Preliminaries]: https://ualib.org/Cubical.Overture.Preliminaries.html
-[Demos.HSP]: https://ualib.org/Demos.HSP.html
-[Demos.HSP-markdown]: https://ualib.org/Demos.HSP-markdown.html
-[Examples.Categories.Functors]: https://ualib.org/Examples.Categories.Functors.html
-[Examples.Structures.Basic]: https://ualib.org/Examples.Structures.Basic.html
-[Examples.Structures.Signatures]: https://ualib.org/Examples.Structures.Signatures.html
-[Exercises.Complexity.FiniteCSP]: https://ualib.org/Exercises.Complexity.FiniteCSP.html
+
+[Base.Categories]: https://ualib.org/Base.Categories.html
+[Base.Categories.Functors]: https://ualib.org/Base.Categories.Functors.html
+
+[Base.Complexity]: https://ualib.org/Base.Complexity.html
+[Base.Complexity.Basic]: https://ualib.org/Base.Complexity.Basic.html
+[Base.Complexity.CSP]: https://ualib.org/Base.Complexity.CSP.html
+
+<!-- ///////////////////////////////////////////////////////////////////////////////////////////////// -->
+
 [Setoid]: https://ualib.org/Setoid.html
+
+[Setoid.Relations]: https://ualib.org/Setoid.Relations.html
+[Setoid.Relations.Discrete]: https://ualib.org/Setoid.Relations.Discrete.html
+[Setoid.Relations.Quotients]: https://ualib.org/Setoid.Relations.Quotients.html
+
+[Setoid.Functions]: https://ualib.org/Setoid.Functions.html
+[Setoid.Functions.Basic]: https://ualib.org/Setoid.Functions.Basic.html
+[Setoid.Functions.Inverses]: https://ualib.org/Setoid.Functions.Inverses.html
+[Setoid.Functions.Injective]: https://ualib.org/Setoid.Functions.Injective.html
+[Setoid.Functions.Surjective]: https://ualib.org/Setoid.Functions.Surjective.html
+[Setoid.Functions.Bijective]: https://ualib.org/Setoid.Functions.Bijective.html
+
 [Setoid.Algebras]: https://ualib.org/Setoid.Algebras.html
 [Setoid.Algebras.Basic]: https://ualib.org/Setoid.Algebras.Basic.html
 [Setoid.Algebras.Congruences]: https://ualib.org/Setoid.Algebras.Congruences.html
 [Setoid.Algebras.Products]: https://ualib.org/Setoid.Algebras.Products.html
+
 [Setoid.Homomorphisms]: https://ualib.org/Setoid.Homomorphisms.html
 [Setoid.Homomorphisms.Basic]: https://ualib.org/Setoid.Homomorphisms.Basic.html
 [Setoid.Homomorphisms.Factor]: https://ualib.org/Setoid.Homomorphisms.Factor.html
@@ -106,23 +133,17 @@
 [Setoid.Homomorphisms.Noether]: https://ualib.org/Setoid.Homomorphisms.Noether.html
 [Setoid.Homomorphisms.Products]: https://ualib.org/Setoid.Homomorphisms.Products.html
 [Setoid.Homomorphisms.Properties]: https://ualib.org/Setoid.Homomorphisms.Properties.html
-[Setoid.Overture]: https://ualib.org/Setoid.Overture.html
-[Setoid.Overture.Bijective]: https://ualib.org/Setoid.Overture.Bijective.html
-[Setoid.Overture.Injective]: https://ualib.org/Setoid.Overture.Injective.html
-[Setoid.Overture.Inverses]: https://ualib.org/Setoid.Overture.Inverses.html
-[Setoid.Overture.Preliminaries]: https://ualib.org/Setoid.Overture.Preliminaries.html
-[Setoid.Overture.Surjective]: https://ualib.org/Setoid.Overture.Surjective.html
-[Setoid.Relations]: https://ualib.org/Setoid.Relations.html
-[Setoid.Relations.Discrete]: https://ualib.org/Setoid.Relations.Discrete.html
-[Setoid.Relations.Quotients]: https://ualib.org/Setoid.Relations.Quotients.html
-[Setoid.Subalgebras]: https://ualib.org/Setoid.Subalgebras.html
-[Setoid.Subalgebras.Properties]: https://ualib.org/Setoid.Subalgebras.Properties.html
-[Setoid.Subalgebras.Subalgebras]: https://ualib.org/Setoid.Subalgebras.Subalgebras.html
-[Setoid.Subalgebras.Subuniverses]: https://ualib.org/Setoid.Subalgebras.Subuniverses.html
+
 [Setoid.Terms]: https://ualib.org/Setoid.Terms.html
 [Setoid.Terms.Basic]: https://ualib.org/Setoid.Terms.Basic.html
 [Setoid.Terms.Operations]: https://ualib.org/Setoid.Terms.Operations.html
 [Setoid.Terms.Properties]: https://ualib.org/Setoid.Terms.Properties.html
+
+[Setoid.Subalgebras]: https://ualib.org/Setoid.Subalgebras.html
+[Setoid.Subalgebras.Properties]: https://ualib.org/Setoid.Subalgebras.Properties.html
+[Setoid.Subalgebras.Subalgebras]: https://ualib.org/Setoid.Subalgebras.Subalgebras.html
+[Setoid.Subalgebras.Subuniverses]: https://ualib.org/Setoid.Subalgebras.Subuniverses.html
+
 [Setoid.Varieties]: https://ualib.org/Setoid.Varieties.html
 [Setoid.Varieties.Closure]: https://ualib.org/Setoid.Varieties.Closure.html
 [Setoid.Varieties.EquationalLogic]: https://ualib.org/Setoid.Varieties.EquationalLogic.html
@@ -132,27 +153,54 @@
 [Setoid.Varieties.Properties]: https://ualib.org/Setoid.Varieties.Properties.html
 [Setoid.Varieties.SoundAndComplete]: https://ualib.org/Setoid.Varieties.SoundAndComplete.html
 
+[Cubical]: https://ualib.org/Cubical.html
+[Cubical.Overture]: https://ualib.org/Cubical.Overture.html
+[Cubical.Overture.Preliminaries]: https://ualib.org/Cubical.Overture.Preliminaries.html
+[Demos.HSP]: https://ualib.org/Demos.HSP.html
+[Demos.HSP-markdown]: https://ualib.org/Demos.HSP-markdown.html
+[Examples.Categories.Functors]: https://ualib.org/Examples.Categories.Functors.html
+[Examples.Structures.Basic]: https://ualib.org/Examples.Structures.Basic.html
+[Examples.Structures.Signatures]: https://ualib.org/Examples.Structures.Signatures.html
+[Exercises.Complexity.FiniteCSP]: https://ualib.org/Exercises.Complexity.FiniteCSP.html
 
+<!-- ///////////////////////////////////////////////////////////////////////////////////////////////// -->
 
+[Overture.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Overture.lagda
+
+[Overture/Preface.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Overture/Preface.lagda
+[Overture/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Overture/Basic.lagda
+[Overture/Signatures.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Overture/Signatures.lagda
+[Overture/Levels.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Overture/Levels.lagda
+[Overture/Operations.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Overture/Operations.lagda
 
 [Base.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base.lagda
-[Base/Adjunction.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Adjunction.lagda
-[Base/Adjunction/Closure.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Adjunction/Closure.lagda
-[Base/Adjunction/Galois.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Adjunction/Galois.lagda
-[Base/Adjunction/Residuation.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Adjunction/Residuation.lagda
-[Base/Algebras.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Algebras.lagda
-[Base/Algebras/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Algebras/Basic.lagda
-[Base/Algebras/Congruences.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Algebras/Congruences.lagda
-[Base/Algebras/Products.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Algebras/Products.lagda
-[Base/Categories.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Categories.lagda
-[Base/Categories/Functors.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Categories/Functors.lagda
-[Base/Complexity.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Complexity.lagda
-[Base/Complexity/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Complexity/Basic.lagda
-[Base/Complexity/CSP.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Complexity/CSP.lagda
+[Base/Relations.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Relations.lagda
+[Base/Relations/Continuous.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Relations/Continuous.lagda
+[Base/Relations/Discrete.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Relations/Discrete.lagda
+[Base/Relations/Properties.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Relations/Properties.lagda
+[Base/Relations/Quotients.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Relations/Quotients.lagda
+
+[Base/Functions.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Functions.lagda
+[Base/Functions/Inverses.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Functions/Inverses.lagda
+[Base/Functions/Injective.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Functions/Injective.lagda
+[Base/Functions/Surjective.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Functions/Surjective.lagda
+[Base/Functions/Transformers.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Functions/Transformers.lagda
+
 [Base/Equality.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Equality.lagda
 [Base/Equality/Extensionality.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Equality/Extensionality.lagda
 [Base/Equality/Truncation.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Equality/Truncation.lagda
 [Base/Equality/Welldefined.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Equality/Welldefined.lagda
+
+[Base/Adjunction.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Adjunction.lagda
+[Base/Adjunction/Closure.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Adjunction/Closure.lagda
+[Base/Adjunction/Galois.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Adjunction/Galois.lagda
+[Base/Adjunction/Residuation.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Adjunction/Residuation.lagda
+
+[Base/Algebras.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Algebras.lagda
+[Base/Algebras/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Algebras/Basic.lagda
+[Base/Algebras/Congruences.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Algebras/Congruences.lagda
+[Base/Algebras/Products.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Algebras/Products.lagda
+
 [Base/Homomorphisms.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Homomorphisms.lagda
 [Base/Homomorphisms/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Homomorphisms/Basic.lagda
 [Base/Homomorphisms/Factor.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Homomorphisms/Factor.lagda
@@ -162,17 +210,25 @@
 [Base/Homomorphisms/Noether.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Homomorphisms/Noether.lagda
 [Base/Homomorphisms/Products.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Homomorphisms/Products.lagda
 [Base/Homomorphisms/Properties.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Homomorphisms/Properties.lagda
-[Base/Overture.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Overture.lagda
-[Base/Overture/Injective.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Overture/Injective.lagda
-[Base/Overture/Inverses.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Overture/Inverses.lagda
-[Base/Overture/Preliminaries.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Overture/Preliminaries.lagda
-[Base/Overture/Surjective.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Overture/Surjective.lagda
-[Base/Overture/Transformers.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Overture/Transformers.lagda
-[Base/Relations.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Relations.lagda
-[Base/Relations/Continuous.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Relations/Continuous.lagda
-[Base/Relations/Discrete.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Relations/Discrete.lagda
-[Base/Relations/Properties.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Relations/Properties.lagda
-[Base/Relations/Quotients.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Relations/Quotients.lagda
+
+[Base/Terms.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Terms.lagda
+[Base/Terms/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Terms/Basic.lagda
+[Base/Terms/Operations.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Terms/Operations.lagda
+[Base/Terms/Properties.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Terms/Properties.lagda
+
+[Base/Subalgebras.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Subalgebras.lagda
+[Base/Subalgebras/Properties.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Subalgebras/Properties.lagda
+[Base/Subalgebras/Subalgebras.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Subalgebras/Subalgebras.lagda
+[Base/Subalgebras/Subuniverses.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Subalgebras/Subuniverses.lagda
+
+[Base/Varieties.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Varieties.lagda
+[Base/Varieties/Closure.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Varieties/Closure.lagda
+[Base/Varieties/EquationalLogic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Varieties/EquationalLogic.lagda
+[Base/Varieties/FreeAlgebras.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Varieties/FreeAlgebras.lagda
+[Base/Varieties/Invariants.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Varieties/Invariants.lagda
+[Base/Varieties/Preservation.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Varieties/Preservation.lagda
+[Base/Varieties/Properties.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Varieties/Properties.lagda
+
 [Base/Structures.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Structures.lagda
 [Base/Structures/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Structures/Basic.lagda
 [Base/Structures/Congruences.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Structures/Congruences.lagda
@@ -190,36 +246,34 @@
 [Base/Structures/Sigma/Products.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Structures/Sigma/Products.lagda
 [Base/Structures/Substructures.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Structures/Substructures.lagda
 [Base/Structures/Terms.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Structures/Terms.lagda
-[Base/Subalgebras.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Subalgebras.lagda
-[Base/Subalgebras/Properties.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Subalgebras/Properties.lagda
-[Base/Subalgebras/Subalgebras.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Subalgebras/Subalgebras.lagda
-[Base/Subalgebras/Subuniverses.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Subalgebras/Subuniverses.lagda
-[Base/Terms.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Terms.lagda
-[Base/Terms/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Terms/Basic.lagda
-[Base/Terms/Operations.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Terms/Operations.lagda
-[Base/Terms/Properties.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Terms/Properties.lagda
-[Base/Varieties.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Varieties.lagda
-[Base/Varieties/Closure.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Varieties/Closure.lagda
-[Base/Varieties/EquationalLogic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Varieties/EquationalLogic.lagda
-[Base/Varieties/FreeAlgebras.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Varieties/FreeAlgebras.lagda
-[Base/Varieties/Invariants.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Varieties/Invariants.lagda
-[Base/Varieties/Preservation.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Varieties/Preservation.lagda
-[Base/Varieties/Properties.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Varieties/Properties.lagda
-[Cubical.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Cubical.lagda
-[Cubical/Overture.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Cubical/Overture.lagda
-[Cubical/Overture/Preliminaries.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Cubical/Overture/Preliminaries.lagda
-[Demos/HSP.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Demos/HSP.lagda
-[Demos/HSP-markdown.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Demos/HSP/markdown.lagda
-[Examples/Categories/Functors.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Categories/Functors.lagda
-[Examples/Structures/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Structures/Basic.lagda
-[Examples/Structures/Signatures.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Structures/Signatures.lagda
-[Exercises/Complexity/FiniteCSP.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Exercises/Complexity/FiniteCSP.lagda
-[Preface.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Preface.lagda
+
+[Base/Categories.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Categories.lagda
+[Base/Categories/Functors.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Categories/Functors.lagda
+
+[Base/Complexity.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Complexity.lagda
+[Base/Complexity/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Complexity/Basic.lagda
+[Base/Complexity/CSP.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Complexity/CSP.lagda
+
+<!-- ///////////////////////////////////////////////////////////////////////////////////////////////// -->
+
 [Setoid.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid.lagda
+
+[Setoid/Relations.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Relations.lagda
+[Setoid/Relations/Discrete.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Relations/Discrete.lagda
+[Setoid/Relations/Quotients.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Relations/Quotients.lagda
+
+[Setoid/Functions.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Functions.lagda
+[Setoid/Functions/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Functions/Basic.lagda
+[Setoid/Functions/Inverses.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Functions/Inverses.lagda
+[Setoid/Functions/Injective.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Functions/Injective.lagda
+[Setoid/Functions/Surjective.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Functions/Surjective.lagda
+[Setoid/Functions/Bijective.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Functions/Bijective.lagda
+
 [Setoid/Algebras.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Algebras.lagda
 [Setoid/Algebras/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Algebras/Basic.lagda
 [Setoid/Algebras/Congruences.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Algebras/Congruences.lagda
 [Setoid/Algebras/Products.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Algebras/Products.lagda
+
 [Setoid/Homomorphisms.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Homomorphisms.lagda
 [Setoid/Homomorphisms/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Homomorphisms/Basic.lagda
 [Setoid/Homomorphisms/Factor.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Homomorphisms/Factor.lagda
@@ -229,23 +283,17 @@
 [Setoid/Homomorphisms/Noether.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Homomorphisms/Noether.lagda
 [Setoid/Homomorphisms/Products.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Homomorphisms/Products.lagda
 [Setoid/Homomorphisms/Properties.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Homomorphisms/Properties.lagda
-[Setoid/Overture.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Overture.lagda
-[Setoid/Overture/Bijective.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Overture/Bijective.lagda
-[Setoid/Overture/Injective.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Overture/Injective.lagda
-[Setoid/Overture/Inverses.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Overture/Inverses.lagda
-[Setoid/Overture/Preliminaries.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Overture/Preliminaries.lagda
-[Setoid/Overture/Surjective.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Overture/Surjective.lagda
-[Setoid/Relations.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Relations.lagda
-[Setoid/Relations/Discrete.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Relations/Discrete.lagda
-[Setoid/Relations/Quotients.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Relations/Quotients.lagda
-[Setoid/Subalgebras.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Subalgebras.lagda
-[Setoid/Subalgebras/Properties.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Subalgebras/Properties.lagda
-[Setoid/Subalgebras/Subalgebras.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Subalgebras/Subalgebras.lagda
-[Setoid/Subalgebras/Subuniverses.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Subalgebras/Subuniverses.lagda
+
 [Setoid/Terms.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Terms.lagda
 [Setoid/Terms/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Terms/Basic.lagda
 [Setoid/Terms/Operations.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Terms/Operations.lagda
 [Setoid/Terms/Properties.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Terms/Properties.lagda
+
+[Setoid/Subalgebras.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Subalgebras.lagda
+[Setoid/Subalgebras/Properties.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Subalgebras/Properties.lagda
+[Setoid/Subalgebras/Subalgebras.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Subalgebras/Subalgebras.lagda
+[Setoid/Subalgebras/Subuniverses.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Subalgebras/Subuniverses.lagda
+
 [Setoid/Varieties.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Varieties.lagda
 [Setoid/Varieties/Closure.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Varieties/Closure.lagda
 [Setoid/Varieties/EquationalLogic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Varieties/EquationalLogic.lagda
@@ -255,8 +303,18 @@
 [Setoid/Varieties/Properties.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Varieties/Properties.lagda
 [Setoid/Varieties/SoundAndComplete.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Varieties/SoundAndComplete.lagda
 
+[Cubical.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Cubical.lagda
+[Cubical/Overture.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Cubical/Overture.lagda
+[Cubical/Overture/Preliminaries.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Cubical/Overture/Preliminaries.lagda
 
+[Demos/HSP.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Demos/HSP.lagda
+[Demos/HSP-markdown.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Demos/HSP-markdown.lagda
+[Examples/Categories/Functors.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Categories/Functors.lagda
+[Examples/Structures/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Structures/Basic.lagda
+[Examples/Structures/Signatures.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Structures/Signatures.lagda
+[Exercises/Complexity/FiniteCSP.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Exercises/Complexity/FiniteCSP.lagda
 
+<!-- ///////////////////////////////////////////////////////////////////////////////////////////////// -->
 
 [absolute value]: https://en.wikipedia.org/wiki/Absolute_value
 [Agda]: https://wiki.portal.chalmers.se/agda/pmwiki.php
@@ -299,13 +357,13 @@
 [Formalization of Universal Algebra in Agda]: http://www.sciencedirect.com/science/article/pii/S1571066118300768
 [function extensionality]: https://ncatlab.org/nlab/show/function+extensionality
 
-
 [Homotopy Type Theory]: https://homotopytypetheory.org/
 [HoTT]: https://homotopytypetheory.org/
 [HoTT book]: https://homotopytypetheory.org/book/
 [HoTT-UF-in-Agda]: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/HoTT-UF-Agda.html
 [HSP Theorem]: https://en.wikipedia.org/wiki/Variety_(universal_algebra)#Birkhoff's_theorem
 [Hyeyoung Shin]: https://hyeyoungshin.github.io/
+
 [Implicit Arguments]: https://leanprover.github.io/theorem_proving_in_lean/dependent_type_theory.html#implicit-arguments
 [Inductive Types in Lean]: https://leanprover.github.io/theorem_proving_in_lean/inductive_types.html
 [inductive types]: https://en.wikipedia.org/wiki/Intuitionistic_type_theory#Inductive_types
@@ -358,6 +416,8 @@
 [Programming Language Foundations in Agda]: https://plfa.github.io/
 [proof assistant]: https://en.wikipedia.org/wiki/Proof_assistant
 [proof tactics]: https://en.wikipedia.org/wiki/Tactic_(proof_assistant)
+
+[A Machine-checked proof of Birkhoff's Variety Theorem in Martin-Löf Type Theory](https://arxiv.org/abs/2101.10166)
 
 [Ralph Freese]: https://math.hawaii.edu/~ralph/
 [reading material]: https://arxiv.org/abs/1807.05923
