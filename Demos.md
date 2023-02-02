@@ -20,3 +20,4 @@ author: "the agda-algebras development team"
 
 --------------------------------------
 
+{% include UALib.Links.md %}

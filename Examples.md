@@ -20,3 +20,4 @@ This is the [Examples][] module of the [Agda Universal Algebra Library][].
 
 </pre>
 
+{% include UALib.Links.md %}

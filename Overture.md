@@ -26,4 +26,4 @@ This is the [Overture][] module of the [Agda Universal Algebra Library][].
 <span style="float:left;">[↑ Top](index.html)</span>
 <span style="float:right;">[Overture.Preface →](Overture.Preface.html)</span>
 
-
+{% include UALib.Links.md %}

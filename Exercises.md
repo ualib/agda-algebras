@@ -19,3 +19,4 @@ This is the [Exercises][] module of the [Agda Universal Algebra Library][].
 
 </pre>
 
+{% include UALib.Links.md %}
