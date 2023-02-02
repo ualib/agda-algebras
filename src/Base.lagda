@@ -7,7 +7,7 @@ author: "the agda-algebras development team"
 
 ## <a id="the-base-module-of-the-agda-universal-algebra-library">The Base Module of the Agda Universal Algebra Library</a>
 
-This module collects all submodules the library that use "bare" types, as opposed to similar versions of these submodules based on Setoids (see the [Setoid](Setoid.html) module).
+This module collects all submodules the library that use "bare" types, as opposed to similar versions of these submodules based on Setoids (see the [Setoid][] module).
 
 (We have also started developing in parallel the `cubical-agda-algebras` library, based on Cubical Agda.)
 
@@ -38,3 +38,4 @@ open import Base.Complexity
 <span style="float:right;">[Base.Relations →](Base.Relations.html)</span>
 
 
+{% include UALib.Links.md %}
