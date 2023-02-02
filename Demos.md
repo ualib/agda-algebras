@@ -13,8 +13,9 @@ author: "the agda-algebras development team"
 
 <a id="264" class="Keyword">module</a> <a id="271" href="Demos.html" class="Module">Demos</a> <a id="277" class="Keyword">where</a>
 
-<a id="284" class="Keyword">open</a> <a id="289" class="Keyword">import</a> <a id="296" href="Demos.HSP.html" class="Module">Demos.HSP</a>
-<a id="306" class="Keyword">open</a> <a id="311" class="Keyword">import</a> <a id="318" href="Demos.ContraX.html" class="Module">Demos.ContraX</a>
+<a id="284" class="Keyword">open</a> <a id="289" class="Keyword">import</a> <a id="296" href="Demos.GeneralOperationsAndRelations.html" class="Module">Demos.GeneralOperationsAndRelations</a>
+<a id="332" class="Keyword">open</a> <a id="337" class="Keyword">import</a> <a id="344" href="Demos.HSP.html" class="Module">Demos.HSP</a>
+<a id="354" class="Keyword">open</a> <a id="359" class="Keyword">import</a> <a id="366" href="Demos.ContraX.html" class="Module">Demos.ContraX</a>
 
 </pre>
 
