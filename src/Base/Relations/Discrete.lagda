@@ -81,7 +81,7 @@ We represent "sets" as inhabitants of such predicate types.
 
 (In the definition of `Pred` above, we replaced `Set` with `Type` for consistency with our notation.)
 
-Sometimes it is useful to obtain the underlying type over which a type of predicates is defined.
+Sometimes it is useful to obtain the underlying type (`A`) over which the predicates in `Pred A ℓ` (the "subsets" of `A`) are defined.
 
 \begin{code}
 
