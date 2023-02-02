@@ -26,4 +26,4 @@ open import Overture.Operations  public
 <span style="float:left;">[↑ Top](index.html)</span>
 <span style="float:right;">[Overture.Preface →](Overture.Preface.html)</span>
 
-
+{% include UALib.Links.md %}

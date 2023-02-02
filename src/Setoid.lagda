@@ -8,8 +8,7 @@ author: "the agda-algebras development team"
 ## <a id="setoid-types-for-general-algebra">Setoid Types for General Algebra</a>
 
 This module collects all submodule of that part of the library based on setoids,
-as opposed to "bare" types (see Base.lagda), or Cubical Agda (used in the
-forthcoming `cubical-agda-algebras` library).
+as opposed to "bare" types (see [Base.lagda][]).
 
 \begin{code}
 
@@ -32,3 +31,4 @@ open import Setoid.Varieties
 <span style="float:right;">[Setoid.Relations →](Setoid.Relations.html)</span>
 
 
+{% include UALib.Links.md %}
