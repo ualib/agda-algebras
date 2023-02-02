@@ -39,7 +39,7 @@ Op A I = (I → A) → A
 
 \end{code}
 
-For example, the `I`-*ary projection operations* on `A` are represented as inhabitants of the type `Op I A` as follows.
+For example, the `I`-*ary projection operations* on `A` are represented as inhabitants of the type `Op A I` as follows.
 
 \begin{code}
 
@@ -49,7 +49,7 @@ For example, the `I`-*ary projection operations* on `A` are represented as inhab
 
 \end{code}
 
-Occasionally we ask for the arity of a given operation symbol using the following.
+Occasionally we want to extract the arity of a given operation symbol.
 
 \begin{code}
 

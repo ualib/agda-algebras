@@ -61,8 +61,8 @@ viewed as the graph of the function `a : ρ𝑓 → A`.
 When the codomain of `ρ` is `ℕ`, we may view `ρ 𝑓` as the finite set `{0, 1, …, ρ𝑓 - 1}`.
 
 Thus, by identifying the `ρ𝑓`-th power `A`<sup>ρ 𝑓</sup> with the type `ρ 𝑓 → A` of
-functions from `{0, 1, …, ρ𝑓 - 1}` to `A`, we identify the function type
-`A`<sup>ρ f</sup> `→ A` with the function (or "functional") type `(ρ𝑓 → A) → A`.
+functions from `{0, 1, …, ρ𝑓 - 1}` to `A`, we identify the type
+`A`<sup>ρ f</sup> `→ A` with the function type `(ρ𝑓 → A) → A`.
 
 **Example**.
 
@@ -94,7 +94,7 @@ Signature 𝓞 𝓥 = Σ[ F ∈ Type 𝓞 ] (F → Type 𝓥)
 
 \end{code}
 
-Occasionally it is useful to obtain the universe level over which a signature is defined.
+Occasionally it is useful to obtain the universe level of a given signature.
 
 \begin{code}
 
