@@ -9,7 +9,12 @@ author: "the agda-algebras development team"
 
 This is the [Base.Relations][] module of the [Agda Universal Algebra Library][].
 
-In the [Base.Relations.Discrete][] submodule we define types that represent *unary* and *binary relations*, which we refer to as "discrete relations" to contrast them with the ("continuous") *general* and *dependent relations* that we introduce in [Base.Relations.Continuous][]. We call the latter "continuous relations" because they can have arbitrary arity (general relations) and they can be defined over arbitrary families of types (dependent relations).
+In the [Base.Relations.Discrete][] submodule we define types that represent *unary* and *binary relations*, and higher-ary *finitary* relations.
+
+We refer to these as "discrete relations" to contrast them with the "continuous," *general* and *dependent relations* that we introduce in [Base.Relations.Continuous][].
+
+We call the latter "continuous relations" because they can have arbitrary arity and they can be defined over arbitrary families of types.
+
 Finally, in [Base.Relations.Quotients][] we define quotient types.
 
 \begin{code}
