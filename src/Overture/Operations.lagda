@@ -45,7 +45,7 @@ For example, the `I`-*ary projection operations* on `A` are represented as inhab
 
 -- Example (projections)
 π : {I : Type 𝓥} {A : Type α } → I → Op A I
-π i x = x i
+π i = λ x → x i
 
 \end{code}
 
