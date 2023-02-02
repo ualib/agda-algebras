@@ -9,7 +9,7 @@ author: "the agda-algebras development team"
 
 This is the [Base.Relations][] module of the [Agda Universal Algebra Library][].
 
-In the [Base.Relations.Discrete][] submodule we define types that represent *unary* and *binary relations*, and higher-ary *finitary* relations.
+In the [Base.Relations.Discrete][] submodule we define types that represent *unary* and *binary relations*.
 
 We refer to these as "discrete relations" to contrast them with the "continuous," *general* and *dependent relations* that we introduce in [Base.Relations.Continuous][].
 
@@ -19,14 +19,14 @@ Finally, in [Base.Relations.Quotients][] we define quotient types.
 
 <pre class="Agda">
 
-<a id="811" class="Symbol">{-#</a> <a id="815" class="Keyword">OPTIONS</a> <a id="823" class="Pragma">--without-K</a> <a id="835" class="Pragma">--exact-split</a> <a id="849" class="Pragma">--safe</a> <a id="856" class="Symbol">#-}</a>
+<a id="774" class="Symbol">{-#</a> <a id="778" class="Keyword">OPTIONS</a> <a id="786" class="Pragma">--without-K</a> <a id="798" class="Pragma">--exact-split</a> <a id="812" class="Pragma">--safe</a> <a id="819" class="Symbol">#-}</a>
 
-<a id="861" class="Keyword">module</a> <a id="868" href="Base.Relations.html" class="Module">Base.Relations</a> <a id="883" class="Keyword">where</a>
+<a id="824" class="Keyword">module</a> <a id="831" href="Base.Relations.html" class="Module">Base.Relations</a> <a id="846" class="Keyword">where</a>
 
-<a id="890" class="Keyword">open</a> <a id="895" class="Keyword">import</a> <a id="902" href="Base.Relations.Discrete.html" class="Module">Base.Relations.Discrete</a>    <a id="929" class="Keyword">public</a>
-<a id="936" class="Keyword">open</a> <a id="941" class="Keyword">import</a> <a id="948" href="Base.Relations.Continuous.html" class="Module">Base.Relations.Continuous</a>  <a id="975" class="Keyword">public</a>
-<a id="982" class="Keyword">open</a> <a id="987" class="Keyword">import</a> <a id="994" href="Base.Relations.Properties.html" class="Module">Base.Relations.Properties</a>  <a id="1021" class="Keyword">public</a>
-<a id="1028" class="Keyword">open</a> <a id="1033" class="Keyword">import</a> <a id="1040" href="Base.Relations.Quotients.html" class="Module">Base.Relations.Quotients</a>   <a id="1067" class="Keyword">public</a>
+<a id="853" class="Keyword">open</a> <a id="858" class="Keyword">import</a> <a id="865" href="Base.Relations.Discrete.html" class="Module">Base.Relations.Discrete</a>    <a id="892" class="Keyword">public</a>
+<a id="899" class="Keyword">open</a> <a id="904" class="Keyword">import</a> <a id="911" href="Base.Relations.Continuous.html" class="Module">Base.Relations.Continuous</a>  <a id="938" class="Keyword">public</a>
+<a id="945" class="Keyword">open</a> <a id="950" class="Keyword">import</a> <a id="957" href="Base.Relations.Properties.html" class="Module">Base.Relations.Properties</a>  <a id="984" class="Keyword">public</a>
+<a id="991" class="Keyword">open</a> <a id="996" class="Keyword">import</a> <a id="1003" href="Base.Relations.Quotients.html" class="Module">Base.Relations.Quotients</a>   <a id="1030" class="Keyword">public</a>
 
 </pre>
 

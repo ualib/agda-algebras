@@ -39,7 +39,7 @@ domain `I → A` (the type of "tuples") and codomain `A`.
 
 </pre>
 
-For example, the `I`-*ary projection operations* on `A` are represented as inhabitants of the type `Op I A` as follows.
+For example, the `I`-*ary projection operations* on `A` are represented as inhabitants of the type `Op A I` as follows.
 
 <pre class="Agda">
 
@@ -49,13 +49,13 @@ For example, the `I`-*ary projection operations* on `A` are represented as inhab
 
 </pre>
 
-Occasionally we ask for the arity of a given operation symbol using the following.
+Occasionally we want to extract the arity of a given operation symbol.
 
 <pre class="Agda">
 
-<a id="1636" class="Comment">-- return the arity of a given operation symbol</a>
-<a id="arity[_]"></a><a id="1684" href="Overture.Operations.html#1684" class="Function Operator">arity[_]</a> <a id="1693" class="Symbol">:</a> <a id="1695" class="Symbol">{</a><a id="1696" href="Overture.Operations.html#1696" class="Bound">I</a> <a id="1698" class="Symbol">:</a> <a id="1700" href="Overture.Operations.html#1088" class="Primitive">Type</a> <a id="1705" href="Overture.Operations.html#1182" class="Generalizable">𝓥</a><a id="1706" class="Symbol">}</a> <a id="1708" class="Symbol">{</a><a id="1709" href="Overture.Operations.html#1709" class="Bound">A</a> <a id="1711" class="Symbol">:</a> <a id="1713" href="Overture.Operations.html#1088" class="Primitive">Type</a> <a id="1718" href="Overture.Operations.html#1176" class="Generalizable">α</a> <a id="1720" class="Symbol">}</a> <a id="1722" class="Symbol">→</a> <a id="1724" href="Overture.Operations.html#1235" class="Function">Op</a> <a id="1727" href="Overture.Operations.html#1709" class="Bound">A</a> <a id="1729" href="Overture.Operations.html#1696" class="Bound">I</a> <a id="1731" class="Symbol">→</a> <a id="1733" href="Overture.Operations.html#1088" class="Primitive">Type</a> <a id="1738" href="Overture.Operations.html#1182" class="Generalizable">𝓥</a>
-<a id="1740" href="Overture.Operations.html#1684" class="Function Operator">arity[_]</a> <a id="1749" class="Symbol">{</a><a id="1750" class="Argument">I</a> <a id="1752" class="Symbol">=</a> <a id="1754" href="Overture.Operations.html#1754" class="Bound">I</a><a id="1755" class="Symbol">}</a> <a id="1757" href="Overture.Operations.html#1757" class="Bound">f</a> <a id="1759" class="Symbol">=</a> <a id="1761" href="Overture.Operations.html#1754" class="Bound">I</a>
+<a id="1624" class="Comment">-- return the arity of a given operation symbol</a>
+<a id="arity[_]"></a><a id="1672" href="Overture.Operations.html#1672" class="Function Operator">arity[_]</a> <a id="1681" class="Symbol">:</a> <a id="1683" class="Symbol">{</a><a id="1684" href="Overture.Operations.html#1684" class="Bound">I</a> <a id="1686" class="Symbol">:</a> <a id="1688" href="Overture.Operations.html#1088" class="Primitive">Type</a> <a id="1693" href="Overture.Operations.html#1182" class="Generalizable">𝓥</a><a id="1694" class="Symbol">}</a> <a id="1696" class="Symbol">{</a><a id="1697" href="Overture.Operations.html#1697" class="Bound">A</a> <a id="1699" class="Symbol">:</a> <a id="1701" href="Overture.Operations.html#1088" class="Primitive">Type</a> <a id="1706" href="Overture.Operations.html#1176" class="Generalizable">α</a> <a id="1708" class="Symbol">}</a> <a id="1710" class="Symbol">→</a> <a id="1712" href="Overture.Operations.html#1235" class="Function">Op</a> <a id="1715" href="Overture.Operations.html#1697" class="Bound">A</a> <a id="1717" href="Overture.Operations.html#1684" class="Bound">I</a> <a id="1719" class="Symbol">→</a> <a id="1721" href="Overture.Operations.html#1088" class="Primitive">Type</a> <a id="1726" href="Overture.Operations.html#1182" class="Generalizable">𝓥</a>
+<a id="1728" href="Overture.Operations.html#1672" class="Function Operator">arity[_]</a> <a id="1737" class="Symbol">{</a><a id="1738" class="Argument">I</a> <a id="1740" class="Symbol">=</a> <a id="1742" href="Overture.Operations.html#1742" class="Bound">I</a><a id="1743" class="Symbol">}</a> <a id="1745" href="Overture.Operations.html#1745" class="Bound">f</a> <a id="1747" class="Symbol">=</a> <a id="1749" href="Overture.Operations.html#1742" class="Bound">I</a>
 </pre>
 
 -----------
