@@ -20,7 +20,7 @@ module Setoid.Algebras.Basic {𝑆 : Signature 𝓞 𝓥} where
 -- Imports from the Agda and the Agda Standard Library --------------------
 open import Agda.Primitive   using ( _⊔_ ; lsuc ) renaming ( Set to Type )
 open import Data.Product     using ( _,_ ; _×_ ; Σ-syntax )
-open import Function         using ( _∘_ ; Func )
+open import Function         using ( _∘_ ; _∘₂_ ; Func ; _$_ )
 open import Level            using ( Level )
 open import Relation.Binary  using ( Setoid ; IsEquivalence )
 
@@ -46,10 +46,9 @@ First we define an operator that translates an ordinary signature into a signatu
 
 \begin{code}
 
-open Setoid using (_≈_ ; Carrier ) renaming  ( refl   to reflS
-                                             ; sym    to symS
-                                             ; trans  to transS
-                                             ; isEquivalence to isEqv )
+open Setoid
+ using (_≈_ ; Carrier )
+ renaming ( refl to reflS ; sym to symS ; trans to transS ; isEquivalence to isEqv )
 
 open Func renaming ( f to _⟨$⟩_ ; cong to ≈cong )
 
@@ -61,7 +60,7 @@ EqArgs {ξ = ξ} refl u v = ∀ i → (_≈_ ξ) (u i) (v i)
 
 
 ⟨_⟩ : Signature 𝓞 𝓥 → Setoid α ρ → Setoid _ _
-Carrier (⟨ 𝑆 ⟩ ξ) = Σ[ f ∈ ∣ 𝑆 ∣ ] ((∥ 𝑆 ∥ f) → ξ .Carrier)
+Carrier (⟨ 𝑆 ⟩ ξ) = Σ[ f ∈ ∣ 𝑆 ∣ ] (∥ 𝑆 ∥ f → ξ .Carrier)
 _≈_ (⟨ 𝑆 ⟩ ξ) (f , u) (g , v) = Σ[ eqv ∈ f ≡ g ] EqArgs{ξ = ξ} eqv u v
 
 IsEquivalence.refl   (isEqv (⟨ 𝑆 ⟩ ξ))                      = refl , λ _ → reflS   ξ
@@ -130,42 +129,40 @@ Level-of-Carrier {α = α} _ = α
 
 \begin{code}
 
-module _ (𝑨 : Algebra α ρ) where
-
- open Algebra 𝑨  using ( Interp )      renaming ( Domain to A )
+module _ (𝑨 : Algebra α ρ)(ℓ : Level) where
+ open Algebra 𝑨  using ()     renaming ( Domain to A )
  open Setoid A   using (sym ; trans )  renaming ( Carrier to ∣A∣ ; _≈_ to _≈₁_ ; refl to refl₁ )
-
  open Level
 
 
- Lift-Algˡ : (ℓ : Level) → Algebra (α ⊔ ℓ) ρ
+ Lift-Algˡ : Algebra (α ⊔ ℓ) ρ
+ Lift-Algˡ .Domain                        = record  { Carrier = Lift ℓ ∣A∣
+                                                    ; _≈_ = λ x y → lower x ≈₁ lower y
+                                                    ; isEquivalence = record
+                                                      { refl = refl₁
+                                                      ; sym = sym
+                                                      ; trans = trans
+                                                      }
+                                                    }
+ Lift-Algˡ .Interp ⟨$⟩ (f , la)           = lift $ (f ̂ 𝑨) (lower ∘ la)
+ Lift-Algˡ .Interp .≈cong (refl , la=lb)  = ≈cong (Interp 𝑨) (refl , la=lb)
 
- Domain (Lift-Algˡ ℓ) = record  { Carrier = Lift ℓ ∣A∣
-                                ; _≈_ = λ x y → lower x ≈₁ lower y
-                                ; isEquivalence = record  { refl = refl₁
-                                                          ; sym = sym
-                                                          ; trans = trans
-                                                          }
-                                }
 
- Interp (Lift-Algˡ ℓ) ⟨$⟩ (f , la) = lift ((f ̂ 𝑨) (lower ∘ la))
- ≈cong (Interp (Lift-Algˡ ℓ)) (refl , la=lb) = ≈cong (Interp 𝑨) ((refl , la=lb))
+ Lift-Algʳ : Algebra α (ρ ⊔ ℓ)
+ Lift-Algʳ .Domain                        = record  { Carrier = ∣A∣
+                                                    ; _≈_ = (Lift ℓ) ∘₂ _≈₁_
+                                                    ; isEquivalence = record
+                                                      { refl = lift refl₁
+                                                      ; sym = lift ∘ sym ∘ lower
+                                                      ; trans = λ x y → lift $ trans (lower x) (lower y)
+                                                      }
+                                                    }
+ Lift-Algʳ .Interp ⟨$⟩ (f , la)           = (f ̂ 𝑨) la
+ Lift-Algʳ .Interp .≈cong (refl , la≡lb)  = lift $ ≈cong (Interp 𝑨) (≡.refl , (lower ∘ la≡lb))
 
- Lift-Algʳ : (ℓ : Level) → Algebra α (ρ ⊔ ℓ)
- Domain (Lift-Algʳ ℓ) =
-  record  { Carrier = ∣A∣
-          ; _≈_ = λ x y → Lift ℓ (x ≈₁ y)
-          ; isEquivalence = record  { refl = lift refl₁
-                                    ; sym = λ x → lift (sym (lower x))
-                                    ; trans = λ x y → lift (trans (lower x) (lower y))
-                                    }
-          }
-
- Interp (Lift-Algʳ ℓ ) ⟨$⟩ (f , la) = (f ̂ 𝑨) la
- ≈cong (Interp (Lift-Algʳ ℓ)) (refl , la≡lb) = lift (≈cong (Interp 𝑨) (≡.refl , λ i → lower (la≡lb i)))
 
 Lift-Alg : (𝑨 : Algebra α ρ)(ℓ₀ ℓ₁ : Level) → Algebra (α ⊔ ℓ₀) (ρ ⊔ ℓ₁)
-Lift-Alg 𝑨 ℓ₀ ℓ₁ = Lift-Algʳ (Lift-Algˡ 𝑨 ℓ₀) ℓ₁
+Lift-Alg 𝑨 ℓ₀ = Lift-Algʳ (Lift-Algˡ 𝑨 ℓ₀)
 \end{code}
 
 

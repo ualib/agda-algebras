@@ -31,13 +31,13 @@ import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------------
 open  import Overture using ( ∣_∣ ; ∥_∥ )
 open  import Setoid.Functions
-      using ( id-is-injective ; module compose ; IsInjective ; ∘-injective )
+      using ( id-is-injective ; module compose ; IsInjective ; ⊙-injective )
 
 open  import Setoid.Algebras {𝑆 = 𝑆}
       using ( Algebra ; Lift-Algˡ ; Lift-Algʳ ; Lift-Alg ; ov ; ⨅ )
 
 open  import Setoid.Homomorphisms {𝑆 = 𝑆}
-      using ( hom ; IsHom ; 𝒾𝒹 ; ∘-hom ; _≅_ ; ≅toInjective ; ≅fromInjective )
+      using ( hom ; IsHom ; 𝒾𝒹 ; ⊙-hom ; _≅_ ; ≅toInjective ; ≅fromInjective )
       using ( mkiso ; ≅-sym ; ≅-refl ; ≅-trans ; Lift-≅ˡ ; Lift-≅ ; Lift-≅ʳ)
 
 open  import Setoid.Subalgebras.Subalgebras {𝑆 = 𝑆}
@@ -70,20 +70,19 @@ open _≅_
 
 module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}{𝑪 : Algebra γ ρᶜ} where
  open Algebra using ( Domain )
- open Setoid (Domain 𝑨) using () renaming ( _≈_ to _≈₁_ ; Carrier to ∣A∣ )
  open Setoid (Domain 𝑩) using () renaming ( _≈_ to _≈₂_ ; Carrier to ∣B∣ )
  open Setoid (Domain 𝑪) using () renaming ( _≈_ to _≈₃_ ; Carrier to ∣C∣ )
 
  ≤-trans : 𝑨 ≤ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
- ≤-trans ( f , finj ) ( g , ginj ) = (∘-hom f g) , ∘-injective ∣ f ∣ ∣ g ∣ finj ginj
+ ≤-trans ( f , finj ) ( g , ginj ) = (⊙-hom f g) , ⊙-injective ∣ f ∣ ∣ g ∣ finj ginj
 
  ≤-trans-≅ : 𝑨 ≤ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≤ 𝑪
- ≤-trans-≅ (h , hinj) B≅C =  ∘-hom h (to B≅C) ,
-                             ∘-injective ∣ h ∣ ∣ to B≅C ∣ hinj (≅toInjective B≅C)
+ ≤-trans-≅ (h , hinj) B≅C =  ⊙-hom h (to B≅C) ,
+                             ⊙-injective ∣ h ∣ ∣ to B≅C ∣ hinj (≅toInjective B≅C)
 
  ≅-trans-≤ : 𝑨 ≅ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
- ≅-trans-≤ A≅B (h , hinj) =  ∘-hom (to A≅B) h ,
-                             ∘-injective ∣ to A≅B ∣ ∣ h ∣ (≅toInjective A≅B) hinj
+ ≅-trans-≤ A≅B (h , hinj) =  ⊙-hom (to A≅B) h ,
+                             ⊙-injective ∣ to A≅B ∣ ∣ h ∣ (≅toInjective A≅B) hinj
 
 module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}{𝑪 : Algebra γ ρᶜ} where
  ≥-trans : 𝑨 ≥ 𝑩 → 𝑩 ≥ 𝑪 → 𝑨 ≥ 𝑪

@@ -32,7 +32,7 @@ open import Relation.Binary.PropositionalEquality as ≡ using ()
 open import Overture          using  ( ∣_∣ ; ∥_∥ ; transport )
 open  import Setoid.Functions
       using ( lift∼lower ; Ran ; _range ; _preimage ; _image ; Inv ; Image_∋_ )
-      using ( _preimage≈image ; InvIsInverseʳ ; IsSurjective ; ∘-IsSurjective )
+      using ( _preimage≈image ; InvIsInverseʳ ; IsSurjective ; ⊙-IsSurjective )
 
 open  import Setoid.Algebras {𝑆 = 𝑆}
       using ( Algebra ; ov ; _̂_ ; ⟨_⟩ ; Lift-Algˡ ; Lift-Alg ; 𝕌[_] )
@@ -41,7 +41,7 @@ open import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}         using ( hom ; IsHom
 open import Setoid.Homomorphisms.Isomorphisms {𝑆 = 𝑆}  using ( _≅_ ; Lift-≅ )
 
 open  import Setoid.Homomorphisms.Properties {𝑆 = 𝑆}
-      using ( Lift-homˡ ; ToLiftˡ ; lift-hom-lemma ; 𝒾𝒹 ; ∘-hom )
+      using ( Lift-homˡ ; ToLiftˡ ; lift-hom-lemma ; 𝒾𝒹 ; ⊙-hom )
 
 open Algebra
 
@@ -86,7 +86,7 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
  open Algebra 𝑩  renaming (Domain to B ; Interp to InterpB )  using ()
  open Setoid B   renaming ( _≈_ to _≈₂_ ; refl to refl₂ )     using ( reflexive )
                  renaming ( sym to sym₂ ; trans to trans₂ ; Carrier to ∣B∣)
- open Func       renaming (f to _⟨$⟩_ )                       using ( cong )
+ open Func       renaming ( f to _⟨$⟩_ )                       using ( cong )
  open IsHom
 
  HomImageOf[_] : hom 𝑨 𝑩 → Algebra (α ⊔ β ⊔ ρᵇ) ρᵇ
@@ -191,16 +191,16 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
 module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
  open _≅_
  Lift-HomImage-lemma : ∀{γ} → (Lift-Alg 𝑨 γ γ) IsHomImageOf 𝑩 → 𝑨 IsHomImageOf 𝑩
- Lift-HomImage-lemma {γ} φ =  ∘-hom ∣ φ ∣ (from Lift-≅) ,
-                              ∘-IsSurjective ∥ φ ∥ (fromIsSurjective (Lift-≅{𝑨 = 𝑨}))
+ Lift-HomImage-lemma {γ} φ =  ⊙-hom ∣ φ ∣ (from Lift-≅) ,
+                              ⊙-IsSurjective ∥ φ ∥ (fromIsSurjective (Lift-≅{𝑨 = 𝑨}))
 
 module _ {𝑨 𝑨' : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
  open _≅_
  HomImage-≅ : 𝑨 IsHomImageOf 𝑨' → 𝑨 ≅ 𝑩 → 𝑩 IsHomImageOf 𝑨'
- HomImage-≅ φ A≅B = ∘-hom ∣ φ ∣ (to A≅B) , ∘-IsSurjective ∥ φ ∥ (toIsSurjective A≅B)
+ HomImage-≅ φ A≅B = ⊙-hom ∣ φ ∣ (to A≅B) , ⊙-IsSurjective ∥ φ ∥ (toIsSurjective A≅B)
 
  HomImage-≅' : 𝑨 IsHomImageOf 𝑨' → 𝑨' ≅ 𝑩 → 𝑨 IsHomImageOf 𝑩
- HomImage-≅' φ A'≅B = (∘-hom (from A'≅B) ∣ φ ∣) , ∘-IsSurjective (fromIsSurjective A'≅B) ∥ φ ∥
+ HomImage-≅' φ A'≅B = (⊙-hom (from A'≅B) ∣ φ ∣) , ⊙-IsSurjective (fromIsSurjective A'≅B) ∥ φ ∥
 \end{code}
 
 --------------------------------------

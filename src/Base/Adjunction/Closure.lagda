@@ -19,8 +19,9 @@ module Base.Adjunction.Closure where
 open import Agda.Primitive           using () renaming ( Set to Type )
 import Algebra.Definitions
 open import Data.Product             using ( Σ-syntax ; _,_ ; _×_ )
-open import Function.Bundles         using ( _↔_ ; Inverse )
-open import Level                    using (  _⊔_ ; Level )
+open import Function                 using ( _∘₂_ )
+open import Function.Bundles         using ( _↔_ ; Inverse)
+open import Level                    using ( _⊔_ ; Level )
 open import Relation.Binary.Bundles  using ( Poset )
 open import Relation.Binary.Core     using ( Rel ; _Preserves_⟶_ )
 open import Relation.Unary           using ( Pred ; _∈_ ; ⋂ )
@@ -97,7 +98,7 @@ record ClOp {ℓ ℓ₁ ℓ₂ : Level}(𝑨 : Poset ℓ ℓ₁ ℓ₂) : Type  
 \begin{code}
 
 open ClOp
-open Inverse
+open Inverse renaming (f to to; f⁻¹ to from)
 
 module _ {𝑨 : Poset ℓ ℓ₁ ℓ₂}(𝑪 : ClOp 𝑨) where
  open Poset 𝑨
@@ -146,20 +147,14 @@ module _ {𝑨 : Poset ℓ ℓ₁ ℓ₂} where
 
  clop←law c hyp  = e , (o , i)
   where
-  h1 : ∀ {x y} → x ≤ (c y) → c x ≤ c y
-  h1 {x}{y} = f (hyp x y)
-
-  h2 : ∀ {x y} → c x ≤ c y → x ≤ (c y)
-  h2 {x}{y} = f⁻¹ (hyp x y)
-
   e : Extensive _≤_ c
-  e = h2 refl
+  e = (from ∘₂ hyp) _ _ refl
 
   o : c Preserves _≤_ ⟶ _≤_
-  o u = h1 (trans u e)
+  o u = (to ∘₂ hyp) _ _ (trans u e)
 
   i : IdempotentFun c
-  i x = antisym (h1 refl) (h2 refl)
+  i x = antisym ((to ∘₂ hyp) _ _ refl) ((from ∘₂ hyp) _ _ refl)
 \end{code}
 
 ----------------------------
