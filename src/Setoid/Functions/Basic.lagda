@@ -16,8 +16,8 @@ This is the [Setoid.Functions.Basic][] module of the [Agda Universal Algebra Lib
 module Setoid.Functions.Basic where
 
 -- Imports from Agda and the Agda Standard Library -----------------------
-open import Agda.Primitive   using ()  renaming ( Set to Type )
-open import Function         using ( id )   renaming ( Func to _⟶_ ; _∘_ to _□_ )
+open import Agda.Primitive   using () renaming ( Set to Type )
+open import Function         using ( id ; _∘_ ) renaming ( Func to _⟶_ )
 open import Level            using ( Level ; Lift ; _⊔_ )
 open import Relation.Binary  using ( Setoid )
 
@@ -28,9 +28,9 @@ private variable α ρᵃ β ρᵇ γ ρᶜ : Level
 
 open _⟶_ renaming ( f to _⟨$⟩_ )
 
-_∘_ :  {A : Setoid α ρᵃ}{B : Setoid β ρᵇ}{C : Setoid γ ρᶜ}
+_⊙_ :  {A : Setoid α ρᵃ}{B : Setoid β ρᵇ}{C : Setoid γ ρᶜ}
  →     B ⟶ C → A ⟶ B → A ⟶ C
-f ∘ g = record { f = (_⟨$⟩_ f) □ (_⟨$⟩_ g); cong = (cong f) □ (cong g) }
+f ⊙ g = record { f = (_⟨$⟩_ f) ∘ (_⟨$⟩_ g); cong = (cong f) ∘ (cong g) }
 
 module _ {𝑨 : Setoid α ρᵃ} where
  open Lift ; open Level ; open Setoid using (_≈_)

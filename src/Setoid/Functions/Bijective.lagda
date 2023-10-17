@@ -17,7 +17,7 @@ A *bijective function* from a setoid `𝑨 = (A, ≈₀)` to a setoid `𝑩 = (B
 
 open import Relation.Binary using ( Setoid )
 
-module Setoid.Functions.Bijective {α ρᵃ β ρᵇ }{𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
+module Setoid.Functions.Bijective {α ρᵃ β ρᵇ}{𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
 
 -- Imports from Agda and the Agda Standard Library --------------------------
 open import Agda.Primitive    using ( _⊔_ ; Level )  renaming ( Set to Type )

@@ -30,7 +30,7 @@ open import Relation.Binary   using ( Rel )
 import Function.Definitions as FD
 
 -- Imports from agda-algebras -----------------------------------------------
-open import Setoid.Functions.Basic     using ( 𝑖𝑑 ) renaming ( _∘_ to _⟨∘⟩_ )
+open import Setoid.Functions.Basic     using ( 𝑖𝑑 ) renaming ( _⊙_ to _⟨⊙⟩_ )
 open import Setoid.Functions.Inverses  using ( Image_∋_ ; Inv )
 
 private variable α β γ ρᵃ ρᵇ ρᶜ ℓ₁ ℓ₂ ℓ₃ : Level
@@ -102,30 +102,19 @@ lines which give each instance of injectivity a different name.
 
 \begin{code}
 
-module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} {𝑪 : Setoid γ ρᶜ} where
- open Setoid 𝑨   using() renaming ( Carrier to A ; _≈_ to _≈₁_ )
- open Setoid 𝑩   using() renaming ( Carrier to B )
- open Setoid 𝑪   using() renaming ( Carrier to C ; _≈_ to _≈₃_)
- open Injection  using() renaming ( function to fun )
+module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ}{𝑪 : Setoid γ ρᶜ} where
 
- ∘-injective : (f : 𝑨 ⟶ 𝑩)(g : 𝑩 ⟶ 𝑪)
-  →            IsInjective f → IsInjective g → IsInjective (g ⟨∘⟩ f)
- ∘-injective _ _ finj ginj = finj ∘ ginj
+ ⊙-injective :  (f : 𝑨 ⟶ 𝑩)(g : 𝑩 ⟶ 𝑪)
+  →             IsInjective f → IsInjective g → IsInjective (g ⟨⊙⟩ f)
+ ⊙-injective _ _ finj ginj = finj ∘ ginj
 
- ∘-injection : Injection 𝑨 𝑩 → Injection 𝑩 𝑪 → Injection 𝑨 𝑪
- ∘-injection fi gi = record  { f = λ x → apg (apf x)
-                             ; cong = conggf
-                             ; injective = ∘-injective (fun fi) (fun gi) (injective fi) (injective gi)
-                             }
-  where
-  open Injection
-  apf : A → B
-  apf = f fi
-  apg : B → C
-  apg = f gi
-  conggf : (λ x → apg (apf x)) Preserves _≈₁_ ⟶ _≈₃_
-  conggf {x}{y} x≈y = cong gi (cong fi x≈y)
-
+ ⊙-injection : Injection 𝑨 𝑩 → Injection 𝑩 𝑪 → Injection 𝑨 𝑪
+ ⊙-injection fi gi = record
+  { f = f gi ∘ f fi
+  ; cong = cong gi ∘ cong fi
+  ; injective = ⊙-injective (function fi) (function gi) (injective fi) (injective gi)
+  }
+  where open Injection
 
 id-is-injective : {𝑨 : Setoid α ρᵃ} → IsInjective{𝑨 = 𝑨}{𝑨} 𝑖𝑑
 id-is-injective = id

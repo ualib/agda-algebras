@@ -30,14 +30,14 @@ open import Relation.Binary.PropositionalEquality as ≡ using ()
 
 -- Imports from the Agda Universal Algebra Library -----------------------------------------
 open import Overture          using ( ∣_∣ ; ∥_∥ )
-open import Setoid.Functions  using ( _∘_ ; eq ; IsInjective ; IsSurjective )
+open import Setoid.Functions  using ( _⊙_ ; eq ; IsInjective ; IsSurjective )
 
 open import Setoid.Algebras {𝑆 = 𝑆}  using ( Algebra ; Lift-Alg ; _̂_ )
                                      using ( Lift-Algˡ ; Lift-Algʳ ; ⨅ )
 
 open import Setoid.Homomorphisms.Basic       {𝑆 = 𝑆} using  ( hom ; IsHom )
 open import Setoid.Homomorphisms.Properties  {𝑆 = 𝑆} using
- ( 𝒾𝒹 ; ∘-hom ; ToLiftˡ ; FromLiftˡ ; ToFromLiftˡ ; FromToLiftˡ
+ ( 𝒾𝒹 ; ⊙-hom ; ToLiftˡ ; FromLiftˡ ; ToFromLiftˡ ; FromToLiftˡ
  ; ToLiftʳ ; FromLiftʳ ; ToFromLiftʳ ; FromToLiftʳ )
 
 open _⟶_      using ( cong ) renaming ( f to _⟨$⟩_ )
@@ -118,10 +118,10 @@ open _≅_
   open Setoid (Domain 𝑨) using () renaming ( _≈_ to _≈₁_ ; trans to trans₁ )
   open Setoid (Domain 𝑪) using () renaming ( _≈_ to _≈₃_ ; trans to trans₃ )
   f : hom 𝑨 𝑪
-  f = ∘-hom (to ab) (to bc)
+  f = ⊙-hom (to ab) (to bc)
 
   g : hom 𝑪 𝑨
-  g = ∘-hom (from bc) (from ab)
+  g = ⊙-hom (from bc) (from ab)
 
   τ : ∀ b → (∣ f ∣ ⟨$⟩ (∣ g ∣ ⟨$⟩ b)) ≈₃ b
   τ b = trans₃ (cong ∣ to bc ∣ (to∼from ab (∣ from bc ∣ ⟨$⟩ b))) (to∼from bc b)

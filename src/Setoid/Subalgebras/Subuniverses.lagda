@@ -21,7 +21,7 @@ module Setoid.Subalgebras.Subuniverses {𝑆 : Signature 𝓞 𝓥} where
 open import Agda.Primitive   using () renaming ( Set to Type )
 open import Data.Product     using ( _,_ )
 open import Function         using ( _∘_ ; Func )
-open import Level            using (Level ;  _⊔_ )
+open import Level            using ( Level ;  _⊔_ )
 open import Relation.Binary  using ( Setoid )
 open import Relation.Unary   using ( Pred ; _∈_ ; _⊆_ ; ⋂ )
 

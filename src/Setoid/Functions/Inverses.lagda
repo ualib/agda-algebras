@@ -17,7 +17,7 @@ module Setoid.Functions.Inverses where
 
 -- Imports from Agda and the Agda Standard Library --------------------
 open import Agda.Primitive    using ( _⊔_ ; Level ) renaming ( Set to Type )
-open import Function          using ( id )   renaming ( Func to _⟶_ )
+open import Function          using ( id ; _$_ )   renaming ( Func to _⟶_ )
 open import Data.Product      using ( _,_ ; Σ-syntax )
                               renaming ( proj₁ to fst ; proj₂ to snd ; _×_ to _∧_)
 open import Relation.Unary    using ( Pred ; _∈_ )
@@ -95,13 +95,13 @@ the second is for functions on setoids.
 
  RRan : (𝑨 ⟶ 𝑩) → Setoid (α ⊔ β ⊔ ρᵇ) (ρᵃ ⊔ ρᵇ)
  RRan F = record  { Carrier = F range
-                  ; _≈_ = λ x y →  ( (F preimage) x ) ≈₁ ( (F preimage) y )
-                                   ∧ ( (F image) x) ≈₂ ( (F image) y )
+                  ; _≈_ = λ x y →  (F preimage) x ≈₁ (F preimage) y
+                                   ∧ (F image) x ≈₂ (F image) y
 
                   ; isEquivalence =
                      record  { refl = refl₁ , refl₂
-                             ; sym = λ x → (sym₁ ∣ x ∣) , (sym₂ ∥ x ∥)
-                             ; trans = λ x y → (trans₁ ∣ x ∣ ∣ y ∣) , (trans₂ ∥ x ∥ ∥ y ∥)
+                             ; sym = λ x → sym₁ ∣ x ∣ , sym₂ ∥ x ∥
+                             ; trans = λ x y → trans₁ ∣ x ∣ ∣ y ∣ , trans₂ ∥ x ∥ ∥ y ∥
                              }
                   }
 
@@ -137,14 +137,11 @@ An inhabitant of `Image f ∋ b` is a dependent pair `(a , p)`, where `a : A` an
  [ F ]⁻¹ = F preimage
 
  ⟦_⟧⁻¹ : (F : 𝑨 ⟶ 𝑩) → Ran F ⟶ Dom F
- ⟦ F ⟧⁻¹ = record { f = F preimage ; cong = λ {x}{y} → c{x}{y} }
-  where
-  c : (F preimage) Preserves
-       (Setoid._≈_ (Ran F)) ⟶ (Setoid._≈_ (Dom F))
-  c {x}{y} ix≈iy = Goal
-   where
-   Goal : F ⟨$⟩ ((F preimage) x) ≈₂ F ⟨$⟩ ((F preimage) y)
-   Goal = trans₂ ((F preimage≈image) x) (trans₂ ix≈iy (sym₂ ((F preimage≈image) y)))
+ ⟦ F ⟧⁻¹ = record
+   { f = F preimage
+   ; cong = λ {x}{y} ix≈iy → trans₂  ((F preimage≈image) x)
+                                     (trans₂ ix≈iy $ sym₂ $ (F preimage≈image) y)
+   }
 
 \end{code}
 

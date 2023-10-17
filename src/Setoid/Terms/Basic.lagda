@@ -23,7 +23,7 @@ open import Data.Empty.Polymorphic using ( ⊥ )
 open import Data.Product           using ( _,_ )
 open import Data.Sum               using ( _⊎_ )
                                    renaming ( inj₁ to inl ; inj₂ to inr )
-open import Function               using () renaming ( Func to _⟶_ )
+open import Function               using ( Func )
 open import Level                  using ( Level ; Lift ; _⊔_ )
 open import Relation.Binary        using ( Setoid ; IsEquivalence )
                                    using ( Reflexive ; Symmetric ; Transitive )
@@ -35,7 +35,7 @@ open import Overture using ( ∥_∥ )
 open import Setoid.Algebras  {𝑆 = 𝑆}  using ( Algebra ; ov ; _̂_)
 open import Base.Terms       {𝑆 = 𝑆}  using ( Term )
 
-open _⟶_ renaming ( f to _⟨$⟩_ )
+open Func renaming ( f to _⟨$⟩_ )
 open Term
 
 private variable
@@ -140,7 +140,7 @@ Interpretation of terms is iteration on the W-type. The standard library offers 
 
 \begin{code}
 
- ⟦_⟧ : {X : Type χ}(t : Term X) → (Env X) ⟶ A
+ ⟦_⟧ : {X : Type χ}(t : Term X) → Func (Env X) A
  ⟦ ℊ x ⟧ ⟨$⟩ ρ = ρ x
  ⟦ node f args ⟧ ⟨$⟩ ρ = InterpA ⟨$⟩ (f , λ i → ⟦ args i ⟧ ⟨$⟩ ρ)
  cong ⟦ ℊ x ⟧ u≈v = u≈v x

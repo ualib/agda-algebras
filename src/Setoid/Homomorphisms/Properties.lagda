@@ -19,7 +19,7 @@ module Setoid.Homomorphisms.Properties {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ------------------------------------------
 open import Data.Product     using ( _,_ ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Function         using ( id ) renaming ( Func to _⟶_ )
+open import Function         using ( id ; _$_ ) renaming ( Func to _⟶_ )
 open import Level            using ( Level )
 open import Relation.Binary  using ( Setoid )
 
@@ -27,7 +27,7 @@ open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------
 open import Overture          using ( ∣_∣ ; ∥_∥ )
-open import Setoid.Functions  using ( _∘_ ; 𝑖𝑑 ; Image_∋_ ; eq ; ∘-IsSurjective )
+open import Setoid.Functions  using ( _⊙_ ; 𝑖𝑑 ; Image_∋_ ; eq ; ⊙-IsSurjective )
 
 open  import Setoid.Algebras {𝑆 = 𝑆}
       using ( Algebra ; _̂_; Lift-Algˡ; Lift-Algʳ; Lift-Alg; 𝕌[_])
@@ -54,13 +54,13 @@ module _  {𝑨 : Algebra α ρᵃ} {𝑩 : Algebra β ρᵇ} {𝑪 : Algebra γ
   open IsHom
 
   -- The composition of homomorphisms is again a homomorphism
-  ∘-is-hom :  {g : A ⟶ B}{h : B ⟶ C}
+  ⊙-is-hom :  {g : A ⟶ B}{h : B ⟶ C}
    →          IsHom 𝑨 𝑩 g → IsHom 𝑩 𝑪 h
-   →          IsHom 𝑨 𝑪 (h ∘ g)
+   →          IsHom 𝑨 𝑪 (h ⊙ g)
 
-  ∘-is-hom {g} {h} ghom hhom = record { compatible = c }
+  ⊙-is-hom {g} {h} ghom hhom = record { compatible = c }
    where
-   c : compatible-map 𝑨 𝑪 (h ∘ g)
+   c : compatible-map 𝑨 𝑪 (h ⊙ g)
    c {f}{a} = trans lemg lemh
     where
     lemg : (h ⟨$⟩ (g ⟨$⟩ ((f ̂ 𝑨) a))) ≈₃ (h ⟨$⟩ ((f ̂ 𝑩) (λ x → g ⟨$⟩ (a x))))
@@ -69,21 +69,21 @@ module _  {𝑨 : Algebra α ρᵃ} {𝑩 : Algebra β ρᵇ} {𝑪 : Algebra γ
     lemh : (h ⟨$⟩ ((f ̂ 𝑩) (λ x → g ⟨$⟩ (a x)))) ≈₃ ((f ̂ 𝑪) (λ x → h ⟨$⟩ (g ⟨$⟩ (a x))))
     lemh = compatible hhom
 
-  ∘-hom : hom 𝑨 𝑩 → hom 𝑩 𝑪  → hom 𝑨 𝑪
-  ∘-hom (h , hhom) (g , ghom) = (g ∘ h) , ∘-is-hom hhom ghom
+  ⊙-hom : hom 𝑨 𝑩 → hom 𝑩 𝑪  → hom 𝑨 𝑪
+  ⊙-hom (h , hhom) (g , ghom) = (g ⊙ h) , ⊙-is-hom hhom ghom
 
   -- The composition of epimorphisms is again an epimorphism
   open IsEpi
 
-  ∘-is-epi :  {g : A ⟶ B}{h : B ⟶ C}
-   →          IsEpi 𝑨 𝑩 g → IsEpi 𝑩 𝑪 h → IsEpi 𝑨 𝑪 (h ∘ g)
+  ⊙-is-epi :  {g : A ⟶ B}{h : B ⟶ C}
+   →          IsEpi 𝑨 𝑩 g → IsEpi 𝑩 𝑪 h → IsEpi 𝑨 𝑪 (h ⊙ g)
 
-  ∘-is-epi gE hE = record  { isHom = ∘-is-hom (isHom gE) (isHom hE)
-                           ; isSurjective = ∘-IsSurjective (isSurjective gE) (isSurjective hE)
+  ⊙-is-epi gE hE = record  { isHom = ⊙-is-hom (isHom gE) (isHom hE)
+                           ; isSurjective = ⊙-IsSurjective (isSurjective gE) (isSurjective hE)
                            }
 
-  ∘-epi : epi 𝑨 𝑩 → epi 𝑩 𝑪  → epi 𝑨 𝑪
-  ∘-epi (h , hepi) (g , gepi) = (g ∘ h) , ∘-is-epi hepi gepi
+  ⊙-epi : epi 𝑨 𝑩 → epi 𝑩 𝑪  → epi 𝑨 𝑪
+  ⊙-epi (h , hepi) (g , gepi) = (g ⊙ h) , ⊙-is-epi hepi gepi
 \end{code}
 
 
@@ -142,10 +142,10 @@ module _ {𝑨 : Algebra α ρᵃ}{ℓ r : Level} where
  open Setoid  (Domain (Lift-Alg 𝑨 ℓ r))  using ( _≈_ )
 
  ToLift : hom 𝑨 (Lift-Alg 𝑨 ℓ r)
- ToLift = ∘-hom ToLiftˡ ToLiftʳ
+ ToLift = ⊙-hom ToLiftˡ ToLiftʳ
 
  FromLift : hom (Lift-Alg 𝑨 ℓ r) 𝑨
- FromLift = ∘-hom FromLiftʳ FromLiftˡ
+ FromLift = ⊙-hom FromLiftʳ FromLiftˡ
 
  ToFromLift : ∀ b → (∣ ToLift ∣ ⟨$⟩ (∣ FromLift ∣ ⟨$⟩ b)) ≈ b
  ToFromLift b = lift refl
@@ -170,7 +170,7 @@ module _ {𝑨 : Algebra α ρᵃ} {𝑩 : Algebra β ρᵇ} where
  open Level
 
  Lift-homˡ : hom 𝑨 𝑩  → (ℓᵃ ℓᵇ : Level) →  hom (Lift-Algˡ 𝑨 ℓᵃ) (Lift-Algˡ 𝑩 ℓᵇ)
- Lift-homˡ (f , fhom) ℓᵃ ℓᵇ = ϕ , ∘-is-hom lABh (snd ToLiftˡ)
+ Lift-homˡ (f , fhom) ℓᵃ ℓᵇ = ϕ , ⊙-is-hom lABh (snd ToLiftˡ)
   where
   lA lB : Algebra _ _
   lA = Lift-Algˡ 𝑨 ℓᵃ
@@ -181,7 +181,7 @@ module _ {𝑨 : Algebra α ρᵃ} {𝑩 : Algebra β ρᵇ} where
   cong ψ = cong f
 
   lABh : IsHom lA 𝑩 ψ
-  lABh = ∘-is-hom (snd FromLiftˡ) fhom
+  lABh = ⊙-is-hom (snd FromLiftˡ) fhom
 
   ϕ : Domain lA ⟶ Domain lB
   ϕ ⟨$⟩ x = lift (f ⟨$⟩ (lower x))
@@ -198,14 +198,14 @@ module _ {𝑨 : Algebra α ρᵃ} {𝑩 : Algebra β ρᵇ} where
   cong ψ xy = cong f (lower xy)
 
   lABh : IsHom lA 𝑩 ψ
-  lABh = ∘-is-hom (snd FromLiftʳ) fhom
+  lABh = ⊙-is-hom (snd FromLiftʳ) fhom
 
   ϕ : Domain lA ⟶ Domain lB
   ϕ ⟨$⟩ x = f ⟨$⟩ x
-  lower (cong ϕ xy) = cong f (lower xy)
+  lower (cong ϕ xy) = cong f $ lower xy
 
   Goal : IsHom lA lB ϕ
-  Goal = ∘-is-hom lABh (snd ToLiftʳ)
+  Goal = ⊙-is-hom lABh (snd ToLiftʳ)
 
  open Setoid using ( _≈_ )
 
@@ -223,10 +223,10 @@ module _ {𝑨 : Algebra α ρᵃ} {𝑩 : Algebra β ρᵇ} where
  Lift-hom φ ℓᵃ rᵃ ℓᵇ rᵇ = Lift-homʳ (Lift-homˡ φ ℓᵃ ℓᵇ) rᵃ rᵇ
 
  Lift-hom-fst : hom 𝑨 𝑩  → (ℓ r : Level) →  hom (Lift-Alg 𝑨 ℓ r) 𝑩
- Lift-hom-fst φ _ _ = ∘-hom FromLift φ
+ Lift-hom-fst φ _ _ = ⊙-hom FromLift φ
 
  Lift-hom-snd : hom 𝑨 𝑩  → (ℓ r : Level) →  hom 𝑨 (Lift-Alg 𝑩 ℓ r)
- Lift-hom-snd φ _ _ = ∘-hom φ ToLift 
+ Lift-hom-snd φ _ _ = ⊙-hom φ ToLift
 \end{code}
 
 --------------------------------

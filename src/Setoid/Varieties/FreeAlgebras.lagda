@@ -35,7 +35,7 @@ open  import Base.Terms {𝑆 = 𝑆}       using ( ℊ )
 open  import Setoid.Algebras {𝑆 = 𝑆}  using ( Algebra ; ov ; Lift-Alg )
 
 open  import Setoid.Homomorphisms {𝑆 = 𝑆}
-      using ( epi ; IsEpi ; IsHom ; hom ; epi→hom ; ∘-epi ; ToLift-epi )
+      using ( epi ; IsEpi ; IsHom ; hom ; epi→hom ; ⊙-epi ; ToLift-epi )
 
 open  import Setoid.Terms {𝑆 = 𝑆}
       using ( 𝑻 ; _≐_ ; module Environment ; free-lift ; free-lift-interp )
@@ -172,7 +172,7 @@ module _ {α ρᵃ ℓ : Level} {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔
   𝔽-ModTh-epi-lift :  𝑨 ∈ Mod (Th (V ℓ ι 𝒦))
    →                  epi 𝔽[ ∣A∣ ] (Lift-Alg 𝑨 (ov α) (ov α))
 
-  𝔽-ModTh-epi-lift A∈ModThK = ∘-epi (𝔽-ModTh-epi (λ {p q} → A∈ModThK{p = p}{q})) ToLift-epi
+  𝔽-ModTh-epi-lift A∈ModThK = ⊙-epi (𝔽-ModTh-epi (λ {p q} → A∈ModThK{p = p}{q})) ToLift-epi
 
  module _  -- higher-universe-version
            -- (HSP theorem needs 𝑨 in higher universe level)
@@ -196,7 +196,7 @@ module _ {α ρᵃ ℓ : Level} {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔
    isSurjective isEpi {y} = eq (ℊ y) refl
 
   𝔽-ModTh-epi-lift : 𝑨 ∈ Mod (Th (V ℓ ι 𝒦)) → epi 𝔽[ ∣A∣ ] (Lift-Alg 𝑨 ι ι)
-  𝔽-ModTh-epi-lift A∈ModThK = ∘-epi (𝔽-ModTh-epi (λ {p q} → A∈ModThK{p = p}{q})) ToLift-epi
+  𝔽-ModTh-epi-lift A∈ModThK = ⊙-epi (𝔽-ModTh-epi (λ {p q} → A∈ModThK{p = p}{q})) ToLift-epi
 \end{code}
 
 --------------------------------
