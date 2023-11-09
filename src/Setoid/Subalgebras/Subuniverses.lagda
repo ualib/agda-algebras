@@ -132,7 +132,7 @@ module _ {𝑨 : Algebra α ρᵃ} where
  private A = 𝕌[ 𝑨 ]
  open Setoid using ( Carrier )
  open Environment 𝑨
- open Func renaming ( f to _⟨$⟩_ )
+ open Func renaming ( to to _⟨$⟩_ )
 
  -- subuniverses are closed under the action of term operations
  sub-term-closed :  (B : Pred A ℓ)
@@ -189,9 +189,9 @@ we call `hom-unique`.
 \begin{code}
 
  module _ {𝑩 : Algebra β ρᵇ} (gh hh : hom 𝑨 𝑩) where
-  open Algebra 𝑩  using ( Interp )  renaming (Domain to B )
+  open Algebra 𝑩  using ( Interp )  renaming ( Domain to B )
   open Setoid B   using ( _≈_ ; sym )
-  open Func       using ( cong )    renaming (f to _⟨$⟩_ )
+  open Func       using ( cong )    renaming ( to to _⟨$⟩_ )
   open SetoidReasoning B
 
   private

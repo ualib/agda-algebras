@@ -48,7 +48,7 @@ open  import Setoid.Varieties.SoundAndComplete  {𝑆 = 𝑆}
       using  ( Eq ; _⊫_ ; _≈̇_ ; _⊢_▹_≈_ ; Th ; Mod
              ; module Soundness ; module FreeAlgebra )
 
-open _⟶_      using ( cong ) renaming ( f to _⟨$⟩_ )
+open _⟶_      using ( cong ) renaming ( to to _⟨$⟩_ )
 open Algebra  using ( Domain )
 
 \end{code}
@@ -113,7 +113,7 @@ Finally, we define an epimorphism from `𝑻 X` onto the relatively free algebra
   c (gnl {f}{s}{t} x) = cong InterpF (≡.refl , c ∘ x)
 
   h : TX ⟶ F
-  h = record { f = id ; cong = c }
+  h = record { to = id ; cong = c }
 
   hepi : IsEpi (𝑻 X) 𝔽[ X ] h
   compatible (isHom hepi) = cong h reflT
@@ -188,9 +188,9 @@ module _ {α ρᵃ ℓ : Level} {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔
    where
    φ : (Domain 𝔽[ ∣A∣ ]) ⟶ A
    _⟨$⟩_ φ = free-lift{𝑨 = 𝑨} id
-   cong φ {p} {q} pq =  trans (sym (free-lift-interp{𝑨 = 𝑨} id p))
-                        ( trans (A∈ModThK{p = p}{q} (kernel-in-theory pq) id )
-                        ( free-lift-interp{𝑨 = 𝑨} id q) )
+   cong φ {p} {q} pq = trans (sym (free-lift-interp{𝑨 = 𝑨} id p))
+                       ( trans (A∈ModThK{p = p}{q} (kernel-in-theory pq) id )
+                       ( free-lift-interp{𝑨 = 𝑨} id q) )
    isEpi : IsEpi 𝔽[ ∣A∣ ] 𝑨 φ
    compatible (isHom isEpi) = cong Interp (≡.refl , (λ _ → refl))
    isSurjective isEpi {y} = eq (ℊ y) refl

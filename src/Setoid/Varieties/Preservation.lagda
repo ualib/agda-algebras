@@ -51,7 +51,7 @@ open  import Setoid.Varieties.Properties {𝑆 = 𝑆}
 open  import Setoid.Varieties.SoundAndComplete {𝑆 = 𝑆}
       using ( _⊧_ ; _⊨_ ; _⊫_ ; Eq ; _≈̇_ ; lhs ; rhs ; _⊢_▹_≈_ ; Th)
 
-open _⟶_      using ( cong ) renaming ( f to _⟨$⟩_ )
+open _⟶_      using ( cong ) renaming ( to to _⟨$⟩_ )
 open Algebra  using ( Domain )
 \end{code}
 

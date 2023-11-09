@@ -26,7 +26,7 @@ open import Relation.Binary   using ( Setoid ;  IsEquivalence ; Decidable )
 open import Relation.Binary.PropositionalEquality  using ( refl ; _≡_ )
 open import Relation.Unary                         using ( Pred ; _⊆_ ; _∈_ )
 
-open Func           using ( cong )           renaming ( f to _⟨$⟩_ )
+open Func           using ( cong )           renaming ( to to _⟨$⟩_ )
 open Setoid         using ( Carrier ; _≈_ )  renaming ( isEquivalence to isEqv )
 open IsEquivalence  using ()                 renaming ( refl to reflE ; sym to symE ; trans to transE )
 

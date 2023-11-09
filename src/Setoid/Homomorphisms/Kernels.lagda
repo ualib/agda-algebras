@@ -40,7 +40,7 @@ open  import Setoid.Homomorphisms.Properties {𝑆 = 𝑆} using ( 𝒾𝒹 )
 private variable  α β ρᵃ ρᵇ ℓ : Level
 
 open Algebra  using ( Domain )
-open _⟶_      using ( cong ) renaming (f to _⟨$⟩_ )
+open _⟶_      using ( cong ) renaming ( to to _⟨$⟩_ )
 
 module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} (hh : hom 𝑨 𝑩) where
 
@@ -114,7 +114,7 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} (h : hom 𝑨 𝑩) 
   open IsHom {𝑨 = (𝑨 ╱ θ)}  using ( compatible )
 
   p : (Domain 𝑨) ⟶ A/θ
-  p = record { f = id ; cong = reflexive ∥ θ ∥ }
+  p = record { to = id ; cong = reflexive ∥ θ ∥ }
 
   pepi : IsEpi 𝑨 (𝑨 ╱ θ) p
   pepi = record  { isHom = record { compatible = sym (compatible ∥ 𝒾𝒹 ∥) }

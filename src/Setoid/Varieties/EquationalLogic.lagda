@@ -49,7 +49,7 @@ Varieties.EquationalLogic.
 
 \begin{code}
 
-open _⟶_ using () renaming ( f to _⟨$⟩_ )
+open _⟶_ using () renaming ( to to _⟨$⟩_ )
 
 module _  {X : Type χ} where
 

@@ -29,7 +29,7 @@ open import Overture                   using ( ∣_∣ )
 open import Base.Relations.Discrete    using ( ker ; 0[_] ; kerlift )
 open import Base.Relations.Properties  using ( Reflexive ; Symmetric ; Transitive )
 
-private variable α β χ : Level
+private variable a b ℓ : Level
 \end{code}
 
 #### <a id="equivalence-relations">Equivalence relations</a>
@@ -43,7 +43,7 @@ is a proof that `r` satisfies `IsEquivalence`.
 
 \begin{code}
 
-Equivalence : Type α → {ρ : Level} → Type (α ⊔ suc ρ)
+Equivalence : Type a → {ρ : Level} → Type (a ⊔ suc ρ)
 Equivalence A {ρ} = Σ[ r ∈ BinRel A ρ ] IsEquivalence r
 
 \end{code}
@@ -54,14 +54,14 @@ and `IsEquivPred` types corresponding to such a representation.
 
 \begin{code}
 
-module _ {X : Type χ}{ρ : Level} where
+module _ {X : Type ℓ}{ρ : Level} where
 
- record IsPartialEquivPred (R : Pred (X × X) ρ) : Type (χ ⊔ ρ) where
+ record IsPartialEquivPred (R : Pred (X × X) ρ) : Type (ℓ ⊔ ρ) where
   field
    sym   : Symmetric R
    trans : Transitive R
 
- record IsEquivPred (R : Pred (X × X) ρ) : Type (χ ⊔ ρ) where
+ record IsEquivPred (R : Pred (X × X) ρ) : Type (ℓ ⊔ ρ) where
   field
    refl  : Reflexive R
    sym   : Symmetric R
@@ -83,13 +83,13 @@ A prominent example of an equivalence relation is the kernel of any function.
 \begin{code}
 
 open Level
-ker-IsEquivalence : {A : Type α}{B : Type β}(f : A → B) → IsEquivalence (ker f)
+ker-IsEquivalence : {A : Type a}{B : Type b}(f : A → B) → IsEquivalence (ker f)
 ker-IsEquivalence f = record  { refl = PE.refl
                               ; sym = λ x → PE.sym x
                               ; trans = λ x y → PE.trans x y
                               }
 
-kerlift-IsEquivalence :  {A : Type α}{B : Type β}(f : A → B){ρ : Level}
+kerlift-IsEquivalence :  {A : Type a}{B : Type b}(f : A → B){ρ : Level}
  →                       IsEquivalence (kerlift f ρ)
 
 kerlift-IsEquivalence f = record  { refl = lift PE.refl
@@ -111,15 +111,15 @@ i.e., blocks of a partition (recall partitions correspond to equivalence relatio
 
 \begin{code}
 
-[_] : {A : Type α} → A → {ρ : Level} → BinRel A ρ → Pred A ρ
+[_] : {A : Type a} → A → {ρ : Level} → BinRel A ρ → Pred A ρ
 [ u ]{ρ} R = R u      -- (the R-block containing u : A)
 
 -- Alternative notation
-[_/_] : {A : Type α} → A → {ρ : Level} → Equivalence A {ρ} → Pred A ρ
+[_/_] : {A : Type a} → A → {ρ : Level} → Equivalence A {ρ} → Pred A ρ
 [ u / R ] = ∣ R ∣ u
 
 -- Alternative notation
-Block : {A : Type α} → A → {ρ : Level} → Equivalence A{ρ} → Pred A ρ
+Block : {A : Type a} → A → {ρ : Level} → Equivalence A{ρ} → Pred A ρ
 Block u {ρ} R = ∣ R ∣ u
 
 infix 60 [_]
@@ -134,8 +134,8 @@ We represent this characterization of an `R`-block as follows.
 
 \begin{code}
 
-record IsBlock  {A : Type α}{ρ : Level}
-                (P : Pred A ρ){R : BinRel A ρ} : Type(α ⊔ suc ρ) where
+record IsBlock  {A : Type a}{ρ : Level}
+                (P : Pred A ρ){R : BinRel A ρ} : Type(a ⊔ suc ρ) where
  constructor mkblk
  field
   blk : A
@@ -149,10 +149,10 @@ denoted by `A / R` and is defined to be the collection `{[ u ] ∣  y : A}` of a
 
 \begin{code}
 
-Quotient : (A : Type α){ρ : Level} → Equivalence A{ρ} → Type(α ⊔ suc ρ)
+Quotient : (A : Type a){ρ : Level} → Equivalence A{ρ} → Type(a ⊔ suc ρ)
 Quotient A R = Σ[ P ∈ Pred A _ ] IsBlock P {∣ R ∣}
 
-_/_ : (A : Type α){ρ : Level} → BinRel A ρ → Type(α ⊔ suc ρ)
+_/_ : (A : Type a){ρ : Level} → BinRel A ρ → Type(a ⊔ suc ρ)
 A / R = Σ[ P ∈ Pred A _ ] IsBlock P {R}
 
 infix -1 _/_
@@ -163,7 +163,7 @@ We use the following type to represent an R-block with a designated representati
 
 \begin{code}
 
-⟪_⟫ : {α : Level}{A : Type α}{ρ : Level} → A → {R : BinRel A ρ} → A / R
+⟪_⟫ : {a : Level}{A : Type a}{ρ : Level} → A → {R : BinRel A ρ} → A / R
 ⟪ a ⟫{R} = [ a ] R , mkblk a PE.refl
 
 \end{code}
@@ -172,7 +172,7 @@ Dually, the next type provides an *elimination rule*.
 
 \begin{code}
 
-⌞_⌟ : {α : Level}{A : Type α}{ρ : Level}{R : BinRel A ρ} → A / R  → A
+⌞_⌟ : {a : Level}{A : Type a}{ρ : Level}{R : BinRel A ρ} → A / R  → A
 ⌞ _ , mkblk a _ ⌟ = a
 
 \end{code}
@@ -181,7 +181,7 @@ Here `C` is a predicate and `p` is a proof of `C ≡ [ a ] R`.
 
 \begin{code}
 
-module _  {A : Type α}
+module _  {A : Type a}
           {ρ : Level}    -- note: ρ is an implicit parameter
           {R : Equivalence A {ρ}} where
 
@@ -205,7 +205,7 @@ An example application of these is the `block-ext` type in the [Base.Relations.E
 Recall, from Base.Relations.Discrete, the zero (or "identity") relation is
 
 ```agda
-0[_] : (A : Type α) → {ρ : Level} → BinRel A (α ⊔ ρ)
+0[_] : (A : Type a) → {ρ : Level} → BinRel A (a ⊔ ρ)
 0[ A ] {ρ} = λ x y → Lift ρ (x ≡ y)
 ```
 
@@ -213,22 +213,22 @@ This is obviously an equivalence relation, as we now confirm.
 
 \begin{code}
 
-0[_]IsEquivalence : (A : Type α){ρ : Level} → IsEquivalence (0[ A ] {ρ})
+0[_]IsEquivalence : (A : Type a){ρ : Level} → IsEquivalence (0[ A ] {ρ})
 0[ A ]IsEquivalence {ρ} = record  { refl = lift PE.refl
                                   ; sym = λ p → lift (PE.sym (lower p))
                                   ; trans = λ p q → lift (PE.trans (lower p) (lower q))
                                   }
 
-0[_]Equivalence : (A : Type α) {ρ : Level} → Equivalence A {α ⊔ ρ}
+0[_]Equivalence : (A : Type a) {ρ : Level} → Equivalence A {a ⊔ ρ}
 0[ A ]Equivalence {ρ} = 0[ A ] {ρ} , 0[ A ]IsEquivalence
 
 
-⟪_∼_⟫-elim : {A : Type α} → (u v : A) → {ρ : Level}{R : Equivalence A{ρ} }
+⟪_∼_⟫-elim : {A : Type a} → (u v : A) → {ρ : Level}{R : Equivalence A{ρ} }
  →           ⟪ u ⟫{∣ R ∣} ≡ ⟪ v ⟫ → ∣ R ∣ u v
 
 ⟪ u ∼ .u ⟫-elim {ρ} {R} PE.refl = IsEquivalence.refl (snd R)
 
-≡→⊆ : {A : Type α}{ρ : Level}(Q R : Pred A ρ) → Q ≡ R → Q ⊆ R
+≡→⊆ : {A : Type a}{ρ : Level}(Q R : Pred A ρ) → Q ≡ R → Q ⊆ R
 ≡→⊆ Q .Q PE.refl {x} Qx = Qx
 \end{code}
 

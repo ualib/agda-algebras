@@ -41,7 +41,7 @@ open  import Setoid.Terms.Basic       {𝑆 = 𝑆}
       using ( module Environment ; 𝑻 ; _≐_ ; ≐-isRefl )
 
 open Term
-open _⟶_ using ( cong ) renaming ( f to _⟨$⟩_ )
+open _⟶_ using ( cong ) renaming ( to to _⟨$⟩_ )
 
 private variable
  α ρᵃ β ρᵇ ρ χ ι : Level

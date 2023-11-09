@@ -53,7 +53,7 @@ between two algebras, say, `𝑨` and `𝑩`.
 
 \begin{code}
 
-record _≅_ {α β : Level}(𝑨 : Algebra α)(𝑩 : Algebra β) : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ β) where
+record _≅_ {α b : Level}(𝑨 : Algebra α)(𝑩 : Algebra b) : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ b) where
  constructor mkiso
  field
   to : hom 𝑨 𝑩
@@ -70,7 +70,7 @@ That is, two structures are *isomorphic* provided there are homomorphisms going 
 We could define this using Sigma types, like this.
 
 ```agda
-_≅_ : {α β : Level}(𝑨 : Algebra α)(𝑩 : Algebra β) → Type(𝓞 ⊔ 𝓥 ⊔ α ⊔ β)
+_≅_ : {α b : Level}(𝑨 : Algebra α)(𝑩 : Algebra b) → Type(𝓞 ⊔ 𝓥 ⊔ α ⊔ b)
 𝑨 ≅ 𝑩 =  Σ[ f ∈ (hom 𝑨 𝑩)] Σ[ g ∈ hom 𝑩 𝑨 ] ((∣ f ∣ ∘ ∣ g ∣ ≈ ∣ 𝒾𝒹 𝑩 ∣) × (∣ g ∣ ∘ ∣ f ∣ ≈ ∣ 𝒾𝒹 𝑨 ∣))
 ```
 
@@ -80,16 +80,16 @@ However, with four components, an equivalent record type is easier to work with.
 
 \begin{code}
 
-private variable α β γ ι : Level
+private variable a b c ℓ : Level
 
-≅-refl : Reflexive (_≅_ {α})
+≅-refl : Reflexive (_≅_ {a})
 ≅-refl {α}{𝑨} = mkiso (𝒾𝒹 𝑨) (𝒾𝒹 𝑨) (λ _ → ≡.refl) λ _ → ≡.refl
 
-≅-sym : Sym (_≅_ {α}) (_≅_ {β})
+≅-sym : Sym (_≅_ {a}) (_≅_ {b})
 ≅-sym φ = mkiso (from φ) (to φ) (from∼to φ) (to∼from φ)
 
-≅-trans : Trans (_≅_ {α})(_≅_ {β})(_≅_ {α}{γ})
-≅-trans {γ = γ}{𝑨}{𝑩}{𝑪} ab bc = mkiso f g τ ν
+≅-trans : Trans (_≅_ {a})(_≅_ {b})(_≅_ {a}{ℓ})
+≅-trans {ℓ = ℓ}{𝑨}{𝑩}{𝑪} ab bc = mkiso f g τ ν
  where
   f : hom 𝑨 𝑪
   f = ∘-hom 𝑨 𝑪 (to ab) (to bc)
@@ -104,7 +104,7 @@ private variable α β γ ι : Level
 
 
 -- The "to" map of an isomorphism is injective.
-≅toInjective :  {α β : Level}{𝑨 : Algebra α}{𝑩 : Algebra β}
+≅toInjective :  {a b : Level}{𝑨 : Algebra a}{𝑩 : Algebra b}
                 (φ : 𝑨 ≅ 𝑩) → IsInjective ∣ to φ ∣
 
 ≅toInjective (mkiso (f , _) (g , _) _ g∼f){a}{b} fafb =
@@ -115,7 +115,7 @@ private variable α β γ ι : Level
 
 
 -- The "from" map of an isomorphism is injective.
-≅fromInjective :  {α β : Level}{𝑨 : Algebra α}{𝑩 : Algebra β}
+≅fromInjective :  {a b : Level}{𝑨 : Algebra a}{𝑩 : Algebra b}
                   (φ : 𝑨 ≅ 𝑩) → IsInjective ∣ from φ ∣
 
 ≅fromInjective φ = ≅toInjective (≅-sym φ)
@@ -130,15 +130,15 @@ Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic 
 
 open Level
 
-Lift-≅ : {α β : Level}{𝑨 : Algebra α} → 𝑨 ≅ (Lift-Alg 𝑨 β)
-Lift-≅{β = β}{𝑨 = 𝑨} = record  { to = 𝓁𝒾𝒻𝓉 𝑨
+Lift-≅ : {a b : Level}{𝑨 : Algebra a} → 𝑨 ≅ (Lift-Alg 𝑨 b)
+Lift-≅{b = b}{𝑨 = 𝑨} = record  { to = 𝓁𝒾𝒻𝓉 𝑨
                                ; from = 𝓁ℴ𝓌ℯ𝓇 𝑨
                                ; to∼from = ≡.cong-app lift∼lower
-                               ; from∼to = ≡.cong-app (lower∼lift {β = β})
+                               ; from∼to = ≡.cong-app (lower∼lift {b = b})
                                }
 
-Lift-Alg-iso :  {α β : Level}{𝑨 : Algebra α}{𝓧 : Level}
-                {𝑩 : Algebra β}{𝓨 : Level}
+Lift-Alg-iso :  {a b : Level}{𝑨 : Algebra a}{𝓧 : Level}
+                {𝑩 : Algebra b}{𝓨 : Level}
  →              𝑨 ≅ 𝑩 → (Lift-Alg 𝑨 𝓧) ≅ (Lift-Alg 𝑩 𝓨)
 
 Lift-Alg-iso A≅B = ≅-trans (≅-trans (≅-sym Lift-≅) A≅B) Lift-≅
@@ -151,7 +151,7 @@ The lift is also associative, up to isomorphism at least.
 
 \begin{code}
 
-Lift-Alg-assoc :  (ℓ₁ ℓ₂ : Level) {𝑨 : Algebra α}
+Lift-Alg-assoc :  (ℓ₁ ℓ₂ : Level) {𝑨 : Algebra a}
  →                Lift-Alg 𝑨 (ℓ₁ ⊔ ℓ₂) ≅ (Lift-Alg (Lift-Alg 𝑨 ℓ₁) ℓ₂)
 
 Lift-Alg-assoc ℓ₁ ℓ₂ {𝑨} = ≅-trans (≅-trans Goal Lift-≅) Lift-≅
@@ -167,9 +167,9 @@ Products of isomorphic families of algebras are themselves isomorphic. The proof
 
 \begin{code}
 
-module _ {α β ι : Level}{I : Type ι}{fiu : funext ι α}{fiw : funext ι β} where
+module _ {a b ι : Level}{I : Type ι}{fiu : funext ι a}{fiw : funext ι b} where
 
-  ⨅≅ :  {𝒜 : I → Algebra α}{ℬ : I → Algebra β}
+  ⨅≅ :  {𝒜 : I → Algebra a}{ℬ : I → Algebra b}
    →     (∀ (i : I) → 𝒜 i ≅ ℬ i) → ⨅ 𝒜 ≅ ⨅ ℬ
 
   ⨅≅ {𝒜}{ℬ} AB = record  { to = ϕ , ϕhom ; from = ψ , ψhom
@@ -200,9 +200,9 @@ A nearly identical proof goes through for isomorphisms of lifted products (thoug
 
 \begin{code}
 
-module _ {α β γ ι  : Level}{I : Type ι}{fizw : funext (ι ⊔ γ) β}{fiu : funext ι α} where
+module _ {a b γ ι  : Level}{I : Type ι}{fizw : funext (ι ⊔ γ) b}{fiu : funext ι a} where
 
-  Lift-Alg-⨅≅ :  {𝒜 : I → Algebra α}{ℬ : (Lift γ I) → Algebra β}
+  Lift-Alg-⨅≅ :  {𝒜 : I → Algebra a}{ℬ : (Lift γ I) → Algebra b}
    →             (∀ i → 𝒜 i ≅ ℬ (lift i)) → Lift-Alg (⨅ 𝒜) γ ≅ ⨅ ℬ
 
   Lift-Alg-⨅≅ {𝒜}{ℬ} AB = Goal

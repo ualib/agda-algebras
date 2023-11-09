@@ -19,7 +19,7 @@ module Setoid.Homomorphisms.Factor {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library -------------------------------------------------
 open import Data.Product     using ( _,_ ; Σ-syntax )  renaming ( proj₁ to fst ; proj₂ to snd )
-open import Function         using ( _∘_ )             renaming ( Func to _⟶_ )
+open import Function         using ( _∘_ ; _$_ )       renaming ( Func to _⟶_ )
 open import Level            using ( Level )
 open import Relation.Binary  using ( Setoid )
 open import Relation.Unary   using ( _⊆_ )
@@ -62,9 +62,9 @@ module _  {𝑨 : Algebra α ρᵃ} (𝑩 : Algebra β ρᵇ) {𝑪 : Algebra γ
 
  open Algebra 𝑩  using ()          renaming (Domain to B )
  open Algebra 𝑪  using ( Interp )  renaming (Domain to C )
- open Setoid B   using ()          renaming ( _≈_ to _≈₂_ ; sym to sym₂ )
- open Setoid C   using ( trans )   renaming ( _≈_ to _≈₃_ ; sym to sym₃ )
- open _⟶_        using ( cong )    renaming ( f to _⟨$⟩_ )
+ open Setoid B   using ()          renaming ( _≈_ to _≈₂_ ; sym to sym₂ ; trans to trans₂)
+ open Setoid C   using ( trans )   renaming ( _≈_ to _≈₃_ ; sym to sym₃ ; refl to refl₃)
+ open _⟶_        using ( cong )    renaming ( to to _⟨$⟩_ )
 
  open SReasoning B
 
@@ -109,13 +109,17 @@ module _  {𝑨 : Algebra α ρᵃ} (𝑩 : Algebra β ρᵇ) {𝑪 : Algebra γ
 
   open _⟶_ φmap using () renaming (cong to φcong)
   φcomp : compatible-map 𝑪 𝑩 φmap
-  φcomp {f}{c} =
-   begin
-    φmap ⟨$⟩ ((f ̂ 𝑪) c)              ≈˘⟨ φcong (cong Interp (≡.refl , (λ _ → η)))  ⟩
-    g (h⁻¹ ((f ̂ 𝑪)(h ∘ (h⁻¹ ∘ c))))  ≈˘⟨ φcong (compatible ∥ hh ∥)                 ⟩
-    g (h⁻¹ (h ((f ̂ 𝑨)(h⁻¹ ∘ c))))    ≈˘⟨ gφh ((f ̂ 𝑨)(h⁻¹ ∘ c))                     ⟩
-    g ((f ̂ 𝑨)(h⁻¹ ∘ c))              ≈⟨ compatible ∥ gh ∥                          ⟩
-    (f ̂ 𝑩)(g ∘ (h⁻¹ ∘ c))            ∎
+  φcomp {f}{c} = trans₂ i (trans₂ ii (trans₂ iii iv))
+   where
+   -- TODO: refactor this proof using the new relational reasoning syntax
+   i : g (h⁻¹ $ (f ̂ 𝑪) c) ≈₂ g (h⁻¹ $ (f ̂ 𝑪) $ h ∘ h⁻¹ ∘ c)
+   i = sym₂ $ φcong (cong Interp (≡.refl , λ _ → SurjInvIsInverseʳ hfunc hE))
+   ii : g (h⁻¹ $ (f ̂ 𝑪) $ h ∘ h⁻¹ ∘ c) ≈₂ g (h⁻¹ $ h $ (f ̂ 𝑨) $ h⁻¹ ∘ c)
+   ii = sym₂ (φcong (compatible ∥ hh ∥))
+   iii : g (h⁻¹ $ h $ (f ̂ 𝑨) $ h⁻¹ ∘ c) ≈₂ g ((f ̂ 𝑨) $ h⁻¹ ∘ c)
+   iii = sym₂ (gφh $ (f ̂ 𝑨) $ h⁻¹ ∘ c)
+   iv : g ((f ̂ 𝑨) $ h⁻¹ ∘ c) ≈₂ (f ̂ 𝑩)(g ∘ h⁻¹ ∘ c)
+   iv = compatible ∥ gh ∥
 
   φhom : IsHom 𝑪 𝑩 φmap
   compatible φhom = φcomp
@@ -128,7 +132,6 @@ If, in addition, `g` is surjective, then so will be the factor `φ`.
 
  HomFactorEpi :  kernelRel _≈₃_ h ⊆ kernelRel _≈₂_ g
   →              IsSurjective hfunc → IsSurjective gfunc
-                 -------------------------------------------------
   →              Σ[ φ ∈ epi 𝑪 𝑩 ] ∀ a → (g a) ≈₂ ∣ φ ∣ ⟨$⟩ (h a)
 
  HomFactorEpi Khg hE gE = (φmap , φepi) , gφh

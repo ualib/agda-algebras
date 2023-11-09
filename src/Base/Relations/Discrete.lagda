@@ -29,7 +29,7 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ )
 -- Imports from agda-algebras -------------------------------------------------------------------
 open import Overture using (_≈_ ; Π-syntax ; Op)
 
-private variable α β ρ 𝓥 : Level
+private variable a b ρ 𝓥 : Level
 \end{code}
 
 We begin with a definition that is useful for defining poitwise "equality" of functions
@@ -37,9 +37,9 @@ with respect to a given "equality" relation (see also the definition of `_≈̇_
 
 \begin{code}
 
-module _ {A : Type α} where
+module _ {A : Type a} where
 
- PointWise : {B : Type β } (_≋_ : BinRel B ρ) → BinRel (A → B) _
+ PointWise : {B : Type b} (_≋_ : BinRel B ρ) → BinRel (A → B) _
  PointWise {B = B} _≋_ = λ (f g : A → B) → ∀ x → f x ≋ g x
 
 \end{code}
@@ -51,7 +51,7 @@ Here is the analogous definition for dependent functions.
 
 \begin{code}
 
- depPointWise :  {B : A → Type β }
+ depPointWise :  {B : A → Type b }
                  (_≋_ : {γ : Level}{C : Type γ} → BinRel C ρ)
   →              BinRel ((a : A) → B a) _
  depPointWise {B = B} _≋_ = λ (f g : (a : A) → B a) → ∀ x → f x ≋ g x
@@ -63,7 +63,7 @@ is contained in a particular "subset" (predicate) of the codomain.
 
 \begin{code}
 
- Im_⊆_ : {B : Type β} → (A → B) → Pred B ρ → Type (α ⊔ ρ)
+ Im_⊆_ : {B : Type b} → (A → B) → Pred B ρ → Type (a ⊔ ρ)
  Im f ⊆ S = ∀ x → f x ∈ S
 
 \end{code}
@@ -85,7 +85,7 @@ Sometimes it is useful to obtain the underlying type (`A`) over which the predic
 
 \begin{code}
 
- PredType : Pred A ρ → Type α
+ PredType : Pred A ρ → Type a
  PredType _ = A
 
 \end{code}
@@ -126,9 +126,9 @@ to be an inhabitant of a (binary) relation type, or a (unary) predicate type.
 
 \begin{code}
 
-module _ {A : Type α}{B : Type β} where
+module _ {A : Type a}{B : Type b} where
 
- ker : (A → B) → BinRel A β
+ ker : (A → B) → BinRel A b
  ker g x y = g x ≡ g y
 
  kerRel : {ρ : Level} → BinRel B ρ → (A → B) → BinRel A ρ
@@ -147,23 +147,23 @@ module _ {A : Type α}{B : Type β} where
                                ; trans = trans eqR
                                }
 
- kerlift : (A → B) → (ρ : Level) → BinRel A (β ⊔ ρ)
+ kerlift : (A → B) → (ρ : Level) → BinRel A (b ⊔ ρ)
  kerlift g ρ x y = Lift ρ (g x ≡ g y)
 
- ker' : (A → B) → (I : Type 𝓥) → BinRel (I → A) (β ⊔ 𝓥)
+ ker' : (A → B) → (I : Type 𝓥) → BinRel (I → A) (b ⊔ 𝓥)
  ker' g I x y = g ∘ x ≡ g ∘ y
 
- kernel : (A → B) → Pred (A × A) β
+ kernel : (A → B) → Pred (A × A) b
  kernel g (x , y) = g x ≡ g y
 
 -- The *identity relation* (equivalently, the kernel of a 1-to-1 function)
-0[_] : (A : Type α) → {ρ : Level} → BinRel A (α ⊔ ρ)
+0[_] : (A : Type a) → {ρ : Level} → BinRel A (a ⊔ ρ)
 0[ A ] {ρ} = λ x y → Lift ρ (x ≡ y)
 
-module _ {A : Type (α ⊔ ρ)} where
+module _ {A : Type (a ⊔ ρ)} where
 
  -- Subset containment relation for binary realtions
- _⊑_ : BinRel A ρ → BinRel A ρ → Type (α ⊔ ρ)
+ _⊑_ : BinRel A ρ → BinRel A ρ → Type (a ⊔ ρ)
  P ⊑ Q = ∀ x y → P x y → Q x y
 
  ⊑-refl : Reflexive _⊑_
@@ -187,35 +187,35 @@ facts about *compatibility* of operations and relations
 
 -- lift a binary relation to the corresponding `I`-ary relation.
 
-eval-rel : {A : Type α}{I : Type 𝓥} → BinRel A ρ → BinRel (I → A) (𝓥 ⊔ ρ)
+eval-rel : {A : Type a}{I : Type 𝓥} → BinRel A ρ → BinRel (I → A) (𝓥 ⊔ ρ)
 eval-rel R u v = ∀ i → R (u i) (v i)
 
-eval-pred : {A : Type α}{I : Type 𝓥} → Pred (A × A) ρ → BinRel (I → A) (𝓥 ⊔ ρ)
+eval-pred : {A : Type a}{I : Type 𝓥} → Pred (A × A) ρ → BinRel (I → A) (𝓥 ⊔ ρ)
 eval-pred P u v = ∀ i → (u i , v i) ∈ P
 
 \end{code}
 
-If `f : Op I` and `R : Rel A β`, then we say `f` and `R` are *compatible* just in case `∀ u v : I → A`, `Π i ꞉ I , R (u i) (v i)  →  R (f u) (f v)`.
+If `f : Op I` and `R : Rel A b`, then we say `f` and `R` are *compatible* just in case `∀ u v : I → A`, `Π i ꞉ I , R (u i) (v i)  →  R (f u) (f v)`.
 
 \begin{code}
 
-_preserves_ : {A : Type α}{I : Type 𝓥} → Op A I → BinRel A ρ → Type (α ⊔ 𝓥 ⊔ ρ)
+_preserves_ : {A : Type a}{I : Type 𝓥} → Op A I → BinRel A ρ → Type (a ⊔ 𝓥 ⊔ ρ)
 f preserves R  = ∀ u v → (eval-rel R) u v → R (f u) (f v)
 
 --shorthand notation for preserves
-_|:_ : {A : Type α}{I : Type 𝓥} → Op A I → BinRel A ρ → Type (α ⊔ 𝓥 ⊔ ρ)
+_|:_ : {A : Type a}{I : Type 𝓥} → Op A I → BinRel A ρ → Type (a ⊔ 𝓥 ⊔ ρ)
 f |: R  = (eval-rel R) =[ f ]⇒ R
 
 -- predicate version of the compatibility relation
-_preserves-pred_ : {A : Type α}{I : Type 𝓥} → Op A I → Pred ( A × A ) ρ → Type (α ⊔ 𝓥 ⊔ ρ)
+_preserves-pred_ : {A : Type a}{I : Type 𝓥} → Op A I → Pred ( A × A ) ρ → Type (a ⊔ 𝓥 ⊔ ρ)
 f preserves-pred P  = ∀ u v → (eval-pred P) u v → (f u , f v) ∈ P
 
-_|:pred_ : {A : Type α}{I : Type 𝓥} → Op A I → Pred (A × A) ρ → Type (α ⊔ 𝓥 ⊔ ρ)
+_|:pred_ : {A : Type a}{I : Type 𝓥} → Op A I → Pred (A × A) ρ → Type (a ⊔ 𝓥 ⊔ ρ)
 f |:pred P  = (eval-pred P) =[ f ]⇒ λ x y → (x , y) ∈ P
 
 
 -- The two types just defined are logically equivalent.
-module _ {A : Type α}{I : Type 𝓥}{f : Op A I}{R : BinRel A ρ} where
+module _ {A : Type a}{I : Type 𝓥}{f : Op A I}{R : BinRel A ρ} where
  compatibility-agreement : f preserves R → f |: R
  compatibility-agreement c {x}{y} Rxy = c x y Rxy
  compatibility-agreement' : f |: R → f preserves R

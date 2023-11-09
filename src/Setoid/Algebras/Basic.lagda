@@ -50,7 +50,7 @@ open Setoid
  using (_≈_ ; Carrier )
  renaming ( refl to reflS ; sym to symS ; trans to transS ; isEquivalence to isEqv )
 
-open Func renaming ( f to _⟨$⟩_ ; cong to ≈cong )
+open Func renaming ( to to _⟨$⟩_ ; cong to ≈cong )
 
 
 EqArgs :  {𝑆 : Signature 𝓞 𝓥}{ξ : Setoid α ρ}

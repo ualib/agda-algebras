@@ -27,7 +27,7 @@ module Setoid.Varieties.Properties {𝑆 : Signature 𝓞 𝓥} where
 -- Imports from Agda and the Agda Standard Library -------------------------------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
 open import Data.Product     using ( _,_ )
-open import Function         using ( _∘_ ; Func )
+open import Function         using ( _∘_ ; Func ; _$_ )
 open import Level            using ( Level )
 open import Relation.Binary  using ( Setoid )
 open import Relation.Unary   using ( Pred ; _∈_ )
@@ -50,7 +50,7 @@ open  import Setoid.Varieties.SoundAndComplete {𝑆 = 𝑆}
 
 private variable α ρᵃ β ρᵇ χ ℓ : Level
 
-open Func     using ( cong ) renaming ( f to _⟨$⟩_ )
+open Func     using ( cong ) renaming ( to to _⟨$⟩_ )
 open Algebra  using ( Domain )
 \end{code}
 
@@ -65,19 +65,29 @@ module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}(𝑩 : Algebra β ρᵇ)(p q : T
  open Environment 𝑨      using () renaming ( ⟦_⟧   to ⟦_⟧₁ )
  open Environment 𝑩      using () renaming ( ⟦_⟧   to ⟦_⟧₂ )
  open Setoid (Domain 𝑨)  using () renaming ( _≈_   to _≈₁_ )
- open Setoid (Domain 𝑩)  using ( _≈_ ; sym )
+ open Setoid (Domain 𝑩)  using ( _≈_ ; sym ; trans )
  open SetoidReasoning (Domain 𝑩)
 
  ⊧-I-invar : 𝑨 ⊧ (p ≈̇ q)  →  𝑨 ≅ 𝑩  →  𝑩 ⊧ (p ≈̇ q)
- ⊧-I-invar Apq (mkiso fh gh f∼g g∼f) ρ =
-  begin
-   ⟦ p ⟧₂ ⟨$⟩ ρ              ≈˘⟨ cong ⟦ p ⟧₂ (λ x → f∼g (ρ x)) ⟩
-   ⟦ p ⟧₂ ⟨$⟩ (f ∘ (g ∘ ρ))  ≈˘⟨ comm-hom-term fh p (g ∘ ρ) ⟩
-   f (⟦ p ⟧₁ ⟨$⟩ (g ∘ ρ))    ≈⟨ cong ∣ fh ∣ (Apq (g ∘ ρ)) ⟩
-   f (⟦ q ⟧₁ ⟨$⟩ (g ∘ ρ))    ≈⟨ comm-hom-term fh q (g ∘ ρ) ⟩
-   ⟦ q ⟧₂ ⟨$⟩ (f ∘ (g ∘ ρ))  ≈⟨ cong ⟦ q ⟧₂ (λ x → f∼g (ρ x)) ⟩
-   ⟦ q ⟧₂ ⟨$⟩ ρ              ∎
-  where private f = _⟨$⟩_ ∣ fh ∣ ; g = _⟨$⟩_ ∣ gh ∣
+ ⊧-I-invar Apq (mkiso fh gh f∼g g∼f) ρ = trans i $ trans ii $ trans iii $ trans iv v
+  where
+  -- TODO: refactor this proof using new relational reasoning syntax/style
+  private f = _⟨$⟩_ ∣ fh ∣ ; g = _⟨$⟩_ ∣ gh ∣
+
+  i : ⟦ p ⟧₂ ⟨$⟩ ρ ≈ ⟦ p ⟧₂ ⟨$⟩ (f ∘ (g ∘ ρ))
+  i = sym $ cong ⟦ p ⟧₂ (f∼g ∘ ρ)
+
+  ii : ⟦ p ⟧₂ ⟨$⟩ (f ∘ (g ∘ ρ)) ≈ f (⟦ p ⟧₁ ⟨$⟩ (g ∘ ρ))
+  ii = sym $ comm-hom-term fh p (g ∘ ρ)
+
+  iii : f (⟦ p ⟧₁ ⟨$⟩ (g ∘ ρ)) ≈ f (⟦ q ⟧₁ ⟨$⟩ (g ∘ ρ))
+  iii = cong ∣ fh ∣ $ Apq (g ∘ ρ)
+
+  iv : f (⟦ q ⟧₁ ⟨$⟩ (g ∘ ρ)) ≈ ⟦ q ⟧₂ ⟨$⟩ (f ∘ (g ∘ ρ))
+  iv = comm-hom-term fh q (g ∘ ρ)
+
+  v : ⟦ q ⟧₂ ⟨$⟩ (f ∘ (g ∘ ρ)) ≈ ⟦ q ⟧₂ ⟨$⟩ ρ
+  v = cong ⟦ q ⟧₂ (f∼g ∘ ρ)
 
 \end{code}
 

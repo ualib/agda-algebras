@@ -40,7 +40,7 @@ open  import Setoid.Subalgebras    {𝑆 = 𝑆}
       using ( _≤_ ; _≤c_ ; ≤-reflexive ; ≤-trans ; ≅-trans-≤ )
       using ( ≤-trans-≅ ; Lift-≤-Lift ; ≤-Lift )
 
-open _⟶_ renaming ( f to _⟨$⟩_ )
+open _⟶_ renaming ( to to _⟨$⟩_ )
 
 module _ {α ρᵃ β ρᵇ : Level} where
 

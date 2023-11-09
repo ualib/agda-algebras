@@ -35,7 +35,7 @@ open import Overture using ( ∥_∥ )
 open import Setoid.Algebras  {𝑆 = 𝑆}  using ( Algebra ; ov ; _̂_)
 open import Base.Terms       {𝑆 = 𝑆}  using ( Term )
 
-open Func renaming ( f to _⟨$⟩_ )
+open Func renaming ( to to _⟨$⟩_ )
 open Term
 
 private variable

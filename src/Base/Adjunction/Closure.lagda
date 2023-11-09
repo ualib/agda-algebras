@@ -98,7 +98,7 @@ record ClOp {ℓ ℓ₁ ℓ₂ : Level}(𝑨 : Poset ℓ ℓ₁ ℓ₂) : Type  
 \begin{code}
 
 open ClOp
-open Inverse renaming (f to to; f⁻¹ to from)
+open Inverse
 
 module _ {𝑨 : Poset ℓ ℓ₁ ℓ₂}(𝑪 : ClOp 𝑨) where
  open Poset 𝑨

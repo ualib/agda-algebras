@@ -32,7 +32,7 @@ open import Setoid.Algebras {𝑆 = 𝑆}
 open import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}
                              using ( hom ; IsHom ; epi )
 
-private variable α ρᵃ β ρᵇ 𝓘 : Level
+private variable a α b β 𝓘 : Level
 
 \end{code}
 
@@ -45,10 +45,10 @@ we can construct a homomorphism from `𝑨` to the product `⨅ ℬ` in the natu
 
 \begin{code}
 
-module _ {I : Type 𝓘}{𝑨 : Algebra α ρᵃ}(ℬ : I → Algebra β ρᵇ)  where
+module _ {I : Type 𝓘}{𝑨 : Algebra a α }(ℬ : I → Algebra b β)  where
  open Algebra 𝑨      using ()        renaming ( Domain to A )
  open Algebra (⨅ ℬ)  using ()        renaming ( Domain to ⨅B )
- open _⟶_            using ( cong )  renaming ( f to _⟨$⟩_ )
+ open _⟶_            using ( cong )  renaming ( to to _⟨$⟩_ )
  open IsHom
 
  ⨅-hom-co : (∀(i : I) → hom 𝑨 (ℬ i)) → hom 𝑨 (⨅ ℬ)
@@ -80,7 +80,7 @@ a homomorphism from `⨅ 𝒜` to `⨅ ℬ` in the following natural way.
 
 \begin{code}
 
- ⨅-hom : (𝒜 : I → Algebra α ρᵃ) → (∀ (i : I) → hom (𝒜 i) (ℬ i)) → hom (⨅ 𝒜)(⨅ ℬ)
+ ⨅-hom : (𝒜 : I → Algebra a α) → (∀ (i : I) → hom (𝒜 i) (ℬ i)) → hom (⨅ 𝒜)(⨅ ℬ)
  ⨅-hom 𝒜 𝒽 = F , isHom
   where
   open Algebra (⨅ 𝒜) using () renaming ( Domain to ⨅A )

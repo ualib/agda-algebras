@@ -75,7 +75,7 @@ open import Relation.Nullary  using ( Dec ; yes ; no ; Irrelevant )
 
 open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; sym ; trans )
 
-private variable α β : Level
+private variable a b : Level
 
 ℓ₁ : Level
 ℓ₁ = suc ℓ₀
@@ -97,7 +97,7 @@ notations for projections out of pairs as follows.
 
 \begin{code}
 
-module _ {A : Type α }{B : A → Type β} where
+module _ {A : Type a}{B : A → Type b} where
 
  ∣_∣ : Σ[ x ∈ A ] B x → A
  ∣_∣ = fst
@@ -112,7 +112,7 @@ module _ {A : Type α }{B : A → Type β} where
 Here we put the definitions inside an *anonymous module*, which starts with the
  `module` keyword followed by an underscore (instead of a module name). The
 purpose is simply to move the postulated typing judgments---the "parameters"
-of the module (e.g., `A : Type α`)---out of the way so they don't obfuscate
+of the module (e.g., `A : Type a`)---out of the way so they don't obfuscate
 the definitions inside the module.
 
 Let's define some useful syntactic sugar that will make it easier to apply
@@ -120,7 +120,7 @@ symmetry and transitivity of `≡` in proofs.
 
 \begin{code}
 
-_⁻¹ : {A : Type α} {x y : A} → x ≡ y → y ≡ x
+_⁻¹ : {A : Type a} {x y : A} → x ≡ y → y ≡ x
 p ⁻¹ = sym p
 
 infix  40 _⁻¹
@@ -133,10 +133,10 @@ sugar makes abundant appeals to transitivity easier to stomach.
 
 \begin{code}
 
-_∙_ : {A : Type α}{x y z : A} → x ≡ y → y ≡ z → x ≡ z
+_∙_ : {A : Type a}{x y z : A} → x ≡ y → y ≡ z → x ≡ z
 p ∙ q = trans p q
 
-𝑖𝑑 : (A : Type α ) → A → A
+𝑖𝑑 : (A : Type a) → A → A
 𝑖𝑑 A = λ x → x
 
 infixl 30 _∙_
@@ -148,7 +148,7 @@ infixl 30 _∙_
 
 infix 2 ∃-syntax
 
-∃-syntax : ∀ {A : Type α} → (A → Type β) → Set (α ⊔ β)
+∃-syntax : ∀ {A : Type a} → (A → Type b) → Set (a ⊔ b)
 ∃-syntax = ∃
 
 syntax ∃-syntax (λ x → B) = ∃[ x ∈ A ] B
@@ -163,10 +163,10 @@ syntax that is closer to standard notation as follows.
 
 \begin{code}
 
-Π : {A : Type α } (B : A → Type β ) → Type (α ⊔ β)
+Π : {A : Type a } (B : A → Type b ) → Type (a ⊔ b)
 Π {A = A} B = (x : A) → B x
 
-Π-syntax : (A : Type α)(B : A → Type β) → Type (α ⊔ β)
+Π-syntax : (A : Type a)(B : A → Type b) → Type (a ⊔ b)
 Π-syntax A B = Π B
 
 syntax Π-syntax A (λ x → B) = Π[ x ∈ A ] B
@@ -181,12 +181,12 @@ In the modules that follow, we will see many examples of this syntax in action.
 The hierarchy of universes in Agda is structured as follows:
 ```agda
 
-Type α : Type (lsuc α) ,   Type (lsuc α) : Type (lsuc (lsuc α)) , etc.
+Type a : Type (lsuc a) ,   Type (lsuc a) : Type (lsuc (lsuc a)) , etc.
 
 ```
-and so on. This means that the universe `Type α` has type `Type(lsuc α)`, and
-`Type(lsuc α)` has type `Type(lsuc (lsuc α))`, and so on.  It is important to
-note, however, this does *not* imply that  `Type α : Type(lsuc(lsuc α))`. In other
+and so on. This means that the universe `Type a` has type `Type(lsuc a)`, and
+`Type(lsuc a)` has type `Type(lsuc (lsuc a))`, and so on.  It is important to
+note, however, this does *not* imply that  `Type a : Type(lsuc(lsuc a))`. In other
 words, Agda's universe hierarchy is *non-cumulative*. This makes it possible to
 treat universe levels more precisely, which is nice. On the other hand, a
 non-cumulative hierarchy can sometimes make for a non-fun proof assistant.
@@ -207,18 +207,18 @@ Let us be more concrete about what is at issue here by considering a typical
 example. Agda will often complain with errors like the following:
 ```
 Birkhoff.lagda:498,20-23
-α != 𝓞 ⊔ 𝓥 ⊔ (lsuc α) when checking that the expression... has type...
+a != 𝓞 ⊔ 𝓥 ⊔ (lsuc a) when checking that the expression... has type...
 ```
-This error message means that Agda encountered the universe level `lsuc α`, on
+This error message means that Agda encountered the universe level `lsuc a`, on
 line 498 (columns 20--23) of the file `Birkhoff.lagda`, but was expecting a type
-at level `𝓞 ⊔ 𝓥 ⊔ lsuc α` instead. 
+at level `𝓞 ⊔ 𝓥 ⊔ lsuc a` instead.
 
 The general `Lift` record type that we now describe makes such problems easier to
 deal with. It takes a type inhabiting some universe and embeds it into a higher
 universe and, apart from syntax and notation, it is equivalent to the `Lift` type
 one finds in the `Level` module of the [Agda Standard Library][].
 ```agda
-record Lift {𝓦 α : Level} (A : Set α) : Set (α ⊔ 𝓦) where
+record Lift {𝓦 a : Level} (A : Set a) : Set (a ⊔ 𝓦) where
 ```
 ```agda
     constructor lift
@@ -234,10 +234,10 @@ the identity transformation. Similarly, `lift` followed by `lower` is the
 identity.
 \begin{code}
 
-lift∼lower : {A : Type α} → lift ∘ lower ≡ 𝑖𝑑 (Lift β A)
+lift∼lower : {A : Type a} → lift ∘ lower ≡ 𝑖𝑑 (Lift b A)
 lift∼lower = refl
 
-lower∼lift : {A : Type α} → (lower {α}{β}) ∘ lift ≡ 𝑖𝑑 A
+lower∼lift : {A : Type a} → (lower {a}{b}) ∘ lift ≡ 𝑖𝑑 A
 lower∼lift = refl
 
 \end{code}
@@ -252,9 +252,9 @@ the same output when given the same input.  (We will have more to say about
 this notion of equality in the [Base.Equality.Extensionality][] module.)
 \begin{code}
 
-module _ {α : Level}{A : Type α}{β : Level}{B : A → Type β } where
+module _ {a : Level}{A : Type a}{b : Level}{B : A → Type b } where
 
- _≈_ :  (f g : (a : A) → B a) → Type (α ⊔ β)
+ _≈_ :  (f g : (a : A) → B a) → Type (a ⊔ b)
  f ≈ g = ∀ x → f x ≡ g x
 
  infix 8 _≈_
@@ -269,7 +269,7 @@ The following is convenient for proving two pairs of a product type are equal
 using the fact that their respective components are equal.
 \begin{code}
 
-≡-by-parts :  {A : Type α}{B : Type β}{u v : A × B}
+≡-by-parts :  {A : Type a}{B : Type b}{u v : A × B}
  →            fst u ≡ fst v → snd u ≡ snd v → u ≡ v
 
 ≡-by-parts refl refl = refl
@@ -280,7 +280,7 @@ proofs.
 
 \begin{code}
 
-transport : {A : Type α } (B : A → Type β) {x y : A} → x ≡ y → B x → B y
+transport : {A : Type a } (B : A → Type b) {x y : A} → x ≡ y → B x → B y
 transport B refl = id
 \end{code}
 

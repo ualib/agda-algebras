@@ -49,7 +49,7 @@ open  import Setoid.Varieties.FreeAlgebras {𝑆 = 𝑆}
 open  import Setoid.Varieties.SoundAndComplete  {𝑆 = 𝑆}
       using ( module FreeAlgebra ; _⊫_ ; _≈̇_ ;  _⊢_▹_≈_ ; Mod ; Th )
 
-open _⟶_          using () renaming ( f to _⟨$⟩_ )
+open _⟶_          using () renaming ( to to _⟨$⟩_ )
 open Setoid       using ( Carrier )
 open Algebra      using ( Domain )
 open Environment  using ( Env )

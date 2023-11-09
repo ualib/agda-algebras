@@ -38,7 +38,7 @@ module _ (𝑨 : Algebra α ρᵃ)(𝑩 : Algebra β ρᵇ) where
  open Setoid A   using() renaming ( _≈_ to _≈₁_ )
  open Setoid B   using() renaming ( _≈_ to _≈₂_ )
 
- open _⟶_ {a = α}{ρᵃ}{β}{ρᵇ}{From = A}{To = B} renaming (f to _⟨$⟩_ )
+ open _⟶_ {a = α}{ρᵃ}{β}{ρᵇ}{From = A}{To = B} renaming (to to _⟨$⟩_ )
 
  compatible-map-op : (A ⟶ B) → ∣ 𝑆 ∣ → Type (𝓥 ⊔ α ⊔ ρᵇ)
  compatible-map-op h f =  ∀ {a}
