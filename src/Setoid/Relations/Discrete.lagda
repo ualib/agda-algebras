@@ -40,7 +40,7 @@ Here is a function that is useful for defining poitwise equality of functions wr
 
 \begin{code}
 
-open _⟶_ renaming ( f to _⟨$⟩_ )
+open _⟶_ renaming ( to to _⟨$⟩_ )
 module _ {𝐴 : Setoid α ρᵃ}{𝐵 : Setoid β ρᵇ} where
  open Setoid 𝐴  using () renaming ( Carrier to A ; _≈_ to _≈₁_ )
  open Setoid 𝐵  using () renaming ( Carrier to B ; _≈_ to _≈₂_ )

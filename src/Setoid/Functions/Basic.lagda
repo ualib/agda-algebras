@@ -24,13 +24,13 @@ open import Relation.Binary  using ( Setoid )
 private variable α ρᵃ β ρᵇ γ ρᶜ : Level
 
 𝑖𝑑 : {A : Setoid α ρᵃ} → A ⟶ A
-𝑖𝑑 {A} = record { f = id ; cong = id }
+𝑖𝑑 {A} = record { to = id ; cong = id }
 
-open _⟶_ renaming ( f to _⟨$⟩_ )
+open _⟶_ renaming ( to to _⟨$⟩_ )
 
 _⊙_ :  {A : Setoid α ρᵃ}{B : Setoid β ρᵇ}{C : Setoid γ ρᶜ}
  →     B ⟶ C → A ⟶ B → A ⟶ C
-f ⊙ g = record { f = (_⟨$⟩_ f) ∘ (_⟨$⟩_ g); cong = (cong f) ∘ (cong g) }
+f ⊙ g = record { to = (_⟨$⟩_ f) ∘ (_⟨$⟩_ g); cong = (cong f) ∘ (cong g) }
 
 module _ {𝑨 : Setoid α ρᵃ} where
  open Lift ; open Level ; open Setoid using (_≈_)
@@ -49,7 +49,7 @@ module _ {𝑨 : Setoid α ρᵃ} where
  lower∼lift _ = reflₐ
 
  liftFunc : {ℓ : Level} → 𝑨 ⟶ 𝑙𝑖𝑓𝑡 ℓ
- liftFunc = record { f = lift ; cong = id }
+ liftFunc = record { to = lift ; cong = id }
 
 \end{code}
 
