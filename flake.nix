@@ -10,53 +10,42 @@
   description = "the agda-algebras library";
 
   # Define the inputs (dependencies) for the flake.
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs";
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs";
+  };
 
   # Define the outputs of the flake.
   outputs = { self, nixpkgs }:
     let
-      # Import the Nix packages.
-      pkgs = import nixpkgs { };
+      # Import Nix packages with the overlay applied.
+      pkgs = import nixpkgs {
+        overlays = [ self.overlay ];
+      };
     in
     {
-      # Define the development shell environment.
-      devShells.default = pkgs.mkShell {
-        # List of dependencies to include in the environment.
-        buildInputs = [
-          pkgs.agda                    # The Agda programming language.
-          pkgs.agdaPackages.standard-library  # The Agda standard library.
-        ];
-
-        # Set the AGDA_LIBS environment variable to point to the .agda-lib file.
-        AGDA_LIBS = "${./agda-algebras.agda-lib}";
-      };
-
-      # Optional: Define a package build environment.
-      # This section creates a custom environment for building and running
-      # the agda-algebras project as a package. It's useful for packaging
-      # the project or running specific build scripts.
-      packages.agda-algebras = pkgs.buildFHSUserEnv {
-        name = "agda-algebras";
-        targetPkgs = pkgs: [
-          pkgs.agda                    # The Agda programming language.
-          pkgs.agdaPackages.standard-library  # The Agda standard library.
-        ];
-        runScript = "agda --library-file=${./agda-algebras.agda-lib} src/Main.agda";
-      };
-
-      # Define an overlay that adds the agda-algebras library to haskellPackages.
-      overlays.default = final: prev: {
+      # Define the overlay that adds the agda-algebras library to haskellPackages.
+      overlay = final: prev: {
         haskellPackages = prev.haskellPackages // {
           agda-algebras = final.haskell.lib.makeHaskellPackage {
             pname = "agda-algebras";
             version = "0.1.0";
-            src = ./.;
+            src = self;
             libraryHaskellDepends = [ prev.agda prev.agdaPackages.standard-library ];
             license = final.lib.licenses.mit;
-            description = "the agda-algebras library";
-            homepage = "https://github.com/ualib/agda-algebras";
+            description = "Agda project with standard library and agda-algebras library";
+            homepage = "https://github.com/ualib/agda-algebras"; 
           };
         };
+      };
+
+      # Define the development shell environment.
+      devShells.default = pkgs.mkShell {
+        buildInputs = [
+          pkgs.haskellPackages.agda-algebras
+        ];
+
+        # Set the AGDA_LIBS environment variable to point to the .agda-lib file.
+        AGDA_LIBS = "${self}/agda-algebras.agda-lib";
       };
     };
 }
