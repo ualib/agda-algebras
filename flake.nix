@@ -1,13 +1,13 @@
 # flake.nix
-# This file defines a Nix flake for the agda-algebras project, providing a
-# reproducible and versioned environment including Agda and its standard library.
+# This file defines a Nix flake for the agda-algebras project, providing
+# a reproducible and versioned environment with Agda and its standard library,
+# and also defining an overlay for nixpkgs.
 
-# Objective: This configuration file and instructions should help any user set up and work
-# with the `agda-algebras` project using Nix or NixOS.
+# Objective: help any Nix/NixOS user set up and work with the `agda-algebras` project.
 
 # Flake description and inputs.
 {
-  description = "agda-algebras project with Agda and the Agda Standard Library";
+  description = "the agda-algebras library";
 
   # Define the inputs (dependencies) for the flake.
   inputs.nixpkgs.url = "github:NixOS/nixpkgs";
@@ -31,7 +31,10 @@
         AGDA_LIBS = "${./agda-algebras.agda-lib}";
       };
 
-      # Optional: Define a package build environment (if needed).
+      # Optional: Define a package build environment.
+      # This section creates a custom environment for building and running
+      # the agda-algebras project as a package. It's useful for packaging
+      # the project or running specific build scripts.
       packages.agda-algebras = pkgs.buildFHSUserEnv {
         name = "agda-algebras";
         targetPkgs = pkgs: [
@@ -39,6 +42,21 @@
           pkgs.agdaPackages.standard-library  # The Agda standard library.
         ];
         runScript = "agda --library-file=${./agda-algebras.agda-lib} src/Main.agda";
+      };
+
+      # Define an overlay that adds the agda-algebras library to haskellPackages.
+      overlays.default = final: prev: {
+        haskellPackages = prev.haskellPackages // {
+          agda-algebras = final.haskell.lib.makeHaskellPackage {
+            pname = "agda-algebras";
+            version = "0.1.0";
+            src = ./.;
+            libraryHaskellDepends = [ prev.agda prev.agdaPackages.standard-library ];
+            license = final.lib.licenses.mit;
+            description = "the agda-algebras library";
+            homepage = "https://github.com/ualib/agda-algebras";
+          };
+        };
       };
     };
 }
@@ -49,24 +67,7 @@
 # 3. Navigate to the project directory.
 # 4. Run `nix develop` to enter the development environment with Agda and its standard library configured.
 
-# More details:
-# +  Using `default.nix`
-#    + This is the traditional method for setting up the environment.
-#    + In the project directory, run `nix-shell`.
-#    + This command will drop you into a shell where Agda and the standard library are available and configured.
-# + Using `flake.nix`:
-#   + This method is for those who want the benefits of flakes, including better reproducibility and versioning.
-#   + Enable flakes by adding `experimental-features = nix-command flakes` to your `~/.config/nix/nix.conf`.
-#   + In the project directory, run `nix develop`.
-#   + This command will drop you into a development environment with Agda and the standard library configured.
-
-# + Important parts of this file
-#   +  `pkgs.mkShell` is used to define a development shell with specific build inputs (dependencies).
-#      It's essential for setting up the environment with the necessary tools.
-#   +  `buildInputs` is a list of packages to include in the environment. Here, it includes Agda and the
-#      Agda standard library.
-#   +  `AGDA_LIBS` is an environment variable that Agda uses to locate the library file.
-#      This is crucial for Agda to find the necessary library paths.
-#   +  `inputs.nixpkgs.url` in `flake.nix` specifies the source of the Nix packages, typically from the
-#      official Nixpkgs repository.
-#   +  `outputs` defines what the flake will produce, such as development environments or packages.
+# To use the agda-algebras library as a Nixpkgs overlay:
+# 1. Add the flake URL to your inputs in your flake.nix.
+# 2. Use the overlay in your nixpkgs configuration.
+# 3. Install the library via `haskellPackages.agda-algebras`.
