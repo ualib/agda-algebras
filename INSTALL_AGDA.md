@@ -190,6 +190,7 @@ to the file `~/ualib/.emacs`.
 
 ### Example Agda section of Emacs config file 
 
+```lisp
 ;; BEGIN AGDA-config ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   (setq load-path (cons "~/.cabal/bin" load-path))
   (setenv "LD_LIBRARY_PATH"
@@ -209,4 +210,4 @@ to the file `~/ualib/.emacs`.
        (setq smartparens-mode nil)
        (setq electric-indent-mode nil) ) )
 ;; END AGDA-config ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+```
