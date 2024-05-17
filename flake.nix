@@ -1,5 +1,5 @@
 {
-  description = "Agda project with standard library and agda-algebras library";
+  description = "agda-algebras library";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs";
@@ -23,17 +23,26 @@
 
     # Define devShells for each system.
     devShells = {
-      x86_64-linux = nixpkgs.lib.mkShell {
+      x86_64-linux = import nixpkgs {
+        overlays = [ self.overlay ];
+      }.mkShell {
         buildInputs = [
-          nixpkgs.haskellPackages.agda-algebras
+          import nixpkgs {
+            overlays = [ self.overlay ];
+          }.haskellPackages.agda-algebras
         ];
 
         # Set the AGDA_LIBS environment variable to point to the .agda-lib file.
         AGDA_LIBS = "${self}/agda-algebras.agda-lib";
       };
-      aarch64-linux = nixpkgs.lib.mkShell {
+
+      aarch64-linux = import nixpkgs {
+        overlays = [ self.overlay ];
+      }.mkShell {
         buildInputs = [
-          nixpkgs.haskellPackages.agda-algebras
+          import nixpkgs {
+            overlays = [ self.overlay ];
+          }.haskellPackages.agda-algebras
         ];
 
         # Set the AGDA_LIBS environment variable to point to the .agda-lib file.
@@ -43,15 +52,28 @@
 
     # Optionally, define packages if needed.
     packages = {
-      x86_64-linux = nixpkgs.stdenv.mkDerivation {
+      x86_64-linux = import nixpkgs {
+        overlays = [ self.overlay ];
+      }.stdenv.mkDerivation {
         name = "agda-algebras";
         src = self;
-        buildInputs = [ nixpkgs.haskellPackages.agda-algebras ];
+        buildInputs = [
+          import nixpkgs {
+            overlays = [ self.overlay ];
+          }.haskellPackages.agda-algebras
+        ];
       };
-      aarch64-linux = nixpkgs.stdenv.mkDerivation {
+
+      aarch64-linux = import nixpkgs {
+        overlays = [ self.overlay ];
+      }.stdenv.mkDerivation {
         name = "agda-algebras";
         src = self;
-        buildInputs = [ nixpkgs.haskellPackages.agda-algebras ];
+        buildInputs = [
+          import nixpkgs {
+            overlays = [ self.overlay ];
+          }.haskellPackages.agda-algebras
+        ];
       };
     };
   };
