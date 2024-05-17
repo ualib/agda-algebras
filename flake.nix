@@ -16,7 +16,7 @@
           libraryHaskellDepends = [ prev.agda prev.agdaPackages.standard-library ];
           license = final.lib.licenses.mit;
           description = "Agda project with standard library and agda-algebras library";
-          homepage = "https://github.com/yourusername/agda-algebras";  # Replace with your actual GitHub username and repository name
+          homepage = "https://github.com/ualib/agda-algebras";  # Replace with your actual GitHub username and repository name
         };
       };
     };
