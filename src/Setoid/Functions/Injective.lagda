@@ -51,12 +51,12 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
  open Setoid 𝑨  using ()               renaming (Carrier to A; _≈_ to _≈₁_)
  open Setoid 𝑩  using ( trans ; sym )  renaming (Carrier to B; _≈_ to _≈₂_)
 
- open Injection {From = 𝑨}{To = 𝑩} using ( function ; injective )  renaming (f to _⟨$⟩_)
- open _⟶_ {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝑨}{To = 𝑩}                    renaming (f to _⟨$⟩_ )
- open FD _≈₁_ _≈₂_
+ open Injection {From = 𝑨}{To = 𝑩} using ( function ; injective )  renaming (to to _⟨$⟩_)
+ open _⟶_ {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝑨}{To = 𝑩}                     renaming (to to _⟨$⟩_ )
+ open FD
 
  IsInjective : (𝑨 ⟶ 𝑩) →  Type (α ⊔ ρᵃ ⊔ ρᵇ)
- IsInjective f = Injective (_⟨$⟩_ f)
+ IsInjective f = Injective _≈₁_ _≈₂_ (_⟨$⟩_ f)
 
  open Image_∋_
 
@@ -85,12 +85,17 @@ module compose  {A : Type α}(_≈₁_ : Rel A ρᵃ)
                 {B : Type β}(_≈₂_ : Rel B ρᵇ)
                 {C : Type γ}(_≈₃_ : Rel C ρᶜ) where
 
- open FD {A = A} {B} _≈₁_ _≈₂_ using() renaming ( Injective to InjectiveAB )
- open FD {A = B} {C} _≈₂_ _≈₃_ using() renaming ( Injective to InjectiveBC )
- open FD {A = A} {C} _≈₁_ _≈₃_ using() renaming ( Injective to InjectiveAC )
+ open FD using( Injective )
 
- ∘-injective-bare : {f : A → B}{g : B → C} → InjectiveAB f → InjectiveBC g → InjectiveAC (g ∘ f)
- ∘-injective-bare finj ginj = finj ∘ ginj
+ -- open FD {A = A} {B} _≈₁_ _≈₂_ using() renaming ( Injective to InjectiveAB )
+ -- open FD {A = B} {C} _≈₂_ _≈₃_ using() renaming ( Injective to InjectiveBC )
+ -- open FD {A = A} {C} _≈₁_ _≈₃_ using() renaming ( Injective to InjectiveAC )
+
+ ∘-injective-bare : {f : A → B}{g : B → C}
+  →                 Injective {A = A}{B = B} _≈₁_ _≈₂_ f
+  →                 Injective {A = B}{B = C} _≈₂_ _≈₃_ g
+  →                 Injective {A = A}{B = C} _≈₁_ _≈₃_ (g ∘ f)
+ ∘-injective-bare finj = finj ∘_
 
 \end{code}
 
@@ -110,7 +115,7 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ}{𝑪 : Setoid γ ρᶜ
 
  ⊙-injection : Injection 𝑨 𝑩 → Injection 𝑩 𝑪 → Injection 𝑨 𝑪
  ⊙-injection fi gi = record
-  { f = f gi ∘ f fi
+  { to = to gi ∘ to fi
   ; cong = cong gi ∘ cong fi
   ; injective = ⊙-injective (function fi) (function gi) (injective fi) (injective gi)
   }

@@ -280,7 +280,7 @@ open import
 -- SETOID.OVERTURE --------------------------------------------------------------------------
 
 open import
- Setoid.Functions.Basic        using ( 𝑖𝑑 ; _∘_ ; 𝑙𝑖𝑓𝑡 ; lift∼lower ; lower∼lift ; liftFunc )
+ Setoid.Functions.Basic        using ( 𝑖𝑑 ; 𝑙𝑖𝑓𝑡 ; lift∼lower ; lower∼lift ; liftFunc ) -- _∘_ ;
 open import
  Setoid.Functions.Inverses     using ( Img_∋_ ; Image_∋_ ; IsInRange ; Image⊆Range       )
                                using ( IsInRange→IsInImage ; Imagef∋f ; _range ; _image  )
@@ -290,11 +290,11 @@ open import
                                using ( InvIsInverseˡ ; ⁻¹IsInverseˡ                      )
 open import
  Setoid.Functions.Injective    using ( IsInjective ; LeftInvPreserves≈ ; module compose  )
-                               using ( ∘-injection ; id-is-injective                     )
+                               using ( id-is-injective                     ) -- ∘-injection ;
 open compose                   using ( ∘-injective-bare                                  )
 open import
- Setoid.Functions.Surjective   using ( IsSurjective ; SurjectionIsSurjective ; SurjInv  )
-                               using ( SurjInvIsInverseʳ ; ∘-IsSurjective ; ∘-epic      )
+ Setoid.Functions.Surjective   using ( IsSurjective ; SurjectionIsSurjection ; SurjInv  )
+                               using ( SurjInvIsInverseʳ ; ∘-epic      ) -- ∘-IsSurjective ;
                                using ( epic-factor                                      )
 open import
  Setoid.Functions.Bijective    using ( IsBijective ; BijInv )
@@ -331,8 +331,8 @@ open import
 open import
  Setoid.Homomorphisms.Properties         using ( ToLiftˡ ; FromLiftˡ ; ToFromLiftˡ      )
                                          using ( FromToLiftˡ ; ToLiftʳ ; FromLiftʳ      )
-                                         using ( ToFromLiftʳ ; FromToLiftʳ  ; ∘-is-hom  )
-                                         using ( ∘-hom ; Lift-homˡ ; Lift-homʳ          )
+                                         using ( ToFromLiftʳ ; FromToLiftʳ  ) -- ; ∘-is-hom  )
+                                         using ( Lift-homˡ ; Lift-homʳ      ) -- ∘-hom ;     )
                                          using ( lift-hom-lemma ; Lift-hom ; 𝒾𝒹         )
 open import
  Setoid.Homomorphisms.Kernels            using ( HomKerComp ; kercon ; kerquo ; ker[_⇒_]_  )

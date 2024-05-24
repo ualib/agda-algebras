@@ -48,7 +48,7 @@ open  import Setoid.Varieties.SoundAndComplete  {𝑆 = 𝑆}
       using  ( Eq ; _⊫_ ; _≈̇_ ; _⊢_▹_≈_ ; Th ; Mod
              ; module Soundness ; module FreeAlgebra )
 
-open _⟶_      using ( cong ) renaming ( f to _⟨$⟩_ )
+open _⟶_      using ( cong ) renaming ( to to _⟨$⟩_ )
 open Algebra  using ( Domain )
 
 \end{code}
@@ -113,7 +113,7 @@ Finally, we define an epimorphism from `𝑻 X` onto the relatively free algebra
   c (gnl {f}{s}{t} x) = cong InterpF (≡.refl , c ∘ x)
 
   h : TX ⟶ F
-  h = record { f = id ; cong = c }
+  h = record { to = id ; cong = c }
 
   hepi : IsEpi (𝑻 X) 𝔽[ X ] h
   compatible (isHom hepi) = cong h reflT

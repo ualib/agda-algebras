@@ -38,7 +38,7 @@ IsBijective : (𝑨 ⟶ 𝑩) → Type (α ⊔ β ⊔ ρᵃ ⊔ ρᵇ)
 IsBijective f = IsInjective f × IsSurjective f
 
 BijInv : (f : 𝑨 ⟶ 𝑩) → IsBijective f → 𝑩 ⟶ 𝑨
-BijInv f (fM , fE) = record { f = finv ; cong = c }
+BijInv f (fM , fE) = record { to = finv ; cong = c }
  where
  finv : B → A
  finv b = Inv f fE

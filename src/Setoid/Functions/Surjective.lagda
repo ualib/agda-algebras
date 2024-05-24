@@ -19,7 +19,7 @@ module Setoid.Functions.Surjective where
 
 -- Imports from Agda and the Agda Standard Library --------------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
-open import Data.Product     using ( _,_ ; Σ-syntax )
+open import Data.Product     using ( ∃ ; _,_ ; Σ-syntax )
 open import Function         using ( Surjection ; IsSurjection ; _$_ ; _∘_ )
                              renaming ( Func to _⟶_ )
 open import Level            using ( _⊔_ ; Level )
@@ -47,9 +47,9 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
  open Setoid 𝑩  renaming (Carrier to B; _≈_ to _≈₂_; isEquivalence to isEqB )
                 using ( trans ; sym )
 
- open Surjection {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝑨}{To = 𝑩}  renaming (f to _⟨$⟩_)
- open _⟶_ {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝑨}{To = 𝑩}         renaming (f to _⟨$⟩_ )
- open FD _≈₁_ _≈₂_
+ open Surjection {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝑨}{To = 𝑩}  renaming (to to _⟨$⟩_)
+ open _⟶_ {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝑨}{To = 𝑩}         renaming (to to _⟨$⟩_ )
+ open FD
 
  isSurj : (A → B) → Type (α ⊔ β ⊔ ρᵇ)
  isSurj f = ∀ {y} → Img_∋_ {𝑨 = 𝑨}{𝑩 = 𝑩} f y
@@ -65,19 +65,11 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
 
  open Image_∋_
 
- SurjectionIsSurjective : (Surjection 𝑨 𝑩) → Σ[ g ∈ (𝑨 ⟶ 𝑩) ] (IsSurjective g)
- SurjectionIsSurjective s = g , gE
-  where
-  g : 𝑨 ⟶ 𝑩
-  g = (record { f = _⟨$⟩_ s ; cong = cong s })
-  gE : IsSurjective g
-  gE {y} = eq ∣ (surjective s) y ∣ (sym ∥ (surjective s) y ∥)
-
  SurjectionIsSurjection : (Surjection 𝑨 𝑩) → Σ[ g ∈ (𝑨 ⟶ 𝑩) ] (IsSurjection _≈₁_ _≈₂_ (_⟨$⟩_ g))
  SurjectionIsSurjection s = g , gE
   where
   g : 𝑨 ⟶ 𝑩
-  g = record { f = _⟨$⟩_ s ; cong = cong s }
+  g = record { to = _⟨$⟩_ s ; cong = cong s }
 
   gE : IsSurjection _≈₁_ _≈₂_ (_⟨$⟩_ g)
   gE .IsSurjection.isCongruent = record  { cong = cong g
@@ -117,9 +109,9 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ}{𝑪 : Setoid γ ρᶜ
  open Setoid 𝑨  using ()               renaming (Carrier to A; _≈_ to _≈₁_)
  open Setoid 𝑩  using ( trans ; sym )  renaming (Carrier to B; _≈_ to _≈₂_)
  open Setoid 𝑪  using ()               renaming (Carrier to C; _≈_ to _≈₃_)
- open Surjection  renaming (f to _⟨$⟩_)
- open _⟶_         renaming (f to _⟨$⟩_ )
- open FD _≈₁_ _≈₂_
+ open Surjection  renaming (to to _⟨$⟩_)
+ open _⟶_         renaming (to to _⟨$⟩_ )
+ open FD
 
 
  ⊙-IsSurjective :  {G : 𝑨 ⟶ 𝑪}{H : 𝑪 ⟶ 𝑩}
@@ -138,7 +130,7 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ}{𝑪 : Setoid γ ρᶜ
 
 
  ∘-epic : Surjection 𝑨 𝑪 → Surjection 𝑪 𝑩 → Surjection 𝑨 𝑩
- Surjection.f           (∘-epic g h) = h ⟨$⟩_ ∘ g ⟨$⟩_
+ Surjection.to           (∘-epic g h) = h ⟨$⟩_ ∘ g ⟨$⟩_
  Surjection.cong        (∘-epic g h) = cong h ∘ cong g
  Surjection.surjective  (∘-epic g h) = surjective $ isOnto  ∥ SurjectionIsSurjection g ∥
                                                             ∥ SurjectionIsSurjection h ∥

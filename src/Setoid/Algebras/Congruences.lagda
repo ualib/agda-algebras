@@ -109,7 +109,7 @@ using this standard notation.
 
 open Algebra  using ( Domain ; Interp )
 open Setoid   using ( Carrier )
-open Func     using ( cong ) renaming ( f to _⟨$⟩_  )
+open Func     using ( cong ) renaming ( to to _⟨$⟩_  )
 
 _╱_ : (𝑨 : Algebra α ρ) → Con 𝑨 {ℓ} → Algebra α ℓ
 Domain (𝑨 ╱ θ) = 𝕌[ 𝑨 ] / (Eqv ∥ θ ∥)

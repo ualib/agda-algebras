@@ -17,7 +17,7 @@ module Base.Functions.Surjective where
 -- Imports from Agda and the Agda Standard Library --------------------------------
 open import Agda.Primitive    using () renaming ( Set to Type )
 open import Data.Empty        using (⊥-elim)
-open import Function          using ( Surjective ; _∘_ )
+open import Function          using ( Surjective ; _∘_ ; _$_)
 open import Level             using ( _⊔_ ; Level )
 open import Relation.Binary   using ( Decidable )
 open import Relation.Nullary  using ( Dec ; yes ; no )
@@ -52,15 +52,15 @@ module _ {A : Type α}{B : Type β} where
  IsSurjective→Surjective :  (f : A → B) → IsSurjective f
   →                         Surjective{A = A} _≡_ _≡_ f
 
- IsSurjective→Surjective f fE y = imgfy→A (fE y)
-  where
-  imgfy→A : Image f ∋ y → Σ[ a ∈ A ] f a ≡ y
-  imgfy→A (eq a p) = a , sym p
+ IsSurjective→Surjective f fE y with fE y
+ ... | eq a refl = a , cong f
 
  Surjective→IsSurjective :  (f : A → B) → Surjective{A = A} _≡_ _≡_ f
   →                         IsSurjective f
 
- Surjective→IsSurjective f fE y = eq (fst (fE y)) (sym (snd(fE y)))
+ Surjective→IsSurjective f fE y with fE y
+ ... | a , f∋ = eq a $ sym (f∋ refl)
+
 
 \end{code}
 
@@ -149,8 +149,8 @@ module _  {I : Set ι}(_≟_ : Decidable{A = I} _≡_)
   bs : (i : I) → B i
   bs i = update bs₀ (j , b) i (i ≟ j)
 
-  pf : proj j bs ≡ b
-  pf = update-id (j ≟ j)
+  pf : {z : (i : I) → B i} → z ≡ bs → proj j z ≡ b
+  pf {.bs} refl = update-id (j ≟ j)
 
  projIsOnto : ∀{j} → IsSurjective (proj j)
  projIsOnto {j} = Surjective→IsSurjective (proj j) proj-is-onto
@@ -162,5 +162,3 @@ module _  {I : Set ι}(_≟_ : Decidable{A = I} _≡_)
 <span style="float:right;">[Base.Functions.Transformers →](Base.Functions.Transformers.html)</span>
 
 {% include UALib.Links.md %}
-
-

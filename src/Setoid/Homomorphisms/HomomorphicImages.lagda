@@ -86,12 +86,12 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
  open Algebra 𝑩  renaming (Domain to B ; Interp to InterpB )  using ()
  open Setoid B   renaming ( _≈_ to _≈₂_ ; refl to refl₂ )     using ( reflexive )
                  renaming ( sym to sym₂ ; trans to trans₂ ; Carrier to ∣B∣)
- open Func       renaming ( f to _⟨$⟩_ )                       using ( cong )
+ open Func       renaming ( to to _⟨$⟩_ )                     using ( cong )
  open IsHom
 
  HomImageOf[_] : hom 𝑨 𝑩 → Algebra (α ⊔ β ⊔ ρᵇ) ρᵇ
  HomImageOf[ h ] =
-  record { Domain = Ran ∣ h ∣ ; Interp = record { f = f' ; cong = cong' } }
+  record { Domain = Ran ∣ h ∣ ; Interp = record { to = f' ; cong = cong' } }
    where
    open Setoid(⟨ 𝑆 ⟩ (Ran ∣ h ∣))
     using() renaming (Carrier to SRanh ; _≈_ to _≈₃_ ; refl to refl₃ )
@@ -141,7 +141,7 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
  open Algebra 𝑨  using ()               renaming ( Domain to A )
  open Algebra 𝑩  using ()               renaming ( Domain to B )
  open Setoid B   using ( sym ; trans )  renaming ( _≈_ to _≈₂_ )
- open Func       using ( cong )         renaming ( f to _⟨$⟩_ )
+ open Func       using ( cong )         renaming ( to to _⟨$⟩_ )
  open Level      using ( lift ; lower )
 
  Lift-epi-is-epiˡ :  (h : hom 𝑨 𝑩)(ℓᵃ ℓᵇ : Level)
