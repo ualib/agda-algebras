@@ -50,7 +50,7 @@ module _ {A : Type a}{B : Type b} where
  onto : Type _
  onto = Σ (A → B) IsSurjective
 
- Surjective' :  (_≈₂_ : Rel B γ) -- Equality over the codomain
+ Surjective' :  (_≈₂_ : Rel B c) -- Equality over the codomain
                → (A → B) → Set _
  Surjective' _≈₂_ f = ∀ y → Σ[ x ∈ A ] ((f x) ≈₂ y)
 
