@@ -31,10 +31,10 @@ module Overture.Operations where
 open import Agda.Primitive               using () renaming ( Set to Type )
 open import Level                        using ( Level ; _⊔_ )
 
-private variable α β ρ 𝓥 : Level
+private variable a b ρ 𝓥 : Level
 
 -- The type of operations on A of arity I
-Op : Type α → Type 𝓥 → Type (α ⊔ 𝓥)
+Op : Type a → Type 𝓥 → Type (a ⊔ 𝓥)
 Op A I = (I → A) → A
 
 \end{code}
@@ -44,7 +44,7 @@ For example, the `I`-*ary projection operations* on `A` are represented as inhab
 \begin{code}
 
 -- Example (projections)
-π : {I : Type 𝓥} {A : Type α } → I → Op A I
+π : {I : Type 𝓥} {A : Type a } → I → Op A I
 π i = λ x → x i
 
 \end{code}
@@ -54,7 +54,7 @@ Occasionally we want to extract the arity of a given operation symbol.
 \begin{code}
 
 -- return the arity of a given operation symbol
-arity[_] : {I : Type 𝓥} {A : Type α } → Op A I → Type 𝓥
+arity[_] : {I : Type 𝓥} {A : Type a } → Op A I → Type 𝓥
 arity[_] {I = I} f = I
 \end{code}
 
