@@ -189,7 +189,7 @@ We reproduce the definitions and prove some of their properties inside the next 
 module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
  open Setoid 𝑨 using () renaming ( _≈_ to _≈ᴬ_ )
  open Setoid 𝑩 using () renaming ( _≈_ to _≈ᴮ_ )
- open FD -- _≈ᴬ_ _≈ᴮ_
+ open FD
 
  IsInjective : (𝑨 ⟶ 𝑩) →  Type (α ⊔ ρᵃ ⊔ ρᵇ)
  IsInjective f = Injective _≈ᴬ_ _≈ᴮ_ (_⟨$⟩_ f)

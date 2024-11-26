@@ -25,7 +25,7 @@ open import Relation.Binary  using ( Setoid )
 open import Relation.Unary   using ( _⊆_ )
 
 open import Relation.Binary.PropositionalEquality  as ≡           using ()
-import Relation.Binary.Reasoning.Setoid            as SReasoning  using ( begin_ ; step-≈˘; step-≈; _∎)
+import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------------
 open import Overture         using ( ∣_∣ ; ∥_∥ )
@@ -66,7 +66,6 @@ module _  {𝑨 : Algebra α ρᵃ} (𝑩 : Algebra β ρᵇ) {𝑪 : Algebra γ
  open Setoid C   using ( trans )   renaming ( _≈_ to _≈₃_ ; sym to sym₃ ; refl to refl₃)
  open _⟶_        using ( cong )    renaming ( to to _⟨$⟩_ )
 
- open SReasoning B
 
  private
   gfunc = ∣ gh ∣
@@ -106,20 +105,17 @@ module _  {𝑨 : Algebra α ρᵃ} (𝑩 : Algebra β ρᵇ) {𝑪 : Algebra γ
   gφh : (a : 𝕌[ 𝑨 ]) → g a ≈₂ φmap ⟨$⟩ (h a)
   gφh a = Khg ξ
 
-
-  open _⟶_ φmap using () renaming (cong to φcong)
   φcomp : compatible-map 𝑪 𝑩 φmap
-  φcomp {f}{c} = trans₂ i (trans₂ ii (trans₂ iii iv))
-   where
-   -- TODO: refactor this proof using the new relational reasoning syntax
-   i : g (h⁻¹ $ (f ̂ 𝑪) c) ≈₂ g (h⁻¹ $ (f ̂ 𝑪) $ h ∘ h⁻¹ ∘ c)
-   i = sym₂ $ φcong (cong Interp (≡.refl , λ _ → SurjInvIsInverseʳ hfunc hE))
-   ii : g (h⁻¹ $ (f ̂ 𝑪) $ h ∘ h⁻¹ ∘ c) ≈₂ g (h⁻¹ $ h $ (f ̂ 𝑨) $ h⁻¹ ∘ c)
-   ii = sym₂ (φcong (compatible ∥ hh ∥))
-   iii : g (h⁻¹ $ h $ (f ̂ 𝑨) $ h⁻¹ ∘ c) ≈₂ g ((f ̂ 𝑨) $ h⁻¹ ∘ c)
-   iii = sym₂ (gφh $ (f ̂ 𝑨) $ h⁻¹ ∘ c)
-   iv : g ((f ̂ 𝑨) $ h⁻¹ ∘ c) ≈₂ (f ̂ 𝑩)(g ∘ h⁻¹ ∘ c)
-   iv = compatible ∥ gh ∥
+  φcomp {f}{c} =
+    let  open SetoidReasoning B
+         open _⟶_ φmap using () renaming (cong to φcong)
+    in
+    begin
+    g (h⁻¹ $ (f ̂ 𝑪) c)            ≈⟨ sym₂ $ φcong (cong Interp (≡.refl , λ _ → SurjInvIsInverseʳ hfunc hE)) ⟩
+    g (h⁻¹ $ f ̂ 𝑪 $ h ∘ h⁻¹ ∘ c)  ≈⟨ sym₂ $ φcong (compatible ∥ hh ∥) ⟩
+    g (h⁻¹ $ h $ f ̂ 𝑨 $ h⁻¹ ∘ c)  ≈⟨ sym₂ $ gφh $ (f ̂ 𝑨) (h⁻¹ ∘ c) ⟩
+    g (f ̂ 𝑨 $ h⁻¹ ∘ c)            ≈⟨ compatible ∥ gh ∥ ⟩
+    (f ̂ 𝑩)(g ∘ h⁻¹ ∘ c)           ∎
 
   φhom : IsHom 𝑪 𝑩 φmap
   compatible φhom = φcomp
@@ -132,6 +128,7 @@ If, in addition, `g` is surjective, then so will be the factor `φ`.
 
  HomFactorEpi :  kernelRel _≈₃_ h ⊆ kernelRel _≈₂_ g
   →              IsSurjective hfunc → IsSurjective gfunc
+                 -------------------------------------------------
   →              Σ[ φ ∈ epi 𝑪 𝑩 ] ∀ a → (g a) ≈₂ ∣ φ ∣ ⟨$⟩ (h a)
 
  HomFactorEpi Khg hE gE = (φmap , φepi) , gφh

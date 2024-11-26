@@ -71,10 +71,7 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
   g : 𝑨 ⟶ 𝑩
   g = (record { to = _⟨$⟩_ s ; cong = cong s })
   gE : IsSurjective g
-  gE {y} = eq ∣ (surjective s) y ∣ (sym Goal)
-    where
-    Goal : Surjection.to s ∣ surjective s y ∣ ≈₂ y
-    Goal = snd (surjective s y) (IsEquivalence.refl isEqA)
+  gE {y} = eq ∣ (surjective s) y ∣ (sym (snd (surjective s y) (IsEquivalence.refl isEqA)))
 
  SurjectionIsSurjection : (Surjection 𝑨 𝑩) → Σ[ g ∈ (𝑨 ⟶ 𝑩) ] (IsSurjection _≈₁_ _≈₂_ (_⟨$⟩_ g))
  SurjectionIsSurjection s = g , gE

@@ -31,6 +31,7 @@ open import Relation.Binary.PropositionalEquality
 -- Imports from agda-algebras -----------------------------------------------------
 open import Overture.Basic     using ( _≈_ ; _∙_ ; transport )
 open import Base.Functions.Inverses  using ( Image_∋_ ; eq ; Inv ; InvIsInverseʳ )
+open import Relation.Binary.Core using (Rel)
 
 private variable a b c ι : Level
 \end{code}
@@ -52,9 +53,8 @@ module _ {A : Type a}{B : Type b} where
  IsSurjective→Surjective :  (f : A → B) → IsSurjective f
   →                         Surjective _≡_ _≡_ f
 
- IsSurjective→Surjective f fE y = Goal
+ IsSurjective→Surjective f fE y = Goal   -- `fE y` is a proof of `Image f ∋ y `
   where
-  -- `fE y` is a proof of `Image f ∋ y `
   imgfy→A : Image f ∋ y → Σ[ x ∈ A ] f x ≡ y
   imgfy→A (eq x p) = x , sym p
   Goal : Σ[ x ∈ A ] ({z : A} → z ≡ x → f z ≡ y)
@@ -66,8 +66,8 @@ module _ {A : Type a}{B : Type b} where
  Surjective→IsSurjective f fE y = eq (fst $ fE y) (sym $ snd (fE y) refl)
 
 \end{code}
-
-With the next definition, we can represent a *right-inverse* of a surjective function.
+With the next definition, we can represent a *right-inverse* of a surjective
+function.
 
 \begin{code}
 
