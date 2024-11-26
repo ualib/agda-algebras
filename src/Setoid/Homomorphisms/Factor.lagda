@@ -105,16 +105,17 @@ module _  {𝑨 : Algebra α ρᵃ} (𝑩 : Algebra β ρᵇ) {𝑪 : Algebra γ
   gφh : (a : 𝕌[ 𝑨 ]) → g a ≈₂ φmap ⟨$⟩ (h a)
   gφh a = Khg ξ
 
-
-  open _⟶_ φmap using () renaming (cong to φcong)
   φcomp : compatible-map 𝑪 𝑩 φmap
-  φcomp {f}{c} = let open SetoidReasoning B in begin
-    g (h⁻¹ $ (f ̂ 𝑪) c)             ≈⟨ (sym₂ $ φcong (cong Interp (≡.refl , λ _ → SurjInvIsInverseʳ hfunc hE))) ⟩
-    g (h⁻¹ $ (f ̂ 𝑪) $ h ∘ h⁻¹ ∘ c) ≈⟨ sym₂ (φcong (compatible ∥ hh ∥)) ⟩
-    g (h⁻¹ $ h $ (f ̂ 𝑨) $ h⁻¹ ∘ c) ≈⟨ sym₂ (gφh $ (f ̂ 𝑨) $ h⁻¹ ∘ c) ⟩
-    g ((f ̂ 𝑨) $ h⁻¹ ∘ c) ≈⟨ compatible ∥ gh ∥ ⟩
-    (f ̂ 𝑩)(g ∘ h⁻¹ ∘ c)
-    ∎
+  φcomp {f}{c} =
+    let  open SetoidReasoning B
+         open _⟶_ φmap using () renaming (cong to φcong)
+    in
+    begin
+    g (h⁻¹ $ (f ̂ 𝑪) c)            ≈⟨ sym₂ $ φcong (cong Interp (≡.refl , λ _ → SurjInvIsInverseʳ hfunc hE)) ⟩
+    g (h⁻¹ $ f ̂ 𝑪 $ h ∘ h⁻¹ ∘ c)  ≈⟨ sym₂ $ φcong (compatible ∥ hh ∥) ⟩
+    g (h⁻¹ $ h $ f ̂ 𝑨 $ h⁻¹ ∘ c)  ≈⟨ sym₂ $ gφh $ (f ̂ 𝑨) (h⁻¹ ∘ c) ⟩
+    g (f ̂ 𝑨 $ h⁻¹ ∘ c)            ≈⟨ compatible ∥ gh ∥ ⟩
+    (f ̂ 𝑩)(g ∘ h⁻¹ ∘ c)           ∎
 
   φhom : IsHom 𝑪 𝑩 φmap
   compatible φhom = φcomp

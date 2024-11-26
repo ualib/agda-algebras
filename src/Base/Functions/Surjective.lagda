@@ -50,16 +50,11 @@ module _ {A : Type a}{B : Type b} where
  onto : Type _
  onto = Σ (A → B) IsSurjective
 
- Surjective' :  (_≈₂_ : Rel B c) -- Equality over the codomain
-               → (A → B) → Set _
- Surjective' _≈₂_ f = ∀ y → Σ[ x ∈ A ] ((f x) ≈₂ y)
-
  IsSurjective→Surjective :  (f : A → B) → IsSurjective f
   →                         Surjective _≡_ _≡_ f
 
- IsSurjective→Surjective f fE y = Goal
+ IsSurjective→Surjective f fE y = Goal   -- `fE y` is a proof of `Image f ∋ y `
   where
-  -- `fE y` is a proof of `Image f ∋ y `
   imgfy→A : Image f ∋ y → Σ[ x ∈ A ] f x ≡ y
   imgfy→A (eq x p) = x , sym p
   Goal : Σ[ x ∈ A ] ({z : A} → z ≡ x → f z ≡ y)
@@ -67,23 +62,10 @@ module _ {A : Type a}{B : Type b} where
 
  Surjective→IsSurjective :  (f : A → B) → Surjective{A = A} _≡_ _≡_ f
   →                         IsSurjective f
+
  Surjective→IsSurjective f fE y = eq (fst $ fE y) (sym $ snd (fE y) refl)
 
- Surjective'→IsSurjective :  (f : A → B) → Surjective' _≡_ f
-  →                         IsSurjective f
-
- Surjective'→IsSurjective f fE y = eq (fst (fE y)) (sym (snd(fE y)))
-
-
- IsSurjective→Surjective' :  (f : A → B) → IsSurjective f
-  →                         Surjective' _≡_ f
-
- IsSurjective→Surjective' f fE y = imgfy→A (fE y)
-  where
-  imgfy→A : Image f ∋ y → Σ[ a ∈ A ] f a ≡ y
-  imgfy→A (eq a p) = a , sym p
 \end{code}
-
 With the next definition, we can represent a *right-inverse* of a surjective
 function.
 
@@ -93,6 +75,7 @@ function.
  SurjInv f fE = Inv f ∘ fE
 
 \end{code}
+
 Thus, a right-inverse of `f` is obtained by applying `SurjInv` to `f` and a proof
 of `IsSurjective f`.  Next we prove that this does indeed give the right-inverse.
 
@@ -165,8 +148,6 @@ module _  {I : Set ι}(_≟_ : Decidable{A = I} _≡_)
 
  proj-is-onto : ∀{j} → Surjective{A = ∀ i → (B i)} _≡_ _≡_ (proj j)
  proj-is-onto {j} b = bs , λ x → trans (cong (λ u → proj j u) x) pf
- -- proj-is-onto : ∀{j} → Surjective'{A = ∀ i → (B i)} _≡_ (proj j)
- -- proj-is-onto {j} b = bs , pf
   where
   bs : (i : I) → B i
   bs i = update bs₀ (j , b) i (i ≟ j)
@@ -176,7 +157,6 @@ module _  {I : Set ι}(_≟_ : Decidable{A = I} _≡_)
 
  projIsOnto : ∀{j} → IsSurjective (proj j)
  projIsOnto {j} = Surjective→IsSurjective (proj j) proj-is-onto
- -- projIsOnto {j} = Surjective'→IsSurjective (proj j) proj-is-onto
 \end{code}
 
 --------------------------------------
