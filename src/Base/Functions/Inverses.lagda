@@ -25,7 +25,7 @@ open import Relation.Unary    using ( Pred ; _∈_ )
 -- Imports from agda-algebras ----------------------------------------------------------------
 open import Overture.Basic using ( ∃-syntax ; ∣_∣ )
 
-private variable α β : Level
+private variable a b : Level
 
 \end{code}
 
@@ -34,17 +34,17 @@ image* of a function.
 
 \begin{code}
 
-module _ {A : Type α }{B : Type β } where
+module _ {A : Type a}{B : Type b} where
 
- data Image_∋_ (f : A → B) : B → Type (α ⊔ β) where
+ data Image_∋_ (f : A → B) : B → Type (a ⊔ b) where
   eq : {b : B} → (a : A) → b ≡ f a → Image f ∋ b
 
  open Image_∋_
 
- Range : (A → B) → Pred B (α ⊔ β)
+ Range : (A → B) → Pred B (a ⊔ b)
  Range f b = ∃[ a ∈ A ] (f a) ≡ b
 
- range : (A → B) → Type (α ⊔ β)
+ range : (A → B) → Type (a ⊔ b)
  range f = Σ[ b ∈ B ] ∃[ a ∈ A ](f a) ≡ b
 
  Image⊆Range : (f : A → B) → ∀ b → Image f ∋ b → b ∈ Range f

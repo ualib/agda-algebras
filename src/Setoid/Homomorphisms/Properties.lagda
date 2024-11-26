@@ -34,7 +34,7 @@ open  import Setoid.Algebras {𝑆 = 𝑆}
 open  import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}
       using ( hom ; IsHom ; epi ; IsEpi ; compatible-map )
 
-open _⟶_ using ( cong ) renaming (to to _⟨$⟩_ )
+open _⟶_ using ( cong ) renaming ( to to _⟨$⟩_ )
 
 private variable α β γ ρᵃ ρᵇ ρᶜ ℓ : Level
 \end{code}

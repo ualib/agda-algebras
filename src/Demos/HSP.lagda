@@ -192,7 +192,7 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
  open FD
 
  IsInjective : (𝑨 ⟶ 𝑩) →  Type (α ⊔ ρᵃ ⊔ ρᵇ)
- IsInjective f = Injective  _≈ᴬ_ _≈ᴮ_ (_⟨$⟩_ f)
+ IsInjective f = Injective _≈ᴬ_ _≈ᴮ_ (_⟨$⟩_ f)
 
  IsSurjective : (𝑨 ⟶ 𝑩) →  Type (α ⊔ β ⊔ ρᵇ)
  IsSurjective F = ∀ {y} → Image F ∋ y

@@ -26,10 +26,10 @@ open import Relation.Binary.PropositionalEquality
                                   using ( _≡_ )
 
 private variable
- α β γ ℓ ℓ₁ ℓ₂ ℓ₃ : Level
- A : Set α
- B : Set β
- C : Set γ
+ a b c α β γ ℓ : Level
+ A : Set a
+ B : Set b
+ C : Set c
 
 curry : Pred(A × B) ℓ → BinREL A B ℓ
 curry P x y = (x , y) ∈ P
@@ -41,7 +41,7 @@ Reflexive : Pred (A × A) ℓ → Type _
 Reflexive P = ∀ {x} → (x , x) ∈ P
 
 -- Generalised symmetry
-Sym : Pred (A × B) ℓ₁ → Pred (B × A) ℓ₂ → Type _
+Sym : Pred (A × B) α → Pred (B × A) β → Type _
 Sym P Q = ∀ {x y} → (x , y) ∈ P → (y , x) ∈ Q
 
 -- Symmetry
@@ -49,11 +49,11 @@ Symmetric : Pred (A × A) ℓ → Type _
 Symmetric P = Sym P P
 
 -- Generalised transitivity.
-Trans : Pred (A × B) ℓ₁ → Pred (B × C) ℓ₂ → Pred (A × C) ℓ₃ → Type _
+Trans : Pred (A × B) α → Pred (B × C) β → Pred (A × C) γ → Type _
 Trans P Q R = ∀ {i j k} → P (i , j) → Q (j , k) → R (i , k)
 
 -- A flipped variant of generalised transitivity.
-TransFlip : Pred (A × B) ℓ₁ → Pred (B × C) ℓ₂ → Pred(A × C) ℓ₃ → Type _
+TransFlip : Pred (A × B) α → Pred (B × C) β → Pred(A × C) γ → Type _
 TransFlip P Q R = ∀ {i j k} → Q (j , k) → P (i , j) → R (i , k)
 
 -- Transitivity.
@@ -61,16 +61,16 @@ Transitive : Pred (A × A) ℓ → Type _
 Transitive P = Trans P P P
 
 -- Generalised antisymmetry
-Antisym : Pred (A × B) ℓ₁ → Pred (B × A) ℓ₂ → Pred (A × B) ℓ₃ → Type _
+Antisym : Pred (A × B) α → Pred (B × A) β → Pred (A × B) γ → Type _
 Antisym R S E = ∀ {i j} → R (i , j) → S (j , i) → E (i , j)
 
 -- Antisymmetry (defined terms of a given equality _≈_).
-Antisymmetric : BinRel A ℓ₁ → Pred (A × A) ℓ₂ → Type _
+Antisymmetric : BinRel A α → Pred (A × A) β → Type _
 Antisymmetric _≈_ P = Antisym P P (uncurry _≈_)
 
 -- Irreflexivity (defined terms of a given equality _≈_).
 
-Irreflexive : BinREL A B ℓ₁ → Pred (A × B) ℓ₂ → Type _
+Irreflexive : BinREL A B α → Pred (A × B) β → Type _
 Irreflexive _≈_ P = ∀ {x y} → x ≈ y → (x , y) ∉ P
 
 -- Asymmetry.
@@ -80,7 +80,7 @@ Asymmetric P = ∀ {x y} → (x , y) ∈ P → (y , x) ∉ P
 
 -- Generalised connex - exactly one of the two relations holds.
 
-Connex : Pred (A × B) ℓ₁ → Pred (B × A) ℓ₂ → Type _
+Connex : Pred (A × B) α → Pred (B × A) β → Type _
 Connex P Q = ∀ x y → (x , y) ∈ P ⊎ (y , x) ∈ Q
 
 -- Totality.

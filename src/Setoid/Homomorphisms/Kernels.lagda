@@ -40,7 +40,7 @@ open  import Setoid.Homomorphisms.Properties {𝑆 = 𝑆} using ( 𝒾𝒹 )
 private variable  α β ρᵃ ρᵇ ℓ : Level
 
 open Algebra  using ( Domain )
-open _⟶_      using ( cong ) renaming (to to _⟨$⟩_ )
+open _⟶_      using ( cong ) renaming ( to to _⟨$⟩_ )
 
 module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} (hh : hom 𝑨 𝑩) where
 

@@ -26,15 +26,15 @@ open import Relation.Binary.Core     using ( _Preserves_⟶_ )
 open import Base.Relations.Discrete using ( PointWise )
 
 private variable
- α ιᵃ ρᵃ β ιᵇ ρᵇ : Level
+ a ιᵃ α b ιᵇ β : Level
 
-module _ (A : Poset α ιᵃ ρᵃ)(B : Poset β ιᵇ ρᵇ) where
+module _ (A : Poset a ιᵃ α)(B : Poset b ιᵇ β) where
  open Poset
  private
   _≤A_ = _≤_ A
   _≤B_ = _≤_ B
 
- record Residuation : Type (suc (α ⊔ ρᵃ ⊔ β ⊔ ρᵇ))  where
+ record Residuation : Type (suc (α ⊔ a ⊔ β ⊔ b))  where
   field
    f      : Carrier A → Carrier B
    g      : Carrier B → Carrier A
@@ -52,7 +52,7 @@ module _ (A : Poset α ιᵃ ρᵃ)(B : Poset β ιᵇ ρᵇ) where
 open Residuation
 open Poset
 
-module _ {A : Poset α ιᵃ ρᵃ} {B : Poset β ιᵇ ρᵇ} (R : Residuation A B) where
+module _ {A : Poset a ιᵃ α} {B : Poset b ιᵇ β} (R : Residuation A B) where
  private
   _≤A_ = _≤_ A
   _≤B_ = _≤_ B
@@ -62,9 +62,9 @@ module _ {A : Poset α ιᵃ ρᵃ} {B : Poset β ιᵇ ρᵇ} (R : Residuation 
 
   -- Pointwise equality of unary functions wrt equality on the given poset carrier
   -- 1. pointwise equality on B → A
-  _≈̇A_ = PointWise{α = β}{A = Carrier B} (_≈_ A)
+  _≈̇A_ = PointWise{a = b}{A = Carrier B} (_≈_ A)
   -- 2. pointwise equality on A → B
-  _≈̇B_ = PointWise{α = α}{A = Carrier A} (_≈_ B)
+  _≈̇B_ = PointWise{a = a}{A = Carrier A} (_≈_ B)
 
 \end{code}
 

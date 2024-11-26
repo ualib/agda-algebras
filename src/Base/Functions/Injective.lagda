@@ -27,14 +27,14 @@ open import Level                                  using ( _⊔_ ; Level )
 open import Relation.Binary                        using ( Rel )
 open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl )
 
-private variable α β γ ℓ₁ ℓ₂ ℓ₃ : Level
+private variable a b c : Level
 
-id-is-injective : {A : Type α} → A ↣ A
+id-is-injective : {A : Type a} → A ↣ A
 id-is-injective {A = A} = ↣-id A
 
-module _ {A : Type α}{B : Type β} where
+module _ {A : Type a}{B : Type b} where
 
- IsInjective : (A → B) → Type (α ⊔ β)
+ IsInjective : (A → B) → Type (a ⊔ b)
  IsInjective f = Injective _≡_ _≡_ f
 
 \end{code}
@@ -43,7 +43,7 @@ The composition of injective functions is injective.
 
 \begin{code}
 
-∘-injective :  {A : Type α}{B : Type β}{C : Type γ}{f : A → B}{g : B → C}
+∘-injective :  {A : Type a}{B : Type b}{C : Type c}{f : A → B}{g : B → C}
   →            IsInjective f → IsInjective g → IsInjective (g ∘ f)
 
 ∘-injective fi gi = λ x → fi (gi x)

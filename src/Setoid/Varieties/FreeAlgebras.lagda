@@ -188,9 +188,9 @@ module _ {α ρᵃ ℓ : Level} {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔
    where
    φ : (Domain 𝔽[ ∣A∣ ]) ⟶ A
    _⟨$⟩_ φ = free-lift{𝑨 = 𝑨} id
-   cong φ {p} {q} pq =  trans (sym (free-lift-interp{𝑨 = 𝑨} id p))
-                        ( trans (A∈ModThK{p = p}{q} (kernel-in-theory pq) id )
-                        ( free-lift-interp{𝑨 = 𝑨} id q) )
+   cong φ {p} {q} pq = trans (sym (free-lift-interp{𝑨 = 𝑨} id p))
+                       ( trans (A∈ModThK{p = p}{q} (kernel-in-theory pq) id )
+                       ( free-lift-interp{𝑨 = 𝑨} id q) )
    isEpi : IsEpi 𝔽[ ∣A∣ ] 𝑨 φ
    compatible (isHom isEpi) = cong Interp (≡.refl , (λ _ → refl))
    isSurjective isEpi {y} = eq (ℊ y) refl

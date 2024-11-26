@@ -29,7 +29,7 @@ open import Relation.Binary.PropositionalEquality
 -- Imports from agda-algebras ----------------------------------------------------
 open import Overture using ( _≈_ )
 
-private variable α β : Level
+private variable a b : Level
 \end{code}
 
 
@@ -38,30 +38,30 @@ private variable α β : Level
 In set theory, these would simply be bijections between sets, or "set isomorphisms."
 \begin{code}
 
-record Bijection (A : Type α)(B : Type β) : Type (α ⊔ β) where
+record Bijection (A : Type a)(B : Type b) : Type (a ⊔ b) where
  field
   to       : A → B
   from     : B → A
   to-from  : to ∘ from ≡ id
   from-to  : from ∘ to ≡ id
 
-∣_∣=∣_∣ : (A : Type α)(B : Type β) → Type (α ⊔ β)
+∣_∣=∣_∣ : (A : Type a)(B : Type b) → Type (a ⊔ b)
 ∣ A ∣=∣ B ∣ = Bijection A B
 
-record PointwiseBijection (A : Type α)(B : Type β) : Type (α ⊔ β) where
+record PointwiseBijection (A : Type a)(B : Type b) : Type (a ⊔ b) where
  field
   to       : A → B
   from     : B → A
   to-from  : to ∘ from ≈ id
   from-to  : from ∘ to ≈ id
 
-∣_∣≈∣_∣ : (A : Type α)(B : Type β) → Type (α ⊔ β)
+∣_∣≈∣_∣ : (A : Type a)(B : Type b) → Type (a ⊔ b)
 ∣ A ∣≈∣ B ∣ = PointwiseBijection A B
 
-uncurry₀ : {A : Type α} → A → A → (A × A)
+uncurry₀ : {A : Type a} → A → A → (A × A)
 uncurry₀ x y = x , y
 
-module _ {A : Type α} {B : Type β} where
+module _ {A : Type a} {B : Type b} where
 
  Curry : ((A × A) → B) → A → A → B
  Curry f x y = f (uncurry₀ x y)
@@ -78,7 +78,7 @@ module _ {A : Type α} {B : Type β} where
 
 \begin{code}
 
-module _ {A : Type α} where
+module _ {A : Type a} where
  open Fin renaming (zero to z ; suc to s)
 
  A×A→Fin2A : A × A → Fin 2 → A
@@ -88,7 +88,7 @@ module _ {A : Type α} where
  Fin2A→A×A : (Fin 2 → A) → A × A
  Fin2A→A×A u = u z , u (s z)
 
- Fin2A~A×A : {A : Type α} → Fin2A→A×A ∘ A×A→Fin2A ≡ id
+ Fin2A~A×A : {A : Type a} → Fin2A→A×A ∘ A×A→Fin2A ≡ id
  Fin2A~A×A = refl
 
  A×A~Fin2A-ptws : ∀ u → (A×A→Fin2A (Fin2A→A×A u)) ≈ u
@@ -131,7 +131,7 @@ function types, `(Fin 2 → A) → B` and `A × A → B`, nor between the types
 
 \begin{code}
 
-module _ {A : Type α} {B : Type β} where
+module _ {A : Type a} {B : Type b} where
  open Fin renaming (zero to z ; suc to s)
 
  lemma : (u : Fin 2 → A) → u ≈ (λ {z → u z ; (s z) → u (s z)})
@@ -149,7 +149,7 @@ module _ {A : Type α} {B : Type β} where
 
  open ≡-Reasoning
 
- CurryFin3 : {A : Type α} → ((Fin 3 → A) → B) → A → A → A → B
+ CurryFin3 : {A : Type a} → ((Fin 3 → A) → B) → A → A → A → B
  CurryFin3 {A = A} f x₁ x₂ x₃ = f u
   where
   u : Fin 3 → A
