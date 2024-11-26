@@ -50,7 +50,7 @@ open  import Setoid.Varieties.SoundAndComplete {𝑆 = 𝑆}
 
 private variable α ρᵃ β ρᵇ χ ℓ : Level
 
-open Func     using ( cong ) renaming ( f to _⟨$⟩_ )
+open Func     using ( cong ) renaming ( to to _⟨$⟩_ )
 open Algebra  using ( Domain )
 \end{code}
 

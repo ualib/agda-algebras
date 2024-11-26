@@ -40,7 +40,7 @@ A prominent example of an equivalence relation is the kernel of any function.
 
 \begin{code}
 
-open _⟶_ using ( cong ) renaming ( f to _⟨$⟩_ )
+open _⟶_ using ( cong ) renaming (to to _⟨$⟩_ )
 
 module _ {𝐴 : Setoid α ρᵃ}{𝐵 : Setoid β ρᵇ} where
  open Setoid 𝐴  using ( refl ) renaming (Carrier to A )

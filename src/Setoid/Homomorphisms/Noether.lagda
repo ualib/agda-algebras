@@ -42,7 +42,7 @@ private variable α ρᵃ β ρᵇ γ ρᶜ ι : Level
 
 \begin{code}
 
-open _⟶_ using ( cong ) renaming ( f to _⟨$⟩_ )
+open _⟶_ using ( cong ) renaming ( to to _⟨$⟩_ )
 open Algebra using ( Domain )
 
 module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}(hh : hom 𝑨 𝑩) where

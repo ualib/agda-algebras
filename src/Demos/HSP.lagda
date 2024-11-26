@@ -90,7 +90,7 @@ open import Data.Product    using ( _×_ ; _,_ ; Σ ; Σ-syntax )
                             renaming ( proj₁ to fst ; proj₂ to snd )
 open import Function        using () renaming ( Func to _⟶_ )
 
-open  _⟶_           using ( cong ) renaming ( f to _⟨$⟩_ )
+open  _⟶_           using ( cong ) renaming ( to to _⟨$⟩_ )
 open IsEquivalence  using ()
                     renaming ( refl to reflᵉ ; sym to symᵉ ; trans to transᵉ )
 open Setoid         using ( Carrier ; isEquivalence ) renaming ( _≈_ to _≈ˢ_ )
@@ -136,12 +136,12 @@ An example of a setoid function is the identity function from a setoid to itself
 \begin{code}
 
 𝑖𝑑 : {A : Setoid α ρᵃ} → A ⟶ A
-𝑖𝑑 {A} = record { f = id ; cong = id }
+𝑖𝑑 {A} = record { to = id ; cong = id }
 
 _⟨∘⟩_ :  {A : Setoid α ρᵃ} {B : Setoid β ρᵇ} {C : Setoid γ ρᶜ}
  →       B ⟶ C  →  A ⟶ B  →  A ⟶ C
 
-f ⟨∘⟩ g = record  { f = (_⟨$⟩_ f) ∘ (_⟨$⟩_ g)
+f ⟨∘⟩ g = record  { to = (_⟨$⟩_ f) ∘ (_⟨$⟩_ g)
                   ; cong = (cong f) ∘ (cong g) }
 \end{code}
 
@@ -189,10 +189,10 @@ We reproduce the definitions and prove some of their properties inside the next 
 module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
  open Setoid 𝑨 using () renaming ( _≈_ to _≈ᴬ_ )
  open Setoid 𝑩 using () renaming ( _≈_ to _≈ᴮ_ )
- open FD _≈ᴬ_ _≈ᴮ_
+ open FD
 
  IsInjective : (𝑨 ⟶ 𝑩) →  Type (α ⊔ ρᵃ ⊔ ρᵇ)
- IsInjective f = Injective (_⟨$⟩_ f)
+ IsInjective f = Injective  _≈ᴬ_ _≈ᴮ_ (_⟨$⟩_ f)
 
  IsSurjective : (𝑨 ⟶ 𝑩) →  Type (α ⊔ β ⊔ ρᵇ)
  IsSurjective F = ∀ {y} → Image F ∋ y
@@ -244,10 +244,10 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
   where open Setoid 𝑩
 
  toIm : (f : 𝑨 ⟶ 𝑩) → 𝑨 ⟶ Im f
- toIm f = record { f = id ; cong = cong f }
+ toIm f = record { to = id ; cong = cong f }
 
  fromIm : (f : 𝑨 ⟶ 𝑩) → Im f ⟶ 𝑩
- fromIm f = record { f = λ x → f ⟨$⟩ x ; cong = id }
+ fromIm f = record { to = λ x → f ⟨$⟩ x ; cong = id }
 
  fromIm-inj : (f : 𝑨 ⟶ 𝑩) → IsInjective (fromIm f)
  fromIm-inj _ = id
@@ -594,10 +594,10 @@ module _ {𝑨 : Algebra α ρᵃ}{ℓ : Level} where
  open Level
 
  ToLiftˡ : hom 𝑨 (Lift-Algˡ 𝑨 ℓ)
- ToLiftˡ = record { f = lift ; cong = id } , mkhom (reflexive ≡.refl)
+ ToLiftˡ = record { to = lift ; cong = id } , mkhom (reflexive ≡.refl)
 
  FromLiftˡ : hom (Lift-Algˡ 𝑨 ℓ) 𝑨
- FromLiftˡ = record { f = lower ; cong = id } , mkhom reflˡ
+ FromLiftˡ = record { to = lower ; cong = id } , mkhom reflˡ
 
  ToFromLiftˡ : ∀ b →  ∣ ToLiftˡ ∣ ⟨$⟩ (∣ FromLiftˡ ∣ ⟨$⟩ b) ≈ˡ b
  ToFromLiftˡ b = refl₁
@@ -606,10 +606,10 @@ module _ {𝑨 : Algebra α ρᵃ}{ℓ : Level} where
  FromToLiftˡ a = refl₁
 
  ToLiftʳ : hom 𝑨 (Lift-Algʳ 𝑨 ℓ)
- ToLiftʳ = record { f = id ; cong = lift } , mkhom (lift (reflexive ≡.refl))
+ ToLiftʳ = record { to = id ; cong = lift } , mkhom (lift (reflexive ≡.refl))
 
  FromLiftʳ : hom (Lift-Algʳ 𝑨 ℓ) 𝑨
- FromLiftʳ = record { f = id ; cong = lower } , mkhom reflˡ
+ FromLiftʳ = record { to = id ; cong = lower } , mkhom reflˡ
 
  ToFromLiftʳ : ∀ b → ∣ ToLiftʳ ∣ ⟨$⟩ (∣ FromLiftʳ ∣ ⟨$⟩ b) ≈ʳ b
  ToFromLiftʳ b = lift refl₁
@@ -1394,9 +1394,9 @@ module _ (𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)) where
   open Setoid 𝔻[ 𝑨 ]            using ( refl )
   open Setoid 𝔻[ ⨅ (λ _ → 𝑨) ]  using () renaming ( refl to refl⨅ )
   to⨅    : 𝔻[ 𝑨 ]            ⟶ 𝔻[ ⨅ (λ _ → 𝑨) ]
-  to⨅    = record { f = λ x _ → x   ; cong = λ xy _ → xy }
+  to⨅    = record { to = λ x _ → x   ; cong = λ xy _ → xy }
   from⨅  : 𝔻[ ⨅ (λ _ → 𝑨) ]  ⟶ 𝔻[ 𝑨 ]
-  from⨅  = record { f = λ x → x tt  ; cong = λ xy → xy tt }
+  from⨅  = record { to = λ x → x tt  ; cong = λ xy → xy tt }
   Goal   : 𝑨 ≅ ⨅ (λ x → 𝑨)
   Goal   = mkiso (to⨅ , mkhom refl⨅) (from⨅ , mkhom refl) (λ _ _ → refl) (λ _ → refl)
 

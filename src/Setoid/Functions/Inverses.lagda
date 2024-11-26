@@ -35,7 +35,7 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
  open Setoid 𝑩 using()  renaming ( Carrier to B ; _≈_ to _≈₂_ )
                         renaming ( refl to refl₂ ; sym to sym₂ ; trans to trans₂ )
 
- open _⟶_ {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝑨}{To = 𝑩} renaming (f to _⟨$⟩_ )
+ open _⟶_ {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝑨}{To = 𝑩} renaming (to to _⟨$⟩_ )
 
 \end{code}
 
@@ -138,7 +138,7 @@ An inhabitant of `Image f ∋ b` is a dependent pair `(a , p)`, where `a : A` an
 
  ⟦_⟧⁻¹ : (F : 𝑨 ⟶ 𝑩) → Ran F ⟶ Dom F
  ⟦ F ⟧⁻¹ = record
-   { f = F preimage
+   { to = F preimage
    ; cong = λ {x}{y} ix≈iy → trans₂  ((F preimage≈image) x)
                                      (trans₂ ix≈iy $ sym₂ $ (F preimage≈image) y)
    }

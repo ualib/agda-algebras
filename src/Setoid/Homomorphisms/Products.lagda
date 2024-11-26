@@ -48,7 +48,7 @@ we can construct a homomorphism from `𝑨` to the product `⨅ ℬ` in the natu
 module _ {I : Type 𝓘}{𝑨 : Algebra α ρᵃ}(ℬ : I → Algebra β ρᵇ)  where
  open Algebra 𝑨      using ()        renaming ( Domain to A )
  open Algebra (⨅ ℬ)  using ()        renaming ( Domain to ⨅B )
- open _⟶_            using ( cong )  renaming ( f to _⟨$⟩_ )
+ open _⟶_            using ( cong )  renaming ( to to _⟨$⟩_ )
  open IsHom
 
  ⨅-hom-co : (∀(i : I) → hom 𝑨 (ℬ i)) → hom 𝑨 (⨅ ℬ)

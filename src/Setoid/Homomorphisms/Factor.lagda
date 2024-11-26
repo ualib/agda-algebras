@@ -19,13 +19,13 @@ module Setoid.Homomorphisms.Factor {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library -------------------------------------------------
 open import Data.Product     using ( _,_ ; Σ-syntax )  renaming ( proj₁ to fst ; proj₂ to snd )
-open import Function         using ( _∘_ )             renaming ( Func to _⟶_ )
+open import Function         using ( _∘_ ; _$_ )             renaming ( Func to _⟶_ )
 open import Level            using ( Level )
 open import Relation.Binary  using ( Setoid )
 open import Relation.Unary   using ( _⊆_ )
 
 open import Relation.Binary.PropositionalEquality  as ≡           using ()
-import Relation.Binary.Reasoning.Setoid            as SReasoning  using ( begin_ ; step-≈˘; step-≈; _∎)
+import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------------
 open import Overture         using ( ∣_∣ ; ∥_∥ )
@@ -62,11 +62,11 @@ module _  {𝑨 : Algebra α ρᵃ} (𝑩 : Algebra β ρᵇ) {𝑪 : Algebra γ
 
  open Algebra 𝑩  using ()          renaming (Domain to B )
  open Algebra 𝑪  using ( Interp )  renaming (Domain to C )
- open Setoid B   using ()          renaming ( _≈_ to _≈₂_ ; sym to sym₂ )
- open Setoid C   using ( trans )   renaming ( _≈_ to _≈₃_ ; sym to sym₃ )
- open _⟶_        using ( cong )    renaming ( f to _⟨$⟩_ )
+ open Setoid B   using ()          renaming ( _≈_ to _≈₂_ ; sym to sym₂ ; trans to trans₂)
+ open Setoid C   using ( trans )   renaming ( _≈_ to _≈₃_ ; sym to sym₃ ; refl to refl₃)
+ open _⟶_        using ( cong )    renaming ( to to _⟨$⟩_ )
 
- open SReasoning B
+ -- open SReasoning B
 
  private
   gfunc = ∣ gh ∣
@@ -109,13 +109,13 @@ module _  {𝑨 : Algebra α ρᵃ} (𝑩 : Algebra β ρᵇ) {𝑪 : Algebra γ
 
   open _⟶_ φmap using () renaming (cong to φcong)
   φcomp : compatible-map 𝑪 𝑩 φmap
-  φcomp {f}{c} =
-   begin
-    φmap ⟨$⟩ ((f ̂ 𝑪) c)              ≈˘⟨ φcong (cong Interp (≡.refl , (λ _ → η)))  ⟩
-    g (h⁻¹ ((f ̂ 𝑪)(h ∘ (h⁻¹ ∘ c))))  ≈˘⟨ φcong (compatible ∥ hh ∥)                 ⟩
-    g (h⁻¹ (h ((f ̂ 𝑨)(h⁻¹ ∘ c))))    ≈˘⟨ gφh ((f ̂ 𝑨)(h⁻¹ ∘ c))                     ⟩
-    g ((f ̂ 𝑨)(h⁻¹ ∘ c))              ≈⟨ compatible ∥ gh ∥                          ⟩
-    (f ̂ 𝑩)(g ∘ (h⁻¹ ∘ c))            ∎
+  φcomp {f}{c} = let open SetoidReasoning B in begin
+    g (h⁻¹ $ (f ̂ 𝑪) c)             ≈⟨ (sym₂ $ φcong (cong Interp (≡.refl , λ _ → SurjInvIsInverseʳ hfunc hE))) ⟩
+    g (h⁻¹ $ (f ̂ 𝑪) $ h ∘ h⁻¹ ∘ c) ≈⟨ sym₂ (φcong (compatible ∥ hh ∥)) ⟩
+    g (h⁻¹ $ h $ (f ̂ 𝑨) $ h⁻¹ ∘ c) ≈⟨ sym₂ (gφh $ (f ̂ 𝑨) $ h⁻¹ ∘ c) ⟩
+    g ((f ̂ 𝑨) $ h⁻¹ ∘ c) ≈⟨ compatible ∥ gh ∥ ⟩
+    (f ̂ 𝑩)(g ∘ h⁻¹ ∘ c)
+    ∎
 
   φhom : IsHom 𝑪 𝑩 φmap
   compatible φhom = φcomp

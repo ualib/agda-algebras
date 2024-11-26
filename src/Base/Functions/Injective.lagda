@@ -22,7 +22,7 @@ module Base.Functions.Injective where
 -- Imports from Agda and the Agda Standard Library -------------------------------
 open import Agda.Primitive                         using () renaming ( Set to Type )
 open import Function                               using ( _↣_ ;  _∘_ ; Injective )
-open import Function.Construct.Identity            using ( id-↣ )
+open import Function.Construct.Identity            using ( ↣-id )
 open import Level                                  using ( _⊔_ ; Level )
 open import Relation.Binary                        using ( Rel )
 open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl )
@@ -30,7 +30,7 @@ open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl )
 private variable α β γ ℓ₁ ℓ₂ ℓ₃ : Level
 
 id-is-injective : {A : Type α} → A ↣ A
-id-is-injective {A = A} = id-↣ A
+id-is-injective {A = A} = ↣-id A
 
 module _ {A : Type α}{B : Type β} where
 

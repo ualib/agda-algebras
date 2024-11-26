@@ -39,7 +39,7 @@ open import Setoid.Algebras  {𝑆 = 𝑆}  using ( Algebra ; ov ; ⟨_⟩ )
 open import Setoid.Terms     {𝑆 = 𝑆}  using ( module Environment ; Sub ; _[_] )
 
 open Setoid  using ( Carrier ; _≈_ ; isEquivalence )
-open _⟶_     renaming ( f to _⟨$⟩_ )
+open _⟶_     renaming ( to to _⟨$⟩_ )
 open Term
 
 private variable

@@ -40,7 +40,7 @@ open import Setoid.Homomorphisms.Properties  {𝑆 = 𝑆} using
  ( 𝒾𝒹 ; ⊙-hom ; ToLiftˡ ; FromLiftˡ ; ToFromLiftˡ ; FromToLiftˡ
  ; ToLiftʳ ; FromLiftʳ ; ToFromLiftʳ ; FromToLiftʳ )
 
-open _⟶_      using ( cong ) renaming ( f to _⟨$⟩_ )
+open _⟶_      using ( cong ) renaming ( to to _⟨$⟩_ )
 open Algebra  using ( Domain )
 
 private variable  α ρᵃ β ρᵇ γ ρᶜ ι : Level
@@ -226,7 +226,7 @@ module _ {𝓘 : Level}{I : Type 𝓘} {𝒜 : I → Algebra α ρᵃ} {ℬ : I 
  ⨅≅ AB = mkiso (ϕ , ϕhom) (ψ , ψhom) ϕ∼ψ ψ∼ϕ
   where
    ϕ : ⨅A ⟶ ⨅B
-   ϕ = record  { f = λ a i → ∣ to (AB i) ∣ ⟨$⟩ (a i)
+   ϕ = record  { to = λ a i → ∣ to (AB i) ∣ ⟨$⟩ (a i)
                ; cong = λ a i → cong ∣ to (AB i) ∣ (a i)
                }
 
@@ -234,7 +234,7 @@ module _ {𝓘 : Level}{I : Type 𝓘} {𝒜 : I → Algebra α ρᵃ} {ℬ : I 
    ϕhom = record { compatible = λ i → compatible ∥ to (AB i) ∥ }
 
    ψ : ⨅B ⟶ ⨅A
-   ψ = record  { f = λ b i → ∣ from (AB i) ∣ ⟨$⟩ (b i)
+   ψ = record  { to = λ b i → ∣ from (AB i) ∣ ⟨$⟩ (b i)
                ; cong = λ b i → cong ∣ from (AB i) ∣ (b i)
                }
 
@@ -267,7 +267,7 @@ module _  {𝓘 : Level}{I : Type 𝓘}
  Lift-Alg-⨅≅ˡ AB = ≅-trans (≅-sym Lift-≅ˡ) A≅B
   where
    ϕ : ⨅A ⟶ ⨅B
-   ϕ = record  { f = λ a i → ∣ to (AB (lower i)) ∣ ⟨$⟩ (a (lower i))
+   ϕ = record  { to = λ a i → ∣ to (AB (lower i)) ∣ ⟨$⟩ (a (lower i))
                ; cong = λ a i → cong ∣ to (AB (lower i)) ∣ (a (lower i))
                }
 
@@ -275,7 +275,7 @@ module _  {𝓘 : Level}{I : Type 𝓘}
    ϕhom = record { compatible = λ i → compatible ∥ to (AB (lower i)) ∥ }
 
    ψ : ⨅B ⟶ ⨅A
-   ψ = record  { f = λ b i → ∣ from (AB i) ∣ ⟨$⟩ (b (lift i))
+   ψ = record  { to = λ b i → ∣ from (AB i) ∣ ⟨$⟩ (b (lift i))
                ; cong = λ b i → cong ∣ from (AB i) ∣ (b (lift i))
                }
 

@@ -34,7 +34,7 @@ open  import Setoid.Algebras {𝑆 = 𝑆}
 open  import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}
       using ( hom ; IsHom ; epi ; IsEpi ; compatible-map )
 
-open _⟶_ using ( cong ) renaming (f to _⟨$⟩_ )
+open _⟶_ using ( cong ) renaming (to to _⟨$⟩_ )
 
 private variable α β γ ρᵃ ρᵇ ρᶜ ℓ : Level
 \end{code}
@@ -110,11 +110,11 @@ module _ {𝑨 : Algebra α ρᵃ}{ℓ : Level} where
 
  open Level
  ToLiftˡ : hom 𝑨 (Lift-Algˡ 𝑨 ℓ)
- ToLiftˡ =  record { f = lift ; cong = id } ,
+ ToLiftˡ =  record { to = lift ; cong = id } ,
             record { compatible = reflexive ≡.refl }
 
  FromLiftˡ : hom (Lift-Algˡ 𝑨 ℓ) 𝑨
- FromLiftˡ = record { f = lower ; cong = id } , record { compatible = reflˡ }
+ FromLiftˡ = record { to = lower ; cong = id } , record { compatible = reflˡ }
 
  ToFromLiftˡ : ∀ b →  (∣ ToLiftˡ ∣ ⟨$⟩ (∣ FromLiftˡ ∣ ⟨$⟩ b)) ≈ˡ b
  ToFromLiftˡ b = refl₁
@@ -123,11 +123,11 @@ module _ {𝑨 : Algebra α ρᵃ}{ℓ : Level} where
  FromToLiftˡ a = refl₁
 
  ToLiftʳ : hom 𝑨 (Lift-Algʳ 𝑨 ℓ)
- ToLiftʳ =  record { f = id ; cong = lift } ,
+ ToLiftʳ =  record { to = id ; cong = lift } ,
             record { compatible = lift (reflexive ≡.refl) }
 
  FromLiftʳ : hom (Lift-Algʳ 𝑨 ℓ) 𝑨
- FromLiftʳ =  record { f = id ; cong = lower } , record { compatible = reflˡ }
+ FromLiftʳ =  record { to = id ; cong = lower } , record { compatible = reflˡ }
 
  ToFromLiftʳ : ∀ b → (∣ ToLiftʳ ∣ ⟨$⟩ (∣ FromLiftʳ ∣ ⟨$⟩ b)) ≈ʳ b
  ToFromLiftʳ b = lift refl₁

@@ -31,6 +31,7 @@ open import Relation.Binary.PropositionalEquality
 -- Imports from agda-algebras -----------------------------------------------------
 open import Overture.Basic     using ( _≈_ ; _∙_ ; transport )
 open import Base.Functions.Inverses  using ( Image_∋_ ; eq ; Inv ; InvIsInverseʳ )
+open import Relation.Binary.Core using (Rel)
 
 private variable α β γ c ι : Level
 \end{code}
@@ -49,18 +50,22 @@ module _ {A : Type α}{B : Type β} where
  onto : Type (α ⊔ β)
  onto = Σ (A → B) IsSurjective
 
- IsSurjective→Surjective :  (f : A → B) → IsSurjective f
-  →                         Surjective{A = A} _≡_ _≡_ f
+ Surjective' :  (_≈₂_ : Rel B γ) -- Equality over the codomain
+               → (A → B) → Set _
+ Surjective' _≈₂_ f = ∀ y → Σ[ x ∈ A ] ((f x) ≈₂ y)
 
- IsSurjective→Surjective f fE y = imgfy→A (fE y)
+ IsSurjective→Surjective' :  (f : A → B) → IsSurjective f
+  →                         Surjective' _≡_ f
+
+ IsSurjective→Surjective' f fE y = imgfy→A (fE y)
   where
   imgfy→A : Image f ∋ y → Σ[ a ∈ A ] f a ≡ y
   imgfy→A (eq a p) = a , sym p
 
- Surjective→IsSurjective :  (f : A → B) → Surjective{A = A} _≡_ _≡_ f
+ Surjective'→IsSurjective :  (f : A → B) → Surjective' _≡_ f
   →                         IsSurjective f
 
- Surjective→IsSurjective f fE y = eq (fst (fE y)) (sym (snd(fE y)))
+ Surjective'→IsSurjective f fE y = eq (fst (fE y)) (sym (snd(fE y)))
 
 \end{code}
 
@@ -143,7 +148,7 @@ module _  {I : Set ι}(_≟_ : Decidable{A = I} _≡_)
  update-id {j}{b}  (yes p) = cong (λ x → transport B x b)(≡-irrelevant (sym p) refl)
  update-id         (no ¬p) = ⊥-elim (¬p refl)
 
- proj-is-onto : ∀{j} → Surjective{A = ∀ i → (B i)} _≡_ _≡_ (proj j)
+ proj-is-onto : ∀{j} → Surjective'{A = ∀ i → (B i)} _≡_ (proj j)
  proj-is-onto {j} b = bs , pf
   where
   bs : (i : I) → B i
@@ -153,7 +158,7 @@ module _  {I : Set ι}(_≟_ : Decidable{A = I} _≡_)
   pf = update-id (j ≟ j)
 
  projIsOnto : ∀{j} → IsSurjective (proj j)
- projIsOnto {j} = Surjective→IsSurjective (proj j) proj-is-onto
+ projIsOnto {j} = Surjective'→IsSurjective (proj j) proj-is-onto
 \end{code}
 
 --------------------------------------
