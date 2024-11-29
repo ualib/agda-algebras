@@ -100,7 +100,7 @@ Cubical Agda.
 </pre>
 
 
-## The formalization of Brkhoff's Theorem
+## The formalization of Birkhoff's Theorem
 
 The [Demos.HSP][] module presents a fairly self-contained formal proof of
 Birkhoff's HSP Theorem in a single module.
