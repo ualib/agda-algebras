@@ -13,7 +13,7 @@ The **previous version** of the library (which was called `UALib` and relied mor
 ## Introduction
 
 This repository contains the source code, as well as the files used to generate 
-the [documentation](https://ualib.guthub.io/agda-algebras), of the 
+the [documentation](https://ualib.github.io/agda-algebras/), of the 
 [Agda Universal Algebra Library](https://github.com/ualib/agda-algebras).
 
 -----------------------------
@@ -173,7 +173,7 @@ rel="dct:source">https://gitlab.com/ualib/ualib.gitlab.io</a>.
 [Hyeyoung Shin]: https://hyeyoungshin.github.io/
 [Siva Somayyajula]: http://www.cs.cmu.edu/~ssomayya/
 
-[agda-algebras]: https://github.com/ualib/agda-algebras
+[agda-algebras]: https://github.com/ualib/agda-algebras/
 [Introduction to Univalent Foundations of Mathematics with Agda]: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/index.html
 [Programming Languages Foundations in Agda]: https://plfa.github.io/
 [Dependent Types at Work]: http://www.cse.chalmers.se/~peterd/papers/DependentTypesAtWork.pdf
