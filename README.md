@@ -1,7 +1,10 @@
 # agda-algebras
 
-This is a copy of the Agda Universal Algebra Library which depends the [Standard Library](https://github.com/agda/agda-stdlib) of the [Agda](https://wiki.portal.chalmers.se/agda/pmwiki.php) proof assistant language.
+This is an update of the Agda Universal Algebra Library which depends on the [Standard Library](https://github.com/agda/agda-stdlib) of the [Agda](https://wiki.portal.chalmers.se/agda/pmwiki.php) proof assistant language.
+
 It is currently under active reconstruction, and should be regarded as α software.
+
+For more details on the latest developments, see the `README_NEWS.md` file in this repository.
 
 The **previous version** of the library (which was called `UALib` and relied more heavily on the [Type Topology](https://github.com/martinescardo/TypeTopology) library of [Martín Escardó][]) is no longer maintained, but is still available at the following urls.
 
