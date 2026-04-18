@@ -13,7 +13,7 @@ This is the [Overture.Signatures][] module of the [Agda Universal Algebra Librar
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Overture.Signatures where
 

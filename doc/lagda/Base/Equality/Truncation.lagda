@@ -16,7 +16,7 @@ Readers who want to learn more about "proof-relevant mathematics" and other conc
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Base.Equality.Truncation where
 

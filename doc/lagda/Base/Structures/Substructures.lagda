@@ -11,7 +11,7 @@ This is the [Base.Structures.Substructures][] module of the [Agda Universal Alge
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Base.Structures.Substructures where
 

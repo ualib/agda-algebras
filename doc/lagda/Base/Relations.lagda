@@ -19,7 +19,7 @@ Finally, in [Base.Relations.Quotients][] we define quotient types.
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Base.Relations where
 

@@ -23,7 +23,7 @@ domain `I → A` (the type of "tuples") and codomain `A`.
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Overture.Operations where
 

@@ -15,7 +15,7 @@ the codomain. The following type manifests this property.
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Base.Functions.Injective where
 

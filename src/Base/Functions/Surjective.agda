@@ -1,5 +1,5 @@
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 module Base.Functions.Surjective where
 
 open import Agda.Primitive    using () renaming ( Set to Type )

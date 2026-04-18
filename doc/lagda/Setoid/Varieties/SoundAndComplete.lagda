@@ -13,7 +13,7 @@ This module is based on [Andreas Abel's Agda formalization of Birkhoff's complet
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using (𝓞 ; 𝓥 ; Signature)
 

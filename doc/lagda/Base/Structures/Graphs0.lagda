@@ -17,7 +17,7 @@ The *graph* of `𝑨` is the structure `Gr 𝑨` with the same domain as `𝑨` 
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Base.Structures.Graphs0 where
 

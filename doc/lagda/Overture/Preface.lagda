@@ -11,7 +11,7 @@ This is the [Overture.Preface][] module of the [Agda Universal Algebra Library][
 
 \begin{code}[hide]
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Overture.Preface where
 

@@ -11,7 +11,7 @@ This is the [Base.Algebras.Products][] module of the [Agda Universal Algebra Lib
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 

@@ -8,7 +8,7 @@ author: "the agda-algebras development team"
 ### <a id="inconsistency-in-first-formalization-attempt">Inconsistency in first formalization attempt</a>
 
 \begin{code}
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 

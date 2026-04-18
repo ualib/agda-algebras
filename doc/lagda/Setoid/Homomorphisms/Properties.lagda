@@ -11,7 +11,7 @@ This is the [Setoid.Homomorphisms.Properties][] module of the [Agda Universal Al
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using (𝓞 ; 𝓥 ; Signature)
 

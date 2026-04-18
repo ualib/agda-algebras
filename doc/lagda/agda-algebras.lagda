@@ -86,7 +86,7 @@ Cubical Agda.
 
 
 \begin{code}[hide]
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 \end{code}
 \begin{code}
 module agda-algebras where

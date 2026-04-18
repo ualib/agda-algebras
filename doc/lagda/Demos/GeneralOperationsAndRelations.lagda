@@ -22,7 +22,7 @@ author: "the agda-algebras development team"
 
 \begin{code}[hide]
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Demos.GeneralOperationsAndRelations where
 

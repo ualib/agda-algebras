@@ -11,7 +11,7 @@ This is the [Base.Terms.Basic][] module of the [Agda Universal Algebra Library][
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using (Signature ; 𝓞 ; 𝓥 )
 

@@ -11,7 +11,7 @@ This is the [Setoid.Functions.Inverses][] module of the [agda-algebras][] librar
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Setoid.Functions.Inverses where
 

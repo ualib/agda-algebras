@@ -11,7 +11,7 @@ This is the [Base.Functions.Surjective][] module of the [agda-algebras][] librar
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 module Base.Functions.Surjective where
 
 -- Imports from Agda and the Agda Standard Library --------------------------------

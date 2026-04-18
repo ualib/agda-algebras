@@ -11,7 +11,7 @@ This is the [Setoid.Relations.Quotients][] module of the [Agda Universal Algebra
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Setoid.Relations.Quotients where
 

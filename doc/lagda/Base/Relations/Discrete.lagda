@@ -11,7 +11,7 @@ This is the [Base.Relations.Discrete][] module of the [Agda Universal Algebra Li
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Base.Relations.Discrete where
 

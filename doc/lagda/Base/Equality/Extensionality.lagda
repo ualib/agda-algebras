@@ -11,7 +11,7 @@ This is the [Base.Equality.Extensionality][] module of the [Agda Universal Algeb
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Base.Equality.Extensionality where
 

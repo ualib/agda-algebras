@@ -15,7 +15,7 @@ Fix a signature 𝑆, let 𝒦 be a class of 𝑆-algebras, and define
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using (𝓞 ; 𝓥 ; Signature)
 
