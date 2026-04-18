@@ -14,7 +14,7 @@ particular algebra, and we prove some compatibility properties of term operation
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 

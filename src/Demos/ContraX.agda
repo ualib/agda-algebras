@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 

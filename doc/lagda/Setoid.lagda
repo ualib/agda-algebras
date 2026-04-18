@@ -12,7 +12,7 @@ as opposed to "bare" types (see [Base.lagda][]).
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Setoid where
 

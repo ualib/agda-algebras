@@ -21,7 +21,7 @@ we prove the following facts (which we use later in our proof of Birkhoff's HSP 
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 

@@ -11,7 +11,7 @@ This is the [Base.Homomorphisms.Kernels] module of the [Agda Universal Algebra L
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using ( Signature; 𝓞 ; 𝓥 )
 

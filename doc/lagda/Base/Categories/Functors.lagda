@@ -28,7 +28,7 @@ An important class of functors for our domain is the class of so called *polynom
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Base.Categories.Functors where
 

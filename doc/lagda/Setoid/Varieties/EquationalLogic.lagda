@@ -15,7 +15,7 @@ Because a class of structures has a different type than a single structure, we m
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using (𝓞 ; 𝓥 ; Signature)
 

@@ -13,7 +13,7 @@ We say that a function `f : A → B` from one setoid (A , ≈₀) to another (B 
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Relation.Binary using ( Setoid )
 

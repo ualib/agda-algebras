@@ -12,7 +12,7 @@ library.  Here we define functions for translating from one type to another.
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Base.Functions.Transformers where
 

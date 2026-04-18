@@ -15,7 +15,7 @@ The purpose of this effort twofold. First, we hope it makes the types defined in
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Base.Categories where
 

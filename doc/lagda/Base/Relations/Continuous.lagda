@@ -11,7 +11,7 @@ This is the [Base.Relations.Continuous][] module of the [Agda Universal Algebra 
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Base.Relations.Continuous where
 

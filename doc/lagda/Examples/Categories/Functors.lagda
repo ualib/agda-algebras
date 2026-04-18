@@ -12,7 +12,7 @@ This is the [Examples.Categories.Functors][] module of the [Agda Universal Algeb
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Examples.Categories.Functors where
 

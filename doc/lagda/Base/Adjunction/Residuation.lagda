@@ -11,7 +11,7 @@ This is the [Base.Adjunction.Residuation][] module of the [Agda Universal Algebr
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Base.Adjunction.Residuation where
 

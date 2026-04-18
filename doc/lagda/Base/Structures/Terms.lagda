@@ -27,7 +27,7 @@ Thus interpretation of a term is defined by structural induction.
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Base.Structures.Terms where
 

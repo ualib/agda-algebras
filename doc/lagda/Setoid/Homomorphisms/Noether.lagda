@@ -11,7 +11,7 @@ This is the [Setoid.Homomorphisms.Noether][] module of the [Agda Universal Algeb
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using (𝓞 ; 𝓥 ; Signature)
 

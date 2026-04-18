@@ -16,7 +16,7 @@ source code inhabits the file [Base/Functions.lagda][], which resides in the
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Base.Functions where
 

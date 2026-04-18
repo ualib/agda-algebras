@@ -15,7 +15,7 @@ University in Prague. They were formalized in dependent type theory by the
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Exercises.Complexity.FiniteCSP  where
 

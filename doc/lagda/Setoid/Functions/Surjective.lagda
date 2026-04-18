@@ -13,7 +13,7 @@ A *surjective function* from a setoid `𝑨 = (A, ≈₀)` to a setoid `𝑩 = (
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Setoid.Functions.Surjective where
 

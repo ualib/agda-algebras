@@ -11,7 +11,7 @@ This is the [Examples.Structures][] module of the [Agda Universal Algebra Librar
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Examples.Structures where
 

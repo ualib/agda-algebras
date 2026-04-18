@@ -21,14 +21,14 @@ its correctness. Every Agda program in [agda-algebras][] begins with the followi
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 \end{code}
 
 These options control certain foundational assumptions that Agda makes when
 type-checking the program to verify its correctness.
 
-*  `--without-K` disables 
+*  `--cubical-compatible` disables 
    [Streicher's K axiom](https://ncatlab.org/nlab/show/axiom+K+%28type+theory%29);
    see also the
    [section on axiom K](https://agda.readthedocs.io/en/v2.6.1/language/without-k.html)

@@ -15,7 +15,7 @@ N.B. This module differs from 0Graphs.lagda in that this module is universe poly
 
 \begin{code}
 
-{-# OPTIONS --without-K --exact-split --safe #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Base.Structures.Graphs where
 
