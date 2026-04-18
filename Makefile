@@ -1,74 +1,70 @@
-# This file is essentially a copy of the Makefile in the agda-categories library by Jacques Carette.
-# The only difference is that this version works with .lagda files instead of .agda files.
-# The original Makefile from agda-categories is https://github.com/agda/agda-categories/blob/master/Makefile
+# =============================================================================
+# agda-algebras — Makefile
+# =============================================================================
+#
+# Run from repo root inside `nix develop` so `agda` and the pinned stdlib
+# are on PATH.  If running outside the Nix shell, ensure your Agda and
+# standard-library versions match the targets declared in flake.nix and
+# agda-algebras.agda-lib.
+#
+# Primary targets:
+#   make              Regenerate src/Everything.agda from the current tree.
+#   make check        Type-check the entire library (what CI runs).
+#   make test         Alias for `make check`.
+#   make html         Generate clickable HTML (in ./html/).
+#   make profile      Type-check with Agda profiling enabled.
+#   make clean        Remove .agdai artifacts and the generated Everything.
+#
+# Notes:
+#   +  Everything.agda is a PHONY target — always regenerated — so that
+#      adding or removing a module is picked up without the user having
+#      to remember.
+#   +  We use `find` rather than `git ls-tree` so that untracked-but-present
+#      files in the working tree are included.  This matters during active
+#      development.
+#   +  The sed pipeline strips ONLY the trailing `.agda` extension
+#      (anchored with `$` and an escaped `\.`), avoiding a class of bugs
+#      where a path segment happens to contain the substring `agda`.
+# =============================================================================
 
-.PHONY: test Everything.agda clean md html profile latex pandoc
+.PHONY: default all check test clean html profile Everything.agda
 
-OTHEROPTS=
-RTSARGS = +RTS -M6G -A128M ${OTHEROPTS} -RTS
+# -- Configuration -----------------------------------------------------------
+SRCDIR    := src
+AGDA      ?= agda
+RTS_OPTS  := +RTS -M6G -A128M -RTS
+AGDA_OPTS ?=
 
-# Locations
-SRCDIR := src
-TEXDIR := tex
-LATEXDIR := latex
-HTMLDIR := html
-INCLDIR := _includes
-
-# File names
-SRC := $(shell find $(SRCDIR) -name "*.lagda")
-MODULES := $(shell find $(SRCDIR) -name "*.lagda" | sed -e 's|^src/[/]*||' -e 's|/|.|g')
-
-TEXFILES = $(shell find . -name "*.tex")
-TEXMDFILES = $(wildcard $(HTMLDIR)/*.tex)
-MDFILES = $(TEXMDFILES:.tex=.md)
-LINKFILE = $(INCLDIR)/UALib.Links.md
+# -- Targets -----------------------------------------------------------------
 
 default: Everything.agda
 
-all: html Everything.agda md $(MDFILES)
-	@echo "target: $@ prereq: $<"
-
-test: Everything.agda
-	@echo "target: $@ prereq: $<"
-	agda ${RTSARGS} $(SRCDIR)/Everything.agda
-
 Everything.agda:
-	@echo "target: $@ prereq: $<"
-	git ls-tree --full-tree -r --name-only HEAD | grep '^src/[^\.]*.lagda' | sed -e 's|^src/[/]*|import |' -e 's|/|.|g' -e 's/.lagda//' -e '/import Everything/d' | LC_COLLATE='C' sort > $(SRCDIR)/Everything.agda
+	@echo "target: $@"
+	@find $(SRCDIR) -name '*.agda' \
+	    ! -name 'Everything.agda' \
+	    ! -path '$(SRCDIR)/Legacy/*' \
+	  | sed -e 's|^$(SRCDIR)/||' \
+	        -e 's|\.agda$$||' \
+	        -e 's|/|.|g' \
+	        -e 's|^|import |' \
+	  | LC_ALL=C sort \
+	  > $(SRCDIR)/Everything.agda
+	@echo "  wrote $(SRCDIR)/Everything.agda ($$(wc -l < $(SRCDIR)/Everything.agda) modules)"
 
-# Make markdown files for html documentation served by jekyll
-md: html $(MDFILES)
-	@echo "target: $@ prereq: $<"
-
-docs: html $(HTMLDIR)/index.markdown $(TEXDIR)/agda-algebras.tex
-	@echo "target: $@ prereq: $<"
+check test: Everything.agda
+	@echo "target: $@"
+	$(AGDA) $(RTS_OPTS) $(AGDA_OPTS) $(SRCDIR)/Everything.agda
 
 html: Everything.agda
-	@echo "target: $@ prereq: $<"
-	@echo $@
-	agda ${RTSARGS} --html --html-highlight=code $(SRCDIR)/Everything.agda
-
-$(HTMLDIR)/index.markdown: $(HTMLDIR)/agda-algebras.md
-	@echo "target: $@ prereq: $<"
-	cp $< $@
-
-## Rule for converting all the agda generated markdown files from .tex to .md
-$(MDFILES): $(TEXMDFILES)
-	@echo "target: $@ prereq: $<"
-	mv $< $@
-
-clean:
-	find . -name '*.agdai' -exec rm \{\} \;
+	@echo "target: $@"
+	$(AGDA) $(RTS_OPTS) --html --html-highlight=code $(SRCDIR)/Everything.agda
 
 profile: Everything.agda
-	@echo "target: $@ prereq: $<"
-	agda ${RTSARGS} -v profile:7 -v profile.definitions:15 $(SRCDIR)/Everything.agda
+	@echo "target: $@"
+	$(AGDA) $(RTS_OPTS) -v profile:7 -v profile.definitions:15 $(SRCDIR)/Everything.agda
 
-
-
-# ## default rule for converting a markdown file to a latex file
-# %.tex: %.md
-# 	@echo "target: $@ prereq: $<"
-# 	cat $(LINKFILE) >> $<              ## first add links to bottom of md so pandoc can insert them as \hrefs
-# 	pandoc -f markdown -t latex $< -o $@
-
+clean:
+	@echo "target: $@"
+	find . -name '*.agdai' -delete
+	rm -f $(SRCDIR)/Everything.agda
