@@ -1,3 +1,4 @@
 name: agda-algebras
 depend: standard-library-2.3
 include: src
+flags: -WnoUnsupportedIndexedMatch
