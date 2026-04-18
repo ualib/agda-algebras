@@ -36,3 +36,5 @@ Notes/Complexity
 referee
 source.zip
 src/Everything.agda
+# Project-local AGDA_DIR (written by `nix develop`; regenerated every time)
+/.agda/
