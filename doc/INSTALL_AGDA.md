@@ -1,3 +1,15 @@
+> ⚠️  **DEPRECATED.**  This document is kept for historical reference only.
+>
+> It targets Agda 2.6.1, which is several major releases out of date; the
+> `cabal sandbox` workflow it describes was removed from Cabal in 2018;
+> the `~/.agda/` path it uses has been superseded by `~/.config/agda/`;
+> and the `agda-mode` executable has been replaced by `agda --emacs-mode`
+> as of Agda 2.8.0.
+>
+> **For current installation instructions, see [INSTALL.md](./INSTALL.md).**
+>
+> This file will be removed in a future release.
+
 Installation of Agda and Emacs
 ==============================
 
