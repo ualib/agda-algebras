@@ -30,7 +30,7 @@ Closes #
 - [ ] `make check` passes locally under `nix develop`.
 - [ ] New public definitions have prose comment blocks.
 - [ ] Commits are coherent and have explanatory messages.
-- [ ] If this PR touches the `src/` tree, the change is targeted at `Setoid/`, `Classical/`, or the shared `Overture/` foundation (not `Legacy/Base/`).
+- [ ] If this PR touches the `src/` tree, the change is targeted at `Base/`, `Setoid/`, or the shared `Overture/` foundation.
 - [ ] If this PR introduces new notation, it doesn't conflict with notation already used elsewhere in the library.
 
 ## Notes for reviewers

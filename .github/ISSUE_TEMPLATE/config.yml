@@ -1,5 +1,5 @@
 blank_issues_enabled: false
 contact_links:
   - name: Project roadmap
-    url: https://github.com/ualib/agda-algebras/blob/master/doc/GITHUB_PROJECT.md
+    url: https://github.com/ualib/agda-algebras/blob/master/docs/GITHUB_PROJECT.md
     about: See the milestone plan to check whether your contribution fits an existing track before filing an issue.

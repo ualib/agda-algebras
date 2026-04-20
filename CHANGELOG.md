@@ -12,7 +12,7 @@ The 3.0 release is a major reconstruction of agda-algebras building on the Setoi
 
 +  **Setoid-canonical tree.**  `src/Setoid/` is the canonical development tree for 3.0.
 +  **Nix flake** at the repo root pinning Agda 2.8.0 and standard-library 2.3, so `nix develop` provides a reproducible development environment.
-+  **`docs/INSTALL.md`** as the canonical installation guide.
++  **`INSTALL.md`** as the canonical installation guide.
 +  **GitHub Actions CI** (`.github/workflows/ci.yml`) that type-checks the library on every push and pull request.
 +  **Community-health files**: `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, issue templates, pull-request template.
 +  **Dual license**: Apache 2.0 for source code under `src/`, CC BY 4.0 for documentation under `docs/`.
@@ -27,7 +27,7 @@ The 3.0 release is a major reconstruction of agda-algebras building on the Setoi
 
 ### Deprecated
 
-+  **`docs/INSTALL_AGDA.md`** superseded by `docs/INSTALL.md`.  Retained with a deprecation banner; will be removed in a future release.
++  **`docs/INSTALL_AGDA.md`** superseded by `INSTALL.md`.  Retained with a deprecation banner; will be removed in a future release.
 
 ### Removed
 
