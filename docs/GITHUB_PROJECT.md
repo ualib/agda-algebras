@@ -10,14 +10,21 @@
 
 ---
 
-## Short Description
+## Summary
 
 Modernization of agda-algebras in 9 milestones: tooling upgrade/infra (M1), consolidate Base/Setoid (M2), classical structures (M3), style/naming uniformity (M4), Cubical Agda (M5), FLRP (M6), complexity/CSP module (M7), training corpus/LLM (M8), novel-research apps of `Continuous` relation API (M9).
 
+---
 
-## Project Description
+## Description
 
 A structured plan to modernize the agda-algebras library.  The work is organized into nine milestones: tooling upgrade and infrastructure (M1), consolidation of the Base/Setoid fork (M2), introduction of the long-missing classical structures layer (M3), style and naming uniformity (M4), a Cubical Agda proof-of-concept as the canonical long-term target (M5), prerequisites for work on the Finite Lattice Representation Problem (M6), an extension of the existing algebraic complexity / CSP module for finite templates (M7), publication of a training corpus for language-model work (M8), and novel-research applications of the `Continuous` relation API (M9).  After M1 lands, the remaining milestones run largely in parallel.
+
+---
+
+## Note on version numbering
+
+agda-algebras was released as v2.0.1 in December 2021 ([Zenodo DOI 10.5281/zenodo.5765793](https://doi.org/10.5281/zenodo.5765793)) as an archival artifact for the TYPES 2021 submission.  The current reconstruction is a major version bump past that release and is planned as v3.0.  The planned Cubical-canonical successor, in which `src/Cubical/` becomes the default development tree, is planned as v4.0.
 
 ---
 
@@ -61,7 +68,7 @@ A structured plan to modernize the agda-algebras library.  The work is organized
 
 ### Milestone 3 — Classical structures layer
 
-**Description**.  Introduce the long-missing tower of classical algebraic structures as Σ-typed specific theories over the universal-algebra framework, with record-typed bundle views matching the stdlib `Algebra.Bundles` idiom.  Each structure ships as a Signatures / Theories / Structures / Bundles / Small quintuple.  Designed so that the underlying equivalence (Setoid in 3.0) can be mechanically substituted for a Cubical path type in 3.0.
+**Description**.  Introduce the long-missing tower of classical algebraic structures as Σ-typed specific theories over the universal-algebra framework, with record-typed bundle views matching the stdlib `Algebra.Bundles` idiom.  Each structure ships as a Signatures / Theories / Structures / Bundles / Small quintuple.  Designed so that the underlying equivalence used in the Setoid-based 3.0 line can be mechanically replaced by a Cubical path type when the 4.0 Cubical track becomes canonical.
 
 Phase 1: Magma, Semigroup, CommutativeSemigroup, Monoid, CommutativeMonoid, Group, AbelianGroup, Semilattice, Lattice.
 
@@ -493,7 +500,7 @@ Ratified design decisions (to be recorded in `docs/adr/002-classical-layer.md`):
 1. Each classical structure `X` is Σ-typed at the core: `X α ρ = Σ[ 𝑨 ∈ Algebra 𝑆ₓ α ρ ] 𝑨 ⊨ Eₓ`.  The mathematical reading "X *is* an algebra equipped with a proof it satisfies the X-theory" motivates Σ over record for classical structures.  The core `Algebra` type stays a record.
 2. A parallel record-typed "bundle view" in `Classical/Bundles/X` matches the stdlib `Algebra.Bundles` idiom for interop.
 3. Built on `Setoid/` (not `Base/`).  A helper `fromPropEq : Type α → ... → X α α` lets users build classical structures from propositional-equality-based definitions without explicit Setoid wrapping.
-4. Designed for Cubical portability.  Equations stated purely in terms of `Algebra.Domain`'s equivalence — never reaching for Setoid-specific features without a Cubical analog.  When `Cubical/` becomes canonical in 3.0, the port should be mechanical.
+4. Designed for Cubical portability.  Equations stated purely in terms of `Algebra.Domain`'s equivalence — never reaching for Setoid-specific features without a Cubical analog.  When `Cubical/` becomes canonical in 4.0, the port should be mechanical.
 5. Two levels of specificity per structure: polymorphic core (`Classical.Structures.X`) and level-fixed veneer (`Classical.Small.Structures.X`) for the common `ℓ₀` case.
 
 ## Tasks
@@ -816,7 +823,7 @@ Every record, type family, and top-level function in the public API should have 
 
 ## Description
 
-Cubical Agda is the canonical long-term target for this library.  This issue establishes the path: port the core algebra types, prove the structure identity principle (SIP), and demonstrate end-to-end workflow by porting Monoid from the Setoid-based Classical layer to a Cubical counterpart.  The ultimate goal is for Cubical to become the default development track in version 3.0, with `Setoid/` moving to Legacy.
+Cubical Agda is the canonical long-term target for this library.  This issue establishes the path: port the core algebra types, prove the structure identity principle (SIP), and demonstrate end-to-end workflow by porting Monoid from the Setoid-based Classical layer to a Cubical counterpart.  The ultimate goal is for Cubical to become the default development track in version 4.0.
 
 Design implication for M3: the Classical layer must be designed so that the Setoid-to-Cubical port is mechanical — equations stated purely in terms of the `Algebra` record's Domain equivalence, no Setoid-specific gadgets in the definitions of classical structures themselves.
 
@@ -826,7 +833,7 @@ Design implication for M3: the Classical layer must be designed so that the Seto
 - [ ] `Cubical/Algebras/SIP.agda`: structure identity principle.  Port or adapt from the `cubical` or `1Lab` library.
 - [ ] Prove: `≅` as defined for Cubical algebras is equivalent to path equality (the central "transport does what we want" result).
 - [ ] End-to-end port: take `Classical/Structures/Monoid.agda` from the Setoid-based version (post M3-4) and produce the Cubical analog.  Verify that equations transport by substitution alone.
-- [ ] Write `docs/adr/003-cubical-canonical-target.md` explicitly planning the 3.0 transition and the criteria for promoting Cubical from experimental to canonical.
+- [ ] Write `docs/adr/003-cubical-canonical-target.md` explicitly planning the 4.0 transition and the criteria for promoting Cubical from experimental to canonical.
 
 ## Acceptance criteria
 

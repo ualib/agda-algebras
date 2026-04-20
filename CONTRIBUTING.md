@@ -13,7 +13,7 @@ The library is currently under active reconstruction for the 3.0 release.  Expec
 +  **Proof terms are first-class training data.**  We intend this library to serve as a high-quality corpus for machine-learning work on formal proofs.  Contributions should be written with that in mind: prefer small focused theorems over large ones, named helper lemmas over opaque rewrite chains, and rich natural-language comments alongside formal statements.
 +  **One canonical form per concept.**  If a concept is already defined somewhere in the library, please use or re-export the existing definition rather than defining a parallel version with slightly different notation.  When in doubt, open a design-discussion issue first.
 +  **Stable public APIs with deprecation cycles.**  Breaking changes to names or signatures in publicly-used definitions should go through at least one minor-version deprecation cycle.  Internal helpers (not re-exported, not documented) can change without notice.
-+  **The Setoid/Classical/Cubical split is intentional.**  `Setoid/` is the canonical development tree for 3.0.  `Classical/` builds specific algebraic theories on top of the universal-algebra foundation.  `Cubical/` is the long-term target for version 3.0.  `Legacy/Base/` is frozen.  New contributions usually belong in `Setoid/` or `Classical/`; if you're unsure, ask.
++  **The Setoid tree is canonical.**  `src/Setoid/` is the canonical active development tree for 3.0.  `src/Base/` contains the pre-3.0 original development and shared foundations still in use; parts of it will be frozen as `Legacy/Base/` during the 3.0 reconstruction (see M2).  The planned `Classical/` tree (specific algebraic theories, tracked in M3) and `Cubical/` tree (long-term 4.0 target, tracked in M5) do not yet exist.  New contributions usually belong in `Setoid/`; if you're not sure where something fits, open a design-discussion issue first.
 
 See [`docs/GITHUB_PROJECT.md`](docs/GITHUB_PROJECT.md) for the milestone roadmap.
 
@@ -69,7 +69,10 @@ Every `.agda` source file begins with:
 {-# OPTIONS --cubical-compatible --safe --exact-split #-}
 ```
 
-plus `module X.Y.Z where` on the next non-comment line.  The exception is `src/Legacy/Base/`, which is frozen and retains its historical `--without-K` pragma.
+plus `module X.Y.Z where` on the next non-comment line.
+
+As of the 3.0 reconstruction, all of `src/` uses `--cubical-compatible`.  When the 3.0 consolidation freezes pre-reconstruction content as `Legacy/Base/` (see M2), the frozen tree will retain its historical `--without-K` pragma for stability, but new contributions will not land there.
+
 
 ### Naming
 

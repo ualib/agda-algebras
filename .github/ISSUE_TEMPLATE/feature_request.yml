@@ -5,7 +5,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for suggesting something for agda-algebras.  Before you fill this out, please check the project roadmap in [`docs/GITHUB_PROJECT.md`](../blob/master/docs/GITHUB_PROJECT.md) — the change you're proposing may already be planned.
+        Thanks for suggesting something for agda-algebras.  Before you fill this out, please check the project roadmap in [`docs/GITHUB_PROJECT.md`](https://github.com/ualib/agda-algebras/blob/master/docs/GITHUB_PROJECT.md) — the change you're proposing may already be planned.
 
   - type: textarea
     id: what
@@ -36,10 +36,11 @@ body:
     attributes:
       label: Which tree does this belong in?
       options:
-        - Setoid/ (canonical for 2.0)
-        - Classical/ (specific algebraic theories)
-        - Cubical/ (long-term 3.0 target)
-        - Not sure
+        - "Setoid/ (canonical for 3.0)"
+        - "Classical/ (planned; specific algebraic theories)"
+        - "Cubical/ (planned; long-term 4.0 target)"
+        - "Base/ (legacy; new code not accepted here)"
+        - "Not sure"
     validations:
       required: true
 
