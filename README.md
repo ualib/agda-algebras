@@ -108,10 +108,7 @@ The official [Agda Wiki][], [Agda User's Manual][], [Agda Language Reference][],
 
 ## Citing
 
-[![DOI](https://zenodo.org/badge/360493064.svg)](https://zenodo.org/badge/latestdoi/360493064)
-
-[bibtex / new Zenodo entry to be added]
-
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5765793.svg)](https://doi.org/10.5281/zenodo.5765793)
 
 To cite the [agda-algebras][] software library in a publication or on a web page, please use the following BibTeX entry:
 
