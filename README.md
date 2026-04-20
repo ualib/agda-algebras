@@ -1,10 +1,14 @@
 # agda-algebras
 
-[![license](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+[![CI](https://github.com/ualib/agda-algebras/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/ualib/agda-algebras/actions/workflows/ci.yml)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](./LICENSE)
+[![Docs License: CC BY 4.0](https://img.shields.io/badge/Docs-CC_BY_4.0-lightgrey.svg)](./LICENSE-docs)
+[![Agda 2.8.0](https://img.shields.io/badge/Agda-2.8.0-purple.svg)](https://github.com/agda/agda/releases/tag/v2.8.0)
+[![stdlib 2.3](https://img.shields.io/badge/stdlib-2.3-orange.svg)](https://github.com/agda/agda-stdlib/releases/tag/v2.3)
 
 A formalization of universal algebra in [Agda](https://wiki.portal.chalmers.se/agda/pmwiki.php), built on the [Agda standard library](https://github.com/agda/agda-stdlib).
 
-**Status.** Version 2.0 is under active development on `master`. The library currently targets Agda 2.8.0 and standard-library 2.3. Expect breaking changes until 2.0 is released; see [doc/GITHUB_PROJECT.md](doc/GITHUB_PROJECT.md) for the milestone plan.
+**Status.** Version 2.0 is under active development on `master`. The library currently targets Agda 2.8.0 and standard-library 2.3. Expect breaking changes until 2.0 is released; see [docs/GITHUB_PROJECT.md](docs/GITHUB_PROJECT.md) for the milestone plan.
 
 The **previous** version (called `UALib`, built against [TypeTopology](https://github.com/martinescardo/TypeTopology)) is no longer maintained but remains available:
 
@@ -17,7 +21,7 @@ The **previous** version (called `UALib`, built against [TypeTopology](https://g
 
 HTML documentation for the current line is served at [https://ualib.org](https://ualib.org).
 
-The library's structure, design decisions, and roadmap are documented in [doc/GITHUB_PROJECT.md](doc/GITHUB_PROJECT.md).
+The library's structure, design decisions, and roadmap are documented in [docs/GITHUB_PROJECT.md](docs/GITHUB_PROJECT.md).
 
 ---
 
@@ -40,7 +44,7 @@ make check   # type-check the library
 make html    # build clickable HTML to ./html/
 ```
 
-Contributors who prefer not to use Nix should install Agda 2.8.0 and standard-library 2.3 by other means (see [doc/INSTALL.md](doc/INSTALL.md) for options) and register them in `~/.config/agda/libraries` before running `make check`.
+Contributors who prefer not to use Nix should install Agda 2.8.0 and standard-library 2.3 by other means (see [docs/INSTALL.md](docs/INSTALL.md) for options) and register them in `~/.config/agda/libraries` before running `make check`.
 
 ---
 
@@ -59,11 +63,23 @@ Older versions of either component are **not** supported on the `master` branch.
 Contributions are welcome via the standard
 [fork-clone-pull-request](https://gist.github.com/Chaser324/ce0505fbed06b947d962)
 workflow.  Please read the contributor documentation in `CONTRIBUTING.md` and the
-style guide in `doc/STYLE.md` (both currently being drafted as part of Milestone 1;
+style guide in `docs/STYLE.md` (both currently being drafted as part of Milestone 1;
 see the GitHub project board).
 
 For questions about mathematical content or large design changes, open a GitHub issue
 labeled `design-discussion` before writing code.
+
+---
+
+## Licensing
+
+agda-algebras is dual-licensed to match the dual nature of the project:
+
++  **Source code** (under `src/`) is licensed under the [Apache License, Version 2.0](./LICENSE).  This is a permissive, industry-standard software license compatible with essentially all other open-source licenses and commercial use.
+
++  **Documentation, papers, and tutorials** (under `docs/`) are licensed under the [Creative Commons Attribution 4.0 International License](./LICENSE-docs).  CC BY 4.0 is the standard license for academic-style written material; it permits sharing and adaptation with attribution.
+
+If you are redistributing or building on agda-algebras, please respect both licenses for their respective parts of the repository.
 
 ---
 
@@ -141,15 +157,12 @@ If you're looking for the latest (setoid-based) formalization of Brkhoff's Theor
 <!-- Link definitions — keep at bottom for readability above -->
 [agda-algebras]: https://github.com/ualib/agda-algebras
 [Agda]: https://wiki.portal.chalmers.se/agda/pmwiki.php
-[Agda Language Reference]: https://agda.readthedocs.io/en/v2.6.1.3/language
-[Agda Standard Library]: https://agda.github.io/agda-stdlib/
-[Agda Tools]: https://agda.readthedocs.io/en/v2.6.1.3/tools/
-[Agda Tutorial]: https://people.inf.elte.hu/pgj/agda/tutorial/Index.html
-[Agda User's Manual]: https://agda.readthedocs.io/en/v2.6.1.3/
-[Agda Wiki]: https://wiki.portal.chalmers.se/agda/pmwiki.php
-[Agda User's Manual]: https://agda.readthedocs.io/en/latest/
 [Agda Language Reference]: https://agda.readthedocs.io/en/latest/language/
 [Agda Standard Library]: https://github.com/agda/agda-stdlib
+[Agda Tools]: https://agda.readthedocs.io/en/latest/tools/
+[Agda Tutorial]: https://people.inf.elte.hu/pgj/agda/tutorial/Index.html
+[Agda User's Manual]: https://agda.readthedocs.io/en/latest/
+[Agda Wiki]: https://wiki.portal.chalmers.se/agda/pmwiki.php
 
 [Andreas Abel]: http://www.cse.chalmers.se/~abela/
 [Andrej Bauer]: http://www.andrej.com/
