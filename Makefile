@@ -41,16 +41,21 @@ default: Everything.agda
 
 Everything.agda:
 	@echo "target: $@"
-	@find $(SRCDIR) -name '*.agda' \
-	    ! -name 'Everything.agda' \
-	    ! -path '$(SRCDIR)/Legacy/*' \
-	  | sed -e 's|^$(SRCDIR)/||' \
-	        -e 's|\.agda$$||' \
-	        -e 's|/|.|g' \
-	        -e 's|^|import |' \
-	  | LC_ALL=C sort \
-	  > $(SRCDIR)/Everything.agda
-	@echo "  wrote $(SRCDIR)/Everything.agda ($$(wc -l < $(SRCDIR)/Everything.agda) modules)"
+	@{ \
+	  echo "{-# OPTIONS --cubical-compatible --safe #-}"; \
+	  echo ""; \
+	  echo "module Everything where"; \
+	  echo ""; \
+	  find $(SRCDIR) -name '*.agda' \
+	      ! -name 'Everything.agda' \
+	      ! -path '$(SRCDIR)/Legacy/*' \
+	    | sed -e 's|^$(SRCDIR)/||' \
+	          -e 's|\.agda$$||' \
+	          -e 's|/|.|g' \
+	          -e 's|^|import |' \
+	    | LC_ALL=C sort; \
+	} > $(SRCDIR)/Everything.agda
+	@echo "  wrote $(SRCDIR)/Everything.agda ($$(grep -c '^import' $(SRCDIR)/Everything.agda) modules)"
 
 check test: Everything.agda
 	@echo "target: $@"

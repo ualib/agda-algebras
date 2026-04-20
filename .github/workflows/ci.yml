@@ -93,7 +93,7 @@ jobs:
           nix develop --command bash -c '
             echo "=== Toolchain ==="
             echo "Agda    : $(agda --version | head -n1)"
-            echo "stdlib  : $(cat .agda/libraries 2>/dev/null || echo "(AGDA_DIR not yet initialized)")"
+            echo "stdlib  : $(cat .agda/libraries)"
             echo "nix     : $(nix --version)"
           '
 

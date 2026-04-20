@@ -108,6 +108,7 @@ exec "$NIX_AGDA" \\
   --no-default-libraries \\
   --library-file "$AGDA_DIR/libraries" \\
   --library standard-library \\
+  --library agda-algebras \\
   "\$@"
 EOF
         chmod +x "$AGDA_DIR/bin/agda"
