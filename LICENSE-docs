@@ -1,0 +1,32 @@
+Creative Commons Attribution 4.0 International License
+
+The documentation and the papers, notes, and tutorials in this repository
+(docs/) are licensed under the Creative Commons Attribution 4.0 International
+License.
+
+Copyright 2025-2026 William DeMeo and Contributors
+
+You are free to:
+
+  Share  — copy and redistribute the material in any medium or format
+
+  Adapt  — remix, transform, and build upon the material for any purpose,
+           even commercially
+
+Under the following terms:
+
+  Attribution — You must give appropriate credit, provide a link to the
+                license, and indicate if changes were made. You may do so
+                in any reasonable manner, but not in any way that suggests
+                the licensor endorses you or your use.
+
+  No additional restrictions — You may not apply legal terms or technological
+                measures that legally restrict others from doing anything the
+                license permits.
+
+Full license text: https://creativecommons.org/licenses/by/4.0/legalcode
+
+---
+
+Note: The source code in this repository (src/) is licensed separately
+under the Apache License, Version 2.0.  See LICENSE for details.
