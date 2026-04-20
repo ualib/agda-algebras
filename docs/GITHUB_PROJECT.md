@@ -2,7 +2,7 @@
 
 # agda-algebras — GitHub Project Roadmap
 
-**Project Title**:  agda-algebras 2.0 — Infrastructure, Consolidation, Classical Structures, Applications
+**Project Title**:  agda-algebras 3.0 — Infrastructure, Consolidation, Classical Structures, Applications
 
 **Repository**:  `ualib/agda-algebras`
 
@@ -45,7 +45,7 @@ A structured plan to modernize the agda-algebras library.  The work is organized
 
 ### Milestone 1 — Infrastructure health (BLOCKING)
 
-**Description**.  Modernize the library's tooling, establish baseline project hygiene, and unblock every subsequent milestone.  The library is currently pinned to Agda 2.6.2 / stdlib 1.7; it must move to Agda 2.8.0 / stdlib v2.3 with `--cubical-compatible` replacing `--without-K`.  Standard community-health files (CONTRIBUTING, CHANGELOG, CODE_OF_CONDUCT, STYLE) must land.  GitHub Actions CI must stand up.  README and installation docs must be rewritten for the 2.0 line.
+**Description**.  Modernize the library's tooling, establish baseline project hygiene, and unblock every subsequent milestone.  The library is currently pinned to Agda 2.6.2 / stdlib 1.7; it must move to Agda 2.8.0 / stdlib v2.3 with `--cubical-compatible` replacing `--without-K`.  Standard community-health files (CONTRIBUTING, CHANGELOG, CODE_OF_CONDUCT, STYLE) must land.  GitHub Actions CI must stand up.  README and installation docs must be rewritten for the 3.0 line.
 
 **Exit criterion**.  `make check` passes under GitHub Actions CI against Agda 2.8.0 / stdlib v2.3; CONTRIBUTING.md, docs/STYLE.md, ROADMAP.md, CHANGELOG.md are merged; README documents the new install path.
 
@@ -53,7 +53,7 @@ A structured plan to modernize the agda-algebras library.  The work is organized
 
 ### Milestone 2 — Consolidation
 
-**Description**.  Resolve the parallel Base/Setoid fork by freezing `Base/` and moving it to `Legacy/Base/`.  `Setoid/` is the canonical development tree for 2.0.  Within Legacy, consolidate redundant `Base.Structures` implementations and remove abandoned experimental modules.  Designate a single canonical proof of Birkhoff's HSP theorem while preserving the pedagogical demonstration variants.
+**Description**.  Resolve the parallel Base/Setoid fork by freezing `Base/` and moving it to `Legacy/Base/`.  `Setoid/` is the canonical development tree for 3.0.  Within Legacy, consolidate redundant `Base.Structures` implementations and remove abandoned experimental modules.  Designate a single canonical proof of Birkhoff's HSP theorem while preserving the pedagogical demonstration variants.
 
 **Exit criterion**.  `src/Base/` is in `src/Legacy/Base/` with a deprecation note; `Setoid.Varieties.HSP.Birkhoff` is designated canonical; ADR-001 (Setoid as canonical) is merged; no duplicate implementations of the same concept remain in `Setoid/` or `Legacy/Base/`.
 
@@ -61,7 +61,7 @@ A structured plan to modernize the agda-algebras library.  The work is organized
 
 ### Milestone 3 — Classical structures layer
 
-**Description**.  Introduce the long-missing tower of classical algebraic structures as Σ-typed specific theories over the universal-algebra framework, with record-typed bundle views matching the stdlib `Algebra.Bundles` idiom.  Each structure ships as a Signatures / Theories / Structures / Bundles / Small quintuple.  Designed so that the underlying equivalence (Setoid in 2.0) can be mechanically substituted for a Cubical path type in 3.0.
+**Description**.  Introduce the long-missing tower of classical algebraic structures as Σ-typed specific theories over the universal-algebra framework, with record-typed bundle views matching the stdlib `Algebra.Bundles` idiom.  Each structure ships as a Signatures / Theories / Structures / Bundles / Small quintuple.  Designed so that the underlying equivalence (Setoid in 3.0) can be mechanically substituted for a Cubical path type in 3.0.
 
 Phase 1: Magma, Semigroup, CommutativeSemigroup, Monoid, CommutativeMonoid, Group, AbelianGroup, Semilattice, Lattice.
 
@@ -89,7 +89,7 @@ Phase 2: Ring, CommutativeRing, Field, Module, DistributiveLattice, BooleanAlgeb
 
 ### Milestone 6 — Toward the Finite Lattice Representation Problem
 
-**Description**.  Build the specialized universal-algebraic infrastructure needed to tackle the Finite Lattice Representation Problem: "Does every finite lattice occur as the congruence lattice of a finite algebra?"  Near-term prerequisites include `Con 𝑨` and `Sub 𝑨` as complete lattices, subdirect products, subdirectly irreducible algebras, and basic Maltsev conditions relevant to lattice representations.  *Medium-term*.  Jónsson's theorem, Day's theorem.  Long-term (out of scope for 2.0): tame congruence theory, commutator theory, explicit representations of small lattices.
+**Description**.  Build the specialized universal-algebraic infrastructure needed to tackle the Finite Lattice Representation Problem: "Does every finite lattice occur as the congruence lattice of a finite algebra?"  Near-term prerequisites include `Con 𝑨` and `Sub 𝑨` as complete lattices, subdirect products, subdirectly irreducible algebras, and basic Maltsev conditions relevant to lattice representations.  *Medium-term*.  Jónsson's theorem, Day's theorem.  Long-term (out of scope for 3.0): tame congruence theory, commutator theory, explicit representations of small lattices.
 
 **Exit criterion**.  `Con 𝑨` is a complete lattice; subdirect products and subdirectly irreducible algebras are defined with basic properties proven; at least one Maltsev condition (congruence permutability via the Maltsev term characterization) is proven.
 
@@ -185,7 +185,7 @@ The library is currently pinned to Agda 2.6.2 / stdlib 1.7.  The Agda ecosystem 
 - [ ] Library type-checks under Agda 2.8.0 / stdlib v2.3.
 - [ ] `make check` succeeds locally.
 - [ ] No file still declares `--without-K`.
-- [ ] Once 2.0 is stable, consider adding a CI job against Agda 2.9/dev to catch forward-compatibility issues early.
+- [ ] Once 3.0 is stable, consider adding a CI job against Agda 2.9/dev to catch forward-compatibility issues early.
 
 ---
 
@@ -225,12 +225,12 @@ The library has no CI.  Contributors can break type-checking without maintainers
 
 ## Description
 
-Standard community-health files are missing.  Drafts of CONTRIBUTING and STYLE exist from the 2.0 planning cycle and can be merged after review.
+Standard community-health files are missing.  Drafts of CONTRIBUTING and STYLE exist from the 3.0 planning cycle and can be merged after review.
 
 ## Tasks
 
 - [ ] Add `CONTRIBUTING.md` (draft from planning cycle).
-- [ ] Add `CHANGELOG.md` seeded with the 2.0 milestone entry.
+- [ ] Add `CHANGELOG.md` seeded with the 3.0 milestone entry.
 - [ ] Add `CODE_OF_CONDUCT.md` (Contributor Covenant 2.1).
 - [ ] Add `.github/ISSUE_TEMPLATE/` with bug-report, feature-request, and design-discussion templates.
 - [ ] Add `.github/PULL_REQUEST_TEMPLATE.md`.
@@ -264,7 +264,7 @@ Create `docs/STYLE.md` documenting file format, module structure, naming convent
 
 ---
 
-### Issue M1-5: Rewrite README and Preface for the 2.0 release
+### Issue M1-5: Rewrite README and Preface for the 3.0 release
 
 **Labels**:  `milestone-1-infra`, `documentation`
 
@@ -272,7 +272,7 @@ Create `docs/STYLE.md` documenting file format, module structure, naming convent
 
 ## Description
 
-The current `README.md` and `docs/lagda/Preface.lagda` are 1.x-era: wrong Agda versions, obsolete installation paths, pre-consolidation library structure.  They need a rewrite aligned with the 2.0 release.  Depends on M1-1 through M1-4 and M2-1.
+The current `README.md` and `docs/lagda/Preface.lagda` are 1.x-era: wrong Agda versions, obsolete installation paths, pre-consolidation library structure.  They need a rewrite aligned with the 3.0 release.  Depends on M1-1 through M1-4 and M2-1.
 
 ## Tasks
 
@@ -305,7 +305,7 @@ As the library evolves, design decisions (Setoid vs Base canonicality, record vs
 - [ ] Create `docs/adr/` directory.
 - [ ] Add `docs/adr/README.md` explaining the ADR format.
 - [ ] Add `docs/adr/000-template.md`.
-- [ ] Seed with decisions ratified in 2.0:
+- [ ] Seed with decisions ratified in 3.0:
   - `001-setoid-as-canonical.md` (from M2-1);
   - `002-classical-layer-design.md` (from M3-1);
   - `003-cubical-canonical-target.md` (from M5-1).
@@ -319,7 +319,7 @@ As the library evolves, design decisions (Setoid vs Base canonicality, record vs
 
 ### Milestone 1 Dependencies
 
-M1-5 is the integration node: the new README / Preface needs all the other M1 deliverables to exist before it can refer to them.  M1-6 (docs/adr/) is structurally independent but is gated on M1-1 because it references the 2.0 release.
+M1-5 is the integration node: the new README / Preface needs all the other M1 deliverables to exist before it can refer to them.  M1-6 (docs/adr/) is structurally independent but is gated on M1-1 because it references the 3.0 release.
 
 ```mermaid
 graph TD
@@ -353,11 +353,11 @@ graph TD
 
 ## Description
 
-The decision is ratified: `Setoid/` is the canonical development tree for 2.0; `Base/` is frozen and moved to `Legacy/Base/`.  Rationale: `Setoid/` is fully constructive (no extensionality postulates); it matches the stdlib `Algebra.Bundles` idiom which simplifies bridges; maintaining two trees indefinitely doubles every theorem's cost; `Setoid/` already contains the definitive HSP proof.
+The decision is ratified: `Setoid/` is the canonical development tree for 3.0; `Base/` is frozen and moved to `Legacy/Base/`.  Rationale: `Setoid/` is fully constructive (no extensionality postulates); it matches the stdlib `Algebra.Bundles` idiom which simplifies bridges; maintaining two trees indefinitely doubles every theorem's cost; `Setoid/` already contains the definitive HSP proof.
 
 Note: `Base/` remains in the repo — frozen, not deleted — for posterity and as a reference.  Parts may be ported back to `Setoid/` or `Cubical/` as needed.
 
-This is a breaking change for downstream users of `Base/`.  Announce prominently in the 2.0 CHANGELOG.
+This is a breaking change for downstream users of `Base/`.  Announce prominently in the 3.0 CHANGELOG.
 
 ## Tasks
 

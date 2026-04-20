@@ -6,7 +6,7 @@
 # Goals:
 #
 #   1. `nix develop` from the repo root drops you in a shell with exactly the
-#      Agda / stdlib versions agda-algebras 2.0 targets. No ~/.config/agda
+#      Agda / stdlib versions agda-algebras 3.0 targets. No ~/.config/agda
 #      configuration required (or consulted).
 #   2. Reproducibility via flake.lock. The nixpkgs input pin *is* the Agda/
 #      stdlib pin.
