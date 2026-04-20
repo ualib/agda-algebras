@@ -60,11 +60,7 @@ Older versions of either component are **not** supported on the `master` branch.
 
 ## Contributing
 
-Contributions are welcome via the standard
-[fork-clone-pull-request](https://gist.github.com/Chaser324/ce0505fbed06b947d962)
-workflow.  Please read the contributor documentation in `CONTRIBUTING.md` and the
-style guide in `docs/STYLE.md` (both currently being drafted as part of Milestone 1;
-see the GitHub project board).
+Contributions are welcome.  See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the development workflow and conventions, and [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) for community standards.  The style guide ([`docs/STYLE.md`](docs/STYLE.md)) is being drafted as part of Milestone 1; see [`docs/GITHUB_PROJECT.md`](docs/GITHUB_PROJECT.md) for the full roadmap.
 
 For questions about mathematical content or large design changes, open a GitHub issue
 labeled `design-discussion` before writing code.

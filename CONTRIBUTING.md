@@ -15,7 +15,7 @@ The library is currently under active reconstruction for the 3.0 release.  Expec
 +  **Stable public APIs with deprecation cycles.**  Breaking changes to names or signatures in publicly-used definitions should go through at least one minor-version deprecation cycle.  Internal helpers (not re-exported, not documented) can change without notice.
 +  **The Setoid/Classical/Cubical split is intentional.**  `Setoid/` is the canonical development tree for 3.0.  `Classical/` builds specific algebraic theories on top of the universal-algebra foundation.  `Cubical/` is the long-term target for version 3.0.  `Legacy/Base/` is frozen.  New contributions usually belong in `Setoid/` or `Classical/`; if you're unsure, ask.
 
-See [`doc/GITHUB_PROJECT.md`](doc/GITHUB_PROJECT.md) for the milestone roadmap.
+See [`docs/GITHUB_PROJECT.md`](docs/GITHUB_PROJECT.md) for the milestone roadmap.
 
 ---
 
@@ -30,7 +30,7 @@ nix develop
 make check
 ```
 
-This pins Agda 2.8.0 and standard-library 2.3 automatically via the repository's flake.  See [`doc/INSTALL.md`](doc/INSTALL.md) for a walkthrough and non-Nix alternatives.
+This pins Agda 2.8.0 and standard-library 2.3 automatically via the repository's flake.  See [`INSTALL.md`](INSTALL.md) for a walkthrough and non-Nix alternatives.
 
 ### Editor
 

@@ -30,7 +30,7 @@ The following behaviors are unacceptable within our community:
 
 ## Reporting an Issue
 
-If you experience or witness behavior that violates this Code of Conduct, please report it by emailing [{REPORTING_EMAIL}](mailto:{REPORTING_EMAIL}).
+If you experience or witness behavior that violates this Code of Conduct, please report it by emailing [williamdemeo at gmail](mailto:williamdemeo@gmail.com).
 
 Reports will be reviewed by the project maintainers.  We will keep reports confidential to the extent possible while still enabling an appropriate response, and we will respond to the reporter within one week.
 
