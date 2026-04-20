@@ -1,0 +1,127 @@
+# =============================================================================
+#  ci.yml — CI Pipeline for agda-algebras
+#  ----------------------------------------------------------------------------
+#
+#  Single lane: type-check the library.
+#
+#  The workflow reuses the project's Nix flake, so CI runs exactly the same
+#  command a developer runs locally: `nix develop --command make check`.
+#  Agda 2.8.0 and standard-library 2.3 are pinned by flake.lock.
+#
+#  Design notes.
+#
+#    + We don't use wenkokke/setup-agda: latest release (v2.5.0, October
+#      2024) maxes at Agda 2.7.0.1.
+#
+#    + Cachix provides the Nix binary cache so Agda + stdlib resolve in
+#      seconds rather than minutes on warm runs, including forks.  On
+#      CACHIX_AUTH_TOKEN absence (e.g. external-fork PRs), the action
+#      falls back to read-only public cache — still a fast install.
+#
+#    + .agdai interface files are cached separately via actions/cache,
+#      keyed on flake.lock + the hash of src/ and agda-algebras.agda-lib.
+#      Agda's own interface-file hash check guarantees that restoring
+#      stale .agdai files is correctness-safe — it will rebuild them if
+#      the source has changed, so we use a generous restore-keys fallback.
+#
+#    + The `all-green` aggregator gate exists so that branch protection
+#      can be configured against a single stable status-check name even
+#      as we add more lanes later (e.g. M1-? weekly Agda-dev job).
+#
+#    + FORCE_JAVASCRIPT_ACTIONS_TO_NODE24 opts us into the upcoming
+#      (2026-06-02) Node 24 default ahead of the deadline.
+#
+# =============================================================================
+
+name: CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Opt into the Node 24 default ahead of GitHub's 2026-06-02 transition.
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Type-check library
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+
+      - name: Set up Cachix
+        uses: cachix/cachix-action@v16
+        with:
+          name: formalverification
+          # Read-only fallback on external-fork PRs where the secret is
+          # unavailable.  See cachix/cachix-action docs.
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+
+      - name: Validate flake
+        run: nix flake check --no-build
+
+      - name: Cache .agdai interface files
+        uses: actions/cache@v4
+        with:
+          path: |
+            src/**/*.agdai
+          key: agdai-${{ runner.os }}-${{ hashFiles('flake.lock') }}-${{ hashFiles('src/**/*.agda', 'agda-algebras.agda-lib') }}
+          restore-keys: |
+            agdai-${{ runner.os }}-${{ hashFiles('flake.lock') }}-
+
+      - name: Show toolchain versions
+        run: |
+          set -euxo pipefail
+          nix develop --command bash -c '
+            echo "=== Toolchain ==="
+            echo "Agda    : $(agda --version | head -n1)"
+            echo "stdlib  : $(cat .agda/libraries 2>/dev/null || echo "(AGDA_DIR not yet initialized)")"
+            echo "nix     : $(nix --version)"
+          '
+
+      - name: Type-check the library
+        run: |
+          set -euxo pipefail
+          nix develop --command make check
+
+  # ---------------------------------------------------------------------------
+  # Aggregate status: a single stable required-check name for branch
+  # protection.  Uses `if: always()` so that skipped/conditional jobs added
+  # in the future don't block the gate.
+  # ---------------------------------------------------------------------------
+  all-green:
+    name: All checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    if: always()
+    needs: [check]
+    steps:
+      - name: Verify all required jobs passed
+        run: |
+          set -euxo pipefail
+          results=( "${{ needs.check.result }}" )
+          for r in "${results[@]}"; do
+            if [ "$r" = "failure" ] || [ "$r" = "cancelled" ]; then
+              echo "A required job ended with result: $r"
+              exit 1
+            fi
+          done
+          echo "All required jobs passed. ✅"
