@@ -69,7 +69,7 @@ Then install standard-library 2.3:
 git clone --branch v2.3 --depth 1 https://github.com/agda/agda-stdlib.git ~/agda-stdlib-2.3
 mkdir -p ~/.config/agda
 echo "$HOME/agda-stdlib-2.3/standard-library.agda-lib" >> ~/.config/agda/libraries
-echo "standard-library" >> ~/.config/agda/defaults
+echo "standard-library-2.3" >> ~/.config/agda/defaults
 ```
 
 Verify the installation from a clone of agda-algebras:
