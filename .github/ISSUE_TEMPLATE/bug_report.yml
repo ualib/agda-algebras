@@ -1,0 +1,65 @@
+name: Bug report
+description: Report something that's broken in agda-algebras.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug.  Please fill in the fields below so we can reproduce and diagnose the issue quickly.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear description of the problem.  What did you do?  What did you expect?  What happened instead?
+      placeholder: I ran `make check` and got error X on module Y...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: The smallest Agda snippet or set of commands that reproduces the issue.  If the issue is environmental, describe your setup.
+      render: shell
+    validations:
+      required: true
+
+  - type: input
+    id: agda-version
+    attributes:
+      label: Agda version
+      description: Output of `agda --version`.
+      placeholder: "Agda version 2.8.0"
+    validations:
+      required: true
+
+  - type: input
+    id: stdlib-version
+    attributes:
+      label: Standard-library version
+      placeholder: "2.3"
+    validations:
+      required: true
+
+  - type: input
+    id: agda-algebras-commit
+    attributes:
+      label: agda-algebras commit
+      description: Output of `git rev-parse --short HEAD`.
+      placeholder: "e.g. a1b2c3d"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: install-method
+    attributes:
+      label: Installation method
+      options:
+        - Nix (`nix develop`)
+        - Agda Python installer
+        - Prebuilt binary from Agda releases
+        - Cabal from Hackage
+        - Other (describe in reproduction section)
+    validations:
+      required: true
