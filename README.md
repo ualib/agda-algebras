@@ -8,7 +8,7 @@
 
 A formalization of universal algebra in [Agda](https://wiki.portal.chalmers.se/agda/pmwiki.php), built on the [Agda standard library](https://github.com/agda/agda-stdlib).
 
-**Status.** Version 2.0 is under active development on `master`. The library currently targets Agda 2.8.0 and standard-library 2.3. Expect breaking changes until 2.0 is released; see [docs/GITHUB_PROJECT.md](docs/GITHUB_PROJECT.md) for the milestone plan.
+**Status.** Version 3.0 is under active development on `master`. The library currently targets Agda 2.8.0 and standard-library 2.3. Expect breaking changes until 3.0 is released; see [docs/GITHUB_PROJECT.md](docs/GITHUB_PROJECT.md) for the milestone plan.
 
 The **previous** version (called `UALib`, built against [TypeTopology](https://github.com/martinescardo/TypeTopology)) is no longer maintained but remains available:
 
