@@ -1,0 +1,42 @@
+name: Design discussion
+description: Propose or debate a design decision.
+labels: ["design-discussion"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Design-discussion issues are for questions that need to be settled before code is written — should X be a record or a Σ-type?  Which of two naming conventions should we adopt?  Does Y belong in `Setoid/` or `Classical/`?
+
+        For reference, ratified design decisions are recorded in `docs/adr/` (Architecture Decision Records).
+
+  - type: textarea
+    id: question
+    attributes:
+      label: The question
+      description: What decision needs to be made?
+    validations:
+      required: true
+
+  - type: textarea
+    id: options
+    attributes:
+      label: Options under consideration
+      description: List the options with their tradeoffs.  If you have a preferred option, say which and why.
+    validations:
+      required: true
+
+  - type: textarea
+    id: constraints
+    attributes:
+      label: Constraints and stakeholders
+      description: Who is affected by this decision?  What downstream code depends on it?  Are there backwards-compatibility concerns?
+    validations:
+      required: false
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed resolution
+      description: If you have a specific resolution in mind, sketch it here.  If you want to leave it open for discussion, that's fine too.
+    validations:
+      required: false

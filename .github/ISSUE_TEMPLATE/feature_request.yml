@@ -1,0 +1,57 @@
+name: Feature request
+description: Suggest a new definition, theorem, or capability for the library.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting something for agda-algebras.  Before you fill this out, please check the project roadmap in [`docs/GITHUB_PROJECT.md`](../blob/master/docs/GITHUB_PROJECT.md) — the change you're proposing may already be planned.
+
+  - type: textarea
+    id: what
+    attributes:
+      label: What are you proposing?
+      description: A clear description of the definition, theorem, or capability you'd like to see added.
+    validations:
+      required: true
+
+  - type: textarea
+    id: why
+    attributes:
+      label: Why is this useful?
+      description: What can users do with this that they can't do now?  What does it enable downstream?
+    validations:
+      required: true
+
+  - type: textarea
+    id: mathematical-context
+    attributes:
+      label: Mathematical context
+      description: If this is a formalization of existing mathematics, cite the source (textbook and page, or paper and theorem number).  If it's novel, say so.
+    validations:
+      required: false
+
+  - type: dropdown
+    id: tree
+    attributes:
+      label: Which tree does this belong in?
+      options:
+        - Setoid/ (canonical for 2.0)
+        - Classical/ (specific algebraic theories)
+        - Cubical/ (long-term 3.0 target)
+        - Not sure
+    validations:
+      required: true
+
+  - type: dropdown
+    id: milestone-fit
+    attributes:
+      label: Does this fit an existing milestone?
+      options:
+        - "M3 — Classical structures"
+        - "M6 — FLRP prerequisites"
+        - "M7 — CSP (finite templates)"
+        - "M9 — Applications of continuous relations"
+        - Other / none
+    validations:
+      required: false
