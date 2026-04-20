@@ -16,33 +16,33 @@ from a single markdown file using the GitHub API.
 
 The following commands assume the GitHub project/issue generation script is at
 `scripts/gh_project_populate.py` and the Markdown file containing the
-label/project/issue descriptions is `doc/GITHUB_PROJECT.md`.
+label/project/issue descriptions is `docs/GITHUB_PROJECT.md`.
 
 +  Dry run — see what would be created (from the main project directory).
 
    ```zsh
-   python3 scripts/gh_project_populate.py doc/GITHUB_PROJECT.md --repo ualib/agda-algebras --dry-run
+   python3 scripts/gh_project_populate.py docs/GITHUB_PROJECT.md --repo ualib/agda-algebras --dry-run
    ```
 
 +  Create everything (will prompt for confirmation).
 
 
    ```zsh
-   python3 scripts/gh_project_populate.py doc/GITHUB_PROJECT.md --repo ualib/agda-algebras
+   python3 scripts/gh_project_populate.py docs/GITHUB_PROJECT.md --repo ualib/agda-algebras
    ```
 
 +  Or create in stages.
 
    ```zsh
-   python3 scripts/gh_project_populate.py doc/GITHUB_PROJECT.md --repo ualib/agda-algebras --labels-only
-   python3 scripts/gh_project_populate.py doc/GITHUB_PROJECT.md --repo ualib/agda-algebras --milestones-only
-   python3 scripts/gh_project_populate.py doc/GITHUB_PROJECT.md --repo ualib/agda-algebras --issues-only
+   python3 scripts/gh_project_populate.py docs/GITHUB_PROJECT.md --repo ualib/agda-algebras --labels-only
+   python3 scripts/gh_project_populate.py docs/GITHUB_PROJECT.md --repo ualib/agda-algebras --milestones-only
+   python3 scripts/gh_project_populate.py docs/GITHUB_PROJECT.md --repo ualib/agda-algebras --issues-only
    ```
 
 +  Resume if interrupted (e.g., start from issue M1-3).
 
    ```zsh
-   python3 scripts/gh_project_populate.py doc/GITHUB_PROJECT.md --repo ualib/agda-algebras --issues-only --start-from M1-3
+   python3 scripts/gh_project_populate.py docs/GITHUB_PROJECT.md --repo ualib/agda-algebras --issues-only --start-from M1-3
    ```
 
 ### Notes

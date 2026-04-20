@@ -1,4 +1,4 @@
-<!-- File: doc/GITHUB_PROJECT.md -->
+<!-- File: docs/GITHUB_PROJECT.md -->
 
 # agda-algebras — GitHub Project Roadmap
 
@@ -9,6 +9,11 @@
 **Date**:  2026-04-19
 
 ---
+
+## Short Description
+
+Modernization of agda-algebras in 9 milestones: tooling upgrade/infra (M1), consolidate Base/Setoid (M2), classical structures (M3), style/naming uniformity (M4), Cubical Agda (M5), FLRP (M6), complexity/CSP module (M7), training corpus/LLM (M8), novel-research apps of `Continuous` relation API (M9).
+
 
 ## Project Description
 
@@ -161,21 +166,21 @@ Below, each issue is tagged with its milestone (**M1**, **M2**, etc.), suggested
 
 **Milestone**:  1 — Infrastructure health
 
-#### Description
+## Description
 
 The library is currently pinned to Agda 2.6.2 / stdlib 1.7.  The Agda ecosystem has moved on: the current stable is Agda 2.8.0 (July 2025) and stdlib v2.3.  `--without-K` has been superseded by `--cubical-compatible` since Agda 2.6.3.  This issue tracks the full upgrade.  Blocks essentially every other issue in this project.
 
-#### Tasks
+## Tasks
 
 - [ ] Update `agda-algebras.agda-lib` to `depend: standard-library-2.3` and document the minimum Agda version as 2.8.0.
 - [ ] Replace every `{-# OPTIONS --without-K --exact-split --safe #-}` with `{-# OPTIONS --cubical-compatible --exact-split --safe #-}`.
 - [ ] Fix any regressions from the flag change.
 - [ ] Update import paths for anything that moved between stdlib 1.7 and 2.3 (expected hotspots: `Function.Bundles`, `Relation.Binary.*` renamings, `Data.*` reorganizations).
 - [ ] Update CI config to test against Agda 2.8.0 / stdlib 2.3.
-- [ ] Update `README.md` and `doc/INSTALL.md` to reflect the new requirements.
+- [ ] Update `README.md` and `INSTALL.md` to reflect the new requirements.
 - [ ] Update the Nix flake.
 
-#### Acceptance criteria
+## Acceptance criteria
 
 - [ ] Library type-checks under Agda 2.8.0 / stdlib v2.3.
 - [ ] `make check` succeeds locally.
@@ -190,11 +195,11 @@ The library is currently pinned to Agda 2.6.2 / stdlib 1.7.  The Agda ecosystem 
 
 **Milestone**:  1 — Infrastructure health
 
-#### Description
+## Description
 
 The library has no CI.  Contributors can break type-checking without maintainers noticing.  Add a GitHub Actions workflow that type-checks the library on each push and pull request.  Reference workflows: `agda-categories` and the stdlib itself both have well-maintained CI that can be adapted.
 
-#### Tasks
+## Tasks
 
 - [ ] Add `.github/workflows/ci.yml`.
 - [ ] Install Agda at the pinned version (Agda 2.8.0; see M1-1).
@@ -203,7 +208,7 @@ The library has no CI.  Contributors can break type-checking without maintainers
 - [ ] Cache the Agda binary and `.agdai` files between runs.
 - [ ] Display a CI badge in the README.
 
-#### Acceptance criteria
+## Acceptance criteria
 
 - [ ] CI runs green on `main`.
 - [ ] CI triggers on every pull request.
@@ -218,11 +223,11 @@ The library has no CI.  Contributors can break type-checking without maintainers
 
 **Milestone**:  1 — Infrastructure health
 
-#### Description
+## Description
 
 Standard community-health files are missing.  Drafts of CONTRIBUTING and STYLE exist from the 2.0 planning cycle and can be merged after review.
 
-#### Tasks
+## Tasks
 
 - [ ] Add `CONTRIBUTING.md` (draft from planning cycle).
 - [ ] Add `CHANGELOG.md` seeded with the 2.0 milestone entry.
@@ -230,7 +235,7 @@ Standard community-health files are missing.  Drafts of CONTRIBUTING and STYLE e
 - [ ] Add `.github/ISSUE_TEMPLATE/` with bug-report, feature-request, and design-discussion templates.
 - [ ] Add `.github/PULL_REQUEST_TEMPLATE.md`.
 
-#### Acceptance criteria
+## Acceptance criteria
 
 - [ ] All four files exist at the repo root (or in `.github/`).
 - [ ] GitHub recognizes the community-health files (green checkmarks on the "Insights → Community" page).
@@ -243,16 +248,16 @@ Standard community-health files are missing.  Drafts of CONTRIBUTING and STYLE e
 
 **Milestone**:  1 — Infrastructure health
 
-#### Description
+## Description
 
 Create `docs/STYLE.md` documenting file format, module structure, naming conventions, notation, universe-polymorphism practices, record vs Σ guidance, proof style, and library-as-training-corpus considerations.  A draft from the planning cycle is ready for review.  Applying the style guide across `Setoid/` and `Classical/` is tracked in M4-1.
 
-#### Tasks
+## Tasks
 
 - [ ] Merge `docs/STYLE.md` (draft from planning cycle).
 - [ ] Link `STYLE.md` from `README.md` and `CONTRIBUTING.md`.
 
-#### Acceptance criteria
+## Acceptance criteria
 
 - [ ] `docs/STYLE.md` is merged.
 - [ ] Links from README and CONTRIBUTING work.
@@ -265,11 +270,11 @@ Create `docs/STYLE.md` documenting file format, module structure, naming convent
 
 **Milestone**:  1 — Infrastructure health
 
-#### Description
+## Description
 
-The current `README.md` and `doc/lagda/Preface.lagda` are 1.x-era: wrong Agda versions, obsolete installation paths, pre-consolidation library structure.  They need a rewrite aligned with the 2.0 release.  Depends on M1-1 through M1-4 and M2-1.
+The current `README.md` and `docs/lagda/Preface.lagda` are 1.x-era: wrong Agda versions, obsolete installation paths, pre-consolidation library structure.  They need a rewrite aligned with the 2.0 release.  Depends on M1-1 through M1-4 and M2-1.
 
-#### Tasks
+## Tasks
 
 - [ ] Pin Agda 2.8.0 / stdlib 2.3 in install instructions.
 - [ ] Describe the Setoid-as-canonical structure and point to `Classical/`.
@@ -277,7 +282,7 @@ The current `README.md` and `doc/lagda/Preface.lagda` are 1.x-era: wrong Agda ve
 - [ ] Concrete quickstart for new users (5-command install → `make check`).
 - [ ] Add CI badge (from M1-2) and documentation site link.
 
-#### Acceptance criteria
+## Acceptance criteria
 
 - [ ] A reviewer can follow the README on a clean machine to a working `make check` without asking questions.
 - [ ] All links resolve.
@@ -291,11 +296,11 @@ The current `README.md` and `doc/lagda/Preface.lagda` are 1.x-era: wrong Agda ve
 
 **Milestone**:  1 — Infrastructure health
 
-#### Description
+## Description
 
 As the library evolves, design decisions (Setoid vs Base canonicality, record vs Σ for classical structures, Cubical track planning) should be recorded so future contributors understand the rationale.  Use Michael Nygard's lightweight ADR format (one page per decision).
 
-#### Tasks
+## Tasks
 
 - [ ] Create `docs/adr/` directory.
 - [ ] Add `docs/adr/README.md` explaining the ADR format.
@@ -305,7 +310,7 @@ As the library evolves, design decisions (Setoid vs Base canonicality, record vs
   - `002-classical-layer-design.md` (from M3-1);
   - `003-cubical-canonical-target.md` (from M5-1).
 
-#### Acceptance criteria
+## Acceptance criteria
 
 - [ ] `docs/adr/` exists with README and template.
 - [ ] All three seeded ADRs are drafted (full content can land with the associated implementation issues).
@@ -346,7 +351,7 @@ graph TD
 
 **Milestone**:  2 — Consolidation
 
-#### Description
+## Description
 
 The decision is ratified: `Setoid/` is the canonical development tree for 2.0; `Base/` is frozen and moved to `Legacy/Base/`.  Rationale: `Setoid/` is fully constructive (no extensionality postulates); it matches the stdlib `Algebra.Bundles` idiom which simplifies bridges; maintaining two trees indefinitely doubles every theorem's cost; `Setoid/` already contains the definitive HSP proof.
 
@@ -354,7 +359,7 @@ Note: `Base/` remains in the repo — frozen, not deleted — for posterity and 
 
 This is a breaking change for downstream users of `Base/`.  Announce prominently in the 2.0 CHANGELOG.
 
-#### Tasks
+## Tasks
 
 - [ ] Move `src/Base/` → `src/Legacy/Base/`.
 - [ ] Update `src/agda-algebras.agda` to re-export `Legacy.Base` with a deprecation note.
@@ -362,7 +367,7 @@ This is a breaking change for downstream users of `Base/`.  Announce prominently
 - [ ] Write ADR `docs/adr/001-setoid-as-canonical.md`.
 - [ ] Announce in CHANGELOG.
 
-#### Acceptance criteria
+## Acceptance criteria
 
 - [ ] `src/Base/` no longer exists at the old path.
 - [ ] `src/Legacy/Base/` exists and type-checks.
@@ -377,18 +382,18 @@ This is a breaking change for downstream users of `Base/`.  Announce prominently
 
 **Milestone**:  2 — Consolidation
 
-#### Description
+## Description
 
 `Base.Structures.Basic` defines multi-sorted structures as records; `Base.Structures.Sigma.*` does the same thing as Σ-types.  They are parallel implementations of the same concept, each with its own `Products`, `Congruences`, `Homs`, `Isos`.  Since `Base/` is frozen (see M2-1), scope is limited to Legacy cleanup, but worth doing for clarity.
 
-#### Tasks
+## Tasks
 
 - [ ] Pick one formulation (record or Σ) as canonical within Legacy.
 - [ ] Add conversion functions where they don't already exist.
 - [ ] Update internal uses to the canonical form.
 - [ ] Keep the non-canonical form under a distinct namespace with a deprecation note.
 
-#### Acceptance criteria
+## Acceptance criteria
 
 - [ ] `Legacy/Base/Structures/` has a single canonical implementation of each concept.
 - [ ] The non-canonical namespace is clearly marked deprecated.
@@ -401,17 +406,17 @@ This is a breaking change for downstream users of `Base/`.  Announce prominently
 
 **Milestone**:  2 — Consolidation
 
-#### Description
+## Description
 
 `src/Base/Structures/Graphs0.agda` is not exported `public` from `Base/Structures.agda` and appears to be an abandoned experimental earlier version of `Base/Structures/Graphs.agda`.
 
-#### Tasks
+## Tasks
 
 - [ ] Investigate for any downstream dependency on `Graphs0`.
 - [ ] If none, delete the file.
 - [ ] If still referenced, rename to `Graphs.Alternative` with a comment explaining the distinction.
 
-#### Acceptance criteria
+## Acceptance criteria
 
 - [ ] `Graphs0` is either deleted or clearly renamed with documentation.
 - [ ] Library still type-checks.
@@ -424,7 +429,7 @@ This is a breaking change for downstream users of `Base/`.  Announce prominently
 
 **Milestone**:  2 — Consolidation
 
-#### Description
+## Description
 
 The library contains three proofs of Birkhoff's HSP theorem:
 
@@ -432,15 +437,15 @@ The library contains three proofs of Birkhoff's HSP theorem:
 2. `Setoid.Varieties.HSP.Birkhoff` (definitive setoid proof).
 3. `Demos.HSP.Birkhoff` (self-contained pedagogical version for TYPES 2021).
 
-#### Tasks
+## Tasks
 
 - [ ] Designate `Setoid.Varieties.HSP.Birkhoff` as canonical.
 - [ ] Keep `Demos.HSP` as the self-contained pedagogical presentation (it was created for TYPES 2021 and remains valuable as a teaching artifact).
 - [ ] Move `Base.Varieties.FreeAlgebras.Birkhoff` into Legacy (implicit via M2-1, but cross-reference explicitly).
 - [ ] Add cross-references among the three so a reader starting at any of them can find the canonical statement.
-- [ ] Update paper citations in `doc/papers/`.
+- [ ] Update paper citations in `docs/papers/`.
 
-#### Acceptance criteria
+## Acceptance criteria
 
 - [ ] `Setoid.Varieties.HSP.Birkhoff` is marked canonical in its module header.
 - [ ] `Demos.HSP` contains a reference to the canonical version.
@@ -479,7 +484,7 @@ graph TD
 
 **Milestone**:  3 — Classical structures layer
 
-#### Description
+## Description
 
 The library has no formalized classical algebraic structures despite this being a long-stated vision.  This issue creates the scaffold; subsequent issues add specific structures.
 
@@ -491,25 +496,25 @@ Ratified design decisions (to be recorded in `docs/adr/002-classical-layer.md`):
 4. Designed for Cubical portability.  Equations stated purely in terms of `Algebra.Domain`'s equivalence — never reaching for Setoid-specific features without a Cubical analog.  When `Cubical/` becomes canonical in 3.0, the port should be mechanical.
 5. Two levels of specificity per structure: polymorphic core (`Classical.Structures.X`) and level-fixed veneer (`Classical.Small.Structures.X`) for the common `ℓ₀` case.
 
-#### Tasks
+## Tasks
 
 - [ ] Create the directory skeleton:
 
-```
-src/Classical/
-  Classical.agda
-  Signatures/
-  Theories/
-  Structures/
-  Bundles/
-  Small/Structures/
-```
+   ```
+   src/Classical/
+     Classical.agda
+     Signatures/
+     Theories/
+     Structures/
+     Bundles/
+     Small/Structures/
+   ```
 
 - [ ] Add placeholder modules that type-check.
 - [ ] Write `Classical.agda` that re-exports everything.
 - [ ] Write `docs/adr/002-classical-layer.md` recording the design decisions.
 
-#### Acceptance criteria
+## Acceptance criteria
 
 - [ ] Scaffold type-checks.
 - [ ] `Classical.agda` re-exports the empty scaffold cleanly.
@@ -523,11 +528,11 @@ src/Classical/
 
 **Milestone**:  3 — Classical structures layer
 
-#### Description
+## Description
 
 After the M3-1 scaffold lands, add Semigroup as the pattern-setting first non-trivial classical structure.  Every subsequent classical structure will imitate this pattern, so getting it right is disproportionately important.
 
-#### Tasks
+## Tasks
 
 - [ ] `Classical/Signatures/Semigroup.agda`: one binary operation, `𝑆ₛ`.
 - [ ] `Classical/Theories/Semigroup.agda`: associativity as the single equation in `Theory 𝑆ₛ`.
@@ -538,7 +543,7 @@ After the M3-1 scaffold lands, add Semigroup as the pattern-setting first non-tr
 - [ ] `Classical/Bundles/Semigroup.agda` with stdlib bridge (see M3-3).
 - [ ] `Classical/Small/Structures/Semigroup.agda` level-fixed veneer.
 
-#### Acceptance criteria
+## Acceptance criteria
 
 - [ ] All files type-check.
 - [ ] The worked example `ℕ-semigroup` type-checks.
@@ -553,11 +558,11 @@ After the M3-1 scaffold lands, add Semigroup as the pattern-setting first non-tr
 
 **Milestone**:  3 — Classical structures layer
 
-#### Description
+## Description
 
 For each classical structure `X`, provide `Classical/Bundles/X.agda` with bidirectional conversion between the Σ-typed core and the stdlib's `Algebra.Bundles.X`.
 
-#### Tasks
+## Tasks
 
 Phase 1 (after M3-2):
 
@@ -577,7 +582,7 @@ Phase 2:
 - [ ] Ring.
 - [ ] CommutativeRing.
 
-#### Acceptance criteria
+## Acceptance criteria
 
 - [ ] Each bundle file proves round-trip properties where applicable.
 - [ ] A stdlib concrete instance (e.g. stdlib's `ℕ-+-commutativeMonoid`) round-trips through the bridge.
@@ -590,11 +595,11 @@ Phase 2:
 
 **Milestone**:  3 — Classical structures layer
 
-#### Description
+## Description
 
 Follow the pattern established in M3-2 to add the monoid-and-group family, with corresponding signatures, theories, bundle views, and level-fixed veneers.
 
-#### Tasks
+## Tasks
 
 - [ ] `Classical/Structures/Monoid.agda`.
 - [ ] `Classical/Structures/CommutativeMonoid.agda`.
@@ -603,7 +608,7 @@ Follow the pattern established in M3-2 to add the monoid-and-group family, with 
 - [ ] Corresponding signatures, theories, bundles (per M3-3), Small veneers.
 - [ ] Worked examples: `(ℕ, +, 0)` as CommutativeMonoid; `(ℤ, +, 0, -)` as AbelianGroup.
 
-#### Acceptance criteria
+## Acceptance criteria
 
 - [ ] All four structures type-check and round-trip through their bundles.
 - [ ] Worked examples type-check.
@@ -616,11 +621,11 @@ Follow the pattern established in M3-2 to add the monoid-and-group family, with 
 
 **Milestone**:  3 — Classical structures layer
 
-#### Description
+## Description
 
 Lattices are centrally important because `Con 𝑨` and `Sub 𝑨` are naturally lattices, and the Finite Lattice Representation Problem (M6) is stated in terms of lattices.
 
-#### Tasks
+## Tasks
 
 - [ ] `Classical/Signatures/Lattice.agda`: two binary operations (`∧`, `∨`) or one (meet), depending on formulation.
 - [ ] `Classical/Theories/Lattice.agda`: associativity, commutativity, idempotence, absorption.
@@ -629,7 +634,7 @@ Lattices are centrally important because `Con 𝑨` and `Sub 𝑨` are naturally
 - [ ] Bridge to `Algebra.Lattice.Bundles`.
 - [ ] Prove equivalence of algebraic (meet-join) and order-theoretic formulations.
 
-#### Acceptance criteria
+## Acceptance criteria
 
 - [ ] Both structures type-check.
 - [ ] The meet-join / order-theoretic equivalence theorem is proved.
@@ -643,11 +648,11 @@ Lattices are centrally important because `Con 𝑨` and `Sub 𝑨` are naturally
 
 **Milestone**:  3 — Classical structures layer
 
-#### Description
+## Description
 
 Rings depend on AbelianGroup for the additive structure, so this issue comes after M3-4.
 
-#### Tasks
+## Tasks
 
 - [ ] `Classical/Signatures/Ring.agda`.
 - [ ] `Classical/Theories/Ring.agda`.
@@ -656,7 +661,7 @@ Rings depend on AbelianGroup for the additive structure, so this issue comes aft
 - [ ] Bridge to stdlib.
 - [ ] Worked example: `(ℤ, +, *, 0, 1, -)` as CommutativeRing.
 
-#### Acceptance criteria
+## Acceptance criteria
 
 - [ ] Both structures type-check.
 - [ ] The worked example `ℤ-ring` type-checks.
@@ -670,11 +675,11 @@ Rings depend on AbelianGroup for the additive structure, so this issue comes aft
 
 **Milestone**:  3 — Classical structures layer
 
-#### Description
+## Description
 
 The `Examples/` directory is thin.  Add worked examples that exercise the Classical/ layer.
 
-#### Tasks
+## Tasks
 
 - [ ] `(ℕ, +, 0)` as a `CommutativeMonoid`, with HSP specialized to it.
 - [ ] `(ℤ, +, 0, -)` as an `AbelianGroup`.
@@ -682,7 +687,7 @@ The `Examples/` directory is thin.  Add worked examples that exercise the Classi
 - [ ] A small finite group (`ℤ/3ℤ`) with its congruence lattice computed.
 - [ ] A finite Heyting algebra as a Lattice example.
 
-#### Acceptance criteria
+## Acceptance criteria
 
 - [ ] At least five new example files in `Examples/Classical/`.
 - [ ] Each example type-checks and is documented in a prose header.
@@ -729,11 +734,11 @@ graph TD
 
 **Milestone**:  4 — Style and naming uniformity sweep
 
-#### Description
+## Description
 
 Apply `docs/STYLE.md` across the `Setoid/` tree.  This is a long-tail task that can be decomposed into per-submodule issues for parallel work.
 
-#### Tasks
+## Tasks
 
 - [ ] Audit naming: `IsHom` vs `is-homomorphism` vs `Hom` — pick one, deprecate others.
 - [ ] Audit notation against the canonical symbol table in STYLE.md.
@@ -741,7 +746,7 @@ Apply `docs/STYLE.md` across the `Setoid/` tree.  This is a long-tail task that 
 - [ ] Ensure every public definition has a prose comment block.
 - [ ] Rich comment headers on every module.
 
-#### Acceptance criteria
+## Acceptance criteria
 
 - [ ] No synonym pairs remain in the `Setoid/` public API.
 - [ ] All notation in `Setoid/` matches the canonical table in STYLE.md.
@@ -755,17 +760,17 @@ Apply `docs/STYLE.md` across the `Setoid/` tree.  This is a long-tail task that 
 
 **Milestone**:  4 — Style and naming uniformity sweep
 
-#### Description
+## Description
 
 Every record, type family, and top-level function in the public API should have a prose comment block explaining what it is, when to use it, and cross-references to related definitions.  Long-tail task; pursue in small per-module PRs.
 
-#### Tasks
+## Tasks
 
 - [ ] Walk every public module in `Setoid/` and add missing docstrings.
 - [ ] Walk every public module in `Classical/` and add missing docstrings.
 - [ ] Enforce via a linter or review checklist.
 
-#### Acceptance criteria
+## Acceptance criteria
 
 - [ ] `grep`-based audit finds zero public definitions without a preceding comment block.
 
@@ -777,11 +782,11 @@ Every record, type family, and top-level function in the public API should have 
 
 **Milestone**:  4 — Style and naming uniformity sweep
 
-#### Description
+## Description
 
 `Overture.Signatures` declares `variable 𝓞 𝓥 : Level` without `private`.  They leak through every downstream module, which is convenient but can be confusing for new contributors shadowing the names.
 
-#### Tasks
+## Tasks
 
 - [ ] Write up the three options in an ADR or design-discussion issue:
   1. Keep current behavior; document clearly.
@@ -791,7 +796,7 @@ Every record, type family, and top-level function in the public API should have 
 - [ ] Document the decision in STYLE.md.
 - [ ] Apply consistently.
 
-#### Acceptance criteria
+## Acceptance criteria
 
 - [ ] Decision is recorded (ADR or STYLE.md section).
 - [ ] `𝓞` and `𝓥` are handled uniformly across the library.
@@ -809,13 +814,13 @@ Every record, type family, and top-level function in the public API should have 
 
 **Milestone**:  5 — Cubical track (canonical long-term target)
 
-#### Description
+## Description
 
 Cubical Agda is the canonical long-term target for this library.  This issue establishes the path: port the core algebra types, prove the structure identity principle (SIP), and demonstrate end-to-end workflow by porting Monoid from the Setoid-based Classical layer to a Cubical counterpart.  The ultimate goal is for Cubical to become the default development track in version 3.0, with `Setoid/` moving to Legacy.
 
 Design implication for M3: the Classical layer must be designed so that the Setoid-to-Cubical port is mechanical — equations stated purely in terms of the `Algebra` record's Domain equivalence, no Setoid-specific gadgets in the definitions of classical structures themselves.
 
-#### Tasks
+## Tasks
 
 - [ ] `Cubical/Algebras/Basic.agda`: cubical counterpart of `Setoid.Algebras.Basic`.  Carrier is a Type; equality is the path type.
 - [ ] `Cubical/Algebras/SIP.agda`: structure identity principle.  Port or adapt from the `cubical` or `1Lab` library.
@@ -823,7 +828,7 @@ Design implication for M3: the Classical layer must be designed so that the Seto
 - [ ] End-to-end port: take `Classical/Structures/Monoid.agda` from the Setoid-based version (post M3-4) and produce the Cubical analog.  Verify that equations transport by substitution alone.
 - [ ] Write `docs/adr/003-cubical-canonical-target.md` explicitly planning the 3.0 transition and the criteria for promoting Cubical from experimental to canonical.
 
-#### Acceptance criteria
+## Acceptance criteria
 
 - [ ] `Cubical/Algebras/Basic.agda` and `SIP.agda` compile under `--cubical`.
 - [ ] The `≅`-is-path theorem is proved.
@@ -843,11 +848,11 @@ Design implication for M3: the Classical layer must be designed so that the Seto
 
 **Milestone**:  6 — Toward the Finite Lattice Representation Problem
 
-#### Description
+## Description
 
 The current `Setoid.Algebras.Congruences` defines congruences but does not organize them as a lattice.  For the FLRP, commutator theory, and subdirect product theorems, `Con 𝑨` as a complete lattice is foundational infrastructure.  Likely requires a congruence-generation theorem as a subsidiary result.
 
-#### Tasks
+## Tasks
 
 - [ ] Define `Con 𝑨` as a type (may exist already; promote to a first-class lattice object).
 - [ ] Define the partial order `_≤_` (containment).
@@ -858,7 +863,7 @@ The current `Setoid.Algebras.Congruences` defines congruences but does not organ
 - [ ] Zero and total congruences as `⊥` and `⊤`.
 - [ ] Subsidiary: congruence-generation theorem.
 
-#### Acceptance criteria
+## Acceptance criteria
 
 - [ ] `Con-Lattice 𝑨` type-checks and satisfies the Lattice axioms.
 - [ ] Infinite meets and joins are proved.
@@ -872,18 +877,18 @@ The current `Setoid.Algebras.Congruences` defines congruences but does not organ
 
 **Milestone**:  6 — Toward the Finite Lattice Representation Problem
 
-#### Description
+## Description
 
 Subdirect products and subdirect irreducibility are foundational for both the FLRP and for general universal-algebraic theorems (e.g. Birkhoff's subdirect product theorem).
 
-#### Tasks
+## Tasks
 
 - [ ] `SubdirectProduct : (𝒜 : I → Algebra α ρ) → Algebra _ _` — embeds into `⨅ 𝒜` with each projection surjective.
 - [ ] `IsSubdirectlyIrreducible : Algebra α ρ → Type _`.
 - [ ] Birkhoff's subdirect product theorem: every algebra is a subdirect product of SI algebras.
 - [ ] SI characterization via monolithic congruences.
 
-#### Acceptance criteria
+## Acceptance criteria
 
 - [ ] Subdirect product construction type-checks.
 - [ ] Birkhoff's subdirect product theorem is proved.
@@ -897,13 +902,13 @@ Subdirect products and subdirect irreducibility are foundational for both the FL
 
 **Milestone**:  6 — Toward the Finite Lattice Representation Problem
 
-#### Description
+## Description
 
 Maltsev conditions characterize varieties by the existence of terms with specific properties.  The three most basic are congruence distributivity (CD), congruence modularity (CM), and congruence permutability (CP).  For the FLRP, congruence modularity is particularly relevant because modular congruence lattices are a natural testing ground for representation questions.
 
 Design discussion: how to encode Maltsev conditions uniformly?  Options include (a) a record bundling a term and its identities; (b) an inductive type of schemes.  Lift from Taylor 1977 where possible.
 
-#### Tasks
+## Tasks
 
 - [ ] `HasMaltsevTerm : Variety → Term → Type`.
 - [ ] Specific Maltsev terms: Jónsson terms (CD), Day terms (CM), Maltsev operation `p(x,y,y) = x = p(y,y,x)` (CP).
@@ -911,7 +916,7 @@ Design discussion: how to encode Maltsev conditions uniformly?  Options include 
 - [ ] CP iff a Maltsev term exists.
 - [ ] Day's theorem for CM.
 
-#### Acceptance criteria
+## Acceptance criteria
 
 - [ ] At least CP's Maltsev-term characterization is proved.
 - [ ] Jónsson's theorem and Day's theorem are either proved or have a clear stub indicating what remains.
@@ -947,13 +952,13 @@ graph TD
 
 **Milestone**:  7 — Algebraic complexity / CSP extensions (finite templates)
 
-#### Description
+## Description
 
 The current `Base.Complexity` module has only two submodules (`Basic` and `CSP`).  The CSP module is little more than a bare definition with no theorems.  This is a separate research track from the FLRP (M6): the FLRP is about which lattices arise as congruence lattices of finite algebras, while finite-template algebraic CSP is about the complexity of constraint satisfaction problems as a function of the polymorphism clone of the underlying finite relational structure.  Both use universal algebra, but they are different questions.  Infinite-template extensions (ω-categorical, Bodirsky–Pinsker) are covered separately under M9-2.
 
 This issue is research-flavored and best decomposed after discussion.
 
-#### Tasks
+## Tasks
 
 Candidate content, to be prioritized:
 
@@ -963,7 +968,7 @@ Candidate content, to be prioritized:
 - [ ] Specific CSP tractability classes as worked examples (Horn-SAT, 2-SAT, linear systems over finite fields).
 - [ ] Statement (not necessarily proof) of the Bulatov–Zhuk algebraic dichotomy.
 
-#### Acceptance criteria
+## Acceptance criteria
 
 - [ ] Polymorphism clones available as a type with basic operations.
 - [ ] Jeavons Galois connection is proved for a fixed finite domain, OR a clear research-plan issue is filed continuing the work.
@@ -981,11 +986,11 @@ Candidate content, to be prioritized:
 
 **Milestone**:  8 — LLM readiness and corpus artifacts
 
-#### Description
+## Description
 
 Once `Setoid/` and `Classical/` are stable post-M4, publish a training and retrieval corpus for language models.
 
-#### Tasks
+## Tasks
 
 - [ ] Design a schema for corpus records: module path, theorem statement, proof term, dependencies, prose summary, keywords.
 - [ ] Implement an extractor that walks the library and emits records.
@@ -993,7 +998,7 @@ Once `Setoid/` and `Classical/` are stable post-M4, publish a training and retri
 - [ ] Add a CI job that regenerates the corpus on each release.
 - [ ] Write a short paper or blog post describing the dataset.
 
-#### Acceptance criteria
+## Acceptance criteria
 
 - [ ] Dataset published with ≥ 500 (theorem, proof) records.
 - [ ] CI regenerates on release.
@@ -1007,17 +1012,17 @@ Once `Setoid/` and `Classical/` are stable post-M4, publish a training and retri
 
 **Milestone**:  8 — LLM readiness and corpus artifacts
 
-#### Description
+## Description
 
 agda-native-air (the developer's parallel project on AI-assisted formal proof) is a natural consumer of the agda-algebras corpus.  This issue tracks the integration.  Exploratory; low-priority until agda-native-air stabilizes.
 
-#### Tasks
+## Tasks
 
 - [ ] Document what API / metadata / annotations agda-native-air needs from agda-algebras.
 - [ ] Identify any agda-algebras design choices that help or hinder agda-native-air consumption.
 - [ ] Write an integration report.
 
-#### Acceptance criteria
+## Acceptance criteria
 
 - [ ] Integration report exists in `docs/integration-agda-native-air.md`.
 - [ ] Any design changes required are filed as separate issues.
@@ -1035,7 +1040,7 @@ agda-native-air (the developer's parallel project on AI-assisted formal proof) i
 
 **Milestone**:  9 — Applications of continuous relations
 
-#### Description
+## Description
 
 The `Base.Relations.Continuous` formalization generalizes classical relations: the arity is an arbitrary type rather than a natural number, and compatibility with an operation is stated pointwise over that arity.  That shape turns out to be the right one for a notion with a distinguished mathematical pedigree: **Scott-continuous relations on directed-complete partial orders (DCPOs)**.
 
@@ -1043,7 +1048,7 @@ A relation `R ⊆ X × Y` between DCPOs is *Scott-continuous* when, for every di
 
 The broader context is *domain theory* in the Scott sense, which underlies the denotational semantics of typed lambda calculi, topologically-enriched model theory and partial-function spaces, and constructive analysis via Escardó's work on exhaustively searchable sets.  The Escardó connection is worth flagging: his LICS 2007 result "Infinite sets that admit fast exhaustive search" characterizes searchable sets via a topological continuity condition on their decision procedures, and provides a computability-flavored reason to care about Scott-continuous relations on specific DCPOs such as the Cantor space.
 
-#### Tasks
+## Tasks
 
 - [ ] `Classical/Order/DCPO.agda` (or `Setoid/Order/DCPO.agda` if it will be adapted for Cubical later): DCPO as a record bundle — a poset with directed suprema.
 - [ ] `Classical/Order/ScottContinuous.agda`: a `ScottContinuous` predicate on pairs of a `Continuous` relation and a DCPO structure on its carriers.
@@ -1051,18 +1056,18 @@ The broader context is *domain theory* in the Scott sense, which underlies the d
 - [ ] At least one non-trivial example: the graph of a Scott-continuous function is Scott-continuous as a relation; conversely, a single-valued Scott-continuous relation is the graph of a Scott-continuous function.
 - [ ] Optional stretch goal: a path to Escardó's characterization of searchable sets, formalized as far as tractable.  If `TypeTopology` is the cleanest source, import from there rather than re-derive.
 
-#### Acceptance criteria
+## Acceptance criteria
 
 - [ ] DCPO record and ScottContinuous predicate type-check.
 - [ ] The graph-of-continuous-function ↔ single-valued-continuous-relation characterization is proved.
 - [ ] At least one closure property (composition or directed union) is proved.
 - [ ] A short public write-up (blog post or arXiv note) connects the formalization to domain theory.
 
-#### Why this belongs in agda-algebras
+## Why this belongs in agda-algebras
 
 Universal algebra and order theory have a long shared history: every algebra with a compatible order gives an ordered algebra; Birkhoff's theorem has order-enriched variants; congruence lattices (the central FLRP object) are themselves DCPOs.  Housing the Scott-continuous-relation material in agda-algebras keeps related abstractions together and gives them a shared foundation in the continuous-relation API.
 
-#### Relation to other milestones
+## Relation to other milestones
 
 - Depends on: M2 (Setoid/ canonical), M3-1 (Classical/ scaffold).
 - Independent of: M6 (FLRP), M7 (finite-template CSP).
@@ -1076,38 +1081,38 @@ Universal algebra and order theory have a long shared history: every algebra wit
 
 **Milestone**:  9 — Applications of continuous relations
 
-#### Description
+## Description
 
 The CSP module under M7 targets finite-template CSPs with finite-arity relations.  A rich body of contemporary work — most visibly the Bodirsky–Pinsker program — studies CSPs whose template is an ω-categorical structure with a countable domain and potentially infinitary relations.  The central tools there include:
 
 - **Polymorphism clones of ω-categorical structures**, which control CSP complexity via a topological-dynamical analog of the finite-domain algebraic approach.
-- **Canonical functions** in a polymorphism clone: functions whose behavior on all "types" is determined by their behavior on finitely many representatives.  See Michael Pinsker's recent work (e.g. [arXiv:2502.06621](https://arxiv.org/abs/2502.06621)) for the state of the art.
+- **Canonical functions** in a polymorphism clone: functions whose behavior on all "types" is determined by their behavior on finitely many representatives.  See Michael Pinsker's recent work (e.g. [arXiv:2502.06621](https://arxiv.org/abs/2502.06621)).
 - **Birkhoff-style theorems for topological clones**, generalizing the classical HSP theorem from varieties to polymorphism clones with a topological structure.
 
 The `Base.Relations.Continuous` formalization in agda-algebras happens to be exactly the right abstraction for this setting.  An ω-categorical template has relations whose natural arity is a countable index set; a continuous-in-our-sense relation drops in unchanged.
 
 This is a design-discussion issue, not an implementation plan.
 
-#### Tasks
+## Tasks
 
 - [ ] Which definitions port over unchanged from `Setoid/Complexity/CSP` (post M7-1), and which need generalization?
 - [ ] What is the minimal API for a "template" in the ω-categorical setting (base structure, automorphism group, topological structure)?
 - [ ] Is there a natural "Birkhoff for topological clones" result whose formalization is tractable with current tooling?  Bodirsky, Pinsker, and collaborators have published multiple variants; select the one with the cleanest statement.
 - [ ] Can a small but genuinely infinitary example be formalized end-to-end — e.g. the template `(ℚ, <)` for temporal constraint satisfaction, which is ω-categorical and has a well-understood polymorphism clone?
 
-#### Deliverables (if pursued)
+## Deliverables (if pursued)
 
 - [ ] A new subtree `Classical/Complexity/Infinitary/` (or similar) with the generalized definitions.
 - [ ] A single formalized example (suggestion: the template `(ℚ, <)`).
 - [ ] A short write-up — blog post or arXiv note — connecting the formalization to the Bodirsky–Pinsker literature.
 
-#### Non-goals
+## Non-goals
 
 - Formalizing the full Bodirsky–Pinsker dichotomy conjecture.
 - Matching the generality of any existing implementation.
 - Engaging with decidability or tractability results (those are downstream; the first task is having the definitions).
 
-#### Relation to other milestones
+## Relation to other milestones
 
 - Depends on: M2 (Setoid/ canonical), M3-1 (Classical/ scaffold).
 - Benefits from: M7-1 (finite-template CSP infrastructure — polymorphism clones, Galois connection machinery).
@@ -1121,7 +1126,7 @@ This is a design-discussion issue, not an implementation plan.
 
 **Milestone**:  9 — Applications of continuous relations
 
-#### Description
+## Description
 
 An exploratory issue, not a deliverable.  The goal is to read, think, and write up findings about whether the `Continuous` relation API has novel applications in coalgebra, particularly for bisimulation of non-finitary coalgebras.
 
@@ -1131,7 +1136,7 @@ The intersection of coalgebra and classical universal algebra has many smart peo
 
 Progress on this issue is measured in paragraphs written, not in type-checked Agda.
 
-#### Tasks
+## Tasks
 
 - [ ] Read Rutten, "Universal coalgebra: a theory of systems," TCS 2000 (the standard introduction).
 - [ ] Read one or two recent survey articles on coalgebraic bisimulation for continuous functors.
@@ -1139,17 +1144,17 @@ Progress on this issue is measured in paragraphs written, not in type-checked Ag
 - [ ] Identify at least one concrete formalization candidate, even if small (e.g. a bisimulation characterization of stream equality using the `Continuous` API).  If no such candidate emerges, document why.
 - [ ] Optional: formalize the candidate, or file a follow-up M9-3a issue.
 
-#### Acceptance criteria
+## Acceptance criteria
 
 - [ ] `docs/exploration/coalgebra.md` exists and is at least 2000 words.
 - [ ] The document contains a concrete verdict: either "there is a formalization project worth pursuing" (in which case a follow-up issue is filed) or "the area is saturated / the fit is not natural" (in which case this issue is closed).
 
-#### Non-goals
+## Non-goals
 
 - Producing a polished, publishable result.  This is scoping work.
 - Committing to a specific subarea of coalgebra.  The reading should be broad enough to spot the low-hanging fruit, whatever it turns out to be.
 
-#### Relation to other milestones
+## Relation to other milestones
 
 - Completely independent of every other milestone.  This is a long-tail exploratory investigation.
 
