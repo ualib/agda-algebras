@@ -30,9 +30,15 @@
 #   `name: standard-library-2.3`.  Agda resolves library dependencies as:
 #     - `depend: standard-library`     — any version
 #     - `depend: standard-library-2.3` — exact match required
-#   This file uses `--library standard-library` in the shell wrapper (any
-#   version works), while agda-algebras.agda-lib uses `standard-library-2.3`
-#   to document the required minimum.
+#
+#   Division of responsibilities:
+#     - flake.lock               pins the stdlib source of truth.
+#     - --library standard-library (wrapper) tracks whatever the lock pins.
+#     - depend: standard-library-2.3 (.agda-lib) enforces the minimum.
+#
+#   Upgrading past 2.3 is a two-step process: bump the .agda-lib floor first,
+#   then `nix flake update`. Skipping the first step produces a clear
+#   dependency-resolution error at `make check` time, not a silent upgrade.
 # =============================================================================
 {
   description = "agda-algebras — a formalization of Universal Algebra in Agda";
@@ -91,18 +97,21 @@
         # auto-discovery from the repo-root .agda-lib.
         echo "standard-library" > "$AGDA_DIR/defaults"
 
-        # ---- agda() wrapper ----
-        # Explicitly re-pass --library-file to override the nix wrapper's
-        # baked-in file, and --no-default-libraries to kill any user-level
-        # defaults. --library standard-library matches any registered
-        # version (including standard-library-2.3).
-        agda() {
-          command agda \
-            --no-default-libraries \
-            --library-file "$AGDA_DIR/libraries" \
-            --library standard-library \
-            "$@"
-        }
+        # Capture the absolute path to the Nix-wrapped agda BEFORE we prepend
+        # our own wrapper to PATH; otherwise the script would recursively call
+        # itself.
+        NIX_AGDA="$(command -v agda)"
+        mkdir -p "$AGDA_DIR/bin"
+        cat > "$AGDA_DIR/bin/agda" <<EOF
+#!/usr/bin/env bash
+exec "$NIX_AGDA" \\
+  --no-default-libraries \\
+  --library-file "$AGDA_DIR/libraries" \\
+  --library standard-library \\
+  "\$@"
+EOF
+        chmod +x "$AGDA_DIR/bin/agda"
+        export PATH="$AGDA_DIR/bin:$PATH"
       '';
     in {
       # ---- Formatter -------------------------------------------------------
