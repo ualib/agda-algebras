@@ -66,7 +66,7 @@ If no issue exists for the change you want to make, **please open one first**, e
 Every `.agda` source file begins with:
 
 ```agda
-{-# OPTIONS --cubical-compatible --safe --exact-split #-}
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
 ```
 
 plus `module X.Y.Z where` on the next non-comment line.
@@ -81,7 +81,7 @@ As of the 3.0 reconstruction, all of `src/` uses `--cubical-compatible`.  When t
 +  **Predicates** are typically named `IsX` for "X-ness of a single thing" (e.g. `IsHomomorphism`) and `X` for "the type of things with property X" (e.g. `Homomorphism`).
 +  Avoid synonyms.  If the concept is already called `Hom` elsewhere, call it `Hom` here too.
 
-A proper style guide, `docs/STYLE.md`, is tracked in M1-4 and will land shortly.  Until then, the convention is "follow the style of the surrounding code, and when in doubt ask in the PR."
+A proper style guide, `docs/STYLE_GUIDE.md`, is tracked in M1-4 and will land shortly.  Until then, the convention is "follow the style of the surrounding code, and when in doubt ask in the PR."
 
 ### Comments
 

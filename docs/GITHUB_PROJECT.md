@@ -54,7 +54,7 @@ agda-algebras was released as v2.0.1 in December 2021 ([Zenodo DOI 10.5281/zenod
 
 **Description**.  Modernize the library's tooling, establish baseline project hygiene, and unblock every subsequent milestone.  The library is currently pinned to Agda 2.6.2 / stdlib 1.7; it must move to Agda 2.8.0 / stdlib v2.3 with `--cubical-compatible` replacing `--without-K`.  Standard community-health files (CONTRIBUTING, CHANGELOG, CODE_OF_CONDUCT, STYLE) must land.  GitHub Actions CI must stand up.  README and installation docs must be rewritten for the 3.0 line.
 
-**Exit criterion**.  `make check` passes under GitHub Actions CI against Agda 2.8.0 / stdlib v2.3; CONTRIBUTING.md, docs/STYLE.md, ROADMAP.md, CHANGELOG.md are merged; README documents the new install path.
+**Exit criterion**.  `make check` passes under GitHub Actions CI against Agda 2.8.0 / stdlib v2.3; CONTRIBUTING.md, docs/STYLE_GUIDE.md, ROADMAP.md, CHANGELOG.md are merged; README documents the new install path.
 
 ---
 
@@ -80,9 +80,9 @@ Phase 2: Ring, CommutativeRing, Field, Module, DistributiveLattice, BooleanAlgeb
 
 ### Milestone 4 — Style and naming uniformity sweep
 
-**Description**.  Apply `docs/STYLE.md` consistently across `Setoid/` and `Classical/`.  Audit naming (one preferred name per concept; synonyms deprecated); audit notation (one canonical symbol table); audit module structure (one concept per module where feasible); ensure every user-facing definition has a prose comment block.
+**Description**.  Apply `docs/STYLE_GUIDE.md` consistently across `Setoid/` and `Classical/`.  Audit naming (one preferred name per concept; synonyms deprecated); audit notation (one canonical symbol table); audit module structure (one concept per module where feasible); ensure every user-facing definition has a prose comment block.
 
-**Exit criterion**.  No undocumented public definitions remain in `Setoid/` or `Classical/`; no synonym pairs (e.g. `is-homomorphism` + `IsHom`) exist in the public API; the canonical symbol table in `docs/STYLE.md` matches the notation actually used in the library.
+**Exit criterion**.  No undocumented public definitions remain in `Setoid/` or `Classical/`; no synonym pairs (e.g. `is-homomorphism` + `IsHom`) exist in the public API; the canonical symbol table in `docs/STYLE_GUIDE.md` matches the notation actually used in the library.
 
 ---
 
@@ -249,7 +249,7 @@ Standard community-health files are missing.  Drafts of CONTRIBUTING and STYLE e
 
 ---
 
-### Issue M1-4: Adopt docs/STYLE.md as the project style guide
+### Issue M1-4: Adopt docs/STYLE_GUIDE.md as the project style guide
 
 **Labels**:  `milestone-1-infra`, `documentation`
 
@@ -257,16 +257,16 @@ Standard community-health files are missing.  Drafts of CONTRIBUTING and STYLE e
 
 ## Description
 
-Create `docs/STYLE.md` documenting file format, module structure, naming conventions, notation, universe-polymorphism practices, record vs Σ guidance, proof style, and library-as-training-corpus considerations.  A draft from the planning cycle is ready for review.  Applying the style guide across `Setoid/` and `Classical/` is tracked in M4-1.
+Create `docs/STYLE_GUIDE.md` documenting file format, module structure, naming conventions, notation, universe-polymorphism practices, record vs Σ guidance, proof style, and library-as-training-corpus considerations.  A draft from the planning cycle is ready for review.  Applying the style guide across `Setoid/` and `Classical/` is tracked in M4-1.
 
 ## Tasks
 
-- [ ] Merge `docs/STYLE.md` (draft from planning cycle).
-- [ ] Link `STYLE.md` from `README.md` and `CONTRIBUTING.md`.
+- [ ] Merge `docs/STYLE_GUIDE.md` (draft from planning cycle).
+- [ ] Link `STYLE_GUIDE.md` from `README.md` and `CONTRIBUTING.md`.
 
 ## Acceptance criteria
 
-- [ ] `docs/STYLE.md` is merged.
+- [ ] `docs/STYLE_GUIDE.md` is merged.
 - [ ] Links from README and CONTRIBUTING work.
 
 ---
@@ -285,7 +285,7 @@ The current `README.md` and `docs/lagda/Preface.lagda` are 1.x-era: wrong Agda v
 
 - [ ] Pin Agda 2.8.0 / stdlib 2.3 in install instructions.
 - [ ] Describe the Setoid-as-canonical structure and point to `Classical/`.
-- [ ] Link `CONTRIBUTING.md`, `ROADMAP.md`, `docs/STYLE.md`.
+- [ ] Link `CONTRIBUTING.md`, `ROADMAP.md`, `docs/STYLE_GUIDE.md`.
 - [ ] Concrete quickstart for new users (5-command install → `make check`).
 - [ ] Add CI badge (from M1-2) and documentation site link.
 
@@ -333,7 +333,7 @@ graph TD
   M1_1["M1-1: Agda 2.8 / stdlib 2.3"]
   M1_2["M1-2: GitHub Actions CI"]
   M1_3["M1-3: Community files"]
-  M1_4["M1-4: STYLE.md"]
+  M1_4["M1-4: STYLE_GUIDE.md"]
   M1_5["M1-5: README / Preface"]
   M1_6["M1-6: docs/adr/"]
   M1_1 --> M1_2
@@ -743,12 +743,12 @@ graph TD
 
 ## Description
 
-Apply `docs/STYLE.md` across the `Setoid/` tree.  This is a long-tail task that can be decomposed into per-submodule issues for parallel work.
+Apply `docs/STYLE_GUIDE.md` across the `Setoid/` tree.  This is a long-tail task that can be decomposed into per-submodule issues for parallel work.
 
 ## Tasks
 
 - [ ] Audit naming: `IsHom` vs `is-homomorphism` vs `Hom` — pick one, deprecate others.
-- [ ] Audit notation against the canonical symbol table in STYLE.md.
+- [ ] Audit notation against the canonical symbol table in STYLE_GUIDE.md.
 - [ ] Audit imports (tighten `using` clauses; remove unused).
 - [ ] Ensure every public definition has a prose comment block.
 - [ ] Rich comment headers on every module.
@@ -756,7 +756,7 @@ Apply `docs/STYLE.md` across the `Setoid/` tree.  This is a long-tail task that 
 ## Acceptance criteria
 
 - [ ] No synonym pairs remain in the `Setoid/` public API.
-- [ ] All notation in `Setoid/` matches the canonical table in STYLE.md.
+- [ ] All notation in `Setoid/` matches the canonical table in STYLE_GUIDE.md.
 - [ ] Every public definition in `Setoid/` has a docstring.
 
 ---
@@ -800,12 +800,12 @@ Every record, type family, and top-level function in the public API should have 
   2. Make them `private` in `Overture.Signatures`; downstream modules re-declare.
   3. Move to a dedicated `Overture.UniverseLevels` module imported explicitly.
 - [ ] Collect input; pick one.
-- [ ] Document the decision in STYLE.md.
+- [ ] Document the decision in STYLE_GUIDE.md.
 - [ ] Apply consistently.
 
 ## Acceptance criteria
 
-- [ ] Decision is recorded (ADR or STYLE.md section).
+- [ ] Decision is recorded (ADR or STYLE_GUIDE.md section).
 - [ ] `𝓞` and `𝓥` are handled uniformly across the library.
 
 ---
@@ -1199,7 +1199,7 @@ graph TD
 | M1-1 | Upgrade to Agda 2.8.0 / stdlib 2.3                        | milestone-1-infra, breaking-change  |
 | M1-2 | Add GitHub Actions CI                                     | milestone-1-infra, good first issue |
 | M1-3 | Add CONTRIBUTING, CHANGELOG, CoC                          | milestone-1-infra, documentation    |
-| M1-4 | Adopt docs/STYLE.md                                       | milestone-1-infra, documentation    |
+| M1-4 | Adopt docs/STYLE_GUIDE.md                                       | milestone-1-infra, documentation    |
 | M1-5 | Rewrite README and Preface                                | milestone-1-infra, documentation    |
 | M1-6 | Establish docs/adr/                                       | milestone-1-infra, documentation    |
 
@@ -1279,7 +1279,7 @@ graph TD
     M1_1["M1-1: Agda 2.8 / stdlib 2.3"]
     M1_2["M1-2: GitHub Actions CI"]
     M1_3["M1-3: Community files"]
-    M1_4["M1-4: STYLE.md"]
+    M1_4["M1-4: STYLE_GUIDE.md"]
     M1_5["M1-5: README / Preface"]
     M1_6["M1-6: docs/adr/"]
   end

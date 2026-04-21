@@ -60,7 +60,7 @@ Older versions of either component are **not** supported on the `master` branch.
 
 ## Contributing
 
-Contributions are welcome.  See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the development workflow and conventions, and [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) for community standards.  The style guide ([`docs/STYLE.md`](docs/STYLE.md)) is being drafted as part of Milestone 1; see [`docs/GITHUB_PROJECT.md`](docs/GITHUB_PROJECT.md) for the full roadmap.
+Contributions are welcome.  See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the development workflow and conventions, and [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) for community standards.  The style guide ([`docs/STYLE_GUIDE.md`](docs/STYLE_GUIDE.md)) is being drafted as part of Milestone 1; see [`docs/GITHUB_PROJECT.md`](docs/GITHUB_PROJECT.md) for the full roadmap.
 
 For questions about mathematical content or large design changes, open a GitHub issue
 labeled `design-discussion` before writing code.
@@ -143,7 +143,7 @@ To cite the [formalization of Birkhoff's HSP Theorem](https://ualib.org/Setoid.V
 }
 ```
 
-If you're looking for the latest (setoid-based) formalization of Brkhoff's Theorem, see the [Proof of the HSP Theorem](https://ualib.org/Setoid.Varieties.HSP.html#proof-of-the-hsp-theorem) in the html documentation, or the source code of the [Setoid.Varieties.HSP][] module in the file [Setoid/Varieties/HSP.lagda][] in the [agda-algebras][] GitHub repository.
+If you're looking for the latest (setoid-based) formalization of Brkhoff's Theorem, see the [Proof of the HSP Theorem](https://ualib.org/Setoid.Varieties.HSP.html#proof-of-the-hsp-theorem) in the html documentation, or the source code of the [Setoid.Varieties.HSP][] module.
 
 ---
 
@@ -175,5 +175,5 @@ If you're looking for the latest (setoid-based) formalization of Brkhoff's Theor
 [Formalization of Universal Algebra in Agda]: https://www.sciencedirect.com/science/article/pii/S1571066118300768
 [Introduction to Univalent Foundations of Mathematics with Agda]: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/
 [Programming Languages Foundations in Agda]: https://plfa.github.io/
-
+[Setoid.Varieties.HSP]: https://github.com/ualib/agda-algebras/src/Setoid/Varieties/HSP.agda
 
