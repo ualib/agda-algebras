@@ -1,7 +1,8 @@
 ---
 layout: default
 title : "Overture.Preface module (The Agda Universal Algebra Library)"
-date : "2021-01-14"
+file: docs/lagda/Overture/Preface.lagda
+date : "2026-04-20"
 author: "the agda-algebras development team"
 ---
 
@@ -10,190 +11,97 @@ author: "the agda-algebras development team"
 This is the [Overture.Preface][] module of the [Agda Universal Algebra Library][].
 
 \begin{code}[hide]
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
-
 module Overture.Preface where
-
 \end{code}
 
-To support formalization in type theory of research level mathematics in universal
-algebra and related fields, we present the [Agda Universal Algebra
-Library][] (or [agda-algebras][] for short), a library for
-the [Agda][] proof assistant which contains definitions, theorems and proofs from
-the foundations of universal algebra. In particular, the library formalizes the
-First (Noether) Isomorphism Theorem and the [Birkhoff HSP
-Theorem](https://ualib.org/Setoid.Varieties.HSP.html#proof-of-the-hsp-theorem)
-asserting that every variety is an equational class.
+The [Agda Universal Algebra Library][] ([agda-algebras][], for short) is a formalization in [Agda][] of the foundations of general algebra in the sense of Birkhoff, Grätzer, McKenzie–McNulty–Taylor, and Bergman: sets equipped with arbitrary-arity operations, the homomorphisms between them, the congruences on them, the term algebras they generate, the varieties they fall into, and the equational logic that organizes all of the above.  The library's current centrepiece is a fully constructive, machine-checked proof of Birkhoff's HSP theorem — every variety is an equational class — in a setoid-based reformulation that avoids function extensionality.
 
-#### <a id="vision-and-goals">Vision and goals</a>
+This Preface explains why a mathematician working in universal algebra or an adjacent area might care about this library, why it is written in Agda specifically, what the 3.0 reconstruction has changed, and where to go next.
 
-The idea for the [agda-algebras][] project originated with the observation that,
-on the one hand a number of basic and important constructs in universal algebra
-can be defined recursively, and theorems about them proved inductively, while on
-the other hand the *types*
-(of type theory---in particular, [dependent types][] and [inductive types][])
-make possible elegant formal representations of recursively defined objects, and
-constructive (*computable*) proofs of their properties. These observations suggest
-that there is much to gain from implementing universal algebra in a language that
-facilitates working with dependent and inductive types.
+#### <a id="why-univ-alg-in-type-theory">Why formalize universal algebra in type theory?</a>
 
-##### <a id="primary-goals">Primary goals</a>
+Universal algebra has a native affinity for type theory that is stronger than first appearances suggest.  Signatures are indexed families of operation symbols; algebras are sets together with a family of operations indexed by the signature; terms are the initial algebra over a set of variables; subalgebras, homomorphic images, and products are each captured by a small collection of definitions each a few lines long.  These are exactly the constructions Martin-Löf type theory was designed to support — inductive types for terms and trees, Π- and Σ-types for universal and existential parameters, dependent records for structured objects — and the transcription between informal mathematical practice and formal type-theoretic statement turns out to be short.
 
-The first goal of [agda-algebras][] is to demonstrate that it is possible to
-express the foundations of universal algebra in type theory and to formalize (and
-formally verify) the foundations in the Agda programming language. We will
-formalize a substantial portion of the edifice on which our own mathematical
-research depends, and demonstrate that our research can also be expressed in type
-theory and formally implemented in such a way that we and other working
-mathematicians can understand and verify the results. The resulting library will
-also serve to educate our peers, and encourage and help them to formally verify
-their own mathematics research.
+The dividend is not only aesthetic.  A formalization in type theory is *computable by construction*: a closed proof that every variety is an equational class does not merely assert the theorem, it can be evaluated on inputs.  It is also *compositional*: the free algebra of a variety is not only named, it is built, and its universal property is a dependent function one can apply.  When the formalization is done constructively, as agda-algebras is, the resulting proof terms are objects one can inspect, slice, export, and share — a feature whose importance has grown sharply with the rise of machine learning on formal mathematics.
 
-Our field is deep and wide and codifying all of its foundations may seem like a
-daunting task and a possibly risky investment of time and energy.  However, we
-believe our subject is well served by a new, modern,
-[constructive](https://ncatlab.org/nlab/show/constructive+mathematics)
-presentation of its foundations.  Our new presentation expresses the foundations
-of universal algebra in the language of type theory, and uses the Agda proof
-assistant to codify and formally verify everything.
+#### <a id="why-agda">Why Agda?</a>
 
-##### <a id="secondary-goals">Secondary goals</a>
+The proof-assistant landscape of 2026 offers several mature choices — Lean 4, Coq / Rocq, Isabelle — each with excellent universal-algebra formalizations at various stages of development.  The case for Agda here rests on three pillars.
 
-We wish to emphasize that our ultimate objective is not merely to translate
-existing results into a more modern and formal language.  Indeed, one important
-goal is to develop a system that is useful for conducting research in mathematics,
-and that is how we intend to use our library once we have achieved our immediate
-objective of implementing the basic foundational core of universal algebra in
-Agda.
+**Proof terms as first-class training and retrieval data**.  Agda's proofs are terms in a pure functional language, constructed by the programmer in direct correspondence with the mathematical content.  Tactic languages, reflection-based automation, and decision procedures have their virtues, but they produce proofs whose surface form is not the proof: a chain of `rfl`, `simp`, `omega`, `aesop` operates on an internal state that the reader cannot see.  An Agda proof is *what it looks like*.  This matters for two present-day concerns.  First, for the library as pedagogy: a graduate student reading agda-algebras encounters the mathematics at full resolution, not a sequence of tactic invocations whose outcomes depend on implementation details of a search procedure.  Second, for the library as training corpus: a (theorem, proof) pair extracted from agda-algebras is a pair a language model can directly learn to generate, not a tactic script whose semantics are opaque without running the assistant.  Milestone 8 of the 3.0 roadmap builds explicitly on this property.
 
-To this end, our long-term objectives include
+**A clear path to cubical type theory**.  Agda has a mature cubical mode with computational univalence and the structure identity principle.  The 3.0 canonical development uses setoids rather than cubical paths, partly because the cubical ecosystem is still stabilizing and partly because setoids are a lingua franca that readers from many traditions can approach without a tutorial.  But the development is written *with cubical portability in mind*: definitions are stated in terms of the algebra's own equivalence relation (`Algebra.Domain`) rather than propositional equality, so that when v4.0 swaps setoids for paths the substitution is substantively mechanical.  The appeal for a universal algebraist is direct: in the cubical mode, isomorphism *is* equality, which is what the informal practice has always pretended.  The structure identity principle turns that pretence into computation.
 
-+ domain specific types to express the idioms of universal algebra,
-+ automated proof search for universal algebra, and
-+ formalization of theorems discovered in our own (informal) mathematics research,
-+ documentation of the resulting Agda library so it is usable by others.
+**A constructive substrate well-matched to universal algebra**.  Universal algebra has historically been set-theoretic, but its core constructions are constructive by nature.  Free algebras are inductive; subalgebra closures are least fixed points of monotone operators, which are computable when the operators are; homomorphic images, quotient algebras, and subdirect products are concretely describable without invoking ambient set-theoretic machinery.  Agda under `--safe --cubical-compatible --exact-split` is a setting where one cannot cheat without the checker noticing, and where the resulting developments are guaranteed consistent with a constructive universe.  Much of classical universal algebra does not need classical logic; the subset that does — ultrafilter-based compactness arguments, Birkhoff-style completeness relying on Zorn — can be isolated, made explicit, and if need be postulated cleanly at the boundary rather than absorbed invisibly into the ambient logic.
 
-For our own mathematics research, we believe a proof assistant like Agda, equipped
-with a specialized library for universal algebra is an extremely useful research
-tool. Thus, a secondary goal is to demonstrate (to ourselves and colleagues) the
-utility of such technologies for discovering new mathematics.
+These three reasons are not independent: the constructive substrate makes the proof terms meaningful, and the cubical trajectory keeps the constructive substrate future-proof against the eventual migration of foundations to path-based equality.
 
-#### <a id="logical-foundations">Logical foundations</a>
+#### <a id="the-3-0-reconstruction">The 3.0 reconstruction</a>
 
-The [Agda Universal Algebra Library][] is based on a minimal version of
-[Martin-Löf dependent type theory][] (MLTT) as implemented in Agda. More details
-on this type theory can be read at [ncatlab entry on Martin-Löf dependent type
-theory](https://ncatlab.org/nlab/show/Martin-L%C3%B6f+dependent+type+theory).
+The first public release, v2.0.1 ([archived on Zenodo](https://doi.org/10.5281/zenodo.5765793), December 2021), accompanied the TYPES 2021 proof of Birkhoff's HSP theorem.  It succeeded narrowly — the proof type-checks, as does everything it depends on — but bequeathed a codebase with two parallel developments (a standard-dependent-types `Base/` tree and a setoid-based `Setoid/` tree), uneven naming, a handful of synonyms for each central concept, and a documentation layer split across LaTeX-literate Agda, Markdown, and Jekyll templating in ways no one could reproduce from first principles.
 
+The 3.0 reconstruction is a long-overdue consolidation, organized into nine milestones detailed in [`docs/GITHUB_PROJECT.md`](https://github.com/ualib/agda-algebras/blob/master/docs/GITHUB_PROJECT.md).  The decisions most visible to a reader:
 
-#### <a id="intended-audience">Intended audience</a>
++  `Setoid/` is canonical.  `Base/` is being frozen as `Legacy/Base/` and no new work lands there.
++  `Classical/` is a new tree (under construction) for specific algebraic theories — semigroups, monoids, groups, lattices, rings — built on the universal-algebra foundation.  Core structures are Σ-typed for mathematical elegance, with parallel record-typed bundle views in `Classical/Bundles/` for compatibility with the Agda standard library's `Algebra.Bundles` idiom.
++  `Cubical/` is the long-term canonical target for v4.0, where the setoid equivalence is replaced by path equality and the structure identity principle takes its proper place.
++  A project-wide style guide ([`docs/STYLE_GUIDE.md`](https://github.com/ualib/agda-algebras/blob/master/docs/STYLE_GUIDE.md)) and a Setoid-to-Cubical portability discipline govern new contributions.
 
-The comments and source code in the library should provide enough detail so that
-people familiar with functional programming and proof assistants can learn enough
-about Agda and its libraries to put them to use when creating, formalizing, and
-verifying mathematical theorems and proofs.
+The documentation conventions have also tightened: public definitions are paired with prose that explains what the definition means and when a mathematician would reach for it, rather than restating the type signature in English.  This is in service of the library's dual role as reference and training corpus, a role the 2021 version acknowledged in passing but did not systematically enforce.
 
-While there are no strict prerequisites, we expect anyone with an interest in this
-work will have been motivated by prior exposure to universal algebra, as presented
-in, say, [Bergman (2012)][] or [McKenzie, McNulty, Taylor (2018)], or category
-theory, as presented in, say, [Riehl (2017)][].
+#### <a id="mathematical-horizon">Mathematical horizon</a>
 
-Some prior exposure to [type theory][] and Agda would be helpful, but even without
-this background one might still be able to get something useful out of this by
-referring to one or more of the resources mentioned in the references section
-below to fill in gaps as needed.
+The library is a working substrate for active mathematical research, not only a reference for settled material.  The 3.0 roadmap sketches several tracks.
 
+**Foundations that unlock many research questions**.  Beyond Birkhoff, the universal-algebra prerequisites shared by many active areas include the congruence lattice `Con 𝑨` as a complete lattice, subalgebra lattices, subdirectly irreducible algebras and subdirect decomposition, and the basic Maltsev conditions — congruence permutability, distributivity, modularity, the near-unanimity conditions, and cube terms.  Milestone 6 (M6) targets this material.  A reader who cares about any of tame congruence theory, commutator theory, clone theory, equational completeness, or the structural side of CSP complexity will find these foundations are their common prerequisite, and having them in one consistent formalization is worth something independently of any specific research horizon.
+
+**The Finite Lattice Representation Problem as a long-term anchor**.  A motivating problem for the maintainers is the Finite Lattice Representation Problem (FLRP): is every finite lattice the congruence lattice of some finite algebra?  The problem has been open since Grätzer–Schmidt (1963), where the corresponding statement for algebraic lattices was resolved affirmatively — no restriction on cardinality — while the finite case has resisted every subsequent attempt.  The 3.0 library does not attempt the FLRP directly, but the M6 foundational material is precisely what an attempt would need; M6 is explicit about this framing.  The FLRP is not the only horizon and not the primary marketing point, but it is the reason the library exists in its present form, and keeping it in view disciplines the design decisions.
+
+**Algebraic complexity and constraint satisfaction**.  Milestone 7 (M7) extends the small `Base.Complexity/CSP` stub into a proper development of finite-template algebraic CSP.  The central objects are polymorphism clones `Pol(A, Γ)` as first-class types, the Jeavons Galois connection between invariant relations and polymorphism clones, worked examples from classical tractability (Horn-SAT, 2-SAT, linear systems over finite fields), and a formal statement — not necessarily a proof, at this stage — of the Bulatov–Zhuk algebraic dichotomy.  Infinite-template extensions in the spirit of the Bodirsky–Pinsker program (polymorphism clones of ω-categorical structures, canonical functions in the sense of Pinsker's recent work, topological Birkhoff analogues for polymorphism clones with a topological structure) are mapped out as a natural application of the continuous-relation API in M9-2.
+
+**Applications of continuous relations**.  The library's `Base.Relations.Continuous` formalization generalizes classical finite-arity relations by allowing the arity to be an arbitrary type, with compatibility with operations stated pointwise over that arity.  That generalization is not ad hoc: it is exactly the shape needed for Scott-continuous relations on directed-complete partial orders (M9-1), and for the infinitary constraints of ω-categorical templates (M9-2).  The former connects agda-algebras to domain theory in the Scott sense — with applications in denotational semantics of typed lambda calculi, topologically enriched model theory, and Escardó's characterization of searchable sets via topological continuity.  The latter connects it to the topological-dynamics approach to infinite-template CSP complexity.  An exploratory track (M9-3) asks whether the same abstraction has novel applications to bisimulation of non-finitary coalgebras — a question at the intersection of coalgebraic methods and Birkhoff-style universal algebra that appears to be less developed than one might expect, and that the maintainers intend to scope rather than speculate about.  These tracks share a foundation and a proof-assistant substrate; keeping them under one roof is one of the library's quiet advantages.
+
+**Library as corpus**.  Milestone 8 (M8) treats the library itself as a deliverable: a published (theorem, proof) corpus, regenerated on each release, distributed on Hugging Face for retrieval and training.  The maintainers' parallel work on agda-native-air — an AI-assisted formal-proof workflow — is a natural downstream consumer, and the design of the corpus is informed by that use case.  The broader goal is to contribute a high-quality source of constructive, human-authored Agda proofs to the growing ecosystem of datasets for machine learning on formal mathematics.  This is not a side project relative to the pure mathematics: the library's design decisions — many small focused lemmas, named helper functions, rich prose comments paired with formal statements, explicit type signatures on every public definition — were tuned for this dual role from the start of the reconstruction.
+
+#### <a id="where-to-go-next">Where to go next</a>
+
+Readers approaching the library for the first time will typically want one of a few entry points.
+
++  For the headline result, see the [Proof of the HSP Theorem](https://ualib.org/Setoid.Varieties.HSP.html#proof-of-the-hsp-theorem) in [Setoid.Varieties.HSP][], or the single-file [Demos.HSP][] rendition written to accompany the TYPES 2021 paper.
++  For the core definitions, see [Setoid.Algebras.Basic][], [Setoid.Homomorphisms][], [Setoid.Subalgebras][], and [Setoid.Varieties][].
++  For the library's layered structure, the milestone plan, and the roadmap, see [`docs/GITHUB_PROJECT.md`](https://github.com/ualib/agda-algebras/blob/master/docs/GITHUB_PROJECT.md).
++  For the style guide and contribution conventions, see [`docs/STYLE_GUIDE.md`](https://github.com/ualib/agda-algebras/blob/master/docs/STYLE_GUIDE.md) and [`CONTRIBUTING.md`](https://github.com/ualib/agda-algebras/blob/master/CONTRIBUTING.md).
+
+The remainder of the `Overture` chapter introduces the library's conventions and notation.  Readers familiar with both Agda and universal algebra can skim it; others may want to read it carefully before moving into the substantive material.
 
 #### <a id="attributions">Attributions</a>
 
-##### <a id="the-agda-algebras-development-team">The agda-algebras development team</a>
+The [agda-algebras][] library is developed and maintained by the *agda-algebras development team*, led by [William DeMeo][] with senior-advisor contributions from [Jacques Carette][] (McMaster University).
 
-The [agda-algebras][] library is developed and maintained by the *Agda Algebras
-Development Team* led by [William DeMeo][] with major contributions by senior
-advisor [Jacques Carette][] (McMaster University).
+##### <a id="acknowledgements">Acknowledgements</a>
 
-##### <a id="Acknowledgements">Acknowledgements</a>
-
-We thank [Andreas Abel][], [Andrej Bauer][], [Clifford Bergman][], [Venanzio
-Capretta][], [Martín Escardó][], [Ralph Freese][], [Hyeyoung Shin][], and [Siva
-Somayyajula][] for helpful discussions, corrections, advice, inspiration and
-encouragement.
-
-Most of the mathematical results formalized in the [agda-algebras][]
-are well known. Regarding the source code in the [agda-algebras][]
-library, this is mainly due to the contributors listed above.
-
+We thank [Andreas Abel][], [Jeremy Avigad][], [Andrej Bauer][], [Clifford Bergman][], [Venanzio Capretta][], [Martín Escardó][], [Ralph Freese][], [Hyeyoung Shin][], and [Siva Somayyajula][] for helpful discussions, corrections, advice, inspiration, and encouragement over the life of the project.  Most of the mathematical content formalized in agda-algebras is well known; the novelty lies in the formalization itself, which is due to the contributors and acknowledgees listed above.
 
 #### <a id="references">References</a>
 
-The following Agda documentation and tutorials helped inform and improve the
-[agda-algebras][] library, especially the first one in the list.
+The following Agda documentation and tutorials informed the development of agda-algebras, and we recommend them to readers new to the language.
 
-* Escardo, [Introduction to Univalent Foundations of Mathematics with Agda][]
-* Wadler, [Programming Language Foundations in Agda][]
-* Bove and Dybjer, [Dependent Types at Work][]
-* Gunther, Gadea, Pagano, [Formalization of Universal Algebra in Agda][]
-* Norell and Chapman, [Dependently Typed Programming in Agda][]
++  Escardó, [Introduction to Univalent Foundations of Mathematics with Agda][]
++  Wadler, Kokke, and Siek, [Programming Language Foundations in Agda][]
++  Bove and Dybjer, [Dependent Types at Work][]
++  Gunther, Gadea, and Pagano, [Formalization of Universal Algebra in Agda][]
++  Norell and Chapman, [Dependently Typed Programming in Agda][]
 
-Finally, the official [Agda Wiki][], [Agda User's Manual][], [Agda Language
-Reference][], and the (open source) [Agda Standard Library][] source code are also
-quite useful.
+The official [Agda Wiki][], [Agda User's Manual][], [Agda Language Reference][], and the open-source [Agda Standard Library][] source code are also indispensable.
 
+#### <a id="citing">Citing</a>
 
-#### <a id="citing-the-agda-algebras-library">Citing the agda-algebras library</a>
-
-If you find the [agda-algebras][] library useful, please cite it using the
-following BibTeX entry:
-
-```bibtex
-@misc{ualib_v2.0.1,
-  author       = {De{M}eo, William and Carette, Jacques},
-  title        = {The {A}gda {U}niversal {A}lgebra {L}ibrary (agda-algebras)},
-  year         = 2021,
-  note         = {Documentation available at https://ualib.org},
-  version      = {2.0.1},
-  doi          = {10.5281/zenodo.5765793},
-  howpublished = {Git{H}ub.com},
-  note         = {Ver.~2.0.1; source code:
-                  \href{https://zenodo.org/record/5765793/files/ualib/agda-algebras-v.2.0.1.zip?download=1}
-                  {agda-algebras-v.2.0.1.zip}, {G}it{H}ub repo:
-                  \href{https://github.com/ualib/agda-algebras}{github.com/ualib/agda-algebras}}
-}
-```
-
-#### <a id="citing-the-formalization-of-birkhoffs-theorem">Citing the formalization of Birkhoff's Theorem </a>
-
-To cite the [formalization of Birkhoff's HSP
-Theorem](https://ualib.org/Setoid.Varieties.HSP.html#proof-of-the-hsp-theorem),
-please use the following BibTeX entry:
-
-```bibtex
-@article{DeMeo:2021,
- author        = {De{M}eo, William and Carette, Jacques},
- title         = {A {M}achine-checked {P}roof of {B}irkhoff's {V}ariety {T}heorem
-                  in {M}artin-{L}\"of {T}ype {T}heory},
- journal       = {CoRR},
- volume        = {abs/2101.10166},
- year          = {2021},
- eprint        = {2101.2101.10166},
- archivePrefix = {arXiv},
- primaryClass  = {cs.LO},
- url           = {https://arxiv.org/abs/2101.10166},
- note          = {Source code:
-                  \href{https://github.com/ualib/agda-algebras/blob/master/src/Demos/HSP.lagda}
-                  {https://github.com/ualib/agda-algebras/blob/master/src/Demos/HSP.lagda}}
-}
-```
-
+Citation information — both the v2.0.1 Zenodo archival entry and the BibTeX for the Birkhoff formalization paper — is maintained in the [README's Citing section](https://github.com/ualib/agda-algebras#citing).  While the 3.0 reconstruction is in development, please cite the GitHub repository and pin a commit hash for reproducibility; a new Zenodo DOI will be minted at the v3.0 release.
 
 #### <a id="contributions-welcomed">Contributions welcomed</a>
 
-Readers and users are encouraged to suggest improvements to the Agda
-[agda-algebras][] library and/or its documentation by submitting a
-[new issue](https://github.com/ualib/agda-algebras/issues/new/choose) or
-[merge request](https://github.com/ualib/agda-algebras/compare) to
-[github.com/ualib/agda-algebras/](https://github.com/ualib/agda-algebras). 
+Improvements to `agda-algebras` — bug reports, design discussions, pull requests, documentation fixes — are welcome.  See [`CONTRIBUTING.md`](https://github.com/ualib/agda-algebras/blob/master/CONTRIBUTING.md) for the development workflow and the [GitHub issue tracker](https://github.com/ualib/agda-algebras/issues/new/choose) to report problems or propose changes.
 
 ------------------------------------------------
 
