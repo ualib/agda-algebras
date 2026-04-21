@@ -8,7 +8,7 @@ The document has two audiences.  The primary audience is contributors: people wr
 
 This is a living document.  When the library adopts a new convention, this file changes.  When the document describes a convention the library doesn't actually follow, *the code is the ground truth*, not this document — and the discrepancy is itself a bug, tracked under M4-1.
 
-A note on forward references.  This document describes the 3.0 target.  Several paths referenced below (`src/Classical/`, `src/Cubical/`, `src/Legacy/Base/`) do not yet exist in the tree as of the writing of this document; they are created in Milestones 2 (M2), 3 (M3), and 5 (M5) respectively.  Rules that apply to those trees are effective when they land.
+A note on forward references.  This document describes the 3.0 target.  Several paths referenced below (`src/Classical/`, `src/Cubical/`, `src/Legacy/Base/`) do not yet exist in the tree as of the writing of this document; they are created in Milestones 2 (M2), 3 (M3), and 2 (M2) respectively.  Rules that apply to those trees are effective when they land.
 
 ---
 

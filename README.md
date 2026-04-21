@@ -143,7 +143,7 @@ To cite the [formalization of Birkhoff's HSP Theorem](https://ualib.org/Setoid.V
 }
 ```
 
-If you're looking for the latest (setoid-based) formalization of Brkhoff's Theorem, see the [Proof of the HSP Theorem](https://ualib.org/Setoid.Varieties.HSP.html#proof-of-the-hsp-theorem) in the html documentation, or the source code of the [Setoid.Varieties.HSP][] module.
+If you're looking for the latest (setoid-based) formalization of Birkhoff's Theorem, see the [Proof of the HSP Theorem](https://ualib.org/Setoid.Varieties.HSP.html#proof-of-the-hsp-theorem) in the html documentation, or the source code of the [Setoid.Varieties.HSP][] module.
 
 ---
 
@@ -175,5 +175,5 @@ If you're looking for the latest (setoid-based) formalization of Brkhoff's Theor
 [Formalization of Universal Algebra in Agda]: https://www.sciencedirect.com/science/article/pii/S1571066118300768
 [Introduction to Univalent Foundations of Mathematics with Agda]: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes/
 [Programming Languages Foundations in Agda]: https://plfa.github.io/
-[Setoid.Varieties.HSP]: https://github.com/ualib/agda-algebras/src/Setoid/Varieties/HSP.agda
+[Setoid.Varieties.HSP]: src/Setoid/Varieties/HSP.agda
 
