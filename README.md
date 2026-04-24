@@ -42,7 +42,7 @@ The first `nix develop` downloads and builds the pinned Agda and standard librar
 +  Style guide: [`docs/STYLE_GUIDE.md`](docs/STYLE_GUIDE.md).
 +  Roadmap and milestone plan: [`docs/GITHUB_PROJECT.md`](docs/GITHUB_PROJECT.md).
 +  Changelog: [`CHANGELOG.md`](CHANGELOG.md).
-+  Architecture decision records: [`docs/adr/`](docs/adr/) (scaffolding tracked in M1-6).
++  Architecture decision records roadmap: [`docs/GITHUB_PROJECT.md`](docs/GITHUB_PROJECT.md) (ADR scaffolding tracked in M1-6).
 +  Code of conduct: [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md).
 
 ---
@@ -56,7 +56,7 @@ The 3.0 reconstruction organizes the source tree around a canonical foundation w
 +  **`src/Cubical/`** *(planned, v4.0, tracked in M5)* is the long-term canonical target: cubical-Agda counterparts of the `Setoid/` and `Classical/` developments, using the structure identity principle in place of setoid equivalence.
 +  **`src/Base/`** holds the pre-reconstruction development and shared foundations still in use during the 3.0 transition.  M2-1 will move the frozen portions to `src/Legacy/Base/`; new contributions do not land in `Base/` (or later in `Legacy/Base/`).
 +  **`src/Overture/`** holds the small set of definitions shared across `Setoid/`, `Classical/`, and (eventually) `Cubical/`.
-+  **`src/Demos/`** holds self-contained pedagogical presentations of marquee results.  [`src/Demos/HSP`](src/Demos) is a single-file rendition of Birkhoff's variety theorem suitable for teaching; the canonical proof lives in [`src/Setoid/Varieties/HSP.agda`](src/Setoid/Varieties/HSP.agda) (canonicality to be formalized in M2-4).
++  **`src/Demos/`** holds self-contained pedagogical presentations of marquee results.  [`src/Demos/HSP`](src/Demos/HSP.agda) is a single-file rendition of Birkhoff's variety theorem suitable for teaching; the canonical proof lives in [`src/Setoid/Varieties/HSP.agda`](src/Setoid/Varieties/HSP.agda) (canonicality to be formalized in M2-4).
 
 The contributor's guide gives more detail on which tree a new piece of work belongs in; when in doubt, please open an issue with the `design-discussion` label.
 
@@ -143,7 +143,7 @@ To cite the [formalization of Birkhoff's HSP theorem](https://ualib.org/Setoid.V
   archivePrefix = {arXiv},
   primaryClass  = {cs.LO},
   url           = {https://arxiv.org/abs/2101.10166},
-  note          = {Source code: \href{https://github.com/ualib/agda-algebras/blob/master/src/Demos/HSP.lagda}{https://github.com/ualib/agda-algebras/blob/master/src/Demos/HSP.lagda}}
+  note          = {Source code: \href{https://github.com/ualib/agda-algebras/blob/master/src/Demos/HSP.agda}{https://github.com/ualib/agda-algebras/blob/master/src/Demos/HSP.agda}}
 }
 ```
 
