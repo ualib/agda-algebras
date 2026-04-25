@@ -43,6 +43,15 @@ The three open questions resolve as follows.
 +  **Consolidate to single-file LaTeX-literate (`.lagda`) with prose inline, keeping LaTeX as the canonical format.**  Rejected because (i) the LaTeX syntax is higher-friction for new contributors than Markdown, (ii) GitHub's native rendering of `.lagda` is poor whereas `.lagda.md` renders cleanly in the web UI, (iii) the modern Agda ecosystem (1Lab most visibly) has standardized on Markdown-literate for exactly the same reasons, (iv) the corpus-extractor argument applies identically to both formats, but the Markdown form is meaningfully easier for downstream consumers who aren't Agda-aware.
 +  **Move to `.agda` with extensive comment blocks; drop literate programming entirely.**  Rejected because literate programming with rendered HTML is a central feature of the library's presentation — ualib.org is the interface most readers encounter — and the HTML rendering is materially better with fenced code blocks than with commented Agda.
 
+## Addendum
+
+Migration is a one-time mechanical operation applied uniformly to every `.lagda` file under `docs/lagda/`.  The destination path mirrors the existing `.agda` skeleton's path, with the extension changed to `.lagda.md` and the skeleton deleted.  This rule applies regardless of which subtree (`Base/`, `Setoid/`, etc.) the file lives in.
+
+The question of which migrated modules receive ongoing maintenance is governed by ADR-001 (canonical-tree policy) and is independent of the migration.  In particular,
+
++  the fact that a file is located in `Base/` does not by itself imply abandonment;
++  modules in `Base/` whose content has no `Setoid/` analogue may support active research (e.g., `Base/Relations/Continuous.agda`) and, as such, constitute "first-class" content that happens to live in `Base/`; the migration puts such modules on the same footing as canonical-tree content.
+
 ## References
 
 +  Issue M1-8 — [Consolidate literate and bare-Agda sources into .lagda.md](https://github.com/ualib/agda-algebras/issues/280).
