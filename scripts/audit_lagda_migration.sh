@@ -29,7 +29,7 @@ banner "2. skeleton .agda files in src/"
 # whether what remains begins with 'module' and contains no '='.
 SKELETON_COUNT=0
 SUBSTANTIVE_COUNT=0
-rm -f /tmp/skeleton.txt /tmp/substantive.txt
+rm -f /tmp/skeleton.txt /tmp/substantive.txt /tmp/substantive-paired.txt
 for f in $(find src -name '*.agda' -not -path '*/Legacy/*'); do
   body=$(sed -E -e 's|--.*$||' -e '/^\{-/,/-\}/d' "$f" \
           | awk 'NF' | sed -E 's/^\s+//;s/\s+$//')
@@ -46,10 +46,12 @@ done
 print -- "  skeleton .agda files:    $SKELETON_COUNT  (list: /tmp/skeleton.txt)"
 print -- "  substantive .agda files: $SUBSTANTIVE_COUNT  (list: /tmp/substantive.txt)"
 
-banner "3. skeleton-to-.lagda pairing"
+banner "3. .agda-to-.lagda pairing (all files, not just skeletons)"
 PAIRED=0
 UNPAIRED=0
+SUBSTANTIVE_PAIRED=0
 rm -f /tmp/unpaired-skeletons.txt
+rm -f /tmp/substantive-paired.txt
 for f in $(cat /tmp/skeleton.txt 2>/dev/null); do
   # src/X/Y/Z.agda  →  docs/lagda/X/Y/Z.lagda
   rel=${f#src/}
@@ -63,6 +65,27 @@ for f in $(cat /tmp/skeleton.txt 2>/dev/null); do
 done
 print -- "  paired skeleton → .lagda: $PAIRED"
 print -- "  unpaired skeletons:       $UNPAIRED  (list: /tmp/unpaired-skeletons.txt)"
+
+# DRIFT HAZARD: substantive .agda files that ALSO have a .lagda partner.
+# These are the files where prose and code may have desynchronized.
+for f in $(cat /tmp/substantive.txt 2>/dev/null); do
+  rel=${f#src/}
+  lagda="docs/lagda/${rel%.agda}.lagda"
+  if [[ -f "$lagda" ]]; then
+    SUBSTANTIVE_PAIRED=$((SUBSTANTIVE_PAIRED + 1))
+    agda_size=$(wc -l < "$f")
+    lagda_size=$(wc -l < "$lagda")
+    agda_mtime=$(stat -c %Y "$f")
+    lagda_mtime=$(stat -c %Y "$lagda")
+    delta=$((agda_mtime - lagda_mtime))
+    print -- "$f  ($agda_size lines)  vs  $lagda  ($lagda_size lines)  Δmtime=${delta}s" \
+      >> /tmp/substantive-paired.txt
+  fi
+done
+print -- "  substantive .agda WITH a .lagda partner (drift hazard): $SUBSTANTIVE_PAIRED"
+if [[ $SUBSTANTIVE_PAIRED -gt 0 ]]; then
+  print -- "  (list: /tmp/substantive-paired.txt)"
+fi
 
 banner "4. external references to .lagda paths"
 print -- "  grepping for '\\.lagda' outside docs/lagda/ ..."
@@ -82,6 +105,8 @@ print -- "  external .lagda references: $REF_COUNT  (list: /tmp/lagda-references
 
 banner "Agda 2.8.0 .lagda.md smoke test"
 # Verify the minimal .lagda.md round-trips under the project's flags.
+# Use --no-libraries so the project's include path doesn't try to
+# resolve the temp module against stdlib or src/.
 TMP=$(mktemp -d)
 cat > "$TMP/Smoke.lagda.md" <<'EOF'
 # Smoke test
@@ -92,8 +117,8 @@ module Smoke where
 data ⊤ : Set where tt : ⊤
 ```
 EOF
-if (cd "$TMP" && agda --html --html-dir="$TMP/out" Smoke.lagda.md \
-                      >/dev/null 2>&1); then
+if (cd "$TMP" && agda --no-libraries --html --html-dir="$TMP/out" \
+                      Smoke.lagda.md >/dev/null 2>&1); then
   print -- "  .lagda.md smoke test: OK"
 else
   print -- "  .lagda.md smoke test: FAILED — investigate before migrating"
@@ -106,5 +131,6 @@ print -- "  skeleton .agda files in src/:           $SKELETON_COUNT"
 print -- "  substantive .agda files in src/:        $SUBSTANTIVE_COUNT"
 print -- "  skeleton → .lagda pairs:                $PAIRED"
 print -- "  skeletons lacking a paired .lagda:      $UNPAIRED"
+print -- "  substantive .agda WITH .lagda partner:  $SUBSTANTIVE_PAIRED  (drift hazard)"
 print -- "  external .lagda references:             $REF_COUNT"
 print -- ""
