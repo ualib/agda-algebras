@@ -55,7 +55,7 @@ Each classical structure ships as a quintuple: `Classical/Signatures/X.agda`, `C
 
 ## References
 
-+  Issue M3-1 — [Introduce the Classical/ tree](https://github.com/ualib/agda-algebras/issues/XX).
++  Issue M3-1 — [Introduce the Classical/ tree](https://github.com/ualib/agda-algebras/issues/260).
 +  Issue M3-2 — `Classical.Structures.Semigroup` as the pattern-setting first structure.
 +  Issue M3-3 — Stdlib bundle bridges.
 +  `docs/STYLE_GUIDE.md` — section on record vs Σ.
