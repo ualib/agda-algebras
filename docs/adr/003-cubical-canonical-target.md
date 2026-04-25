@@ -35,7 +35,7 @@ Not all four need hold in the same quarter; the promotion is triggered when the 
 
 ## Consequences
 
-+  **The 3.0 development is not "set theoretic" in the sense it would have to be abandoned at 4.0.**  The setoid formulation is the path of record for the current cycle; it is preserved in `Legacy/Setoid/` at 4.0 and remains type-checking.
++  **The 3.0 development is not "set theoretic" in the sense it would have to be abandoned at 4.0.**  The setoid formulation is the path of record for the current cycle; it is preserved in `src/Legacy/Setoid/` at 4.0 and remains type-checking.
 +  **A portability discipline constrains what new contributions may assume.**  Theorems in `Setoid/` and `Classical/Structures/` that would require setoid-specific machinery without a cubical analog must either find a cubical-portable alternative or be marked as non-portable in the module header.  The constraint is real but modest; most universal-algebra theorems are portable because they are stated about the algebra's equivalence, not about the specific representation of that equivalence.
 +  **M5-1 is a genuine validation, not a formality.**  A substantive failure of the Monoid port would surface in M5-1, and the response would be to relax the commitment or to redefine the discipline, not to paper over the failure.  ADR-003 is appropriately tentative on the implementation side.
 +  **The library has a forward-looking story for the next decade.**  Cubical Agda is the direction the Agda ecosystem as a whole is moving (1Lab is the most visible exemplar); committing to it publicly aligns `agda-algebras` with that trajectory and makes the case that its setoid-era proofs remain useful — as first-class training data, if nothing else — after the foundations shift.
@@ -48,7 +48,7 @@ Not all four need hold in the same quarter; the promotion is triggered when the 
 
 ## References
 
-+  Issue M5-1 — [Cubical/Algebras/Basic with SIP and Monoid port](https://github.com/ualib/agda-algebras/issues/XX).
++  Issue M5-1 — [Cubical/Algebras/Basic with SIP and Monoid port](https://github.com/ualib/agda-algebras/issues/270).
 +  ADR-001 — Setoid as canonical development tree for 3.0.
 +  ADR-002 — Classical layer design (which makes the portability discipline concrete).
 +  Vezzosi, Mörtberg, and Abel (2019), *Cubical Agda: A Dependently Typed Programming Language with Univalence and Higher Inductive Types*, JFP.

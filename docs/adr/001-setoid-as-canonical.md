@@ -35,7 +35,7 @@ A third consideration, previously under-emphasized: definitions in `Setoid/` tha
 
 ## References
 
-+  Issue M2-1 — [Freeze Base/, adopt Setoid/ as canonical](https://github.com/ualib/agda-algebras/issues/XX).
++  Issue M2-1 — [Freeze Base/, adopt Setoid/ as canonical](https://github.com/ualib/agda-algebras/issues/256).
 +  `docs/STYLE_GUIDE.md` — section on record vs Σ, which depends on this decision.
 +  `docs/GITHUB_PROJECT.md` — milestone 2 exit criterion.
 +  DeMeo and Carette (2023), *A Machine-Checked Proof of Birkhoff's Variety Theorem in Martin-Löf Type Theory*, TYPES 2021 post-proceedings.

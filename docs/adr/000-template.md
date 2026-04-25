@@ -2,7 +2,8 @@
 
 ## Status
 
-Proposed | Accepted | Deprecated | Superseded by ADR-NNN — YYYY-MM-DD.
+<!-- One of: Proposed | Accepted | Deprecated | Superseded by ADR-NNN.  Include the date this status last changed. -->
+Accepted — YYYY-MM-DD.
 
 ## Context
 

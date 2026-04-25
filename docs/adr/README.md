@@ -24,10 +24,10 @@ A template is provided in [`000-template.md`](000-template.md); copy it to start
 
 +  **Proposed**: written and opened as a draft PR.  Review happens on the PR.
 +  **Accepted**: the PR is merged.  The decision is in force as of the merge date.
-+  **Deprecated**: the decision is no longer in force but has not been explicitly replaced.  Add a deprecation note at the top of the file and update the status; do not delete the ADR.
-+  **Superseded by ADR-NNN**: a later ADR replaces this one.  Link forward to the superseding ADR and update the status; the superseding ADR links back.
++  **Deprecated**: the decision is no longer in force but has not been explicitly replaced.  Record any deprecation note in the **Status** section/header when you update the status; do not delete the ADR.
++  **Superseded by ADR-NNN**: a later ADR replaces this one.  Record the forward link to the superseding ADR in the **Status** section/header when you update the status; the superseding ADR links back.
 
-ADRs are **append-only**.  Once accepted, the body text is not edited except to fix factual errors or update the status header.  If a decision changes, write a new ADR that supersedes the old one.
+ADRs are **append-only**.  Once accepted, the body text is not edited except to fix factual errors or update the status section/header (including deprecation or supersession notes).  If a decision changes, write a new ADR that supersedes the old one.
 
 ## Index
 
