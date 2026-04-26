@@ -128,6 +128,15 @@ class GitHubClient:
     skipped on the write path).  Read-side methods (`list_*`) provide the
     state-pull half of the populate/render symmetry.
 
+    Dry-run contract: when `dry_run=True`, no write API calls are made, but
+    read calls (`list_*`) still occur — they're needed to make idempotency
+    visible in the dry-run output.  An entity that already exists is
+    reported as `- exists: ...`; a genuinely-new entity is reported as
+    `[dry-run] would create ...`.  Running --dry-run against an
+    already-populated repo therefore produces a clean inventory rather
+    than the misleading "would create everything" output of an earlier
+    iteration of this client.
+
     The `env_prefix` flag prepends `env -u GH_TOKEN -u GITHUB_TOKEN` to every
     invocation, working around a long-standing `gh` quirk where these
     environment variables silently override the keychain-stored auth token
@@ -164,19 +173,8 @@ class GitHubClient:
     def create_label(self, label: Label) -> Result[bool, PipelineError]:
         """Create `label` on GitHub; return True if newly created, False if it
         already existed.  Idempotent."""
-        if self.dry_run:
-            print(f"  [dry-run] would create label: {label.name} (#{label.color})")
-            return Result.ok(True)
         return self.list_labels().and_then(
-            lambda existing: (
-                Result.ok(False) if any(e.name == label.name for e in existing)
-                else self._run(
-                    "label", "create", label.name,
-                    "--repo", self.repo,
-                    "--color", label.color,
-                    "--description", label.description,
-                ).map(lambda _: True)
-            )
+            lambda existing: _find_or_create_label(self, label, existing)
         )
 
     # — milestones ——————————————————————————————————————————————————————
@@ -202,9 +200,6 @@ class GitHubClient:
         """Create `ms` on GitHub; return a `Milestone` with `gh_number`
         populated.  Idempotent: an existing milestone with the same title is
         re-used rather than recreated."""
-        if self.dry_run:
-            print(f"  [dry-run] would create milestone: {ms.title}")
-            return Result.ok(ms.with_gh_number(0))
         return self.list_milestones().and_then(
             lambda existing: _find_or_create_milestone(self, ms, existing)
         )
@@ -237,9 +232,6 @@ class GitHubClient:
         issues — without it, re-running populate would silently duplicate
         every existing issue.
         """
-        if self.dry_run:
-            print(f"  [dry-run] would create issue: {issue.title}")
-            return Result.ok(0)
         return self.list_issues().and_then(
             lambda existing: _find_or_create_issue(self, issue, milestone_title, existing)
         )
@@ -348,6 +340,31 @@ def _parse_json(stdout: str, kind: str) -> Result[list[dict], PipelineError]:
 # Kept as module-level closures (rather than methods on GitHubClient) to keep
 # the client's surface compact and to make the pure decision logic separately
 # testable from the I/O.
+#
+# Each helper receives the current state of the corresponding GitHub entity
+# (already fetched by the caller) and decides between three outcomes: report
+# the entity as existing and return its ID, preview the creation under
+# dry_run, or perform the real create.  Keeping the existence check ahead of
+# the dry-run branch means dry-run output accurately reflects what will
+# happen during a live run.
+
+def _find_or_create_label(
+    client: GitHubClient,
+    label: Label,
+    existing: list[Label],
+) -> Result[bool, PipelineError]:
+    if any(e.name == label.name for e in existing):
+        print(f"  - exists: label {label.name}")
+        return Result.ok(False)
+    if client.dry_run:
+        print(f"  [dry-run] would create label: {label.name} (#{label.color})")
+        return Result.ok(True)
+    return client._run(
+        "label", "create", label.name,
+        "--repo", client.repo,
+        "--color", label.color,
+        "--description", label.description,
+    ).map(lambda _: True)
 
 def _find_or_create_milestone(
     client: GitHubClient,
@@ -356,7 +373,11 @@ def _find_or_create_milestone(
 ) -> Result[Milestone, PipelineError]:
     for e in existing:
         if e.title == ms.title:
+            print(f"  - exists: milestone #{e.gh_number} {e.title}")
             return Result.ok(ms.with_gh_number(e.gh_number or 0))
+    if client.dry_run:
+        print(f"  [dry-run] would create milestone: {ms.title}")
+        return Result.ok(ms.with_gh_number(0))
     return client._run(
         "api", f"repos/{client.repo}/milestones",
         "-X", "POST",
@@ -390,11 +411,18 @@ def _find_or_create_issue(
     the parsed ID rather than the full title makes the guard robust to
     post-creation title edits (which do happen — issue maintenance routinely
     tweaks the descriptive part of a title).
+
+    The check runs ahead of the dry-run early-return so that `--dry-run`
+    accurately previews idempotent behavior; existing issues are reported
+    as `- exists`, only genuinely-new issues print `[dry-run] would create`.
     """
     for e in existing:
         if e.id == issue.id:
-            print(f"  - exists: #{e.gh_number} {e.title}")
+            print(f"  - exists: issue #{e.gh_number} {e.title}")
             return Result.ok(e.gh_number or 0)
+    if client.dry_run:
+        print(f"  [dry-run] would create issue: {issue.title}")
+        return Result.ok(0)
     args = [
         "issue", "create",
         "--repo", client.repo,
