@@ -34,6 +34,7 @@ ADRs are **append-only**.  Once accepted, the body text is not edited except to 
 +  [ADR-001 — Setoid as canonical development tree for 3.0](001-setoid-as-canonical.md)
 +  [ADR-002 — Classical structures layer: Σ-typed core with record-typed bundle views](002-classical-layer-design.md)
 +  [ADR-003 — Cubical Agda as the canonical long-term target](003-cubical-canonical-target.md)
++  [ADR-004 — Markdown-literate Agda as the canonical literate format](004-lagda-md-canonical.md)
 
 ## When to write an ADR
 
