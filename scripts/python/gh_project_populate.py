@@ -1,11 +1,8 @@
 #!/usr/bin/env python3
 """
-gh_project_populate.py
-
 File: scripts/python/gh_project_populate.py
 
 Description:
-
   Create GitHub milestones, labels, and issues from a structured Markdown project plan.
 
 Usage:
@@ -32,47 +29,29 @@ Options:
   --env-prefix       Prefix gh commands with `env -u GH_TOKEN -u GITHUB_TOKEN`
                      to work around token precedence issues (default: True)
   --no-env-prefix    Disable the env prefix
+
+Architecture:
+  The data model (Label, Milestone, Issue) and GitHub I/O layer (GitHubClient)
+  are shared with gh_project_render.py via _gh_project_lib.  This file owns
+  only the markdown-parsing logic, which is populate-specific.
 """
 
 from __future__ import annotations
 
 import argparse
-import json
 import re
-import subprocess
 import sys
 import textwrap
 import time
-from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Optional
 
-
-# ── Data classes ──────────────────────────────────────────────────────────────
-
-@dataclass
-class Label:
-    name: str
-    color: str
-    description: str = ""
-
-
-@dataclass
-class Milestone:
-    number: int  # 0-based index from the markdown (M0, M1, ...)
-    title: str
-    description: str
-    gh_number: Optional[int] = None  # GitHub-assigned milestone number
-
-
-@dataclass
-class Issue:
-    id: str          # e.g. "M0-1"
-    title: str
-    body: str
-    labels: list[str] = field(default_factory=list)
-    milestone_idx: int = 0  # which milestone (0, 1, 2, ...)
-
+from _gh_project_lib import (
+    GitHubClient,
+    Issue,
+    Label,
+    Milestone,
+    issue_id_gte,
+)
 
 # ── Markdown parser ──────────────────────────────────────────────────────────
 
@@ -282,170 +261,6 @@ def _parse_issues(text: str) -> list[Issue]:
     return issues
 
 
-# ── GitHub API calls ─────────────────────────────────────────────────────────
-
-class GitHubClient:
-    """Thin wrapper around `gh` CLI."""
-
-    def __init__(self, repo: str, dry_run: bool = False, env_prefix: bool = True):
-        self.repo = repo
-        self.dry_run = dry_run
-        self.env_prefix = env_prefix
-        self._milestone_cache: dict[str, int] = {}  # title → gh number
-
-    def _gh_cmd(self, *args: str) -> list[str]:
-        """Build the gh command, optionally with env prefix."""
-        cmd = []
-        if self.env_prefix:
-            cmd = ["env", "-u", "GH_TOKEN", "-u", "GITHUB_TOKEN"]
-        cmd.extend(["gh"])
-        cmd.extend(args)
-        return cmd
-
-    def _run(self, cmd: list[str], check: bool = True) -> subprocess.CompletedProcess:
-        """Run a command and return the result."""
-        if self.dry_run:
-            print(f"  [DRY RUN] {' '.join(cmd)}")
-            return subprocess.CompletedProcess(cmd, 0, stdout=b'{"number": 0}', stderr=b'')
-
-        result = subprocess.run(
-            cmd,
-            capture_output=True,
-            text=False,  # get bytes
-        )
-
-        if check and result.returncode != 0:
-            stderr = result.stderr.decode("utf-8", errors="replace")
-            # Don't fail on "already exists" errors
-            if "already exists" in stderr.lower():
-                print(f"    (already exists, skipping)")
-                return result
-            print(f"  ⚠ Command failed (exit {result.returncode}):")
-            print(f"    stderr: {stderr[:500]}")
-            return result
-
-        return result
-
-    # ── Labels ────────────────────────────────────────────────────────────
-
-    def create_label(self, label: Label) -> bool:
-        """Create a label. Returns True if created, False if it already existed."""
-        print(f"  Creating label: {label.name} (#{label.color})")
-
-        cmd = self._gh_cmd(
-            "label", "create", label.name,
-            "--color", label.color,
-            "--repo", self.repo,
-        )
-        if label.description:
-            cmd.extend(["--description", label.description])
-
-        result = self._run(cmd, check=False)
-        return result.returncode == 0
-
-    # ── Milestones ────────────────────────────────────────────────────────
-
-    def get_existing_milestones(self) -> dict[str, int]:
-        """Fetch existing milestones and return {title: number}."""
-        if self.dry_run:
-            return {}
-
-        cmd = self._gh_cmd(
-            "api", f"repos/{self.repo}/milestones",
-            "--method", "GET",
-            "-f", "state=all",
-            "-f", "per_page=100",
-        )
-        result = self._run(cmd, check=False)
-        if result.returncode != 0:
-            return {}
-
-        try:
-            data = json.loads(result.stdout)
-            return {m["title"]: m["number"] for m in data}
-        except (json.JSONDecodeError, KeyError):
-            return {}
-
-    def create_milestone(self, milestone: Milestone) -> Optional[int]:
-        """Create a milestone. Returns the GitHub milestone number."""
-        existing = self._milestone_cache or self.get_existing_milestones()
-        self._milestone_cache = existing
-
-        if milestone.title in existing:
-            gh_num = existing[milestone.title]
-            print(f"  Milestone '{milestone.title}' already exists (#{gh_num})")
-            return gh_num
-
-        print(f"  Creating milestone: {milestone.title}")
-
-        cmd = self._gh_cmd(
-            "api", f"repos/{self.repo}/milestones",
-            "--method", "POST",
-            "-f", f"title={milestone.title}",
-            "-f", f"description={milestone.description}",
-            "-f", "state=open",
-        )
-
-        result = self._run(cmd)
-        if self.dry_run:
-            return 0
-
-        try:
-            data = json.loads(result.stdout)
-            gh_num = data.get("number", 0)
-            self._milestone_cache[milestone.title] = gh_num
-            print(f"    → milestone #{gh_num}")
-            return gh_num
-        except (json.JSONDecodeError, KeyError):
-            print(f"    ⚠ Could not parse milestone response")
-            return None
-
-    # ── Issues ────────────────────────────────────────────────────────────
-
-    def create_issue(self, issue: Issue, milestone_title: Optional[str] = None) -> Optional[int]:
-        """Create an issue. Returns the GitHub issue number.
-
-        Note: `gh issue create --milestone` expects the milestone TITLE (a string),
-        not the GitHub API milestone number.
-        """
-        # Build the title with the issue ID prefix
-        full_title = f"[{issue.id}] {issue.title}"
-        print(f"  Creating issue: {full_title}")
-
-        cmd = self._gh_cmd(
-            "issue", "create",
-            "--repo", self.repo,
-            "--title", full_title,
-            "--body", issue.body,
-        )
-
-        # Add labels
-        for label in issue.labels:
-            cmd.extend(["--label", label])
-
-        # Add milestone (gh issue create expects the title, not the number)
-        if milestone_title:
-            cmd.extend(["--milestone", milestone_title])
-
-        result = self._run(cmd)
-
-        if self.dry_run:
-            return 0
-
-        # gh issue create prints the URL on success
-        stdout = result.stdout.decode("utf-8", errors="replace").strip()
-        if stdout:
-            # Extract issue number from URL
-            num_match = re.search(r"/issues/(\d+)", stdout)
-            if num_match:
-                gh_num = int(num_match.group(1))
-                print(f"    → issue #{gh_num}: {stdout}")
-                return gh_num
-            else:
-                print(f"    → {stdout}")
-        return None
-
-
 # ── Main logic ───────────────────────────────────────────────────────────────
 
 def main():
@@ -513,7 +328,7 @@ def main():
         if not args.milestones_only and not args.labels_only:
             count = len(issues)
             if args.start_from:
-                count = len([i for i in issues if _issue_id_gte(i.id, args.start_from)])
+                count = len([i for i in issues if issue_id_gte(i.id, args.start_from)])
             what.append(f"{count} issues")
 
         print(f"This will create: {', '.join(what)}")
@@ -532,7 +347,7 @@ def main():
         print("CREATING LABELS")
         print("═" * 60)
         for label in labels:
-            gh.create_label(label)
+            gh.create_label(label).map_err(lambda e: print(f"  ! label {label.name}: {e}"))
             if not args.dry_run:
                 time.sleep(0.5)
         print()
@@ -549,21 +364,23 @@ def main():
         print("CREATING MILESTONES")
         print("═" * 60)
         for ms in milestones:
-            gh_num = gh.create_milestone(ms)
-            if gh_num is not None:
-                ms_title_map[ms.number] = ms.title
-                ms.gh_number = gh_num
+            result = gh.create_milestone(ms)
+            if result.is_ok:
+                created = result.unwrap()
+                ms_title_map[created.number] = created.title
             if not args.dry_run:
                 time.sleep(args.delay)
         print()
     else:
-        # Need to fetch existing milestones to verify they exist
         print("Fetching existing milestones...")
-        existing = gh.get_existing_milestones()
+        result = gh.list_milestones()
+        if result.is_err:
+            print(f"  ! could not fetch milestones: {result.unwrap_err()}", file=sys.stderr)
+            sys.exit(1)
+        existing = {m.title: m.gh_number for m in result.unwrap() if m.gh_number is not None}
         for ms in milestones:
             if ms.title in existing:
                 ms_title_map[ms.number] = ms.title
-                ms.gh_number = existing[ms.title]
         print(f"  Found {len(ms_title_map)} existing milestones")
         for idx, title in sorted(ms_title_map.items()):
             print(f"    M{idx} → \"{title}\"")
@@ -593,11 +410,11 @@ def main():
 
         ms_title = ms_title_map.get(issue.milestone_idx)
         result = gh.create_issue(issue, milestone_title=ms_title)
-
-        if result is not None:
+        if result.is_ok:
             created += 1
         else:
             failed += 1
+            print(f"  ! issue {issue.id}: {result.unwrap_err()}")
 
         if not args.dry_run:
             time.sleep(args.delay)
@@ -606,15 +423,6 @@ def main():
     print("═" * 60)
     print(f"DONE: {created} issues created, {failed} failed")
     print("═" * 60)
-
-
-def _issue_id_gte(a: str, b: str) -> bool:
-    """Compare issue IDs like M0-1 >= M1-3."""
-    def parse(s):
-        m = re.match(r"M(\d+)-(\d+)", s)
-        return (int(m.group(1)), int(m.group(2))) if m else (999, 999)
-    return parse(a) >= parse(b)
-
 
 if __name__ == "__main__":
     main()
