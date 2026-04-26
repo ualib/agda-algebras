@@ -2,7 +2,7 @@
 """
 gh_project_populate.py
 
-File: scripts/gh_project_populate.py
+File: scripts/python/gh_project_populate.py
 
 Description:
 
