@@ -23,19 +23,26 @@ find docs/lagda -name '*.lagda' 2>/dev/null | sort > /tmp/lagda-files.txt
 print -- "  list written to /tmp/lagda-files.txt"
 
 banner "2. skeleton .agda files in src/"
-# Heuristic for "skeleton": the file's non-comment, non-blank body consists
-# of just a single module declaration and nothing else.  We strip line
-# comments, block comments (approximately), and blank lines, then check
-# whether what remains begins with 'module' and contains no '='.
+# Heuristic for "skeleton": after stripping comments and blank lines, only
+# allow either:
+#   1. a single "module ... where" line, or
+#   2. one OPTIONS pragma followed by a single "module ... where" line.
+# Anything else counts as substantive content.
 SKELETON_COUNT=0
 SUBSTANTIVE_COUNT=0
 rm -f /tmp/skeleton.txt /tmp/substantive.txt /tmp/substantive-paired.txt
 for f in $(find src -name '*.agda' -not -path '*/Legacy/*'); do
   body=$(sed -E -e 's|--.*$||' -e '/^\{-/,/-\}/d' "$f" \
           | awk 'NF' | sed -E 's/^\s+//;s/\s+$//')
-  # A skeleton's body starts with OPTIONS pragma or "module ... where" and
-  # contains no "=" signs (which would indicate a definition).
-  if [[ -z "$body" ]] || ( ! grep -q '=' <<< "$body" ); then
+  first_line=$(printf '%s\n' "$body" | sed -n '1p')
+  second_line=$(printf '%s\n' "$body" | sed -n '2p')
+  line_count=$(printf '%s\n' "$body" | awk 'NF { count++ } END { print count + 0 }')
+
+  if { [[ "$line_count" -eq 1 ]] \
+       && grep -Eq '^module[[:space:]]+.+[[:space:]]+where$' <<< "$first_line"; } \
+     || { [[ "$line_count" -eq 2 ]] \
+          && grep -Eq '^\{-# OPTIONS .+#-\}$' <<< "$first_line" \
+          && grep -Eq '^module[[:space:]]+.+[[:space:]]+where$' <<< "$second_line"; }; then
     SKELETON_COUNT=$((SKELETON_COUNT + 1))
     print -- "$f" >> /tmp/skeleton.txt
   else
