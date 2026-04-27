@@ -195,7 +195,7 @@ The library is currently pinned to Agda 2.6.2 / stdlib 1.7.  The Agda ecosystem 
 - [ ] Fix any regressions from the flag change.
 - [ ] Update import paths for anything that moved between stdlib 1.7 and 2.3 (expected hotspots: `Function.Bundles`, `Relation.Binary.*` renamings, `Data.*` reorganizations).
 - [ ] Update CI config to test against Agda 2.8.0 / stdlib 2.3.
-- [ ] Update `README.md` and `doc/INSTALL.md` to reflect the new requirements.
+- [ ] Update `README.md` and `INSTALL.md` to reflect the new requirements.
 - [ ] Update the Nix flake.
 
 ## Acceptance criteria
@@ -282,7 +282,7 @@ Create `docs/STYLE_GUIDE.md` documenting file format, module structure, naming c
 
 ## Description
 
-The current `README.md` and `doc/lagda/Overture/Preface.lagda` are 1.x-era: wrong Agda versions, obsolete installation paths, pre-consolidation library structure.  They need a rewrite aligned with the 3.0 release.  Depends on M1-1 through M1-4 and M2-1.
+The current `README.md` and `docs/lagda/Overture/Preface.lagda` are 1.x-era: wrong Agda versions, obsolete installation paths, pre-consolidation library structure.  They need a rewrite aligned with the 3.0 release.  Depends on M1-1 through M1-4 and M2-1.
 
 ## Tasks
 
@@ -291,7 +291,7 @@ The current `README.md` and `doc/lagda/Overture/Preface.lagda` are 1.x-era: wron
 - [ ] Link `CONTRIBUTING.md`, `ROADMAP.md`, `docs/STYLE_GUIDE.md`.
 - [ ] Concrete quickstart for new users (5-command install → `make check`).
 - [ ] Add CI badge (from M1-2) and documentation site link.
-- [ ] Consider whether to merge `doc/lagda/Overture/Preface.lagda` and `src/Overture/Preface.agda` into new **Markdown-based literate Agda** file called `src/Overture/Preface.lagda.md` at this stage or put this off to a later milestone/issue/release.
+- [ ] Consider whether to merge `docs/lagda/Overture/Preface.lagda` and `src/Overture/Preface.agda` into new **Markdown-based literate Agda** file called `src/Overture/Preface.lagda.md` at this stage or put this off to a later milestone/issue/release.
 
 
 ## Acceptance criteria
@@ -675,7 +675,7 @@ The library contains three proofs of Birkhoff's HSP theorem:
 - [ ] Keep `Demos.HSP` as the self-contained pedagogical presentation (it was created for TYPES 2021 and remains valuable as a teaching artifact).
 - [ ] Move `Base.Varieties.FreeAlgebras.Birkhoff` into Legacy (implicit via M2-1, but cross-reference explicitly).
 - [ ] Add cross-references among the three so a reader starting at any of them can find the canonical statement.
-- [ ] Update paper citations in `doc/papers/`.
+- [ ] Update paper citations in `docs/papers/`.
 
 ## Acceptance criteria
 
@@ -952,7 +952,7 @@ graph TD
 
 ## Description
 
-Apply `docs/STYLE.md` across the `Setoid/` tree.  This is a long-tail task that can be decomposed into per-submodule issues for parallel work.
+Apply `docs/STYLE_GUIDE.md` across the `Setoid/` tree.  This is a long-tail task that can be decomposed into per-submodule issues for parallel work.
 
 ## Tasks
 
@@ -1067,7 +1067,7 @@ For agda-algebras this has concrete implications:
 
 +  [ ] **Watch agda/agda-stdlib#2967**.  Track the discussion; note the final decision (reverted as proposed, compromise, or `--without-K`-with-opt-in).
 +  [ ] **Benchmark `--cubical-compatible` → `--without-K` on our own code**.  Branch experiment: add `{-# OPTIONS --without-K --exact-split --safe #-}` pragmas across `Setoid/` and `Classical/`, measure `make check` wall-clock delta.  This is decidable today, independent of upstream.
-+  [ ] **Decide and document the `src/Cubical/` → agda-cubical strategy**.  Write up in `doc/FLAGS.md` (new file) so future contributors understand the firewall and why.  The current best guess: `Setoid/` and `Classical/` remain `--cubical-compatible` (or move to `--without-K` after benchmark); `Cubical/` uses `--cubical`, imports `agda-cubical` instead of stdlib, and re-derives / imports-from-agda-cubical whatever stdlib types it needs.
++  [ ] **Decide and document the `src/Cubical/` → agda-cubical strategy**.  Write up in `docs/FLAGS.md` (new file) so future contributors understand the firewall and why.  The current best guess: `Setoid/` and `Classical/` remain `--cubical-compatible` (or move to `--without-K` after benchmark); `Cubical/` uses `--cubical`, imports `agda-cubical` instead of stdlib, and re-derives / imports-from-agda-cubical whatever stdlib types it needs.
 +  [ ] **(Deferred) Prepare comment for agda/agda-stdlib#2967**.  agda-algebras is a non-trivial downstream with stated cubical ambitions; the maintainers benefit from knowing our position.  Hold until we have hands-on experience with agda-cubical in `src/Cubical/` (see M5) — the comment should be factual ("here is what this PR means for us in practice"), not advocacy.
 
 ## Relation to other milestones
