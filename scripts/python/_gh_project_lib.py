@@ -96,7 +96,9 @@ class Label:
 @dataclass(frozen=True)
 class Milestone:
     """A GitHub milestone; `gh_number` is set after creation or lookup."""
-    number: int                        # zero-based index in the project plan
+    number: int                        # 1-based plan index, matching the
+                                       # leading integer of the GitHub title
+                                       # ("1. Infrastructure health" → 1)
     title: str                         # GitHub display title, e.g. "1. Infrastructure"
     description: str
     gh_number: Optional[int] = None    # GitHub-assigned milestone number
@@ -113,7 +115,9 @@ class Issue:
     title: str                                # full title including `[MN-k]` prefix
     body: str
     labels: tuple[str, ...] = ()
-    milestone_idx: int = 0                    # zero-based; matches `milestone-N-*` label
+    milestone_idx: int = 0                    # 1-based plan index, matching the
+                                              # `milestone-N-*` label group; default 0
+                                              # means "unclassified" (no matching label)
     state: str = "open"                       # "open" or "closed"; render-only
     gh_number: Optional[int] = None           # GitHub-assigned issue number; render-only
 
