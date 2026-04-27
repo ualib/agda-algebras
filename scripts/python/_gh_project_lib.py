@@ -170,9 +170,10 @@ class GitHubClient:
         )
         return cmd.and_then(_parse_labels_json)
 
-    def create_label(self, label: Label) -> Result[bool, PipelineError]:
-        """Create `label` on GitHub; return True if newly created, False if it
-        already existed.  Idempotent."""
+    def create_label(self, label: Label) -> Result[tuple[str, bool], PipelineError]:
+        """Create `label` on GitHub.  Returns (name, was_created), where
+        was_created is True if a new label was created on this call and
+        False if an identically-named label already existed.  Idempotent."""
         return self.list_labels().and_then(
             lambda existing: _find_or_create_label(self, label, existing)
         )
@@ -196,10 +197,13 @@ class GitHubClient:
         )
         return cmd.and_then(_parse_milestones_json)
 
-    def create_milestone(self, ms: Milestone) -> Result[Milestone, PipelineError]:
-        """Create `ms` on GitHub; return a `Milestone` with `gh_number`
-        populated.  Idempotent: an existing milestone with the same title is
-        re-used rather than recreated."""
+    def create_milestone(
+        self, ms: Milestone
+    ) -> Result[tuple[Milestone, bool], PipelineError]:
+        """Create `ms` on GitHub.  Returns (milestone, was_created), where
+        the milestone has its gh_number populated and was_created is True
+        if a new milestone was created on this call and False if an
+        existing milestone with the same title was reused.  Idempotent."""
         return self.list_milestones().and_then(
             lambda existing: _find_or_create_milestone(self, ms, existing)
         )
@@ -223,15 +227,13 @@ class GitHubClient:
         )
         return cmd.and_then(_parse_issues_json)
 
-    def create_issue(self, issue: Issue, milestone_title: Optional[str]) -> Result[int, PipelineError]:
-        """Create `issue` on GitHub; return the GitHub-assigned issue number.
-
-        Idempotent: if an issue with the same `[MN-k]` title prefix already
-        exists, return its number without creating a duplicate.  This guard
-        is what makes populate safe to re-run after render has added new
-        issues — without it, re-running populate would silently duplicate
-        every existing issue.
-        """
+    def create_issue(
+        self, issue: Issue, milestone_title: Optional[str]
+    ) -> Result[tuple[int, bool], PipelineError]:
+        """Create `issue` on GitHub.  Returns (gh_number, was_created), where
+        was_created is True if a new issue was created on this call and
+        False if an existing issue with the same `[MN-k]` prefix was found.
+        Idempotent."""
         return self.list_issues().and_then(
             lambda existing: _find_or_create_issue(self, issue, milestone_title, existing)
         )
@@ -352,38 +354,41 @@ def _find_or_create_label(
     client: GitHubClient,
     label: Label,
     existing: list[Label],
-) -> Result[bool, PipelineError]:
+) -> Result[tuple[str, bool], PipelineError]:
     if any(e.name == label.name for e in existing):
         print(f"  - exists: label {label.name}")
-        return Result.ok(False)
+        return Result.ok((label.name, False))
     if client.dry_run:
         print(f"  [dry-run] would create label: {label.name} (#{label.color})")
-        return Result.ok(True)
+        return Result.ok((label.name, True))
     return client._run(
         "label", "create", label.name,
         "--repo", client.repo,
         "--color", label.color,
         "--description", label.description,
-    ).map(lambda _: True)
+    ).map(lambda _: (label.name, True))
 
 def _find_or_create_milestone(
     client: GitHubClient,
     ms: Milestone,
     existing: list[Milestone],
-) -> Result[Milestone, PipelineError]:
+) -> Result[tuple[Milestone, bool], PipelineError]:
     for e in existing:
         if e.title == ms.title:
             print(f"  - exists: milestone #{e.gh_number} {e.title}")
-            return Result.ok(ms.with_gh_number(e.gh_number or 0))
+            return Result.ok((ms.with_gh_number(e.gh_number or 0), False))
     if client.dry_run:
         print(f"  [dry-run] would create milestone: {ms.title}")
-        return Result.ok(ms.with_gh_number(0))
+        return Result.ok((ms.with_gh_number(0), True))
     return client._run(
         "api", f"repos/{client.repo}/milestones",
         "-X", "POST",
         "-f", f"title={ms.title}",
         "-f", f"description={ms.description}",
-    ).and_then(_parse_milestone_create_response).map(ms.with_gh_number)
+    ).and_then(_parse_milestone_create_response).map(
+        lambda n: (ms.with_gh_number(n), True)
+    )
+
 
 
 def _parse_milestone_create_response(stdout: str) -> Result[int, PipelineError]:
@@ -403,7 +408,7 @@ def _find_or_create_issue(
     issue: Issue,
     milestone_title: Optional[str],
     existing: list[Issue],
-) -> Result[int, PipelineError]:
+) -> Result[tuple[int, bool], PipelineError]:
     """Create `issue` if no existing issue has the same `[MN-k]` prefix.
 
     The prefix check is the idempotency guard: re-running populate after
@@ -419,10 +424,10 @@ def _find_or_create_issue(
     for e in existing:
         if e.id == issue.id:
             print(f"  - exists: issue #{e.gh_number} {e.title}")
-            return Result.ok(e.gh_number or 0)
+            return Result.ok((e.gh_number or 0, False))
     if client.dry_run:
         print(f"  [dry-run] would create issue: {issue.title}")
-        return Result.ok(0)
+        return Result.ok((0, True))
     args = [
         "issue", "create",
         "--repo", client.repo,
@@ -433,7 +438,10 @@ def _find_or_create_issue(
         args += ["--label", label]
     if milestone_title is not None:
         args += ["--milestone", milestone_title]
-    return client._run(*args).and_then(_parse_issue_create_response)
+    return client._run(*args).and_then(_parse_issue_create_response).map(
+        lambda n: (n, True)
+    )
+
 
 
 def _parse_issue_create_response(stdout: str) -> Result[int, PipelineError]:
