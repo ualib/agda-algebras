@@ -155,7 +155,7 @@ def render_issue(issue: Issue) -> str:
 def render_region(region_id: str, issues_by_ms: dict[int, list[Issue]]) -> str:
     m = re.match(r"^milestone-(\d+)$", region_id)
     if m is None:
-        return f"\n<!-- region '{region_id}' has no rendering rule in render.py -->\n"
+        return f"\n<!-- region '{region_id}' has no rendering rule in gh_project_render.py -->\n"
     n = int(m.group(1))
     issues = issues_by_ms.get(n, [])
     if not issues:

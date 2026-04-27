@@ -1,6 +1,6 @@
 ## scripts
 
-This directory contains miscelleneous utility scripts.
+This directory contains miscellaneous utility scripts.
 
 The Python utilities live under `scripts/python/`, separated from shell scripts and other scaffolding so that they can be lifted as a self-contained package if and when they become useful outside this repository.  See `scripts/python/_utils/` for the functional-programming primitives (Result monad, command-runner wrappers, file-ops wrappers) shared across the Python scripts.
 
