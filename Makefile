@@ -47,10 +47,12 @@ Everything.agda:
 	  echo ""; \
 	  echo "module Everything where"; \
 	  echo ""; \
-	  find $(SRCDIR) -name '*.agda' \
+	  find $(SRCDIR) \
+	      \( -name '*.lagda.md' -o -name '*.agda' \) \
 	      ! -name 'Everything.agda' \
 	      ! -path '$(SRCDIR)/Legacy/*' \
 	    | sed -e 's|^$(SRCDIR)/||' \
+	          -e 's|\.lagda\.md$$||' \
 	          -e 's|\.agda$$||' \
 	          -e 's|/|.|g' \
 	          -e 's|^|import |' \
