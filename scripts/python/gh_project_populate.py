@@ -346,10 +346,24 @@ def main():
         print("═" * 60)
         print("CREATING LABELS")
         print("═" * 60)
+        labels_created = 0
+        labels_existed = 0
+        labels_failed = 0
         for label in labels:
-            gh.create_label(label).map_err(lambda e: print(f"  ! label {label.name}: {e}"))
+            result = gh.create_label(label)
+            if result.is_ok:
+                _name, was_created = result.unwrap()
+                if was_created:
+                    labels_created += 1
+                else:
+                    labels_existed += 1
+            else:
+                labels_failed += 1
+                print(f"  ! label {label.name}: {result.unwrap_err()}")
             if not args.dry_run:
                 time.sleep(0.5)
+        print()
+        print(f"  labels: {labels_created} created, {labels_existed} already existed, {labels_failed} failed")
         print()
 
     if args.labels_only:
@@ -363,13 +377,25 @@ def main():
         print("═" * 60)
         print("CREATING MILESTONES")
         print("═" * 60)
+        ms_created = 0
+        ms_existed = 0
+        ms_failed = 0
         for ms in milestones:
             result = gh.create_milestone(ms)
             if result.is_ok:
-                created = result.unwrap()
+                created, was_created = result.unwrap()
                 ms_title_map[created.number] = created.title
+                if was_created:
+                    ms_created += 1
+                else:
+                    ms_existed += 1
+            else:
+                ms_failed += 1
+                print(f"  ! milestone {ms.title}: {result.unwrap_err()}")
             if not args.dry_run:
                 time.sleep(args.delay)
+        print()
+        print(f"  milestones: {ms_created} created, {ms_existed} already existed, {ms_failed} failed")
         print()
     else:
         print("Fetching existing milestones...")
@@ -396,8 +422,9 @@ def main():
     print("═" * 60)
 
     skipping = args.start_from is not None
-    created = 0
-    failed = 0
+    issues_created = 0
+    issues_existed = 0
+    issues_failed = 0
 
     for issue in issues:
         # Handle --start-from
@@ -411,9 +438,13 @@ def main():
         ms_title = ms_title_map.get(issue.milestone_idx)
         result = gh.create_issue(issue, milestone_title=ms_title)
         if result.is_ok:
-            created += 1
+            _gh_number, was_created = result.unwrap()
+            if was_created:
+                issues_created += 1
+            else:
+                issues_existed += 1
         else:
-            failed += 1
+            issues_failed += 1
             print(f"  ! issue {issue.id}: {result.unwrap_err()}")
 
         if not args.dry_run:
@@ -421,7 +452,7 @@ def main():
 
     print()
     print("═" * 60)
-    print(f"DONE: {created} issues created, {failed} failed")
+    print(f"DONE: {issues_created} issues created, {issues_existed} already existed, {issues_failed} failed")
     print("═" * 60)
 
 if __name__ == "__main__":
