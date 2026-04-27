@@ -27,13 +27,14 @@
 #      where a path segment happens to contain the substring `agda`.
 # =============================================================================
 
-.PHONY: default all check test clean html profile Everything.agda
+.PHONY: default all check test clean html profile project-plan Everything.agda
 
 # -- Configuration -----------------------------------------------------------
 SRCDIR    := src
 AGDA      ?= agda
 RTS_OPTS  := +RTS -M6G -A128M -RTS
 AGDA_OPTS ?=
+REPO      ?= ualib/agda-algebras
 
 # -- Targets -----------------------------------------------------------------
 
@@ -73,3 +74,10 @@ clean:
 	@echo "target: $@"
 	find . -name '*.agdai' -delete
 	rm -f $(SRCDIR)/Everything.agda
+
+# Regenerate the issue listings in docs/GITHUB_PROJECT.md from current
+# GitHub state.  Hand-edited prose outside the BEGIN/END GENERATED markers
+# is preserved verbatim.  Requires the `gh` CLI authenticated against $(REPO).
+project-plan:
+	@echo "target: $@"
+	python3 scripts/python/gh_project_render.py docs/GITHUB_PROJECT.md --repo $(REPO)
