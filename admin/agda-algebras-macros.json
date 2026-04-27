@@ -1,0 +1,9 @@
+{
+  "agda_terms": {
+    "ab": { "basename": "", "agda_class": "AgdaBound" },
+    "af": { "basename": "", "agda_class": "AgdaFunction" },
+    "ar": { "basename": "", "agda_class": "AgdaRecord" },
+    "as": { "basename": "", "agda_class": "AgdaSymbol" },
+    "au": { "basename": "", "agda_class": "AgdaArgument" }
+  }
+}
