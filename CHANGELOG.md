@@ -1,4 +1,4 @@
-# Changelog
+# CHANGELOG
 
 All notable changes to agda-algebras are documented in this file.
 
@@ -21,7 +21,8 @@ The 3.0 release is a major reconstruction of agda-algebras building on the Setoi
 
 +  **Agda target**: 2.6.2 → 2.8.0.
 +  **Standard library target**: 1.7 → 2.3.
-+  **Pragma**: `--without-K` → `--cubical-compatible` across the tree.  See `docs/lagda/Overture/Basic.lagda` for the reasoning.
++  **Pragma**: `--without-K` → `--cubical-compatible` across the tree.  See `src/Overture/Basic.lagda.md` for the reasoning.
++  **Literate-Agda format** (**breaking** for external links into `docs/lagda/`).  The historical dual-tree split — minimal `src/X/Y/Z.agda` skeletons paired with LaTeX-literate `docs/lagda/X/Y/Z.lagda` content — is consolidated into unified Markdown-literate `src/X/Y/Z.lagda.md` files.  127 module pairs were collapsed; the `docs/lagda/` tree was deleted.  Rationale and migration policy are recorded in [ADR-004](docs/adr/004-lagda-md-canonical.md).  External bookmarks pointing at specific `docs/lagda/X/Y/Z.lagda` paths will not resolve; the rendered documentation site at [https://ualib.org](https://ualib.org) is unaffected because it serves `X.Y.Z.html` paths under the same scheme as before.
 +  **Documentation directory**: `doc/` → `docs/` following modern conventions.
 +  **README**: rewritten for the 3.0 line.
 
@@ -31,7 +32,8 @@ The 3.0 release is a major reconstruction of agda-algebras building on the Setoi
 
 ### Removed
 
-Nothing removed yet in this cycle.
++  **`docs/lagda/` tree** (127 LaTeX-literate `.lagda` files).  Content migrated to `src/X/Y/Z.lagda.md`; see "Literate-Agda format" above.
++  **`src/X/Y/Z.agda` skeleton companions** (127 files) that were mechanically derived from the LaTeX-literate sources by `admin/illiterator/`.  The illiterator program itself is slated for deletion in the rendering-pipeline-modernization follow-up.
 
 ### Fixed
 
