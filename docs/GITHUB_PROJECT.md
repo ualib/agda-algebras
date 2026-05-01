@@ -394,9 +394,9 @@ A short design discussion is needed before code is written; the resolutions shou
 
 ### File migration
 
-- [ ] Run the conversion script across `docs/lagda/` (excluding any items the ADR earmarks to remain LaTeX-literate).
-- [ ] Move output to the matching `src/` path with `.lagda.md` extension.
-- [ ] Delete the corresponding `src/X/Y/Z.agda` skeleton files.
+- [x] Run the conversion script across `docs/lagda/` (excluding any items the ADR earmarks to remain LaTeX-literate).
+- [x] Move output to the matching `src/` path with `.lagda.md` extension.
+- [x] Delete the corresponding `src/X/Y/Z.agda` skeleton files.
 - [ ] Update internal cross-references — link definitions, `[Module.Name][]`-style references, BibTeX `Source code` notes in module headers.
 - [ ] Update `_includes/UALib.Links.md` (or equivalent) to reflect new paths.
 
@@ -409,10 +409,10 @@ A short design discussion is needed before code is written; the resolutions shou
 
 ### Verification
 
-- [ ] `make check` passes after migration.
+- [x] `make check` passes after migration.
 - [ ] `make html` produces equivalent or improved HTML output; spot-check at least 10 rendered pages against a pre-migration archive.
 - [ ] All internal cross-references resolve in the rendered HTML.
-- [ ] Round-trip sanity: a representative sample of converted Agda code blocks type-check identically to their pre-migration `.lagda` originals.
+- [x] Round-trip sanity: a representative sample of converted Agda code blocks type-check identically to their pre-migration `.lagda` originals.
 
 ## Acceptance criteria
 

@@ -47,6 +47,47 @@ Five principles shape the specific rules below.  When a situation isn't covered 
 
 ## File format
 
+### Literate format
+
+Every module under `src/` is written in Markdown-literate Agda and placed in a
+file that is named after the module, with the `.lagda.md` extension.  Both prose and
+Agda code live in the same file: the type checker reads the Agda inside fenced code
+blocks; Markdown renderers (GitHub's web UI, mkdocs, `agda --html`, etc.) render the
+prose and the code together as a document.  This consolidation was ratified in
+[ADR-004](./docs/adr/004-lagda-md-canonical.md) and landed in
+[M1-8](https://github.com/ualib/agda-algebras/issues/280); the historical dual-tree
+`src/X/Y/Z.agda` skeleton + `docs/lagda/X/Y/Z.lagda` content split is gone from the
+corpus.
+
+Agda code blocks are delimited by triple-backtick fences with the `agda` info string:
+
+`````
+```agda
+example : ℕ → ℕ
+example x = x + 1
+```
+`````
+
+Any block fenced as `agda` is fed to the type checker.  Illustrative or pseudo-code
+that should *not* type-check uses an indented four-space code block, or a fence with
+a different info string (`text`, `bash`, or none).
+
+Inline references to Agda terms in prose use kramdown attribute spans, which recover
+the highlighting that the LaTeX-literate `\AgdaFunction{...}` macros used to provide;
+e.g.,
+
+    ... applying `S`{.AgdaFunction} to ...
+
+The five attribute classes carried over from the legacy corpus are `{.AgdaBound}`,
+`{.AgdaFunction}`, `{.AgdaRecord}`, `{.AgdaSymbol}`, and `{.AgdaArgument}`.  The
+canonical mapping lives in `admin/agda-algebras-macros.json` and is the input to bulk
+operations on the corpus (corpus extraction, future format migrations).
+
+Files under `docs/papers/` retain LaTeX-literate (`.lagda`) shape — they are co-built
+with external paper PDFs and are out of scope for the Markdown-literate rule.  No
+other `.lagda` files exist in the repository.
+
+
 ### Pragma
 
 Every Agda source file begins with the following pragma:
@@ -69,9 +110,9 @@ The flags, in order, mean the following:
 
 Immediately after the pragma (possibly separated by imports required by the module header's own arguments), the module is declared.  The module name must match the filename under the `src/` include root, with `/` replaced by `.`; e.g.,
 
-+  `src/Base.agda` → `module Base where`.
-+  `src/Setoid/Algebras/Basic.agda` → `module Setoid.Algebras.Basic where`.
-+  `src/Classical/Structures/Semigroup.agda` → `module Classical.Structures.Semigroup where`.
++  `src/Base.lagda.md` → `module Base where`.
++  `src/Setoid/Algebras/Basic.lagda.md` → `module Setoid.Algebras.Basic where`.
++  `src/Classical/Structures/Semigroup.lagda.md` → `module Classical.Structures.Semigroup where`.
 
 Parametrized modules declare their parameters in the header:
 
@@ -133,7 +174,7 @@ In upcoming versions of agda-algebras (to land in [Milestone 3][`docs/GITHUB_PRO
 +  `Classical/Bundles/X.agda`: the record-typed "bundle view" matching stdlib's `Algebra.Bundles.X`.
 +  `Classical/Small/Structures/X.agda`: a level-fixed veneer at `ℓ₀` for the common case.
 
-This pattern is to be ratified in ADR-002 (to land with [M3-1][`docs/GITHUB_PROJECT.md`]) and exemplified in `Classical/Structures/Semigroup.agda` (M3-2) as the pattern-setting first structure.
+This pattern is to be ratified in ADR-002 (to land with [M3-1][`docs/GITHUB_PROJECT.md`]) and exemplified in `Classical/Structures/Semigroup.lagda.md` (M3-2) as the pattern-setting first structure.
 
 ### Module headers have comment blocks
 
@@ -218,7 +259,7 @@ Agda's standard library names predicates `IsSemigroup`, `IsMonoid`, `IsHomomorph
 
 1.  **Stdlib compatibility**.  Our bundle bridges to `Algebra.Bundles` interoperate naturally when our types share stdlib's idiom.
 2.  **Disambiguation**.  `IsHom` (the property) is structurally a different kind of object from `hom` (the Σ of the function and the property), and the typographic difference makes that clear.
-3.  **Established in canonical code**.  `Setoid/Homomorphisms/Basic.agda`, `Demos/HSP.lagda`, and the `Setoid/Varieties/` tree already use this form.
+3.  **Established in canonical code**.  `Setoid/Homomorphisms/Basic.lagda.md`, `Demos/HSP.lagda.md`, and the `Setoid/Varieties/` tree already use this form.
 
 **Deprecated synonyms** (existing in `Base/` and some early `Setoid/`-ish code):
 
@@ -339,9 +380,17 @@ Plain-text `A`, `B` denote carrier types; mathematical bold italic `𝑨`, `𝑩
 
 ### When to introduce new notation
 
-Do not introduce new notation for a concept that already has notation elsewhere in the library.  If you're defining a new concept, consult this table and the `Setoid/Homomorphisms/Basic.agda` file for local conventions before picking a new symbol.  Prefer Unicode symbols already used in the Agda ecosystem (stdlib, `1Lab`, `cubical`, `TypeTopology`) over inventing new ones.
+Do not introduce new notation for a concept that already has notation elsewhere in
+the library.
 
-When you *do* introduce new notation, add it to this table in the same PR.
+If you're defining a new concept, consult the tables above and/or the
+existing code base (e.g., the file
+[`Setoid/Homomorphisms/Basic.lagda.md`](./src/Setoid/Homomorphisms/Basic.lagda.md))
+for local conventions before picking a new symbol.
+
+Prefer Unicode symbols already used in the Agda ecosystem (stdlib, `cubical`, `TypeTopology`) over inventing new ones.
+
+When you *do* introduce new notation, add it in a table above in the same PR.
 
 ---
 
@@ -386,7 +435,7 @@ The core `Algebra` type is a **record**.  It has named projections (`Domain`, `I
 **Classical algebraic structures** (`Semigroup`, `Monoid`, `Group`, `Ring`, `Lattice`, etc.), on the other hand, are **Σ-typed** at the core, with a **record-typed "bundle view"** in a parallel `Classical/Bundles/` module for stdlib interoperability; e.g.,
 
 ```agda
--- Classical/Structures/Semigroup.agda
+-- File: Classical/Structures/Semigroup.lagda.md
 module Classical.Structures.Semigroup where
 open import Classical.Signatures.Semigroup using ( 𝑆ₛ )
 open import Setoid.Algebras {𝑆 = 𝑆ₛ} using ( Algebra )
@@ -394,7 +443,7 @@ open import Setoid.Algebras {𝑆 = 𝑆ₛ} using ( Algebra )
 Semigroup : (α ρ : Level) → Type _
 Semigroup α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ Eₛ
 
--- Classical/Bundles/Semigroup.agda
+-- File: Classical/Bundles/Semigroup.lagda.md
 record SemigroupBundle α ρ : Type _ where ...
 ```
 
@@ -508,7 +557,7 @@ See [Module structure and organization](#module-structure-and-organization) abov
 
 ### Literate-Agda files
 
-Files in `docs/lagda/` are user-facing exposition built around formal content.  The rules above for in-source comments apply to the `\begin{code}` ... `\end{code}` blocks; the surrounding prose can be more expansive.  The literate files are currently the primary vehicle for tutorial-style documentation.
+Every module under `src/` is a literate-Agda file (`.lagda.md`); see [File format](#file-format) above.  The in-source-comment rules above apply to the Agda content inside fenced `agda` blocks; the surrounding Markdown prose can be more expansive and is the primary vehicle for tutorial-style documentation.  Tutorial-style chapters that historically lived under `docs/lagda/` are now ordinary modules under `src/` (typically under `Demos/` or `Overture/`).
 
 ---
 

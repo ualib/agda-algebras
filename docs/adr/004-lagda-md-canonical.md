@@ -1,3 +1,5 @@
+<!-- File: docs/adr/004-lagda-md-canonical.md -->
+
 # ADR-004: Markdown-literate Agda (`.lagda.md`) as the canonical literate format
 
 ## Status
