@@ -49,15 +49,7 @@ Five principles shape the specific rules below.  When a situation isn't covered 
 
 ### Literate format
 
-Every module under `src/` is written in Markdown-literate Agda and placed in a
-file that is named after the module, with the `.lagda.md` extension.  Both prose and
-Agda code live in the same file: the type checker reads the Agda inside fenced code
-blocks; Markdown renderers (GitHub's web UI, mkdocs, `agda --html`, etc.) render the
-prose and the code together as a document.  This consolidation was ratified in
-[ADR-004](./docs/adr/004-lagda-md-canonical.md) and landed in
-[M1-8](https://github.com/ualib/agda-algebras/issues/280); the historical dual-tree
-`src/X/Y/Z.agda` skeleton + `docs/lagda/X/Y/Z.lagda` content split is gone from the
-corpus.
+Every module under `src/` is written in Markdown-literate Agda and placed in a file that is named after the module, with the `.lagda.md` extension.  Both prose and Agda code live in the same file: the type checker reads the Agda inside fenced code blocks; Markdown renderers (GitHub's web UI, mkdocs, `agda --html`, etc.) render the prose and the code together as a document.  This consolidation was ratified in [ADR-004](./docs/adr/004-lagda-md-canonical.md) and landed in [M1-8](https://github.com/ualib/agda-algebras/issues/280); the historical dual-tree `src/X/Y/Z.agda` skeleton + `docs/lagda/X/Y/Z.lagda` content split is gone from the corpus.
 
 Agda code blocks are delimited by triple-backtick fences with the `agda` info string:
 
@@ -68,24 +60,15 @@ example x = x + 1
 ```
 `````
 
-Any block fenced as `agda` is fed to the type checker.  Illustrative or pseudo-code
-that should *not* type-check uses an indented four-space code block, or a fence with
-a different info string (`text`, `bash`, or none).
+Any block fenced as `agda` is fed to the type checker.  Illustrative or pseudo-code that should *not* type-check uses an indented four-space code block, or a fence with a different info string (`text`, `bash`, or none).
 
-Inline references to Agda terms in prose use kramdown attribute spans, which recover
-the highlighting that the LaTeX-literate `\AgdaFunction{...}` macros used to provide;
-e.g.,
+Inline references to Agda terms in prose use kramdown attribute spans, which recover the highlighting that the LaTeX-literate `\AgdaFunction{...}` macros used to provide; e.g.,
 
     ... applying `S`{.AgdaFunction} to ...
 
-The five attribute classes carried over from the legacy corpus are `{.AgdaBound}`,
-`{.AgdaFunction}`, `{.AgdaRecord}`, `{.AgdaSymbol}`, and `{.AgdaArgument}`.  The
-canonical mapping lives in `admin/agda-algebras-macros.json` and is the input to bulk
-operations on the corpus (corpus extraction, future format migrations).
+The five attribute classes carried over from the legacy corpus are `{.AgdaBound}`, `{.AgdaFunction}`, `{.AgdaRecord}`, `{.AgdaSymbol}`, and `{.AgdaArgument}`.  The canonical mapping lives in `admin/agda-algebras-macros.json` and is the input to bulk operations on the corpus (corpus extraction, future format migrations).
 
-Files under `docs/papers/` retain LaTeX-literate (`.lagda`) shape — they are co-built
-with external paper PDFs and are out of scope for the Markdown-literate rule.  No
-other `.lagda` files exist in the repository.
+Files under `docs/papers/` retain LaTeX-literate (`.lagda`) shape — they are co-built with external paper PDFs and are out of scope for the Markdown-literate rule.  No other `.lagda` files exist in the repository.
 
 
 ### Pragma
@@ -557,7 +540,7 @@ See [Module structure and organization](#module-structure-and-organization) abov
 
 ### Literate-Agda files
 
-Every module under `src/` is a literate-Agda file (`.lagda.md`); see [File format](#file-format) above.  The in-source-comment rules above apply to the Agda content inside fenced `agda` blocks; the surrounding Markdown prose can be more expansive and is the primary vehicle for tutorial-style documentation.  Tutorial-style chapters that historically lived under `docs/lagda/` are now ordinary modules under `src/` (typically under `Demos/` or `Overture/`).
+Every module under `src/` is a literate-Agda file (`.lagda.md`); see [File format](#file-format) above.  The in-source-comment rules above apply to the Agda content inside fenced ```` ```agda ```` blocks; the surrounding Markdown prose can be more expansive and is the primary vehicle for tutorial-style documentation.  Tutorial-style chapters that historically lived under `docs/lagda/` are now ordinary modules under `src/` (typically under `Demos/` or `Overture/`).
 
 ---
 
