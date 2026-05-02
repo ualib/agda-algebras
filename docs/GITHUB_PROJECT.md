@@ -25,13 +25,13 @@ edits to those regions will be overwritten on the next render.
 
 ## Summary
 
-Modernization of agda-algebras in 9 milestones: tooling upgrade/infra (M1), consolidate Base/Setoid (M2), classical structures (M3), style/naming uniformity (M4), Cubical Agda (M5), FLRP (M6), complexity/CSP module (M7), training corpus/LLM (M8), novel-research apps of `Continuous` relation API (M9).
+Modernization of agda-algebras in 10 milestones: tooling upgrade/infra (M1), consolidate Base/Setoid (M2), classical structures (M3), style/naming uniformity (M4), Cubical Agda (M5), FLRP (M6), complexity/CSP module (M7), training corpus/LLM (M8), novel-research apps of `Continuous` relation API (M9), and post-3.0 polish — rendering pipeline, organization transfer, and Nix packaging (M10).
 
 ---
 
 ## Description
 
-A structured plan to modernize the agda-algebras library.  The work is organized into nine milestones: tooling upgrade and infrastructure (M1), consolidation of the Base/Setoid fork (M2), introduction of the long-missing classical structures layer (M3), style and naming uniformity (M4), a Cubical Agda proof-of-concept as the canonical long-term target (M5), prerequisites for work on the Finite Lattice Representation Problem (M6), an extension of the existing algebraic complexity / CSP module for finite templates (M7), publication of a training corpus for language-model work (M8), and novel-research applications of the `Continuous` relation API (M9).  After M1 lands, the remaining milestones run largely in parallel.
+A structured plan to modernize the agda-algebras library.  The work is organized into ten milestones: tooling upgrade and infrastructure (M1), consolidation of the Base/Setoid fork (M2), introduction of the long-missing classical structures layer (M3), style and naming uniformity (M4), a Cubical Agda proof-of-concept as the canonical long-term target (M5), prerequisites for work on the Finite Lattice Representation Problem (M6), an extension of the existing algebraic complexity / CSP module for finite templates (M7), publication of a training corpus for language-model work (M8), novel-research applications of the `Continuous` relation API (M9), and a post-3.0 polish layer — rendering-pipeline modernization, transfer to the official `agda` GitHub organization, and first-class distribution through nixpkgs (M10).  After M1 lands, the remaining milestones run largely in parallel; M10 in particular requires only M1, M2, and M4 to be complete and runs alongside M5–M9 rather than after them.
 
 ---
 
@@ -52,13 +52,15 @@ agda-algebras was released as v2.0.1 in December 2021 ([Zenodo DOI 10.5281/zenod
 - `milestone-7-csp` (5319e7) — Milestone 7: Algebraic complexity / CSP.
 - `milestone-8-llm` (5319e7) — Milestone 8: LLM readiness.
 - `milestone-9-apps` (5319e7) — Milestone 9: Applications of continuous relations.
+- `milestone-10-polish` (5319e7) — Milestone 10: Post-3.0 polish (rendering, organization transfer, packaging).
 - `stdlib-bridge` (fbca04) — Bridges to the Agda standard library.
 - `breaking-change` (d93f0b) — Breaking change to the public API.
 - `good first issue` (7057ff) — Good for newcomers.
 - `help-wanted` (0e8a16) — Community help wanted.
 - `design-discussion` (c5def5) — Needs design discussion before implementation.
 - `documentation` (0e8a16) — Documentation changes.
-
+- `governance` (8aea29) — Administration and governance
+- `agda-community` (945ca0) — Topics relevant to the Agda community.
 ---
 
 ## Milestones
@@ -139,6 +141,20 @@ Phase 2: Ring, CommutativeRing, Field, Module, DistributiveLattice, BooleanAlgeb
 
 ---
 
+### Milestone 10 — Post-3.0 polish (community packaging and presentation)
+
+**Description**.  Independent polish items that finalize agda-algebras' presentation as a community-grade library, separated out from the body of the 3.0 modernization work because each is most valuable applied to a library already in production-grade shape, but none of them depends on M5–M9, and M10-1 in particular can begin as soon as M1, M2, and M4 are complete and run in parallel with the rest.
+
++  **M10-1**: modernize the rendering pipeline by replacing the Jekyll-based `admin/generate-html` machinery with a MkDocs site consumed directly from `.lagda.md` sources.
++  **M10-2**: transfer the repository to the official `agda` GitHub organization to align governance with the rest of the Agda ecosystem.
++  **M10-3**: promote the library to a first-class entry under `nixpkgs.agdaPackages` so downstream Nix users can depend on it without vendoring a flake input.
+
+M10-2 and M10-3 are governance/packaging tasks with no hard structural prerequisites inside the milestone tree; they sit in M10 for thematic grouping (post-3.0 community polish) rather than for dependency reasons.  Pursuing them prematurely, before the library itself is in 3.0-ready shape, undermines the goals these tasks aim to achieve, which is why they're tagged with this milestone rather than M1 or M2.
+
+**Exit criterion**.  MkDocs site live at https://ualib.org with `make site` building cleanly under `nix develop`; the repository is hosted at `agda/agda-algebras` with HTTP redirects from the old `ualib/` URL working transparently; `nix-shell -p 'agdaPackages.agda-algebras'` produces a working environment in which `agda --library agda-algebras` resolves correctly.
+
+---
+
 ### Milestone Dependencies
 
 ```mermaid
@@ -152,18 +168,22 @@ graph TD
   M7["M7 — CSP (finite templates)"]
   M8["M8 — LLM corpus"]
   M9["M9 — Continuous-relation apps"]
+  M10["M10 — Post-3.0 polish"]
 
   M1 --> M2
   M1 --> M4
   M1 --> M5
+  M1 --> M10
   M2 --> M3
   M2 --> M7
   M2 --> M9
+  M2 --> M10
   M3 --> M5
   M3 --> M6
   M3 --> M7
   M3 --> M9
   M4 --> M8
+  M4 --> M10
   M7 -.-> M9
 ```
 
@@ -190,20 +210,20 @@ The library is currently pinned to Agda 2.6.2 / stdlib 1.7.  The Agda ecosystem 
 
 ## Tasks
 
-- [ ] Update `agda-algebras.agda-lib` to `depend: standard-library-2.3` and document the minimum Agda version as 2.8.0.
-- [ ] Replace every `{-# OPTIONS --without-K --exact-split --safe #-}` with `{-# OPTIONS --cubical-compatible --exact-split --safe #-}`.
-- [ ] Fix any regressions from the flag change.
-- [ ] Update import paths for anything that moved between stdlib 1.7 and 2.3 (expected hotspots: `Function.Bundles`, `Relation.Binary.*` renamings, `Data.*` reorganizations).
-- [ ] Update CI config to test against Agda 2.8.0 / stdlib 2.3.
-- [ ] Update `README.md` and `INSTALL.md` to reflect the new requirements.
-- [ ] Update the Nix flake.
+- [x] Update `agda-algebras.agda-lib` to `depend: standard-library-2.3` and document the minimum Agda version as 2.8.0.
+- [x] Replace every `{-# OPTIONS --without-K --exact-split --safe #-}` with `{-# OPTIONS --cubical-compatible --exact-split --safe #-}`.
+- [x] Fix any regressions from the flag change.
+- [x] Update import paths for anything that moved between stdlib 1.7 and 2.3 (expected hotspots: `Function.Bundles`, `Relation.Binary.*` renamings, `Data.*` reorganizations).
+- [x] Update CI config to test against Agda 2.8.0 / stdlib 2.3.
+- [x] Update `README.md` and `INSTALL.md` to reflect the new requirements.
+- [x] Update the Nix flake.
 
 ## Acceptance criteria
 
-- [ ] Library type-checks under Agda 2.8.0 / stdlib v2.3.
-- [ ] `make check` succeeds locally.
+- [x] Library type-checks under Agda 2.8.0 / stdlib v2.3.
+- [x] `make check` succeeds locally.
 - [ ] No file still declares `--without-K`.
-- [ ] Once 2.0 is stable, consider adding a CI job against Agda 2.9/dev to catch forward-compatibility issues early.
+- [x] Once 2.0 is stable, consider adding a CI job against Agda 2.9/dev to catch forward-compatibility issues early.
 
 ---
 
@@ -227,9 +247,9 @@ The library has no CI.  Contributors can break type-checking without maintainers
 ## Acceptance criteria
 
 - [x] CI runs green on `main`.
-- [ ] CI triggers on every pull request.
-- [ ] Average job time < 10 min after caching.
-- [ ] README shows a green CI badge.
+- [x] CI triggers on every pull request.
+- [x] Average job time < 10 min after caching.
+- [x] README shows a green CI badge.
 
 ---
 
@@ -239,7 +259,7 @@ The library has no CI.  Contributors can break type-checking without maintainers
 
 ## Description
 
-Standard community-health files are missing.  Drafts of CONTRIBUTING and STYLE may exist from the 3.0 planning cycle and could be merged after review.
+Standard community-health files are missing.  Drafts of `CONTRIBUTING.md` and `docs/STYLE_GUIDE.md` may exist from the 3.0 planning cycle and could be merged after review.
 
 ## Tasks
 
@@ -252,7 +272,7 @@ Standard community-health files are missing.  Drafts of CONTRIBUTING and STYLE m
 ## Acceptance criteria
 
 - [x] All four files exist at the repo root (or in `.github/`).
-- [ ] GitHub recognizes the community-health files (green checkmarks on the "Insights → Community" page).
+- [x] GitHub recognizes the community-health files (green checkmarks on the "Insights → Community standards" page).
 
 ---
 
@@ -266,13 +286,13 @@ Create `docs/STYLE_GUIDE.md` documenting file format, module structure, naming c
 
 ## Tasks
 
-- [ ] Merge `docs/STYLE_GUIDE.md` (draft from planning cycle).
-- [ ] Link `STYLE.md` from `README.md` and `CONTRIBUTING.md`.
+- [x] Merge `docs/STYLE_GUIDE.md` (draft from planning cycle).
+- [x] Link `docs/STYLE_GUIDE.md` from `README.md` and `CONTRIBUTING.md`.
 
 ## Acceptance criteria
 
-- [ ] `docs/STYLE_GUIDE.md` is merged.
-- [ ] Links from README and CONTRIBUTING work.
+- [x] `docs/STYLE_GUIDE.md` is merged.
+- [x] Links from README and CONTRIBUTING work.
 
 ---
 
@@ -286,20 +306,20 @@ The current `README.md` and `docs/lagda/Overture/Preface.lagda` are 1.x-era: wro
 
 ## Tasks
 
-- [ ] Pin Agda 2.8.0 / stdlib 2.3 in install instructions.
+- [x] Pin Agda 2.8.0 / stdlib 2.3 in install instructions.
 - [ ] Describe the Setoid-as-canonical structure and point to `Classical/`.
-- [ ] Link `CONTRIBUTING.md`, `ROADMAP.md`, `docs/STYLE_GUIDE.md`.
-- [ ] Concrete quickstart for new users (5-command install → `make check`).
-- [ ] Add CI badge (from M1-2) and documentation site link.
+- [x] Link `CONTRIBUTING.md`, `GITHUB_PROJECT.md`, `docs/STYLE_GUIDE.md`.
+- [x] Concrete quickstart for new users (5-command install → `make check`).
+- [x] Add CI badge (from M1-2) and documentation site link.
 - [ ] Consider whether to merge `docs/lagda/Overture/Preface.lagda` and `src/Overture/Preface.agda` into new **Markdown-based literate Agda** file called `src/Overture/Preface.lagda.md` at this stage or put this off to a later milestone/issue/release.
 
 
 ## Acceptance criteria
 
-- [ ] A reviewer can follow the README on a clean machine to a working `make check` without asking questions.
-- [ ] All links resolve.
-- [ ] No references to Agda 2.6.x or stdlib 1.x remain.
-- [ ] A decision is made to either merge Preface{.lagda,.agda} files into one Markdown-based literate Agda file, or make a new issue for applying the `.lagda` + `.agda` => `.lagda.md` transformation across entire code base (e.g., using a script like the one we developed at IO for converting LaTeX-based to Markdown-based literate Agda).
+- [x] A reviewer can follow the README on a clean machine to a working `make check` without asking questions.
+- [x] All links resolve.
+- [x] ~~No references to Agda 2.6.x or stdlib 1.x remain.~~ Current installation/setup guidance no longer instructs users to use Agda 2.6.x or stdlib 1.x; any remaining references are clearly historical or archival rather than normative.
+- [x] A decision is made to either merge Preface{.lagda,.agda} files into one Markdown-based literate Agda file, or make a new issue for applying the `.lagda` + `.agda` => `.lagda.md` transformation across entire code base (e.g., using a script like the one we developed at IO for converting LaTeX-based to Markdown-based literate Agda).
 
 ---
 
@@ -313,18 +333,18 @@ As the library evolves, design decisions (Setoid vs Base canonicality, record vs
 
 ## Tasks
 
-- [ ] Create `docs/adr/` directory.
-- [ ] Add `docs/adr/README.md` explaining the ADR format.
-- [ ] Add `docs/adr/000-template.md`.
-- [ ] Seed with decisions ratified in 2.0:
+- [x] Create `docs/adr/` directory.
+- [x] Add `docs/adr/README.md` explaining the ADR format.
+- [x] Add `docs/adr/000-template.md`.
+- [x] Seed with decisions ratified in 2.0:
   - `001-setoid-as-canonical.md` (from M2-1);
   - `002-classical-layer-design.md` (from M3-1);
   - `003-cubical-canonical-target.md` (from M5-1).
 
 ## Acceptance criteria
 
-- [ ] `docs/adr/` exists with README and template.
-- [ ] All three seeded ADRs are drafted (full content can land with the associated implementation issues).
+- [x] `docs/adr/` exists with README and template.
+- [x] All three seeded ADRs are drafted (full content can land with the associated implementation issues).
 
 ---
 
@@ -357,9 +377,9 @@ A short design discussion is needed before code is written; the resolutions shou
 ### Pre-work and design
 
 - [x] Extract and generalize the IOHK conversion script; done (see [agda-lagda-migrator](https://github.com/williamdemeo/agda-lagda-migrator)).
-- [ ] Confirm agda-lagda-migrator produces well-formed `.lagda.md` on a representative sample (suggested: `Overture/Preface`, `Setoid/Algebras/Basic`, `Demos/HSP`).
+- [x] Confirm agda-lagda-migrator produces well-formed `.lagda.md` on a representative sample (suggested: `Overture/Preface`, `Setoid/Algebras/Basic`, `Demos/HSP`).
 - [x] Audit current state: count of `.lagda` files, count of `.agda` skeletons paired with `.lagda` content, count of `.agda` files with substantive content.
-- [ ] Confirm Agda 2.8.0's `.lagda.md` support is fully functional under `--cubical-compatible --exact-split --safe`.
+- [x] Confirm Agda 2.8.0's `.lagda.md` support is fully functional under `--cubical-compatible --exact-split --safe`.
 - [ ] Inventory hard-coded paths to specific `.lagda` files across the repository (commit messages, BibTeX notes, paper PDFs, README links, internal cross-references, Jekyll templates).
 - [x] Write ADR `docs/adr/004-lagda-md-canonical.md` resolving the open design questions above.
 
@@ -506,7 +526,7 @@ Combined with a project-local `$AGDA_DIR/defaults` that lists `standard-library`
 
 ---
 
-### Issue M1-10: Script to generate `GITHUB_PROJECT.md` from GitHub API (#289)
+### Issue M1-10: Script to generate `GITHUB_PROJECT.md` from GitHub API (#289, closed)
 
 **Labels**: `documentation`, `milestone-1-infra`
 
@@ -514,7 +534,7 @@ Combined with a project-local `$AGDA_DIR/defaults` that lists `standard-library`
 
 `docs/GITHUB_PROJECT.md` is the single-file master plan of the 3.0 upgrade: milestone prose, exit criteria, dependency graphs, and the full set of issue bodies.  It was authored by hand during the initial project-planning cycle and then used as input to `scripts/gh_project_populate.py` to materialize the GitHub milestones, labels, and issues.
 
-After the initial population, GitHub became the authoritative source for issue state — we edit issues on the web, close them as they complete, file new ones.  But the markdown file has no mechanism to follow along.  Issues added since the initial cycle (e.g. `[M1-7]` itself, `[M1-8]`) are not reflected, and this drift will compound as the project progresses.
+After the initial population, GitHub became the authoritative source for issue state — we edit issues on the web, close them as they complete, file new ones.  But the markdown file has no mechanism to follow along.  Issues added since the initial cycle are not reflected, and this drift will compound as the project progresses.
 
 The file is too useful to abandon — external readers link to it, `gh_project_populate.py` consumes it, and a single-file view of the entire plan is the most efficient way to share the project state with collaborators (human and AI).  The problem is purely that it isn't regenerated.
 
@@ -523,26 +543,25 @@ The file is too useful to abandon — external readers link to it, `gh_project_p
 Add `scripts/gh_project_render.py`, a generator that produces `docs/GITHUB_PROJECT.md` from two inputs:
 
 +  **GitHub API** — issue bodies, milestone assignments (inferred from `milestone-N-*` labels), issue state (open/closed); queried via the `gh` CLI in the same style as `gh_project_populate.py`.
-+  **`docs/project_meta.yml`** (new, ~300 lines) — authored-by-hand narrative content that has no home on GitHub: ordered milestone list with description / exit criterion / mermaid dependency graph per milestone; label palette with hex colors and descriptions; file-level preamble and epilogue.
++  ~~**`docs/project_meta.yml`** — authored-by-hand narrative content that has no home on GitHub: ordered milestone list with description / exit criterion / mermaid dependency graph per milestone; label palette with hex colors and descriptions; file-level preamble and epilogue.~~ Alternative design ratified: all content in one file with markdown comment markers delimiting what should be regenerated.
 
-The generator is the mirror image of `gh_project_populate.py`: the latter pushes markdown to GitHub, the former pulls GitHub state back into markdown.  Shared data classes (`Milestone`, `Label`, `Issue`) and the `GitHubClient` wrapper should be factored into a small `scripts/_gh_project_lib.py` module used by both scripts.
+The generator is sort of inverse to `gh_project_populate.py`: the latter pushes markdown to GitHub, the former pulls GitHub state back into markdown.  Shared data classes (`Milestone`, `Label`, `Issue`) and the `GitHubClient` wrapper are factored into a small `scripts/_gh_project_lib.py` module used by both scripts.
 
 ## Design decisions to ratify
 
 +  **Issue membership is label-inferred**, not listed in a separate outline file.  The `milestone-N-*` labels already used by `gh_project_populate.py` determine which milestone an issue belongs to; within-milestone ordering comes from the `[MN-k]` prefix in the issue title.  Rationale: adding a new issue requires one human action (label it) instead of two (label it + edit an outline).
-+  **Dependency graphs stay in `project_meta.yml`**, authored by hand as per-milestone mermaid strings.  Machine-generation would require a "Depends on #N" convention nobody has committed to and a parser that doesn't exist; manual mermaid is six lines per milestone and changes rarely.
++  **Dependency graphs** are authored by hand as per-milestone mermaid strings.  Machine-generation would require a "Depends on #N" convention nobody has committed to and a parser that doesn't exist; manual mermaid is typically less than ten lines per milestone and changes rarely.
 +  **`GITHUB_PROJECT.md` remains committed**, with a generated-file banner at the top, because external links, issue templates, and the library's documentation page all point at it, and because a textual diff on project-structure changes is a useful PR review aid.
 +  **Maintenance is initially manual via `make project-plan`**; a CI staleness check is a follow-up once CI lands in M1-2.
 
 ## Tasks
 
-+  [ ] Factor shared data classes and the `GitHubClient` wrapper out of `gh_project_populate.py` into `scripts/_gh_project_lib.py`.
-+  [ ] Add `scripts/gh_project_render.py` that queries the GitHub API, loads `docs/project_meta.yml`, and emits `docs/GITHUB_PROJECT.md`.
-+  [ ] Add `docs/project_meta.yml` with the current narrative content extracted from the existing markdown.
-+  [ ] Add a `project-plan` target to the `Makefile`.
-+  [ ] Add a top-of-file banner to `docs/GITHUB_PROJECT.md` noting that it is generated.
-+  [ ] Regenerate `docs/GITHUB_PROJECT.md` and commit the (now byte-reproducible) version.
-+  [ ] Update `scripts/README.md` with usage for the new generator.
++  [x] Factor shared data classes and the `GitHubClient` wrapper out of `gh_project_populate.py` into `scripts/_gh_project_lib.py`.
++  [x] Add `scripts/gh_project_render.py` that queries the GitHub API and emits `docs/GITHUB_PROJECT.md`.
++  [x] Add a `project-plan` target to the `Makefile`.
++  [x] Add a top-of-file banner to `docs/GITHUB_PROJECT.md` noting that it is generated.
++  [x] Regenerate `docs/GITHUB_PROJECT.md` and commit the (now byte-reproducible) version.
++  [x] Update `scripts/README.md` with usage for the new generator.
 
 ## Follow-up (not part of this issue)
 
@@ -550,10 +569,10 @@ The generator is the mirror image of `gh_project_populate.py`: the latter pushes
 
 ## Acceptance criteria
 
-+  [ ] Running `make project-plan` on a clean checkout with a valid `gh` auth token produces a `docs/GITHUB_PROJECT.md` that matches the committed file byte-for-byte.
-+  [ ] All 31 currently-open issues are listed in their correct milestone sections.
-+  [ ] The mermaid dependency graphs render identically to the current hand-authored versions.
-+  [ ] `scripts/README.md` documents the new workflow.
++  [x] Running `make project-plan` on a clean checkout with a valid `gh` auth token produces a `docs/GITHUB_PROJECT.md` that matches the committed file byte-for-byte.
++  [x] All currently-open issues are listed in their correct milestone sections.
++  [x] The mermaid dependency graphs render identically to the current hand-authored versions.
++  [x] `scripts/README.md` documents the new workflow.
 
 <!-- END GENERATED: milestone-1 -->
 
@@ -1417,6 +1436,201 @@ graph TD
 ---
 ---
 
+## Milestone 10 — Post-3.0 polish
+
+<!-- BEGIN GENERATED: milestone-10 -->
+
+### Issue M10-1: doc rendering-pipeline modernization (mkdocs) (#295)
+
+**Labels**: `documentation`, `breaking-change`, `milestone-10-polish`
+
+## Context
+
+M1-8 / PR #294 proposes consolidating the current dual-tree literate-Agda layout into single-file `.lagda.md` modules under `src/`.  This issue tracks the rendering-pipeline modernization that should follow once that migration lands.
+
+The shared root cause is the same: if the source tree is migrated to Markdown-literate `.lagda.md` files, the current Jekyll-based `admin/generate-html` + `admin/generate-tex` pipeline will no longer be the natural fit.  In that post-migration layout, `agda --html --html-highlight=code` on a `.lagda.md` file already produces Markdown with fenced code blocks and (when paired with kramdown attribute spans, per ADR-004 and `agda-lagda-migrator#14`) inline-highlighted Agda terms.  A modern static-site generator that reads Markdown directly would then be the right shape for the rendering pipeline; the Agda community's de facto choice for that role is [MkDocs](https://www.mkdocs.org/) with the [Material](https://squidfunk.github.io/mkdocs-material/) theme.
+
+---
+
+## Open design questions
+
+A short discussion is needed before code is written.  The resolutions should be recorded in `docs/adr/005-mkdocs-rendering-pipeline.md`.
+
++  **Domain.**  Recommendation: keep [https://ualib.org](https://ualib.org).  It is the existing public URL of the rendered library; preserving it avoids breaking every external link to a `Module.Submodule.html` page.  Alternatives are out of scope here (see "Non-goals" below).
++  **agda-html integration.**  Two viable architectures — (a) preprocess `.lagda.md` files by running `agda --html --html-highlight=code` and pointing MkDocs at the generated Markdown, vs. (b) point MkDocs directly at `.lagda.md` and rely on kramdown attribute spans + a custom CSS for highlighting (no `agda --html` step in the rendering pipeline).  Recommendation: (b), because it eliminates a build-time dependency and matches what 1Lab and `agda-lagda-migrator` already produce.  The trade-off is that whole-token-by-token Agda highlighting (the kind `agda --html` produces) is sacrificed in favor of class-tagged inline references; in practice the latter is what readers actually use.
++  **MkDocs plugins.**  Baseline: `material`, `search` (built-in), `mkdocs-macros-plugin` (for the equivalent of Jekyll's `{% include %}` directive), `mkdocs-redirects` (to absorb the small set of post-3.0 URL changes).  Open: whether to add a Mermaid plugin for the dependency graphs in `docs/GITHUB_PROJECT.md` once they're rendered there too.
++  **Custom CSS.**  Recommendation: adapt the formal-ledger-specifications `custom.css` (referenced from `agda-lagda-migrator#14`'s PR description) for kramdown-attribute-span styling.  Light and dark themes; per-Agda-class colors (`AgdaFunction`, `AgdaBound`, `AgdaRecord`, `AgdaSymbol`, `AgdaArgument`).
+
+## Proposal
+
+### Pre-work
+
++  [ ] Write `docs/adr/005-mkdocs-rendering-pipeline.md` resolving the open questions above.
++  [ ] Confirm that the existing `_includes/UALib.Links.md` content is reproducible under MkDocs' macros plugin (or under a simple Markdown reference-link include scheme).
+
+### Tooling
+
++  [ ] Add `mkdocs.yml` at the repo root with `theme: material`, navigation tabs configured to mirror the existing `docs/GITHUB_PROJECT.md` ordering, and the `agda-algebras` library section linking to the `src/` tree.
++  [ ] Add `docs/stylesheets/custom.css` with kramdown-attribute-span styling for the five Agda classes.
++  [ ] Add `docs/javascripts/` only if a specific JS dependency is required (e.g., a search hook); avoid by default.
++  [ ] Add a top-level `make site` target that runs `mkdocs build`, with `make serve` for local preview (`mkdocs serve`).
++  [ ] Add a Nix shell input for MkDocs + Material so the rendering pipeline is reproducible under `nix develop`.
+
+### Content migration
+
++  [ ] Move the shared link definitions to a dedicated `docs/_links.md` referenced from each module (or provide the equivalent under `mkdocs-macros-plugin`).
++  [ ] Rewrite `docs/_links.md`'s entries: strip the `docs/lagda/` paths, point each entry at the new `src/X/Y/Z.lagda.md` path.
++  [ ] Audit the `src/**/*.lagda.md` corpus for any surviving `\href{...}{...}` LaTeX-link macros (the `agda-lagda-migrator#14` rewrite catches these but a sweep is cheap insurance) and any surviving raw `@@AgdaTerm@@...@@` placeholders.
+
+### CI / deploy
+
++  [ ] Add a GitHub Actions workflow `.github/workflows/docs.yml` that builds the MkDocs site on every push to `master` and deploys to `gh-pages` (using `mkdocs gh-deploy --force` or `peaceiris/actions-gh-pages`).
++  [ ] Configure GitHub Pages to serve from `gh-pages` with custom domain `ualib.org`.
++  [ ] Configure DNS at the registrar to point `ualib.org` (and `www.ualib.org`) at GitHub Pages' IPs.
++  [ ] Spot-check at least 10 rendered pages against the pre-migration archive at the current `https://ualib.org`.
+
+### Tooling cleanup
+
++  [ ] Delete `admin/generate-html`, `admin/generate-tex`, `admin/illiterator/`.
++  [ ] Delete `_layouts/`, `_config.yml`, and any other Jekyll-only files at the repo root or under `docs/`.
++  [ ] Remove the `make html` target and replace it with `make site`; update `Makefile`, `README.md`, and `INSTALL.md` accordingly.
+
+## Acceptance criteria
+
++  [ ] `make site` builds the full library at `site/` (or wherever MkDocs writes output) without errors.
++  [ ] Spot-checked rendered pages match the pre-migration archive in content; minor styling differences are acceptable.
++  [ ] `https://ualib.org` serves the new MkDocs site; existing `Module.Submodule.html` URLs continue to resolve (with `mkdocs-redirects` covering any path that legitimately moved).
++  [ ] `admin/generate-html/`, `admin/generate-tex/`, and `admin/illiterator/` no longer exist in the tree.
++  [ ] `docs/adr/005-mkdocs-rendering-pipeline.md` is merged.
++  [ ] `CHANGELOG.md` records the rendering-pipeline change under `[Unreleased] / Changed`.
+
+## Non-goals
+
++  Moving the documentation to a different domain.  `formalverification.org` and `agda-algebras.org` are tracked as separate considerations if at all; this issue does the obvious-and-stable thing and keeps `ualib.org`.
++  Re-litigating the choice of MkDocs over alternatives (Hugo, Zola, Quarto, etc.).  MkDocs is the de facto standard in the Agda ecosystem and the choice tracks ecosystem convention.
++  Restructuring the module hierarchy or renaming any `.lagda.md` file.
+
+## Related
+
++  PR #294 — M1-8: migrate to Markdown-literate Agda.
++  ADR-004 — Markdown-literate Agda as the canonical literate format.
++  `agda-lagda-migrator#14` — kramdown attribute spans (the convention this pipeline relies on).
++  Issue #280 — original M1-8 issue (closed by #294).
+
+## Why now
+
+The rendering pipeline is the last piece of the M1-8 story.  Deferring it indefinitely leaves `admin/generate-html` and the Jekyll machinery as dead code in the tree, ages the deferred-CHANGELOG entries, and blocks the `make corpus` target from M8 (LLM readiness) which wants the same `.lagda.md` walker MkDocs will exercise.  The work is bounded: MkDocs configuration is small, the kramdown-attribute-span scheme is already proven against the agda-algebras corpus by `agda-lagda-migrator#14`, and the deploy step is a known-good Actions-to-Pages flow.
+
+---
+
+### Issue M10-2: offer to transfer agda-algebras to the agda organization (#298)
+
+**Labels**: `milestone-10-polish`, `governance`, `agda-community`
+
+## Motivation
+
+Agda's umbrella organization, [github.com/agda](https://github.com/agda), already hosts the language itself, the standard library, the categorical-foundations library `agda-categories`, and other community-maintained core libraries.  agda-algebras' current home at `github.com/ualib` reflects an earlier era; folding it into the umbrella agda org would
+
+1. signal community-curated rather than personal-project status,
+2. make discovery easier for users browsing Agda's GitHub presence,
+3. align the library's governance with the same patterns the rest of the ecosystem uses.
+
+---
+
+## Pre-conditions
+
+The transfer should happen *after* the library is in good shape.  Concretely:
+
++  [ ] 3.0 has shipped (M1–M5 complete, classical structures landed, CI green, documentation site live).
++  [ ] CONTRIBUTING.md, CODE_OF_CONDUCT.md, governance model are stable.
++  [ ] Maintainership beyond a single primary author is realistic — at least one additional reviewer with commit rights to the core tree.
+
+The case for transfer rests on the library being something an org-level audience can rely on; transferring during a half-finished reconstruction would be premature.
+
+---
+
+## Process
+
+GitHub's "Transfer ownership" feature (Settings → General → Danger zone → Transfer) preserves stars, forks, watchers, issues, PRs, releases, and — critically — installs HTTP redirects from the old `ualib/agda-algebras` URLs to the new `agda/agda-algebras` URLs at the GitHub level.  External links don't need to be rewritten on day one.
+
+---
+
+## Tasks
+
++  [ ] Approach the agda-org maintainers (Andreas Abel, Nils Anders Danielsson, etc.) informally first.  Confirm they're amenable to hosting the library and what their org-level expectations are (CI, code of conduct, license, responsiveness on issues).
++  [ ] File a tracking issue in `agda/agda-algebras` (or wherever the discussion lives) for cross-referencing.
++  [ ] Execute the GitHub transfer.
++  [ ] Update `README.md`, `INSTALL.md`, `CONTRIBUTING.md`, `CHANGELOG.md`, the MkDocs site's `mkdocs.yml`, and any CI badge URLs to point at `agda/agda-algebras` directly (the redirects work, but explicit URLs are more durable).
++  [ ] Update the `agda-algebras.cabal`-style metadata (or whatever the equivalent is for an Agda library) to reflect the new home.
++  [ ] Announce on the Agda Zulip and the agda-algebras CHANGELOG.
+
+---
+
+## Non-goals
+
++  Renaming the repository.  `agda-algebras` stays `agda-algebras`.
++  Changing the library's API or any source content as part of the move.
++  Migrating off the existing `ualib.org` documentation domain.  That decision is independent and tracked separately.
+
+---
+
+### Issue M10-3: Distribute agda-algebras through nixpkgs as an Agda library (#299)
+
+**Labels**: `nix`, `milestone-10-polish`, `agda-community`
+
+## Motivation
+
+The repo's `flake.nix` provides a *development* environment — `nix develop` gives a contributor a pinned Agda + stdlib shell.  It does not provide a *consumer* Nix package: a downstream Nix user who wants to depend on agda-algebras as a library has to vendor a flake input or rebuild the package themselves.  Promoting agda-algebras to a first-class entry under `nixpkgs.agdaPackages` solves this and tracks how the rest of the Agda ecosystem is distributed (`agdaPackages.standard-library`, `agdaPackages.agda-categories`, `agdaPackages.cubical`, etc.).
+
+---
+
+## Tasks
+
++  [ ] Audit `nixpkgs/pkgs/build-support/agda` and the existing `agdaPackages.*` entries to confirm the packaging contract (build inputs, `everythingFile`, library-name conventions, version pinning).
++  [ ] Add a `pkgs/agda-modules/agda-algebras.nix` (or whatever the current nixpkgs path is) defining the package: source from a tagged release on `master`, depend on `standard-library` ≥ 2.3, build `Everything.agda`.
++  [ ] Open a PR against `nixpkgs` adding the entry; coordinate with the nixpkgs Agda maintainers (look at recent `agdaPackages` PRs for the right reviewer set).
++  [ ] Once accepted, update agda-algebras' own `flake.nix` to expose the same library derivation as a flake output (so flake-based downstream users don't have to wait for the nixpkgs channel cycle).
++  [ ] Document the consumer-side usage pattern in `INSTALL.md`: `agdaPackages.agda-algebras` for nixpkgs users; `inputs.agda-algebras.lib.X` for flake users.
++  [ ] Coordinate with each subsequent agda-algebras release: tag, update the nixpkgs entry's source hash, bump the package version.
+
+---
+
+## Acceptance criteria
+
++  [ ] `nix-shell -p 'agdaPackages.agda-algebras'` produces a working environment in which `agda --library agda-algebras` resolves correctly.
++  [ ] The flake also exposes the library derivation: `nix build github:ualib/agda-algebras#lib` (or the post-transfer `agda/agda-algebras` URL).
++  [ ] `INSTALL.md` documents the nixpkgs consumer path alongside the existing development-environment path.
+
+---
+
+## Non-goals
+
++  Replacing the existing development flake.  The development flake (`nix develop`) is a different artifact and stays in place.
++  Distributing through any package manager other than nix.  Agda libraries don't have a strong tradition of cross-package-manager distribution; the agda-stdlib is the closest thing to a canonical distribution channel and it's nixpkgs-anchored.
+
+<!-- END GENERATED: milestone-10 -->
+
+### Milestone 10 Dependencies
+
+M10-1 (MkDocs rendering) is the only one of the three with concrete structural prerequisites — it consumes the `.lagda.md` corpus produced by M1-8, the stable file tree from M2, and the prose-comment uniformity from M4.  M10-2 (organization transfer) and M10-3 (nixpkgs distribution) are governance/packaging tasks with no hard upstream dependencies; their position in this milestone is thematic rather than structural.
+
+```mermaid
+graph TD
+  M1_8["M1-8: `.lagda.md` migration"]:::ext
+  M2_1["M2-1: Freeze Base"]:::ext
+  M4_1["M4-1: Style audit"]:::ext
+  M10_1["M10-1: MkDocs rendering"]
+  M10_2["M10-2: agda org transfer"]
+  M10_3["M10-3: nixpkgs distribution"]
+  M1_8 --> M10_1
+  M2_1 --> M10_1
+  M4_1 --> M10_1
+  classDef ext fill:#f0f0f0,stroke:#999,stroke-dasharray: 4 3,color:#555
+```
+
+---
+---
+
 ## Dependency Graph (Mermaid)
 
 ```mermaid
@@ -1428,6 +1642,7 @@ graph TD
     M1_4["M1-4: STYLE_GUIDE.md"]
     M1_5["M1-5: README / Preface"]
     M1_6["M1-6: docs/adr/"]
+    M1_8["M1-8: .lagda.md migration"]
   end
   subgraph "M2 — Consolidation"
     M2_1["M2-1: Freeze Base"]
@@ -1468,6 +1683,11 @@ graph TD
     M9_1["M9-1: Scott-continuous relations"]
     M9_2["M9-2: Infinitary CSP"]
     M9_3["M9-3: Coalgebra exploration"]
+  end
+  subgraph "M10 — Post-3.0 polish"
+    M10_1["M10-1: MkDocs rendering"]
+    M10_2["M10-2: agda org transfer"]
+    M10_3["M10-3: nixpkgs distribution"]
   end
 
   %% M1 internal
@@ -1528,6 +1748,11 @@ graph TD
   M3_1 --> M9_1
   M3_1 --> M9_2
   M7_1 -.-> M9_2
+
+  %% M10 depends on M1-8, M2-1, M4-1 (M10-1 specifically; M10-2 and M10-3 are independent)
+  M1_8 --> M10_1
+  M2_1 --> M10_1
+  M4_1 --> M10_1
 ```
 
 ---
