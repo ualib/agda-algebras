@@ -61,6 +61,8 @@ If no issue exists for the change you want to make, **please open one first**, e
 
 ## Code conventions
 
+This section describes only the most important conventions contributors are expected to follow.  For a more complete style guide, see [`docs/STYLE_GUIDE.md`](./docs/STYLE_GUIDE.md).  Please follow the style described in that document; when in doubt, or if something isn't covered in the style guide, ask in the PR.
+
 ### File pragma
 
 Every `.agda` source file begins with:
@@ -80,8 +82,6 @@ As of the 3.0 reconstruction, all of `src/` uses `--cubical-compatible`.  When t
 +  **Types** start with an uppercase letter.
 +  **Predicates** are typically named `IsX` for "X-ness of a single thing" (e.g. `IsHomomorphism`) and `X` for "the type of things with property X" (e.g. `Homomorphism`).
 +  Avoid synonyms.  If the concept is already called `Hom` elsewhere, call it `Hom` here too.
-
-A proper style guide, `docs/STYLE_GUIDE.md`, is tracked in M1-4 and will land shortly.  Until then, the convention is "follow the style of the surrounding code, and when in doubt ask in the PR."
 
 ### Comments
 
