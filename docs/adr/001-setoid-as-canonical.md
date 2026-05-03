@@ -1,8 +1,10 @@
+<!-- File: docs/adr/001-setoid-as-canonical.md -->
+
 # ADR-001: Setoid as canonical development tree for 3.0
 
 ## Status
 
-Accepted — 2026-04-24.
+Accepted — 2026-04-24 (drafted at M1-6); updated 2026-05-02 with post-inventory findings from the M2-1 implementation.
 
 ## Context
 
@@ -27,17 +29,27 @@ A third consideration, previously under-emphasized: definitions in `Setoid/` tha
 +  **`Base/` must be kept type-checking for posterity.**  Frozen-but-checked means the CI pipeline must run over both trees indefinitely, at the cost of some build time.  The alternative — deleting `Base/` — was rejected because the Base-tree proofs remain the only implementations of several lemmas that have not yet been ported, and because the historical TYPES 2021 proof should remain executable at its original location as a matter of scholarly record.
 +  **Some readable but pedagogically useful Base-tree presentations are demoted to Legacy.**  `Base.Varieties.FreeAlgebras.Birkhoff` is the clearest example.  The compensation is `Demos/HSP`, which is kept as a self-contained teaching artifact (M2-4).
 
+The following consequences were added 2026-05-02 with the M2-1 implementation, reflecting findings from the orphan inventory:
+
++  **`Legacy/Base/` is not a uniform semantic category.**  The orphan inventory at freeze time identifies three distinguishable kinds of legacy module: those with a canonical `Setoid/` analog (deprecated-with-replacement, 35 of 68 modules); those with no analog yet but a planned port in a later milestone (pending-port, 29 modules — most prominently the entire `Structures.*` subtree, awaiting `Classical/` in M3, and `Relations.Continuous` together with `Complexity.*`, awaiting M9); and those whose role is retired by construction in `Setoid/` (no replacement planned, the `Equality.*` extensionality machinery).  The three-way split is documented with migration guidance in `src/Legacy/Base/DEPRECATED.md`.  The "Legacy" name is a physical-location concept, not a semantic one, until each orphan is resolved.
++  **`Setoid/` currently imports from `Base/`.**  Several `Setoid/*` modules import basic definitions (`Term`, `kernelRel`, `IsSurjective`, and others) from `Base/`.  After the freeze, those become `Legacy.Base.*` imports — type-correct but aesthetically embarrassing for a tree just declared canonical.  Tracked as a separate follow-up issue ("Extract `Setoid/`-canonical foundations from `Legacy.Base`") to be resolved early in the M2-1 follow-up window so that `Classical/` (M3) builds on a self-sufficient `Setoid/`.
+
+
 ## Alternatives considered
 
 +  **Keep both `Base/` and `Setoid/` as co-canonical**.  Rejected because this is what the 2.x line did, and the cost of every new theorem being built twice is precisely what motivated the reconstruction.  There is no mathematical case for carrying both indefinitely once the Classical and Cubical tracks exist.
 +  **Delete `Base/` outright**.  Rejected because (i) several theorems live only in `Base/` and would be lost until re-proven, and (ii) the TYPES 2021 citations in the literature point at `Base/`-tree modules whose URLs should continue to resolve.  Freezing under `Legacy/Base/` preserves both.
 +  **Adopt `Base/` as canonical, reconstruct `Setoid/` as a translation layer**.  Rejected because `Setoid/` already contains the definitive HSP proof, matches stdlib's bundle idiom, and keeps the door open to cubical Agda — three forward-looking properties that `Base/` does not have.
++  **Port every `Base/*` module to `Setoid/*` before freezing**.  Rejected as a blocker for M2-1.  35 of 68 `Base/*` modules have no `Setoid/` analog at the time of writing, and several — most notably `Base.Relations.Continuous` (central to M9) and the entire `Base.Structures.*` subtree (superseded by the planned M3 `Classical/` tree, not by a parallel `Setoid.Structures` development) — would require nontrivial design work before they could be ported.  Conflating the organizational decision with a substantive mathematical refactor would either delay M2-1 indefinitely or force rushed ports.  The freeze-now, port-on-schedule policy is recorded in `DEPRECATED.md` and tracked by the per-orphan child issues.
++  **Make `Cubical/` canonical immediately, bypassing the Setoid intermediate**.  Rejected.  Cubical Agda is the long-term canonical target (ADR-003), but the library's Cubical development is currently a stub.  Until the Cubical tree matches the breadth of `Setoid/`, designating it canonical would be aspirational rather than substantive.  The chosen path — Setoid canonical for 3.0, with `Setoid/` definitions phrased in terms of the algebra's equivalence relation rather than setoid-specific features — makes the eventual M5 Cubical port mechanical rather than a redesign.
+
 
 ## References
 
 +  Issue M2-1 — [Freeze Base/, adopt Setoid/ as canonical](https://github.com/ualib/agda-algebras/issues/256).
 +  `docs/STYLE_GUIDE.md` — section on record vs Σ, which depends on this decision.
 +  `docs/GITHUB_PROJECT.md` — milestone 2 exit criterion.
++  `src/Legacy/Base/DEPRECATED.md` — three-category inventory of legacy content with migration guidance (added 2026-05-02 during M2-1 implementation).
 +  DeMeo and Carette (2023), *A Machine-Checked Proof of Birkhoff's Variety Theorem in Martin-Löf Type Theory*, TYPES 2021 post-proceedings.
 
 
