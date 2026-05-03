@@ -33,7 +33,7 @@ import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 open import Overture         using ( ∣_∣ ; ∥_∥ )
 open import Setoid.Functions using ( Image_∋_ ; IsSurjective ; SurjInv )
                              using ( SurjInvIsInverseʳ ; epic-factor )
-open import Base.Relations   using ( kernelRel )
+open import Legacy.Base.Relations   using ( kernelRel )
 
 open import Setoid.Algebras {𝑆 = 𝑆}             using ( Algebra ; 𝕌[_] ; _̂_ )
 open import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}  using ( hom ; IsHom ; compatible-map ; epi ; IsEpi)

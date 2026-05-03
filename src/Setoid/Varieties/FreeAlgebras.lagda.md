@@ -33,7 +33,7 @@ open  import Overture          using ( ∣_∣ ; ∥_∥ )
 open  import Setoid.Relations  using ( fkerPred )
 open  import Setoid.Functions  using ( eq ; IsSurjective )
 
-open  import Base.Terms {𝑆 = 𝑆}       using ( ℊ )
+open  import Legacy.Base.Terms {𝑆 = 𝑆}       using ( ℊ )
 open  import Setoid.Algebras {𝑆 = 𝑆}  using ( Algebra ; ov ; Lift-Alg )
 
 open  import Setoid.Homomorphisms {𝑆 = 𝑆}

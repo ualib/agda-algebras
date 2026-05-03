@@ -34,7 +34,7 @@ open import Overture          using ( ∣_∣ ; ∥_∥ )
 open import Setoid.Functions  using ( Img_∋_ ; eq ; isSurj ; IsSurjective )
                               using ( isSurj→IsSurjective )
 
-open import Base.Terms            {𝑆 = 𝑆} using ( Term )
+open import Legacy.Base.Terms            {𝑆 = 𝑆} using ( Term )
 open import Setoid.Algebras       {𝑆 = 𝑆} using ( Algebra ; 𝕌[_] ; _̂_ )
 open import Setoid.Homomorphisms  {𝑆 = 𝑆} using ( hom ; compatible-map ; IsHom )
 open import Setoid.Terms.Basic    {𝑆 = 𝑆}  using ( 𝑻 ; _≐_  ; ≐-isRefl )

@@ -37,7 +37,7 @@ import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 open import Overture          using ( ∣_∣ ; ∥_∥ )
 open import Setoid.Functions  using ( IsSurjective ; SurjInv ; SurjInvIsInverseʳ )
 
-open import Base.Terms       {𝑆 = 𝑆} using ( Term )
+open import Legacy.Base.Terms       {𝑆 = 𝑆} using ( Term )
 open import Setoid.Algebras  {𝑆 = 𝑆} using ( Algebra ; ov ; 𝕌[_] ; Lift-Alg ; ⨅ )
 
 open  import Setoid.Homomorphisms {𝑆 = 𝑆}

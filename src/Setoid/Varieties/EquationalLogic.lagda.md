@@ -34,7 +34,7 @@ open import Relation.Unary   using ( Pred ; _∈_ )
 
 -- Imports from the Agda Universal Algebra Library -------------------------------
 open import Setoid.Algebras  {𝑆 = 𝑆} using ( Algebra ; ov )
-open import Base.Terms       {𝑆 = 𝑆} using ( Term )
+open import Legacy.Base.Terms       {𝑆 = 𝑆} using ( Term )
 open import Setoid.Terms     {𝑆 = 𝑆} using ( 𝑻 ; module Environment )
 
 private variable χ α ρᵃ ℓ ι : Level

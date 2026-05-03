@@ -35,7 +35,7 @@ open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
 -- Imports from the Agda Universal Algebra Library -------------------------------
 open import Overture using ( ∥_∥ )
 open import Setoid.Algebras  {𝑆 = 𝑆}  using ( Algebra ; ov ; _̂_)
-open import Base.Terms       {𝑆 = 𝑆}  using ( Term )
+open import Legacy.Base.Terms       {𝑆 = 𝑆}  using ( Term )
 
 open Func renaming ( to to _⟨$⟩_ )
 open Term
