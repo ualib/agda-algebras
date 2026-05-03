@@ -31,7 +31,7 @@ open import Relation.Binary.PropositionalEquality using ( refl )
 
 -- Imports from the Agda Universal Algebras Library ------------------------------
 open import Overture          using ( ∣_∣  ; ∥_∥  )
-open import Base.Relations    using ( 0[_] ; _|:_ ; Equivalence )
+open import Legacy.Base.Relations    using ( 0[_] ; _|:_ ; Equivalence )
 open import Setoid.Relations  using ( ⟪_⟫ ; _/_ ; ⟪_∼_⟫-elim )
 open import Setoid.Algebras.Basic {𝑆 = 𝑆} using ( ov ; Algebra ; 𝕌[_] ; _̂_ )
 

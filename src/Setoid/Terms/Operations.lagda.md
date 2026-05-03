@@ -35,7 +35,7 @@ import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from Agda Universal Algebra Library -----------------------------------
 open  import Overture                         using ( ∣_∣ ; ∥_∥ )
-open  import Base.Terms               {𝑆 = 𝑆} using ( Term )
+open  import Legacy.Base.Terms               {𝑆 = 𝑆} using ( Term )
 open  import Setoid.Algebras          {𝑆 = 𝑆} using ( Algebra ; _̂_ ; ov ; ⨅ )
 open  import Setoid.Homomorphisms     {𝑆 = 𝑆} using ( hom ; IsHom )
 open  import Setoid.Terms.Properties  {𝑆 = 𝑆} using ( free-lift )

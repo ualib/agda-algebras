@@ -30,7 +30,7 @@ open import Relation.Binary.PropositionalEquality as ≡
 
 -- Imports from agda-algebras -----------------------------------------------------
 open import Overture                   using ( ∣_∣ ; ∥_∥ )
-open import Base.Relations             using ( [_] ; Equivalence )
+open import Legacy.Base.Relations             using ( [_] ; Equivalence )
 open import Setoid.Relations.Discrete  using ( fker )
 
 private variable α β ρᵃ ρᵇ ℓ : Level
