@@ -10,6 +10,12 @@ The 3.0 release is a major reconstruction of agda-algebras building on the Setoi
 
 ### Added
 
++  **ADR-001 — `Setoid/` as canonical development tree**.
+   `docs/adr/001-setoid-as-canonical.md` records the architectural decision
+   and the alternatives considered.
++  **`src/Legacy/Base/DEPRECATED.md`**.  Three-category inventory of legacy
+   content (deprecated-with-replacement, pending-port, no-replacement-planned)
+   with migration guidance.
 +  **Setoid-canonical tree.**  `src/Setoid/` is the canonical development tree for 3.0.
 +  **Nix flake** at the repo root pinning Agda 2.8.0 and standard-library 2.3, so `nix develop` provides a reproducible development environment.
 +  **`INSTALL.md`** as the canonical installation guide.
@@ -17,8 +23,31 @@ The 3.0 release is a major reconstruction of agda-algebras building on the Setoi
 +  **Community-health files**: `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, issue templates, pull-request template.
 +  **Dual license**: Apache 2.0 for source code under `src/`, CC BY 4.0 for documentation under `docs/`.
 
-### Changed
+### Changed (BREAKING)
 
++  **`src/Base/` frozen as `src/Legacy/Base/`** (M2-1, #256).  `Setoid/` is now
+   the canonical development tree for agda-algebras 3.0.  The pre-3.0 bare-types
+   tree has been moved to `src/Legacy/Base/`; the top-level aggregator
+   `agda-algebras.lagda.md` re-exports it as `Legacy.Base`.  This is a breaking
+   change for downstream users of `Base.*`.  The migration is mechanical for
+   most imports; see `src/Legacy/Base/DEPRECATED.md` for the categorization
+   (deprecated-with-replacement vs. pending-port vs. no-replacement-planned)
+   and `docs/adr/001-setoid-as-canonical.md` for the rationale.
+
+   Migration recipe (most imports):
+
+       sed -i -E 's/(\s+import\s+)Base\./\1Legacy.Base./g' YOUR_FILE.agda
+
+   For modules that have a `Setoid/` analog (Category A in DEPRECATED.md),
+   prefer migrating to the `Setoid.*` import and passing
+   `Relation.Binary.PropositionalEquality.setoid A` where a setoid is now
+   expected.  For modules without one (Category B), the `Legacy.Base.*`
+   import is the supported interim path until the per-orphan port lands.
++  **`src/agda-algebras.lagda.md` substantially revised** (#256).  Updated
+   to reflect the v3.0 source-tree organization (canonical `Setoid/`,
+   planned `Classical/` and `Cubical/`, frozen `Legacy.Base/`).  Removed
+   stale per-file license boilerplate that contradicted the project-level
+   licensing.
 +  **Agda target**: 2.6.2 → 2.8.0.
 +  **Standard library target**: 1.7 → 2.3.
 +  **Pragma**: `--without-K` → `--cubical-compatible` across the tree.  See `src/Overture/Basic.lagda.md` for the reasoning.
