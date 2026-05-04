@@ -120,14 +120,19 @@ def group_by_milestone(issues: list[Issue]) -> dict[int, list[Issue]]:
     return out
 
 
-def issue_sort_key(issue: Issue) -> tuple[int, int]:
-    m = re.match(r"^M(\d+)-(\d+)$", issue.id)
-    return (int(m.group(1)), int(m.group(2))) if m else (10**9, 10**9)
+def issue_sort_key(issue: Issue) -> tuple[int, int, str]:
+    """Sort key for in-region ordering: (milestone, ordinal, suffix).
+    The empty-string suffix on plain `[MN-k]` ids sorts before any
+    alphabetic suffix, so a parent like `M2-7` precedes its children
+    `M2-7a`, `M2-7b`, ... naturally.
+    """
+    m = re.match(r"^M(\d+)-(\d+)([a-z]?)$", issue.id)
+    return (int(m.group(1)), int(m.group(2)), m.group(3) or "") if m else (10**9, 10**9, "")
 
 
 # ── Region rendering ─────────────────────────────────────────────────────────
 
-_ID_PREFIX_RE = re.compile(r"^\[M\d+-\d+\]\s+(.+)$")
+_ID_PREFIX_RE = re.compile(r"^\[M\d+-\d+[a-z]?\]\s+(.+)$")
 
 
 def strip_id_prefix(title: str) -> str:
