@@ -46,6 +46,7 @@ The following consequences were added 2026-05-02 with the M2-1 implementation, r
 ## References
 
 +  Issue M2-1 — [Freeze Base/, adopt Setoid/ as canonical](https://github.com/ualib/agda-algebras/issues/256).
++  Issue M2-6 — [Extract Setoid-canonical foundations from Legacy.Base](https://github.com/ualib/agda-algebras/issues/303).
 +  `docs/STYLE_GUIDE.md` — section on record vs Σ, which depends on this decision.
 +  `docs/GITHUB_PROJECT.md` — milestone 2 exit criterion.
 +  `src/Legacy/Base/DEPRECATED.md` — three-category inventory of legacy content with migration guidance (added 2026-05-02 during M2-1 implementation).

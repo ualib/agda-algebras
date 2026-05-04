@@ -59,8 +59,3 @@ for f in "${FILES[@]}"; do
   run sed -i.bak -E 's/^(\s*import\s+)Base(\.|\s|$)/\1Legacy.Base\2/' "$f"
   run rm -f "${f}.bak"
 done
-
-# 4. Top-level aggregator.
-#    src/agda-algebras.agda (or .lagda.md) imports `Base` and `Setoid` (and others).
-#    Rewrite the `Base` line to `Legacy.Base`. Done by hand if the aggregator is unusual.
-echo "Don't forget to update src/agda-algebras.agda by hand: see suggested diff in the PR description."

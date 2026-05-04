@@ -380,47 +380,47 @@ A short design discussion is needed before code is written; the resolutions shou
 - [x] Confirm agda-lagda-migrator produces well-formed `.lagda.md` on a representative sample (suggested: `Overture/Preface`, `Setoid/Algebras/Basic`, `Demos/HSP`).
 - [x] Audit current state: count of `.lagda` files, count of `.agda` skeletons paired with `.lagda` content, count of `.agda` files with substantive content.
 - [x] Confirm Agda 2.8.0's `.lagda.md` support is fully functional under `--cubical-compatible --exact-split --safe`.
-- [ ] Inventory hard-coded paths to specific `.lagda` files across the repository (commit messages, BibTeX notes, paper PDFs, README links, internal cross-references, Jekyll templates).
+- [x] Inventory hard-coded paths to specific `.lagda` files across the repository (commit messages, BibTeX notes, paper PDFs, README links, internal cross-references, Jekyll templates).
 - [x] Write ADR `docs/adr/004-lagda-md-canonical.md` resolving the open design questions above.
 
 ### Build-system changes
 
-- [ ] Update the Nix flake's `shellHook` and the `.agda-lib` include-path rules as needed (they should Just Work; `.lagda.md` is treated as Agda source by the compiler).
-- [ ] Update `Makefile`'s Everything.agda generation pattern to pick up `*.lagda.md` files alongside `*.agda` (currently `find $(SRCDIR) -name '*.agda'` matches neither `.lagda` nor `.lagda.md`; change to `find src -name '*.lagda.md' -o -name '*.agda'`; Agda will handle either, though going forward everything should be `.lagda.md`).
-- [ ] Consider adding a `make corpus` target that extracts (prose, code-block) pairs into JSONL — first piece of M8 (LLM readiness) landing early.
-- [ ] Update `admin/generate-html` to operate on `.lagda.md` files; remove or deprecate `admin/generate-tex` if no longer needed.
-- [ ] Update Jekyll configuration to consume the Markdown output of `agda --html` directly.
-- [ ] Update CI workflow if the new pipeline introduces new dependencies.
+- [x] Update the Nix flake's `shellHook` and the `.agda-lib` include-path rules as needed (they should Just Work; `.lagda.md` is treated as Agda source by the compiler).
+- [x] Update `Makefile`'s Everything.agda generation pattern to pick up `*.lagda.md` files alongside `*.agda` (currently `find $(SRCDIR) -name '*.agda'` matches neither `.lagda` nor `.lagda.md`; change to `find src -name '*.lagda.md' -o -name '*.agda'`; Agda will handle either, though going forward everything should be `.lagda.md`).
+- [x] ~~Consider adding a `make corpus` target that extracts (prose, code-block) pairs into JSONL — first piece of M8 (LLM readiness) landing early.~~ (deferred)
+- [x] ~~Update `admin/generate-html` to operate on `.lagda.md` files; remove or deprecate `admin/generate-tex` if no longer needed.~~ (deferred)
+- [x] ~~Update Jekyll configuration to consume the Markdown output of `agda --html` directly.~~ (deferred)
+- [x] Update CI workflow if the new pipeline introduces new dependencies.
 
 ### File migration
 
-- [ ] Run the conversion script across `docs/lagda/` (excluding any items the ADR earmarks to remain LaTeX-literate).
-- [ ] Move output to the matching `src/` path with `.lagda.md` extension.
-- [ ] Delete the corresponding `src/X/Y/Z.agda` skeleton files.
-- [ ] Update internal cross-references — link definitions, `[Module.Name][]`-style references, BibTeX `Source code` notes in module headers.
-- [ ] Update `_includes/UALib.Links.md` (or equivalent) to reflect new paths.
+- [x] Run the conversion script across `docs/lagda/` (excluding any items the ADR earmarks to remain LaTeX-literate).
+- [x] Move output to the matching `src/` path with `.lagda.md` extension.
+- [x] Delete the corresponding `src/X/Y/Z.agda` skeleton files.
+- [x] ~~Update internal cross-references — link definitions, `[Module.Name][]`-style references, BibTeX `Source code` notes in module headers.~~ (deferred)
+- [x] ~~Update `_includes/UALib.Links.md` (or equivalent) to reflect new paths.~~ (deferred)
 
 ### Documentation
 
-- [ ] Update `docs/STYLE_GUIDE.md` to specify `.lagda.md` as the canonical literate-Agda format and document the migration outcome.
-- [ ] Update `CONTRIBUTING.md` examples that reference `.lagda` files.
-- [ ] Update `README.md`'s BibTeX notes if any reference `.lagda` paths (specifically the `DeMeo:2021` entry's `Source code` URL).
-- [ ] Add a `CHANGELOG.md` entry under [Unreleased] flagging the file-format change as breaking for external links.
+- [x] Update `docs/STYLE_GUIDE.md` to specify `.lagda.md` as the canonical literate-Agda format and document the migration outcome.
+- [x] Update `CONTRIBUTING.md` examples that reference `.lagda` files.
+- [x] Update `README.md`'s BibTeX notes if any reference `.lagda` paths (specifically the `DeMeo:2021` entry's `Source code` URL).
+- [x] Add a `CHANGELOG.md` entry under [Unreleased] flagging the file-format change as breaking for external links.
 
 ### Verification
 
-- [ ] `make check` passes after migration.
-- [ ] `make html` produces equivalent or improved HTML output; spot-check at least 10 rendered pages against a pre-migration archive.
-- [ ] All internal cross-references resolve in the rendered HTML.
-- [ ] Round-trip sanity: a representative sample of converted Agda code blocks type-check identically to their pre-migration `.lagda` originals.
+- [x] `make check` passes after migration.
+- [x] ~~`make html` produces equivalent or improved HTML output; spot-check at least 10 rendered pages against a pre-migration archive.~~ (deferred)
+- [x] ~~All internal cross-references resolve in the rendered HTML.~~ (deferred)
+- [x] Round-trip sanity: a representative sample of converted Agda code blocks type-check identically to their pre-migration `.lagda` originals.
 
 ## Acceptance criteria
 
-- [ ] No `.lagda` files remain under `src/` or `docs/lagda/` outside of any items the ADR explicitly preserves.
-- [ ] No `src/X/Y/Z.agda` skeleton files remain (those that previously paired with a `docs/lagda/X/Y/Z.lagda` content file).
-- [ ] `make check` and `make html` succeed under the new pipeline.
-- [ ] Rendered HTML output at [https://ualib.org](https://ualib.org) is equivalent or improved.
-- [ ] `docs/STYLE_GUIDE.md` specifies `.lagda.md` as canonical.
+- [x] No `.lagda` files remain under `src/` or `docs/lagda/` outside of any items the ADR explicitly preserves.
+- [x] No `src/X/Y/Z.agda` skeleton files remain (those that previously paired with a `docs/lagda/X/Y/Z.lagda` content file).
+- [x] `make check` ~~and `make html`~~ succeeds under the new pipeline.
+- [x] ~~Rendered HTML output at [https://ualib.org](https://ualib.org) is equivalent or improved.~~ (deferred)
+- [x] `docs/STYLE_GUIDE.md` specifies `.lagda.md` as canonical.
 - [x] ADR `docs/adr/004-lagda-md-canonical.md` is merged.
 
 ## Non-goals
@@ -842,6 +842,293 @@ The legacy module is **not deleted** in the porting PR — it is removed in the 
 +  ADR-001 — `docs/adr/001-setoid-as-canonical.md`
 +  DEPRECATED.md — `src/Legacy/Base/DEPRECATED.md`
 +  M2-1 — #256
+
+---
+
+### Issue M2-7a: Port Legacy.Base.Adjunction.* to canonical paths (#305)
+
+**Labels**: `milestone-2-consolidation`, `design-discussion`
+
+## Description
+
+Port the four-module `Legacy.Base.Adjunction.*` subtree (aggregator + `Closure` + `Galois` + `Residuation`) to canonical paths.  Child of #302.
+
+The destination is not yet decided — adjunction / Galois-connection / residuation content sits at an awkward intersection of universal algebra (where it is consumed: closure operators induce algebraic closure systems, congruence-extending Galois connections appear in clone theory) and pure order theory (where the abstract definitions naturally belong).  The destination decision is part of this issue.
+
+## Destination options
+
++  **`Setoid.Adjunction/`** — keeps the content next to its universal-algebra consumers.  Disadvantage: adjunctions are not specifically setoid-flavored; if `Classical/` ever grows order-theoretic content (lattices, posets) the same definitions will want to live there too, and we'd have duplication.
++  **`Classical.Order.Adjunction/`** — fits if M3-5 (#264, Lattice) and any planned `Classical.Order.*` infrastructure absorb the abstract order-theoretic content.  Disadvantage: requires `Classical/` order infrastructure to land first.
++  **`Overture/Adjunction/`** — fits if the content is genuinely foundational and used across `Setoid/`, `Classical/`, and (eventually) `Cubical/`.  Disadvantage: `Overture/` is small and intentionally narrow; expanding its scope deserves its own design discussion.
+
+The third option is probably premature; the first two are both defensible.  Recommend deciding `Setoid.Adjunction/` for v3.0 and reconsidering the location for v4.0 alongside any `Classical.Order/` work.
+
+## Tasks
+
++  [ ] Decide the destination.  Record briefly in this issue.
++  [ ] Port `Legacy.Base.Adjunction.Closure` to `<Destination>.Closure`.
++  [ ] Port `Legacy.Base.Adjunction.Galois` to `<Destination>.Galois`.
++  [ ] Port `Legacy.Base.Adjunction.Residuation` to `<Destination>.Residuation`.
++  [ ] Port the aggregator `Legacy.Base.Adjunction` to `<Destination>`.
++  [ ] Add `{-# WARNING_ON_USAGE #-}` pragmas to each legacy module pointing at the canonical home.
++  [ ] Update `Legacy/Base/DEPRECATED.md`: move all four rows from Category B to Category A.
++  [ ] Confirm `make check` and `EverythingLegacy` both pass.
+
+## Acceptance criteria
+
++  [ ] Four canonical-path modules exist and type-check.
++  [ ] Four `Legacy.Base.Adjunction.*` modules carry `WARNING_ON_USAGE` pragmas.
++  [ ] DEPRECATED.md reflects the move; no `#TBD` cells remain for the Adjunction rows.
+
+## References
+
++  Parent — #302
++  ADR-001 — `docs/adr/001-setoid-as-canonical.md`
++  DEPRECATED.md — `src/Legacy/Base/DEPRECATED.md`
++  Possible future consumer — #282 (M9-1, Scott-continuous DCPOs).  Not a blocker; flagged because the destination decision should keep M9-1's plausible needs in mind (Galois connections between predicates and operations on DCPOs are natural M9-1 territory).
+
+---
+
+### Issue M2-7b: Port Legacy.Base.Categories.* to canonical paths (#306)
+
+**Labels**: `milestone-2-consolidation`, `design-discussion`
+
+## Description
+
+Port the two-module `Legacy.Base.Categories.*` subtree (aggregator + `Functors`) to canonical paths.  Child of #302.
+
+The destination is not obvious.  agda-algebras is a universal-algebra library, not a category-theory library; the Agda ecosystem already has `agda-categories` as a comprehensive category-theory development.  Two questions:
+
++  Do we *need* this content in agda-algebras, or should it be redirected to `agda-categories` with a thin shim re-exporting whatever agda-algebras code presently consumes?  `src/Examples/Categories/Functors.lagda.md` is the only known consumer in this repo.
++  If kept, where: `Setoid.Categories/`, a new top-level `Categories/` tree (probably wrong; we don't want to be a category-theory library), or pulled into `Overture/` (probably wrong; too narrow there)?
+
+This issue's first deliverable is the **destination decision**, not the port.
+
+## Tasks
+
++  [ ] Audit the content of `Legacy.Base.Categories.*` against `agda-categories` to determine whether equivalent functionality already exists upstream.
++  [ ] If equivalent functionality exists upstream: file a follow-up to remove `Legacy.Base.Categories.*` outright, redirecting `src/Examples/Categories/Functors.lagda.md` (#304) to `agda-categories` instead of porting.  Close this issue with the redirection decision recorded.
++  [ ] If equivalent functionality does *not* exist upstream: decide on a destination (`Setoid.Categories/`, or kept in `Legacy.Base.Categories/` indefinitely with the Category B rationale clarified to "stays in Legacy because no canonical home exists in the universal-algebra scope of this library").  Port if `Setoid.Categories/`; document if "stays in Legacy."
++  [ ] Update `Legacy/Base/DEPRECATED.md` accordingly: either move both rows to Category A (port landed), or reword the Category B rows to reflect "stays in Legacy" status (no port planned), or move to a new "Category D — relocated upstream" if redirected.
++  [ ] Confirm `make check` and `EverythingLegacy` both pass.
+
+## Acceptance criteria
+
++  [ ] A destination decision is recorded in this issue.
++  [ ] DEPRECATED.md reflects the resolution; no `#TBD` cells remain for the Categories rows.
++  [ ] If a port lands, the canonical-path modules type-check; if relocated upstream, `Examples/Categories/Functors.lagda.md` is updated accordingly.
+
+## References
+
++  Parent — #302
++  Examples migration — #304
++  `agda-categories` — https://github.com/agda/agda-categories
++  Adjacent — #283 (M9-3, exploratory coalgebra).  M9-3's reading may surface a need for some categorical infrastructure; if so, this issue's destination decision should be reconsidered with M9-3's findings in mind.  Not a current blocker — M9-3 is exploratory and may conclude no formalization is warranted.
+
+---
+
+### Issue M2-7c: Port Legacy.Base.Complexity.* to canonical paths (#307)
+
+**Labels**: `milestone-2-consolidation`, `milestone-9-apps`
+
+## Description
+
+Port the three-module `Legacy.Base.Complexity.*` subtree (aggregator + `Basic` + `CSP`) to canonical paths.  Child of #302.
+
+Scheduled with M9.  Issue #274 (M7-1, "Extend Complexity module beyond Basic and CSP") is the substantive sequel that *grows* this content significantly; this issue's scope is the canonical-path migration only, not the extension.  Order: this issue first, then #274 builds on the canonical-path version.
+
+## Destination
+
+The natural destination is `Setoid.Complexity/`, mirroring the existing `Legacy.Base.Complexity/` shape.  Open question — to be settled in this issue — is whether the eventual home should be `Setoid.Complexity/` (consistent with current naming) or a top-level `Complexity/` tree (parallel to `Classical/`, since complexity is a domain rather than a flavor of universal algebra).  Recommendation: `Setoid.Complexity/` for v3.0 to minimize churn; revisit at the v4.0 Cubical canonicalization moment.
+
+## Tasks
+
++  [ ] Confirm the destination — recommended `Setoid.Complexity/`.
++  [ ] Port `Legacy.Base.Complexity.Basic` to `Setoid.Complexity.Basic`.
++  [ ] Port `Legacy.Base.Complexity.CSP` to `Setoid.Complexity.CSP`.
++  [ ] Port the aggregator `Legacy.Base.Complexity` to `Setoid.Complexity`.
++  [ ] Add `{-# WARNING_ON_USAGE #-}` pragmas to each legacy module pointing at the canonical home.
++  [ ] Update `Legacy/Base/DEPRECATED.md`: move all three rows from Category B to Category A; correct the destination column to the agreed canonical name.
++  [ ] Confirm `make check` and `EverythingLegacy` both pass.
+
+## Acceptance criteria
+
++  [ ] Three canonical-path modules exist and type-check.
++  [ ] Three `Legacy.Base.Complexity.*` modules carry `WARNING_ON_USAGE` pragmas.
++  [ ] DEPRECATED.md reflects the move; no `#TBD` cells remain for the Complexity rows.
+
+## Why M9 milestone?
+
+`Setoid.Complexity/` is the foundation for M9-2 (#281, infinitary CSP), which is squarely complexity content built on the existing `Base.Complexity` development.  M7-1 (#274) is the *extension* of the same content for finite-template CSP; that issue depends on the canonical-path version landing first.  M9-1 (#282, Scott-continuous DCPOs) does *not* depend on this port — its dependencies are on `Relations.Continuous` (#308) and on the order/lattice infrastructure flowing from M3-5 (#264) — and is listed below only as a sibling M9 issue, not as a consumer.
+
+## References
+
++  Parent — #302
++  M7-1 (extend Complexity) — #274
++  M9-2 (infinitary CSP) — #281
++  Exercises migration — #304 (depends on this for `FiniteCSP.lagda.md`)
+
+---
+
+### Issue M2-7d: Port Legacy.Base.Relations.Continuous to canonical paths (#308)
+
+**Labels**: `milestone-2-consolidation`, `milestone-9-apps`
+
+## Description
+
+Port `Legacy.Base.Relations.Continuous` to a canonical path.  Child of #302.
+
+The `Continuous` relation API — relations of arbitrary arity type rather than fixed natural-number arity, with arity-many indexed-setoid families — is the foundation of three M9 issues (#281, #282, #283).  Until this port lands, M9 work depends on `Legacy.Base/`, contradicting the framing of `Setoid/` as canonical.
+
+## Destination question
+
+Two options:
+
++  **`Setoid.Relations.Continuous`** — fits the current `Setoid.Relations.{Discrete,Quotients}` naming.  Disadvantage: continuous relations are not specifically setoid-flavored; the abstract definition is at the order-theoretic / domain-theoretic level.
++  **`Overture.Relations.Continuous`** (or new `Overture.Continuous/`) — fits if continuous relations are foundational across `Setoid/`, `Classical/`, and `Cubical/`.  Likely the right long-term home, but expanding `Overture/` deserves its own design moment.
+
+Recommendation: port to `Setoid.Relations.Continuous` for v3.0 (mechanical, low-friction); revisit `Overture/` placement during v4.0 Cubical canonicalization when the same definitions will have to be expressible there too.
+
+The destination decision should harmonize with #303 (M2-6, Extract Setoid-canonical foundations from Legacy.Base), which makes parallel decisions for `Term`, `kerRel`, and other foundational definitions.  If #303 lands first and routes those to `Overture/`, this issue should follow suit; if #303 keeps them in `Setoid/`, the same logic applies here.
+
+## Why this is a non-trivial port
+
+Unlike most of Category A, where the propositional-equality version maps mechanically onto the setoid version by passing `≡-setoid A`, the `Continuous` API has substantive subtlety: the "respects-the-setoid-equivalence" condition for arity-many arguments needs careful design.  The natural setoid version of `f : (i : I) → A i → B` has a `cong` that takes a proof of `(i : I) → A i ≈ A' i` and produces `f A ≈ f A'`, but the indexing makes the standard setoid-function shape not quite right.  The port should consult the design used by the underlying stdlib `Function.Indexed.*` machinery (if any) and harmonize.
+
+## Tasks
+
++  [ ] Decide the destination.  Recommended `Setoid.Relations.Continuous` for v3.0.
++  [ ] Design the setoid-respecting interface for indexed continuous relations.  Document briefly in the module header.
++  [ ] Port `Legacy.Base.Relations.Continuous` to the chosen destination, with the indexed-setoid design in place.
++  [ ] Add a `{-# WARNING_ON_USAGE #-}` pragma to the legacy module.
++  [ ] Update `Legacy/Base/DEPRECATED.md`: move the row to Category A.
++  [ ] Confirm `make check` and `EverythingLegacy` both pass.
+
+## Acceptance criteria
+
++  [ ] Canonical-path module exists, type-checks, and has a prose comment block documenting the indexed-setoid-respecting design.
++  [ ] `Legacy.Base.Relations.Continuous` carries a `WARNING_ON_USAGE` pragma.
++  [ ] DEPRECATED.md reflects the move; no `#TBD` cell remains for the Continuous row.
++  [ ] M9-1 (#282) and M9-2 (#281) can import from the canonical path without changes.
+
+## References
+
++  Parent — #302
++  M2-6 (Setoid foundations extraction) — #303.  Sibling issue setting precedent for `Overture/` vs. `Setoid/` placement of foundational definitions.
++  M9-1 — #282
++  M9-2 — #281
++  M9-3 — #283
++  Exercises migration — #304 (depends on this for `FiniteCSP.lagda.md`)
+
+---
+
+### Issue M2-7e: Port Legacy.Base.Relations.Properties to Setoid.Relations.Properties (#309)
+
+**Labels**: `milestone-2-consolidation`
+
+## Description
+
+Port `Legacy.Base.Relations.Properties` to `Setoid.Relations.Properties`.  Child of #302.
+
+Smallest of the M2-7 children — a single module port whose canonical destination is unambiguous (the `Setoid.Relations.*` subtree exists and has matching `Discrete` / `Quotients` siblings).  Scheduled as an M2 follow-up.
+
+The M2-1 inventory found no consumers of `Base.Relations.Properties` outside `src/Base/` itself — no `src/Setoid/`, `src/Examples/`, or `src/Exercises/` module imports it.  The migration is therefore localized: porting the module and updating the `Setoid.Relations` aggregator covers it.
+
+## Tasks
+
++  [ ] Port `Legacy.Base.Relations.Properties` to `Setoid.Relations.Properties`.  Migration is mechanical when content is propositional-equality-based; replace `_≡_` arguments with the algebra's setoid equivalence as needed.
++  [ ] Update `Setoid.Relations` (the aggregator) to re-export `Setoid.Relations.Properties` `public`.
++  [ ] Add a `{-# WARNING_ON_USAGE #-}` pragma to `Legacy.Base.Relations.Properties`.
++  [ ] Update `Legacy/Base/DEPRECATED.md`: move the row from Category B to Category A; remove the partial-replacement note from the `Legacy.Base.Relations` aggregator row in Category A (now covered).
++  [ ] Confirm `make check` and `EverythingLegacy` both pass.
+
+## Acceptance criteria
+
++  [ ] `Setoid.Relations.Properties` exists and type-checks.
++  [ ] `Legacy.Base.Relations.Properties` carries a `WARNING_ON_USAGE` pragma.
++  [ ] DEPRECATED.md no longer flags `Setoid.Relations` as a partial replacement (assuming `Continuous` is also resolved per #308; otherwise, the partial-replacement note is updated to reference only `Continuous`).
++  [ ] No `#TBD` cell remains for the Relations.Properties row.
+
+## References
+
++  Parent — #302
++  Companion — #308 (Relations.Continuous; the other half of why `Setoid.Relations` is currently partial)
+
+---
+
+### Issue M2-7f: Port Legacy.Base.Functions.Transformers to canonical paths (#310)
+
+**Labels**: `milestone-2-consolidation`, `design-discussion`
+
+## Description
+
+Port `Legacy.Base.Functions.Transformers` to a canonical path.  Child of #302.
+
+Single-module port; destination is the design-discussion piece.
+
+Like #309, the M2-1 inventory found no consumers of `Base.Functions.Transformers` outside `src/Base/` itself.  This makes the "drop entirely if all definitions have stdlib equivalents" path cheap — no internal call sites need migration.
+
+## Destination question
+
+`Legacy.Base.Functions.Transformers` contains function-transformer combinators (currying, uncurrying, point-free composition variants, possibly others — to be confirmed by audit).  Two destinations:
+
++  **`Setoid.Functions.Transformers`** — fits the current `Setoid.Functions.{Injective,Surjective,Inverses}` naming.  Disadvantage: function transformers are propositional (not setoid-flavored) by nature; the canonical home is probably stdlib's `Function.Base` / `Function.Definitions`.
++  **Redirect to stdlib** — audit the content; if stdlib already provides equivalent combinators, remove the module rather than porting it, and update any consumers to import from stdlib.
+
+Recommendation: audit first; the right answer is likely "stdlib redirect" for most of the module, with `Setoid.Functions.Transformers` covering whatever residual content has no stdlib analog.
+
+## Tasks
+
++  [ ] Audit `Legacy.Base.Functions.Transformers` content against stdlib's `Function.Base` and `Function.Construct.*`.
++  [ ] For each definition, decide: stdlib redirect, port to `Setoid.Functions.Transformers`, or drop entirely (if an unused experimental).
++  [ ] If any content survives the audit: port to `Setoid.Functions.Transformers`; update `Setoid.Functions` aggregator to re-export.
++  [ ] If no content survives: remove `Legacy.Base.Functions.Transformers` from `Legacy/Base/DEPRECATED.md` and from the Legacy build (or move to a new "Category D — removed in 3.x" section if the deletion deserves a record).
++  [ ] Add a `{-# WARNING_ON_USAGE #-}` pragma to the legacy module pointing at the new home (or at the appropriate stdlib module per definition).
++  [ ] Confirm `make check` and `EverythingLegacy` both pass.
+
+## Acceptance criteria
+
++  [ ] Audit results recorded in this issue (per-definition disposition).
++  [ ] DEPRECATED.md reflects the resolution; no `#TBD` cell remains for the Functions.Transformers row.
++  [ ] `make check` passes.
+
+## References
+
++  Parent — #302
++  stdlib `Function.*` — https://agda.github.io/agda-stdlib/master/Function.html
+
+---
+
+### Issue M2-7g: Port Legacy.Base.Varieties.Invariants to Setoid.Varieties.Invariants (#311)
+
+**Labels**: `milestone-2-consolidation`
+
+## Description
+
+Port `Legacy.Base.Varieties.Invariants` to `Setoid.Varieties.Invariants`.  Child of #302.
+
+Single-module port; destination is unambiguous (the `Setoid.Varieties.*` subtree is already canonical and contains the HSP development).
+
+The M2-1 inventory found no consumers of `Base.Varieties.Invariants` outside `src/Base/` itself.  Plausible future consumer: M3-7 (#266, expand Examples/), where varieties-as-invariants results characterizing classical structure classes are natural worked examples.
+
+## Tasks
+
++  [ ] Port `Legacy.Base.Varieties.Invariants` to `Setoid.Varieties.Invariants`.  Migration is mechanical when content reasons up to propositional equality on the algebra carrier; replace with the algebra's setoid equivalence as needed.
++  [ ] Update `Setoid.Varieties` (the aggregator) to re-export `Setoid.Varieties.Invariants` `public`.
++  [ ] Add a `{-# WARNING_ON_USAGE #-}` pragma to `Legacy.Base.Varieties.Invariants`.
++  [ ] Update `Legacy/Base/DEPRECATED.md`: move the row from Category B to Category A.
++  [ ] Confirm `make check` and `EverythingLegacy` both pass.
+
+## Acceptance criteria
+
++  [ ] `Setoid.Varieties.Invariants` exists and type-checks.
++  [ ] `Legacy.Base.Varieties.Invariants` carries a `WARNING_ON_USAGE` pragma.
++  [ ] DEPRECATED.md reflects the move; no `#TBD` cell remains for the Varieties.Invariants row.
+
+## References
+
++  Parent — #302
++  Possible future consumer — #266 (M3-7, expand Examples/ with classical structures).  Not a current dependency.
 
 ---
 
@@ -1714,6 +2001,7 @@ A short discussion is needed before code is written.  The resolutions should be 
 
 +  [ ] Move the shared link definitions to a dedicated `docs/_links.md` referenced from each module (or provide the equivalent under `mkdocs-macros-plugin`).
 +  [ ] Rewrite `docs/_links.md`'s entries: strip the `docs/lagda/` paths, point each entry at the new `src/X/Y/Z.lagda.md` path.
++  **Rebrand legacy prose for the post-M2-1 module names**.  Across `src/Legacy/Base/**/*.lagda.md`: front-matter `title:` fields still say "Base.X.Y module"; reference-style links of the form `[Base.X.Y][]` in prose comments don't resolve; bottom-of-page nav links target `Base.html` files that no longer exist after the rename to `Legacy.Base/`.  This was deliberately deferred from PR #300 (the freeze rewrote only `module`, `import`, `open import` lines — the syntactic positions Agda's type checker reads — leaving prose untouched).  Rebranding piecemeal would create inconsistency; doing it as part of the rendering-pipeline migration is the natural moment because the Markdown reference targets and nav scheme are themselves changing here.
 +  [ ] Audit the `src/**/*.lagda.md` corpus for any surviving `\href{...}{...}` LaTeX-link macros (the `agda-lagda-migrator#14` rewrite catches these but a sweep is cheap insurance) and any surviving raw `@@AgdaTerm@@...@@` placeholders.
 
 ### CI / deploy

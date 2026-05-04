@@ -39,9 +39,10 @@ from _utils.command_runner import run_command
 
 # ── Issue identifier conventions ────────────────────────────────────────────
 
-# Issue titles are prefixed with `[MN-k]` for cross-script identification
-# and within-milestone ordering.  Examples: `[M0-1] ...`, `[M1-12] ...`.
-ISSUE_ID_PATTERN = re.compile(r"^\[(M(\d+)-(\d+))\]\s+(.+)$")
+# Issue titles are prefixed with `[MN-k]` (or `[MN-k{a..z}]` for sub-tickets
+# of a fan-out parent) for cross-script identification and within-milestone
+# ordering.  Examples: `[M0-1] ...`, `[M1-12] ...`, `[M2-7a] ...`.
+ISSUE_ID_PATTERN = re.compile(r"^\[(M(\d+)-(\d+)([a-z]?))\]\s+(.+)$")
 
 # Labels of the form `milestone-N-*` map issues to milestone N.  Populate
 # emits these labels; render uses them to infer milestone membership when
@@ -49,17 +50,23 @@ ISSUE_ID_PATTERN = re.compile(r"^\[(M(\d+)-(\d+))\]\s+(.+)$")
 MILESTONE_LABEL_PATTERN = re.compile(r"^milestone-(\d+)-")
 
 
-def parse_issue_id(title: str) -> Optional[tuple[str, int, int, str]]:
-    """Parse a `[MN-k] Title` prefix into (id, milestone, ordinal, rest).
+def parse_issue_id(title: str) -> Optional[tuple[str, int, int, str, str]]:
+    """Parse a `[MN-k] Title` prefix into (id, milestone, ordinal, suffix, rest).
 
     Returns None if the title does not begin with a recognized prefix.
     Used by populate's idempotency guard and by render's title-based ordering.
+    The suffix is "" for plain `[MN-k]` ids and a single lowercase letter for
+    fan-out sub-tickets like `[M2-7a]`, `[M2-7b]`.
     """
     m = ISSUE_ID_PATTERN.match(title)
     if not m:
         return None
-    issue_id, ms, ord_, rest = m.group(1), int(m.group(2)), int(m.group(3)), m.group(4)
-    return issue_id, ms, ord_, rest
+    issue_id = m.group(1)
+    ms = int(m.group(2))
+    ord_ = int(m.group(3))
+    suffix = m.group(4) or ""
+    rest = m.group(5)
+    return issue_id, ms, ord_, suffix, rest
 
 
 def milestone_index_from_labels(labels: list[str]) -> Optional[int]:
@@ -74,12 +81,14 @@ def milestone_index_from_labels(labels: list[str]) -> Optional[int]:
 def issue_id_gte(a: str, b: str) -> bool:
     """Compare issue IDs lexicographically by (milestone, ordinal).
 
-    `M1-3 >= M1-2` is True; `M0-9 >= M1-1` is False.  Used by populate's
-    --start-from logic and by render to order issues within a milestone.
+    Compare by (milestone, ordinal, suffix).  `M1-3 >= M1-2` is True;
+    `M0-9 >= M1-1` is False; `M2-7a >= M2-7` is True; `M2-7b >= M2-7a` is True.
+    Used by populate's --start-from logic and by render to order issues
+    within a milestone.
     """
-    def parse(s: str) -> tuple[int, int]:
-        m = re.match(r"M(\d+)-(\d+)", s)
-        return (int(m.group(1)), int(m.group(2))) if m else (10**9, 10**9)
+    def parse(s: str) -> tuple[int, int, str]:
+        m = re.match(r"M(\d+)-(\d+)([a-z]?)", s)
+        return (int(m.group(1)), int(m.group(2)), m.group(3) or "") if m else (10**9, 10**9, "")
     return parse(a) >= parse(b)
 
 
@@ -298,7 +307,7 @@ def _parse_issues_json(stdout: str) -> Result[list[Issue], PipelineError]:
                 # Not a planning issue (e.g. an ad-hoc bug report).  Skip
                 # silently; render does not list these.
                 continue
-            issue_id, ms_idx, _ord, _rest = parsed
+            issue_id, ms_idx, _ord, _suffix, _rest = parsed
             label_names = tuple(lbl["name"] for lbl in item.get("labels", []) or [])
             # Prefer the milestone-N-* label; fall back to the leading integer
             # of GitHub's milestone title.  The label is canonical because it
