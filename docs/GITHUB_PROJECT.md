@@ -348,7 +348,7 @@ As the library evolves, design decisions (Setoid vs Base canonicality, record vs
 
 ---
 
-### Issue M1-8: Consolidate literate and bare-Agda sources into `.lagda.md` (#280)
+### Issue M1-8: Consolidate literate and bare-Agda sources into `.lagda.md` (#280, closed)
 
 **Labels**: `documentation`, `milestone-1-infra`, `breaking-change`
 
@@ -394,9 +394,9 @@ A short design discussion is needed before code is written; the resolutions shou
 
 ### File migration
 
-- [x] Run the conversion script across `docs/lagda/` (excluding any items the ADR earmarks to remain LaTeX-literate).
-- [x] Move output to the matching `src/` path with `.lagda.md` extension.
-- [x] Delete the corresponding `src/X/Y/Z.agda` skeleton files.
+- [ ] Run the conversion script across `docs/lagda/` (excluding any items the ADR earmarks to remain LaTeX-literate).
+- [ ] Move output to the matching `src/` path with `.lagda.md` extension.
+- [ ] Delete the corresponding `src/X/Y/Z.agda` skeleton files.
 - [ ] Update internal cross-references — link definitions, `[Module.Name][]`-style references, BibTeX `Source code` notes in module headers.
 - [ ] Update `_includes/UALib.Links.md` (or equivalent) to reflect new paths.
 
@@ -409,10 +409,10 @@ A short design discussion is needed before code is written; the resolutions shou
 
 ### Verification
 
-- [x] `make check` passes after migration.
+- [ ] `make check` passes after migration.
 - [ ] `make html` produces equivalent or improved HTML output; spot-check at least 10 rendered pages against a pre-migration archive.
 - [ ] All internal cross-references resolve in the rendered HTML.
-- [x] Round-trip sanity: a representative sample of converted Agda code blocks type-check identically to their pre-migration `.lagda` originals.
+- [ ] Round-trip sanity: a representative sample of converted Agda code blocks type-check identically to their pre-migration `.lagda` originals.
 
 ## Acceptance criteria
 
@@ -701,6 +701,196 @@ The library contains three proofs of Birkhoff's HSP theorem:
 - [ ] `Setoid.Varieties.HSP.Birkhoff` is marked canonical in its module header.
 - [ ] `Demos.HSP` contains a reference to the canonical version.
 - [ ] The paper citation table is up to date.
+
+---
+
+### Issue M2-5: CI gap: `Legacy.Base` tree is not type-checked by make check (#301)
+
+**Labels**: `milestone-2-consolidation`, `ci`
+
+## Description
+
+The current `Everything.agda` target in the Makefile excludes `$(SRCDIR)/Legacy/*` from the generated `Everything.agda` file.  Consequence: `make check` does not type-check the `Legacy/Base/*` tree.  This was discovered while reviewing PR #300 (M2-1, freeze `Base/` as `Legacy/Base/`); the freeze itself does not introduce the gap, but it makes the gap operationally significant for the first time, since several `Setoid/*` modules now import from `Legacy.Base/*` (per [ADR-001 §Consequences](docs/adr/001-setoid-as-canonical.md) and the partial-replacement note in [DEPRECATED.md](src/Legacy/Base/DEPRECATED.md)).
+
+The exclusion is correct in spirit: `Everything` is the canonical library, and `Legacy/` is by definition not canonical.  Including Legacy modules in `Everything` would (i) clutter the rendered HTML with `import Legacy.Base.Structures.Sigma.Congruences` next to `import Setoid.Varieties.HSP` as if they were peers, and (ii) bind the canonical aggregator's import list to content scheduled for eventual removal.
+
+The fix is a second aggregator, `EverythingLegacy.lagda.md`, that exists purely as a CI gate over `src/Legacy/`.  It is not part of the canonical library and is not rendered to HTML.  This pattern generalizes correctly: when `Setoid/` itself becomes Legacy in 4.0 (per [ADR-003](docs/adr/003-cubical-canonical-target.md), to be ratified at M5-1), `EverythingLegacy.lagda.md` will pick up the demoted Setoid tree without any change to `Everything.lagda.md` semantics.
+
+## Tasks
+
++  [ ] Add an `EverythingLegacy.lagda.md` target to the Makefile that generates an aggregator over `$(SRCDIR)/Legacy/`.
++  [ ] Wire `EverythingLegacy.lagda.md` into `make check` so that both `Everything` and `EverythingLegacy` are type-checked on every invocation.
++  [ ] Update `.gitignore` if `Everything.lagda.md` is gitignored (treat the legacy aggregator the same way).
++  [ ] Update `.github/workflows/ci.yml` to ensure CI invokes the same target (likely no change needed if CI already calls `make check`, but verify).
++  [ ] Add a header comment to the generated `EverythingLegacy.lagda.md` explaining why it exists and that it is not part of the canonical library.
++  [ ] Add `! -name 'EverythingLegacy.lagda.md'` to the `Everything.lagda.md` target's `find` exclusions (preempts the bootstrap loop where each aggregator tries to import the other).
++  [ ] Document the split in `docs/STYLE_GUIDE.md` (one paragraph: "what does Everything mean?") so future contributors understand the convention.
+
+## Acceptance criteria
+
++  [ ] `make check` on a clean `nix develop` shell type-checks every `.lagda.md` and `.agda` file under `src/`, including `src/Legacy/`.
++  [ ] CI on a fresh PR fails if any `Legacy/Base/*` module fails to type-check.
++  [ ] The rendered HTML at https://ualib.org continues to advertise `Everything` as the canonical library, with no `Legacy.Base.*` entries cluttering its module list.
++  [ ] STYLE_GUIDE.md documents the convention.
+
+---
+
+### Issue M2-6: Extract Setoid-canonical foundations from Legacy.Base (#303)
+
+**Labels**: `milestone-2-consolidation`
+
+## Description
+
+The M2-1 freeze (#256, PR #300) surfaced an unaesthetic structural fact: several `Setoid/*` modules import basic definitions from what is now `Legacy.Base.*`.  After the freeze these imports are type-correct but contradict the framing of `Setoid/` as canonical — the canonical tree should not depend on the legacy tree.
+
+This issue extracts the affected definitions into a self-sufficient location.  Should land before M3-1 (#260, Classical/ scaffold) so the new layer builds on a clean `Setoid/`.
+
+## Affected imports (audit at M2-1 merge)
+
+From `grep -rn 'open import Legacy.Base' src/Setoid` after the freeze:
+
++  `Setoid.Algebras.Congruences` ← `Legacy.Base.Relations` (`0[_]`, `_|:_`, `Equivalence`)
++  `Setoid.Algebras.Products` ← `Legacy.Base.Functions` (`proj`, `projIsOnto`, `IsSurjective` renamed `onto`)
++  `Setoid.Homomorphisms.Factor` ← `Legacy.Base.Relations` (`kernelRel`)
++  `Setoid.Homomorphisms.Kernels` ← `Legacy.Base.Relations` (`kerRel`, `kerRelOfEquiv`)
++  `Setoid.Relations.Quotients` ← `Legacy.Base.Relations` (`[_]`, `Equivalence`)
++  `Setoid.Subalgebras.Subuniverses` ← `Legacy.Base.Relations` (`Im_⊆_`), `Legacy.Base.Terms` (`Term`, `ℊ`, `node`)
++  `Setoid.Terms.Basic`, `Setoid.Terms.Operations`, `Setoid.Terms.Properties` ← `Legacy.Base.Terms` (`Term`)
++  `Setoid.Varieties.EquationalLogic`, `Setoid.Varieties.FreeAlgebras`, `Setoid.Varieties.Preservation`, `Setoid.Varieties.Properties`, `Setoid.Varieties.SoundAndComplete` ← `Legacy.Base.Terms` (`Term`, `ℊ`)
+
+## Tasks
+
++  [ ] For each imported definition (`Term`, `Equivalence`, `kernelRel`, `kerRel`, `kerRelOfEquiv`, `Im_⊆_`, `[_]`, `0[_]`, `_|:_`, `proj`, `projIsOnto`, `IsSurjective`), decide its canonical destination: `Overture/` (if it's foundational and shared across `Setoid/` and `Classical/`), or a new `Setoid/` module (if it's setoid-specific and was simply mis-located in `Base/` historically).  `Term` is the most consequential decision point: it likely belongs in `Overture/` because both `Setoid/` and `Classical/` will need it.
++  [ ] Move each definition to its canonical destination.  Preserve prose comments.
++  [ ] Update the affected `Setoid/*` imports.
++  [ ] Add a `{-# WARNING_ON_USAGE #-}` pragma to the legacy definition pointing at the new home.
++  [ ] Update `Legacy/Base/DEPRECATED.md` to record the relocation under Category A with the new canonical path.
++  [ ] `make check` passes.
+
+## Acceptance criteria
+
++  [ ] `grep -rn 'open import Legacy.Base' src/Setoid` returns no matches.
++  [ ] `grep -rn 'open import Legacy.Base' src/Classical` (when M3-1 lands) returns no matches.
++  [ ] `make check` passes including `EverythingLegacy.lagda.md`.
++  [ ] DEPRECATED.md reflects the relocations.
+
+## Why now
+
++  M3-1 (#260) introduces `Classical/`, which will exercise `Setoid/`'s self-sufficiency aggressively.  Landing this work first means `Classical/` doesn't inherit the Legacy.Base dependency.
++  Definitions that need to live in `Overture/` are easier to relocate before they have many call sites; `Term` in particular is referenced widely already.
+
+## Non-goals
+
++  Porting Category-B legacy modules (tracked in #TBD parent).
++  Reorganizing `Setoid/` more broadly.
+
+## References
+
++  ADR-001 — `docs/adr/001-setoid-as-canonical.md` (Consequences section, "Setoid/ is not yet self-sufficient")
++  M2-1 — #256
++  M3-1 — #260 (depends on this)
+
+---
+
+### Issue M2-7: Port orphan Base modules to canonical paths (#302)
+
+**Labels**: `milestone-2-consolidation`
+
+## Description
+
+The M2-1 freeze (#256, PR #300) moved `src/Base/` to `src/Legacy/Base/` and partitioned the legacy modules into three categories in [DEPRECATED.md](https://github.com/ualib/agda-algebras/blob/master/src/Legacy/Base/DEPRECATED.md).  This issue is the parent that tracks the **Category-B** ports — modules that have no canonical replacement at the freeze point and need one in a later milestone.
+
+This issue is the parent.  Children file the per-orphan ports against their target milestones.
+
+## Scope
+
+Only orphans whose canonical destination is *a port to `Setoid/` or `Overture/`*.  The two large groups of Category-B content that are **not in scope** here:
+
++  `Legacy.Base.Structures.*` (16 modules) — superseded wholesale by the `Classical/` tree (#260, M3-1), not ported to a parallel `Setoid.Structures` subtree.  Closed by M3 deliverables; no child issue here.
++  `Legacy.Base.Equality.*` (4 modules, Category C) — retired by construction in `Setoid/`, no replacement planned.  No child issue.
+
+Per-orphan children to file under this parent:
+
++  Adjunction (4 modules: aggregator, Closure, Galois, Residuation).  Destination TBD (`Setoid/`, `Classical/`, or `Overture/`); destination decision is part of the child issue.
++  Categories (2 modules: aggregator, Functors).  Destination TBD.
++  Complexity (3 modules: aggregator, Basic, CSP) → `Setoid.Complexity` or similar.  Target milestone M9 (#282, #281 depend on this).
++  Functions.Transformers → `Setoid.Functions.Transformers`.  Destination TBD.
++  Relations.Continuous → `Setoid.Relations.Continuous` (or `Overture/`).  Target milestone M9; M9-1 (#282) and M9-2 (#281) depend on this.
++  Relations.Properties → `Setoid.Relations.Properties`.  M2 follow-up.
++  Varieties.Invariants → `Setoid.Varieties.Invariants`.  TBD.
+
+## Workflow per child issue
+
+For each child:
+
++  [ ] Decide the destination (`Setoid/`, `Classical/`, `Overture/`).  Record briefly in the child issue.
++  [ ] Port the module: definitions, lemmas, proofs, prose comments.
++  [ ] Update DEPRECATED.md: move the row from Category B to Category A; populate the canonical-replacement column; add the date the port landed.
++  [ ] Add a `{-# WARNING_ON_USAGE #-}` pragma to the legacy module pointing at the new home.
++  [ ] Update the parent (this issue) by checking the box.
+
+The legacy module is **not deleted** in the porting PR — it is removed in the *following* minor release, giving downstream users one full minor cycle to migrate.
+
+## Acceptance criteria
+
++  [ ] Every orphan listed above has either a closed child issue (port complete) or an open child issue with a target milestone (work scheduled).
++  [ ] DEPRECATED.md's Category B table contains no row whose `Tracking issue` column reads `#TBD`.
++  [ ] Once all children close, this parent closes; at that point the only Category-B residual content is the `Structures.*` subtree (handled by M3) and the `Equality.*` subtree (Category C, no replacement planned).
+
+## References
+
++  ADR-001 — `docs/adr/001-setoid-as-canonical.md`
++  DEPRECATED.md — `src/Legacy/Base/DEPRECATED.md`
++  M2-1 — #256
+
+---
+
+### Issue M2-8: Migrate src/Examples and src/Exercises imports to canonical paths (#304)
+
+**Labels**: `milestone-2-consolidation`
+
+## Description
+
+After the M2-1 freeze (#256, PR #300), four files outside `src/Legacy/` still import from `Legacy.Base.*`:
+
++  `src/Examples/Categories/Functors.lagda.md` — imports `Legacy.Base.Categories.Functors`
++  `src/Examples/Structures/Basic.lagda.md` — imports `Legacy.Base.Structures` and `Legacy.Base.Structures.Basic`
++  `src/Examples/Structures/Signatures.lagda.md` — imports `Legacy.Base.Structures.Basic`
++  `src/Exercises/Complexity/FiniteCSP.lagda.md` — imports `Legacy.Base.Relations.Continuous`, `Legacy.Base.Structures.Basic`, `Legacy.Base.Structures.Homs`
+
+These imports are technically correct after the rename, but the example/exercise should exercise the **canonical** library, not the legacy one.  Each needs to migrate to whichever destination its content lands at.
+
+## Per-file plan
+
++  **`src/Examples/Categories/Functors.lagda.md`**.  Awaits the Categories port (child of #TBD parent issue).  Migrate when the destination of `Categories.Functors` is decided.
++  **`src/Examples/Structures/Basic.lagda.md`** and **`src/Examples/Structures/Signatures.lagda.md`**.  These are `Structures`-family examples.  When `Classical/` lands (M3-1 #260), these examples should either (a) migrate to `Classical/` to demonstrate the new layer, or (b) be deleted in favor of the new `Examples/Classical/` examples that M3-7 (#266) will produce.  Decision is part of M3 implementation.
++  **`src/Exercises/Complexity/FiniteCSP.lagda.md`**.  Depends on the `Complexity` and `Continuous` ports (children of #TBD parent issue) and on M7-1 (#274).  Migrate when the canonical destinations land.
+
+## Tasks
+
++  [ ] When the canonical destination of `Categories.Functors` is decided, migrate `Examples/Categories/Functors.lagda.md`.
++  [ ] As part of M3 (or as a follow-up), decide the fate of `Examples/Structures/{Basic,Signatures}.lagda.md` (migrate to `Classical/` examples or remove).
++  [ ] When `Complexity` and `Relations.Continuous` are ported (M9 dependencies), migrate `Exercises/Complexity/FiniteCSP.lagda.md`.
++  [ ] Confirm via `grep -rn 'Legacy.Base' src/Examples src/Exercises` that no `Legacy.Base.*` imports remain in the example/exercise tree.
+
+## Acceptance criteria
+
++  [ ] `grep -rn 'open import Legacy.Base' src/Examples src/Exercises` returns no matches.
++  [ ] `make check` passes.
++  [ ] Every example/exercise file has a clean canonical-tree import list.
+
+## Non-goals
+
++  Reworking the example/exercise content beyond the import-path change.
++  Adding new examples (M3-7 #266 covers that).
+
+## References
+
++  M2-1 — #256
++  M3-1 — #260
++  M3-7 — #266
++  M7-1 — #274
++  Parent port-tracking issue — #TBD
 
 <!-- END GENERATED: milestone-2 -->
 
