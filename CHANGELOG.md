@@ -36,7 +36,7 @@ The 3.0 release is a major reconstruction of agda-algebras building on the Setoi
 
    Migration recipe (most imports):
 
-       sed -i -E 's/(\s+import\s+)Base\./\1Legacy.Base./g' YOUR_FILE.agda
+       sed -i -E 's/import(\s+)Base\./import\1Legacy.Base./g' YOUR_FILE.lagda.md
 
    For modules that have a `Setoid/` analog (Category A in DEPRECATED.md),
    prefer migrating to the `Setoid.*` import and passing

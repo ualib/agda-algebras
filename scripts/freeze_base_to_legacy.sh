@@ -19,39 +19,45 @@ DRY_RUN=${1:-}
 
 run() {
   if [[ "$DRY_RUN" == "--dry-run" ]]; then
-    echo "DRY: $*"
+    printf 'DRY: '
+    printf '%q ' "$@"
+    echo
   else
-    eval "$@"
+    "$@"
   fi
 }
 
 # 1. Move the tree.
 if [[ -d src/Base ]]; then
-  run "mkdir -p src/Legacy"
-  run "git mv src/Base src/Legacy/Base"
+  run mkdir -p src/Legacy
+  run git mv src/Base src/Legacy/Base
 fi
 
 # 2. Move the top-level src/Base.lagda.md to src/Legacy/Base.lagda.md
 if [[ -f src/Base.lagda.md ]]; then
-  run "git mv src/Base.lagda.md src/Legacy/Base.lagda.md"
+  run git mv src/Base.lagda.md src/Legacy/Base.lagda.md
 fi
 
-# 3. Rewrite references. We target three patterns:
-#    (a) `module Base.X.Y where`             → `module Legacy.Base.X.Y where`
-#    (b) `open import Base.X.Y`              → `open import Legacy.Base.X.Y`
-#    (c) `import Base.X.Y`                   → `import Legacy.Base.X.Y`
+# 3. Rewrite references.  We target three positional patterns:
+#    (a) `module Base...`         → `module Legacy.Base...`
+#    (b) `open import Base...`    → `open import Legacy.Base...`
+#    (c) `import Base...`         → `import Legacy.Base...`
+# In each case the trailing context after `Base` may be `.` (qualified module
+# path), whitespace (the bare-`Base` form, e.g. `module Base where` or
+# `open import Base`), or end-of-line.  The regex captures whichever follows
+# and re-emits it verbatim.
 #
 # Limit the search to .agda, .lagda, .lagda.md files inside src/.
 
-FILES=$(find src -type f \( -name '*.agda' -o -name '*.lagda' -o -name '*.lagda.md' \))
+mapfile -t FILES < <(find src -type f \( -name '*.agda' -o -name '*.lagda' -o -name '*.lagda.md' \))
 
-for f in $FILES; do
+for f in "${FILES[@]}"; do
   # (a) module header
-  run "sed -i.bak -E 's/^(\s*module\s+)Base\./\1Legacy.Base./' '$f'"
+  run sed -i.bak -E 's/^(\s*module\s+)Base(\.|\s|$)/\1Legacy.Base\2/' "$f"
   # (b) and (c) imports
-  run "sed -i.bak -E 's/^(\s*open\s+import\s+)Base\./\1Legacy.Base./' '$f'"
-  run "sed -i.bak -E 's/^(\s*import\s+)Base\./\1Legacy.Base./' '$f'"
-  run "rm -f '${f}.bak'"
+  run sed -i.bak -E 's/^(\s*open\s+import\s+)Base(\.|\s|$)/\1Legacy.Base\2/' "$f"
+  run sed -i.bak -E 's/^(\s*import\s+)Base(\.|\s|$)/\1Legacy.Base\2/' "$f"
+  run rm -f "${f}.bak"
 done
 
 # 4. Top-level aggregator.
