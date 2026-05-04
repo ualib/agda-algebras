@@ -10,11 +10,11 @@ author: "the agda-algebras development team"
 The `Legacy.Base.*` modules in this directory descend from `src/Base/`, the
 original "bare-types" development of universal algebra in agda-algebras.  As of
 version 3.0, `Setoid/` is the **canonical** development tree (see
-[`docs/adr/001-setoid-as-canonical.md`](../../docs/adr/001-setoid-as-canonical.md)
+[`docs/adr/001-setoid-as-canonical.md`](./docs/adr/001-setoid-as-canonical.md)
 for the full rationale).
 
 `Base/` was moved here rather than deleted because three distinct categories of
-module live within it.  Each is described below; the distinction matters because
+modules live within it.  Each is described below; the distinction matters because
 it tells users whether a given import is **discouraged**, **provisional**, or
 **without planned replacement**.
 
@@ -28,6 +28,13 @@ these modules; **do** migrate existing imports to their `Setoid/` counterparts.
 The bare-types style in these modules typically depends on postulates of
 function extensionality and propositional extensionality that `Setoid/` retires
 by construction.
+
+Note on aggregator rows: `Legacy.Base.Relations`, `Legacy.Base.Functions`, and
+`Legacy.Base.Varieties` are aggregator modules whose contents straddle Categories
+A and B.  The "canonical replacement" column points at the corresponding canonical
+aggregator, which covers most but not all of the legacy aggregator's submodules.
+Users importing aggregators should consult the per-submodule rows in this table
+and the Category-B table below to confirm coverage of specific submodules.
 
 For users of these modules, the migration is mechanical when the concrete
 setting works up to propositional equality: replace `Legacy.Base.X` with
@@ -55,7 +62,7 @@ parallel abstract foundation.
 | `Legacy.Base.Homomorphisms.Noether`           | `Setoid.Homomorphisms.Noether`           |
 | `Legacy.Base.Homomorphisms.Products`          | `Setoid.Homomorphisms.Products`          |
 | `Legacy.Base.Homomorphisms.Properties`        | `Setoid.Homomorphisms.Properties`        |
-| `Legacy.Base.Relations`                       | `Setoid.Relations`                       |
+| `Legacy.Base.Relations`                       | `Setoid.Relations` (partial — see note above; `Continuous` and `Properties` are tracked under Category B) |
 | `Legacy.Base.Relations.Discrete`              | `Setoid.Relations.Discrete`              |
 | `Legacy.Base.Relations.Quotients`             | `Setoid.Relations.Quotients`             |
 | `Legacy.Base.Subalgebras`                     | `Setoid.Subalgebras`                     |
@@ -183,8 +190,8 @@ Three reasons:
 
 ## Further reading
 
-+  ADR-001 — [`docs/adr/001-setoid-as-canonical.md`](../../docs/adr/001-setoid-as-canonical.md)
-+  Migration guide — `CHANGELOG.md` (3.0 entry)
-+  Roadmap — [`docs/GITHUB_PROJECT.md`](../../docs/GITHUB_PROJECT.md)
++  ADR-001 — [`docs/adr/001-setoid-as-canonical.md`](./docs/adr/001-setoid-as-canonical.md)
++  Migration guide — [`CHANGELOG.md`](CHANGELOG.md) (3.0 entry)
++  Roadmap — [`docs/GITHUB_PROJECT.md`](./docs/GITHUB_PROJECT.md)
 
 
