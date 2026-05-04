@@ -40,6 +40,8 @@ REPO      ?= ualib/agda-algebras
 
 default: Everything.agda
 
+# The canonical library aggregator.  Excludes Legacy/.  Feeds HTML rendering
+# and is the natural entry point for downstream consumers.
 Everything.agda:
 	@echo "target: $@"
 	@{ \
@@ -50,6 +52,7 @@ Everything.agda:
 	  find $(SRCDIR) \
 	      \( -name '*.lagda.md' -o -name '*.agda' \) \
 	      ! -name 'Everything.agda' \
+	      ! -name 'EverythingLegacy.agda' \
 	      ! -path '$(SRCDIR)/Legacy/*' \
 	    | sed -e 's|^$(SRCDIR)/||' \
 	          -e 's|\.lagda\.md$$||' \
@@ -60,9 +63,37 @@ Everything.agda:
 	} > $(SRCDIR)/Everything.agda
 	@echo "  wrote $(SRCDIR)/Everything.agda ($$(grep -c '^import' $(SRCDIR)/Everything.agda) modules)"
 
-check test: Everything.agda
+# CI gate over the frozen Legacy/ tree.  Not part of the canonical library;
+# not rendered to HTML.  Exists so that make check catches any breakage in
+# Legacy/Base/* introduced by changes to its dependencies (most importantly,
+# Setoid/* modules whose definitions Legacy.Base depends on transitively).
+# See docs/adr/001-setoid-as-canonical.md and src/Legacy/Base/DEPRECATED.md.
+EverythingLegacy.agda:
+	@echo "target: $@"
+	@{ \
+	  echo "{-# OPTIONS --cubical-compatible --safe #-}"; \
+	  echo ""; \
+	  echo "-- This file exists to gate CI on the Legacy/ tree."; \
+	  echo "-- It is NOT part of the canonical library and is NOT rendered to HTML."; \
+	  echo "-- See docs/adr/001-setoid-as-canonical.md and src/Legacy/Base/DEPRECATED.md."; \
+	  echo ""; \
+	  echo "module EverythingLegacy where"; \
+	  echo ""; \
+	  find $(SRCDIR)/Legacy \
+	      \( -name '*.lagda.md' -o -name '*.agda' \) \
+	    | sed -e 's|^$(SRCDIR)/||' \
+	          -e 's|\.lagda\.md$$||' \
+	          -e 's|\.agda$$||' \
+	          -e 's|/|.|g' \
+	          -e 's|^|import |' \
+	    | LC_ALL=C sort; \
+	} > $(SRCDIR)/EverythingLegacy.agda
+	@echo "  wrote $(SRCDIR)/EverythingLegacy.agda ($$(grep -c '^import' $(SRCDIR)/EverythingLegacy.agda) modules)"
+
+check test: Everything.agda EverythingLegacy.agda
 	@echo "target: $@"
 	$(AGDA) $(RTS_OPTS) $(AGDA_OPTS) $(SRCDIR)/Everything.agda
+	$(AGDA) $(RTS_OPTS) $(AGDA_OPTS) $(SRCDIR)/EverythingLegacy.agda
 
 html: Everything.agda
 	@echo "target: $@"
@@ -75,7 +106,7 @@ profile: Everything.agda
 clean:
 	@echo "target: $@"
 	find . -name '*.agdai' -delete
-	rm -f $(SRCDIR)/Everything.agda
+	rm -f $(SRCDIR)/Everything.agda $(SRCDIR)/EverythingLegacy.agda
 
 # Regenerate the issue listings in docs/GITHUB_PROJECT.md from current
 # GitHub state.  Hand-edited prose outside the BEGIN/END GENERATED markers
