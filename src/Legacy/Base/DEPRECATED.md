@@ -10,7 +10,7 @@ author: "the agda-algebras development team"
 The `Legacy.Base.*` modules in this directory descend from `src/Base/`, the
 original "bare-types" development of universal algebra in agda-algebras.  As of
 version 3.0, `Setoid/` is the **canonical** development tree (see
-[`docs/adr/001-setoid-as-canonical.md`](./docs/adr/001-setoid-as-canonical.md)
+[`docs/adr/001-setoid-as-canonical.md`](../../../docs/adr/001-setoid-as-canonical.md)
 for the full rationale).
 
 `Base/` was moved here rather than deleted because three distinct categories of
@@ -96,36 +96,36 @@ replacement; this gives downstream users one full minor cycle to migrate.
 
 | Legacy module                              | Planned destination                              | Target milestone | Tracking issue |
 |--------------------------------------------|--------------------------------------------------|------------------|----------------|
-| `Legacy.Base.Adjunction`                   | TBD (`Setoid/`, `Classical/`, or `Overture/`)    | TBD              | #TBD           |
-| `Legacy.Base.Adjunction.Closure`           | TBD                                              | TBD              | #TBD           |
-| `Legacy.Base.Adjunction.Galois`            | TBD                                              | TBD              | #TBD           |
-| `Legacy.Base.Adjunction.Residuation`       | TBD                                              | TBD              | #TBD           |
-| `Legacy.Base.Categories`                   | TBD                                              | TBD              | #TBD           |
-| `Legacy.Base.Categories.Functors`          | TBD                                              | TBD              | #TBD           |
-| `Legacy.Base.Complexity`                   | `Setoid.Complexity` (TBD name)                   | M9               | #TBD           |
-| `Legacy.Base.Complexity.Basic`             | as above                                         | M9               | #TBD           |
-| `Legacy.Base.Complexity.CSP`               | as above                                         | M9               | #TBD           |
-| `Legacy.Base.Functions.Transformers`       | TBD                                              | TBD              | #TBD           |
-| `Legacy.Base.Relations.Continuous`         | `Setoid.Relations.Continuous` (or `Overture/`)   | M9               | #TBD           |
-| `Legacy.Base.Relations.Properties`         | `Setoid.Relations.Properties`                    | M2 follow-up     | #TBD           |
-| `Legacy.Base.Structures`                   | `Classical/` (entire subtree superseded)         | M3               | #TBD           |
-| `Legacy.Base.Structures.Basic`             | as above                                         | M3               | #TBD           |
-| `Legacy.Base.Structures.Congruences`       | as above                                         | M3               | #TBD           |
-| `Legacy.Base.Structures.EquationalLogic`   | as above                                         | M3               | #TBD           |
-| `Legacy.Base.Structures.Graphs`            | as above                                         | M3               | #TBD           |
-| `Legacy.Base.Structures.Graphs0`           | (slated for removal; see M2-3)                   | M2-3             | #TBD           |
-| `Legacy.Base.Structures.Homs`              | `Classical/`                                     | M3               | #TBD           |
-| `Legacy.Base.Structures.Isos`              | `Classical/`                                     | M3               | #TBD           |
-| `Legacy.Base.Structures.Products`          | `Classical/`                                     | M3               | #TBD           |
-| `Legacy.Base.Structures.Sigma`             | `Classical/` (subsumed by Σ-typed core)          | M3               | #TBD           |
-| `Legacy.Base.Structures.Sigma.Basic`       | as above                                         | M3               | #TBD           |
-| `Legacy.Base.Structures.Sigma.Congruences` | as above                                         | M3               | #TBD           |
-| `Legacy.Base.Structures.Sigma.Homs`        | as above                                         | M3               | #TBD           |
-| `Legacy.Base.Structures.Sigma.Isos`        | as above                                         | M3               | #TBD           |
-| `Legacy.Base.Structures.Sigma.Products`    | as above                                         | M3               | #TBD           |
-| `Legacy.Base.Structures.Substructures`     | `Classical/`                                     | M3               | #TBD           |
-| `Legacy.Base.Structures.Terms`             | `Classical/`                                     | M3               | #TBD           |
-| `Legacy.Base.Varieties.Invariants`         | `Setoid.Varieties.Invariants`                    | TBD              | #TBD           |
+| `Legacy.Base.Adjunction`                   | TBD (`Setoid/`, `Classical/`, or `Overture/`)    | M2               | #305           |
+| `Legacy.Base.Adjunction.Closure`           | as parent                                        | M2               | #305           |
+| `Legacy.Base.Adjunction.Galois`            | as parent                                        | M2               | #305           |
+| `Legacy.Base.Adjunction.Residuation`       | as parent                                        | M2               | #305           |
+| `Legacy.Base.Categories`                   | TBD (decision part of #306)                      | M2               | #306           |
+| `Legacy.Base.Categories.Functors`          | as parent                                        | M2               | #306           |
+| `Legacy.Base.Complexity`                   | `Setoid.Complexity`                              | M9               | #307           |
+| `Legacy.Base.Complexity.Basic`             | `Setoid.Complexity.Basic`                        | M9               | #307           |
+| `Legacy.Base.Complexity.CSP`               | `Setoid.Complexity.CSP`                          | M9               | #307           |
+| `Legacy.Base.Functions.Transformers`       | stdlib redirect or `Setoid.Functions.Transformers` (decision part of #310) | TBD | #310 |
+| `Legacy.Base.Relations.Continuous`         | `Setoid.Relations.Continuous`                    | M9               | #308           |
+| `Legacy.Base.Relations.Properties`         | `Setoid.Relations.Properties`                    | M2 follow-up     | #309           |
+| `Legacy.Base.Structures`                   | `Classical/` (entire subtree superseded)         | M3               | #260           |
+| `Legacy.Base.Structures.Basic`             | as above                                         | M3               | #260           |
+| `Legacy.Base.Structures.Congruences`       | as above                                         | M3               | #260           |
+| `Legacy.Base.Structures.EquationalLogic`   | as above                                         | M3               | #260           |
+| `Legacy.Base.Structures.Graphs`            | as above                                         | M3               | #260           |
+| `Legacy.Base.Structures.Graphs0`           | (slated for removal; see M2-3)                   | M2-3             | #258           |
+| `Legacy.Base.Structures.Homs`              | `Classical/`                                     | M3               | #260           |
+| `Legacy.Base.Structures.Isos`              | `Classical/`                                     | M3               | #260           |
+| `Legacy.Base.Structures.Products`          | `Classical/`                                     | M3               | #260           |
+| `Legacy.Base.Structures.Sigma`             | `Classical/` (subsumed by Σ-typed core)          | M3               | #260           |
+| `Legacy.Base.Structures.Sigma.Basic`       | as above                                         | M3               | #260           |
+| `Legacy.Base.Structures.Sigma.Congruences` | as above                                         | M3               | #260           |
+| `Legacy.Base.Structures.Sigma.Homs`        | as above                                         | M3               | #260           |
+| `Legacy.Base.Structures.Sigma.Isos`        | as above                                         | M3               | #260           |
+| `Legacy.Base.Structures.Sigma.Products`    | as above                                         | M3               | #260           |
+| `Legacy.Base.Structures.Substructures`     | `Classical/`                                     | M3               | #260           |
+| `Legacy.Base.Structures.Terms`             | `Classical/`                                     | M3               | #260           |
+| `Legacy.Base.Varieties.Invariants`         | `Setoid.Varieties.Invariants`                    | TBD              | #311           |
 
 ### Category C — No replacement planned
 
@@ -190,8 +190,8 @@ Three reasons:
 
 ## Further reading
 
-+  ADR-001 — [`docs/adr/001-setoid-as-canonical.md`](./docs/adr/001-setoid-as-canonical.md)
-+  Migration guide — [`CHANGELOG.md`](CHANGELOG.md) (3.0 entry)
-+  Roadmap — [`docs/GITHUB_PROJECT.md`](./docs/GITHUB_PROJECT.md)
++  ADR-001 — [`docs/adr/001-setoid-as-canonical.md`](../../../docs/adr/001-setoid-as-canonical.md)
++  Migration guide — [`CHANGELOG.md`](../../../CHANGELOG.md) (3.0 entry)
++  Roadmap — [`docs/GITHUB_PROJECT.md`](../../../docs/GITHUB_PROJECT.md)
 
 

@@ -905,10 +905,35 @@ graph TD
   M2_2["M2-2: Consolidate Base.Structures"]
   M2_3["M2-3: Remove Graphs0"]
   M2_4["M2-4: Canonical HSP"]
+  M2_5["M2-5: EverythingLegacy CI"]
+  M2_6["M2-6: Extract Setoid foundations"]
+  M2_7["M2-7: Port orphans (parent)"]
+  M2_7a["M2-7a: Adjunction"]
+  M2_7b["M2-7b: Categories"]
+  M2_7c["M2-7c: Complexity"]
+  M2_7d["M2-7d: Continuous"]
+  M2_7e["M2-7e: Relations.Properties"]
+  M2_7f["M2-7f: Functions.Transformers"]
+  M2_7g["M2-7g: Varieties.Invariants"]
+  M2_8["M2-8: Examples/Exercises migration"]
   M1_1 --> M2_1
   M2_1 --> M2_2
   M2_1 --> M2_3
   M2_1 --> M2_4
+  M2_1 --> M2_5
+  M2_1 --> M2_6
+  M2_1 --> M2_7
+  M2_7 --> M2_7a
+  M2_7 --> M2_7b
+  M2_7 --> M2_7c
+  M2_7 --> M2_7d
+  M2_7 --> M2_7e
+  M2_7 --> M2_7f
+  M2_7 --> M2_7g
+  M2_7a --> M2_8
+  M2_7b --> M2_8
+  M2_7c --> M2_8
+  M2_7d --> M2_8
   classDef ext fill:#f0f0f0,stroke:#999,stroke-dasharray: 4 3,color:#555
 ```
 
@@ -1128,6 +1153,7 @@ M3-2 (Semigroup) is the pattern-setter — the design choices made there propaga
 ```mermaid
 graph TD
   M2_1["M2-1: Freeze Base"]:::ext
+  M2_6["M2-6: Extract Setoid foundations"]:::ext
   M3_1["M3-1: Classical/ scaffold"]
   M3_2["M3-2: Semigroup (pattern-setting)"]
   M3_3["M3-3: Stdlib bridges"]
@@ -1136,6 +1162,7 @@ graph TD
   M3_6["M3-6: Ring"]
   M3_7["M3-7: Examples"]
   M2_1 --> M3_1
+  M2_6 --> M3_1
   M3_1 --> M3_2
   M3_2 --> M3_3
   M3_2 --> M3_4
@@ -1424,6 +1451,11 @@ Candidate content, to be prioritized:
 
 <!-- END GENERATED: milestone-7 -->
 
+
+### Milestone 7 Dependencies
+
+M7-1 (#274) depends on M2-7c (#307) for the canonical-path Complexity content.  Sequencing: #307 ports the existing module; this issue extends it.
+
 ---
 ---
 
@@ -1610,18 +1642,30 @@ M9-1 and M9-2 depend on M2 (Setoid/ canonical) and M3-1 (Classical/ scaffold).  
 ```mermaid
 graph TD
   M2_1["M2-1: Freeze Base"]:::ext
+  M2_7c["M2-7c: Port Complexity"]:::ext
+  M2_7d["M2-7d: Port Continuous"]:::ext
   M3_1["M3-1: Classical/ scaffold"]:::ext
+  M3_5["M3-5: Lattice"]:::ext
   M7_1["M7-1: Finite CSP"]:::ext
   M9_1["M9-1: Scott-continuous relations"]
   M9_2["M9-2: Infinitary CSP"]
   M9_3["M9-3: Coalgebra exploration"]
   M2_1 --> M9_1
   M2_1 --> M9_2
+  M2_7d --> M9_1
+  M2_7d --> M9_2
+  M2_7d -.-> M9_3
+  M2_7c --> M9_2
   M3_1 --> M9_1
+  M3_5 --> M9_1
   M3_1 --> M9_2
   M7_1 -.-> M9_2
   classDef ext fill:#f0f0f0,stroke:#999,stroke-dasharray: 4 3,color:#555
 ```
+
++  **`M2-7d → M9-1, M9-2`** added as solid edges; **`M2-7d -.-> M9-3`** added as dashed (M9-3 only consumes if it produces a formalization candidate, per its own body).
++  **`M2-7c → M9-2`** added as solid (per the audit; M9-1 explicitly does *not* depend on Complexity).
++  **`M3-5 → M9-1`** added — this is technically a pre-existing dependency that the original graph missed. M9-1's body explicitly invokes "DCPO as a record bundle — a poset with directed suprema," which depends on lattice/order infrastructure that M3-5 produces. Worth flagging since the audit surfaced it.
 
 ---
 ---
