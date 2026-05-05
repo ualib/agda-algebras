@@ -22,7 +22,6 @@ open import Legacy.Base.Structures.Products         public
 open import Legacy.Base.Structures.Congruences      public
 open import Legacy.Base.Structures.Homs             public
 open import Legacy.Base.Structures.Graphs           public
-open import Legacy.Base.Structures.Graphs0
 open import Legacy.Base.Structures.Isos             public
 open import Legacy.Base.Structures.Terms            public
 open import Legacy.Base.Structures.Substructures    public
