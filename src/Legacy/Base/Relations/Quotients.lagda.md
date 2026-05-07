@@ -46,10 +46,10 @@ is a proof that `r` satisfies `IsEquivalence`.
 
 
 ```agda
-
-
 Equivalence : Type a → {ρ : Level} → Type (a ⊔ suc ρ)
 Equivalence A {ρ} = Σ[ r ∈ BinRel A ρ ] IsEquivalence r
+
+{-# WARNING_ON_USAGE Equivalence "Use Overture.Relations.Equivalence instead. Deprecated under #303." #-}
 ```
 
 
@@ -125,6 +125,8 @@ i.e., blocks of a partition (recall partitions correspond to equivalence relatio
 
 [_] : {A : Type a} → A → {ρ : Level} → BinRel A ρ → Pred A ρ
 [ u ]{ρ} R = R u      -- (the R-block containing u : A)
+
+{-# WARNING_ON_USAGE [_] "Use Overture.Relations.[_] instead. Deprecated under #303." #-}
 
 -- Alternative notation
 [_/_] : {A : Type a} → A → {ρ : Level} → Equivalence A {ρ} → Pred A ρ
@@ -244,6 +246,8 @@ This is obviously an equivalence relation, as we now confirm.
 0[_]Equivalence : (A : Type a) {ρ : Level} → Equivalence A {a ⊔ ρ}
 0[ A ]Equivalence {ρ} = 0[ A ] {ρ} , 0[ A ]IsEquivalence
 
+{-# WARNING_ON_USAGE 0[_]IsEquivalence "Use Overture.Relations.0[_]IsEquivalence instead. Deprecated under #303." #-}
+{-# WARNING_ON_USAGE 0[_]Equivalence "Use Overture.Relations.0[_]Equivalence instead. Deprecated under #303." #-}
 
 ⟪_∼_⟫-elim : {A : Type a} → (u v : A) → {ρ : Level}{R : Equivalence A{ρ} }
  →           ⟪ u ⟫{∣ R ∣} ≡ ⟪ v ⟫ → ∣ R ∣ u v

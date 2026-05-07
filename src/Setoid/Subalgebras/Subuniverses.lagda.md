@@ -29,13 +29,11 @@ import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 open import Relation.Binary.PropositionalEquality using ( refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------------
-open import Overture        using ( ∣_∣ ; ∥_∥ )
-open import Legacy.Base.Relations  using ( Im_⊆_ )
-
-open import Overture.Terms        {𝑆 = 𝑆} using ( Term ; ℊ ; node )
-open import Setoid.Algebras       {𝑆 = 𝑆} using ( Algebra ; 𝕌[_] ; _̂_ ; ov )
-open import Setoid.Terms          {𝑆 = 𝑆} using ( module Environment )
-open import Setoid.Homomorphisms  {𝑆 = 𝑆} using ( hom ; IsHom )
+open import Overture                       using ( ∣_∣ ; ∥_∥ ; Im_⊆_ )
+open import Overture.Terms        {𝑆 = 𝑆}  using ( Term ; ℊ ; node )
+open import Setoid.Algebras       {𝑆 = 𝑆}  using ( Algebra ; 𝕌[_] ; _̂_ ; ov )
+open import Setoid.Terms          {𝑆 = 𝑆}  using ( module Environment )
+open import Setoid.Homomorphisms  {𝑆 = 𝑆}  using ( hom ; IsHom )
 
 private variable
  α β γ ρᵃ ρᵇ ρᶜ ℓ χ : Level
