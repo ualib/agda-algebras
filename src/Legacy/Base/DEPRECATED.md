@@ -29,6 +29,18 @@ The bare-types style in these modules typically depends on postulates of
 function extensionality and propositional extensionality that `Setoid/` retires
 by construction.
 
+Some Category-A relocations target `Overture/` rather than `Setoid/`.  This is
+correct when the relocated definition does not presuppose a setoid structure —
+for instance, `Term` is the W-type for the polynomial functor of a signature,
+`Equivalence A {ρ}` is a Σ-bundle of a `BinRel` with an `IsEquivalence` proof,
+and bare-types `IsSurjective` is parametric in a raw function `A → B`.  Such
+definitions belong in the shared foundations, not in the setoid layer; they
+are needed identically by the canonical `Setoid/` tree, by the planned
+`Classical/` tree (M3), and by the long-term `Cubical/` target (M5).  The
+per-symbol table below records the relocations to `Overture/` from the audit
+at #303 (M2-6).  The per-module table that follows it records the broader
+module-level deprecations to `Setoid/` for everything else.
+
 Note on aggregator rows: `Legacy.Base.Relations`, `Legacy.Base.Functions`, and
 `Legacy.Base.Varieties` are aggregator modules whose contents straddle Categories
 A and B.  The "canonical replacement" column points at the corresponding canonical
@@ -80,6 +92,10 @@ parallel abstract foundation.
 | `Legacy.Base.Varieties.Preservation`          | `Setoid.Varieties.Preservation`          |
 | `Legacy.Base.Varieties.Properties`            | `Setoid.Varieties.Properties`            |
 
+
+
+
+
 ### Category B — Pending port; no `Setoid/` analog yet
 
 These modules contain mathematical content with **no canonical replacement at
@@ -93,6 +109,43 @@ PR that lands the port, and the legacy file gains a `{-# WARNING_ON_USAGE #-}`
 pragma pointing to the new home.  The legacy module is removed in the
 *following* minor release, never in the same release that introduces the
 replacement; this gives downstream users one full minor cycle to migrate.
+
+
+#### Foundational definitions relocated to `Overture/` (per #303, M2-6)
+
+The following individual symbols are relocated to `Overture/` because they do
+not presuppose a setoid structure and are needed across `Setoid/`, `Classical/`,
+and `Cubical/`.  They were authored in the bare-types tree as a historical
+accident — `Base/` was the only tree at the time — and #303 corrects the
+structural placement.  At each definition site in the legacy tree there is now
+a `{-# WARNING_ON_USAGE #-}` pragma pointing at the canonical home.
+
+| Symbol                                              | Legacy location                          | Canonical home              |
+|-----------------------------------------------------|------------------------------------------|-----------------------------|
+| `Term`, `ℊ`, `node`                                 | `Legacy.Base.Terms.Basic`                | `Overture.Terms`            |
+| `Equivalence`                                       | `Legacy.Base.Relations.Quotients`        | `Overture.Relations`        |
+| `[_]`                                               | `Legacy.Base.Relations.Quotients`        | `Overture.Relations`        |
+| `0[_]`                                              | `Legacy.Base.Relations.Discrete`         | `Overture.Relations`        |
+| `0[_]IsEquivalence`, `0[_]Equivalence`              | `Legacy.Base.Relations.Quotients`        | `Overture.Relations`        |
+| `kerRel`, `kerRelOfEquiv`, `kernelRel`              | `Legacy.Base.Relations.Discrete`         | `Overture.Relations`        |
+| `Im_⊆_`                                             | `Legacy.Base.Relations.Discrete`         | `Overture.Relations`        |
+| `_preserves_`, `_|:_`                               | `Legacy.Base.Relations.Discrete`         | `Overture.Relations`        |
+| `eval-rel`, `eval-pred`                             | `Legacy.Base.Relations.Discrete`         | `Overture.Relations`        |
+| `Image_∋_`, `eq`                                    | `Legacy.Base.Functions.Inverses`         | `Overture.Functions`        |
+| `Inv`, `InvIsInverseʳ`                              | `Legacy.Base.Functions.Inverses`         | `Overture.Functions`        |
+| `IsSurjective`                                      | `Legacy.Base.Functions.Surjective`       | `Overture.Functions`        |
+| `IsSurjective→Surjective`, `Surjective→IsSurjective`| `Legacy.Base.Functions.Surjective`       | `Overture.Functions`        |
+| `SurjInv`, `SurjInvIsInverseʳ`                      | `Legacy.Base.Functions.Surjective`       | `Overture.Functions`        |
+| `epic-factor`, `epic-factor-intensional`            | `Legacy.Base.Functions.Surjective`       | `Overture.Functions`        |
+| `proj`, `projIsOnto`                                | `Legacy.Base.Functions.Surjective`       | `Overture.Functions`        |
+
+Migration: replace the legacy module path with `Overture.Terms` (with `{𝑆 = 𝑆}`
+instantiation), `Overture.Relations`, or `Overture.Functions` as appropriate.
+The Overture aggregator re-exports `Overture.Relations` and `Overture.Functions`
+(but not the parameterized `Overture.Terms`), so most call sites can simplify
+to `open import Overture using ( … )`.
+
+#### Module-level Setoid analogues
 
 | Legacy module                              | Planned destination                              | Target milestone | Tracking issue |
 |--------------------------------------------|--------------------------------------------------|------------------|----------------|
@@ -187,6 +240,27 @@ Three reasons:
     `Legacy.Base/` would actively remove formalized mathematics from the
     library.  The freeze-but-retain policy is what lets M2-1 ship without
     blocking on milestones M3, M9, and beyond.
+
+
+## Internal helpers
+
+The internal helpers `update`, `update-id`, and `proj-is-onto` (used by
+`projIsOnto`) were relocated alongside it but do not carry deprecation pragmas:
+no consumer imports them directly, and pragmatizing every internal helper would
+inflate the deprecation-warning volume without serving a real migration audience.
+If a downstream consumer turns out to need them at the legacy path, the omission
+is recoverable in a follow-up.
+
+## Deprecation-warning volume after #303
+
+The `WARNING_ON_USAGE` pragmas added in #303 fire on every import site, including
+internal `Legacy.Base.*` cross-imports.  This is intentional: the warnings are
+aimed at downstream consumers of `Legacy.Base`, and they fire correctly on
+internal Legacy uses too because those internal uses are themselves slated for
+removal in the next minor cycle.  The warnings under `EverythingLegacy.lagda.md`
+during `make check` are expected and do not indicate a regression.  Suppressing
+the warnings inside `Legacy.Base/*` would defeat their purpose.
+
 
 ## Further reading
 
