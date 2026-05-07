@@ -11,8 +11,6 @@ This is the [Base.Functions.Surjective][] module of the [agda-algebras][] librar
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 module Legacy.Base.Functions.Surjective where
 
@@ -45,12 +43,12 @@ and codomain of `f` agree.  The following types manifest this notion.
 
 
 ```agda
-
-
 module _ {A : Type a}{B : Type b} where
 
  IsSurjective : (A → B) →  Type _
  IsSurjective f = ∀ y → Image f ∋ y
+
+ {-# WARNING_ON_USAGE IsSurjective "Use Overture.Functions.IsSurjective instead. Deprecated under #303." #-}
 
  onto : Type _
  onto = Σ (A → B) IsSurjective
@@ -65,10 +63,14 @@ module _ {A : Type a}{B : Type b} where
   Goal : Σ[ x ∈ A ] ({z : A} → z ≡ x → f z ≡ y)
   Goal = fst (imgfy→A $ fE y) , λ z≡fst → trans (cong f z≡fst) $ snd (imgfy→A $ fE y)
 
+ {-# WARNING_ON_USAGE IsSurjective→Surjective "Use Overture.Functions.IsSurjective→Surjective instead. Deprecated under #303." #-}
+
  Surjective→IsSurjective :  (f : A → B) → Surjective{A = A} _≡_ _≡_ f
   →                         IsSurjective f
 
  Surjective→IsSurjective f fE y = eq (fst $ fE y) (sym $ snd (fE y) refl)
+
+ {-# WARNING_ON_USAGE Surjective→IsSurjective "Use Overture.Functions.Surjective→IsSurjective instead. Deprecated under #303." #-}
 ```
 
 With the next definition, we can represent a *right-inverse* of a surjective
@@ -76,10 +78,10 @@ function.
 
 
 ```agda
-
-
  SurjInv : (f : A → B) → IsSurjective f → B → A
  SurjInv f fE = Inv f ∘ fE
+
+ {-# WARNING_ON_USAGE SurjInv "Use Overture.Functions.SurjInv instead. Deprecated under #303." #-}
 ```
 
 
@@ -88,14 +90,14 @@ of `IsSurjective f`.  Next we prove that this does indeed give the right-inverse
 
 
 ```agda
-
-
 module _ {A : Type a}{B : Type b} where
 
  SurjInvIsInverseʳ :  (f : A → B)(fE : IsSurjective f)
   →                   ∀ b → f ((SurjInv f fE) b) ≡ b
 
  SurjInvIsInverseʳ f fE b = InvIsInverseʳ (fE b)
+
+ {-# WARNING_ON_USAGE SurjInvIsInverseʳ "Use Overture.Functions.SurjInvIsInverseʳ instead. Deprecated under #303." #-}
 
  -- composition law for epics
  epic-factor :  {C : Type c}(f : A → B)(g : A → C)(h : C → B)
@@ -115,6 +117,8 @@ module _ {A : Type a}{B : Type b} where
    Goal : Image h ∋ y
    Goal = eq (g (finv y)) η
 
+ {-# WARNING_ON_USAGE epic-factor "Use Overture.Functions.epic-factor instead. Deprecated under #303." #-}
+
  epic-factor-intensional :  {C : Type c}(f : A → B)(g : A → C)(h : C → B)
   →                         f ≡ h ∘ g → IsSurjective f → IsSurjective h
 
@@ -131,6 +135,8 @@ module _ {A : Type a}{B : Type b} where
 
    Goal : Image h ∋ y
    Goal = eq (g (finv y)) (sym η)
+
+ {-# WARNING_ON_USAGE epic-factor-intensional "Use Overture.Functions.epic-factor-intensional instead. Deprecated under #303." #-}
 ```
 
 
@@ -138,8 +144,6 @@ Later we will need the fact that the projection of an arbitrary product onto one
 
 
 ```agda
-
-
 module _  {I : Set ι}(_≟_ : Decidable{A = I} _≡_)
           {B : I → Set b}
           (bs₀ : ∀ i → (B i))
@@ -168,6 +172,9 @@ module _  {I : Set ι}(_≟_ : Decidable{A = I} _≡_)
 
  projIsOnto : ∀{j} → IsSurjective (proj j)
  projIsOnto {j} = Surjective→IsSurjective (proj j) proj-is-onto
+
+ {-# WARNING_ON_USAGE proj "Use Overture.Functions.proj instead. Deprecated under #303." #-}
+ {-# WARNING_ON_USAGE projIsOnto "Use Overture.Functions.projIsOnto instead. Deprecated under #303." #-}
 ```
 
 

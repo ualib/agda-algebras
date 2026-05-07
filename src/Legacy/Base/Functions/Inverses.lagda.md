@@ -43,6 +43,9 @@ module _ {A : Type a}{B : Type b} where
  data Image_∋_ (f : A → B) : B → Type (a ⊔ b) where
   eq : {b : B} → (a : A) → b ≡ f a → Image f ∋ b
 
+ {-# WARNING_ON_USAGE Image_∋_ "Use Overture.Functions.Image_∋_ instead. Deprecated under #303; removal planned one minor cycle after #303 lands." #-}
+ {-# WARNING_ON_USAGE eq "Use Overture.Functions.eq instead. Deprecated under #303." #-}
+
  open Image_∋_
 
  Range : (A → B) → Pred B (a ⊔ b)
@@ -74,11 +77,10 @@ function, which we call `Inv`, and which takes an arbitrary `b : B` and a
 
 
 ```agda
-
-
  Inv : (f : A → B){b : B} → Image f ∋ b  →  A
  Inv f (eq a _) = a
 
+ {-# WARNING_ON_USAGE Inv "Use Overture.Functions.Inv instead. Deprecated under #303." #-}
 
  [_]⁻¹ : (f : A → B) → range f →  A
  [ f ]⁻¹ (_ , (a , _)) = a
@@ -94,6 +96,8 @@ follows.
 
  InvIsInverseʳ : {f : A → B}{b : B}(q : Image f ∋ b) → f(Inv f q) ≡ b
  InvIsInverseʳ (eq _ p) = sym p
+
+ {-# WARNING_ON_USAGE InvIsInverseʳ "Use Overture.Functions.InvIsInverseʳ instead. Deprecated under #303." #-}
 
  ⁻¹IsInverseʳ : {f : A → B}{bap : range f} → f ([ f ]⁻¹ bap) ≡ ∣ bap ∣
  ⁻¹IsInverseʳ {bap = (_ , (_ , p))} = p
