@@ -34,8 +34,8 @@ open IsEquivalence  using ()                 renaming ( refl to reflE ; sym to s
 
 
 -- Imports from agda-algebras -----------------------------------------------------
-open import Overture        using ( ∣_∣; ∥_∥ )
-open import Legacy.Base.Functions  using ( proj ; projIsOnto ) renaming ( IsSurjective to onto )
+open import Overture  using ( ∣_∣; ∥_∥ ; proj ; projIsOnto )
+                      renaming ( IsSurjective to onto )
 
 open import Setoid.Algebras.Basic {𝑆 = 𝑆}  using ( Algebra ; _̂_ ; ov ; 𝕌[_])
 
