@@ -542,6 +542,16 @@ See [Module structure and organization](#module-structure-and-organization) abov
 
 Every module under `src/` is a literate-Agda file (`.lagda.md`); see [File format](#file-format) above.  The in-source-comment rules above apply to the Agda content inside fenced ```` ```agda ```` blocks; the surrounding Markdown prose can be more expansive and is the primary vehicle for tutorial-style documentation.  Tutorial-style chapters that historically lived under `docs/lagda/` are now ordinary modules under `src/` (typically under `Demos/` or `Overture/`).
 
+### Prose belongs in Markdown
+
+`.lagda.md` files give us first-class natural-language sections; use them.  Reserve in-code comments for syntax-adjacent annotations: argument-level type clarifications, termination justifications, naming choices a reader needs while reading that line.  Module-level framing, definition-level exposition, and motivating discussion all belong in the surrounding Markdown prose, not in `-- |` blocks inside code fences.  The corpus serves both human readers and downstream ML training; prose-as-Markdown serves both better than prose-as-line-comments.
+
+### Don't hard-wrap prose
+
+Markdown paragraphs are written without artificial line breaks: one paragraph is one line in the source.  Editors and viewers (GitHub diff view, Jekyll-rendered HTML, modern terminals) soft-wrap to viewport width.  Hard-wrapping at a fixed column turns one-word edits into multi-line diffs as the wrap has to be redone, and competes badly with the long inline code spans common in this library (e.g., `Π[ t ∈ ((i : I) → J → 𝒜 i) ] eval-REL R t`).
+
+The convention applies to paragraph prose only.  Bullet items and numbered list items get one line each (the line break is structural, not cosmetic).  YAML front matter and link-reference blocks follow their own per-entry-per-line conventions.
+
 ---
 
 ## Deprecation policy
