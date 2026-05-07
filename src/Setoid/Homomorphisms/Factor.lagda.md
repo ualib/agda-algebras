@@ -30,10 +30,9 @@ open import Relation.Binary.PropositionalEquality  as ≡           using ()
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------------
-open import Overture         using ( ∣_∣ ; ∥_∥ )
+open import Overture         using ( ∣_∣ ; ∥_∥ ; kernelRel )
 open import Setoid.Functions using ( Image_∋_ ; IsSurjective ; SurjInv )
                              using ( SurjInvIsInverseʳ ; epic-factor )
-open import Legacy.Base.Relations   using ( kernelRel )
 
 open import Setoid.Algebras {𝑆 = 𝑆}             using ( Algebra ; 𝕌[_] ; _̂_ )
 open import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}  using ( hom ; IsHom ; compatible-map ; epi ; IsEpi)

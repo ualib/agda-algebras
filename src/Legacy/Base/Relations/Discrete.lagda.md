@@ -70,10 +70,10 @@ is contained in a particular "subset" (predicate) of the codomain.
 
 
 ```agda
-
-
  Im_⊆_ : {B : Type b} → (A → B) → Pred B ρ → Type (a ⊔ ρ)
  Im f ⊆ S = ∀ x → f x ∈ S
+
+ {-# WARNING_ON_USAGE Im_⊆_ "Use Overture.Relations.Im_⊆_ instead. Deprecated under #303." #-}
 ```
 
 
@@ -168,9 +168,15 @@ module _ {A : Type a}{B : Type b} where
  kernel : (A → B) → Pred (A × A) b
  kernel g (x , y) = g x ≡ g y
 
+{-# WARNING_ON_USAGE kerRel "Use Overture.Relations.kerRel instead. Deprecated under #303; removal planned one minor cycle after #303 lands." #-}
+{-# WARNING_ON_USAGE kerRelOfEquiv "Use Overture.Relations.kerRelOfEquiv instead. Deprecated under #303; removal planned one minor cycle after #303 lands." #-}
+{-# WARNING_ON_USAGE kernelRel "Use Overture.Relations.kernelRel instead. Deprecated under #303; removal planned one minor cycle after #303 lands." #-}
+
 -- The *identity relation* (equivalently, the kernel of a 1-to-1 function)
 0[_] : (A : Type a) → {ρ : Level} → BinRel A (a ⊔ ρ)
 0[ A ] {ρ} = λ x y → Lift ρ (x ≡ y)
+
+{-# WARNING_ON_USAGE 0[_] "Use Overture.Relations.0[_] instead. Deprecated under #303; removal planned one minor cycle after #303 lands." #-}
 
 module _ {A : Type (a ⊔ ρ)} where
 
@@ -222,6 +228,11 @@ f preserves R  = ∀ u v → (eval-rel R) u v → R (f u) (f v)
 --shorthand notation for preserves
 _|:_ : {A : Type a}{I : Type 𝓥} → Op A I → BinRel A ρ → Type (a ⊔ 𝓥 ⊔ ρ)
 f |: R  = (eval-rel R) =[ f ]⇒ R
+
+{-# WARNING_ON_USAGE eval-rel "Use Overture.Relations.eval-rel instead. Deprecated under #303." #-}
+{-# WARNING_ON_USAGE eval-pred "Use Overture.Relations.eval-pred instead. Deprecated under #303." #-}
+{-# WARNING_ON_USAGE _preserves_ "Use Overture.Relations._preserves_ instead. Deprecated under #303." #-}
+{-# WARNING_ON_USAGE _|:_ "Use Overture.Relations._|:_ instead. Deprecated under #303." #-}
 
 -- predicate version of the compatibility relation
 _preserves-pred_ : {A : Type a}{I : Type 𝓥} → Op A I → Pred ( A × A ) ρ → Type (a ⊔ 𝓥 ⊔ ρ)
