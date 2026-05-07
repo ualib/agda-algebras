@@ -66,6 +66,16 @@ data Term (X : Type χ ) : Type (ov χ)  where
  node : (f : ∣ 𝑆 ∣)(t : ∥ 𝑆 ∥ f → Term X) → Term X
 
 open Term
+
+{-# WARNING_ON_USAGE Term
+"Use Overture.Terms.Term instead.  Legacy.Base.Terms.Term is deprecated and will be removed one minor version after #303 lands."
+#-}
+{-# WARNING_ON_USAGE ℊ
+"Use Overture.Terms.ℊ instead.  Legacy.Base.Terms.ℊ is deprecated and will be removed one minor version after #303 lands."
+#-}
+{-# WARNING_ON_USAGE node
+"Use Overture.Terms.node instead.  Legacy.Base.Terms.node is deprecated and will be removed one minor version after #303 lands."
+#-}
 ```
 
 
