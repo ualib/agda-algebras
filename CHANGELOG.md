@@ -22,32 +22,25 @@ The 3.0 release is a major reconstruction of agda-algebras building on the Setoi
 +  **GitHub Actions CI** (`.github/workflows/ci.yml`) that type-checks the library on every push and pull request.
 +  **Community-health files**: `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, issue templates, pull-request template.
 +  **Dual license**: Apache 2.0 for source code under `src/`, CC BY 4.0 for documentation under `docs/`.
++  **Three new `Overture/` submodules** (M2-6, #303):
+
+   +  `Overture.Terms` (the W-type `Term` over a signature, with constructors `ℊ` and `node`);
+   +  `Overture.Relations` (the `Equivalence` Σ-bundle, the identity relation `0[_]` with its `IsEquivalence`/`Equivalence` bundles, raw-function kernels `kerRel` / `kernelRel` / `kerRelOfEquiv`, the bare-types image-containment `Im_⊆_`, the compatibility relations `_preserves_` and `_|:_`, and the lifting helpers `eval-rel` / `eval-pred`);
+   +  `Overture.Functions` (the bare-types image-and-inverse infrastructure `Image_∋_` / `Inv` / `InvIsInverseʳ`, surjectivity `IsSurjective` with its right-inverse `SurjInv` and the composition law `epic-factor`, and the coordinate-projection cluster `proj` / `projIsOnto`).
+
+   These house the foundational definitions that the canonical `Setoid/` tree had been importing from `Legacy.Base.*` since the M2-1 freeze; relocating them to `Overture/` makes `Setoid/` self-sufficient and lets `Classical/` (M3-1, #260) build on a clean canonical foundation without inheriting a `Legacy.Base` dependency.  See [ADR-001 §Consequences "Setoid/ is not
+   yet self-sufficient"](docs/adr/001-setoid-as-canonical.md) for the motivation and `src/Legacy/Base/DEPRECATED.md` for the per-symbol relocation table.
 
 ### Changed (BREAKING)
 
-+  **`src/Base/` frozen as `src/Legacy/Base/`** (M2-1, #256).  `Setoid/` is now
-   the canonical development tree for agda-algebras 3.0.  The pre-3.0 bare-types
-   tree has been moved to `src/Legacy/Base/`; the top-level aggregator
-   `agda-algebras.lagda.md` re-exports it as `Legacy.Base`.  This is a breaking
-   change for downstream users of `Base.*`.  The migration is mechanical for
-   most imports; see `src/Legacy/Base/DEPRECATED.md` for the categorization
-   (deprecated-with-replacement vs. pending-port vs. no-replacement-planned)
-   and `docs/adr/001-setoid-as-canonical.md` for the rationale.
++  **`src/Base/` frozen as `src/Legacy/Base/`** (M2-1, #256).  `Setoid/` is now the canonical development tree for agda-algebras 3.0.  The pre-3.0 bare-types tree has been moved to `src/Legacy/Base/`; the top-level aggregator `agda-algebras.lagda.md` re-exports it as `Legacy.Base`.  This is a breaking change for downstream users of `Base.*`.  The migration is mechanical for most imports; see `src/Legacy/Base/DEPRECATED.md` for the categorization (deprecated-with-replacement vs. pending-port vs. no-replacement-planned) and `docs/adr/001-setoid-as-canonical.md` for the rationale.
 
    Migration recipe (most imports):
 
        sed -i -E 's/import(\s+)Base\./import\1Legacy.Base./g' YOUR_FILE.lagda.md
 
-   For modules that have a `Setoid/` analog (Category A in DEPRECATED.md),
-   prefer migrating to the `Setoid.*` import and passing
-   `Relation.Binary.PropositionalEquality.setoid A` where a setoid is now
-   expected.  For modules without one (Category B), the `Legacy.Base.*`
-   import is the supported interim path until the per-orphan port lands.
-+  **`src/agda-algebras.lagda.md` substantially revised** (#256).  Updated
-   to reflect the v3.0 source-tree organization (canonical `Setoid/`,
-   planned `Classical/` and `Cubical/`, frozen `Legacy.Base/`).  Removed
-   stale per-file license boilerplate that contradicted the project-level
-   licensing.
+   For modules that have a `Setoid/` analog (Category A in DEPRECATED.md), prefer migrating to the `Setoid.*` import and passing `Relation.Binary.PropositionalEquality.setoid A` where a setoid is now expected.  For modules without one (Category B), the `Legacy.Base.*` import is the supported interim path until the per-orphan port lands.
++  **`src/agda-algebras.lagda.md` substantially revised** (#256).  Updated to reflect the v3.0 source-tree organization (canonical `Setoid/`, planned `Classical/` and `Cubical/`, frozen `Legacy.Base/`).  Removed stale per-file license boilerplate that contradicted the project-level licensing.
 +  **Agda target**: 2.6.2 → 2.8.0.
 +  **Standard library target**: 1.7 → 2.3.
 +  **Pragma**: `--without-K` → `--cubical-compatible` across the tree.  See `src/Overture/Basic.lagda.md` for the reasoning.
@@ -58,11 +51,22 @@ The 3.0 release is a major reconstruction of agda-algebras building on the Setoi
 ### Deprecated
 
 +  **`docs/INSTALL_AGDA.md`** superseded by `INSTALL.md`.  Retained with a deprecation banner; will be removed in a future release.
++  **Legacy.Base.Terms.{Term, ℊ, node}** (M2-6, #303).  Use `Overture.Terms.{Term, ℊ, node}` instead.  The two `Term` types are definitionally identical; migration is a pure import rewrite.
++  **Legacy.Base.Relations.Quotients.{Equivalence, [_], 0[_]Equivalence, 0[_]IsEquivalence}** (M2-6, #303).  Use `Overture.Relations` instead.
++  **Legacy.Base.Relations.Discrete.{0[_], kerRel, kerRelOfEquiv, kernelRel, Im_⊆_, _preserves_, _|:_, eval-rel, eval-pred}** (M2-6, #303).  Use `Overture.Relations` instead.
++  **Legacy.Base.Functions.Inverses.{Image_∋_, eq, Inv, InvIsInverseʳ}** (M2-6, #303).  Use `Overture.Functions` instead.
++  **Legacy.Base.Functions.Surjective.{IsSurjective, IsSurjective→Surjective, Surjective→IsSurjective, SurjInv, SurjInvIsInverseʳ, epic-factor, epic-factor-intensional, proj, projIsOnto}** (M2-6, #303).  Use `Overture.Functions` instead.
+
+Each deprecated definition carries a `{-# WARNING_ON_USAGE #-}` pragma at its definition site pointing at the canonical home.  The legacy modules themselves continue to type-check and to export the deprecated names; the removal of these names is scheduled for the next minor release after the release that lands #303 (per the deprecation policy in `docs/STYLE_GUIDE.md`).
+
+Migration recipe (most call sites): replace `open import Legacy.Base.X using (…)` with `open import Overture using (…)` (since the `Overture` aggregator re-exports `Overture.Relations` and `Overture.Functions`); for `Term` / `ℊ` / `node`, use `open import Overture.Terms {𝑆 = 𝑆} using (…)` directly since the parameterized module is not re-exported through the umbrella.
 
 ### Removed
 
 +  **`docs/lagda/` tree** (127 LaTeX-literate `.lagda` files).  Content migrated to `src/X/Y/Z.lagda.md`; see "Literate-Agda format" above.
 +  **`src/X/Y/Z.agda` skeleton companions** (127 files) that were mechanically derived from the LaTeX-literate sources by `admin/illiterator/`.  The illiterator program itself is slated for deletion in the rendering-pipeline-modernization follow-up.
+
+---
 
 ### Fixed
 
