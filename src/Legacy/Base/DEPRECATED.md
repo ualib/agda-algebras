@@ -29,17 +29,7 @@ The bare-types style in these modules typically depends on postulates of
 function extensionality and propositional extensionality that `Setoid/` retires
 by construction.
 
-Some Category-A relocations target `Overture/` rather than `Setoid/`.  This is
-correct when the relocated definition does not presuppose a setoid structure —
-for instance, `Term` is the W-type for the polynomial functor of a signature,
-`Equivalence A {ρ}` is a Σ-bundle of a `BinRel` with an `IsEquivalence` proof,
-and bare-types `IsSurjective` is parametric in a raw function `A → B`.  Such
-definitions belong in the shared foundations, not in the setoid layer; they
-are needed identically by the canonical `Setoid/` tree, by the planned
-`Classical/` tree (M3), and by the long-term `Cubical/` target (M5).  The
-per-symbol table below records the relocations to `Overture/` from the audit
-at #303 (M2-6).  The per-module table that follows it records the broader
-module-level deprecations to `Setoid/` for everything else.
+Some Category-A relocations target `Overture/` rather than `Setoid/`.  This is correct when the relocated definition does not presuppose a setoid structure — for instance, `Term` is the W-type for the polynomial functor of a signature, `Equivalence A {ρ}` is a Σ-bundle of a `BinRel` with an `IsEquivalence` proof, and bare-types `IsSurjective` is parametric in a raw function `A → B`.  Such definitions belong in the shared foundations, not in the setoid layer; they are needed identically by the canonical `Setoid/` tree, by the planned `Classical/` tree (M3), and by the long-term `Cubical/` target (M5).  The per-symbol table below records the relocations to `Overture/` from the audit at #303 (M2-6).  The per-module table that follows it records the broader module-level deprecations to `Setoid/` for everything else.
 
 Note on aggregator rows: `Legacy.Base.Relations`, `Legacy.Base.Functions`, and
 `Legacy.Base.Varieties` are aggregator modules whose contents straddle Categories

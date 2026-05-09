@@ -28,8 +28,7 @@ The 3.0 release is a major reconstruction of agda-algebras building on the Setoi
    +  `Overture.Relations` (the `Equivalence` Σ-bundle, the identity relation `0[_]` with its `IsEquivalence`/`Equivalence` bundles, raw-function kernels `kerRel` / `kernelRel` / `kerRelOfEquiv`, the bare-types image-containment `Im_⊆_`, the compatibility relations `_preserves_` and `_|:_`, and the lifting helpers `eval-rel` / `eval-pred`);
    +  `Overture.Functions` (the bare-types image-and-inverse infrastructure `Image_∋_` / `Inv` / `InvIsInverseʳ`, surjectivity `IsSurjective` with its right-inverse `SurjInv` and the composition law `epic-factor`, and the coordinate-projection cluster `proj` / `projIsOnto`).
 
-   These house the foundational definitions that the canonical `Setoid/` tree had been importing from `Legacy.Base.*` since the M2-1 freeze; relocating them to `Overture/` makes `Setoid/` self-sufficient and lets `Classical/` (M3-1, #260) build on a clean canonical foundation without inheriting a `Legacy.Base` dependency.  See [ADR-001 §Consequences "Setoid/ is not
-   yet self-sufficient"](docs/adr/001-setoid-as-canonical.md) for the motivation and `src/Legacy/Base/DEPRECATED.md` for the per-symbol relocation table.
+   These house the foundational definitions that the canonical `Setoid/` tree had been importing from `Legacy.Base.*` since the M2-1 freeze; relocating them to `Overture/` makes `Setoid/` self-sufficient and lets `Classical/` (M3-1, #260) build on a clean canonical foundation without inheriting a `Legacy.Base` dependency.  See [ADR-001 §Consequences "Setoid/ is not yet self-sufficient"](docs/adr/001-setoid-as-canonical.md) for the motivation and `src/Legacy/Base/DEPRECATED.md` for the per-symbol relocation table.
 
 ### Changed (BREAKING)
 
