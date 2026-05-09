@@ -1,19 +1,20 @@
 ---
 layout: default
-title : "Base.Adjunction.Galois module (The Agda Universal Algebra Library)"
-date : "2021-08-30"
-author: "agda-algebras development team"
+title : "Overture.Adjunction.Galois module (The Agda Universal Algebra Library)"
+date : "2026-05-09"
+author: "the agda-algebras development team"
 ---
 
-### <a id="Galois connections">Galois Connections</a>
+### <a id="galois-connections">Galois Connections</a>
 
-This is the [Base.Adjunction.Galois][] module of the [Agda Universal Algebra Library][].
+This is the [Overture.Adjunction.Galois][] module of the [Agda Universal Algebra Library][].
 
 
 ```agda
+
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-module Legacy.Base.Adjunction.Galois where
+module Overture.Adjunction.Galois where
 
 -- Imports from Agda and the Agda Standard Library --------------------------------------
 open import Agda.Primitive           using () renaming ( Set to Type )
@@ -30,18 +31,18 @@ private variable α β ℓᵃ ρᵃ ℓᵇ ρᵇ : Level
 ```
 
 
-If `𝑨 = (A, ≤)` and `𝑩 = (B, ≤)` are two partially ordered sets (posets), then a
-*Galois connection* between `𝑨` and `𝑩` is a pair `(F , G)` of functions such that
+If `𝑨 = (A, ≤)` and `𝑩 = (B, ≤)` are two partially ordered sets (posets), then a *Galois connection* between `𝑨` and `𝑩` is a pair `(F , G)` of functions such that
 
 1. `F : A → B`
 2. `G : B → A`
 3. `∀ (a : A)(b : B)  →  F(a) ≤   b   →    a  ≤ G(b)`
-r. `∀ (a : A)(b : B)  →    a  ≤ G(b)  →  F(a) ≤   b`
+4. `∀ (a : A)(b : B)  →    a  ≤ G(b)  →  F(a) ≤   b`
 
 In other terms, `F` is a *left adjoint* of `G` and `G` is a *right adjoint* of `F`.
 
 
 ```agda
+
 module _ (A : Poset α ℓᵃ ρᵃ)(B : Poset β ℓᵇ ρᵇ) where
  open Poset
  private
@@ -88,13 +89,13 @@ module _ {𝒜 : Type α}{ℬ : Type β} where
 ```
 
 
-
 #### <a id="the-poset-of-subsets-of-a-set">The poset of subsets of a set</a>
 
-Here we define a type that represents the poset of subsets of a given set equipped with the usual set inclusion relation. (It seems there is no definition in the standard library of this important example of a poset; we should propose adding it.)
+Here we define a type that represents the poset of subsets of a given set equipped with the usual set inclusion relation.  (It seems there is no definition in the standard library of this important example of a poset; we should propose adding it.)
 
 
 ```agda
+
 open Poset
 
 module _ {α ρ : Level} {𝒜 : Type α} where
@@ -126,13 +127,11 @@ module _ {α : Level} (ρ : Level) (𝒜 : Type α) where
 ```
 
 
-A Binary relation from one poset to another induces a Galois connection, but only in a very special
-situation, namely when all the involved sets are of the same size.  This is akin to the situation
-with Adjunctions in Category Theory (unsurprisingly). In other words, there is likely a
-unit/counit definition that is more level polymorphic.
+A binary relation from one poset to another induces a Galois connection.  This is akin to the situation with Adjunctions in Category Theory (unsurprisingly).  In other words, there is likely a unit/counit definition that is more level polymorphic.
 
 
 ```agda
+
 module _ {ℓ : Level}{𝒜 : Type ℓ} {ℬ : Type ℓ} where
 
  𝒫𝒜 : Poset (suc ℓ) ℓ ℓ
@@ -148,26 +147,10 @@ module _ {ℓ : Level}{𝒜 : Type ℓ} {ℬ : Type ℓ} where
                      ; FG≥id = λ _ → →←≥id }
 ```
 
-```agda
-{-# WARNING_ON_USAGE Galois         "Use Overture.Adjunction.Galois.Galois instead. Deprecated under #305; removal planned one minor cycle later." #-}
-{-# WARNING_ON_USAGE _⃗_            "Use Overture.Adjunction.Galois._⃗_ instead. Deprecated under #305; removal planned one minor cycle later." #-}
-{-# WARNING_ON_USAGE _⃖_            "Use Overture.Adjunction.Galois._⃖_ instead. Deprecated under #305; removal planned one minor cycle later." #-}
-{-# WARNING_ON_USAGE ←→≥id          "Use Overture.Adjunction.Galois.←→≥id instead. Deprecated under #305; removal planned one minor cycle later." #-}
-{-# WARNING_ON_USAGE →←≥id          "Use Overture.Adjunction.Galois.→←≥id instead. Deprecated under #305; removal planned one minor cycle later." #-}
-{-# WARNING_ON_USAGE →←→⊆→          "Use Overture.Adjunction.Galois.→←→⊆→ instead. Deprecated under #305; removal planned one minor cycle later." #-}
-{-# WARNING_ON_USAGE ←→←⊆←          "Use Overture.Adjunction.Galois.←→←⊆← instead. Deprecated under #305; removal planned one minor cycle later." #-}
-{-# WARNING_ON_USAGE ←→Closed       "Use Overture.Adjunction.Galois.←→Closed instead. Deprecated under #305; removal planned one minor cycle later." #-}
-{-# WARNING_ON_USAGE →←Closed       "Use Overture.Adjunction.Galois.→←Closed instead. Deprecated under #305; removal planned one minor cycle later." #-}
-{-# WARNING_ON_USAGE _≐_            "Use Overture.Adjunction.Galois._≐_ instead. Deprecated under #305; removal planned one minor cycle later." #-}
-{-# WARNING_ON_USAGE ≐-iseqv        "Use Overture.Adjunction.Galois.≐-iseqv instead. Deprecated under #305; removal planned one minor cycle later." #-}
-{-# WARNING_ON_USAGE PosetOfSubsets "Use Overture.Adjunction.Galois.PosetOfSubsets instead. Deprecated under #305; removal planned one minor cycle later." #-}
-{-# WARNING_ON_USAGE Rel→Gal        "Use Overture.Adjunction.Galois.Rel→Gal instead. Deprecated under #305; removal planned one minor cycle later." #-}
-```
 
 --------------------
 
-<span style="float:left;">[← Base.Adjunction.Closure ](Base.Adjunction.Closure.html)</span>
-<span style="float:right;">[Base.Adjunction.Residuation →](Base.Adjunction.Residuation.html)</span>
+<span style="float:left;">[← Overture.Adjunction.Closure](Overture.Adjunction.Closure.html)</span>
+<span style="float:right;">[Overture.Adjunction.Residuation →](Overture.Adjunction.Residuation.html)</span>
 
 {% include UALib.Links.md %}
-

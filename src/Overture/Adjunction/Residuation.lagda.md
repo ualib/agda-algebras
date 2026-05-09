@@ -1,19 +1,20 @@
 ---
 layout: default
-title : "Base.Adjunction.Residuation module (The Agda Universal Algebra Library)"
-date : "2021-07-12"
-author: "agda-algebras development team"
+title : "Overture.Adjunction.Residuation module (The Agda Universal Algebra Library)"
+date : "2026-05-09"
+author: "the agda-algebras development team"
 ---
 
 ### <a id="residuation">Residuation</a>
 
-This is the [Base.Adjunction.Residuation][] module of the [Agda Universal Algebra Library][].
+This is the [Overture.Adjunction.Residuation][] module of the [Agda Universal Algebra Library][].
 
 
 ```agda
+
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-module Legacy.Base.Adjunction.Residuation where
+module Overture.Adjunction.Residuation where
 
 -- Imports from Agda and the Agda Standard Library --------------------------------------
 open import Agda.Primitive           using () renaming ( Set to Type )
@@ -22,8 +23,8 @@ open import Level                    using ( Level ; _⊔_ ; suc )
 open import Relation.Binary.Bundles  using ( Poset )
 open import Relation.Binary.Core     using ( _Preserves_⟶_ )
 
--- Imports from the Agda Universal Algebra Library --------------------------------------
-open import Legacy.Base.Relations.Discrete using ( PointWise )
+-- Imports from agda-algebras -----------------------------------------------------------
+open import Overture.Relations using ( PointWise )
 
 private variable
  a ιᵃ α b ιᵇ β : Level
@@ -45,11 +46,11 @@ module _ (A : Poset a ιᵃ α)(B : Poset b ιᵇ β) where
 ```
 
 
-
 #### <a id="basic-properties-of-residual-pairs">Basic properties of residual pairs</a>
 
 
 ```agda
+
 open Residuation
 open Poset
 
@@ -69,11 +70,11 @@ module _ {A : Poset a ιᵃ α} {B : Poset b ιᵇ β} (R : Residuation A B) whe
 ```
 
 
-In a ring `R`, if `x y : R` and if `x y x = x`, then `y` is called a *weak inverse* for `x`.
-(A ring is called *von Neumann regular* if every element has a unique weak inverse.) 
+In a ring `R`, if `x y : R` and if `x y x = x`, then `y` is called a *weak inverse* for `x`.  (A ring is called *von Neumann regular* if every element has a unique weak inverse.)
 
 
 ```agda
+
  -- 𝑔 is a weak inverse for 𝑓
  weak-inverse : (𝑓 ∘ 𝑔 ∘ 𝑓) ≈̇B 𝑓
  weak-inverse a = antisym B lt gt
@@ -93,15 +94,10 @@ In a ring `R`, if `x y : R` and if `x y x = x`, then `y` is called a *weak inver
   gt = gf≥id R (𝑔 b)
 ```
 
-```agda
-{-# WARNING_ON_USAGE Residuation   "Use Overture.Adjunction.Residuation.Residuation instead. Deprecated under #305; removal planned one minor cycle later." #-}
-{-# WARNING_ON_USAGE weak-inverse  "Use Overture.Adjunction.Residuation.weak-inverse instead. Deprecated under #305; removal planned one minor cycle later." #-}
-{-# WARNING_ON_USAGE weak-inverse' "Use Overture.Adjunction.Residuation.weak-inverse' instead. Deprecated under #305; removal planned one minor cycle later." #-}
-```
 
 ------------------------------------------
 
-<span style="float:left;">[← Base.Adjunction.Galois ](Base.Adjunction.Galois.html)</span>
-<span style="float:right;">[Base.Categories →](Base.Categories.html)</span>
+<span style="float:left;">[← Overture.Adjunction.Galois](Overture.Adjunction.Galois.html)</span>
+<span style="float:right;">[Overture.Adjunction](Overture.Adjunction.html)</span>
 
 {% include UALib.Links.md %}

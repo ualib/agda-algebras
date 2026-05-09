@@ -11,8 +11,6 @@ This is the [Base.Relations.Discrete][] module of the [Agda Universal Algebra Li
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Legacy.Base.Relations.Discrete where
@@ -40,14 +38,11 @@ with respect to a given "equality" relation (see also the definition of `_≈̇_
 
 
 ```agda
-
-
 module _ {A : Type a} where
 
  PointWise : {B : Type b} (_≋_ : BinRel B ρ) → BinRel (A → B) _
  PointWise {B = B} _≋_ = λ (f g : A → B) → ∀ x → f x ≋ g x
 ```
-
 
 Thus, given a binary relation `≋` on ‵B`, and a pair of functions `f, g : A → B`,
 we have `f (Pointwise _≋_) g` provided `∀ x → f x ≋ g x`.
@@ -56,8 +51,6 @@ Here is the analogous definition for dependent functions.
 
 
 ```agda
-
-
  depPointWise :  {B : A → Type b }
                  (_≋_ : {γ : Level}{C : Type γ} → BinRel C ρ)
   →              BinRel ((a : A) → B a) _
@@ -72,8 +65,6 @@ is contained in a particular "subset" (predicate) of the codomain.
 ```agda
  Im_⊆_ : {B : Type b} → (A → B) → Pred B ρ → Type (a ⊔ ρ)
  Im f ⊆ S = ∀ x → f x ∈ S
-
- {-# WARNING_ON_USAGE Im_⊆_ "Use Overture.Relations.Im_⊆_ instead. Deprecated under #303." #-}
 ```
 
 
@@ -93,8 +84,6 @@ Sometimes it is useful to obtain the underlying type (`A`) over which the predic
 
 
 ```agda
-
-
  PredType : Pred A ρ → Type a
  PredType _ = A
 ```
@@ -119,8 +108,6 @@ Occasionally it is useful to extract the universe level over which a binary rela
 
 
 ```agda
-
-
  Level-of-Rel : {ℓ : Level} → BinRel A ℓ → Level
  Level-of-Rel {ℓ} _ = ℓ
 ```
@@ -136,8 +123,6 @@ to be an inhabitant of a (binary) relation type, or a (unary) predicate type.
 
 
 ```agda
-
-
 module _ {A : Type a}{B : Type b} where
 
  ker : (A → B) → BinRel A b
@@ -168,15 +153,9 @@ module _ {A : Type a}{B : Type b} where
  kernel : (A → B) → Pred (A × A) b
  kernel g (x , y) = g x ≡ g y
 
-{-# WARNING_ON_USAGE kerRel "Use Overture.Relations.kerRel instead. Deprecated under #303; removal planned one minor cycle after #303 lands." #-}
-{-# WARNING_ON_USAGE kerRelOfEquiv "Use Overture.Relations.kerRelOfEquiv instead. Deprecated under #303; removal planned one minor cycle after #303 lands." #-}
-{-# WARNING_ON_USAGE kernelRel "Use Overture.Relations.kernelRel instead. Deprecated under #303; removal planned one minor cycle after #303 lands." #-}
-
 -- The *identity relation* (equivalently, the kernel of a 1-to-1 function)
 0[_] : (A : Type a) → {ρ : Level} → BinRel A (a ⊔ ρ)
 0[ A ] {ρ} = λ x y → Lift ρ (x ≡ y)
-
-{-# WARNING_ON_USAGE 0[_] "Use Overture.Relations.0[_] instead. Deprecated under #303; removal planned one minor cycle after #303 lands." #-}
 
 module _ {A : Type (a ⊔ ρ)} where
 
@@ -204,8 +183,6 @@ facts about *compatibility* of operations and relations
 
 
 ```agda
-
-
 -- lift a binary relation to the corresponding `I`-ary relation.
 
 eval-rel : {A : Type a}{I : Type 𝓥} → BinRel A ρ → BinRel (I → A) (𝓥 ⊔ ρ)
@@ -220,19 +197,12 @@ If `f : Op I` and `R : Rel A b`, then we say `f` and `R` are *compatible* just i
 
 
 ```agda
-
-
 _preserves_ : {A : Type a}{I : Type 𝓥} → Op A I → BinRel A ρ → Type (a ⊔ 𝓥 ⊔ ρ)
 f preserves R  = ∀ u v → (eval-rel R) u v → R (f u) (f v)
 
 --shorthand notation for preserves
 _|:_ : {A : Type a}{I : Type 𝓥} → Op A I → BinRel A ρ → Type (a ⊔ 𝓥 ⊔ ρ)
 f |: R  = (eval-rel R) =[ f ]⇒ R
-
-{-# WARNING_ON_USAGE eval-rel "Use Overture.Relations.eval-rel instead. Deprecated under #303." #-}
-{-# WARNING_ON_USAGE eval-pred "Use Overture.Relations.eval-pred instead. Deprecated under #303." #-}
-{-# WARNING_ON_USAGE _preserves_ "Use Overture.Relations._preserves_ instead. Deprecated under #303." #-}
-{-# WARNING_ON_USAGE _|:_ "Use Overture.Relations._|:_ instead. Deprecated under #303." #-}
 
 -- predicate version of the compatibility relation
 _preserves-pred_ : {A : Type a}{I : Type 𝓥} → Op A I → Pred ( A × A ) ρ → Type (a ⊔ 𝓥 ⊔ ρ)
@@ -250,6 +220,19 @@ module _ {A : Type a}{I : Type 𝓥}{f : Op A I}{R : BinRel A ρ} where
  compatibility-agreement' c = λ u v x → c x
 ```
 
+```agda
+{-# WARNING_ON_USAGE PointWise "Use Overture.Relations.PointWise instead. Deprecated under #305; removal planned one minor cycle later." #-}
+{-# WARNING_ON_USAGE depPointWise "Use Overture.Relations.depPointWise instead. Deprecated under #305; removal planned one minor cycle later." #-}
+{-# WARNING_ON_USAGE Im_⊆_ "Use Overture.Relations.Im_⊆_ instead. Deprecated under #303." #-}
+{-# WARNING_ON_USAGE kerRel "Use Overture.Relations.kerRel instead. Deprecated under #303; removal planned one minor cycle after #303 lands." #-}
+{-# WARNING_ON_USAGE kerRelOfEquiv "Use Overture.Relations.kerRelOfEquiv instead. Deprecated under #303; removal planned one minor cycle after #303 lands." #-}
+{-# WARNING_ON_USAGE kernelRel "Use Overture.Relations.kernelRel instead. Deprecated under #303; removal planned one minor cycle after #303 lands." #-}
+{-# WARNING_ON_USAGE 0[_] "Use Overture.Relations.0[_] instead. Deprecated under #303; removal planned one minor cycle after #303 lands." #-}
+{-# WARNING_ON_USAGE eval-rel "Use Overture.Relations.eval-rel instead. Deprecated under #303." #-}
+{-# WARNING_ON_USAGE eval-pred "Use Overture.Relations.eval-pred instead. Deprecated under #303." #-}
+{-# WARNING_ON_USAGE _preserves_ "Use Overture.Relations._preserves_ instead. Deprecated under #303." #-}
+{-# WARNING_ON_USAGE _|:_ "Use Overture.Relations._|:_ instead. Deprecated under #303." #-}
+```
 
 --------------------------------------
 

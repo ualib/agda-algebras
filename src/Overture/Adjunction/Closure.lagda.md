@@ -1,19 +1,20 @@
 ---
 layout: default
-title : "Base.Adjunction.Closure module (The Agda Universal Algebra Library)"
-date : "2021-08-30"
-author: "agda-algebras development team"
+title : "Overture.Adjunction.Closure module (The Agda Universal Algebra Library)"
+date : "2026-05-09"
+author: "the agda-algebras development team"
 ---
 
 ### <a id="closure-systems">Closure Systems and Operators</a>
 
-This is the [Base.Adjunction.Closure][] module of the [Agda Universal Algebra Library][].
+This is the [Overture.Adjunction.Closure][] module of the [Agda Universal Algebra Library][].
 
 
 ```agda
+
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-module Legacy.Base.Adjunction.Closure where
+module Overture.Adjunction.Closure where
 
 -- Imports from Agda and the Agda Standard Library  ---------------------------------------
 open import Agda.Primitive           using () renaming ( Set to Type )
@@ -36,24 +37,20 @@ private variable
 
 #### <a id="closure-systems">Closure Systems</a>
 
-A *closure system* on a set `X` is a collection `𝒞` of subsets of `X` that is closed
-under arbitrary intersection (including the empty intersection, so `⋂ ∅ = X ∈ 𝒞`.
-Thus a closure system is a complete meet semilattice with respect to the subset
-inclusion ordering.
+A *closure system* on a set `X` is a collection `𝒞` of subsets of `X` that is closed under arbitrary intersection (including the empty intersection, so `⋂ ∅ = X ∈ 𝒞`).  Thus a closure system is a complete meet semilattice with respect to the subset inclusion ordering.
 
-Since every complete meet semilattice is automatically a complete lattice, the closed
-sets of a closure system form a complete lattice.
-(See J.B. Nation's [Lattice Theory Notes](http://math.hawaii.edu/~jb/math618/Nation-LatticeTheory.pdf), Theorem 2.5.)
+Since every complete meet semilattice is automatically a complete lattice, the closed sets of a closure system form a complete lattice.  (See J.B. Nation's [Lattice Theory Notes](http://math.hawaii.edu/~jb/math618/Nation-LatticeTheory.pdf), Theorem 2.5.)
 
 Some examples of closure systems are the following:
 
-* order ideals of an ordered set
-* subalgebras of an algebra
-* equivalence relations on a set
-* congruence relations of an algebra
++  order ideals of an ordered set
++  subalgebras of an algebra
++  equivalence relations on a set
++  congruence relations of an algebra
 
 
 ```agda
+
 Extensive : Rel a ρ → (a → a) → Type _
 Extensive _≤_ C = ∀{x} → x ≤ C x
 -- (We might propose a new stdlib equivalent to Extensive in, e.g., `Relation.Binary.Core`.)
@@ -68,11 +65,9 @@ module _ {χ ρ ℓ : Level}{X : Type χ} where
 ```
 
 
-
 #### <a id="closure-operators">Closure Operators</a>
 
-Let `𝑷 = (P, ≤)` be a poset. An function `C : P → P` is called a *closure operator*
-on `𝑷` if it is
+Let `𝑷 = (P, ≤)` be a poset.  A function `C : P → P` is called a *closure operator* on `𝑷` if it is
 
 1. (extensive) `∀ x → x ≤ C x`
 2. (order preserving) `∀ x y → x ≤ y → C x ≤ C y`
@@ -82,6 +77,7 @@ Thus, a closure operator is an extensive, idempotent poset endomorphism.
 
 
 ```agda
+
 -- ClOp, the inhabitants of which denote closure operators.
 record ClOp {ℓ ℓ₁ ℓ₂ : Level}(𝑨 : Poset ℓ ℓ₁ ℓ₂) : Type  (ℓ ⊔ ℓ₂ ⊔ ℓ₁) where
  open Poset 𝑨
@@ -95,11 +91,11 @@ record ClOp {ℓ ℓ₁ ℓ₂ : Level}(𝑨 : Poset ℓ ℓ₁ ℓ₂) : Type  
 ```
 
 
-
 #### <a id="basic-properties-of-closure-operators">Basic properties of closure operators</a>
 
 
 ```agda
+
 open ClOp
 open Inverse
 
@@ -112,11 +108,11 @@ module _ {𝑨 : Poset ℓ ℓ₁ ℓ₂}(𝑪 : ClOp 𝑨) where
 ```
 
 
-**Theorem 1**. If `𝑨 = (A , ≦)` is a poset and `c` is a closure operator on `A`, then
-               `∀ (x y : A) → (x ≦ (c y) ↔ (c x) ≦ (c y))`
+**Theorem 1**. If `𝑨 = (A , ≦)` is a poset and `c` is a closure operator on `A`, then `∀ (x y : A) → (x ≦ (c y) ↔ (c x) ≦ (c y))`.
 
 
 ```agda
+
  clop→law⇒ : (x y : A) → x ≤ (c y) → (c x) ≤ (c y)
  clop→law⇒ x y x≤cy = begin
    c x      ≤⟨ isOrderPreserving 𝑪 x≤cy ⟩
@@ -131,15 +127,13 @@ module _ {𝑨 : Poset ℓ ℓ₁ ℓ₂}(𝑪 : ClOp 𝑨) where
 ```
 
 
-The converse of Theorem 1 also holds. That is,
+The converse of Theorem 1 also holds.  That is,
 
-**Theorem 2**. If `𝑨 = (A , ≤)` is a poset and `c : A → A` satisfies
-               `∀ (x y : A) → (x ≤ (c y) ↔ (c x) ≤ (c y))`
-
-               then `c` is a closure operator on `A`.
+**Theorem 2**.  If `𝑨 = (A , ≤)` is a poset and `c : A → A` satisfies `∀ (x y : A) → (x ≤ (c y) ↔ (c x) ≤ (c y))`, then `c` is a closure operator on `A`.
 
 
 ```agda
+
 module _ {𝑨 : Poset ℓ ℓ₁ ℓ₂} where
  open Poset 𝑨
  private A = Carrier
@@ -160,19 +154,10 @@ module _ {𝑨 : Poset ℓ ℓ₁ ℓ₂} where
   i x = antisym ((to ∘₂ hyp) _ _ refl) ((from ∘₂ hyp) _ _ refl)
 ```
 
-```agda
-{-# WARNING_ON_USAGE Extensive       "Use Overture.Adjunction.Closure.Extensive instead. Deprecated under #305; removal planned one minor cycle later." #-}
-{-# WARNING_ON_USAGE IntersectClosed "Use Overture.Adjunction.Closure.IntersectClosed instead. Deprecated under #305; removal planned one minor cycle later." #-}
-{-# WARNING_ON_USAGE ClosureSystem   "Use Overture.Adjunction.Closure.ClosureSystem instead. Deprecated under #305; removal planned one minor cycle later." #-}
-{-# WARNING_ON_USAGE ClOp            "Use Overture.Adjunction.Closure.ClOp instead. Deprecated under #305; removal planned one minor cycle later." #-}
-{-# WARNING_ON_USAGE clop→law⇒       "Use Overture.Adjunction.Closure.clop→law⇒ instead. Deprecated under #305; removal planned one minor cycle later." #-}
-{-# WARNING_ON_USAGE clop→law⇐       "Use Overture.Adjunction.Closure.clop→law⇐ instead. Deprecated under #305; removal planned one minor cycle later." #-}
-{-# WARNING_ON_USAGE clop←law        "Use Overture.Adjunction.Closure.clop←law instead. Deprecated under #305; removal planned one minor cycle later." #-}
-```
 
 ----------------------------
 
-<span style="float:left;">[↑ Base.Adjunction](Base.Adjunction.html)</span>
-<span style="float:right;">[Base.Adjunction.Galois →](Base.Adjunction.Galois.html)</span>
+<span style="float:left;">[← Overture.Adjunction](Overture.Adjunction.html)</span>
+<span style="float:right;">[Overture.Adjunction.Galois →](Overture.Adjunction.Galois.html)</span>
 
 {% include UALib.Links.md %}
