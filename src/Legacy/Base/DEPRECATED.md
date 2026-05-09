@@ -47,6 +47,10 @@ parallel abstract foundation.
 
 | Legacy module                                 | Canonical replacement                    |
 |-----------------------------------------------|------------------------------------------|
+| `Legacy.Base.Adjunction`                      | `Overture.Adjunction`                    |
+| `Legacy.Base.Adjunction.Closure`              | `Overture.Adjunction.Closure`            |
+| `Legacy.Base.Adjunction.Galois`               | `Overture.Adjunction.Galois`             |
+| `Legacy.Base.Adjunction.Residuation`          | `Overture.Adjunction.Residuation`        |
 | `Legacy.Base.Algebras`                        | `Setoid.Algebras`                        |
 | `Legacy.Base.Algebras.Basic`                  | `Setoid.Algebras.Basic`                  |
 | `Legacy.Base.Algebras.Congruences`            | `Setoid.Algebras.Congruences`            |
@@ -139,10 +143,6 @@ to `open import Overture using ( … )`.
 
 | Legacy module                              | Planned destination                              | Target milestone | Tracking issue |
 |--------------------------------------------|--------------------------------------------------|------------------|----------------|
-| `Legacy.Base.Adjunction`                   | TBD (`Setoid/`, `Classical/`, or `Overture/`)    | M2               | #305           |
-| `Legacy.Base.Adjunction.Closure`           | as parent                                        | M2               | #305           |
-| `Legacy.Base.Adjunction.Galois`            | as parent                                        | M2               | #305           |
-| `Legacy.Base.Adjunction.Residuation`       | as parent                                        | M2               | #305           |
 | `Legacy.Base.Categories`                   | TBD (decision part of #306)                      | M2               | #306           |
 | `Legacy.Base.Categories.Functors`          | as parent                                        | M2               | #306           |
 | `Legacy.Base.Complexity`                   | `Setoid.Complexity`                              | M9               | #307           |

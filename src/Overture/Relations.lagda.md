@@ -126,6 +126,28 @@ Im a ⊆ B = ∀ i → a i ∈ B
 
 A setoid analogue of `Im_⊆_`, taking a setoid function rather than a raw function, is given separately in `Setoid.Relations.Discrete`.  The two coexist because they have genuinely different type signatures and serve genuinely different call sites.
 
+
+### <a id="pointwise-lifting">Pointwise lifting of a binary relation</a>
+
+If `_≋_` is a binary relation on `B`, the *pointwise lift* of `_≋_` to the function space `A → B` holds at `f, g : A → B` precisely when `∀ x → f x ≋ g x`.  This construction is foundational across the library: it is the equality used in `Overture.Adjunction.Residuation` to express that the composite `g ∘ f ∘ g` agrees pointwise with `g`, and is the natural generalization of stdlib's `_≗_` (which fixes `_≋_ = _≡_`) to an arbitrary equivalence on the codomain.
+
+```agda
+module _ {A : Type a} where
+
+ PointWise : {B : Type b} (_≋_ : BinRel B ρ) → BinRel (A → B) _
+ PointWise {B = B} _≋_ = λ (f g : A → B) → ∀ x → f x ≋ g x
+```
+
+The dependent analogue lifts `_≋_` over a family `B : A → Type b`:
+
+```agda
+ depPointWise :  {B : A → Type b}
+                 (_≋_ : {γ : Level}{C : Type γ} → BinRel C ρ)
+  →              BinRel ((a : A) → B a) _
+ depPointWise {B = B} _≋_ = λ (f g : (a : A) → B a) → ∀ x → f x ≋ g x
+```
+
+
 ### <a id="compatibility">Compatibility of operations with relations</a>
 
 If `f : Op A I` is an `I`-ary operation on `A` and `R` is a binary relation on `A`, we say that `f` and `R` are *compatible* (equivalently, that `f` *preserves* `R`) when, for all tuples `u v : I → A`, the pointwise hypothesis `∀ i → R (u i) (v i)` implies `R (f u) (f v)`.  We provide both a long-form name `_preserves_` and the customary infix shorthand `_|:_`.
