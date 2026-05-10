@@ -48,7 +48,7 @@ Some exercises below refer to the following relations on 𝟚 := \{0, 1\} (where
 
 **Exercise 1**. Prove that the definitions of CSP(𝔸) (satisfiability of a list of constraints, homomorphism   problem, truth of primitive positive formulas) are equivalent.
 
-**Exercise 2**. Find a polymomial-time algorithm for CSP(A), where
+**Exercise 2**. Find a polynomial-time algorithm for CSP(A), where
 
 2.1. 𝑨 = ({0, 1}, Rᵃ) = (𝟚 , \{(0,0), (1, 1)\})
 2.2. 𝑨 = ({0, 1}, Rᵃ, C₀ᵃ, C₁ᵃ) = (𝟚 , \{ (0,0) , (1, 1) \} , \{ 0 \} , \{ 1 \})
