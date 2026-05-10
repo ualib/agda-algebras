@@ -7,6 +7,8 @@ author: "the agda-algebras development team"
 
 ### <a id="constraint-satisfaction-problems">Constraint Satisfaction Problems</a>
 
+> **Deprecated**.  Canonical home is now [`Setoid.Complexity.CSP`](Setoid.Complexity.CSP.html), ported under #307 (M2-7c).  Importers will see `WARNING_ON_USAGE` warnings on `Constraint` and `CSPInstance`; migrate by replacing `Legacy.Base.Complexity.CSP` with `Setoid.Complexity.CSP` (signature parameter is unchanged).  See [`src/Legacy/Base/DEPRECATED.md`](../../DEPRECATED.md).  Removal is planned for v3.1.
+
 This is the [Base.Complexity.CSP][] module of the [Agda Universal Algebra Library][].
 
 #### <a id="the-relational-formulation-of-csp">The relational formulation of CSP</a>
@@ -39,8 +41,6 @@ CSP(𝒜) of 𝑅 structures having homomorphisms into 𝒜.
 
 That is, our algorithm must take as input an 𝑅-structure (a relational structure in the
 signature of 𝒜) and decide whether or not it belongs to the set CSP(𝒜).
-
-
 
 #### <a id="connection-to-algebraic-csp">Connection to algebraic CSP</a>
 
@@ -90,8 +90,6 @@ algebra, 𝑨(R) := (A , ∣: ⃖ R).
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using ( 𝓞 ; 𝓥 ; Signature )
@@ -140,8 +138,6 @@ where,
 
 
 ```agda
-
-
 module  _              -- levels for...
         {ι : Level}    -- ...arity (or argument index) types
         {ν : Level}    -- ...variable symbol types
@@ -158,8 +154,6 @@ module  _              -- levels for...
   satisfies f = rel (f ∘ scope)      -- *satisfies* the constraint 𝐶 = (σ , 𝑅) provided
                                     -- 𝑓 ∘ σ ∈ 𝑅, where σ is the scope of the constraint.
 ```
-
-
 
 #### <a id="csp-templates-and-instances">CSP templates and instances</a>
 
@@ -178,10 +172,7 @@ An instance of a constraint satisfaction problem is a triple 𝑃 = (𝑉, 𝐷,
 * 𝐷 denotes a "domain",
 * 𝐶 denotes an indexed collection of constraints.
 
-
 ```agda
-
-
  open Algebra
  open Setoid
  record CSPInstance (var : Type ν)(𝒜 : var → Algebra α ℓ) : Type (ν ⊔ α ⊔ lsuc ι) where
@@ -193,6 +184,10 @@ An instance of a constraint satisfaction problem is a triple 𝑃 = (𝑉, 𝐷,
   isSolution f = ∀ i → (Constraint.satisfies (cs i)) f  -- if it satisfies all the constraints.
 ```
 
+```agda
+{-# WARNING_ON_USAGE Constraint   "Use Setoid.Complexity.CSP.Constraint instead. Deprecated under #307; removal planned one minor cycle later." #-}
+{-# WARNING_ON_USAGE CSPInstance  "Use Setoid.Complexity.CSP.CSPInstance instead. Deprecated under #307; removal planned one minor cycle later." #-}
+```
 
 --------------------------------
 

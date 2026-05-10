@@ -7,15 +7,13 @@ author: "agda-algebras development team"
 
 ### <a id="complexity-theory">Complexity Theory</a>
 
+> **Deprecated**.  Canonical home is now [`Setoid.Complexity.Basic`](Setoid.Complexity.Basic.html), ported under #307 (M2-7c).  This module has no Agda exports of its own, so no `WARNING_ON_USAGE` pragmas are attached; the deprecation lives at the documentation level.  See [`src/Legacy/Base/DEPRECATED.md`](../../DEPRECATED.md) for migration guidance.  Removal is planned for v3.1.
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Legacy.Base.Complexity.Basic where
 ```
-
 
 #### <a id="words">Words</a>
 
