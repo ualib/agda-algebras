@@ -160,7 +160,7 @@ l₁ = 3 ∷ l₀
 
 -- 3. Three-element list, (1, 2, 3)
 L₃ : List ℕ
-L₃ = inn (inr (1 , (inn (inr (2 , L₀)))))
+L₃ = inn (inr (1 , (inn (inr (2 , L₁)))))
 
 l₃ : list ℕ
 l₃ = 1 ∷ (2 ∷ l₁)
@@ -199,6 +199,18 @@ L₃[0]≢some2 = λ ()
 
 l₃[0]≢some2 : l₃ ⟦ 0 ⟧ ≢ some 2
 l₃[0]≢some2 = λ ()
+
+L₃[1]≡some2 : L₃ [ 1 ] ≡ some 2
+L₃[1]≡some2 = refl
+
+l₃⟦1⟧≡some2 : l₃ ⟦ 1 ⟧ ≡ some 2
+l₃⟦1⟧≡some2 = refl
+
+L₃[2]≡some3 : L₃ [ 2 ] ≡ some 3
+L₃[2]≡some3 = refl
+
+l₃⟦2⟧≡some3 : l₃ ⟦ 2 ⟧ ≡ some 3
+l₃⟦2⟧≡some3 = refl
 
 ℓ₁ : Level
 ℓ₁ = lsuc ℓ₀
