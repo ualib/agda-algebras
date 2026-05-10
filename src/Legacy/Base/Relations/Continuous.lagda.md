@@ -7,7 +7,7 @@ author: "[agda-algebras development team][]"
 
 ### <a id="continuous-relations">Continuous Relations</a>
 
-> **Deprecated**.  Canonical home is now [`Setoid.Relations.Continuous`](Setoid.Relations.Continuous.html), ported under #308 (M2-7d).  Importers will see `WARNING_ON_USAGE` warnings on `Rel`, `REL`, their syntactic-sugar variants, and the `eval-*`/`compatible-*` helpers; migrate by replacing `Legacy.Base.Relations.Continuous` with `Setoid.Relations.Continuous`, and pass a `Setoid` (or `Relation.Binary.PropositionalEquality.setoid A` for a bare type `A`) where a bare type was previously expected as the relation's underlying carrier.  See [`src/Legacy/Base/DEPRECATED.md`](../../DEPRECATED.md).  Removal is planned for v3.1.
+> **Deprecated**.  Canonical home is now [`Setoid.Relations.Continuous`](Setoid.Relations.Continuous.html), ported under #308 (M2-7d).  Importers will see `WARNING_ON_USAGE` warnings on `Rel`, `REL`, their syntactic-sugar variants, and the `eval-*`/`compatible-*` helpers; in most cases, migration is just replacing `Legacy.Base.Relations.Continuous` with `Setoid.Relations.Continuous`.  The replacement `Rel`/`REL` definitions still take bare carrier types as before; only the optional setoid-respect layer (for example, `Π-Respects-Rel`/`Π-Respects-REL`) requires passing an explicit `Setoid` such as `Relation.Binary.PropositionalEquality.setoid A` for a bare type `A`.  See [`src/Legacy/Base/DEPRECATED.md`](../../DEPRECATED.md).  Removal is planned for v3.1.
 
 This is the [Base.Relations.Continuous][] module of the [Agda Universal Algebra Library][].
 
