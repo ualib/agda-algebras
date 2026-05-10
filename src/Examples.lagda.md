@@ -17,7 +17,7 @@ This is the [Examples][] module of the [Agda Universal Algebra Library][].
 
 module Examples where
 
-open import Examples.Categories
+open import Examples.PolynomialFunctors
 open import Examples.Structures
 ```
 

@@ -28,8 +28,6 @@ An important class of functors for our domain is the class of so called *polynom
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Legacy.Base.Categories.Functors where
@@ -88,8 +86,6 @@ be defined in Agda with the following datatype declaration.
 
 
 ```agda
-
-
 data μ_ (F : Functor) : Type where
  inn : [ F ] (μ F) → μ F
 ```
@@ -99,8 +95,6 @@ An important example is the polymorphic list datatype. The standard way to defin
 
 
 ```agda
-
-
 data list (A : Type) : Type ℓ₀ where
  [] : list A
  _∷_ : A → list A → list A
@@ -111,8 +105,6 @@ We could instead define a `List` datatype by applying `μ` to a polynomial funct
 
 
 ```agda
-
-
 L : {ℓ : Level}(A : Type ℓ) → Functor{ℓ}
 L A = Const ⊤ ⊕ (Const A ⊗ Id)
 
@@ -125,8 +117,6 @@ To see some examples demonstrating that both formulations of the polymorphic lis
 
 
 ```agda
-
-
 data Option (A : Type) : Type where
  some : A → Option A
  none : Option A
@@ -142,7 +132,19 @@ _⟦_⟧ : {A : Type} → list A → ℕ → Option A
 (x ∷ l) ⟦ suc n ⟧ = l ⟦ n ⟧
 ```
 
-
+```agda
+{-# WARNING_ON_USAGE Functor₀ "Use Examples.PolynomialFunctors.Functors.Functor₀ instead.  Reclassified under #306 as illustrative content.  Removal planned one minor cycle later." #-}
+{-# WARNING_ON_USAGE [_]₀     "Use Examples.PolynomialFunctors.Functors.[_]₀ instead.  Reclassified under #306 as illustrative content.  Removal planned one minor cycle later." #-}
+{-# WARNING_ON_USAGE Functor  "Use Examples.PolynomialFunctors.Functors.Functor instead.  Reclassified under #306 as illustrative content.  Removal planned one minor cycle later." #-}
+{-# WARNING_ON_USAGE [_]_     "Use Examples.PolynomialFunctors.Functors.[_]_ instead.  Reclassified under #306 as illustrative content.  Removal planned one minor cycle later." #-}
+{-# WARNING_ON_USAGE μ_       "Use Examples.PolynomialFunctors.Functors.μ_ instead.  Reclassified under #306 as illustrative content.  Removal planned one minor cycle later." #-}
+{-# WARNING_ON_USAGE L        "Use Examples.PolynomialFunctors.Functors.L instead.  Reclassified under #306 as illustrative content.  Removal planned one minor cycle later." #-}
+{-# WARNING_ON_USAGE List     "Use Examples.PolynomialFunctors.Functors.List instead.  Reclassified under #306 as illustrative content.  Removal planned one minor cycle later." #-}
+{-# WARNING_ON_USAGE list     "Use Examples.PolynomialFunctors.Functors.list instead.  Reclassified under #306 as illustrative content.  Removal planned one minor cycle later." #-}
+{-# WARNING_ON_USAGE Option   "Use Examples.PolynomialFunctors.Functors.Option instead.  Reclassified under #306 as illustrative content.  Removal planned one minor cycle later." #-}
+{-# WARNING_ON_USAGE _[_]     "Use Examples.PolynomialFunctors.Functors._[_] instead.  Reclassified under #306 as illustrative content.  Removal planned one minor cycle later." #-}
+{-# WARNING_ON_USAGE _⟦_⟧    "Use Examples.PolynomialFunctors.Functors._⟦_⟧ instead.  Reclassified under #306 as illustrative content.  Removal planned one minor cycle later." #-}
+```
 
 --------------------------------
 

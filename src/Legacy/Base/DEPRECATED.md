@@ -22,28 +22,15 @@ it tells users whether a given import is **discouraged**, **provisional**, or
 
 ### Category A — Deprecated; a `Setoid/` analog already exists
 
-These modules duplicate, in a non-fully-constructive setting, content that is
-already formalized canonically in `Setoid/`.  **Do not** start new work against
-these modules; **do** migrate existing imports to their `Setoid/` counterparts.
-The bare-types style in these modules typically depends on postulates of
-function extensionality and propositional extensionality that `Setoid/` retires
-by construction.
+These modules duplicate, in a non-fully-constructive setting, content that is already formalized canonically in `Setoid/`.  **Do not** start new work against these modules; **do** migrate existing imports to their `Setoid/` counterparts.  The bare-types style in these modules typically depends on postulates of function extensionality and propositional extensionality that `Setoid/` retires by construction.
 
 Some Category-A relocations target `Overture/` rather than `Setoid/`.  This is correct when the relocated definition does not presuppose a setoid structure — for instance, `Term` is the W-type for the polynomial functor of a signature, `Equivalence A {ρ}` is a Σ-bundle of a `BinRel` with an `IsEquivalence` proof, and bare-types `IsSurjective` is parametric in a raw function `A → B`.  Such definitions belong in the shared foundations, not in the setoid layer; they are needed identically by the canonical `Setoid/` tree, by the planned `Classical/` tree (M3), and by the long-term `Cubical/` target (M5).  The per-symbol table below records the relocations to `Overture/` from the audit at #303 (M2-6).  The per-module table that follows it records the broader module-level deprecations to `Setoid/` for everything else.
 
-Note on aggregator rows: `Legacy.Base.Relations`, `Legacy.Base.Functions`, and
-`Legacy.Base.Varieties` are aggregator modules whose contents straddle Categories
-A and B.  The "canonical replacement" column points at the corresponding canonical
-aggregator, which covers most but not all of the legacy aggregator's submodules.
-Users importing aggregators should consult the per-submodule rows in this table
-and the Category-B table below to confirm coverage of specific submodules.
+Other Category-A relocations target `Examples/` rather than `Setoid/` or `Overture/`.  This is correct when the relocated content was illustrative or pedagogical rather than load-bearing for the universal-algebra core, and where the natural canonical home is therefore the examples tree.  The polynomial-functor / W-type material in `Legacy.Base.Categories.*` is the precedent under #306: its single consumer was already in `Examples/`, the legacy aggregator's own header characterized the content as "experiments," and nothing in the canonical `Setoid/`, `Classical/`, or `Cubical/` development depends on it.  Moving such content to `Examples/` is preferred to leaving it in `Legacy/` permanently — the deprecation table should not carry a permanent "no canonical home" entry for content that was never load-bearing in the first place.
 
-For users of these modules, the migration is mechanical when the concrete
-setting works up to propositional equality: replace `Legacy.Base.X` with
-`Setoid.X` and pass `Relation.Binary.PropositionalEquality.setoid A` (or the
-appropriate setoid for your carrier) where a setoid argument is now expected.
-This recovers the bare-types reading without committing the library to a
-parallel abstract foundation.
+Note on aggregator rows: `Legacy.Base.Relations`, `Legacy.Base.Functions`, and `Legacy.Base.Varieties` are aggregator modules whose contents straddle Categories A and B.  The "canonical replacement" column points at the corresponding canonical aggregator, which covers most but not all of the legacy aggregator's submodules. Users importing aggregators should consult the per-submodule rows in this table and the Category-B table below to confirm coverage of specific submodules.
+
+For users of these modules, the migration is mechanical when the concrete setting works up to propositional equality: replace `Legacy.Base.X` with `Setoid.X` and pass `Relation.Binary.PropositionalEquality.setoid A` (or the appropriate setoid for your carrier) where a setoid argument is now expected.  This recovers the bare-types reading without committing the library to a parallel abstract foundation.
 
 | Legacy module                                 | Canonical replacement                    |
 |-----------------------------------------------|------------------------------------------|
@@ -55,6 +42,8 @@ parallel abstract foundation.
 | `Legacy.Base.Algebras.Basic`                  | `Setoid.Algebras.Basic`                  |
 | `Legacy.Base.Algebras.Congruences`            | `Setoid.Algebras.Congruences`            |
 | `Legacy.Base.Algebras.Products`               | `Setoid.Algebras.Products`               |
+| `Legacy.Base.Categories`                      | `Examples.PolynomialFunctors`            |
+| `Legacy.Base.Categories.Functors`             | `Examples.PolynomialFunctors.Functors`   |
 | `Legacy.Base.Functions`                       | `Setoid.Functions`                       |
 | `Legacy.Base.Functions.Injective`             | `Setoid.Functions.Injective`             |
 | `Legacy.Base.Functions.Inverses`              | `Setoid.Functions.Inverses`              |
@@ -143,8 +132,6 @@ to `open import Overture using ( … )`.
 
 | Legacy module                              | Planned destination                              | Target milestone | Tracking issue |
 |--------------------------------------------|--------------------------------------------------|------------------|----------------|
-| `Legacy.Base.Categories`                   | TBD (decision part of #306)                      | M2               | #306           |
-| `Legacy.Base.Categories.Functors`          | as parent                                        | M2               | #306           |
 | `Legacy.Base.Complexity`                   | `Setoid.Complexity`                              | M9               | #307           |
 | `Legacy.Base.Complexity.Basic`             | `Setoid.Complexity.Basic`                        | M9               | #307           |
 | `Legacy.Base.Complexity.CSP`               | `Setoid.Complexity.CSP`                          | M9               | #307           |
