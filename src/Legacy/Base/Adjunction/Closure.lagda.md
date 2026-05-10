@@ -76,7 +76,7 @@ on `𝑷` if it is
 
 1. (extensive) `∀ x → x ≤ C x`
 2. (order preserving) `∀ x y → x ≤ y → C x ≤ C y`
-3. (idempotent) `∀ x → C (C x) = C x`
+3. (idempotent) `∀ x → C (C x) ≈ C x`, where `_≈_` is the equivalence carried by the poset
 
 Thus, a closure operator is an extensive, idempotent poset endomorphism.
 
