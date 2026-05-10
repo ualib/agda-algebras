@@ -604,7 +604,7 @@ graph TD
 
 <!-- BEGIN GENERATED: milestone-2 -->
 
-### Issue M2-1: Freeze Base/, adopt Setoid/ as canonical (#256)
+### Issue M2-1: Freeze Base/, adopt Setoid/ as canonical (#256, closed)
 
 **Labels**: `milestone-2-consolidation`, `breaking-change`
 
@@ -633,7 +633,7 @@ This is a breaking change for downstream users of `Base/`.  Announce prominently
 
 ---
 
-### Issue M2-2: Consolidate parallel implementations within Legacy/Base/Structures (#257)
+### Issue M2-2: Consolidate parallel implementations within Legacy/Base/Structures (#257, closed)
 
 **Labels**: `milestone-2-consolidation`
 
@@ -655,7 +655,7 @@ This is a breaking change for downstream users of `Base/`.  Announce prominently
 
 ---
 
-### Issue M2-3: Remove Base.Structures.Graphs0 (unused experimental duplicate) (#258)
+### Issue M2-3: Remove Base.Structures.Graphs0 (unused experimental duplicate) (#258, closed)
 
 **Labels**: `milestone-2-consolidation`
 
@@ -704,7 +704,7 @@ The library contains three proofs of Birkhoff's HSP theorem:
 
 ---
 
-### Issue M2-5: CI gap: `Legacy.Base` tree is not type-checked by make check (#301)
+### Issue M2-5: CI gap: `Legacy.Base` tree is not type-checked by make check (#301, closed)
 
 **Labels**: `milestone-2-consolidation`, `ci`
 
@@ -735,7 +735,7 @@ The fix is a second aggregator, `EverythingLegacy.lagda.md`, that exists purely 
 
 ---
 
-### Issue M2-6: Extract Setoid-canonical foundations from Legacy.Base (#303)
+### Issue M2-6: Extract Setoid-canonical foundations from Legacy.Base (#303, closed)
 
 **Labels**: `milestone-2-consolidation`
 
@@ -845,7 +845,7 @@ The legacy module is **not deleted** in the porting PR — it is removed in the 
 
 ---
 
-### Issue M2-7a: Port Legacy.Base.Adjunction.* to canonical paths (#305)
+### Issue M2-7a: Port Legacy.Base.Adjunction.* to canonical paths (#305, closed)
 
 **Labels**: `milestone-2-consolidation`, `design-discussion`
 
@@ -889,7 +889,7 @@ The third option is probably premature; the first two are both defensible.  Reco
 
 ---
 
-### Issue M2-7b: Port Legacy.Base.Categories.* to canonical paths (#306)
+### Issue M2-7b: Port Legacy.Base.Categories.* to canonical paths (#306, closed)
 
 **Labels**: `milestone-2-consolidation`, `design-discussion`
 
@@ -927,7 +927,7 @@ This issue's first deliverable is the **destination decision**, not the port.
 
 ---
 
-### Issue M2-7c: Port Legacy.Base.Complexity.* to canonical paths (#307)
+### Issue M2-7c: Port Legacy.Base.Complexity.* to canonical paths (#307, closed)
 
 **Labels**: `milestone-2-consolidation`, `milestone-9-apps`
 

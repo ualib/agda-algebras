@@ -60,9 +60,10 @@ For users of these modules, the migration is mechanical when the concrete settin
 | `Legacy.Base.Homomorphisms.Noether`           | `Setoid.Homomorphisms.Noether`           |
 | `Legacy.Base.Homomorphisms.Products`          | `Setoid.Homomorphisms.Products`          |
 | `Legacy.Base.Homomorphisms.Properties`        | `Setoid.Homomorphisms.Properties`        |
-| `Legacy.Base.Relations`                       | `Setoid.Relations` (partial — see note above; `Continuous` and `Properties` are tracked under Category B) |
+| `Legacy.Base.Relations`                       | `Setoid.Relations` (partial — see note above; `Properties` is tracked under Category B) |
 | `Legacy.Base.Relations.Discrete`              | `Setoid.Relations.Discrete`              |
 | `Legacy.Base.Relations.Quotients`             | `Setoid.Relations.Quotients`             |
+| `Legacy.Base.Relations.Continuous`            | `Setoid.Relations.Continuous`            |
 | `Legacy.Base.Subalgebras`                     | `Setoid.Subalgebras`                     |
 | `Legacy.Base.Subalgebras.Properties`          | `Setoid.Subalgebras.Properties`          |
 | `Legacy.Base.Subalgebras.Subalgebras`         | `Setoid.Subalgebras.Subalgebras`         |
@@ -136,7 +137,6 @@ to `open import Overture using ( … )`.
 | Legacy module                              | Planned destination                              | Target milestone | Tracking issue |
 |--------------------------------------------|--------------------------------------------------|------------------|----------------|
 | `Legacy.Base.Functions.Transformers`       | stdlib redirect or `Setoid.Functions.Transformers` (decision part of #310) | TBD | #310 |
-| `Legacy.Base.Relations.Continuous`         | `Setoid.Relations.Continuous`                    | M9               | #308           |
 | `Legacy.Base.Relations.Properties`         | `Setoid.Relations.Properties`                    | M2 follow-up     | #309           |
 | `Legacy.Base.Structures`                   | `Classical/` (entire subtree superseded)         | M3               | #260           |
 | `Legacy.Base.Structures.Basic`             | as above                                         | M3               | #260           |

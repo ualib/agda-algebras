@@ -9,7 +9,6 @@ author: "the agda-algebras development team"
 
 This is the [Base.Relations.Discrete][] module of the [Agda Universal Algebra Library][].
 
-
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -32,10 +31,8 @@ open import Overture using (_≈_ ; Π-syntax ; Op)
 private variable a b ρ 𝓥 : Level
 ```
 
-
 We begin with a definition that is useful for defining poitwise "equality" of functions
 with respect to a given "equality" relation (see also the definition of `_≈̇_` in the [Base.Adjunction.Residuation][] module).
-
 
 ```agda
 module _ {A : Type a} where
@@ -49,7 +46,6 @@ we have `f (Pointwise _≋_) g` provided `∀ x → f x ≋ g x`.
 
 Here is the analogous definition for dependent functions.
 
-
 ```agda
  depPointWise :  {B : A → Type b }
                  (_≋_ : {γ : Level}{C : Type γ} → BinRel C ρ)
@@ -57,16 +53,13 @@ Here is the analogous definition for dependent functions.
  depPointWise {B = B} _≋_ = λ (f g : (a : A) → B a) → ∀ x → f x ≋ g x
 ```
 
-
 Next we define a type that is useful for asserting that the image of a function
 is contained in a particular "subset" (predicate) of the codomain.
-
 
 ```agda
  Im_⊆_ : {B : Type b} → (A → B) → Pred B ρ → Type (a ⊔ ρ)
  Im f ⊆ S = ∀ x → f x ∈ S
 ```
-
 
 
 #### <a id="operation-symbols-unary-relations-binary-relations">Operation symbols, unary relations, binary relations</a>
@@ -82,12 +75,10 @@ We represent "sets" as inhabitants of such predicate types.
 
 Sometimes it is useful to obtain the underlying type (`A`) over which the predicates in `Pred A ℓ` (the "subsets" of `A`) are defined.
 
-
 ```agda
  PredType : Pred A ρ → Type a
  PredType _ = A
 ```
-
 
 The binary relation types are called `Rel` and `REL` in the standard library, but we
 will call them `BinRel` and `BinREL` and reserve the names `Rel` and `REL` for the relation
@@ -98,7 +89,6 @@ We import the "heterogeneous" binary relation type from the standard library and
 `BinREL : ∀ {ℓ} (A B : Type ℓ) (ℓ' : Level) → Type (ℓ-max ℓ (ℓ-suc ℓ'))`
 `BinREL A B ℓ' = A → B → Type ℓ'`
 
-
 A special case, the homogeneous binary relation type is also imported and renamed `BinRel`.
 
 `BinRel : ∀{ℓ} → Type ℓ → (ℓ' : Level) → Type (ℓ ⊔ lsuc ℓ')`
@@ -106,12 +96,10 @@ A special case, the homogeneous binary relation type is also imported and rename
 
 Occasionally it is useful to extract the universe level over which a binary relation is defined.
 
-
 ```agda
  Level-of-Rel : {ℓ : Level} → BinRel A ℓ → Level
  Level-of-Rel {ℓ} _ = ℓ
 ```
-
 
 
 #### <a id="kernels">Kernels</a>
@@ -120,7 +108,6 @@ The *kernel* of `f : A → B` is defined informally by `{(x , y) ∈ A × A : f 
 This can be represented in type theory and Agda in a number of ways, each of which
 may be useful in a particular context. For example, we could define the kernel
 to be an inhabitant of a (binary) relation type, or a (unary) predicate type.
-
 
 ```agda
 module _ {A : Type a}{B : Type b} where
@@ -171,7 +158,6 @@ module _ {A : Type (a ⊔ ρ)} where
 ```
 
 
-
 ### <a id="compatibility-of-operations-and-relations">Compatibility of operations and relations</a>
 
 Recall, from the [Overture.Signatures][] and [Overture.Operations][] modules which established
@@ -180,7 +166,6 @@ represent operation symbols and arities, respectively.
 
 In the present subsection, we define types that are useful for asserting and proving
 facts about *compatibility* of operations and relations
-
 
 ```agda
 -- lift a binary relation to the corresponding `I`-ary relation.
@@ -192,9 +177,7 @@ eval-pred : {A : Type a}{I : Type 𝓥} → Pred (A × A) ρ → BinRel (I → A
 eval-pred P u v = ∀ i → (u i , v i) ∈ P
 ```
 
-
 If `f : Op I` and `R : Rel A b`, then we say `f` and `R` are *compatible* just in case `∀ u v : I → A`, `Π i ꞉ I , R (u i) (v i)  →  R (f u) (f v)`.
-
 
 ```agda
 _preserves_ : {A : Type a}{I : Type 𝓥} → Op A I → BinRel A ρ → Type (a ⊔ 𝓥 ⊔ ρ)
@@ -210,7 +193,6 @@ f preserves-pred P  = ∀ u v → (eval-pred P) u v → (f u , f v) ∈ P
 
 _|:pred_ : {A : Type a}{I : Type 𝓥} → Op A I → Pred (A × A) ρ → Type (a ⊔ 𝓥 ⊔ ρ)
 f |:pred P  = (eval-pred P) =[ f ]⇒ λ x y → (x , y) ∈ P
-
 
 -- The two types just defined are logically equivalent.
 module _ {A : Type a}{I : Type 𝓥}{f : Op A I}{R : BinRel A ρ} where

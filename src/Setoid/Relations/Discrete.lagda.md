@@ -9,10 +9,7 @@ author: "the agda-algebras development team"
 
 This is the [Setoid.Relations.Discrete][] module of the [Agda Universal Algebra Library][].
 
-
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Setoid.Relations.Discrete where
@@ -37,13 +34,9 @@ open import Overture using ( Π-syntax )
 private variable α β ρᵃ ρᵇ ℓ 𝓥 : Level
 ```
 
-
 Here is a function that is useful for defining poitwise equality of functions wrt a given equality.
 
-
 ```agda
-
-
 open _⟶_ renaming ( to to _⟨$⟩_ )
 module _ {𝐴 : Setoid α ρᵃ}{𝐵 : Setoid β ρᵇ} where
  open Setoid 𝐴  using () renaming ( Carrier to A ; _≈_ to _≈₁_ )
@@ -53,18 +46,13 @@ module _ {𝐴 : Setoid α ρᵃ}{𝐵 : Setoid β ρᵇ} where
  function-equality f g = ∀ x → f ⟨$⟩ x ≈₂ g ⟨$⟩ x
 ```
 
-
 Here is useful notation for asserting that the image of a function (the first argument)
 is contained in a predicate, the second argument (a "subset" of the codomain).
 
-
 ```agda
-
-
  Im_⊆_ : (𝐴 ⟶ 𝐵) → Pred B ℓ → Type (α ⊔ ℓ)
  Im f ⊆ S = ∀ x → f ⟨$⟩ x ∈ S
 ```
-
 
 
 #### <a id="kernels">Kernels on setoids</a>
@@ -72,10 +60,7 @@ is contained in a predicate, the second argument (a "subset" of the codomain).
 Given setoids 𝐴 and 𝐵 (with carriers A and B, resp), the *kernel* of a function `f : 𝐴 ⟶ 𝐵` is defined
 informally by `{(x , y) ∈ A × A : f ⟨$⟩ x ≈₂ f ⟨$⟩ y}`.
 
-
 ```agda
-
-
  fker : (𝐴 ⟶ 𝐵) → BinRel A ρᵇ
  fker g x y = g ⟨$⟩ x ≈₂ g ⟨$⟩ y
 
@@ -91,7 +76,6 @@ informally by `{(x , y) ∈ A × A : f ⟨$⟩ x ≈₂ f ⟨$⟩ y}`.
  0rel : {ℓ : Level} → BinRel A (ρᵃ ⊔ ℓ)
  0rel {ℓ} = λ x y → Lift ℓ (x ≈₁ y)
 ```
-
 
 --------------------------------------
 

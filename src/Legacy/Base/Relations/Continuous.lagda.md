@@ -7,12 +7,11 @@ author: "[agda-algebras development team][]"
 
 ### <a id="continuous-relations">Continuous Relations</a>
 
+> **Deprecated**.  Canonical home is now [`Setoid.Relations.Continuous`](Setoid.Relations.Continuous.html), ported under #308 (M2-7d).  Importers will see `WARNING_ON_USAGE` warnings on `Rel`, `REL`, their syntactic-sugar variants, and the `eval-*`/`compatible-*` helpers; migrate by replacing `Legacy.Base.Relations.Continuous` with `Setoid.Relations.Continuous`, and pass a `Setoid` (or `Relation.Binary.PropositionalEquality.setoid A` for a bare type `A`) where a bare type was previously expected as the relation's underlying carrier.  See [`src/Legacy/Base/DEPRECATED.md`](../../DEPRECATED.md).  Removal is planned for v3.1.
+
 This is the [Base.Relations.Continuous][] module of the [Agda Universal Algebra Library][].
 
-
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Legacy.Base.Relations.Continuous where
@@ -69,10 +68,7 @@ Heuristically, we can think of an inhabitant of type `REL I 𝒜 β` as a relati
 
 (This is only a rough heuristic since `I` could denote an uncountable collection.)  See the discussion below for a more detailed explanation.
 
-
 ```agda
-
-
 module _ {𝓥 : Level} where
  ar : Type (suc 𝓥)
  ar = Type 𝓥
@@ -101,37 +97,26 @@ module _ {𝓥 : Level} where
 
 #### <a id="compatibility-with-general-relations">Compatibility with general relations</a>
 
-
 ```agda
-
-
  -- Lift a relation of tuples up to a relation on tuples of tuples.
  eval-Rel : {I : ar}{A : Type a} → Rel A I{ρ} → (J : ar) → (I → J → A) → Type (𝓥 ⊔ ρ)
  eval-Rel R J t = ∀ (j : J) → R λ i → t i j
 ```
 
-
 A relation `R` is compatible with an operation `f` if for every tuple `t` of tuples
 belonging to `R`, the tuple whose elements are the result of applying `f` to
 sections of `t` also belongs to `R`.
 
-
 ```agda
-
-
  compatible-Rel : {I J : ar}{A : Type a} → Op(A) J → Rel A I{ρ} → Type (𝓥 ⊔ a ⊔ ρ)
  compatible-Rel f R  = ∀ t → eval-Rel R arity[ f ] t → R λ i → f (t i)
  -- (inferred type of t is I → J → A)
 ```
 
 
-
 #### <a id="compatibility-of-operations-with-dependent-relations">Compatibility of operations with dependent relations</a>
 
-
 ```agda
-
-
  eval-REL :  {I J : ar}{𝒜 : I → Type a}
   →          REL I 𝒜 {ρ}          -- the relation type: subsets of Π[ i ∈ I ] 𝒜 i
                                   -- (where Π[ i ∈ I ] 𝒜 i is a type of dependent functions or "tuples")
@@ -147,7 +132,6 @@ sections of `t` also belongs to `R`.
   →                Type (𝓥 ⊔ a ⊔ ρ)
  compatible-REL {I = I}{J}{𝒜} 𝑓 R  = Π[ t ∈ ((i : I) → J → 𝒜 i) ] eval-REL R t
 ```
-
 
 The definition `eval-REL` denotes an *evaluation* function which lifts an `I`-ary relation to an `(I → J)`-ary relation.
 
@@ -171,7 +155,6 @@ For simplicity, pretend for a moment that `J` is a finite set, say, `{1, 2, ...,
 
 For example, here are the i-th and k-th columns (for some `i k : I`).
 
-
     𝒶 i 1      𝒶 k 1
     𝒶 i 2      𝒶 k 2  <-- (a row of I such columns forms an I-tuple)
       ⋮          ⋮
@@ -185,6 +168,17 @@ Finally, `compatible-REL` takes
 *  an `I`-tuple (`𝒶 : I → J → A`) of `J`-tuples
 
 and determines whether the `I`-tuple `λ i → (𝑓 i) (𝑎 i)` belongs to `R`.
+
+```agda
+{-# WARNING_ON_USAGE Rel             "Use Setoid.Relations.Continuous.Rel instead. Deprecated under #308; removal planned one minor cycle later." #-}
+{-# WARNING_ON_USAGE Rel-syntax      "Use Setoid.Relations.Continuous.Rel-syntax instead. Deprecated under #308; removal planned one minor cycle later." #-}
+{-# WARNING_ON_USAGE REL             "Use Setoid.Relations.Continuous.REL instead. Deprecated under #308; removal planned one minor cycle later." #-}
+{-# WARNING_ON_USAGE REL-syntax      "Use Setoid.Relations.Continuous.REL-syntax instead. Deprecated under #308; removal planned one minor cycle later." #-}
+{-# WARNING_ON_USAGE eval-Rel        "Use Setoid.Relations.Continuous.eval-Rel instead. Deprecated under #308; removal planned one minor cycle later." #-}
+{-# WARNING_ON_USAGE compatible-Rel  "Use Setoid.Relations.Continuous.compatible-Rel instead. Deprecated under #308; removal planned one minor cycle later." #-}
+{-# WARNING_ON_USAGE eval-REL        "Use Setoid.Relations.Continuous.eval-REL instead. Deprecated under #308; removal planned one minor cycle later." #-}
+{-# WARNING_ON_USAGE compatible-REL  "Use Setoid.Relations.Continuous.compatible-REL instead. Note: the canonical version corrects a bug in the legacy definition (see Setoid.Relations.Continuous module header). Deprecated under #308; removal planned one minor cycle later." #-}
+```
 
 --------------------------------------
 

@@ -9,10 +9,7 @@ author: "the agda-algebras development team"
 
 This is the [Setoid.Relations.Quotients][] module of the [Agda Universal Algebra Library][].
 
-
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Setoid.Relations.Quotients where
@@ -35,15 +32,11 @@ open import Setoid.Relations.Discrete  using ( fker )
 private variable α β ρᵃ ρᵇ ℓ : Level
 ```
 
-
 #### <a id="kernels">Kernels</a>
 
 A prominent example of an equivalence relation is the kernel of any function.
 
-
 ```agda
-
-
 open _⟶_ using ( cong ) renaming ( to to _⟨$⟩_ )
 
 module _ {𝐴 : Setoid α ρᵃ}{𝐵 : Setoid β ρᵇ} where
@@ -65,15 +58,11 @@ record IsBlock  {A : Type α}{ρ : Level}
 open IsBlock
 ```
 
-
 If `R` is an equivalence relation on `A`, then the *quotient* of `A` modulo `R` is
 denoted by `A / R` and is defined to be the collection `{[ u ] ∣  y : A}` of all
 `R`-blocks.
 
-
 ```agda
-
-
 Quotient : (A : Type α) → Equivalence A{ℓ} → Type(α ⊔ suc ℓ)
 Quotient A R = Σ[ P ∈ Pred A _ ] IsBlock P {∣ R ∣}
 
@@ -83,13 +72,9 @@ A / R = record { Carrier = A ; _≈_ = ∣ R ∣ ; isEquivalence = ∥ R ∥ }
 infix -1 _/_
 ```
 
-
 We use the following type to represent an R-block with a designated representative.
 
-
 ```agda
-
-
 open Setoid
 ⟪_⟫ : {α : Level}{A : Type α} → A → {R : Equivalence A{ℓ}} → Carrier (A / R)
 ⟪ a ⟫{R} = a
@@ -107,8 +92,6 @@ module _ {A : Type α}{R : Equivalence A{ℓ} } where
 ≡→⊆ : {A : Type α}{ρ : Level}(Q R : Pred A ρ) → Q ≡ R → Q ⊆ R
 ≡→⊆ Q .Q ≡.refl {x} Qx = Qx
 ```
-
-
 
 -------------------------------------
 

@@ -74,13 +74,7 @@ open import Function.Base    using ( _∘_ )
 open import Relation.Binary  using ( Setoid )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
--- NOTE: `Legacy.Base.Relations.Continuous` is imported here because
--- `Setoid.Relations.Continuous` does not yet exist; the port of `Continuous` is
--- tracked under #308 (M2-7d, scheduled with M9).  Per the Category-B contract
--- in `src/Legacy/Base/DEPRECATED.md`, importing from `Legacy.Base.*` is the
--- supported, non-deprecated path until that port lands.  When #308 lands this
--- import will be redirected to the canonical path and the note removed.
-open import Legacy.Base.Relations.Continuous  using ( REL ; REL-syntax )
+open import Setoid.Relations.Continuous       using ( REL ; REL-syntax )
 open import Setoid.Algebras.Basic  {𝑆 = 𝑆}    using ( Algebra )
 ```
 
