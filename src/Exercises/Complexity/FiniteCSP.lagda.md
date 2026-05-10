@@ -15,8 +15,6 @@ University in Prague. They were formalized in dependent type theory by the
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Exercises.Complexity.FiniteCSP  where
@@ -36,7 +34,6 @@ open signature
 open structure
 ```
 
-
 Some exercises below refer to the following relations on 𝟚 := \{0, 1\} (where i, j ∈ 𝟚):
 
 \begin{align*}
@@ -49,9 +46,7 @@ Some exercises below refer to the following relations on 𝟚 := \{0, 1\} (where
  Gᵃ₂   & := \{ (0,0,1), (0,1,0), (1,0,0), (1,1,1) \}
 \end{align*}
 
-
 **Exercise 1**. Prove that the definitions of CSP(𝔸) (satisfiability of a list of constraints, homomorphism   problem, truth of primitive positive formulas) are equivalent.
-
 
 **Exercise 2**. Find a polymomial-time algorithm for CSP(A), where
 
@@ -65,8 +60,6 @@ Some exercises below refer to the following relations on 𝟚 := \{0, 1\} (where
 2.8. 𝑨 = ({0, 1}, Rᵃ, Nᵃ, C₀ᵃ, C₁ᵃ, 𝑆₀₀, S₀₁ᵃ, S₁₀ᵃ, S₁₁ᵃ) = (𝟚 , \{ (0,0) , (1, 1) \} , \{ (0, 1) , (1, 0) \} , \{ 0 \} , \{ 1 \} , 𝟚³ - \{ (0, 0) \} , 𝟚³ - \{ (0, 1) \} , 𝟚³ - \{ (1, 0) \} , 𝟚³ - \{ (1, 1) \})
 2.9. 𝑨 = ({0, 1}, all unary and binary relations)
 
-
-
 **Solution 2.1**. If 𝑨 = ({0, 1}, Rᵃ) = (𝟚 , \{(0,0), (1, 1)\}), then an instance of (the HOM
 formulation of) CSP(𝑨) is a relational structure 𝑩 = (B, Rᵇ⟩, where Rᵇ ⊆ B² and we must decide
 whether there exists a homomorphism f : 𝑩 → 𝑨, that is, a map f : B → A (= 𝟚) such that
@@ -77,7 +70,6 @@ constantly-1 map) is such a homomorphism.  Let's prove this formally.
 
 
 ```agda
-
 module solution-2-1 where
 
  -- The (purely) relational structure with
@@ -96,18 +88,14 @@ module solution-2-1 where
             ; rel = λ _ x → ((x 𝟚.𝟎) , (x 𝟚.𝟏)) ∈ Rᵃ
             }
 
-
  -- Claim: Given an arbitrary 𝑩 in the signatures Sig∅ Sig001, we can construct a homomorphism from 𝑩 to 𝑨.
  claim : (𝑩 : structure {ℓ₀}{ℓ₀}{ℓ₀}{ℓ₀} S∅ S001 {ℓ₀}{ℓ₀}) → hom 𝑩 𝑨
  claim 𝑩 = (λ x → 𝟚.𝟎) , (λ _ _ _ → r1) , λ ()
 ```
 
-
 In general, whenever the template structure 𝑨 has a one-element subuniverse, say, \{ a \},
 then the constant map that always gives a is a homomorphism from any structure in the given
 signature to 𝑨. ∎
-
-
 
 **Solution 2.2**. If 𝑨 = (\{ 0, 1 \}, Rᵃ, C₀ᵃ, C₁ᵃ) = (𝟚 , \{ (0, 0) , (1, 1) \} , \{ 0 \} , \{ 1 \}),
 then an instance of HOM CSP(𝑨) is a relational structure 𝑩 = (B, Rᵇ, C₀ᵇ, C₁ᵇ), where
@@ -127,10 +115,7 @@ to check each pair (x, y) ∈ Rᵇ and make sure that the following two implicat
  1.  x ∈ C₀ᵇ  only if  y ∉ C₁ᵇ, and
  2.  x ∈ C₁ᵇ  only if  y ∉ C₀ᵇ.
 
-
 ```agda
-
-
 module solution-2-2 where
 
  -- The (purely) relational structure with
@@ -148,7 +133,6 @@ module solution-2-2 where
  data C₁ᵃ : Pred 𝟚 ℓ₀ where
   c₁ : 𝟚.𝟏 ∈ C₁ᵃ
 
-
  𝑨 : structure S∅    -- (no operations)
                S021  -- (two unary relations and one binary relation)
 
@@ -162,7 +146,6 @@ module solution-2-2 where
             rels 𝟛.𝟏 x = x 𝟎 ∈ C₀ᵃ
             rels 𝟛.𝟐 x = x 𝟎 ∈ C₁ᵃ
 
-
  -- Claim: Given an arbitrary 𝑩 in the signatures S∅ S021, we can construct a homomorphism from 𝑩 to 𝑨.
  -- claim :  (𝑩 : structure S∅ S021 {ℓ₀}{ℓ₀})
  --  →       (∀ (x : 𝟚 → carrier 𝑩)
@@ -174,8 +157,6 @@ module solution-2-2 where
  --  →       hom 𝑩 𝑨
  -- claim 𝑩 x = {!!}
 ```
-
-
 
 (The remainder are "todo.")
 
@@ -193,7 +174,6 @@ module solution-2-2 where
 
 **Solution 2.9**. 𝑨 = ({0, 1}, all unary and binary relations)
 
-
 **Exercise 3**. Find a polynomial-time algorithm for CSP({0, 1}, Hᵃ, C₀ᵃ, C₁ᵃ).
 
 **Exercise 4**. Find a polynomial-time algorithm for CSP({0, 1}, C₀ᵃ, C₁ᵃ, G₁ᵃ, G₂ᵃ).
@@ -203,5 +183,3 @@ module solution-2-2 where
 --------------------------------
 
 {% include UALib.Links.md %}
-
-

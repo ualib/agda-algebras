@@ -44,6 +44,9 @@ For users of these modules, the migration is mechanical when the concrete settin
 | `Legacy.Base.Algebras.Products`               | `Setoid.Algebras.Products`               |
 | `Legacy.Base.Categories`                      | `Examples.PolynomialFunctors`            |
 | `Legacy.Base.Categories.Functors`             | `Examples.PolynomialFunctors.Functors`   |
+| `Legacy.Base.Complexity`                      | `Setoid.Complexity`                      |
+| `Legacy.Base.Complexity.Basic`                | `Setoid.Complexity.Basic`                |
+| `Legacy.Base.Complexity.CSP`                  | `Setoid.Complexity.CSP`                  |
 | `Legacy.Base.Functions`                       | `Setoid.Functions`                       |
 | `Legacy.Base.Functions.Injective`             | `Setoid.Functions.Injective`             |
 | `Legacy.Base.Functions.Inverses`              | `Setoid.Functions.Inverses`              |
@@ -132,9 +135,6 @@ to `open import Overture using ( … )`.
 
 | Legacy module                              | Planned destination                              | Target milestone | Tracking issue |
 |--------------------------------------------|--------------------------------------------------|------------------|----------------|
-| `Legacy.Base.Complexity`                   | `Setoid.Complexity`                              | M9               | #307           |
-| `Legacy.Base.Complexity.Basic`             | `Setoid.Complexity.Basic`                        | M9               | #307           |
-| `Legacy.Base.Complexity.CSP`               | `Setoid.Complexity.CSP`                          | M9               | #307           |
 | `Legacy.Base.Functions.Transformers`       | stdlib redirect or `Setoid.Functions.Transformers` (decision part of #310) | TBD | #310 |
 | `Legacy.Base.Relations.Continuous`         | `Setoid.Relations.Continuous`                    | M9               | #308           |
 | `Legacy.Base.Relations.Properties`         | `Setoid.Relations.Properties`                    | M2 follow-up     | #309           |
