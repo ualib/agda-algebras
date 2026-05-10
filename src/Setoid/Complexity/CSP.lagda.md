@@ -112,19 +112,24 @@ module  _              -- levels for...
         {ι : Level}    -- ...arity (or argument index) types
         {ν : Level}    -- ...variable symbol types
         {α ρ : Level}  -- ...domain carrier and equivalence levels
+        {ρʳ : Level}   -- ...constraint relation level
  where
  open Setoid
 
- record Constraint (var : Type ν) (dom : var → Setoid α ρ) : Type (ν ⊔ α ⊔ lsuc ι) where
+ record Constraint (var : Type ν) (dom : var → Setoid α ρ)
+                   : Type (ν ⊔ α ⊔ lsuc ι ⊔ lsuc ρʳ) where
   field
    arity  : Type ι               -- The "number" of variables involved in the constraint.
    scope  : arity → var          -- Which variables are involved in the constraint.
-   rel    : REL[ i ∈ arity ] (Carrier (dom (scope i)))   -- The constraint relation.
+   rel    : REL[ i ∈ arity ] (Carrier (dom (scope i))) -- The constraint relation.
 
-  satisfies : (∀ v → Carrier (dom v)) → Type _   -- An assignment 𝑓 : var → dom of values to variables
-  satisfies f = rel (f ∘ scope)                  -- *satisfies* the constraint 𝐶 = (σ , 𝑅) provided
-                                                 -- 𝑓 ∘ σ ∈ 𝑅, where σ is the scope of the constraint.
+  satisfies : ((v : var) → Carrier (dom v)) → Type ρʳ  -- An assignment, 𝑓 : var → dom, of values to variables
+  satisfies f = rel (f ∘ scope)                        -- *satisfies* the constraint 𝐶 = (σ , 𝑅) provided
+                                                       -- 𝑓 ∘ σ ∈ 𝑅, where σ is the scope of the constraint.
 ```
+
+**Note on `ρʳ`**.  The constraint-relation level `ρʳ` is fixed at the module level rather than parameterizing each `Constraint` independently.  This matches the universal-algebraic CSP literature, where every constraint of an instance typically lives at the same relation level (in practice `lzero`).  Lifting `ρʳ` to a per-record parameter is a mechanical refactor that may become warranted when later content (e.g., the M7-1 polymorphism-clone development under #274 or the M9-2 infinitary CSP work under #281) needs to mix relation levels across constraints in a single instance.
+
 
 #### <a id="csp-templates-and-instances">CSP templates and instances</a>
 
@@ -140,13 +145,14 @@ An instance of a constraint satisfaction problem is a triple 𝑃 = (𝑉, 𝐷,
 ```agda
  open Algebra
 
- record CSPInstance (var : Type ν)(𝒜 : var → Algebra α ρ) : Type (ν ⊔ α ⊔ lsuc ι) where
+ record CSPInstance (var : Type ν)(𝒜 : var → Algebra α ρ)
+                    : Type (ν ⊔ α ⊔ lsuc ι ⊔ lsuc ρʳ) where
   field
    ar : Type ι       -- ar indexes the contraints in the instance
    cs : (i : ar) → Constraint var (λ v → Domain (𝒜 v))
 
-  isSolution : (∀ v → Carrier (Domain (𝒜 v))) → Type _   -- An assignment *solves* the instance
-  isSolution f = ∀ i → (Constraint.satisfies (cs i)) f   -- if it satisfies all the constraints.
+  isSolution : ((v : var) → Carrier (Domain (𝒜 v))) → Type (ι ⊔ ρʳ)  -- An assignment *solves* the instance
+  isSolution f = ∀ i → (Constraint.satisfies (cs i)) f               -- if it satisfies all the constraints.
 ```
 
 --------------------------------
