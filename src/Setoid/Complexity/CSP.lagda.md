@@ -56,7 +56,7 @@ Let 𝑨(R) denote the algebraic structure with domain A and operations ∣: ⃖
 The reason this Galois connection is useful is due to the following fact (observed by Peter Jeavons in the late 1990's):
 
 *Theorem*. Let 𝒜 = (A, R) be a finite relational structure.
-           If R' ⊆ (∣: ⃖ R) ⃗ ∣: is finite, then CSP((A, Γ'))
+           If R' ⊆ (∣: ⃖ R) ⃗ ∣: is finite, then CSP((A, R'))
            is reducible in poly-time to CSP(𝒜)
 
 In particular, the tractability of CSP(𝒜) depends only on its associated polymorphism algebra, 𝑨(R) := (A , ∣: ⃖ R).
@@ -148,7 +148,7 @@ An instance of a constraint satisfaction problem is a triple 𝑃 = (𝑉, 𝐷,
  record CSPInstance (var : Type ν)(𝒜 : var → Algebra α ρ)
                     : Type (ν ⊔ α ⊔ lsuc ι ⊔ lsuc ρʳ) where
   field
-   ar : Type ι       -- ar indexes the contraints in the instance
+   ar : Type ι       -- ar indexes the constraints in the instance
    cs : (i : ar) → Constraint var (λ v → Domain (𝒜 v))
 
   isSolution : ((v : var) → Carrier (Domain (𝒜 v))) → Type (ι ⊔ ρʳ)  -- An assignment *solves* the instance
