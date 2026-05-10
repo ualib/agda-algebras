@@ -11,12 +11,13 @@ This is the [Overture.Relations][] module of the [Agda Universal Algebra Library
 
 This module collects the foundational definitions concerning binary relations on a type that are needed by both the canonical `Setoid/` tree and the planned `Classical/` tree.  Every definition in this module takes its arguments at the level of bare types and `BinRel`; none presupposes a setoid structure.  The Setoid-flavoured analogues — relations between setoid functions, kernels of setoid morphisms, etc. — live in `Setoid.Relations.*` and are built on top of, rather than parallel to, what is collected here.
 
-The contents fall into four clusters:
+The contents fall into four clusters.
 
 +  **`Equivalence`**.  A Σ-bundle of a binary relation with a proof that it is an equivalence relation.  The setoid `_/_` quotient construction in `Setoid.Relations.Quotients` consumes this.
 +  **Kernels and identity**.  `kerRel`, `kerRelOfEquiv`, `kernelRel`, and the trivial relation `0[_]`.  Used pervasively in `Setoid.Homomorphisms.{Factor,Kernels}` and `Setoid.Algebras.Congruences`.
 +  **Image-containment**.  `Im_⊆_`, the predicate that the image of a tuple lies inside a given subset.  Used in `Setoid.Subalgebras.Subuniverses` for the ar-tuple of an operation, which is a *raw* function from an arity type to the algebra's carrier — not a setoid function — so the bare-types version is what's needed at the call site.
 +  **Compatibility**.  `_|:_` (and its long form `_preserves_`), expressing that an `Op A I` is compatible with a `BinRel A ρ`.  Used in `Setoid.Algebras.Congruences._∣≈_` even on setoid algebras, since congruences of a setoid algebra are bare-types relations on its carrier that contain the setoid's `_≈_`.
++  **Pointwise lifting**.  `PointWise` and `depPointWise`, lifting a binary relation on a codomain (or a family of relations on a dependent codomain) to the function space.  Generalizes stdlib's `_≗_` (which fixes the codomain relation to `_≡_`).  Used in `Overture.Adjunction.Residuation` to express that the composite `g ∘ f ∘ g` agrees pointwise with `g`.
 
 This module is a Category-A relocation under #303 (M2-6).  See [`src/Legacy/Base/DEPRECATED.md`](../Legacy/Base/DEPRECATED.md) for the full inventory and migration guidance.
 
@@ -138,11 +139,13 @@ module _ {A : Type a} where
  PointWise {B = B} _≋_ = λ (f g : A → B) → ∀ x → f x ≋ g x
 ```
 
-The dependent analogue lifts `_≋_` over a family `B : A → Type b`:
+The dependent analogue lifts `_≋_` over a family `B : A → Type b`.
+
+Here `_≋_` is a *family* of relations; for each index `x : A`, an instance `_≋_ {x}` is a binary relation on the fiber `B x`.  This is the standard dependent generalization — the relations on distinct fibers may be unrelated — and is what makes the lift usable with fiber-specific relations rather than restricting to relations uniform across types.
 
 ```agda
  depPointWise :  {B : A → Type b}
-                 (_≋_ : {γ : Level}{C : Type γ} → BinRel C ρ)
+                 (_≋_ : ∀ {x} → BinRel (B x) ρ)
   →              BinRel ((a : A) → B a) _
  depPointWise {B = B} _≋_ = λ (f g : (a : A) → B a) → ∀ x → f x ≋ g x
 ```
