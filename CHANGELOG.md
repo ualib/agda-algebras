@@ -55,6 +55,7 @@ The 3.0 release is a major reconstruction of agda-algebras building on the Setoi
 +  **Legacy.Base.Relations.Discrete.{0[_], kerRel, kerRelOfEquiv, kernelRel, Im_⊆_, _preserves_, _|:_, eval-rel, eval-pred}** (M2-6, #303).  Use `Overture.Relations` instead.
 +  **Legacy.Base.Functions.Inverses.{Image_∋_, eq, Inv, InvIsInverseʳ}** (M2-6, #303).  Use `Overture.Functions` instead.
 +  **Legacy.Base.Functions.Surjective.{IsSurjective, IsSurjective→Surjective, Surjective→IsSurjective, SurjInv, SurjInvIsInverseʳ, epic-factor, epic-factor-intensional, proj, projIsOnto}** (M2-6, #303).  Use `Overture.Functions` instead.
++  **Legacy.Base.Varieties.Invariants.AlgebraicInvariant** (M2-7g, #311).  Use `Setoid.Varieties.Invariants.AlgebraicInvariant` instead.  The setoid port carries an extra implicit `ρᵃ` level on `Algebra` but is otherwise definitionally identical; migration is a pure import rewrite.
 
 Each deprecated definition carries a `{-# WARNING_ON_USAGE #-}` pragma at its definition site pointing at the canonical home.  The legacy modules themselves continue to type-check and to export the deprecated names; the removal of these names is scheduled for the next minor release after the release that lands #303 (per the deprecation policy in `docs/STYLE_GUIDE.md`).
 
