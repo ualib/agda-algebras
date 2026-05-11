@@ -1,22 +1,24 @@
 ---
 layout: default
-title : "Base.Functions.Transformers module"
-date : "2021-07-26"
+title : "Examples.FunctionTypeBijections module"
+date : "2026-05-10"
 author: "the agda-algebras development team"
 ---
 
-### <a id="type-transformers">Type Transformers</a>
+### <a id="nary-function-encodings">N-ary function encodings</a>
 
-This is the [Base.Functions.Transformers][] module of the [agda-algebras][] library.
+This is the [Examples.FunctionTypeBijections][] module of the [Agda Universal Algebra Library][].
 
-> **Deprecation notice (v3.0, #310)**.  This module has been relocated to [Examples.FunctionTypeBijections][].  The content here is retained for one minor-version cycle so v2.x consumers can migrate; it is scheduled for removal in v3.1.  Please update your imports to `open import Examples.FunctionTypeBijections`.
+This module is illustrative rather than load-bearing.  It investigates three competing encodings of n-ary functions on a type — the curried form `A → A → B`, the product form `A × A → B`, and the `Fin`-indexed form `(Fin n → A) → B` — and surfaces a subtle phenomenon: while `A × A → B` and `A → A → B` are bijective up to definitional equality (`Curry` and `Uncurry` are mutually inverse on the nose), the `Fin`-indexed encoding does not enjoy a definitional bijection with either of the other two.  The obstruction is η-expansion failure for function types out of `Fin n`: the equation `(λ {z → u z; (s z) → u (s z)}) ≈ u` holds only pointwise, not definitionally.
 
-Here we define functions for translating from one type to another.
+This phenomenon is directly relevant to the universal-algebra core, where n-ary operations are encoded as `(Fin n → A) → A`.  Algebraists who reach for the "obvious" curried form `A → ⋯ → A → A` and expect to recover the canonical encoding by `refl` will find this module a useful cautionary example.
+
+The content was relocated here under #310 from `Legacy.Base.Functions.Transformers`; nothing in the canonical `Setoid/`, `Classical/`, or planned `Cubical/` development of the library depends on it.
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-module Legacy.Base.Functions.Transformers where
+module Examples.FunctionTypeBijections where
 
 -- Imports from Agda and the Agda Standard Library -------------------------------
 open import Agda.Primitive  using () renaming ( Set to Type )
@@ -26,7 +28,7 @@ open import Function.Base   using ( _∘_ ; id )
 open import Level           using ( _⊔_ ; Level )
 
 open import Relation.Binary.PropositionalEquality
-                            using ( _≡_ ; refl ; module ≡-Reasoning )
+                            using ( _≡_ ; refl )
 
 -- Imports from agda-algebras ----------------------------------------------------
 open import Overture using ( _≈_ )
@@ -36,7 +38,7 @@ private variable a b : Level
 
 #### <a id="bijections-of-nondependent-function-types">Bijections of nondependent function types</a>
 
-In set theory, these would simply be bijections between sets, or "set isomorphisms."
+The first piece of infrastructure is the type of bijections between two types, in two flavors: the definitional flavor (`Bijection`, where the round-trip composites are required to be `_≡_`-equal to `id`) and the pointwise flavor (`PointwiseBijection`, where pointwise equality `_≈_` suffices).  The investigation below turns on the gap between these two notions.
 
 ```agda
 record Bijection (A : Type a)(B : Type b) : Type (a ⊔ b) where
@@ -46,12 +48,8 @@ record Bijection (A : Type a)(B : Type b) : Type (a ⊔ b) where
   to-from  : to ∘ from ≡ id
   from-to  : from ∘ to ≡ id
 
-{-# WARNING_ON_USAGE Bijection "Bijection is deprecated as of agda-algebras v3.0.  Use Examples.FunctionTypeBijections.Bijection (or Function.Bundles.Bijection from stdlib for setoid-flavored bijections)." #-}
-
 ∣_∣=∣_∣ : (A : Type a)(B : Type b) → Type (a ⊔ b)
 ∣ A ∣=∣ B ∣ = Bijection A B
-
-{-# WARNING_ON_USAGE ∣_∣=∣_∣ "∣_∣=∣_∣ is deprecated as of agda-algebras v3.0.  Use Examples.FunctionTypeBijections.∣_∣=∣_∣." #-}
 
 record PointwiseBijection (A : Type a)(B : Type b) : Type (a ⊔ b) where
  field
@@ -60,12 +58,8 @@ record PointwiseBijection (A : Type a)(B : Type b) : Type (a ⊔ b) where
   to-from  : to ∘ from ≈ id
   from-to  : from ∘ to ≈ id
 
-{-# WARNING_ON_USAGE PointwiseBijection "PointwiseBijection is deprecated as of agda-algebras v3.0.  Use Examples.FunctionTypeBijections.PointwiseBijection." #-}
-
 ∣_∣≈∣_∣ : (A : Type a)(B : Type b) → Type (a ⊔ b)
 ∣ A ∣≈∣ B ∣ = PointwiseBijection A B
-
-{-# WARNING_ON_USAGE ∣_∣≈∣_∣ "∣_∣≈∣_∣ is deprecated as of agda-algebras v3.0.  Use Examples.FunctionTypeBijections.∣_∣≈∣_∣." #-}
 
 uncurry₀ : {A : Type a} → A → A → (A × A)
 uncurry₀ x y = x , y
@@ -77,17 +71,19 @@ module _ {A : Type a} {B : Type b} where
 
  Uncurry : (A → A → B) → A × A → B
  Uncurry f (x , y) = f x y
+```
 
+The product and curried forms enjoy a *definitional* bijection — the round-trip composites reduce to `id` on the nose.
+
+```agda
  A×A→B≅A→A→B : ∣ (A × A → B) ∣=∣ (A → A → B) ∣
  A×A→B≅A→A→B = record  { to = Curry ; from = Uncurry
                        ; to-from = refl ; from-to = refl }
-
-{-# WARNING_ON_USAGE Curry "Curry is deprecated as of agda-algebras v3.0.  Use Examples.FunctionTypeBijections.Curry, or stdlib's Function.Base.curry." #-}
-{-# WARNING_ON_USAGE Uncurry "Uncurry is deprecated as of agda-algebras v3.0.  Use Examples.FunctionTypeBijections.Uncurry, or stdlib's Function.Base.uncurry." #-}
 ```
 
+#### <a id="fin-indexed-encodings">Fin-indexed encodings</a>
 
-#### <a id="non-bijective-transformations">Non-bijective transformations</a>
+We now introduce the `Fin`-indexed encoding `Fin 2 → A` and transformations between it, the product form `A × A`, and the curried form `A → A`.  The asymmetric behavior of these transformations under definitional equality is the central pedagogical content of the module.
 
 ```agda
 module _ {A : Type a} where
@@ -136,9 +132,9 @@ module _ {A : Type a} where
  Fin2A≡ u (s z) = refl
 ```
 
-Somehow we cannot establish a bijection between the two seemingly isomorphic
-function types, `(Fin 2 → A) → B` and `A × A → B`, nor between the types
-`(Fin 2 → A) → B` and `A → A → B`.
+#### <a id="failed-bijections">Failed bijections</a>
+
+We can establish that `CurryFin2 ∘ UncurryFin2 ≡ id` reduces to `refl`, but the reverse composition `UncurryFin2 ∘ CurryFin2` does *not*: it would require reducing `λ {z → u z; (s z) → u (s z)}` to `u`, which is η-expansion of a function out of `Fin 2`, and Agda's definitional equality does not include this reduction.  Hence no definitional bijection between `(Fin 2 → A) → B` and `A → A → B`; only a pointwise one.
 
 ```agda
 module _ {A : Type a} {B : Type b} where
@@ -156,8 +152,6 @@ module _ {A : Type a} {B : Type b} where
 
  CurryFin2~UncurryFin2 : CurryFin2 ∘ UncurryFin2 ≡ id
  CurryFin2~UncurryFin2 = refl
-
- open ≡-Reasoning
 
  CurryFin3 : {A : Type a} → ((Fin 3 → A) → B) → A → A → A → B
  CurryFin3 {A = A} f x₁ x₂ x₃ = f u
@@ -178,17 +172,10 @@ module _ {A : Type a} {B : Type b} where
 
  Fin2A→B~A×A→B : Fin2A→B-to-A×A→B ∘ A×A→B-to-Fin2A→B ≡ id
  Fin2A→B~A×A→B = refl
-
-{-# WARNING_ON_USAGE CurryFin2 "CurryFin2 is deprecated as of agda-algebras v3.0.  Use Examples.FunctionTypeBijections.CurryFin2." #-}
-{-# WARNING_ON_USAGE UncurryFin2 "UncurryFin2 is deprecated as of agda-algebras v3.0.  Use Examples.FunctionTypeBijections.UncurryFin2." #-}
-{-# WARNING_ON_USAGE CurryFin3 "CurryFin3 is deprecated as of agda-algebras v3.0.  Use Examples.FunctionTypeBijections.CurryFin3." #-}
-{-# WARNING_ON_USAGE UncurryFin3 "UncurryFin3 is deprecated as of agda-algebras v3.0.  Use Examples.FunctionTypeBijections.UncurryFin3." #-}
 ```
+
+The symmetric statement `A×A→B-to-Fin2A→B ∘ Fin2A→B-to-A×A→B ≡ id` fails for the same η-expansion reason: it would require `λ u → (λ {z → u z; (s z) → u (s z)}) ≡ u`, which Agda does not reduce.
 
 --------------------------------------
 
-<span style="float:left;">[← Base.Functions.Inverses](Base.Functions.Inverses.html)</span>
-<span style="float:right;">[Base.Relations →](Base.Relations.html)</span>
-
 {% include UALib.Links.md %}
-
