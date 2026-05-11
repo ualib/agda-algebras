@@ -23,7 +23,7 @@ Some Category-A relocations target `Overture/` rather than `Setoid/`.  This is c
 
 Other Category-A relocations target `Examples/` rather than `Setoid/` or `Overture/`.  This is correct when the relocated content was illustrative or pedagogical rather than load-bearing for the universal-algebra core, and where the natural canonical home is therefore the examples tree.  The polynomial-functor / W-type material in `Legacy.Base.Categories.*` is the precedent under #306: its single consumer was already in `Examples/`, the legacy aggregator's own header characterized the content as "experiments," and nothing in the canonical `Setoid/`, `Classical/`, or `Cubical/` development depends on it.  Moving such content to `Examples/` is preferred to leaving it in `Legacy/` permanently — the deprecation table should not carry a permanent "no canonical home" entry for content that was never load-bearing in the first place.
 
-Note on aggregator rows: `Legacy.Base.Varieties` is an aggregator module whose contents straddle Categories A and B; the "canonical replacement" column points at the corresponding canonical aggregator, which covers most but not all of the legacy aggregator's submodules.  `Legacy.Base.Functions` after #310 has all four of its submodules in Category A, but three of them land in `Setoid.Functions` while `Transformers` lands in `Examples.FunctionTypeBijections`; the per-submodule rows record the actual destinations.  Users importing aggregators should consult the per-submodule rows in this table and the Category-B table below to confirm coverage of specific submodules.
+Note on aggregator rows: `Legacy.Base.Functions` after #310 has all four of its submodules in Category A, but three of them land in `Setoid.Functions` while `Transformers` lands in `Examples.FunctionTypeBijections`; the per-submodule rows record the actual destinations.  Users importing aggregators should consult the per-submodule rows in this table and the Category-B table below to confirm coverage of specific submodules.
 
 For users of these modules, the migration is mechanical when the concrete setting works up to propositional equality: replace `Legacy.Base.X` with `Setoid.X` and pass `Relation.Binary.PropositionalEquality.setoid A` (or the appropriate setoid for your carrier) where a setoid argument is now expected.  This recovers the bare-types reading without committing the library to a parallel abstract foundation.
 
@@ -73,6 +73,7 @@ For users of these modules, the migration is mechanical when the concrete settin
 | `Legacy.Base.Varieties.Closure`               | `Setoid.Varieties.Closure`               |
 | `Legacy.Base.Varieties.EquationalLogic`       | `Setoid.Varieties.EquationalLogic`       |
 | `Legacy.Base.Varieties.FreeAlgebras`          | `Setoid.Varieties.FreeAlgebras`          |
+| `Legacy.Base.Varieties.Invariants`            | `Setoid.Varieties.Invariants`            |
 | `Legacy.Base.Varieties.Preservation`          | `Setoid.Varieties.Preservation`          |
 | `Legacy.Base.Varieties.Properties`            | `Setoid.Varieties.Properties`            |
 
@@ -130,7 +131,6 @@ Migration: replace the legacy module path with `Overture.Terms` (with `{𝑆 = �
 | `Legacy.Base.Structures.Sigma.Products`    | as above                                         | M3               | #260           |
 | `Legacy.Base.Structures.Substructures`     | `Classical/`                                     | M3               | #260           |
 | `Legacy.Base.Structures.Terms`             | `Classical/`                                     | M3               | #260           |
-| `Legacy.Base.Varieties.Invariants`         | `Setoid.Varieties.Invariants`                    | TBD              | #311           |
 
 ---
 
