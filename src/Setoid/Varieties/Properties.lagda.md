@@ -292,6 +292,6 @@ module _ {X : Type χ}{p q : Term X}{𝑨 : Algebra α ρᵃ}(φh : hom (𝑻 X)
 ---------------------------------
 
 <span style="float:left;">[← Setoid.Varieties.Closure](Setoid.Varieties.Closure.html)</span>
-<span style="float:right;">[Setoid.Varieties.Preservation →](Setoid.Varieties.Preservation.html)</span>
+<span style="float:right;">[Setoid.Varieties.Invariants →](Setoid.Varieties.Invariants.html)</span>
 
 {% include UALib.Links.md %}

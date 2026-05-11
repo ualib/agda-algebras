@@ -7,7 +7,7 @@ author: "the ualib/agda-algebras development team"
 
 ### Algebraic invariants
 
-> **Deprecation notice (v3.0, #311)**.  This module has been ported to [Setoid.Varieties.Invariants][].  The content here is retained for one minor-version cycle so v2.x consumers can migrate; it is scheduled for removal in v3.1.  Please update your imports to `open import Setoid.Varieties.Invariants`.
+> **Deprecation notice (v3.0, #311)**.  This module has been ported to [Setoid.Varieties.Invariants][].  The content here is retained for one minor-version cycle so v2.x consumers can migrate; it is scheduled for removal in v3.1.  Please update your imports to `open import Setoid.Varieties.Invariants {𝑆}`.
 
 These are properties that are preserved under isomorphism.
 

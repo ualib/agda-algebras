@@ -242,7 +242,7 @@ modeled by `𝒦`.   We formalize this observation as follows.
 
 ----------------------------
 
-<span style="float:left;">[← Setoid.Varieties.Properties](Setoid.Varieties.Properties.html)</span>
+<span style="float:left;">[← Setoid.Varieties.Invariants](Setoid.Varieties.Invariants.html)</span>
 <span style="float:right;">[Setoid.Varieties.FreeAlgebras →](Setoid.Varieties.FreeAlgebras.html)</span>
 
 {% include UALib.Links.md %}

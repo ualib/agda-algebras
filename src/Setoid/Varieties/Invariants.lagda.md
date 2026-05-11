@@ -1,6 +1,6 @@
 ---
 layout: default
-title : "Setoid.Varieties.Invariants module (Agda Universal Algebra Library)"
+title : "Setoid.Varieties.Invariants module (The Agda Universal Algebra Library)"
 date : "2026-05-10"
 author: "agda-algebras development team"
 ---
