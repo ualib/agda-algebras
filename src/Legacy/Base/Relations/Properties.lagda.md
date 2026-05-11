@@ -9,10 +9,7 @@ author: "the agda-algebras development team"
 
 This is the [Base.Relations.Properties][] module of the [Agda Universal Algebra Library][].
 
-
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Legacy.Base.Relations.Properties where
@@ -89,8 +86,22 @@ Connex P Q = ∀ x y → (x , y) ∈ P ⊎ (y , x) ∈ Q
 
 Total : Pred (A × A) ℓ → Type _
 Total P = Connex P P
-```
 
+{-# WARNING_ON_USAGE curry          "Use Data.Product.curry instead. Deprecated under #309; removal planned one minor cycle later." #-}
+{-# WARNING_ON_USAGE uncurry        "Use Data.Product.uncurry instead. Deprecated under #309; removal planned one minor cycle later." #-}
+{-# WARNING_ON_USAGE Reflexive      "Use Setoid.Relations.Properties.Reflexive instead. Note: the canonical version uses stdlib Rel A ℓ (curried) rather than Pred (A × A) ℓ. Deprecated under #309; removal planned one minor cycle later." #-}
+{-# WARNING_ON_USAGE Sym            "Use Setoid.Relations.Properties.Sym instead. Deprecated under #309; removal planned one minor cycle later." #-}
+{-# WARNING_ON_USAGE Symmetric      "Use Setoid.Relations.Properties.Symmetric instead. Deprecated under #309; removal planned one minor cycle later." #-}
+{-# WARNING_ON_USAGE Trans          "Use Setoid.Relations.Properties.Trans instead. Deprecated under #309; removal planned one minor cycle later." #-}
+{-# WARNING_ON_USAGE TransFlip      "Use Setoid.Relations.Properties.TransFlip instead. Deprecated under #309; removal planned one minor cycle later." #-}
+{-# WARNING_ON_USAGE Transitive     "Use Setoid.Relations.Properties.Transitive instead. Deprecated under #309; removal planned one minor cycle later." #-}
+{-# WARNING_ON_USAGE Antisym        "Use Setoid.Relations.Properties.Antisym instead. Deprecated under #309; removal planned one minor cycle later." #-}
+{-# WARNING_ON_USAGE Antisymmetric  "Use Setoid.Relations.Properties.Antisymmetric instead. Deprecated under #309; removal planned one minor cycle later." #-}
+{-# WARNING_ON_USAGE Irreflexive    "Use Setoid.Relations.Properties.Irreflexive instead. Deprecated under #309; removal planned one minor cycle later." #-}
+{-# WARNING_ON_USAGE Asymmetric     "Use Setoid.Relations.Properties.Asymmetric instead. Deprecated under #309; removal planned one minor cycle later." #-}
+{-# WARNING_ON_USAGE Connex         "Use Setoid.Relations.Properties.Connex instead. Note: the canonical (stdlib) Connex is homogeneous (Rel A ℓ on both sides) where the legacy version is heterogeneous; if you need the heterogeneous form, define it locally. Deprecated under #309; removal planned one minor cycle later." #-}
+{-# WARNING_ON_USAGE Total          "Use Setoid.Relations.Properties.Total instead. Deprecated under #309; removal planned one minor cycle later." #-}
+```
 
 -----------------------------------------------
 
