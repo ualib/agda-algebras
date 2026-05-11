@@ -142,6 +142,6 @@ compatible-REL 𝑓 R = ∀ t → eval-REL R t → R (λ i → 𝑓 i (t i))
 --------------------------------------
 
 <span style="float:left;">[← Setoid.Relations.Quotients](Setoid.Relations.Quotients.html)</span>
-<span style="float:right;">[Setoid.Algebras →](Setoid.Algebras.html)</span>
+<span style="float:right;">[Setoid.Relations.Properties →](Setoid.Relations.Properties.html)</span>
 
 {% include UALib.Links.md %}

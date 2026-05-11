@@ -7,16 +7,11 @@ author: "the agda-algebras development team"
 
 # `Legacy.Base` — Deprecation Notice
 
-The `Legacy.Base.*` modules in this directory descend from `src/Base/`, the
-original "bare-types" development of universal algebra in agda-algebras.  As of
-version 3.0, `Setoid/` is the **canonical** development tree (see
-[`docs/adr/001-setoid-as-canonical.md`](../../../docs/adr/001-setoid-as-canonical.md)
-for the full rationale).
+The `Legacy.Base.*` modules in this directory descend from `src/Base/`, the original "bare-types" development of universal algebra in agda-algebras.  As of version 3.0, `Setoid/` is the **canonical** development tree (see [`docs/adr/001-setoid-as-canonical.md`](../../../docs/adr/001-setoid-as-canonical.md) for the full rationale).
 
-`Base/` was moved here rather than deleted because three distinct categories of
-modules live within it.  Each is described below; the distinction matters because
-it tells users whether a given import is **discouraged**, **provisional**, or
-**without planned replacement**.
+`Base/` was moved here rather than deleted because three distinct categories of modules live within it.  Each is described below; the distinction matters because it tells users whether a given import is **discouraged**, **provisional**, or **without planned replacement**.
+
+---
 
 ## Three categories of legacy module
 
@@ -28,7 +23,7 @@ Some Category-A relocations target `Overture/` rather than `Setoid/`.  This is c
 
 Other Category-A relocations target `Examples/` rather than `Setoid/` or `Overture/`.  This is correct when the relocated content was illustrative or pedagogical rather than load-bearing for the universal-algebra core, and where the natural canonical home is therefore the examples tree.  The polynomial-functor / W-type material in `Legacy.Base.Categories.*` is the precedent under #306: its single consumer was already in `Examples/`, the legacy aggregator's own header characterized the content as "experiments," and nothing in the canonical `Setoid/`, `Classical/`, or `Cubical/` development depends on it.  Moving such content to `Examples/` is preferred to leaving it in `Legacy/` permanently — the deprecation table should not carry a permanent "no canonical home" entry for content that was never load-bearing in the first place.
 
-Note on aggregator rows: `Legacy.Base.Relations`, `Legacy.Base.Functions`, and `Legacy.Base.Varieties` are aggregator modules whose contents straddle Categories A and B.  The "canonical replacement" column points at the corresponding canonical aggregator, which covers most but not all of the legacy aggregator's submodules. Users importing aggregators should consult the per-submodule rows in this table and the Category-B table below to confirm coverage of specific submodules.
+Note on aggregator rows: `Legacy.Base.Functions` and `Legacy.Base.Varieties` are aggregator modules whose contents straddle Categories A and B.  The "canonical replacement" column points at the corresponding canonical aggregator, which covers most but not all of the legacy aggregator's submodules.  Users importing aggregators should consult the per-submodule rows in this table and the Category-B table below to confirm coverage of specific submodules.
 
 For users of these modules, the migration is mechanical when the concrete setting works up to propositional equality: replace `Legacy.Base.X` with `Setoid.X` and pass `Relation.Binary.PropositionalEquality.setoid A` (or the appropriate setoid for your carrier) where a setoid argument is now expected.  This recovers the bare-types reading without committing the library to a parallel abstract foundation.
 
@@ -60,10 +55,11 @@ For users of these modules, the migration is mechanical when the concrete settin
 | `Legacy.Base.Homomorphisms.Noether`           | `Setoid.Homomorphisms.Noether`           |
 | `Legacy.Base.Homomorphisms.Products`          | `Setoid.Homomorphisms.Products`          |
 | `Legacy.Base.Homomorphisms.Properties`        | `Setoid.Homomorphisms.Properties`        |
-| `Legacy.Base.Relations`                       | `Setoid.Relations` (partial — see note above; `Properties` is tracked under Category B) |
+| `Legacy.Base.Relations`                       | `Setoid.Relations`                       |
 | `Legacy.Base.Relations.Discrete`              | `Setoid.Relations.Discrete`              |
 | `Legacy.Base.Relations.Quotients`             | `Setoid.Relations.Quotients`             |
 | `Legacy.Base.Relations.Continuous`            | `Setoid.Relations.Continuous`            |
+| `Legacy.Base.Relations.Properties`            | `Setoid.Relations.Properties`            |
 | `Legacy.Base.Subalgebras`                     | `Setoid.Subalgebras`                     |
 | `Legacy.Base.Subalgebras.Properties`          | `Setoid.Subalgebras.Properties`          |
 | `Legacy.Base.Subalgebras.Subalgebras`         | `Setoid.Subalgebras.Subalgebras`         |
@@ -79,33 +75,17 @@ For users of these modules, the migration is mechanical when the concrete settin
 | `Legacy.Base.Varieties.Preservation`          | `Setoid.Varieties.Preservation`          |
 | `Legacy.Base.Varieties.Properties`            | `Setoid.Varieties.Properties`            |
 
-
-
-
+---
 
 ### Category B — Pending port; no `Setoid/` analog yet
 
-These modules contain mathematical content with **no canonical replacement at
-the time of the M2-1 freeze**, but with a planned port scheduled in a later
-milestone.  Importing from `Legacy.Base.*` is the **supported,
-non-deprecated** way to use this content until the corresponding canonical
-module exists.
+These modules contain mathematical content with **no canonical replacement at the time of the M2-1 freeze**, but with a planned port scheduled in a later milestone.  Importing from `Legacy.Base.*` is the **supported, non-deprecated** way to use this content until the corresponding canonical module exists.
 
-When a Category-B module is ported, the row migrates to Category A in the same
-PR that lands the port, and the legacy file gains a `{-# WARNING_ON_USAGE #-}`
-pragma pointing to the new home.  The legacy module is removed in the
-*following* minor release, never in the same release that introduces the
-replacement; this gives downstream users one full minor cycle to migrate.
-
+When a Category-B module is ported, the row migrates to Category A in the same PR that lands the port, and the legacy file gains a `{-# WARNING_ON_USAGE #-}` pragma pointing to the new home.  The legacy module is removed in the *following* minor release, never in the same release that introduces the replacement; this gives downstream users one full minor cycle to migrate.
 
 #### Foundational definitions relocated to `Overture/` (per #303, M2-6)
 
-The following individual symbols are relocated to `Overture/` because they do
-not presuppose a setoid structure and are needed across `Setoid/`, `Classical/`,
-and `Cubical/`.  They were authored in the bare-types tree as a historical
-accident — `Base/` was the only tree at the time — and #303 corrects the
-structural placement.  At each definition site in the legacy tree there is now
-a `{-# WARNING_ON_USAGE #-}` pragma pointing at the canonical home.
+The following individual symbols are relocated to `Overture/` because they do not presuppose a setoid structure and are needed across `Setoid/`, `Classical/`, and `Cubical/`.  They were authored in the bare-types tree as a historical accident — `Base/` was the only tree at the time — and #303 corrects the structural placement.  At each definition site in the legacy tree there is now a `{-# WARNING_ON_USAGE #-}` pragma pointing at the canonical home.
 
 | Symbol                                              | Legacy location                          | Canonical home              |
 |-----------------------------------------------------|------------------------------------------|-----------------------------|
@@ -126,18 +106,13 @@ a `{-# WARNING_ON_USAGE #-}` pragma pointing at the canonical home.
 | `epic-factor`, `epic-factor-intensional`            | `Legacy.Base.Functions.Surjective`       | `Overture.Functions`        |
 | `proj`, `projIsOnto`                                | `Legacy.Base.Functions.Surjective`       | `Overture.Functions`        |
 
-Migration: replace the legacy module path with `Overture.Terms` (with `{𝑆 = 𝑆}`
-instantiation), `Overture.Relations`, or `Overture.Functions` as appropriate.
-The Overture aggregator re-exports `Overture.Relations` and `Overture.Functions`
-(but not the parameterized `Overture.Terms`), so most call sites can simplify
-to `open import Overture using ( … )`.
+Migration: replace the legacy module path with `Overture.Terms` (with `{𝑆 = 𝑆}` instantiation), `Overture.Relations`, or `Overture.Functions` as appropriate. The Overture aggregator re-exports `Overture.Relations` and `Overture.Functions` (but not the parameterized `Overture.Terms`), so most call sites can simplify to `open import Overture using ( … )`.
 
 #### Module-level Setoid analogues
 
 | Legacy module                              | Planned destination                              | Target milestone | Tracking issue |
 |--------------------------------------------|--------------------------------------------------|------------------|----------------|
 | `Legacy.Base.Functions.Transformers`       | stdlib redirect or `Setoid.Functions.Transformers` (decision part of #310) | TBD | #310 |
-| `Legacy.Base.Relations.Properties`         | `Setoid.Relations.Properties`                    | M2 follow-up     | #309           |
 | `Legacy.Base.Structures`                   | `Classical/` (entire subtree superseded)         | M3               | #260           |
 | `Legacy.Base.Structures.Basic`             | as above                                         | M3               | #260           |
 | `Legacy.Base.Structures.Congruences`       | as above                                         | M3               | #260           |
@@ -157,21 +132,13 @@ to `open import Overture using ( … )`.
 | `Legacy.Base.Structures.Terms`             | `Classical/`                                     | M3               | #260           |
 | `Legacy.Base.Varieties.Invariants`         | `Setoid.Varieties.Invariants`                    | TBD              | #311           |
 
+---
+
 ### Category C — No replacement planned
 
-These modules encode auxiliary infrastructure that the canonical `Setoid/`
-foundation **retires by construction**.  In `Setoid/` the equivalence relation
-is bundled into the algebra and operations are required to respect it; the
-extensionality postulates and well-definedness lemmas these modules provide
-are simply not needed.
+These modules encode auxiliary infrastructure that the canonical `Setoid/` foundation **retires by construction**.  In `Setoid/` the equivalence relation is bundled into the algebra and operations are required to respect it; the extensionality postulates and well-definedness lemmas these modules provide are simply not needed.
 
-For users with active dependencies on these modules, the migration is to
-restate the surrounding development in `Setoid/` and let the equivalence
-machinery do the work that extensionality was previously doing.  Where
-propositional truncation (h-props, h-sets) is genuinely needed, prefer
-stdlib's `Relation.Nullary.Reflects` and
-`Relation.Binary.PropositionalEquality.Properties`, or pull the relevant
-pieces into `Overture/` as that scope expands.
+For users with active dependencies on these modules, the migration is to restate the surrounding development in `Setoid/` and let the equivalence machinery do the work that extensionality was previously doing.  Where propositional truncation (h-props, h-sets) is genuinely needed, prefer stdlib's `Relation.Nullary.Reflects` and `Relation.Binary.PropositionalEquality.Properties`, or pull the relevant pieces into `Overture/` as that scope expands.
 
 | Legacy module                          | Status                                                  |
 |----------------------------------------|---------------------------------------------------------|
@@ -180,64 +147,37 @@ pieces into `Overture/` as that scope expands.
 | `Legacy.Base.Equality.Welldefined`     | No replacement planned; built into `Setoid/` algebra signatures |
 | `Legacy.Base.Equality.Truncation`      | Possibly migrated to `Overture/` or replaced by stdlib equivalents; tracked separately |
 
+---
+
 ## What you should do
 
-+  **New code**.  Do not import from `Legacy.Base.*` for any module that has a
-   canonical replacement (Category A) or whose replacement is being designed
-   in another milestone (most of Category B).  For modules without one yet
-   (Category B with an open tracking issue), importing from `Legacy.Base.*` is
-   supported in the interim, but please subscribe to the corresponding
-   tracking issue so you are notified when the port lands.
-+  **Existing code**.  Begin migrating Category-A imports now.  The migration
-   is typically mechanical: replace `Legacy.Base.X` with `Setoid.X` and pass
-   `Relation.Binary.PropositionalEquality.setoid A` where a setoid is now
-   expected.  See the migration recipe in the 3.0 `CHANGELOG.md` for examples.
-+  **Contributors**.  New contributions to `Legacy.Base/*` are accepted only
-   when they support the port-out workflow (e.g., extracting a lemma to make
-   the canonical port cleaner).  For day-to-day development, work in
-   `Setoid/`, `Classical/` (when it lands), or eventually `Cubical/`.
++  **New code**.  Do not import from `Legacy.Base.*` for any module that has a canonical replacement (Category A) or whose replacement is being designed in another milestone (most of Category B).  For modules without one yet (Category B with an open tracking issue), importing from `Legacy.Base.*` is supported in the interim, but please subscribe to the corresponding tracking issue so you are notified when the port lands.
++  **Existing code**.  Begin migrating Category-A imports now.  The migration is typically mechanical: replace `Legacy.Base.X` with `Setoid.X` and pass `Relation.Binary.PropositionalEquality.setoid A` where a setoid is now expected.  See the migration recipe in the 3.0 `CHANGELOG.md` for examples.
++  **Contributors**.  New contributions to `Legacy.Base/*` are accepted only when they support the port-out workflow (e.g., extracting a lemma to make the canonical port cleaner).  For day-to-day development, work in `Setoid/`, `Classical/` (when it lands), or eventually `Cubical/`.
+
+---
 
 ## Why preserve `Legacy.Base/` at all?
 
 Three reasons:
 
-1.  **Continuity for downstream users**.  v2.x users have imports from `Base.*`
-    throughout their developments.  Renaming the module path to `Legacy.Base.*`
-    is a breaking change, but a small one: a single sed across imports.
-    Deleting these modules outright would force a full migration to `Setoid/`
-    in lockstep with the v3.0 upgrade, which is a much larger undertaking than
-    v3.0 itself should impose.
-2.  **Reference and provenance**.  `Base/` contains the original ≡-based
-    formulations of definitions and lemmas that were subsequently re-developed
-    in `Setoid/`.  Keeping the legacy versions visible in the repository
-    preserves a useful historical record and supports cross-comparison during
-    review of `Setoid/`-side changes.
-3.  **Provisional content**.  Categories B and C above.  Until each orphan is
-    ported (or formally retired with a stdlib redirect), deleting
-    `Legacy.Base/` would actively remove formalized mathematics from the
-    library.  The freeze-but-retain policy is what lets M2-1 ship without
-    blocking on milestones M3, M9, and beyond.
+1.  **Continuity for downstream users**.  v2.x users have imports from `Base.*` throughout their developments.  Renaming the module path to `Legacy.Base.*` is a breaking change, but a small one: a single sed across imports. Deleting these modules outright would force a full migration to `Setoid/` in lockstep with the v3.0 upgrade, which is a much larger undertaking than v3.0 itself should impose.
+2.  **Reference and provenance**.  `Base/` contains the original ≡-based formulations of definitions and lemmas that were subsequently re-developed in `Setoid/`.  Keeping the legacy versions visible in the repository preserves a useful historical record and supports cross-comparison during review of `Setoid/`-side changes.
+3.  **Provisional content**.  Categories B and C above.  Until each orphan is ported (or formally retired with a stdlib redirect), deleting `Legacy.Base/` would actively remove formalized mathematics from the library.  The freeze-but-retain policy is what lets M2-1 ship without blocking on milestones M3, M9, and beyond.
 
+---
 
 ## Internal helpers
 
-The internal helpers `update`, `update-id`, and `proj-is-onto` (used by
-`projIsOnto`) were relocated alongside it but do not carry deprecation pragmas:
-no consumer imports them directly, and pragmatizing every internal helper would
-inflate the deprecation-warning volume without serving a real migration audience.
-If a downstream consumer turns out to need them at the legacy path, the omission
-is recoverable in a follow-up.
+The internal helpers `update`, `update-id`, and `proj-is-onto` (used by `projIsOnto`) were relocated alongside it but do not carry deprecation pragmas: no consumer imports them directly, and pragmatizing every internal helper would inflate the deprecation-warning volume without serving a real migration audience. If a downstream consumer turns out to need them at the legacy path, the omission is recoverable in a follow-up.
+
+---
 
 ## Deprecation-warning volume after #303
 
-The `WARNING_ON_USAGE` pragmas added in #303 fire on every import site, including
-internal `Legacy.Base.*` cross-imports.  This is intentional: the warnings are
-aimed at downstream consumers of `Legacy.Base`, and they fire correctly on
-internal Legacy uses too because those internal uses are themselves slated for
-removal in the next minor cycle.  The warnings under `EverythingLegacy.lagda.md`
-during `make check` are expected and do not indicate a regression.  Suppressing
-the warnings inside `Legacy.Base/*` would defeat their purpose.
+The `WARNING_ON_USAGE` pragmas added in #303 fire on every import site, including internal `Legacy.Base.*` cross-imports.  This is intentional: the warnings are aimed at downstream consumers of `Legacy.Base`, and they fire correctly on internal Legacy uses too because those internal uses are themselves slated for removal in the next minor cycle.  The warnings under `EverythingLegacy.lagda.md` during `make check` are expected and do not indicate a regression.  Suppressing the warnings inside `Legacy.Base/*` would defeat their purpose.
 
+---
 
 ## Further reading
 

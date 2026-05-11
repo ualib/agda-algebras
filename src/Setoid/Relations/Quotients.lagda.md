@@ -96,7 +96,7 @@ module _ {A : Type α}{R : Equivalence A{ℓ} } where
 -------------------------------------
 
 <span style="float:left;">[← Setoid.Relations.Discrete](Setoid.Relations.Discrete.html)</span>
-<span style="float:right;">[Setoid.Algebras →](Setoid.Algebras.html)</span>
+<span style="float:right;">[Setoid.Relations.Continuous →](Setoid.Relations.Continuous.html)</span>
 
 {% include UALib.Links.md %}
 
