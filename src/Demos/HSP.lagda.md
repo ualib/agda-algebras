@@ -1,11 +1,14 @@
 ---
 layout: default
-title : "Demos.HSP module"
-date : "2022-04-27"
+file: "src/Demos/HSP.lagda.md"
+title: "Demos.HSP module"
+date: "2022-04-27"
 author: "the agda-algebras development team"
 ---
 
 ### <a id="introduction">Introduction</a>
+
+This module is the self-contained pedagogical companion to the TYPES 2021 paper [@DeMeo:2021].  The canonical statement and proof of Birkhoff's HSP theorem in agda-algebras now lives in [Setoid.Varieties.HSP][] (designated canonical under [issue #259](https://github.com/ualib/agda-algebras/issues/259), M2-4); the two presentations are co-extensive — this module's `Var⇒EqCl` and `Setoid.Varieties.HSP`'s `Birkhoff` prove the same theorem.  `Setoid.Varieties.HSP` is factored across the broader `Setoid.Varieties.*` development and is the appropriate import target for downstream uses, while this module collects the same proof into a single literate file and is preserved as a teaching artifact.
 
 The Agda Universal Algebra Library ([agda-algebras][]) formalizes the foundations of universal 
 algebra in intensional Martin-Löf type theory ([MLTT][]) using [Agda][] ()  [@Norell:2007; @agdaref].
