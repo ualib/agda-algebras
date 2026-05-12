@@ -20,7 +20,8 @@ Closes #
 
 - [ ] Bug fix
 - [ ] New definition, theorem, or feature
-- [ ] Refactoring / cleanup (no user-facing change)
+- [ ] Refactor / cleanup (user-facing/API change)
+- [ ] Refactor / cleanup (no user-facing change)
 - [ ] Documentation
 - [ ] Infrastructure (CI, Nix, build)
 - [ ] Other

@@ -1,7 +1,8 @@
 ---
 layout: default
-title : "Examples.PolynomialFunctors.Functors module (The Agda Universal Algebra Library)"
-date : "2026-05-09"
+file: "src/Examples/PolynomialFunctors/Functors.lagda.md"
+title: "Examples.PolynomialFunctors.Functors module (The Agda Universal Algebra Library)"
+date: "2026-05-09"
 author: "the agda-algebras development team"
 ---
 

@@ -1,7 +1,8 @@
 ---
 layout: default
-title : "Base.Categories.Functors module (The Agda Universal Algebra Library)"
-date : "2021-08-30"
+file: "src/Legacy/Base/Categories/Functors.lagda.md"
+title: "Base.Categories.Functors module (The Agda Universal Algebra Library)"
+date: "2021-08-30"
 author: "agda-algebras development team"
 ---
 

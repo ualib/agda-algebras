@@ -1,7 +1,8 @@
 ---
 layout: default
-title : "Exercises.Complexity.FiniteCSP module (The Agda Universal Algebra Library)"
-date : "2021-07-26"
+file: "src/Exercises/Complexity/FiniteCSP.lagda.md"
+title: "Exercises.Complexity.FiniteCSP module (The Agda Universal Algebra Library)"
+date: "2026-05-11"
 author: "agda-algebras development team and Libor Barto"
 ---
 
@@ -26,10 +27,15 @@ open import Relation.Unary  using ( Pred ; _∈_ )
 
 -- Imports from agda-algebras --------------------------------------------------------------
 open import Overture.Basic                  using ( 𝟚 ; 𝟛 )
-open import Legacy.Base.Relations.Continuous       using ( Rel )
-open import Legacy.Base.Structures.Basic           using ( signature ; structure )
+open import Setoid.Relations.Continuous     using ( Rel )
 open import Examples.Structures.Signatures  using ( S∅ ; S001 ; S021)
+
+-- TODO(#M2-8c): the two imports below await the M3-1 (#260) Classical/ scaffold;
+-- the canonical destinations for `signature`, `structure`, and `hom` will live
+-- under Classical/ once M3 lands.
+open import Legacy.Base.Structures.Basic           using ( signature ; structure )
 open import Legacy.Base.Structures.Homs            using ( hom )
+
 open signature
 open structure
 ```
