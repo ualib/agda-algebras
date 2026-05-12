@@ -1,16 +1,19 @@
 ---
 layout: default
-title : "Setoid.Varieties.HSP module (Agda Universal Algebra Library)"
-date : "2021-10-16"
+file: "src/Setoid/Varieties/HSP.lagda.md"
+title: "Setoid.Varieties.HSP module (Agda Universal Algebra Library)"
+date: "2021-10-16"
 author: "agda-algebras development team"
 ---
 
+This is the [Setoid.Varieties.HSP][] module of the [Agda Universal Algebra Library][].  **This module is the canonical home of Birkhoff's HSP theorem in agda-algebras**, designated as such under [issue #259](https://github.com/ualib/agda-algebras/issues/259) (M2-4).  The theorem `Birkhoff` and its converse `Birkhoff-converse` defined below — joined to the identity-preservation lemma `V-id1` of [Setoid.Varieties.Preservation][] and the expansive-closure fact `V-expa` of [Setoid.Varieties.Closure][] — constitute the library's authoritative formalization of the variety theorem.  The proof is fully constructive (no function-extensionality postulate) and is stated against the setoid-typed `Algebra` of [Setoid.Algebras.Basic][], so the underlying equivalence can be mechanically substituted when the library ports to Cubical Agda (M5).  See [ADR-001](https://github.com/ualib/agda-algebras/blob/master/docs/adr/001-setoid-as-canonical.md) for the broader design rationale of the v3.0 Setoid-as-canonical migration.
+
+Two other presentations of Birkhoff's theorem live in the source tree, and both reference this module as their canonical source.  [Demos.HSP](https://ualib.org/Demos.HSP.html) is a single-file rendition extracted for the TYPES 2021 paper and retained as a self-contained teaching artifact; its theorem `Var⇒EqCl` plays the role of `Birkhoff` here.  [Legacy.Base.Varieties.FreeAlgebras](https://ualib.org/Legacy.Base.Varieties.FreeAlgebras.html) holds the original bare-types proof, frozen as part of the v3.0 `Base → Legacy.Base` consolidation; new work does not land there.
+
+
 #### <a id="the-hsp-theorem">The HSP Theorem</a>
 
-
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using (𝓞 ; 𝓥 ; Signature)
@@ -66,15 +69,11 @@ module _  {α ρᵃ ℓ : Level}
  open FreeAlgebra {ι = ι}{I = ℐ} ℰ using ( 𝔽[_] )
 ```
 
-
 We want to pair each `(𝑨 , p)` (where p : 𝑨 ∈ S 𝒦) with an environment
 `ρ : X → ∣ 𝑨 ∣` so that we can quantify over all algebras *and* all
 assignments of values in the domain `∣ 𝑨 ∣` to variables in `X`.
 
-
 ```agda
-
-
  ℑ⁺ : Type ι
  ℑ⁺ = Σ[ 𝑨 ∈ (Algebra α ρᵃ) ] (𝑨 ∈ S ℓ 𝒦) × (Carrier (Env 𝑨 X))
 
@@ -85,7 +84,6 @@ assignments of values in the domain `∣ 𝑨 ∣` to variables in `X`.
  ℭ = ⨅ 𝔄⁺
 ```
 
-
 Next we define a useful type, `skEqual`, which we use to represent a term identity `p ≈ q` for any
 given `i = (𝑨 , sA , ρ)` (where `𝑨` is an algebra, `sA : 𝑨 ∈ S 𝒦` is a proof that `𝑨` belongs
 to `S 𝒦`, and `ρ` is a mapping from `X` to the domain of `𝑨`). Then we prove `AllEqual⊆ker𝔽` which
@@ -95,10 +93,7 @@ kernel of the natural homomorphism from `𝑻 X` onto `𝔽[ X ]`. We will use t
 that there is a monomorphism from `𝔽[ X ]` into `ℭ`, and thus `𝔽[ X ]` is a subalgebra of ℭ,
 so belongs to `S (P 𝒦)`.
 
-
 ```agda
-
-
  skEqual : (i : ℑ⁺) → ∀{p q} → Type ρᵃ
  skEqual i {p}{q} = ⟦ p ⟧ ⟨$⟩ snd ∥ i ∥ ≈ ⟦ q ⟧ ⟨$⟩ snd ∥ i ∥
   where
@@ -139,7 +134,6 @@ so belongs to `S (P 𝒦)`.
   Goal : (free-lift{𝑨 = 𝑨} ρ p) ≈ (free-lift{𝑨 = 𝑨} ρ q)
   Goal = trans (sym (fl p)) (trans subgoal (fl q))
 
-
  hom𝔽ℭ : hom 𝔽[ X ] ℭ
  hom𝔽ℭ = ∣ HomFactor ℭ homℭ hom𝔽[ X ] ker𝔽⊆kerℭ hom𝔽[ X ]-is-epic ∣
 
@@ -170,15 +164,11 @@ so belongs to `S (P 𝒦)`.
   isInjective isMon {p} {q} φpq = kerℭ⊆ker𝔽 φpq
 ```
 
-
 Now that we have proved the existence of a monomorphism from `𝔽[ X ]` to `ℭ` we are in a position
 to prove that `𝔽[ X ]` is a subalgebra of ℭ, so belongs to `S (P 𝒦)`.  In fact, we will show
 that `𝔽[ X ]` is a subalgebra of the *lift* of `ℭ`, denoted `ℓℭ`.
 
-
 ```agda
-
-
  𝔽≤ℭ : 𝔽[ X ] ≤ ℭ
  𝔽≤ℭ = mon→≤ mon𝔽ℭ
 
@@ -200,10 +190,7 @@ that `𝔽[ X ]` is a subalgebra of the *lift* of `ℭ`, denoted `ℓℭ`.
 
 Finally, we are in a position to prove Birkhoff's celebrated variety theorem.
 
-
 ```agda
-
-
 module _ {α ρᵃ ℓ : Level}{𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
  private ι = ov(α ⊔ ρᵃ ⊔ ℓ)
 
@@ -227,22 +214,17 @@ module _ {α ρᵃ ℓ : Level}{𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ 
   VlA = 𝔽[ ∣A∣ ] , sp𝔽A , lAimg𝔽A
 ```
 
-
 The converse inclusion, `V 𝒦 ⊆ Mod (Th (V 𝒦))`, is a simple consequence of the
 fact that `Mod Th` is a closure operator. Nonetheless, completeness demands
 that we formalize this inclusion as well, however trivial the proof.
 
-
 ```agda
-
-
  module _ {𝑨 : Algebra α ρᵃ} where
   open Setoid (Domain 𝑨) using () renaming ( Carrier to ∣A∣ )
 
   Birkhoff-converse : 𝑨 ∈ V{α}{ρᵃ}{α}{ρᵃ}{α}{ρᵃ} ℓ ι 𝒦 → 𝑨 ∈ Mod{X = ∣A∣} (Th (V ℓ ι 𝒦))
   Birkhoff-converse vA pThq = pThq 𝑨 vA
 ```
-
 
 We have thus proved that every variety is an equational class.
 
