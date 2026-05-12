@@ -1,7 +1,8 @@
 ---
 layout: default
-title : "Base.Categories module (The Agda Universal Algebra Library)"
-date : "2021-08-31"
+file: "src/Legacy/Base/Categories.lagda.md"
+title: "Base.Categories module (The Agda Universal Algebra Library)"
+date: "2021-08-31"
 author: "agda-algebras development team"
 ---
 
@@ -15,15 +16,12 @@ The purpose of this effort twofold. First, we hope it makes the types defined in
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Legacy.Base.Categories where
 
 open import Legacy.Base.Categories.Functors  public
 ```
-
 
 --------------------------------------
 
