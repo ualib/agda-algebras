@@ -970,7 +970,7 @@ The natural destination is `Setoid.Complexity/`, mirroring the existing `Legacy.
 
 ---
 
-### Issue M2-7d: Port Legacy.Base.Relations.Continuous to canonical paths (#308)
+### Issue M2-7d: Port Legacy.Base.Relations.Continuous to canonical paths (#308, closed)
 
 **Labels**: `milestone-2-consolidation`, `milestone-9-apps`
 
@@ -1022,7 +1022,7 @@ Unlike most of Category A, where the propositional-equality version maps mechani
 
 ---
 
-### Issue M2-7e: Port Legacy.Base.Relations.Properties to Setoid.Relations.Properties (#309)
+### Issue M2-7e: Port Legacy.Base.Relations.Properties to Setoid.Relations.Properties (#309, closed)
 
 **Labels**: `milestone-2-consolidation`
 
@@ -1056,7 +1056,7 @@ The M2-1 inventory found no consumers of `Base.Relations.Properties` outside `sr
 
 ---
 
-### Issue M2-7f: Port Legacy.Base.Functions.Transformers to canonical paths (#310)
+### Issue M2-7f: Port Legacy.Base.Functions.Transformers to canonical paths (#310, closed)
 
 **Labels**: `milestone-2-consolidation`, `design-discussion`
 
@@ -1099,7 +1099,7 @@ Recommendation: audit first; the right answer is likely "stdlib redirect" for mo
 
 ---
 
-### Issue M2-7g: Port Legacy.Base.Varieties.Invariants to Setoid.Varieties.Invariants (#311)
+### Issue M2-7g: Port Legacy.Base.Varieties.Invariants to Setoid.Varieties.Invariants (#311, closed)
 
 **Labels**: `milestone-2-consolidation`
 
