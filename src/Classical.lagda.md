@@ -37,11 +37,11 @@ This file is the umbrella for the `Classical/` tree.  At the moment this scaffol
 
 module Classical where
 
-open import Classical.Signatures
-open import Classical.Theories
-open import Classical.Structures
-open import Classical.Bundles
-open import Classical.Small
+open import Classical.Signatures public
+open import Classical.Theories public
+open import Classical.Structures public
+open import Classical.Bundles public
+open import Classical.Small public
 ```
 
 --------------------------------------
