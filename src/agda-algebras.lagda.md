@@ -1,8 +1,9 @@
 ---
 layout: title-page
-title : "agda-algebras (The Agda Universal Algebra Library)"
-date : "2026-05-02"
-author: "[agda-algebras development team][]"
+file: "src/agda-algebras.lagda.md"
+title: "agda-algebras (The Agda Universal Algebra Library)"
+date: "2026-05-15"
+author: "the agda-algebras development team"
 ---
 
 # The Agda Universal Algebra Library
@@ -56,11 +57,12 @@ top-level aggregator below imports each layer in turn.
    M9 (algebraic complexity / CSP) — have no `Setoid/` analog yet and are
    scheduled for migration in later milestones.  New work does not land in
    `Legacy.Base`.
-+  `Classical/` *(planned, M3)* — specific algebraic theories (semigroups,
++  [`Classical/`][Classical] — specific algebraic theories (semigroups,
    monoids, groups, lattices, rings) built on the universal-algebra
-   foundation.  Σ-typed core with parallel record-typed bundle views in
-   `Classical/Bundles/` for stdlib interop.  ADR-002 (forthcoming) will
-   record the design.
+   foundation.  Σ-typed cores with parallel record-typed bundle views in
+   `Classical/Bundles/` for stdlib interop.  The scaffold landed under
+   M3-1 (#260, #326); concrete structures arrive under M3-2 onward.
+   See [ADR-002][ADR-002] for the design.
 +  `Cubical/` *(planned, M5; canonical for 4.0)* — cubical-Agda counterparts
    of the `Setoid/` and `Classical/` developments, using the structure
    identity principle in place of setoid equivalence.
@@ -86,6 +88,12 @@ open import Overture
 -- Setoid/ is the canonical 3.0 development tree.  All new universal-algebra
 -- content lands here.  See docs/adr/001-setoid-as-canonical.md for rationale.
 open import Setoid
+
+-- Classical/ formalizes specific algebraic theories (semigroups, monoids,
+-- groups, lattices, rings, ...) over the Setoid/ foundation.  Σ-typed cores
+-- with parallel record-typed bundle views for stdlib interop.
+-- See docs/adr/002-classical-layer-design.md for rationale.
+open import Classical
 
 -- Legacy.Base is the frozen pre-3.0 development.  It is retained both for
 -- v2.x downstream-user continuity and because some modules have no Setoid/
@@ -122,30 +130,6 @@ under the [Apache License 2.0][LICENSE], and the documentation under `docs/`
 (together with the prose embedded in literate Agda files) is released under
 [Creative Commons Attribution 4.0 International][LICENSE-docs].  See the
 project [`README.md`][README] for further detail and citation information.
-
-[agda-algebras]: https://github.com/ualib/agda-algebras
-[agda-algebras development team]: https://github.com/ualib/agda-algebras#credits
-[Agda]: https://wiki.portal.chalmers.se/agda/pmwiki.php
-[ADR-001]: https://github.com/ualib/agda-algebras/blob/master/docs/adr/001-setoid-as-canonical.md
-[ADR-dir]: https://github.com/ualib/agda-algebras/tree/master/docs/adr
-[Complexity]: Legacy.Base.Complexity.html
-[Continuous]: Legacy.Base.Relations.Continuous.html
-[Demos]: Demos.html
-[Demos.HSP]: Demos.HSP.html
-[DEPRECATED]: https://github.com/ualib/agda-algebras/blob/master/src/Legacy/Base/DEPRECATED.md
-[Examples]: Examples.html
-[HSP-wiki]: https://en.wikipedia.org/wiki/Variety_(universal_algebra)#Birkhoff's_theorem
-[INSTALL]: https://github.com/ualib/agda-algebras/blob/master/INSTALL.md
-[Jacques Carette]: http://www.cas.mcmaster.ca/~carette/
-[Legacy.Base]: Legacy.Base.html
-[LICENSE]: https://github.com/ualib/agda-algebras/blob/master/LICENSE
-[LICENSE-docs]: https://github.com/ualib/agda-algebras/blob/master/LICENSE-docs
-[Overture]: Overture.html
-[README]: https://github.com/ualib/agda-algebras/blob/master/README.md
-[ROADMAP]: https://github.com/ualib/agda-algebras/blob/master/docs/GITHUB_PROJECT.md
-[Setoid]: Setoid.html
-[Setoid.HSP]: Setoid.Varieties.HSP.html
-[William DeMeo]: https://williamdemeo.github.io/
 
 ----
 
