@@ -1,8 +1,12 @@
+<!-- File: docs/adr/002-classical-layer-design.md -->
+
 # ADR-002: Classical structures as Σ-typed cores with record-typed bundle views
 
 ## Status
 
 Accepted — 2026-04-24.
+
+---
 
 ## Context
 
@@ -15,6 +19,8 @@ The 3.0 reconstruction adds a `src/Classical/` tree holding specific algebraic t
 These three questions interact.  A record-typed core is easier to read at use sites (named projections, instance arguments) but commits the library to a specific projection vocabulary that fights the stdlib-shaped bundle idiom when we want bidirectional conversion.  A Σ-typed core matches the mathematical reading "`X` *is* an algebra equipped with a proof it satisfies the `X`-theory" and is also the formulation most robust to changes in the underlying equivalence — crucial for the cubical port.
 
 A related question: what does "classical" mean in this subtree?  It does not mean "classical logic" — the library stays constructive throughout.  `Classical/` names the *tradition* of concrete algebraic structures (groups, rings, lattices) as distinct from the universal-algebraic treatment of algebras-over-a-signature that lives in `Setoid/`.  An alternative name considered was `Concrete/`; `Classical/` was retained because "classical algebraic structures" is standard terminology in the universal-algebra literature (Burris and Sankappanavar use it throughout).
+
+---
 
 ## Decision
 
@@ -38,14 +44,22 @@ A helper `fromPropEq : (A : Type α) → ... → X α α` lets users construct c
 
 Each classical structure ships as a quintuple: `Classical/Signatures/X.agda`, `Classical/Theories/X.agda`, `Classical/Structures/X.agda`, `Classical/Bundles/X.agda`, and a level-fixed veneer `Classical/Small/Structures/X.agda` specialized to the common `ℓ₀`–`ℓ₀` case.
 
+The `Small` subtree exists because most downstream consumers — finite-template CSP (M7), the finite cases that motivate FLRP intuition (M6), and tutorial-pedagogical contexts in `Examples/` and `Demos/` — will likely want the carrier and equivalence to live at `Set` rather than at a polymorphic `Set α` / `Set ρ` family.  The level polymorphism in the core is necessary for the substantive theorems but is a distraction at use sites for the small case.  Pulling the level-fixed specialization into its own subtree keeps the polymorphic core unencumbered while giving small-case users a one-import path.
+
+
+---
+
 ## Consequences
 
-+  **Definitions read the way a universal algebraist thinks.**  "A monoid is a magma satisfying the monoid equations" is exactly what `Σ[ 𝑨 ∈ Algebra 𝑆ₘ α ρ ] 𝑨 ⊨ Eₘ` types.  This is pedagogically valuable for the library-as-training-corpus role.
-+  **Stdlib interop has a fixed cost paid once per structure.**  Every `Classical/Bundles/X.agda` is a small, mechanical file: one record definition, two conversion functions, a round-trip proof.  The cost is predictable and the pattern is copy-paste.
-+  **Cubical portability is a property of the code, not a retrofit.**  Since no theorem in `Classical/Structures/X.agda` may reach for setoid-specific machinery, the 4.0 port (ADR-003) is substitutional — replace the setoid equivalence with the path type, rerun the type-checker, fix any fallout — rather than a second rewrite.  Enforcing this discipline is a design cost paid up front.
-+  **Use-site ergonomics are slightly worse than with a record-typed core.**  A proof that works against a Σ-typed monoid projects with `proj₁` and `proj₂` rather than named fields.  This is annoying in short proofs; we offset it with named convenience accessors (`Domain`, `Signature`, `equations`) defined next to each structure.
-+  **The core `Algebra` type stays a record.**  This is not inconsistent with the Σ-for-classical-structures choice: `Algebra` has multiple meaningful named projections (`Domain`, `Interp`, …) and is inhabited many times across the library; `Semigroup` naturally decomposes as "algebra + proof," which a Σ expresses directly.  The rule for future decisions is in `docs/STYLE_GUIDE.md` — record when there are three or more meaningful named projections or when stdlib interop demands it, Σ when the structure has a "bundled-together" mathematical reading.
-+  **A parallel record implementation of any classical structure is a bug.**  The `Base/Structures/Basic` vs `Base/Structures/Sigma` dual is exactly the mistake this ADR codifies against; see the STYLE_GUIDE for the explicit rule.
++  **Definitions read the way a universal algebraist thinks**.  "A monoid is a magma satisfying the monoid equations" is exactly what `Σ[ 𝑨 ∈ Algebra 𝑆ₘ α ρ ] 𝑨 ⊨ Eₘ` types.  This is pedagogically valuable for the library-as-training-corpus role.
++  **`fromPropEq` bridges bare-type definitions to the Σ-typed core**.  Users with an algebraic structure presented over a bare `A : Type α` (rather than over a setoid) construct the corresponding classical structure without manually setoid-wrapping the carrier.  The return type necessarily collapses to `X α α` because propositional equality at type `A : Type α` lives in `Type α`; consumers who need `α ≠ ρ` work directly with the underlying setoid.
++  **Stdlib interop has a fixed cost paid once per structure**.  Every `Classical/Bundles/X.agda` is a small, mechanical file: one record definition, two conversion functions, a round-trip proof.  The cost is predictable and the pattern is copy-paste.
++  **Cubical portability is a property of the code, not a retrofit**.  Since no theorem in `Classical/Structures/X.agda` may reach for setoid-specific machinery, the 4.0 port (ADR-003) is substitutional — replace the setoid equivalence with the path type, rerun the type-checker, fix any fallout — rather than a second rewrite.  Enforcing this discipline is a design cost paid up front.
++  **Use-site ergonomics are slightly worse than with a record-typed core**.  A proof that works against a Σ-typed monoid projects with `proj₁` and `proj₂` rather than named fields.  This is annoying in short proofs; we offset it with named convenience accessors (`Domain`, `Signature`, `equations`) defined next to each structure.
++  **The core `Algebra` type stays a record**.  This is not inconsistent with the Σ-for-classical-structures choice: `Algebra` has multiple meaningful named projections (`Domain`, `Interp`, …) and is inhabited many times across the library; `Semigroup` naturally decomposes as "algebra + proof," which a Σ expresses directly.  The rule for future decisions is in `docs/STYLE_GUIDE.md` — record when there are three or more meaningful named projections or when stdlib interop demands it, Σ when the structure has a "bundled-together" mathematical reading.
++  **A parallel record implementation of any classical structure is a bug**.  The `Base/Structures/Basic` vs `Base/Structures/Sigma` dual is exactly the mistake this ADR codifies against; see the STYLE_GUIDE for the explicit rule.
+
+---
 
 ## Alternatives considered
 
@@ -53,11 +67,15 @@ Each classical structure ships as a quintuple: `Classical/Signatures/X.agda`, `C
 +  **Two record variants in parallel (one library-internal, one stdlib-shaped)**.  Rejected for the same reason the `Base/Structures/Basic` + `Base/Structures/Sigma` split in the legacy tree is a maintenance hazard: two type-level representations of the same mathematical object doubles every theorem's cost.  The Σ + bundle split is not two representations of the same object; it is a canonical core with a narrow interop view.
 +  **`Classical/` built directly on `Base/` instead of `Setoid/`**.  Rejected because (i) `Base/` is frozen (ADR-001), (ii) `Base/` postulates extensionality, breaking the constructivity commitment, and (iii) `Base/`'s propositional-equality setting is not cubical-portable without further rework.
 
+---
+
 ## References
 
 +  Issue M3-1 — [Introduce the Classical/ tree](https://github.com/ualib/agda-algebras/issues/260).
 +  Issue M3-2 — `Classical.Structures.Semigroup` as the pattern-setting first structure.
 +  Issue M3-3 — Stdlib bundle bridges.
++  ADR-001 — `Setoid/` as canonical development tree (the foundation `Classical/` builds on).
++  ADR-003 — Cubical Agda as the canonical long-term target (the discipline `Classical/` enforces).
 +  `docs/STYLE_GUIDE.md` — section on record vs Σ.
 +  Agda standard library, `Algebra.Bundles`.
 +  Burris and Sankappanavar, *A Course in Universal Algebra*, chapter II.

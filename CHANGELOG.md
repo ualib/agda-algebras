@@ -1,8 +1,12 @@
+<!-- File: CHANGELOG.md -->
+
 # CHANGELOG
 
 All notable changes to agda-algebras are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project aspires to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+---
 
 ## [Unreleased] — 3.0 development
 
@@ -29,6 +33,8 @@ The 3.0 release is a major reconstruction of agda-algebras building on the Setoi
    +  `Overture.Functions` (the bare-types image-and-inverse infrastructure `Image_∋_` / `Inv` / `InvIsInverseʳ`, surjectivity `IsSurjective` with its right-inverse `SurjInv` and the composition law `epic-factor`, and the coordinate-projection cluster `proj` / `projIsOnto`).
 
    These house the foundational definitions that the canonical `Setoid/` tree had been importing from `Legacy.Base.*` since the M2-1 freeze; relocating them to `Overture/` makes `Setoid/` self-sufficient and lets `Classical/` (M3-1, #260) build on a clean canonical foundation without inheriting a `Legacy.Base` dependency.  See [ADR-001 §Consequences "Setoid/ is not yet self-sufficient"](docs/adr/001-setoid-as-canonical.md) for the motivation and `src/Legacy/Base/DEPRECATED.md` for the per-symbol relocation table.
++  **`Classical/` tree scaffold** (M3-1, #260; M3-1a, #326).  Six umbrella files introduce the directory layout for the classical-structures tree: top-level [`src/Classical.lagda.md`](src/Classical.lagda.md) plus subtree aggregators [`src/Classical/Signatures.lagda.md`](src/Classical/Signatures.lagda.md), [`src/Classical/Theories.lagda.md`](src/Classical/Theories.lagda.md), [`src/Classical/Structures.lagda.md`](src/Classical/Structures.lagda.md), [`src/Classical/Bundles.lagda.md`](src/Classical/Bundles.lagda.md), and [`src/Classical/Small.lagda.md`](src/Classical/Small.lagda.md).  Each concrete structure will ship as a quintuple across these five subtrees (Signatures + Theories + Structures + Bundles + Small), per [ADR-002](docs/adr/002-classical-layer-design.md).  This issue ships scaffolding only — no concrete structure (Magma, Semigroup, Monoid, Group, Lattice, Ring) lands here; those are M3-2 onward.  The library aggregator [`src/agda-algebras.lagda.md`](src/agda-algebras.lagda.md) now re-exports `Classical` and the `README.md` library-structure description is updated to reflect the activation.
++  **ADR-002 — Classical structures as Σ-typed cores with record-typed bundle views**.  [`docs/adr/002-classical-layer-design.md`](docs/adr/002-classical-layer-design.md) records the architectural decision: each classical structure `X` is Σ-typed at the core as `X α ρ = Σ[ 𝑨 ∈ Algebra 𝑆ₓ α ρ ] 𝑨 ⊨ Eₓ` (matching the mathematical reading "an `X` is an algebra equipped with a proof that it satisfies the `X`-theory"), with a parallel record-typed bundle view at `Classical/Bundles/X` for stdlib interop, equations stated purely in terms of the `Algebra.Domain` setoid equivalence for cubical portability, and a level-fixed `Classical/Small/Structures/X` veneer for the common `ℓ₀`–`ℓ₀` case.  The `Classical/` tree builds on the canonical `Setoid/` foundation (per [ADR-001](docs/adr/001-setoid-as-canonical.md)) and is designed for mechanical migration to `Cubical/` (per [ADR-003](docs/adr/003-cubical-canonical-target.md)).
 +  **Canonical designation of Birkhoff's HSP theorem** (M2-4, #259).  [`Setoid.Varieties.HSP`](src/Setoid/Varieties/HSP.lagda.md) is now formally designated as the canonical home of Birkhoff's HSP theorem in agda-algebras.  Cross-references added from [`Demos.HSP`](src/Demos/HSP.lagda.md) (the self-contained pedagogical companion for the TYPES 2021 paper) and from [`Legacy.Base.Varieties.FreeAlgebras`](src/Legacy/Base/Varieties/FreeAlgebras.lagda.md) (the frozen pre-3.0 bare-types proof).  See ADR-001 for the broader Setoid-as-canonical rationale; the canonical proof is fully constructive, setoid-typed, and cubical-portable, which the legacy bare-types proof is not.
 
 ### Changed (BREAKING)
@@ -73,8 +79,6 @@ Migration recipe for the M2-7 destinations: replace `open import Legacy.Base.Rel
 
 +  **`docs/lagda/` tree** (127 LaTeX-literate `.lagda` files).  Content migrated to `src/X/Y/Z.lagda.md`; see "Literate-Agda format" above.
 +  **`src/X/Y/Z.agda` skeleton companions** (127 files) that were mechanically derived from the LaTeX-literate sources by `admin/illiterator/`.  The illiterator program itself is slated for deletion in the rendering-pipeline-modernization follow-up.
-
----
 
 ### Fixed
 
