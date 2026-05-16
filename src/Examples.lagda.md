@@ -20,6 +20,7 @@ module Examples where
 open import Examples.FunctionTypeBijections
 open import Examples.PolynomialFunctors
 open import Examples.Structures
+open import Examples.Classical
 ```
 
 

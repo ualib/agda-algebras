@@ -19,13 +19,12 @@ This file is the umbrella for the subtree; at the moment this scaffold lands the
 
 module Classical.Signatures where
 
--- Per-structure signature modules will be re-exported here as they land
--- under milestone M3-2 onward; e.g., once M3-2 introduces the
--- semigroup signature, we'll add
---
---   open import Classical.Signatures.Semigroup public
---
--- with analogous lines for Monoid, Group, Lattice, Ring, etc.
+open import Classical.Signatures.Semigroup public
+-- Future per-structure signature modules to be re-exported here:
+--   open import Classical.Signatures.Monoid public   (M3-4)
+--   open import Classical.Signatures.Group public    (M3-4)
+--   open import Classical.Signatures.Lattice public  (M3-5)
+--   open import Classical.Signatures.Ring public     (M3-6)
 ```
 
 --------------------------------------

@@ -21,12 +21,12 @@ This file is the umbrella for the subtree; at the moment this scaffold lands the
 
 module Classical.Theories where
 
--- Per-structure equational-theory modules will be re-exported here as
--- they land under milestone M3-2 onward, e.g.,
---
---   open import Classical.Theories.Semigroup public
---
--- with analogous lines for Monoid, Group, Lattice, Ring, etc.
+open import Classical.Theories.Semigroup public
+-- Future per-structure equational-theory modules to be re-exported here:
+--   open import Classical.Theories.Monoid public   (M3-4)
+--   open import Classical.Theories.Group public    (M3-4)
+--   open import Classical.Theories.Lattice public  (M3-5)
+--   open import Classical.Theories.Ring public     (M3-6)
 ```
 
 

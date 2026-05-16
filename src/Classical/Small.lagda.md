@@ -21,13 +21,9 @@ This file is the umbrella for the subtree; at the moment this scaffold lands the
 
 module Classical.Small where
 
--- The Small subtree will grow a Structures aggregator once concrete
--- veneers land, e.g.,
---
---   open import Classical.Small.Structures public
---
--- where Classical.Small.Structures itself re-exports per-structure
--- ℓ₀-veneers (Classical.Small.Structures.Semigroup, etc.).
+open import Classical.Small.Structures public
+            -- ^ re-exports per-structure ℓ₀-veneers;
+            -- e.g., Classical.Small.Structures.Semigroup, etc.
 ```
 
 --------------------------------------

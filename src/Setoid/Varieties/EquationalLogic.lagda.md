@@ -102,15 +102,15 @@ If `ℰ` denotes a set of identities, then `Mod ℰ` is the class of structures
 satisfying the identities in `ℰ`.
 
 ```agda
- Mod' : Pred(Term X × Term X) (ov α) → Pred(Algebra α ρᵃ) (ρᵃ ⊔ ov(α ⊔ χ))
- Mod' ℰ = λ 𝑨 → ∀ p q → (p , q) ∈ ℰ → 𝑨 ⊧ p ≈ q
+Mod' : {X : Type χ} → Pred(Term X × Term X) (ov α) → Pred(Algebra α ρᵃ) (ρᵃ ⊔ ov(α ⊔ χ))
+Mod' ℰ = λ 𝑨 → ∀ p q → (p , q) ∈ ℰ → 𝑨 ⊧ p ≈ q
 ```
 
 It is sometimes more convenient to have a "tupled" version of the previous definition, which we denote by `Modᵗ` and define as follows.
 
 ```agda
- Modᵗ : {I : Type ι} → (I → Term X × Term X) → {α : Level} → Pred(Algebra α ρᵃ) (χ ⊔ ρᵃ ⊔ ι ⊔ α)
- Modᵗ ℰ = λ 𝑨 → ∀ i → 𝑨 ⊧ fst (ℰ i) ≈ snd (ℰ i)
+Modᵗ : {X : Type χ}{I : Type ι} → (I → Term X × Term X) → {α : Level} → Pred(Algebra α ρᵃ) (χ ⊔ ρᵃ ⊔ ι ⊔ α)
+Modᵗ ℰ = λ 𝑨 → ∀ i → 𝑨 ⊧ fst (ℰ i) ≈ snd (ℰ i)
 ```
 
 

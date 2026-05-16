@@ -21,12 +21,12 @@ This file is the umbrella for the subtree; at the moment this scaffold lands the
 
 module Classical.Bundles where
 
--- Per-structure bundle modules will be re-exported here as they land
--- under milestone M3-2 onward, e.g.,
---
---   open import Classical.Bundles.Semigroup public
---
--- with analogous lines for Monoid, Group, Lattice, Ring, etc.
+open import Classical.Bundles.Semigroup public
+-- Future per-structure bundle modules to be re-exported here:
+--   open import Classical.Bundles.Monoid public   (M3-4)
+--   open import Classical.Bundles.Group public    (M3-4)
+--   open import Classical.Bundles.Lattice public  (M3-5)
+--   open import Classical.Bundles.Ring public     (M3-6)
 ```
 
 --------------------------------------
