@@ -71,6 +71,22 @@ The five attribute classes carried over from the legacy corpus are `{.AgdaBound}
 Files under `docs/papers/` retain LaTeX-literate (`.lagda`) shape — they are co-built with external paper PDFs and are out of scope for the Markdown-literate rule.  No other `.lagda` files exist in the repository.
 
 
+### Jekyll/MkDocs YAML frontmatter 
+
+Every source code file in the repository includes Jekyll/MkDocs YAML frontmatter, including a `file:` field giving the file's repo-relative path.  For example,
+
+```markdown
+---
+layout: default
+title : "Setoid.Varieties.EquationalLogic module (The Agda Universal Algebra Library)"
+date : "2021-09-24"
+author: "agda-algebras development team"
+---
+```
+
+The "file" filed is redundant with the file's location on disk, but having it inline makes the file self-identifying when shared as a snippet — and YAML frontmatter is open-by-design, so unknown fields are silently ignored by both pipelines.
+
+
 ### Pragma
 
 Every Agda source file begins with the following pragma:
