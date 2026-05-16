@@ -13,10 +13,7 @@ Let 𝑆 be a signature. By an *identity* or *equation* in 𝑆 we mean an order
 
 Because a class of structures has a different type than a single structure, we must use a slightly different syntax to avoid overloading the relations ⊧ and ≈. As a reasonable alternative to what we would normally express informally as 𝒦 ⊧ 𝑝 ≈ 𝑞, we have settled on 𝒦 ⊫ p ≈ q to denote this relation.  To reiterate, if 𝒦 is a class of 𝑆-algebras, we write 𝒦 ⊫ 𝑝 ≈ 𝑞 if every 𝑨 ∈ 𝒦 satisfies 𝑨 ⊧ 𝑝 ≈ 𝑞.
 
-
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using (𝓞 ; 𝓥 ; Signature)
@@ -41,7 +38,6 @@ private variable χ α ρᵃ ℓ ι : Level
 ```
 
 
-
 #### <a id="the-models-relation">The models relation</a>
 
 We define the binary "models" relation `⊧` using infix syntax so that we may
@@ -50,10 +46,7 @@ algebras) to the identities that they satisfy. We also prove a couple of useful
 facts about ⊧.  More will be proved about ⊧ in the next module,
 Varieties.EquationalLogic.
 
-
 ```agda
-
-
 open _⟶_ using () renaming ( to to _⟨$⟩_ )
 
 module _  {X : Type χ} where
@@ -71,7 +64,6 @@ module _  {X : Type χ} where
  𝒦 ⊫ p ≈ q = {𝑨 : Algebra _ _} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
 ```
 
-
 (**Unicode tip**. Type \models to get `⊧` ; type \||= to get `⊫`.)
 
 The expression `𝑨 ⊧ p ≈ q` represents the assertion that the identity `p ≈ q`
@@ -85,10 +77,7 @@ assignment of values in the domain to variable symbols).
 If 𝒦 denotes a class of structures, then `Th 𝒦` represents the set of identities
 modeled by the members of 𝒦.
 
-
 ```agda
-
-
  Th' : Pred (Algebra α ρᵃ) ℓ → Pred(Term X × Term X) (χ ⊔ ℓ ⊔ ov(α ⊔ ρᵃ))
  Th' 𝒦 = λ (p , q) → 𝒦 ⊫ p ≈ q
 
@@ -97,16 +86,11 @@ Th'' :  {χ α : Level}{X : Type χ} → Pred (Algebra α α) (ov α)
 Th'' 𝒦 = λ (p , q) → 𝒦 ⊫ p ≈ q
 ```
 
-
 Perhaps we want to represent Th 𝒦 as an indexed collection.  We do so
 essentially by taking `Th 𝒦` itself to be the index set, as shown below.
 
-
 ```agda
-
-
 module _ {X : Type χ}{𝒦 : Pred (Algebra α ρᵃ) (ov α)} where
-
  ℐ : Type (ov(α ⊔ ρᵃ ⊔ χ))
  ℐ = Σ[ (p , q) ∈ (Term X × Term X) ] 𝒦 ⊫ p ≈ q
 
@@ -114,25 +98,17 @@ module _ {X : Type χ}{𝒦 : Pred (Algebra α ρᵃ) (ov α)} where
  ℰ ((p , q) , _) = (p , q)
 ```
 
-
 If `ℰ` denotes a set of identities, then `Mod ℰ` is the class of structures
 satisfying the identities in `ℰ`.
 
-
 ```agda
-
-
  Mod' : Pred(Term X × Term X) (ov α) → Pred(Algebra α ρᵃ) (ρᵃ ⊔ ov(α ⊔ χ))
  Mod' ℰ = λ 𝑨 → ∀ p q → (p , q) ∈ ℰ → 𝑨 ⊧ p ≈ q
 ```
 
-
 It is sometimes more convenient to have a "tupled" version of the previous definition, which we denote by `Modᵗ` and define as follows.
 
-
 ```agda
-
-
  Modᵗ : {I : Type ι} → (I → Term X × Term X) → {α : Level} → Pred(Algebra α ρᵃ) (χ ⊔ ρᵃ ⊔ ι ⊔ α)
  Modᵗ ℰ = λ 𝑨 → ∀ i → 𝑨 ⊧ fst (ℰ i) ≈ snd (ℰ i)
 ```
