@@ -676,7 +676,7 @@ This is a breaking change for downstream users of `Base/`.  Announce prominently
 
 ---
 
-### Issue M2-4: Designate a canonical HSP proof; consolidate the others (#259)
+### Issue M2-4: Designate a canonical HSP proof; consolidate the others (#259, closed)
 
 **Labels**: `documentation`, `milestone-2-consolidation`
 
@@ -792,56 +792,47 @@ From `grep -rn 'open import Legacy.Base' src/Setoid` after the freeze:
 
 ---
 
-### Issue M2-7: Port orphan Base modules to canonical paths (#302)
+### Issue M2-7: Port orphan Base modules to canonical paths (#302, closed)
 
 **Labels**: `milestone-2-consolidation`
 
-## Description
+# Description
 
-The M2-1 freeze (#256, PR #300) moved `src/Base/` to `src/Legacy/Base/` and partitioned the legacy modules into three categories in [DEPRECATED.md](https://github.com/ualib/agda-algebras/blob/master/src/Legacy/Base/DEPRECATED.md).  This issue is the parent that tracks the **Category-B** ports — modules that have no canonical replacement at the freeze point and need one in a later milestone.
+The M2-1 freeze (#256, PR #300) moved `src/Base/` to `src/Legacy/Base/` and partitioned the legacy modules into three categories in [DEPRECATED.md](https://github.com/ualib/agda-algebras/blob/master/src/Legacy/Base/DEPRECATED.md).  This issue was the parent tracking the **Category-B** ports — modules without a canonical replacement at the freeze point.
 
-This issue is the parent.  Children file the per-orphan ports against their target milestones.
+## Scope (as filed)
 
-## Scope
+Only orphans whose canonical destination is a port to `Setoid/`, `Overture/`, or `Examples/`.  The two large groups of Category-B content explicitly out of scope:
 
-Only orphans whose canonical destination is *a port to `Setoid/` or `Overture/`*.  The two large groups of Category-B content that are **not in scope** here:
-
-+  `Legacy.Base.Structures.*` (16 modules) — superseded wholesale by the `Classical/` tree (#260, M3-1), not ported to a parallel `Setoid.Structures` subtree.  Closed by M3 deliverables; no child issue here.
++  `Legacy.Base.Structures.*` (16 modules) — superseded wholesale by the `Classical/` tree (#260, M3-1).  Closed by M3 deliverables; no child issue here.
 +  `Legacy.Base.Equality.*` (4 modules, Category C) — retired by construction in `Setoid/`, no replacement planned.  No child issue.
 
-Per-orphan children to file under this parent:
+## Resolution
 
-+  Adjunction (4 modules: aggregator, Closure, Galois, Residuation).  Destination TBD (`Setoid/`, `Classical/`, or `Overture/`); destination decision is part of the child issue.
-+  Categories (2 modules: aggregator, Functors).  Destination TBD.
-+  Complexity (3 modules: aggregator, Basic, CSP) → `Setoid.Complexity` or similar.  Target milestone M9 (#282, #281 depend on this).
-+  Functions.Transformers → `Setoid.Functions.Transformers`.  Destination TBD.
-+  Relations.Continuous → `Setoid.Relations.Continuous` (or `Overture/`).  Target milestone M9; M9-1 (#282) and M9-2 (#281) depend on this.
-+  Relations.Properties → `Setoid.Relations.Properties`.  M2 follow-up.
-+  Varieties.Invariants → `Setoid.Varieties.Invariants`.  TBD.
+All seven children closed.  Final dispositions:
 
-## Workflow per child issue
++  **M2-7a (#305)** — `Legacy.Base.Adjunction.*` (4 modules) → `Overture.Adjunction.*`.  Promoted to `Overture/` rather than `Setoid/` because the abstract order-theoretic content is needed identically across `Setoid/`, `Classical/`, and `Cubical/`.
++  **M2-7b (#306)** — `Legacy.Base.Categories.*` (2 modules) → `Examples.PolynomialFunctors.*`.  Relocated to `Examples/` rather than ported into the canonical universal-algebra core; established the precedent now documented in DEPRECATED.md for Category-A relocations to `Examples/`.
++  **M2-7c (#307)** — `Legacy.Base.Complexity.*` (3 modules) → `Setoid.Complexity.*`.  Landed in M2 rather than deferred to M9; M9-2 (#281) and M7-1 (#274) now consume the canonical path directly.
++  **M2-7d (#308)** — `Legacy.Base.Relations.Continuous` → `Setoid.Relations.Continuous`, with the arity-many indexed-setoid `cong` design documented in the module header.  Landed in M2; M9-1 (#282) and M9-2 (#281) now consume the canonical path directly.
++  **M2-7e (#309)** — `Legacy.Base.Relations.Properties` → `Setoid.Relations.Properties`.
++  **M2-7f (#310)** — `Legacy.Base.Functions.Transformers` → `Examples.FunctionTypeBijections`.  Audit against stdlib's `Function.*` confirmed the content was illustrative bijection-construction material rather than a load-bearing API; same `Examples/` precedent as M2-7b.
++  **M2-7g (#311)** — `Legacy.Base.Varieties.Invariants` → `Setoid.Varieties.Invariants`.
 
-For each child:
-
-+  [ ] Decide the destination (`Setoid/`, `Classical/`, `Overture/`).  Record briefly in the child issue.
-+  [ ] Port the module: definitions, lemmas, proofs, prose comments.
-+  [ ] Update DEPRECATED.md: move the row from Category B to Category A; populate the canonical-replacement column; add the date the port landed.
-+  [ ] Add a `{-# WARNING_ON_USAGE #-}` pragma to the legacy module pointing at the new home.
-+  [ ] Update the parent (this issue) by checking the box.
-
-The legacy module is **not deleted** in the porting PR — it is removed in the *following* minor release, giving downstream users one full minor cycle to migrate.
+For each port, the legacy module was retained with a `{-# WARNING_ON_USAGE #-}` pragma naming the canonical home and the closing-issue number; removal is scheduled for v3.1, giving downstream users one full minor cycle to migrate.
 
 ## Acceptance criteria
 
-+  [ ] Every orphan listed above has either a closed child issue (port complete) or an open child issue with a target milestone (work scheduled).
-+  [ ] DEPRECATED.md's Category B table contains no row whose `Tracking issue` column reads `#TBD`.
-+  [ ] Once all children close, this parent closes; at that point the only Category-B residual content is the `Structures.*` subtree (handled by M3) and the `Equality.*` subtree (Category C, no replacement planned).
++  [x] Every orphan listed above has a closed child issue (port complete).
++  [x] DEPRECATED.md's Category B table contains no row whose `Tracking issue` column reads `#TBD`.
++  [x] The only Category-B residual content is the `Structures.*` subtree (handled by M3); the `Equality.*` subtree is Category C (no replacement planned).
 
 ## References
 
 +  ADR-001 — `docs/adr/001-setoid-as-canonical.md`
 +  DEPRECATED.md — `src/Legacy/Base/DEPRECATED.md`
 +  M2-1 — #256
++  Children — #305, #306, #307, #308, #309, #310, #311
 
 ---
 
@@ -1132,52 +1123,116 @@ The M2-1 inventory found no consumers of `Base.Varieties.Invariants` outside `sr
 
 ---
 
-### Issue M2-8: Migrate src/Examples and src/Exercises imports to canonical paths (#304)
+### Issue M2-8: Migrate src/Examples and src/Exercises imports to canonical paths (#304, closed)
 
 **Labels**: `milestone-2-consolidation`
 
 ## Description
 
-After the M2-1 freeze (#256, PR #300), four files outside `src/Legacy/` still import from `Legacy.Base.*`:
+After the M2-1 freeze (#256, PR #300), three files outside `src/Legacy/` still import from `Legacy.Base.*`:
 
-+  `src/Examples/Categories/Functors.lagda.md` — imports `Legacy.Base.Categories.Functors`
-+  `src/Examples/Structures/Basic.lagda.md` — imports `Legacy.Base.Structures` and `Legacy.Base.Structures.Basic`
-+  `src/Examples/Structures/Signatures.lagda.md` — imports `Legacy.Base.Structures.Basic`
-+  `src/Exercises/Complexity/FiniteCSP.lagda.md` — imports `Legacy.Base.Relations.Continuous`, `Legacy.Base.Structures.Basic`, `Legacy.Base.Structures.Homs`
++  `src/Examples/Structures/Basic.lagda.md` — imports `Legacy.Base.Structures` and `Legacy.Base.Structures.Basic`.
++  `src/Examples/Structures/Signatures.lagda.md` — imports `Legacy.Base.Structures.Basic`.
++  `src/Exercises/Complexity/FiniteCSP.lagda.md` — imports `Legacy.Base.Structures.Basic`, `Legacy.Base.Structures.Homs` (and, until this PR, `Legacy.Base.Relations.Continuous`).
 
 These imports are technically correct after the rename, but the example/exercise should exercise the **canonical** library, not the legacy one.  Each needs to migrate to whichever destination its content lands at.
 
-## Per-file plan
+## Status
 
-+  **`src/Examples/Categories/Functors.lagda.md`**.  Awaits the Categories port (child of #TBD parent issue).  Migrate when the destination of `Categories.Functors` is decided.
-+  **`src/Examples/Structures/Basic.lagda.md`** and **`src/Examples/Structures/Signatures.lagda.md`**.  These are `Structures`-family examples.  When `Classical/` lands (M3-1 #260), these examples should either (a) migrate to `Classical/` to demonstrate the new layer, or (b) be deleted in favor of the new `Examples/Classical/` examples that M3-7 (#266) will produce.  Decision is part of M3 implementation.
-+  **`src/Exercises/Complexity/FiniteCSP.lagda.md`**.  Depends on the `Complexity` and `Continuous` ports (children of #TBD parent issue) and on M7-1 (#274).  Migrate when the canonical destinations land.
++  **Categories.Functors**.  Resolved under #306 (M2-7b) by relocation to `Examples.PolynomialFunctors.Functors`; the old `src/Examples/Categories/` directory was removed.  The stale `\input{../latex/Examples.Categories.Functors}` in `docs/papers/EverythingFunc.tex` is fixed by this PR.
++  **`Setoid.Relations.Continuous` import in `FiniteCSP`**.  Landed in this PR (the canonical Continuous destination was finalized under #308 / M2-7d).
++  **`Legacy.Base.Structures.*` imports**.  Blocked on M3-1 (#260, `Classical/` scaffold).  Tracked in follow-ups M2-8b (Structures examples) and M2-8c (FiniteCSP structures + homs).
 
 ## Tasks
 
-+  [ ] When the canonical destination of `Categories.Functors` is decided, migrate `Examples/Categories/Functors.lagda.md`.
-+  [ ] As part of M3 (or as a follow-up), decide the fate of `Examples/Structures/{Basic,Signatures}.lagda.md` (migrate to `Classical/` examples or remove).
-+  [ ] When `Complexity` and `Relations.Continuous` are ported (M9 dependencies), migrate `Exercises/Complexity/FiniteCSP.lagda.md`.
-+  [ ] Confirm via `grep -rn 'Legacy.Base' src/Examples src/Exercises` that no `Legacy.Base.*` imports remain in the example/exercise tree.
++  [x] Migrate the `Continuous` import in `Exercises/Complexity/FiniteCSP.lagda.md`.
++  [x] Fix the stale `Examples.Categories.Functors` LaTeX `\input`.
++  [ ] Decide the fate of `Examples/Structures/{Basic,Signatures}.lagda.md` once M3-1 lands — migrate to `Classical/` or fold into the M3-7 (#266) examples.  Tracked in M2-8b.
++  [ ] Migrate the two `Legacy.Base.Structures.*` imports in `Exercises/Complexity/FiniteCSP.lagda.md` once M3-1 lands.  Tracked in M2-8c.
 
 ## Acceptance criteria
 
-+  [ ] `grep -rn 'open import Legacy.Base' src/Examples src/Exercises` returns no matches.
-+  [ ] `make check` passes.
-+  [ ] Every example/exercise file has a clean canonical-tree import list.
-
-## Non-goals
-
-+  Reworking the example/exercise content beyond the import-path change.
-+  Adding new examples (M3-7 #266 covers that).
++  [x] `grep -rn 'Examples\.Categories' src/ docs/` returns no matches.
++  [ ] `grep -rn 'open import Legacy.Base' src/Examples src/Exercises` returns no matches (deferred to M2-8b + M2-8c after M3-1).
++  [x] `make check` passes.
 
 ## References
 
 +  M2-1 — #256
++  M2-7b (Categories port) — #306
++  M2-7d (Continuous port) — #308
 +  M3-1 — #260
 +  M3-7 — #266
-+  M7-1 — #274
-+  Parent port-tracking issue — #TBD
++  Parent port-tracking issue — #302
+
+---
+
+### Issue M2-8b: Update imports in submodules of `Examples.Structures` (#322)
+
+**Labels**: `milestone-2-consolidation`, `blocked-upstream`
+
+## Description
+
+The two example modules `src/Examples/Structures/Basic.lagda.md` and `src/Examples/Structures/Signatures.lagda.md` still import `signature` and `structure` from `Legacy.Base.Structures.{Basic,...}`.  Their canonical home depends on M3-1 (#260, `Classical/` scaffold), which has not yet landed.
+
+The pedagogical content here is heterogeneous:
+
++  **Finite signatures `S∅`, `S1`, `S001`, `S021`, ... in `Signatures.lagda.md`**.  These are foundational examples consumed by `Exercises.Complexity.FiniteCSP`.  Natural canonical home: `Classical.Signatures.*` once M3-1 lands.  Migration is mechanical.
++  **`SL` (3-element meet-semilattice) in `Basic.lagda.md`**.  Naturally re-expressed against `Classical.Structures.Semilattice` (M3-5 #264) once that lands.  Could fold into the M3-7 (#266) examples program.
++  **`NAE3SAT` (2-element ternary NAE-3-SAT relational structure) in `Basic.lagda.md`**.  Genuinely *relational* — the current M3 plan is algebraic (operations only) — so this content has no natural destination in the planned `Classical/` tree.  Two options: (a) keep a bare-types relational-structures example, perhaps under `Examples/RelationalStructures/`; (b) defer to a future `Classical.Relational/` extension.
+
+## Tasks
+
++  [ ] Decide the per-example destination once M3-1 lands.
++  [ ] Migrate signatures examples to `Classical.Signatures.*` if M3-1's signature API supports it directly.
++  [ ] Migrate or rewrite `SL` against `Classical.Structures.Semilattice` (depends on M3-5).
++  [ ] Resolve `NAE3SAT`: relocate, rewrite, or delete.
++  [ ] Update `Exercises/Complexity/FiniteCSP.lagda.md`'s `Examples.Structures.Signatures` consumer accordingly (M2-8c is the immediate downstream).
+
+## Dependencies
+
++  Blocked by M3-1 (#260).
++  Benefits from M3-5 (#264) for the semilattice example.
++  M3-7 (#266) may subsume the `SL` example.
+
+## References
+
++  Parent — #304 (M2-8)
++  M3-1 — #260
++  M3-5 — #264
++  M3-7 — #266
+
+---
+
+### Issue M2-8c: Fix imports in `Exercises.Complexity.FiniteCSP` (#323)
+
+**Labels**: `milestone-2-consolidation`, `blocked-upstream`
+
+## Description
+
+`src/Exercises/Complexity/FiniteCSP.lagda.md` still imports `signature`, `structure`, and `hom` from `Legacy.Base.Structures.{Basic,Homs}` after the M2-8a partial closure (#304).  These imports are gated on M3-1 (#260, `Classical/` scaffold) for the same reasons as M2-8b.
+
+The exercise uses the bare-types relational-structures API (relational signatures `S021`, the `structure 𝐹 𝑅` record with non-trivial `rel` field, and `hom` for the resulting relational structures).  As noted in M2-8b, the planned `Classical/` tree is currently algebraic-only, so this migration depends on either:
+
++  M2-8b resolving the relational-structures destination question, or
++  M3 being extended to cover relational structures (a `Classical.Relational/` subtree).
+
+## Tasks
+
++  [ ] Coordinate with M2-8b on the destination of relational-structures content.
++  [ ] Migrate the `signature`, `structure`, `hom` imports in `FiniteCSP.lagda.md` to the chosen destination.
++  [ ] Remove the `TODO(#M2-8c)` marker added in M2-8a.
+
+## Acceptance criteria
+
++  [ ] `grep -rn 'open import Legacy.Base' src/Exercises` returns no matches.
++  [ ] `make check` passes.
+
+## References
+
++  Parent — #304 (M2-8)
++  Sibling — M2-8b
++  M3-1 — #260
 
 <!-- END GENERATED: milestone-2 -->
 
@@ -1231,7 +1286,7 @@ graph TD
 
 <!-- BEGIN GENERATED: milestone-3 -->
 
-### Issue M3-1: Introduce the Classical/ tree — Signatures, Theories, Structures, Bundles, Small (#260)
+### Issue M3-1: Introduce the Classical/ tree — Signatures, Theories, Structures, Bundles, Small (#260, closed)
 
 **Labels**: `milestone-3-classical`, `design-discussion`
 
@@ -1273,31 +1328,144 @@ Ratified design decisions (to be recorded in `docs/adr/002-classical-layer.md`):
 
 ---
 
-### Issue M3-2: Add Classical.Structures.Semigroup (pattern-setting first structure) (#261)
+### Issue M3-1a: Scaffold the Classical/ tree — umbrella files for all five subtrees (#326, closed)
 
-**Labels**: `milestone-3-classical`
+**Labels**: `documentation`, `milestone-3-classical`
+
+**Parent**: #260 (M3-1)
 
 ## Description
 
-After the M3-1 scaffold lands, add Semigroup as the pattern-setting first non-trivial classical structure.  Every subsequent classical structure will imitate this pattern, so getting it right is disproportionately important.
+This issue introduces the directory layout and umbrella files for the `Classical/` tree, per the design committed in [ADR-002](https://github.com/ualib/agda-algebras/blob/master/docs/adr/002-classical-layer-design.md).  It is scaffolding only: no concrete structure (Magma, Semigroup, Monoid, …) lands here.  Concrete structures are tracked under separate M3-2…N issues, each shipping the five-file quintuple (Signatures + Theories + Structures + Bundles + Small) per ADR-002 for one structure.
+
+Six umbrella files land:
+
++  `src/Classical.lagda.md` — top-level umbrella for the `Classical` tree
++  `src/Classical/Signatures.lagda.md` — umbrella for per-structure signatures
++  `src/Classical/Theories.lagda.md` — umbrella for per-structure equational theories
++  `src/Classical/Structures.lagda.md` — umbrella for per-structure Σ-typed cores
++  `src/Classical/Bundles.lagda.md` — umbrella for per-structure stdlib-shaped record bundles
++  `src/Classical/Small.lagda.md` — umbrella for per-structure level-fixed veneers
+
+Each umbrella file gets a standard module header with the canonical "This is the [Classical.X][] module of the [Agda Universal Algebra Library][]" prose preamble, an ADR-002 cross-reference, a prose-schema explanation of what the subtree *will* contain (so a reader landing on `Classical/Signatures.lagda.md` knows it's the home of per-structure signature definitions, even before any concrete signature exists), and an empty `public` re-export block ready to grow as M3-2…N land structures.
+
+The top-level `Classical.lagda.md` umbrella additionally cross-references the parallel structure of `Setoid/` (per ADR-001) so the relationship between the two trees is visible from the entry point.
+
+The library aggregator `agda-algebras.lagda.md` already mentions `Classical/` as a planned tree under ADR-002; that reference is updated from "planned, M3" to active wording with a link to this scaffold, and the existing `open import Classical` line is uncommented (or added, if currently absent).
+
+The `Everything.agda` and `EverythingFunc.agda` generators are updated to walk the new subtree.
+
+## Non-goals
+
++  No concrete structure (`Magma`, `Semigroup`, `Monoid`, `Group`, `Lattice`, `Ring`, …) lands here; those are M3-2…N.
++  No shared infrastructure (`fromPropEq`, named projection helpers like `Domain` / `Signature` / `equations`, generic Classical-flavored equational reasoning) lands here.  The right shapes for those helpers emerge from M3-2 (Semigroup) and will be pulled up into shared locations only once they have at least one consumer.  Premature abstraction here is the failure mode this issue explicitly avoids.
++  No bundle-bridge infrastructure to stdlib lands here; that is M3-3.
++  No update to `Legacy.Base.Structures.*` deprecation notices; the structures-superseded-by-Classical relocation is per-structure and tracked on the M3-2…N issues.
 
 ## Tasks
 
-- [ ] `Classical/Signatures/Semigroup.agda`: one binary operation, `𝑆ₛ`.
-- [ ] `Classical/Theories/Semigroup.agda`: associativity as the single equation in `Theory 𝑆ₛ`.
-- [ ] `Classical/Structures/Semigroup.agda`: the Σ-typed definition `Semigroup α ρ = Σ[ 𝑨 ∈ Algebra 𝑆ₛ α ρ ] 𝑨 ⊨ Eₛ` with convenience projections.
-- [ ] Basic lemmas: every semigroup is an `Algebra`; composition of semigroup morphisms is a semigroup morphism.
-- [ ] `fromPropEq` helper for propositional-equality-based definitions.
-- [ ] At least one worked example: `(ℕ, +)` as a `Semigroup`.
-- [ ] `Classical/Bundles/Semigroup.agda` with stdlib bridge (see M3-3).
-- [ ] `Classical/Small/Structures/Semigroup.agda` level-fixed veneer.
++  [ ] Create `src/Classical.lagda.md` with the top-level module header, ADR-001/ADR-002 cross-references, a brief prose explanation of the five-subtree quintuple pattern, and an empty re-export block.
++  [ ] Create `src/Classical/Signatures.lagda.md`, `src/Classical/Theories.lagda.md`, `src/Classical/Structures.lagda.md`, `src/Classical/Bundles.lagda.md`, `src/Classical/Small.lagda.md`, each with module header + ADR-002 cross-reference + subtree-purpose prose + empty re-export block.
++  [ ] Update `src/agda-algebras.lagda.md` to activate the `Classical/` mention (replace "planned, M3" with active wording linking to ADR-002 and to this scaffold).
++  [ ] Update the `Everything.agda` / `EverythingFunc.agda` build target so the new files are walked by `make check`.
++  [ ] Update `README.md` library-structure section to drop "planned, M3" from the `Classical/` bullet.
++  [ ] Record under `CHANGELOG.md` `[Unreleased] / Added`.
 
 ## Acceptance criteria
 
-- [ ] All files type-check.
-- [ ] The worked example `ℕ-semigroup` type-checks.
-- [ ] The bridge to `Algebra.Bundles.Semigroup` round-trips on `ℕ`.
-- [ ] Module header comment documents the pattern for future structures.
++  [ ] All six umbrella files exist with proper module headers and ADR-002 cross-references.
++  [ ] `make check` passes (the empty re-export blocks should type-check trivially).
++  [ ] `agda-algebras.lagda.md`, `README.md`, and `CHANGELOG.md` reflect the activation.
++  [ ] No concrete structure or shared helper lands; the diff is pure scaffolding.
+
+## References
+
++  Parent — #260 (M3-1).
++  Design — [ADR-002](https://github.com/ualib/agda-algebras/blob/master/docs/adr/002-classical-layer-design.md).
++  Foundation — [ADR-001](https://github.com/ualib/agda-algebras/blob/master/docs/adr/001-setoid-as-canonical.md).
++  Long-term portability target — [ADR-003](https://github.com/ualib/agda-algebras/blob/master/docs/adr/003-cubical-canonical-target.md).
++  Downstream — M3-2 (Semigroup, the first concrete structure landing under the scaffold), M3-3 (stdlib bundle bridges).
+
+---
+
+### Issue M3-2: Add Classical.Structures.Semigroup (pattern-setting first structure) (#261)
+
+**Labels**: `enhancement`, `milestone-3-classical`
+
+## Description
+
+After the M3-1 scaffold (#326, merged) lands, add Semigroup as the pattern-setting first concrete classical structure under the [`Classical/`](src/Classical.lagda.md) tree.  Every subsequent classical structure (Monoid, Group, Lattice, Ring, …) will imitate the file layout, conventions, and helper-shapes established here, so getting Semigroup right is disproportionately important.
+
+Design context: [ADR-002 — Classical structures as Σ-typed cores with record-typed bundle views](docs/adr/002-classical-layer-design.md).
+
+## Design decisions to record (resolved in the M3-2 PR description)
+
+These were settled in advance of implementation; record them in the PR description and in module-header prose so future structures inherit the conventions without re-litigation.
+
++  **Signature representation**.  Named operator via a one-constructor data type: `data Op-Semigroup : Type where ∙op : Op-Semigroup`, with `ar-Semigroup ∙op = Fin 2`.  Constructor-naming convention `<symbol>op` reserves the bare symbol for use-site infix sugar over `node`.  Rationale: proof terms self-document the operation being applied (training-corpus value), and the pattern generalizes uniformly to multi-operation signatures (Monoid adds `eop`; Group adds `invop`; Lattice adds `∧op`, `∨op`; Ring adds five operators).
++  **Equational theory representation**.  Indexed form per `Setoid.Varieties.EquationalLogic` `Modᵗ`: `data Eq-Semigroup : Type where assoc : Eq-Semigroup`, with `Th-Semigroup : Eq-Semigroup → Term SemigroupVar × Term SemigroupVar`.  Symmetric with the signature convention.  The Σ-typed core uses `Modᵗ Th-Semigroup` (aliased as `_⊨_` locally; pull-up deferred).
++  **Variable carrier for terms**.  Per-structure named enum: `data SemigroupVar : Type where x y z : SemigroupVar`.  Parallels the named-operation convention; keeps equations mathematically readable (`ℊ x` rather than `ℊ 0F`).  Naming convention for future structures: `<Structure>Var` with constructors drawn from the conventional metasyntactic letters for the structure's identities.
++  **Named accessors next to the core**.  `Domain`, `Signature`, `equations` defined alongside `Semigroup α ρ` to offset Σ-projection ergonomic cost.  These get pulled up to a shared location (probably `Classical.Structures` itself, or a small `Classical.Accessors` module) once a second consumer exists; landing them locally in M3-2 is deliberate — premature shared abstraction is the failure mode #326's non-goals were drawn to avoid.
++  **`fromPropEq` shape**.  Per-structure: `fromPropEq : (A : Type α) (_·_ : A → A → A) (assoc : ∀ x y z → (x · y) · z ≡ x · (y · z)) → Semigroup α α`.  Same pull-up policy as the accessors.
++  **Morphisms of classical structures**.  No per-structure invariant required: any `Setoid.Homomorphisms` morphism between the underlying algebras already preserves operations, and the target inheriting the theory is automatic from the source side.  So "semigroup morphism" is definitionally an algebra hom of underlying algebras; nothing to define in M3-2.
++  **Worked-example placement**.  The example lives in a sibling `Examples/Classical/Semigroup.lagda.md`, not co-located with the core.  Keeps the canonical `Classical/Structures/Semigroup.lagda.md` lean and gives a natural home for further semigroup examples (`(List A, _++_)`, free semigroups, presentations, …) as they accumulate, without bloating the core.
+
+## Tasks
+
+### Core five-file quintuple
+
++  [ ] `src/Classical/Signatures/Semigroup.lagda.md`: `Op-Semigroup`, `ar-Semigroup`, `𝑆ₛₘ : Signature lzero lzero`.
++  [ ] `src/Classical/Theories/Semigroup.lagda.md`: `SemigroupVar`, `Eq-Semigroup`, `Th-Semigroup : Eq-Semigroup → Term SemigroupVar × Term SemigroupVar` encoding associativity as the single identity.
++  [ ] `src/Classical/Structures/Semigroup.lagda.md`:
+   +  the Σ-typed core `Semigroup α ρ = Σ[ 𝑨 ∈ Algebra 𝑆ₛₘ α ρ ] 𝑨 ⊨ Th-Semigroup`,
+   +  local `_⊨_` alias for `Modᵗ`-on-`Th-Semigroup`,
+   +  named accessors `Domain`, `Signature`, `equations`,
+   +  `fromPropEq` helper.
++  [ ] `src/Classical/Bundles/Semigroup.lagda.md`: record matching `Algebra.Bundles.Semigroup` from stdlib 2.3, conversion functions `⟨_⟩ₛₘ`, `⟪_⟫ₛₘ` (Σ-core → bundle, bundle → Σ-core), round-trip lemma.  Coordinates with M3-3.
++  [ ] `src/Classical/Small/Structures/Semigroup.lagda.md`: level-fixed veneer `Semigroup = Classical.Structures.Semigroup.Semigroup lzero lzero`, plus a re-export of the small-case `fromPropEq`.
+
+### Worked example (sibling under `Examples/`)
+
++  [ ] `src/Examples/Classical/Semigroup.lagda.md`: `(ℕ, +)` as a `Classical.Small.Structures.Semigroup.Semigroup`, constructed via `fromPropEq` from stdlib's `+-assoc`.  File-header prose flags this as the home of all future semigroup-specific examples.
++  [ ] `src/Examples/Classical.lagda.md`: new umbrella for the `Examples/Classical/` subtree (parallels how `src/Classical.lagda.md` umbrellas the `Classical/` tree).  Re-exports `Examples.Classical.Semigroup`; will grow as Monoid, Group, … examples land alongside their structures.
+
+### Umbrella updates
+
++  [ ] Update the five `Classical/` subtree umbrellas to `open import ... public` the new modules: `Classical.Signatures`, `Classical.Theories`, `Classical.Structures`, `Classical.Bundles`.  Update `Classical.Small` to `open import Classical.Small.Structures public` once the small `Structures` aggregator exists.
++  [ ] Create `src/Classical/Small/Structures.lagda.md` aggregator (one further file beyond the quintuple above): re-exports `Classical.Small.Structures.Semigroup`.
++  [ ] Update `src/Examples.lagda.md` to `open import Examples.Classical`.
+
+### Documentation
+
++  [ ] Module-header prose in `Classical/Structures/Semigroup.lagda.md` documents the conventions established here, so future structures (Monoid in M3-4, Group in M3-5, …) have a single normative reference.
++  [ ] `CHANGELOG.md` `[Unreleased] / Added` entry.
+
+## Non-goals (deferred to later milestones)
+
++  Pull-up of `_⊨_`, named accessors, and `fromPropEq` to shared locations.  Deferred until at least one additional structure (Monoid, M3-4) confirms the shape generalizes.
++  Stdlib bundle bridges generalized beyond the per-structure conversion functions.  M3-3.
++  Anything to do with semigroup homomorphisms beyond the observation in the design-decisions section.  Homomorphisms of classical structures are just `Setoid.Homomorphisms` of underlying algebras.
++  Free semigroups, semigroup varieties as a sub-class of varieties of `𝑆ₛₘ`-algebras, presentations, term rewriting, decidability of the word problem.  All later.
++  Additional worked examples beyond `(ℕ, +)`.  The `Examples/Classical/Semigroup.lagda.md` file is the right home for these as they accumulate, but M3-2's scope is the one canonical example.
+
+## Acceptance criteria
+
++  [ ] All eight new files type-check under `make check`.
++  [ ] The worked example `ℕ-semigroup` in `Examples.Classical.Semigroup` type-checks.
++  [ ] The interpretation of `∙op` in `ℕ-semigroup` reduces definitionally to `_+_` — no unfortunate opacity from the `fromPropEq` construction.
++  [ ] The bridge to `Algebra.Bundles.Semigroup` round-trips on `ℕ-semigroup`: converting Σ-core → bundle → Σ-core gives back a structure propositionally equal to the original.
++  [ ] Module-header prose in `Classical/Structures/Semigroup.lagda.md` documents the design conventions clearly enough that a contributor writing `Classical/Structures/Monoid.lagda.md` from scratch could do so without consulting M3-2's PR discussion.
++  [ ] CHANGELOG entry under `[Unreleased] / Added`.
+
+## References
+
++  Parent — #260 (M3-1).
++  Scaffold predecessor — #326 (M3-1a).
++  Sibling — #262 (M3-3, stdlib bundle bridges; coordinates on the bundle pattern across structures).
++  Design — [ADR-002](docs/adr/002-classical-layer-design.md).
++  Equational-logic substrate — [`src/Setoid/Varieties/EquationalLogic.lagda.md`](src/Setoid/Varieties/EquationalLogic.lagda.md) (`Modᵗ`).
++  Term substrate — [`src/Overture/Terms.lagda.md`](src/Overture/Terms.lagda.md) (`Term`, `ℊ`, `node`).
++  Stdlib target for the bundle bridge — `Algebra.Bundles.Semigroup` in standard-library 2.3.
 
 ---
 
