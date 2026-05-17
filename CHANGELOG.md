@@ -39,6 +39,8 @@ The 3.0 release is a major reconstruction of agda-algebras building on the Setoi
 
 ### Changed (BREAKING)
 
++  **ADR-002 revised to v2** (no associated issue; revision documented in [PR ref]).  The original ADR-002 was authored ahead of the M3-2 Semigroup load test; v2 incorporates the findings from that load test.  No higher-level architecture is overturned; the revisions clarify and refine the original decisions across nine numbered sections.  See the ADR's `Empirical revision history` section for the substantive content of the revision.
+
 +  **`src/Base/` frozen as `src/Legacy/Base/`** (M2-1, #256).  `Setoid/` is now the canonical development tree for agda-algebras 3.0.  The pre-3.0 bare-types tree has been moved to `src/Legacy/Base/`; the top-level aggregator `agda-algebras.lagda.md` re-exports it as `Legacy.Base`.  This is a breaking change for downstream users of `Base.*`.  The migration is mechanical for most imports; see `src/Legacy/Base/DEPRECATED.md` for the categorization (deprecated-with-replacement vs. pending-port vs. no-replacement-planned) and `docs/adr/001-setoid-as-canonical.md` for the rationale.
 
    Migration recipe (most imports):

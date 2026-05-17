@@ -1603,30 +1603,34 @@ The `Examples/` directory is thin.  Add worked examples that exercise the Classi
 
 ### Milestone 3 Dependencies
 
-M3-2 (Semigroup) is the pattern-setter — the design choices made there propagate to every other structure.  M3-4 (Monoid/Group) and M3-5 (Lattice) are the mid-level hubs; M3-6 (Ring) needs M3-4 because rings are abelian groups with extra structure, and M3-7 (Examples) aggregates from several of the structure issues.
+The pattern-setters are M3-2 (infrastructure), M3-3 (no-equation pattern), M3-4 (one-equation pattern) — the design choices made there propagate to every other structure.  M3-6 (Monoid/Group) and M3-7 (Lattice) are the mid-level hubs; M3-8 (Ring) needs M3-6 because rings are abelian groups with extra structure, and M3-9 (Examples) aggregates from several of the structure issues.
 
 ```mermaid
 graph TD
   M2_1["M2-1: Freeze Base"]:::ext
   M2_6["M2-6: Extract Setoid foundations"]:::ext
   M3_1["M3-1: Classical/ scaffold"]
-  M3_2["M3-2: Semigroup (pattern-setting)"]
-  M3_3["M3-3: Stdlib bridges"]
-  M3_4["M3-4: Monoid / Group"]
-  M3_5["M3-5: Lattice"]
-  M3_6["M3-6: Ring"]
-  M3_7["M3-7: Examples"]
+  M3_2["M3-2: Operations + Equations infra"]
+  M3_3["M3-3: Magma (no-equation pattern)"]
+  M3_4["M3-4: Semigroup (one-equation pattern)"]
+  M3_5["M3-5: Stdlib bridges (continued)"]
+  M3_6["M3-6: Monoid / Group"]
+  M3_7["M3-7: Lattice"]
+  M3_8["M3-8: Ring"]
+  M3_9["M3-9: Examples"]
   M2_1 --> M3_1
   M2_6 --> M3_1
   M3_1 --> M3_2
   M3_2 --> M3_3
-  M3_2 --> M3_4
-  M3_3 --> M3_5
+  M3_3 --> M3_4
   M3_4 --> M3_5
   M3_4 --> M3_6
-  M3_2 --> M3_7
-  M3_4 --> M3_7
   M3_5 --> M3_7
+  M3_6 --> M3_7
+  M3_6 --> M3_8
+  M3_4 --> M3_9
+  M3_6 --> M3_9
+  M3_7 --> M3_9
   classDef ext fill:#f0f0f0,stroke:#999,stroke-dasharray: 4 3,color:#555
 ```
 
