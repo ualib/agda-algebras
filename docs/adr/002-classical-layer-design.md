@@ -110,7 +110,7 @@ Pointwise agreement is the mathematically correct notion of "same semigroup" und
 
 ### 7.  Notation policy
 
-**Operation-symbol interpretation**: `f ^ 𝑨` replaces `f ̂ 𝑨`.  The carrot combining-character is unicode-Tetris that breaks grep, sed, and shell-pipeline tooling; ASCII `^` survives every text-processing tool.  The two notations coexist for one minor version under a `WARNING_ON_USAGE` pragma on `̂`, then `̂` is removed.
+**Operation-symbol interpretation**: `f ^ 𝑨` replaces `f ̂ 𝑨`.  The caret combining character is unicode-Tetris that breaks grep, sed, and shell-pipeline tooling; ASCII `^` survives every text-processing tool.  The two notations coexist for one minor version under a `WARNING_ON_USAGE` pragma on `̂`, then `̂` is removed.
 
 **Unicode usage across the library**: three categories, with three different policies.
 
