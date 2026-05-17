@@ -1388,90 +1388,272 @@ The `Everything.agda` and `EverythingFunc.agda` generators are updated to walk t
 
 ---
 
-### Issue M3-2: Add Classical.Structures.Semigroup (pattern-setting first structure) (#261)
+### Issue M3-2: Classical.Operations and Classical.Equations infrastructure (#330)
 
-**Labels**: `enhancement`, `milestone-3-classical`
+**Labels**: `milestone-3-classical`, `design-discussion`
 
 ## Description
 
-After the M3-1 scaffold (#326, merged) lands, add Semigroup as the pattern-setting first concrete classical structure under the [`Classical/`](src/Classical.lagda.md) tree.  Every subsequent classical structure (Monoid, Group, Lattice, Ring, …) will imitate the file layout, conventions, and helper-shapes established here, so getting Semigroup right is disproportionately important.
+This issue introduces the two shared-infrastructure modules that every concrete `Classical/X` structure will depend on: [`Classical.Operations`](src/Classical/Operations.lagda.md), holding the per-arity `Curry`/`Uncurry` helpers that bridge the foundational tuple-indexed operation form `(I → A) → A` with the curried user-facing form `A → A → A`; and the seed of [`Classical.Equations`](src/Classical/Equations.lagda.md) (or `Classical.Identities.lagda.md` — name TBD in PR), holding generic equation builders parametric in a signature and operation symbols.
 
-Design context: [ADR-002 — Classical structures as Σ-typed cores with record-typed bundle views](docs/adr/002-classical-layer-design.md).
+Per [ADR-002 v2 §1](docs/adr/002-classical-layer-design.md), tuple-indexed operations live in `Setoid.Algebras` and downstream meta-theory; curried operations are the user-facing form across `Classical/`.  Per [ADR-002 v2 §3](docs/adr/002-classical-layer-design.md), generic equation builders form the syntactic dual of stdlib's `Algebra.Definitions` and feed the equational-logic substrate (`Modᵗ`) for every concrete theory.
 
-## Design decisions to record (resolved in the M3-2 PR description)
+Landing this infrastructure before any concrete structure means M3-3 (Magma) is purely about signature mechanics, M3-4 (Semigroup) is purely about adding one equation, and so on.  Each per-structure issue is a small composition rather than a re-derivation.
 
-These were settled in advance of implementation; record them in the PR description and in module-header prose so future structures inherit the conventions without re-litigation.
+This issue is the renumbered predecessor of what was originally M3-2 (Semigroup); the M3-2 issue body was reformulated to M3-4 after the v2 ADR.
 
-+  **Signature representation**.  Named operator via a one-constructor data type: `data Op-Semigroup : Type where ∙op : Op-Semigroup`, with `ar-Semigroup ∙op = Fin 2`.  Constructor-naming convention `<symbol>op` reserves the bare symbol for use-site infix sugar over `node`.  Rationale: proof terms self-document the operation being applied (training-corpus value), and the pattern generalizes uniformly to multi-operation signatures (Monoid adds `eop`; Group adds `invop`; Lattice adds `∧op`, `∨op`; Ring adds five operators).
-+  **Equational theory representation**.  Indexed form per `Setoid.Varieties.EquationalLogic` `Modᵗ`: `data Eq-Semigroup : Type where assoc : Eq-Semigroup`, with `Th-Semigroup : Eq-Semigroup → Term SemigroupVar × Term SemigroupVar`.  Symmetric with the signature convention.  The Σ-typed core uses `Modᵗ Th-Semigroup` (aliased as `_⊨_` locally; pull-up deferred).
-+  **Variable carrier for terms**.  Per-structure named enum: `data SemigroupVar : Type where x y z : SemigroupVar`.  Parallels the named-operation convention; keeps equations mathematically readable (`ℊ x` rather than `ℊ 0F`).  Naming convention for future structures: `<Structure>Var` with constructors drawn from the conventional metasyntactic letters for the structure's identities.
-+  **Named accessors next to the core**.  `Domain`, `Signature`, `equations` defined alongside `Semigroup α ρ` to offset Σ-projection ergonomic cost.  These get pulled up to a shared location (probably `Classical.Structures` itself, or a small `Classical.Accessors` module) once a second consumer exists; landing them locally in M3-2 is deliberate — premature shared abstraction is the failure mode #326's non-goals were drawn to avoid.
-+  **`fromPropEq` shape**.  Per-structure: `fromPropEq : (A : Type α) (_·_ : A → A → A) (assoc : ∀ x y z → (x · y) · z ≡ x · (y · z)) → Semigroup α α`.  Same pull-up policy as the accessors.
-+  **Morphisms of classical structures**.  No per-structure invariant required: any `Setoid.Homomorphisms` morphism between the underlying algebras already preserves operations, and the target inheriting the theory is automatic from the source side.  So "semigroup morphism" is definitionally an algebra hom of underlying algebras; nothing to define in M3-2.
-+  **Worked-example placement**.  The example lives in a sibling `Examples/Classical/Semigroup.lagda.md`, not co-located with the core.  Keeps the canonical `Classical/Structures/Semigroup.lagda.md` lean and gives a natural home for further semigroup examples (`(List A, _++_)`, free semigroups, presentations, …) as they accumulate, without bloating the core.
+## Design decisions
+
+These are the conventions established here; the same applies to every per-structure file that consumes this infrastructure.
+
++  **`Curry`/`Uncurry` helpers**.  One pair per arity: `Curry₀`/`Uncurry₀` for nullary, `Curry₁`/`Uncurry₁` for unary, `Curry₂`/`Uncurry₂` for binary.  Higher arities added as needed (Lattice in M3-7 may want `Curry₃` for the absorption-law statement; defer the decision until then).  Each helper is a two-line definition; the file is short.
++  **Fin n η-bridge containment**.  The Fin 2 η-failure under `--cubical-compatible` is contained inside `Uncurry₂` and `Curry₂` — at the use site, an `(I → A) → A` operation appears as `A → A → A` and the wrapping/unwrapping is invisible.  Per-structure files never write `pair`-style helpers inline.
++  **Generic equation builders**.  Parametric in signature `S : Signature 𝓞 𝓥` (or `Signature ℓ₁ ℓ₂` if the abstract over levels is undesirable; finalize during PR) and in operation symbols within `S`, with arity-conformance evidence as a `≡ Fin n` argument.  Inventory for M3-2:
+   +  `Associative : (f : OperationSymbolsOf S) → ArityOf f ≡ Fin 2 → ∀ {X} → X → X → X → Term X × Term X`
+   +  `Commutative : (f : OperationSymbolsOf S) → ArityOf f ≡ Fin 2 → ∀ {X} → X → X → Term X × Term X`
+   +  `LeftIdentity / RightIdentity : binary op + nullary op + their arity proofs → ∀ {X} → X → Term X × Term X`
+   +  `LeftInverse / RightInverse : binary op + nullary identity op + unary inverse op + arity proofs → ∀ {X} → X → Term X × Term X`
+   +  `Idempotent : (f : OperationSymbolsOf S) → ArityOf f ≡ Fin 2 → ∀ {X} → X → Term X × Term X`
+   +  `DistributesOverˡ / DistributesOverʳ : two binary ops + their arity proofs → ∀ {X} → X → X → X → Term X × Term X`
+   +  `Absorbs : two binary ops + their arity proofs → ∀ {X} → X → X → Term X × Term X`
+
+   This inventory covers every equation in `Th-Magma`, `Th-Semigroup`, `Th-Monoid`, `Th-Group`, `Th-Semilattice`, `Th-Lattice`, `Th-Semiring`, `Th-Ring`.  Builders for less-uniform equations (e.g., the medial law) deferred until a structure needs them.
++  **Self-documenting signature projections**.  This file also seeds `OperationSymbolsOf` and `ArityOf` aliases in `Overture.Signatures` (per [ADR-002 v2 §1](docs/adr/002-classical-layer-design.md)).  Two-line addition; bracket notation remains everywhere it already appears.
++  **Notation rename `̂` → `^`** (per [ADR-002 v2 §7](docs/adr/002-classical-layer-design.md)).  Add `WARNING_ON_USAGE` to the existing `̂` definition in `Setoid.Algebras.Basic`; introduce `^` as the new canonical infix.  Per-tree policy: new `Classical/` code uses `^` exclusively; existing `Setoid/` code is not retroactively renamed.
 
 ## Tasks
 
-### Core five-file quintuple
+### Core infrastructure files
 
-+  [ ] `src/Classical/Signatures/Semigroup.lagda.md`: `Op-Semigroup`, `ar-Semigroup`, `𝑆ₛₘ : Signature lzero lzero`.
-+  [ ] `src/Classical/Theories/Semigroup.lagda.md`: `SemigroupVar`, `Eq-Semigroup`, `Th-Semigroup : Eq-Semigroup → Term SemigroupVar × Term SemigroupVar` encoding associativity as the single identity.
-+  [ ] `src/Classical/Structures/Semigroup.lagda.md`:
-   +  the Σ-typed core `Semigroup α ρ = Σ[ 𝑨 ∈ Algebra 𝑆ₛₘ α ρ ] 𝑨 ⊨ Th-Semigroup`,
-   +  local `_⊨_` alias for `Modᵗ`-on-`Th-Semigroup`,
-   +  named accessors `Domain`, `Signature`, `equations`,
-   +  `fromPropEq` helper.
-+  [ ] `src/Classical/Bundles/Semigroup.lagda.md`: record matching `Algebra.Bundles.Semigroup` from stdlib 2.3, conversion functions `⟨_⟩ₛₘ`, `⟪_⟫ₛₘ` (Σ-core → bundle, bundle → Σ-core), round-trip lemma.  Coordinates with M3-3.
-+  [ ] `src/Classical/Small/Structures/Semigroup.lagda.md`: level-fixed veneer `Semigroup = Classical.Structures.Semigroup.Semigroup lzero lzero`, plus a re-export of the small-case `fromPropEq`.
++  [ ] `src/Classical/Operations.lagda.md` — `Curry₀`/`Uncurry₀`, `Curry₁`/`Uncurry₁`, `Curry₂`/`Uncurry₂` with prose explaining the design intent.
++  [ ] `src/Classical/Equations.lagda.md` — the generic equation builders above, with prose introducing the file as the syntactic dual of `Algebra.Definitions` and citing Bryant 1982 for the historical motivation that distinguishes syntactic from evaluated equation collections.
++  [ ] `src/Classical.lagda.md` umbrella — `open import Classical.Operations public` and `open import Classical.Equations public`.
 
-### Worked example (sibling under `Examples/`)
+### Signature-projection aliases
 
-+  [ ] `src/Examples/Classical/Semigroup.lagda.md`: `(ℕ, +)` as a `Classical.Small.Structures.Semigroup.Semigroup`, constructed via `fromPropEq` from stdlib's `+-assoc`.  File-header prose flags this as the home of all future semigroup-specific examples.
-+  [ ] `src/Examples/Classical.lagda.md`: new umbrella for the `Examples/Classical/` subtree (parallels how `src/Classical.lagda.md` umbrellas the `Classical/` tree).  Re-exports `Examples.Classical.Semigroup`; will grow as Monoid, Group, … examples land alongside their structures.
++  [ ] Update `src/Overture/Signatures.lagda.md` to export `OperationSymbolsOf` and `ArityOf`.  Definitionally identical to the existing `∣ 𝑆 ∣` and `∥ 𝑆 ∥` aliases; no behavioral change.
 
-### Umbrella updates
+### Notation rename
 
-+  [ ] Update the five `Classical/` subtree umbrellas to `open import ... public` the new modules: `Classical.Signatures`, `Classical.Theories`, `Classical.Structures`, `Classical.Bundles`.  Update `Classical.Small` to `open import Classical.Small.Structures public` once the small `Structures` aggregator exists.
-+  [ ] Create `src/Classical/Small/Structures.lagda.md` aggregator (one further file beyond the quintuple above): re-exports `Classical.Small.Structures.Semigroup`.
-+  [ ] Update `src/Examples.lagda.md` to `open import Examples.Classical`.
++  [ ] Update `src/Setoid/Algebras/Basic.lagda.md` to introduce `_^_` alongside `_̂_`, with a `WARNING_ON_USAGE _̂_` pragma announcing v3.1 removal.  Add an ADR-002 §7 cross-reference in the module-header prose.
 
 ### Documentation
 
-+  [ ] Module-header prose in `Classical/Structures/Semigroup.lagda.md` documents the conventions established here, so future structures (Monoid in M3-4, Group in M3-5, …) have a single normative reference.
++  [ ] Module-header prose in `Classical.Operations` and `Classical.Equations` documenting the design intent normatively, so M3-3 / M3-4 / M3-5 / M3-6 authors have a single reference for the conventions they're consuming.
++  [ ] Cross-reference `Classical.Equations` in `docs/STYLE_GUIDE.md` under a new section on "Generic equation builders for classical structures."
 +  [ ] `CHANGELOG.md` `[Unreleased] / Added` entry.
 
-## Non-goals (deferred to later milestones)
+## Non-goals
 
-+  Pull-up of `_⊨_`, named accessors, and `fromPropEq` to shared locations.  Deferred until at least one additional structure (Monoid, M3-4) confirms the shape generalizes.
-+  Stdlib bundle bridges generalized beyond the per-structure conversion functions.  M3-3.
-+  Anything to do with semigroup homomorphisms beyond the observation in the design-decisions section.  Homomorphisms of classical structures are just `Setoid.Homomorphisms` of underlying algebras.
-+  Free semigroups, semigroup varieties as a sub-class of varieties of `𝑆ₛₘ`-algebras, presentations, term rewriting, decidability of the word problem.  All later.
-+  Additional worked examples beyond `(ℕ, +)`.  The `Examples/Classical/Semigroup.lagda.md` file is the right home for these as they accumulate, but M3-2's scope is the one canonical example.
++  No concrete structure (Magma, Semigroup, Monoid, …) lands here.  Those are M3-3 onward.
++  No bundle-bridge infrastructure beyond what `Curry`/`Uncurry` enables.  Per-structure bundle bridges land with their structures.
++  Higher-arity `Curry`/`Uncurry` helpers (Curry₃, Curry₄, …) are added only when a concrete structure requires them.
++  Generic equation builders beyond the inventory above are added per-need.
 
 ## Acceptance criteria
 
-+  [ ] All eight new files type-check under `make check`.
-+  [ ] The worked example `ℕ-semigroup` in `Examples.Classical.Semigroup` type-checks.
-+  [ ] The interpretation of `∙op` in `ℕ-semigroup` reduces definitionally to `_+_` — no unfortunate opacity from the `fromPropEq` construction.
-+  [ ] The bridge to `Algebra.Bundles.Semigroup` round-trips on `ℕ-semigroup`: converting Σ-core → bundle → Σ-core gives back a structure propositionally equal to the original.
-+  [ ] Module-header prose in `Classical/Structures/Semigroup.lagda.md` documents the design conventions clearly enough that a contributor writing `Classical/Structures/Monoid.lagda.md` from scratch could do so without consulting M3-2's PR discussion.
++  [ ] All three new files (`Classical.Operations`, `Classical.Equations`, and the `Classical.lagda.md` umbrella update) type-check under `make check`.
++  [ ] `OperationSymbolsOf` and `ArityOf` aliases reduce definitionally to the bracket forms — `OperationSymbolsOf S ≡ ∣ S ∣` and `ArityOf {S} f ≡ ∥ S ∥ f` both inhabited by `refl`.
++  [ ] The `WARNING_ON_USAGE _̂_` pragma fires in a test module that imports the old notation, and `^` is available as the new canonical notation.  Existing `Setoid/` code continues to type-check (the warning is non-fatal).
++  [ ] Module-header prose in `Classical.Operations` and `Classical.Equations` is normative enough that a contributor authoring `Classical.Magma` from scratch can do so without consulting this PR.
 +  [ ] CHANGELOG entry under `[Unreleased] / Added`.
 
 ## References
 
 +  Parent — #260 (M3-1).
 +  Scaffold predecessor — #326 (M3-1a).
-+  Sibling — #262 (M3-3, stdlib bundle bridges; coordinates on the bundle pattern across structures).
-+  Design — [ADR-002](docs/adr/002-classical-layer-design.md).
-+  Equational-logic substrate — [`src/Setoid/Varieties/EquationalLogic.lagda.md`](src/Setoid/Varieties/EquationalLogic.lagda.md) (`Modᵗ`).
-+  Term substrate — [`src/Overture/Terms.lagda.md`](src/Overture/Terms.lagda.md) (`Term`, `ℊ`, `node`).
-+  Stdlib target for the bundle bridge — `Algebra.Bundles.Semigroup` in standard-library 2.3.
++  Design — [ADR-002 v2 §1, §3, §7](docs/adr/002-classical-layer-design.md).
++  Downstream — M3-3 (Magma, first consumer of this infrastructure), M3-4 (Semigroup, first equation-bearing consumer), M3-5 (stdlib bridges), M3-6/M3-7/M3-8 (Monoid/Group, Lattice, Ring).
++  Empirical motivation — the M3-2 (old) Semigroup load-test in branch `261-m3-2-classical-semigroup`, whose `cong (Interp 𝑨)` bridges and `assignment` plumbing live as evidence of what this infrastructure exists to remove.
++  Reference for the syntactic-vs-evaluated equation distinction — R. Bryant, *The laws of finite pointed groups*, Bull. London Math. Soc. 14 (1982), 119–123.
 
 ---
 
-### Issue M3-3: Bridges between Classical.Structures and Algebra.Bundles (#262)
+### Issue M3-3: Classical.Magma (#331)
+
+**Labels**: `enhancement`, `milestone-3-classical`
+
+## Description
+
+After [M3-2] (#330) lands, add Magma as the pattern-setting first concrete classical structure under [`Classical/`](src/Classical.lagda.md).  Magma is the right starting structure precisely because its equational theory is empty: this isolates the *signature mechanics* (operation-symbol naming, arity convention, signature assembly, signature-to-algebra interpretation) from the *equation mechanics* of subsequent structures.  Every signature convention established here propagates to Semigroup (M3-4), Monoid (M3-6), Group (M3-6), Lattice (M3-7), Ring (M3-8).
+
+Per [ADR-002 v2 §5](docs/adr/002-classical-layer-design.md), a structure with empty equational theory is encoded as `Magma α ρ = Algebra α ρ` directly — no Σ-wrapping over a trivial `⊤`-typed proof obligation.  Subsequent structures with equations follow the `Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ Th-X` pattern.
+
+This issue is the renumbered analog of the *pattern-setting* role that the original M3-2 (Semigroup) was meant to play.  The original M3-2 conflated signature mechanics with equation mechanics; the v2 ADR splits them out.
+
+## Design decisions
+
+These are normative for every subsequent structure (Semigroup in M3-4, Monoid + Group in M3-6, Lattice in M3-7, Ring in M3-8).  Per [ADR-002 v2](docs/adr/002-classical-layer-design.md).
+
++  **Signature representation**.  Named operator via a one-constructor data type: `data Op-Magma : Type where ∙-Op : Op-Magma`.  Constructor-naming convention `<symbol>-Op` (hyphen-separated, capital O).  Reserves the bare symbol for use-site infix sugar over `Curry₂ (∙-Op ^ _)`.
++  **Arity function**.  `ar-Magma ∙-Op = Fin 2`.  Naming convention: `ar-<Structure>` for the arity function of `<Structure>`'s signature.
++  **Signature value**.  `Sig-Magma : Signature lzero lzero` defined as `Sig-Magma = Op-Magma , ar-Magma`.  Hyphenated long-form name per [ADR-002 v2 §7](docs/adr/002-classical-layer-design.md); the original draft's `𝑆ₘₐ` subscript form is not adopted.
++  **No theory file**.  Magma has no equations, so no `src/Classical/Theories/Magma.lagda.md` file is created.  The umbrella `Classical.Theories` does not import a Magma theory.  Subsequent structures with theories will introduce their own `Theories/X.lagda.md` files.
++  **Σ-typed core absent**.  `Magma α ρ = Algebra α ρ` (after opening `Setoid.Algebras {𝑆 = Sig-Magma}`).  No `⊨` obligation since the theory is empty.  This is the only structure in the hierarchy with this property; from Semigroup onward, structures are Σ-typed.
++  **Named accessors next to the core**.  `Domain`, `Carrier`, `_∙_` defined alongside `Magma α ρ` to offset Σ/record-projection ergonomic cost.  `_∙_ : (𝑴 : Magma α ρ) → Carrier 𝑴 → Carrier 𝑴 → Carrier 𝑴` defined as `𝑴 ∙ a b = Curry₂ (∙-Op ^ 𝑴) a b`.  Per [ADR-002 v2 §1](docs/adr/002-classical-layer-design.md), this surfaces the operation in user-facing curried form; the tuple-indexed `∙-Op ^ 𝑴` form lives below the user interface.
++  **`fromOp` shape**.  Per-structure: `fromOp : (A : Type α) (_·_ : A → A → A) → Magma α α`.  No equation arguments because Magma's theory is empty.  Subsequent structures' `fromOp`-family constructors add an equation argument per equation in their theory.
++  **Morphisms**.  No per-structure invariant required: a magma morphism is definitionally an algebra homomorphism between the underlying `Algebra Sig-Magma`-algebras.  Per [ADR-002 v2 §5](docs/adr/002-classical-layer-design.md), this applies uniformly across the hierarchy.
++  **Worked-example placement**.  In sibling `src/Examples/Classical/Magma.lagda.md`, paralleling [ADR-002 v2 §5](docs/adr/002-classical-layer-design.md)'s policy.
+
+## Tasks
+
+### Core four-file quintuple (no theory file — see design decisions)
+
++  [ ] `src/Classical/Signatures/Magma.lagda.md` — `Op-Magma`, `ar-Magma`, `Sig-Magma : Signature lzero lzero`.
++  [ ] `src/Classical/Structures/Magma.lagda.md`:
+   +  the type-alias core `Magma α ρ = Algebra α ρ` inside `open Setoid.Algebras {𝑆 = Sig-Magma}`,
+   +  named accessors `Domain`, `Carrier`, `_∙_`,
+   +  the `fromOp` helper.
++  [ ] `src/Classical/Bundles/Magma.lagda.md` — record matching `Algebra.Bundles.Magma` from stdlib 2.3, conversion functions `⟨_⟩ₘₐ`, `⟪_⟫ₘₐ`, pointwise round-trip lemma per [ADR-002 v2 §6](docs/adr/002-classical-layer-design.md).
++  [ ] `src/Classical/Small/Structures/Magma.lagda.md` — level-fixed veneer `Magma = Classical.Structures.Magma.Magma lzero lzero`, plus the small-case `fromOp`.
+
+### Worked example
+
++  [ ] `src/Examples/Classical/Magma.lagda.md` — `(ℕ, _+_)` as `Classical.Small.Structures.Magma.Magma`, constructed via `fromOp`.  File-header prose flags this as the home of all future magma-specific examples.  No further example demands beyond this one for M3-3.
+
+### Umbrella updates
+
++  [ ] Update `src/Classical/Signatures.lagda.md` to `open import Classical.Signatures.Magma public`.
++  [ ] Update `src/Classical/Structures.lagda.md` to `open import Classical.Structures.Magma public`.
++  [ ] Update `src/Classical/Bundles.lagda.md` to `open import Classical.Bundles.Magma public`.
++  [ ] Update `src/Classical/Small/Structures.lagda.md` to `open import Classical.Small.Structures.Magma public`.  Create this aggregator if it does not exist.
++  [ ] Update `src/Examples/Classical.lagda.md` to `open import Examples.Classical.Magma`.  Create this umbrella if it does not exist.
+
+### Documentation
+
++  [ ] Module-header prose in `Classical/Structures/Magma.lagda.md` documents the conventions established here normatively, so future structures (Semigroup in M3-4, Monoid in M3-6, …) have a single normative reference for signature mechanics.  Explicitly: hyphen-separated `<symbol>-Op` constructor convention, `ar-<Structure>` arity-function convention, `Sig-<Structure>` signature-value convention, `_∙_ = Curry₂ (∙-Op ^ _)` user-facing curried-accessor convention, `fromOp`-family constructor convention.
++  [ ] `CHANGELOG.md` `[Unreleased] / Added` entry.
+
+## Non-goals
+
++  No equational theory.  Magma's defining feature is the empty theory; structures with equations are M3-4 onward.
++  No `Classical/Theories/Magma.lagda.md`.  The umbrella `Classical.Theories` remains empty after M3-3 lands; first concrete theory file is Semigroup's in M3-4.
++  No generic equation builders.  Those are M3-2.
++  No magma homomorphisms beyond the observation that they are definitionally algebra homomorphisms.
++  No free magma, magma varieties as a sub-class of varieties of `Sig-Magma`-algebras, presentations, term rewriting.  All later.
++  Additional worked examples beyond `(ℕ, +)`.  The `Examples.Classical.Magma` file is the right home for these as they accumulate.
+
+## Acceptance criteria
+
++  [ ] All new files type-check under `make check`.
++  [ ] The worked example `ℕ-magma` in `Examples.Classical.Magma` type-checks.
++  [ ] The interpretation of `∙-Op` in `ℕ-magma` reduces definitionally to `_+_` — no opacity from the `fromOp` construction or from the `Curry₂` wrapping.  Discharged by `refl`.
++  [ ] The bridge to `Algebra.Bundles.Magma` round-trips on `ℕ-magma` *pointwise*: for all `a, b : ℕ`, the round-tripped operation applied to `a, b` equals `a + b`.  Discharged by `refl` on the curried form.  Pointwise round-trip per [ADR-002 v2 §6](docs/adr/002-classical-layer-design.md); not propositional `≡` on the Σ-type.
++  [ ] Module-header prose in `Classical/Structures/Magma.lagda.md` documents the design conventions clearly enough that a contributor writing `Classical/Structures/Semigroup.lagda.md` (M3-4) from scratch could do so without consulting this PR's discussion.
++  [ ] CHANGELOG entry under `[Unreleased] / Added`.
+
+## References
+
++  Parent: [M3-1] #260 
++  Scaffold predecessor: [M3-1a] #326
++  Predecessor: [M3-2] #330
++  Successor: [M3-4] Semigroup #261 (first equation-bearing structure consuming this signature pattern).
++  Sibling: [M3-5] #262 (stdlib bundle bridges)
++  Design: [ADR-002 v2 §1, §5, §7, §8](docs/adr/002-classical-layer-design.md).
++  Stdlib target for the bundle bridge: `Algebra.Bundles.Magma` in standard-library 2.3.
+
+---
+
+### Issue M3-4: Classical.Semigroup (#261)
+
+**Labels**: `enhancement`, `milestone-3-classical`
+
+## Description
+
+After [M3-3] #331 (Magma) lands, add Semigroup as the first concrete classical structure with a non-empty equational theory.  Following [ADR-002 v2 §5](docs/adr/002-classical-layer-design.md), a semigroup is the Σ-typed structure `Semigroup α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ Th-Semigroup` over the same signature `Sig-Magma` introduced by Magma — semigroups and magmas share a signature; semigroups are precisely those magmas whose binary operation is associative.
+
+This issue is the reformulated body of #261 (originally M3-2).  The original body — which positioned Semigroup as the pattern-setting first structure with per-structure `SemigroupVar` enums and Σ-typed cores — is superseded by the v2 ADR.  The original branch `261-m3-2-classical-semigroup` is retained in repository history as evidence of the load test that motivated the v2 revisions.
+
+## Design decisions
+
+These are normative for every subsequent equation-bearing structure (Monoid in M3-6, Group in M3-6, …) and consume the conventions established in M3-2 (infrastructure) and M3-3 (Magma).  Per [ADR-002 v2](docs/adr/002-classical-layer-design.md).
+
++  **Signature reuse**.  Semigroup uses the magma signature `Sig-Magma` directly — there is no `Sig-Semigroup`.  Subsequent structures that *add* operations (Monoid adds an identity element, Group adds an inverse) get their own signature; structures that *only add equations* over a predecessor's signature reuse the predecessor's signature.
++  **Equational theory representation**.  Indexed form per [`Setoid.Varieties.EquationalLogic.Modᵗ`](src/Setoid/Varieties/EquationalLogic.lagda.md): `data Eq-Semigroup : Type where assoc : Eq-Semigroup`, with `Th-Semigroup : Eq-Semigroup → Term (Fin 3) × Term (Fin 3)` mapping `assoc` to the associativity term-pair via the generic builder `Associative ∙-Op refl 0F 1F 2F` from [`Classical.Equations`](src/Classical/Equations.lagda.md) (introduced in M3-2).
++  **Variable carrier `Fin 3`**.  Per [ADR-002 v2 §2](docs/adr/002-classical-layer-design.md).  No per-structure `SemigroupVar`-style enum.  Variable patterns at use sites are `0F`, `1F`, `2F` from `Data.Fin.Patterns`.
++  **Σ-typed core**.  `Semigroup α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] Modᵗ Th-Semigroup 𝑨` inside `open Setoid.Algebras {𝑆 = Sig-Magma}`.  Local `_⊨_` alias for `Modᵗ Th-Semigroup` is permitted but should spell out the codomain type explicitly to avoid the meta-resolution pitfall identified in the original M3-2 load test (`(Eq-Semigroup → Term (Fin 3) × Term (Fin 3))`, not `_`).
++  **Named accessors next to the core**.  `Domain`, `Carrier`, `_∙_`, `equations` defined alongside `Semigroup α ρ`.  The `_∙_` accessor delegates to `Magma._∙_` after the `semigroup→magma` forgetful, per [ADR-002 v2 §5](docs/adr/002-classical-layer-design.md).
++  **`fromPropEq` shape**.  Per-structure: `fromPropEq : (A : Type α) (_·_ : A → A → A) (·-assoc : ∀ a b c → (a · b) · c ≡ a · (b · c)) → Semigroup α α`.  Pull-up to a shared location deferred until Monoid (M3-6) confirms the shape generalizes — premature shared abstraction is the failure mode #326's non-goals warn against.
++  **`semigroup→magma` forgetful**.  `semigroup→magma : Semigroup α ρ → Magma α ρ` defined alongside the Σ-typed core, simply `proj₁`.  Per [ADR-002 v2 §5](docs/adr/002-classical-layer-design.md), forgetful projections are how the "a semigroup is a magma" inheritance manifests; subsequent structures define analogous forgetfuls (`monoid→semigroup`, `group→monoid`, etc.).
++  **Bundle bridge**.  Bidirectional `⟨_⟩ₛₘ` / `⟪_⟫ₛₘ` to `Algebra.Bundles.Semigroup` from stdlib 2.3, with a *pointwise* round-trip lemma per [ADR-002 v2 §6](docs/adr/002-classical-layer-design.md).  The Fin 2 η-bridge is contained in `Curry₂`/`Uncurry₂` from `Classical.Operations`; per-structure bridge files do not write inline `pair`-style wrappers.
++  **Worked-example placement**.  `src/Examples/Classical/Semigroup.lagda.md`, alongside the Magma example from M3-3.
+
+## Tasks
+
+### Core four-file quintuple
+
++  [ ] `src/Classical/Theories/Semigroup.lagda.md` — `Eq-Semigroup`, `Th-Semigroup` (composes `Associative ∙-Op refl 0F 1F 2F`).
++  [ ] `src/Classical/Structures/Semigroup.lagda.md`:
+   +  the Σ-typed core,
+   +  named accessors `Domain`, `Carrier`, `_∙_`, `equations`,
+   +  the `fromPropEq` helper,
+   +  the `semigroup→magma` forgetful projection.
++  [ ] `src/Classical/Bundles/Semigroup.lagda.md` — bidirectional bridge to `Algebra.Bundles.Semigroup` with pointwise round-trip.
++  [ ] `src/Classical/Small/Structures/Semigroup.lagda.md` — level-fixed veneer.
+
+### Worked example
+
++  [ ] `src/Examples/Classical/Semigroup.lagda.md` — `(ℕ, +)` as a `Classical.Small.Structures.Semigroup.Semigroup`, constructed via `fromPropEq` from stdlib's `+-assoc`.
+
+### Umbrella updates
+
++  [ ] Update `src/Classical/Theories.lagda.md` to `open import Classical.Theories.Semigroup public`.  First concrete theory module.
++  [ ] Update `src/Classical/Structures.lagda.md` to `open import Classical.Structures.Semigroup public`.
++  [ ] Update `src/Classical/Bundles.lagda.md` to `open import Classical.Bundles.Semigroup public`.
++  [ ] Update `src/Classical/Small/Structures.lagda.md` to `open import Classical.Small.Structures.Semigroup public`.
++  [ ] Update `src/Examples/Classical.lagda.md` to `open import Examples.Classical.Semigroup`.
+
+### Documentation
+
++  [ ] Module-header prose in `Classical/Structures/Semigroup.lagda.md` documents the equation-bearing-structure conventions established here normatively, complementing the signature-mechanics prose in `Classical/Structures/Magma.lagda.md` from M3-3.
++  [ ] `CHANGELOG.md` `[Unreleased] / Added` entry.
+
+## Non-goals
+
++  Pull-up of `fromPropEq` to a shared location.  Deferred until at least Monoid (M3-6) confirms the shape generalizes.
++  Pull-up of named accessors and forgetful projections to a shared location.  Same policy.
++  Generic bundle-bridge infrastructure beyond the per-structure conversion functions.  M3-5.
++  Semigroup homomorphisms beyond `semigroup→magma`-via-`Setoid.Homomorphisms`.  Per [ADR-002 v2 §5](docs/adr/002-classical-layer-design.md).
++  Free semigroups, semigroup varieties as a sub-class of varieties of `Sig-Magma`-algebras, presentations, term rewriting, decidability of the word problem.  All later.
++  Additional worked examples beyond `(ℕ, +)`.
+
+## Acceptance criteria
+
++  [ ] All new files type-check under `make check`.
++  [ ] The worked example `ℕ-semigroup` type-checks.
++  [ ] The interpretation of `∙-Op` in `ℕ-semigroup` reduces definitionally to `_+_`.  Discharged by `refl` on the curried form.
++  [ ] The bridge to `Algebra.Bundles.Semigroup` round-trips on `ℕ-semigroup` pointwise.  Discharged by `refl` on the curried form per [ADR-002 v2 §6](docs/adr/002-classical-layer-design.md).
++  [ ] The forgetful `semigroup→magma (ℕ-semigroup)` equals `ℕ-magma` (where `ℕ-magma` is from M3-3) up to the obvious equality.
++  [ ] Module-header prose in `Classical/Structures/Semigroup.lagda.md` documents the equation-bearing-structure conventions normatively.
++  [ ] CHANGELOG entry under `[Unreleased] / Added`.
+
+## References
+
++  Parent: [M3-1] #260.
++  Scaffold predecessor: [M3-1a] #326.
++  Predecessors: [M3-2] (infrastructure) #330, [M3-3] (Magma) #331.
++  Sibling:  [M3-5] (stdlib bundle bridges) #262.
++  Design: [ADR-002 v2 §2, §3, §4, §5, §6](docs/adr/002-classical-layer-design.md).
++  Empirical motivation: the original #261 branch `261-m3-2-classical-semigroup`, whose Σ-typed-with-`SemigroupVar` design surfaced the issues that the v2 ADR addresses.
++  Equational-logic substrate: [`src/Setoid/Varieties/EquationalLogic.lagda.md`](src/Setoid/Varieties/EquationalLogic.lagda.md) (`Modᵗ`).
++  Equation builder: `Associative` in [`src/Classical/Equations.lagda.md`](src/Classical/Equations.lagda.md) ([M3-2]).
++  Stdlib target for the bundle bridge: `Algebra.Bundles.Semigroup` in standard-library 2.3.
+
+---
+
+### Issue M3-5: Bridges between Classical.Structures and Algebra.Bundles (#262)
 
 **Labels**: `milestone-3-classical`, `stdlib-bridge`
+
+## v2 amendment (2026-05-17)
+
+Renumbered M3-3 → M3-5 following [revision of ADR-002 v2](https://github.com/ualib/agda-algebras/pull/332).  The original M3-2 (Semigroup pattern-setter) was split into [M3-2] (Operations + Equations infrastructure, #330), [M3-3] (Magma, #331), and M3-4 (reformulated Semigroup, this issue's predecessor in chronological order).
+
+Scope adjustment: the Magma and Semigroup bundle bridges land with their respective structure issues (M3-3 and M3-4), not in this issue.  This issue's scope is therefore reduced to Monoid, CommutativeMonoid, Group, AbelianGroup, Semilattice, Lattice, Semiring, Ring, CommutativeRing bridges — one per structure, mechanical following the patterns established in M3-3 and M3-4.
+
+The pointwise round-trip policy from [ADR-002 v2 §6](docs/adr/002-classical-layer-design.md) applies uniformly: no per-structure bundle bridge claims a propositional Σ-equality round-trip; the round-trip is stated pointwise.
+
+---
 
 ## Description
 
@@ -1504,9 +1686,23 @@ Phase 2:
 
 ---
 
-### Issue M3-4: Classical structures — Monoid, CommutativeMonoid, Group, AbelianGroup (#263)
+### Issue M3-6: Classical structures — Monoid, CommutativeMonoid, Group, AbelianGroup (#263)
 
 **Labels**: `milestone-3-classical`, `help-wanted`
+
+## v2 amendment (2026-05-17)
+
+Renumbered M3-4 → M3-6 following [revision of ADR-002 v2](https://github.com/ualib/agda-algebras/pull/332).
+
+Scope adjustment per [ADR-002 v2 §5](docs/adr/002-classical-layer-design.md): each structure is self-contained over its own signature, with forgetful projections for inheritance.  Concretely:
+
++  `Sig-Monoid` adds a nullary identity-element symbol `ε-Op` (arity `Fin 0`) to `Sig-Magma`.  `Th-Monoid` includes `assoc`, `id-l`, `id-r`.  Forgetful `monoid→semigroup`.
++  `Sig-Group` adds a unary inverse symbol `⁻¹-Op` (arity `Fin 1`) to `Sig-Monoid`.  `Th-Group` includes `assoc`, `id-l`, `id-r`, `inv-l`, `inv-r`.  Forgetful `group→monoid` (composes downward to `group→semigroup`, `group→magma`).
++  `Sig-CommutativeMonoid` and `Sig-AbelianGroup` reuse `Sig-Monoid` and `Sig-Group` respectively; the only addition is `comm` to the theory.
+
+All equations come from the generic builders in `Classical.Equations` (M3-2).  Distinguished elements (the identity, the inverse) are nullary/unary operation symbols of the signature, per [ADR-002 v2 §9](docs/adr/002-classical-layer-design.md).
+
+---
 
 ## Description
 
@@ -1528,9 +1724,19 @@ Follow the pattern established in M3-2 to add the monoid-and-group family, with 
 
 ---
 
-### Issue M3-5: Classical.Semilattice and Classical.Lattice (#264)
+### Issue M3-7: Classical.Semilattice and Classical.Lattice (#264)
 
 **Labels**: `milestone-3-classical`
+
+## v2 amendment (2026-05-17)
+
+Renumbered M3-5 → M3-7 following [revision of ADR-002 v2](https://github.com/ualib/agda-algebras/pull/332).
+
+Scope is unchanged.  Conventions inherit from M3-2 / M3-3 / M3-4: hyphen-separated `∧-Op`, `∨-Op` constructors; `Sig-Semilattice` and `Sig-Lattice` signatures; equations composed from `Associative`, `Commutative`, `Idempotent`, `Absorbs` builders in `Classical.Equations`.
+
+The "two binary ops" vs "one binary op with the other defined" representational question for Lattice — flagged in the original issue — is settled in favor of *two binary operation symbols* (`∧-Op` and `∨-Op`), consistent with the signature-extension policy: each operation that participates in the variety's equations gets its own signature symbol.
+
+---
 
 ## Description
 
@@ -1553,9 +1759,19 @@ Lattices are centrally important because `Con 𝑨` and `Sub 𝑨` are naturally
 
 ---
 
-### Issue M3-6: Classical.Ring and Classical.CommutativeRing (#265)
+### Issue M3-8: Classical.Ring and Classical.CommutativeRing (#265)
 
 **Labels**: `milestone-3-classical`, `help-wanted`
+
+## v2 amendment (2026-05-17)
+
+Renumbered M3-6 → M3-8 following [revision of ADR-002 v2](https://github.com/ualib/agda-algebras/pull/332).
+
+Scope is unchanged.  Conventions inherit from M3-6 (Monoid/Group/AbelianGroup) and from M3-7 (the precedent for multiple binary operations in one signature).
+
+`Sig-Ring` has signature symbols `+-Op` (binary), `0-Op` (nullary, the additive identity), `-Op` (unary, the additive inverse), `·-Op` (binary), `1-Op` (nullary, the multiplicative identity).  `Th-Ring` composes the abelian-group equations on `(+-Op, 0-Op, -Op)`, the monoid equations on `(·-Op, 1-Op)`, and the distributivity equations from `DistributesOverˡ`/`DistributesOverʳ`.  Forgetful `ring→abelianGroup` (additive structure) and an additional forgetful `ring→monoid` (multiplicative structure) defined alongside the core.
+
+---
 
 ## Description
 
@@ -1578,9 +1794,19 @@ Rings depend on AbelianGroup for the additive structure, so this issue comes aft
 
 ---
 
-### Issue M3-7: Expand Examples/ with worked classical-structure instances (#266)
+### Issue M3-9: Expand Examples/ with worked classical-structure instances (#266)
 
 **Labels**: `documentation`, `milestone-3-classical`
+
+## v2 amendment (2026-05-17)
+
+Renumbered M3-7 → M3-9 following [revision of ADR-002 v2](https://github.com/ualib/agda-algebras/pull/332).
+
+Scope is unchanged.  Per-structure worked examples land *with their structure issues* (M3-3 ships `ℕ-magma`; M3-4 ships `ℕ-semigroup`; M3-6 ships `ℕ-monoid` and `ℤ-group`; etc.).  This issue is therefore reduced to *cross-structure and richer examples*: free magmas, free semigroups, term-rewriting demonstrations, presentations, finite-quotient examples for use as Demos/ companion material, etc.
+
+The reduction in scope reflects the M3-3-onward convention that one canonical worked example per structure ships with the structure itself; this issue exists for the *additional* examples that wouldn't fit cleanly in any one structure's file.
+
+---
 
 ## Description
 
