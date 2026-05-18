@@ -1388,7 +1388,7 @@ The `Everything.agda` and `EverythingFunc.agda` generators are updated to walk t
 
 ---
 
-### Issue M3-2: Classical.Operations and Classical.Equations infrastructure (#330)
+### Issue M3-2: Classical.Operations and Classical.Equations infrastructure (#330, closed)
 
 **Labels**: `milestone-3-classical`, `design-discussion`
 
@@ -1487,7 +1487,7 @@ These are normative for every subsequent structure (Semigroup in M3-4, Monoid + 
 
 +  **Signature representation**.  Named operator via a one-constructor data type: `data Op-Magma : Type where ∙-Op : Op-Magma`.  Constructor-naming convention `<symbol>-Op` (hyphen-separated, capital O).  Reserves the bare symbol for use-site infix sugar over `Curry₂ (∙-Op ^ _)`.
 +  **Arity function**.  `ar-Magma ∙-Op = Fin 2`.  Naming convention: `ar-<Structure>` for the arity function of `<Structure>`'s signature.
-+  **Signature value**.  `Sig-Magma : Signature 0ℓ 0ℓ` defined as `Sig-Magma = Op-Magma , ar-Magma`.  Hyphenated long-form name per [ADR-002 v2 §7](docs/adr/002-classical-layer-design.md); the original draft's `𝑆ₘₐ` subscript form is not adopted.
++  **Signature value**.  `Sig-Magma : Signature lzero lzero` defined as `Sig-Magma = Op-Magma , ar-Magma`.  Hyphenated long-form name per [ADR-002 v2 §7](docs/adr/002-classical-layer-design.md); the original draft's `𝑆ₘₐ` subscript form is not adopted.
 +  **No theory file**.  Magma has no equations, so no `src/Classical/Theories/Magma.lagda.md` file is created.  The umbrella `Classical.Theories` does not import a Magma theory.  Subsequent structures with theories will introduce their own `Theories/X.lagda.md` files.
 +  **Σ-typed core absent**.  `Magma α ρ = Algebra α ρ` (after opening `Setoid.Algebras {𝑆 = Sig-Magma}`).  No `⊨` obligation since the theory is empty.  This is the only structure in the hierarchy with this property; from Semigroup onward, structures are Σ-typed.
 +  **Named accessors next to the core**.  `Domain`, `Carrier`, `_∙_` defined alongside `Magma α ρ` to offset Σ/record-projection ergonomic cost.  `_∙_ : (𝑴 : Magma α ρ) → Carrier 𝑴 → Carrier 𝑴 → Carrier 𝑴` defined as `𝑴 ∙ a b = Curry₂ (∙-Op ^ 𝑴) a b`.  Per [ADR-002 v2 §1](docs/adr/002-classical-layer-design.md), this surfaces the operation in user-facing curried form; the tuple-indexed `∙-Op ^ 𝑴` form lives below the user interface.
@@ -1499,13 +1499,13 @@ These are normative for every subsequent structure (Semigroup in M3-4, Monoid + 
 
 ### Core four-file quintuple (no theory file — see design decisions)
 
-+  [ ] `src/Classical/Signatures/Magma.lagda.md` — `Op-Magma`, `ar-Magma`, `Sig-Magma : Signature 0ℓ 0ℓ`.
++  [ ] `src/Classical/Signatures/Magma.lagda.md` — `Op-Magma`, `ar-Magma`, `Sig-Magma : Signature lzero lzero`.
 +  [ ] `src/Classical/Structures/Magma.lagda.md`:
    +  the type-alias core `Magma α ρ = Algebra α ρ` inside `open Setoid.Algebras {𝑆 = Sig-Magma}`,
    +  named accessors `Domain`, `Carrier`, `_∙_`,
    +  the `fromOp` helper.
 +  [ ] `src/Classical/Bundles/Magma.lagda.md` — record matching `Algebra.Bundles.Magma` from stdlib 2.3, conversion functions `⟨_⟩ₘₐ`, `⟪_⟫ₘₐ`, pointwise round-trip lemma per [ADR-002 v2 §6](docs/adr/002-classical-layer-design.md).
-+  [ ] `src/Classical/Small/Structures/Magma.lagda.md` — level-fixed veneer `Magma = Classical.Structures.Magma.Magma 0ℓ 0ℓ`, plus the small-case `fromOp`.
++  [ ] `src/Classical/Small/Structures/Magma.lagda.md` — level-fixed veneer `Magma = Classical.Structures.Magma.Magma lzero lzero`, plus the small-case `fromOp`.
 
 ### Worked example
 
