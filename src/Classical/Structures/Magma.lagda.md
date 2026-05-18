@@ -36,19 +36,19 @@ module Classical.Structures.Magma where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
 open import Agda.Primitive                         using () renaming ( Set to Type )
+open import Data.Fin.Patterns                      using ( 0F ; 1F )
+open import Data.Product                           using ( _,_ )
 open import Function                               using ( Func )
 open import Level                                  using ( Level )
 open import Relation.Binary                        using ( Setoid )
-import      Relation.Binary.PropositionalEquality  as ≡
-open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl )
+open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl ; cong₂ ; isEquivalence ; setoid)
 
-open Func renaming ( to to _⟨$⟩_ ; cong to ≈cong )
+open Func renaming ( to to _⟨$⟩_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Classical.Operations         using ( Curry₂ ; pair )
-open import Classical.Signatures.Magma   using ( Op-Magma ; ∙-Op ; Sig-Magma )
-open import Setoid.Algebras.Basic        {𝑆 = Sig-Magma}
-                                         using ( Algebra ; _^_ ; 𝔻[_] ; 𝕌[_] )
+open import Classical.Operations                   using ( Curry₂ ; pair )
+open import Classical.Signatures.Magma             using ( Op-Magma ; ∙-Op ; Sig-Magma )
+open import Setoid.Algebras.Basic {𝑆 = Sig-Magma}  using ( Algebra ; _^_ ; 𝔻[_] ; 𝕌[_] ; ⟨_⟩ )
 
 private variable α ρ : Level
 ```
@@ -112,15 +112,15 @@ arguments.  This is the empty-theory edge case of the `fromOp`-family
 constructor pattern; M3-4 onward generalizes it.
 
 ```agda
-fromOp : (A : Type α) → (A → A → A) → Magma α α
-fromOp A _·_ = record
-  { Domain = ≡.setoid A
-  ; Interp = record
-    { to    = λ where (∙-Op , args) → args 0F · args 1F
-    ; cong  = λ where (refl , args≡) → ≡.cong₂ _·_ (args≡ 0F) (args≡ 1F)
-    }
-  }
-  where open import Data.Fin.Patterns using ( 0F ; 1F )
+fromOp : ∀{α} → (A : Type α) → (A → A → A) → Magma α α
+fromOp {α} A _·_ = record { Domain = M ; Interp = interp } -- interp }
+  where
+  M : Setoid α α
+  M = setoid A
+
+  interp : Func (⟨ Sig-Magma ⟩ M) M
+  interp ⟨$⟩ (∙-Op , args) = args 0F · args 1F
+  cong interp { ∙-Op , _ } { .∙-Op , _ } (refl , args≡) = cong₂ _·_ (args≡ 0F) (args≡ 1F)
 ```
 
 #### <a id="morphisms">A note on morphisms</a>

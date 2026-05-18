@@ -9,19 +9,17 @@ author: "agda-algebras development team"
 
 This is the [Base.Structures.Sigma.Basic][] module of the [Agda Universal Algebra Library][].
 
-
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Legacy.Base.Structures.Sigma.Basic where
 
+open import Agda.Primitive using () renaming ( Set to Type )
+
 -- Imports from the Agda Standard Library ------------------------------------------------
-open import Agda.Primitive        using () renaming ( Set to Type ; lzero to ℓ₀ )
 open import Data.Product          using ( _,_ ; _×_ ; Σ-syntax )
                                   renaming ( proj₁ to fst ; proj₂ to snd )
-open import Level                 using ( _⊔_ ; suc ; Level )
+open import Level                 using ( _⊔_ ; suc ; Level ) renaming ( 0ℓ to ℓ₀ )
 open import Relation.Binary.Core  using ( _⇒_ ; _=[_]⇒_ )
                                   renaming ( REL to BinREL ; Rel to BinRel )
 
@@ -100,7 +98,6 @@ module _ {𝑅 𝐹 : Signature} {α ρ : Level} where
  Lift-Struc : (ℓˡ ℓʳ : Level) → Structure 𝑅 𝐹 {α}{ρ} → Structure 𝑅 𝐹 {α ⊔ ℓˡ}{ρ ⊔ ℓʳ}
  Lift-Struc ℓˡ ℓʳ 𝑨 = Lift-Strucʳ ℓʳ (Lift-Strucˡ ℓˡ 𝑨)
 ```
-
 
 --------------------------------
 

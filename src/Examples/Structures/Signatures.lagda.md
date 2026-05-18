@@ -7,16 +7,16 @@ author: "agda-algebras development team"
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Examples.Structures.Signatures where
 
-open import Agda.Primitive         using () renaming ( lzero to ℓ₀ )
-open import Data.Unit.Base         using () renaming ( ⊤ to 𝟙 ; tt to 𝟎 )
-open import Data.Empty             using () renaming ( ⊥ to 𝟘 )
-open import Overture               using ( 𝟚 ; 𝟛 )
+-- Imports from the Agda Standard Library -------------------------------------
+open import Data.Empty                    using () renaming ( ⊥ to 𝟘 )
+open import Data.Unit.Base                using () renaming ( ⊤ to 𝟙 ; tt to 𝟎 )
+open import Level                         using () renaming ( 0ℓ to ℓ₀ )
+
+open import Overture                      using ( 𝟚 ; 𝟛 )
 open import Legacy.Base.Structures.Basic  using ( signature ; structure )
 ```
 
@@ -25,8 +25,6 @@ open import Legacy.Base.Structures.Basic  using ( signature ; structure )
 
 
 ```agda
-
-
 -- The signature with...
 
 -- ... no symbols  (e.g., sets)

@@ -11,16 +11,15 @@ This is the [Base.Algebras.Basic][] module of the [Agda Universal Algebra Librar
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 
 module Legacy.Base.Algebras.Basic {𝑆 : Signature 𝓞 𝓥 } where
 
--- Imports from the Agda (Builtin) and the Agda Standard Library --------------
-open import Agda.Primitive   using () renaming ( Set to  Type ; lzero to ℓ₀ )
+open import Agda.Primitive using () renaming ( Set to  Type )
+
+-- Imports from the Agda Standard Library -------------------------------------
 open import Data.Product     using ( _,_ ; _×_ ; Σ-syntax )
 open import Level            using ( Level ; _⊔_ ; suc )
 open import Relation.Binary  using ( IsEquivalence ) renaming ( Rel to BinRel )
@@ -34,7 +33,6 @@ open  import Legacy.Base.Relations  using ( _|:_ ; _|:pred_ ; Rel ; compatible-R
 
 private variable α β ρ : Level
 ```
-
 
 
 #### <a id="algebras">Algebras</a>
@@ -66,15 +64,11 @@ For a fixed signature `𝑆 : Signature 𝓞 𝓥` and universe level `α`, we d
 *type of algebras in the signature* `𝑆` (or *type of* `𝑆`-*algebras*) *with domain
 type* `Type α` as follows.
 
-
 ```agda
-
-
 Algebra : (α : Level) → Type (𝓞 ⊔ 𝓥 ⊔ suc α)
 Algebra α =  Σ[ A ∈ Type α ]                 -- the domain
              ∀ (f : ∣ 𝑆 ∣) → Op A (∥ 𝑆 ∥ f)  -- the basic operations
 ```
-
 
 It would be more precise to refer to inhabitants of this type as ∞-*algebras*
 because their domains can be of arbitrary type and need not be truncated at some
@@ -107,10 +101,7 @@ Nonetheless, for those who prefer to represent algebraic structures in type theo
 using records, we offer the following definition (which is equivalent to the Sigma
 type formulation).
 
-
 ```agda
-
-
 record algebra (α : Level) : Type(suc(𝓞 ⊔ 𝓥 ⊔ α)) where
  constructor mkalg
  field
@@ -118,15 +109,12 @@ record algebra (α : Level) : Type(suc(𝓞 ⊔ 𝓥 ⊔ α)) where
   opsymbol : (f : ∣ 𝑆 ∣) → ((∥ 𝑆 ∥ f) → carrier) → carrier
 ```
 
-
 This representation of algebras as inhabitants of a record type is equivalent to
 the representation using Sigma types in the sense that a bi-implication between
 the two representations is obvious.
 
 
 ```agda
-
-
 open algebra
 
 algebra→Algebra : algebra α → Algebra α
@@ -135,7 +123,6 @@ algebra→Algebra 𝑨 = (carrier 𝑨 , opsymbol 𝑨)
 Algebra→algebra : Algebra α → algebra α
 Algebra→algebra 𝑨 = mkalg ∣ 𝑨 ∣ ∥ 𝑨 ∥
 ```
-
 
 
 #### <a id="operation-interpretation-syntax">Operation interpretation syntax</a>
@@ -147,12 +134,9 @@ almost exclusively in the remaining modules of the [agda-algebras][] library.
 
 
 ```agda
-
-
 _̂_ : (𝑓 : ∣ 𝑆 ∣)(𝑨 : Algebra α) → (∥ 𝑆 ∥ 𝑓  →  ∣ 𝑨 ∣) → ∣ 𝑨 ∣
 𝑓 ̂ 𝑨 = λ 𝑎 → (∥ 𝑨 ∥ 𝑓) 𝑎
 ```
-
 
 So, if `𝑓 : ∣ 𝑆 ∣` is an operation symbol in the signature `𝑆`, and if
 `𝑎 : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣` is a tuple of the appropriate arity, then `(𝑓 ̂ 𝑨) 𝑎`
@@ -163,17 +147,13 @@ denotes the operation `𝑓` interpreted in `𝑨` and evaluated at `𝑎`.
 Occasionally we will be given an algebra and we just need to know the universe
 level of its domain. The following utility function provides this.
 
-
 ```agda
-
-
 Level-of-Alg : {α : Level} → Algebra α → Level
 Level-of-Alg {α = α} _ = 𝓞 ⊔ 𝓥 ⊔ suc α
 
 Level-of-Carrier : {α  : Level} → Algebra α → Level
 Level-of-Carrier {α = α} _ = α
 ```
-
 
 
 #### <a id="lifts-of-algebras">Level lifting algebra types</a>
@@ -187,8 +167,6 @@ bespoke tools designed specifically for our operation and algebra types.
 
 
 ```agda
-
-
 open Level
 
 Lift-alg-op : {I : Type 𝓥} {A : Type α} → Op A I → (β : Level) → Op (Lift β A) I
@@ -203,7 +181,6 @@ Lift-algebra : algebra α → (β : Level) → algebra (α ⊔ β)
 Lift-algebra  𝑨 β =  mkalg (Lift β (carrier 𝑨)) (λ (f : ∣ 𝑆 ∣)
  →                   Lift-alg-op ((opsymbol 𝑨) f) β)
 ```
-
 
 What makes the `Lift-Alg` type so useful for resolving type level errors involving
 algebras is the nice properties it possesses.  Indeed, the [agda-algebras][]
@@ -227,17 +204,13 @@ a binary relation, then `compatible 𝑨 R` will represent the assertion that `R
 since all the work is done by the relation `|:`, which we defined above (see
 [Base.Relations.Discrete][]).
 
-
 ```agda
-
-
 compatible : (𝑨 : Algebra α) → BinRel ∣ 𝑨 ∣ ρ → Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ)
 compatible  𝑨 R = ∀ 𝑓 → (𝑓 ̂ 𝑨) |: R
 
 compatible-pred : (𝑨 : Algebra α) → Pred (∣ 𝑨 ∣ × ∣ 𝑨 ∣)ρ → Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ)
 compatible-pred  𝑨 P = ∀ 𝑓 → (𝑓 ̂ 𝑨) |:pred P
 ```
-
 
 Recall, the `|:` type was defined in [Base.Relations.Discrete][] module.
 
@@ -252,10 +225,7 @@ relation with all operations of an algebra.  Similarly, we define the analogous
 `compatible-REL-alg` function for the (even more general) type of *dependent
 relations*.
 
-
 ```agda
-
-
 module _ {I : Type 𝓥} where
 
  compatible-Rel-alg : (𝑨 : Algebra α) → Rel ∣ 𝑨 ∣ I{ρ} → Type(𝓞 ⊔ α ⊔ 𝓥 ⊔ ρ)
@@ -264,7 +234,6 @@ module _ {I : Type 𝓥} where
  compatible-REL-alg : (𝒜 : I → Algebra α) → REL I (λ i → ∣ 𝒜  i ∣) {ρ} → Type _
  compatible-REL-alg 𝒜 R = ∀ ( 𝑓 : ∣ 𝑆 ∣ ) →  compatible-REL (λ i → 𝑓 ̂ (𝒜 i)) R
 ```
-
 
 -------------------------------------
 
