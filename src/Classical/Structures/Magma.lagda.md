@@ -83,7 +83,7 @@ constructs `pair`-style argument tuples inline.  This is what
 Fin n η-bridge is contained inside one module library-wide.
 
 ```agda
-module _ {α ρ : Level} (𝑴 : Magma α ρ) where
+module Magma-Op {α ρ : Level} (𝑴 : Magma α ρ) where
 
   Domain : Setoid α ρ
   Domain = 𝔻[ 𝑴 ]
@@ -113,7 +113,7 @@ constructor pattern; M3-4 onward generalizes it.
 
 ```agda
 fromOp : ∀{α} → (A : Type α) → (A → A → A) → Magma α α
-fromOp {α} A _·_ = record { Domain = M ; Interp = interp } -- interp }
+fromOp {α} A _·_ = record { Domain = M ; Interp = interp }
   where
   M : Setoid α α
   M = setoid A
