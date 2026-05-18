@@ -7,19 +7,16 @@ author: "agda-algebras development team"
 
 #### <a id="homomorphisms-of-general-structures">Homomorphisms of general structures</a>
 
-
-
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Legacy.Base.Structures.Sigma.Homs where
 
+open import Agda.Primitive  using () renaming ( Set to Type )
+
 -- Imports from the Agda Standard Library ----------------------------------------------------------
-open import Agda.Primitive  using ( _⊔_ ; lsuc ) renaming ( Set to Type ; lzero to ℓ₀ )
 open import Data.Product    using ( _,_ ; _×_ ; Σ-syntax ) renaming ( proj₁ to fst ; proj₂ to snd )
-open import Level           using ( Level ; Lift ; lift ; lower )
+open import Level           using ( _⊔_ ; Level ; Lift ; lift ; lower ) renaming ( 0ℓ to ℓ₀ ; suc to lsuc )
 open import Function.Base   using ( _∘_ ; id )
 open import Relation.Binary.PropositionalEquality
                             using ( _≡_ ;  cong ; refl ; module ≡-Reasoning )
@@ -118,13 +115,9 @@ module _  {α ρᵃ : Level} (𝑨 : Structure 𝑅 𝐹 {α}{ρᵃ})
  epi→hom ϕ = (fst ϕ) , fst (snd ϕ)
 ```
 
-
 Next, `lift` and `lower` are (the maps of) homomorphisms.
 
-
 ```agda
-
-
 module _ {𝑅 𝐹 : Signature}{α ρᵃ : Level} where
  open Lift
 
@@ -149,17 +142,13 @@ module _  {𝑅 𝐹 : Signature}{α ρᵃ β ρᵇ : Level}{𝑅 𝐹 : Signatu
 ```
 
 
-
 #### <a id="kernels-of-homomorphisms-of-structures-of-sigma-type">Kernels of homomorphisms of structures of sigma type</a>
 
 The kernel of a homomorphism is a congruence relation and conversely for
 every congruence relation `θ`, there exists a homomorphism with kernel `θ`
 (namely, that canonical projection onto the quotient modulo `θ`).
 
-
 ```agda
-
-
 open ≡-Reasoning
 module _  {𝑅 𝐹 : Signature} {α ρᵃ β ρᵇ : Level}
           {𝑨 : Structure 𝑅 𝐹 {α}{ρᵃ}}{𝑩 : Structure 𝑅 𝐹{β}{ρᵇ}} where
@@ -170,7 +159,6 @@ module _  {𝑅 𝐹 : Signature} {α ρᵃ β ρᵇ : Level}
                                   ((f ᵒ 𝑩)(∣ h ∣ ∘ v))  ≡⟨((snd ∥ h ∥) f v)⁻¹ ⟩
                                   (∣ h ∣((f ᵒ 𝑨) v))    ∎
 ```
-
 
 --------------------------------
 

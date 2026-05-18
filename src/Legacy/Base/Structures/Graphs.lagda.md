@@ -13,20 +13,18 @@ N.B. This module differs from 0Graphs.lagda in that this module is universe poly
 
 **Definition** (Graph of a structure). Let `𝑨` be an `(𝑅, 𝐹)`-structure (relations from `𝑅` and operations from `𝐹`). The *graph* of `𝑨` is the structure `Gr 𝑨` with the same domain as `𝑨` with relations from `𝑅` together with a (`k+1`)-ary relation symbol `G 𝑓` for each `𝑓 ∈ 𝐹` of arity `k`, which is interpreted in `Gr 𝑨` as all tuples `(t , y) ∈ Aᵏ⁺¹` such that `𝑓 t ≡ y`. (See also Definition 2 of https://arxiv.org/pdf/2010.04958v2.pdf)
 
-
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Legacy.Base.Structures.Graphs where
 
+open import Agda.Primitive  using () renaming  ( Set to Type )
+
 -- imports from Agda and the Agda Standard Library -------------------------------------------
-open import Agda.Primitive  using () renaming  ( Set to Type ; lzero  to ℓ₀ )
 open import Data.Product    using ( _,_ ; Σ-syntax ; _×_ )
 open import Data.Sum.Base   using ( _⊎_ ) renaming  ( inj₁ to inl ; inj₂ to inr )
 open import Data.Unit.Base  using ( ⊤ ; tt )
-open import Level           using (  _⊔_ ; Level ; Lift ; lift ; lower )
+open import Level           using (  _⊔_ ; Level ; Lift ; lift ; lower ) renaming ( 0ℓ to ℓ₀ )
 open import Function.Base   using ( _∘_  )
 open import Relation.Binary.PropositionalEquality as ≡
                             using ( _≡_ ; module ≡-Reasoning )
@@ -126,8 +124,6 @@ in the intermediate structures decreases at each step, `| 𝑩ᵢ₊₁ | < | �
 finishes in time that is bounded by a polynomial in the size of `𝑩`.
 
 ```agda
-
-
 record _⇛_⇚_ (𝑩 𝑨 𝑪 : structure 𝐹 𝑅) : Type ℓ₀ where
  field
   to   : hom 𝑩 𝑨 → hom 𝑪 𝑨

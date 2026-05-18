@@ -20,9 +20,10 @@ University in Prague. They were formalized in dependent type theory by the
 
 module Exercises.Complexity.FiniteCSP  where
 
-open import Agda.Primitive  using ( ) renaming (lzero to ℓ₀ )
+-- Imports from the Agda Standard Library ---------------------------------------------------
 open import Data.Product    using ( _,_ ; _×_ )
 open import Data.Unit.Base  using () renaming ( tt to 𝟎 )
+open import Level           using () renaming ( 0ℓ to ℓ₀ )
 open import Relation.Unary  using ( Pred ; _∈_ )
 
 -- Imports from agda-algebras --------------------------------------------------------------
@@ -33,8 +34,8 @@ open import Examples.Structures.Signatures  using ( S∅ ; S001 ; S021)
 -- TODO(#M2-8c): the two imports below await the M3-1 (#260) Classical/ scaffold;
 -- the canonical destinations for `signature`, `structure`, and `hom` will live
 -- under Classical/ once M3 lands.
-open import Legacy.Base.Structures.Basic           using ( signature ; structure )
-open import Legacy.Base.Structures.Homs            using ( hom )
+open import Legacy.Base.Structures.Basic    using ( signature ; structure )
+open import Legacy.Base.Structures.Homs     using ( hom )
 
 open signature
 open structure

@@ -23,11 +23,8 @@ Each module in the library begins with a pragma line of the form
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 ```
-
 
 +  The `--cubical-compatible` flag asks Agda to rule out reasoning principles incompatible with univalent type theory — in particular, Streicher's axiom K and uniqueness of identity proofs — and to generate the internal support code that lets Cubical Agda import this module. It implies `--without-K` (which forbids K outright) and strengthens it by additionally preparing each definition for interaction with Cubical's path-based notion of equality.
 
@@ -52,16 +49,14 @@ the [Base.Functions.Basic][] module begins with the following line, and then a
 list of imports of things used in the module.
 
 ```agda
-
-
 module Overture.Basic where
 
--- Imports from Agda and the Agda Standard Library -----------------------------------------------
-open import Agda.Primitive    using () renaming ( Set to  Type ; lzero to  ℓ₀ )
-open import Data.Product      using ( _,_ ; ∃ ; Σ-syntax ; _×_ )
-                              renaming ( proj₁ to fst ; proj₂ to snd )
+open import Agda.Primitive using () renaming ( Set to  Type )
+
+-- Imports from the Agda Standard Library -----------------------------------------------
+open import Data.Product      using ( _,_ ; ∃ ; Σ-syntax ; _×_ ; proj₁ ; proj₂ )
 open import Function.Base     using ( _∘_ ; id )
-open import Level             using ( Level ; suc ; _⊔_ ; lift ; lower ; Lift )
+open import Level             using ( Level ; suc ; _⊔_ ; lift ; lower ; Lift ; 0ℓ )
 open import Relation.Binary   using ( Decidable )
 open import Relation.Binary   using ( IsEquivalence ; IsPartialOrder )
 open import Relation.Nullary  using ( Dec ; yes ; no ; Irrelevant )
@@ -71,39 +66,34 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; sym ; t
 private variable a b : Level
 
 ℓ₁ : Level
-ℓ₁ = suc ℓ₀
+ℓ₁ = suc 0ℓ
 
 -- the two element type
-data 𝟚 : Type ℓ₀ where 𝟎 : 𝟚 ;  𝟏 : 𝟚
+data 𝟚 : Type 0ℓ where 𝟎 : 𝟚 ;  𝟏 : 𝟚
 
 -- the three element type
-data 𝟛 : Type ℓ₀ where 𝟎 : 𝟛 ;  𝟏 : 𝟛 ;  𝟐 : 𝟛
+data 𝟛 : Type 0ℓ where 𝟎 : 𝟛 ;  𝟏 : 𝟛 ;  𝟐 : 𝟛
 ```
 
 
 #### <a id="projection-notation">Projection notation</a>
 
 The definition of `Σ` (and thus, of `×`) includes the fields `proj₁` and `proj₂`
-representing the first and second projections out of the product.  However, we
-prefer the shorter names `fst` and `snd`.  Sometimes we prefer to denote these
-projections by `∣_∣` and `∥_∥`, respectively. We define these alternative
-notations for projections out of pairs as follows.
-
+representing the first and second projections out of the product.  Sometimes we
+prefer to denote these projections by `∣_∣` and `∥_∥`, respectively.  We define these
+alternative notations for projections out of pairs as follows.
 
 ```agda
-
-
 module _ {A : Type a}{B : A → Type b} where
 
  ∣_∣ : Σ[ x ∈ A ] B x → A
- ∣_∣ = fst
+ ∣_∣ = proj₁
 
  ∥_∥ : (z : Σ[ a ∈ A ] B a) → B ∣ z ∣
- ∥_∥ = snd
+ ∥_∥ = proj₂
 
  infix  40 ∣_∣
 ```
-
 
 Here we put the definitions inside an *anonymous module*, which starts with the
  `module` keyword followed by an underscore (instead of a module name). The
@@ -114,10 +104,7 @@ the definitions inside the module.
 Let's define some useful syntactic sugar that will make it easier to apply
 symmetry and transitivity of `≡` in proofs.
 
-
 ```agda
-
-
 _⁻¹ : {A : Type a} {x y : A} → x ≡ y → y ≡ x
 p ⁻¹ = sym p
 
@@ -129,10 +116,7 @@ If we have a proof `p : x ≡ y`, and we need a proof of `y ≡ x`, then instead
 `sym p` we can use the more intuitive `p ⁻¹`. Similarly, the following syntactic
 sugar makes abundant appeals to transitivity easier to stomach.
 
-
 ```agda
-
-
 _∙_ : {A : Type a}{x y z : A} → x ≡ y → y ≡ z → x ≡ z
 p ∙ q = trans p q
 
@@ -145,10 +129,7 @@ infixl 30 _∙_
 
 #### <a id="sigma-types">Sigma types</a>
 
-
 ```agda
-
-
 infix 2 ∃-syntax
 
 ∃-syntax : ∀ {A : Type a} → (A → Type b) → Set (a ⊔ b)
@@ -165,10 +146,7 @@ and typically expressed as `Π(x : A) B x`, or something similar.  In Agda synta
 one writes `(x : A) → B x` for this dependent function type, but we can define
 syntax that is closer to standard notation as follows.
 
-
 ```agda
-
-
 Π : {A : Type a } (B : A → Type b ) → Type (a ⊔ b)
 Π {A = A} B = (x : A) → B x
 
@@ -234,8 +212,6 @@ the identity transformation. Similarly, `lift` followed by `lower` is the
 identity.
 
 ```agda
-
-
 lift∼lower : {A : Type a} → lift ∘ lower ≡ 𝑖𝑑 (Lift b A)
 lift∼lower = refl
 
@@ -254,8 +230,6 @@ the same output when given the same input.  (We will have more to say about
 this notion of equality in the [Base.Equality.Extensionality][] module.)
 
 ```agda
-
-
 module _ {a : Level}{A : Type a}{b : Level}{B : A → Type b } where
 
  _≈_ :  (f g : (a : A) → B a) → Type (a ⊔ b)
@@ -273,10 +247,8 @@ The following is convenient for proving two pairs of a product type are equal
 using the fact that their respective components are equal.
 
 ```agda
-
-
 ≡-by-parts :  {A : Type a}{B : Type b}{u v : A × B}
- →            fst u ≡ fst v → snd u ≡ snd v → u ≡ v
+ →            proj₁ u ≡ proj₁ v → proj₂ u ≡ proj₂ v → u ≡ v
 
 ≡-by-parts refl refl = refl
 ```
@@ -284,14 +256,10 @@ using the fact that their respective components are equal.
 Lastly, we will use the following type (instead of `subst`) to transport equality
 proofs.
 
-
 ```agda
-
-
 transport : {A : Type a } (B : A → Type b) {x y : A} → x ≡ y → B x → B y
 transport B refl = id
 ```
-
 
 ------------------------------
 

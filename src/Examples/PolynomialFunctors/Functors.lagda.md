@@ -32,23 +32,21 @@ An important class of functors for our domain is the class of so called *polynom
 * `(F + G) A = F A + G A`
 * `(F × G) A = F A × G A`
 
-
 ```agda
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Examples.PolynomialFunctors.Functors where
 
--- Imports from Agda and the Agda Standard Library  ---------------------------------------
-open import Agda.Primitive                         using ( _⊔_ ; lsuc ; Level )
-                                                   renaming ( Set to Type ; lzero to ℓ₀ )
+open import Agda.Primitive using () renaming ( Set to Type )
+
+-- Imports from the Agda Standard Library  ---------------------------------------
 open import Data.Nat                               using ( ℕ ; zero ; suc ; _>_ )
-open import Data.Sum.Base                          using ( _⊎_ ) renaming ( inj₁ to inl ;  inj₂ to inr )
 open import Data.Product                           using ( Σ-syntax ; _,_ ; _×_ )
+open import Data.Sum.Base                          using ( _⊎_ ) renaming ( inj₁ to inl ;  inj₂ to inr )
 open import Data.Unit                              using () renaming ( tt to 𝟎 )
 open import Data.Unit.Polymorphic                  using ( ⊤ )
+open import Level                                  using ( _⊔_ ; Level ) renaming (suc to lsuc ; 0ℓ to ℓ₀ )
 open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl ; _≢_ )
-open import Level
 
 private variable α β : Level
 
@@ -80,33 +78,24 @@ data Functor {ℓ : Level} : Type (lsuc ℓ) where
 [ F ⊗ G ] B = [ F ] B × [ G ] B
 ```
 
-
 The least fixed point of a polynomial function can then be defined in Agda with the following datatype declaration.
 
-
 ```agda
-
 data μ_ (F : Functor) : Type where
  inn : [ F ] (μ F) → μ F
 ```
 
-
 An important example is the polymorphic list datatype.  The standard way to define this in Agda is as follows:
 
-
 ```agda
-
 data list (A : Type) : Type ℓ₀ where
  [] : list A
  _∷_ : A → list A → list A
 ```
 
-
 We could instead define a `List` datatype by applying `μ` to a polynomial functor `L` as follows:
 
-
 ```agda
-
 L : {ℓ : Level}(A : Type ℓ) → Functor{ℓ}
 L A = Const ⊤ ⊕ (Const A ⊗ Id)
 
@@ -114,12 +103,9 @@ List : (A : Type) → Type ℓ₀
 List A = μ (L A)
 ```
 
-
 To verify that both formulations of the polymorphic list type give what we expect, we use "getter" functions, which take a list `l` and a natural number `n` and return the element of `l` at index `n`.  Since such an element doesn't always exist, we first define the `Option` type.
 
-
 ```agda
-
 data Option (A : Type) : Type where
  some : A → Option A
  none : Option A
@@ -135,14 +121,11 @@ _⟦_⟧ : {A : Type} → list A → ℕ → Option A
 (x ∷ l) ⟦ suc n ⟧ = l ⟦ n ⟧
 ```
 
-
 ### <a id="worked-examples">Worked examples</a>
 
 The following examples confirm that the W-type encoding `List A = μ (L A)` and the standard inductive definition `list A` produce the same observable behavior on small concrete cases.
 
-
 ```agda
-
 -- 1. Empty list
 L₀ : List ℕ
 L₀ = inn (inl (Level.lift 𝟎))
@@ -217,13 +200,11 @@ l₃⟦2⟧≡some3 = refl
 ℓ₁ = lsuc ℓ₀
 ```
 
-
 --------------------------------
 
 <span style="float:left;">[← Examples.PolynomialFunctors](Examples.PolynomialFunctors.html)</span>
 
 {% include UALib.Links.md %}
-
 
 <!-- Some helpful excerpts from
      [Modular Type-Safety Proofs in Agda](https://doi.org/10.1145/2428116.2428120)
@@ -245,7 +226,6 @@ The expression problem in functional languages arises as a result of algebraic d
 once the type has been declared, no new constructors for the type may be added without amending the original declaration.
 Malcom's solution is to remove immediate recursion and split a monolithic datatype into parameterized components that
 can later be collected under the umbrella of a disjoint sum (i.e., a tagged union)."
-
 
 
 "Users of Coq might wonder why the definition of µ is accepted by Agda; Coq would reject the

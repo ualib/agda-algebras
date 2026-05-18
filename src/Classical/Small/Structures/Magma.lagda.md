@@ -11,7 +11,7 @@ author: "the agda-algebras development team"
 This is the [Classical.Small.Structures.Magma][] module of the [Agda Universal Algebra Library][].
 
 This module specializes [`Classical.Structures.Magma`][] to the common case where
-both the carrier level and the equivalence level are `lzero` — Set-valued
+both the carrier level and the equivalence level are `0ℓ` — Set-valued
 carriers with propositional or set-truncated equivalence.  Finite-template CSP
 (M7), the finite cases relevant to FLRP intuition (M6), and the tutorial
 contexts in [`Examples/`][Examples] and [`Demos/`][Demos] typically live in this
@@ -26,7 +26,7 @@ module Classical.Small.Structures.Magma where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
 open import Agda.Primitive  using () renaming ( Set to Type )
-open import Level           using ( lzero )
+open import Level           using ( 0ℓ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 import Classical.Structures.Magma as Polymorphic
@@ -36,17 +36,17 @@ import Classical.Structures.Magma as Polymorphic
 
 ```agda
 Magma : Type _
-Magma = Polymorphic.Magma lzero lzero
+Magma = Polymorphic.Magma 0ℓ 0ℓ
 ```
 
 #### <a id="fromOp">Small `fromOp`</a>
 
-The polymorphic `fromOp` specializes immediately: with `α = lzero`, it produces
-a `Polymorphic.Magma lzero lzero` from `(A : Type lzero) → (A → A → A)`, which
+The polymorphic `fromOp` specializes immediately: with `α = 0ℓ`, it produces
+a `Polymorphic.Magma 0ℓ 0ℓ` from `(A : Type 0ℓ) → (A → A → A)`, which
 is exactly the level-fixed `Magma` above.
 
 ```agda
-fromOp : (A : Type lzero) → (A → A → A) → Magma
+fromOp : (A : Type 0ℓ) → (A → A → A) → Magma
 fromOp = Polymorphic.fromOp
 ```
 

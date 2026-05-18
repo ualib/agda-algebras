@@ -27,22 +27,20 @@ An important class of functors for our domain is the class of so called *polynom
 * `(F + G) A = F A + G A`
 * `(F × G) A = F A × G A`
 
-
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Legacy.Base.Categories.Functors where
 
 -- Imports from Agda and the Agda Standard Library  ---------------------------------------
-open import Agda.Primitive                         using ( _⊔_ ; lsuc ; Level )
-                                                   renaming ( Set to Type ; lzero to ℓ₀ )
+open import Agda.Primitive                         using () renaming ( Set to Type )
 open import Data.Nat                               using ( ℕ ; zero ; suc ; _>_ )
 open import Data.Sum.Base                          using ( _⊎_ ) renaming ( inj₁ to inl ;  inj₂ to inr )
 open import Data.Product                           using ( Σ-syntax ; _,_ ; _×_ )
 open import Data.Unit                              using ( tt ) renaming ( ⊤ to ⊤₀ )
 open import Data.Unit.Polymorphic                  using ( ⊤ )
 open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl ; _≢_ )
-open import Level
+open import Level                                  using ( _⊔_ ; Level ) renaming (suc to lsuc ; 0ℓ to ℓ₀ )
 
 private variable α β : Level
 
@@ -81,19 +79,15 @@ record Poly (I J : Type) : Type (lsuc ℓ₀) where
 -}
 ```
 
-
 The least fixed point of a polynomial function can then
 be defined in Agda with the following datatype declaration.
-
 
 ```agda
 data μ_ (F : Functor) : Type where
  inn : [ F ] (μ F) → μ F
 ```
 
-
 An important example is the polymorphic list datatype. The standard way to define this in Agda is as follows:
-
 
 ```agda
 data list (A : Type) : Type ℓ₀ where
@@ -101,9 +95,7 @@ data list (A : Type) : Type ℓ₀ where
  _∷_ : A → list A → list A
 ```
 
-
 We could instead define a `List` datatype by applying `μ` to a polynomial functor `L` as follows:
-
 
 ```agda
 L : {ℓ : Level}(A : Type ℓ) → Functor{ℓ}
@@ -160,8 +152,6 @@ _⟦_⟧ : {A : Type} → list A → ℕ → Option A
 <span style="float:right;">[Base.Complexity →](Base.Complexity.html)</span>
 
 {% include UALib.Links.md %}
-
-
 
 
 

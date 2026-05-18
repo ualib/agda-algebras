@@ -17,14 +17,15 @@ This is the [Base.Structures.Homs][] module of the [Agda Universal Algebra Libra
 
 module Legacy.Base.Structures.Homs where
 
--- Imports from Agda and the Agda Standard Library -------------------------------------------
-open import Agda.Primitive   using () renaming ( lzero to ℓ₀ ; Set to Type )
+open import Agda.Primitive using () renaming ( Set to Type )
+
+-- Imports from the Agda Standard Library -------------------------------------------
 open import Axiom.Extensionality.Propositional
                              using () renaming (Extensionality to funext)
 open import Data.Product     using ( _×_ ; Σ-syntax ; _,_ )
                              renaming ( proj₁ to fst ; proj₂ to snd )
 open import Function.Base    using ( _∘_ ; id )
-open import Level            using ( _⊔_ ; suc ; Level ; Lift ; lift )
+open import Level            using ( _⊔_ ; suc ; Level ; Lift ; lift ) renaming ( 0ℓ to ℓ₀ )
 open import Relation.Binary  using ( IsEquivalence )
 open import Relation.Binary.PropositionalEquality
                              using ( _≡_ ; refl ; sym ; cong ; module ≡-Reasoning ; trans )

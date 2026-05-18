@@ -7,19 +7,17 @@ author: "agda-algebras development team"
 
 #### <a id="congruences-of-general-structures">Congruences of general structures</a>
 
-
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Legacy.Base.Structures.Sigma.Congruences where
 
+open import Agda.Primitive using () renaming ( Set to Type )
+
 -- Imports from the Agda Standard Library ------------------------------------------------
-open import Agda.Primitive   using () renaming ( Set to Type ; lzero to ℓ₀ )
 open import Data.Product     using ( _,_ ; _×_ ; Σ-syntax ) renaming ( proj₁ to fst )
 open import Function         using ( _∘_ )
-open import Level            using (  _⊔_ ; suc ; Level ; Lift ; lift ; lower )
+open import Level            using (  _⊔_ ; suc ; Level ; Lift ; lift ; lower ) renaming ( 0ℓ to ℓ₀ )
 open import Relation.Unary   using ( Pred ; _∈_ )
 open import Relation.Binary  using ( IsEquivalence ) renaming ( Rel to BinRel )
 open import Relation.Binary.PropositionalEquality using ( _≡_ )
@@ -53,13 +51,9 @@ module _ {α ρ : Level} where
 ```
 
 
-
 #### <a id="quotient-structures">Quotients of structures of sigma type</a>
 
-
 ```agda
-
-
  _╱_ : (𝑨 : Structure 𝑅 𝐹 {α}{ρ}) → Con 𝑨 → Structure 𝑅 𝐹 {suc (α ⊔ ρ)}{ρ}
 
  𝑨 ╱ θ =  ( Quotient (∣ 𝑨 ∣) {α ⊔ ρ} ∣ θ ∣)       -- domain of quotient structure
@@ -75,10 +69,7 @@ module _ {α ρ : Level} where
 
 #### <a id="the-zero-congruence-of-an-arbitrary-structure">The zero congruence of an arbitrary structure</a>
 
-
 ```agda
-
-
  𝟘[_╱_] :  (𝑨 : Structure 𝑅 𝐹 {α}{ρ})(θ : Con 𝑨)
   →        BinRel (∣ 𝑨 ∣ / (fst ∣ θ ∣)) (suc (α ⊔ ρ))
 
@@ -89,7 +80,6 @@ module _ {α ρ : Level} where
 
 𝟎[ 𝑨 ╱ θ ] wd = 0[ ∣ 𝑨 ╱ θ ∣ ]Equivalence , 0[ 𝑨 ╱ θ ]Compatible wd
 ```
-
 
 --------------------------------
 

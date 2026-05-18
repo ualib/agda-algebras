@@ -111,7 +111,7 @@ in v3.1.  Use the ASCII `_^_` defined immediately below.  See ADR-002 §7."
 -- exclusively; existing `Setoid/` code may continue to use `_̂_` until v3.1.
 -- See ADR-002 §7 for the rationale and per-tree policy.
 _^_ : (f : ∣ 𝑆 ∣)(𝑨 : Algebra α ρ) → (∥ 𝑆 ∥ f  →  𝕌[ 𝑨 ]) → 𝕌[ 𝑨 ]
-f ^ 𝑨 = f ̂ 𝑨
+f ^ 𝑨 = λ a → (Interp 𝑨) ⟨$⟩ (f , a)
 ```
 
 Sometimes we want to extract the universe level of a given algebra or its carrier.
@@ -146,7 +146,7 @@ module _ (𝑨 : Algebra α ρ)(ℓ : Level) where
                                                       ; trans = trans
                                                       }
                                                     }
- Lift-Algˡ .Interp ⟨$⟩ (f , la)           = lift $ (f ̂ 𝑨) (lower ∘ la)
+ Lift-Algˡ .Interp ⟨$⟩ (f , la)           = lift $ (f ^ 𝑨) (lower ∘ la)
  Lift-Algˡ .Interp .≈cong (refl , la=lb)  = ≈cong (Interp 𝑨) (refl , la=lb)
 
 
@@ -159,7 +159,7 @@ module _ (𝑨 : Algebra α ρ)(ℓ : Level) where
                                                       ; trans = λ x y → lift $ trans (lower x) (lower y)
                                                       }
                                                     }
- Lift-Algʳ .Interp ⟨$⟩ (f , la)           = (f ̂ 𝑨) la
+ Lift-Algʳ .Interp ⟨$⟩ (f , la)           = (f ^ 𝑨) la
  Lift-Algʳ .Interp .≈cong (refl , la≡lb)  = lift $ ≈cong (Interp 𝑨) (≡.refl , (lower ∘ la≡lb))
 
 
