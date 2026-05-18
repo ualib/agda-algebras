@@ -9,10 +9,7 @@ author: "agda-algebras development team"
 
 This is the [Setoid.Algebras.Basic][] module of the [Agda Universal Algebra Library][].
 
-
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using (𝓞 ; 𝓥 ; Signature )
@@ -38,7 +35,6 @@ ov α = 𝓞 ⊔ 𝓥 ⊔ lsuc α
 ```
 
 
-
 #### <a id="setoid-algebras">Setoid Algebras</a>
 
 Here we define algebras over a setoid, instead of a mere type with no equivalence on it.
@@ -47,10 +43,7 @@ Here we define algebras over a setoid, instead of a mere type with no equivalenc
 
 First we define an operator that translates an ordinary signature into a signature over a setoid domain.
 
-
 ```agda
-
-
 open Setoid
  using (_≈_ ; Carrier )
  renaming ( refl to reflS ; sym to symS ; trans to transS ; isEquivalence to isEqv )
@@ -73,16 +66,12 @@ IsEquivalence.sym    (isEqv (⟨ 𝑆 ⟩ ξ))(refl , g)            = refl , λ 
 IsEquivalence.trans  (isEqv (⟨ 𝑆 ⟩ ξ))(refl , g)(refl , h)  = refl , λ i → transS  ξ (g i) (h i)
 ```
 
-
 A setoid algebra is just like an algebra but we require that all basic operations
 of the algebra respect the underlying setoid equality. The `Func` record packs a
 function (`f`, aka apply, aka `_⟨$⟩_`) with a proof (cong) that the function respects
 equality.
 
-
 ```agda
-
-
 record Algebra α ρ : Type (𝓞 ⊔ 𝓥 ⊔ lsuc (α ⊔ ρ)) where
  field
   Domain : Setoid α ρ
@@ -97,14 +86,10 @@ record Algebra α ρ : Type (𝓞 ⊔ 𝓥 ⊔ lsuc (α ⊔ ρ)) where
 open Algebra
 ```
 
-
 The next three definitions are merely syntactic sugar, but they can be very useful
 for improving readability of our code.
 
-
 ```agda
-
-
 𝔻[_] : Algebra α ρ →  Setoid α ρ
 𝔻[ 𝑨 ] = Domain 𝑨
 
@@ -114,18 +99,25 @@ for improving readability of our code.
 
 -- interpretation of an operation symbol in an algebra
 _̂_ : (f : ∣ 𝑆 ∣)(𝑨 : Algebra α ρ) → (∥ 𝑆 ∥ f  →  𝕌[ 𝑨 ]) → 𝕌[ 𝑨 ]
-
 f ̂ 𝑨 = λ a → (Interp 𝑨) ⟨$⟩ (f , a)
-```
+{-# WARNING_ON_USAGE _̂_
+"The combining-caret notation `_̂_` is deprecated as of v3.0 and will be removed
+in v3.1.  Use the ASCII `_^_` defined immediately below.  See ADR-002 §7."
+#-}
 
+-- ASCII canonical form of operation-symbol interpretation in an algebra.
+-- Definitionally identical to `_̂_`; introduced for grep-friendliness and to
+-- survive shell-pipeline tooling.  New `Classical/` code uses `_^_`
+-- exclusively; existing `Setoid/` code may continue to use `_̂_` until v3.1.
+-- See ADR-002 §7 for the rationale and per-tree policy.
+_^_ : (f : ∣ 𝑆 ∣)(𝑨 : Algebra α ρ) → (∥ 𝑆 ∥ f  →  𝕌[ 𝑨 ]) → 𝕌[ 𝑨 ]
+f ^ 𝑨 = f ̂ 𝑨
+```
 
 Sometimes we want to extract the universe level of a given algebra or its carrier.
 The following functions provide that information.
 
-
 ```agda
-
-
 -- The universe level of an algebra
 Level-of-Alg : {α ρ 𝓞 𝓥 : Level}{𝑆 : Signature 𝓞 𝓥} → Algebra α ρ → Level
 Level-of-Alg {α = α}{ρ}{𝓞}{𝓥} _ = 𝓞 ⊔ 𝓥 ⊔ lsuc (α ⊔ ρ)
@@ -136,13 +128,9 @@ Level-of-Carrier {α = α} _ = α
 ```
 
 
-
 #### <a id="level-lifting-setoid-algebra-types">Level lifting setoid algebra types</a>
 
-
 ```agda
-
-
 module _ (𝑨 : Algebra α ρ)(ℓ : Level) where
  open Algebra 𝑨  using ()     renaming ( Domain to A )
  open Setoid A   using (sym ; trans )  renaming ( Carrier to ∣A∣ ; _≈_ to _≈₁_ ; refl to refl₁ )
@@ -178,8 +166,6 @@ module _ (𝑨 : Algebra α ρ)(ℓ : Level) where
 Lift-Alg : (𝑨 : Algebra α ρ)(ℓ₀ ℓ₁ : Level) → Algebra (α ⊔ ℓ₀) (ρ ⊔ ℓ₁)
 Lift-Alg 𝑨 ℓ₀ = Lift-Algʳ (Lift-Algˡ 𝑨 ℓ₀)
 ```
-
-
 
 --------------------------------
 
