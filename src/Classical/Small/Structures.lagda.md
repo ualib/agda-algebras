@@ -1,0 +1,30 @@
+---
+layout: default
+file: "src/Classical/Small/Structures.lagda.md"
+title: "Classical.Small.Structures module"
+date: "2026-05-17"
+author: "the agda-algebras development team"
+---
+
+### <a id="classical-small-structures">Aggregator for level-fixed structure veneers</a>
+
+This is the [Classical.Small.Structures][] module of the [Agda Universal Algebra Library][].
+
+This is the parallel-to-[`Classical.Structures`][] aggregator inside the
+[`Classical.Small`][] subtree.  It re-exports each per-structure level-fixed
+veneer in `Classical/Small/Structures/X.lagda.md` as those land under milestone
+M3.  See [ADR-002][] for the design rationale.
+
+```agda
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+
+module Classical.Small.Structures where
+
+open import Classical.Small.Structures.Magma public
+```
+
+--------------------------------------
+
+<span style="float:left;">[↑ Classical.Small](Classical.Small.html)</span>
+
+{% include UALib.Links.md %}
