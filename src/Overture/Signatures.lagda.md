@@ -114,7 +114,7 @@ arity of `𝑓`.
 The bracket notation `∣ 𝑆 ∣` and `∥ 𝑆 ∥` is concise but reads opaquely at use
 sites for readers who do not have the encoding cached.  The following long-form
 aliases are definitionally identical to the bracket forms; they are used by
-default in the `Classical/` tree.  See [ADR-002 §1] for the rationale and the
+default in the `Classical/` tree.  See [ADR-002][] §1 for the rationale and the
 per-tree policy.
 
 ```agda
