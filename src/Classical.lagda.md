@@ -37,6 +37,8 @@ This file is the umbrella for the `Classical/` tree.  At the moment this scaffol
 
 module Classical where
 
+open import Classical.Operations public
+open import Classical.Equations  public
 open import Classical.Signatures public
 open import Classical.Theories public
 open import Classical.Structures public

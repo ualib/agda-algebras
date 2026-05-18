@@ -10,11 +10,7 @@ author: "agda-algebras development team"
 
 This is the [Overture.Signatures][] module of the [Agda Universal Algebra Library][].
 
-
-
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Overture.Signatures where
@@ -24,9 +20,11 @@ open import Agda.Primitive  using () renaming ( Set to  Type )
 open import Data.Product    using ( Σ-syntax )
 open import Level           using ( Level ; suc ; _⊔_ )
 
+-- Imports from the Agda Universal Algebra Library ----------------------
+open import Overture.Basic using ( ∣_∣ ; ∥_∥ )
+
 variable 𝓞 𝓥 : Level
 ```
-
 
 The variables `𝓞` and `𝓥` are not private since, throughout the [agda-algebras][] library,
 `𝓞` denotes the universe level of *operation symbol* types, while `𝓥` denotes the universe
@@ -83,34 +81,25 @@ Then the following typing judgments obtain:
 `h ∘ a : ρ𝑓 → B` and `𝑓 (h ∘ a) : B`.
 
 
-
 #### <a id="the-signature-type">The signature type</a>
 
 In the [agda-algebras][] library we represent the *signature* of an algebraic
 structure using the following type.
 
-
 ```agda
-
-
 Signature : (𝓞 𝓥 : Level) → Type (suc (𝓞 ⊔ 𝓥))
 Signature 𝓞 𝓥 = Σ[ F ∈ Type 𝓞 ] (F → Type 𝓥)
 ```
 
-
 Occasionally it is useful to obtain the universe level of a given signature.
 
-
 ```agda
-
-
 Level-of-Signature : {𝓞 𝓥 : Level} → Signature 𝓞 𝓥 → Level
 Level-of-Signature {𝓞}{𝓥} _ = suc (𝓞 ⊔ 𝓥)
 ```
 
-
 In the [Base.Functions][] module of the [agda-algebras][] library, special syntax
-is defined for the first and second projections---namely, `∣_∣` and `∥_∥`, resp.
+is defined for the first and second projections — namely, `∣_∣` and `∥_∥`, resp.
 
 Consequently, if `𝑆 : Signature 𝓞 𝓥` is a signature, then
 
@@ -119,6 +108,25 @@ Consequently, if `𝑆 : Signature 𝓞 𝓥` is a signature, then
 
 If `𝑓 : ∣ 𝑆 ∣` is an operation symbol in the signature `𝑆`, then `∥ 𝑆 ∥ 𝑓` is the
 arity of `𝑓`.
+
+#### <a id="self-documenting-projections">Self-documenting projections</a>
+
+The bracket notation `∣ 𝑆 ∣` and `∥ 𝑆 ∥` is concise but reads opaquely at use
+sites for readers who do not have the encoding cached.  The following long-form
+aliases are definitionally identical to the bracket forms; they are used by
+default in the `Classical/` tree.  See [ADR-002 §1] for the rationale and the
+per-tree policy.
+
+```agda
+OperationSymbolsOf : Signature 𝓞 𝓥 → Type 𝓞
+OperationSymbolsOf 𝑆 = ∣ 𝑆 ∣
+
+ArityOf : (𝑆 : Signature 𝓞 𝓥) → OperationSymbolsOf 𝑆 → Type 𝓥
+ArityOf 𝑆 f = ∥ 𝑆 ∥ f
+```
+
+The bracket notation remains available everywhere; `Setoid/`-tree code retains
+its existing usage.
 
 ----------------------
 
