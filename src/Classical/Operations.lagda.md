@@ -16,7 +16,7 @@ The user-facing layer of `Classical/` — every accessor that consumers of a cla
 
 This module provides the bridge: per-arity `Curry`/`Uncurry` helpers that translate between the two forms.  They are written once here and reused by every per-structure file across the `Classical/` tree.  The Fin n η-failure under `--cubical-compatible` is contained inside `Uncurry₂` / `Curry₂` and similar — per-structure files never write `pair`-style argument wrappers inline; the wrapping is the responsibility of this module alone.
 
-See [ADR-002 v2 §1](docs/adr/002-classical-layer-design.md) for the design rationale.
+See [ADR-002 v2 §1](../../docs/adr/002-classical-layer-design.md) for the design rationale.
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}

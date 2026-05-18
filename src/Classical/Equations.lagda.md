@@ -47,7 +47,7 @@ over, not just on the carrier and operations.  A formal account of equations as
 syntactic objects, distinct from their evaluations in particular algebras, is what
 makes that distinction expressible.
 
-See [ADR-002 v2 §3](docs/adr/002-classical-layer-design.md) for more details about
+See [ADR-002 v2 §3](../../docs/adr/002-classical-layer-design.md) for more details about
 the design rationale.
 
 *Note for per-structure-theory authors*.  The arity-conformance evidence `refl`
