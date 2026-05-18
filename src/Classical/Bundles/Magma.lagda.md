@@ -30,26 +30,21 @@ definitionally to `a` and `b` respectively.
 
 module Classical.Bundles.Magma where
 
-open import Agda.Primitive       using () renaming ( Set to Type )
-
 -- Imports from the Agda Standard Library ----------------------------
 open import Algebra.Bundles                        using () renaming ( Magma to stdlib-Magma )
-open import Algebra.Structures                     using (IsMagma)
 open import Data.Fin.Patterns                      using ( 0F ; 1F )
 open import Data.Product                           using ( _,_ )
 open import Function                               using ( Func )
 open import Level                                  using ( Level )
 open import Relation.Binary                        using ( Setoid )
-open import Relation.Binary.PropositionalEquality  using ( refl )
+import Relation.Binary.PropositionalEquality as ≡
 
-open Setoid using (_≈_ ; isEquivalence)
 open Func renaming ( to to _⟨$⟩_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Classical.Operations                   using ( Curry₂ ; pair )
-open import Classical.Signatures.Magma             using ( Op-Magma ; ∙-Op ; Sig-Magma )
-open import Classical.Structures.Magma            using ( Magma ; module Magma-Op )
-open import Setoid.Algebras.Basic {𝑆 = Sig-Magma}  using ( Algebra ; _^_ ; 𝔻[_] ; 𝕌[_] ; ⟨_⟩ )
+open import Classical.Signatures.Magma             using ( ∙-Op ; Sig-Magma )
+open import Classical.Structures.Magma             using ( Magma ; module Magma-Op )
+open import Setoid.Algebras.Basic {𝑆 = Sig-Magma}  using ( Algebra ; ⟨_⟩ ; 𝕌[_] ; 𝔻[_] )
 open Algebra using (Interp)
 
 private variable α ρ : Level
@@ -64,16 +59,16 @@ from the algebra's `Interp.cong` by unpacking the Fin 2 pattern.
 
 ```agda
 ⟨_⟩ₘₐ : Magma α ρ → stdlib-Magma α ρ
-⟨ 𝑴 ⟩ₘₐ = let open Magma-Op 𝑴 using ( Domain ; Carrier ; _∙_ ) in
-  record
-  { Carrier = Carrier
-  ; _≈_     = _≈_ Domain
+⟨ 𝑴 ⟩ₘₐ = record
+  { Carrier = 𝕌[ 𝑴 ]
+  ; _≈_     = _≈_
   ; _∙_     = _∙_
   ; isMagma = record
-    { isEquivalence = isEquivalence Domain
-    ; ∙-cong = λ x≈y u≈v → cong (Interp 𝑴) (refl , λ { 0F → x≈y ; 1F → u≈v })
-    }
+      { isEquivalence = isEquivalence
+      ; ∙-cong = λ x≈y u≈v → cong (Interp 𝑴) (≡.refl , λ { 0F → x≈y ; 1F → u≈v })
+      }
   }
+  where open Magma-Op 𝑴; open Setoid 𝔻[ 𝑴 ]
 ```
 
 #### <a id="bundle-to-core">Stdlib bundle to core</a>
@@ -97,7 +92,7 @@ equivalence proof.
   where
   interp : Func (⟨ Sig-Magma ⟩ (stdlib-Magma.setoid M)) (stdlib-Magma.setoid M)
   interp ⟨$⟩ (∙-Op , args) = (M stdlib-Magma.∙ (args 0F)) (args 1F)
-  cong interp { ∙-Op , _ } { .∙-Op , _ } (refl , args≈) = stdlib-Magma.∙-cong M (args≈ 0F) (args≈ 1F)
+  cong interp { ∙-Op , _ } { .∙-Op , _ } (≡.refl , args≈) = stdlib-Magma.∙-cong M (args≈ 0F) (args≈ 1F)
 ```
 
 #### <a id="roundtrip">Pointwise round-trip</a>
@@ -109,20 +104,23 @@ discharges the obligation.
 
 ```agda
 module _ {𝑴 : Magma α ρ} where
-  open Magma-Op 𝑴 using ( _∙_ )
+  open Magma-Op 𝑴 ; open Setoid 𝔻[ 𝑴 ]
   open Magma-Op ⟪ ⟨ 𝑴 ⟩ₘₐ ⟫ₘₐ renaming ( _∙_ to _∙'_ )
 
-  roundtrip-cbc : (a b : Carrier) → Setoid._≈_ Domain (a ∙' b) (a ∙ b)
-  roundtrip-cbc a b = Setoid.refl Domain
+  roundtrip-cbc : (a b : 𝕌[ 𝑴 ]) → (a ∙' b) ≈ (a ∙ b)
+  roundtrip-cbc a b = refl
 ```
 
 The reverse direction, bundle → core → bundle, holds pointwise on the bundle's
 underlying equivalence by the same reduction.
 
 ```agda
-roundtrip-bcb : (M : stdlib-Magma α ρ) (a b : stdlib-Magma.Carrier M)
-  → stdlib-Magma._≈_ M (stdlib-Magma._∙_ ⟨ ⟪ M ⟫ₘₐ ⟩ₘₐ a b) (stdlib-Magma._∙_ M a b)
-roundtrip-bcb M a b = stdlib-Magma.refl M
+module _ {𝑴 : stdlib-Magma α ρ} where
+  open stdlib-Magma 𝑴 using (_≈_; _∙_; refl) renaming (Carrier to M)
+  open stdlib-Magma ⟨ ⟪ 𝑴 ⟫ₘₐ ⟩ₘₐ using () renaming ( _∙_ to _∙'_ )
+
+  roundtrip-bcb : (a b : M) → (a ∙ b) ≈ (a ∙' b)
+  roundtrip-bcb a b = refl
 ```
 
 --------------------------------------
