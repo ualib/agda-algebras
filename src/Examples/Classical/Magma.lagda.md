@@ -38,6 +38,8 @@ import      Classical.Structures.Magma          as Poly
 ```agda
 ℕ-magma : Magma
 ℕ-magma = fromOp ℕ _+_
+
+open Poly.Magma-Op ℕ-magma using ( _∙_ )
 ```
 
 #### <a id="acceptance">Acceptance checks</a>
@@ -47,7 +49,7 @@ the `fromOp` construction, no opacity from the `Curry₂` wrapping in the named
 accessor.  Discharged by `refl`.
 
 ```agda
-∙-is-+ : ∀ (a b : ℕ) → (Poly._∙_ ℕ-magma) a b ≡ a + b
+∙-is-+ : ∀ (a b : ℕ) → a ∙ b ≡ a + b
 ∙-is-+ a b = refl
 ```
 
@@ -57,13 +59,15 @@ obligation at the curried form (per
 [ADR-002 v2 §6](../../docs/adr/002-classical-layer-design.md)).
 
 ```agda
-roundtrip-ℕ : ∀ (a b : ℕ) → (Poly._∙_ ⟪ ⟨ ℕ-magma ⟩ₘₐ ⟫ₘₐ) a b ≡ a + b
+open Poly.Magma-Op ⟪ ⟨ ℕ-magma ⟩ₘₐ ⟫ₘₐ using () renaming ( _∙_ to _·_ )
+
+roundtrip-ℕ : ∀ (a b : ℕ) → a · b ≡ a + b
 roundtrip-ℕ a b = refl
 ```
 
 --------------------------------------
 
 <span style="float:left;">[← Examples.Classical](Examples.Classical.html)</span>
-<span style="float:right;">[Examples.Demos →](Examples.Demos.html)</span>
+<span style="float:right;">[Demos →](Demos.html)</span>
 
 {% include UALib.Links.md %}
