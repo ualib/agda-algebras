@@ -102,7 +102,7 @@ module _ {𝑆 : Signature 𝓞 0ℓ} {X : Type χ} where
   app₀ {e} e-nul = node e (subst (λ I → I → Term X) (sym e-nul) λ ())
 
   app₁ : {i : OperationSymbolsOf 𝑆} → ArityOf 𝑆 i ≡ Fin 1 → Term X → Term X
-  app₁ {i} i-un  s = node i (subst (λ I → I → Term X) (sym i-un) (λ _ → s))
+  app₁ {i} i-un s = node i (subst (λ I → I → Term X) (sym i-un) (λ _ → s))
 
   app₂ : {f : OperationSymbolsOf 𝑆} → ArityOf 𝑆 f ≡ Fin 2 → Term X → Term X → Term X
   app₂ {f} f-bin s t = node f (subst (λ I → I → Term X) (sym f-bin) (pair s t))

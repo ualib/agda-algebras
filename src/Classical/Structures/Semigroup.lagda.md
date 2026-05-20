@@ -1,0 +1,187 @@
+---
+layout: default
+file: "src/Classical/Structures/Semigroup.lagda.md"
+title: "Classical.Structures.Semigroup module"
+date: "2026-05-18"
+author: "the agda-algebras development team"
+---
+
+### <a id="classical-structures-semigroup">Semigroups — the first equation-bearing classical structure</a>
+
+This is the [Classical.Structures.Semigroup][] module of the [Agda Universal Algebra Library][].
+
+A *semigroup* is a magma whose binary operation is associative.  Type-theoretically,
+this is the Σ-typed structure consisting of an `Sig-Magma`-algebra `𝑨` paired with a
+proof that `𝑨` satisfies `Th-Semigroup`.  Mathematically: a semigroup *is* an
+algebra equipped with a proof that it satisfies the semigroup theory.  The Σ encodes
+that reading directly, per
+[ADR-002 v2 §5](../../docs/adr/002-classical-layer-design.md).
+
+This is the first concrete classical structure with a non-empty equational theory,
+and consequently this module's prose is normative for every subsequent
+equation-bearing structure (Monoid in M3-6, Group in M3-6, Lattice in M3-7, Ring in
+M3-8).  Specifically, the conventions documented and embodied here are:
+
++  **Theory representation**.  Each equation-bearing structure `X` has a
+   `Classical/Theories/X.lagda.md` file housing a singleton-or-larger index enum
+   `Eq-X` and a theory function `Th-X : Eq-X → Term (Fin n) × Term (Fin n)` composed
+   from generic equation builders in [`Classical.Equations`][].  The Σ-typed core
+   `X α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ Th-X` lives in `Classical/Structures/X.lagda.md`
+   over `open Setoid.Algebras {𝑆 = Sig-X}`.
++  **`_⊨_` alias**.  Each structure file defines a local `_⊨_` with the codomain
+   *spelled out explicitly* — for Semigroup, `Eq-Semigroup → Term (Fin 3) × Term (Fin 3)`,
+   not `_`.  The underscore lets Agda's unifier wander into the equational-logic
+   substrate, where it produces error messages naming `Modᵗ` rather than the local
+   alias; the explicit codomain is a load-test outcome from the original M3-2
+   branch.  The alias's body unfolds `Modᵗ Th-X` once at the point of use.
++  **Named accessor module `<Structure>-Op`**.  The signature-mechanics convention
+   from M3-3 — one named parametric module per structure exposing curried,
+   infix-friendly accessors so that downstream code can `open <Structure>-Op 𝑿` once
+   and write `a ∙ b` thereafter — extends to equation-bearing structures by additively
+   re-exporting the predecessor's accessors through the forgetful projection and by
+   adding new accessors for the equation-witness proofs.  Concretely, `Semigroup-Op 𝑺`
+   exposes `_∙_` inherited from `Magma-Op (semigroup→magma 𝑺)` via
+   `open Magma-Op (semigroup→magma 𝑺) public using (_∙_)`, plus the new
+   `equations : (semigroup→magma 𝑺) ⊨ Th-Semigroup` accessor projecting the
+   satisfaction-witness.  Subsequent `Monoid-Op`, `Group-Op`, `Lattice-Op`, `Ring-Op`
+   follow the same template.  Note that `Domain` and `Carrier` are *not* re-exposed
+   via the named module; they remain accessible through the foundation's
+   blackboard-bold accessors `𝔻[ semigroup→magma 𝑺 ]` and `𝕌[ semigroup→magma 𝑺 ]`,
+   which avoid potential clashes with field names of the same provenance in stdlib
+   bundle records.
++  **Forgetful projection `<structure>→<weaker>`**.  Each equation-bearing structure
+   `X` ships a forgetful function `x→y : X α ρ → Y α ρ` to its immediate predecessor
+   `Y` in the hierarchy.  When `Y`'s underlying signature is the same as `X`'s
+   (i.e., `X` adds equations only — no new operation symbols), the forgetful is
+   simply `proj₁`.  When `X` adds operation symbols on top of `Y`'s signature, the
+   forgetful is more substantial (it projects out the additional operations); those
+   cases land with Monoid in M3-6.  For Semigroup over Magma there are no added
+   symbols, so `semigroup→magma = proj₁`.  Composition of forgetfuls down the
+   hierarchy expresses inheritance type-theoretically: a group `𝑮` is a monoid via
+   `group→monoid 𝑮`, a semigroup via `monoid→semigroup ∘ group→monoid`, and a magma
+   via `semigroup→magma ∘ monoid→semigroup ∘ group→monoid`.
++  **`fromPropEq`-family constructor factoring through the predecessor's `fromOp`**.
+   The user-facing constructor `fromPropEq` builds a semigroup from a bare type `A`,
+   a binary operation `_·_ : A → A → A`, and one propositional-equality proof per
+   equation in the theory (here, one `·-assoc` proof).  Its definition factors
+   through M3-3's `fromOp`: `fromPropEq A _·_ ·-assoc = fromOp A _·_ , <proof>`,
+   reusing the M3-3-built underlying-algebra construction rather than rebuilding it.
+   This factoring has two payoffs: it keeps the per-structure constructor short, and
+   it makes the forgetful acceptance criterion `semigroup→magma (fromPropEq A _·_ _)
+   ≡ fromOp A _·_` discharge by `refl`.  Subsequent `fromPropEq`-family constructors
+   (Monoid's, Group's, Lattice's, Ring's) follow the same shape, each factoring
+   through their immediate predecessor's `fromX` constructor.
+
+The pull-up of `fromPropEq` to a shared infrastructure location is deferred until
+at least Monoid (M3-6) confirms the shape generalizes — premature shared abstraction
+is the failure mode that the M3-1a non-goals list (#326) warns against.
+
+```agda
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+
+module Classical.Structures.Semigroup where
+
+open import Agda.Primitive                          using () renaming ( Set to Type )
+
+-- Imports from the Agda Standard Library -------------------------------------------------------
+open import Data.Fin.Base                          using ( Fin )
+open import Data.Fin.Patterns                      using ( 0F ; 1F ; 2F )
+open import Data.Product                           using ( Σ-syntax ; _×_ ; _,_ ; proj₁ ; proj₂ )
+open import Level                                  using ( Level ; _⊔_ ; suc )
+open import Relation.Binary.PropositionalEquality  using ( _≡_ )
+
+-- Imports from the Agda Universal Algebra Library -----------------------------------------------
+open import Classical.Signatures.Magma             using ( Sig-Magma )
+open import Classical.Structures.Magma             using ( Magma ; fromOp ; module Magma-Op )
+open import Classical.Theories.Semigroup           using ( Eq-Semigroup ; Th-Semigroup ; assoc )
+open import Overture.Terms {𝑆 = Sig-Magma}         using ( Term )
+open import Setoid.Algebras.Basic {𝑆 = Sig-Magma}  using ( Algebra )
+open import Setoid.Varieties.EquationalLogic {𝑆 = Sig-Magma} using ( _⊧_≈_ )
+
+private variable α ρ : Level
+```
+
+#### <a id="satisfaction-alias">The local satisfaction predicate</a>
+
+`𝑨 ⊨ ℰ` says that the algebra `𝑨` satisfies every equation in the theory `ℰ` — that
+is, for every equation `(p , q) = ℰ i`, the formulas `p` and `q` evaluate to setoid-equal
+elements under every environment.  This is `Modᵗ ℰ 𝑨` from
+[`Setoid.Varieties.EquationalLogic`][], unfolded once to bring the codomain
+type-shape into view at the use site.
+
+```agda
+infix 4 _⊨_
+_⊨_ : (𝑨 : Algebra α ρ) (ℰ : Eq-Semigroup → Term (Fin 3) × Term (Fin 3)) → Type (α ⊔ ρ)
+𝑨 ⊨ ℰ = ∀ i → 𝑨 ⊧ proj₁ (ℰ i) ≈ proj₂ (ℰ i)
+```
+
+#### <a id="the-type">The type of semigroups</a>
+
+```agda
+Semigroup : (α ρ : Level) → Type (suc α ⊔ suc ρ)
+Semigroup α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ Th-Semigroup
+```
+
+#### <a id="forgetful">The forgetful projection to magmas</a>
+
+A semigroup is a magma + a proof that its operation is associative; forgetting the
+proof recovers the magma.
+
+```agda
+semigroup→magma : Semigroup α ρ → Magma α ρ
+semigroup→magma = proj₁
+```
+
+#### <a id="semigroup-op">The `Semigroup-Op` module: named accessors for a fixed semigroup</a>
+
+`Semigroup-Op 𝑺` exposes `_∙_` (re-exported from `Magma-Op (semigroup→magma 𝑺)`
+through the forgetful) and `equations` (the satisfaction-witness proof, projected
+out of the Σ).  Users `open Semigroup-Op 𝑺` at a use site to bring both into scope;
+the binary operation is then available in infix form `a ∙ b`, mirroring the
+`open Semigroup S`-and-then-`a ∙ b` idiom of `Algebra.Bundles`.
+
+The pattern — *each `<Structure>-Op` module re-exports its immediate predecessor's
+`<Weaker>-Op` accessors through the forgetful projection, then adds new accessors
+for the equation-witness proofs* — is the normative inheritance idiom for the whole
+hierarchy.
+
+```agda
+module Semigroup-Op {α ρ : Level} (𝑺 : Semigroup α ρ) where
+  open Magma-Op (semigroup→magma 𝑺) public using ( _∙_ )
+
+  equations : semigroup→magma 𝑺 ⊨ Th-Semigroup
+  equations = proj₂ 𝑺
+```
+
+#### <a id="fromPropEq">From a bare type, a binary operation, and an associativity proof</a>
+
+`fromPropEq` is the canonical constructor for downstream users.  Given a carrier
+type `A`, a binary operation `_·_ : A → A → A`, and a propositional-equality
+associativity proof `·-assoc`, it returns a `Semigroup α α`.  The construction
+factors through M3-3's `fromOp` so that the underlying-algebra portion is shared
+with `Magma`'s constructor — this is what makes the forgetful agreement criterion
+`semigroup→magma ∘ fromPropEq A _·_ _ ≡ fromOp A _·_` discharge by `refl`.
+
+The associativity proof discharges by direct evaluation: under `≡.setoid A`, the
+setoid equivalence is propositional equality; the interpretation of
+`(ℊ 0F ∙ ℊ 1F) ∙ ℊ 2F` in `fromOp A _·_` under an environment `ρ` reduces
+definitionally to `(ρ 0F · ρ 1F) · ρ 2F`, and the mirror reduction holds for the
+right-associated term, so `·-assoc (ρ 0F) (ρ 1F) (ρ 2F)` is exactly the proof
+required.
+
+```agda
+fromPropEq : (A : Type α) (_·_ : A → A → A)
+           → (·-assoc : ∀ a b c → (a · b) · c ≡ a · (b · c))
+           → Semigroup α α
+fromPropEq A _·_ ·-assoc = fromOp A _·_ , proof
+  where
+  proof : (fromOp A _·_) ⊨ Th-Semigroup
+  proof assoc ρ = ·-assoc (ρ 0F) (ρ 1F) (ρ 2F)
+```
+
+--------------------------------------
+
+<span style="float:left;">[← Classical.Structures.Magma](Classical.Structures.Magma.html)</span>
+<span style="float:right;">[Classical.Bundles.Semigroup →](Classical.Bundles.Semigroup.html)</span>
+
+{% include UALib.Links.md %}

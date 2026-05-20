@@ -33,6 +33,7 @@ This file is the umbrella for the subtree.
 module Classical.Bundles where
 
 open import Classical.Bundles.Magma public
+open import Classical.Bundles.Semigroup public
 ```
 
 --------------------------------------

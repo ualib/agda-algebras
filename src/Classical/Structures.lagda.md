@@ -40,6 +40,7 @@ submodules are the initial, pattern-setting structures.
 module Classical.Structures where
 
 open import Classical.Structures.Magma public
+open import Classical.Structures.Semigroup public
 ```
 
 --------------------------------------

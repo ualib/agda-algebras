@@ -25,6 +25,7 @@ and continues issue-by-issue under milestone M3.
 module Examples.Classical where
 
 open import Examples.Classical.Magma public
+open import Examples.Classical.Semigroup public
 ```
 
 --------------------------------------
