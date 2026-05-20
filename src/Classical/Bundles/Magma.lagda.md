@@ -58,8 +58,8 @@ domain's `Carrier` and `_≈_`, exposes the operation in curried form via
 from the algebra's `Interp.cong` by unpacking the Fin 2 pattern.
 
 ```agda
-⟨_⟩ₘₐ : Magma α ρ → stdlib-Magma α ρ
-⟨ 𝑴 ⟩ₘₐ = record
+⟨_⟩ᵐᵃ : Magma α ρ → stdlib-Magma α ρ
+⟨ 𝑴 ⟩ᵐᵃ = record
   { Carrier = 𝕌[ 𝑴 ]
   ; _≈_     = _≈_
   ; _∙_     = _∙_
@@ -80,8 +80,8 @@ built from the bundle's `∙-cong` applied pointwise to the argument-tuple's
 equivalence proof.
 
 ```agda
-⟪_⟫ₘₐ : stdlib-Magma α ρ → Magma α ρ
-⟪ M ⟫ₘₐ = record
+⟪_⟫ᵐᵃ : stdlib-Magma α ρ → Magma α ρ
+⟪ M ⟫ᵐᵃ = record
   { Domain = record
     { Carrier        = stdlib-Magma.Carrier M
     ; _≈_            = stdlib-Magma._≈_ M
@@ -105,7 +105,7 @@ discharges the obligation.
 ```agda
 module _ {𝑴 : Magma α ρ} where
   open Magma-Op 𝑴 ; open Setoid 𝔻[ 𝑴 ]
-  open Magma-Op ⟪ ⟨ 𝑴 ⟩ₘₐ ⟫ₘₐ renaming ( _∙_ to _∙'_ )
+  open Magma-Op ⟪ ⟨ 𝑴 ⟩ᵐᵃ ⟫ᵐᵃ renaming ( _∙_ to _∙'_ )
 
   roundtrip-cbc : (a b : 𝕌[ 𝑴 ]) → (a ∙' b) ≈ (a ∙ b)
   roundtrip-cbc a b = refl
@@ -117,7 +117,7 @@ underlying equivalence by the same reduction.
 ```agda
 module _ {𝑴 : stdlib-Magma α ρ} where
   open stdlib-Magma 𝑴 using (_≈_; _∙_; refl) renaming (Carrier to M)
-  open stdlib-Magma ⟨ ⟪ 𝑴 ⟫ₘₐ ⟩ₘₐ using () renaming ( _∙_ to _∙'_ )
+  open stdlib-Magma ⟨ ⟪ 𝑴 ⟫ᵐᵃ ⟩ᵐᵃ using () renaming ( _∙_ to _∙'_ )
 
   roundtrip-bcb : (a b : M) → (a ∙ b) ≈ (a ∙' b)
   roundtrip-bcb a b = refl
