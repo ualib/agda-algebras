@@ -28,7 +28,7 @@ open import Data.Nat                                using ( ℕ ; _+_ )
 open import Relation.Binary.PropositionalEquality   using ( _≡_ ; refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Classical.Bundles.Magma             using ( ⟨_⟩ₘₐ ; ⟪_⟫ₘₐ )
+open import Classical.Bundles.Magma             using ( ⟨_⟩ᵐᵃ ; ⟪_⟫ᵐᵃ )
 open import Classical.Small.Structures.Magma    using ( Magma ; fromOp )
 import      Classical.Structures.Magma          as Poly
 ```
@@ -59,7 +59,7 @@ obligation at the curried form (per
 [ADR-002 v2 §6](../../docs/adr/002-classical-layer-design.md)).
 
 ```agda
-open Poly.Magma-Op ⟪ ⟨ ℕ-magma ⟩ₘₐ ⟫ₘₐ using () renaming ( _∙_ to _·_ )
+open Poly.Magma-Op ⟪ ⟨ ℕ-magma ⟩ᵐᵃ ⟫ᵐᵃ using () renaming ( _∙_ to _·_ )
 
 roundtrip-ℕ : ∀ (a b : ℕ) → a · b ≡ a + b
 roundtrip-ℕ a b = refl
