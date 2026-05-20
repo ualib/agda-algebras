@@ -30,11 +30,9 @@ open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl )
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Classical.Bundles.Semigroup           using ( ⟨_⟩ˢᵍ ; ⟪_⟫ˢᵍ )
 open import Classical.Small.Structures.Semigroup  using ( Semigroup ; fromPropEq )
-open import Classical.Small.Structures.Magma      using () renaming ( fromOp to magma-fromOp )
 open import Examples.Classical.Magma              using ( ℕ-magma )
 
 import      Classical.Structures.Semigroup        as Poly
-import      Classical.Structures.Magma            as PolyMagma
 ```
 
 #### <a id="N-semigroup">The semigroup `(ℕ, +)`</a>
@@ -58,8 +56,8 @@ from the `fromPropEq` construction, from the factoring through `fromOp`, or from
 `Curry₂` wrapping in the inherited named accessor.  Discharged by `refl`.
 
 ```agda
-∙-is-+ : ∀ (a b : ℕ) → a ∙ b ≡ a + b
-∙-is-+ a b = refl
+∙-is-+-sg : ∀ (a b : ℕ) → a ∙ b ≡ a + b
+∙-is-+-sg a b = refl
 ```
 
 The forgetful image of `ℕ-semigroup` is the magma `ℕ-magma` from M3-3, *on the
@@ -81,8 +79,8 @@ obligation at the curried form (per
 ```agda
 open Poly.Semigroup-Op ⟪ ⟨ ℕ-semigroup ⟩ˢᵍ ⟫ˢᵍ using () renaming ( _∙_ to _·_ )
 
-roundtrip-ℕ : ∀ (a b : ℕ) → a · b ≡ a + b
-roundtrip-ℕ a b = refl
+roundtrip-ℕ-sg : ∀ (a b : ℕ) → a · b ≡ a + b
+roundtrip-ℕ-sg a b = refl
 ```
 
 --------------------------------------

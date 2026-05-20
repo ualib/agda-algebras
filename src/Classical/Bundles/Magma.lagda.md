@@ -107,8 +107,8 @@ module _ {𝑴 : Magma α ρ} where
   open Magma-Op 𝑴 ; open Setoid 𝔻[ 𝑴 ]
   open Magma-Op ⟪ ⟨ 𝑴 ⟩ᵐᵃ ⟫ᵐᵃ renaming ( _∙_ to _∙'_ )
 
-  roundtrip-cbc : (a b : 𝕌[ 𝑴 ]) → (a ∙' b) ≈ (a ∙ b)
-  roundtrip-cbc a b = refl
+  roundtrip-cbc-ma : (a b : 𝕌[ 𝑴 ]) → (a ∙' b) ≈ (a ∙ b)
+  roundtrip-cbc-ma a b = refl
 ```
 
 The reverse direction, bundle → core → bundle, holds pointwise on the bundle's
@@ -119,8 +119,8 @@ module _ {𝑴 : stdlib-Magma α ρ} where
   open stdlib-Magma 𝑴 using (_≈_; _∙_; refl) renaming (Carrier to M)
   open stdlib-Magma ⟨ ⟪ 𝑴 ⟫ᵐᵃ ⟩ᵐᵃ using () renaming ( _∙_ to _∙'_ )
 
-  roundtrip-bcb : (a b : M) → (a ∙ b) ≈ (a ∙' b)
-  roundtrip-bcb a b = refl
+  roundtrip-bcb-ma : (a b : M) → (a ∙ b) ≈ (a ∙' b)
+  roundtrip-bcb-ma a b = refl
 ```
 
 --------------------------------------

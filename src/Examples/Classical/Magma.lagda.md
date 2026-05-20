@@ -49,8 +49,8 @@ the `fromOp` construction, no opacity from the `Curry₂` wrapping in the named
 accessor.  Discharged by `refl`.
 
 ```agda
-∙-is-+ : ∀ (a b : ℕ) → a ∙ b ≡ a + b
-∙-is-+ a b = refl
+∙-is-+-ma : ∀ (a b : ℕ) → a ∙ b ≡ a + b
+∙-is-+-ma a b = refl
 ```
 
 The bundle bridge round-trips on `ℕ-magma` pointwise.  Both directions reduce by
@@ -61,8 +61,8 @@ obligation at the curried form (per
 ```agda
 open Poly.Magma-Op ⟪ ⟨ ℕ-magma ⟩ᵐᵃ ⟫ᵐᵃ using () renaming ( _∙_ to _·_ )
 
-roundtrip-ℕ : ∀ (a b : ℕ) → a · b ≡ a + b
-roundtrip-ℕ a b = refl
+roundtrip-ℕ-ma : ∀ (a b : ℕ) → a · b ≡ a + b
+roundtrip-ℕ-ma a b = refl
 ```
 
 --------------------------------------
