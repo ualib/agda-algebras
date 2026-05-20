@@ -43,8 +43,16 @@ M3-8).  Specifically, the conventions documented and embodied here are:
    exposes `_∙_` inherited from `Magma-Op (semigroup→magma 𝑺)` via
    `open Magma-Op (semigroup→magma 𝑺) public using (_∙_)`, plus the new
    `equations : (semigroup→magma 𝑺) ⊨ Th-Semigroup` accessor projecting the
-   satisfaction-witness.  Subsequent `Monoid-Op`, `Group-Op`, `Lattice-Op`, `Ring-Op`
-   follow the same template.  Note that `Domain` and `Carrier` are *not* re-exposed
+   satisfaction-witness, and the curried-form laws derived from it — for Semigroup,
+   `assoc-law : ∀ x y z → (x ∙ y) ∙ z ≈ x ∙ (y ∙ z)`.  The laws are stated in the
+   curried form working algebraists use, so that the bundle bridge's law-fields and
+   any downstream consumer get them as one-liners rather than re-deriving them from
+   `equations`.  The single point where the Fin 2 η-gap between term-interpretation
+   form and curried form is paid is the local `interp-node` lemma, contained here so
+   that neither the bundle bridge nor any consumer touches it.  Subsequent
+   `Monoid-Op`, `Group-Op`, `Lattice-Op`, `Ring-Op` follow the same template —
+   each exposes its predecessor's laws (inherited through the forgetful) plus its
+   own new laws in curried form.  Note that `Domain` and `Carrier` are *not* re-exposed
    via the named module; they remain accessible through the foundation's
    blackboard-bold accessors `𝔻[ semigroup→magma 𝑺 ]` and `𝕌[ semigroup→magma 𝑺 ]`,
    which avoid potential clashes with field names of the same provenance in stdlib
@@ -87,16 +95,26 @@ open import Agda.Primitive                          using () renaming ( Set to T
 open import Data.Fin.Base                          using ( Fin )
 open import Data.Fin.Patterns                      using ( 0F ; 1F ; 2F )
 open import Data.Product                           using ( Σ-syntax ; _×_ ; _,_ ; proj₁ ; proj₂ )
+open import Function                               using ( Func )
 open import Level                                  using ( Level ; _⊔_ ; suc )
-open import Relation.Binary.PropositionalEquality  using ( _≡_ )
+open import Relation.Binary                        using ( Setoid )
+open import Relation.Binary.PropositionalEquality  as ≡ using ( _≡_ )
+
+import Relation.Binary.Reasoning.Setoid as SetoidReasoning
+
+open Func renaming ( to to _⟨$⟩_ )
 
 -- Imports from the Agda Universal Algebra Library -----------------------------------------------
-open import Classical.Signatures.Magma             using ( Sig-Magma )
+open import Classical.Operations                   using ( pair )
+open import Classical.Signatures.Magma             using ( Sig-Magma ; ∙-Op )
 open import Classical.Structures.Magma             using ( Magma ; fromOp ; module Magma-Op )
 open import Classical.Theories.Semigroup           using ( Eq-Semigroup ; Th-Semigroup ; assoc )
-open import Overture.Terms {𝑆 = Sig-Magma}         using ( Term )
-open import Setoid.Algebras.Basic {𝑆 = Sig-Magma}  using ( Algebra )
+open import Overture.Terms {𝑆 = Sig-Magma}         using ( Term ; ℊ ; node )
+open import Setoid.Algebras.Basic {𝑆 = Sig-Magma}  using ( Algebra ; 𝔻[_] ; 𝕌[_] )
+open import Setoid.Terms {𝑆 = Sig-Magma}           using ( module Environment )
 open import Setoid.Varieties.EquationalLogic {𝑆 = Sig-Magma} using ( _⊧_≈_ )
+
+open Algebra using ( Interp )
 
 private variable α ρ : Level
 ```
@@ -151,6 +169,51 @@ module Semigroup-Op {α ρ : Level} (𝑺 : Semigroup α ρ) where
 
   equations : semigroup→magma 𝑺 ⊨ Th-Semigroup
   equations = proj₂ 𝑺
+
+  private
+    𝑴 = semigroup→magma 𝑺
+  open Setoid 𝔻[ 𝑴 ]
+  open Environment 𝑴 using ( ⟦_⟧ )
+  open SetoidReasoning 𝔻[ 𝑴 ]
+  -- Binary congruence of the interpreted operation.  This is the same content as
+  -- the stdlib `isMagma.∙-cong` field; naming it here lets both that field (in the
+  -- bundle bridge) and `assoc-law` below reuse it as a reasoning step.
+  ∙-cong : ∀ {x y u v} → x ≈ y → u ≈ v → (x ∙ u) ≈ (y ∙ v)
+  ∙-cong x≈y u≈v = cong (Interp 𝑴) (≡.refl , λ { 0F → x≈y ; 1F → u≈v })
+
+  -- The Fin 2 η-containment lemma — the single point in the whole Semigroup layer where
+  -- the cost of the gap between term-interpretation form and curried form is paid.
+  --   LHS reduces to  Interp 𝑴 ⟨$⟩ (∙-Op , λ i → ⟦ pair s t i ⟧ ⟨$⟩ η)
+  --   RHS reduces to  Interp 𝑴 ⟨$⟩ (∙-Op , pair (⟦ s ⟧ ⟨$⟩ η) (⟦ t ⟧ ⟨$⟩ η))
+  -- The two argument tuples agree at 0F and 1F but not definitionally (no η on
+  -- `Fin 2 → A`), so `cong (Interp 𝑴)` bridges them pointwise.  In the 4.0 cubical
+  -- port this lemma becomes `funExt (λ { 0F → refl ; 1F → refl })`; the content is
+  -- identical and the definitional gap is unchanged, so containing it in this one
+  -- named lemma is what makes the port mechanical.
+  interp-node : (s t : Term (Fin 3)) (η : Fin 3 → 𝕌[ 𝑴 ])
+              → ⟦ node ∙-Op (pair s t) ⟧ ⟨$⟩ η ≈ (⟦ s ⟧ ⟨$⟩ η) ∙ (⟦ t ⟧ ⟨$⟩ η)
+  interp-node s t η = cong (Interp 𝑴) (≡.refl , λ { 0F → refl ; 1F → refl })
+
+  -- Associativity in curried form.  The `equations assoc η` step is the actual
+  -- mathematical content (associativity in term-interpretation form); the four
+  -- surrounding steps reassociate `interp-node` and `∙-cong` to carry it between
+  -- the curried endpoints.  This is the law in the form working algebraists want,
+  -- and it is what the bundle bridge's `assoc` field reduces to.
+  assoc-law : ∀ x y z → (x ∙ y) ∙ z ≈ x ∙ (y ∙ z)
+  assoc-law x y z = begin
+    (x ∙ y) ∙ z          ≈⟨ ∙-cong (sym (interp-node (ℊ 0F) (ℊ 1F) η)) refl ⟩
+    (⟦ Lt ⟧ ⟨$⟩ η) ∙ z   ≈⟨ sym (interp-node Lt (ℊ 2F) η) ⟩
+    ⟦ lhsT ⟧ ⟨$⟩ η       ≈⟨ equations assoc η ⟩
+    ⟦ rhsT ⟧ ⟨$⟩ η       ≈⟨ interp-node (ℊ 0F) Rt η ⟩
+    x ∙ (⟦ Rt ⟧ ⟨$⟩ η)   ≈⟨ ∙-cong refl (interp-node (ℊ 1F) (ℊ 2F) η) ⟩
+    x ∙ (y ∙ z)          ∎
+    where
+    η : Fin 3 → 𝕌[ 𝑴 ]
+    η = λ { 0F → x ; 1F → y ; 2F → z }
+    Lt   = node ∙-Op (pair (ℊ 0F) (ℊ 1F))
+    Rt   = node ∙-Op (pair (ℊ 1F) (ℊ 2F))
+    lhsT = node ∙-Op (pair Lt (ℊ 2F))
+    rhsT = node ∙-Op (pair (ℊ 0F) Rt)
 ```
 
 #### <a id="fromPropEq">From a bare type, a binary operation, and an associativity proof</a>

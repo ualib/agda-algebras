@@ -22,7 +22,9 @@ setoid equivalence, per
 [ADR-002 v2 §6](../../docs/adr/002-classical-layer-design.md).  The same
 Fin 2 η-failure under `--cubical-compatible` that motivated the pointwise
 round-trip for Magma applies here unchanged — the equation-witness layer adds
-nothing new to the bridge's obstruction analysis, only to its content.
+nothing new to the bridge's obstruction analysis, only to its content, and that
+content (the curried associativity law) is supplied ready-made by
+`Semigroup-Op.assoc-law`, so the bridge itself stays a thin record-shuffle.
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -41,25 +43,24 @@ open Func renaming ( to to _⟨$⟩_ )
 
 -- Imports from the Agda Universal Algebra Library --------------------------------
 open import Classical.Signatures.Magma      using ( ∙-Op ; Sig-Magma )
-open import Classical.Structures.Magma      using ( Magma ; module Magma-Op )
 open import Classical.Structures.Semigroup  using ( Semigroup ; semigroup→magma ; module Semigroup-Op )
 open import Classical.Theories.Semigroup    using ( assoc )
 
 open import Setoid.Algebras.Basic {𝑆 = Sig-Magma} using ( Algebra ; ⟨_⟩ ; 𝕌[_] ; 𝔻[_] )
-
-open Algebra using ( Interp )
 
 private variable α ρ : Level
 ```
 
 #### <a id="core-to-bundle">Core to stdlib bundle</a>
 
-Going from the canonical Σ-typed core to the stdlib record reads off the
-domain's `Carrier` and `_≈_`, exposes the operation in curried form via
-[`Classical.Structures.Semigroup`][]'s `Semigroup-Op`, builds the `isMagma`
-witness from the algebra's `Interp.cong` the same way the M3-3 bridge does, and
-discharges `assoc` by applying the `equations` accessor to the three-variable
-environment `λ { 0F → a ; 1F → b ; 2F → c }`.
+Going from the canonical Σ-typed core to the stdlib record reads off the domain's
+`Carrier` and `_≈_` and exposes the operation and both law-fields through
+`open Semigroup-Op 𝑺`.  The `isMagma.∙-cong` and `isSemigroup.assoc` fields are
+*exactly* `Semigroup-Op`'s `∙-cong` and `assoc-law` — both already in curried form —
+so this direction is pure field-plumbing with no proof content of its own.  All of
+the Fin 2 η-bridging between term-interpretation form and curried form is discharged
+once, upstream, inside `Semigroup-Op.interp-node` (see
+[`Classical.Structures.Semigroup`][]); the bundle bridge never touches it.
 
 ```agda
 ⟨_⟩ˢᵍ : Semigroup α ρ → stdlib-Semigroup α ρ
@@ -68,28 +69,8 @@ environment `λ { 0F → a ; 1F → b ; 2F → c }`.
   ; _≈_         = _≈_
   ; _∙_         = _∙_
   ; isSemigroup = record
-      { isMagma = record
-          { isEquivalence = isEquivalence
-          ; ∙-cong = λ x≈y u≈v →
-              cong (Interp 𝑴) (≡.refl , λ { 0F → x≈y ; 1F → u≈v })
-          }
-      -- `equations assoc η` proves associativity in term-interpretation form:
-      --     `⟦ lhsT ⟧ ⟨$⟩ η` / `⟦ rhsT ⟧ ⟨$⟩ η`.
-      -- The stdlib `assoc` field wants it in curried form:
-      --     `(a ∙ b) ∙ c` / `a ∙ (b ∙ c)`.
-      -- These differ only by the Fin 2 η-gap inside each `∙-Op` node: interpretation
-      -- yields a stuck `λ i → ⟦ pair _ _ i ⟧ ⟨$⟩ η` argument tuple where the
-      -- curried form has `pair (a ∙ b) c`.  The two `cong (Interp 𝑴)` sandwiches
-      -- bridge that gap pointwise — `refl` at the leaves, one nested `cong` at
-      -- the compound subterm — exactly as `∙-cong` does one level up.
-      ; assoc = λ a b c →
-          trans (sym (cong (Interp 𝑴)
-                  (≡.refl , λ { 0F → cong (Interp 𝑴) (≡.refl , λ { 0F → refl ; 1F → refl })
-                              ; 1F → refl })))
-          ( trans (equations assoc (λ { 0F → a ; 1F → b ; 2F → c }))
-                  (cong (Interp 𝑴)
-                    (≡.refl , λ { 0F → refl
-                                ; 1F → cong (Interp 𝑴) (≡.refl , λ { 0F → refl ; 1F → refl }) })) )
+      { isMagma = record { isEquivalence = isEquivalence ; ∙-cong = ∙-cong }
+      ; assoc = assoc-law
       }
   }
   where
@@ -117,7 +98,7 @@ field by an environment-application of the same three-variable shape.
   𝑨 = record { Domain = setoid ; Interp = interp }
     where
     interp : Func (⟨ Sig-Magma ⟩ setoid) setoid
-    interp ⟨$⟩ (∙-Op , args)                                = args 0F · args 1F
+    interp ⟨$⟩ (∙-Op , args) = args 0F · args 1F
     cong interp { ∙-Op , _ } { .∙-Op , _ } (≡.refl , args≈) = ∙-cong (args≈ 0F) (args≈ 1F)
 ```
 
@@ -132,8 +113,8 @@ module _ {𝑺 : Semigroup α ρ} where
   open Semigroup-Op 𝑺 ; open Setoid 𝔻[ semigroup→magma 𝑺 ]
   open Semigroup-Op ⟪ ⟨ 𝑺 ⟩ˢᵍ ⟫ˢᵍ renaming ( _∙_ to _∙'_ )
 
-  roundtrip-cbc : (a b : 𝕌[ semigroup→magma 𝑺 ]) → (a ∙' b) ≈ (a ∙ b)
-  roundtrip-cbc a b = refl
+  roundtrip-cbc-sg : (a b : 𝕌[ semigroup→magma 𝑺 ]) → (a ∙' b) ≈ (a ∙ b)
+  roundtrip-cbc-sg a b = refl
 ```
 
 The reverse direction, bundle → core → bundle, holds pointwise on the bundle's
@@ -144,8 +125,8 @@ module _ {S : stdlib-Semigroup α ρ} where
   open stdlib-Semigroup S using ( _≈_ ; _∙_ ; refl ) renaming ( Carrier to A )
   open stdlib-Semigroup ⟨ ⟪ S ⟫ˢᵍ ⟩ˢᵍ using () renaming ( _∙_ to _∙'_ )
 
-  roundtrip-bcb : (a b : A) → (a ∙ b) ≈ (a ∙' b)
-  roundtrip-bcb a b = refl
+  roundtrip-bcb-sg : (a b : A) → (a ∙ b) ≈ (a ∙' b)
+  roundtrip-bcb-sg a b = refl
 ```
 
 --------------------------------------

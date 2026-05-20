@@ -25,7 +25,9 @@ record definition, two conversion functions, and a round-trip proof.  The design
 rationale — including why this is *not* a parallel implementation of the structure
 but rather a narrow interop view — is recorded in [ADR-002][ADR-002].
 
-This file is the umbrella for the subtree.
+This file is the umbrella for the subtree.  Round-trip and acceptance-check lemma
+names carry a per-structure suffix (`-ma`, `-sg`, `-mn`, `-gr`, …), precisely so the
+umbrellas can `public`-export every structure's witnesses without collision.
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}

@@ -26,7 +26,7 @@ module Classical.Small.Structures.Magma where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
 open import Agda.Primitive  using () renaming ( Set to Type )
-open import Level           using ( 0ℓ )
+open import Level           using ( 0ℓ ; suc )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 import Classical.Structures.Magma as Polymorphic
@@ -35,7 +35,7 @@ import Classical.Structures.Magma as Polymorphic
 #### <a id="the-type">The level-fixed type</a>
 
 ```agda
-Magma : Type _
+Magma : Type (suc 0ℓ)
 Magma = Polymorphic.Magma 0ℓ 0ℓ
 ```
 
