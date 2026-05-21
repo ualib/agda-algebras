@@ -36,7 +36,6 @@ fixed-universe-level veneers; these are paired with polymorphic cores in
 module Classical.Small where
 
 open import Classical.Small.Structures public
-open import Classical.Small.Structures.Semigroup public
 ```
 
 --------------------------------------

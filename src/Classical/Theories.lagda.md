@@ -21,10 +21,10 @@ equivalence rather than any setoid-specific feature without a cubical analog, so
 the eventual port to cubical Agda ([ADR-003][ADR-003]) is mechanical.  The design
 rationale is recorded in [ADR-002][ADR-002].
 
-This file is the umbrella for the subtree; at the moment this scaffold lands the
-subtree is empty.  Concrete theory modules arrive issue-by-issue under milestone M3
-(M3-2 onward), pairing with the corresponding `Classical/Signatures/X.lagda.md` and
-consumed by `Classical/Structures/X.lagda.md`.
+This file is the barrel module for the subtree; it currently re-exports
+`Classical.Theories.Semigroup`.  Additional concrete theory modules arrive
+under milestone M3, each paired with a corresponding
+`Classical/Signatures/X.lagda.md` and consumed by `Classical/Structures/X.lagda.md`.
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
