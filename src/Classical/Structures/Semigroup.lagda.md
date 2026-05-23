@@ -245,6 +245,6 @@ fromPropEq A _·_ ·-assoc = fromOp A _·_ , proof
 --------------------------------------
 
 <span style="float:left;">[← Classical.Structures.Magma](Classical.Structures.Magma.html)</span>
-<span style="float:right;">[Classical.Bundles.Semigroup →](Classical.Bundles.Semigroup.html)</span>
+<span style="float:right;">[Classical.Structures.Monoid →](Classical.Structures.Monoid.html)</span>
 
 {% include UALib.Links.md %}
