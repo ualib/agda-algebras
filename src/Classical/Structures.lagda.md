@@ -39,7 +39,9 @@ submodules are the initial, pattern-setting structures.
 
 module Classical.Structures where
 
+open import Classical.Structures.Interpret public
 open import Classical.Structures.Magma public
+open import Classical.Structures.Reduct public
 open import Classical.Structures.Semigroup public
 ```
 

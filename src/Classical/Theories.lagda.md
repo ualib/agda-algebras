@@ -32,6 +32,7 @@ under milestone M3, each paired with a corresponding
 module Classical.Theories where
 
 open import Classical.Theories.Semigroup public
+open import Classical.Theories.Monoid public
 ```
 
 --------------------------------------
