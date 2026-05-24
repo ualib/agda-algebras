@@ -1469,7 +1469,7 @@ These are the conventions established here; the same applies to every per-struct
 
 ---
 
-### Issue M3-3: Classical.Magma (#331)
+### Issue M3-3: Classical.Magma (#331, closed)
 
 **Labels**: `enhancement`, `milestone-3-classical`
 
@@ -1554,7 +1554,7 @@ These are normative for every subsequent structure (Semigroup in M3-4, Monoid + 
 
 ---
 
-### Issue M3-4: Classical.Semigroup (#261)
+### Issue M3-4: Classical.Semigroup (#261, closed)
 
 **Labels**: `enhancement`, `milestone-3-classical`
 
@@ -1569,13 +1569,14 @@ This issue is the reformulated body of #261 (originally M3-2).  The original bod
 These are normative for every subsequent equation-bearing structure (Monoid in M3-6, Group in M3-6, …) and consume the conventions established in M3-2 (infrastructure) and M3-3 (Magma).  Per [ADR-002 v2](docs/adr/002-classical-layer-design.md).
 
 +  **Signature reuse**.  Semigroup uses the magma signature `Sig-Magma` directly — there is no `Sig-Semigroup`.  Subsequent structures that *add* operations (Monoid adds an identity element, Group adds an inverse) get their own signature; structures that *only add equations* over a predecessor's signature reuse the predecessor's signature.
-+  **Equational theory representation**.  Indexed form per [`Setoid.Varieties.EquationalLogic.Modᵗ`](src/Setoid/Varieties/EquationalLogic.lagda.md): `data Eq-Semigroup : Type where assoc : Eq-Semigroup`, with `Th-Semigroup : Eq-Semigroup → Term (Fin 3) × Term (Fin 3)` mapping `assoc` to the associativity term-pair via the generic builder `Associative ∙-Op refl 0F 1F 2F` from [`Classical.Equations`](src/Classical/Equations.lagda.md) (introduced in M3-2).
++  **Equational theory representation**.  Indexed form per [`Setoid.Varieties.EquationalLogic.Modᵗ`](src/Setoid/Varieties/EquationalLogic.lagda.md): `data Eq-Semigroup : Type where assoc : Eq-Semigroup`, with `Th-Semigroup : Eq-Semigroup → Term (Fin 3) × Term (Fin 3)` mapping `assoc` to the associativity term-pair via the generic builder `Associative ∙-Op refl 0F 1F 2F` from [`Classical.Equations`](src/Classical/Equations.lagda.md) (introduced in M3-2). (Open `Classical.Equations` with the parameters fixed: `open Classical.Equations.??? {𝑆 = Sig-Magma} {X = Fin 3}` at the top of `Classical/Theories/Semigroup.lagda.md`.)
 +  **Variable carrier `Fin 3`**.  Per [ADR-002 v2 §2](docs/adr/002-classical-layer-design.md).  No per-structure `SemigroupVar`-style enum.  Variable patterns at use sites are `0F`, `1F`, `2F` from `Data.Fin.Patterns`.
-+  **Σ-typed core**.  `Semigroup α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] Modᵗ Th-Semigroup 𝑨` inside `open Setoid.Algebras {𝑆 = Sig-Magma}`.  Local `_⊨_` alias for `Modᵗ Th-Semigroup` is permitted but should spell out the codomain type explicitly to avoid the meta-resolution pitfall identified in the original M3-2 load test (`(Eq-Semigroup → Term (Fin 3) × Term (Fin 3))`, not `_`).
-+  **Named accessors next to the core**.  `Domain`, `Carrier`, `_∙_`, `equations` defined alongside `Semigroup α ρ`.  The `_∙_` accessor delegates to `Magma._∙_` after the `semigroup→magma` forgetful, per [ADR-002 v2 §5](docs/adr/002-classical-layer-design.md).
++  **Σ-typed core**.  `Semigroup α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] Modᵗ Th-Semigroup 𝑨` inside `open Setoid.Algebras {𝑆 = Sig-Magma}`.  Local `_⊨_` alias for `Modᵗ Th-Semigroup` is permitted but should spell out the codomain type explicitly to avoid the meta-resolution pitfall identified in the original M3-2 load test (`(Eq-Semigroup → Term (Fin 3) × Term (Fin 3))`, not `_` — the underscore lets Agda's unifier wander into the equational-logic substrate and the resulting error message points at `Modᵗ` rather than at the alias).
++  **Named accessors in a `Semigroup-Op` module**.  Following the [M3-3] precedent (where `Magma-Op` houses magma's named accessors so that `open Magma-Op 𝑴` brings `a ∙ b` into scope at the use site), `Semigroup-Op {α ρ} (𝑺 : Semigroup α ρ)` is a named parametric module exposing `_∙_`, and `equations`.  The first is re-exported through the forgetful functor via `open Magma-Op (semigroup→magma 𝑺) public using (_∙_)`.  This pattern — *each `<Structure>-Op` module additively re-exports its predecessor's `<Weaker>-Op` accessors through the forgetful projection* — is the normative inheritance idiom for the whole hierarchy; subsequent `Monoid-Op`, `Group-Op`, `Lattice-Op`, `Ring-Op` follow the same template.  `equations : Modᵗ Th-Semigroup (semigroup→magma 𝑺)` is the new addition exposing the satisfaction proof. `Domain` and `Carrier` are *not* placed in `Semigroup-Op`; they remain accessible through the foundation's blackboard-bold accessors `𝔻[ semigroup→magma 𝑺 ]` and `𝕌[ semigroup→magma 𝑺 ]`, which makes name clashes with stdlib bundle fields less likely.
 +  **`fromPropEq` shape**.  Per-structure: `fromPropEq : (A : Type α) (_·_ : A → A → A) (·-assoc : ∀ a b c → (a · b) · c ≡ a · (b · c)) → Semigroup α α`.  Pull-up to a shared location deferred until Monoid (M3-6) confirms the shape generalizes — premature shared abstraction is the failure mode #326's non-goals warn against.
++  **`fromPropEq` factors through `fromOp`**.  `fromPropEq A _·_ ·-assoc = fromOp A _·_ , <Th-Semigroup proof>`, reusing M3-3's `fromOp` rather than rebuilding the underlying algebra.  This makes the forgetful acceptance criterion discharge by `refl` and is the normative shape for every subsequent `fromPropEq`-family constructor (Monoid's factors through Semigroup's, etc.).
 +  **`semigroup→magma` forgetful**.  `semigroup→magma : Semigroup α ρ → Magma α ρ` defined alongside the Σ-typed core, simply `proj₁`.  Per [ADR-002 v2 §5](docs/adr/002-classical-layer-design.md), forgetful projections are how the "a semigroup is a magma" inheritance manifests; subsequent structures define analogous forgetfuls (`monoid→semigroup`, `group→monoid`, etc.).
-+  **Bundle bridge**.  Bidirectional `⟨_⟩ₛₘ` / `⟪_⟫ₛₘ` to `Algebra.Bundles.Semigroup` from stdlib 2.3, with a *pointwise* round-trip lemma per [ADR-002 v2 §6](docs/adr/002-classical-layer-design.md).  The Fin 2 η-bridge is contained in `Curry₂`/`Uncurry₂` from `Classical.Operations`; per-structure bridge files do not write inline `pair`-style wrappers.
++  **Bundle bridge**.  Bidirectional `⟨_⟩ˢᵍ` / `⟪_⟫ˢᵍ` to `Algebra.Bundles.Semigroup` from stdlib 2.3, with a *pointwise* round-trip lemma per [ADR-002 v2 §6](docs/adr/002-classical-layer-design.md).  The Fin 2 η-bridge is contained in `Curry₂`/`Uncurry₂` from `Classical.Operations`; per-structure bridge files do not write inline `pair`-style wrappers.  The superscript subscript-mnemonic `ˢᵍ` replaces the `ₛₘ` form of the original draft; the analogous Magma bridge is renamed `⟨_⟩ᵐᵃ`/`⟪_⟫ᵐᵃ` (from `ₘₐ`) for hierarchy-wide uniformity, since the natural "sg" mnemonic for Semigroup has no subscript-`g`.
 +  **Worked-example placement**.  `src/Examples/Classical/Semigroup.lagda.md`, alongside the Magma example from M3-3.
 
 ## Tasks
@@ -1585,9 +1586,9 @@ These are normative for every subsequent equation-bearing structure (Monoid in M
 +  [ ] `src/Classical/Theories/Semigroup.lagda.md` — `Eq-Semigroup`, `Th-Semigroup` (composes `Associative ∙-Op refl 0F 1F 2F`).
 +  [ ] `src/Classical/Structures/Semigroup.lagda.md`:
    +  the Σ-typed core,
-   +  named accessors `Domain`, `Carrier`, `_∙_`, `equations`,
-   +  the `fromPropEq` helper,
-   +  the `semigroup→magma` forgetful projection.
+   +  the `semigroup→magma` forgetful projection,
+   +  the `Semigroup-Op` named accessor module exposing `_∙_` (via the forgetful) and `equations`,
+   +  the `fromPropEq` helper.
 +  [ ] `src/Classical/Bundles/Semigroup.lagda.md` — bidirectional bridge to `Algebra.Bundles.Semigroup` with pointwise round-trip.
 +  [ ] `src/Classical/Small/Structures/Semigroup.lagda.md` — level-fixed veneer.
 
@@ -1623,7 +1624,7 @@ These are normative for every subsequent equation-bearing structure (Monoid in M
 +  [ ] The worked example `ℕ-semigroup` type-checks.
 +  [ ] The interpretation of `∙-Op` in `ℕ-semigroup` reduces definitionally to `_+_`.  Discharged by `refl` on the curried form.
 +  [ ] The bridge to `Algebra.Bundles.Semigroup` round-trips on `ℕ-semigroup` pointwise.  Discharged by `refl` on the curried form per [ADR-002 v2 §6](docs/adr/002-classical-layer-design.md).
-+  [ ] The forgetful `semigroup→magma (ℕ-semigroup)` equals `ℕ-magma` (where `ℕ-magma` is from M3-3) up to the obvious equality.
++  [ ] The forgetful `semigroup→magma (ℕ-semigroup)` equals `ℕ-magma` (from M3-3) propositionally.  Discharged by `refl`.  This holds because `fromPropEq` is implemented as `(fromOp A _·_) , <proof of Th-Semigroup>`, factoring the underlying-algebra construction through M3-3's `fromOp` so that `semigroup→magma ∘ fromPropEq A _·_ _ ≡ fromOp A _·_` definitionally.
 +  [ ] Module-header prose in `Classical/Structures/Semigroup.lagda.md` documents the equation-bearing-structure conventions normatively.
 +  [ ] CHANGELOG entry under `[Unreleased] / Added`.
 
@@ -1645,44 +1646,29 @@ These are normative for every subsequent equation-bearing structure (Monoid in M
 
 **Labels**: `milestone-3-classical`, `stdlib-bridge`
 
-## v2 amendment (2026-05-17)
+## v3 amendment (2026-05-21)
 
-Renumbered M3-3 → M3-5 following [revision of ADR-002 v2](https://github.com/ualib/agda-algebras/pull/332).  The original M3-2 (Semigroup pattern-setter) was split into [M3-2] (Operations + Equations infrastructure, #330), [M3-3] (Magma, #331), and M3-4 (reformulated Semigroup, this issue's predecessor in chronological order).
+Following the M3-4 precedent (Magma and Semigroup bridges landed inside #331 and #261), the Monoid, CommutativeMonoid, Group, and AbelianGroup bundle bridges move *into* [M3-6] #263 alongside their structures.  The bridge is a thin record-shuffle once each `<Structure>-Op` module exposes its laws in curried form, so it belongs in the same PR as the structure that produces those laws.
 
-Scope adjustment: the Magma and Semigroup bundle bridges land with their respective structure issues (M3-3 and M3-4), not in this issue.  This issue's scope is therefore reduced to Monoid, CommutativeMonoid, Group, AbelianGroup, Semilattice, Lattice, Semiring, Ring, CommutativeRing bridges — one per structure, mechanical following the patterns established in M3-3 and M3-4.
+Applying that rule uniformly, every remaining bundle bridge lands with its owning structure issue.  This issue is consequently reduced to a *tracking* issue: it records the cross-cutting round-trip policy and the per-structure ownership map, and holds no implementation tasks of its own.
 
-The pointwise round-trip policy from [ADR-002 v2 §6](docs/adr/002-classical-layer-design.md) applies uniformly: no per-structure bundle bridge claims a propositional Σ-equality round-trip; the round-trip is stated pointwise.
+## Round-trip policy (normative, applies to every bridge)
 
----
+The pointwise round-trip policy from [ADR-002 v2 §6](docs/adr/002-classical-layer-design.md) applies uniformly.  No per-structure bundle bridge claims a propositional Σ-equality round-trip; the round-trip is stated pointwise on the carrier in the structure's underlying setoid equivalence.  Each bridge ships a `roundtrip-<suffix>` lemma to that effect, and a stdlib concrete instance round-trips through the bridge in the owning issue's worked example.
 
-## Description
+## Bridge ownership map
 
-For each classical structure `X`, provide `Classical/Bundles/X.agda` with bidirectional conversion between the Σ-typed core and the stdlib's `Algebra.Bundles.X`.
-
-## Tasks
-
-Phase 1 (after M3-2):
-
-- [ ] Magma.
-- [ ] Semigroup.
-- [ ] CommutativeSemigroup.
-- [ ] Monoid.
-- [ ] CommutativeMonoid.
-- [ ] Group.
-- [ ] AbelianGroup.
-
-Phase 2:
-
-- [ ] Semilattice.
-- [ ] Lattice (bridges to both `Algebra.Bundles.Lattice` and `Algebra.Lattice.Bundles.Lattice`).
-- [ ] Semiring.
-- [ ] Ring.
-- [ ] CommutativeRing.
++  Magma → `Algebra.Bundles.Magma` — landed in [M3-3] #331.
++  Semigroup → `Algebra.Bundles.Semigroup` — landed in [M3-4] #261.
++  CommutativeSemigroup → `Algebra.Bundles.CommutativeSemigroup` — **UNASSIGNED**; fold into [M3-6] #263.
++  Monoid, CommutativeMonoid, Group, AbelianGroup → `Algebra.Bundles.{Monoid,CommutativeMonoid,Group,AbelianGroup}` — [M3-6] #263.
++  Semilattice, Lattice → `Algebra.Bundles` / `Algebra.Lattice.Bundles` — [M3-7] #264.  Lattice bridges to *both* `Algebra.Bundles.Lattice` and `Algebra.Lattice.Bundles.Lattice`.
++  Semiring, Ring, CommutativeRing → `Algebra.Bundles.{Semiring,Ring,CommutativeRing}` — [M3-8] #265.
 
 ## Acceptance criteria
 
-- [ ] Each bundle file proves round-trip properties where applicable.
-- [ ] A stdlib concrete instance (e.g. stdlib's `ℕ-+-commutativeMonoid`) round-trips through the bridge.
++  [ ] This issue carries no code.  Each bridge's type-checking and round-trip acceptance is owned by the structure issue listed above.
++  [ ] The round-trip policy text above is mirrored in [ADR-002 v2 §6](docs/adr/002-classical-layer-design.md) so the policy survives even if this tracker is later closed.
 
 ---
 
