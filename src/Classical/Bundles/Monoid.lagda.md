@@ -1,0 +1,121 @@
+---
+layout: default
+file: "src/Classical/Bundles/Monoid.lagda.md"
+title: "Classical.Bundles.Monoid module"
+date: "2026-05-24"
+author: "the agda-algebras development team"
+---
+
+### <a id="classical-bundles-monoid">Bundle bridge for monoids</a>
+
+This is the [Classical.Bundles.Monoid][] module of the [Agda Universal Algebra Library][].
+
+The bidirectional bridge between the Σ-typed core of [`Classical.Structures.Monoid`][]
+and the record-typed `Algebra.Bundles.Monoid` in the standard library.  As with the
+Semigroup bridge, the round-trip is stated *pointwise* per
+[ADR-002 v2 §6](../../docs/adr/002-classical-layer-design.md); the curried laws
+`assoc-law`, `idˡ-law`, `idʳ-law` arrive ready-made from `Monoid-Op`, so each
+direction is a thin record-shuffle.  The only addition over the Semigroup bridge is
+the nullary `ε` field and the `ε-Op` clause of the reverse interpretation.
+
+```agda
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+
+module Classical.Bundles.Monoid where
+
+-- Imports from the Agda Standard Library -----------------------------------------
+open import Algebra.Bundles     using () renaming ( Monoid to stdlib-Monoid )
+open import Data.Fin.Patterns   using ( 0F ; 1F ; 2F )
+open import Data.Product        using ( _,_ ; proj₁ )
+open import Function            using ( Func )
+open import Level               using ( Level )
+open import Relation.Binary     using ( Setoid )
+import Relation.Binary.PropositionalEquality as ≡
+open Func renaming ( to to _⟨$⟩_ )
+
+-- Imports from the Agda Universal Algebra Library --------------------------------
+open import Classical.Signatures.Monoid  using ( Sig-Monoid ; ∙-Op ; ε-Op )
+open import Classical.Structures.Monoid  using ( Monoid ; module Monoid-Op )
+open import Classical.Theories.Monoid    using ( assoc ; idˡ ; idʳ )
+open import Setoid.Algebras.Basic {𝑆 = Sig-Monoid} using ( Algebra ; ⟨_⟩ ; 𝕌[_] ; 𝔻[_] )
+
+private variable α ρ : Level
+```
+
+#### <a id="core-to-bundle">Core to stdlib bundle</a>
+
+```agda
+⟨_⟩ᵐⁿ : Monoid α ρ → stdlib-Monoid α ρ
+⟨ 𝑴 ⟩ᵐⁿ = record
+  { Carrier  = 𝕌[ 𝑨 ]
+  ; _≈_      = _≈_
+  ; _∙_      = _∙_
+  ; ε        = ε
+  ; isMonoid = record
+      { isSemigroup = record
+          { isMagma = record { isEquivalence = isEquivalence ; ∙-cong = ∙-cong }
+          ; assoc   = assoc-law
+          }
+      ; identity = idˡ-law , idʳ-law
+      }
+  }
+  where
+  𝑨 = proj₁ 𝑴
+  open Monoid-Op 𝑴
+  open Setoid 𝔻[ 𝑨 ]
+```
+
+#### <a id="bundle-to-core">Stdlib bundle to core</a>
+
+```agda
+⟪_⟫ᵐⁿ : stdlib-Monoid α ρ → Monoid α ρ
+⟪ M ⟫ᵐⁿ = 𝑨 , λ { assoc ρ → M-assoc (ρ 0F) (ρ 1F) (ρ 2F)
+                ; idˡ   ρ → M-idˡ   (ρ 0F)
+                ; idʳ   ρ → M-idʳ   (ρ 0F) }
+  where
+  open stdlib-Monoid M
+      using ( setoid ; ∙-cong )
+      renaming ( _∙_ to _·_ ; ε to e ; assoc to M-assoc
+               ; identityˡ to M-idˡ ; identityʳ to M-idʳ )
+
+  𝑨 : Algebra _ _
+  𝑨 = record { Domain = setoid ; Interp = interp }
+    where
+    interp : Func (⟨ Sig-Monoid ⟩ setoid) setoid
+    interp ⟨$⟩ (∙-Op , args)                            = args 0F · args 1F
+    interp ⟨$⟩ (ε-Op , _)                               = e
+    cong interp {∙-Op , _} {.∙-Op , _} (≡.refl , args≈) = ∙-cong (args≈ 0F) (args≈ 1F)
+    cong interp {ε-Op , _} {.ε-Op , _} (≡.refl , _)     = Setoid.refl setoid
+```
+
+#### <a id="roundtrip">Pointwise round-trip</a>
+
+```agda
+module _ {𝑴 : Monoid α ρ} where
+  open Monoid-Op 𝑴
+  open Setoid 𝔻[ proj₁ 𝑴 ]
+  open Monoid-Op ⟪ ⟨ 𝑴 ⟩ᵐⁿ ⟫ᵐⁿ renaming ( _∙_ to _∙'_ ; ε to ε' )
+
+  roundtrip-cbc-∙-mn : (a b : 𝕌[ proj₁ 𝑴 ]) → (a ∙' b) ≈ (a ∙ b)
+  roundtrip-cbc-∙-mn a b = refl
+
+  roundtrip-cbc-ε-mn : ε' ≈ ε
+  roundtrip-cbc-ε-mn = refl
+
+module _ {M : stdlib-Monoid α ρ} where
+  open stdlib-Monoid M using ( _≈_ ; _∙_ ; ε ; refl ) renaming ( Carrier to A )
+  open stdlib-Monoid ⟨ ⟪ M ⟫ᵐⁿ ⟩ᵐⁿ using () renaming ( _∙_ to _∙'_ ; ε to ε' )
+
+  roundtrip-bcb-∙-mn : (a b : A) → (a ∙ b) ≈ (a ∙' b)
+  roundtrip-bcb-∙-mn a b = refl
+
+  roundtrip-bcb-ε-mn : ε ≈ ε'
+  roundtrip-bcb-ε-mn = refl
+```
+
+--------------------------------------
+
+<span style="float:left;">[← Classical.Structures.Monoid](Classical.Structures.Monoid.html)</span>
+<span style="float:right;">[Classical.Small.Structures.Monoid →](Classical.Small.Structures.Monoid.html)</span>
+
+{% include UALib.Links.md %}

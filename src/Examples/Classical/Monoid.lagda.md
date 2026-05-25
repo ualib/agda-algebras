@@ -1,0 +1,73 @@
+---
+layout: default
+file: "src/Examples/Classical/Monoid.lagda.md"
+title: "Examples.Classical.Monoid module"
+date: "2026-05-24"
+author: "the agda-algebras development team"
+---
+
+### <a id="examples-classical-monoid">Worked example — `(List ℕ, ++, [])` as a monoid</a>
+
+This is the [Examples.Classical.Monoid][] module of the [Agda Universal Algebra Library][].
+
+Lists under concatenation form the canonical monoid, and a deliberately
+*non-commutative* one — so the corpus carries a witness that a monoid need not be
+commutative, in contrast to the `(ℕ, +, 0)` commutative monoid of
+[`Examples.Classical.CommutativeMonoid`][].  Built directly from stdlib's `++-assoc`,
+`++-identityˡ`, `++-identityʳ`.
+
+```agda
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+
+module Examples.Classical.Monoid where
+
+-- Imports from the Agda Standard Library -------------------------------------
+open import Data.List                              using ( List ; [] ; _++_ )
+open import Data.List.Properties                   using ( ++-assoc ; ++-identityˡ ; ++-identityʳ )
+open import Data.Nat                               using ( ℕ )
+open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl )
+
+-- Imports from the Agda Universal Algebra Library ----------------------------
+open import Classical.Bundles.Monoid           using ( ⟨_⟩ᵐⁿ ; ⟪_⟫ᵐⁿ )
+open import Classical.Small.Structures.Monoid  using ( Monoid ; fromPropEq )
+
+import      Classical.Structures.Monoid        as Poly
+```
+
+#### <a id="list-monoid">The monoid `(List ℕ, ++, [])`</a>
+
+```agda
+list-monoid : Monoid
+list-monoid = fromPropEq (List ℕ) _++_ [] ++-assoc ++-identityˡ ++-identityʳ
+
+open Poly.Monoid-Op list-monoid using ( _∙_ ; ε )
+```
+
+#### <a id="acceptance">Acceptance checks</a>
+
+```agda
+∙-is-++-mn : ∀ (xs ys : List ℕ) → xs ∙ ys ≡ xs ++ ys
+∙-is-++-mn xs ys = refl
+
+ε-is-[]-mn : ε ≡ []
+ε-is-[]-mn = refl
+```
+
+The bundle round-trips pointwise on both the operation and the identity.
+
+```agda
+open Poly.Monoid-Op ⟪ ⟨ list-monoid ⟩ᵐⁿ ⟫ᵐⁿ using () renaming ( _∙_ to _·_ ; ε to ε· )
+
+roundtrip-∙-mn : ∀ (xs ys : List ℕ) → xs · ys ≡ xs ++ ys
+roundtrip-∙-mn xs ys = refl
+
+roundtrip-ε-mn : ε· ≡ []
+roundtrip-ε-mn = refl
+```
+
+--------------------------------------
+
+<span style="float:left;">[← Examples.Classical.Semigroup](Examples.Classical.Semigroup.html)</span>
+<span style="float:right;">[Examples.Classical.CommutativeMonoid →](Examples.Classical.CommutativeMonoid.html)</span>
+
+{% include UALib.Links.md %}

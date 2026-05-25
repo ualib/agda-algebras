@@ -1921,6 +1921,241 @@ Every record, type family, and top-level function in the public API should have 
 - [ ] Decision is recorded (ADR or STYLE.md section).
 - [ ] `𝓞` and `𝓥` are handled uniformly across the library.
 
+---
+
+### Issue M4-4: Hoist `⟨_⟩` and `EqArgs` out of `Setoid.Algebras.Basic` (#337)
+
+**Labels**: `enhancement`, `milestone-4-style`, `breaking-change`, `design-discussion`
+
+## Context
+
+`Setoid.Algebras.Basic` is parameterized by a module-level `{𝑆 : Signature 𝓞 𝓥}`.  Two of its definitions — `EqArgs` and the polynomial-functor lifting `⟨_⟩` — take their signature as their *own explicit argument* and do **not** use the module parameter.  When such a name is imported without instantiating the module, Agda still prepends the unused `{𝑆}` to it.  For every other export (`Algebra`, `_^_`, `𝔻[_]`, `𝕌[_]`, …) the parameter is recovered from context because the name's type mentions `𝑆`; but `⟨_⟩` and `EqArgs` mention it nowhere, so the prepended `{𝑆}` becomes an unsolvable metavariable the moment either is written by hand at a use site.
+
+This surfaced while implementing `Classical.Structures.Monoid`: an `interp : Func (⟨ Sig-Monoid ⟩ (≡.setoid A)) (≡.setoid A)` annotation failed with an `UnsolvedConstraints` error (`_𝑆_ : Signature 0ℓ 0ℓ … blocked`), even though every value in scope determined the signature.  The current workaround is to avoid hand-writing `⟨_⟩` and rely on copattern inference of the `Interp` field — which works, but leaves a latent footgun for any future use site that names `⟨_⟩` or `EqArgs` directly.
+
+The underlying issue is conceptual: the module parameter fixes a *fibre* `Alg(𝑆)`, which is exactly right for the single-signature meta-theory but wrong for code that ranges over signatures.  `⟨_⟩` and `EqArgs` are signature-*generic* constructions that happen to live inside the fibre-fixing module.
+
+## Proposal
+
+Extract `EqArgs` and `⟨_⟩` (and any other signature-explicit, parameter-unused definitions) into a new non-parameterized module — suggest `Setoid/Algebras/Setoid.lagda.md` — and have `Setoid.Algebras.Basic` import them.  Their bodies are unchanged (they already take `𝑆` explicitly); only their home changes, so the spurious `{𝑆}` no longer rides along.  `Algebra`'s field `Interp : Func (⟨ 𝑆 ⟩ Domain) Domain` continues to apply the relocated `⟨_⟩` to the module's `𝑆`.
+
+## Acceptance criteria
+
++  [ ] `EqArgs` and `⟨_⟩` live in a non-parameterized module; `Setoid.Algebras.Basic` re-exports them so existing import sites are unaffected (or, where they must change, the change is mechanical and enumerated in the PR).
++  [ ] `make check` passes on the whole `Setoid/` tree and the `Demos/HSP` development.
++  [ ] A throwaway `_ = ⟨ Sig-Monoid ⟩ (≡.setoid ℕ)` in `Classical/Structures/Monoid` elaborates with no unsolved metavariable (then removed).
++  [ ] The copattern workaround in `fromMonoidOps`/`expand-ε` still type-checks (it should be unaffected; this is a regression guard).
+
+## Non-goals
+
++  Any change to the *fibre vs. total-category* design of `Algebra` itself — that is the separate M11 question (see #<M11>).  This issue only relocates two signature-generic helpers; it does not touch whether `𝑆` is a parameter or an argument of `Algebra`.
+
+## Risk
+
+Low, but the blast radius is whatever currently imports `⟨_⟩`/`EqArgs` from `Basic`.  Expected to be small (both are nearly internal to `Algebra`), but the PR should grep for both and re-run `make check` rather than assume.
+
+---
+
+### Issue M4-5: Signatures as functors — reducts, expansions, and interpretability (#338)
+
+**Labels**: `enhancement`, `milestone-4-style`, `design-discussion`
+
+## Summary
+
+Make the polynomial-functor / container structure already latent in the foundation *first-class*, and with it the total-category (`∫Alg`) view that reducts, expansions, and signature morphisms inherently require — as opposed to the fibre view (`Alg(𝑆)` for a fixed `𝑆`) that the module-parameter convention of `Setoid.Algebras.Basic` privileges.  Full design in `docs/notes/milestone-signature-functors.md`.
+
+## Why now
+
+The M3-6 (Monoid/Group) work built, by hand, a container-morphism `reduct`, an `expand-ε` dual, and discovered that "reduct-invariance of satisfaction" is what discharges each forgetful projection's theory obligation.  It also surfaced that the foundation already *is* a polynomial-functor formalization without saying so: `Signature` is a `Container`, `⟨ 𝑆 ⟩` is the polynomial functor `P_σ` lifted to setoids, `Interp` is the structure map `P_σ(Domain) → Domain`, and `Term` is the initial algebra of `A ↦ X ⊎ P_σ(A)`.  M4-5 makes this explicit and reusable, and is the proper home for the `Base/Adjunction` and `Base/Categories` orphans currently parked as TBD.
+
+## Mathematical core
+
+A signature morphism is a container morphism `(ι , κ)` (`ι` covariant on symbols, `κ` contravariant on arities).  Signatures and these morphisms form a category `Sig`.  `P` is a 2-functor `Sig → [Setoid,Setoid]`; reduct is precomposition with the induced natural transformation; expansion is its copairing dual; reduct-invariance of satisfaction is naturality of the unique fold; reduct has a left adjoint (free expansion); a theory interpretation is a signature morphism into *derived operations*, with Maltsev conditions as interpretations of small theories.
+
+## Phases (sub-issues)
+
++  [ ] **M4-5-1** Category of signature morphisms; promote `reduct` to a packaged morphism.  *(low risk)*
++  [ ] **M4-5-2** `⟨_⟩` as a functor; induced natural transformations.  *(low–medium)*
++  [ ] **M4-5-3** Reduct as a functor on algebras; upgrade the classical forgetful *projections* to forgetful *functors* by supplying the morphism action.  *(medium)*
++  [ ] **M4-5-4** Free expansion; the `F ⊣ reduct` adjunction.  Distinguish from M3-6's chosen `expand-ε`.  *(high / high-value)*
++  [ ] **M4-5-5** Term monad; naturality of the fold; reduct-invariance of satisfaction as a corollary, absorbing M3-6's per-structure pivot proofs.  *(medium)*
++  [ ] **M4-5-6** Theory interpretations; Maltsev conditions as interpretations; the interpretability quasi-order.  *(research-grade, exploratory)*
++  [ ] **M4-5-7** Reduct classes of varieties are prevarieties (closed under S, P, not H).  *(research-grade)*
+
+## De-risking spikes (before committing the hard phases)
+
++  **Spike A** (M4-5-3): supply the morphism action for `monoid→semigroup` only and prove it functorial.
++  **Spike B** (M4-5-4): construct the free monoid on a semigroup (adjoin a unit) and prove the universal property against `reduct`.  If this single adjunction is clean with setoid quotients, the general theorem is plausible.
+
+## Open questions
+
++  Adjunction direction/existence along inclusions that *add equations* (needs quotients now, cubical HITs later).
++  Build on `agda-categories` vs. stay self-contained (prototype both in M4-5-1).
++  Whether cubical dissolves the M3-5 binary-node-bridge obstruction (an MLTT/`--safe` artifact) — a measurable cubical-port payoff if so.
++  Keep M4-5-6/7 on the clone/CSP side (connects to M9-2), explicitly **not** the FLRP side.
+
+## Relationship to other work
+
+Depends on M3 (concrete reduct/expand) and the `Setoid.Varieties` machinery.  Sibling to the surgical foundation fix #337 (which removes the `⟨_⟩`/`EqArgs` parameter leak this milestone would otherwise keep hitting).  Connects to #281  (infinitary CSP, Bodirsky–Pinsker) via interpretability.
+
+---
+
+### Issue M4-5a: Category of signature morphisms (#339)
+
+**Labels**: `enhancement`, `milestone-4-style`, `category-theory`
+
+The current `reduct ι κ 𝑨` ([`Classical.Structures.Reduct`][]) takes the container morphism as two loose arguments.  Package the pair `(ι , κ)` as a first-class `SigMorphism 𝑆₁ 𝑆₂` — a record with `ι : OperationSymbolsOf 𝑆₁ → OperationSymbolsOf 𝑆₂` (covariant on symbols) and `κ : (o : OperationSymbolsOf 𝑆₁) → ArityOf 𝑆₂ (ι o) → ArityOf 𝑆₁ o` (contravariant on positions) — and assemble signatures and these morphisms into a category `Sig`.  This is the Abbott–Altenkirch–Ghani container-morphism, specialized to `Signature = (OperationSymbolsOf ▷ ArityOf)`.
+
+The first real subtlety this surfaces is morphism *equality*: under `--safe` without funext, two `SigMorphism`s agreeing pointwise need not be propositionally equal (the same `Fin n` η-gap that forces the pointwise bundle round-trips), so the category laws may have to be stated against a setoid of morphisms rather than `≡`.  Settling that is half the value of the issue, since it determines the shape of everything downstream.
+
+Tasks:
++  [ ] Define `SigMorphism 𝑆₁ 𝑆₂` (record packaging `ι`, `κ`).
++  [ ] Define identity (`ι = id`, `κ = λ _ → id`) and composition (`ι` composes covariantly, `κ` contravariantly).
++  [ ] Decide the hom-equality (propositional vs. a hom-setoid) and prove the category laws under that choice.
++  [ ] Re-express `reduct` to consume a `SigMorphism`, keeping the loose-argument form as a thin wrapper (or deprecating it).
++  [ ] Decision spike: realize `Sig` both as an `agda-categories` `Category` and as a self-contained record; record which to standardize on.
+
+Non-goals: any action on algebras (that is M4-5-3); morphisms into derived operations (that is M4-5-6, where `κ`'s codomain becomes terms rather than symbols).
+
+Acceptance criteria:
++  [ ] `reduct (id-morphism) 𝑨` agrees with `𝑨` (definitionally on the carrier; up to the chosen hom-equality on operations).
++  [ ] `reduct (ψ ∘ φ)` agrees with `reduct φ ∘ reduct ψ`.
++  [ ] The category laws type-check under the chosen morphism-equality.
+
+References: Abbott, Altenkirch, Ghani, *Containers: constructing strictly positive types*; [ADR-002 v2 §5](docs/adr/002-classical-layer-design.md).
+
+---
+
+### Issue M4-5b: `⟨_⟩` as functor and induced natural transformations (#340)
+
+**Labels**: `enhancement`, `milestone-4-style`, `category-theory`
+
+Make explicit that `⟨ 𝑆 ⟩ : Setoid → Setoid` ([`Setoid.Algebras.Basic`][]) is the polynomial/container functor `P_σ` and is functorial in the carrier (its action on a setoid map is post-composition on the position function).  Then show that a `SigMorphism (ι , κ) : 𝑆₁ → 𝑆₂` induces a *natural transformation* `⟦ι,κ⟧ : ⟨ 𝑆₁ ⟩ ⟹ ⟨ 𝑆₂ ⟩`, given on components by `(o , args) ↦ (ι o , args ∘ κ o)` — which is exactly the data `reduct` already precomposes into `Interp`.  Finally, show the assignment `SigMorphism ↦ natural transformation` is itself functorial (identity to identity, composite to vertical composite), i.e. `⟦_⟧` is a functor `Sig → [Setoid , Setoid]`.
+
+This is the issue where the "the foundation already *is* a polynomial-functor formalization" observation stops being a remark and becomes a checked statement.  It is the natural-transformation layer that [M4-5e]'s fold-naturality result will sit on top of.
+
+Tasks:
++  [ ] `⟨ 𝑆 ⟩` functorial in the carrier (map-law + functoriality).
++  [ ] The induced natural transformation `⟦ι,κ⟧`; prove its naturality square.
++  [ ] Functoriality of `⟦_⟧` (preserves identity and composition of `SigMorphism`s).
+
+Acceptance criteria:
++  [ ] The naturality square for `⟦ι,κ⟧` commutes.
++  [ ] `⟦ id-morphism ⟧` is the identity natural transformation; `⟦ ψ ∘ φ ⟧` is the vertical composite, up to the chosen equality.
+
+References: Gambino, Kock, *Polynomial functors and polynomial monads*.
+
+---
+
+### Issue M4-5c: Reduct as functor on algebras (#341)
+
+**Labels**: `enhancement`, `milestone-4-style`, `category-theory`
+
+For a fixed `φ : SigMorphism 𝑆₁ 𝑆₂`, promote `reduct φ : Alg(𝑆₂) → Alg(𝑆₁)` from an object map to a *functor*: its action on an `𝑆₂`-homomorphism is the same underlying setoid map, whose `𝑆₁`-homomorphism condition transfers because the reduct's operations are `φ`-images of `𝑆₂`'s (the square commutes by the same `κ`-reindex).  Then resolve the M3-6 note that `monoid→semigroup` and friends are "object maps of forgetful functors, not yet functors" by supplying the morphism action, packaging each classical forgetful as a genuine functor between the structures' categories.
+
+This requires a category of `𝑆`-algebras in the first place.  `Setoid.Homomorphisms` supplies the homs; this issue must assemble `Alg(𝑆)` as a category (or reuse one if it already exists), and observe that a morphism of Σ-typed classical structures is just an algebra hom (the equational-witness component carries no additional morphism data).  That assembly is the main dependency risk and should be scoped explicitly at the top of the PR.
+
+Tasks:
++  [ ] Assemble `Alg(𝑆)` as a category over `Setoid.Homomorphisms` (or confirm/reuse an existing one).
++  [ ] `reduct φ` as a functor: morphism action + functor laws.
++  [ ] Package `monoid→semigroup`, `commutativeMonoid→monoid`, `commutativeSemigroup→semigroup` (and the Sig-Group analogues once they land) as forgetful functors, with the reindex forgetfuls reusing the M4-5-1 identity-ish morphism.
+
+Non-goals: a left adjoint [M4-5d] (#342); the equational-class semantics [M4-5g] (#345)).
+
+Acceptance criteria:
++  [ ] `reduct φ` satisfies the functor laws.
++  [ ] At least `monoid→semigroup` type-checks as a functor and its action on a concrete monoid hom reduces correctly.
+
+References: `Setoid.Homomorphisms`; [ADR-002 v2 §5](docs/adr/002-classical-layer-design.md).
+
+---
+
+### Issue M4-5d: Free expansion; the `F ⊣ reduct` adjunction (#342)
+
+**Labels**: `enhancement`, `milestone-4-style`, `category-theory`, `research-exploratory`
+
+Construct the left adjoint `F : Alg(𝑆₁) → Alg(𝑆₂)` to `reduct φ` along a *symbol-adjoining* inclusion `φ` (one that adds operation symbols and no equations), exhibiting the free `𝑆₂`-algebra on an `𝑆₁`-algebra.  The sharpest content of the issue is the contrast with M3-6's `expand-ε`: `expand-ε` adjoins `ε` as a *chosen* element of the existing magma carrier — a specific section of the reduct, not a universal one — whereas the free expansion freely adjoins a new generator for each added symbol, enlarging the carrier.  Making `F ⊣ reduct` precise is what tells you when "this magma is secretly a monoid" (a section) and "the free monoid on this magma" (the adjoint) are the same and when they diverge.
+
+Inclusions that adjoin *equations* (not just symbols) need a quotient for the left adjoint — the free algebra modulo the new equations — which wants setoid quotients now and is a candidate cubical-HIT payoff later.  Scope this issue to symbol-adjoining inclusions; flag equation-adjoining adjoints as a follow-up.
+
+Spike (do this before the general construction): build `F` for one concrete symbol-adjoining inclusion — freely adjoin a unit to a semigroup, i.e. the free monoid on a semigroup — and verify the universal property against `reduct`.  If a single adjunction is clean under setoid quotients, the general theorem is plausible; if it is not, that is the signal to re-scope.
+
+Tasks:
++  [ ] Spike: `F` for the free-unit inclusion; unit, counit, and triangle identities for that one case.
++  [ ] Generalize `F` to arbitrary symbol-adjoining `φ` (stretch).
++  [ ] Document precisely how `expand-ε` relates to `F` (a section vs. the adjoint), updating the M3-6 prose that currently calls `expand-ε` "the expand half of the reduct/expand dual."
+
+Non-goals: equation-adjoining left adjoints (deferred; needs quotients/HITs).
+
+Acceptance criteria:
++  [ ] The spike adjunction's triangle identities type-check.
++  [ ] A design note distinguishing `expand-ε` from `F`.
+
+---
+
+### Issue M4-5e: Term monad; naturality of the fold; reduct-invariance of satisfaction (#343)
+
+**Labels**: `enhancement`, `milestone-4-style`, `category-theory`
+
+Establish `Term 𝑆 : Setoid → Setoid` as a monad (unit `ℊ`, multiplication by substitution) and the environment interpretation `⟦_⟧` as the unique fold out of the term algebra, natural in the carrier.  The target theorem is *reduct-invariance of satisfaction*: for `φ : 𝑆₁ → 𝑆₂`, an `𝑆₂`-algebra `𝑨`, and an `𝑆₁`-equation `s ≈ t`, `reduct φ 𝑨 ⊧ s ≈ t` is equivalent to `𝑨 ⊧ φ✶ s ≈ φ✶ t` (the `φ`-translation of terms), and this is precisely naturality of the fold with respect to the M4-5-2 induced natural transformation.
+
+This is the payoff issue.  As a corollary it absorbs the per-structure curried-law pivots written by hand in M3-6 — `monoid→semigroup`'s `thm`, and the analogous obligations for the reindex forgetfuls — into instances of one lemma.  It also bears directly on the M3-5 negative finding: the per-signature `interp-nodeₙ` families are the manual unfolding that fold-naturality systematizes, and this issue should *measure* whether the binary-node-bridge obstruction (the `refl`-match on a neutral `ArityOf 𝑆 f ≡ Fin 2`, rejected by the without-K unifier) survives at the functorial level or dissolves — the answer is a concrete data point for the cubical-port (v4.0) cost/benefit.
+
+Tasks:
++  [ ] `Term 𝑆` monad laws (left/right unit, associativity of substitution).
++  [ ] Fold (`⟦_⟧`) naturality in the carrier.
++  [ ] The reduct-invariance-of-satisfaction lemma.
++  [ ] Re-derive `monoid→semigroup`'s `Th-Semigroup` obligation from the lemma as a regression demonstration (do not delete the bespoke proof until the general one lands and type-checks).
++  [ ] Record whether the M3-5 node-bridge obstruction persists functorially.
+
+Acceptance criteria:
++  [ ] The reduct-invariance lemma type-checks.
++  [ ] The Monoid forgetful's theory obligation is re-provable through it.
+
+References: the M3-5 finding on `interp-node` (per-signature, proof-free); [ADR-002 v2 §1](docs/adr/002-classical-layer-design.md).
+
+---
+
+### Issue M4-5f: Theory interpretations; Maltsev conditions as interpretations; the interpretability quasi-order (#344)
+
+**Labels**: `milestone-4-style`, `research-exploratory`
+
+> Scope note: this is a research-tracking issue.  The task list below is provisional and deliberately shallow — committing to an internal structure before M4-5-1..5 exist would be premature.  The deliverable for *this* issue is a definition, one or two worked instances, and a design note that lets a later issue commit to the real development.
+
+Generalize the symbol-to-symbol `SigMorphism` of M4-5-1 to a *theory interpretation* `T₁ → T₂`: a signature morphism into the **derived** (term) operations of `T₂` under which every `T₁`-equation becomes a `T₂`-theorem.  Maltsev conditions — a Maltsev term, a majority term, a near-unanimity term — are then exactly interpretations of small theories (e.g. the one-ternary-symbol theory with the Maltsev equations) into a given variety, and the interpretability relation induces the Garcia–Taylor quasi-order on varieties.
+
+This sits squarely on the clone/CSP side of the library and connects forward to M9-2 (infinitary CSP over ω-categorical templates, the Bodirsky–Pinsker program).  It is explicitly **not** FLRP work — the interpretability/Maltsev/clone material and the Finite Lattice Representation Problem are kept in separate research tracks, and conflating them is an error to flag in review.
+
+Provisional tasks:
++  [ ] Reading pass: Garcia–Taylor, *The Lattice of Interpretability Types of Varieties*; standard Maltsev-condition references; Bodirsky for the CSP linkage.
++  [ ] Define theory interpretation (signature morphism into derived operations + equation-preservation).
++  [ ] One worked instance (e.g. the Maltsev-term theory interpreted into a concrete congruence-permutable variety, or just the formal statement).
++  [ ] Design note scoping the real development and its dependence on [M4-5e] (#343).
+
+Acceptance criteria (loose): a checked definition, at least one interpretation instance, and a written scope note.  No claim about the full quasi-order is in scope here.
+
+---
+
+### Issue M4-5g: Reduct classes of varieties (prevarieties) (#345)
+
+**Labels**: `milestone-4-style`, `research-exploratory`
+
+> Scope note: research-tracking, like [M4-5f] (#344).  Prove the tractable half (S, P) and document the rest; do not over-specify before the dependencies land.
+
+For a variety `𝒱` of `𝑆₂`-algebras and `φ : 𝑆₁ → 𝑆₂`, the reduct class `reduct φ (𝒱)` is closed under subalgebras and products but not, in general, homomorphic images — so it is a prevariety, not a variety.  The S- and P-closure follow structurally from `reduct φ` being a functor [M4-5c] (#341) that preserves the relevant subobjects and limits, together with reduct-invariance [M4-5e] (#343); the failure of H-closure is the interesting negative and is best recorded as a concrete counterexample.
+
+Like M4-5-6, this is clone/variety-theoretic and CSP-adjacent, **not** FLRP.
+
+Provisional tasks:
++  [ ] State the theorem against the `Setoid.Varieties` S/H/P machinery.
++  [ ] Prove reduct preserves S (subalgebras).
++  [ ] Prove reduct preserves P (products).
++  [ ] Record the ¬H part as a documented counterexample, or defer with a written rationale.
+
+Acceptance criteria (loose): S and P parts type-check; the ¬H situation is documented.
+
+References: Burris, Sankappanavar, *A Course in Universal Algebra* (reducts; SP-closure).
+
 <!-- END GENERATED: milestone-4 -->
 
 ---

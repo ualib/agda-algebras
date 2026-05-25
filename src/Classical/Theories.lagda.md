@@ -33,6 +33,8 @@ module Classical.Theories where
 
 open import Classical.Theories.Semigroup public
 open import Classical.Theories.Monoid public
+open import Classical.Theories.CommutativeSemigroup public
+open import Classical.Theories.CommutativeMonoid public
 ```
 
 --------------------------------------
