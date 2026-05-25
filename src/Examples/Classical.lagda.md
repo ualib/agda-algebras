@@ -28,6 +28,7 @@ open import Examples.Classical.Magma public
 open import Examples.Classical.Semigroup public
 open import Examples.Classical.Monoid public
 open import Examples.Classical.CommutativeMonoid public
+open import Examples.Classical.CommutativeSemigroup public
 ```
 
 --------------------------------------

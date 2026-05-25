@@ -22,25 +22,25 @@ commutative, in contrast to the `(ℕ, +, 0)` commutative monoid of
 module Examples.Classical.Monoid where
 
 -- Imports from the Agda Standard Library -------------------------------------
-open import Data.List                              using ( List ; [] ; _++_ )
-open import Data.List.Properties                   using ( ++-assoc ; ++-identityˡ ; ++-identityʳ )
-open import Data.Nat                               using ( ℕ )
-open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl )
+open import Data.List             using ( List ; [] ; _++_ )
+open import Data.List.Properties  using ( ++-assoc ; ++-identityˡ ; ++-identityʳ )
+open import Data.Nat              using ( ℕ )
+open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Classical.Bundles.Monoid           using ( ⟨_⟩ᵐⁿ ; ⟪_⟫ᵐⁿ )
-open import Classical.Small.Structures.Monoid  using ( Monoid ; fromPropEq )
+open import Classical.Small.Structures.Monoid  using ( Monoid ; fromMonoidEqs )
 
-import      Classical.Structures.Monoid        as Poly
+import Classical.Structures.Monoid as Polymorphic
 ```
 
 #### <a id="list-monoid">The monoid `(List ℕ, ++, [])`</a>
 
 ```agda
 list-monoid : Monoid
-list-monoid = fromPropEq (List ℕ) _++_ [] ++-assoc ++-identityˡ ++-identityʳ
+list-monoid = fromMonoidEqs (List ℕ) _++_ [] ++-assoc ++-identityˡ ++-identityʳ
 
-open Poly.Monoid-Op list-monoid using ( _∙_ ; ε )
+open Polymorphic.Monoid-Op list-monoid using ( _∙_ ; ε )
 ```
 
 #### <a id="acceptance">Acceptance checks</a>
@@ -56,7 +56,7 @@ open Poly.Monoid-Op list-monoid using ( _∙_ ; ε )
 The bundle round-trips pointwise on both the operation and the identity.
 
 ```agda
-open Poly.Monoid-Op ⟪ ⟨ list-monoid ⟩ᵐⁿ ⟫ᵐⁿ using () renaming ( _∙_ to _·_ ; ε to ε· )
+open Polymorphic.Monoid-Op ⟪ ⟨ list-monoid ⟩ᵐⁿ ⟫ᵐⁿ using () renaming ( _∙_ to _·_ ; ε to ε· )
 
 roundtrip-∙-mn : ∀ (xs ys : List ℕ) → xs · ys ≡ xs ++ ys
 roundtrip-∙-mn xs ys = refl

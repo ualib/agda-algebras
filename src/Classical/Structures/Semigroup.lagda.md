@@ -216,14 +216,14 @@ module Semigroup-Op {α ρ : Level} (𝑺 : Semigroup α ρ) where
     rhsT = node ∙-Op (pair (ℊ 0F) Rt)
 ```
 
-#### <a id="fromPropEq">From a bare type, a binary operation, and an associativity proof</a>
+#### `fromSemigroupEqs`
 
-`fromPropEq` is the canonical constructor for downstream users.  Given a carrier
+`fromSemigroupEqs` is the canonical constructor for downstream users.  Given a carrier
 type `A`, a binary operation `_·_ : A → A → A`, and a propositional-equality
 associativity proof `·-assoc`, it returns a `Semigroup α α`.  The construction
 factors through M3-3's `fromOp` so that the underlying-algebra portion is shared
 with `Magma`'s constructor — this is what makes the forgetful agreement criterion
-`semigroup→magma ∘ fromPropEq A _·_ _ ≡ fromOp A _·_` discharge by `refl`.
+`semigroup→magma ∘ fromSemigroupEqs A _·_ _ ≡ fromOp A _·_` discharge by `refl`.
 
 The associativity proof discharges by direct evaluation: under `≡.setoid A`, the
 setoid equivalence is propositional equality; the interpretation of
@@ -233,10 +233,10 @@ right-associated term, so `·-assoc (ρ 0F) (ρ 1F) (ρ 2F)` is exactly the proo
 required.
 
 ```agda
-fromPropEq : (A : Type α) (_·_ : A → A → A)
-           → (·-assoc : ∀ a b c → (a · b) · c ≡ a · (b · c))
-           → Semigroup α α
-fromPropEq A _·_ ·-assoc = fromOp A _·_ , proof
+fromSemigroupEqs : (A : Type α) (_·_ : A → A → A)
+  → (·-assoc : ∀ a b c → (a · b) · c ≡ a · (b · c))
+  → Semigroup α α
+fromSemigroupEqs A _·_ ·-assoc = fromOp A _·_ , proof
   where
   proof : (fromOp A _·_) ⊨ Th-Semigroup
   proof assoc ρ = ·-assoc (ρ 0F) (ρ 1F) (ρ 2F)
