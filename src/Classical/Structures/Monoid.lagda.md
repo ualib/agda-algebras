@@ -33,8 +33,9 @@ Ring, etc.); the conventions it adds to the Semigroup template are as follows.
    `mn-assoc` is proved once, standalone, before `monoid→semigroup`, because the
    forgetful's `Th-Semigroup` obligation consumes it; `Monoid-Op.assoc-law` then
    re-exposes the same `mn-assoc`, so there is a single proof of curried
-   associativity, used in both places; this is the acyclic ordering:
-   `mn-assoc` → `monoid→semigroup` → `Monoid-Op`.
+   associativity, with a single proof; the acyclic ordering is
+   `mn-assoc` → `Monoid-Op.assoc-law` (= `mn-assoc 𝑴`) → `monoid→semigroup`
+   (which opens `Monoid-Op` for `assoc-law`).
 +  **The forgetful is a reduct**.  `monoid→semigroup` reducts the
    `Sig-Monoid`-algebra to a `Sig-Magma`-algebra (dropping `ε-Op` via the container
    morphism `∙-incl`) and discharges `Th-Semigroup` from `mn-assoc` by the
@@ -66,27 +67,20 @@ open Func renaming ( to to _⟨$⟩_ )
 
 -- Imports from the Agda Universal Algebra Library -----------------------------------------------
 open import Classical.Operations                    using ( pair ; Curry₂ ; Curry₀ )
-open import Classical.Signatures.Magma              using ( Sig-Magma ; Op-Magma )renaming ( ∙-Op to ∙-Opᵐᵃ )
+open import Classical.Signatures.Magma              using ( Sig-Magma ; Op-Magma ) renaming ( ∙-Op to ∙-Opᵐᵃ )
 open import Classical.Signatures.Monoid             using ( Sig-Monoid ; Op-Monoid ; ∙-Op ; ε-Op )
-open import Classical.Structures.Magma              using ( Magma ; module Magma-Op )
+open import Classical.Structures.Interpret          using ( interp-cong )
+open import Classical.Structures.Magma              using ( Magma ; module Magma-Op ; fromOp )
 open import Classical.Structures.Reduct             using ( reduct )
 open import Classical.Structures.Semigroup          using ( Semigroup ) renaming (_⊨_ to _⊨ˢᵍ_)
-open import Classical.Theories.Monoid               using ( Eq-Monoid ; Th-Monoid ; assoc ; id-l ; id-r )
+open import Classical.Theories.Monoid               using ( Eq-Monoid ; Th-Monoid ; assoc ; idˡ ; idʳ )
 open import Classical.Theories.Semigroup            using ( Th-Semigroup ) renaming ( assoc to assocˢ )
-open import Overture.Terms {𝑆 = Sig-Monoid}         using ( Term ; ℊ ; node )
+open import Overture.Terms                          using ( Term ; ℊ ; node )
 open import Overture.Signatures                     using ( ArityOf ; OperationSymbolsOf)
-import Overture.Terms {𝑆 = Sig-Magma} as TmMa
-import Setoid.Terms {𝑆 = Sig-Magma} as StMa
+open import Setoid.Algebras.Basic                   using ( Algebra ; _^_ ; 𝔻[_] ; 𝕌[_] )
+open import Setoid.Terms                            using ( module Environment )
 
-open import Setoid.Algebras.Basic {𝑆 = Sig-Monoid}  using ( Algebra ; _^_ ; 𝔻[_] ; 𝕌[_] ; ⟨_⟩ )
-import Setoid.Algebras.Basic as Alg -- {𝑆 = Sig-Monoid}  using ( Algebra ; _^_ ; 𝔻[_] ; 𝕌[_] ; ⟨_⟩ )
-open import Setoid.Terms {𝑆 = Sig-Monoid}           using ( module Environment )
 open import Setoid.Varieties.EquationalLogic {𝑆 = Sig-Monoid} using ( _⊧_≈_ )
-
-import Classical.Structures.Interpret {𝑆 = Sig-Monoid} as IntMo
-import Classical.Structures.Interpret {𝑆 = Sig-Magma}  as IntMa
-
--- open Algebra using ( Interp )
 
 private variable α ρ : Level
 ```
@@ -95,7 +89,7 @@ private variable α ρ : Level
 
 ```agda
 infix 4 _⊨_
-_⊨_ : (𝑨 : Alg.Algebra α ρ) (ℰ : Eq-Monoid → Term (Fin 3) × Term (Fin 3)) → Type (α ⊔ ρ)
+_⊨_ : (𝑨 : Algebra α ρ) (ℰ : Eq-Monoid → Term (Fin 3) × Term (Fin 3)) → Type (α ⊔ ρ)
 𝑨 ⊨ ℰ = ∀ i → 𝑨 ⊧ proj₁ (ℰ i) ≈ proj₂ (ℰ i)
 ```
 
@@ -103,7 +97,7 @@ _⊨_ : (𝑨 : Alg.Algebra α ρ) (ℰ : Eq-Monoid → Term (Fin 3) × Term (Fi
 
 ```agda
 Monoid : (α ρ : Level) → Type (suc α ⊔ suc ρ)
-Monoid α ρ = Σ[ 𝑨 ∈ Alg.Algebra α ρ ] 𝑨 ⊨ Th-Monoid
+Monoid α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ Th-Monoid
 ```
 
 #### <a id="forgetful-to-magma">The reduct to magmas</a>
@@ -139,11 +133,10 @@ verbatim port of `Semigroup-Op.assoc-law` to `Sig-Monoid`.
 
 ```agda
 module _ (𝑴 : Monoid α ρ) where
-  -- open Alg {𝑆 = Sig-Monoid}
   private 𝑨 = proj₁ 𝑴
-  open Setoid Alg.𝔻[ 𝑨 ]
+  open Setoid 𝔻[ 𝑨 ]
   open Environment 𝑨 using ( ⟦_⟧ )
-  open SetoidReasoning Alg.𝔻[ 𝑨 ]
+  open SetoidReasoning 𝔻[ 𝑨 ]
 
   private
     _∙_ : 𝕌[ 𝑨 ] → 𝕌[ 𝑨 ] → 𝕌[ 𝑨 ]
@@ -151,17 +144,19 @@ module _ (𝑴 : Monoid α ρ) where
 
     interp-node∙ : (s t : Term (Fin 3)) (η : Fin 3 → 𝕌[ 𝑨 ])
                  → ⟦ node ∙-Op (pair s t) ⟧ ⟨$⟩ η ≈ (⟦ s ⟧ ⟨$⟩ η) ∙ (⟦ t ⟧ ⟨$⟩ η)
-    interp-node∙ s t η = IntMo.interp-cong 𝑨 ∙-Op (λ { 0F → refl ; 1F → refl })
+    interp-node∙ s t η = interp-cong 𝑨 ∙-Op (λ { 0F → refl ; 1F → refl })
 
   mn-assoc : ∀ x y z → (x ∙ y) ∙ z ≈ x ∙ (y ∙ z)
   mn-assoc x y z = begin
-    (x ∙ y) ∙ z          ≈⟨ IntMo.interp-cong 𝑨 ∙-Op (λ { 0F → sym (interp-node∙ (ℊ 0F) (ℊ 1F) η) ; 1F → refl }) ⟩
-    ⟦ lhsT ⟧ ⟨$⟩ η       ≈⟨ proj₂ 𝑴 assoc η ⟩
-    ⟦ rhsT ⟧ ⟨$⟩ η       ≈⟨ IntMo.interp-cong 𝑨 ∙-Op (λ { 0F → refl ; 1F → interp-node∙ (ℊ 1F) (ℊ 2F) η }) ⟩
-    x ∙ (y ∙ z)          ∎
+    (x ∙ y) ∙ z     ≈⟨ interp-cong 𝑨 ∙-Op (λ { 0F → sym (interp-node∙ (ℊ 0F) (ℊ 1F) η) ; 1F → refl }) ⟩
+    ⟦ lhsT ⟧ ⟨$⟩ η  ≈⟨ proj₂ 𝑴 assoc η ⟩
+    ⟦ rhsT ⟧ ⟨$⟩ η  ≈⟨ interp-cong 𝑨 ∙-Op (λ { 0F → refl ; 1F → interp-node∙ (ℊ 1F) (ℊ 2F) η }) ⟩
+    x ∙ (y ∙ z)     ∎
     where
     η : Fin 3 → 𝕌[ 𝑨 ]
     η = λ { 0F → x ; 1F → y ; 2F → z }
+
+    lhsT rhsT : Term (Fin 3)
     lhsT = node ∙-Op (pair (node ∙-Op (pair (ℊ 0F) (ℊ 1F))) (ℊ 2F))
     rhsT = node ∙-Op (pair (ℊ 0F) (node ∙-Op (pair (ℊ 1F) (ℊ 2F))))
 ```
@@ -185,71 +180,68 @@ module Monoid-Op {α ρ : Level} (𝑴 : Monoid α ρ) where
   equations = proj₂ 𝑴
 
   ∙-cong : ∀ {x y u v} → x ≈ y → u ≈ v → (x ∙ u) ≈ (y ∙ v)
-  ∙-cong x≈y u≈v = IntMo.interp-cong 𝑨 ∙-Op (λ { 0F → x≈y ; 1F → u≈v })
+  ∙-cong x≈y u≈v = interp-cong 𝑨 ∙-Op (λ { 0F → x≈y ; 1F → u≈v })
 
-  interp-node∙ : (s t : Term (Fin 3)) (η : Fin 3 → 𝕌[ 𝑨 ])
-               → ⟦ node ∙-Op (pair s t) ⟧ ⟨$⟩ η ≈ (⟦ s ⟧ ⟨$⟩ η) ∙ (⟦ t ⟧ ⟨$⟩ η)
-  interp-node∙ s t η = IntMo.interp-cong 𝑨 ∙-Op (λ { 0F → refl ; 1F → refl })
+  interp-node-∙ : (s t : Term (Fin 3)) {η : Fin 3 → 𝕌[ 𝑨 ]}
+                → ⟦ node ∙-Op (pair s t) ⟧ ⟨$⟩ η ≈ (⟦ s ⟧ ⟨$⟩ η) ∙ (⟦ t ⟧ ⟨$⟩ η)
+  interp-node-∙ s t = interp-cong 𝑨 ∙-Op (λ { 0F → refl ; 1F → refl })
 
-  interp-node₀ : (η : Fin 3 → 𝕌[ 𝑨 ]) → ⟦ node ε-Op (λ ()) ⟧ ⟨$⟩ η ≈ ε
-  interp-node₀ η = IntMo.interp-cong 𝑨 ε-Op (λ ())
+  interp-node-ε : {η : Fin 3 → 𝕌[ 𝑨 ]} → ⟦ node ε-Op (λ ()) ⟧ ⟨$⟩ η ≈ ε
+  interp-node-ε = interp-cong 𝑨 ε-Op (λ ())
 
   assoc-law : ∀ x y z → (x ∙ y) ∙ z ≈ x ∙ (y ∙ z)
   assoc-law = mn-assoc 𝑴
 
   idˡ-law : ∀ x → ε ∙ x ≈ x
-  idˡ-law x = trans (∙-cong (sym (interp-node₀ η)) refl)
-                    (trans (sym (interp-node∙ (node ε-Op (λ ())) (ℊ 0F) η)) (equations id-l η))
-    where η : Fin 3 → 𝕌[ 𝑨 ] ; η = λ _ → x
+  idˡ-law x = trans (∙-cong (sym interp-node-ε) refl)
+                    (trans (sym (interp-node-∙ (node ε-Op (λ ())) (ℊ 0F)))
+                           (equations idˡ (λ _ → x)))
 
   idʳ-law : ∀ x → x ∙ ε ≈ x
-  idʳ-law x = trans (∙-cong refl (sym (interp-node₀ η)))
-                    (trans (sym (interp-node∙ (ℊ 0F) (node ε-Op (λ ())) η)) (equations id-r η))
-    where η : Fin 3 → 𝕌[ 𝑨 ] ; η = λ _ → x
+  idʳ-law x = trans (∙-cong refl (sym (interp-node-ε)))
+                    (trans (sym (interp-node-∙ (ℊ 0F) (node ε-Op (λ ()))))
+                           (equations idʳ (λ _ → x)))
 ```
 
 #### <a id="forgetful-to-semigroup">The forgetful projection to semigroups</a>
 
 ```agda
 monoid→semigroup : Monoid α ρ → Semigroup α ρ
-monoid→semigroup 𝑴 = 𝑹 , thm -- thm
+monoid→semigroup ℳ@(𝑴 , _) = 𝑹 , thm
   where
-  𝑹 = monoid→magma 𝑴
-  module ℳ = Alg {𝑆 = Sig-Monoid}
-  module ℛ = Alg {𝑆 = Sig-Magma}
-  open ℳ.Algebra (proj₁ 𝑴) renaming (Domain to M)
-  open ℛ.Algebra 𝑹 renaming (Domain to R)
+  𝑹 : Magma _ _
+  𝑹 = monoid→magma ℳ
+  open Algebra 𝑴 using () renaming (Domain to M)
+  open Algebra 𝑹 using () renaming (Domain to R)
   open Setoid M using (_≈_; refl; sym)
-  open Setoid R using () renaming (_≈_ to _≋_ ; refl to R-refl)
-  open StMa.Environment 𝑹 using ( ⟦_⟧ )          -- Sig-Magma environment on 𝑹
+  open Setoid R using () renaming (_≈_ to _≋_ )
+  open Environment 𝑹 using ( ⟦_⟧ )    -- Sig-Magma environment on 𝑹
   open SetoidReasoning M
-  open Magma-Op 𝑹 using ( _∙_ )                  -- 𝑹's curried ∙, over Sig-Magma
+  open Magma-Op 𝑹 using ( _∙_ )  -- 𝑹's curried ∙, over Sig-Magma
 
-  -- 𝑹's binary node-bridge, over Sig-Magma (IntMa = Interpret {Sig-Magma})
-  ndᴿ : (s t : TmMa.Term (Fin 3)) (η : Fin 3 → 𝕌[ proj₁ 𝑴 ])
-      → ⟦ TmMa.node ∙-Opᵐᵃ (pair s t) ⟧ ⟨$⟩ η ≈ (⟦ s ⟧ ⟨$⟩ η) ∙ (⟦ t ⟧ ⟨$⟩ η)
-  ndᴿ s t η = IntMa.interp-cong 𝑹 ∙-Opᵐᵃ (λ { 0F → refl ; 1F → refl })
+  -- 𝑹's binary node-bridge, over Sig-Magma
+  interp-congᴿ : (s t : Term (Fin 3)) (η : Fin 3 → 𝕌[ 𝑴 ])
+      → ⟦ node ∙-Opᵐᵃ (pair s t) ⟧ ⟨$⟩ η ≈ (⟦ s ⟧ ⟨$⟩ η) ∙ (⟦ t ⟧ ⟨$⟩ η)
+  interp-congᴿ s t η = interp-cong 𝑹 ∙-Opᵐᵃ λ { 0F → refl ; 1F → refl }
+
+  -- 𝑹's curried-∙ congruence
+  ∙-congᴿ : ∀ {a b c d} → a ≈ b → c ≈ d → (a ∙ c) ≈ (b ∙ d)
+  ∙-congᴿ a≈b c≈d = interp-cong 𝑹 ∙-Opᵐᵃ (λ { 0F → a≈b ; 1F → c≈d })
 
   thm : 𝑹 ⊨ˢᵍ Th-Semigroup
-  thm assocˢ η = Goal
+  thm assocˢ η = let x = η 0F ; y = η 1F ; z = η 2F in
+    begin
+      ⟦ Th-Semigroup assocˢ .proj₁ ⟧ ⟨$⟩ η  ≈⟨ interp-congᴿ xy (ℊ 2F) η ⟩
+      ⟦ xy ⟧ ⟨$⟩ η ∙ z                      ≈⟨ ∙-congᴿ (interp-congᴿ (ℊ 0F) (ℊ 1F) η) refl ⟩
+      x ∙ y ∙ z                             ≈⟨ assoc-law x y z ⟩
+      x ∙ (y ∙ z)                           ≈˘⟨ ∙-congᴿ refl (interp-congᴿ (ℊ 1F) (ℊ 2F) η) ⟩
+      x ∙ ⟦ yz ⟧ ⟨$⟩ η                      ≈˘⟨ interp-congᴿ (ℊ 0F) yz η ⟩
+      ⟦ Th-Semigroup assocˢ .proj₂ ⟧ ⟨$⟩ η  ∎
     where
-    open Monoid-Op 𝑴 using ( assoc-law )       -- the monoid's curried associativity
-
-    -- 𝑹's curried-∙ congruence, in the same idiom as ndᴿ (reuses interp-cong):
-    ∙-congᴿ : ∀ {a b c d} → a ≈ b → c ≈ d → (a ∙ c) ≈ (b ∙ d)
-    ∙-congᴿ a≈b c≈d = IntMa.interp-cong 𝑹 ∙-Opᵐᵃ (λ { 0F → a≈b ; 1F → c≈d })
-
-    Lt = TmMa.node ∙-Opᵐᵃ (pair (TmMa.ℊ 0F) (TmMa.ℊ 1F))   -- the subterm  x ∙ y
-    Rt = TmMa.node ∙-Opᵐᵃ (pair (TmMa.ℊ 1F) (TmMa.ℊ 2F))   -- the subterm  y ∙ z
-
-    Goal : ⟦ Th-Semigroup assocˢ .proj₁ ⟧ ⟨$⟩ η ≋ ⟦ Th-Semigroup assocˢ .proj₂ ⟧ ⟨$⟩ η
-    Goal = begin
-      ⟦ Th-Semigroup assocˢ .proj₁ ⟧ ⟨$⟩ η   ≈⟨ ndᴿ Lt (TmMa.ℊ 2F) η ⟩
-      (⟦ Lt ⟧ ⟨$⟩ η) ∙ (η 2F)                ≈⟨ ∙-congᴿ (ndᴿ (TmMa.ℊ 0F) (TmMa.ℊ 1F) η) refl ⟩
-      (η 0F) ∙ (η 1F) ∙ (η 2F)               ≈⟨ assoc-law (η 0F) (η 1F) (η 2F) ⟩
-      (η 0F) ∙ ((η 1F) ∙ (η 2F))             ≈˘⟨ ∙-congᴿ refl (ndᴿ (TmMa.ℊ 1F) (TmMa.ℊ 2F) η) ⟩
-      (η 0F) ∙ (⟦ Rt ⟧ ⟨$⟩ η)                ≈˘⟨ ndᴿ (TmMa.ℊ 0F) Rt η ⟩
-      ⟦ Th-Semigroup assocˢ .proj₂ ⟧ ⟨$⟩ η   ∎
+    open Monoid-Op ℳ using ( assoc-law ) -- the monoid's curried associativity
+    xy yz : Term (Fin 3)
+    xy = node ∙-Opᵐᵃ (pair (ℊ 0F) (ℊ 1F))   -- the subterm  x ∙ y
+    yz = node ∙-Opᵐᵃ (pair (ℊ 1F) (ℊ 2F))   -- the subterm  y ∙ z
 ```
 
 The statement is `𝑹 ⊧ (Sig-Magma assoc-lhs) ≈ (Sig-Magma assoc-rhs)` under every `η`,
@@ -259,23 +251,29 @@ of the monoid, definitionally equal to `∙ᴿ` since the position map is `id`),
 refold.  Mechanically identical to `Semigroup-Op.assoc-law` but on `𝑹` and pivoting
 through `mn-assoc 𝑴` in the middle.
 
-#### <a id="frommonoidops">Bare-algebra builder and `fromPropEq`</a>
+#### Bare-algebra builder and `fromPropEq` {#frommonoidops}
 
 `fromMonoidOps` builds a `Sig-Monoid`-algebra from a carrier, a binary operation,
-and an identity element — interpreting `∙-Op` and `ε-Op` directly.  This is the
-expand half of the reduct/expand dual at the Magma↪Monoid step, written inline
-(no generic `expand` until a second use appears, per #326).  `fromPropEq` pairs
-it with the three propositional-equality proofs.
+and an identity element.  It is `fromOp` followed by one `expand-ε`, building the
+magma over `≡.setoid A` and adjoining `e` as the interpretation of `ε-Op`.
 
 ```agda
-fromMonoidOps : (A : Type α) (_·_ : A → A → A) (e : A) → Algebra α α
-fromMonoidOps A _·_ e = record { Domain = ≡.setoid A ; Interp = interp }
+fromMonoidOps : (A : Type α) (_·_ : A → A → A) (e : A) → Algebra {𝑆 = Sig-Monoid} α α
+fromMonoidOps A _·_ e = expand-ε e
+
   where
-  interp : Func (⟨ Sig-Monoid ⟩ _) _
-  interp ⟨$⟩ (∙-Op , args) = args 0F · args 1F
-  interp ⟨$⟩ (ε-Op , _)    = e
-  cong interp {∙-Op , _} {.∙-Op , _} (≡.refl , a≈) = ≡.cong₂ _·_ (a≈ 0F) (a≈ 1F)
-  cong interp {ε-Op , _} {.ε-Op , _} (≡.refl , _)  = ≡.refl
+  open Algebra
+  𝑩 : Algebra {𝑆 = Sig-Magma} _ _
+  𝑩 = fromOp A _·_
+  -- expand-ε is the expand half of the reduct/expand dual at the Sig-Magma ↪ Sig-Monoid
+  -- step, written inline; we'll construct a shared `expand` module once Group's
+  -- expand-⁻¹ provides a second consumer.
+  expand-ε : A → Algebra {𝑆 = Sig-Monoid} _ _
+  expand-ε _ .Domain = 𝔻[ 𝑩 ]
+  expand-ε _ .Interp ⟨$⟩ (∙-Op , args) = (∙-Opᵐᵃ ^ 𝑩) args
+  expand-ε e .Interp ⟨$⟩ (ε-Op , _) = e
+  expand-ε _ .Interp .cong {∙-Op , _} {.∙-Op , _} (≡.refl , u≈v) = cong (𝑩 .Interp) (≡.refl , u≈v)
+  expand-ε _ .Interp .cong {ε-Op , _} {.ε-Op , _} (≡.refl , _) = Setoid.refl 𝔻[ 𝑩 ]
 
 fromPropEq : (A : Type α) (_·_ : A → A → A) (e : A)
            → (·-assoc : ∀ a b c → (a · b) · c ≡ a · (b · c))
@@ -285,8 +283,8 @@ fromPropEq A _·_ e ·-assoc ·-idˡ ·-idʳ = fromMonoidOps A _·_ e , proof
   where
   proof : (fromMonoidOps A _·_ e) ⊨ Th-Monoid
   proof assoc ρ = ·-assoc (ρ 0F) (ρ 1F) (ρ 2F)
-  proof id-l  ρ = ·-idˡ (ρ 0F)
-  proof id-r  ρ = ·-idʳ (ρ 0F)
+  proof idˡ ρ = ·-idˡ (ρ 0F)
+  proof idʳ ρ = ·-idʳ (ρ 0F)
 ```
 
 --------------------------------------
