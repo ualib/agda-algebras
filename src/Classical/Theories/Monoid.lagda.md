@@ -38,12 +38,12 @@ open import Classical.Equations                    using ( Associative ; LeftIde
 open import Overture.Terms {𝑆 = Sig-Monoid}        using ( Term )
 
 data Eq-Monoid : Type where
-  assoc id-l id-r : Eq-Monoid
+  assoc idˡ idʳ : Eq-Monoid
 
 Th-Monoid : Eq-Monoid → Term (Fin 3) × Term (Fin 3)
-Th-Monoid assoc = Associative   ∙-Op      refl 0F 1F 2F
-Th-Monoid id-l  = LeftIdentity  ∙-Op ε-Op refl refl 0F
-Th-Monoid id-r  = RightIdentity ∙-Op ε-Op refl refl 0F
+Th-Monoid assoc  = Associative    ∙-Op       refl 0F 1F 2F
+Th-Monoid idˡ    = LeftIdentity   ∙-Op ε-Op  refl refl 0F
+Th-Monoid idʳ    = RightIdentity  ∙-Op ε-Op  refl refl 0F
 ```
 
 --------------------------------------

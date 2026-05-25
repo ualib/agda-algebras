@@ -26,18 +26,18 @@ open import Function          using ( flip ; Func )
 open import Level             using( _⊔_ ; Level )
 open import Relation.Binary   using ( Setoid ;  IsEquivalence ; Decidable )
 open import Relation.Binary.PropositionalEquality  using ( refl ; _≡_ )
-open import Relation.Unary                         using ( Pred ; _⊆_ ; _∈_ )
+open import Relation.Unary    using ( Pred ; _⊆_ ; _∈_ )
 
-open Func           using ( cong )           renaming ( to to _⟨$⟩_ )
-open Setoid         using ( Carrier ; _≈_ )  renaming ( isEquivalence to isEqv )
-open IsEquivalence  using ()                 renaming ( refl to reflE ; sym to symE ; trans to transE )
+open Func           using ( cong ) renaming ( to to _⟨$⟩_ )
+open Setoid         using ( Carrier ; _≈_ ) renaming ( isEquivalence to isEqv )
+open IsEquivalence  using () renaming ( refl to reflE ; sym to symE ; trans to transE )
 
 
 -- Imports from agda-algebras -----------------------------------------------------
 open import Overture  using ( ∣_∣; ∥_∥ ; proj ; projIsOnto )
                       renaming ( IsSurjective to onto )
 
-open import Setoid.Algebras.Basic {𝑆 = 𝑆}  using ( Algebra ; _̂_ ; ov ; 𝕌[_])
+open import Setoid.Algebras.Basic {𝑆 = 𝑆}  using ( Algebra ; _^_ ; ov ; 𝔻[_] ; 𝕌[_])
 
 private variable α ρ ι : Level
 
@@ -46,16 +46,16 @@ open Algebra
 ⨅ : {I : Type ι }(𝒜 : I → Algebra α ρ) → Algebra (α ⊔ ι) (ρ ⊔ ι)
 
 Domain (⨅ {I} 𝒜) =
- record  { Carrier = ∀ i → Carrier (Domain (𝒜 i))
-         ; _≈_ = λ a b → ∀ i → Domain (𝒜 i) ._≈_ (a i) (b i)
+ record  { Carrier = ∀ i → 𝕌[ 𝒜 i ]
+         ; _≈_ = λ a b → ∀ i → 𝔻[ 𝒜 i ] ._≈_ (a i) (b i)
          ; isEquivalence =
-            record  { refl   = λ i      → reflE   (isEqv (Domain (𝒜 i)))
-                    ; sym    = λ x i    → symE    (isEqv (Domain (𝒜 i)))(x i)
-                    ; trans  = λ x y i  → transE  (isEqv (Domain (𝒜 i)))(x i)(y i)
+            record  { refl   = λ i      → reflE   (isEqv 𝔻[ 𝒜 i ])
+                    ; sym    = λ x i    → symE    (isEqv 𝔻[ 𝒜 i ])(x i)
+                    ; trans  = λ x y i  → transE  (isEqv 𝔻[ 𝒜 i ])(x i)(y i)
                     }
          }
 
-(Interp (⨅ {I} 𝒜)) ⟨$⟩ (f , a) = λ i → (f ̂ (𝒜 i)) (flip a i)
+Interp (⨅ {I} 𝒜) ⟨$⟩ (f , a) = λ i → (f ^ 𝒜 i) (flip a i)
 cong (Interp (⨅ {I} 𝒜)) (refl , f=g ) = λ i → cong  (Interp (𝒜 i)) (refl , flip f=g i )
 ```
 

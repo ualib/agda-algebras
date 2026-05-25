@@ -48,8 +48,7 @@ open Func renaming ( to to _⟨$⟩_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Overture.Signatures    using ( OperationSymbolsOf ; ArityOf )
-open import Setoid.Algebras.Basic using ( Algebra ; ⟨_⟩ ; 𝔻[_]; 𝕌[_] ; _^_)
--- open import Setoid.Algebras.Basic  using ( Algebra ; _^_ )
+open import Setoid.Algebras.Basic  using ( Algebra ; _^_ )
 
 private variable
   α ρ 𝓞₁ 𝓞₂ : Level

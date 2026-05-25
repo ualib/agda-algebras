@@ -52,10 +52,10 @@ open import Relation.Binary  using ( Setoid )
 import Relation.Binary.PropositionalEquality as ≡
 
 -- Imports from the Agda Universal Algebra Library --------------------------------
-open import Overture.Signatures             using ( OperationSymbolsOf ; ArityOf )
-open import Setoid.Algebras.Basic {𝑆 = 𝑆}   using ( Algebra ; 𝔻[_] ; 𝕌[_] )
+open import Overture.Signatures     using ( OperationSymbolsOf ; ArityOf )
+open import Setoid.Algebras.Basic   using ( Algebra ; 𝔻[_] ; 𝕌[_] ; _^_ )
 
-open Func    renaming ( to to _⟨$⟩_ )
+open Func renaming ( to to _⟨$⟩_ )
 open Algebra using ( Interp )
 
 private variable α ρ : Level
@@ -72,7 +72,6 @@ module _ (𝑨 : Algebra α ρ) where
   open Setoid 𝔻[ 𝑨 ] using ( _≈_ )
 
   interp-cong : (f : OperationSymbolsOf 𝑆) {u v : ArityOf 𝑆 f → 𝕌[ 𝑨 ]}
-              → (∀ i → u i ≈ v i)
-              → (Interp 𝑨 ⟨$⟩ (f , u)) ≈ (Interp 𝑨 ⟨$⟩ (f , v))
+              → (∀ i → u i ≈ v i) → (f ^ 𝑨) u ≈ (f ^ 𝑨) v
   interp-cong f u≈v = cong (Interp 𝑨) (≡.refl , u≈v)
 ```
