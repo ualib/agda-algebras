@@ -29,24 +29,24 @@ open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Classical.Bundles.Semigroup           using ( ⟨_⟩ˢᵍ ; ⟪_⟫ˢᵍ )
-open import Classical.Small.Structures.Semigroup  using ( Semigroup ; fromPropEq )
+open import Classical.Small.Structures.Semigroup  using ( Semigroup ; fromSemigroupEqs )
 open import Examples.Classical.Magma              using ( ℕ-magma )
 
-import      Classical.Structures.Semigroup        as Poly
+import Classical.Structures.Semigroup as Polymorphic
 ```
 
 #### <a id="N-semigroup">The semigroup `(ℕ, +)`</a>
 
-We build `(ℕ, +)` directly from stdlib's `+-assoc`.  The `fromPropEq` constructor
+We build `(ℕ, +)` directly from stdlib's `+-assoc`.  The `fromSemigroupEqs` constructor
 demands an associativity proof of exactly the shape
 `∀ a b c → (a + b) + c ≡ a + (b + c)`, which is `+-assoc`'s type up to the
 definitional equality `Associative _+_ = ∀ x y z → (x + y) + z ≡ x + (y + z)`.
 
 ```agda
 ℕ-semigroup : Semigroup
-ℕ-semigroup = fromPropEq ℕ _+_ +-assoc
+ℕ-semigroup = fromSemigroupEqs ℕ _+_ +-assoc
 
-open Poly.Semigroup-Op ℕ-semigroup using ( _∙_ )
+open Polymorphic.Semigroup-Op ℕ-semigroup using ( _∙_ )
 ```
 
 #### <a id="acceptance">Acceptance checks</a>
@@ -67,7 +67,7 @@ to `fromOp ℕ _+_`, which is exactly the definition of `ℕ-magma`.  Discharged
 `refl`.
 
 ```agda
-forgetful-agrees : Poly.semigroup→magma ℕ-semigroup ≡ ℕ-magma
+forgetful-agrees : Polymorphic.semigroup→magma ℕ-semigroup ≡ ℕ-magma
 forgetful-agrees = refl
 ```
 
@@ -77,7 +77,7 @@ obligation at the curried form (per
 [ADR-002 v2 §6](../../docs/adr/002-classical-layer-design.md)).
 
 ```agda
-open Poly.Semigroup-Op ⟪ ⟨ ℕ-semigroup ⟩ˢᵍ ⟫ˢᵍ using () renaming ( _∙_ to _·_ )
+open Polymorphic.Semigroup-Op ⟪ ⟨ ℕ-semigroup ⟩ˢᵍ ⟫ˢᵍ using () renaming ( _∙_ to _·_ )
 
 roundtrip-ℕ-sg : ∀ (a b : ℕ) → a · b ≡ a + b
 roundtrip-ℕ-sg a b = refl

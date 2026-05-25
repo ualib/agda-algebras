@@ -39,17 +39,17 @@ Semigroup : Type (suc 0ℓ)
 Semigroup = Polymorphic.Semigroup 0ℓ 0ℓ
 ```
 
-#### <a id="fromPropEq">Small `fromPropEq`</a>
+#### Small `fromSemigroupEqs`
 
-The polymorphic `fromPropEq` specializes immediately: with `α = 0ℓ`, it produces
+The polymorphic `fromSemigroupEqs` specializes immediately: with `α = 0ℓ`, it produces
 a `Polymorphic.Semigroup 0ℓ 0ℓ` from `(A : Type 0ℓ)`, a binary operation, and an
 associativity proof, which is exactly the level-fixed `Semigroup` above.
 
 ```agda
-fromPropEq  : (A : Type 0ℓ) (_·_ : A → A → A)
-            → (∀ a b c → (a · b) · c ≡ a · (b · c))
-            → Semigroup
-fromPropEq = Polymorphic.fromPropEq
+fromSemigroupEqs  : (A : Type 0ℓ) (_·_ : A → A → A)
+  → (∀ a b c → (a · b) · c ≡ a · (b · c))
+  → Semigroup
+fromSemigroupEqs = Polymorphic.fromSemigroupEqs
 ```
 
 --------------------------------------

@@ -27,11 +27,11 @@ import Classical.Structures.Monoid as Polymorphic
 Monoid : Type (suc 0ℓ)
 Monoid = Polymorphic.Monoid 0ℓ 0ℓ
 
-fromPropEq : (A : Type 0ℓ) (_·_ : A → A → A) (e : A)
-           → (∀ a b c → (a · b) · c ≡ a · (b · c))
-           → (∀ a → e · a ≡ a) → (∀ a → a · e ≡ a)
-           → Monoid
-fromPropEq = Polymorphic.fromPropEq
+fromMonoidEqs : (A : Type 0ℓ) (_·_ : A → A → A) (e : A)
+  → (∀ a b c → (a · b) · c ≡ a · (b · c))
+  → (∀ a → e · a ≡ a) → (∀ a → a · e ≡ a)
+  → Monoid
+fromMonoidEqs = Polymorphic.fromMonoidEqs
 ```
 
 --------------------------------------

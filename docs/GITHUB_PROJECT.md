@@ -1962,41 +1962,68 @@ Low, but the blast radius is whatever currently imports `⟨_⟩`/`EqArgs` from 
 
 ## Summary
 
-Make the polynomial-functor / container structure already latent in the foundation *first-class*, and with it the total-category (`∫Alg`) view that reducts, expansions, and signature morphisms inherently require — as opposed to the fibre view (`Alg(𝑆)` for a fixed `𝑆`) that the module-parameter convention of `Setoid.Algebras.Basic` privileges.  Full design in `docs/notes/milestone-signature-functors.md`.
+Make the polynomial-functor / container structure already latent in the foundation
+*first-class*, and with it the total-category (`∫Alg`) view that reducts, expansions,
+and signature morphisms inherently require — as opposed to the fibre view (`Alg(𝑆)`
+for a fixed `𝑆`) that the module-parameter convention of `Setoid.Algebras.Basic`
+privileges.  This is the structural companion to the surgical fix in [M4-4]: where
+M4-4 relocates the two signature-generic helpers (`⟨_⟩`, `EqArgs`) that leak the
+unused module parameter, M4-5 builds out the category-theoretic layer that motivates
+ranging over signatures in the first place.  Full design in
+`docs/notes/milestone-signature-functors.md`.
 
 ## Why now
 
-The M3-6 (Monoid/Group) work built, by hand, a container-morphism `reduct`, an `expand-ε` dual, and discovered that "reduct-invariance of satisfaction" is what discharges each forgetful projection's theory obligation.  It also surfaced that the foundation already *is* a polynomial-functor formalization without saying so: `Signature` is a `Container`, `⟨ 𝑆 ⟩` is the polynomial functor `P_σ` lifted to setoids, `Interp` is the structure map `P_σ(Domain) → Domain`, and `Term` is the initial algebra of `A ↦ X ⊎ P_σ(A)`.  M4-5 makes this explicit and reusable, and is the proper home for the `Base/Adjunction` and `Base/Categories` orphans currently parked as TBD.
+The M3-6 (Monoid/Group) work built, by hand, a container-morphism `reduct`
+([`Classical.Structures.Reduct`][]), an `expand-ε` dual, and discovered that
+"reduct-invariance of satisfaction" is what discharges each forgetful projection's
+theory obligation (the per-structure curried-law pivots in `monoid→semigroup` and the
+reindex forgetfuls).  It also surfaced that the foundation already *is* a
+polynomial-functor formalization without saying so: `Signature` is a container,
+`⟨ 𝑆 ⟩` is the polynomial functor `P_σ` lifted to setoids, `Interp` is the structure
+map `P_σ(Domain) → Domain`, and `Term` is the initial algebra of `A ↦ X ⊎ P_σ(A)`.
+M4-5 makes this explicit and reusable, and is the proper home for the
+`Base/Adjunction` and `Base/Categories` orphans currently parked as TBD.
 
 ## Mathematical core
 
-A signature morphism is a container morphism `(ι , κ)` (`ι` covariant on symbols, `κ` contravariant on arities).  Signatures and these morphisms form a category `Sig`.  `P` is a 2-functor `Sig → [Setoid,Setoid]`; reduct is precomposition with the induced natural transformation; expansion is its copairing dual; reduct-invariance of satisfaction is naturality of the unique fold; reduct has a left adjoint (free expansion); a theory interpretation is a signature morphism into *derived operations*, with Maltsev conditions as interpretations of small theories.
+A signature morphism is a container morphism `(ι , κ)` (`ι` covariant on symbols, `κ`
+contravariant on arities).  Signatures and these morphisms form a category `Sig`.
+`P` is a 2-functor `Sig → [Setoid,Setoid]`; reduct is precomposition with the induced
+natural transformation; expansion is its copairing dual; reduct-invariance of
+satisfaction is naturality of the unique fold; reduct has a left adjoint (free
+expansion); a theory interpretation is a signature morphism into *derived* operations,
+with Maltsev conditions as interpretations of small theories.
 
-## Phases (sub-issues)
+## Subissues
 
-+  [ ] **M4-5-1** Category of signature morphisms; promote `reduct` to a packaged morphism.  *(low risk)*
-+  [ ] **M4-5-2** `⟨_⟩` as a functor; induced natural transformations.  *(low–medium)*
-+  [ ] **M4-5-3** Reduct as a functor on algebras; upgrade the classical forgetful *projections* to forgetful *functors* by supplying the morphism action.  *(medium)*
-+  [ ] **M4-5-4** Free expansion; the `F ⊣ reduct` adjunction.  Distinguish from M3-6's chosen `expand-ε`.  *(high / high-value)*
-+  [ ] **M4-5-5** Term monad; naturality of the fold; reduct-invariance of satisfaction as a corollary, absorbing M3-6's per-structure pivot proofs.  *(medium)*
-+  [ ] **M4-5-6** Theory interpretations; Maltsev conditions as interpretations; the interpretability quasi-order.  *(research-grade, exploratory)*
-+  [ ] **M4-5-7** Reduct classes of varieties are prevarieties (closed under S, P, not H).  *(research-grade)*
++  [ ] **M4-5a** Category of signature morphisms; promote `reduct` to a packaged morphism.  *(low risk)*
++  [ ] **M4-5b** `⟨_⟩` as a functor; induced natural transformations.  *(low–medium)*
++  [ ] **M4-5c** Reduct as a functor on algebras; upgrade the classical forgetful *projections* to forgetful *functors* by supplying the morphism action.  *(medium)*
++  [ ] **M4-5d** Free expansion; the `F ⊣ reduct` adjunction.  Distinguish from M3-6's chosen `expand-ε`.  *(high / high-value)*
++  [ ] **M4-5e** Term monad; naturality of the fold; reduct-invariance of satisfaction as a corollary, absorbing M3-6's per-structure pivot proofs.  *(medium)*
++  [ ] **M4-5f** Theory interpretations; Maltsev conditions as interpretations; the interpretability quasi-order.  *(research-grade, exploratory)*
++  [ ] **M4-5g** Reduct classes of varieties are prevarieties (closed under S, P, not H).  *(research-grade)*
 
-## De-risking spikes (before committing the hard phases)
+The ordering is a dependency chain: a→b→c→{d,e}, with e gating f and c gating g.
 
-+  **Spike A** (M4-5-3): supply the morphism action for `monoid→semigroup` only and prove it functorial.
-+  **Spike B** (M4-5-4): construct the free monoid on a semigroup (adjoin a unit) and prove the universal property against `reduct`.  If this single adjunction is clean with setoid quotients, the general theorem is plausible.
+## De-risking spikes (before the hard phases)
+
++  **Spike A** (in M4-5c): supply the morphism action for `monoid→semigroup` only and prove it functorial.
++  **Spike B** (in M4-5d): construct the free monoid on a semigroup (adjoin a unit) and prove the universal property against `reduct`.  If this single adjunction is clean with setoid quotients, the general theorem is plausible.
 
 ## Open questions
 
 +  Adjunction direction/existence along inclusions that *add equations* (needs quotients now, cubical HITs later).
-+  Build on `agda-categories` vs. stay self-contained (prototype both in M4-5-1).
-+  Whether cubical dissolves the M3-5 binary-node-bridge obstruction (an MLTT/`--safe` artifact) — a measurable cubical-port payoff if so.
-+  Keep M4-5-6/7 on the clone/CSP side (connects to M9-2), explicitly **not** the FLRP side.
++  Build on `agda-categories` vs. stay self-contained (prototype both in M4-5a).
++  Whether cubical dissolves the M3-5 binary-node-bridge obstruction (an MLTT/`--safe` artifact) — a measurable cubical-port (v4.0) payoff if so; M4-5e is the place to measure it.
++  Keep M4-5f/g on the clone/CSP side (connects to M9-2, Bodirsky–Pinsker), explicitly **not** the FLRP side.
 
 ## Relationship to other work
 
-Depends on M3 (concrete reduct/expand) and the `Setoid.Varieties` machinery.  Sibling to the surgical foundation fix #337 (which removes the `⟨_⟩`/`EqArgs` parameter leak this milestone would otherwise keep hitting).  Connects to #281  (infinitary CSP, Bodirsky–Pinsker) via interpretability.
+Depends on M3 (concrete reduct/expand) and the `Setoid.Varieties` machinery.  Sibling
+to [M4-4] (the `⟨_⟩`/`EqArgs` parameter-leak fix, which removes friction this milestone
+would otherwise keep hitting).  Connects to M9-2 via interpretability..
 
 ---
 

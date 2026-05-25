@@ -88,16 +88,16 @@ private variable α ρ : Level
 #### <a id="satisfaction-alias">The local satisfaction predicate</a>
 
 ```agda
-infix 4 _⊨_
-_⊨_ : (𝑨 : Algebra α ρ) (ℰ : Eq-Monoid → Term (Fin 3) × Term (Fin 3)) → Type (α ⊔ ρ)
-𝑨 ⊨ ℰ = ∀ i → 𝑨 ⊧ proj₁ (ℰ i) ≈ proj₂ (ℰ i)
+infix 4 _⊨ᵐᵒ_
+_⊨ᵐᵒ_ : (𝑨 : Algebra α ρ) (ℰ : Eq-Monoid → Term (Fin 3) × Term (Fin 3)) → Type (α ⊔ ρ)
+𝑨 ⊨ᵐᵒ ℰ = ∀ i → 𝑨 ⊧ proj₁ (ℰ i) ≈ proj₂ (ℰ i)
 ```
 
 #### <a id="the-type">The type of monoids</a>
 
 ```agda
 Monoid : (α ρ : Level) → Type (suc α ⊔ suc ρ)
-Monoid α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ Th-Monoid
+Monoid α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ᵐᵒ Th-Monoid
 ```
 
 #### <a id="forgetful-to-magma">The reduct to magmas</a>
@@ -176,7 +176,7 @@ module Monoid-Op {α ρ : Level} (𝑴 : Monoid α ρ) where
   ε : 𝕌[ 𝑨 ]
   ε = Curry₀ (ε-Op ^ 𝑨)
 
-  equations : 𝑨 ⊨ Th-Monoid
+  equations : 𝑨 ⊨ᵐᵒ Th-Monoid
   equations = proj₂ 𝑴
 
   ∙-cong : ∀ {x y u v} → x ≈ y → u ≈ v → (x ∙ u) ≈ (y ∙ v)
@@ -275,13 +275,13 @@ fromMonoidOps A _·_ e = expand-ε e
   expand-ε _ .Interp .cong {∙-Op , _} {.∙-Op , _} (≡.refl , u≈v) = cong (𝑩 .Interp) (≡.refl , u≈v)
   expand-ε _ .Interp .cong {ε-Op , _} {.ε-Op , _} (≡.refl , _) = Setoid.refl 𝔻[ 𝑩 ]
 
-fromPropEq : (A : Type α) (_·_ : A → A → A) (e : A)
-           → (·-assoc : ∀ a b c → (a · b) · c ≡ a · (b · c))
-           → (·-idˡ : ∀ a → e · a ≡ a) (·-idʳ : ∀ a → a · e ≡ a)
-           → Monoid α α
-fromPropEq A _·_ e ·-assoc ·-idˡ ·-idʳ = fromMonoidOps A _·_ e , proof
+fromMonoidEqs : (A : Type α) (_·_ : A → A → A) (e : A)
+  → (·-assoc : ∀ a b c → (a · b) · c ≡ a · (b · c))
+  → (·-idˡ : ∀ a → e · a ≡ a) (·-idʳ : ∀ a → a · e ≡ a)
+  → Monoid α α
+fromMonoidEqs A _·_ e ·-assoc ·-idˡ ·-idʳ = fromMonoidOps A _·_ e , proof
   where
-  proof : (fromMonoidOps A _·_ e) ⊨ Th-Monoid
+  proof : (fromMonoidOps A _·_ e) ⊨ᵐᵒ Th-Monoid
   proof assoc ρ = ·-assoc (ρ 0F) (ρ 1F) (ρ 2F)
   proof idˡ ρ = ·-idˡ (ρ 0F)
   proof idʳ ρ = ·-idʳ (ρ 0F)
