@@ -1678,7 +1678,7 @@ The pointwise round-trip policy from [ADR-002 v2 §6](docs/adr/002-classical-lay
 
 ## v2 amendment (2026-05-17)
 
-Renumbered M3-4 → M3-6 following [revision of ADR-002 v2](https://github.com/ualib/agda-algebras/pull/332).
+Renumbered [M3-4] → [M3-6] following [revision of ADR-002 v2](https://github.com/ualib/agda-algebras/pull/332).
 
 Scope adjustment per [ADR-002 v2 §5](docs/adr/002-classical-layer-design.md): each structure is self-contained over its own signature, with forgetful projections for inheritance.  Concretely:
 
@@ -1686,21 +1686,22 @@ Scope adjustment per [ADR-002 v2 §5](docs/adr/002-classical-layer-design.md): e
 +  `Sig-Group` adds a unary inverse symbol `⁻¹-Op` (arity `Fin 1`) to `Sig-Monoid`.  `Th-Group` includes `assoc`, `id-l`, `id-r`, `inv-l`, `inv-r`.  Forgetful `group→monoid` (composes downward to `group→semigroup`, `group→magma`).
 +  `Sig-CommutativeMonoid` and `Sig-AbelianGroup` reuse `Sig-Monoid` and `Sig-Group` respectively; the only addition is `comm` to the theory.
 
-All equations come from the generic builders in `Classical.Equations` (M3-2).  Distinguished elements (the identity, the inverse) are nullary/unary operation symbols of the signature, per [ADR-002 v2 §9](docs/adr/002-classical-layer-design.md).
+All equations come from the generic builders in `Classical.Equations` [M3-2].  Distinguished elements (the identity, the inverse) are nullary/unary operation symbols of the signature, per [ADR-002 v2 §9](docs/adr/002-classical-layer-design.md).
 
 ---
 
 ## Description
 
-Follow the pattern established in M3-2 to add the monoid-and-group family, with corresponding signatures, theories, bundle views, and level-fixed veneers.
+Follow the pattern established in [M3-3]/[M3-4] to add the monoid-and-group family, with corresponding signatures, theories, bundle views, and level-fixed veneers.
 
 ## Tasks
 
-- [ ] `Classical/Structures/Monoid.agda`.
-- [ ] `Classical/Structures/CommutativeMonoid.agda`.
-- [ ] `Classical/Structures/Group.agda`.
-- [ ] `Classical/Structures/AbelianGroup.agda`.
-- [ ] Corresponding signatures, theories, bundles (per M3-3), Small veneers.
+- [ ] `Classical/Structures/Monoid.lagda.md`.
+- [ ] `Classical/Structures/CommutativeMonoid.lagda.md`.
+- [ ] `Classical/Structures/CommutativeSemigroup.lagda.md`.
+- [ ] `Classical/Structures/Group.lagda.md`.
+- [ ] `Classical/Structures/AbelianGroup.lagda.md`.
+- [ ] Corresponding signatures, theories, bundles (per [M3-3]), Small veneers.
 - [ ] Worked examples: `(ℕ, +, 0)` as CommutativeMonoid; `(ℤ, +, 0, -)` as AbelianGroup.
 
 ## Acceptance criteria
