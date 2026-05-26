@@ -30,7 +30,7 @@ open import Relation.Binary                        using ( Setoid )
 open import Relation.Binary.PropositionalEquality  using ( _≡_ )
 
 open import Classical.Signatures.Monoid            using ( Sig-Monoid )
-open import Classical.Structures.Monoid            using ( Monoid ; module Monoid-Op ; opsToRawMonoid )
+open import Classical.Structures.Monoid            using ( Monoid ; module Monoid-Op ; opsToBareMonoid )
 open import Classical.Theories.Monoid              using ( assoc ; idˡ ; idʳ )
 open import Classical.Theories.CommutativeMonoid   using ( Eq-CommutativeMonoid ; Th-CommutativeMonoid ; comm )
                                                    renaming ( assoc to assocᶜ ; idˡ to idˡᶜ ; idʳ to idʳᶜ )
@@ -41,7 +41,7 @@ open import Setoid.Varieties.EquationalLogic {𝑆 = Sig-Monoid} using ( _⊧_�
 private variable α ρ : Level
 ```
 
-#### Satisfaction Ppredicate and the `CommutativeMonoid` type</a>
+#### Satisfaction predicate and the `CommutativeMonoid` type
 
 ```agda
 infix 4 _⊨ᶜᵐᵒ_
@@ -52,7 +52,7 @@ CommutativeMonoid : (α ρ : Level) → Type (suc α ⊔ suc ρ)
 CommutativeMonoid α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ᶜᵐᵒ Th-CommutativeMonoid
 ```
 
-#### <a id="forgetful">The forgetful projection to monoids (pure reindex)</a>
+#### The forgetful projection to monoids
 
 ```agda
 commutativeMonoid→monoid : CommutativeMonoid α ρ → Monoid α ρ
@@ -90,9 +90,9 @@ eqsToCommutativeMonoid : (A : Type α) (_·_ : A → A → A) (e : A)
   → (·-idˡ : ∀ a → e · a ≡ a) (·-idʳ : ∀ a → a · e ≡ a)
   → (·-comm : ∀ a b → a · b ≡ b · a)
   → CommutativeMonoid α α
-eqsToCommutativeMonoid A _·_ e ·-assoc ·-idˡ ·-idʳ ·-comm = opsToRawMonoid A _·_ e , proof
+eqsToCommutativeMonoid A _·_ e ·-assoc ·-idˡ ·-idʳ ·-comm = opsToBareMonoid A _·_ e , proof
   where
-  proof : opsToRawMonoid A _·_ e ⊨ᶜᵐᵒ Th-CommutativeMonoid
+  proof : opsToBareMonoid A _·_ e ⊨ᶜᵐᵒ Th-CommutativeMonoid
   proof assocᶜ ρ = ·-assoc (ρ 0F) (ρ 1F) (ρ 2F)
   proof idˡᶜ   ρ = ·-idˡ   (ρ 0F)
   proof idʳᶜ   ρ = ·-idʳ   (ρ 0F)

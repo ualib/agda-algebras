@@ -28,7 +28,7 @@ open import Data.Nat              using ( ℕ )
 open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Classical.Bundles.Monoid           using ( ⟨_⟩ᵐⁿ ; ⟪_⟫ᵐⁿ )
+open import Classical.Bundles.Monoid           using ( ⟨_⟩ᵐᵒ ; ⟪_⟫ᵐᵒ )
 open import Classical.Small.Structures.Monoid  using ( Monoid ; eqsToMonoid )
 
 import Classical.Structures.Monoid as Polymorphic
@@ -56,7 +56,7 @@ open Polymorphic.Monoid-Op list-monoid using ( _∙_ ; ε )
 The bundle round-trips pointwise on both the operation and the identity.
 
 ```agda
-open Polymorphic.Monoid-Op ⟪ ⟨ list-monoid ⟩ᵐⁿ ⟫ᵐⁿ using () renaming ( _∙_ to _·_ ; ε to ε· )
+open Polymorphic.Monoid-Op ⟪ ⟨ list-monoid ⟩ᵐᵒ ⟫ᵐᵒ using () renaming ( _∙_ to _·_ ; ε to ε· )
 
 roundtrip-∙-mn : ∀ (xs ys : List ℕ) → xs · ys ≡ xs ++ ys
 roundtrip-∙-mn xs ys = refl

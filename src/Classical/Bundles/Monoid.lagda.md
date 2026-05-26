@@ -45,8 +45,8 @@ private variable α ρ : Level
 #### <a id="core-to-bundle">Core to stdlib bundle</a>
 
 ```agda
-⟨_⟩ᵐⁿ : Monoid α ρ → stdlib-Monoid α ρ
-⟨ 𝑴 ⟩ᵐⁿ = record
+⟨_⟩ᵐᵒ : Monoid α ρ → stdlib-Monoid α ρ
+⟨ 𝑴 ⟩ᵐᵒ = record
   { Carrier  = 𝕌[ 𝑨 ]
   ; _≈_      = _≈_
   ; _∙_      = _∙_
@@ -68,8 +68,8 @@ private variable α ρ : Level
 #### <a id="bundle-to-core">Stdlib bundle to core</a>
 
 ```agda
-⟪_⟫ᵐⁿ : stdlib-Monoid α ρ → Monoid α ρ
-⟪ M ⟫ᵐⁿ = 𝑨 , λ { assoc ρ → M-assoc (ρ 0F) (ρ 1F) (ρ 2F)
+⟪_⟫ᵐᵒ : stdlib-Monoid α ρ → Monoid α ρ
+⟪ M ⟫ᵐᵒ = 𝑨 , λ { assoc ρ → M-assoc (ρ 0F) (ρ 1F) (ρ 2F)
                 ; idˡ   ρ → M-idˡ   (ρ 0F)
                 ; idʳ   ρ → M-idʳ   (ρ 0F) }
   where
@@ -94,7 +94,7 @@ private variable α ρ : Level
 module _ {𝑴 : Monoid α ρ} where
   open Monoid-Op 𝑴
   open Setoid 𝔻[ proj₁ 𝑴 ]
-  open Monoid-Op ⟪ ⟨ 𝑴 ⟩ᵐⁿ ⟫ᵐⁿ renaming ( _∙_ to _∙'_ ; ε to ε' )
+  open Monoid-Op ⟪ ⟨ 𝑴 ⟩ᵐᵒ ⟫ᵐᵒ renaming ( _∙_ to _∙'_ ; ε to ε' )
 
   roundtrip-cbc-∙-mn : (a b : 𝕌[ proj₁ 𝑴 ]) → (a ∙' b) ≈ (a ∙ b)
   roundtrip-cbc-∙-mn a b = refl
@@ -104,7 +104,7 @@ module _ {𝑴 : Monoid α ρ} where
 
 module _ {M : stdlib-Monoid α ρ} where
   open stdlib-Monoid M using ( _≈_ ; _∙_ ; ε ; refl ) renaming ( Carrier to A )
-  open stdlib-Monoid ⟨ ⟪ M ⟫ᵐⁿ ⟩ᵐⁿ using () renaming ( _∙_ to _∙'_ ; ε to ε' )
+  open stdlib-Monoid ⟨ ⟪ M ⟫ᵐᵒ ⟩ᵐᵒ using () renaming ( _∙_ to _∙'_ ; ε to ε' )
 
   roundtrip-bcb-∙-mn : (a b : A) → (a ∙ b) ≈ (a ∙' b)
   roundtrip-bcb-∙-mn a b = refl

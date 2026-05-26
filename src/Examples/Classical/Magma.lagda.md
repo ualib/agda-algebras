@@ -45,7 +45,7 @@ open Polymorphic.Magma-Op ℕ-magma using ( _∙_ )
 #### <a id="acceptance">Acceptance checks</a>
 
 `∙-Op` interpreted in `ℕ-magma` reduces definitionally to `_+_`: no opacity from
-the `binaryOpToMagma` construction, no opacity from the `Curry₂` wrapping in the named
+the `opsToMagma` construction, no opacity from the `Curry₂` wrapping in the named
 accessor.  Discharged by `refl`.
 
 ```agda

@@ -104,7 +104,7 @@ The benefit of self-contained encoding: "what equations does a group satisfy?" h
 
 ### 6.  Bundle bridge: pointwise equivalence, not propositional Σ-equality
 
-The bidirectional conversion functions `⟨_⟩ₓ` (Σ-core → stdlib bundle) and `⟪_⟫ₓ` (stdlib bundle → Σ-core) form a *pointwise inverse pair*: the round-tripped algebra has the same underlying setoid as the original and interprets each operation symbol identically on every input.  The round-trip is *not* claimed as an inhabitant of `_≡_` on the Σ-type — under `--cubical-compatible`, the lack of η on `Fin n`-pattern lambdas makes the operation-tuple-vs-curried repackaging propositionally but not definitionally equal, and demanding `≡` on the Σ-type forces a funext appeal that the `--safe` regime forbids.
+The bidirectional conversion functions `⟨_⟩ˣ` (Σ-core → stdlib bundle) and `⟪_⟫ˣ` (stdlib bundle → Σ-core) form a *pointwise inverse pair*: the round-tripped algebra has the same underlying setoid as the original and interprets each operation symbol identically on every input.  The round-trip is *not* claimed as an inhabitant of `_≡_` on the Σ-type — under `--cubical-compatible`, the lack of η on `Fin n`-pattern lambdas makes the operation-tuple-vs-curried repackaging propositionally but not definitionally equal, and demanding `≡` on the Σ-type forces a funext appeal that the `--safe` regime forbids.
 
 Pointwise agreement is the mathematically correct notion of "same semigroup" under setoid semantics: two semigroups are the same exactly when their underlying setoids coincide and their operations agree on every input.  Each bundle bridge module exports a `roundtrip-X` lemma stating this pointwise agreement; nothing stronger is claimed.
 

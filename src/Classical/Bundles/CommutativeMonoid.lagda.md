@@ -37,8 +37,8 @@ open import Setoid.Algebras.Basic {𝑆 = Sig-Monoid}     using  ( Algebra ; ⟨
 
 private variable α ρ : Level
 
-⟨_⟩ᶜᵐ : CommutativeMonoid α ρ → stdlib-CommutativeMonoid α ρ
-⟨ 𝑪 ⟩ᶜᵐ = record
+⟨_⟩ᶜᵐᵒ : CommutativeMonoid α ρ → stdlib-CommutativeMonoid α ρ
+⟨ 𝑪 ⟩ᶜᵐᵒ = record
   { Carrier = 𝕌[ proj₁ 𝑪 ]
   ; _≈_     = _≈_
   ; _∙_     = _∙_
@@ -58,8 +58,8 @@ private variable α ρ : Level
   open CommutativeMonoid-Op 𝑪
   open Setoid 𝔻[ proj₁ 𝑪 ]
 
-⟪_⟫ᶜᵐ : stdlib-CommutativeMonoid α ρ → CommutativeMonoid α ρ
-⟪ M ⟫ᶜᵐ = 𝑨 , λ { assoc ρ → M-assoc (ρ 0F) (ρ 1F) (ρ 2F)
+⟪_⟫ᶜᵐᵒ : stdlib-CommutativeMonoid α ρ → CommutativeMonoid α ρ
+⟪ M ⟫ᶜᵐᵒ = 𝑨 , λ { assoc ρ → M-assoc (ρ 0F) (ρ 1F) (ρ 2F)
                 ; idˡ   ρ → M-idˡ   (ρ 0F)
                 ; idʳ   ρ → M-idʳ   (ρ 0F)
                 ; comm  ρ → M-comm  (ρ 0F) (ρ 1F) }
@@ -81,7 +81,7 @@ private variable α ρ : Level
 module _ {𝑪 : CommutativeMonoid α ρ} where
   open CommutativeMonoid-Op 𝑪
   open Setoid 𝔻[ proj₁ 𝑪 ]
-  open CommutativeMonoid-Op ⟪ ⟨ 𝑪 ⟩ᶜᵐ ⟫ᶜᵐ renaming ( _∙_ to _∙'_ ; ε to ε' )
+  open CommutativeMonoid-Op ⟪ ⟨ 𝑪 ⟩ᶜᵐᵒ ⟫ᶜᵐᵒ renaming ( _∙_ to _∙'_ ; ε to ε' )
 
   roundtrip-cbc-∙-cm : (a b : 𝕌[ proj₁ 𝑪 ]) → (a ∙' b) ≈ (a ∙ b)
   roundtrip-cbc-∙-cm a b = refl
@@ -91,7 +91,7 @@ module _ {𝑪 : CommutativeMonoid α ρ} where
 
 module _ {M : stdlib-CommutativeMonoid α ρ} where
   open stdlib-CommutativeMonoid M using ( _≈_ ; _∙_ ; ε ; refl ) renaming ( Carrier to A )
-  open stdlib-CommutativeMonoid ⟨ ⟪ M ⟫ᶜᵐ ⟩ᶜᵐ using () renaming ( _∙_ to _∙'_ ; ε to ε' )
+  open stdlib-CommutativeMonoid ⟨ ⟪ M ⟫ᶜᵐᵒ ⟩ᶜᵐᵒ using () renaming ( _∙_ to _∙'_ ; ε to ε' )
 
   roundtrip-bcb-∙-cm : (a b : A) → (a ∙ b) ≈ (a ∙' b)
   roundtrip-bcb-∙-cm a b = refl
