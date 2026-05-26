@@ -37,8 +37,8 @@ open import Setoid.Algebras.Basic {𝑆 = Sig-Magma}      using  ( Algebra ; ⟨
 
 private variable α ρ : Level
 
-⟨_⟩ᶜˢ : CommutativeSemigroup α ρ → stdlib-CommutativeSemigroup α ρ
-⟨ 𝑪 ⟩ᶜˢ = record
+⟨_⟩ᶜˢᵍ : CommutativeSemigroup α ρ → stdlib-CommutativeSemigroup α ρ
+⟨ 𝑪 ⟩ᶜˢᵍ = record
   { Carrier = 𝕌[ proj₁ 𝑪 ]
   ; _≈_     = _≈_
   ; _∙_     = _∙_
@@ -54,8 +54,8 @@ private variable α ρ : Level
   open CommutativeSemigroup-Op 𝑪
   open Setoid 𝔻[ proj₁ 𝑪 ]
 
-⟪_⟫ᶜˢ : stdlib-CommutativeSemigroup α ρ → CommutativeSemigroup α ρ
-⟪ S ⟫ᶜˢ = 𝑨 , λ { assoc ρ → S-assoc (ρ 0F) (ρ 1F) (ρ 2F)
+⟪_⟫ᶜˢᵍ : stdlib-CommutativeSemigroup α ρ → CommutativeSemigroup α ρ
+⟪ S ⟫ᶜˢᵍ = 𝑨 , λ { assoc ρ → S-assoc (ρ 0F) (ρ 1F) (ρ 2F)
                 ; comm  ρ → S-comm  (ρ 0F) (ρ 1F) }
   where
   open stdlib-CommutativeSemigroup S
@@ -72,14 +72,14 @@ private variable α ρ : Level
 module _ {𝑪 : CommutativeSemigroup α ρ} where
   open CommutativeSemigroup-Op 𝑪
   open Setoid 𝔻[ proj₁ 𝑪 ]
-  open CommutativeSemigroup-Op ⟪ ⟨ 𝑪 ⟩ᶜˢ ⟫ᶜˢ renaming ( _∙_ to _∙'_ )
+  open CommutativeSemigroup-Op ⟪ ⟨ 𝑪 ⟩ᶜˢᵍ ⟫ᶜˢᵍ renaming ( _∙_ to _∙'_ )
 
   roundtrip-cbc-cs : (a b : 𝕌[ proj₁ 𝑪 ]) → (a ∙' b) ≈ (a ∙ b)
   roundtrip-cbc-cs a b = refl
 
 module _ {S : stdlib-CommutativeSemigroup α ρ} where
   open stdlib-CommutativeSemigroup S using ( _≈_ ; _∙_ ; refl ) renaming ( Carrier to A )
-  open stdlib-CommutativeSemigroup ⟨ ⟪ S ⟫ᶜˢ ⟩ᶜˢ using () renaming ( _∙_ to _∙'_ )
+  open stdlib-CommutativeSemigroup ⟨ ⟪ S ⟫ᶜˢᵍ ⟩ᶜˢᵍ using () renaming ( _∙_ to _∙'_ )
 
   roundtrip-bcb-cs : (a b : A) → (a ∙ b) ≈ (a ∙' b)
   roundtrip-bcb-cs a b = refl

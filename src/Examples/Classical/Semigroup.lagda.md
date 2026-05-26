@@ -75,7 +75,7 @@ forgetful-agrees = refl
 The bundle bridge round-trips on `ℕ-semigroup` pointwise.  Both directions reduce
 by `pair a b 0F ⇉ a` and `pair a b 1F ⇉ b`, so propositional `refl` discharges the
 obligation at the curried form (per
-[ADR-002 v2](../../docs/adr/002-classical-layer-design.md)) §6.
+[ADR-002 v2](../../docs/adr/002-classical-layer-design.md) §6.
 
 ```agda
 open Polymorphic.Semigroup-Op ⟪ ⟨ ℕ-semigroup ⟩ˢᵍ ⟫ˢᵍ using () renaming ( _∙_ to _·_ )

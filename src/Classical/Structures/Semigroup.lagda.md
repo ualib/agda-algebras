@@ -19,8 +19,8 @@ that reading directly, per
 
 This is the first concrete classical structure with a non-empty equational theory,
 and consequently this module's prose is normative for every subsequent
-equation-bearing structure (Monoid in M3-6, Group in M3-6, Lattice in M3-7, Ring in
-M3-8).  Specifically, the conventions documented and embodied here are:
+equation-bearing structure (Monoid, Group, Lattice, Ring).
+Specifically, the conventions documented and embodied here are as follows.
 
 +  **Theory representation**.  Each equation-bearing structure `X` has a
    `Classical/Theories/X.lagda.md` file housing a singleton-or-larger index enum
@@ -32,8 +32,8 @@ M3-8).  Specifically, the conventions documented and embodied here are:
    *spelled out explicitly* — for Semigroup, `Eq-Semigroup → Term (Fin 3) × Term (Fin 3)`,
    not `_`.  The underscore lets Agda's unifier wander into the equational-logic
    substrate, where it produces error messages naming `Modᵗ` rather than the local
-   alias; the explicit codomain is a load-test outcome from the original M3-2
-   branch.  The alias's body unfolds `Modᵗ Th-X` once at the point of use.
+   alias; the explicit codomain is a load-test outcome from the original branch ([M3-2]).
+   The alias's body unfolds `Modᵗ Th-X` once at the point of use.
 +  **Named accessor module `<Structure>-Op`**.  The signature-mechanics convention
    — one named parametric module per structure exposing curried,
    infix-friendly accessors so that downstream code can `open <Structure>-Op 𝑿` once
@@ -63,7 +63,7 @@ M3-8).  Specifically, the conventions documented and embodied here are:
    (i.e., `X` adds equations only — no new operation symbols), the forgetful is
    simply `proj₁`.  When `X` adds operation symbols on top of `Y`'s signature, the
    forgetful is more substantial (it projects out the additional operations); those
-   cases land with Monoid in M3-6.  For Semigroup over Magma there are no added
+   cases land with Monoid ([M3-6]).  For Semigroup over Magma there are no added
    symbols, so `semigroup→magma = proj₁`.  Composition of forgetfuls down the
    hierarchy expresses inheritance type-theoretically: a group `𝑮` is a monoid via
    `group→monoid 𝑮`, a semigroup via `monoid→semigroup ∘ group→monoid`, and a magma
@@ -72,13 +72,13 @@ M3-8).  Specifically, the conventions documented and embodied here are:
    The user-facing constructor `eqsToSemigroup` builds a semigroup from a bare type `A`,
    a binary operation `_·_ : A → A → A`, and one propositional-equality proof per
    equation in the theory (here, one `·-assoc` proof).  Its definition factors
-   through `opsTo`: `eqsTo A _·_ ·-assoc = opsTo A _·_ , <proof>`, reusing the
-   underlying-algebra construction rather than rebuilding it.
+   through `opsToMagma`: `eqsToSemigroup A _·_ ·-assoc = opsToMagma A _·_ , <proof>`,
+   reusing the underlying-algebra construction rather than rebuilding it.
    This factoring has two payoffs: it keeps the per-structure constructor short, and
-   it makes the forgetful acceptance criterion `semigroup→magma (eqsTo A _·_ _)
-   ≡ opsTo A _·_` discharge by `refl`.  Subsequent `eqsTo`-family constructors
+   it makes the forgetful acceptance criterion `semigroup→magma (eqsToSemigroup A _·_ _)
+   ≡ opsToMagma A _·_` discharge by `refl`.  Subsequent `eqsTo`-family constructors
    (for Monoid, Group, Lattice, Ring) follow the same shape, each factoring
-   through their immediate predecessor's `opsTo`/`eqsTo` constructors.
+   through their immediate predecessor's concrete constructor family.
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -231,8 +231,8 @@ required.
 
 ```agda
 eqsToSemigroup : (A : Type α) (_·_ : A → A → A)
-  → (·-assoc : ∀ a b c → (a · b) · c ≡ a · (b · c))
-  → Semigroup α α
+  (·-assoc : ∀ a b c → (a · b) · c ≡ a · (b · c)) → Semigroup α α
+
 eqsToSemigroup A _·_ ·-assoc = opsToMagma A _·_ , proof
   where
   proof : opsToMagma A _·_ ⊨ Th-Semigroup

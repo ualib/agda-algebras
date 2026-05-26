@@ -6,6 +6,10 @@ date: "2026-05-24"
 author: "the agda-algebras development team"
 ---
 
+### Worked Example: `(ℕ, +, 0)` as a commutative semigroup
+
+This is the [Examples.Classical.CommutativeSemigroup][] module of the [Agda Universal Algebra Library][].
+
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 module Examples.Classical.CommutativeSemigroup where
@@ -27,3 +31,7 @@ open Polymorphic.CommutativeSemigroup-Op ℕ-commutativeSemigroup using ( _∙_ 
 ∙-is-+-cs : ∀ (a b : ℕ) → a ∙ b ≡ a + b
 ∙-is-+-cs a b = refl
 ```
+
+--------------------------------------
+
+{% include UALib.Links.md %}

@@ -251,15 +251,16 @@ of the monoid, definitionally equal to `∙ᴿ` since the position map is `id`),
 refold.  Mechanically identical to `Semigroup-Op.assoc-law` but on `𝑹` and pivoting
 through `mn-assoc 𝑴` in the middle.
 
-#### Raw Monoid and Monoid Builders
+#### Monoid Builders
 
-`opsToRawMonoid` builds a raw `Sig-Monoid`-algebra from a carrier, a binary operation,
-and an identity element.  It is `opsToMagma` followed by one `expand-ε`, building the
-magma over `≡.setoid A` and adjoining `e` as the interpretation of `ε-Op`.
+`opsToBareMonoid` builds a "raw" algebra in the signature of a monoid from a carrier,
+a binary operation, and an identity element.  It is `opsToMagma` followed by one
+`expand-ε`, building the magma over `≡.setoid A` and adjoining `e` as the
+interpretation of `ε-Op`.
 
 ```agda
-opsToRawMonoid : (A : Type α) (_·_ : A → A → A) (e : A) → Algebra {𝑆 = Sig-Monoid} α α
-opsToRawMonoid A _·_ e = expand-ε e
+opsToBareMonoid : (A : Type α) (_·_ : A → A → A) (e : A) → Algebra {𝑆 = Sig-Monoid} α α
+opsToBareMonoid A _·_ e = expand-ε e
 
   where
   open Algebra
@@ -276,7 +277,7 @@ opsToRawMonoid A _·_ e = expand-ε e
   expand-ε _ .Interp .cong {ε-Op , _} {.ε-Op , _} (≡.refl , _) = Setoid.refl 𝔻[ 𝑩 ]
 ```
 
-`eqsToMonoid` builds a Monoid by first building the raw algebra via `opsToRawMonoid`,
+`eqsToMonoid` builds a Monoid by first building the raw algebra via `opsToBareMonoid`,
 then proving the monoid laws from the given equations.  The proof is a verbatim port
 of `Semigroup-Op.assoc-law` to `Sig-Monoid` for associativity, and straightforward
 for the identity laws.
@@ -286,9 +287,9 @@ eqsToMonoid : (A : Type α) (_·_ : A → A → A) (e : A)
   → (·-assoc : ∀ a b c → (a · b) · c ≡ a · (b · c))
   → (·-idˡ : ∀ a → e · a ≡ a) (·-idʳ : ∀ a → a · e ≡ a)
   → Monoid α α
-eqsToMonoid A _·_ e ·-assoc ·-idˡ ·-idʳ = opsToRawMonoid A _·_ e , proof
+eqsToMonoid A _·_ e ·-assoc ·-idˡ ·-idʳ = opsToBareMonoid A _·_ e , proof
   where
-  proof : opsToRawMonoid A _·_ e ⊨ᵐᵒ Th-Monoid
+  proof : opsToBareMonoid A _·_ e ⊨ᵐᵒ Th-Monoid
   proof assoc ρ = ·-assoc (ρ 0F) (ρ 1F) (ρ 2F)
   proof idˡ ρ = ·-idˡ (ρ 0F)
   proof idʳ ρ = ·-idʳ (ρ 0F)

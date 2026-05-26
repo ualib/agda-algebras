@@ -31,7 +31,7 @@ operation-symbol interpretation, a named `<Structure>-Op` module housing the
 curried user-facing accessors so that downstream code can `open <Structure>-Op 𝑿`
 once and use the binary operation in infix form `a ∙ b` (mirroring the
 `open Magma M`-and-then-`a ∙ b` idiom of `Algebra.Bundles`), the curried-accessor
-body `_∙_ = Curry₂ (∙-Op ^ _)`, and the `opsTo`-<RawFamily>` constructor pattern.
+body `_∙_ = Curry₂ (∙-Op ^ _)`, and the `opsTo<family>` constructor pattern.
 
 Semigroup, Monoid, Group, Lattice, and Ring all follow this template.
 (Deviations require an ADR.)
@@ -127,10 +127,10 @@ For structures with non-empty theory, the analogous constructor takes one additi
 argument per equation in the theory — `eqsToSemigroup` takes an associativity
 proof, `eqsToMonoid` takes associativity plus the two identity laws, and so on.
 Magma's empty theory means `opsToMagma` takes no equation arguments.  This is the
-empty-theory edge case of the `opsTo`-<RawFamily> constructor pattern.
+empty-theory edge case of the `opsTo<family>` constructor pattern.
 
 ```agda
-opsToMagma : (A : Type α) → (A → A → A) → Magma α α
+opsToMagma : (A : Type α) (_·_ : A → A → A) → Magma α α
 opsToMagma A _·_ = record { Domain = ≡.setoid A ; Interp = interp }
   where
   interp : Func (⟨ Sig-Magma ⟩ _) _
