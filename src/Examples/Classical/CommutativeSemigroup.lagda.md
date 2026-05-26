@@ -15,12 +15,12 @@ open import Data.Nat.Properties                    using ( +-assoc ; +-comm )
 open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl )
 
 open import Classical.Small.Structures.CommutativeSemigroup
-  using ( CommutativeSemigroup ; fromCommSemigroupEqs )
+  using ( CommutativeSemigroup ; eqsToCommutativeSemigroup )
 
 import Classical.Structures.CommutativeSemigroup as Polymorphic
 
 ℕ-commutativeSemigroup : CommutativeSemigroup
-ℕ-commutativeSemigroup = fromCommSemigroupEqs ℕ _+_ +-assoc +-comm
+ℕ-commutativeSemigroup = eqsToCommutativeSemigroup ℕ _+_ +-assoc +-comm
 
 open Polymorphic.CommutativeSemigroup-Op ℕ-commutativeSemigroup using ( _∙_ )
 

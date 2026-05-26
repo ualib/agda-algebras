@@ -6,6 +6,13 @@ date: "2026-05-24"
 author: "the agda-algebras development team"
 ---
 
+### Level-fixed Commutative Monoid
+
+This is the [Classical.Small.Structures.CommutativeMonoid][] module of the [Agda Universal Algebra Library][].
+
+Specializes [`Classical.Structures.CommutativeMonoid`][] to the `0ℓ`–`0ℓ` case, mirroring the veneers of
+`Magma`, `Semigroup`, `Monoid`, etc.
+
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 module Classical.Small.Structures.CommutativeMonoid where
@@ -17,10 +24,10 @@ import Classical.Structures.CommutativeMonoid as Polymorphic
 CommutativeMonoid : Type (suc 0ℓ)
 CommutativeMonoid = Polymorphic.CommutativeMonoid 0ℓ 0ℓ
 
-fromCommMonoidEqs : (A : Type 0ℓ) (_·_ : A → A → A) (e : A)
+eqsToCommutativeMonoid : (A : Type 0ℓ) (_·_ : A → A → A) (e : A)
   → (∀ a b c → (a · b) · c ≡ a · (b · c))
   → (∀ a → e · a ≡ a) → (∀ a → a · e ≡ a)
   → (∀ a b → a · b ≡ b · a)
   → CommutativeMonoid
-fromCommMonoidEqs = Polymorphic.fromCommMonoidEqs
+eqsToCommutativeMonoid = Polymorphic.eqsToCommutativeMonoid
 ```

@@ -6,7 +6,7 @@ date: "2026-05-17"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-small-structures">Aggregator for level-fixed structure veneers</a>
+### Aggregator for Level-fixed Structures
 
 This is the [Classical.Small.Structures][] module of the [Agda Universal Algebra Library][].
 

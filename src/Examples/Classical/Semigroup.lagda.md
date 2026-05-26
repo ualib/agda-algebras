@@ -29,7 +29,7 @@ open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Classical.Bundles.Semigroup           using ( ⟨_⟩ˢᵍ ; ⟪_⟫ˢᵍ )
-open import Classical.Small.Structures.Semigroup  using ( Semigroup ; fromSemigroupEqs )
+open import Classical.Small.Structures.Semigroup  using ( Semigroup ; eqsToSemigroup )
 open import Examples.Classical.Magma              using ( ℕ-magma )
 
 import Classical.Structures.Semigroup as Polymorphic
@@ -37,34 +37,35 @@ import Classical.Structures.Semigroup as Polymorphic
 
 #### <a id="N-semigroup">The semigroup `(ℕ, +)`</a>
 
-We build `(ℕ, +)` directly from stdlib's `+-assoc`.  The `fromSemigroupEqs` constructor
+We build `(ℕ, +)` directly from stdlib's `+-assoc`.  The `eqsToSemigroup` constructor
 demands an associativity proof of exactly the shape
-`∀ a b c → (a + b) + c ≡ a + (b + c)`, which is `+-assoc`'s type up to the
+`∀ a b c → (a + b) + c ≡ a + (b + c)`, which is the type of `+-assoc` up to the
 definitional equality `Associative _+_ = ∀ x y z → (x + y) + z ≡ x + (y + z)`.
 
 ```agda
 ℕ-semigroup : Semigroup
-ℕ-semigroup = fromSemigroupEqs ℕ _+_ +-assoc
+ℕ-semigroup = eqsToSemigroup ℕ _+_ +-assoc
 
 open Polymorphic.Semigroup-Op ℕ-semigroup using ( _∙_ )
 ```
 
-#### <a id="acceptance">Acceptance checks</a>
+#### Acceptance checks
 
 `∙-Op` interpreted in `ℕ-semigroup` reduces definitionally to `_+_`: no opacity
-from the `fromPropEq` construction, from the factoring through `fromOp`, or from the
-`Curry₂` wrapping in the inherited named accessor.  Discharged by `refl`.
+from the `eqsToSemigroup` construction, from the factoring through
+`opsToMagma`, or from the `Curry₂` wrapping in the inherited named accessor;
+discharged by `refl`.
 
 ```agda
 ∙-is-+-sg : ∀ (a b : ℕ) → a ∙ b ≡ a + b
 ∙-is-+-sg a b = refl
 ```
 
-The forgetful image of `ℕ-semigroup` is the magma `ℕ-magma` from M3-3, *on the
-nose*.  This holds because `fromPropEq` is implemented as
-`(fromOp A _·_) , <proof>`, so `semigroup→magma (fromPropEq ℕ _+_ +-assoc)` reduces
-to `fromOp ℕ _+_`, which is exactly the definition of `ℕ-magma`.  Discharged by
-`refl`.
+The forgetful image of `ℕ-semigroup` is the magma `ℕ-magma` (from [M3-3]),
+*on the nose*.  This holds because `eqsToSemigroup` is implemented as
+`opsToMagma A _·_ , <proof>`, so `semigroup→magma (eqsToSemigroup ℕ _+_ +-assoc)`
+reduces to `opsToMagma ℕ _+_`, which is exactly the definition of `ℕ-magma`;
+discharged by `refl`.
 
 ```agda
 forgetful-agrees : Polymorphic.semigroup→magma ℕ-semigroup ≡ ℕ-magma
@@ -74,7 +75,7 @@ forgetful-agrees = refl
 The bundle bridge round-trips on `ℕ-semigroup` pointwise.  Both directions reduce
 by `pair a b 0F ⇉ a` and `pair a b 1F ⇉ b`, so propositional `refl` discharges the
 obligation at the curried form (per
-[ADR-002 v2 §6](../../docs/adr/002-classical-layer-design.md)).
+[ADR-002 v2](../../docs/adr/002-classical-layer-design.md)) §6.
 
 ```agda
 open Polymorphic.Semigroup-Op ⟪ ⟨ ℕ-semigroup ⟩ˢᵍ ⟫ˢᵍ using () renaming ( _∙_ to _·_ )

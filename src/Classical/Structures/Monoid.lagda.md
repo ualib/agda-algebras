@@ -70,7 +70,7 @@ open import Classical.Operations                    using ( pair ; Curry₂ ; Cu
 open import Classical.Signatures.Magma              using ( Sig-Magma ; Op-Magma ) renaming ( ∙-Op to ∙-Opᵐᵃ )
 open import Classical.Signatures.Monoid             using ( Sig-Monoid ; Op-Monoid ; ∙-Op ; ε-Op )
 open import Classical.Structures.Interpret          using ( interp-cong )
-open import Classical.Structures.Magma              using ( Magma ; module Magma-Op ; fromOp )
+open import Classical.Structures.Magma              using ( Magma ; module Magma-Op ; opsToMagma )
 open import Classical.Structures.Reduct             using ( reduct )
 open import Classical.Structures.Semigroup          using ( Semigroup ) renaming (_⊨_ to _⊨ˢᵍ_)
 open import Classical.Theories.Monoid               using ( Eq-Monoid ; Th-Monoid ; assoc ; idˡ ; idʳ )
@@ -251,20 +251,20 @@ of the monoid, definitionally equal to `∙ᴿ` since the position map is `id`),
 refold.  Mechanically identical to `Semigroup-Op.assoc-law` but on `𝑹` and pivoting
 through `mn-assoc 𝑴` in the middle.
 
-#### Bare-algebra builder and `fromPropEq` {#frommonoidops}
+#### Raw Monoid and Monoid Builders
 
-`fromMonoidOps` builds a `Sig-Monoid`-algebra from a carrier, a binary operation,
-and an identity element.  It is `fromOp` followed by one `expand-ε`, building the
+`opsToRawMonoid` builds a raw `Sig-Monoid`-algebra from a carrier, a binary operation,
+and an identity element.  It is `opsToMagma` followed by one `expand-ε`, building the
 magma over `≡.setoid A` and adjoining `e` as the interpretation of `ε-Op`.
 
 ```agda
-fromMonoidOps : (A : Type α) (_·_ : A → A → A) (e : A) → Algebra {𝑆 = Sig-Monoid} α α
-fromMonoidOps A _·_ e = expand-ε e
+opsToRawMonoid : (A : Type α) (_·_ : A → A → A) (e : A) → Algebra {𝑆 = Sig-Monoid} α α
+opsToRawMonoid A _·_ e = expand-ε e
 
   where
   open Algebra
   𝑩 : Algebra {𝑆 = Sig-Magma} _ _
-  𝑩 = fromOp A _·_
+  𝑩 = opsToMagma A _·_
   -- expand-ε is the expand half of the reduct/expand dual at the Sig-Magma ↪ Sig-Monoid
   -- step, written inline; we'll construct a shared `expand` module once Group's
   -- expand-⁻¹ provides a second consumer.
@@ -274,14 +274,21 @@ fromMonoidOps A _·_ e = expand-ε e
   expand-ε e .Interp ⟨$⟩ (ε-Op , _) = e
   expand-ε _ .Interp .cong {∙-Op , _} {.∙-Op , _} (≡.refl , u≈v) = cong (𝑩 .Interp) (≡.refl , u≈v)
   expand-ε _ .Interp .cong {ε-Op , _} {.ε-Op , _} (≡.refl , _) = Setoid.refl 𝔻[ 𝑩 ]
+```
 
-fromMonoidEqs : (A : Type α) (_·_ : A → A → A) (e : A)
+`eqsToMonoid` builds a Monoid by first building the raw algebra via `opsToRawMonoid`,
+then proving the monoid laws from the given equations.  The proof is a verbatim port
+of `Semigroup-Op.assoc-law` to `Sig-Monoid` for associativity, and straightforward
+for the identity laws.
+
+```agda
+eqsToMonoid : (A : Type α) (_·_ : A → A → A) (e : A)
   → (·-assoc : ∀ a b c → (a · b) · c ≡ a · (b · c))
   → (·-idˡ : ∀ a → e · a ≡ a) (·-idʳ : ∀ a → a · e ≡ a)
   → Monoid α α
-fromMonoidEqs A _·_ e ·-assoc ·-idˡ ·-idʳ = fromMonoidOps A _·_ e , proof
+eqsToMonoid A _·_ e ·-assoc ·-idˡ ·-idʳ = opsToRawMonoid A _·_ e , proof
   where
-  proof : (fromMonoidOps A _·_ e) ⊨ᵐᵒ Th-Monoid
+  proof : opsToRawMonoid A _·_ e ⊨ᵐᵒ Th-Monoid
   proof assoc ρ = ·-assoc (ρ 0F) (ρ 1F) (ρ 2F)
   proof idˡ ρ = ·-idˡ (ρ 0F)
   proof idʳ ρ = ·-idʳ (ρ 0F)

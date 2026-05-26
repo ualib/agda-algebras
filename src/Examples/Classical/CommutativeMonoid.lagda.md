@@ -23,7 +23,7 @@ open import Relation.Binary.PropositionalEquality  using  ( _≡_ ; refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Classical.Small.Structures.CommutativeMonoid
-  using  ( CommutativeMonoid ; fromCommMonoidEqs )
+  using  ( CommutativeMonoid ; eqsToCommutativeMonoid )
 
 import Classical.Structures.CommutativeMonoid as Polymorphic
 ```
@@ -33,7 +33,7 @@ We construct `(ℕ, +, 0)` from stdlib's `+-assoc`, `+-identityˡ`, `+-identity�
 
 ```agda
 ℕ-commutativeMonoid : CommutativeMonoid
-ℕ-commutativeMonoid = fromCommMonoidEqs ℕ _+_ zero +-assoc +-identityˡ +-identityʳ +-comm
+ℕ-commutativeMonoid = eqsToCommutativeMonoid ℕ _+_ zero +-assoc +-identityˡ +-identityʳ +-comm
 
 open Polymorphic.CommutativeMonoid-Op ℕ-commutativeMonoid using ( _∙_ ; ε )
 

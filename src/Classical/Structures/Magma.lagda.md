@@ -31,7 +31,7 @@ operation-symbol interpretation, a named `<Structure>-Op` module housing the
 curried user-facing accessors so that downstream code can `open <Structure>-Op 𝑿`
 once and use the binary operation in infix form `a ∙ b` (mirroring the
 `open Magma M`-and-then-`a ∙ b` idiom of `Algebra.Bundles`), the curried-accessor
-body `_∙_ = Curry₂ (∙-Op ^ _)`, and the `fromOp`-family constructor pattern.
+body `_∙_ = Curry₂ (∙-Op ^ _)`, and the `opsTo`-<RawFamily>` constructor pattern.
 
 Semigroup, Monoid, Group, Lattice, and Ring all follow this template.
 (Deviations require an ADR.)
@@ -115,23 +115,23 @@ module Magma-Op {α ρ : Level} (𝑴 : Magma α ρ) where
   _∙_ = Curry₂ (∙-Op ^ 𝑴)
 ```
 
-#### <a id="fromOp">From a bare type and a binary operation</a>
+#### From a bare type and a binary operation
 
 The single most common use case for downstream consumers is constructing a magma
-from a bare type `A : Type α` and a binary operation `_·_ : A → A → A`.  The `fromOp`
-function performs the construction.  The underlying setoid is the
-propositional-equality setoid `≡.setoid A`, and the interpretation of `∙-Op`
+from a bare type `A : Type α` and a binary operation `_·_ : A → A → A`.
+The `opsToMagma` function performs the construction.  The underlying setoid is
+the propositional-equality setoid `≡.setoid A`, and the interpretation of `∙-Op`
 uncurries `_·_` back into the tuple-indexed form the algebra demands.
 
 For structures with non-empty theory, the analogous constructor takes one additional
-argument per equation in the theory — `Semigroup`'s `fromPropEq` takes an
-associativity proof, `Monoid`'s takes associativity plus the two identity laws, and
-so on.  Magma's empty theory means `fromOp` takes no equation arguments.  This is the
-empty-theory edge case of the `fromOp`-family constructor pattern.
+argument per equation in the theory — `eqsToSemigroup` takes an associativity
+proof, `eqsToMonoid` takes associativity plus the two identity laws, and so on.
+Magma's empty theory means `opsToMagma` takes no equation arguments.  This is the
+empty-theory edge case of the `opsTo`-<RawFamily> constructor pattern.
 
 ```agda
-fromOp : (A : Type α) → (A → A → A) → Magma α α
-fromOp A _·_ = record { Domain = ≡.setoid A ; Interp = interp }
+opsToMagma : (A : Type α) → (A → A → A) → Magma α α
+opsToMagma A _·_ = record { Domain = ≡.setoid A ; Interp = interp }
   where
   interp : Func (⟨ Sig-Magma ⟩ _) _
   interp ⟨$⟩ (∙-Op , args) = args 0F · args 1F

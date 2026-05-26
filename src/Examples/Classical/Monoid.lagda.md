@@ -29,7 +29,7 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Classical.Bundles.Monoid           using ( ⟨_⟩ᵐⁿ ; ⟪_⟫ᵐⁿ )
-open import Classical.Small.Structures.Monoid  using ( Monoid ; fromMonoidEqs )
+open import Classical.Small.Structures.Monoid  using ( Monoid ; eqsToMonoid )
 
 import Classical.Structures.Monoid as Polymorphic
 ```
@@ -38,7 +38,7 @@ import Classical.Structures.Monoid as Polymorphic
 
 ```agda
 list-monoid : Monoid
-list-monoid = fromMonoidEqs (List ℕ) _++_ [] ++-assoc ++-identityˡ ++-identityʳ
+list-monoid = eqsToMonoid (List ℕ) _++_ [] ++-assoc ++-identityˡ ++-identityʳ
 
 open Polymorphic.Monoid-Op list-monoid using ( _∙_ ; ε )
 ```

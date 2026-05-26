@@ -6,7 +6,7 @@ date: "2026-05-18"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-small-semigroup">Level-fixed semigroup veneer</a>
+### Level-fixed Semigroups
 
 This is the [Classical.Small.Structures.Semigroup][] module of the [Agda Universal Algebra Library][].
 
@@ -32,24 +32,24 @@ open import Relation.Binary.PropositionalEquality  using ( _≡_ )
 import Classical.Structures.Semigroup as Polymorphic
 ```
 
-#### <a id="the-type">The level-fixed type</a>
+#### The Level-fixed Semigroup Type
 
 ```agda
 Semigroup : Type (suc 0ℓ)
 Semigroup = Polymorphic.Semigroup 0ℓ 0ℓ
 ```
 
-#### Small `fromSemigroupEqs`
+#### Small `eqsToSemigroup`
 
-The polymorphic `fromSemigroupEqs` specializes immediately: with `α = 0ℓ`, it produces
+The polymorphic `eqsToSemigroup` specializes immediately: with `α = 0ℓ`, it produces
 a `Polymorphic.Semigroup 0ℓ 0ℓ` from `(A : Type 0ℓ)`, a binary operation, and an
 associativity proof, which is exactly the level-fixed `Semigroup` above.
 
 ```agda
-fromSemigroupEqs  : (A : Type 0ℓ) (_·_ : A → A → A)
+eqsToSemigroup  : (A : Type 0ℓ) (_·_ : A → A → A)
   → (∀ a b c → (a · b) · c ≡ a · (b · c))
   → Semigroup
-fromSemigroupEqs = Polymorphic.fromSemigroupEqs
+eqsToSemigroup = Polymorphic.eqsToSemigroup
 ```
 
 --------------------------------------

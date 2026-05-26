@@ -35,7 +35,7 @@ M3-8).  Specifically, the conventions documented and embodied here are:
    alias; the explicit codomain is a load-test outcome from the original M3-2
    branch.  The alias's body unfolds `Modᵗ Th-X` once at the point of use.
 +  **Named accessor module `<Structure>-Op`**.  The signature-mechanics convention
-   from M3-3 — one named parametric module per structure exposing curried,
+   — one named parametric module per structure exposing curried,
    infix-friendly accessors so that downstream code can `open <Structure>-Op 𝑿` once
    and write `a ∙ b` thereafter — extends to equation-bearing structures by additively
    re-exporting the predecessor's accessors through the forgetful projection and by
@@ -68,21 +68,17 @@ M3-8).  Specifically, the conventions documented and embodied here are:
    hierarchy expresses inheritance type-theoretically: a group `𝑮` is a monoid via
    `group→monoid 𝑮`, a semigroup via `monoid→semigroup ∘ group→monoid`, and a magma
    via `semigroup→magma ∘ monoid→semigroup ∘ group→monoid`.
-+  **`fromPropEq`-family constructor factoring through the predecessor's `fromOp`**.
-   The user-facing constructor `fromPropEq` builds a semigroup from a bare type `A`,
++  **`eqsTo`-family constructor factoring through the predecessor's `opsTo`-family**.
+   The user-facing constructor `eqsToSemigroup` builds a semigroup from a bare type `A`,
    a binary operation `_·_ : A → A → A`, and one propositional-equality proof per
    equation in the theory (here, one `·-assoc` proof).  Its definition factors
-   through M3-3's `fromOp`: `fromPropEq A _·_ ·-assoc = fromOp A _·_ , <proof>`,
-   reusing the M3-3-built underlying-algebra construction rather than rebuilding it.
+   through `opsTo`: `eqsTo A _·_ ·-assoc = opsTo A _·_ , <proof>`, reusing the
+   underlying-algebra construction rather than rebuilding it.
    This factoring has two payoffs: it keeps the per-structure constructor short, and
-   it makes the forgetful acceptance criterion `semigroup→magma (fromPropEq A _·_ _)
-   ≡ fromOp A _·_` discharge by `refl`.  Subsequent `fromPropEq`-family constructors
-   (Monoid's, Group's, Lattice's, Ring's) follow the same shape, each factoring
-   through their immediate predecessor's `fromX` constructor.
-
-The pull-up of `fromPropEq` to a shared infrastructure location is deferred until
-at least Monoid (M3-6) confirms the shape generalizes — premature shared abstraction
-is the failure mode that the M3-1a non-goals list (#326) warns against.
+   it makes the forgetful acceptance criterion `semigroup→magma (eqsTo A _·_ _)
+   ≡ opsTo A _·_` discharge by `refl`.  Subsequent `eqsTo`-family constructors
+   (for Monoid, Group, Lattice, Ring) follow the same shape, each factoring
+   through their immediate predecessor's `opsTo`/`eqsTo` constructors.
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -107,7 +103,7 @@ open Func renaming ( to to _⟨$⟩_ )
 -- Imports from the Agda Universal Algebra Library -----------------------------------------------
 open import Classical.Operations                   using ( pair )
 open import Classical.Signatures.Magma             using ( Sig-Magma ; ∙-Op )
-open import Classical.Structures.Magma             using ( Magma ; fromOp ; module Magma-Op )
+open import Classical.Structures.Magma             using ( Magma ; opsToMagma ; module Magma-Op )
 open import Classical.Theories.Semigroup           using ( Eq-Semigroup ; Th-Semigroup ; assoc )
 open import Overture.Terms {𝑆 = Sig-Magma}         using ( Term ; ℊ ; node )
 open import Setoid.Algebras.Basic {𝑆 = Sig-Magma}  using ( Algebra ; 𝔻[_] ; 𝕌[_] )
@@ -216,29 +212,30 @@ module Semigroup-Op {α ρ : Level} (𝑺 : Semigroup α ρ) where
     rhsT = node ∙-Op (pair (ℊ 0F) Rt)
 ```
 
-#### `fromSemigroupEqs`
+#### `eqsToSemigroup`
 
-`fromSemigroupEqs` is the canonical constructor for downstream users.  Given a carrier
+This is the canonical constructor for downstream users.  Given a carrier
 type `A`, a binary operation `_·_ : A → A → A`, and a propositional-equality
 associativity proof `·-assoc`, it returns a `Semigroup α α`.  The construction
-factors through M3-3's `fromOp` so that the underlying-algebra portion is shared
-with `Magma`'s constructor — this is what makes the forgetful agreement criterion
-`semigroup→magma ∘ fromSemigroupEqs A _·_ _ ≡ fromOp A _·_` discharge by `refl`.
+factors through `opsToMagma` so that the underlying-algebra portion is shared with
+the `Magma` constructor — this is what makes the forgetful agreement criterion
+`semigroup→magma ∘ eqsToSemigroup A _·_ _ ≡ opsToMagma A _·_` discharge by
+`refl`.
 
 The associativity proof discharges by direct evaluation: under `≡.setoid A`, the
 setoid equivalence is propositional equality; the interpretation of
-`(ℊ 0F ∙ ℊ 1F) ∙ ℊ 2F` in `fromOp A _·_` under an environment `ρ` reduces
+`(ℊ 0F ∙ ℊ 1F) ∙ ℊ 2F` in `opsToMagma A _·_` under an environment `ρ` reduces
 definitionally to `(ρ 0F · ρ 1F) · ρ 2F`, and the mirror reduction holds for the
 right-associated term, so `·-assoc (ρ 0F) (ρ 1F) (ρ 2F)` is exactly the proof
 required.
 
 ```agda
-fromSemigroupEqs : (A : Type α) (_·_ : A → A → A)
+eqsToSemigroup : (A : Type α) (_·_ : A → A → A)
   → (·-assoc : ∀ a b c → (a · b) · c ≡ a · (b · c))
   → Semigroup α α
-fromSemigroupEqs A _·_ ·-assoc = fromOp A _·_ , proof
+eqsToSemigroup A _·_ ·-assoc = opsToMagma A _·_ , proof
   where
-  proof : (fromOp A _·_) ⊨ Th-Semigroup
+  proof : opsToMagma A _·_ ⊨ Th-Semigroup
   proof assoc ρ = ·-assoc (ρ 0F) (ρ 1F) (ρ 2F)
 ```
 
