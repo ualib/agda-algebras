@@ -6,7 +6,7 @@ date: "2026-05-24"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-structures-commutativesemigroup">Commutative semigroups</a>
+### Commutative Semigroups
 
 This is the [Classical.Structures.CommutativeSemigroup][] module of the [Agda Universal Algebra Library][].
 
@@ -35,7 +35,7 @@ open import Relation.Binary.PropositionalEquality  using ( _≡_ )
 
 -- Imports from the Agda Universal Algebra Library --------------------------------
 open import Classical.Signatures.Magma               using  ( Sig-Magma )
-open import Classical.Structures.Magma               using  ( fromOp )
+open import Classical.Structures.Magma               using  ( opsToMagma )
 open import Classical.Structures.Semigroup           using  ( Semigroup ; module Semigroup-Op )
 open import Classical.Theories.Semigroup             using  ( Th-Semigroup ; assoc )
 open import Classical.Theories.CommutativeSemigroup  using  ( Eq-CommutativeSemigroup
@@ -70,7 +70,7 @@ commutativeSemigroup→semigroup : CommutativeSemigroup α ρ → Semigroup α �
 commutativeSemigroup→semigroup (𝑨 , mod) = 𝑨 , λ { assoc → mod assocᶜ }
 ```
 
-#### <a id="op">The `CommutativeSemigroup-Op` module</a>
+#### The `CommutativeSemigroup-Op` module
 
 ```agda
 module CommutativeSemigroup-Op {α ρ : Level} (𝑪 : CommutativeSemigroup α ρ) where
@@ -91,16 +91,16 @@ module CommutativeSemigroup-Op {α ρ : Level} (𝑪 : CommutativeSemigroup α �
           η = λ { 0F → x ; 1F → y ; 2F → x }
 ```
 
-#### `fromCommSemigroupEqs`
+#### `eqsToCommutativeSemigroup`
 
 ```agda
-fromCommSemigroupEqs : (A : Type α) (_·_ : A → A → A)
+eqsToCommutativeSemigroup : (A : Type α) (_·_ : A → A → A)
   → (·-assoc : ∀ a b c → (a · b) · c ≡ a · (b · c))
   → (·-comm  : ∀ a b → a · b ≡ b · a)
   → CommutativeSemigroup α α
-fromCommSemigroupEqs A _·_ ·-assoc ·-comm = fromOp A _·_ , proof
+eqsToCommutativeSemigroup A _·_ ·-assoc ·-comm = opsToMagma A _·_ , proof
   where
-  proof : (fromOp A _·_) ⊨ᶜˢᵍ Th-CommutativeSemigroup
+  proof : opsToMagma A _·_ ⊨ᶜˢᵍ Th-CommutativeSemigroup
   proof assocᶜ ρ = ·-assoc (ρ 0F) (ρ 1F) (ρ 2F)
   proof comm   ρ = ·-comm  (ρ 0F) (ρ 1F)
 ```

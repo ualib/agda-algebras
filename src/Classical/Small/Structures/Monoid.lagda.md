@@ -6,12 +6,12 @@ date: "2026-05-24"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-small-monoid">Level-fixed monoid veneer</a>
+### Level-fixed Monoid
 
 This is the [Classical.Small.Structures.Monoid][] module of the [Agda Universal Algebra Library][].
 
-Specializes [`Classical.Structures.Monoid`][] to the `0ℓ`–`0ℓ` case, mirroring the
-magma and semigroup veneers.
+Specializes [`Classical.Structures.Monoid`][] to the `0ℓ`–`0ℓ` case, mirroring the analogous
+veneers for `Magma`, `Semigroup`, etc.
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -27,11 +27,11 @@ import Classical.Structures.Monoid as Polymorphic
 Monoid : Type (suc 0ℓ)
 Monoid = Polymorphic.Monoid 0ℓ 0ℓ
 
-fromMonoidEqs : (A : Type 0ℓ) (_·_ : A → A → A) (e : A)
+eqsToMonoid : (A : Type 0ℓ) (_·_ : A → A → A) (e : A)
   → (∀ a b c → (a · b) · c ≡ a · (b · c))
   → (∀ a → e · a ≡ a) → (∀ a → a · e ≡ a)
   → Monoid
-fromMonoidEqs = Polymorphic.fromMonoidEqs
+eqsToMonoid = Polymorphic.eqsToMonoid
 ```
 
 --------------------------------------

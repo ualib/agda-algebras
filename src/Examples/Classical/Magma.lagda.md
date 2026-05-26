@@ -29,23 +29,23 @@ open import Relation.Binary.PropositionalEquality   using ( _≡_ ; refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Classical.Bundles.Magma             using ( ⟨_⟩ᵐᵃ ; ⟪_⟫ᵐᵃ )
-open import Classical.Small.Structures.Magma    using ( Magma ; fromOp )
-import      Classical.Structures.Magma          as Poly
+open import Classical.Small.Structures.Magma    using ( Magma ; opsToMagma )
+import      Classical.Structures.Magma          as Polymorphic
 ```
 
 #### <a id="N-magma">The magma `(ℕ, +)`</a>
 
 ```agda
 ℕ-magma : Magma
-ℕ-magma = fromOp ℕ _+_
+ℕ-magma = opsToMagma ℕ _+_
 
-open Poly.Magma-Op ℕ-magma using ( _∙_ )
+open Polymorphic.Magma-Op ℕ-magma using ( _∙_ )
 ```
 
 #### <a id="acceptance">Acceptance checks</a>
 
 `∙-Op` interpreted in `ℕ-magma` reduces definitionally to `_+_`: no opacity from
-the `fromOp` construction, no opacity from the `Curry₂` wrapping in the named
+the `binaryOpToMagma` construction, no opacity from the `Curry₂` wrapping in the named
 accessor.  Discharged by `refl`.
 
 ```agda
@@ -59,7 +59,7 @@ obligation at the curried form (per
 [ADR-002 v2 §6](../../docs/adr/002-classical-layer-design.md)).
 
 ```agda
-open Poly.Magma-Op ⟪ ⟨ ℕ-magma ⟩ᵐᵃ ⟫ᵐᵃ using () renaming ( _∙_ to _·_ )
+open Polymorphic.Magma-Op ⟪ ⟨ ℕ-magma ⟩ᵐᵃ ⟫ᵐᵃ using () renaming ( _∙_ to _·_ )
 
 roundtrip-ℕ-ma : ∀ (a b : ℕ) → a · b ≡ a + b
 roundtrip-ℕ-ma a b = refl

@@ -6,18 +6,18 @@ date: "2026-05-17"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-small-magma">Level-fixed magma veneer</a>
+### Level-fixed Magmas
 
 This is the [Classical.Small.Structures.Magma][] module of the [Agda Universal Algebra Library][].
 
 This module specializes [`Classical.Structures.Magma`][] to the common case where
 both the carrier level and the equivalence level are `0ℓ` — Set-valued
-carriers with propositional or set-truncated equivalence.  Finite-template CSP
-(M7), the finite cases relevant to FLRP intuition (M6), and the tutorial
-contexts in [`Examples/`][Examples] and [`Demos/`][Demos] typically live in this
-small case; pulling the level-fixed specialization out keeps the polymorphic
-core unencumbered while giving downstream consumers a flat import without
-universe polymorphism in the foreground.
+carriers with propositional or set-truncated equivalence.  Finite-template CSP,
+the finite cases relevant to FLRP intuition, and the tutorial contexts in
+[`Examples/`][Examples] and [`Demos/`][Demos] typically live in this small case;
+pulling the level-fixed specialization out keeps the polymorphic core unencumbered
+while giving downstream consumers a flat import without universe polymorphism in the
+foreground.
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -32,22 +32,22 @@ open import Level           using ( 0ℓ ; suc )
 import Classical.Structures.Magma as Polymorphic
 ```
 
-#### <a id="the-type">The level-fixed type</a>
+#### The level-fixed Magma Type
 
 ```agda
 Magma : Type (suc 0ℓ)
 Magma = Polymorphic.Magma 0ℓ 0ℓ
 ```
 
-#### <a id="fromOp">Small `fromOp`</a>
+#### Small `opsToMagma`
 
-The polymorphic `fromOp` specializes immediately: with `α = 0ℓ`, it produces
+The polymorphic `opsToMagma` specializes immediately: with `α = 0ℓ`, it produces
 a `Polymorphic.Magma 0ℓ 0ℓ` from `(A : Type 0ℓ) → (A → A → A)`, which
 is exactly the level-fixed `Magma` above.
 
 ```agda
-fromOp : (A : Type 0ℓ) → (A → A → A) → Magma
-fromOp = Polymorphic.fromOp
+opsToMagma : (A : Type 0ℓ) → (A → A → A) → Magma
+opsToMagma = Polymorphic.opsToMagma
 ```
 
 --------------------------------------

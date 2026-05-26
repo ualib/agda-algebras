@@ -6,6 +6,13 @@ date: "2026-05-24"
 author: "the agda-algebras development team"
 ---
 
+### Level-fixed Commutative Semigroup
+
+This is the [Classical.Small.Structures.CommutativeSemigroup][] module of the [Agda Universal Algebra Library][].
+
+Specializes [`Classical.Structures.CommutativeSemigroup`][] to the `0ℓ`–`0ℓ` case, mirroring the veneers of
+`Magma`, `Semigroup`, etc.
+
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 module Classical.Small.Structures.CommutativeSemigroup where
@@ -17,9 +24,9 @@ import Classical.Structures.CommutativeSemigroup as Polymorphic
 CommutativeSemigroup : Type (suc 0ℓ)
 CommutativeSemigroup = Polymorphic.CommutativeSemigroup 0ℓ 0ℓ
 
-fromCommSemigroupEqs : (A : Type 0ℓ) (_·_ : A → A → A)
+eqsToCommutativeSemigroup : (A : Type 0ℓ) (_·_ : A → A → A)
   → (∀ a b c → (a · b) · c ≡ a · (b · c))
   → (∀ a b → a · b ≡ b · a)
   → CommutativeSemigroup
-fromCommSemigroupEqs = Polymorphic.fromCommSemigroupEqs
+eqsToCommutativeSemigroup = Polymorphic.eqsToCommutativeSemigroup
 ```
