@@ -24,11 +24,12 @@ and continues issue-by-issue under milestone M3.
 
 module Examples.Classical where
 
-open import Examples.Classical.Magma public
-open import Examples.Classical.Semigroup public
-open import Examples.Classical.Monoid public
-open import Examples.Classical.CommutativeMonoid public
 open import Examples.Classical.CommutativeSemigroup public
+open import Examples.Classical.CommutativeMonoid public
+open import Examples.Classical.Magma public
+open import Examples.Classical.Monoid public
+open import Examples.Classical.Semigroup public
+open import Examples.Classical.Semilattice public
 ```
 
 --------------------------------------

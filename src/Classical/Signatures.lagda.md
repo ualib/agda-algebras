@@ -25,6 +25,7 @@ This file is the umbrella for the subtree.
 
 module Classical.Signatures where
 
+open import Classical.Signatures.Lattice public
 open import Classical.Signatures.Magma public
 open import Classical.Signatures.Monoid public
 ```
