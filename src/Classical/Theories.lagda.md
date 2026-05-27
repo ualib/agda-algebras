@@ -31,10 +31,12 @@ under milestone M3, each paired with a corresponding
 
 module Classical.Theories where
 
-open import Classical.Theories.Semigroup public
-open import Classical.Theories.Monoid public
-open import Classical.Theories.CommutativeSemigroup public
 open import Classical.Theories.CommutativeMonoid public
+open import Classical.Theories.CommutativeSemigroup public
+open import Classical.Theories.Lattice public
+open import Classical.Theories.Monoid public
+open import Classical.Theories.Semigroup public
+open import Classical.Theories.Semilattice public
 ```
 
 --------------------------------------
