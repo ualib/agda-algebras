@@ -61,11 +61,10 @@ most of the tree.
 
 ### Scaffold status
 
-This file is the umbrella for the `Classical/` tree.  At the moment this scaffold
-lands, the five quintuple subtree aggregators below exist but are empty; concrete
-structures arrive issue-by-issue under milestone M3 (#260, with M3-2 onward landing
-one structure each).  The `Properties` aggregator is added later (M3-7) as the first
-per-structure derived-results module lands.
+This file is the umbrella for the `Classical/` tree.  The five quintuple subtree
+aggregators below re-export concrete structures as they land under milestone M3,
+and the `Properties` aggregator was added in M3-7 for per-structure
+derived-results modules.
 
 
 ```agda
