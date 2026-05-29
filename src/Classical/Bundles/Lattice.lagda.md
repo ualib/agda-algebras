@@ -11,9 +11,9 @@ author: "the agda-algebras development team"
 This is the [Classical.Bundles.Lattice][] module of the [Agda Universal Algebra Library][].
 
 Bridges `Classical.Structures.Lattice` to stdlib's `Algebra.Lattice.Bundles.Lattice`.
-This is the first bundle bridge with two distinct binary operations and the
-first whose stdlib target lives in `Algebra.Lattice.Bundles` (rather than
-`Algebra.Bundles`).
+This is the first bundle bridge with two distinct binary operations; like the
+Semilattice bridge, its stdlib target lives in `Algebra.Lattice.Bundles` rather
+than `Algebra.Bundles`.
 
 Two derivations cross the bridge.  The forward direction (`⟨_⟩ˡᵃ`) needs the
 stdlib-canonical absorption form `∨ Absorbs ∧` — i.e. `x ∨ (x ∧ y) ≈ x` — from
