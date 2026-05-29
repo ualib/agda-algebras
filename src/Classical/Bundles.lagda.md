@@ -36,6 +36,7 @@ module Classical.Bundles where
 
 open import Classical.Bundles.CommutativeMonoid public
 open import Classical.Bundles.CommutativeSemigroup public
+open import Classical.Bundles.Lattice public
 open import Classical.Bundles.Magma public
 open import Classical.Bundles.Monoid public
 open import Classical.Bundles.Semigroup public
