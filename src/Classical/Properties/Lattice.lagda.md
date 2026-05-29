@@ -18,11 +18,10 @@ equations — we construct the partial order `x ≤ y := x ∧ y ≈ x` and show
 `_∧_` and `_∨_` are the binary meet and join with respect to it.
 
 The dual order characterization `x ≤ y ⇔ x ∨ y ≈ y` is proved as the connecting
-lemma; absorption is used in exactly that one place.  The partial-order
-properties (reflexivity, transitivity, antisymmetry, congruence in `≈`) and the
-GLB/LUB properties (universal property of meet and join with respect to `_≤_`)
-follow from associativity, commutativity, and idempotency together with the
-connecting lemma — assoc/comm/idem alone do not suffice for the LUB direction.
+lemma.  The partial-order properties and the GLB properties use only
+associativity, commutativity, and idempotency; the join upper-bound clauses use
+absorption directly, and the join leastness proof routes through the connecting
+lemma.
 
 This is the first module in `Classical/Properties/`.  The directory is a
 by-concern parallel of `Classical/Structures/`, `Classical/Bundles/`, etc., for
@@ -74,9 +73,9 @@ The join-form `x ∨ y ≈ y` is proved iff-equivalent below.
 
 **Connecting lemma: meet-form and join-form agree.**  Forward direction uses
 the second absorption law (in its `absorbʳ-law` shape: `(y ∧ x) ∨ y ≈ y`);
-backward direction uses the first.  This is the *only* place absorption is
-invoked in this module — all the partial-order and GLB results below need only
-associativity, commutativity, and idempotency.
+backward direction uses the first.  The partial-order and GLB results below need
+only associativity, commutativity, and idempotency; the join upper-bound clauses
+use absorption directly.
 
 ```agda
   ≤-via-∨ : ∀ {x y} → x ≤ y → x ∨ y ≈ y
