@@ -6,6 +6,7 @@
 
 Accepted — 2026-04-24.
 Revised v2 — 2026-05-17, following the M3-2 (Semigroup) load test.
+Amended v2.1 — 2026-05-28, adds §10 on `Classical/Properties/` following the M3-7 (Lattice) order-theoretic equivalence work.
 
 ---
 
@@ -147,6 +148,16 @@ with the basepoint `p` interpreted via `p-Op ^ 𝑮`.  The equational theory `Th
 
 The naming convention for nullary operation symbols mirrors the binary case: `<symbol>-Op` (`∙-Op`, `ε-Op`, `0-Op`, `1-Op`, `⊤-Op`, `⊥-Op`).  Hyphenation reads aloud the way an algebraist pronounces these — "dot-op," "epsilon-op," "zero-op" — and greps cleanly.
 
+### 10.  `Classical/Properties/` for derived results
+
+A sixth subtree `Classical/Properties/` (sibling of `Signatures/`, `Theories/`, `Structures/`, `Bundles/`, `Small/`) houses *derived* results about classical structures — theorems that are properties of a fixed inhabitant of one of the structures defined in `Classical/Structures/`, rather than part of the structure's definition.  Each per-structure file `Classical/Properties/X.lagda.md` consumes `X-Op`'s curried accessors and proves further facts about a parameterized `(𝑿 : X α ρ)`.
+
+The inaugural inhabitant is `Classical.Properties.Lattice`, which proves the meet-join / order-theoretic equivalence: the partial order `x ≤ y := x ∧ y ≈ x` induced by the algebraic data, with the partial-order witnesses and the proof that `_∧_` and `_∨_` are the binary meet and join with respect to it.  Future inhabitants of this subtree include, for example, uniqueness of inverses in `Classical.Properties.Group`, `0 · x ≈ 0` in `Classical.Properties.Ring`, and the order-induced semilattice on a `Semilattice`.
+
+Unlike the five quintuple subtrees, `Classical/Properties/` is *sparse*: per-structure files are added only as concrete derived results accrue, not maintained as a uniform one-file-per-structure shape.  An umbrella aggregator `Classical.Properties` re-exports each per-structure file as it lands.
+
+The decision to organize by *concern* (a top-level `Classical/Properties/` directory housing per-structure files) rather than by *structure* (per-structure subdirectories such as `Classical/Lattice/Properties.lagda.md`) was made for consistency with the existing tree's organization: every other file in `Classical/` lives under a concern-named directory, with the structure as the leaf name.  Per-structure subdirectories for properties alone would mix two organizing axes and create an asymmetry a reader would have to memorize.  The choice also mirrors stdlib's `Algebra.Lattice.Properties.Lattice` layout.
+
 ---
 
 ## Empirical revision history
@@ -203,6 +214,9 @@ The revisions above are the response to these findings.  No part of the original
 
 +  **Mass rename of unicode in the existing `Setoid/` tree**.  Considered for consistency with the long-form-name convention adopted for new `Classical/` code.  Rejected as churn for no architectural benefit: `Setoid/` is well-established reference material, the unicode there is mostly category-1 (standard mathematical notation) anyway, and a rename would invalidate existing tutorials, papers, and external references to specific identifiers.  Policy is per-tree: new `Classical/` long-form, existing `Setoid/` retained.
 
++  **Per-structure `Classical/<X>/Properties.lagda.md` subdirectories** (e.g. `Classical/Lattice/Properties.lagda.md`).  Considered as a layout option for derived results when M3-7's lattice order-theoretic equivalence motivated the first Properties module.  Rejected for organizational uniformity: the existing tree organizes strictly by concern (one axis = concern as directory, leaf = structure), and per-structure subdirectories for properties alone would mix two organizing axes (concern-as-directory for everything else, structure-as-directory only for properties).  By-concern (§10) keeps the existing pattern uniform and mirrors stdlib's layout.
+
+
 ---
 
 ## References
@@ -213,6 +227,7 @@ The revisions above are the response to these findings.  No part of the original
 +  Issue M3-3 — [Classical.Magma](https://github.com/ualib/agda-algebras/issues/330).
 +  Issue M3-4 — [Classical.Semigroup](https://github.com/ualib/agda-algebras/issues/261) (reformulated; supersedes original body).
 +  Issue M3-5 — Stdlib bundle bridges (continued).
++  Issue M3-7 — [Classical.Semilattice and Classical.Lattice](https://github.com/ualib/agda-algebras/issues/264) (the order-theoretic equivalence motivating §10).
 +  ADR-001 — `Setoid/` as canonical development tree (the foundation `Classical/` builds on).
 +  ADR-003 — Cubical Agda as the canonical long-term target (the discipline `Classical/` enforces).
 +  `docs/STYLE_GUIDE.md` — sections on record vs Σ, on unicode usage, on long-form vs bracket projection names.
