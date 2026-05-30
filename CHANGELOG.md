@@ -66,7 +66,7 @@ The 3.0 release is a major reconstruction of agda-algebras building on the Setoi
 
 ### Deprecated
 
-+  **`docs/INSTALL_AGDA.md`** superseded by `INSTALL.md`.  Retained with a deprecation banner; will be removed in a future release.
++  **`docs/INSTALL_AGDA.md`** superseded by `INSTALL.md`.  ~Retained with a deprecation banner; will be removed in a future release.~ removed
 +  **Legacy.Base.Terms.{Term, ℊ, node}** (M2-6, #303).  Use `Overture.Terms.{Term, ℊ, node}` instead.  The two `Term` types are definitionally identical; migration is a pure import rewrite.
 +  **Legacy.Base.Relations.Quotients.{Equivalence, [_], 0[_]Equivalence, 0[_]IsEquivalence}** (M2-6, #303).  Use `Overture.Relations` instead.
 +  **Legacy.Base.Relations.Discrete.{0[_], kerRel, kerRelOfEquiv, kernelRel, Im_⊆_, _preserves_, _|:_, eval-rel, eval-pred}** (M2-6, #303).  Use `Overture.Relations` instead.

@@ -61,7 +61,7 @@ experimental-features = nix-command flakes
 build-users-group =
 sandbox = false
 substituters = https://cache.nixos.org https://formalverification.cachix.org
-trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= formalverification.cachix.org-1:<PASTE_KEY_FROM_cachix_use>
+trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= formalverification.cachix.org-1:KG/AJuuli2F4/bA56rUYC9V8ZE/Zw6iZjxJEf40cQOo=
 max-jobs = auto
 CONF
 }
