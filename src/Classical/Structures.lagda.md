@@ -41,11 +41,15 @@ module Classical.Structures where
 
 open import Classical.Structures.CommutativeMonoid public
 open import Classical.Structures.CommutativeSemigroup public
+open import Classical.Structures.AbelianGroup public
+open import Classical.Structures.CommutativeRing public
+open import Classical.Structures.Group public
 open import Classical.Structures.Interpret public
 open import Classical.Structures.Lattice public
 open import Classical.Structures.Magma public
 open import Classical.Structures.Monoid public
 open import Classical.Structures.Reduct public
+open import Classical.Structures.Ring public
 open import Classical.Structures.Semigroup public
 open import Classical.Structures.Semilattice public
 ```
