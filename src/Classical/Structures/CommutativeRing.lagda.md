@@ -62,17 +62,17 @@ CommutativeRing α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ᶜʳᵍ Th-Commuta
 
 ```agda
 commutativeRing→ring : CommutativeRing α ρ → Ring α ρ
-commutativeRing→ring (𝑨 , mod) = 𝑨 , λ { +-assoc  → mod +-assocᶜ
-                                       ; +-idˡ    → mod +-idˡᶜ
-                                       ; +-idʳ    → mod +-idʳᶜ
-                                       ; +-invˡ   → mod +-invˡᶜ
-                                       ; +-invʳ   → mod +-invʳᶜ
-                                       ; +-comm   → mod +-commᶜ
-                                       ; ·-assoc  → mod ·-assocᶜ
-                                       ; ·-idˡ    → mod ·-idˡᶜ
-                                       ; ·-idʳ    → mod ·-idʳᶜ
-                                       ; distribˡ → mod distribˡᶜ
-                                       ; distribʳ → mod distribʳᶜ }
+commutativeRing→ring (𝑨 , mod) = 𝑨 , λ  { +-assoc   → mod +-assocᶜ
+                                        ; +-idˡ     → mod +-idˡᶜ
+                                        ; +-idʳ     → mod +-idʳᶜ
+                                        ; +-invˡ    → mod +-invˡᶜ
+                                        ; +-invʳ    → mod +-invʳᶜ
+                                        ; +-comm    → mod +-commᶜ
+                                        ; ·-assoc   → mod ·-assocᶜ
+                                        ; ·-idˡ     → mod ·-idˡᶜ
+                                        ; ·-idʳ     → mod ·-idʳᶜ
+                                        ; distribˡ  → mod distribˡᶜ
+                                        ; distribʳ  → mod distribʳᶜ }
 ```
 
 #### The `CommutativeRing-Op` module

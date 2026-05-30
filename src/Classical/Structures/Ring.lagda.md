@@ -144,46 +144,55 @@ module _ (ℛ : Ring α ρ) where
     infixl 7 _·_
     infix  8 -_
 
-    _+_ : 𝕌[ 𝑹 ] → 𝕌[ 𝑹 ] → 𝕌[ 𝑹 ]
-    _+_ = Curry₂ (+-Op ^ 𝑹)
-    _·_ : 𝕌[ 𝑹 ] → 𝕌[ 𝑹 ] → 𝕌[ 𝑹 ]
-    _·_ = Curry₂ (·-Op ^ 𝑹)
-    0R : 𝕌[ 𝑹 ]
+    -- nullary ops
+    0R 1R : 𝕌[ 𝑹 ]
     0R = Curry₀ (0-Op ^ 𝑹)
-    1R : 𝕌[ 𝑹 ]
     1R = Curry₀ (1-Op ^ 𝑹)
+
+    -- unary ops
     -_ : 𝕌[ 𝑹 ] → 𝕌[ 𝑹 ]
     -_ = Curry₁ (-Op ^ 𝑹)
 
+    -- binary ops
+    _+_ _·_ : 𝕌[ 𝑹 ] → 𝕌[ 𝑹 ] → 𝕌[ 𝑹 ]
+    _+_ = Curry₂ (+-Op ^ 𝑹)
+    _·_ = Curry₂ (·-Op ^ 𝑹)
+
     +-cong : ∀ {x y u v} → x ≈ y → u ≈ v → (x + u) ≈ (y + v)
     +-cong x≈y u≈v = interp-cong 𝑹 +-Op (λ { 0F → x≈y ; 1F → u≈v })
+
     ·-cong : ∀ {x y u v} → x ≈ y → u ≈ v → (x · u) ≈ (y · v)
     ·-cong x≈y u≈v = interp-cong 𝑹 ·-Op (λ { 0F → x≈y ; 1F → u≈v })
+
     neg-cong : ∀ {x y} → x ≈ y → (- x) ≈ (- y)
     neg-cong x≈y = interp-cong 𝑹 -Op (λ { 0F → x≈y })
 
     i+ : (s t : Term (Fin 3)) (η : Fin 3 → 𝕌[ 𝑹 ])
-       → ⟦ node +-Op (pair s t) ⟧ ⟨$⟩ η ≈ (⟦ s ⟧ ⟨$⟩ η) + (⟦ t ⟧ ⟨$⟩ η)
+       → ⟦ node +-Op (pair s t) ⟧ ⟨$⟩ η ≈ ⟦ s ⟧ ⟨$⟩ η + ⟦ t ⟧ ⟨$⟩ η
     i+ s t η = interp-cong 𝑹 +-Op (λ { 0F → refl ; 1F → refl })
+
     i· : (s t : Term (Fin 3)) (η : Fin 3 → 𝕌[ 𝑹 ])
-       → ⟦ node ·-Op (pair s t) ⟧ ⟨$⟩ η ≈ (⟦ s ⟧ ⟨$⟩ η) · (⟦ t ⟧ ⟨$⟩ η)
+       → ⟦ node ·-Op (pair s t) ⟧ ⟨$⟩ η ≈ ⟦ s ⟧ ⟨$⟩ η · ⟦ t ⟧ ⟨$⟩ η
     i· s t η = interp-cong 𝑹 ·-Op (λ { 0F → refl ; 1F → refl })
+
     i0 : (η : Fin 3 → 𝕌[ 𝑹 ]) → ⟦ node 0-Op (λ ()) ⟧ ⟨$⟩ η ≈ 0R
     i0 η = interp-cong 𝑹 0-Op (λ ())
+
     i1 : (η : Fin 3 → 𝕌[ 𝑹 ]) → ⟦ node 1-Op (λ ()) ⟧ ⟨$⟩ η ≈ 1R
     i1 η = interp-cong 𝑹 1-Op (λ ())
+
     i- : (s : Term (Fin 3)) (η : Fin 3 → 𝕌[ 𝑹 ])
-       → ⟦ node -Op (λ _ → s) ⟧ ⟨$⟩ η ≈ - (⟦ s ⟧ ⟨$⟩ η)
+       → ⟦ node -Op (λ _ → s) ⟧ ⟨$⟩ η ≈ - ⟦ s ⟧ ⟨$⟩ η
     i- s η = interp-cong 𝑹 -Op (λ { 0F → refl })
 
   -- Additive associativity
-  rg-+-assoc : ∀ x y z → (x + y) + z ≈ x + (y + z)
+  rg-+-assoc : ∀ x y z → x + y + z ≈ x + (y + z)
   rg-+-assoc x y z = begin
-    (x + y) + z       ≈⟨ +-cong (sym (i+ (ℊ 0F) (ℊ 1F) η)) refl ⟩
-    (⟦ xy ⟧ ⟨$⟩ η) + z ≈⟨ sym (i+ xy (ℊ 2F) η) ⟩
+    x + y + z         ≈⟨ +-cong (sym (i+ (ℊ 0F) (ℊ 1F) η)) refl ⟩
+    ⟦ xy ⟧ ⟨$⟩ η + z  ≈⟨ sym (i+ xy (ℊ 2F) η) ⟩
     ⟦ lhsT ⟧ ⟨$⟩ η    ≈⟨ proj₂ ℛ +-assoc η ⟩
     ⟦ rhsT ⟧ ⟨$⟩ η    ≈⟨ i+ (ℊ 0F) yz η ⟩
-    x + (⟦ yz ⟧ ⟨$⟩ η) ≈⟨ +-cong refl (i+ (ℊ 1F) (ℊ 2F) η) ⟩
+    x + ⟦ yz ⟧ ⟨$⟩ η  ≈⟨ +-cong refl (i+ (ℊ 1F) (ℊ 2F) η) ⟩
     x + (y + z)       ∎
     where
     η : Fin 3 → 𝕌[ 𝑹 ]
@@ -197,10 +206,10 @@ module _ (ℛ : Ring α ρ) where
   -- Additive identities
   rg-+-idˡ : ∀ x → 0R + x ≈ x
   rg-+-idˡ x = begin
-    0R + x                       ≈⟨ +-cong (sym (i0 η)) refl ⟩
-    (⟦ node 0-Op (λ ()) ⟧ ⟨$⟩ η) + x ≈⟨ sym (i+ (node 0-Op (λ ())) (ℊ 0F) η) ⟩
-    ⟦ lhsT ⟧ ⟨$⟩ η               ≈⟨ proj₂ ℛ +-idˡ η ⟩
-    x                            ∎
+    0R + x                          ≈⟨ +-cong (sym (i0 η)) refl ⟩
+    ⟦ node 0-Op (λ ()) ⟧ ⟨$⟩ η + x  ≈⟨ sym (i+ (node 0-Op (λ ())) (ℊ 0F) η) ⟩
+    ⟦ lhsT ⟧ ⟨$⟩ η                  ≈⟨ proj₂ ℛ +-idˡ η ⟩
+    x                               ∎
     where
     η : Fin 3 → 𝕌[ 𝑹 ]
     η = λ { 0F → x ; 1F → x ; 2F → x }
@@ -209,10 +218,10 @@ module _ (ℛ : Ring α ρ) where
 
   rg-+-idʳ : ∀ x → x + 0R ≈ x
   rg-+-idʳ x = begin
-    x + 0R                       ≈⟨ +-cong refl (sym (i0 η)) ⟩
-    x + (⟦ node 0-Op (λ ()) ⟧ ⟨$⟩ η) ≈⟨ sym (i+ (ℊ 0F) (node 0-Op (λ ())) η) ⟩
-    ⟦ lhsT ⟧ ⟨$⟩ η               ≈⟨ proj₂ ℛ +-idʳ η ⟩
-    x                            ∎
+    x + 0R                          ≈⟨ +-cong refl (sym (i0 η)) ⟩
+    x + ⟦ node 0-Op (λ ()) ⟧ ⟨$⟩ η  ≈⟨ sym (i+ (ℊ 0F) (node 0-Op (λ ())) η) ⟩
+    ⟦ lhsT ⟧ ⟨$⟩ η                  ≈⟨ proj₂ ℛ +-idʳ η ⟩
+    x                               ∎
     where
     η : Fin 3 → 𝕌[ 𝑹 ]
     η = λ { 0F → x ; 1F → x ; 2F → x }
@@ -222,11 +231,11 @@ module _ (ℛ : Ring α ρ) where
   -- Additive inverses
   rg-+-invˡ : ∀ x → (- x) + x ≈ 0R
   rg-+-invˡ x = begin
-    (- x) + x                    ≈⟨ +-cong (sym (i- (ℊ 0F) η)) refl ⟩
-    (⟦ negT ⟧ ⟨$⟩ η) + x         ≈⟨ sym (i+ negT (ℊ 0F) η) ⟩
-    ⟦ lhsT ⟧ ⟨$⟩ η               ≈⟨ proj₂ ℛ +-invˡ η ⟩
-    ⟦ node 0-Op (λ ()) ⟧ ⟨$⟩ η   ≈⟨ i0 η ⟩
-    0R                           ∎
+    (- x) + x                   ≈⟨ +-cong (sym (i- (ℊ 0F) η)) refl ⟩
+    ⟦ negT ⟧ ⟨$⟩ η + x          ≈⟨ sym (i+ negT (ℊ 0F) η) ⟩
+    ⟦ lhsT ⟧ ⟨$⟩ η              ≈⟨ proj₂ ℛ +-invˡ η ⟩
+    ⟦ node 0-Op (λ ()) ⟧ ⟨$⟩ η  ≈⟨ i0 η ⟩
+    0R                          ∎
     where
     η : Fin 3 → 𝕌[ 𝑹 ]
     η = λ { 0F → x ; 1F → x ; 2F → x }
@@ -236,11 +245,11 @@ module _ (ℛ : Ring α ρ) where
 
   rg-+-invʳ : ∀ x → x + (- x) ≈ 0R
   rg-+-invʳ x = begin
-    x + (- x)                    ≈⟨ +-cong refl (sym (i- (ℊ 0F) η)) ⟩
-    x + (⟦ negT ⟧ ⟨$⟩ η)         ≈⟨ sym (i+ (ℊ 0F) negT η) ⟩
-    ⟦ lhsT ⟧ ⟨$⟩ η               ≈⟨ proj₂ ℛ +-invʳ η ⟩
-    ⟦ node 0-Op (λ ()) ⟧ ⟨$⟩ η   ≈⟨ i0 η ⟩
-    0R                           ∎
+    x + (- x)                   ≈⟨ +-cong refl (sym (i- (ℊ 0F) η)) ⟩
+    x + ⟦ negT ⟧ ⟨$⟩ η          ≈⟨ sym (i+ (ℊ 0F) negT η) ⟩
+    ⟦ lhsT ⟧ ⟨$⟩ η              ≈⟨ proj₂ ℛ +-invʳ η ⟩
+    ⟦ node 0-Op (λ ()) ⟧ ⟨$⟩ η  ≈⟨ i0 η ⟩
+    0R                          ∎
     where
     η : Fin 3 → 𝕌[ 𝑹 ]
     η = λ { 0F → x ; 1F → x ; 2F → x }
@@ -251,10 +260,10 @@ module _ (ℛ : Ring α ρ) where
   -- Additive commutativity
   rg-+-comm : ∀ x y → x + y ≈ y + x
   rg-+-comm x y = begin
-    x + y          ≈⟨ sym (i+ (ℊ 0F) (ℊ 1F) η) ⟩
-    ⟦ xy ⟧ ⟨$⟩ η   ≈⟨ proj₂ ℛ +-comm η ⟩
-    ⟦ yx ⟧ ⟨$⟩ η   ≈⟨ i+ (ℊ 1F) (ℊ 0F) η ⟩
-    y + x          ∎
+    x + y         ≈⟨ sym (i+ (ℊ 0F) (ℊ 1F) η) ⟩
+    ⟦ xy ⟧ ⟨$⟩ η  ≈⟨ proj₂ ℛ +-comm η ⟩
+    ⟦ yx ⟧ ⟨$⟩ η  ≈⟨ i+ (ℊ 1F) (ℊ 0F) η ⟩
+    y + x         ∎
     where
     η : Fin 3 → 𝕌[ 𝑹 ]
     η = λ { 0F → x ; 1F → y ; 2F → x }
@@ -263,13 +272,13 @@ module _ (ℛ : Ring α ρ) where
     yx = node +-Op (pair (ℊ 1F) (ℊ 0F))
 
   -- Multiplicative associativity
-  rg-·-assoc : ∀ x y z → (x · y) · z ≈ x · (y · z)
+  rg-·-assoc : ∀ x y z → x · y · z ≈ x · (y · z)
   rg-·-assoc x y z = begin
-    (x · y) · z       ≈⟨ ·-cong (sym (i· (ℊ 0F) (ℊ 1F) η)) refl ⟩
-    (⟦ xy ⟧ ⟨$⟩ η) · z ≈⟨ sym (i· xy (ℊ 2F) η) ⟩
+    x · y · z         ≈⟨ ·-cong (sym (i· (ℊ 0F) (ℊ 1F) η)) refl ⟩
+    ⟦ xy ⟧ ⟨$⟩ η · z  ≈⟨ sym (i· xy (ℊ 2F) η) ⟩
     ⟦ lhsT ⟧ ⟨$⟩ η    ≈⟨ proj₂ ℛ ·-assoc η ⟩
     ⟦ rhsT ⟧ ⟨$⟩ η    ≈⟨ i· (ℊ 0F) yz η ⟩
-    x · (⟦ yz ⟧ ⟨$⟩ η) ≈⟨ ·-cong refl (i· (ℊ 1F) (ℊ 2F) η) ⟩
+    x · ⟦ yz ⟧ ⟨$⟩ η  ≈⟨ ·-cong refl (i· (ℊ 1F) (ℊ 2F) η) ⟩
     x · (y · z)       ∎
     where
     η : Fin 3 → 𝕌[ 𝑹 ]
@@ -283,10 +292,10 @@ module _ (ℛ : Ring α ρ) where
   -- Multiplicative identities
   rg-·-idˡ : ∀ x → 1R · x ≈ x
   rg-·-idˡ x = begin
-    1R · x                       ≈⟨ ·-cong (sym (i1 η)) refl ⟩
-    (⟦ node 1-Op (λ ()) ⟧ ⟨$⟩ η) · x ≈⟨ sym (i· (node 1-Op (λ ())) (ℊ 0F) η) ⟩
-    ⟦ lhsT ⟧ ⟨$⟩ η               ≈⟨ proj₂ ℛ ·-idˡ η ⟩
-    x                            ∎
+    1R · x                          ≈⟨ ·-cong (sym (i1 η)) refl ⟩
+    ⟦ node 1-Op (λ ()) ⟧ ⟨$⟩ η · x  ≈⟨ sym (i· (node 1-Op (λ ())) (ℊ 0F) η) ⟩
+    ⟦ lhsT ⟧ ⟨$⟩ η                  ≈⟨ proj₂ ℛ ·-idˡ η ⟩
+    x                               ∎
     where
     η : Fin 3 → 𝕌[ 𝑹 ]
     η = λ { 0F → x ; 1F → x ; 2F → x }
@@ -295,25 +304,25 @@ module _ (ℛ : Ring α ρ) where
 
   rg-·-idʳ : ∀ x → x · 1R ≈ x
   rg-·-idʳ x = begin
-    x · 1R                       ≈⟨ ·-cong refl (sym (i1 η)) ⟩
-    x · (⟦ node 1-Op (λ ()) ⟧ ⟨$⟩ η) ≈⟨ sym (i· (ℊ 0F) (node 1-Op (λ ())) η) ⟩
-    ⟦ lhsT ⟧ ⟨$⟩ η               ≈⟨ proj₂ ℛ ·-idʳ η ⟩
-    x                            ∎
+    x · 1R                          ≈⟨ ·-cong refl (sym (i1 η)) ⟩
+    x · ⟦ node 1-Op (λ ()) ⟧ ⟨$⟩ η  ≈⟨ sym (i· (ℊ 0F) (node 1-Op (λ ())) η) ⟩
+    ⟦ lhsT ⟧ ⟨$⟩ η                  ≈⟨ proj₂ ℛ ·-idʳ η ⟩
+    x                               ∎
     where
     η : Fin 3 → 𝕌[ 𝑹 ]
     η = λ { 0F → x ; 1F → x ; 2F → x }
     lhsT : Term (Fin 3)
     lhsT = node ·-Op (pair (ℊ 0F) (node 1-Op (λ ())))
 
-  -- Left distributivity:  x · (y + z) ≈ (x · y) + (x · z)
-  rg-distribˡ : ∀ x y z → x · (y + z) ≈ (x · y) + (x · z)
+  -- Left distributivity
+  rg-distribˡ : ∀ x y z → x · (y + z) ≈ x · y + x · z
   rg-distribˡ x y z = begin
-    x · (y + z)              ≈⟨ ·-cong refl (sym (i+ (ℊ 1F) (ℊ 2F) η)) ⟩
-    x · (⟦ y+z ⟧ ⟨$⟩ η)      ≈⟨ sym (i· (ℊ 0F) y+z η) ⟩
-    ⟦ lhsT ⟧ ⟨$⟩ η           ≈⟨ proj₂ ℛ distribˡ η ⟩
-    ⟦ rhsT ⟧ ⟨$⟩ η           ≈⟨ i+ xy xz η ⟩
-    (⟦ xy ⟧ ⟨$⟩ η) + (⟦ xz ⟧ ⟨$⟩ η) ≈⟨ +-cong (i· (ℊ 0F) (ℊ 1F) η) (i· (ℊ 0F) (ℊ 2F) η) ⟩
-    (x · y) + (x · z)        ∎
+    x · (y + z)                  ≈⟨ ·-cong refl (sym (i+ (ℊ 1F) (ℊ 2F) η)) ⟩
+    x · ⟦ y+z ⟧ ⟨$⟩ η            ≈⟨ sym (i· (ℊ 0F) y+z η) ⟩
+    ⟦ lhsT ⟧ ⟨$⟩ η               ≈⟨ proj₂ ℛ distribˡ η ⟩
+    ⟦ rhsT ⟧ ⟨$⟩ η               ≈⟨ i+ xy xz η ⟩
+    ⟦ xy ⟧ ⟨$⟩ η + ⟦ xz ⟧ ⟨$⟩ η  ≈⟨ +-cong (i· (ℊ 0F) (ℊ 1F) η) (i· (ℊ 0F) (ℊ 2F) η) ⟩
+    x · y + x · z        ∎
     where
     η : Fin 3 → 𝕌[ 𝑹 ]
     η = λ { 0F → x ; 1F → y ; 2F → z }
@@ -324,15 +333,15 @@ module _ (ℛ : Ring α ρ) where
     lhsT = node ·-Op (pair (ℊ 0F) y+z)
     rhsT = node +-Op (pair xy xz)
 
-  -- Right distributivity:  (y + z) · x ≈ (y · x) + (z · x)
-  rg-distribʳ : ∀ x y z → (y + z) · x ≈ (y · x) + (z · x)
+  -- Right distributivity
+  rg-distribʳ : ∀ x y z → (y + z) · x ≈ y · x + z · x
   rg-distribʳ x y z = begin
-    (y + z) · x              ≈⟨ ·-cong (sym (i+ (ℊ 1F) (ℊ 2F) η)) refl ⟩
-    (⟦ y+z ⟧ ⟨$⟩ η) · x      ≈⟨ sym (i· y+z (ℊ 0F) η) ⟩
-    ⟦ lhsT ⟧ ⟨$⟩ η           ≈⟨ proj₂ ℛ distribʳ η ⟩
-    ⟦ rhsT ⟧ ⟨$⟩ η           ≈⟨ i+ yx zx η ⟩
-    (⟦ yx ⟧ ⟨$⟩ η) + (⟦ zx ⟧ ⟨$⟩ η) ≈⟨ +-cong (i· (ℊ 1F) (ℊ 0F) η) (i· (ℊ 2F) (ℊ 0F) η) ⟩
-    (y · x) + (z · x)        ∎
+    (y + z) · x                  ≈⟨ ·-cong (sym (i+ (ℊ 1F) (ℊ 2F) η)) refl ⟩
+    ⟦ y+z ⟧ ⟨$⟩ η · x            ≈⟨ sym (i· y+z (ℊ 0F) η) ⟩
+    ⟦ lhsT ⟧ ⟨$⟩ η               ≈⟨ proj₂ ℛ distribʳ η ⟩
+    ⟦ rhsT ⟧ ⟨$⟩ η               ≈⟨ i+ yx zx η ⟩
+    ⟦ yx ⟧ ⟨$⟩ η + ⟦ zx ⟧ ⟨$⟩ η  ≈⟨ +-cong (i· (ℊ 1F) (ℊ 0F) η) (i· (ℊ 2F) (ℊ 0F) η) ⟩
+    y · x + z · x                ∎
     where
     η : Fin 3 → 𝕌[ 𝑹 ]
     η = λ { 0F → x ; 1F → y ; 2F → z }
@@ -360,39 +369,46 @@ module Ring-Op {α ρ : Level} (ℛ : Ring α ρ) where
   infixl 7 _·_
   infix  8 -_
 
-  _+_ : 𝕌[ 𝑹 ] → 𝕌[ 𝑹 ] → 𝕌[ 𝑹 ]
-  _+_ = Curry₂ (+-Op ^ 𝑹)
-  _·_ : 𝕌[ 𝑹 ] → 𝕌[ 𝑹 ] → 𝕌[ 𝑹 ]
-  _·_ = Curry₂ (·-Op ^ 𝑹)
-  0R : 𝕌[ 𝑹 ]
+  -- nullary ops
+  0R 1R : 𝕌[ 𝑹 ]
   0R = Curry₀ (0-Op ^ 𝑹)
-  1R : 𝕌[ 𝑹 ]
   1R = Curry₀ (1-Op ^ 𝑹)
+
+  -- unary ops
   -_ : 𝕌[ 𝑹 ] → 𝕌[ 𝑹 ]
   -_ = Curry₁ (-Op ^ 𝑹)
+
+  -- binary ops
+  _+_ _·_ : 𝕌[ 𝑹 ] → 𝕌[ 𝑹 ] → 𝕌[ 𝑹 ]
+  _+_ = Curry₂ (+-Op ^ 𝑹)
+  _·_ = Curry₂ (·-Op ^ 𝑹)
 
   equations : 𝑹 ⊨ʳᵍ Th-Ring
   equations = proj₂ ℛ
 
-  +-cong : ∀ {x y u v} → x ≈ y → u ≈ v → (x + u) ≈ (y + v)
+  +-cong : ∀ {x y u v} → x ≈ y → u ≈ v → x + u ≈ y + v
   +-cong x≈y u≈v = interp-cong 𝑹 +-Op (λ { 0F → x≈y ; 1F → u≈v })
-  ·-cong : ∀ {x y u v} → x ≈ y → u ≈ v → (x · u) ≈ (y · v)
+  ·-cong : ∀ {x y u v} → x ≈ y → u ≈ v → x · u ≈ y · v
   ·-cong x≈y u≈v = interp-cong 𝑹 ·-Op (λ { 0F → x≈y ; 1F → u≈v })
-  neg-cong : ∀ {x y} → x ≈ y → (- x) ≈ (- y)
+  neg-cong : ∀ {x y} → x ≈ y → - x ≈ - y
   neg-cong x≈y = interp-cong 𝑹 -Op (λ { 0F → x≈y })
 
   interp-node-+ : (s t : Term (Fin 3)) {η : Fin 3 → 𝕌[ 𝑹 ]}
-                → ⟦ node +-Op (pair s t) ⟧ ⟨$⟩ η ≈ (⟦ s ⟧ ⟨$⟩ η) + (⟦ t ⟧ ⟨$⟩ η)
+    → ⟦ node +-Op (pair s t) ⟧ ⟨$⟩ η ≈ ⟦ s ⟧ ⟨$⟩ η + ⟦ t ⟧ ⟨$⟩ η
   interp-node-+ s t = interp-cong 𝑹 +-Op (λ { 0F → refl ; 1F → refl })
+
   interp-node-· : (s t : Term (Fin 3)) {η : Fin 3 → 𝕌[ 𝑹 ]}
-                → ⟦ node ·-Op (pair s t) ⟧ ⟨$⟩ η ≈ (⟦ s ⟧ ⟨$⟩ η) · (⟦ t ⟧ ⟨$⟩ η)
+    → ⟦ node ·-Op (pair s t) ⟧ ⟨$⟩ η ≈ ⟦ s ⟧ ⟨$⟩ η · ⟦ t ⟧ ⟨$⟩ η
   interp-node-· s t = interp-cong 𝑹 ·-Op (λ { 0F → refl ; 1F → refl })
+
   interp-node-0 : {η : Fin 3 → 𝕌[ 𝑹 ]} → ⟦ node 0-Op (λ ()) ⟧ ⟨$⟩ η ≈ 0R
   interp-node-0 = interp-cong 𝑹 0-Op (λ ())
+
   interp-node-1 : {η : Fin 3 → 𝕌[ 𝑹 ]} → ⟦ node 1-Op (λ ()) ⟧ ⟨$⟩ η ≈ 1R
   interp-node-1 = interp-cong 𝑹 1-Op (λ ())
+
   interp-node-neg : (s : Term (Fin 3)) {η : Fin 3 → 𝕌[ 𝑹 ]}
-                  → ⟦ node -Op (λ _ → s) ⟧ ⟨$⟩ η ≈ - (⟦ s ⟧ ⟨$⟩ η)
+    → ⟦ node -Op (λ _ → s) ⟧ ⟨$⟩ η ≈ - ⟦ s ⟧ ⟨$⟩ η
   interp-node-neg s = interp-cong 𝑹 -Op (λ { 0F → refl })
 
   +-assoc-law : ∀ x y z → (x + y) + z ≈ x + (y + z)
@@ -447,47 +463,50 @@ ring→abelianGroup ℛ@(𝑹 , _) = 𝑹ᵍ , thm
   i- s η = interp-cong 𝑹ᵍ ⁻¹-Opᵍ (λ { 0F → refl })
 
   thm : 𝑹ᵍ ⊨ᵃᵍ Th-AbelianGroup
-  thm assocᵃ η = let x = η 0F ; y = η 1F ; z = η 2F in begin
+  thm assocᵃ η = begin
     ⟦ Th-AbelianGroup assocᵃ .proj₁ ⟧ ⟨$⟩ η  ≈⟨ i+ xy (ℊ 2F) η ⟩
-    (⟦ xy ⟧ ⟨$⟩ η) + z                       ≈⟨ +-cong (i+ (ℊ 0F) (ℊ 1F) η) refl ⟩
-    (x + y) + z                              ≈⟨ +-assoc-law x y z ⟩
+    ⟦ xy ⟧ ⟨$⟩ η + z                         ≈⟨ +-cong (i+ (ℊ 0F) (ℊ 1F) η) refl ⟩
+    x + y + z                                ≈⟨ +-assoc-law x y z ⟩
     x + (y + z)                              ≈˘⟨ +-cong refl (i+ (ℊ 1F) (ℊ 2F) η) ⟩
-    x + (⟦ yz ⟧ ⟨$⟩ η)                       ≈˘⟨ i+ (ℊ 0F) yz η ⟩
+    x + ⟦ yz ⟧ ⟨$⟩ η                         ≈˘⟨ i+ (ℊ 0F) yz η ⟩
     ⟦ Th-AbelianGroup assocᵃ .proj₂ ⟧ ⟨$⟩ η  ∎
     where
+    x y z : 𝕌[ 𝑹 ]
+    x = η 0F ; y = η 1F ; z = η 2F
     xy yz : Term (Fin 3)
     xy = node ∙-Opᵍ (pair (ℊ 0F) (ℊ 1F))
     yz = node ∙-Opᵍ (pair (ℊ 1F) (ℊ 2F))
   thm idˡᵃ η = let x = η 0F in begin
-    ⟦ Th-AbelianGroup idˡᵃ .proj₁ ⟧ ⟨$⟩ η    ≈⟨ i+ (node ε-Opᵍ (λ ())) (ℊ 0F) η ⟩
-    (⟦ node ε-Opᵍ (λ ()) ⟧ ⟨$⟩ η) + x        ≈⟨ +-cong (i0 η) refl ⟩
-    0R + x                                   ≈⟨ +-idˡ-law x ⟩
-    x                                        ∎
-  thm idʳᵃ η = let x = η 0F in begin
-    ⟦ Th-AbelianGroup idʳᵃ .proj₁ ⟧ ⟨$⟩ η    ≈⟨ i+ (ℊ 0F) (node ε-Opᵍ (λ ())) η ⟩
-    x + (⟦ node ε-Opᵍ (λ ()) ⟧ ⟨$⟩ η)        ≈⟨ +-cong refl (i0 η) ⟩
-    x + 0R                                   ≈⟨ +-idʳ-law x ⟩
-    x                                        ∎
-  thm invˡᵃ η = let x = η 0F in begin
-    ⟦ Th-AbelianGroup invˡᵃ .proj₁ ⟧ ⟨$⟩ η   ≈⟨ i+ negT (ℊ 0F) η ⟩
-    (⟦ negT ⟧ ⟨$⟩ η) + x                     ≈⟨ +-cong (i- (ℊ 0F) η) refl ⟩
-    (- x) + x                                ≈⟨ +-invˡ-law x ⟩
-    0R                                       ≈˘⟨ i0 η ⟩
-    ⟦ Th-AbelianGroup invˡᵃ .proj₂ ⟧ ⟨$⟩ η   ∎
+    ⟦ Th-AbelianGroup idˡᵃ .proj₁ ⟧ ⟨$⟩ η  ≈⟨ i+ (node ε-Opᵍ (λ ())) (ℊ 0F) η ⟩
+    ⟦ node ε-Opᵍ (λ ()) ⟧ ⟨$⟩ η + x        ≈⟨ +-cong (i0 η) refl ⟩
+    0R + x                                 ≈⟨ +-idˡ-law x ⟩
+    x                                      ∎
+  thm idʳᵃ η = begin
+    ⟦ Th-AbelianGroup idʳᵃ .proj₁ ⟧ ⟨$⟩ η  ≈⟨ i+ (ℊ 0F) (node ε-Opᵍ (λ ())) η ⟩
+    _ + ⟦ node ε-Opᵍ (λ ()) ⟧ ⟨$⟩ η        ≈⟨ +-cong refl (i0 η) ⟩
+    _ + 0R                                 ≈⟨ +-idʳ-law _ ⟩
+    _                                      ∎
+  thm invˡᵃ η = begin
+    ⟦ Th-AbelianGroup invˡᵃ .proj₁ ⟧ ⟨$⟩ η  ≈⟨ i+ negT (ℊ 0F) η ⟩
+    ⟦ negT ⟧ ⟨$⟩ η + _                      ≈⟨ +-cong (i- (ℊ 0F) η) refl ⟩
+    (- _) + _                               ≈⟨ +-invˡ-law _ ⟩
+    0R                                      ≈˘⟨ i0 η ⟩
+    ⟦ Th-AbelianGroup invˡᵃ .proj₂ ⟧ ⟨$⟩ η  ∎
     where negT : Term (Fin 3)
           negT = node ⁻¹-Opᵍ (λ _ → ℊ 0F)
-  thm invʳᵃ η = let x = η 0F in begin
-    ⟦ Th-AbelianGroup invʳᵃ .proj₁ ⟧ ⟨$⟩ η   ≈⟨ i+ (ℊ 0F) negT η ⟩
-    x + (⟦ negT ⟧ ⟨$⟩ η)                     ≈⟨ +-cong refl (i- (ℊ 0F) η) ⟩
-    x + (- x)                                ≈⟨ +-invʳ-law x ⟩
-    0R                                       ≈˘⟨ i0 η ⟩
-    ⟦ Th-AbelianGroup invʳᵃ .proj₂ ⟧ ⟨$⟩ η   ∎
-    where negT : Term (Fin 3)
-          negT = node ⁻¹-Opᵍ (λ _ → ℊ 0F)
-  thm commᵃ η = let x = η 0F ; y = η 1F in begin
+  thm invʳᵃ η = begin
+    ⟦ Th-AbelianGroup invʳᵃ .proj₁ ⟧ ⟨$⟩ η  ≈⟨ i+ (ℊ 0F) negT η ⟩
+    _ + ⟦ negT ⟧ ⟨$⟩ η                      ≈⟨ +-cong refl (i- (ℊ 0F) η) ⟩
+    _ + (- _)                               ≈⟨ +-invʳ-law _ ⟩
+    0R                                      ≈˘⟨ i0 η ⟩
+    ⟦ Th-AbelianGroup invʳᵃ .proj₂ ⟧ ⟨$⟩ η  ∎
+    where
+    negT : Term (Fin 3)
+    negT = node ⁻¹-Opᵍ (λ _ → ℊ 0F)
+  thm commᵃ η = begin
     ⟦ Th-AbelianGroup commᵃ .proj₁ ⟧ ⟨$⟩ η   ≈⟨ i+ (ℊ 0F) (ℊ 1F) η ⟩
-    x + y                                    ≈⟨ +-comm-law x y ⟩
-    y + x                                    ≈˘⟨ i+ (ℊ 1F) (ℊ 0F) η ⟩
+    _ + _                                    ≈⟨ +-comm-law _ _ ⟩
+    _ + _                                    ≈˘⟨ i+ (ℊ 1F) (ℊ 0F) η ⟩
     ⟦ Th-AbelianGroup commᵃ .proj₂ ⟧ ⟨$⟩ η   ∎
 ```
 
@@ -499,43 +518,45 @@ curried laws.
 
 ```agda
 ring→monoid : Ring α ρ → Monoid α ρ
-ring→monoid ℛ@(𝑹 , _) = 𝑹ᵐ , thm
+ring→monoid ℛ@(𝑹 , _) = 𝑹-mon , thm
   where
-  𝑹ᵐ : Algebra {𝑆 = Sig-Monoid} _ _
-  𝑹ᵐ = ring→monoidAlg ℛ
+  𝑹-mon : Algebra {𝑆 = Sig-Monoid} _ _
+  𝑹-mon = ring→monoidAlg ℛ
   open Setoid 𝔻[ 𝑹 ]
-  open Environment 𝑹ᵐ using ( ⟦_⟧ )
+  open Environment 𝑹-mon using ( ⟦_⟧ )
   open SetoidReasoning 𝔻[ 𝑹 ]
   open Ring-Op ℛ using ( _·_ ; 1R ; ·-cong ; ·-assoc-law ; ·-idˡ-law ; ·-idʳ-law )
 
-  i· : (s t : Term (Fin 3)) (η : Fin 3 → 𝕌[ 𝑹 ])
+  i· : {s t : Term (Fin 3)} {η : Fin 3 → 𝕌[ 𝑹 ]}
      → ⟦ node ∙-Opᵐ (pair s t) ⟧ ⟨$⟩ η ≈ (⟦ s ⟧ ⟨$⟩ η) · (⟦ t ⟧ ⟨$⟩ η)
-  i· s t η = interp-cong 𝑹ᵐ ∙-Opᵐ (λ { 0F → refl ; 1F → refl })
-  i1 : (η : Fin 3 → 𝕌[ 𝑹 ]) → ⟦ node ε-Opᵐ (λ ()) ⟧ ⟨$⟩ η ≈ 1R
-  i1 η = interp-cong 𝑹ᵐ ε-Opᵐ (λ ())
+  i· = interp-cong 𝑹-mon ∙-Opᵐ (λ { 0F → refl ; 1F → refl })
+  i1 : {η : Fin 3 → 𝕌[ 𝑹 ]} → ⟦ node ε-Opᵐ (λ ()) ⟧ ⟨$⟩ η ≈ 1R
+  i1 = interp-cong 𝑹-mon ε-Opᵐ (λ ())
 
-  thm : 𝑹ᵐ ⊨ᵐᵒ Th-Monoid
-  thm assocᵐ η = let x = η 0F ; y = η 1F ; z = η 2F in begin
-    ⟦ Th-Monoid assocᵐ .proj₁ ⟧ ⟨$⟩ η  ≈⟨ i· xy (ℊ 2F) η ⟩
-    (⟦ xy ⟧ ⟨$⟩ η) · z                 ≈⟨ ·-cong (i· (ℊ 0F) (ℊ 1F) η) refl ⟩
-    (x · y) · z                        ≈⟨ ·-assoc-law x y z ⟩
-    x · (y · z)                        ≈˘⟨ ·-cong refl (i· (ℊ 1F) (ℊ 2F) η) ⟩
-    x · (⟦ yz ⟧ ⟨$⟩ η)                 ≈˘⟨ i· (ℊ 0F) yz η ⟩
+  thm : 𝑹-mon ⊨ᵐᵒ Th-Monoid
+  thm assocᵐ η = begin
+    ⟦ Th-Monoid assocᵐ .proj₁ ⟧ ⟨$⟩ η  ≈⟨ i· ⟩
+    ⟦ xy ⟧ ⟨$⟩ η · z                   ≈⟨ ·-cong i·  refl ⟩
+    x · y · z                          ≈⟨ ·-assoc-law x y z ⟩
+    x · (y · z)                        ≈˘⟨ ·-cong refl i· ⟩
+    x · ⟦ yz ⟧ ⟨$⟩ η                   ≈˘⟨ i·  ⟩
     ⟦ Th-Monoid assocᵐ .proj₂ ⟧ ⟨$⟩ η  ∎
     where
+    x y z : 𝕌[ 𝑹-mon ]
+    x = η 0F ; y = η 1F ; z = η 2F
     xy yz : Term (Fin 3)
     xy = node ∙-Opᵐ (pair (ℊ 0F) (ℊ 1F))
     yz = node ∙-Opᵐ (pair (ℊ 1F) (ℊ 2F))
-  thm idˡᵐ η = let x = η 0F in begin
-    ⟦ Th-Monoid idˡᵐ .proj₁ ⟧ ⟨$⟩ η    ≈⟨ i· (node ε-Opᵐ (λ ())) (ℊ 0F) η ⟩
-    (⟦ node ε-Opᵐ (λ ()) ⟧ ⟨$⟩ η) · x  ≈⟨ ·-cong (i1 η) refl ⟩
-    1R · x                             ≈⟨ ·-idˡ-law x ⟩
-    x                                  ∎
-  thm idʳᵐ η = let x = η 0F in begin
-    ⟦ Th-Monoid idʳᵐ .proj₁ ⟧ ⟨$⟩ η    ≈⟨ i· (ℊ 0F) (node ε-Opᵐ (λ ())) η ⟩
-    x · (⟦ node ε-Opᵐ (λ ()) ⟧ ⟨$⟩ η)  ≈⟨ ·-cong refl (i1 η) ⟩
-    x · 1R                             ≈⟨ ·-idʳ-law x ⟩
-    x                                  ∎
+  thm idˡᵐ η = begin
+    ⟦ Th-Monoid idˡᵐ .proj₁ ⟧ ⟨$⟩ η  ≈⟨ i· ⟩
+    ⟦ node ε-Opᵐ (λ ()) ⟧ ⟨$⟩ η · _  ≈⟨ ·-cong i1 refl ⟩
+    1R · _                           ≈⟨ ·-idˡ-law _ ⟩
+    _                                ∎
+  thm idʳᵐ η = begin
+    ⟦ Th-Monoid idʳᵐ .proj₁ ⟧ ⟨$⟩ η  ≈⟨ i· ⟩
+    _ · ⟦ node ε-Opᵐ (λ ()) ⟧ ⟨$⟩ η  ≈⟨ ·-cong refl i1 ⟩
+    _ · 1R                           ≈⟨ ·-idʳ-law _ ⟩
+    _                                ∎
 ```
 
 #### <a id="builders">Ring builders</a>
