@@ -20,8 +20,10 @@ M3.  See [ADR-002][] for the design rationale.
 
 module Classical.Small.Structures where
 
+open import Classical.Small.Structures.AbelianGroup public
 open import Classical.Small.Structures.CommutativeMonoid public
 open import Classical.Small.Structures.CommutativeSemigroup public
+open import Classical.Small.Structures.Group public
 open import Classical.Small.Structures.Lattice public
 open import Classical.Small.Structures.Magma public
 open import Classical.Small.Structures.Monoid public
