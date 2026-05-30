@@ -253,18 +253,16 @@ group→monoid 𝒢@(𝑮 , _) = 𝑹 , thm
     xy yz : Term (Fin 3)
     xy = node ∙-Opᵐᵒ (pair (ℊ 0F) (ℊ 1F))
     yz = node ∙-Opᵐᵒ (pair (ℊ 1F) (ℊ 2F))
-  thm idˡᵐ η = let x = η 0F in
-    begin
-      ⟦ Th-Monoid idˡᵐ .proj₁ ⟧ ⟨$⟩ η   ≈⟨ interp-node-∙ᴿ (node ε-Opᵐᵒ (λ ())) (ℊ 0F) η ⟩
-      ⟦ node ε-Opᵐᵒ (λ ()) ⟧ ⟨$⟩ η ∙ x  ≈⟨ ∙-cong (interp-node-εᴿ η) refl ⟩
-      ε ∙ x                             ≈⟨ idˡ-law x ⟩
-      x                                 ∎
-  thm idʳᵐ η = let x = η 0F in
-    begin
-      ⟦ Th-Monoid idʳᵐ .proj₁ ⟧ ⟨$⟩ η   ≈⟨ interp-node-∙ᴿ (ℊ 0F) (node ε-Opᵐᵒ (λ ())) η ⟩
-      x ∙ ⟦ node ε-Opᵐᵒ (λ ()) ⟧ ⟨$⟩ η  ≈⟨ ∙-cong refl (interp-node-εᴿ η) ⟩
-      x ∙ ε                             ≈⟨ idʳ-law x ⟩
-      x                                 ∎
+  thm idˡᵐ η = begin
+    ⟦ Th-Monoid idˡᵐ .proj₁ ⟧ ⟨$⟩ η   ≈⟨ interp-node-∙ᴿ (node ε-Opᵐᵒ (λ ())) (ℊ 0F) η ⟩
+    ⟦ node ε-Opᵐᵒ (λ ()) ⟧ ⟨$⟩ η ∙ _  ≈⟨ ∙-cong (interp-node-εᴿ η) refl ⟩
+    ε ∙ _                             ≈⟨ idˡ-law _ ⟩
+    _                                 ∎
+  thm idʳᵐ η = begin
+    ⟦ Th-Monoid idʳᵐ .proj₁ ⟧ ⟨$⟩ η   ≈⟨ interp-node-∙ᴿ (ℊ 0F) (node ε-Opᵐᵒ (λ ())) η ⟩
+    _ ∙ ⟦ node ε-Opᵐᵒ (λ ()) ⟧ ⟨$⟩ η  ≈⟨ ∙-cong refl (interp-node-εᴿ η) ⟩
+    _ ∙ ε                             ≈⟨ idʳ-law _ ⟩
+    _                                 ∎
 ```
 
 #### Group builders
