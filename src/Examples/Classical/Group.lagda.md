@@ -25,7 +25,7 @@ open import Data.Integer.Properties  using ( +-assoc ; +-identityˡ ; +-identity
 open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Classical.Bundles.Group           using ( ⟨_⟩ᵍʳ ; ⟪_⟫ᵍʳ )
+open import Classical.Bundles.Group           using ( ⟨_⟩ᵍᵖ ; ⟪_⟫ᵍᵖ )
 open import Classical.Small.Structures.Group  using ( Group ; eqsToGroup )
 
 import Classical.Structures.Group as Polymorphic
@@ -43,29 +43,29 @@ open Polymorphic.Group-Op ℤ-group using ( _∙_ ; ε ; _⁻¹ )
 #### <a id="acceptance">Acceptance checks</a>
 
 ```agda
-∙-is-+-gr : ∀ (a b : ℤ) → a ∙ b ≡ a + b
-∙-is-+-gr a b = refl
+∙-is-+-group : ∀ (a b : ℤ) → a ∙ b ≡ a + b
+∙-is-+-group a b = refl
 
-ε-is-0-gr : ε ≡ 0ℤ
-ε-is-0-gr = refl
+ε-is-0-group : ε ≡ 0ℤ
+ε-is-0-group = refl
 
-⁻¹-is-neg-gr : ∀ (a : ℤ) → a ⁻¹ ≡ - a
-⁻¹-is-neg-gr a = refl
+⁻¹-is-neg-group : ∀ (a : ℤ) → a ⁻¹ ≡ - a
+⁻¹-is-neg-group a = refl
 ```
 
 The bundle round-trips pointwise on the operation, the identity, and the inverse.
 
 ```agda
-open Polymorphic.Group-Op ⟪ ⟨ ℤ-group ⟩ᵍʳ ⟫ᵍʳ using () renaming ( _∙_ to _·_ ; ε to ε· ; _⁻¹ to _⁻¹· )
+open Polymorphic.Group-Op ⟪ ⟨ ℤ-group ⟩ᵍᵖ ⟫ᵍᵖ using () renaming ( _∙_ to _·_ ; ε to ε· ; _⁻¹ to _⁻¹· )
 
-roundtrip-∙-gr : ∀ (a b : ℤ) → a · b ≡ a + b
-roundtrip-∙-gr a b = refl
+roundtrip-∙-group : ∀ (a b : ℤ) → a · b ≡ a + b
+roundtrip-∙-group a b = refl
 
-roundtrip-ε-gr : ε· ≡ 0ℤ
-roundtrip-ε-gr = refl
+roundtrip-ε-group : ε· ≡ 0ℤ
+roundtrip-ε-group = refl
 
-roundtrip-⁻¹-gr : ∀ (a : ℤ) → a ⁻¹· ≡ - a
-roundtrip-⁻¹-gr a = refl
+roundtrip-⁻¹-group : ∀ (a : ℤ) → a ⁻¹· ≡ - a
+roundtrip-⁻¹-group a = refl
 ```
 
 --------------------------------------
