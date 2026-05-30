@@ -29,6 +29,7 @@ open import Classical.Signatures.Group public
 open import Classical.Signatures.Lattice public
 open import Classical.Signatures.Magma public
 open import Classical.Signatures.Monoid public
+open import Classical.Signatures.Ring public
 ```
 
 --------------------------------------
