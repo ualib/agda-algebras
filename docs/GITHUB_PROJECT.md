@@ -574,6 +574,50 @@ The generator is sort of inverse to `gh_project_populate.py`: the latter pushes 
 +  [x] The mermaid dependency graphs render identically to the current hand-authored versions.
 +  [x] `scripts/README.md` documents the new workflow.
 
+---
+
+### Issue M1-11: Add Claude Code agent config for Agda type-checking (#349, closed)
+
+**Labels**: `milestone-1-infra`, `nix`
+
+## Description
+
+Add a `.claude/` configuration directory so Claude Code on the web can provision the pinned Agda toolchain and type-check the library exactly as CI does (`nix develop --command make check`).  The web container is ephemeral and ships with neither Nix nor Agda, so a `SessionStart` hook re-provisions the toolchain at the start of every session.
+
+This adds two files:
+
++  `.claude/settings.json` — registers the `SessionStart` hook.
++  `.claude/hooks/session-start.sh` — an idempotent, web-only hook that installs single-user Nix, enables flakes, and pre-warms the dev shell so Agda 2.8.0 + standard-library 2.3 (pinned by `flake.lock`) are realized from the binary cache before the agent runs.
+
+Toolchain pinning stays entirely in `flake.nix` / `flake.lock`; the hook only makes `nix` available and then drives Agda through the existing flake wrapper.
+
+## Motivation
+
+The library is intended to support AI-assisted formal development (the `agda-native-air` tooling track) and to serve as a high-quality Agda corpus for ML training and retrieval (M8).  An agent that can type-check its own proposed revisions is a prerequisite for both: it closes the loop between suggestion and verification, and it keeps any agent-authored proof terms honest before they enter the corpus.  Committing the configuration makes agent onboarding reproducible and reviewable rather than ad hoc per session.
+
+## Tasks
+
++  [ ] Add `.claude/settings.json`.
++  [ ] Add `.claude/hooks/session-start.sh` (mode `0755`).
++  [ ] Confirm generated artifacts stay untracked (`/.agda/`, `src/**/*.agdai`, the generated `Everything*.agda`).
++  [ ] (Optional) Add the `formalverification` Cachix substituter to the hook for CI parity and faster warm-ups.
++  [ ] (Optional) Add or update `CLAUDE.md` so the agent inherits the canonical-path conventions (`Setoid/` canonical, `Legacy/Base/` frozen, Σ-type core with record bundle views, deprecation discipline).
+
+## Acceptance criteria
+
++  [ ] In a fresh web session the hook provisions Nix and reports Agda 2.8.0 / standard-library 2.3.
++  [ ] The agent type-checks at least one representative module through the flake wrapper with exit 0 (e.g. `nix develop --command agda src/Overture.lagda.md`).
++  [ ] `make` regenerates the module aggregator and `make check` invokes `agda` unchanged.
++  [ ] No generated interface files or aggregator modules are committed.
++  [ ] CI behaviour is unaffected; the hook is web-only and local `nix develop` is untouched.
+
+## Notes
+
++  The hook is synchronous: the session waits until provisioning finishes, which prevents the agent from invoking `agda` before it exists.  The cost is ~30–80 s on a cold container and near-instant once cached.
++  Network discovery: the web container uses a host allowlist in which `nixos.org` and `install.determinate.systems` are unreachable but `releases.nixos.org` and `cache.nixos.org` are reachable; the hook fetches the installer from `releases.nixos.org` accordingly.
++  Chicken-and-egg: the hook only takes effect once it is on the checked-out branch, so the first session after merge — and any session on a branch that contains it — is provisioned automatically.
++  Project-specific Claude Code skills (an Agda type-check skill, a `docs/STYLE.md`-mirroring style skill) are deferred to a follow-up issue to keep this change focused on the environment.
+
 <!-- END GENERATED: milestone-1 -->
 
 ### Milestone 1 Dependencies
@@ -1672,7 +1716,7 @@ The pointwise round-trip policy from [ADR-002 v2 §6](docs/adr/002-classical-lay
 
 ---
 
-### Issue M3-6: Classical structures — Monoid, CommutativeMonoid, Group, AbelianGroup (#263)
+### Issue M3-6: Classical structures — Monoid, CommutativeMonoid, Group, AbelianGroup (#263, closed)
 
 **Labels**: `milestone-3-classical`, `help-wanted`
 
@@ -1711,7 +1755,7 @@ Follow the pattern established in [M3-3]/[M3-4] to add the monoid-and-group fami
 
 ---
 
-### Issue M3-7: Classical.Semilattice and Classical.Lattice (#264)
+### Issue M3-7: Classical.Semilattice and Classical.Lattice (#264, closed)
 
 **Labels**: `milestone-3-classical`
 
@@ -1752,7 +1796,7 @@ Lattices are centrally important because `Con 𝑨` and `Sub 𝑨` are naturally
 
 ## v2 amendment (2026-05-17)
 
-Renumbered M3-6 → M3-8 following [revision of ADR-002 v2](https://github.com/ualib/agda-algebras/pull/332).
+Renumbered M3-6 → M3-8 following [this revision](https://github.com/ualib/agda-algebras/pull/332) of the [ADR-002 v2](https://github.com/ualib/agda-algebras/blob/master/docs/adr/002-classical-layer-design.md) document.
 
 Scope is unchanged.  Conventions inherit from M3-6 (Monoid/Group/AbelianGroup) and from M3-7 (the precedent for multiple binary operations in one signature).
 
