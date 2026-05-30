@@ -22,11 +22,13 @@ module Classical.Small.Structures where
 
 open import Classical.Small.Structures.AbelianGroup public
 open import Classical.Small.Structures.CommutativeMonoid public
+open import Classical.Small.Structures.CommutativeRing public
 open import Classical.Small.Structures.CommutativeSemigroup public
 open import Classical.Small.Structures.Group public
 open import Classical.Small.Structures.Lattice public
 open import Classical.Small.Structures.Magma public
 open import Classical.Small.Structures.Monoid public
+open import Classical.Small.Structures.Ring public
 open import Classical.Small.Structures.Semigroup public
 open import Classical.Small.Structures.Semilattice public
 ```
