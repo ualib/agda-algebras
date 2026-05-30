@@ -41,7 +41,6 @@ These proof terms are first-class training data.  Optimize for legibility and st
 +  Default to functional style: total functions, structural recursion, no hidden effects.  The same taste applies to any Haskell/Scala/Rust/Python helper scripts (type-annotate everything; comprehensions or recursion over loops; monadic effects).
 +  Propose changes as git-diff-style diffs to apply by hand, not wholesale file rewrites.
 +  Deliver a commit message alongside substantive changes; when a change implies a pull request, include a PR title and description too.
-+  Defer paperwork (CHANGELOG entries, admin-script cleanup, pipeline modernization) to follow-up PRs rather than blocking the primary change.
 
 ## Markdown style (issues, PRs, docs)
 

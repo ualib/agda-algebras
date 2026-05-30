@@ -45,15 +45,15 @@ private variable α ρ : Level
 #### <a id="core-to-bundle">Core to stdlib bundle</a>
 
 ```agda
-⟨_⟩ʳⁱ : Ring α ρ → stdlib-Ring α ρ
-⟨ 𝑹 ⟩ʳⁱ = record
+⟨_⟩ʳᵍ : Ring α ρ → stdlib-Ring α ρ
+⟨ 𝑹 ⟩ʳᵍ = record
   { Carrier = 𝕌[ 𝑨 ]
   ; _≈_     = _≈_
   ; _+_     = _+_
   ; _*_     = _·_
   ; -_      = -_
-  ; 0#      = 0#
-  ; 1#      = 1#
+  ; 0#      = 0R
+  ; 1#      = 1R
   ; isRing  = record
       { +-isAbelianGroup = record
           { isGroup = record
@@ -84,26 +84,26 @@ private variable α ρ : Level
 #### <a id="bundle-to-core">Stdlib bundle to core</a>
 
 ```agda
-⟪_⟫ʳⁱ : stdlib-Ring α ρ → Ring α ρ
-⟪ R ⟫ʳⁱ = 𝑨 , λ { +-assoc  ρ → R-+assoc  (ρ 0F) (ρ 1F) (ρ 2F)
-                ; +-idˡ    ρ → R-+idˡ    (ρ 0F)
-                ; +-idʳ    ρ → R-+idʳ    (ρ 0F)
-                ; +-invˡ   ρ → R-+invˡ   (ρ 0F)
-                ; +-invʳ   ρ → R-+invʳ   (ρ 0F)
-                ; +-comm   ρ → R-+comm   (ρ 0F) (ρ 1F)
-                ; ·-assoc  ρ → R-*assoc  (ρ 0F) (ρ 1F) (ρ 2F)
-                ; ·-idˡ    ρ → R-*idˡ    (ρ 0F)
-                ; ·-idʳ    ρ → R-*idʳ    (ρ 0F)
-                ; distribˡ ρ → R-distribˡ (ρ 0F) (ρ 1F) (ρ 2F)
-                ; distribʳ ρ → R-distribʳ (ρ 0F) (ρ 1F) (ρ 2F) }
+⟪_⟫ʳᵍ : stdlib-Ring α ρ → Ring α ρ
+⟪ R ⟫ʳᵍ = 𝑨 , λ  { +-assoc   ρ → R-+assoc    (ρ 0F) (ρ 1F) (ρ 2F)
+                 ; +-idˡ     ρ → R-+idˡ      (ρ 0F)
+                 ; +-idʳ     ρ → R-+idʳ      (ρ 0F)
+                 ; +-invˡ    ρ → R-+invˡ     (ρ 0F)
+                 ; +-invʳ    ρ → R-+invʳ     (ρ 0F)
+                 ; +-comm    ρ → R-+comm     (ρ 0F) (ρ 1F)
+                 ; ·-assoc   ρ → R-*assoc    (ρ 0F) (ρ 1F) (ρ 2F)
+                 ; ·-idˡ     ρ → R-*idˡ      (ρ 0F)
+                 ; ·-idʳ     ρ → R-*idʳ      (ρ 0F)
+                 ; distribˡ  ρ → R-distribˡ  (ρ 0F) (ρ 1F) (ρ 2F)
+                 ; distribʳ  ρ → R-distribʳ  (ρ 0F) (ρ 1F) (ρ 2F) }
   where
   open stdlib-Ring R
-      using ( setoid ; +-cong ; -‿cong ; *-cong )
-      renaming ( _+_ to _⊕_ ; _*_ to _⊛_ ; -_ to ⊖_ ; 0# to z ; 1# to o
-               ; +-assoc to R-+assoc ; +-identityˡ to R-+idˡ ; +-identityʳ to R-+idʳ
-               ; -‿inverseˡ to R-+invˡ ; -‿inverseʳ to R-+invʳ ; +-comm to R-+comm
-               ; *-assoc to R-*assoc ; *-identityˡ to R-*idˡ ; *-identityʳ to R-*idʳ
-               ; distribˡ to R-distribˡ ; distribʳ to R-distribʳ )
+    using ( setoid ; +-cong ; -‿cong ; *-cong )
+    renaming  ( _+_ to _⊕_ ; _*_ to _⊛_ ; -_ to ⊖_ ; 0# to z ; 1# to e
+              ; +-assoc to R-+assoc ; +-identityˡ to R-+idˡ ; +-identityʳ to R-+idʳ
+              ; -‿inverseˡ to R-+invˡ ; -‿inverseʳ to R-+invʳ ; +-comm to R-+comm
+              ; *-assoc to R-*assoc ; *-identityˡ to R-*idˡ ; *-identityʳ to R-*idʳ
+              ; distribˡ to R-distribˡ ; distribʳ to R-distribʳ )
 
   𝑨 : Algebra _ _
   𝑨 = record { Domain = setoid ; Interp = interp }
@@ -113,7 +113,7 @@ private variable α ρ : Level
     interp ⟨$⟩ (0-Op , _)                                = z
     interp ⟨$⟩ (-Op  , args)                             = ⊖ (args 0F)
     interp ⟨$⟩ (·-Op , args)                             = args 0F ⊛ args 1F
-    interp ⟨$⟩ (1-Op , _)                                = o
+    interp ⟨$⟩ (1-Op , _)                                = e
     cong interp {+-Op , _} {.+-Op , _} (≡.refl , args≈)  = +-cong (args≈ 0F) (args≈ 1F)
     cong interp {0-Op , _} {.0-Op , _} (≡.refl , _)      = Setoid.refl setoid
     cong interp { -Op , _} {.-Op  , _} (≡.refl , args≈)  = -‿cong (args≈ 0F)
@@ -127,41 +127,41 @@ private variable α ρ : Level
 module _ {𝑹 : Ring α ρ} where
   open Ring-Op 𝑹
   open Setoid 𝔻[ proj₁ 𝑹 ]
-  open Ring-Op ⟪ ⟨ 𝑹 ⟩ʳⁱ ⟫ʳⁱ renaming ( _+_ to _+'_ ; _·_ to _·'_ ; -_ to -'_ ; 0# to 0#' ; 1# to 1#' )
+  open Ring-Op ⟪ ⟨ 𝑹 ⟩ʳᵍ ⟫ʳᵍ renaming ( _+_ to _+'_ ; _·_ to _·'_ ; -_ to -'_ ; 0R to 0R' ; 1R to 1R' )
 
-  roundtrip-cbc-+-ri : (a b : 𝕌[ proj₁ 𝑹 ]) → (a +' b) ≈ (a + b)
-  roundtrip-cbc-+-ri a b = refl
+  roundtrip-cbc-+-ring : (a b : 𝕌[ proj₁ 𝑹 ]) → (a +' b) ≈ (a + b)
+  roundtrip-cbc-+-ring a b = refl
 
-  roundtrip-cbc-·-ri : (a b : 𝕌[ proj₁ 𝑹 ]) → (a ·' b) ≈ (a · b)
-  roundtrip-cbc-·-ri a b = refl
+  roundtrip-cbc-·-ring : (a b : 𝕌[ proj₁ 𝑹 ]) → (a ·' b) ≈ (a · b)
+  roundtrip-cbc-·-ring a b = refl
 
-  roundtrip-cbc-neg-ri : (a : 𝕌[ proj₁ 𝑹 ]) → (-' a) ≈ (- a)
-  roundtrip-cbc-neg-ri a = refl
+  roundtrip-cbc-neg-ring : (a : 𝕌[ proj₁ 𝑹 ]) → (-' a) ≈ (- a)
+  roundtrip-cbc-neg-ring a = refl
 
-  roundtrip-cbc-0-ri : 0#' ≈ 0#
-  roundtrip-cbc-0-ri = refl
+  roundtrip-cbc-0-ring : 0R' ≈ 0R
+  roundtrip-cbc-0-ring = refl
 
-  roundtrip-cbc-1-ri : 1#' ≈ 1#
-  roundtrip-cbc-1-ri = refl
+  roundtrip-cbc-1-ring : 1R' ≈ 1R
+  roundtrip-cbc-1-ring = refl
 
 module _ {R : stdlib-Ring α ρ} where
   open stdlib-Ring R using ( _≈_ ; _+_ ; _*_ ; -_ ; 0# ; 1# ; refl ) renaming ( Carrier to A )
-  open stdlib-Ring ⟨ ⟪ R ⟫ʳⁱ ⟩ʳⁱ using () renaming ( _+_ to _+'_ ; _*_ to _*'_ ; -_ to -'_ ; 0# to 0#' ; 1# to 1#' )
+  open stdlib-Ring ⟨ ⟪ R ⟫ʳᵍ ⟩ʳᵍ using () renaming ( _+_ to _+'_ ; _*_ to _*'_ ; -_ to -'_ ; 0# to 0#' ; 1# to 1#' )
 
-  roundtrip-bcb-+-ri : (a b : A) → (a + b) ≈ (a +' b)
-  roundtrip-bcb-+-ri a b = refl
+  roundtrip-bcb-+-ring : (a b : A) → (a + b) ≈ (a +' b)
+  roundtrip-bcb-+-ring a b = refl
 
-  roundtrip-bcb-·-ri : (a b : A) → (a * b) ≈ (a *' b)
-  roundtrip-bcb-·-ri a b = refl
+  roundtrip-bcb-·-ring : (a b : A) → (a * b) ≈ (a *' b)
+  roundtrip-bcb-·-ring a b = refl
 
-  roundtrip-bcb-neg-ri : (a : A) → (- a) ≈ (-' a)
-  roundtrip-bcb-neg-ri a = refl
+  roundtrip-bcb-neg-ring : (a : A) → (- a) ≈ (-' a)
+  roundtrip-bcb-neg-ring a = refl
 
-  roundtrip-bcb-0-ri : 0# ≈ 0#'
-  roundtrip-bcb-0-ri = refl
+  roundtrip-bcb-0-ring : 0# ≈ 0#'
+  roundtrip-bcb-0-ring = refl
 
-  roundtrip-bcb-1-ri : 1# ≈ 1#'
-  roundtrip-bcb-1-ri = refl
+  roundtrip-bcb-1-ring : 1# ≈ 1#'
+  roundtrip-bcb-1-ring = refl
 ```
 
 --------------------------------------

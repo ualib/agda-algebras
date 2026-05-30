@@ -33,7 +33,7 @@ open import Data.Integer.Properties  using ( +-assoc ; +-identityˡ ; +-identity
 open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Classical.Bundles.CommutativeRing           using ( ⟨_⟩ᶜʳⁱ ; ⟪_⟫ᶜʳⁱ )
+open import Classical.Bundles.CommutativeRing           using ( ⟨_⟩ᶜʳᵍ ; ⟪_⟫ᶜʳᵍ )
 open import Classical.Small.Structures.CommutativeRing  using ( CommutativeRing ; eqsToCommutativeRing )
 
 import Classical.Structures.CommutativeRing as Polymorphic
@@ -50,7 +50,7 @@ import Classical.Structures.CommutativeRing as Polymorphic
     *-distribˡ-+ *-distribʳ-+
 
 open Polymorphic.CommutativeRing-Op ℤ-commutativeRing using ()
-  renaming ( _+_ to _⊕_ ; _·_ to _⊗_ ; 0# to e₀ ; 1# to e₁ ; -_ to ⊝_ )
+  renaming ( _+_ to _⊕_ ; _·_ to _⊗_ ; 0R to e₀ ; 1R to e₁ ; -_ to ⊝_ )
 ```
 
 #### <a id="acceptance">Acceptance checks</a>
@@ -77,8 +77,8 @@ e₁-is-1ℤ-cr = refl
 The bridge to stdlib's `CommutativeRing` round-trips pointwise on every operation.
 
 ```agda
-open Polymorphic.CommutativeRing-Op ⟪ ⟨ ℤ-commutativeRing ⟩ᶜʳⁱ ⟫ᶜʳⁱ using ()
-  renaming ( _+_ to _⊕'_ ; _·_ to _⊗'_ ; 0# to e₀' ; 1# to e₁' ; -_ to ⊝'_ )
+open Polymorphic.CommutativeRing-Op ⟪ ⟨ ℤ-commutativeRing ⟩ᶜʳᵍ ⟫ᶜʳᵍ using ()
+  renaming ( _+_ to _⊕'_ ; _·_ to _⊗'_ ; 0R to e₀' ; 1R to e₁' ; -_ to ⊝'_ )
 
 roundtrip-⊕-cr : ∀ (a b : ℤ) → a ⊕' b ≡ a + b
 roundtrip-⊕-cr a b = refl

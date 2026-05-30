@@ -42,15 +42,15 @@ private variable α ρ : Level
 #### <a id="core-to-bundle">Core to stdlib bundle</a>
 
 ```agda
-⟨_⟩ᶜʳⁱ : CommutativeRing α ρ → stdlib-CommutativeRing α ρ
-⟨ 𝑪 ⟩ᶜʳⁱ = record
+⟨_⟩ᶜʳᵍ : CommutativeRing α ρ → stdlib-CommutativeRing α ρ
+⟨ 𝑪 ⟩ᶜʳᵍ = record
   { Carrier = 𝕌[ proj₁ 𝑪 ]
   ; _≈_     = _≈_
   ; _+_     = _+_
   ; _*_     = _·_
   ; -_      = -_
-  ; 0#      = 0#
-  ; 1#      = 1#
+  ; 0#      = 0R
+  ; 1#      = 1R
   ; isCommutativeRing = record
       { isRing = record
           { +-isAbelianGroup = record
@@ -83,8 +83,8 @@ private variable α ρ : Level
 #### <a id="bundle-to-core">Stdlib bundle to core</a>
 
 ```agda
-⟪_⟫ᶜʳⁱ : stdlib-CommutativeRing α ρ → CommutativeRing α ρ
-⟪ R ⟫ᶜʳⁱ = 𝑨 , λ { +-assoc  ρ → R-+assoc   (ρ 0F) (ρ 1F) (ρ 2F)
+⟪_⟫ᶜʳᵍ : stdlib-CommutativeRing α ρ → CommutativeRing α ρ
+⟪ R ⟫ᶜʳᵍ = 𝑨 , λ { +-assoc  ρ → R-+assoc   (ρ 0F) (ρ 1F) (ρ 2F)
                  ; +-idˡ    ρ → R-+idˡ     (ρ 0F)
                  ; +-idʳ    ρ → R-+idʳ     (ρ 0F)
                  ; +-invˡ   ρ → R-+invˡ    (ρ 0F)
@@ -127,7 +127,7 @@ private variable α ρ : Level
 module _ {𝑪 : CommutativeRing α ρ} where
   open CommutativeRing-Op 𝑪
   open Setoid 𝔻[ proj₁ 𝑪 ]
-  open CommutativeRing-Op ⟪ ⟨ 𝑪 ⟩ᶜʳⁱ ⟫ᶜʳⁱ renaming ( _+_ to _+'_ ; _·_ to _·'_ ; -_ to -'_ ; 0# to 0#' ; 1# to 1#' )
+  open CommutativeRing-Op ⟪ ⟨ 𝑪 ⟩ᶜʳᵍ ⟫ᶜʳᵍ renaming ( _+_ to _+'_ ; _·_ to _·'_ ; -_ to -'_ ; 0R to 0R' ; 1R to 1R' )
 
   roundtrip-cbc-+-cr : (a b : 𝕌[ proj₁ 𝑪 ]) → (a +' b) ≈ (a + b)
   roundtrip-cbc-+-cr a b = refl
@@ -138,15 +138,15 @@ module _ {𝑪 : CommutativeRing α ρ} where
   roundtrip-cbc-neg-cr : (a : 𝕌[ proj₁ 𝑪 ]) → (-' a) ≈ (- a)
   roundtrip-cbc-neg-cr a = refl
 
-  roundtrip-cbc-0-cr : 0#' ≈ 0#
+  roundtrip-cbc-0-cr : 0R' ≈ 0R
   roundtrip-cbc-0-cr = refl
 
-  roundtrip-cbc-1-cr : 1#' ≈ 1#
+  roundtrip-cbc-1-cr : 1R' ≈ 1R
   roundtrip-cbc-1-cr = refl
 
 module _ {R : stdlib-CommutativeRing α ρ} where
   open stdlib-CommutativeRing R using ( _≈_ ; _+_ ; _*_ ; -_ ; 0# ; 1# ; refl ) renaming ( Carrier to A )
-  open stdlib-CommutativeRing ⟨ ⟪ R ⟫ᶜʳⁱ ⟩ᶜʳⁱ using () renaming ( _+_ to _+'_ ; _*_ to _*'_ ; -_ to -'_ ; 0# to 0#' ; 1# to 1#' )
+  open stdlib-CommutativeRing ⟨ ⟪ R ⟫ᶜʳᵍ ⟩ᶜʳᵍ using () renaming ( _+_ to _+'_ ; _*_ to _*'_ ; -_ to -'_ ; 0# to 0#' ; 1# to 1#' )
 
   roundtrip-bcb-+-cr : (a b : A) → (a + b) ≈ (a +' b)
   roundtrip-bcb-+-cr a b = refl

@@ -14,7 +14,7 @@ This is the [Classical.Structures.CommutativeRing][] module of the [Agda Univers
 extension of Ring, structurally identical to the way `CommutativeMonoid` extends
 `Monoid` and `AbelianGroup` extends `Group`: `commutativeRing→ring` is a pure
 theory-reindex (`proj₁` on the underlying algebra), and `CommutativeRing-Op` inherits
-the additive `(_+_, 0#, -_)`, the multiplicative `(_·_, 1#)`, and all eleven ring laws
+the additive `(_+_, 0R, -_)`, the multiplicative `(_·_, 1R)`, and all eleven ring laws
 through it, adding `·-comm-law`.
 
 ```agda
@@ -50,12 +50,12 @@ private variable α ρ : Level
 #### Satisfaction predicate and the `CommutativeRing` type
 
 ```agda
-infix 4 _⊨ᶜʳⁱ_
-_⊨ᶜʳⁱ_ : (𝑨 : Algebra α ρ) (ℰ : Eq-CommutativeRing → Term (Fin 3) × Term (Fin 3)) → Type (α ⊔ ρ)
-𝑨 ⊨ᶜʳⁱ ℰ = ∀ i → 𝑨 ⊧ proj₁ (ℰ i) ≈ proj₂ (ℰ i)
+infix 4 _⊨ᶜʳᵍ_
+_⊨ᶜʳᵍ_ : (𝑨 : Algebra α ρ) (ℰ : Eq-CommutativeRing → Term (Fin 3) × Term (Fin 3)) → Type (α ⊔ ρ)
+𝑨 ⊨ᶜʳᵍ ℰ = ∀ i → 𝑨 ⊧ proj₁ (ℰ i) ≈ proj₂ (ℰ i)
 
 CommutativeRing : (α ρ : Level) → Type (suc α ⊔ suc ρ)
-CommutativeRing α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ᶜʳⁱ Th-CommutativeRing
+CommutativeRing α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ᶜʳᵍ Th-CommutativeRing
 ```
 
 #### The forgetful projection to rings
@@ -83,12 +83,12 @@ module CommutativeRing-Op {α ρ : Level} (𝑪 : CommutativeRing α ρ) where
   open Setoid 𝔻[ 𝑨 ]
 
   open Ring-Op (commutativeRing→ring 𝑪) public
-    using ( _+_ ; _·_ ; 0# ; 1# ; -_ ; +-cong ; ·-cong ; neg-cong
+    using ( _+_ ; _·_ ; 0R ; 1R ; -_ ; +-cong ; ·-cong ; neg-cong
           ; interp-node-+ ; interp-node-· ; interp-node-0 ; interp-node-1 ; interp-node-neg
           ; +-assoc-law ; +-idˡ-law ; +-idʳ-law ; +-invˡ-law ; +-invʳ-law ; +-comm-law
           ; ·-assoc-law ; ·-idˡ-law ; ·-idʳ-law ; distribˡ-law ; distribʳ-law )
 
-  equations : 𝑨 ⊨ᶜʳⁱ Th-CommutativeRing
+  equations : 𝑨 ⊨ᶜʳᵍ Th-CommutativeRing
   equations = proj₂ 𝑪
 
   ·-comm-law : ∀ x y → x · y ≈ y · x
@@ -116,7 +116,7 @@ eqsToCommutativeRing A _+'_ 0' -'_ _*'_ 1'
   +-assoc-≡ +-idˡ-≡ +-idʳ-≡ +-invˡ-≡ +-invʳ-≡ +-comm-≡ *-assoc-≡ *-idˡ-≡ *-idʳ-≡ *-comm-≡ distribˡ-≡ distribʳ-≡ =
   opsToBareRing A _+'_ 0' -'_ _*'_ 1' , proof
   where
-  proof : opsToBareRing A _+'_ 0' -'_ _*'_ 1' ⊨ᶜʳⁱ Th-CommutativeRing
+  proof : opsToBareRing A _+'_ 0' -'_ _*'_ 1' ⊨ᶜʳᵍ Th-CommutativeRing
   proof +-assocᶜ  ρ = +-assoc-≡  (ρ 0F) (ρ 1F) (ρ 2F)
   proof +-idˡᶜ    ρ = +-idˡ-≡    (ρ 0F)
   proof +-idʳᶜ    ρ = +-idʳ-≡    (ρ 0F)
