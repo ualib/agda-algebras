@@ -12,4 +12,3 @@ exclude:
   - "*.hi"
   - "*.o"
   - "README.md"
-  - "INSTALL_AGDA.md"

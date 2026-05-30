@@ -17,7 +17,7 @@ Guidance for Claude Code working in this repository.  Keep changes consistent wi
 +  `src/Cubical/` is the long-term canonical target (v4.0).  When defining new structures, isolate the underlying equality/equivalence so it can be mechanically substituted on the eventual Cubical port.
 +  The `Classical/` tree builds specific theories (semigroups, groups, lattices, rings) over the universal-algebra foundation, using Σ-type definitions at the core with record-typed "bundle views" for agda-stdlib interop.
 +  The literate format is `.lagda.md` (ADR-004); every module is literate Markdown.  Render inline Agda names with kramdown attribute spans, e.g. `` `S`{.AgdaFunction} ``.
-+  Roadmap and milestones (M1–M9) live in `docs/GITHUB_PROJECT.md`; the full style guide is `docs/STYLE.md`.
++  Roadmap and milestones (M1–M9) live in `docs/GITHUB_PROJECT.md`; the full style guide is `docs/STYLE_GUIDE.md`.
 
 ## Agda and corpus-quality conventions
 
