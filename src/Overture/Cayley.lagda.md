@@ -9,44 +9,41 @@ author: "the agda-algebras development team"
 
 This is the [Overture.Cayley][] module of the [Agda Universal Algebra Library][].
 
-A *Cayley table* (or *multiplication table*) specifies a binary operation on a
-finite set by tabulating every product.  This module fixes a small, reusable
-representation for finite operations together with the decision procedures that
-discharge their algebraic laws, and so answers the practical question: *what is a
-good way to describe a finite operation by its Cayley table in Agda, and how does
-one then prove the laws?*
+A *Cayley table* (or *multiplication table*) specifies a binary operation on a finite
+set by tabulating every product.  This module fixes a small, reusable representation
+for finite operations together with the decision procedures that discharge their
+algebraic laws, and so answers the following practical question:
 
-The representation deliberately depends only on the finite-data parts of the
-standard library — `Fin`{.AgdaDatatype}, `Vec`{.AgdaDatatype}, and decidable
-equality on `Fin n`{.AgdaDatatype} — and **not** on the standard library's
-algebra hierarchy.  A binary operation is just a function
-`Fin n → Fin n → Fin n`{.AgdaFunction}; we do not route it through
-`Algebra.Core.Op₂`{.AgdaFunction} or any bundle.  (Re-expressing finite
-operations over the library's own tuple-indexed `Op`{.AgdaFunction} is deferred
-to the milestone-4 cleanup that consolidates the two `Op`{.AgdaFunction}
-declarations; see the note at the end of this module.)
+> How does one represent a binary operation on a finite set by its Cayley table in
+> Agda, and how does one prove the laws of such an operation?
 
-The representation is a square table of indices.  The carrier is the canonical
-`n`-element type `Fin n`{.AgdaDatatype}, and a Cayley table is an `n × n` matrix
-of elements of `Fin n`{.AgdaDatatype}, stored row-major as a `Vec`{.AgdaDatatype}
-of rows:
+The representation deliberately depends only on the finite-data parts of the standard
+library — `Fin`{.AgdaDatatype}, `Vec`{.AgdaDatatype}, and decidable equality on
+`Fin n` — and does not depend on the standard library's algebra hierarchy.
 
-+  `⟦ t ⟧ a b`{.AgdaFunction} reads the entry in row `a`, column `b`.  This makes
-   the table itself a first-class, inspectable datum — the literal you write down
-   *is* the Cayley table — while `⟦_⟧`{.AgdaFunction} turns it into the binary
-   operation `Fin n → Fin n → Fin n`{.AgdaFunction} that the `Classical/`{.AgdaModule}
-   builders (`opsToMagma`{.AgdaFunction}, `eqsToGroup`{.AgdaFunction}, …) consume.
+A binary operation is just a function `Fin n → Fin n → Fin n`; we do not route it
+through `Algebra.Core.Op₂`{.AgdaFunction} or any bundle.  The representation is a
+square table of indices.  The carrier is the canonical `n`-element type `Fin n`, and
+a Cayley table is an `n × n` array of elements of `Fin n`, stored row-major as a
+`Vec`{.AgdaDatatype} of rows:
+
++  `⟦ t ⟧ a b` reads the entry in row `a`, column `b`.  This makes the table itself a
+   first-class, inspectable datum — the literal you write down *is* the Cayley table
+   — while `⟦_⟧`{.AgdaFunction} turns it into the binary operation in
+   `Fin n → Fin n → Fin n` that the `Classical`{.AgdaModule} builders
+   (`opsToMagma`{.AgdaFunction}, `eqsToGroup`{.AgdaFunction}, …) consume.
 
 The pay-off is that an equational law over a finite carrier is a *decidable*
-proposition: `Fin n`{.AgdaDatatype} has decidable equality, and
-[`Data.Fin.Properties.all?`][] turns a pointwise decision procedure into a
-decision for a universally quantified statement.  So each law — associativity,
-commutativity, idempotence, the identity and inverse laws — is discharged by
-`from-yes`{.AgdaFunction} applied to the corresponding decision, with no
-hand-written case dump.  Equivalently: if the table you wrote down does *not*
-satisfy a law, the decision reduces to `no`{.AgdaInductiveConstructor} and the
-`from-yes`{.AgdaFunction} term fails to type-check, so the table is checked for
-you at compile time.
+proposition: `Fin n` has decidable equality, and [`Data.Fin.Properties.all?`][] turns
+a pointwise decision procedure into a decision for a universally quantified statement.
+So each law — associativity, commutativity, idempotence, the identity and inverse
+laws — is discharged by `from-yes`{.AgdaFunction} applied to the corresponding
+decision, with no hand-written case dump.
+
+Equivalently, if the table you wrote down does *not* satisfy a law, the decision
+reduces to `no`{.AgdaInductiveConstructor} and the `from-yes`{.AgdaFunction} term
+fails to type-check; in this way, the operation's properties can be checked by the
+Agda type checker.
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -54,12 +51,12 @@ you at compile time.
 module Overture.Cayley where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
-open import Agda.Primitive          using () renaming ( Set to Type )
-open import Data.Nat                using ( ℕ )
-open import Data.Fin               using ( Fin )
-open import Data.Fin.Properties     using ( _≟_ ; all? )
-open import Data.Vec.Base           using ( Vec ; lookup )
-open import Relation.Binary.PropositionalEquality  using ( _≡_ )
+open import Agda.Primitive                          using () renaming ( Set to Type )
+open import Data.Nat                                using ( ℕ )
+open import Data.Fin                                using ( Fin )
+open import Data.Fin.Properties                     using ( _≟_ ; all? )
+open import Data.Vec.Base                           using ( Vec ; lookup )
+open import Relation.Binary.PropositionalEquality   using ( _≡_ )
 open import Relation.Nullary.Decidable.Core         using ( Dec )
 
 -- Re-exported so downstream examples can discharge laws with a single name.
@@ -80,11 +77,11 @@ Table n = Vec (Vec (Fin n) n) n
 
 #### Decidable algebraic laws
 
-Each law over the finite carrier is decidable; we expose the decision so that
-callers can extract the proof with `from-yes`{.AgdaFunction} whenever the
-operation satisfies the law.  These checkers are stated for an arbitrary binary
-operation `Fin n → Fin n → Fin n`{.AgdaFunction}, so they apply to any finite
-operation, not only to table-defined ones.
+Each law over the finite carrier is decidable; we expose the decision so that callers
+can extract the proof with `from-yes`{.AgdaFunction} whenever the operation satisfies
+the law.  These checkers are stated for an arbitrary binary operation
+`Fin n → Fin n → Fin n`, so they apply to any finite operation, not only to
+table-defined ones.
 
 ```agda
 module _ {n : ℕ} (_·_ : Fin n → Fin n → Fin n) where
@@ -124,12 +121,12 @@ module _ {n : ℕ} (_·_ : Fin n → Fin n → Fin n) where
 
 #### A note on the operation type
 
-This module types a binary operation as a bare `Fin n → Fin n → Fin n`{.AgdaFunction}
-rather than the library's tuple-indexed `Op`{.AgdaFunction}.  That is a
-deliberate, temporary choice: the library currently carries *two* declarations
-of `Op`{.AgdaFunction} — `Overture.Operations.Op A I`{.AgdaFunction} (carrier
-first) and `Classical.Operations.Op I A`{.AgdaFunction} (arity first) — and the
-right fix is to consolidate them into a single canonical `Op`{.AgdaFunction} in
+This module types a binary operation as a bare `Fin n → Fin n → Fin n` rather than
+the library's tuple-indexed `Op`{.AgdaFunction}.  That is a deliberate, temporary
+choice: the library currently carries *two* declarations of `Op`{.AgdaFunction} —
+`Overture.Operations.Op A I`{.AgdaFunction} (carrier first) and
+`Classical.Operations.Op I A`{.AgdaFunction} (arity first) — and the right fix is to
+consolidate them into a single canonical `Op`{.AgdaFunction} in
 `Overture.Operations`{.AgdaModule} before threading it through new constructions.
 That consolidation has a wide blast radius and is tracked as a milestone-4 style
 sweep ([#354](https://github.com/ualib/agda-algebras/issues/354)); once it lands,
