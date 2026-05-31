@@ -24,7 +24,6 @@ and continues issue-by-issue under milestone M3.
 
 module Examples.Classical where
 
-open import Examples.Classical.Cayley public
 open import Examples.Classical.CommutativeIdempotentMagma public
 open import Examples.Classical.CommutativeSemigroup public
 open import Examples.Classical.CommutativeMonoid public
