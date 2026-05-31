@@ -34,7 +34,7 @@ a Cayley table is an `n × n` array of elements of `Fin n`, stored row-major as 
    (`opsToMagma`{.AgdaFunction}, `eqsToGroup`{.AgdaFunction}, …) consume.
 
 The pay-off is that an equational law over a finite carrier is a *decidable*
-proposition: `Fin n` has decidable equality, and [`Data.Fin.Properties.all?`][] turns
+proposition: `Fin n` has decidable equality, and `Data.Fin.Properties.all?`{.AgdaFunction} turns
 a pointwise decision procedure into a decision for a universally quantified statement.
 So each law — associativity, commutativity, idempotence, the identity and inverse
 laws — is discharged by `from-yes`{.AgdaFunction} applied to the corresponding
