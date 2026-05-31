@@ -1,14 +1,14 @@
 ---
 layout: default
-file: "src/Examples/Classical/Lattice.lagda.md"
-title: "Examples.Classical.Lattice module"
-date: "2026-05-28"
+file: "src/Examples/Classical/Lattices/Two.lagda.md"
+title: "Examples.Classical.Lattices.Two module"
+date: "2026-05-31"
 author: "the agda-algebras development team"
 ---
 
-### <a id="examples-classical-lattice">Worked example — `𝟚 = (Bool, _∧_, _∨_)` as a Boolean lattice</a>
+### Worked example — `𝟚 = (Bool, _∧_, _∨_)` as a Boolean lattice {#examples-classical-lattices-two}
 
-This is the [Examples.Classical.Lattice][] module of the [Agda Universal Algebra Library][].
+This is the [Examples.Classical.Lattices.Two][] module of the [Agda Universal Algebra Library][].
 
 `Bool` under meet and join forms the canonical two-element lattice, and it is
 the lattice the acceptance criterion of [M3-7](https://github.com/ualib/agda-algebras/issues/264)
@@ -19,7 +19,7 @@ asks the stdlib bridge to round-trip on.  Built from stdlib's
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
-module Examples.Classical.Lattice where
+module Examples.Classical.Lattices.Two where
 
 -- Imports from the Agda Standard Library -------------------------------------
 open import Data.Bool                              using  ( Bool ; _∧_ ; _∨_ )
@@ -35,7 +35,7 @@ open import Classical.Small.Structures.Lattice  using ( Lattice ; eqsToLattice )
 import Classical.Structures.Lattice as Polymorphic
 ```
 
-#### <a id="absorbR">Deriving the second absorption equation</a>
+#### Deriving the second absorption equation {#absorbR}
 
 Our `eqsToLattice` takes the second absorption equation in the form
 `(a ∧ b) ∨ a ≡ a` (per `Th-Lattice absorbʳ = AbsorbsRight ∧-Op ∨-Op refl refl 0F 1F`);
@@ -47,7 +47,7 @@ Bool-absorbʳ : ∀ a b → (a ∧ b) ∨ a ≡ a
 Bool-absorbʳ a b = trans (∨-comm (a ∧ b) a) (∨-absorbs-∧ a b)
 ```
 
-#### <a id="bool-lattice">The lattice `𝟚 = (Bool, _∧_, _∨_)`</a>
+#### The lattice `𝟚 = (Bool, _∧_, _∨_)` {#bool-lattice}
 
 ```agda
 Bool-lattice : Lattice
@@ -57,7 +57,7 @@ Bool-lattice = eqsToLattice Bool _∧_ _∨_
                  ∧-absorbs-∨ Bool-absorbʳ
 ```
 
-#### <a id="acceptance">Acceptance checks</a>
+#### Acceptance checks {#acceptance}
 
 The `Lattice-Op` accessors interpret to stdlib's `Bool._∧_` and `Bool._∨_` on
 the nose: no opacity from `eqsToLattice`, from the factoring through
@@ -73,7 +73,7 @@ open Polymorphic.Lattice-Op Bool-lattice renaming ( _∧_ to _∙∧_ ; _∨_ to
 ∙∨-is-∨-la a b = refl
 ```
 
-#### <a id="roundtrip">Round-trip through `Algebra.Lattice.Bundles.Lattice`</a>
+#### Round-trip through `Algebra.Lattice.Bundles.Lattice` {#roundtrip}
 
 The bundle bridge round-trips on `Bool-lattice` pointwise on both operations.
 Both directions reduce by `pair a b 0F ⇉ a` and `pair a b 1F ⇉ b`, so
