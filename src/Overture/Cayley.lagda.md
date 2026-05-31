@@ -132,8 +132,9 @@ first) and `Classical.Operations.Op I A`{.AgdaFunction} (arity first) — and th
 right fix is to consolidate them into a single canonical `Op`{.AgdaFunction} in
 `Overture.Operations`{.AgdaModule} before threading it through new constructions.
 That consolidation has a wide blast radius and is tracked as a milestone-4 style
-sweep; once it lands, `⟦_⟧`{.AgdaFunction} and the checkers above can be
-re-expressed over the canonical `Op`{.AgdaFunction} if that reads better.
+sweep ([#354](https://github.com/ualib/agda-algebras/issues/354)); once it lands,
+`⟦_⟧`{.AgdaFunction} and the checkers above can be re-expressed over the canonical
+`Op`{.AgdaFunction} if that reads better.
 
 --------------------------------------
 
