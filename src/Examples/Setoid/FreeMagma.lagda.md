@@ -1,0 +1,138 @@
+---
+layout: default
+file: "src/Examples/Setoid/FreeMagma.lagda.md"
+title: "Examples.Setoid.FreeMagma module"
+date: "2026-05-31"
+author: "the agda-algebras development team"
+---
+
+### Worked example: the free magma on two generators {#examples-setoid-freemagma}
+
+This is the [Examples.Setoid.FreeMagma][] module of the [Agda Universal Algebra Library][].
+
+A *magma* is a carrier with a single binary operation and an *empty* equational
+theory, so the absolutely free magma on a set `X`{.AgdaBound} of generators is
+nothing more than the term algebra `𝑻 X`{.AgdaFunction} over the magma signature
+`Sig-Magma`{.AgdaFunction}: its elements are the finite binary trees with leaves
+labelled by generators.  This module exhibits a few concrete terms over two
+generators and demonstrates the universal property — every assignment of the
+generators into a concrete magma extends uniquely to a homomorphism, computed by
+`free-lift`{.AgdaFunction}.
+
+```agda
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+
+module Examples.Setoid.FreeMagma where
+
+-- Imports from Agda and the Agda Standard Library -----------------------------
+open import Agda.Primitive                         using () renaming ( Set to Type )
+open import Data.Fin.Base                          using ( Fin )
+open import Data.Fin.Patterns                      using ( 0F ; 1F )
+open import Data.Nat                               using ( ℕ ; _∸_ )
+open import Data.Product                           using ( _,_ )
+open import Function                               using ( Func )
+open import Level                                  using ( 0ℓ )
+open import Relation.Binary.PropositionalEquality as ≡
+                                                   using ( _≡_ ; refl )
+
+-- Imports from the Agda Universal Algebra Library -----------------------------
+open import Classical.Signatures.Magma             using ( Sig-Magma ; ∙-Op )
+open import Overture                               using ( ∣_∣ )
+open import Overture.Terms       {𝑆 = Sig-Magma}   using ( Term ; ℊ ; node )
+open import Setoid.Algebras      {𝑆 = Sig-Magma}   using ( Algebra ; 𝕌[_] ; ⟨_⟩ )
+open import Setoid.Homomorphisms {𝑆 = Sig-Magma}   using ( hom )
+open import Setoid.Terms         {𝑆 = Sig-Magma}   using ( 𝑻 ; free-lift ; lift-hom )
+
+open Func renaming ( to to _⟨$⟩_ )
+```
+
+#### Building terms over the magma signature {#building-terms}
+
+The single binary operation symbol of `Sig-Magma`{.AgdaFunction} is `∙-Op`{.AgdaInductiveConstructor},
+of arity `Fin 2`{.AgdaDatatype}.  We package the syntactic "multiply" of two terms
+into a readable infix helper, then name the two generators.
+
+```agda
+-- Syntactic product of two terms: the node ∙-Op applied to (s , t).
+_·_ : {X : Type} → Term X → Term X → Term X
+s · t = node ∙-Op λ { 0F → s ; 1F → t }
+
+-- The two generators of the free magma on Fin 2.
+x y : Term (Fin 2)
+x = ℊ 0F
+y = ℊ 1F
+```
+
+A handful of distinct elements of the free magma, i.e. distinct binary trees:
+
+```agda
+xy : Term (Fin 2)
+xy = x · y
+
+xy·x : Term (Fin 2)
+xy·x = (x · y) · x
+
+x·yx : Term (Fin 2)
+x·yx = x · (y · x)
+```
+
+Because the magma theory is empty, these are genuinely *different* elements of the
+free magma — there is no associativity law to collapse `(x · y) · x`{.AgdaFunction}
+and `x · (y · x)`{.AgdaFunction}.  (Their identification is exactly what passing to
+the free *semigroup* would add; see [Examples.Setoid.FreeSemigroup][].)
+
+#### The universal property {#universal-property}
+
+To witness the universal property concretely we map into `(ℕ, ∸)`{.AgdaFunction} —
+truncated subtraction — regarded as a magma over `Sig-Magma`{.AgdaFunction}.  We
+deliberately pick a *non-associative* operation so that the syntactic distinction
+between the two trees becomes a numerical one.
+
+```agda
+ℕ∸-magma : Algebra 0ℓ 0ℓ
+ℕ∸-magma = record { Domain = ≡.setoid ℕ ; Interp = interp }
+  where
+  interp : Func (⟨ Sig-Magma ⟩ (≡.setoid ℕ)) (≡.setoid ℕ)
+  interp ⟨$⟩ (∙-Op , args)                          = args 0F ∸ args 1F
+  cong interp {∙-Op , _} {.∙-Op , _} (refl , args≈) =
+    ≡.cong₂ _∸_ (args≈ 0F) (args≈ 1F)
+```
+
+Fix the assignment `0F ↦ 3`, `1F ↦ 5`.  The free lift evaluates each generator by
+this assignment and each `∙-Op`{.AgdaInductiveConstructor} node by `∸`.  The tree
+`(x · y) · x`{.AgdaFunction} evaluates to `(3 ∸ 5) ∸ 3 = 0`, whereas
+`x · (y · x)`{.AgdaFunction} evaluates to `3 ∸ (5 ∸ 3) = 1` — different values,
+on the nose.
+
+```agda
+η : Fin 2 → ℕ
+η 0F = 3
+η 1F = 5
+
+⟦_⟧η : Term (Fin 2) → ℕ
+⟦_⟧η = free-lift {𝑨 = ℕ∸-magma} η
+
+eval-xy·x : ⟦ xy·x ⟧η ≡ 0
+eval-xy·x = refl
+
+eval-x·yx : ⟦ x·yx ⟧η ≡ 1
+eval-x·yx = refl
+```
+
+Because the free magma keeps the two parenthesisations apart, a non-associative
+target can tell them apart numerically.  Finally, the free lift is not merely a
+function but a homomorphism `𝑻 (Fin 2) ⟶ ℕ∸-magma`, supplied by
+`lift-hom`{.AgdaFunction}:
+
+```agda
+ηhom : hom (𝑻 (Fin 2)) ℕ∸-magma
+ηhom = lift-hom {𝑨 = ℕ∸-magma} η
+
+-- The underlying map of the homomorphism is exactly the free lift.
+ηhom-is-free-lift : ∀ t → ∣ ηhom ∣ ⟨$⟩ t ≡ ⟦ t ⟧η
+ηhom-is-free-lift _ = refl
+```
+
+--------------------------------------
+
+{% include UALib.Links.md %}
