@@ -99,11 +99,11 @@ _⇒_ = ⟦ ⇒-table ⟧
 
 #### The chain as a distributive lattice {#chain-distributive-lattice}
 
-Associativity, commutativity, and idempotency of both operations come from the
-generic `Overture.Cayley` deciders; absorption and distributivity come from
-`Classical.Properties.Lattice` (`Absorbsˡ?`, `Absorbsʳ?`, `Distributesˡ?`).  Note
-that the second distributivity law, `∨` over `∧`, is `Distributesˡ?` with the two
-operations exchanged.
+The decidable law-checkers all come from `Overture.Operations.Properties`:
+associativity, commutativity, and idempotency of each operation, and the
+two-operation absorption and distributivity laws (`Absorbsˡ?`, `Absorbsʳ?`,
+`Distributesˡ?`).  Note that the second distributivity law, `∨` over `∧`, is
+`Distributesˡ?` with the two operations exchanged.
 
 ```agda
 chain3 : DistributiveLattice

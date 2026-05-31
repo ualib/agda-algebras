@@ -6,7 +6,7 @@ date: "2026-05-28"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-properties-lattice">The meet-join / order-theoretic view of a lattice</a>
+### The meet-join / order-theoretic view of a lattice {#classical-properties-lattice}
 
 This is the [Classical.Properties.Lattice][] module of the [Agda Universal Algebra Library][].
 
@@ -58,7 +58,7 @@ open import Setoid.Algebras.Basic {𝑆 = Sig-Lattice}  using ( 𝔻[_] ; 𝕌[_
 private variable α ρ : Level
 ```
 
-#### <a id="lattice-order">The `Lattice-Order` module</a>
+#### The `Lattice-Order` module {#lattice-order}
 
 ```agda
 module Lattice-Order {α ρ : Level} (𝑳 : Lattice α ρ) where
@@ -184,7 +184,7 @@ through absorption twice.
     z             ∎)
 ```
 
-#### <a id="finite-order">The decidable meet order and its atoms</a>
+#### The decidable meet order and its atoms {#finite-order}
 
 `FiniteOrder _∧_` packages the meet order `a ≤ b := a ∧ b ≡ a` over a finite carrier
 together with its decision procedure.  Fixing a bottom `⊥` and top `⊤` (submodule
