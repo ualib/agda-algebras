@@ -16,14 +16,14 @@ Bridges [`Classical.Structures.DistributiveLattice`][] to the standard library's
 `Algebra.Lattice.Bundles`.
 
 The forward direction (`⟨_⟩ᵈˡ`) builds an `IsDistributiveLattice` from our laws:
-its `isLattice` field is the same record the Lattice bridge produces (one ∨-comm
+its `isLattice` field is the same record the Lattice bridge produces (one `∨-comm`
 step bridges our `absorbʳ-law` to stdlib's `∨-absorbs-∧`), and the two
 `DistributesOver` fields each pair a left and a right curried law — both of which
 `DistributiveLattice-Op` supplies.
 
 The reverse direction (`⟪_⟫ᵈˡ`) reads stdlib's `∨-distribˡ-∧` and `∧-distribˡ-∧`
 back as the two left distributivity equations and reuses the Lattice-bridge
-derivations (idempotency from absorption, the `absorbʳ` form by one ∨-comm step)
+derivations (idempotency from absorption, the `absorbʳ` form by one `∨-comm` step)
 for the eight shared equations.
 
 ```agda
@@ -32,7 +32,9 @@ for the eight shared equations.
 module Classical.Bundles.DistributiveLattice where
 
 -- Imports from the Agda Standard Library -------------------------------------
-open import Algebra.Lattice.Bundles  using () renaming ( DistributiveLattice to stdlib-DistributiveLattice )
+open import Algebra.Lattice.Bundles  using ()
+                                     renaming (  DistributiveLattice
+                                                 to stdlib-DistributiveLattice )
 open import Data.Fin.Patterns        using ( 0F ; 1F ; 2F )
 open import Data.Product             using ( _,_ ; proj₁ ; proj₂ )
 open import Function                 using ( Func )
@@ -42,13 +44,14 @@ import Relation.Binary.PropositionalEquality as ≡
 open Func renaming ( to to _⟨$⟩_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Classical.Signatures.Lattice                 using  ( ∧-Op ; ∨-Op ; Sig-Lattice )
-open import Classical.Structures.DistributiveLattice     using  ( DistributiveLattice ; module DistributiveLattice-Op )
-open import Classical.Theories.DistributiveLattice       using  ( ∧-assoc ; ∧-comm ; ∧-idem
-                                                                ; ∨-assoc ; ∨-comm ; ∨-idem
-                                                                ; absorbˡ ; absorbʳ
-                                                                ; ∧-distribˡ ; ∨-distribˡ )
-open import Setoid.Algebras.Basic {𝑆 = Sig-Lattice}      using  ( Algebra ; ⟨_⟩ ; 𝕌[_] ; 𝔻[_] )
+open import Classical.Signatures.Lattice              using  ( ∧-Op ; ∨-Op ; Sig-Lattice )
+open import Classical.Structures.DistributiveLattice  using  ( DistributiveLattice
+                                                             ; module DistributiveLattice-Op )
+open import Classical.Theories.DistributiveLattice    using  ( ∧-assoc ; ∧-comm ; ∧-idem
+                                                             ; ∨-assoc ; ∨-comm ; ∨-idem
+                                                             ; absorbˡ ; absorbʳ
+                                                             ; ∧-distribˡ ; ∨-distribˡ )
+open import Setoid.Algebras.Basic {𝑆 = Sig-Lattice}   using  ( Algebra ; ⟨_⟩ ; 𝕌[_] ; 𝔻[_] )
 
 private variable α ρ : Level
 
@@ -103,13 +106,13 @@ private variable α ρ : Level
                ; ∧-distribˡ-∨ to L-∧-distribˡ-∨ ; ∨-distribˡ-∧ to L-∨-distribˡ-∧ )
   open Setoid setoid
 
-  ∧-idem-derived : ∀ x → (x ∧' x) ≈ x
+  ∧-idem-derived : ∀ x → x ∧' x ≈ x
   ∧-idem-derived x = trans (∧-cong refl (sym (L-∨-absorbs-∧ x x))) (L-∧-absorbs-∨ x (x ∧' x))
 
-  ∨-idem-derived : ∀ x → (x ∨' x) ≈ x
+  ∨-idem-derived : ∀ x → x ∨' x ≈ x
   ∨-idem-derived x = trans (∨-cong refl (sym (L-∧-absorbs-∨ x x))) (L-∨-absorbs-∧ x (x ∨' x))
 
-  absorbʳ-derived : ∀ x y → ((x ∧' y) ∨' x) ≈ x
+  absorbʳ-derived : ∀ x y → (x ∧' y) ∨' x ≈ x
   absorbʳ-derived x y = trans (L-∨-comm (x ∧' y) x) (L-∨-absorbs-∧ x y)
 
   𝑨 : Algebra _ _
@@ -126,10 +129,10 @@ module _ {𝑫 : DistributiveLattice α ρ} where
   open Setoid 𝔻[ proj₁ 𝑫 ]
   open DistributiveLattice-Op ⟪ ⟨ 𝑫 ⟩ᵈˡ ⟫ᵈˡ renaming ( _∧_ to _∧'_ ; _∨_ to _∨'_ )
 
-  roundtrip-cbc-∧-dl : (a b : 𝕌[ proj₁ 𝑫 ]) → (a ∧' b) ≈ (a ∧ b)
+  roundtrip-cbc-∧-dl : (a b : 𝕌[ proj₁ 𝑫 ]) → a ∧' b ≈ a ∧ b
   roundtrip-cbc-∧-dl a b = refl
 
-  roundtrip-cbc-∨-dl : (a b : 𝕌[ proj₁ 𝑫 ]) → (a ∨' b) ≈ (a ∨ b)
+  roundtrip-cbc-∨-dl : (a b : 𝕌[ proj₁ 𝑫 ]) → a ∨' b ≈ a ∨ b
   roundtrip-cbc-∨-dl a b = refl
 
 module _ {L : stdlib-DistributiveLattice α ρ} where

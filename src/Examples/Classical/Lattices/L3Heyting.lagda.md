@@ -1,27 +1,27 @@
 ---
 layout: default
-file: "src/Examples/Classical/HeytingChain3.lagda.md"
-title: "Examples.Classical.HeytingChain3 module"
+file: "src/Examples/Classical/Lattices/L3Heyting.lagda.md"
+title: "Examples.Classical.Lattices.L3Heyting module"
 date: "2026-05-31"
 author: "the agda-algebras development team"
 ---
 
 ### Worked example — the three-element chain as a finite Heyting algebra {#examples-classical-heytingchain3}
 
-This is the [Examples.Classical.HeytingChain3][] module of the [Agda Universal Algebra Library][].
+This is the [Examples.Classical.Lattices.L3Heyting][] module of the [Agda Universal Algebra Library][].
 
 The three-element chain `𝟛 = {0 ≤ 1 ≤ 2}` is the smallest non-Boolean Heyting
 algebra: as a lattice it is `(Fin 3, min, max)`, and because every chain is
-distributive it is a [`DistributiveLattice`][Classical.Structures.DistributiveLattice].
+distributive it is a
+[`DistributiveLattice`][Classical.Structures.DistributiveLattice].
 What makes it a *Heyting* algebra is a relative pseudocomplement (an implication)
 `_⇒_` satisfying the residuation adjunction
 
-> `a ∧ b ≤ c  ⟺  a ≤ (b ⇒ c)`,
+    a ∧ b ≤ c  ⟺  a ≤ (b ⇒ c),
 
-where `a ≤ b` is the meet order `a ∧ b ≡ a`.  Following the M3-9 task wording, the
-chain is presented *as a lattice example* — concretely a distributive lattice — and
-the implication is supplied as an extra operation whose residuation and Heyting
-identities are proved alongside.
+where `a ≤ b` is the meet order `a ∧ b ≡ a`.  The chain is presented *as a lattice
+example* — concretely a distributive lattice — and the implication is supplied as an
+extra operation whose residuation and Heyting identities are proved alongside.
 
 Both the lattice operations and the implication are given by Cayley tables, and
 every law — the ten distributive-lattice equations, the residuation adjunction, and
@@ -32,7 +32,7 @@ the corresponding decision compute to `no`, and the example would fail to compil
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
-module Examples.Classical.HeytingChain3 where
+module Examples.Classical.Lattices.L3Heyting where
 
 -- Imports from Agda and the Agda Standard Library -----------------------------
 open import Agda.Primitive                          using () renaming ( Set to Type )
@@ -65,35 +65,36 @@ minimum, join is the maximum, and the implication `a ⇒ b` is the largest `x` w
 | 2   | 0 | 1 | 2 |   | 2   | 2 | 2 | 2 |   | 2   | 0 | 1 | 2 |
 
 ```agda
-⊤ : Fin 3
-⊤ = 2F
+private
+  infixr 7 _∧_
+  infixr 6 _∨_
+  infixr 5 _⇒_
 
-∧-table : Table 3
-∧-table = (0F ∷ 0F ∷ 0F ∷ [])
-        ∷ (0F ∷ 1F ∷ 1F ∷ [])
-        ∷ (0F ∷ 1F ∷ 2F ∷ [])
-        ∷ []
+  ⊤ : Fin 3
+  ⊤ = 2F
 
-∨-table : Table 3
-∨-table = (0F ∷ 1F ∷ 2F ∷ [])
-        ∷ (1F ∷ 1F ∷ 2F ∷ [])
-        ∷ (2F ∷ 2F ∷ 2F ∷ [])
-        ∷ []
+  ∧-table : Table 3
+  ∧-table = (0F ∷ 0F ∷ 0F ∷ [])
+          ∷ (0F ∷ 1F ∷ 1F ∷ [])
+          ∷ (0F ∷ 1F ∷ 2F ∷ [])
+          ∷ []
 
-⇒-table : Table 3
-⇒-table = (2F ∷ 2F ∷ 2F ∷ [])
-        ∷ (0F ∷ 2F ∷ 2F ∷ [])
-        ∷ (0F ∷ 1F ∷ 2F ∷ [])
-        ∷ []
+  ∨-table : Table 3
+  ∨-table = (0F ∷ 1F ∷ 2F ∷ [])
+          ∷ (1F ∷ 1F ∷ 2F ∷ [])
+          ∷ (2F ∷ 2F ∷ 2F ∷ [])
+          ∷ []
 
-infixr 7 _∧_
-infixr 6 _∨_
-infixr 5 _⇒_
+  ⇒-table : Table 3
+  ⇒-table = (2F ∷ 2F ∷ 2F ∷ [])
+          ∷ (0F ∷ 2F ∷ 2F ∷ [])
+          ∷ (0F ∷ 1F ∷ 2F ∷ [])
+          ∷ []
 
-_∧_ _∨_ _⇒_ : Fin 3 → Fin 3 → Fin 3
-_∧_ = ⟦ ∧-table ⟧
-_∨_ = ⟦ ∨-table ⟧
-_⇒_ = ⟦ ⇒-table ⟧
+  _∧_ _∨_ _⇒_ : Fin 3 → Fin 3 → Fin 3
+  _∧_ = ⟦ ∧-table ⟧
+  _∨_ = ⟦ ∨-table ⟧
+  _⇒_ = ⟦ ⇒-table ⟧
 ```
 
 #### The chain as a distributive lattice {#chain-distributive-lattice}
@@ -103,17 +104,18 @@ generic `Overture.Cayley` deciders; absorption and distributivity are decided he
 by the same `all?`/`_≟_` idiom.
 
 ```agda
-absorbˡ? : Dec (∀ a b → a ∧ (a ∨ b) ≡ a)
-absorbˡ? = all? (λ a → all? (λ b → (a ∧ (a ∨ b)) ≟ a))
+private
+  absorbˡ? : Dec (∀ a b → a ∧ (a ∨ b) ≡ a)
+  absorbˡ? = all? (λ a → all? (λ b → (a ∧ (a ∨ b)) ≟ a))
 
-absorbʳ? : Dec (∀ a b → (a ∧ b) ∨ a ≡ a)
-absorbʳ? = all? (λ a → all? (λ b → ((a ∧ b) ∨ a) ≟ a))
+  absorbʳ? : Dec (∀ a b → (a ∧ b) ∨ a ≡ a)
+  absorbʳ? = all? (λ a → all? (λ b → ((a ∧ b) ∨ a) ≟ a))
 
-∧-distribˡ? : Dec (∀ a b c → a ∧ (b ∨ c) ≡ (a ∧ b) ∨ (a ∧ c))
-∧-distribˡ? = all? (λ a → all? (λ b → all? (λ c → (a ∧ (b ∨ c)) ≟ ((a ∧ b) ∨ (a ∧ c)))))
+  ∧-distribˡ? : Dec (∀ a b c → a ∧ (b ∨ c) ≡ (a ∧ b) ∨ (a ∧ c))
+  ∧-distribˡ? = all? (λ a → all? (λ b → all? (λ c → (a ∧ (b ∨ c)) ≟ ((a ∧ b) ∨ (a ∧ c)))))
 
-∨-distribˡ? : Dec (∀ a b c → a ∨ (b ∧ c) ≡ (a ∨ b) ∧ (a ∨ c))
-∨-distribˡ? = all? (λ a → all? (λ b → all? (λ c → (a ∨ (b ∧ c)) ≟ ((a ∨ b) ∧ (a ∨ c)))))
+  ∨-distribˡ? : Dec (∀ a b c → a ∨ (b ∧ c) ≡ (a ∨ b) ∧ (a ∨ c))
+  ∨-distribˡ? = all? (λ a → all? (λ b → all? (λ c → (a ∨ (b ∧ c)) ≟ ((a ∨ b) ∧ (a ∨ c)))))
 
 chain3 : DistributiveLattice
 chain3 = eqsToDistributiveLattice (Fin 3) _∧_ _∨_
@@ -132,16 +134,19 @@ implication is the residuation adjunction between `_∧ b` and `b ⇒_`: for all
 quantified over the finite carrier, is decided and extracted by `from-yes`.
 
 ```agda
+infix 4 _≼_ _≼?_
 _≼_ : Fin 3 → Fin 3 → Type
 a ≼ b = a ∧ b ≡ a
 
 _≼?_ : (a b : Fin 3) → Dec (a ≼ b)
 a ≼? b = (a ∧ b) ≟ a
 
-residuation? : Dec (∀ a b c → ((a ∧ b) ≼ c → a ≼ (b ⇒ c)) × (a ≼ (b ⇒ c) → (a ∧ b) ≼ c))
-residuation? = all? (λ a → all? (λ b → all? (λ c →
-                 (((a ∧ b) ≼? c) →-dec (a ≼? (b ⇒ c)))
-                 ×-dec ((a ≼? (b ⇒ c)) →-dec ((a ∧ b) ≼? c)))))
+residuation? : Dec (∀ a b c → (a ∧ b ≼ c → a ≼ (b ⇒ c)) × (a ≼ (b ⇒ c) → a ∧ b ≼ c))
+residuation? =
+  all? (λ a →
+    all? (λ b →
+      all? (λ c →
+        (a ∧ b ≼? c →-dec a ≼? (b ⇒ c)) ×-dec (a ≼? (b ⇒ c) →-dec a ∧ b ≼? c))))
 
 residuation : ∀ a b c → ((a ∧ b) ≼ c → a ≼ (b ⇒ c)) × (a ≼ (b ⇒ c) → (a ∧ b) ≼ c)
 residuation = from-yes residuation?

@@ -32,37 +32,38 @@ left and a right law.
 
 module Classical.Structures.DistributiveLattice where
 
-open import Agda.Primitive                          using () renaming ( Set to Type )
+open import Agda.Primitive                using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library -------------------------------------
-open import Data.Fin.Base                          using ( Fin )
-open import Data.Fin.Patterns                      using ( 0F ; 1F ; 2F )
-open import Data.Product                           using ( Σ-syntax ; _×_ ; _,_ ; proj₁ ; proj₂ )
-open import Function                               using ( Func )
-open import Level                                  using ( Level ; _⊔_ ; suc )
-open import Relation.Binary                        using ( Setoid )
-open import Relation.Binary.PropositionalEquality  using ( _≡_ )
+open import Data.Fin.Base                 using ( Fin )
+open import Data.Fin.Patterns             using ( 0F ; 1F ; 2F )
+open import Data.Product                  using ( Σ-syntax ; _×_ ; _,_ ; proj₁ ; proj₂ )
+open import Function                      using ( Func )
+open import Level                         using ( Level ; _⊔_ ; suc )
+open import Relation.Binary               using ( Setoid )
+open import Relation.Binary.PropositionalEquality using ( _≡_ )
 
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 open Func renaming ( to to _⟨$⟩_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Classical.Operations                   using ( pair )
-open import Classical.Signatures.Lattice           using ( Sig-Lattice ; ∧-Op ; ∨-Op )
-open import Classical.Structures.Lattice           using ( Lattice ; module Lattice-Op ; opsToBareLattice )
-open import Classical.Theories.Lattice             using ()
-                                                   renaming ( ∧-assoc to ∧-assocˡᵃ ; ∧-comm to ∧-commˡᵃ ; ∧-idem to ∧-idemˡᵃ
-                                                            ; ∨-assoc to ∨-assocˡᵃ ; ∨-comm to ∨-commˡᵃ ; ∨-idem to ∨-idemˡᵃ
-                                                            ; absorbˡ to absorbˡˡᵃ ; absorbʳ to absorbʳˡᵃ )
-open import Classical.Theories.DistributiveLattice using ( Eq-DistributiveLattice ; Th-DistributiveLattice
-                                                         ; ∧-assoc ; ∧-comm ; ∧-idem
-                                                         ; ∨-assoc ; ∨-comm ; ∨-idem
-                                                         ; absorbˡ ; absorbʳ
-                                                         ; ∧-distribˡ ; ∨-distribˡ )
-open import Overture.Terms {𝑆 = Sig-Lattice}       using ( Term ; ℊ ; node )
+open import Classical.Operations          using  ( pair )
+open import Classical.Signatures.Lattice  using  ( Sig-Lattice ; ∧-Op ; ∨-Op )
+open import Classical.Structures.Lattice  using  ( Lattice ; module Lattice-Op
+                                                 ; opsToBareLattice )
+open import Classical.Theories.Lattice    using  ()
+  renaming  ( ∧-assoc to ∧-assocˡᵃ ; ∧-comm to ∧-commˡᵃ ; ∧-idem to ∧-idemˡᵃ
+            ; ∨-assoc to ∨-assocˡᵃ ; ∨-comm to ∨-commˡᵃ ; ∨-idem to ∨-idemˡᵃ
+            ; absorbˡ to absorbˡˡᵃ ; absorbʳ to absorbʳˡᵃ )
+
+open import Classical.Theories.DistributiveLattice
+  using  ( Eq-DistributiveLattice ; Th-DistributiveLattice ; ∧-assoc ; ∧-comm ; ∧-idem
+         ; ∨-assoc ; ∨-comm ; ∨-idem ; absorbˡ ; absorbʳ ; ∧-distribˡ ; ∨-distribˡ )
+
+open import Overture.Terms {𝑆 = Sig-Lattice} using ( Term ; ℊ ; node )
 open import Setoid.Algebras.Basic {𝑆 = Sig-Lattice} using ( Algebra ; 𝔻[_] ; 𝕌[_] )
-open import Setoid.Terms                           using ( module Environment )
+open import Setoid.Terms using ( module Environment )
 open import Setoid.Varieties.EquationalLogic {𝑆 = Sig-Lattice} using ( _⊧_≈_ )
 
 private variable α ρ : Level
@@ -72,7 +73,9 @@ private variable α ρ : Level
 
 ```agda
 infix 4 _⊨ᵈˡ_
-_⊨ᵈˡ_ : (𝑨 : Algebra α ρ) (ℰ : Eq-DistributiveLattice → Term (Fin 3) × Term (Fin 3)) → Type (α ⊔ ρ)
+_⊨ᵈˡ_ : (𝑨 : Algebra α ρ) (ℰ : Eq-DistributiveLattice → Term (Fin 3) × Term (Fin 3))
+  → Type (α ⊔ ρ)
+
 𝑨 ⊨ᵈˡ ℰ = ∀ i → 𝑨 ⊧ proj₁ (ℰ i) ≈ proj₂ (ℰ i)
 
 DistributiveLattice : (α ρ : Level) → Type (suc α ⊔ suc ρ)
@@ -109,10 +112,9 @@ module DistributiveLattice-Op {α ρ : Level} (𝑫 : DistributiveLattice α ρ)
   open SetoidReasoning 𝔻[ 𝑨 ]
 
   open Lattice-Op (distributiveLattice→lattice 𝑫) public
-    using ( _∧_ ; _∨_ ; ∧-cong ; ∨-cong ; interp-node-∧ ; interp-node-∨
-          ; ∧-assoc-law ; ∧-comm-law ; ∧-idem-law
-          ; ∨-assoc-law ; ∨-comm-law ; ∨-idem-law
-          ; absorbˡ-law ; absorbʳ-law )
+    using  ( _∧_ ; ∧-cong ; interp-node-∧ ; ∧-assoc-law ; ∧-comm-law ; ∧-idem-law
+           ; _∨_ ; ∨-cong ; interp-node-∨ ; ∨-assoc-law ; ∨-comm-law ; ∨-idem-law
+           ; absorbˡ-law ; absorbʳ-law )
 
   equations : 𝑨 ⊨ᵈˡ Th-DistributiveLattice
   equations = proj₂ 𝑫
@@ -193,7 +195,8 @@ eqsToDistributiveLattice : (A : Type α) (_∧'_ _∨'_ : A → A → A)
   → (∧-distribˡ-≡ : ∀ a b c → a ∧' (b ∨' c) ≡ (a ∧' b) ∨' (a ∧' c))
   → (∨-distribˡ-≡ : ∀ a b c → a ∨' (b ∧' c) ≡ (a ∨' b) ∧' (a ∨' c))
   → DistributiveLattice α α
-eqsToDistributiveLattice A _∧'_ _∨'_ ∧-assoc-≡ ∧-comm-≡ ∧-idem-≡ ∨-assoc-≡ ∨-comm-≡ ∨-idem-≡ absorbˡ-≡ absorbʳ-≡ ∧-distribˡ-≡ ∨-distribˡ-≡ =
+eqsToDistributiveLattice A _∧'_ _∨'_
+  ∧-assoc-≡ ∧-comm-≡ ∧-idem-≡ ∨-assoc-≡ ∨-comm-≡ ∨-idem-≡ absorbˡ-≡ absorbʳ-≡ ∧-distribˡ-≡ ∨-distribˡ-≡ =
   opsToBareLattice A _∧'_ _∨'_ , proof
   where
   proof : opsToBareLattice A _∧'_ _∨'_ ⊨ᵈˡ Th-DistributiveLattice
