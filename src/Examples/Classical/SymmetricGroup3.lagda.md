@@ -55,8 +55,8 @@ open import Relation.Binary.PropositionalEquality   using ( _≡_ ; _≢_ ; refl
 open import Relation.Nullary.Negation.Core          using ( ¬_ ; contradiction )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture.Cayley                     using ( Table ; ⟦_⟧ ; from-yes
-                                                      ; Associative? ; Commutative?
+open import Overture.Cayley                     using ( Table ; ⟦_⟧ ; from-yes )
+open import Overture.Operations.Properties      using ( Associative? ; Commutative?
                                                       ; LeftIdentity? ; RightIdentity?
                                                       ; LeftInverse? ; RightInverse? )
 open import Classical.Bundles.Group             using ( ⟨_⟩ᵍᵖ ; ⟪_⟫ᵍᵖ )

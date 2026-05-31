@@ -44,8 +44,8 @@ open import Relation.Binary.PropositionalEquality   using ( _≡_ ; _≢_ ; refl
 open import Relation.Nullary.Negation.Core          using ( ¬_ ; contradiction )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture.Cayley                         using  ( Table ; ⟦_⟧ ; from-yes
-                                                           ; Commutative? ; Idempotent? )
+open import Overture.Cayley                         using  ( Table ; ⟦_⟧ ; from-yes )
+open import Overture.Operations.Properties          using  ( Commutative? ; Idempotent? )
 open import Classical.Bundles.Magma                 using  ( ⟨_⟩ᵐᵃ ; ⟪_⟫ᵐᵃ )
 open import Classical.Small.Structures.Magma        using  ( Magma ; opsToMagma )
 

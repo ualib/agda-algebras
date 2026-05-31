@@ -44,10 +44,11 @@ open import Relation.Binary.PropositionalEquality   using ( _≡_ ; refl )
 open import Relation.Nullary.Decidable.Core         using ( Dec ; _×-dec_ ; _→-dec_ )
 
 -- Imports from the Agda Universal Algebra Library -----------------------------
-open import Overture.Cayley                                 using ( Table ; ⟦_⟧ ; from-yes
-                                                                   ; Associative? ; Commutative? ; Idempotent? )
+open import Overture.Cayley                                 using ( Table ; ⟦_⟧ ; from-yes )
+open import Overture.Operations.Properties                  using ( Associative? ; Commutative? ; Idempotent?
+                                                                   ; Absorbsˡ? ; Absorbsʳ? ; Distributesˡ? )
 open import Classical.Bundles.DistributiveLattice           using ( ⟨_⟩ᵈˡ ; ⟪_⟫ᵈˡ )
-open import Classical.Properties.Lattice                    using ( Absorbsˡ? ; Absorbsʳ? ; Distributesˡ? ; module FiniteOrder )
+open import Classical.Properties.Lattice                    using ( module FiniteOrder )
 open import Classical.Small.Structures.DistributiveLattice  using ( DistributiveLattice ; eqsToDistributiveLattice )
 import Classical.Structures.DistributiveLattice as Polymorphic
 ```

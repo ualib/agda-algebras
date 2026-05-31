@@ -184,36 +184,6 @@ through absorption twice.
     z             ∎)
 ```
 
-#### <a id="finite-law-deciders">Deciding lattice laws over a finite carrier</a>
-
-For a finite carrier `Fin n` every equational law is decidable: `all?` quantifies
-over the carrier and `_≟_` decides each instance.  These checkers complement the
-single-operation deciders (`Associative?`, `Commutative?`, `Idempotent?`) of
-[`Overture.Cayley`][] with the *two-operation* lattice laws — absorption and
-distributivity — so that the finite lattice examples can discharge their defining
-equations uniformly with `from-yes`.  Each is stated for arbitrary finite operations
-`_·_` and `_∘_`, mirroring the evaluated-law shapes of [`Classical.Equations`][].
-
-```agda
-module _ {n : ℕ} (_·_ _∘_ : Fin n → Fin n → Fin n) where
-
-  -- a · (a ∘ b) ≡ a
-  Absorbsˡ? : Dec (∀ a b → a · (a ∘ b) ≡ a)
-  Absorbsˡ? = all? (λ a → all? (λ b → (a · (a ∘ b)) ≟ a))
-
-  -- (a · b) ∘ a ≡ a
-  Absorbsʳ? : Dec (∀ a b → (a · b) ∘ a ≡ a)
-  Absorbsʳ? = all? (λ a → all? (λ b → ((a · b) ∘ a) ≟ a))
-
-  -- a · (b ∘ c) ≡ (a · b) ∘ (a · c)
-  Distributesˡ? : Dec (∀ a b c → a · (b ∘ c) ≡ (a · b) ∘ (a · c))
-  Distributesˡ? = all? (λ a → all? (λ b → all? (λ c → (a · (b ∘ c)) ≟ ((a · b) ∘ (a · c)))))
-
-  -- (b ∘ c) · a ≡ (b · a) ∘ (c · a)
-  Distributesʳ? : Dec (∀ a b c → (b ∘ c) · a ≡ (b · a) ∘ (c · a))
-  Distributesʳ? = all? (λ a → all? (λ b → all? (λ c → ((b ∘ c) · a) ≟ ((b · a) ∘ (c · a)))))
-```
-
 #### <a id="finite-order">The decidable meet order and its atoms</a>
 
 `FiniteOrder _∧_` packages the meet order `a ≤ b := a ∧ b ≡ a` over a finite carrier
