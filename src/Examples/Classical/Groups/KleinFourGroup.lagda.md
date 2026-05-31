@@ -1,20 +1,20 @@
 ---
 layout: default
-file: "src/Examples/Classical/KleinFourGroup.lagda.md"
-title: "Examples.Classical.KleinFourGroup module"
+file: "src/Examples/Classical/Groups/KleinFourGroup.lagda.md"
+title: "Examples.Classical.Groups.KleinFourGroup module"
 date: "2026-05-31"
 author: "the agda-algebras development team"
 ---
 
 ### Worked Example: the Klein four-group `V₄` from a Cayley table
 
-This is the [Examples.Classical.KleinFourGroup][] module of the [Agda Universal Algebra Library][].
+This is the [Examples.Classical.Groups.KleinFourGroup][] module of the [Agda Universal Algebra Library][].
 
 The Klein four-group `V₄ ≅ ℤ/2ℤ × ℤ/2ℤ` is the smallest non-cyclic group.
 We build it on the carrier `Fin 4`, identifying the four elements with
 the two-bit codes `0 = (0,0)`, `1 = (1,0)`, `2 = (0,1)`, `3 = (1,1)`, so the group
 operation is component-wise addition mod 2 — equivalently, bitwise *exclusive or* on
-the index.  As with [`Examples.Classical.CyclicGroup3`][], the group axioms are
+the index.  As with [`Examples.Classical.Groups.CyclicGroup3`][], the group axioms are
 discharged by decision over the finite carrier.
 
 The defining feature, in contrast to `ℤ/3ℤ`, is that every element is its own inverse
@@ -32,7 +32,7 @@ The operation table (entry `a , b` is `a xor b`):
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-module Examples.Classical.KleinFourGroup where
+module Examples.Classical.Groups.KleinFourGroup where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
 open import Data.Fin                                using ( Fin )
@@ -41,13 +41,13 @@ open import Data.Vec.Base                           using ( _∷_ ; [] )
 open import Relation.Binary.PropositionalEquality   using ( _≡_ ; refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture.Cayley                     using ( Table ; ⟦_⟧ ; from-yes )
-open import Overture.Operations.Properties      using ( Associative? ; Commutative?
-                                                      ; LeftIdentity? ; RightIdentity?
-                                                      ; LeftInverse? ; RightInverse? )
-open import Classical.Bundles.Group             using ( ⟨_⟩ᵍᵖ ; ⟪_⟫ᵍᵖ )
-open import Classical.Small.Structures.Group    using ( Group ; eqsToGroup )
-import      Classical.Structures.Group          as Polymorphic
+open import Overture.Cayley                   using  ( Table ; ⟦_⟧ ; from-yes )
+open import Overture.Operations.Properties    using  ( Associative? ; Commutative?
+                                                     ; LeftIdentity? ; RightIdentity?
+                                                     ; LeftInverse? ; RightInverse? )
+open import Classical.Bundles.Group           using  ( ⟨_⟩ᵍᵖ ; ⟪_⟫ᵍᵖ )
+open import Classical.Small.Structures.Group  using  ( Group ; eqsToGroup )
+import Classical.Structures.Group as Polymorphic
 ```
 
 #### The Cayley table, the operation, and the inverse map
@@ -75,11 +75,9 @@ v4-inv x = x
 ```agda
 v4-group : Group
 v4-group = eqsToGroup (Fin 4) _·_ 0F v4-inv
-             (from-yes (Associative?   _·_))
-             (from-yes (LeftIdentity?  _·_ 0F))
-             (from-yes (RightIdentity? _·_ 0F))
-             (from-yes (LeftInverse?   _·_ 0F v4-inv))
-             (from-yes (RightInverse?  _·_ 0F v4-inv))
+  (from-yes (Associative?   _·_)) (from-yes (LeftIdentity?  _·_ 0F))
+  (from-yes (RightIdentity? _·_ 0F)) (from-yes (LeftInverse?   _·_ 0F v4-inv))
+  (from-yes (RightInverse?  _·_ 0F v4-inv))
 
 open Polymorphic.Group-Op v4-group using ( _∙_ ; ε ; _⁻¹ )
 ```

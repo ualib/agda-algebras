@@ -6,7 +6,7 @@ date: "2026-05-17"
 author: "the agda-algebras development team"
 ---
 
-### <a id="examples-classical">Worked examples of classical structures</a>
+### Worked examples of classical structures
 
 This is the [Examples.Classical][] module of the [Agda Universal Algebra Library][].
 

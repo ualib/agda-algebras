@@ -1686,19 +1686,19 @@ These are normative for every subsequent equation-bearing structure (Monoid in M
 
 ---
 
-### Issue M3-5: Bridges between Classical.Structures and Algebra.Bundles (#262)
+### Issue M3-5: Bridges between Classical.Structures and Algebra.Bundles (#262, closed)
 
 **Labels**: `milestone-3-classical`, `stdlib-bridge`
 
 ## v3 amendment (2026-05-21)
 
-Following the M3-4 precedent (Magma and Semigroup bridges landed inside #331 and #261), the Monoid, CommutativeMonoid, Group, and AbelianGroup bundle bridges move *into* [M3-6] #263 alongside their structures.  The bridge is a thin record-shuffle once each `<Structure>-Op` module exposes its laws in curried form, so it belongs in the same PR as the structure that produces those laws.
+Following the M3-4 precedent (Magma and Semigroup bridges landed inside #331 and #261), the Monoid, CommutativeMonoid, Group, and AbelianGroup bundle bridges move *into* [M3-6] #263 alongside their structures.  The bridge is a thin record-shuffle once each `-Op` module exposes its laws in curried form, so it belongs in the same PR as the structure that produces those laws.
 
 Applying that rule uniformly, every remaining bundle bridge lands with its owning structure issue.  This issue is consequently reduced to a *tracking* issue: it records the cross-cutting round-trip policy and the per-structure ownership map, and holds no implementation tasks of its own.
 
 ## Round-trip policy (normative, applies to every bridge)
 
-The pointwise round-trip policy from [ADR-002 v2 §6](docs/adr/002-classical-layer-design.md) applies uniformly.  No per-structure bundle bridge claims a propositional Σ-equality round-trip; the round-trip is stated pointwise on the carrier in the structure's underlying setoid equivalence.  Each bridge ships a `roundtrip-<suffix>` lemma to that effect, and a stdlib concrete instance round-trips through the bridge in the owning issue's worked example.
+The pointwise round-trip policy from [ADR-002 v2 §6](docs/adr/002-classical-layer-design.md) applies uniformly.  No per-structure bundle bridge claims a propositional Σ-equality round-trip; the round-trip is stated pointwise on the carrier in the structure's underlying setoid equivalence.  Each bridge ships a `roundtrip-` lemma to that effect, and a stdlib concrete instance round-trips through the bridge in the owning issue's worked example.
 
 ## Bridge ownership map
 
@@ -1707,12 +1707,12 @@ The pointwise round-trip policy from [ADR-002 v2 §6](docs/adr/002-classical-lay
 +  CommutativeSemigroup → `Algebra.Bundles.CommutativeSemigroup` — **UNASSIGNED**; fold into [M3-6] #263.
 +  Monoid, CommutativeMonoid, Group, AbelianGroup → `Algebra.Bundles.{Monoid,CommutativeMonoid,Group,AbelianGroup}` — [M3-6] #263.
 +  Semilattice, Lattice → `Algebra.Bundles` / `Algebra.Lattice.Bundles` — [M3-7] #264.  Lattice bridges to *both* `Algebra.Bundles.Lattice` and `Algebra.Lattice.Bundles.Lattice`.
-+  Semiring, Ring, CommutativeRing → `Algebra.Bundles.{Semiring,Ring,CommutativeRing}` — [M3-8] #265.
++  ~~Semiring~~, Ring, CommutativeRing → `Algebra.Bundles.{~~Semiring~~,Ring,CommutativeRing}` — [M3-8] #265.  (~~Semiring~~ was never in M3-8's scope and was not implemented; deferred to a later milestone.  Ring and CommutativeRing landed in #265.)
 
 ## Acceptance criteria
 
-+  [ ] This issue carries no code.  Each bridge's type-checking and round-trip acceptance is owned by the structure issue listed above.
-+  [ ] The round-trip policy text above is mirrored in [ADR-002 v2 §6](docs/adr/002-classical-layer-design.md) so the policy survives even if this tracker is later closed.
++  [x] This issue carries no code.  Each bridge's type-checking and round-trip acceptance is owned by the structure issue listed above.
++  [x] The round-trip policy text above is mirrored in [ADR-002 v2 §6](docs/adr/002-classical-layer-design.md) so the policy survives even if this tracker is later closed.
 
 ---
 
@@ -1790,7 +1790,7 @@ Lattices are centrally important because `Con 𝑨` and `Sub 𝑨` are naturally
 
 ---
 
-### Issue M3-8: Classical.Ring and Classical.CommutativeRing (#265)
+### Issue M3-8: Classical.Ring and Classical.CommutativeRing (#265, closed)
 
 **Labels**: `milestone-3-classical`, `help-wanted`
 
@@ -1835,7 +1835,7 @@ Renumbered M3-7 → M3-9 following [revision of ADR-002 v2](https://github.com/u
 
 Scope is unchanged.  Per-structure worked examples land *with their structure issues* (M3-3 ships `ℕ-magma`; M3-4 ships `ℕ-semigroup`; M3-6 ships `ℕ-monoid` and `ℤ-group`; etc.).  This issue is therefore reduced to *cross-structure and richer examples*: free magmas, free semigroups, term-rewriting demonstrations, presentations, finite-quotient examples for use as Demos/ companion material, etc.
 
-The reduction in scope reflects the M3-3-onward convention that one canonical worked example per structure ships with the structure itself; this issue exists for the *additional* examples that wouldn't fit cleanly in any one structure's file.
+The reduction in scope reflects the M3-3-onward convention that one canonical worked example per structure ships with the structure itself; this issue exists for the *additional* examples that wouldn&#39;t fit cleanly in any one structure&#39;s file.
 
 ---
 
@@ -1850,6 +1850,8 @@ The `Examples/` directory is thin.  Add worked examples that exercise the Classi
 - [ ] `𝟚` with two operations as a `DistributiveLattice`.
 - [ ] A small finite group (`ℤ/3ℤ`) with its congruence lattice computed.
 - [ ] A finite Heyting algebra as a Lattice example.
+- [ ] An example of a nonabelian group.  (I believe the only example of the `Group` type in `Examples.Classical` is the integers.  We should add an example of a nonabelian group that does not happen to be abelian as well.)
+- [ ] An example of a "commutative idempotent binar" (that is, a magma with an idempotent commutative binary operation); the operation should be defined by its Cayley table.  (I'm not sure how to implement a Cayley table to describe an operation in Agda yet, so this task will be an excellent opportunity for us to figure out the best way to do that.)
 
 ## Acceptance criteria
 
@@ -2226,6 +2228,49 @@ Provisional tasks:
 Acceptance criteria (loose): S and P parts type-check; the ¬H situation is documented.
 
 References: Burris, Sankappanavar, *A Course in Universal Algebra* (reducts; SP-closure).
+
+---
+
+### Issue M4-6: Consolidate the duplicate `Op` operation type into one canonical declaration (#354)
+
+**Labels**: `enhancement`, `milestone-4-style`, `breaking-change`
+
+## Context
+
+The library currently carries *two* declarations of the operation type `Op`, with identical bodies but opposite parameter order:
+
++  `Overture.Operations.Op A I = (I → A) → A` — carrier first.
++  `Classical.Operations.Op I A = (I → A) → A` — arity first.
+
+They are the *same* type up to argument order, so this is a "one canonical form per concept" violation (the M4 exit criterion explicitly targets synonym pairs in the public API).  The arity-first order has proved the more useful of the two: `Op (Fin 2)` partially applies as "binary operation," independent of any carrier, which is the right convention for the `Curry`/`Uncurry`/`pair` family in `Classical.Operations`.
+
+## Why this issue exists (and why it is deferred from #353)
+
+This surfaced in [#353](https://github.com/ualib/agda-algebras/pull/353), which adds `Overture.Cayley` (a Cayley-table construction for finite operations).  That PR deliberately types a binary operation as a bare `Fin n → Fin n → Fin n` rather than either `Op`, precisely so as not to spread the unresolved convention clash into a new module before it is settled.  A note at the end of `Overture.Cayley` points here.  The consolidation has a wide blast radius (`Op` is foundational and used throughout `Classical/`), so it belongs in the M4 style sweep rather than in an examples-focused PR.
+
+## Decision to implement
+
+Consolidate to a single canonical `Op` in `Overture.Operations`, using the arity-first convention `Op I A = (I → A) → A`, and have `Classical.Operations` re-export it (deprecating its local copy under the stable-API discipline rather than deleting it outright).
+
+## Tasks
+
++  [ ] Adopt the canonical `Op : Type 𝓥 → Type α → Type _` with `Op I A = (I → A) → A` in `Overture.Operations`; update that module's prose, and adjust `π` and `arity[_]` to the new argument order.
++  [ ] Re-export the canonical `Op` from `Classical.Operations`; mark the old arity-first local definition with a `WARNING_ON_USAGE` deprecation for at least one minor cycle (it already matches the canonical order, so this is mostly a relocation).
++  [ ] Audit every `Op` use site for the carrier-first vs arity-first flip and migrate; the carrier-first uses (whatever currently imports `Overture.Operations.Op`) are the ones that change.
++  [ ] Decide whether `pair` / `Curry₂` / `Uncurry₂` (currently in `Classical.Operations`) move down to `Overture` alongside the canonical `Op`, or stay in `Classical.Operations`; record the rationale.
++  [ ] Re-express `Overture.Cayley.⟦_⟧` and the decidable-law checkers over the canonical `Op` if it reads better than the bare `Fin n → Fin n → Fin n`, or record why the finite case keeps the plain function type.
++  [ ] Update the canonical symbol/notation table in `docs/STYLE_GUIDE.md` to record the single `Op` and its argument-order convention.
+
+## Acceptance criteria
+
++  [ ] Exactly one `Op` declaration in the public API; no duplicate/synonym remains.
++  [ ] `make check` passes across the whole tree.
++  [ ] Any removed/relocated public name goes through a `WARNING_ON_USAGE` deprecation cycle rather than a hard break.
++  [ ] The `docs/STYLE_GUIDE.md` notation table matches the consolidated `Op`.
+
+## Risk
+
+Low conceptually but wide: `Op` is foundational, so the PR should `grep` every use site, flip carrier-first uses, and re-run `make check` rather than assume the blast radius is small.
 
 <!-- END GENERATED: milestone-4 -->
 

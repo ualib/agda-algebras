@@ -5,7 +5,7 @@ date : "2022-18-06"
 author: "the agda-algebras development team"
 ---
 
-### <a id="examples-of-structures">Examples of structures</a>
+### Examples of structures
 
 This is the [Examples.Structures][] module of the [Agda Universal Algebra Library][].
 

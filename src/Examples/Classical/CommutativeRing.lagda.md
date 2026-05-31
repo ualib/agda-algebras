@@ -6,7 +6,7 @@ date: "2026-05-30"
 author: "the agda-algebras development team"
 ---
 
-### <a id="examples-classical-commutativering">Worked example — `(ℤ, +, *, 0, 1, -)` as a commutative ring</a>
+### Worked example: `(ℤ, +, *, 0, 1, -)` as a commutative ring {#examples-classical-commutativering}
 
 This is the [Examples.Classical.CommutativeRing][] module of the [Agda Universal Algebra Library][].
 
@@ -33,13 +33,14 @@ open import Data.Integer.Properties  using ( +-assoc ; +-identityˡ ; +-identity
 open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Classical.Bundles.CommutativeRing           using ( ⟨_⟩ᶜʳᵍ ; ⟪_⟫ᶜʳᵍ )
-open import Classical.Small.Structures.CommutativeRing  using ( CommutativeRing ; eqsToCommutativeRing )
+open import Classical.Bundles.CommutativeRing using ( ⟨_⟩ᶜʳᵍ ; ⟪_⟫ᶜʳᵍ )
+open import Classical.Small.Structures.CommutativeRing
+  using ( CommutativeRing ; eqsToCommutativeRing )
 
 import Classical.Structures.CommutativeRing as Polymorphic
 ```
 
-#### <a id="integer-commutativering">The commutative ring `(ℤ, +, *, 0, 1, -)`</a>
+#### The commutative ring `(ℤ, +, *, 0, 1, -)` {#integer-commutativering}
 
 ```agda
 ℤ-commutativeRing : CommutativeRing
@@ -53,7 +54,7 @@ open Polymorphic.CommutativeRing-Op ℤ-commutativeRing using ()
   renaming ( _+_ to _⊕_ ; _·_ to _⊗_ ; 0R to e₀ ; 1R to e₁ ; -_ to ⊝_ )
 ```
 
-#### <a id="acceptance">Acceptance checks</a>
+#### Acceptance checks
 
 The curried accessors compute to the underlying integer operations.
 

@@ -21,7 +21,7 @@ open import Legacy.Base.Structures.Basic  using ( signature ; structure )
 ```
 
 
-#### <a id="examples-of-finite-signatures">Examples of finite signatures</a>
+#### Examples of finite signatures
 
 
 ```agda

@@ -1,18 +1,18 @@
 ---
 layout: default
-file: "src/Examples/Classical/SymmetricGroup3.lagda.md"
-title: "Examples.Classical.SymmetricGroup3 module"
+file: "src/Examples/Classical/Groups/SymmetricGroup3.lagda.md"
+title: "Examples.Classical.Groups.SymmetricGroup3 module"
 date: "2026-05-31"
 author: "the agda-algebras development team"
 ---
 
 ### Worked Example: the symmetric group `S₃` from a Cayley table
 
-This is the [Examples.Classical.SymmetricGroup3][] module of the [Agda Universal Algebra Library][].
+This is the [Examples.Classical.Groups.SymmetricGroup3][] module of the [Agda Universal Algebra Library][].
 
 The symmetric group `S₃` on three letters — equivalently the dihedral group `D₃` of
 symmetries of an equilateral triangle — is the smallest *non-abelian* group.  The
-canonical `Group`{.AgdaRecord} example in [`Examples.Classical.Group`][] is the
+canonical `Group`{.AgdaRecord} example in [`Examples.Classical.Groups.Group`][] is the
 integers under addition, which is abelian; this module supplies a genuinely
 non-commutative companion.
 
@@ -44,24 +44,24 @@ triples — exactly the case where a hand-written proof would be unreasonable an
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-module Examples.Classical.SymmetricGroup3 where
+module Examples.Classical.Groups.SymmetricGroup3 where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
-open import Data.Fin                                using ( Fin )
-open import Data.Fin.Patterns                       using ( 0F ; 1F ; 2F ; 3F ; 4F ; 5F )
-open import Data.Product                            using ( ∃-syntax ; _,_ )
-open import Data.Vec.Base                           using ( _∷_ ; [] )
-open import Relation.Binary.PropositionalEquality   using ( _≡_ ; _≢_ ; refl )
-open import Relation.Nullary.Negation.Core          using ( ¬_ ; contradiction )
+open import Data.Fin                               using ( Fin )
+open import Data.Fin.Patterns                      using ( 0F ; 1F ; 2F ; 3F ; 4F ; 5F )
+open import Data.Product                           using ( ∃-syntax ; _,_ )
+open import Data.Vec.Base                          using ( _∷_ ; [] )
+open import Relation.Binary.PropositionalEquality  using ( _≡_ ; _≢_ ; refl )
+open import Relation.Nullary.Negation.Core         using ( ¬_ ; contradiction )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture.Cayley                     using ( Table ; ⟦_⟧ ; from-yes )
-open import Overture.Operations.Properties      using ( Associative? ; Commutative?
-                                                      ; LeftIdentity? ; RightIdentity?
-                                                      ; LeftInverse? ; RightInverse? )
-open import Classical.Bundles.Group             using ( ⟨_⟩ᵍᵖ ; ⟪_⟫ᵍᵖ )
-open import Classical.Small.Structures.Group    using ( Group ; eqsToGroup )
-import      Classical.Structures.Group          as Polymorphic
+open import Overture.Cayley                   using  ( Table ; ⟦_⟧ ; from-yes )
+open import Overture.Operations.Properties    using  ( Associative? ; Commutative?
+                                                     ; LeftIdentity? ; RightIdentity?
+                                                     ; LeftInverse? ; RightInverse? )
+open import Classical.Bundles.Group           using ( ⟨_⟩ᵍᵖ ; ⟪_⟫ᵍᵖ )
+open import Classical.Small.Structures.Group  using ( Group ; eqsToGroup )
+import Classical.Structures.Group as Polymorphic
 ```
 
 #### The Cayley table, the operation, and the inverse map
@@ -97,11 +97,9 @@ s3-inv 5F = 5F
 ```agda
 s3-group : Group
 s3-group = eqsToGroup (Fin 6) _·_ 0F s3-inv
-             (from-yes (Associative?   _·_))
-             (from-yes (LeftIdentity?  _·_ 0F))
-             (from-yes (RightIdentity? _·_ 0F))
-             (from-yes (LeftInverse?   _·_ 0F s3-inv))
-             (from-yes (RightInverse?  _·_ 0F s3-inv))
+  (from-yes (Associative?   _·_)) (from-yes (LeftIdentity?  _·_ 0F))
+  (from-yes (RightIdentity? _·_ 0F)) (from-yes (LeftInverse?   _·_ 0F s3-inv))
+  (from-yes (RightInverse?  _·_ 0F s3-inv))
 
 open Polymorphic.Group-Op s3-group using ( _∙_ ; ε ; _⁻¹ )
 ```

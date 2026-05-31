@@ -6,7 +6,7 @@ date: "2026-05-09"
 author: "the agda-algebras development team"
 ---
 
-### <a id="polynomial-functors-and-w-types">Polynomial Functors and W-types</a>
+### Polynomial Functors and W-types
 
 This is the [Examples.PolynomialFunctors.Functors][] module of the [Agda Universal Algebra Library][].
 
@@ -15,7 +15,7 @@ This module is illustrative rather than load-bearing.  It develops a closed-univ
 The main reference is [Schwaab and Siek, *Modular Type-Safety Proofs in Agda* (PLPV '07)](https://doi.org/10.1145/2428116.2428120).
 
 
-#### <a id="functors">Functors</a>
+#### Functors
 
 Recall, a *functor* `F` is a function that maps the objects and morphisms of one category `𝒞` to the objects and morphisms of a category `𝒟` in such a way that the following *functor laws* are satisfied:
 
@@ -23,7 +23,7 @@ Recall, a *functor* `F` is a function that maps the objects and morphisms of one
 * `∀ A, F(id A) = id (F A)`  (where `id X` denotes the identity morphism on X)
 
 
-#### <a id="polynomial-functors">Polynomial functors</a>
+#### Polynomial functors
 
 An important class of functors for our domain is the class of so called *polynomial functors*.  These are functors that are built up using the constant, identity, sum, and product functors.  To be precise, the actions of the latter on objects are as follows: `∀ A B` (objects), `∀ F G` (functors),
 
@@ -121,7 +121,7 @@ _⟦_⟧ : {A : Type} → list A → ℕ → Option A
 (x ∷ l) ⟦ suc n ⟧ = l ⟦ n ⟧
 ```
 
-### <a id="worked-examples">Worked examples</a>
+### Worked examples
 
 The following examples confirm that the W-type encoding `List A = μ (L A)` and the standard inductive definition `list A` produce the same observable behavior on small concrete cases.
 

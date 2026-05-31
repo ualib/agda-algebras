@@ -66,36 +66,35 @@ minimum, join is the maximum, and the implication `a ⇒ b` is the largest `x` w
 | 2   | 0 | 1 | 2 |   | 2   | 2 | 2 | 2 |   | 2   | 0 | 1 | 2 |
 
 ```agda
-private
-  infixr 7 _∧_
-  infixr 6 _∨_
-  infixr 5 _⇒_
+infixr 7 _∧_
+infixr 6 _∨_
+infixr 5 _⇒_
 
-  ⊤ : Fin 3
-  ⊤ = 2F
+⊤ : Fin 3
+⊤ = 2F
 
-  ∧-table : Table 3
-  ∧-table = (0F ∷ 0F ∷ 0F ∷ [])
-          ∷ (0F ∷ 1F ∷ 1F ∷ [])
-          ∷ (0F ∷ 1F ∷ 2F ∷ [])
-          ∷ []
+∧-table : Table 3
+∧-table = (0F ∷ 0F ∷ 0F ∷ [])
+        ∷ (0F ∷ 1F ∷ 1F ∷ [])
+        ∷ (0F ∷ 1F ∷ 2F ∷ [])
+        ∷ []
 
-  ∨-table : Table 3
-  ∨-table = (0F ∷ 1F ∷ 2F ∷ [])
-          ∷ (1F ∷ 1F ∷ 2F ∷ [])
-          ∷ (2F ∷ 2F ∷ 2F ∷ [])
-          ∷ []
+∨-table : Table 3
+∨-table = (0F ∷ 1F ∷ 2F ∷ [])
+        ∷ (1F ∷ 1F ∷ 2F ∷ [])
+        ∷ (2F ∷ 2F ∷ 2F ∷ [])
+        ∷ []
 
-  ⇒-table : Table 3
-  ⇒-table = (2F ∷ 2F ∷ 2F ∷ [])
-          ∷ (0F ∷ 2F ∷ 2F ∷ [])
-          ∷ (0F ∷ 1F ∷ 2F ∷ [])
-          ∷ []
+⇒-table : Table 3
+⇒-table = (2F ∷ 2F ∷ 2F ∷ [])
+        ∷ (0F ∷ 2F ∷ 2F ∷ [])
+        ∷ (0F ∷ 1F ∷ 2F ∷ [])
+        ∷ []
 
-  _∧_ _∨_ _⇒_ : Fin 3 → Fin 3 → Fin 3
-  _∧_ = ⟦ ∧-table ⟧
-  _∨_ = ⟦ ∨-table ⟧
-  _⇒_ = ⟦ ⇒-table ⟧
+_∧_ _∨_ _⇒_ : Fin 3 → Fin 3 → Fin 3
+_∧_ = ⟦ ∧-table ⟧
+_∨_ = ⟦ ∨-table ⟧
+_⇒_ = ⟦ ⇒-table ⟧
 ```
 
 #### The chain as a distributive lattice {#chain-distributive-lattice}
@@ -109,10 +108,10 @@ operations exchanged.
 ```agda
 chain3 : DistributiveLattice
 chain3 = eqsToDistributiveLattice (Fin 3) _∧_ _∨_
-           (from-yes (Associative? _∧_)) (from-yes (Commutative? _∧_)) (from-yes (Idempotent? _∧_))
-           (from-yes (Associative? _∨_)) (from-yes (Commutative? _∨_)) (from-yes (Idempotent? _∨_))
-           (from-yes (Absorbsˡ? _∧_ _∨_)) (from-yes (Absorbsʳ? _∧_ _∨_))
-           (from-yes (Distributesˡ? _∧_ _∨_)) (from-yes (Distributesˡ? _∨_ _∧_))
+  (from-yes (Associative? _∧_)) (from-yes (Commutative? _∧_)) (from-yes (Idempotent? _∧_))
+  (from-yes (Associative? _∨_)) (from-yes (Commutative? _∨_)) (from-yes (Idempotent? _∨_))
+  (from-yes (Absorbsˡ? _∧_ _∨_)) (from-yes (Absorbsʳ? _∧_ _∨_))
+  (from-yes (Distributesˡ? _∧_ _∨_)) (from-yes (Distributesˡ? _∨_ _∧_))
 ```
 
 #### The residuation adjunction {#residuation}
