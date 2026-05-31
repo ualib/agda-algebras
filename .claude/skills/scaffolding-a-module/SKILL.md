@@ -11,7 +11,7 @@ description: Create a new Agda module in agda-algebras with the correct canonica
 
 ## Literate structure
 
-A module is `.lagda.md`: Markdown prose interleaved with Agda code fences, with inline Agda names written as kramdown spans, e.g. `` `Semigroup`{.AgdaRecord} ``.  Lead with a prose statement of why the module exists and how it fits the development.
+A module is `.lagda.md`: Markdown prose interleaved with Agda code fences, with inline Agda names written as kramdown spans, e.g. `` `Semigroup`{.AgdaRecord} ``.  Lead with a prose statement of why the module exists and how it fits the development.  Write section headings as plain Markdown ATX headings (`### Title`); do not wrap them in HTML `<a id="…">…</a>` anchors — MkDocs slugifies heading text automatically (see `docs/STYLE_GUIDE.md` § Section headings).
 
 ## Skeleton
 

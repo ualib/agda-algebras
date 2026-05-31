@@ -137,6 +137,15 @@ Prefer lines of at most 100 characters.  This is a soft limit: breaking a long t
 
 (A `.editorconfig` file in the repo root would enforce these mechanically.  Until one exists, we try to catch violations in review.)
 
+### Section headings
+
+Write section headings as plain Markdown ATX headings; do not wrap the heading text in an HTML `<a id="…">…</a>` anchor.
+
++  Bad: `### <a id="examples-classical-cayley">Cayley tables for finite operations</a>`.
++  Good: `### Cayley tables for finite operations`.
+
+The inline anchors were a Jekyll-era device for stable in-page links.  They clutter the unrendered source and are redundant under MkDocs, which slugifies heading text into anchors automatically.  Existing files still carry them; strip them opportunistically when you touch a file, but a dedicated sweep is out of scope for unrelated PRs.
+
 ---
 
 ## Module structure and organization

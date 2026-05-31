@@ -6,7 +6,7 @@ date: "2026-05-31"
 author: "the agda-algebras development team"
 ---
 
-### <a id="examples-classical-commutative-idempotent-magma">Worked example — a commutative idempotent magma from a Cayley table</a>
+### Worked example — a commutative idempotent magma from a Cayley table
 
 This is the [Examples.Classical.CommutativeIdempotentMagma][] module of the [Agda Universal Algebra Library][].
 
@@ -40,9 +40,10 @@ module Examples.Classical.CommutativeIdempotentMagma where
 -- Imports from Agda and the Agda Standard Library ----------------------------
 open import Data.Fin                                using ( Fin )
 open import Data.Fin.Patterns                       using ( 0F ; 1F ; 2F ; 3F )
+open import Data.Product                            using ( ∃-syntax ; _,_ )
 open import Data.Vec.Base                           using ( _∷_ ; [] )
-open import Relation.Binary.PropositionalEquality   using ( _≡_ ; refl )
-open import Relation.Nullary.Negation.Core          using ( ¬_ )
+open import Relation.Binary.PropositionalEquality   using ( _≡_ ; _≢_ ; refl )
+open import Relation.Nullary.Negation.Core          using ( ¬_ ; contradiction )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Examples.Classical.Cayley           using ( Table ; ⟦_⟧ ; from-yes
@@ -52,7 +53,7 @@ open import Classical.Small.Structures.Magma    using ( Magma ; opsToMagma )
 import      Classical.Structures.Magma          as Polymorphic
 ```
 
-#### <a id="the-table">The Cayley table and its operation</a>
+#### The Cayley table and its operation
 
 ```agda
 -- The Cayley table, written out row by row.
@@ -68,7 +69,7 @@ _·_ : Fin 4 → Fin 4 → Fin 4
 _·_ = ⟦ cim-table ⟧
 ```
 
-#### <a id="the-magma">The magma `(Fin 4, _·_)`</a>
+#### The magma `(Fin 4, _·_)`
 
 ```agda
 cim-magma : Magma
@@ -77,7 +78,7 @@ cim-magma = opsToMagma (Fin 4) _·_
 open Polymorphic.Magma-Op cim-magma using ( _∙_ )
 ```
 
-#### <a id="laws">Commutativity and idempotence</a>
+#### Commutativity and idempotence
 
 Both laws are decidable over the finite carrier, so each is discharged by
 `from-yes`{.AgdaFunction} applied to the corresponding decision from
@@ -93,19 +94,32 @@ the term would fail to type-check.
 ·-idem = from-yes (Idempotent? _·_)
 ```
 
-#### <a id="not-associative">The operation is not associative</a>
+#### The operation is not associative
 
 A single triple witnesses the failure of associativity: `(0 · 1) · 2`{.AgdaFunction}
 reduces to `2`{.AgdaInductiveConstructor} while `0 · (1 · 2)`{.AgdaFunction}
-reduces to `3`{.AgdaInductiveConstructor}.  So this magma is not a semigroup.
+reduces to `3`{.AgdaInductiveConstructor}.  Stated existentially, *some* triple
+distinguishes the two bracketings; the witnessing inequality is the absurd
+pattern `λ ()`{.AgdaFunction}, since the goal `2 ≡ 3`{.AgdaFunction} is
+uninhabited.  (Agda's `∃-syntax`{.AgdaFunction} has no three-variable
+`∃[ a b c ]`{.AgdaFunction} form, so we nest three `∃[_]`{.AgdaFunction}.)
 
 ```agda
-·-not-associative : ¬ (∀ a b c → (a · b) · c ≡ a · (b · c))
-·-not-associative assoc with assoc 0F 1F 2F
-... | ()
+·-not-associative : ∃[ a ] ∃[ b ] ∃[ c ] (a · b) · c ≢ a · (b · c)
+·-not-associative = 0F , 1F , 2F , λ ()
 ```
 
-#### <a id="acceptance">Acceptance checks</a>
+The same fact in negated-universal form — the operation admits no proof of
+associativity, so the magma is not a semigroup — follows without `with`{.AgdaKeyword}
+by feeding the witnessing triple to the assumed associativity and deriving a
+contradiction.
+
+```agda
+·-not-a-semigroup : ¬ (∀ a b c → (a · b) · c ≡ a · (b · c))
+·-not-a-semigroup assoc = contradiction (assoc 0F 1F 2F) λ ()
+```
+
+#### Acceptance checks
 
 The `Magma-Op`{.AgdaModule} accessor interprets to the tabulated operation on the
 nose, with no opacity from `opsToMagma`{.AgdaFunction} or the `Curry₂`{.AgdaFunction}
