@@ -6,7 +6,7 @@ date: "2026-05-31"
 author: "the agda-algebras development team"
 ---
 
-### Worked example — the symmetric group `S₃` from a Cayley table
+### Worked Example: the symmetric group `S₃` from a Cayley table
 
 This is the [Examples.Classical.SymmetricGroup3][] module of the [Agda Universal Algebra Library][].
 
@@ -14,13 +14,12 @@ The symmetric group `S₃` on three letters — equivalently the dihedral group 
 symmetries of an equilateral triangle — is the smallest *non-abelian* group.  The
 canonical `Group`{.AgdaRecord} example in [`Examples.Classical.Group`][] is the
 integers under addition, which is abelian; this module supplies a genuinely
-non-commutative companion, fulfilling the corresponding task of issue #266.
+non-commutative companion.
 
-We present `S₃` through the dihedral generators: a rotation `r`{.AgdaBound} with
-`r³ = e`{.AgdaFunction} and a reflection `s`{.AgdaBound} with `s² = e`{.AgdaFunction}
-and `s r = r² s`{.AgdaFunction}.  Every element is uniquely `rⁱ sʲ`{.AgdaFunction}
-with `i ∈ {0,1,2}`, `j ∈ {0,1}`, and we encode it as the index `i + 3j` in
-`Fin 6`{.AgdaDatatype}:
+We present `S₃` through the dihedral generators: a rotation `r` with `r³ = e` and a
+reflection `s` with `s² = e` and `s r = r² s`.  Every element is uniquely `rⁱ sʲ`
+with `i ∈ {0,1,2}`, `j ∈ {0,1}`, and we encode it as the index `i + 3j` in `Fin 6` as
+follows:
 
 | index | 0 | 1 | 2 | 3 | 4 | 5 |
 |-------|---|---|---|---|---|---|
@@ -109,10 +108,9 @@ open Polymorphic.Group-Op s3-group using ( _∙_ ; ε ; _⁻¹ )
 
 #### `S₃` is not abelian
 
-The product `r · s = rs`{.AgdaFunction} (index `1 · 3 = 4`) differs from
-`s · r = r²s`{.AgdaFunction} (index `3 · 1 = 5`), so the rotation and the reflection do
-not commute.  The witnessing inequality is the absurd pattern `λ ()`{.AgdaFunction},
-since `4 ≡ 5`{.AgdaFunction} is uninhabited.
+The product `r · s = rs` (index `1 · 3 = 4`) differs from `s · r = r²s`
+(index `3 · 1 = 5`), so the rotation and the reflection do not commute.
+The witnessing inequality is the absurd pattern `λ ()`, since `4 ≡ 5` is uninhabited.
 
 ```agda
 s3-noncomm : ∃[ a ] ∃[ b ] a · b ≢ b · a
