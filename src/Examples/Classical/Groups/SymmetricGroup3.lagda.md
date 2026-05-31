@@ -12,7 +12,7 @@ This is the [Examples.Classical.Groups.SymmetricGroup3][] module of the [Agda Un
 
 The symmetric group `S₃` on three letters — equivalently the dihedral group `D₃` of
 symmetries of an equilateral triangle — is the smallest *non-abelian* group.  The
-canonical `Group`{.AgdaRecord} example in [`Examples.Classical.Groups.Group`][] is the
+canonical `Group`{.AgdaRecord} example in [`Examples.Classical.Groups.CyclicGroup`][] is the
 integers under addition, which is abelian; this module supplies a genuinely
 non-commutative companion.
 
