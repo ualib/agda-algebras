@@ -10,18 +10,18 @@ author: "the agda-algebras development team"
 
 This is the [Examples.Setoid.Presentation][] module of the [Agda Universal Algebra Library][].
 
-A *presentation* `⟨ X ∣ R ⟩`{.AgdaFunction} describes a structure by a set `X` of
+A *presentation* `⟨ X ∣ R ⟩` describes a structure by a set `X` of
 generators together with a set `R` of defining relations: the presented structure
 is the free algebra on `X` modulo the smallest congruence containing `R`.  In the
 relatively-free-algebra machinery of [Setoid.Varieties.SoundAndComplete][] this is
-exactly `𝔽[ X ]`{.AgdaFunction} for the equation family `R`, whose carrier equality
+exactly `𝔽[ X ]` for the equation family `R`, whose carrier equality
 is derivable equality from `R`.
 
 We take the smallest interesting presentation over the magma signature
-`Sig-Magma`{.AgdaFunction}: one generator `a`{.AgdaFunction} and one relation
-making it idempotent, `⟨ a ∣ a · a ≈ a ⟩`{.AgdaFunction} — the *free band on one
-generator*.  Idempotence forces every nonempty product of `a`{.AgdaFunction} to
-collapse to `a`{.AgdaFunction}; we derive two instances of that collapse from the
+`Sig-Magma`{.AgdaFunction}: one generator `a` and one relation
+making it idempotent, `⟨ a ∣ a · a ≈ a ⟩` — the *free band on one
+generator*.  Idempotence forces every nonempty product of `a` to
+collapse to `a`; we derive two instances of that collapse from the
 single defining relation.
 
 ```agda
@@ -48,7 +48,7 @@ open _⊢_▹_≈_ using ( hyp ; app ; refl ; trans )
 
 #### The presentation `⟨ a ∣ a · a ≈ a ⟩` {#the-presentation}
 
-The single generator is `a = ℊ 0F`{.AgdaFunction} in the one-variable context
+The single generator is `a = ℊ 0F` in the one-variable context
 `Fin 1`{.AgdaDatatype}; the single relation is idempotence.
 
 ```agda
@@ -69,7 +69,7 @@ R _ = idem-rel
 open FreeAlgebra R using ( 𝔽[_] )
 ```
 
-The presented structure is `𝔽[ Fin 1 ]`{.AgdaFunction}; it models its own defining
+The presented structure is `𝔽[ Fin 1 ]`; it models its own defining
 relation by construction.
 
 ```agda
@@ -79,11 +79,11 @@ presented-is-idempotent = FreeAlgebra.satisfies R
 
 #### Consequences of the presentation {#consequences}
 
-The carrier equality of `𝔽[ Fin 1 ]`{.AgdaFunction} is derivable equality, so the
+The carrier equality of `𝔽[ Fin 1 ]` is derivable equality, so the
 defining relation is available as `hyp`{.AgdaInductiveConstructor} `0F`.  Rewriting
-the redex `a · a`{.AgdaFunction} with congruence (`app`{.AgdaInductiveConstructor})
+the redex `a · a` with congruence (`app`{.AgdaInductiveConstructor})
 and then once more at the top collapses the two three-fold products to
-`a`{.AgdaFunction}.
+`a`.
 
 ```agda
 open Setoid 𝔻[ 𝔽[ Fin 1 ] ] using ( _≈_ )

@@ -23,8 +23,8 @@ cross-structure and "richer" examples requested in
 
 module Examples.Setoid where
 
--- Opened without `public`: each worked example defines its own local
--- syntactic-product helper `_·_`, so re-exporting them together would clash.
+-- Each worked example defines its own local syntactic-product helper `_·_`, so they
+-- must be opened without `public`: re-exporting would fail due to name clash.
 -- This barrel keeps the five modules in the build and the documentation tree.
 open import Examples.Setoid.FreeMagma
 open import Examples.Setoid.FreeSemigroup

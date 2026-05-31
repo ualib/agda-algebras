@@ -11,14 +11,16 @@ author: "the agda-algebras development team"
 This is the [Examples.Setoid.FiniteQuotient][] module of the [Agda Universal Algebra Library][].
 
 The quotient of an algebra by a congruence is one of the central constructions of
-universal algebra; in the Setoid development it is the operation
-`_╱_`{.AgdaFunction} of [Setoid.Algebras.Congruences][].  This module quotients the
-commutative monoid `(ℕ, +, 0)`{.AgdaFunction} — the very monoid of
-[Examples.Classical.CommutativeMonoid][], here rebuilt directly over
-`Sig-Monoid`{.AgdaFunction} — by the *parity* congruence
+universal algebra; in the Setoid development it is the operation `_╱_`{.AgdaFunction}
+of [Setoid.Algebras.Congruences][].  This module takes the quotient of the
+commutative monoid `(ℕ, +, 0)` modulo the *parity* congruence
 `a ∼ b ⟺ a % 2 ≡ b % 2`{.AgdaFunction}.  The result is a genuinely *finite*
 quotient: it has exactly two congruence classes, even and odd, and its induced
 operation is addition modulo `2` — i.e. the two-element group `ℤ/2ℤ`.
+
+(Incidentally, the monoid `(ℕ, +, 0)` that we use here is the same one that appears in
+[Examples.Classical.CommutativeMonoid][]; it is rebuilt here directly over here
+`Sig-Monoid`{.AgdaFunction}.)
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -39,8 +41,8 @@ open import Relation.Binary.PropositionalEquality as ≡
 open import Relation.Nullary  using ( ¬_ )
 
 -- Imports from the Agda Universal Algebra Library -----------------------------
-open import Classical.Signatures.Monoid                using ( Sig-Monoid ; ∙-Op ; ε-Op )
-open import Setoid.Algebras {𝑆 = Sig-Monoid}           using ( Algebra ; 𝕌[_] ; 𝔻[_] ; ⟨_⟩ ; _̂_ )
+open import Classical.Signatures.Monoid       using ( Sig-Monoid ; ∙-Op ; ε-Op )
+open import Setoid.Algebras {𝑆 = Sig-Monoid}  using ( Algebra ; 𝕌[_] ; 𝔻[_] ; ⟨_⟩ ; _̂_ )
 open import Setoid.Algebras.Congruences {𝑆 = Sig-Monoid}
   using ( Con ; IsCongruence ; _∣≈_ ; _╱_ )
 
@@ -54,18 +56,18 @@ open Func renaming ( to to _⟨$⟩_ )
 ℕ+-monoid = record { Domain = ≡.setoid ℕ ; Interp = interp }
   where
   interp : Func (⟨ Sig-Monoid ⟩ (≡.setoid ℕ)) (≡.setoid ℕ)
-  interp ⟨$⟩ (∙-Op , args)                          = args 0F + args 1F
-  interp ⟨$⟩ (ε-Op , _)                             = 0
+  interp ⟨$⟩ (∙-Op , args) = args 0F + args 1F
+  interp ⟨$⟩ (ε-Op , _) = 0
   cong interp {∙-Op , _} {.∙-Op , _} (refl , args≈) = cong₂ _+_ (args≈ 0F) (args≈ 1F)
-  cong interp {ε-Op , _} {.ε-Op , _} (refl , _)     = refl
+  cong interp {ε-Op , _} {.ε-Op , _} (refl , _) = refl
 ```
 
-#### The parity congruence {#parity-congruence}
+#### The parity congruence
 
 Two naturals are related when they have the same remainder modulo `2`.  This is the
-kernel of `_% 2`{.AgdaFunction}, hence an equivalence; compatibility with `+` is the
-standard fact that remainder distributes over addition (`%-distribˡ-+`{.AgdaFunction}),
-and compatibility with the nullary `0` is immediate.
+kernel of `_% 2`, hence an equivalence; compatibility with `+` is the standard fact
+that remainder distributes over addition (`%-distribˡ-+`{.AgdaFunction}), and
+compatibility with the nullary `0` is immediate.
 
 ```agda
 θ : ℕ → ℕ → Type
@@ -77,15 +79,15 @@ and compatibility with the nullary `0` is immediate.
 -- + preserves parity:  (u₀ + u₁) % 2 ≡ (v₀ + v₁) % 2  from  uᵢ % 2 ≡ vᵢ % 2.
 θ-compatible : ℕ+-monoid ∣≈ θ
 θ-compatible ∙-Op {u} {v} h =
-  trans (%-distribˡ-+ (u 0F) (u 1F) 2)
-        (trans (cong₂ (λ r s → (r + s) % 2) (h 0F) (h 1F))
-               (sym (%-distribˡ-+ (v 0F) (v 1F) 2)))
+  trans  (%-distribˡ-+ (u 0F) (u 1F) 2)
+         (trans  (cong₂ (λ r s → (r + s) % 2) (h 0F) (h 1F))
+                 (sym (%-distribˡ-+ (v 0F) (v 1F) 2)))
 θ-compatible ε-Op _ = refl
 
 parity : Con ℕ+-monoid {0ℓ}
-parity = θ , record { reflexive      = ≡.cong (_% 2)
-                    ; is-equivalence = θ-isEquiv
-                    ; is-compatible  = θ-compatible }
+parity = θ , record  { reflexive       = ≡.cong (_% 2)
+                     ; is-equivalence  = θ-isEquiv
+                     ; is-compatible   = θ-compatible }
 ```
 
 #### The quotient `(ℕ, +, 0) ╱ parity ≅ ℤ/2ℤ` {#the-quotient}
