@@ -54,10 +54,7 @@ module Overture.Cayley where
 open import Agda.Primitive                          using () renaming ( Set to Type )
 open import Data.Nat                                using ( ℕ )
 open import Data.Fin                                using ( Fin )
-open import Data.Fin.Properties                     using ( _≟_ ; all? )
 open import Data.Vec.Base                           using ( Vec ; lookup )
-open import Relation.Binary.PropositionalEquality   using ( _≡_ )
-open import Relation.Nullary.Decidable.Core         using ( Dec )
 
 -- Re-exported so downstream examples can discharge laws with a single name.
 open import Relation.Nullary.Decidable.Core         using ( from-yes ) public
@@ -77,47 +74,14 @@ Table n = Vec (Vec (Fin n) n) n
 
 #### Decidable algebraic laws
 
-Each law over the finite carrier is decidable; we expose the decision so that callers
-can extract the proof with `from-yes`{.AgdaFunction} whenever the operation satisfies
-the law.  These checkers are stated for an arbitrary binary operation
-`Fin n → Fin n → Fin n`, so they apply to any finite operation, not only to
-table-defined ones.
-
-```agda
-module _ {n : ℕ} (_·_ : Fin n → Fin n → Fin n) where
-
-  -- a · a ≡ a for every a.
-  Idempotent? : Dec (∀ a → a · a ≡ a)
-  Idempotent? = all? (λ a → (a · a) ≟ a)
-
-  -- a · b ≡ b · a for every a, b.
-  Commutative? : Dec (∀ a b → a · b ≡ b · a)
-  Commutative? = all? (λ a → all? (λ b → (a · b) ≟ (b · a)))
-
-  -- (a · b) · c ≡ a · (b · c) for every a, b, c.
-  Associative? : Dec (∀ a b c → (a · b) · c ≡ a · (b · c))
-  Associative? = all? (λ a → all? (λ b → all? (λ c → ((a · b) · c) ≟ (a · (b · c)))))
-
-  module _ (e : Fin n) where
-
-    -- e · a ≡ a for every a.
-    LeftIdentity? : Dec (∀ a → e · a ≡ a)
-    LeftIdentity? = all? (λ a → (e · a) ≟ a)
-
-    -- a · e ≡ a for every a.
-    RightIdentity? : Dec (∀ a → a · e ≡ a)
-    RightIdentity? = all? (λ a → (a · e) ≟ a)
-
-    module _ (i : Fin n → Fin n) where
-
-      -- (i a) · a ≡ e for every a.
-      LeftInverse? : Dec (∀ a → (i a) · a ≡ e)
-      LeftInverse? = all? (λ a → ((i a) · a) ≟ e)
-
-      -- a · (i a) ≡ e for every a.
-      RightInverse? : Dec (∀ a → a · (i a) ≡ e)
-      RightInverse? = all? (λ a → (a · (i a)) ≟ e)
-```
+The decidable equational-law checkers for finite operations — `Associative?`,
+`Commutative?`, `Idempotent?`, the identity/inverse laws, and the two-operation
+absorption and distributivity laws — live in [`Overture.Operations.Properties`][].
+They take an arbitrary finite operation `Fin n → Fin n → Fin n` and do not touch the
+table representation, so they are not specific to Cayley tables; finiteness is simply
+what makes the laws decidable.  Together with the `Table`/`⟦_⟧` machinery here and
+the re-exported `from-yes`{.AgdaFunction}, they let a finite example discharge its
+defining equations without writing a single case by hand.
 
 #### A note on the operation type
 
@@ -130,8 +94,8 @@ consolidate them into a single canonical `Op`{.AgdaFunction} in
 `Overture.Operations`{.AgdaModule} before threading it through new constructions.
 That consolidation has a wide blast radius and is tracked as a milestone-4 style
 sweep ([#354](https://github.com/ualib/agda-algebras/issues/354)); once it lands,
-`⟦_⟧`{.AgdaFunction} and the checkers above can be re-expressed over the canonical
-`Op`{.AgdaFunction} if that reads better.
+`⟦_⟧`{.AgdaFunction} and the checkers in [`Overture.Operations.Properties`][] can be
+re-expressed over the canonical `Op`{.AgdaFunction} if that reads better.
 
 --------------------------------------
 
