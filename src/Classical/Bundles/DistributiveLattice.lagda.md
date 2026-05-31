@@ -21,7 +21,7 @@ step bridges our `absorbʳ-law` to stdlib's `∨-absorbs-∧`), and the two
 `DistributesOver` fields each pair a left and a right curried law — both of which
 `DistributiveLattice-Op` supplies.
 
-The reverse direction (`⟪_⟫ᵈˡ`) reads stdlib's `∨-distribˡ-∧` and `∧-distribˡ-∧`
+The reverse direction (`⟪_⟫ᵈˡ`) reads stdlib's `∨-distribˡ-∧` and `∧-distribˡ-∨`
 back as the two left distributivity equations and reuses the Lattice-bridge
 derivations (idempotency from absorption, the `absorbʳ` form by one `∨-comm` step)
 for the eight shared equations.
