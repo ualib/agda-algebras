@@ -124,8 +124,8 @@ module _ {n : ℕ} (_·_ : Fin n → Fin n → Fin n) where
 This module types a binary operation as a bare `Fin n → Fin n → Fin n` rather than
 the library's tuple-indexed `Op`{.AgdaFunction}.  That is a deliberate, temporary
 choice: the library currently carries *two* declarations of `Op`{.AgdaFunction} —
-`Overture.Operations.Op A I`{.AgdaFunction} (carrier first) and
-`Classical.Operations.Op I A`{.AgdaFunction} (arity first) — and the right fix is to
+`Overture.Operations.Op`{.AgdaFunction} `A I` (carrier first) and
+`Classical.Operations.Op`{.AgdaFunction} `I A` (arity first) — and the right fix is to
 consolidate them into a single canonical `Op`{.AgdaFunction} in
 `Overture.Operations`{.AgdaModule} before threading it through new constructions.
 That consolidation has a wide blast radius and is tracked as a milestone-4 style
