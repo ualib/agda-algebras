@@ -11,7 +11,7 @@ author: "the agda-algebras development team"
 This is the [Examples.Classical.Groups.AbelianGroup][] module of the [Agda Universal Algebra Library][].
 
 The integers under addition are the canonical abelian group — the same carrier and
-operations as the [`Group`][Examples.Classical.Groups.Group] example, now additionally
+operations as the [`CyclicGroup`][Examples.Classical.Groups.CyclicGroup] example, now additionally
 witnessing commutativity via stdlib's `+-comm`.
 
 ```agda
@@ -73,6 +73,6 @@ roundtrip-⁻¹-ag a = refl
 
 --------------------------------------
 
-<span style="float:left;">[← Examples.Classical.Groups.Group](Examples.Classical.Groups.Group.html)</span>
+<span style="float:left;">[← Examples.Classical.Groups.CyclicGroup](Examples.Classical.Groups.CyclicGroup.html)</span>
 
 {% include UALib.Links.md %}

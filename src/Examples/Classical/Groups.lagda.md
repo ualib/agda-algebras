@@ -17,7 +17,7 @@ contents.  The finite examples each introduce a local operation `_·_` and their
 characteristic lemmas, which are meaningful only within their own module, so there is
 nothing to gain (and names to clash) from re-exporting them through a barrel.
 
-+ `Group` and `AbelianGroup` present `(ℤ, +, 0, -)` as a group and as an abelian group.
++ `CyclicGroup` and `AbelianGroup` present `(ℤ, +, 0, -)` — the infinite cyclic group — as a group and as an abelian group.
 + `CyclicGroup3` is the cyclic group `ℤ/3ℤ`, built from a Cayley table.
 + `KleinFourGroup` is the Klein four-group `V₄`.
 + `SymmetricGroup3` is the symmetric group `S₃`, the smallest non-abelian group.

@@ -10,7 +10,8 @@ author: "the agda-algebras development team"
 
 This is the [Examples.Classical.Groups.CyclicGroup][] module of the [Agda Universal Algebra Library][].
 
-The integers under addition form the canonical group; built directly from stdlib's
+The integers under addition form the canonical group — indeed the infinite cyclic
+group; built directly from stdlib's
 `+-assoc`, `+-identityˡ`, `+-identityʳ`, `+-inverseˡ`, `+-inverseʳ`.
 
 ```agda
