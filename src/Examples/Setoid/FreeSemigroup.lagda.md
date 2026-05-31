@@ -30,14 +30,14 @@ inside a larger term via congruence.
 module Examples.Setoid.FreeSemigroup where
 
 -- Imports from Agda and the Agda Standard Library -----------------------------
-open import Agda.Primitive                       using () renaming ( Set to Type )
-open import Data.Fin.Base                        using ( Fin )
-open import Data.Fin.Patterns                    using ( 0F ; 1F ; 2F )
+open import Agda.Primitive                   using () renaming ( Set to Type )
+open import Data.Fin.Base                    using ( Fin )
+open import Data.Fin.Patterns                using ( 0F ; 1F ; 2F )
 
 -- Imports from the Agda Universal Algebra Library -----------------------------
-open import Classical.Signatures.Magma           using ( Sig-Magma ; ∙-Op )
-open import Overture.Terms       {𝑆 = Sig-Magma} using ( Term ; ℊ ; node )
-open import Setoid.Algebras      {𝑆 = Sig-Magma} using ( 𝔻[_] )
+open import Classical.Signatures.Magma       using ( Sig-Magma ; ∙-Op )
+open import Overture.Terms {𝑆 = Sig-Magma}   using ( Term ; ℊ ; node )
+open import Setoid.Algebras {𝑆 = Sig-Magma}  using ( 𝔻[_] )
 open import Setoid.Varieties.SoundAndComplete {𝑆 = Sig-Magma}
   using ( Eq ; _≈̇_ ; _⊨_ ; _⊢_▹_≈_ ; module FreeAlgebra )
 
@@ -46,10 +46,10 @@ open import Relation.Binary using ( Setoid )
 open _⊢_▹_≈_ using ( hyp ; app ; refl ; sym ; trans )
 ```
 
-#### The associativity theory {#associativity-theory}
+#### The Associativity Theory
 
 The syntactic product helper is the same as for the free magma.  The associativity
-equation lives in the three-variable context `Fin 3`{.AgdaDatatype}; the three
+equation lives in the three-variable context `Fin`{.AgdaDatatype} `3`; the three
 generators are `ℊ 0F`, `ℊ 1F`, `ℊ 2F`.
 
 ```agda
@@ -73,19 +73,19 @@ E _ = assoc-eq
 open FreeAlgebra E using ( 𝔽[_] )
 ```
 
-#### The free algebra is a semigroup {#free-is-semigroup}
+#### The free algebra is a semigroup
 
-The free-algebra construction already proves that `𝔽[ X ]`{.AgdaFunction} *models*
-every equation of the theory, so the free semigroup is, as expected, a semigroup.
+The free-algebra construction already proves that `𝔽[ X ]` *models* every equation of
+the theory, so the free semigroup is, as expected, a semigroup.
 
 ```agda
 free-semigroup-models-assoc : 𝔽[ Fin 3 ] ⊨ E
 free-semigroup-models-assoc = FreeAlgebra.satisfies E
 ```
 
-#### Associativity as an equality in the free semigroup {#assoc-equality}
+#### Associativity as an equality in the free semigroup
 
-The carrier equality of `𝔽[ X ]`{.AgdaFunction} *is* derivable equality, so the
+The carrier equality of `𝔽[ X ]` *is* derivable equality, so the
 associativity rule `hyp`{.AgdaInductiveConstructor} `0F` witnesses, on the nose,
 that the two parenthesisations of `g₀ · g₁ · g₂` are equal elements of the free
 semigroup — exactly the identification that the free magma withholds.
@@ -101,7 +101,7 @@ assoc≈˘ : (g₀ · (g₁ · g₂)) ≈ ((g₀ · g₁) · g₂)
 assoc≈˘ = sym (hyp 0F)
 ```
 
-#### Term rewriting inside a larger term {#term-rewriting}
+#### Term rewriting inside a larger term
 
 Congruence (`app`{.AgdaInductiveConstructor}) lets us rewrite an associativity
 *redex* wherever it occurs as a subterm.  Starting from a product whose *both*
