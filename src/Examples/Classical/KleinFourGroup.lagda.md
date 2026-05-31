@@ -6,12 +6,12 @@ date: "2026-05-31"
 author: "the agda-algebras development team"
 ---
 
-### Worked example — the Klein four-group `V₄` from a Cayley table
+### Worked Example: the Klein four-group `V₄` from a Cayley table
 
 This is the [Examples.Classical.KleinFourGroup][] module of the [Agda Universal Algebra Library][].
 
-The Klein four-group `V₄ ≅ ℤ/2ℤ × ℤ/2ℤ`{.AgdaFunction} is the smallest non-cyclic group.
-We build it on the carrier `Fin 4`{.AgdaDatatype}, identifying the four elements with
+The Klein four-group `V₄ ≅ ℤ/2ℤ × ℤ/2ℤ` is the smallest non-cyclic group.
+We build it on the carrier `Fin 4`, identifying the four elements with
 the two-bit codes `0 = (0,0)`, `1 = (1,0)`, `2 = (0,1)`, `3 = (1,1)`, so the group
 operation is component-wise addition mod 2 — equivalently, bitwise *exclusive or* on
 the index.  As with [`Examples.Classical.CyclicGroup3`][], the group axioms are

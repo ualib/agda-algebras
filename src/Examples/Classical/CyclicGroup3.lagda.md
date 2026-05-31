@@ -6,16 +6,16 @@ date: "2026-05-31"
 author: "the agda-algebras development team"
 ---
 
-### Worked example — the cyclic group `ℤ/3ℤ` from a Cayley table
+### Worked example: the cyclic group `ℤ/3ℤ` from a Cayley table
 
 This is the [Examples.Classical.CyclicGroup3][] module of the [Agda Universal Algebra Library][].
 
 The integers modulo `3` under addition form the smallest non-trivial cyclic group.
-We build it on the carrier `Fin 3`{.AgdaDatatype} from its addition table, using the
-Cayley-table machinery of [`Overture.Cayley`][]: the group axioms are decidable over
-the finite carrier, so associativity, the identity laws, and the inverse laws are each
-discharged by `from-yes`{.AgdaFunction} applied to the corresponding decision.  This is
-the first example to exercise the `Associative?`{.AgdaFunction},
+We build it on the carrier `Fin 3` from its addition table, using the Cayley-table
+machinery of [`Overture.Cayley`][]: the group axioms are decidable over the finite
+carrier, so associativity, the identity laws, and the inverse laws are each
+discharged by `from-yes`{.AgdaFunction} applied to the corresponding decision.  This
+is the first example to exercise the `Associative?`{.AgdaFunction},
 `LeftIdentity?`{.AgdaFunction}, `RightIdentity?`{.AgdaFunction},
 `LeftInverse?`{.AgdaFunction}, and `RightInverse?`{.AgdaFunction} checkers, and the
 first to feed a tabulated operation to `eqsToGroup`{.AgdaFunction}.
