@@ -10,17 +10,19 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Small.Structures.Monoid][] module of the [Agda Universal Algebra Library][].
 
-Specializes [`Classical.Structures.Monoid`][] to the `0ℓ`–`0ℓ` case, mirroring the analogous
-veneers for `Magma`, `Semigroup`, etc.
+Specializes [`Classical.Structures.Monoid`][] to the common case where the universe
+level of both the carrier and the equivalence is `0ℓ` (i.e., Set-valued carriers with
+propositional or set-truncated equivalence), mirroring the analogous veneers for
+`Magma`, `Semigroup`, etc.
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Classical.Small.Structures.Monoid where
 
-open import Agda.Primitive                          using () renaming ( Set to Type )
-open import Level                                   using ( 0ℓ ; suc )
-open import Relation.Binary.PropositionalEquality   using ( _≡_ )
+open import Agda.Primitive                         using () renaming ( Set to Type )
+open import Level                                  using ( 0ℓ ; suc )
+open import Relation.Binary.PropositionalEquality  using ( _≡_ )
 
 import Classical.Structures.Monoid as Polymorphic
 
