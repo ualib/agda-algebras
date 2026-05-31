@@ -11,7 +11,7 @@ author: "the agda-algebras development team"
 This is the [Examples.Classical.DistributiveLattice][] module of the [Agda Universal Algebra Library][].
 
 The two-element Boolean lattice `𝟚` is distributive, and this module promotes the
-`Lattice` instance of [`Examples.Classical.Lattice`][] to a full
+`Lattice` instance of [`Examples.Classical.Lattices.Two`][] to a full
 [`DistributiveLattice`][Classical.Structures.DistributiveLattice].  This completes
 the `DistributiveLattice` task of [#266](https://github.com/ualib/agda-algebras/issues/266):
 all ten equations are discharged by standard-library lemmas, and the new structure
