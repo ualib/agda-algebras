@@ -6,7 +6,7 @@ date: "2026-05-31"
 author: "the agda-algebras development team"
 ---
 
-### <a id="examples-classical-cayley">Cayley tables for finite operations</a>
+### Cayley tables for finite operations
 
 This is the [Examples.Classical.Cayley][] module of the [Agda Universal Algebra Library][].
 
@@ -56,7 +56,7 @@ open import Relation.Nullary.Decidable.Core         using ( Dec )
 open import Relation.Nullary.Decidable.Core         using ( from-yes ) public
 ```
 
-#### <a id="table">The table representation</a>
+#### The table representation
 
 ```agda
 -- An n × n Cayley table over the carrier Fin n, stored as a vector of rows.
@@ -68,7 +68,7 @@ Table n = Vec (Vec (Fin n) n) n
 ⟦ t ⟧ a b = lookup (lookup t a) b
 ```
 
-#### <a id="deciders">Decidable algebraic laws</a>
+#### Decidable algebraic laws
 
 Each law over the finite carrier is decidable; we expose the decision so that the
 examples can extract the proof with `from-yes`{.AgdaFunction} whenever the table

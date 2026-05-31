@@ -49,6 +49,7 @@ These proof terms are first-class training data.  Optimize for legibility and st
 +  Two spaces after a sentence-ending period.
 +  Do not bold a bullet title's trailing period: write `+  **Title**.`, not `+ **Title.**`.
 +  Bullets are complete sentences ending in a period or semicolon.
++  Write section headings as plain ATX headings; do not wrap them in HTML `<a id="…">…</a>` anchors (MkDocs slugifies headings automatically).  See `docs/STYLE_GUIDE.md` § Section headings.
 
 ## Environment gotchas
 
