@@ -6,7 +6,7 @@ date: "2026-05-24"
 author: "the agda-algebras development team"
 ---
 
-### <a id="examples-classical-monoid">Worked example — `(List ℕ, ++, [])` as a monoid</a>
+### Worked example: `(List ℕ, ++, [])` as a monoid {#examples-classical-monoid}
 
 This is the [Examples.Classical.Monoid][] module of the [Agda Universal Algebra Library][].
 
@@ -34,7 +34,7 @@ open import Classical.Small.Structures.Monoid  using ( Monoid ; eqsToMonoid )
 import Classical.Structures.Monoid as Polymorphic
 ```
 
-#### <a id="list-monoid">The monoid `(List ℕ, ++, [])`</a>
+#### The monoid `(List ℕ, ++, [])` {#list-monoid}
 
 ```agda
 list-monoid : Monoid
@@ -56,7 +56,8 @@ open Polymorphic.Monoid-Op list-monoid using ( _∙_ ; ε )
 The bundle round-trips pointwise on both the operation and the identity.
 
 ```agda
-open Polymorphic.Monoid-Op ⟪ ⟨ list-monoid ⟩ᵐᵒ ⟫ᵐᵒ using () renaming ( _∙_ to _·_ ; ε to ε· )
+open Polymorphic.Monoid-Op ⟪ ⟨ list-monoid ⟩ᵐᵒ ⟫ᵐᵒ
+  using () renaming ( _∙_ to _·_ ; ε to ε· )
 
 roundtrip-∙-mn : ∀ (xs ys : List ℕ) → xs · ys ≡ xs ++ ys
 roundtrip-∙-mn xs ys = refl

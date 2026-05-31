@@ -1,23 +1,23 @@
 ---
 layout: default
-file: "src/Examples/Classical/AbelianGroup.lagda.md"
-title: "Examples.Classical.AbelianGroup module"
+file: "src/Examples/Classical/Groups/AbelianGroup.lagda.md"
+title: "Examples.Classical.Groups.AbelianGroup module"
 date: "2026-05-30"
 author: "the agda-algebras development team"
 ---
 
-### <a id="examples-classical-abeliangroup">Worked example — `(ℤ, +, 0, -)` as an abelian group</a>
+### Worked example: `(ℤ, +, 0, -)` as an abelian group {#examples-classical-groups-abeliangroup}
 
-This is the [Examples.Classical.AbelianGroup][] module of the [Agda Universal Algebra Library][].
+This is the [Examples.Classical.Groups.AbelianGroup][] module of the [Agda Universal Algebra Library][].
 
 The integers under addition are the canonical abelian group — the same carrier and
-operations as the [`Group`][Examples.Classical.Group] example, now additionally
+operations as the [`Group`][Examples.Classical.Groups.Group] example, now additionally
 witnessing commutativity via stdlib's `+-comm`.
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-module Examples.Classical.AbelianGroup where
+module Examples.Classical.Groups.AbelianGroup where
 
 -- Imports from the Agda Standard Library -------------------------------------
 open import Data.Integer             using ( ℤ ; _+_ ; 0ℤ ; -_ )
@@ -32,7 +32,7 @@ open import Classical.Small.Structures.AbelianGroup  using ( AbelianGroup ; eqsT
 import Classical.Structures.AbelianGroup as Polymorphic
 ```
 
-#### <a id="integer-abeliangroup">The abelian group `(ℤ, +, 0, -)`</a>
+#### The abelian group `(ℤ, +, 0, -)` {#integer-abeliangroup}
 
 ```agda
 ℤ-abelianGroup : AbelianGroup
@@ -42,7 +42,7 @@ import Classical.Structures.AbelianGroup as Polymorphic
 open Polymorphic.AbelianGroup-Op ℤ-abelianGroup using ( _∙_ ; ε ; _⁻¹ )
 ```
 
-#### <a id="acceptance">Acceptance checks</a>
+#### Acceptance checks
 
 ```agda
 ∙-is-+-ag : ∀ (a b : ℤ) → a ∙ b ≡ a + b
@@ -73,6 +73,6 @@ roundtrip-⁻¹-ag a = refl
 
 --------------------------------------
 
-<span style="float:left;">[← Examples.Classical.Group](Examples.Classical.Group.html)</span>
+<span style="float:left;">[← Examples.Classical.Groups.Group](Examples.Classical.Groups.Group.html)</span>
 
 {% include UALib.Links.md %}

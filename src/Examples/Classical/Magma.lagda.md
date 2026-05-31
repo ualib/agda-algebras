@@ -6,7 +6,7 @@ date: "2026-05-17"
 author: "the agda-algebras development team"
 ---
 
-### <a id="examples-classical-magma">Worked example — `(ℕ, +)` as a magma</a>
+### Worked example: `(ℕ, +)` as a magma {#examples-classical-magma}
 
 This is the [Examples.Classical.Magma][] module of the [Agda Universal Algebra Library][].
 
@@ -24,16 +24,17 @@ core structure file.
 module Examples.Classical.Magma where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
-open import Data.Nat                                using ( ℕ ; _+_ )
-open import Relation.Binary.PropositionalEquality   using ( _≡_ ; refl )
+open import Data.Nat                               using ( ℕ ; _+_ )
+open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Classical.Bundles.Magma             using ( ⟨_⟩ᵐᵃ ; ⟪_⟫ᵐᵃ )
-open import Classical.Small.Structures.Magma    using ( Magma ; opsToMagma )
-import      Classical.Structures.Magma          as Polymorphic
+open import Classical.Bundles.Magma           using ( ⟨_⟩ᵐᵃ ; ⟪_⟫ᵐᵃ )
+open import Classical.Small.Structures.Magma  using ( Magma ; opsToMagma )
+
+import Classical.Structures.Magma as Polymorphic
 ```
 
-#### <a id="N-magma">The magma `(ℕ, +)`</a>
+#### The magma `(ℕ, +)` {#N-magma}
 
 ```agda
 ℕ-magma : Magma

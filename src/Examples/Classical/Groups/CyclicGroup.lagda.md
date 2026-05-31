@@ -1,14 +1,14 @@
 ---
 layout: default
-file: "src/Examples/Classical/Group.lagda.md"
-title: "Examples.Classical.Group module"
+file: "src/Examples/Classical/Groups/CyclicGroup.lagda.md"
+title: "Examples.Classical.Groups.CyclicGroup module"
 date: "2026-05-30"
 author: "the agda-algebras development team"
 ---
 
-### <a id="examples-classical-group">Worked example — `(ℤ, +, 0, -)` as a group</a>
+### Worked example: `(ℤ, +, 0, -)` as a group
 
-This is the [Examples.Classical.Group][] module of the [Agda Universal Algebra Library][].
+This is the [Examples.Classical.Groups.CyclicGroup][] module of the [Agda Universal Algebra Library][].
 
 The integers under addition form the canonical group; built directly from stdlib's
 `+-assoc`, `+-identityˡ`, `+-identityʳ`, `+-inverseˡ`, `+-inverseʳ`.
@@ -16,7 +16,7 @@ The integers under addition form the canonical group; built directly from stdlib
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-module Examples.Classical.Group where
+module Examples.Classical.Groups.CyclicGroup where
 
 -- Imports from the Agda Standard Library -------------------------------------
 open import Data.Integer             using ( ℤ ; _+_ ; 0ℤ ; -_ )
@@ -31,7 +31,7 @@ open import Classical.Small.Structures.Group  using ( Group ; eqsToGroup )
 import Classical.Structures.Group as Polymorphic
 ```
 
-#### <a id="integer-group">The group `(ℤ, +, 0, -)`</a>
+#### The group `(ℤ, +, 0, -)` {#integer-group}
 
 ```agda
 ℤ-group : Group
@@ -40,7 +40,7 @@ import Classical.Structures.Group as Polymorphic
 open Polymorphic.Group-Op ℤ-group using ( _∙_ ; ε ; _⁻¹ )
 ```
 
-#### <a id="acceptance">Acceptance checks</a>
+#### Acceptance checks
 
 ```agda
 ∙-is-+-group : ∀ (a b : ℤ) → a ∙ b ≡ a + b
@@ -71,6 +71,6 @@ roundtrip-⁻¹-group a = refl
 --------------------------------------
 
 <span style="float:left;">[← Examples.Classical.Monoid](Examples.Classical.Monoid.html)</span>
-<span style="float:right;">[Examples.Classical.AbelianGroup →](Examples.Classical.AbelianGroup.html)</span>
+<span style="float:right;">[Examples.Classical.Groups.AbelianGroup →](Examples.Classical.Groups.AbelianGroup.html)</span>
 
 {% include UALib.Links.md %}

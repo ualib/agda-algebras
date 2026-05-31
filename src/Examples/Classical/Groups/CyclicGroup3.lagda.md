@@ -1,14 +1,14 @@
 ---
 layout: default
-file: "src/Examples/Classical/CyclicGroup3.lagda.md"
-title: "Examples.Classical.CyclicGroup3 module"
+file: "src/Examples/Classical/Groups/CyclicGroup3.lagda.md"
+title: "Examples.Classical.Groups.CyclicGroup3 module"
 date: "2026-05-31"
 author: "the agda-algebras development team"
 ---
 
 ### Worked example: the cyclic group `ℤ/3ℤ` from a Cayley table
 
-This is the [Examples.Classical.CyclicGroup3][] module of the [Agda Universal Algebra Library][].
+This is the [Examples.Classical.Groups.CyclicGroup3][] module of the [Agda Universal Algebra Library][].
 
 The integers modulo `3` under addition form the smallest non-trivial cyclic group.
 We build it on the carrier `Fin 3` from its addition table, using the Cayley-table
@@ -32,7 +32,7 @@ The addition table (rows indexed by the left summand, columns by the right; entr
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-module Examples.Classical.CyclicGroup3 where
+module Examples.Classical.Groups.CyclicGroup3 where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
 open import Data.Fin                                using ( Fin )
@@ -41,13 +41,14 @@ open import Data.Vec.Base                           using ( _∷_ ; [] )
 open import Relation.Binary.PropositionalEquality   using ( _≡_ ; refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture.Cayley                     using ( Table ; ⟦_⟧ ; from-yes )
-open import Overture.Operations.Properties      using ( Associative? ; Commutative?
-                                                      ; LeftIdentity? ; RightIdentity?
-                                                      ; LeftInverse? ; RightInverse? )
-open import Classical.Bundles.Group             using ( ⟨_⟩ᵍᵖ ; ⟪_⟫ᵍᵖ )
-open import Classical.Small.Structures.Group    using ( Group ; eqsToGroup )
-import      Classical.Structures.Group          as Polymorphic
+open import Overture.Cayley                   using  ( Table ; ⟦_⟧ ; from-yes )
+open import Overture.Operations.Properties    using  ( Associative? ; Commutative?
+                                                     ; LeftIdentity? ; RightIdentity?
+                                                     ; LeftInverse? ; RightInverse? )
+open import Classical.Bundles.Group           using  ( ⟨_⟩ᵍᵖ ; ⟪_⟫ᵍᵖ )
+open import Classical.Small.Structures.Group  using  ( Group ; eqsToGroup )
+
+import Classical.Structures.Group as Polymorphic
 ```
 
 #### The Cayley table, the operation, and the inverse map
@@ -82,11 +83,9 @@ type-check.
 ```agda
 z3-group : Group
 z3-group = eqsToGroup (Fin 3) _·_ 0F z3-inv
-             (from-yes (Associative?   _·_))
-             (from-yes (LeftIdentity?  _·_ 0F))
-             (from-yes (RightIdentity? _·_ 0F))
-             (from-yes (LeftInverse?   _·_ 0F z3-inv))
-             (from-yes (RightInverse?  _·_ 0F z3-inv))
+  (from-yes (Associative?   _·_)) (from-yes (LeftIdentity?  _·_ 0F))
+  (from-yes (RightIdentity? _·_ 0F)) (from-yes (LeftInverse?   _·_ 0F z3-inv))
+  (from-yes (RightInverse?  _·_ 0F z3-inv))
 
 open Polymorphic.Group-Op z3-group using ( _∙_ ; ε ; _⁻¹ )
 ```

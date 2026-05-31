@@ -6,7 +6,7 @@ date: "2026-05-18"
 author: "the agda-algebras development team"
 ---
 
-### <a id="examples-classical-semigroup">Worked example — `(ℕ, +)` as a semigroup</a>
+### Worked example: `(ℕ, +)` as a semigroup {#examples-classical-semigroup}
 
 This is the [Examples.Classical.Semigroup][] module of the [Agda Universal Algebra Library][].
 
@@ -35,7 +35,7 @@ open import Examples.Classical.Magma              using ( ℕ-magma )
 import Classical.Structures.Semigroup as Polymorphic
 ```
 
-#### <a id="N-semigroup">The semigroup `(ℕ, +)`</a>
+#### The semigroup `(ℕ, +)` {#N-semigroup}
 
 We build `(ℕ, +)` directly from stdlib's `+-assoc`.  The `eqsToSemigroup` constructor
 demands an associativity proof of exactly the shape

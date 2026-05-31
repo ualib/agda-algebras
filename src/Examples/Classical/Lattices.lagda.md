@@ -23,10 +23,10 @@ Each submodule is the home of one concrete lattice.
 
 module Examples.Classical.Lattices where
 
-open import Examples.Classical.Lattices.L2 public
-open import Examples.Classical.Lattices.L2Distributive public
-open import Examples.Classical.Lattices.L3Heyting public
-open import Examples.Classical.Lattices.L7 public
+open import Examples.Classical.Lattices.L2
+open import Examples.Classical.Lattices.L2Distributive
+open import Examples.Classical.Lattices.L3Heyting
+open import Examples.Classical.Lattices.L7
 ```
 
 --------------------------------------

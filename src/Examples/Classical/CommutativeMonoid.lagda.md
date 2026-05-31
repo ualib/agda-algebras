@@ -6,7 +6,7 @@ date: "2026-05-24"
 author: "the agda-algebras development team"
 ---
 
-### <a id="examples-classical-commutativemonoid">Worked example — `(ℕ, +, 0)` as a commutative monoid</a>
+### Worked example: `(ℕ, +, 0)` as a commutative monoid {#examples-classical-commutativemonoid}
 
 This is the [Examples.Classical.CommutativeMonoid][] module of the [Agda Universal Algebra Library][].
 
@@ -33,7 +33,8 @@ We construct `(ℕ, +, 0)` from stdlib's `+-assoc`, `+-identityˡ`, `+-identity�
 
 ```agda
 ℕ-commutativeMonoid : CommutativeMonoid
-ℕ-commutativeMonoid = eqsToCommutativeMonoid ℕ _+_ zero +-assoc +-identityˡ +-identityʳ +-comm
+ℕ-commutativeMonoid =
+  eqsToCommutativeMonoid ℕ _+_ zero +-assoc +-identityˡ +-identityʳ +-comm
 
 open Polymorphic.CommutativeMonoid-Op ℕ-commutativeMonoid using ( _∙_ ; ε )
 
