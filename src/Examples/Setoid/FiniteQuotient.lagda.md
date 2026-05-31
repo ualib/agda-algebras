@@ -19,7 +19,7 @@ quotient: it has exactly two congruence classes, even and odd, and its induced
 operation is addition modulo `2` — i.e. the two-element group `ℤ/2ℤ`.
 
 (Incidentally, the monoid `(ℕ, +, 0)` that we use here is the same one that appears in
-[Examples.Classical.CommutativeMonoid][]; it is rebuilt here directly over here
+[Examples.Classical.CommutativeMonoid][]; it is rebuilt here directly over
 `Sig-Monoid`{.AgdaFunction}.)
 
 ```agda
@@ -42,7 +42,7 @@ open import Relation.Nullary  using ( ¬_ )
 
 -- Imports from the Agda Universal Algebra Library -----------------------------
 open import Classical.Signatures.Monoid       using ( Sig-Monoid ; ∙-Op ; ε-Op )
-open import Setoid.Algebras {𝑆 = Sig-Monoid}  using ( Algebra ; 𝕌[_] ; 𝔻[_] ; ⟨_⟩ ; _̂_ )
+open import Setoid.Algebras {𝑆 = Sig-Monoid}  using ( Algebra ; 𝕌[_] ; 𝔻[_] ; ⟨_⟩ )
 open import Setoid.Algebras.Congruences {𝑆 = Sig-Monoid}
   using ( Con ; IsCongruence ; _∣≈_ ; _╱_ )
 
