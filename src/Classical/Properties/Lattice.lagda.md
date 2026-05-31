@@ -38,9 +38,15 @@ module Classical.Properties.Lattice where
 open import Agda.Primitive                           using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library -----------------------------------------
-open import Data.Product                             using ( proj₁ )
+open import Data.Fin.Base                            using ( Fin )
+open import Data.Fin.Properties                      using ( _≟_ ; all? )
+open import Data.Nat.Base                            using ( ℕ )
+open import Data.Product                             using ( proj₁ ; _×_ )
+open import Data.Sum.Base                            using ( _⊎_ )
 open import Level                                    using ( Level ; _⊔_ )
 open import Relation.Binary                          using ( Setoid )
+open import Relation.Binary.PropositionalEquality    using ( _≡_ ; _≢_ )
+open import Relation.Nullary.Decidable.Core          using ( Dec ; ¬? ; _×-dec_ ; _→-dec_ ; _⊎-dec_ )
 
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
@@ -176,6 +182,71 @@ through absorption twice.
     x ∨ (y ∨ z)   ≈⟨ ∨-cong refl (≤-via-∨ y≤z) ⟩
     x ∨ z         ≈⟨ ≤-via-∨ x≤z ⟩
     z             ∎)
+```
+
+#### <a id="finite-law-deciders">Deciding lattice laws over a finite carrier</a>
+
+For a finite carrier `Fin n` every equational law is decidable: `all?` quantifies
+over the carrier and `_≟_` decides each instance.  These checkers complement the
+single-operation deciders (`Associative?`, `Commutative?`, `Idempotent?`) of
+[`Overture.Cayley`][] with the *two-operation* lattice laws — absorption and
+distributivity — so that the finite lattice examples can discharge their defining
+equations uniformly with `from-yes`.  Each is stated for arbitrary finite operations
+`_·_` and `_∘_`, mirroring the evaluated-law shapes of [`Classical.Equations`][].
+
+```agda
+module _ {n : ℕ} (_·_ _∘_ : Fin n → Fin n → Fin n) where
+
+  -- a · (a ∘ b) ≡ a
+  Absorbsˡ? : Dec (∀ a b → a · (a ∘ b) ≡ a)
+  Absorbsˡ? = all? (λ a → all? (λ b → (a · (a ∘ b)) ≟ a))
+
+  -- (a · b) ∘ a ≡ a
+  Absorbsʳ? : Dec (∀ a b → (a · b) ∘ a ≡ a)
+  Absorbsʳ? = all? (λ a → all? (λ b → ((a · b) ∘ a) ≟ a))
+
+  -- a · (b ∘ c) ≡ (a · b) ∘ (a · c)
+  Distributesˡ? : Dec (∀ a b c → a · (b ∘ c) ≡ (a · b) ∘ (a · c))
+  Distributesˡ? = all? (λ a → all? (λ b → all? (λ c → (a · (b ∘ c)) ≟ ((a · b) ∘ (a · c)))))
+
+  -- (b ∘ c) · a ≡ (b · a) ∘ (c · a)
+  Distributesʳ? : Dec (∀ a b c → (b ∘ c) · a ≡ (b · a) ∘ (c · a))
+  Distributesʳ? = all? (λ a → all? (λ b → all? (λ c → ((b ∘ c) · a) ≟ ((b · a) ∘ (c · a)))))
+```
+
+#### <a id="finite-order">The decidable meet order and its atoms</a>
+
+`FiniteOrder _∧_` packages the meet order `a ≤ b := a ∧ b ≡ a` over a finite carrier
+together with its decision procedure.  Fixing a bottom `⊥` and top `⊤` (submodule
+`Bounded`) it provides the `atom`/`coatom` predicates and their deciders.  This is
+the finite, decidable counterpart of the setoid-level `Lattice-Order._≤_` above, and
+is what the finite lattice examples reuse.
+
+```agda
+module FiniteOrder {n : ℕ} (_∧_ : Fin n → Fin n → Fin n) where
+  infix 4 _≤_ _≤?_
+
+  _≤_ : Fin n → Fin n → Type
+  a ≤ b = a ∧ b ≡ a
+
+  _≤?_ : (a b : Fin n) → Dec (a ≤ b)
+  a ≤? b = (a ∧ b) ≟ a
+
+  module Bounded (⊥ ⊤ : Fin n) where
+
+    -- a is an atom: a ≠ ⊥, with nothing strictly between ⊥ and a.
+    atom : Fin n → Type
+    atom a = (a ≢ ⊥) × (∀ b → b ≤ a → (b ≡ ⊥) ⊎ (b ≡ a))
+
+    -- a is a coatom: a ≠ ⊤, with nothing strictly between a and ⊤.
+    coatom : Fin n → Type
+    coatom a = (a ≢ ⊤) × (∀ b → a ≤ b → (b ≡ a) ⊎ (b ≡ ⊤))
+
+    atom? : (a : Fin n) → Dec (atom a)
+    atom? a = ¬? (a ≟ ⊥) ×-dec all? (λ b → (b ≤? a) →-dec ((b ≟ ⊥) ⊎-dec (b ≟ a)))
+
+    coatom? : (a : Fin n) → Dec (coatom a)
+    coatom? a = ¬? (a ≟ ⊤) ×-dec all? (λ b → (a ≤? b) →-dec ((b ≟ a) ⊎-dec (b ≟ ⊤)))
 ```
 
 --------------------------------------
