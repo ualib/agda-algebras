@@ -193,7 +193,7 @@ them, and it is above any common lower bound.  These three facts are exactly the
   ∧-isMeetSemilattice {ℓ} = record { isPartialOrder = ≤-isPartialOrder {ℓ} ; infimum = ∧-infimum {ℓ} }
 ```
 
-#### <a id="the-bundles">The poset and meet-semilattice of congruences</a>
+#### The poset and meet-semilattice of congruences
 
 Finally we assemble the standard-library bundles.  At a fixed relation level `ℓ`,
 `Con-Poset 𝑨` is the poset `(Con 𝑨, ≅, ≤)` and `Con-MeetSemilattice 𝑨` equips it
