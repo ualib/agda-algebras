@@ -36,7 +36,7 @@ and is deferred to a follow-up.
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature ; ∣_∣ ; ∥_∥)
+open import Overture using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Algebras.Congruences.Generation {𝑆 : Signature 𝓞 𝓥} where
 
@@ -49,6 +49,7 @@ open import Relation.Binary  using ( Setoid ; IsEquivalence )
                              renaming ( Rel to BinRel )
 
 -- Imports from the Agda Universal Algebras Library ------------------------------
+open import Overture using ( ∣_∣ ; ∥_∥ )
 open import Setoid.Algebras.Basic {𝑆 = 𝑆} using ( Algebra ; 𝕌[_] ; _^_ )
 open import Setoid.Algebras.Congruences {𝑆 = 𝑆}
   using  ( Con ; mkcon ; _∣≈_ ; reflexive ; is-equivalence ; is-compatible )
