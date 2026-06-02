@@ -26,7 +26,7 @@ open import Function          using ( flip ; Func )
 open import Level             using( _⊔_ ; Level )
 open import Relation.Binary   using ( Setoid ;  IsEquivalence ; Decidable )
 open import Relation.Binary.PropositionalEquality  using ( refl ; _≡_ )
-open import Relation.Unary    using ( Pred ; _⊆_ ; _∈_ )
+open import Relation.Unary    using ( Pred ; _∈_ )
 
 open Func           using ( cong ) renaming ( to to _⟨$⟩_ )
 open Setoid         using ( Carrier ; _≈_ ) renaming ( isEquivalence to isEqv )
@@ -68,7 +68,7 @@ cong (Interp (⨅ {I} 𝒜)) (refl , f=g ) = λ i → cong  (Interp (𝒜 i)) (r
 
 module _ {𝒦 : Pred (Algebra α ρ) (ov α)} where
 
- ℑ : Type (ov(α ⊔ ρ))
+ ℑ : Type (ov (α ⊔ ρ))
  ℑ = Σ[ 𝑨 ∈ (Algebra α ρ) ] 𝑨 ∈ 𝒦
 
  𝔄 : ℑ → Algebra α ρ
