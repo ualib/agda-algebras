@@ -12,11 +12,10 @@ This is the [Examples.Setoid.CongruenceLattice][] module of the [Agda Universal 
 
 We exercise [Setoid.Algebras.Congruences.CompleteLattice][] on the smallest
 nontrivial example: the two-element algebra `𝟚` in the *empty* signature (no
-operations), whose carrier is `Bool` under propositional equality.  Because there
-are no operations, every equivalence relation on `Bool` is automatically a
-congruence, so `Con 𝟚` is just the lattice of equivalence relations on a
-two-element set — the two-element chain `⊥ < ⊤`, where `⊥` is the diagonal
-(`≡`) and `⊤` is the all-relation.
+operations), whose carrier is `Bool` under propositional equality.  Because there are
+no operations, every equivalence relation on `Bool` is automatically a congruence, so
+`Con 𝟚` is just the lattice of equivalence relations on a two-element set — the
+two-element chain `⊥ < ⊤`, where `⊥` is the diagonal (`≡`) and `⊤` is the all-relation.
 
 We instantiate the `Lattice`, `BoundedLattice`, and `CompleteLattice` bundles for
 `𝟚`, and verify the lattice is genuinely nontrivial by proving `⊤ ⋬ ⊥`.
@@ -57,13 +56,13 @@ open import Setoid.Algebras.Congruences {𝑆 = 𝑆₀} using ( Con ; mkcon )
 -- The two-element algebra: carrier Bool with ≡, and no operations to interpret.
 𝟚 : Algebra 0ℓ 0ℓ
 𝟚 = record { Domain = ≡.setoid Bool ; Interp = interp }
- where
- interp : Func (⟨ 𝑆₀ ⟩ (≡.setoid Bool)) (≡.setoid Bool)
- interp ⟨$⟩ (() , _)
- cong interp {() , _}
+  where
+  interp : Func (⟨ 𝑆₀ ⟩ (≡.setoid Bool)) (≡.setoid Bool)
+  interp ⟨$⟩ (() , _)
+  cong interp {() , _}
 ```
 
-#### The diagonal congruence {#the-diagonal}
+#### The Diagonal Congruence
 
 Propositional equality `_≡_` is a congruence of `𝟚`: it is reflexive over the
 setoid equality (which *is* `_≡_` here), an equivalence relation, and — since `𝑆₀`
@@ -76,7 +75,7 @@ has no operations — compatibility is vacuous.
                  (λ ())
 ```
 
-#### Instantiating the bundles {#the-bundles}
+#### Instantiating the bundles
 
 With the base level `ℓ₀ = 0ℓ` the absorbing level `L` is `0ℓ`, so the congruence
 lattice of `𝟚` is the chain on `Con 𝟚 {0ℓ}`.  All three bundles type-check.
@@ -84,7 +83,7 @@ lattice of `𝟚` is the chain on `Con 𝟚 {0ℓ}`.  All three bundles type-che
 ```agda
 open import Setoid.Algebras.Congruences.Lattice {𝑆 = 𝑆₀} using ( _≤_ )
 open import Setoid.Algebras.Congruences.CompleteLattice {𝑆 = 𝑆₀}
-  using ( Con-Lattice ; Con-BoundedLattice ; Con-CompleteLattice ; ⊤c ; ⊥c ; ⊥-minimum )
+  using ( Con-Lattice ; Con-BoundedLattice ; Con-CompleteLattice ; 1ᴬ ; 0ᴬ ; 0ᴬ-minimum )
 
 Con𝟚-Lattice          = Con-Lattice         𝟚 0ℓ
 Con𝟚-BoundedLattice   = Con-BoundedLattice  𝟚 0ℓ
@@ -94,13 +93,13 @@ Con𝟚-CompleteLattice  = Con-CompleteLattice 𝟚 0ℓ
 #### Nontriviality: `⊤ ⋬ ⊥` {#nontriviality}
 
 The top and bottom congruences are distinct.  If we had `⊤ ≤ ⊥`, then composing with
-`⊥ ≤ Δ` (the bottom is the least congruence, so it is below `Δ`) would give `⊤ ≤ Δ`;
+`0 ≤ Δ` (the bottom is the least congruence, so it is below `Δ`) would give `⊤ ≤ Δ`;
 but `⊤` relates `true` and `false` while `Δ` (namely `_≡_`) does not, so `true ≡ false`
 — a contradiction.
 
 ```agda
-Con𝟚-nontrivial : ¬ ( (⊤c 𝟚 0ℓ) ≤ (⊥c 𝟚 0ℓ) )
-Con𝟚-nontrivial ⊤≤⊥ with ⊥-minimum 𝟚 0ℓ Δ (⊤≤⊥ {true} {false} (lift _))
+Con𝟚-nontrivial : ¬ ( (1ᴬ 𝟚 0ℓ) ≤ (0ᴬ 𝟚 0ℓ) )
+Con𝟚-nontrivial ⊤≤⊥ with 0ᴬ-minimum 𝟚 0ℓ Δ (⊤≤⊥ {true} {false} (lift _))
 ... | ()
 ```
 

@@ -5,14 +5,12 @@ date : "2021-09-15"
 author: "agda-algebras development team"
 ---
 
-#### <a id="congruences-of-setoidalgebras">Congruences of Setoid Algebras</a>
+#### Congruences of Setoid Algebras
 
 This is the [Setoid.Algebras.Congruences][] module of the [Agda Universal Algebra Library][].
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using (𝓞 ; 𝓥 ; Signature)
@@ -37,18 +35,17 @@ open import Setoid.Algebras.Basic {𝑆 = 𝑆} using ( ov ; Algebra ; 𝕌[_] ;
 private variable α ρ ℓ : Level
 ```
 
-
-We now define the function `compatible` so that, if `𝑨` denotes an algebra and `R` a binary relation, then `compatible 𝑨 R` will represent the assertion that `R` is *compatible* with all basic operations of `𝑨`. The formal definition is immediate since all the work is done by the relation `|:`, which we defined above (see [Setoid.Relations.Discrete][]).
-
+We now define the function `compatible` so that, if `𝑨` denotes an algebra and `R` a
+binary relation, then `compatible 𝑨 R` will represent the assertion that `R` is
+*compatible* with all basic operations of `𝑨`. The formal definition is immediate
+since all the work is done by the relation `|:`, which we defined above (see
+[Setoid.Relations.Discrete][]).
 
 ```agda
-
-
 -- Algebra compatibility with binary relation
 _∣≈_ : (𝑨 : Algebra α ρ) → BinRel 𝕌[ 𝑨 ] ℓ → Type _
 𝑨 ∣≈ R = ∀ 𝑓 → (𝑓 ̂ 𝑨) |: R
 ```
-
 
 A *congruence relation* of an algebra `𝑨` is defined to be an equivalence relation
 that is compatible with the basic operations of `𝑨`.  This concept can be
@@ -64,59 +61,48 @@ field `reflexive` to the definition of `IsCongruence`. (In fact, we should
 probably redefine equivalence relation on setiods to be reflexive with respect to
 the underying setoid equality (and not just with respect to _≡_).)
 
-
 ```agda
-
-
 module _ (𝑨 : Algebra α ρ) where
- open Algebra 𝑨  using ()  renaming (Domain to A )
- open Setoid A   using ( _≈_ )
+  open Algebra 𝑨  using ()  renaming (Domain to A )
+  open Setoid A   using ( _≈_ )
 
- record IsCongruence (θ : BinRel 𝕌[ 𝑨 ] ℓ) : Type (𝓞 ⊔ 𝓥 ⊔ ρ ⊔ ℓ ⊔ α)  where
-  constructor mkcon
-  field
-   reflexive : ∀ {a₀ a₁} → a₀ ≈ a₁ → θ a₀ a₁
-   is-equivalence : IsEquivalence θ
-   is-compatible  : 𝑨 ∣≈ θ
+  record IsCongruence (θ : BinRel 𝕌[ 𝑨 ] ℓ) : Type (𝓞 ⊔ 𝓥 ⊔ ρ ⊔ ℓ ⊔ α)  where
+    constructor mkcon
+    field
+      reflexive : ∀ {a₀ a₁} → a₀ ≈ a₁ → θ a₀ a₁
+      is-equivalence : IsEquivalence θ
+      is-compatible  : 𝑨 ∣≈ θ
 
-  Eqv : Equivalence 𝕌[ 𝑨 ] {ℓ}
-  Eqv = θ , is-equivalence
+    Eqv : Equivalence 𝕌[ 𝑨 ] {ℓ}
+    Eqv = θ , is-equivalence
 
- open IsCongruence public
+  open IsCongruence public
 
- Con : {ℓ : Level} → Type (α ⊔ ρ ⊔ ov ℓ)
- Con {ℓ} = Σ[ θ ∈ ( BinRel 𝕌[ 𝑨 ] ℓ ) ] IsCongruence θ
+  Con : {ℓ : Level} → Type (α ⊔ ρ ⊔ ov ℓ)
+  Con {ℓ} = Σ[ θ ∈ BinRel 𝕌[ 𝑨 ] ℓ ] IsCongruence θ
 ```
-
 
 Each of these types captures what it means to be a congruence and they are
 equivalent in the sense that each implies the other. One implication is the
 "uncurry" operation and the other is the second projection.
 
-
 ```agda
-
-
 IsCongruence→Con : {𝑨 : Algebra α ρ}(θ : BinRel 𝕌[ 𝑨 ] ℓ) → IsCongruence 𝑨 θ → Con 𝑨
 IsCongruence→Con θ p = θ , p
 
 Con→IsCongruence : {𝑨 : Algebra α ρ}((θ , _) : Con 𝑨 {ℓ}) → IsCongruence 𝑨 θ
-Con→IsCongruence θ = ∥ θ ∥
+Con→IsCongruence (_ , p) = p
 ```
 
 
-
-#### <a id="quotient-algebras">Quotient algebras</a>
+#### Quotient algebras
 
 In many areas of abstract mathematics the *quotient* of an algebra `𝑨` with
 respect to a congruence relation `θ` of `𝑨` plays an important role. This quotient
 is typically denoted by `𝑨 / θ` and Agda allows us to define and express quotients
 using this standard notation.
 
-
 ```agda
-
-
 open Algebra  using ( Domain ; Interp )
 open Setoid   using ( Carrier )
 open Func     using ( cong ) renaming ( to to _⟨$⟩_ )
@@ -138,7 +124,6 @@ module _ (𝑨 : Algebra α ρ) where
 
  /-≡ θ {u}{v} uv = reflexive ∥ θ ∥ uv
 ```
-
 
 --------------------------------------
 

@@ -19,15 +19,16 @@ universal algebra — the congruence lattice
 ([Setoid.Algebras.Congruences.CompleteLattice][]) and the subalgebra lattice are the
 motivating instances — so we keep the definition in the `Algebras` tree rather than
 relegating it to `Classical`.  Every supremum/infimum is required to exist only for
-`ι`-small index types, the customary predicative reading of "complete".
+`ι`-small index types, the customary predicative reading of "complete."
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Setoid.Algebras.Lattices.CompleteLattice where
 
--- Imports from the Agda Standard Library ---------------------------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
+
+-- Imports from the Agda Standard Library ---------------------------------------
 open import Level            using ( Level ; _⊔_ ; suc )
 open import Relation.Binary  using ( IsPartialOrder ) renaming ( Rel to BinRel )
 ```
@@ -38,23 +39,23 @@ upper bound `⨆` and a greatest lower bound `⨅`.
 
 ```agda
 record CompleteLattice (c ℓ₁ ℓ₂ ι : Level) : Type (suc (c ⊔ ℓ₁ ⊔ ℓ₂ ⊔ ι)) where
- field
-  Carrier          : Type c
-  _≈ᶜ_            : BinRel Carrier ℓ₁
-  _≤ᶜ_            : BinRel Carrier ℓ₂
-  isPartialOrderᶜ  : IsPartialOrder _≈ᶜ_ _≤ᶜ_
+  field
+    Carrier           : Type c
+    _≈ᶜ_              : BinRel Carrier ℓ₁
+    _≤ᶜ_              : BinRel Carrier ℓ₂
+    isPartialOrderᶜ   : IsPartialOrder _≈ᶜ_ _≤ᶜ_
 
-  -- Infinitary supremum and infimum of an ι-indexed family.
-  ⨆ : {I : Type ι} → (I → Carrier) → Carrier
-  ⨅ : {I : Type ι} → (I → Carrier) → Carrier
+    -- Infinitary supremum and infimum of an ι-indexed family.
+    ⨆ : {I : Type ι} → (I → Carrier) → Carrier
+    ⨅ : {I : Type ι} → (I → Carrier) → Carrier
 
-  -- ⨆ f is the least upper bound of the family f.
-  ⨆-upper  : {I : Type ι} (f : I → Carrier) (i : I) → (f i) ≤ᶜ (⨆ f)
-  ⨆-least  : {I : Type ι} (f : I → Carrier) (x : Carrier) → (∀ i → (f i) ≤ᶜ x) → (⨆ f) ≤ᶜ x
+    -- ⨆ f is the least upper bound of the family f.
+    ⨆-upper  : {I : Type ι} (f : I → Carrier) (i : I) → f i ≤ᶜ ⨆ f
+    ⨆-least  : {I : Type ι} (f : I → Carrier) (x : Carrier) → (∀ i → f i ≤ᶜ x) → ⨆ f ≤ᶜ x
 
-  -- ⨅ f is the greatest lower bound of the family f.
-  ⨅-lower     : {I : Type ι} (f : I → Carrier) (i : I) → (⨅ f) ≤ᶜ (f i)
-  ⨅-greatest  : {I : Type ι} (f : I → Carrier) (x : Carrier) → (∀ i → x ≤ᶜ (f i)) → x ≤ᶜ (⨅ f)
+    -- ⨅ f is the greatest lower bound of the family f.
+    ⨅-lower     : {I : Type ι} (f : I → Carrier) (i : I) → ⨅ f ≤ᶜ f i
+    ⨅-greatest  : {I : Type ι} (f : I → Carrier) (x : Carrier) → (∀ i → x ≤ᶜ f i) → x ≤ᶜ ⨅ f
 ```
 
 --------------------------------------
