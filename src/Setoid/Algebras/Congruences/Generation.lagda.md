@@ -40,14 +40,14 @@ open import Overture using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Algebras.Congruences.Generation {𝑆 : Signature 𝓞 𝓥} where
 
+open import Agda.Primitive using () renaming ( Set to Type )
+
 -- Imports from the Agda Standard Library ---------------------------------------
-open import Agda.Primitive   using () renaming ( Set to Type )
 open import Data.Product     using ( _,_ ; proj₁ ; proj₂ )
 open import Data.Sum.Base    using ( _⊎_ ; inj₁ ; inj₂ ; [_,_] )
 open import Level            using ( Level ; _⊔_ )
 open import Relation.Binary  using ( Setoid ; IsEquivalence )
-                             renaming ( Rel to BinRel )
-
+                             renaming ( Rel to BinRel ; _⇒_ to _⊆_)
 -- Imports from the Agda Universal Algebras Library ------------------------------
 open import Overture using ( ∣_∣ ; ∥_∥ )
 open import Setoid.Algebras.Basic {𝑆 = 𝑆} using ( Algebra ; 𝕌[_] ; _^_ )
@@ -67,15 +67,15 @@ inhabits `BinRel 𝕌[ 𝑨 ] (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ ℓ)`; we name th
 
 ```agda
 module _ {𝑨 : Algebra α ρ} where
-  open Algebra 𝑨  using ()       renaming ( Domain to 𝐀 )
-  open Setoid 𝐀   using ( _≈_ )  renaming ( refl to reflA )
+  open Algebra 𝑨 using () renaming ( Domain to 𝐀 )
+  open Setoid 𝐀 using ( _≈_ ) renaming ( refl to reflA )
 
   -- The level at which the generated congruence lives.
   𝒈 : Level → Level
   𝒈 ℓ = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ ℓ
 
   data Gen (R : BinRel 𝕌[ 𝑨 ] ℓ) : BinRel 𝕌[ 𝑨 ] (𝒈 ℓ) where
-    base : {x y : 𝕌[ 𝑨 ]} → R x y → Gen R x y
+    base : R ⊆ Gen R
     rfl  : {x y : 𝕌[ 𝑨 ]} → x ≈ y → Gen R x y
     symm : {x y : 𝕌[ 𝑨 ]} → Gen R x y → Gen R y x
     tran : {x y z : 𝕌[ 𝑨 ]} → Gen R x y → Gen R y z → Gen R x z
@@ -100,24 +100,18 @@ congruence with that property: any congruence `ψ` containing `R` already contai
 turning each closure rule into the corresponding congruence law of `ψ`
 (`reflexive`, `sym`, `trans`, `is-compatible`).  Note `ψ` may live at any relation
 level `ℓ′`, so this is a genuinely heterogeneous statement.
-
+⊆
 ```agda
-  Cg-incl : (R : BinRel 𝕌[ 𝑨 ] ℓ) {x y : 𝕌[ 𝑨 ]} → R x y → Gen R x y
+  Cg-incl : (R : BinRel 𝕌[ 𝑨 ] ℓ) → R ⊆ Gen R
   Cg-incl R = base
 
-  Cg-least : {R : BinRel 𝕌[ 𝑨 ] ℓ} (ψ : Con 𝑨 {ℓ′})
-    → (∀ {x y} → R x y → proj₁ ψ x y) → ∀ {x y} → Gen R x y → proj₁ ψ x y
-
+  Cg-least : {R : BinRel 𝕌[ 𝑨 ] ℓ} (ψ : Con 𝑨 {ℓ′}) → R ⊆ proj₁ ψ → Gen R ⊆ proj₁ ψ
   Cg-least ψ R⊆ψ (base r) = R⊆ψ r
-
   Cg-least ψ R⊆ψ (rfl e) = reflexive (proj₂ ψ) e
-
   Cg-least ψ R⊆ψ (symm p) =
     IsEquivalence.sym (is-equivalence (proj₂ ψ)) (Cg-least ψ R⊆ψ p)
-
   Cg-least ψ R⊆ψ (tran p q) =
     IsEquivalence.trans (is-equivalence (proj₂ ψ)) (Cg-least ψ R⊆ψ p) (Cg-least ψ R⊆ψ q)
-
   Cg-least ψ R⊆ψ (comp f h) = is-compatible (proj₂ ψ) f (λ i → Cg-least ψ R⊆ψ (h i))
 ```
 
@@ -125,9 +119,7 @@ Monotonicity follows immediately: if `R` is contained in `S` then `Cg R` is
 contained in `Cg S` (take `ψ = Cg S`, which contains `S` hence `R`).
 
 ```agda
-  Cg-mono :  {R : BinRel 𝕌[ 𝑨 ] ℓ} {S : BinRel 𝕌[ 𝑨 ] ℓ′}
-    → (∀ {x y} → R x y → S x y) → ∀ {x y} → Gen R x y → Gen S x y
-
+  Cg-mono : {R : BinRel 𝕌[ 𝑨 ] ℓ} {S : BinRel 𝕌[ 𝑨 ] ℓ′} → R ⊆ S → Gen R ⊆ Gen S
   Cg-mono {S = S} R⊆S = Cg-least (Cg S) (λ r → base (R⊆S r))
 ```
 
@@ -143,7 +135,7 @@ join sits at the higher level `𝒈 ℓ`.
 ```agda
   -- Heterogeneous containment of congruences.
   _⊑_ : Con 𝑨 {ℓ} → Con 𝑨 {ℓ′} → Type (α ⊔ ℓ ⊔ ℓ′)
-  θ ⊑ φ = ∀ {x y} → proj₁ θ x y → proj₁ φ x y
+  θ ⊑ φ = proj₁ θ ⊆ proj₁ φ
   infix 4 _⊑_
 
   -- The union of the underlying relations of two congruences.
