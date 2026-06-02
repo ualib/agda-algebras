@@ -35,8 +35,8 @@ open import Setoid.Algebras.Basic {𝑆 = 𝑆} using ( ov ; Algebra ; 𝕌[_] ;
 private variable α ρ ℓ : Level
 ```
 
-We now define the function `compatible` so that, if `𝑨` denotes an algebra and `R` a
-binary relation, then `compatible 𝑨 R` will represent the assertion that `R` is
+We now define the predicate `_∣≈_` so that, if `𝑨` denotes an algebra and `R` a
+binary relation, then `𝑨 ∣≈ R` will represent the assertion that `R` is
 *compatible* with all basic operations of `𝑨`. The formal definition is immediate
 since all the work is done by the relation `|:`, which we defined above (see
 [Setoid.Relations.Discrete][]).
@@ -58,8 +58,8 @@ Congruences should obviously contain the equality relation on the underlying
 setoid. That is, they must be reflexive. Unfortunately this doesn't come for free
 (e.g., as part of the definition of `IsEquivalence` on Setoid), so we must add the
 field `reflexive` to the definition of `IsCongruence`. (In fact, we should
-probably redefine equivalence relation on setiods to be reflexive with respect to
-the underying setoid equality (and not just with respect to _≡_).)
+probably redefine equivalence relation on setoids to be reflexive with respect to
+the underlying setoid equality (and not just with respect to _≡_).)
 
 ```agda
 module _ (𝑨 : Algebra α ρ) where
