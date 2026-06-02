@@ -100,7 +100,7 @@ congruence with that property: any congruence `ψ` containing `R` already contai
 turning each closure rule into the corresponding congruence law of `ψ`
 (`reflexive`, `sym`, `trans`, `is-compatible`).  Note `ψ` may live at any relation
 level `ℓ′`, so this is a genuinely heterogeneous statement.
-⊆
+
 ```agda
   Cg-incl : (R : BinRel 𝕌[ 𝑨 ] ℓ) → R ⊆ Gen R
   Cg-incl R = base
