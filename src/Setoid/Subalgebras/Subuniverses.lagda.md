@@ -88,7 +88,7 @@ Next we prove by structural induction that `Sg X` is the smallest subuniverse of
 ```agda
 
 
- sgIsSmallest :  {G : Pred A ρᵃ}(B : Pred A ρᵇ)
+ sgIsSmallest :  {G : Pred A ℓ}(B : Pred A ρᵇ)
   →              B ∈ Subuniverses  →  G ⊆ B  →  Sg G ⊆ B
 
  sgIsSmallest _ _ G⊆B (var Gx) = G⊆B Gx
