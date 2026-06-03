@@ -62,7 +62,7 @@ private variable α ρᵃ : Level
 
 The subuniverse lattice of an algebra is formalized here and packaged inside a module
 called `Sublattice`, which is parametrized by the algebra `𝑨` and a base level `ℓ₀`.
-This way openning the `Sublattice` module at a use site (with, e.g., `open Sublattice 𝑨 ℓ₀`)
+This way opening the `Sublattice` module at a use site (with, e.g., `open Sublattice 𝑨 ℓ₀`)
 makes available `_≤_`, `_∧_`, `_∨_`, the bounds, and the bundles specialized to `𝑨`.
 One can then write `B ≤ C`, instead of `_≤_ 𝑨 ℓ₀ B C`.
 
