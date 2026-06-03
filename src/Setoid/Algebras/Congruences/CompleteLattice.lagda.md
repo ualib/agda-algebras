@@ -84,7 +84,7 @@ module _ (𝑨 : Algebra α ρ) (ℓ₀ : Level) where
 
   private
     Conᴸ : Type (α ⊔ ρ ⊔ ov L)
-    Conᴸ = Con 𝑨 {L}
+    Conᴸ = Con 𝑨 L
 ```
 
 The join is the least upper bound: the two upper-bound facts come from `Generation`,
@@ -92,9 +92,9 @@ and the universality is `∨-least`.
 
 ```agda
   Con-supremum : Supremum (_≤_ {𝑨 = 𝑨} {L}) _∨_
-  Con-supremum θ φ  = ∨-upperˡ {θ = θ} {φ}
-                    , ∨-upperʳ {θ = θ} {φ}
-                    , λ ψ θ≤ψ φ≤ψ → ∨-least {θ = θ} {φ} ψ θ≤ψ φ≤ψ
+  Con-supremum θ φ  = ∨-upperˡ θ φ
+                    , ∨-upperʳ θ φ
+                    , λ ψ θ≤ψ φ≤ψ → ∨-least θ φ ψ θ≤ψ φ≤ψ
 ```
 
 Assembling the partial order, the supremum, and the meet's infimum gives the lattice.

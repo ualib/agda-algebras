@@ -82,7 +82,7 @@ module _ {𝑨 : Algebra α ρ} where
     comp : (f : ∣ 𝑆 ∣) {u v : ∥ 𝑆 ∥ f → 𝕌[ 𝑨 ]}
       → (∀ i → Gen R (u i) (v i)) → Gen R ((f ^ 𝑨) u) ((f ^ 𝑨) v)
 
-  Cg : (R : BinRel 𝕌[ 𝑨 ] ℓ) → Con 𝑨 {𝒈 ℓ}
+  Cg : (R : BinRel 𝕌[ 𝑨 ] ℓ) → Con 𝑨 (𝒈 ℓ)
   Cg R = Gen R , mkcon rfl g-isEquivalence g-compatible
     where
     g-isEquivalence : IsEquivalence (Gen R)
@@ -105,7 +105,7 @@ level `ℓ′`, so this is a genuinely heterogeneous statement.
   Cg-incl : (R : BinRel 𝕌[ 𝑨 ] ℓ) → R ⊆ Gen R
   Cg-incl R = base
 
-  Cg-least : {R : BinRel 𝕌[ 𝑨 ] ℓ} (ψ : Con 𝑨 {ℓ′}) → R ⊆ proj₁ ψ → Gen R ⊆ proj₁ ψ
+  Cg-least : {R : BinRel 𝕌[ 𝑨 ] ℓ} (ψ : Con 𝑨 ℓ′) → R ⊆ proj₁ ψ → Gen R ⊆ proj₁ ψ
   Cg-least ψ R⊆ψ (base r) = R⊆ψ r
   Cg-least ψ R⊆ψ (rfl e) = reflexive (proj₂ ψ) e
   Cg-least ψ R⊆ψ (symm p) =
@@ -134,16 +134,16 @@ join sits at the higher level `𝒈 ℓ`.
 
 ```agda
   -- Heterogeneous containment of congruences.
-  _⊑_ : Con 𝑨 {ℓ} → Con 𝑨 {ℓ′} → Type (α ⊔ ℓ ⊔ ℓ′)
+  _⊑_ : Con 𝑨 ℓ → Con 𝑨 ℓ′ → Type (α ⊔ ℓ ⊔ ℓ′)
   θ ⊑ φ = proj₁ θ ⊆ proj₁ φ
   infix 4 _⊑_
 
   -- The union of the underlying relations of two congruences.
-  _∪ᵣ_ : Con 𝑨 {ℓ} → Con 𝑨 {ℓ} → BinRel 𝕌[ 𝑨 ] ℓ
+  _∪ᵣ_ : Con 𝑨 ℓ → Con 𝑨 ℓ → BinRel 𝕌[ 𝑨 ] ℓ
   (θ ∪ᵣ φ) x y = proj₁ θ x y ⊎ proj₁ φ x y
   infixr 6 _∪ᵣ_
 
-  _∨_ : Con 𝑨 {ℓ} → Con 𝑨 {ℓ} → Con 𝑨 {𝒈 ℓ}
+  _∨_ : Con 𝑨 ℓ → Con 𝑨 ℓ → Con 𝑨 (𝒈 ℓ)
   θ ∨ φ = Cg (θ ∪ᵣ φ)
   infixr 6 _∨_
 ```
@@ -153,14 +153,14 @@ The join is the least upper bound of its arguments: each argument is below it
 `Cg-least`, since the union is below any congruence above both arguments).
 
 ```agda
-  ∨-upperˡ : {θ φ : Con 𝑨 {ℓ}} → θ ⊑ (θ ∨ φ)
-  ∨-upperˡ p = base (inj₁ p)
+  ∨-upperˡ : (θ φ : Con 𝑨 ℓ) → θ ⊑ (θ ∨ φ)
+  ∨-upperˡ _ _ p = base (inj₁ p)
 
-  ∨-upperʳ : {θ φ : Con 𝑨 {ℓ}} → φ ⊑ (θ ∨ φ)
-  ∨-upperʳ q = base (inj₂ q)
+  ∨-upperʳ : (θ φ : Con 𝑨 ℓ) → φ ⊑ (θ ∨ φ)
+  ∨-upperʳ _ _ q = base (inj₂ q)
 
-  ∨-least :  {θ φ : Con 𝑨 {ℓ}} (ψ : Con 𝑨 {ℓ′}) → θ ⊑ ψ → φ ⊑ ψ → (θ ∨ φ) ⊑ ψ
-  ∨-least ψ θ⊑ψ φ⊑ψ = Cg-least ψ (λ {x y} → [ θ⊑ψ , φ⊑ψ ])
+  ∨-least : (θ φ : Con 𝑨 ℓ) (ψ : Con 𝑨 ℓ′) → θ ⊑ ψ → φ ⊑ ψ → (θ ∨ φ) ⊑ ψ
+  ∨-least _ _ ψ θ⊑ψ φ⊑ψ = Cg-least ψ (λ {x y} → [ θ⊑ψ , φ⊑ψ ])
 ```
 
 --------------------------------------
