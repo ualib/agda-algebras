@@ -64,7 +64,7 @@ open import Setoid.Algebras {𝑆 = 𝑆₀} using ( Algebra ; 𝕌[_] ; ⟨_⟩
 #### Instantiating the bundles {#the-bundles}
 
 With base level `ℓ₀ = 0ℓ` the absorbing level `L` is `0ℓ`, so the subalgebra lattice
-of `𝟚` lives on `Sub 𝟚 {0ℓ}`.  All three bundles type-check.
+of `𝟚` lives on `Subᴸ 𝟚 0ℓ`.  All three bundles type-check.
 
 ```agda
 open import Setoid.Subalgebras.CompleteLattice {𝑆 = 𝑆₀}
@@ -83,7 +83,7 @@ operations).  If we had `⊤ ≤ ⊥`, then since `⊥` is the *least* subuniver
 `∅`, so `true ∈ ⊤` would force `true ∈ ∅` — impossible.
 
 ```agda
--- The empty subuniverse, as an element of Sub 𝟚.
+-- The empty subuniverse, as an element of Subᴸ 𝟚 0ℓ.
 ∅ˢ : Subᴸ 𝟚 0ℓ
 ∅ˢ = (λ _ → Lift 0ℓ ⊥) , λ ()
 

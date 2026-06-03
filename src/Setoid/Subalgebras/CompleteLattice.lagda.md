@@ -247,6 +247,6 @@ because `I` is `ℓ₀`-small.
 --------------------------------------
 
 <span style="float:left;">[← Setoid.Subalgebras.Subuniverses](Setoid.Subalgebras.Subuniverses.html)</span>
-<span style="float:right;">[Setoid.Homomorphisms →](Setoid.Homomorphisms.html)</span>
+<span style="float:right;">[Setoid.Subalgebras.Subalgebras →](Setoid.Subalgebras.Subalgebras.html)</span>
 
 {% include UALib.Links.md %}
