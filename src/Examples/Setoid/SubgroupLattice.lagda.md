@@ -26,8 +26,11 @@ order-two subgroups in between, pairwise incomparable, any two of which meet at 
 and join to the whole group.  That is the lattice **`M₃`** — the five-element diamond,
 and the smallest *non-distributive* lattice.  This module exhibits the three middle
 subgroups as elements of `Sub V₄`, instantiates the lattice bundles, and proves the
-`M₃` shape (incomparability, properness, and "atoms meet at `0`").  The remaining completeness
-claim — that these *are all* the subgroups — is left for future work.
+*order skeleton* of `M₃`: the three atoms are pairwise incomparable and proper (each
+strictly between `{e}` and the whole group).  The lattice-equation content that makes
+`M₃` non-distributive — that any two atoms meet at `{e}` and join to the top — and the
+completeness claim that these *are all* the subgroups, are left for future work (see
+*Remaining work* below).
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -151,6 +154,28 @@ Each middle subgroup lies strictly between the bottom `{e}` and the top: it is a
 -- 𝑯₁ is a *proper* subgroup: the top is not contained in it (it omits (true , false)).
 1⋬𝑯₁ : ¬ ( _≤_ V₄ 0ℓ (1ˢ V₄ 0ℓ) 𝑯₁ )
 1⋬𝑯₁ le with le {true , false} (lift tt)
+... | ()
+
+0≤𝑯₂ : _≤_ V₄ 0ℓ (0ˢ V₄ 0ℓ) 𝑯₂
+0≤𝑯₂ = 0ˢ-minimum V₄ 0ℓ 𝑯₂
+
+𝑯₂≤1 : _≤_ V₄ 0ℓ 𝑯₂ (1ˢ V₄ 0ℓ)
+𝑯₂≤1 _ = lift tt
+
+-- 𝑯₂ omits (false , true) (its second coordinate is not trivial).
+1⋬𝑯₂ : ¬ ( _≤_ V₄ 0ℓ (1ˢ V₄ 0ℓ) 𝑯₂ )
+1⋬𝑯₂ le with le {false , true} (lift tt)
+... | ()
+
+0≤𝑯₌ : _≤_ V₄ 0ℓ (0ˢ V₄ 0ℓ) 𝑯₌
+0≤𝑯₌ = 0ˢ-minimum V₄ 0ℓ 𝑯₌
+
+𝑯₌≤1 : _≤_ V₄ 0ℓ 𝑯₌ (1ˢ V₄ 0ℓ)
+𝑯₌≤1 _ = lift tt
+
+-- 𝑯₌ omits (true , false) (its coordinates differ).
+1⋬𝑯₌ : ¬ ( _≤_ V₄ 0ℓ (1ˢ V₄ 0ℓ) 𝑯₌ )
+1⋬𝑯₌ le with le {true , false} (lift tt)
 ... | ()
 ```
 
