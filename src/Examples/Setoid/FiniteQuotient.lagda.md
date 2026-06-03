@@ -84,7 +84,7 @@ compatibility with the nullary `0` is immediate.
                  (sym (%-distribˡ-+ (v 0F) (v 1F) 2)))
 θ-compatible ε-Op _ = refl
 
-parity : Con ℕ+-monoid {0ℓ}
+parity : Con ℕ+-monoid 0ℓ
 parity = θ , record  { reflexive       = ≡.cong (_% 2)
                      ; is-equivalence  = θ-isEquiv
                      ; is-compatible   = θ-compatible }

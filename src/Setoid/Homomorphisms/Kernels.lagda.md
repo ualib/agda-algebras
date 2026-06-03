@@ -82,7 +82,7 @@ The kernel of a homomorphism is a congruence of the domain, which we construct a
 ```agda
 
 
- kercon : Con 𝑨
+ kercon : Con 𝑨 ρᵇ
  kercon =  kerRel _≈₂_ h ,
            mkcon (λ x → cong ∣ hh ∣ x)(kerRelOfEquiv isEquivalence h)(HomKerComp)
 ```
@@ -114,7 +114,7 @@ Given an algebra `𝑨` and a congruence `θ`, the *canonical projection* is a m
 module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} (h : hom 𝑨 𝑩) where
  open IsCongruence
 
- πepi : (θ : Con 𝑨 {ℓ}) → epi 𝑨 (𝑨 ╱ θ)
+ πepi : (θ : Con 𝑨 ℓ) → epi 𝑨 (𝑨 ╱ θ)
  πepi θ = p , pepi
   where
 
@@ -140,7 +140,7 @@ This is obtained by applying `epi-to-hom`, like so.
 ```agda
 
 
- πhom : (θ : Con 𝑨 {ℓ}) → hom 𝑨 (𝑨 ╱ θ)
+ πhom : (θ : Con 𝑨 ℓ) → hom 𝑨 (𝑨 ╱ θ)
  πhom θ = epi→hom 𝑨 (𝑨 ╱ θ) (πepi θ)
 ```
 
@@ -171,7 +171,7 @@ the one we need later.
 
  open IsCongruence
 
- ker-in-con : {θ : Con 𝑨 {ℓ}} → ∀ {x}{y} → ∣ kercon (πhom θ) ∣ x y →  ∣ θ ∣ x y
+ ker-in-con : {θ : Con 𝑨 ℓ} → ∀ {x}{y} → ∣ kercon (πhom θ) ∣ x y →  ∣ θ ∣ x y
  ker-in-con = id
 ```
 

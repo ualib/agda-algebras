@@ -69,7 +69,7 @@ setoid equality (which *is* `_≡_` here), an equivalence relation, and — sinc
 has no operations — compatibility is vacuous.
 
 ```agda
-Δ : Con 𝟚 {0ℓ}
+Δ : Con 𝟚 0ℓ
 Δ = _≡_ , mkcon  (λ e → e)
                  (record { refl = ≡.refl ; sym = ≡.sym ; trans = ≡.trans })
                  (λ ())

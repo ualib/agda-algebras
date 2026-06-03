@@ -78,8 +78,8 @@ module _ (𝑨 : Algebra α ρ) where
 
   open IsCongruence public
 
-  Con : {ℓ : Level} → Type (α ⊔ ρ ⊔ ov ℓ)
-  Con {ℓ} = Σ[ θ ∈ BinRel 𝕌[ 𝑨 ] ℓ ] IsCongruence θ
+  Con : (ℓ : Level) → Type (α ⊔ ρ ⊔ ov ℓ)
+  Con ℓ = Σ[ θ ∈ BinRel 𝕌[ 𝑨 ] ℓ ] IsCongruence θ
 ```
 
 Each of these types captures what it means to be a congruence and they are
@@ -87,10 +87,10 @@ equivalent in the sense that each implies the other. One implication is the
 "uncurry" operation and the other is the second projection.
 
 ```agda
-IsCongruence→Con : {𝑨 : Algebra α ρ}(θ : BinRel 𝕌[ 𝑨 ] ℓ) → IsCongruence 𝑨 θ → Con 𝑨
+IsCongruence→Con : {𝑨 : Algebra α ρ}(θ : BinRel 𝕌[ 𝑨 ] ℓ) → IsCongruence 𝑨 θ → Con 𝑨 ℓ
 IsCongruence→Con θ p = θ , p
 
-Con→IsCongruence : {𝑨 : Algebra α ρ}((θ , _) : Con 𝑨 {ℓ}) → IsCongruence 𝑨 θ
+Con→IsCongruence : {𝑨 : Algebra α ρ}((θ , _) : Con 𝑨 ℓ) → IsCongruence 𝑨 θ
 Con→IsCongruence (_ , p) = p
 ```
 
@@ -107,7 +107,7 @@ open Algebra  using ( Domain ; Interp )
 open Setoid   using ( Carrier )
 open Func     using ( cong ) renaming ( to to _⟨$⟩_ )
 
-_╱_ : (𝑨 : Algebra α ρ) → Con 𝑨 {ℓ} → Algebra α ℓ
+_╱_ : (𝑨 : Algebra α ρ) → Con 𝑨 ℓ → Algebra α ℓ
 Domain (𝑨 ╱ θ) = 𝕌[ 𝑨 ] / (Eqv ∥ θ ∥)
 (Interp (𝑨 ╱ θ)) ⟨$⟩ (f , a) = (f ̂ 𝑨) a
 cong (Interp (𝑨 ╱ θ)) {f , u} {.f , v} (refl , a) = is-compatible ∥ θ ∥ f a
@@ -116,10 +116,10 @@ module _ (𝑨 : Algebra α ρ) where
  open Algebra 𝑨  using ( )      renaming (Domain to A )
  open Setoid A   using ( _≈_ )  renaming (refl to refl₁)
 
- _/∙_ : 𝕌[ 𝑨 ] → (θ : Con 𝑨{ℓ}) → Carrier (Domain (𝑨 ╱ θ))
+ _/∙_ : 𝕌[ 𝑨 ] → (θ : Con 𝑨 ℓ) → Carrier (Domain (𝑨 ╱ θ))
  a /∙ θ = a
 
- /-≡ :  (θ : Con 𝑨{ℓ}){u v : 𝕌[ 𝑨 ]}
+ /-≡ :  (θ : Con 𝑨 ℓ){u v : 𝕌[ 𝑨 ]}
   →     ⟪ u ⟫{Eqv ∥ θ ∥} ≈ ⟪ v ⟫{Eqv ∥ θ ∥} → ∣ θ ∣ u v
 
  /-≡ θ {u}{v} uv = reflexive ∥ θ ∥ uv

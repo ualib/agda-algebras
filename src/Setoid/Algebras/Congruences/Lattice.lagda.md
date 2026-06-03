@@ -33,7 +33,7 @@ open import Agda.Primitive           using () renaming ( Set to Type )
 open import Data.Product             using ( _×_ ; _,_ ; proj₁ ; proj₂ ; swap )
 open import Level                    using ( Level ; _⊔_ )
 open import Relation.Binary          using ( Setoid ; IsEquivalence ; IsPartialOrder )
-                                     renaming ( Rel to BinRel )
+                                     renaming ( Rel to BinRel ; _⇒_ to _⊆_ )
 open import Relation.Binary.Bundles  using ( Poset )
 open import Relation.Binary.Lattice  using ( Infimum ; IsMeetSemilattice ; MeetSemilattice )
 
@@ -67,16 +67,16 @@ dictates.  Classically `_≅_` collapses to `_≡_` via propositional extensiona
 
 ```agda
 module _ {𝑨 : Algebra α ρ} where
-  open Algebra 𝑨  using ()  renaming ( Domain to A )
-  open Setoid A   using ( _≈_ )
+  open Algebra 𝑨 using () renaming ( Domain to A )
+  open Setoid A using ( _≈_ )
 
   -- θ ≤ φ : the relation of θ is contained in the relation of φ.
-  _≤_ : Con 𝑨 {ℓ} → Con 𝑨 {ℓ} → Type (α ⊔ ℓ)
-  θ ≤ φ = ∀ {x y} → proj₁ θ x y → proj₁ φ x y
+  _≤_ : Con 𝑨 ℓ → Con 𝑨 ℓ → Type (α ⊔ ℓ)
+  θ ≤ φ = proj₁ θ ⊆ proj₁ φ
   infix 4 _≤_
 
   -- θ ≅ φ : mutual containment (the equivalence the partial order is taken over).
-  _≅_ : Con 𝑨 {ℓ} → Con 𝑨 {ℓ} → Type (α ⊔ ℓ)
+  _≅_ : Con 𝑨 ℓ → Con 𝑨 ℓ → Type (α ⊔ ℓ)
   θ ≅ φ = (θ ≤ φ) × (φ ≤ θ)
   infix 4 _≅_
 ```
@@ -84,36 +84,36 @@ module _ {𝑨 : Algebra α ρ} where
 The order is reflexive and transitive, and `_≅_` collapses it to a partial order.
 
 ```agda
-  ≤-refl : {θ : Con 𝑨 {ℓ}} → θ ≤ θ
+  ≤-refl : {θ : Con 𝑨 ℓ} → θ ≤ θ
   ≤-refl p = p
 
-  ≤-trans : {θ φ ψ : Con 𝑨 {ℓ}} → θ ≤ φ → φ ≤ ψ → θ ≤ ψ
+  ≤-trans : {θ φ ψ : Con 𝑨 ℓ} → θ ≤ φ → φ ≤ ψ → θ ≤ ψ
   ≤-trans θ≤φ φ≤ψ p = φ≤ψ (θ≤φ p)
 
   -- A ≅-step entails a ≤-step (the `reflexive` field of a preorder).
-  ≤-reflexive : {θ φ : Con 𝑨 {ℓ}} → θ ≅ φ → θ ≤ φ
+  ≤-reflexive : {θ φ : Con 𝑨 ℓ} → θ ≅ φ → θ ≤ φ
   ≤-reflexive = proj₁
 
   -- Antisymmetry holds up to mutual containment, by definition of _≅_.
-  ≤-antisym : {θ φ : Con 𝑨 {ℓ}} → θ ≤ φ → φ ≤ θ → θ ≅ φ
+  ≤-antisym : {θ φ : Con 𝑨 ℓ} → θ ≤ φ → φ ≤ θ → θ ≅ φ
   ≤-antisym θ≤φ φ≤θ = θ≤φ , φ≤θ
 
   -- The components are written out directly rather than via ≤-refl/≤-trans:
   -- because _≤_ is a defined relation (not an injective type former), Agda
   -- cannot recover the implicit congruence arguments of those lemmas from the
   -- expected component types, so we inline the (trivial) proofs here.
-  ≅-refl : {θ : Con 𝑨 {ℓ}} → θ ≅ θ
+  ≅-refl : {θ : Con 𝑨 ℓ} → θ ≅ θ
   ≅-refl = (λ p → p) , (λ p → p)
 
-  ≅-sym : {θ φ : Con 𝑨 {ℓ}} → θ ≅ φ → φ ≅ θ
+  ≅-sym : {θ φ : Con 𝑨 ℓ} → θ ≅ φ → φ ≅ θ
   ≅-sym = swap
 
-  ≅-trans : {θ φ ψ : Con 𝑨 {ℓ}} → θ ≅ φ → φ ≅ ψ → θ ≅ ψ
+  ≅-trans : {θ φ ψ : Con 𝑨 ℓ} → θ ≅ φ → φ ≅ ψ → θ ≅ ψ
   ≅-trans (θ≤φ , φ≤θ) (φ≤ψ , ψ≤φ) = (λ p → φ≤ψ (θ≤φ p)) , (λ p → φ≤θ (ψ≤φ p))
 
   -- The implicit congruence (and level) arguments of the helper lemmas are bound
   -- by lambdas and forwarded explicitly: they cannot be inferred through the
-  -- (non-injective) `Con 𝑨 {ℓ}` carrier type at these function-typed fields.
+  -- (non-injective) `Con 𝑨 ℓ` carrier type at these function-typed fields.
   ≅-isEquivalence : IsEquivalence (_≅_ {ℓ})
   ≅-isEquivalence {ℓ} = record
     { refl   = λ {θ}        → ≅-refl   {ℓ} {θ}
@@ -141,10 +141,10 @@ the underlying relation first, then bundle the `IsCongruence` proof.
 
 ```agda
   -- The underlying relation of the meet: pointwise conjunction.
-  meetRel : Con 𝑨 {ℓ} → Con 𝑨 {ℓ} → BinRel 𝕌[ 𝑨 ] ℓ
+  meetRel : Con 𝑨 ℓ → Con 𝑨 ℓ → BinRel 𝕌[ 𝑨 ] ℓ
   meetRel θ φ x y = proj₁ θ x y × proj₁ φ x y
 
-  _∧_ : Con 𝑨 {ℓ} → Con 𝑨 {ℓ} → Con 𝑨 {ℓ}
+  _∧_ : Con 𝑨 ℓ → Con 𝑨 ℓ → Con 𝑨 ℓ
   θ ∧ φ = meetRel θ φ , mkcon m-reflexive m-isEquivalence m-compatible
     where
     θc = proj₂ θ
@@ -176,13 +176,13 @@ them, and it is above any common lower bound.  These three facts are exactly the
 `Infimum` of `_≤_` at `_∧_`.
 
 ```agda
-  ∧-lowerˡ : {θ φ : Con 𝑨 {ℓ}} → (θ ∧ φ) ≤ θ
+  ∧-lowerˡ : {θ φ : Con 𝑨 ℓ} → (θ ∧ φ) ≤ θ
   ∧-lowerˡ = proj₁
 
-  ∧-lowerʳ : {θ φ : Con 𝑨 {ℓ}} → (θ ∧ φ) ≤ φ
+  ∧-lowerʳ : {θ φ : Con 𝑨 ℓ} → (θ ∧ φ) ≤ φ
   ∧-lowerʳ = proj₂
 
-  ∧-greatest : {θ φ ψ : Con 𝑨 {ℓ}} → ψ ≤ θ → ψ ≤ φ → ψ ≤ (θ ∧ φ)
+  ∧-greatest : {θ φ ψ : Con 𝑨 ℓ} → ψ ≤ θ → ψ ≤ φ → ψ ≤ (θ ∧ φ)
   ∧-greatest ψ≤θ ψ≤φ p = ψ≤θ p , ψ≤φ p
 
   -- As above, the implicit congruence arguments of ∧-lowerˡ/ʳ and ∧-greatest
@@ -204,11 +204,11 @@ the bounds `⊥`/`⊤`, are built in the subsequent steps of #271.)
 ```agda
 module _ (𝑨 : Algebra α ρ) {ℓ : Level} where
  Con-Poset : Poset (α ⊔ ρ ⊔ ov ℓ) (α ⊔ ℓ) (α ⊔ ℓ)
- Con-Poset = record  { Carrier = Con 𝑨 {ℓ} ; _≈_ = _≅_ ; _≤_ = _≤_
+ Con-Poset = record  { Carrier = Con 𝑨 ℓ ; _≈_ = _≅_ ; _≤_ = _≤_
                      ; isPartialOrder  = ≤-isPartialOrder }
 
  Con-MeetSemilattice : MeetSemilattice (α ⊔ ρ ⊔ ov ℓ) (α ⊔ ℓ) (α ⊔ ℓ)
- Con-MeetSemilattice = record  { Carrier = Con 𝑨 {ℓ}
+ Con-MeetSemilattice = record  { Carrier = Con 𝑨 ℓ
                                ; _≈_ = _≅_
                                ; _≤_ = _≤_
                                ; _∧_ = _∧_
