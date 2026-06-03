@@ -64,16 +64,17 @@ open import Setoid.Algebras {𝑆 = 𝑆₀} using ( Algebra ; 𝕌[_] ; ⟨_⟩
 #### Instantiating the bundles {#the-bundles}
 
 With base level `ℓ₀ = 0ℓ` the absorbing level `L` is `0ℓ`, so the subalgebra lattice
-of `𝟚` lives on `Subᴸ 𝟚 0ℓ`.  All three bundles type-check.
+of `𝟚` lives on `Subᴸ`.  We `open SubLattice 𝟚 0ℓ` to bring the order, operations,
+bounds, and bundles into scope specialized to `𝟚` — so we may write `B ≤ C` rather
+than `_≤_ 𝟚 0ℓ B C`.  All three bundles type-check.
 
 ```agda
-open import Setoid.Subalgebras.CompleteLattice {𝑆 = 𝑆₀}
-  using ( Subᴸ ; _≤_ ; Sub-Lattice ; Sub-BoundedLattice ; Sub-CompleteLattice
-        ; 1ˢ ; 0ˢ ; 0ˢ-minimum )
+open import Setoid.Subalgebras.CompleteLattice {𝑆 = 𝑆₀} using ( module SubLattice )
+open SubLattice 𝟚 0ℓ
 
-Sub𝟚-Lattice          = Sub-Lattice         𝟚 0ℓ
-Sub𝟚-BoundedLattice   = Sub-BoundedLattice  𝟚 0ℓ
-Sub𝟚-CompleteLattice  = Sub-CompleteLattice 𝟚 0ℓ
+Sub𝟚-Lattice          = Sub-Lattice
+Sub𝟚-BoundedLattice   = Sub-BoundedLattice
+Sub𝟚-CompleteLattice  = Sub-CompleteLattice
 ```
 
 #### Nontriviality: `⊤ ⋬ ⊥` {#nontriviality}
@@ -83,12 +84,12 @@ operations).  If we had `⊤ ≤ ⊥`, then since `⊥` is the *least* subuniver
 `∅`, so `true ∈ ⊤` would force `true ∈ ∅` — impossible.
 
 ```agda
--- The empty subuniverse, as an element of Subᴸ 𝟚 0ℓ.
-∅ˢ : Subᴸ 𝟚 0ℓ
+-- The empty subuniverse, as an element of Subᴸ.
+∅ˢ : Subᴸ
 ∅ˢ = (λ _ → Lift 0ℓ ⊥) , λ ()
 
-Sub𝟚-nontrivial : ¬ ( _≤_ 𝟚 0ℓ (1ˢ 𝟚 0ℓ) (0ˢ 𝟚 0ℓ) )
-Sub𝟚-nontrivial 1≤0 = lower (0ˢ-minimum 𝟚 0ℓ ∅ˢ (1≤0 {true} (lift tt)))
+Sub𝟚-nontrivial : ¬ ( 1ˢ ≤ 0ˢ )
+Sub𝟚-nontrivial 1≤0 = lower (0ˢ-minimum ∅ˢ (1≤0 {true} (lift tt)))
 ```
 
 --------------------------------------

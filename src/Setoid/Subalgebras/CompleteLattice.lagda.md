@@ -61,7 +61,10 @@ private variable α ρᵃ : Level
 #### The subuniverse lattice at the absorbing level `L`
 
 ```agda
-module _ (𝑨 : Algebra α ρᵃ) (ℓ₀ : Level) where
+-- All of the following is parametrized by the algebra `𝑨` and a base level `ℓ₀`.
+-- Open it at a use site (`open SubLattice 𝑨 ℓ₀`) to get `_≤_`, `_∧_`, `_∨_`, the
+-- bounds, and the bundles specialized to `𝑨` — so one writes `B ≤ C`, not `_≤_ 𝑨 ℓ₀ B C`.
+module SubLattice (𝑨 : Algebra α ρᵃ) (ℓ₀ : Level) where
  private A = 𝕌[ 𝑨 ]
 
  L : Level
