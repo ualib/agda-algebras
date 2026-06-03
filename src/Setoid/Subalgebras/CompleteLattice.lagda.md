@@ -60,50 +60,53 @@ private variable α ρᵃ : Level
 
 #### The subuniverse lattice at the absorbing level `L`
 
+The subuniverse lattice of an algebra is formalized here and packaged inside a module
+called `Sublattice`, which is parametrized by the algebra `𝑨` and a base level `ℓ₀`.
+This way openning the `Sublattice` module at a use site (with, e.g., `open Sublattice 𝑨 ℓ₀`)
+makes available `_≤_`, `_∧_`, `_∨_`, the bounds, and the bundles specialized to `𝑨`.
+One can then write `B ≤ C`, instead of `_≤_ 𝑨 ℓ₀ B C`.
+
 ```agda
--- All of the following is parametrized by the algebra `𝑨` and a base level `ℓ₀`.
--- Open it at a use site (`open SubLattice 𝑨 ℓ₀`) to get `_≤_`, `_∧_`, `_∨_`, the
--- bounds, and the bundles specialized to `𝑨` — so one writes `B ≤ C`, not `_≤_ 𝑨 ℓ₀ B C`.
-module SubLattice (𝑨 : Algebra α ρᵃ) (ℓ₀ : Level) where
- private A = 𝕌[ 𝑨 ]
+module Sublattice (𝑨 : Algebra α ρᵃ) (ℓ₀ : Level) where
+  private A = 𝕌[ 𝑨 ]
 
- L : Level
- L = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ℓ₀
+  L : Level
+  L = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ℓ₀
 
- -- A subuniverse, as its underlying predicate together with a proof of closure.
- Subᴸ : Type (α ⊔ ov L)
- Subᴸ = Σ[ B ∈ Pred A L ] B ∈ Subuniverses 𝑨
+  -- A subuniverse, as its underlying predicate together with a proof of closure.
+  Subᴸ : Type (α ⊔ ov L)
+  Subᴸ = Σ[ B ∈ Pred A L ] B ∈ Subuniverses 𝑨
 ```
 
 The order is inclusion of the underlying predicates, and the associated equality is
 mutual inclusion.
 
 ```agda
- infix 4 _≤_ _≈_
+  infix 4 _≤_ _≈_
 
- _≤_ : Subᴸ → Subᴸ → Type (α ⊔ L)
- B ≤ C = proj₁ B ⊆ proj₁ C
+  _≤_ : Subᴸ → Subᴸ → Type (α ⊔ L)
+  B ≤ C = proj₁ B ⊆ proj₁ C
 
- _≈_ : Subᴸ → Subᴸ → Type (α ⊔ L)
- B ≈ C = (B ≤ C) × (C ≤ B)
+  _≈_ : Subᴸ → Subᴸ → Type (α ⊔ L)
+  B ≈ C = (B ≤ C) × (C ≤ B)
 
- -- The proofs are inlined (rather than routed through named ≤-lemmas) because
- -- _≤_ is a defined relation whose congruence arguments Agda cannot recover.
- ≈-isEquivalence : IsEquivalence _≈_
- ≈-isEquivalence = record
-  { refl   = (λ z → z) , (λ z → z)
-  ; sym    = λ (p , q) → q , p
-  ; trans  = λ (p , q) (p′ , q′) → (λ z → p′ (p z)) , (λ z → q (q′ z))
-  }
+  -- The proofs are inlined (rather than routed through named ≤-lemmas) because
+  -- _≤_ is a defined relation whose congruence arguments Agda cannot recover.
+  ≈-isEquivalence : IsEquivalence _≈_
+  ≈-isEquivalence = record
+   { refl   = (λ z → z) , (λ z → z)
+   ; sym    = λ (p , q) → q , p
+   ; trans  = λ (p , q) (p′ , q′) → (λ z → p′ (p z)) , (λ z → q (q′ z))
+   }
 
- ≤-isPartialOrder : IsPartialOrder _≈_ _≤_
- ≤-isPartialOrder = record
-  { isPreorder = record  { isEquivalence  = ≈-isEquivalence
-                         ; reflexive      = proj₁
-                         ; trans          = λ p q z → q (p z)
-                         }
-  ; antisym = λ p q → p , q
-  }
+  ≤-isPartialOrder : IsPartialOrder _≈_ _≤_
+  ≤-isPartialOrder = record
+   { isPreorder = record  { isEquivalence  = ≈-isEquivalence
+                          ; reflexive      = proj₁
+                          ; trans          = λ p q z → q (p z)
+                          }
+   ; antisym = λ p q → p , q
+   }
 ```
 
 #### Meet and join
@@ -112,49 +115,49 @@ The meet is the intersection of the underlying predicates (a subuniverse,
 componentwise), and the join is the subuniverse *generated* by the union.
 
 ```agda
- infixr 7 _∧_
- infixr 6 _∨_
+  infixr 7 _∧_
+  infixr 6 _∨_
 
- _∧_ : Subᴸ → Subᴸ → Subᴸ
- B ∧ C = (proj₁ B ∩ proj₁ C)
-       , λ f a im → proj₂ B f a (λ i → proj₁ (im i))
-                  , proj₂ C f a (λ i → proj₂ (im i))
+  _∧_ : Subᴸ → Subᴸ → Subᴸ
+  B ∧ C = (proj₁ B ∩ proj₁ C)
+        , λ f a im → proj₂ B f a (λ i → proj₁ (im i))
+                   , proj₂ C f a (λ i → proj₂ (im i))
 
- _∨_ : Subᴸ → Subᴸ → Subᴸ
- B ∨ C = Sg 𝑨 (proj₁ B ∪ proj₁ C) , sgIsSub 𝑨
+  _∨_ : Subᴸ → Subᴸ → Subᴸ
+  B ∨ C = Sg 𝑨 (proj₁ B ∪ proj₁ C) , sgIsSub 𝑨
 
- -- The meet is the greatest lower bound.
- ∧-infimum : Infimum _≤_ _∧_
- ∧-infimum B C =  (λ z → proj₁ z)
-               ,  (λ z → proj₂ z)
-               ,  λ D D≤B D≤C z → D≤B z , D≤C z
+  -- The meet is the greatest lower bound.
+  ∧-infimum : Infimum _≤_ _∧_
+  ∧-infimum B C =  (λ z → proj₁ z)
+                ,  (λ z → proj₂ z)
+                ,  λ D D≤B D≤C z → D≤B z , D≤C z
 
- -- The join is the least upper bound (upper bounds via `var`, universality via
- -- `sgIsSmallest`, since the union is below any subuniverse above both arguments).
- ∨-supremum : Supremum _≤_ _∨_
- ∨-supremum B C =  (λ z → var (inj₁ z))
-                ,  (λ z → var (inj₂ z))
-                ,  λ D B≤D C≤D → sgIsSmallest 𝑨 (proj₁ D) (proj₂ D)
-                                   (λ { (inj₁ x) → B≤D x ; (inj₂ x) → C≤D x })
+  -- The join is the least upper bound (upper bounds via `var`, universality via
+  -- `sgIsSmallest`, since the union is below any subuniverse above both arguments).
+  ∨-supremum : Supremum _≤_ _∨_
+  ∨-supremum B C =  (λ z → var (inj₁ z))
+                 ,  (λ z → var (inj₂ z))
+                 ,  λ D B≤D C≤D → sgIsSmallest 𝑨 (proj₁ D) (proj₂ D)
+                                    (λ { (inj₁ x) → B≤D x ; (inj₂ x) → C≤D x })
 ```
 
 #### The lattice
 
 ```agda
- Sub-isLattice : IsLattice _≈_ _≤_ _∨_ _∧_
- Sub-isLattice = record  { isPartialOrder  = ≤-isPartialOrder
-                         ; supremum        = ∨-supremum
-                         ; infimum         = ∧-infimum
-                         }
+  Sub-isLattice : IsLattice _≈_ _≤_ _∨_ _∧_
+  Sub-isLattice = record  { isPartialOrder  = ≤-isPartialOrder
+                          ; supremum        = ∨-supremum
+                          ; infimum         = ∧-infimum
+                          }
 
- Sub-Lattice : Lattice (α ⊔ ov L) (α ⊔ L) (α ⊔ L)
- Sub-Lattice = record  { Carrier    = Subᴸ
-                       ; _≈_        = _≈_
-                       ; _≤_        = _≤_
-                       ; _∨_        = _∨_
-                       ; _∧_        = _∧_
-                       ; isLattice  = Sub-isLattice
-                       }
+  Sub-Lattice : Lattice (α ⊔ ov L) (α ⊔ L) (α ⊔ L)
+  Sub-Lattice = record  { Carrier    = Subᴸ
+                        ; _≈_        = _≈_
+                        ; _≤_        = _≤_
+                        ; _∨_        = _∨_
+                        ; _∧_        = _∧_
+                        ; isLattice  = Sub-isLattice
+                        }
 ```
 
 #### The bounds: empty and full subuniverses
@@ -164,41 +167,41 @@ by the empty predicate (`0ˢ = Sg ∅`); its minimality is immediate from `sgIsS
 The top subuniverse `1ˢ` is the whole carrier, trivially closed under the operations.
 
 ```agda
- private
-  0R : Pred A L
-  0R _ = Lift L ⊥
+  private
+   0R : Pred A L
+   0R _ = Lift L ⊥
 
-  1R : Pred A L
-  1R _ = Lift L ⊤
+   1R : Pred A L
+   1R _ = Lift L ⊤
 
- 0ˢ : Subᴸ
- 0ˢ = Sg 𝑨 0R , sgIsSub 𝑨
+  0ˢ : Subᴸ
+  0ˢ = Sg 𝑨 0R , sgIsSub 𝑨
 
- 1ˢ : Subᴸ
- 1ˢ = 1R , λ _ _ _ → lift tt
+  1ˢ : Subᴸ
+  1ˢ = 1R , λ _ _ _ → lift tt
 
- 0ˢ-minimum : Minimum _≤_ 0ˢ
- 0ˢ-minimum B = sgIsSmallest 𝑨 (proj₁ B) (proj₂ B) (λ { (lift ()) })
+  0ˢ-minimum : Minimum _≤_ 0ˢ
+  0ˢ-minimum B = sgIsSmallest 𝑨 (proj₁ B) (proj₂ B) (λ { (lift ()) })
 
- 1ˢ-maximum : Maximum _≤_ 1ˢ
- 1ˢ-maximum B _ = lift tt
+  1ˢ-maximum : Maximum _≤_ 1ˢ
+  1ˢ-maximum B _ = lift tt
 
- Sub-isBoundedLattice : IsBoundedLattice _≈_ _≤_ _∨_ _∧_ 1ˢ 0ˢ
- Sub-isBoundedLattice = record  { isLattice  = Sub-isLattice
-                                ; maximum    = 1ˢ-maximum
-                                ; minimum    = 0ˢ-minimum
-                                }
+  Sub-isBoundedLattice : IsBoundedLattice _≈_ _≤_ _∨_ _∧_ 1ˢ 0ˢ
+  Sub-isBoundedLattice = record  { isLattice  = Sub-isLattice
+                                 ; maximum    = 1ˢ-maximum
+                                 ; minimum    = 0ˢ-minimum
+                                 }
 
- Sub-BoundedLattice : BoundedLattice (α ⊔ ov L) (α ⊔ L) (α ⊔ L)
- Sub-BoundedLattice = record  { Carrier           = Subᴸ
-                              ; _≈_               = _≈_
-                              ; _≤_               = _≤_
-                              ; _∨_               = _∨_
-                              ; _∧_               = _∧_
-                              ; ⊤                 = 1ˢ
-                              ; ⊥                 = 0ˢ
-                              ; isBoundedLattice  = Sub-isBoundedLattice
-                              }
+  Sub-BoundedLattice : BoundedLattice (α ⊔ ov L) (α ⊔ L) (α ⊔ L)
+  Sub-BoundedLattice = record  { Carrier           = Subᴸ
+                               ; _≈_               = _≈_
+                               ; _≤_               = _≤_
+                               ; _∨_               = _∨_
+                               ; _∧_               = _∧_
+                               ; ⊤                 = 1ˢ
+                               ; ⊥                 = 0ˢ
+                               ; isBoundedLattice  = Sub-isBoundedLattice
+                               }
 ```
 
 #### Infinitary meets and joins
@@ -209,42 +212,42 @@ is the subuniverse generated by the union, `⨆ 𝒜 = Sg(⋃ 𝒜)`.  Both stay
 because `I` is `ℓ₀`-small.
 
 ```agda
- ⨅ : {I : Type ℓ₀} → (I → Subᴸ) → Subᴸ
- ⨅ {I} 𝒜 = ⋂ I (λ i → proj₁ (𝒜 i))
-          , ⋂s {𝑨 = 𝑨} I {𝒜 = λ i → proj₁ (𝒜 i)} (λ i → proj₂ (𝒜 i))
+  ⨅ : {I : Type ℓ₀} → (I → Subᴸ) → Subᴸ
+  ⨅ {I} 𝒜 = ⋂ I (λ i → proj₁ (𝒜 i))
+           , ⋂s {𝑨 = 𝑨} I {𝒜 = λ i → proj₁ (𝒜 i)} (λ i → proj₂ (𝒜 i))
 
- ⨆ : {I : Type ℓ₀} → (I → Subᴸ) → Subᴸ
- ⨆ {I} 𝒜 = Sg 𝑨 (⋃ I (λ i → proj₁ (𝒜 i))) , sgIsSub 𝑨
+  ⨆ : {I : Type ℓ₀} → (I → Subᴸ) → Subᴸ
+  ⨆ {I} 𝒜 = Sg 𝑨 (⋃ I (λ i → proj₁ (𝒜 i))) , sgIsSub 𝑨
 
- ⨅-lower : {I : Type ℓ₀} (𝒜 : I → Subᴸ) (i : I) → (⨅ 𝒜) ≤ (𝒜 i)
- ⨅-lower 𝒜 i z = z i
+  ⨅-lower : {I : Type ℓ₀} (𝒜 : I → Subᴸ) (i : I) → (⨅ 𝒜) ≤ (𝒜 i)
+  ⨅-lower 𝒜 i z = z i
 
- ⨅-greatest : {I : Type ℓ₀} (𝒜 : I → Subᴸ) (D : Subᴸ) → (∀ i → D ≤ (𝒜 i)) → D ≤ (⨅ 𝒜)
- ⨅-greatest 𝒜 D D≤𝒜 z i = D≤𝒜 i z
+  ⨅-greatest : {I : Type ℓ₀} (𝒜 : I → Subᴸ) (D : Subᴸ) → (∀ i → D ≤ (𝒜 i)) → D ≤ (⨅ 𝒜)
+  ⨅-greatest 𝒜 D D≤𝒜 z i = D≤𝒜 i z
 
- ⨆-upper : {I : Type ℓ₀} (𝒜 : I → Subᴸ) (i : I) → (𝒜 i) ≤ (⨆ 𝒜)
- ⨆-upper 𝒜 i z = var (i , z)
+  ⨆-upper : {I : Type ℓ₀} (𝒜 : I → Subᴸ) (i : I) → (𝒜 i) ≤ (⨆ 𝒜)
+  ⨆-upper 𝒜 i z = var (i , z)
 
- ⨆-least : {I : Type ℓ₀} (𝒜 : I → Subᴸ) (D : Subᴸ) → (∀ i → (𝒜 i) ≤ D) → (⨆ 𝒜) ≤ D
- ⨆-least 𝒜 D 𝒜≤D = sgIsSmallest 𝑨 (proj₁ D) (proj₂ D) (λ (i , z) → 𝒜≤D i z)
+  ⨆-least : {I : Type ℓ₀} (𝒜 : I → Subᴸ) (D : Subᴸ) → (∀ i → (𝒜 i) ≤ D) → (⨆ 𝒜) ≤ D
+  ⨆-least 𝒜 D 𝒜≤D = sgIsSmallest 𝑨 (proj₁ D) (proj₂ D) (λ (i , z) → 𝒜≤D i z)
 ```
 
 #### The complete lattice
 
 ```agda
- Sub-CompleteLattice : CompleteLattice (α ⊔ ov L) (α ⊔ L) (α ⊔ L) ℓ₀
- Sub-CompleteLattice = record
-  { Carrier          = Subᴸ
-  ; _≈_              = _≈_
-  ; _≤_              = _≤_
-  ; isPartialOrder   = ≤-isPartialOrder
-  ; ⨆                = ⨆
-  ; ⨅                = ⨅
-  ; ⨆-upper          = ⨆-upper
-  ; ⨆-least          = ⨆-least
-  ; ⨅-lower          = ⨅-lower
-  ; ⨅-greatest       = ⨅-greatest
-  }
+  Sub-CompleteLattice : CompleteLattice (α ⊔ ov L) (α ⊔ L) (α ⊔ L) ℓ₀
+  Sub-CompleteLattice = record
+   { Carrier          = Subᴸ
+   ; _≈_              = _≈_
+   ; _≤_              = _≤_
+   ; isPartialOrder   = ≤-isPartialOrder
+   ; ⨆                = ⨆
+   ; ⨅                = ⨅
+   ; ⨆-upper          = ⨆-upper
+   ; ⨆-least          = ⨆-least
+   ; ⨅-lower          = ⨅-lower
+   ; ⨅-greatest       = ⨅-greatest
+   }
 ```
 
 --------------------------------------
