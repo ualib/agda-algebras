@@ -25,12 +25,11 @@ the identity, so the *bottom* subuniverse `Sg ∅` is already the trivial subgro
 order-two subgroups in between, pairwise incomparable, any two of which meet at `{e}`
 and join to the whole group.  That is the lattice **`M₃`** — the five-element diamond,
 and the smallest *non-distributive* lattice.  This module exhibits the three middle
-subgroups as elements of `Sub V₄`, instantiates the lattice bundles, and proves the
-*order skeleton* of `M₃`: the three atoms are pairwise incomparable and proper (each
-strictly between `{e}` and the whole group).  The lattice-equation content that makes
-`M₃` non-distributive — that any two atoms meet at `{e}` and join to the top — and the
-completeness claim that these *are all* the subgroups, are left for future work (see
-*Remaining work* below).
+subgroups as elements of `Sub V₄`, instantiates the lattice bundles, and proves that
+the subgroup lattice **is** `M₃`: the three atoms are pairwise incomparable and proper,
+any two **meet** at `{e}`, and any two **join** to the whole group — whence
+non-distributivity.  The one piece left for future work is *completeness*: that these
+five subgroups are *all* of them.
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -42,12 +41,13 @@ open import Agda.Primitive  using () renaming ( Set to Type )
 open import Data.Bool.Base  using ( Bool ; true ; false ; _xor_ )
 open import Data.Fin.Patterns using ( 0F ; 1F )
 open import Data.Product    using ( _×_ ; _,_ ; proj₁ ; proj₂ )
+open import Data.Sum.Base   using ( inj₁ ; inj₂ )
 open import Data.Unit.Base  using ( tt )
 open import Function        using ( Func )
 open import Level           using ( 0ℓ ; lift )
 open import Relation.Binary using ( Setoid )
 open import Relation.Binary.PropositionalEquality as ≡
-                            using ( _≡_ ; refl ; cong₂ )
+                            using ( _≡_ ; refl ; sym ; cong₂ )
 open import Relation.Nullary  using ( ¬_ )
 open import Relation.Unary    using ( Pred ; _∈_ )
 
@@ -94,7 +94,7 @@ hence a subuniverse: closure under `∙` is `xor` respecting the condition (via
 inverse is the identity map.
 
 ```agda
-open import Setoid.Subalgebras.Subuniverses {𝑆 = Sig-Group} using ( Subuniverses )
+open import Setoid.Subalgebras.Subuniverses {𝑆 = Sig-Group} using ( Subuniverses ; Sg ; var ; app )
 
 H₁ H₂ H₌ : Pred (Bool × Bool) 0ℓ
 H₁ x = proj₁ x ≡ false
@@ -124,7 +124,7 @@ With base level `ℓ₀ = 0ℓ` the absorbing level `L` is `0ℓ`, so the subgro
 
 ```agda
 open import Setoid.Subalgebras.CompleteLattice {𝑆 = Sig-Group}
-  using ( Subᴸ ; _≤_ ; Sub-Lattice ; Sub-BoundedLattice
+  using ( Subᴸ ; _≤_ ; _≈_ ; _∧_ ; _∨_ ; Sub-Lattice ; Sub-BoundedLattice
         ; Sub-CompleteLattice ; 0ˢ ; 1ˢ ; 0ˢ-minimum )
 
 SubV₄-Lattice          = Sub-Lattice         V₄ 0ℓ
@@ -209,22 +209,70 @@ element the others lack — `(false , true) ∈ H₁`, `(true , false) ∈ H₂`
 ... | ()
 ```
 
-Together these facts pin down the **`M₃`** shape: three pairwise-incomparable proper
-subgroups, each strictly between the trivial subgroup `0ˢ = {e}` and the whole group
-`1ˢ`.
+Together these facts give the **order skeleton** of `M₃`: three pairwise-incomparable
+proper subgroups, each strictly between `0ˢ = {e}` and `1ˢ`.
+
+#### The meet/join table: `M₃` is non-distributive {#the-m3-table}
+
+The lattice is `M₃` on the nose: any two atoms **meet** at `{e}` and **join** to the
+whole group.  For a meet, an element trivial in both relevant coordinates *is* the
+identity `(false , false)`, which the nullary `ε` generates, so it lies in
+`0ˢ = Sg ∅`.  For a join, the union of two atoms generates all four elements — the
+fourth as the `⊕` of the other two atom witnesses (e.g.
+`(true , true) = (false , true) ⊕ (true , false)`).
+
+```agda
+𝑯₁∧𝑯₂≈⊥ : _≈_ V₄ 0ℓ (_∧_ V₄ 0ℓ 𝑯₁ 𝑯₂) (0ˢ V₄ 0ℓ)
+𝑯₁∧𝑯₂≈⊥ = m , 0ˢ-minimum V₄ 0ℓ (_∧_ V₄ 0ℓ 𝑯₁ 𝑯₂)
+ where m : _≤_ V₄ 0ℓ (_∧_ V₄ 0ℓ 𝑯₁ 𝑯₂) (0ˢ V₄ 0ℓ)
+       m {x₁ , x₂} (p , q) rewrite p | q = app ε-Op (λ ()) (λ ())
+
+𝑯₁∧𝑯₌≈⊥ : _≈_ V₄ 0ℓ (_∧_ V₄ 0ℓ 𝑯₁ 𝑯₌) (0ˢ V₄ 0ℓ)
+𝑯₁∧𝑯₌≈⊥ = m , 0ˢ-minimum V₄ 0ℓ (_∧_ V₄ 0ℓ 𝑯₁ 𝑯₌)
+ where m : _≤_ V₄ 0ℓ (_∧_ V₄ 0ℓ 𝑯₁ 𝑯₌) (0ˢ V₄ 0ℓ)
+       m {x₁ , x₂} (p , q) rewrite p | sym q = app ε-Op (λ ()) (λ ())
+
+𝑯₂∧𝑯₌≈⊥ : _≈_ V₄ 0ℓ (_∧_ V₄ 0ℓ 𝑯₂ 𝑯₌) (0ˢ V₄ 0ℓ)
+𝑯₂∧𝑯₌≈⊥ = m , 0ˢ-minimum V₄ 0ℓ (_∧_ V₄ 0ℓ 𝑯₂ 𝑯₌)
+ where m : _≤_ V₄ 0ℓ (_∧_ V₄ 0ℓ 𝑯₂ 𝑯₌) (0ˢ V₄ 0ℓ)
+       m {x₁ , x₂} (p , q) rewrite p | q = app ε-Op (λ ()) (λ ())
+
+𝑯₁∨𝑯₂≈⊤ : _≈_ V₄ 0ℓ (_∨_ V₄ 0ℓ 𝑯₁ 𝑯₂) (1ˢ V₄ 0ℓ)
+𝑯₁∨𝑯₂≈⊤ = (λ _ → lift tt) , j
+ where j : _≤_ V₄ 0ℓ (1ˢ V₄ 0ℓ) (_∨_ V₄ 0ℓ 𝑯₁ 𝑯₂)
+       j {false , false} _ = var (inj₁ refl)
+       j {false , true}  _ = var (inj₁ refl)
+       j {true , false}  _ = var (inj₂ refl)
+       j {true , true}   _ = app ∙-Op (λ { 0F → false , true ; 1F → true , false })
+                                       (λ { 0F → var (inj₁ refl) ; 1F → var (inj₂ refl) })
+
+𝑯₁∨𝑯₌≈⊤ : _≈_ V₄ 0ℓ (_∨_ V₄ 0ℓ 𝑯₁ 𝑯₌) (1ˢ V₄ 0ℓ)
+𝑯₁∨𝑯₌≈⊤ = (λ _ → lift tt) , j
+ where j : _≤_ V₄ 0ℓ (1ˢ V₄ 0ℓ) (_∨_ V₄ 0ℓ 𝑯₁ 𝑯₌)
+       j {false , false} _ = var (inj₁ refl)
+       j {false , true}  _ = var (inj₁ refl)
+       j {true , true}   _ = var (inj₂ refl)
+       j {true , false}  _ = app ∙-Op (λ { 0F → false , true ; 1F → true , true })
+                                       (λ { 0F → var (inj₁ refl) ; 1F → var (inj₂ refl) })
+
+𝑯₂∨𝑯₌≈⊤ : _≈_ V₄ 0ℓ (_∨_ V₄ 0ℓ 𝑯₂ 𝑯₌) (1ˢ V₄ 0ℓ)
+𝑯₂∨𝑯₌≈⊤ = (λ _ → lift tt) , j
+ where j : _≤_ V₄ 0ℓ (1ˢ V₄ 0ℓ) (_∨_ V₄ 0ℓ 𝑯₂ 𝑯₌)
+       j {false , false} _ = var (inj₁ refl)
+       j {true , false}  _ = var (inj₁ refl)
+       j {true , true}   _ = var (inj₂ refl)
+       j {false , true}  _ = app ∙-Op (λ { 0F → true , false ; 1F → true , true })
+                                       (λ { 0F → var (inj₁ refl) ; 1F → var (inj₂ refl) })
+```
+
+These equalities are exactly non-distributivity: with `x = 𝑯₁`, `y = 𝑯₂`, `z = 𝑯₌`,
+the meet `x ∧ (y ∨ z) = x ∧ 1ˢ = x` (a proper, nonzero subgroup), whereas
+`(x ∧ y) ∨ (x ∧ z) = 0ˢ ∨ 0ˢ = 0ˢ` — so `M₃` is not distributive.
 
 #### Remaining work {#remaining}
 
-Two pieces complete the picture and are left for follow-up:
-
-+  **The meet/join table.**  Any two atoms *meet* in `{e}` (`𝑯ᵢ ∧ 𝑯ⱼ ≈ 0ˢ`) and
-   *join* to the whole group (`𝑯ᵢ ∨ 𝑯ⱼ ≈ 1ˢ`) — the equalities that make `M₃`
-   non-distributive.  The meet direction needs `(false , false) ∈ Sg ∅`, i.e. the
-   identity is generated by the nullary `ε`; expressing that cleanly runs into the
-   usual difficulty that a nullary application `(ε ̂ V₄) a` does not constrain its
-   (empty) argument tuple `a`, so it wants a small dedicated lemma.
-+  **Completeness.**  That `0ˢ`, `1ˢ`, `𝑯₁`, `𝑯₂`, `𝑯₌` are *all* the subgroups —
-   a finite case analysis over the four group elements.
+What remains is **completeness**: that `0ˢ`, `1ˢ`, `𝑯₁`, `𝑯₂`, `𝑯₌` are *all* the
+subgroups — a finite case analysis over the four group elements.
 
 --------------------------------------
 
