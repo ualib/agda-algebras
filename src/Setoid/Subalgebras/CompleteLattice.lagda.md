@@ -34,25 +34,26 @@ open import Overture using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Subalgebras.CompleteLattice {𝑆 : Signature 𝓞 𝓥} where
 
--- Imports from the Agda Standard Library ---------------------------------------
 open import Agda.Primitive               using () renaming ( Set to Type )
-open import Data.Empty                   using ( ⊥ )
-open import Data.Product                 using ( _,_ ; _×_ ; proj₁ ; proj₂ ; Σ-syntax )
-open import Data.Sum.Base                using ( inj₁ ; inj₂ )
-open import Data.Unit.Base               using ( ⊤ ; tt )
-open import Level                        using ( Level ; _⊔_ ; suc ; Lift ; lift ; lower )
-open import Relation.Binary              using ( IsEquivalence ; IsPartialOrder )
-open import Relation.Binary.Definitions  using ( Maximum ; Minimum )
-open import Relation.Binary.Lattice      using ( Supremum ; Infimum ; IsLattice
-                                               ; Lattice ; IsBoundedLattice
-                                               ; BoundedLattice )
-open import Relation.Unary               using ( Pred ; _∈_ ; _⊆_ ; _∩_ ; _∪_ ; ⋂ ; ⋃ )
+
+-- Imports from the Agda Standard Library ---------------------------------------
+open import Data.Empty                   using  ( ⊥ )
+open import Data.Product                 using  ( _,_ ; _×_ ; proj₁ ; proj₂ ; Σ-syntax )
+open import Data.Sum.Base                using  ( inj₁ ; inj₂ )
+open import Data.Unit.Base               using  ( ⊤ ; tt )
+open import Level                        using  ( Level ; _⊔_ ; suc ; Lift ; lift ; lower )
+open import Relation.Binary              using  ( IsEquivalence ; IsPartialOrder )
+open import Relation.Binary.Definitions  using  ( Maximum ; Minimum )
+open import Relation.Binary.Lattice      using  ( Supremum ; Infimum ; IsLattice
+                                                ; Lattice ; IsBoundedLattice
+                                                ; BoundedLattice )
+open import Relation.Unary               using  ( Pred ; _∈_ ; _⊆_ ; _∩_ ; _∪_ ; ⋂ ; ⋃ )
 
 -- Imports from the Agda Universal Algebras Library ------------------------------
-open import Setoid.Algebras.Basic {𝑆 = 𝑆}            using  ( ov ; Algebra ; 𝕌[_] )
+open import Setoid.Algebras.Basic {𝑆 = 𝑆}             using  ( ov ; Algebra ; 𝕌[_] )
 open import Setoid.Algebras.Lattices.CompleteLattice  using  ( CompleteLattice )
 open import Setoid.Subalgebras.Subuniverses {𝑆 = 𝑆}
-  using  ( Subuniverses ; Sg ; var ; sgIsSub ; sgIsSmallest ; ⋂s )
+  using ( Subuniverses ; Sg ; var ; sgIsSub ; sgIsSmallest ; ⋂s )
 
 private variable α ρᵃ : Level
 ```
@@ -231,9 +232,9 @@ because `I` is `ℓ₀`-small.
  Sub-CompleteLattice : CompleteLattice (α ⊔ ov L) (α ⊔ L) (α ⊔ L) ℓ₀
  Sub-CompleteLattice = record
   { Carrier          = Subᴸ
-  ; _≈ᶜ_             = _≈_
-  ; _≤ᶜ_             = _≤_
-  ; isPartialOrderᶜ  = ≤-isPartialOrder
+  ; _≈_              = _≈_
+  ; _≤_              = _≤_
+  ; isPartialOrder   = ≤-isPartialOrder
   ; ⨆                = ⨆
   ; ⨅                = ⨅
   ; ⨆-upper          = ⨆-upper

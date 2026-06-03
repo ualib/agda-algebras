@@ -57,7 +57,7 @@ open import Relation.Binary.Lattice      using ( Supremum ; Infimum ; IsLattice
 -- Imports from the Agda Universal Algebras Library ------------------------------
 open import Setoid.Algebras.Basic {𝑆 = 𝑆}             using  ( ov ; Algebra ; 𝕌[_] )
 open import Setoid.Algebras.Lattices.CompleteLattice  using  ( CompleteLattice )
-open import Setoid.Algebras.Congruences {𝑆 = 𝑆}
+open import Setoid.Algebras.Congruences.Basic {𝑆 = 𝑆}
   using  ( Con ; mkcon ; _∣≈_ ; reflexive ; is-equivalence ; is-compatible )
 open import Setoid.Algebras.Congruences.Lattice {𝑆 = 𝑆}
   using  ( _≅_ ; _≤_ ; _∧_ ; ≤-isPartialOrder ; ∧-infimum )
@@ -227,9 +227,9 @@ yields the complete lattice of congruences.
   Con-CompleteLattice : CompleteLattice (α ⊔ ρ ⊔ ov L) (α ⊔ L) (α ⊔ L) ℓ₀
   Con-CompleteLattice = record
     { Carrier          = Conᴸ
-    ; _≈ᶜ_             = _≅_
-    ; _≤ᶜ_             = _≤_
-    ; isPartialOrderᶜ  = ≤-isPartialOrder
+    ; _≈_              = _≅_
+    ; _≤_              = _≤_
+    ; isPartialOrder   = ≤-isPartialOrder
     ; ⨆                = ⋁
     ; ⨅                = ⋀
     ; ⨆-upper          = λ f i → ⋁-upper f i

@@ -51,7 +51,7 @@ open import Relation.Binary  using ( Setoid ; IsEquivalence )
 -- Imports from the Agda Universal Algebras Library ------------------------------
 open import Overture using ( ∣_∣ ; ∥_∥ )
 open import Setoid.Algebras.Basic {𝑆 = 𝑆} using ( Algebra ; 𝕌[_] ; _^_ )
-open import Setoid.Algebras.Congruences {𝑆 = 𝑆}
+open import Setoid.Algebras.Congruences.Basic {𝑆 = 𝑆}
   using  ( Con ; mkcon ; _∣≈_ ; reflexive ; is-equivalence ; is-compatible )
 
 private variable α ρ ℓ ℓ′ : Level

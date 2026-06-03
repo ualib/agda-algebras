@@ -38,9 +38,10 @@ open import Relation.Binary.Bundles  using ( Poset )
 open import Relation.Binary.Lattice  using ( Infimum ; IsMeetSemilattice ; MeetSemilattice )
 
 -- Imports from the Agda Universal Algebras Library ------------------------------
-open import Setoid.Algebras.Basic        {𝑆 = 𝑆}  using  ( ov ; Algebra ; 𝕌[_] )
-open import Setoid.Algebras.Congruences  {𝑆 = 𝑆}  using  ( Con ; mkcon ; _∣≈_ ; reflexive
-                                                         ; is-equivalence ; is-compatible )
+open import Setoid.Algebras.Basic {𝑆 = 𝑆}              using  ( ov ; Algebra ; 𝕌[_] )
+open import Setoid.Algebras.Congruences.Basic {𝑆 = 𝑆}  using  ( Con ; mkcon ; _∣≈_
+                                                              ; reflexive ; is-equivalence
+                                                              ; is-compatible )
 private variable α ρ ℓ : Level
 ```
 
