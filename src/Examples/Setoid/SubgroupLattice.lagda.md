@@ -16,18 +16,17 @@ subuniverses via [Setoid.Subalgebras.CompleteLattice][].
 
 Two remarks make this a *group*-theoretic example rather than a bare subset example.
 First, because `Sig-Group` carries the binary `∙`, the unary inverse `⁻¹`, and the
-nullary identity `ε`, a subuniverse — a subset closed under all the operations — is
-exactly a **subgroup**.  Second, the nullary `ε` forces every subuniverse to contain
+nullary identity `ε`, a subuniverse (i.e., a subset closed under all the operations)
+is exactly a **subgroup**.  Second, the nullary `ε` forces every subuniverse to contain
 the identity, so the *bottom* subuniverse `Sg ∅` is already the trivial subgroup
 `{e}`; we get it for free as the lattice bottom `0ˢ`.
 
 `V₄` has exactly five subgroups: the trivial group `{e}`, the whole group, and three
-order-two subgroups in between, pairwise incomparable, any two of which meet in `{e}`
+order-two subgroups in between, pairwise incomparable, any two of which meet at `{e}`
 and join to the whole group.  That is the lattice **`M₃`** — the five-element diamond,
-the smallest *non-distributive* lattice (and a recurring character in the finite
-lattice representation problem).  This module exhibits the three middle subgroups as
-elements of `Sub V₄`, instantiates the lattice bundles, and proves the `M₃` shape
-(incomparability, properness, and "atoms meet to `⊥`").  The remaining completeness
+and the smallest *non-distributive* lattice.  This module exhibits the three middle
+subgroups as elements of `Sub V₄`, instantiates the lattice bundles, and proves the
+`M₃` shape (incomparability, properness, and "atoms meet at `0`").  The remaining completeness
 claim — that these *are all* the subgroups — is left for future work.
 
 ```agda
