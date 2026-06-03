@@ -55,26 +55,22 @@ open import Setoid.Algebras {𝑆 = 𝑆₀} using ( Algebra ; 𝕌[_] ; ⟨_⟩
 -- The two-element algebra: carrier Bool with ≡, and no operations to interpret.
 𝟚 : Algebra 0ℓ 0ℓ
 𝟚 = record { Domain = ≡.setoid Bool ; Interp = interp }
- where
- interp : Func (⟨ 𝑆₀ ⟩ (≡.setoid Bool)) (≡.setoid Bool)
- interp ⟨$⟩ (() , _)
- cong interp {() , _}
+  where
+  interp : Func (⟨ 𝑆₀ ⟩ (≡.setoid Bool)) (≡.setoid Bool)
+  interp ⟨$⟩ (() , _)
+  cong interp {() , _}
 ```
 
 #### Instantiating the bundles {#the-bundles}
 
 With base level `ℓ₀ = 0ℓ` the absorbing level `L` is `0ℓ`, so the subalgebra lattice
-of `𝟚` lives on `Subᴸ`.  We `open SubLattice 𝟚 0ℓ` to bring the order, operations,
+of `𝟚` lives on `Subᴸ`.  We `open Sublattice 𝟚 0ℓ` to bring the order, operations,
 bounds, and bundles into scope specialized to `𝟚` — so we may write `B ≤ C` rather
 than `_≤_ 𝟚 0ℓ B C`.  All three bundles type-check.
 
 ```agda
-open import Setoid.Subalgebras.CompleteLattice {𝑆 = 𝑆₀} using ( module SubLattice )
-open SubLattice 𝟚 0ℓ
-
-Sub𝟚-Lattice          = Sub-Lattice
-Sub𝟚-BoundedLattice   = Sub-BoundedLattice
-Sub𝟚-CompleteLattice  = Sub-CompleteLattice
+open import Setoid.Subalgebras.CompleteLattice {𝑆 = 𝑆₀} using ( module Sublattice )
+open Sublattice 𝟚 0ℓ
 ```
 
 #### Nontriviality: `⊤ ⋬ ⊥` {#nontriviality}
