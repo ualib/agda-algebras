@@ -119,20 +119,20 @@ H₌-isSub ⁻¹-Op a im = im 0F
 
 #### Instantiating the lattice bundles {#the-bundles}
 
-With base level `ℓ₀ = 0ℓ` the absorbing level `L` is `0ℓ`, so the subgroups live in
-`Sub V₄ {0ℓ}`.  All three bundles type-check.
+With base level `ℓ₀ = 0ℓ` the absorbing level `L` is `0ℓ`.  We `open Sublattice V₄ 0ℓ`
+to bring the order, operations, bounds, and bundles into scope specialized to `V₄` —
+so we write `𝑯₁ ≤ 𝑯₂`, `𝑯₁ ∧ 𝑯₂`, `0ˢ`, etc. directly.  All three bundles type-check.
 
 ```agda
-open import Setoid.Subalgebras.CompleteLattice {𝑆 = Sig-Group}
-  using ( Subᴸ ; _≤_ ; _≈_ ; _∧_ ; _∨_ ; Sub-Lattice ; Sub-BoundedLattice
-        ; Sub-CompleteLattice ; 0ˢ ; 1ˢ ; 0ˢ-minimum )
+open import Setoid.Subalgebras.CompleteLattice {𝑆 = Sig-Group} using ( module Sublattice )
+open Sublattice V₄ 0ℓ
 
-SubV₄-Lattice          = Sub-Lattice         V₄ 0ℓ
-SubV₄-BoundedLattice   = Sub-BoundedLattice  V₄ 0ℓ
-SubV₄-CompleteLattice  = Sub-CompleteLattice V₄ 0ℓ
+SubV₄-Lattice          = Sub-Lattice
+SubV₄-BoundedLattice   = Sub-BoundedLattice
+SubV₄-CompleteLattice  = Sub-CompleteLattice
 
 -- The three middle subgroups as elements of Sub V₄.
-𝑯₁ 𝑯₂ 𝑯₌ : Subᴸ V₄ 0ℓ
+𝑯₁ 𝑯₂ 𝑯₌ : Subᴸ
 𝑯₁ = H₁ , H₁-isSub
 𝑯₂ = H₂ , H₂-isSub
 𝑯₌ = H₌ , H₌-isSub
@@ -145,36 +145,36 @@ Each middle subgroup lies strictly between the bottom `{e}` and the top: it is a
 *proper* — distinct from the top, because it omits some element of the group.
 
 ```agda
-0≤𝑯₁ : _≤_ V₄ 0ℓ (0ˢ V₄ 0ℓ) 𝑯₁
-0≤𝑯₁ = 0ˢ-minimum V₄ 0ℓ 𝑯₁
+0≤𝑯₁ : 0ˢ ≤ 𝑯₁
+0≤𝑯₁ = 0ˢ-minimum 𝑯₁
 
-𝑯₁≤1 : _≤_ V₄ 0ℓ 𝑯₁ (1ˢ V₄ 0ℓ)
+𝑯₁≤1 : 𝑯₁ ≤ 1ˢ
 𝑯₁≤1 _ = lift tt
 
 -- 𝑯₁ is a *proper* subgroup: the top is not contained in it (it omits (true , false)).
-1⋬𝑯₁ : ¬ ( _≤_ V₄ 0ℓ (1ˢ V₄ 0ℓ) 𝑯₁ )
+1⋬𝑯₁ : ¬ ( 1ˢ ≤ 𝑯₁ )
 1⋬𝑯₁ le with le {true , false} (lift tt)
 ... | ()
 
-0≤𝑯₂ : _≤_ V₄ 0ℓ (0ˢ V₄ 0ℓ) 𝑯₂
-0≤𝑯₂ = 0ˢ-minimum V₄ 0ℓ 𝑯₂
+0≤𝑯₂ : 0ˢ ≤ 𝑯₂
+0≤𝑯₂ = 0ˢ-minimum 𝑯₂
 
-𝑯₂≤1 : _≤_ V₄ 0ℓ 𝑯₂ (1ˢ V₄ 0ℓ)
+𝑯₂≤1 : 𝑯₂ ≤ 1ˢ
 𝑯₂≤1 _ = lift tt
 
 -- 𝑯₂ omits (false , true) (its second coordinate is not trivial).
-1⋬𝑯₂ : ¬ ( _≤_ V₄ 0ℓ (1ˢ V₄ 0ℓ) 𝑯₂ )
+1⋬𝑯₂ : ¬ ( 1ˢ ≤ 𝑯₂ )
 1⋬𝑯₂ le with le {false , true} (lift tt)
 ... | ()
 
-0≤𝑯₌ : _≤_ V₄ 0ℓ (0ˢ V₄ 0ℓ) 𝑯₌
-0≤𝑯₌ = 0ˢ-minimum V₄ 0ℓ 𝑯₌
+0≤𝑯₌ : 0ˢ ≤ 𝑯₌
+0≤𝑯₌ = 0ˢ-minimum 𝑯₌
 
-𝑯₌≤1 : _≤_ V₄ 0ℓ 𝑯₌ (1ˢ V₄ 0ℓ)
+𝑯₌≤1 : 𝑯₌ ≤ 1ˢ
 𝑯₌≤1 _ = lift tt
 
 -- 𝑯₌ omits (true , false) (its coordinates differ).
-1⋬𝑯₌ : ¬ ( _≤_ V₄ 0ℓ (1ˢ V₄ 0ℓ) 𝑯₌ )
+1⋬𝑯₌ : ¬ ( 1ˢ ≤ 𝑯₌ )
 1⋬𝑯₌ le with le {true , false} (lift tt)
 ... | ()
 ```
@@ -184,27 +184,27 @@ element the others lack — `(false , true) ∈ H₁`, `(true , false) ∈ H₂`
 `(true , true) ∈ H₌`.
 
 ```agda
-𝑯₁⋬𝑯₂ : ¬ ( _≤_ V₄ 0ℓ 𝑯₁ 𝑯₂ )
+𝑯₁⋬𝑯₂ : ¬ ( 𝑯₁ ≤ 𝑯₂ )
 𝑯₁⋬𝑯₂ le with le {false , true} refl
 ... | ()
 
-𝑯₂⋬𝑯₁ : ¬ ( _≤_ V₄ 0ℓ 𝑯₂ 𝑯₁ )
+𝑯₂⋬𝑯₁ : ¬ ( 𝑯₂ ≤ 𝑯₁ )
 𝑯₂⋬𝑯₁ le with le {true , false} refl
 ... | ()
 
-𝑯₁⋬𝑯₌ : ¬ ( _≤_ V₄ 0ℓ 𝑯₁ 𝑯₌ )
+𝑯₁⋬𝑯₌ : ¬ ( 𝑯₁ ≤ 𝑯₌ )
 𝑯₁⋬𝑯₌ le with le {false , true} refl
 ... | ()
 
-𝑯₌⋬𝑯₁ : ¬ ( _≤_ V₄ 0ℓ 𝑯₌ 𝑯₁ )
+𝑯₌⋬𝑯₁ : ¬ ( 𝑯₌ ≤ 𝑯₁ )
 𝑯₌⋬𝑯₁ le with le {true , true} refl
 ... | ()
 
-𝑯₂⋬𝑯₌ : ¬ ( _≤_ V₄ 0ℓ 𝑯₂ 𝑯₌ )
+𝑯₂⋬𝑯₌ : ¬ ( 𝑯₂ ≤ 𝑯₌ )
 𝑯₂⋬𝑯₌ le with le {true , false} refl
 ... | ()
 
-𝑯₌⋬𝑯₂ : ¬ ( _≤_ V₄ 0ℓ 𝑯₌ 𝑯₂ )
+𝑯₌⋬𝑯₂ : ¬ ( 𝑯₌ ≤ 𝑯₂ )
 𝑯₌⋬𝑯₂ le with le {true , true} refl
 ... | ()
 ```
@@ -222,42 +222,42 @@ fourth as the `⊕` of the other two atom witnesses (e.g.
 `(true , true) = (false , true) ⊕ (true , false)`).
 
 ```agda
-𝑯₁∧𝑯₂≈⊥ : _≈_ V₄ 0ℓ (_∧_ V₄ 0ℓ 𝑯₁ 𝑯₂) (0ˢ V₄ 0ℓ)
-𝑯₁∧𝑯₂≈⊥ = m , 0ˢ-minimum V₄ 0ℓ (_∧_ V₄ 0ℓ 𝑯₁ 𝑯₂)
- where m : _≤_ V₄ 0ℓ (_∧_ V₄ 0ℓ 𝑯₁ 𝑯₂) (0ˢ V₄ 0ℓ)
+𝑯₁∧𝑯₂≈⊥ : (𝑯₁ ∧ 𝑯₂) ≈ 0ˢ
+𝑯₁∧𝑯₂≈⊥ = m , 0ˢ-minimum (𝑯₁ ∧ 𝑯₂)
+ where m : (𝑯₁ ∧ 𝑯₂) ≤ 0ˢ
        m {x₁ , x₂} (p , q) rewrite p | q = app ε-Op (λ ()) (λ ())
 
-𝑯₁∧𝑯₌≈⊥ : _≈_ V₄ 0ℓ (_∧_ V₄ 0ℓ 𝑯₁ 𝑯₌) (0ˢ V₄ 0ℓ)
-𝑯₁∧𝑯₌≈⊥ = m , 0ˢ-minimum V₄ 0ℓ (_∧_ V₄ 0ℓ 𝑯₁ 𝑯₌)
- where m : _≤_ V₄ 0ℓ (_∧_ V₄ 0ℓ 𝑯₁ 𝑯₌) (0ˢ V₄ 0ℓ)
+𝑯₁∧𝑯₌≈⊥ : (𝑯₁ ∧ 𝑯₌) ≈ 0ˢ
+𝑯₁∧𝑯₌≈⊥ = m , 0ˢ-minimum (𝑯₁ ∧ 𝑯₌)
+ where m : (𝑯₁ ∧ 𝑯₌) ≤ 0ˢ
        m {x₁ , x₂} (p , q) rewrite p | sym q = app ε-Op (λ ()) (λ ())
 
-𝑯₂∧𝑯₌≈⊥ : _≈_ V₄ 0ℓ (_∧_ V₄ 0ℓ 𝑯₂ 𝑯₌) (0ˢ V₄ 0ℓ)
-𝑯₂∧𝑯₌≈⊥ = m , 0ˢ-minimum V₄ 0ℓ (_∧_ V₄ 0ℓ 𝑯₂ 𝑯₌)
- where m : _≤_ V₄ 0ℓ (_∧_ V₄ 0ℓ 𝑯₂ 𝑯₌) (0ˢ V₄ 0ℓ)
+𝑯₂∧𝑯₌≈⊥ : (𝑯₂ ∧ 𝑯₌) ≈ 0ˢ
+𝑯₂∧𝑯₌≈⊥ = m , 0ˢ-minimum (𝑯₂ ∧ 𝑯₌)
+ where m : (𝑯₂ ∧ 𝑯₌) ≤ 0ˢ
        m {x₁ , x₂} (p , q) rewrite p | q = app ε-Op (λ ()) (λ ())
 
-𝑯₁∨𝑯₂≈⊤ : _≈_ V₄ 0ℓ (_∨_ V₄ 0ℓ 𝑯₁ 𝑯₂) (1ˢ V₄ 0ℓ)
+𝑯₁∨𝑯₂≈⊤ : (𝑯₁ ∨ 𝑯₂) ≈ 1ˢ
 𝑯₁∨𝑯₂≈⊤ = (λ _ → lift tt) , j
- where j : _≤_ V₄ 0ℓ (1ˢ V₄ 0ℓ) (_∨_ V₄ 0ℓ 𝑯₁ 𝑯₂)
+ where j : 1ˢ ≤ (𝑯₁ ∨ 𝑯₂)
        j {false , false} _ = var (inj₁ refl)
        j {false , true}  _ = var (inj₁ refl)
        j {true , false}  _ = var (inj₂ refl)
        j {true , true}   _ = app ∙-Op (λ { 0F → false , true ; 1F → true , false })
                                        (λ { 0F → var (inj₁ refl) ; 1F → var (inj₂ refl) })
 
-𝑯₁∨𝑯₌≈⊤ : _≈_ V₄ 0ℓ (_∨_ V₄ 0ℓ 𝑯₁ 𝑯₌) (1ˢ V₄ 0ℓ)
+𝑯₁∨𝑯₌≈⊤ : (𝑯₁ ∨ 𝑯₌) ≈ 1ˢ
 𝑯₁∨𝑯₌≈⊤ = (λ _ → lift tt) , j
- where j : _≤_ V₄ 0ℓ (1ˢ V₄ 0ℓ) (_∨_ V₄ 0ℓ 𝑯₁ 𝑯₌)
+ where j : 1ˢ ≤ (𝑯₁ ∨ 𝑯₌)
        j {false , false} _ = var (inj₁ refl)
        j {false , true}  _ = var (inj₁ refl)
        j {true , true}   _ = var (inj₂ refl)
        j {true , false}  _ = app ∙-Op (λ { 0F → false , true ; 1F → true , true })
                                        (λ { 0F → var (inj₁ refl) ; 1F → var (inj₂ refl) })
 
-𝑯₂∨𝑯₌≈⊤ : _≈_ V₄ 0ℓ (_∨_ V₄ 0ℓ 𝑯₂ 𝑯₌) (1ˢ V₄ 0ℓ)
+𝑯₂∨𝑯₌≈⊤ : (𝑯₂ ∨ 𝑯₌) ≈ 1ˢ
 𝑯₂∨𝑯₌≈⊤ = (λ _ → lift tt) , j
- where j : _≤_ V₄ 0ℓ (1ˢ V₄ 0ℓ) (_∨_ V₄ 0ℓ 𝑯₂ 𝑯₌)
+ where j : 1ˢ ≤ (𝑯₂ ∨ 𝑯₌)
        j {false , false} _ = var (inj₁ refl)
        j {true , false}  _ = var (inj₁ refl)
        j {true , true}   _ = var (inj₂ refl)
