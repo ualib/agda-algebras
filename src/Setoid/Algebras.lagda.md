@@ -5,7 +5,7 @@ date : "2021-09-17"
 author: "agda-algebras development team"
 ---
 
-### <a id="setoid-representation-of-algebras">Setoid Representation of Algebras</a>
+### Setoid Representation of Algebras
 
 
 ```agda

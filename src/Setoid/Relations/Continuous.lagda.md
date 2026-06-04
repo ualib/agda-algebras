@@ -38,7 +38,7 @@ open import Overture          using ( Op ; arity[_] )
 private variable α ρᵃ ρ ι : Level
 ```
 
-#### <a id="pi-setoid">The Π-setoid construction</a>
+#### The Π-setoid construction
 
 Given an indexing type `I : Type ι` and a family `𝒜 : I → Setoid α ρᵃ`, the indexed-product setoid `⨅ˢ 𝒜` has carrier the dependent function type `(i : I) → Carrier (𝒜 i)` and equivalence the pointwise equivalence `λ a b → ∀ i → _≈_ (𝒜 i) (a i) (b i)`, an equivalence relation by appeal to each `isEquivalence (𝒜 i)`.  The level signature matches `Setoid.Algebras.Products.⨅` exactly; lifting the construction to a named referent means downstream consumers can reference a single canonical Π-setoid rather than rolling it inline at each use site.
 
@@ -103,7 +103,7 @@ The predicates `Π-Respects-Rel` and `Π-Respects-REL` below name this property 
   ∀ {f g} → ((i : I) → _≈_ (𝒜 i) (f i) (g i)) → R f → R g
 ```
 
-#### <a id="compatibility-with-general-relations">Compatibility of operations with continuous relations</a>
+#### Compatibility of operations with continuous relations
 
 The operation `eval-Rel` lifts an `I`-ary relation to an `(I → J)`-ary relation: the lifted relation relates an `I`-tuple of `J`-tuples just in case each `J`-indexed *row* of the tuple-of-tuples (viewed as a `J`-indexed family of `I`-tuples) belongs to the original relation.
 
@@ -121,7 +121,7 @@ compatible-Rel :  {A : Type α}{I J : Type ι}
 compatible-Rel f R = ∀ t → eval-Rel R arity[ f ] t → R (λ i → f (t i))
 ```
 
-#### <a id="compatibility-of-operations-with-dependent-relations">Compatibility of operations with dependent relations</a>
+#### Compatibility of operations with dependent relations
 
 The multi-sorted analogues `eval-REL` and `compatible-REL` mirror the single-sorted versions exactly, with `Rel A I` replaced by `REL I 𝒜` and tuple types replaced by their dependent counterparts.  The definition of `compatible-REL` corrects the buggy form in the legacy module; see the module header.
 

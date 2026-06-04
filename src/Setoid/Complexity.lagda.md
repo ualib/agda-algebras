@@ -5,7 +5,7 @@ date : "2026-05-09"
 author: "agda-algebras development team"
 ---
 
-## <a id="types-for-computational-complexity">Types for Computational Complexity</a>
+## Types for Computational Complexity
 
 This is the [Setoid.Complexity][] module of the [Agda Universal Algebra Library][].
 

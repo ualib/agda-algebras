@@ -5,7 +5,7 @@ date : "2021-09-18"
 author: "agda-algebras development team"
 ---
 
-#### <a id="basic-definitions">Basic definitions</a>
+#### Basic definitions
 
 This is the [Setoid.Terms.Basic][] module of the [Agda Universal Algebra Library][].
 
@@ -44,7 +44,7 @@ private variable
 ```
 
 
-##### <a id="equality-of-terms">Equality of terms</a>
+##### Equality of terms
 
 We take a different approach here, using Setoids instead of quotient types.
 That is, we will define the collection of terms in a signature as a setoid
@@ -92,7 +92,7 @@ cong (Interp (𝑻 X)) (≡.refl , ss≐ts) = gnl ss≐ts
 
 
 
-##### <a id="interpretation-of-terms-in-setoid-algebras">Interpretation of terms in setoid algebras</a>
+##### Interpretation of terms in setoid algebras
 
 The approach to terms and their interpretation in this module was inspired by
 [Andreas Abel's formal proof of Birkhoff's completeness theorem](http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf).

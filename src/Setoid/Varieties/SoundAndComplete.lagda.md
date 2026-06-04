@@ -5,7 +5,7 @@ date : "2021-01-14"
 author: "agda-algebras development team"
 ---
 
-#### <a id="entailment-derivation-rules-soundness-and-completeness">Entailment, derivation rules, soundness and completeness</a>
+#### Entailment, derivation rules, soundness and completeness
 
 This is the [Setoid.Varieties.SoundAndComplete][] module of the [Agda Universal Algebra Library][].
 
@@ -105,7 +105,7 @@ module _ {α}{ρᵃ}{ι}{I : Type ι} where
 
 
 
-##### <a id="derivations-in-a-context">Derivations in a context</a>
+##### Derivations in a context
 
 (Based on [Andreas Abel's Agda formalization of Birkhoff's completeness theorem](http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf).)
 
@@ -126,7 +126,7 @@ module _ {χ ι : Level} where
 ```
 
 
-##### <a id="soundness-of-the-inference-rules">Soundness of the inference rules</a>
+##### Soundness of the inference rules
 
 (Based on [Andreas Abel's Agda formalization of Birkhoff's completeness theorem](see: http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf).)
 
@@ -170,7 +170,7 @@ The converse is Birkhoff's completeness theorem: if Mod E ⊫ p ≈ q, then E �
 We will prove that result next.
 
 
-##### <a id="birkhoffs-completeness-theorem">Birkhoff's completeness theorem</a>
+##### Birkhoff's completeness theorem
 
 The proof proceeds by constructing a relatively free algebra consisting of term
 quotiented by derivable equality E ⊢ X ▹ _≈_.  It then suffices to prove

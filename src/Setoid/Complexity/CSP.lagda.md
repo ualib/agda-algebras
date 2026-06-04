@@ -5,7 +5,7 @@ date : "2026-05-09"
 author: "the agda-algebras development team"
 ---
 
-### <a id="constraint-satisfaction-problems">Constraint Satisfaction Problems</a>
+### Constraint Satisfaction Problems
 
 This is the [Setoid.Complexity.CSP][] module of the [Agda Universal Algebra Library][].
 
@@ -17,7 +17,7 @@ fixed finite domain, and a statement of the Bulatov–Zhuk algebraic dichotomy �
 scheduled under #274 (M7-1).  The infinite-template / ω-categorical extension is
 covered separately under #281 (M9-2), which depends on this canonical-path version.
 
-#### <a id="the-relational-formulation-of-csp">The relational formulation of CSP</a>
+#### The relational formulation of CSP
 
 Let 𝒜 = (𝐴 , 𝑅ᵃ) be a *relational structure* (or 𝑅-structure), that is, a pair
 consisting of a set 𝐴 along with a collection 𝑅ᵃ ⊆ ⋃ₙ 𝒫(𝐴ⁿ) of relations on 𝐴.
@@ -48,7 +48,7 @@ CSP(𝒜) of 𝑅 structures having homomorphisms into 𝒜.  That is, our algor
 as input an 𝑅-structure (a relational structure in the signature of 𝒜) and decide
 whether or not it belongs to the set CSP(𝒜).
 
-#### <a id="connection-to-algebraic-csp">Connection to algebraic CSP</a>
+#### Connection to algebraic CSP
 
 Let A be a set, let Op(A) denote the set of all operations, Rel(A) the set of all relations, on A.
 
@@ -97,7 +97,7 @@ open import Setoid.Relations.Continuous       using ( REL ; REL-syntax )
 open import Setoid.Algebras.Basic  {𝑆 = 𝑆}    using ( Algebra )
 ```
 
-#### <a id="constraints">Constraints</a>
+#### Constraints
 
 A constraint c consists of
 
@@ -153,7 +153,7 @@ infinitary CSP work under #281) needs to mix relation levels across constraints 
 a single instance.
 
 
-#### <a id="csp-templates-and-instances">CSP templates and instances</a>
+#### CSP templates and instances
 
 A CSP "template" restricts the relations that may occur in instances of the problem.
 A convenient way to specify a template is to give an indexed family 𝒜 : var → Algebra

@@ -5,7 +5,7 @@ date : "2021-04-23"
 author: "agda-algebras development team"
 ---
 
-#### <a id="basic-definitions">Basic definitions</a>
+#### Basic definitions
 
 This is the [Setoid.Algebras.Basic][] module of the [Agda Universal Algebra Library][].
 
@@ -35,7 +35,7 @@ ov α = 𝓞 ⊔ 𝓥 ⊔ lsuc α
 ```
 
 
-#### <a id="setoid-algebras">Setoid Algebras</a>
+#### Setoid Algebras
 
 Here we define algebras over a setoid, instead of a mere type with no equivalence on it.
 
@@ -128,7 +128,7 @@ Level-of-Carrier {α = α} _ = α
 ```
 
 
-#### <a id="level-lifting-setoid-algebra-types">Level lifting setoid algebra types</a>
+#### Level lifting setoid algebra types
 
 ```agda
 module _ (𝑨 : Algebra α ρ)(ℓ : Level) where

@@ -5,7 +5,7 @@ date : "2021-06-29"
 author: "agda-algebras development team"
 ---
 
-#### <a id="free-setoid-algebras">Free setoid algebras</a>
+#### Free setoid algebras
 
 
 ```agda

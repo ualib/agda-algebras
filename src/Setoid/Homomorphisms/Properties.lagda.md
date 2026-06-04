@@ -5,7 +5,7 @@ date : "2021-09-13"
 author: "agda-algebras development team"
 ---
 
-#### <a id="properties-of-homomorphisms-of-setoidalgebras">Properties of Homomorphisms of Algebras</a>
+#### Properties of Homomorphisms of Algebras
 
 This is the [Setoid.Homomorphisms.Properties][] module of the [Agda Universal Algebra Library][].
 
@@ -40,7 +40,7 @@ private variable α β γ ρᵃ ρᵇ ρᶜ ℓ : Level
 ```
 
 
-##### <a id="composition-of-homs">Composition of homs</a>
+##### Composition of homs
 
 
 ```agda
@@ -89,7 +89,7 @@ module _  {𝑨 : Algebra α ρᵃ} {𝑩 : Algebra β ρᵇ} {𝑪 : Algebra γ
 
 
 
-##### <a id="lifting-and-lowering">Lifting and lowering of homs</a>
+##### Lifting and lowering of homs
 
 First we define the identity homomorphism for setoid algebras and then we prove that the operations of lifting and lowering of a setoid algebra are homomorphisms.
 

@@ -5,7 +5,7 @@ date : "2021-09-24"
 author: "agda-algebras development team"
 ---
 
-### <a id="properties-of-the-models-relation">Properties of the models relation for setoid algebras</a>
+### Properties of the models relation for setoid algebras
 
 We prove some closure and invariance properties of the relation `⊧`.  In particular, we prove the following facts (which are needed, for example, in the proof the Birkhoff HSP Theorem).
 
@@ -56,7 +56,7 @@ open Algebra  using ( Domain )
 
 
 
-#### <a id="algebraic-invariance-of-models">Algebraic invariance of ⊧</a>
+#### Algebraic invariance of ⊧
 
 The binary relation ⊧ would be practically useless if it were not an *algebraic invariant* (i.e., invariant under isomorphism).
 
@@ -95,7 +95,7 @@ module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}(𝑩 : Algebra β ρᵇ)(p q : T
 As the proof makes clear, we show `𝑩 ⊧ p ≈ q` by showing that `𝑩 ⟦ p ⟧ ≡ 𝑩 ⟦ q ⟧`
 holds *extensionally*, that is, `∀ x, 𝑩 ⟦ p ⟧ x ≡ 𝑩 ⟦q ⟧ x`.
 
-#### <a id="lift-invariance">Lift-invariance of ⊧</a>
+#### Lift-invariance of ⊧ {#lift-invariance}
 The ⊧ relation is also invariant under the algebraic lift and lower operations.
 
 
@@ -110,7 +110,7 @@ module _ {X : Type χ}{𝑨 : Algebra α ρᵃ} where
 ```
 
 
-#### <a id="homomorphic-invariance">Homomorphic invariance of ⊧</a>
+#### Homomorphic invariance of ⊧
 Identities modeled by an algebra `𝑨` are also modeled by every homomorphic image
 of `𝑨`, which fact can be formalized as follows.
 
@@ -138,7 +138,7 @@ module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}{p q : T
 
 
 
-#### <a id="subalgebraic-invariance">Subalgebraic invariance of ⊧</a>
+#### Subalgebraic invariance of ⊧ {#subalgebraic-invariance}
 Identities modeled by an algebra `𝑨` are also modeled by every subalgebra of `𝑨`, which fact can be formalized as follows.
 
 
@@ -184,7 +184,7 @@ module _ {X : Type χ}{p q : Term X} where
 
 
 
-#### <a id="product-invariance">Product invariance of ⊧</a>
+#### Product invariance of ⊧ {#product-invariance}
 
 An identity satisfied by all algebras in an indexed collection is also satisfied
 by the product of algebras in that collection.
@@ -240,7 +240,7 @@ algebras models (p ≈̇ q) if the lift of each algebra in the collection models
 
 
 
-#### <a id="homomorphisc-invariance">Homomorphic invariance of ⊧</a>
+#### Homomorphic invariance of ⊧
 
 If an algebra 𝑨 models an identity (p ≈̇ q), then the pair (p , q) belongs to the
 kernel of every homomorphism φ : hom (𝑻 X) 𝑨 from the term algebra to 𝑨; that is,

@@ -5,7 +5,7 @@ date : "2021-09-15"
 author: "agda-algebras development team"
 ---
 
-#### <a id="isomorphisms-of-setoid-algebras">Isomorphisms of setoid algebras</a>
+#### Isomorphisms of setoid algebras
 
 This is the [Setoid.Homomorphisms.Factor][] module of the [Agda Universal Algebra Library][].
 
@@ -98,7 +98,7 @@ module _ (𝑨 : Algebra α ρᵃ) (𝑩 : Algebra β ρᵇ) where
 That is, two structures are *isomorphic* provided there are homomorphisms going back and forth between them which compose to the identity map.
 
 
-#### <a id="properties-of-isomorphisms-of-setoid-algebras">Properties of isomorphism of setoid algebras</a>
+#### Properties of isomorphism of setoid algebras
 
 
 ```agda

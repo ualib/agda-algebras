@@ -5,7 +5,7 @@ date : "2021-09-16"
 author: "the agda-algebras development team"
 ---
 
-### <a id="quotients">Quotients of setoids</a>
+### Quotients of setoids
 
 This is the [Setoid.Relations.Quotients][] module of the [Agda Universal Algebra Library][].
 
@@ -32,7 +32,7 @@ open import Setoid.Relations.Discrete  using ( fker )
 private variable α β ρᵃ ρᵇ ℓ : Level
 ```
 
-#### <a id="kernels">Kernels</a>
+#### Kernels
 
 A prominent example of an equivalence relation is the kernel of any function.
 

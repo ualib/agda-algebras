@@ -5,7 +5,7 @@ date : "2021-09-24"
 author: "agda-algebras development team"
 ---
 
-### <a id="varieties-model-theory-and-equational-logic">Equational Logic and varieties of setoid algebras</a>
+### Equational Logic and varieties of setoid algebras
 
 This is the [Setoid.Varieties.EquationalLogic][] module of the [Agda Universal Algebra Library][] where the binary "models" relation ⊧, relating algebras (or classes of algebras) to the identities that they satisfy, is defined.
 
@@ -37,7 +37,7 @@ private variable χ α ρᵃ ℓ ι : Level
 ```
 
 
-#### <a id="the-models-relation">The models relation</a>
+#### The models relation
 
 We define the binary "models" relation `⊧` using infix syntax so that we may
 write, e.g., `𝑨 ⊧ p ≈ q` or `𝒦 ⊫ p ≈ q`, relating algebras (or classes of
@@ -71,7 +71,7 @@ this interpretation as `⟦ p ⟧ ρ ≈ ⟦ q ⟧ ρ`. (Recall, and environment
 assignment of values in the domain to variable symbols).
 
 
-#### <a id="equational-theories-and-models">Equational theories and models over setoids</a>
+#### Equational theories and models over setoids
 
 If 𝒦 denotes a class of structures, then `Th 𝒦` represents the set of identities
 modeled by the members of 𝒦.

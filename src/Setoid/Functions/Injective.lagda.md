@@ -5,7 +5,7 @@ date : "2021-09-13"
 author: "the agda-algebras development team"
 ---
 
-### <a id="injective-functions-on-setoids">Injective functions on setoids</a>
+### Injective functions on setoids
 
 This is the [Setoid.Functions.Injective][] module of the [agda-algebras][] library.
 

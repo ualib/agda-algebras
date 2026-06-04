@@ -5,7 +5,7 @@ date : "2021-09-13"
 author: "the agda-algebras development team"
 ---
 
-### <a id="bijective-functions-on-setoids">Bijective functions on setoids</a>
+### Bijective functions on setoids
 
 This is the [Setoid.Functions.Bijective][] module of the [agda-algebras][] library.
 

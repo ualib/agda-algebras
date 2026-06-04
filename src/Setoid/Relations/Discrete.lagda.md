@@ -5,7 +5,7 @@ date : "2021-09-16"
 author: "the agda-algebras development team"
 ---
 
-### <a id="discrete-relations">Discrete Relations on Setoids</a>
+### Discrete Relations on Setoids
 
 This is the [Setoid.Relations.Discrete][] module of the [Agda Universal Algebra Library][].
 
@@ -55,7 +55,7 @@ is contained in a predicate, the second argument (a "subset" of the codomain).
 ```
 
 
-#### <a id="kernels">Kernels on setoids</a>
+#### Kernels on setoids
 
 Given setoids 𝐴 and 𝐵 (with carriers A and B, resp), the *kernel* of a function `f : 𝐴 ⟶ 𝐵` is defined
 informally by `{(x , y) ∈ A × A : f ⟨$⟩ x ≈₂ f ⟨$⟩ y}`.

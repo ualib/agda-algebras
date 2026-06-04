@@ -5,7 +5,7 @@ date : "2021-09-08"
 author: "the agda-algebras development team"
 ---
 
-## <a id="setoids-functions">Setoid Functions</a>
+## Setoid Functions
 
 This is the [Setoid.Functions][] module of the [Agda Universal Algebra Library][].
 

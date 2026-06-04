@@ -5,7 +5,7 @@ date : "2021-09-13"
 author: "the agda-algebras development team"
 ---
 
-### <a id="inverses-for-functions-with-structure">Inverses for functions with structure</a>
+### Inverses for functions with structure
 
 This is the [Setoid.Functions.Inverses][] module of the [agda-algebras][] library.
 

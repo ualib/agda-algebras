@@ -5,7 +5,7 @@ date : "2026-05-09"
 author: "agda-algebras development team"
 ---
 
-### <a id="complexity-theory">Complexity Theory</a>
+### Complexity Theory
 
 This is the [Setoid.Complexity.Basic][] module of the [Agda Universal Algebra Library][].
 
@@ -17,7 +17,7 @@ This module is the canonical home for the content previously developed in `Legac
 module Setoid.Complexity.Basic where
 ```
 
-#### <a id="words">Words</a>
+#### Words
 
 Let 𝑇ₙ be a totally ordered set of size 𝑛.  Let 𝐴 be a set (the alphabet).
 We can model the set 𝑊ₙ, of *words* (strings of letters from 𝐴) of length 𝑛

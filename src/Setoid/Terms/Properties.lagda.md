@@ -5,7 +5,7 @@ date : "2021-09-18"
 author: "agda-algebras development team"
 ---
 
-#### <a id="basic-properties">Basic properties of terms on setoids</a>
+#### Basic properties of terms on setoids
 
 This is the [Setoid.Terms.Properties][] module of the [Agda Universal Algebra Library][].
 

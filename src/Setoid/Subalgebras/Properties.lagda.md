@@ -5,7 +5,7 @@ date : "2021-07-18"
 author: "agda-algebras development team"
 ---
 
-#### <a id="properties-of-the-subalgebra-relation">Properties of the subalgebra relation for setoid algebras</a>
+#### Properties of the subalgebra relation for setoid algebras
 
 This is the [Setoid.Subalgebras.Properties][] module of the [Agda Universal Algebra Library][].
 
@@ -142,7 +142,7 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
 
 
 
-#### <a id="lifts-of-subalgebras-of-setoid-algebras">Lifts of subalgebras of setoid algebras</a>
+#### Lifts of subalgebras of setoid algebras
 
 
 ```agda

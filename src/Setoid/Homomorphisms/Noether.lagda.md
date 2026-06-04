@@ -5,7 +5,7 @@ date : "2021-09-15"
 author: "agda-algebras development team"
 ---
 
-### <a id="homomorphism-theorems">Homomorphism Theorems for Setoid Algebras</a>
+### Homomorphism Theorems for Setoid Algebras
 
 This is the [Setoid.Homomorphisms.Noether][] module of the [Agda Universal Algebra Library][].
 
@@ -39,7 +39,7 @@ private variable α ρᵃ β ρᵇ γ ρᶜ ι : Level
 ```
 
 
-#### <a id="the-first-homomorphism-theorem">The First Homomorphism Theorem for setoid algebras</a>
+#### The First Homomorphism Theorem for setoid algebras
 
 
 ```agda

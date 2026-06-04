@@ -5,7 +5,7 @@ date : "2021-09-17"
 author: "the agda-algebras development team"
 ---
 
-## <a id="relations">Relations on setoids</a>
+## Relations on setoids
 
 This is the [Setoid.Relations][] module of the [Agda Universal Algebra Library][].
 
