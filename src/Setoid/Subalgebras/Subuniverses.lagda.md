@@ -123,7 +123,7 @@ In the proof above, we assume the following typing judgments:
     σ  : (i : I) → 𝒜 i ∈ Subuniverses 𝑨
 
 and we must prove `(f ^ 𝑨) a ∈ ⋂ I 𝒜`.  (The command `C-c C-a` works in this case;
-Agda fills in the proof term `λ i → σ i f a (λ x → ν x i)` automatically .)
+Agda fills in the proof term `λ i → σ i f a (λ x → ν x i)` automatically.)
 
 
 ```agda
