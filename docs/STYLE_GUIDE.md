@@ -186,7 +186,13 @@ This pattern is to be ratified in ADR-002 (to land with [M3-1][`docs/GITHUB_PROJ
 
 ### Module headers have comment blocks
 
-Every non-trivial module should have a prose comment block near the top — after the pragma and any module-header imports, but before the main body; e.g.,
+Every non-trivial module should have a prose comment block near the top.  In a literate `.lagda.md` module that block is Markdown — the section heading and an introductory paragraph or two — and it *precedes* the opening code fence, rather than sitting in a `-- |` block inside it.  For example, `Setoid.Algebras.Basic` would open with prose like
+
+> ### Basic definitions
+>
+> An `Algebra` over signature `𝑆` is a setoid (the domain) equipped with an interpretation of each operation symbol in `𝑆` as a function on the carrier that respects the setoid's equivalence relation.  This module is the canonical entry point for the Setoid tree; see `Setoid.Algebras.Products` for indexed products, `Setoid.Algebras.Congruences` for the congruence relations used to build quotients, and `Setoid.Homomorphisms.Basic` for homomorphisms between algebras.
+
+and only then the opening fence:
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -194,17 +200,6 @@ Every non-trivial module should have a prose comment block near the top — afte
 open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 
 module Setoid.Algebras.Basic {𝑆 : Signature 𝓞 𝓥} where
-
--- | Basic definitions for Setoid-based universal algebras.
--- |
--- | An `Algebra` over signature `𝑆` is a setoid (the domain) equipped with an
--- | interpretation of each operation symbol in `𝑆` as a function on the
--- | carrier that respects the setoid's equivalence relation.
--- |
--- | This module is the canonical entry point for the Setoid tree.  Related modules:
--- | `Setoid.Algebras.Products` for indexed products; `Setoid.Algebras.Congruences`
--- | for the congruence relations used to build quotients.  See also
--- | `Setoid.Homomorphisms.Basic` for homomorphisms between algebras.
 ```
 
 The content of these blocks matters — see [Comments and documentation](#comments-and-documentation) below.
@@ -246,7 +241,7 @@ open import Relation.Binary  using ( IsEquivalence ) renaming ( Rel to BinRel )
 open import Relation.Unary   using ( _∈_ ; Pred )
 
 -- Imports from the agda-algebras library.
-open import Overture         using ( ∣_∣ ; ∥_∥ ; Op )
+open import Overture         using ( proj₁ ; proj₂ ; Op )
 open import Base.Relations   using ( _|:_ ; _|:pred_ ; Rel ; compatible-Rel )
                              using ( REL ; compatible-REL )
 ```
@@ -298,14 +293,18 @@ Don't decorate names to indicate implementation/type choices; avoid suffixes lik
 
 | Symbol | Meaning | Source | Status/Plan |
 |---|---|---|---|
-| `∣_∣` | First projection of a Σ-type | `Overture.Basic` | **deprecated** : replace with `proj₁` in v3.0 |
-| `∥_∥` | Second projection of a Σ-type | `Overture.Basic` | **deprecated** : replace with `proj₂` in v3.0 |
-| `_,_` | Σ-type constructor | stdlib `Data.Product` | **standard** : retain in v3.0 |
-| `Σ[_∈_]_` | Σ-type binder syntax | stdlib `Data.Product` | **standard** : retain in v3.0 |
+| `proj₁` | First projection of a Σ-type | stdlib `Data.Product` (re-exported by `Overture`) | **canonical** |
+| `proj₂` | Second projection of a Σ-type | stdlib `Data.Product` (re-exported by `Overture`) | **canonical** |
+| `OperationSymbolsOf` | A signature's operation symbols (`proj₁ 𝑆`) | `Overture.Signatures` | **canonical** for signature components |
+| `ArityOf` | A signature's arity function (`proj₂ 𝑆`) | `Overture.Signatures` | **canonical** for signature components |
+| `∣_∣` | First projection of a Σ-type | `Overture.Basic` | **deprecated** (v3.0, `WARNING_ON_USAGE`); migrated out of the live trees by #367, retained for `Legacy/` |
+| `∥_∥` | Second projection of a Σ-type | `Overture.Basic` | **deprecated** (v3.0, `WARNING_ON_USAGE`); migrated out of the live trees by #367, retained for `Legacy/` |
+| `_,_` | Σ-type constructor | stdlib `Data.Product` | **standard** |
+| `Σ[_∈_]_` | Σ-type binder syntax | stdlib `Data.Product` | **standard** |
 
-In the upcoming release cycle we will replace `∣_∣` and `∥_∥` with the more standard `proj₁` and `proj₂` throughout.  The vertical-bars convention was an `agda-algebras` idiom carried over from earlier `TypeTopology`-style developments; they make the code *less* readable for mathematicians who typically reserve those symbols for absolute value and norm, and the stdlib names bridge more cleanly to `Data.Product`.
+The mechanical sweep replacing `∣_∣` / `∥_∥` with the standard `proj₁` / `proj₂` was carried out in M4-1 (#367).  The vertical-bars convention was an `agda-algebras` idiom carried over from earlier `TypeTopology`-style developments; the bars read *less* clearly for mathematicians who reserve them for absolute value and norm, and the stdlib names bridge more cleanly to `Data.Product`.  Signature components use the self-documenting `OperationSymbolsOf` / `ArityOf` (definitionally `proj₁` / `proj₂` of the signature); see [ADR-002][] §1.
 
-**Scope note**.  These projections are used pervasively throughout `src/` and `docs/lagda/` — this is the largest syntactic change in the 3.0 cycle.  The rationale and migration plan will be captured in a dedicated ADR (see M1-6), and the mechanical sweep is scheduled as part of M4-1.  Until then, existing `∣_∣` / `∥_∥` callsites remain valid; new code may use either notation, but `proj₁` / `proj₂` is preferred.
+**Scope note**.  The live trees (`Overture/`, `Setoid/`, `Classical/`, `Demos/ContraX`, `Examples/`) are on `proj₁` / `proj₂`; the bracket definitions remain in `Overture.Basic` under a `WARNING_ON_USAGE` so `Legacy/` keeps compiling.  The `∣` glyph legitimately survives outside `Legacy/` in the `_∣≈_` / `_∥≈_` operators, the `∣_∣=∣_∣` / `∣_∣≈∣_∣` bijection operators (`Examples.FunctionTypeBijections`), the `∣A∣`-style Carrier-alias identifiers, and CSP math prose; and the self-contained `Demos/HSP` keeps its own bracket notation.
 
 
 ### Universe levels
@@ -375,7 +374,8 @@ Plain-text `A`, `B` denote carrier types; mathematical bold italic `𝑨`, `𝑩
 
 | Symbol | Meaning |
 |---|---|
-| `_̂_` | interpretation of an operation symbol in an algebra or other structure (`𝑓 ̂ 𝑨`) |
+| `_^_` | interpretation of an operation symbol in an algebra or other structure (`𝑓 ^ 𝑨`) |
+| `_̂_` | deprecated (v3.0, `WARNING_ON_USAGE`) combining-caret alias of `_^_`; migrated out of the live trees by #368, retained for `Legacy/` |
 | `Domain` | underlying setoid of an algebra or other structure |
 | `Interp` | `Func`-typed interpretation of operations |
 
@@ -533,18 +533,13 @@ proof = begin
 
 ### Every public definition has a prose comment block
 
-This is non-negotiable for public API.  A public definition — anything re-exported from a barrel module, anything documented in the user-facing literate-Agda files — has a comment block immediately above it; e.g.,
+This is non-negotiable for public API.  A public definition — anything re-exported from a barrel module, anything documented in the user-facing literate-Agda files — has a prose comment block immediately above it.  In a literate `.lagda.md` module that prose is Markdown preceding the code fence (not `-- |` comments inside it); e.g.,
+
+`hom 𝑨 𝑩` is the type of homomorphisms from `𝑨` to `𝑩`.  A homomorphism is a setoid function on carriers that respects every operation of the signature: for every operation symbol `𝑓`, the map commutes with `𝑓 ^ 𝑨` and `𝑓 ^ 𝑩`.  See also `IsHom` for the predicate form, `∘-hom` for composition, and `Setoid.Homomorphisms.Isomorphisms` for the isomorphism variant.
 
 ```agda
--- | `Hom 𝑨 𝑩` is the type of homomorphisms from `𝑨` to `𝑩`.  A
--- | homomorphism is a setoid function on carriers that respects every
--- | operation of the signature: for every operation symbol `𝑓`, the
--- | map commutes with `𝑓 ̂ 𝑨` and `𝑓 ̂ 𝑩`.
--- |
--- | See also: `IsHom` for the predicate form, `∘-hom` for composition,
--- | and `Setoid.Homomorphisms.Isomorphisms` for the isomorphism variant.
-Hom : (𝑨 : Algebra α ρᵃ) (𝑩 : Algebra β ρᵇ) → Type _
-Hom 𝑨 𝑩 = Σ (Domain 𝑨 ⟶ Domain 𝑩) (IsHom 𝑨 𝑩)
+hom : (𝑨 : Algebra α ρᵃ) (𝑩 : Algebra β ρᵇ) → Type _
+hom 𝑨 𝑩 = Σ (Domain 𝑨 ⟶ Domain 𝑩) (IsHom 𝑨 𝑩)
 ```
 
 ### What a good comment block contains
