@@ -1,6 +1,6 @@
 ---
 layout: default
-title : "Setoid.Algebras.Congruences module (Agda Universal Algebra Library)"
+title : "Setoid.Congruences module (Agda Universal Algebra Library)"
 date : "2021-09-17"
 author: "agda-algebras development team"
 ---
@@ -13,12 +13,12 @@ author: "agda-algebras development team"
 
 open import Overture using (𝓞 ; 𝓥 ; Signature)
 
-module Setoid.Algebras.Congruences {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Congruences {𝑆 : Signature 𝓞 𝓥} where
 
-open import Setoid.Algebras.Congruences.Basic {𝑆 = 𝑆} public
-open import Setoid.Algebras.Congruences.CompleteLattice {𝑆 = 𝑆} public
-open import Setoid.Algebras.Congruences.Generation {𝑆 = 𝑆} public
-open import Setoid.Algebras.Congruences.Lattice {𝑆 = 𝑆} public
+open import Setoid.Congruences.Basic {𝑆 = 𝑆} public
+open import Setoid.Congruences.CompleteLattice {𝑆 = 𝑆} public
+open import Setoid.Congruences.Generation {𝑆 = 𝑆} public
+open import Setoid.Congruences.Lattice {𝑆 = 𝑆} public
 ```
 
 --------------------------------

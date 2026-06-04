@@ -32,7 +32,7 @@ open import Setoid.Homomorphisms.HomomorphicImages  {𝑆 = 𝑆} public
 
 --------------------------------
 
-<span style="float:left;">[← Setoid.Algebras.Congruences](Setoid.Algebras.Congruences.html)</span>
+<span style="float:left;">[← Setoid.Congruences](Setoid.Congruences.html)</span>
 <span style="float:right;">[Setoid.Homomorphisms.Basic →](Setoid.Homomorphisms.Basic.html)</span>
 
 {% include UALib.Links.md %}

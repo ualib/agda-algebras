@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Setoid.Algebras.Lattices.CompleteLattice module (The Agda Universal Algebra Library)"
+title : "Order.CompleteLattice module (The Agda Universal Algebra Library)"
 date : "2026-06-02"
 author: "agda-algebras development team"
 ---
 
 ### Complete Lattices
 
-This is the [Setoid.Algebras.Lattices.CompleteLattice][] module of the [Agda Universal Algebra Library][].
+This is the [Order.CompleteLattice][] module of the [Agda Universal Algebra Library][].
 
 The standard library provides order-theoretic semilattices, lattices, and bounded
 lattices, but no *complete* lattice, so we define one here.
@@ -17,15 +17,18 @@ A **complete lattice** is a partially ordered set in which every family of eleme
 
 Although this notion is pure order theory, complete lattices are pervasive in
 universal algebra — the congruence lattice
-([Setoid.Algebras.Congruences.CompleteLattice][]) and the subalgebra lattice are the
-motivating instances — so we keep the definition in the `Algebras` tree rather than
-relegating it to `Classical`.  Every supremum/infimum is required to exist only for
-`ι`-small index types, the customary predicative reading of "complete."
+([Setoid.Congruences.CompleteLattice][]) and the subalgebra lattice
+([Setoid.Subalgebras.CompleteLattice][]) are the motivating instances — so it lives in
+its own top-level `Order/` tree.  Note this is the *order-theoretic* notion of lattice
+(a poset with meets and joins); for lattices *as equational algebras* over `Sig-Lattice`
+see instead the `Classical.*.Lattice` modules (the two presentations are equivalent via
+a standard theorem).  Every supremum/infimum is required to exist only for `ι`-small
+index types, the customary predicative reading of "complete."
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-module Setoid.Algebras.Lattices.CompleteLattice where
+module Order.CompleteLattice where
 
 open import Agda.Primitive   using () renaming ( Set to Type )
 
@@ -61,7 +64,7 @@ record CompleteLattice (c ℓ₁ ℓ₂ ι : Level) : Type (suc (c ⊔ ℓ₁ �
 
 --------------------------------------
 
-<span style="float:left;">[↑ Setoid.Algebras.Lattices](Setoid.Algebras.Lattices.html)</span>
-<span style="float:right;">[Setoid.Algebras.Congruences.CompleteLattice →](Setoid.Algebras.Congruences.CompleteLattice.html)</span>
+<span style="float:left;">[↑ Order](Order.html)</span>
+<span style="float:right;">[Setoid.Congruences.CompleteLattice →](Setoid.Congruences.CompleteLattice.html)</span>
 
 {% include UALib.Links.md %}

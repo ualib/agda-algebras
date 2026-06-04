@@ -112,6 +112,6 @@ module _  {I : Type ι}                  -- index type
 --------------------------------
 
 <span style="float:left;">[← Setoid.Algebras.Basic](Setoid.Algebras.Basic.html)</span>
-<span style="float:right;">[Setoid.Algebras.Congruences →](Setoid.Algebras.Congruences.html)</span>
+<span style="float:right;">[Setoid.Congruences →](Setoid.Congruences.html)</span>
 
 {% include UALib.Links.md %}

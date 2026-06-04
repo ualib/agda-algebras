@@ -12,7 +12,7 @@ This is the [Examples.Setoid.FiniteQuotient][] module of the [Agda Universal Alg
 
 The quotient of an algebra by a congruence is one of the central constructions of
 universal algebra; in the Setoid development it is the operation `_╱_`{.AgdaFunction}
-of [Setoid.Algebras.Congruences][].  This module takes the quotient of the
+of [Setoid.Congruences][].  This module takes the quotient of the
 commutative monoid `(ℕ, +, 0)` modulo the *parity* congruence
 `a ∼ b ⟺ a % 2 ≡ b % 2`{.AgdaFunction}.  The result is a genuinely *finite*
 quotient: it has exactly two congruence classes, even and odd, and its induced
@@ -43,7 +43,7 @@ open import Relation.Nullary  using ( ¬_ )
 -- Imports from the Agda Universal Algebra Library -----------------------------
 open import Classical.Signatures.Monoid       using ( Sig-Monoid ; ∙-Op ; ε-Op )
 open import Setoid.Algebras {𝑆 = Sig-Monoid}  using ( Algebra ; 𝕌[_] ; 𝔻[_] ; ⟨_⟩ )
-open import Setoid.Algebras.Congruences {𝑆 = Sig-Monoid}
+open import Setoid.Congruences {𝑆 = Sig-Monoid}
   using ( Con ; IsCongruence ; _∣≈_ ; _╱_ )
 
 open Func renaming ( to to _⟨$⟩_ )

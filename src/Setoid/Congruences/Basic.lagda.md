@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Setoid.Algebras.Congruences.Basic module (The Agda Universal Algebra Library)"
+title : "Setoid.Congruences.Basic module (The Agda Universal Algebra Library)"
 date : "2021-09-15"
 author: "agda-algebras development team"
 ---
 
 #### Congruences of Setoid Algebras
 
-This is the [Setoid.Algebras.Congruences.Basic][] module of the [Agda Universal Algebra Library][].
+This is the [Setoid.Congruences.Basic][] module of the [Agda Universal Algebra Library][].
 
 
 ```agda
@@ -15,7 +15,7 @@ This is the [Setoid.Algebras.Congruences.Basic][] module of the [Agda Universal 
 
 open import Overture using (𝓞 ; 𝓥 ; Signature)
 
-module Setoid.Algebras.Congruences.Basic {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Congruences.Basic {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from the Agda Standard Library ---------------------------------------
 open import Agda.Primitive   using () renaming ( Set to Type )

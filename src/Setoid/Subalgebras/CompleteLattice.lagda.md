@@ -12,8 +12,8 @@ This is the [Setoid.Subalgebras.CompleteLattice][] module of the [Agda Universal
 The subuniverses of a setoid algebra `𝑨` — the subsets of its carrier closed under
 the basic operations — form a **complete lattice** `Sub 𝑨` under inclusion.  This is
 the second instance of the order-theoretic `CompleteLattice` record of
-[Setoid.Algebras.Lattices.CompleteLattice][] (the first being the congruence lattice
-[Setoid.Algebras.Congruences.CompleteLattice][]), and it is built directly from the
+[Order.CompleteLattice][] (the first being the congruence lattice
+[Setoid.Congruences.CompleteLattice][]), and it is built directly from the
 subuniverse-generation machinery of [Setoid.Subalgebras.Subuniverses][]:
 
 +  `Subuniverses 𝑨` — the predicate "is a subuniverse";
@@ -51,7 +51,7 @@ open import Relation.Unary               using  ( Pred ; _∈_ ; _⊆_ ; _∩_ ;
 
 -- Imports from the Agda Universal Algebras Library ------------------------------
 open import Setoid.Algebras.Basic {𝑆 = 𝑆}             using  ( ov ; Algebra ; 𝕌[_] )
-open import Setoid.Algebras.Lattices.CompleteLattice  using  ( CompleteLattice )
+open import Order.CompleteLattice  using  ( CompleteLattice )
 open import Setoid.Subalgebras.Subuniverses {𝑆 = 𝑆}
   using ( Subuniverses ; Sg ; var ; sgIsSub ; sgIsSmallest ; ⋂s )
 

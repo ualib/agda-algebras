@@ -10,7 +10,7 @@ author: "the agda-algebras development team"
 
 This is the [Examples.Setoid.CongruenceLattice][] module of the [Agda Universal Algebra Library][].
 
-We exercise [Setoid.Algebras.Congruences.CompleteLattice][] on the smallest
+We exercise [Setoid.Congruences.CompleteLattice][] on the smallest
 nontrivial example: the two-element algebra `𝟚` in the *empty* signature (no
 operations), whose carrier is `Bool` under propositional equality.  Because there are
 no operations, every equivalence relation on `Bool` is automatically a congruence, so
@@ -51,7 +51,7 @@ The empty signature has no operation symbols (`⊥`), hence no arities.
 𝑆₀ = ⊥ , λ ()
 
 open import Setoid.Algebras {𝑆 = 𝑆₀} using ( Algebra ; 𝕌[_] ; ⟨_⟩ )
-open import Setoid.Algebras.Congruences {𝑆 = 𝑆₀} using ( Con ; mkcon )
+open import Setoid.Congruences {𝑆 = 𝑆₀} using ( Con ; mkcon )
 
 -- The two-element algebra: carrier Bool with ≡, and no operations to interpret.
 𝟚 : Algebra 0ℓ 0ℓ
@@ -81,8 +81,8 @@ With the base level `ℓ₀ = 0ℓ` the absorbing level `L` is `0ℓ`, so the co
 lattice of `𝟚` is the chain on `Con 𝟚 {0ℓ}`.  All three bundles type-check.
 
 ```agda
-open import Setoid.Algebras.Congruences.Lattice {𝑆 = 𝑆₀} using ( _≤_ )
-open import Setoid.Algebras.Congruences.CompleteLattice {𝑆 = 𝑆₀}
+open import Setoid.Congruences.Lattice {𝑆 = 𝑆₀} using ( _≤_ )
+open import Setoid.Congruences.CompleteLattice {𝑆 = 𝑆₀}
   using ( Con-Lattice ; Con-BoundedLattice ; Con-CompleteLattice ; 1ᴬ ; 0ᴬ ; 0ᴬ-minimum )
 
 Con𝟚-Lattice          = Con-Lattice         𝟚 0ℓ
@@ -105,7 +105,7 @@ Con𝟚-nontrivial ⊤≤⊥ with 0ᴬ-minimum 𝟚 0ℓ Δ (⊤≤⊥ {true} {f
 
 --------------------------------------
 
-<span style="float:left;">[← Setoid.Algebras.Congruences.CompleteLattice](Setoid.Algebras.Congruences.CompleteLattice.html)</span>
+<span style="float:left;">[← Setoid.Congruences.CompleteLattice](Setoid.Congruences.CompleteLattice.html)</span>
 <span style="float:right;">[Setoid.Homomorphisms →](Setoid.Homomorphisms.html)</span>
 
 {% include UALib.Links.md %}
