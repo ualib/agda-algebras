@@ -10,7 +10,7 @@ author: "the agda-algebras development team"
 
 This is the [Examples.Setoid.SubgroupLattice][] module of the [Agda Universal Algebra Library][].
 
-We realize the **Klein four-group** `V₄ = ℤ/2ℤ × ℤ/2ℤ` as a setoid algebra over the
+We formalize the **Klein four-group** `V₄ = ℤ/2ℤ × ℤ/2ℤ` as a setoid algebra over the
 group signature [`Sig-Group`][Classical.Signatures.Group] and study its lattice of
 subuniverses via [Setoid.Subalgebras.CompleteLattice][].
 
@@ -22,14 +22,15 @@ the identity, so the *bottom* subuniverse `Sg ∅` is already the trivial subgro
 `{e}`; we get it for free as the lattice bottom `0ˢ`.
 
 `V₄` has exactly five subgroups: the trivial group `{e}`, the whole group, and three
-order-two subgroups in between, pairwise incomparable, any two of which meet at `{e}`
-and join to the whole group.  That is the lattice **`M₃`** — the five-element diamond,
-and the smallest *non-distributive* lattice.  This module exhibits the three middle
-subgroups as elements of `Sub V₄`, instantiates the lattice bundles, and proves that
-the subgroup lattice **is** `M₃`: the three atoms are pairwise incomparable and proper,
-any two **meet** at `{e}`, and any two **join** to the whole group — whence
-non-distributivity.  The one piece left for future work is *completeness*: that these
-five subgroups are *all* of them.
+non-trivial, order-two subgroups in between, pairwise incomparable, any two of which
+meet at `{e}` and join to the whole group.  That is the lattice **`M₃`** — the
+five-element diamond, and the smallest *non-distributive* lattice.
+
+This module exhibits the three middle subgroups as elements of `Sub V₄`, instantiates
+the lattice bundles, and proves that the subgroup lattice is an `M₃` lattice: the
+three atoms are pairwise incomparable and proper, any two meet at `{e}`, and any two
+join to the whole group.  The one piece left for future work is to prove that these
+five are the only subgroups.
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -39,6 +40,7 @@ module Examples.Setoid.SubgroupLattice where
 -- Imports from Agda and the Agda Standard Library ------------------------------
 open import Agda.Primitive  using () renaming ( Set to Type )
 open import Data.Bool.Base  using ( Bool ; true ; false ; _xor_ )
+open import Data.Empty      using ( ⊥ )
 open import Data.Fin.Patterns using ( 0F ; 1F )
 open import Data.Product    using ( _×_ ; _,_ ; proj₁ ; proj₂ )
 open import Data.Sum.Base   using ( inj₁ ; inj₂ )
@@ -48,40 +50,38 @@ open import Level           using ( 0ℓ ; lift )
 open import Relation.Binary using ( Setoid )
 open import Relation.Binary.PropositionalEquality as ≡
                             using ( _≡_ ; refl ; sym ; cong₂ )
-open import Relation.Nullary  using ( ¬_ )
+open import Relation.Nullary  using ( ¬_ ; contradiction)
 open import Relation.Unary    using ( Pred ; _∈_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
 open import Classical.Signatures.Group  using ( Sig-Group ; ∙-Op ; ε-Op ; ⁻¹-Op )
-
+open import Setoid.Algebras {𝑆 = Sig-Group} using ( Algebra ; 𝕌[_] ; ⟨_⟩ )
 open Func renaming ( to to _⟨$⟩_ )
 ```
 
-#### The Klein four-group `V₄` {#the-group}
+#### The Klein four-group `V₄`
 
 The carrier is `Bool × Bool`; the group operation is componentwise exclusive-or,
 every element is its own inverse, and the identity is `(false , false)`.  We define
 `_⊕_` through the projections (rather than by matching the pairs) so that it computes
-on arbitrary — not just literal — arguments, which keeps the closure proofs below
+on arbitrary (not just literal) arguments, which keeps the closure proofs below
 definitional.
 
 ```agda
 infixl 6 _⊕_
 _⊕_ : Bool × Bool → Bool × Bool → Bool × Bool
-x ⊕ y = (proj₁ x xor proj₁ y) , (proj₂ x xor proj₂ y)
-
-open import Setoid.Algebras {𝑆 = Sig-Group} using ( Algebra ; 𝕌[_] ; ⟨_⟩ )
+x ⊕ y = proj₁ x xor proj₁ y , proj₂ x xor proj₂ y
 
 V₄ : Algebra 0ℓ 0ℓ
 V₄ = record { Domain = ≡.setoid (Bool × Bool) ; Interp = interp }
  where
  interp : Func (⟨ Sig-Group ⟩ (≡.setoid (Bool × Bool))) (≡.setoid (Bool × Bool))
- interp ⟨$⟩ (∙-Op  , args)  = args 0F ⊕ args 1F
- interp ⟨$⟩ (ε-Op  , _)     = false , false
- interp ⟨$⟩ (⁻¹-Op , args)  = args 0F
- cong interp {∙-Op  , _} {.∙-Op  , _} (refl , a≈)  = cong₂ _⊕_ (a≈ 0F) (a≈ 1F)
- cong interp {ε-Op  , _} {.ε-Op  , _} (refl , _)   = refl
- cong interp {⁻¹-Op , _} {.⁻¹-Op , _} (refl , a≈)  = a≈ 0F
+ interp ⟨$⟩ (∙-Op , args) = args 0F ⊕ args 1F
+ interp ⟨$⟩ (ε-Op , _)  = false , false
+ interp ⟨$⟩ (⁻¹-Op , args) = args 0F
+ cong interp {∙-Op , _} {.∙-Op , _} (refl , a≈) = cong₂ _⊕_ (a≈ 0F) (a≈ 1F)
+ cong interp {ε-Op , _} {.ε-Op , _} (refl , _) = refl
+ cong interp {⁻¹-Op , _} {.⁻¹-Op , _} (refl , a≈) = a≈ 0F
 ```
 
 #### The three order-two subgroups {#the-subgroups}
@@ -94,7 +94,8 @@ hence a subuniverse: closure under `∙` is `xor` respecting the condition (via
 inverse is the identity map.
 
 ```agda
-open import Setoid.Subalgebras.Subuniverses {𝑆 = Sig-Group} using ( Subuniverses ; Sg ; var ; app )
+open import Setoid.Subalgebras.Subuniverses {𝑆 = Sig-Group}
+  using ( Subuniverses ; Sg ; var ; app )
 
 H₁ H₂ H₌ : Pred (Bool × Bool) 0ℓ
 H₁ x = proj₁ x ≡ false
@@ -102,19 +103,19 @@ H₂ x = proj₂ x ≡ false
 H₌ x = proj₁ x ≡ proj₂ x
 
 H₁-isSub : H₁ ∈ Subuniverses V₄
-H₁-isSub ∙-Op  a im = cong₂ _xor_ (im 0F) (im 1F)
-H₁-isSub ε-Op  a im = refl
-H₁-isSub ⁻¹-Op a im = im 0F
+H₁-isSub ∙-Op _ im = cong₂ _xor_ (im 0F) (im 1F)
+H₁-isSub ε-Op _ _ = refl
+H₁-isSub ⁻¹-Op _ im = im 0F
 
 H₂-isSub : H₂ ∈ Subuniverses V₄
-H₂-isSub ∙-Op  a im = cong₂ _xor_ (im 0F) (im 1F)
-H₂-isSub ε-Op  a im = refl
-H₂-isSub ⁻¹-Op a im = im 0F
+H₂-isSub ∙-Op _ im = cong₂ _xor_ (im 0F) (im 1F)
+H₂-isSub ε-Op _ _ = refl
+H₂-isSub ⁻¹-Op _ im = im 0F
 
 H₌-isSub : H₌ ∈ Subuniverses V₄
-H₌-isSub ∙-Op  a im = cong₂ _xor_ (im 0F) (im 1F)
-H₌-isSub ε-Op  a im = refl
-H₌-isSub ⁻¹-Op a im = im 0F
+H₌-isSub ∙-Op _ im = cong₂ _xor_ (im 0F) (im 1F)
+H₌-isSub ε-Op _ _ = refl
+H₌-isSub ⁻¹-Op _ im = im 0F
 ```
 
 #### Instantiating the lattice bundles {#the-bundles}
@@ -124,12 +125,9 @@ to bring the order, operations, bounds, and bundles into scope specialized to `V
 so we write `𝑯₁ ≤ 𝑯₂`, `𝑯₁ ∧ 𝑯₂`, `0ˢ`, etc. directly.  All three bundles type-check.
 
 ```agda
-open import Setoid.Subalgebras.CompleteLattice {𝑆 = Sig-Group} using ( module Sublattice )
+open import Setoid.Subalgebras.CompleteLattice {𝑆 = Sig-Group}
+  using ( module Sublattice )
 open Sublattice V₄ 0ℓ
-
-SubV₄-Lattice          = Sub-Lattice
-SubV₄-BoundedLattice   = Sub-BoundedLattice
-SubV₄-CompleteLattice  = Sub-CompleteLattice
 
 -- The three middle subgroups as elements of Sub V₄.
 𝑯₁ 𝑯₂ 𝑯₌ : Subᴸ
@@ -153,8 +151,13 @@ Each middle subgroup lies strictly between the bottom `{e}` and the top: it is a
 
 -- 𝑯₁ is a *proper* subgroup: the top is not contained in it (it omits (true , false)).
 1⋬𝑯₁ : ¬ ( 1ˢ ≤ 𝑯₁ )
-1⋬𝑯₁ le with le {true , false} (lift tt)
-... | ()
+1⋬𝑯₁ le = ex falso
+  where
+  ex : (true , false) ∈ proj₁ 𝑯₁ → ⊥
+  ex ()
+
+  falso : (true , false) ∈ proj₁ 𝑯₁
+  falso = le {true , false} (lift tt)
 
 0≤𝑯₂ : 0ˢ ≤ 𝑯₂
 0≤𝑯₂ = 0ˢ-minimum 𝑯₂
@@ -164,8 +167,12 @@ Each middle subgroup lies strictly between the bottom `{e}` and the top: it is a
 
 -- 𝑯₂ omits (false , true) (its second coordinate is not trivial).
 1⋬𝑯₂ : ¬ ( 1ˢ ≤ 𝑯₂ )
-1⋬𝑯₂ le with le {false , true} (lift tt)
-... | ()
+1⋬𝑯₂ le = ex falso
+  where
+  ex : (false , true) ∈ proj₁ 𝑯₂ → ⊥
+  ex ()
+  falso : (false , true) ∈ proj₁ 𝑯₂
+  falso = le {false , true} (lift tt)
 
 0≤𝑯₌ : 0ˢ ≤ 𝑯₌
 0≤𝑯₌ = 0ˢ-minimum 𝑯₌
@@ -175,94 +182,113 @@ Each middle subgroup lies strictly between the bottom `{e}` and the top: it is a
 
 -- 𝑯₌ omits (true , false) (its coordinates differ).
 1⋬𝑯₌ : ¬ ( 1ˢ ≤ 𝑯₌ )
-1⋬𝑯₌ le with le {true , false} (lift tt)
-... | ()
+1⋬𝑯₌ le = ex (le (lift tt))
+  where
+  ex : (true , false) ∈ proj₁ 𝑯₌ → ⊥
+  ex ()
 ```
 
-The three middle subgroups are pairwise **incomparable**: each contains a non-identity
+The three middle subgroups are pairwise incomparable: each contains a non-identity
 element the others lack — `(false , true) ∈ H₁`, `(true , false) ∈ H₂`,
 `(true , true) ∈ H₌`.
 
 ```agda
 𝑯₁⋬𝑯₂ : ¬ ( 𝑯₁ ≤ 𝑯₂ )
-𝑯₁⋬𝑯₂ le with le {false , true} refl
-... | ()
+𝑯₁⋬𝑯₂ le = ex (le refl)
+  where
+  ex : (false , true) ∈ proj₁ 𝑯₂ → ⊥
+  ex ()
 
 𝑯₂⋬𝑯₁ : ¬ ( 𝑯₂ ≤ 𝑯₁ )
-𝑯₂⋬𝑯₁ le with le {true , false} refl
-... | ()
+𝑯₂⋬𝑯₁ le = ex (le refl)
+  where
+  ex : (true , false) ∈ proj₁ 𝑯₁ → ⊥
+  ex ()
 
 𝑯₁⋬𝑯₌ : ¬ ( 𝑯₁ ≤ 𝑯₌ )
-𝑯₁⋬𝑯₌ le with le {false , true} refl
-... | ()
+𝑯₁⋬𝑯₌ le = ex (le refl)
+  where
+  ex : (false , true) ∈ proj₁ 𝑯₌ → ⊥
+  ex ()
 
 𝑯₌⋬𝑯₁ : ¬ ( 𝑯₌ ≤ 𝑯₁ )
-𝑯₌⋬𝑯₁ le with le {true , true} refl
-... | ()
+𝑯₌⋬𝑯₁ le = ex (le refl)
+  where
+  ex : (true , false) ∈ proj₁ 𝑯₁ → ⊥
+  ex ()
 
 𝑯₂⋬𝑯₌ : ¬ ( 𝑯₂ ≤ 𝑯₌ )
-𝑯₂⋬𝑯₌ le with le {true , false} refl
-... | ()
+𝑯₂⋬𝑯₌ le = ex (le refl)
+  where
+  ex : (true , false) ∈ proj₁ 𝑯₌ → ⊥
+  ex ()
 
 𝑯₌⋬𝑯₂ : ¬ ( 𝑯₌ ≤ 𝑯₂ )
-𝑯₌⋬𝑯₂ le with le {true , true} refl
-... | ()
+𝑯₌⋬𝑯₂ le = ex (le refl)
+  where
+  ex : (true , true) ∈ proj₁ 𝑯₂ → ⊥
+  ex ()
 ```
 
-Together these facts give the **order skeleton** of `M₃`: three pairwise-incomparable
+Together these facts give the order skeleton of `M₃`: three pairwise-incomparable
 proper subgroups, each strictly between `0ˢ = {e}` and `1ˢ`.
 
 #### The meet/join table: `M₃` is non-distributive {#the-m3-table}
 
-The lattice is `M₃` on the nose: any two atoms **meet** at `{e}` and **join** to the
-whole group.  For a meet, an element trivial in both relevant coordinates *is* the
-identity `(false , false)`, which the nullary `ε` generates, so it lies in
-`0ˢ = Sg ∅`.  For a join, the union of two atoms generates all four elements — the
-fourth as the `⊕` of the other two atom witnesses (e.g.
-`(true , true) = (false , true) ⊕ (true , false)`).
+The lattice is `M₃`: any two atoms meet at `{e}` and join to the whole group.
+
+For a meet, an element trivial in both relevant coordinates is the identity
+`(false , false)`, which the nullary `ε` generates, so it lies in `0ˢ = Sg ∅`.
+
+For a join, the union of two atoms generates all four elements — the fourth as the
+`⊕` of the other two atom witnesses
+(e.g., `(true , true) = (false , true) ⊕ (true , false)`).
 
 ```agda
-𝑯₁∧𝑯₂≈⊥ : (𝑯₁ ∧ 𝑯₂) ≈ 0ˢ
+𝑯₁∧𝑯₂≈⊥ : 𝑯₁ ∧ 𝑯₂ ≈ 0ˢ
 𝑯₁∧𝑯₂≈⊥ = m , 0ˢ-minimum (𝑯₁ ∧ 𝑯₂)
- where m : (𝑯₁ ∧ 𝑯₂) ≤ 0ˢ
-       m {x₁ , x₂} (p , q) rewrite p | q = app ε-Op (λ ()) (λ ())
+  where m : 𝑯₁ ∧ 𝑯₂ ≤ 0ˢ
+        m (refl , refl) = app ε-Op (λ ()) λ ()
 
 𝑯₁∧𝑯₌≈⊥ : (𝑯₁ ∧ 𝑯₌) ≈ 0ˢ
 𝑯₁∧𝑯₌≈⊥ = m , 0ˢ-minimum (𝑯₁ ∧ 𝑯₌)
- where m : (𝑯₁ ∧ 𝑯₌) ≤ 0ˢ
-       m {x₁ , x₂} (p , q) rewrite p | sym q = app ε-Op (λ ()) (λ ())
+  where m : (𝑯₁ ∧ 𝑯₌) ≤ 0ˢ
+        m  (refl , refl) = app ε-Op (λ ()) (λ ())
 
 𝑯₂∧𝑯₌≈⊥ : (𝑯₂ ∧ 𝑯₌) ≈ 0ˢ
 𝑯₂∧𝑯₌≈⊥ = m , 0ˢ-minimum (𝑯₂ ∧ 𝑯₌)
- where m : (𝑯₂ ∧ 𝑯₌) ≤ 0ˢ
-       m {x₁ , x₂} (p , q) rewrite p | q = app ε-Op (λ ()) (λ ())
+  where m : (𝑯₂ ∧ 𝑯₌) ≤ 0ˢ
+        m (refl , refl) = app ε-Op (λ ()) (λ ())
 
 𝑯₁∨𝑯₂≈⊤ : (𝑯₁ ∨ 𝑯₂) ≈ 1ˢ
 𝑯₁∨𝑯₂≈⊤ = (λ _ → lift tt) , j
- where j : 1ˢ ≤ (𝑯₁ ∨ 𝑯₂)
-       j {false , false} _ = var (inj₁ refl)
-       j {false , true}  _ = var (inj₁ refl)
-       j {true , false}  _ = var (inj₂ refl)
-       j {true , true}   _ = app ∙-Op (λ { 0F → false , true ; 1F → true , false })
-                                       (λ { 0F → var (inj₁ refl) ; 1F → var (inj₂ refl) })
+  where
+  j : 1ˢ ≤ (𝑯₁ ∨ 𝑯₂)
+  j {false , false} _ = var (inj₁ refl)
+  j {false , true} _ = var (inj₁ refl)
+  j {true , false} _ = var (inj₂ refl)
+  j {true , true} _ = app ∙-Op (λ { 0F → false , true ; 1F → true , false })
+                               (λ { 0F → var (inj₁ refl) ; 1F → var (inj₂ refl) })
 
 𝑯₁∨𝑯₌≈⊤ : (𝑯₁ ∨ 𝑯₌) ≈ 1ˢ
 𝑯₁∨𝑯₌≈⊤ = (λ _ → lift tt) , j
- where j : 1ˢ ≤ (𝑯₁ ∨ 𝑯₌)
-       j {false , false} _ = var (inj₁ refl)
-       j {false , true}  _ = var (inj₁ refl)
-       j {true , true}   _ = var (inj₂ refl)
-       j {true , false}  _ = app ∙-Op (λ { 0F → false , true ; 1F → true , true })
-                                       (λ { 0F → var (inj₁ refl) ; 1F → var (inj₂ refl) })
+  where
+  j : 1ˢ ≤ (𝑯₁ ∨ 𝑯₌)
+  j {false , false} _ = var (inj₁ refl)
+  j {false , true} _ = var (inj₁ refl)
+  j {true , true} _ = var (inj₂ refl)
+  j {true , false} _ = app ∙-Op (λ { 0F → false , true ; 1F → true , true })
+                                (λ { 0F → var (inj₁ refl) ; 1F → var (inj₂ refl) })
 
 𝑯₂∨𝑯₌≈⊤ : (𝑯₂ ∨ 𝑯₌) ≈ 1ˢ
 𝑯₂∨𝑯₌≈⊤ = (λ _ → lift tt) , j
- where j : 1ˢ ≤ (𝑯₂ ∨ 𝑯₌)
-       j {false , false} _ = var (inj₁ refl)
-       j {true , false}  _ = var (inj₁ refl)
-       j {true , true}   _ = var (inj₂ refl)
-       j {false , true}  _ = app ∙-Op (λ { 0F → true , false ; 1F → true , true })
-                                       (λ { 0F → var (inj₁ refl) ; 1F → var (inj₂ refl) })
+  where
+  j : 1ˢ ≤ (𝑯₂ ∨ 𝑯₌)
+  j {false , false} _ = var (inj₁ refl)
+  j {true , false} _ = var (inj₁ refl)
+  j {true , true} _ = var (inj₂ refl)
+  j {false , true} _ = app ∙-Op (λ { 0F → true , false ; 1F → true , true })
+                                (λ { 0F → var (inj₁ refl) ; 1F → var (inj₂ refl) })
 ```
 
 These equalities are exactly non-distributivity: with `x = 𝑯₁`, `y = 𝑯₂`, `z = 𝑯₌`,
