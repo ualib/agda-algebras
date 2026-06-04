@@ -11,7 +11,7 @@ This is the [Setoid.Varieties.HSP][] module of the [Agda Universal Algebra Libra
 Two other presentations of Birkhoff's theorem live in the source tree, and both reference this module as their canonical source.  [Demos.HSP](https://ualib.org/Demos.HSP.html) is a single-file rendition extracted for the TYPES 2021 paper and retained as a self-contained teaching artifact; its theorem `Var⇒EqCl` plays the role of `Birkhoff` here.  [Legacy.Base.Varieties.FreeAlgebras](https://ualib.org/Legacy.Base.Varieties.FreeAlgebras.html) holds the original bare-types proof, frozen as part of the v3.0 `Base → Legacy.Base` consolidation; new work does not land there.
 
 
-#### <a id="the-hsp-theorem">The HSP Theorem</a>
+#### The HSP Theorem
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -185,7 +185,7 @@ that `𝔽[ X ]` is a subalgebra of the *lift* of `ℭ`, denoted `ℓℭ`.
 ```
 
 
-#### <a id="proof-of-the-hsp-theorem">Proof of the HSP theorem</a>
+#### Proof of the HSP theorem
 
 Finally, we are in a position to prove Birkhoff's celebrated variety theorem.
 

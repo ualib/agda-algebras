@@ -5,7 +5,7 @@ date : "2021-07-26"
 author: "agda-algebras development team"
 ---
 
-### <a id="equations-and-varieties-for-setoids">Equations and Varieties for Setoids</a>
+### Equations and Varieties for Setoids
 
 This is the [Setoid.Varieties][] module of the [Agda Universal Algebra Library][].
 

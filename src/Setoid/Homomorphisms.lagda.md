@@ -5,7 +5,7 @@ date : "2021-09-17"
 author: "agda-algebras development team"
 ---
 
-### <a id="types-for-homomorphism-of-setoid-algebras">Types for Homomorphism of Setoid Algebras</a>
+### Types for Homomorphism of Setoid Algebras
 
 This is the [Setoid.Homomorphisms][] module of the [Agda Universal Algebra Library][].
 

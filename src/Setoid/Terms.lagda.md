@@ -5,7 +5,7 @@ date : "2021-09-18"
 author: "agda-algebras development team"
 ---
 
-### <a id="terms-on-setoids">Terms on setoids</a>
+### Terms on setoids
 
 This is the [Setoid.Terms][] module of the [Agda Universal Algebra Library][].
 

@@ -5,7 +5,7 @@ date : "2021-09-13"
 author: "agda-algebras development team"
 ---
 
-#### <a id="factoring-homomorphisms-of-setoidalgebra">Factoring Homomorphism of Algebras</a>
+#### Factoring Homomorphism of Algebras
 
 This is the [Setoid.Homomorphisms.Factor][] module of the [Agda Universal Algebra Library][].
 

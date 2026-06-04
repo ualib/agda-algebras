@@ -5,7 +5,7 @@ date : "2026-05-10"
 author: "agda-algebras development team"
 ---
 
-### <a id="algebraic-invariants-for-setoid-algebras">Algebraic invariants for setoid algebras</a>
+### Algebraic invariants for setoid algebras
 
 This is the [Setoid.Varieties.Invariants][] module of the [Agda Universal Algebra Library][].
 

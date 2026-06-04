@@ -5,7 +5,7 @@ date : "2021-09-13"
 author: "agda-algebras development team"
 ---
 
-#### <a id="kernels-of-homomorphisms-of-setoidalgebras">Kernels of Homomorphisms</a>
+#### Kernels of Homomorphisms
 
 This is the [Setoid.Homomorphisms.Kernels][] module of the [Agda Universal Algebra Library][].
 
@@ -95,7 +95,7 @@ ker[ 𝑨 ⇒ 𝑩 ] h = kerquo h
 
 
 
-#### <a id="the-canonical-projection">The canonical projection</a>
+#### The canonical projection
 
 Given an algebra `𝑨` and a congruence `θ`, the *canonical projection* is a map from `𝑨` onto `𝑨 ╱ θ` that is constructed, and proved epimorphic, as follows.
 

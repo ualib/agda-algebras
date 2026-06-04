@@ -5,7 +5,7 @@ date : "2021-09-24"
 author: "agda-algebras development team"
 ---
 
-### <a id="Equation preservation">Equation preservation for setoid algebras</a>
+### Equation preservation for setoid algebras
 
 This is the [Setoid.Varieties.Preservation][] module of the [Agda Universal Algebra Library][] where we show
 that the classes \af H `𝒦`{.AgdaBound}, \af S `𝒦`{.AgdaBound}, \af P `𝒦`{.AgdaBound}, and \af V `𝒦`{.AgdaBound} all satisfy the
@@ -56,7 +56,7 @@ open Algebra  using ( Domain )
 
 
 
-#### <a id="closure-properties">Closure properties</a>
+#### Closure properties
 
 The types defined above represent operators with useful closure properties. We now
 prove a handful of such properties that we need later.
@@ -109,7 +109,7 @@ in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
 ```
 
 
-#### <a id="h-preserves-identities">H preserves identities</a>
+#### H preserves identities
 
 First we prove that the closure operator H is compatible with identities that hold in the given class.
 
@@ -136,7 +136,7 @@ The converse of the foregoing result is almost too obvious to bother with. Nonet
 
 
 
-#### <a id="s-preserves-identities">S preserves identities</a>
+#### S preserves identities
 
 
 ```agda
@@ -150,7 +150,7 @@ The converse of the foregoing result is almost too obvious to bother with. Nonet
 
 
 
-#### <a id="p-preserves-identities">P preserves identities</a>
+#### P preserves identities
 
 
 ```agda
@@ -168,7 +168,7 @@ The converse of the foregoing result is almost too obvious to bother with. Nonet
 
 
 
-#### <a id="v-preserves-identities">V preserves identities</a>
+#### V preserves identities
 
 Finally, we prove the analogous preservation lemmas for the closure operator `V`.
 
@@ -204,7 +204,7 @@ module _  {α ρᵃ ℓ ι χ : Level}
 
 
 
-#### <a id="class-identities">Class identities</a>
+#### Class identities
 
 From `V-id1` it follows that if 𝒦 is a class of structures, then the set of identities
 modeled by all structures in `𝒦` is equivalent to the set of identities modeled by all

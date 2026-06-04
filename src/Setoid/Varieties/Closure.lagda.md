@@ -5,7 +5,7 @@ date : "2021-01-14"
 author: "agda-algebras development team"
 ---
 
-#### <a id="closure-operators-for-setoid-algebras">Closure Operators for Setoid Algebras</a>
+#### Closure Operators for Setoid Algebras
 
 Fix a signature 𝑆, let 𝒦 be a class of 𝑆-algebras, and define
 
@@ -97,7 +97,7 @@ module _ {α ρᵃ ℓ ι : Level} where
 ```
 
 
-#### <a id="closure-properties-of-S">Closure properties of S</a>
+#### Closure properties of S
 
 `S` is a closure operator.  The fact that S is expansive won't be needed, so we omit the proof, but we will make use of monotonicity and idempotence of `S`.
 
@@ -127,7 +127,7 @@ Of course, this is proved by establishing two inclusions, but one of them is tri
 
 
 
-#### <a id="closure-properties-of-P">Closure properties of P</a>
+#### Closure properties of P
 
 `P` is a closure operator.  This is proved by checking that `P` is *monotone*, *expansive*, and *idempotent*. The meaning of these terms will be clear from the definitions of the types that follow.
 

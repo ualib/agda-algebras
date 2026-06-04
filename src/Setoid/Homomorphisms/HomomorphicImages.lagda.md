@@ -5,7 +5,7 @@ date : "2021-09-14"
 author: "agda-algebras development team"
 ---
 
-#### <a id="homomorphic-images-of-setoid-algebras">Homomorphic images of setoid algebras</a>
+#### Homomorphic images of setoid algebras
 
 This is the [Setoid.Homomorphisms.HomomorphicImages][] module of the [Agda Universal Algebra Library][].
 
@@ -73,7 +73,7 @@ Sigma type appearing in the second definition. Given an `𝑆`-algebra
 `𝑨 : Algebra α ρ`, the type `HomImages 𝑨` denotes the class `𝒦` of algebras such
 that `𝑩 ∈ 𝒦` provided there is a surjective homomorphism from `𝑨` to `𝑩`.
 
-#### <a id="constructing an algebra from the image of a hom">The image algebra of a hom</a>
+#### The image algebra of a hom
 
 Here we show how to construct a Algebra (called `ImageAlgebra` below) that is
 the image of given hom.
@@ -119,7 +119,7 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
 ```
 
 
-#### <a id="homomorphic-images-of-classes-of-setoid-algebras">Homomorphic images of classes of setoid algebras</a>
+#### Homomorphic images of classes of setoid algebras
 
 Given a class `𝒦` of `𝑆`-algebras, we need a type that expresses the assertion that a given algebra is a homomorphic image of some algebra in the class, as well as a type that represents all such homomorphic images.
 
@@ -133,7 +133,7 @@ HomImageOfClass 𝒦 = Σ[ 𝑩 ∈ Algebra _ _ ] IsHomImageOfClass {𝒦 = 𝒦
 ```
 
 
-#### <a id="lifting-tools">Lifting tools</a>
+#### Lifting tools
 
 Here are some tools that have been useful (e.g., in the road to the proof of Birkhoff's HSP theorem). The first states and proves the simple fact that the lift of an epimorphism is an epimorphism.
 

@@ -5,7 +5,7 @@ date : "2021-07-17"
 author: "agda-algebras development team"
 ---
 
-#### <a id="subalgebras-of-setoidalgebras">Subalgebras of setoid algebras</a>
+#### Subalgebras of setoid algebras
 
 This is the [Setoid.Subalgebras.Subalgebras][] module of the [Agda Universal Algebra Library][].
 
@@ -75,7 +75,7 @@ record SubalgebraREL(R : REL (Algebra β ρᵇ)(Algebra α ρᵃ) ℓ) : Type (o
 
 From now on we will use `𝑩 ≤ 𝑨` to express the assertion that `𝑩` is a subalgebra of `𝑨`.
 
-#### <a id="subalgebras-of-classes-of-algebras">Subalgebras of classes of setoid algebras</a>
+#### Subalgebras of classes of setoid algebras
 
 Suppose `𝒦 : Pred (Algebra α 𝑆) γ` denotes a class of `𝑆`-algebras and
 `𝑩 : Algebra β ρᵇ` denotes an arbitrary `𝑆`-algebra. Then we might wish to
@@ -112,7 +112,7 @@ SubalgebrasOfClass 𝒦 {β}{ρᵇ} = Σ[ 𝑩 ∈ Algebra β ρᵇ ] 𝑩 ≤c 
 
 
 
-#### <a id="consequences-of-first-homomorphism-theorem">Consequences of First Homomorphism Theorem</a>
+#### Consequences of First Homomorphism Theorem
 
 As an example use-case of the `IsSubalgebraOf` type defined above, we prove the
 following easy but useful corollary of the First Homomorphism Theorem (proved

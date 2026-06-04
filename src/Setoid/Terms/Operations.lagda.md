@@ -5,7 +5,7 @@ date : "2021-09-25"
 author: "agda-algebras development team"
 ---
 
-#### <a id="term-operations">Term Operations for Setoid Algebras</a>
+#### Term Operations for Setoid Algebras
 
 This section presents the [Setoid.Terms.Operations][] module of the [Agda Universal Algebra Library][].
 
@@ -82,7 +82,7 @@ module _ {X : Type χ} where
 ```
 
 
-#### <a id="interpretation-of-terms-in-product-algebras">Interpretation of terms in product algebras</a>
+#### Interpretation of terms in product algebras
 
 
 ```agda
@@ -100,7 +100,7 @@ module _ {X : Type χ }{I : Type ι}(𝒜 : I → Algebra α ρᵃ) where
 ```
 
 
-#### <a id="compatibility-of-terms">Compatibility of terms</a>
+#### Compatibility of terms
 
 We now prove two important facts about term operations.  The first of these, which is used very often in the sequel, asserts that every term commutes with every homomorphism.
 
@@ -136,7 +136,7 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}(hh : hom 𝑨 𝑩) 
 
 
 
-#### <a id="substitution">Substitution</a>
+#### Substitution
 
 A substitution from `Y` to `X` is simply a function from `Y` to `X`, and the application of a substitution is represented as follows.
 

@@ -5,7 +5,7 @@ date : "2021-07-11"
 author: "agda-algebras development team"
 ---
 
-#### <a id="subuniverses-of-setoid-algebras">Subuniverses of setoid algebras</a>
+#### Subuniverses of setoid algebras
 
 This is the [Setoid.Subalgebras.Subuniverses][] module of the [Agda Universal Algebra Library][].
 

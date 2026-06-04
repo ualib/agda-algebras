@@ -5,7 +5,7 @@ date : "2021-07-03"
 author: "agda-algebras development team"
 ---
 
-#### <a id="products-of-setoidalgebras">Products of Setoid Algebras</a>
+#### Products of Setoid Algebras
 
 This is the [Setoid.Algebras.Products][] module of the [Agda Universal Algebra Library][].
 
@@ -58,7 +58,7 @@ cong (Interp (⨅ {I} 𝒜)) (refl , f=g ) = λ i → cong  (Interp (𝒜 i)) (r
 ```
 
 
-#### <a id="products-of-classes-of-setoidalgebras">Products of classes of Algebras</a>
+#### Products of classes of Algebras
 
 
 ```agda

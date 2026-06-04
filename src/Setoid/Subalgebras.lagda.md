@@ -5,7 +5,7 @@ date : "2021-07-26"
 author: "agda-algebras development team"
 ---
 
-### <a id="subalgebra-setoid-types">Subalgebras over setoids</a>
+### Subalgebras over setoids
 
 This is the [Setoid.Subalgebras][] module of the [Agda Universal Algebra Library][].
 

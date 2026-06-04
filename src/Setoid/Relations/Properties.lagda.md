@@ -5,7 +5,7 @@ date : "2026-05-10"
 author: "the agda-algebras development team"
 ---
 
-### <a id="properties-of-binary-relations">Properties of binary relations</a>
+### Properties of binary relations
 
 This is the [Setoid.Relations.Properties][] module of the [Agda Universal Algebra Library][].
 

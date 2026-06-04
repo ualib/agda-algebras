@@ -5,7 +5,7 @@ date : "2021-09-13"
 author: "agda-algebras development team"
 ---
 
-#### <a id="homomorphisms-of-algebras-over-setoids">Homomorphisms of Algebras over Setoids</a>
+#### Homomorphisms of Algebras over Setoids
 
 This is the [Setoid.Homomorphisms.Basic][] module of the [Agda Universal Algebra Library][].
 
@@ -57,7 +57,7 @@ module _ (𝑨 : Algebra α ρᵃ)(𝑩 : Algebra β ρᵇ) where
 
 
 
-#### <a id="monomorphisms-and-epimorphisms">Monomorphisms and epimorphisms</a>
+#### Monomorphisms and epimorphisms
 
 
 ```agda
