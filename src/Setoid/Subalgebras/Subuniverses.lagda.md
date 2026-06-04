@@ -31,7 +31,7 @@ open import Relation.Binary.PropositionalEquality using ( refl )
 -- Imports from the Agda Universal Algebra Library ----------------------------------
 open import Overture                       using ( ∣_∣ ; ∥_∥ ; Im_⊆_ )
 open import Overture.Terms        {𝑆 = 𝑆}  using ( Term ; ℊ ; node )
-open import Setoid.Algebras       {𝑆 = 𝑆}  using ( Algebra ; 𝕌[_] ; _̂_ ; ov )
+open import Setoid.Algebras       {𝑆 = 𝑆}  using ( Algebra ; 𝕌[_] ; _^_ ; ov )
 open import Setoid.Terms          {𝑆 = 𝑆}  using ( module Environment )
 open import Setoid.Homomorphisms  {𝑆 = 𝑆}  using ( hom ; IsHom )
 
@@ -49,7 +49,7 @@ module _ (𝑨 : Algebra α ρᵃ) where
  private A = 𝕌[ 𝑨 ] -- the forgetful functor
 
  Subuniverses : Pred (Pred A ℓ) (𝓞 ⊔ 𝓥 ⊔ α ⊔ ℓ )
- Subuniverses B = ∀ f a → Im a ⊆ B → (f ̂ 𝑨) a ∈ B
+ Subuniverses B = ∀ f a → Im a ⊆ B → (f ^ 𝑨) a ∈ B
 
  -- Subuniverses as a record type
  record Subuniverse : Type(ov (α ⊔ ℓ)) where
@@ -61,7 +61,7 @@ module _ (𝑨 : Algebra α ρᵃ) where
  -- Subuniverse Generation
  data Sg (G : Pred A ℓ) : Pred A (𝓞 ⊔ 𝓥 ⊔ α ⊔ ℓ) where
   var : ∀ {v} → v ∈ G → v ∈ Sg G
-  app : ∀ f a → Im a ⊆ Sg G → (f ̂ 𝑨) a ∈ Sg G
+  app : ∀ f a → Im a ⊆ Sg G → (f ^ 𝑨) a ∈ Sg G
 ```
 
 
@@ -86,12 +86,12 @@ Next we prove by structural induction that `Sg X` is the smallest subuniverse of
   →              B ∈ Subuniverses  →  G ⊆ B  →  Sg G ⊆ B
 
  sgIsSmallest _ _ G⊆B (var Gx) = G⊆B Gx
- sgIsSmallest B B≤A G⊆B {.((f ̂ 𝑨) a)} (app f a SgGa) = Goal
+ sgIsSmallest B B≤A G⊆B {.((f ^ 𝑨) a)} (app f a SgGa) = Goal
   where
   IH : Im a ⊆ B
   IH i = sgIsSmallest B B≤A G⊆B (SgGa i)
 
-  Goal : (f ̂ 𝑨) a ∈ B
+  Goal : (f ^ 𝑨) a ∈ B
   Goal = B≤A f a IH
 ```
 
@@ -118,7 +118,7 @@ In the proof above, we assume the following typing judgments:
     f  : ∣ 𝑆 ∣
     σ  : (i : I) → 𝒜 i ∈ Subuniverses 𝑨
 
-and we must prove `(f ̂ 𝑨) a ∈ ⋂ I 𝒜`.  When we did this with the old
+and we must prove `(f ^ 𝑨) a ∈ ⋂ I 𝒜`.  When we did this with the old
 Algebra type, Agda could fill in the proof term `λ i → σ i f a (λ x → ν x i)`
 automatically using `C-c C-a`, but this doesn't work for Algebra
 as we've implemented it.  We get the error "Agsy does not support copatterns
@@ -164,7 +164,7 @@ Alternatively, we could express the preceeding fact using an inductive type repr
 ```agda
  data TermImage (B : Pred A ρᵃ) : Pred A (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ) where
   var : ∀ {b : A} → b ∈ B → b ∈ TermImage B
-  app : ∀ f ts →  ((i : ∥ 𝑆 ∥ f) → ts i ∈ TermImage B)  → (f ̂ 𝑨) ts ∈ TermImage B
+  app : ∀ f ts →  ((i : ∥ 𝑆 ∥ f) → ts i ∈ TermImage B)  → (f ^ 𝑨) ts ∈ TermImage B
 
  -- `TermImage B` is a subuniverse of 𝑨 that contains B.
  TermImageIsSub : {B : Pred A ρᵃ} → TermImage B ∈ Subuniverses 𝑨
@@ -202,17 +202,17 @@ we call `hom-unique`.
    →            (a : A) → (a ∈ Sg 𝑨 G → g a ≈ h a)
 
   hom-unique G σ a (var Ga) = σ a Ga
-  hom-unique G σ .((f ̂ 𝑨) a) (app f a SgGa) = Goal
+  hom-unique G σ .((f ^ 𝑨) a) (app f a SgGa) = Goal
    where
    IH : ∀ i → h (a i) ≈ g (a i)
    IH i = sym (hom-unique G σ (a i) (SgGa i))
 
-   Goal : g ((f ̂ 𝑨) a) ≈ h ((f ̂ 𝑨) a)
+   Goal : g ((f ^ 𝑨) a) ≈ h ((f ^ 𝑨) a)
    Goal =  begin
-           g ((f ̂ 𝑨) a)   ≈⟨ compatible ∥ gh ∥ ⟩
-           (f ̂ 𝑩)(g ∘ a ) ≈˘⟨ cong Interp (refl , IH) ⟩
-           (f ̂ 𝑩)(h ∘ a)  ≈˘⟨ compatible ∥ hh ∥ ⟩
-           h ((f ̂ 𝑨) a )  ∎
+           g ((f ^ 𝑨) a)   ≈⟨ compatible ∥ gh ∥ ⟩
+           (f ^ 𝑩)(g ∘ a ) ≈˘⟨ cong Interp (refl , IH) ⟩
+           (f ^ 𝑩)(h ∘ a)  ≈˘⟨ compatible ∥ hh ∥ ⟩
+           h ((f ^ 𝑨) a )  ∎
 ```
 
 
@@ -226,7 +226,7 @@ In the induction step, the following typing judgments are assumed:
     hh   : hom 𝑨 𝑩
     gh   : hom 𝑨 𝑩
 
-and, under these assumptions, we proved `g ((f ̂ 𝑨) a) ≈ h ((f ̂ 𝑨) a)`.
+and, under these assumptions, we proved `g ((f ^ 𝑨) a) ≈ h ((f ^ 𝑨) a)`.
 
 ---------------------------------
 

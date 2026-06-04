@@ -35,7 +35,7 @@ open  import Setoid.Functions
       using ( _preimage≈image ; InvIsInverseʳ ; IsSurjective ; ⊙-IsSurjective )
 
 open  import Setoid.Algebras {𝑆 = 𝑆}
-      using ( Algebra ; ov ; _̂_ ; ⟨_⟩ ; Lift-Algˡ ; Lift-Alg ; 𝕌[_] )
+      using ( Algebra ; ov ; _^_ ; ⟨_⟩ ; Lift-Algˡ ; Lift-Alg ; 𝕌[_] )
 
 open import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}         using ( hom ; IsHom )
 open import Setoid.Homomorphisms.Isomorphisms {𝑆 = 𝑆}  using ( _≅_ ; Lift-≅ )
@@ -97,20 +97,20 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
     using() renaming (Carrier to SRanh ; _≈_ to _≈₃_ ; refl to refl₃ )
 
    hhom :  ∀ {𝑓}(x : ∥ 𝑆 ∥ 𝑓 → ∣ h ∣ range )
-    →      (∣ h ∣ ⟨$⟩ (𝑓 ̂ 𝑨) ((∣ h ∣ preimage) ∘ x)) ≈₂ (𝑓 ̂ 𝑩) ((∣ h ∣ image) ∘ x)
+    →      (∣ h ∣ ⟨$⟩ (𝑓 ^ 𝑨) ((∣ h ∣ preimage) ∘ x)) ≈₂ (𝑓 ^ 𝑩) ((∣ h ∣ image) ∘ x)
 
    hhom {𝑓} x = trans₂ (compatible ∥ h ∥) (cong InterpB (≡.refl , (∣ h ∣ preimage≈image) ∘ x))
 
    f' : SRanh → ∣ h ∣ range
-   f' (𝑓 , x) =  (𝑓 ̂ 𝑩)((∣ h ∣ image)∘ x)        -- b : the image in ∣B∣
-                 , (𝑓 ̂ 𝑨)((∣ h ∣ preimage) ∘ x)  -- a : the preimage in ∣A∣
+   f' (𝑓 , x) =  (𝑓 ^ 𝑩)((∣ h ∣ image)∘ x)        -- b : the image in ∣B∣
+                 , (𝑓 ^ 𝑨)((∣ h ∣ preimage) ∘ x)  -- a : the preimage in ∣A∣
                  , hhom x                        -- p : proof that `(∣ h ∣ ⟨$⟩ a) ≈₂ b`
 
    cong' : ∀ {x y} → x ≈₃ y → ((∣ h ∣ image) (f' x)) ≈₂ ((∣ h ∣ image) (f' y))
    cong' {(𝑓 , u)} {(.𝑓 , v)} (≡.refl , EqA) = Goal
     where
     -- Alternative formulation of the goal:
-    goal : (𝑓 ̂ 𝑩)(λ i → ((∣ h ∣ image)(u i))) ≈₂ (𝑓 ̂ 𝑩)(λ i → ((∣ h ∣ image) (v i)))
+    goal : (𝑓 ^ 𝑩)(λ i → ((∣ h ∣ image)(u i))) ≈₂ (𝑓 ^ 𝑩)(λ i → ((∣ h ∣ image) (v i)))
     goal = cong InterpB (≡.refl , EqA )
 
     Goal : (∣ h ∣ image) (f' (𝑓 , u)) ≈₂ (∣ h ∣ image) (f' (𝑓 , v))

@@ -32,7 +32,7 @@ open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
 
 -- Imports from the Agda Universal Algebra Library -------------------------------
 open import Overture using ( ∥_∥ )
-open import Setoid.Algebras  {𝑆 = 𝑆}  using ( Algebra ; ov ; _̂_)
+open import Setoid.Algebras  {𝑆 = 𝑆}  using ( Algebra ; ov ; _^_)
 open import Overture.Terms  {𝑆 = 𝑆} using ( Term )
 
 open Func renaming ( to to _⟨$⟩_ )
@@ -133,7 +133,7 @@ module Environment (𝑨 : Algebra α ℓ) where
 
  EnvAlgebra : Type χ → Algebra (α ⊔ χ) (ℓ ⊔ χ)
  Domain (EnvAlgebra X) = Env X
- (Interp (EnvAlgebra X) ⟨$⟩ (f , aϕ)) x = (f ̂ 𝑨) (λ i → aϕ i x)
+ (Interp (EnvAlgebra X) ⟨$⟩ (f , aϕ)) x = (f ^ 𝑨) (λ i → aϕ i x)
  cong (Interp (EnvAlgebra X)) {f , a} {.f , b} (≡.refl , aibi) x = cong InterpA (≡.refl , (λ i → aibi i x))
 ```
 

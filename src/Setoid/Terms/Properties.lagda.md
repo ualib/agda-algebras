@@ -33,7 +33,7 @@ open import Setoid.Functions  using ( Img_∋_ ; eq ; isSurj ; IsSurjective )
                               using ( isSurj→IsSurjective )
 
 open import Overture.Terms        {𝑆 = 𝑆} using ( Term )
-open import Setoid.Algebras       {𝑆 = 𝑆} using ( Algebra ; 𝕌[_] ; _̂_ )
+open import Setoid.Algebras       {𝑆 = 𝑆} using ( Algebra ; 𝕌[_] ; _^_ )
 open import Setoid.Homomorphisms  {𝑆 = 𝑆} using ( hom ; compatible-map ; IsHom )
 open import Setoid.Terms.Basic    {𝑆 = 𝑆}  using ( 𝑻 ; _≐_  ; ≐-isRefl )
 
@@ -66,7 +66,7 @@ module _ {𝑨 : Algebra α ρ}(h : X → 𝕌[ 𝑨 ]) where
 
  free-lift : 𝕌[ 𝑻 X ] → 𝕌[ 𝑨 ]
  free-lift (ℊ x) = h x
- free-lift (node f t) = (f ̂ 𝑨) (λ i → free-lift (t i))
+ free-lift (node f t) = (f ^ 𝑨) (λ i → free-lift (t i))
 
  free-lift-of-surj-isSurj :  isSurj{𝑨 = ≡.setoid X}{𝑩 = A} h
   →                          isSurj{𝑨 = TX}{𝑩 = A} free-lift
@@ -92,7 +92,7 @@ Naturally, at the base step of the induction, when the term has the form `genera
 x, the free lift of `h` agrees with `h`.  For the inductive step, when the given term
 has the form `node f t`, the free lift is defined as follows: Assuming (the induction
 hypothesis) that we know the image of each subterm `t i` under the free lift of `h`,
-define the free lift at the full term by applying `f ̂ 𝑨` to the images of the subterms.
+define the free lift at the full term by applying `f ^ 𝑨` to the images of the subterms.
 
 The free lift so defined is a homomorphism by construction. Indeed, here is the trivial proof.
 
@@ -145,13 +145,13 @@ module _ {𝑨 : Algebra α ρ}{gh hh : hom (𝑻 X) 𝑨} where
   lem2 : ∀ i → (g (t i)) ≈ (h (t i))
   lem2 i = free-unique p (t i)
 
-  lem3 : (f ̂ 𝑨)(λ i → (g (t i))) ≈ (f ̂ 𝑨)(λ i → (h (t i)))
+  lem3 : (f ^ 𝑨)(λ i → (g (t i))) ≈ (f ^ 𝑨)(λ i → (h (t i)))
   lem3 = cong Interp (_≡_.refl , lem2)
 
-  geq : (g (node f t)) ≈ (f ̂ 𝑨)(λ i → (g (t i)))
+  geq : (g (node f t)) ≈ (f ^ 𝑨)(λ i → (g (t i)))
   geq = compatible ∥ gh ∥
 
-  heq : h (node f t) ≈ (f ̂ 𝑨)(λ i → h (t i))
+  heq : h (node f t) ≈ (f ^ 𝑨)(λ i → h (t i))
   heq = compatible ∥ hh ∥
 ```
 

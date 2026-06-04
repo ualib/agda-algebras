@@ -32,7 +32,7 @@ open import Relation.Binary.PropositionalEquality as ≡ using ()
 open import Overture          using ( ∣_∣ ; ∥_∥ )
 open import Setoid.Functions  using ( _⊙_ ; eq ; IsInjective ; IsSurjective )
 
-open import Setoid.Algebras {𝑆 = 𝑆}  using ( Algebra ; Lift-Alg ; _̂_ )
+open import Setoid.Algebras {𝑆 = 𝑆}  using ( Algebra ; Lift-Alg ; _^_ )
                                      using ( Lift-Algˡ ; Lift-Algʳ ; ⨅ )
 
 open import Setoid.Homomorphisms.Basic       {𝑆 = 𝑆} using  ( hom ; IsHom )
