@@ -153,3 +153,7 @@ The `STYLE_GUIDE` contradicts itself in three places this audit touches, all of 
 +  The "Every public definition has a prose comment block" example (around line 539) writes a `-- |` docstring *inside* a fence and names a capital `Hom`, contradicting both "prose belongs in Markdown" and the Naming section's deprecation of `Hom` (line 275); rewrite to Markdown-prose-before-fence with lowercase `hom`.
 +  The "Group imports by origin" example (line 249) imports `∣_∣ ; ∥_∥`, the very notation the Projections table deprecates; update it to `proj₁ ; proj₂` once #367 lands.
 +  The Projections table (line 301) and the Interpretation table (line 378) describe the pre-migration trees; refresh them to match the post-#367 / post-#368 state.
+
+[M4-1]: https://github.com/ualib/agda-algebras/issues/267
+[M4-1d]: https://github.com/ualib/agda-algebras/issues/370
+[M4-2]: https://github.com/ualib/agda-algebras/issues/268
