@@ -7,6 +7,7 @@
 Accepted — 2026-04-24.
 Revised v2 — 2026-05-17, following the M3-2 (Semigroup) load test.
 Amended v2.1 — 2026-05-28, adds §10 on `Classical/Properties/` following the M3-7 (Lattice) order-theoretic equivalence work.
+Amended v2.2 — 2026-06-04, records the M4-1 Σ-projection migration (#267 / #367): the bracket projections `∣_∣` / `∥_∥` are replaced by `proj₁` / `proj₂` across the live trees, revising the "no mass rename of Σ-projections" stance in §1, §7, and *Alternatives considered*.  The long-form `OperationSymbolsOf` / `ArityOf` remain canonical for signature components and are now defined via `proj₁` / `proj₂`.  The caret (§7) and long-form-naming policies are unaffected.
 
 ---
 
@@ -45,13 +46,13 @@ The arity-first ordering `Op : Type 𝓥 → Type α → Type (𝓥 ⊔ α)` wit
 
 ```agda
 OperationSymbolsOf : Signature 𝓞 𝓥 → Type 𝓞
-OperationSymbolsOf 𝑆 = ∣ 𝑆 ∣
+OperationSymbolsOf 𝑆 = proj₁ 𝑆
 
-ArityOf : {𝑆 : Signature 𝓞 𝓥} → OperationSymbolsOf 𝑆 → Type 𝓥
-ArityOf {𝑆 = 𝑆} f = ∥ 𝑆 ∥ f
+ArityOf : (𝑆 : Signature 𝓞 𝓥) → OperationSymbolsOf 𝑆 → Type 𝓥
+ArityOf 𝑆 f = proj₂ 𝑆 f
 ```
 
-These are definitionally identical to the bracket notation.  New `Classical/` code uses the long forms by default; the bracket notation is retained indefinitely for the existing `Setoid/`-tree code and remains available everywhere.
+These are definitionally identical to `proj₁` / `proj₂`.  As of M4-1 (#267 / #367) the long forms are the canonical names for signature components throughout the library, and the live trees use `proj₁` / `proj₂` for generic Σ-projections; the bracket definitions `∣_∣` / `∥_∥` remain in `Overture.Basic` under a `WARNING_ON_USAGE`, retained only so `Legacy/` keeps compiling.
 
 ### 2.  Variable carrier for equations: `Fin n`, not per-structure named enums
 
@@ -119,9 +120,9 @@ Pointwise agreement is the mathematically correct notion of "same semigroup" und
 
 +  *Subscripted Latin used to name structure-specific entities* — `𝑆ₓ`, `Thₓ`, `Eqₓ` in the original draft.  Replaced by hyphen-separated long forms: `Sig-X`, `Th-X`, `Eq-X`.  Hyphen-separated forms grep cleanly, display in any monospaced font, read aloud sensibly, and don't require an Agda-input-mode dance per occurrence.  New `Classical/` code uses the long forms exclusively.
 
-+  *Bracket notation for Σ-projections* — `∣ 𝑆 ∣`, `∥ 𝑆 ∥ f`, `𝔻[ 𝑨 ]`, `𝕌[ 𝑨 ]`.  Kept available everywhere; supplemented by self-documenting long-form aliases (`OperationSymbolsOf`, `ArityOf`, `Domain`, `Carrier`) that new `Classical/` code uses by default.  No retroactive rename of existing `Setoid/` / `Overture/` code.
++  *Bracket notation for Σ-projections* — `∣ 𝑆 ∣`, `∥ 𝑆 ∥ f`.  **Migrated** to `proj₁` / `proj₂` (and the `OperationSymbolsOf` / `ArityOf` long-forms for signature components) across the live trees in M4-1 (#267 / #367); the definitions remain in `Overture.Basic` under a `WARNING_ON_USAGE` for `Legacy/`.  The blackboard accessor notation `𝔻[ 𝑨 ]` (Domain) and `𝕌[ 𝑨 ]` (Carrier) is category-1 standard notation and is **kept** everywhere.
 
-No mass rename is performed.  The policy is: new `Classical/` code adopts the cleaner long-form conventions; the existing universal-algebra meta-theory in `Setoid/` retains its existing bracket-and-subscript notation, which is well-established reference material.
+The original v2 policy performed no mass rename; M4-1 (amendment v2.2) revised this for the `∣_∣` / `∥_∥` Σ-projections specifically, which are now `proj₁` / `proj₂` library-wide.  The remaining policy stands: new `Classical/` code adopts the long-form conventions, and the subscript / blackboard notation in `Setoid/` is retained as well-established reference material.
 
 ### 8.  First concrete structure: Magma
 
@@ -212,7 +213,7 @@ The revisions above are the response to these findings.  No part of the original
 
 +  **Distinguished elements as algebra-level distinguished carrier elements rather than nullary operation symbols**.  Considered for the apparent simplicity of "a pointed group is a group with a chosen basepoint."  Rejected because the equational-logic substrate (`Modᵗ`, the variety machinery) characterizes a variety as algebras satisfying identities *over the signature*: if a distinguished element does not appear as a signature symbol, no identity can mention it, and the structure's theory cannot constrain it.  Nullary-symbol encoding (revised §9) is what makes the variety of monoids a proper variety and what makes pointed-group expansions a meaningful distinct variety.
 
-+  **Mass rename of unicode in the existing `Setoid/` tree**.  Considered for consistency with the long-form-name convention adopted for new `Classical/` code.  Rejected as churn for no architectural benefit: `Setoid/` is well-established reference material, the unicode there is mostly category-1 (standard mathematical notation) anyway, and a rename would invalidate existing tutorials, papers, and external references to specific identifiers.  Policy is per-tree: new `Classical/` long-form, existing `Setoid/` retained.
++  **Mass rename of unicode in the existing `Setoid/` tree**.  Considered for consistency with the long-form-name convention adopted for new `Classical/` code.  Rejected as churn for no architectural benefit: `Setoid/` is well-established reference material, the unicode there is mostly category-1 (standard mathematical notation) anyway, and a rename would invalidate existing tutorials, papers, and external references to specific identifiers.  Policy is per-tree: new `Classical/` long-form, existing `Setoid/` retained.  (Amended v2.2: the one narrow exception is the `∣_∣` / `∥_∥` Σ-projections, migrated to `proj₁` / `proj₂` in M4-1 (#267 / #367) — there the readability and grep-tooling arguments outweighed the churn; the category-1 mathematical notation, subscripts, and blackboard accessors are still retained.)
 
 +  **Per-structure `Classical/<X>/Properties.lagda.md` subdirectories** (e.g. `Classical/Lattice/Properties.lagda.md`).  Considered as a layout option for derived results when M3-7's lattice order-theoretic equivalence motivated the first Properties module.  Rejected for organizational uniformity: the existing tree organizes strictly by concern (one axis = concern as directory, leaf = structure), and per-structure subdirectories for properties alone would mix two organizing axes (concern-as-directory for everything else, structure-as-directory only for properties).  By-concern (§10) keeps the existing pattern uniform and mirrors stdlib's layout.
 
