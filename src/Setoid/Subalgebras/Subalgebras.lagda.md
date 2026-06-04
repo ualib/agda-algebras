@@ -20,7 +20,7 @@ module Setoid.Subalgebras.Subalgebras {𝑆 : Signature 𝓞 𝓥} where
 -- imports from Agda and the Agda Standard Library ------------------------------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
 open import Data.Product     using ( _,_ ; Σ-syntax )
-                             renaming ( _×_ to _∧_ ; proj₂ to snd )
+                             renaming ( _×_ to _∧_ )
 open import Level            using ( Level ; _⊔_ )
 open import Relation.Binary  using ( REL )
 open import Relation.Unary   using ( Pred ; _∈_ )
@@ -125,7 +125,7 @@ is (isomorphic to) a subalgebra of `𝑩`.
 FirstHomCorollary :  {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}
                      (hh : hom 𝑨 𝑩) → (kerquo hh) IsSubalgebraOf 𝑩
 
-FirstHomCorollary hh = (proj₁ (FirstHomTheorem hh)) , snd (proj₂ (FirstHomTheorem hh))
+FirstHomCorollary hh = (proj₁ (FirstHomTheorem hh)) , proj₂ (proj₂ (FirstHomTheorem hh))
 ```
 
 

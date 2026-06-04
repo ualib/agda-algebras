@@ -20,7 +20,7 @@ module Setoid.Subalgebras.Properties {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ------------------------------------
 open import Agda.Primitive   using ()       renaming ( Set to Type )
-open import Data.Product     using ( _,_ )  renaming ( proj₁ to fst ; proj₂ to snd )
+open import Data.Product     using ( _,_ )
 open import Function         using ( _∘_ )  renaming ( Func to _⟶_ )
 open import Level            using ( Level ; _⊔_ )
 open import Relation.Binary  using ( Setoid )
@@ -91,7 +91,7 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}{𝑪 : Algebra γ ρ
 ≤→≤c→≤c :  {𝑨 : Algebra α α}{𝑩 : Algebra α α}{𝒦 : Pred(Algebra α α) (ov α)}
  →         𝑨 ≤ 𝑩 → 𝑩 ≤c 𝒦 → 𝑨 ≤c 𝒦
 
-≤→≤c→≤c {𝑨 = 𝑨} A≤B sB = (proj₁ sB) , (fst (proj₂ sB) , ≤-trans A≤B (snd (proj₂ sB)))
+≤→≤c→≤c {𝑨 = 𝑨} A≤B sB = (proj₁ sB) , (proj₁ (proj₂ sB) , ≤-trans A≤B (proj₂ (proj₂ sB)))
 
 module _ {α ρᵃ ρ : Level} where
 

@@ -19,7 +19,7 @@ module Setoid.Functions.Surjective where
 
 -- Imports from Agda and the Agda Standard Library --------------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
-open import Data.Product     using ( _,_ ; Σ-syntax ) renaming (proj₁ to fst ; proj₂ to snd)
+open import Data.Product     using ( _,_ ; Σ-syntax )
 open import Function         using ( Surjection ; IsSurjection ; _$_ ; _∘_ )
                              renaming ( Func to _⟶_ )
 open import Level            using ( _⊔_ ; Level )
@@ -71,7 +71,7 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
   g : 𝑨 ⟶ 𝑩
   g = (record { to = _⟨$⟩_ s ; cong = cong s })
   gE : IsSurjective g
-  gE {y} = eq (proj₁ ((surjective s) y)) (sym (snd (surjective s y) (IsEquivalence.refl isEqA)))
+  gE {y} = eq (proj₁ ((surjective s) y)) (sym (proj₂ (surjective s y) (IsEquivalence.refl isEqA)))
 
  SurjectionIsSurjection : (Surjection 𝑨 𝑩) → Σ[ g ∈ (𝑨 ⟶ 𝑩) ] (IsSurjection _≈₁_ _≈₂_ (_⟨$⟩_ g))
  SurjectionIsSurjection s = g , gE

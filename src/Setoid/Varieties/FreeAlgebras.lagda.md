@@ -18,7 +18,6 @@ module Setoid.Varieties.FreeAlgebras {𝑆 : Signature 𝓞 𝓥} where
 -- Imports from Agda and the Agda Standard Library -------------------------------
 open import Agda.Primitive   using ()                  renaming ( Set to Type )
 open import Data.Product     using ( Σ-syntax ; _,_ )
-                             renaming ( proj₁ to fst ; proj₂ to snd )
 open import Function         using ( _∘_ ; id )        renaming ( Func to _⟶_ )
 open import Level            using ( Level ; _⊔_)
 open import Relation.Binary  using ( Setoid )
@@ -124,7 +123,7 @@ Finally, we define an epimorphism from `𝑻 X` onto the relatively free algebra
  hom𝔽[ X ] = epi→hom (𝑻 X) 𝔽[ X ] epi𝔽[ X ]
 
  hom𝔽[_]-is-epic : (X : Type χ) → IsSurjective (proj₁ (hom𝔽[ X ]))
- hom𝔽[ X ]-is-epic = IsEpi.isSurjective (snd (epi𝔽[ X ]))
+ hom𝔽[ X ]-is-epic = IsEpi.isSurjective (proj₂ (epi𝔽[ X ]))
 
 
  class-models-kernel : ∀{X p q} → (p , q) ∈ fkerPred (proj₁ (hom𝔽[ X ])) → 𝒦 ⊫ (p ≈̇ q)

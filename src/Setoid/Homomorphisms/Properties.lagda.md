@@ -18,7 +18,7 @@ open import Overture using (𝓞 ; 𝓥 ; Signature)
 module Setoid.Homomorphisms.Properties {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ------------------------------------------
-open import Data.Product     using ( _,_ ) renaming ( proj₁ to fst ; proj₂ to snd )
+open import Data.Product     using ( _,_ )
 open import Function         using ( id ; _$_ ) renaming ( Func to _⟶_ )
 open import Level            using ( Level )
 open import Relation.Binary  using ( Setoid )
@@ -172,7 +172,7 @@ module _ {𝑨 : Algebra α ρᵃ} {𝑩 : Algebra β ρᵇ} where
  open Level
 
  Lift-homˡ : hom 𝑨 𝑩  → (ℓᵃ ℓᵇ : Level) →  hom (Lift-Algˡ 𝑨 ℓᵃ) (Lift-Algˡ 𝑩 ℓᵇ)
- Lift-homˡ (f , fhom) ℓᵃ ℓᵇ = ϕ , ⊙-is-hom lABh (snd ToLiftˡ)
+ Lift-homˡ (f , fhom) ℓᵃ ℓᵇ = ϕ , ⊙-is-hom lABh (proj₂ ToLiftˡ)
   where
   lA lB : Algebra _ _
   lA = Lift-Algˡ 𝑨 ℓᵃ
@@ -183,7 +183,7 @@ module _ {𝑨 : Algebra α ρᵃ} {𝑩 : Algebra β ρᵇ} where
   cong ψ = cong f
 
   lABh : IsHom lA 𝑩 ψ
-  lABh = ⊙-is-hom (snd FromLiftˡ) fhom
+  lABh = ⊙-is-hom (proj₂ FromLiftˡ) fhom
 
   ϕ : Domain lA ⟶ Domain lB
   ϕ ⟨$⟩ x = lift (f ⟨$⟩ (lower x))
@@ -200,14 +200,14 @@ module _ {𝑨 : Algebra α ρᵃ} {𝑩 : Algebra β ρᵇ} where
   cong ψ xy = cong f (lower xy)
 
   lABh : IsHom lA 𝑩 ψ
-  lABh = ⊙-is-hom (snd FromLiftʳ) fhom
+  lABh = ⊙-is-hom (proj₂ FromLiftʳ) fhom
 
   ϕ : Domain lA ⟶ Domain lB
   ϕ ⟨$⟩ x = f ⟨$⟩ x
   lower (cong ϕ xy) = cong f $ lower xy
 
   Goal : IsHom lA lB ϕ
-  Goal = ⊙-is-hom lABh (snd ToLiftʳ)
+  Goal = ⊙-is-hom lABh (proj₂ ToLiftʳ)
 
  open Setoid using ( _≈_ )
 

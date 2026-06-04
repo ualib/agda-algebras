@@ -20,7 +20,7 @@ module Setoid.Homomorphisms.HomomorphicImages {𝑆 : Signature 𝓞 𝓥} where
 -- Imports from Agda and the Agda Standard Library ------------------------------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
 open import Data.Product     using ( _,_ ; Σ-syntax )
-                             renaming ( _×_ to _∧_ ; proj₁ to fst ; proj₂ to snd )
+                             renaming ( _×_ to _∧_ )
 open import Function         using ( Func ; _on_ ; _∘_ ; id )
 open import Level            using ( Level ; _⊔_ ; suc )
 open import Relation.Binary  using ( Setoid ; _Preserves_⟶_ )

@@ -19,7 +19,7 @@ module Setoid.Functions.Inverses where
 open import Agda.Primitive    using ( _⊔_ ; Level ) renaming ( Set to Type )
 open import Function          using ( id ; _$_ )   renaming ( Func to _⟶_ )
 open import Data.Product      using ( _,_ ; Σ-syntax )
-                              renaming ( proj₁ to fst ; proj₂ to snd ; _×_ to _∧_)
+                              renaming ( _×_ to _∧_)
 open import Relation.Unary    using ( Pred ; _∈_ )
 open import Relation.Binary   using ( Setoid ; _Preserves_⟶_ )
 

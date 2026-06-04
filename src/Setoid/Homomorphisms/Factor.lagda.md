@@ -18,7 +18,7 @@ open import Overture using (𝓞 ; 𝓥 ; Signature)
 module Setoid.Homomorphisms.Factor {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library -------------------------------------------------
-open import Data.Product     using ( _,_ ; Σ-syntax )  renaming ( proj₁ to fst ; proj₂ to snd )
+open import Data.Product     using ( _,_ ; Σ-syntax )
 open import Function         using ( _∘_ ; _$_ )       renaming ( Func to _⟶_ )
 open import Level            using ( Level )
 open import Relation.Binary  using ( Setoid )
@@ -134,13 +134,13 @@ If, in addition, `g` is surjective, then so will be the factor `φ`.
   homfactor = HomFactor Khg hE
 
   φmap : C ⟶ B
-  φmap = fst (proj₁ homfactor)
+  φmap = proj₁ (proj₁ homfactor)
 
   gφh : (a : 𝕌[ 𝑨 ]) → g a ≈₂ φmap ⟨$⟩ (h a)
-  gφh = snd homfactor -- Khg ξ
+  gφh = proj₂ homfactor -- Khg ξ
 
   φhom : IsHom 𝑪 𝑩 φmap
-  φhom = snd (proj₁ homfactor)
+  φhom = proj₂ (proj₁ homfactor)
 
   φepi : IsEpi 𝑪 𝑩 φmap
   φepi = record  { isHom = φhom

@@ -23,7 +23,6 @@ module Setoid.Varieties.HSP {𝑆 : Signature 𝓞 𝓥} where
 -- Imports from Agda and the Agda Standard Library -------------------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
 open import Data.Product     using ( _,_ ; Σ-syntax ; _×_ )
-                             renaming ( proj₁ to fst ; proj₂ to snd )
 open import Function         using () renaming ( Func to _⟶_ )
 open import Level            using ( Level ; _⊔_ )
 open import Relation.Binary  using ( Setoid )
@@ -95,7 +94,7 @@ so belongs to `S (P 𝒦)`.
 
 ```agda
  skEqual : (i : ℑ⁺) → ∀{p q} → Type ρᵃ
- skEqual i {p}{q} = ⟦ p ⟧ ⟨$⟩ snd (proj₂ i) ≈ ⟦ q ⟧ ⟨$⟩ snd (proj₂ i)
+ skEqual i {p}{q} = ⟦ p ⟧ ⟨$⟩ proj₂ (proj₂ i) ≈ ⟦ q ⟧ ⟨$⟩ proj₂ (proj₂ i)
   where
   open Setoid (Domain (𝔄⁺ i)) using ( _≈_ )
   open Environment (𝔄⁺ i) using ( ⟦_⟧ )
@@ -116,7 +115,7 @@ so belongs to `S (P 𝒦)`.
  homℭ = ⨅-hom-co 𝔄⁺ h
   where
   h : ∀ i → hom (𝑻 X) (𝔄⁺ i)
-  h i = lift-hom (snd (proj₂ i))
+  h i = lift-hom (proj₂ (proj₂ i))
 
  open Algebra 𝔽[ X ]  using () renaming ( Domain to F ; Interp to InterpF )
  open Setoid F        using () renaming (refl to reflF ; _≈_ to _≈F≈_ ; Carrier to ∣F∣)
@@ -147,9 +146,9 @@ so belongs to `S (P 𝒦)`.
    where
    open Environment (𝔄⁺ i)      using () renaming ( ⟦_⟧ to ⟦_⟧ᵢ )
    open Setoid (Domain (𝔄⁺ i))  using ( _≈_ ; sym ; trans )
-   goal : ⟦ p ⟧ᵢ ⟨$⟩ snd (proj₂ i) ≈ ⟦ q ⟧ᵢ ⟨$⟩ snd (proj₂ i)
-   goal = trans  (free-lift-interp{𝑨 = (proj₁ i)}(snd (proj₂ i)) p)
-                 (trans (pKq i)(sym (free-lift-interp{𝑨 = (proj₁ i)} (snd (proj₂ i)) q)))
+   goal : ⟦ p ⟧ᵢ ⟨$⟩ proj₂ (proj₂ i) ≈ ⟦ q ⟧ᵢ ⟨$⟩ proj₂ (proj₂ i)
+   goal = trans  (free-lift-interp{𝑨 = (proj₁ i)}(proj₂ (proj₂ i)) p)
+                 (trans (pKq i)(sym (free-lift-interp{𝑨 = (proj₁ i)} (proj₂ (proj₂ i)) q)))
   E⊢pq : ℰ ⊢ X ▹ p ≈ q
   E⊢pq = AllEqual⊆ker𝔽 pqEqual
 
@@ -176,7 +175,7 @@ that `𝔽[ X ]` is a subalgebra of the *lift* of `ℭ`, denoted `ℓℭ`.
  SP𝔽 = S-idem SSP𝔽
   where
   PSℭ : ℭ ∈ P (α ⊔ ρᵃ ⊔ ℓ) ι (S ℓ 𝒦)
-  PSℭ = ℑ⁺ , (𝔄⁺ , ((λ i → fst (proj₂ i)) , ≅-refl))
+  PSℭ = ℑ⁺ , (𝔄⁺ , ((λ i → proj₁ (proj₂ i)) , ≅-refl))
 
   SPℭ : ℭ ∈ S ι (P ℓ ι 𝒦)
   SPℭ = PS⊆SP {ℓ = ℓ} PSℭ
