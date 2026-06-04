@@ -41,7 +41,10 @@ private variable
 ```
 
 
-We first show how to represent in [Agda][] the collection of subuniverses of an algebra `𝑨`.  Since a subuniverse is viewed as a subset of the domain of `𝑨`, we define it as a predicate on `𝕌[ 𝑨 ]`.  Thus, the collection of subuniverses is a predicate on predicates on `𝕌[ 𝑨 ]`.
+We first show how to represent in [Agda][] the collection of subuniverses of an
+algebra `𝑨`.  Since a subuniverse is viewed as a subset of the domain of `𝑨`, we
+define it as a predicate on `𝕌[ 𝑨 ]`.  Thus, the collection of subuniverses is a
+predicate on predicates on `𝕌[ 𝑨 ]`.
 
 
 ```agda
@@ -65,7 +68,8 @@ module _ (𝑨 : Algebra α ρᵃ) where
 ```
 
 
-(The inferred types in the `app` constructor are `f : OperationSymbolsOf 𝑆` and `a : ArityOf 𝑆 𝑓 → 𝕌[ 𝑨 ]`.)
+(The inferred types in the `app` constructor are `f : OperationSymbolsOf 𝑆` and
+`a : ArityOf 𝑆 𝑓 → 𝕌[ 𝑨 ]`.)
 
 Given an arbitrary subset `X` of the domain `𝕌[ 𝑨 ]` of an `𝑆`-algebra `𝑨`, the
 type `Sg X` does indeed represent a subuniverse of `𝑨`. Proving this using the
@@ -118,11 +122,8 @@ In the proof above, we assume the following typing judgments:
     f  : OperationSymbolsOf 𝑆
     σ  : (i : I) → 𝒜 i ∈ Subuniverses 𝑨
 
-and we must prove `(f ^ 𝑨) a ∈ ⋂ I 𝒜`.  When we did this with the old
-Algebra type, Agda could fill in the proof term `λ i → σ i f a (λ x → ν x i)`
-automatically using `C-c C-a`, but this doesn't work for Algebra
-as we've implemented it.  We get the error "Agsy does not support copatterns
-yet."  We should fix the implementation to resolve this.
+and we must prove `(f ^ 𝑨) a ∈ ⋂ I 𝒜`.  (The command `C-c C-a` works in this case;
+Agda fills in the proof term `λ i → σ i f a (λ x → ν x i)` automatically .)
 
 
 ```agda
@@ -137,7 +138,7 @@ module _ {𝑨 : Algebra α ρᵃ} where
   →                 (B ∈ Subuniverses 𝑨)
   →                 (t : Term X)
   →                 (b : Carrier (Env X))
-  →                 (∀ x → (b x ∈ B)) → (⟦ t ⟧ ⟨$⟩ b) ∈ B
+  →                 (∀ x → b x ∈ B) → ⟦ t ⟧ ⟨$⟩ b ∈ B
 
  sub-term-closed _ _ (ℊ x) b Bb = Bb x
  sub-term-closed B B≤A (node f t)b ν =
@@ -209,10 +210,10 @@ we call `hom-unique`.
 
    Goal : g ((f ^ 𝑨) a) ≈ h ((f ^ 𝑨) a)
    Goal =  begin
-           g ((f ^ 𝑨) a)   ≈⟨ compatible (proj₂ gh) ⟩
-           (f ^ 𝑩)(g ∘ a ) ≈˘⟨ cong Interp (refl , IH) ⟩
-           (f ^ 𝑩)(h ∘ a)  ≈˘⟨ compatible (proj₂ hh) ⟩
-           h ((f ^ 𝑨) a )  ∎
+           g ((f ^ 𝑨) a)    ≈⟨ compatible (proj₂ gh) ⟩
+           (f ^ 𝑩)(g ∘ a )  ≈˘⟨ cong Interp (refl , IH) ⟩
+           (f ^ 𝑩)(h ∘ a)   ≈˘⟨ compatible (proj₂ hh) ⟩
+           h ((f ^ 𝑨) a )   ∎
 ```
 
 
