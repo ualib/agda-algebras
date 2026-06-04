@@ -18,7 +18,7 @@ open import Overture using (𝓞 ; 𝓥 ; Signature)
 module Setoid.Homomorphisms.Noether {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ---------------------------
-open import Data.Product     using (Σ-syntax ; _,_ )  renaming ( _×_ to _∧_ ; proj₁ to fst)
+open import Data.Product     using (Σ-syntax ; _,_ )  renaming ( _×_ to _∧_)
 open import Function         using ( id )             renaming ( Func to _⟶_ )
 open import Level            using ( Level )
 open import Relation.Binary  using ( Setoid )

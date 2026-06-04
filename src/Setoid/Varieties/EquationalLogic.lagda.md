@@ -22,8 +22,7 @@ module Setoid.Varieties.EquationalLogic {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library -------------------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
-open import Data.Product     using ( _×_ ; _,_ ; Σ-syntax)
-                             renaming ( proj₁ to fst ; proj₂ to snd )
+open import Data.Product     using ( _×_ ; _,_ ; Σ-syntax ; proj₁ ; proj₂ )
 open import Function         using () renaming ( Func to _⟶_ )
 open import Level            using ( _⊔_ ; Level )
 open import Relation.Binary  using ( Setoid )
@@ -110,7 +109,7 @@ It is sometimes more convenient to have a "tupled" version of the previous defin
 
 ```agda
  Modᵗ : {I : Type ι} → (I → Term X × Term X) → {α : Level} → Pred(Algebra α ρᵃ) (χ ⊔ ρᵃ ⊔ ι ⊔ α)
- Modᵗ ℰ = λ 𝑨 → ∀ i → 𝑨 ⊧ fst (ℰ i) ≈ snd (ℰ i)
+ Modᵗ ℰ = λ 𝑨 → ∀ i → 𝑨 ⊧ proj₁ (ℰ i) ≈ proj₂ (ℰ i)
 ```
 
 

@@ -27,8 +27,7 @@ module Overture.Functions where
 -- Imports from Agda primitives and the standard library.
 open import Agda.Primitive    using ()           renaming ( Set to Type )
 open import Data.Empty        using ( ⊥-elim )
-open import Data.Product      using ( Σ ; Σ-syntax ; _,_ )
-                              renaming ( proj₁ to fst ; proj₂ to snd )
+open import Data.Product      using ( Σ ; Σ-syntax ; _,_ ; proj₁ ; proj₂ )
 open import Function          using ( _∘_ ; _$_ ; Surjective )
 open import Level             using ( Level ; _⊔_ )
 open import Relation.Binary   using ( Decidable )
@@ -82,12 +81,12 @@ module _ {A : Type a}{B : Type b} where
   imgfy→A : Image f ∋ y → Σ[ x ∈ A ] f x ≡ y
   imgfy→A (eq x p) = x , sym p
   goal : Σ[ x ∈ A ] ({z : A} → z ≡ x → f z ≡ y)
-  goal = fst (imgfy→A $ fE y)
-       , λ z≡fst → trans (cong f z≡fst) $ snd (imgfy→A $ fE y)
+  goal = proj₁ (imgfy→A $ fE y)
+       , λ z≡fst → trans (cong f z≡fst) $ proj₂ (imgfy→A $ fE y)
 
  Surjective→IsSurjective :  (f : A → B) → Surjective {A = A} _≡_ _≡_ f
   →                         IsSurjective f
- Surjective→IsSurjective f fE y = eq (fst $ fE y) (sym $ snd (fE y) refl)
+ Surjective→IsSurjective f fE y = eq (proj₁ $ fE y) (sym $ proj₂ (fE y) refl)
 ```
 
 A right-inverse of a surjective `f` is obtained by composing `Inv` with the surjectivity proof.  The right-inverse property is then immediate from `InvIsInverseʳ` above.

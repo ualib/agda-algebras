@@ -22,7 +22,6 @@ module Setoid.Varieties.SoundAndComplete {𝑆 : Signature 𝓞 𝓥} where
 -- imports from Agda and the Agda Standard Library -------------------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
 open import Data.Product     using ( _,_ ; Σ-syntax ; _×_ )
-                             renaming ( proj₁ to fst ; proj₂ to snd )
 open import Function         using ( _∘_ ; flip ; id ) renaming ( Func to _⟶_ )
 open import Level            using ( Level ; _⊔_ )
 open import Relation.Binary  using ( Setoid ; IsEquivalence )
@@ -33,7 +32,7 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl )
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library -------------------------------
-open import Overture                  using ( proj₁ ; OperationSymbolsOf )
+open import Overture                  using ( proj₁ ; proj₂ ; OperationSymbolsOf )
 open import Overture.Terms   {𝑆 = 𝑆}  using ( Term )
 open import Setoid.Algebras  {𝑆 = 𝑆}  using ( Algebra ; ov ; ⟨_⟩ )
 open import Setoid.Terms     {𝑆 = 𝑆}  using ( module Environment ; Sub ; _[_] )
@@ -96,7 +95,7 @@ module _ {α ρᵃ ℓ : Level} where
  module _ {χ : Level}{X : Type χ} where
 
   ThTuple : (𝒦 : Pred (Algebra α ρᵃ) ℓ) → ℑTh{χ = χ} (Th{X = X} 𝒦) → Eq{χ}
-  ThTuple 𝒦 = λ i → fst (proj₁ i) ≈̇ snd (proj₁ i)
+  ThTuple 𝒦 = λ i → proj₁ (proj₁ i) ≈̇ proj₂ (proj₁ i)
 
 module _ {α}{ρᵃ}{ι}{I : Type ι} where
  -- An entailment E ⊃ eq holds iff it holds in all models of E.

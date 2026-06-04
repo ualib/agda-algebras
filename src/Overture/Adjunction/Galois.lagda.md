@@ -17,7 +17,7 @@ module Overture.Adjunction.Galois where
 
 -- Imports from Agda and the Agda Standard Library --------------------------------------
 open import Agda.Primitive           using () renaming ( Set to Type )
-open import Data.Product             using ( _,_ ; _×_ ; swap ) renaming ( proj₁ to fst )
+open import Data.Product             using ( _,_ ; _×_ ; swap ; proj₁ )
 open import Function.Base            using ( _∘_ ; id )
 open import Level                    using ( _⊔_ ;  Level ; suc )
 open import Relation.Binary.Bundles  using ( Poset )
@@ -116,7 +116,7 @@ module _ {α : Level} (ρ : Level) (𝒜 : Type α) where
  _≤_ PosetOfSubsets = _⊆_
  isPartialOrder PosetOfSubsets =
   record  { isPreorder = record  { isEquivalence = ≐-iseqv
-                                 ; reflexive = fst
+                                 ; reflexive = proj₁
                                  ; trans = λ u v → v ∘ u
                                  }
           ; antisym = _,_

@@ -22,7 +22,6 @@ module Setoid.Varieties.Preservation {𝑆 : Signature 𝓞 𝓥} where
 -- Imports from Agda and the Agda Standard Library -------------------------------
 open import Agda.Primitive         using ()       renaming ( Set to Type )
 open import Data.Product           using ( _,_ )
-                                   renaming ( proj₁ to fst ; proj₂ to snd )
 open import Data.Unit.Polymorphic  using ( ⊤ )
 open import Function               using ( _∘_ )  renaming ( Func to _⟶_ )
 open import Level                  using ( Level ; _⊔_ )
@@ -102,9 +101,9 @@ in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
   ℬ : I → Algebra α ρᵃ
   ℬ i = (proj₁ (sA i))
   kB : (i : I) → ℬ i ∈ 𝒦
-  kB i =  fst (proj₂ (sA i))
+  kB i =  proj₁ (proj₂ (sA i))
   ⨅A≤⨅B : ⨅ 𝒜 ≤ ⨅ ℬ
-  ⨅A≤⨅B = ⨅-≤ λ i → snd (proj₂ (sA i))
+  ⨅A≤⨅B = ⨅-≤ λ i → proj₂ (proj₂ (sA i))
   Goal : 𝑩 ∈ S{β = oaℓ}{oaℓ}oaℓ (P {β = oaℓ}{oaℓ} ℓ oaℓ 𝒦)
   Goal = ⨅ ℬ , (I , (ℬ , (kB , ≅-refl))) , (≅-trans-≤ B≅⨅A ⨅A≤⨅B)
 ```
