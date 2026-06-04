@@ -38,10 +38,9 @@ open import Relation.Binary.Bundles  using ( Poset )
 open import Relation.Binary.Lattice  using ( Infimum ; IsMeetSemilattice ; MeetSemilattice )
 
 -- Imports from the Agda Universal Algebras Library ------------------------------
-open import Setoid.Algebras.Basic {𝑆 = 𝑆}              using  ( ov ; Algebra ; 𝕌[_] )
-open import Setoid.Congruences.Basic {𝑆 = 𝑆}  using  ( Con ; mkcon ; _∣≈_
-                                                              ; reflexive ; is-equivalence
-                                                              ; is-compatible )
+open import Setoid.Algebras.Basic {𝑆 = 𝑆}     using  ( ov ; Algebra ; 𝕌[_] )
+open import Setoid.Congruences.Basic {𝑆 = 𝑆}  using  ( Con ; mkcon ; _∣≈_ ; reflexive
+                                                     ; is-equivalence ; is-compatible )
 private variable α ρ ℓ : Level
 ```
 
@@ -77,7 +76,7 @@ module _ {𝑨 : Algebra α ρ} where
 
   -- θ ≅ φ : mutual containment (the equivalence the partial order is taken over).
   _≅_ : Con 𝑨 ℓ → Con 𝑨 ℓ → Type (α ⊔ ℓ)
-  θ ≅ φ = (θ ≤ φ) × (φ ≤ θ)
+  θ ≅ φ = θ ≤ φ × φ ≤ θ
   infix 4 _≅_
 ```
 
@@ -103,7 +102,7 @@ The order is reflexive and transitive, and `_≅_` collapses it to a partial ord
   -- cannot recover the implicit congruence arguments of those lemmas from the
   -- expected component types, so we inline the (trivial) proofs here.
   ≅-refl : {θ : Con 𝑨 ℓ} → θ ≅ θ
-  ≅-refl = (λ p → p) , (λ p → p)
+  ≅-refl = (λ z → z) , (λ z → z)
 
   ≅-sym : {θ φ : Con 𝑨 ℓ} → θ ≅ φ → φ ≅ θ
   ≅-sym = swap
@@ -116,16 +115,16 @@ The order is reflexive and transitive, and `_≅_` collapses it to a partial ord
   -- (non-injective) `Con 𝑨 ℓ` carrier type at these function-typed fields.
   ≅-isEquivalence : IsEquivalence (_≅_ {ℓ})
   ≅-isEquivalence {ℓ} = record
-    { refl   = λ {θ}        → ≅-refl   {ℓ} {θ}
-    ; sym    = λ {θ} {φ}    → ≅-sym    {ℓ} {θ} {φ}
-    ; trans  = λ {θ} {φ} {ψ} → ≅-trans  {ℓ} {θ} {φ} {ψ}
+    { refl = λ {θ} → ≅-refl {ℓ} {θ}
+    ; sym = λ {θ} {φ} → ≅-sym {ℓ} {θ} {φ}
+    ; trans = λ {θ} {φ} {ψ} → ≅-trans  {ℓ} {θ} {φ} {ψ}
     }
 
   ≤-isPartialOrder : IsPartialOrder (_≅_ {ℓ}) _≤_
   ≤-isPartialOrder {ℓ} = record
-    { isPreorder = record  { isEquivalence  = ≅-isEquivalence {ℓ}
-                           ; reflexive      = λ {θ} {φ}     → ≤-reflexive  {ℓ} {θ} {φ}
-                           ; trans          = λ {θ} {φ} {ψ} → ≤-trans      {ℓ} {θ} {φ} {ψ}
+    { isPreorder = record  { isEquivalence = ≅-isEquivalence {ℓ}
+                           ; reflexive = λ {θ} {φ} → ≤-reflexive {ℓ} {θ} {φ}
+                           ; trans = λ {θ} {φ} {ψ} → ≤-trans {ℓ} {θ} {φ} {ψ}
                            }
     ; antisym = λ {θ} {φ} → ≤-antisym {ℓ} {θ} {φ}
     }
@@ -176,13 +175,13 @@ them, and it is above any common lower bound.  These three facts are exactly the
 `Infimum` of `_≤_` at `_∧_`.
 
 ```agda
-  ∧-lowerˡ : {θ φ : Con 𝑨 ℓ} → (θ ∧ φ) ≤ θ
+  ∧-lowerˡ : {θ φ : Con 𝑨 ℓ} → θ ∧ φ ≤ θ
   ∧-lowerˡ = proj₁
 
-  ∧-lowerʳ : {θ φ : Con 𝑨 ℓ} → (θ ∧ φ) ≤ φ
+  ∧-lowerʳ : {θ φ : Con 𝑨 ℓ} → θ ∧ φ ≤ φ
   ∧-lowerʳ = proj₂
 
-  ∧-greatest : {θ φ ψ : Con 𝑨 ℓ} → ψ ≤ θ → ψ ≤ φ → ψ ≤ (θ ∧ φ)
+  ∧-greatest : {θ φ ψ : Con 𝑨 ℓ} → ψ ≤ θ → ψ ≤ φ → ψ ≤ θ ∧ φ
   ∧-greatest ψ≤θ ψ≤φ p = ψ≤θ p , ψ≤φ p
 
   -- As above, the implicit congruence arguments of ∧-lowerˡ/ʳ and ∧-greatest
