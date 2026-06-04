@@ -30,7 +30,7 @@ open import Overture          using ( ∣_∣ ; ∥_∥ )
 open import Setoid.Functions  using ( _⊙_ ; 𝑖𝑑 ; Image_∋_ ; eq ; ⊙-IsSurjective )
 
 open  import Setoid.Algebras {𝑆 = 𝑆}
-      using ( Algebra ; _̂_; Lift-Algˡ; Lift-Algʳ; Lift-Alg; 𝕌[_])
+      using ( Algebra ; _^_; Lift-Algˡ; Lift-Algʳ; Lift-Alg; 𝕌[_])
 open  import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}
       using ( hom ; IsHom ; epi ; IsEpi ; compatible-map )
 
@@ -64,10 +64,10 @@ module _  {𝑨 : Algebra α ρᵃ} {𝑩 : Algebra β ρᵇ} {𝑪 : Algebra γ
    c : compatible-map 𝑨 𝑪 (h ⊙ g)
    c {f}{a} = trans lemg lemh
     where
-    lemg : (h ⟨$⟩ (g ⟨$⟩ ((f ̂ 𝑨) a))) ≈₃ (h ⟨$⟩ ((f ̂ 𝑩) (λ x → g ⟨$⟩ (a x))))
+    lemg : (h ⟨$⟩ (g ⟨$⟩ ((f ^ 𝑨) a))) ≈₃ (h ⟨$⟩ ((f ^ 𝑩) (λ x → g ⟨$⟩ (a x))))
     lemg = cong h (compatible ghom)
 
-    lemh : (h ⟨$⟩ ((f ̂ 𝑩) (λ x → g ⟨$⟩ (a x)))) ≈₃ ((f ̂ 𝑪) (λ x → h ⟨$⟩ (g ⟨$⟩ (a x))))
+    lemh : (h ⟨$⟩ ((f ^ 𝑩) (λ x → g ⟨$⟩ (a x)))) ≈₃ ((f ^ 𝑪) (λ x → h ⟨$⟩ (g ⟨$⟩ (a x))))
     lemh = compatible hhom
 
   ⊙-hom : hom 𝑨 𝑩 → hom 𝑩 𝑪  → hom 𝑨 𝑪

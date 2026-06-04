@@ -30,7 +30,7 @@ open import Relation.Binary.PropositionalEquality using ( refl )
 -- Imports from the Agda Universal Algebras Library ------------------------------
 open import Overture          using ( ∣_∣  ; ∥_∥ ; 0[_] ; _|:_ ; Equivalence )
 open import Setoid.Relations  using ( ⟪_⟫ ; _/_ ; ⟪_∼_⟫-elim )
-open import Setoid.Algebras.Basic {𝑆 = 𝑆} using ( ov ; Algebra ; 𝕌[_] ; _̂_ )
+open import Setoid.Algebras.Basic {𝑆 = 𝑆} using ( ov ; Algebra ; 𝕌[_] ; _^_ )
 
 private variable α ρ ℓ : Level
 ```
@@ -44,7 +44,7 @@ since all the work is done by the relation `|:`, which we defined above (see
 ```agda
 -- Algebra compatibility with binary relation
 _∣≈_ : (𝑨 : Algebra α ρ) → BinRel 𝕌[ 𝑨 ] ℓ → Type _
-𝑨 ∣≈ R = ∀ 𝑓 → (𝑓 ̂ 𝑨) |: R
+𝑨 ∣≈ R = ∀ 𝑓 → (𝑓 ^ 𝑨) |: R
 ```
 
 A *congruence relation* of an algebra `𝑨` is defined to be an equivalence relation
@@ -109,7 +109,7 @@ open Func     using ( cong ) renaming ( to to _⟨$⟩_ )
 
 _╱_ : (𝑨 : Algebra α ρ) → Con 𝑨 ℓ → Algebra α ℓ
 Domain (𝑨 ╱ θ) = 𝕌[ 𝑨 ] / (Eqv ∥ θ ∥)
-(Interp (𝑨 ╱ θ)) ⟨$⟩ (f , a) = (f ̂ 𝑨) a
+(Interp (𝑨 ╱ θ)) ⟨$⟩ (f , a) = (f ^ 𝑨) a
 cong (Interp (𝑨 ╱ θ)) {f , u} {.f , v} (refl , a) = is-compatible ∥ θ ∥ f a
 
 module _ (𝑨 : Algebra α ρ) where

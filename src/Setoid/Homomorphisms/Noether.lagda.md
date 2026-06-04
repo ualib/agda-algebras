@@ -31,7 +31,7 @@ import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 open import Overture          using ( ∣_∣ ; ∥_∥ )
 open import Setoid.Functions  using ( IsInjective )
 
-open import Setoid.Algebras {𝑆 = 𝑆}               using ( Algebra ; _̂_)
+open import Setoid.Algebras {𝑆 = 𝑆}               using ( Algebra ; _^_)
 open import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}    using ( hom ; IsHom )
 open import Setoid.Homomorphisms.Kernels {𝑆 = 𝑆}  using ( kerquo ; πker )
 

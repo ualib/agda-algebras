@@ -32,7 +32,7 @@ open import Overture         using ( ∣_∣ ; ∥_∥ ; kernelRel )
 open import Setoid.Functions using ( Image_∋_ ; IsSurjective ; SurjInv )
                              using ( SurjInvIsInverseʳ ; epic-factor )
 
-open import Setoid.Algebras {𝑆 = 𝑆}             using ( Algebra ; 𝕌[_] ; _̂_ )
+open import Setoid.Algebras {𝑆 = 𝑆}             using ( Algebra ; 𝕌[_] ; _^_ )
 open import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}  using ( hom ; IsHom ; compatible-map ; epi ; IsEpi)
 
 private variable α ρᵃ β ρᵇ γ ρᶜ : Level
@@ -108,11 +108,11 @@ module _  {𝑨 : Algebra α ρᵃ} (𝑩 : Algebra β ρᵇ) {𝑪 : Algebra γ
          open _⟶_ φmap using () renaming (cong to φcong)
     in
     begin
-    g (h⁻¹ $ (f ̂ 𝑪) c)            ≈⟨ sym₂ $ φcong (cong Interp (≡.refl , λ _ → SurjInvIsInverseʳ hfunc hE)) ⟩
-    g (h⁻¹ $ f ̂ 𝑪 $ h ∘ h⁻¹ ∘ c)  ≈⟨ sym₂ $ φcong (compatible ∥ hh ∥) ⟩
-    g (h⁻¹ $ h $ f ̂ 𝑨 $ h⁻¹ ∘ c)  ≈⟨ sym₂ $ gφh $ (f ̂ 𝑨) (h⁻¹ ∘ c) ⟩
-    g (f ̂ 𝑨 $ h⁻¹ ∘ c)            ≈⟨ compatible ∥ gh ∥ ⟩
-    (f ̂ 𝑩)(g ∘ h⁻¹ ∘ c)           ∎
+    g (h⁻¹ $ (f ^ 𝑪) c)            ≈⟨ sym₂ $ φcong (cong Interp (≡.refl , λ _ → SurjInvIsInverseʳ hfunc hE)) ⟩
+    g (h⁻¹ $ f ^ 𝑪 $ h ∘ h⁻¹ ∘ c)  ≈⟨ sym₂ $ φcong (compatible ∥ hh ∥) ⟩
+    g (h⁻¹ $ h $ f ^ 𝑨 $ h⁻¹ ∘ c)  ≈⟨ sym₂ $ gφh $ (f ^ 𝑨) (h⁻¹ ∘ c) ⟩
+    g (f ^ 𝑨 $ h⁻¹ ∘ c)            ≈⟨ compatible ∥ gh ∥ ⟩
+    (f ^ 𝑩)(g ∘ h⁻¹ ∘ c)           ∎
 
   φhom : IsHom 𝑪 𝑩 φmap
   compatible φhom = φcomp

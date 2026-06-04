@@ -34,7 +34,7 @@ import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 -- Imports from Agda Universal Algebra Library -----------------------------------
 open  import Overture                         using ( ∣_∣ ; ∥_∥ )
 open  import Overture.Terms           {𝑆 = 𝑆} using ( Term )
-open  import Setoid.Algebras          {𝑆 = 𝑆} using ( Algebra ; _̂_ ; ov ; ⨅ )
+open  import Setoid.Algebras          {𝑆 = 𝑆} using ( Algebra ; _^_ ; ov ; ⨅ )
 open  import Setoid.Homomorphisms     {𝑆 = 𝑆} using ( hom ; IsHom )
 open  import Setoid.Terms.Properties  {𝑆 = 𝑆} using ( free-lift )
 open  import Setoid.Terms.Basic       {𝑆 = 𝑆}
@@ -72,7 +72,7 @@ module _ {X : Type χ} where
  open SetoidReasoning TX
 
  term-interp :  (f : ∣ 𝑆 ∣){s t : ∥ 𝑆 ∥ f → Term X} → (∀ i → s i ≐ t i)
-  →             ∀ η → ⟦ node f s ⟧ ⟨$⟩ η ≈ ⟦ node f t ⟧ ⟨$⟩ η -- (f ̂ 𝑻 X) t
+  →             ∀ η → ⟦ node f s ⟧ ⟨$⟩ η ≈ ⟦ node f t ⟧ ⟨$⟩ η -- (f ^ 𝑻 X) t
 
  term-interp f {s}{t} st η = cong Interp (≡.refl , λ i → ≐→Equal (s i) (t i) (st i) η )
 
@@ -129,8 +129,8 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}(hh : hom 𝑨 𝑩) 
   goal : h (⟦ node f t ⟧₁ ⟨$⟩ a) ≈ (⟦ node f t ⟧₂ ⟨$⟩ (h ∘ a))
   goal = begin
    h (⟦ node f t ⟧₁ ⟨$⟩ a)             ≈⟨ (compatible ∥ hh ∥) ⟩
-   (f ̂ 𝑩)(λ i → h (⟦ t i ⟧₁ ⟨$⟩ a))    ≈⟨ cong Interp₂ (≡.refl , λ i → comm-hom-term (t i) a) ⟩
-   (f ̂ 𝑩)(λ i → ⟦ t i ⟧₂ ⟨$⟩ (h ∘ a))  ≈⟨ refl ⟩
+   (f ^ 𝑩)(λ i → h (⟦ t i ⟧₁ ⟨$⟩ a))    ≈⟨ cong Interp₂ (≡.refl , λ i → comm-hom-term (t i) a) ⟩
+   (f ^ 𝑩)(λ i → ⟦ t i ⟧₂ ⟨$⟩ (h ∘ a))  ≈⟨ refl ⟩
    (⟦ node f t ⟧₂ ⟨$⟩ (h ∘ a))         ∎
 ```
 

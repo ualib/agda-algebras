@@ -27,7 +27,7 @@ open  import Relation.Binary.PropositionalEquality as ≡ using ()
 -- Imports from the Agda Universal Algebra Library ------------------------------------------
 open  import Overture          using  ( ∣_∣ ; ∥_∥ ; kerRel ; kerRelOfEquiv )
 open  import Setoid.Functions  using  ( Image_∋_ )
-open  import Setoid.Algebras     {𝑆 = 𝑆}  using ( Algebra ; _̂_ ; ov )
+open  import Setoid.Algebras     {𝑆 = 𝑆}  using ( Algebra ; _^_ ; ov )
 open  import Setoid.Congruences  {𝑆 = 𝑆}  using ( _∣≈_ ; Con ; mkcon ; _╱_ ; IsCongruence )
 
 open  import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}
@@ -51,23 +51,23 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} (hh : hom 𝑨 𝑩)
 
 
 `HomKerComp` asserts that the kernel of a homomorphism is compatible with the basic operations.
-That is, if each `(u i, v i)` belongs to the kernel, then so does the pair `((f ̂ 𝑨) u , (f ̂ 𝑨) v)`.
+That is, if each `(u i, v i)` belongs to the kernel, then so does the pair `((f ^ 𝑨) u , (f ^ 𝑨) v)`.
 
 
 ```agda
  HomKerComp : 𝑨 ∣≈ kerRel _≈₂_ h
  HomKerComp f {u}{v} kuv = Goal
   where
-  fhuv : (f ̂ 𝑩)(h ∘ u) ≈₂ (f ̂ 𝑩)(h ∘ v)
+  fhuv : (f ^ 𝑩)(h ∘ u) ≈₂ (f ^ 𝑩)(h ∘ v)
   fhuv = cong Interp (≡.refl , kuv)
 
-  lem1 : h ((f ̂ 𝑨) u) ≈₂ (f ̂ 𝑩)(h ∘ u)
+  lem1 : h ((f ^ 𝑨) u) ≈₂ (f ^ 𝑩)(h ∘ u)
   lem1 = IsHom.compatible ∥ hh ∥
 
-  lem2 : (f ̂ 𝑩) (h ∘ v) ≈₂ h ((f ̂ 𝑨) v)
+  lem2 : (f ^ 𝑩) (h ∘ v) ≈₂ h ((f ^ 𝑨) v)
   lem2 = sym (IsHom.compatible ∥ hh ∥)
 
-  Goal : h ((f ̂ 𝑨) u) ≈₂ h ((f ̂ 𝑨) v)
+  Goal : h ((f ^ 𝑨) u) ≈₂ h ((f ^ 𝑨) v)
   Goal = trans lem1 (trans fhuv lem2)
 ```
 
