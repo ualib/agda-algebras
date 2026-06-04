@@ -29,8 +29,8 @@ open  import Relation.Binary.PropositionalEquality as ≡ using ()
 -- Imports from the Agda Universal Algebra Library ------------------------------------------
 open  import Overture          using  ( ∣_∣ ; ∥_∥ ; kerRel ; kerRelOfEquiv )
 open  import Setoid.Functions  using  ( Image_∋_ )
-open  import Setoid.Algebras {𝑆 = 𝑆}
-      using ( Algebra ; _̂_ ; ov ; _∣≈_ ; Con ; mkcon ; _╱_ ; IsCongruence )
+open  import Setoid.Algebras     {𝑆 = 𝑆}  using ( Algebra ; _̂_ ; ov )
+open  import Setoid.Congruences  {𝑆 = 𝑆}  using ( _∣≈_ ; Con ; mkcon ; _╱_ ; IsCongruence )
 
 open  import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}
       using ( hom ; IsHom ; epi ; IsEpi ; epi→hom )

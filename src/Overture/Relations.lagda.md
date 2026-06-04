@@ -14,9 +14,9 @@ This module collects the foundational definitions concerning binary relations on
 The contents fall into four clusters.
 
 +  **`Equivalence`**.  A Σ-bundle of a binary relation with a proof that it is an equivalence relation.  The setoid `_/_` quotient construction in `Setoid.Relations.Quotients` consumes this.
-+  **Kernels and identity**.  `kerRel`, `kerRelOfEquiv`, `kernelRel`, and the trivial relation `0[_]`.  Used pervasively in `Setoid.Homomorphisms.{Factor,Kernels}` and `Setoid.Algebras.Congruences`.
++  **Kernels and identity**.  `kerRel`, `kerRelOfEquiv`, `kernelRel`, and the trivial relation `0[_]`.  Used pervasively in `Setoid.Homomorphisms.{Factor,Kernels}` and `Setoid.Congruences`.
 +  **Image-containment**.  `Im_⊆_`, the predicate that the image of a tuple lies inside a given subset.  Used in `Setoid.Subalgebras.Subuniverses` for the ar-tuple of an operation, which is a *raw* function from an arity type to the algebra's carrier — not a setoid function — so the bare-types version is what's needed at the call site.
-+  **Compatibility**.  `_|:_` (and its long form `_preserves_`), expressing that an `Op A I` is compatible with a `BinRel A ρ`.  Used in `Setoid.Algebras.Congruences._∣≈_` even on setoid algebras, since congruences of a setoid algebra are bare-types relations on its carrier that contain the setoid's `_≈_`.
++  **Compatibility**.  `_|:_` (and its long form `_preserves_`), expressing that an `Op A I` is compatible with a `BinRel A ρ`.  Used in `Setoid.Congruences._∣≈_` even on setoid algebras, since congruences of a setoid algebra are bare-types relations on its carrier that contain the setoid's `_≈_`.
 +  **Pointwise lifting**.  `PointWise` and `depPointWise`, lifting a binary relation on a codomain (or a family of relations on a dependent codomain) to the function space.  Generalizes stdlib's `_≗_` (which fixes the codomain relation to `_≡_`).  Used in `Overture.Adjunction.Residuation` to express that the composite `g ∘ f ∘ g` agrees pointwise with `g`.
 
 This module is a Category-A relocation under #303 (M2-6).  See [`src/Legacy/Base/DEPRECATED.md`](../Legacy/Base/DEPRECATED.md) for the full inventory and migration guidance.

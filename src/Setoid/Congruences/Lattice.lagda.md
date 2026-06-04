@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Setoid.Algebras.Congruences.Lattice module (The Agda Universal Algebra Library)"
+title : "Setoid.Congruences.Lattice module (The Agda Universal Algebra Library)"
 date : "2026-06-01"
 author: "agda-algebras development team"
 ---
 
 #### The Congruence Lattice of a Setoid Algebra
 
-This is the [Setoid.Algebras.Congruences.Lattice][] module of the [Agda Universal Algebra Library][].
+This is the [Setoid.Congruences.Lattice][] module of the [Agda Universal Algebra Library][].
 
 The congruences of an algebra `𝑨`, ordered by containment, form a complete lattice.
 This module begins the formalization of that fact by promoting `Con 𝑨` to a
@@ -26,7 +26,7 @@ the join requires the congruence-generation theorem as a subsidiary result.
 
 open import Overture using (𝓞 ; 𝓥 ; Signature)
 
-module Setoid.Algebras.Congruences.Lattice {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Congruences.Lattice {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from the Agda Standard Library ---------------------------------------
 open import Agda.Primitive           using () renaming ( Set to Type )
@@ -39,7 +39,7 @@ open import Relation.Binary.Lattice  using ( Infimum ; IsMeetSemilattice ; MeetS
 
 -- Imports from the Agda Universal Algebras Library ------------------------------
 open import Setoid.Algebras.Basic {𝑆 = 𝑆}              using  ( ov ; Algebra ; 𝕌[_] )
-open import Setoid.Algebras.Congruences.Basic {𝑆 = 𝑆}  using  ( Con ; mkcon ; _∣≈_
+open import Setoid.Congruences.Basic {𝑆 = 𝑆}  using  ( Con ; mkcon ; _∣≈_
                                                               ; reflexive ; is-equivalence
                                                               ; is-compatible )
 private variable α ρ ℓ : Level
@@ -218,7 +218,7 @@ module _ (𝑨 : Algebra α ρ) {ℓ : Level} where
 
 --------------------------------------
 
-<span style="float:left;">[← Setoid.Algebras.Congruences](Setoid.Algebras.Congruences.html)</span>
+<span style="float:left;">[← Setoid.Congruences](Setoid.Congruences.html)</span>
 <span style="float:right;">[Setoid.Homomorphisms →](Setoid.Homomorphisms.html)</span>
 
 {% include UALib.Links.md %}

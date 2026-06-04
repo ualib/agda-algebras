@@ -10,6 +10,12 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Structures.Lattice][] module of the [Agda Universal Algebra Library][].
 
+This module formalizes a lattice *as an equational algebra* (an algebra over
+`Sig-Lattice` satisfying `Th-Lattice`).  For the complementary *order-theoretic* view —
+a lattice as a poset with meets and joins, the form taken by the congruence and
+subalgebra lattices — see [Order.CompleteLattice][] (the two presentations are
+equivalent via a standard theorem).
+
 A **lattice** inhabits the Σ-typed structure `Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ Th-Lattice`
 over `Sig-Lattice`.  Lattice is the first structure in the [`Classical/`][Classical]
 tree with two *distinct* binary operation symbols (`∧-Op` and `∨-Op`); its
