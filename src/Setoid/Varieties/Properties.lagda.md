@@ -56,7 +56,7 @@ open Algebra  using ( Domain )
 
 
 
-#### Algebraic invariance of ⊧
+#### Algebraic invariance of ⊧ {#algebraic-invariance}
 
 The binary relation ⊧ would be practically useless if it were not an *algebraic invariant* (i.e., invariant under isomorphism).
 
@@ -240,7 +240,7 @@ algebras models (p ≈̇ q) if the lift of each algebra in the collection models
 
 
 
-#### Homomorphic invariance of ⊧
+#### Modeled identities and homomorphism kernels
 
 If an algebra 𝑨 models an identity (p ≈̇ q), then the pair (p , q) belongs to the
 kernel of every homomorphism φ : hom (𝑻 X) 𝑨 from the term algebra to 𝑨; that is,
