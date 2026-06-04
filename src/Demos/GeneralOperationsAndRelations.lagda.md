@@ -23,8 +23,6 @@ author: "the agda-algebras development team"
 
 <!--
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Demos.GeneralOperationsAndRelations where

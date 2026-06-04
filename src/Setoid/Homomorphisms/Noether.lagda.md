@@ -11,8 +11,6 @@ This is the [Setoid.Homomorphisms.Noether][] module of the [Agda Universal Algeb
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using (𝓞 ; 𝓥 ; Signature)
@@ -45,8 +43,6 @@ private variable α ρᵃ β ρᵇ γ ρᶜ ι : Level
 
 
 ```agda
-
-
 open _⟶_ using ( cong ) renaming ( to to _⟨$⟩_ )
 open Algebra using ( Domain )
 
@@ -82,8 +78,6 @@ Now we prove that the homomorphism whose existence is guaranteed by `FirstHomThe
 
 
 ```agda
-
-
  FirstHomUnique :  (f g : hom (kerquo hh) 𝑩)
   →                ( ∀ a →  h a ≈ ∣ f ∣ ⟨$⟩ (∣ πker hh ∣ ⟨$⟩ a) )
   →                ( ∀ a →  h a ≈ ∣ g ∣ ⟨$⟩ (∣ πker hh ∣ ⟨$⟩ a) )

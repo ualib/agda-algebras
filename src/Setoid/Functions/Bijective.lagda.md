@@ -13,8 +13,6 @@ A *bijective function* from a setoid `𝑨 = (A, ≈₀)` to a setoid `𝑩 = (B
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Relation.Binary using ( Setoid )

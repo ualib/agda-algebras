@@ -11,8 +11,6 @@ This is the [Setoid.Homomorphisms.Properties][] module of the [Agda Universal Al
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using (𝓞 ; 𝓥 ; Signature)
@@ -46,8 +44,6 @@ private variable α β γ ρᵃ ρᵇ ρᶜ ℓ : Level
 
 
 ```agda
-
-
 module _  {𝑨 : Algebra α ρᵃ} {𝑩 : Algebra β ρᵇ} {𝑪 : Algebra γ ρᶜ} where
   open Algebra 𝑨  renaming (Domain to A )   using ()
   open Algebra 𝑩  renaming (Domain to B )   using ()
@@ -99,8 +95,6 @@ First we define the identity homomorphism for setoid algebras and then we prove 
 
 
 ```agda
-
-
 module _ {𝑨 : Algebra α ρᵃ} where
  open Algebra 𝑨  renaming (Domain to A )                   using ()
  open Setoid A   renaming ( _≈_ to _≈₁_ ; refl to refl₁ )  using ( reflexive )
@@ -171,8 +165,6 @@ Next we formalize the fact that a homomorphism from `𝑨` to `𝑩` can be lift
 
 
 ```agda
-
-
 module _ {𝑨 : Algebra α ρᵃ} {𝑩 : Algebra β ρᵇ} where
  open Algebra            using ( Domain )
  open Setoid (Domain 𝑨)  using ( reflexive )  renaming ( _≈_ to _≈₁_ )

@@ -11,8 +11,6 @@ This is the [Examples][] module of the [Agda Universal Algebra Library][].
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Examples where

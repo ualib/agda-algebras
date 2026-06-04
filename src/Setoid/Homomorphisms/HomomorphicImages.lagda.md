@@ -11,8 +11,6 @@ This is the [Setoid.Homomorphisms.HomomorphicImages][] module of the [Agda Unive
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using (𝓞 ; 𝓥 ; Signature)
@@ -56,8 +54,6 @@ class of *homomorphic images* of an algebra in dependent type theory.
 
 
 ```agda
-
-
 open IsHom
 
 _IsHomImageOf_ : (𝑩 : Algebra β ρᵇ)(𝑨 : Algebra α ρᵃ) → Type _
@@ -84,8 +80,6 @@ the image of given hom.
 
 
 ```agda
-
-
 module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
  open Algebra 𝑨  renaming (Domain to A )                      using (Interp)
  open Setoid A   renaming ( _≈_ to _≈₁_ ; Carrier to ∣A∣)     using ()
@@ -131,8 +125,6 @@ Given a class `𝒦` of `𝑆`-algebras, we need a type that expresses the asser
 
 
 ```agda
-
-
 IsHomImageOfClass : {𝒦 : Pred (Algebra α ρᵃ)(suc α)} → Algebra α ρᵃ → Type (ov (α ⊔ ρᵃ))
 IsHomImageOfClass {𝒦 = 𝒦} 𝑩 = Σ[ 𝑨 ∈ Algebra _ _ ] ((𝑨 ∈ 𝒦) ∧ (𝑩 IsHomImageOf 𝑨))
 
@@ -147,8 +139,6 @@ Here are some tools that have been useful (e.g., in the road to the proof of Bir
 
 
 ```agda
-
-
 module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
  open Algebra 𝑨  using ()               renaming ( Domain to A )
  open Algebra 𝑩  using ()               renaming ( Domain to B )

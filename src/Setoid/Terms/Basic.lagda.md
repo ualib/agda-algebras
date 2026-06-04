@@ -11,8 +11,6 @@ This is the [Setoid.Terms.Basic][] module of the [Agda Universal Algebra Library
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using (𝓞 ; 𝓥 ; Signature)
@@ -56,8 +54,6 @@ as a Algebra whose carrier is the setoid of terms.
 
 
 ```agda
-
-
 module _ {X : Type χ } where
 
  -- Equality of terms as an inductive datatype
@@ -105,8 +101,6 @@ A substitution from `Δ` to `Γ` associates a term in `Γ` with each variable in
 
 
 ```agda
-
-
 -- Parallel substitutions.
 Sub : Type χ → Type χ → Type (ov χ)
 Sub X Y = (y : Y) → Term X
@@ -122,8 +116,6 @@ An environment for `Γ` maps each variable `x : Γ` to an element of `A`, and eq
 
 
 ```agda
-
-
 module Environment (𝑨 : Algebra α ℓ) where
  open Algebra 𝑨  renaming( Domain to A ; Interp  to InterpA )  using()
  open Setoid A   renaming( _≈_ to _≈ₐ_ ; Carrier to ∣A∣ )      using( refl ; sym ; trans )
@@ -150,8 +142,6 @@ Interpretation of terms is iteration on the W-type. The standard library offers 
 
 
 ```agda
-
-
  ⟦_⟧ : {X : Type χ}(t : Term X) → Func (Env X) A
  ⟦ ℊ x ⟧ ⟨$⟩ ρ = ρ x
  ⟦ node f args ⟧ ⟨$⟩ ρ = InterpA ⟨$⟩ (f , λ i → ⟦ args i ⟧ ⟨$⟩ ρ)

@@ -11,8 +11,6 @@ This is the [Setoid.Functions.Inverses][] module of the [agda-algebras][] librar
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Setoid.Functions.Inverses where
@@ -47,8 +45,6 @@ the second is for functions on setoids.
 
 
 ```agda
-
-
  data Img_∋_ (f : A → B) : B → Type (α ⊔ β ⊔ ρᵇ) where
   eq : {b : B} → (a : A) → b ≈₂ (f a) → Img f ∋ b
 
@@ -128,8 +124,6 @@ An inhabitant of `Image f ∋ b` is a dependent pair `(a , p)`, where `a : A` an
 
 
 ```agda
-
-
  inv : (f : A → B){b : B} → Img f ∋ b → A
  inv _ (eq a _) = a
 
@@ -155,8 +149,6 @@ We can prove that `Inv f` is the range-restricted right-inverse of `f`, as follo
 
 
 ```agda
-
-
  invIsInvʳ : {f : A → B}{b : B}(q : Img f ∋ b) → (f (inv f q)) ≈₂ b
  invIsInvʳ (eq _ p) = sym₂ p
 
@@ -174,8 +166,6 @@ In the following sense, `Inv f` is also a (range-restricted) *left-inverse*.
 
 
 ```agda
-
-
  InvIsInverseˡ : ∀ {F a} → Inv F {b = F ⟨$⟩ a} Imagef∋f ≈₁ a
  InvIsInverseˡ = refl₁
 

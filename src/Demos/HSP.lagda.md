@@ -53,7 +53,6 @@ theory and a proof assistant like [Agda][]. On the other hand, this paper is pro
 To best emulate [MLTT][], we use
 
 ```agda
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 ```
 
@@ -76,7 +75,6 @@ We also make use of the following definitions from [Agda][]'s standard library (
 
 
 ```agda
-
 -- Import universe levels and Signature type (described below) from the agda-algebras library.
 open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 module Demos.HSP {𝑆 : Signature 𝓞 𝓥} where
@@ -121,7 +119,6 @@ reference="setoid-functions"} below), and the symbol `_⟨$⟩_` in place of `f`
 
 
 ```agda
-
 module _ {A : Type α }{B : A → Type β} where
  ∣_∣ : Σ[ x ∈ A ] B x → A
  ∣_∣ = fst
@@ -146,8 +143,6 @@ An example of a setoid function is the identity function from a setoid to itself
 
 
 ```agda
-
-
 𝑖𝑑 : {A : Setoid α ρᵃ} → A ⟶ A
 𝑖𝑑 {A} = record { to = id ; cong = id }
 
@@ -167,8 +162,6 @@ We define the *inverse* of a setoid function in terms of the image of the functi
 
 
 ```agda
-
-
 module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
  open Setoid 𝑩 using ( _≈_ ; sym ) renaming ( Carrier to B )
 
@@ -182,8 +175,6 @@ certainty, is accompanied by a proof that it gives such a right-inverse.
 
 
 ```agda
-
-
  Inv : (f : 𝑨 ⟶ 𝑩){b : B} → Image f ∋ b → Carrier 𝑨
  Inv _ (eq a _) = a
 
@@ -205,8 +196,6 @@ We reproduce the definitions and prove some of their properties inside the next 
 
 
 ```agda
-
-
 module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
  open Setoid 𝑨 using () renaming ( _≈_ to _≈ᴬ_ )
  open Setoid 𝑩 using () renaming ( _≈_ to _≈ᴮ_ )
@@ -227,8 +216,6 @@ Proving that the composition of injective setoid functions is again injective is
 
 
 ```agda
-
-
 module _  {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ}{𝑪 : Setoid γ ρᶜ}
           (f : 𝑨 ⟶ 𝑩)(g : 𝑩 ⟶ 𝑪) where
 
@@ -258,8 +245,6 @@ by an injective map `fromIm : Im f ⟶ B`.
 
 
 ```agda
-
-
 module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
 
  Im : (f : 𝑨 ⟶ 𝑩) → Setoid _ _
@@ -315,8 +300,6 @@ We need to augment our `Signature` type so that it supports algebras over setoid
 
 
 ```agda
-
-
 EqArgs :  {𝑆 : Signature 𝓞 𝓥}{ξ : Setoid α ρᵃ}
  →        ∀ {f g} → f ≡ g → (∥ 𝑆 ∥ f → Carrier ξ) → (∥ 𝑆 ∥ g → Carrier ξ) → Type (𝓥 ⊔ ρᵃ)
 EqArgs {ξ = ξ} ≡.refl u v = ∀ i → u i ≈ v i where open Setoid ξ using ( _≈_ )
@@ -327,8 +310,6 @@ This makes it possible to define an operator which translates a signature for al
 
 
 ```agda
-
-
 ⟨_⟩ : Signature 𝓞 𝓥 → Setoid α ρᵃ → Setoid _ _
 
 Carrier  (⟨ 𝑆 ⟩ ξ)                = Σ[ f ∈ ∣ 𝑆 ∣ ] (∥ 𝑆 ∥ f → ξ .Carrier)
@@ -351,8 +332,6 @@ Our [Agda][] implementation represents algebras as inhabitants of a record type 
 
 
 ```agda
-
-
 record Algebra α ρ : Type (𝓞 ⊔ 𝓥 ⊔ suc (α ⊔ ρ)) where
  field  Domain  : Setoid α ρ
         Interp  : ⟨ 𝑆 ⟩ Domain ⟶ Domain
@@ -366,8 +345,6 @@ Thus, for each operation symbol in `𝑆` we have a setoid function `f` whose do
 
 
 ```agda
-
-
 open Algebra
 𝔻[_] : Algebra α ρᵃ →  Setoid α ρᵃ
 𝔻[ 𝑨 ] = Domain 𝑨
@@ -402,8 +379,6 @@ The `Lift` operation of the standard library embeds a type into a higher univers
 
 
 ```agda
-
-
 module _ (𝑨 : Algebra α ρᵃ) where
  open Setoid 𝔻[ 𝑨 ] using ( _≈_ ; refl ; sym ; trans ) ; open Level
  Lift-Algˡ : (ℓ : Level) → Algebra (α ⊔ ℓ) ρᵃ
@@ -464,8 +439,6 @@ Here is the formal definition of the product algebra type in [Agda][].
 
 
 ```agda
-
-
 module _ {ι : Level}{I : Type ι } where
 
  ⨅ : (𝒜 : I → Algebra α ρᵃ) → Algebra (α ⊔ ι) (ρᵃ ⊔ ι)
@@ -507,8 +480,6 @@ of) `𝑨` to (the domain of) `𝑩`.
 
 
 ```agda
-
-
 module _ (𝑨 : Algebra α ρᵃ)(𝑩 : Algebra β ρᵇ) where
 
  compatible-map-op : (𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]) → ∣ 𝑆 ∣ → Type _
@@ -525,8 +496,6 @@ finally the type (`hom`) of homomorphisms from `𝑨` to `𝑩`.
 
 
 ```agda
-
-
  record IsHom (h : 𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]) : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵇ) where
   constructor  mkhom
   field        compatible : compatible-map h
@@ -546,8 +515,6 @@ well as and for the corresponding types.
 
 
 ```agda
-
-
  record IsMon (h : 𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]) : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ ⊔ ρᵇ) where
   field  isHom : IsHom h
          isInjective : IsInjective h
@@ -565,8 +532,6 @@ monomorphism.
 
 
 ```agda
-
-
  record IsEpi (h : 𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]) : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ β ⊔ ρᵇ) where
   field  isHom : IsHom h
          isSurjective : IsSurjective h
@@ -582,8 +547,6 @@ Here are two utilities that are useful for translating between types.
 
 
 ```agda
-
-
 open IsHom ; open IsMon ; open IsEpi
 module _ (𝑨 : Algebra α ρᵃ)(𝑩 : Algebra β ρᵇ) where
  mon→intohom : mon 𝑨 𝑩 → Σ[ h ∈ hom 𝑨 𝑩 ] IsInjective ∣ h ∣
@@ -603,8 +566,6 @@ straightforward.
 
 
 ```agda
-
-
 module _  {𝑨 : Algebra α ρᵃ} {𝑩 : Algebra β ρᵇ} {𝑪 : Algebra γ ρᶜ}
           {g : 𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]}{h : 𝔻[ 𝑩 ] ⟶ 𝔻[ 𝑪 ]} where
   open Setoid 𝔻[ 𝑪 ] using ( trans )
@@ -636,8 +597,6 @@ the operations of lifting and lowering of a setoid algebra are homomorphisms.
 
 
 ```agda
-
-
 𝒾𝒹 : {𝑨 : Algebra α ρᵃ} → hom 𝑨 𝑨
 𝒾𝒹 {𝑨 = 𝑨} =  𝑖𝑑 , mkhom (reflexive ≡.refl)
               where open Setoid ( Domain 𝑨 ) using ( reflexive )
@@ -707,8 +666,6 @@ latter in dependent type theory as follows.
 
 
 ```agda
-
-
 module _ {ι : Level}{I : Type ι}{𝑨 : Algebra α ρᵃ}(ℬ : I → Algebra β ρᵇ) where
  ⨅-hom-co : (∀(i : I) → hom 𝑨 (ℬ i)) → hom 𝑨 (⨅ ℬ)
  ⨅-hom-co 𝒽 = h , hhom where  h : 𝔻[ 𝑨 ] ⟶ 𝔻[ ⨅ ℬ ]
@@ -727,8 +684,6 @@ accessible.
 
 
 ```agda
-
-
 module _ (𝑨 : Algebra α ρᵃ) (𝑩 : Algebra β ρᵇ) where
  open Setoid 𝔻[ 𝑨 ]  using ()  renaming ( _≈_ to _≈ᴬ_ )
  open Setoid 𝔻[ 𝑩 ]  using ()  renaming ( _≈_ to _≈ᴮ_ )
@@ -758,8 +713,6 @@ It is easy to prove that `\au{`{.AgdaRecord}≅``{.AgdaArgument}} is an equivale
 
 
 ```agda
-
-
 ≅-refl : Reflexive (_≅_ {α}{ρᵃ})
 ≅-refl {α}{ρᵃ}{𝑨} =
  mkiso 𝒾𝒹 𝒾𝒹 (λ b → refl) λ a → refl where open Setoid 𝔻[ 𝑨 ] using ( refl )
@@ -792,8 +745,6 @@ image via the identity hom.
 
 
 ```agda
-
-
 ov : Level → Level         -- shorthand for a common level transformation
 ov α = 𝓞 ⊔ 𝓥 ⊔ suc α
 
@@ -821,8 +772,6 @@ below.[^8]
 
 
 ```agda
-
-
 module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
 
  HomIm : (h : hom 𝑨 𝑩) → Algebra _ _
@@ -855,8 +804,6 @@ non-cumulativity because isomorphism classes of algebras are closed under
 
 
 ```agda
-
-
 module _ {𝑨 : Algebra α ρᵃ}{ℓ : Level} where
  Lift-≅ˡ : 𝑨 ≅ (Lift-Algˡ 𝑨 ℓ)
  Lift-≅ˡ = mkiso ToLiftˡ FromLiftˡ (ToFromLiftˡ{𝑨 = 𝑨}) (FromToLiftˡ{𝑨 = 𝑨}{ℓ})
@@ -875,8 +822,6 @@ embedded* in `𝑩`; in other terms, `𝑨 ≤ 𝑩` iff there exists an injecti
 
 
 ```agda
-
-
 _≤_ : Algebra α ρᵃ → Algebra β ρᵇ → Type _
 𝑨 ≤ 𝑩 = Σ[ h ∈ hom 𝑨 𝑩 ] IsInjective ∣ h ∣
 ```
@@ -885,8 +830,6 @@ The subalgebra relation is reflexive, by the identity monomorphism (and transiti
 
 
 ```agda
-
-
 ≤-reflexive   :  {𝑨 : Algebra α ρᵃ} → 𝑨 ≤ 𝑨
 ≤-reflexive = 𝒾𝒹 , id
 ```
@@ -898,8 +841,6 @@ We conclude this section with a definition that will be useful later; it simply 
 
 
 ```agda
-
-
 mon→≤ : {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} → mon 𝑨 𝑩 → 𝑨 ≤ 𝑩
 mon→≤ {𝑨 = 𝑨}{𝑩} x = mon→intohom 𝑨 𝑩 x
 ```
@@ -918,8 +859,6 @@ each leaf `ℊ`; hence the constructor names (`ℊ` for "generator" and `node` f
 
 
 ```agda
-
-
 data Term (X : Type χ) : Type (ov χ)  where
  ℊ : X → Term X
  node : (f : ∣ 𝑆 ∣)(t : ∥ 𝑆 ∥ f → Term X) → Term X
@@ -933,8 +872,6 @@ We enrich the `Term` type to a setoid of `𝑆`-terms, which will ultimately be 
 
 
 ```agda
-
-
 module _ {X : Type χ } where
 
  data _≃_ : Term X → Term X → Type (ov χ) where
@@ -947,8 +884,6 @@ It is easy to show that `_≃_` is an equivalence relation as follows.
 
 
 ```agda
-
-
  ≃-isRefl   : Reflexive      _≃_
  ≃-isRefl {ℊ _} = rfl ≡.refl
  ≃-isRefl {node _ _} = gnl λ _ → ≃-isRefl
@@ -973,8 +908,6 @@ term `f t`.
 
 
 ```agda
-
-
 TermSetoid : (X : Type χ) → Setoid _ _
 TermSetoid X = record { Carrier = Term X ; _≈_ = _≃_ ; isEquivalence = ≃-isEquiv }
 
@@ -995,8 +928,6 @@ Abel uses to formalize Birkhoff's completeness theorem.
 
 
 ```agda
-
-
 module Environment (𝑨 : Algebra α ℓ) where
  open Setoid 𝔻[ 𝑨 ] using ( _≈_ ; refl ; sym ; trans )
 
@@ -1012,8 +943,6 @@ The *interpretation* of a term *evaluated* in a particular environment is define
 
 
 ```agda
-
-
  ⟦_⟧ : {X : Type χ}(t : Term X) → (Env X) ⟶ 𝔻[ 𝑨 ]
  ⟦ ℊ x ⟧          ⟨$⟩ ρ    = ρ x
  ⟦ node f args ⟧  ⟨$⟩ ρ    = (Interp 𝑨) ⟨$⟩ (f , λ i → ⟦ args i ⟧ ⟨$⟩ ρ)
@@ -1025,8 +954,6 @@ Two terms are proclaimed *equal* if they are equal for all environments.
 
 
 ```agda
-
-
  Equal : {X : Type χ}(s t : Term X) → Type _
  Equal {X = X} s t = ∀ (ρ : Carrier (Env X)) → ⟦ s ⟧ ⟨$⟩ ρ ≈ ⟦ t ⟧ ⟨$⟩ ρ
 ```
@@ -1035,8 +962,6 @@ Proof that `Equal` is an equivalence relation, and that the implication `s ≃ t
 
 
 ```agda
-
-
  ≃→Equal : {X : Type χ}(s t : Term X) → s ≃ t → Equal s t
  ≃→Equal .(ℊ _) .(ℊ _) (rfl ≡.refl) = λ _ → refl
  ≃→Equal (node _ s)(node _ t)(gnl x) =
@@ -1060,8 +985,6 @@ the second (`interp-prod`) is the interpretation of a term in a product algebra.
 
 
 ```agda
-
-
 module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}(hh : hom 𝑨 𝑩) where
  open Environment 𝑨  using ( ⟦_⟧ )
  open Environment 𝑩  using () renaming ( ⟦_⟧ to ⟦_⟧ᴮ )
@@ -1101,8 +1024,6 @@ If `𝒦` is a class of algebras of a given signature, then we write `𝒦 ⊫ p
 
 
 ```agda
-
-
 module _ {X : Type χ} where
  _⊧_≈_ : Algebra α ρᵃ → Term X → Term X → Type _
  𝑨 ⊧ p ≈ q = Equal p q where open Environment 𝑨
@@ -1115,8 +1036,6 @@ We represent a set of term identities as a predicate over pairs of terms, say, `
 
 
 ```agda
-
-
  _⊨_ : (𝑨 : Algebra α ρᵃ) → Pred(Term X × Term X)(ov χ) → Type _
  𝑨 ⊨ ℰ = ∀ {p q} → (p , q) ∈ ℰ → Equal p q where open Environment 𝑨
 ```
@@ -1131,8 +1050,6 @@ invariance under isomorphism).  We formalize this property as follows.
 
 
 ```agda
-
-
 module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}(𝑩 : Algebra β ρᵇ)(p q : Term X) where
  ⊧-I-invar : 𝑨 ⊧ p ≈ q  →  𝑨 ≅ 𝑩  →  𝑩 ⊧ p ≈ q
  ⊧-I-invar Apq (mkiso fh gh f∼g g∼f) ρ = begin
@@ -1152,8 +1069,6 @@ the class of algebras modeling `ℰ`, denoted `Mod ℰ`, is called the *equation
 
 
 ```agda
-
-
 Th : {X : Type χ} → Pred (Algebra α ρᵃ) ℓ → Pred(Term X × Term X) _
 Th 𝒦 = λ (p , q) → 𝒦 ⊫ p ≈ q
 
@@ -1176,8 +1091,6 @@ provided `H 𝒦 ⊆ 𝒦`. Similarly, `𝒦` is *closed under the taking of sub
 
 
 ```agda
-
-
 module _ {α ρᵃ β ρᵇ : Level} where
  private a = α ⊔ ρᵃ
  H : ∀ ℓ → Pred(Algebra α ρᵃ) (a ⊔ ov ℓ) → Pred(Algebra β ρᵇ) _
@@ -1195,8 +1108,6 @@ Identities modeled by an algebra `𝑨` are also modeled by every homomorphic im
 
 
 ```agda
-
-
 module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}{p q : Term X} where
  ⊧-H-invar : 𝑨 ⊧ p ≈ q → 𝑩 IsHomImageOf 𝑨 → 𝑩 ⊧ p ≈ q
  ⊧-H-invar Apq (φh , φE) ρ = begin
@@ -1231,8 +1142,6 @@ An identity satisfied by all algebras in an indexed collection is also satisfied
 
 
 ```agda
-
-
 module _ {X : Type χ}{I : Type ℓ}(𝒜 : I → Algebra α ρᵃ){p q : Term X} where
  ⊧-P-invar : (∀ i → 𝒜 i ⊧ p ≈ q) → ⨅ 𝒜 ⊧ p ≈ q
  ⊧-P-invar 𝒜pq a = begin
@@ -1254,8 +1163,6 @@ The class `V 𝒦` is called the *varietal closure* of `𝒦`. Here is how we de
 
 
 ```agda
-
-
 module _  {α ρᵃ β ρᵇ γ ρᶜ δ ρᵈ : Level} where
  private a = α ⊔ ρᵃ ; b = β ⊔ ρᵇ
  V : ∀ ℓ ι → Pred(Algebra α ρᵃ) (a ⊔ ov ℓ) →  Pred(Algebra δ ρᵈ) _
@@ -1269,8 +1176,6 @@ assertion. (The others are included in the `Setoid.Varieties.Preservation` modul
 
 
 ```agda
-
-
 module _  {X : Type χ}{𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)}{p q : Term X} where
  H-id1 : 𝒦 ⊫ p ≈ q → H{β = α}{ρᵃ}ℓ 𝒦 ⊫ p ≈ q
  H-id1 σ 𝑩 (𝑨 , kA , BimgA) = ⊧-H-invar{p = p}{q} (σ 𝑨 kA) BimgA
@@ -1280,8 +1185,6 @@ The analogous preservation result for `S` is a consequence of the invariance lem
 
 
 ```agda
-
-
  S-id1 : 𝒦 ⊫ p ≈ q → S{β = α}{ρᵃ}ℓ 𝒦 ⊫ p ≈ q
  S-id1 σ 𝑩 (𝑨 , kA , B≤A) = ⊧-S-invar{p = p}{q} (σ 𝑨 kA) B≤A
 
@@ -1293,8 +1196,6 @@ The [agda-algebras][] library includes analogous pairs of implications for `P`, 
 
 
 ```agda
-
-
  P-id1 : ∀{ι} → 𝒦 ⊫ p ≈ q → P{β = α}{ρᵃ}ℓ ι 𝒦 ⊫ p ≈ q
  P-id1 σ 𝑨 (I , 𝒜 , kA , A≅⨅A) = ⊧-I-invar 𝑨 p q IH (≅-sym A≅⨅A) where
   IH : ⨅ 𝒜 ⊧ p ≈ q
@@ -1328,8 +1229,6 @@ and its setoid analog `free-lift-func`, and then proving the latter is a homomor
 
 
 ```agda
-
-
 module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}(h : X → 𝕌[ 𝑨 ]) where
  free-lift : 𝕌[ 𝑻 X ] → 𝕌[ 𝑨 ]
  free-lift (ℊ x)       = h x
@@ -1354,8 +1253,6 @@ as the free lift of `η` evaluated at `p`. We apply this fact a number of times 
 
 
 ```agda
-
-
 module _  {X : Type χ} {𝑨 : Algebra α ρᵃ}   where
  open Setoid 𝔻[ 𝑨 ]  using ( _≈_ ; refl )
  open Environment 𝑨  using ( ⟦_⟧ )
@@ -1393,8 +1290,6 @@ To do so, we contrive an index type for the product; each index is a triple `(�
 
 
 ```agda
-
-
 module FreeAlgebra (𝒦 : Pred (Algebra α ρᵃ) ℓ) where
  private c = α ⊔ ρᵃ ; ι = ov c ⊔ ℓ
  ℑ : {χ : Level} → Type χ → Type (ι ⊔ χ)
@@ -1408,8 +1303,6 @@ We then define `𝔽[ X ]` to be the image of a homomorphism from `𝑻 X` to `�
 
 
 ```agda
-
-
  homC : (X : Type χ) → hom (𝑻 X) (𝑪 X)
  homC X = ⨅-hom-co _ (λ i → lift-hom (snd ∥ i ∥))
 
@@ -1422,8 +1315,6 @@ is defined as follows.
 
 
 ```agda
-
-
 module FreeHom {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
  private c = α ⊔ ρᵃ ; ι = ov c ⊔ ℓ
  open FreeAlgebra 𝒦 using ( 𝔽[_] ; homC )
@@ -1442,8 +1333,6 @@ then there exists an epimorphism from `𝔽[ A ]` onto `𝑨`, where `A` denotes
 
 
 ```agda
-
-
 module _ {𝑨 : Algebra (α ⊔ ρᵃ ⊔ ℓ)(α ⊔ ρᵃ ⊔ ℓ)}{𝒦 : Pred(Algebra α ρᵃ)(α ⊔ ρᵃ ⊔ ov ℓ)} where
  private c = α ⊔ ρᵃ ⊔ ℓ ; ι = ov c
  open FreeAlgebra 𝒦 using ( 𝔽[_] ; 𝑪 )
@@ -1486,8 +1375,6 @@ Actually, we will need the following lifted version of this result.
 
 
 ```agda
-
-
  F-ModTh-epi-lift : 𝑨 ∈ Mod (Th (V ℓ ι 𝒦)) → epi 𝔽[ A ] (Lift-Alg 𝑨 ι ι)
  F-ModTh-epi-lift A∈ModThK = ∘-epi (F-ModThV-epi λ {p q} → A∈ModThK{p = p}{q} ) ToLift-epi
 ```
@@ -1530,8 +1417,6 @@ We need an arbitrary equational class, which we obtain by starting with an arbit
 
 
 ```agda
-
-
 module _ (𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)) where
  V-expa : 𝒦 ⊆ V ℓ (ov (α ⊔ ρᵃ ⊔ ℓ)) 𝒦
  V-expa {x = 𝑨}kA = 𝑨 , (𝑨 , (⊤ , (λ _ → 𝑨), (λ _ → kA), Goal), ≤-reflexive), IdHomImage
@@ -1554,8 +1439,6 @@ For the inclusion `V 𝒦 ⊆ 𝒦`, recall lemma `V-id1` which asserts that `�
 
 
 ```agda
-
-
 module _ {ℓ : Level}{X : Type ℓ}{ℰ : {Y : Type ℓ} → Pred (Term Y × Term Y) (ov ℓ)} where
  private 𝒦 = Mod{α = ℓ}{ℓ}{X} ℰ     -- an arbitrary equational class
 
@@ -1570,8 +1453,6 @@ To fix an arbitrary variety, start with an arbitrary class `𝒦` of `𝑆`-alge
 
 
 ```agda
-
-
 module _ (𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)){X : Type (α ⊔ ρᵃ ⊔ ℓ)} where
  private c = α ⊔ ρᵃ ⊔ ℓ ; ι = ov c
 
@@ -1592,8 +1473,6 @@ so `𝔽[ X ]` is (isomorphic to) a subalgebra of `𝑪 X`.
 
 
 ```agda
-
-
  open FreeHom {ℓ = ℓ}{𝒦}
  open FreeAlgebra 𝒦 using (homC ;  𝔽[_] ; 𝑪 )
  homFC : hom 𝔽[ X ] (𝑪 X)
@@ -1616,8 +1495,6 @@ Next we prove that every algebra in `Mod (Th (V 𝒦))` is a homomorphic image o
 
 
 ```agda
-
-
 module _ {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
  private c = α ⊔ ρᵃ ⊔ ℓ ; ι = ov c
 

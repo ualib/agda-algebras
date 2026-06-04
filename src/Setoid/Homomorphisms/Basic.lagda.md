@@ -11,8 +11,6 @@ This is the [Setoid.Homomorphisms.Basic][] module of the [Agda Universal Algebra
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using (𝓞 ; 𝓥 ; Signature )
@@ -63,8 +61,6 @@ module _ (𝑨 : Algebra α ρᵃ)(𝑩 : Algebra β ρᵇ) where
 
 
 ```agda
-
-
  record IsMon (h : A ⟶ B) : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ) where
   field
    isHom : IsHom h

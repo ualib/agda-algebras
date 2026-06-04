@@ -23,8 +23,6 @@ domain `I → A` (the type of "tuples") and codomain `A`.
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Overture.Operations where
@@ -45,8 +43,6 @@ For example, the `I`-*ary projection operations* on `A` are represented as inhab
 
 
 ```agda
-
-
 -- Example (projections)
 π : {I : Type 𝓥} {A : Type a } → I → Op A I
 π i = λ x → x i
@@ -57,8 +53,6 @@ Occasionally we want to extract the arity of a given operation symbol.
 
 
 ```agda
-
-
 -- return the arity of a given operation symbol
 arity[_] : {I : Type 𝓥} {A : Type a } → Op A I → Type 𝓥
 arity[_] {I = I} f = I

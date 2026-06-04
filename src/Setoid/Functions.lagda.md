@@ -11,8 +11,6 @@ This is the [Setoid.Functions][] module of the [Agda Universal Algebra Library][
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Setoid.Functions where

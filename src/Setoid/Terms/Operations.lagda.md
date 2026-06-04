@@ -13,8 +13,6 @@ Here we define *term operations* which are simply terms interpreted in a particu
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using (𝓞 ; 𝓥 ; Signature)
@@ -56,8 +54,6 @@ It turns out that the intepretation of a term is the same as the `free-lift`
 
 
 ```agda
-
-
 module _ {𝑨 : Algebra α ρᵃ} where
  open Algebra 𝑨      using ( Interp )      renaming (Domain to A )
  open Setoid A       using ( _≈_ ; refl )  renaming ( Carrier to ∣A∣ )
@@ -90,8 +86,6 @@ module _ {X : Type χ} where
 
 
 ```agda
-
-
 module _ {X : Type χ }{I : Type ι}(𝒜 : I → Algebra α ρᵃ) where
  open Algebra (⨅ 𝒜)      using (Interp)  renaming ( Domain to ⨅A )
  open Setoid ⨅A          using ( _≈_ ; refl )
@@ -112,8 +106,6 @@ We now prove two important facts about term operations.  The first of these, whi
 
 
 ```agda
-
-
 module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}(hh : hom 𝑨 𝑩) where
  open Algebra 𝑨      using () renaming (Domain to A ; Interp to Interp₁ )
  open Setoid A       using () renaming ( _≈_ to _≈₁_ ; Carrier to ∣A∣ )
@@ -150,8 +142,6 @@ A substitution from `Y` to `X` is simply a function from `Y` to `X`, and the app
 
 
 ```agda
-
-
 _[_]s : {χ : Level}{X Y : Type χ} → Term Y → (Y → X) → Term X
 (ℊ y) [ σ ]s = ℊ (σ y)
 (node f t)  [ σ ]s = node f λ i → t i [ σ ]s
@@ -162,8 +152,6 @@ Alternatively, we may want a substitution that replaces each variable symbol in 
 
 
 ```agda
-
-
 -- Substerm X Y, an inhabitant of which replaces each variable symbol in Y with a term from Term X.
 Substerm : (X Y : Type χ) → Type (ov χ)
 Substerm X Y = (y : Y) → Term X

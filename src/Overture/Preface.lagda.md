@@ -13,7 +13,6 @@ This is the [Overture.Preface][] module of the [Agda Universal Algebra Library][
 
 <!--
 ```agda
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 module Overture.Preface where
 ```

@@ -11,8 +11,6 @@ This is the [Setoid.Terms.Properties][] module of the [Agda Universal Algebra Li
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using (𝓞 ; 𝓥 ; Signature)
@@ -60,8 +58,6 @@ on the structure of the given term.
 
 
 ```agda
-
-
 module _ {𝑨 : Algebra α ρ}(h : X → 𝕌[ 𝑨 ]) where
  open Algebra 𝑨      using ( Interp )                   renaming ( Domain to A )
  open Setoid A       using ( _≈_ ; reflexive ; trans )  renaming ( Carrier to ∣A∣ )
@@ -102,8 +98,6 @@ The free lift so defined is a homomorphism by construction. Indeed, here is the 
 
 
 ```agda
-
-
  lift-hom : hom (𝑻 X) 𝑨
  lift-hom = free-lift-func , hhom
   where
@@ -122,8 +116,6 @@ If we further assume that each of the mappings from `X` to `∣ 𝑨 ∣` is *su
 
 
 ```agda
-
-
  lift-of-epi-is-epi : isSurj{𝑨 = ≡.setoid X}{𝑩 = A} h → IsSurjective free-lift-func
  lift-of-epi-is-epi hE = isSurj→IsSurjective free-lift-func (free-lift-of-surj-isSurj hE)
 ```
@@ -135,8 +127,6 @@ we can omit the `swelldef` hypothesis we needed previously to prove `free-unique
 
 
 ```agda
-
-
 module _ {𝑨 : Algebra α ρ}{gh hh : hom (𝑻 X) 𝑨} where
  open Algebra 𝑨      using ( Interp )  renaming ( Domain to A )
  open Setoid A       using ( _≈_ ; trans ; sym )

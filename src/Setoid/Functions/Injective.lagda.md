@@ -13,8 +13,6 @@ We say that a function `f : A → B` from one setoid (A , ≈₀) to another (B 
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Relation.Binary using ( Setoid )
@@ -48,8 +46,6 @@ setoids (called `IsInjective`).
 
 
 ```agda
-
-
 module _ {𝑨 : Setoid a α}{𝑩 : Setoid b β} where
 
  open Setoid 𝑨  using ()               renaming (Carrier to A; _≈_ to _≈₁_)
@@ -85,8 +81,6 @@ of the setoids; an alternative for setoid functions, called `∘-injective`, is 
 
 
 ```agda
-
-
 module compose  {A : Type a}(_≈₁_ : Rel A α)
                 {B : Type b}(_≈₂_ : Rel B β)
                 {C : Type c}(_≈₃_ : Rel C γ) where
@@ -108,8 +102,6 @@ lines which give each instance of injectivity a different name.
 
 
 ```agda
-
-
 module _ {𝑨 : Setoid a α}{𝑩 : Setoid b β}{𝑪 : Setoid c γ} where
 
  ⊙-injective :  (f : 𝑨 ⟶ 𝑩)(g : 𝑩 ⟶ 𝑪)
