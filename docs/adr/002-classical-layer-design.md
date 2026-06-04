@@ -7,7 +7,7 @@
 Accepted — 2026-04-24.
 Revised v2 — 2026-05-17, following the M3-2 (Semigroup) load test.
 Amended v2.1 — 2026-05-28, adds §10 on `Classical/Properties/` following the M3-7 (Lattice) order-theoretic equivalence work.
-Amended v2.2 — 2026-06-04, records the M4-1 Σ-projection migration (#267 / #367): the bracket projections `∣_∣` / `∥_∥` are replaced by `proj₁` / `proj₂` across the live trees, revising the "no mass rename of Σ-projections" stance in §1, §7, and *Alternatives considered*.  The long-form `OperationSymbolsOf` / `ArityOf` remain canonical for signature components and are now defined via `proj₁` / `proj₂`.  The caret (§7) and long-form-naming policies are unaffected.
+Amended v2.2 — 2026-06-04, records the M4-1 Σ-projection migration (#267 / #367): the bracket projections `∣_∣` / `∥_∥` are replaced by `proj₁` / `proj₂` across the live trees, revising the "no mass rename of Σ-projections" stance in §1, §7, and *Alternatives considered*.  The long-form `OperationSymbolsOf` / `ArityOf` remain canonical for signature components and are defined via `proj₁` / `proj₂` once #367 lands.  The caret (§7) and long-form-naming policies are unaffected.
 
 ---
 
@@ -52,7 +52,7 @@ ArityOf : (𝑆 : Signature 𝓞 𝓥) → OperationSymbolsOf 𝑆 → Type 𝓥
 ArityOf 𝑆 f = proj₂ 𝑆 f
 ```
 
-These are definitionally identical to `proj₁` / `proj₂`.  As of M4-1 (#267 / #367) the long forms are the canonical names for signature components throughout the library, and the live trees use `proj₁` / `proj₂` for generic Σ-projections; the bracket definitions `∣_∣` / `∥_∥` remain in `Overture.Basic` under a `WARNING_ON_USAGE`, retained only so `Legacy/` keeps compiling.
+These are definitionally identical to `proj₁` / `proj₂`.  M4-1 makes the long forms the canonical names for signature components throughout the library and migrates generic Σ-projections in the live trees to `proj₁` / `proj₂` (#367); that change also adds a `WARNING_ON_USAGE` to the bracket definitions `∣_∣` / `∥_∥` in `Overture.Basic` and retains them only so `Legacy/` keeps compiling.
 
 ### 2.  Variable carrier for equations: `Fin n`, not per-structure named enums
 
@@ -120,7 +120,7 @@ Pointwise agreement is the mathematically correct notion of "same semigroup" und
 
 +  *Subscripted Latin used to name structure-specific entities* — `𝑆ₓ`, `Thₓ`, `Eqₓ` in the original draft.  Replaced by hyphen-separated long forms: `Sig-X`, `Th-X`, `Eq-X`.  Hyphen-separated forms grep cleanly, display in any monospaced font, read aloud sensibly, and don't require an Agda-input-mode dance per occurrence.  New `Classical/` code uses the long forms exclusively.
 
-+  *Bracket notation for Σ-projections* — `∣ 𝑆 ∣`, `∥ 𝑆 ∥ f`.  **Migrated** to `proj₁` / `proj₂` (and the `OperationSymbolsOf` / `ArityOf` long-forms for signature components) across the live trees in M4-1 (#267 / #367); the definitions remain in `Overture.Basic` under a `WARNING_ON_USAGE` for `Legacy/`.  The blackboard accessor notation `𝔻[ 𝑨 ]` (Domain) and `𝕌[ 𝑨 ]` (Carrier) is category-1 standard notation and is **kept** everywhere.
++  *Bracket notation for Σ-projections* — `∣ 𝑆 ∣`, `∥ 𝑆 ∥ f`.  **Migrated** to `proj₁` / `proj₂` (and the `OperationSymbolsOf` / `ArityOf` long-forms for signature components) across the live trees by M4-1 (#367), which adds a `WARNING_ON_USAGE` to the definitions in `Overture.Basic` and retains them for `Legacy/`.  The blackboard accessor notation `𝔻[ 𝑨 ]` (Domain) and `𝕌[ 𝑨 ]` (Carrier) is category-1 standard notation and is **kept** everywhere.
 
 The original v2 policy performed no mass rename; M4-1 (amendment v2.2) revised this for the `∣_∣` / `∥_∥` Σ-projections specifically, which are now `proj₁` / `proj₂` library-wide.  The remaining policy stands: new `Classical/` code adopts the long-form conventions, and the subscript / blackboard notation in `Setoid/` is retained as well-established reference material.
 
