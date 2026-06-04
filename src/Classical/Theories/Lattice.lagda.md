@@ -6,7 +6,7 @@ date: "2026-05-27"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-theories-lattice">The equational theory of lattices</a>
+### The equational theory of lattices
 
 This is the [Classical.Theories.Lattice][] module of the [Agda Universal Algebra Library][].
 

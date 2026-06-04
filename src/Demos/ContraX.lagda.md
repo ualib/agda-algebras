@@ -5,7 +5,7 @@ date : "2022-04-27"
 author: "the agda-algebras development team"
 ---
 
-### <a id="inconsistency-in-first-formalization-attempt">Inconsistency in first formalization attempt</a>
+### Inconsistency in first formalization attempt
 
 
 ```agda

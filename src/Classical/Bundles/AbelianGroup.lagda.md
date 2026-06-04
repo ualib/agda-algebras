@@ -6,7 +6,7 @@ date: "2026-05-30"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-bundles-abeliangroup">Bundle bridge for abelian groups</a>
+### Bundle bridge for abelian groups
 
 This is the [Classical.Bundles.AbelianGroup][] module of the [Agda Universal Algebra Library][].
 

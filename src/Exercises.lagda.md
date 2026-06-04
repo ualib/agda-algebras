@@ -5,7 +5,7 @@ date : "2022-18-06"
 author: "the agda-algebras development team"
 ---
 
-### <a id="exercises">Exercises</a>
+### Exercises
 
 This is the [Exercises][] module of the [Agda Universal Algebra Library][].
 

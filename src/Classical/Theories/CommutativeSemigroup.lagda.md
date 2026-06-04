@@ -6,7 +6,7 @@ date: "2026-05-24"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-theories-commutativesemigroup">The equational theory of commutative semigroups</a>
+### The equational theory of commutative semigroups
 
 This is the [Classical.Theories.CommutativeSemigroup][] module of the [Agda Universal Algebra Library][].
 

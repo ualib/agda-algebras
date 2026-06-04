@@ -6,7 +6,7 @@ date: "2026-05-18"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-bundles-semigroup">Bundle bridge for semigroups</a>
+### Bundle bridge for semigroups
 
 This is the [Classical.Bundles.Semigroup][] module of the [Agda Universal Algebra Library][].
 
@@ -51,7 +51,7 @@ open import Setoid.Algebras.Basic {𝑆 = Sig-Magma} using ( Algebra ; ⟨_⟩ ;
 private variable α ρ : Level
 ```
 
-#### <a id="core-to-bundle">Core to stdlib bundle</a>
+#### Core to stdlib bundle
 
 Going from the canonical Σ-typed core to the stdlib record reads off the domain's
 `Carrier` and `_≈_` and exposes the operation and both law-fields through
@@ -79,7 +79,7 @@ once, upstream, inside `Semigroup-Op.interp-node` (see
   open Setoid 𝔻[ 𝑴 ]
 ```
 
-#### <a id="bundle-to-core">Stdlib bundle to core</a>
+#### Stdlib bundle to core
 
 The reverse direction reassembles the bundle's `Carrier`, `_≈_`, and `_∙_` into
 an `Sig-Magma`-algebra (exactly as in the M3-3 magma bridge) and pairs that
@@ -102,7 +102,7 @@ field by an environment-application of the same three-variable shape.
     cong interp { ∙-Op , _ } { .∙-Op , _ } (≡.refl , args≈) = ∙-cong (args≈ 0F) (args≈ 1F)
 ```
 
-#### <a id="roundtrip">Pointwise round-trip</a>
+#### Pointwise round-trip
 
 Going core → bundle → core preserves the curried operation pointwise.  Both
 sides reduce to `(∙-Op ^ 𝑺) (pair a b)` definitionally, so `Setoid.refl`

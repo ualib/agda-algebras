@@ -6,7 +6,7 @@ date: "2026-05-24"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-bundles-commutativemonoid">Bundle bridge for commutative monoids</a>
+### Bundle bridge for commutative monoids
 
 This is the [Classical.Bundles.CommutativeMonoid][] module of the [Agda Universal Algebra Library][].
 

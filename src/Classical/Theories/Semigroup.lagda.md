@@ -6,7 +6,7 @@ date: "2026-05-18"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-theories-semigroup">The equational theory of semigroups</a>
+### The equational theory of semigroups
 
 This is the [Classical.Theories.Semigroup][] module of the [Agda Universal Algebra Library][].
 
@@ -57,7 +57,7 @@ open import Classical.Equations                    using ( Associative )
 open import Overture.Terms {𝑆 = Sig-Magma}         using ( Term )
 ```
 
-#### <a id="eq-semigroup">The index of equations</a>
+#### The index of equations
 
 Semigroup's theory has exactly one equation, associativity.  The singleton enum
 `Eq-Semigroup` names it.
@@ -67,7 +67,7 @@ data Eq-Semigroup : Type where
   assoc : Eq-Semigroup
 ```
 
-#### <a id="th-semigroup">The theory map</a>
+#### The theory map
 
 `Th-Semigroup` sends the sole equation constructor `assoc` to the associativity
 term-pair built by the generic `Associative` builder from

@@ -6,7 +6,7 @@ date: "2026-05-22"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-signatures-monoid">The signature of monoids</a>
+### The signature of monoids
 
 This is the [Classical.Signatures.Monoid][] module of the [Agda Universal Algebra Library][].
 

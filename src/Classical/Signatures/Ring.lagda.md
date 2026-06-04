@@ -6,7 +6,7 @@ date: "2026-05-30"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-signatures-ring">The signature of rings</a>
+### The signature of rings
 
 This is the [Classical.Signatures.Ring][] module of the [Agda Universal Algebra Library][].
 

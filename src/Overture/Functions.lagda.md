@@ -5,7 +5,7 @@ date : "2026-05-07"
 author: "the agda-algebras development team"
 ---
 
-### <a id="functions">Foundational function infrastructure</a>
+### Foundational function infrastructure
 
 This is the [Overture.Functions][] module of the [Agda Universal Algebra Library][].
 
@@ -43,7 +43,7 @@ open import Overture.Basic  using ( _≈_ ; _∙_ ; transport )
 private variable a b c ι : Level
 ```
 
-#### <a id="image">The image of a raw function</a>
+#### The image of a raw function
 
 The *image* of a raw function `f : A → B` at a point `b : B` is the proposition that some `a : A` satisfies `f a ≡ b`.  We represent it as an inductive type with one constructor, `eq`, which packages the witness `a` together with the equality proof.  This inductive presentation matters: an inhabitant of `Image f ∋ b` carries an actual point of `A`, so we can extract that point computationally (the function `Inv` below).  The corresponding Σ-type formulation `Σ[ a ∈ A ] f a ≡ b` would be logically equivalent but syntactically less convenient at the call sites; the legacy module has used the inductive form throughout, and the canonical Setoid tree consumes it that way.
 
@@ -64,7 +64,7 @@ Given an inhabitant of `Image f ∋ b`, we recover the underlying preimage by pa
  InvIsInverseʳ (eq _ p) = sym p
 ```
 
-#### <a id="surjectivity">Surjectivity of raw functions</a>
+#### Surjectivity of raw functions
 
 A raw function `f : A → B` is *surjective* when every `b : B` is in the image of `f`.  The library distinguishes this from stdlib's `Function.Surjective`, which is a more general "respects two arbitrary equivalences" notion; the bare-types `IsSurjective` is the specialization to propositional equality on both sides.  Conversion in either direction is straightforward, as the two helper lemmas below show.
 
@@ -138,7 +138,7 @@ module _ {A : Type a}{B : Type b}{C : Type c} where
    goal = eq (g (finv y)) (sym η)
 ```
 
-#### <a id="projection">Coordinate projection out of a dependent product</a>
+#### Coordinate projection out of a dependent product
 
 Given an indexed family `B : I → Type b` and a "default" point `bs₀ : ∀ i → B i` of the dependent product, we define the coordinate projection `proj j` and prove it surjective.  The default point and the decidable equality on `I` are both essential: without a fallback value at indices `i ≠ j` we cannot construct a preimage of an arbitrary `b : B j`, and without decidable equality we cannot decide which coordinate to fill in with `b`.
 

@@ -6,7 +6,7 @@ date: "2026-05-30"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-theories-group">The equational theory of groups</a>
+### The equational theory of groups
 
 This is the [Classical.Theories.Group][] module of the [Agda Universal Algebra Library][].
 

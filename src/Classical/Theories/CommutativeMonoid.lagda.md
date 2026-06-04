@@ -6,7 +6,7 @@ date: "2026-05-24"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-theories-commutativemonoid">The equational theory of commutative monoids</a>
+### The equational theory of commutative monoids
 
 This is the [Classical.Theories.CommutativeMonoid][] module of the [Agda Universal Algebra Library][].
 

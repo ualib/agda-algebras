@@ -6,7 +6,7 @@ date: "2026-05-30"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-theories-ring">The equational theory of rings</a>
+### The equational theory of rings
 
 This is the [Classical.Theories.Ring][] module of the [Agda Universal Algebra Library][].
 

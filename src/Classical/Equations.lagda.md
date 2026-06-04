@@ -131,7 +131,7 @@ module _ {𝑆 : Signature 𝓞 0ℓ} {X : Type χ} where
   Idempotent _ f-bin x = app₂ f-bin (ℊ x) (ℊ x) , ℊ x
 ```
 
-#### <a id="identity-laws">Identity laws</a>
+#### Identity laws
 
 These take a binary operation `f` together with a nullary "identity element" symbol
 `e`.  The arity-conformance evidence for `e` is `ArityOf e ≡ Fin 0`, consistent with
@@ -152,7 +152,7 @@ the `Op (Fin 0) A` representation of nullary operations in
   RightIdentity _ _ f-bin e-nul x = app₂ f-bin (ℊ x) (app₀ e-nul) , ℊ x
 ```
 
-#### <a id="inverse-laws">Inverse laws</a>
+#### Inverse laws
 
 These take a binary `f`, a nullary identity `e`, and a unary inverse `i`.  The arity
 evidence for `i` is `ArityOf i ≡ Fin 1`.
@@ -173,7 +173,7 @@ evidence for `i` is `ArityOf i ≡ Fin 1`.
     app₂ f-bin (ℊ x) (app₁ i-un (ℊ x)) , app₀ e-nul
 ```
 
-#### <a id="distributive-laws">Distributive laws</a>
+#### Distributive laws
 
 ```agda
   -- x · (y + z) ≈ (x · y) + (x · z)
@@ -194,7 +194,7 @@ evidence for `i` is `ArityOf i ≡ Fin 1`.
 
 ```
 
-#### <a id="absorption-laws">Absorption laws</a>
+#### Absorption laws
 
 These take two binary operations `f` and `g`; each builder expresses one
 direction of the absorption between them.  In a lattice, `f` and `g` are

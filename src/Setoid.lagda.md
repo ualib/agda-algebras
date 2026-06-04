@@ -5,7 +5,7 @@ date : "2021-12-12"
 author: "the agda-algebras development team"
 ---
 
-## <a id="setoid-types-for-general-algebra">Setoid Types for General Algebra</a>
+## Setoid Types for General Algebra
 
 This module collects all submodule of that part of the library based on setoids,
 as opposed to "bare" types (see [Base.lagda][]).

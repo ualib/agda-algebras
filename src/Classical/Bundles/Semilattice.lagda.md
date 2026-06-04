@@ -6,7 +6,7 @@ date: "2026-05-27"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-bundles-semilattice">Bundle bridge for semilattices</a>
+### Bundle bridge for semilattices
 
 This is the [Classical.Bundles.Semilattice][] module of the [Agda Universal Algebra Library][].
 

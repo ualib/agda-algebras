@@ -5,7 +5,7 @@ date : "2026-05-07"
 author: "the agda-algebras development team"
 ---
 
-## <a id="relations">Foundational relation infrastructure</a>
+## Foundational relation infrastructure
 
 This is the [Overture.Relations][] module of the [Agda Universal Algebra Library][].
 
@@ -46,7 +46,7 @@ private variable
  𝓦 : Level   -- arity-tuple level, conventional name elsewhere in the library
 ```
 
-### <a id="equivalence-bundle">The `Equivalence` Σ-bundle</a>
+### The `Equivalence` Σ-bundle
 
 `Equivalence A {ρ}` packages a binary relation on `A` with a proof that the relation is an equivalence.  Compared to stdlib's `Relation.Binary.Bundles.Setoid`, which bundles a `Carrier` *and* an `_≈_` *and* an `IsEquivalence`, `Equivalence` fixes the carrier as a parameter and bundles only the relation with its proof — useful when one wants to vary the equivalence relation over a fixed carrier (the situation in quotient and congruence constructions).
 
@@ -57,7 +57,7 @@ Equivalence A {ρ} = Σ[ r ∈ BinRel A ρ ] IsEquivalence r
 
 Given `R : Equivalence A`, we use `(proj₁ R)` for the underlying relation and `(proj₂ R)` for the equivalence-relation proof, following the library convention.
 
-### <a id="equivalence-blocks">Equivalence classes</a>
+### Equivalence classes
 
 If `R` is a binary relation on `A`, the *`R`-block containing* `u : A` is the predicate that holds at `v` precisely when `R u v`.  The notation `[ u ] R` is shorthand for that predicate.
 
@@ -68,7 +68,7 @@ If `R` is a binary relation on `A`, the *`R`-block containing* `u : A` is the pr
 infix 60 [_]
 ```
 
-### <a id="identity-relation">The identity relation</a>
+### The identity relation
 
 The *identity* (or *zero*) relation on `A` is `λ x y → Lift ρ (x ≡ y)`.  The `Lift` is there so that the relation's universe level can be parametrized independently of the carrier's level — useful when the relation has to live at a level dictated by surrounding context (e.g., congruence relations on an algebra at level `α ⊔ suc ρ`).
 
@@ -90,7 +90,7 @@ The identity relation is, of course, an equivalence relation; we package its `Is
 0[ A ]Equivalence {ρ} = 0[ A ] {ρ} , 0[ A ]IsEquivalence
 ```
 
-### <a id="kernels">Kernels of raw functions</a>
+### Kernels of raw functions
 
 The *kernel* of `f : A → B` is the equivalence relation on `A` whose blocks are the fibres of `f`.  We give three formulations corresponding to three idiomatic uses elsewhere in the library: `kerRel` parametrizes the codomain equivalence (used when `B` has its own equivalence relation that the kernel should reflect, e.g. the carrier of a setoid algebra); `kernelRel` repackages the same content as a predicate on pairs (more convenient for some `Pred`-based constructions); and `kerRelOfEquiv` lifts an `IsEquivalence` proof on the codomain to one on the kernel.
 
@@ -114,7 +114,7 @@ module _ {A : Type a}{B : Type b} where
                                }
 ```
 
-### <a id="image-containment">Image-containment of a tuple</a>
+### Image-containment of a tuple
 
 If `a : I → A` is a tuple of `A`-values indexed by `I`, and `B` is a subset of `A`, then `Im a ⊆ B` asserts that every component of the tuple lies in `B`.  This is the bare-types form of image-containment, in which `a` is a raw function rather than a setoid morphism.
 
@@ -127,7 +127,7 @@ Im a ⊆ B = ∀ i → a i ∈ B
 A setoid analogue of `Im_⊆_`, taking a setoid function rather than a raw function, is given separately in `Setoid.Relations.Discrete`.  The two coexist because they have genuinely different type signatures and serve genuinely different call sites.
 
 
-### <a id="pointwise-lifting">Pointwise lifting of a binary relation</a>
+### Pointwise lifting of a binary relation
 
 If `_≋_` is a binary relation on `B`, the *pointwise lift* of `_≋_` to the function space `A → B` holds at `f, g : A → B` precisely when `∀ x → f x ≋ g x`.  This construction is foundational across the library: it is the equality used in `Overture.Adjunction.Residuation` to express that the composite `g ∘ f ∘ g` agrees pointwise with `g`, and is the natural generalization of stdlib's `_≗_` (which fixes `_≋_ = _≡_`) to an arbitrary equivalence on the codomain.
 
@@ -150,7 +150,7 @@ Here `_≋_` is a *family* of relations; for each index `x : A`, an instance `_�
 ```
 
 
-### <a id="compatibility">Compatibility of operations with relations</a>
+### Compatibility of operations with relations
 
 If `f : Op A I` is an `I`-ary operation on `A` and `R` is a binary relation on `A`, we say that `f` and `R` are *compatible* (equivalently, that `f` *preserves* `R`) when, for all tuples `u v : I → A`, the pointwise hypothesis `∀ i → R (u i) (v i)` implies `R (f u) (f v)`.  We provide both a long-form name `_preserves_` and the customary infix shorthand `_|:_`.
 

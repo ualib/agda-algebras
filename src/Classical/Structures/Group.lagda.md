@@ -76,7 +76,7 @@ open import Setoid.Varieties.EquationalLogic {𝑆 = Sig-Group} using ( _⊧_≈
 private variable α ρ : Level
 ```
 
-#### <a id="satisfaction-alias">The local satisfaction predicate</a>
+#### The local satisfaction predicate
 
 ```agda
 infix 4 _⊨ᵍᵖ_
@@ -84,14 +84,14 @@ _⊨ᵍᵖ_ : (𝑨 : Algebra α ρ) (ℰ : Eq-Group → Term (Fin 3) × Term (F
 𝑨 ⊨ᵍᵖ ℰ = ∀ i → 𝑨 ⊧ proj₁ (ℰ i) ≈ proj₂ (ℰ i)
 ```
 
-#### <a id="the-type">The type of groups</a>
+#### The type of groups
 
 ```agda
 Group : (α ρ : Level) → Type (suc α ⊔ suc ρ)
 Group α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ᵍᵖ Th-Group
 ```
 
-#### <a id="forgetful-to-monoid">The reduct to monoids</a>
+#### The reduct to monoids
 
 The container morphism `Sig-Monoid ⟹ Sig-Group` sends the monoid's `∙-Opᵐᵒ` and
 `ε-Opᵐᵒ` to the group's `∙-Op` and `ε-Op`; the position maps are the identity.
@@ -111,7 +111,7 @@ group→monoidAlg : Group α ρ → Algebra {𝑆 = Sig-Monoid} α ρ
 group→monoidAlg 𝑮 = reduct mo-incl mo-κ (𝑮 .proj₁)
 ```
 
-#### <a id="curried-associativity">Curried associativity, standalone</a>
+#### Curried associativity, standalone
 
 `gp-assoc` proves `(x ∙ y) ∙ z ≈ x ∙ (y ∙ z)` for the group's own `∙`, a verbatim
 port of `Monoid-Op.mn-assoc` to `Sig-Group`.  It is standalone, above the forgetful,
@@ -148,7 +148,7 @@ module _ (𝑮 : Group α ρ) where
     rhsT = node ∙-Op (pair (ℊ 0F) (node ∙-Op (pair (ℊ 1F) (ℊ 2F))))
 ```
 
-#### <a id="group-op">The `Group-Op` module</a>
+#### The `Group-Op` module
 
 ```agda
 module Group-Op {α ρ : Level} (𝑮 : Group α ρ) where
@@ -211,7 +211,7 @@ module Group-Op {α ρ : Level} (𝑮 : Group α ρ) where
                             (trans (equations invʳ (λ _ → x)) (interp-node-ε {λ _ → x})))
 ```
 
-#### <a id="forgetful-to-monoid-proj">The forgetful projection to monoids</a>
+#### The forgetful projection to monoids
 
 `group→monoid` takes a group to the monoid on its `(∙, ε)`-reduct: the underlying
 algebra is `group→monoidAlg`, and the `Th-Monoid` satisfaction proof pivots through

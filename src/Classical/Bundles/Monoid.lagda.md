@@ -6,7 +6,7 @@ date: "2026-05-24"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-bundles-monoid">Bundle bridge for monoids</a>
+### Bundle bridge for monoids
 
 This is the [Classical.Bundles.Monoid][] module of the [Agda Universal Algebra Library][].
 
@@ -42,7 +42,7 @@ open import Setoid.Algebras.Basic {𝑆 = Sig-Monoid} using ( Algebra ; ⟨_⟩ 
 private variable α ρ : Level
 ```
 
-#### <a id="core-to-bundle">Core to stdlib bundle</a>
+#### Core to stdlib bundle
 
 ```agda
 ⟨_⟩ᵐᵒ : Monoid α ρ → stdlib-Monoid α ρ
@@ -65,7 +65,7 @@ private variable α ρ : Level
   open Setoid 𝔻[ 𝑨 ]
 ```
 
-#### <a id="bundle-to-core">Stdlib bundle to core</a>
+#### Stdlib bundle to core
 
 ```agda
 ⟪_⟫ᵐᵒ : stdlib-Monoid α ρ → Monoid α ρ
@@ -88,7 +88,7 @@ private variable α ρ : Level
     cong interp {ε-Op , _} {.ε-Op , _} (≡.refl , _)     = Setoid.refl setoid
 ```
 
-#### <a id="roundtrip">Pointwise round-trip</a>
+#### Pointwise round-trip
 
 ```agda
 module _ {𝑴 : Monoid α ρ} where

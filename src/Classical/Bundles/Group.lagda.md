@@ -6,7 +6,7 @@ date: "2026-05-30"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-bundles-group">Bundle bridge for groups</a>
+### Bundle bridge for groups
 
 This is the [Classical.Bundles.Group][] module of the [Agda Universal Algebra Library][].
 
@@ -43,7 +43,7 @@ open import Setoid.Algebras.Basic {𝑆 = Sig-Group} using ( Algebra ; ⟨_⟩ ;
 private variable α ρ : Level
 ```
 
-#### <a id="core-to-bundle">Core to stdlib bundle</a>
+#### Core to stdlib bundle
 
 ```agda
 ⟨_⟩ᵍᵖ : Group α ρ → stdlib-Group α ρ
@@ -71,7 +71,7 @@ private variable α ρ : Level
   open Setoid 𝔻[ 𝑨 ]
 ```
 
-#### <a id="bundle-to-core">Stdlib bundle to core</a>
+#### Stdlib bundle to core
 
 ```agda
 ⟪_⟫ᵍᵖ : stdlib-Group α ρ → Group α ρ
@@ -99,7 +99,7 @@ private variable α ρ : Level
     cong interp {⁻¹-Op , _} {.⁻¹-Op , _} (≡.refl , args≈) = ⁻¹-cong (args≈ 0F)
 ```
 
-#### <a id="roundtrip">Pointwise round-trip</a>
+#### Pointwise round-trip
 
 ```agda
 module _ {𝑮 : Group α ρ} where

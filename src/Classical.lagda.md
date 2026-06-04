@@ -6,7 +6,7 @@ date: "2026-05-15"
 author: "the agda-algebras development team"
 ---
 
-## <a id="classical-algebraic-structures">Classical algebraic structures</a>
+## Classical algebraic structures
 
 This is the [Classical][] module of the [Agda Universal Algebra Library][].
 

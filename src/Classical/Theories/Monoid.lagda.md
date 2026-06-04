@@ -6,7 +6,7 @@ date: "2026-05-22"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-theories-monoid">The equational theory of monoids</a>
+### The equational theory of monoids
 
 This is the [Classical.Theories.Monoid][] module of the [Agda Universal Algebra Library][].
 

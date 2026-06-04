@@ -6,7 +6,7 @@ date: "2026-05-30"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-bundles-commutativering">Bundle bridge for commutative rings</a>
+### Bundle bridge for commutative rings
 
 This is the [Classical.Bundles.CommutativeRing][] module of the [Agda Universal Algebra Library][].
 
@@ -39,7 +39,7 @@ open import Setoid.Algebras.Basic {𝑆 = Sig-Ring}  using ( Algebra ; ⟨_⟩ ;
 private variable α ρ : Level
 ```
 
-#### <a id="core-to-bundle">Core to stdlib bundle</a>
+#### Core to stdlib bundle
 
 ```agda
 ⟨_⟩ᶜʳᵍ : CommutativeRing α ρ → stdlib-CommutativeRing α ρ
@@ -80,7 +80,7 @@ private variable α ρ : Level
   open Setoid 𝔻[ proj₁ 𝑪 ]
 ```
 
-#### <a id="bundle-to-core">Stdlib bundle to core</a>
+#### Stdlib bundle to core
 
 ```agda
 ⟪_⟫ᶜʳᵍ : stdlib-CommutativeRing α ρ → CommutativeRing α ρ
@@ -121,7 +121,7 @@ private variable α ρ : Level
     cong interp {1-Op , _} {.1-Op , _} (≡.refl , _)      = Setoid.refl setoid
 ```
 
-#### <a id="roundtrip">Pointwise round-trip</a>
+#### Pointwise round-trip
 
 ```agda
 module _ {𝑪 : CommutativeRing α ρ} where

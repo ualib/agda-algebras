@@ -5,7 +5,7 @@ date : "2022-06-17"
 author: "the agda-algebras development team"
 ---
 
-### <a id="Operations">Operations</a>
+### Operations
 
 This is the [Overture.Operations][] module of the [Agda Universal Algebra Library][].
 

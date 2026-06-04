@@ -5,11 +5,11 @@ date : "2021-01-13"
 author: "the agda-algebras development team"
 ---
 
-### <a id="preliminaries">Preliminaries</a>
+### Preliminaries
 
 This is the [Overture.Basic][] module of the [Agda Universal Algebra Library][].
 
-#### <a id="logical-foundations">Logical foundations</a>
+#### Logical foundations
 
 (See also the Equality module of the [agda-algebras][] library.)
 
@@ -42,7 +42,7 @@ Each module in the library begins with a pragma line of the form
 (Readers familiar with the standard library will notice occasional `-W[no]UnsupportedIndexedMatch` warnings on our pattern-matching definitions. These warnings come from `--cubical-compatible` and indicate that the flagged definition will not compute when applied to a `--cubical` transport. They are suppressed at the library level via the `flags:` field in `agda-algebras.agda-lib`. Every such site is a candidate for cleanup when we eventually port to Cubical; see the project's Milestone 5.)
 
 
-#### <a id="agda-modules">Agda modules</a>
+#### Agda modules
 
 The `OPTIONS` pragma is usually followed by the start of a module.  For example,
 the [Base.Functions.Basic][] module begins with the following line, and then a
@@ -79,7 +79,7 @@ data 𝟛 : Type 0ℓ where 𝟎 : 𝟛 ;  𝟏 : 𝟛 ;  𝟐 : 𝟛
 ```
 
 
-#### <a id="projection-notation">Projection notation</a>
+#### Projection notation
 
 The definition of `Σ` (and thus, of `×`) includes the fields `proj₁` and `proj₂`
 representing the first and second projections out of the product.  Sometimes we
@@ -141,7 +141,7 @@ infixl 30 _∙_
 ```
 
 
-#### <a id="sigma-types">Sigma types</a>
+#### Sigma types
 
 ```agda
 infix 2 ∃-syntax
@@ -153,7 +153,7 @@ syntax ∃-syntax (λ x → B) = ∃[ x ∈ A ] B
 ```
 
 
-#### <a id="pi-types">Pi types</a>
+#### Pi types
 
 The dependent function type is traditionally denoted with an uppercase pi symbol
 and typically expressed as `Π(x : A) B x`, or something similar.  In Agda syntax,
@@ -174,7 +174,7 @@ infix 6 Π-syntax
 In the modules that follow, we will see many examples of this syntax in action.
 
 
-#### <a id="agdas-universe-hierarchy">Agda's universe hierarchy</a>
+#### Agda's universe hierarchy
 
 The hierarchy of universes in Agda is structured as follows:
 
@@ -190,7 +190,7 @@ Specifically, in certain situations, the non-cumulativity makes it unduly
 difficult to convince Agda that a program or proof is correct.
 
 
-#### <a id="lifting-and-lowering">Lifting and lowering</a>
+#### Lifting and lowering
 
 Here we describe a general `Lift` type that help us overcome the technical issue
 described in the previous subsection.  In the [Lifts of algebras
@@ -236,7 +236,7 @@ lower∼lift = refl
 The proofs are trivial. Nonetheless, we'll come across some holes these lemmas can fill.
 
 
-#### <a id="pointwise-equality-of-dependent-functions">Pointwise equality of dependent functions</a>
+#### Pointwise equality of dependent functions
 
 We conclude this module with a definition that conveniently represents te assertion
 that two functions are (extensionally) the same in the sense that they produce

@@ -6,7 +6,7 @@ date: "2026-05-18"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-structures-semigroup">Semigroups — the first equation-bearing classical structure</a>
+### Semigroups — the first equation-bearing classical structure
 
 This is the [Classical.Structures.Semigroup][] module of the [Agda Universal Algebra Library][].
 
@@ -115,7 +115,7 @@ open Algebra using ( Interp )
 private variable α ρ : Level
 ```
 
-#### <a id="satisfaction-alias">The local satisfaction predicate</a>
+#### The local satisfaction predicate
 
 `𝑨 ⊨ ℰ` says that the algebra `𝑨` satisfies every equation in the theory `ℰ` — that
 is, for every equation `(p , q) = ℰ i`, the formulas `p` and `q` evaluate to setoid-equal
@@ -129,14 +129,14 @@ _⊨_ : (𝑨 : Algebra α ρ) (ℰ : Eq-Semigroup → Term (Fin 3) × Term (Fin
 𝑨 ⊨ ℰ = ∀ i → 𝑨 ⊧ proj₁ (ℰ i) ≈ proj₂ (ℰ i)
 ```
 
-#### <a id="the-type">The type of semigroups</a>
+#### The type of semigroups
 
 ```agda
 Semigroup : (α ρ : Level) → Type (suc α ⊔ suc ρ)
 Semigroup α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ Th-Semigroup
 ```
 
-#### <a id="forgetful">The forgetful projection to magmas</a>
+#### The forgetful projection to magmas
 
 A semigroup is a magma + a proof that its operation is associative; forgetting the
 proof recovers the magma.
@@ -146,7 +146,7 @@ semigroup→magma : Semigroup α ρ → Magma α ρ
 semigroup→magma = proj₁
 ```
 
-#### <a id="semigroup-op">The `Semigroup-Op` module: named accessors for a fixed semigroup</a>
+#### The `Semigroup-Op` module: named accessors for a fixed semigroup
 
 `Semigroup-Op 𝑺` exposes `_∙_` (re-exported from `Magma-Op (semigroup→magma 𝑺)`
 through the forgetful) and `equations` (the satisfaction-witness proof, projected

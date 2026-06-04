@@ -5,7 +5,7 @@ date : "2022-18-06"
 author: "the agda-algebras development team"
 ---
 
-### <a id="exercises-in-complexity-theory">Exercises in complexity theory</a>
+### Exercises in complexity theory
 
 This is the [Exercises.Complexity][] module of the [Agda Universal Algebra Library][].
 

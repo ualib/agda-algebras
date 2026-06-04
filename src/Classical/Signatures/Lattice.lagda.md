@@ -6,7 +6,7 @@ date: "2026-05-27"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-signatures-lattice">The signature of lattices</a>
+### The signature of lattices
 
 This is the [Classical.Signatures.Lattice][] module of the [Agda Universal Algebra Library][].
 

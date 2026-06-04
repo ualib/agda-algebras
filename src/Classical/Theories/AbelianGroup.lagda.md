@@ -6,7 +6,7 @@ date: "2026-05-30"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-theories-abeliangroup">The equational theory of abelian groups</a>
+### The equational theory of abelian groups
 
 This is the [Classical.Theories.AbelianGroup][] module of the [Agda Universal Algebra Library][].
 

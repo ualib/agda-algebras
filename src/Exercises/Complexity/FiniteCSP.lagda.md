@@ -6,7 +6,7 @@ date: "2026-05-11"
 author: "agda-algebras development team and Libor Barto"
 ---
 
-### <a id="csp-exercises">CSP Exercises</a>
+### CSP Exercises
 
 This is the [Exercises.Complexity.FiniteCSP][] module of the [Agda Universal Algebra Library][].
 
