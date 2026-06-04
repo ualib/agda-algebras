@@ -297,14 +297,14 @@ Don't decorate names to indicate implementation/type choices; avoid suffixes lik
 | `proj₂` | Second projection of a Σ-type | stdlib `Data.Product` (re-exported by `Overture`) | **canonical** |
 | `OperationSymbolsOf` | A signature's operation symbols (`proj₁ 𝑆`) | `Overture.Signatures` | **canonical** for signature components |
 | `ArityOf` | A signature's arity function (`proj₂ 𝑆`) | `Overture.Signatures` | **canonical** for signature components |
-| `∣_∣` | First projection of a Σ-type | `Overture.Basic` | **deprecated** (v3.0, `WARNING_ON_USAGE`); migrated out of the live trees by #367, retained for `Legacy/` |
-| `∥_∥` | Second projection of a Σ-type | `Overture.Basic` | **deprecated** (v3.0, `WARNING_ON_USAGE`); migrated out of the live trees by #367, retained for `Legacy/` |
+| `∣_∣` | First projection of a Σ-type | `Overture.Basic` | **deprecated** (v3.0); the live-tree sweep to `proj₁` and the `WARNING_ON_USAGE` land with #367, after which it is retained for `Legacy/` |
+| `∥_∥` | Second projection of a Σ-type | `Overture.Basic` | **deprecated** (v3.0); the live-tree sweep to `proj₂` and the `WARNING_ON_USAGE` land with #367, after which it is retained for `Legacy/` |
 | `_,_` | Σ-type constructor | stdlib `Data.Product` | **standard** |
 | `Σ[_∈_]_` | Σ-type binder syntax | stdlib `Data.Product` | **standard** |
 
-The mechanical sweep replacing `∣_∣` / `∥_∥` with the standard `proj₁` / `proj₂` was carried out in M4-1 (#367).  The vertical-bars convention was an `agda-algebras` idiom carried over from earlier `TypeTopology`-style developments; the bars read *less* clearly for mathematicians who reserve them for absolute value and norm, and the stdlib names bridge more cleanly to `Data.Product`.  Signature components use the self-documenting `OperationSymbolsOf` / `ArityOf` (definitionally `proj₁` / `proj₂` of the signature); see [ADR-002][] §1.
+The mechanical sweep replacing `∣_∣` / `∥_∥` with the standard `proj₁` / `proj₂` across the live trees is M4-1 (#367).  The vertical-bars convention was an `agda-algebras` idiom carried over from earlier `TypeTopology`-style developments; the bars read *less* clearly for mathematicians who reserve them for absolute value and norm, and the stdlib names bridge more cleanly to `Data.Product`.  Signature components use the self-documenting `OperationSymbolsOf` / `ArityOf` (definitionally `proj₁` / `proj₂` of the signature); see [ADR-002][] §1.
 
-**Scope note**.  The live trees (`Overture/`, `Setoid/`, `Classical/`, `Demos/ContraX`, `Examples/`) are on `proj₁` / `proj₂`; the bracket definitions remain in `Overture.Basic` under a `WARNING_ON_USAGE` so `Legacy/` keeps compiling.  The `∣` glyph legitimately survives outside `Legacy/` in the `_∣≈_` / `_∥≈_` operators, the `∣_∣=∣_∣` / `∣_∣≈∣_∣` bijection operators (`Examples.FunctionTypeBijections`), the `∣A∣`-style Carrier-alias identifiers, and CSP math prose; and the self-contained `Demos/HSP` keeps its own bracket notation.
+**Scope note**.  Once #367 lands, the live trees (`Overture/`, `Setoid/`, `Classical/`, `Demos/ContraX`, `Examples/`) are on `proj₁` / `proj₂`, and the bracket definitions remain in `Overture.Basic` under a `WARNING_ON_USAGE` so `Legacy/` keeps compiling.  The `∣` glyph legitimately survives outside `Legacy/` in the `_∣≈_` / `_∥≈_` operators, the `∣_∣=∣_∣` / `∣_∣≈∣_∣` bijection operators (`Examples.FunctionTypeBijections`), the `∣A∣`-style Carrier-alias identifiers, and CSP math prose; and the self-contained `Demos/HSP` keeps its own bracket notation.
 
 
 ### Universe levels
@@ -375,7 +375,7 @@ Plain-text `A`, `B` denote carrier types; mathematical bold italic `𝑨`, `𝑩
 | Symbol | Meaning |
 |---|---|
 | `_^_` | interpretation of an operation symbol in an algebra or other structure (`𝑓 ^ 𝑨`) |
-| `_̂_` | deprecated (v3.0, `WARNING_ON_USAGE`) combining-caret alias of `_^_`; migrated out of the live trees by #368, retained for `Legacy/` |
+| `_̂_` | deprecated (v3.0) combining-caret alias of `_^_`; the live-tree sweep to `_^_` lands with #368, after which it is retained for `Legacy/` |
 | `Domain` | underlying setoid of an algebra or other structure |
 | `Interp` | `Func`-typed interpretation of operations |
 
