@@ -30,7 +30,7 @@ open import Relation.Binary  using ( Setoid )
 open import Relation.Unary   using ( Pred ; _∈_ ; _⊆_ )
 
 -- -- Imports from the Agda Universal Algebra Library ----------------------------
-open  import Overture          using ( ∣_∣ ; ∥_∥ )
+open  import Overture          using ( proj₁ ; proj₂ )
 open  import Setoid.Relations  using ( fkerPred )
 
 open  import Setoid.Algebras {𝑆 = 𝑆}     using ( Algebra ; ov ; Lift-Alg ; ⨅ )
@@ -70,15 +70,15 @@ module _  {α ρᵃ ℓ : Level}
 ```
 
 We want to pair each `(𝑨 , p)` (where p : 𝑨 ∈ S 𝒦) with an environment
-`ρ : X → ∣ 𝑨 ∣` so that we can quantify over all algebras *and* all
-assignments of values in the domain `∣ 𝑨 ∣` to variables in `X`.
+`ρ : X → 𝕌[ 𝑨 ]` so that we can quantify over all algebras *and* all
+assignments of values in the domain `𝕌[ 𝑨 ]` to variables in `X`.
 
 ```agda
  ℑ⁺ : Type ι
  ℑ⁺ = Σ[ 𝑨 ∈ (Algebra α ρᵃ) ] (𝑨 ∈ S ℓ 𝒦) × (Carrier (Env 𝑨 X))
 
  𝔄⁺ : ℑ⁺ → Algebra α ρᵃ
- 𝔄⁺ i = ∣ i ∣
+ 𝔄⁺ i = (proj₁ i)
 
  ℭ : Algebra ι ι
  ℭ = ⨅ 𝔄⁺
@@ -95,13 +95,13 @@ so belongs to `S (P 𝒦)`.
 
 ```agda
  skEqual : (i : ℑ⁺) → ∀{p q} → Type ρᵃ
- skEqual i {p}{q} = ⟦ p ⟧ ⟨$⟩ snd ∥ i ∥ ≈ ⟦ q ⟧ ⟨$⟩ snd ∥ i ∥
+ skEqual i {p}{q} = ⟦ p ⟧ ⟨$⟩ snd (proj₂ i) ≈ ⟦ q ⟧ ⟨$⟩ snd (proj₂ i)
   where
   open Setoid (Domain (𝔄⁺ i)) using ( _≈_ )
   open Environment (𝔄⁺ i) using ( ⟦_⟧ )
 
  AllEqual⊆ker𝔽 :  ∀ {p q}
-  →               (∀ i → skEqual i {p}{q}) → (p , q) ∈ fkerPred ∣ hom𝔽[ X ] ∣
+  →               (∀ i → skEqual i {p}{q}) → (p , q) ∈ fkerPred (proj₁ (hom𝔽[ X ]))
 
  AllEqual⊆ker𝔽 {p} {q} x = Goal
   where
@@ -116,13 +116,13 @@ so belongs to `S (P 𝒦)`.
  homℭ = ⨅-hom-co 𝔄⁺ h
   where
   h : ∀ i → hom (𝑻 X) (𝔄⁺ i)
-  h i = lift-hom (snd ∥ i ∥)
+  h i = lift-hom (snd (proj₂ i))
 
  open Algebra 𝔽[ X ]  using () renaming ( Domain to F ; Interp to InterpF )
  open Setoid F        using () renaming (refl to reflF ; _≈_ to _≈F≈_ ; Carrier to ∣F∣)
 
 
- ker𝔽⊆kerℭ : fkerPred ∣ hom𝔽[ X ] ∣ ⊆ fkerPred ∣ homℭ ∣
+ ker𝔽⊆kerℭ : fkerPred (proj₁ (hom𝔽[ X ])) ⊆ fkerPred (proj₁ homℭ)
  ker𝔽⊆kerℭ {p , q} pKq (𝑨 , sA , ρ) = Goal
   where
   open Setoid (Domain 𝑨)  using ( _≈_ ; sym ; trans )
@@ -135,11 +135,11 @@ so belongs to `S (P 𝒦)`.
   Goal = trans (sym (fl p)) (trans subgoal (fl q))
 
  hom𝔽ℭ : hom 𝔽[ X ] ℭ
- hom𝔽ℭ = ∣ HomFactor ℭ homℭ hom𝔽[ X ] ker𝔽⊆kerℭ hom𝔽[ X ]-is-epic ∣
+ hom𝔽ℭ = (proj₁ (HomFactor ℭ homℭ hom𝔽[ X ] ker𝔽⊆kerℭ hom𝔽[ X ]-is-epic))
 
  open Environment ℭ
 
- kerℭ⊆ker𝔽 : ∀{p q} → (p , q) ∈ fkerPred ∣ homℭ ∣ → (p , q) ∈ fkerPred ∣ hom𝔽[ X ] ∣
+ kerℭ⊆ker𝔽 : ∀{p q} → (p , q) ∈ fkerPred (proj₁ homℭ) → (p , q) ∈ fkerPred (proj₁ (hom𝔽[ X ]))
  kerℭ⊆ker𝔽 {p}{q} pKq = E⊢pq
   where
   pqEqual : ∀ i → skEqual i {p}{q}
@@ -147,20 +147,20 @@ so belongs to `S (P 𝒦)`.
    where
    open Environment (𝔄⁺ i)      using () renaming ( ⟦_⟧ to ⟦_⟧ᵢ )
    open Setoid (Domain (𝔄⁺ i))  using ( _≈_ ; sym ; trans )
-   goal : ⟦ p ⟧ᵢ ⟨$⟩ snd ∥ i ∥ ≈ ⟦ q ⟧ᵢ ⟨$⟩ snd ∥ i ∥
-   goal = trans  (free-lift-interp{𝑨 = ∣ i ∣}(snd ∥ i ∥) p)
-                 (trans (pKq i)(sym (free-lift-interp{𝑨 = ∣ i ∣} (snd ∥ i ∥) q)))
+   goal : ⟦ p ⟧ᵢ ⟨$⟩ snd (proj₂ i) ≈ ⟦ q ⟧ᵢ ⟨$⟩ snd (proj₂ i)
+   goal = trans  (free-lift-interp{𝑨 = (proj₁ i)}(snd (proj₂ i)) p)
+                 (trans (pKq i)(sym (free-lift-interp{𝑨 = (proj₁ i)} (snd (proj₂ i)) q)))
   E⊢pq : ℰ ⊢ X ▹ p ≈ q
   E⊢pq = AllEqual⊆ker𝔽 pqEqual
 
 
  mon𝔽ℭ : mon 𝔽[ X ] ℭ
- mon𝔽ℭ = ∣ hom𝔽ℭ ∣ , isMon
+ mon𝔽ℭ = (proj₁ hom𝔽ℭ) , isMon
   where
   open IsMon
   open IsHom
-  isMon : IsMon 𝔽[ X ] ℭ ∣ hom𝔽ℭ ∣
-  isHom isMon = ∥ hom𝔽ℭ ∥
+  isMon : IsMon 𝔽[ X ] ℭ (proj₁ hom𝔽ℭ)
+  isHom isMon = (proj₂ hom𝔽ℭ)
   isInjective isMon {p} {q} φpq = kerℭ⊆ker𝔽 φpq
 ```
 
@@ -176,7 +176,7 @@ that `𝔽[ X ]` is a subalgebra of the *lift* of `ℭ`, denoted `ℓℭ`.
  SP𝔽 = S-idem SSP𝔽
   where
   PSℭ : ℭ ∈ P (α ⊔ ρᵃ ⊔ ℓ) ι (S ℓ 𝒦)
-  PSℭ = ℑ⁺ , (𝔄⁺ , ((λ i → fst ∥ i ∥) , ≅-refl))
+  PSℭ = ℑ⁺ , (𝔄⁺ , ((λ i → fst (proj₂ i)) , ≅-refl))
 
   SPℭ : ℭ ∈ S ι (P ℓ ι 𝒦)
   SPℭ = PS⊆SP {ℓ = ℓ} PSℭ

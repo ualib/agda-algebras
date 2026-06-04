@@ -51,11 +51,11 @@ open _⟶_ using () renaming ( to to _⟨$⟩_ )
 
 module _  {X : Type χ} where
 
- open Setoid   using () renaming (Carrier to ∣_∣ )
+ open Setoid   using ( Carrier )
  open Algebra  using ( Domain )
 
  _⊧_≈_ : Algebra α ρᵃ → Term X → Term X → Type _
- 𝑨 ⊧ p ≈ q = ∀ (ρ : ∣ Env X ∣) → ⟦ p ⟧ ⟨$⟩ ρ ≈ ⟦ q ⟧ ⟨$⟩ ρ
+ 𝑨 ⊧ p ≈ q = ∀ (ρ : Carrier (Env X)) → ⟦ p ⟧ ⟨$⟩ ρ ≈ ⟦ q ⟧ ⟨$⟩ ρ
   where
   open Setoid ( Domain 𝑨 )  using ( _≈_ )
   open Environment 𝑨        using ( Env ; ⟦_⟧ )

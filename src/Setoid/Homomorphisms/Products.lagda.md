@@ -26,7 +26,7 @@ open import Relation.Binary  using ( Setoid )
 open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
 
 -- Imports from the Agda Universal Algebras Library ----------------------
-open import Overture         using ( ∣_∣ ; ∥_∥)
+open import Overture         using ( proj₁ ; proj₂)
 open import Setoid.Algebras {𝑆 = 𝑆}
                              using ( Algebra ; _^_ ; ⨅ )
 open import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}
@@ -55,11 +55,11 @@ module _ {I : Type 𝓘}{𝑨 : Algebra a α }(ℬ : I → Algebra b β)  where
  ⨅-hom-co 𝒽 = h , hhom
   where
   h : A ⟶ ⨅B
-  (h ⟨$⟩ a) i = ∣ 𝒽 i ∣ ⟨$⟩ a
-  cong h xy i = cong ∣ 𝒽 i ∣ xy
+  (h ⟨$⟩ a) i = (proj₁ (𝒽 i)) ⟨$⟩ a
+  cong h xy i = cong (proj₁ (𝒽 i)) xy
 
   hhom : IsHom 𝑨 (⨅ ℬ) h
-  compatible hhom = λ i → compatible ∥ 𝒽 i ∥
+  compatible hhom = λ i → compatible (proj₂ (𝒽 i))
 ```
 
 
@@ -86,11 +86,11 @@ a homomorphism from `⨅ 𝒜` to `⨅ ℬ` in the following natural way.
   open Algebra (⨅ 𝒜) using () renaming ( Domain to ⨅A )
 
   F : ⨅A ⟶ ⨅B
-  (F ⟨$⟩ x) i = ∣ 𝒽 i ∣ ⟨$⟩ x i
-  cong F xy i = cong ∣ 𝒽 i ∣ (xy i)
+  (F ⟨$⟩ x) i = (proj₁ (𝒽 i)) ⟨$⟩ x i
+  cong F xy i = cong (proj₁ (𝒽 i)) (xy i)
 
   isHom : IsHom (⨅ 𝒜) (⨅ ℬ) F
-  compatible isHom i = compatible ∥ 𝒽 i ∥
+  compatible isHom i = compatible (proj₂ (𝒽 i))
 ```
 
 

@@ -49,7 +49,7 @@ open import Level            using ( Level ; _⊔_ )
 open import Relation.Binary  using ( Setoid ; IsEquivalence )
                              renaming ( Rel to BinRel ; _⇒_ to _⊆_)
 -- Imports from the Agda Universal Algebras Library ------------------------------
-open import Overture using ( ∣_∣ ; ∥_∥ )
+open import Overture using ( proj₁ ; proj₂ ; OperationSymbolsOf ; ArityOf )
 open import Setoid.Algebras.Basic {𝑆 = 𝑆} using ( Algebra ; 𝕌[_] ; _^_ )
 open import Setoid.Congruences.Basic {𝑆 = 𝑆}
   using  ( Con ; mkcon ; _∣≈_ ; reflexive ; is-equivalence ; is-compatible )
@@ -79,7 +79,7 @@ module _ {𝑨 : Algebra α ρ} where
     rfl  : {x y : 𝕌[ 𝑨 ]} → x ≈ y → Gen R x y
     symm : {x y : 𝕌[ 𝑨 ]} → Gen R x y → Gen R y x
     tran : {x y z : 𝕌[ 𝑨 ]} → Gen R x y → Gen R y z → Gen R x z
-    comp : (f : ∣ 𝑆 ∣) {u v : ∥ 𝑆 ∥ f → 𝕌[ 𝑨 ]}
+    comp : (f : OperationSymbolsOf 𝑆) {u v : ArityOf 𝑆 f → 𝕌[ 𝑨 ]}
       → (∀ i → Gen R (u i) (v i)) → Gen R ((f ^ 𝑨) u) ((f ^ 𝑨) v)
 
   Cg : (R : BinRel 𝕌[ 𝑨 ] ℓ) → Con 𝑨 (𝒈 ℓ)

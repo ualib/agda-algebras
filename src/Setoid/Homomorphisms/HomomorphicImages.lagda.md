@@ -29,7 +29,7 @@ open import Relation.Unary   using ( Pred ; _∈_ )
 open import Relation.Binary.PropositionalEquality as ≡ using ()
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
-open import Overture          using  ( ∣_∣ ; ∥_∥ ; transport )
+open import Overture          using  ( proj₁ ; proj₂ ; ArityOf ; transport )
 open  import Setoid.Functions
       using ( lift∼lower ; Ran ; _range ; _preimage ; _image ; Inv ; Image_∋_ )
       using ( _preimage≈image ; InvIsInverseʳ ; IsSurjective ; ⊙-IsSurjective )
@@ -57,7 +57,7 @@ class of *homomorphic images* of an algebra in dependent type theory.
 open IsHom
 
 _IsHomImageOf_ : (𝑩 : Algebra β ρᵇ)(𝑨 : Algebra α ρᵃ) → Type _
-𝑩 IsHomImageOf 𝑨 = Σ[ φ ∈ hom 𝑨 𝑩 ] IsSurjective ∣ φ ∣
+𝑩 IsHomImageOf 𝑨 = Σ[ φ ∈ hom 𝑨 𝑩 ] IsSurjective (proj₁ φ)
 
 HomImages : Algebra α ρᵃ → Type (α ⊔ ρᵃ ⊔ ov (β ⊔ ρᵇ))
 HomImages {β = β}{ρᵇ = ρᵇ} 𝑨 = Σ[ 𝑩 ∈ Algebra β ρᵇ ] 𝑩 IsHomImageOf 𝑨
@@ -91,31 +91,31 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
 
  HomImageOf[_] : hom 𝑨 𝑩 → Algebra (α ⊔ β ⊔ ρᵇ) ρᵇ
  HomImageOf[ h ] =
-  record { Domain = Ran ∣ h ∣ ; Interp = record { to = f' ; cong = cong' } }
+  record { Domain = Ran (proj₁ h) ; Interp = record { to = f' ; cong = cong' } }
    where
-   open Setoid(⟨ 𝑆 ⟩ (Ran ∣ h ∣))
+   open Setoid(⟨ 𝑆 ⟩ (Ran (proj₁ h)))
     using() renaming (Carrier to SRanh ; _≈_ to _≈₃_ ; refl to refl₃ )
 
-   hhom :  ∀ {𝑓}(x : ∥ 𝑆 ∥ 𝑓 → ∣ h ∣ range )
-    →      (∣ h ∣ ⟨$⟩ (𝑓 ^ 𝑨) ((∣ h ∣ preimage) ∘ x)) ≈₂ (𝑓 ^ 𝑩) ((∣ h ∣ image) ∘ x)
+   hhom :  ∀ {𝑓}(x : ArityOf 𝑆 𝑓 → (proj₁ h) range )
+    →      ((proj₁ h) ⟨$⟩ (𝑓 ^ 𝑨) (((proj₁ h) preimage) ∘ x)) ≈₂ (𝑓 ^ 𝑩) (((proj₁ h) image) ∘ x)
 
-   hhom {𝑓} x = trans₂ (compatible ∥ h ∥) (cong InterpB (≡.refl , (∣ h ∣ preimage≈image) ∘ x))
+   hhom {𝑓} x = trans₂ (compatible (proj₂ h)) (cong InterpB (≡.refl , ((proj₁ h) preimage≈image) ∘ x))
 
-   f' : SRanh → ∣ h ∣ range
-   f' (𝑓 , x) =  (𝑓 ^ 𝑩)((∣ h ∣ image)∘ x)        -- b : the image in ∣B∣
-                 , (𝑓 ^ 𝑨)((∣ h ∣ preimage) ∘ x)  -- a : the preimage in ∣A∣
-                 , hhom x                        -- p : proof that `(∣ h ∣ ⟨$⟩ a) ≈₂ b`
+   f' : SRanh → (proj₁ h) range
+   f' (𝑓 , x) =  (𝑓 ^ 𝑩)(((proj₁ h) image)∘ x)        -- b : the image in ∣B∣
+                 , (𝑓 ^ 𝑨)(((proj₁ h) preimage) ∘ x)  -- a : the preimage in ∣A∣
+                 , hhom x                             -- p : proof that (proj₁ h ⟨$⟩ a) ≈₂ b
 
-   cong' : ∀ {x y} → x ≈₃ y → ((∣ h ∣ image) (f' x)) ≈₂ ((∣ h ∣ image) (f' y))
+   cong' : ∀ {x y} → x ≈₃ y → (((proj₁ h) image) (f' x)) ≈₂ (((proj₁ h) image) (f' y))
    cong' {(𝑓 , u)} {(.𝑓 , v)} (≡.refl , EqA) = Goal
     where
     -- Alternative formulation of the goal:
-    goal : (𝑓 ^ 𝑩)(λ i → ((∣ h ∣ image)(u i))) ≈₂ (𝑓 ^ 𝑩)(λ i → ((∣ h ∣ image) (v i)))
+    goal : (𝑓 ^ 𝑩)(λ i → (((proj₁ h) image)(u i))) ≈₂ (𝑓 ^ 𝑩)(λ i → (((proj₁ h) image) (v i)))
     goal = cong InterpB (≡.refl , EqA )
 
-    Goal : (∣ h ∣ image) (f' (𝑓 , u)) ≈₂ (∣ h ∣ image) (f' (𝑓 , v))
+    Goal : ((proj₁ h) image) (f' (𝑓 , u)) ≈₂ ((proj₁ h) image) (f' (𝑓 , v))
     Goal = goal
-    -- Note: `EqA : ∀ i → (∣ h ∣ image) (u i) ≈₂ (∣ h ∣ image) (v i)`
+    -- Note: `EqA : ∀ i → ((proj₁ h) image) (u i) ≈₂ ((proj₁ h) image) (v i)`
 ```
 
 
@@ -147,7 +147,7 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
  open Level      using ( lift ; lower )
 
  Lift-epi-is-epiˡ :  (h : hom 𝑨 𝑩)(ℓᵃ ℓᵇ : Level)
-  →                  IsSurjective ∣ h ∣ → IsSurjective ∣ Lift-homˡ {𝑨 = 𝑨}{𝑩} h ℓᵃ ℓᵇ ∣
+  →                  IsSurjective (proj₁ h) → IsSurjective (proj₁ (Lift-homˡ {𝑨 = 𝑨}{𝑩} h ℓᵃ ℓᵇ))
 
  Lift-epi-is-epiˡ h ℓᵃ ℓᵇ hepi {b} = Goal
   where
@@ -155,24 +155,24 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
   open Setoid lB using () renaming ( _≈_ to _≈ₗ₂_ )
 
   a : 𝕌[ 𝑨 ]
-  a = Inv ∣ h ∣ hepi
+  a = Inv (proj₁ h) hepi
 
   lem1 : b ≈ₗ₂ (lift (lower b))
   lem1 = lift∼lower {𝑨 = B} b
 
-  lem2' : (lower b) ≈₂ (∣ h ∣ ⟨$⟩ a)
+  lem2' : (lower b) ≈₂ ((proj₁ h) ⟨$⟩ a)
   lem2' = sym  (InvIsInverseʳ hepi)
 
-  lem2 : (lift (lower b)) ≈ₗ₂ (lift (∣ h ∣ ⟨$⟩ a))
-  lem2 = cong{From = B} ∣ ToLiftˡ{𝑨 = 𝑩}{ℓᵇ} ∣ lem2'
+  lem2 : (lift (lower b)) ≈ₗ₂ (lift ((proj₁ h) ⟨$⟩ a))
+  lem2 = cong{From = B} (proj₁ (ToLiftˡ{𝑨 = 𝑩}{ℓᵇ})) lem2'
 
-  lem3 : (lift (∣ h ∣ ⟨$⟩ a)) ≈ₗ₂ ((∣ Lift-homˡ h ℓᵃ ℓᵇ ∣ ⟨$⟩ lift a))
+  lem3 : (lift ((proj₁ h) ⟨$⟩ a)) ≈ₗ₂ (((proj₁ (Lift-homˡ h ℓᵃ ℓᵇ)) ⟨$⟩ lift a))
   lem3 = lift-hom-lemma h a ℓᵃ ℓᵇ
 
-  η : b ≈ₗ₂ (∣ Lift-homˡ h ℓᵃ ℓᵇ ∣ ⟨$⟩ lift a)
+  η : b ≈ₗ₂ ((proj₁ (Lift-homˡ h ℓᵃ ℓᵇ)) ⟨$⟩ lift a)
   η = trans lem1 (trans lem2 lem3)
 
-  Goal : Image ∣ Lift-homˡ h ℓᵃ ℓᵇ ∣ ∋ b
+  Goal : Image (proj₁ (Lift-homˡ h ℓᵃ ℓᵇ)) ∋ b
   Goal = Image_∋_.eq (lift a) η
 
 
@@ -184,7 +184,7 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
   lφ : hom (Lift-Algˡ 𝑨 ℓᵃ) (Lift-Algˡ 𝑩 ℓᵇ)
   lφ = Lift-homˡ {𝑨 = 𝑨}{𝑩} (φ , φhom) ℓᵃ ℓᵇ
 
-  lφepic : IsSurjective ∣ lφ ∣
+  lφepic : IsSurjective (proj₁ lφ)
   lφepic = Lift-epi-is-epiˡ (φ , φhom) ℓᵃ ℓᵇ φepic
   Goal : (Lift-Algˡ 𝑩 ℓᵇ) IsHomImageOf (Lift-Algˡ 𝑨 ℓᵃ)
   Goal = lφ , lφepic
@@ -193,16 +193,16 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
 module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
  open _≅_
  Lift-HomImage-lemma : ∀{γ} → (Lift-Alg 𝑨 γ γ) IsHomImageOf 𝑩 → 𝑨 IsHomImageOf 𝑩
- Lift-HomImage-lemma {γ} φ =  ⊙-hom ∣ φ ∣ (from Lift-≅) ,
-                              ⊙-IsSurjective ∥ φ ∥ (fromIsSurjective (Lift-≅{𝑨 = 𝑨}))
+ Lift-HomImage-lemma {γ} φ =  ⊙-hom (proj₁ φ) (from Lift-≅) ,
+                              ⊙-IsSurjective (proj₂ φ) (fromIsSurjective (Lift-≅{𝑨 = 𝑨}))
 
 module _ {𝑨 𝑨' : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
  open _≅_
  HomImage-≅ : 𝑨 IsHomImageOf 𝑨' → 𝑨 ≅ 𝑩 → 𝑩 IsHomImageOf 𝑨'
- HomImage-≅ φ A≅B = ⊙-hom ∣ φ ∣ (to A≅B) , ⊙-IsSurjective ∥ φ ∥ (toIsSurjective A≅B)
+ HomImage-≅ φ A≅B = ⊙-hom (proj₁ φ) (to A≅B) , ⊙-IsSurjective (proj₂ φ) (toIsSurjective A≅B)
 
  HomImage-≅' : 𝑨 IsHomImageOf 𝑨' → 𝑨' ≅ 𝑩 → 𝑨 IsHomImageOf 𝑩
- HomImage-≅' φ A'≅B = (⊙-hom (from A'≅B) ∣ φ ∣) , ⊙-IsSurjective (fromIsSurjective A'≅B) ∥ φ ∥
+ HomImage-≅' φ A'≅B = (⊙-hom (from A'≅B) (proj₁ φ)) , ⊙-IsSurjective (fromIsSurjective A'≅B) (proj₂ φ)
 ```
 
 

@@ -54,7 +54,10 @@ module Overture.Basic where
 open import Agda.Primitive using () renaming ( Set to  Type )
 
 -- Imports from the Agda Standard Library -----------------------------------------------
-open import Data.Product      using ( _,_ ; ∃ ; Σ-syntax ; _×_ ; proj₁ ; proj₂ )
+open import Data.Product      using ( _,_ ; ∃ ; Σ-syntax ; _×_ )
+-- `proj₁` / `proj₂` are re-exported, so the umbrella `Overture` supplies the
+-- canonical projections that replace the deprecated `∣_∣` / `∥_∥` (ADR-002 §1).
+open import Data.Product      using ( proj₁ ; proj₂ ) public
 open import Function.Base     using ( _∘_ ; id )
 open import Level             using ( Level ; suc ; _⊔_ ; lift ; lower ; Lift ; 0ℓ )
 open import Relation.Binary   using ( Decidable )
@@ -89,10 +92,21 @@ module _ {A : Type a}{B : A → Type b} where
  ∣_∣ : Σ[ x ∈ A ] B x → A
  ∣_∣ = proj₁
 
- ∥_∥ : (z : Σ[ a ∈ A ] B a) → B ∣ z ∣
+ ∥_∥ : (z : Σ[ a ∈ A ] B a) → B (proj₁ z)
  ∥_∥ = proj₂
 
  infix  40 ∣_∣
+
+ {-# WARNING_ON_USAGE ∣_∣
+ "The bracket projection `∣_∣` is deprecated (v3.0); it is being replaced
+  library-wide by `proj₁` (from `Data.Product`), with `OperationSymbolsOf` for
+  signature components.  See ADR-002 §1.  Retained so `Legacy/` keeps compiling."
+ #-}
+ {-# WARNING_ON_USAGE ∥_∥
+ "The bracket projection `∥_∥` is deprecated (v3.0); it is being replaced
+  library-wide by `proj₂` (from `Data.Product`), with `ArityOf` for signature
+  components.  See ADR-002 §1.  Retained so `Legacy/` keeps compiling."
+ #-}
 ```
 
 Here we put the definitions inside an *anonymous module*, which starts with the

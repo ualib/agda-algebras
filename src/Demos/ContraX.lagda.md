@@ -23,7 +23,7 @@ open import  Data.Product                           using ( Σ-syntax )
 open import  Function    renaming (Func to _⟶_ )    using ()
 
 
-open import Overture                 using ( ∣_∣ ; ∥_∥ )
+open import Overture                 using ( proj₁ ; proj₂ )
 open import Setoid.Algebras {𝑆 = 𝑆}  using ( Algebra ; 𝔻[_] )
 open import Setoid.Functions         using (IsSurjective ; Image_∋_)
 
@@ -48,10 +48,10 @@ contradiction h1 = ex falso
  h : Σ[ h ∈ (setoid ⊥ ⟶ 𝔻[ myAlg ])] IsSurjective h
  h = h1 ⊥ myAlg
 
- falso : Image ∣ h ∣ ∋ tt
- falso = ∥ h ∥
+ falso : Image (proj₁ h) ∋ tt
+ falso = (proj₂ h)
 
- ex : Image ∣ h ∣ ∋ tt → ⊥
+ ex : Image (proj₁ h) ∋ tt → ⊥
  ex (Image_∋_.eq a x) = a
 ```
 

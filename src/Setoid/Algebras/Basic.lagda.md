@@ -26,7 +26,7 @@ open import Relation.Binary  using ( Setoid ; IsEquivalence )
 open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ ; refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------
-open import Overture    using ( ∥_∥ ; ∣_∣ )
+open import Overture    using ( proj₂ ; proj₁ ; OperationSymbolsOf ; ArityOf )
 
 private variable α ρ ι : Level
 
@@ -52,13 +52,13 @@ open Func renaming ( to to _⟨$⟩_ ; cong to ≈cong )
 
 
 EqArgs :  {𝑆 : Signature 𝓞 𝓥}{ξ : Setoid α ρ}
- →        ∀{f g} → f ≡ g → (∥ 𝑆 ∥ f → Carrier ξ) → (∥ 𝑆 ∥ g → Carrier ξ) → Type _
+ →        ∀{f g} → f ≡ g → (ArityOf 𝑆 f → Carrier ξ) → (ArityOf 𝑆 g → Carrier ξ) → Type _
 
 EqArgs {ξ = ξ} refl u v = ∀ i → (_≈_ ξ) (u i) (v i)
 
 
 ⟨_⟩ : Signature 𝓞 𝓥 → Setoid α ρ → Setoid _ _
-Carrier (⟨ 𝑆 ⟩ ξ) = Σ[ f ∈ ∣ 𝑆 ∣ ] (∥ 𝑆 ∥ f → ξ .Carrier)
+Carrier (⟨ 𝑆 ⟩ ξ) = Σ[ f ∈ OperationSymbolsOf 𝑆 ] (ArityOf 𝑆 f → ξ .Carrier)
 _≈_ (⟨ 𝑆 ⟩ ξ) (f , u) (g , v) = Σ[ eqv ∈ f ≡ g ] EqArgs{ξ = ξ} eqv u v
 
 IsEquivalence.refl   (isEqv (⟨ 𝑆 ⟩ ξ))                      = refl , λ _ → reflS   ξ
@@ -98,7 +98,7 @@ for improving readability of our code.
 𝕌[ 𝑨 ] = Carrier 𝔻[ 𝑨 ]
 
 -- interpretation of an operation symbol in an algebra
-_̂_ : (f : ∣ 𝑆 ∣)(𝑨 : Algebra α ρ) → (∥ 𝑆 ∥ f  →  𝕌[ 𝑨 ]) → 𝕌[ 𝑨 ]
+_̂_ : (f : OperationSymbolsOf 𝑆)(𝑨 : Algebra α ρ) → (ArityOf 𝑆 f  →  𝕌[ 𝑨 ]) → 𝕌[ 𝑨 ]
 f ̂ 𝑨 = λ a → (Interp 𝑨) ⟨$⟩ (f , a)
 {-# WARNING_ON_USAGE _̂_
 "The combining-caret notation `_̂_` is deprecated as of v3.0 and will be removed
@@ -110,7 +110,7 @@ in v3.1.  Use the ASCII `_^_` defined immediately below.  See ADR-002 §7."
 -- survive shell-pipeline tooling.  New `Classical/` code uses `_^_`
 -- exclusively; existing `Setoid/` code may continue to use `_̂_` until v3.1.
 -- See ADR-002 §7 for the rationale and per-tree policy.
-_^_ : (f : ∣ 𝑆 ∣)(𝑨 : Algebra α ρ) → (∥ 𝑆 ∥ f  →  𝕌[ 𝑨 ]) → 𝕌[ 𝑨 ]
+_^_ : (f : OperationSymbolsOf 𝑆)(𝑨 : Algebra α ρ) → (ArityOf 𝑆 f  →  𝕌[ 𝑨 ]) → 𝕌[ 𝑨 ]
 f ^ 𝑨 = λ a → (Interp 𝑨) ⟨$⟩ (f , a)
 ```
 

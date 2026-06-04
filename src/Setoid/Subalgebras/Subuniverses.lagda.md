@@ -29,7 +29,7 @@ import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 open import Relation.Binary.PropositionalEquality using ( refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------------
-open import Overture                       using ( ∣_∣ ; ∥_∥ ; Im_⊆_ )
+open import Overture                       using ( proj₁ ; proj₂ ; OperationSymbolsOf ; ArityOf ; Im_⊆_ )
 open import Overture.Terms        {𝑆 = 𝑆}  using ( Term ; ℊ ; node )
 open import Setoid.Algebras       {𝑆 = 𝑆}  using ( Algebra ; 𝕌[_] ; _^_ ; ov )
 open import Setoid.Terms          {𝑆 = 𝑆}  using ( module Environment )
@@ -41,7 +41,7 @@ private variable
 ```
 
 
-We first show how to represent in [Agda][] the collection of subuniverses of an algebra `𝑨`.  Since a subuniverse is viewed as a subset of the domain of `𝑨`, we define it as a predicate on `∣ 𝑨 ∣`.  Thus, the collection of subuniverses is a predicate on predicates on `∣ 𝑨 ∣`.
+We first show how to represent in [Agda][] the collection of subuniverses of an algebra `𝑨`.  Since a subuniverse is viewed as a subset of the domain of `𝑨`, we define it as a predicate on `𝕌[ 𝑨 ]`.  Thus, the collection of subuniverses is a predicate on predicates on `𝕌[ 𝑨 ]`.
 
 
 ```agda
@@ -65,9 +65,9 @@ module _ (𝑨 : Algebra α ρᵃ) where
 ```
 
 
-(The inferred types in the `app` constructor are `f : ∣ 𝑆 ∣` and `a : ∥ 𝑆 ∥ 𝑓 → ∣ 𝑨 ∣`.)
+(The inferred types in the `app` constructor are `f : OperationSymbolsOf 𝑆` and `a : ArityOf 𝑆 𝑓 → 𝕌[ 𝑨 ]`.)
 
-Given an arbitrary subset `X` of the domain `∣ 𝑨 ∣` of an `𝑆`-algebra `𝑨`, the
+Given an arbitrary subset `X` of the domain `𝕌[ 𝑨 ]` of an `𝑆`-algebra `𝑨`, the
 type `Sg X` does indeed represent a subuniverse of `𝑨`. Proving this using the
 inductive type `Sg` is trivial, as we see here.
 
@@ -114,8 +114,8 @@ In the proof above, we assume the following typing judgments:
 
 
     ν  : Im a ⊆ ⋂ I 𝒜
-    a  : ∥ 𝑆 ∥ f → Setoid.Subalgebras.A 𝑨
-    f  : ∣ 𝑆 ∣
+    a  : ArityOf 𝑆 f → Setoid.Subalgebras.A 𝑨
+    f  : OperationSymbolsOf 𝑆
     σ  : (i : I) → 𝒜 i ∈ Subuniverses 𝑨
 
 and we must prove `(f ^ 𝑨) a ∈ ⋂ I 𝒜`.  When we did this with the old
@@ -149,8 +149,8 @@ In the induction step of the foregoing proof, the typing judgments of the premis
 
     ν  : (x : X) → b x ∈ B
     b  : Setoid.Carrier (Env X)
-    t  : ∥ 𝑆 ∥ f → Term X
-    f  : ∣ 𝑆 ∣
+    t  : ArityOf 𝑆 f → Term X
+    f  : OperationSymbolsOf 𝑆
     σ  : B ∈ Subuniverses 𝑨
     B  : Pred A ρ
     ρ  : Level
@@ -164,7 +164,7 @@ Alternatively, we could express the preceeding fact using an inductive type repr
 ```agda
  data TermImage (B : Pred A ρᵃ) : Pred A (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ) where
   var : ∀ {b : A} → b ∈ B → b ∈ TermImage B
-  app : ∀ f ts →  ((i : ∥ 𝑆 ∥ f) → ts i ∈ TermImage B)  → (f ^ 𝑨) ts ∈ TermImage B
+  app : ∀ f ts →  ((i : ArityOf 𝑆 f) → ts i ∈ TermImage B)  → (f ^ 𝑨) ts ∈ TermImage B
 
  -- `TermImage B` is a subuniverse of 𝑨 that contains B.
  TermImageIsSub : {B : Pred A ρᵃ} → TermImage B ∈ Subuniverses 𝑨
@@ -192,8 +192,8 @@ we call `hom-unique`.
   open SetoidReasoning B
 
   private
-   g = _⟨$⟩_ ∣ gh ∣
-   h = _⟨$⟩_ ∣ hh ∣
+   g = _⟨$⟩_ (proj₁ gh)
+   h = _⟨$⟩_ (proj₁ hh)
 
   open IsHom
   open Environment 𝑩
@@ -209,9 +209,9 @@ we call `hom-unique`.
 
    Goal : g ((f ^ 𝑨) a) ≈ h ((f ^ 𝑨) a)
    Goal =  begin
-           g ((f ^ 𝑨) a)   ≈⟨ compatible ∥ gh ∥ ⟩
+           g ((f ^ 𝑨) a)   ≈⟨ compatible (proj₂ gh) ⟩
            (f ^ 𝑩)(g ∘ a ) ≈˘⟨ cong Interp (refl , IH) ⟩
-           (f ^ 𝑩)(h ∘ a)  ≈˘⟨ compatible ∥ hh ∥ ⟩
+           (f ^ 𝑩)(h ∘ a)  ≈˘⟨ compatible (proj₂ hh) ⟩
            h ((f ^ 𝑨) a )  ∎
 ```
 
@@ -219,8 +219,8 @@ we call `hom-unique`.
 In the induction step, the following typing judgments are assumed:
 
     SgGa : Im a ⊆ Sg 𝑨 G
-    a    : ∥ 𝑆 ∥ f → Subuniverses 𝑨
-    f    : ∣ 𝑆 ∣
+    a    : ArityOf 𝑆 f → Subuniverses 𝑨
+    f    : OperationSymbolsOf 𝑆
     σ    : (x : A) → x ∈ G → g x ≈ h x
     G    : Pred A ℓ
     hh   : hom 𝑨 𝑩

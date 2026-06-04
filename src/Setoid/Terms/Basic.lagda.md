@@ -31,7 +31,7 @@ open import Relation.Binary        using ( Setoid ; IsEquivalence )
 open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
 
 -- Imports from the Agda Universal Algebra Library -------------------------------
-open import Overture using ( ∥_∥ )
+open import Overture using ( ArityOf )
 open import Setoid.Algebras  {𝑆 = 𝑆}  using ( Algebra ; ov ; _^_)
 open import Overture.Terms  {𝑆 = 𝑆} using ( Term )
 
@@ -59,7 +59,7 @@ module _ {X : Type χ } where
  -- Equality of terms as an inductive datatype
  data _≐_ : Term X → Term X → Type (ov χ) where
   rfl : {x y : X} → x ≡ y → (ℊ x) ≐ (ℊ y)
-  gnl : ∀ {f}{s t : ∥ 𝑆 ∥ f → Term X} → (∀ i → (s i) ≐ (t i)) → (node f s) ≐ (node f t)
+  gnl : ∀ {f}{s t : ArityOf 𝑆 f → Term X} → (∀ i → (s i) ≐ (t i)) → (node f s) ≐ (node f t)
 
  -- Equality of terms is an equivalence relation
  open Level
@@ -148,12 +148,12 @@ Interpretation of terms is iteration on the W-type. The standard library offers 
  cong ⟦ ℊ x ⟧ u≈v = u≈v x
  cong ⟦ node f args ⟧ x≈y = cong InterpA (≡.refl , λ i → cong ⟦ args i ⟧ x≈y )
 
- open Setoid using () renaming ( Carrier to ∣_∣ )
+ open Setoid using ( Carrier )
 
  -- An equality between two terms holds in a model
  -- if the two terms are equal under all valuations of their free variables.
  Equal : ∀ {X : Type χ} (s t : Term X) → Type _
- Equal {X = X} s t = ∀ (ρ : ∣ Env X ∣) →  ⟦ s ⟧ ⟨$⟩ ρ ≈ₐ ⟦ t ⟧ ⟨$⟩ ρ
+ Equal {X = X} s t = ∀ (ρ : Carrier (Env X)) →  ⟦ s ⟧ ⟨$⟩ ρ ≈ₐ ⟦ t ⟧ ⟨$⟩ ρ
 
  ≐→Equal : {X : Type χ}(s t : Term X) → s ≐ t → Equal s t
  ≐→Equal .(ℊ _) .(ℊ _) (rfl ≡.refl) = λ _ → refl
@@ -167,11 +167,11 @@ Interpretation of terms is iteration on the W-type. The standard library offers 
  IsEquivalence.trans  isEquiv = λ ij jk ρ → trans (ij ρ) (jk ρ)
 
  -- Evaluation of a substitution gives an environment.
- ⟦_⟧s : {X Y : Type χ} → Sub X Y → ∣ Env X ∣ → ∣ Env Y ∣
+ ⟦_⟧s : {X Y : Type χ} → Sub X Y → Carrier (Env X) → Carrier (Env Y)
  ⟦ σ ⟧s ρ x = ⟦ σ x ⟧ ⟨$⟩ ρ
 
  -- Substitution lemma: ⟦t[σ]⟧ρ ≃ ⟦t⟧⟦σ⟧ρ
- substitution :  {X Y : Type χ} → (t : Term Y) (σ : Sub X Y) (ρ : ∣ Env X ∣ )
+ substitution :  {X Y : Type χ} → (t : Term Y) (σ : Sub X Y) (ρ : Carrier (Env X) )
   →              ⟦ t [ σ ] ⟧ ⟨$⟩ ρ  ≈ₐ  ⟦ t ⟧ ⟨$⟩ (⟦ σ ⟧s ρ)
 
  substitution (ℊ x) σ ρ = refl

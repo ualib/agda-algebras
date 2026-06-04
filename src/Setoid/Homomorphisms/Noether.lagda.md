@@ -28,7 +28,7 @@ open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from agda-algebras ------------------------------------------------
-open import Overture          using ( ∣_∣ ; ∥_∥ )
+open import Overture          using ( proj₁ ; proj₂ )
 open import Setoid.Functions  using ( IsInjective )
 
 open import Setoid.Algebras {𝑆 = 𝑆}               using ( Algebra ; _^_)
@@ -53,12 +53,12 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}(hh : hom 𝑨 𝑩) 
 
  open IsHom
  private
-  hfunc = ∣ hh ∣
+  hfunc = (proj₁ hh)
   h = _⟨$⟩_ hfunc
 
  FirstHomTheorem :  Σ[ φ ∈ hom (kerquo hh) 𝑩  ]
-                    ( ∀ a → h a ≈ ∣ φ ∣ ⟨$⟩ (∣ πker hh ∣ ⟨$⟩ a) )
-                     ∧ IsInjective ∣ φ ∣
+                    ( ∀ a → h a ≈ (proj₁ φ) ⟨$⟩ ((proj₁ (πker hh)) ⟨$⟩ a) )
+                     ∧ IsInjective (proj₁ φ)
 
  FirstHomTheorem = (φ , φhom) , (λ _ → refl) , φmon
   where
@@ -67,7 +67,7 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}(hh : hom 𝑨 𝑩) 
   cong φ = id
 
   φhom : IsHom (kerquo hh) 𝑩 φ
-  compatible φhom = trans (compatible ∥ hh ∥) (cong Interp (≡.refl , (λ _ → refl)))
+  compatible φhom = trans (compatible (proj₂ hh)) (cong Interp (≡.refl , (λ _ → refl)))
 
   φmon : IsInjective φ
   φmon = id
@@ -79,9 +79,9 @@ Now we prove that the homomorphism whose existence is guaranteed by `FirstHomThe
 
 ```agda
  FirstHomUnique :  (f g : hom (kerquo hh) 𝑩)
-  →                ( ∀ a →  h a ≈ ∣ f ∣ ⟨$⟩ (∣ πker hh ∣ ⟨$⟩ a) )
-  →                ( ∀ a →  h a ≈ ∣ g ∣ ⟨$⟩ (∣ πker hh ∣ ⟨$⟩ a) )
-  →                ∀ [a]  →  ∣ f ∣ ⟨$⟩ [a] ≈ ∣ g ∣ ⟨$⟩ [a]
+  →                ( ∀ a →  h a ≈ (proj₁ f) ⟨$⟩ ((proj₁ (πker hh)) ⟨$⟩ a) )
+  →                ( ∀ a →  h a ≈ (proj₁ g) ⟨$⟩ ((proj₁ (πker hh)) ⟨$⟩ a) )
+  →                ∀ [a]  →  (proj₁ f) ⟨$⟩ [a] ≈ (proj₁ g) ⟨$⟩ [a]
 
  FirstHomUnique fh gh hfk hgk a = trans (sym (hfk a)) (hgk a)
 ```

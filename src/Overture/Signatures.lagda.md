@@ -17,11 +17,8 @@ module Overture.Signatures where
 
 -- Imports from the Agda (Builtin) and the Agda Standard Library -----------------------
 open import Agda.Primitive  using () renaming ( Set to  Type )
-open import Data.Product    using ( Σ-syntax )
+open import Data.Product    using ( Σ-syntax ; proj₁ ; proj₂ )
 open import Level           using ( Level ; suc ; _⊔_ )
-
--- Imports from the Agda Universal Algebra Library ----------------------
-open import Overture.Basic using ( ∣_∣ ; ∥_∥ )
 
 variable 𝓞 𝓥 : Level
 ```
@@ -98,35 +95,36 @@ Level-of-Signature : {𝓞 𝓥 : Level} → Signature 𝓞 𝓥 → Level
 Level-of-Signature {𝓞}{𝓥} _ = suc (𝓞 ⊔ 𝓥)
 ```
 
-In the [Base.Functions][] module of the [agda-algebras][] library, special syntax
-is defined for the first and second projections — namely, `∣_∣` and `∥_∥`, resp.
+A signature is a Σ-type, so its two components are recovered by the standard
+projections `proj₁` and `proj₂` (from `Data.Product`, re-exported by
+[Overture.Basic][]).
 
 Consequently, if `𝑆 : Signature 𝓞 𝓥` is a signature, then
 
-* `∣ 𝑆 ∣` denotes the set of operation symbols, and
-* `∥ 𝑆 ∥` denotes the arity function.
+* `proj₁ 𝑆` denotes the set of operation symbols, and
+* `proj₂ 𝑆` denotes the arity function.
 
-If `𝑓 : ∣ 𝑆 ∣` is an operation symbol in the signature `𝑆`, then `∥ 𝑆 ∥ 𝑓` is the
-arity of `𝑓`.
+If `𝑓 : proj₁ 𝑆` is an operation symbol in the signature `𝑆`, then `proj₂ 𝑆 𝑓`
+is the arity of `𝑓`.
 
 #### <a id="self-documenting-projections">Self-documenting projections</a>
 
-The bracket notation `∣ 𝑆 ∣` and `∥ 𝑆 ∥` is concise but reads opaquely at use
-sites for readers who do not have the encoding cached.  The following long-form
-aliases are definitionally identical to the bracket forms; they are used by
-default in the `Classical/` tree.  See [ADR-002][] §1 for the rationale and the
-per-tree policy.
+Bare `proj₁` / `proj₂` read opaquely at signature use sites.  The following
+long-form aliases are definitionally identical to the projections and are the
+canonical way to name a signature's components throughout the library.  See
+[ADR-002][] §1 for the rationale and the per-tree policy.
 
 ```agda
 OperationSymbolsOf : Signature 𝓞 𝓥 → Type 𝓞
-OperationSymbolsOf 𝑆 = ∣ 𝑆 ∣
+OperationSymbolsOf 𝑆 = proj₁ 𝑆
 
 ArityOf : (𝑆 : Signature 𝓞 𝓥) → OperationSymbolsOf 𝑆 → Type 𝓥
-ArityOf 𝑆 f = ∥ 𝑆 ∥ f
+ArityOf 𝑆 f = proj₂ 𝑆 f
 ```
 
-The bracket notation remains available everywhere; `Setoid/`-tree code retains
-its existing usage.
+The bracket projections `∣_∣` / `∥_∥` are deprecated as of v3.0 (they carry a
+`WARNING_ON_USAGE` in [Overture.Basic][]); new code uses `OperationSymbolsOf` /
+`ArityOf` for signature components and `proj₁` / `proj₂` elsewhere.
 
 ----------------------
 

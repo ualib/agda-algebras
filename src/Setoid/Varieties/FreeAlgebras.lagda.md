@@ -27,7 +27,7 @@ open import Relation.Unary   using ( Pred ; _∈_ ; _⊆_ )
 open import Relation.Binary.PropositionalEquality as ≡ using (_≡_)
 
 -- Imports from the Agda Universal Algebra Library -------------------------------
-open  import Overture          using ( ∣_∣ ; ∥_∥ )
+open  import Overture          using ( proj₁ ; proj₂ )
 open  import Setoid.Relations  using ( fkerPred )
 open  import Setoid.Functions  using ( eq ; IsSurjective )
 
@@ -84,7 +84,7 @@ The relatively free algebra (relative to `Th 𝒦`) is called `M` and is derived
  ℰ (eqv , p) = eqv
 
  ℰ⊢[_]▹Th𝒦 : (X : Type χ) → ∀{p q} → ℰ ⊢ X ▹ p ≈ q → 𝒦 ⊫ (p ≈̇ q)
- ℰ⊢[ X ]▹Th𝒦 x 𝑨 kA = sound (λ i ρ → ∥ i ∥ 𝑨 kA ρ) x
+ ℰ⊢[ X ]▹Th𝒦 x 𝑨 kA = sound (λ i ρ → (proj₂ i) 𝑨 kA ρ) x
   where open Soundness ℰ 𝑨
 
  ----------- THE RELATIVELY FREE ALGEBRA -----------
@@ -123,21 +123,21 @@ Finally, we define an epimorphism from `𝑻 X` onto the relatively free algebra
  hom𝔽[_] : (X : Type χ) → hom (𝑻 X) 𝔽[ X ]
  hom𝔽[ X ] = epi→hom (𝑻 X) 𝔽[ X ] epi𝔽[ X ]
 
- hom𝔽[_]-is-epic : (X : Type χ) → IsSurjective ∣ hom𝔽[ X ] ∣
+ hom𝔽[_]-is-epic : (X : Type χ) → IsSurjective (proj₁ (hom𝔽[ X ]))
  hom𝔽[ X ]-is-epic = IsEpi.isSurjective (snd (epi𝔽[ X ]))
 
 
- class-models-kernel : ∀{X p q} → (p , q) ∈ fkerPred ∣ hom𝔽[ X ] ∣ → 𝒦 ⊫ (p ≈̇ q)
+ class-models-kernel : ∀{X p q} → (p , q) ∈ fkerPred (proj₁ (hom𝔽[ X ])) → 𝒦 ⊫ (p ≈̇ q)
  class-models-kernel {X = X}{p}{q} pKq = ℰ⊢[ X ]▹Th𝒦 pKq
 
- kernel-in-theory : {X : Type χ} → fkerPred ∣ hom𝔽[ X ] ∣ ⊆ Th (V ℓ ι 𝒦)
+ kernel-in-theory : {X : Type χ} → fkerPred (proj₁ (hom𝔽[ X ])) ⊆ Th (V ℓ ι 𝒦)
  kernel-in-theory {X = X} {p , q} pKq vkA x =
   classIds-⊆-VIds {ℓ = ℓ} {p = p}{q} (class-models-kernel pKq) vkA x
 
 
  module _  {X : Type χ} {𝑨 : Algebra α ρᵃ}{sA : 𝑨 ∈ S {β = α}{ρᵃ} ℓ 𝒦} where
   open Environment 𝑨 using ( Equal )
-  ker𝔽⊆Equal : ∀{p q} → (p , q) ∈ fkerPred ∣ hom𝔽[ X ] ∣ → Equal p q
+  ker𝔽⊆Equal : ∀{p q} → (p , q) ∈ fkerPred (proj₁ (hom𝔽[ X ])) → Equal p q
   ker𝔽⊆Equal{p = p}{q} x = S-id1{ℓ = ℓ}{p = p}{q} (ℰ⊢[ X ]▹Th𝒦 x) 𝑨 sA
 
  𝒦⊫→ℰ⊢ : {X : Type χ} → ∀{p q} → 𝒦 ⊫ (p ≈̇ q) → ℰ ⊢ X ▹ p ≈ q

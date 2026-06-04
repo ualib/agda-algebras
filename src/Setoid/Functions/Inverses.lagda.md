@@ -24,7 +24,7 @@ open import Relation.Unary    using ( Pred ; _∈_ )
 open import Relation.Binary   using ( Setoid ; _Preserves_⟶_ )
 
 -- Imports from agda-algebras -----------------------------------------
-open import Overture using ( ∣_∣ ; ∥_∥ ; ∃-syntax )
+open import Overture using ( proj₁ ; proj₂ ; ∃-syntax )
 
 private variable α ρᵃ β ρᵇ : Level
 
@@ -100,8 +100,8 @@ the second is for functions on setoids.
 
                   ; isEquivalence =
                      record  { refl = refl₁ , refl₂
-                             ; sym = λ x → sym₁ ∣ x ∣ , sym₂ ∥ x ∥
-                             ; trans = λ x y → trans₁ ∣ x ∣ ∣ y ∣ , trans₂ ∥ x ∥ ∥ y ∥
+                             ; sym = λ x → sym₁ (proj₁ x) , sym₂ (proj₂ x)
+                             ; trans = λ x y → trans₁ (proj₁ x) (proj₁ y) , trans₂ (proj₂ x) (proj₂ y)
                              }
                   }
 
@@ -155,7 +155,7 @@ We can prove that `Inv f` is the range-restricted right-inverse of `f`, as follo
  InvIsInverseʳ : {F : 𝑨 ⟶ 𝑩}{b : B}(q : Image F ∋ b) → (F ⟨$⟩ (Inv F q)) ≈₂ b
  InvIsInverseʳ (eq _ p) = sym₂ p
 
- ⁻¹IsInverseʳ : {F : 𝑨 ⟶ 𝑩}{bap : F range} → (F ⟨$⟩ ([ F ]⁻¹ bap )) ≈₂ ∣ bap ∣
+ ⁻¹IsInverseʳ : {F : 𝑨 ⟶ 𝑩}{bap : F range} → (F ⟨$⟩ ([ F ]⁻¹ bap )) ≈₂ (proj₁ bap)
  ⁻¹IsInverseʳ {bap = (_ , (_ , p))} = p
 ```
 

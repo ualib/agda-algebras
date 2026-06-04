@@ -32,7 +32,7 @@ open IsEquivalence  using () renaming ( refl to reflE ; sym to symE ; trans to t
 
 
 -- Imports from agda-algebras -----------------------------------------------------
-open import Overture  using ( ∣_∣; ∥_∥ ; proj ; projIsOnto )
+open import Overture  using ( proj₁; proj₂ ; proj ; projIsOnto )
                       renaming ( IsSurjective to onto )
 
 open import Setoid.Algebras.Basic {𝑆 = 𝑆}  using ( Algebra ; _^_ ; ov ; 𝔻[_] ; 𝕌[_])
@@ -68,7 +68,7 @@ module _ {𝒦 : Pred (Algebra α ρ) (ov α)} where
  ℑ = Σ[ 𝑨 ∈ (Algebra α ρ) ] 𝑨 ∈ 𝒦
 
  𝔄 : ℑ → Algebra α ρ
- 𝔄 i = ∣ i ∣
+ 𝔄 i = (proj₁ i)
 
  class-product : Algebra (ov (α ⊔ ρ)) _
  class-product = ⨅ 𝔄
