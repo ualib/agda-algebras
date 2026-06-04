@@ -6,7 +6,7 @@ date: "2026-05-15"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-signatures">Signatures of classical structures</a>
+### Signatures of classical structures
 
 This is the [Classical.Signatures][] module of the [Agda Universal Algebra Library][].
 

@@ -48,7 +48,7 @@ open import Setoid.Varieties.EquationalLogic {𝑆 = Sig-Magma} using ( _⊧_≈
 private variable α ρ : Level
 ```
 
-#### <a id="satisfaction-alias">Satisfaction predicate and the type</a>
+#### Satisfaction predicate and the type
 
 ```agda
 infix 4 _⊨ᶜˢᵍ_
@@ -59,7 +59,7 @@ CommutativeSemigroup : (α ρ : Level) → Type (suc α ⊔ suc ρ)
 CommutativeSemigroup α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ᶜˢᵍ Th-CommutativeSemigroup
 ```
 
-#### <a id="forgetful">The forgetful projection to semigroups (pure reindex)</a>
+#### The forgetful projection to semigroups (pure reindex)
 
 The pattern `assoc` is `Eq-Semigroup`'s sole constructor; the applied `assocᶜ` is
 `Eq-CommutativeSemigroup`'s (renamed on import).  Both theory entries are

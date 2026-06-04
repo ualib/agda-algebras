@@ -6,7 +6,7 @@ date: "2026-05-23"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-structures-reduct">Signature reducts along a container morphism</a>
+### Signature reducts along a container morphism
 
 This is the [Classical.Structures.Reduct][] module of the [Agda Universal Algebra Library][].
 
@@ -54,7 +54,7 @@ private variable
   α ρ 𝓞₁ 𝓞₂ : Level
 ```
 
-#### <a id="the-reduct">The reduct of an algebra along a container morphism</a>
+#### The reduct of an algebra along a container morphism
 
 `reduct ι κ 𝑨` is the `𝑆₁`-algebra obtained from the `𝑆₂`-algebra `𝑨` by the
 container morphism `(ι , κ)`.  The domain is unchanged; the interpretation of a

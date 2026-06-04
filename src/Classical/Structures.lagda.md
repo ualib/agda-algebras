@@ -6,7 +6,7 @@ date: "2026-05-15"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-structures">Σ-typed cores of classical structures</a>
+### Σ-typed cores of classical structures
 
 This is the [Classical.Structures][] module of the [Agda Universal Algebra Library][].
 

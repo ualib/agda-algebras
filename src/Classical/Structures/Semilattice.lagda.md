@@ -52,7 +52,7 @@ open import Setoid.Varieties.EquationalLogic {𝑆 = Sig-Magma} using ( _⊧_≈
 private variable α ρ : Level
 ```
 
-#### <a id="satisfaction-alias">Satisfaction predicate and the type</a>
+#### Satisfaction predicate and the type
 
 ```agda
 infix 4 _⊨ˢˡ_
@@ -63,7 +63,7 @@ Semilattice : (α ρ : Level) → Type (suc α ⊔ suc ρ)
 Semilattice α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ˢˡ Th-Semilattice
 ```
 
-#### <a id="forgetful">The forgetful projection to commutative semigroups (pure reindex)</a>
+#### The forgetful projection to commutative semigroups (pure reindex)
 
 `Th-Semilattice` extends `Th-CommutativeSemigroup` by the single `idem` equation,
 over the same `Sig-Magma` signature; the forgetful is the identity on the underlying

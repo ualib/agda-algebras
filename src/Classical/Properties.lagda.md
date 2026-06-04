@@ -6,7 +6,7 @@ date: "2026-05-28"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-properties">Derived properties of classical structures</a>
+### Derived properties of classical structures
 
 This is the [Classical.Properties][] module of the [Agda Universal Algebra Library][].
 

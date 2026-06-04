@@ -6,7 +6,7 @@ date: "2026-05-15"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-small">Level-fixed veneers of classical structures</a>
+### Level-fixed veneers of classical structures
 
 This is the [Classical.Small][] module of the [Agda Universal Algebra Library][].
 

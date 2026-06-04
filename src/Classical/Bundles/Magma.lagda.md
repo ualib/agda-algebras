@@ -6,7 +6,7 @@ date: "2026-05-17"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-bundles-magma">Bundle bridge for magmas</a>
+### Bundle bridge for magmas
 
 This is the [Classical.Bundles.Magma][] module of the [Agda Universal Algebra Library][].
 
@@ -50,7 +50,7 @@ open Algebra using (Interp)
 private variable α ρ : Level
 ```
 
-#### <a id="core-to-bundle">Core to stdlib bundle</a>
+#### Core to stdlib bundle
 
 Going from the canonical Σ-typed core to the stdlib record reads off the
 domain's `Carrier` and `_≈_`, exposes the operation in curried form via
@@ -71,7 +71,7 @@ from the algebra's `Interp.cong` by unpacking the Fin 2 pattern.
   where open Magma-Op 𝑴; open Setoid 𝔻[ 𝑴 ]
 ```
 
-#### <a id="bundle-to-core">Stdlib bundle to core</a>
+#### Stdlib bundle to core
 
 The reverse direction reassembles the bundle's `Carrier`, `_≈_`, and `_∙_` into
 an `Algebra Sig-Magma`.  The interpretation of `∙-Op` uncurries the bundle's
@@ -95,7 +95,7 @@ equivalence proof.
   cong interp { ∙-Op , _ } { .∙-Op , _ } (≡.refl , args≈) = stdlib-Magma.∙-cong M (args≈ 0F) (args≈ 1F)
 ```
 
-#### <a id="roundtrip">Pointwise round-trip</a>
+#### Pointwise round-trip
 
 Going core → bundle → core preserves the curried operation pointwise.  The two
 sides reduce to the same `(∙-Op ^ 𝑴) (pair a b)` definitionally — `pair a b 0F`

@@ -5,7 +5,7 @@ date : "2026-05-09"
 author: "the agda-algebras development team"
 ---
 
-### <a id="galois-connections">Galois Connections</a>
+### Galois Connections
 
 This is the [Overture.Adjunction.Galois][] module of the [Agda Universal Algebra Library][].
 
@@ -87,7 +87,7 @@ module _ {𝒜 : Type α}{ℬ : Type β} where
 ```
 
 
-#### <a id="the-poset-of-subsets-of-a-set">The poset of subsets of a set</a>
+#### The poset of subsets of a set
 
 Here we define a type that represents the poset of subsets of a given set equipped with the usual set inclusion relation.  (It seems there is no definition in the standard library of this important example of a poset; we should propose adding it.)
 

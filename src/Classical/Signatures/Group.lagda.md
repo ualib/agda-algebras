@@ -6,7 +6,7 @@ date: "2026-05-30"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-signatures-group">The signature of groups</a>
+### The signature of groups
 
 This is the [Classical.Signatures.Group][] module of the [Agda Universal Algebra Library][].
 

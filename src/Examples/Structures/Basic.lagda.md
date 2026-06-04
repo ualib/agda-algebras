@@ -5,7 +5,7 @@ date : "2021-07-29"
 author: "agda-algebras development team"
 ---
 
-### <a id="examples-of-structures">Examples of Structures</a>
+### Examples of Structures
 
 
 ```agda

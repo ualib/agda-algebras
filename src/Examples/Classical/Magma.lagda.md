@@ -43,7 +43,7 @@ import Classical.Structures.Magma as Polymorphic
 open Polymorphic.Magma-Op ℕ-magma using ( _∙_ )
 ```
 
-#### <a id="acceptance">Acceptance checks</a>
+#### Acceptance checks
 
 `∙-Op` interpreted in `ℕ-magma` reduces definitionally to `_+_`: no opacity from
 the `opsToMagma` construction, no opacity from the `Curry₂` wrapping in the named

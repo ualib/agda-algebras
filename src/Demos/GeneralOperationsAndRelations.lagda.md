@@ -5,7 +5,7 @@ date : "2022-04-27"
 author: "the agda-algebras development team"
 ---
 
-### <a id="general-operations-and-relations">General Opereations and Relations</a>
+### General Opereations and Relations
 
 +  [Signatures][Overture.Signatures]
 

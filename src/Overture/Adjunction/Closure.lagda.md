@@ -5,7 +5,7 @@ date : "2026-05-09"
 author: "the agda-algebras development team"
 ---
 
-### <a id="closure-systems">Closure Systems and Operators</a>
+### Closure Systems and Operators
 
 This is the [Overture.Adjunction.Closure][] module of the [Agda Universal Algebra Library][].
 
@@ -34,7 +34,7 @@ private variable
 ```
 
 
-#### <a id="closure-systems">Closure Systems</a>
+#### Closure Systems
 
 A *closure system* on a set `X` is a collection `𝒞` of subsets of `X` that is closed under arbitrary intersection (including the empty intersection, so `⋂ ∅ = X ∈ 𝒞`).  Thus a closure system is a complete meet semilattice with respect to the subset inclusion ordering.
 
@@ -63,7 +63,7 @@ module _ {χ ρ ℓ : Level}{X : Type χ} where
 ```
 
 
-#### <a id="closure-operators">Closure Operators</a>
+#### Closure Operators
 
 Let `𝑷 = (P, ≤)` be a poset.  A function `C : P → P` is called a *closure operator* on `𝑷` if it is
 
@@ -88,7 +88,7 @@ record ClOp {ℓ ℓ₁ ℓ₂ : Level}(𝑨 : Poset ℓ ℓ₁ ℓ₂) : Type  
 ```
 
 
-#### <a id="basic-properties-of-closure-operators">Basic properties of closure operators</a>
+#### Basic properties of closure operators
 
 
 ```agda

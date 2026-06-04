@@ -6,7 +6,7 @@ date: "2026-05-24"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-bundles-commutativesemigroup">Bundle bridge for commutative semigroups</a>
+### Bundle bridge for commutative semigroups
 
 This is the [Classical.Bundles.CommutativeSemigroup][] module of the [Agda Universal Algebra Library][].
 

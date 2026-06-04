@@ -6,7 +6,7 @@ date: "2026-05-17"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-operations">Operations on classical structures — curry/uncurry between tuple-indexed and curried form</a>
+### Operations on classical structures — curry/uncurry between tuple-indexed and curried form
 
 This is the [Classical.Operations][] module of the [Agda Universal Algebra Library][].
 
@@ -34,7 +34,7 @@ private variable
   A : Type α
 ```
 
-#### <a id="op-types">Operation types</a>
+#### Operation types
 
 The type `Op I A` of `I`-ary operations on `A`, in tuple-indexed form.  Arity first, carrier second: this orders parameters from "less likely to vary" to "more likely to vary," which is the right convention for partial application — `Op (Fin 2)` partially applies as "binary operation," independent of any carrier.
 
@@ -43,7 +43,7 @@ Op : {𝓥 : Level} → Type 𝓥 → Type α → Type _
 Op I A = (I → A) → A
 ```
 
-#### <a id="pair-helper">Two-element argument tuple</a>
+#### Two-element argument tuple
 
 The canonical `Fin 2 → A` constructed from two elements.  Used internally by `Uncurry₂` and as the bridge target in bundle conversion functions.  Made public for the rare per-structure use case (e.g., expressing a tuple-indexed `(∙-Op ^ 𝑨) (pair a b)` directly when the curried form is inconvenient).
 
@@ -53,7 +53,7 @@ pair a b 0F = a
 pair a b 1F = b
 ```
 
-#### <a id="curry-uncurry">Curry and Uncurry, per arity</a>
+#### Curry and Uncurry, per arity
 
 The translation between tuple-indexed and curried operations.  Each pair is a two-line definition; the obligation that they form a definitional inverse on the curried side (`Curry₂ (Uncurry₂ f) ≡ f` as functions `A → A → A → A`) holds by `refl`.  The reverse direction (`Uncurry₂ (Curry₂ f) ≡ f` as `(Fin 2 → A) → A`) holds *pointwise* but not definitionally as functions, because the lack of η on `Fin 2`-pattern lambdas under `--cubical-compatible` prevents the lambda repackaging from collapsing.  This asymmetry is contained here and surfaced as the pointwise round-trip statement in per-structure bundle bridges (per [ADR-002 v2 §6](docs/adr/002-classical-layer-design.md)).
 

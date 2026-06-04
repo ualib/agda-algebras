@@ -5,7 +5,7 @@ date : "2026-05-10"
 author: "the agda-algebras development team"
 ---
 
-### <a id="nary-function-encodings">N-ary function encodings</a>
+### N-ary function encodings
 
 This is the [Examples.FunctionTypeBijections][] module of the [Agda Universal Algebra Library][].
 
@@ -36,7 +36,7 @@ open import Overture using ( _≈_ )
 private variable a b : Level
 ```
 
-#### <a id="bijections-of-nondependent-function-types">Bijections of nondependent function types</a>
+#### Bijections of nondependent function types
 
 The first piece of infrastructure is the type of bijections between two types, in two flavors: the definitional flavor (`Bijection`, where the round-trip composites are required to be `_≡_`-equal to `id`) and the pointwise flavor (`PointwiseBijection`, where pointwise equality `_≈_` suffices).  The investigation below turns on the gap between these two notions.
 
@@ -81,7 +81,7 @@ The product and curried forms enjoy a *definitional* bijection — the round-tri
                        ; to-from = refl ; from-to = refl }
 ```
 
-#### <a id="fin-indexed-encodings">Fin-indexed encodings</a>
+#### Fin-indexed encodings
 
 We now introduce the `Fin`-indexed encoding `Fin 2 → A` and transformations between it, the product form `A × A`, and the curried form `A → A`.  The asymmetric behavior of these transformations under definitional equality is the central pedagogical content of the module.
 
@@ -132,7 +132,7 @@ module _ {A : Type a} where
  Fin2A≡ u (s z) = refl
 ```
 
-#### <a id="failed-bijections">Failed bijections</a>
+#### Failed bijections
 
 We can establish that `CurryFin2 ∘ UncurryFin2 ≡ id` reduces to `refl`, but the reverse composition `UncurryFin2 ∘ CurryFin2` does *not*: it would require reducing `λ {z → u z; (s z) → u (s z)}` to `u`, which is η-expansion of a function out of `Fin 2`, and Agda's definitional equality does not include this reduction.  Hence no definitional bijection between `(Fin 2 → A) → B` and `A → A → B`; only a pointwise one.
 

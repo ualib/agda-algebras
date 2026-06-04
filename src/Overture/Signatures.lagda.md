@@ -6,7 +6,7 @@ author: "agda-algebras development team"
 ---
 
 
-### <a id="signatures">Signatures</a>
+### Signatures
 
 This is the [Overture.Signatures][] module of the [Agda Universal Algebra Library][].
 
@@ -27,7 +27,7 @@ The variables `𝓞` and `𝓥` are not private since, throughout the [agda-alge
 `𝓞` denotes the universe level of *operation symbol* types, while `𝓥` denotes the universe
 level of *arity* types.
 
-#### <a id="theoretical-background">Theoretical background</a>
+#### Theoretical background
 
 In [model theory](https://en.wikipedia.org/wiki/Model_theory), the *signature*
 `𝑆 = (𝐶, 𝐹, 𝑅, ρ)` of a structure consists of three (possibly empty) sets `𝐶`, `𝐹`,
@@ -78,7 +78,7 @@ Then the following typing judgments obtain:
 `h ∘ a : ρ𝑓 → B` and `𝑓 (h ∘ a) : B`.
 
 
-#### <a id="the-signature-type">The signature type</a>
+#### The signature type
 
 In the [agda-algebras][] library we represent the *signature* of an algebraic
 structure using the following type.
@@ -107,7 +107,7 @@ Consequently, if `𝑆 : Signature 𝓞 𝓥` is a signature, then
 If `𝑓 : proj₁ 𝑆` is an operation symbol in the signature `𝑆`, then `proj₂ 𝑆 𝑓`
 is the arity of `𝑓`.
 
-#### <a id="self-documenting-projections">Self-documenting projections</a>
+#### Self-documenting projections
 
 Bare `proj₁` / `proj₂` read opaquely at signature use sites.  The following
 long-form aliases are definitionally identical to the projections and are the

@@ -6,7 +6,7 @@ date: "2026-05-15"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-theories">Equational theories of classical structures</a>
+### Equational theories of classical structures
 
 This is the [Classical.Theories][] module of the [Agda Universal Algebra Library][].
 

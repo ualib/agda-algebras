@@ -6,7 +6,7 @@ date : "2026-04-20"
 author: "the agda-algebras development team"
 ---
 
-### <a id="preface">Preface</a>
+### Preface
 
 This is the [Overture.Preface][] module of the [Agda Universal Algebra Library][].
 
@@ -23,13 +23,13 @@ The [Agda Universal Algebra Library][] ([agda-algebras][], for short) is a forma
 
 This Preface explains why a mathematician working in universal algebra or an adjacent area might care about this library, why it is written in Agda specifically, what the 3.0 reconstruction has changed, and where to go next.
 
-#### <a id="why-univ-alg-in-type-theory">Why formalize universal algebra in type theory?</a>
+#### Why formalize universal algebra in type theory?
 
 Universal algebra has a native affinity for type theory that is stronger than first appearances suggest.  Signatures are indexed families of operation symbols; algebras are sets together with a family of operations indexed by the signature; terms are the initial algebra over a set of variables; subalgebras, homomorphic images, and products are each captured by a small collection of definitions each a few lines long.  These are exactly the constructions Martin-Löf type theory was designed to support — inductive types for terms and trees, Π- and Σ-types for universal and existential parameters, dependent records for structured objects — and the transcription between informal mathematical practice and formal type-theoretic statement turns out to be short.
 
 The dividend is not only aesthetic.  A formalization in type theory is *computable by construction*: a closed proof that every variety is an equational class does not merely assert the theorem, it can be evaluated on inputs.  It is also *compositional*: the free algebra of a variety is not only named, it is built, and its universal property is a dependent function one can apply.  When the formalization is done constructively, as agda-algebras is, the resulting proof terms are objects one can inspect, slice, export, and share — a feature whose importance has grown sharply with the rise of machine learning on formal mathematics.
 
-#### <a id="why-agda">Why Agda?</a>
+#### Why Agda?
 
 The proof-assistant landscape of 2026 offers several mature choices — Lean 4, Coq / Rocq, Isabelle — each with excellent universal-algebra formalizations at various stages of development.  The case for Agda here rests on three pillars.
 
@@ -41,7 +41,7 @@ The proof-assistant landscape of 2026 offers several mature choices — Lean 4, 
 
 These three reasons are not independent: the constructive substrate makes the proof terms meaningful, and the cubical trajectory keeps the constructive substrate future-proof against the eventual migration of foundations to path-based equality.
 
-#### <a id="the-3-0-reconstruction">The 3.0 reconstruction</a>
+#### The 3.0 reconstruction
 
 The first public release, v2.0.1 ([archived on Zenodo](https://doi.org/10.5281/zenodo.5765793), December 2021), accompanied the TYPES 2021 proof of Birkhoff's HSP theorem.  It succeeded narrowly — the proof type-checks, as does everything it depends on — but bequeathed a codebase with two parallel developments (a standard-dependent-types `Base/` tree and a setoid-based `Setoid/` tree), uneven naming, a handful of synonyms for each central concept, and a documentation layer split across LaTeX-literate Agda, Markdown, and Jekyll templating in ways no one could reproduce from first principles.
 
@@ -54,7 +54,7 @@ The 3.0 reconstruction is a long-overdue consolidation, organized into nine mile
 
 The documentation conventions have also tightened: public definitions are paired with prose that explains what the definition means and when a mathematician would reach for it, rather than restating the type signature in English.  This is in service of the library's dual role as reference and training corpus, a role the 2021 version acknowledged in passing but did not systematically enforce.
 
-#### <a id="mathematical-horizon">Mathematical horizon</a>
+#### Mathematical horizon
 
 The library is a working substrate for active mathematical research, not only a reference for settled material.  The 3.0 roadmap sketches several tracks.
 
@@ -68,7 +68,7 @@ The library is a working substrate for active mathematical research, not only a 
 
 **Library as corpus**.  Milestone 8 (M8) treats the library itself as a deliverable: a published (theorem, proof) corpus, regenerated on each release, distributed on Hugging Face for retrieval and training.  The maintainers' parallel work on agda-native-air — an AI-assisted formal-proof workflow — is a natural downstream consumer, and the design of the corpus is informed by that use case.  The broader goal is to contribute a high-quality source of constructive, human-authored Agda proofs to the growing ecosystem of datasets for machine learning on formal mathematics.  This is not a side project relative to the pure mathematics: the library's design decisions — many small focused lemmas, named helper functions, rich prose comments paired with formal statements, explicit type signatures on every public definition — were tuned for this dual role from the start of the reconstruction.
 
-#### <a id="where-to-go-next">Where to go next</a>
+#### Where to go next
 
 Readers approaching the library for the first time will typically want one of a few entry points.
 
@@ -79,15 +79,15 @@ Readers approaching the library for the first time will typically want one of a 
 
 The remainder of the `Overture` chapter introduces the library's conventions and notation.  Readers familiar with both Agda and universal algebra can skim it; others may want to read it carefully before moving into the substantive material.
 
-#### <a id="attributions">Attributions</a>
+#### Attributions
 
 The [agda-algebras][] library is developed and maintained by the *agda-algebras development team*, led by [William DeMeo][] with senior-advisor contributions from [Jacques Carette][] (McMaster University).
 
-##### <a id="acknowledgements">Acknowledgements</a>
+##### Acknowledgements
 
 We thank [Andreas Abel][], [Jeremy Avigad][], [Andrej Bauer][], [Clifford Bergman][], [Venanzio Capretta][], [Martín Escardó][], [Ralph Freese][], [Hyeyoung Shin][], and [Siva Somayyajula][] for helpful discussions, corrections, advice, inspiration, and encouragement over the life of the project.  Most of the mathematical content formalized in agda-algebras is well known; the novelty lies in the formalization itself, which is due to the contributors and acknowledgees listed above.
 
-#### <a id="references">References</a>
+#### References
 
 The following Agda documentation and tutorials informed the development of agda-algebras, and we recommend them to readers new to the language.
 
@@ -99,11 +99,11 @@ The following Agda documentation and tutorials informed the development of agda-
 
 The official [Agda Wiki][], [Agda User's Manual][], [Agda Language Reference][], and the open-source [Agda Standard Library][] source code are also indispensable.
 
-#### <a id="citing">Citing</a>
+#### Citing
 
 Citation information — both the v2.0.1 Zenodo archival entry and the BibTeX for the Birkhoff formalization paper — is maintained in the [README's Citing section](https://github.com/ualib/agda-algebras#citing).  While the 3.0 reconstruction is in development, please cite the GitHub repository and pin a commit hash for reproducibility; a new Zenodo DOI will be minted at the v3.0 release.
 
-#### <a id="contributions-welcomed">Contributions welcomed</a>
+#### Contributions welcomed
 
 Improvements to `agda-algebras` — bug reports, design discussions, pull requests, documentation fixes — are welcome.  See [`CONTRIBUTING.md`](https://github.com/ualib/agda-algebras/blob/master/CONTRIBUTING.md) for the development workflow and the [GitHub issue tracker](https://github.com/ualib/agda-algebras/issues/new/choose) to report problems or propose changes.
 

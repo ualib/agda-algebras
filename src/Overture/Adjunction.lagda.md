@@ -5,7 +5,7 @@ date : "2026-05-09"
 author: "the agda-algebras development team"
 ---
 
-## <a id="adjunction">Adjunction</a>
+## Adjunction
 
 This is the [Overture.Adjunction][] module of the [Agda Universal Algebra Library][].
 

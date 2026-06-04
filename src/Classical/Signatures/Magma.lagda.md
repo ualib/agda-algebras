@@ -6,7 +6,7 @@ date: "2026-05-17"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-signatures-magma">The signature of magmas</a>
+### The signature of magmas
 
 This is the [Classical.Signatures.Magma][] module of the [Agda Universal Algebra Library][].
 
@@ -58,7 +58,7 @@ open import Level          using ( 0ℓ )
 open import Overture.Signatures using ( Signature )
 ```
 
-#### <a id="operation-symbols">The operation-symbol type</a>
+#### The operation-symbol type
 
 A magma has a single binary operation symbol.  The constructor is named `∙-Op`
 following the `<symbol>-Op` convention; the bare `∙` is reserved for the curried
@@ -69,7 +69,7 @@ data Op-Magma : Type where
   ∙-Op : Op-Magma
 ```
 
-#### <a id="arity-function">The arity function</a>
+#### The arity function
 
 `∙-Op` is binary, so its arity is `Fin 2`.  Direct pattern matching on the single
 constructor lets `ArityOf Sig-Magma ∙-Op` reduce definitionally to `Fin 2` —
@@ -82,7 +82,7 @@ ar-Magma : Op-Magma → Type
 ar-Magma ∙-Op = Fin 2
 ```
 
-#### <a id="signature-value">The signature value</a>
+#### The signature value
 
 ```agda
 Sig-Magma : Signature 0ℓ 0ℓ

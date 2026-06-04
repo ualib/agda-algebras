@@ -5,7 +5,7 @@ date : "2026-05-06"
 author: "agda-algebras development team"
 ---
 
-## <a id="terms">Terms over a signature</a>
+## Terms over a signature {#terms}
 
 A `Term X` is a finite tree whose leaves are drawn from a type `X` of variable symbols and whose internal nodes are labelled by operation symbols of the signature `𝑆`.  Equivalently, `Term` is the W-type for the polynomial functor associated to `𝑆`, freely adjoined a copy of `X` at the leaves.
 
@@ -26,7 +26,7 @@ open import Level           using ( Level ; suc ; _⊔_ )
 private variable χ : Level
 ```
 
-### <a id="ov">The level shorthand `ov`</a>
+### The level shorthand `ov`
 
 Throughout the library we package the universe levels of operation symbols (`𝓞`), arities (`𝓥`), and a separate "carrier-or-variable" level (`χ`) into a single shorthand `ov χ = 𝓞 ⊔ 𝓥 ⊔ suc χ`.  The `suc` is unavoidable because `Term X` mixes leaves of type `X : Type χ` with operation symbols of type `Type 𝓞`, so the resulting tree type sits one universe up.
 
@@ -37,7 +37,7 @@ ov : Level → Level
 ov χ = 𝓞 ⊔ 𝓥 ⊔ suc χ
 ```
 
-### <a id="the-type-of-terms">The type of terms</a>
+### The type of terms
 
 Fix a signature `𝑆` and let `X` denote an arbitrary collection of variable symbols, assumed disjoint from the operation symbols of `𝑆` (i.e. `X ∩ OperationSymbolsOf 𝑆 = ∅`).
 

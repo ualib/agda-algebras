@@ -5,7 +5,7 @@ date : "2026-05-09"
 author: "the agda-algebras development team"
 ---
 
-### <a id="residuation">Residuation</a>
+### Residuation
 
 This is the [Overture.Adjunction.Residuation][] module of the [Agda Universal Algebra Library][].
 
@@ -45,7 +45,7 @@ module _ (A : Poset a ιᵃ α)(B : Poset b ιᵇ β) where
 ```
 
 
-#### <a id="basic-properties-of-residual-pairs">Basic properties of residual pairs</a>
+#### Basic properties of residual pairs
 
 
 ```agda

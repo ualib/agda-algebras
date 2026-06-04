@@ -6,7 +6,7 @@ date: "2026-05-15"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-bundles">Stdlib-shaped record bundles for classical structures</a>
+### Stdlib-shaped record bundles for classical structures
 
 This is the [Classical.Bundles][] module of the [Agda Universal Algebra Library][].
 

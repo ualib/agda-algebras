@@ -78,7 +78,7 @@ open import Setoid.Varieties.EquationalLogic {𝑆 = Sig-Ring} using ( _⊧_≈_
 private variable α ρ : Level
 ```
 
-#### <a id="satisfaction-alias">The local satisfaction predicate</a>
+#### The local satisfaction predicate
 
 ```agda
 infix 4 _⊨ʳᵍ_
@@ -86,14 +86,14 @@ _⊨ʳᵍ_ : (𝑨 : Algebra α ρ) (ℰ : Eq-Ring → Term (Fin 3) × Term (Fin
 𝑨 ⊨ʳᵍ ℰ = ∀ i → 𝑨 ⊧ proj₁ (ℰ i) ≈ proj₂ (ℰ i)
 ```
 
-#### <a id="the-type">The type of rings</a>
+#### The type of rings
 
 ```agda
 Ring : (α ρ : Level) → Type (suc α ⊔ suc ρ)
 Ring α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ʳᵍ Th-Ring
 ```
 
-#### <a id="reduct-algebras">The additive and multiplicative reduct algebras</a>
+#### The additive and multiplicative reduct algebras
 
 The container morphism `Sig-Group ⟹ Sig-Ring` sends `(∙-Opᵍ, ε-Opᵍ, ⁻¹-Opᵍ)` to the
 additive `(+-Op, 0-Op, -Op)`; the morphism `Sig-Monoid ⟹ Sig-Ring` sends
@@ -126,7 +126,7 @@ ring→monoidAlg : Ring α ρ → Algebra {𝑆 = Sig-Monoid} α ρ
 ring→monoidAlg 𝑹 = reduct ·-incl ·-κ (𝑹 .proj₁)
 ```
 
-#### <a id="curried-laws">The eleven curried laws, standalone</a>
+#### The eleven curried laws, standalone
 
 Each `Th-Ring` equation is proved here in curried form once, above the forgetfuls.
 The pattern is the same throughout: bridge each `node` to curried form via
@@ -353,7 +353,7 @@ module _ (ℛ : Ring α ρ) where
     rhsT = node +-Op (pair yx zx)
 ```
 
-#### <a id="ring-op">The `Ring-Op` module</a>
+#### The `Ring-Op` module
 
 `Ring-Op` exposes the additive `(_+_, 0R, -_)`, the multiplicative `(_·_, 1R)`, their
 congruences and node-bridges, the eleven curried laws, and the satisfaction-witness
@@ -435,7 +435,7 @@ module Ring-Op {α ρ : Level} (ℛ : Ring α ρ) where
   distribʳ-law = rg-distribʳ ℛ
 ```
 
-#### <a id="forgetful-additive">The forgetful projection to abelian groups</a>
+#### The forgetful projection to abelian groups
 
 `ring→abelianGroup` takes a ring to the abelian group on its additive reduct,
 discharging the six `Th-AbelianGroup` equations on `ring→abelianGroupAlg` via
@@ -510,7 +510,7 @@ ring→abelianGroup ℛ@(𝑹 , _) = 𝑹ᵍ , thm
     ⟦ Th-AbelianGroup commᵃ .proj₂ ⟧ ⟨$⟩ η   ∎
 ```
 
-#### <a id="forgetful-multiplicative">The forgetful projection to monoids</a>
+#### The forgetful projection to monoids
 
 `ring→monoid` takes a ring to the monoid on its multiplicative reduct, discharging the
 three `Th-Monoid` equations on `ring→monoidAlg` via `Ring-Op`'s multiplicative
@@ -559,7 +559,7 @@ ring→monoid ℛ@(𝑹 , _) = 𝑹-mon , thm
     _                                ∎
 ```
 
-#### <a id="builders">Ring builders</a>
+#### Ring builders
 
 `opsToBareRing` builds a "raw" `Sig-Ring`-algebra over `≡.setoid A` from a carrier and
 the five operations.  `eqsToRing` adds the eleven equation proofs.

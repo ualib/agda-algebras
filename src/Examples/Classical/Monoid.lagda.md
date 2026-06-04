@@ -43,7 +43,7 @@ list-monoid = eqsToMonoid (List ℕ) _++_ [] ++-assoc ++-identityˡ ++-identity�
 open Polymorphic.Monoid-Op list-monoid using ( _∙_ ; ε )
 ```
 
-#### <a id="acceptance">Acceptance checks</a>
+#### Acceptance checks
 
 ```agda
 ∙-is-++-mn : ∀ (xs ys : List ℕ) → xs ∙ ys ≡ xs ++ ys

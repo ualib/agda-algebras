@@ -6,7 +6,7 @@ date: "2026-05-30"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-theories-commutativering">The equational theory of commutative rings</a>
+### The equational theory of commutative rings
 
 This is the [Classical.Theories.CommutativeRing][] module of the [Agda Universal Algebra Library][].
 

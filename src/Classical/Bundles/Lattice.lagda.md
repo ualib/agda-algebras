@@ -6,7 +6,7 @@ date: "2026-05-28"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-bundles-lattice">Bundle bridge for lattices</a>
+### Bundle bridge for lattices
 
 This is the [Classical.Bundles.Lattice][] module of the [Agda Universal Algebra Library][].
 

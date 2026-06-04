@@ -99,7 +99,7 @@ open import Setoid.Varieties.EquationalLogic {𝑆 = Sig-Lattice} using ( _⊧_�
 private variable α ρ : Level
 ```
 
-#### <a id="satisfaction-alias">The local satisfaction predicate</a>
+#### The local satisfaction predicate
 
 ```agda
 infix 4 _⊨ˡᵃ_
@@ -107,14 +107,14 @@ _⊨ˡᵃ_ : (𝑨 : Algebra α ρ) (ℰ : Eq-Lattice → Term (Fin 3) × Term (
 𝑨 ⊨ˡᵃ ℰ = ∀ i → 𝑨 ⊧ proj₁ (ℰ i) ≈ proj₂ (ℰ i)
 ```
 
-#### <a id="the-type">The type of lattices</a>
+#### The type of lattices
 
 ```agda
 Lattice : (α ρ : Level) → Type (suc α ⊔ suc ρ)
 Lattice α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ˡᵃ Th-Lattice
 ```
 
-#### <a id="meet-magma-reduct">The meet and join magma reducts</a>
+#### The meet and join magma reducts
 
 The two container morphisms `Sig-Magma ⟹ Sig-Lattice` send the magma's
 `∙-Opᵐᵃ` to the lattice's `∧-Op` and `∨-Op` respectively; the position maps are
@@ -143,7 +143,7 @@ lattice→joinMagma : Lattice α ρ → Algebra {𝑆 = Sig-Magma} α ρ
 lattice→joinMagma 𝑳 = reduct ∨-incl ∨-κ (𝑳 .proj₁)
 ```
 
-#### <a id="curried-laws">Curried laws, standalone</a>
+#### Curried laws, standalone
 
 Each of the eight `Th-Lattice` equations is proved here in curried form once,
 above the semilattice forgetfuls, so that `Lattice-Op` and each
@@ -267,7 +267,7 @@ module _ (𝑳 : Lattice α ρ) where
     lhsT = node ∨-Op (pair x∧y (ℊ 0F))
 ```
 
-#### <a id="lattice-op">The `Lattice-Op` module</a>
+#### The `Lattice-Op` module
 
 `Lattice-Op` exposes `_∧_`, `_∨_`, their congruences, the term-to-curried node
 bridges `interp-node-∧` / `interp-node-∨`, the eight curried laws (matching the
@@ -331,7 +331,7 @@ module Lattice-Op {α ρ : Level} (𝑳 : Lattice α ρ) where
   absorbʳ-law = lt-absorbʳ 𝑳
 ```
 
-#### <a id="forgetfuls-to-semilattices">The forgetful projections to semilattices</a>
+#### The forgetful projections to semilattices
 
 `lattice→meetSemilattice` and `lattice→joinSemilattice` each take a lattice to
 the semilattice on its meet (resp. join) operation: the underlying algebra is
@@ -419,7 +419,7 @@ lattice→joinSemilattice ℒ@(𝑳 , _) = 𝑹 , thm
     x                                       ∎
 ```
 
-#### <a id="builders">Lattice builders</a>
+#### Lattice builders
 
 `opsToBareLattice` builds a "raw" `Sig-Lattice`-algebra from a carrier and two
 binary operations.  `eqsToLattice` adds the eight equation proofs and produces

@@ -6,7 +6,7 @@ date: "2026-05-17"
 author: "the agda-algebras development team"
 ---
 
-### <a id="classical-structures-magma">Magmas — the empty-theory base case</a>
+### Magmas — the empty-theory base case
 
 This is the [Classical.Structures.Magma][] module of the [Agda Universal Algebra Library][].
 
@@ -60,7 +60,7 @@ open import Setoid.Algebras.Basic {𝑆 = Sig-Magma}  using ( Algebra ; _^_ ; �
 private variable α ρ : Level
 ```
 
-#### <a id="the-type">The type of magmas</a>
+#### The type of magmas
 
 `Magma α ρ` is the type of `Sig-Magma`-algebras whose carrier sits at level `α`
 and whose underlying setoid equivalence sits at level `ρ`.  Empty theory means
@@ -77,7 +77,7 @@ Magma α ρ = Algebra α ρ
 `𝑆 = Sig-Magma`.)
 
 
-#### <a id="magma-op">The `Magma-Op` module: named accessors for a fixed magma</a>
+#### The `Magma-Op` module: named accessors for a fixed magma
 
 `Domain`, `Carrier`, and `_∙_` are exposed inside a named parametric module
 `Magma-Op`.  Users `open Magma-Op 𝑴` at a use site to bring all three into
@@ -138,7 +138,7 @@ opsToMagma A _·_ = record { Domain = ≡.setoid A ; Interp = interp }
   cong interp {∙-Op , _} {.∙-Op , _} (≡.refl , args≡) = ≡.cong₂ _·_ (args≡ 0F) (args≡ 1F)
 ```
 
-#### <a id="morphisms">A note on morphisms</a>
+#### A note on morphisms
 
 A magma morphism is, by [ADR-002][] §5, definitionally a homomorphism of the
 underlying `Sig-Magma`-algebras.  No per-structure morphism record is introduced; we

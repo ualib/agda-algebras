@@ -85,7 +85,7 @@ open import Setoid.Varieties.EquationalLogic {𝑆 = Sig-Monoid} using ( _⊧_�
 private variable α ρ : Level
 ```
 
-#### <a id="satisfaction-alias">The local satisfaction predicate</a>
+#### The local satisfaction predicate
 
 ```agda
 infix 4 _⊨ᵐᵒ_
@@ -93,14 +93,14 @@ _⊨ᵐᵒ_ : (𝑨 : Algebra α ρ) (ℰ : Eq-Monoid → Term (Fin 3) × Term (
 𝑨 ⊨ᵐᵒ ℰ = ∀ i → 𝑨 ⊧ proj₁ (ℰ i) ≈ proj₂ (ℰ i)
 ```
 
-#### <a id="the-type">The type of monoids</a>
+#### The type of monoids
 
 ```agda
 Monoid : (α ρ : Level) → Type (suc α ⊔ suc ρ)
 Monoid α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ᵐᵒ Th-Monoid
 ```
 
-#### <a id="forgetful-to-magma">The reduct to magmas</a>
+#### The reduct to magmas
 
 The container morphism `Sig-Magma ⟹ Sig-Monoid` sends the magma's `∙-Opᵐᵃ` to the
 monoid's `∙-Op`; the position map is the identity (`Fin 2` to `Fin 2`).
@@ -123,7 +123,7 @@ monoid→magma : Monoid α ρ → Magma α ρ
 monoid→magma 𝑴 = reduct ∙-incl ∙-κ (𝑴 .proj₁)
 ```
 
-#### <a id="curried-associativity">Curried associativity, standalone</a>
+#### Curried associativity, standalone
 
 `mn-assoc` proves `(x ∙ y) ∙ z ≈ x ∙ (y ∙ z)` for the monoid's own `∙`, from
 `equations assoc`, via the local binary node-bridge `interp-node∙` built on
@@ -161,7 +161,7 @@ module _ (𝑴 : Monoid α ρ) where
     rhsT = node ∙-Op (pair (ℊ 0F) (node ∙-Op (pair (ℊ 1F) (ℊ 2F))))
 ```
 
-#### <a id="monoid-op">The `Monoid-Op` module</a>
+#### The `Monoid-Op` module
 
 ```agda
 module Monoid-Op {α ρ : Level} (𝑴 : Monoid α ρ) where
@@ -203,7 +203,7 @@ module Monoid-Op {α ρ : Level} (𝑴 : Monoid α ρ) where
                            (equations idʳ (λ _ → x)))
 ```
 
-#### <a id="forgetful-to-semigroup">The forgetful projection to semigroups</a>
+#### The forgetful projection to semigroups
 
 ```agda
 monoid→semigroup : Monoid α ρ → Semigroup α ρ
