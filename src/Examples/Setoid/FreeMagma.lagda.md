@@ -36,7 +36,7 @@ open import Relation.Binary.PropositionalEquality as ≡  using ( _≡_ ; refl )
 
 -- Imports from the Agda Universal Algebra Library -----------------------------
 open import Classical.Signatures.Magma             using ( Sig-Magma ; ∙-Op )
-open import Overture                               using ( ∣_∣ )
+open import Overture                               using ( proj₁ )
 open import Overture.Terms        {𝑆 = Sig-Magma}  using ( Term ; ℊ ; node )
 open import Setoid.Algebras       {𝑆 = Sig-Magma}  using ( Algebra ; 𝕌[_] ; ⟨_⟩ )
 open import Setoid.Homomorphisms  {𝑆 = Sig-Magma}  using ( hom )
@@ -123,7 +123,7 @@ function but a homomorphism `𝑻 (Fin 2) ⟶ ℕ∸-magma`, supplied by
 ηhom = lift-hom {𝑨 = ℕ∸-magma} η
 
 -- The underlying map of the homomorphism is exactly the free lift.
-ηhom-is-free-lift : ∀ t → ∣ ηhom ∣ ⟨$⟩ t ≡ ⟦ t ⟧η
+ηhom-is-free-lift : ∀ t → (proj₁ ηhom) ⟨$⟩ t ≡ ⟦ t ⟧η
 ηhom-is-free-lift _ = refl
 ```
 

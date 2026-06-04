@@ -56,7 +56,7 @@ Equivalence : Type a → {ρ : Level} → Type (a ⊔ suc ρ)
 Equivalence A {ρ} = Σ[ r ∈ BinRel A ρ ] IsEquivalence r
 ```
 
-Given `R : Equivalence A`, we use `∣ R ∣` for the underlying relation and `∥ R ∥` for the equivalence-relation proof, following the library convention.
+Given `R : Equivalence A`, we use `(proj₁ R)` for the underlying relation and `(proj₂ R)` for the equivalence-relation proof, following the library convention.
 
 ### <a id="equivalence-blocks">Equivalence classes</a>
 

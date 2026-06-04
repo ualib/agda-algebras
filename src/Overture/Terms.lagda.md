@@ -16,15 +16,12 @@ This module is a Category-A relocation under #303 (M2-6).  See [`src/Legacy/Base
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture.Signatures using ( 𝓞 ; 𝓥 ; Signature )
+open import Overture.Signatures using ( 𝓞 ; 𝓥 ; Signature ; OperationSymbolsOf ; ArityOf )
 
 module Overture.Terms {𝑆 : Signature 𝓞 𝓥} where
 -- Imports from Agda primitives and the standard library.
 open import Agda.Primitive  using ()           renaming ( Set to Type )
 open import Level           using ( Level ; suc ; _⊔_ )
-
--- Imports from agda-algebras.
-open import Overture.Basic  using ( ∣_∣ ; ∥_∥ )
 
 private variable χ : Level
 ```
@@ -42,22 +39,22 @@ ov χ = 𝓞 ⊔ 𝓥 ⊔ suc χ
 
 ### <a id="the-type-of-terms">The type of terms</a>
 
-Fix a signature `𝑆` and let `X` denote an arbitrary collection of variable symbols, assumed disjoint from the operation symbols of `𝑆` (i.e. `X ∩ ∣ 𝑆 ∣ = ∅`).
+Fix a signature `𝑆` and let `X` denote an arbitrary collection of variable symbols, assumed disjoint from the operation symbols of `𝑆` (i.e. `X ∩ OperationSymbolsOf 𝑆 = ∅`).
 
-By a *word* in the language of `𝑆`, we mean a nonempty finite sequence of members of `X ∪ ∣ 𝑆 ∣`; we denote concatenation of such sequences by simple juxtaposition.
+By a *word* in the language of `𝑆`, we mean a nonempty finite sequence of members of `X ∪ OperationSymbolsOf 𝑆`; we denote concatenation of such sequences by simple juxtaposition.
 
-Let `S₀` denote the set of nullary operation symbols of `𝑆`.  We define the sets `𝑇ₙ` of *words* over `X ∪ ∣ 𝑆 ∣` by induction on `n` (cf. [Bergman (2012)][] Def. 4.19):
+Let `S₀` denote the set of nullary operation symbols of `𝑆`.  We define the sets `𝑇ₙ` of *words* over `X ∪ OperationSymbolsOf 𝑆` by induction on `n` (cf. [Bergman (2012)][] Def. 4.19):
 
 `𝑇₀ := X ∪ S₀`  and  `𝑇ₙ₊₁ := 𝑇ₙ ∪ 𝒯ₙ`
 
-where `𝒯ₙ` is the collection of all `f t` such that `f : ∣ 𝑆 ∣` and `t : ∥ 𝑆 ∥ f → 𝑇ₙ` (recall `∥ 𝑆 ∥ f` is the arity of `f`).  The collection of *terms* in the signature `𝑆` over `X` is then `Term X := ⋃ₙ 𝑇ₙ`.  By an 𝑆-*term* we mean a term in the language of `𝑆`.
+where `𝒯ₙ` is the collection of all `f t` such that `f : OperationSymbolsOf 𝑆` and `t : ArityOf 𝑆 f → 𝑇ₙ` (recall `ArityOf 𝑆 f` is the arity of `f`).  The collection of *terms* in the signature `𝑆` over `X` is then `Term X := ⋃ₙ 𝑇ₙ`.  By an 𝑆-*term* we mean a term in the language of `𝑆`.
 
 The definition of `Term X` is recursive, indicating that an inductive type suffices to represent the notion in type theory.  Such a representation is given by the inductive type below, which encodes each term as a tree with an operation symbol at each `node` and a variable symbol (the `generator`) at each leaf.
 
 ```agda
 data Term (X : Type χ) : Type (ov χ) where
  ℊ    : X → Term X                                       -- (ℊ for "generator")
- node : (f : ∣ 𝑆 ∣)(t : ∥ 𝑆 ∥ f → Term X) → Term X
+ node : (f : OperationSymbolsOf 𝑆)(t : ArityOf 𝑆 f → Term X) → Term X
 
 open Term public
 ```

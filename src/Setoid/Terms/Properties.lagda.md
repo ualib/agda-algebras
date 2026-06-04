@@ -28,7 +28,7 @@ open import Relation.Binary.PropositionalEquality as ≡ using (_≡_)
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture          using ( ∣_∣ ; ∥_∥ )
+open import Overture          using ( proj₁ ; proj₂ )
 open import Setoid.Functions  using ( Img_∋_ ; eq ; isSurj ; IsSurjective )
                               using ( isSurj→IsSurjective )
 
@@ -49,11 +49,11 @@ private variable
 The term algebra `𝑻 X` is *absolutely free* (or *universal*, or *initial*) for
 algebras in the signature `𝑆`. That is, for every 𝑆-algebra `𝑨`, the following hold.
 
-1. Every function from `𝑋` to `∣ 𝑨 ∣` lifts to a homomorphism from `𝑻 X` to `𝑨`.
+1. Every function from `𝑋` to `𝕌[ 𝑨 ]` lifts to a homomorphism from `𝑻 X` to `𝑨`.
 2. The homomorphism that exists by item 1 is unique.
 
 We now prove this in [Agda][], starting with the fact that every map from `X` to
-`∣ 𝑨 ∣` lifts to a map from `∣ 𝑻 X ∣` to `∣ 𝑨 ∣` in a natural way, by induction
+`𝕌[ 𝑨 ]` lifts to a map from `𝕌[ 𝑻 X ]` to `𝕌[ 𝑨 ]` in a natural way, by induction
 on the structure of the given term.
 
 
@@ -112,7 +112,7 @@ The free lift so defined is a homomorphism by construction. Indeed, here is the 
 ```
 
 
-If we further assume that each of the mappings from `X` to `∣ 𝑨 ∣` is *surjective*, then the homomorphisms constructed with `free-lift` and `lift-hom` are *epimorphisms*, as we now prove.
+If we further assume that each of the mappings from `X` to `𝕌[ 𝑨 ]` is *surjective*, then the homomorphisms constructed with `free-lift` and `lift-hom` are *epimorphisms*, as we now prove.
 
 
 ```agda
@@ -135,8 +135,8 @@ module _ {𝑨 : Algebra α ρ}{gh hh : hom (𝑻 X) 𝑨} where
  open IsHom
 
  private
-  g = _⟨$⟩_ ∣ gh ∣
-  h = _⟨$⟩_ ∣ hh ∣
+  g = _⟨$⟩_ (proj₁ gh)
+  h = _⟨$⟩_ (proj₁ hh)
 
  free-unique : (∀ x → g (ℊ x) ≈ h (ℊ x)) → ∀ (t : Term X) →  g t ≈ h t
  free-unique p (ℊ x) = p x
@@ -149,10 +149,10 @@ module _ {𝑨 : Algebra α ρ}{gh hh : hom (𝑻 X) 𝑨} where
   lem3 = cong Interp (_≡_.refl , lem2)
 
   geq : (g (node f t)) ≈ (f ^ 𝑨)(λ i → (g (t i)))
-  geq = compatible ∥ gh ∥
+  geq = compatible (proj₂ gh)
 
   heq : h (node f t) ≈ (f ^ 𝑨)(λ i → h (t i))
-  heq = compatible ∥ hh ∥
+  heq = compatible (proj₂ hh)
 ```
 
 

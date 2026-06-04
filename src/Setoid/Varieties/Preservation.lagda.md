@@ -32,7 +32,7 @@ open import Relation.Unary         using ( Pred ; _⊆_ ; _∈_ )
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library -------------------------------
-open import Overture          using ( ∣_∣ ; ∥_∥ )
+open import Overture          using ( proj₁ ; proj₂ )
 open import Setoid.Functions  using ( IsSurjective ; SurjInv ; SurjInvIsInverseʳ )
 
 open import Overture.Terms   {𝑆 = 𝑆} using ( Term )
@@ -100,11 +100,11 @@ in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
  PS⊆SP {𝑩} (I , ( 𝒜 , sA , B≅⨅A )) = Goal
   where
   ℬ : I → Algebra α ρᵃ
-  ℬ i = ∣ sA i ∣
+  ℬ i = (proj₁ (sA i))
   kB : (i : I) → ℬ i ∈ 𝒦
-  kB i =  fst ∥ sA i ∥
+  kB i =  fst (proj₂ (sA i))
   ⨅A≤⨅B : ⨅ 𝒜 ≤ ⨅ ℬ
-  ⨅A≤⨅B = ⨅-≤ λ i → snd ∥ sA i ∥
+  ⨅A≤⨅B = ⨅-≤ λ i → snd (proj₂ (sA i))
   Goal : 𝑩 ∈ S{β = oaℓ}{oaℓ}oaℓ (P {β = oaℓ}{oaℓ} ℓ oaℓ 𝒦)
   Goal = ⨅ ℬ , (I , (ℬ , (kB , ≅-refl))) , (≅-trans-≤ B≅⨅A ⨅A≤⨅B)
 ```

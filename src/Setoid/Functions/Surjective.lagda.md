@@ -31,7 +31,7 @@ open import Function.Construct.Composition renaming ( isSurjection to isOnto )
 import Function.Definitions as FD
 
 -- Imports from agda-algebras -----------------------------------------------
-open import Overture                   using ( ∣_∣ ; ∥_∥ ; ∃-syntax ; transport )
+open import Overture                   using ( proj₁ ; proj₂ ; ∃-syntax ; transport )
 open import Setoid.Functions.Basic     using ( _⊙_ )
 open import Setoid.Functions.Inverses  using ( Img_∋_ ; Image_∋_ ; Inv ; InvIsInverseʳ )
 
@@ -71,7 +71,7 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
   g : 𝑨 ⟶ 𝑩
   g = (record { to = _⟨$⟩_ s ; cong = cong s })
   gE : IsSurjective g
-  gE {y} = eq ∣ (surjective s) y ∣ (sym (snd (surjective s y) (IsEquivalence.refl isEqA)))
+  gE {y} = eq (proj₁ ((surjective s) y)) (sym (snd (surjective s y) (IsEquivalence.refl isEqA)))
 
  SurjectionIsSurjection : (Surjection 𝑨 𝑩) → Σ[ g ∈ (𝑨 ⟶ 𝑩) ] (IsSurjection _≈₁_ _≈₂_ (_⟨$⟩_ g))
  SurjectionIsSurjection s = g , gE
@@ -84,7 +84,7 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
                                          ; isEquivalence₁ = isEqA
                                          ; isEquivalence₂ = isEqB
                                          }
-  gE .IsSurjection.surjective y = ∣ (surjective s) y ∣ , ∥ (surjective s) y ∥
+  gE .IsSurjection.surjective y = (proj₁ ((surjective s) y)) , (proj₂ ((surjective s) y))
 ```
 
 
@@ -140,8 +140,8 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ}{𝑪 : Setoid γ ρᶜ
  ∘-epic : Surjection 𝑨 𝑪 → Surjection 𝑪 𝑩 → Surjection 𝑨 𝑩
  Surjection.to           (∘-epic g h) = h ⟨$⟩_ ∘ g ⟨$⟩_
  Surjection.cong        (∘-epic g h) = cong h ∘ cong g
- Surjection.surjective  (∘-epic g h) = surjective $ isOnto  ∥ SurjectionIsSurjection g ∥
-                                                            ∥ SurjectionIsSurjection h ∥
+ Surjection.surjective  (∘-epic g h) = surjective $ isOnto  (proj₂ (SurjectionIsSurjection g))
+                                                            (proj₂ (SurjectionIsSurjection h))
   where open IsSurjection
 
 

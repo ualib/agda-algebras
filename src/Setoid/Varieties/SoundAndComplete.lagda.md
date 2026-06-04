@@ -33,7 +33,7 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl )
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library -------------------------------
-open import Overture                  using ( ∣_∣ )
+open import Overture                  using ( proj₁ ; OperationSymbolsOf )
 open import Overture.Terms   {𝑆 = 𝑆}  using ( Term )
 open import Setoid.Algebras  {𝑆 = 𝑆}  using ( Algebra ; ov ; ⟨_⟩ )
 open import Setoid.Terms     {𝑆 = 𝑆}  using ( module Environment ; Sub ; _[_] )
@@ -45,7 +45,7 @@ open Term
 private variable
  χ α ρᵃ ι ℓ : Level
  X Γ Δ : Type χ
- f     : ∣ 𝑆 ∣
+ f     : OperationSymbolsOf 𝑆
  I : Type ι
 
 -- Equations
@@ -96,7 +96,7 @@ module _ {α ρᵃ ℓ : Level} where
  module _ {χ : Level}{X : Type χ} where
 
   ThTuple : (𝒦 : Pred (Algebra α ρᵃ) ℓ) → ℑTh{χ = χ} (Th{X = X} 𝒦) → Eq{χ}
-  ThTuple 𝒦 = λ i → fst ∣ i ∣ ≈̇ snd ∣ i ∣
+  ThTuple 𝒦 = λ i → fst (proj₁ i) ≈̇ snd (proj₁ i)
 
 module _ {α}{ρᵃ}{ι}{I : Type ι} where
  -- An entailment E ⊃ eq holds iff it holds in all models of E.

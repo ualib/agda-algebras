@@ -26,7 +26,7 @@ open import Relation.Binary  using ( REL )
 open import Relation.Unary   using ( Pred ; _∈_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------
-open import Overture          using ( ∣_∣ ; ∥_∥ )
+open import Overture          using ( proj₁ ; proj₂ )
 open import Setoid.Functions  using ( IsInjective )
 
 open import Setoid.Algebras       {𝑆 = 𝑆} using ( Algebra ; ov )
@@ -37,11 +37,11 @@ private variable α ρᵃ β ρᵇ ℓ : Level
 
 _≥_  -- (alias for supalgebra (aka overalgebra))
  _IsSupalgebraOf_ : Algebra α ρᵃ → Algebra β ρᵇ → Type _
-𝑨 IsSupalgebraOf 𝑩 = Σ[ h ∈ hom 𝑩 𝑨 ] IsInjective ∣ h ∣
+𝑨 IsSupalgebraOf 𝑩 = Σ[ h ∈ hom 𝑩 𝑨 ] IsInjective (proj₁ h)
 
 _≤_  -- (alias for subalgebra relation))
  _IsSubalgebraOf_ : Algebra α ρᵃ → Algebra β ρᵇ → Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
-𝑨 IsSubalgebraOf 𝑩 = Σ[ h ∈ hom 𝑨 𝑩 ] IsInjective ∣ h ∣
+𝑨 IsSubalgebraOf 𝑩 = Σ[ h ∈ hom 𝑨 𝑩 ] IsInjective (proj₁ h)
 
 -- Syntactic sugar for sup/sub-algebra relations.
 𝑨 ≥ 𝑩 = 𝑨 IsSupalgebraOf 𝑩
@@ -125,7 +125,7 @@ is (isomorphic to) a subalgebra of `𝑩`.
 FirstHomCorollary :  {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}
                      (hh : hom 𝑨 𝑩) → (kerquo hh) IsSubalgebraOf 𝑩
 
-FirstHomCorollary hh = ∣ FirstHomTheorem hh ∣ , snd ∥ FirstHomTheorem hh ∥
+FirstHomCorollary hh = (proj₁ (FirstHomTheorem hh)) , snd (proj₂ (FirstHomTheorem hh))
 ```
 
 

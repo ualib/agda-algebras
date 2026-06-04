@@ -35,7 +35,7 @@ open import Relation.Unary   using ( Pred ; _∈_ )
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
-open  import Overture                       using  ( ∣_∣ ; ∥_∥ )
+open  import Overture                       using  ( proj₁ ; proj₂ )
 open  import Setoid.Functions               using  ( InvIsInverseʳ ; SurjInv )
 open  import Overture.Terms        {𝑆 = 𝑆}  using  ( Term ; ℊ )
 open  import Setoid.Algebras       {𝑆 = 𝑆}
@@ -73,7 +73,7 @@ module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}(𝑩 : Algebra β ρᵇ)(p q : T
  ⊧-I-invar Apq (mkiso fh gh f∼g g∼f) ρ = trans i $ trans ii $ trans iii $ trans iv v
   where
   -- TODO: refactor this proof using new relational reasoning syntax/style
-  f = _⟨$⟩_ ∣ fh ∣ ; g = _⟨$⟩_ ∣ gh ∣
+  f = _⟨$⟩_ (proj₁ fh) ; g = _⟨$⟩_ (proj₁ gh)
 
   i : ⟦ p ⟧₂ ⟨$⟩ ρ ≈ ⟦ p ⟧₂ ⟨$⟩ (f ∘ (g ∘ ρ))
   i = sym $ cong ⟦ p ⟧₂ (f∼g ∘ ρ)
@@ -82,7 +82,7 @@ module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}(𝑩 : Algebra β ρᵇ)(p q : T
   ii = sym $ comm-hom-term fh p (g ∘ ρ)
 
   iii : f (⟦ p ⟧₁ ⟨$⟩ (g ∘ ρ)) ≈ f (⟦ q ⟧₁ ⟨$⟩ (g ∘ ρ))
-  iii = cong ∣ fh ∣ $ Apq (g ∘ ρ)
+  iii = cong (proj₁ fh) $ Apq (g ∘ ρ)
 
   iv : f (⟦ q ⟧₁ ⟨$⟩ (g ∘ ρ)) ≈ ⟦ q ⟧₂ ⟨$⟩ (f ∘ (g ∘ ρ))
   iv = comm-hom-term fh q (g ∘ ρ)
@@ -123,14 +123,14 @@ module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}{p q : T
   begin
        ⟦ p ⟧   ⟨$⟩               ρ    ≈˘⟨  cong ⟦ p ⟧(λ _ → InvIsInverseʳ φE)  ⟩
        ⟦ p ⟧   ⟨$⟩ (φ ∘  φ⁻¹  ∘  ρ)   ≈˘⟨  comm-hom-term φh p (φ⁻¹ ∘ ρ)        ⟩
-   φ(  ⟦ p ⟧ᴬ  ⟨$⟩ (     φ⁻¹  ∘  ρ))  ≈⟨   cong ∣ φh ∣ (Apq (φ⁻¹ ∘ ρ))         ⟩
+   φ(  ⟦ p ⟧ᴬ  ⟨$⟩ (     φ⁻¹  ∘  ρ))  ≈⟨   cong (proj₁ φh) (Apq (φ⁻¹ ∘ ρ))         ⟩
    φ(  ⟦ q ⟧ᴬ  ⟨$⟩ (     φ⁻¹  ∘  ρ))  ≈⟨   comm-hom-term φh q (φ⁻¹ ∘ ρ)        ⟩
        ⟦ q ⟧   ⟨$⟩ (φ ∘  φ⁻¹  ∘  ρ)   ≈⟨   cong ⟦ q ⟧(λ _ → InvIsInverseʳ φE)  ⟩
        ⟦ q ⟧   ⟨$⟩               ρ    ∎
   where
   φ⁻¹ : 𝕌[ 𝑩 ] → 𝕌[ 𝑨 ]
-  φ⁻¹ = SurjInv ∣ φh ∣ φE
-  φ = (_⟨$⟩_ ∣ φh ∣)
+  φ⁻¹ = SurjInv (proj₁ φh) φE
+  φ = (_⟨$⟩_ (proj₁ φh))
   open Environment 𝑨  using () renaming ( ⟦_⟧ to ⟦_⟧ᴬ)
   open Environment 𝑩  using ( ⟦_⟧ )
   open SetoidReasoning 𝔻[ 𝑩 ]
@@ -154,8 +154,8 @@ module _ {X : Type χ}{p q : Term X}{𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β 
  ⊧-S-invar Apq B≤A b = goal
   where
   hh : hom 𝑩 𝑨
-  hh = ∣ B≤A ∣
-  h = _⟨$⟩_ ∣ hh ∣
+  hh = (proj₁ B≤A)
+  h = _⟨$⟩_ (proj₁ hh)
   ξ : ∀ b → h (⟦ p ⟧₂ ⟨$⟩ b) ≈ h (⟦ q ⟧₂ ⟨$⟩ b)
   ξ b = begin
          h (⟦ p ⟧₂ ⟨$⟩ b)    ≈⟨ comm-hom-term hh p b ⟩
@@ -164,7 +164,7 @@ module _ {X : Type χ}{p q : Term X}{𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β 
          h (⟦ q ⟧₂ ⟨$⟩ b)    ∎
 
   goal : ⟦ p ⟧₂ ⟨$⟩ b ≈₂ ⟦ q ⟧₂ ⟨$⟩ b
-  goal = ∥ B≤A ∥ (ξ b)
+  goal = (proj₂ B≤A) (ξ b)
 ```
 
 
@@ -250,16 +250,16 @@ every homomorphism from 𝑻 X to 𝑨 maps p and q to the same element of 𝑨.
 ```agda
 module _ {X : Type χ}{p q : Term X}{𝑨 : Algebra α ρᵃ}(φh : hom (𝑻 X) 𝑨) where
  open Setoid (Domain 𝑨) using ( _≈_ )
- private φ = _⟨$⟩_ ∣ φh ∣
+ private φ = _⟨$⟩_ (proj₁ φh)
 
  ⊧-H-ker : 𝑨 ⊧ (p ≈̇ q) → φ p ≈ φ q
  ⊧-H-ker β =
   begin
-   φ p                 ≈⟨ cong ∣ φh ∣ (term-agreement p)⟩
+   φ p                 ≈⟨ cong (proj₁ φh) (term-agreement p)⟩
    φ (⟦ p ⟧ ⟨$⟩ ℊ)     ≈⟨ comm-hom-term φh p ℊ ⟩
    ⟦ p ⟧₂ ⟨$⟩ (φ ∘ ℊ)  ≈⟨ β (φ ∘ ℊ) ⟩
    ⟦ q ⟧₂ ⟨$⟩ (φ ∘ ℊ)  ≈˘⟨ comm-hom-term φh q ℊ ⟩
-   φ (⟦ q ⟧ ⟨$⟩ ℊ)     ≈˘⟨ cong ∣ φh ∣ (term-agreement q)⟩
+   φ (⟦ q ⟧ ⟨$⟩ ℊ)     ≈˘⟨ cong (proj₁ φh) (term-agreement q)⟩
    φ q                 ∎
 
   where

@@ -32,7 +32,7 @@ open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from Agda Universal Algebra Library -----------------------------------
-open  import Overture                         using ( ∣_∣ ; ∥_∥ )
+open  import Overture                         using ( proj₁ ; proj₂ ; OperationSymbolsOf ; ArityOf )
 open  import Overture.Terms           {𝑆 = 𝑆} using ( Term )
 open  import Setoid.Algebras          {𝑆 = 𝑆} using ( Algebra ; _^_ ; ov ; ⨅ )
 open  import Setoid.Homomorphisms     {𝑆 = 𝑆} using ( hom ; IsHom )
@@ -71,7 +71,7 @@ module _ {X : Type χ} where
  open Environment (𝑻 X)  using ( ⟦_⟧ ; ≐→Equal )
  open SetoidReasoning TX
 
- term-interp :  (f : ∣ 𝑆 ∣){s t : ∥ 𝑆 ∥ f → Term X} → (∀ i → s i ≐ t i)
+ term-interp :  (f : OperationSymbolsOf 𝑆){s t : ArityOf 𝑆 f → Term X} → (∀ i → s i ≐ t i)
   →             ∀ η → ⟦ node f s ⟧ ⟨$⟩ η ≈ ⟦ node f t ⟧ ⟨$⟩ η -- (f ^ 𝑻 X) t
 
  term-interp f {s}{t} st η = cong Interp (≡.refl , λ i → ≐→Equal (s i) (t i) (st i) η )
@@ -117,7 +117,7 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}(hh : hom 𝑨 𝑩) 
  open IsHom
 
  private
-  hfunc = ∣ hh ∣
+  hfunc = proj₁ hh
   h = _⟨$⟩_ hfunc
 
  comm-hom-term :  (t : Term X) (a : X → ∣A∣)
@@ -128,7 +128,7 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}(hh : hom 𝑨 𝑩) 
   where
   goal : h (⟦ node f t ⟧₁ ⟨$⟩ a) ≈ (⟦ node f t ⟧₂ ⟨$⟩ (h ∘ a))
   goal = begin
-   h (⟦ node f t ⟧₁ ⟨$⟩ a)             ≈⟨ (compatible ∥ hh ∥) ⟩
+   h (⟦ node f t ⟧₁ ⟨$⟩ a)             ≈⟨ (compatible (proj₂ hh)) ⟩
    (f ^ 𝑩)(λ i → h (⟦ t i ⟧₁ ⟨$⟩ a))    ≈⟨ cong Interp₂ (≡.refl , λ i → comm-hom-term (t i) a) ⟩
    (f ^ 𝑩)(λ i → ⟦ t i ⟧₂ ⟨$⟩ (h ∘ a))  ≈⟨ refl ⟩
    (⟦ node f t ⟧₂ ⟨$⟩ (h ∘ a))         ∎

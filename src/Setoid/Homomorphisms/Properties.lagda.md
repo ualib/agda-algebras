@@ -26,7 +26,7 @@ open import Relation.Binary  using ( Setoid )
 open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------
-open import Overture          using ( ∣_∣ ; ∥_∥ )
+open import Overture          using ( proj₁ ; proj₂ )
 open import Setoid.Functions  using ( _⊙_ ; 𝑖𝑑 ; Image_∋_ ; eq ; ⊙-IsSurjective )
 
 open  import Setoid.Algebras {𝑆 = 𝑆}
@@ -118,10 +118,10 @@ module _ {𝑨 : Algebra α ρᵃ}{ℓ : Level} where
  FromLiftˡ : hom (Lift-Algˡ 𝑨 ℓ) 𝑨
  FromLiftˡ = record { to = lower ; cong = id } , record { compatible = reflˡ }
 
- ToFromLiftˡ : ∀ b →  (∣ ToLiftˡ ∣ ⟨$⟩ (∣ FromLiftˡ ∣ ⟨$⟩ b)) ≈ˡ b
+ ToFromLiftˡ : ∀ b →  ((proj₁ ToLiftˡ) ⟨$⟩ ((proj₁ FromLiftˡ) ⟨$⟩ b)) ≈ˡ b
  ToFromLiftˡ b = refl₁
 
- FromToLiftˡ : ∀ a → (∣ FromLiftˡ ∣ ⟨$⟩ (∣ ToLiftˡ ∣ ⟨$⟩ a)) ≈₁ a
+ FromToLiftˡ : ∀ a → ((proj₁ FromLiftˡ) ⟨$⟩ ((proj₁ ToLiftˡ) ⟨$⟩ a)) ≈₁ a
  FromToLiftˡ a = refl₁
 
  ToLiftʳ : hom 𝑨 (Lift-Algʳ 𝑨 ℓ)
@@ -131,10 +131,10 @@ module _ {𝑨 : Algebra α ρᵃ}{ℓ : Level} where
  FromLiftʳ : hom (Lift-Algʳ 𝑨 ℓ) 𝑨
  FromLiftʳ =  record { to = id ; cong = lower } , record { compatible = reflˡ }
 
- ToFromLiftʳ : ∀ b → (∣ ToLiftʳ ∣ ⟨$⟩ (∣ FromLiftʳ ∣ ⟨$⟩ b)) ≈ʳ b
+ ToFromLiftʳ : ∀ b → ((proj₁ ToLiftʳ) ⟨$⟩ ((proj₁ FromLiftʳ) ⟨$⟩ b)) ≈ʳ b
  ToFromLiftʳ b = lift refl₁
 
- FromToLiftʳ : ∀ a → (∣ FromLiftʳ ∣ ⟨$⟩ (∣ ToLiftʳ ∣ ⟨$⟩ a)) ≈₁ a
+ FromToLiftʳ : ∀ a → ((proj₁ FromLiftʳ) ⟨$⟩ ((proj₁ ToLiftʳ) ⟨$⟩ a)) ≈₁ a
  FromToLiftʳ a = refl₁
 
 module _ {𝑨 : Algebra α ρᵃ}{ℓ r : Level} where
@@ -149,14 +149,14 @@ module _ {𝑨 : Algebra α ρᵃ}{ℓ r : Level} where
  FromLift : hom (Lift-Alg 𝑨 ℓ r) 𝑨
  FromLift = ⊙-hom FromLiftʳ FromLiftˡ
 
- ToFromLift : ∀ b → (∣ ToLift ∣ ⟨$⟩ (∣ FromLift ∣ ⟨$⟩ b)) ≈ b
+ ToFromLift : ∀ b → ((proj₁ ToLift) ⟨$⟩ ((proj₁ FromLift) ⟨$⟩ b)) ≈ b
  ToFromLift b = lift refl
 
 
  ToLift-epi : epi 𝑨 (Lift-Alg 𝑨 ℓ r)
- ToLift-epi = ∣ ToLift ∣ ,
-              record  { isHom = ∥ ToLift ∥
-                      ; isSurjective = λ {y} → eq (∣ FromLift ∣ ⟨$⟩ y) (ToFromLift y)
+ ToLift-epi = (proj₁ ToLift) ,
+              record  { isHom = (proj₂ ToLift)
+                      ; isSurjective = λ {y} → eq ((proj₁ FromLift) ⟨$⟩ y) (ToFromLift y)
                       }
 ```
 
@@ -212,8 +212,8 @@ module _ {𝑨 : Algebra α ρᵃ} {𝑩 : Algebra β ρᵇ} where
  open Setoid using ( _≈_ )
 
  lift-hom-lemma :  (h : hom 𝑨 𝑩)(a : 𝕌[ 𝑨 ])(ℓᵃ ℓᵇ : Level)
-  →                (_≈_ (Domain (Lift-Algˡ 𝑩 ℓᵇ))) (lift (∣ h ∣ ⟨$⟩ a))
-                   (∣ Lift-homˡ h ℓᵃ ℓᵇ ∣ ⟨$⟩ lift a)
+  →                (_≈_ (Domain (Lift-Algˡ 𝑩 ℓᵇ))) (lift ((proj₁ h) ⟨$⟩ a))
+                   ((proj₁ (Lift-homˡ h ℓᵃ ℓᵇ)) ⟨$⟩ lift a)
 
  lift-hom-lemma h a ℓᵃ ℓᵇ = Setoid.refl (Domain 𝑩)
 

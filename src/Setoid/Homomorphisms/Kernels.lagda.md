@@ -25,7 +25,7 @@ open  import Relation.Binary   using ( Setoid )
 open  import Relation.Binary.PropositionalEquality as ≡ using ()
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------
-open  import Overture          using  ( ∣_∣ ; ∥_∥ ; kerRel ; kerRelOfEquiv )
+open  import Overture          using  ( proj₁ ; proj₂ ; kerRel ; kerRelOfEquiv )
 open  import Setoid.Functions  using  ( Image_∋_ )
 open  import Setoid.Algebras     {𝑆 = 𝑆}  using ( Algebra ; _^_ ; ov )
 open  import Setoid.Congruences  {𝑆 = 𝑆}  using ( _∣≈_ ; Con ; mkcon ; _╱_ ; IsCongruence )
@@ -46,7 +46,7 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} (hh : hom 𝑨 𝑩)
  open Algebra 𝑩          renaming (Domain to B )   using ( Interp )
  open Setoid B           renaming ( _≈_ to _≈₂_ )
                          using ( sym ; trans ; isEquivalence )
- private h = _⟨$⟩_ ∣ hh ∣
+ private h = _⟨$⟩_ (proj₁ hh)
 ```
 
 
@@ -62,10 +62,10 @@ That is, if each `(u i, v i)` belongs to the kernel, then so does the pair `((f 
   fhuv = cong Interp (≡.refl , kuv)
 
   lem1 : h ((f ^ 𝑨) u) ≈₂ (f ^ 𝑩)(h ∘ u)
-  lem1 = IsHom.compatible ∥ hh ∥
+  lem1 = IsHom.compatible (proj₂ hh)
 
   lem2 : (f ^ 𝑩) (h ∘ v) ≈₂ h ((f ^ 𝑨) v)
-  lem2 = sym (IsHom.compatible ∥ hh ∥)
+  lem2 = sym (IsHom.compatible (proj₂ hh))
 
   Goal : h ((f ^ 𝑨) u) ≈₂ h ((f ^ 𝑨) v)
   Goal = trans lem1 (trans fhuv lem2)
@@ -78,7 +78,7 @@ The kernel of a homomorphism is a congruence of the domain, which we construct a
 ```agda
  kercon : Con 𝑨 ρᵇ
  kercon =  kerRel _≈₂_ h ,
-           mkcon (λ x → cong ∣ hh ∣ x)(kerRelOfEquiv isEquivalence h)(HomKerComp)
+           mkcon (λ x → cong (proj₁ hh) x)(kerRelOfEquiv isEquivalence h)(HomKerComp)
 ```
 
 
@@ -113,10 +113,10 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} (h : hom 𝑨 𝑩) 
   open IsHom {𝑨 = (𝑨 ╱ θ)}  using ( compatible )
 
   p : (Domain 𝑨) ⟶ A/θ
-  p = record { to = id ; cong = reflexive ∥ θ ∥ }
+  p = record { to = id ; cong = reflexive (proj₂ θ) }
 
   pepi : IsEpi 𝑨 (𝑨 ╱ θ) p
-  pepi = record  { isHom = record { compatible = sym (compatible ∥ 𝒾𝒹 ∥) }
+  pepi = record  { isHom = record { compatible = sym (compatible (proj₂ 𝒾𝒹)) }
                  ; isSurjective = λ {y} → Image_∋_.eq y refl
                  }
 ```
@@ -155,7 +155,7 @@ the one we need later.
 ```agda
  open IsCongruence
 
- ker-in-con : {θ : Con 𝑨 ℓ} → ∀ {x}{y} → ∣ kercon (πhom θ) ∣ x y →  ∣ θ ∣ x y
+ ker-in-con : {θ : Con 𝑨 ℓ} → ∀ {x}{y} → (proj₁ (kercon (πhom θ))) x y →  (proj₁ θ) x y
  ker-in-con = id
 ```
 

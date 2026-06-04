@@ -28,7 +28,7 @@ open import Relation.Binary.PropositionalEquality  as ≡           using ()
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------------
-open import Overture         using ( ∣_∣ ; ∥_∥ ; kernelRel )
+open import Overture         using ( proj₁ ; proj₂ ; kernelRel )
 open import Setoid.Functions using ( Image_∋_ ; IsSurjective ; SurjInv )
                              using ( SurjInvIsInverseʳ ; epic-factor )
 
@@ -65,8 +65,8 @@ module _  {𝑨 : Algebra α ρᵃ} (𝑩 : Algebra β ρᵇ) {𝑪 : Algebra γ
 
 
  private
-  gfunc = ∣ gh ∣
-  hfunc = ∣ hh ∣
+  gfunc = proj₁ gh
+  hfunc = proj₁ hh
   g = _⟨$⟩_ gfunc
   h = _⟨$⟩_ hfunc
 
@@ -75,7 +75,7 @@ module _  {𝑨 : Algebra α ρᵃ} (𝑩 : Algebra β ρᵇ) {𝑪 : Algebra γ
 
  HomFactor :  kernelRel _≈₃_ h ⊆ kernelRel _≈₂_ g → IsSurjective hfunc
               ---------------------------------------------------------
-  →           Σ[ φ ∈ hom 𝑪 𝑩 ] ∀ a → (g a) ≈₂ ∣ φ ∣ ⟨$⟩ (h a)
+  →           Σ[ φ ∈ hom 𝑪 𝑩 ] ∀ a → (g a) ≈₂ (proj₁ φ) ⟨$⟩ (h a)
 
  HomFactor Khg hE = (φmap , φhom) , gφh
   where
@@ -109,9 +109,9 @@ module _  {𝑨 : Algebra α ρᵃ} (𝑩 : Algebra β ρᵇ) {𝑪 : Algebra γ
     in
     begin
     g (h⁻¹ $ (f ^ 𝑪) c)            ≈⟨ sym₂ $ φcong (cong Interp (≡.refl , λ _ → SurjInvIsInverseʳ hfunc hE)) ⟩
-    g (h⁻¹ $ f ^ 𝑪 $ h ∘ h⁻¹ ∘ c)  ≈⟨ sym₂ $ φcong (compatible ∥ hh ∥) ⟩
+    g (h⁻¹ $ f ^ 𝑪 $ h ∘ h⁻¹ ∘ c)  ≈⟨ sym₂ $ φcong (compatible (proj₂ hh)) ⟩
     g (h⁻¹ $ h $ f ^ 𝑨 $ h⁻¹ ∘ c)  ≈⟨ sym₂ $ gφh $ (f ^ 𝑨) (h⁻¹ ∘ c) ⟩
-    g (f ^ 𝑨 $ h⁻¹ ∘ c)            ≈⟨ compatible ∥ gh ∥ ⟩
+    g (f ^ 𝑨 $ h⁻¹ ∘ c)            ≈⟨ compatible (proj₂ gh) ⟩
     (f ^ 𝑩)(g ∘ h⁻¹ ∘ c)           ∎
 
   φhom : IsHom 𝑪 𝑩 φmap
@@ -126,21 +126,21 @@ If, in addition, `g` is surjective, then so will be the factor `φ`.
  HomFactorEpi :  kernelRel _≈₃_ h ⊆ kernelRel _≈₂_ g
   →              IsSurjective hfunc → IsSurjective gfunc
                  -------------------------------------------------
-  →              Σ[ φ ∈ epi 𝑪 𝑩 ] ∀ a → (g a) ≈₂ ∣ φ ∣ ⟨$⟩ (h a)
+  →              Σ[ φ ∈ epi 𝑪 𝑩 ] ∀ a → (g a) ≈₂ (proj₁ φ) ⟨$⟩ (h a)
 
  HomFactorEpi Khg hE gE = (φmap , φepi) , gφh
   where
-  homfactor : Σ[ φ ∈ hom 𝑪 𝑩 ] ∀ a → (g a) ≈₂ ∣ φ ∣ ⟨$⟩ (h a)
+  homfactor : Σ[ φ ∈ hom 𝑪 𝑩 ] ∀ a → (g a) ≈₂ (proj₁ φ) ⟨$⟩ (h a)
   homfactor = HomFactor Khg hE
 
   φmap : C ⟶ B
-  φmap = fst ∣ homfactor ∣
+  φmap = fst (proj₁ homfactor)
 
   gφh : (a : 𝕌[ 𝑨 ]) → g a ≈₂ φmap ⟨$⟩ (h a)
   gφh = snd homfactor -- Khg ξ
 
   φhom : IsHom 𝑪 𝑩 φmap
-  φhom = snd ∣ homfactor ∣
+  φhom = snd (proj₁ homfactor)
 
   φepi : IsEpi 𝑪 𝑩 φmap
   φepi = record  { isHom = φhom

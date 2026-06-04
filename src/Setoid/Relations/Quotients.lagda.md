@@ -26,7 +26,7 @@ open import Relation.Binary.PropositionalEquality as ≡
                               using ( _≡_ )
 
 -- Imports from agda-algebras -----------------------------------------------------
-open import Overture                   using ( ∣_∣ ; ∥_∥ ; [_] ; Equivalence )
+open import Overture                   using ( proj₁ ; proj₂ ; [_] ; Equivalence )
 open import Setoid.Relations.Discrete  using ( fker )
 
 private variable α β ρᵃ ρᵇ ℓ : Level
@@ -64,10 +64,10 @@ denoted by `A / R` and is defined to be the collection `{[ u ] ∣  y : A}` of a
 
 ```agda
 Quotient : (A : Type α) → Equivalence A{ℓ} → Type(α ⊔ suc ℓ)
-Quotient A R = Σ[ P ∈ Pred A _ ] IsBlock P {∣ R ∣}
+Quotient A R = Σ[ P ∈ Pred A _ ] IsBlock P {(proj₁ R)}
 
 _/_ : (A : Type α) → Equivalence A{ℓ} → Setoid _ _
-A / R = record { Carrier = A ; _≈_ = ∣ R ∣ ; isEquivalence = ∥ R ∥ }
+A / R = record { Carrier = A ; _≈_ = (proj₁ R) ; isEquivalence = (proj₂ R) }
 
 infix -1 _/_
 ```
@@ -83,10 +83,10 @@ module _ {A : Type α}{R : Equivalence A{ℓ} } where
 
  open Setoid (A / R) using () renaming ( _≈_ to _≈₁_ )
 
- ⟪_∼_⟫-intro : (u v : A) → ∣ R ∣ u v → ⟪ u ⟫{R} ≈₁ ⟪ v ⟫{R}
+ ⟪_∼_⟫-intro : (u v : A) → (proj₁ R) u v → ⟪ u ⟫{R} ≈₁ ⟪ v ⟫{R}
  ⟪ u ∼ v ⟫-intro = id
 
- ⟪_∼_⟫-elim : (u v : A) → ⟪ u ⟫{R} ≈₁ ⟪ v ⟫{R} → ∣ R ∣ u v
+ ⟪_∼_⟫-elim : (u v : A) → ⟪ u ⟫{R} ≈₁ ⟪ v ⟫{R} → (proj₁ R) u v
  ⟪ u ∼ v ⟫-elim = id
 
 ≡→⊆ : {A : Type α}{ρ : Level}(Q R : Pred A ρ) → Q ≡ R → Q ⊆ R
