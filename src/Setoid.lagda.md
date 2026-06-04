@@ -12,8 +12,6 @@ as opposed to "bare" types (see [Base.lagda][]).
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Setoid where

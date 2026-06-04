@@ -11,8 +11,6 @@ This is the [Setoid.Subalgebras.Subalgebras][] module of the [Agda Universal Alg
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using (𝓞 ; 𝓥 ; Signature)
@@ -87,8 +85,6 @@ The next type we define allows us to express this assertion as
 
 
 ```agda
-
-
 _≤c_
  _IsSubalgebraOfClass_ : Algebra β ρᵇ → Pred (Algebra α ρᵃ) ℓ → Type _
 𝑩 IsSubalgebraOfClass 𝒦 = Σ[ 𝑨 ∈ Algebra _ _ ] ((𝑨 ∈ 𝒦) ∧ (𝑩 ≤ 𝑨))
@@ -126,8 +122,6 @@ is (isomorphic to) a subalgebra of `𝑩`.
 
 
 ```agda
-
-
 FirstHomCorollary :  {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}
                      (hh : hom 𝑨 𝑩) → (kerquo hh) IsSubalgebraOf 𝑩
 

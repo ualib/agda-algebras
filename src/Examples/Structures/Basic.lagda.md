@@ -9,8 +9,6 @@ author: "agda-algebras development team"
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Examples.Structures.Basic where
@@ -52,8 +50,6 @@ the ternary NAE-3-SAT relation, R = S³ - {(0,0,0), (1,1,1)} (where S = {0, 1}).
 
 
 ```agda
-
-
 data NAE3SAT : Pred (𝟚 × 𝟚 × 𝟚) 0ℓ where
  r1 : (𝟚.𝟎 , 𝟚.𝟎 , 𝟚.𝟏) ∈ NAE3SAT
  r2 : (𝟚.𝟎 , 𝟚.𝟏 , 𝟚.𝟎) ∈ NAE3SAT

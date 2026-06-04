@@ -11,8 +11,6 @@ This is the [Exercises.Complexity][] module of the [Agda Universal Algebra Libra
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Exercises.Complexity where

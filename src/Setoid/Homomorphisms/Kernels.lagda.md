@@ -11,8 +11,6 @@ This is the [Setoid.Homomorphisms.Kernels][] module of the [Agda Universal Algeb
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using (𝓞 ; 𝓥 ; Signature)
@@ -57,8 +55,6 @@ That is, if each `(u i, v i)` belongs to the kernel, then so does the pair `((f 
 
 
 ```agda
-
-
  HomKerComp : 𝑨 ∣≈ kerRel _≈₂_ h
  HomKerComp f {u}{v} kuv = Goal
   where
@@ -80,8 +76,6 @@ The kernel of a homomorphism is a congruence of the domain, which we construct a
 
 
 ```agda
-
-
  kercon : Con 𝑨 ρᵇ
  kercon =  kerRel _≈₂_ h ,
            mkcon (λ x → cong ∣ hh ∣ x)(kerRelOfEquiv isEquivalence h)(HomKerComp)
@@ -92,8 +86,6 @@ Now that we have a congruence, we can construct the quotient relative to the ker
 
 
 ```agda
-
-
  kerquo : Algebra α ρᵇ
  kerquo = 𝑨 ╱ kercon
 
@@ -109,8 +101,6 @@ Given an algebra `𝑨` and a congruence `θ`, the *canonical projection* is a m
 
 
 ```agda
-
-
 module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} (h : hom 𝑨 𝑩) where
  open IsCongruence
 
@@ -138,8 +128,6 @@ This is obtained by applying `epi-to-hom`, like so.
 
 
 ```agda
-
-
  πhom : (θ : Con 𝑨 ℓ) → hom 𝑨 (𝑨 ╱ θ)
  πhom θ = epi→hom 𝑨 (𝑨 ╱ θ) (πepi θ)
 ```
@@ -152,8 +140,6 @@ above for the quotient of `𝑨` modulo the kernel of `h`.)
 
 
 ```agda
-
-
  πker : epi 𝑨 (ker[ 𝑨 ⇒ 𝑩 ] h)
  πker = πepi (kercon h)
 ```
@@ -167,8 +153,6 @@ the one we need later.
 
 
 ```agda
-
-
  open IsCongruence
 
  ker-in-con : {θ : Con 𝑨 ℓ} → ∀ {x}{y} → ∣ kercon (πhom θ) ∣ x y →  ∣ θ ∣ x y

@@ -12,8 +12,6 @@ This is the [Setoid.Subalgebras.Properties][] module of the [Agda Universal Alge
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using (𝓞 ; 𝓥 ; Signature)
@@ -53,8 +51,6 @@ The subalgebra relation is a *preorder*, i.e., a reflexive, transitive binary re
 
 
 ```agda
-
-
 open _≅_
 
 ≅→≤ : {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} → 𝑨 ≅ 𝑩 → 𝑨 ≤ 𝑩
@@ -150,8 +146,6 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
 
 
 ```agda
-
-
 module _ {𝒦 : Pred (Algebra α ρᵃ)(ov α)}{𝑩 : Algebra β ρᵇ}{ℓ : Level} where
 
  Lift-is-sub : 𝑩 ≤c 𝒦 → (Lift-Algˡ 𝑩 ℓ) ≤c 𝒦
@@ -196,8 +190,6 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
 
 
 ```agda
-
-
 module _ {I : Type ι}{𝒜 : I → Algebra α ρᵃ}{ℬ : I → Algebra β ρᵇ} where
  open Algebra (⨅ 𝒜)  using () renaming ( Domain to ⨅A )
  open Algebra (⨅ ℬ)  using () renaming ( Domain to ⨅B )

@@ -13,8 +13,6 @@ A *surjective function* from a setoid `𝑨 = (A, ≈₀)` to a setoid `𝑩 = (
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Setoid.Functions.Surjective where
@@ -94,8 +92,6 @@ With the next definition we represent a *right-inverse* of a surjective setoid f
 
 
 ```agda
-
-
  SurjInv : (f : 𝑨 ⟶ 𝑩) → IsSurjective f → B → A
  SurjInv f fE b = Inv f (fE {b})
 ```
@@ -105,8 +101,6 @@ Thus, a right-inverse of `f` is obtained by applying `Inv` to `f` and a proof of
 
 
 ```agda
-
-
  SurjInvIsInverseʳ :  (f : 𝑨 ⟶ 𝑩)(fE : IsSurjective f)
   →                   ∀ {b} → f ⟨$⟩ (SurjInv f fE) b ≈₂ b
 
@@ -118,8 +112,6 @@ Next, we prove composition laws for epics.
 
 
 ```agda
-
-
 module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ}{𝑪 : Setoid γ ρᶜ} where
 
  open Setoid 𝑨  using ()               renaming (Carrier to A; _≈_ to _≈₁_)

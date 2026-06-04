@@ -18,8 +18,6 @@ We prove some closure and invariance properties of the relation `⊧`.  In parti
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using (𝓞 ; 𝓥 ; Signature)
@@ -64,8 +62,6 @@ The binary relation ⊧ would be practically useless if it were not an *algebrai
 
 
 ```agda
-
-
 module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}(𝑩 : Algebra β ρᵇ)(p q : Term X) where
  open Environment 𝑨      using () renaming ( ⟦_⟧   to ⟦_⟧₁ )
  open Environment 𝑩      using () renaming ( ⟦_⟧   to ⟦_⟧₂ )
@@ -104,8 +100,6 @@ The ⊧ relation is also invariant under the algebraic lift and lower operations
 
 
 ```agda
-
-
 module _ {X : Type χ}{𝑨 : Algebra α ρᵃ} where
 
  ⊧-Lift-invar : (p q : Term X) → 𝑨 ⊧ (p ≈̇ q) → Lift-Algˡ 𝑨 β ⊧ (p ≈̇ q)
@@ -122,8 +116,6 @@ of `𝑨`, which fact can be formalized as follows.
 
 
 ```agda
-
-
 module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}{p q : Term X} where
 
  ⊧-H-invar : 𝑨 ⊧ (p ≈̇ q) → 𝑩 IsHomImageOf 𝑨 → 𝑩 ⊧ (p ≈̇ q)
@@ -151,8 +143,6 @@ Identities modeled by an algebra `𝑨` are also modeled by every subalgebra of 
 
 
 ```agda
-
-
 module _ {X : Type χ}{p q : Term X}{𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
  open Environment 𝑨      using () renaming ( ⟦_⟧ to ⟦_⟧₁ )
  open Environment 𝑩      using () renaming ( ⟦_⟧ to ⟦_⟧₂ )
@@ -184,8 +174,6 @@ all `𝑨 ∈ 𝒦` is also satisfied by every subalgebra of a member of `𝒦`.
 
 
 ```agda
-
-
 module _ {X : Type χ}{p q : Term X} where
 
  ⊧-S-class-invar :  {𝒦 : Pred (Algebra α ρᵃ) ℓ}
@@ -203,8 +191,6 @@ by the product of algebras in that collection.
 
 
 ```agda
-
-
 module _ {X : Type χ}{p q : Term X}{I : Type ℓ}(𝒜 : I → Algebra α ρᵃ) where
 
  ⊧-P-invar : (∀ i → 𝒜 i ⊧ (p ≈̇ q)) → ⨅ 𝒜 ⊧ (p ≈̇ q)
@@ -232,8 +218,6 @@ of algebras in the class.
 
 
 ```agda
-
-
  ⊧-P-class-invar :  (𝒦 : Pred (Algebra α ρᵃ)(ov α))
   →                 𝒦 ⊫ (p ≈̇ q) → (∀ i → 𝒜 i ∈ 𝒦) → ⨅ 𝒜 ⊧ (p ≈̇ q)
 
@@ -247,8 +231,6 @@ algebras models (p ≈̇ q) if the lift of each algebra in the collection models
 
 
 ```agda
-
-
  ⊧-P-lift-invar : (∀ i → Lift-Algˡ (𝒜 i) β ⊧ (p ≈̇ q))  →  ⨅ 𝒜 ⊧ (p ≈̇ q)
  ⊧-P-lift-invar α = ⊧-P-invar Aipq
   where
@@ -266,8 +248,6 @@ every homomorphism from 𝑻 X to 𝑨 maps p and q to the same element of 𝑨.
 
  
 ```agda
-
-
 module _ {X : Type χ}{p q : Term X}{𝑨 : Algebra α ρᵃ}(φh : hom (𝑻 X) 𝑨) where
  open Setoid (Domain 𝑨) using ( _≈_ )
  private φ = _⟨$⟩_ ∣ φh ∣

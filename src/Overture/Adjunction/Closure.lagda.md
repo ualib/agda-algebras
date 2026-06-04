@@ -11,7 +11,6 @@ This is the [Overture.Adjunction.Closure][] module of the [Agda Universal Algebr
 
 
 ```agda
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Overture.Adjunction.Closure where
@@ -50,7 +49,6 @@ Some examples of closure systems are the following:
 
 
 ```agda
-
 Extensive : Rel a ρ → (a → a) → Type _
 Extensive _≤_ C = ∀{x} → x ≤ C x
 -- (We might propose a new stdlib equivalent to Extensive in, e.g., `Relation.Binary.Core`.)
@@ -77,7 +75,6 @@ Thus, a closure operator is an extensive, idempotent poset endomorphism.
 
 
 ```agda
-
 -- ClOp, the inhabitants of which denote closure operators.
 record ClOp {ℓ ℓ₁ ℓ₂ : Level}(𝑨 : Poset ℓ ℓ₁ ℓ₂) : Type  (ℓ ⊔ ℓ₂ ⊔ ℓ₁) where
  open Poset 𝑨
@@ -95,7 +92,6 @@ record ClOp {ℓ ℓ₁ ℓ₂ : Level}(𝑨 : Poset ℓ ℓ₁ ℓ₂) : Type  
 
 
 ```agda
-
 open ClOp
 open Inverse
 
@@ -112,7 +108,6 @@ module _ {𝑨 : Poset ℓ ℓ₁ ℓ₂}(𝑪 : ClOp 𝑨) where
 
 
 ```agda
-
  clop→law⇒ : (x y : A) → x ≤ (c y) → (c x) ≤ (c y)
  clop→law⇒ x y x≤cy = begin
    c x      ≤⟨ isOrderPreserving 𝑪 x≤cy ⟩
@@ -133,7 +128,6 @@ The converse of Theorem 1 also holds.  That is,
 
 
 ```agda
-
 module _ {𝑨 : Poset ℓ ℓ₁ ℓ₂} where
  open Poset 𝑨
  private A = Carrier

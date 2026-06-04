@@ -104,7 +104,6 @@ A right-inverse of a surjective `f` is obtained by composing `Inv` with the surj
 The composition law for surjective functions: if `f` factors through `g` via `h`, and `f` is surjective, then so is `h`.  This is consumed in `Setoid.Homomorphisms.Factor` to lift surjectivity through the homomorphism factorization diagram.
 
 ```agda
-
 module _ {A : Type a}{B : Type b}{C : Type c} where
 
  epic-factor :  (f : A → B)(g : A → C)(h : C → B)
@@ -147,7 +146,6 @@ Given an indexed family `B : I → Type b` and a "default" point `bs₀ : ∀ i 
 The auxiliary `update` modifies the default point at the single coordinate `j` to take a given value `b`, leaving the other coordinates alone.  The auxiliary `update-id` says that `update bs₀ (j , b)` evaluated at `j` gives back `b`, regardless of which proof of `j ≡ j` the decision procedure happens to produce.  The latter is where uniqueness-of-identity-proofs (UIP) for the index type `I` enters: `update-id` cannot be proved without it, because the "yes" case has to handle a propositionally-but-not-definitionally trivial equality proof.  The `Decidable⇒UIP` module from stdlib gives us UIP for any type with decidable equality, which is the assumption already made on `I`.
 
 ```agda
-
 module _  {I : Type ι}(_≟_ : Decidable {A = I} _≡_)
           {B : I → Type b}
           (bs₀ : ∀ i → B i)

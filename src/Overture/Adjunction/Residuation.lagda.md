@@ -11,7 +11,6 @@ This is the [Overture.Adjunction.Residuation][] module of the [Agda Universal Al
 
 
 ```agda
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Overture.Adjunction.Residuation where
@@ -50,7 +49,6 @@ module _ (A : Poset a ιᵃ α)(B : Poset b ιᵇ β) where
 
 
 ```agda
-
 open Residuation
 open Poset
 
@@ -74,7 +72,6 @@ In a ring `R`, if `x y : R` and if `x y x = x`, then `y` is called a *weak inver
 
 
 ```agda
-
  -- 𝑔 is a weak inverse for 𝑓
  weak-inverse : (𝑓 ∘ 𝑔 ∘ 𝑓) ≈̇B 𝑓
  weak-inverse a = antisym B lt gt

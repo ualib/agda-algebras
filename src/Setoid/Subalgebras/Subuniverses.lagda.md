@@ -45,8 +45,6 @@ We first show how to represent in [Agda][] the collection of subuniverses of an 
 
 
 ```agda
-
-
 module _ (𝑨 : Algebra α ρᵃ) where
  private A = 𝕌[ 𝑨 ] -- the forgetful functor
 
@@ -75,8 +73,6 @@ inductive type `Sg` is trivial, as we see here.
 
 
 ```agda
-
-
  sgIsSub : {G : Pred A ℓ} → Sg G ∈ Subuniverses
  sgIsSub = app
 ```
@@ -86,8 +82,6 @@ Next we prove by structural induction that `Sg X` is the smallest subuniverse of
 
 
 ```agda
-
-
  sgIsSmallest :  {G : Pred A ℓ}(B : Pred A ρᵇ)
   →              B ∈ Subuniverses  →  G ⊆ B  →  Sg G ⊆ B
 
@@ -106,8 +100,6 @@ When the element of `Sg G` is constructed as `app f a SgGa`, we may assume (the 
 
 
 ```agda
-
-
 module _ {𝑨 : Algebra α ρᵃ} where
  private A = 𝕌[ 𝑨 ]
 
@@ -134,8 +126,6 @@ yet."  We should fix the implementation to resolve this.
 
 
 ```agda
-
-
 module _ {𝑨 : Algebra α ρᵃ} where
  private A = 𝕌[ 𝑨 ]
  open Setoid using ( Carrier )
@@ -172,8 +162,6 @@ Alternatively, we could express the preceeding fact using an inductive type repr
 
 
 ```agda
-
-
  data TermImage (B : Pred A ρᵃ) : Pred A (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ) where
   var : ∀ {b : A} → b ∈ B → b ∈ TermImage B
   app : ∀ f ts →  ((i : ∥ 𝑆 ∥ f) → ts i ∈ TermImage B)  → (f ̂ 𝑨) ts ∈ TermImage B
@@ -197,8 +185,6 @@ we call `hom-unique`.
 
 
 ```agda
-
-
  module _ {𝑩 : Algebra β ρᵇ} (gh hh : hom 𝑨 𝑩) where
   open Algebra 𝑩  using ( Interp )  renaming ( Domain to B )
   open Setoid B   using ( _≈_ ; sym )

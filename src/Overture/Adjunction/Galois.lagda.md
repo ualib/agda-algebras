@@ -11,7 +11,6 @@ This is the [Overture.Adjunction.Galois][] module of the [Agda Universal Algebra
 
 
 ```agda
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Overture.Adjunction.Galois where
@@ -42,7 +41,6 @@ In other terms, `F` is a *left adjoint* of `G` and `G` is a *right adjoint* of `
 
 
 ```agda
-
 module _ (A : Poset α ℓᵃ ρᵃ)(B : Poset β ℓᵇ ρᵇ) where
  open Poset
  private
@@ -95,7 +93,6 @@ Here we define a type that represents the poset of subsets of a given set equipp
 
 
 ```agda
-
 open Poset
 
 module _ {α ρ : Level} {𝒜 : Type α} where
@@ -131,7 +128,6 @@ A binary relation from one poset to another induces a Galois connection.  This i
 
 
 ```agda
-
 module _ {ℓ : Level}{𝒜 : Type ℓ} {ℬ : Type ℓ} where
 
  𝒫𝒜 : Poset (suc ℓ) ℓ ℓ

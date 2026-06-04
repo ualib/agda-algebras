@@ -13,8 +13,6 @@ This module is based on [Andreas Abel's Agda formalization of Birkhoff's complet
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using (𝓞 ; 𝓥 ; Signature)
@@ -114,8 +112,6 @@ module _ {α}{ρᵃ}{ι}{I : Type ι} where
 
 
 ```agda
-
-
 module _ {χ ι : Level} where
 
  data _⊢_▹_≈_ {I : Type ι}(E : I → Eq) : (X : Type χ)(p q : Term X) → Type (ι ⊔ ov χ) where
@@ -137,8 +133,6 @@ module _ {χ ι : Level} where
 
 
 ```agda
-
-
 module Soundness  {χ α ι : Level}{I : Type ι} (E : I → Eq{χ})
                   (𝑨 : Algebra α ρᵃ)     -- We assume an algebra M
                   (V : 𝑨 ⊨ E)         -- that models all equations in E.
@@ -189,8 +183,6 @@ We denote by `𝔽[ X ]` the *relatively free algebra* over `X` (relative to `E`
 
 
 ```agda
-
-
 module FreeAlgebra {χ : Level}{ι : Level}{I : Type ι}(E : I → Eq) where
  open Algebra
 
@@ -231,8 +223,6 @@ the fact that these results are independent of the chosen variable symbol
 type `X` (or `Δ`, or `Γ`), which is an arbitrary inhabitant of `Type χ`.)
 
 ```agda
-
-
  module _ {X : Type χ} where
   open Environment 𝔽[ X ]
   evaluation : (t : Term Δ) (σ : Sub X Δ) → E ⊢ X ▹ (⟦ t ⟧ ⟨$⟩ σ) ≈ (t [ σ ])
@@ -259,8 +249,6 @@ We are finally ready to formally state and prove Birkhoff's Completeness Theorem
 
 
 ```agda
-
-
  module _ {Γ : Type χ} where
 
   completeness : ∀ p q → ModTuple E ⊫ (p ≈̇ q) → E ⊢ Γ ▹ p ≈ q

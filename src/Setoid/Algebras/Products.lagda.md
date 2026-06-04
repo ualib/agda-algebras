@@ -11,8 +11,6 @@ This is the [Setoid.Algebras.Products][] module of the [Agda Universal Algebra L
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using (𝓞 ; 𝓥 ; Signature)
@@ -64,8 +62,6 @@ cong (Interp (⨅ {I} 𝒜)) (refl , f=g ) = λ i → cong  (Interp (𝒜 i)) (r
 
 
 ```agda
-
-
 module _ {𝒦 : Pred (Algebra α ρ) (ov α)} where
 
  ℑ : Type (ov (α ⊔ ρ))
@@ -96,8 +92,6 @@ projection of a product of algebras over such an index type is surjective.
 
 
 ```agda
-
-
 module _  {I : Type ι}                  -- index type
           {_≟_ : Decidable{A = I} _≡_}  -- with decidable equality
           {𝒜 : I → Algebra α ρ}         -- indexed collection of algebras

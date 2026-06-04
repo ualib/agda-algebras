@@ -11,8 +11,6 @@ This is the [Setoid.Homomorphisms.Factor][] module of the [Agda Universal Algebr
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using (𝓞 ; 𝓥 ; Signature)
@@ -60,8 +58,6 @@ However, with four components, an equivalent record type is easier to work with.
 
 
 ```agda
-
-
 module _ (𝑨 : Algebra α ρᵃ) (𝑩 : Algebra β ρᵇ) where
  open Setoid (Domain 𝑨) using ( sym ; trans ) renaming ( _≈_ to _≈₁_ )
  open Setoid (Domain 𝑩) using () renaming ( _≈_ to _≈₂_ ; sym to sym₂ ; trans to trans₂)
@@ -106,8 +102,6 @@ That is, two structures are *isomorphic* provided there are homomorphisms going 
 
 
 ```agda
-
-
 open _≅_
 
 ≅-refl : Reflexive (_≅_ {α}{ρᵃ})
@@ -165,8 +159,6 @@ from the noncumulativity of Agda's universe hierarchy.
 
 
 ```agda
-
-
 module _ {𝑨 : Algebra α ρᵃ}{ℓ : Level} where
  Lift-≅ˡ : 𝑨 ≅ (Lift-Algˡ 𝑨 ℓ)
  Lift-≅ˡ = mkiso ToLiftˡ FromLiftˡ (ToFromLiftˡ{𝑨 = 𝑨}) (FromToLiftˡ{𝑨 = 𝑨}{ℓ})
@@ -199,8 +191,6 @@ The lift is also associative, up to isomorphism at least.
 
 
 ```agda
-
-
 module _ {𝑨 : Algebra α ρᵃ}{ℓ₁ ℓ₂ : Level} where
 
  Lift-assocˡ : Lift-Algˡ 𝑨 (ℓ₁ ⊔ ℓ₂) ≅  Lift-Algˡ (Lift-Algˡ 𝑨 ℓ₁) ℓ₂
@@ -224,8 +214,6 @@ looks a bit technical, but it is as straightforward as it ought to be.
 
 
 ```agda
-
-
 module _ {𝓘 : Level}{I : Type 𝓘} {𝒜 : I → Algebra α ρᵃ} {ℬ : I → Algebra β ρᵇ} where
  open Algebra (⨅ 𝒜)  using () renaming (Domain to ⨅A )
  open Setoid ⨅A      using () renaming ( _≈_ to _≈₁_ )
@@ -264,8 +252,6 @@ A nearly identical proof goes through for isomorphisms of lifted products.
 
 
 ```agda
-
-
 module _  {𝓘 : Level}{I : Type 𝓘}
           {𝒜 : I → Algebra α ρᵃ}
           {ℬ : (Lift γ I) → Algebra β ρᵇ} where

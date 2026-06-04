@@ -13,8 +13,6 @@ same identities.
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using (𝓞 ; 𝓥 ; Signature)
@@ -66,8 +64,6 @@ prove a handful of such properties that we need later.
 
 
 ```agda
-
-
 module _  {α ρᵃ ℓ : Level}{𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
  private
   a = α ⊔ ρᵃ
@@ -100,8 +96,6 @@ in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
 
 
 ```agda
-
-
  PS⊆SP : P (a ⊔ ℓ) oaℓ (S{β = α}{ρᵃ} ℓ 𝒦) ⊆ S oaℓ (P ℓ oaℓ 𝒦)
  PS⊆SP {𝑩} (I , ( 𝒜 , sA , B≅⨅A )) = Goal
   where
@@ -122,8 +116,6 @@ First we prove that the closure operator H is compatible with identities that ho
 
 
 ```agda
-
-
 module _   {α ρᵃ ℓ χ : Level}
            {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)}
            {X : Type χ}
@@ -139,8 +131,6 @@ The converse of the foregoing result is almost too obvious to bother with. Nonet
 
 
 ```agda
-
-
  H-id2 : H ℓ 𝒦 ⊫ (p ≈̇ q) → 𝒦 ⊫ (p ≈̇ q)
  H-id2 Hpq 𝑨 kA = Hpq 𝑨 (𝑨 , (kA , IdHomImage))
 ```
@@ -151,8 +141,6 @@ The converse of the foregoing result is almost too obvious to bother with. Nonet
 
 
 ```agda
-
-
  S-id1 : 𝒦 ⊫ (p ≈̇ q) → (S {β = α}{ρᵃ} ℓ 𝒦) ⊫ (p ≈̇ q)
  S-id1 σ 𝑩 (𝑨 , kA , B≤A) = ⊧-S-invar{p = p}{q} (σ 𝑨 kA) B≤A
 
@@ -167,8 +155,6 @@ The converse of the foregoing result is almost too obvious to bother with. Nonet
 
 
 ```agda
-
-
  P-id1 : ∀{ι} → 𝒦 ⊫ (p ≈̇ q) → P {β = α}{ρᵃ}ℓ ι 𝒦 ⊫ (p ≈̇ q)
  P-id1 σ 𝑨 (I , 𝒜 , kA , A≅⨅A) = ⊧-I-invar 𝑨 p q IH (≅-sym A≅⨅A)
   where
@@ -189,8 +175,6 @@ Finally, we prove the analogous preservation lemmas for the closure operator `V`
 
 
 ```agda
-
-
 module _  {α ρᵃ ℓ ι χ : Level}
           {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)}
           {X : Type χ}
@@ -230,8 +214,6 @@ modeled by `𝒦`.   We formalize this observation as follows.
 
 
 ```agda
-
-
  classIds-⊆-VIds : 𝒦 ⊫ (p ≈̇ q)  → (p , q) ∈ Th (V ℓ ι 𝒦)
  classIds-⊆-VIds pKq 𝑨 = V-id1 pKq 𝑨
 

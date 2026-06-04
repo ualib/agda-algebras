@@ -11,8 +11,6 @@ This is the [Setoid.Homomorphisms.Factor][] module of the [Agda Universal Algebr
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using (𝓞 ; 𝓥 ; Signature)
@@ -56,8 +54,6 @@ We will prove this in case h is both surjective and injective.
 
 
 ```agda
-
-
 module _  {𝑨 : Algebra α ρᵃ} (𝑩 : Algebra β ρᵇ) {𝑪 : Algebra γ ρᶜ}
           (gh : hom 𝑨 𝑩)(hh : hom 𝑨 𝑪) where
 
@@ -127,8 +123,6 @@ If, in addition, `g` is surjective, then so will be the factor `φ`.
 
 
 ```agda
-
-
  HomFactorEpi :  kernelRel _≈₃_ h ⊆ kernelRel _≈₂_ g
   →              IsSurjective hfunc → IsSurjective gfunc
                  -------------------------------------------------

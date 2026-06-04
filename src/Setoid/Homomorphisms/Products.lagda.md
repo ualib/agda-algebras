@@ -11,8 +11,6 @@ This is the [Setoid.Homomorphisms.Products][] module of the [Agda Universal Alge
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using (𝓞 ; 𝓥 ; Signature)
@@ -47,8 +45,6 @@ we can construct a homomorphism from `𝑨` to the product `⨅ ℬ` in the natu
 
 
 ```agda
-
-
 module _ {I : Type 𝓘}{𝑨 : Algebra a α }(ℬ : I → Algebra b β)  where
  open Algebra 𝑨      using ()        renaming ( Domain to A )
  open Algebra (⨅ ℬ)  using ()        renaming ( Domain to ⨅B )
@@ -84,8 +80,6 @@ a homomorphism from `⨅ 𝒜` to `⨅ ℬ` in the following natural way.
 
 
 ```agda
-
-
  ⨅-hom : (𝒜 : I → Algebra a α) → (∀ (i : I) → hom (𝒜 i) (ℬ i)) → hom (⨅ 𝒜)(⨅ ℬ)
  ⨅-hom 𝒜 𝒽 = F , isHom
   where
@@ -108,8 +102,6 @@ onto one of its factors is a homomorphism.
 
 
 ```agda
-
-
  ⨅-projection-hom : (i : I) → hom (⨅ ℬ) (ℬ i)
  ⨅-projection-hom i = F , isHom
   where

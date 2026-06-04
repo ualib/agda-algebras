@@ -9,8 +9,6 @@ author: "agda-algebras development team"
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using (𝓞 ; 𝓥 ; Signature)
@@ -64,8 +62,6 @@ Alternatively, we could let `X` be the product of all algebras in the class `�
 
 
 ```agda
-
-
 module FreeHom (χ : Level){α ρᵃ ℓ : Level}
                {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
  private
@@ -80,8 +76,6 @@ The relatively free algebra (relative to `Th 𝒦`) is called `M` and is derived
 
 
 ```agda
-
-
  -- ℐ indexes the collection of equations modeled by 𝒦
  ℐ : Type ι
  ℐ = Σ[ eq ∈ Eq{χ} ] 𝒦 ⊫ ((lhs eq) ≈̇ (rhs eq))
@@ -104,8 +98,6 @@ Finally, we define an epimorphism from `𝑻 X` onto the relatively free algebra
 
 
 ```agda
-
-
  epi𝔽[_] : (X : Type χ) → epi (𝑻 X) 𝔽[ X ]
  epi𝔽[ X ] = h , hepi
   where

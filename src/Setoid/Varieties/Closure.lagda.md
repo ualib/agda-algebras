@@ -15,8 +15,6 @@ Fix a signature 𝑆, let 𝒦 be a class of 𝑆-algebras, and define
 
 
 ```agda
-
-
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using (𝓞 ; 𝓥 ; Signature)
@@ -89,8 +87,6 @@ With the closure operator V representing closure under HSP, we represent formall
 
 
 ```agda
-
-
 module _ {α ρᵃ ℓ ι : Level} where
 
  is-variety : (𝒱 : Pred (Algebra α ρᵃ)(α ⊔ ρᵃ ⊔ ov ℓ)) → Type (ov (α ⊔ ρᵃ ⊔ ℓ ⊔ ι))
@@ -107,7 +103,6 @@ module _ {α ρᵃ ℓ ι : Level} where
 
 
 ```agda
-
 module _ {α ρᵃ : Level} where
 
  private a = α ⊔ ρᵃ
@@ -124,8 +119,6 @@ Of course, this is proved by establishing two inclusions, but one of them is tri
 
 
 ```agda
-
-
  S-idem :  ∀{β ρᵇ γ ρᶜ ℓ} → {𝒦 : Pred (Algebra α ρᵃ)(a ⊔ ov ℓ)}
   →        S{β = γ}{ρᶜ} (a ⊔ ℓ) (S{β = β}{ρᵇ} ℓ 𝒦) ⊆ S{β = γ}{ρᶜ} ℓ 𝒦
 
@@ -140,8 +133,6 @@ Of course, this is proved by establishing two inclusions, but one of them is tri
 
 
 ```agda
-
-
  H-expa : ∀{ℓ} → {𝒦 : Pred (Algebra α ρᵃ)(a ⊔ ov ℓ)} → 𝒦 ⊆ H ℓ 𝒦
  H-expa {ℓ} {𝒦}{𝑨} kA = 𝑨 , kA , IdHomImage
 
@@ -192,8 +183,6 @@ We sometimes want to go back and forth between our two representations of subalg
 
 
 ```agda
-
-
 module _  {α ρᵃ β ρᵇ ℓ ι : Level}{𝒦 : Pred (Algebra α ρᵃ)(α ⊔ ρᵃ ⊔ ov ℓ)}
           {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
 
@@ -229,8 +218,6 @@ The remaining theorems in this file are as yet unused, but may be useful later a
 
 
 ```agda
-
-
 module _ {α ρᵃ ℓ ι : Level}{𝒦 : Pred (Algebra α ρᵃ)(α ⊔ ρᵃ ⊔ ov ℓ)} where
 
  -- For reference, some useful type levels:
