@@ -26,9 +26,9 @@ in this non-parameterized module removes the spurious parameter at the source.
 [Setoid.Algebras.Basic][] re-exports both names, so importing them from there is
 unaffected.
 
-(The setoid-algebra approach is inspired by the one taken, e.g., by Andreas Abel
-in his formalization of Birkhoff's completeness theorem; a
-[pdf is available here](http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf).)
+The setoid-algebra approach was inspired by Andreas Abel's formalization of
+Birkhoff's completeness theorem; see:
+http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf.
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -38,7 +38,7 @@ module Setoid.Algebras.Setoid where
 -- Imports from the Agda and the Agda Standard Library --------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
 open import Data.Product     using ( _,_ ; Σ-syntax )
-open import Level            using ( Level )
+open import Level            using ( Level ; _⊔_ )
 open import Relation.Binary  using ( Setoid ; IsEquivalence )
 
 open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl )
@@ -55,27 +55,30 @@ open Setoid
 
 `EqArgs` is the equality on the argument tuples of a pair of operation symbols.
 Given a proof `f ≡ g` that the two symbols agree, two tuples are `EqArgs`-related
-when they are pointwise equal in the underlying setoid `ξ`.
+when they are pointwise equal in the underlying setoid `A`.
 
 ```agda
-EqArgs :  {𝑆 : Signature 𝓞 𝓥}{ξ : Setoid α ρ}
- →        ∀{f g} → f ≡ g → (ArityOf 𝑆 f → Carrier ξ) → (ArityOf 𝑆 g → Carrier ξ) → Type _
+EqArgs : {𝑆 : Signature 𝓞 𝓥} (A : Setoid α ρ)
+  → ∀{f g} → f ≡ g → (ArityOf 𝑆 f → Carrier A) → (ArityOf 𝑆 g → Carrier A)
+  → Type (𝓥 ⊔ ρ)
 
-EqArgs {ξ = ξ} refl u v = ∀ i → (_≈_ ξ) (u i) (v i)
+EqArgs A refl u v = ∀ i → u i ≈ᴬ v i
+  where open Setoid A using () renaming ( _≈_ to _≈ᴬ_ )
 ```
 
-`⟨ 𝑆 ⟩ ξ` is the setoid whose carrier is a single operation symbol paired with a
-tuple of its arguments drawn from `ξ`, and whose equality is `EqArgs`{.AgdaFunction}.
+`⟨ 𝑆 ⟩ A` is the setoid whose carrier is a single operation symbol paired with a
+tuple of its arguments drawn from `A`, and whose equality is `EqArgs`{.AgdaFunction}.
 This is the polynomial functor of the signature `𝑆`, lifted to setoids.
 
 ```agda
-⟨_⟩ : Signature 𝓞 𝓥 → Setoid α ρ → Setoid _ _
-Carrier (⟨ 𝑆 ⟩ ξ) = Σ[ f ∈ OperationSymbolsOf 𝑆 ] (ArityOf 𝑆 f → ξ .Carrier)
-_≈_ (⟨ 𝑆 ⟩ ξ) (f , u) (g , v) = Σ[ eqv ∈ f ≡ g ] EqArgs{ξ = ξ} eqv u v
+⟨_⟩ : Signature 𝓞 𝓥 → Setoid α ρ → Setoid (𝓞 ⊔ 𝓥 ⊔ α) (𝓞 ⊔ 𝓥 ⊔ ρ)
+Carrier (⟨ 𝑆 ⟩ A) = Σ[ f ∈ OperationSymbolsOf 𝑆 ] (ArityOf 𝑆 f → A .Carrier)
+_≈_ (⟨ 𝑆 ⟩ A) (f , u) (g , v) = Σ[ eqv ∈ f ≡ g ] EqArgs A eqv u v
 
-IsEquivalence.refl   (isEqv (⟨ 𝑆 ⟩ ξ))                      = refl , λ _ → reflS   ξ
-IsEquivalence.sym    (isEqv (⟨ 𝑆 ⟩ ξ))(refl , g)            = refl , λ i → symS    ξ (g i)
-IsEquivalence.trans  (isEqv (⟨ 𝑆 ⟩ ξ))(refl , g)(refl , h)  = refl , λ i → transS  ξ (g i) (h i)
+IsEquivalence.refl (isEqv (⟨ 𝑆 ⟩ A)) = refl , λ _ → reflS A
+IsEquivalence.sym (isEqv (⟨ 𝑆 ⟩ A)) (refl , g) = refl , λ i → symS A (g i)
+IsEquivalence.trans (isEqv (⟨ 𝑆 ⟩ A)) (refl , g) (refl , h) =
+  refl , λ i → transS  A (g i) (h i)
 ```
 
 --------------------------------
