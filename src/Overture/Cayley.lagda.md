@@ -86,16 +86,21 @@ defining equations without writing a single case by hand.
 #### A note on the operation type
 
 This module types a binary operation as a bare `Fin n → Fin n → Fin n` rather than
-the library's tuple-indexed `Op`{.AgdaFunction}.  That is a deliberate, temporary
-choice: the library currently carries *two* declarations of `Op`{.AgdaFunction} —
-`Overture.Operations.Op`{.AgdaFunction} `A I` (carrier first) and
-`Classical.Operations.Op`{.AgdaFunction} `I A` (arity first) — and the right fix is to
-consolidate them into a single canonical `Op`{.AgdaFunction} in
-`Overture.Operations`{.AgdaModule} before threading it through new constructions.
-That consolidation has a wide blast radius and is tracked as a milestone-4 style
-sweep ([#354](https://github.com/ualib/agda-algebras/issues/354)); once it lands,
-`⟦_⟧`{.AgdaFunction} and the checkers in [`Overture.Operations.Properties`][] can be
-re-expressed over the canonical `Op`{.AgdaFunction} if that reads better.
+the library's tuple-indexed `Op`{.AgdaFunction}, and it stays that way now that the
+`Op`{.AgdaFunction} consolidation
+([#354](https://github.com/ualib/agda-algebras/issues/354)) has landed: there is a
+single canonical, arity-first `Op I A = (I → A) → A` in
+`Overture.Operations`{.AgdaModule}.  That tuple-indexed shape is the right one for the
+universal-algebra meta-theory, but it is the wrong shape for a Cayley table.  A table
+is read in *curried* form — `⟦ t ⟧ a b` is the row-`a`, column-`b` entry — and the
+`Classical`{.AgdaModule} builders (`opsToMagma`{.AgdaFunction}, `eqsToGroup`{.AgdaFunction}, …)
+that consume `⟦_⟧`{.AgdaFunction} take their binary operation curried as
+`Fin n → Fin n → Fin n`.  Routing `⟦_⟧`{.AgdaFunction} through the tuple-indexed
+`Op (Fin 2) (Fin n)` would only insert `Curry₂`/`Uncurry₂` adapters at every call site
+and obscure the two-dimensional table, so the finite Cayley-table case keeps the plain
+curried function type.  The decidable-law checkers in [`Overture.Operations.Properties`][]
+take the same bare `Fin n → Fin n → Fin n`, for the same reason: finiteness is what
+makes the laws decidable, independently of how an operation's arguments are packaged.
 
 --------------------------------------
 

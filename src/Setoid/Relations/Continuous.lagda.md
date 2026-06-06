@@ -113,11 +113,11 @@ eval-Rel :  {A : Type α}{I : Type ι}
 eval-Rel R J t = (j : J) → R (λ i → t i j)
 ```
 
-A relation `R` is *compatible* with an operation `f : Op A J` if, for every `I`-tuple-of-`J`-tuples whose `J`-indexed rows lie in `R`, applying `f` columnwise yields a tuple in `R`.
+A relation `R` is *compatible* with an operation `f : Op J A` if, for every `I`-tuple-of-`J`-tuples whose `J`-indexed rows lie in `R`, applying `f` columnwise yields a tuple in `R`.
 
 ```agda
 compatible-Rel :  {A : Type α}{I J : Type ι}
-  →                Op A J → Rel A I {ρ} → Type (ι ⊔ α ⊔ ρ)
+  →                Op J A → Rel A I {ρ} → Type (ι ⊔ α ⊔ ρ)
 compatible-Rel f R = ∀ t → eval-Rel R arity[ f ] t → R (λ i → f (t i))
 ```
 
@@ -133,7 +133,7 @@ eval-REL :  {I : Type ι}{𝒜 : I → Type α}{J : Type ι}
 eval-REL {J = J} R t = (j : J) → R (λ i → t i j)
 
 compatible-REL :  {I J : Type ι}{𝒜 : I → Type α}
-  →                (∀ i → Op (𝒜 i) J)
+  →                (∀ i → Op J (𝒜 i))
   →                REL I 𝒜 {ρ}
   →                Type (ι ⊔ α ⊔ ρ)
 compatible-REL 𝑓 R = ∀ t → eval-REL R t → R (λ i → 𝑓 i (t i))

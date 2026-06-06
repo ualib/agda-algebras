@@ -67,7 +67,7 @@ type* `Type α` as follows.
 ```agda
 Algebra : (α : Level) → Type (𝓞 ⊔ 𝓥 ⊔ suc α)
 Algebra α =  Σ[ A ∈ Type α ]                 -- the domain
-             ∀ (f : ∣ 𝑆 ∣) → Op A (∥ 𝑆 ∥ f)  -- the basic operations
+             ∀ (f : ∣ 𝑆 ∣) → Op (∥ 𝑆 ∥ f) A  -- the basic operations
 ```
 
 It would be more precise to refer to inhabitants of this type as ∞-*algebras*
@@ -169,7 +169,7 @@ bespoke tools designed specifically for our operation and algebra types.
 ```agda
 open Level
 
-Lift-alg-op : {I : Type 𝓥} {A : Type α} → Op A I → (β : Level) → Op (Lift β A) I
+Lift-alg-op : {I : Type 𝓥} {A : Type α} → Op I A → (β : Level) → Op I (Lift β A)
 Lift-alg-op f β = λ x → lift (f (λ i → lower (x i)))
 
 Lift-Alg : Algebra α → (β : Level) → Algebra (α ⊔ β)

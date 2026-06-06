@@ -307,6 +307,14 @@ The mechanical sweep replacing `∣_∣` / `∥_∥` with the standard `proj₁`
 **Scope note**.  Once #367 lands, the live trees (`Overture/`, `Setoid/`, `Classical/`, `Demos/ContraX`, `Examples/`) are on `proj₁` / `proj₂`, and the bracket definitions remain in `Overture.Basic` under a `WARNING_ON_USAGE` so `Legacy/` keeps compiling.  The `∣` glyph legitimately survives outside `Legacy/` in the `_∣≈_` / `_∥≈_` operators, the `∣_∣=∣_∣` / `∣_∣≈∣_∣` bijection operators (`Examples.FunctionTypeBijections`), the `∣A∣`-style Carrier-alias identifiers, and CSP math prose; and the self-contained `Demos/HSP` keeps its own bracket notation.
 
 
+### Operations
+
+| Symbol | Meaning | Source | Status/Plan |
+|---|---|---|---|
+| `Op` | `Op I A = (I → A) → A`, the type of `I`-ary operations on a carrier `A` — **arity first, carrier second** | `Overture.Operations` (re-exported by `Overture` and `Classical.Operations`) | **canonical** |
+
+There is exactly one `Op` library-wide, declared in `Overture.Operations` with the arity-first argument order `Op I A`.  Arity first lets `Op (Fin 2)` partially apply as "the type of binary operations on any carrier," the convention the `Curry` / `Uncurry` / `pair` family in `Classical.Operations` is built on.  `Classical.Operations` re-exports it (the former arity-first duplicate there is now that re-export), and the carrier-first uses in `Legacy/` were migrated to arity-first in the same sweep (#354).
+
 ### Universe levels
 
 | Symbol | Meaning |

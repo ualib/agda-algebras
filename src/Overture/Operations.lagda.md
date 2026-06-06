@@ -33,18 +33,19 @@ open import Level                        using ( Level ; _⊔_ )
 
 private variable a b ρ 𝓥 : Level
 
--- The type of operations on A of arity I
-Op : Type a → Type 𝓥 → Type (a ⊔ 𝓥)
-Op A I = (I → A) → A
+-- The type of I-ary operations on A.  Arity first, carrier second, so that
+-- `Op (Fin 2)` partially applies as "the type of binary operations on any A".
+Op : Type 𝓥 → Type a → Type (a ⊔ 𝓥)
+Op I A = (I → A) → A
 ```
 
 
-For example, the `I`-*ary projection operations* on `A` are represented as inhabitants of the type `Op A I` as follows.
+For example, the `I`-*ary projection operations* on `A` are represented as inhabitants of the type `Op I A` as follows.
 
 
 ```agda
 -- Example (projections)
-π : {I : Type 𝓥} {A : Type a } → I → Op A I
+π : {I : Type 𝓥} {A : Type a } → I → Op I A
 π i = λ x → x i
 ```
 
@@ -54,7 +55,7 @@ Occasionally we want to extract the arity of a given operation symbol.
 
 ```agda
 -- return the arity of a given operation symbol
-arity[_] : {I : Type 𝓥} {A : Type a } → Op A I → Type 𝓥
+arity[_] : {I : Type 𝓥} {A : Type a } → Op I A → Type 𝓥
 arity[_] {I = I} f = I
 ```
 

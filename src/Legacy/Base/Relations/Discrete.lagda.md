@@ -180,22 +180,22 @@ eval-pred P u v = ∀ i → (u i , v i) ∈ P
 If `f : Op I` and `R : Rel A b`, then we say `f` and `R` are *compatible* just in case `∀ u v : I → A`, `Π i ꞉ I , R (u i) (v i)  →  R (f u) (f v)`.
 
 ```agda
-_preserves_ : {A : Type a}{I : Type 𝓥} → Op A I → BinRel A ρ → Type (a ⊔ 𝓥 ⊔ ρ)
+_preserves_ : {A : Type a}{I : Type 𝓥} → Op I A → BinRel A ρ → Type (a ⊔ 𝓥 ⊔ ρ)
 f preserves R  = ∀ u v → (eval-rel R) u v → R (f u) (f v)
 
 --shorthand notation for preserves
-_|:_ : {A : Type a}{I : Type 𝓥} → Op A I → BinRel A ρ → Type (a ⊔ 𝓥 ⊔ ρ)
+_|:_ : {A : Type a}{I : Type 𝓥} → Op I A → BinRel A ρ → Type (a ⊔ 𝓥 ⊔ ρ)
 f |: R  = (eval-rel R) =[ f ]⇒ R
 
 -- predicate version of the compatibility relation
-_preserves-pred_ : {A : Type a}{I : Type 𝓥} → Op A I → Pred ( A × A ) ρ → Type (a ⊔ 𝓥 ⊔ ρ)
+_preserves-pred_ : {A : Type a}{I : Type 𝓥} → Op I A → Pred ( A × A ) ρ → Type (a ⊔ 𝓥 ⊔ ρ)
 f preserves-pred P  = ∀ u v → (eval-pred P) u v → (f u , f v) ∈ P
 
-_|:pred_ : {A : Type a}{I : Type 𝓥} → Op A I → Pred (A × A) ρ → Type (a ⊔ 𝓥 ⊔ ρ)
+_|:pred_ : {A : Type a}{I : Type 𝓥} → Op I A → Pred (A × A) ρ → Type (a ⊔ 𝓥 ⊔ ρ)
 f |:pred P  = (eval-pred P) =[ f ]⇒ λ x y → (x , y) ∈ P
 
 -- The two types just defined are logically equivalent.
-module _ {A : Type a}{I : Type 𝓥}{f : Op A I}{R : BinRel A ρ} where
+module _ {A : Type a}{I : Type 𝓥}{f : Op I A}{R : BinRel A ρ} where
  compatibility-agreement : f preserves R → f |: R
  compatibility-agreement c {x}{y} Rxy = c x y Rxy
  compatibility-agreement' : f |: R → f preserves R

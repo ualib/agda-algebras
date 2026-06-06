@@ -29,6 +29,9 @@ open import Data.Fin.Base     using ( Fin )
 open import Data.Fin.Patterns using ( 0F ; 1F )
 open import Level             using ( Level )
 
+-- Imports from the Agda Universal Algebra Library ----------------------
+open import Overture.Operations using ( Op ) public
+
 private variable
   α : Level
   A : Type α
@@ -36,12 +39,7 @@ private variable
 
 #### Operation types
 
-The type `Op I A` of `I`-ary operations on `A`, in tuple-indexed form.  Arity first, carrier second: this orders parameters from "less likely to vary" to "more likely to vary," which is the right convention for partial application — `Op (Fin 2)` partially applies as "binary operation," independent of any carrier.
-
-```agda
-Op : {𝓥 : Level} → Type 𝓥 → Type α → Type _
-Op I A = (I → A) → A
-```
+The type `Op I A` of `I`-ary operations on `A`, in tuple-indexed form, is the single canonical `Op`{.AgdaFunction} from [Overture.Operations][] (arity first, carrier second: `Op (Fin 2)` partially applies as "binary operation," independent of any carrier).  It is re-exported here (see the import above), so the `Curry`/`Uncurry`/`pair` family below — and any `Classical/` consumer that imports `Op` from this module — are unaffected by the consolidation.  This module previously declared its own identical arity-first `Op`; that duplicate is now the re-export, leaving exactly one `Op` declaration library-wide.
 
 #### Two-element argument tuple
 
