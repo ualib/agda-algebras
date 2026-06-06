@@ -35,13 +35,13 @@ Structure : (𝑅 F : Signature){α ρ : Level} → Type (suc (α ⊔ ρ))
 Structure 𝑅 𝐹 {α}{ρ} =
   Σ[ A ∈ Type α ]                        -- the domain of the structure is A
   ( ((r : ∣ 𝑅 ∣) → Rel A (snd 𝑅 r){ρ})   -- the interpretations of the relation symbols
-  × ((f : ∣ 𝐹 ∣) → Op A (snd 𝐹 f)) )     -- the interpretations of the operation symbols
+  × ((f : ∣ 𝐹 ∣) → Op (snd 𝐹 f) A) )     -- the interpretations of the operation symbols
 
 RStructure : Signature → {α ρ : Level} → Type (suc (α ⊔ ρ))
 RStructure 𝑅 {α} {ρ} = Σ[ A ∈ Type α ] ∀(r : ∣ 𝑅 ∣) → Rel A (snd 𝑅 r) {ρ}
 
 AStructure : Signature → {α : Level} → Type (suc α)
-AStructure 𝐹 {α} = Σ[ A ∈ Type α ] ∀ (f : ∣ 𝐹 ∣) → Op A (snd 𝐹 f)
+AStructure 𝐹 {α} = Σ[ A ∈ Type α ] ∀ (f : ∣ 𝐹 ∣) → Op (snd 𝐹 f) A
 
 module _ {𝑅 𝐹 : Signature} {α ρ : Level} where
 
@@ -56,13 +56,13 @@ module _ {𝑅 𝐹 : Signature} {α ρ : Level} where
  _⟦_⟧ᵣ : (𝒜 : Structure 𝑅 𝐹 {α}{ρ})(𝑟 : ∣ 𝑅 ∣) → Rel ∣ 𝒜 ∣ (∥ 𝑅 ∥ 𝑟) {ρ}
  𝒜 ⟦ 𝑟 ⟧ᵣ = λ a → (fst ∥ 𝒜 ∥ 𝑟) a
 
- _⟦_⟧ₒ : (𝒜 : Structure 𝑅 𝐹 {α}{ρ})(𝑓 : ∣ 𝐹 ∣) → Op ∣ 𝒜 ∣ (∥ 𝐹 ∥ 𝑓)
+ _⟦_⟧ₒ : (𝒜 : Structure 𝑅 𝐹 {α}{ρ})(𝑓 : ∣ 𝐹 ∣) → Op (∥ 𝐹 ∥ 𝑓) ∣ 𝒜 ∣
  𝒜 ⟦ 𝑓 ⟧ₒ = λ a → (snd ∥ 𝒜 ∥ 𝑓) a
 
  _ʳ_ : (𝑟 : ∣ 𝑅 ∣)(𝒜 : Structure 𝑅 𝐹 {α}) → Rel ∣ 𝒜 ∣ (∥ 𝑅 ∥ 𝑟){ρ}
  𝑟 ʳ 𝒜 = λ a → (𝒜 ⟦ 𝑟 ⟧ᵣ) a
 
- _ᵒ_ : (𝑓 : ∣ 𝐹 ∣)(𝒜 : Structure 𝑅 𝐹 {α}{ρ}) → Op ∣ 𝒜 ∣(∥ 𝐹 ∥ 𝑓)
+ _ᵒ_ : (𝑓 : ∣ 𝐹 ∣)(𝒜 : Structure 𝑅 𝐹 {α}{ρ}) → Op (∥ 𝐹 ∥ 𝑓) ∣ 𝒜 ∣
  𝑓 ᵒ 𝒜 = λ a → (𝒜 ⟦ 𝑓 ⟧ₒ) a
 
  Compatible : {ρ' : Level}(𝑨 : Structure 𝑅 𝐹{α}{ρ}) → BinRel ∣ 𝑨 ∣ ρ'  → Type (α ⊔ ρ')
@@ -73,7 +73,7 @@ module _ {𝑅 𝐹 : Signature} {α ρ : Level} where
 
  open Level
 
- Lift-op : {I : Type ℓ₀}{A : Type α} → Op A I → (ℓ : Level) → Op (Lift ℓ A) I
+ Lift-op : {I : Type ℓ₀}{A : Type α} → Op I A → (ℓ : Level) → Op I (Lift ℓ A)
  Lift-op f ℓ = λ x → lift (f (λ i → lower (x i)))
 
  Lift-rel : {I : Type ℓ₀}{A : Type α} → Rel A I {ρ} → (ℓ : Level) → Rel (Lift ℓ A) I{ρ}
@@ -84,7 +84,7 @@ module _ {𝑅 𝐹 : Signature} {α ρ : Level} where
   where
   lrel : (r : ∣ 𝑅 ∣) → Rel (Lift ℓ ∣ 𝑨 ∣)(∥ 𝑅 ∥ r){ρ}
   lrel r = λ x → ((r ʳ 𝑨) (λ i → lower (x i)))
-  lop : (f : ∣ 𝐹 ∣) → Op (Lift ℓ ∣ 𝑨 ∣) (∥ 𝐹 ∥ f)
+  lop : (f : ∣ 𝐹 ∣) → Op (∥ 𝐹 ∥ f) (Lift ℓ ∣ 𝑨 ∣)
   lop f = λ x → lift ((f ᵒ 𝑨)( λ i → lower (x i)))
 
  Lift-Strucʳ : (ℓ : Level) → Structure 𝑅 𝐹 {α}{ρ} → Structure 𝑅 𝐹 {α}{ρ = (ρ ⊔ ℓ)}

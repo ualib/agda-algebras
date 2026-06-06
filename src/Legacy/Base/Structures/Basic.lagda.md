@@ -52,7 +52,7 @@ record structure  (𝐹 : signature 𝓞₀ 𝓥₀)
  where
  field
   carrier : Type α
-  op   : ∀(f : symbol 𝐹) → Op  carrier (arity 𝐹 f)      -- interpret. of operations
+  op   : ∀(f : symbol 𝐹) → Op (arity 𝐹 f) carrier      -- interpret. of operations
   rel  : ∀(r : symbol 𝑅) → Rel carrier (arity 𝑅 r) {ρ}  -- interpret. of relations
 
  -- Forgetful Functor
@@ -68,7 +68,7 @@ module _ {𝐹 : signature 𝓞₀ 𝓥₀}{𝑅 : signature 𝓞₁ 𝓥₁} wh
  _ʳ_ = flip rel
 
  _ᵒ_ :  ∀{α ρ} → (f : symbol 𝐹)(𝒜 : structure 𝐹 𝑅 {α}{ρ})
-  →     Op (carrier 𝒜)((arity 𝐹) f)
+  →     Op ((arity 𝐹) f) (carrier 𝒜)
  _ᵒ_ = flip op
 
  compatible :  ∀{α ρ ℓ} → (𝑨 : structure 𝐹 𝑅 {α}{ρ})
@@ -79,7 +79,7 @@ module _ {𝐹 : signature 𝓞₀ 𝓥₀}{𝑅 : signature 𝓞₁ 𝓥₁} wh
 
  -- lift an operation to act on type of higher universe level
  Lift-op :  ∀{ι α} → {I : Type ι}{A : Type α}
-  →         Op A I → {ℓ : Level} → Op (Lift ℓ A) I
+  →         Op I A → {ℓ : Level} → Op I (Lift ℓ A)
 
  Lift-op f = λ z → lift (f (lower ∘ z))
 

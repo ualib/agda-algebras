@@ -53,7 +53,7 @@ inputs result in equal outputs.
 ```agda
 
 
-welldef : {A : Type α}{I : Type 𝓥}(f : Op A I) → ∀ u v → u ≡ v → f u ≡ f v
+welldef : {A : Type α}{I : Type 𝓥}(f : Op I A) → ∀ u v → u ≡ v → f u ≡ f v
 welldef f u v = cong f
 ```
 
@@ -68,7 +68,7 @@ this formalize this notation in the following type.
 
 
 swelldef : ∀ ι α → Type (suc (α ⊔ ι))
-swelldef ι α =  ∀ {I : Type ι}{A : Type α}(f : Op A I)(u v : I → A)
+swelldef ι α =  ∀ {I : Type ι}{A : Type α}(f : Op I A)(u v : I → A)
  →              u ≈ v → f u ≡ f v
 
 funext→swelldef : {α 𝓥 : Level} → funext 𝓥 α → swelldef 𝓥 α

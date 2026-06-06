@@ -108,7 +108,7 @@ belonging to `R`, the tuple whose elements are the result of applying `f` to
 sections of `t` also belongs to `R`.
 
 ```agda
- compatible-Rel : {I J : ar}{A : Type a} → Op(A) J → Rel A I{ρ} → Type (𝓥 ⊔ a ⊔ ρ)
+ compatible-Rel : {I J : ar}{A : Type a} → Op J A → Rel A I{ρ} → Type (𝓥 ⊔ a ⊔ ρ)
  compatible-Rel f R  = ∀ t → eval-Rel R arity[ f ] t → R λ i → f (t i)
  -- (inferred type of t is I → J → A)
 ```
@@ -126,7 +126,7 @@ sections of `t` also belongs to `R`.
  eval-REL{I = I}{J}{𝒜} R t = ∀ j → R λ i → (t i) j
 
  compatible-REL :  {I J : ar}{𝒜 : I → Type a}
-  →                (∀ i → Op (𝒜 i) J)  -- for each i : I, an operation of type  Op(𝒜 i){J} = (J → 𝒜 i) → 𝒜 i
+  →                (∀ i → Op J (𝒜 i))  -- for each i : I, an operation of type  Op J (𝒜 i) = (J → 𝒜 i) → 𝒜 i
   →                REL I 𝒜 {ρ}         -- a subset of Π[ i ∈ I ] 𝒜 i
                                        -- (where Π[ i ∈ I ] 𝒜 i is a type of dependent functions or "tuples")
   →                Type (𝓥 ⊔ a ⊔ ρ)
