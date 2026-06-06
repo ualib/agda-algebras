@@ -177,7 +177,7 @@ eval-pred : {A : Type a}{I : Type 𝓥} → Pred (A × A) ρ → BinRel (I → A
 eval-pred P u v = ∀ i → (u i , v i) ∈ P
 ```
 
-If `f : Op I` and `R : Rel A b`, then we say `f` and `R` are *compatible* just in case `∀ u v : I → A`, `Π i ꞉ I , R (u i) (v i)  →  R (f u) (f v)`.
+If `f : Op I A` and `R : BinRel A ρ`, then we say `f` and `R` are *compatible* just in case `∀ u v : I → A`, `Π i ꞉ I , R (u i) (v i)  →  R (f u) (f v)`.
 
 ```agda
 _preserves_ : {A : Type a}{I : Type 𝓥} → Op I A → BinRel A ρ → Type (a ⊔ 𝓥 ⊔ ρ)
