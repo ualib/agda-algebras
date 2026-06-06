@@ -18,7 +18,7 @@ module Setoid.Algebras.Basic {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from the Agda and the Agda Standard Library --------------------
 open import Agda.Primitive   using ( _⊔_ ; lsuc ) renaming ( Set to Type )
-open import Data.Product     using ( _,_ ; _×_ ; Σ-syntax )
+open import Data.Product     using ( _,_ )
 open import Function         using ( _∘_ ; _∘₂_ ; Func ; _$_ )
 open import Level            using ( Level )
 open import Relation.Binary  using ( Setoid ; IsEquivalence )
@@ -26,7 +26,8 @@ open import Relation.Binary  using ( Setoid ; IsEquivalence )
 open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ ; refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------
-open import Overture    using ( proj₂ ; proj₁ ; OperationSymbolsOf ; ArityOf )
+open import Overture                using ( proj₂ ; proj₁ ; OperationSymbolsOf ; ArityOf )
+open import Setoid.Algebras.Setoid  public using ( EqArgs ; ⟨_⟩ )
 
 private variable α ρ ι : Level
 
@@ -41,29 +42,19 @@ Here we define algebras over a setoid, instead of a mere type with no equivalenc
 
 (This approach is inspired by the one taken, e.g., by Andreas Abel in his formalization Birkhoff's completeness theorem; a [pdf is available here](http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf).)
 
-First we define an operator that translates an ordinary signature into a signature over a setoid domain.
+The operator `⟨_⟩`{.AgdaFunction} that translates an ordinary signature into a
+signature over a setoid domain — together with its companion `EqArgs`{.AgdaFunction} —
+is defined in the signature-generic module [Setoid.Algebras.Setoid][] and re-exported
+here (see the import above).  Both take their signature as an explicit argument, so
+housing them in a non-parameterized module keeps the unused `{𝑆 : Signature 𝓞 𝓥}`
+parameter of this module from riding along as an unsolvable metavariable at use
+sites.  `Algebra`{.AgdaRecord}'s `Interp`{.AgdaField} field below applies the
+re-exported `⟨ 𝑆 ⟩`{.AgdaFunction} to this module's signature `𝑆`.
 
 ```agda
-open Setoid
- using (_≈_ ; Carrier )
- renaming ( refl to reflS ; sym to symS ; trans to transS ; isEquivalence to isEqv )
+open Setoid using ( _≈_ ; Carrier )
 
 open Func renaming ( to to _⟨$⟩_ ; cong to ≈cong )
-
-
-EqArgs :  {𝑆 : Signature 𝓞 𝓥}{ξ : Setoid α ρ}
- →        ∀{f g} → f ≡ g → (ArityOf 𝑆 f → Carrier ξ) → (ArityOf 𝑆 g → Carrier ξ) → Type _
-
-EqArgs {ξ = ξ} refl u v = ∀ i → (_≈_ ξ) (u i) (v i)
-
-
-⟨_⟩ : Signature 𝓞 𝓥 → Setoid α ρ → Setoid _ _
-Carrier (⟨ 𝑆 ⟩ ξ) = Σ[ f ∈ OperationSymbolsOf 𝑆 ] (ArityOf 𝑆 f → ξ .Carrier)
-_≈_ (⟨ 𝑆 ⟩ ξ) (f , u) (g , v) = Σ[ eqv ∈ f ≡ g ] EqArgs{ξ = ξ} eqv u v
-
-IsEquivalence.refl   (isEqv (⟨ 𝑆 ⟩ ξ))                      = refl , λ _ → reflS   ξ
-IsEquivalence.sym    (isEqv (⟨ 𝑆 ⟩ ξ))(refl , g)            = refl , λ i → symS    ξ (g i)
-IsEquivalence.trans  (isEqv (⟨ 𝑆 ⟩ ξ))(refl , g)(refl , h)  = refl , λ i → transS  ξ (g i) (h i)
 ```
 
 A setoid algebra is just like an algebra but we require that all basic operations
