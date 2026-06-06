@@ -16,12 +16,13 @@ as opposed to "bare" types (see [Base.lagda][]).
 
 module Setoid where
 
-open import Setoid.Relations
-open import Setoid.Functions
 open import Setoid.Algebras
+open import Setoid.Functions
 open import Setoid.Homomorphisms
-open import Setoid.Terms
+open import Setoid.Relations
+open import Setoid.Signatures
 open import Setoid.Subalgebras
+open import Setoid.Terms
 open import Setoid.Varieties
 ```
 

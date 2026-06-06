@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Setoid.Algebras.Setoid module (Agda Universal Algebra Library)"
+title : "Setoid.Signatures module (Agda Universal Algebra Library)"
 date : "2026-06-06"
 author: "agda-algebras development team"
 ---
 
 #### The signature-to-setoid functor
 
-This is the [Setoid.Algebras.Setoid][] module of the [Agda Universal Algebra Library][].
+This is the [Setoid.Signatures][] module of the [Agda Universal Algebra Library][].
 
 It collects the two *signature-generic* constructions that translate an ordinary
 signature into a signature over a setoid domain: the polynomial-functor lifting
@@ -33,7 +33,7 @@ http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf.
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-module Setoid.Algebras.Setoid where
+module Setoid.Signatures where
 
 -- Imports from the Agda and the Agda Standard Library --------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
@@ -83,7 +83,7 @@ IsEquivalence.trans (isEqv (⟨ 𝑆 ⟩ A)) (refl , g) (refl , h) =
 
 --------------------------------
 
-<span style="float:left;">[↑ Setoid.Algebras](Setoid.Algebras.html)</span>
-<span style="float:right;">[Setoid.Algebras.Basic →](Setoid.Algebras.Basic.html)</span>
+<span style="float:left;">[↑ Setoid](Setoid.html)</span>
+<span style="float:right;">[Setoid.Subalgebras →](Setoid.Subalgebras.html)</span>
 
 {% include UALib.Links.md %}
