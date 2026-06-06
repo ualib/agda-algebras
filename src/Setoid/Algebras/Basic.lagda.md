@@ -42,12 +42,12 @@ Here we define algebras over a setoid, instead of a mere type with no equivalenc
 
 The operator `⟨_⟩`{.AgdaFunction} that translates an ordinary signature into a
 signature over a setoid domain — together with its companion `EqArgs`{.AgdaFunction}
-— is defined in the signature-generic module [Setoid.Algebras.Setoid][] and re-exported
-here (see the import above).  Both take their signature as an explicit argument, so
-housing them in a non-parameterized module means the unused `{𝑆 : Signature 𝓞 𝓥}`
-parameter of this module does not ride along as an unsolvable metavariable at use
-sites.  The `Interp`{.AgdaField} field of `Algebra`{.AgdaRecord} applies the
-re-exported `⟨ 𝑆 ⟩` to this module's signature `𝑆`.
+— is defined in the signature-generic module [Setoid.Signatures][] and re-exported
+here (see the import above).  Each takes its own signature argument rather than
+reading this module's `{𝑆}`, so housing them in a non-parameterized module means
+the unused `{𝑆 : Signature 𝓞 𝓥}` parameter of this module does not ride along as
+an unsolvable metavariable at use sites.  The `Interp`{.AgdaField} field of
+`Algebra`{.AgdaRecord} applies the re-exported `⟨ 𝑆 ⟩` to this module's signature `𝑆`.
 
 ```agda
 open Setoid using ( _≈_ ; Carrier )

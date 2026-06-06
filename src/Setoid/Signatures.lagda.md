@@ -11,20 +11,23 @@ This is the [Setoid.Signatures][] module of the [Agda Universal Algebra Library]
 
 It collects the two *signature-generic* constructions that translate an ordinary
 signature into a signature over a setoid domain: the polynomial-functor lifting
-`⟨_⟩`{.AgdaFunction} and its companion `EqArgs`{.AgdaFunction}.  Both take the
-signature as an *explicit* argument and use no ambient signature, so they live in
-a module with no `{𝑆 : Signature 𝓞 𝓥}` parameter.
+`⟨_⟩`{.AgdaFunction} and its companion `EqArgs`{.AgdaFunction}.  Each takes the
+signature as its own argument — explicitly for `⟨_⟩`{.AgdaFunction}, as an implicit
+`{𝑆}` for `EqArgs`{.AgdaFunction} — and reads no ambient signature, so they live in
+a module with no `{𝑆 : Signature 𝓞 𝓥}` parameter.  It is the setoid-level companion
+to [Overture.Signatures][].
 
 Keeping them here — rather than inside the signature-parameterized
 [Setoid.Algebras.Basic][] — matters for more than tidiness.  In a module
-parameterized by `{𝑆 : Signature 𝓞 𝓥}`, a definition whose type never mentions
-the parameter still has the unused `{𝑆}` silently prepended.  For `Algebra`,
-`_^_`, `𝔻[_]`, … the parameter is recovered from context because each of those
-types mentions `𝑆`; but `⟨_⟩` and `EqArgs` mention it nowhere, so a hand-written
-use site leaves the prepended `{𝑆}` as an unsolvable metavariable.  Defining them
-in this non-parameterized module removes the spurious parameter at the source.
-[Setoid.Algebras.Basic][] re-exports both names, so importing them from there is
-unaffected.
+parameterized by `{𝑆 : Signature 𝓞 𝓥}`, every definition gets that module
+parameter silently prepended, whether or not it uses it.  For `Algebra`, `_^_`,
+`𝔻[_]`, … that is harmless: their types mention the module's `𝑆`, so it is
+recovered from context at each use site.  But `⟨_⟩` and `EqArgs` take their own
+signature argument and never refer to the module's parameter, so the prepended
+`{𝑆}` is left unconstrained — a hand-written use site stalls on it as an
+unsolvable metavariable.  Defining them in this non-parameterized module removes
+the spurious parameter at the source.  [Setoid.Algebras.Basic][] re-exports both
+names, so importing them from there is unaffected.
 
 The setoid-algebra approach was inspired by Andreas Abel's formalization of
 Birkhoff's completeness theorem; see:
