@@ -1825,7 +1825,7 @@ Rings depend on AbelianGroup for the additive structure, so this issue comes aft
 
 ---
 
-### Issue M3-9: Expand Examples/ with worked classical-structure instances (#266)
+### Issue M3-9: Expand Examples/ with worked classical-structure instances (#266, closed)
 
 **Labels**: `documentation`, `milestone-3-classical`
 
@@ -1845,13 +1845,17 @@ The `Examples/` directory is thin.  Add worked examples that exercise the Classi
 
 ## Tasks
 
+### Update (20260531)
+
+**Missed ask**. We forgot to address the following: "Richer examples: free magmas, free semigroups, term-rewriting demonstrations, presentations, finite-quotient examples for use as Demos/ companion material, etc."  Let's reopen and add these in a new PR attached to this issue.
+
 - [ ] `(ℕ, +, 0)` as a `CommutativeMonoid`, with HSP specialized to it.
-- [ ] `(ℤ, +, 0, -)` as an `AbelianGroup`.
-- [ ] `𝟚` with two operations as a `DistributiveLattice`.
-- [ ] A small finite group (`ℤ/3ℤ`) with its congruence lattice computed.
-- [ ] A finite Heyting algebra as a Lattice example.
-- [ ] An example of a nonabelian group.  (I believe the only example of the `Group` type in `Examples.Classical` is the integers.  We should add an example of a nonabelian group that does not happen to be abelian as well.)
-- [ ] An example of a "commutative idempotent binar" (that is, a magma with an idempotent commutative binary operation); the operation should be defined by its Cayley table.  (I'm not sure how to implement a Cayley table to describe an operation in Agda yet, so this task will be an excellent opportunity for us to figure out the best way to do that.)
+- [x] `(ℤ, +, 0, -)` as an `AbelianGroup`.
+- [x] `𝟚` with two operations as a `DistributiveLattice`.
+- [x] A small finite group (`ℤ/3ℤ`) with its congruence lattice computed.
+- [x] A finite Heyting algebra as a Lattice example.
+- [x] An example of a nonabelian group.  (I believe the only example of the `Group` type in `Examples.Classical` is the integers.  We should add an example of a nonabelian group that does not happen to be abelian as well.)
+- [x] An example of a "commutative idempotent binar" (that is, a magma with an idempotent commutative binary operation); the operation should be defined by its Cayley table.  (I'm not sure how to implement a Cayley table to describe an operation in Agda yet, so this task will be an excellent opportunity for us to figure out the best way to do that.)
 
 ## Acceptance criteria
 
@@ -1900,27 +1904,163 @@ graph TD
 
 <!-- BEGIN GENERATED: milestone-4 -->
 
-### Issue M4-1: Style uniformity sweep across Setoid/ (#267)
+### Issue M4-1: Mechanical style & notation sweep (umbrella) (#267, closed)
 
 **Labels**: `documentation`, `milestone-4-style`
 
 ## Description
+Umbrella for the mechanical half of Milestone 4: bring the live trees (`Overture/`, `Setoid/`, `Classical/`, `Demos/`, `Examples/`) into `docs/STYLE_GUIDE.md` conformance for everything that changes *compiled code* — notation and imports — and reconcile the guide with itself.  All prose work (rich module headers, per-definition docstrings, anchor removal) is tracked under M4-2 (#268) and its per-subtree children.
 
-Apply `docs/STYLE_GUIDE.md` across the `Setoid/` tree.  This is a long-tail task that can be decomposed into per-submodule issues for parallel work.
+The naming audit is already discharged.  `grep -rnE 'is-homomorphism|\bHom\b' src/Setoid/` is empty; the only `is-hom`/`is-epi` hits are descriptive lemma names (`⊙-is-hom`, `lift-of-epi-is-epi`, `hom𝔽[_]-is-epic`), not synonyms of the `IsHom`/`IsEpi` predicates.  The Setoid public API is already on `IsHom`/`hom`, `IsMon`/`mon`, `IsEpi`/`epi`.  What remains is notation, imports, and the guide.
+
+## Children
++  #367
++  #368
++  #369
++  #370
++  #372
++  #384 — `fst` / `snd` → `proj₁` / `proj₂`, split out of #367 task 4 (the rename turned out to be a deliberate library-wide convention across ~17 modules, not a dead rename).
+
+Residual import hygiene rides along with #368/#369 (which rewrite every import block touching projections/interpretation) and the M4-2 per-subtree PRs; no separate issue.
+
+## Exit criterion
++  [x] All sub-issues closed.
++  [x] `make check` passes; `EverythingLegacy.agda` still compiles (warnings from `Legacy/` expected).
++  [x] `grep -rE 'is-homomorphism|\bHom\b' src/Setoid/ src/Classical/` is empty.
++  [x] The Projections and Interpretation tables in `docs/STYLE_GUIDE.md` match the live trees.
+
+---
+
+### Issue M4-1a: Migrate `∣_∣` / `∥_∥` → `proj₁` / `proj₂` (#367, closed)
+
+**Labels**: 
+
+## Description
+Remove the bracket projections from the live trees.  Generic Σ-projections become stdlib `proj₁` / `proj₂`; signature components become the existing `OperationSymbolsOf` / `ArityOf` from `Overture.Signatures` (already canonical in `Classical/`).  The `∣_∣` / `∥_∥` definitions stay in `Overture.Basic` with `WARNING_ON_USAGE` so `Legacy/Base/` still compiles.  Mechanical but verified by recompilation — execute in Claude Code.
+
+## Tasks
++  [ ] `Overture.Basic`: decouple `∥_∥`'s type from `∣_∣`; add `WARNING_ON_USAGE` to both.
++  [ ] `Overture.Signatures`: rewrite `OperationSymbolsOf` / `ArityOf` to use `proj₁` / `proj₂`; drop the `Overture.Basic` bracket import; fix the stale `Base.Functions` reference and the per-tree prose.
++  [ ] Sweep all non-`Legacy/` callsites: `∣ 𝑆 ∣`→`OperationSymbolsOf 𝑆`, `∥ 𝑆 ∥`→`ArityOf 𝑆`, all other `∣ e ∣`/`∥ e ∥`→`proj₁ e`/`proj₂ e` (code fences and inline prose).
++  [ ] Per-file import surgery; collapse the dead `proj₁ to fst ; proj₂ to snd` rename in `Setoid/Homomorphisms/Properties`.
++  [ ] Amend ADR-002 §1 (the unified policy) — or fold into #CCC.
++  [ ] `make check`.
+
+## Acceptance criteria
++  [ ] `rg '∣' src --glob '!src/Legacy/**'` matches only the `∣_∣`/`∥_∥` definitions in `Overture.Basic`.
++  [ ] `make check` passes; `Legacy/` compiles.
+
+---
+
+### Issue M4-1b: Complete the `_̂_` → `_^_` migration (#368, closed)
+
+**Labels**: 
+
+## Description
+`_̂_` was deprecated in v3.0 in favour of the ASCII `_^_`, with a `WARNING_ON_USAGE` pragma already at the definition site in `Setoid.Algebras.Basic` (ADR-002 §7).  The callsite migration is partial: `Setoid.Algebras.Products` is on `_^_`, but `Setoid.Algebras.Congruences` still imports and uses `_̂_` and trips the warning.  Finish it across the live trees.
+
+## Tasks
++  [ ] Rewrite every non-`Legacy/` `_̂_` callsite and import to `_^_` (code fences and inline prose).
++  [ ] Update the `### Interpretation` table in `docs/STYLE_GUIDE.md` (folds into #CCC if landing together).
++  [ ] `make check` with no `_̂_` deprecation warnings outside `Legacy/`.
+
+## Acceptance criteria
++  [ ] `grep -rn '̂' src/ | grep -v src/Legacy/` matches only the `_̂_` definition/deprecation in `Setoid.Algebras.Basic` and in `src/Demos/HSP.lagda.md`; (the latter is frozen for historical continuity since it's cited in the Birkhoff HSP paper).
++  [ ] `make check` passes.
+
+---
+
+### Issue M4-1c: Reconcile docs/STYLE_GUIDE.md self-contradictions (#369, closed)
+
+**Labels**: 
+
+## Description
+The guide contradicts itself in three places; its own meta-rule makes each an M4-1 bug.
++  Docstring form: the "prose comment block" example uses `-- |` inside a fence, which "Prose belongs in Markdown" forbids.  Rewrite to Markdown-prose-before-fence.
++  `Hom` vs `hom`: the same example defines a capital `Hom`, the synonym the Naming section deprecates.  Use lowercase `hom`.
++  Tables: update Projections to reflect #367 and Interpretation to reflect #368.
+
+## Tasks
++  [ ] Apply the three edits (drafted in the PR thread).
++  [ ] Verify no remaining `-- |`-style docstring examples in the guide.
++  [ ] Amend ADR-002 §1 and `Overture.Signatures` prose to the unified projection policy; fix the stale `Base.Functions` cross-reference.
+
+## Acceptance criteria
++  [ ] The guide's examples use lowercase `hom`, `_^_`, and Markdown-prose docstrings.
++  [ ] Projections and Interpretation tables match the post-migration trees.
+
+---
+
+### Issue M4-1d: Repo-wide style-guide violation audit (#370, closed)
+
+**Labels**: 
+
+## Description
+
+A scripted sweep of the live trees for `STYLE_GUIDE.md` violations, producing a checklist that feeds the migration PRs and the M4-2 per-subtree PRs.  Run in Claude Code.
+
+## Tasks
++  [ ] Notation: residual `∣_∣` / `∥_∥` / `_̂_` outside `Legacy/`.
++  [ ] Imports: bare `open import` without `using`; cosmetic `renaming`; non-alphabetical groups.
++  [ ] Headers: modules whose header is only YAML + the one-line "This is the … module" (feeds M4-2).
++  [ ] Anchors: `<a id=…>` occurrences (feeds M4-2; ≈ 90 across `Setoid/`).
++  [ ] Naming: any `is-x` predicate forms or synonym pairs (expected: none in `Setoid/`).
++  [ ] Emit `docs/audits/M4-style-audit.md` with per-file findings.
+
+## Acceptance criteria
++  [ ] Audit committed; every finding fixed or linked to a child PR.
+
+---
+
+### Issue M4-1e: Normalize code-fence whitespace (#372, closed)
+
+**Labels**: 
+
+## Description
+The `.lagda`→`.lagda.md` migration script left blank lines between the ```` ```agda ```` opener and the first line of code in many blocks.  Collapse them so the first code line is adjacent.  Live trees only; `Legacy/` stays frozen.  Pure whitespace, semantically null for both Agda and Markdown.
+
+## Tasks
++  [ ] `perl -0pi -e 's/```agda\n\n+/```agda\n/g'` across `src/` excluding `src/Legacy/`.
++  [ ] `make check`.
+
+## Acceptance criteria
++  [ ] `rg -U '```agda\n\n' src --glob '!src/Legacy/**'` is empty.
+
+---
+
+### Issue M4-1f: Unify fst / snd → proj₁ / proj₂ (#384, closed)
+
+**Labels**: 
+
+## Description
+
+Split out of #367 task 4.  That task asked to "collapse the dead `proj₁ to fst ; proj₂ to snd` rename in `Setoid.Homomorphisms.Properties`", but the rename is **not** dead: `fst` / `snd` is a deliberate short-hand for `proj₁` / `proj₂` used across ~17 live modules.  Unifying it on the canonical `proj₁` / `proj₂` (per the STYLE_GUIDE "one canonical form per concept" rule) is therefore its own mechanical sweep, separate from the bracket-projection migration (#367), which is now complete.
+
+## Scope
+
+The `renaming ( proj₁ to fst ; proj₂ to snd )` idiom (or a one-sided variant) appears in:
+
++  `Overture/Relations`, `Overture/Functions`, `Overture/Adjunction/Galois`;
++  `Setoid/Functions/{Inverses, Surjective}`;
++  `Setoid/Homomorphisms/{HomomorphicImages, Noether, Properties, Factor}`;
++  `Setoid/Subalgebras/{Properties, Subalgebras}`;
++  `Setoid/Varieties/{FreeAlgebras, SoundAndComplete, Preservation, HSP, EquationalLogic}`.
+
+`Demos/HSP` also uses it; consistent with the #367 / #368 decisions, the self-contained demo is exempt by default.
 
 ## Tasks
 
-- [ ] Audit naming: `IsHom` vs `is-homomorphism` vs `Hom` — pick one, deprecate others.
-- [ ] Audit notation against the canonical symbol table in STYLE.md.
-- [ ] Audit imports (tighten `using` clauses; remove unused).
-- [ ] Ensure every public definition has a prose comment block.
-- [ ] Rich comment headers on every module.
++  [ ] Drop the `proj₁ to fst` / `proj₂ to snd` renames from each `Data.Product` import.  After #367, `proj₁` / `proj₂` are re-exported by the `Overture` umbrella, so most modules can drop the `Data.Product` projection import entirely rather than re-add a plain one.
++  [ ] Rewrite `fst` → `proj₁` and `snd` → `proj₂` at every callsite.
++  [ ] **Gotcha**: identifiers such as `Lift-hom-fst` / `Lift-hom-snd` (definition names in `Setoid.Homomorphisms.Properties`) and any other `…fst` / `…snd`-suffixed names must **not** be rewritten.  A blind `s/\bfst\b/proj₁/` corrupts them, since `\b` matches inside a hyphenated name.
++  [ ] `make check`.
 
 ## Acceptance criteria
 
-- [ ] No synonym pairs remain in the `Setoid/` public API.
-- [ ] All notation in `Setoid/` matches the canonical table in STYLE.md.
-- [ ] Every public definition in `Setoid/` has a docstring.
++  [ ] `grep -rn 'proj₁ to fst\|proj₂ to snd' src` matches only `src/Legacy/**` (and `src/Demos/HSP.lagda.md` if exempted).
++  [ ] `make check` passes; `Legacy/` compiles.
+
+Part of the M4-1 umbrella (#267).
 
 ---
 
@@ -1941,6 +2081,40 @@ Every record, type family, and top-level function in the public API should have 
 ## Acceptance criteria
 
 - [ ] `grep`-based audit finds zero public definitions without a preceding comment block.
+
+---
+
+### Issue M4-2a: Remove HTML <a id> heading anchors (rely on kramdown auto-slugs) (#387, closed)
+
+**Labels**: 
+
+## Description
+
+Split out of the M4 style audit (`docs/audits/M4-style-audit.md`, finding 4) — the docstring pass #268 is a *different* M4-2 task.  The `docs/STYLE_GUIDE.md` § Section headings rule says headings should be plain ATX, not wrapped in `<a id="…">…</a>`; the renderer (Jekyll + kramdown) auto-generates a slug id from each heading.  The audit found **~300 such anchors across 111 files**.  Pursue per-subtree, starting with `Setoid/` (~93 anchors / 43 files).
+
+## Algorithm (per anchor `<level> <a id="TAG">TEXT</a>`)
+
++  Compute `slug = kramdown_generate_id(TEXT)`.
++  If `slug == TAG`: drop the wrapper → `<level> TEXT` (the auto-slug reproduces the same id, so any `#TAG` link still resolves).
++  If `slug ≠ TAG`: check whether `TAG` is used as a cross-reference (`#TAG` in a link, anywhere in `src/` + `docs/`).
+   +  If **not** referenced: drop the wrapper → `<level> TEXT`.
+   +  If referenced: keep the id explicitly via the kramdown attribute-list form → `<level> TEXT {#TAG}`.
+
+This guarantees no cross-reference breaks while removing the HTML wrappers.
+
+## Notes
+
++  Cross-references are scanned repo-wide (a `Setoid/` anchor can be linked from `Overture/`, the paper, etc. — e.g. `proof-of-the-hsp-theorem` is linked from `Overture.Preface`).
++  `src/Legacy/**` is frozen and excluded from rewriting (but still scanned for references).
++  Anchor changes are pure prose (outside `agda` fences); `make check` is unaffected but is run as the gate.
+
+## Acceptance criteria
+
++  [ ] `rg -n '<a id=' src/Setoid` is empty (after the `Setoid/` PR; further subtrees follow).
++  [ ] No cross-reference `#TAG` is left dangling.
++  [ ] `make check` passes.
+
+Part of Milestone 4 (style and naming uniformity sweep); see also the umbrella #267 and the audit #370.
 
 ---
 
@@ -2272,6 +2446,304 @@ Consolidate to a single canonical `Op` in `Overture.Operations`, using the arity
 
 Low conceptually but wide: `Op` is foundational, so the PR should `grep` every use site, flip carrier-first uses, and re-run `make check` rather than assume the blast radius is small.
 
+---
+
+### Issue M4-7: `V` exposes eight unconstrained universe-level parameters; provide a common-case specialization (#359)
+
+**Labels**: `milestone-4-style`
+
+## Context
+
+`Setoid.Varieties.Closure.V` is defined in a module parameterized by *eight* universe levels:
+
+```agda
+module _ {α ρᵃ β ρᵇ γ ρᶜ δ ρᵈ : Level} where
+ V : ∀ ℓ ι → Pred(Algebra α ρᵃ) (a ⊔ ov ℓ) → Pred(Algebra δ ρᵈ) (d ⊔ ov(a ⊔ b ⊔ c ⊔ ℓ ⊔ ι))
+ V ℓ ι 𝒦 = H{γ}{ρᶜ}{δ}{ρᵈ} (a ⊔ b ⊔ ℓ ⊔ ι) (S{β}{ρᵇ} (a ⊔ ℓ ⊔ ι) (P ℓ ι 𝒦))
+```
+
+The four intermediate levels `β ρᵇ γ ρᶜ` are genuinely internal to the `H ∘ S ∘ P` composition — they appear in neither the input algebra `(α, ρᵃ)` nor the output algebra `(δ, ρᵈ)`.
+
+## Where it bit
+
+Writing a natural type signature for "the variety generated by a concrete algebra" fails with unsolved metavariables, because `β ρᵇ γ ρᶜ` are not determined by anything in the signature:
+
+```agda
+ℕ∈V : 𝑨₀ ∈ V 0ℓ (ov 0ℓ) 𝒦₀   -- unsolved metas: β ρᵇ γ ρᶜ
+```
+
+In `Examples.Setoid.HSPCommutativeMonoid` (PR #358) I had to introduce a `𝕍` alias pinning all eight implicits to `0ℓ` positionally:
+
+```agda
+𝕍 : Pred (Algebra 0ℓ 0ℓ) (ov (ov 0ℓ))
+𝕍 = V {0ℓ}{0ℓ}{0ℓ}{0ℓ}{0ℓ}{0ℓ}{0ℓ}{0ℓ} 0ℓ (ov 0ℓ) 𝒦₀
+```
+
+This is a real papercut for anyone instantiating the variety machinery at a fixed algebra.
+
+## Suggested fix
+
++  Provide a common-case specialization, e.g. `V′ : ∀ ℓ ι → Pred(Algebra α ρᵃ)(a ⊔ ov ℓ) → Pred(Algebra α ρᵃ) _` that collapses the intermediate universes to those of the input/output algebra (the overwhelmingly common case where a class and the generated variety live at the same levels).
++  Alternatively, make `β ρᵇ γ ρᶜ` *computed* from `α ρᵃ δ ρᵈ ℓ ι` (so they are no longer free implicits) rather than independent module parameters, if the H/S/P composition permits.
++  At minimum, document the eight-parameter shape and the pinning idiom in `docs/STYLE_GUIDE.md`, and ship the `𝕍`-style helper as library API so examples/tests need not re-derive it.
+
+## Acceptance criteria
+
++  A downstream `𝑨 ∈ V … 𝒦` membership at a fixed algebra type-checks without manually pinning intermediate levels.
++  `make check` passes.
+
+---
+
+### Issue M4-8: `V-expa` cannot infer its class `𝒦` from a membership proof; offer an explicit-argument variant (#360)
+
+**Labels**: `milestone-4-style`
+
+## Context
+
+`Setoid.Varieties.Closure.V-expa` has the `_⊆_`-based signature
+
+```agda
+V-expa : ∀ ℓ ι → {𝒦 : Pred (Algebra α ρᵃ)(a ⊔ ov ℓ)} → 𝒦 ⊆ V ℓ ι 𝒦
+```
+
+where `𝒦 ⊆ V ℓ ι 𝒦` unfolds to `∀ {x} → x ∈ 𝒦 → x ∈ V ℓ ι 𝒦`.  Both the class `𝒦` and the element `x` are implicit and must be recovered from a single membership argument.
+
+## Where it bit
+
+Applying `V-expa` to a membership proof leaves `𝒦` (and `x`) as a higher-order unification problem `_𝒦 _x ≟ (type of the proof)`, which Agda cannot solve — especially once the class predicate reduces.  In `Examples.Setoid.HSPCommutativeMonoid` (PR #358), `V-expa 0ℓ (ov 0ℓ) 𝑨₀∈𝒦₀` failed; I had to both (a) make the singleton class a non-reducing one-constructor data family *and* (b) pass `{𝒦 = 𝒦₀}` explicitly:
+
+```agda
+ℕ∈V = V-expa 0ℓ (ov 0ℓ) {𝒦 = 𝒦₀} 𝑨₀∈𝒦₀
+```
+
+## Suggested fix
+
++  Add an explicit-argument variant, e.g.
+
+  ```agda
+  V-expa′ : ∀ ℓ ι (𝒦 : Pred (Algebra α ρᵃ)(a ⊔ ov ℓ)) {𝑨} → 𝑨 ∈ 𝒦 → 𝑨 ∈ V ℓ ι 𝒦
+  ```
+
+  so the class is supplied directly rather than back-inferred through `_⊆_`.
++  Consider applying the same treatment to the other `_⊆_`/`_⊫_`-stated closure lemmas (`S-expa`, `H-expa`, `P-expa`) for consistency.
++  Keep the `_⊆_` form as the abstract statement; the explicit variant is the ergonomic entry point.
+
+## Acceptance criteria
+
++  `𝑨 ∈ V ℓ ι 𝒦` is derivable from `𝑨 ∈ 𝒦` without manually supplying `{𝒦 = …}` or reshaping the class to avoid reduction.
++  `make check` passes.
+
+---
+
+### Issue M4-9: `V-id1` forces explicit `{p}{q}` because `_⊫_`/`_⊧_` unfold eagerly during unification (#361)
+
+**Labels**: `milestone-4-style`
+
+## Context
+
+`Setoid.Varieties.Preservation.V-id1` lifts an identity from a class to the variety it generates:
+
+```agda
+V-id1 : 𝒦 ⊫ (p ≈̇ q) → V ℓ ι 𝒦 ⊫ (p ≈̇ q)
+```
+
+with `p q` module-level implicits.  The equation `(p ≈̇ q)` appears, intact, in the type of the argument.
+
+## Where it bit
+
+When checking `V-commutative : 𝕍 ⊫ (x·y ≈̇ y·x)` against `V-id1 … 𝒦₀⊫comm` (PR #358), Agda did **not** unify the equation at the injective `Eq` level (`_p ≈̇ _q ≟ x·y ≈̇ y·x`).  Instead it unfolded `_⊫_` → `_⊧_` → `Equal` → `⟦_⟧`, producing stuck constraints of the form
+
+```
+⟦ 𝑨 ⟧ _p ρ ≈ ⟦ 𝑨 ⟧ (node ∙-Op (λ { 0F → ℊ 0F ; 1F → ℊ 1F })) ρ   (blocked on _p)
+```
+
+i.e. the equation's `lhs`/`rhs` became metavariables blocked behind the unfolded interpreter.  I had to pin them by hand:
+
+```agda
+V-commutative = V-id1 {ℓ = 0ℓ} {ι = ov 0ℓ} {𝒦 = 𝒦₀} {p = x·y} {q = y·x} 𝒦₀⊫comm
+```
+
+even though `p`, `q`, and `𝒦` are all visible in the argument's type.
+
+## Suggested fix
+
++  Make `_⊧_` / `Equal` (and hence `_⊫_`) less reduction-happy so the equation unifies as an `Eq`, not as an unfolded `Equal` — e.g. wrap `Equal` in a `record` / make it `abstract`, or mark the relevant definitions so the unifier prefers the `Eq` constructor.  (This likely helps `V-id2`, `S-id1`, `H-id1`, and friends too.)
++  Or restate the preservation lemmas to take the equation `Eq` as an explicit argument, so callers never rely on back-inference through `_⊫_`.
+
+## Acceptance criteria
+
++  `V ℓ ι 𝒦 ⊫ (p ≈̇ q)` is derivable from `𝒦 ⊫ (p ≈̇ q)` without manually supplying `{p}{q}` when they already appear in the argument's type.
++  `make check` passes.
+
+---
+
+### Issue M4-10: Substitution `_[_]` does not compute through tuple arguments; add a substitution-lemma kit (#362)
+
+**Labels**: `milestone-4-style`
+
+## Context
+
+In `Setoid.Terms.Basic`, term substitution pushes into nodes pointwise:
+
+```agda
+(node f ts) [ σ ] = node f (λ i → ts i [ σ ])
+```
+
+When `ts` is a finite tuple built from a pattern-matching lambda (the natural way to write a binary term, `s · t = node ∙-Op (λ { 0F → s ; 1F → t })`), the result `node f (λ i → ts i [ σ ])` is **not** definitionally equal to a freshly rebuilt term `(s [ σ ]) · (t [ σ ])` — a pattern-matching lambda does not reduce under a variable index `i`, and bridging the two functions needs function extensionality, which is unavailable under `--safe`/`--cubical-compatible`.
+
+## Where it bit
+
+This blocks the obvious way to instantiate an equation at *compound* terms.  In `Examples.Setoid.FreeSemigroup` (PR #358) the natural statement
+
+```agda
+assoc▹ : (p q r : Term (Fin 4)) → E ⊢ Fin 4 ▹ ((p · q) · r) ≈ (p · (q · r))
+assoc▹ p q r = sub (hyp 0F) σ        -- σ 0F = p; 1F = q; 2F = r
+```
+
+fails: `sub` produces a goal in `[ σ ]`-form (`node ∙-Op (λ i → … [ σ ])`) that will not match the readable `(p · q) · r`.  As a result I could not write a clean four-fold reassociation and had to restrict the term-rewriting demo to redexes that match the law literally (no `sub`).
+
+## Suggested fix
+
++  Ship a small substitution-lemma kit, proved up to derivable equality `_⊢_▹_≈_` (or propositional `_≡_` where it holds), e.g.:
+   +  `[]-node`: `node f ts [ σ ] ≈ node f (λ i → ts i [ σ ])` and a congruence `[]-cong` for rebuilding tuples;
+   +  `[]-∘` (substitution composition) and `[]-ℊ`.
++  And/or offer a `Vec`-based (or explicitly enumerated) argument representation for fixed finite arities under which substitution commutes *definitionally*, so `(s · t) [ σ ]` reduces to `(s [ σ ]) · (t [ σ ])` on the nose.
++  Document the idiom (and the funext obstruction) so users do not rediscover it.
+
+## Acceptance criteria
+
++  An equation can be instantiated at compound terms via `sub` and the result matches a readable, rebuilt term (definitionally, or via a one-line lemma).
++  A multi-step reassociation example (e.g. `((a·b)·c)·d ≈ a·(b·(c·d))`) type-checks cleanly.
++  `make check` passes.
+
+---
+
+### Issue M4-11: No generic smart-constructor for a concrete Setoid `Algebra`; add one (#363)
+
+**Labels**: `milestone-4-style`
+
+## Context
+
+Building a concrete `Setoid.Algebras.Basic.Algebra` requires hand-writing the interpretation `Func (⟨ 𝑆 ⟩ Domain) Domain`, including its `cong` over the `Σ`/`EqArgs` encoding of `⟨ 𝑆 ⟩`:
+
+```agda
+ℕ∸-magma : Algebra 0ℓ 0ℓ
+ℕ∸-magma = record { Domain = ≡.setoid ℕ ; Interp = interp }
+  where
+  interp : Func (⟨ Sig-Magma ⟩ (≡.setoid ℕ)) (≡.setoid ℕ)
+  interp ⟨$⟩ (∙-Op , args)                          = args 0F ∸ args 1F
+  cong interp {∙-Op , _} {.∙-Op , _} (refl , args≈) = ≡.cong₂ _∸_ (args≈ 0F) (args≈ 1F)
+```
+
+The `{∙-Op , _}{.∙-Op , _}(refl , args≈)` boilerplate recurs in every concrete algebra (it appears in `Examples.Setoid.FreeMagma`, `Examples.Setoid.FiniteQuotient`, and across `Classical.Bundles.*`).
+
+## Where it bit
+
+The Classical layer has structure-specific smart-constructors (`opsToMagma`, `eqsToMonoid`, `eqsToCommutativeMonoid`, …), but there is no *generic* builder at the Setoid layer.  Every example/test that needs a one-off concrete algebra re-derives the interp + `cong` plumbing.
+
+## Suggested fix
+
++  Add a generic builder in `Setoid.Algebras.Basic`, e.g. for a `≡`-carrier:
+
+  ```agda
+  mkAlgebraₚ : (A : Type α)
+    → (f : (o : ∣ 𝑆 ∣) → (∥ 𝑆 ∥ o → A) → A)
+    → Algebra α 0ℓ
+  ```
+
+  deriving `Domain = ≡.setoid A` and the `cong` automatically (it is `≡`-congruence of `f` in each argument).
++  Optionally a setoid-general version `mkAlgebra` taking a carrier `Setoid` plus a per-operation `cong` obligation, packaging the `(refl , args≈)` destructuring once.
++  Re-express a couple of existing concrete algebras through it as a regression demonstration.
+
+## Acceptance criteria
+
++  A concrete finite/`≡`-carrier algebra can be defined without writing the `⟨ 𝑆 ⟩`-`cong` boilerplate by hand.
++  `make check` passes.
+
+---
+
+### Issue M4-12: Re-export `_,_` from `Setoid.Algebras` to avoid a misleading Σ-constructor scope error (#364)
+
+**Labels**: `milestone-4-style`
+
+## Context
+
+The carrier of `⟨ 𝑆 ⟩ ξ` is an `Agda.Builtin.Sigma.Σ`, so an interpretation clause pattern-matches as `(o , args)`.  This requires the pair constructor `_,_` to be in scope.
+
+## Where it bit
+
+If `_,_` is not imported (easy to forget when you have only imported the signature and algebra machinery), the clause
+
+```agda
+interp ⟨$⟩ (∙-Op , args) = …
+```
+
+fails with the *misleading* error
+
+```
+∙-Op is not a constructor of the datatype Agda.Builtin.Sigma.Σ
+```
+
+which points at `∙-Op` rather than at the missing `_,_`, and gives no hint that the fix is `open import Data.Product using ( _,_ )`.  I hit this immediately when writing the first example in PR #358.
+
+## Suggested fix
+
++  Re-export `_,_` (and likely `Σ-syntax`) from `Setoid.Algebras` (and/or `Setoid.Algebras.Basic`), since any consumer pattern-matching on `⟨ 𝑆 ⟩` carriers needs it.  This is the smallest change and removes the trap for example/test authors.
++  Optionally, note the requirement in the `Setoid.Algebras.Basic` prose next to the `⟨_⟩` definition.
+
+## Acceptance criteria
+
++  Importing `Setoid.Algebras` is sufficient to pattern-match `(o , args)` on a `⟨ 𝑆 ⟩` carrier without a separate `Data.Product` import.
++  `make check` passes.
+
+---
+
+### Issue M4-13: Reorganize modules: top-level Order/ tree and Setoid.Congruences promotion (#377, closed)
+
+**Labels**: 
+
+## Description
+
+Two module-placement corrections that came out of the #373/#375 review discussion.  Both are about putting things on the footing the library's own conventions imply.
+
+**(a) Promote congruences to a sibling of `Setoid.Algebras`.**  The library's child-vs-sibling convention is "the *definition* of the algebra type is a child of `Algebras` (`Basic`, `Products`); a *major construction built on algebras* is a sibling" — which is why `Homomorphisms`, `Subalgebras`, `Relations`, `Terms`, `Varieties` are all siblings even though they depend crucially on algebras.  Congruences are the dual of subalgebras (quotients ↔ subobjects), so by that rule they belong next to `Setoid.Subalgebras`, not buried under `Setoid.Algebras` (where they currently sit only by inheritance from legacy `Base.Algebras.Congruences`).
+
+**(b) Move the order-theoretic lattice infrastructure to a new top-level `Order/` tree.**  The `CompleteLattice` *record* is pure order theory — it imports only `Level` and `Relation.Binary`, with zero dependency on algebras or setoids.  A top-level `Order/` tree (sibling of `Setoid/`, `Classical/`, `Overture/`) is its honest home, and it makes the tree path self-documenting: `Order.*` is unmistakably the *order-theoretic* notion of lattice, fully disambiguated from `Classical.*.Lattice`, which is the distinct *equational-algebra* notion (a peer of groups/rings).  There is no real redundancy between the two — they are the two classical presentations of "lattice," equivalent only via a theorem.
+
+## Target layout
+
+```
+src/
+├── Order/
+│   ├── Order.lagda.md            (barrel; prose cross-refs Classical.*.Lattice)
+│   └── CompleteLattice.lagda.md  (moved from Setoid.Algebras.Lattices.CompleteLattice)
+├── Setoid/
+│   ├── Algebras/        (Basic, Products)
+│   ├── Congruences/     (Basic, Lattice, Generation, CompleteLattice)   ← promoted
+│   ├── Subalgebras/     (…, CompleteLattice)
+│   └── Relations/ Homomorphisms/ Terms/ Varieties/ …
+└── Classical/           (… .Lattice modules untouched)
+```
+
+## Tasks
+
++  Create top-level `Order/` tree: `git mv` `Setoid.Algebras.Lattices.CompleteLattice` → `Order.CompleteLattice`; add the `Order` barrel; remove `Setoid.Algebras.Lattices(.lagda.md)`.
++  Promote `Setoid.Algebras.Congruences.*` → `Setoid.Congruences.*` (`Basic`, `Lattice`, `Generation`, `CompleteLattice`); add the `Setoid.Congruences` barrel; drop the `Congruences` re-export from the `Setoid.Algebras` barrel.
++  Rewire all imports: `Setoid.Homomorphisms.Kernels`, the `Setoid.Algebras` barrel, `Setoid.Subalgebras.CompleteLattice` (now imports `Order.CompleteLattice`), the Congruences submodules' self-references, and the examples (`Examples.Setoid.{CongruenceLattice, FiniteQuotient, SubalgebraLattice, SubgroupLattice}`).
++  Update module titles, nav links, and the `Order ↔ Classical.*.Lattice` cross-reference prose.
++  `nix develop --command make check` passes.
+
+## Acceptance criteria
+
++  Tree matches the target layout; `Order.CompleteLattice` and `Setoid.Congruences.*` resolve.
++  Full library type-checks (exit 0).
++  Cross-reference prose added in both directions (`Order` ↔ `Classical`).
+
+## Notes
+
++  An algebraic ⇄ order-theoretic lattice **bridge** (proving the two presentations agree) is a genuinely valuable follow-up, but a *theorem*, not part of this reorg — track separately.
++  Pure module-move + import-rewrite refactor; no proofs change.  To be done on branch `377-m4-13-order-reorg` after #375 and #376 merge, so those reviews aren't rebased mid-flight.
+
 <!-- END GENERATED: milestone-4 -->
 
 ---
@@ -2349,7 +2821,7 @@ For agda-algebras this has concrete implications:
 
 <!-- BEGIN GENERATED: milestone-6 -->
 
-### Issue M6-1: Con(A) as a complete lattice (#271)
+### Issue M6-1: Con(A) as a complete lattice (#271, closed)
 
 **Labels**: `milestone-6-flrp`
 
@@ -2359,20 +2831,20 @@ The current `Setoid.Algebras.Congruences` defines congruences but does not organ
 
 ## Tasks
 
-- [ ] Define `Con 𝑨` as a type (may exist already; promote to a first-class lattice object).
-- [ ] Define the partial order `_≤_` (containment).
-- [ ] Define meet: `θ ∧ φ = θ ∩ φ`.
-- [ ] Define join: `θ ∨ φ = Cg(θ ∪ φ)` (congruence generated by union).
-- [ ] `Con-Lattice : (𝑨 : Algebra α ρ) → Lattice _ _`.
-- [ ] `Con-CompleteLattice` with infinite meets and joins.
-- [ ] Zero and total congruences as `⊥` and `⊤`.
-- [ ] Subsidiary: congruence-generation theorem.
+- [x] Define `Con 𝑨` as a type (may exist already; promote to a first-class lattice object).
+- [x] Define the partial order `_≤_` (containment).
+- [x] Define meet: `θ ∧ φ = θ ∩ φ`.
+- [x] Define join: `θ ∨ φ = Cg(θ ∪ φ)` (congruence generated by union).
+- [x] `Con-Lattice : (𝑨 : Algebra α ρ) → Lattice _ _`.
+- [x] `Con-CompleteLattice` with infinite meets and joins.
+- [x] Zero and total congruences as `0ᴬ` and `1ᴬ`.
+- [x] Subsidiary: congruence-generation theorem.
 
 ## Acceptance criteria
 
-- [ ] `Con-Lattice 𝑨` type-checks and satisfies the Lattice axioms.
-- [ ] Infinite meets and joins are proved.
-- [ ] At least one small worked example (e.g. `Con` of a 2-element algebra).
+- [x] `Con-Lattice 𝑨` type-checks and satisfies the Lattice axioms.
+- [x] Infinite meets and joins are proved.
+- [x] At least one small worked example (e.g. `Con` of a 2-element algebra).
 
 ---
 
@@ -2421,6 +2893,72 @@ Design discussion: how to encode Maltsev conditions uniformly?  Options include 
 
 - [ ] At least CP's Maltsev-term characterization is proved.
 - [ ] Jónsson's theorem and Day's theorem are either proved or have a clear stub indicating what remains.
+
+---
+
+### Issue M6-4: Sub(A) as a complete lattice (next Setoid.Algebras.Lattices instance) (#373, closed)
+
+**Labels**: `milestone-6-flrp`
+
+## Description
+
+With the congruence lattice now in place ([#271][], modules `Setoid.Algebras.Congruences.{Lattice,Generation,CompleteLattice}` plus the general `Setoid.Algebras.Lattices.CompleteLattice` record), the natural companion is the **subalgebra lattice**: the subuniverses of a setoid algebra `𝑨`, ordered by inclusion, form a complete lattice `Sub 𝑨`.  This is the second motivating instance of the `CompleteLattice` record and is foundational for the FLRP (every finite lattice question is, after all, about lattices of the form `Con 𝑨` / `Sub 𝑨`).
+
+Most of the hard work already exists in `Setoid.Subalgebras.Subuniverses`:
+
++  `Subuniverses 𝑨` — the predicate "is a subuniverse" (closed under the basic operations);
++  `Sg 𝑨 G` — the inductively generated subuniverse, with `sgIsSub` (it is a subuniverse) and `sgIsSmallest` (the generation theorem / universal property);
++  `⋂s` — an arbitrary intersection of subuniverses is a subuniverse (the infinitary meet).
+
+So assembling the lattice is a "step-3"-style task, closely parallel to the congruence-lattice assembly.
+
+## Tasks
+
++  [ ] Define `Sub 𝑨` (the type of subuniverses, as a Σ of a predicate with its subuniverse proof) and the inclusion order `_≤_` (= `_⊆_`).
++  [ ] Meet `B ∧ C = B ∩ C`, join `B ∨ C = Sg(B ∪ C)`.
++  [ ] `Sub-Lattice : (𝑨 : Algebra α ρ)(ℓ₀ : Level) → Lattice _ _ _`, at the absorbing level `L = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ℓ₀` (where `Sg` stays at `L`).
++  [ ] Bounds: bottom `Sg ∅` (smallest subuniverse) and top `U` (the whole carrier); `Sub-BoundedLattice`.
++  [ ] Infinitary meet `⋂` (via `⋂s`) and join `Sg(⋃ …)`; `Sub-CompleteLattice` instantiating the `CompleteLattice` record.
++  [ ] A small worked example.
+
+## Acceptance criteria
+
++  [ ] `Sub-Lattice 𝑨` / `Sub-CompleteLattice 𝑨` type-check and satisfy the (complete-)lattice axioms.
++  [ ] Bounds proved as `⊥`/`⊤`.
++  [ ] At least one small worked example.
+
+## Notes
+
++  Placement, mirroring the congruence case (`Setoid.Algebras.Congruences.CompleteLattice`): the instance goes in `Setoid.Subalgebras.CompleteLattice`, instantiating the general record in `Setoid.Algebras.Lattices.CompleteLattice`.
++  A richer worked example — the **subgroup lattice of a concrete finite group** — is appealing but a sizeable undertaking (defining the group over a signature, classifying its subgroups); it is tracked as a separate follow-up so this PR can stay focused.
+
+[#271]: https://github.com/ualib/agda-algebras/issues/271
+
+---
+
+### Issue M6-5: Worked example: the subgroup lattice of a concrete finite group (#374, closed)
+
+**Labels**: `milestone-6-flrp`
+
+## Description
+
+Follow-up to the subalgebra-lattice infrastructure (#373).  Once `Sub 𝑨` is available as a complete lattice, a compelling worked example is the **subgroup lattice of a concrete finite group** — e.g. `ℤ/4ℤ` (the 3-element chain `0 < ⟨2⟩ < ℤ/4ℤ`), the Klein four-group `V₄` (the diamond `M₃`-minus, i.e. `2³`-style with three order-2 subgroups), or `S₃` (the well-known six-subgroup lattice).
+
+This is separated from #373 because it is a sizeable undertaking on its own:
+
++  realize the group concretely as a setoid algebra over a group signature (the `Classical/` tree has group machinery to draw on);
++  identify the subuniverses (= subgroups, since the signature includes inverse and identity);
++  classify them and exhibit the lattice order, ideally matching a known finite lattice.
+
+## Acceptance criteria
+
++  [ ] A concrete finite group built as a `Setoid` algebra.
++  [ ] Its subgroups exhibited as elements of `Sub 𝑨`, with the lattice order between them.
++  [ ] Prose identifying the resulting lattice (chain / diamond / `S₃` lattice).
+
+## Notes
+
++  Subuniverses of a group algebra are exactly its subgroups precisely because the signature carries the unary inverse and the nullary identity, so closure under the operations forces the subgroup axioms — worth stating explicitly in the example.
 
 <!-- END GENERATED: milestone-6 -->
 
