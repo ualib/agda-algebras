@@ -26,8 +26,8 @@ open import Relation.Binary  using ( Setoid ; IsEquivalence )
 open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ ; refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------
-open import Overture                using ( proj₂ ; proj₁ ; OperationSymbolsOf ; ArityOf )
-open import Setoid.Algebras.Setoid  public using ( EqArgs ; ⟨_⟩ )
+open import Overture           using ( proj₂ ; proj₁ ; OperationSymbolsOf ; ArityOf )
+open import Setoid.Signatures  using ( EqArgs ; ⟨_⟩ ) public
 
 private variable α ρ ι : Level
 
