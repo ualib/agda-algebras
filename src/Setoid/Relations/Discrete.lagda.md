@@ -32,7 +32,7 @@ open import Overture using ( Π-syntax )
 private variable α β ρᵃ ρᵇ ℓ : Level
 ```
 
-Here is a function that is useful for defining poitwise equality of functions wrt a
+Here is a function that is useful for defining pointwise equality of functions wrt a
 given equality.
 
 ```agda
