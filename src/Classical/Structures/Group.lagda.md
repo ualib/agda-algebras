@@ -60,7 +60,7 @@ open import Classical.Signatures.Monoid             using ( Sig-Monoid ; Op-Mono
                                                     renaming ( ∙-Op to ∙-Opᵐᵒ ; ε-Op to ε-Opᵐᵒ )
 open import Classical.Signatures.Group              using ( Sig-Group ; Op-Group ; ∙-Op ; ε-Op ; ⁻¹-Op )
 open import Classical.Structures.Interpret          using ( interp-cong )
-open import Classical.Structures.Reduct             using ( reduct )
+open import Classical.Structures.Reduct             using ( reduct-loose )
 open import Classical.Structures.Monoid             using ( Monoid ; _⊨ᵐᵒ_ )
 open import Classical.Theories.Group                using ( Eq-Group ; Th-Group
                                                           ; assoc ; idˡ ; idʳ ; invˡ ; invʳ )
@@ -108,7 +108,7 @@ mo-κ ∙-Opᵐᵒ = λ z → z
 mo-κ ε-Opᵐᵒ = λ z → z
 
 group→monoidAlg : Group α ρ → Algebra {𝑆 = Sig-Monoid} α ρ
-group→monoidAlg 𝑮 = reduct mo-incl mo-κ (𝑮 .proj₁)
+group→monoidAlg 𝑮 = reduct-loose mo-incl mo-κ (𝑮 .proj₁)
 ```
 
 #### Curried associativity, standalone

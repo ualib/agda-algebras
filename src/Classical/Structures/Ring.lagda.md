@@ -57,7 +57,7 @@ open import Classical.Signatures.Monoid             using ( Sig-Monoid ; Op-Mono
                                                     renaming ( ∙-Op to ∙-Opᵐ ; ε-Op to ε-Opᵐ )
 open import Classical.Signatures.Ring               using ( Sig-Ring ; Op-Ring ; +-Op ; 0-Op ; -Op ; ·-Op ; 1-Op )
 open import Classical.Structures.Interpret          using ( interp-cong )
-open import Classical.Structures.Reduct             using ( reduct )
+open import Classical.Structures.Reduct             using ( reduct-loose )
 open import Classical.Structures.AbelianGroup       using ( AbelianGroup ; _⊨ᵃᵍ_ )
 open import Classical.Structures.Monoid             using ( Monoid ; _⊨ᵐᵒ_ )
 open import Classical.Theories.Ring                 using ( Eq-Ring ; Th-Ring
@@ -120,10 +120,10 @@ identity.
 ·-κ ε-Opᵐ = λ z → z
 
 ring→abelianGroupAlg : Ring α ρ → Algebra {𝑆 = Sig-Group} α ρ
-ring→abelianGroupAlg 𝑹 = reduct +-incl +-κ (𝑹 .proj₁)
+ring→abelianGroupAlg 𝑹 = reduct-loose +-incl +-κ (𝑹 .proj₁)
 
 ring→monoidAlg : Ring α ρ → Algebra {𝑆 = Sig-Monoid} α ρ
-ring→monoidAlg 𝑹 = reduct ·-incl ·-κ (𝑹 .proj₁)
+ring→monoidAlg 𝑹 = reduct-loose ·-incl ·-κ (𝑹 .proj₁)
 ```
 
 #### The eleven curried laws, standalone

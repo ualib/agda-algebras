@@ -71,7 +71,7 @@ open import Classical.Signatures.Magma              using ( Sig-Magma ; Op-Magma
 open import Classical.Signatures.Monoid             using ( Sig-Monoid ; Op-Monoid ; ∙-Op ; ε-Op )
 open import Classical.Structures.Interpret          using ( interp-cong )
 open import Classical.Structures.Magma              using ( Magma ; module Magma-Op ; opsToMagma )
-open import Classical.Structures.Reduct             using ( reduct )
+open import Classical.Structures.Reduct             using ( reduct-loose )
 open import Classical.Structures.Semigroup          using ( Semigroup ) renaming (_⊨_ to _⊨ˢᵍ_)
 open import Classical.Theories.Monoid               using ( Eq-Monoid ; Th-Monoid ; assoc ; idˡ ; idʳ )
 open import Classical.Theories.Semigroup            using ( Th-Semigroup ) renaming ( assoc to assocˢ )
@@ -120,7 +120,7 @@ With that:
 
 ```agda
 monoid→magma : Monoid α ρ → Magma α ρ
-monoid→magma 𝑴 = reduct ∙-incl ∙-κ (𝑴 .proj₁)
+monoid→magma 𝑴 = reduct-loose ∙-incl ∙-κ (𝑴 .proj₁)
 ```
 
 #### Curried associativity, standalone
