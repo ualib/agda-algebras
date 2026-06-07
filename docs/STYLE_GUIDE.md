@@ -424,7 +424,7 @@ variable 𝓞 𝓥 : Level
 
 Every signature-parametrized module imports these by name from `Overture`.  Never re-declare them as `variable` in a downstream module.
 
-The design-discussion question of whether `𝓞` and `𝓥` should be `private variable` (forcing downstream modules to re-declare) or left as public `variable` is tracked in **M4-3**.  Until that issue is resolved, the rule is: leave `𝓞`/`𝓥` as public `variable`s in `Overture.Signatures` and import them by name.
+This convention is settled by [ADR-005](adr/005-universe-level-variable-scope.md): `𝓞` and `𝓥` remain public `variable`s in `Overture.Signatures`, co-located with the `Signature` type whose levels they name, and downstream modules import them by name.  Options 2 (`private` + re-declare downstream) and 3 (a dedicated `Overture.UniverseLevels` module) were weighed and rejected there.
 
 ### Other level variables
 
