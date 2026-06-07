@@ -31,7 +31,10 @@ module Overture.Operations where
 open import Agda.Primitive               using () renaming ( Set to Type )
 open import Level                        using ( Level ; _⊔_ )
 
-private variable a b ρ 𝓥 : Level
+-- Imports from the Agda Universal Algebra Library -----------------------------
+open import Overture.Signatures          using ( 𝓥 )
+
+private variable a b ρ : Level
 
 -- The type of I-ary operations on A.  Arity first, carrier second, so that
 -- `Op (Fin 2)` partially applies as "the type of binary operations on any A".

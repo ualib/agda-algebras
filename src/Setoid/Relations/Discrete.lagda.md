@@ -31,7 +31,7 @@ open import Relation.Binary.PropositionalEquality
 -- Imports from agda-algebras -------------------------------------------------------------------
 open import Overture using ( Π-syntax )
 
-private variable α β ρᵃ ρᵇ ℓ 𝓥 : Level
+private variable α β ρᵃ ρᵇ ℓ : Level
 ```
 
 Here is a function that is useful for defining poitwise equality of functions wrt a given equality.

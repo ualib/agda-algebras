@@ -4,7 +4,7 @@
 
 ## Status
 
-Proposed — 2026-06-06 (M4-3).
+Accepted — 2026-06-06 (M4-3).
 
 ## Context
 
