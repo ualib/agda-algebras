@@ -8,7 +8,7 @@ Accepted — 2026-06-07 (M4-5a).
 
 ## Context
 
-[M4-5][] (#338) builds out the category-theoretic layer the foundation already implicitly is: `Signature` is a container, `⟨ 𝑆 ⟩` is its polynomial functor, `Interp` is the structure map, and `Term` is the initial algebra.  [M4-5a][] (#339) is the first link: package the loose pair `(ι , κ)` that `reduct` consumes today (`Classical.Structures.Reduct`) as a first-class `SigMorphism 𝑆₁ 𝑆₂` — a container morphism with `ι` covariant on operation symbols and `κ` contravariant on positions — and assemble signatures and these morphisms into a category `Sig`.
+[M4-5][] (#338) builds out the category-theoretic layer the foundation already implicitly is: `Signature` is a container, `⟨ 𝑆 ⟩` is its polynomial functor, `Interp` is the structure map, and `Term` is the initial algebra.  [M4-5a][] (#339) is the first link: package the pair `(ι , κ)` that `reduct` consumes today (`Classical.Structures.Reduct`) as a first-class `SigMorphism 𝑆₁ 𝑆₂` — a container morphism with `ι` covariant on operation symbols and `κ` contravariant on positions — and assemble signatures and these morphisms into a category `Sig`.
 
 Two decisions are forced before any of [M4-5][] can proceed, because they fix the shape of everything downstream.
 
@@ -25,7 +25,7 @@ Two decisions are forced before any of [M4-5][] can proceed, because they fix th
 
 4.  **`Sig 𝓞 𝓥` fixes a common level pair**.  Its objects are `Signature 𝓞 𝓥` at fixed `(𝓞 , 𝓥)`; the morphism record shares those levels.  A level-heterogeneous (large or displayed) category of signatures is out of scope for [M4-5a][].
 
-5.  **`reduct` is re-expressed to consume a `SigMorphism`, keeping the loose `(ι , κ)` form as a thin wrapper (`reduct-loose`)**.  Each of the six call sites routes its existing per-structure position map — `∙-κ`, `mo-κ`, `∧-κ`, `∨-κ`, `+-κ`, `·-κ`, each defined by pattern-matching on the operation symbol and returning `id` — through `reduct-loose`, a one-line change per site.  A single generic `embed` with `κ = λ _ → id` is *not* definable under `--safe`: for an abstract symbol `o`, the arities `ArityOf 𝑆₂ (ι o)` and `ArityOf 𝑆₁ o` are not definitionally equal, so `id` does not type-check there; the position map must pattern-match on the symbol, which is exactly what the per-structure maps already do.
+5.  **`reduct` is re-expressed to consume a `SigMorphism`, keeping the `(ι , κ)`-pair form as a thin wrapper (`reductBy`)**.  Each of the six call sites routes its existing per-structure position map — `∙-κ`, `mo-κ`, `∧-κ`, `∨-κ`, `+-κ`, `·-κ`, each defined by pattern-matching on the operation symbol and returning `id` — through `reductBy`, a one-line change per site.  A single generic `embed` with `κ = λ _ → id` is *not* definable under `--safe`: for an abstract symbol `o`, the arities `ArityOf 𝑆₂ (ι o)` and `ArityOf 𝑆₁ o` are not definitionally equal, so `id` does not type-check there; the position map must pattern-match on the symbol, which is exactly what the per-structure maps already do.
 
 ## Consequences
 
@@ -34,7 +34,7 @@ Two decisions are forced before any of [M4-5][] can proceed, because they fix th
 +  **We forgo `agda-categories`' library of constructions** (negative).  Functor categories, (co)limits, and adjunction combinators are not handed to us; [M4-5d][] (the `F ⊣ reduct` adjunction) and later issues may have to build scaffolding `agda-categories` would have supplied.  Revisit decision 2 if the self-contained vocabulary grows unwieldy.
 +  **The signature and algebra categories use different hom-equalities** (negative).  `Sig` uses `_≡_`; the algebra category will use a pointwise setoid.  The shared `Category` record must therefore be general (carry `_≈_`) even though `Sig` only ever needs `_≡_`, so a reader meeting `Sig` first sees a `_≈_` field that is trivially `_≡_`.
 +  **Placement in `Overture` keeps the signature category dependency-light**.  It is importable by the whole library without pulling in `Setoid` machinery.
-+  **`reduct`'s call sites migrate uniformly**.  `lattice→meetMagma`, `lattice→joinMagma`, `monoid→magma`, `group→monoidAlg`, `ring→abelianGroupAlg`, and `ring→monoidAlg` each route their existing pattern-matched position map through the `reduct-loose` wrapper — a one-line change per site, no flag-day rewrite.
++  **`reduct`'s call sites migrate uniformly**.  `lattice→meetMagma`, `lattice→joinMagma`, `monoid→magma`, `group→monoidAlg`, `ring→abelianGroupAlg`, and `ring→monoidAlg` each route their existing pattern-matched position map through the `reductBy` wrapper — a one-line change per site, no flag-day rewrite.
 
 ## Alternatives considered
 

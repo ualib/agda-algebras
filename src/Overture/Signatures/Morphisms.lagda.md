@@ -14,7 +14,7 @@ A *signature morphism* `𝑆₁ → 𝑆₂` is the Abbott–Altenkirch–Ghani[
 specialized to the container `Signature = (OperationSymbolsOf ▷ ArityOf)`.  It is a pair
 `(ι , κ)`: a map `ι` sending each operation symbol of `𝑆₁` to one of `𝑆₂` (covariant on
 symbols), together with a family `κ` sending the arity of `ι o` back to the arity of `o`
-(contravariant on positions).  These are exactly the two loose arguments that
+(contravariant on positions).  These are exactly the two arguments that
 [`reduct`][Classical.Structures.Reduct] consumes today; this module packages them as a
 first-class record and assembles signatures and their morphisms into a category.
 
@@ -57,6 +57,7 @@ signatures are fixed at a common pair of levels `(𝓞 , 𝓥)`.
 
 ```agda
 record SigMorphism (𝑆₁ 𝑆₂ : Signature 𝓞 𝓥) : Type (𝓞 ⊔ 𝓥) where
+  constructor mkSigMorphism
   field
     ι : OperationSymbolsOf 𝑆₁ → OperationSymbolsOf 𝑆₂                  -- covariant on symbols
     κ : (o : OperationSymbolsOf 𝑆₁) → ArityOf 𝑆₂ (ι o) → ArityOf 𝑆₁ o  -- contravariant on positions

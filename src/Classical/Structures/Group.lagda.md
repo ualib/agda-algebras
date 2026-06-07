@@ -42,34 +42,34 @@ module Classical.Structures.Group where
 open import Agda.Primitive                          using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library -------------------------------------------------------
-open import Data.Fin.Base                          using ( Fin )
-open import Data.Fin.Patterns                      using ( 0F ; 1F ; 2F )
-open import Data.Product                           using ( Σ-syntax ; _×_ ; _,_ ; proj₁ ; proj₂ )
-open import Function                               using ( Func )
-open import Level                                  using ( Level ; _⊔_ ; suc )
-open import Relation.Binary                        using ( Setoid )
-open import Relation.Binary.PropositionalEquality  as ≡ using ( _≡_ )
+open import Data.Fin.Base      using ( Fin )
+open import Data.Fin.Patterns  using ( 0F ; 1F ; 2F )
+open import Data.Product       using ( Σ-syntax ; _×_ ; _,_ ; proj₁ ; proj₂ )
+open import Function           using ( Func )
+open import Level              using ( Level ; _⊔_ ; suc )
+open import Relation.Binary    using ( Setoid )
+open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
 
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 open Func renaming ( to to _⟨$⟩_ )
 
 -- Imports from the Agda Universal Algebra Library -----------------------------------------------
-open import Classical.Operations                    using ( pair ; Curry₂ ; Curry₁ ; Curry₀ )
-open import Classical.Signatures.Monoid             using ( Sig-Monoid ; Op-Monoid )
-                                                    renaming ( ∙-Op to ∙-Opᵐᵒ ; ε-Op to ε-Opᵐᵒ )
-open import Classical.Signatures.Group              using ( Sig-Group ; Op-Group ; ∙-Op ; ε-Op ; ⁻¹-Op )
-open import Classical.Structures.Interpret          using ( interp-cong )
-open import Classical.Structures.Reduct             using ( reduct-loose )
-open import Classical.Structures.Monoid             using ( Monoid ; _⊨ᵐᵒ_ )
-open import Classical.Theories.Group                using ( Eq-Group ; Th-Group
-                                                          ; assoc ; idˡ ; idʳ ; invˡ ; invʳ )
-open import Classical.Theories.Monoid               using ( Th-Monoid )
-                                                    renaming ( assoc to assocᵐ ; idˡ to idˡᵐ ; idʳ to idʳᵐ )
-open import Overture.Terms                          using ( Term ; ℊ ; node )
-open import Overture.Signatures                     using ( ArityOf ; OperationSymbolsOf )
-open import Setoid.Algebras.Basic                   using ( Algebra ; _^_ ; 𝔻[_] ; 𝕌[_] )
-open import Setoid.Terms                            using ( module Environment )
+open import Classical.Operations            using  ( pair ; Curry₂ ; Curry₁ ; Curry₀ )
+open import Classical.Signatures.Monoid     using  ( Sig-Monoid ; Op-Monoid )
+                                            renaming ( ∙-Op to ∙-Opᵐᵒ ; ε-Op to ε-Opᵐᵒ )
+open import Classical.Signatures.Group      using  ( Sig-Group ; Op-Group ; ∙-Op ; ε-Op ; ⁻¹-Op )
+open import Classical.Structures.Interpret  using  ( interp-cong )
+open import Classical.Structures.Reduct     using  ( reductBy )
+open import Classical.Structures.Monoid     using  ( Monoid ; _⊨ᵐᵒ_ )
+open import Classical.Theories.Group        using  ( Eq-Group ; Th-Group
+                                                   ; assoc ; idˡ ; idʳ ; invˡ ; invʳ )
+open import Classical.Theories.Monoid       using  ( Th-Monoid )
+                                            renaming ( assoc to assocᵐ ; idˡ to idˡᵐ ; idʳ to idʳᵐ )
+open import Overture.Terms                  using  ( Term ; ℊ ; node )
+open import Overture.Signatures             using  ( ArityOf ; OperationSymbolsOf )
+open import Setoid.Algebras.Basic           using  ( Algebra ; _^_ ; 𝔻[_] ; 𝕌[_] )
+open import Setoid.Terms                    using  ( module Environment )
 
 open import Setoid.Varieties.EquationalLogic {𝑆 = Sig-Group} using ( _⊧_≈_ )
 
@@ -108,7 +108,7 @@ mo-κ ∙-Opᵐᵒ = λ z → z
 mo-κ ε-Opᵐᵒ = λ z → z
 
 group→monoidAlg : Group α ρ → Algebra {𝑆 = Sig-Monoid} α ρ
-group→monoidAlg 𝑮 = reduct-loose mo-incl mo-κ (𝑮 .proj₁)
+group→monoidAlg 𝑮 = reductBy mo-incl mo-κ (𝑮 .proj₁)
 ```
 
 #### Curried associativity, standalone

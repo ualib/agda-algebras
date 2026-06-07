@@ -74,25 +74,24 @@ import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 open Func renaming ( to to _⟨$⟩_ )
 
 -- Imports from the Agda Universal Algebra Library --------------------------------
-open import Classical.Operations                    using ( pair ; Curry₂ )
-open import Classical.Signatures.Magma              using ( Sig-Magma ; Op-Magma )
-                                                    renaming ( ∙-Op to ∙-Opᵐᵃ )
-open import Classical.Signatures.Lattice            using ( Sig-Lattice ; Op-Lattice ; ∧-Op ; ∨-Op )
-open import Classical.Structures.Interpret          using ( interp-cong )
-open import Classical.Structures.Reduct             using ( reduct-loose )
-open import Classical.Structures.Semilattice        using ( Semilattice ; _⊨ˢˡ_)
-open import Classical.Theories.Lattice              using ( Eq-Lattice ; Th-Lattice
-                                                          ; ∧-assoc ; ∧-comm ; ∧-idem
-                                                          ; ∨-assoc ; ∨-comm ; ∨-idem
-                                                          ; absorbˡ ; absorbʳ )
-open import Classical.Theories.Semilattice          using ( Th-Semilattice )
-                                                    renaming ( assoc to assocˢˡ
-                                                             ; comm  to commˢˡ
-                                                             ; idem  to idemˢˡ )
-open import Overture.Terms                          using ( Term ; ℊ ; node )
-open import Overture.Signatures                     using ( ArityOf ; OperationSymbolsOf )
-open import Setoid.Algebras.Basic                   using ( Algebra ; _^_ ; 𝔻[_] ; 𝕌[_] ; ⟨_⟩ )
-open import Setoid.Terms                            using ( module Environment )
+open import Classical.Operations              using  ( pair ; Curry₂ )
+open import Classical.Signatures.Magma        using  ( Sig-Magma ; Op-Magma )
+                                              renaming ( ∙-Op to ∙-Opᵐᵃ )
+open import Classical.Signatures.Lattice      using  ( Sig-Lattice ; Op-Lattice ; ∧-Op ; ∨-Op )
+open import Classical.Structures.Interpret    using  ( interp-cong )
+open import Classical.Structures.Reduct       using  ( reductBy )
+open import Classical.Structures.Semilattice  using  ( Semilattice ; _⊨ˢˡ_)
+open import Classical.Theories.Lattice        using  ( Eq-Lattice ; Th-Lattice ; ∧-assoc
+                                                     ; ∧-comm ; ∧-idem ; ∨-assoc ; ∨-comm
+                                                     ; ∨-idem ; absorbˡ ; absorbʳ )
+open import Classical.Theories.Semilattice    using ( Th-Semilattice )
+                                              renaming  ( assoc to assocˢˡ
+                                                        ; comm  to commˢˡ
+                                                        ; idem  to idemˢˡ )
+open import Overture.Terms                    using ( Term ; ℊ ; node )
+open import Overture.Signatures               using ( ArityOf ; OperationSymbolsOf )
+open import Setoid.Algebras.Basic             using ( Algebra ; _^_ ; 𝔻[_] ; 𝕌[_] ; ⟨_⟩ )
+open import Setoid.Terms                      using ( module Environment )
 
 open import Setoid.Varieties.EquationalLogic {𝑆 = Sig-Lattice} using ( _⊧_≈_ )
 
@@ -137,10 +136,10 @@ are the induced reducts.
 ∨-κ ∙-Opᵐᵃ = λ z → z
 
 lattice→meetMagma : Lattice α ρ → Algebra {𝑆 = Sig-Magma} α ρ
-lattice→meetMagma 𝑳 = reduct-loose ∧-incl ∧-κ (𝑳 .proj₁)
+lattice→meetMagma 𝑳 = reductBy ∧-incl ∧-κ (𝑳 .proj₁)
 
 lattice→joinMagma : Lattice α ρ → Algebra {𝑆 = Sig-Magma} α ρ
-lattice→joinMagma 𝑳 = reduct-loose ∨-incl ∨-κ (𝑳 .proj₁)
+lattice→joinMagma 𝑳 = reductBy ∨-incl ∨-κ (𝑳 .proj₁)
 ```
 
 #### Curried laws, standalone
