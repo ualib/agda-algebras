@@ -79,7 +79,7 @@ open import Classical.Signatures.Magma              using ( Sig-Magma ; Op-Magma
                                                     renaming ( ∙-Op to ∙-Opᵐᵃ )
 open import Classical.Signatures.Lattice            using ( Sig-Lattice ; Op-Lattice ; ∧-Op ; ∨-Op )
 open import Classical.Structures.Interpret          using ( interp-cong )
-open import Classical.Structures.Reduct             using ( reduct )
+open import Classical.Structures.Reduct             using ( reduct-loose )
 open import Classical.Structures.Semilattice        using ( Semilattice ; _⊨ˢˡ_)
 open import Classical.Theories.Lattice              using ( Eq-Lattice ; Th-Lattice
                                                           ; ∧-assoc ; ∧-comm ; ∧-idem
@@ -137,10 +137,10 @@ are the induced reducts.
 ∨-κ ∙-Opᵐᵃ = λ z → z
 
 lattice→meetMagma : Lattice α ρ → Algebra {𝑆 = Sig-Magma} α ρ
-lattice→meetMagma 𝑳 = reduct ∧-incl ∧-κ (𝑳 .proj₁)
+lattice→meetMagma 𝑳 = reduct-loose ∧-incl ∧-κ (𝑳 .proj₁)
 
 lattice→joinMagma : Lattice α ρ → Algebra {𝑆 = Sig-Magma} α ρ
-lattice→joinMagma 𝑳 = reduct ∨-incl ∨-κ (𝑳 .proj₁)
+lattice→joinMagma 𝑳 = reduct-loose ∨-incl ∨-κ (𝑳 .proj₁)
 ```
 
 #### Curried laws, standalone
