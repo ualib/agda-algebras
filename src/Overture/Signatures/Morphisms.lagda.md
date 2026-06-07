@@ -10,7 +10,7 @@ author: "the agda-algebras development team"
 
 This is the [Overture.Signatures.Morphisms][] module of the [Agda Universal Algebra Library][].
 
-A *signature morphism* `𝑆₁ → 𝑆₂` is the Abbott–Altenkirch–Ghani *container morphism*,
+A *signature morphism* `𝑆₁ → 𝑆₂` is the Abbott–Altenkirch–Ghani[^1] *container morphism*,
 specialized to the container `Signature = (OperationSymbolsOf ▷ ArityOf)`.  It is a pair
 `(ι , κ)`: a map `ι` sending each operation symbol of `𝑆₁` to one of `𝑆₂` (covariant on
 symbols), together with a family `κ` sending the arity of `ι o` back to the arity of `o`
@@ -33,9 +33,9 @@ normalizing `Fin`-pattern lambdas.  See ADR-006 for the decision and its rationa
 module Overture.Signatures.Morphisms where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
-open import Agda.Primitive  using ()             renaming ( Set to Type )
-open import Function        using ( id ; _∘_ )
-open import Level           using ( _⊔_ )
+open import Agda.Primitive                        using () renaming ( Set to Type )
+open import Function                              using ( id ; _∘_ )
+open import Level                                 using ( _⊔_ )
 open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
@@ -58,8 +58,8 @@ signatures are fixed at a common pair of levels `(𝓞 , 𝓥)`.
 ```agda
 record SigMorphism (𝑆₁ 𝑆₂ : Signature 𝓞 𝓥) : Type (𝓞 ⊔ 𝓥) where
   field
-    ι : OperationSymbolsOf 𝑆₁ → OperationSymbolsOf 𝑆₂                       -- covariant on symbols
-    κ : (o : OperationSymbolsOf 𝑆₁) → ArityOf 𝑆₂ (ι o) → ArityOf 𝑆₁ o      -- contravariant on positions
+    ι : OperationSymbolsOf 𝑆₁ → OperationSymbolsOf 𝑆₂                  -- covariant on symbols
+    κ : (o : OperationSymbolsOf 𝑆₁) → ArityOf 𝑆₂ (ι o) → ArityOf 𝑆₁ o  -- contravariant on positions
 
 open SigMorphism public
 ```
@@ -78,16 +78,14 @@ id-morphism = record { ι = id ; κ = λ _ → id }
 infixr 9 _∘ₛ_
 
 _∘ₛ_ : SigMorphism 𝑆₂ 𝑆₃ → SigMorphism 𝑆₁ 𝑆₂ → SigMorphism 𝑆₁ 𝑆₃
-ψ ∘ₛ φ = record { ι = ι ψ ∘ ι φ
-                ; κ = λ o → κ φ o ∘ κ ψ (ι φ o) }
+ψ ∘ₛ φ = record { ι = ι ψ ∘ ι φ ; κ = λ o → κ φ o ∘ κ ψ (ι φ o) }
 ```
 
 #### The category laws
 
 The left and right identity laws and associativity each hold by `refl`: the relevant
 function compositions reduce away by η, and record η lifts the componentwise equalities to
-the morphism record.  No hom-setoid and no funext are needed — this is the spike result
-that ADR-006 records.
+the morphism record.  No hom-setoid and no funext are needed.[^2]
 
 ```agda
 ∘ₛ-identityˡ : (φ : SigMorphism 𝑆₁ 𝑆₂) → id-morphism ∘ₛ φ ≡ φ
@@ -103,10 +101,14 @@ that ADR-006 records.
 
 These four pieces — `SigMorphism`, `id-morphism`, `_∘ₛ_`, and the three laws — are exactly
 the data of a category `Sig 𝓞 𝓥` whose objects are signatures at levels `(𝓞 , 𝓥)`,
-realized self-contained (no `agda-categories` dependency; see ADR-006).  Bundling them into
-a reusable `Category` record — shared with the category of algebras in M4-5c — is left to
-that later, shared module rather than fixed here.
+and whose realization is self-contained (no `agda-categories` dependency for now; see ADR-006).
+Bundling them into a reusable `Category` record — shared with the category of algebras — is
+postponed for follow-up work.
 
 --------------------------------------
+
+[^1]: M. Abbott, T. Altenkirch, N. Ghani, *Containers: constructing strictly positive types*, Theoret. Comput. Sci. **342** (2005) 3–27.
+
+[^2]: This is the result that ADR-006 records.
 
 {% include UALib.Links.md %}
