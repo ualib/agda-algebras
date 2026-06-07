@@ -13,7 +13,8 @@ This is the [Classical.Structures.Reduct][] module of the [Agda Universal Algebr
 A *reduct* of an `𝑆₂`-algebra `𝑨` along a signature inclusion `𝑆₁ ↪ 𝑆₂` is the
 `𝑆₁`-algebra with the same carrier whose operations are those of `𝑨` named by the
 inclusion, interpreted exactly as in `𝑨`.  This is the first non-`proj₁` forgetful
-projection in the hierarchy (per [ADR-002 v2 §5](../../docs/adr/002-classical-layer-design.md)):
+projection in the hierarchy
+(per [ADR-002 v2](../../docs/adr/002-classical-layer-design.md) §5);
 `monoid→semigroup` and `group→monoid` are reducts (composed with an equation-reindex),
 whereas `semigroup→magma`, `commutativeMonoid→monoid`, and `abelianGroup→group` are
 `proj₁`.
@@ -23,16 +24,16 @@ inclusion is a [`SigMorphism`][Overture.Signatures.Morphisms] `(ι , κ)`: `ι` 
 symbols of `𝑆₁` to symbols of `𝑆₂` (covariantly), and `κ` maps the arity of `ι o` back to
 the arity of `o` (contravariantly).  This induces the polynomial-functor natural
 transformation `P_{𝑆₁} ⟹ P_{𝑆₂}`, and `reduct φ` precomposes the `𝑆₂`-structure map with
-it.  Two payoffs over an `ArityOf 𝑆₁ o ≡ ArityOf 𝑆₂ (ι o)` formulation: the interpretation
-is plain function composition `args ∘ κ φ o` with no `subst`, keeping proof terms
-transport-free (and the Cubical port mechanical); and for an arity-preserving inclusion
-`κ φ o` is `id`, so the reduct preserves each retained symbol's interpretation
-*definitionally* — which is exactly what discharges the downstream theory-reindex obligation
-cheaply.
+it.  Two payoffs over an `ArityOf 𝑆₁ o ≡ ArityOf 𝑆₂ (ι o)` formulation:
+1. the interpretation is plain function composition `args ∘ κ φ o` with no `subst`,
+   keeping proof terms transport-free (and the Cubical port mechanical);
+2. for an arity-preserving inclusion `κ φ o` is `id`, so the reduct preserves each
+   retained symbol's interpretation *definitionally*, which is what discharges the
+   downstream theory-reindex obligation cheaply.
 
-Since M4-5a (#339, ADR-006) the container morphism is packaged: `reduct` consumes a
-`SigMorphism`, with `reduct-loose` retaining the two-argument form as a thin wrapper.
-Packaging makes `reduct` a (contravariant) functor — `reduct-id` and `reduct-∘` below state
+The container morphism is packaged as follows: `reduct` consumes a `SigMorphism`,
+with `reduct₂` retaining the two-argument form as a thin wrapper.  Packaging
+makes `reduct` a (contravariant) functor — `reduct-id` and `reduct-∘` below state
 identity- and composition-preservation, both holding by `refl`.
 
 ```agda
@@ -43,19 +44,19 @@ open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 module Classical.Structures.Reduct where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
-open import Agda.Primitive  using ()             renaming ( Set to Type )
-open import Data.Product    using ( _,_ )
-open import Function        using ( _∘_ ; Func )
-open import Level           using ( Level )
-import Relation.Binary.PropositionalEquality as ≡
+open import Agda.Primitive                        using () renaming ( Set to Type )
+open import Data.Product                          using ( _,_ )
+open import Function                              using ( _∘_ ; _∘₂_ ; Func )
+open import Level                                 using ( Level )
+open import Relation.Binary.PropositionalEquality using (_≡_; refl)
 
 open Func renaming ( to to _⟨$⟩_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture.Signatures            using ( OperationSymbolsOf ; ArityOf )
-open import Overture.Signatures.Morphisms  using ( SigMorphism ; ι ; κ ; id-morphism ; _∘ₛ_ )
-open import Setoid.Algebras.Basic          using ( Algebra ; _^_ ; 𝕌[_] )
-
+open import Overture.Signatures            using  ( OperationSymbolsOf ; ArityOf )
+open import Overture.Signatures.Morphisms  using  ( SigMorphism ; mkSigMorphism
+                                                  ; ι ; κ ; id-morphism ; _∘ₛ_ )
+open import Setoid.Algebras.Basic          using  ( Algebra ; _^_ ; 𝕌[_] )
 private variable
   α ρ : Level
   𝑆 𝑆₁ 𝑆₂ 𝑆₃ : Signature 𝓞 𝓥
@@ -71,21 +72,21 @@ morphism `φ : SigMorphism 𝑆₁ 𝑆₂`.  The domain is unchanged; the inter
 
 ```agda
 reduct : SigMorphism 𝑆₁ 𝑆₂ → Algebra {𝑆 = 𝑆₂} α ρ → Algebra {𝑆 = 𝑆₁} α ρ
-reduct φ 𝑨 .Algebra.Domain                          = Algebra.Domain 𝑨
-reduct φ 𝑨 .Algebra.Interp ⟨$⟩ (o , args)           = (ι φ o ^ 𝑨) (args ∘ κ φ o)
-reduct φ 𝑨 .Algebra.Interp .cong {o , u} {.o , u'} (≡.refl , u≈v) =
-  cong (Algebra.Interp 𝑨) (≡.refl , λ i → u≈v (κ φ o i))
+reduct φ 𝑨 .Algebra.Domain = Algebra.Domain 𝑨
+reduct φ 𝑨 .Algebra.Interp ⟨$⟩ (o , args) = (ι φ o ^ 𝑨) (args ∘ κ φ o)
+reduct φ 𝑨 .Algebra.Interp .cong {o , u} {.o , u'} (refl , u≈v) =
+  cong (Algebra.Interp 𝑨) (refl , λ i → u≈v (κ φ o i))
 ```
 
 The two-argument form is retained as a thin wrapper, so a call site that already holds `ι`
 and `κ` separately need not assemble the record by hand.
 
 ```agda
-reduct-loose : {𝑆₁ 𝑆₂ : Signature 𝓞 𝓥}
-               (ι : OperationSymbolsOf 𝑆₁ → OperationSymbolsOf 𝑆₂)
-               (κ : (o : OperationSymbolsOf 𝑆₁) → ArityOf 𝑆₂ (ι o) → ArityOf 𝑆₁ o)
-             → Algebra {𝑆 = 𝑆₂} α ρ → Algebra {𝑆 = 𝑆₁} α ρ
-reduct-loose ι κ = reduct (record { ι = ι ; κ = κ })
+reductBy : {𝑆₁ 𝑆₂ : Signature 𝓞 𝓥}
+  (ι : OperationSymbolsOf 𝑆₁ → OperationSymbolsOf 𝑆₂)
+  (κ : (o : OperationSymbolsOf 𝑆₁) → ArityOf 𝑆₂ (ι o) → ArityOf 𝑆₁ o)
+  → Algebra {𝑆 = 𝑆₂} α ρ → Algebra {𝑆 = 𝑆₁} α ρ
+reductBy = reduct ∘₂ mkSigMorphism
 ```
 
 #### Functoriality
@@ -100,15 +101,15 @@ would need funext — which is exactly the carrier-vs-operations split the M4-5a
 criteria anticipate.
 
 ```agda
-reduct-id : (𝑨 : Algebra {𝑆 = 𝑆} α ρ) (o : OperationSymbolsOf 𝑆) (args : ArityOf 𝑆 o → 𝕌[ 𝑨 ])
-          → (o ^ reduct id-morphism 𝑨) args ≡.≡ (o ^ 𝑨) args
-reduct-id _ _ _ = ≡.refl
+reduct-id : {𝑨 : Algebra {𝑆 = 𝑆} α ρ} {o : OperationSymbolsOf 𝑆}
+  {args : ArityOf 𝑆 o → 𝕌[ 𝑨 ]} → (o ^ reduct id-morphism 𝑨) args ≡ (o ^ 𝑨) args
+reduct-id = refl
 
 reduct-∘ : {𝑆₁ 𝑆₂ 𝑆₃ : Signature 𝓞 𝓥}
-           (φ : SigMorphism 𝑆₁ 𝑆₂) (ψ : SigMorphism 𝑆₂ 𝑆₃) (𝑨 : Algebra {𝑆 = 𝑆₃} α ρ)
-           (o : OperationSymbolsOf 𝑆₁) (args : ArityOf 𝑆₁ o → 𝕌[ 𝑨 ])
-         → (o ^ reduct (ψ ∘ₛ φ) 𝑨) args ≡.≡ (o ^ reduct φ (reduct ψ 𝑨)) args
-reduct-∘ _ _ _ _ _ = ≡.refl
+  {φ : SigMorphism 𝑆₁ 𝑆₂} {ψ : SigMorphism 𝑆₂ 𝑆₃}
+  {𝑨 : Algebra {𝑆 = 𝑆₃} α ρ} {o : OperationSymbolsOf 𝑆₁} {args : ArityOf 𝑆₁ o → 𝕌[ 𝑨 ]}
+  → (o ^ reduct (ψ ∘ₛ φ) 𝑨) args ≡ (o ^ reduct φ (reduct ψ 𝑨)) args
+reduct-∘ = refl
 ```
 
 --------------------------------------

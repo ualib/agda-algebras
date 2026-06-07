@@ -59,26 +59,26 @@ open import Data.Product                           using ( Σ-syntax ; _×_ ; _,
 open import Function                               using ( Func )
 open import Level                                  using ( Level ; _⊔_ ; suc )
 open import Relation.Binary                        using ( Setoid )
-open import Relation.Binary.PropositionalEquality  as ≡ using ( _≡_ )
+open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl)
 
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 open Func renaming ( to to _⟨$⟩_ )
 
 -- Imports from the Agda Universal Algebra Library -----------------------------------------------
-open import Classical.Operations                    using ( pair ; Curry₂ ; Curry₀ )
-open import Classical.Signatures.Magma              using ( Sig-Magma ; Op-Magma ) renaming ( ∙-Op to ∙-Opᵐᵃ )
-open import Classical.Signatures.Monoid             using ( Sig-Monoid ; Op-Monoid ; ∙-Op ; ε-Op )
-open import Classical.Structures.Interpret          using ( interp-cong )
-open import Classical.Structures.Magma              using ( Magma ; module Magma-Op ; opsToMagma )
-open import Classical.Structures.Reduct             using ( reduct-loose )
-open import Classical.Structures.Semigroup          using ( Semigroup ) renaming (_⊨_ to _⊨ˢᵍ_)
-open import Classical.Theories.Monoid               using ( Eq-Monoid ; Th-Monoid ; assoc ; idˡ ; idʳ )
-open import Classical.Theories.Semigroup            using ( Th-Semigroup ) renaming ( assoc to assocˢ )
-open import Overture.Terms                          using ( Term ; ℊ ; node )
-open import Overture.Signatures                     using ( ArityOf ; OperationSymbolsOf)
-open import Setoid.Algebras.Basic                   using ( Algebra ; _^_ ; 𝔻[_] ; 𝕌[_] )
-open import Setoid.Terms                            using ( module Environment )
+open import Classical.Operations            using ( pair ; Curry₂ ; Curry₀ )
+open import Classical.Signatures.Magma      using ( Sig-Magma ; Op-Magma ) renaming ( ∙-Op to ∙-Opᵐᵃ )
+open import Classical.Signatures.Monoid     using ( Sig-Monoid ; Op-Monoid ; ∙-Op ; ε-Op )
+open import Classical.Structures.Interpret  using ( interp-cong )
+open import Classical.Structures.Magma      using ( Magma ; module Magma-Op ; opsToMagma )
+open import Classical.Structures.Reduct     using ( reductBy )
+open import Classical.Structures.Semigroup  using ( Semigroup ) renaming (_⊨_ to _⊨ˢᵍ_)
+open import Classical.Theories.Monoid       using ( Eq-Monoid ; Th-Monoid ; assoc ; idˡ ; idʳ )
+open import Classical.Theories.Semigroup    using ( Th-Semigroup ) renaming ( assoc to assocˢ )
+open import Overture.Terms                  using ( Term ; ℊ ; node )
+open import Overture.Signatures             using ( ArityOf ; OperationSymbolsOf)
+open import Setoid.Algebras.Basic           using ( Algebra ; _^_ ; 𝔻[_] ; 𝕌[_] )
+open import Setoid.Terms                    using ( module Environment )
 
 open import Setoid.Varieties.EquationalLogic {𝑆 = Sig-Monoid} using ( _⊧_≈_ )
 
@@ -120,7 +120,7 @@ With that:
 
 ```agda
 monoid→magma : Monoid α ρ → Magma α ρ
-monoid→magma 𝑴 = reduct-loose ∙-incl ∙-κ (𝑴 .proj₁)
+monoid→magma 𝑴 = reductBy ∙-incl ∙-κ (𝑴 .proj₁)
 ```
 
 #### Curried associativity, standalone
@@ -134,23 +134,24 @@ verbatim port of `Semigroup-Op.assoc-law` to `Sig-Monoid`.
 ```agda
 module _ (𝑴 : Monoid α ρ) where
   private 𝑨 = proj₁ 𝑴
-  open Setoid 𝔻[ 𝑨 ]
+  open Setoid 𝔻[ 𝑨 ] using (_≈_; sym) renaming (refl to ≈refl)
   open Environment 𝑨 using ( ⟦_⟧ )
   open SetoidReasoning 𝔻[ 𝑨 ]
 
   private
+    infixl 7 _∙_
     _∙_ : 𝕌[ 𝑨 ] → 𝕌[ 𝑨 ] → 𝕌[ 𝑨 ]
     _∙_ = Curry₂ (∙-Op ^ 𝑨)
 
     interp-node∙ : (s t : Term (Fin 3)) (η : Fin 3 → 𝕌[ 𝑨 ])
-                 → ⟦ node ∙-Op (pair s t) ⟧ ⟨$⟩ η ≈ (⟦ s ⟧ ⟨$⟩ η) ∙ (⟦ t ⟧ ⟨$⟩ η)
-    interp-node∙ s t η = interp-cong 𝑨 ∙-Op (λ { 0F → refl ; 1F → refl })
+      → ⟦ node ∙-Op (pair s t) ⟧ ⟨$⟩ η ≈ (⟦ s ⟧ ⟨$⟩ η) ∙ (⟦ t ⟧ ⟨$⟩ η)
+    interp-node∙ s t η = interp-cong 𝑨 ∙-Op (λ { 0F → ≈refl ; 1F → ≈refl })
 
-  mn-assoc : ∀ x y z → (x ∙ y) ∙ z ≈ x ∙ (y ∙ z)
+  mn-assoc : ∀ x y z → x ∙ y ∙ z ≈ x ∙ (y ∙ z)
   mn-assoc x y z = begin
-    (x ∙ y) ∙ z     ≈⟨ interp-cong 𝑨 ∙-Op (λ { 0F → sym (interp-node∙ (ℊ 0F) (ℊ 1F) η) ; 1F → refl }) ⟩
+    x ∙ y ∙ z       ≈˘⟨ interp-cong 𝑨 ∙-Op (λ { 0F → interp-node∙ (ℊ 0F) (ℊ 1F) η ; 1F → ≈refl }) ⟩
     ⟦ lhsT ⟧ ⟨$⟩ η  ≈⟨ proj₂ 𝑴 assoc η ⟩
-    ⟦ rhsT ⟧ ⟨$⟩ η  ≈⟨ interp-cong 𝑨 ∙-Op (λ { 0F → refl ; 1F → interp-node∙ (ℊ 1F) (ℊ 2F) η }) ⟩
+    ⟦ rhsT ⟧ ⟨$⟩ η  ≈⟨ interp-cong 𝑨 ∙-Op (λ { 0F → ≈refl ; 1F → interp-node∙ (ℊ 1F) (ℊ 2F) η }) ⟩
     x ∙ (y ∙ z)     ∎
     where
     η : Fin 3 → 𝕌[ 𝑨 ]
@@ -166,7 +167,7 @@ module _ (𝑴 : Monoid α ρ) where
 ```agda
 module Monoid-Op {α ρ : Level} (𝑴 : Monoid α ρ) where
   private 𝑨 = proj₁ 𝑴
-  open Setoid 𝔻[ 𝑨 ]
+  open Setoid 𝔻[ 𝑨 ] using (_≈_; trans; sym) renaming (refl to ≈refl)
   open Environment 𝑨 using ( ⟦_⟧ )
 
   infixl 7 _∙_
@@ -179,26 +180,26 @@ module Monoid-Op {α ρ : Level} (𝑴 : Monoid α ρ) where
   equations : 𝑨 ⊨ᵐᵒ Th-Monoid
   equations = proj₂ 𝑴
 
-  ∙-cong : ∀ {x y u v} → x ≈ y → u ≈ v → (x ∙ u) ≈ (y ∙ v)
+  ∙-cong : ∀ {x y u v} → x ≈ y → u ≈ v → x ∙ u ≈ y ∙ v
   ∙-cong x≈y u≈v = interp-cong 𝑨 ∙-Op (λ { 0F → x≈y ; 1F → u≈v })
 
   interp-node-∙ : (s t : Term (Fin 3)) {η : Fin 3 → 𝕌[ 𝑨 ]}
-                → ⟦ node ∙-Op (pair s t) ⟧ ⟨$⟩ η ≈ (⟦ s ⟧ ⟨$⟩ η) ∙ (⟦ t ⟧ ⟨$⟩ η)
-  interp-node-∙ s t = interp-cong 𝑨 ∙-Op (λ { 0F → refl ; 1F → refl })
+    → ⟦ node ∙-Op (pair s t) ⟧ ⟨$⟩ η ≈ ⟦ s ⟧ ⟨$⟩ η ∙ ⟦ t ⟧ ⟨$⟩ η
+  interp-node-∙ s t = interp-cong 𝑨 ∙-Op (λ { 0F → ≈refl ; 1F → ≈refl })
 
   interp-node-ε : {η : Fin 3 → 𝕌[ 𝑨 ]} → ⟦ node ε-Op (λ ()) ⟧ ⟨$⟩ η ≈ ε
   interp-node-ε = interp-cong 𝑨 ε-Op (λ ())
 
-  assoc-law : ∀ x y z → (x ∙ y) ∙ z ≈ x ∙ (y ∙ z)
+  assoc-law : ∀ x y z → x ∙ y ∙ z ≈ x ∙ (y ∙ z)
   assoc-law = mn-assoc 𝑴
 
   idˡ-law : ∀ x → ε ∙ x ≈ x
-  idˡ-law x = trans (∙-cong (sym interp-node-ε) refl)
+  idˡ-law x = trans (∙-cong (sym interp-node-ε) ≈refl)
                     (trans (sym (interp-node-∙ (node ε-Op (λ ())) (ℊ 0F)))
                            (equations idˡ (λ _ → x)))
 
   idʳ-law : ∀ x → x ∙ ε ≈ x
-  idʳ-law x = trans (∙-cong refl (sym (interp-node-ε)))
+  idʳ-law x = trans (∙-cong ≈refl (sym (interp-node-ε)))
                     (trans (sym (interp-node-∙ (ℊ 0F) (node ε-Op (λ ()))))
                            (equations idʳ (λ _ → x)))
 ```
@@ -213,7 +214,7 @@ monoid→semigroup ℳ@(𝑴 , _) = 𝑹 , thm
   𝑹 = monoid→magma ℳ
   open Algebra 𝑴 using () renaming (Domain to M)
   open Algebra 𝑹 using () renaming (Domain to R)
-  open Setoid M using (_≈_; refl; sym)
+  open Setoid M using (_≈_; sym) renaming (refl to ≈refl)
   open Setoid R using () renaming (_≈_ to _≋_ )
   open Environment 𝑹 using ( ⟦_⟧ )    -- Sig-Magma environment on 𝑹
   open SetoidReasoning M
@@ -222,23 +223,24 @@ monoid→semigroup ℳ@(𝑴 , _) = 𝑹 , thm
   -- 𝑹's binary node-bridge, over Sig-Magma
   interp-congᴿ : (s t : Term (Fin 3)) (η : Fin 3 → 𝕌[ 𝑴 ])
       → ⟦ node ∙-Opᵐᵃ (pair s t) ⟧ ⟨$⟩ η ≈ (⟦ s ⟧ ⟨$⟩ η) ∙ (⟦ t ⟧ ⟨$⟩ η)
-  interp-congᴿ s t η = interp-cong 𝑹 ∙-Opᵐᵃ λ { 0F → refl ; 1F → refl }
+  interp-congᴿ s t η = interp-cong 𝑹 ∙-Opᵐᵃ λ { 0F → ≈refl ; 1F → ≈refl }
 
   -- 𝑹's curried-∙ congruence
   ∙-congᴿ : ∀ {a b c d} → a ≈ b → c ≈ d → (a ∙ c) ≈ (b ∙ d)
   ∙-congᴿ a≈b c≈d = interp-cong 𝑹 ∙-Opᵐᵃ (λ { 0F → a≈b ; 1F → c≈d })
 
   thm : 𝑹 ⊨ˢᵍ Th-Semigroup
-  thm assocˢ η = let x = η 0F ; y = η 1F ; z = η 2F in
-    begin
-      ⟦ Th-Semigroup assocˢ .proj₁ ⟧ ⟨$⟩ η  ≈⟨ interp-congᴿ xy (ℊ 2F) η ⟩
-      ⟦ xy ⟧ ⟨$⟩ η ∙ z                      ≈⟨ ∙-congᴿ (interp-congᴿ (ℊ 0F) (ℊ 1F) η) refl ⟩
-      x ∙ y ∙ z                             ≈⟨ assoc-law x y z ⟩
-      x ∙ (y ∙ z)                           ≈˘⟨ ∙-congᴿ refl (interp-congᴿ (ℊ 1F) (ℊ 2F) η) ⟩
-      x ∙ ⟦ yz ⟧ ⟨$⟩ η                      ≈˘⟨ interp-congᴿ (ℊ 0F) yz η ⟩
-      ⟦ Th-Semigroup assocˢ .proj₂ ⟧ ⟨$⟩ η  ∎
+  thm assocˢ η = begin
+    ⟦ Th-Semigroup assocˢ .proj₁ ⟧ ⟨$⟩ η  ≈⟨ interp-congᴿ xy (ℊ 2F) η ⟩
+    ⟦ xy ⟧ ⟨$⟩ η ∙ z                      ≈⟨ ∙-congᴿ (interp-congᴿ (ℊ 0F) (ℊ 1F) η) ≈refl ⟩
+    x ∙ y ∙ z                             ≈⟨ assoc-law x y z ⟩
+    x ∙ (y ∙ z)                           ≈˘⟨ ∙-congᴿ ≈refl (interp-congᴿ (ℊ 1F) (ℊ 2F) η) ⟩
+    x ∙ ⟦ yz ⟧ ⟨$⟩ η                      ≈˘⟨ interp-congᴿ (ℊ 0F) yz η ⟩
+    ⟦ Th-Semigroup assocˢ .proj₂ ⟧ ⟨$⟩ η  ∎
     where
     open Monoid-Op ℳ using ( assoc-law ) -- the monoid's curried associativity
+    x y z : 𝕌[ 𝑴 ]
+    x = η 0F ; y = η 1F ; z = η 2F
     xy yz : Term (Fin 3)
     xy = node ∙-Opᵐᵃ (pair (ℊ 0F) (ℊ 1F))   -- the subterm  x ∙ y
     yz = node ∙-Opᵐᵃ (pair (ℊ 1F) (ℊ 2F))   -- the subterm  y ∙ z
@@ -273,8 +275,8 @@ opsToBareMonoid A _·_ e = expand-ε e
   expand-ε _ .Domain = 𝔻[ 𝑩 ]
   expand-ε _ .Interp ⟨$⟩ (∙-Op , args) = (∙-Opᵐᵃ ^ 𝑩) args
   expand-ε e .Interp ⟨$⟩ (ε-Op , _) = e
-  expand-ε _ .Interp .cong {∙-Op , _} {.∙-Op , _} (≡.refl , u≈v) = cong (𝑩 .Interp) (≡.refl , u≈v)
-  expand-ε _ .Interp .cong {ε-Op , _} {.ε-Op , _} (≡.refl , _) = Setoid.refl 𝔻[ 𝑩 ]
+  expand-ε _ .Interp .cong {∙-Op , _} {.∙-Op , _} (refl , u≈v) = cong (𝑩 .Interp) (refl , u≈v)
+  expand-ε _ .Interp .cong {ε-Op , _} {.ε-Op , _} (refl , _) = Setoid.refl 𝔻[ 𝑩 ]
 ```
 
 `eqsToMonoid` builds a Monoid by first building the raw algebra via `opsToBareMonoid`,

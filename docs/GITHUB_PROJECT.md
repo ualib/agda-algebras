@@ -2118,7 +2118,7 @@ Part of Milestone 4 (style and naming uniformity sweep); see also the umbrella #
 
 ---
 
-### Issue M4-3: Design discussion — scope of 𝓞 and 𝓥 universe variables (#269)
+### Issue M4-3: Design discussion — scope of 𝓞 and 𝓥 universe variables (#269, closed)
 
 **Labels**: `milestone-4-style`, `design-discussion`
 
@@ -2143,7 +2143,7 @@ Part of Milestone 4 (style and naming uniformity sweep); see also the umbrella #
 
 ---
 
-### Issue M4-4: Hoist `⟨_⟩` and `EqArgs` out of `Setoid.Algebras.Basic` (#337)
+### Issue M4-4: Hoist `⟨_⟩` and `EqArgs` out of `Setoid.Algebras.Basic` (#337, closed)
 
 **Labels**: `enhancement`, `milestone-4-style`, `breaking-change`, `design-discussion`
 
@@ -2251,7 +2251,7 @@ would otherwise keep hitting).  Connects to M9-2 via interpretability..
 
 **Labels**: `enhancement`, `milestone-4-style`, `category-theory`
 
-The current `reduct ι κ 𝑨` ([`Classical.Structures.Reduct`][]) takes the container morphism as two loose arguments.  Package the pair `(ι , κ)` as a first-class `SigMorphism 𝑆₁ 𝑆₂` — a record with `ι : OperationSymbolsOf 𝑆₁ → OperationSymbolsOf 𝑆₂` (covariant on symbols) and `κ : (o : OperationSymbolsOf 𝑆₁) → ArityOf 𝑆₂ (ι o) → ArityOf 𝑆₁ o` (contravariant on positions) — and assemble signatures and these morphisms into a category `Sig`.  This is the Abbott–Altenkirch–Ghani container-morphism, specialized to `Signature = (OperationSymbolsOf ▷ ArityOf)`.
+The current `reduct ι κ 𝑨` (`Classical.Structures.Reduct`) takes the container morphism as two loose arguments.  Package the pair `(ι , κ)` as a first-class `SigMorphism 𝑆₁ 𝑆₂` — a record with `ι : OperationSymbolsOf 𝑆₁ → OperationSymbolsOf 𝑆₂` (covariant on symbols) and `κ : (o : OperationSymbolsOf 𝑆₁) → ArityOf 𝑆₂ (ι o) → ArityOf 𝑆₁ o` (contravariant on positions) — and assemble signatures and these morphisms into a category `Sig`.  This is the Abbott–Altenkirch–Ghani container-morphism, specialized to `Signature = (OperationSymbolsOf ▷ ArityOf)`.
 
 The first real subtlety this surfaces is morphism *equality*: under `--safe` without funext, two `SigMorphism`s agreeing pointwise need not be propositionally equal (the same `Fin n` η-gap that forces the pointwise bundle round-trips), so the category laws may have to be stated against a setoid of morphisms rather than `≡`.  Settling that is half the value of the issue, since it determines the shape of everything downstream.
 
@@ -2277,7 +2277,7 @@ References: Abbott, Altenkirch, Ghani, *Containers: constructing strictly positi
 
 **Labels**: `enhancement`, `milestone-4-style`, `category-theory`
 
-Make explicit that `⟨ 𝑆 ⟩ : Setoid → Setoid` ([`Setoid.Algebras.Basic`][]) is the polynomial/container functor `P_σ` and is functorial in the carrier (its action on a setoid map is post-composition on the position function).  Then show that a `SigMorphism (ι , κ) : 𝑆₁ → 𝑆₂` induces a *natural transformation* `⟦ι,κ⟧ : ⟨ 𝑆₁ ⟩ ⟹ ⟨ 𝑆₂ ⟩`, given on components by `(o , args) ↦ (ι o , args ∘ κ o)` — which is exactly the data `reduct` already precomposes into `Interp`.  Finally, show the assignment `SigMorphism ↦ natural transformation` is itself functorial (identity to identity, composite to vertical composite), i.e. `⟦_⟧` is a functor `Sig → [Setoid , Setoid]`.
+Make explicit that `⟨ 𝑆 ⟩ : Setoid → Setoid` (`Setoid.Algebras.Basic`) is the polynomial/container functor `P_σ` and is functorial in the carrier (its action on a setoid map is post-composition on the position function).  Then show that a `SigMorphism (ι , κ) : 𝑆₁ → 𝑆₂` induces a *natural transformation* `⟦ι,κ⟧ : ⟨ 𝑆₁ ⟩ ⟹ ⟨ 𝑆₂ ⟩`, given on components by `(o , args) ↦ (ι o , args ∘ κ o)` — which is exactly the data `reduct` already precomposes into `Interp`.  Finally, show the assignment `SigMorphism ↦ natural transformation` is itself functorial (identity to identity, composite to vertical composite), i.e. `⟦_⟧` is a functor `Sig → [Setoid , Setoid]`.
 
 This is the issue where the "the foundation already *is* a polynomial-functor formalization" observation stops being a remark and becomes a checked statement.  It is the natural-transformation layer that [M4-5e]'s fold-naturality result will sit on top of.
 
@@ -2405,7 +2405,7 @@ References: Burris, Sankappanavar, *A Course in Universal Algebra* (reducts; SP-
 
 ---
 
-### Issue M4-6: Consolidate the duplicate `Op` operation type into one canonical declaration (#354)
+### Issue M4-6: Consolidate the duplicate `Op` operation type into one canonical declaration (#354, closed)
 
 **Labels**: `enhancement`, `milestone-4-style`, `breaking-change`
 
