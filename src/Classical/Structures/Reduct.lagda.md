@@ -32,7 +32,7 @@ it.  Two payoffs over an `ArityOf 𝑆₁ o ≡ ArityOf 𝑆₂ (ι o)` formulat
    downstream theory-reindex obligation cheaply.
 
 The container morphism is packaged as follows: `reduct` consumes a `SigMorphism`,
-with `reduct₂` retaining the two-argument form as a thin wrapper.  Packaging
+with `reductBy` retaining the two-argument form as a thin wrapper.  Packaging
 makes `reduct` a (contravariant) functor — `reduct-id` and `reduct-∘` below state
 identity- and composition-preservation, both holding by `refl`.
 
