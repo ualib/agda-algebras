@@ -102,25 +102,24 @@ affords short of equating the *algebras* themselves, which would need funext for
 
 ```agda
 reduct-id : {𝑨 : Algebra {𝑆 = 𝑆} α ρ} {o : OperationSymbolsOf 𝑆}
-          → o ^ reduct id-morphism 𝑨 ≡ o ^ 𝑨
+  → o ^ reduct id-morphism 𝑨 ≡ o ^ 𝑨
 reduct-id = refl
 
 reduct-id-ptw : {𝑨 : Algebra {𝑆 = 𝑆} α ρ} {o : OperationSymbolsOf 𝑆}
-                (args : ArityOf 𝑆 o → 𝕌[ 𝑨 ])
-              → (o ^ reduct id-morphism 𝑨) args ≡ (o ^ 𝑨) args
+  (args : ArityOf 𝑆 o → 𝕌[ 𝑨 ]) → (o ^ reduct id-morphism 𝑨) args ≡ (o ^ 𝑨) args
 reduct-id-ptw _ = refl
 
 reduct-∘ : {𝑆₁ 𝑆₂ 𝑆₃ : Signature 𝓞 𝓥}
-           {φ : SigMorphism 𝑆₁ 𝑆₂} {ψ : SigMorphism 𝑆₂ 𝑆₃}
-           {𝑨 : Algebra {𝑆 = 𝑆₃} α ρ} {o : OperationSymbolsOf 𝑆₁}
-         → o ^ reduct (ψ ∘ₛ φ) 𝑨 ≡ o ^ reduct φ (reduct ψ 𝑨)
+  {φ : SigMorphism 𝑆₁ 𝑆₂} {ψ : SigMorphism 𝑆₂ 𝑆₃}
+  {𝑨 : Algebra {𝑆 = 𝑆₃} α ρ} {o : OperationSymbolsOf 𝑆₁}
+  → o ^ reduct (ψ ∘ₛ φ) 𝑨 ≡ o ^ reduct φ (reduct ψ 𝑨)
 reduct-∘ = refl
 
 reduct-∘-ptw : {𝑆₁ 𝑆₂ 𝑆₃ : Signature 𝓞 𝓥}
-               {φ : SigMorphism 𝑆₁ 𝑆₂} {ψ : SigMorphism 𝑆₂ 𝑆₃}
-               {𝑨 : Algebra {𝑆 = 𝑆₃} α ρ} {o : OperationSymbolsOf 𝑆₁}
-               (args : ArityOf 𝑆₁ o → 𝕌[ 𝑨 ])
-             → (o ^ reduct (ψ ∘ₛ φ) 𝑨) args ≡ (o ^ reduct φ (reduct ψ 𝑨)) args
+  {φ : SigMorphism 𝑆₁ 𝑆₂} {ψ : SigMorphism 𝑆₂ 𝑆₃}
+  {𝑨 : Algebra {𝑆 = 𝑆₃} α ρ} {o : OperationSymbolsOf 𝑆₁}
+  (args : ArityOf 𝑆₁ o → 𝕌[ 𝑨 ])
+  → (o ^ reduct (ψ ∘ₛ φ) 𝑨) args ≡ (o ^ reduct φ (reduct ψ 𝑨)) args
 reduct-∘-ptw _ = refl
 ```
 
