@@ -49,7 +49,6 @@ open Func    renaming ( to to _⟨$⟩_ ; cong to ≈cong )
 open Setoid  using ( Carrier )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture.Signatures            using ( OperationSymbolsOf ; ArityOf )
 open import Overture.Signatures.Morphisms  using ( SigMorphism ; ι ; κ ; id-morphism ; _∘ₛ_ )
 open import Setoid.Signatures              using ( ⟨_⟩ )
 
