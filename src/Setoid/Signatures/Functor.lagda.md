@@ -71,18 +71,18 @@ underlying-function form (`refl`); the pointwise corollary (suffix `-ptw`) is on
 
 ```agda
 module _ {S : Signature 𝓞 𝓥} {A : Setoid α ρ} where
-  map-id-≡ : map (identity A) ⟨$⟩_ ≡ λ (x : Carrier (⟨ S ⟩ A)) → x
-  map-id-≡ = refl
+  map-id : map (identity A) ⟨$⟩_ ≡ λ (x : Carrier (⟨ S ⟩ A)) → x
+  map-id = refl
 
-  map-id-≈ : ∀ x → map (identity A) ⟨$⟩ x ≡ x
-  map-id-≈ = cong-app map-id-≡
+  map-id-ptw : ∀ x → map (identity A) ⟨$⟩ x ≡ x
+  map-id-ptw = cong-app map-id
 
-  module _ {B : Setoid α ρ} {C : Setoid αᶜ ρᶜ} {h : Func A B} {g : Func B C} where
-    map-∘-≡ : map (h ∘' g) ⟨$⟩_ ≡ λ (x : Carrier (⟨ S ⟩ A)) → map g ⟨$⟩ (map h ⟨$⟩ x)
-    map-∘-≡ = refl
+  module _ {B : Setoid αᵇ ρᵇ} {C : Setoid αᶜ ρᶜ} {h : Func A B} {g : Func B C} where
+    map-∘ : map (h ∘' g) ⟨$⟩_ ≡ λ (x : Carrier (⟨ S ⟩ A)) → map g ⟨$⟩ (map h ⟨$⟩ x)
+    map-∘ = refl
 
-    map-∘-≈ : ∀ x → map (h ∘' g) ⟨$⟩ x ≡ map g ⟨$⟩ (map h ⟨$⟩ x)
-    map-∘-≈ = cong-app map-∘-≡
+    map-∘-ptw : ∀ x → map (h ∘' g) ⟨$⟩ x ≡ map g ⟨$⟩ (map h ⟨$⟩ x)
+    map-∘-ptw = cong-app map-∘
 ```
 
 #### The natural transformation induced by a signature morphism
@@ -111,11 +111,11 @@ module _
   {h : Func A B}
   where
 
-  naturality-≡ : map h ⟨$⟩_ ∘ ⟦ φ ⟧ A ⟨$⟩_ ≡ ⟦ φ ⟧ B ⟨$⟩_ ∘ map h ⟨$⟩_
-  naturality-≡ = refl
+  naturality : map h ⟨$⟩_ ∘ ⟦ φ ⟧ A ⟨$⟩_ ≡ ⟦ φ ⟧ B ⟨$⟩_ ∘ map h ⟨$⟩_
+  naturality = refl
 
-  naturality-≈ : ∀ x → map h ⟨$⟩ (⟦ φ ⟧ A ⟨$⟩ x) ≡ ⟦ φ ⟧ B ⟨$⟩ (map h ⟨$⟩ x)
-  naturality-≈ = cong-app naturality-≡
+  naturality-ptw : ∀ x → map h ⟨$⟩ (⟦ φ ⟧ A ⟨$⟩ x) ≡ ⟦ φ ⟧ B ⟨$⟩ (map h ⟨$⟩ x)
+  naturality-ptw = cong-app naturality
 ```
 
 ##### Functoriality of `⟦_⟧`
@@ -125,11 +125,11 @@ composite morphism to the vertical composite of natural transformations.
 
 ```agda
 module _ {S : Signature 𝓞 𝓥} {A : Setoid α ρ} where
-  ⟦id⟧≡ : ⟦ id-morphism ⟧ A ⟨$⟩_ ≡ λ (x : Carrier (⟨ S ⟩ A)) → x
-  ⟦id⟧≡ = refl
+  ⟦id⟧ : ⟦ id-morphism ⟧ A ⟨$⟩_ ≡ λ (x : Carrier (⟨ S ⟩ A)) → x
+  ⟦id⟧ = refl
 
-  ⟦id⟧≈ : ∀ x → ⟦ id-morphism ⟧ A ⟨$⟩ x ≡ x
-  ⟦id⟧≈ = cong-app ⟦id⟧≡
+  ⟦id⟧-ptw : ∀ x → ⟦ id-morphism ⟧ A ⟨$⟩ x ≡ x
+  ⟦id⟧-ptw = cong-app ⟦id⟧
 
 
 module _
@@ -138,11 +138,11 @@ module _
   {φ : SigMorphism 𝑆₁ 𝑆₂}
   {ψ : SigMorphism 𝑆₂ 𝑆₃}
   where
-  ⟦∘⟧≡ : ⟦ ψ ∘ₛ φ ⟧ A ⟨$⟩_ ≡ ⟦ ψ ⟧ A ⟨$⟩_ ∘ ⟦ φ ⟧ A ⟨$⟩_
-  ⟦∘⟧≡ = refl
+  ⟦∘⟧ : ⟦ ψ ∘ₛ φ ⟧ A ⟨$⟩_ ≡ ⟦ ψ ⟧ A ⟨$⟩_ ∘ ⟦ φ ⟧ A ⟨$⟩_
+  ⟦∘⟧ = refl
 
-  ⟦∘⟧≈ : ∀ x → ⟦ ψ ∘ₛ φ ⟧ A ⟨$⟩ x ≡ ⟦ ψ ⟧ A ⟨$⟩ (⟦ φ ⟧ A ⟨$⟩ x)
-  ⟦∘⟧≈ = cong-app ⟦∘⟧≡
+  ⟦∘⟧-ptw : ∀ x → ⟦ ψ ∘ₛ φ ⟧ A ⟨$⟩ x ≡ ⟦ ψ ⟧ A ⟨$⟩ (⟦ φ ⟧ A ⟨$⟩ x)
+  ⟦∘⟧-ptw = cong-app ⟦∘⟧
 ```
 
 --------------------------------------
