@@ -92,24 +92,36 @@ reductBy = reduct ∘₂ mkSigMorphism
 #### Functoriality
 
 `reduct` is functorial in the signature morphism, contravariantly: it preserves the identity
-and turns a composite into the *reversed* composite of reducts.  Under `--safe` these are
-stated *operation-wise* — the agreement the chosen hom-equality `_≡_` gives (ADR-006).  Each
-reduct keeps `𝑨`'s carrier definitionally, and the interpretation of every operation symbol
-agrees by `refl` (the position-map compositions reduce by η).  Full propositional equality of
-the *algebras* is not available under `--safe`: equating the setoid-congruence proof field
-would need funext — which is exactly the carrier-vs-operations split the M4-5a acceptance
-criteria anticipate.
+and turns a composite into the *reversed* composite of reducts.  Following the strict-first
+discipline, each law is stated at the level of an operation's *interpretation function*
+(`o ^ reduct … ≡ o ^ …`, with no argument tuple applied) and holds by `refl`; the conventional
+`args`-applied functoriality statement is the corollary directly below each (also `refl` — it
+is the strict law specialized to an argument tuple).  This is the strongest equality `--safe`
+affords short of equating the *algebras* themselves, which would need funext for the
+`Interp.cong` field.
 
 ```agda
 reduct-id : {𝑨 : Algebra {𝑆 = 𝑆} α ρ} {o : OperationSymbolsOf 𝑆}
-  {args : ArityOf 𝑆 o → 𝕌[ 𝑨 ]} → (o ^ reduct id-morphism 𝑨) args ≡ (o ^ 𝑨) args
+          → o ^ reduct id-morphism 𝑨 ≡ o ^ 𝑨
 reduct-id = refl
 
+reduct-id-ptw : {𝑨 : Algebra {𝑆 = 𝑆} α ρ} {o : OperationSymbolsOf 𝑆}
+                (args : ArityOf 𝑆 o → 𝕌[ 𝑨 ])
+              → (o ^ reduct id-morphism 𝑨) args ≡ (o ^ 𝑨) args
+reduct-id-ptw _ = refl
+
 reduct-∘ : {𝑆₁ 𝑆₂ 𝑆₃ : Signature 𝓞 𝓥}
-  {φ : SigMorphism 𝑆₁ 𝑆₂} {ψ : SigMorphism 𝑆₂ 𝑆₃}
-  {𝑨 : Algebra {𝑆 = 𝑆₃} α ρ} {o : OperationSymbolsOf 𝑆₁} {args : ArityOf 𝑆₁ o → 𝕌[ 𝑨 ]}
-  → (o ^ reduct (ψ ∘ₛ φ) 𝑨) args ≡ (o ^ reduct φ (reduct ψ 𝑨)) args
+           {φ : SigMorphism 𝑆₁ 𝑆₂} {ψ : SigMorphism 𝑆₂ 𝑆₃}
+           {𝑨 : Algebra {𝑆 = 𝑆₃} α ρ} {o : OperationSymbolsOf 𝑆₁}
+         → o ^ reduct (ψ ∘ₛ φ) 𝑨 ≡ o ^ reduct φ (reduct ψ 𝑨)
 reduct-∘ = refl
+
+reduct-∘-ptw : {𝑆₁ 𝑆₂ 𝑆₃ : Signature 𝓞 𝓥}
+               {φ : SigMorphism 𝑆₁ 𝑆₂} {ψ : SigMorphism 𝑆₂ 𝑆₃}
+               {𝑨 : Algebra {𝑆 = 𝑆₃} α ρ} {o : OperationSymbolsOf 𝑆₁}
+               (args : ArityOf 𝑆₁ o → 𝕌[ 𝑨 ])
+             → (o ^ reduct (ψ ∘ₛ φ) 𝑨) args ≡ (o ^ reduct φ (reduct ψ 𝑨)) args
+reduct-∘-ptw _ = refl
 ```
 
 --------------------------------------
