@@ -10,16 +10,17 @@ author: "the agda-algebras development team"
 
 This is the [Setoid.Categories.Category][] module of the [Agda Universal Algebra Library][].
 
-`Category o ℓ e` is a self-contained, `agda-categories`-free category record (ADR-006): objects
-in `Type o`, hom-types in `Type ℓ`, and a per-hom-set *equivalence* `_≈_` valued in `Type e`.
-Carrying `_≈_` as a field — rather than fixing it to `_≡_` — is what lets the category of
-algebras (M4-5c) use *pointwise* homomorphism equality, which `_≡_` cannot express under
-`--safe` (it would need funext); the signature category `Sig` would instead instantiate
-`_≈_ = _≡_`.
+`Category o ℓ e` is a self-contained, `agda-categories`-free category record: objects
+in `Type o`, hom types in `Type ℓ`, and a per-hom-set *equivalence* `_≈_` valued in
+`Type e`.
 
-The record is deliberately minimal — exactly the data and laws the M4-5c–e layer needs — and
-is pure `Type`-level category theory (no `Setoid` import).  It lives under `Setoid.Categories`
-because its first consumers are setoid-level.
+Carrying `_≈_` as a field — rather than fixing it to `_≡_` — is what lets the
+category of algebras use *pointwise* homomorphism equality, which `_≡_` cannot
+express under `--safe` without funext.
+
+The record is deliberately minimal — exactly the data and laws we need to express
+reducts as functors — and is pure `Type`-level category theory (no `Setoid` import).
+It lives under `Setoid.Categories` because its current consumers are setoid-based.
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -34,29 +35,30 @@ private variable o ℓ e : Level
 
 record Category (o ℓ e : Level) : Type (lsuc (o ⊔ ℓ ⊔ e)) where
   infixr 9 _∘_
-  infix  4 _≈_
-  field
-    Obj : Type o
-    _⇒_ : Obj → Obj → Type ℓ
-    _≈_ : {A B : Obj} → (A ⇒ B) → (A ⇒ B) → Type e
-    id  : {A : Obj} → A ⇒ A
-    _∘_ : {A B C : Obj} → (B ⇒ C) → (A ⇒ B) → (A ⇒ C)
+  infix 4 _≈_
 
-    ≈-equiv   : {A B : Obj} → IsEquivalence (_≈_ {A} {B})
-    assoc     : {A B C D : Obj} {f : A ⇒ B} {g : B ⇒ C} {h : C ⇒ D}
-              → ((h ∘ g) ∘ f) ≈ (h ∘ (g ∘ f))
-    identityˡ : {A B : Obj} {f : A ⇒ B} → (id ∘ f) ≈ f
-    identityʳ : {A B : Obj} {f : A ⇒ B} → (f ∘ id) ≈ f
-    ∘-resp-≈  : {A B C : Obj} {f g : B ⇒ C} {h i : A ⇒ B}
-              → f ≈ g → h ≈ i → (f ∘ h) ≈ (g ∘ i)
+  field
+    Obj  : Type o
+    Hom  : Obj → Obj → Type ℓ
+    _≈_  : {A B : Obj} → Hom A B → Hom A B → Type e
+    id   : {A : Obj} → Hom A A
+    _∘_  : {A B C : Obj} → Hom B C → Hom A B → Hom A C
+
+    ≈-equiv    : {A B : Obj} → IsEquivalence (_≈_ {A} {B})
+    assoc      : {A B C D : Obj} {f : Hom A B} {g : Hom B C} {h : Hom C D}
+               → (h ∘ g) ∘ f ≈ h ∘ (g ∘ f)
+    identityˡ  : {A B : Obj} {f : Hom A B} → id ∘ f ≈ f
+    identityʳ  : {A B : Obj} {f : Hom A B} → f ∘ id ≈ f
+    ∘-resp-≈   : {A B C : Obj} {f g : Hom B C} {h i : Hom A B}
+               → f ≈ g → h ≈ i → f ∘ h ≈ g ∘ i
 
   -- Reflexivity, symmetry, and transitivity of each hom-set's equivalence,
   -- surfaced for use in functor-law and instance proofs.
-  ≈-refl  : {A B : Obj} {f : A ⇒ B} → f ≈ f
+  ≈-refl  : {A B : Obj} {f : Hom A B} → f ≈ f
   ≈-refl  = IsEquivalence.refl ≈-equiv
-  ≈-sym   : {A B : Obj} {f g : A ⇒ B} → f ≈ g → g ≈ f
+  ≈-sym   : {A B : Obj} {f g : Hom A B} → f ≈ g → g ≈ f
   ≈-sym   = IsEquivalence.sym ≈-equiv
-  ≈-trans : {A B : Obj} {f g h : A ⇒ B} → f ≈ g → g ≈ h → f ≈ h
+  ≈-trans : {A B : Obj} {f g h : Hom A B} → f ≈ g → g ≈ h → f ≈ h
   ≈-trans = IsEquivalence.trans ≈-equiv
 ```
 

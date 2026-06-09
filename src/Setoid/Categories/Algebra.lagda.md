@@ -11,16 +11,17 @@ author: "the agda-algebras development team"
 This is the [Setoid.Categories.Algebra][] module of the [Agda Universal Algebra Library][].
 
 `Alg 𝑆 α ρ` assembles the `𝑆`-algebras at levels `(α , ρ)` into a
-[`Category`][Setoid.Categories.Category]: objects are `Algebra α ρ`, homs are the setoid
-homomorphisms `hom` of [Setoid.Homomorphisms][], identity and composition are `𝒾𝒹` and
-`⊙-hom`, and the hom-equality `_≋_` is **pointwise** — two homomorphisms are equal when their
-underlying maps agree on every element, in the codomain's setoid equality.  This pointwise
-hom-setoid is exactly what `_≡_` cannot provide under `--safe` (ADR-006), and is why the
-`Category` record carries `_≈_` as a field.
+[`Category`][Setoid.Categories.Category]: objects are `Algebra α ρ`, homs are the
+setoid homomorphisms `hom` of [Setoid.Homomorphisms][], identity and composition are
+`𝒾𝒹` and `⊙-hom`, and the hom-equality `_≋_` is **pointwise** — two homomorphisms are
+equal when their underlying maps agree on every element, in the codomain's setoid
+equality.  This pointwise hom-setoid is exactly what `_≡_` cannot provide under
+`--safe`, and is why the `Category` record carries `_≈_` as a field.
 
 The `assoc` and identity laws hold by the codomain's `refl` (the underlying maps are
-definitionally equal — `⊙-hom` is function composition, `𝒾𝒹` the identity map); `∘-resp-≈`
-is the one law with content, combining the codomain's `trans` with a hom's `cong`.
+definitionally equal — `⊙-hom` is function composition, `𝒾𝒹` the identity map);
+`∘-resp-≈` is the one law with content, combining the codomain's `trans` with a hom's
+`cong`.
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -29,18 +30,20 @@ open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 
 module Setoid.Categories.Algebra {𝑆 : Signature 𝓞 𝓥} where
 
-open import Agda.Primitive  using ( _⊔_ ; lsuc ) renaming ( Set to Type )
-open import Data.Product    using ( proj₁ )
-open import Function        using ( Func )
-open import Level           using ( Level )
-open import Relation.Binary using ( Setoid ; IsEquivalence )
+-- Imports from Agda and the Agda Standard Library ----------------------------
+open import Agda.Primitive   using ( _⊔_ ; lsuc ) renaming ( Set to Type )
+open import Data.Product     using ( proj₁ )
+open import Function         using ( Func )
+open import Level            using ( Level )
+open import Relation.Binary  using ( Setoid ; IsEquivalence )
 
-open import Setoid.Algebras.Basic           {𝑆 = 𝑆} using ( Algebra ; 𝕌[_] ; 𝔻[_] )
-open import Setoid.Homomorphisms.Basic      {𝑆 = 𝑆} using ( hom )
-open import Setoid.Homomorphisms.Properties {𝑆 = 𝑆} using ( ⊙-hom ; 𝒾𝒹 )
+-- Imports from the Agda Universal Algebra Library ----------------------------
+open import Setoid.Algebras.Basic {𝑆 = 𝑆}            using ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}       using ( hom )
+open import Setoid.Homomorphisms.Properties {𝑆 = 𝑆}  using ( ⊙-hom ; 𝒾𝒹 )
 open import Setoid.Categories.Category               using ( Category )
 
-open Func renaming ( to to _⟨$⟩_ ; cong to ≈cong )
+open Func using (cong) renaming ( to to _⟨$⟩_ )
 
 private variable α ρ : Level
 ```
@@ -53,8 +56,8 @@ _≋_ {𝑨 = 𝑨} {𝑩} f g = ∀ (x : 𝕌[ 𝑨 ]) → Setoid._≈_ 𝔻[ �
 
 ≋-equiv : {𝑨 𝑩 : Algebra α ρ} → IsEquivalence (_≋_ {𝑨 = 𝑨} {𝑩})
 ≋-equiv {𝑩 = 𝑩} = record
-  { refl  = λ _       → Setoid.refl  𝔻[ 𝑩 ]
-  ; sym   = λ f≋g x   → Setoid.sym   𝔻[ 𝑩 ] (f≋g x)
+  { refl = λ _ → Setoid.refl 𝔻[ 𝑩 ]
+  ; sym = λ f≋g x → Setoid.sym 𝔻[ 𝑩 ] (f≋g x)
   ; trans = λ f≋g g≋h x → Setoid.trans 𝔻[ 𝑩 ] (f≋g x) (g≋h x)
   }
 ```
@@ -74,7 +77,7 @@ Alg α ρ = record
   ; identityˡ = λ {_} {𝑩} _ → Setoid.refl 𝔻[ 𝑩 ]
   ; identityʳ = λ {_} {𝑩} _ → Setoid.refl 𝔻[ 𝑩 ]
   ; ∘-resp-≈  = λ {_} {_} {𝑪} {_} {g} {h} f≋g h≋i x →
-                  Setoid.trans 𝔻[ 𝑪 ] (f≋g (proj₁ h ⟨$⟩ x)) (≈cong (proj₁ g) (h≋i x))
+                  Setoid.trans 𝔻[ 𝑪 ] (f≋g (proj₁ h ⟨$⟩ x)) (cong (proj₁ g) (h≋i x))
   }
 ```
 
