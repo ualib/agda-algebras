@@ -26,18 +26,16 @@ open import Setoid.Categories.Category using ( Category )
 
 private variable o ℓ e o′ ℓ′ e′ : Level
 
-record Functor (𝒞 : Category o ℓ e) (𝒟 : Category o′ ℓ′ e′)
-  : Type (o ⊔ ℓ ⊔ e ⊔ o′ ⊔ ℓ′ ⊔ e′) where
-  private module C = Category 𝒞
-  private module D = Category 𝒟
+record Functor (𝒞 : Category o ℓ e) (𝒟 : Category o′ ℓ′ e′) : Type (o ⊔ ℓ ⊔ e ⊔ o′ ⊔ ℓ′ ⊔ e′) where
+  open Category 𝒞 renaming (Obj to Obj₀; Hom to Hom₀; _≈_ to _≈₀_; id to id₀; _∘_ to _∘₀_)
+  open Category 𝒟 renaming (Obj to Obj₁; Hom to Hom₁; _≈_ to _≈₁_; id to id₁; _∘_ to _∘₁_)
   field
-    F₀ : C.Obj → D.Obj
-    F₁ : {A B : C.Obj} → A C.⇒ B → F₀ A D.⇒ F₀ B
+    F₀ : Obj₀ → Obj₁
+    F₁ : {A B : Obj₀} → Hom₀ A B → Hom₁ (F₀ A) (F₀ B)
 
-    F-resp-≈     : {A B : C.Obj} {f g : A C.⇒ B} → f C.≈ g → F₁ f D.≈ F₁ g
-    identity     : {A : C.Obj} → F₁ (C.id {A}) D.≈ D.id
-    homomorphism : {A B E : C.Obj} {f : A C.⇒ B} {g : B C.⇒ E}
-                 → F₁ (g C.∘ f) D.≈ (F₁ g D.∘ F₁ f)
+    F-resp-≈      : {A B : Obj₀} {f g : Hom₀ A B} → f ≈₀ g → F₁ f ≈₁ F₁ g
+    identity      : {A : Obj₀} → F₁ (id₀ {A}) ≈₁ id₁
+    homomorphism  : {A B E : Obj₀} {f : Hom₀ A B} {g : Hom₀ B E} → F₁ (g ∘₀ f) ≈₁ (F₁ g ∘₁ F₁ f)
 ```
 
 --------------------------------------
