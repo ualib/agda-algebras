@@ -98,7 +98,7 @@ positions by `κ φ`.
 ⟦ φ ⟧ A .cong {o , u} {.o , v} (refl , u≈v) = refl , λ i → u≈v (κ φ o i)
 ```
 
-##### Naturality
+#### Naturality
 
 Post-composing along `h` and relabelling by `φ` commute.
 
@@ -118,7 +118,7 @@ module _
   naturality-ptw = cong-app naturality
 ```
 
-##### Functoriality of `⟦_⟧`
+#### Functoriality of `⟦_⟧`
 
 `⟦_⟧` sends the identity signature morphism to the identity natural transformation and a
 composite morphism to the vertical composite of natural transformations.
@@ -134,9 +134,7 @@ module _ {S : Signature 𝓞 𝓥} {A : Setoid α ρ} where
 
 module _
   {𝑆₁ 𝑆₂ 𝑆₃ : Signature 𝓞 𝓥}
-  {A : Setoid α ρ}
-  {φ : SigMorphism 𝑆₁ 𝑆₂}
-  {ψ : SigMorphism 𝑆₂ 𝑆₃}
+  {A : Setoid α ρ} {φ : SigMorphism 𝑆₁ 𝑆₂} {ψ : SigMorphism 𝑆₂ 𝑆₃}
   where
   ⟦∘⟧ : ⟦ ψ ∘ₛ φ ⟧ A ⟨$⟩_ ≡ ⟦ ψ ⟧ A ⟨$⟩_ ∘ ⟦ φ ⟧ A ⟨$⟩_
   ⟦∘⟧ = refl
