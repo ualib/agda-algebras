@@ -156,7 +156,7 @@ restated in *curried* form: `h (x ∙ y) ≈ h x ∙ h y`.  The `compatible` fie
 `IsHom` states this against argument tuples (`h ((∙-Op ^ 𝑨) a) ≈ (∙-Op ^ 𝑩) (h ∘ a)`);
 `hom-preserves-∙` instantiates the tuple at `pair x y` and pays the `Fin 2` η-bridge
 once, via [`interp-cong`][Classical.Structures.Interpret], so downstream consumers
-(e.g. the free-expansion functor of M4-5d) get the curried law as a one-liner.
+(e.g. the free-expansion functor) get the curried law as a one-liner.
 
 ```agda
 module _ {α β ρᵃ ρᵇ : Level} {𝑨 : Magma α ρᵃ} {𝑩 : Magma β ρᵇ} where

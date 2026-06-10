@@ -10,17 +10,17 @@ author: "the agda-algebras development team"
 
 This is the [Setoid.Categories.FullSubcategory][] module of the [Agda Universal Algebra Library][].
 
-`FullSub 𝒞 P` is the full subcategory of `𝒞` whose objects are the inhabitants of
+`FullSubcategory 𝒞 P` is the full subcategory of `𝒞` whose objects are the inhabitants of
 `Σ (Obj 𝒞) P` — an object of `𝒞` together with evidence that it satisfies `P` — and
 whose morphisms, hom-equality, identity, composition, and laws are inherited from `𝒞`
 unchanged.  This is exactly the shape of the theory-satisfying classical structures
 (`Semigroup α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ Th-Semigroup`, and likewise `Monoid`,
-`Group`, …): each is a full subcategory of the algebra category
+`Group`, …); each is a full subcategory of the algebra category
 [`Alg`][Setoid.Categories.Algebra] of its signature, because a homomorphism between
 theory-satisfying algebras is just a homomorphism of the underlying algebras —
 satisfaction is a *property* of the objects, not structure on the morphisms.
 
-`FullSubF` restricts a functor along such predicates: given `F : 𝒞 ⟶ 𝒟` and a
+`FullSubcategoryF` restricts a functor along such predicates; given `F : 𝒞 ⟶ 𝒟` and a
 `transfer` of evidence `P A → Q (F₀ A)`, the functor maps the full subcategory on `P`
 to the one on `Q`, acting as `F` on morphisms.  The functor laws are inherited
 verbatim, since the hom-equalities are.
@@ -30,12 +30,11 @@ verbatim, since the hom-equalities are.
 
 module Setoid.Categories.FullSubcategory where
 
-open import Agda.Primitive  using ( _⊔_ ) renaming ( Set to Type )
-open import Data.Product    using ( Σ ; _,_ ; proj₁ ; proj₂ )
-open import Level           using ( Level )
-
-open import Setoid.Categories.Category using ( Category )
-open import Setoid.Categories.Functor  using ( Functor )
+open import Agda.Primitive              using ( _⊔_ ) renaming ( Set to Type )
+open import Data.Product                using ( Σ ; _,_ ; proj₁ ; proj₂ )
+open import Level                       using ( Level )
+open import Setoid.Categories.Category  using ( Category )
+open import Setoid.Categories.Functor   using ( Functor )
 
 private variable o ℓ e o′ ℓ′ e′ p q : Level
 ```
@@ -46,10 +45,10 @@ private variable o ℓ e o′ ℓ′ e′ p q : Level
 module _ (𝒞 : Category o ℓ e) where
   open Category 𝒞
 
-  FullSub : (P : Obj → Type p) → Category (o ⊔ p) ℓ e
-  FullSub P = record
+  FullSubcategory : (P : Obj → Type p) → Category (o ⊔ p) ℓ e
+  FullSubcategory P = record
     { Obj        = Σ Obj P
-    ; Hom        = λ A B → Hom (proj₁ A) (proj₁ B)
+    ; Hom        = λ (A B : Σ Obj P) → Hom (proj₁ A) (proj₁ B)
     ; _≈_        = _≈_
     ; id         = id
     ; _∘_        = _∘_
@@ -61,22 +60,27 @@ module _ (𝒞 : Category o ℓ e) where
     }
 ```
 
-#### Restricting a functor to full subcategories
+#### Restricting a functor to a full subcategory
 
 ```agda
-module _ {𝒞 : Category o ℓ e} {𝒟 : Category o′ ℓ′ e′}
-         {P : Category.Obj 𝒞 → Type p} {Q : Category.Obj 𝒟 → Type q} where
+open Category
+module _
+  {𝒞 : Category o ℓ e} {𝒟 : Category o′ ℓ′ e′}
+  {P : Obj 𝒞 → Type p} {Q : Obj 𝒟 → Type q}
+  (F : Functor 𝒞 𝒟)
+  where
+  open Functor F
 
-  FullSubF : (F : Functor 𝒞 𝒟) (transfer : ∀ {A} → P A → Q (Functor.F₀ F A))
-    → Functor (FullSub 𝒞 P) (FullSub 𝒟 Q)
-  FullSubF F transfer = record
-    { F₀            = λ A → F₀ (proj₁ A) , transfer (proj₂ A)
+  FullSubcategoryF :
+    (transfer : {A : Obj 𝒞} → P A → Q (F₀ A))
+    → Functor (FullSubcategory 𝒞 P) (FullSubcategory 𝒟 Q)
+  FullSubcategoryF transfer = record
+    { F₀            = λ A → ( F₀ (proj₁ A) , transfer (proj₂ A) )
     ; F₁            = F₁
     ; F-resp-≈      = F-resp-≈
     ; identity      = identity
     ; homomorphism  = homomorphism
     }
-    where open Functor F
 ```
 
 --------------------------------------
