@@ -16,7 +16,7 @@ M4-5a, b, c and the reduct-functoriality strengthening are all merged to `master
 Loose ends, neither blocking:
 
 +  A cosmetic orphan commit `5f538313` on branch `340-m4-5b-signature-functor` (two `##### → ####` heading tweaks plus a line-wrap in `Setoid/Signatures/Functor.lagda.md`), pushed after #393 merged so it never reached `master`.  Harmless; that branch is otherwise safe to delete.
-+  Commits made in this environment show as **Unverified** on GitHub because the configured SSH signing key (`/home/claude/.ssh/commit_signing_key.pub`) is an empty file — there is no key to sign with.  Authorship (`Claude <noreply@anthropic.com>`) is correct.  Do **not** run the stop-hook's blanket `git rebase --exec … origin/<branch>` after a rebase: it re-authors the upstream commits it replays.
++  Commits may show as **Unverified** on GitHub if commit signing is misconfigured (e.g. the configured signing key is missing/empty).  After rebasing, avoid workflows/hooks that run a blanket `git rebase --exec … origin/<branch>`: it can rewrite and re-author the upstream commits it replays.
 
 ## Conventions to carry
 
