@@ -580,6 +580,12 @@ Markdown paragraphs are written without artificial line breaks: one paragraph is
 
 The convention applies to paragraph prose only.  Bullet items and numbered list items get one line each (the line break is structural, not cosmetic).  YAML front matter and link-reference blocks follow their own per-entry-per-line conventions.
 
+### The `docs/` tree: notes versus papers
+
+The `docs/` tree sorts its contents by kind, and the sort is by directory.  Markdown working notes, design notes, and session handoffs live in `docs/notes/` (lowercase); LaTeX papers and their build assets — `.tex` sources, conference and arXiv submissions, `.cls`/`.sty`/`.bib` files, and figure PDFs — live under `docs/papers/`, one subdirectory per paper.  Architecture Decision Records (ADRs) keep their own `docs/adr/` home, and style and quality audits live in `docs/audits/`.
+
+Two rules keep this stable.  Never create two `docs/` directories whose names differ only in case: the `docs/notes/` versus `docs/Notes/` pair that motivated this section collides on case-insensitive filesystems, where a checkout folds the two into one directory and can silently clobber files.  And never file a paper under a "notes" name: if it has a `.tex` source and a document class it is a paper, and it belongs in `docs/papers/<paper-name>/` alongside the arXiv source and `TYPES2021/`.
+
 ---
 
 ## Deprecation policy
