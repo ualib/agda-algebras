@@ -16,10 +16,7 @@ An `Adjunction L R` exhibits the functor `L : 𝒞 ⟶ 𝒟` as *left adjoint* t
 `counit` of `𝒟`-morphisms `L (R B) ⟶ B`, each with its naturality square, together
 with the two triangle identities — `zig` (the counit–unit triangle at `L`,
 `counit (L A) ∘ L (unit A) ≈ id`) and `zag` (the triangle at `R`,
-`R (counit B) ∘ unit (R B) ≈ id`).  Packaging `unit` and `counit` as
-natural-transformation records is deferred to M4-5e, which introduces them for the
-`Term` monad; the componentwise form is exactly what the free-expansion spike of
-M4-5d consumes.
+`R (counit B) ∘ unit (R B) ≈ id`).[^1]
 
 Every law is stated against the owning category's hom-equality `_≈_`, so an
 instance whose hom-equality is pointwise (the algebra categories of
@@ -38,8 +35,9 @@ open import Setoid.Categories.Functor  using ( Functor )
 
 private variable o ℓ e o′ ℓ′ e′ : Level
 
-record Adjunction {𝒞 : Category o ℓ e} {𝒟 : Category o′ ℓ′ e′}
-                  (L : Functor 𝒞 𝒟) (R : Functor 𝒟 𝒞) : Type (o ⊔ ℓ ⊔ e ⊔ o′ ⊔ ℓ′ ⊔ e′) where
+record Adjunction
+  {𝒞 : Category o ℓ e} {𝒟 : Category o′ ℓ′ e′}
+  (L : Functor 𝒞 𝒟) (R : Functor 𝒟 𝒞) : Type (o ⊔ ℓ ⊔ e ⊔ o′ ⊔ ℓ′ ⊔ e′) where
   open Category 𝒞 renaming ( Obj to Obj₀ ; Hom to Hom₀ ; _≈_ to _≈₀_ ; id to id₀ ; _∘_ to _∘₀_ )
   open Category 𝒟 renaming ( Obj to Obj₁ ; Hom to Hom₁ ; _≈_ to _≈₁_ ; id to id₁ ; _∘_ to _∘₁_ )
   open Functor L renaming ( F₀ to L₀ ; F₁ to L₁ )
@@ -51,16 +49,16 @@ record Adjunction {𝒞 : Category o ℓ e} {𝒟 : Category o′ ℓ′ e′}
     counit : (B : Obj₁) → Hom₁ (L₀ (R₀ B)) B
 
     -- Naturality of each family.
-    unit-natural   : {A B : Obj₀} (f : Hom₀ A B)
-                   → (unit B ∘₀ f) ≈₀ (R₁ (L₁ f) ∘₀ unit A)
-    counit-natural : {A B : Obj₁} (g : Hom₁ A B)
-                   → (counit B ∘₁ L₁ (R₁ g)) ≈₁ (g ∘₁ counit A)
+    unit-natural : {A B : Obj₀} (f : Hom₀ A B) → unit B ∘₀ f ≈₀ R₁ (L₁ f) ∘₀ unit A
+    counit-natural : {A B : Obj₁} (g : Hom₁ A B) → counit B ∘₁ L₁ (R₁ g) ≈₁ g ∘₁ counit A
 
     -- The triangle identities.
-    zig : (A : Obj₀) → (counit (L₀ A) ∘₁ L₁ (unit A)) ≈₁ id₁ {L₀ A}
-    zag : (B : Obj₁) → (R₁ (counit B) ∘₀ unit (R₀ B)) ≈₀ id₀ {R₀ B}
+    zig : (A : Obj₀) → counit (L₀ A) ∘₁ L₁ (unit A) ≈₁ id₁ {L₀ A}
+    zag : (B : Obj₁) → R₁ (counit B) ∘₀ unit (R₀ B) ≈₀ id₀ {R₀ B}
 ```
 
 --------------------------------------
+
+[^1]: Packaging `unit` and `counit` as natural-transformation records is deferred to M4-5e, which introduces them for the `Term` monad; the componentwise form is exactly what the free-expansion spike of M4-5d consumes.
 
 {% include UALib.Links.md %}

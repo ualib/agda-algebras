@@ -195,7 +195,7 @@ module Semigroup-Op {α ρ : Level} (𝑺 : Semigroup α ρ) where
   -- surrounding steps reassociate `interp-node` and `∙-cong` to carry it between
   -- the curried endpoints.  This is the law in the form working algebraists want,
   -- and it is what the bundle bridge's `assoc` field reduces to.
-  assoc-law : ∀ x y z → (x ∙ y) ∙ z ≈ x ∙ (y ∙ z)
+  assoc-law : ∀ x y z → x ∙ y ∙ z ≈ x ∙ (y ∙ z)
   assoc-law x y z = begin
     (x ∙ y) ∙ z          ≈⟨ ∙-cong (sym (interp-node (ℊ 0F) (ℊ 1F) η)) refl ⟩
     (⟦ Lt ⟧ ⟨$⟩ η) ∙ z   ≈⟨ sym (interp-node Lt (ℊ 2F) η) ⟩
