@@ -78,6 +78,7 @@ open import Classical.Theories.Semigroup    using ( Th-Semigroup ) renaming ( as
 open import Overture.Terms                  using ( Term ; ℊ ; node )
 open import Overture.Signatures             using ( ArityOf ; OperationSymbolsOf)
 open import Setoid.Algebras.Basic           using ( Algebra ; _^_ ; 𝔻[_] ; 𝕌[_] )
+open import Setoid.Homomorphisms.Basic {𝑆 = Sig-Monoid}  using ( hom ; IsHom )
 open import Setoid.Terms                    using ( module Environment )
 
 open import Setoid.Varieties.EquationalLogic {𝑆 = Sig-Monoid} using ( _⊧_≈_ )
@@ -253,6 +254,27 @@ of the monoid, definitionally equal to `∙ᴿ` since the position map is `id`),
 refold.  Mechanically identical to `Semigroup-Op.assoc-law` but on `𝑹` and pivoting
 through `mn-assoc 𝑴` in the middle.
 
+#### Homomorphism invariants
+
+Per the policy stated in [`Classical.Structures.Magma`][], morphism invariants are
+theorems about the inherited `Sig-Monoid`-homomorphisms, not new record fields.  The
+inaugural instance is the one that prose names explicitly: *homomorphisms preserve
+the identity element*.  The proof needs only the homomorphism's compatibility at
+`ε-Op` — no monoid theory — so it is stated for raw `Sig-Monoid`-algebras, in the
+curried form (`Curry₀ (ε-Op ^ 𝑨)` is the distinguished element of `𝑨`) that
+downstream consumers use; the empty-arity tuple bridge is one `interp-cong` with the
+vacuous pointwise witness `λ ()`.
+
+```agda
+module _ {α β ρᵃ ρᵇ : Level} {𝑨 : Algebra {𝑆 = Sig-Monoid} α ρᵃ} {𝑩 : Algebra {𝑆 = Sig-Monoid} β ρᵇ} where
+  open Setoid 𝔻[ 𝑩 ] using () renaming ( _≈_ to _≈ᵇ_ ; trans to ≈ᵇ-trans )
+
+  -- Monoid homomorphisms preserve the identity element: h ε ≈ ε.
+  hom-preserves-ε : (h : hom 𝑨 𝑩) → proj₁ h ⟨$⟩ Curry₀ (ε-Op ^ 𝑨) ≈ᵇ Curry₀ (ε-Op ^ 𝑩)
+  hom-preserves-ε h =
+    ≈ᵇ-trans (IsHom.compatible (proj₂ h) {ε-Op} {λ ()}) (interp-cong 𝑩 ε-Op (λ ()))
+```
+
 #### Monoid Builders
 
 `opsToBareMonoid` builds a "raw" algebra in the signature of a monoid from a carrier,
@@ -268,15 +290,34 @@ opsToBareMonoid A _·_ e = expand-ε e
   open Algebra
   𝑩 : Algebra {𝑆 = Sig-Magma} _ _
   𝑩 = opsToMagma A _·_
-  -- expand-ε is the expand half of the reduct/expand dual at the Sig-Magma ↪ Sig-Monoid
-  -- step, written inline; we'll construct a shared `expand` module once Group's
-  -- expand-⁻¹ provides a second consumer.
+  -- expand-ε interprets ε-Op as a *chosen element of the existing carrier* — it is a
+  -- section of the reduct along Sig-Magma ↪ Sig-Monoid (opsToBareMonoid-section
+  -- below), not the reduct's left adjoint.  The *free* expansion, which adjoins a
+  -- fresh element and is universal, is Classical.Categories.AdjoinUnit (M4-5d); see
+  -- docs/notes/m4-5d-free-expansion.md for the comparison.  expand-ε stays inline;
+  -- a shared `expand` module is still deferred until Group's expand-⁻¹ provides a
+  -- second consumer.
   expand-ε : A → Algebra {𝑆 = Sig-Monoid} _ _
   expand-ε _ .Domain = 𝔻[ 𝑩 ]
   expand-ε _ .Interp ⟨$⟩ (∙-Op , args) = (∙-Opᵐᵃ ^ 𝑩) args
   expand-ε e .Interp ⟨$⟩ (ε-Op , _) = e
   expand-ε _ .Interp .cong {∙-Op , _} {.∙-Op , _} (refl , u≈v) = cong (𝑩 .Interp) (refl , u≈v)
   expand-ε _ .Interp .cong {ε-Op , _} {.ε-Op , _} (refl , _) = Setoid.refl 𝔻[ 𝑩 ]
+```
+
+That `expand-ε` is a *section* of the reduct — reducting the expansion recovers the
+original magma, carrier and interpretation on the nose — is a definitional fact,
+recorded here in the strict operation-level form of
+[`Classical.Structures.Reduct`][]'s functoriality laws.  This is the formal half of
+the section-versus-adjoint contrast of M4-5d: `expand-ε` *chooses* an existing
+element to interpret `ε-Op` (so the carrier is unchanged and the reduct round-trips),
+whereas the free expansion `adjoinUnit` of [`Classical.Categories.AdjoinUnit`][]
+*adjoins* a fresh element (enlarging the carrier) and is universal.
+
+```agda
+opsToBareMonoid-section : (A : Type α) (_·_ : A → A → A) (e : A) (o : OperationSymbolsOf Sig-Magma)
+  → o ^ reductBy ∙-incl ∙-κ (opsToBareMonoid A _·_ e) ≡ o ^ opsToMagma A _·_
+opsToBareMonoid-section A _·_ e ∙-Opᵐᵃ = refl
 ```
 
 `eqsToMonoid` builds a Monoid by first building the raw algebra via `opsToBareMonoid`,

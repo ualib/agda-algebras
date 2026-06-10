@@ -44,7 +44,7 @@ module Classical.Structures.Magma where
 -- Imports from Agda and the Agda Standard Library ----------------------------
 open import Agda.Primitive                         using () renaming ( Set to Type )
 open import Data.Fin.Patterns                      using ( 0F ; 1F )
-open import Data.Product                           using ( _,_ )
+open import Data.Product                           using ( _,_ ; proj₁ ; proj₂ )
 open import Function                               using ( Func )
 open import Level                                  using ( Level ; _⊔_ ; suc )
 open import Relation.Binary                        using ( Setoid )
@@ -53,9 +53,11 @@ import Relation.Binary.PropositionalEquality as ≡
 open Func renaming ( to to _⟨$⟩_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Classical.Operations                   using ( Curry₂ )
+open import Classical.Operations                   using ( Curry₂ ; pair )
 open import Classical.Signatures.Magma             using ( Op-Magma ; ∙-Op ; Sig-Magma )
+open import Classical.Structures.Interpret         using ( interp-cong )
 open import Setoid.Algebras.Basic {𝑆 = Sig-Magma}  using ( Algebra ; _^_ ; 𝔻[_] ; 𝕌[_] ; ⟨_⟩ )
+open import Setoid.Homomorphisms.Basic {𝑆 = Sig-Magma}  using ( hom ; IsHom )
 
 private variable α ρ : Level
 ```
@@ -148,6 +150,27 @@ homomorphisms, isomorphisms, and substructure machinery from `Setoid/`
 instantiated at its own signature.  Per-structure morphism *invariants* — for
 example, "monoid homomorphisms preserve the identity element" — are theorems
 about the inherited homomorphism, not new record fields.
+
+The first such invariant is the inherited homomorphism's compatibility with `∙-Op`
+restated in *curried* form: `h (x ∙ y) ≈ h x ∙ h y`.  The `compatible` field of
+`IsHom` states this against argument tuples (`h ((∙-Op ^ 𝑨) a) ≈ (∙-Op ^ 𝑩) (h ∘ a)`);
+`hom-preserves-∙` instantiates the tuple at `pair x y` and pays the `Fin 2` η-bridge
+once, via [`interp-cong`][Classical.Structures.Interpret], so downstream consumers
+(e.g. the free-expansion functor of M4-5d) get the curried law as a one-liner.
+
+```agda
+module _ {α β ρᵃ ρᵇ : Level} {𝑨 : Magma α ρᵃ} {𝑩 : Magma β ρᵇ} where
+  open Magma-Op 𝑨 using ( _∙_ )
+  open Magma-Op 𝑩 using () renaming ( _∙_ to _∙ᵇ_ )
+  open Setoid 𝔻[ 𝑩 ] using () renaming ( _≈_ to _≈ᵇ_ ; refl to ≈ᵇ-refl ; trans to ≈ᵇ-trans )
+
+  -- Magma homomorphisms preserve the binary operation, in curried form.
+  hom-preserves-∙ : (h : hom 𝑨 𝑩) (x y : 𝕌[ 𝑨 ])
+    → proj₁ h ⟨$⟩ (x ∙ y) ≈ᵇ (proj₁ h ⟨$⟩ x) ∙ᵇ (proj₁ h ⟨$⟩ y)
+  hom-preserves-∙ h x y =
+    ≈ᵇ-trans  (IsHom.compatible (proj₂ h) {∙-Op} {pair x y})
+              (interp-cong 𝑩 ∙-Op (λ { 0F → ≈ᵇ-refl ; 1F → ≈ᵇ-refl }))
+```
 
 --------------------------------------
 

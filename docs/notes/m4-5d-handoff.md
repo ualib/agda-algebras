@@ -4,7 +4,9 @@
 
 This is a working handoff for the session that picks up **M4-5d** (the `F ⊣ reduct` free-expansion adjunction, #342) and the rest of the M4-5 category-theoretic chain.  Read it together with the design note [`milestone-signature-functors.md`](milestone-signature-functors.md) (the mathematical map and the a→g subissue dependency chain) and [ADR-006](../adr/006-signature-morphism-category.md) (the equality/realization decisions).  The dated *state* section below is transient; the conventions and gotchas under it are durable.
 
-## Where things stand (2026-06-09)
+## Where things stand (2026-06-10)
+
+The M4-5d spike is implemented (branch `claude/happy-curie-owacbr`): `Setoid.Categories.{Adjunction, FullSubcategory}`, `Classical.Categories.AdjoinUnit` (the `adjoinUnit ⊣ forgetUnit` adjunction with triangle identities and the explicit universal property), the `hom-preserves-∙` / `hom-preserves-ε` morphism invariants, the `expand-ε`-is-a-section lemma, and the design note [`m4-5d-free-expansion.md`](m4-5d-free-expansion.md) (which also records the implicit-pinning gotchas this spike re-confirmed).  The general raw-level free expansion (the issue's stretch task) is deferred there with a concrete construction plan.
 
 M4-5a, b, c and the reduct-functoriality strengthening are all merged to `master`:
 
