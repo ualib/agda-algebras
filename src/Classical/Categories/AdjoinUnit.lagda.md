@@ -61,9 +61,7 @@ open import Relation.Binary                        using  ( Setoid ; Reflexive ;
                                                           ; Symmetric ; Transitive )
 open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl )
 
-open import Algebra.Definitions as stdlib-Algebra
-  using (Associative; Commutative; LeftIdentity; RightIdentity; LeftZero; RightZero; Zero)
-
+open import Algebra.Definitions using ( Associative ; LeftIdentity ; RightIdentity )
 
 open Func using ( cong ) renaming ( to to _⟨$⟩_ )
 
@@ -165,10 +163,14 @@ module AdjoinUnit {α ρ : Level} (𝑺 : Semigroup α ρ) where
   nothing ≈¹ just _ = ⊥
   nothing ≈¹ nothing = ⊤
 
-  -- The equivalence proofs.  ≈¹-refl takes its argument explicitly: _≈¹_ is a
-  -- pattern-matching function, so the unifier cannot recover the argument from
-  -- the goal (it would have to invert a non-injective function); the same gotcha
-  -- forces the eta-expanded field assignments in 𝔻¹ below.
+  -- The equivalence proofs.  _≈¹_ is a pattern-matching function, so the unifier
+  -- cannot recover its arguments from a goal (that would mean inverting a
+  -- non-injective function); hence the use sites pin ≈¹-refl's implicit
+  -- explicitly (`≈¹-refl {t}`), and the field assignments in 𝔻¹ below are
+  -- eta-expanded for the same reason.  The cross-constructor cases are
+  -- impossible (the hypothesis type reduces to the empty `⊥`); Agda's coverage
+  -- checker discharges them silently if they are omitted, but we keep the
+  -- absurd clauses explicit so totality is locally evident.
   ≈¹-refl : Reflexive _≈¹_
   ≈¹-refl {just _} = ≈refl
   ≈¹-refl {nothing} = tt
@@ -181,12 +183,11 @@ module AdjoinUnit {α ρ : Level} (𝑺 : Semigroup α ρ) where
 
   ≈¹-trans : Transitive _≈¹_
   ≈¹-trans {just _} {just _} {just _} x≈y y≈z = ≈trans x≈y y≈z
+  ≈¹-trans {just _} {just _} {nothing} _ ()
+  ≈¹-trans {just _} {nothing} ()
+  ≈¹-trans {nothing} {just _} ()
+  ≈¹-trans {nothing} {nothing} {just _} _ ()
   ≈¹-trans {nothing} {nothing} {nothing} _ _ = tt
-  -- Do we need the following cases?
-  -- ≈¹-trans {just _} {just _} {nothing} _ ()
-  -- ≈¹-trans {just _} {nothing} ()
-  -- ≈¹-trans {nothing} {just _} ()
-  -- ≈¹-trans {nothing} {nothing} {just _} _ ()
 
   𝔻¹ : Setoid α ρ
   𝔻¹ = record
@@ -213,13 +214,12 @@ involving the fresh element survives as a new carrier element.
 
   ∙¹-cong : {s s' t t' : A¹} → s ≈¹ s' → t ≈¹ t' → s ∙¹ t ≈¹ s' ∙¹ t'
   ∙¹-cong {just _} {just _} {just _} {just _} s≈s' t≈t' = ∙-cong s≈s' t≈t'
-  ∙¹-cong {nothing} {nothing} _ t≈t' = t≈t'
+  ∙¹-cong {just _} {just _} {just _} {nothing} _ ()
+  ∙¹-cong {just _} {just _} {nothing} {just _} _ ()
   ∙¹-cong {just _} {just _} {nothing} {nothing} s≈s' _ = s≈s'
-  -- Do we need the following cases?
-  -- ∙¹-cong {just _} {just _} {just _} {nothing} _ ()
-  -- ∙¹-cong {just _} {just _} {nothing} {just _} _ ()
-  -- ∙¹-cong {just _} {nothing} ()
-  -- ∙¹-cong {nothing} {just _} ()
+  ∙¹-cong {just _} {nothing} ()
+  ∙¹-cong {nothing} {just _} ()
+  ∙¹-cong {nothing} {nothing} _ t≈t' = t≈t'
 
   -- The Sig-Monoid algebra: ∙-Op is the extended operation, ε-Op the fresh element.
   𝑨¹ : Algebra {𝑆 = Sig-Monoid} α ρ
@@ -246,13 +246,16 @@ satisfaction proofs are exactly these curried lemmas (the `eqsToMonoid` pattern)
   ∙¹-assoc (just _) nothing nothing = ≈refl
   ∙¹-assoc nothing t u = ≈¹-refl {t ∙¹ u}
 
-  ∙¹-idʳ : (t : A¹) → (t ∙¹ nothing) ≈¹ t
+  ∙¹-idˡ : LeftIdentity _≈¹_ nothing _∙¹_
+  ∙¹-idˡ t = ≈¹-refl {t}
+
+  ∙¹-idʳ : RightIdentity _≈¹_ nothing _∙¹_
   ∙¹-idʳ (just _) = ≈refl
   ∙¹-idʳ nothing = tt
 
   𝑨¹⊨Th-Monoid : 𝑨¹ ⊨ᵐᵒ Th-Monoid
   𝑨¹⊨Th-Monoid assoc η = ∙¹-assoc (η 0F) (η 1F) (η 2F)
-  𝑨¹⊨Th-Monoid idˡ η = ≈¹-refl {η 0F}
+  𝑨¹⊨Th-Monoid idˡ η = ∙¹-idˡ (η 0F)
   𝑨¹⊨Th-Monoid idʳ η = ∙¹-idʳ (η 0F)
 ```
 
@@ -354,7 +357,7 @@ old elements into the corresponding product in the expansion, up to the `Fin 2`
 ```agda
 module _ (𝑺 : Semigroup α ρ) where
   private 𝑨 = proj₁ 𝑺
-  open AdjoinUnit 𝑺 using (𝔻¹; A¹; 𝑨¹; _≈¹_)
+  open AdjoinUnit 𝑺 using (𝔻¹; 𝑨¹; _≈¹_)
   open Setoid 𝔻[ 𝑨 ] using () renaming ( refl to ≈refl )
 
   unit-map : Func 𝔻[ 𝑨 ] 𝔻¹
@@ -392,11 +395,10 @@ module _ (𝑺 : Semigroup α ρ) (𝑴 : Monoid α ρ) (f : hom (proj₁ 𝑺) 
   extend-map : Func 𝔻¹ 𝔻[ 𝑩 ]
   extend-map ⟨$⟩ just x  = proj₁ f ⟨$⟩ x
   extend-map ⟨$⟩ nothing = ε
-  extend-map .cong {just _} {just _}  x≈y = cong (proj₁ f) x≈y
+  extend-map .cong {just _} {just _} x≈y = cong (proj₁ f) x≈y
+  extend-map .cong {just _} {nothing} ()
+  extend-map .cong {nothing} {just _} ()
   extend-map .cong {nothing} {nothing} _ = ≈ᵇ-refl
-  -- Do we need the following cases?
-  -- extend-map .cong {just _} {nothing} ()
-  -- extend-map .cong {nothing} {just _}  ()
 
   -- Formal products in the expansion become real products in 𝑴;
   -- the unit laws of 𝑴 absorb the cases involving the fresh unit.
@@ -458,8 +460,11 @@ module _ (𝑴 𝑵 : Monoid α ρ) (g : hom (proj₁ 𝑴) (proj₁ 𝑵)) wher
 module _ (𝑺 : Semigroup α ρ) where
   open AdjoinUnit 𝑺 using (A¹; _≈¹_)
   open Setoid 𝔻[ proj₁ 𝑺 ] using () renaming ( refl to ≈ˢ-refl )
-  F𝑺 : Monoid α ρ
-  F𝑺 = adjoinUnit 𝑺
+  -- Local abbreviation only; the canonical name for the free expansion stays
+  -- adjoinUnit (no public synonyms).
+  private
+    F𝑺 : Monoid α ρ
+    F𝑺 = adjoinUnit 𝑺
 
   zig¹ : (t : A¹)
     → proj₁ (counit-hom F𝑺) ⟨$⟩ (map¹ 𝑺 (monoid→semigroup F𝑺) (unit-map 𝑺) ⟨$⟩ t) ≈¹ t
