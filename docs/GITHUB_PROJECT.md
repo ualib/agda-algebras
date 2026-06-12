@@ -2243,10 +2243,10 @@ A signature morphism is a container morphism `(ι , κ)` (`ι` covariant on symb
 
 ## Subissues
 
-+  [ ] **M4-5a** Category of signature morphisms; promote `reduct` to a packaged morphism.  *(low risk)*
-+  [ ] **M4-5b** `⟨_⟩` as a functor; induced natural transformations.  *(low–medium)*
-+  [ ] **M4-5c** Reduct as a functor on algebras; upgrade the classical forgetful *projections* to forgetful *functors* by supplying the morphism action.  *(medium)*
-+  [ ] **M4-5d** Free expansion; the `F ⊣ reduct` adjunction.  Distinguish from M3-6's chosen `expand-ε`.  *(high / high-value)*
++  [x] **M4-5a** Category of signature morphisms; promote `reduct` to a packaged morphism.  *(low risk; #392, #394)*
++  [x] **M4-5b** `⟨_⟩` as a functor; induced natural transformations.  *(low–medium; #393)*
++  [x] **M4-5c** Reduct as a functor on algebras; upgrade the classical forgetful *projections* to forgetful *functors* by supplying the morphism action.  *(medium; #395)*
++  [x] **M4-5d** Free expansion; the `F ⊣ reduct` adjunction.  Distinguish from M3-6's chosen `expand-ε`.  *(high / high-value; spike landed in #399, raw-level stretch deferred — see `docs/notes/m4-5d-free-expansion.md`)*
 +  [ ] **M4-5e** Term monad; naturality of the fold; reduct-invariance of satisfaction as a corollary, absorbing M3-6's per-structure pivot proofs.  *(medium)*
 +  [ ] **M4-5f** Theory interpretations; Maltsev conditions as interpretations; the interpretability quasi-order.  *(research-grade, exploratory)*
 +  [ ] **M4-5g** Reduct classes of varieties are prevarieties (closed under S, P, not H).  *(research-grade)*
