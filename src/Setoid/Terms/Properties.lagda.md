@@ -33,8 +33,8 @@ open import Setoid.Functions  using ( Img_∋_ ; eq ; isSurj ; IsSurjective )
                               using ( isSurj→IsSurjective )
 
 open import Overture.Terms        {𝑆 = 𝑆} using ( Term )
-open import Setoid.Algebras       {𝑆 = 𝑆} using ( Algebra ; 𝕌[_] ; _^_ )
-open import Setoid.Homomorphisms  {𝑆 = 𝑆} using ( hom ; compatible-map ; IsHom )
+open import Setoid.Algebras       {𝑆 = 𝑆} using ( Algebra ; 𝕌[_] ; 𝔻[_] ; _^_ )
+open import Setoid.Homomorphisms  {𝑆 = 𝑆} using ( hom ; compatible-map ; IsHom ; ⊙-hom )
 open import Setoid.Terms.Basic    {𝑆 = 𝑆}  using ( 𝑻 ; _≐_  ; ≐-isRefl )
 
 open Term
@@ -153,6 +153,52 @@ module _ {𝑨 : Algebra α ρ}{gh hh : hom (𝑻 X) 𝑨} where
 
   heq : h (node f t) ≈ (f ^ 𝑨)(λ i → h (t i))
   heq = compatible (proj₂ hh)
+```
+
+
+##### Naturality of the free lift
+
+Existence (`lift-hom`) and uniqueness (`free-unique`) together say that `𝑻 X` is a
+*free* (initial) object, and freeness always brings a third, slightly less quotable
+property: the assignment "generator map ↦ induced homomorphism" is *natural* in the
+target algebra.  Concretely, lifting `η : X → 𝕌[ 𝑨 ]` into `𝑨` and then applying a
+homomorphism `h : 𝑨 ⟶ 𝑩` is the same as lifting the composite map `h ∘ η` into `𝑩`
+directly:
+
+```text
+                  lift-hom η
+        𝑻 X ────────────────────→ 𝑨
+            ╲                     │
+             ╲                    │ h
+   lift-hom   ╲                   │
+   (h ∘ η)     ↘                  ↓
+                                  𝑩
+```
+
+The proof is a one-liner, and *that* is the point: both routes around the triangle
+are homomorphisms `𝑻 X ⟶ 𝑩` that agree on the generators (both send `ℊ x` to
+`h (η x)`, definitionally), so `free-unique` forces them to agree on every term.  No
+induction over terms appears here — it is already packaged inside `free-unique`.
+This is the way category theory pays rent: theorems about *all* terms become
+theorems about *generators only*.
+
+(The same fact in environment form — `h (⟦ t ⟧ a) ≈ ⟦ t ⟧ (h ∘ a)` — is
+`comm-hom-term` in [Setoid.Terms.Operations][], proved there by direct induction;
+`free-lift-interp`, also in that module, mediates between the two phrasings.  The
+companion naturality in the *signature* argument, where the algebra is fixed and the
+signature varies along a morphism, is `reduct-interp` in
+[Classical.Varieties.Invariance][].)
+
+```agda
+module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}(h : hom 𝑨 𝑩)(η : X → 𝕌[ 𝑨 ]) where
+ open Setoid 𝔻[ 𝑩 ] using () renaming ( _≈_ to _≈ᵇ_ ; refl to reflᵇ )
+
+ free-lift-natural : (t : Term X)
+  →                  proj₁ h ⟨$⟩ free-lift{𝑨 = 𝑨} η t ≈ᵇ free-lift{𝑨 = 𝑩} (λ x → proj₁ h ⟨$⟩ η x) t
+
+ free-lift-natural =
+  free-unique {𝑨 = 𝑩} {gh = ⊙-hom (lift-hom η) h} {hh = lift-hom (λ x → proj₁ h ⟨$⟩ η x)}
+   (λ _ → reflᵇ)
 ```
 
 
