@@ -20,7 +20,12 @@ module Setoid.Terms {𝑆 : Signature 𝓞 𝓥} where
 open import Setoid.Terms.Basic       {𝑆 = 𝑆} public
 open import Setoid.Terms.Properties  {𝑆 = 𝑆} public
 open import Setoid.Terms.Operations  {𝑆 = 𝑆} public
+open import Setoid.Terms.Monad       {𝑆 = 𝑆} public
 ```
+
+(The laws of term *translation* along a signature morphism live in
+[Setoid.Terms.Translation][]; that module relates two signatures at once, so it is
+not `{𝑆}`-parameterized and is imported directly rather than re-exported here.)
 
 
 --------------------------------
