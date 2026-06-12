@@ -618,6 +618,55 @@ The library is intended to support AI-assisted formal development (the `agda-nat
 +  Chicken-and-egg: the hook only takes effect once it is on the checked-out branch, so the first session after merge — and any session on a branch that contains it — is provisioned automatically.
 +  Project-specific Claude Code skills (an Agda type-check skill, a `docs/STYLE.md`-mirroring style skill) are deferred to a follow-up issue to keep this change focused on the environment.
 
+---
+
+### Issue M1-12: Reorganize docs/: resolve the docs/notes vs docs/Notes case collision (#396, closed)
+
+**Labels**: 
+
+## Problem
+
+`docs/` holds two sibling directories whose names differ only in case — `docs/notes/` and `docs/Notes/`.  On a case-insensitive filesystem (default macOS APFS, default Windows NTFS) these two paths collide: git tracks them as distinct, but a checkout folds them into one directory, producing phantom modify/delete churn in `git status` and risking file clobbering on checkout.  This is a portability bug, not merely a cosmetic one; it will bite any collaborator or CI runner on a case-insensitive filesystem.
+
+The two directories are also unrelated in content:
+
++  `docs/notes/` holds Markdown working and design notes — currently `milestone-signature-functors.md` and `m4-5d-handoff.md`.  This is the correct home for prose notes and should keep its lowercase name.
++  `docs/Notes/` is not notes at all: it is a LIPIcs LaTeX paper draft, *"The design space of generalizing universal algebra"* (Jacques Carette), together with its build assets (`lipics-v2021.cls`, `cc-by.pdf`, `orcid.pdf`, `lipics-logo-bw.pdf`).  It is paper material misfiled under a "Notes" name.
+
+## Proposed structure
+
+Move the LaTeX draft under `docs/papers/` (where the arXiv paper and `TYPES2021/` already live) and keep `docs/notes/` for Markdown notes:
+
+```
+docs/
+├── adr/            # architecture decision records (unchanged)
+├── audits/         # style / quality audits (unchanged)
+├── notes/          # Markdown working & design notes (unchanged; canonical home for prose notes)
+├── papers/         # all LaTeX papers and their assets
+│   ├── designspace/   # ← moved from docs/Notes/ (Carette "design space" LIPIcs draft + assets)
+│   ├── TYPES2021/
+│   └── …              # arXiv paper, shared .cls / .sty / .bib / pdf
+├── GITHUB_PROJECT.md
+└── STYLE_GUIDE.md
+```
+
+The core move eliminates the `docs/Notes` path entirely, so the collision is resolved without a case-only rename (which would itself need a two-step `git mv` on a case-insensitive filesystem).
+
+## Tasks
+
++  [ ] `git mv docs/Notes docs/papers/designspace` (moves `designspace.tex` and its four assets).
++  [ ] Grep the repo for references to `docs/Notes` (any makefile target, link, or build script) and update them.
++  [ ] Record the convention in `docs/STYLE_GUIDE.md`: `docs/notes/` is the home for Markdown notes; LaTeX papers and their assets live under `docs/papers/`.
+
+## Non-goals
+
++  Deduplicating the three `lipics-v2021.cls` copies (under `docs/Notes/`, `docs/papers/`, and `docs/papers/TYPES2021/`).  They have **different** contents (distinct md5sums), so consolidating them is a separate, careful task and not part of this cleanup.
++  Any change to `src/`, or to the `adr/` and `audits/` trees.
+
+## Labeling
+
+This is repo-infrastructure and docs-governance hygiene, so it belongs in milestone **M1** (home of CI, the STYLE_GUIDE, `docs/adr/`, and the GITHUB_PROJECT tooling), as **M1-12** — the next free M1 number (M1-11 / #349 is the highest used).
+
 <!-- END GENERATED: milestone-1 -->
 
 ### Milestone 1 Dependencies
@@ -2182,38 +2231,15 @@ Low, but the blast radius is whatever currently imports `⟨_⟩`/`EqArgs` from 
 
 ## Summary
 
-Make the polynomial-functor / container structure already latent in the foundation
-*first-class*, and with it the total-category (`∫Alg`) view that reducts, expansions,
-and signature morphisms inherently require — as opposed to the fibre view (`Alg(𝑆)`
-for a fixed `𝑆`) that the module-parameter convention of `Setoid.Algebras.Basic`
-privileges.  This is the structural companion to the surgical fix in [M4-4]: where
-M4-4 relocates the two signature-generic helpers (`⟨_⟩`, `EqArgs`) that leak the
-unused module parameter, M4-5 builds out the category-theoretic layer that motivates
-ranging over signatures in the first place.  Full design in
-`docs/notes/milestone-signature-functors.md`.
+Make the polynomial-functor / container structure already latent in the foundation *first-class*, and with it the total-category (`∫Alg`) view that reducts, expansions, and signature morphisms inherently require — as opposed to the fibre view (`Alg(𝑆)` for a fixed `𝑆`) that the module-parameter convention of `Setoid.Algebras.Basic` privileges.  This is the structural companion to the surgical fix in [M4-4]: where M4-4 relocates the two signature-generic helpers (`⟨_⟩`, `EqArgs`) that leak the unused module parameter, M4-5 builds out the category-theoretic layer that motivates ranging over signatures in the first place.  Full design in `docs/notes/milestone-signature-functors.md`.
 
 ## Why now
 
-The M3-6 (Monoid/Group) work built, by hand, a container-morphism `reduct`
-([`Classical.Structures.Reduct`][]), an `expand-ε` dual, and discovered that
-"reduct-invariance of satisfaction" is what discharges each forgetful projection's
-theory obligation (the per-structure curried-law pivots in `monoid→semigroup` and the
-reindex forgetfuls).  It also surfaced that the foundation already *is* a
-polynomial-functor formalization without saying so: `Signature` is a container,
-`⟨ 𝑆 ⟩` is the polynomial functor `P_σ` lifted to setoids, `Interp` is the structure
-map `P_σ(Domain) → Domain`, and `Term` is the initial algebra of `A ↦ X ⊎ P_σ(A)`.
-M4-5 makes this explicit and reusable, and is the proper home for the
-`Base/Adjunction` and `Base/Categories` orphans currently parked as TBD.
+The M3-6 (Monoid/Group) work built, by hand, a container-morphism `reduct` ([`Classical.Structures.Reduct`][]), an `expand-ε` dual, and discovered that "reduct-invariance of satisfaction" is what discharges each forgetful projection's theory obligation (the per-structure curried-law pivots in `monoid→semigroup` and the reindex forgetfuls).  It also surfaced that the foundation already *is* a polynomial-functor formalization without saying so: `Signature` is a container, `⟨ 𝑆 ⟩` is the polynomial functor `P_σ` lifted to setoids, `Interp` is the structure map `P_σ(Domain) → Domain`, and `Term` is the initial algebra of `A ↦ X ⊎ P_σ(A)`.  M4-5 makes this explicit and reusable, and is the proper home for the `Base/Adjunction` and `Base/Categories` orphans currently parked as TBD.
 
 ## Mathematical core
 
-A signature morphism is a container morphism `(ι , κ)` (`ι` covariant on symbols, `κ`
-contravariant on arities).  Signatures and these morphisms form a category `Sig`.
-`P` is a 2-functor `Sig → [Setoid,Setoid]`; reduct is precomposition with the induced
-natural transformation; expansion is its copairing dual; reduct-invariance of
-satisfaction is naturality of the unique fold; reduct has a left adjoint (free
-expansion); a theory interpretation is a signature morphism into *derived* operations,
-with Maltsev conditions as interpretations of small theories.
+A signature morphism is a container morphism `(ι , κ)` (`ι` covariant on symbols, `κ` contravariant on arities).  Signatures and these morphisms form a category `Sig`.  `P` is a 2-functor `Sig → [Setoid,Setoid]`; reduct is precomposition with the induced natural transformation; expansion is its copairing dual; reduct-invariance of satisfaction is naturality of the unique fold; reduct has a left adjoint (free expansion); a theory interpretation is a signature morphism into *derived* operations, with Maltsev conditions as interpretations of small theories.
 
 ## Subissues
 
@@ -2241,13 +2267,11 @@ The ordering is a dependency chain: a→b→c→{d,e}, with e gating f and c gat
 
 ## Relationship to other work
 
-Depends on M3 (concrete reduct/expand) and the `Setoid.Varieties` machinery.  Sibling
-to [M4-4] (the `⟨_⟩`/`EqArgs` parameter-leak fix, which removes friction this milestone
-would otherwise keep hitting).  Connects to M9-2 via interpretability..
+Depends on M3 (concrete reduct/expand) and the `Setoid.Varieties` machinery.  Sibling to [M4-4] (the `⟨_⟩`/`EqArgs` parameter-leak fix, which removes friction this milestone would otherwise keep hitting).  Connects to M9-2 via interpretability.
 
 ---
 
-### Issue M4-5a: Category of signature morphisms (#339)
+### Issue M4-5a: Category of signature morphisms (#339, closed)
 
 **Labels**: `enhancement`, `milestone-4-style`, `category-theory`
 
@@ -2273,7 +2297,7 @@ References: Abbott, Altenkirch, Ghani, *Containers: constructing strictly positi
 
 ---
 
-### Issue M4-5b: `⟨_⟩` as functor and induced natural transformations (#340)
+### Issue M4-5b: `⟨_⟩` as functor and induced natural transformations (#340, closed)
 
 **Labels**: `enhancement`, `milestone-4-style`, `category-theory`
 
@@ -2294,7 +2318,7 @@ References: Gambino, Kock, *Polynomial functors and polynomial monads*.
 
 ---
 
-### Issue M4-5c: Reduct as functor on algebras (#341)
+### Issue M4-5c: Reduct as functor on algebras (#341, closed)
 
 **Labels**: `enhancement`, `milestone-4-style`, `category-theory`
 
@@ -2344,7 +2368,7 @@ Acceptance criteria:
 
 **Labels**: `enhancement`, `milestone-4-style`, `category-theory`
 
-Establish `Term 𝑆 : Setoid → Setoid` as a monad (unit `ℊ`, multiplication by substitution) and the environment interpretation `⟦_⟧` as the unique fold out of the term algebra, natural in the carrier.  The target theorem is *reduct-invariance of satisfaction*: for `φ : 𝑆₁ → 𝑆₂`, an `𝑆₂`-algebra `𝑨`, and an `𝑆₁`-equation `s ≈ t`, `reduct φ 𝑨 ⊧ s ≈ t` is equivalent to `𝑨 ⊧ φ✶ s ≈ φ✶ t` (the `φ`-translation of terms), and this is precisely naturality of the fold with respect to the M4-5-2 induced natural transformation.
+Establish `Term 𝑆 : Setoid → Setoid` as a monad (unit `ℊ`, multiplication by substitution) and the environment interpretation `⟦_⟧` as the unique fold out of the term algebra, natural in the carrier.  The target theorem is *reduct-invariance of satisfaction*: for `φ : 𝑆₁ → 𝑆₂`, an `𝑆₂`-algebra `𝑨`, and an `𝑆₁`-equation `s ≈ t`, `reduct φ 𝑨 ⊧ s ≈ t` is equivalent to `𝑨 ⊧ φ✶ s ≈ φ✶ t` (the `φ`-translation of terms), and this is precisely naturality of the fold with respect to the [M4-5b] induced natural transformation.
 
 This is the payoff issue.  As a corollary it absorbs the per-structure curried-law pivots written by hand in M3-6 — `monoid→semigroup`'s `thm`, and the analogous obligations for the reindex forgetfuls — into instances of one lemma.  It also bears directly on the M3-5 negative finding: the per-signature `interp-nodeₙ` families are the manual unfolding that fold-naturality systematizes, and this issue should *measure* whether the binary-node-bridge obstruction (the `refl`-match on a neutral `ArityOf 𝑆 f ≡ Fin 2`, rejected by the without-K unifier) survives at the functorial level or dissolves — the answer is a concrete data point for the cubical-port (v4.0) cost/benefit.
 
@@ -2359,7 +2383,7 @@ Acceptance criteria:
 +  [ ] The reduct-invariance lemma type-checks.
 +  [ ] The Monoid forgetful's theory obligation is re-provable through it.
 
-References: the M3-5 finding on `interp-node` (per-signature, proof-free); [ADR-002 v2 §1](docs/adr/002-classical-layer-design.md).
+References: the M3-5 finding on `interp-node` (per-signature, proof-free); [ADR-002 v2](docs/adr/002-classical-layer-design.md) §1.
 
 ---
 
