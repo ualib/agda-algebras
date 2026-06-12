@@ -4,21 +4,23 @@
 
 This is a working handoff for the session that picks up **M4-5d** (the `F ⊣ reduct` free-expansion adjunction, #342) and the rest of the M4-5 category-theoretic chain.  Read it together with the design note [`milestone-signature-functors.md`](milestone-signature-functors.md) (the mathematical map and the a→g subissue dependency chain) and [ADR-006](../adr/006-signature-morphism-category.md) (the equality/realization decisions).  The dated *state* section below is transient; the conventions and gotchas under it are durable.
 
-## Where things stand (2026-06-10)
+## Where things stand (2026-06-12)
 
-The M4-5d spike is implemented (branch `claude/happy-curie-owacbr`): `Setoid.Categories.{Adjunction, FullSubcategory}`, `Classical.Categories.AdjoinUnit` (the `adjoinUnit ⊣ forgetUnit` adjunction with triangle identities and the explicit universal property), the `hom-preserves-∙` / `hom-preserves-ε` morphism invariants, the `expand-ε`-is-a-section lemma, and the design note [`m4-5d-free-expansion.md`](m4-5d-free-expansion.md) (which also records the implicit-pinning gotchas this spike re-confirmed).  The general raw-level free expansion (the issue's stretch task) is deferred there with a concrete construction plan.
-
-M4-5a, b, c and the reduct-functoriality strengthening are all merged to `master`:
+M4-5a through M4-5d are all merged to `master`:
 
 +  **M4-5a (#339 / #392)** — `Overture.Signatures.Morphisms`: `SigMorphism`, identity, composition, the `Sig` category laws (all `refl`); `reduct` re-expressed to consume a `SigMorphism` (`Classical.Structures.Reduct`).
 +  **M4-5b (#340 / #393)** — `Setoid.Signatures.Functor`: `⟨ 𝑆 ⟩` functorial in the carrier (`map`) and the natural transformation `⟦_⟧` induced by a `SigMorphism`, each law strict (`refl`) with a `-ptw` pointwise corollary.
 +  **M4-5c (#341 / #395)** — the category vocabulary and the reduct/forgetful functors: `Setoid.Categories.Category` (minimal `Category` record — objects, `Hom`, a per-hom-set equivalence `_≈_`, `id`, `_∘_`, the laws, and derived `≈-refl` / `≈-sym` / `≈-trans`); `Setoid.Categories.Functor` (`Functor` record: `F₀`, `F₁`, `F-resp-≈`, `identity`, `homomorphism`); `Setoid.Categories.Algebra` (`Alg 𝑆 α ρ : Category` with a **pointwise** hom-setoid `_≋_`); `Classical.Categories.Reduct` (`reductF φ : Functor (Alg 𝑆₂) (Alg 𝑆₁)`); and `Classical.Categories.Forgetful` (`monoid→semigroupF = reductF` of the `Sig-Magma ↪ Sig-Monoid` inclusion).
 +  **Reduct strengthening (#339 / #394)** — `reduct-id` / `reduct-∘` in `Classical.Structures.Reduct` are now the strict `args`-free form (`o ^ reduct … ≡ o ^ …`, `refl`) with `-ptw` corollaries.
++  **M4-5d (#342 / #399)** — the free-expansion spike: `Setoid.Categories.{Adjunction, FullSubcategory}`, `Classical.Categories.AdjoinUnit` (the `adjoinUnit ⊣ forgetUnit` adjunction with triangle identities and the explicit universal property), the `hom-preserves-∙` / `hom-preserves-ε` morphism invariants, the `expand-ε`-is-a-section lemma, and the design note [`m4-5d-free-expansion.md`](m4-5d-free-expansion.md) (which also records the implicit-pinning gotchas this spike re-confirmed).  The general raw-level free expansion (the issue's stretch task) is deferred there with a concrete construction plan.
 
-Loose ends, neither blocking:
+M4-5e (#343) is implemented on branch `claude/dreamy-allen-zu01ah`: `Setoid.Categories.{NaturalTransformation, Monad}` (with `idF` / `_∘F_` added to `Setoid.Categories.Functor`, derived `unitNT` / `counitNT` views on `Adjunction`, and the general `adjunction→monad`, instantiated as `adjoinUnitMonad` in `Classical.Categories.AdjoinUnit`); the term-monad laws and Kleisli category (`Overture.Terms.Translation`, `Setoid.Terms.{Monad, Translation}`, `free-lift-natural` in `Setoid.Terms.Properties`); and the payoff theorem with its regression demo (`Classical.Varieties.Invariance`, `Th-Semigroup-via-invariance` in `Classical.Categories.Forgetful`).  The two findings the issue asked to measure — `Term` is a *relative* monad (levels grow; Kleisli form is forced and the cubical port will not change that) and the M3-5 node-bridge obstruction *dissolves* functorially (only per-theory `_≐_` bridges remain, and those erase under funext) — are recorded in [`m4-5e-term-monad.md`](m4-5e-term-monad.md).
+
+Loose ends, none blocking:
 
 +  A cosmetic orphan commit `5f538313` on branch `340-m4-5b-signature-functor` (two `##### → ####` heading tweaks plus a line-wrap in `Setoid/Signatures/Functor.lagda.md`), pushed after #393 merged so it never reached `master`.  Harmless; that branch is otherwise safe to delete.
 +  Commits may show as **Unverified** on GitHub if commit signing is misconfigured (e.g. the configured signing key is missing/empty).  After rebasing, avoid workflows/hooks that run a blanket `git rebase --exec … origin/<branch>`: it can rewrite and re-author the upstream commits it replays.
++  `Setoid.Terms.Basic`'s `Sub` / `_[_]` and `Setoid.Terms.Operations`' `Substerm` / `_[_]t` are duplicate concepts; `Sub` / `_[_]` is canonical (it is what `SoundAndComplete` and the monad laws consume), and the reconciliation is a deprecation-cycle cleanup for a later housekeeping issue.
 
 ## Conventions to carry
 
@@ -29,7 +31,7 @@ Loose ends, neither blocking:
 
 ## Inference gotchas (Agda 2.8.0, `--cubical-compatible --exact-split --safe`)
 
-+  **`cong-app` corollaries need their implicits pinned.**  Deriving `pointwise = cong-app strict` often leaves the strict law's implicit signature/setoid unsolved, because the goal is matched through `Carrier (⟨ 𝑆 ⟩ A)` or `o ^ 𝑨` — and `_^_`, `map`, `⟦_⟧` *unfold* through the non-injective `Carrier` / `Interp`, so the unifier cannot invert them.  Two fixes both work: wrap the law and its corollary in a `module _ {𝑆} {A} where …` block so the implicits are fixed locally (cleanest — what `Setoid.Signatures.Functor` does), or pass them explicitly (`cong-app (law {𝑆 = 𝑆} {A = A}) x`).
++  **`cong-app` corollaries need their implicits pinned.**  Deriving `pointwise = cong-app strict` often leaves the strict law's implicit signature/setoid unsolved, because the goal is matched through `Carrier (⟨ 𝑆 ⟩ A)` or `o ^ 𝑨` — and `_^_`, `map`, `⟦_⟧` *unfold* through the non-injective `Carrier` / `Interp`, so the unifier cannot invert them.  Two fixes both work: wrap the law and its corollary in a `module _ {𝑆} {A} where …` block so the implicits are fixed locally (cleanest — what `Setoid.Signatures.Functor` does), or pass them explicitly (`cong-app (law {𝑆 = 𝑆} {A = A}) x`).  The same discipline applies to any lemma whose implicit is a *term* consumed by a recursive function: `⊧-reduct`'s equation sides must be pinned at the use site (`{s = …} {t = …}`), since `s` is not recoverable from `φ ✶ s` or `⟦ s ⟧` (fourth sighting, M4-5e).
 +  **The strict category/functor laws are `refl`, not setoid reasoning.**  The polynomial-functor action is post-composition on the position function, so the coherences reduce by `∘`-associativity, `id`-cancellation, function-η, record-η and Σ-η — all available under `--cubical-compatible`.  The `Fin n` η-gap of ADR-002 §6 does *not* bite here, because these laws compose *abstract* position maps; it bites only when a concrete `Fin`-pattern lambda must be normalized.
 +  **Whole-algebra `≡` is not available.**  `reduct id-morphism 𝑨 ≡ 𝑨` cannot be `refl` (the `Interp.cong` proof field would need funext).  State operation- or hom-level equalities instead — which is exactly why the algebra category's hom-equality is pointwise.
 +  **Two-signature functors.**  A functor like `reductF : Functor (Alg 𝑆₂) (Alg 𝑆₁)` needs the (`{𝑆}`-parameterized) `Alg` / `hom` / `Algebra` modules at *both* signatures.  Instantiate them by module application inside a `module _ {𝑆₁ 𝑆₂} (φ) where`: `private module A₁ = Setoid.Categories.Algebra {𝑆 = 𝑆₁}` and `module A₂ = … {𝑆 = 𝑆₂}`.  The `F₁` action keeps the underlying setoid map and reindexes the source `compatible` through `κ` (`compatible (proj₂ f) {ι φ o} {a ∘ κ φ o}`, definitionally).
@@ -39,7 +41,7 @@ Loose ends, neither blocking:
 +  Build the left adjoint `F ⊣ reduct` (free expansion).  Along signature *inclusions* this is structural; along inclusions that **add equations** it needs a quotient — a **setoid quotient** now, a cubical HIT at v4.0.
 +  De-risk with **Spike B**: construct the free monoid on a semigroup (adjoin a unit) and prove its universal property against `reduct`.  If that single adjunction is clean with setoid quotients, the general theorem is plausible.
 +  Keep `F` distinct from M3-6's chosen `expand-ε`.
-+  You will likely add an `Adjunction` record (and, for M4-5e, a `Monad` record) to `Setoid.Categories`, reusing the `Category`'s `≈-refl` / `≈-sym` / `≈-trans` helpers for the triangle identities.
++  The `Adjunction` record landed with the spike, and M4-5e added `NaturalTransformation` and `Monad` (plus `idF` / `_∘F_`) alongside it in `Setoid.Categories`, all reusing the `Category`'s `≈-refl` / `≈-sym` / `≈-trans` helpers.
 
 ## Build / check
 
