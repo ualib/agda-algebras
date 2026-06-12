@@ -88,6 +88,7 @@ open import Setoid.Categories.Adjunction       using ( Adjunction )
 open import Setoid.Categories.Category         using ( Category )
 open import Setoid.Categories.FullSubcategory  using ( FullSubcategory ; FullSubcategoryF )
 open import Setoid.Categories.Functor          using ( Functor )
+open import Setoid.Categories.Monad            using ( Monad ; adjunction→monad )
 
 import Setoid.Categories.Algebra as AlgCat
 
@@ -487,6 +488,37 @@ adjoinUnit⊣forgetUnit = record
   ; zag             = λ 𝑴 x → Setoid.refl 𝔻[ proj₁ 𝑴 ]
   }
 ```
+
+#### The induced monad on semigroups
+
+Every adjunction induces a monad on the left adjoint's domain
+(`adjunction→monad`, [Setoid.Categories.Monad][]), and instantiating that general
+theorem here yields a worked, concrete monad — a good object to test one's intuition
+for the [`Monad`][Setoid.Categories.Monad] record against:
+
++  the underlying functor sends a semigroup `𝑺` to the semigroup reduct of `𝑺¹`,
+   i.e. to `𝑺` with one fresh element adjoined, neutral on both sides — on
+   carriers, `Maybe 𝕌[ 𝑺 ]` (this is the semigroup-level shape of the familiar
+   `Maybe`/"option" monad);
++  the monad unit is the inclusion `just : 𝑺 ⟶ 𝑺¹` of the old elements;
++  the multiplication `μ_𝑺 : (𝑺¹)¹ ⟶ 𝑺¹` collapses the *two* fresh units — the one
+   adjoined first and the one adjoined on top of it — onto a single fresh unit,
+   leaving old elements alone (on carriers: `Maybe (Maybe A) → Maybe A`, the join of
+   the `Maybe` monad);
++  the monad laws specialize to: adjoining a unit and immediately collapsing is the
+   identity (both unit laws), and with three layers of `Maybe` it does not matter
+   which two collapse first (associativity).
+
+```agda
+adjoinUnitMonad : Monad (Semigroups α ρ)
+adjoinUnitMonad = adjunction→monad adjoinUnit⊣forgetUnit
+```
+
+That this is a one-liner is the point: all the component-level work was already done
+by the adjunction's unit, counit, and triangle identities, and the general theorem
+assembles them.  (The term monad of [Setoid.Terms.Monad][] arises the same way
+mathematically — from the free-algebra adjunction over a signature — but its
+universe-level profile keeps it out of this record; see the note there.)
 
 --------------------------------------
 
