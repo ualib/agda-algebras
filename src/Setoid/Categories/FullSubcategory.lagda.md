@@ -10,9 +10,9 @@ author: "the agda-algebras development team"
 
 This is the [Setoid.Categories.FullSubcategory][] module of the [Agda Universal Algebra Library][].
 
-`FullSubcategory 𝒞 P` is the full subcategory of `𝒞` whose objects are the inhabitants of
-`Σ (Obj 𝒞) P` — an object of `𝒞` together with evidence that it satisfies `P` — and
-whose morphisms, hom-equality, identity, composition, and laws are inherited from `𝒞`
+`FullSubcategory 𝐂 P` is the full subcategory of `𝐂` whose objects are the inhabitants of
+`Σ (Obj 𝐂) P` — an object of `𝐂` together with evidence that it satisfies `P` — and
+whose morphisms, hom-equality, identity, composition, and laws are inherited from `𝐂`
 unchanged.  This is exactly the shape of the theory-satisfying classical structures
 (`Semigroup α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ Th-Semigroup`, and likewise `Monoid`,
 `Group`, …); each is a full subcategory of the algebra category
@@ -20,7 +20,7 @@ unchanged.  This is exactly the shape of the theory-satisfying classical structu
 theory-satisfying algebras is just a homomorphism of the underlying algebras —
 satisfaction is a *property* of the objects, not structure on the morphisms.
 
-`FullSubcategoryF` restricts a functor along such predicates; given `F : 𝒞 ⟶ 𝒟` and a
+`FullSubcategoryF` restricts a functor along such predicates; given `F : 𝐂 ⟶ 𝐃` and a
 `transfer` of evidence `P A → Q (F₀ A)`, the functor maps the full subcategory on `P`
 to the one on `Q`, acting as `F` on morphisms.  The functor laws are inherited
 verbatim, since the hom-equalities are.
@@ -42,8 +42,8 @@ private variable o ℓ e o′ ℓ′ e′ p q : Level
 #### The full subcategory
 
 ```agda
-module _ (𝒞 : Category o ℓ e) where
-  open Category 𝒞
+module _ (𝐂 : Category o ℓ e) where
+  open Category 𝐂
 
   FullSubcategory : (P : Obj → Type p) → Category (o ⊔ p) ℓ e
   FullSubcategory P = record
@@ -63,24 +63,24 @@ module _ (𝒞 : Category o ℓ e) where
 #### Restricting a functor to a full subcategory
 
 ```agda
-open Category
+open Category using (Obj)
 module _
-  {𝒞 : Category o ℓ e} {𝒟 : Category o′ ℓ′ e′}
-  {P : Obj 𝒞 → Type p} {Q : Obj 𝒟 → Type q}
-  (F : Functor 𝒞 𝒟)
+  {𝐂 : Category o ℓ e} {𝐃 : Category o′ ℓ′ e′}
+  {P : Obj 𝐂 → Type p} {Q : Obj 𝐃 → Type q}
+  (F : Functor 𝐂 𝐃)
   where
   open Functor F
 
   FullSubcategoryF :
-    (transfer : {A : Obj 𝒞} → P A → Q (F₀ A))
-    → Functor (FullSubcategory 𝒞 P) (FullSubcategory 𝒟 Q)
-  FullSubcategoryF transfer = record
-    { F₀            = λ A → ( F₀ (proj₁ A) , transfer (proj₂ A) )
-    ; F₁            = F₁
-    ; F-resp-≈      = F-resp-≈
-    ; identity      = identity
-    ; homomorphism  = homomorphism
-    }
+    (transfer : {A : Obj 𝐂} → P A → Q (F₀ A))
+    → Functor (FullSubcategory 𝐂 P) (FullSubcategory 𝐃 Q)
+  FullSubcategoryF transfer =
+    record  { F₀            = λ A → ( F₀ (proj₁ A) , transfer (proj₂ A) )
+            ; F₁            = F₁
+            ; F-resp-≈      = F-resp-≈
+            ; identity      = identity
+            ; homomorphism  = homomorphism
+            }
 ```
 
 --------------------------------------

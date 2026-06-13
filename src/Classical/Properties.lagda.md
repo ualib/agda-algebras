@@ -18,9 +18,7 @@ than part of the structure's definition.  Each per-structure file
 proves further facts about a parameterized `(𝑿 : X α ρ)`.
 
 The inaugural inhabitant is `Classical.Properties.Lattice`, which proves the
-order-theoretic view of a lattice — the equivalence with the algebraic
-presentation that the [M3-7](https://github.com/ualib/agda-algebras/issues/264)
-acceptance criterion calls for.  Future inhabitants include, for example,
+order-theoretic view of a lattice.  Future inhabitants include, for example,
 uniqueness of inverses in Group and `0 · x ≈ 0` in Ring.
 
 This file is the umbrella for the subtree.

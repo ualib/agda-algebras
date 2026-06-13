@@ -32,45 +32,41 @@ open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 
 module Classical.Categories.Reduct where
 
--- Imports from Agda and the Agda Standard Library ----------------------------
-open import Agda.Primitive  using ()             renaming ( Set to Type )
-open import Data.Product    using ( _,_ ; proj₁ ; proj₂ )
-open import Function        using ( Func ; _∘_ )
-open import Level           using ( Level )
-open import Relation.Binary using ( Setoid )
+open import Agda.Primitive using () renaming ( Set to Type )
+
+-- Imports from the Agda Standard Library ----------------------------
+open import Data.Product                   using ( _,_ ; proj₁ ; proj₂ )
+open import Function                       using ( Func ; _∘_ ; id)
+open import Level                          using ( Level ; _⊔_) renaming (suc to lsuc)
+open import Relation.Binary                using ( Setoid )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture.Signatures.Morphisms  using ( SigMorphism ; ι ; κ )
-open import Setoid.Categories.Functor      using ( Functor )
 open import Classical.Structures.Reduct    using ( reduct )
-
-import Setoid.Categories.Algebra   as AlgCat
-import Setoid.Homomorphisms.Basic  as HomMod
-import Setoid.Algebras.Basic       as AlgMod
+open import Overture.Signatures.Morphisms  using ( SigMorphism ; ι ; κ )
+open import Setoid.Algebras.Basic          using (𝔻[_])
+open import Setoid.Categories.Algebra      using (Alg)
+open import Setoid.Categories.Category     using (Category)
+open import Setoid.Categories.Functor      using ( Functor )
+open import Setoid.Homomorphisms.Basic     using (IsHom; mkIsHom)
 
 open Func renaming ( to to _⟨$⟩_ )
 
-private variable
-  α ρ : Level
+module _ {α ρ : Level} {𝑆₁ 𝑆₂ : Signature 𝓞 𝓥} (φ : SigMorphism 𝑆₁ 𝑆₂) where
+  𝓐₁ 𝓐₂ : Category (𝓞 ⊔ 𝓥 ⊔ lsuc (α ⊔ ρ)) (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ) (α ⊔ ρ)
+  𝓐₁ = Alg {𝑆 = 𝑆₁} α ρ
+  𝓐₂ = Alg {𝑆 = 𝑆₂} α ρ
+  open IsHom {𝑆 = 𝑆₂} renaming ( compatible to comp₂ )
 
-module _ {𝑆₁ 𝑆₂ : Signature 𝓞 𝓥} (φ : SigMorphism 𝑆₁ 𝑆₂) where
-
-  private
-    module A₁ = AlgCat  {𝑆 = 𝑆₁}   -- the category Alg 𝑆₁
-    module A₂ = AlgCat  {𝑆 = 𝑆₂}   -- the category Alg 𝑆₂
-    module H₂ = HomMod  {𝑆 = 𝑆₂}   -- 𝑆₂-homomorphisms (the source homs)
-    module M₁ = AlgMod  {𝑆 = 𝑆₁}   -- 𝑆₁-algebras (for the reduct's domain setoid)
-
-  reductF : Functor (A₂.Alg α ρ) (A₁.Alg α ρ)
-  reductF = record
-    { F₀           = reduct φ
-    ; F₁           = λ f → proj₁ f , record
-                       { compatible = λ {o} {a} →
-                           H₂.IsHom.compatible (proj₂ f) {ι φ o} {a ∘ κ φ o} }
-    ; F-resp-≈     = λ f≋g → f≋g
-    ; identity     = λ {𝑨} _ → Setoid.refl M₁.𝔻[ reduct φ 𝑨 ]
-    ; homomorphism = λ {_} {_} {E} _ → Setoid.refl M₁.𝔻[ reduct φ E ]
-    }
+  reductF : Functor 𝓐₂ 𝓐₁
+  reductF =
+    record
+      { F₀            = reduct φ
+      ; F₁            = λ f → proj₁ f
+                             , mkIsHom (λ{o a} → comp₂ (proj₂ f) {ι φ o} {a ∘ κ φ o})
+      ; F-resp-≈      = id
+      ; identity      = λ {𝑨} _ → Setoid.refl 𝔻[ reduct φ 𝑨 ]
+      ; homomorphism  = λ {_} {_} {E} _ → Setoid.refl 𝔻[ reduct φ E ]
+      }
 ```
 
 --------------------------------------

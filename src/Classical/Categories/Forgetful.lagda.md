@@ -10,7 +10,7 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Categories.Forgetful][] module of the [Agda Universal Algebra Library][].
 
-The classical forgetful *projections* of [ADR-002][] §5 become forgetful *functors* simply by
+The classical forgetful *projections* ([ADR-002][] §5) become forgetful *functors* simply by
 giving them the morphism action — and that action is already supplied, uniformly, by the
 reduct functor [`reductF`][Classical.Categories.Reduct].  Each forgetful is `reductF` of the
 relevant signature inclusion, reusing the per-structure inclusion data (`X-incl` / `X-κ`).
@@ -21,14 +21,14 @@ of the inclusion `Sig-Magma ↪ Sig-Monoid` — packaged from the existing `∙-
 [`Classical.Structures.Monoid`][].  Its action on a monoid homomorphism keeps the underlying
 setoid map on the nose, as `monoid→semigroupF-keeps-map` records by `refl`.
 
-A forgetful functor between *theory-satisfying* structures owes a second debt beyond the
-morphism action: the theory obligation.  `monoid→semigroup` must show that the magma reduct
-of a monoid satisfies `Th-Semigroup`, and M3-6 paid that debt by hand (the curried-law pivot
-`thm` inside [`Classical.Structures.Monoid`][], built on per-signature `interp-node`
-bridges).  The last section of this module re-derives that obligation from the general
-*reduct-invariance of satisfaction* theorem of [Classical.Varieties.Invariance][] — the
-M4-5e regression demonstration that the bespoke per-structure pivots are instances of one
-lemma.
+A forgetful functor between *theory-satisfying* structures owes a second debt beyond
+the morphism action — namely, the theory obligation.  `monoid→semigroup` must show
+that the magma reduct of a monoid satisfies `Th-Semigroup`, and we've already paid that
+debt by hand (the curried-law pivot `thm` inside [`Classical.Structures.Monoid`][],
+built on per-signature `interp-node` bridges).  The last section of this module
+re-derives that obligation from the general *reduct-invariance of satisfaction*
+theorem of [Classical.Varieties.Invariance][], and thus demonstrates that the bespoke
+per-structure pivots are instances of one lemma.
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -36,35 +36,35 @@ lemma.
 module Classical.Categories.Forgetful where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
-open import Agda.Primitive    using ()           renaming ( Set to Type )
-open import Data.Fin.Patterns using ( 0F ; 1F )
-open import Data.Product      using ( proj₁ ; proj₂ )
-open import Level             using ( Level )
-open import Relation.Binary   using ( Setoid )
-open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl )
+open import Agda.Primitive                          using () renaming ( Set to Type )
+open import Data.Fin.Patterns                       using ( 0F ; 1F )
+open import Data.Product                            using ( proj₁ ; proj₂ )
+open import Level                                   using ( Level )
+open import Relation.Binary                         using ( Setoid )
+open import Relation.Binary.PropositionalEquality   using ( _≡_ ; refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture.Signatures.Morphisms  using ( SigMorphism ; mkSigMorphism )
-open import Overture.Terms.Translation     using ( _✶_ )
-open import Setoid.Categories.Functor      using ( Functor )
-open import Classical.Categories.Reduct    using ( reductF )
-open import Classical.Signatures.Magma     using ( Sig-Magma )
-open import Classical.Signatures.Monoid    using ( Sig-Monoid )
-open import Classical.Structures.Monoid    using ( ∙-incl ; ∙-κ ; Monoid ; monoid→magma )
-open import Classical.Structures.Semigroup using () renaming ( _⊨_ to _⊨ˢᵍ_ )
-open import Classical.Theories.Monoid      using ( Th-Monoid ; assoc )
-open import Classical.Theories.Semigroup   using ( Th-Semigroup ) renaming ( assoc to assocˢ )
-open import Classical.Varieties.Invariance using ( ⊧-reduct )
-
-open import Setoid.Terms.Basic               using ( _≐_ ; module Environment )
-open import Setoid.Varieties.EquationalLogic using ( _⊧_≈_ )
-
-import Setoid.Categories.Algebra as AlgCat
-
-open import Setoid.Algebras.Basic      {𝑆 = Sig-Monoid} using ( Algebra ; 𝔻[_] )
+open import Classical.Categories.Reduct             using  ( reductF )
+open import Classical.Signatures.Magma              using  ( Sig-Magma )
+open import Classical.Signatures.Monoid             using  ( Sig-Monoid )
+open import Classical.Structures.Monoid             using  ( ∙-incl ; ∙-κ
+                                                           ; Monoid ; monoid→magma )
+open import Classical.Structures.Semigroup          using  () renaming ( _⊨_ to _⊨ˢᵍ_ )
+open import Classical.Theories.Monoid               using  ( Th-Monoid ; assoc )
+open import Classical.Theories.Semigroup            using  ( Th-Semigroup )
+                                                    renaming ( assoc to assocˢ )
+open import Classical.Varieties.Invariance          using  ( ⊧-reduct )
+open import Overture.Signatures.Morphisms           using  ( SigMorphism ; mkSigMorphism )
+open import Overture.Terms.Translation              using  ( _✶_ )
+open import Setoid.Algebras.Basic {𝑆 = Sig-Monoid}  using  ( Algebra ; 𝔻[_] )
+open import Setoid.Categories.Algebra               using  ( Alg )
+open import Setoid.Categories.Functor               using  ( Functor )
 open import Setoid.Homomorphisms.Basic {𝑆 = Sig-Monoid} using ( hom )
+open import Setoid.Terms.Basic                      using  ( _≐_ ; module Environment )
+open import Setoid.Varieties.EquationalLogic        using  ( _⊧_≈_ )
 
 open _≐_ using ( rfl ; gnl )
+open Functor using (F₁)
 
 private variable α ρ : Level
 ```
@@ -79,7 +79,7 @@ magma↪monoid = mkSigMorphism ∙-incl ∙-κ
 The forgetful functor on algebras, `reductF` of that inclusion:
 
 ```agda
-monoid→semigroupF : Functor (AlgCat.Alg {𝑆 = Sig-Monoid} α ρ) (AlgCat.Alg {𝑆 = Sig-Magma} α ρ)
+monoid→semigroupF : Functor (Alg {𝑆 = Sig-Monoid} α ρ) (Alg {𝑆 = Sig-Magma} α ρ)
 monoid→semigroupF = reductF magma↪monoid
 ```
 
@@ -87,7 +87,7 @@ Its morphism action keeps the underlying setoid map of a monoid homomorphism unc
 
 ```agda
 monoid→semigroupF-keeps-map : {𝑴 𝑵 : Algebra α ρ} (f : hom 𝑴 𝑵)
-                            → proj₁ (Functor.F₁ monoid→semigroupF f) ≡ proj₁ f
+  → proj₁ (F₁ monoid→semigroupF f) ≡ proj₁ f
 monoid→semigroupF-keeps-map _ = refl
 ```
 
@@ -149,7 +149,9 @@ module _ (ℳ : Monoid α ρ) where
   Th-Semigroup-via-invariance : monoid→magma ℳ ⊨ˢᵍ Th-Semigroup
   Th-Semigroup-via-invariance assocˢ =
     ⊧-reduct magma↪monoid 𝑴
-      {s = proj₁ (Th-Semigroup assocˢ)} {t = proj₂ (Th-Semigroup assocˢ)} ℳ⊧assoc✶
+      {s = proj₁ (Th-Semigroup assocˢ)}
+      {t = proj₂ (Th-Semigroup assocˢ)}
+      ℳ⊧assoc✶
 ```
 
 Per the issue's instruction, the bespoke proof in `Classical.Structures.Monoid` is

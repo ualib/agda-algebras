@@ -63,7 +63,7 @@ Specifically, the conventions documented and embodied here are as follows.
    (i.e., `X` adds equations only — no new operation symbols), the forgetful is
    simply `proj₁`.  When `X` adds operation symbols on top of `Y`'s signature, the
    forgetful is more substantial (it projects out the additional operations); those
-   cases land with Monoid ([M3-6]).  For Semigroup over Magma there are no added
+   cases land with Monoid.  For Semigroup over Magma there are no added
    symbols, so `semigroup→magma = proj₁`.  Composition of forgetfuls down the
    hierarchy expresses inheritance type-theoretically: a group `𝑮` is a monoid via
    `group→monoid 𝑮`, a semigroup via `monoid→semigroup ∘ group→monoid`, and a magma
