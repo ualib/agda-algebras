@@ -6,45 +6,95 @@ date: "2026-06-12"
 author: "the agda-algebras development team"
 ---
 
-#### The term monad
+### The term monad
 
 This is the [Setoid.Terms.Monad][] module of the [Agda Universal Algebra Library][].
 
 This module establishes that `Term`{.AgdaDatatype} — terms over a type of variables,
-in the ambient signature `𝑆` — carries the structure of a *monad*: variables embed
-into terms (`ℊ`{.AgdaInductiveConstructor}, the unit), terms whose "variables" are
-themselves terms flatten into terms (substitution, the multiplication), and the three
-monad laws hold.  This is the precise content of the slogan "the term algebra is the
-free algebra": freeness *is* a monad, and the monad laws are the familiar bookkeeping
-facts about substitution that universal-algebra proofs use tacitly all the time.
+in the ambient signature `𝑆` — carries the structure of a *monad*:
 
-##### Which form do the laws take?  The Kleisli presentation
++  variables embed into terms (`ℊ`{.AgdaInductiveConstructor}, the unit),
++  terms whose "variables" are themselves terms flatten into terms
+   (substitution, the multiplication),
++  the three monad laws hold.
 
-A monad can be presented two equivalent ways:
+This is the precise content of the slogan *"the term algebra is the free algebra."*
+In other words, freeness *is* a monad, and the monad laws are the familiar bookkeeping
+facts about substitution that universal-algebra proofs use tacitly all the time.  We
+will elaborate on this slogan and the motivation for naming the structure below, but
+the punchline is that the monad structure is not just a convenient packaging of
+substitution's properties, but the computational form of the free-algebra universal
+property, and it underwrites the rest of the development: the fold, the Kleisli
+category of contexts-and-substitutions, and reduct-invariance of satisfaction.
 
-+  the **categorical (μ) form** — an endofunctor `T` with natural transformations
-   `η : Id ⟹ T` and `μ : T ∘ T ⟹ T` and three commuting diagrams — packaged
-   abstractly by the [`Monad`][Setoid.Categories.Monad] record; or
-+  the **Kleisli (extension) form** — `η` together with an *extension* operation
-   turning each `σ : X → T Y` into `σ✶ : T X → T Y`, satisfying three equations.
-   For terms, the extension of `σ` is exactly *substitution* `_[ σ ]`, already
-   defined in [Setoid.Terms.Basic][] (following Abel), and the three equations are
-   the left unit, right unit, and associativity laws proved below.
+#### The motivation in detail
 
-We state the laws in Kleisli form, and the choice is forced, not stylistic: in a
-predicative universe hierarchy `Term` **raises universe levels**.  For variables
+**Why should we express `Term` as a monad?**
+
+Building terms and then *substituting* into them is something universal algebra
+proofs do on nearly every page, and *monad* is the name for that activity together
+with the three laws that keep it coherent.  Making the structure explicit turns those
+laws from lemmas re-proved in passing into one named, reusable interface.
+
+The picture to hold onto is "an expression you can nest and then flatten."
+
++  The **unit** is the generator map `ℊ`{.AgdaInductiveConstructor} — a variable is
+   already a (trivial) term, "the variable `x` is the term `x`".
++  The **multiplication** is *substitution*: a term whose variables have themselves
+   been replaced by terms flattens into a single term.
++  The three monad laws are then exactly the facts about substitution one already
+   takes for granted:
+
+   1. substituting each variable by *itself* changes nothing (the right unit law);
+   2. a lone variable, once substituted, is just looked up (the left unit law);
+   3. substituting in two stages equals substituting once by the composite (associativity).
+
+The deeper reason to name the structure is that "`Term` is a monad" is the
+computational form of the slogan,
+
+*"`Term X` is the free algebra on the variables `X`."*
+
+Freeness is an adjunction (free ⊣ forgetful) and every adjunction yields a monad, so
+the monad *is* that universal property in a shape one can compute with.
+This underwrites the rest of the development: the **fold** — interpreting a term in an
+algebra is the unique homomorphism out of the free object, so `⟦_⟧` exists and is
+determined by its action on variables — the **Kleisli category** of
+contexts-and-substitutions (below), and *reduct-invariance of satisfaction*
+([Classical.Varieties.Invariance][]), which is precisely naturality of that fold.
+
+The monad abstraction is therefore not mere decoration: it discharges substitution's
+bookkeeping once, it is literally the assertion that the term algebra is free, and it
+recasts the library's interpretation results as instances of standard monad facts
+rather than per-signature hand-work.
+
+#### The Kleisli presentation
+
+**Which form do the laws take?**
+
+A monad can be presented two equivalent ways.
+
+1.  The **categorical (μ) form**: an endofunctor `T` with natural transformations
+    `η : Id ⟹ T` and `μ : T ∘ T ⟹ T` and three commuting diagrams, packaged
+    abstractly by the [`Monad`][Setoid.Categories.Monad] record.
+2.  The **Kleisli (extension) form**: `η` together with an *extension* operation
+    turning each `σ : X → T Y` into `σ✶ : T X → T Y`, satisfying three equations.
+    For terms, the extension of `σ` is exactly *substitution* `_[ σ ]`, already
+    defined in [Setoid.Terms.Basic][] (following Abel), and the three equations are
+    the left unit, right unit, and associativity laws proved below.
+
+We state the laws in Kleisli form, and the choice is forced, not stylistic; in a
+predicative universe hierarchy, `Term` **raises universe levels**.  For variables
 `X : Type χ` the terms live one universe up, `Term X : Type (ov χ)` where
 `ov χ = 𝓞 ⊔ 𝓥 ⊔ suc χ` — the `suc` is unavoidable because a term mixes leaves from
 `X` with operation symbols from `Type 𝓞`.  Consequently `Term` is not an endofunctor
 of any single category `Setoid α ρ`, there is no level at which `η : Id ⟹ Term` even
-type-checks, and the `Monad` record cannot be instantiated.  What `Term` is, exactly,
-is a *relative monad* in the sense of Altenkirch–Chapman–Uustalu, relative to the
-universe-lifting inclusion `Type χ → Type (ov χ)`; and the Kleisli form is precisely
-the presentation of a relative monad that never mentions `T ∘ T`, so it states and
-proves at heterogeneous levels what the μ form cannot.  (See
-`docs/notes/m4-5e-term-monad.md`; this level obstruction is a fact about
-predicativity that a cubical port will *not* dissolve, unlike the η-gap obstructions
-recorded elsewhere.)
+type-checks, and the `Monad` record cannot be instantiated.
+
+What `Term` is, exactly, is a *relative monad* in the sense of
+Altenkirch–Chapman–Uustalu, relative to the universe-lifting inclusion
+`Type χ → Type (ov χ)`; the Kleisli form is precisely the presentation of a relative
+monad that never mentions `T ∘ T`, so it states and proves at heterogeneous levels
+what the μ form cannot.[^1]
 
 The equality in the laws is `_≐_`{.AgdaDatatype}, the equality-of-terms relation of
 [Setoid.Terms.Basic][] — two terms are `≐`-related when they have the same shape with
@@ -54,33 +104,38 @@ involved and `--safe` provides no function extensionality.  Per the library's
 strict-first convention, the left unit law is stated in its strongest, function-level
 `≡` form first, with the pointwise corollary derived.
 
-##### The payoff: substitution becomes a category
+#### The payoff: substitution becomes a category
 
 The monad laws are not merely recorded — they are *packaged*.  Substitutions compose
 (`_⊙ˢ_`{.AgdaFunction}), the generator map `ℊ` is a unit for that composition, and
 composition is associative; so variable types and substitutions form a category, the
 **Kleisli category** of the term monad, assembled below as a bona fide instance
 `TermKleisli`{.AgdaFunction} of the [`Category`][Setoid.Categories.Category] record.
+
 The three category laws *are* the three monad laws — no residue is lost in the
 packaging, and the level arithmetic works out (`Obj = Type χ` lives at `suc χ`,
 hom-sets at `ov χ`), which is how the term monad gets a fully categorical, checked
 statement despite not being an endofunctor.
 
-A concrete reading, for the signature of monoids: an object is a supply of variable
-names; an arrow `X ⟶ Y` assigns to each name in `X` a monoid term over the names in
-`Y` — for instance `x ↦ (y₁ ∙ y₂) ∙ ε` — that is, an arrow is a *simultaneous change
-of variables*; composing arrows substitutes the second assignment into the terms of
-the first; and the identity arrow renames nothing (`x ↦ x`).  Equational reasoning
-about composite substitutions — the daily bread of free-algebra arguments — is then
-just diagram chasing in `TermKleisli`.
+A concrete reading for the signature of monoids is the following:
 
-The interpretation (fold) side of the story — every algebra `𝑨` evaluates terms, and
-evaluation interacts with this monad structure — is distributed as follows:
-`substitution` in [Setoid.Terms.Basic][] says evaluation takes `_[ σ ]` to
-composition of environments (`𝑨` is an Eilenberg–Moore-style algebra for the monad);
-`free-lift-natural` and `comm-hom-term` in [Setoid.Terms.Properties][] and
-[Setoid.Terms.Operations][] say the fold is natural in the algebra; and
-[Classical.Varieties.Invariance][] adds naturality in the *signature*.
++  an object is a supply of variable names;
++  an arrow `X ⟶ Y` assigns to each name in `X` a monoid term over the names in `Y`
+   (e.g., `x ↦ (y₁ ∙ y₂) ∙ ε`); that is, an arrow is a *simultaneous change of variables*;
++  composing arrows substitutes the second assignment into the terms of
+   the first; and the identity arrow renames nothing (`x ↦ x`).
+
+Equational reasoning about composite substitutions — the daily bread of free-algebra
+arguments — is then just diagram chasing in `TermKleisli`.
+
+The interpretation (fold) side of the story: every algebra `𝑨` evaluates terms, and
+evaluation interacts with this monad structure.  It works as follows:
+
++  `substitution` in [Setoid.Terms.Basic][] says evaluation takes `_[ σ ]` to
+   composition of environments (`𝑨` is an Eilenberg–Moore-style algebra for the monad);
++  `free-lift-natural` and `comm-hom-term` in [Setoid.Terms.Properties][] and
+   [Setoid.Terms.Operations][] say the fold is natural in the algebra;
++  [Classical.Varieties.Invariance][] adds naturality in the *signature*.
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -89,18 +144,17 @@ open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 
 module Setoid.Terms.Monad {𝑆 : Signature 𝓞 𝓥} where
 
--- Imports from Agda and the Agda Standard Library ----------------------------
-open import Agda.Primitive  using () renaming ( Set to Type )
-open import Level           using ( Level ; suc )
+open import Agda.Primitive using () renaming ( Set to Type )
 
-open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; cong-app )
+-- Imports from the Agda Standard Library ----------------------------
+open import Level                                  using ( Level ; suc )
+open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl ; cong-app )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture.Terms          {𝑆 = 𝑆} using ( Term ; ℊ ; node ; ov )
-open import Setoid.Terms.Basic      {𝑆 = 𝑆} using ( Sub ; _[_] ; _≐_
-                                                  ; ≐-isRefl ; ≐-isSym ; ≐-isTrans )
-open import Setoid.Categories.Category      using ( Category )
-
+open import Overture.Terms {𝑆 = 𝑆}      using  ( Term ; ℊ ; node ; ov )
+open import Setoid.Categories.Category  using  ( Category )
+open import Setoid.Terms.Basic {𝑆 = 𝑆}  using  ( Sub ; _[_] ; _≐_
+                                               ; ≐-isRefl ; ≐-isSym ; ≐-isTrans )
 open _≐_
 
 private variable
@@ -108,23 +162,23 @@ private variable
   W X Y : Type χ
 ```
 
-##### Composition of substitutions
+#### Composition of substitutions
 
 `σ ⊙ˢ τ` performs `σ` and then `τ`: each variable is sent by `σ` to a term, into
 which `τ` then substitutes.  (Diagrammatic order, like `⊙-hom`; the Kleisli category
-below flips it into the applicative order of the `Category` record's `_∘_`, exactly
+below flips it into the applicative order of the `_∘_` of the `Category` record, exactly
 as the algebra category does with `⊙-hom`.)
 
 ```agda
 _⊙ˢ_ : Sub X Y → Sub W X → Sub W Y
-(σ ⊙ˢ τ) y = (σ y) [ τ ]
+σ ⊙ˢ τ = λ y → (σ y) [ τ ]
 ```
 
-##### The monad laws
+#### The monad laws
 
-**Left unit.**  Substituting into a bare variable just looks the variable up:
+**Left unit**.  Substituting into a bare variable just looks the variable up:
 `(ℊ y) [ σ ]` *is* `σ y`, by the first defining clause of `_[_]`.  Stated
-strict-first: as functions of the variable, `(λ y → (ℊ y) [ σ ])` and `σ` are
+strict-first: as functions of the variable, `λ y → (ℊ y) [ σ ]` and `σ` are
 definitionally equal (function η), so the law is `refl`, with the pointwise corollary
 one `cong-app` away.
 
@@ -138,26 +192,25 @@ module _ {X Y : Type χ} {σ : Sub X Y} where
   []-unitˡ-ptw = cong-app []-unitˡ
 ```
 
-**Right unit.**  Substituting the generator term `ℊ y` for each variable `y` rebuilds
+**Right unit**.  Substituting the generator term `ℊ y` for each variable `y` rebuilds
 the term unchanged.  This is the identity substitution, and the proof is the
 structural recursion the statement suggests; the result is `_≐_`, not `_≡_`, because
 at each node the two argument tuples agree only pointwise.
 
 ```agda
-[]-unitʳ : (t : Term X) → (t [ ℊ ]) ≐ t
-[]-unitʳ (ℊ x)       = ≐-isRefl
-[]-unitʳ (node f ts) = gnl (λ i → []-unitʳ (ts i))
+[]-unitʳ : (t : Term X) → t [ ℊ ] ≐ t
+[]-unitʳ (ℊ x) = ≐-isRefl
+[]-unitʳ (node f ts) = gnl λ i → []-unitʳ (ts i)
 ```
 
-**Associativity.**  Substituting in two stages is one substitution by the composite.
+**Associativity**.  Substituting in two stages is one substitution by the composite.
 This is the law a syntactician would call the *substitution lemma for substitutions*;
 it is what makes towers of changes-of-variables collapse.
 
 ```agda
-[]-assoc : (t : Term Y) (σ : Sub X Y) (τ : Sub W X)
-  → ((t [ σ ]) [ τ ]) ≐ (t [ σ ⊙ˢ τ ])
-[]-assoc (ℊ y)       σ τ = ≐-isRefl
-[]-assoc (node f ts) σ τ = gnl (λ i → []-assoc (ts i) σ τ)
+[]-assoc : (t : Term Y) (σ : Sub X Y) (τ : Sub W X) → (t [ σ ]) [ τ ] ≐ t [ σ ⊙ˢ τ ]
+[]-assoc (ℊ y) σ τ = ≐-isRefl
+[]-assoc (node f ts) σ τ = gnl λ i → []-assoc (ts i) σ τ
 ```
 
 **Congruence.**  Substitution respects `_≐_` in both arguments — replacing the term
@@ -167,12 +220,12 @@ it is the `∘-resp-≈` law of the Kleisli category).
 
 ```agda
 []-cong : {s t : Term Y} {σ τ : Sub X Y}
-  → s ≐ t → ((y : Y) → σ y ≐ τ y) → (s [ σ ]) ≐ (t [ τ ])
+  → s ≐ t → ((y : Y) → σ y ≐ τ y) → s [ σ ] ≐ t [ τ ]
 []-cong (rfl refl) σ≐τ = σ≐τ _
 []-cong (gnl ps)   σ≐τ = gnl (λ i → []-cong (ps i) σ≐τ)
 ```
 
-##### The Kleisli category
+#### The Kleisli category
 
 Objects: variable types at level `χ`.  An arrow `X ⟶ Y` is a substitution
 `Sub Y X` — a term over `Y` for each variable in `X` (the arrow points from
@@ -190,18 +243,18 @@ TermKleisli χ = record
   ; _≈_        = λ σ τ → ∀ x → σ x ≐ τ x
   ; id         = ℊ
   ; _∘_        = λ τ σ → σ ⊙ˢ τ
-  ; ≈-equiv    = record  { refl   = λ _ → ≐-isRefl
-                         ; sym    = λ p x → ≐-isSym (p x)
-                         ; trans  = λ p q x → ≐-isTrans (p x) (q x)
+  ; ≈-equiv    = record  { refl = λ _ → ≐-isRefl
+                         ; sym = λ p x → ≐-isSym (p x)
+                         ; trans = λ p q x → ≐-isTrans (p x) (q x)
                          }
-  ; assoc      = λ {A} {B} {C} {D} {f} {g} {h} a → ≐-isSym ([]-assoc (f a) g h)
-  ; identityˡ  = λ {A} {B} {f} a → []-unitʳ (f a)
+  ; assoc      = λ {f = f} {g} {h} a → ≐-isSym ([]-assoc (f a) g h)
+  ; identityˡ  = λ {f = f} a → []-unitʳ (f a)
   ; identityʳ  = λ _ → ≐-isRefl
   ; ∘-resp-≈   = λ f≈g h≈i a → []-cong (h≈i a) f≈g
   }
 ```
 
-##### The multiplication, for the record
+#### The multiplication, for the record
 
 For completeness — and because the μ form is the one the `Monad` record speaks — here
 is the multiplication itself: a term whose leaves are terms flattens by grafting each
@@ -213,15 +266,18 @@ domain `Term (Term X)` is inherently heterogeneous — `Term X` lives at `ov χ`
 
 ```agda
 join : Term (Term X) → Term X
-join (ℊ t)       = t
+join (ℊ t) = t
 join (node f ts) = node f (λ i → join (ts i))
 
 -- The μ-form unit law that is definitional: flattening a trivial
 -- expression-of-expressions yields the expression.
-join-ℊ : (t : Term X) → join (ℊ t) ≡ t
-join-ℊ _ = refl
+join-ℊ : {t : Term X} → join (ℊ t) ≡ t
+join-ℊ = refl
 ```
 
 --------------------------------------
+
+[^1]: See `docs/notes/m4-5e-term-monad.md`; this level obstruction is a fact about predicativity that a cubical port will *not* dissolve, unlike the η-gap obstructions recorded elsewhere.)
+
 
 {% include UALib.Links.md %}

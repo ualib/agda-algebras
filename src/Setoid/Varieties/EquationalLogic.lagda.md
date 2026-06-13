@@ -58,6 +58,7 @@ module _  {X : Type χ} where
   where
   open Setoid ( Domain 𝑨 )  using ( _≈_ )
   open Environment 𝑨        using ( Env ; ⟦_⟧ )
+ infix 10 _⊧_≈_
 
  _⊫_≈_ : Pred(Algebra α ρᵃ) ℓ → Term X → Term X → Type (χ ⊔ ℓ ⊔ ov(α ⊔ ρᵃ))
  𝒦 ⊫ p ≈ q = {𝑨 : Algebra _ _} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q

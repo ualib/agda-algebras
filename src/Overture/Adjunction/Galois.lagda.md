@@ -24,35 +24,33 @@ open import Relation.Binary.Bundles  using ( Poset )
 open import Relation.Binary.Core     using ( REL ; Rel ; _⇒_ ; _Preserves_⟶_ )
 open import Relation.Unary           using ( _⊆_ ;  _∈_ ; Pred   )
 
-import Relation.Binary.Structures as BS
+open import Relation.Binary.Structures using (IsEquivalence)
 
 private variable α β ℓᵃ ρᵃ ℓᵇ ρᵇ : Level
 ```
 
 
-If `𝑨 = (A, ≤)` and `𝑩 = (B, ≤)` are two partially ordered sets (posets), then a *Galois connection* between `𝑨` and `𝑩` is a pair `(F , G)` of functions such that
+If `𝑨 = (A, ≤)` and `𝑩 = (B, ≤)` are two partially ordered sets (posets), then a
+*Galois connection* between `𝑨` and `𝑩` is a pair `(F , G)` of functions such that
 
 1. `F : A → B`
 2. `G : B → A`
-3. `∀ (a : A)(b : B)  →  F(a) ≤   b   →    a  ≤ G(b)`
-4. `∀ (a : A)(b : B)  →    a  ≤ G(b)  →  F(a) ≤   b`
+3. `∀ (a : A)(b : B)  →  F(a)  ≤  b     →  a     ≤  G(b)`
+4. `∀ (a : A)(b : B)  →  a     ≤  G(b)  →  F(a)  ≤  b`
 
 In other terms, `F` is a *left adjoint* of `G` and `G` is a *right adjoint* of `F`.
 
 
 ```agda
-module _ (A : Poset α ℓᵃ ρᵃ)(B : Poset β ℓᵇ ρᵇ) where
- open Poset
- private
-  _≤A_ = _≤_ A
-  _≤B_ = _≤_ B
-
+module _ (𝑨 : Poset α ℓᵃ ρᵃ)(𝑩 : Poset β ℓᵇ ρᵇ) where
+ open Poset 𝑨 renaming ( Carrier to A ; _≤_ to _≤ᴬ_ ) using ()
+ open Poset 𝑩 renaming ( Carrier to B ; _≤_ to _≤ᴮ_ ) using ()
  record Galois : Type (suc (α ⊔ β ⊔ ρᵃ ⊔ ρᵇ))  where
   field
-   F : Carrier A → Carrier B
-   G : Carrier B → Carrier A
-   GF≥id : ∀ a →  a ≤A G (F a)
-   FG≥id : ∀ b →  b ≤B F (G b)
+   F : A → B
+   G : B → A
+   GF≥id : ∀ a →  a ≤ᴬ G (F a)
+   FG≥id : ∀ b →  b ≤ᴮ F (G b)
 
 
 module _ {𝒜 : Type α}{ℬ : Type β} where
@@ -86,63 +84,60 @@ module _ {𝒜 : Type α}{ℬ : Type β} where
  →←Closed {B = B}{R} = (R ⃖ B) ⃗ R ⊆ B
 ```
 
-
 #### The poset of subsets of a set
 
-Here we define a type that represents the poset of subsets of a given set equipped with the usual set inclusion relation.  (It seems there is no definition in the standard library of this important example of a poset; we should propose adding it.)
-
+Here we define a type that represents the poset of subsets of a given set equipped
+with the usual set inclusion relation.  (It seems there is no definition in the
+standard library of this important example of a poset; we should propose adding it.)
 
 ```agda
-open Poset
-
 module _ {α ρ : Level} {𝒜 : Type α} where
 
  _≐_ : Pred 𝒜 ρ → Pred 𝒜 ρ → Type (α ⊔ ρ)
  P ≐ Q = (P ⊆ Q) × (Q ⊆ P)
 
- open BS.IsEquivalence renaming (refl to ref ; sym to symm ; trans to tran)
+ open IsEquivalence -- renaming (refl to ref ; sym to symm ; trans to tran)
 
- ≐-iseqv : BS.IsEquivalence _≐_
- ref ≐-iseqv = id , id
- symm ≐-iseqv = swap
- tran ≐-iseqv (u₁ , u₂) (v₁ , v₂) = v₁ ∘ u₁ , u₂ ∘ v₂
-
+ ≐-iseqv : IsEquivalence _≐_
+ refl ≐-iseqv = id , id
+ sym ≐-iseqv = swap
+ trans ≐-iseqv (u₁ , u₂) (v₁ , v₂) = v₁ ∘ u₁ , u₂ ∘ v₂
 
 module _ {α : Level} (ρ : Level) (𝒜 : Type α) where
+  open Poset using (Carrier; _≈_ ; _≤_; isPartialOrder)
 
- PosetOfSubsets : Poset (α ⊔ suc ρ) (α ⊔ ρ) (α ⊔ ρ)
- Carrier PosetOfSubsets = Pred 𝒜 ρ
- _≈_ PosetOfSubsets = _≐_
- _≤_ PosetOfSubsets = _⊆_
- isPartialOrder PosetOfSubsets =
-  record  { isPreorder = record  { isEquivalence = ≐-iseqv
-                                 ; reflexive = proj₁
-                                 ; trans = λ u v → v ∘ u
-                                 }
-          ; antisym = _,_
-          }
+
+  PosetOfSubsets : Poset (α ⊔ suc ρ) (α ⊔ ρ) (α ⊔ ρ)
+  Carrier PosetOfSubsets = Pred 𝒜 ρ
+  _≈_ PosetOfSubsets = _≐_
+  _≤_ PosetOfSubsets = _⊆_
+  isPartialOrder PosetOfSubsets =
+    record
+      { isPreorder = record  { isEquivalence = ≐-iseqv
+                             ; reflexive = proj₁
+                             ; trans = λ u v → v ∘ u
+                             }
+      ; antisym = _,_ }
 ```
 
-
-A binary relation from one poset to another induces a Galois connection.  This is akin to the situation with Adjunctions in Category Theory (unsurprisingly).  In other words, there is likely a unit/counit definition that is more level polymorphic.
-
+A binary relation from one poset to another induces a Galois connection.  This is
+akin to the situation with Adjunctions in Category Theory (unsurprisingly).  In other
+words, there is likely a unit/counit definition that is more level polymorphic.
 
 ```agda
 module _ {ℓ : Level}{𝒜 : Type ℓ} {ℬ : Type ℓ} where
 
- 𝒫𝒜 : Poset (suc ℓ) ℓ ℓ
- 𝒫ℬ : Poset (suc ℓ) ℓ ℓ
- 𝒫𝒜 = PosetOfSubsets ℓ 𝒜
- 𝒫ℬ = PosetOfSubsets ℓ ℬ
+  𝒫𝒜 𝒫ℬ : Poset (suc ℓ) ℓ ℓ
+  𝒫𝒜 = PosetOfSubsets ℓ 𝒜
+  𝒫ℬ = PosetOfSubsets ℓ ℬ
 
- -- Every binary relation from one poset to another induces a Galois connection.
- Rel→Gal : (R : REL 𝒜 ℬ ℓ) → Galois 𝒫𝒜 𝒫ℬ
- Rel→Gal R = record  { F = _⃗ R
-                     ; G = R ⃖_
-                     ; GF≥id = λ _ → ←→≥id
-                     ; FG≥id = λ _ → →←≥id }
+  -- Every binary relation from one poset to another induces a Galois connection.
+  Rel→Gal : (R : REL 𝒜 ℬ ℓ) → Galois 𝒫𝒜 𝒫ℬ
+  Rel→Gal R = record  { F = _⃗ R
+                      ; G = R ⃖_
+                      ; GF≥id = λ _ → ←→≥id
+                      ; FG≥id = λ _ → →←≥id }
 ```
-
 
 --------------------
 

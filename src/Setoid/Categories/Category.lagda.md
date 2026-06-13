@@ -61,11 +61,12 @@ module Setoid.Categories.Category where
 open import Agda.Primitive  using ( _⊔_ ; lsuc ) renaming ( Set to Type )
 open import Level           using ( Level )
 open import Relation.Binary using ( IsEquivalence )
+open import Algebra.Definitions using (Associative)
 
 private variable o ℓ e : Level
 
 record Category (o ℓ e : Level) : Type (lsuc (o ⊔ ℓ ⊔ e)) where
-  infixr 9 _∘_
+  infixl 9 _∘_
   infix 4 _≈_
 
   field
@@ -75,20 +76,22 @@ record Category (o ℓ e : Level) : Type (lsuc (o ⊔ ℓ ⊔ e)) where
     id   : {A : Obj} → Hom A A
     _∘_  : {A B C : Obj} → Hom B C → Hom A B → Hom A C
 
-    ≈-equiv    : {A B : Obj} → IsEquivalence (_≈_ {A} {B})
-    assoc      : {A B C D : Obj} {f : Hom A B} {g : Hom B C} {h : Hom C D}
-               → (h ∘ g) ∘ f ≈ h ∘ (g ∘ f)
-    identityˡ  : {A B : Obj} {f : Hom A B} → id ∘ f ≈ f
-    identityʳ  : {A B : Obj} {f : Hom A B} → f ∘ id ≈ f
-    ∘-resp-≈   : {A B C : Obj} {f g : Hom B C} {h i : Hom A B}
-               → f ≈ g → h ≈ i → f ∘ h ≈ g ∘ i
+    ≈-equiv    :  {A B : Obj} → IsEquivalence (_≈_ {A} {B})
+    assoc      :  {A B C D : Obj} {f : Hom A B} {g : Hom B C} {h : Hom C D}
+                  → h ∘ g ∘ f ≈ h ∘ (g ∘ f)
+    identityˡ  :  {A B : Obj} {f : Hom A B} → id ∘ f ≈ f
+    identityʳ  :  {A B : Obj} {f : Hom A B} → f ∘ id ≈ f
+    ∘-resp-≈   :  {A B C : Obj} {f g : Hom B C} {h i : Hom A B}
+                  → f ≈ g → h ≈ i → f ∘ h ≈ g ∘ i
 
   -- Reflexivity, symmetry, and transitivity of each hom-set's equivalence,
   -- surfaced for use in functor-law and instance proofs.
-  ≈-refl  : {A B : Obj} {f : Hom A B} → f ≈ f
-  ≈-refl  = IsEquivalence.refl ≈-equiv
-  ≈-sym   : {A B : Obj} {f g : Hom A B} → f ≈ g → g ≈ f
-  ≈-sym   = IsEquivalence.sym ≈-equiv
+  ≈-refl : {A B : Obj} {f : Hom A B} → f ≈ f
+  ≈-refl = IsEquivalence.refl ≈-equiv
+
+  ≈-sym : {A B : Obj} {f g : Hom A B} → f ≈ g → g ≈ f
+  ≈-sym = IsEquivalence.sym ≈-equiv
+
   ≈-trans : {A B : Obj} {f g h : Hom A B} → f ≈ g → g ≈ h → f ≈ h
   ≈-trans = IsEquivalence.trans ≈-equiv
 ```

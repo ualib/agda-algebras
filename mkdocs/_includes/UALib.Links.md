@@ -332,6 +332,9 @@
 [ADR-001]: https://github.com/ualib/agda-algebras/blob/master/docs/adr/001-setoid-as-canonical.md
 [ADR-002]: https://github.com/ualib/agda-algebras/blob/master/docs/adr/002-classical-layer-design.md
 [ADR-003]: https://github.com/ualib/agda-algebras/blob/master/docs/adr/003-cubical-canonical-target.md
+[ADR-004]: https://github.com/ualib/agda-algebras/blob/master/docs/adr/004-lagda-md-canonical.md
+[ADR-005]: https://github.com/ualib/agda-algebras/blob/master/docs/adr/005-universe-level-variable-scope.md
+[ADR-006]: https://github.com/ualib/agda-algebras/blob/master/docs/adr/006-signature-morphism-category.md
 [ADR-dir]: https://github.com/ualib/agda-algebras/tree/master/docs/adr
 [Agda]: https://wiki.portal.chalmers.se/agda/pmwiki.php
 [Agda Language Reference]: https://agda.readthedocs.io/en/v2.6.1.3/language

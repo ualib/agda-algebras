@@ -15,8 +15,9 @@ This is the [Overture.Adjunction.Residuation][] module of the [Agda Universal Al
 
 module Overture.Adjunction.Residuation where
 
--- Imports from Agda and the Agda Standard Library --------------------------------------
-open import Agda.Primitive           using () renaming ( Set to Type )
+open import Agda.Primitive using () renaming ( Set to Type )
+
+-- Imports from the Agda Standard Library --------------------------------------
 open import Function.Base            using ( _on_ ; _∘_ )
 open import Level                    using ( Level ; _⊔_ ; suc )
 open import Relation.Binary.Bundles  using ( Poset )
@@ -28,43 +29,36 @@ open import Overture.Relations using ( PointWise )
 private variable
  a ιᵃ α b ιᵇ β : Level
 
-module _ (A : Poset a ιᵃ α)(B : Poset b ιᵇ β) where
- open Poset
- private
-  _≤A_ = _≤_ A
-  _≤B_ = _≤_ B
+module _ (𝑨 : Poset a ιᵃ α)(𝑩 : Poset b ιᵇ β) where
+  open Poset 𝑨 renaming ( Carrier to A ; _≤_ to _≤ᴬ_ ) using ()
+  open Poset 𝑩 renaming ( Carrier to B ; _≤_ to _≤ᴮ_ ) using ()
 
- record Residuation : Type (suc (α ⊔ a ⊔ β ⊔ b))  where
-  field
-   f      : Carrier A → Carrier B
-   g      : Carrier B → Carrier A
-   fhom   : f Preserves _≤A_ ⟶ _≤B_
-   ghom   : g Preserves _≤B_ ⟶ _≤A_
-   gf≥id  : ∀ a → a ≤A g (f a)
-   fg≤id  : ∀ b → f (g b) ≤B b
+  record Residuation : Type (suc (α ⊔ a ⊔ β ⊔ b))  where
+    field
+      f      : A → B
+      g      : B → A
+      fhom   : f Preserves _≤ᴬ_ ⟶ _≤ᴮ_
+      ghom   : g Preserves _≤ᴮ_ ⟶ _≤ᴬ_
+      gf≥id  : ∀ a → a ≤ᴬ g (f a)
+      fg≤id  : ∀ b → f (g b) ≤ᴮ b
 ```
-
 
 #### Basic properties of residual pairs
 
-
 ```agda
-open Residuation
-open Poset
+-- open Residuation
+-- open Poset
 
-module _ {A : Poset a ιᵃ α} {B : Poset b ιᵇ β} (R : Residuation A B) where
- private
-  _≤A_ = _≤_ A
-  _≤B_ = _≤_ B
-
-  𝑓 = (R .f)
-  𝑔 = (R .g)
+module _ {𝑨 : Poset a ιᵃ α} {𝑩 : Poset b ιᵇ β} (R : Residuation 𝑨 𝑩) where
+  open Poset 𝑨 renaming ( Carrier to A ; _≤_ to _≤ᴬ_ ; _≈_ to _≈ᴬ_; antisym to antisymᴬ) using ()
+  open Poset 𝑩 renaming ( Carrier to B ; _≤_ to _≤ᴮ_ ; _≈_ to _≈ᴮ_; antisym to antisymᴮ) using ()
+  open Residuation R
 
   -- Pointwise equality of unary functions wrt equality on the given poset carrier
   -- 1. pointwise equality on B → A
-  _≈̇A_ = PointWise{a = b}{A = Carrier B} (_≈_ A)
+  _≈̇A_ = PointWise{a = b}{A = B} (_≈ᴬ_)
   -- 2. pointwise equality on A → B
-  _≈̇B_ = PointWise{a = a}{A = Carrier A} (_≈_ B)
+  _≈̇B_ = PointWise{a = a}{A = A} (_≈ᴮ_)
 ```
 
 
@@ -72,23 +66,23 @@ In a ring `R`, if `x y : R` and if `x y x = x`, then `y` is called a *weak inver
 
 
 ```agda
- -- 𝑔 is a weak inverse for 𝑓
- weak-inverse : (𝑓 ∘ 𝑔 ∘ 𝑓) ≈̇B 𝑓
- weak-inverse a = antisym B lt gt
-  where
-  lt : 𝑓 (𝑔 (𝑓 a)) ≤B 𝑓 a
-  lt = fg≤id R (𝑓 a)
-  gt : 𝑓 a ≤B 𝑓 (𝑔 (𝑓 a))
-  gt = fhom R (gf≥id R a)
+  -- g is a weak inverse for f
+  weak-inverse : (f ∘ g ∘ f) ≈̇B f
+  weak-inverse a = antisymᴮ lt gt
+    where
+    lt : f (g (f a)) ≤ᴮ f a
+    lt = fg≤id (f a)
+    gt : f a ≤ᴮ f (g (f a))
+    gt = fhom (gf≥id a)
 
- -- 𝑓 is a weak inverse of 𝑔
- weak-inverse' : (𝑔 ∘ 𝑓 ∘ 𝑔) ≈̇A 𝑔
- weak-inverse' b = antisym A lt gt
-  where
-  lt : 𝑔 (𝑓 (𝑔 b)) ≤A 𝑔 b
-  lt = ghom R (fg≤id R b)
-  gt : 𝑔 b ≤A 𝑔 (𝑓 (𝑔 b))
-  gt = gf≥id R (𝑔 b)
+ -- f is a weak inverse of g
+  weak-inverse' : (g ∘ f ∘ g) ≈̇A g
+  weak-inverse' b = antisymᴬ lt gt
+    where
+    lt : g (f (g b)) ≤ᴬ g b
+    lt = ghom (fg≤id b)
+    gt : g b ≤ᴬ g (f (g b))
+    gt = gf≥id (g b)
 ```
 
 

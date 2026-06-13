@@ -33,10 +33,10 @@ normalizing `Fin`-pattern lambdas.  See ADR-006 for the decision and its rationa
 module Overture.Signatures.Morphisms where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
-open import Agda.Primitive                        using () renaming ( Set to Type )
-open import Function                              using ( id ; _∘_ )
-open import Level                                 using ( _⊔_ )
-open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl )
+open import Agda.Primitive                         using () renaming ( Set to Type )
+open import Function                               using ( id ; _∘_ )
+open import Level                                  using ( _⊔_ )
+open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 -- 𝓞 / 𝓥 are the canonical operation-symbol / arity level variables (ADR-005);
@@ -59,8 +59,11 @@ signatures are fixed at a common pair of levels `(𝓞 , 𝓥)`.
 record SigMorphism (𝑆₁ 𝑆₂ : Signature 𝓞 𝓥) : Type (𝓞 ⊔ 𝓥) where
   constructor mkSigMorphism
   field
-    ι : OperationSymbolsOf 𝑆₁ → OperationSymbolsOf 𝑆₂                  -- covariant on symbols
-    κ : (o : OperationSymbolsOf 𝑆₁) → ArityOf 𝑆₂ (ι o) → ArityOf 𝑆₁ o  -- contravariant on positions
+    -- covariant on symbols
+    ι : OperationSymbolsOf 𝑆₁ → OperationSymbolsOf 𝑆₂
+
+    -- contravariant on positions
+    κ : (o : OperationSymbolsOf 𝑆₁) → ArityOf 𝑆₂ (ι o) → ArityOf 𝑆₁ o
 
 open SigMorphism public
 ```
@@ -76,7 +79,7 @@ then through `φ` at `o`.
 id-morphism : SigMorphism 𝑆 𝑆
 id-morphism = record { ι = id ; κ = λ _ → id }
 
-infixr 9 _∘ₛ_
+infixl 20 _∘ₛ_
 
 _∘ₛ_ : SigMorphism 𝑆₂ 𝑆₃ → SigMorphism 𝑆₁ 𝑆₂ → SigMorphism 𝑆₁ 𝑆₃
 ψ ∘ₛ φ = record { ι = ι ψ ∘ ι φ ; κ = λ o → κ φ o ∘ κ ψ (ι φ o) }
@@ -96,7 +99,7 @@ the morphism record.  No hom-setoid and no funext are needed.[^2]
 ∘ₛ-identityʳ _ = refl
 
 ∘ₛ-assoc : (χ : SigMorphism 𝑆₃ 𝑆₄) (ψ : SigMorphism 𝑆₂ 𝑆₃) (φ : SigMorphism 𝑆₁ 𝑆₂)
-         → (χ ∘ₛ ψ) ∘ₛ φ ≡ χ ∘ₛ (ψ ∘ₛ φ)
+  → χ ∘ₛ ψ ∘ₛ φ ≡ χ ∘ₛ (ψ ∘ₛ φ)
 ∘ₛ-assoc _ _ _ = refl
 ```
 

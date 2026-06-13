@@ -479,14 +479,14 @@ sides send `x` to `just (f x)`) and the `zag` triangle (the counit collapses
 
 ```agda
 adjoinUnit⊣forgetUnit : Adjunction (adjoinUnitF {α} {ρ}) (forgetUnitF {α} {ρ})
-adjoinUnit⊣forgetUnit = record
-  { unit            = unit-hom
-  ; counit          = counit-hom
-  ; unit-natural    = λ {𝑺} {𝑻} f x → Setoid.refl 𝔻[ proj₁ 𝑻 ]
-  ; counit-natural  = λ {𝑴} {𝑵} → counit-natural¹ 𝑴 𝑵
-  ; zig             = zig¹
-  ; zag             = λ 𝑴 x → Setoid.refl 𝔻[ proj₁ 𝑴 ]
-  }
+adjoinUnit⊣forgetUnit =
+  record  { unit            = unit-hom
+          ; counit          = counit-hom
+          ; unit-natural    = λ {𝑺} {𝑻} f x → Setoid.refl 𝔻[ proj₁ 𝑻 ]
+          ; counit-natural  = λ {𝑴} {𝑵} → counit-natural¹ 𝑴 𝑵
+          ; zig             = zig¹
+          ; zag             = λ 𝑴 x → Setoid.refl 𝔻[ proj₁ 𝑴 ]
+          }
 ```
 
 #### The induced monad on semigroups

@@ -78,22 +78,18 @@ private variable
 
 #### The translation
 
-The two signatures are instantiated by module application; `T₁.Term X` and
-`T₂.Term X` are the term types over the same variable type `X`.
-
-(**Unicode tip**.  Type `\st` and select `✶` to get the star.)
+The two signatures are instantiated by module application; `Term₁ X` and
+`Term₂ X` are the term types over the same variable type `X`.[^1]
 
 ```agda
 module _ {𝑆₁ 𝑆₂ : Signature 𝓞 𝓥} where
-  private
-    module T₁ = Terms {𝑆 = 𝑆₁}
-    module T₂ = Terms {𝑆 = 𝑆₂}
+  open Terms {𝑆 = 𝑆₁} using () renaming (ℊ to ℊ₁; node to node₁; Term to Term₁)
+  open Terms {𝑆 = 𝑆₂} using () renaming (ℊ to ℊ₂; node to node₂; Term to Term₂)
+  infix 15 _✶_
 
-  infix 25 _✶_
-
-  _✶_ : SigMorphism 𝑆₁ 𝑆₂ → T₁.Term X → T₂.Term X
-  φ ✶ T₁.ℊ x       = T₂.ℊ x
-  φ ✶ T₁.node f ts = T₂.node (ι φ f) (λ j → φ ✶ ts (κ φ f j))
+  _✶_ : SigMorphism 𝑆₁ 𝑆₂ → Term₁ X → Term₂ X
+  φ ✶ ℊ₁ x = ℊ₂ x
+  φ ✶ node₁ f ts = node₂ (ι φ f) (λ j → φ ✶ ts (κ φ f j))
 ```
 
 Variables are fixed points of the translation (`φ ✶ ℊ x` is `ℊ x`, definitionally),
@@ -102,5 +98,8 @@ needs values for exactly the variables that interpreting `t` needs.  The
 reduct-invariance theorem leans on this directly.
 
 --------------------------------------
+
+[^1]: **Unicode tip**.  Type `\st` and select `✶` to get the star.
+
 
 {% include UALib.Links.md %}

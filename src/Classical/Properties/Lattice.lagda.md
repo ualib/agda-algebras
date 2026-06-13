@@ -10,9 +10,8 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Properties.Lattice][] module of the [Agda Universal Algebra Library][].
 
-The acceptance criterion of [M3-7](https://github.com/ualib/agda-algebras/issues/264)
-asks for the equivalence of the algebraic and order-theoretic presentations of a
-lattice.  This module proves the *object-level* half of that equivalence: given
+The algebraic and order-theoretic presentations of a lattice are equivalenct.
+This module proves the *object-level* half of that equivalence: given
 a `Lattice α ρ` — that is, the algebraic data of meet, join, and the eight
 equations — we construct the partial order `x ≤ y := x ∧ y ≈ x` and show that
 `_∧_` and `_∨_` are the binary meet and join with respect to it.

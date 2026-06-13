@@ -61,11 +61,10 @@ discharged by `refl`.
 ∙-is-+-sg a b = refl
 ```
 
-The forgetful image of `ℕ-semigroup` is the magma `ℕ-magma` (from [M3-3]),
-*on the nose*.  This holds because `eqsToSemigroup` is implemented as
-`opsToMagma A _·_ , <proof>`, so `semigroup→magma (eqsToSemigroup ℕ _+_ +-assoc)`
-reduces to `opsToMagma ℕ _+_`, which is exactly the definition of `ℕ-magma`;
-discharged by `refl`.
+The forgetful image of `ℕ-semigroup` is the magma `ℕ-magma` *on the nose*.
+This holds because `eqsToSemigroup` is implemented as `opsToMagma A _·_ , <proof>`,
+so `semigroup→magma (eqsToSemigroup ℕ _+_ +-assoc)` reduces to `opsToMagma ℕ _+_`,
+which is exactly the definition of `ℕ-magma`; discharged by `refl`.
 
 ```agda
 forgetful-agrees : Polymorphic.semigroup→magma ℕ-semigroup ≡ ℕ-magma
