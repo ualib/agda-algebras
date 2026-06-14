@@ -1,18 +1,18 @@
 ---
 layout: default
-file: "src/Classical/Categories/Reduct.lagda.md"
-title: "Classical.Categories.Reduct module"
+file: "src/Setoid/Categories/Reduct.lagda.md"
+title: "Setoid.Categories.Reduct module"
 date: "2026-06-09"
 author: "the agda-algebras development team"
 ---
 
 ### Reduct as a functor on algebras
 
-This is the [Classical.Categories.Reduct][] module of the [Agda Universal Algebra Library][].
+This is the [Setoid.Categories.Reduct][] module of the [Agda Universal Algebra Library][].
 
 A signature morphism `φ : SigMorphism 𝑆₁ 𝑆₂` induces a covariant functor
 `reductF φ : Alg 𝑆₂ ⟶ Alg 𝑆₁` between the [algebra categories][Setoid.Categories.Algebra].
-On objects it is [`reduct`][Classical.Structures.Reduct]`φ`; on a homomorphism it keeps the
+On objects it is [`reduct`][Setoid.Algebras.Reduct]`φ`; on a homomorphism it keeps the
 *same* underlying setoid map and transfers the `𝑆₂`-homomorphism condition to `𝑆₁` by the
 `κ`-reindex — `compatible` at the `𝑆₁`-symbol `o` is `f`'s `𝑆₂`-`compatible` at `ι φ o`,
 definitionally on the nose, because `(o ^ reduct φ 𝑨) = (ι φ o ^ 𝑨) ∘ (_∘ κ φ o)`.
@@ -22,15 +22,18 @@ unchanged, and the hom-equality is pointwise on them), and `identity` / `homomor
 by the codomain's `refl` (the underlying maps of both sides are the same — `𝒾𝒹` and `⊙-hom`
 are the identity map and function composition).
 
-This functor lives in the `Classical` tree, not `Setoid.Categories`, because its object map
-`reduct` is in `Classical.Structures.Reduct` (ADR-006), which is above `Setoid`.
+This functor lives in `Setoid.Categories`, alongside the rest of the category vocabulary; its
+object map `reduct` is [`Setoid.Algebras.Reduct`][Setoid.Algebras.Reduct], also a `Setoid/`
+construction.  (Both were relocated from `Classical/` by
+[ADR-006](../../docs/adr/006-signature-morphism-category.md), M4-16: reduct is universal
+algebra, not classical, and depends on nothing in `Classical/`.)
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 
-module Classical.Categories.Reduct where
+module Setoid.Categories.Reduct where
 
 open import Agda.Primitive using () renaming ( Set to Type )
 
@@ -41,7 +44,7 @@ open import Level                          using ( Level ; _⊔_) renaming (suc 
 open import Relation.Binary                using ( Setoid )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Classical.Structures.Reduct    using ( reduct )
+open import Setoid.Algebras.Reduct         using ( reduct )
 open import Overture.Signatures.Morphisms  using ( SigMorphism ; ι ; κ )
 open import Setoid.Algebras.Basic          using (𝔻[_])
 open import Setoid.Categories.Algebra      using (Alg)

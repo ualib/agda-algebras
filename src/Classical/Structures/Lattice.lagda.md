@@ -79,7 +79,7 @@ open import Classical.Signatures.Magma        using  ( Sig-Magma ; Op-Magma )
                                               renaming ( ∙-Op to ∙-Opᵐᵃ )
 open import Classical.Signatures.Lattice      using  ( Sig-Lattice ; Op-Lattice ; ∧-Op ; ∨-Op )
 open import Classical.Structures.Interpret    using  ( interp-cong )
-open import Classical.Structures.Reduct       using  ( reductBy )
+open import Setoid.Algebras.Reduct       using  ( reductBy )
 open import Classical.Structures.Semilattice  using  ( Semilattice ; _⊨ˢˡ_)
 open import Classical.Theories.Lattice        using  ( Eq-Lattice ; Th-Lattice ; ∧-assoc
                                                      ; ∧-comm ; ∧-idem ; ∨-assoc ; ∨-comm

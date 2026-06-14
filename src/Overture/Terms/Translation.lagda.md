@@ -39,9 +39,9 @@ identity, as in `Sig-Magma ↪ Sig-Monoid` — the translation simply re-reads a
 term such as `(x ∙ y) ∙ z` as the same expression in the monoid signature.  That
 "same expression, richer signature" reading is what makes the translation the
 syntactic half of the *reduct*: `reduct φ` moves algebras from `𝑆₂` to `𝑆₁`
-([Classical.Structures.Reduct][]), `φ ✶_` moves terms from `𝑆₁` to `𝑆₂`, and the
+([Setoid.Algebras.Reduct][]), `φ ✶_` moves terms from `𝑆₁` to `𝑆₂`, and the
 two are adjoint in the logical sense that satisfaction is invariant —
-`reduct φ 𝑨 ⊧ s ≈ t` iff `𝑨 ⊧ φ ✶ s ≈ φ ✶ t` ([Classical.Varieties.Invariance][]).
+`reduct φ 𝑨 ⊧ s ≈ t` iff `𝑨 ⊧ φ ✶ s ≈ φ ✶ t` ([Setoid.Varieties.Invariance][]).
 In the vocabulary of M4-5b, `φ ✶_` is the unique extension of the natural
 transformation `⟦ φ ⟧ : ⟨ 𝑆₁ ⟩ ⟹ ⟨ 𝑆₂ ⟩` from single applications to free
 `P_{𝑆₁}`-algebras; in monad vocabulary it is a *morphism of term monads*, a fact

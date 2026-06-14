@@ -1,17 +1,21 @@
 ---
 layout: default
-file: "src/Classical/Varieties/Reducts.lagda.md"
-title: "Classical.Varieties.Reducts module"
+file: "src/Setoid/Varieties/Reducts.lagda.md"
+title: "Setoid.Varieties.Reducts module"
 date: "2026-06-14"
 author: "the agda-algebras development team"
 ---
 
 ### Reduct classes of varieties
 
-This is the [Classical.Varieties.Reducts][] module of the [Agda Universal Algebra Library][].
+This is the [Setoid.Varieties.Reducts][] module of the [Agda Universal Algebra Library][].
+
+Like its companion [Setoid.Varieties.Invariance][], this module lives in the `Setoid/`
+foundation: reducts are universal algebra (relocated here from `Classical/` by
+[ADR-006](../../docs/adr/006-signature-morphism-category.md), M4-16).
 
 Fix two signatures `𝑆₁`, `𝑆₂` and a signature morphism `φ : 𝑆₁ → 𝑆₂`.  The reduct functor
-`reduct φ : Alg 𝑆₂ → Alg 𝑆₁` ([Classical.Categories.Reduct][], M4-5c) turns each
+`reduct φ : Alg 𝑆₂ → Alg 𝑆₁` ([Setoid.Categories.Reduct][], M4-5c) turns each
 `𝑆₂`-algebra into an `𝑆₁`-algebra by remembering only the operations named by `φ`.
 Given a **variety** `𝒱` of `𝑆₂`-algebras, this module studies the *reduct class*
 
@@ -65,7 +69,7 @@ though it need not equal one.  That containment is `reduct-⊧` below.
 
 open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 
-module Classical.Varieties.Reducts where
+module Setoid.Varieties.Reducts where
 
 open import Agda.Primitive using () renaming ( Set to Type )
 
@@ -80,9 +84,9 @@ open import Relation.Unary                 using ( Pred ; _∈_ ; _⊆_ )
 open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Classical.Structures.Reduct             using  ( reduct )
-open import Classical.Categories.Reduct             using  ( reductF )
-open import Classical.Varieties.Invariance          using  ( ⊧-reduct )
+open import Setoid.Algebras.Reduct             using  ( reduct )
+open import Setoid.Categories.Reduct             using  ( reductF )
+open import Setoid.Varieties.Invariance          using  ( ⊧-reduct )
 open import Overture.Signatures.Morphisms           using  ( SigMorphism )
                                                     renaming ( ι to ι-op ; κ to κ-ar )
 open import Overture.Terms                          using  ( Term )
@@ -114,7 +118,7 @@ Concretely, if `h : 𝑨 ⟶ 𝑩` is an `𝑆₂`-homomorphism, the very same u
 interprets an `𝑆₁`-symbol `o` as the interpretation in `𝑨` of `ι φ o` precomposed with the
 `κ φ o`-reindex, and `h` already respects every `𝑆₂`-operation — in particular `ι φ o` — so it
 respects the reindexed one with no extra work.  This is the morphism action `F₁` of the functor
-`reductF` ([Classical.Categories.Reduct][]); we restate it directly here because the closure
+`reductF` ([Setoid.Categories.Reduct][]); we restate it directly here because the closure
 arguments need it between algebras at *different* universe levels (subalgebra, isomorphism and
 homomorphic-image relations are all level-heterogeneous), whereas `reductF` is the
 single-level packaging.
@@ -259,7 +263,7 @@ bounded, research-tracking scope of this milestone.
 #### Reducts satisfy the pulled-back theory
 
 The genuine grain of truth behind "prevariety" is supplied by reduct-invariance of satisfaction
-(`⊧-reduct`, [Classical.Varieties.Invariance][]).  For any family `ℰ` of `𝑆₁`-equations, if an
+(`⊧-reduct`, [Setoid.Varieties.Invariance][]).  For any family `ℰ` of `𝑆₁`-equations, if an
 `𝑆₂`-algebra `𝑨` satisfies every `φ`-*translated* equation `φ ✶ s ≈ φ ✶ t`, then its reduct
 satisfies the original family.  In closure-operator terms this says
 

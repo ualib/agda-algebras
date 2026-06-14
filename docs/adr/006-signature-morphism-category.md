@@ -5,6 +5,7 @@
 ## Status
 
 Accepted — 2026-06-07 (M4-5a).
+Amended — 2026-06-14 (M4-16, #403): the `reduct` development relocates from `Classical/` to `Setoid/` (reduct is universal algebra, not classical, and depends on nothing in `Classical/`).  See the *Amendment* section below; it supersedes the placement clause of Decision 3.
 
 ## Context
 
@@ -21,7 +22,7 @@ Two decisions are forced before any of [M4-5][] can proceed, because they fix th
 
 2.  **Realize the [M4-5][] category layer self-contained; do not add an `agda-categories` dependency**.  Because the laws are `refl`/`cong`, the realization cost `agda-categories` would save is small, and the dependency cost is real (a flake change, a version pin, CI surface, and unverified compatibility with the pinned Agda 2.8.0).  The shared category vocabulary the layer introduces — built where [M4-5c][] first needs it, not here — is a *minimal* `Category` record carrying a hom-equality field `_≈_`, instantiated to `_≈_ = _≡_` for `Sig` and to a pointwise setoid for the algebra category.
 
-3.  **The signature-morphism layer is setoid-free and lives in `Overture`**.  Objects are Σ-typed signatures, morphisms are functions, and equality is `_≡_` — no `Setoid` machinery is involved — so the module is `Overture.Signatures.Morphisms`, co-located with `Overture.Signatures`.  The algebra-level category material ([M4-5c][] onward) lives higher up, in the `Setoid/` layer.  `reduct`, which acts on algebras, stays in its current home and merely imports the morphism type (acyclically: `Overture` is below `Setoid` and `Classical`).
+3.  **The signature-morphism layer is setoid-free and lives in `Overture`**.  Objects are Σ-typed signatures, morphisms are functions, and equality is `_≡_` — no `Setoid` machinery is involved — so the module is `Overture.Signatures.Morphisms`, co-located with `Overture.Signatures`.  The algebra-level category material ([M4-5c][] onward) lives higher up, in the `Setoid/` layer.  `reduct`, which acts on algebras, stays in its current home and merely imports the morphism type (acyclically: `Overture` is below `Setoid` and `Classical`).  *(The placement of `reduct` is amended by [M4-16][] — see the Amendment below: `reduct` and its dependent modules move down into `Setoid/`, which is both the principled home and cycle-free, since they import nothing from `Classical/`.)*
 
 4.  **`Sig 𝓞 𝓥` fixes a common level pair**.  Its objects are `Signature 𝓞 𝓥` at fixed `(𝓞 , 𝓥)`; the morphism record shares those levels.  A level-heterogeneous (large or displayed) category of signatures is out of scope for [M4-5a][].
 
@@ -43,9 +44,28 @@ Two decisions are forced before any of [M4-5][] can proceed, because they fix th
 +  **Place the signature category under `Setoid/`**.  Rejected: the signature category needs no setoids, so `Overture` is its natural, lower home and keeps it usable without `Setoid` imports.
 +  **A level-heterogeneous (large) category of signatures**.  Deferred: useful for morphisms across differing operation/arity levels, but not needed for reduct-packaging goal of [M4-5a][]; the fixed-level `Sig 𝓞 𝓥` is the clean first cut.
 
+## Amendment (2026-06-14, M4-16): the reduct development moves to `Setoid/`
+
+Decision 3 placed `reduct` in `Classical.Structures.Reduct`, and the reduct functor and reduct-invariance results were realized in `Classical/` too, on the rule that "anything whose object map is `reduct` must live in `Classical/` — a `Setoid.* → Classical.*` import would be a cycle."  [M4-16][] (#403) reverses the placement, for two reasons.
+
++  **Conceptual.**  Reducts, signature morphisms, and varieties are *universal algebra* — they range over arbitrary signatures.  `Classical/` is the tradition of specific structures (groups, rings, fields), each studied over one fixed signature, where reducts play little role.  So the reduct development belongs in the `Setoid/` foundation.
+
++  **Technical — the cycle rule was circular.**  `reduct` imports only `Overture.*` and `Setoid.Algebras.Basic`; it depends on nothing in `Classical/`.  The "`Setoid → Classical` cycle" existed *only because* `reduct` was parked in `Classical/`.  Moving the root down removes the obstruction entirely, and reunifies the M4-5 functorial layer — most of which (`Overture.Signatures.Morphisms`, `Setoid.Signatures.Functor`, the `Setoid.Categories.*` vocabulary, `Overture.Terms.Translation`, `Setoid.Terms.*`) already lives in `Setoid/` / `Overture/`; only the reduct-touching modules were stranded in `Classical/`.
+
+The relocations:
+
++  `Classical.Structures.Reduct` → `Setoid.Algebras.Reduct`.
++  `Classical.Categories.Reduct` → `Setoid.Categories.Reduct`.
++  `Classical.Varieties.Invariance` → `Setoid.Varieties.Invariance`, and `Classical.Varieties.Reducts` → `Setoid.Varieties.Reducts` (the M4-5g module, #402), retiring the `Classical/Varieties/` subtree.
+
+What stays in `Classical/`: `Classical.Categories.AdjoinUnit` and `Classical.Categories.Forgetful`, which are structure-specific (adjoin-a-unit to a semigroup; `monoid→semigroup`) and now import `reductF` / `⊧-reduct` from their `Setoid/` homes.  The classical forgetful projections (`monoid→semigroup`, `group→monoid`, …) continue to consume `reduct` / `reductBy`, now imported from `Setoid.Algebras.Reduct`.
+
+Because the moved modules are inherently *two-signature* (`φ : 𝑆₁ → 𝑆₂`), they do not fit the single-`{𝑆}` umbrella aggregators `Setoid.Algebras` and `Setoid.Varieties`; they remain directory-resident and are imported directly, as they already were.  Decision 2 (self-contained, no `agda-categories`) and the equality decisions (1, 4) are unaffected; only the *tree* placement of the reduct modules changes.
+
 ## References
 
 +  Issue [M4-5][] — Signatures as functors: reducts, expansions, and interpretability.
++  Issue [M4-16][] — Relocate the reduct development from `Classical/` to `Setoid/` (this amendment).
 +  Issue [M4-5a][] — Category of signature morphisms.
 +  `src/Overture/Signatures/Morphisms.lagda.md` — the `SigMorphism` record, identity and composition, and the `refl`-proved category laws (the spike this ADR records).
 +  `docs/notes/milestone-signature-functors.md` — the [M4-5][] design note.
@@ -59,3 +79,4 @@ Two decisions are forced before any of [M4-5][] can proceed, because they fix th
 [M4-5b]: https://github.com/ualib/agda-algebras/issues/340
 [M4-5c]: https://github.com/ualib/agda-algebras/issues/341
 [M4-5d]: https://github.com/ualib/agda-algebras/issues/342
+[M4-16]: https://github.com/ualib/agda-algebras/issues/403

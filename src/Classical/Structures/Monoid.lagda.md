@@ -71,7 +71,7 @@ open import Classical.Signatures.Magma      using ( Sig-Magma ; Op-Magma ) renam
 open import Classical.Signatures.Monoid     using ( Sig-Monoid ; Op-Monoid ; ∙-Op ; ε-Op )
 open import Classical.Structures.Interpret  using ( interp-cong )
 open import Classical.Structures.Magma      using ( Magma ; module Magma-Op ; opsToMagma )
-open import Classical.Structures.Reduct     using ( reductBy )
+open import Setoid.Algebras.Reduct     using ( reductBy )
 open import Classical.Structures.Semigroup  using ( Semigroup ) renaming (_⊨_ to _⊨ˢᵍ_)
 open import Classical.Theories.Monoid       using ( Eq-Monoid ; Th-Monoid ; assoc ; idˡ ; idʳ )
 open import Classical.Theories.Semigroup    using ( Th-Semigroup ) renaming ( assoc to assocˢ )
@@ -308,7 +308,7 @@ opsToBareMonoid A _·_ e = expand-ε e
 That `expand-ε` is a *section* of the reduct — reducting the expansion recovers the
 original magma, carrier and interpretation on the nose — is a definitional fact,
 recorded here in the strict operation-level form of
-[`Classical.Structures.Reduct`][]'s functoriality laws.  This is the formal half of
+[`Setoid.Algebras.Reduct`][]'s functoriality laws.  This is the formal half of
 the section-versus-adjoint contrast of M4-5d: `expand-ε` *chooses* an existing
 element to interpret `ε-Op` (so the carrier is unchanged and the reduct round-trips),
 whereas the free expansion `adjoinUnit` of [`Classical.Categories.AdjoinUnit`][]

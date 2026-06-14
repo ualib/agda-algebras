@@ -60,7 +60,7 @@ open import Classical.Signatures.Monoid     using  ( Sig-Monoid ; Op-Monoid )
                                             renaming ( ∙-Op to ∙-Opᵐᵒ ; ε-Op to ε-Opᵐᵒ )
 open import Classical.Signatures.Group      using  ( Sig-Group ; Op-Group ; ∙-Op ; ε-Op ; ⁻¹-Op )
 open import Classical.Structures.Interpret  using  ( interp-cong )
-open import Classical.Structures.Reduct     using  ( reductBy )
+open import Setoid.Algebras.Reduct     using  ( reductBy )
 open import Classical.Structures.Monoid     using  ( Monoid ; _⊨ᵐᵒ_ )
 open import Classical.Theories.Group        using  ( Eq-Group ; Th-Group
                                                    ; assoc ; idˡ ; idʳ ; invˡ ; invʳ )
