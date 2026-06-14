@@ -144,8 +144,8 @@ module _ {𝑆₁ 𝑆₂ : Signature 𝓞 𝓥} (φ : SigMorphism 𝑆₁ 𝑆�
 
 The commuting triangle: interpreting an `𝑆₁`-term in the reduct is interpreting its
 translation in `𝑨`, under any environment.  At a leaf both sides look up the
-variable.  At a node, the reduct's interpretation *is* "apply `𝑨`'s interpretation
-of `ι φ f` to the `κ φ f`-reindexed arguments" — definitionally, by the defining
+variable.  At a node, the reduct's interpretation *is* "apply the interpretation
+in `𝑨` of `ι φ f` to the `κ φ f`-reindexed arguments" — definitionally, by the defining
 clause of `reduct` — and the translation's `node` clause performs the same
 reindexing syntactically, so the two sides agree position by position, by the
 inductive hypothesis at the reindexed subterms.  Note what does *not* happen: no

@@ -30,10 +30,9 @@ Specifically, the conventions documented and embodied here are as follows.
    over `open Setoid.Algebras {𝑆 = Sig-X}`.
 +  **`_⊨_` alias**.  Each structure file defines a local `_⊨_` with the codomain
    *spelled out explicitly* — for Semigroup, `Eq-Semigroup → Term (Fin 3) × Term (Fin 3)`,
-   not `_`.  The underscore lets Agda's unifier wander into the equational-logic
+   not `_`.  (The underscore lets Agda's unifier wander into the equational-logic
    substrate, where it produces error messages naming `Modᵗ` rather than the local
-   alias; the explicit codomain is a load-test outcome from the original branch ([M3-2]).
-   The alias's body unfolds `Modᵗ Th-X` once at the point of use.
+   alias.) The alias's body unfolds `Modᵗ Th-X` once at the point of use.
 +  **Named accessor module `<Structure>-Op`**.  The signature-mechanics convention
    — one named parametric module per structure exposing curried,
    infix-friendly accessors so that downstream code can `open <Structure>-Op 𝑿` once
