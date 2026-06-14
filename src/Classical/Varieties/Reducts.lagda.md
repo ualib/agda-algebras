@@ -128,7 +128,7 @@ module _ {𝑆₁ 𝑆₂ : Signature 𝓞 𝓥} (φ : SigMorphism 𝑆₁ 𝑆�
 
   reduct-hom : {𝑨 : Algebra {𝑆 = 𝑆₂} α ρ}{𝑩 : Algebra {𝑆 = 𝑆₂} β ρᵇ}
     → hom 𝑨 𝑩 → hom (reduct φ 𝑨) (reduct φ 𝑩)
-  reduct-hom (h , hhom) = h , mkIsHom (λ {o}{a} → compatible hhom) -- {ι-op φ o} {a ∘ κ-ar φ o})
+  reduct-hom (h , hhom) = h , mkIsHom (λ {o}{a} → compatible hhom)
 ```
 
 The single-level instance agrees with the functor's morphism map definitionally — they are the
@@ -209,7 +209,7 @@ means "isomorphic".
 ```agda
   Reduct[_] :  Pred (Algebra {𝑆 = 𝑆₂} γ ρᶜ) ℓ
     → Pred (Algebra {𝑆 = 𝑆₁} β ρᵇ) (ov (γ ⊔ ρᶜ) ⊔ ℓ ⊔ β ⊔ ρᵇ)
-  Reduct[ 𝒲 ] 𝑩 = Σ[ 𝑨 ∈ Algebra _ _ ] (𝑨 ∈ 𝒲) ∧ (𝑩 ≅ reduct φ 𝑨)
+  Reduct[ 𝒲 ] 𝑩 = Σ[ 𝑨 ∈ Algebra {𝑆 = 𝑆₂} γ ρᶜ ] (𝑨 ∈ 𝒲) ∧ (𝑩 ≅ reduct φ 𝑨)
 ```
 
 `Reduct[_]` is monotone: a bigger source class has a bigger reduct image.
@@ -245,7 +245,7 @@ the product-preservation `⨅ (reduct φ ∘ 𝑨•) ≅ reduct φ (⨅ 𝑨•
     )
     = ⨅ 𝑨• , (I , 𝑨• , 𝑨•∈𝒱 , ≅-refl) , 𝑩≅red⨅𝑨•
     where
-    𝑨• : I → Algebra {𝑆 = 𝑆₂} _ _
+    𝑨• : I → Algebra {𝑆 = 𝑆₂} α ρ
     𝑨• i = proj₁ (𝒞∈R i)
     𝑨•∈𝒱 : ∀ i → 𝑨• i ∈ 𝒱
     𝑨•∈𝒱 i = proj₁ (proj₂ (𝒞∈R i))
