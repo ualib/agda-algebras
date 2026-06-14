@@ -79,7 +79,7 @@ then through `φ` at `o`.
 id-morphism : SigMorphism 𝑆 𝑆
 id-morphism = record { ι = id ; κ = λ _ → id }
 
-infixl 20 _∘ₛ_
+infixr 9 _∘ₛ_
 
 _∘ₛ_ : SigMorphism 𝑆₂ 𝑆₃ → SigMorphism 𝑆₁ 𝑆₂ → SigMorphism 𝑆₁ 𝑆₃
 ψ ∘ₛ φ = record { ι = ι ψ ∘ ι φ ; κ = λ o → κ φ o ∘ κ ψ (ι φ o) }
@@ -99,7 +99,7 @@ the morphism record.  No hom-setoid and no funext are needed.[^2]
 ∘ₛ-identityʳ _ = refl
 
 ∘ₛ-assoc : (χ : SigMorphism 𝑆₃ 𝑆₄) (ψ : SigMorphism 𝑆₂ 𝑆₃) (φ : SigMorphism 𝑆₁ 𝑆₂)
-  → χ ∘ₛ ψ ∘ₛ φ ≡ χ ∘ₛ (ψ ∘ₛ φ)
+  → (χ ∘ₛ ψ) ∘ₛ φ ≡ χ ∘ₛ (ψ ∘ₛ φ)
 ∘ₛ-assoc _ _ _ = refl
 ```
 

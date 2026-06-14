@@ -61,12 +61,11 @@ module Setoid.Categories.Category where
 open import Agda.Primitive  using ( _⊔_ ; lsuc ) renaming ( Set to Type )
 open import Level           using ( Level )
 open import Relation.Binary using ( IsEquivalence )
-open import Algebra.Definitions using (Associative)
 
 private variable o ℓ e : Level
 
 record Category (o ℓ e : Level) : Type (lsuc (o ⊔ ℓ ⊔ e)) where
-  infixl 9 _∘_
+  infixr 9 _∘_
   infix 4 _≈_
 
   field
@@ -78,7 +77,7 @@ record Category (o ℓ e : Level) : Type (lsuc (o ⊔ ℓ ⊔ e)) where
 
     ≈-equiv    :  {A B : Obj} → IsEquivalence (_≈_ {A} {B})
     assoc      :  {A B C D : Obj} {f : Hom A B} {g : Hom B C} {h : Hom C D}
-                  → h ∘ g ∘ f ≈ h ∘ (g ∘ f)
+                  → (h ∘ g) ∘ f ≈ h ∘ (g ∘ f)
     identityˡ  :  {A B : Obj} {f : Hom A B} → id ∘ f ≈ f
     identityʳ  :  {A B : Obj} {f : Hom A B} → f ∘ id ≈ f
     ∘-resp-≈   :  {A B C : Obj} {f g : Hom B C} {h i : Hom A B}

@@ -130,7 +130,7 @@ module _ {𝑆 : Signature 𝓞 𝓥} where
 
 module _ {𝑆₁ 𝑆₂ 𝑆₃ : Signature 𝓞 𝓥} {φ : SigMorphism 𝑆₁ 𝑆₂} {ψ : SigMorphism 𝑆₂ 𝑆₃} where
 
-  ✶-∘ : (t : Term {𝑆 = 𝑆₁} X) → ψ ∘ₛ φ ✶ t ≐ ψ ✶ (φ ✶ t)
+  ✶-∘ : (t : Term {𝑆 = 𝑆₁} X) → (ψ ∘ₛ φ) ✶ t ≐ ψ ✶ (φ ✶ t)
   ✶-∘ (ℊ x) = ≐-isRefl
   ✶-∘ (node f ts) = gnl (λ i → ✶-∘ (ts (κ φ f (κ ψ (ι φ f) i))))
 ```
