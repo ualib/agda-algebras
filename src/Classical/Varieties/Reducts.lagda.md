@@ -111,7 +111,7 @@ private variable
 Everything rests on one observation: a homomorphism is preserved by `reduct φ` *on the nose*.
 Concretely, if `h : 𝑨 ⟶ 𝑩` is an `𝑆₂`-homomorphism, the very same underlying setoid map is an
 `𝑆₁`-homomorphism `reduct φ 𝑨 ⟶ reduct φ 𝑩`.  The reason is definitional: `reduct φ`
-interprets an `𝑆₁`-symbol `o` as `𝑨`'s interpretation of `ι φ o` precomposed with the
+interprets an `𝑆₁`-symbol `o` as the interpretation in `𝑨` of `ι φ o` precomposed with the
 `κ φ o`-reindex, and `h` already respects every `𝑆₂`-operation — in particular `ι φ o` — so it
 respects the reindexed one with no extra work.  This is the morphism action `F₁` of the functor
 `reductF` ([Classical.Categories.Reduct][]); we restate it directly here because the closure
