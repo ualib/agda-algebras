@@ -128,7 +128,8 @@ module _ {𝑆₁ 𝑆₂ : Signature 𝓞 𝓥} (φ : SigMorphism 𝑆₁ 𝑆�
 
   reduct-hom : {𝑨 : Algebra {𝑆 = 𝑆₂} α ρ}{𝑩 : Algebra {𝑆 = 𝑆₂} β ρᵇ}
     → hom 𝑨 𝑩 → hom (reduct φ 𝑨) (reduct φ 𝑩)
-  reduct-hom (h , hhom) = h , mkIsHom (λ {o}{a} → compatible hhom)
+  reduct-hom (h , hhom) =
+    h , mkIsHom (λ {o}{a} → compatible hhom {f = ι-op φ o} {a = a ∘ κ-ar φ o})
 ```
 
 The single-level instance agrees with the functor's morphism map definitionally — they are the
@@ -305,7 +306,7 @@ of monoid reducts of 𝒱 — monoids `(M , ·, e)` that underlie some group.
 
 +  The monoid `(ℤ , +, 0)` is a reduct of the group `(ℤ , + , - , 0)`, so `(ℤ , +, 0) ∈ reduct φ 𝒱`.
 +  As monoids `(ℕ , +, 0) ≤ (ℤ , +, 0)` — `ℕ` is closed under `+` and the inclusion is an
-   injective magma homomorphism — so `(ℕ , +, 0) ∈ S (reduct φ 𝒱)`.
+   injective monoid homomorphism — so `(ℕ , +, 0) ∈ S (reduct φ 𝒱)`.
 +  But `(ℕ , +, 0)` is **not** a monoid reduct of some group: there is no group whose
    carrier is `ℕ` and whose binary operation is `+`, since any nonzero natural number
    has no additive inverse in `ℕ`.  So `(ℕ , +, 0) ∉ reduct φ 𝒱`.
