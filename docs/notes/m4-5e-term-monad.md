@@ -15,7 +15,7 @@ This note records the outcome of [M4-5e][] (#343): the term-monad laws, the natu
 +  `Setoid.Terms.Monad` — the term-monad laws in Kleisli form (`[]-unitˡ` strict by `refl` with a `-ptw` corollary; `[]-unitʳ` and `[]-assoc` by induction up to `_≐_`; `[]-cong`), substitution composition `_⊙ˢ_`, the Kleisli category `TermKleisli χ : Category (suc χ) (ov χ) (ov χ)` whose three category laws *are* the three monad laws, and the heterogeneous-level `join` with its definitional unit law.
 +  `Setoid.Terms.Translation` — the `_≐_`-level laws of `_✶_`: congruence (`✶-cong`, packaged as `✶-func`), functoriality (`✶-id`, `✶-∘`), and the monad-morphism square (`✶-sub`: translation commutes with substitution).
 +  `Setoid.Terms.Properties` — `free-lift-natural`: naturality of the fold in the algebra, a one-liner by `free-unique` (both triangle legs agree on generators); together with the existing `comm-hom-term` / `free-lift-interp` / `substitution` this completes the carrier-direction naturality inventory.
-+  `Classical.Varieties.Invariance` — the payoff: `reduct-interp` (the fold-naturality triangle along `φ`: interpreting an `𝑆₁`-term in `reduct φ 𝑨` is interpreting its translation in `𝑨`) and the satisfaction condition `⊧-reduct` / `⊧-expand` (`reduct φ 𝑨 ⊧ s ≈ t` iff `𝑨 ⊧ φ ✶ s ≈ φ ✶ t`).  This opens the `Classical/Varieties/` area that M4-5g will extend.
++  `Setoid.Varieties.Invariance` — the payoff: `reduct-interp` (the fold-naturality triangle along `φ`: interpreting an `𝑆₁`-term in `reduct φ 𝑨` is interpreting its translation in `𝑨`) and the satisfaction condition `⊧-reduct` / `⊧-expand` (`reduct φ 𝑨 ⊧ s ≈ t` iff `𝑨 ⊧ φ ✶ s ≈ φ ✶ t`).  This opens the `Setoid/Varieties/` area that M4-5g will extend.
 +  `Classical.Categories.Forgetful` — the regression demonstration: `Th-Semigroup-via-invariance` re-derives the Monoid forgetful's theory obligation from `⊧-reduct` plus two four-line `_≐_` bridges; the bespoke M3-6 proof (`thm` in `Classical.Structures.Monoid`) is kept, per the issue's instruction.
 
 ## Finding 1: the term monad is a relative monad — the Kleisli form is forced
@@ -44,13 +44,13 @@ The M3-5 finding (ADR-002 §1) was that the binary node-bridge `⟦ node f (pair
 The issue's "fold naturality" splits along the two arguments of the interpretation pairing `(𝑨 , t) ↦ ⟦ t ⟧ᴬ`, and the formal artifacts are distributed as follows:
 
 +  **Naturality in the algebra** (signature fixed, algebra varies along `h : 𝑨 ⟶ 𝑩`): `free-lift-natural` (`Setoid.Terms.Properties`, new, by `free-unique`), `comm-hom-term` (`Setoid.Terms.Operations`, pre-existing, environment form), with `free-lift-interp` mediating and `substitution` (`Setoid.Terms.Basic`) covering the Kleisli/Eilenberg–Moore interaction.
-+  **Naturality in the signature** (algebra fixed, signature varies along `φ : 𝑆₁ → 𝑆₂`): `reduct-interp` (`Classical.Varieties.Invariance`, new), with satisfaction-invariance as the quantified corollary.
++  **Naturality in the signature** (algebra fixed, signature varies along `φ : 𝑆₁ → 𝑆₂`): `reduct-interp` (`Setoid.Varieties.Invariance`, new), with satisfaction-invariance as the quantified corollary.
 +  **Naturality of the translation itself** (the monad-morphism square): `✶-sub` (`Setoid.Terms.Translation`, new), which M4-5f's theory interpretations will need for composability.
 
 ## Follow-ups
 
-+  M4-5f (#344): theory interpretations generalize `_✶_` by sending symbols to *derived* terms; `✶-sub` is the composability law, and `Classical.Varieties.Invariance` the template for the satisfaction side.
-+  M4-5g (#345): `Classical/Varieties/` now exists; the prevariety results extend it against `Setoid.Varieties`.
++  M4-5f (#344): theory interpretations generalize `_✶_` by sending symbols to *derived* terms; `✶-sub` is the composability law, and `Setoid.Varieties.Invariance` the template for the satisfaction side.
++  M4-5g (#345): `Setoid/Varieties/` now exists; the prevariety results extend it against `Setoid.Varieties`.
 +  Optional cleanups, deliberately not done here: reconcile `Sub`/`_[_]` with `Substerm`/`_[_]t` (deprecation cycle); a `⊧-respects-≐` convenience lemma in `Setoid.Varieties` if a second consumer of the bridge pattern appears; vertical/horizontal composition for `NaturalTransformation` when a second consumer needs them.
 
 [M4-5e]: https://github.com/ualib/agda-algebras/issues/343

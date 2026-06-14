@@ -60,7 +60,7 @@ This underwrites the rest of the development: the **fold** — interpreting a te
 algebra is the unique homomorphism out of the free object, so `⟦_⟧` exists and is
 determined by its action on variables — the **Kleisli category** of
 contexts-and-substitutions (below), and *reduct-invariance of satisfaction*
-([Classical.Varieties.Invariance][]), which is precisely naturality of that fold.
+([Setoid.Varieties.Invariance][]), which is precisely naturality of that fold.
 
 The monad abstraction is therefore not mere decoration: it discharges substitution's
 bookkeeping once, it is literally the assertion that the term algebra is free, and it
@@ -135,7 +135,7 @@ evaluation interacts with this monad structure.  It works as follows:
    composition of environments (`𝑨` is an Eilenberg–Moore-style algebra for the monad);
 +  `free-lift-natural` and `comm-hom-term` in [Setoid.Terms.Properties][] and
    [Setoid.Terms.Operations][] say the fold is natural in the algebra;
-+  [Classical.Varieties.Invariance][] adds naturality in the *signature*.
++  [Setoid.Varieties.Invariance][] adds naturality in the *signature*.
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}

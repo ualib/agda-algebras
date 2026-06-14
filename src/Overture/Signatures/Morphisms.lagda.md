@@ -15,7 +15,7 @@ specialized to the container `Signature = (OperationSymbolsOf ▷ ArityOf)`.  It
 `(ι , κ)`: a map `ι` sending each operation symbol of `𝑆₁` to one of `𝑆₂` (covariant on
 symbols), together with a family `κ` sending the arity of `ι o` back to the arity of `o`
 (contravariant on positions).  These are exactly the two arguments that
-[`reduct`][Classical.Structures.Reduct] consumes today; this module packages them as a
+[`reduct`][Setoid.Algebras.Reduct] consumes today; this module packages them as a
 first-class record and assembles signatures and their morphisms into a category.
 
 Morphism equality here is *propositional* (`_≡_`), not a hom-setoid.  Because `ι` and `κ`

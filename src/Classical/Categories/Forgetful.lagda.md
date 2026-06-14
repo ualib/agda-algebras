@@ -12,7 +12,7 @@ This is the [Classical.Categories.Forgetful][] module of the [Agda Universal Alg
 
 The classical forgetful *projections* ([ADR-002][] §5) become forgetful *functors* simply by
 giving them the morphism action — and that action is already supplied, uniformly, by the
-reduct functor [`reductF`][Classical.Categories.Reduct].  Each forgetful is `reductF` of the
+reduct functor [`reductF`][Setoid.Categories.Reduct].  Each forgetful is `reductF` of the
 relevant signature inclusion, reusing the per-structure inclusion data (`X-incl` / `X-κ`).
 
 The inaugural instance is `monoid→semigroupF`.  Since a semigroup is an algebra over
@@ -27,7 +27,7 @@ that the magma reduct of a monoid satisfies `Th-Semigroup`, and we've already pa
 debt by hand (the curried-law pivot `thm` inside [`Classical.Structures.Monoid`][],
 built on per-signature `interp-node` bridges).  The last section of this module
 re-derives that obligation from the general *reduct-invariance of satisfaction*
-theorem of [Classical.Varieties.Invariance][], and thus demonstrates that the bespoke
+theorem of [Setoid.Varieties.Invariance][], and thus demonstrates that the bespoke
 per-structure pivots are instances of one lemma.
 
 ```agda
@@ -44,7 +44,7 @@ open import Relation.Binary                         using ( Setoid )
 open import Relation.Binary.PropositionalEquality   using ( _≡_ ; refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Classical.Categories.Reduct             using  ( reductF )
+open import Setoid.Categories.Reduct             using  ( reductF )
 open import Classical.Signatures.Magma              using  ( Sig-Magma )
 open import Classical.Signatures.Monoid             using  ( Sig-Monoid )
 open import Classical.Structures.Monoid             using  ( ∙-incl ; ∙-κ
@@ -53,7 +53,7 @@ open import Classical.Structures.Semigroup          using  () renaming ( _⊨_ t
 open import Classical.Theories.Monoid               using  ( Th-Monoid ; assoc )
 open import Classical.Theories.Semigroup            using  ( Th-Semigroup )
                                                     renaming ( assoc to assocˢ )
-open import Classical.Varieties.Invariance          using  ( ⊧-reduct )
+open import Setoid.Varieties.Invariance          using  ( ⊧-reduct )
 open import Overture.Signatures.Morphisms           using  ( SigMorphism ; mkSigMorphism )
 open import Overture.Terms.Translation              using  ( _✶_ )
 open import Setoid.Algebras.Basic {𝑆 = Sig-Monoid}  using  ( Algebra ; 𝔻[_] )
@@ -97,7 +97,7 @@ This is the M4-5e regression demonstration.  The obligation: the magma reduct of
 monoid satisfies the semigroup theory.  The bespoke M3-6 proof (`thm` inside
 `monoid→semigroup`) pivots through the monoid's curried associativity with hand-rolled
 `interp-node` bridges; here the same obligation falls out of the general lemma
-[`⊧-reduct`][Classical.Varieties.Invariance] in three steps:
+[`⊧-reduct`][Setoid.Varieties.Invariance] in three steps:
 
 1. the monoid itself satisfies its associativity equation (`proj₂ ℳ assoc` — already
    in hand, no term reasoning at all);
@@ -107,7 +107,7 @@ monoid satisfies the semigroup theory.  The bespoke M3-6 proof (`thm` inside
 3. `⊧-reduct` converts satisfaction of the translated equation into satisfaction of
    the original equation by the reduct.
 
-Step 2 is where the M3-5 measurement (recorded in [Classical.Varieties.Invariance][])
+Step 2 is where the M3-5 measurement (recorded in [Setoid.Varieties.Invariance][])
 becomes visible in practice.  The translated term and the theory's term are *not*
 definitionally equal — both theories build their argument tuples with `Fin`-pattern
 lambdas (`pair`), and the translation rebuilds the positions through `κ`, so the

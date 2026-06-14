@@ -37,7 +37,7 @@ the categories of semigroups and monoids are *full subcategories*
 ([`Setoid.Categories.FullSubcategory`][]) of the algebra categories
 ([`Alg`][Setoid.Categories.Algebra]) of their signatures.  A homomorphism of
 theory-satisfying algebras is just a homomorphism of the underlying algebras.
-The forgetful functor is [`reductF`][Classical.Categories.Reduct] restricted along
+The forgetful functor is [`reductF`][Setoid.Categories.Reduct] restricted along
 `monoid→semigroup`'s theory transfer.
 
 This module lives in `Classical.Categories` because its objects are the `Classical`
@@ -67,7 +67,7 @@ open Func using ( cong ) renaming ( to to _⟨$⟩_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Classical.Categories.Forgetful     using ( magma↪monoid )
-open import Classical.Categories.Reduct        using ( reductF )
+open import Setoid.Categories.Reduct        using ( reductF )
 open import Classical.Signatures.Magma         using ( Sig-Magma ; Op-Magma )
                                                renaming ( ∙-Op to ∙-Opᵐᵃ )
 open import Classical.Signatures.Monoid        using ( Sig-Monoid ; Op-Monoid ; ∙-Op ; ε-Op )
@@ -75,7 +75,7 @@ open import Classical.Structures.Interpret     using ( interp-cong )
 open import Classical.Structures.Magma         using ( hom-preserves-∙ )
 open import Classical.Structures.Monoid        using ( Monoid ; _⊨ᵐᵒ_ ; module Monoid-Op
                                                      ; monoid→semigroup ; hom-preserves-ε )
-open import Classical.Structures.Reduct        using ( reduct )
+open import Setoid.Algebras.Reduct        using ( reduct )
 open import Classical.Structures.Semigroup     using ( Semigroup ; module Semigroup-Op )
                                                renaming ( _⊨_ to _⊨ˢᵍ_ )
 open import Classical.Theories.Monoid          using ( Th-Monoid ; assoc ; idˡ ; idʳ )

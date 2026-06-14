@@ -1,14 +1,14 @@
 ---
 layout: default
-file: "src/Classical/Varieties/Invariance.lagda.md"
-title: "Classical.Varieties.Invariance module"
+file: "src/Setoid/Varieties/Invariance.lagda.md"
+title: "Setoid.Varieties.Invariance module"
 date: "2026-06-12"
 author: "the agda-algebras development team"
 ---
 
 ### Reduct-invariance of satisfaction
 
-This is the [Classical.Varieties.Invariance][] module of the [Agda Universal Algebra Library][].
+This is the [Setoid.Varieties.Invariance][] module of the [Agda Universal Algebra Library][].
 
 This module proves the *reduct-invariance of satisfaction*, which is the primary
 pay-off of expressing the reduct as a functor.
@@ -58,7 +58,7 @@ term.  Both routes are *folds* — unique homomorphic extensions out of term alg
 natural transformation `⟦ φ ⟧ : ⟨ 𝑆₁ ⟩ ⟹ ⟨ 𝑆₂ ⟩` induced by `φ` (M4-5b,
 [Setoid.Signatures.Functor][]): unwinding the `node` case of the proof, the
 inductive step is exactly "precompose with `⟦ φ ⟧`'s component, then interpret" —
-which is the defining clause of [`reduct`][Classical.Structures.Reduct].  Once the
+which is the defining clause of [`reduct`][Setoid.Algebras.Reduct].  Once the
 triangle commutes, both invariance directions are two-line equational
 rearrangements: an equation `⟦s⟧ ≈ ⟦t⟧` holds on one side of the triangle iff it
 holds on the other.
@@ -89,15 +89,16 @@ the demonstration in [Classical.Categories.Forgetful][]) — and that alignment 
 obstruction dissolves functorially; only its benign, provable shadow survives, in
 the concrete theories themselves.
 
-This module lives in the `Classical` tree because `reduct` does (ADR-006:
-`Setoid.* → Classical.*` imports would be cyclic), and it opens the
-`Classical/Varieties/` area that M4-5g (reduct classes of varieties are
-prevarieties) will extend.
+This module lives in `Setoid.Varieties`: reduct-invariance of satisfaction is general
+universal algebra, and its object map [`reduct`][Setoid.Algebras.Reduct] is itself a
+`Setoid/` construction (both relocated from `Classical/` by
+[ADR-006](../../docs/adr/006-signature-morphism-category.md), M4-16).  It opens the
+two-signature `Setoid/Varieties/` area that M4-5g (reduct classes of varieties) extends.
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-module Classical.Varieties.Invariance where
+module Setoid.Varieties.Invariance where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
 open import Agda.Primitive                 using () renaming ( Set to Type )
@@ -114,7 +115,7 @@ open import Overture.Signatures.Morphisms  using ( SigMorphism ; ι ; κ )
 open import Overture.Terms                 using ( Term ; ℊ ; node )
 open import Overture.Terms.Translation     using ( _✶_ )
 open import Setoid.Algebras.Basic          using ( Algebra ; 𝔻[_] ; 𝕌[_] )
-open import Classical.Structures.Reduct    using ( reduct )
+open import Setoid.Algebras.Reduct         using ( reduct )
 
 open import Setoid.Terms.Basic          using (module Environment) --        as TermsBasic
 import Setoid.Varieties.EquationalLogic    as EqLogic

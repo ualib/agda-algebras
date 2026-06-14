@@ -1,23 +1,26 @@
 ---
 layout: default
-file: "src/Classical/Structures/Reduct.lagda.md"
-title: "Classical.Structures.Reduct module"
+file: "src/Setoid/Algebras/Reduct.lagda.md"
+title: "Setoid.Algebras.Reduct module"
 date: "2026-05-23"
 author: "the agda-algebras development team"
 ---
 
 ### Signature reducts along a signature morphism
 
-This is the [Classical.Structures.Reduct][] module of the [Agda Universal Algebra Library][].
+This is the [Setoid.Algebras.Reduct][] module of the [Agda Universal Algebra Library][].
 
-A *reduct* of an `𝑆₂`-algebra `𝑨` along a signature inclusion `𝑆₁ ↪ 𝑆₂` is the
-`𝑆₁`-algebra with the same carrier whose operations are those of `𝑨` named by the
-inclusion, interpreted exactly as in `𝑨`.  This is the first non-`proj₁` forgetful
-projection in the hierarchy
-(per [ADR-002 v2](../../docs/adr/002-classical-layer-design.md) §5);
-`monoid→semigroup` and `group→monoid` are reducts (composed with an equation-reindex),
-whereas `semigroup→magma`, `commutativeMonoid→monoid`, and `abelianGroup→group` are
-`proj₁`.
+A *reduct* of an `𝑆₂`-algebra `𝑨` along a signature morphism `φ : 𝑆₁ → 𝑆₂` is the
+`𝑆₁`-algebra with the same carrier whose operations are those of `𝑨` named by `φ`,
+interpreted exactly as in `𝑨`.  Reduct is a construction of *general* universal algebra —
+it acts on algebras over arbitrary signatures along an arbitrary signature morphism — so
+its home is the `Setoid/` foundation, relocated here from `Classical/` by
+[ADR-006](../../docs/adr/006-signature-morphism-category.md) (M4-16; see the Amendment).
+Its principal *consumers*, however, are classical: it is the first non-`proj₁` forgetful
+projection in the structure hierarchy (per
+[ADR-002 v2](../../docs/adr/002-classical-layer-design.md) §5); `monoid→semigroup` and
+`group→monoid` are reducts (composed with an equation-reindex), whereas `semigroup→magma`,
+`commutativeMonoid→monoid`, and `abelianGroup→group` are `proj₁`.
 
 We take the *container-morphism* form rather than an arity-equation form.  A signature
 inclusion is a [`SigMorphism`][Overture.Signatures.Morphisms] `(ι , κ)`: `ι` maps operation
@@ -41,7 +44,7 @@ identity- and composition-preservation, both holding by `refl`.
 
 open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 
-module Classical.Structures.Reduct where
+module Setoid.Algebras.Reduct where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
 open import Agda.Primitive                        using () renaming ( Set to Type )

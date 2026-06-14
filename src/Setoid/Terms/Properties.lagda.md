@@ -187,7 +187,7 @@ theorems about *generators only*.
 `free-lift-interp`, also in that module, mediates between the two phrasings.  The
 companion naturality in the *signature* argument, where the algebra is fixed and the
 signature varies along a morphism, is `reduct-interp` in
-[Classical.Varieties.Invariance][].)
+[Setoid.Varieties.Invariance][].)
 
 ```agda
 module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}(h : hom 𝑨 𝑩)(η : X → 𝕌[ 𝑨 ]) where
