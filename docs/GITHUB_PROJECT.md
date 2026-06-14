@@ -2231,7 +2231,7 @@ Low, but the blast radius is whatever currently imports `⟨_⟩`/`EqArgs` from 
 
 ## Summary
 
-Make the polynomial-functor / container structure already latent in the foundation *first-class*, and with it the total-category (`∫Alg`) view that reducts, expansions, and signature morphisms inherently require — as opposed to the fibre view (`Alg(𝑆)` for a fixed `𝑆`) that the module-parameter convention of `Setoid.Algebras.Basic` privileges.  This is the structural companion to the surgical fix in [M4-4]: where M4-4 relocates the two signature-generic helpers (`⟨_⟩`, `EqArgs`) that leak the unused module parameter, M4-5 builds out the category-theoretic layer that motivates ranging over signatures in the first place.  Full design in `docs/notes/milestone-signature-functors.md`.
+Make the polynomial-functor / container structure already latent in the foundation *first-class*, and with it the total-category (`∫Alg`) view that reducts, expansions, and signature morphisms inherently require — as opposed to the fibre view (`Alg(𝑆)` for a fixed `𝑆`) that the module-parameter convention of `Setoid.Algebras.Basic` privileges.  This is the structural companion to the surgical fix in [M4-4]: where M4-4 relocates the two signature-generic helpers (`⟨_⟩`, `EqArgs`) that leak the unused module parameter, [M4-5] builds out the category-theoretic layer that motivates ranging over signatures in the first place.  Full design in `docs/notes/milestone-signature-functors.md`.
 
 ## Why now
 
@@ -2243,11 +2243,11 @@ A signature morphism is a container morphism `(ι , κ)` (`ι` covariant on symb
 
 ## Subissues
 
-+  [ ] **M4-5a** Category of signature morphisms; promote `reduct` to a packaged morphism.  *(low risk)*
-+  [ ] **M4-5b** `⟨_⟩` as a functor; induced natural transformations.  *(low–medium)*
-+  [ ] **M4-5c** Reduct as a functor on algebras; upgrade the classical forgetful *projections* to forgetful *functors* by supplying the morphism action.  *(medium)*
-+  [ ] **M4-5d** Free expansion; the `F ⊣ reduct` adjunction.  Distinguish from M3-6's chosen `expand-ε`.  *(high / high-value)*
-+  [ ] **M4-5e** Term monad; naturality of the fold; reduct-invariance of satisfaction as a corollary, absorbing M3-6's per-structure pivot proofs.  *(medium)*
++  [x] **M4-5a** Category of signature morphisms; promote `reduct` to a packaged morphism.  *(low risk)*
++  [x] **M4-5b** `⟨_⟩` as a functor; induced natural transformations.  *(low–medium)*
++  [x] **M4-5c** Reduct as a functor on algebras; upgrade the classical forgetful *projections* to forgetful *functors* by supplying the morphism action.  *(medium)*
++  [x] **M4-5d** Free expansion; the `F ⊣ reduct` adjunction.  Distinguish from M3-6's chosen `expand-ε`.  *(high / high-value)*
++  [x] **M4-5e** Term monad; naturality of the fold; reduct-invariance of satisfaction as a corollary, absorbing M3-6's per-structure pivot proofs.  *(medium)*
 +  [ ] **M4-5f** Theory interpretations; Maltsev conditions as interpretations; the interpretability quasi-order.  *(research-grade, exploratory)*
 +  [ ] **M4-5g** Reduct classes of varieties are prevarieties (closed under S, P, not H).  *(research-grade)*
 
@@ -2364,7 +2364,7 @@ Acceptance criteria:
 
 ---
 
-### Issue M4-5e: Term monad; naturality of the fold; reduct-invariance of satisfaction (#343)
+### Issue M4-5e: Term monad; naturality of the fold; reduct-invariance of satisfaction (#343, closed)
 
 **Labels**: `enhancement`, `milestone-4-style`, `category-theory`
 
@@ -2415,7 +2415,7 @@ Acceptance criteria (loose): a checked definition, at least one interpretation i
 
 For a variety `𝒱` of `𝑆₂`-algebras and `φ : 𝑆₁ → 𝑆₂`, the reduct class `reduct φ (𝒱)` is closed under subalgebras and products but not, in general, homomorphic images — so it is a prevariety, not a variety.  The S- and P-closure follow structurally from `reduct φ` being a functor [M4-5c] (#341) that preserves the relevant subobjects and limits, together with reduct-invariance [M4-5e] (#343); the failure of H-closure is the interesting negative and is best recorded as a concrete counterexample.
 
-Like M4-5-6, this is clone/variety-theoretic and CSP-adjacent, **not** FLRP.
+Like [M4-5f], this is clone/variety-theoretic and CSP-adjacent, **not** FLRP.
 
 Provisional tasks:
 +  [ ] State the theorem against the `Setoid.Varieties` S/H/P machinery.
