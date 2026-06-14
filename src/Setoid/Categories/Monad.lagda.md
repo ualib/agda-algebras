@@ -171,7 +171,7 @@ module _
                                                            homomorphism)
                       }
 
-    -- In R₁, the two flattenings differ by the counit's natty square taken at ε itself.
+    -- In R₁, the two flattenings differ by the counit's naturality square taken at ε itself.
     ; assoc = λ A → ≈-trans  (≈-sym homomorphism)
                              (≈-trans  (F-resp-≈ (counit-natural (counit (L₀ A))))
                                        homomorphism)

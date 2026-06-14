@@ -10,7 +10,7 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Properties.Lattice][] module of the [Agda Universal Algebra Library][].
 
-The algebraic and order-theoretic presentations of a lattice are equivalenct.
+The algebraic and order-theoretic presentations of a lattice are equivalent.
 This module proves the *object-level* half of that equivalence: given
 a `Lattice α ρ` — that is, the algebraic data of meet, join, and the eight
 equations — we construct the partial order `x ≤ y := x ∧ y ≈ x` and show that
