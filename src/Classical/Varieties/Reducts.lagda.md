@@ -209,7 +209,7 @@ means "isomorphic".
 ```agda
   Reduct[_] :  Pred (Algebra {𝑆 = 𝑆₂} γ ρᶜ) ℓ
     → Pred (Algebra {𝑆 = 𝑆₁} β ρᵇ) (ov (γ ⊔ ρᶜ) ⊔ ℓ ⊔ β ⊔ ρᵇ)
-  Reduct[ 𝒲 ] 𝑩 = Σ[ 𝑨 ∈ Algebra {𝑆 = 𝑆₂} γ ρᶜ ] (𝑨 ∈ 𝒲) ∧ (𝑩 ≅ reduct φ 𝑨)
+  Reduct[ 𝒲 ] 𝑩 = Σ[ 𝑨 ∈ Algebra _ _ ] (𝑨 ∈ 𝒲) ∧ (𝑩 ≅ reduct φ 𝑨)
 ```
 
 `Reduct[_]` is monotone: a bigger source class has a bigger reduct image.
@@ -223,42 +223,33 @@ means "isomorphic".
 Now the class-level product result.  The clean, hypothesis-free statement is that the reduct
 image **commutes past `P`**: a product of reduct-images is a reduct-image of a product,
 
-    P (Reduct[ 𝒱 ])  ⊆  Reduct[ P 𝒱 ].
+    P Reduct[ 𝒱 ]  ⊆  Reduct[ P 𝒱 ].
 
-The proof assembles the witnessing `𝒱`-algebras `𝑨•` from the membership data of the factors,
-takes their product `⨅ 𝑨•` (a member of `P 𝒱` by construction), and chains three isomorphisms:
-the given `𝑩 ≅ ⨅ 𝒞`, the product of the per-factor isos `⨅ 𝒞 ≅ ⨅ (reduct φ ∘ 𝑨•)` (`⨅≅`), and
-the product-preservation `⨅ (reduct φ ∘ 𝑨•) ≅ reduct φ (⨅ 𝑨•)` (`reduct-⨅`, reversed).
+The proof assembles the witnessing `𝒱`-algebras `𝓐` from the membership data of the factors,
+takes their product `⨅ 𝓐` (a member of `P 𝒱` by construction), and chains three isomorphisms:
+the given `𝑩 ≅ ⨅ 𝒞`, the product of the per-factor isos `⨅ 𝒞 ≅ ⨅ (reduct φ ∘ 𝓐)` (`⨅≅`), and
+the product-preservation `⨅ (reduct φ ∘ 𝓐) ≅ reduct φ (⨅ 𝓐)` (`reduct-⨅`, reversed).
 
 ```agda
--- P : ∀ ℓ ι → Pred(Algebra α ρᵃ) (a ⊔ ov ℓ) → Pred(Algebra β ρᵇ) (b ⊔ ov(a ⊔ ℓ ⊔ ι))
--- P ℓ ι 𝒦 𝑩 = Σ[ I ∈ Type ι ] (Σ[ 𝒜 ∈ (I → Algebra α ρᵃ) ] (∀ i → 𝒜 i ∈ 𝒦) ∧ (𝑩 ≅ ⨅ 𝒜))
   P-Reduct : {𝒱 : Pred (Algebra {𝑆 = 𝑆₂} α ρ) (α ⊔ ρ ⊔ ov ℓ)}
-    → P {α = α}{ρ}{α}{ρ} (α ⊔ ρ ⊔ ℓ) ι (Reduct[ 𝒱 ]) ⊆ Reduct[ P ℓ ι 𝒱 ]
-  P-Reduct
-    { 𝒱 = 𝒱 }
-    { 𝑩 }        -- 𝑩 : Algebra α ρ
-    ( I
-    , 𝒞          -- 𝒞 : I → Algebra α ρ
-    , 𝒞∈R        -- for each i, 𝒞 i belongs to Reduct[ 𝒱 ]
-    , 𝑩≅⨅𝒞       -- 𝑩≅⨅𝒞 : 𝑩 ≅ ⨅ 𝒞
-    )
-    = ⨅ 𝑨• , (I , 𝑨• , 𝑨•∈𝒱 , ≅-refl) , 𝑩≅red⨅𝑨•
+    → P {α = α}{ρ}{α}{ρ} (α ⊔ ρ ⊔ ℓ) ι Reduct[ 𝒱 ] ⊆ Reduct[ P ℓ ι 𝒱 ]
+  P-Reduct {α = α} {ρ} {𝒱 = 𝒱} {𝑩} ( I , 𝒞 , 𝒞∈R , 𝑩≅⨅𝒞 ) =
+    ⨅ 𝓐 , (I , 𝓐 , 𝓐∈𝒱 , ≅-refl) , 𝑩≅red⨅𝓐
     where
-    𝑨• : I → Algebra {𝑆 = 𝑆₂} α ρ
-    𝑨• i = proj₁ (𝒞∈R i)
-    𝑨•∈𝒱 : ∀ i → 𝑨• i ∈ 𝒱
-    𝑨•∈𝒱 i = proj₁ (proj₂ (𝒞∈R i))
-    𝒞≅red𝑨• : ∀ i → 𝒞 i ≅ reduct φ (𝑨• i)
-    𝒞≅red𝑨• i = proj₂ (proj₂ (𝒞∈R i))
-    𝑩≅red⨅𝑨• : 𝑩 ≅ reduct φ (⨅ 𝑨•)
-    𝑩≅red⨅𝑨• = ≅-trans 𝑩≅⨅𝒞 (≅-trans (⨅≅ 𝒞≅red𝑨•) (≅-sym (reduct-⨅ 𝑨•)))
+    𝓐 : I → Algebra {𝑆 = 𝑆₂} α ρ
+    𝓐 i = proj₁ (𝒞∈R i)
+    𝓐∈𝒱 : ∀ i → 𝓐 i ∈ 𝒱
+    𝓐∈𝒱 i = proj₁ (proj₂ (𝒞∈R i))
+    𝒞≅red𝓐 : ∀ i → 𝒞 i ≅ reduct φ (𝓐 i)
+    𝒞≅red𝓐 i = proj₂ (proj₂ (𝒞∈R i))
+    𝑩≅red⨅𝓐 : 𝑩 ≅ reduct φ (⨅ 𝓐)
+    𝑩≅red⨅𝓐 = ≅-trans 𝑩≅⨅𝒞 (≅-trans (⨅≅ 𝒞≅red𝓐) (≅-sym (reduct-⨅ 𝓐)))
 ```
 
 This is the substance of "`reduct φ (𝒱)` is closed under products".  The final step —
 concluding `P (Reduct[ 𝒱 ]) ⊆ Reduct[ 𝒱 ]` itself when `𝒱` is a variety — combines
 `P-Reduct` with `Reduct-mono` and the `P`-closure of `𝒱`: `P 𝒱 ⊆ 𝒱`; the only
-remaining gap is the universe-level bump that products introduce (`⨅ 𝑨•` lands one
+remaining gap is the universe-level bump that products introduce (`⨅ 𝓐` lands one
 level up), which the library bridges with `Lift-Alg` and `Level-closure`
 ([Setoid.Varieties.Closure][]) exactly as it does for the HSP theorem.
 We stop at `P-Reduct`, the level-clean heart of the matter, in keeping with the
@@ -294,7 +285,7 @@ nor closed under `S`.
 
 #### Why `S` and `H` fail at the class level
 
-It remains to substantiate the claim that `reduct φ (𝒱)` is **not** closed under `S` (and, in
+It remains to substantiate the claim that `reduct φ 𝒱` is **not** closed under `S` (and, in
 general, not under `H`), so it is a product class rather than a prevariety.  The asymmetry with
 `P` is structural: the functorial preservations above all run `𝑆₂ → 𝑆₁` (reduct of a subalgebra
 is a subalgebra, etc.), but *class-level* closure needs the reverse, `𝑆₁ → 𝑆₂`,
@@ -306,35 +297,33 @@ sub- or quotient-algebra of a reduct generally cannot be re-equipped with the op
 forgot.  (Categorically: `reduct φ` is a right adjoint — `F ⊣ reduct φ`, M4-5d — so it preserves
 limits, which is why products are the well-behaved case.)
 
-**The `S`-counterexample (concrete).**  Let `𝑆₂` be the group signature (a binary `·`, a unary
-`⁻¹`, a nullary `e`) and `𝑆₁` the magma signature (just `·`), with `φ : 𝑆₁ ↪ 𝑆₂` the inclusion;
-then `reduct φ` forgets `⁻¹` and `e`, keeping `·`.  Take `𝒱` to be the variety of groups.  Then
-`reduct φ (𝒱)` is the class of *group-magmas* — magmas `(M , ·)` that underlie some group.
+**The `S`-counterexample (concrete).**  Let `𝑆₂` be the group signature with binary `·`, unary
+`⁻¹`, and nullary `e`; let `𝑆₁` be the monoid signature with binary `·` and nullary
+`e`; let `φ : 𝑆₁ ↪ 𝑆₂` be the natural inclusion; then `reduct φ` forgets `⁻¹` keeping
+`·` and `e`.  Take `𝒱` to be the variety of groups.  Then `reduct φ 𝒱` is the class
+of monoid reducts of 𝒱 — monoids `(M , ·, e)` that underlie some group.
 
-+  `(ℤ , +)` is the magma-reduct of the group `(ℤ , + , - , 0)`, so `(ℤ , +) ∈ reduct φ (𝒱)`.
-+  `(ℕ , +)` is a sub-magma of `(ℤ , +)` — `ℕ` is closed under `+` and the inclusion is an
-   injective magma homomorphism — so `(ℕ , +) ∈ S (reduct φ (𝒱))`.
-+  But `(ℕ , +)` is **not** a group-magma: there is no group whose carrier is `ℕ` and whose
-   operation is `+`, since `1` has no additive inverse in `ℕ`.  So `(ℕ , +) ∉ reduct φ (𝒱)`.
++  The monoid `(ℤ , +, 0)` is a reduct of the group `(ℤ , + , - , 0)`, so `(ℤ , +, 0) ∈ reduct φ 𝒱`.
++  As monoids `(ℕ , +, 0) ≤ (ℤ , +, 0)` — `ℕ` is closed under `+` and the inclusion is an
+   injective magma homomorphism — so `(ℕ , +, 0) ∈ S (reduct φ 𝒱)`.
++  But `(ℕ , +, 0)` is **not** a monoid reduct of some group: there is no group whose
+   carrier is `ℕ` and whose binary operation is `+`, since any nonzero natural number
+   has no additive inverse in `ℕ`.  So `(ℕ , +, 0) ∉ reduct φ 𝒱`.
 
-Hence `S (reduct φ (𝒱)) ⊄ reduct φ (𝒱)`: the class is not closed under `S`, and therefore is
-**not a prevariety**.  Stated against the operator, the false inclusion is
-`S (Reduct[ 𝒱 ]) ⊆ Reduct[ S 𝒱 ]` — it would require a sub-magma of a group to be the reduct of
-a subgroup, which `ℕ ⊆ ℤ` refutes.  We deliberately do **not** state this as an Agda lemma: it is
-false, and a faithful formalization of the refutation would mean building `ℤ`, `ℕ`, and the
-non-existence of the group structure — out of scope for research-tracking, and the textbook
-argument above settles it.
+Hence `S (reduct φ 𝒱) ⊈ reduct φ 𝒱`, so `reduct φ 𝒱` is not closed under `S`, and
+therefore is **not a prevariety**.  Stated against the operator, the false inclusion is
+`S Reduct[ 𝒱 ] ⊆ Reduct[ S 𝒱 ]` — it would require a sub-monoid of a group to be the reduct of
+a subgroup, which `ℕ ⊆ ℤ` refutes.
 
-**On `H`**.  Class-level `H`-closure, `H (Reduct[ 𝒱 ]) ⊆ Reduct[ H 𝒱 ]`, also fails in general,
+**On `H`**.  Class-level `H`-closure, `H Reduct[ 𝒱 ] ⊆ Reduct[ H 𝒱 ]`, also fails in general,
 for the same reconstruction reason: the kernel of a surjective `𝑆₁`-homomorphism out of a reduct
 is an `𝑆₁`-congruence, but need not be an `𝑆₂`-congruence, so the quotient need not carry the
 dropped operations.  Notably, for the group example above it happens to *hold* — every
-magma-congruence of a group is a group-congruence (from `a θ b` one derives `b⁻¹ θ a⁻¹` by
-multiplying on both sides), so a magma-quotient of a group is again a group-magma.  This is why
-neither the issue's "`S, P` yes, `H` no" pattern nor its exact mirror is the general law: the
-robust statement is **`P` always; `S` and `H` not in general** — `reduct φ (𝒱)` is a
-product-closed (pseudo-elementary) class, contained in a variety by `reduct-⊧`, but not itself a
-prevariety.
+monoid-congruence of a group is a group-congruence (from `a θ b` one derives `b⁻¹ θ a⁻¹` by
+multiplying on both sides), so a monoid-quotient of a group is again a group-monoid.
+
+In short, `reduct φ 𝒱` is a product-closed (pseudo-elementary) class, contained in a
+variety by `reduct-⊧`, but not itself a prevariety.
 
 --------------------------------------
 
