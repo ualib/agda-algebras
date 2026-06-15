@@ -198,7 +198,7 @@ module Semigroup-Op {α ρ : Level} (𝑺 : Semigroup α ρ) where
   assoc-law x y z = begin
     (x ∙ y) ∙ z          ≈⟨ ∙-cong (sym (interp-node (ℊ 0F) (ℊ 1F) η)) refl ⟩
     (⟦ Lt ⟧ ⟨$⟩ η) ∙ z   ≈⟨ sym (interp-node Lt (ℊ 2F) η) ⟩
-    ⟦ lhsT ⟧ ⟨$⟩ η       ≈⟨ equations assoc η ⟩
+    ⟦ lhsT ⟧ ⟨$⟩ η       ≈⟨ equations assoc ⟩
     ⟦ rhsT ⟧ ⟨$⟩ η       ≈⟨ interp-node (ℊ 0F) Rt η ⟩
     x ∙ (⟦ Rt ⟧ ⟨$⟩ η)   ≈⟨ ∙-cong refl (interp-node (ℊ 1F) (ℊ 2F) η) ⟩
     x ∙ (y ∙ z)          ∎
@@ -229,13 +229,13 @@ right-associated term, so `·-assoc (ρ 0F) (ρ 1F) (ρ 2F)` is exactly the proo
 required.
 
 ```agda
-eqsToSemigroup : (A : Type α) (_·_ : A → A → A)
-  (·-assoc : ∀ a b c → (a · b) · c ≡ a · (b · c)) → Semigroup α α
+eqsToSemigroup : {A : Type α} (_·_ : A → A → A)
+  → (∀ a b c → (a · b) · c ≡ a · (b · c)) → Semigroup α α
 
-eqsToSemigroup A _·_ ·-assoc = opsToMagma A _·_ , proof
+eqsToSemigroup _·_ ·-assoc = opsToMagma _·_ , proof
   where
-  proof : opsToMagma A _·_ ⊨ Th-Semigroup
-  proof assoc ρ = ·-assoc (ρ 0F) (ρ 1F) (ρ 2F)
+  proof : opsToMagma _·_ ⊨ Th-Semigroup
+  proof assoc {ρ} = ·-assoc (ρ 0F) (ρ 1F) (ρ 2F)
 ```
 
 --------------------------------------

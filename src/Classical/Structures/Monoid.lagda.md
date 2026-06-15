@@ -151,7 +151,7 @@ module _ (𝑴 : Monoid α ρ) where
   mn-assoc : ∀ x y z → x ∙ y ∙ z ≈ x ∙ (y ∙ z)
   mn-assoc x y z = begin
     x ∙ y ∙ z       ≈˘⟨ interp-cong 𝑨 ∙-Op (λ { 0F → interp-node∙ (ℊ 0F) (ℊ 1F) η ; 1F → ≈refl }) ⟩
-    ⟦ lhsT ⟧ ⟨$⟩ η  ≈⟨ proj₂ 𝑴 assoc η ⟩
+    ⟦ lhsT ⟧ ⟨$⟩ η  ≈⟨ proj₂ 𝑴 assoc ⟩
     ⟦ rhsT ⟧ ⟨$⟩ η  ≈⟨ interp-cong 𝑨 ∙-Op (λ { 0F → ≈refl ; 1F → interp-node∙ (ℊ 1F) (ℊ 2F) η }) ⟩
     x ∙ (y ∙ z)     ∎
     where
@@ -197,12 +197,12 @@ module Monoid-Op {α ρ : Level} (𝑴 : Monoid α ρ) where
   idˡ-law : ∀ x → ε ∙ x ≈ x
   idˡ-law x = trans (∙-cong (sym interp-node-ε) ≈refl)
                     (trans (sym (interp-node-∙ (node ε-Op (λ ())) (ℊ 0F)))
-                           (equations idˡ (λ _ → x)))
+                           (equations idˡ {λ _ → x}))
 
   idʳ-law : ∀ x → x ∙ ε ≈ x
   idʳ-law x = trans (∙-cong ≈refl (sym (interp-node-ε)))
                     (trans (sym (interp-node-∙ (ℊ 0F) (node ε-Op (λ ()))))
-                           (equations idʳ (λ _ → x)))
+                           (equations idʳ {λ _ → x}))
 ```
 
 #### The forgetful projection to semigroups
@@ -231,7 +231,7 @@ monoid→semigroup ℳ@(𝑴 , _) = 𝑹 , thm
   ∙-congᴿ a≈b c≈d = interp-cong 𝑹 ∙-Opᵐᵃ (λ { 0F → a≈b ; 1F → c≈d })
 
   thm : 𝑹 ⊨ˢᵍ Th-Semigroup
-  thm assocˢ η = begin
+  thm assocˢ {η} = begin
     ⟦ Th-Semigroup assocˢ .proj₁ ⟧ ⟨$⟩ η  ≈⟨ interp-congᴿ xy (ℊ 2F) η ⟩
     ⟦ xy ⟧ ⟨$⟩ η ∙ z                      ≈⟨ ∙-congᴿ (interp-congᴿ (ℊ 0F) (ℊ 1F) η) ≈refl ⟩
     x ∙ y ∙ z                             ≈⟨ assoc-law x y z ⟩
@@ -283,13 +283,13 @@ a binary operation, and an identity element.  It is `opsToMagma` followed by one
 interpretation of `ε-Op`.
 
 ```agda
-opsToBareMonoid : (A : Type α) (_·_ : A → A → A) (e : A) → Algebra {𝑆 = Sig-Monoid} α α
-opsToBareMonoid A _·_ e = expand-ε e
+opsToBareMonoid : {A : Type α} (_·_ : A → A → A) (e : A) → Algebra {𝑆 = Sig-Monoid} α α
+opsToBareMonoid {A = A} _·_ e = expand-ε e
 
   where
   open Algebra
   𝑩 : Algebra {𝑆 = Sig-Magma} _ _
-  𝑩 = opsToMagma A _·_
+  𝑩 = opsToMagma _·_
   -- expand-ε interprets ε-Op as a *chosen element of the existing carrier* — it is a
   -- section of the reduct along Sig-Magma ↪ Sig-Monoid (opsToBareMonoid-section
   -- below), not the reduct's left adjoint.  The *free* expansion, which adjoins a
@@ -315,9 +315,10 @@ whereas the free expansion `adjoinUnit` of [`Classical.Categories.AdjoinUnit`][]
 *adjoins* a fresh element (enlarging the carrier) and is universal.
 
 ```agda
-opsToBareMonoid-section : (A : Type α) (_·_ : A → A → A) (e : A) (o : OperationSymbolsOf Sig-Magma)
-  → o ^ reductBy ∙-incl ∙-κ (opsToBareMonoid A _·_ e) ≡ o ^ opsToMagma A _·_
-opsToBareMonoid-section A _·_ e ∙-Opᵐᵃ = refl
+opsToBareMonoid-section : {A : Type α}
+  (_·_ : A → A → A) (e : A) (o : OperationSymbolsOf Sig-Magma)
+  → o ^ reductBy ∙-incl ∙-κ (opsToBareMonoid _·_ e) ≡ o ^ opsToMagma _·_
+opsToBareMonoid-section _·_ e ∙-Opᵐᵃ = refl
 ```
 
 `eqsToMonoid` builds a Monoid by first building the raw algebra via `opsToBareMonoid`,
@@ -326,16 +327,16 @@ of `Semigroup-Op.assoc-law` to `Sig-Monoid` for associativity, and straightforwa
 for the identity laws.
 
 ```agda
-eqsToMonoid : (A : Type α) (_·_ : A → A → A) (e : A)
+eqsToMonoid : {A : Type α} (_·_ : A → A → A) (e : A)
   → (·-assoc : ∀ a b c → (a · b) · c ≡ a · (b · c))
   → (·-idˡ : ∀ a → e · a ≡ a) (·-idʳ : ∀ a → a · e ≡ a)
   → Monoid α α
-eqsToMonoid A _·_ e ·-assoc ·-idˡ ·-idʳ = opsToBareMonoid A _·_ e , proof
+eqsToMonoid _·_ e ·-assoc ·-idˡ ·-idʳ = opsToBareMonoid _·_ e , proof
   where
-  proof : opsToBareMonoid A _·_ e ⊨ᵐᵒ Th-Monoid
-  proof assoc ρ = ·-assoc (ρ 0F) (ρ 1F) (ρ 2F)
-  proof idˡ ρ = ·-idˡ (ρ 0F)
-  proof idʳ ρ = ·-idʳ (ρ 0F)
+  proof : opsToBareMonoid _·_ e ⊨ᵐᵒ Th-Monoid
+  proof assoc {ρ} = ·-assoc (ρ 0F) (ρ 1F) (ρ 2F)
+  proof idˡ {ρ} = ·-idˡ (ρ 0F)
+  proof idʳ {ρ} = ·-idʳ (ρ 0F)
 ```
 
 --------------------------------------

@@ -81,7 +81,7 @@ module AbelianGroup-Op {α ρ : Level} (𝑨𝑩 : AbelianGroup α ρ) where
 
   comm-law : ∀ x y → x ∙ y ≈ y ∙ x
   comm-law x y = trans (sym (interp-node-∙ (ℊ 0F) (ℊ 1F) {η}))
-                       (trans (equations comm η) (interp-node-∙ (ℊ 1F) (ℊ 0F) {η}))
+                       (trans (equations comm) (interp-node-∙ (ℊ 1F) (ℊ 0F) {η}))
     where η : Fin 3 → 𝕌[ 𝑨 ]
           η = λ { 0F → x ; 1F → y ; 2F → x }
 ```
@@ -89,21 +89,21 @@ module AbelianGroup-Op {α ρ : Level} (𝑨𝑩 : AbelianGroup α ρ) where
 #### `eqsToAbelianGroup`
 
 ```agda
-eqsToAbelianGroup : (A : Type α) (_·_ : A → A → A) (e : A) (i : A → A)
+eqsToAbelianGroup : {A : Type α} (_·_ : A → A → A) (e : A) (i : A → A)
   → (·-assoc : ∀ a b c → (a · b) · c ≡ a · (b · c))
   → (·-idˡ : ∀ a → e · a ≡ a) (·-idʳ : ∀ a → a · e ≡ a)
   → (·-invˡ : ∀ a → (i a) · a ≡ e) (·-invʳ : ∀ a → a · (i a) ≡ e)
   → (·-comm : ∀ a b → a · b ≡ b · a)
   → AbelianGroup α α
-eqsToAbelianGroup A _·_ e i ·-assoc ·-idˡ ·-idʳ ·-invˡ ·-invʳ ·-comm = opsToBareGroup A _·_ e i , proof
+eqsToAbelianGroup _·_ e i ·-assoc ·-idˡ ·-idʳ ·-invˡ ·-invʳ ·-comm = opsToBareGroup _·_ e i , proof
   where
-  proof : opsToBareGroup A _·_ e i ⊨ᵃᵍ Th-AbelianGroup
-  proof assocᵃ ρ = ·-assoc (ρ 0F) (ρ 1F) (ρ 2F)
-  proof idˡᵃ   ρ = ·-idˡ   (ρ 0F)
-  proof idʳᵃ   ρ = ·-idʳ   (ρ 0F)
-  proof invˡᵃ  ρ = ·-invˡ  (ρ 0F)
-  proof invʳᵃ  ρ = ·-invʳ  (ρ 0F)
-  proof comm   ρ = ·-comm  (ρ 0F) (ρ 1F)
+  proof : opsToBareGroup _·_ e i ⊨ᵃᵍ Th-AbelianGroup
+  proof assocᵃ {ρ} = ·-assoc (ρ 0F) (ρ 1F) (ρ 2F)
+  proof idˡᵃ   {ρ} = ·-idˡ   (ρ 0F)
+  proof idʳᵃ   {ρ} = ·-idʳ   (ρ 0F)
+  proof invˡᵃ  {ρ} = ·-invˡ  (ρ 0F)
+  proof invʳᵃ  {ρ} = ·-invʳ  (ρ 0F)
+  proof comm   {ρ} = ·-comm  (ρ 0F) (ρ 1F)
 ```
 
 --------------------------------------
