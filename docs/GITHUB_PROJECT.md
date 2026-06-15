@@ -2407,7 +2407,7 @@ Acceptance criteria (loose): a checked definition, at least one interpretation i
 
 ---
 
-### Issue M4-5g: Reduct classes of varieties (prevarieties) (#345)
+### Issue M4-5g: Reduct classes of varieties (prevarieties) (#345, closed)
 
 **Labels**: `milestone-4-style`, `research-exploratory`
 
@@ -2850,6 +2850,41 @@ with something parameterized over a `DecSetoid` `S` and a search/finiteness witn
 +  This is exploratory and tied to M9-1; it does not block any current milestone.
 
 Spun off from review discussion on #356.
+
+---
+
+### Issue M4-16: Relocate the reduct development from Classical/ to Setoid/ (#403, closed)
+
+**Labels**: `milestone-4-style`
+
+Follow-up from the review of #402 (M4-5g).  The notion of *reduct* — and the variety-level results built on it — is universal algebra: it quantifies over arbitrary signatures and signature morphisms.  It is not classical algebra, where each theory studies one fixed kind of structure (groups, rings, fields) and reducts play little role.  So the development belongs in `Setoid/` (the universal-algebra foundation), not `Classical/`.
+
+The current placement under `Classical/` is genealogical, not principled.  `reduct` was introduced in ADR-002 §5 as the engine for the classical forgetful projections (`monoid→semigroup`, `group→monoid`), so it was born in `Classical.Structures`; ADR-006 then kept it there ("stays in its current home") and rationalized a "`Setoid.* → Classical.*` would be a cycle" rule around it.
+
+That rule is circular: the cycle exists *only because* `reduct` sits in `Classical/`.  `reduct` imports only `Overture.*` and `Setoid.Algebras.Basic` — nothing from `Classical/` — so the whole reduct chain can move down to `Setoid/` with no cycle.  Doing so also reunifies the M4-5 functorial layer, most of which (`Overture.Signatures.Morphisms`, `Setoid.Signatures.Functor`, the `Setoid.Categories.*` vocabulary, `Overture.Terms.Translation`, `Setoid.Terms.*`) already lives in `Setoid/` / `Overture/`; only the reduct-touching modules were stranded in `Classical/`.
+
+## Scope
+
++  `Classical.Structures.Reduct` → `Setoid.Algebras.Reduct` (`reduct`, `reductBy`, `reduct-id`, `reduct-∘`).
++  `Classical.Categories.Reduct` → `Setoid.Categories.Reduct` (`reductF`).
++  `Classical.Varieties.Invariance` → `Setoid.Varieties.Invariance` (`reduct-interp`, `⊧-reduct`, `⊧-expand`).
++  `Classical.Varieties.Reducts` → `Setoid.Varieties.Reducts` (the M4-5g module from #402; folded in when the PRs rebase — see below).  The now-empty `Classical/Varieties/` directory is removed.
++  Amend ADR-006 to reverse the "reduct stays in `Classical/`" placement decision and retire the cycle rationale.
++  Import sweep of all consumers (`Classical.Structures.{Monoid,Group,Lattice,Ring}`, `Classical.Categories.{AdjoinUnit,Forgetful}`) and prose links (`Setoid.Terms.*`, `Overture.Terms.Translation`, `Overture.Signatures.Morphisms`).
+
+Note: the moved modules are inherently two-signature, so they do not fit the single-`{𝑆}` umbrellas (`Setoid.Algebras`, `Setoid.Varieties`); they remain directory-resident and imported directly, as they already are.
+
+## Stays in `Classical/`
+
++  `Classical.Categories.AdjoinUnit` and `Classical.Categories.Forgetful` are genuinely structure-specific (adjoin-a-unit to a semigroup; `monoid→semigroup`), so they remain — they import `reductF` / `⊧-reduct` from the new `Setoid/` homes.
+
+## Interaction with #402
+
+#402 adds `Classical.Varieties.Reducts`.  Whichever of #402 / this PR merges first, the other rebases.  Recommended order: #402 first (so its active review is not disrupted by a path change), after which this PR folds in the `Reducts` → `Setoid.Varieties.Reducts` move.
+
+## Acceptance
+
++  `nix develop --command make check` passes (whole library).
 
 <!-- END GENERATED: milestone-4 -->
 
