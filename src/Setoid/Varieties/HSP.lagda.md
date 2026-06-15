@@ -245,7 +245,7 @@ This completes the formal proof of Birkhoff's variety theorem.
 
 --------------------------------
 
-[^1]: Recall, `V′` is simply a short hand for `V` in the (not very special) case in which every pair of predicate level parameters is `α ρᵃ`.
+[^1]: Recall, `V′` is simply a shorthand for `V` in the (not very special) case in which every pair of predicate level parameters is `α ρᵃ`.
 
 
 <span style="float:left;">[← Setoid.Varieties.FreeAlgebras](Setoid.Varieties.FreeAlgebras.html)</span>

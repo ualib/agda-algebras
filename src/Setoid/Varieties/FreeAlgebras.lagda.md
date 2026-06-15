@@ -49,7 +49,7 @@ open Algebra  using ( Domain )
 
 In the code below, `X` will play the role of an arbitrary collection of variables; it
 would suffice to take `X` to be the cardinality of the largest algebra in 𝒦, but
-since we don't know that cardinality, we leave `X` aribtrary for now.
+since we don't know that cardinality, we leave `X` arbitrary for now.
 
 Alternatively, we could let `X` be the product of all algebras in the class `𝒦`, like so.
 
