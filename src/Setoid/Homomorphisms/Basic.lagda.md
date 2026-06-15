@@ -41,8 +41,7 @@ module _ (𝑨 : Algebra α ρᵃ)(𝑩 : Algebra β ρᵇ) where
  open _⟶_ {a = α}{ρᵃ}{β}{ρᵇ}{From = A}{To = B} renaming (to to _⟨$⟩_ )
 
  compatible-map-op : (A ⟶ B) → OperationSymbolsOf 𝑆 → Type (𝓥 ⊔ α ⊔ ρᵇ)
- compatible-map-op h f =  ∀ {a}
-  →                       h ⟨$⟩ (f ^ 𝑨) a ≈₂ (f ^ 𝑩) λ x → h ⟨$⟩ (a x)
+ compatible-map-op h f =  ∀ {a} → h ⟨$⟩ (f ^ 𝑨) a ≈₂ (f ^ 𝑩) λ x → h ⟨$⟩ a x
 
  compatible-map : (A ⟶ B) → Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵇ)
  compatible-map h = ∀ {f} → compatible-map-op h f
@@ -56,10 +55,7 @@ module _ (𝑨 : Algebra α ρᵃ)(𝑩 : Algebra β ρᵇ) where
  hom = Σ (A ⟶ B) IsHom
 ```
 
-
-
 #### Monomorphisms and epimorphisms
-
 
 ```agda
  record IsMon (h : A ⟶ B) : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ) where

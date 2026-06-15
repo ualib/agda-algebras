@@ -28,8 +28,6 @@ open import Level                  using ( Level ; _⊔_ )
 open import Relation.Binary        using ( Setoid )
 open import Relation.Unary         using ( Pred ; _⊆_ ; _∈_ )
 
-import Relation.Binary.Reasoning.Setoid as SetoidReasoning
-
 -- Imports from the Agda Universal Algebra Library -------------------------------
 open import Overture          using ( proj₁ ; proj₂ )
 open import Setoid.Functions  using ( IsSurjective ; SurjInv ; SurjInvIsInverseʳ )
