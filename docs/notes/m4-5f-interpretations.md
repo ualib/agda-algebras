@@ -35,11 +35,18 @@ the full interpretability lattice is in scope.
    `refl`); the convenience lemma `⊧-≐` (the "second consumer" the M4-5e note anticipated);
    and the **interpretability quasi-order** `_≼_` on equational theories with `≼-refl`
    (via `idᴵ`/`✦-id`) and `≼-trans` (via `_∘ᴵ_`/`✦-∘`, routed through `reductᴵ-∘-⊧`).
-+  `Classical.Interpretations.Maltsev` — the worked instance.  The one-ternary-symbol
-   theory `Th-Maltsev` (`m(x,x,y) ≈ y`, `m(x,y,y) ≈ x`), the interpretation `I-grp`
-   sending `m` to the group term `x ∙ (y ⁻¹ ∙ z)`, and the theorem `maltsev-≼-group :
-   Th-Maltsev ≼ Th-Group` — "every group is congruence-permutable via that term."  Plus
-   `Classical.Interpretations`, the subtree aggregator.
++  `Setoid.Varieties.Maltsev` — the Maltsev condition *as universal algebra*: the
+   one-ternary-symbol signature `Sig-Maltsev`, the two-equation theory `Th-Maltsev`
+   (`m(x,x,y) ≈ y`, `m(x,y,y) ≈ x`), and the predicate `HasMaltsevTerm ℰ = Th-Maltsev ≼ ℰ`
+   (a variety admits a Maltsev term — is congruence-permutable — iff the Maltsev theory
+   interprets into it).  This is signature-agnostic, structure-free universal algebra, so
+   it lives in the `Setoid/` foundation, beside `Setoid.Varieties.Interpretation`.
++  `Classical.Interpretations.Maltsev` — the *worked witness* for one concrete variety:
+   the interpretation `I-grp` sending `m` to the group term `x ∙ (y ⁻¹ ∙ z)`, and the
+   theorem `maltsev-≼-group : HasMaltsevTerm Th-Group` — "every group is
+   congruence-permutable via that term."  This proof consumes the group operations and
+   laws, so it is structure-specific and lives in `Classical/`, one layer above the general
+   theory.  Plus `Classical.Interpretations`, the subtree aggregator.
 
 ## The definition, precisely
 
@@ -143,6 +150,6 @@ representation.
 +  Whole library (what CI runs): `nix develop --command make check`.
 +  The new modules, one at a time: `nix develop --command agda src/Overture/Terms/Interpretation.lagda.md`
    (then `Setoid/Terms/Interpretation`, `Setoid/Varieties/Interpretation`,
-   `Classical/Interpretations/Maltsev`).
+   `Setoid/Varieties/Maltsev`, `Classical/Interpretations/Maltsev`).
 
 [M4-5f]: https://github.com/ualib/agda-algebras/issues/344
