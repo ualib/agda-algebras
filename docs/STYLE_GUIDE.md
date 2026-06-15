@@ -440,6 +440,27 @@ This keeps them from leaking into the module's public interface.
 
 When stating a type that involves levels, write the explicit level expression (e.g., `𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ`) rather than letting Agda infer a `Level`.  The explicit form is more informative for readers and for training-corpus consumers, and it catches universe-polymorphism bugs early.
 
+### Closure operators and the eight-level shape of `V`
+
+The variety closure operator `Setoid.Varieties.Closure.V` is parameterized by *eight* universe levels:
+
+```agda
+module _ {α ρᵃ β ρᵇ γ ρᶜ δ ρᵈ : Level} where
+ V : ∀ ℓ ι → Pred(Algebra α ρᵃ) (a ⊔ ov ℓ) → Pred(Algebra δ ρᵈ) (d ⊔ ov(a ⊔ b ⊔ c ⊔ ℓ ⊔ ι))
+ V ℓ ι 𝒦 = H{γ}{ρᶜ}{δ}{ρᵈ} (a ⊔ b ⊔ ℓ ⊔ ι) (S{β}{ρᵇ} (a ⊔ ℓ ⊔ ι) (P ℓ ι 𝒦))
+```
+
+The input class lives at `(α, ρᵃ)` and the output algebra at `(δ, ρᵈ)`; the intermediate pairs `(β, ρᵇ)` and `(γ, ρᶜ)` are the levels of the algebras threaded through the `H ∘ S ∘ P` composition.  They are determined by nothing in the input or output, so they remain free metavariables whenever `V` is applied without a goal that already pins them.  A bare `𝑨 ∈ V ℓ ι 𝒦` at a fixed algebra therefore fails with unsolved metas.  This full generality is needed by the HSP theorem and must stay.
+
+For the common case in which the generated variety is considered at the same levels as the class that generates it, use the specialization `V′`, which collapses all four algebra positions to the input levels (`β = γ = δ = α` and `ρᵇ = ρᶜ = ρᵈ = ρᵃ`) — exactly the pinning `is-variety` performs.  Under that collapse the output level `d ⊔ ov(a ⊔ b ⊔ c ⊔ ℓ ⊔ ι)` reduces to `a ⊔ ov(a ⊔ ℓ ⊔ ι)`:
+
+```agda
+V′ : ∀ ℓ ι → Pred(Algebra α ρᵃ)(a ⊔ ov ℓ) → Pred(Algebra α ρᵃ) (a ⊔ ov(a ⊔ ℓ ⊔ ι))
+V′ ℓ ι 𝒦 = V {α}{ρᵃ}{α}{ρᵃ}{α}{ρᵃ}{α}{ρᵃ} ℓ ι 𝒦
+```
+
+`V′` is a documented narrowing, not a synonym: `V` remains the canonical level-polymorphic operator, and `V′` is the fixed-level entry point that downstream examples and tests should prefer.  When a *membership* rather than a predicate is wanted, the explicit-class lemma `V-expa′ : ∀ ℓ ι (𝒦 : …) {𝑨} → 𝑨 ∈ 𝒦 → 𝑨 ∈ V ℓ ι 𝒦` supplies `𝑨 ∈ V ℓ ι 𝒦` from `𝑨 ∈ 𝒦` directly, sidestepping the higher-order unification that the `_⊆_`-stated `V-expa` forces on the caller.
+
 ---
 
 ## Record vs Σ
