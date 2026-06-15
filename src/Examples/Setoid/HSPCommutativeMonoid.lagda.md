@@ -46,7 +46,7 @@ open import Examples.Classical.CommutativeMonoid using ( ℕ-commutativeMonoid )
 open import Classical.Signatures.Monoid          using ( Sig-Monoid ; ∙-Op )
 open import Overture.Terms {𝑆 = Sig-Monoid}      using ( Term ; ℊ ; node )
 open import Setoid.Algebras {𝑆 = Sig-Monoid}     using ( Algebra ; 𝕌[_] ; ov )
-open import Setoid.Varieties.Closure {𝑆 = Sig-Monoid}        using ( V ; V′ ; V-expa )
+open import Setoid.Varieties.Closure {𝑆 = Sig-Monoid}        using ( V ; V′ ; V-expa′ )
 open import Setoid.Varieties.Preservation {𝑆 = Sig-Monoid}   using ( V-id1 )
 open import Setoid.Varieties.SoundAndComplete {𝑆 = Sig-Monoid}
   using ( _⊧_ ; _⊫_ ; _≈̇_ ; Mod ; Th )
@@ -64,8 +64,9 @@ projection is the underlying `(ℕ, +, 0)` setoid algebra.
 𝑨₀ : Algebra 0ℓ 0ℓ
 𝑨₀ = proj₁ ℕ-commutativeMonoid
 
--- the singleton class { 𝑨₀ }, as a one-constructor family so that membership
--- evidence retains the class (needed for the closure operators to infer 𝒦)
+-- the singleton class { 𝑨₀ }, as a one-constructor family.  With the explicit-class
+-- V-expa′ the closure operators no longer need this shape to infer 𝒦; we keep the
+-- data family because 𝒦₀⊫comm (below) reads cleanly by matching its in₀ constructor.
 data 𝒦₀ : Pred (Algebra 0ℓ 0ℓ) (ov 0ℓ) where
   in₀ : 𝒦₀ 𝑨₀
 
@@ -87,12 +88,15 @@ level by hand or leaving unsolved level metavariables.
 
 #### Corollary 1: the generator lies in its own variety {#in-its-variety}
 
-`V` is expansive, so `(ℕ, +, 0)` belongs to the variety
-it generates.
+`V`{.AgdaFunction} is expansive, so `(ℕ, +, 0)` belongs to the variety
+it generates.  We obtain the membership from `V-expa′`{.AgdaFunction}, the
+explicit-class form of expansiveness: the class `𝒦₀`{.AgdaFunction} is passed
+positionally, so nothing has to be inferred and the intermediate levels are pinned
+by unification with the `V′`{.AgdaFunction} goal `𝕍`{.AgdaFunction}.
 
 ```agda
 ℕ∈V : 𝑨₀ ∈ 𝕍
-ℕ∈V = V-expa 0ℓ (ov 0ℓ) {𝒦 = 𝒦₀} 𝑨₀∈𝒦₀
+ℕ∈V = V-expa′ 0ℓ (ov 0ℓ) 𝒦₀ 𝑨₀∈𝒦₀
 ```
 
 #### Corollary 2: the variety is commutative {#variety-commutative}
