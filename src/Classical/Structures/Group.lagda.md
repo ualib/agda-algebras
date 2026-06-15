@@ -305,7 +305,7 @@ group→monoid 𝒢@(𝑮 , _) = 𝑹 , thm
 
 `opsToBareGroup` builds a "raw" `Sig-Group`-algebra from a carrier, a binary
 operation, an identity element, and an inverse, over the propositional-equality
-setoid `≡.setoid A` — the empty-theory edge case of the `opsTo<family>` pattern, now
+setoid `setoid A` — the empty-theory edge case of the `opsTo<family>` pattern, now
 with one clause per `Sig-Group` symbol.
 
 ```agda
