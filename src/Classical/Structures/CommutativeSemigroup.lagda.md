@@ -98,9 +98,9 @@ eqsToCommutativeSemigroup : (A : Type α) (_·_ : A → A → A)
   → (·-assoc : ∀ a b c → (a · b) · c ≡ a · (b · c))
   → (·-comm  : ∀ a b → a · b ≡ b · a)
   → CommutativeSemigroup α α
-eqsToCommutativeSemigroup A _·_ ·-assoc ·-comm = opsToMagma A _·_ , proof
+eqsToCommutativeSemigroup A _·_ ·-assoc ·-comm = opsToMagma _·_ , proof
   where
-  proof : opsToMagma A _·_ ⊨ᶜˢᵍ Th-CommutativeSemigroup
+  proof : opsToMagma _·_ ⊨ᶜˢᵍ Th-CommutativeSemigroup
   proof assocᶜ ρ = ·-assoc (ρ 0F) (ρ 1F) (ρ 2F)
   proof comm   ρ = ·-comm  (ρ 0F) (ρ 1F)
 ```

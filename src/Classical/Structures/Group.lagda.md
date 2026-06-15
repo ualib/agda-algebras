@@ -136,7 +136,7 @@ module _ (𝑮 : Group α ρ) where
   gp-assoc : ∀ x y z → (x ∙ y) ∙ z ≈ x ∙ (y ∙ z)
   gp-assoc x y z = begin
     x ∙ y ∙ z                ≈˘⟨ interp-cong 𝑨 ∙-Op γ ⟩
-    ⟦ node ∙-Op lhs ⟧ ⟨$⟩ η  ≈⟨ proj₂ 𝑮 assoc ⟩
+    ⟦ node ∙-Op lhs ⟧ ⟨$⟩ η  ≈⟨ proj₂ 𝑮 assoc η ⟩
     ⟦ node ∙-Op rhs ⟧ ⟨$⟩ η  ≈⟨ interp-cong 𝑨 ∙-Op γ' ⟩
     x ∙ (y ∙ z)              ∎
     where
@@ -200,11 +200,11 @@ module Group-Op {α ρ : Level} (𝑮 : Group α ρ) where
   assoc-law : ∀ x y z → x ∙ y ∙ z ≈ x ∙ (y ∙ z)
   assoc-law = gp-assoc 𝑮
 
-  idˡ-law : {x : 𝕌[ 𝑨 ]} → ε ∙ x ≈ x
-  idˡ-law {x = x} = begin
+  idˡ-law : ∀ x → ε ∙ x ≈ x
+  idˡ-law x = begin
     ε ∙ x                                             ≈˘⟨ ∙-cong interp-node-ε ≈refl ⟩
     ⟦ node ε-Op (λ ()) ⟧ ⟨$⟩ η ∙ ⟦ g0 ⟧ ⟨$⟩ η         ≈˘⟨ interp-node-∙ (node ε-Op (λ ())) g0 ⟩
-    ⟦ node ∙-Op (pair (node ε-Op (λ ())) g0) ⟧ ⟨$⟩ η  ≈⟨ equations idˡ ⟩
+    ⟦ node ∙-Op (pair (node ε-Op (λ ())) g0) ⟧ ⟨$⟩ η  ≈⟨ equations idˡ η ⟩
     x                                                 ∎
     where
     η : Fin 3 → 𝕌[ 𝑨 ]
@@ -212,11 +212,11 @@ module Group-Op {α ρ : Level} (𝑮 : Group α ρ) where
     g0 : Term (Fin 3)
     g0 = ℊ {X = Fin 3} 0F
 
-  idʳ-law : {x : 𝕌[ 𝑨 ]} → x ∙ ε ≈ x
-  idʳ-law {x} = begin
+  idʳ-law : ∀ x → x ∙ ε ≈ x
+  idʳ-law x = begin
     x ∙ ε                                             ≈˘⟨ ∙-cong ≈refl interp-node-ε ⟩
     ⟦ g0 ⟧ ⟨$⟩ η ∙ ⟦ node ε-Op (λ ()) ⟧ ⟨$⟩ η         ≈˘⟨ interp-node-∙ g0 (node ε-Op (λ ())) ⟩
-    ⟦ node ∙-Op (pair g0 (node ε-Op (λ ()))) ⟧ ⟨$⟩ η  ≈⟨ equations idʳ ⟩
+    ⟦ node ∙-Op (pair g0 (node ε-Op (λ ()))) ⟧ ⟨$⟩ η  ≈⟨ equations idʳ η ⟩
     x                                                 ∎
     where
     η : Fin 3 → 𝕌[ 𝑨 ]
@@ -224,11 +224,11 @@ module Group-Op {α ρ : Level} (𝑮 : Group α ρ) where
     g0 : Term (Fin 3)
     g0 = ℊ {X = Fin 3} 0F
 
-  invˡ-law : {x : 𝕌[ 𝑨 ]} → x ⁻¹ ∙ x ≈ ε
-  invˡ-law {x = x} = begin
+  invˡ-law : ∀ x → x ⁻¹ ∙ x ≈ ε
+  invˡ-law x = begin
     x ⁻¹ ∙ x                                       ≈˘⟨ ∙-cong (interp-node-⁻¹ g0 {η}) ≈refl ⟩
     ⟦ node ⁻¹-Op τ ⟧ ⟨$⟩ η ∙ ⟦ g0 ⟧ ⟨$⟩ η          ≈˘⟨ interp-node-∙ (node ⁻¹-Op τ) g0 ⟩
-    ⟦ node ∙-Op (pair (node ⁻¹-Op τ) g0) ⟧ ⟨$⟩ η   ≈⟨ equations invˡ ⟩
+    ⟦ node ∙-Op (pair (node ⁻¹-Op τ) g0) ⟧ ⟨$⟩ η   ≈⟨ equations invˡ η ⟩
     ⟦ node ε-Op (λ ()) ⟧ ⟨$⟩ η                     ≈⟨ interp-node-ε ⟩
     ε              ∎
     where
@@ -242,7 +242,7 @@ module Group-Op {α ρ : Level} (𝑮 : Group α ρ) where
   invʳ-law : ∀ x → x ∙ x ⁻¹ ≈ ε
   invʳ-law x = ≈trans (∙-cong ≈refl (≈sym (interp-node-⁻¹ (ℊ 0F) {λ _ → x})))
                      (≈trans (≈sym (interp-node-∙ (ℊ 0F) (node ⁻¹-Op (λ _ → ℊ 0F)) {λ _ → x}))
-                            (≈trans (equations invʳ {λ _ → x}) (interp-node-ε {λ _ → x})))
+                            (≈trans (equations invʳ (λ _ → x)) (interp-node-ε {λ _ → x})))
 ```
 
 #### The forgetful projection to monoids
@@ -274,7 +274,7 @@ group→monoid 𝒢@(𝑮 , _) = 𝑹 , thm
   interp-node-εᴿ η = interp-cong 𝑹 ε-Opᵐᵒ (λ ())
 
   thm : 𝑹 ⊨ᵐᵒ Th-Monoid
-  thm assocᵐ {η} = begin
+  thm assocᵐ η = begin
     ⟦ Th-Monoid assocᵐ .proj₁ ⟧ ⟨$⟩ η  ≈⟨ interp-node-∙ᴿ xy (ℊ 2F) η ⟩
     ⟦ xy ⟧ ⟨$⟩ η ∙ z                   ≈⟨ ∙-cong (interp-node-∙ᴿ (ℊ 0F) (ℊ 1F) η) ≈refl ⟩
     x ∙ y ∙ z                          ≈⟨ assoc-law x y z ⟩
@@ -288,16 +288,16 @@ group→monoid 𝒢@(𝑮 , _) = 𝑹 , thm
     xy = node ∙-Opᵐᵒ (pair (ℊ 0F) (ℊ 1F))
     yz = node ∙-Opᵐᵒ (pair (ℊ 1F) (ℊ 2F))
 
-  thm idˡᵐ {η} = begin
+  thm idˡᵐ η = begin
     ⟦ Th-Monoid idˡᵐ .proj₁ ⟧ ⟨$⟩ η   ≈⟨ interp-node-∙ᴿ (node ε-Opᵐᵒ (λ ())) (ℊ 0F) η ⟩
     ⟦ node ε-Opᵐᵒ (λ ()) ⟧ ⟨$⟩ η ∙ _  ≈⟨ ∙-cong (interp-node-εᴿ η) ≈refl ⟩
-    ε ∙ _                             ≈⟨ idˡ-law ⟩
+    ε ∙ _                             ≈⟨ idˡ-law _ ⟩
     _                                 ∎
 
-  thm idʳᵐ {η} = begin
+  thm idʳᵐ η = begin
     ⟦ Th-Monoid idʳᵐ .proj₁ ⟧ ⟨$⟩ η   ≈⟨ interp-node-∙ᴿ (ℊ 0F) (node ε-Opᵐᵒ (λ ())) η ⟩
     _ ∙ ⟦ node ε-Opᵐᵒ (λ ()) ⟧ ⟨$⟩ η  ≈⟨ ∙-cong ≈refl (interp-node-εᴿ η) ⟩
-    _ ∙ ε                             ≈⟨ idʳ-law ⟩
+    _ ∙ ε                             ≈⟨ idʳ-law _ ⟩
     _                                 ∎
 ```
 
@@ -333,11 +333,11 @@ eqsToGroup : {A : Type α} (_·_ : A → A → A) (e : A) (i : A → A)
 eqsToGroup _·_ e i ·-assoc ·-idˡ ·-idʳ ·-invˡ ·-invʳ = opsToBareGroup _·_ e i , proof
   where
   proof : opsToBareGroup _·_ e i ⊨ᵍᵖ Th-Group
-  proof assoc {ρ} = ·-assoc (ρ 0F) (ρ 1F) (ρ 2F)
-  proof idˡ   {ρ} = ·-idˡ   (ρ 0F)
-  proof idʳ   {ρ} = ·-idʳ   (ρ 0F)
-  proof invˡ  {ρ} = ·-invˡ  (ρ 0F)
-  proof invʳ  {ρ} = ·-invʳ  (ρ 0F)
+  proof assoc ρ = ·-assoc (ρ 0F) (ρ 1F) (ρ 2F)
+  proof idˡ   ρ = ·-idˡ   (ρ 0F)
+  proof idʳ   ρ = ·-idʳ   (ρ 0F)
+  proof invˡ  ρ = ·-invˡ  (ρ 0F)
+  proof invʳ  ρ = ·-invʳ  (ρ 0F)
 ```
 
 --------------------------------------

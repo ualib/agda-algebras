@@ -89,9 +89,11 @@ the demonstration in [Classical.Categories.Forgetful][]) — and that alignment 
 obstruction dissolves functorially; only its benign, provable shadow survives, in
 the concrete theories themselves.
 
-This module lives in `Setoid.Varieties` since reduct-invariance of satisfaction is
-general universal algebra, and its object map [`reduct`][Setoid.Algebras.Reduct] is
-itself a `Setoid/` construction.
+This module lives in `Setoid.Varieties`: reduct-invariance of satisfaction is general
+universal algebra, and its object map [`reduct`][Setoid.Algebras.Reduct] is itself a
+`Setoid/` construction (both relocated from `Classical/` by
+[ADR-006](../../docs/adr/006-signature-morphism-category.md), M4-16).  It opens the
+two-signature `Setoid/Varieties/` area that M4-5g (reduct classes of varieties) extends.
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -115,7 +117,7 @@ open import Overture.Terms.Translation     using ( _✶_ )
 open import Setoid.Algebras.Basic          using ( Algebra ; 𝔻[_] ; 𝕌[_] )
 open import Setoid.Algebras.Reduct         using ( reduct )
 
-open import Setoid.Terms.Basic             using (module Environment)
+open import Setoid.Terms.Basic          using (module Environment) --        as TermsBasic
 import Setoid.Varieties.EquationalLogic    as EqLogic
 
 open Algebra using ( Interp )
@@ -152,10 +154,10 @@ arity is ever compared to a concrete `Fin n`, so the without-K unifier is never
 asked to invert anything.
 
 ```agda
-  reduct-interp : (t : Term X) {η : X → 𝕌[ 𝑨 ]} → ⟦ t ⟧₁ ⟨$⟩ η ≈ ⟦ φ ✶ t ⟧₂ ⟨$⟩ η
-  reduct-interp (ℊ x) = ≈refl
-  reduct-interp (node f ts) =
-    cong (Interp 𝑨) (refl , λ j → reduct-interp (ts (κ φ f j)))
+  reduct-interp : (t : Term X) (η : X → 𝕌[ 𝑨 ]) → ⟦ t ⟧₁ ⟨$⟩ η ≈ ⟦ φ ✶ t ⟧₂ ⟨$⟩ η
+  reduct-interp (ℊ x) η = ≈refl
+  reduct-interp (node f ts) η =
+    cong (Interp 𝑨) (refl , λ j → reduct-interp (ts (κ φ f j)) η)
 ```
 
 #### The satisfaction condition
@@ -173,11 +175,13 @@ associativity its reduct must satisfy); `⊧-expand` is the converse, the direct
 used when transporting equational facts from a reduct up to its expansion.
 
 ```agda
-  ⊧-reduct : (s t : Term X) → 𝑨 ⊧₂ (φ ✶ s) ≈ (φ ✶ t) → reduct φ 𝑨 ⊧₁ s ≈ t
-  ⊧-reduct s t A⊧ = ≈trans (reduct-interp s) (≈trans A⊧ (≈sym (reduct-interp t)))
+  ⊧-reduct : {s t : Term X} → 𝑨 ⊧₂ (φ ✶ s) ≈ (φ ✶ t) → reduct φ 𝑨 ⊧₁ s ≈ t
+  ⊧-reduct {s = s} {t} A⊧ η =
+    ≈trans (reduct-interp s η) (≈trans (A⊧ η) (≈sym (reduct-interp t η)))
 
-  ⊧-expand : (s t : Term X) → reduct φ 𝑨 ⊧₁ s ≈ t → 𝑨 ⊧₂ φ ✶ s ≈ φ ✶ t
-  ⊧-expand s t R⊧ = ≈trans (≈sym (reduct-interp s)) (≈trans R⊧ (reduct-interp t ))
+  ⊧-expand : {s t : Term X} → reduct φ 𝑨 ⊧₁ s ≈ t → 𝑨 ⊧₂ φ ✶ s ≈ φ ✶ t
+  ⊧-expand {s = s} {t} R⊧ η =
+    ≈trans (≈sym (reduct-interp s η)) (≈trans (R⊧ η) (reduct-interp t η))
 ```
 
 Together the two directions are the biconditional promised at the top.  They are

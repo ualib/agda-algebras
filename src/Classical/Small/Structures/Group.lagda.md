@@ -34,7 +34,7 @@ eqsToGroup : (A : Type 0ℓ) (_·_ : A → A → A) (e : A) (i : A → A)
   → (∀ a → e · a ≡ a) → (∀ a → a · e ≡ a)
   → (∀ a → (i a) · a ≡ e) → (∀ a → a · (i a) ≡ e)
   → Group
-eqsToGroup = Polymorphic.eqsToGroup
+eqsToGroup A = Polymorphic.eqsToGroup {A = A}
 ```
 
 --------------------------------------

@@ -50,7 +50,7 @@ associativity proof, which is exactly the level-fixed `Semigroup` above.
 eqsToSemigroup  : (A : Type 0ℓ) (_·_ : A → A → A)
   → (∀ a b c → (a · b) · c ≡ a · (b · c))
   → Semigroup
-eqsToSemigroup = Polymorphic.eqsToSemigroup
+eqsToSemigroup A = Polymorphic.eqsToSemigroup {A = A}
 ```
 
 --------------------------------------

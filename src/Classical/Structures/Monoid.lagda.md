@@ -151,7 +151,7 @@ module _ (𝑴 : Monoid α ρ) where
   mn-assoc : ∀ x y z → x ∙ y ∙ z ≈ x ∙ (y ∙ z)
   mn-assoc x y z = begin
     x ∙ y ∙ z       ≈˘⟨ interp-cong 𝑨 ∙-Op (λ { 0F → interp-node∙ (ℊ 0F) (ℊ 1F) η ; 1F → ≈refl }) ⟩
-    ⟦ lhsT ⟧ ⟨$⟩ η  ≈⟨ proj₂ 𝑴 assoc ⟩
+    ⟦ lhsT ⟧ ⟨$⟩ η  ≈⟨ proj₂ 𝑴 assoc η ⟩
     ⟦ rhsT ⟧ ⟨$⟩ η  ≈⟨ interp-cong 𝑨 ∙-Op (λ { 0F → ≈refl ; 1F → interp-node∙ (ℊ 1F) (ℊ 2F) η }) ⟩
     x ∙ (y ∙ z)     ∎
     where
@@ -197,12 +197,12 @@ module Monoid-Op {α ρ : Level} (𝑴 : Monoid α ρ) where
   idˡ-law : ∀ x → ε ∙ x ≈ x
   idˡ-law x = trans (∙-cong (sym interp-node-ε) ≈refl)
                     (trans (sym (interp-node-∙ (node ε-Op (λ ())) (ℊ 0F)))
-                           (equations idˡ {λ _ → x}))
+                           (equations idˡ (λ _ → x)))
 
   idʳ-law : ∀ x → x ∙ ε ≈ x
   idʳ-law x = trans (∙-cong ≈refl (sym (interp-node-ε)))
                     (trans (sym (interp-node-∙ (ℊ 0F) (node ε-Op (λ ()))))
-                           (equations idʳ {λ _ → x}))
+                           (equations idʳ (λ _ → x)))
 ```
 
 #### The forgetful projection to semigroups
@@ -231,7 +231,7 @@ monoid→semigroup ℳ@(𝑴 , _) = 𝑹 , thm
   ∙-congᴿ a≈b c≈d = interp-cong 𝑹 ∙-Opᵐᵃ (λ { 0F → a≈b ; 1F → c≈d })
 
   thm : 𝑹 ⊨ˢᵍ Th-Semigroup
-  thm assocˢ {η} = begin
+  thm assocˢ η = begin
     ⟦ Th-Semigroup assocˢ .proj₁ ⟧ ⟨$⟩ η  ≈⟨ interp-congᴿ xy (ℊ 2F) η ⟩
     ⟦ xy ⟧ ⟨$⟩ η ∙ z                      ≈⟨ ∙-congᴿ (interp-congᴿ (ℊ 0F) (ℊ 1F) η) ≈refl ⟩
     x ∙ y ∙ z                             ≈⟨ assoc-law x y z ⟩
@@ -334,9 +334,9 @@ eqsToMonoid : {A : Type α} (_·_ : A → A → A) (e : A)
 eqsToMonoid _·_ e ·-assoc ·-idˡ ·-idʳ = opsToBareMonoid _·_ e , proof
   where
   proof : opsToBareMonoid _·_ e ⊨ᵐᵒ Th-Monoid
-  proof assoc {ρ} = ·-assoc (ρ 0F) (ρ 1F) (ρ 2F)
-  proof idˡ {ρ} = ·-idˡ (ρ 0F)
-  proof idʳ {ρ} = ·-idʳ (ρ 0F)
+  proof assoc ρ = ·-assoc (ρ 0F) (ρ 1F) (ρ 2F)
+  proof idˡ ρ = ·-idˡ (ρ 0F)
+  proof idʳ ρ = ·-idʳ (ρ 0F)
 ```
 
 --------------------------------------
