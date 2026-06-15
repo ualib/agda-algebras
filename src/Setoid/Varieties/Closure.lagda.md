@@ -9,7 +9,7 @@ author: "agda-algebras development team"
 
 Fix a signature 𝑆, let 𝒦 be a class of 𝑆-algebras, and define
 
-+  `H 𝒦` = algebras isomorphic to a homomorphic image of a members of `𝒦`;
++  `H 𝒦` = algebras isomorphic to a homomorphic image of a member of `𝒦`;
 +  `S 𝒦` = algebras isomorphic to a subalgebra of a member of `𝒦`;
 +  `P 𝒦` = algebras isomorphic to a product of members of `𝒦`.
 
