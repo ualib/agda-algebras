@@ -103,9 +103,9 @@ eqsToSemilattice : (A : Type α) (_·_ : A → A → A)
   → (·-comm  : ∀ a b → a · b ≡ b · a)
   → (·-idem  : ∀ a → a · a ≡ a)
   → Semilattice α α
-eqsToSemilattice A _·_ ·-assoc ·-comm ·-idem = opsToMagma A _·_ , proof
+eqsToSemilattice A _·_ ·-assoc ·-comm ·-idem = opsToMagma _·_ , proof
   where
-  proof : opsToMagma A _·_ ⊨ˢˡ Th-Semilattice
+  proof : opsToMagma _·_ ⊨ˢˡ Th-Semilattice
   proof assocˢˡ ρ = ·-assoc (ρ 0F) (ρ 1F) (ρ 2F)
   proof commˢˡ  ρ = ·-comm  (ρ 0F) (ρ 1F)
   proof idem    ρ = ·-idem  (ρ 0F)

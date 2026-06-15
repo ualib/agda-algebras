@@ -90,9 +90,9 @@ eqsToCommutativeMonoid : (A : Type α) (_·_ : A → A → A) (e : A)
   → (·-idˡ : ∀ a → e · a ≡ a) (·-idʳ : ∀ a → a · e ≡ a)
   → (·-comm : ∀ a b → a · b ≡ b · a)
   → CommutativeMonoid α α
-eqsToCommutativeMonoid A _·_ e ·-assoc ·-idˡ ·-idʳ ·-comm = opsToBareMonoid A _·_ e , proof
+eqsToCommutativeMonoid A _·_ e ·-assoc ·-idˡ ·-idʳ ·-comm = opsToBareMonoid _·_ e , proof
   where
-  proof : opsToBareMonoid A _·_ e ⊨ᶜᵐᵒ Th-CommutativeMonoid
+  proof : opsToBareMonoid _·_ e ⊨ᶜᵐᵒ Th-CommutativeMonoid
   proof assocᶜ ρ = ·-assoc (ρ 0F) (ρ 1F) (ρ 2F)
   proof idˡᶜ   ρ = ·-idˡ   (ρ 0F)
   proof idʳᶜ   ρ = ·-idʳ   (ρ 0F)

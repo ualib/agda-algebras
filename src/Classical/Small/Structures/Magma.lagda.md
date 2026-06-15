@@ -47,7 +47,7 @@ is exactly the level-fixed `Magma` above.
 
 ```agda
 opsToMagma : (A : Type 0ℓ) → (A → A → A) → Magma
-opsToMagma = Polymorphic.opsToMagma
+opsToMagma A = Polymorphic.opsToMagma {A = A}
 ```
 
 --------------------------------------

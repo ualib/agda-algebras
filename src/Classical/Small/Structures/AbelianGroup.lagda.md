@@ -33,7 +33,7 @@ eqsToAbelianGroup : (A : Type 0ℓ) (_·_ : A → A → A) (e : A) (i : A → A)
   → (∀ a → (i a) · a ≡ e) → (∀ a → a · (i a) ≡ e)
   → (∀ a b → a · b ≡ b · a)
   → AbelianGroup
-eqsToAbelianGroup = Polymorphic.eqsToAbelianGroup
+eqsToAbelianGroup A = Polymorphic.eqsToAbelianGroup {A = A}
 ```
 
 --------------------------------------

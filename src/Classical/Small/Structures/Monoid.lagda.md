@@ -33,7 +33,7 @@ eqsToMonoid : (A : Type 0ℓ) (_·_ : A → A → A) (e : A)
   → (∀ a b c → (a · b) · c ≡ a · (b · c))
   → (∀ a → e · a ≡ a) → (∀ a → a · e ≡ a)
   → Monoid
-eqsToMonoid = Polymorphic.eqsToMonoid
+eqsToMonoid A = Polymorphic.eqsToMonoid {A = A}
 ```
 
 --------------------------------------
