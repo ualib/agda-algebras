@@ -9,7 +9,7 @@ Amended — 2026-06-14 (M4-16, #403): the `reduct` development relocates from `C
 
 ## Context
 
-[M4-5][] (#338) builds out the category-theoretic layer the foundation already implicitly is: `Signature` is a container, `⟨ 𝑆 ⟩` is its polynomial functor, `Interp` is the structure map, and `Term` is the initial algebra.  [M4-5a][] (#339) is the first link: package the pair `(ι , κ)` that `reduct` consumes today (`Classical.Structures.Reduct`) as a first-class `SigMorphism 𝑆₁ 𝑆₂` — a container morphism with `ι` covariant on operation symbols and `κ` contravariant on positions — and assemble signatures and these morphisms into a category `Sig`.
+[M4-5][] (#338) builds out the category-theoretic layer the foundation already implicitly is: `Signature` is a container, `⟨ 𝑆 ⟩` is its polynomial functor, `Interp` is the structure map, and `Term` is the initial algebra.  [M4-5a][] (#339) is the first link: package the pair `(ι , κ)` that `reduct` consumes today (then `Classical.Structures.Reduct`, relocated to `Setoid.Algebras.Reduct` by the *Amendment* below) as a first-class `SigMorphism 𝑆₁ 𝑆₂` — a container morphism with `ι` covariant on operation symbols and `κ` contravariant on positions — and assemble signatures and these morphisms into a category `Sig`.
 
 Two decisions are forced before any of [M4-5][] can proceed, because they fix the shape of everything downstream.
 
