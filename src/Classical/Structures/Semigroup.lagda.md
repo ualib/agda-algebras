@@ -71,11 +71,11 @@ Specifically, the conventions documented and embodied here are as follows.
    The user-facing constructor `eqsToSemigroup` builds a semigroup from a bare type `A`,
    a binary operation `_·_ : A → A → A`, and one propositional-equality proof per
    equation in the theory (here, one `·-assoc` proof).  Its definition factors
-   through `opsToMagma`: `eqsToSemigroup A _·_ ·-assoc = opsToMagma A _·_ , <proof>`,
+   through `opsToMagma`: `eqsToSemigroup _·_ ·-assoc = opsToMagma _·_ , <proof>`,
    reusing the underlying-algebra construction rather than rebuilding it.
    This factoring has two payoffs: it keeps the per-structure constructor short, and
-   it makes the forgetful acceptance criterion `semigroup→magma (eqsToSemigroup A _·_ _)
-   ≡ opsToMagma A _·_` discharge by `refl`.  Subsequent `eqsTo`-family constructors
+   it makes the forgetful acceptance criterion `semigroup→magma (eqsToSemigroup _·_ _)
+   ≡ opsToMagma _·_` discharge by `refl`.  Subsequent `eqsTo`-family constructors
    (for Monoid, Group, Lattice, Ring) follow the same shape, each factoring
    through their immediate predecessor's concrete constructor family.
 
@@ -218,12 +218,12 @@ type `A`, a binary operation `_·_ : A → A → A`, and a propositional-equalit
 associativity proof `·-assoc`, it returns a `Semigroup α α`.  The construction
 factors through `opsToMagma` so that the underlying-algebra portion is shared with
 the `Magma` constructor — this is what makes the forgetful agreement criterion
-`semigroup→magma ∘ eqsToSemigroup A _·_ _ ≡ opsToMagma A _·_` discharge by
+`semigroup→magma ∘ eqsToSemigroup _·_ _ ≡ opsToMagma _·_` discharge by
 `refl`.
 
 The associativity proof discharges by direct evaluation: under `≡.setoid A`, the
 setoid equivalence is propositional equality; the interpretation of
-`(ℊ 0F ∙ ℊ 1F) ∙ ℊ 2F` in `opsToMagma A _·_` under an environment `ρ` reduces
+`(ℊ 0F ∙ ℊ 1F) ∙ ℊ 2F` in `opsToMagma _·_` under an environment `ρ` reduces
 definitionally to `(ρ 0F · ρ 1F) · ρ 2F`, and the mirror reduction holds for the
 right-associated term, so `·-assoc (ρ 0F) (ρ 1F) (ρ 2F)` is exactly the proof
 required.

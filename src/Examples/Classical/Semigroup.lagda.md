@@ -62,7 +62,7 @@ discharged by `refl`.
 ```
 
 The forgetful image of `ℕ-semigroup` is the magma `ℕ-magma` *on the nose*.
-This holds because `eqsToSemigroup` is implemented as `opsToMagma A _·_ , <proof>`,
+This holds because `eqsToSemigroup` is implemented as `opsToMagma _·_ , <proof>`,
 so `semigroup→magma (eqsToSemigroup ℕ _+_ +-assoc)` reduces to `opsToMagma ℕ _+_`,
 which is exactly the definition of `ℕ-magma`; discharged by `refl`.
 
