@@ -11,26 +11,27 @@ author: "the agda-algebras development team"
 This is the [Setoid.Varieties.Reducts][] module of the [Agda Universal Algebra Library][].
 
 Like its companion [Setoid.Varieties.Invariance][], this module lives in the `Setoid/`
-foundation: reducts are universal algebra (relocated here from `Classical/` by
-[ADR-006](../../docs/adr/006-signature-morphism-category.md), M4-16).
+foundation; reducts are in the domain of universal algebra.
 
 Fix two signatures `𝑆₁`, `𝑆₂` and a signature morphism `φ : 𝑆₁ → 𝑆₂`.  The reduct functor
-`reduct φ : Alg 𝑆₂ → Alg 𝑆₁` ([Setoid.Categories.Reduct][], M4-5c) turns each
-`𝑆₂`-algebra into an `𝑆₁`-algebra by remembering only the operations named by `φ`.
+`reduct φ : Alg 𝑆₂ → Alg 𝑆₁` ([Setoid.Categories.Reduct][]) turns each `𝑆₂`-algebra
+into an `𝑆₁`-algebra by remembering only the operations named by `φ`.
+
 Given a **variety** `𝒱` of `𝑆₂`-algebras, this module studies the *reduct class*
 
-    reduct φ (𝒱)  =  { 𝑩 : 𝑩 ≅ reduct φ 𝑨 for some 𝑨 ∈ 𝒱 },
+    reduct φ 𝒱  =  { 𝑩 : 𝑩 ≅ reduct φ 𝑨 for some 𝑨 ∈ 𝒱 },
 
 a class of `𝑆₁`-algebras, and asks, "under which of the operators `S`, `H`,
-`P` is `reduct φ (𝒱)` closed?"[^1]
+`P` is `reduct φ 𝒱` closed?"[^1]
 
-#### What is actually true — and a correction to the milestone framing
+At first glance, we might anticipate that `reduct φ 𝒱` is closed under `S` and `P`
+but not `H`, which would make it a *prevariety*.[^2]
 
-The milestone issue that prompted the creation of this module anticipated that
-`reduct φ (𝒱)` would be closed under `S` and `P` but not `H` — a *prevariety*.[^2]
-Working it through against the library's definitions shows the truth is different,
-and sharper, so we record it carefully here (this is research-tracking, where getting
-the statement right is the point).  Two layers must be distinguished.
+Working it through against the library's definitions shows that the truth is different,
+and sharper, so we record it formally here.  (This is research-tracking, where
+discovering which assertion is the correct one is part of the process.)
+
+Two layers must be distinguished.
 
 +  **Functorial preservation (true for `S`, `P`, *and* `H`)**.  `reduct φ` preserves
    the subalgebra relation, products, and the homomorphic-image relation
@@ -290,50 +291,61 @@ nor closed under `S`.
 
 #### Why `S` and `H` fail at the class level
 
-It remains to substantiate the claim that `reduct φ 𝒱` is **not** closed under `S` (and, in
-general, not under `H`), so it is a product class rather than a prevariety.  The asymmetry with
-`P` is structural: the functorial preservations above all run `𝑆₂ → 𝑆₁` (reduct of a subalgebra
-is a subalgebra, etc.), but *class-level* closure needs the reverse, `𝑆₁ → 𝑆₂`,
-**reconstruction** — every `𝑆₁`-subalgebra/quotient/product of a reduct must arise as the reduct
-of an `𝑆₂`-subalgebra/quotient/product inside `𝒱`.  For products that reconstruction is
-automatic (`reduct-⨅`): the dropped operations on a product are computed coordinatewise from the
-factors, so they are always present.  For subalgebras and quotients it can fail, because a
-sub- or quotient-algebra of a reduct generally cannot be re-equipped with the operations `φ`
-forgot.  (Categorically: `reduct φ` is a right adjoint — `F ⊣ reduct φ`, M4-5d — so it preserves
-limits, which is why products are the well-behaved case.)
+It remains to substantiate the claim that `reduct φ 𝒱` is **not** closed under `S`
+(and, in general, not under `H`), so it is a product class rather than a prevariety.
+The asymmetry with `P` is structural: the functorial preservations above all run
+`𝑆₂ → 𝑆₁` (reduct of a subalgebra is a subalgebra, etc.), but *class-level* closure
+needs the reverse, `𝑆₁ → 𝑆₂`, **reconstruction** — every
+`𝑆₁`-subalgebra/quotient/product of a reduct must arise as the reduct of an
+`𝑆₂`-subalgebra/quotient/product inside `𝒱`.
 
-**The `S`-counterexample (concrete).**  Let `𝑆₂` be the group signature with binary `·`, unary
-`⁻¹`, and nullary `e`; let `𝑆₁` be the monoid signature with binary `·` and nullary
-`e`; let `φ : 𝑆₁ ↪ 𝑆₂` be the natural inclusion; then `reduct φ` forgets `⁻¹` keeping
-`·` and `e`.  Take `𝒱` to be the variety of groups.  Then `reduct φ 𝒱` is the class
-of monoid reducts of 𝒱 — monoids `(M , ·, e)` that underlie some group.
+For products that reconstruction is automatic (`reduct-⨅`): the dropped operations on
+a product are computed coordinatewise from the factors, so they are always present.
 
-+  The monoid `(ℤ , +, 0)` is a reduct of the group `(ℤ , + , - , 0)`, so `(ℤ , +, 0) ∈ reduct φ 𝒱`.
-+  As monoids `(ℕ , +, 0) ≤ (ℤ , +, 0)` — `ℕ` is closed under `+` and the inclusion is an
-   injective monoid homomorphism — so `(ℕ , +, 0) ∈ S (reduct φ 𝒱)`.
-+  But `(ℕ , +, 0)` is **not** a monoid reduct of some group: there is no group whose
-   carrier is `ℕ` and whose binary operation is `+`, since any nonzero natural number
-   has no additive inverse in `ℕ`.  So `(ℕ , +, 0) ∉ reduct φ 𝒱`.
+For subalgebras and quotients it can fail, because a sub- or quotient-algebra of a
+reduct generally cannot be re-equipped with the operations `φ` forgot.
 
-Hence `S (reduct φ 𝒱) ⊈ reduct φ 𝒱`, so `reduct φ 𝒱` is not closed under `S`, and
-therefore is **not a prevariety**.  Stated against the operator, the false inclusion is
-`S Reduct[ 𝒱 ] ⊆ Reduct[ S 𝒱 ]` — it would require a sub-monoid of a group to be the reduct of
-a subgroup, which `ℕ ⊆ ℤ` refutes.
+Categorically: `reduct φ` is a right adjoint — `F ⊣ reduct φ` — so it preserves
+limits, which is why products are the well-behaved case.
 
-**On `H`**.  Class-level `H`-closure, `H Reduct[ 𝒱 ] ⊆ Reduct[ H 𝒱 ]`, also fails in general,
-for the same reconstruction reason: the kernel of a surjective `𝑆₁`-homomorphism out of a reduct
-is an `𝑆₁`-congruence, but need not be an `𝑆₂`-congruence, so the quotient need not carry the
-dropped operations.  Notably, for the group example above it happens to *hold* — every
-monoid-congruence of a group is a group-congruence (from `a θ b` one derives `b⁻¹ θ a⁻¹` by
-multiplying on both sides), so a monoid-quotient of a group is again a group-monoid.
+##### Counterexamples
+
+1.  Let `𝑆₂` be the group signature with binary `·`, unary `⁻¹`, and nullary `e`; let
+    `𝑆₁` be the monoid signature with binary `·` and nullary `e`; let `φ : 𝑆₁ ↪ 𝑆₂`
+    be the natural inclusion; then `reduct φ` forgets `⁻¹` keeping `·` and `e`.  Take
+    `𝒱` to be the variety of groups.  Then `reduct φ 𝒱` is the class of monoid
+    reducts of 𝒱 — monoids `(M , ·, e)` such that `(M , ·, ⁻¹, e)` forms a group.
+
+    +  The monoid `(ℤ , + , 0)` is a reduct of the group `(ℤ , + , - , 0)`, so
+       `(ℤ , + , 0) ∈ reduct φ 𝒱`.
+    +  As monoids, `(ℕ , + , 0) ≤ (ℤ , + , 0)` — `ℕ` is closed under `+` and the
+       inclusion is an injective monoid homomorphism — so `(ℕ , + , 0) ∈ S (reduct φ 𝒱)`.
+    +  But `(ℕ , + , 0)` is *not* a monoid reduct of some group; there is no group whose
+       carrier is `ℕ` and whose binary operation is `+`, since any nonzero natural number
+       has no additive inverse in `ℕ`, so `(ℕ , + , 0) ∉ reduct φ 𝒱`.
+
+    This proves that `S (reduct φ 𝒱) ⊈ reduct φ 𝒱`, so `reduct φ 𝒱` is not closed under
+    `S`, and therefore is not a prevariety.
+
+    Stated against the operator, the false inclusion is `S Reduct[ 𝒱 ] ⊆ Reduct[ S 𝒱 ]`;
+    it would require a sub-monoid of a group to be the reduct of a subgroup, which
+    `ℕ ⊆ ℤ` refutes.
+
+2.  Class-level `H`-closure, `H Reduct[ 𝒱 ] ⊆ Reduct[ H 𝒱 ]`, also fails in general,
+    for the same reconstruction reason: the kernel of a surjective `𝑆₁`-homomorphism
+    out of a reduct is an `𝑆₁`-congruence, but need not be an `𝑆₂`-congruence, so the
+    quotient need not carry the dropped operations.  Notably, for the group example
+    above it happens to *hold* — every monoid-congruence of a group is a
+    group-congruence (from `a θ b` one derives `b⁻¹ θ a⁻¹` by multiplying on both
+    sides), so a monoid-quotient of a group is again a group-monoid.
 
 In short, `reduct φ 𝒱` is a product-closed (pseudo-elementary) class, contained in a
-variety by `reduct-⊧`, but not itself a prevariety.
+variety by `reduct-⊧`, but is not a prevariety.
 
 --------------------------------------
 
 [^1]: The closure operators `H`, `S`, and `P` are defined in the [Setoid.Varieties.Closure][] module.
 
-[^2]: [#345](https://github.com/ualib/agda-algebras/issues/345)
+[^2]: This was indeed what GitHub Issue [#345](https://github.com/ualib/agda-algebras/issues/345) proposed, prompting this exploration of the reduct functor in a submodule of the `Varieties`{.AgdaModule} module.
 
 {% include UALib.Links.md %}
