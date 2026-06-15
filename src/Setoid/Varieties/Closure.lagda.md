@@ -113,7 +113,7 @@ module _ {α ρᵃ : Level} where
     a = α ⊔ ρᵃ
 
   V′ : ∀ ℓ ι → Pred(Algebra α ρᵃ)(a ⊔ ov ℓ) → Pred(Algebra α ρᵃ) (a ⊔ ov(a ⊔ ℓ ⊔ ι))
-  V′ ℓ ι 𝒦 = V {α}{ρᵃ}{α}{ρᵃ}{α}{ρᵃ}{α}{ρᵃ} ℓ ι 𝒦
+  V′ ℓ ι 𝒦 = V {α}{ρᵃ}{α}{ρᵃ}{α}{ρᵃ} ℓ ι 𝒦
 ```
 
 With the closure operator V representing closure under HSP, we represent formally
