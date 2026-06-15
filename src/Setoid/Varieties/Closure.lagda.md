@@ -208,6 +208,31 @@ Of course, this is proved by establishing two inclusions, but one of them is tri
 ```
 
 
+The expansiveness lemmas above are stated with `_⊆_`, i.e. `𝒦 ⊆ ⊙ ℓ … 𝒦`, which
+unfolds to `∀ {𝑨} → 𝑨 ∈ 𝒦 → 𝑨 ∈ ⊙ ℓ … 𝒦` with both the class `𝒦`{.AgdaBound} and the
+element `𝑨`{.AgdaBound} implicit.  Recovering them from a single membership proof is a
+higher-order unification problem (`_𝒦 _𝑨 ≟ (𝑨 ∈ 𝒦)`) that Agda cannot solve once the
+class predicate reduces.  The variants below take the class `𝒦`{.AgdaBound}
+*explicitly*, so a membership in a closure operator follows directly from a membership
+in the class with nothing to infer.  The `_⊆_` forms above remain the abstract
+statements; these are the ergonomic entry points (`V-expa′`{.AgdaFunction} is the one
+exercised by `Examples.Setoid.HSPCommutativeMonoid`{.AgdaModule}).
+
+```agda
+ H-expa′ : ∀ ℓ (𝒦 : Pred (Algebra α ρᵃ)(a ⊔ ov ℓ)) {𝑨} → 𝑨 ∈ 𝒦 → 𝑨 ∈ H ℓ 𝒦
+ H-expa′ ℓ 𝒦 = H-expa {ℓ}{𝒦}
+
+ S-expa′ : ∀ ℓ (𝒦 : Pred (Algebra α ρᵃ)(a ⊔ ov ℓ)) {𝑨} → 𝑨 ∈ 𝒦 → 𝑨 ∈ S ℓ 𝒦
+ S-expa′ ℓ 𝒦 = S-expa {ℓ}{𝒦}
+
+ P-expa′ : ∀ ℓ ι (𝒦 : Pred (Algebra α ρᵃ)(a ⊔ ov ℓ)) {𝑨} → 𝑨 ∈ 𝒦 → 𝑨 ∈ P ℓ ι 𝒦
+ P-expa′ ℓ ι 𝒦 = P-expa {ℓ}{ι}{𝒦}
+
+ V-expa′ : ∀ ℓ ι (𝒦 : Pred (Algebra α ρᵃ)(a ⊔ ov ℓ)) {𝑨} → 𝑨 ∈ 𝒦 → 𝑨 ∈ V ℓ ι 𝒦
+ V-expa′ ℓ ι 𝒦 = V-expa ℓ ι {𝒦}
+```
+
+
 We sometimes want to go back and forth between our two representations of subalgebras of algebras in a class. The tools `subalgebra→S` and `S→subalgebra` are made for that purpose.
 
 
