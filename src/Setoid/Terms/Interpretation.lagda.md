@@ -56,20 +56,20 @@ module Setoid.Terms.Interpretation where
 open import Agda.Primitive                 using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ----------------------------
-open import Function                       using ( Func )
+open import Function                       using ( Func ; _∘_ )
 open import Level                          using ( Level )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture.Signatures            using ( 𝓞 ; 𝓥 ; Signature )
-open import Overture.Signatures.Morphisms  using ( SigMorphism ; ι ; κ )
-open import Overture.Terms                  using ( Term ; ℊ ; node )
-open import Overture.Terms.Translation      using ( _✶_ )
-open import Overture.Terms.Interpretation   using ( Interpretation ; graft ; _✦_
+open import Overture.Signatures            using  ( 𝓞 ; 𝓥 ; Signature )
+open import Overture.Signatures.Morphisms  using  ( SigMorphism ; ι ; κ )
+open import Overture.Terms                 using  ( Term ; ℊ ; node )
+open import Overture.Terms.Translation     using  ( _✶_ )
+open import Overture.Terms.Interpretation  using  ( Interpretation ; graft ; _✦_
                                                   ; idᴵ ; _∘ᴵ_ ; ⟨_⟩ᴵ )
-open import Setoid.Terms.Basic             using ( _≐_ ; ≐-isRefl ; ≐-isSym ; ≐-isTrans
-                                                 ; Sub ; _[_] ; TermSetoid )
+open import Setoid.Terms.Basic             using  ( _≐_ ; ≐-isRefl ; ≐-isSym ; ≐-isTrans
+                                                  ; Sub ; _[_] ; TermSetoid )
 
-open _≐_ using ( rfl ; gnl )
+open _≐_
 open Func using ( cong ) renaming ( to to _⟨$⟩_ )
 
 private variable
@@ -96,21 +96,21 @@ Grafting in two stages is grafting once by the composite — associativity of th
 The leaf case is definitional (a single lookup either way); the node case recurses.
 
 ```agda
-graft-assoc : (u : Term {𝑆 = 𝑆} V) (α : V → Term {𝑆 = 𝑆} U) (β : U → Term {𝑆 = 𝑆} X)
+graft-assoc : (u : Term {𝑆 = 𝑆} V) (α : V → Term U) (β : U → Term X)
   → graft (graft u α) β ≐ graft u (λ z → graft (α z) β)
-graft-assoc (ℊ z)       α β = ≐-isRefl
+graft-assoc (ℊ z) α β = ≐-isRefl
 graft-assoc (node f ts) α β = gnl (λ i → graft-assoc (ts i) α β)
 ```
 
-Grafting commutes with substitution: substituting `β` into a graft equals grafting the
-`β`-substituted terms.  (Both are instances of associativity, with one side a
+Grafting commutes with substitution: substituting `β` into a graft equals grafting
+the `β`-substituted terms.  (Both are instances of associativity, with one side a
 same-level substitution `_[_]`; we state it separately because `_✦_`'s monad-morphism
 square consumes exactly this form.)
 
 ```agda
 graft-sub : (u : Term {𝑆 = 𝑆} U) (ρ : U → Term {𝑆 = 𝑆} X) (β : Sub {𝑆 = 𝑆} Y X)
   → graft u (λ y → (ρ y) [ β ]) ≐ (graft u ρ) [ β ]
-graft-sub (ℊ y)       ρ β = ≐-isRefl
+graft-sub (ℊ y) ρ β = ≐-isRefl
 graft-sub (node f ts) ρ β = gnl (λ i → graft-sub (ts i) ρ β)
 ```
 
@@ -121,8 +121,8 @@ clause rebuilds the position function).
 
 ```agda
 ✦-id : (t : Term {𝑆 = 𝑆} X) → (idᴵ ✦ t) ≐ t
-✦-id (ℊ x)       = ≐-isRefl
-✦-id (node f ts) = gnl (λ i → ✦-id (ts i))
+✦-id (ℊ x) = ≐-isRefl
+✦-id (node f ts) = gnl (✦-id ∘ ts)
 ```
 
 ##### Congruence and the monad-morphism square
@@ -132,16 +132,16 @@ function; the leaf case fixes variables, the node case consults the inductive
 hypotheses at the grafted positions.
 
 ```agda
-module _ {𝑆₁ 𝑆₂ : Signature 𝓞 𝓥} (I : Interpretation 𝑆₁ 𝑆₂) where
+module _ {𝑆₁ 𝑆₂ : Signature 𝓞 𝓥} where
+  module _ {I : Interpretation 𝑆₁ 𝑆₂} where
+    ✦-cong : {s t : Term {𝑆 = 𝑆₁} X} → s ≐ t → (I ✦ s) ≐ (I ✦ t)
+    ✦-cong (rfl x≡y) = rfl x≡y
+    ✦-cong (gnl {f = f} ps) = graft-cong (I f) (λ i → ✦-cong (ps i))
 
-  ✦-cong : {s t : Term {𝑆 = 𝑆₁} X} → s ≐ t → (I ✦ s) ≐ (I ✦ t)
-  ✦-cong (rfl x≡y)        = rfl x≡y
-  ✦-cong (gnl {f = f} ps) = graft-cong (I f) (λ i → ✦-cong (ps i))
-
-  -- The packaged form: the interpretation action as a map of term setoids.
-  ✦-func : (X : Type χ) → Func (TermSetoid {𝑆 = 𝑆₁} X) (TermSetoid {𝑆 = 𝑆₂} X)
-  ✦-func X ⟨$⟩ t = I ✦ t
-  ✦-func X .cong = ✦-cong
+    -- The packaged form: the interpretation action as a map of term setoids.
+    ✦-func : (X : Type χ) → Func (TermSetoid {𝑆 = 𝑆₁} X) (TermSetoid {𝑆 = 𝑆₂} X)
+    ✦-func X ⟨$⟩ t = I ✦ t
+    ✦-func X .cong = ✦-cong
 ```
 
 Translation commutes with substitution: interpreting `t [ σ ]` equals substituting the
@@ -161,47 +161,12 @@ generalization of `✶-sub` — proved by reducing the node case to `graft-sub`.
 ```
 
 ```agda
-  ✦-sub : (t : Term {𝑆 = 𝑆₁} Y) (σ : Sub {𝑆 = 𝑆₁} X Y)
-    → I ✦ (t [ σ ]) ≐ (I ✦ t) [ (λ y → I ✦ σ y) ]
-  ✦-sub (ℊ y)       σ = ≐-isRefl
-  ✦-sub (node f ts) σ =
-    ≐-isTrans (graft-cong (I f) (λ i → ✦-sub (ts i) σ))
-              (graft-sub  (I f) (λ i → I ✦ ts i) (λ y → I ✦ σ y))
-```
-
-##### Interpreting a graft
-
-The action of an interpretation `J` is itself a graft homomorphism — it commutes with
-grafting.  This is the lemma the composition law turns on, and its node case is a
-`graft-assoc` rearrangement.
-
-```agda
-module _ {𝑆₂ 𝑆₃ : Signature 𝓞 𝓥} (J : Interpretation 𝑆₂ 𝑆₃) where
-
-  ✦-graft : (u : Term {𝑆 = 𝑆₂} U) (ρ : U → Term {𝑆 = 𝑆₂} X)
-    → J ✦ (graft u ρ) ≐ graft (J ✦ u) (λ y → J ✦ ρ y)
-  ✦-graft (ℊ y)       ρ = ≐-isRefl
-  ✦-graft (node f us) ρ =
-    ≐-isTrans (graft-cong (J f) (λ i → ✦-graft (us i) ρ))
-              (≐-isSym (graft-assoc (J f) (λ i → J ✦ us i) (λ y → J ✦ ρ y)))
-```
-
-##### Functoriality at a composite
-
-Interpreting along a composite `J ∘ᴵ I` is interpreting twice.  This is the
-composability law: together with `✦-id` it makes `I ↦ I ✦_` a functor from the clone
-category to term-setoid endomaps, and it underwrites transitivity of the
-interpretability quasi-order.
-
-```agda
-module _ {𝑆₁ 𝑆₂ 𝑆₃ : Signature 𝓞 𝓥}
-         (J : Interpretation 𝑆₂ 𝑆₃) (I : Interpretation 𝑆₁ 𝑆₂) where
-
-  ✦-∘ : (t : Term {𝑆 = 𝑆₁} X) → ((J ∘ᴵ I) ✦ t) ≐ (J ✦ (I ✦ t))
-  ✦-∘ (ℊ x)       = ≐-isRefl
-  ✦-∘ (node f ts) =
-    ≐-isTrans (graft-cong (J ✦ I f) (λ i → ✦-∘ (ts i)))
-              (≐-isSym (✦-graft J (I f) (λ i → I ✦ ts i)))
+    ✦-sub : (t : Term {𝑆 = 𝑆₁} Y) (σ : Sub {𝑆 = 𝑆₁} X Y)
+      → I ✦ (t [ σ ]) ≐ (I ✦ t) [ (λ y → I ✦ σ y) ]
+    ✦-sub (ℊ y)       σ = ≐-isRefl
+    ✦-sub (node f ts) σ =
+      ≐-isTrans  (graft-cong (I f) (λ i → ✦-sub (ts i) σ))
+                 (graft-sub  (I f) (λ i → I ✦ ts i) (λ y → I ✦ σ y))
 ```
 
 ##### Signature morphisms as interpretations
@@ -212,11 +177,49 @@ interpretability quasi-order below extends the reduct/satisfaction story of
 [Setoid.Varieties.Invariance][] to derived operations.
 
 ```agda
-module _ {𝑆₁ 𝑆₂ : Signature 𝓞 𝓥} (φ : SigMorphism 𝑆₁ 𝑆₂) where
+  module _ (φ : SigMorphism 𝑆₁ 𝑆₂) where
+    ✦-⟨⟩ : (t : Term {𝑆 = 𝑆₁} X) → (⟨ φ ⟩ᴵ ✦ t) ≐ (φ ✶ t)
+    ✦-⟨⟩ (ℊ x) = ≐-isRefl
+    ✦-⟨⟩ (node f ts) = gnl (λ j → ✦-⟨⟩ (ts (κ φ f j)))
+```
 
-  ✦-⟨⟩ : (t : Term {𝑆 = 𝑆₁} X) → (⟨ φ ⟩ᴵ ✦ t) ≐ (φ ✶ t)
-  ✦-⟨⟩ (ℊ x)       = ≐-isRefl
-  ✦-⟨⟩ (node f ts) = gnl (λ j → ✦-⟨⟩ (ts (κ φ f j)))
+
+
+##### Interpreting a graft
+
+The action of an interpretation `J` is itself a graft homomorphism — it commutes with
+grafting.  This is the lemma the composition law turns on, and its node case is a
+`graft-assoc` rearrangement.
+
+```agda
+module _ {𝑆₂ 𝑆₃ : Signature 𝓞 𝓥} {J : Interpretation 𝑆₂ 𝑆₃} where
+
+  ✦-graft : (u : Term {𝑆 = 𝑆₂} U) (ρ : U → Term {𝑆 = 𝑆₂} X)
+    → J ✦ (graft u ρ) ≐ graft (J ✦ u) λ y → J ✦ ρ y
+  ✦-graft (ℊ y) ρ = ≐-isRefl
+  ✦-graft (node f us) ρ =
+    ≐-isTrans  (graft-cong (J f) (λ i → ✦-graft (us i) ρ))
+               (≐-isSym (graft-assoc (J f) (λ i → J ✦ us i) (λ y → J ✦ ρ y)))
+```
+
+##### Functoriality at a composite
+
+Interpreting along a composite `J ∘ᴵ I` is interpreting twice.  This is the
+composability law: together with `✦-id` it makes `I ↦ I ✦_` a functor from the clone
+category to term-setoid endomaps, and it underwrites transitivity of the
+interpretability quasi-order.
+
+```agda
+module _
+  {𝑆₁ 𝑆₂ 𝑆₃ : Signature 𝓞 𝓥}
+  {I : Interpretation 𝑆₁ 𝑆₂}
+  {J : Interpretation 𝑆₂ 𝑆₃}
+  where
+
+  ✦-∘ : (t : Term {𝑆 = 𝑆₁} X) → ((J ∘ᴵ I) ✦ t) ≐ (J ✦ (I ✦ t))
+  ✦-∘ (ℊ x) = ≐-isRefl
+  ✦-∘ (node f ts) = ≐-isTrans  (graft-cong (J ✦ I f) (λ i → ✦-∘ (ts i)))
+                               (≐-isSym (✦-graft (I f) (λ i → I ✦ ts i)))
 ```
 
 --------------------------------------

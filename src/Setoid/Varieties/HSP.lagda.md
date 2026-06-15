@@ -187,13 +187,16 @@ Finally, we are in a position to prove Birkhoff's celebrated variety theorem.
 
 ```agda
 module _ {α ρᵃ ℓ : Level}{𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
-  private ι = ov(α ⊔ ρᵃ ⊔ ℓ)
+  private
+    a ι : Level
+    a = α ⊔ ρᵃ ⊔ ℓ
+    ι = ov a
 
   open FreeHom (α ⊔ ρᵃ ⊔ ℓ) {α}{ρᵃ}{ℓ}{𝒦}
   open FreeAlgebra {ι = ι}{I = ℐ} ℰ using ( 𝔽[_] )
 
-  Birkhoff : ∀ 𝑨 → 𝑨 ∈ Mod (Th (V ℓ ι 𝒦)) → 𝑨 ∈ V ℓ ι 𝒦
-  Birkhoff 𝑨 ModThA = V-≅-lc{α}{ρᵃ}{ℓ} 𝒦 𝑨 VlA
+  Birkhoff : {𝑨 : Algebra a a} → 𝑨 ∈ Mod (Th (V ℓ ι 𝒦)) → 𝑨 ∈ V ℓ ι 𝒦
+  Birkhoff {𝑨 = 𝑨} ModThA = V-≅-lc {α} {ρᵃ} {ℓ} 𝒦 𝑨 VlA
    where
    open Setoid (Domain 𝑨) using () renaming ( Carrier to ∣A∣ )
    sp𝔽A : 𝔽[ ∣A∣ ] ∈ S{ι} ι (P ℓ ι 𝒦)
