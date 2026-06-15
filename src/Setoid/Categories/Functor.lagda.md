@@ -32,7 +32,7 @@ data, just as `Func` must carry `cong`.)
 
 The two running examples in this library are good ones to keep in mind:
 
-+  `reductF φ` ([Classical.Categories.Reduct][]) translates the world of
++  `reductF φ` ([Setoid.Categories.Reduct][]) translates the world of
    `𝑆₂`-algebras into the world of `𝑆₁`-algebras along a signature morphism `φ`: the
    object map forgets (reindexes) operations, the hom map is the identity on the
    underlying setoid maps.

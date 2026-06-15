@@ -132,8 +132,8 @@ Magma's empty theory means `opsToMagma` takes no equation arguments.  This is th
 empty-theory edge case of the `opsTo<family>` constructor pattern.
 
 ```agda
-opsToMagma : (A : Type α) (_·_ : A → A → A) → Magma α α
-opsToMagma A _·_ = record { Domain = ≡.setoid A ; Interp = interp }
+opsToMagma : {A : Type α} (_·_ : A → A → A) → Magma α α
+opsToMagma {A = A} _·_ = record { Domain = ≡.setoid A ; Interp = interp }
   where
   interp : Func (⟨ Sig-Magma ⟩ _) _
   interp ⟨$⟩ (∙-Op , args) = args 0F · args 1F

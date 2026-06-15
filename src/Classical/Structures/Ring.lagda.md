@@ -57,7 +57,7 @@ open import Classical.Signatures.Monoid             using ( Sig-Monoid ; Op-Mono
                                                     renaming ( ∙-Op to ∙-Opᵐ ; ε-Op to ε-Opᵐ )
 open import Classical.Signatures.Ring               using ( Sig-Ring ; Op-Ring ; +-Op ; 0-Op ; -Op ; ·-Op ; 1-Op )
 open import Classical.Structures.Interpret          using ( interp-cong )
-open import Classical.Structures.Reduct             using ( reductBy )
+open import Setoid.Algebras.Reduct             using ( reductBy )
 open import Classical.Structures.AbelianGroup       using ( AbelianGroup ; _⊨ᵃᵍ_ )
 open import Classical.Structures.Monoid             using ( Monoid ; _⊨ᵐᵒ_ )
 open import Classical.Theories.Ring                 using ( Eq-Ring ; Th-Ring
