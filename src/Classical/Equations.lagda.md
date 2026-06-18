@@ -86,7 +86,7 @@ however-many-variables-the-equation-needs to a pair of terms over the signature.
 <!--
 ```agda
 module _ {𝑆 : Signature 𝓞 0ℓ} {X : Type χ} where
-  open import Overture.Terms {𝑆 = 𝑆} using ( Term ; ℊ ; node )
+  open import Overture.Terms.Basic {𝑆 = 𝑆} using ( Term ; ℊ ; node )
   -- Apply an operation symbol of known arity to its term arguments.  Each helper
   -- takes the symbol and the arity-conformance evidence; `subst` is what bridges
   -- the abstract `ArityOf 𝑆 f` (an opaque type that depends on the abstract

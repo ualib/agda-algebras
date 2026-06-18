@@ -79,11 +79,11 @@ private
   x = ℊ 0F ; y = ℊ 1F ; z = ℊ 2F
 
 data Eq-Maltsev : Type where
-  malˡ malʳ : Eq-Maltsev
+  mxxy≈y mxyy≈x : Eq-Maltsev
 
 Th-Maltsev : Eq-Maltsev → Term {𝑆 = Sig-Maltsev} (Fin 3) × Term {𝑆 = Sig-Maltsev} (Fin 3)
-Th-Maltsev malˡ = m x y z , y   -- m(x, x, y) ≈ y
-Th-Maltsev malʳ = m x y y , x   -- m(x, y, y) ≈ x
+Th-Maltsev mxxy≈y = m x x y , y   -- m(x, x, y) ≈ y
+Th-Maltsev mxyy≈x = m x y y , x   -- m(x, y, y) ≈ x
 ```
 
 #### The Maltsev condition
