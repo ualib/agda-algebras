@@ -62,14 +62,14 @@ relabelling by substitution into the chosen derived term.
 module Overture.Terms.Translation where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
-open import Agda.Primitive  using () renaming ( Set to Type )
-open import Level           using ( Level )
+open import Agda.Primitive                 using () renaming ( Set to Type )
+open import Level                          using ( Level )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Overture.Signatures            using ( 𝓞 ; 𝓥 ; Signature )
 open import Overture.Signatures.Morphisms  using ( SigMorphism ; ι ; κ )
 
-import Overture.Terms as Terms
+import Overture.Terms.Basic as Terms
 
 private variable
   χ : Level

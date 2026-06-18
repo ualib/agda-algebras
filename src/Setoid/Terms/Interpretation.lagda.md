@@ -144,10 +144,11 @@ module _ {𝑆₁ 𝑆₂ : Signature 𝓞 𝓥} where
     ✦-func X .cong = ✦-cong
 ```
 
-Translation commutes with substitution: interpreting `t [ σ ]` equals substituting the
-*interpreted* assignment `λ y → I ✦ σ y` into `I ✦ t`.  (It commutes with the units by
-definition, since `I ✦ ℊ x` reduces to `ℊ x`.)  This is the monad-morphism square — the
-generalization of `✶-sub` — proved by reducing the node case to `graft-sub`.
+Translation commutes with substitution: interpreting `t [ σ ]` equals substituting
+the *interpreted* assignment `λ y → I ✦ σ y` into `I ✦ t`.  (It commutes with the
+units by definition, since `I ✦ ℊ x` reduces to `ℊ x`.)  This is the monad-morphism
+square — the generalization of `✶-sub` — proved by reducing the node case to
+`graft-sub`.
 
 ```text
                     _[ σ ]
@@ -183,8 +184,6 @@ interpretability quasi-order below extends the reduct/satisfaction story of
     ✦-⟨⟩ (node f ts) = gnl (λ j → ✦-⟨⟩ (ts (κ φ f j)))
 ```
 
-
-
 ##### Interpreting a graft
 
 The action of an interpretation `J` is itself a graft homomorphism — it commutes with
@@ -216,9 +215,9 @@ module _
   {J : Interpretation 𝑆₂ 𝑆₃}
   where
 
-  ✦-∘ : (t : Term {𝑆 = 𝑆₁} X) → ((J ∘ᴵ I) ✦ t) ≐ (J ✦ (I ✦ t))
+  ✦-∘ : (t : Term {𝑆 = 𝑆₁} X) → (J ∘ᴵ I) ✦ t ≐ J ✦ (I ✦ t)
   ✦-∘ (ℊ x) = ≐-isRefl
-  ✦-∘ (node f ts) = ≐-isTrans  (graft-cong (J ✦ I f) (λ i → ✦-∘ (ts i)))
+  ✦-∘ (node f ts) = ≐-isTrans  (graft-cong (J ✦ I f) (✦-∘ ∘ ts))
                                (≐-isSym (✦-graft (I f) (λ i → I ✦ ts i)))
 ```
 
