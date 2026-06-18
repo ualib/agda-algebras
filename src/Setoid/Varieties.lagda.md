@@ -24,10 +24,10 @@ open import Setoid.Varieties.HSP               {𝑆 = 𝑆}  public
 open import Setoid.Varieties.Interpretation             public
 open import Setoid.Varieties.Invariance                 public
 open import Setoid.Varieties.Invariants        {𝑆 = 𝑆}  public
-open import Setoid.Varieties.Maltsev
+open import Setoid.Varieties.Maltsev                    public
 open import Setoid.Varieties.Preservation      {𝑆 = 𝑆}  public
 open import Setoid.Varieties.Properties        {𝑆 = 𝑆}  public
-open import Setoid.Varieties.Reducts
+open import Setoid.Varieties.Reducts                    public
 open import Setoid.Varieties.SoundAndComplete  {𝑆 = 𝑆}  public
 ```
 

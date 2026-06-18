@@ -16,7 +16,7 @@ A *theory interpretation* generalizes this one decisive step: it sends each
 operation symbol `o` of `𝑆₁` to a *term* of `𝑆₂` — a *derived operation* of `𝑆₂`, an
 `𝑆₂`-term in the argument positions `ArityOf 𝑆₁ o` of `o`.
 
-This is the term-valued generalization of asignature morphism, and it is exactly the
+This is the term-valued generalization of a signature morphism, and it is exactly the
 data with which universal algebra defines one variety's operations inside another
 (Garcia–Taylor's "definitions"[^1]): a Maltsev term, a majority term, or a
 near-unanimity term is such an assignment of one fresh symbol to a derived term.

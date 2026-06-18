@@ -25,9 +25,9 @@ open import Setoid.Terms.Properties {𝑆 = 𝑆}  public
 open import Setoid.Terms.Translation         public
 ```
 
-(The laws of term *translation* along a signature morphism live in
-[Setoid.Terms.Translation][]; that module relates two signatures at once, so it is
-not `{𝑆}`-parameterized and is imported directly rather than re-exported here.)
+(The two-signature modules [Setoid.Terms.Translation][] and
+[Setoid.Terms.Interpretation][] relate two signatures at once, so they are not
+`{𝑆}`-parameterized; they are nonetheless re-exported here for convenience.)
 
 
 --------------------------------
