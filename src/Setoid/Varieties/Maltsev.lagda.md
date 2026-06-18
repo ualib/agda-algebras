@@ -14,22 +14,20 @@ A **Maltsev term** for a variety `𝒱` is a ternary term `m` satisfying
 
     m(x, x, y) ≈ y      and      m(x, y, y) ≈ x,
 
-and a variety has one exactly when it is congruence-permutable — the original, and still
-paradigmatic, *Maltsev condition*.  This is general universal algebra: it is a property of
-an arbitrary variety, phrased over an arbitrary signature, with no commitment to any
-particular structure.  So — like its companions [Setoid.Varieties.Interpretation][]
-(the interpretability quasi-order) and [Setoid.Varieties.Invariance][] (reduct-invariance
-of satisfaction) — it lives in the `Setoid/` foundation, **not** in `Classical/`.
+and a variety has one exactly when it is congruence-permutable — the original, and
+still paradigmatic, *Maltsev condition*.  This is general universal algebra: it is a
+property of an arbitrary variety, phrased over an arbitrary signature, with no
+commitment to any particular structure.
 
 The module fixes the abstract data of the condition and frames it as a theory
-interpretation ([Setoid.Varieties.Interpretation][]): the one-ternary-symbol signature
-`Sig-Maltsev`, the two-equation theory `Th-Maltsev`, and the predicate
-`HasMaltsevTerm ℰ = Th-Maltsev ≼ ℰ` — "`ℰ` admits a Maltsev term" is exactly "the Maltsev
-theory interprets into `ℰ`".  A *worked* witness, that the variety of groups has the
-Maltsev term `x ∙ (y ⁻¹ ∙ z)`, is necessarily structure-specific (it consumes the group
-operations and laws), so it lives one layer up, in
-[Classical.Interpretations.Maltsev][] — the same Setoid-general / Classical-specific split
-as `Setoid.Varieties.Invariance` versus the group-specific `Classical.Categories.Forgetful`.
+interpretation ([Setoid.Varieties.Interpretation][]): the one-ternary-symbol
+signature `Sig-Maltsev`, the two-equation theory `Th-Maltsev`, and the predicate
+`HasMaltsevTerm ℰ = Th-Maltsev ≼ ℰ` — "`ℰ` admits a Maltsev term" is exactly
+"the Maltsev theory interprets into `ℰ`".
+
+A *worked* witness, that the variety of groups has the Maltsev term `x ∙ (y ⁻¹ ∙ z)`,
+is structure-specific (it consumes the group operations and laws), so it lives one
+layer up, in [Classical.Interpretations.Maltsev][].
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -51,8 +49,8 @@ open import Setoid.Varieties.Interpretation using ( _≼_ )
 
 #### The Maltsev signature and theory
 
-`Sig-Maltsev` has a single ternary operation symbol; `Th-Maltsev` carries the two Maltsev
-equations over the variable carrier `Fin 3` (`0F` for `x`, `1F` for `y`).
+`Sig-Maltsev` has a single ternary operation symbol; `Th-Maltsev` carries the two
+Maltsev equations over the variable carrier `Fin 3` (`0F` for `x`, `1F` for `y`).
 
 ```agda
 data Op-Maltsev : Type where
@@ -72,16 +70,20 @@ tri a b c 1F = b
 tri a b c 2F = c
 
 -- the ternary application m(a, b, c) as a Sig-Maltsev term
-mlt : {X : Type} → Term {𝑆 = Sig-Maltsev} X → Term {𝑆 = Sig-Maltsev} X
+m : {X : Type} → Term {𝑆 = Sig-Maltsev} X → Term {𝑆 = Sig-Maltsev} X
   → Term {𝑆 = Sig-Maltsev} X → Term {𝑆 = Sig-Maltsev} X
-mlt a b c = node m-Op (tri a b c)
+m a b c = node m-Op (tri a b c)
+
+private
+  x y z : Term {𝑆 = Sig-Maltsev} (Fin 3)
+  x = ℊ 0F ; y = ℊ 1F ; z = ℊ 2F
 
 data Eq-Maltsev : Type where
   malˡ malʳ : Eq-Maltsev
 
 Th-Maltsev : Eq-Maltsev → Term {𝑆 = Sig-Maltsev} (Fin 3) × Term {𝑆 = Sig-Maltsev} (Fin 3)
-Th-Maltsev malˡ = mlt (ℊ 0F) (ℊ 0F) (ℊ 1F) , ℊ 1F   -- m(x, x, y) ≈ y
-Th-Maltsev malʳ = mlt (ℊ 0F) (ℊ 1F) (ℊ 1F) , ℊ 0F   -- m(x, y, y) ≈ x
+Th-Maltsev malˡ = m x y z , y   -- m(x, x, y) ≈ y
+Th-Maltsev malʳ = m x y y , x   -- m(x, y, y) ≈ x
 ```
 
 #### The Maltsev condition
@@ -97,9 +99,9 @@ interpretability relation `_≼_` relates theories over a common level pair); th
 restriction for the finitary algebraic theories the Maltsev condition concerns.
 
 ```agda
-HasMaltsevTerm : {α ρ χ ι : Level} {𝑆 : Signature 0ℓ 0ℓ} {X : Type χ} {Idx : Type ι}
+HasMaltsevTerm : {χ ι : Level} {𝑆 : Signature 0ℓ 0ℓ} {X : Type χ} {Idx : Type ι}
   → (Idx → Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X) → Type _
-HasMaltsevTerm {α = α} {ρ = ρ} ℰ = _≼_ {α = α} {ρ = ρ} Th-Maltsev ℰ
+HasMaltsevTerm ℰ = Th-Maltsev ≼ ℰ
 ```
 
 --------------------------------------

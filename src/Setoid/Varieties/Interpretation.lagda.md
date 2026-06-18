@@ -74,7 +74,7 @@ module Setoid.Varieties.Interpretation where
 open import Agda.Primitive                 using () renaming ( Set to Type )
 open import Data.Product                   using ( _,_ ; _×_ ; Σ-syntax ; proj₁ ; proj₂ )
 open import Function                       using ( Func )
-open import Level                          using ( Level ; _⊔_ )
+open import Level                          using ( Level ; _⊔_ ; 0ℓ)
 open import Relation.Binary                using ( Setoid )
 
 open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl )
@@ -244,13 +244,13 @@ indexed by the algebra-level pair `(α , ρ)` at which models are tested, exactl
 satisfaction relations are.
 
 ```agda
-_≼_ : {𝑆₁ 𝑆₂ : Signature 𝓞 𝓥} {α ρ : Level}
+_≼_ : {𝑆₁ 𝑆₂ : Signature 𝓞 𝓥}
   {X₁ : Type χ₁} {X₂ : Type χ₂} {Idx₁ : Type ι₁} {Idx₂ : Type ι₂}
   → (Idx₁ → Term {𝑆 = 𝑆₁} X₁ × Term {𝑆 = 𝑆₁} X₁)
   → (Idx₂ → Term {𝑆 = 𝑆₂} X₂ × Term {𝑆 = 𝑆₂} X₂) → Type _
-_≼_ {𝑆₁ = 𝑆₁} {𝑆₂} {α} {ρ} ℰ₁ ℰ₂ =
+_≼_ {𝑆₁ = 𝑆₁} {𝑆₂} ℰ₁ ℰ₂ =
   Σ[ I ∈ Interpretation 𝑆₁ 𝑆₂ ]
-    ((𝑩 : Algebra {𝑆 = 𝑆₂} α ρ) → 𝑩 ⊨ₑ ℰ₂ → reductᴵ I 𝑩 ⊨ₑ ℰ₁)
+    ((𝑩 : Algebra {𝑆 = 𝑆₂} 0ℓ 0ℓ) → 𝑩 ⊨ₑ ℰ₂ → reductᴵ I 𝑩 ⊨ₑ ℰ₁)
 
 infix 4 _≼_
 ```
@@ -259,11 +259,11 @@ Reflexivity: the identity interpretation works, because `idᴵ ✦_` is the iden
 to `_≐_` (`✦-id`) and satisfaction respects `_≐_`.
 
 ```agda
-≼-refl : {𝑆 : Signature 𝓞 𝓥} {α ρ : Level} {X : Type χ} {Idx : Type ι}
+≼-refl : {𝑆 : Signature 𝓞 𝓥} {X : Type χ} {Idx : Type ι}
   (ℰ : Idx → Term X × Term X) → ℰ ≼ ℰ
-≼-refl {𝑆 = 𝑆} {α} {ρ} ℰ = idᴵ , red
+≼-refl {𝑆 = 𝑆} ℰ = idᴵ , red
   where
-  red : (𝑩 : Algebra {𝑆 = 𝑆} α ρ) → 𝑩 ⊨ₑ ℰ → reductᴵ idᴵ 𝑩 ⊨ₑ ℰ
+  red : (𝑩 : Algebra {𝑆 = 𝑆} 0ℓ 0ℓ) → 𝑩 ⊨ₑ ℰ → reductᴵ idᴵ 𝑩 ⊨ₑ ℰ
   red 𝑩 B⊨ k =
     ⊧-interp idᴵ 𝑩 {s = proj₁ (ℰ k)} {t = proj₂ (ℰ k)}
       (⊧-≐ 𝑩 (≐-isSym (✦-id (ℰ k .proj₁))) (≐-isSym (✦-id (ℰ k .proj₂))) (B⊨ k))
@@ -274,7 +274,7 @@ implications, and re-fold the iterated reduct into the composite reduct with
 `reductᴵ-∘-⊧`.
 
 ```agda
-≼-trans : {𝑆₁ 𝑆₂ 𝑆₃ : Signature 𝓞 𝓥} {α ρ : Level}
+≼-trans : {𝑆₁ 𝑆₂ 𝑆₃ : Signature 𝓞 𝓥}
   {X₁ : Type χ₁} {X₂ : Type χ₂} {X₃ : Type χ₃}
   {Idx₁ : Type ι₁} {Idx₂ : Type ι₂} {Idx₃ : Type ι₃}
   (ℰ₁ : Idx₁ → Term {𝑆 = 𝑆₁} X₁ × Term {𝑆 = 𝑆₁} X₁)
@@ -282,9 +282,9 @@ implications, and re-fold the iterated reduct into the composite reduct with
   (ℰ₃ : Idx₃ → Term {𝑆 = 𝑆₃} X₃ × Term {𝑆 = 𝑆₃} X₃)
   → ℰ₁ ≼ ℰ₂ → ℰ₂ ≼ ℰ₃ → ℰ₁ ≼ ℰ₃
 
-≼-trans {𝑆₃ = 𝑆₃} {α}{ρ} ℰ₁ ℰ₂ ℰ₃ (I , Ihyp) (J , Jhyp) = J ∘ᴵ I , red
+≼-trans {𝑆₃ = 𝑆₃} ℰ₁ ℰ₂ ℰ₃ (I , Ihyp) (J , Jhyp) = J ∘ᴵ I , red
   where
-  red : (𝑪 : Algebra {𝑆 = 𝑆₃} α ρ) → 𝑪 ⊨ₑ ℰ₃ → reductᴵ (J ∘ᴵ I) 𝑪 ⊨ₑ ℰ₁
+  red : (𝑪 : Algebra {𝑆 = 𝑆₃} 0ℓ 0ℓ) → 𝑪 ⊨ₑ ℰ₃ → reductᴵ (J ∘ᴵ I) 𝑪 ⊨ₑ ℰ₁
   red 𝑪 C⊨ k =
     reductᴵ-∘-⊧ I J 𝑪 {s = proj₁ (ℰ₁ k)} {t = proj₂ (ℰ₁ k)}
       (Ihyp (reductᴵ J 𝑪) (Jhyp 𝑪 C⊨) k)
