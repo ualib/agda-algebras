@@ -99,9 +99,9 @@ interpretability relation `_≼_` relates theories over a common level pair); th
 restriction for the finitary algebraic theories the Maltsev condition concerns.
 
 ```agda
-HasMaltsevTerm : {χ ι : Level} {𝑆 : Signature 0ℓ 0ℓ} {X : Type χ} {Idx : Type ι}
+HasMaltsevTerm : {α ρ χ ι : Level} {𝑆 : Signature 0ℓ 0ℓ} {X : Type χ} {Idx : Type ι}
   → (Idx → Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X) → Type _
-HasMaltsevTerm ℰ = Th-Maltsev ≼ ℰ
+HasMaltsevTerm {α = α} {ρ = ρ} ℰ = _≼_ {α = α} {ρ = ρ} Th-Maltsev ℰ
 ```
 
 --------------------------------------
