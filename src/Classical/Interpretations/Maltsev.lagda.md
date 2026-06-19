@@ -80,9 +80,9 @@ laws via two evaluation lemmas — `eval-m`, which unfolds the chosen derived te
 application through `graft-eval` — and the two Maltsev identities (`mal-lhsᵍ`, `mal-rhsᵍ`).
 
 ```agda
-red : {α ρ : Level} (𝑩 : Algebra α ρ) → 𝑩 ⊨ₑ Th-Group → reductᴵ I-grp 𝑩 ⊨ₑ Th-Maltsev
-red 𝑩 g = λ  { mxxy≈y → ⊧-interp I-grp 𝑩 {s = proj₁ (Th-Maltsev mxxy≈y)} {t = proj₂ (Th-Maltsev mxxy≈y)} pfˡ
-             ; mxyy≈x → ⊧-interp I-grp 𝑩 {s = proj₁ (Th-Maltsev mxyy≈x)} {t = proj₂ (Th-Maltsev mxyy≈x)} pfʳ }
+red : {α ρ : Level} (𝑩 : Algebra α ρ) → 𝑩 ⊨ₑ Th-Group → reductᴵ 𝑩 I-grp ⊨ₑ Th-Maltsev
+red 𝑩 g = λ  { mxxy≈y → ⊧-interp 𝑩 I-grp {s = proj₁ (Th-Maltsev mxxy≈y)} {t = proj₂ (Th-Maltsev mxxy≈y)} pfˡ
+             ; mxyy≈x → ⊧-interp 𝑩 I-grp {s = proj₁ (Th-Maltsev mxyy≈x)} {t = proj₂ (Th-Maltsev mxyy≈x)} pfʳ }
   where
   𝒢 : Group _ _
   𝒢 = 𝑩 , g

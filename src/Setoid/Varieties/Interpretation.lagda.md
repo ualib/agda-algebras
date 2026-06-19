@@ -140,9 +140,13 @@ and interprets each `𝑆₁`-symbol `o` by evaluating `I o` (a derived operatio
 `cong` is the congruence of that evaluation.
 
 ```agda
-module _ {𝑆₁ 𝑆₂ : Signature 𝓞 𝓥} where
-
-  module _ (I : Interpretation 𝑆₁ 𝑆₂) (𝑩 : Algebra {𝑆 = 𝑆₂} α ρ) where
+module _
+  {𝑆₁ 𝑆₂ : Signature 𝓞 𝓥}
+  (𝑩 : Algebra {𝑆 = 𝑆₂} α ρ)
+  where
+  module _
+    (I : Interpretation 𝑆₁ 𝑆₂)
+    where
     private module EnvB = Environment 𝑩
     open EnvB using () renaming ( ⟦_⟧ to ⟦_⟧₂ )
     open Algebra using (Domain ; Interp)
@@ -194,10 +198,9 @@ the ordinary signature reduct, operation by operation, by `refl` — the algebra
 witness that `_✦_` (and hence this whole development) extends to derived operations.
 
 ```agda
-  module _ {φ : SigMorphism 𝑆₁ 𝑆₂} where
-    reductᴵ-⟨⟩ : {o : OperationSymbolsOf 𝑆₁} {𝑩 : Algebra {𝑆 = 𝑆₂} α ρ}
-      → o ^ reductᴵ ⟨ φ ⟩ᴵ 𝑩 ≡ o ^ reduct φ 𝑩
-    reductᴵ-⟨⟩ = refl
+  reductᴵ-⟨⟩ : {φ : SigMorphism 𝑆₁ 𝑆₂} {o : OperationSymbolsOf 𝑆₁}
+    → o ^ reductᴵ ⟨ φ ⟩ᴵ ≡ o ^ reduct φ 𝑩
+  reductᴵ-⟨⟩ = refl
 ```
 
 #### The interpretability quasi-order
@@ -210,8 +213,7 @@ module _ {𝑆 : Signature 𝓞 𝓥} where
   open EqLogic {𝑆 = 𝑆} using ( _⊧_≈_ )
 
   infix 4 _⊨ₑ_
-  _⊨ₑ_ : {Idx : Type ι} → Algebra {𝑆 = 𝑆} α ρ
-    → (Idx → Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X) → Type _
+  _⊨ₑ_ : {Idx : Type ι} → Algebra α ρ → (Idx → Term X × Term X) → Type _
   𝑨 ⊨ₑ ℰ = ∀ k → 𝑨 ⊧ proj₁ (ℰ k) ≈ proj₂ (ℰ k)
 ```
 
@@ -230,12 +232,12 @@ module _
   open EqLogic {𝑆 = 𝑆₁} using ( _⊧_≈_ )
 
   reductᴵ-∘-⊧ : {s t : Term {𝑆 = 𝑆₁} X}
-    → reductᴵ I (reductᴵ J 𝑪) ⊧ s ≈ t → reductᴵ (J ∘ᴵ I) 𝑪 ⊧ s ≈ t
+    → reductᴵ (reductᴵ 𝑪 J) I ⊧ s ≈ t → reductᴵ 𝑪 (J ∘ᴵ I) ⊧ s ≈ t
   reductᴵ-∘-⊧ {s = s} {t} hyp =
-    ⊧-interp (J ∘ᴵ I) 𝑪 {s = s} {t = t}
+    ⊧-interp 𝑪 (J ∘ᴵ I) {s = s} {t}
       (⊧-≐ 𝑪 (≐-isSym (✦-∘ s)) (≐-isSym (✦-∘ t))
-        (⊧-uninterp J 𝑪 {s = I ✦ s} {t = I ✦ t}
-          (⊧-uninterp I (reductᴵ J 𝑪) {s = s} {t = t} hyp)))
+        (⊧-uninterp 𝑪 J {s = I ✦ s} {t = I ✦ t}
+          (⊧-uninterp (reductᴵ 𝑪 J) I {s = s} {t = t} hyp)))
 ```
 
 `ℰ₁ ≼ ℰ₂` says `ℰ₁` (a theory of `𝑆₁`) is interpretable in `ℰ₂` (a theory of `𝑆₂`):
@@ -244,29 +246,35 @@ indexed by the algebra-level pair `(α , ρ)` at which models are tested, exactl
 satisfaction relations are.
 
 ```agda
-_≼_ : {𝑆₁ 𝑆₂ : Signature 𝓞 𝓥} {α ρ : Level}
-  {X₁ : Type χ₁} {X₂ : Type χ₂} {Idx₁ : Type ι₁} {Idx₂ : Type ι₂}
-  → (Idx₁ → Term {𝑆 = 𝑆₁} X₁ × Term {𝑆 = 𝑆₁} X₁)
-  → (Idx₂ → Term {𝑆 = 𝑆₂} X₂ × Term {𝑆 = 𝑆₂} X₂) → Type _
-_≼_ {𝑆₁ = 𝑆₁} {𝑆₂ = 𝑆₂} {α = α} {ρ = ρ} ℰ₁ ℰ₂ =
-  Σ[ I ∈ Interpretation 𝑆₁ 𝑆₂ ]
-    ((𝑩 : Algebra {𝑆 = 𝑆₂} α ρ) → 𝑩 ⊨ₑ ℰ₂ → reductᴵ I 𝑩 ⊨ₑ ℰ₁)
+module Interpret (α ρ : Level) where
 
-infix 4 _≼_
+  _≼_ : {𝑆₁ 𝑆₂ : Signature 𝓞 𝓥}
+    {X₁ : Type χ₁} {X₂ : Type χ₂} {Idx₁ : Type ι₁} {Idx₂ : Type ι₂}
+    → (Idx₁ → Term {𝑆 = 𝑆₁} X₁ × Term {𝑆 = 𝑆₁} X₁)
+    → (Idx₂ → Term {𝑆 = 𝑆₂} X₂ × Term {𝑆 = 𝑆₂} X₂) → Type _
+  _≼_ {𝑆₁ = 𝑆₁} {𝑆₂ = 𝑆₂} ℰ₁ ℰ₂ =
+    Σ[ I ∈ Interpretation 𝑆₁ 𝑆₂ ]
+      ((𝑩 : Algebra {𝑆 = 𝑆₂} α ρ) → 𝑩 ⊨ₑ ℰ₂ → reductᴵ 𝑩 I ⊨ₑ ℰ₁)
+
+  infix 4 _≼_
 ```
 
 Reflexivity: the identity interpretation works, because `idᴵ ✦_` is the identity up
 to `_≐_` (`✦-id`) and satisfaction respects `_≐_`.
 
 ```agda
-≼-refl : {𝑆 : Signature 𝓞 𝓥} {α ρ : Level} {X : Type χ} {Idx : Type ι}
-  (ℰ : Idx → Term X × Term X) → _≼_ {α = α} {ρ = ρ} ℰ ℰ
-≼-refl {𝑆 = 𝑆} {α = α} {ρ = ρ} ℰ = idᴵ , red
-  where
-  red : (𝑩 : Algebra {𝑆 = 𝑆} α ρ) → 𝑩 ⊨ₑ ℰ → reductᴵ idᴵ 𝑩 ⊨ₑ ℰ
-  red 𝑩 B⊨ k =
-    ⊧-interp idᴵ 𝑩 {s = proj₁ (ℰ k)} {t = proj₂ (ℰ k)}
-      (⊧-≐ 𝑩 (≐-isSym (✦-id (ℰ k .proj₁))) (≐-isSym (✦-id (ℰ k .proj₂))) (B⊨ k))
+module _ α ρ where
+
+  open Interpret α ρ
+
+  ≼-refl : {𝑆 : Signature 𝓞 𝓥} {X : Type χ} {Idx : Type ι}
+    (ℰ : Idx → Term X × Term X) → ℰ ≼ ℰ
+  ≼-refl {𝑆 = 𝑆} ℰ = idᴵ , red
+    where
+    red : (𝑩 : Algebra {𝑆 = 𝑆} α ρ) → 𝑩 ⊨ₑ ℰ → reductᴵ 𝑩 idᴵ ⊨ₑ ℰ
+    red 𝑩 B⊨ k =
+      ⊧-interp 𝑩 idᴵ {s = proj₁ (ℰ k)} {t = proj₂ (ℰ k)}
+        (⊧-≐ 𝑩 (≐-isSym (✦-id (ℰ k .proj₁))) (≐-isSym (✦-id (ℰ k .proj₂))) (B⊨ k))
 ```
 
 Transitivity: compose the interpretations with `_∘ᴵ_`, chain the two reduct
@@ -274,20 +282,20 @@ implications, and re-fold the iterated reduct into the composite reduct with
 `reductᴵ-∘-⊧`.
 
 ```agda
-≼-trans : {𝑆₁ 𝑆₂ 𝑆₃ : Signature 𝓞 𝓥} {α ρ : Level}
-  {X₁ : Type χ₁} {X₂ : Type χ₂} {X₃ : Type χ₃}
-  {Idx₁ : Type ι₁} {Idx₂ : Type ι₂} {Idx₃ : Type ι₃}
-  (ℰ₁ : Idx₁ → Term {𝑆 = 𝑆₁} X₁ × Term {𝑆 = 𝑆₁} X₁)
-  (ℰ₂ : Idx₂ → Term {𝑆 = 𝑆₂} X₂ × Term {𝑆 = 𝑆₂} X₂)
-  (ℰ₃ : Idx₃ → Term {𝑆 = 𝑆₃} X₃ × Term {𝑆 = 𝑆₃} X₃)
-  → _≼_ {α = α} {ρ = ρ} ℰ₁ ℰ₂ → _≼_ {α = α} {ρ = ρ} ℰ₂ ℰ₃ → _≼_ {α = α} {ρ = ρ} ℰ₁ ℰ₃
+  ≼-trans : {𝑆₁ 𝑆₂ 𝑆₃ : Signature 𝓞 𝓥}
+    {X₁ : Type χ₁} {X₂ : Type χ₂} {X₃ : Type χ₃}
+    {Idx₁ : Type ι₁} {Idx₂ : Type ι₂} {Idx₃ : Type ι₃}
+    (ℰ₁ : Idx₁ → Term {𝑆 = 𝑆₁} X₁ × Term {𝑆 = 𝑆₁} X₁)
+    (ℰ₂ : Idx₂ → Term {𝑆 = 𝑆₂} X₂ × Term {𝑆 = 𝑆₂} X₂)
+    (ℰ₃ : Idx₃ → Term {𝑆 = 𝑆₃} X₃ × Term {𝑆 = 𝑆₃} X₃)
+    → ℰ₁ ≼ ℰ₂ → ℰ₂ ≼ ℰ₃ → ℰ₁ ≼ ℰ₃
 
-≼-trans {𝑆₃ = 𝑆₃} {α = α} {ρ = ρ} ℰ₁ ℰ₂ ℰ₃ (I , Ihyp) (J , Jhyp) = J ∘ᴵ I , red
-  where
-  red : (𝑪 : Algebra {𝑆 = 𝑆₃} α ρ) → 𝑪 ⊨ₑ ℰ₃ → reductᴵ (J ∘ᴵ I) 𝑪 ⊨ₑ ℰ₁
-  red 𝑪 C⊨ k =
-    reductᴵ-∘-⊧ I J 𝑪 {s = proj₁ (ℰ₁ k)} {t = proj₂ (ℰ₁ k)}
-      (Ihyp (reductᴵ J 𝑪) (Jhyp 𝑪 C⊨) k)
+  ≼-trans {𝑆₃ = 𝑆₃} ℰ₁ ℰ₂ ℰ₃ (I , Ihyp) (J , Jhyp) = J ∘ᴵ I , red
+    where
+    red : (𝑪 : Algebra {𝑆 = 𝑆₃} α ρ) → 𝑪 ⊨ₑ ℰ₃ → reductᴵ 𝑪 (J ∘ᴵ I) ⊨ₑ ℰ₁
+    red 𝑪 C⊨ k =
+      reductᴵ-∘-⊧ I J 𝑪 {s = proj₁ (ℰ₁ k)} {t = proj₂ (ℰ₁ k)}
+        (Ihyp (reductᴵ 𝑪 J) (Jhyp 𝑪 C⊨) k)
 ```
 
 --------------------------------------

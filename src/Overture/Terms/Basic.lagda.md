@@ -27,7 +27,7 @@ open import Overture.Signatures using ( 𝓞 ; 𝓥 ; Signature ; OperationSymbo
 
 module Overture.Terms.Basic {𝑆 : Signature 𝓞 𝓥} where
 -- Imports from Agda primitives and the standard library.
-open import Agda.Primitive  using ()           renaming ( Set to Type )
+open import Agda.Primitive  using () renaming ( Set to Type )
 open import Level           using ( Level ; suc ; _⊔_ )
 
 private variable χ : Level
