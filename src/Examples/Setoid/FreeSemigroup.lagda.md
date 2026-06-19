@@ -32,18 +32,22 @@ module Examples.Setoid.FreeSemigroup where
 -- Imports from Agda and the Agda Standard Library -----------------------------
 open import Agda.Primitive                   using () renaming ( Set to Type )
 open import Data.Fin.Base                    using ( Fin )
-open import Data.Fin.Patterns                using ( 0F ; 1F ; 2F )
+open import Data.Fin.Patterns                using ( 0F ; 1F ; 2F ; 3F )
 
 -- Imports from the Agda Universal Algebra Library -----------------------------
 open import Classical.Signatures.Magma       using ( Sig-Magma ; ∙-Op )
 open import Overture.Terms {𝑆 = Sig-Magma}   using ( Term ; ℊ ; node )
 open import Setoid.Algebras {𝑆 = Sig-Magma}  using ( 𝔻[_] )
+open import Setoid.Terms.Basic {𝑆 = Sig-Magma}
+  using ( _≐_ ; ≐-isRefl ; Sub ; _[_] )
 open import Setoid.Varieties.SoundAndComplete {𝑆 = Sig-Magma}
   using ( Eq ; _≈̇_ ; _⊨_ ; _⊢_▹_≈_ ; module FreeAlgebra )
+open import Setoid.Varieties.FreeSubstitution {𝑆 = Sig-Magma}  using ( sub▹ )
 
 open import Relation.Binary using ( Setoid )
 
-open _⊢_▹_≈_ using ( hyp ; app ; refl ; sym ; trans )
+open _≐_     using ( gnl )
+open _⊢_▹_≈_ using ( hyp ; app ; sub ; refl ; sym ; trans )
 ```
 
 #### The Associativity Theory
@@ -128,6 +132,50 @@ rewrite² = trans left right
   right = app λ { 0F → refl ; 1F → hyp 0F }
 ```
 
+#### Instantiating associativity at arbitrary terms
+
+`assoc≈` above is associativity for the three *generators* `g₀ , g₁ , g₂`.  To rewrite an
+associativity redex whose factors are *arbitrary* terms `p , q , r`, we instantiate the
+rule with the substitution `σ` sending the generators to `p , q , r` and use
+`sub`{.AgdaInductiveConstructor}.  The catch (issue [M4-10][]) is that `sub` lands in
+`_[ σ ]`-form, which is only *pointwise* equal to the readable rebuilt terms `(p · q) · r`
+and `p · (q · r)`; `sub▹`{.AgdaFunction} ([Setoid.Varieties.FreeSubstitution][]) bridges
+that gap, taking the two rebuild equalities — mechanical `gnl` / `≐-isRefl` matches, since
+`(ℊ k) [ σ ]` reduces to the chosen term — and returning the readable derivation.
+
+```agda
+assoc▹ : {Γ : Type} (p q r : Term Γ) → E ⊢ Γ ▹ ((p · q) · r) ≈ (p · (q · r))
+assoc▹ {Γ} p q r = sub▹ (hyp 0F) σ blhs brhs
+  where
+  σ : Sub Γ (Fin 3)
+  σ = λ { 0F → p ; 1F → q ; 2F → r }
+
+  blhs : ((p · q) · r) ≐ (((g₀ · g₁) · g₂) [ σ ])
+  blhs = gnl λ { 0F → gnl (λ { 0F → ≐-isRefl ; 1F → ≐-isRefl }) ; 1F → ≐-isRefl }
+
+  brhs : ((g₀ · (g₁ · g₂)) [ σ ]) ≐ (p · (q · r))
+  brhs = gnl λ { 0F → ≐-isRefl ; 1F → gnl (λ { 0F → ≐-isRefl ; 1F → ≐-isRefl }) }
+```
+
+#### A multi-step reassociation
+
+With `assoc▹`{.AgdaFunction} in hand, a full reassociation chains cleanly.  Over four
+generators, the left-combed `(((a · b) · c) · d)` rewrites to the right-combed
+`a · (b · (c · d))` in two associativity steps — first at the top with first factor
+`a · b`, then at the top of the result — composed with `trans`{.AgdaInductiveConstructor}.
+This is the readable, `sub`-driven rewrite the issue asks for; no factor needs to match
+the rule literally.
+
+```agda
+a b c d : Term (Fin 4)
+a = ℊ 0F ; b = ℊ 1F ; c = ℊ 2F ; d = ℊ 3F
+
+reassoc⁴ : E ⊢ Fin 4 ▹ ((((a · b) · c) · d)) ≈ (a · (b · (c · d)))
+reassoc⁴ = trans (assoc▹ (a · b) c d) (assoc▹ a b (c · d))
+```
+
 --------------------------------------
+
+[M4-10]: https://github.com/ualib/agda-algebras/issues/362
 
 {% include UALib.Links.md %}
