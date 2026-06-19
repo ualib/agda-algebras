@@ -28,7 +28,7 @@ the full interpretability lattice is in scope.
    monad-morphism square, the direct generalization of `✶-sub`); and `✦-⟨⟩` (the embedded
    signature morphism acts exactly as `φ ✶_`).
 +  `Setoid.Varieties.Interpretation` — the algebra/satisfaction layer, mirroring
-   `Setoid.Varieties.Invariance`.  The *interpretation reduct* `reductᴵ I 𝑩` (each
+   `Setoid.Varieties.Invariance`.  The *interpretation reduct* `reductᴵ 𝑩 I` (each
    `𝑆₁`-symbol interpreted as the derived operation `I o` evaluated in `𝑩`); the triangle
    `reductᴵ-interp` (built on the heterogeneous `graft-eval`); the satisfaction condition
    `⊧-interp` / `⊧-uninterp`; `reductᴵ-⟨⟩` (when `I = ⟨ φ ⟩ᴵ`, `reductᴵ` *is* `reduct`, by
@@ -144,6 +144,43 @@ It is **not** FLRP work.  Per the milestone note, the interpretability / Maltsev
 track and the Finite Lattice Representation Problem are kept in separate research tracks;
 conflating them is an error to flag in review.  Nothing in M4-5f touches congruence-lattice
 representation.
+
+## Post-merge refinements
+
+Several organizational refinements landed during review and just after the merge; they do
+not change the mathematics, only the module layout and a few signatures.
+
++  **`Overture.Terms` split.**  The bare `Term` datatype (with `ℊ`, `node`, and the level
+   shorthand `ov`) now lives in `Overture.Terms.Basic`, and `Overture.Terms` is an umbrella
+   re-exporting `Basic`, `Interpretation`, and `Translation` — mirroring the `Setoid.Terms`
+   / `Setoid.Terms.Basic` arrangement.  `Overture.Terms.Interpretation` and
+   `Overture.Terms.Translation` import `Overture.Terms.Basic` directly (importing the
+   umbrella would be a cycle).
++  **`reductᴵ` takes the algebra first.**  The interpretation reduct and the satisfaction
+   lemmas are organized as `module _ (𝑩) where module _ (I) where …`, so the spelling is
+   `reductᴵ 𝑩 I`, `⊧-interp 𝑩 I`, `⊧-uninterp 𝑩 I` (algebra outermost).
++  **`_≼_` is level-parameterized by a module.**  Rather than threading `{α ρ}` as implicit
+   arguments, the quasi-order lives in `module Interpret (α ρ : Level)`; a consumer writes
+   `open Interpret α ρ` and then `ℰ₁ ≼ ℰ₂`.  `≼-refl` / `≼-trans` open it at the chosen
+   levels, and `Setoid.Varieties.Maltsev`'s `HasMaltsevTerm` does the same.  (The relation
+   is still level-polymorphic; the levels are simply supplied to the module rather than to
+   the operator.)
++  **Maltsev naming.**  In `Setoid.Varieties.Maltsev`, the two equation constructors are
+   `mxxy≈y` / `mxyy≈x`, the term-builder is `m a b c`, and the named position tuple is
+   `tri a b c` (an ordinary function, per the fresh-pattern-lambda finding above).
+
+### A Birkhoff (HSP) signature refinement rode along
+
+One change in this PR is unrelated to interpretations and is recorded here for traceability:
+`Setoid.Varieties.HSP`'s `Birkhoff` was restated.  Two `private` level abbreviations were
+introduced — `a = α ⊔ ρᵃ ⊔ ℓ` and `ι = ov a` — and the principal algebra `𝑨` was changed
+from an explicit argument (`∀ 𝑨 → …`) to an implicit one pinned to that level
+(`{𝑨 : Algebra a a} → …`).  `𝑨` is recovered from the `𝑨 ∈ Mod (Th (V ℓ ι 𝒦))` argument, so
+the theorem now reads as the inclusion `Mod (Th (V 𝒦)) ⊆ V 𝒦`; the level `(a , a)` is the
+one the proof already required (it embeds `𝑨` into the relatively free algebra and its
+lift).  This is a presentational refinement, not a change to the theorem's content, and the
+sole consumer — `Examples.Setoid.HSPCommutativeMonoid` — was updated to match.  The module
+prose at `Setoid.Varieties.HSP` documents the signature in place.
 
 ## Build / check
 
