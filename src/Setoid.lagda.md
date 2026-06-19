@@ -17,6 +17,8 @@ as opposed to "bare" types (see [Base.lagda][]).
 module Setoid where
 
 open import Setoid.Algebras
+open import Setoid.Complexity
+open import Setoid.Congruences
 open import Setoid.Functions
 open import Setoid.Homomorphisms
 open import Setoid.Relations
@@ -25,7 +27,6 @@ open import Setoid.Subalgebras
 open import Setoid.Terms
 open import Setoid.Varieties
 ```
-
 
 --------------------------------------
 

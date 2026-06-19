@@ -38,15 +38,15 @@ open import Setoid.Congruences.Basic      {𝑆 = 𝑆}  using ( Con )
 open import Setoid.Congruences.Lattice    {𝑆 = 𝑆}  using ( _≤_ ; _≅_ ; _∧_ )
 open import Setoid.Congruences.Generation {𝑆 = 𝑆}  using ( _∨_ )
 
-private variable α ρ : Level
+-- private variable α ρ : Level
 ```
 
 #### The absorbing relation level
 
 ```agda
 -- The relation level at which both meet and join are operations on Con 𝑨.
-𝐋 : {α ρ : Level} → Level → Level
-𝐋 {α}{ρ} ℓ₀ = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ ℓ₀
+𝐋 : Level → Level → Level → Level
+𝐋 α ρ ℓ₀ = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ ℓ₀
 ```
 
 #### Congruence distributivity
@@ -57,9 +57,10 @@ this `≅` is automatic in any lattice; the distributive law is the forward one,
 state the symmetric `≅` for uniformity.)
 
 ```agda
-CongruenceDistributive : (𝑨 : Algebra α ρ)(ℓ₀ : Level) → Type (α ⊔ ρ ⊔ ov (𝐋 {α}{ρ} ℓ₀))
-CongruenceDistributive {α}{ρ} 𝑨 ℓ₀ =
-  (θ φ ψ : Con 𝑨 (𝐋 {α}{ρ} ℓ₀)) → (θ ∧ (φ ∨ ψ)) ≅ ((θ ∧ φ) ∨ (θ ∧ ψ))
+CongruenceDistributive : {α ρ : Level} (𝑨 : Algebra α ρ)(ℓ₀ : Level)
+  → Type (α ⊔ ρ ⊔ ov (𝐋 α ρ ℓ₀))
+CongruenceDistributive {α} {ρ} 𝑨 ℓ₀ =
+  (θ φ ψ : Con 𝑨 (𝐋 α ρ ℓ₀)) → θ ∧ (φ ∨ ψ) ≅ (θ ∧ φ) ∨ (θ ∧ ψ)
 ```
 
 #### Congruence modularity
@@ -70,9 +71,8 @@ modularity, so the congruence-distributive algebras form a subclass of the
 congruence-modular ones.
 
 ```agda
-CongruenceModular : (𝑨 : Algebra α ρ)(ℓ₀ : Level) → Type (α ⊔ ρ ⊔ ov (𝐋 {α}{ρ} ℓ₀))
-CongruenceModular {α}{ρ} 𝑨 ℓ₀ =
-  (θ φ ψ : Con 𝑨 (𝐋 {α}{ρ} ℓ₀)) → θ ≤ ψ → (θ ∨ (φ ∧ ψ)) ≅ ((θ ∨ φ) ∧ ψ)
+CongruenceModular : {α ρ : Level} (𝑨 : Algebra α ρ)(ℓ₀ : Level) → Type (α ⊔ ρ ⊔ ov (𝐋 α ρ ℓ₀))
+CongruenceModular {α} {ρ} 𝑨 ℓ₀ = (θ φ ψ : Con 𝑨 (𝐋 α ρ ℓ₀)) → θ ≤ ψ → θ ∨ (φ ∧ ψ) ≅ (θ ∨ φ) ∧ ψ
 ```
 
 --------------------------------------

@@ -43,28 +43,36 @@ identities", packaged so that the whole interpretability apparatus
 module Setoid.Varieties.MaltsevConditions where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
-open import Agda.Primitive    using () renaming ( Set to Type )
-open import Data.Bool.Base    using ( Bool ; true ; false ; not ; if_then_else_ )
-open import Data.Fin.Base     using ( Fin ; toℕ ; fromℕ ; inject₁ )
-                              renaming ( zero to fzero ; suc to fsuc )
-open import Data.Fin.Patterns using ( 0F ; 1F ; 2F ; 3F )
-open import Data.Nat.Base     using ( ℕ ; zero ; suc )
-open import Data.Product      using ( _×_ ; _,_ ; Σ-syntax ; proj₁ ; proj₂ )
-open import Level             using ( Level ; 0ℓ ; _⊔_ ) renaming ( suc to lsuc )
-open import Relation.Binary   using ( Setoid ; IsEquivalence )
+open import Agda.Primitive                    using  () renaming ( Set to Type )
+open import Data.Bool.Base                    using  ( Bool ; true ; false ; not
+                                                     ; if_then_else_ )
+open import Data.Fin.Base                     using  ( Fin ; toℕ ; fromℕ ; inject₁ )
+                                              renaming ( zero to fzero ; suc to fsuc )
+open import Data.Fin.Patterns                 using  ( 0F ; 1F ; 2F ; 3F )
+open import Data.Nat.Base                     using  ( ℕ ; zero ; suc )
+open import Data.Product                      using  ( _×_ ; _,_ ; Σ-syntax
+                                                     ; proj₁ ; proj₂ )
+open import Level                             using  ( Level ; 0ℓ ; _⊔_ )
+                                              renaming ( suc to lsuc )
+open import Relation.Binary                   using  ( Setoid ; IsEquivalence )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture.Signatures              using ( 𝓞 ; 𝓥 ; Signature )
-open import Overture.Terms                   using ( Term ; ℊ ; node )
-open import Overture.Terms.Interpretation    using ( Interpretation )
-open import Setoid.Algebras.Basic            using ( Algebra ; 𝔻[_] ; 𝕌[_] )
-open import Setoid.Terms.Basic               using ( module Environment )
-open import Setoid.Congruences.Basic         using ( Con ; reflexive ; is-equivalence ; is-compatible )
-open import Setoid.Congruences.Permutability using ( _⨾_ ; Permutes ; CongruencePermutable )
-open import Setoid.Congruences.Modularity    using ( CongruenceDistributive ; CongruenceModular ) public
-open import Setoid.Varieties.Interpretation  using ( reductᴵ ; _⊨ₑ_ ; module Interpret )
-open import Setoid.Varieties.Maltsev         using ( Sig-Maltsev ; m-Op ; m ; tri
-                                                   ; mxxy≈y ; mxyy≈x ; Th-Maltsev ; HasMaltsevTerm )
+open import Overture.Signatures               using  ( 𝓞 ; 𝓥 ; Signature )
+open import Overture.Terms                    using  ( Term ; ℊ ; node )
+open import Overture.Terms.Interpretation     using  ( Interpretation )
+open import Setoid.Algebras.Basic             using  ( Algebra ; 𝔻[_] ; 𝕌[_] )
+open import Setoid.Terms.Basic                using  ( module Environment )
+open import Setoid.Congruences.Basic          using  ( Con ; reflexive
+                                                     ; is-equivalence ; is-compatible )
+open import Setoid.Congruences.Permutability  using  ( _⨾_ ; Permutes
+                                                     ; CongruencePermutable )
+open import Setoid.Congruences.Modularity     using  ( CongruenceDistributive
+                                                     ; CongruenceModular ) public
+open import Setoid.Varieties.Interpretation   using  ( reductᴵ ; _⊨ₑ_
+                                                     ; module Interpret )
+open import Setoid.Varieties.Maltsev          using  ( Sig-Maltsev ; m-Op ; m ; tri
+                                                     ; mxxy≈y ; mxyy≈x ; Th-Maltsev
+                                                     ; HasMaltsevTerm )
 
 open import Function using ( Func )
 open Func using ( cong ) renaming ( to to _⟨$⟩_ )
@@ -87,8 +95,9 @@ module _ {𝑆 : Signature 𝓞 𝓥}{𝑩 : Algebra {𝑆 = 𝑆} α ρ} where
 
   term-compatible : {V : Type χ}(ψ : Con 𝑩 ℓ)(t : Term {𝑆 = 𝑆} V){η η′ : V → 𝕌[ 𝑩 ]}
     → (∀ v → proj₁ ψ (η v) (η′ v)) → proj₁ ψ (⟦ t ⟧ ⟨$⟩ η) (⟦ t ⟧ ⟨$⟩ η′)
-  term-compatible ψ (ℊ v)       h = h v
-  term-compatible ψ (node f ts) h = is-compatible (proj₂ ψ) f (λ i → term-compatible ψ (ts i) h)
+  term-compatible ψ (ℊ v) h = h v
+  term-compatible ψ (node f ts) h =
+    is-compatible (proj₂ ψ) f (λ i → term-compatible ψ (ts i) h)
 ```
 
 #### Maltsev's theorem: a Maltsev term gives permutability
@@ -99,12 +108,16 @@ show: if `ℰ` has a Maltsev term then every model `𝑩` of `ℰ` is
 congruence-permutable.
 
 ```agda
-module _ {𝑆 : Signature 0ℓ 0ℓ}{X : Type χ}{Idx : Type ι}
-         (ℰ : Idx → Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X) where
+module _
+  {𝑆 : Signature 0ℓ 0ℓ}
+  {X : Type χ} {Idx : Type ι}
+  (ℰ : Idx → Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X)
+  where
 
   hasMaltsevTerm⇒permutable : HasMaltsevTerm {α = α}{ρ = ρ} ℰ
     → (𝑩 : Algebra {𝑆 = 𝑆} α ρ) → 𝑩 ⊨ₑ ℰ → {ℓ : Level} → CongruencePermutable 𝑩 ℓ
-  hasMaltsevTerm⇒permutable mt 𝑩 B⊨ {ℓ} θ φ {x}{y} (z , xθz , zφy) = m𝑩 x z y , xφw , wθy
+  hasMaltsevTerm⇒permutable mt 𝑩 B⊨ {ℓ} θ φ {x}{y} (z , xθz , zφy) =
+    m𝑩 x z y , xφw , wθy
     where
     open Setoid 𝔻[ 𝑩 ] using ( _≈_ )
       renaming ( refl to ≈refl ; sym to ≈sym ; trans to ≈trans )
@@ -126,7 +139,7 @@ module _ {𝑆 : Signature 0ℓ 0ℓ}{X : Type χ}{Idx : Type ι}
     m-compat : (ψ : Con 𝑩 ℓ)(a a′ b b′ c c′ : 𝕌[ 𝑩 ])
       → proj₁ ψ a a′ → proj₁ ψ b b′ → proj₁ ψ c c′ → proj₁ ψ (m𝑩 a b c) (m𝑩 a′ b′ c′)
     m-compat ψ a a′ b b′ c c′ pa pb pc =
-      term-compatible ψ (I m-Op) {tri a b c}{tri a′ b′ c′} (λ { 0F → pa ; 1F → pb ; 2F → pc })
+      term-compatible ψ (I m-Op) {tri a b c}{tri a′ b′ c′} λ { 0F → pa ; 1F → pb ; 2F → pc }
 
     -- evaluating a Maltsev application in the reduct lands on the curried m𝑩
     eval-m : (i₀ i₁ i₂ : Fin 3)(η : Fin 3 → 𝕌[ 𝑩 ])
@@ -141,22 +154,22 @@ module _ {𝑆 : Signature 0ℓ 0ℓ}{X : Type χ}{Idx : Type ι}
     mxyy a b = ≈trans (≈sym (eval-m 0F 1F 1F (tri a b b))) (satM mxyy≈x (tri a b b))
 
     -- equivalence-relation structure of the two congruences
-    θ-refl  = IsEquivalence.refl  (is-equivalence (proj₂ θ))
-    θ-sym   = IsEquivalence.sym   (is-equivalence (proj₂ θ))
-    θ-trans = IsEquivalence.trans (is-equivalence (proj₂ θ))
-    φ-refl  = IsEquivalence.refl  (is-equivalence (proj₂ φ))
-    φ-trans = IsEquivalence.trans (is-equivalence (proj₂ φ))
+    open IsEquivalence (is-equivalence (proj₂ θ)) using ()
+      renaming (refl to θ-refl; sym to θ-sym; trans to θ-trans)
+
+    open IsEquivalence (is-equivalence (proj₂ φ)) using ()
+      renaming (refl to φ-refl; trans to φ-trans)
 
     -- the witness w = m(x, z, y) lies φ-above x and θ-below y
     --   x φ m(x,z,z) = x  (identity mxyy) then m(x,z,z) φ m(x,z,y)  (since z φ y)
     xφw : proj₁ φ x (m𝑩 x z y)
-    xφw = φ-trans (reflexive (proj₂ φ) (≈sym (mxyy x z)))
-                  (m-compat φ x x z z z y φ-refl φ-refl zφy)
+    xφw = φ-trans  (reflexive (proj₂ φ) (≈sym (mxyy x z)))
+                   (m-compat φ x x z z z y φ-refl φ-refl zφy)
 
     --   m(x,z,y) θ m(x,x,y)  (since z θ x) then m(x,x,y) = y  (identity mxxy)
     wθy : proj₁ θ (m𝑩 x z y) y
-    wθy = θ-trans (m-compat θ x x z x y y θ-refl (θ-sym xθz) θ-refl)
-                  (reflexive (proj₂ θ) (mxxy x y))
+    wθy = θ-trans  (m-compat θ x x z x y y θ-refl (θ-sym xθz) θ-refl)
+                   (reflexive (proj₂ θ) (mxxy x y))
 ```
 
 The theorem above is the required acceptance criterion: CP's Maltsev-term
@@ -189,7 +202,7 @@ Jónsson theory interprets into it, the same `Th-X ≼ ℰ` shape as `HasMaltsev
 ```agda
 -- parity of a natural number, to split the Jónsson/Day "fork" identities by index
 even? : ℕ → Bool
-even? zero    = true
+even? zero = true
 even? (suc m) = not (even? m)
 
 module _ (n : ℕ) where
@@ -302,23 +315,23 @@ module _ {χ ι : Level}{𝑆 : Signature 0ℓ 0ℓ}{X : Type χ}{Idx : Type ι}
     (𝑩 : Algebra {𝑆 = 𝑆} α ρ) → 𝑩 ⊨ₑ ℰ → CongruenceModular 𝑩 ℓ₀
 
   -- Maltsev's theorem, forward direction, as a statement about the variety (PROVED).
-  maltsev⇒CP : HasMaltsevTerm {α = α}{ρ = ρ} ℰ → {ℓ : Level} → CongruencePermutableVariety ℓ
+  maltsev⇒CP : HasMaltsevTerm {α = α}{ρ} ℰ → {ℓ : Level} → CongruencePermutableVariety ℓ
   maltsev⇒CP mt 𝑩 B⊨ = hasMaltsevTerm⇒permutable ℰ mt 𝑩 B⊨
 
   -- The converse (DEFERRED): a congruence-permutable variety has a Maltsev term.
   CP⇒maltsev-Statement : (ℓ : Level) → Type _
-  CP⇒maltsev-Statement ℓ = CongruencePermutableVariety ℓ → HasMaltsevTerm {α = α}{ρ = ρ} ℰ
+  CP⇒maltsev-Statement ℓ = CongruencePermutableVariety ℓ → HasMaltsevTerm {α = α}{ρ} ℰ
 
   -- Jónsson's theorem (DEFERRED): CD ⇔ existence of Jónsson terms.
   Jonsson-Statement : (ℓ₀ : Level) → Type _
   Jonsson-Statement ℓ₀ =
-      (CongruenceDistributiveVariety ℓ₀ → Σ[ n ∈ ℕ ] HasJonssonTerms n {α = α}{ρ = ρ} ℰ)
-    × (Σ[ n ∈ ℕ ] HasJonssonTerms n {α = α}{ρ = ρ} ℰ → CongruenceDistributiveVariety ℓ₀)
+      (CongruenceDistributiveVariety ℓ₀ → Σ[ n ∈ ℕ ] HasJonssonTerms n {α = α}{ρ} ℰ)
+    × (Σ[ n ∈ ℕ ] HasJonssonTerms n {α = α}{ρ} ℰ → CongruenceDistributiveVariety ℓ₀)
 
   -- Day's theorem (DEFERRED): CM ⇔ existence of Day terms.
   Day-Statement : (ℓ₀ : Level) → Type _
   Day-Statement ℓ₀ =
-      (CongruenceModularVariety ℓ₀ → Σ[ n ∈ ℕ ] HasDayTerms n {α = α}{ρ = ρ} ℰ)
+      (CongruenceModularVariety ℓ₀ → Σ[ n ∈ ℕ ] HasDayTerms n {α = α}{ρ} ℰ)
     × (Σ[ n ∈ ℕ ] HasDayTerms n {α = α}{ρ = ρ} ℰ → CongruenceModularVariety ℓ₀)
 ```
 

@@ -16,10 +16,10 @@ This is the [Setoid.Functions][] module of the [Agda Universal Algebra Library][
 module Setoid.Functions where
 
 open import Setoid.Functions.Basic       public
-open import Setoid.Functions.Inverses    public
-open import Setoid.Functions.Injective   public
-open import Setoid.Functions.Surjective  public
 open import Setoid.Functions.Bijective   public
+open import Setoid.Functions.Injective   public
+open import Setoid.Functions.Inverses    public
+open import Setoid.Functions.Surjective  public
 ```
 
 
