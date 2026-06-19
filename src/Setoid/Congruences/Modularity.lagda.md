@@ -1,0 +1,83 @@
+---
+layout: default
+file: "src/Setoid/Congruences/Modularity.lagda.md"
+title: "Setoid.Congruences.Modularity module"
+date: "2026-06-19"
+author: "the agda-algebras development team"
+---
+
+### Distributive and modular congruence lattices
+
+This is the [Setoid.Congruences.Modularity][] module of the [Agda Universal Algebra Library][].
+
+[Setoid.Congruences.CompleteLattice][] assembled the congruence lattice of an
+algebra.  This module names two properties that lattice may have — being
+**distributive** and being **modular** — which the Maltsev conditions of
+congruence distributivity (Jónsson) and congruence modularity (Day) characterize by
+the existence of terms ([Setoid.Varieties.MaltsevConditions][]).
+
+As in [Setoid.Congruences.CompleteLattice][], the lattice equations are stated at the
+**absorbing** relation level `𝐋 ℓ₀ = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ ℓ₀`.  At this level the join
+`_∨_` (whose codomain otherwise bumps the level to `𝒈 ℓ`) lands back at the level of
+the meet `_∧_`, so both are operations on `Con 𝑨 (𝐋 ℓ₀)` and the equations type-check.
+
+```agda
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+
+open import Overture using ( 𝓞 ; 𝓥 ; Signature )
+
+module Setoid.Congruences.Modularity {𝑆 : Signature 𝓞 𝓥} where
+
+-- Imports from Agda and the Agda Standard Library ----------------------------
+open import Agda.Primitive  using () renaming ( Set to Type )
+open import Level           using ( Level ; _⊔_ )
+
+-- Imports from the Agda Universal Algebra Library ----------------------------
+open import Setoid.Algebras.Basic         {𝑆 = 𝑆}  using ( ov ; Algebra )
+open import Setoid.Congruences.Basic      {𝑆 = 𝑆}  using ( Con )
+open import Setoid.Congruences.Lattice    {𝑆 = 𝑆}  using ( _≤_ ; _≅_ ; _∧_ )
+open import Setoid.Congruences.Generation {𝑆 = 𝑆}  using ( _∨_ )
+
+private variable α ρ : Level
+```
+
+#### The absorbing relation level
+
+```agda
+-- The relation level at which both meet and join are operations on Con 𝑨.
+𝐋 : {α ρ : Level} → Level → Level
+𝐋 {α}{ρ} ℓ₀ = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ ℓ₀
+```
+
+#### Congruence distributivity
+
+An algebra `𝑨` is **congruence-distributive** when its congruence lattice satisfies
+the distributive law `θ ∧ (φ ∨ ψ) ≅ (θ ∧ φ) ∨ (θ ∧ ψ)`.  (The reverse containment of
+this `≅` is automatic in any lattice; the distributive law is the forward one, but we
+state the symmetric `≅` for uniformity.)
+
+```agda
+CongruenceDistributive : (𝑨 : Algebra α ρ)(ℓ₀ : Level) → Type (α ⊔ ρ ⊔ ov (𝐋 {α}{ρ} ℓ₀))
+CongruenceDistributive {α}{ρ} 𝑨 ℓ₀ =
+  (θ φ ψ : Con 𝑨 (𝐋 {α}{ρ} ℓ₀)) → (θ ∧ (φ ∨ ψ)) ≅ ((θ ∧ φ) ∨ (θ ∧ ψ))
+```
+
+#### Congruence modularity
+
+An algebra `𝑨` is **congruence-modular** when its congruence lattice satisfies the
+modular law: whenever `θ ≤ ψ`, `θ ∨ (φ ∧ ψ) ≅ (θ ∨ φ) ∧ ψ`.  Distributivity implies
+modularity, so the congruence-distributive algebras form a subclass of the
+congruence-modular ones.
+
+```agda
+CongruenceModular : (𝑨 : Algebra α ρ)(ℓ₀ : Level) → Type (α ⊔ ρ ⊔ ov (𝐋 {α}{ρ} ℓ₀))
+CongruenceModular {α}{ρ} 𝑨 ℓ₀ =
+  (θ φ ψ : Con 𝑨 (𝐋 {α}{ρ} ℓ₀)) → θ ≤ ψ → (θ ∨ (φ ∧ ψ)) ≅ ((θ ∨ φ) ∧ ψ)
+```
+
+--------------------------------------
+
+<span style="float:left;">[← Setoid.Congruences.Permutability](Setoid.Congruences.Permutability.html)</span>
+<span style="float:right;">[Setoid.Varieties.MaltsevConditions →](Setoid.Varieties.MaltsevConditions.html)</span>
+
+{% include UALib.Links.md %}

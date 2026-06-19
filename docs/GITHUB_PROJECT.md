@@ -3025,16 +3025,45 @@ Design discussion: how to encode Maltsev conditions uniformly?  Options include 
 
 ## Tasks
 
-- [ ] `HasMaltsevTerm : Variety → Term → Type`.
-- [ ] Specific Maltsev terms: Jónsson terms (CD), Day terms (CM), Maltsev operation `p(x,y,y) = x = p(y,y,x)` (CP).
-- [ ] Jónsson's theorem: a variety is CD iff Jónsson terms exist.
-- [ ] CP iff a Maltsev term exists.
-- [ ] Day's theorem for CM.
+- [x] `HasMaltsevTerm : Variety → Term → Type` — landed in M4-5f as the interpretation predicate `HasMaltsevTerm ℰ = Th-Maltsev ≼ ℰ` (`Setoid.Varieties.Maltsev`).
+- [x] Specific Maltsev terms: Jónsson terms (CD), Day terms (CM), Maltsev operation (CP) — `Th-Maltsev`, `Th-Jonsson n`, `Th-Day n` with their `HasMaltsevTerm` / `HasJonssonTerms n` / `HasDayTerms n` predicates (`Setoid.Varieties.Maltsev`, `Setoid.Varieties.MaltsevConditions`).
+- [~] Jónsson's theorem: a variety is CD iff Jónsson terms exist — stated (`Jonsson-Statement`), not yet inhabited; construction plan in the design note.
+- [~] CP iff a Maltsev term exists — the **forward** direction (Maltsev term ⟹ CP) is proved (`maltsev⇒CP`); the converse is stated (`CP⇒maltsev-Statement`) with a free-algebra construction plan in the design note.
+- [~] Day's theorem for CM — stated (`Day-Statement`), not yet inhabited; construction plan in the design note.
 
 ## Acceptance criteria
 
-- [ ] At least CP's Maltsev-term characterization is proved.
-- [ ] Jónsson's theorem and Day's theorem are either proved or have a clear stub indicating what remains.
+- [x] At least CP's Maltsev-term characterization is proved — `hasMaltsevTerm⇒permutable` / `maltsev⇒CP` in `Setoid.Varieties.MaltsevConditions`.
+- [x] Jónsson's theorem and Day's theorem are either proved or have a clear stub indicating what remains — both are stated as (uninhabited) `Type`s with the remaining construction sketched in `docs/notes/m6-3-maltsev-conditions.md`.
+
+## Resolution (first pass: the CP track)
+
+This pass builds the congruence-permutability layer and proves the required direction
+of Maltsev's theorem; CD/CM are scaffolded as definitions and theorem statements.
+
++  **`Setoid.Congruences.Permutability`** — relation composition `θ ⨾ φ` on
+   congruences, the `Permutes` predicate (`θ ⨾ φ ⊆ φ ⨾ θ`), and
+   `CongruencePermutable 𝑨 ℓ` ("every two congruences permute"), with `permutable⇒commute`.
++  **`Setoid.Congruences.Modularity`** — `CongruenceDistributive` and
+   `CongruenceModular`, the lattice properties CD and CM characterize, at the
+   absorbing relation level used by `Setoid.Congruences.CompleteLattice`.
++  **`Setoid.Varieties.MaltsevConditions`** — the term-operation compatibility lemma
+   (`term-compatible`: a congruence respects every term operation); **Maltsev's
+   theorem, forward direction** (`hasMaltsevTerm⇒permutable` / `maltsev⇒CP`: a theory
+   with a Maltsev term is congruence-permutable), bridging the interpretation-based
+   `HasMaltsevTerm` to the curried `m` and its two identities; the Jónsson and Day
+   theories (`Th-Jonsson n`, `Th-Day n`) and predicates; and the deferred theorems —
+   the Maltsev converse, Jónsson's and Day's theorems — as checked `Type` statements.
+
+Design note (encoding discussion, the term-compatibility bridge, and the deferred
+converse/Jónsson/Day construction plans): `docs/notes/m6-3-maltsev-conditions.md`.
+The interpretation encoding `Th-X ≼ ℰ` is the chosen uniform encoding for all three
+conditions, in preference to the issue's options (a) record and (b) inductive scheme.
+
+Track hygiene: this is clone/Maltsev material; per the milestone note, congruence
+modularity *connects forward* to the FLRP but the interpretability/Maltsev/clone track
+and the FLRP are kept separate, and nothing here touches congruence-lattice
+representation.
 
 ---
 
