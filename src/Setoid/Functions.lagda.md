@@ -1,6 +1,6 @@
 ---
 layout: default
-title : "Setoid.Overture module (Agda Universal Algebra Library)"
+title : "Setoid.Functions module (Agda Universal Algebra Library)"
 date : "2021-09-08"
 author: "the agda-algebras development team"
 ---
@@ -26,6 +26,6 @@ open import Setoid.Functions.Surjective  public
 --------------------------------------
 
 <span style="float:left;">[← Preface](Preface.html)</span>
-<span style="float:right;">[Setoid.Functions.Preliminaries →](Setoid.Functions.Preliminaries.html)</span>
+<span style="float:right;">[Setoid.Functions.Basic →](Setoid.Functions.Basic.html)</span>
 
 {% include UALib.Links.md %}
