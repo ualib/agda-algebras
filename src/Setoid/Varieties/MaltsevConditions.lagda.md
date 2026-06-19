@@ -181,7 +181,7 @@ variety — every model of a theory with a Maltsev term is congruence-permutable
 #### Distributivity and modularity of the congruence lattice
 
 CD and CM are properties of the congruence *lattice*, defined in
-[Setoid.Congruences.Modularity][] as `CongruenceDistributive` and
+[Setoid.Congruences.Properties][] as `CongruenceDistributive` and
 `CongruenceModular` (at the absorbing relation level, so that meet and join are
 operations on a single type).  They are re-exported here (the `public` on the import
 above) so the Maltsev conditions of this module — permutability, and the Jónsson/Day
