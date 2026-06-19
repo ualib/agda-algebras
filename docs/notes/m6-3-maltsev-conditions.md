@@ -18,15 +18,15 @@ together with the converse of Maltsev's theorem, are stated as the goals that re
 ## What landed
 
 +  `Setoid.Congruences.Permutability` — the CP layer, pure congruence theory.
-   Relation composition `θ ⨾ φ` of two congruences (`(θ ⨾ φ) x y = ∃ z. x θ z × z φ y`,
+   Relation composition `θ ∘ φ` of two congruences (`(θ ∘ φ) x y = ∃ z. x θ z × z φ y`,
    a *bare* relation, since composition need not be transitive); the inclusion lemmas
-   `⨾-inˡ` / `⨾-inʳ` (each factor embeds into the composite, by reflexivity); the
-   `Permutes` predicate (`θ ⨾ φ ⊆ φ ⨾ θ`); the property `CongruencePermutable 𝑨 ℓ`
+   `∘-inˡ` / `∘-inʳ` (each factor embeds into the composite, by reflexivity); the
+   `Permutes` predicate (`θ ∘ φ ⊆ φ ∘ θ`); the property `CongruencePermutable 𝑨 ℓ`
    ("every two congruences permute"); and `permutable⇒commute` (CP makes composition
-   commutative on congruences, the conventional `θ ⨾ φ = φ ⨾ θ` read as mutual
+   commutative on congruences, the conventional `θ ∘ φ = φ ∘ θ` read as mutual
    containment).
 
-+  `Setoid.Congruences.Modularity` — `CongruenceDistributive` and `CongruenceModular`,
++  `Setoid.Congruences.Properties` — `CongruenceDistributive` and `CongruenceModular`,
    the lattice properties that CD and CM name, stated at the **absorbing** relation
    level `𝐋 ℓ₀ = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ ℓ₀` of `Setoid.Congruences.CompleteLattice`, where
    the join `_∨_` lands back at the level of the meet `_∧_` so the lattice equations
@@ -37,7 +37,7 @@ together with the converse of Maltsev's theorem, are stated as the goals that re
    +  `term-compatible` — *a congruence is compatible with every term operation*
       (structural induction: leaf is the hypothesis, node is `is-compatible`).  This
       is the load-bearing lemma of the forward theorem and a generally useful fact.
-   +  `hasMaltsevTerm⇒permutable` / `maltsev⇒CP` — **Maltsev's theorem, forward
+   +  `MaltsevTerm⇒CP` / `maltsev⇒CP` — **Maltsev's theorem, forward
       direction**: a theory with a Maltsev term is congruence-permutable.
    +  `Th-Jonsson n` / `HasJonssonTerms n` and `Th-Day n` / `HasDayTerms n` — the
       Jónsson and Day term theories, encoded as interpretations exactly as the Maltsev
@@ -89,8 +89,8 @@ is the `n`-free instance, and `HasJonssonTerms n ℰ = Th-Jonsson n ≼ ℰ`,
 `Setoid.Varieties.Maltsev` gave the term-existence side of CP (`HasMaltsevTerm`); the
 congruence-lattice side (`CongruencePermutable`) is new here.  The forward theorem
 joins them.  Given `mt : HasMaltsevTerm ℰ`, a model `𝑩` of `ℰ`, and congruences `θ`, `φ`
-with `x θ z` and `z φ y` (i.e. `(x , y) ∈ θ ⨾ φ`), the classical argument sets
-`w = m(x, z, y)` and shows `(x , y) ∈ φ ⨾ θ` via that `w`:
+with `x θ z` and `z φ y` (i.e. `(x , y) ∈ θ ∘ φ`), the classical argument sets
+`w = m(x, z, y)` and shows `(x , y) ∈ φ ∘ θ` via that `w`:
 
 +  `x φ w`: from `m(x,z,z) ≈ x` (the identity `mxyy`) and `z φ y`, congruence of `m` in
    its third argument gives `x = m(x,z,z) φ m(x,z,y) = w`.
@@ -148,7 +148,7 @@ Thm. 12.2): work in the relatively free algebra `𝔽 = 𝔽[ Fin 3 ]` on three 
 `x , y , z` (`Setoid.Varieties.SoundAndComplete`), which is a model of `ℰ`
 (`satisfies`), hence congruence-permutable by hypothesis.  Take the principal
 congruences `β = Cg(x , y)` and `γ = Cg(y , z)` (`Setoid.Congruences.Generation`).
-Then `x β y` and `y γ z`, so `(x , z) ∈ β ⨾ γ`; permutability gives `(x , z) ∈ γ ⨾ β`,
+Then `x β y` and `y γ z`, so `(x , z) ∈ β ∘ γ`; permutability gives `(x , z) ∈ γ ∘ β`,
 i.e. a witness `w` (necessarily `w = M(x,y,z)` for some term `M`, since the carrier of
 `𝔽` *is* `Term (Fin 3)`) with `x γ w` and `w β z`.  Translate the two memberships
 through the substitution homomorphisms `𝔽[ Fin 3 ] → 𝔽[ Fin 2 ]` collapsing `z ↦ y`
@@ -197,10 +197,10 @@ free-algebra/`Cg` bridge is in place.
    one-liners and yields a lemma reusable for Jónsson, Day, and any later
    clone-theoretic argument.
 
-+  **Composition lives at `BinRel`, not `Con`.**  `θ ⨾ φ` is deliberately *not* a
++  **Composition lives at `BinRel`, not `Con`.**  `θ ∘ φ` is deliberately *not* a
    congruence (it need not be transitive); making it a bare relation keeps the
    permutability statement honest and avoids smuggling in a join.  The lattice join
-   `θ ∨ φ` and the composition `θ ⨾ φ` coincide exactly when the algebra is CP — that
+   `θ ∨ φ` and the composition `θ ∘ φ` coincide exactly when the algebra is CP — that
    coincidence, not a definitional identification, is the content.
 
 +  **The absorbing level recurs.**  CD/CM, like the complete lattice, can only state
@@ -224,7 +224,7 @@ the milestone note asks reviewers to flag.
 
 +  Whole library (what CI runs): `nix develop --command make check`.
 +  The new modules, one at a time: `nix develop --command agda src/Setoid/Congruences/Permutability.lagda.md`
-   (then `Setoid/Congruences/Modularity`, `Setoid/Varieties/MaltsevConditions`).
+   (then `Setoid/Congruences/Properties`, `Setoid/Varieties/MaltsevConditions`).
 
 [M6-3]: https://github.com/ualib/agda-algebras/issues/273
 [`GITHUB_PROJECT.md`]: ../GITHUB_PROJECT.md

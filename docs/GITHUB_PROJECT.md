@@ -3044,7 +3044,7 @@ of Maltsev's theorem; CD/CM are scaffolded as definitions and theorem statements
 +  **`Setoid.Congruences.Permutability`** — relation composition `θ ⨾ φ` on
    congruences, the `Permutes` predicate (`θ ⨾ φ ⊆ φ ⨾ θ`), and
    `CongruencePermutable 𝑨 ℓ` ("every two congruences permute"), with `permutable⇒commute`.
-+  **`Setoid.Congruences.Modularity`** — `CongruenceDistributive` and
++  **`Setoid.Congruences.Properties`** — `CongruenceDistributive` and
    `CongruenceModular`, the lattice properties CD and CM characterize, at the
    absorbing relation level used by `Setoid.Congruences.CompleteLattice`.
 +  **`Setoid.Varieties.MaltsevConditions`** — the term-operation compatibility lemma
