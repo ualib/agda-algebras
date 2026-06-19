@@ -19,7 +19,7 @@ open import Setoid.Congruences.Basic {𝑆 = 𝑆} public
 open import Setoid.Congruences.CompleteLattice {𝑆 = 𝑆} public
 open import Setoid.Congruences.Generation {𝑆 = 𝑆} public
 open import Setoid.Congruences.Lattice {𝑆 = 𝑆} public
-open import Setoid.Congruences.Modularity {𝑆 = 𝑆} public
+open import Setoid.Congruences.Properties {𝑆 = 𝑆} public
 open import Setoid.Congruences.Permutability {𝑆 = 𝑆} public
 ```
 
