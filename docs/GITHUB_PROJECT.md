@@ -2225,7 +2225,7 @@ Low, but the blast radius is whatever currently imports `⟨_⟩`/`EqArgs` from 
 
 ---
 
-### Issue M4-5: Signatures as functors — reducts, expansions, and interpretability (#338)
+### Issue M4-5: Signatures as functors — reducts, expansions, and interpretability (#338, closed)
 
 **Labels**: `enhancement`, `milestone-4-style`, `design-discussion`
 
@@ -2248,8 +2248,8 @@ A signature morphism is a container morphism `(ι , κ)` (`ι` covariant on symb
 +  [x] **M4-5c** Reduct as a functor on algebras; upgrade the classical forgetful *projections* to forgetful *functors* by supplying the morphism action.  *(medium)*
 +  [x] **M4-5d** Free expansion; the `F ⊣ reduct` adjunction.  Distinguish from M3-6's chosen `expand-ε`.  *(high / high-value)*
 +  [x] **M4-5e** Term monad; naturality of the fold; reduct-invariance of satisfaction as a corollary, absorbing M3-6's per-structure pivot proofs.  *(medium)*
-+  [ ] **M4-5f** Theory interpretations; Maltsev conditions as interpretations; the interpretability quasi-order.  *(research-grade, exploratory)*
-+  [ ] **M4-5g** Reduct classes of varieties are prevarieties (closed under S, P, not H).  *(research-grade)*
++  [x] **M4-5f** Theory interpretations; Maltsev conditions as interpretations; the interpretability quasi-order.  *(research-grade, exploratory)*
++  [x] **M4-5g** Reduct classes of varieties are prevarieties (closed under S, P, not H).  *(research-grade)*
 
 The ordering is a dependency chain: a→b→c→{d,e}, with e gating f and c gating g.
 
@@ -2387,7 +2387,7 @@ References: the M3-5 finding on `interp-node` (per-signature, proof-free); [ADR-
 
 ---
 
-### Issue M4-5f: Theory interpretations; Maltsev conditions as interpretations; the interpretability quasi-order (#344)
+### Issue M4-5f: Theory interpretations; Maltsev conditions as interpretations; the interpretability quasi-order (#344, closed)
 
 **Labels**: `milestone-4-style`, `research-exploratory`
 
@@ -2472,7 +2472,7 @@ Low conceptually but wide: `Op` is foundational, so the PR should `grep` every u
 
 ---
 
-### Issue M4-7: `V` exposes eight unconstrained universe-level parameters; provide a common-case specialization (#359)
+### Issue M4-7: `V` exposes eight unconstrained universe-level parameters; provide a common-case specialization (#359, closed)
 
 **Labels**: `milestone-4-style`
 
@@ -2518,7 +2518,7 @@ This is a real papercut for anyone instantiating the variety machinery at a fixe
 
 ---
 
-### Issue M4-8: `V-expa` cannot infer its class `𝒦` from a membership proof; offer an explicit-argument variant (#360)
+### Issue M4-8: `V-expa` cannot infer its class `𝒦` from a membership proof; offer an explicit-argument variant (#360, closed)
 
 **Labels**: `milestone-4-style`
 
@@ -2601,7 +2601,7 @@ even though `p`, `q`, and `𝒦` are all visible in the argument's type.
 
 ---
 
-### Issue M4-10: Substitution `_[_]` does not compute through tuple arguments; add a substitution-lemma kit (#362)
+### Issue M4-10: Substitution `_[_]` does not compute through tuple arguments; add a substitution-lemma kit (#362, closed)
 
 **Labels**: `milestone-4-style`
 
@@ -3025,45 +3025,71 @@ Design discussion: how to encode Maltsev conditions uniformly?  Options include 
 
 ## Tasks
 
-- [x] `HasMaltsevTerm : Variety → Term → Type` — landed in M4-5f as the interpretation predicate `HasMaltsevTerm ℰ = Th-Maltsev ≼ ℰ` (`Setoid.Varieties.Maltsev`).
-- [x] Specific Maltsev terms: Jónsson terms (CD), Day terms (CM), Maltsev operation (CP) — `Th-Maltsev`, `Th-Jonsson n`, `Th-Day n` with their `HasMaltsevTerm` / `HasJonssonTerms n` / `HasDayTerms n` predicates (`Setoid.Varieties.Maltsev`, `Setoid.Varieties.MaltsevConditions`).
-- [~] Jónsson's theorem: a variety is CD iff Jónsson terms exist — stated (`Jonsson-Statement`), not yet inhabited; construction plan in the design note.
-- [~] CP iff a Maltsev term exists — the **forward** direction (Maltsev term ⟹ CP) is proved (`maltsev⇒CP`); the converse is stated (`CP⇒maltsev-Statement`) with a free-algebra construction plan in the design note.
-- [~] Day's theorem for CM — stated (`Day-Statement`), not yet inhabited; construction plan in the design note.
+- [x] `HasMaltsevTerm : Variety → Term → Type` — landed as the interpretation predicate `HasMaltsevTerm ℰ = Th-Maltsev ≼ ℰ` (`Setoid.Varieties.Maltsev`).
+- [x] Specific Maltsev terms: Jónsson terms (CD), Day terms (CM), Maltsev operation (CP) — `Th-Maltsev`, `Th-Jonsson n`, `Th-Day n`, with `HasMaltsevTerm` / `HasJonssonTerms n` / `HasDayTerms n` (`Setoid.Varieties.{Maltsev,MaltsevConditions}`).
+- [ ] Jónsson's theorem: a variety is CD iff Jónsson terms exist — stated (`Jonsson-Statement`); proof tracked in #412 (forward) and #413 (converse).
+- [ ] CP iff a Maltsev term exists — forward direction proved (`MaltsevTerm⇒CP` / `maltsev⇒CP`); converse stated (`CP⇒maltsev-Statement`) and tracked in #411.
+- [ ] Day's theorem for CM — stated (`Day-Statement`); proof tracked in #412 (forward) and #413 (converse).
 
 ## Acceptance criteria
 
-- [x] At least CP's Maltsev-term characterization is proved — `hasMaltsevTerm⇒permutable` / `maltsev⇒CP` in `Setoid.Varieties.MaltsevConditions`.
-- [x] Jónsson's theorem and Day's theorem are either proved or have a clear stub indicating what remains — both are stated as (uninhabited) `Type`s with the remaining construction sketched in `docs/notes/m6-3-maltsev-conditions.md`.
+- [x] At least CP's Maltsev-term characterization is proved — `MaltsevTerm⇒CP` / `maltsev⇒CP` in `Setoid.Varieties.MaltsevConditions` (the concrete "term ⟹ permutable" direction).
+- [x] Jónsson's theorem and Day's theorem are either proved or have a clear stub indicating what remains — both stated as checked, uninhabited `Type`s, with construction plans in `docs/notes/m6-3-maltsev-conditions.md`.
 
-## Resolution (first pass: the CP track)
+## Status — first pass (PR #409)
 
-This pass builds the congruence-permutability layer and proves the required direction
-of Maltsev's theorem; CD/CM are scaffolded as definitions and theorem statements.
+The CP track landed in PR #409:
 
-+  **`Setoid.Congruences.Permutability`** — relation composition `θ ⨾ φ` on
-   congruences, the `Permutes` predicate (`θ ⨾ φ ⊆ φ ⨾ θ`), and
-   `CongruencePermutable 𝑨 ℓ` ("every two congruences permute"), with `permutable⇒commute`.
-+  **`Setoid.Congruences.Properties`** — `CongruenceDistributive` and
-   `CongruenceModular`, the lattice properties CD and CM characterize, at the
-   absorbing relation level used by `Setoid.Congruences.CompleteLattice`.
-+  **`Setoid.Varieties.MaltsevConditions`** — the term-operation compatibility lemma
-   (`term-compatible`: a congruence respects every term operation); **Maltsev's
-   theorem, forward direction** (`hasMaltsevTerm⇒permutable` / `maltsev⇒CP`: a theory
-   with a Maltsev term is congruence-permutable), bridging the interpretation-based
-   `HasMaltsevTerm` to the curried `m` and its two identities; the Jónsson and Day
-   theories (`Th-Jonsson n`, `Th-Day n`) and predicates; and the deferred theorems —
-   the Maltsev converse, Jónsson's and Day's theorems — as checked `Type` statements.
++  `Setoid.Congruences.Permutability` — relation composition `θ ∘ φ`, the `Permutes` predicate (`θ ∘ φ ⊆ φ ∘ θ`), and `CongruencePermutable`.
++  `Setoid.Congruences.Properties` — `CongruenceDistributive` and `CongruenceModular`.
++  `Setoid.Varieties.MaltsevConditions` — `term-compatible`; the forward Maltsev theorem `MaltsevTerm⇒CP` / `maltsev⇒CP`; the Jónsson and Day term theories; and the deferred theorems (`CP⇒maltsev-Statement`, `Jonsson-Statement`, `Day-Statement`) as checked `Type` statements.
++  Design note: `docs/notes/m6-3-maltsev-conditions.md`.
 
-Design note (encoding discussion, the term-compatibility bridge, and the deferred
-converse/Jónsson/Day construction plans): `docs/notes/m6-3-maltsev-conditions.md`.
-The interpretation encoding `Th-X ≼ ℰ` is the chosen uniform encoding for all three
-conditions, in preference to the issue's options (a) record and (b) inductive scheme.
+The chosen encoding is the interpretation `Th-X ≼ ℰ` (preferred over the issue's options (a) record and (b) inductive scheme; see the note).
 
-Track hygiene: this is clone/Maltsev material; per the milestone note, congruence
-modularity *connects forward* to the FLRP but the interpretability/Maltsev/clone track
-and the FLRP are kept separate, and nothing here touches congruence-lattice
-representation.
+Deferred proofs are tracked in successor issues: #410 ([M6-4] free-algebra `Cg`↔derivability bridge), #411 ([M6-5] CP converse), #412 ([M6-6] forward Jónsson/Day), #413 ([M6-7] converse Jónsson/Day).
+
+---
+
+### Issue M6-4: Free-algebra congruence/derivability bridge (infrastructure for the Maltsev-condition converses) (#410)
+
+**Labels**: `milestone-6-flrp`
+
+## Description
+
+The *converse* directions of the basic Maltsev conditions (a lattice property of `Con 𝑨` ⟹ the existence of terms) are all proved the same way: read equational identities off the congruences of the relatively free algebra `𝔽[ X ]`.  This issue builds the **reusable bridge** that all of them need — between the generated congruence `Cg R` on `𝔽[ X ]` and derivability `_⊢_▹_≈_` — so the converse issues ([M6-5], [M6-7]) can consume it rather than each re-deriving it.
+
+It is the single biggest lever identified in the M6-3 design note: built once, it unlocks the CP, CD, and CM converses.
+
+## Background
+
++  M6-3 (#273, PR #409) landed the CP layer and the forward Maltsev theorem, and *stated* the deferred converses as checked, uninhabited `Type`s (`CP⇒maltsev-Statement`, `Jonsson-Statement`, `Day-Statement`).
++  Construction plan and rationale: `docs/notes/m6-3-maltsev-conditions.md`, § "The deferred theorems and their construction plans".
+
+## Tasks
+
++  Substitution-induced homomorphism `𝔽[ X ] → 𝔽[ Y ]` from a map of variables (`X → Term Y`, and the special case `X → Y`), with the proof that it is a homomorphism — its action on a term is substitution `_[_]`, which commutes with `node` by definition.
++  Package the kernel of a homomorphism as a `Con` (compatibility is `HomKerComp` in `Setoid.Homomorphisms.Kernels`; add the equivalence and `reflexive` fields).
++  The bridge lemma: for a relation `R` on `𝔽[ X ]` cut out by finitely many identified pairs, `Cg R ⊆ ker h` for any hom `h` that collapses those pairs (immediate from `Cg-least`); hence membership in a principal congruence `Cg {(s , t)}` yields a *derivable* equation in the quotient.
++  The impedance shims between the `Idx → Term × Term` theory shape used by `_≼_` and the `I → Eq` shape used by `_⊢_▹_≈_` / `𝔽[_]`, in both directions, so a witness term extracted in `𝔽` can be packaged as an `Interpretation` and discharged via `⊧-interp` + soundness.
+
+## Dependencies
+
++  None beyond what M6-3 (#273, PR #409) landed.  This is the prerequisite for [M6-5] and [M6-7].
+
+## Acceptance criteria
+
++  The bridge lemmas type-check under `--cubical-compatible --exact-split --safe`.
++  At least one smoke-test consumer: recover a single derivable identity from a principal-congruence membership on `𝔽[ X ]`.
+
+## References
+
++  `Setoid.Varieties.SoundAndComplete` (`𝔽[_]`, `satisfies`, soundness/completeness); `Setoid.Congruences.Generation` (`Cg`, `Cg-least`); `Setoid.Homomorphisms.Kernels` (`HomKerComp`); `Setoid.Varieties.Interpretation` (`⊧-interp`).
++  Burris and Sankappanavar, *A Course in Universal Algebra*, Ch. II.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01MvPrLTCxKjFgsnTMK8j2qZ
 
 ---
 
@@ -3107,6 +3133,50 @@ So assembling the lattice is a "step-3"-style task, closely parallel to the cong
 
 ---
 
+### Issue M6-5: Converse of Maltsev's theorem: congruence-permutable ⟹ Maltsev term (#411)
+
+**Labels**: `milestone-6-flrp`
+
+## Description
+
+Complete the **congruence-permutability** characterization by proving the converse of Maltsev's theorem: a congruence-permutable variety has a Maltsev term.  Concretely, inhabit `CP⇒maltsev-Statement` in `Setoid.Varieties.MaltsevConditions`.  M6-3 (#273, PR #409) proved the forward direction (`MaltsevTerm⇒CP`); together they give the iff.
+
+## Background
+
+Construction (Burris–Sankappanavar, Thm. 12.2), detailed in `docs/notes/m6-3-maltsev-conditions.md`:
+
++  Work in `𝔽[ Fin 3 ]`, the relatively free algebra on three generators `x , y , z`; it is a model of `ℰ` (`satisfies`), hence congruence-permutable by hypothesis.
++  Take the principal congruences `θ = Cg(x , y)` and `φ = Cg(y , z)`.  From `x θ y` and `y φ z` we get `(x , z) ∈ θ ∘ φ`; permutability gives `(x , z) ∈ φ ∘ θ`, i.e. a witness `w` with `x φ w` and `w θ z`.
++  Since the carrier of `𝔽` *is* `Term (Fin 3)`, `w` is literally a term `M(x , y , z)`.  Translating `x φ w` and `w θ z` through the collapsing-substitution homomorphisms (`z ↦ y`, resp. `x ↦ y`) yields `M(x , y , y) ≈ x` and `M(x , x , y) ≈ y` — the two Maltsev identities.
++  Package `M` as the interpretation `Th-Maltsev ≼ ℰ` and discharge via `⊧-interp` + soundness.
+
+Note: #273's text says "the free algebra on two generators"; the standard construction is on **three** generators `x , y , z`, since the Maltsev term has three variables.
+
+## Tasks
+
++  Build the principal congruences and the `θ ∘ φ` membership in `𝔽[ Fin 3 ]`; apply the CP hypothesis.
++  Extract the witness `w` as a term and translate both memberships to the two identities via the [M6-4] bridge (#410).
++  Assemble the interpretation and inhabit `CP⇒maltsev-Statement`.
+
+## Dependencies
+
++  [M6-4] (#410) — the free-algebra congruence/derivability bridge.  This is the smallest client of that bridge and a good first validation of it.
+
+## Acceptance criteria
+
++  `CP⇒maltsev-Statement` is inhabited; with `maltsev⇒CP`, congruence permutability is characterized by the Maltsev term (a complete iff).
+
+## References
+
++  A. I. Mal'cev, *On the general theory of algebraic systems* (Russian), Mat. Sb. (N.S.) **35(77)** (1954), 3–20; Engl. transl., *Amer. Math. Soc. Transl.* (2) **27** (1963), 125–142.  [Math-Net.Ru](http://www.mathnet.ru/sm5264).
++  Burris and Sankappanavar, *A Course in Universal Algebra*, Thm. II.12.2.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01MvPrLTCxKjFgsnTMK8j2qZ
+
+---
+
 ### Issue M6-5: Worked example: the subgroup lattice of a concrete finite group (#374, closed)
 
 **Labels**: `milestone-6-flrp`
@@ -3130,6 +3200,95 @@ This is separated from #373 because it is a sizeable undertaking on its own:
 ## Notes
 
 +  Subuniverses of a group algebra are exactly its subgroups precisely because the signature carries the unary inverse and the nullary identity, so closure under the operations forces the subgroup axioms — worth stating explicitly in the example.
+
+---
+
+### Issue M6-6: Forward Jónsson/Day: Jónsson terms ⟹ CD and Day terms ⟹ CM (#412)
+
+**Labels**: `milestone-6-flrp`
+
+## Description
+
+Prove the "terms ⟹ lattice property" halves of Jónsson's and Day's theorems: a variety with Jónsson terms is congruence-distributive, and a variety with Day terms is congruence-modular.  These inhabit the *first* projections of `Jonsson-Statement` and `Day-Statement` in `Setoid.Varieties.MaltsevConditions`.
+
+These halves need **no** free-algebra machinery (so they are independent of [M6-4] (#410)): they are universally quantified over the variety and use the chain terms available on every algebra via the interpretation, plus `term-compatible` and an induction over the join `_∨_ = Cg(∪)`.  They are the lowest-friction next deliverables and reuse the M6-3 infrastructure directly.
+
+## Tasks
+
++  Generalize the curried-term extraction (`eval-m` / `satM` from M6-3) from one ternary symbol to the `Fin (n+1)` chain — the ternary Jónsson terms `dᵢ` and the quaternary Day terms `mᵢ` — yielding the curried operations and their parity-split identities on every model of the theory.
++  **Jónsson terms ⟹ CD**: the "staircase" induction over the `Gen (φ ∪ ψ)` derivation, proving the non-trivial inclusion `θ ∧ (φ ∨ ψ) ⊆ (θ ∧ φ) ∨ (θ ∧ ψ)` (the reverse inclusion is automatic in any lattice).
++  **Day terms ⟹ CM**: the analogous staircase for the modular law `θ ≤ ψ → (θ ∨ φ) ∧ ψ ⊆ θ ∨ (φ ∧ ψ)`.
++  Inhabit the forward projections of `Jonsson-Statement` and `Day-Statement`.
+
+## Dependencies
+
++  None beyond M6-3 (#273, PR #409): reuses `term-compatible`, the curried-extraction pattern, and the congruence lattice (`Setoid.Congruences.{Lattice,Generation,Properties}`).  Independent of [M6-4] (#410).
+
+## Acceptance criteria
+
++  Both forward implications type-check under `--safe`; one direction of each of Jónsson's and Day's theorems is done.
+
+## Notes
+
++  Difficulty: moderate.  The mechanical cost is generalizing the extraction to `n+1` parity-split identities; the mathematical content is the chain induction over the inductively-generated join.
+
+## References
+
++  B. Jónsson, *Algebras whose congruence lattices are distributive*, Math. Scand. **21** (1967), 110–121.  [doi:10.7146/math.scand.a-10850](https://doi.org/10.7146/math.scand.a-10850) (open access).
++  A. Day, *A characterization of modularity for congruence lattices of algebras*, Canad. Math. Bull. **12** (1969), 167–173.  [doi:10.4153/CMB-1969-016-6](https://doi.org/10.4153/CMB-1969-016-6).
++  Burris and Sankappanavar, *A Course in Universal Algebra*, Thms. II.12.6 (Jónsson) and II.12.4 (Day).
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01MvPrLTCxKjFgsnTMK8j2qZ
+
+---
+
+### Issue M6-7: Converse Jónsson/Day: CD ⟹ Jónsson terms and CM ⟹ Day terms (#413)
+
+**Labels**: `milestone-6-flrp`
+
+## Description
+
+Complete Jónsson's and Day's theorems with the hard "lattice property ⟹ terms" directions: a congruence-distributive variety has Jónsson terms, and a congruence-modular variety has Day terms.  These inhabit the *second* projections of `Jonsson-Statement` and `Day-Statement` in `Setoid.Varieties.MaltsevConditions`, turning both into complete iffs.
+
+This is the research-grade end of the M6-3 track.  Beyond the [M6-4] (#410) bridge, it requires extracting the **chain length `n`** and the terms `dᵢ` / `mᵢ` from the inductive derivation witnessing a join membership — the source of the `Σ[ n ∈ ℕ ]` in the statements, and the part with no off-the-shelf analogue in the library.
+
+## Background
+
+Construction (Burris–Sankappanavar, Thms. 12.6 and 12.4), sketched in `docs/notes/m6-3-maltsev-conditions.md`:
+
++  Work in `𝔽[ Fin 3 ]` (Jónsson) / `𝔽[ Fin 4 ]` (Day); set up the principal congruences whose distributive / modular identity forces the chain.
++  Extract `n : ℕ` and the parity-correct chain of terms from the `Gen` derivation witnessing the relevant join membership.
++  Package the chain as an interpretation and discharge via `⊧-interp` + soundness (through the [M6-4] bridge).
+
+## Tasks
+
++  CD ⟹ Jónsson terms: extract the ternary chain `d₀ … dₙ` and inhabit the converse projection of `Jonsson-Statement`.
++  CM ⟹ Day terms: extract the quaternary chain `m₀ … mₙ` and inhabit the converse projection of `Day-Statement`.
++  Confirm the extracted identities match the parity convention of `Th-Jonsson` / `Th-Day` (cross-check the even/odd argument patterns when the proof is in hand).
+
+## Dependencies
+
++  [M6-4] (#410) — the free-algebra congruence/derivability bridge.
++  [M6-6] (#412) — the chain-term extraction and the forward halves (reused for the parity bookkeeping and the curried chain operations).
+
+## Acceptance criteria
+
++  Both converse implications type-check under `--safe`; Jónsson's and Day's theorems are complete iffs.
+
+## Notes
+
++  Difficulty: hard.  The derivation-length / chain extraction from an inductively-generated congruence is the crux; budget accordingly and consider landing CD ⟹ Jónsson first, with CM ⟹ Day mirroring it.
+
+## References
+
++  B. Jónsson, *Algebras whose congruence lattices are distributive*, Math. Scand. **21** (1967), 110–121.  [doi:10.7146/math.scand.a-10850](https://doi.org/10.7146/math.scand.a-10850).
++  A. Day, *A characterization of modularity for congruence lattices of algebras*, Canad. Math. Bull. **12** (1969), 167–173.  [doi:10.4153/CMB-1969-016-6](https://doi.org/10.4153/CMB-1969-016-6).
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01MvPrLTCxKjFgsnTMK8j2qZ
 
 <!-- END GENERATED: milestone-6 -->
 
