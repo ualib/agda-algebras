@@ -11,7 +11,6 @@ This is the [Setoid.Varieties.SoundAndComplete][] module of the [Agda Universal 
 
 This module is based on [Andreas Abel's Agda formalization of Birkhoff's completeness theorem](http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf).
 
-
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -19,8 +18,9 @@ open import Overture using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Varieties.SoundAndComplete {𝑆 : Signature 𝓞 𝓥} where
 
--- imports from Agda and the Agda Standard Library -------------------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
+
+-- imports from the Agda Standard Library ---------------------------------------
 open import Data.Product     using ( _,_ ; Σ-syntax ; _×_ )
 open import Function         using ( _∘_ ; flip ; id ) renaming ( Func to _⟶_ )
 open import Level            using ( Level ; _⊔_ )
@@ -44,7 +44,7 @@ open Term
 private variable
  χ α ρᵃ ι ℓ : Level
  X Γ Δ : Type χ
- f     : OperationSymbolsOf 𝑆
+ f : OperationSymbolsOf 𝑆
  I : Type ι
 
 -- Equations
@@ -55,7 +55,7 @@ record Eq : Type (ov χ) where
   {cxt}  : Type χ
   lhs    : Term cxt
   rhs    : Term cxt
-
+infix 4 _≈̇_
 open Eq public
 
 -- Equation p ≈̇ q holding in algebra M. (type \~~\^. to get ≈̇; type \models to get ⊧)
@@ -104,28 +104,23 @@ module _ {α}{ρᵃ}{ι}{I : Type ι} where
 
 ##### Derivations in a context
 
-(Based on [Andreas Abel's Agda formalization of Birkhoff's completeness
-theorem](http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf).)
-
 ```agda
 module _ {χ ι : Level} where
 
   data _⊢_▹_≈_ {I : Type ι}(E : I → Eq) : (X : Type χ)(p q : Term X) → Type (ι ⊔ ov χ) where
-    hyp    : ∀ i → let p ≈̇ q = E i in E ⊢ _ ▹ p ≈ q
-    app    : ∀ {ps qs} → (∀ i → E ⊢ Γ ▹ ps i ≈ qs i) → E ⊢ Γ ▹ (node f ps) ≈ (node f qs)
-    sub    : ∀ {p q} → E ⊢ Δ ▹ p ≈ q → ∀ (σ : Sub Γ Δ) → E ⊢ Γ ▹ (p [ σ ]) ≈ (q [ σ ])
-    refl   : ∀ {p}              → E ⊢ Γ ▹ p ≈ p
-    sym    : ∀ {p q : Term Γ}   → E ⊢ Γ ▹ p ≈ q → E ⊢ Γ ▹ q ≈ p
-    trans  : ∀ {p q r : Term Γ} → E ⊢ Γ ▹ p ≈ q → E ⊢ Γ ▹ q ≈ r → E ⊢ Γ ▹ p ≈ r
+    hyp    : ∀ (i : I)           → let p ≈̇ q = E i in E ⊢ _ ▹ p ≈ q
+    app    : ∀ {ps qs}           → (∀ i → E ⊢ Γ ▹ ps i ≈ qs i) → E ⊢ Γ ▹ node f ps ≈ node f qs
+    sub    : ∀ {p q : Term Δ}    → E ⊢ Δ ▹ p ≈ q → ∀ (σ : Sub Γ Δ) → E ⊢ Γ ▹ p [ σ ] ≈ q [ σ ]
+    refl   : ∀ {p : Term Γ}      → E ⊢ Γ ▹ p ≈ p
+    sym    : ∀ {p q : Term Γ}    → E ⊢ Γ ▹ p ≈ q → E ⊢ Γ ▹ q ≈ p
+    trans  : ∀ {p q r : Term Γ}  → E ⊢ Γ ▹ p ≈ q → E ⊢ Γ ▹ q ≈ r → E ⊢ Γ ▹ p ≈ r
+  infix 4 _⊢_▹_≈_
 
   ⊢▹≈IsEquiv : {I : Type ι}{E : I → Eq} → IsEquivalence (E ⊢ Γ ▹_≈_)
   ⊢▹≈IsEquiv = record { refl = refl ; sym = sym ; trans = trans }
 ```
 
 ##### Soundness of the inference rules
-
-(Based on [Andreas Abel's Agda formalization of Birkhoff's completeness theorem](see:
-http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf).)
 
 ```agda
 module Soundness
@@ -174,9 +169,6 @@ We will prove that result next.
 The proof proceeds by constructing a relatively free algebra consisting of term
 quotiented by derivable equality `E ⊢ X ▹ _≈_`.  It then suffices to prove that this
 model satisfies all equations in `E`.
-
-(Based on [Andreas Abel's Agda formalization of Birkhoff's completeness
-theorem](http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf).)
 
 We denote by `𝔽[ X ]` the *relatively free algebra* over `X` (relative to `E`), which
 is defined as `Term X` modulo `E ⊢ X ▹ _≈_`.  This algebra `𝔽[ X ]` is "free" or
@@ -243,7 +235,8 @@ type `X` (or `Δ`, or `Γ`), which is an arbitrary inhabitant of `Type χ`.)
       open SetoidReasoning (Domain 𝔽[ Δ ]) ; p = lhs (E i) ; q = rhs (E i)
 ```
 
-We are finally ready to formally state and prove Birkhoff's Completeness Theorem, which asserts that every valid consequence is derivable.
+We are finally ready to formally state and prove Birkhoff's Completeness Theorem,
+which asserts that every valid consequence is derivable.
 
 ```agda
   module _ {Γ : Type χ} where
