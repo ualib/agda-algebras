@@ -17,6 +17,7 @@ module Setoid.Algebras {𝑆 : Signature 𝓞 𝓥} where
 
 open import Setoid.Algebras.Basic {𝑆 = 𝑆} public
 open import Setoid.Algebras.Products {𝑆 = 𝑆} public
+open import Setoid.Algebras.Reduct public
 ```
 
 --------------------------------

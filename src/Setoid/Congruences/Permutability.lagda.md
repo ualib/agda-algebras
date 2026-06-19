@@ -43,7 +43,7 @@ open import Relation.Binary  using ( Setoid ; IsEquivalence )
                              renaming ( Rel to BinRel ; _⇒_ to _⊆_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Setoid.Algebras.Basic    {𝑆 = 𝑆}  using ( ov ; Algebra ; 𝕌[_] )
+open import Setoid.Algebras.Basic     {𝑆 = 𝑆}  using ( ov ; Algebra ; 𝕌[_] )
 open import Setoid.Congruences.Basic  {𝑆 = 𝑆}  using ( Con ; reflexive ; is-equivalence )
 
 private variable α ρ ℓ : Level
