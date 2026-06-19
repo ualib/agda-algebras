@@ -55,7 +55,7 @@ record Eq : Type (ov χ) where
   {cxt}  : Type χ
   lhs    : Term cxt
   rhs    : Term cxt
-infix 4 _≈̇_
+infix 6 _≈̇_
 open Eq public
 
 -- Equation p ≈̇ q holding in algebra M. (type \~~\^. to get ≈̇; type \models to get ⊧)
@@ -64,6 +64,7 @@ _⊧_ : (𝑨 : Algebra α ρᵃ)(term-identity : Eq{χ}) → Type _
 
 _⊫_ : Pred (Algebra α ρᵃ) ℓ → Eq{χ} → Type (ℓ ⊔ χ ⊔ ov(α ⊔ ρᵃ))
 𝒦 ⊫ eq = ∀ 𝑨 → 𝒦 𝑨 → 𝑨 ⊧ eq                    -- (type \||= to get ⊫)
+infix 5 _⊫_
 
 -- An I-indexed set of equations inhabits the type I → Eq.
 
