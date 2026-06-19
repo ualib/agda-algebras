@@ -177,8 +177,10 @@ introduced — `a = α ⊔ ρᵃ ⊔ ℓ` and `ι = ov a` — and the principal 
 from an explicit argument (`∀ 𝑨 → …`) to an implicit one pinned to that level
 (`{𝑨 : Algebra a a} → …`).  `𝑨` is recovered from the `𝑨 ∈ Mod (Th (V ℓ ι 𝒦))` argument, so
 the theorem now reads as the inclusion `Mod (Th (V 𝒦)) ⊆ V 𝒦`; the level `(a , a)` is the
-one the proof already required (it embeds `𝑨` into the relatively free algebra and its
-lift).  This is a presentational refinement, not a change to the theorem's content, and the
+one the proof already required — `𝑨`'s carrier `∣A∣ : Type a` is the generating set of the
+relatively free algebra `𝔽[ ∣A∣ ]`, while that free algebra and the lift `Lift-Alg 𝑨 ι ι`
+live one level up, at `(ι , ι)` (`ι = ov a`).  This is a presentational refinement, not a
+change to the theorem's content, and the
 sole consumer — `Examples.Setoid.HSPCommutativeMonoid` — was updated to match.  The module
 prose at `Setoid.Varieties.HSP` documents the signature in place.
 
