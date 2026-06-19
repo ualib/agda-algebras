@@ -185,6 +185,18 @@ that `𝔽[ X ]` is a subalgebra of the *lift* of `ℭ`, denoted `ℓℭ`.
 
 Finally, we are in a position to prove Birkhoff's celebrated variety theorem.
 
+The statement uses two `private` level abbreviations: `a = α ⊔ ρᵃ ⊔ ℓ` — the single
+level at which the proof operates, the join of the generating class's carrier level
+`α`, its relation level `ρᵃ`, and the variable level `ℓ` — and `ι = ov a`.  The
+principal algebra `𝑨` is taken as an *implicit* argument pinned to `Algebra a a`.  It
+is implicit because it is recovered from the model-membership argument
+`𝑨 ∈ Mod (Th (V ℓ ι 𝒦))`, so the theorem reads as the textbook inclusion
+`Mod (Th (V 𝒦)) ⊆ V 𝒦`; and it is pinned to level `(a , a)` because the proof embeds
+`𝑨` into the relatively free algebra `𝔽[ ∣A∣ ]` and its lift `Lift-Alg 𝑨 ι ι`, both of
+which live at that level.  This is a presentational refinement of the equivalent
+`∀ 𝑨 → …` form — it names the level the proof already fixes — not a change to the
+theorem's content.
+
 ```agda
 module _ {α ρᵃ ℓ : Level}{𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
   private
