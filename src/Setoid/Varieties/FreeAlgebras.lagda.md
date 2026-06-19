@@ -135,7 +135,7 @@ Finally, we define an epimorphism from `𝑻 X` onto the relatively free algebra
     ker𝔽⊆Equal{p = p}{q} x = S-id1{ℓ = ℓ}{p = p}{q} (ℰ⊢[ X ]▹Th𝒦 x) 𝑨 sA
 
   𝒦⊫→ℰ⊢ : {X : Type χ} → ∀{p q} → 𝒦 ⊫ (p ≈̇ q) → ℰ ⊢ X ▹ p ≈ q
-  𝒦⊫→ℰ⊢ {p = p} {q} pKq = hyp (p ≈̇ q , pKq) where open _⊢_▹_≈_ using (hyp)
+  𝒦⊫→ℰ⊢ {p = p} {q} pKq = hyp ((p ≈̇ q) , pKq) where open _⊢_▹_≈_ using (hyp)
 
 ------------------------------------------------------------------------------
 

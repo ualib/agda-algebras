@@ -67,7 +67,7 @@ open import Level           using ( Level )
 import Relation.Binary.PropositionalEquality as ≡
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture.Terms                      {𝑆 = 𝑆} using ( Term ; ℊ ; node )
+open import Overture.Terms                      {𝑆 = 𝑆} using ( Term )
 open import Setoid.Terms.Basic                  {𝑆 = 𝑆} using ( _≐_ ; Sub ; _[_] )
 open import Setoid.Varieties.SoundAndComplete   {𝑆 = 𝑆} using ( Eq ; _⊢_▹_≈_ )
 
