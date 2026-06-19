@@ -134,8 +134,8 @@ Finally, we define an epimorphism from `𝑻 X` onto the relatively free algebra
     ker𝔽⊆Equal : ∀{p q} → (p , q) ∈ fkerPred (proj₁ (hom𝔽[ X ])) → Equal p q
     ker𝔽⊆Equal{p = p}{q} x = S-id1{ℓ = ℓ}{p = p}{q} (ℰ⊢[ X ]▹Th𝒦 x) 𝑨 sA
 
-  𝒦⊫→ℰ⊢ : {X : Type χ} → ∀{p q} → 𝒦 ⊫ (p ≈̇ q) → ℰ ⊢ X ▹ p ≈ q
-  𝒦⊫→ℰ⊢ {p = p} {q} pKq = hyp ((p ≈̇ q) , pKq) where open _⊢_▹_≈_ using (hyp)
+  𝒦⊫→ℰ⊢ : {X : Type χ} → ∀{p q} → 𝒦 ⊫ p ≈̇ q → ℰ ⊢ X ▹ p ≈ q
+  𝒦⊫→ℰ⊢ {p = p} {q} pKq = hyp (p ≈̇ q , pKq) where open _⊢_▹_≈_ using (hyp)
 
 ------------------------------------------------------------------------------
 
@@ -182,21 +182,19 @@ module _ {α ρᵃ ℓ : Level} {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔
       where
       φ : 𝔻[ 𝔽[ ∣A∣ ] ] ⟶ A
       φ ⟨$⟩ x = free-lift id x
-      φ .cong {p} {q} pq = Goal
-        where
-        Goal : free-lift id p ≈ free-lift id q
-        Goal = begin
-          free-lift id p ≈˘⟨ free-lift-interp{𝑨 = 𝑨} id p ⟩
-          ⟦ p ⟧ ⟨$⟩ id ≈⟨ A∈ModThK{p = p}{q} (kernel-in-theory pq) id ⟩
-          ⟦ q ⟧ ⟨$⟩ id ≈⟨ free-lift-interp{𝑨 = 𝑨} id q ⟩
-          free-lift id q ∎
+      φ .cong {p} {q} pq = begin
+          free-lift id p  ≈˘⟨ free-lift-interp{𝑨 = 𝑨} id p ⟩
+          ⟦ p ⟧ ⟨$⟩ id    ≈⟨ A∈ModThK{p = p}{q} (kernel-in-theory pq) id ⟩
+          ⟦ q ⟧ ⟨$⟩ id    ≈⟨ free-lift-interp{𝑨 = 𝑨} id q ⟩
+          free-lift id q  ∎
 
       isEpi : IsEpi 𝔽[ ∣A∣ ] 𝑨 φ
       isEpi .isHom .compatible = cong Interp (≡.refl , λ _ → refl)
       isEpi .isSurjective = eq (ℊ _) refl
 
     𝔽-ModTh-epi-lift : 𝑨 ∈ Mod (Th (V ℓ ι 𝒦)) → epi 𝔽[ ∣A∣ ] (Lift-Alg 𝑨 ι ι)
-    𝔽-ModTh-epi-lift A∈ModThK = ⊙-epi (𝔽-ModTh-epi (λ {p q} → A∈ModThK{p = p}{q})) ToLift-epi
+    𝔽-ModTh-epi-lift A∈ModThK =
+      ⊙-epi (𝔽-ModTh-epi (λ {p q} → A∈ModThK{p = p}{q})) ToLift-epi
 ```
 
 --------------------------------
