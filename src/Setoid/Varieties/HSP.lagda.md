@@ -191,9 +191,11 @@ level at which the proof operates, the join of the generating class's carrier le
 principal algebra `𝑨` is taken as an *implicit* argument pinned to `Algebra a a`.  It
 is implicit because it is recovered from the model-membership argument
 `𝑨 ∈ Mod (Th (V ℓ ι 𝒦))`, so the theorem reads as the textbook inclusion
-`Mod (Th (V 𝒦)) ⊆ V 𝒦`; and it is pinned to level `(a , a)` because the proof embeds
-`𝑨` into the relatively free algebra `𝔽[ ∣A∣ ]` and its lift `Lift-Alg 𝑨 ι ι`, both of
-which live at that level.  This is a presentational refinement of the equivalent
+`Mod (Th (V 𝒦)) ⊆ V 𝒦`; and it is pinned to level `(a , a)` so that its carrier
+`∣A∣ : Type a` can serve as the generating set of the relatively free algebra
+`𝔽[ ∣A∣ ]`.  (That free algebra and the lift `Lift-Alg 𝑨 ι ι` through which the proof
+factors live one level up, at `(ι , ι)` with `ι = ov a`.)  This is a presentational
+refinement of the equivalent
 `∀ 𝑨 → …` form — it names the level the proof already fixes — not a change to the
 theorem's content.
 
