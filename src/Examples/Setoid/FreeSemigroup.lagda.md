@@ -89,7 +89,7 @@ free-semigroup-models-assoc = FreeAlgebra.satisfies E
 
 The carrier equality of `𝔽[ X ]` *is* derivable equality, so the
 associativity rule `hyp`{.AgdaInductiveConstructor} `0F` witnesses, on the nose,
-that the two parenthesisations of `g₀ · g₁ · g₂` are equal elements of the free
+that the two parenthesisations of `x · y · z` are equal elements of the free
 semigroup — exactly the identification that the free magma withholds.
 
 ```agda
