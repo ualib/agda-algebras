@@ -22,14 +22,14 @@ Two modules, both `--cubical-compatible --exact-split --safe`.
    of subdirect irreducibility.
    +  `Nontrivial 𝑨` / `Trivial 𝑨` — the carrier has two `≈`-distinct elements / all
       elements are `≈`-equal (the degenerate one-element case); `trivial⇒¬nontrivial`.
-   +  `BelowDiagonal θ` (`θ` relates only `≈`-equal elements, i.e. `θ ≅ 0ᴬ`) and its
+   +  `BelowDiagonal θ` (`θ` relates only `≈`-equal elements, i.e. `θ ≡ 0ᴬ`) and its
       negation `Nonzero θ` (the right "strictly above `0ᴬ`" notion).
    +  `⋂` — the meet (intersection) of an `ℓ`-small family of `ℓ`-level congruences, at
       the algebra's own relation level (the natural-level instance of the `⋀` that
       `Setoid.Congruences.CompleteLattice` packages at the absorbing level `L`).
    +  `IsMonolith μ` — `μ` is nonzero and is contained in every nonzero congruence (the
       least nonzero congruence); `HasMonolith`; `monolith-unique` (the monolith is
-      unique up to `≅`).
+      unique up to `≡`, the mutual-containment equivalence on congruences).
    +  `IsSubdirectlyIrreducible 𝑨 = Nontrivial 𝑨 × HasMonolith 𝑨`, with `si⇒nontrivial`
       and `trivial⇒¬si`.
    +  `monolith⇒cmi` — the characterization: a monolith makes `0ᴬ` *completely
@@ -104,9 +104,9 @@ as a checked `Type`), since (a) both states the assumption and proves the theore
 
 `monolith⇒cmi` is stated in **contrapositive** form: *if every member of a family is
 nonzero, the meet is nonzero*.  This is the constructively honest reading of "`0ᴬ` is
-completely meet-irreducible" — the textbook form "`⋀ θ ≅ 0ᴬ ⟹ ∃ i, θ i ≅ 0ᴬ`" would
+completely meet-irreducible" — the textbook form "`⋀ θ ≡ 0ᴬ ⟹ ∃ i, θ i ≡ 0ᴬ`" would
 require extracting a witnessing index from a negated statement.  The proof is immediate
-from the monolith: `μ ≤ θ i` for every `i`, so `μ ≤ ⋀ θ`, and `μ` nonzero forces `⋀ θ`
+from the monolith: `μ ⊆ θ i` for every `i`, so `μ ⊆ ⋀ θ`, and `μ` nonzero forces `⋀ θ`
 nonzero.
 
 The **converse** (`0ᴬ` completely meet-irreducible ⟹ a monolith exists) is *not* added.
