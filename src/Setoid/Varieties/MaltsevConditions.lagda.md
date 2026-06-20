@@ -185,180 +185,47 @@ module _
 ```
 
 The theorem above is the required acceptance criterion: CP's Maltsev-term
-characterization, in its concrete "term ⟹ permutable" direction.  Read for the whole
-variety — every model of a theory with a Maltsev term is congruence-permutable — it is
-`maltsev⇒CP` in the final section.
+characterization, in its concrete "term ⟹ permutable" direction.
 
-#### Distributivity and modularity of the congruence lattice
+#### Congruence-permutable varieties
 
-CD and CM are properties of the congruence *lattice*, defined in
-[Setoid.Congruences.Properties][] as `CongruenceDistributive` and
-`CongruenceModular` (at the absorbing relation level, so that meet and join are
-operations on a single type).  They are re-exported here (the `public` on the import
-above) so the Maltsev conditions of this module — permutability, and the Jónsson/Day
-conditions below — read from one place.
+Fix a theory `ℰ` and the level pair `(α , ρ)` at which models are tested.
+A *congruence-permutable variety* is one in which all models are
+congruence-permutable.
 
-#### Jónsson terms (congruence distributivity)
-
-Where a single ternary term characterizes CP, a *chain* of ternary terms
-`d₀ , … , dₙ` — the **Jónsson terms** — characterizes CD.[^jonsson]
-They are encoded exactly as the Maltsev term was: a signature `Sig-Jonsson n` of
-`n+1` ternary symbols, and a theory `Th-Jonsson n` of the Jónsson identities
-(Burris–Sankappanavar, Def. 12.5),
-
-    d₀(x,y,z) ≈ x,    dₙ(x,y,z) ≈ z,    dᵢ(x,y,x) ≈ x   (all i),
-    dᵢ(x,x,z) ≈ dᵢ₊₁(x,x,z)   (i even),  dᵢ(x,y,y) ≈ dᵢ₊₁(x,y,y)   (i odd).
-
-`HasJonssonTerms n ℰ = Th-Jonsson n ≼ ℰ` — `ℰ` admits `n+1` Jónsson terms iff the
-Jónsson theory interprets into it, the same `Th-X ≼ ℰ` shape as `HasMaltsevTerm`.
+The forward Maltsev theorem, restated for the whole variety, asserts that every model
+of a theory with a Maltsev term is congruence-permutable.
 
 ```agda
--- parity of a natural number, to split the Jónsson/Day "fork" identities by index
-even? : ℕ → Bool
-even? zero = true
-even? (suc m) = not (even? m)
+module _
+  {α ρ ℓ : Level}
+  {𝑆 : Signature 0ℓ 0ℓ}
+  {X : Type χ} {Idx : Type ι}
+  (ℰ : Idx → Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X)
+  where
 
-module _ (n : ℕ) where
-
-  -- n+1 ternary operation symbols.
-  Sig-Jonsson : Signature 0ℓ 0ℓ
-  Sig-Jonsson = Fin (suc n) , (λ _ → Fin 3)
-
-  private
-    -- the i-th Jónsson term applied to three arguments
-    d : Fin (suc n) → (a b c : Term (Fin 3)) → Term (Fin 3)
-    d i a b c = node i (tri a b c)
-
-    x y z : Term {𝑆 = Sig-Jonsson} (Fin 3)
-    x = ℊ 0F ; y = ℊ 1F ; z = ℊ 2F
-
-  -- the index of the Jónsson identities: endpoints, the "x,y,x" family, and the forks
-  data Eq-Jonsson : Type where
-    dxyz≈x  : Eq-Jonsson                 -- d₀(x,y,z) ≈ x
-    dxyz≈z  : Eq-Jonsson                 -- dₙ(x,y,z) ≈ z
-    dxyx≈x  : Fin (suc n) → Eq-Jonsson   -- dᵢ(x,y,x) ≈ x
-    d-fork  : Fin n → Eq-Jonsson         -- consecutive dᵢ, dᵢ₊₁ agree (parity-dependent)
-
-  Th-Jonsson : Eq-Jonsson → Term {𝑆 = Sig-Jonsson} (Fin 3) × Term {𝑆 = Sig-Jonsson} (Fin 3)
-  Th-Jonsson dxyz≈x      = d fzero x y z , x
-  Th-Jonsson (dxyx≈x i)  = d i x y x , x
-  Th-Jonsson dxyz≈z      = d (fromℕ n) x y z , z
-  Th-Jonsson (d-fork i) = if even? (toℕ i)
-    then ( d (inject₁ i) x x z , d (fsuc i) x x z )   -- i even: agree on (x,x,z)
-    else ( d (inject₁ i) x y y , d (fsuc i) x y y )   -- i odd:  agree on (x,y,y)
-
-HasJonssonTerms : (n : ℕ)
-  {α ρ : Level} {𝑆 : Signature 0ℓ 0ℓ}{X : Type χ}{Idx : Type ι}
-  → (Idx → Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X) → Type (lsuc (α ⊔ ρ) ⊔ χ ⊔ ι)
-HasJonssonTerms n {α}{ρ} ℰ = Th-Jonsson n ≼ ℰ
-  where open Interpret α ρ
-```
-
-#### Day terms (congruence modularity)
-
-Congruence modularity is characterized by a chain of *quaternary* terms `m₀ , … , mₙ`,
-the **Day terms**[^day] (Day 1969; Burris–Sankappanavar, Thm. 12.4), with identities
-
-    m₀(x,y,z,u) ≈ x,   mₙ(x,y,z,u) ≈ u,   mᵢ(x,y,y,x) ≈ x   (all i),
-    mᵢ(x,x,u,u) ≈ mᵢ₊₁(x,x,u,u)  (i even),  mᵢ(x,y,y,u) ≈ mᵢ₊₁(x,y,y,u)  (i odd).
-
-```agda
--- the canonical 4-element tuple over the variable carrier Fin 4
-quad : {ℓ : Level}{A : Type ℓ} → A → A → A → A → Fin 4 → A
-quad a b c d 0F = a
-quad a b c d 1F = b
-quad a b c d 2F = c
-quad a b c d 3F = d
-
-module _ (n : ℕ) where
-
-  -- n+1 quaternary operation symbols.
-  Sig-Day : Signature 0ℓ 0ℓ
-  Sig-Day = Fin (suc n) , (λ _ → Fin 4)
-
-  private
-    d : Fin (suc n) → (a b c d : Term (Fin 4)) → Term (Fin 4)
-    d i a b c d = node i (quad a b c d)
-
-    x y z u : Term {𝑆 = Sig-Day} (Fin 4)
-    x = ℊ 0F ; y = ℊ 1F ; z = ℊ 2F ; u = ℊ 3F
-
-  data Eq-Day : Type where
-    mxyzu≈x  : Eq-Day                 -- m₀(x,y,z,u) ≈ x
-    mxyyx≈x  : Fin (suc n) → Eq-Day   -- mᵢ(x,y,y,x) ≈ x
-    mxyzu≈u  : Eq-Day                 -- mₙ(x,y,z,u) ≈ u
-    m-fork   : Fin n → Eq-Day         -- consecutive mᵢ, mᵢ₊₁ agree (parity-dependent)
-
-  Th-Day : Eq-Day → Term (Fin 4) × Term (Fin 4)
-  Th-Day mxyzu≈x      = d fzero x y z u , x
-  Th-Day mxyzu≈u      = d (fromℕ n) x y z u , u
-  Th-Day (mxyyx≈x i)  = d i x y y x , x
-  Th-Day (m-fork i)   = if even? (toℕ i)
-    then ( d (inject₁ i) x x u u , d (fsuc i) x x u u )   -- i even: agree on (x,x,u,u)
-    else ( d (inject₁ i) x y y u , d (fsuc i) x y y u )   -- i odd:  agree on (x,y,y,u)
-
-HasDayTerms : (n : ℕ){α ρ χ ι : Level}{𝑆 : Signature 0ℓ 0ℓ}{X : Type χ}{Idx : Type ι}
-  → (Idx → Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X) → Type (lsuc (α ⊔ ρ) ⊔ χ ⊔ ι)
-HasDayTerms n {α}{ρ} ℰ = Th-Day n ≼ ℰ  where open Interpret α ρ
-```
-
-#### The conditions as properties of a variety, and the deferred theorems
-
-Fix a theory `ℰ` and the level pair `(α , ρ)` at which models are tested.  A
-*congruence-permutable variety* is one all of whose models are
-congruence-permutable, and similarly for CD and CM.  The forward Maltsev theorem,
-restated for the whole variety, is `maltsev⇒CP`.  The other theorems — the converse of
-Maltsev, and the Jónsson and Day characterizations — are stated here as the goals that
-remain (their constructions are sketched in the design note); each is a `Type`.  The
-The converse of Maltsev, `CP⇒maltsev-Statement`, is now *inhabited* by `CP⇒maltsev`
-(see [The converse of Maltsev's theorem](#the-converse-of-maltsevs-theorem))
-via the bridge of [Setoid.Varieties.FreeBridge][]; the Jónsson and Day statements
-remain open.
-
-```agda
-module _ {χ ι : Level}{𝑆 : Signature 0ℓ 0ℓ}{X : Type χ}{Idx : Type ι}
-         (ℰ : Idx → Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X)(α ρ ℓ : Level) where
-
-  -- "Every model is congruence-permutable / -distributive / -modular."
+  -- "Every model is congruence-permutable."
   CongruencePermutableVariety : Type (χ ⊔ ι ⊔ lsuc (α ⊔ ρ ⊔ ℓ))
   CongruencePermutableVariety = (𝑩 : Algebra α ρ) → 𝑩 ⊨ₑ ℰ → CongruencePermutable 𝑩 ℓ
-
-  CongruenceDistributiveVariety : Type (χ ⊔ ι ⊔ lsuc (α ⊔ ρ ⊔ ℓ))
-  CongruenceDistributiveVariety = (𝑩 : Algebra α ρ) → 𝑩 ⊨ₑ ℰ → CongruenceDistributive 𝑩 ℓ
-
-  CongruenceModularVariety : Type (χ ⊔ ι ⊔ lsuc (α ⊔ ρ ⊔ ℓ))
-  CongruenceModularVariety = (𝑩 : Algebra α ρ) → 𝑩 ⊨ₑ ℰ → CongruenceModular 𝑩 ℓ
 
   -- Maltsev's theorem, forward direction, as a statement about the variety (PROVED).
   maltsev⇒CP : HasMaltsevTerm ℰ → CongruencePermutableVariety
   maltsev⇒CP mt 𝑩 B⊨ = MaltsevTerm⇒CP ℰ mt 𝑩 B⊨
-
-  -- The converse: a congruence-permutable variety has a Maltsev term.  Inhabited by
-  -- `CP⇒maltsev` in the section below (M6-5).
-  CP⇒maltsev-Statement : Type (χ ⊔ ι ⊔ lsuc (α ⊔ ρ ⊔ ℓ))
-  CP⇒maltsev-Statement = CongruencePermutableVariety → HasMaltsevTerm {α = α}{ρ} ℰ
-
-  -- Jónsson's theorem (DEFERRED): CD ⇔ existence of Jónsson terms.
-  Jonsson-Statement : Type (χ ⊔ ι ⊔ lsuc (α ⊔ ρ ⊔ ℓ))
-  Jonsson-Statement =
-      (CongruenceDistributiveVariety → Σ[ n ∈ ℕ ] HasJonssonTerms n {α = α}{ρ} ℰ)
-    × (Σ[ n ∈ ℕ ] HasJonssonTerms n {α = α}{ρ} ℰ → CongruenceDistributiveVariety)
-
-  -- Day's theorem (DEFERRED): CM ⇔ existence of Day terms.
-  Day-Statement : Type _
-  Day-Statement =
-      (CongruenceModularVariety → Σ[ n ∈ ℕ ] HasDayTerms n {α = α}{ρ} ℰ)
-    × (Σ[ n ∈ ℕ ] HasDayTerms n {α = α}{ρ} ℰ → CongruenceModularVariety)
 ```
 
-### The converse of Maltsev's theorem
+#### The converse of Maltsev's theorem
 
-Above we proved the *forward* direction of Maltsev's theorem
-(`maltsev⇒CP`{.AgdaFunction}: a variety with a Maltsev term is congruence-permutable)
-and stated the converse as a checked, uninhabited `Type`,
-`CP⇒maltsev-Statement`{.AgdaFunction}.  This section produces an inhabitant (proof)
-of that type (statement), completing the characterization: a congruence-permutable
-variety has a Maltsev term.[^maltsev2]
+Th converse can be stated formally (as a checked `Type`), as follows:
+
+```agda
+  -- A congruence-permutable variety has a Maltsev term.
+  CP⇒maltsev-Statement : Type (χ ⊔ ι ⊔ lsuc (α ⊔ ρ ⊔ ℓ))
+  CP⇒maltsev-Statement = CongruencePermutableVariety → HasMaltsevTerm {α = α}{ρ} ℰ
+```
+
+Our goal in this section is to show that the `CP⇒maltsev-Statement`{.AgdaFunction}
+type is inhabited, thereby proving the statement and completing the characterization:
+a congruence-permutable variety has a Maltsev term.[^maltsev2]
 
 The construction is the classical one (Burris–Sankappanavar, Thm. II.12.2), run through
 the free-algebra congruence/derivability bridge of [Setoid.Varieties.FreeBridge][].
@@ -393,7 +260,7 @@ construction shares one universe level between the equations' variables and the 
 generators, the theory's variable type is taken at level `0ℓ` (`X : Type 0ℓ`); this is
 no restriction for the finitary algebraic theories the Maltsev condition concerns.
 
-#### The theorem
+##### The theorem
 
 Fix a theory `ℰ` over a signature `𝑆 : Signature 0ℓ 0ℓ`, with variables `X : Type 0ℓ`.
 We inhabit `CP⇒maltsev-Statement`{.AgdaFunction} at the levels of the free algebra
@@ -402,10 +269,10 @@ We inhabit `CP⇒maltsev-Statement`{.AgdaFunction} at the levels of the free alg
 congruences live.
 
 ```agda
-module _ {ι : Level}{𝑆 : Signature 0ℓ 0ℓ}{X : Type 0ℓ}{Idx : Type ι}
+module _ {𝑆 : Signature 0ℓ 0ℓ}{X : Type 0ℓ}{Idx : Type ι}
          (ℰ : Idx → Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X) where
 
-  CP⇒maltsev : CP⇒maltsev-Statement ℰ (lsuc 0ℓ) (ι ⊔ lsuc 0ℓ) (ι ⊔ lsuc 0ℓ)
+  CP⇒maltsev : CP⇒maltsev-Statement ℰ
   CP⇒maltsev cpv = I , red
     where
     -- the theory in the `I → Eq` shape that the free algebra consumes
@@ -475,18 +342,161 @@ module _ {ι : Level}{𝑆 : Signature 0ℓ 0ℓ}{X : Type 0ℓ}{Idx : Type ι}
 
     -- every model satisfying ℰ satisfies the interpreted Maltsev identities
     red : (𝑩 : Algebra (lsuc 0ℓ) (ι ⊔ lsuc 0ℓ)) → 𝑩 ⊨ₑ ℰ → reductᴵ 𝑩 I ⊨ₑ Th-Maltsev
-
     red 𝑩 B⊨ mxxy≈y = Goal
       where
       Goal : reductᴵ 𝑩 I ⊧ m (ℊ 0F) (ℊ 0F) (ℊ 1F) ≈ (ℊ 1F)
       Goal = ⊧-interp 𝑩 I {s = proj₁ (Th-Maltsev mxxy≈y)} {t = proj₂ (Th-Maltsev mxxy≈y)}
                (Soundness.sound E 𝑩 B⊨ deriv-xxy)
-
     red 𝑩 B⊨ mxyy≈x = Goal
       where
       Goal : reductᴵ 𝑩 I ⊧ m (ℊ 0F) (ℊ 1F) (ℊ 1F) ≈ (ℊ 0F)
       Goal = ⊧-interp 𝑩 I {s = proj₁ (Th-Maltsev mxyy≈x)} {t = proj₂ (Th-Maltsev mxyy≈x)}
                (Soundness.sound E 𝑩 B⊨ deriv-xyy)
+```
+
+
+#### Distributivity and modularity of the congruence lattice
+
+CD and CM are properties of the congruence *lattice*, defined in
+[Setoid.Congruences.Properties][] as `CongruenceDistributive` and
+`CongruenceModular` (at the absorbing relation level, so that meet and join are
+operations on a single type).  They are re-exported here (the `public` on the import
+above) so the Maltsev conditions of this module — permutability, and the Jónsson/Day
+conditions below — read from one place.
+
+#### Jónsson terms (congruence distributivity)
+
+Where a single ternary term characterizes CP, a *chain* of ternary terms
+`d₀ , … , dₙ` — the **Jónsson terms** — characterizes CD.[^jonsson]
+They are encoded exactly as the Maltsev term was: a signature `Sig-Jonsson n` of
+`n+1` ternary symbols, and a theory `Th-Jonsson n` of the Jónsson identities
+(Burris–Sankappanavar, Def. 12.5),
+
+    d₀(x,y,z) ≈ x,    dₙ(x,y,z) ≈ z,    dᵢ(x,y,x) ≈ x   (all i),
+    dᵢ(x,x,z) ≈ dᵢ₊₁(x,x,z)   (i even),  dᵢ(x,y,y) ≈ dᵢ₊₁(x,y,y)   (i odd).
+
+`HasJonssonTerms n ℰ = Th-Jonsson n ≼ ℰ` — `ℰ` admits `n+1` Jónsson terms iff the
+Jónsson theory interprets into it, the same `Th-X ≼ ℰ` shape as `HasMaltsevTerm`.
+
+```agda
+-- parity of a natural number, to split the Jónsson/Day "fork" identities by index
+even? : ℕ → Bool
+even? zero = true
+even? (suc m) = not (even? m)
+
+module _ (n : ℕ) where
+
+  -- n+1 ternary operation symbols.
+  Sig-Jonsson : Signature 0ℓ 0ℓ
+  Sig-Jonsson = Fin (suc n) , (λ _ → Fin 3)
+
+  private
+    -- the i-th Jónsson term applied to three arguments
+    d : Fin (suc n) → (a b c : Term (Fin 3)) → Term (Fin 3)
+    d i a b c = node i (tri a b c)
+
+    x y z : Term {𝑆 = Sig-Jonsson} (Fin 3)
+    x = ℊ 0F ; y = ℊ 1F ; z = ℊ 2F
+
+  -- the index of the Jónsson identities: endpoints, the "x,y,x" family, and the forks
+  data Eq-Jonsson : Type where
+    dxyz≈x  : Eq-Jonsson                 -- d₀(x,y,z) ≈ x
+    dxyz≈z  : Eq-Jonsson                 -- dₙ(x,y,z) ≈ z
+    dxyx≈x  : Fin (suc n) → Eq-Jonsson   -- dᵢ(x,y,x) ≈ x
+    d-fork  : Fin n → Eq-Jonsson         -- consecutive dᵢ, dᵢ₊₁ agree (parity-dependent)
+
+  Th-Jonsson : Eq-Jonsson → Term {𝑆 = Sig-Jonsson} (Fin 3) × Term {𝑆 = Sig-Jonsson} (Fin 3)
+  Th-Jonsson dxyz≈x      = d fzero x y z , x
+  Th-Jonsson (dxyx≈x i)  = d i x y x , x
+  Th-Jonsson dxyz≈z      = d (fromℕ n) x y z , z
+  Th-Jonsson (d-fork i) = if even? (toℕ i)
+    then ( d (inject₁ i) x x z , d (fsuc i) x x z )   -- i even: agree on (x,x,z)
+    else ( d (inject₁ i) x y y , d (fsuc i) x y y )   -- i odd:  agree on (x,y,y)
+
+HasJonssonTerms : (n : ℕ)
+  (α ρ : Level) {𝑆 : Signature 0ℓ 0ℓ}{X : Type χ}{Idx : Type ι}
+  → (Idx → Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X) → Type (lsuc (α ⊔ ρ) ⊔ χ ⊔ ι)
+HasJonssonTerms n α ρ ℰ = Th-Jonsson n ≼ ℰ
+  where open Interpret α ρ
+```
+
+#### Day terms (congruence modularity)
+
+Congruence modularity is characterized by a chain of *quaternary* terms `m₀ , … , mₙ`,
+the **Day terms**[^day] (Day 1969; Burris–Sankappanavar, Thm. 12.4), with identities
+
+    m₀(x,y,z,u) ≈ x,   mₙ(x,y,z,u) ≈ u,   mᵢ(x,y,y,x) ≈ x   (all i),
+    mᵢ(x,x,u,u) ≈ mᵢ₊₁(x,x,u,u)  (i even),  mᵢ(x,y,y,u) ≈ mᵢ₊₁(x,y,y,u)  (i odd).
+
+```agda
+-- the canonical 4-element tuple over the variable carrier Fin 4
+quad : {ℓ : Level}{A : Type ℓ} → A → A → A → A → Fin 4 → A
+quad a b c d 0F = a
+quad a b c d 1F = b
+quad a b c d 2F = c
+quad a b c d 3F = d
+
+module _ (n : ℕ) where
+
+  -- n+1 quaternary operation symbols.
+  Sig-Day : Signature 0ℓ 0ℓ
+  Sig-Day = Fin (suc n) , (λ _ → Fin 4)
+
+  private
+    d : Fin (suc n) → (a b c d : Term (Fin 4)) → Term (Fin 4)
+    d i a b c d = node i (quad a b c d)
+
+    x y z u : Term {𝑆 = Sig-Day} (Fin 4)
+    x = ℊ 0F ; y = ℊ 1F ; z = ℊ 2F ; u = ℊ 3F
+
+  data Eq-Day : Type where
+    mxyzu≈x  : Eq-Day                 -- m₀(x,y,z,u) ≈ x
+    mxyyx≈x  : Fin (suc n) → Eq-Day   -- mᵢ(x,y,y,x) ≈ x
+    mxyzu≈u  : Eq-Day                 -- mₙ(x,y,z,u) ≈ u
+    m-fork   : Fin n → Eq-Day         -- consecutive mᵢ, mᵢ₊₁ agree (parity-dependent)
+
+  Th-Day : Eq-Day → Term (Fin 4) × Term (Fin 4)
+  Th-Day mxyzu≈x      = d fzero x y z u , x
+  Th-Day mxyzu≈u      = d (fromℕ n) x y z u , u
+  Th-Day (mxyyx≈x i)  = d i x y y x , x
+  Th-Day (m-fork i)   = if even? (toℕ i)
+    then ( d (inject₁ i) x x u u , d (fsuc i) x x u u )   -- i even: agree on (x,x,u,u)
+    else ( d (inject₁ i) x y y u , d (fsuc i) x y y u )   -- i odd:  agree on (x,y,y,u)
+
+HasDayTerms : (n : ℕ) (α ρ : Level)
+  {𝑆 : Signature 0ℓ 0ℓ}{X : Type χ}{Idx : Type ι}
+  → (Idx → Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X) → Type (lsuc (α ⊔ ρ) ⊔ χ ⊔ ι)
+HasDayTerms n α ρ ℰ = Th-Day n ≼ ℰ  where open Interpret α ρ
+```
+
+#### The conditions as properties of a variety, and the deferred theorems
+
+Fix a theory `ℰ` and the level pair `(α , ρ)` at which models are tested.
+A *congruence-distributive variety* is one in which all models are
+congruence-distributive, and similarly for CM.  The Jónsson and Day characterizations
+of CD and CM varieties are stated here as the goals that remain (their constructions
+are sketched in the design note); each is a `Type`.
+
+```agda
+module _ {𝑆 : Signature 0ℓ 0ℓ}{X : Type χ}{Idx : Type ι}
+         (ℰ : Idx → Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X)(α ρ ℓ : Level) where
+
+  -- "Every model is congruence--distributive / -modular."
+  CongruenceDistributiveVariety : Type (χ ⊔ ι ⊔ lsuc (α ⊔ ρ ⊔ ℓ))
+  CongruenceDistributiveVariety = (𝑩 : Algebra α ρ) → 𝑩 ⊨ₑ ℰ → CongruenceDistributive 𝑩 ℓ
+
+  CongruenceModularVariety : Type (χ ⊔ ι ⊔ lsuc (α ⊔ ρ ⊔ ℓ))
+  CongruenceModularVariety = (𝑩 : Algebra α ρ) → 𝑩 ⊨ₑ ℰ → CongruenceModular 𝑩 ℓ
+
+  -- Jónsson's theorem (DEFERRED): CD ⇔ existence of Jónsson terms.
+  Jonsson-Statement : Type (χ ⊔ ι ⊔ lsuc (α ⊔ ρ ⊔ ℓ))
+  Jonsson-Statement =  CongruenceDistributiveVariety → Σ[ n ∈ ℕ ] HasJonssonTerms n α ρ ℰ
+                       × Σ[ n ∈ ℕ ] HasJonssonTerms n α ρ ℰ → CongruenceDistributiveVariety
+
+  -- Day's theorem (DEFERRED): CM ⇔ existence of Day terms.
+  Day-Statement : Type (χ ⊔ ι ⊔ lsuc (α ⊔ ρ ⊔ ℓ))
+  Day-Statement =  CongruenceModularVariety → Σ[ n ∈ ℕ ] HasDayTerms n α ρ ℰ
+                   × Σ[ n ∈ ℕ ] HasDayTerms n α ρ ℰ → CongruenceModularVariety
 ```
 
 ---
