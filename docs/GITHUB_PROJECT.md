@@ -3089,7 +3089,7 @@ It is the single biggest lever identified in the M6-3 design note: built once, i
 
 ## Status — landed
 
-`Setoid.Varieties.FreeBridge` supplies the four pieces: `subhom` / `renhom` (the substitution-induced hom out of `𝔽[ X ]`, a homomorphism by `refl`), the re-exported `kercon` (kernel as a `Con`), `Cg⊆ker` / `cg-pair→⊢` (the bridge lemma, one line via `Cg-least`), and the shims `toEq` / `⊨ₑ⇒⊨` / `⊨⇒⊨ₑ` plus the term-level `graft≐[]`.  Smoke test: `recover` / `recover-gen` / `recover-swap`.  Design note: `docs/notes/m6-4-free-bridge.md`.
+`Setoid.Varieties.FreeBridge` supplies the bridge: `subhom` / `renhom` (the substitution-induced hom out of `𝔽[ X ]`, a homomorphism by `refl`), the re-exported `kercon` (kernel as a `Con`), and `Cg⊆ker` / `cg-pair→⊢` (the bridge lemma, one line via `Cg-least`), plus the `toEq` shim (the two satisfaction predicates `_⊨ₑ_` / `_⊨_` coincide definitionally, so no conversion function is needed).  The term-level companion `graft≐[]` (identifying `_✦_`'s `graft` with `_[_]`) lives with the other laws of `graft` in `Setoid.Terms.Interpretation`.  Smoke test: `recover` / `recover-gen` / `recover-swap`.  Design note: `docs/notes/m6-4-free-bridge.md`.
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
