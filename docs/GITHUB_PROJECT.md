@@ -3028,7 +3028,7 @@ Design discussion: how to encode Maltsev conditions uniformly?  Options include 
 - [x] `HasMaltsevTerm : Variety → Term → Type` — landed as the interpretation predicate `HasMaltsevTerm ℰ = Th-Maltsev ≼ ℰ` (`Setoid.Varieties.Maltsev`).
 - [x] Specific Maltsev terms: Jónsson terms (CD), Day terms (CM), Maltsev operation (CP) — `Th-Maltsev`, `Th-Jonsson n`, `Th-Day n`, with `HasMaltsevTerm` / `HasJonssonTerms n` / `HasDayTerms n` (`Setoid.Varieties.{Maltsev,MaltsevConditions}`).
 - [ ] Jónsson's theorem: a variety is CD iff Jónsson terms exist — stated (`Jonsson-Statement`); proof tracked in #412 (forward) and #413 (converse).
-- [ ] CP iff a Maltsev term exists — forward direction proved (`MaltsevTerm⇒CP` / `maltsev⇒CP`); converse stated (`CP⇒maltsev-Statement`) and tracked in #411.
+- [x] CP iff a Maltsev term exists — forward direction `MaltsevTerm⇒CP` / `maltsev⇒CP` (M6-3, #409); converse `CP⇒maltsev` (`Setoid.Varieties.MaltsevConverse`, M6-5, #411) inhabiting `CP⇒maltsev-Statement`, built on the free-algebra bridge (`Setoid.Varieties.FreeBridge`, M6-4, #410).
 - [ ] Day's theorem for CM — stated (`Day-Statement`); proof tracked in #412 (forward) and #413 (converse).
 
 ## Acceptance criteria
@@ -3047,7 +3047,7 @@ The CP track landed in PR #409:
 
 The chosen encoding is the interpretation `Th-X ≼ ℰ` (preferred over the issue's options (a) record and (b) inductive scheme; see the note).
 
-Deferred proofs are tracked in successor issues: #410 ([M6-4] free-algebra `Cg`↔derivability bridge), #411 ([M6-5] CP converse), #412 ([M6-6] forward Jónsson/Day), #413 ([M6-7] converse Jónsson/Day).
+Deferred proofs are tracked in successor issues: #410 ([M6-4] free-algebra `Cg`↔derivability bridge — **landed**, `Setoid.Varieties.FreeBridge`), #411 ([M6-5] CP converse — **landed**, `Setoid.Varieties.MaltsevConverse`), #412 ([M6-6] forward Jónsson/Day), #413 ([M6-7] converse Jónsson/Day).  See the design note `docs/notes/m6-4-free-bridge.md` for #410 / #411.
 
 ---
 
@@ -3086,6 +3086,10 @@ It is the single biggest lever identified in the M6-3 design note: built once, i
 
 +  `Setoid.Varieties.SoundAndComplete` (`𝔽[_]`, `satisfies`, soundness/completeness); `Setoid.Congruences.Generation` (`Cg`, `Cg-least`); `Setoid.Homomorphisms.Kernels` (`HomKerComp`); `Setoid.Varieties.Interpretation` (`⊧-interp`).
 +  Burris and Sankappanavar, *A Course in Universal Algebra*, Ch. II.
+
+## Status — landed
+
+`Setoid.Varieties.FreeBridge` supplies the four pieces: `subhom` / `renhom` (the substitution-induced hom out of `𝔽[ X ]`, a homomorphism by `refl`), the re-exported `kercon` (kernel as a `Con`), `Cg⊆ker` / `cg-pair→⊢` (the bridge lemma, one line via `Cg-least`), and the shims `toEq` / `⊨ₑ⇒⊨` / `⊨⇒⊨ₑ` plus the term-level `graft≐[]`.  Smoke test: `recover` / `recover-gen` / `recover-swap`.  Design note: `docs/notes/m6-4-free-bridge.md`.
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
@@ -3170,6 +3174,10 @@ Note: #273's text says "the free algebra on two generators"; the standard constr
 
 +  A. I. Mal'cev, *On the general theory of algebraic systems* (Russian), Mat. Sb. (N.S.) **35(77)** (1954), 3–20; Engl. transl., *Amer. Math. Soc. Transl.* (2) **27** (1963), 125–142.  [Math-Net.Ru](http://www.mathnet.ru/sm5264).
 +  Burris and Sankappanavar, *A Course in Universal Algebra*, Thm. II.12.2.
+
+## Status — landed
+
+`Setoid.Varieties.MaltsevConverse.CP⇒maltsev` inhabits `CP⇒maltsev-Statement` at the levels of `𝔽[ Fin 3 ]`, for theories with variables `X : Type 0ℓ` (forced by the single-level free-algebra interface; no restriction for finitary theories).  The collapsing substitutions are chosen to coincide with the `_✦_` position maps, so the bridge output is definitionally the interpreted Maltsev identity up to one `graft≐[]` step.  With `maltsev⇒CP`, congruence permutability is now a complete iff.  Design note: `docs/notes/m6-4-free-bridge.md`.
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
