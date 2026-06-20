@@ -18,7 +18,7 @@ module Setoid.Congruences {𝑆 : Signature 𝓞 𝓥} where
 open import Setoid.Congruences.Basic {𝑆 = 𝑆} public
 open import Setoid.Congruences.CompleteLattice {𝑆 = 𝑆} public
 open import Setoid.Congruences.Generation {𝑆 = 𝑆} public
-open import Setoid.Congruences.Lattice {𝑆 = 𝑆} public renaming (_≡_ to _↔_)
+open import Setoid.Congruences.Lattice {𝑆 = 𝑆} public
 open import Setoid.Congruences.Monolith {𝑆 = 𝑆} public
 open import Setoid.Congruences.Properties {𝑆 = 𝑆} public
 open import Setoid.Congruences.Permutability {𝑆 = 𝑆} public
