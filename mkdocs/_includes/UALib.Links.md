@@ -128,6 +128,7 @@
 [Setoid.Congruences.CompleteLattice]: https://ualib.org/Setoid.Congruences.CompleteLattice.html
 [Setoid.Congruences.Permutability]: https://ualib.org/Setoid.Congruences.Permutability.html
 [Setoid.Congruences.Properties]: https://ualib.org/Setoid.Congruences.Properties.html
+[Setoid.Congruences.Monolith]: https://ualib.org/Setoid.Congruences.Monolith.html
 
 [Setoid.Homomorphisms]: https://ualib.org/Setoid.Homomorphisms.html
 [Setoid.Homomorphisms.Basic]: https://ualib.org/Setoid.Homomorphisms.Basic.html
@@ -151,6 +152,7 @@
 [Setoid.Subalgebras.Subalgebras]: https://ualib.org/Setoid.Subalgebras.Subalgebras.html
 [Setoid.Subalgebras.Subuniverses]: https://ualib.org/Setoid.Subalgebras.Subuniverses.html
 [Setoid.Subalgebras.CompleteLattice]: https://ualib.org/Setoid.Subalgebras.CompleteLattice.html
+[Setoid.Subalgebras.Subdirect]: https://ualib.org/Setoid.Subalgebras.Subdirect.html
 
 [Setoid.Varieties]: https://ualib.org/Setoid.Varieties.html
 [Setoid.Varieties.Closure]: https://ualib.org/Setoid.Varieties.Closure.html
