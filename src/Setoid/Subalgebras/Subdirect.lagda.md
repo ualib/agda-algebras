@@ -47,18 +47,20 @@ module Setoid.Subalgebras.Subdirect {𝑆 : Signature 𝓞 𝓥} where
 -- Imports from Agda and the Agda Standard Library ----------------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
 open import Data.Product     using ( _×_ ; _,_ ; Σ-syntax ; proj₁ ; proj₂ )
-open import Function         using () renaming ( Func to _⟶_ )
-open import Level            using ( Level ; _⊔_ )
+open import Function         using ( id ) renaming ( Func to _⟶_ )
+open import Level            using ( Level ; _⊔_ ) renaming ( suc to lsuc )
 open import Relation.Binary  using ( Setoid )
+open import Relation.Binary.PropositionalEquality using ( _≡_ ) renaming ( refl to ≡refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Setoid.Functions  using ( IsInjective ; IsSurjective )
+open import Setoid.Functions                         using ( IsInjective ; IsSurjective )
 
-open import Setoid.Algebras       {𝑆 = 𝑆}  using ( Algebra ; ov ; _^_ ; ⨅ ; 𝕌[_] ; 𝔻[_] )
-open import Setoid.Congruences    {𝑆 = 𝑆}  using ( Con ; _╱_ )
-open import Setoid.Homomorphisms  {𝑆 = 𝑆}
-  using ( hom ; IsHom ; epi ; IsEpi ; 𝒾𝒹 ; ⊙-hom ; ⨅-hom-co ; πhom ; πepi )
-open import Setoid.Subalgebras.Subalgebras {𝑆 = 𝑆}  using ( _≤_ )
+open import Setoid.Algebras                 {𝑆 = 𝑆}  using ( Algebra ; ⨅ ; 𝔻[_] )
+open import Setoid.Congruences              {𝑆 = 𝑆}  using ( Con ; _╱_ )
+open import Setoid.Homomorphisms            {𝑆 = 𝑆}  using  ( hom ; IsHom ; epi ; IsEpi
+                                                            ; 𝒾𝒹 ; ⊙-hom ; ⨅-hom-co
+                                                            ; πhom ; πepi )
+open import Setoid.Subalgebras.Subalgebras  {𝑆 = 𝑆}  using ( _≤_ )
 open import Setoid.Congruences.Monolith     {𝑆 = 𝑆}  using ( IsSubdirectlyIrreducible )
 
 open _⟶_  using ( cong ) renaming ( to to _⟨$⟩_ )
@@ -80,12 +82,12 @@ module _ {I : Type ι}(𝒜 : I → Algebra α ρ) where
   ⨅-proj : (i : I) → hom (⨅ 𝒜) (𝒜 i)
   ⨅-proj i = F , isHom
     where
-    open Algebra (𝒜 i) using () renaming ( Domain to Aᵢ )
-    open Setoid Aᵢ     using () renaming ( refl to reflᵢ )
+    open Algebra (𝒜 i)  using () renaming ( Domain to Aᵢ )
+    open Setoid Aᵢ       using ( refl )
     F : ⨅A ⟶ Aᵢ
     F = record { to = λ x → x i ; cong = λ xy → xy i }
     isHom : IsHom (⨅ 𝒜) (𝒜 i) F
-    isHom = record { compatible = reflᵢ }
+    isHom = record { compatible = refl }
 ```
 
 #### Subdirect products and subdirect embeddings
@@ -126,8 +128,7 @@ their product, assembled from the canonical quotient projections `πhom (θ i)`.
 
 ```agda
 module _ {I : Type ι}{𝑨 : Algebra α ρ}(θ : I → Con 𝑨 ℓ) where
-  open Algebra 𝑨 using () renaming ( Domain to A )
-  open Setoid A  using ( _≈_ )
+  open Setoid 𝔻[ 𝑨 ] using ( _≈_ )
 
   -- the family of quotient algebras and the natural map into their product
   𝑨╱ : I → Algebra α ℓ
@@ -149,10 +150,13 @@ congruence classes, and two elements have the same tuple iff every `θ i` relate
 
   -- Injectivity of the natural map is definitionally the separation property.
   natmap-injective : Separates → IsInjective (proj₁ natmap)
-  natmap-injective sep = sep
+  natmap-injective = id
 
   natmap-separates : IsInjective (proj₁ natmap) → Separates
-  natmap-separates inj = inj
+  natmap-separates = id
+
+  _ : IsInjective (proj₁ natmap) ≡ Separates
+  _ = ≡refl
 ```
 
 Each coordinate map `projᵢ ∘ natmap` *is* the canonical quotient epimorphism
@@ -181,7 +185,7 @@ The conclusion of Birkhoff's theorem is that an algebra is a subdirect product o
 into their product.
 
 ```agda
-SubdirectlyRepresentable : (𝑨 : Algebra α ρ) → (ℓ ι : Level) → Type _
+SubdirectlyRepresentable : (𝑨 : Algebra α ρ) → (ℓ ι : Level) → Type (𝓞 ⊔ 𝓥  ⊔ ρ ⊔ lsuc (α ⊔ ℓ ⊔ ι))
 SubdirectlyRepresentable {α}{ρ} 𝑨 ℓ ι =
   Σ[ I ∈ Type ι ] Σ[ 𝒜 ∈ (I → Algebra α ℓ) ]
     ((∀ i → IsSubdirectlyIrreducible (𝒜 i)) × SubdirectEmbedding {𝑩 = 𝑨} 𝒜)
@@ -193,8 +197,8 @@ irreducible, and a proof that the family separates points.  This is the precise
 content that Zorn's lemma supplies classically (and is the only non-constructive input).
 
 ```agda
-SubdirectSIRep : (𝑨 : Algebra α ρ) → (ℓ ι : Level) → Type _
-SubdirectSIRep {α}{ρ} 𝑨 ℓ ι =
+SubdirectSIRep : (𝑨 : Algebra α ρ) → (ℓ ι : Level) → Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ lsuc (ℓ ⊔ ι))
+SubdirectSIRep 𝑨 ℓ ι =
   Σ[ I ∈ Type ι ] Σ[ θ ∈ (I → Con 𝑨 ℓ) ]
     (Separates θ × (∀ i → IsSubdirectlyIrreducible (𝑨 ╱ θ i)))
 ```

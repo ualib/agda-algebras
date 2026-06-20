@@ -21,8 +21,8 @@ congruences.
 The development here is pure congruence theory and is fully constructive.  We work
 throughout with congruences at the algebra's own relation level `ρ`, so the diagonal
 `0ᴬ` is the setoid equality `_≈_ : Con 𝑨 ρ` and the monolith (when it exists) is a
-`Con 𝑨 ρ`.  The choice-dependent *existence* of subdirect SI-representations — Birkhoff's
-subdirect representation theorem — is built on top of this in
+`Con 𝑨 ρ`.  The choice-dependent *existence* of subdirect SI-representations —
+Birkhoff's subdirect representation theorem — is built on top of this in
 [Setoid.Subalgebras.Subdirect][]; nothing here assumes it.
 
 ```agda
@@ -34,16 +34,16 @@ module Setoid.Congruences.Monolith {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
-open import Data.Product     using ( _×_ ; _,_ ; Σ-syntax ; proj₁ ; proj₂ )
+open import Data.Product     using ( _×_ ; _,_ ; Σ-syntax ; ∃-syntax ; proj₁ ; proj₂ )
 open import Level            using ( Level ; _⊔_ )
 open import Relation.Binary  using ( Setoid ; IsEquivalence )
 open import Relation.Nullary using ( ¬_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Setoid.Algebras.Basic     {𝑆 = 𝑆}  using ( ov ; Algebra ; 𝕌[_] )
-open import Setoid.Congruences.Basic   {𝑆 = 𝑆}
-  using ( Con ; mkcon ; _∣≈_ ; reflexive ; is-equivalence ; is-compatible )
-open import Setoid.Congruences.Lattice {𝑆 = 𝑆}  using ( _≤_ ; _≅_ ; _∧_ )
+open import Setoid.Algebras.Basic       {𝑆 = 𝑆}  using  ( ov ; Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Congruences.Basic    {𝑆 = 𝑆}  using  ( Con ; mkcon ; _∣≈_ ; reflexive
+                                                        ; is-equivalence ; is-compatible )
+open import Setoid.Congruences.Lattice  {𝑆 = 𝑆}  using  ( _⊆_ ; _≡_ ; _∧_ )
 
 private variable α ρ ℓ : Level
 ```
@@ -56,16 +56,16 @@ setoid equality keeps apart; the degenerate (one-element) algebras are exactly t
 
 ```agda
 module _ (𝑨 : Algebra α ρ) where
-  open Algebra 𝑨 using () renaming ( Domain to A )
-  open Setoid A  using ( _≈_ )
+  open Setoid 𝔻[ 𝑨 ]  using ( _≈_ )
 
   -- 𝑨 has two ≈-distinct elements.
   Nontrivial : Type (α ⊔ ρ)
-  Nontrivial = Σ[ a ∈ 𝕌[ 𝑨 ] ] Σ[ b ∈ 𝕌[ 𝑨 ] ] ¬ (a ≈ b)
+  Nontrivial = ∃[ a ] ∃[ b ] ¬ (a ≈ b)
+  -- `∃[ a ] P a`  is shorthand for `Σ[ a ∈ 𝕌[ 𝑨 ] ] P a`
 
   -- Every two elements of 𝑨 are equal (the one-element, degenerate case).
   Trivial : Type (α ⊔ ρ)
-  Trivial = (a b : 𝕌[ 𝑨 ]) → a ≈ b
+  Trivial = ∀ a b → a ≈ b
 
   -- A trivial algebra is not nontrivial.
   trivial⇒¬nontrivial : Trivial → ¬ Nontrivial
@@ -73,13 +73,13 @@ module _ (𝑨 : Algebra α ρ) where
 ```
 
 A congruence is **below the diagonal** when it relates only `≈`-equal elements; this is
-exactly the assertion `θ ≅ 0ᴬ` (since `0ᴬ ≤ θ` always holds), so its negation is the
+exactly the assertion `θ ≡ 0ᴬ` (since `0ᴬ ⊆ θ` always holds), so its negation is the
 right notion of a **nonzero** (strictly-above-`0ᴬ`) congruence.
 
 ```agda
-  -- θ relates only equal elements, i.e. θ ≅ 0ᴬ.
+  -- θ relates only equal elements, i.e. θ ≡ 0ᴬ.
   BelowDiagonal : Con 𝑨 ℓ → Type (α ⊔ ρ ⊔ ℓ)
-  BelowDiagonal θ = ∀ {a b} → proj₁ θ a b → a ≈ b
+  BelowDiagonal (_θ_ , _) = ∀ {a b} → a θ b → a ≈ b
 
   -- θ is nonzero: it is *not* below the diagonal (it relates some distinct pair).
   Nonzero : Con 𝑨 ℓ → Type (α ⊔ ρ ⊔ ℓ)
@@ -88,8 +88,8 @@ right notion of a **nonzero** (strictly-above-`0ᴬ`) congruence.
 
 #### The infinitary meet of a family of congruences
 
-For the completely-meet-irreducible characterization we need the meet (intersection) of
-a family of congruences.  This is the same intersection that
+For the completely-meet-irreducible characterization we need the meet (intersection)
+of a family of congruences.  This is the same intersection that
 [Setoid.Congruences.CompleteLattice][] packages (there as `⋀`, at the absorbing level
 `L`); here we take it at the algebra's own relation level `ℓ` for an `ℓ`-small index
 `I`, where it stays a `Con 𝑨 ℓ`.
@@ -101,18 +101,19 @@ a family of congruences.  This is the same intersection that
     m-refl : ∀ {a₀ a₁} → a₀ ≈ a₁ → (i : I) → proj₁ (θ i) a₀ a₁
     m-refl e i = reflexive (proj₂ (θ i)) e
 
+    open IsEquivalence
     m-equiv : IsEquivalence (λ x y → (i : I) → proj₁ (θ i) x y)
     m-equiv = record
-      { refl   = λ i → IsEquivalence.refl (is-equivalence (proj₂ (θ i)))
-      ; sym    = λ p i → IsEquivalence.sym (is-equivalence (proj₂ (θ i))) (p i)
-      ; trans  = λ p q i → IsEquivalence.trans (is-equivalence (proj₂ (θ i))) (p i) (q i)
+      { refl   = λ i      → is-equivalence (proj₂ (θ i)) .refl
+      ; sym    = λ p i    → is-equivalence (proj₂ (θ i)) .sym    (p i)
+      ; trans  = λ p q i  → is-equivalence (proj₂ (θ i)) .trans  (p i) (q i)
       }
 
     m-comp : 𝑨 ∣≈ (λ x y → (i : I) → proj₁ (θ i) x y)
     m-comp f h i = is-compatible (proj₂ (θ i)) f (λ k → h k i)
 
   -- The meet is a lower bound of each family member.
-  ⋂-lower : {I : Type ℓ}(θ : I → Con 𝑨 ℓ)(i : I) → ⋂ θ ≤ θ i
+  ⋂-lower : {I : Type ℓ}(θ : I → Con 𝑨 ℓ)(i : I) → ⋂ θ ⊆ θ i
   ⋂-lower θ i p = p i
 ```
 
@@ -126,7 +127,7 @@ so the diagonal and the monolith are `Con 𝑨 ρ`.)
   record IsMonolith (μ : Con 𝑨 ρ) : Type (α ⊔ ov ρ) where
     field
       mono-nonzero : Nonzero μ
-      mono-least   : (θ : Con 𝑨 ρ) → Nonzero θ → μ ≤ θ
+      mono-least   : (θ : Con 𝑨 ρ) → Nonzero θ → μ ⊆ θ
 
   open IsMonolith public
 
@@ -134,14 +135,13 @@ so the diagonal and the monolith are `Con 𝑨 ρ`.)
   HasMonolith = Σ[ μ ∈ Con 𝑨 ρ ] IsMonolith μ
 ```
 
-The monolith, when it exists, is unique up to mutual containment `≅`: two least nonzero
+The monolith, when it exists, is unique up to mutual containment `≡`: two least nonzero
 congruences are each below the other.
 
 ```agda
-  monolith-unique : (m m′ : HasMonolith) → proj₁ m ≅ proj₁ m′
+  monolith-unique : (m m′ : HasMonolith) → proj₁ m ≡ proj₁ m′
   monolith-unique (μ , mono) (μ′ , mono′) =
-      mono-least mono  μ′ (mono-nonzero mono′)
-    , mono-least mono′ μ  (mono-nonzero mono)
+    mono-least mono  μ′ (mono-nonzero mono′) , mono-least mono′ μ  (mono-nonzero mono)
 ```
 
 #### Subdirect irreducibility
@@ -184,14 +184,14 @@ meet were below the diagonal, so would `μ` be, contradicting `Nonzero μ`.
 
 ```agda
   monolith⇒cmi : HasMonolith → CompletelyMeetIrreducible
-  monolith⇒cmi (μ , mono) θ all-nonzero ⋂θ≤Δ = mono-nonzero mono μ≤Δ
+  monolith⇒cmi (μ , mono) θ all-nonzero ⋂θ⊆Δ = mono-nonzero mono μ⊆Δ
     where
-    μ≤θ : ∀ i → μ ≤ θ i
-    μ≤θ i = mono-least mono (θ i) (all-nonzero i)
-    μ≤⋂ : μ ≤ ⋂ θ
-    μ≤⋂ p i = μ≤θ i p
-    μ≤Δ : BelowDiagonal μ
-    μ≤Δ p = ⋂θ≤Δ (μ≤⋂ p)
+    μ⊆θ : ∀ i → μ ⊆ θ i
+    μ⊆θ i = mono-least mono (θ i) (all-nonzero i)
+    μ⊆⋂ : μ ⊆ ⋂ θ
+    μ⊆⋂ p i = μ⊆θ i p
+    μ⊆Δ : BelowDiagonal μ
+    μ⊆Δ p = ⋂θ⊆Δ (μ⊆⋂ p)
 ```
 
 ```agda
@@ -199,15 +199,15 @@ meet were below the diagonal, so would `μ` be, contradicting `Nonzero μ`.
   -- is meet-irreducible.  This is the "directly-indecomposable-adjacent" fact: a
   -- monolithic algebra cannot have two nonzero congruences with diagonal meet.
   monolith⇒∧-irreducible :
-      HasMonolith → (θ φ : Con 𝑨 ρ) → Nonzero θ → Nonzero φ → Nonzero (θ ∧ φ)
-  monolith⇒∧-irreducible (μ , mono) θ φ nzθ nzφ θ∧φ≤Δ = mono-nonzero mono μ≤Δ
+    HasMonolith → (θ φ : Con 𝑨 ρ) → Nonzero θ → Nonzero φ → Nonzero (θ ∧ φ)
+  monolith⇒∧-irreducible (μ , mono) θ φ nzθ nzφ θ∧φ⊆Δ = mono-nonzero mono μ⊆Δ
     where
-    μ≤θ : μ ≤ θ
-    μ≤θ = mono-least mono θ nzθ
-    μ≤φ : μ ≤ φ
-    μ≤φ = mono-least mono φ nzφ
-    μ≤Δ : BelowDiagonal μ
-    μ≤Δ p = θ∧φ≤Δ (μ≤θ p , μ≤φ p)
+    μ⊆θ : μ ⊆ θ
+    μ⊆θ = mono-least mono θ nzθ
+    μ⊆φ : μ ⊆ φ
+    μ⊆φ = mono-least mono φ nzφ
+    μ⊆Δ : BelowDiagonal μ
+    μ⊆Δ p = θ∧φ⊆Δ (μ⊆θ p , μ⊆φ p)
 ```
 
 --------------------------------------

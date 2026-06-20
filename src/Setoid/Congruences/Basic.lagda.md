@@ -30,7 +30,7 @@ open import Relation.Binary.PropositionalEquality using ( refl )
 -- Imports from the Agda Universal Algebras Library ------------------------------
 open import Overture          using ( proj₁  ; proj₂ ; 0[_] ; _|:_ ; Equivalence )
 open import Setoid.Relations  using ( ⟪_⟫ ; _/_ ; ⟪_∼_⟫-elim )
-open import Setoid.Algebras.Basic {𝑆 = 𝑆} using ( ov ; Algebra ; 𝕌[_] ; _^_ )
+open import Setoid.Algebras.Basic {𝑆 = 𝑆} using ( ov ; Algebra ; 𝔻[_] ; 𝕌[_] ; _^_ )
 
 private variable α ρ ℓ : Level
 ```
@@ -109,20 +109,19 @@ open Func     using ( cong ) renaming ( to to _⟨$⟩_ )
 
 _╱_ : (𝑨 : Algebra α ρ) → Con 𝑨 ℓ → Algebra α ℓ
 Domain (𝑨 ╱ θ) = 𝕌[ 𝑨 ] / (Eqv (proj₂ θ))
-(Interp (𝑨 ╱ θ)) ⟨$⟩ (f , a) = (f ^ 𝑨) a
-cong (Interp (𝑨 ╱ θ)) {f , u} {.f , v} (refl , a) = is-compatible (proj₂ θ) f a
+Interp (𝑨 ╱ θ) ⟨$⟩ (f , a) = (f ^ 𝑨) a
+Interp (𝑨 ╱ θ) .cong {f , u} {.f , v} (refl , a) = is-compatible (proj₂ θ) f a
 
 module _ (𝑨 : Algebra α ρ) where
- open Algebra 𝑨  using ( )      renaming (Domain to A )
- open Setoid A   using ( _≈_ )  renaming (refl to refl₁)
+  open Setoid 𝔻[ 𝑨 ]   using ( _≈_ )
 
- _/∙_ : 𝕌[ 𝑨 ] → (θ : Con 𝑨 ℓ) → Carrier (Domain (𝑨 ╱ θ))
- a /∙ θ = a
+  _/∙_ : 𝕌[ 𝑨 ] → (θ : Con 𝑨 ℓ) → 𝕌[ 𝑨 ╱ θ ]
+  a /∙ θ = a
 
- /-≡ :  (θ : Con 𝑨 ℓ){u v : 𝕌[ 𝑨 ]}
-  →     ⟪ u ⟫{Eqv (proj₂ θ)} ≈ ⟪ v ⟫{Eqv (proj₂ θ)} → (proj₁ θ) u v
+  /-≡ : (θ : Con 𝑨 ℓ){u v : 𝕌[ 𝑨 ]}
+    → ⟪ u ⟫{Eqv (proj₂ θ)} ≈ ⟪ v ⟫{Eqv (proj₂ θ)} → (proj₁ θ) u v
 
- /-≡ θ {u}{v} uv = reflexive (proj₂ θ) uv
+  /-≡ θ uv = reflexive (Con→IsCongruence θ) uv
 ```
 
 --------------------------------------
