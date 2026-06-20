@@ -67,19 +67,19 @@ module Setoid.Varieties.FreeBridge {𝑆 : Signature 𝓞 𝓥} where
 -- Imports from Agda and the Agda Standard Library ----------------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
 open import Data.Product     using ( _,_ ; _×_ ; proj₁ ; proj₂ )
-open import Function         using ( Func )
+open import Function         using ( Func ; id )
 open import Level            using ( Level ; _⊔_ )
 open import Relation.Binary  using ()
                              renaming ( Rel to BinRel ; _⇒_ to _⊆_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Overture.Terms                {𝑆 = 𝑆}  using ( Term ; ℊ ; node )
-open import Overture.Terms.Interpretation            using ( graft )
+open import Overture.Terms.Interpretation          using ( graft )
 open import Setoid.Algebras.Basic         {𝑆 = 𝑆}  using ( Algebra ; 𝕌[_] ; 𝔻[_] )
 open import Setoid.Terms.Basic            {𝑆 = 𝑆}  using ( Sub ; _[_] ; _≐_ ; ≐-isRefl )
 open import Setoid.Congruences.Generation {𝑆 = 𝑆}  using ( Gen ; Cg-least ; base )
 open import Setoid.Homomorphisms.Basic    {𝑆 = 𝑆}  using ( hom ; mkIsHom )
-open import Setoid.Homomorphisms.Kernels  {𝑆 = 𝑆}  using ( kercon ) public
+open import Setoid.Homomorphisms.Kernels  {𝑆 = 𝑆}  using ( kercon )
 open import Setoid.Varieties.SoundAndComplete {𝑆 = 𝑆}
   using ( Eq ; _≈̇_ ; lhs ; rhs ; _⊢_▹_≈_ ; _⊨_ ; module FreeAlgebra )
 open import Setoid.Varieties.Interpretation          using ( _⊨ₑ_ )
@@ -105,8 +105,8 @@ when one is wanted.
 
 ```agda
 graft≐[] : (t : Term Y)(σ : Sub X Y) → graft t σ ≐ (t [ σ ])
-graft≐[] (ℊ y)       σ = ≐-isRefl
-graft≐[] (node f ts) σ = gnl (λ i → graft≐[] (ts i) σ)
+graft≐[] (ℊ y) σ = ≐-isRefl
+graft≐[] (node f ts) σ = gnl λ i → graft≐[] (ts i) σ
 ```
 
 #### The principal (single-pair) relation
@@ -154,10 +154,10 @@ module _ {χ ι α ρ : Level}{Idx : Type ι}{X : Type χ}
          (𝑨 : Algebra α ρ)(ℰ : Idx → Term X × Term X) where
 
   ⊨ₑ⇒⊨ : 𝑨 ⊨ₑ ℰ → 𝑨 ⊨ (toEq ℰ)
-  ⊨ₑ⇒⊨ p = p
+  ⊨ₑ⇒⊨ = id
 
   ⊨⇒⊨ₑ : 𝑨 ⊨ (toEq ℰ) → 𝑨 ⊨ₑ ℰ
-  ⊨⇒⊨ₑ p = p
+  ⊨⇒⊨ₑ = id
 ```
 
 #### The substitution-induced homomorphism, and the principal-pair bridge
@@ -198,7 +198,7 @@ principal congruence `Cg ❴ a , b ❵` becomes derivably equal after `σ`.
     → E ⊢ Y ▹ (s [ σ ]) ≈ (t [ σ ])
   cg-pair→⊢ {X = X}{Y = Y} σ a b coll = Cg⊆ker (subhom {X = X}{Y = Y} σ) incl
     where
-    incl : ❴_,_❵ {𝑨 = 𝔽[ X ]} a b ⊆ proj₁ (kercon (subhom {X = X}{Y = Y} σ))
+    incl : ❴ a , b ❵ ⊆ proj₁ (kercon (subhom σ))
     incl pᵣ = coll
 ```
 
