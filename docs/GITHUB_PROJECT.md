@@ -3013,7 +3013,7 @@ Subdirect products and subdirect irreducibility are foundational for both the FL
 
 ---
 
-### Issue M6-3: Basic Maltsev conditions (CD, CM, CP) (#273)
+### Issue M6-3: Basic Maltsev conditions (CD, CM, CP) (#273, closed)
 
 **Labels**: `milestone-6-flrp`, `design-discussion`
 
