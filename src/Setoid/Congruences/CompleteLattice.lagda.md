@@ -55,15 +55,17 @@ open import Relation.Binary.Lattice      using ( Supremum ; Infimum ; IsLattice
                                                ; BoundedLattice )
 
 -- Imports from the Agda Universal Algebras Library ------------------------------
-open import Setoid.Algebras.Basic {𝑆 = 𝑆}             using  ( ov ; Algebra ; 𝕌[_] )
-open import Order.CompleteLattice  using  ( CompleteLattice )
-open import Setoid.Congruences.Basic {𝑆 = 𝑆}
-  using  ( Con ; mkcon ; _∣≈_ ; reflexive ; is-equivalence ; is-compatible )
-open import Setoid.Congruences.Lattice {𝑆 = 𝑆}
-  using  ( _≅_ ; _≤_ ; _∧_ ; ≤-isPartialOrder ; ∧-infimum )
-open import Setoid.Congruences.Generation  {𝑆 = 𝑆}
-  using  ( Cg ; Cg-least ; base ; _∨_ ; ∨-upperˡ ; ∨-upperʳ ; ∨-least )
-
+open import Setoid.Algebras.Basic            {𝑆 = 𝑆}  using  ( ov ; Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Order.CompleteLattice                     using  ( CompleteLattice )
+open import Setoid.Congruences.Basic         {𝑆 = 𝑆}  using  ( Con ; mkcon ; _∣≈_
+                                                             ; reflexive ; is-equivalence
+                                                             ; is-compatible )
+open import Setoid.Congruences.Lattice       {𝑆 = 𝑆}  using  ( _≡_ ; _⊆_ ; _∧_
+                                                             ; ⊆-isPartialOrder
+                                                             ; ∧-infimum )
+open import Setoid.Congruences.Generation    {𝑆 = 𝑆}  using  ( Cg ; Cg-least ; base
+                                                             ; _∨_ ; ∨-upperˡ
+                                                             ; ∨-upperʳ ; ∨-least )
 private variable α ρ ℓ₀ : Level
 ```
 
@@ -76,8 +78,7 @@ relation level is `L = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ ℓ₀`.  Because level j
 
 ```agda
 module _ (𝑨 : Algebra α ρ) (ℓ₀ : Level) where
-  open Algebra 𝑨 using () renaming ( Domain to 𝐀 )
-  open Setoid 𝐀 using ( _≈_ ) renaming ( refl to reflA )
+  open Setoid 𝔻[ 𝑨 ] using ( _≈_ ) renaming ( refl to reflA )
 
   L : Level
   L = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ ℓ₀
@@ -91,25 +92,25 @@ The join is the least upper bound: the two upper-bound facts come from `Generati
 and the universality is `∨-least`.
 
 ```agda
-  Con-supremum : Supremum (_≤_ {𝑨 = 𝑨} {L}) _∨_
+  Con-supremum : Supremum (_⊆_ {𝑨 = 𝑨} {L}) _∨_
   Con-supremum θ φ  = ∨-upperˡ θ φ
                     , ∨-upperʳ θ φ
-                    , λ ψ θ≤ψ φ≤ψ → ∨-least θ φ ψ θ≤ψ φ≤ψ
+                    , λ ψ θ⊆ψ φ⊆ψ → ∨-least θ φ ψ θ⊆ψ φ⊆ψ
 ```
 
 Assembling the partial order, the supremum, and the meet's infimum gives the lattice.
 
 ```agda
-  Con-isLattice : IsLattice (_≅_ {𝑨 = 𝑨} {L}) _≤_ _∨_ _∧_
-  Con-isLattice = record  { isPartialOrder  = ≤-isPartialOrder
+  Con-isLattice : IsLattice (_≡_ {𝑨 = 𝑨} {L}) _⊆_ _∨_ _∧_
+  Con-isLattice = record  { isPartialOrder  = ⊆-isPartialOrder
                           ; supremum        = Con-supremum
                           ; infimum         = ∧-infimum
                           }
 
   Con-Lattice : Lattice (α ⊔ ρ ⊔ ov L) (α ⊔ L) (α ⊔ L)
   Con-Lattice = record  { Carrier    = Conᴸ
-                        ; _≈_        = _≅_
-                        ; _≤_        = _≤_
+                        ; _≈_        = _≡_
+                        ; _≤_        = _⊆_
                         ; _∨_        = _∨_
                         ; _∧_        = _∧_
                         ; isLattice  = Con-isLattice
@@ -144,10 +145,10 @@ the greatest.
                             })
                    (λ _ _ → lift tt)
 
-  0ᴬ-minimum : Minimum _≤_ 0ᴬ
+  0ᴬ-minimum : Minimum _⊆_ 0ᴬ
   0ᴬ-minimum θ = Cg-least θ (λ { (lift ()) })
 
-  1ᴬ-maximum : Maximum _≤_ 1ᴬ
+  1ᴬ-maximum : Maximum _⊆_ 1ᴬ
   1ᴬ-maximum _ _ = lift tt
 ```
 
@@ -155,7 +156,7 @@ With the bounds the lattice becomes a bounded lattice (`1ᴬ` is the maximum, `0
 minimum).
 
 ```agda
-  Con-isBoundedLattice : IsBoundedLattice (_≅_ {𝑨 = 𝑨} {L}) _≤_ _∨_ _∧_ 1ᴬ 0ᴬ
+  Con-isBoundedLattice : IsBoundedLattice (_≡_ {𝑨 = 𝑨} {L}) _⊆_ _∨_ _∧_ 1ᴬ 0ᴬ
   Con-isBoundedLattice = record  { isLattice  = Con-isLattice
                                  ; maximum    = 1ᴬ-maximum
                                  ; minimum    = 0ᴬ-minimum
@@ -163,8 +164,8 @@ minimum).
 
   Con-BoundedLattice : BoundedLattice (α ⊔ ρ ⊔ ov L) (α ⊔ L) (α ⊔ L)
   Con-BoundedLattice = record  { Carrier           = Conᴸ
-                               ; _≈_               = _≅_
-                               ; _≤_               = _≤_
+                               ; _≈_               = _≡_
+                               ; _≤_               = _⊆_
                                ; _∨_               = _∨_
                                ; _∧_               = _∧_
                                ; ⊤                 = 1ᴬ
@@ -205,17 +206,17 @@ join the least upper bound of the family.
     ⋁ : Conᴸ
     ⋁ = Cg (λ x y → Σ[ i ∈ I ] proj₁ (f i) x y)
 
-    ⋀-lower : (i : I) → ⋀ ≤ f i
+    ⋀-lower : (i : I) → ⋀ ⊆ f i
     ⋀-lower i p = p i
 
-    ⋀-greatest : (ψ : Conᴸ) → (∀ i → ψ ≤ f i) → ψ ≤ ⋀
-    ⋀-greatest ψ ψ≤f p i = ψ≤f i p
+    ⋀-greatest : (ψ : Conᴸ) → (∀ i → ψ ⊆ f i) → ψ ⊆ ⋀
+    ⋀-greatest ψ ψ⊆f p i = ψ⊆f i p
 
-    ⋁-upper : (i : I) → f i ≤ ⋁
+    ⋁-upper : (i : I) → f i ⊆ ⋁
     ⋁-upper i p = base (i , p)
 
-    ⋁-least : (ψ : Conᴸ) → (∀ i → f i ≤ ψ) → ⋁ ≤ ψ
-    ⋁-least ψ f≤ψ = Cg-least {𝑨 = 𝑨} ψ (λ (i , p) → f≤ψ i p)
+    ⋁-least : (ψ : Conᴸ) → (∀ i → f i ⊆ ψ) → ⋁ ⊆ ψ
+    ⋁-least ψ f⊆ψ = Cg-least {𝑨 = 𝑨} ψ (λ (i , p) → f⊆ψ i p)
 ```
 
 #### The complete lattice
@@ -227,9 +228,9 @@ yields the complete lattice of congruences.
   Con-CompleteLattice : CompleteLattice (α ⊔ ρ ⊔ ov L) (α ⊔ L) (α ⊔ L) ℓ₀
   Con-CompleteLattice = record
     { Carrier          = Conᴸ
-    ; _≈_              = _≅_
-    ; _≤_              = _≤_
-    ; isPartialOrder   = ≤-isPartialOrder
+    ; _≈_              = _≡_
+    ; _≤_              = _⊆_
+    ; isPartialOrder   = ⊆-isPartialOrder
     ; ⨆                = ⋁
     ; ⨅                = ⋀
     ; ⨆-upper          = λ f i → ⋁-upper f i

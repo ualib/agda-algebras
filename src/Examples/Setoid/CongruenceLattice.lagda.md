@@ -81,7 +81,7 @@ With the base level `ℓ₀ = 0ℓ` the absorbing level `L` is `0ℓ`, so the co
 lattice of `𝟚` is the chain on `Con 𝟚 {0ℓ}`.  All three bundles type-check.
 
 ```agda
-open import Setoid.Congruences.Lattice {𝑆 = 𝑆₀} using ( _≤_ )
+open import Setoid.Congruences.Lattice {𝑆 = 𝑆₀} using ( _⊆_ )
 open import Setoid.Congruences.CompleteLattice {𝑆 = 𝑆₀}
   using ( Con-Lattice ; Con-BoundedLattice ; Con-CompleteLattice ; 1ᴬ ; 0ᴬ ; 0ᴬ-minimum )
 
@@ -98,7 +98,7 @@ but `⊤` relates `true` and `false` while `Δ` (namely `_≡_`) does not, so `t
 — a contradiction.
 
 ```agda
-Con𝟚-nontrivial : ¬ ( (1ᴬ 𝟚 0ℓ) ≤ (0ᴬ 𝟚 0ℓ) )
+Con𝟚-nontrivial : ¬ ( (1ᴬ 𝟚 0ℓ) ⊆ (0ᴬ 𝟚 0ℓ) )
 Con𝟚-nontrivial ⊤≤⊥ with 0ᴬ-minimum 𝟚 0ℓ Δ (⊤≤⊥ {true} {false} (lift _))
 ... | ()
 ```
