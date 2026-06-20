@@ -145,10 +145,15 @@ the standard product level arithmetic), so the Birkhoff index can be the
 
 ## What remains (follow-ups)
 
-+  The constructive finite case (option (b)): for an algebra with decidable `≈` and a
++  ~~The constructive finite case (option (b)): for an algebra with decidable `≈` and a
    finite congruence lattice, *discharge* `SubdirectSIRep` by searching for maximal
    separating congruences — turning `Birkhoff-subdirect` into an unconditional theorem on
-   finite algebras.
+   finite algebras.~~  **Done in [M6-8][] (#419)**: `Setoid.Subalgebras.Subdirect.Finite`
+   constructs `finiteSubdirectSIRep` / `finite-Birkhoff` by a count-based maximal-congruence
+   search over a finite, complete list of decidable congruences.  See the design note
+   [`m6-8-finite-birkhoff.md`][], which records why the complete congruence enumeration
+   must be part of the finiteness interface (it is not derivable from carrier-finiteness
+   plus decidable `≈` alone).
 +  The impredicative converse `cmi ⟹ monolith`, if/when the library adopts an
    impredicative or resized meet.
 +  Connecting `IsSubdirectlyIrreducible` to the *absence of a nontrivial subdirect
@@ -156,4 +161,6 @@ the standard product level arithmetic), so the Birkhoff index can be the
    coordinate) — the equivalence that makes "subdirectly irreducible" name what it does.
 
 [M6-2]: https://github.com/ualib/agda-algebras/issues/272
+[M6-8]: https://github.com/ualib/agda-algebras/issues/419
 [`GITHUB_PROJECT.md`]: ../GITHUB_PROJECT.md
+[`m6-8-finite-birkhoff.md`]: ./m6-8-finite-birkhoff.md
