@@ -16,16 +16,17 @@ as opposed to "bare" types (see [Base.lagda][]).
 
 module Setoid where
 
-open import Setoid.Algebras
-open import Setoid.Complexity
-open import Setoid.Congruences
-open import Setoid.Functions
-open import Setoid.Homomorphisms
-open import Setoid.Relations
-open import Setoid.Signatures
-open import Setoid.Subalgebras
-open import Setoid.Terms
-open import Setoid.Varieties
+open import Setoid.Algebras public
+open import Setoid.Categories public
+open import Setoid.Complexity public
+open import Setoid.Congruences public
+open import Setoid.Functions public
+open import Setoid.Homomorphisms public
+open import Setoid.Relations public
+open import Setoid.Signatures public
+open import Setoid.Subalgebras public
+open import Setoid.Terms public
+open import Setoid.Varieties public
 ```
 
 --------------------------------------

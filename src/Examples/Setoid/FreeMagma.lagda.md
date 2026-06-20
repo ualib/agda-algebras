@@ -24,21 +24,23 @@ generators into a concrete magma extends uniquely to a homomorphism, computed by
 
 module Examples.Setoid.FreeMagma where
 
--- Imports from Agda and the Agda Standard Library -----------------------------
-open import Agda.Primitive                              using () renaming ( Set to Type )
-open import Data.Fin.Base                               using ( Fin )
-open import Data.Fin.Patterns                           using ( 0F ; 1F )
-open import Data.Nat                                    using ( ℕ ; _∸_ )
-open import Data.Product                                using ( _,_ )
-open import Function                                    using ( Func )
-open import Level                                       using ( 0ℓ )
-open import Relation.Binary.PropositionalEquality as ≡  using ( _≡_ ; refl )
+open import Agda.Primitive using () renaming ( Set to Type )
+
+-- Imports from the Agda Standard Library -----------------------------
+open import Data.Fin.Base                          using ( Fin )
+open import Data.Fin.Patterns                      using ( 0F ; 1F )
+open import Data.Nat                               using ( ℕ ; _∸_ )
+open import Data.Product                           using ( _,_ )
+open import Function                               using ( Func )
+open import Level                                  using ( 0ℓ )
+open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl ; setoid ; cong₂ )
 
 -- Imports from the Agda Universal Algebra Library -----------------------------
 open import Classical.Signatures.Magma             using ( Sig-Magma ; ∙-Op )
 open import Overture                               using ( proj₁ )
 open import Overture.Terms        {𝑆 = Sig-Magma}  using ( Term ; ℊ ; node )
-open import Setoid.Algebras       {𝑆 = Sig-Magma}  using ( Algebra ; 𝕌[_] ; ⟨_⟩ )
+open import Setoid.Algebras       {𝑆 = Sig-Magma}  using ( Algebra ; 𝕌[_] )
+open import Setoid.Signatures                      using ( ⟨_⟩ )
 open import Setoid.Homomorphisms  {𝑆 = Sig-Magma}  using ( hom )
 open import Setoid.Terms          {𝑆 = Sig-Magma}  using ( 𝑻 ; free-lift ; lift-hom )
 
@@ -86,11 +88,11 @@ between the two trees becomes a numerical one.
 
 ```agda
 ℕ∸-magma : Algebra 0ℓ 0ℓ
-ℕ∸-magma = record { Domain = ≡.setoid ℕ ; Interp = interp }
+ℕ∸-magma = record { Domain = setoid ℕ ; Interp = interp }
   where
-  interp : Func (⟨ Sig-Magma ⟩ (≡.setoid ℕ)) (≡.setoid ℕ)
+  interp : Func (⟨ Sig-Magma ⟩ (setoid ℕ)) (setoid ℕ)
   interp ⟨$⟩ (∙-Op , args) = args 0F ∸ args 1F
-  cong interp {∙-Op , _} {.∙-Op , _} (refl , args≈) = ≡.cong₂ _∸_ (args≈ 0F) (args≈ 1F)
+  cong interp {∙-Op , _} {.∙-Op , _} (refl , args≈) = cong₂ _∸_ (args≈ 0F) (args≈ 1F)
 ```
 
 Fix the assignment `0F ↦ 3`, `1F ↦ 5`.  The free lift evaluates each generator by

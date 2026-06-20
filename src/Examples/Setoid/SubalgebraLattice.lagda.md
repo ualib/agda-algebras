@@ -50,7 +50,8 @@ open Func renaming ( to to _⟨$⟩_ )
 𝑆₀ : Signature 0ℓ 0ℓ
 𝑆₀ = ⊥ , λ ()
 
-open import Setoid.Algebras {𝑆 = 𝑆₀} using ( Algebra ; 𝕌[_] ; ⟨_⟩ )
+open import Setoid.Algebras {𝑆 = 𝑆₀}  using ( Algebra ; 𝕌[_] )
+open import Setoid.Signatures         using ( ⟨_⟩ )
 
 -- The two-element algebra: carrier Bool with ≡, and no operations to interpret.
 𝟚 : Algebra 0ℓ 0ℓ

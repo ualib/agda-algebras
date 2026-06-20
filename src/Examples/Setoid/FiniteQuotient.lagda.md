@@ -41,10 +41,10 @@ open import Relation.Binary.PropositionalEquality as ≡
 open import Relation.Nullary  using ( ¬_ )
 
 -- Imports from the Agda Universal Algebra Library -----------------------------
-open import Classical.Signatures.Monoid       using ( Sig-Monoid ; ∙-Op ; ε-Op )
-open import Setoid.Algebras {𝑆 = Sig-Monoid}  using ( Algebra ; 𝕌[_] ; 𝔻[_] ; ⟨_⟩ )
-open import Setoid.Congruences {𝑆 = Sig-Monoid}
-  using ( Con ; IsCongruence ; _∣≈_ ; _╱_ )
+open import Classical.Signatures.Monoid          using ( Sig-Monoid ; ∙-Op ; ε-Op )
+open import Setoid.Algebras {𝑆 = Sig-Monoid}     using ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Congruences {𝑆 = Sig-Monoid}  using ( Con ; IsCongruence ; _∣≈_ ; _╱_ )
+open import Setoid.Signatures                    using  ( ⟨_⟩ )
 
 open Func renaming ( to to _⟨$⟩_ )
 ```

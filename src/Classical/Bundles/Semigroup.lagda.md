@@ -42,11 +42,13 @@ import Relation.Binary.PropositionalEquality as ≡
 open Func renaming ( to to _⟨$⟩_ )
 
 -- Imports from the Agda Universal Algebra Library --------------------------------
-open import Classical.Signatures.Magma      using ( ∙-Op ; Sig-Magma )
-open import Classical.Structures.Semigroup  using ( Semigroup ; semigroup→magma ; module Semigroup-Op )
-open import Classical.Theories.Semigroup    using ( assoc )
+open import Classical.Signatures.Magma             using  ( ∙-Op ; Sig-Magma )
+open import Classical.Structures.Semigroup         using  ( Semigroup ; semigroup→magma
+                                                          ; module Semigroup-Op )
+open import Classical.Theories.Semigroup           using  ( assoc )
 
-open import Setoid.Algebras.Basic {𝑆 = Sig-Magma} using ( Algebra ; ⟨_⟩ ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Algebras.Basic {𝑆 = Sig-Magma}  using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Signatures                      using  ( ⟨_⟩ )
 
 private variable α ρ : Level
 ```
@@ -113,7 +115,7 @@ module _ {𝑺 : Semigroup α ρ} where
   open Semigroup-Op 𝑺 ; open Setoid 𝔻[ semigroup→magma 𝑺 ]
   open Semigroup-Op ⟪ ⟨ 𝑺 ⟩ˢᵍ ⟫ˢᵍ renaming ( _∙_ to _∙'_ )
 
-  roundtrip-cbc-sg : (a b : 𝕌[ semigroup→magma 𝑺 ]) → (a ∙' b) ≈ (a ∙ b)
+  roundtrip-cbc-sg : (a b : 𝕌[ semigroup→magma 𝑺 ]) → a ∙' b ≈ a ∙ b
   roundtrip-cbc-sg a b = refl
 ```
 
@@ -125,7 +127,7 @@ module _ {S : stdlib-Semigroup α ρ} where
   open stdlib-Semigroup S using ( _≈_ ; _∙_ ; refl ) renaming ( Carrier to A )
   open stdlib-Semigroup ⟨ ⟪ S ⟫ˢᵍ ⟩ˢᵍ using () renaming ( _∙_ to _∙'_ )
 
-  roundtrip-bcb-sg : (a b : A) → (a ∙ b) ≈ (a ∙' b)
+  roundtrip-bcb-sg : (a b : A) → a ∙ b ≈ a ∙' b
   roundtrip-bcb-sg a b = refl
 ```
 

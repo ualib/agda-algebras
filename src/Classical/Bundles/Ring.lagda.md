@@ -33,11 +33,14 @@ import Relation.Binary.PropositionalEquality as ≡
 open Func renaming ( to to _⟨$⟩_ )
 
 -- Imports from the Agda Universal Algebra Library --------------------------------
-open import Classical.Signatures.Ring  using ( Sig-Ring ; +-Op ; 0-Op ; -Op ; ·-Op ; 1-Op )
-open import Classical.Structures.Ring  using ( Ring ; module Ring-Op )
-open import Classical.Theories.Ring    using ( +-assoc ; +-idˡ ; +-idʳ ; +-invˡ ; +-invʳ ; +-comm
-                                             ; ·-assoc ; ·-idˡ ; ·-idʳ ; distribˡ ; distribʳ )
-open import Setoid.Algebras.Basic {𝑆 = Sig-Ring} using ( Algebra ; ⟨_⟩ ; 𝕌[_] ; 𝔻[_] )
+open import Classical.Signatures.Ring             using  ( Sig-Ring ; +-Op ; 0-Op
+                                                         ; -Op ; ·-Op ; 1-Op )
+open import Classical.Structures.Ring             using  ( Ring ; module Ring-Op )
+open import Classical.Theories.Ring               using  ( +-assoc ; +-idˡ ; +-idʳ ; +-invˡ
+                                                         ; +-invʳ ; +-comm ; ·-assoc ; ·-idˡ
+                                                         ; ·-idʳ ; distribˡ ; distribʳ )
+open import Setoid.Algebras.Basic {𝑆 = Sig-Ring}  using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Signatures                     using  ( ⟨_⟩ )
 
 private variable α ρ : Level
 ```
@@ -97,13 +100,15 @@ private variable α ρ : Level
                  ; distribˡ  ρ → R-distribˡ  (ρ 0F) (ρ 1F) (ρ 2F)
                  ; distribʳ  ρ → R-distribʳ  (ρ 0F) (ρ 1F) (ρ 2F) }
   where
-  open stdlib-Ring R
-    using ( setoid ; +-cong ; -‿cong ; *-cong )
-    renaming  ( _+_ to _⊕_ ; _*_ to _⊛_ ; -_ to ⊖_ ; 0# to z ; 1# to e
-              ; +-assoc to R-+assoc ; +-identityˡ to R-+idˡ ; +-identityʳ to R-+idʳ
-              ; -‿inverseˡ to R-+invˡ ; -‿inverseʳ to R-+invʳ ; +-comm to R-+comm
-              ; *-assoc to R-*assoc ; *-identityˡ to R-*idˡ ; *-identityʳ to R-*idʳ
-              ; distribˡ to R-distribˡ ; distribʳ to R-distribʳ )
+  open stdlib-Ring R using ( setoid ; +-cong ; -‿cong ; *-cong )
+    renaming  ( _+_         to _⊕_         ; _*_         to _⊛_ ; -_  to ⊖_
+              ; 0#          to z           ; 1#          to e
+              ; +-assoc     to R-+assoc    ; +-comm      to R-+comm
+              ; +-identityˡ to R-+idˡ      ; +-identityʳ to R-+idʳ
+              ; -‿inverseˡ  to R-+invˡ     ; -‿inverseʳ  to R-+invʳ
+              ; *-assoc     to R-*assoc
+              ; *-identityˡ to R-*idˡ      ; *-identityʳ to R-*idʳ
+              ; distribˡ    to R-distribˡ  ; distribʳ    to R-distribʳ )
 
   𝑨 : Algebra _ _
   𝑨 = record { Domain = setoid ; Interp = interp }
@@ -127,15 +132,19 @@ private variable α ρ : Level
 module _ {𝑹 : Ring α ρ} where
   open Ring-Op 𝑹
   open Setoid 𝔻[ proj₁ 𝑹 ]
-  open Ring-Op ⟪ ⟨ 𝑹 ⟩ʳᵍ ⟫ʳᵍ renaming ( _+_ to _+'_ ; _·_ to _·'_ ; -_ to -'_ ; 0R to 0R' ; 1R to 1R' )
+  open Ring-Op ⟪ ⟨ 𝑹 ⟩ʳᵍ ⟫ʳᵍ renaming  ( _+_  to _+'_
+                                       ; _·_  to _·'_
+                                       ; -_   to -'_
+                                       ; 0R   to 0R'
+                                       ; 1R   to 1R' )
 
-  roundtrip-cbc-+-ring : (a b : 𝕌[ proj₁ 𝑹 ]) → (a +' b) ≈ (a + b)
+  roundtrip-cbc-+-ring : (a b : 𝕌[ proj₁ 𝑹 ]) → a +' b ≈ a + b
   roundtrip-cbc-+-ring a b = refl
 
-  roundtrip-cbc-·-ring : (a b : 𝕌[ proj₁ 𝑹 ]) → (a ·' b) ≈ (a · b)
+  roundtrip-cbc-·-ring : (a b : 𝕌[ proj₁ 𝑹 ]) → a ·' b ≈ a · b
   roundtrip-cbc-·-ring a b = refl
 
-  roundtrip-cbc-neg-ring : (a : 𝕌[ proj₁ 𝑹 ]) → (-' a) ≈ (- a)
+  roundtrip-cbc-neg-ring : (a : 𝕌[ proj₁ 𝑹 ]) → -' a ≈ - a
   roundtrip-cbc-neg-ring a = refl
 
   roundtrip-cbc-0-ring : 0R' ≈ 0R
@@ -146,15 +155,19 @@ module _ {𝑹 : Ring α ρ} where
 
 module _ {R : stdlib-Ring α ρ} where
   open stdlib-Ring R using ( _≈_ ; _+_ ; _*_ ; -_ ; 0# ; 1# ; refl ) renaming ( Carrier to A )
-  open stdlib-Ring ⟨ ⟪ R ⟫ʳᵍ ⟩ʳᵍ using () renaming ( _+_ to _+'_ ; _*_ to _*'_ ; -_ to -'_ ; 0# to 0#' ; 1# to 1#' )
+  open stdlib-Ring ⟨ ⟪ R ⟫ʳᵍ ⟩ʳᵍ using () renaming  ( _+_ to _+'_
+                                                    ; _*_ to _*'_
+                                                    ; -_  to -'_
+                                                    ; 0#  to 0#'
+                                                    ; 1#  to 1#' )
 
-  roundtrip-bcb-+-ring : (a b : A) → (a + b) ≈ (a +' b)
+  roundtrip-bcb-+-ring : (a b : A) → a + b ≈ a +' b
   roundtrip-bcb-+-ring a b = refl
 
-  roundtrip-bcb-·-ring : (a b : A) → (a * b) ≈ (a *' b)
+  roundtrip-bcb-·-ring : (a b : A) → a * b ≈ a *' b
   roundtrip-bcb-·-ring a b = refl
 
-  roundtrip-bcb-neg-ring : (a : A) → (- a) ≈ (-' a)
+  roundtrip-bcb-neg-ring : (a : A) → - a ≈ -' a
   roundtrip-bcb-neg-ring a = refl
 
   roundtrip-bcb-0-ring : 0# ≈ 0#'

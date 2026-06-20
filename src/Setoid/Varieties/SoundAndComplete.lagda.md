@@ -34,7 +34,8 @@ import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 -- Imports from the Agda Universal Algebra Library -------------------------------
 open import Overture                  using ( proj₁ ; proj₂ ; OperationSymbolsOf )
 open import Overture.Terms   {𝑆 = 𝑆}  using ( Term )
-open import Setoid.Algebras  {𝑆 = 𝑆}  using ( Algebra ; ov ; ⟨_⟩ ; 𝔻[_] )
+open import Setoid.Algebras  {𝑆 = 𝑆}  using ( Algebra ; ov ; 𝔻[_] )
+open import Setoid.Signatures         using ( ⟨_⟩ )
 open import Setoid.Terms     {𝑆 = 𝑆}  using ( module Environment ; Sub ; _[_] )
 
 open Setoid  using ( Carrier ; _≈_ ; isEquivalence )
