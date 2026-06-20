@@ -310,8 +310,8 @@ congruence-permutable, and similarly for CD and CM.  The forward Maltsev theorem
 restated for the whole variety, is `maltsev⇒CP`.  The other theorems — the converse of
 Maltsev, and the Jónsson and Day characterizations — are stated here as the goals that
 remain (their constructions are sketched in the design note); each is a `Type`.  The
-converse of Maltsev, `CP⇒maltsev-Statement`, is now *inhabited* by `CP⇒maltsev`
-(see [The converse of Maltsev's theorem](#sec:maltsev-converse))
+The converse of Maltsev, `CP⇒maltsev-Statement`, is now *inhabited* by `CP⇒maltsev`
+(see [The converse of Maltsev's theorem](#the-converse-of-maltsevs-theorem))
 via the bridge of [Setoid.Varieties.FreeBridge][]; the Jónsson and Day statements
 remain open.
 
@@ -351,7 +351,7 @@ module _ {χ ι : Level}{𝑆 : Signature 0ℓ 0ℓ}{X : Type χ}{Idx : Type ι}
     × (Σ[ n ∈ ℕ ] HasDayTerms n {α = α}{ρ} ℰ → CongruenceModularVariety)
 ```
 
-### The converse of Maltsev's theorem {#sec:maltsev-converse}
+### The converse of Maltsev's theorem
 
 Above we proved the *forward* direction of Maltsev's theorem
 (`maltsev⇒CP`{.AgdaFunction}: a variety with a Maltsev term is congruence-permutable)
