@@ -25,28 +25,26 @@ open  import Relation.Binary   using ( Setoid )
 open  import Relation.Binary.PropositionalEquality as ≡ using ()
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------
-open  import Overture          using  ( proj₁ ; proj₂ ; kerRel ; kerRelOfEquiv )
-open  import Setoid.Functions  using  ( Image_∋_ )
-open  import Setoid.Algebras     {𝑆 = 𝑆}  using ( Algebra ; _^_ ; ov )
-open  import Setoid.Congruences  {𝑆 = 𝑆}  using ( _∣≈_ ; Con ; mkcon ; _╱_ ; IsCongruence )
-
-open  import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}
-      using ( hom ; IsHom ; epi ; IsEpi ; epi→hom )
-
+open  import Overture                            using ( proj₁ ; proj₂ ; kerRel ; kerRelOfEquiv )
+open  import Setoid.Functions                    using ( Image_∋_ )
+open  import Setoid.Algebras            {𝑆 = 𝑆}  using ( Algebra ; _^_ ; ov )
+open  import Setoid.Congruences         {𝑆 = 𝑆}  using ( _∣≈_ ; Con ; mkcon ; _╱_ ; IsCongruence )
+open  import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}  using ( hom ; IsHom ; epi ; IsEpi ; epi→hom )
 open  import Setoid.Homomorphisms.Properties {𝑆 = 𝑆} using ( 𝒾𝒹 )
 
 private variable  α β ρᵃ ρᵇ ℓ : Level
 
 open Algebra  using ( Domain )
-open _⟶_      using ( cong ) renaming ( to to _⟨$⟩_ )
+
+open _⟶_ using ( cong ) renaming ( to to _⟨$⟩_ )
 
 module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} (hh : hom 𝑨 𝑩) where
 
- open Setoid (Domain 𝑨)  renaming ( _≈_ to _≈₁_ )  using ( reflexive )
- open Algebra 𝑩          renaming (Domain to B )   using ( Interp )
- open Setoid B           renaming ( _≈_ to _≈₂_ )
-                         using ( sym ; trans ; isEquivalence )
- private h = _⟨$⟩_ (proj₁ hh)
+  open Setoid (Domain 𝑨)  renaming ( _≈_ to _≈₁_ )  using ( reflexive )
+  open Algebra 𝑩          renaming (Domain to B )   using ( Interp )
+  open Setoid B           renaming ( _≈_ to _≈₂_ )
+                          using ( sym ; trans ; isEquivalence )
+  private h = _⟨$⟩_ (proj₁ hh)
 ```
 
 
@@ -55,20 +53,20 @@ That is, if each `(u i, v i)` belongs to the kernel, then so does the pair `((f 
 
 
 ```agda
- HomKerComp : 𝑨 ∣≈ kerRel _≈₂_ h
- HomKerComp f {u}{v} kuv = Goal
-  where
-  fhuv : (f ^ 𝑩)(h ∘ u) ≈₂ (f ^ 𝑩)(h ∘ v)
-  fhuv = cong Interp (≡.refl , kuv)
+  HomKerComp : 𝑨 ∣≈ kerRel _≈₂_ h
+  HomKerComp f {u}{v} kuv = Goal
+    where
+    fhuv : (f ^ 𝑩)(h ∘ u) ≈₂ (f ^ 𝑩)(h ∘ v)
+    fhuv = cong Interp (≡.refl , kuv)
 
-  lem1 : h ((f ^ 𝑨) u) ≈₂ (f ^ 𝑩)(h ∘ u)
-  lem1 = IsHom.compatible (proj₂ hh)
+    lem1 : h ((f ^ 𝑨) u) ≈₂ (f ^ 𝑩)(h ∘ u)
+    lem1 = IsHom.compatible (proj₂ hh)
 
-  lem2 : (f ^ 𝑩) (h ∘ v) ≈₂ h ((f ^ 𝑨) v)
-  lem2 = sym (IsHom.compatible (proj₂ hh))
+    lem2 : (f ^ 𝑩) (h ∘ v) ≈₂ h ((f ^ 𝑨) v)
+    lem2 = sym (IsHom.compatible (proj₂ hh))
 
-  Goal : h ((f ^ 𝑨) u) ≈₂ h ((f ^ 𝑨) v)
-  Goal = trans lem1 (trans fhuv lem2)
+    Goal : h ((f ^ 𝑨) u) ≈₂ h ((f ^ 𝑨) v)
+    Goal = trans lem1 (trans fhuv lem2)
 ```
 
 
@@ -76,9 +74,9 @@ The kernel of a homomorphism is a congruence of the domain, which we construct a
 
 
 ```agda
- kercon : Con 𝑨 ρᵇ
- kercon =  kerRel _≈₂_ h ,
-           mkcon (λ x → cong (proj₁ hh) x)(kerRelOfEquiv isEquivalence h)(HomKerComp)
+  kercon : Con 𝑨 ρᵇ
+  kercon =  kerRel _≈₂_ h ,
+            mkcon (λ x → cong (proj₁ hh) x)(kerRelOfEquiv isEquivalence h)(HomKerComp)
 ```
 
 
@@ -86,8 +84,8 @@ Now that we have a congruence, we can construct the quotient relative to the ker
 
 
 ```agda
- kerquo : Algebra α ρᵇ
- kerquo = 𝑨 ╱ kercon
+  kerquo : Algebra α ρᵇ
+  kerquo = 𝑨 ╱ kercon
 
 ker[_⇒_]_ :  (𝑨 : Algebra α ρᵃ) (𝑩 : Algebra β ρᵇ) → hom 𝑨 𝑩 → Algebra _ _
 ker[ 𝑨 ⇒ 𝑩 ] h = kerquo h
@@ -102,23 +100,23 @@ Given an algebra `𝑨` and a congruence `θ`, the *canonical projection* is a m
 
 ```agda
 module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} (h : hom 𝑨 𝑩) where
- open IsCongruence
+  open IsCongruence
 
- πepi : (θ : Con 𝑨 ℓ) → epi 𝑨 (𝑨 ╱ θ)
- πepi θ = p , pepi
-  where
+  πepi : (θ : Con 𝑨 ℓ) → epi 𝑨 (𝑨 ╱ θ)
+  πepi θ = p , pepi
+    where
 
-  open Algebra (𝑨 ╱ θ)      using () renaming ( Domain to A/θ )
-  open Setoid A/θ           using ( sym ; refl )
-  open IsHom {𝑨 = (𝑨 ╱ θ)}  using ( compatible )
+    open Algebra (𝑨 ╱ θ)      using () renaming ( Domain to A/θ )
+    open Setoid A/θ           using ( sym ; refl )
+    open IsHom {𝑨 = (𝑨 ╱ θ)}  using ( compatible )
 
-  p : (Domain 𝑨) ⟶ A/θ
-  p = record { to = id ; cong = reflexive (proj₂ θ) }
+    p : (Domain 𝑨) ⟶ A/θ
+    p = record { to = id ; cong = reflexive (proj₂ θ) }
 
-  pepi : IsEpi 𝑨 (𝑨 ╱ θ) p
-  pepi = record  { isHom = record { compatible = sym (compatible (proj₂ 𝒾𝒹)) }
-                 ; isSurjective = λ {y} → Image_∋_.eq y refl
-                 }
+    pepi : IsEpi 𝑨 (𝑨 ╱ θ) p
+    pepi = record  { isHom = record { compatible = sym (compatible (proj₂ 𝒾𝒹)) }
+                   ; isSurjective = λ {y} → Image_∋_.eq y refl
+                   }
 ```
 
 
@@ -128,8 +126,8 @@ This is obtained by applying `epi-to-hom`, like so.
 
 
 ```agda
- πhom : (θ : Con 𝑨 ℓ) → hom 𝑨 (𝑨 ╱ θ)
- πhom θ = epi→hom 𝑨 (𝑨 ╱ θ) (πepi θ)
+  πhom : (θ : Con 𝑨 ℓ) → hom 𝑨 (𝑨 ╱ θ)
+  πhom θ = epi→hom 𝑨 (𝑨 ╱ θ) (πepi θ)
 ```
 
 
@@ -140,8 +138,8 @@ above for the quotient of `𝑨` modulo the kernel of `h`.)
 
 
 ```agda
- πker : epi 𝑨 (ker[ 𝑨 ⇒ 𝑩 ] h)
- πker = πepi (kercon h)
+  πker : epi 𝑨 (ker[ 𝑨 ⇒ 𝑩 ] h)
+  πker = πepi (kercon h)
 ```
 
 
@@ -153,10 +151,10 @@ the one we need later.
 
 
 ```agda
- open IsCongruence
+  open IsCongruence
 
- ker-in-con : {θ : Con 𝑨 ℓ} → ∀ {x}{y} → (proj₁ (kercon (πhom θ))) x y →  (proj₁ θ) x y
- ker-in-con = id
+  ker-in-con : {θ : Con 𝑨 ℓ} → ∀ {x}{y} → (proj₁ (kercon (πhom θ))) x y →  (proj₁ θ) x y
+  ker-in-con = id
 ```
 
 
