@@ -215,7 +215,7 @@ module _
 
 #### The converse of Maltsev's theorem
 
-Th converse can be stated formally (as a checked `Type`), as follows:
+The converse can be stated formally (as a checked `Type`), as follows:
 
 ```agda
   -- A congruence-permutable variety has a Maltsev term.
@@ -360,9 +360,8 @@ module _ {𝑆 : Signature 0ℓ 0ℓ}{X : Type 0ℓ}{Idx : Type ι}
 CD and CM are properties of the congruence *lattice*, defined in
 [Setoid.Congruences.Properties][] as `CongruenceDistributive` and
 `CongruenceModular` (at the absorbing relation level, so that meet and join are
-operations on a single type).  They are re-exported here (the `public` on the import
-above) so the Maltsev conditions of this module — permutability, and the Jónsson/Day
-conditions below — read from one place.
+operations on a single type).  We use them here to phrase the Jónsson and Day variety
+conditions below.
 
 #### Jónsson terms (congruence distributivity)
 
@@ -414,9 +413,9 @@ module _ (n : ℕ) where
     else ( d (inject₁ i) x y y , d (fsuc i) x y y )   -- i odd:  agree on (x,y,y)
 
 HasJonssonTerms : (n : ℕ)
-  (α ρ : Level) {𝑆 : Signature 0ℓ 0ℓ}{X : Type χ}{Idx : Type ι}
+  {α ρ : Level} {𝑆 : Signature 0ℓ 0ℓ}{X : Type χ}{Idx : Type ι}
   → (Idx → Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X) → Type (lsuc (α ⊔ ρ) ⊔ χ ⊔ ι)
-HasJonssonTerms n α ρ ℰ = Th-Jonsson n ≼ ℰ
+HasJonssonTerms n {α}{ρ} ℰ = Th-Jonsson n ≼ ℰ
   where open Interpret α ρ
 ```
 
@@ -463,10 +462,22 @@ module _ (n : ℕ) where
     then ( d (inject₁ i) x x u u , d (fsuc i) x x u u )   -- i even: agree on (x,x,u,u)
     else ( d (inject₁ i) x y y u , d (fsuc i) x y y u )   -- i odd:  agree on (x,y,y,u)
 
-HasDayTerms : (n : ℕ) (α ρ : Level)
-  {𝑆 : Signature 0ℓ 0ℓ}{X : Type χ}{Idx : Type ι}
+HasDayTerms : (n : ℕ){α ρ : Level}{𝑆 : Signature 0ℓ 0ℓ}{X : Type χ}{Idx : Type ι}
   → (Idx → Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X) → Type (lsuc (α ⊔ ρ) ⊔ χ ⊔ ι)
-HasDayTerms n α ρ ℰ = Th-Day n ≼ ℰ  where open Interpret α ρ
+HasDayTerms n {α}{ρ} ℰ = Th-Day n ≼ ℰ  where open Interpret α ρ
+```
+
+#### Logical equivalence of types
+
+Both remaining characterizations are *iff*s, so we package the two-way implication of
+two types as `_⇔_`{.AgdaFunction}.  (The standard library's `_⇔_` is the bundled
+`Function.Bundles.Equivalence` record, carrying congruence proofs; here the lighter
+logical equivalence — a pair of functions — is what these `Type`-level statements want.)
+
+```agda
+_⇔_ : {a b : Level} → Type a → Type b → Type (a ⊔ b)
+P ⇔ Q = (P → Q) × (Q → P)
+infix 1 _⇔_
 ```
 
 #### The conditions as properties of a variety, and the deferred theorems
@@ -478,10 +489,10 @@ of CD and CM varieties are stated here as the goals that remain (their construct
 are sketched in the design note); each is a `Type`.
 
 ```agda
-module _ {𝑆 : Signature 0ℓ 0ℓ}{X : Type χ}{Idx : Type ι}
-         (ℰ : Idx → Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X)(α ρ ℓ : Level) where
+module _ {α ρ ℓ : Level}{𝑆 : Signature 0ℓ 0ℓ}{X : Type χ}{Idx : Type ι}
+         (ℰ : Idx → Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X) where
 
-  -- "Every model is congruence--distributive / -modular."
+  -- "Every model is congruence-distributive / -modular."
   CongruenceDistributiveVariety : Type (χ ⊔ ι ⊔ lsuc (α ⊔ ρ ⊔ ℓ))
   CongruenceDistributiveVariety = (𝑩 : Algebra α ρ) → 𝑩 ⊨ₑ ℰ → CongruenceDistributive 𝑩 ℓ
 
@@ -490,13 +501,11 @@ module _ {𝑆 : Signature 0ℓ 0ℓ}{X : Type χ}{Idx : Type ι}
 
   -- Jónsson's theorem (DEFERRED): CD ⇔ existence of Jónsson terms.
   Jonsson-Statement : Type (χ ⊔ ι ⊔ lsuc (α ⊔ ρ ⊔ ℓ))
-  Jonsson-Statement =  CongruenceDistributiveVariety → Σ[ n ∈ ℕ ] HasJonssonTerms n α ρ ℰ
-                       × Σ[ n ∈ ℕ ] HasJonssonTerms n α ρ ℰ → CongruenceDistributiveVariety
+  Jonsson-Statement = CongruenceDistributiveVariety ⇔ (Σ[ n ∈ ℕ ] HasJonssonTerms n {α = α}{ρ = ρ} ℰ)
 
   -- Day's theorem (DEFERRED): CM ⇔ existence of Day terms.
   Day-Statement : Type (χ ⊔ ι ⊔ lsuc (α ⊔ ρ ⊔ ℓ))
-  Day-Statement =  CongruenceModularVariety → Σ[ n ∈ ℕ ] HasDayTerms n α ρ ℰ
-                   × Σ[ n ∈ ℕ ] HasDayTerms n α ρ ℰ → CongruenceModularVariety
+  Day-Statement = CongruenceModularVariety ⇔ (Σ[ n ∈ ℕ ] HasDayTerms n {α = α}{ρ = ρ} ℰ)
 ```
 
 ---
