@@ -37,8 +37,6 @@ five are the only subgroups.
 
 module Examples.Setoid.SubgroupLattice where
 
-open import Agda.Primitive using () renaming ( Set to Type )
-
 -- Imports from the Agda Standard Library ---------------------------------------
 open import Data.Bool.Base                         using ( Bool ; true ; false ; _xor_ )
 open import Data.Empty                             using ( ⊥ )
@@ -50,12 +48,12 @@ open import Function                               using ( Func )
 open import Level                                  using ( 0ℓ ; lift )
 open import Relation.Binary                        using ( Setoid )
 open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl ; cong₂ ; setoid )
-open import Relation.Nullary                       using ( ¬_ ; contradiction)
+open import Relation.Nullary                       using ( ¬_ )
 open import Relation.Unary                         using ( Pred ; _∈_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
 open import Classical.Signatures.Group             using ( Sig-Group ; ∙-Op ; ε-Op ; ⁻¹-Op )
-open import Setoid.Algebras {𝑆 = Sig-Group}        using ( Algebra ; 𝕌[_] )
+open import Setoid.Algebras {𝑆 = Sig-Group}        using ( Algebra )
 open import Setoid.Signatures                      using  ( ⟨_⟩ )
 
 open Func renaming ( to to _⟨$⟩_ )

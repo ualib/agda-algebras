@@ -54,7 +54,7 @@ open Func renaming ( to to _⟨$⟩_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Classical.Operations                        using ( Curry₂ ; pair )
-open import Classical.Signatures.Magma                  using ( Op-Magma ; ∙-Op ; Sig-Magma )
+open import Classical.Signatures.Magma                  using ( ∙-Op ; Sig-Magma )
 open import Classical.Structures.Interpret              using ( interp-cong )
 open import Setoid.Algebras.Basic {𝑆 = Sig-Magma}       using ( Algebra ; _^_ ; 𝔻[_] ; 𝕌[_] )
 open import Setoid.Homomorphisms.Basic {𝑆 = Sig-Magma}  using ( hom ; IsHom )

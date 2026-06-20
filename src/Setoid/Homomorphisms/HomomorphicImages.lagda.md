@@ -24,7 +24,7 @@ open import Data.Product     using ( _,_ ; Σ-syntax )
                              renaming ( _×_ to _∧_ )
 open import Function         using ( Func ; _on_ ; _∘_ ; id )
 open import Level            using ( Level ; _⊔_ ; suc )
-open import Relation.Binary  using ( Setoid ; _Preserves_⟶_ )
+open import Relation.Binary  using ( Setoid )
 open import Relation.Unary   using ( Pred ; _∈_ )
 
 open import Relation.Binary.PropositionalEquality as ≡ using ()

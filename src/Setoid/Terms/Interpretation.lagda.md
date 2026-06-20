@@ -61,7 +61,7 @@ open import Level                          using ( Level )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Overture.Signatures            using  ( 𝓞 ; 𝓥 ; Signature )
-open import Overture.Signatures.Morphisms  using  ( SigMorphism ; ι ; κ )
+open import Overture.Signatures.Morphisms  using  ( SigMorphism ; κ )
 open import Overture.Terms                 using  ( Term ; ℊ ; node )
 open import Overture.Terms.Translation     using  ( _✶_ )
 open import Overture.Terms.Interpretation  using  ( Interpretation ; graft ; _✦_

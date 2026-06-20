@@ -34,8 +34,8 @@ be written directly.
 
 The fix is small, because the bookkeeping half of the kit is already proved: the
 `_≐_`-level laws `[]-unitˡ` (left unit, the issue's `[]-ℊ`), `[]-unitʳ`, `[]-assoc`,
-and `[]-cong` live in [Setoid.Terms.Monad][] and are re-exported here so the kit
-reads from one place.  What is added here is the bridge between the two equalities on
+and `[]-cong` live in [Setoid.Terms.Monad][].  What is added here is the bridge
+between the two equalities on
 terms — the inductive equality `_≐_` of [Setoid.Terms.Basic][] and the *derivable*
 equality `_⊢_▹_≈_` of [Setoid.Varieties.SoundAndComplete][]:
 
@@ -70,11 +70,6 @@ import Relation.Binary.PropositionalEquality as ≡
 open import Overture.Terms                      {𝑆 = 𝑆} using ( Term )
 open import Setoid.Terms.Basic                  {𝑆 = 𝑆} using ( _≐_ ; Sub ; _[_] )
 open import Setoid.Varieties.SoundAndComplete   {𝑆 = 𝑆} using ( Eq ; _⊢_▹_≈_ )
-
--- The bookkeeping laws (proved in Setoid.Terms.Monad).
--- The issue's `[]-ℊ` is `[]-unitˡ`; its `[]-∘` is `[]-assoc`.
-open import Setoid.Terms.Monad {𝑆 = 𝑆} using  ( _⊙ˢ_ ; []-unitˡ ; []-unitˡ-ptw
-                                              ; []-unitʳ ; []-assoc ; []-cong )
 
 open _≐_         using ( rfl ; gnl )
 open _⊢_▹_≈_     using ( app ; sub ; refl ; trans )

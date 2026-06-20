@@ -27,7 +27,7 @@ open import Level            using ( Level ; _⊔_ )
 open import Relation.Binary  using ( Setoid ; IsEquivalence )
 open import Relation.Unary   using ( Pred ; _∈_ )
 
-open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl )
+open import Relation.Binary.PropositionalEquality using ( refl )
 
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 

@@ -39,7 +39,7 @@ open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl ; setoid
 open import Classical.Signatures.Magma             using ( Sig-Magma ; ∙-Op )
 open import Overture                               using ( proj₁ )
 open import Overture.Terms        {𝑆 = Sig-Magma}  using ( Term ; ℊ ; node )
-open import Setoid.Algebras       {𝑆 = Sig-Magma}  using ( Algebra ; 𝕌[_] )
+open import Setoid.Algebras       {𝑆 = Sig-Magma}  using ( Algebra )
 open import Setoid.Signatures                      using ( ⟨_⟩ )
 open import Setoid.Homomorphisms  {𝑆 = Sig-Magma}  using ( hom )
 open import Setoid.Terms          {𝑆 = Sig-Magma}  using ( 𝑻 ; free-lift ; lift-hom )

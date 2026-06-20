@@ -69,7 +69,7 @@ module Setoid.Varieties.FreeBridge {𝑆 : Signature 𝓞 𝓥} where
 open import Agda.Primitive   using () renaming ( Set to Type )
 open import Data.Product     using ( _,_ ; _×_ ; proj₁ ; proj₂ )
 open import Function         using ( Func )
-open import Level            using ( Level ; _⊔_ )
+open import Level            using ( Level )
 open import Relation.Binary  using ()
                              renaming ( Rel to BinRel ; _⇒_ to _⊆_ )
 
