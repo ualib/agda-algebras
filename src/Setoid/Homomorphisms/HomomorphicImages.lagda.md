@@ -17,31 +17,29 @@ open import Overture using (𝓞 ; 𝓥 ; Signature)
 
 module Setoid.Homomorphisms.HomomorphicImages {𝑆 : Signature 𝓞 𝓥} where
 
--- Imports from Agda and the Agda Standard Library ------------------------------------------
-open import Agda.Primitive   using () renaming ( Set to Type )
+open import Agda.Primitive using () renaming ( Set to Type )
+
+-- Imports from the Agda Standard Library ----------------------------------------------------
 open import Data.Product     using ( _,_ ; Σ-syntax )
                              renaming ( _×_ to _∧_ )
 open import Function         using ( Func ; _on_ ; _∘_ ; id )
 open import Level            using ( Level ; _⊔_ ; suc )
-open import Relation.Binary  using ( Setoid ; _Preserves_⟶_ )
+open import Relation.Binary  using ( Setoid )
 open import Relation.Unary   using ( Pred ; _∈_ )
 
 open import Relation.Binary.PropositionalEquality as ≡ using ()
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
-open import Overture          using  ( proj₁ ; proj₂ ; ArityOf ; transport )
-open  import Setoid.Functions
-      using ( lift∼lower ; Ran ; _range ; _preimage ; _image ; Inv ; Image_∋_ )
-      using ( _preimage≈image ; InvIsInverseʳ ; IsSurjective ; ⊙-IsSurjective )
-
-open  import Setoid.Algebras {𝑆 = 𝑆}
-      using ( Algebra ; ov ; _^_ ; ⟨_⟩ ; Lift-Algˡ ; Lift-Alg ; 𝕌[_] )
-
-open import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}         using ( hom ; IsHom )
-open import Setoid.Homomorphisms.Isomorphisms {𝑆 = 𝑆}  using ( _≅_ ; Lift-≅ )
-
-open  import Setoid.Homomorphisms.Properties {𝑆 = 𝑆}
-      using ( Lift-homˡ ; ToLiftˡ ; lift-hom-lemma ; 𝒾𝒹 ; ⊙-hom )
+open import Overture                                    using  ( proj₁ ; proj₂
+                                                               ; ArityOf ; transport )
+open import Setoid.Algebras                    {𝑆 = 𝑆}  using  ( Algebra ; ov ; _^_
+                                                               ; Lift-Algˡ ; Lift-Alg ; 𝕌[_] )
+open import Setoid.Functions
+open import Setoid.Signatures                           using  ( ⟨_⟩ )
+open import Setoid.Homomorphisms.Basic         {𝑆 = 𝑆}  using  ( hom ; IsHom )
+open import Setoid.Homomorphisms.Isomorphisms  {𝑆 = 𝑆}  using  ( _≅_ ; Lift-≅ )
+open  import Setoid.Homomorphisms.Properties   {𝑆 = 𝑆}  using  ( Lift-homˡ ; ToLiftˡ ; 𝒾𝒹
+                                                               ; lift-hom-lemma ; ⊙-hom )
 
 open Algebra
 

@@ -42,19 +42,20 @@ The bridge has four parts.
    identified pair and the substitution hom, it says: a principal-congruence membership
    yields a derivable equation — the lemma `cg-pair→⊢`{.AgdaFunction}.
 
-+  **The impedance shims**.  The interpretability relation `_≼_`{.AgdaFunction}
-   ([Setoid.Varieties.Interpretation][]) records a theory as an `Idx → Term × Term`,
-   while derivability `_⊢_▹_≈_`{.AgdaFunction} and `𝔽[_]`{.AgdaFunction} consume an
-   `I → Eq`{.AgdaRecord}.  `toEq`{.AgdaFunction} converts the former to the latter, and
-   the two satisfaction predicates `_⊨ₑ_`{.AgdaFunction} / `_⊨_`{.AgdaFunction} agree
-   on the nose (`⊨ₑ⇒⊨`{.AgdaFunction} / `⊨⇒⊨ₑ`{.AgdaFunction}).  A term-level shim
-   `graft≐[]`{.AgdaFunction} identifies the heterogeneous `graft`{.AgdaFunction}
-   ([Overture.Terms.Interpretation][]) — which the interpretation action `_✦_` uses at a
-   node — with the level-homogeneous `_[_]`{.AgdaFunction} that the substitution hom
-   uses, so a witness term extracted in `𝔽` lines up with the term `_✦_` produces.
++  **The impedance shim** `toEq`{.AgdaFunction}.  The interpretability relation
+   `_≼_`{.AgdaFunction} ([Setoid.Varieties.Interpretation][]) records a theory as an
+   `Idx → Term × Term`, while derivability `_⊢_▹_≈_`{.AgdaFunction} and `𝔽[_]`{.AgdaFunction}
+   consume an `I → Eq`{.AgdaRecord}; `toEq`{.AgdaFunction} converts the former to the
+   latter.  No conversion is needed for *satisfaction* — the two predicates
+   `_⊨ₑ_`{.AgdaFunction} and `_⊨_`{.AgdaFunction} coincide definitionally.
+
+A consumer that produces a witness term once via `_✦_`{.AgdaFunction} (whose node clause
+is a `graft`{.AgdaFunction}) and once via `_[_]`{.AgdaFunction} lines the two up with
+`graft≐[]`{.AgdaFunction}, which lives with the other laws of `graft` in
+[Setoid.Terms.Interpretation][].
 
 The first client of this bridge is the converse of Maltsev's theorem
-([Setoid.Varieties.MaltsevConverse][]); the Jónsson and Day converses are designed to
+([Setoid.Varieties.MaltsevConditions][]); the Jónsson and Day converses are designed to
 reuse the same machinery.
 
 ```agda
@@ -68,45 +69,26 @@ module Setoid.Varieties.FreeBridge {𝑆 : Signature 𝓞 𝓥} where
 open import Agda.Primitive   using () renaming ( Set to Type )
 open import Data.Product     using ( _,_ ; _×_ ; proj₁ ; proj₂ )
 open import Function         using ( Func )
-open import Level            using ( Level ; _⊔_ )
+open import Level            using ( Level )
 open import Relation.Binary  using ()
                              renaming ( Rel to BinRel ; _⇒_ to _⊆_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Overture.Terms                {𝑆 = 𝑆}  using ( Term ; ℊ ; node )
-open import Overture.Terms.Interpretation            using ( graft )
 open import Setoid.Algebras.Basic         {𝑆 = 𝑆}  using ( Algebra ; 𝕌[_] ; 𝔻[_] )
-open import Setoid.Terms.Basic            {𝑆 = 𝑆}  using ( Sub ; _[_] ; _≐_ ; ≐-isRefl )
+open import Setoid.Terms.Basic            {𝑆 = 𝑆}  using ( Sub ; _[_] )
 open import Setoid.Congruences.Generation {𝑆 = 𝑆}  using ( Gen ; Cg-least ; base )
 open import Setoid.Homomorphisms.Basic    {𝑆 = 𝑆}  using ( hom ; mkIsHom )
-open import Setoid.Homomorphisms.Kernels  {𝑆 = 𝑆}  using ( kercon ) public
+open import Setoid.Homomorphisms.Kernels  {𝑆 = 𝑆}  using ( kercon )
 open import Setoid.Varieties.SoundAndComplete {𝑆 = 𝑆}
-  using ( Eq ; _≈̇_ ; lhs ; rhs ; _⊢_▹_≈_ ; _⊨_ ; module FreeAlgebra )
-open import Setoid.Varieties.Interpretation          using ( _⊨ₑ_ )
+  using ( Eq ; _≈̇_ ; _⊢_▹_≈_ ; module FreeAlgebra )
 
 open Func    using ( cong ) renaming ( to to _⟨$⟩_ )
-open _≐_     using ( gnl )
 open _⊢_▹_≈_ using ( sub ; refl )
 
 private variable
   α ρ β ρᵇ χ ι ℓ : Level
   X Y : Type χ
-```
-
-#### A term-level shim: `graft` is substitution
-
-The interpretation action `_✦_` ([Overture.Terms.Interpretation][]) grafts at a node;
-the substitution homomorphism below acts by `_[_]`{.AgdaFunction}.  The two operations
-have identical defining clauses, but for a *variable* term they are distinct neutral
-forms, so the identification needs a (one-line) structural induction.  We record it as
-`_≐_`-equality of terms (the inductive equality of [Setoid.Terms.Basic][]); via
-[Setoid.Varieties.FreeSubstitution][]'s `≐→⊢`{.AgdaFunction} it becomes a derivation
-when one is wanted.
-
-```agda
-graft≐[] : (t : Term Y)(σ : Sub X Y) → graft t σ ≐ (t [ σ ])
-graft≐[] (ℊ y)       σ = ≐-isRefl
-graft≐[] (node f ts) σ = gnl (λ i → graft≐[] (ts i) σ)
 ```
 
 #### The principal (single-pair) relation
@@ -137,27 +119,20 @@ module _ {𝑨 : Algebra α ρ}{𝑩 : Algebra β ρᵇ}(h : hom 𝑨 𝑩) wher
   Cg⊆ker R⊆k = Cg-least (kercon h) R⊆k
 ```
 
-#### The impedance shims between the two theory shapes
+#### The impedance shim between the two theory shapes
 
 `_≼_`{.AgdaFunction} records a theory as an `Idx → Term × Term`; `_⊢_▹_≈_`{.AgdaFunction}
 and `𝔽[_]`{.AgdaFunction} consume an `I → Eq`{.AgdaRecord}.  `toEq`{.AgdaFunction}
-bridges the two, and the two satisfaction predicates coincide definitionally
-(both unfold to pointwise equality of the two interpreted terms), so the conversions
-are the identity.
+bridges the two.  No companion is needed for *satisfaction*: the two predicates
+`_⊨ₑ_`{.AgdaFunction} ([Setoid.Varieties.Interpretation][]) and
+`_⊨_`{.AgdaFunction} of the converted theory coincide *definitionally* (both unfold to
+pointwise equality of the two interpreted terms under all environments), so a proof of
+one is directly a proof of the other.
 
 ```agda
 toEq : {χ ι : Level}{Idx : Type ι}{X : Type χ}
   → (Idx → Term X × Term X) → (Idx → Eq {χ = χ})
 toEq ℰ i = proj₁ (ℰ i) ≈̇ proj₂ (ℰ i)
-
-module _ {χ ι α ρ : Level}{Idx : Type ι}{X : Type χ}
-         (𝑨 : Algebra α ρ)(ℰ : Idx → Term X × Term X) where
-
-  ⊨ₑ⇒⊨ : 𝑨 ⊨ₑ ℰ → 𝑨 ⊨ (toEq ℰ)
-  ⊨ₑ⇒⊨ p = p
-
-  ⊨⇒⊨ₑ : 𝑨 ⊨ (toEq ℰ) → 𝑨 ⊨ₑ ℰ
-  ⊨⇒⊨ₑ p = p
 ```
 
 #### The substitution-induced homomorphism, and the principal-pair bridge
@@ -198,7 +173,7 @@ principal congruence `Cg ❴ a , b ❵` becomes derivably equal after `σ`.
     → E ⊢ Y ▹ (s [ σ ]) ≈ (t [ σ ])
   cg-pair→⊢ {X = X}{Y = Y} σ a b coll = Cg⊆ker (subhom {X = X}{Y = Y} σ) incl
     where
-    incl : ❴_,_❵ {𝑨 = 𝔽[ X ]} a b ⊆ proj₁ (kercon (subhom {X = X}{Y = Y} σ))
+    incl : ❴ a , b ❵ ⊆ proj₁ (kercon (subhom σ))
     incl pᵣ = coll
 ```
 

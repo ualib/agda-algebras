@@ -18,9 +18,9 @@ M6-5 inhabits the statement, completing the iff for congruence permutability.
 +  `Setoid.Varieties.FreeBridge` — the reusable bridge (M6-4), four self-contained
    pieces (below).
 
-+  `Setoid.Varieties.MaltsevConverse` — `CP⇒maltsev` (M6-5), inhabiting
-   `CP⇒maltsev-Statement` from `Setoid.Varieties.MaltsevConditions`.  With the
-   forward `maltsev⇒CP` already in the tree, congruence permutability is now
++  `Setoid.Varieties.MaltsevConditions` — `CP⇒maltsev` (M6-5), inhabiting
+   `CP⇒maltsev-Statement` in the same module (the converse lives next to its
+   statement and the forward `maltsev⇒CP`).  Congruence permutability is now
    characterized by the Maltsev term — a complete iff.
 
 ## The bridge (M6-4)
@@ -65,22 +65,23 @@ load-bearing lemma `cg-pair→⊢`: given a substitution `σ` that collapses `(a
 `Cg ❴ a , b ❵` becomes derivably equal after `σ`, `E ⊢ Y ▹ s [ σ ] ≈ t [ σ ]`.  The
 principal (single-pair) relation `❴ a , b ❵` is a one-constructor inductive family.
 
-### (iv) The impedance shims
+### (iv) The impedance shim
 
 Two theory shapes are in play.  The interpretability relation `_≼_`
 (`Setoid.Varieties.Interpretation`) records a theory as an `Idx → Term × Term`; the
 derivation calculus `_⊢_▹_≈_` and the free algebra `𝔽[_]` consume an `I → Eq`.
-`toEq ℰ i = proj₁ (ℰ i) ≈̇ proj₂ (ℰ i)` converts the former to the latter, and the two
-satisfaction predicates `_⊨ₑ_` / `_⊨_` are *definitionally* equal (both unfold to
-pointwise equality of the two terms under all environments), so `⊨ₑ⇒⊨` / `⊨⇒⊨ₑ` are the
-identity.
+`toEq ℰ i = proj₁ (ℰ i) ≈̇ proj₂ (ℰ i)` converts the former to the latter.  No companion
+is needed for *satisfaction*: the two predicates `_⊨ₑ_` / `_⊨_` are *definitionally*
+equal (both unfold to pointwise equality of the two terms under all environments), so a
+proof of one is directly a proof of the other — no conversion function is written.
 
-A *term-level* shim is also needed: the interpretation action `_✦_` grafts at a node
-(`graft`, `Overture.Terms.Interpretation`), while the substitution hom acts by `_[_]`
-(`Setoid.Terms.Basic`).  These two operations have identical defining clauses, but for a
-*variable* term `w` they are distinct neutral forms — `graft w σ` and `w [ σ ]` do not
-reduce to one another.  `graft≐[] : graft t σ ≐ (t [ σ ])` identifies them by a one-line
-structural induction, at the inductive equality `_≐_`; `≐→⊢`
+A *term-level* fact is also needed, and it lives with its kin (the laws of `graft`) in
+`Setoid.Terms.Interpretation`, not in this module: the interpretation action `_✦_`
+grafts at a node (`graft`, `Overture.Terms.Interpretation`), while the substitution hom
+acts by `_[_]` (`Setoid.Terms.Basic`).  These two operations have identical defining
+clauses, but for a *variable* term `w` they are distinct neutral forms — `graft w σ` and
+`w [ σ ]` do not reduce to one another.  `graft≐[] : graft t σ ≐ (t [ σ ])` identifies
+them by a one-line structural induction, at the inductive equality `_≐_`; `≐→⊢`
 (`Setoid.Varieties.FreeSubstitution`) promotes it to a derivation when one is wanted.
 
 ### Smoke test
@@ -150,7 +151,7 @@ live — `𝒈 (ov 0ℓ)`, the absorbing level of `Setoid.Congruences.Generation
 +  **The bridge is small because `Cg-least` does the work.**  Once the kernel is a
    congruence (it already was, `kercon`), "a generated congruence sits inside any
    collapsing kernel" is `Cg-least` verbatim.  The whole of M6-4 is then plumbing:
-   the substitution hom (proof `refl`), the single-pair relation, and the two shims.
+   the substitution hom (proof `refl`), the single-pair relation, and the `toEq` shim.
 
 +  **Choosing `σ` to be the `_✦_` position map is the lever.**  It turns the
    interpretation/derivation mismatch from a per-model evaluation argument into one
@@ -179,9 +180,9 @@ congruence-lattice *representation*, only properties of congruence lattices.
 ## Build / check
 
 +  Whole library (what CI runs): `nix develop --command make check`.
-+  The new modules, one at a time:
++  The new / changed modules, one at a time:
    `nix develop --command agda src/Setoid/Varieties/FreeBridge.lagda.md`
-   (then `Setoid/Varieties/MaltsevConverse`).
+   (then `Setoid/Varieties/MaltsevConditions`, which now contains the converse).
 
 [M6-4]: https://github.com/ualib/agda-algebras/issues/410
 [M6-5]: https://github.com/ualib/agda-algebras/issues/411

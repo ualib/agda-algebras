@@ -36,11 +36,11 @@ open import Algebra.Lattice.Bundles  using ()
                                      renaming (  DistributiveLattice
                                                  to stdlib-DistributiveLattice )
 open import Data.Fin.Patterns        using ( 0F ; 1F ; 2F )
-open import Data.Product             using ( _,_ ; proj₁ ; proj₂ )
+open import Data.Product             using ( _,_ ; proj₁ )
 open import Function                 using ( Func )
 open import Level                    using ( Level )
 open import Relation.Binary          using ( Setoid )
-import Relation.Binary.PropositionalEquality as ≡
+open import Relation.Binary.PropositionalEquality using (refl)
 open Func renaming ( to to _⟨$⟩_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
@@ -51,7 +51,8 @@ open import Classical.Theories.DistributiveLattice    using  ( ∧-assoc ; ∧-c
                                                              ; ∨-assoc ; ∨-comm ; ∨-idem
                                                              ; absorbˡ ; absorbʳ
                                                              ; ∧-distribˡ ; ∨-distribˡ )
-open import Setoid.Algebras.Basic {𝑆 = Sig-Lattice}   using  ( Algebra ; ⟨_⟩ ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Algebras.Basic {𝑆 = Sig-Lattice}   using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Signatures                         using  ( ⟨_⟩ )
 
 private variable α ρ : Level
 
@@ -78,11 +79,11 @@ private variable α ρ : Level
   }
   where
   open DistributiveLattice-Op 𝑫
-  open Setoid 𝔻[ proj₁ 𝑫 ]
+  open Setoid 𝔻[ proj₁ 𝑫 ] using ( _≈_ ; isEquivalence) renaming (refl to ≈refl ; trans to ≈trans )
 
   -- stdlib's first absorption is x ∨ (x ∧ y) ≈ x; our absorbʳ-law is (x ∧ y) ∨ x ≈ x.
-  ∨-absorbs-∧ : ∀ x y → (x ∨ (x ∧ y)) ≈ x
-  ∨-absorbs-∧ x y = trans (∨-comm-law x (x ∧ y)) (absorbʳ-law x y)
+  ∨-absorbs-∧ : ∀ x y → x ∨ (x ∧ y) ≈ x
+  ∨-absorbs-∧ x y = ≈trans (∨-comm-law x (x ∧ y)) (absorbʳ-law x y)
 
 ⟪_⟫ᵈˡ : stdlib-DistributiveLattice α ρ → DistributiveLattice α ρ
 ⟪ L ⟫ᵈˡ = 𝑨 , λ { ∧-assoc    ρ → L-∧-assoc (ρ 0F) (ρ 1F) (ρ 2F)
@@ -104,46 +105,46 @@ private variable α ρ : Level
                ; ∧-assoc to L-∧-assoc ; ∧-comm to L-∧-comm
                ; ∨-absorbs-∧ to L-∨-absorbs-∧ ; ∧-absorbs-∨ to L-∧-absorbs-∨
                ; ∧-distribˡ-∨ to L-∧-distribˡ-∨ ; ∨-distribˡ-∧ to L-∨-distribˡ-∧ )
-  open Setoid setoid
+  open Setoid setoid using ( _≈_ ) renaming ( refl to ≈refl ; trans to ≈trans ; sym to ≈sym )
 
   ∧-idem-derived : ∀ x → x ∧' x ≈ x
-  ∧-idem-derived x = trans (∧-cong refl (sym (L-∨-absorbs-∧ x x))) (L-∧-absorbs-∨ x (x ∧' x))
+  ∧-idem-derived x = ≈trans (∧-cong ≈refl (≈sym (L-∨-absorbs-∧ x x))) (L-∧-absorbs-∨ x (x ∧' x))
 
   ∨-idem-derived : ∀ x → x ∨' x ≈ x
-  ∨-idem-derived x = trans (∨-cong refl (sym (L-∧-absorbs-∨ x x))) (L-∨-absorbs-∧ x (x ∨' x))
+  ∨-idem-derived x = ≈trans (∨-cong ≈refl (≈sym (L-∧-absorbs-∨ x x))) (L-∨-absorbs-∧ x (x ∨' x))
 
   absorbʳ-derived : ∀ x y → (x ∧' y) ∨' x ≈ x
-  absorbʳ-derived x y = trans (L-∨-comm (x ∧' y) x) (L-∨-absorbs-∧ x y)
+  absorbʳ-derived x y = ≈trans (L-∨-comm (x ∧' y) x) (L-∨-absorbs-∧ x y)
 
   𝑨 : Algebra _ _
   𝑨 = record { Domain = setoid ; Interp = interp }
     where
     interp : Func (⟨ Sig-Lattice ⟩ setoid) setoid
-    interp ⟨$⟩ (∧-Op , args)                            = args 0F ∧' args 1F
-    interp ⟨$⟩ (∨-Op , args)                            = args 0F ∨' args 1F
-    cong interp {∧-Op , _} {.∧-Op , _} (≡.refl , args≈) = ∧-cong (args≈ 0F) (args≈ 1F)
-    cong interp {∨-Op , _} {.∨-Op , _} (≡.refl , args≈) = ∨-cong (args≈ 0F) (args≈ 1F)
+    interp ⟨$⟩ (∧-Op , args) = args 0F ∧' args 1F
+    interp ⟨$⟩ (∨-Op , args) = args 0F ∨' args 1F
+    cong interp {∧-Op , _} {.∧-Op , _} (refl , args≈) = ∧-cong (args≈ 0F) (args≈ 1F)
+    cong interp {∨-Op , _} {.∨-Op , _} (refl , args≈) = ∨-cong (args≈ 0F) (args≈ 1F)
 
 module _ {𝑫 : DistributiveLattice α ρ} where
   open DistributiveLattice-Op 𝑫
-  open Setoid 𝔻[ proj₁ 𝑫 ]
+  open Setoid 𝔻[ proj₁ 𝑫 ] using ( _≈_ ) renaming ( refl to ≈refl )
   open DistributiveLattice-Op ⟪ ⟨ 𝑫 ⟩ᵈˡ ⟫ᵈˡ renaming ( _∧_ to _∧'_ ; _∨_ to _∨'_ )
 
   roundtrip-cbc-∧-dl : (a b : 𝕌[ proj₁ 𝑫 ]) → a ∧' b ≈ a ∧ b
-  roundtrip-cbc-∧-dl a b = refl
+  roundtrip-cbc-∧-dl a b = ≈refl
 
   roundtrip-cbc-∨-dl : (a b : 𝕌[ proj₁ 𝑫 ]) → a ∨' b ≈ a ∨ b
-  roundtrip-cbc-∨-dl a b = refl
+  roundtrip-cbc-∨-dl a b = ≈refl
 
 module _ {L : stdlib-DistributiveLattice α ρ} where
-  open stdlib-DistributiveLattice L using ( _≈_ ; _∧_ ; _∨_ ; refl ) renaming ( Carrier to A )
+  open stdlib-DistributiveLattice L using ( _≈_ ; _∧_ ; _∨_ ) renaming ( Carrier to A ; refl to ≈refl )
   open stdlib-DistributiveLattice ⟨ ⟪ L ⟫ᵈˡ ⟩ᵈˡ using () renaming ( _∧_ to _∧'_ ; _∨_ to _∨'_ )
 
   roundtrip-bcb-∧-dl : (a b : A) → (a ∧ b) ≈ (a ∧' b)
-  roundtrip-bcb-∧-dl a b = refl
+  roundtrip-bcb-∧-dl a b = ≈refl
 
   roundtrip-bcb-∨-dl : (a b : A) → (a ∨ b) ≈ (a ∨' b)
-  roundtrip-bcb-∨-dl a b = refl
+  roundtrip-bcb-∨-dl a b = ≈refl
 ```
 
 --------------------------------------

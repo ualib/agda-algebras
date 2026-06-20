@@ -31,7 +31,7 @@ module Classical.Bundles.Lattice where
 -- Imports from the Agda Standard Library -----------------------------------------
 open import Algebra.Lattice.Bundles  using () renaming ( Lattice to stdlib-Lattice )
 open import Data.Fin.Patterns        using ( 0F ; 1F ; 2F )
-open import Data.Product             using ( _,_ ; proj₁ ; proj₂ )
+open import Data.Product             using ( _,_ ; proj₁ )
 open import Function                 using ( Func )
 open import Level                    using ( Level )
 open import Relation.Binary          using ( Setoid )
@@ -44,7 +44,8 @@ open import Classical.Structures.Lattice             using  ( Lattice ; module L
 open import Classical.Theories.Lattice               using  ( ∧-assoc ; ∧-comm ; ∧-idem
                                                             ; ∨-assoc ; ∨-comm ; ∨-idem
                                                             ; absorbˡ ; absorbʳ )
-open import Setoid.Algebras.Basic {𝑆 = Sig-Lattice}  using  ( Algebra ; ⟨_⟩ ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Algebras.Basic {𝑆 = Sig-Lattice}  using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Signatures                        using  ( ⟨_⟩ )
 
 private variable α ρ : Level
 

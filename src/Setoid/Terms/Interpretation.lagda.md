@@ -61,7 +61,7 @@ open import Level                          using ( Level )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Overture.Signatures            using  ( 𝓞 ; 𝓥 ; Signature )
-open import Overture.Signatures.Morphisms  using  ( SigMorphism ; ι ; κ )
+open import Overture.Signatures.Morphisms  using  ( SigMorphism ; κ )
 open import Overture.Terms                 using  ( Term ; ℊ ; node )
 open import Overture.Terms.Translation     using  ( _✶_ )
 open import Overture.Terms.Interpretation  using  ( Interpretation ; graft ; _✦_
@@ -112,6 +112,19 @@ graft-sub : (u : Term {𝑆 = 𝑆} U) (ρ : U → Term {𝑆 = 𝑆} X) (β : S
   → graft u (λ y → (ρ y) [ β ]) ≐ (graft u ρ) [ β ]
 graft-sub (ℊ y) ρ β = ≐-isRefl
 graft-sub (node f ts) ρ β = gnl (λ i → graft-sub (ts i) ρ β)
+```
+
+At a *single* level, `graft`{.AgdaFunction} *is* the homogeneous substitution
+`_[_]`{.AgdaFunction}: the two share their defining clauses and so agree up to `_≐_` on
+every term.  (They are not definitionally equal on a *variable* term — both are then
+neutral, with distinct heads — so the identification is this one-line induction.)  A
+consumer that builds a term once via `_✦_`{.AgdaFunction} (whose node clause is a
+`graft`) and once via `_[_]` uses this to line the two up.
+
+```agda
+graft≐[] : (t : Term {𝑆 = 𝑆} Y) (σ : Sub {𝑆 = 𝑆} X Y) → graft t σ ≐ (t [ σ ])
+graft≐[] (ℊ y)       σ = ≐-isRefl
+graft≐[] (node f ts) σ = gnl (λ i → graft≐[] (ts i) σ)
 ```
 
 ##### Functoriality at the identity

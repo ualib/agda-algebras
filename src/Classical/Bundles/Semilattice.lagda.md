@@ -31,10 +31,11 @@ import Relation.Binary.PropositionalEquality as ≡
 open Func renaming ( to to _⟨$⟩_ )
 
 -- Imports from the Agda Universal Algebra Library --------------------------------
-open import Classical.Signatures.Magma         using  ( ∙-Op ; Sig-Magma )
-open import Classical.Structures.Semilattice   using  ( Semilattice ; module Semilattice-Op )
-open import Classical.Theories.Semilattice     using  ( assoc ; comm ; idem )
-open import Setoid.Algebras.Basic {𝑆 = Sig-Magma} using ( Algebra ; ⟨_⟩ ; 𝕌[_] ; 𝔻[_] )
+open import Classical.Signatures.Magma             using  ( ∙-Op ; Sig-Magma )
+open import Classical.Structures.Semilattice       using  ( Semilattice ; module Semilattice-Op )
+open import Classical.Theories.Semilattice         using  ( assoc ; comm ; idem )
+open import Setoid.Algebras.Basic {𝑆 = Sig-Magma}  using ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Signatures                      using  ( ⟨_⟩ )
 
 private variable α ρ : Level
 
@@ -59,13 +60,14 @@ private variable α ρ : Level
   open Setoid 𝔻[ proj₁ 𝑺 ]
 
 ⟪_⟫ˢˡ : stdlib-Semilattice α ρ → Semilattice α ρ
-⟪ S ⟫ˢˡ = 𝑨 , λ { assoc ρ → S-assoc (ρ 0F) (ρ 1F) (ρ 2F)
-                ; comm  ρ → S-comm  (ρ 0F) (ρ 1F)
-                ; idem  ρ → S-idem  (ρ 0F) }
+⟪ S ⟫ˢˡ = 𝑨 , λ  { assoc ρ → S-assoc (ρ 0F) (ρ 1F) (ρ 2F)
+                 ; comm  ρ → S-comm  (ρ 0F) (ρ 1F)
+                 ; idem  ρ → S-idem  (ρ 0F) }
   where
-  open stdlib-Semilattice S
-      using ( setoid ; ∙-cong )
-      renaming ( _∙_ to _·_ ; assoc to S-assoc ; comm to S-comm ; idem to S-idem )
+  open stdlib-Semilattice S using ( setoid ; ∙-cong ) renaming  ( _∙_    to _·_
+                                                                ; assoc  to S-assoc
+                                                                ; comm   to S-comm
+                                                                ; idem   to S-idem )
 
   𝑨 : Algebra _ _
   𝑨 = record { Domain = setoid ; Interp = interp }

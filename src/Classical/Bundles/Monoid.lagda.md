@@ -34,10 +34,11 @@ import Relation.Binary.PropositionalEquality as ≡
 open Func renaming ( to to _⟨$⟩_ )
 
 -- Imports from the Agda Universal Algebra Library --------------------------------
-open import Classical.Signatures.Monoid  using ( Sig-Monoid ; ∙-Op ; ε-Op )
-open import Classical.Structures.Monoid  using ( Monoid ; module Monoid-Op )
-open import Classical.Theories.Monoid    using ( assoc ; idˡ ; idʳ )
-open import Setoid.Algebras.Basic {𝑆 = Sig-Monoid} using ( Algebra ; ⟨_⟩ ; 𝕌[_] ; 𝔻[_] )
+open import Classical.Signatures.Monoid             using ( Sig-Monoid ; ∙-Op ; ε-Op )
+open import Classical.Structures.Monoid             using ( Monoid ; module Monoid-Op )
+open import Classical.Theories.Monoid               using ( assoc ; idˡ ; idʳ )
+open import Setoid.Algebras.Basic {𝑆 = Sig-Monoid}  using ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Signatures                       using ( ⟨_⟩ )
 
 private variable α ρ : Level
 ```
@@ -69,14 +70,15 @@ private variable α ρ : Level
 
 ```agda
 ⟪_⟫ᵐᵒ : stdlib-Monoid α ρ → Monoid α ρ
-⟪ M ⟫ᵐᵒ = 𝑨 , λ { assoc ρ → M-assoc (ρ 0F) (ρ 1F) (ρ 2F)
-                ; idˡ   ρ → M-idˡ   (ρ 0F)
-                ; idʳ   ρ → M-idʳ   (ρ 0F) }
+⟪ M ⟫ᵐᵒ = 𝑨 , λ  { assoc ρ → M-assoc (ρ 0F) (ρ 1F) (ρ 2F)
+                 ; idˡ   ρ → M-idˡ   (ρ 0F)
+                 ; idʳ   ρ → M-idʳ   (ρ 0F) }
   where
-  open stdlib-Monoid M
-      using ( setoid ; ∙-cong )
-      renaming ( _∙_ to _·_ ; ε to e ; assoc to M-assoc
-               ; identityˡ to M-idˡ ; identityʳ to M-idʳ )
+  open stdlib-Monoid M using ( setoid ; ∙-cong ) renaming  ( _∙_       to _·_
+                                                           ; ε         to e
+                                                           ; assoc     to M-assoc
+                                                           ; identityˡ to M-idˡ
+                                                           ; identityʳ to M-idʳ )
 
   𝑨 : Algebra _ _
   𝑨 = record { Domain = setoid ; Interp = interp }
@@ -93,14 +95,14 @@ private variable α ρ : Level
 ```agda
 module _ {𝑴 : Monoid α ρ} where
   open Monoid-Op 𝑴
-  open Setoid 𝔻[ proj₁ 𝑴 ]
+  open Setoid 𝔻[ proj₁ 𝑴 ] using (_≈_) renaming (refl to ≈refl)
   open Monoid-Op ⟪ ⟨ 𝑴 ⟩ᵐᵒ ⟫ᵐᵒ renaming ( _∙_ to _∙'_ ; ε to ε' )
 
   roundtrip-cbc-∙-mn : (a b : 𝕌[ proj₁ 𝑴 ]) → (a ∙' b) ≈ (a ∙ b)
-  roundtrip-cbc-∙-mn a b = refl
+  roundtrip-cbc-∙-mn a b = ≈refl
 
   roundtrip-cbc-ε-mn : ε' ≈ ε
-  roundtrip-cbc-ε-mn = refl
+  roundtrip-cbc-ε-mn = ≈refl
 
 module _ {M : stdlib-Monoid α ρ} where
   open stdlib-Monoid M using ( _≈_ ; _∙_ ; ε ; refl ) renaming ( Carrier to A )
