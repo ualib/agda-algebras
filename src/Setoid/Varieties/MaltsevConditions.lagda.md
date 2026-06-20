@@ -56,6 +56,7 @@ open import Level                              using  ( Level ; 0ℓ ; _⊔_ )
 open import Relation.Binary                    using  ( Setoid ; IsEquivalence )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
+open import Overture.Basic                     using  ( _⇔_ )
 open import Overture.Signatures                using  ( 𝓞 ; 𝓥 ; Signature )
 open import Overture.Terms                     using  ( Term ; ℊ ; node )
 open import Overture.Terms.Interpretation      using  ( Interpretation ; _✦_ )
@@ -412,10 +413,9 @@ module _ (n : ℕ) where
     then ( d (inject₁ i) x x z , d (fsuc i) x x z )   -- i even: agree on (x,x,z)
     else ( d (inject₁ i) x y y , d (fsuc i) x y y )   -- i odd:  agree on (x,y,y)
 
-HasJonssonTerms : (n : ℕ)
-  {α ρ : Level} {𝑆 : Signature 0ℓ 0ℓ}{X : Type χ}{Idx : Type ι}
+HasJonssonTerms : (n : ℕ) (α ρ : Level) {𝑆 : Signature 0ℓ 0ℓ} {X : Type χ} {Idx : Type ι}
   → (Idx → Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X) → Type (lsuc (α ⊔ ρ) ⊔ χ ⊔ ι)
-HasJonssonTerms n {α}{ρ} ℰ = Th-Jonsson n ≼ ℰ
+HasJonssonTerms n α ρ ℰ = Th-Jonsson n ≼ ℰ
   where open Interpret α ρ
 ```
 
@@ -462,22 +462,10 @@ module _ (n : ℕ) where
     then ( d (inject₁ i) x x u u , d (fsuc i) x x u u )   -- i even: agree on (x,x,u,u)
     else ( d (inject₁ i) x y y u , d (fsuc i) x y y u )   -- i odd:  agree on (x,y,y,u)
 
-HasDayTerms : (n : ℕ){α ρ : Level}{𝑆 : Signature 0ℓ 0ℓ}{X : Type χ}{Idx : Type ι}
+HasDayTerms : (n : ℕ)(α ρ : Level){𝑆 : Signature 0ℓ 0ℓ}{X : Type χ}{Idx : Type ι}
   → (Idx → Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X) → Type (lsuc (α ⊔ ρ) ⊔ χ ⊔ ι)
-HasDayTerms n {α}{ρ} ℰ = Th-Day n ≼ ℰ  where open Interpret α ρ
-```
-
-#### Logical equivalence of types
-
-Both remaining characterizations are *iff*s, so we package the two-way implication of
-two types as `_⇔_`{.AgdaFunction}.  (The standard library's `_⇔_` is the bundled
-`Function.Bundles.Equivalence` record, carrying congruence proofs; here the lighter
-logical equivalence — a pair of functions — is what these `Type`-level statements want.)
-
-```agda
-_⇔_ : {a b : Level} → Type a → Type b → Type (a ⊔ b)
-P ⇔ Q = (P → Q) × (Q → P)
-infix 1 _⇔_
+HasDayTerms n α ρ ℰ = Th-Day n ≼ ℰ
+  where open Interpret α ρ
 ```
 
 #### The conditions as properties of a variety, and the deferred theorems
@@ -501,11 +489,11 @@ module _ {α ρ ℓ : Level}{𝑆 : Signature 0ℓ 0ℓ}{X : Type χ}{Idx : Type
 
   -- Jónsson's theorem (DEFERRED): CD ⇔ existence of Jónsson terms.
   Jonsson-Statement : Type (χ ⊔ ι ⊔ lsuc (α ⊔ ρ ⊔ ℓ))
-  Jonsson-Statement = CongruenceDistributiveVariety ⇔ (Σ[ n ∈ ℕ ] HasJonssonTerms n {α = α}{ρ = ρ} ℰ)
+  Jonsson-Statement = CongruenceDistributiveVariety ⇔ ( Σ[ n ∈ ℕ ] HasJonssonTerms n α ρ ℰ )
 
   -- Day's theorem (DEFERRED): CM ⇔ existence of Day terms.
   Day-Statement : Type (χ ⊔ ι ⊔ lsuc (α ⊔ ρ ⊔ ℓ))
-  Day-Statement = CongruenceModularVariety ⇔ (Σ[ n ∈ ℕ ] HasDayTerms n {α = α}{ρ = ρ} ℰ)
+  Day-Statement = CongruenceModularVariety ⇔ ( Σ[ n ∈ ℕ ] HasDayTerms n α ρ ℰ )
 ```
 
 ---
