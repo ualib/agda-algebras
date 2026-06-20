@@ -275,6 +275,21 @@ transport : {A : Type a } (B : A → Type b) {x y : A} → x ≡ y → B x → B
 transport B refl = id
 ```
 
+#### Logical equivalence helper
+
+For simple logical equivalence of types, we define a small helper that
+packages the two implications into a single two-way implication.[^2]
+
+```agda
+_⇔_ : {a b : Level} → Type a → Type b → Type (a ⊔ b)
+P ⇔ Q = (P → Q) × (Q → P)
+infix 1 _⇔_
+```
+
+The standard library's `_⇔_` is the bundled `Function.Bundles.Equivalence` record,
+carrying congruence proofs; here the lighter logical equivalence — a pair of
+functions — is all that simple `Type`-level statements require.)
+
 ------------------------------
 
 <span style="float:left;">[← Overture.Preface](Overture.Preface.html)</span>
