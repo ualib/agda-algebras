@@ -114,6 +114,19 @@ graft-sub (ℊ y) ρ β = ≐-isRefl
 graft-sub (node f ts) ρ β = gnl (λ i → graft-sub (ts i) ρ β)
 ```
 
+At a *single* level, `graft`{.AgdaFunction} *is* the homogeneous substitution
+`_[_]`{.AgdaFunction}: the two share their defining clauses and so agree up to `_≐_` on
+every term.  (They are not definitionally equal on a *variable* term — both are then
+neutral, with distinct heads — so the identification is this one-line induction.)  A
+consumer that builds a term once via `_✦_`{.AgdaFunction} (whose node clause is a
+`graft`) and once via `_[_]` uses this to line the two up.
+
+```agda
+graft≐[] : (t : Term {𝑆 = 𝑆} Y) (σ : Sub {𝑆 = 𝑆} X Y) → graft t σ ≐ (t [ σ ])
+graft≐[] (ℊ y)       σ = ≐-isRefl
+graft≐[] (node f ts) σ = gnl (λ i → graft≐[] (ts i) σ)
+```
+
 ##### Functoriality at the identity
 
 Interpreting along the identity interpretation changes nothing (up to `_≐_` — the node

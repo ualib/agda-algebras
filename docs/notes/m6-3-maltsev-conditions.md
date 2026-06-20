@@ -145,7 +145,7 @@ recorded so a successor can pick it up.
 
 **Update (M6-4 / M6-5, #410 / #411).**  Now *proved*: the bridge is
 `Setoid.Varieties.FreeBridge` and the converse is `CP⇒maltsev` in
-`Setoid.Varieties.MaltsevConverse`; see the design note
+`Setoid.Varieties.MaltsevConditions` (next to its statement); see the design note
 [`m6-4-free-bridge.md`](m6-4-free-bridge.md).  The plan below is the recipe they execute.
 
 *A congruence-permutable variety has a Maltsev term.*  Construction (Burris–Sankappanavar

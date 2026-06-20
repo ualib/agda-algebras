@@ -68,8 +68,9 @@ open import Setoid.Congruences.Permutability   using  ( Permutes
 open import Setoid.Congruences.Properties      using  ( CongruenceDistributive
                                                       ; CongruenceModular )
 open import Setoid.Terms.Basic                 using  ( Sub ; _[_] ; module Environment )
+open import Setoid.Terms.Interpretation        using  ( graft≐[] )
 open import Setoid.Varieties.EquationalLogic
-open import Setoid.Varieties.FreeBridge        using  ( graft≐[] ; ❴_,_❵ ; pᵣ ; cg-pair→⊢ ; toEq )
+open import Setoid.Varieties.FreeBridge        using  ( ❴_,_❵ ; pᵣ ; cg-pair→⊢ ; toEq )
 open import Setoid.Varieties.FreeSubstitution  using  ( ≐→⊢ )
 open import Setoid.Varieties.Interpretation    using  ( reductᴵ ; _⊨ₑ_ ; ⊧-interp
                                                       ; module Interpret )
@@ -334,7 +335,7 @@ module _ {χ ι : Level}{𝑆 : Signature 0ℓ 0ℓ}{X : Type χ}{Idx : Type ι}
   maltsev⇒CP mt 𝑩 B⊨ = MaltsevTerm⇒CP ℰ mt 𝑩 B⊨
 
   -- The converse: a congruence-permutable variety has a Maltsev term.  Inhabited by
-  -- `CP⇒maltsev` in Setoid.Varieties.MaltsevConverse (M6-5).
+  -- `CP⇒maltsev` in the section below (M6-5).
   CP⇒maltsev-Statement : Type (χ ⊔ ι ⊔ lsuc (α ⊔ ρ ⊔ ℓ))
   CP⇒maltsev-Statement = CongruencePermutableVariety → HasMaltsevTerm {α = α}{ρ} ℰ
 
