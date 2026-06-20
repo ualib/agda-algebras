@@ -27,7 +27,7 @@
 #      where a path segment happens to contain the substring `agda`.
 # =============================================================================
 
-.PHONY: default all check test clean html profile project-plan Everything.agda
+.PHONY: default all check test clean html profile project-plan unused-imports unused-imports-test Everything.agda
 
 # -- Configuration -----------------------------------------------------------
 SRCDIR    := src
@@ -114,3 +114,15 @@ clean:
 project-plan:
 	@echo "target: $@"
 	python3 scripts/python/gh_project_render.py docs/GITHUB_PROJECT.md --repo $(REPO)
+
+# Report import/open statements that bring in names the module never uses.
+# Scans $(SRCDIR) (skipping the frozen Legacy tree); exits non-zero when
+# anything is flagged, so it can gate CI.  Run `make unused-imports-test` to
+# exercise the analyzer's own test suite.
+unused-imports:
+	@echo "target: $@"
+	python3 scripts/python/unused_imports.py $(SRCDIR)
+
+unused-imports-test:
+	@echo "target: $@"
+	python3 scripts/python/test_unused_imports.py
