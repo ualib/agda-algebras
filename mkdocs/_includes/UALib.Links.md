@@ -12,6 +12,7 @@
 [Overture.Levels]: https://ualib.org/Overture.Levels.html
 [Overture.Operations]: https://ualib.org/Overture.Operations.html
 [Overture.Cayley]: https://ualib.org/Overture.Cayley.html
+[Overture.Terms.Interpretation]: https://ualib.org/Overture.Terms.Interpretation.html
 
 [Base]: https://ualib.org/Base.html
 
@@ -155,8 +156,13 @@
 [Setoid.Varieties.Closure]: https://ualib.org/Setoid.Varieties.Closure.html
 [Setoid.Varieties.EquationalLogic]: https://ualib.org/Setoid.Varieties.EquationalLogic.html
 [Setoid.Varieties.FreeAlgebras]: https://ualib.org/Setoid.Varieties.FreeAlgebras.html
+[Setoid.Varieties.FreeBridge]: https://ualib.org/Setoid.Varieties.FreeBridge.html
+[Setoid.Varieties.FreeSubstitution]: https://ualib.org/Setoid.Varieties.FreeSubstitution.html
 [Setoid.Varieties.HSP]: https://ualib.org/Setoid.Varieties.HSP.html
+[Setoid.Varieties.Interpretation]: https://ualib.org/Setoid.Varieties.Interpretation.html
+[Setoid.Varieties.Maltsev]: https://ualib.org/Setoid.Varieties.Maltsev.html
 [Setoid.Varieties.MaltsevConditions]: https://ualib.org/Setoid.Varieties.MaltsevConditions.html
+[Setoid.Varieties.MaltsevConverse]: https://ualib.org/Setoid.Varieties.MaltsevConverse.html
 [Setoid.Varieties.Preservation]: https://ualib.org/Setoid.Varieties.Preservation.html
 [Setoid.Varieties.Properties]: https://ualib.org/Setoid.Varieties.Properties.html
 [Setoid.Varieties.SoundAndComplete]: https://ualib.org/Setoid.Varieties.SoundAndComplete.html

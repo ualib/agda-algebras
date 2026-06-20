@@ -296,10 +296,12 @@ HasDayTerms n {α}{ρ} ℰ = Th-Day n ≼ ℰ  where open Interpret α ρ
 Fix a theory `ℰ` and the level pair `(α , ρ)` at which models are tested.  A
 *congruence-permutable variety* is one all of whose models are
 congruence-permutable, and similarly for CD and CM.  The forward Maltsev theorem,
-restated for the whole variety, is `maltsev⇒CP`.  The remaining theorems — the
-converse of Maltsev, and the Jónsson and Day characterizations — are stated here as
-the goals that remain (their constructions are sketched in the design note); each is a
-`Type`, not yet inhabited.
+restated for the whole variety, is `maltsev⇒CP`.  The other theorems — the converse of
+Maltsev, and the Jónsson and Day characterizations — are stated here as the goals that
+remain (their constructions are sketched in the design note); each is a `Type`.  The
+converse of Maltsev, `CP⇒maltsev-Statement`, is now *inhabited* by `CP⇒maltsev` in
+[Setoid.Varieties.MaltsevConverse][] (M6-5, via the bridge of
+[Setoid.Varieties.FreeBridge][], M6-4); the Jónsson and Day statements remain open.
 
 ```agda
 module _ {χ ι : Level}{𝑆 : Signature 0ℓ 0ℓ}{X : Type χ}{Idx : Type ι}
@@ -319,7 +321,8 @@ module _ {χ ι : Level}{𝑆 : Signature 0ℓ 0ℓ}{X : Type χ}{Idx : Type ι}
   maltsev⇒CP : HasMaltsevTerm ℰ → CongruencePermutableVariety
   maltsev⇒CP mt 𝑩 B⊨ = MaltsevTerm⇒CP ℰ mt 𝑩 B⊨
 
-  -- The converse (DEFERRED): a congruence-permutable variety has a Maltsev term.
+  -- The converse: a congruence-permutable variety has a Maltsev term.  Inhabited by
+  -- `CP⇒maltsev` in Setoid.Varieties.MaltsevConverse (M6-5).
   CP⇒maltsev-Statement : Type (χ ⊔ ι ⊔ lsuc (α ⊔ ρ ⊔ ℓ))
   CP⇒maltsev-Statement = CongruencePermutableVariety → HasMaltsevTerm {α = α}{ρ} ℰ
 
