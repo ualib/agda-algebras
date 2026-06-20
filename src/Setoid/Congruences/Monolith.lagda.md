@@ -43,7 +43,7 @@ open import Relation.Nullary using ( ¬_ )
 open import Setoid.Algebras.Basic       {𝑆 = 𝑆}  using  ( ov ; Algebra ; 𝕌[_] ; 𝔻[_] )
 open import Setoid.Congruences.Basic    {𝑆 = 𝑆}  using  ( Con ; mkcon ; _∣≈_ ; reflexive
                                                         ; is-equivalence ; is-compatible )
-open import Setoid.Congruences.Lattice  {𝑆 = 𝑆}  using  ( _⊆_ ; _≡_ ; _∧_ )
+open import Setoid.Congruences.Lattice  {𝑆 = 𝑆}  using  ( _⊆_ ; _≑_ ; _∧_ )
 
 private variable α ρ ℓ : Level
 ```
@@ -73,11 +73,11 @@ module _ (𝑨 : Algebra α ρ) where
 ```
 
 A congruence is **below the diagonal** when it relates only `≈`-equal elements; this is
-exactly the assertion `θ ≡ 0ᴬ` (since `0ᴬ ⊆ θ` always holds), so its negation is the
+exactly the assertion `θ ≑ 0ᴬ` (since `0ᴬ ⊆ θ` always holds), so its negation is the
 right notion of a **nonzero** (strictly-above-`0ᴬ`) congruence.
 
 ```agda
-  -- θ relates only equal elements, i.e. θ ≡ 0ᴬ.
+  -- θ relates only equal elements, i.e. θ ≑ 0ᴬ.
   BelowDiagonal : Con 𝑨 ℓ → Type (α ⊔ ρ ⊔ ℓ)
   BelowDiagonal (_θ_ , _) = ∀ {a b} → a θ b → a ≈ b
 
@@ -135,11 +135,11 @@ so the diagonal and the monolith are `Con 𝑨 ρ`.)
   HasMonolith = Σ[ μ ∈ Con 𝑨 ρ ] IsMonolith μ
 ```
 
-The monolith, when it exists, is unique up to mutual containment `≡`: two least nonzero
+The monolith, when it exists, is unique up to mutual containment `≑`: two least nonzero
 congruences are each below the other.
 
 ```agda
-  monolith-unique : (m m′ : HasMonolith) → proj₁ m ≡ proj₁ m′
+  monolith-unique : (m m′ : HasMonolith) → proj₁ m ≑ proj₁ m′
   monolith-unique (μ , mono) (μ′ , mono′) =
     mono-least mono  μ′ (mono-nonzero mono′) , mono-least mono′ μ  (mono-nonzero mono)
 ```

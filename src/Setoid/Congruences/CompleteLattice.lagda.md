@@ -60,7 +60,7 @@ open import Order.CompleteLattice                     using  ( CompleteLattice )
 open import Setoid.Congruences.Basic         {𝑆 = 𝑆}  using  ( Con ; mkcon ; _∣≈_
                                                              ; reflexive ; is-equivalence
                                                              ; is-compatible )
-open import Setoid.Congruences.Lattice       {𝑆 = 𝑆}  using  ( _≡_ ; _⊆_ ; _∧_
+open import Setoid.Congruences.Lattice       {𝑆 = 𝑆}  using  ( _≑_ ; _⊆_ ; _∧_
                                                              ; ⊆-isPartialOrder
                                                              ; ∧-infimum )
 open import Setoid.Congruences.Generation    {𝑆 = 𝑆}  using  ( Cg ; Cg-least ; base
@@ -101,7 +101,7 @@ and the universality is `∨-least`.
 Assembling the partial order, the supremum, and the meet's infimum gives the lattice.
 
 ```agda
-  Con-isLattice : IsLattice (_≡_ {𝑨 = 𝑨} {L}) _⊆_ _∨_ _∧_
+  Con-isLattice : IsLattice (_≑_ {𝑨 = 𝑨} {L}) _⊆_ _∨_ _∧_
   Con-isLattice = record  { isPartialOrder  = ⊆-isPartialOrder
                           ; supremum        = Con-supremum
                           ; infimum         = ∧-infimum
@@ -109,7 +109,7 @@ Assembling the partial order, the supremum, and the meet's infimum gives the lat
 
   Con-Lattice : Lattice (α ⊔ ρ ⊔ ov L) (α ⊔ L) (α ⊔ L)
   Con-Lattice = record  { Carrier    = Conᴸ
-                        ; _≈_        = _≡_
+                        ; _≈_        = _≑_
                         ; _≤_        = _⊆_
                         ; _∨_        = _∨_
                         ; _∧_        = _∧_
@@ -156,7 +156,7 @@ With the bounds the lattice becomes a bounded lattice (`1ᴬ` is the maximum, `0
 minimum).
 
 ```agda
-  Con-isBoundedLattice : IsBoundedLattice (_≡_ {𝑨 = 𝑨} {L}) _⊆_ _∨_ _∧_ 1ᴬ 0ᴬ
+  Con-isBoundedLattice : IsBoundedLattice (_≑_ {𝑨 = 𝑨} {L}) _⊆_ _∨_ _∧_ 1ᴬ 0ᴬ
   Con-isBoundedLattice = record  { isLattice  = Con-isLattice
                                  ; maximum    = 1ᴬ-maximum
                                  ; minimum    = 0ᴬ-minimum
@@ -164,7 +164,7 @@ minimum).
 
   Con-BoundedLattice : BoundedLattice (α ⊔ ρ ⊔ ov L) (α ⊔ L) (α ⊔ L)
   Con-BoundedLattice = record  { Carrier           = Conᴸ
-                               ; _≈_               = _≡_
+                               ; _≈_               = _≑_
                                ; _≤_               = _⊆_
                                ; _∨_               = _∨_
                                ; _∧_               = _∧_
@@ -228,7 +228,7 @@ yields the complete lattice of congruences.
   Con-CompleteLattice : CompleteLattice (α ⊔ ρ ⊔ ov L) (α ⊔ L) (α ⊔ L) ℓ₀
   Con-CompleteLattice = record
     { Carrier          = Conᴸ
-    ; _≈_              = _≡_
+    ; _≈_              = _≑_
     ; _≤_              = _⊆_
     ; isPartialOrder   = ⊆-isPartialOrder
     ; ⨆                = ⋁

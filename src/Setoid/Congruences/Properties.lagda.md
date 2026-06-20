@@ -35,7 +35,7 @@ open import Level           using ( Level ; _⊔_ ) renaming (suc to lsuc)
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Setoid.Algebras.Basic          {𝑆 = 𝑆} using ( ov ; Algebra )
 open import Setoid.Congruences.Basic       {𝑆 = 𝑆} using ( Con )
-open import Setoid.Congruences.Lattice     {𝑆 = 𝑆} using ( _⊆_ ; _≡_ ; _∧_ )
+open import Setoid.Congruences.Lattice     {𝑆 = 𝑆} using ( _⊆_ ; _≑_ ; _∧_ )
 open import Setoid.Congruences.Generation  {𝑆 = 𝑆} using ( _∨_ )
 ```
 
@@ -50,27 +50,27 @@ open import Setoid.Congruences.Generation  {𝑆 = 𝑆} using ( _∨_ )
 #### Congruence distributivity
 
 An algebra `𝑨` is **congruence-distributive** (CD) when its congruence lattice
-satisfies the distributive law `θ ∧ (φ ∨ ψ) ≡ (θ ∧ φ) ∨ (θ ∧ ψ)`.  (The reverse
-containment half of this `≡` is automatic in any lattice; the distributive law is the
+satisfies the distributive law `θ ∧ (φ ∨ ψ) ≑ (θ ∧ φ) ∨ (θ ∧ ψ)`.  (The reverse
+containment half of this `≑` is automatic in any lattice; the distributive law is the
 forward containment `θ ∧ (φ ∨ ψ) ⊆ (θ ∧ φ) ∨ (θ ∧ ψ)`, but we state the full
-symmetric `≡` result for uniformity.)
+symmetric `≑` result for uniformity.)
 
 ```agda
 module _ {α ρ : Level} (𝑨 : Algebra α ρ)(ℓ₀ : Level) where
   CongruenceDistributive : Type (lsuc (Ł α ρ ℓ₀))
-  CongruenceDistributive = (θ φ ψ : Con 𝑨 (Ł α ρ ℓ₀)) → θ ∧ (φ ∨ ψ) ≡ (θ ∧ φ) ∨ (θ ∧ ψ)
+  CongruenceDistributive = (θ φ ψ : Con 𝑨 (Ł α ρ ℓ₀)) → θ ∧ (φ ∨ ψ) ≑ (θ ∧ φ) ∨ (θ ∧ ψ)
 ```
 
 #### Congruence modularity
 
 An algebra `𝑨` is **congruence-modular** (CM) when its congruence lattice satisfies
-the modular law: whenever `θ ≤ ψ`, `θ ∨ (φ ∧ ψ) ≡ (θ ∨ φ) ∧ ψ`.  Distributivity
+the modular law: whenever `θ ≤ ψ`, `θ ∨ (φ ∧ ψ) ≑ (θ ∨ φ) ∧ ψ`.  Distributivity
 implies modularity, so the congruence-distributive algebras form a subclass of the
 congruence-modular ones.
 
 ```agda
   CongruenceModular : Type (lsuc (Ł α ρ ℓ₀))
-  CongruenceModular = (θ φ ψ : Con 𝑨 (Ł α ρ ℓ₀)) → θ ⊆ ψ → θ ∨ (φ ∧ ψ) ≡ (θ ∨ φ) ∧ ψ
+  CongruenceModular = (θ φ ψ : Con 𝑨 (Ł α ρ ℓ₀)) → θ ⊆ ψ → θ ∨ (φ ∧ ψ) ≑ (θ ∨ φ) ∧ ψ
 ```
 
 --------------------------------------

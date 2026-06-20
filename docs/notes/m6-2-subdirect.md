@@ -22,14 +22,14 @@ Two modules, both `--cubical-compatible --exact-split --safe`.
    of subdirect irreducibility.
    +  `Nontrivial 𝑨` / `Trivial 𝑨` — the carrier has two `≈`-distinct elements / all
       elements are `≈`-equal (the degenerate one-element case); `trivial⇒¬nontrivial`.
-   +  `BelowDiagonal θ` (`θ` relates only `≈`-equal elements, i.e. `θ ≡ 0ᴬ`) and its
+   +  `BelowDiagonal θ` (`θ` relates only `≈`-equal elements, i.e. `θ ≑ 0ᴬ`) and its
       negation `Nonzero θ` (the right "strictly above `0ᴬ`" notion).
    +  `⋂` — the meet (intersection) of an `ℓ`-small family of `ℓ`-level congruences, at
       the algebra's own relation level (the natural-level instance of the `⋀` that
       `Setoid.Congruences.CompleteLattice` packages at the absorbing level `L`).
    +  `IsMonolith μ` — `μ` is nonzero and is contained in every nonzero congruence (the
       least nonzero congruence); `HasMonolith`; `monolith-unique` (the monolith is
-      unique up to `≡`, the mutual-containment equivalence on congruences).
+      unique up to `≑`, the mutual-containment equivalence on congruences).
    +  `IsSubdirectlyIrreducible 𝑨 = Nontrivial 𝑨 × HasMonolith 𝑨`, with `si⇒nontrivial`
       and `trivial⇒¬si`.
    +  `monolith⇒cmi` — the characterization: a monolith makes `0ᴬ` *completely
@@ -45,10 +45,10 @@ Two modules, both `--cubical-compatible --exact-split --safe`.
       whose every coordinate map is surjective); `SubdirectEmbedding`; `subdirect→≤`
       (a subdirect embedding is in particular a subalgebra inclusion `𝑩 ≤ ⨅ 𝒜`).
    +  **The bridge.**  For a family `θ : I → Con 𝑨`, the natural map
-      `⟪ θ ⟫hom = ⨅-hom-co (πhom ∘ θ) : 𝑨 → ⨅ (λ i → 𝑨 ╱ θ i)`.  `Separates θ` says the
-      meet `⋂ θ` is the diagonal (`∀ i, θ i a b ⟹ a ≈ b`).  Then `⟪⟫-injective` /
-      `⟪⟫-separates` show injectivity of the natural map is **definitionally** the
-      separation property, and `⟪⟫-proj-onto` shows each coordinate map *is* the
+      `natmap = ⨅-hom-co (πhom ∘ θ) : 𝑨 → ⨅ (λ i → 𝑨 ╱ θ i)`.  `Separates θ` says the
+      meet `⋂ θ` is the diagonal (`∀ i, θ i a b ⟹ a ≈ b`).  Then `natmap-injective` /
+      `natmap-separates` show injectivity of the natural map is **definitionally** the
+      separation property, and `natmap-proj-onto` shows each coordinate map *is* the
       canonical quotient epimorphism, hence surjective — with no decidability or choice
       on the index.  `separating→SubdirectEmbedding` assembles them.
    +  **Birkhoff, reduced to existence.**  `SubdirectlyRepresentable 𝑨` (a family of SI
@@ -61,11 +61,12 @@ Two modules, both `--cubical-compatible --exact-split --safe`.
 ## The injectivity-is-separation identity
 
 The technical pleasantness of the bridge is that the two halves are *definitional*, not
-just provable.  The image of `a : 𝕌[ 𝑨 ]` under `⟪ θ ⟫hom` is its tuple of congruence
+just provable.  The image of `a : 𝕌[ 𝑨 ]` under `natmap` is its tuple of congruence
 classes `λ i → a`, and equality in `⨅ (λ i → 𝑨 ╱ θ i)` at that tuple unfolds to
 `∀ i → proj₁ (θ i) a b` — exactly the hypothesis of `Separates`.  So
-`IsInjective (proj₁ ⟪ θ ⟫hom)` and `Separates θ` are the *same type*, and
-`⟪⟫-injective = λ sep → sep`.  Likewise `coord 𝑨╱ ⟪ θ ⟫hom i` reduces to the canonical
+`IsInjective (proj₁ natmap)` and `Separates θ` are the *same type* — a fact we record
+with a `refl`-checked `IsInjective (proj₁ natmap) ≡ Separates` (propositional `≡`) — and
+`natmap-injective = id`.  Likewise `coord 𝑨╱ natmap i` reduces to the canonical
 projection `πepi 𝒾𝒹 (θ i)`, so its surjectivity is `IsEpi.isSurjective` of that epi
 verbatim.  This is the formal content of the brief's "injectivity is exactly *the meet is
 the diagonal*".
@@ -104,7 +105,7 @@ as a checked `Type`), since (a) both states the assumption and proves the theore
 
 `monolith⇒cmi` is stated in **contrapositive** form: *if every member of a family is
 nonzero, the meet is nonzero*.  This is the constructively honest reading of "`0ᴬ` is
-completely meet-irreducible" — the textbook form "`⋀ θ ≡ 0ᴬ ⟹ ∃ i, θ i ≡ 0ᴬ`" would
+completely meet-irreducible" — the textbook form "`⋀ θ ≑ 0ᴬ ⟹ ∃ i, θ i ≑ 0ᴬ`" would
 require extracting a witnessing index from a negated statement.  The proof is immediate
 from the monolith: `μ ⊆ θ i` for every `i`, so `μ ⊆ ⋀ θ`, and `μ` nonzero forces `⋀ θ`
 nonzero.

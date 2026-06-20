@@ -12,7 +12,7 @@ This is the [Setoid.Congruences.Lattice][] module of the [Agda Universal Algebra
 The congruences of an algebra `𝑨`, ordered by containment, form a complete lattice.
 This module begins the formalization of that fact by promoting `Con 𝑨` to a
 first-class ordered object: it defines the containment order `_≤_`, the induced
-equivalence `_≡_` of mutual containment, and the **meet** `θ ∧ φ`, which is the
+equivalence `_≑_` of mutual containment, and the **meet** `θ ∧ φ`, which is the
 relational intersection `θ ∩ φ`.  The intersection of two congruences is again a
 congruence, and it is the greatest lower bound of the two arguments.  Thus we have a
 partially ordered set which, with the meet operation, forms a semilattice.
@@ -50,7 +50,7 @@ For congruences `θ φ : Con 𝑨` we write `θ ⊆ φ` when the underlying rela
 is **contained** in that of `φ` ("contained" is with respect to subset inclusion on
 `ℙ(A × A)`).  Classically this is the familiar (lattice) partial order on equivalence
 relations, and it remains a partial order here — `_⊆_` is antisymmetric
-**with respect to `_≡_`**, the equivalence of *mutual set containment*.  The only
+**with respect to `_≑_`**, the equivalence of *mutual set containment*.  The only
 subtlety is which equality counts as **equal congruences**.
 
 The underlying relation of a congruence inhabits the `BinRel` type
@@ -58,11 +58,11 @@ The underlying relation of a congruence inhabits the `BinRel` type
 between the proof-types `proj₁ θ x y` and `proj₁ φ x y` rather than a proof that the
 packaged congruences are *propositionally* equal.
 
-Upgrading `_≡_` to propositional equality would need function extensionality with
+Upgrading `_≑_` to propositional equality would need function extensionality with
 propositional extensionality/univalence (and proof-irrelevance for the `IsCongruence`
 witness), and that's simply not available under   `--safe --cubical-compatible`; so we
-take `_≡_` as the equality of congruences, exactly as the `Setoid/` discipline
-dictates.  Classically `_≡_` collapses to propositional equality via propositional
+take `_≑_` as the equality of congruences, exactly as the `Setoid/` discipline
+dictates.  Classically `_≑_` collapses to propositional equality via propositional
 extensionality.
 
 ```agda
@@ -75,13 +75,14 @@ module _ {𝑨 : Algebra α ρ} where
   θ ⊆ φ = proj₁ θ ⇒ proj₁ φ
   infix 4 _⊆_
 
-  -- θ ≡ φ : mutual containment (the equivalence the partial order is taken over).
-  _≡_ : Con 𝑨 ℓ → Con 𝑨 ℓ → Type (α ⊔ ℓ)
-  θ ≡ φ = θ ⊆ φ × φ ⊆ θ
-  infix 4 _≡_
+  -- θ ≑ φ : mutual containment (the equivalence the partial order is taken over).
+  -- (the symbol ≑ is input as \doteqdot)
+  _≑_ : Con 𝑨 ℓ → Con 𝑨 ℓ → Type (α ⊔ ℓ)
+  θ ≑ φ = θ ⊆ φ × φ ⊆ θ
+  infix 4 _≑_
 ```
 
-The order is reflexive and transitive, and `_≡_` collapses it to a partial order.
+The order is reflexive and transitive, and `_≑_` collapses it to a partial order.
 
 ```agda
   ⊆-refl : {θ : Con 𝑨 ℓ} → θ ⊆ θ
@@ -90,40 +91,40 @@ The order is reflexive and transitive, and `_≡_` collapses it to a partial ord
   ⊆-trans : {θ φ ψ : Con 𝑨 ℓ} → θ ⊆ φ → φ ⊆ ψ → θ ⊆ ψ
   ⊆-trans θ⊆φ φ⊆ψ p = φ⊆ψ (θ⊆φ p)
 
-  -- A ≡-step entails a ⊆-step (the `reflexive` field of a preorder).
-  ⊆-reflexive : {θ φ : Con 𝑨 ℓ} → θ ≡ φ → θ ⊆ φ
+  -- A ≑-step entails a ⊆-step (the `reflexive` field of a preorder).
+  ⊆-reflexive : {θ φ : Con 𝑨 ℓ} → θ ≑ φ → θ ⊆ φ
   ⊆-reflexive = proj₁
 
-  -- Antisymmetry holds up to mutual containment, by definition of _≡_.
-  ⊆-antisym : {θ φ : Con 𝑨 ℓ} → θ ⊆ φ → φ ⊆ θ → θ ≡ φ
+  -- Antisymmetry holds up to mutual containment, by definition of _≑_.
+  ⊆-antisym : {θ φ : Con 𝑨 ℓ} → θ ⊆ φ → φ ⊆ θ → θ ≑ φ
   ⊆-antisym θ⊆φ φ⊆θ = θ⊆φ , φ⊆θ
 
   -- The components are written out directly rather than via ⊆-refl/⊆-trans:
   -- because _⊆_ is a defined relation (not an injective type former), Agda
   -- cannot recover the implicit congruence arguments of those lemmas from the
   -- expected component types, so we inline the (trivial) proofs here.
-  ≡-refl : {θ : Con 𝑨 ℓ} → θ ≡ θ
-  ≡-refl = (λ z → z) , (λ z → z)
+  ≑-refl : {θ : Con 𝑨 ℓ} → θ ≑ θ
+  ≑-refl = (λ z → z) , (λ z → z)
 
-  ≡-sym : {θ φ : Con 𝑨 ℓ} → θ ≡ φ → φ ≡ θ
-  ≡-sym = swap
+  ≑-sym : {θ φ : Con 𝑨 ℓ} → θ ≑ φ → φ ≑ θ
+  ≑-sym = swap
 
-  ≡-trans : {θ φ ψ : Con 𝑨 ℓ} → θ ≡ φ → φ ≡ ψ → θ ≡ ψ
-  ≡-trans (θ⊆φ , φ⊆θ) (φ⊆ψ , ψ⊆φ) = (λ p → φ⊆ψ (θ⊆φ p)) , (λ p → φ⊆θ (ψ⊆φ p))
+  ≑-trans : {θ φ ψ : Con 𝑨 ℓ} → θ ≑ φ → φ ≑ ψ → θ ≑ ψ
+  ≑-trans (θ⊆φ , φ⊆θ) (φ⊆ψ , ψ⊆φ) = (λ p → φ⊆ψ (θ⊆φ p)) , (λ p → φ⊆θ (ψ⊆φ p))
 
   -- The implicit congruence (and level) arguments of the helper lemmas are bound
   -- by lambdas and forwarded explicitly: they cannot be inferred through the
   -- (non-injective) `Con 𝑨 ℓ` carrier type at these function-typed fields.
-  ≡-isEquivalence : IsEquivalence (_≡_ {ℓ})
-  ≡-isEquivalence {ℓ} = record
-    { refl = λ {θ} → ≡-refl {ℓ} {θ}
-    ; sym = λ {θ} {φ} → ≡-sym {ℓ} {θ} {φ}
-    ; trans = λ {θ} {φ} {ψ} → ≡-trans  {ℓ} {θ} {φ} {ψ}
+  ≑-isEquivalence : IsEquivalence (_≑_ {ℓ})
+  ≑-isEquivalence {ℓ} = record
+    { refl = λ {θ} → ≑-refl {ℓ} {θ}
+    ; sym = λ {θ} {φ} → ≑-sym {ℓ} {θ} {φ}
+    ; trans = λ {θ} {φ} {ψ} → ≑-trans  {ℓ} {θ} {φ} {ψ}
     }
 
-  ⊆-isPartialOrder : IsPartialOrder (_≡_ {ℓ}) _⊆_
+  ⊆-isPartialOrder : IsPartialOrder (_≑_ {ℓ}) _⊆_
   ⊆-isPartialOrder {ℓ} = record
-    { isPreorder = record  { isEquivalence = ≡-isEquivalence {ℓ}
+    { isPreorder = record  { isEquivalence = ≑-isEquivalence {ℓ}
                            ; reflexive = λ {θ} {φ} → ⊆-reflexive {ℓ} {θ} {φ}
                            ; trans = λ {θ} {φ} {ψ} → ⊆-trans {ℓ} {θ} {φ} {ψ}
                            }
@@ -190,26 +191,26 @@ them, and it is above any common lower bound.  These three facts are exactly the
   ∧-infimum : Infimum (_⊆_ {ℓ}) _∧_
   ∧-infimum θ φ = proj₁ , proj₂ , λ ψ ψ⊆θ ψ⊆φ p → ψ⊆θ p , ψ⊆φ p
 
-  ∧-isMeetSemilattice : IsMeetSemilattice (_≡_ {ℓ}) _⊆_ _∧_
+  ∧-isMeetSemilattice : IsMeetSemilattice (_≑_ {ℓ}) _⊆_ _∧_
   ∧-isMeetSemilattice {ℓ} = record { isPartialOrder = ⊆-isPartialOrder {ℓ} ; infimum = ∧-infimum {ℓ} }
 ```
 
 #### The poset and meet-semilattice of congruences
 
 Finally we assemble the standard-library bundles.  At a fixed relation level `ℓ`,
-`Con-Poset 𝑨` is the poset `(Con 𝑨, ≡, ⊆)` and `Con-MeetSemilattice 𝑨` equips it
+`Con-Poset 𝑨` is the poset `(Con 𝑨, ≑, ⊆)` and `Con-MeetSemilattice 𝑨` equips it
 with the meet `_∧_`.  (The full lattice and complete lattice, with the join and
 the bounds `⊥`/`⊤`, are built in the subsequent steps of #271.)
 
 ```agda
 module _ (𝑨 : Algebra α ρ) {ℓ : Level} where
  Con-Poset : Poset (α ⊔ ρ ⊔ ov ℓ) (α ⊔ ℓ) (α ⊔ ℓ)
- Con-Poset = record  { Carrier = Con 𝑨 ℓ ; _≈_ = _≡_ ; _≤_ = _⊆_
+ Con-Poset = record  { Carrier = Con 𝑨 ℓ ; _≈_ = _≑_ ; _≤_ = _⊆_
                      ; isPartialOrder  = ⊆-isPartialOrder }
 
  Con-MeetSemilattice : MeetSemilattice (α ⊔ ρ ⊔ ov ℓ) (α ⊔ ℓ) (α ⊔ ℓ)
  Con-MeetSemilattice = record  { Carrier = Con 𝑨 ℓ
-                               ; _≈_ = _≡_
+                               ; _≈_ = _≑_
                                ; _≤_ = _⊆_
                                ; _∧_ = _∧_
                                ; isMeetSemilattice  = ∧-isMeetSemilattice
