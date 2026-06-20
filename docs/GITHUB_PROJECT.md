@@ -2996,20 +2996,29 @@ The current `Setoid.Algebras.Congruences` defines congruences but does not organ
 
 ## Description
 
-Subdirect products and subdirect irreducibility are foundational for both the FLRP and for general universal-algebraic theorems (e.g. Birkhoff's subdirect product theorem).
+Subdirect products and subdirect irreducibility are foundational for both the FLRP and for general universal-algebraic theorems (e.g. Birkhoff's subdirect representation theorem).
 
 ## Tasks
 
-- [ ] `SubdirectProduct : (𝒜 : I → Algebra α ρ) → Algebra _ _` — embeds into `⨅ 𝒜` with each projection surjective.
-- [ ] `IsSubdirectlyIrreducible : Algebra α ρ → Type _`.
-- [ ] Birkhoff's subdirect product theorem: every algebra is a subdirect product of SI algebras.
-- [ ] SI characterization via monolithic congruences.
+- [x] `SubdirectProduct` / subdirect embedding — landed as `IsSubdirectEmbedding` / `SubdirectEmbedding` (`Setoid.Subalgebras.Subdirect`): an injective hom into `⨅ 𝒜` whose every coordinate projection is surjective (the standard relational presentation of "a subalgebra of `⨅ 𝒜` meeting every factor", rather than a separately-constructed algebra).
+- [x] `IsSubdirectlyIrreducible : Algebra α ρ → Type _` — landed (`Setoid.Congruences.Monolith`), defined as `Nontrivial × HasMonolith`.
+- [x] Birkhoff's subdirect representation theorem — the choice-free core is proved (`SIRep→Representable`: a separating SI-family of congruences yields a subdirect embedding into a product of SI algebras); `Birkhoff-subdirect` proves the full statement relative to an explicit choice principle (`SubdirectSIRep` existence), the Zorn step isolated as a module parameter rather than postulated.
+- [x] SI characterization via monolithic congruences — `monolith⇒cmi` (a monolith makes `0ᴬ` completely meet-irreducible) and the binary instance `monolith⇒∧-irreducible` (`0ᴬ` is meet-irreducible); plus `monolith-unique`.
 
 ## Acceptance criteria
 
-- [ ] Subdirect product construction type-checks.
-- [ ] Birkhoff's subdirect product theorem is proved.
-- [ ] SI characterization is proved.
+- [x] Subdirect product construction type-checks — `Setoid.Subalgebras.Subdirect` type-checks under `make check`.
+- [x] Birkhoff's subdirect representation theorem is proved — constructive core in full; the choice-dependent existence is an explicit module parameter (mirrors M6-3's handling of choice-dependent theorems).  See the design note.
+- [x] SI characterization is proved — the forward direction (monolith ⟹ completely meet-irreducible) is proved constructively; the converse is predicativity-blocked and recorded as a follow-up.
+
+## Status — first pass (PR #418)
+
+The constructive core of subdirect representation theory landed in two modules:
+
++  `Setoid.Congruences.Monolith` — `Nontrivial` / `Trivial`, `Nonzero` congruences, the infinitary meet `⋂`, `IsMonolith` / `HasMonolith` / `monolith-unique`, `IsSubdirectlyIrreducible`, and the characterization `monolith⇒cmi` / `monolith⇒∧-irreducible`.
++  `Setoid.Subalgebras.Subdirect` — `⨅-proj`, `coord`, `IsSubdirectEmbedding` / `SubdirectEmbedding` / `subdirect→≤`; the bridge `separating→SubdirectEmbedding` (with `natmap-injective` / `natmap-separates`, and a `refl`-checked `IsInjective (proj₁ natmap) ≡ Separates`, showing injectivity is *definitionally* the separation hypothesis "the meet is the diagonal"); and `Birkhoff-subdirect`, the subdirect representation theorem relative to the choice principle `SubdirectSIRep`.
+
+The choice/Zorn decision (option (a): explicit module parameter), the constructive-`¬¬` reason the parameter is a separating SI-family rather than per-pair maximal congruences, the predicativity wall blocking the cmi-⟹-monolith converse, and the level conventions are recorded in `docs/notes/m6-2-subdirect.md`.  Follow-ups: the constructive finite case (option (b), discharging the parameter by search when `≈` is decidable); the impredicative converse; and linking SI to the absence of a nontrivial subdirect decomposition.
 
 ---
 
@@ -3051,7 +3060,7 @@ Deferred proofs are tracked in successor issues: #410 ([M6-4] free-algebra `Cg`�
 
 ---
 
-### Issue M6-4: Free-algebra congruence/derivability bridge (infrastructure for the Maltsev-condition converses) (#410)
+### Issue M6-4: Free-algebra congruence/derivability bridge (infrastructure for the Maltsev-condition converses) (#410, closed)
 
 **Labels**: `milestone-6-flrp`
 
@@ -3137,7 +3146,7 @@ So assembling the lattice is a "step-3"-style task, closely parallel to the cong
 
 ---
 
-### Issue M6-5: Converse of Maltsev's theorem: congruence-permutable ⟹ Maltsev term (#411)
+### Issue M6-5: Converse of Maltsev's theorem: congruence-permutable ⟹ Maltsev term (#411, closed)
 
 **Labels**: `milestone-6-flrp`
 
@@ -3213,7 +3222,7 @@ This is separated from #373 because it is a sizeable undertaking on its own:
 
 ### Issue M6-6: Forward Jónsson/Day: Jónsson terms ⟹ CD and Day terms ⟹ CM (#412)
 
-**Labels**: `milestone-6-flrp`
+**Labels**: `enhancement`, `milestone-6-flrp`
 
 ## Description
 
@@ -3254,7 +3263,7 @@ https://claude.ai/code/session_01MvPrLTCxKjFgsnTMK8j2qZ
 
 ### Issue M6-7: Converse Jónsson/Day: CD ⟹ Jónsson terms and CM ⟹ Day terms (#413)
 
-**Labels**: `milestone-6-flrp`
+**Labels**: `enhancement`, `milestone-6-flrp`, `research-exploratory`
 
 ## Description
 
@@ -3297,6 +3306,112 @@ Construction (Burris–Sankappanavar, Thms. 12.6 and 12.4), sketched in `docs/no
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
 https://claude.ai/code/session_01MvPrLTCxKjFgsnTMK8j2qZ
+
+---
+
+### Issue M6-8: Finite Birkhoff: discharge SubdirectSIRep constructively for finite algebras with decidable equality (#419)
+
+**Labels**: `enhancement`, `milestone-6-flrp`
+
+## Description
+
+[M6-2] (#272, PR #418) proved the choice-free core of Birkhoff's subdirect representation theorem: the bridge `separating→SubdirectEmbedding` (a family of congruences whose meet is the diagonal embeds `𝑨` subdirectly into the product of its quotients) and the reduction `SIRep→Representable`.  The full theorem `Birkhoff-subdirect` is stated *relative to* a module parameter `SubdirectSIRep 𝑨` — the existence of a separating family of SI-quotient congruences — because producing it in general is a Zorn's-lemma step (a congruence maximal among those excluding a given pair), incompatible with postulate-free `--safe`.
+
+For **finite algebras with decidable setoid equality** that parameter can be *discharged constructively*: the congruence lattice is finite and searchable, so for each pair `a ≢ b` one finds a congruence maximal among those not relating `a , b` by search.  Such a congruence is completely meet-irreducible, hence its quotient is subdirectly irreducible (via the monolith characterization in `Setoid.Congruences.Monolith`), and the family over all distinct pairs separates points.  This turns `Birkhoff-subdirect` into an *unconditional* theorem on finite algebras — and finiteness is exactly the FLRP setting, so this is the payoff direction.
+
+This is option (b) of the M6-2 design note (`docs/notes/m6-2-subdirect.md`).
+
+## Tasks
+
++  Fix the finiteness/decidability interface: a decidable setoid equality on `𝕌[ 𝑨 ]` and a finiteness/enumerability witness for the relevant congruences at the working level.  Decide the cleanest encoding (reuse any existing `Fin`/`Setoid`-based finiteness already in the tree).
++  For a distinct pair `a , b`, search the (finite) set of congruences not relating `a , b` for a maximal one, and prove its maximality.
++  Show a maximal-separating congruence is completely meet-irreducible and that its quotient is `IsSubdirectlyIrreducible`.  Note the subtlety the design note flags: with decidable `≈` the `¬¬`-gap that blocks the general construction disappears, so the family's meet is *exactly* the diagonal.
++  Assemble `SubdirectSIRep 𝑨` (index = distinct pairs) and instantiate `Birkhoff-subdirect` to obtain the unconditional finite statement.
+
+## Dependencies
+
++  [M6-2] (#272, PR #418) — `Setoid.Subalgebras.Subdirect` (the bridge, `SubdirectSIRep`, `Birkhoff-subdirect`) and `Setoid.Congruences.Monolith` (SI via monolith, `monolith⇒cmi`).
+
+## Acceptance criteria
+
++  A constructive `SubdirectSIRep 𝑨` for finite algebras with decidable equality, and `Birkhoff-subdirect` instantiated to an unconditional subdirect-representation theorem on that class, type-checking under `--cubical-compatible --exact-split --safe`.
+
+## References
+
++  Burris and Sankappanavar, *A Course in Universal Algebra*, Thm. II.8.6 (Birkhoff's subdirect representation theorem).
++  Design note: `docs/notes/m6-2-subdirect.md` (option (b)).
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01B9q9aP34sakGdPgZVaXU2s
+
+---
+
+### Issue M6-9: The completely-meet-irreducible ⟹ monolith converse (needs an impredicative/resized congruence meet) (#420)
+
+**Labels**: `enhancement`, `milestone-6-flrp`, `design-discussion`
+
+## Description
+
+`Setoid.Congruences.Monolith` (from [M6-2] (#272, PR #418)) proves the useful direction of the subdirect-irreducibility characterization: a monolith makes `0ᴬ` completely meet-irreducible (`monolith⇒cmi`, in the constructive contrapositive form "every member of a family nonzero ⟹ the meet is nonzero").
+
+The **converse** — `0ᴬ` completely meet-irreducible ⟹ a monolith exists — is not proved, for a predicativity reason.  The natural construction takes the monolith to be `μ = ⋀ { θ : Nonzero θ }`, the meet of *all* nonzero congruences; but that family is indexed by `Σ[ θ ∈ Con 𝑨 ℓ ] Nonzero θ`, which lives one universe up, so the meet lands at a level `ℓ′ > ℓ` and is not a monolith *at level `ℓ`*.  This is the same predicativity wall the complete-lattice construction meets (completeness only for `ℓ₀`-small families).
+
+## Tasks
+
++  Decide the resolution: (i) a level-polymorphic monolith / `IsSubdirectlyIrreducible` allowing the monolith one level up; (ii) an impredicative or resized congruence meet, taken as an explicit parameter (mirroring the M6-2 choice-principle discipline, so nothing is postulated under `--safe`); or (iii) restrict to a setting where the nonzero congruences are `ℓ`-small (e.g. finite, dovetailing with [M6-8]).
++  Prove the converse under the chosen resolution: from completely-meet-irreducible `0ᴬ` (and nontriviality) construct the least nonzero congruence and show `IsMonolith`.
++  Record the assumption / level cost explicitly.
+
+## Dependencies
+
++  [M6-2] (#272, PR #418) — `Setoid.Congruences.Monolith` (`IsMonolith`, `Nonzero`, `⋂`, `monolith⇒cmi`).
+
+## Acceptance criteria
+
++  `cmi ⟹ HasMonolith` proved (at the appropriate level / under the stated resizing assumption), completing the SI ⟺ completely-meet-irreducible characterization, type-checking under `--safe`.
+
+## References
+
++  Design note: `docs/notes/m6-2-subdirect.md` (§ "The monolith characterization and its converse").
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01B9q9aP34sakGdPgZVaXU2s
+
+---
+
+### Issue M6-10: Subdirectly irreducible ⟺ no nontrivial subdirect decomposition (the structural characterization) (#421)
+
+**Labels**: `enhancement`, `milestone-6-flrp`
+
+## Description
+
+`Setoid.Congruences.Monolith` (from [M6-2] (#272, PR #418)) *defines* subdirect irreducibility order-theoretically: `IsSubdirectlyIrreducible 𝑨 = Nontrivial 𝑨 × HasMonolith 𝑨`.  What makes the name apt is the **structural** characterization: `𝑨` is subdirectly irreducible iff it has no nontrivial subdirect decomposition — i.e. in every subdirect embedding `𝑨 ↪ ⨅ 𝒜`, some coordinate projection `projᵢ ∘ h` is an isomorphism.  This issue proves that equivalence, tying `Setoid.Congruences.Monolith` to `Setoid.Subalgebras.Subdirect`.
+
+## Tasks
+
++  State "no nontrivial subdirect decomposition": in every subdirect embedding `h : 𝑨 ↪ ⨅ 𝒜`, some coordinate map is an isomorphism.  Pick the cleanest constructive phrasing — via the kernels, a subdirect embedding corresponds to a separating family `θ` (`⋂ θ` the diagonal), and "some projection is iso" ⟺ "some `θ i ≑ 0ᴬ`".
++  Prove monolith ⟹ structural irreducibility: if `⋂ θ` is the diagonal and `𝑨` has a monolith `μ`, then some `θ i ≑ 0ᴬ` (else `μ ⊆ θ i` for all `i`, so `μ ⊆ ⋂ θ ≑ 0ᴬ`, contradicting `Nonzero μ`) — `monolith⇒cmi` transported across the kernel/subdirect correspondence.  Extracting the specific `i` constructively may need the index decidable/finite (coordinate with [M6-8]); otherwise state the contrapositive.
++  Prove the converse (structural ⟹ monolith), or document its level/choice cost if it mirrors [M6-9].
+
+## Dependencies
+
++  [M6-2] (#272, PR #418) — `Setoid.Subalgebras.Subdirect` and `Setoid.Congruences.Monolith`.
++  Likely interacts with [M6-8] (finite/decidable extraction) and [M6-9] (the converse's predicativity).
+
+## Acceptance criteria
+
++  The equivalence (at least the constructive direction, with the converse proved or its cost documented) type-checks under `--safe`, connecting `IsSubdirectlyIrreducible` to subdirect decompositions.
+
+## References
+
++  Burris and Sankappanavar, *A Course in Universal Algebra*, Def. II.8.3 and Thm. II.8.4.
++  Design note: `docs/notes/m6-2-subdirect.md`.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+https://claude.ai/code/session_01B9q9aP34sakGdPgZVaXU2s
 
 <!-- END GENERATED: milestone-6 -->
 
