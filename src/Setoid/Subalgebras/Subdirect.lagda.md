@@ -144,7 +144,7 @@ injectivity of the natural map: an element's image in the product is its tuple o
 congruence classes, and two elements have the same tuple iff every `θ i` relates them.
 
 ```agda
-  -- ⋂ θ ≅ 0ᴬ : every θ i relating a,b forces a ≈ b.
+  -- the meet ⋂ θ is the diagonal 0ᴬ: every θ i relating a,b forces a ≈ b.
   Separates : Type (ι ⊔ α ⊔ ρ ⊔ ℓ)
   Separates = ∀ {a b} → (∀ i → proj₁ (θ i) a b) → a ≈ b
 
