@@ -65,7 +65,7 @@ open import Setoid.Congruences.Basic          using  ( Con ; reflexive
 open import Setoid.Congruences.Permutability  using  ( Permutes
                                                      ; CongruencePermutable )
 open import Setoid.Congruences.Properties     using  ( CongruenceDistributive
-                                                     ; CongruenceModular ) public
+                                                     ; CongruenceModular )
 open import Setoid.Varieties.Interpretation   using  ( reductᴵ ; _⊨ₑ_
                                                      ; module Interpret )
 open import Setoid.Varieties.Maltsev          using  ( Sig-Maltsev ; m-Op ; m ; tri

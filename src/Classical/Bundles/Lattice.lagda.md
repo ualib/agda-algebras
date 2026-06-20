@@ -44,7 +44,8 @@ open import Classical.Structures.Lattice             using  ( Lattice ; module L
 open import Classical.Theories.Lattice               using  ( ∧-assoc ; ∧-comm ; ∧-idem
                                                             ; ∨-assoc ; ∨-comm ; ∨-idem
                                                             ; absorbˡ ; absorbʳ )
-open import Setoid.Algebras.Basic {𝑆 = Sig-Lattice}  using  ( Algebra ; ⟨_⟩ ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Algebras.Basic {𝑆 = Sig-Lattice}  using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Signatures                        using  ( ⟨_⟩ )
 
 private variable α ρ : Level
 

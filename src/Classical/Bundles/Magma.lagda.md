@@ -44,7 +44,8 @@ open Func renaming ( to to _⟨$⟩_ )
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Classical.Signatures.Magma             using ( ∙-Op ; Sig-Magma )
 open import Classical.Structures.Magma             using ( Magma ; module Magma-Op )
-open import Setoid.Algebras.Basic {𝑆 = Sig-Magma}  using ( Algebra ; ⟨_⟩ ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Algebras.Basic {𝑆 = Sig-Magma}  using ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Signatures                      using  ( ⟨_⟩ )
 open Algebra using (Interp)
 
 private variable α ρ : Level

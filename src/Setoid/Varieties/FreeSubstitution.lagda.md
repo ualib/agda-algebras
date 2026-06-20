@@ -71,10 +71,10 @@ open import Overture.Terms                      {𝑆 = 𝑆} using ( Term )
 open import Setoid.Terms.Basic                  {𝑆 = 𝑆} using ( _≐_ ; Sub ; _[_] )
 open import Setoid.Varieties.SoundAndComplete   {𝑆 = 𝑆} using ( Eq ; _⊢_▹_≈_ )
 
--- The bookkeeping laws (proved in Setoid.Terms.Monad) re-exported for one-stop access.
+-- The bookkeeping laws (proved in Setoid.Terms.Monad).
 -- The issue's `[]-ℊ` is `[]-unitˡ`; its `[]-∘` is `[]-assoc`.
-open import Setoid.Terms.Monad {𝑆 = 𝑆}
-  using ( _⊙ˢ_ ; []-unitˡ ; []-unitˡ-ptw ; []-unitʳ ; []-assoc ; []-cong ) public
+open import Setoid.Terms.Monad {𝑆 = 𝑆} using  ( _⊙ˢ_ ; []-unitˡ ; []-unitˡ-ptw
+                                              ; []-unitʳ ; []-assoc ; []-cong )
 
 open _≐_         using ( rfl ; gnl )
 open _⊢_▹_≈_     using ( app ; sub ; refl ; trans )

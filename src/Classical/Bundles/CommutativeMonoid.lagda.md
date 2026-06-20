@@ -33,7 +33,8 @@ open import Classical.Signatures.Monoid                using  ( Sig-Monoid ; ∙
 open import Classical.Structures.CommutativeMonoid     using  ( CommutativeMonoid
                                                               ; module CommutativeMonoid-Op )
 open import Classical.Theories.CommutativeMonoid       using  ( assoc ; idˡ ; idʳ ; comm )
-open import Setoid.Algebras.Basic {𝑆 = Sig-Monoid}     using  ( Algebra ; ⟨_⟩ ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Algebras.Basic {𝑆 = Sig-Monoid}     using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Signatures                          using  ( ⟨_⟩ )
 
 private variable α ρ : Level
 

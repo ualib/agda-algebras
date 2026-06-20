@@ -37,25 +37,27 @@ five are the only subgroups.
 
 module Examples.Setoid.SubgroupLattice where
 
--- Imports from Agda and the Agda Standard Library ------------------------------
-open import Agda.Primitive  using () renaming ( Set to Type )
-open import Data.Bool.Base  using ( Bool ; true ; false ; _xor_ )
-open import Data.Empty      using ( ⊥ )
-open import Data.Fin.Patterns using ( 0F ; 1F )
-open import Data.Product    using ( _×_ ; _,_ ; proj₁ ; proj₂ )
-open import Data.Sum.Base   using ( inj₁ ; inj₂ )
-open import Data.Unit.Base  using ( tt )
-open import Function        using ( Func )
-open import Level           using ( 0ℓ ; lift )
-open import Relation.Binary using ( Setoid )
-open import Relation.Binary.PropositionalEquality as ≡
-                            using ( _≡_ ; refl ; sym ; cong₂ )
-open import Relation.Nullary  using ( ¬_ ; contradiction)
-open import Relation.Unary    using ( Pred ; _∈_ )
+open import Agda.Primitive using () renaming ( Set to Type )
+
+-- Imports from the Agda Standard Library ---------------------------------------
+open import Data.Bool.Base                         using ( Bool ; true ; false ; _xor_ )
+open import Data.Empty                             using ( ⊥ )
+open import Data.Fin.Patterns                      using ( 0F ; 1F )
+open import Data.Product                           using ( _×_ ; _,_ ; proj₁ ; proj₂ )
+open import Data.Sum.Base                          using ( inj₁ ; inj₂ )
+open import Data.Unit.Base                         using ( tt )
+open import Function                               using ( Func )
+open import Level                                  using ( 0ℓ ; lift )
+open import Relation.Binary                        using ( Setoid )
+open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl ; cong₂ ; setoid )
+open import Relation.Nullary                       using ( ¬_ ; contradiction)
+open import Relation.Unary                         using ( Pred ; _∈_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Classical.Signatures.Group  using ( Sig-Group ; ∙-Op ; ε-Op ; ⁻¹-Op )
-open import Setoid.Algebras {𝑆 = Sig-Group} using ( Algebra ; 𝕌[_] ; ⟨_⟩ )
+open import Classical.Signatures.Group             using ( Sig-Group ; ∙-Op ; ε-Op ; ⁻¹-Op )
+open import Setoid.Algebras {𝑆 = Sig-Group}        using ( Algebra ; 𝕌[_] )
+open import Setoid.Signatures                      using  ( ⟨_⟩ )
+
 open Func renaming ( to to _⟨$⟩_ )
 ```
 
@@ -73,9 +75,9 @@ _⊕_ : Bool × Bool → Bool × Bool → Bool × Bool
 x ⊕ y = proj₁ x xor proj₁ y , proj₂ x xor proj₂ y
 
 V₄ : Algebra 0ℓ 0ℓ
-V₄ = record { Domain = ≡.setoid (Bool × Bool) ; Interp = interp }
+V₄ = record { Domain = setoid (Bool × Bool) ; Interp = interp }
  where
- interp : Func (⟨ Sig-Group ⟩ (≡.setoid (Bool × Bool))) (≡.setoid (Bool × Bool))
+ interp : Func (⟨ Sig-Group ⟩ (setoid (Bool × Bool))) (setoid (Bool × Bool))
  interp ⟨$⟩ (∙-Op , args) = args 0F ⊕ args 1F
  interp ⟨$⟩ (ε-Op , _)  = false , false
  interp ⟨$⟩ (⁻¹-Op , args) = args 0F

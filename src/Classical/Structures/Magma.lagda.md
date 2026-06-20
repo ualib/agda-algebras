@@ -42,22 +42,23 @@ Semigroup, Monoid, Group, Lattice, and Ring all follow this template.
 module Classical.Structures.Magma where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
-open import Agda.Primitive                         using () renaming ( Set to Type )
-open import Data.Fin.Patterns                      using ( 0F ; 1F )
-open import Data.Product                           using ( _,_ ; proj₁ ; proj₂ )
-open import Function                               using ( Func )
-open import Level                                  using ( Level ; _⊔_ ; suc )
-open import Relation.Binary                        using ( Setoid )
+open import Agda.Primitive                              using () renaming ( Set to Type )
+open import Data.Fin.Patterns                           using ( 0F ; 1F )
+open import Data.Product                                using ( _,_ ; proj₁ ; proj₂ )
+open import Function                                    using ( Func )
+open import Level                                       using ( Level ; _⊔_ ; suc )
+open import Relation.Binary                             using ( Setoid )
 import Relation.Binary.PropositionalEquality as ≡
 
 open Func renaming ( to to _⟨$⟩_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Classical.Operations                   using ( Curry₂ ; pair )
-open import Classical.Signatures.Magma             using ( Op-Magma ; ∙-Op ; Sig-Magma )
-open import Classical.Structures.Interpret         using ( interp-cong )
-open import Setoid.Algebras.Basic {𝑆 = Sig-Magma}  using ( Algebra ; _^_ ; 𝔻[_] ; 𝕌[_] ; ⟨_⟩ )
+open import Classical.Operations                        using ( Curry₂ ; pair )
+open import Classical.Signatures.Magma                  using ( Op-Magma ; ∙-Op ; Sig-Magma )
+open import Classical.Structures.Interpret              using ( interp-cong )
+open import Setoid.Algebras.Basic {𝑆 = Sig-Magma}       using ( Algebra ; _^_ ; 𝔻[_] ; 𝕌[_] )
 open import Setoid.Homomorphisms.Basic {𝑆 = Sig-Magma}  using ( hom ; IsHom )
+open import Setoid.Signatures                           using ( ⟨_⟩ )
 
 private variable α ρ : Level
 ```

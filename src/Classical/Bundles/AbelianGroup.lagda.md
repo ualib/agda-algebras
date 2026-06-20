@@ -28,10 +28,11 @@ import Relation.Binary.PropositionalEquality as ≡
 open Func renaming ( to to _⟨$⟩_ )
 
 -- Imports from the Agda Universal Algebra Library --------------------------------
-open import Classical.Signatures.Group         using ( Sig-Group ; ∙-Op ; ε-Op ; ⁻¹-Op )
-open import Classical.Structures.AbelianGroup  using ( AbelianGroup ; module AbelianGroup-Op )
-open import Classical.Theories.AbelianGroup    using ( assoc ; idˡ ; idʳ ; invˡ ; invʳ ; comm )
-open import Setoid.Algebras.Basic {𝑆 = Sig-Group} using ( Algebra ; ⟨_⟩ ; 𝕌[_] ; 𝔻[_] )
+open import Classical.Signatures.Group             using ( Sig-Group ; ∙-Op ; ε-Op ; ⁻¹-Op )
+open import Classical.Structures.AbelianGroup      using ( AbelianGroup ; module AbelianGroup-Op )
+open import Classical.Theories.AbelianGroup        using ( assoc ; idˡ ; idʳ ; invˡ ; invʳ ; comm )
+open import Setoid.Algebras.Basic {𝑆 = Sig-Group}  using ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Signatures                      using ( ⟨_⟩ )
 
 private variable α ρ : Level
 
