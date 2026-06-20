@@ -26,18 +26,17 @@ We instantiate the `Lattice`, `BoundedLattice`, and `CompleteLattice` bundles fo
 module Examples.Setoid.CongruenceLattice where
 
 -- Imports from Agda and the Agda Standard Library ------------------------------
-open import Agda.Primitive    using () renaming ( Set to Type )
 open import Data.Bool.Base    using ( Bool ; true ; false )
 open import Data.Empty        using ( ⊥ )
-open import Data.Product      using ( _,_ ; proj₁ )
+open import Data.Product      using ( _,_ )
 open import Function          using ( Func )
-open import Level             using ( 0ℓ ; Lift ; lift )
-open import Relation.Binary   using ( Setoid ; IsEquivalence )
+open import Level             using ( 0ℓ ; lift )
+open import Relation.Binary   using ( Setoid )
 open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
 open import Relation.Nullary  using ( ¬_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Overture using ( 𝓞 ; 𝓥 ; Signature )
+open import Overture using ( Signature )
 
 open Func renaming ( to to _⟨$⟩_ )
 ```
@@ -50,7 +49,7 @@ The empty signature has no operation symbols (`⊥`), hence no arities.
 𝑆₀ : Signature 0ℓ 0ℓ
 𝑆₀ = ⊥ , λ ()
 
-open import Setoid.Algebras {𝑆 = 𝑆₀}     using ( Algebra ; 𝕌[_] )
+open import Setoid.Algebras {𝑆 = 𝑆₀}     using ( Algebra )
 open import Setoid.Congruences {𝑆 = 𝑆₀}  using ( Con ; mkcon )
 open import Setoid.Signatures            using ( ⟨_⟩ )
 

@@ -27,7 +27,6 @@ contained in the empty one).
 module Examples.Setoid.SubalgebraLattice where
 
 -- Imports from Agda and the Agda Standard Library ------------------------------
-open import Agda.Primitive    using () renaming ( Set to Type )
 open import Data.Bool.Base    using ( Bool ; true )
 open import Data.Empty        using ( ⊥ )
 open import Data.Product      using ( _,_ )
@@ -39,7 +38,7 @@ open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
 open import Relation.Nullary  using ( ¬_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Overture using ( 𝓞 ; 𝓥 ; Signature )
+open import Overture using ( Signature )
 
 open Func renaming ( to to _⟨$⟩_ )
 ```
@@ -50,7 +49,7 @@ open Func renaming ( to to _⟨$⟩_ )
 𝑆₀ : Signature 0ℓ 0ℓ
 𝑆₀ = ⊥ , λ ()
 
-open import Setoid.Algebras {𝑆 = 𝑆₀}  using ( Algebra ; 𝕌[_] )
+open import Setoid.Algebras {𝑆 = 𝑆₀}  using ( Algebra )
 open import Setoid.Signatures         using ( ⟨_⟩ )
 
 -- The two-element algebra: carrier Bool with ≡, and no operations to interpret.

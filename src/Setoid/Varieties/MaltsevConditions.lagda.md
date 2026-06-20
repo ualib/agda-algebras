@@ -43,7 +43,7 @@ module Setoid.Varieties.MaltsevConditions where
 open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ----------------------------
-open import Data.Bool.Base                     using  ( Bool ; true ; false ; not
+open import Data.Bool.Base                     using  ( Bool ; true ; not
                                                       ; if_then_else_ )
 open import Data.Fin.Base                      using  ( Fin ; toℕ ; fromℕ ; inject₁ )
                                                renaming ( zero to fzero ; suc to fsuc )
@@ -63,8 +63,7 @@ open import Setoid.Algebras.Basic              using  ( Algebra ; 𝔻[_] ; 𝕌
 open import Setoid.Congruences.Basic           using  ( Con ; reflexive
                                                       ; is-equivalence ; is-compatible )
 open import Setoid.Congruences.Generation      using  ( Cg ; base )
-open import Setoid.Congruences.Permutability   using  ( Permutes
-                                                      ; CongruencePermutable )
+open import Setoid.Congruences.Permutability   using  ( CongruencePermutable )
 open import Setoid.Congruences.Properties      using  ( CongruenceDistributive
                                                       ; CongruenceModular )
 open import Setoid.Terms.Basic                 using  ( Sub ; _[_] ; module Environment )
