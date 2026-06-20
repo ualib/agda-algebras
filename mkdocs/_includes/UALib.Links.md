@@ -162,7 +162,6 @@
 [Setoid.Varieties.Interpretation]: https://ualib.org/Setoid.Varieties.Interpretation.html
 [Setoid.Varieties.Maltsev]: https://ualib.org/Setoid.Varieties.Maltsev.html
 [Setoid.Varieties.MaltsevConditions]: https://ualib.org/Setoid.Varieties.MaltsevConditions.html
-[Setoid.Varieties.MaltsevConverse]: https://ualib.org/Setoid.Varieties.MaltsevConverse.html
 [Setoid.Varieties.Preservation]: https://ualib.org/Setoid.Varieties.Preservation.html
 [Setoid.Varieties.Properties]: https://ualib.org/Setoid.Varieties.Properties.html
 [Setoid.Varieties.SoundAndComplete]: https://ualib.org/Setoid.Varieties.SoundAndComplete.html
