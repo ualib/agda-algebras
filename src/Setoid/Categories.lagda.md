@@ -7,7 +7,7 @@ author: "the agda-algebras development team"
 
 ## Categories for General Algebra
 
-This module collects modules that formalization some of the basic notions of
+This module collects modules that formalize some of the basic notions of
 category theory that are useful for formalizing universal algebra in other modules of
 the library.
 
