@@ -64,7 +64,7 @@ module _ {α ρ : Level} (𝑨 : Algebra α ρ)(ℓ₀ : Level) where
 #### Congruence modularity
 
 An algebra `𝑨` is **congruence-modular** (CM) when its congruence lattice satisfies
-the modular law: whenever `θ ≤ ψ`, `θ ∨ (φ ∧ ψ) ≑ (θ ∨ φ) ∧ ψ`.  Distributivity
+the modular law: whenever `θ ⊆ ψ`, `θ ∨ (φ ∧ ψ) ≑ (θ ∨ φ) ∧ ψ`.  Distributivity
 implies modularity, so the congruence-distributive algebras form a subclass of the
 congruence-modular ones.
 

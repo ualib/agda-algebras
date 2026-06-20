@@ -11,7 +11,7 @@ This is the [Setoid.Congruences.Lattice][] module of the [Agda Universal Algebra
 
 The congruences of an algebra `𝑨`, ordered by containment, form a complete lattice.
 This module begins the formalization of that fact by promoting `Con 𝑨` to a
-first-class ordered object: it defines the containment order `_≤_`, the induced
+first-class ordered object: it defines the containment order `_⊆_`, the induced
 equivalence `_≑_` of mutual containment, and the **meet** `θ ∧ φ`, which is the
 relational intersection `θ ∩ φ`.  The intersection of two congruences is again a
 congruence, and it is the greatest lower bound of the two arguments.  Thus we have a
