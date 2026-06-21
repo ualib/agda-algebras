@@ -27,7 +27,8 @@ module Setoid.Congruences.Lattice {𝑆 : Signature 𝓞 𝓥} where
 -- Imports from the Agda Standard Library ---------------------------------------
 open import Agda.Primitive           using () renaming ( Set to Type )
 open import Data.Product             using ( _×_ ; _,_ ; proj₁ ; proj₂ ; swap )
-open import Level                    using ( Level ; _⊔_ )
+open import Data.Unit.Base           using ( tt )
+open import Level                    using ( Level ; _⊔_ ; lift ; lower )
 open import Relation.Binary          using ( Setoid ; IsEquivalence ; IsPartialOrder ; _⇒_ )
                                      renaming ( Rel to BinRel )
 open import Relation.Binary.Bundles  using ( Poset )
@@ -36,7 +37,8 @@ open import Relation.Binary.Lattice  using ( Infimum ; IsMeetSemilattice ; MeetS
 -- Imports from the Agda Universal Algebras Library ------------------------------
 open import Setoid.Algebras.Basic     {𝑆 = 𝑆}  using  ( ov ; Algebra ; 𝕌[_] )
 open import Setoid.Congruences.Basic  {𝑆 = 𝑆}  using  ( Con ; mkcon ; _∣≈_ ; reflexive
-                                                      ; is-equivalence ; is-compatible )
+                                                      ; is-equivalence ; is-compatible
+                                                      ; 𝟘[_] ; 𝟙[_] )
 private variable α ρ ℓ : Level
 ```
 
@@ -126,6 +128,24 @@ The order is reflexive and transitive, and `_≑_` collapses it to a partial ord
                            }
     ; antisym = λ {θ} {φ} → ⊆-antisym {ℓ} {θ} {φ}
     }
+```
+
+#### The bottom and top of the order
+
+The diagonal congruence `𝟘[ 𝑨 ]` (defined in [Setoid.Congruences.Basic][]) is the
+*least* congruence: it is contained in every congruence, because a congruence is
+reflexive over `≈` and `𝟘[ 𝑨 ]` relates only `≈`-equal pairs.  The total congruence
+`𝟙[ 𝑨 ]` is the *greatest*: every congruence is contained in it, since it relates
+everything.  These are the `⊥` and `⊤` of the congruence lattice.
+
+```agda
+  -- 𝟘[ 𝑨 ] is the least congruence (the minimum of the containment order).
+  𝟘-min : {ℓ : Level}(θ : Con 𝑨 (ρ ⊔ ℓ)) → 𝟘[ 𝑨 ] {ℓ} ⊆ θ
+  𝟘-min θ p = reflexive (proj₂ θ) (lower p)
+
+  -- 𝟙[ 𝑨 ] is the greatest congruence (the maximum of the containment order).
+  𝟙-max : {ℓ : Level}(θ : Con 𝑨 ℓ) → θ ⊆ 𝟙[ 𝑨 ] {ℓ}
+  𝟙-max θ _ = lift tt
 ```
 
 #### Meet: the intersection of two congruences

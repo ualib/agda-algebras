@@ -73,35 +73,21 @@ infix 60 [_]
 The *identity* (or *zero*) relation on `A` is `λ x y → Lift ρ (x ≡ y)`.  The `Lift` is there so that the relation's universe level can be parametrized independently of the carrier's level — useful when the relation has to live at a level dictated by surrounding context (e.g., congruence relations on an algebra at level `α ⊔ suc ρ`).
 
 ```agda
-0[_]₌ : (A : Type a) → {ρ : Level} → BinRel A (a ⊔ ρ)
-0[ A ]₌ {ρ} = λ x y → Lift ρ (x ≡ y)
-```
-
-```agda
-0[_] : (A : Type a) → {ρ : Level} → BinRel A ρ → BinRel A (a ⊔ ρ)
-0[_]{a} A {ρ} _≈_ = λ x y → Lift a (x ≈ y)
+0[_] : (A : Type a) → {ρ : Level} → BinRel A (a ⊔ ρ)
+0[ A ] {ρ} = λ x y → Lift ρ (x ≡ y)
 ```
 
 The identity relation is, of course, an equivalence relation; we package its `IsEquivalence` proof and the corresponding `Equivalence` bundle for convenience.
 
 ```agda
-0[_]₌IsEquivalence : (A : Type a){ρ : Level} → IsEquivalence (0[ A ]₌ {ρ})
-0[ A ]₌IsEquivalence {ρ} = record  { refl   = lift ≡.refl
+0[_]IsEquivalence : (A : Type a){ρ : Level} → IsEquivalence (0[ A ] {ρ})
+0[ A ]IsEquivalence {ρ} = record  { refl   = lift ≡.refl
                                   ; sym    = λ p   → lift (≡.sym (lower p))
                                   ; trans  = λ p q → lift (≡.trans (lower p) (lower q))
                                   }
 
-0[_]IsEquivalence : (A : Type a){ρ : Level}{_≈_ : BinRel A ρ} → (IsEquivalence _≈_) → IsEquivalence (0[ A ] {ρ} _≈_)
-0[ A ]IsEquivalence {ρ}{_≈_} eqv =
-  record  { refl   = λ {x} → lift eqv-refl
-          ; sym    = λ {x} {y} z → lift (eqv-sym (z .lower))
-          ; trans  = λ {i} {j} {k} w z → lift (eqv-trans (w .lower) (z .lower))
-          }
-    where open IsEquivalence eqv renaming (refl to eqv-refl ; sym to eqv-sym ; trans to eqv-trans )
-
-
-0[_]₌Equivalence : (A : Type a){ρ : Level} → Equivalence A {a ⊔ ρ}
-0[ A ]₌Equivalence {ρ} = 0[ A ]₌ {ρ} , 0[ A ]₌IsEquivalence
+0[_]Equivalence : (A : Type a){ρ : Level} → Equivalence A {a ⊔ ρ}
+0[ A ]Equivalence {ρ} = 0[ A ] {ρ} , 0[ A ]IsEquivalence
 ```
 
 ### Kernels of raw functions
