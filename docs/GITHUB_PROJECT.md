@@ -2990,7 +2990,7 @@ The current `Setoid.Algebras.Congruences` defines congruences but does not organ
 
 ---
 
-### Issue M6-2: Subdirect products and subdirectly irreducible algebras (#272)
+### Issue M6-2: Subdirect products and subdirectly irreducible algebras (#272, closed)
 
 **Labels**: `milestone-6-flrp`
 
