@@ -162,7 +162,7 @@ Assembling injectivity and the surjective coordinate maps gives the subdirect em
 
 --------------------------------------
 
-<span style="float:left;">[← Setoid.Subalgebras](Setoid.Subalgebras.Subdirect.html)</span>
+<span style="float:left;">[← Setoid.Subalgebras.Subdirect](Setoid.Subalgebras.Subdirect.html)</span>
 <span style="float:right;">[Setoid.Subalgebras.Subdirect.BirkhoffSI →](Setoid.Subalgebras.Subdirect.BirkhoffSI.html)</span>
 
 {% include UALib.Links.md %}

@@ -4,8 +4,8 @@
 
 This note records [M6-8][] (#419), the constructive *discharge* of the choice
 principle that [M6-2][] (#272) isolated.  Read it alongside the M6-2 note
-[`m6-2-subdirect.md`][] (its "option (b)" is exactly this work) and the merged
-modules `Setoid.Subalgebras.Subdirect` and `Setoid.Congruences.Monolith`.
+[`m6-2-subdirect.md`][] (its "option (b)" is exactly this work) and the modules
+`Setoid.Subalgebras.Subdirect.{Basic,BirkhoffSI}` and `Setoid.Congruences.Monolith`.
 
 M6-2 proved the choice-free core of Birkhoff's subdirect representation theorem and
 stated the full theorem `Birkhoff-subdirect` *relative to* a module parameter
