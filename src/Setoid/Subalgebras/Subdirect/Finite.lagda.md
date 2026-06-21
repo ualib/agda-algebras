@@ -90,8 +90,10 @@ open import Setoid.Congruences.Lattice     {𝑆 = 𝑆}  using  ( _⊆_ ; _≑_
 open import Setoid.Congruences.Generation  {𝑆 = 𝑆}  using  ( Cg ; Cg-least ; base )
 open import Setoid.Congruences.Monolith    {𝑆 = 𝑆}  using  ( IsSubdirectlyIrreducible ; IsMonolith
                                                           ; mono-nonzero ; mono-least ; Nonzero )
-open import Setoid.Subalgebras.Subdirect   {𝑆 = 𝑆}  using  ( Separates ; SubdirectSIRep
-                                                          ; SubdirectlyRepresentable ; SIRep→Representable )
+
+open import Setoid.Subalgebras.Subdirect.Basic {𝑆 = 𝑆} using ( Separates )
+open import Setoid.Subalgebras.Subdirect.BirkhoffSI {𝑆 = 𝑆}
+  using (SubdirectSIRep; SubdirectlyRepresentable ; SIRep→Representable )
 
 open Algebra using ( Domain ; Interp )
 open Func    using ( cong ) renaming ( to to _⟨$⟩_ )
