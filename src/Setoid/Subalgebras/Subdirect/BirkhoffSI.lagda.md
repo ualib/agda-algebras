@@ -8,29 +8,30 @@ author: "the agda-algebras development team"
 
 ### Birkhoff's subdirect representation theorem
 
-This is the [Setoid.Subalgebras.Subdirect.BirkhoffSI][] module of the [Agda Universal Algebra Library][].
+This is the [Setoid.Subalgebras.Subdirect.BirkhoffSI][] module of the
+[Agda Universal Algebra Library][].
 
-The conclusion of Birkhoff's theorem is that an algebra is a subdirect product of
-*subdirectly irreducible* algebras: a family of SI algebras and a subdirect embedding
-into their product.
+Birkhoff's SI theorem asserts that every algebra is a subdirect product of
+subdirectly irreducible algebras; this manifests as a family of SI algebras and a
+subdirect embedding into their product.
 
-This module proves the **choice-free core** in full:
+This module proves the **choice-free core** in full.
 
-+  *the bridge* — a family of congruences `θ : I → Con 𝑨` whose meet is the diagonal
-   (`θ` *separates points*) induces a subdirect embedding `𝑨 ↪ ⨅ (λ i → 𝑨 ╱ θ i)`, with
-   injectivity *exactly* the separation hypothesis and the coordinate projections
-   surjective because they are the canonical quotient maps; and
-+  *the reduction of Birkhoff to existence* — given a subdirect SI-representation of `𝑨`
-   (a separating family whose quotients are all subdirectly irreducible), `𝑨` is a
-   subdirect product of subdirectly irreducible algebras.
++  *The bridge* — a family of congruences `θ : I → Con 𝑨` whose meet is the diagonal
+   (`θ` *separates points*) induces a subdirect embedding `𝑨 ↪ ⨅ (λ i → 𝑨 ╱ θ i)`,
+   with injectivity *exactly* the separation hypothesis and the coordinate
+   projections surjective because they are the canonical quotient maps.
++  *The reduction of Birkhoff to existence* — given a subdirect SI-representation of
+   `𝑨` (a separating family whose quotients are all subdirectly irreducible), `𝑨` is
+   a subdirect product of subdirectly irreducible algebras.
 
 What is **not** choice-free is the *existence* of a subdirect SI-representation for an
-arbitrary algebra: for each pair `a ≢ b` one needs a congruence maximal among those not
-relating `a , b` (it is completely meet-irreducible, so its quotient is subdirectly
-irreducible), and selecting it is a Zorn's-lemma step incompatible with postulate-free
-`--safe`.  Following option (a) of the design brief, we take that existence as an
-explicit module parameter (`SubdirectSIRep`), so the theorem is proved *relative to* a
-precisely-stated assumption and nothing is postulated.[^1]
+arbitrary algebra.  Indeed, for each pair `a ≢ b` one needs a congruence maximal
+among those not relating `a , b` (it is completely meet-irreducible, so its quotient
+is subdirectly irreducible); this is chosen by Zorn's lemma, which incompatible with
+a postulate-free, `--safe` formalization.  In the present module, we take that
+existence as an explicit module parameter (`SubdirectSIRep`), so the theorem is
+proved *relative to* a precisely-stated assumption and nothing is postulated.[^1]
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -93,7 +94,7 @@ module _ (sirep : (𝑨 : Algebra α ρ) → SubdirectSIRep 𝑨 ℓ ι) where
 
 -------------------------------
 
-[^1]: See the design note `docs/notes/m6-2-subdirect.md` for the alternatives (finite/decidable search; deferral) and the rationale.
+[^1]: This is called "option (a)" in the design brief `docs/notes/m6-2-subdirect.md`; that document also describes alternatives (finite/decidable search, and the rationale) to be explored in other submodules of [Setoid.Subalgebras.Subdirect](Setoid.Subalgebras.Subdirec.Basict.html).
 
 <span style="float:left;">[← Setoid.Subalgebras.Subdirect.Basic](Setoid.Subalgebras.Subdirect.Basic.html)</span>
 <span style="float:right;">[Setoid.Subalgebras.Subdirect.Finite →](Setoid.Subalgebras.Subdirect.Finite.html)</span>

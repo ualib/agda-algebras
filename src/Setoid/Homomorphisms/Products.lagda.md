@@ -26,13 +26,14 @@ open import Relation.Binary  using ( Setoid )
 open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
 
 -- Imports from the Agda Universal Algebras Library ----------------------
-open import Overture         using ( proj₁ ; proj₂)
-open import Setoid.Algebras {𝑆 = 𝑆}
-                             using ( Algebra ; _^_ ; ⨅ )
-open import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}
-                             using ( hom ; IsHom ; epi )
+open import Overture                             using ( proj₁ ; proj₂)
+open import Setoid.Algebras             {𝑆 = 𝑆}  using ( Algebra ; _^_ ; ⨅ ; 𝔻[_] )
+open import Setoid.Homomorphisms.Basic  {𝑆 = 𝑆}  using ( hom ; IsHom ; epi )
 
-private variable a α b β 𝓘 : Level
+open _⟶_ using ( cong )  renaming ( to to _⟨$⟩_ )
+open IsHom
+
+private variable α ρ β ρᵇ 𝓘 : Level
 ```
 
 
@@ -45,21 +46,18 @@ we can construct a homomorphism from `𝑨` to the product `⨅ ℬ` in the natu
 
 
 ```agda
-module _ {I : Type 𝓘}{𝑨 : Algebra a α }(ℬ : I → Algebra b β)  where
- open Algebra 𝑨      using ()        renaming ( Domain to A )
- open Algebra (⨅ ℬ)  using ()        renaming ( Domain to ⨅B )
- open _⟶_            using ( cong )  renaming ( to to _⟨$⟩_ )
- open IsHom
+module _ {I : Type 𝓘}{𝑨 : Algebra α ρ }(ℬ : I → Algebra β ρᵇ)  where
+  open Algebra (⨅ ℬ) using () renaming ( Domain to ⨅B )
 
- ⨅-hom-co : (∀(i : I) → hom 𝑨 (ℬ i)) → hom 𝑨 (⨅ ℬ)
- ⨅-hom-co 𝒽 = h , hhom
-  where
-  h : A ⟶ ⨅B
-  (h ⟨$⟩ a) i = (proj₁ (𝒽 i)) ⟨$⟩ a
-  cong h xy i = cong (proj₁ (𝒽 i)) xy
+  ⨅-hom-co : (∀(i : I) → hom 𝑨 (ℬ i)) → hom 𝑨 (⨅ ℬ)
+  ⨅-hom-co 𝒽 = h , hhom
+    where
+    h : 𝔻[ 𝑨 ] ⟶ ⨅B
+    (h ⟨$⟩ a) i = (proj₁ (𝒽 i)) ⟨$⟩ a
+    cong h xy i = cong (proj₁ (𝒽 i)) xy
 
-  hhom : IsHom 𝑨 (⨅ ℬ) h
-  compatible hhom = λ i → compatible (proj₂ (𝒽 i))
+    hhom : IsHom 𝑨 (⨅ ℬ) h
+    compatible hhom = λ i → compatible (proj₂ (𝒽 i))
 ```
 
 
@@ -80,44 +78,45 @@ a homomorphism from `⨅ 𝒜` to `⨅ ℬ` in the following natural way.
 
 
 ```agda
- ⨅-hom : (𝒜 : I → Algebra a α) → (∀ (i : I) → hom (𝒜 i) (ℬ i)) → hom (⨅ 𝒜)(⨅ ℬ)
- ⨅-hom 𝒜 𝒽 = F , isHom
-  where
+module _ {I : Type 𝓘}(𝒜 : I → Algebra α ρ) where
   open Algebra (⨅ 𝒜) using () renaming ( Domain to ⨅A )
 
-  F : ⨅A ⟶ ⨅B
-  (F ⟨$⟩ x) i = (proj₁ (𝒽 i)) ⟨$⟩ x i
-  cong F xy i = cong (proj₁ (𝒽 i)) (xy i)
+  ⨅-hom : (ℬ : I → Algebra β ρᵇ) → (∀ (i : I) → hom (𝒜 i) (ℬ i)) → hom (⨅ 𝒜)(⨅ ℬ)
+  ⨅-hom ℬ 𝒽 = F , isHom
+    where
+    open Algebra (⨅ ℬ) using () renaming ( Domain to ⨅B )
 
-  isHom : IsHom (⨅ 𝒜) (⨅ ℬ) F
-  compatible isHom i = compatible (proj₂ (𝒽 i))
+    F : ⨅A ⟶ ⨅B
+    (F ⟨$⟩ x) i = (proj₁ (𝒽 i)) ⟨$⟩ x i
+    cong F xy i = cong (proj₁ (𝒽 i)) (xy i)
+
+    isHom : IsHom (⨅ 𝒜) (⨅ ℬ) F
+    compatible isHom i = compatible (proj₂ (𝒽 i))
 ```
 
 
 
 #### Projection out of products
 
-Later we will need a proof of the fact that projecting out of a product algebra
-onto one of its factors is a homomorphism.
-
+The projection of a product algebra onto its `i`-th factor is a homomorphism.
 
 ```agda
- ⨅-projection-hom : (i : I) → hom (⨅ ℬ) (ℬ i)
- ⨅-projection-hom i = F , isHom
-  where
-  open Algebra (ℬ i)  using () renaming ( Domain to Bi )
-  open Setoid Bi      using () renaming ( refl to reflᵢ )
+  ⨅-proj : (i : I) → hom (⨅ 𝒜) (𝒜 i)
+  ⨅-proj i = F , isHom
+    where
+    open Algebra (𝒜 i)  using () renaming ( Domain to Ai )
+    open Setoid Ai using () renaming ( refl to refli )
 
-  F : ⨅B ⟶ Bi
-  F ⟨$⟩ x = x i
-  cong F xy = xy i
+    F : ⨅A ⟶ Ai
+    F ⟨$⟩ x = x i
+    cong F xy = xy i
 
-  isHom : IsHom (⨅ ℬ) (ℬ i) F
-  compatible isHom {f} {a} = reflᵢ
+    isHom : IsHom (⨅ 𝒜) (𝒜 i) F
+    compatible isHom {f} {a} = refli
 ```
 
-
-We could prove a more general result involving projections onto multiple factors, but so far the single-factor result has sufficed.
+We could prove a more general result involving projections onto multiple factors, but
+so far the single-factor result has sufficed.
 
 ---------------------------------
 
