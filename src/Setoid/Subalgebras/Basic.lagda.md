@@ -78,7 +78,7 @@ From now on we will use `𝑩 ≤ 𝑨` to express the assertion that `𝑩` is 
 
 Suppose `𝒦 : Pred (Algebra α 𝑆) γ` denotes a class of `𝑆`-algebras and `𝑩 : Algebra β ρᵇ`
 denotes an arbitrary `𝑆`-algebra.  Consider the assertion that `𝑩` is a subalgebra of
-an algebra in the class `𝒦`.  With the next defininition we can express this
+an algebra in the class `𝒦`.  With the next definition we can express this
 assertion as `𝑩 IsSubalgebraOfClass 𝒦`.
 
 ```agda
