@@ -41,9 +41,9 @@ Two modules, both `--cubical-compatible --exact-split --safe`.
    reorganized under M6-8 into a `Subdirect` barrel: the structures and the bridge in
    `Subdirect.Basic`, the Birkhoff reduction in `Subdirect.BirkhoffSI`, and the finite
    discharge in `Subdirect.Finite`.)
-   +  `⨅-proj` — the coordinate projection `⨅ 𝒜 → 𝒜 i` as a homomorphism (the
-      `⨅-projection-hom` of `Setoid.Homomorphisms.Products` re-derived so the factor
-      family alone determines it, without that version's vestigial domain parameter).
+   +  `⨅-proj` — the coordinate projection `⨅ 𝒜 → 𝒜 i` as a homomorphism (originally
+      re-derived in `Subdirect` to drop a vestigial domain parameter; under M6-8
+      promoted to `Setoid.Homomorphisms.Products` as `⨅-proj` and imported from there).
    +  `coord h i = projᵢ ∘ h` and `IsSubdirectEmbedding` (a hom that is injective and
       whose every coordinate map is surjective); `SubdirectEmbedding`; `subdirect→≤`
       (a subdirect embedding is in particular a subalgebra inclusion `𝑩 ≤ ⨅ 𝒜`).

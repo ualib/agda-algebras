@@ -63,7 +63,7 @@ For users of these modules, the migration is mechanical when the concrete settin
 | `Legacy.Base.Relations.Properties`            | `Setoid.Relations.Properties`            |
 | `Legacy.Base.Subalgebras`                     | `Setoid.Subalgebras`                     |
 | `Legacy.Base.Subalgebras.Properties`          | `Setoid.Subalgebras.Properties`          |
-| `Legacy.Base.Subalgebras.Subalgebras`         | `Setoid.Subalgebras.Subalgebras`         |
+| `Legacy.Base.Subalgebras.Subalgebras`         | `Setoid.Subalgebras.Basic`               |
 | `Legacy.Base.Subalgebras.Subuniverses`        | `Setoid.Subalgebras.Subuniverses`        |
 | `Legacy.Base.Terms`                           | `Setoid.Terms`                           |
 | `Legacy.Base.Terms.Basic`                     | `Setoid.Terms.Basic`                     |
