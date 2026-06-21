@@ -22,6 +22,7 @@ open import Setoid.Complexity public
 open import Setoid.Congruences public
 open import Setoid.Functions public
 open import Setoid.Homomorphisms public
+open import Setoid.Operations public
 open import Setoid.Relations public
 open import Setoid.Signatures public
 open import Setoid.Subalgebras public

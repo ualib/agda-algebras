@@ -11,6 +11,7 @@
 [Overture.Signatures]: https://ualib.org/Overture.Signatures.html
 [Overture.Levels]: https://ualib.org/Overture.Levels.html
 [Overture.Operations]: https://ualib.org/Overture.Operations.html
+[Overture.Operations.Properties]: https://ualib.org/Overture.Operations.Properties.html
 [Overture.Cayley]: https://ualib.org/Overture.Cayley.html
 [Overture.Terms.Interpretation]: https://ualib.org/Overture.Terms.Interpretation.html
 
@@ -106,6 +107,8 @@
 <!-- [Setoid]: Setoid.html -->
 [Setoid]: https://ualib.org/Setoid.html
 
+[Setoid.Operations]: https://ualib.org/Setoid.Operations.html
+[Setoid.Operations.Properties]: https://ualib.org/Setoid.Operations.Properties.html
 [Setoid.Relations]: https://ualib.org/Setoid.Relations.html
 [Setoid.Relations.Discrete]: https://ualib.org/Setoid.Relations.Discrete.html
 [Setoid.Relations.Quotients]: https://ualib.org/Setoid.Relations.Quotients.html
@@ -194,6 +197,7 @@
 [Overture/Signatures.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Overture/Signatures.lagda
 [Overture/Levels.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Overture/Levels.lagda
 [Overture/Operations.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Overture/Operations.lagda
+[Overture/Operations/Properties.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Overture/Operations/Properties.lagda
 
 [Base.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base.lagda
 [Base/Relations.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Base/Relations.lagda
@@ -279,6 +283,8 @@
 <!-- ///////////////////////////////////////////////////////////////////////////////////////////////// -->
 
 [Setoid.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid.lagda
+[Setoid/Operations.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Operations.lagda
+[Setoid/Operations/Properties.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Operations/Properties.lagda
 
 [Setoid/Relations.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Relations.lagda
 [Setoid/Relations/Discrete.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Relations/Discrete.lagda
