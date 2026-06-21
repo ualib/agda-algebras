@@ -21,8 +21,7 @@ open import Setoid.Subalgebras.CompleteLattice {𝑆 = 𝑆}
 open import Setoid.Subalgebras.Properties {𝑆 = 𝑆} public
 open import Setoid.Subalgebras.Subalgebras {𝑆 = 𝑆} public
 open import Setoid.Subalgebras.Subuniverses {𝑆 = 𝑆} public
-open import Setoid.Subalgebras.Subdirect {𝑆 = 𝑆} public
-open import Setoid.Subalgebras.Subdirect.Finite {𝑆 = 𝑆} public
+open import Setoid.Subalgebras.Subdirect public
 ```
 
 
