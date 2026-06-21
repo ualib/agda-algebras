@@ -153,6 +153,9 @@
 [Setoid.Subalgebras.Subuniverses]: https://ualib.org/Setoid.Subalgebras.Subuniverses.html
 [Setoid.Subalgebras.CompleteLattice]: https://ualib.org/Setoid.Subalgebras.CompleteLattice.html
 [Setoid.Subalgebras.Subdirect]: https://ualib.org/Setoid.Subalgebras.Subdirect.html
+[Setoid.Subalgebras.Subdirect.Basic]: https://ualib.org/Setoid.Subalgebras.Subdirect.Basic.html
+[Setoid.Subalgebras.Subdirect.BirkhoffSI]: https://ualib.org/Setoid.Subalgebras.Subdirect.BirkhoffSI.html
+[Setoid.Subalgebras.Subdirect.Finite]: https://ualib.org/Setoid.Subalgebras.Subdirect.Finite.html
 
 [Setoid.Varieties]: https://ualib.org/Setoid.Varieties.html
 [Setoid.Varieties.Closure]: https://ualib.org/Setoid.Varieties.Closure.html

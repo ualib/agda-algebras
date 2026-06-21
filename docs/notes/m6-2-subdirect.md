@@ -37,7 +37,10 @@ Two modules, both `--cubical-compatible --exact-split --safe`.
       two nonzero congruences is nonzero ("`0ᴬ` is meet-irreducible", the
       directly-indecomposable-adjacent fact).
 
-+  `Setoid.Subalgebras.Subdirect` — the subdirect structures and the bridge.
++  `Setoid.Subalgebras.Subdirect` — the subdirect structures and the bridge.  (Later
+   reorganized under M6-8 into a `Subdirect` barrel: the structures and the bridge in
+   `Subdirect.Basic`, the Birkhoff reduction in `Subdirect.BirkhoffSI`, and the finite
+   discharge in `Subdirect.Finite`.)
    +  `⨅-proj` — the coordinate projection `⨅ 𝒜 → 𝒜 i` as a homomorphism (the
       `⨅-projection-hom` of `Setoid.Homomorphisms.Products` re-derived so the factor
       family alone determines it, without that version's vestigial domain parameter).
@@ -137,11 +140,17 @@ the standard product level arithmetic), so the Birkhoff index can be the
    notions and depend only on `Setoid.Congruences.{Basic,Lattice}`; putting them under
    `Setoid.Algebras.` would invert the layering (Algebras is below Congruences).
 +  Subdirect products/embeddings and Birkhoff live under `Setoid.Subalgebras.` (a
-   subdirect product *is* a subalgebra of a product); `Subdirect` imports `Monolith` for
-   the SI predicate, a clean one-way dependency.
+   subdirect product *is* a subalgebra of a product); the development imports `Monolith`
+   for the SI predicate, a clean one-way dependency.  Under M6-8 the single `Subdirect`
+   module became a `Subdirect` barrel re-exporting `Subdirect.Basic` (the structures and
+   the bridge), `Subdirect.BirkhoffSI` (the SI-representation theorem), and
+   `Subdirect.Finite` (the finite discharge), since `Subdirect.Basic` is now shared by
+   the latter two.
 +  The theorem is `Birkhoff-subdirect`, distinct from the HSP variety theorem's
    `Birkhoff` (`Setoid.Varieties.HSP`), so both can be re-exported through the top-level
-   `Setoid` barrel without an ambiguous-name clash.
+   `Setoid` barrel without an ambiguous-name clash.  (The SI-representation theorem's
+   module is named `BirkhoffSI` for the same reason — to keep it distinct from the HSP
+   `Birkhoff`.)
 
 ## What remains (follow-ups)
 

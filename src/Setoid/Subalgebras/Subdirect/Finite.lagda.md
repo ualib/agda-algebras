@@ -11,7 +11,7 @@ author: "the agda-algebras development team"
 This is the [Setoid.Subalgebras.Subdirect.Finite][] module of the
 [Agda Universal Algebra Library][].
 
-[Setoid.Subalgebras.Subdirect][] proved the **choice-free core** of Birkhoff's
+[Setoid.Subalgebras.Subdirect.BirkhoffSI][] proved the **choice-free core** of Birkhoff's
 subdirect representation theorem and stated the full theorem `Birkhoff-subdirect`
 *relative to* the choice principle `SubdirectSIRep 𝑨` — the existence, for every
 algebra, of a separating family of congruences whose quotients are subdirectly
@@ -448,7 +448,7 @@ cong (Interp 𝟏) _ = tt
 
 --------------------------------------
 
-<span style="float:left;">[← Setoid.Subalgebras.Subdirect](Setoid.Subalgebras.Subdirect.html)</span>
+<span style="float:left;">[← Setoid.Subalgebras.Subdirect.BirkhoffSI](Setoid.Subalgebras.Subdirect.BirkhoffSI.html)</span>
 <span style="float:right;">[Setoid.Subalgebras.Properties →](Setoid.Subalgebras.Properties.html)</span>
 
 {% include UALib.Links.md %}
