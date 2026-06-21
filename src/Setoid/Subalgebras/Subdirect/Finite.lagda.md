@@ -48,7 +48,7 @@ We therefore take that content as the finiteness interface: a `FiniteAlgebra`
 bundles decidable `≈`, a finite enumeration of the carrier, and a finite list of
 **decidable** congruences that is complete up to `≑`.  Everything downstream is
 then fully constructive and computes.  Classically every finite algebra furnishes
-these data, so `finite-Birkhoff` is Birkhoff's theorem for finite algebras; the
+this data, so `finite-Birkhoff` is Birkhoff's theorem for finite algebras; the
 `FiniteAlgebra` record is precisely the constructive witness that makes the search
 go through under `--safe`.
 
@@ -59,50 +59,40 @@ open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 
 module Setoid.Subalgebras.Subdirect.Finite {𝑆 : Signature 𝓞 𝓥} where
 
-open import Agda.Primitive using () renaming ( Set to Type )
-
 -- Imports from Agda and the Agda Standard Library ----------------------------
-open import Data.Empty                          using  ( ⊥ ; ⊥-elim )
-open import Data.Fin.Base                       using  ( Fin ; zero )
-open import Data.Fin.Properties                 using  ( all? ; ¬∀⟶∃¬ )
-open import Data.List.Base                      using  ( List ; [] ; _∷_ ; filter
-                                                       ; length ; allFin ; cartesianProduct )
-open import Data.List.Extrema.Nat               using  ( argmax ; f[xs]≤f[argmax] ; argmax-sel )
-open import Data.List.Membership.Propositional  using  ( _∈_ )
-
-open import Data.List.Membership.Propositional.Properties
-  using  ( ∈-filter⁺ ; ∈-filter⁻ ; ∈-cartesianProduct⁺ ; ∈-allFin )
-
-open import Data.List.Relation.Unary.All        using  ( lookup )
-open import Data.List.Relation.Unary.Any        using  ( here ; there )
-open import Data.Nat.Base                       using  ( ℕ ; _≤_ ; _<_ ; z≤n ; s≤s )
-open import Data.Nat.Properties                 using  ( m≤n⇒m≤1+n ; n<1+n ; <-trans
-                                                       ; ≤-<-trans ; n≮n )
-open import Data.Product                        using  ( _×_ ; _,_ ; Σ-syntax
-                                                       ; ∃-syntax ; proj₁ ; proj₂ )
-open import Data.Sum.Base                       using  ( _⊎_ ; inj₁ ; inj₂ )
-open import Data.Unit.Base                      using  ( ⊤ ; tt )
-open import Function                            using  ( Func ; _∘_ )
-open import Level  renaming ( suc to lsuc )     using  ( Level ; _⊔_ ; 0ℓ ; Lift ; lift ; lower )
-open import Relation.Binary                     using  ( Setoid ; IsEquivalence ; Transitive ; _⇒_)
-                                                renaming ( Rel to BinRel )
-open import Relation.Binary.PropositionalEquality
-  using  ( _≡_ ; refl ; subst ; sym )
-
-open import Relation.Nullary                    using  ( ¬_ ; Dec ; yes ; no )
-open import Relation.Nullary.Decidable          using  ( _→-dec_ ; ¬? )
+open import Agda.Primitive   using ( lsuc ) renaming ( Set to Type )
+open import Data.Empty       using ( ⊥ ; ⊥-elim )
+open import Data.Fin.Base    using ( Fin ; zero )
+open import Data.Fin.Properties                          using ( all? ; ¬∀⟶∃¬ )
+open import Data.List.Base   using ( List ; [] ; _∷_ ; filter ; length ; allFin ; cartesianProduct )
+open import Data.List.Extrema.Nat                        using ( argmax ; f[xs]≤f[argmax] ; argmax-sel )
+open import Data.List.Membership.Propositional           using ( _∈_ )
+open import Data.List.Membership.Propositional.Properties using ( ∈-filter⁺ ; ∈-filter⁻ ; ∈-cartesianProduct⁺ ; ∈-allFin )
+open import Data.List.Relation.Unary.All                 using ( lookup )
+open import Data.List.Relation.Unary.Any                 using ( here ; there )
+open import Data.Nat.Base    using ( ℕ ; _≤_ ; _<_ ; z≤n ; s≤s )
+open import Data.Nat.Properties                          using ( m≤n⇒m≤1+n ; n<1+n ; <-trans ; ≤-<-trans ; n≮n )
+open import Data.Product     using ( _×_ ; _,_ ; Σ-syntax ; ∃-syntax ; proj₁ ; proj₂ )
+open import Data.Sum.Base    using ( _⊎_ ; inj₁ ; inj₂ )
+open import Data.Unit.Base   using ( ⊤ ; tt )
+open import Function         using ( Func )
+open import Level            using ( Level ; _⊔_ ; 0ℓ ; Lift ; lift ; lower )
+open import Relation.Binary  using ( Setoid ; IsEquivalence )
+open import Relation.Binary.PropositionalEquality as ≡   using ( _≡_ )
+open import Relation.Nullary using ( ¬_ ; Dec ; yes ; no )
+open import Relation.Nullary.Decidable                   using ( _→-dec_ ; ¬? )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Setoid.Algebras.Basic          {𝑆 = 𝑆}  using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Algebras.Basic         {𝑆 = 𝑆}  using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
 open import Setoid.Congruences.Basic       {𝑆 = 𝑆}  using  ( Con ; mkcon ; _∣≈_ ; reflexive
-                                                           ; is-equivalence ; is-compatible ; _╱_ )
+                                                          ; is-equivalence ; is-compatible ; _╱_ ; 𝟘[_] )
 open import Setoid.Congruences.Lattice     {𝑆 = 𝑆}  using  ( _⊆_ ; _≑_ ; ⊆-trans )
 open import Setoid.Congruences.Generation  {𝑆 = 𝑆}  using  ( Cg ; Cg-least ; base )
 open import Setoid.Congruences.Monolith    {𝑆 = 𝑆}  using  ( IsSubdirectlyIrreducible ; IsMonolith
-                                                           ; mono-nonzero ; mono-least ; Nonzero )
+                                                          ; mono-nonzero ; mono-least ; Nonzero )
 open import Setoid.Subalgebras.Subdirect   {𝑆 = 𝑆}  using  ( Separates ; SubdirectSIRep
-                                                           ; SubdirectlyRepresentable
-                                                           ; SIRep→Representable )
+                                                          ; SubdirectlyRepresentable ; SIRep→Representable )
+
 open Algebra using ( Domain ; Interp )
 open Func    using ( cong ) renaming ( to to _⟨$⟩_ )
 
@@ -120,14 +110,10 @@ whenever some listed element satisfies `Q` but not `P`.
 private variable ℓ₁ ℓ₂ ℓ₃ : Level
 
 private
-  module _
-    {X : Type ℓ₁}
-    {P : X → Type ℓ₂}
-    {Q : X → Type ℓ₃}
-    (P? : (x : X) → Dec (P x))
-    (Q? : (x : X) → Dec (Q x))
-    (sub : ∀ {x} → P x → Q x)
-    where
+
+  module _ {X : Type ℓ₁}{P : X → Type ℓ₂}{Q : X → Type ℓ₃}
+           (P? : (x : X) → Dec (P x))(Q? : (x : X) → Dec (Q x))
+           (sub : ∀ {x} → P x → Q x) where
 
     -- If P entails Q then no more elements pass the P-filter than the Q-filter.
     filter-length-mono : (xs : List X) → length (filter P? xs) ≤ length (filter Q? xs)
@@ -141,7 +127,7 @@ private
     -- If moreover some w ∈ xs has Q w and ¬ P w, the P-filter is strictly shorter.
     filter-length-strict : (xs : List X){w : X} → w ∈ xs → Q w → ¬ P w
                          → length (filter P? xs) < length (filter Q? xs)
-    filter-length-strict (x ∷ xs) (here refl) qw ¬pw with P? x | Q? x
+    filter-length-strict (x ∷ xs) (here ≡.refl) qw ¬pw with P? x | Q? x
     ... | yes pw | _      = ⊥-elim (¬pw pw)
     ... | no _   | yes _  = s≤s (filter-length-mono xs)
     ... | no _   | no ¬qw = ⊥-elim (¬qw qw)
@@ -162,36 +148,34 @@ private
 A **decidable congruence** is a congruence whose membership relation is decidable.
 The working congruence level is the absorbing level `clv α ρ = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ`, at
 which the generated (principal) congruences used for the monolith stay put — the
-same level discipline as in [Setoid.Congruences.CompleteLattice][].
+same level discipline as [Setoid.Congruences.CompleteLattice][].
 
 ```agda
 -- The absorbing congruence level at which everything below is carried out.
-acl : (α ρ : Level) → Level
-acl α ρ = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ
+clv : (α ρ : Level) → Level
+clv α ρ = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ
 
 -- A congruence together with a decision procedure for its membership.
 DecCon : (𝑨 : Algebra α ρ)(ℓ : Level) → Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ lsuc ℓ)
 DecCon 𝑨 ℓ = Σ[ θ ∈ Con 𝑨 ℓ ] (∀ x y → Dec (proj₁ θ x y))
-
-ConRel : {𝑨 : Algebra α ρ}{ℓ : Level} → DecCon 𝑨 ℓ → BinRel 𝕌[ 𝑨 ] ℓ
-ConRel = proj₁ ∘ proj₁
 ```
 
-The finiteness interface bundles decidable `≈`, a surjective enumeration of the
-carrier (used to *count* related pairs), and a finite, complete list of decidable
-congruences (the searchable congruence lattice).  (See the module header for why
-the last field cannot be derived from the first two.)
+The finiteness interface bundles: decidable `≈`; a surjective enumeration of the
+carrier (used to *count* related pairs); and a finite, complete list of decidable
+congruences (the searchable congruence lattice).  See the module header for why
+the last field cannot be derived from the first two.
 
 ```agda
-record FiniteAlgebra (𝑨 : Algebra α ρ) : Type (lsuc (acl α ρ)) where
+record FiniteAlgebra (𝑨 : Algebra α ρ) : Type (lsuc (clv α ρ)) where
   open Setoid 𝔻[ 𝑨 ] using ( _≈_ )
   field
     _≟_       : (x y : 𝕌[ 𝑨 ]) → Dec (x ≈ y)
     card      : ℕ
     enum      : Fin card → 𝕌[ 𝑨 ]
     enum-sur  : (x : 𝕌[ 𝑨 ]) → Σ[ i ∈ Fin card ] (enum i ≈ x)
-    cons      : List (DecCon 𝑨 (acl α ρ))
-    complete  : (φ : Con 𝑨 (acl α ρ)) → Σ[ d ∈ DecCon 𝑨 (acl α ρ) ] (d ∈ cons) × (φ ≑ proj₁ d)
+    cons      : List (DecCon 𝑨 (clv α ρ))
+    complete  : (φ : Con 𝑨 (clv α ρ))
+              → Σ[ d ∈ DecCon 𝑨 (clv α ρ) ] (d ∈ cons) × (φ ≑ proj₁ d)
 ```
 
 #### The construction
@@ -202,21 +186,22 @@ list of all index pairs of the carrier enumeration.
 ```agda
 module _ {𝑨 : Algebra α ρ} (𝑭 : FiniteAlgebra 𝑨) where
   open FiniteAlgebra 𝑭
-  open Setoid 𝔻[ 𝑨 ] using ( _≈_ ) renaming ( refl to ≈refl ; sym to ≈sym ; trans to ≈trans )
+  open Setoid 𝔻[ 𝑨 ] using ( _≈_ ; sym )
 
   ℓ : Level
-  ℓ = acl α ρ
+  ℓ = clv α ρ
 
   pairs : List (Fin card × Fin card)
   pairs = cartesianProduct (allFin card) (allFin card)
 
   -- The decision procedure that a decidable congruence relates the i-th and j-th
   -- enumerated carrier elements, and the count of all such related index pairs.
-  [_]? : (d : DecCon 𝑨 ℓ)((p , q) : Fin card × Fin card) → Dec (ConRel d  (enum p) (enum q))
-  [ d ]? (i , j) = proj₂ d (enum i) (enum j)
+  pred : (d : DecCon 𝑨 ℓ)(p : Fin card × Fin card)
+       → Dec (proj₁ (proj₁ d) (enum (proj₁ p)) (enum (proj₂ p)))
+  pred d (i , j) = proj₂ d (enum i) (enum j)
 
   count : DecCon 𝑨 ℓ → ℕ
-  count d = length (filter [ d ]? pairs)
+  count d = length (filter (pred d) pairs)
 ```
 
 A congruence contained in another relates no more pairs (`count-mono`); if the
@@ -225,16 +210,16 @@ containment is *proper on the enumerated carrier* it relates strictly fewer
 
 ```agda
   count-mono : (d e : DecCon 𝑨 ℓ) → proj₁ d ⊆ proj₁ e → count d ≤ count e
-  count-mono d e d⊆e = filter-length-mono [ d ]? [ e ]? (λ {p} → d⊆e) pairs
+  count-mono d e d⊆e = filter-length-mono (pred d) (pred e) (λ {p} → d⊆e) pairs
 
   count-strict : (d e : DecCon 𝑨 ℓ)(i j : Fin card)
-    → proj₁ d ⊆ proj₁ e
-    → ConRel e (enum i) (enum j)
-    → ¬ ConRel d (enum i) (enum j)
-    → count d < count e
+               → proj₁ d ⊆ proj₁ e
+               → proj₁ (proj₁ e) (enum i) (enum j)
+               → ¬ proj₁ (proj₁ d) (enum i) (enum j)
+               → count d < count e
   count-strict d e i j d⊆e eij ¬dij =
-    filter-length-strict [ d ]? [ e ]? (λ {p} → d⊆e)
-      pairs (∈-cartesianProduct⁺ (∈-allFin i) (∈-allFin j)) eij ¬dij
+    filter-length-strict (pred d) (pred e) (λ {p} → d⊆e)
+                         pairs (∈-cartesianProduct⁺ (∈-allFin i) (∈-allFin j)) eij ¬dij
 ```
 
 A relation that holds on every enumerated pair holds everywhere, because the
@@ -243,40 +228,20 @@ carrier-level containment to a genuine containment of congruences.
 
 ```agda
   carrier-lift : (R S : Con 𝑨 ℓ)
-    → (∀ i j → proj₁ R (enum i) (enum j) → proj₁ S (enum i) (enum j)) → R ⊆ S
-
-  carrier-lift (R , pr) (S , ps) h {x}{y} Rxy =
-    Strans (Srefl (≈sym ei≈x)) (Strans Sij (Srefl ej≈y))
-      where
-      open IsEquivalence using (trans)
-
-      Rrefl : _≈_ ⇒ R
-      Rrefl = reflexive pr
-
-      Srefl : _≈_ ⇒ S
-      Srefl = reflexive ps
-
-      Rtrans : Transitive R
-      Rtrans = (is-equivalence pr) .trans
-
-      Strans : Transitive S
-      Strans = (is-equivalence ps) .trans
-
-      i j : Fin card
-      i = proj₁ (enum-sur x)
-      j = proj₁ (enum-sur y)
-
-      ei≈x : enum i ≈ x
-      ei≈x = proj₂ (enum-sur x)
-
-      ej≈y : enum j ≈ y
-      ej≈y = proj₂ (enum-sur y)
-
-      Rij : R (enum i) (enum j)
-      Rij = Rtrans (Rrefl ei≈x) (Rtrans Rxy (Rrefl (≈sym ej≈y)))
-
-      Sij : S (enum i) (enum j)
-      Sij = h i j Rij
+               → (∀ i j → proj₁ R (enum i) (enum j) → proj₁ S (enum i) (enum j))
+               → R ⊆ S
+  carrier-lift R S h {x}{y} Rxy = Strans (Srefl (sym eᵢ≈x)) (Strans Sᵢⱼ (Srefl eⱼ≈y))
+    where
+    Rrefl   = reflexive (proj₂ R)
+    Rtrans  = IsEquivalence.trans (is-equivalence (proj₂ R))
+    Srefl   = reflexive (proj₂ S)
+    Strans  = IsEquivalence.trans (is-equivalence (proj₂ S))
+    i = proj₁ (enum-sur x) ; eᵢ≈x = proj₂ (enum-sur x)
+    j = proj₁ (enum-sur y) ; eⱼ≈y = proj₂ (enum-sur y)
+    Rᵢⱼ : proj₁ R (enum i) (enum j)
+    Rᵢⱼ = Rtrans (Rrefl eᵢ≈x) (Rtrans Rxy (Rrefl (sym eⱼ≈y)))
+    Sᵢⱼ : proj₁ S (enum i) (enum j)
+    Sᵢⱼ = h i j Rᵢⱼ
 ```
 
 Now fix a pair `a ≢ b`.  Among the congruences not relating `a` and `b` (a finite,
@@ -284,6 +249,11 @@ non-empty sublist of `cons`, non-empty because the diagonal is one) we pick one 
 maximum `count`; `count`-maximality is `⊆`-maximality, by `count-mono`/`count-strict`.
 
 ```agda
+  -- The diagonal (least) congruence at level ℓ, from Setoid.Congruences.Basic;
+  -- its representative in `cons` witnesses the non-emptiness of `filtered` below.
+  Δ : Con 𝑨 ℓ
+  Δ = 𝟘[ 𝑨 ] {ℓ}
+
   module _ (a b : 𝕌[ 𝑨 ]) (a≢b : ¬ (a ≈ b)) where
 
     -- The congruences of `cons` that do not relate a and b.
@@ -308,7 +278,7 @@ maximum `count`; `count`-maximality is `⊆`-maximality, by `count-mono`/`count-
 
     Θ-dec∈filtered : Θ-dec ∈ filtered
     Θ-dec∈filtered with argmax-sel count dΔ filtered
-    ... | inj₁ eq = subst (_∈ filtered) (sym eq) dΔ∈filtered
+    ... | inj₁ eq = ≡.subst (_∈ filtered) (≡.sym eq) dΔ∈filtered
     ... | inj₂ ∈f = ∈f
 
     Θ : Con 𝑨 ℓ
@@ -329,15 +299,15 @@ carrier-containment.
 
 ```agda
     Θ-max : (d : DecCon 𝑨 ℓ) → d ∈ filtered → Θ ⊆ proj₁ d → proj₁ d ⊆ Θ
-    Θ-max d d∈f Θ⊆d with all? (λ i → all? (λ j → [ d ]? (i , j) →-dec [ Θ-dec ]? (i , j)))
+    Θ-max d d∈f Θ⊆d with all? (λ i → all? (λ j → pred d (i , j) →-dec pred Θ-dec (i , j)))
     ... | yes h = carrier-lift (proj₁ d) Θ h
     ... | no ¬h = ⊥-elim (n≮n (count d) (≤-<-trans (Θ-max-count d d∈f) cΘ<cd))
       where
-      i₀ = proj₁ (¬∀⟶∃¬ card _ (λ i → all? (λ j → [ d ]? (i , j) →-dec [ Θ-dec ]? (i , j))) ¬h)
-      ¬hj = proj₂ (¬∀⟶∃¬ card _ (λ i → all? (λ j → [ d ]? (i , j) →-dec [ Θ-dec ]? (i , j))) ¬h)
-      j₀ = proj₁ (¬∀⟶∃¬ card _ (λ j → [ d ]? (i₀ , j) →-dec [ Θ-dec ]? (i₀ , j)) ¬hj)
-      ¬impl = proj₂ (¬∀⟶∃¬ card _ (λ j → [ d ]? (i₀ , j) →-dec [ Θ-dec ]? (i₀ , j)) ¬hj)
-      split = ¬→-split ([ d ]? (i₀ , j₀)) ¬impl
+      i₀ = proj₁ (¬∀⟶∃¬ card _ (λ i → all? (λ j → pred d (i , j) →-dec pred Θ-dec (i , j))) ¬h)
+      ¬hj = proj₂ (¬∀⟶∃¬ card _ (λ i → all? (λ j → pred d (i , j) →-dec pred Θ-dec (i , j))) ¬h)
+      j₀ = proj₁ (¬∀⟶∃¬ card _ (λ j → pred d (i₀ , j) →-dec pred Θ-dec (i₀ , j)) ¬hj)
+      ¬impl = proj₂ (¬∀⟶∃¬ card _ (λ j → pred d (i₀ , j) →-dec pred Θ-dec (i₀ , j)) ¬hj)
+      split = ¬→-split (pred d (i₀ , j₀)) ¬impl
       cΘ<cd : count Θ-dec < count d
       cΘ<cd = count-strict Θ-dec d i₀ j₀ Θ⊆d (proj₁ split) (proj₂ split)
 ```
@@ -367,35 +337,35 @@ the least nonzero congruence: any nonzero `ψ` of `Q` corresponds to a congruenc
 hence `ψ`, relates `a , b`, i.e. contains the principal congruence.
 
 ```agda
-    -- Rₐᵦ : 𝕌[ 𝑨 ] → 𝕌[ 𝑨 ] → Type α
-    -- Rₐᵦ x y = (x ≡ a) × (y ≡ b)
+    Rₐᵦ : 𝕌[ 𝑨 ] → 𝕌[ 𝑨 ] → Type α
+    Rₐᵦ x y = (x ≡ a) × (y ≡ b)
 
-    -- μ : Con Q ℓ
-    -- μ = Cg {𝑨 = Q} Rₐᵦ
+    μ : Con Q ℓ
+    μ = Cg {𝑨 = Q} Rₐᵦ
 
-    -- μ-nonzero : Nonzero Q μ
-    -- μ-nonzero below = ¬Θab (below (base {𝑨 = Q} (refl , refl)))
+    μ-nonzero : Nonzero Q μ
+    μ-nonzero below = ¬Θab (below (base {𝑨 = Q} (≡.refl , ≡.refl)))
 
-    -- μ-least : (ψ : Con Q ℓ) → Nonzero Q ψ → μ ⊆ ψ
-    -- μ-least ψ nz = Cg-least {𝑨 = Q} {R = Rₐᵦ} ψ R⊆ψ
-    --   where
-    --   φ : Con 𝑨 ℓ
-    --   φ = Q→A ψ
-    --   Θ⊆φ : Θ ⊆ φ
-    --   Θ⊆φ = reflexive (proj₂ ψ)
-    --   ψab : proj₁ ψ a b
-    --   ψab with complete φ
-    --   ... | d , d∈cons , φ⊆d , d⊆φ with proj₂ d a b
-    --   ...   | yes dab = d⊆φ dab
-    --   ...   | no ¬dab = ⊥-elim (nz (⊆-trans {θ = φ}{φ = proj₁ d}{ψ = Θ} φ⊆d
-    --                       (Θ-max d (∈-filter⁺ notrel? d∈cons ¬dab)
-    --                                (⊆-trans {θ = Θ}{φ = φ}{ψ = proj₁ d} Θ⊆φ φ⊆d))))
-    --   R⊆ψ : ∀ {x y} → Rₐᵦ x y → proj₁ ψ x y
-    --   R⊆ψ (refl , refl) = ψab
+    μ-least : (ψ : Con Q ℓ) → Nonzero Q ψ → μ ⊆ ψ
+    μ-least ψ nz = Cg-least {𝑨 = Q} {R = Rₐᵦ} ψ R⊆ψ
+      where
+      φ : Con 𝑨 ℓ
+      φ = Q→A ψ
+      Θ⊆φ : Θ ⊆ φ
+      Θ⊆φ = reflexive (proj₂ ψ)
+      ψab : proj₁ ψ a b
+      ψab with complete φ
+      ... | d , d∈cons , φ⊆d , d⊆φ with proj₂ d a b
+      ...   | yes dab = d⊆φ dab
+      ...   | no ¬dab = ⊥-elim (nz (⊆-trans {θ = φ}{φ = proj₁ d}{ψ = Θ} φ⊆d
+                          (Θ-max d (∈-filter⁺ notrel? d∈cons ¬dab)
+                                   (⊆-trans {θ = Θ}{φ = φ}{ψ = proj₁ d} Θ⊆φ φ⊆d))))
+      R⊆ψ : ∀ {x y} → Rₐᵦ x y → proj₁ ψ x y
+      R⊆ψ (≡.refl , ≡.refl) = ψab
 
-    -- SI-Q : IsSubdirectlyIrreducible Q
-    -- SI-Q = (a , b , ¬Θab)
-    --      , (μ , record { mono-nonzero = μ-nonzero ; mono-least = μ-least })
+    SI-Q : IsSubdirectlyIrreducible Q
+    SI-Q = (a , b , ¬Θab)
+         , (μ , record { mono-nonzero = μ-nonzero ; mono-least = μ-least })
 ```
 
 #### Assembling the representation and the theorem
@@ -407,19 +377,19 @@ member related them, they would be equal.  This is where decidable `≈` closes 
 `¬¬`-gap the design note flags: the meet is *exactly* the diagonal.
 
 ```agda
-  -- finiteSubdirectSIRep : SubdirectSIRep 𝑨 ℓ (α ⊔ ρ)
-  -- finiteSubdirectSIRep = I , Θfam , separates , si
-  --   where
-  --   I : Type (α ⊔ ρ)
-  --   I = Σ[ a ∈ 𝕌[ 𝑨 ] ] Σ[ b ∈ 𝕌[ 𝑨 ] ] ¬ (a ≈ b)
-  --   Θfam : I → Con 𝑨 ℓ
-  --   Θfam (a , b , a≢b) = Θ a b a≢b
-  --   separates : Separates Θfam
-  --   separates {x}{y} h with x ≟ y
-  --   ... | yes x≈y = x≈y
-  --   ... | no  x≢y = ⊥-elim (¬Θab x y x≢y (h (x , y , x≢y)))
-  --   si : (i : I) → IsSubdirectlyIrreducible (𝑨 ╱ Θfam i)
-  --   si (a , b , a≢b) = SI-Q a b a≢b
+  finiteSubdirectSIRep : SubdirectSIRep 𝑨 ℓ (α ⊔ ρ)
+  finiteSubdirectSIRep = I , Θfam , separates , si
+    where
+    I : Type (α ⊔ ρ)
+    I = Σ[ a ∈ 𝕌[ 𝑨 ] ] Σ[ b ∈ 𝕌[ 𝑨 ] ] ¬ (a ≈ b)
+    Θfam : I → Con 𝑨 ℓ
+    Θfam (a , b , a≢b) = Θ a b a≢b
+    separates : Separates Θfam
+    separates {x}{y} h with x ≟ y
+    ... | yes x≈y = x≈y
+    ... | no  x≢y = ⊥-elim (¬Θab x y x≢y (h (x , y , x≢y)))
+    si : (i : I) → IsSubdirectlyIrreducible (𝑨 ╱ Θfam i)
+    si (a , b , a≢b) = SI-Q a b a≢b
 ```
 
 Birkhoff's subdirect representation theorem for finite algebras, unconditionally:
@@ -427,8 +397,8 @@ every finite algebra (with the decidable, complete congruence data above) is a
 subdirect product of subdirectly irreducible algebras.
 
 ```agda
-  -- finite-Birkhoff : SubdirectlyRepresentable 𝑨 ℓ (α ⊔ ρ)
-  -- finite-Birkhoff = SIRep→Representable finiteSubdirectSIRep
+  finite-Birkhoff : SubdirectlyRepresentable 𝑨 ℓ (α ⊔ ρ)
+  finite-Birkhoff = SIRep→Representable finiteSubdirectSIRep
 ```
 
 #### Non-vacuity: the interface is inhabited
@@ -443,35 +413,35 @@ of the empty family).  A genuinely subdirectly irreducible worked example — on
 that exercises the maximal-congruence search — is the natural next addition.
 
 ```agda
--- -- The one-element algebra over the signature 𝑆.
--- 𝟏 : Algebra 0ℓ 0ℓ
--- Domain 𝟏 = record  { Carrier        = ⊤
---                    ; _≈_            = λ _ _ → ⊤
---                    ; isEquivalence  = record { refl = tt ; sym = λ _ → tt ; trans = λ _ _ → tt } }
--- Interp 𝟏 ⟨$⟩ _    = tt
--- cong (Interp 𝟏) _ = tt
+-- The one-element algebra over the signature 𝑆.
+𝟏 : Algebra 0ℓ 0ℓ
+Domain 𝟏 = record  { Carrier        = ⊤
+                   ; _≈_            = λ _ _ → ⊤
+                   ; isEquivalence  = record { refl = tt ; sym = λ _ → tt ; trans = λ _ _ → tt } }
+Interp 𝟏 ⟨$⟩ _    = tt
+cong (Interp 𝟏) _ = tt
 
--- -- Its sole decidable congruence: the all-relation (= the diagonal on a point).
--- 𝟏-Δ : DecCon 𝟏 (acl 0ℓ 0ℓ)
--- 𝟏-Δ = ((λ _ _ → Lift (acl 0ℓ 0ℓ) ⊤)
---       , mkcon  (λ _ → lift tt)
---                (record { refl = lift tt ; sym = λ _ → lift tt ; trans = λ _ _ → lift tt })
---                (λ _ _ → lift tt))
---       , (λ _ _ → yes (lift tt))
+-- Its sole decidable congruence: the all-relation (= the diagonal on a point).
+𝟏-Δ : DecCon 𝟏 (clv 0ℓ 0ℓ)
+𝟏-Δ = ((λ _ _ → Lift (clv 0ℓ 0ℓ) ⊤)
+      , mkcon  (λ _ → lift tt)
+               (record { refl = lift tt ; sym = λ _ → lift tt ; trans = λ _ _ → lift tt })
+               (λ _ _ → lift tt))
+      , (λ _ _ → yes (lift tt))
 
--- 𝟏-FiniteAlgebra : FiniteAlgebra 𝟏
--- 𝟏-FiniteAlgebra = record
---   { _≟_       = λ _ _ → yes tt
---   ; card      = 1
---   ; enum      = λ _ → tt
---   ; enum-sur  = λ _ → zero , tt
---   ; cons      = 𝟏-Δ ∷ []
---   ; complete  = λ φ → 𝟏-Δ , here refl , (λ _ → lift tt) , (λ _ → reflexive (proj₂ φ) tt)
---   }
+𝟏-FiniteAlgebra : FiniteAlgebra 𝟏
+𝟏-FiniteAlgebra = record
+  { _≟_       = λ _ _ → yes tt
+  ; card      = 1
+  ; enum      = λ _ → tt
+  ; enum-sur  = λ _ → zero , tt
+  ; cons      = 𝟏-Δ ∷ []
+  ; complete  = λ φ → 𝟏-Δ , here ≡.refl , (λ _ → lift tt) , (λ _ → reflexive (proj₂ φ) tt)
+  }
 
--- -- The theorem applied: the one-element algebra is subdirectly representable.
--- 𝟏-SubdirectlyRepresentable : SubdirectlyRepresentable 𝟏 (acl 0ℓ 0ℓ) 0ℓ
--- 𝟏-SubdirectlyRepresentable = finite-Birkhoff 𝟏-FiniteAlgebra
+-- The theorem applied: the one-element algebra is subdirectly representable.
+𝟏-SubdirectlyRepresentable : SubdirectlyRepresentable 𝟏 (clv 0ℓ 0ℓ) 0ℓ
+𝟏-SubdirectlyRepresentable = finite-Birkhoff 𝟏-FiniteAlgebra
 ```
 
 --------------------------------------

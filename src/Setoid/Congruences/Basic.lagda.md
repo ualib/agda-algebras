@@ -20,15 +20,16 @@ module Setoid.Congruences.Basic {𝑆 : Signature 𝓞 𝓥} where
 -- Imports from the Agda Standard Library ---------------------------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
 open import Data.Product     using ( _,_ ; Σ-syntax )
+open import Data.Unit.Base   using ( ⊤ ; tt )
 open import Function         using ( id ; Func )
-open import Level            using ( Level ; _⊔_ )
+open import Level            using ( Level ; _⊔_ ; Lift ; lift ; lower )
 open import Relation.Binary  using ( Setoid ; IsEquivalence )
                              renaming ( Rel to BinRel )
 
 open import Relation.Binary.PropositionalEquality using ( refl )
 
 -- Imports from the Agda Universal Algebras Library ------------------------------
-open import Overture          using ( proj₁  ; proj₂ ; 0[_] ; _|:_ ; Equivalence ; 0[_]IsEquivalence )
+open import Overture          using ( proj₁  ; proj₂ ; _|:_ ; Equivalence )
 open import Setoid.Relations  using ( ⟪_⟫ ; _/_ ; ⟪_∼_⟫-elim )
 open import Setoid.Algebras.Basic {𝑆 = 𝑆} using ( ov ; Algebra ; 𝔻[_] ; 𝕌[_] ; _^_ )
 
@@ -92,28 +93,6 @@ Con→IsCongruence : {𝑨 : Algebra α ρ}((θ , _) : Con 𝑨 ℓ) → IsCongr
 Con→IsCongruence (_ , p) = p
 ```
 
-#### Greatest and least congruences
-
-The greatest congruence is the total relation `1ᴬ` (which relates every pair of elements), and the least congruence is the diagonal `0ᴬ` (which relates only pairs of equal elements).  Both are congruences: they are equivalence relations, and they are compatible with every operation (trivially, since they relate all pairs or only equal pairs, respectively).
-
-```agda
-1[_] : (𝑨 : Algebra α ρ) → BinRel 𝕌[ 𝑨 ] ℓ
-1[ 𝑨 ] = {!!}
-
-𝟘[_]' : (𝑨 : Algebra α ρ) → BinRel 𝕌[ 𝑨 ] (α ⊔ ρ)
-𝟘[ 𝑨 ]' = 0[ 𝕌[ 𝑨 ] ] _≈_
-  where open Setoid 𝔻[ 𝑨 ] using ( _≈_ )
-
-𝟘[_] : (𝑨 : Algebra α ρ) → Con 𝑨 _
-𝟘[ 𝑨 ] = 0[ 𝕌[ 𝑨 ] ] _≈_ , Goal
-  where
-  open Setoid 𝔻[ 𝑨 ] using ( _≈_ ; isEquivalence )
-  Goal : IsCongruence 𝑨 (0[ 𝕌[ 𝑨 ] ] _≈_)
-  Goal .reflexive = λ z → Level.lift z
-  Goal .is-equivalence = 0[ 𝕌[ 𝑨 ] ]IsEquivalence isEquivalence
-  Goal .is-compatible 𝑓 x = Level.lift {!!}
-```
-
 #### Quotient algebras
 
 In many areas of abstract mathematics the *quotient* of an algebra `𝑨` with
@@ -141,6 +120,50 @@ module _ (𝑨 : Algebra α ρ) where
     → ⟪ u ⟫{Eqv (proj₂ θ)} ≈ ⟪ v ⟫{Eqv (proj₂ θ)} → (proj₁ θ) u v
 
   /-≡ θ uv = reflexive (Con→IsCongruence θ) uv
+```
+
+#### The least and greatest congruences
+
+Every algebra has a *least* and a *greatest* congruence.  The least is the
+**diagonal** (identity) congruence `𝟘[ 𝑨 ]`, which relates exactly the
+`≈`-equal elements — it is the setoid equality, viewed as a congruence.  The
+greatest is the **total** congruence `𝟙[ 𝑨 ]`, which relates everything.  These
+are the bottom and top of the congruence lattice (their order properties — that
+they really are least and greatest — are recorded in
+[Setoid.Congruences.Lattice][], where the containment order `_⊆_` is available).
+
+Both are level-polymorphic via `Lift`, so they can be taken at whatever relation
+level the surrounding context dictates (e.g. the absorbing level at which the
+congruence lattice is assembled in [Setoid.Congruences.CompleteLattice][]); the
+diagonal's result lives at `ρ ⊔ ℓ`, the total's at `ℓ`.
+
+The only non-trivial obligation is **compatibility with the operations**.  For the
+diagonal this is *exactly* the statement that the operations of `𝑨` respect its
+setoid equality — i.e. the `cong` field of `Interp 𝑨` — which is why the diagonal
+congruence cannot live in `Overture` (which has no algebra to appeal to) and
+belongs here.  For the total congruence compatibility is trivial, since every two
+elements are related.
+
+```agda
+-- The least (diagonal) congruence of 𝑨: relates exactly the ≈-equal pairs.
+𝟘[_] : (𝑨 : Algebra α ρ){ℓ : Level} → Con 𝑨 (ρ ⊔ ℓ)
+𝟘[ 𝑨 ] {ℓ} = (λ x y → Lift ℓ (x ≈ y)) , mkcon (λ e → lift e) 𝟘-isEquiv 𝟘-compatible
+  where
+  open Setoid 𝔻[ 𝑨 ] using ( _≈_ ) renaming ( refl to ≈refl ; sym to ≈sym ; trans to ≈trans )
+  𝟘-isEquiv : IsEquivalence (λ x y → Lift ℓ (x ≈ y))
+  𝟘-isEquiv = record  { refl   = lift ≈refl
+                      ; sym    = λ p → lift (≈sym (lower p))
+                      ; trans  = λ p q → lift (≈trans (lower p) (lower q)) }
+  -- compatibility is precisely that the operations respect ≈ (the cong of Interp)
+  𝟘-compatible : 𝑨 ∣≈ (λ x y → Lift ℓ (x ≈ y))
+  𝟘-compatible f h = lift (cong (Interp 𝑨) (refl , λ i → lower (h i)))
+
+-- The greatest (total) congruence of 𝑨: relates every pair.
+𝟙[_] : (𝑨 : Algebra α ρ){ℓ : Level} → Con 𝑨 ℓ
+𝟙[ 𝑨 ] {ℓ} = (λ _ _ → Lift ℓ ⊤) , mkcon (λ _ → lift tt) 𝟙-isEquiv (λ _ _ → lift tt)
+  where
+  𝟙-isEquiv : IsEquivalence (λ (_ _ : 𝕌[ 𝑨 ]) → Lift ℓ ⊤)
+  𝟙-isEquiv = record { refl = lift tt ; sym = λ _ → lift tt ; trans = λ _ _ → lift tt }
 ```
 
 --------------------------------------
