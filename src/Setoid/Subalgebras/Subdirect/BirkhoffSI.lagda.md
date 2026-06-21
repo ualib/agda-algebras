@@ -42,29 +42,17 @@ module Setoid.Subalgebras.Subdirect.BirkhoffSI {𝑆 : Signature 𝓞 𝓥} wher
 open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
-open import Data.Product     using ( _×_ ; _,_ ; Σ-syntax ; proj₁ ; proj₂ )
-open import Function         using ( id )                        renaming ( Func to _⟶_ )
-open import Level            using ( Level ; _⊔_ )               renaming ( suc to lsuc )
-open import Relation.Binary  using ( Setoid )
-open import Relation.Binary.PropositionalEquality using ( _≡_ )  renaming ( refl to ≡refl )
+open import Data.Product     using ( _×_ ; _,_ ; Σ-syntax )
+open import Level            using ( Level ; _⊔_ )  renaming ( suc to lsuc )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Setoid.Functions               using  ( IsInjective ; IsSurjective )
-
-open import Setoid.Algebras       {𝑆 = 𝑆}  using  ( Algebra ; ⨅ ; 𝔻[_] )
-open import Setoid.Congruences    {𝑆 = 𝑆}  using  ( Con ; _╱_ )
-open import Setoid.Homomorphisms  {𝑆 = 𝑆}  using  ( hom ; IsHom ; epi ; IsEpi ; 𝒾𝒹
-                                                  ; ⊙-hom ; ⨅-hom-co ; πhom ; πepi )
-
+open import Setoid.Algebras                     {𝑆 = 𝑆}  using  ( Algebra )
+open import Setoid.Congruences                  {𝑆 = 𝑆}  using  ( Con ; _╱_ )
 open import Setoid.Congruences.Monolith         {𝑆 = 𝑆} using ( IsSubdirectlyIrreducible )
-open import Setoid.Subalgebras.Subalgebras      {𝑆 = 𝑆} using ( _≤_ )
 open import Setoid.Subalgebras.Subdirect.Basic  {𝑆 = 𝑆}
   using ( SubdirectEmbedding ; Separates ; separating→SubdirectEmbedding )
 
-open _⟶_  using ( cong ) renaming ( to to _⟨$⟩_ )
-open Algebra  using ( Domain )
-
-private variable α ρ β ρᵇ ℓ ι : Level
+private variable α ρ ℓ ι : Level
 
 SubdirectlyRepresentable : (𝑨 : Algebra α ρ) (ℓ ι : Level) → Type (𝓞 ⊔ 𝓥  ⊔ ρ ⊔ lsuc (α ⊔ ℓ ⊔ ι))
 SubdirectlyRepresentable {α}{ρ} 𝑨 ℓ ι =
