@@ -149,7 +149,7 @@
 
 [Setoid.Subalgebras]: https://ualib.org/Setoid.Subalgebras.html
 [Setoid.Subalgebras.Properties]: https://ualib.org/Setoid.Subalgebras.Properties.html
-[Setoid.Subalgebras.Subalgebras]: https://ualib.org/Setoid.Subalgebras.Subalgebras.html
+[Setoid.Subalgebras.Basic]: https://ualib.org/Setoid.Subalgebras.Basic.html
 [Setoid.Subalgebras.Subuniverses]: https://ualib.org/Setoid.Subalgebras.Subuniverses.html
 [Setoid.Subalgebras.CompleteLattice]: https://ualib.org/Setoid.Subalgebras.CompleteLattice.html
 [Setoid.Subalgebras.Subdirect]: https://ualib.org/Setoid.Subalgebras.Subdirect.html

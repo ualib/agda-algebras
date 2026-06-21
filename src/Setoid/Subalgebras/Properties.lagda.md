@@ -30,8 +30,7 @@ import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ----------------------------------
 open import Overture                          using  ( proj₁ ; proj₂ )
-open import Setoid.Functions                  using  ( id-is-injective ; module compose
-                                                     ; IsInjective ; ⊙-injective )
+open import Setoid.Functions                  using  ( id-is-injective ; IsInjective ; ⊙-injective )
 open import Setoid.Algebras          {𝑆 = 𝑆}  using  ( Algebra ; Lift-Algˡ ; Lift-Algʳ
                                                      ; Lift-Alg ; ov ; ⨅ ; 𝔻[_] )
 open import Setoid.Homomorphisms     {𝑆 = 𝑆}  using  ( hom ; IsHom ; 𝒾𝒹 ; ⊙-hom ; _≅_

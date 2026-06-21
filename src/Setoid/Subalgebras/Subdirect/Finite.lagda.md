@@ -484,7 +484,7 @@ that exercises the maximal-congruence search — is the natural next addition.
 
 --------------------------------------
 
-[^1] This is option (b) of the design note [`docs/notes/m6-2-subdirect.md`](docs/notes/m6-2-subdirect.md).
+[^1]: This is option (b) of the design note `docs/notes/m6-2-subdirect.md`.
 
 <span style="float:left;">[← Setoid.Subalgebras.Subdirect.BirkhoffSI](Setoid.Subalgebras.Subdirect.BirkhoffSI.html)</span>
 <span style="float:right;">[Setoid.Subalgebras.Properties →](Setoid.Subalgebras.Properties.html)</span>
