@@ -98,7 +98,7 @@ open import Setoid.Homomorphisms.Basic              using  ( hom ; IsHom ; mkIsH
 open import Setoid.Homomorphisms.Isomorphisms       using  ( _≅_ ; mkiso ; ≅-refl
                                                            ; ≅-sym ; ≅-trans ; ⨅≅ )
 open import Setoid.Homomorphisms.HomomorphicImages  using  ( _IsHomImageOf_ )
-open import Setoid.Subalgebras.Subalgebras          using  ( _≤_ )
+open import Setoid.Subalgebras.Basic                using  ( _≤_ )
 open import Setoid.Categories.Functor               using  ( Functor )
 open import Setoid.Varieties.Closure                using  ( P )
 
