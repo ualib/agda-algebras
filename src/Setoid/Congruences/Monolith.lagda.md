@@ -36,7 +36,7 @@ module Setoid.Congruences.Monolith {𝑆 : Signature 𝓞 𝓥} where
 open import Agda.Primitive   using () renaming ( Set to Type )
 open import Data.Product     using ( _×_ ; _,_ ; Σ-syntax ; ∃-syntax ; proj₁ ; proj₂ )
 open import Level            using ( Level ; _⊔_ )
-open import Relation.Binary  using ( Setoid ; IsEquivalence )
+open import Relation.Binary  using ( Setoid ; IsEquivalence ; _⇒_ )
 open import Relation.Nullary using ( ¬_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
@@ -79,7 +79,7 @@ right notion of a **nonzero** (strictly-above-`0ᴬ`) congruence.
 ```agda
   -- θ relates only equal elements, i.e. θ ≑ 0ᴬ.
   BelowDiagonal : Con 𝑨 ℓ → Type (α ⊔ ρ ⊔ ℓ)
-  BelowDiagonal (_θ_ , _) = ∀ {a b} → a θ b → a ≈ b
+  BelowDiagonal ( θ , _ ) = θ ⇒ _≈_
 
   -- θ is nonzero: it is *not* below the diagonal (it relates some distinct pair).
   Nonzero : Con 𝑨 ℓ → Type (α ⊔ ρ ⊔ ℓ)

@@ -28,7 +28,7 @@ open import Relation.Binary  using ( Setoid ; IsEquivalence )
 open import Relation.Binary.PropositionalEquality using ( refl )
 
 -- Imports from the Agda Universal Algebras Library ------------------------------
-open import Overture          using ( proj₁  ; proj₂ ; 0[_] ; _|:_ ; Equivalence )
+open import Overture          using ( proj₁  ; proj₂ ; 0[_] ; _|:_ ; Equivalence ; 0[_]IsEquivalence )
 open import Setoid.Relations  using ( ⟪_⟫ ; _/_ ; ⟪_∼_⟫-elim )
 open import Setoid.Algebras.Basic {𝑆 = 𝑆} using ( ov ; Algebra ; 𝔻[_] ; 𝕌[_] ; _^_ )
 
@@ -63,9 +63,7 @@ the underlying setoid equality (and not just with respect to _≡_).)
 
 ```agda
 module _ (𝑨 : Algebra α ρ) where
-  open Algebra 𝑨  using ()  renaming (Domain to A )
-  open Setoid A   using ( _≈_ )
-
+  open Setoid 𝔻[ 𝑨 ] using ( _≈_ )
   record IsCongruence (θ : BinRel 𝕌[ 𝑨 ] ℓ) : Type (𝓞 ⊔ 𝓥 ⊔ ρ ⊔ ℓ ⊔ α)  where
     constructor mkcon
     field
@@ -94,6 +92,27 @@ Con→IsCongruence : {𝑨 : Algebra α ρ}((θ , _) : Con 𝑨 ℓ) → IsCongr
 Con→IsCongruence (_ , p) = p
 ```
 
+#### Greatest and least congruences
+
+The greatest congruence is the total relation `1ᴬ` (which relates every pair of elements), and the least congruence is the diagonal `0ᴬ` (which relates only pairs of equal elements).  Both are congruences: they are equivalence relations, and they are compatible with every operation (trivially, since they relate all pairs or only equal pairs, respectively).
+
+```agda
+1[_] : (𝑨 : Algebra α ρ) → BinRel 𝕌[ 𝑨 ] ℓ
+1[ 𝑨 ] = {!!}
+
+𝟘[_]' : (𝑨 : Algebra α ρ) → BinRel 𝕌[ 𝑨 ] (α ⊔ ρ)
+𝟘[ 𝑨 ]' = 0[ 𝕌[ 𝑨 ] ] _≈_
+  where open Setoid 𝔻[ 𝑨 ] using ( _≈_ )
+
+𝟘[_] : (𝑨 : Algebra α ρ) → Con 𝑨 _
+𝟘[ 𝑨 ] = 0[ 𝕌[ 𝑨 ] ] _≈_ , Goal
+  where
+  open Setoid 𝔻[ 𝑨 ] using ( _≈_ ; isEquivalence )
+  Goal : IsCongruence 𝑨 (0[ 𝕌[ 𝑨 ] ] _≈_)
+  Goal .reflexive = λ z → Level.lift z
+  Goal .is-equivalence = 0[ 𝕌[ 𝑨 ] ]IsEquivalence isEquivalence
+  Goal .is-compatible 𝑓 x = Level.lift {!!}
+```
 
 #### Quotient algebras
 
