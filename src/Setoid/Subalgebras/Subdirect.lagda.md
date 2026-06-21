@@ -13,11 +13,13 @@ This is the [Setoid.Subalgebras.Subdirect][] module of the [Agda Universal Algeb
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-module Setoid.Subalgebras.Subdirect where
+open import Overture using (𝓞 ; 𝓥 ; Signature)
 
-open import Setoid.Subalgebras.Subdirect.Basic public
-open import Setoid.Subalgebras.Subdirect.BirkhoffSI public
-open import Setoid.Subalgebras.Subdirect.Finite public
+module Setoid.Subalgebras.Subdirect {𝑆 : Signature 𝓞 𝓥} where
+
+open import Setoid.Subalgebras.Subdirect.Basic {𝑆 = 𝑆} public
+open import Setoid.Subalgebras.Subdirect.BirkhoffSI {𝑆 = 𝑆} public
+open import Setoid.Subalgebras.Subdirect.Finite {𝑆 = 𝑆} public
 ```
 
 --------------------------------------
