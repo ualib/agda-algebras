@@ -3309,7 +3309,7 @@ https://claude.ai/code/session_01MvPrLTCxKjFgsnTMK8j2qZ
 
 ---
 
-### Issue M6-8: Finite Birkhoff: discharge SubdirectSIRep constructively for finite algebras with decidable equality (#419)
+### Issue M6-8: Finite Birkhoff: discharge SubdirectSIRep constructively for finite algebras with decidable equality (#419, closed)
 
 **Labels**: `enhancement`, `milestone-6-flrp`
 
