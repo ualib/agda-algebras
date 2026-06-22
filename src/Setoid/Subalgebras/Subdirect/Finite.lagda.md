@@ -487,6 +487,6 @@ that exercises the maximal-congruence search — is the natural next addition.
 [^1]: This is option (b) of the design note `docs/notes/m6-2-subdirect.md`.
 
 <span style="float:left;">[← Setoid.Subalgebras.Subdirect.BirkhoffSI](Setoid.Subalgebras.Subdirect.BirkhoffSI.html)</span>
-<span style="float:right;">[Setoid.Subalgebras.Subdirect.SI →](Setoid.Subalgebras.Subdirect.SI.html)</span>
+<span style="float:right;">[Setoid.Subalgebras.Subdirect.Irreducible →](Setoid.Subalgebras.Subdirect.Irreducible.html)</span>
 
 {% include UALib.Links.md %}

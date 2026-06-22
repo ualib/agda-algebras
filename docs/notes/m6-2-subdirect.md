@@ -154,7 +154,7 @@ the standard product level arithmetic), so the Birkhoff index can be the
 
 ## The structural characterization (M6-10)
 
-[M6-10][] (#421) adds `Setoid.Subalgebras.Subdirect.SI`, tying `IsSubdirectlyIrreducible`
+[M6-10][] (#421) adds `Setoid.Subalgebras.Subdirect.Irreducible`, tying `IsSubdirectlyIrreducible`
 (Monolith) to the subdirect structures (`Subdirect.Basic`) — the equivalence that makes
 "subdirectly irreducible" name what it does: `𝑨` is SI iff it has no nontrivial subdirect
 decomposition, i.e. every subdirect embedding `𝑨 ↪ ⨅ 𝒜` has an isomorphism coordinate.
@@ -205,7 +205,7 @@ decomposition, i.e. every subdirect embedding `𝑨 ↪ ⨅ 𝒜` has an isomorp
 +  ~~Connecting `IsSubdirectlyIrreducible` to the *absence of a nontrivial subdirect
    decomposition* (an SI algebra's every subdirect embedding has an isomorphism
    coordinate) — the equivalence that makes "subdirectly irreducible" name what it
-   does.~~  **Done in [M6-10][] (#421)**: `Setoid.Subalgebras.Subdirect.SI` proves the
+   does.~~  **Done in [M6-10][] (#421)**: `Setoid.Subalgebras.Subdirect.Irreducible` proves the
    constructive direction (contrapositive `si⇒¬no-iso-coord`, and the finite
    witness-extracting `si⇒iso-coord`) and records the converse's predicativity cost; see
    "The structural characterization (M6-10)" above.
