@@ -180,8 +180,8 @@ module _ {c ℓ} (S : DecSetoid c ℓ) (E : Exhaustible (DecSetoid.Carrier S)) w
     Distributesˡ? = all? λ a → all? λ b → all? λ c → a ∧ (b ∨ c) ≟ (a ∧ b) ∨ (a ∧ c)
 
     -- (b ∨ c) ∧ a ≈ (b ∧ a) ∨ (c ∧ a) for every a, b, c.
-    Distributesʳ? : Dec (∀ a b c → ((b ∨ c) ∧ a) ≈ ((b ∧ a) ∨ (c ∧ a)))
-    Distributesʳ? = all? (λ a → all? (λ b → all? (λ c → ((b ∨ c) ∧ a) ≟ ((b ∧ a) ∨ (c ∧ a)))))
+    Distributesʳ? : Dec ∀ a b c → (b ∨ c) ∧ a ≈ (b ∧ a) ∨ (c ∧ a)
+    Distributesʳ? = all? λ a → all? λ b → all? λ c → (b ∨ c) ∧ a ≟ (b ∧ a) ∨ (c ∧ a)
 ```
 
 #### The finite instance
@@ -214,8 +214,9 @@ instance of the generalized ones — and, because the equalities are definitiona
 concrete checkers keep reducing exactly as before for `from-yes`{.AgdaFunction}, so
 the finite examples are unaffected.
 
-(We leave present each of the remaining observations as an anonymous theorem, since
-they serve to confirm and demonstrate fact which likely will not be used elsewhere.)
+(Each equation is stated as an anonymous definition: it exists only to confirm, at
+type-checking time, that the identity holds, and is not meant to be named or
+referenced elsewhere.)
 
 ```agda
 module _ {n : ℕ} (_·_ : Fin n → Fin n → Fin n) where
@@ -314,7 +315,7 @@ examples.
 
 --------------------------------------
 
-[^1]: See Milestone 9, especially Issue [M9-1].
+[^1]: See Milestone 9 of the project roadmap, especially task M9-1.
 
 [^2]: which is why a future Escardó-style `Searchable`/`Exhaustible` carrier could
 supply it without change.
