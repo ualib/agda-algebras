@@ -32,7 +32,6 @@ open import Agda.Primitive    using () renaming ( Set to Type )
 open import Data.Fin.Patterns using ( 0F ; 1F )
 open import Data.Nat          using ( ℕ ; _+_ ; _%_ )
 open import Data.Nat.DivMod   using ( %-distribˡ-+ )
-open import Data.Product      using ( _,_ )
 open import Function          using ( Func )
 open import Level             using ( 0ℓ )
 open import Relation.Binary   using ( Setoid ; IsEquivalence )
@@ -42,14 +41,22 @@ open import Relation.Nullary  using ( ¬_ )
 
 -- Imports from the Agda Universal Algebra Library -----------------------------
 open import Classical.Signatures.Monoid          using ( Sig-Monoid ; ∙-Op ; ε-Op )
-open import Setoid.Algebras {𝑆 = Sig-Monoid}     using ( Algebra ; 𝔻[_] )
+open import Setoid.Algebras {𝑆 = Sig-Monoid}     using ( Algebra ; 𝔻[_] ; _,_ )
 open import Setoid.Congruences {𝑆 = Sig-Monoid}  using ( Con ; _∣≈_ ; _╱_ )
-open import Setoid.Signatures                    using  ( ⟨_⟩ )
+open import Setoid.Signatures                    using ( ⟨_⟩ )
 
 open Func renaming ( to to _⟨$⟩_ )
 ```
 
 #### The monoid `(ℕ, +, 0)` over `Sig-Monoid` {#the-monoid}
+
+We author this algebra *by hand*, matching the `⟨ Sig-Monoid ⟩` carrier as `(o , args)` in
+the `Interp`{.AgdaField} field.  The pair constructor `_,_` now comes straight from the
+`Setoid.Algebras` barrel (re-exported via [Setoid.Algebras.Basic][]), so no separate
+`Data.Product` import is needed — and the `(∙-Op , args)` match no longer trips the
+misleading "`∙-Op` is not a constructor of the datatype … `Σ`" error.  For the
+boilerplate-free alternative via the `mkAlgebraₚ`{.AgdaFunction} smart constructor, see the
+`ℕ∸`-magma of `Examples.Setoid.FreeMagma`.
 
 ```agda
 ℕ+-monoid : Algebra 0ℓ 0ℓ

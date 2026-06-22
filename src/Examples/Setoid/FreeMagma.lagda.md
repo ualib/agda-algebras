@@ -30,17 +30,15 @@ open import Agda.Primitive using () renaming ( Set to Type )
 open import Data.Fin.Base                          using ( Fin )
 open import Data.Fin.Patterns                      using ( 0F ; 1F )
 open import Data.Nat                               using ( ℕ ; _∸_ )
-open import Data.Product                           using ( _,_ )
 open import Function                               using ( Func )
 open import Level                                  using ( 0ℓ )
-open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl ; setoid ; cong₂ )
+open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl ; cong₂ )
 
 -- Imports from the Agda Universal Algebra Library -----------------------------
 open import Classical.Signatures.Magma             using ( Sig-Magma ; ∙-Op )
-open import Overture                               using ( proj₁ )
+open import Overture                               using ( proj₁ ; OperationSymbolsOf ; ArityOf )
 open import Overture.Terms        {𝑆 = Sig-Magma}  using ( Term ; ℊ ; node )
-open import Setoid.Algebras       {𝑆 = Sig-Magma}  using ( Algebra )
-open import Setoid.Signatures                      using ( ⟨_⟩ )
+open import Setoid.Algebras       {𝑆 = Sig-Magma}  using ( Algebra ; mkAlgebraₚ )
 open import Setoid.Homomorphisms  {𝑆 = Sig-Magma}  using ( hom )
 open import Setoid.Terms          {𝑆 = Sig-Magma}  using ( 𝑻 ; free-lift ; lift-hom )
 
@@ -86,13 +84,24 @@ truncated subtraction — regarded as a magma over `Sig-Magma`{.AgdaFunction}.  
 deliberately pick a *non-associative* operation so that the syntactic distinction
 between the two trees becomes a numerical one.
 
+We assemble the algebra with the `mkAlgebraₚ`{.AgdaFunction} smart constructor of
+[Setoid.Algebras.Basic][]: it takes the interpretation `f`{.AgdaBound} of each operation
+symbol and a pointwise congruence `cong-f`{.AgdaBound}, and discharges the
+`⟨ Sig-Magma ⟩`-congruence boilerplate (`{∙-Op , _} {.∙-Op , _} (refl , args≈)`) internally.
+Only `f`{.AgdaBound} and `cong-f`{.AgdaBound} remain of the longhand
+`record { Domain = ≡.setoid ℕ ; Interp = … }` this replaces.
+
 ```agda
 ℕ∸-magma : Algebra 0ℓ 0ℓ
-ℕ∸-magma = record { Domain = setoid ℕ ; Interp = interp }
+ℕ∸-magma = mkAlgebraₚ ℕ f cong-f
   where
-  interp : Func (⟨ Sig-Magma ⟩ (setoid ℕ)) (setoid ℕ)
-  interp ⟨$⟩ (∙-Op , args) = args 0F ∸ args 1F
-  cong interp {∙-Op , _} {.∙-Op , _} (refl , args≈) = cong₂ _∸_ (args≈ 0F) (args≈ 1F)
+  -- the single binary operation symbol, interpreted as truncated subtraction
+  f : (o : OperationSymbolsOf Sig-Magma) → (ArityOf Sig-Magma o → ℕ) → ℕ
+  f ∙-Op args = args 0F ∸ args 1F
+  -- ∸ respects pointwise equality of its two arguments (the only obligation left)
+  cong-f : (o : OperationSymbolsOf Sig-Magma){u v : ArityOf Sig-Magma o → ℕ}
+         → (∀ i → u i ≡ v i) → f o u ≡ f o v
+  cong-f ∙-Op args≈ = cong₂ _∸_ (args≈ 0F) (args≈ 1F)
 ```
 
 Fix the assignment `0F ↦ 3`, `1F ↦ 5`.  The free lift evaluates each generator by

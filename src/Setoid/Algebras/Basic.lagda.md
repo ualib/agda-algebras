@@ -18,7 +18,7 @@ module Setoid.Algebras.Basic {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from the Agda and the Agda Standard Library --------------------
 open import Agda.Primitive   using ( _⊔_ ; lsuc ) renaming ( Set to Type )
-open import Data.Product     using ( _,_ )
+open import Data.Product     using ( _,_ ; Σ-syntax ) public
 open import Function         using ( _∘_ ; _∘₂_ ; Func ; _$_ )
 open import Level            using ( Level )
 open import Relation.Binary  using ( Setoid ; IsEquivalence )
@@ -42,12 +42,20 @@ Here we define algebras over a setoid, instead of a mere type with no equivalenc
 
 The operator `⟨_⟩`{.AgdaFunction} that translates an ordinary signature into a
 signature over a setoid domain — together with its companion `EqArgs`{.AgdaFunction}
-— is defined in the signature-generic module [Setoid.Signatures][] and re-exported
+— is defined in the signature-generic module [Setoid.Signatures][] and imported
 here (see the import above).  Each takes its own signature argument rather than
 reading this module's `{𝑆}`, so housing them in a non-parameterized module means
 the unused `{𝑆 : Signature 𝓞 𝓥}` parameter of this module does not ride along as
 an unsolvable metavariable at use sites.  The `Interp`{.AgdaField} field of
-`Algebra`{.AgdaRecord} applies the re-exported `⟨ 𝑆 ⟩` to this module's signature `𝑆`.
+`Algebra`{.AgdaRecord} applies the imported `⟨ 𝑆 ⟩` to this module's signature `𝑆`.
+
+Because the carrier of `⟨ 𝑆 ⟩ Domain` is a `Σ`-type — an operation symbol paired with
+its argument tuple — an `Interp`{.AgdaField} clause matches it as `(o , args)`, which
+needs the pair constructor `_,_` in scope.  We therefore re-export `_,_` and
+`Σ-syntax`{.AgdaFunction} from this module (and hence from the `Setoid.Algebras` barrel),
+so that pattern-matching such a carrier needs no separate `Data.Product` import — and no
+longer trips the misleading "`∙-Op` is not a constructor of the datatype … `Σ`" error,
+which points at the operation symbol rather than at the missing `_,_`.
 
 ```agda
 open Setoid using ( _≈_ ; Carrier )
@@ -101,6 +109,54 @@ in v3.1.  Use the ASCII `_^_` defined immediately below.  See ADR-002 §7."
 -- See ADR-002 §7 for the rationale and per-tree policy.
 _^_ : (f : OperationSymbolsOf 𝑆)(𝑨 : Algebra α ρ) → (ArityOf 𝑆 f  →  𝕌[ 𝑨 ]) → 𝕌[ 𝑨 ]
 f ^ 𝑨 = λ a → (Interp 𝑨) ⟨$⟩ (f , a)
+```
+
+
+#### Smart constructors for concrete algebras
+
+Authoring a concrete `Algebra`{.AgdaRecord} by hand means supplying the `Interp`{.AgdaField}
+field as a `Func`{.AgdaRecord} `(⟨ 𝑆 ⟩ Domain) Domain`, whose congruence proof must take
+apart the `Σ`/`EqArgs`{.AgdaFunction} encoding of `⟨ 𝑆 ⟩`: the clause
+`≈cong {o , _} {.o , _} (refl , args≈) = …` recurs verbatim in every such algebra (it
+appears across `Examples.Setoid.*` and `Classical.Bundles.*`).  The two builders below
+package that destructuring once.
+
+A *fully automatic* congruence is not derivable at this layer, and deliberately so.
+Passing from the pointwise hypothesis `∀ i → u i ≈ v i` to `f o u ≈ f o v` is exactly an
+application of function extensionality, which the Setoid development avoids on principle
+and which is in any case unavailable under `--safe --cubical-compatible`.  So each builder
+still asks for a per-operation, pointwise congruence `cong-f`; what it removes is only the
+`(refl , args≈)` boilerplate, never the mathematical content.
+
+`mkAlgebra`{.AgdaFunction} is the setoid-general builder.  Given a carrier setoid `𝐃`, an
+interpretation `f` of each operation symbol, and a proof `cong-f` that every `f o` respects
+pointwise setoid equality of its argument tuple, it assembles the `Algebra`{.AgdaRecord},
+discharging the `{o , _} {.o , _} (refl , args≈)` match internally.
+
+```agda
+mkAlgebra : (𝐃 : Setoid α ρ)
+            (f : (o : OperationSymbolsOf 𝑆) → (ArityOf 𝑆 o → Carrier 𝐃) → Carrier 𝐃)
+          → ((o : OperationSymbolsOf 𝑆){u v : ArityOf 𝑆 o → Carrier 𝐃}
+               → (∀ i → (_≈_ 𝐃) (u i) (v i)) → (_≈_ 𝐃) (f o u) (f o v))
+          → Algebra α ρ
+mkAlgebra 𝐃 f cong-f .Domain                                        = 𝐃
+mkAlgebra 𝐃 f cong-f .Interp ⟨$⟩ (o , args)                         = f o args
+mkAlgebra 𝐃 f cong-f .Interp .≈cong {o , _} {.o , _} (refl , args≈) = cong-f o args≈
+```
+
+`mkAlgebraₚ`{.AgdaFunction} specialises `mkAlgebra`{.AgdaFunction} to a carrier whose
+equality is propositional `_≡_`.  It takes a bare type `A`, builds `Domain = ≡.setoid A`
+(a `Setoid α α`, so the result is `Algebra α α`), and asks for `cong-f` in pointwise `_≡_`
+form — e.g. `≡.cong₂` for a binary operation, as in the `ℕ∸`-magma of
+`Examples.Setoid.FreeMagma`.
+
+```agda
+mkAlgebraₚ : (A : Type α)
+             (f : (o : OperationSymbolsOf 𝑆) → (ArityOf 𝑆 o → A) → A)
+           → ((o : OperationSymbolsOf 𝑆){u v : ArityOf 𝑆 o → A}
+                → (∀ i → u i ≡ v i) → f o u ≡ f o v)
+           → Algebra α α
+mkAlgebraₚ A f cong-f = mkAlgebra (≡.setoid A) f cong-f
 ```
 
 Sometimes we want to extract the universe level of a given algebra or its carrier.
