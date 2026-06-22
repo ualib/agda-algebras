@@ -567,11 +567,13 @@ def evaluate(
     if not stmt.closed:
         return None  # whole-module open / hiding / bare renaming: unanalyzable
 
-    # A name imported as `module X` (or an `as X` alias) may be used not by a
-    # token but by being opened or used as a qualifier in another statement
-    # (`open X …`, `open X.Sub …`), whose line is excluded from the token corpus.
+    # Any imported name may be a module that is used not by a token but by being
+    # opened or used as a qualifier in another statement (`open X …`,
+    # `open X.Sub …`), whose line is excluded from the token corpus.  This holds
+    # whether or not the name was imported with the `module` keyword: a plain
+    # `using ( signature )` can still be consumed by a later `open signature`.
     def used(it: ImportItem) -> bool:
-        return is_used(it.local, toks) or (it.is_module and it.local in module_refs)
+        return is_used(it.local, toks) or it.local in module_refs
 
     unused = tuple(it.local for it in stmt.in_scope if not used(it))
     if not unused:

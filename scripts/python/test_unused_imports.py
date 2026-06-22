@@ -239,6 +239,17 @@ def test_module_item_used_as_qualifier_in_open() -> None:
     assert flagged(text) == {}
 
 
+def test_plain_item_opened_as_module() -> None:
+    # `signature` is imported by plain name (no `module` keyword) but is a module
+    # consumed by a later `open signature`.
+    text = block(
+        "open import B using ( signature ; structure )",
+        "open signature",
+        "foo = structure",
+    )
+    assert flagged(text) == {}
+
+
 # --------------------------------------------------------------------------- #
 # Multi-line, repeated clauses, multiple opens per line
 # --------------------------------------------------------------------------- #
