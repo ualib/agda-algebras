@@ -142,6 +142,34 @@ The exit status is `1` when anything is flagged and `0` otherwise, so the tool
 can gate CI; pass `--exit-zero` to suppress that, and `--include-legacy` to scan
 `src/Legacy` as well.
 
+**Summary tables**.
+
+The text report ends with two ranked tables — the files carrying the most unused
+names, and the `module → name` pairs unused in the most files — so the
+highest-impact cleanup targets (typically a boilerplate import block copied
+across many modules) are easy to spot.  Control the row count with `--top N`, or
+suppress the tables with `--no-tables`.
+
+**Removing them automatically**.
+
++  `--fix` deletes the unused imports in place: individual names are excised
+   surgically from their `using` / `renaming` list (preserving the surrounding
+   layout, including multi-line lists), and a statement whose names are all
+   unused is removed entirely.  A statement that shares a line with another
+   (`open A ; open B`) is left for manual handling and reported.
+
+   ```zsh
+   python3 scripts/python/unused_imports.py --fix src/Setoid
+   make check        # ALWAYS re-type-check afterwards
+   ```
+
++  The fixer removes exactly what the report flags, so the same caveats apply.
+   Because the analysis is textual it cannot see a name resolved only by
+   *instance search* or referenced only inside a `{-# … #-}` pragma; such a name
+   would be removed in error and only the type-checker will catch it.  Treat
+   `--fix` as a fast first pass to be reviewed with `git diff` and validated with
+   `make check`, never as a blind rewrite.
+
 **What it does and does not flag**.
 
 +  It reports the *closed* forms whose in-scope names it can enumerate exactly:

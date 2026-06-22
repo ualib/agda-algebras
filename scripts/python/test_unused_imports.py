@@ -219,6 +219,26 @@ def test_qualified_import_as_used() -> None:
     assert flagged(text) == {}
 
 
+def test_qualified_alias_used_as_qualifier_in_open() -> None:
+    # `Polymorphic` is used only as a qualifier in a later open's module path.
+    text = block(
+        "import Classical.Structures.CommutativeMonoid as Polymorphic",
+        "open Polymorphic.CommutativeMonoid-Op x using ( _∙_ )",
+        "foo a b = a ∙ b",
+    )
+    assert flagged(text) == {}
+
+
+def test_module_item_used_as_qualifier_in_open() -> None:
+    # `Environment` is used as the prefix of another open's module path.
+    text = block(
+        "open import S using ( module Environment ; t )",
+        "open Environment.Inner x using ( ⟦_⟧ )",
+        "foo = t ⟦_⟧",
+    )
+    assert flagged(text) == {}
+
+
 # --------------------------------------------------------------------------- #
 # Multi-line, repeated clauses, multiple opens per line
 # --------------------------------------------------------------------------- #
@@ -327,6 +347,81 @@ def test_prose_is_ignored() -> None:
         "open import N using ( b )", "foo = b"
     )
     assert flagged(text) == {}
+
+
+# --------------------------------------------------------------------------- #
+# --fix: surgical removal
+# --------------------------------------------------------------------------- #
+
+def fix(text: str) -> str:
+    """Return the fixed source (or the original if nothing changed)."""
+    result = ui.fix_file(Path("T.lagda.md"), text)
+    return result.new_text if result.new_text is not None else text
+
+
+def test_fix_remove_middle_name() -> None:
+    text = block("open import M using ( a ; b ; c )", "foo = a c")
+    assert fix(text) == block("open import M using ( a ; c )", "foo = a c")
+
+
+def test_fix_remove_first_name() -> None:
+    text = block("open import M using ( a ; b ; c )", "foo = b c")
+    assert fix(text) == block("open import M using ( b ; c )", "foo = b c")
+
+
+def test_fix_remove_last_name() -> None:
+    text = block("open import M using ( a ; b ; c )", "foo = a b")
+    assert fix(text) == block("open import M using ( a ; b )", "foo = a b")
+
+
+def test_fix_remove_whole_statement() -> None:
+    text = block("open import M using ( a ; b )", "open import N using ( c )", "foo = c")
+    assert fix(text) == block("open import N using ( c )", "foo = c")
+
+
+def test_fix_remove_qualified_import() -> None:
+    text = block("import Algebra.Definitions", "foo = bar")
+    assert fix(text) == block("foo = bar")
+
+
+def test_fix_renaming_target() -> None:
+    text = block("open import F using ( g ) renaming ( h to k ; p to q )", "foo = g q")
+    assert fix(text) == block("open import F using ( g ) renaming ( p to q )", "foo = g q")
+
+
+def test_fix_multiline_preserves_layout() -> None:
+    text = block("open  import M", "      using ( a ; b ;", "              c ; d )", "foo = a c")
+    assert fix(text) == block("open  import M", "      using ( a ;", "              c )", "foo = a c")
+
+
+def test_fix_leaves_shared_line_for_manual() -> None:
+    text = block("open H using ( h ) ; open S using ( s )", "foo = h")
+    result = ui.fix_file(Path("T.lagda.md"), text)
+    assert result.new_text is None          # nothing edited
+    assert len(result.manual) == 1          # the shared-line finding is reported
+
+
+def test_fix_is_idempotent() -> None:
+    text = block("open import M using ( a ; b ; c )", "foo = a")
+    once = fix(text)
+    assert ui.analyze_file(Path("T.lagda.md"), once).findings == ()
+    assert fix(once) == once
+
+
+# --------------------------------------------------------------------------- #
+# Summary tables
+# --------------------------------------------------------------------------- #
+
+def test_summary_tables_rank_by_frequency() -> None:
+    reports = [
+        ui.analyze_file(Path("A.lagda.md"), block("open import M using ( x )", "foo = bar")),
+        ui.analyze_file(Path("B.lagda.md"), block("open import M using ( x )", "foo = bar")),
+    ]
+    lines = ui.summary_tables(reports, top=20)
+    text = "\n".join(lines)
+    assert "M → x" in text
+    # x is unused in both files, so its row reports a file count of 2.
+    assert any("2" in line and "M → x" in line for line in lines)
 
 
 # --------------------------------------------------------------------------- #

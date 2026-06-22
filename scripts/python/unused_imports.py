@@ -49,14 +49,24 @@ type-check before removal: names that are only ever resolved by *instance
 search*, and names referenced only inside ``{-# … #-}`` pragmas (which are
 stripped along with comments).
 
+The report ends with two tables — the files with the most unused names, and the
+import names unused in the most files — to show where cleanup pays off most.
+
 Usage
 -----
 
     python3 scripts/python/unused_imports.py                 # scan src/ (skips Legacy)
     python3 scripts/python/unused_imports.py src/Setoid      # scan one subtree
     python3 scripts/python/unused_imports.py --json src      # machine-readable
-    python3 scripts/python/unused_imports.py --summary src   # counts only
+    python3 scripts/python/unused_imports.py --summary src   # tables + counts only
     python3 scripts/python/unused_imports.py --show-open-ended src
+    python3 scripts/python/unused_imports.py --fix src/Setoid  # remove them in place
+
+``--fix`` deletes the unused names (surgically from ``using`` / ``renaming``
+lists, or the whole statement when nothing remains), leaving formatting intact;
+statements sharing a line with another are left for manual handling.  Because the
+analysis is textual, **always re-type-check after ``--fix``** — a name resolved
+only by instance search or used only inside a pragma can be a false positive.
 
 Exit status is ``1`` when anything is flagged (so CI can gate on it) and ``0``
 otherwise; pass ``--exit-zero`` to always exit ``0``.
@@ -78,6 +88,7 @@ import argparse
 import json
 import re
 import sys
+from collections import Counter, defaultdict
 from dataclasses import dataclass, replace
 from functools import reduce
 from itertools import accumulate
@@ -92,7 +103,7 @@ if str(_SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(_SCRIPT_DIR))
 
 from _utils import Result, PipelineError, ErrorType  # noqa: E402
-from _utils.file_ops import read_text  # noqa: E402
+from _utils.file_ops import read_text, write_text  # noqa: E402
 
 
 # =============================================================================
@@ -344,6 +355,14 @@ def is_used(name: str, toks: frozenset[str]) -> bool:
     return False
 
 
+def dotted_prefixes(path: str) -> frozenset[str]:
+    """Every dotted prefix of a module path: ``A.B.C`` -> {A, A.B, A.B.C}.  These
+    are the names by which the path can be referenced — as a qualifier (``A.B.x``)
+    or by opening it (``open A.B``)."""
+    parts = path.split(".")
+    return frozenset(".".join(parts[:k]) for k in range(1, len(parts) + 1))
+
+
 # =============================================================================
 # Statement collection:  group physical lines into logical statements
 # =============================================================================
@@ -523,32 +542,36 @@ def evaluate(
     stmt: ImportStmt,
     toks: frozenset[str],
     usage_text: str,
-    opened_modules: frozenset[str],
+    module_refs: frozenset[str],
 ) -> Optional[Finding]:
     """Decide whether ``stmt`` introduces anything unused.  ``toks`` is the set of
     usage tokens; ``usage_text`` is the raw usage corpus (for qualified-path
-    substring checks); ``opened_modules`` are the module names re-opened by an
-    ``open M`` statement (the way a qualified ``import M`` is typically used)."""
+    substring checks); ``module_refs`` are the module names that *other* statements
+    reference — every dotted prefix of their module paths — which is how a module
+    or alias brought into scope is used without appearing as a code token (e.g.
+    ``open Polymorphic.CommutativeMonoid-Op`` uses the alias ``Polymorphic``, and
+    ``open Environment 𝑨`` uses the module ``Environment``)."""
     if stmt.public:
         return None
     if stmt.is_qualified:
         if stmt.in_scope:  # `import M as N` -> check the alias N
             alias = stmt.in_scope[0].local
-            if is_used(alias, toks) or alias in opened_modules:
+            if is_used(alias, toks) or alias in module_refs:
                 return None
             return Finding(path, stmt.line, stmt.keyword, stmt.module, (alias,), 1, "qualified")
-        # `import M` -> used iff the path is re-opened or referenced qualified.
-        if stmt.module in opened_modules or stmt.module in usage_text:
+        # `import M` -> used iff the path is re-opened/qualified by another
+        # statement or referenced qualified in the code.
+        if stmt.module in module_refs or stmt.module in usage_text:
             return None
         return Finding(path, stmt.line, stmt.keyword, stmt.module, (stmt.module,), 0, "qualified")
     if not stmt.closed:
         return None  # whole-module open / hiding / bare renaming: unanalyzable
 
     # A name imported as `module X` (or an `as X` alias) may be used not by a
-    # token but by being re-opened later (`open X …`); that `open` is itself an
-    # import statement, so the use does not appear in the token corpus.
+    # token but by being opened or used as a qualifier in another statement
+    # (`open X …`, `open X.Sub …`), whose line is excluded from the token corpus.
     def used(it: ImportItem) -> bool:
-        return is_used(it.local, toks) or (it.is_module and it.local in opened_modules)
+        return is_used(it.local, toks) or (it.is_module and it.local in module_refs)
 
     unused = tuple(it.local for it in stmt.in_scope if not used(it))
     if not unused:
@@ -565,40 +588,274 @@ def open_ended_reason(stmt: ImportStmt) -> Optional[str]:
     return "whole-module open (no `using`); names cannot be enumerated"
 
 
-def analyze_file(path: Path, text: str) -> FileReport:
-    """Produce the findings and open-ended report for one file."""
+@dataclass(frozen=True)
+class Located:
+    """A parsed statement together with the original lines it occupies, so the
+    ``--fix`` path can edit the exact source span.  ``text`` is the cleaned span
+    text; because comment removal preserves length, its character offsets line up
+    with the original source.  ``shared`` flags a span that holds more than one
+    statement (``open A ; open B``), which the fixer leaves alone."""
+
+    stmt: ImportStmt
+    span: tuple[int, ...]   # 0-based original line indices
+    text: str               # cleaned joined text of the span
+    shared: bool
+
+
+@dataclass(frozen=True)
+class Scan:
+    """Everything a single file's analysis produces, shared by report and fix."""
+
+    path: Path
+    findings: tuple[tuple[Located, Finding], ...]
+    open_ended: tuple[OpenEnded, ...]
+    analyzed: int
+    public: int
+
+
+def scan_file(path: Path, text: str) -> Scan:
+    """Parse, classify, and evaluate every import/open statement in one file."""
     code_lines = file_code_lines(text)
     raws = collect_statements(code_lines)
     consumed = frozenset(i for _, span, _ in raws for i in span)
 
-    statements = tuple(
-        s
-        for start, _span, joined in raws
+    parsed = [
+        (s, tuple(span), joined)
+        for start, span, joined in raws
         for piece in split_semicolons(joined)
         for s in (parse_statement(start, piece),)
         if s is not None
+    ]
+    span_counts = Counter(span for _, span, _ in parsed)
+    located = tuple(
+        Located(s, span, joined, span_counts[span] > 1) for s, span, joined in parsed
     )
 
     # Usage corpus: all non-import code, plus the argument lists of imports
     # (module applications such as `{𝑆 = 𝑆}` are genuine use sites), but never
     # the import keywords, module paths, or using/renaming/hiding lists.
     non_import = "\n".join(ln for i, ln in enumerate(code_lines) if i not in consumed)
-    args = "\n".join(s.args for s in statements)
+    args = "\n".join(loc.stmt.args for loc in located)
     usage_text = non_import + "\n" + args
     toks = code_tokens(usage_text)
-    opened_modules = frozenset(s.module for s in statements if s.keyword == "open")
 
+    # The module names each statement can be referenced by; a statement is judged
+    # against the references made by all the *others*.
+    prefixes = [dotted_prefixes(loc.stmt.module) for loc in located]
+    others = [
+        frozenset().union(*(prefixes[j] for j in range(len(located)) if j != i))
+        if len(located) > 1 else frozenset()
+        for i in range(len(located))
+    ]
     findings = tuple(
-        f for s in statements if (f := evaluate(path, s, toks, usage_text, opened_modules))
+        (loc, f)
+        for i, loc in enumerate(located)
+        if (f := evaluate(path, loc.stmt, toks, usage_text, others[i]))
     )
     open_ended = tuple(
-        OpenEnded(path, s.line, s.keyword, s.module, reason)
-        for s in statements
-        if (reason := open_ended_reason(s))
+        OpenEnded(path, loc.stmt.line, loc.stmt.keyword, loc.stmt.module, reason)
+        for loc in located
+        if (reason := open_ended_reason(loc.stmt))
     )
-    analyzed = sum(1 for s in statements if not s.public and (s.closed or s.is_qualified))
-    public = sum(1 for s in statements if s.public)
-    return FileReport(path, findings, open_ended, analyzed, public)
+    analyzed = sum(
+        1 for loc in located if not loc.stmt.public and (loc.stmt.closed or loc.stmt.is_qualified)
+    )
+    public = sum(1 for loc in located if loc.stmt.public)
+    return Scan(path, findings, open_ended, analyzed, public)
+
+
+def analyze_file(path: Path, text: str) -> FileReport:
+    """Produce the findings and open-ended report for one file."""
+    scan = scan_file(path, text)
+    return FileReport(
+        path,
+        tuple(f for _, f in scan.findings),
+        scan.open_ended,
+        scan.analyzed,
+        scan.public,
+    )
+
+
+# =============================================================================
+# Automatic removal (--fix)
+# =============================================================================
+
+def clause_regions(text: str) -> list[tuple[int, int]]:
+    """Offsets ``(start, end)`` of the content inside each ``using`` / ``renaming``
+    / ``hiding`` parenthesised list in a statement (comments already removed)."""
+    regions: list[tuple[int, int]] = []
+    for m in re.finditer(r"\b(?:using|renaming|hiding)\b", text):
+        opener = text.find("(", m.end())
+        if opener < 0:
+            continue
+        depth = 0
+        for k in range(opener, len(text)):
+            if text[k] in "([{":
+                depth += 1
+            elif text[k] in ")]}":
+                depth -= 1
+                if depth == 0:
+                    regions.append((opener + 1, k))
+                    break
+    return regions
+
+
+def segment_spans(inner: str) -> list[tuple[int, int]]:
+    """Offsets of the ``;``-separated items inside a clause body (depth 0)."""
+    spans: list[tuple[int, int]] = []
+    depth, start = 0, 0
+    for i, c in enumerate(inner):
+        if c in "([{":
+            depth += 1
+        elif c in ")]}":
+            depth -= 1
+        elif c == ";" and depth == 0:
+            spans.append((start, i))
+            start = i + 1
+    spans.append((start, len(inner)))
+    return spans
+
+
+def item_local_name(item: str) -> Optional[str]:
+    """The in-scope name an item introduces (``A to B`` -> B, ``module M`` -> M)."""
+    item = item.strip()
+    if (rm := _RENAME.match(item)):
+        return rm.group(3).strip()
+    parsed = parse_using_item(item)
+    return parsed.local if parsed else None
+
+
+def locate_removal(text: str, target: str) -> Optional[tuple[int, int]]:
+    """The character span to delete from ``text`` to drop the item that introduces
+    ``target`` (the item plus one adjacent separator), or ``None`` if ``target`` is
+    the sole item of its clause (which calls for removing the whole statement)."""
+    for cs, ce in clause_regions(text):
+        inner = text[cs:ce]
+        segs = segment_spans(inner)
+        names = [item_local_name(inner[s:e]) for s, e in segs]
+        if target not in names:
+            continue
+        if len(segs) == 1:
+            return None
+        idx = names.index(target)
+        if idx > 0:  # eat the preceding "; item"
+            return cs + segs[idx - 1][1], cs + segs[idx][1]
+        return cs + segs[0][0], cs + segs[1][0]  # eat the trailing "item ;"
+    return None
+
+
+@dataclass(frozen=True)
+class FixResult:
+    path: Path
+    removed_names: int
+    removed_statements: int
+    manual: tuple[str, ...]       # findings the fixer declined to touch
+    new_text: Optional[str]        # None when nothing changed
+
+
+def fix_file(path: Path, text: str) -> FixResult:
+    """Compute the edited source for one file by deleting its unused imports.
+
+    Whole-statement and qualified findings delete the statement's line span;
+    individual-name findings surgically delete the item from its ``using`` /
+    ``renaming`` list, preserving the rest of the line.  Statements that share a
+    line with another statement are left for manual handling.  The character
+    offsets from the cleaned text apply unchanged to the original source because
+    comment removal is length-preserving."""
+    scan = scan_file(path, text)
+    orig_lines = text.split("\n")
+    edits: dict[int, tuple[tuple[int, ...], list[str]]] = {}
+    manual: list[str] = []
+    removed_names = removed_statements = 0
+
+    for loc, finding in scan.findings:
+        where = f"{path}:{finding.line}: `{finding.keyword} {finding.module}`"
+        if loc.shared:
+            manual.append(f"{where} shares a line with another statement")
+            continue
+        if finding.category in ("statement", "qualified"):
+            edits[min(loc.span)] = (loc.span, [])
+            removed_statements += 1
+            continue
+        ranges = [locate_removal(loc.text, name) for name in finding.unused]
+        if any(r is None for r in ranges):
+            manual.append(f"{where}: could not locate {', '.join(finding.unused)}")
+            continue
+        joined = "\n".join(orig_lines[i] for i in loc.span)
+        for start, end in sorted(ranges, key=lambda r: r[0], reverse=True):
+            joined = joined[:start] + joined[end:]
+        edits[min(loc.span)] = (loc.span, joined.split("\n"))
+        removed_names += len(finding.unused)
+
+    if not edits:
+        return FixResult(path, 0, 0, tuple(manual), None)
+
+    spanned = {i for span, _ in edits.values() for i in span}
+    rebuilt: list[str] = []
+    i = 0
+    while i < len(orig_lines):
+        if i in edits:
+            span, new_lines = edits[i]
+            rebuilt.extend(new_lines)
+            i = max(span) + 1
+        elif i in spanned:
+            i += 1  # interior line of a span whose start was already emitted
+        else:
+            rebuilt.append(orig_lines[i])
+            i += 1
+    return FixResult(path, removed_names, removed_statements, tuple(manual), "\n".join(rebuilt))
+
+
+# =============================================================================
+# Summary tables
+# =============================================================================
+
+def _aligned(rows: list[tuple[str, ...]], headers: tuple[str, ...]) -> list[str]:
+    """Render rows as a left/right padded text table (numeric columns right-aligned)."""
+    cols = list(zip(*([headers] + rows))) if rows else [(h,) for h in headers]
+    widths = [max(len(c) for c in col) for col in cols]
+    numeric = [all(c.isdigit() for c in col[1:]) for col in cols]
+    def fmt(row: tuple[str, ...]) -> str:
+        cells = [c.rjust(w) if num else c.ljust(w) for c, w, num in zip(row, widths, numeric)]
+        return "  " + "  ".join(cells).rstrip()
+    return [fmt(headers)] + [fmt(r) for r in rows]
+
+
+def summary_tables(reports: list[FileReport], top: int) -> list[str]:
+    """Two tables: the files with the most unused names, and the import names that
+    are unused in the most files — the places where cleanup pays off most."""
+    findings = [f for r in reports for f in r.findings]
+    if not findings:
+        return []
+
+    scored = [
+        (sum(len(f.unused) for f in r.findings),
+         sum(1 for f in r.findings if f.category != "name"),
+         r.path)
+        for r in reports
+        if r.findings
+    ]
+    scored.sort(key=lambda s: (-s[0], str(s[2])))
+    file_rows = [(str(n), str(w), str(p)) for n, w, p in scored[:top]]
+    file_head = (
+        f"Top files by unused imports (showing {len(file_rows)} of {len(scored)}):"
+    )
+
+    pair_files: dict[tuple[str, str], set[Path]] = defaultdict(set)
+    for r in reports:
+        for f in r.findings:
+            for name in f.unused:
+                pair_files[(f.module, name)].add(r.path)
+    pairs = sorted(pair_files.items(), key=lambda kv: (-len(kv[1]), kv[0][0], kv[0][1]))
+    pair_rows = [(str(len(files)), f"{mod} → {name}") for (mod, name), files in pairs[:top]]
+    pair_head = f"Most-repeated unused imports (showing {len(pair_rows)} of {len(pairs)}):"
+
+    return (
+        ["", file_head]
+        + _aligned(file_rows, ("unused", "whole", "file"))
+        + ["", pair_head]
+        + _aligned(pair_rows, ("files", "import"))
+    )
 
 
 # =============================================================================
@@ -635,6 +892,8 @@ def render_report(
     *,
     summary_only: bool,
     show_open_ended: bool,
+    tables: bool,
+    top: int,
 ) -> None:
     findings = [f for r in reports for f in r.findings]
     if not summary_only:
@@ -651,6 +910,9 @@ def render_report(
     names_unused = sum(len(f.unused) for f in findings if f.category == "name")
     analyzed = sum(r.analyzed for r in reports)
     open_ended = sum(len(r.open_ended) for r in reports)
+    if tables:
+        for line in summary_tables(reports, top):
+            print(line)
     print(
         f"\nScanned {len(reports)} files, {analyzed} analyzable statements: "
         f"{len(findings)} flagged "
@@ -672,6 +934,12 @@ def main(argv: list[str]) -> int:
                         help="also list whole-module opens that cannot be analyzed")
     parser.add_argument("--exit-zero", action="store_true",
                         help="always exit 0 (do not signal findings via exit status)")
+    parser.add_argument("--no-tables", action="store_true",
+                        help="suppress the summary tables")
+    parser.add_argument("--top", type=int, default=20, metavar="N",
+                        help="rows to show in each summary table (default: 20)")
+    parser.add_argument("--fix", action="store_true",
+                        help="remove the unused imports in place (re-type-check afterward!)")
     args = parser.parse_args(argv)
 
     paths = [Path(p) for p in (args.paths or ["src"])]
@@ -679,6 +947,9 @@ def main(argv: list[str]) -> int:
     if not files:
         print("no .lagda.md files found in: " + ", ".join(map(str, paths)), file=sys.stderr)
         return 2
+
+    if args.fix:
+        return run_fix(files)
 
     results = [(f, read_and_analyze(f)) for f in files]
     reports = [r.unwrap() for _, r in results if r.is_ok]
@@ -689,9 +960,44 @@ def main(argv: list[str]) -> int:
         print(json.dumps([f.to_dict() for f in findings], ensure_ascii=False, indent=2))
     else:
         render_report(reports, errors, summary_only=args.summary,
-                      show_open_ended=args.show_open_ended)
+                      show_open_ended=args.show_open_ended,
+                      tables=not args.no_tables, top=args.top)
 
     return 0 if (args.exit_zero or not findings) else 1
+
+
+def run_fix(files: list[Path]) -> int:
+    """Apply ``--fix``: read each file, delete its unused imports, write it back."""
+    changed = total_names = total_statements = 0
+    manual: list[str] = []
+    for path in files:
+        read = read_text(path)
+        if read.is_err:
+            print(f"!! {path}: {read.unwrap_err()}", file=sys.stderr)
+            continue
+        result = fix_file(path, read.unwrap())
+        manual.extend(result.manual)
+        if result.new_text is None:
+            continue
+        write = write_text(path, result.new_text)
+        if write.is_err:
+            print(f"!! {path}: {write.unwrap_err()}", file=sys.stderr)
+            continue
+        changed += 1
+        total_names += result.removed_names
+        total_statements += result.removed_statements
+        print(f"fixed {path}: removed {result.removed_statements} statement(s), "
+              f"{result.removed_names} name(s)")
+
+    for note in manual:
+        print(f"manual: {note}")
+    print(
+        f"\nApplied fixes to {changed} files: removed {total_statements} statements "
+        f"and {total_names} names; {len(manual)} finding(s) left for manual handling."
+    )
+    print("IMPORTANT: re-type-check now (e.g. `make check`) — textual analysis can "
+          "miss names used only via instance search or inside pragmas.")
+    return 0
 
 
 if __name__ == "__main__":
