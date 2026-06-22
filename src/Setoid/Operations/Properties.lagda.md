@@ -121,35 +121,35 @@ module _ {c ℓ} (S : DecSetoid c ℓ) (E : Exhaustible (DecSetoid.Carrier S)) w
   module _ (_·_ : Carrier → Carrier → Carrier) where
 
     -- a · a ≈ a for every a.
-    Idempotent? : Dec ∀ a → a · a ≈ a
+    Idempotent? : Dec (∀ a → a · a ≈ a)
     Idempotent? = all? λ a → a · a ≟ a
 
     -- a · b ≈ b · a for every a, b.
-    Commutative? : Dec ∀ a b → a · b ≈ b · a
+    Commutative? : Dec (∀ a b → a · b ≈ b · a)
     Commutative? = all? λ a → all? λ b → a · b ≟ b · a
 
     -- (a · b) · c ≈ a · (b · c) for every a, b, c.
-    Associative? : Dec ∀ a b c → (a · b) · c ≈ a · (b · c)
+    Associative? : Dec (∀ a b c → (a · b) · c ≈ a · (b · c))
     Associative? = all? λ a → all? λ b → all? λ c → (a · b) · c ≟ a · (b · c)
 
     module _ (e : Carrier) where
 
       -- e · a ≈ a for every a.
-      LeftIdentity? : Dec ∀ a → e · a ≈ a
+      LeftIdentity? : Dec (∀ a → e · a ≈ a)
       LeftIdentity? = all? λ a → e · a ≟ a
 
       -- a · e ≈ a for every a.
-      RightIdentity? : Dec ∀ a → a · e ≈ a
+      RightIdentity? : Dec (∀ a → a · e ≈ a)
       RightIdentity? = all? λ a → a · e ≟ a
 
       module _ (i : Carrier → Carrier) where
 
         -- (i a) · a ≈ e for every a.
-        LeftInverse? : Dec ∀ a → (i a) · a ≈ e
+        LeftInverse? : Dec (∀ a → (i a) · a ≈ e)
         LeftInverse? = all? λ a → (i a) · a ≟ e
 
         -- a · (i a) ≈ e for every a.
-        RightInverse? : Dec ∀ a → a · (i a) ≈ e
+        RightInverse? : Dec (∀ a → a · (i a) ≈ e)
         RightInverse? = all? λ a → a · (i a) ≟ e
 ```
 
@@ -168,19 +168,19 @@ module _ {c ℓ} (S : DecSetoid c ℓ) (E : Exhaustible (DecSetoid.Carrier S)) w
   module _ (_∧_ _∨_ : Carrier → Carrier → Carrier) where
 
     -- a ∧ (a ∨ b) ≈ a for every a, b.
-    Absorbsˡ? : Dec ∀ a b → a ∧ (a ∨ b) ≈ a
+    Absorbsˡ? : Dec (∀ a b → a ∧ (a ∨ b) ≈ a)
     Absorbsˡ? = all? λ a → all? λ b → a ∧ (a ∨ b) ≟ a
 
     -- (a ∧ b) ∨ a ≈ a for every a, b.
-    Absorbsʳ? : Dec ∀ a b → (a ∧ b) ∨ a ≈ a
+    Absorbsʳ? : Dec (∀ a b → (a ∧ b) ∨ a ≈ a)
     Absorbsʳ? = all? λ a → all? λ b → (a ∧ b) ∨ a ≟ a
 
     -- a ∧ (b ∨ c) ≈ (a ∧ b) ∨ (a ∧ c) for every a, b, c.
-    Distributesˡ? : Dec ∀ a b c → a ∧ (b ∨ c) ≈ (a ∧ b) ∨ (a ∧ c)
+    Distributesˡ? : Dec (∀ a b c → a ∧ (b ∨ c) ≈ (a ∧ b) ∨ (a ∧ c))
     Distributesˡ? = all? λ a → all? λ b → all? λ c → a ∧ (b ∨ c) ≟ (a ∧ b) ∨ (a ∧ c)
 
     -- (b ∨ c) ∧ a ≈ (b ∧ a) ∨ (c ∧ a) for every a, b, c.
-    Distributesʳ? : Dec ∀ a b c → (b ∨ c) ∧ a ≈ (b ∧ a) ∨ (c ∧ a)
+    Distributesʳ? : Dec (∀ a b c → (b ∨ c) ∧ a ≈ (b ∧ a) ∨ (c ∧ a))
     Distributesʳ? = all? λ a → all? λ b → all? λ c → (b ∨ c) ∧ a ≟ (b ∧ a) ∨ (c ∧ a)
 ```
 
