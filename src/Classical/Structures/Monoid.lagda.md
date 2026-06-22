@@ -214,9 +214,7 @@ monoid→semigroup ℳ@(𝑴 , _) = 𝑹 , thm
   𝑹 : Magma _ _
   𝑹 = monoid→magma ℳ
   open Algebra 𝑴 using () renaming (Domain to M)
-  open Algebra 𝑹 using () renaming (Domain to R)
   open Setoid M using (_≈_; sym) renaming (refl to ≈refl)
-  open Setoid R using () renaming (_≈_ to _≋_ )
   open Environment 𝑹 using ( ⟦_⟧ )    -- Sig-Magma environment on 𝑹
   open SetoidReasoning M
   open Magma-Op 𝑹 using ( _∙_ )  -- 𝑹's curried ∙, over Sig-Magma

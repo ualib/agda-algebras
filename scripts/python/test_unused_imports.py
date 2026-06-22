@@ -102,6 +102,15 @@ def test_mixfix_unused() -> None:
     assert flagged(text) == {"Alg": ("_∘_",)}
 
 
+def test_mixfix_used_as_section() -> None:
+    # `_⊨ˢᵍ_` used as a right section `(_⊨ˢᵍ Th)` -> token `_⊨ˢᵍ`.
+    text = block(
+        "open import S using ( _⊨ˢᵍ_ ; Th )",
+        "cls = FullSubcategory (_⊨ˢᵍ Th)",
+    )
+    assert flagged(text) == {}
+
+
 def test_mixfix_outer_bars() -> None:
     text = block(
         "open import Q using ( ∣_∣ )",

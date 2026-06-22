@@ -36,7 +36,6 @@ per-structure pivots are instances of one lemma.
 module Classical.Categories.Forgetful where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
-open import Agda.Primitive                          using () renaming ( Set to Type )
 open import Data.Fin.Patterns                       using ( 0F ; 1F )
 open import Data.Product                            using ( proj₁ ; proj₂ )
 open import Level                                   using ( Level )

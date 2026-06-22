@@ -349,6 +349,10 @@ def is_used(name: str, toks: frozenset[str]) -> bool:
         return True
     if name.endswith("-syntax") and (name[: -len("-syntax")] + "[") in toks:
         return True
+    # Operator sections keep one hole glued to the name: `_⊨ˢᵍ_` used as
+    # `(_⊨ˢᵍ Th)` tokenises to `_⊨ˢᵍ`, and `(x ∙_)` to `∙_`.
+    if {name.lstrip("_"), name.rstrip("_")} & toks:
+        return True
     parts = name_parts(name)
     if "_" in name and parts != (name,):
         return any(p in toks for p in parts)
