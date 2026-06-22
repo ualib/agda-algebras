@@ -30,7 +30,7 @@ open import Relation.Binary.PropositionalEquality as ≡ using ()
 
 -- Imports from the Agda Universal Algebra Library -----------------------------------------
 open import Overture          using ( proj₁ ; proj₂ )
-open import Setoid.Functions  using ( _⊙_ ; eq ; IsInjective ; IsSurjective )
+open import Setoid.Functions  using ( _⊙_ ; eq ; IsInjective ; IsSurjective ; SurjInv ; SurjInvIsInverseʳ )
 
 open import Setoid.Algebras {𝑆 = 𝑆}  using ( Algebra ; Lift-Alg ; _^_ )
                                      using ( Lift-Algˡ ; Lift-Algʳ ; ⨅ )
@@ -41,7 +41,7 @@ open import Setoid.Homomorphisms.Properties  {𝑆 = 𝑆} using
  ; ToLiftʳ ; FromLiftʳ ; ToFromLiftʳ ; FromToLiftʳ )
 
 open _⟶_      using ( cong ) renaming ( to to _⟨$⟩_ )
-open Algebra  using ( Domain )
+open Algebra  using ( Domain ; Interp )
 
 private variable  α ρᵃ β ρᵇ γ ρᶜ ι : Level
 ```
@@ -149,6 +149,50 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
                   (φ : 𝑨 ≅ 𝑩) → IsInjective (proj₁ (from φ))
 
 ≅fromInjective φ = ≅toInjective (≅-sym φ)
+```
+
+
+#### A bijective homomorphism is an isomorphism
+
+A homomorphism that is both injective and surjective is an isomorphism.  The witness
+is the surjective right inverse `g = SurjInv h`, which is a *two-sided* inverse because
+`h` is injective; and `g` is again a homomorphism — to see `g (f b) ≈ f (g ∘ b)` it
+suffices, by injectivity of `h`, to compare the `h`-images, where `h ∘ g` cancels.
+This is the converse of `≅toInjective`/`toIsSurjective` and lets one promote a
+bijective `hom` to an `_≅_` without exhibiting the inverse homomorphism by hand.
+
+
+```agda
+module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
+ open Setoid (Domain 𝑨)  using ()              renaming ( Carrier to A ; _≈_ to _≈₁_ )
+ open Setoid (Domain 𝑩)  using ( sym ; trans ) renaming ( Carrier to B ; _≈_ to _≈₂_ )
+ open IsHom
+
+ Bijective→≅ :  (h : hom 𝑨 𝑩) → IsInjective (proj₁ h) → IsSurjective (proj₁ h) → 𝑨 ≅ 𝑩
+ Bijective→≅ h hM hE = mkiso h (g , gHom) (λ _ → invʳ) (λ _ → hM invʳ)
+  where
+  hf : Domain 𝑨 ⟶ Domain 𝑩
+  hf = proj₁ h
+
+  -- the surjective right inverse of h, made two-sided by injectivity
+  ginv : B → A
+  ginv = SurjInv hf hE
+
+  invʳ : ∀ {b} → hf ⟨$⟩ (ginv b) ≈₂ b
+  invʳ = SurjInvIsInverseʳ hf hE
+
+  -- ginv preserves setoid equality: pull b₀ ≈ b₁ back through h and cancel h ∘ ginv
+  gcong : ∀ {b₀ b₁} → b₀ ≈₂ b₁ → ginv b₀ ≈₁ ginv b₁
+  gcong b₀≈b₁ = hM (trans invʳ (trans b₀≈b₁ (sym invʳ)))
+
+  g : Domain 𝑩 ⟶ Domain 𝑨
+  g = record { to = ginv ; cong = gcong }
+
+  -- ginv is a homomorphism: compare h-images (h injective) and cancel h ∘ ginv
+  gHom : IsHom 𝑩 𝑨 g
+  compatible gHom {f}{b} =
+   hM (trans invʳ (sym (trans (compatible (proj₂ h))
+                              (cong (Interp 𝑩) (≡.refl , λ _ → invʳ)))))
 ```
 
 

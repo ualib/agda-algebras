@@ -152,6 +152,43 @@ the standard product level arithmetic), so the Birkhoff index can be the
    module is named `BirkhoffSI` for the same reason — to keep it distinct from the HSP
    `Birkhoff`.)
 
+## The structural characterization (M6-10)
+
+[M6-10][] (#421) adds `Setoid.Subalgebras.Subdirect.SI`, tying `IsSubdirectlyIrreducible`
+(Monolith) to the subdirect structures (`Subdirect.Basic`) — the equivalence that makes
+"subdirectly irreducible" name what it does: `𝑨` is SI iff it has no nontrivial subdirect
+decomposition, i.e. every subdirect embedding `𝑨 ↪ ⨅ 𝒜` has an isomorphism coordinate.
+
++  **The kernel bridges are definitional**.  For `h : 𝑨 → ⨅ 𝒜` the kernel family
+   `kerfam h i = kercon (coord 𝒜 h i)` makes three identities hold on the nose (recorded as
+   `id`, exactly the `natmap` injectivity-is-separation pattern): `BelowDiagonal (kerfam i)`
+   *is* `IsInjective (coord h i)` (`coord-inj→below` / `below→coord-inj`); injectivity of
+   `h` *is* `Separates kerfam` (`embed→separates` / `separates→embed`), since equality in
+   `⨅ 𝒜` is pointwise; and — the one bridge with content — a surjective and injective
+   coordinate map is an isomorphism (`coord-iso`, via the new generic `Bijective→≅` added to
+   `Setoid.Homomorphisms.Isomorphisms`).
++  **The constructive direction**.  `monolith⇒¬all-nonzero` is `monolith⇒cmi` read on the
+   separation predicate (`separates≡below-meet` records the definitional identity
+   `Separates θ ≡ BelowDiagonal (⋂ θ)` for a `ρ`-small index): a monolithic `𝑨` whose
+   kernel family separates points cannot have all coordinates proper.  The direct proof
+   drops the `ρ`-small-index restriction that `⋂` imposes, so it covers the `Fin n`-indexed
+   case.  At the embedding level this is `si⇒¬no-iso-coord : ¬ (∀ i → ¬ (𝑨 ≅ 𝒜 i))`, the
+   choice-free contrapositive form.
++  **The finite witness**.  `si⇒iso-coord` extracts an *explicit* isomorphic coordinate
+   `∃[ i ] 𝑨 ≅ 𝒜 i` for a `Fin n` index given a decision of `BelowDiagonal (kerfam i)` per
+   coordinate, via `¬∀⟶∃¬` and `decidable-stable` (the same finite toolset as [M6-8][]).
+   Decidable `≈` on a finite carrier makes that `Π`-over-pairs decision go through, so a
+   `FiniteAlgebra` supplies the data — the constructive, witness-producing reading of the
+   characterization.
++  **The converse**.  The family-level converse `iso-coord⟹¬all-proper` (an injective
+   coordinate forces the kernel family not-all-nonzero) is choice-free.  The full
+   *structural ⟹ monolith* is not added: the natural witness `μ = ⋀ {θ : Nonzero θ}` is
+   indexed by `Σ[ θ ∈ Con 𝑨 ρ ] Nonzero θ`, a universe up, so the meet is a `Con 𝑨 ℓ′` with
+   `ℓ′ > ρ` — not a monolith *at level `ρ`*; and the finite escape fails too, since the
+   constructive complete congruence lists (`FiniteAlgebra.cons`, [M6-8][]) live at the
+   absorbing level `clv α ρ ⊒ ρ`.  This is the same predicativity wall as the
+   `cmi ⟹ monolith` direction above (and [M6-9][]); recorded, not forced.
+
 ## What remains (follow-ups)
 
 +  ~~The constructive finite case (option (b)): for an algebra with decidable `≈` and a
@@ -165,11 +202,17 @@ the standard product level arithmetic), so the Birkhoff index can be the
    plus decidable `≈` alone).
 +  The impredicative converse `cmi ⟹ monolith`, if/when the library adopts an
    impredicative or resized meet.
-+  Connecting `IsSubdirectlyIrreducible` to the *absence of a nontrivial subdirect
++  ~~Connecting `IsSubdirectlyIrreducible` to the *absence of a nontrivial subdirect
    decomposition* (an SI algebra's every subdirect embedding has an isomorphism
-   coordinate) — the equivalence that makes "subdirectly irreducible" name what it does.
+   coordinate) — the equivalence that makes "subdirectly irreducible" name what it
+   does.~~  **Done in [M6-10][] (#421)**: `Setoid.Subalgebras.Subdirect.SI` proves the
+   constructive direction (contrapositive `si⇒¬no-iso-coord`, and the finite
+   witness-extracting `si⇒iso-coord`) and records the converse's predicativity cost; see
+   "The structural characterization (M6-10)" above.
 
 [M6-2]: https://github.com/ualib/agda-algebras/issues/272
 [M6-8]: https://github.com/ualib/agda-algebras/issues/419
+[M6-9]: https://github.com/ualib/agda-algebras/issues/420
+[M6-10]: https://github.com/ualib/agda-algebras/issues/421
 [`GITHUB_PROJECT.md`]: ../GITHUB_PROJECT.md
 [`m6-8-finite-birkhoff.md`]: ./m6-8-finite-birkhoff.md

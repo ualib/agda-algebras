@@ -20,6 +20,7 @@ module Setoid.Subalgebras.Subdirect {𝑆 : Signature 𝓞 𝓥} where
 open import Setoid.Subalgebras.Subdirect.Basic {𝑆 = 𝑆} public
 open import Setoid.Subalgebras.Subdirect.BirkhoffSI {𝑆 = 𝑆} public
 open import Setoid.Subalgebras.Subdirect.Finite {𝑆 = 𝑆} public
+open import Setoid.Subalgebras.Subdirect.SI {𝑆 = 𝑆} public
 ```
 
 --------------------------------------
