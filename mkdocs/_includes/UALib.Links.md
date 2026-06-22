@@ -156,6 +156,7 @@
 [Setoid.Subalgebras.Subdirect.Basic]: https://ualib.org/Setoid.Subalgebras.Subdirect.Basic.html
 [Setoid.Subalgebras.Subdirect.BirkhoffSI]: https://ualib.org/Setoid.Subalgebras.Subdirect.BirkhoffSI.html
 [Setoid.Subalgebras.Subdirect.Finite]: https://ualib.org/Setoid.Subalgebras.Subdirect.Finite.html
+[Setoid.Subalgebras.Subdirect.SI]: https://ualib.org/Setoid.Subalgebras.Subdirect.SI.html
 
 [Setoid.Varieties]: https://ualib.org/Setoid.Varieties.html
 [Setoid.Varieties.Closure]: https://ualib.org/Setoid.Varieties.Closure.html
