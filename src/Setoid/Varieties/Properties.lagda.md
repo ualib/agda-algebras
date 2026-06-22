@@ -46,7 +46,7 @@ open  import Setoid.Terms          {𝑆 = 𝑆}
       using  ( 𝑻 ; module Environment ; comm-hom-term ; interp-prod ; term-agreement )
 open  import Setoid.Subalgebras    {𝑆 = 𝑆}  using  ( _≤_ ; SubalgebrasOfClass )
 open  import Setoid.Varieties.SoundAndComplete {𝑆 = 𝑆}
-      using ( _⊧_ ; _⊨_ ; _⊫_ ; Eq ; _≈̇_ ; lhs ; rhs ; _⊢_▹_≈_ )
+      using ( _⊧_ ; _⊨_ ; _⊫_ ; ⊫-proof ; Eq ; _≈̇_ ; lhs ; rhs ; _⊢_▹_≈_ )
 
 private variable α ρᵃ β ρᵇ χ ℓ : Level
 
@@ -179,7 +179,7 @@ module _ {X : Type χ}{p q : Term X} where
  ⊧-S-class-invar :  {𝒦 : Pred (Algebra α ρᵃ) ℓ}
   →                 (𝒦 ⊫ (p ≈̇ q)) → ((𝑩 , _) : SubalgebrasOfClass 𝒦 {β}{ρᵇ})
   →                 𝑩 ⊧ (p ≈̇ q)
- ⊧-S-class-invar Kpq (𝑩 , 𝑨 , kA , B≤A) = ⊧-S-invar{p = p}{q} (Kpq 𝑨 kA) B≤A
+ ⊧-S-class-invar Kpq (𝑩 , 𝑨 , kA , B≤A) = ⊧-S-invar{p = p}{q} (Kpq .⊫-proof 𝑨 kA) B≤A
 ```
 
 
@@ -221,7 +221,7 @@ of algebras in the class.
  ⊧-P-class-invar :  (𝒦 : Pred (Algebra α ρᵃ)(ov α))
   →                 𝒦 ⊫ (p ≈̇ q) → (∀ i → 𝒜 i ∈ 𝒦) → ⨅ 𝒜 ⊧ (p ≈̇ q)
 
- ⊧-P-class-invar 𝒦 σ K𝒜 = ⊧-P-invar (λ i ρ → σ (𝒜 i) (K𝒜 i) ρ)
+ ⊧-P-class-invar 𝒦 σ K𝒜 = ⊧-P-invar (λ i ρ → σ .⊫-proof (𝒜 i) (K𝒜 i) ρ)
 ```
 
 

@@ -63,8 +63,19 @@ open Eq public
 _⊧_ : (𝑨 : Algebra α ρᵃ)(term-identity : Eq{χ}) → Type _
 𝑨 ⊧ (p ≈̇ q) = Equal p q where open Environment 𝑨
 
-_⊫_ : Pred (Algebra α ρᵃ) ℓ → Eq{χ} → Type (ℓ ⊔ χ ⊔ ov(α ⊔ ρᵃ))
-𝒦 ⊫ eq = ∀ 𝑨 → 𝒦 𝑨 → 𝑨 ⊧ eq                    -- (type \||= to get ⊫)
+-- 𝒦 ⊫ (p ≈̇ q) asserts that every algebra in the class 𝒦 models the equation
+-- p ≈̇ q.  This is a one-field record (a frozen wrapper around the underlying
+-- ∀ 𝑨 → 𝒦 𝑨 → 𝑨 ⊧ eq) rather than a plain function type, so that the equation
+-- stays visible as an Eq during unification.  Inferring the implicit {p}{q} of
+-- a preservation lemma such as V-id1 then unifies the two equations
+-- structurally at the Eq level — the record type former _⊫_ is injective —
+-- instead of unfolding _⊫_ → _⊧_ → Equal → ⟦_⟧ and getting stuck on the term
+-- interpreter.  (See issue #361.  Note _⊧_ and Equal still reduce
+-- definitionally, so the proofs that compute with them are unaffected.)
+record _⊫_ (𝒦 : Pred (Algebra α ρᵃ) ℓ)(eq : Eq{χ}) : Type (ℓ ⊔ χ ⊔ ov(α ⊔ ρᵃ)) where
+ constructor ⊫-intro
+ field ⊫-proof : ∀ (𝑨 : Algebra α ρᵃ) → 𝒦 𝑨 → 𝑨 ⊧ eq          -- (type \||= to get ⊫)
+open _⊫_ public
 infix 5 _⊫_
 
 -- An I-indexed set of equations inhabits the type I → Eq.
@@ -247,7 +258,7 @@ which asserts that every valid consequence is derivable.
     completeness p q V = begin
       p              ≈˘⟨ identity p ⟩
       p [ σ₀ ]       ≈˘⟨ evaluation p σ₀ ⟩
-      ⟦ p ⟧ ⟨$⟩ σ₀   ≈⟨ V 𝔽[ Γ ] satisfies σ₀ ⟩
+      ⟦ p ⟧ ⟨$⟩ σ₀   ≈⟨ V .⊫-proof 𝔽[ Γ ] satisfies σ₀ ⟩
       ⟦ q ⟧ ⟨$⟩ σ₀   ≈⟨ evaluation q σ₀ ⟩
       q [ σ₀ ]       ≈⟨ identity q ⟩
       q              ∎

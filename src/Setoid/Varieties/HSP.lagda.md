@@ -42,7 +42,7 @@ open import Setoid.Varieties.Closure {𝑆 = 𝑆}           using  ( S ; P ; S-
 open import Setoid.Varieties.FreeAlgebras {𝑆 = 𝑆}      using  ( module FreeHom
                                                               ; 𝔽-ModTh-epi-lift )
 open import Setoid.Varieties.Preservation {𝑆 = 𝑆}      using  ( S-id2 ; PS⊆SP )
-open import Setoid.Varieties.SoundAndComplete {𝑆 = 𝑆}  using  ( module FreeAlgebra ; _⊫_
+open import Setoid.Varieties.SoundAndComplete {𝑆 = 𝑆}  using  ( module FreeAlgebra ; _⊫_ ; ⊫-proof
                                                               ; _≈̇_ ; _⊢_▹_≈_ ; Mod ; Th )
 
 open _⟶_          using () renaming ( to to _⟨$⟩_ )
@@ -103,9 +103,9 @@ so belongs to `S (P 𝒦)`.
    open Algebra 𝔽[ X ]  using () renaming ( Domain to F ; Interp to InterpF )
    open Setoid F        using () renaming ( _≈_  to _≈F≈_ ; refl to reflF )
    S𝒦⊫pq : S{β = α}{ρᵃ} ℓ 𝒦 ⊫ (p ≈̇ q)
-   S𝒦⊫pq 𝑨 sA ρ = x (𝑨 , sA , ρ)
+   S𝒦⊫pq .⊫-proof 𝑨 sA ρ = x (𝑨 , sA , ρ)
    Goal : p ≈F≈ q
-   Goal = 𝒦⊫→ℰ⊢ (S-id2{ℓ = ℓ}{p = p}{q} S𝒦⊫pq)
+   Goal = 𝒦⊫→ℰ⊢ (S-id2{ℓ = ℓ} S𝒦⊫pq)
 
   homℭ : hom (𝑻 X) ℭ
   homℭ = ⨅-hom-co 𝔄⁺ h
@@ -235,7 +235,7 @@ that we formalize this inclusion as well, however trivial the proof.[^1]
     open Setoid (Domain 𝑨) using () renaming ( Carrier to ∣A∣ )
 
     Birkhoff-converse : 𝑨 ∈ V′ ℓ ι 𝒦 → 𝑨 ∈ Mod{X = ∣A∣} (Th (V ℓ ι 𝒦))
-    Birkhoff-converse vA pThq = pThq 𝑨 vA
+    Birkhoff-converse vA pThq = pThq .⊫-proof 𝑨 vA
 ```
 
 We have thus proved that every variety is an equational class.

@@ -49,7 +49,7 @@ open import Overture.Terms {𝑆 = Sig-Monoid}                     using  ( Term
 open import Setoid.Algebras {𝑆 = Sig-Monoid}                    using  ( Algebra ; 𝕌[_] ; ov )
 open import Setoid.Varieties.Closure {𝑆 = Sig-Monoid}           using  ( V ; V′ ; V-expa′ )
 open import Setoid.Varieties.Preservation {𝑆 = Sig-Monoid}      using  ( V-id1 )
-open import Setoid.Varieties.SoundAndComplete {𝑆 = Sig-Monoid}  using  ( _⊧_ ; _⊫_
+open import Setoid.Varieties.SoundAndComplete {𝑆 = Sig-Monoid}  using  ( _⊧_ ; _⊫_ ; ⊫-proof
                                                                        ; _≈̇_ ; Mod ; Th )
 open import Setoid.Varieties.HSP {𝑆 = Sig-Monoid}               using  ( Birkhoff
                                                                        ; Birkhoff-converse )
@@ -118,10 +118,10 @@ x·y = node ∙-Op λ { 0F → ℊ 0F ; 1F → ℊ 1F }
 y·x = node ∙-Op λ { 0F → ℊ 1F ; 1F → ℊ 0F }
 
 𝒦₀⊫comm : 𝒦₀ ⊫ (x·y ≈̇ y·x)
-𝒦₀⊫comm 𝑩 in₀ ρ = +-comm (ρ 0F) (ρ 1F)
+𝒦₀⊫comm .⊫-proof 𝑩 in₀ ρ = +-comm (ρ 0F) (ρ 1F)
 
 V-commutative : 𝕍 ⊫ (x·y ≈̇ y·x)
-V-commutative = V-id1 {p = x·y} {q = y·x} 𝒦₀⊫comm
+V-commutative = V-id1 𝒦₀⊫comm
 ```
 
 #### Birkhoff's theorem, specialized {#birkhoff-specialized}

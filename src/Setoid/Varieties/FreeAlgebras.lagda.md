@@ -40,7 +40,7 @@ open import Setoid.Terms                       {𝑆 = 𝑆}  using  ( 𝑻 ; _�
 open import Setoid.Varieties.Closure           {𝑆 = 𝑆}  using  ( V ; S )
 
 open import Setoid.Varieties.Preservation      {𝑆 = 𝑆}  using  ( classIds-⊆-VIds ; S-id1 )
-open import Setoid.Varieties.SoundAndComplete  {𝑆 = 𝑆}  using  ( Eq ; _⊫_ ; _≈̇_ ; _⊢_▹_≈_
+open import Setoid.Varieties.SoundAndComplete  {𝑆 = 𝑆}  using  ( Eq ; _⊫_ ; ⊫-proof ; _≈̇_ ; _⊢_▹_≈_
                                                                ; Th ; Mod ; module Soundness
                                                                ; module FreeAlgebra )
 open _⟶_      using ( cong ) renaming ( to to _⟨$⟩_ )
@@ -80,7 +80,7 @@ The relatively free algebra (relative to `Th 𝒦`) is called `M` and is derived
   ℰ (eqv , p) = eqv
 
   ℰ⊢[_]▹Th𝒦 : (X : Type χ) → ∀{p q} → ℰ ⊢ X ▹ p ≈ q → 𝒦 ⊫ (p ≈̇ q)
-  ℰ⊢[ X ]▹Th𝒦 x 𝑨 kA = sound (λ i ρ → (proj₂ i) 𝑨 kA ρ) x
+  ℰ⊢[ X ]▹Th𝒦 x .⊫-proof 𝑨 kA = sound (λ i ρ → (proj₂ i) .⊫-proof 𝑨 kA ρ) x
     where open Soundness ℰ 𝑨
 
  ----------- THE RELATIVELY FREE ALGEBRA -----------
@@ -125,14 +125,14 @@ Finally, we define an epimorphism from `𝑻 X` onto the relatively free algebra
   class-models-kernel {X = X}{p}{q} pKq = ℰ⊢[ X ]▹Th𝒦 pKq
 
   kernel-in-theory : {X : Type χ} → fkerPred (proj₁ (hom𝔽[ X ])) ⊆ Th (V ℓ ι 𝒦)
-  kernel-in-theory {X = X} {p , q} pKq vkA x =
-    classIds-⊆-VIds {ℓ = ℓ} {p = p}{q} (class-models-kernel pKq) vkA x
+  kernel-in-theory {X = X} {p , q} pKq =
+    classIds-⊆-VIds {ℓ = ℓ} (class-models-kernel pKq)
 
 
   module _  {X : Type χ} {𝑨 : Algebra α ρᵃ}{sA : 𝑨 ∈ S {β = α}{ρᵃ} ℓ 𝒦} where
     open Environment 𝑨 using ( Equal )
     ker𝔽⊆Equal : ∀{p q} → (p , q) ∈ fkerPred (proj₁ (hom𝔽[ X ])) → Equal p q
-    ker𝔽⊆Equal{p = p}{q} x = S-id1{ℓ = ℓ}{p = p}{q} (ℰ⊢[ X ]▹Th𝒦 x) 𝑨 sA
+    ker𝔽⊆Equal{p = p}{q} x = S-id1{ℓ = ℓ} (ℰ⊢[ X ]▹Th𝒦 x) .⊫-proof 𝑨 sA
 
   𝒦⊫→ℰ⊢ : {X : Type χ} → ∀{p q} → 𝒦 ⊫ p ≈̇ q → ℰ ⊢ X ▹ p ≈ q
   𝒦⊫→ℰ⊢ {p = p} {q} pKq = hyp (p ≈̇ q , pKq) where open _⊢_▹_≈_ using (hyp)

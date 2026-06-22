@@ -46,7 +46,7 @@ open  import Setoid.Varieties.Closure {𝑆 = 𝑆}
 open  import Setoid.Varieties.Properties {𝑆 = 𝑆}
       using ( ⊧-H-invar ; ⊧-S-invar ; ⊧-P-invar ; ⊧-I-invar )
 open  import Setoid.Varieties.SoundAndComplete {𝑆 = 𝑆}
-      using ( _⊧_ ; _⊨_ ; _⊫_ ; Eq ; _≈̇_ ; lhs ; rhs ; _⊢_▹_≈_ ; Th)
+      using ( _⊧_ ; _⊨_ ; _⊫_ ; ⊫-proof ; Eq ; _≈̇_ ; lhs ; rhs ; _⊢_▹_≈_ ; Th)
 
 open _⟶_      using ( cong ) renaming ( to to _⟨$⟩_ )
 open Algebra  using ( Domain )
@@ -120,7 +120,7 @@ module _   {α ρᵃ ℓ χ : Level}
            where
 
  H-id1 : 𝒦 ⊫ (p ≈̇ q) → H {β = α}{ρᵃ}ℓ 𝒦 ⊫ (p ≈̇ q)
- H-id1 σ 𝑩 (𝑨 , kA , BimgA) = ⊧-H-invar{p = p}{q} (σ 𝑨 kA) BimgA
+ H-id1 σ .⊫-proof 𝑩 (𝑨 , kA , BimgA) = ⊧-H-invar{p = p}{q} (σ .⊫-proof 𝑨 kA) BimgA
 ```
 
 
@@ -129,7 +129,7 @@ The converse of the foregoing result is almost too obvious to bother with. Nonet
 
 ```agda
  H-id2 : H ℓ 𝒦 ⊫ (p ≈̇ q) → 𝒦 ⊫ (p ≈̇ q)
- H-id2 Hpq 𝑨 kA = Hpq 𝑨 (𝑨 , (kA , IdHomImage))
+ H-id2 Hpq .⊫-proof 𝑨 kA = Hpq .⊫-proof 𝑨 (𝑨 , (kA , IdHomImage))
 ```
 
 
@@ -139,10 +139,10 @@ The converse of the foregoing result is almost too obvious to bother with. Nonet
 
 ```agda
  S-id1 : 𝒦 ⊫ (p ≈̇ q) → (S {β = α}{ρᵃ} ℓ 𝒦) ⊫ (p ≈̇ q)
- S-id1 σ 𝑩 (𝑨 , kA , B≤A) = ⊧-S-invar{p = p}{q} (σ 𝑨 kA) B≤A
+ S-id1 σ .⊫-proof 𝑩 (𝑨 , kA , B≤A) = ⊧-S-invar{p = p}{q} (σ .⊫-proof 𝑨 kA) B≤A
 
  S-id2 : S ℓ 𝒦 ⊫ (p ≈̇ q) → 𝒦 ⊫ (p ≈̇ q)
- S-id2 Spq 𝑨 kA = Spq 𝑨 (𝑨 , (kA , ≤-reflexive))
+ S-id2 Spq .⊫-proof 𝑨 kA = Spq .⊫-proof 𝑨 (𝑨 , (kA , ≤-reflexive))
 ```
 
 
@@ -153,15 +153,15 @@ The converse of the foregoing result is almost too obvious to bother with. Nonet
 
 ```agda
  P-id1 : ∀{ι} → 𝒦 ⊫ (p ≈̇ q) → P {β = α}{ρᵃ}ℓ ι 𝒦 ⊫ (p ≈̇ q)
- P-id1 σ 𝑨 (I , 𝒜 , kA , A≅⨅A) = ⊧-I-invar 𝑨 p q IH (≅-sym A≅⨅A)
+ P-id1 σ .⊫-proof 𝑨 (I , 𝒜 , kA , A≅⨅A) = ⊧-I-invar 𝑨 p q IH (≅-sym A≅⨅A)
   where
   ih : ∀ i → 𝒜 i ⊧ (p ≈̇ q)
-  ih i = σ (𝒜 i) (kA i)
+  ih i = σ .⊫-proof (𝒜 i) (kA i)
   IH : ⨅ 𝒜 ⊧ (p ≈̇ q)
   IH = ⊧-P-invar {p = p}{q} 𝒜 ih
 
  P-id2 : ∀{ι} → P ℓ ι 𝒦 ⊫ (p ≈̇ q) → 𝒦 ⊫ (p ≈̇ q)
- P-id2{ι} PKpq 𝑨 kA = PKpq 𝑨 (P-expa {ℓ = ℓ}{ι} kA)
+ P-id2{ι} PKpq .⊫-proof 𝑨 kA = PKpq .⊫-proof 𝑨 (P-expa {ℓ = ℓ}{ι} kA)
 ```
 
 
@@ -180,24 +180,24 @@ module _  {α ρᵃ ℓ ι χ : Level}
  private aℓι = α ⊔ ρᵃ ⊔ ℓ ⊔ ι
 
  V-id1 : 𝒦 ⊫ (p ≈̇ q) → V ℓ ι 𝒦 ⊫ (p ≈̇ q)
- V-id1 σ 𝑩 (𝑨 , (⨅A , p⨅A , A≤⨅A) , BimgA) =
-  H-id1{ℓ = aℓι}{𝒦 = S aℓι (P {β = α}{ρᵃ}ℓ ι 𝒦)}{p = p}{q} spK⊧pq 𝑩 (𝑨 , (spA , BimgA))
+ V-id1 σ .⊫-proof 𝑩 (𝑨 , (⨅A , p⨅A , A≤⨅A) , BimgA) =
+  H-id1{ℓ = aℓι}{𝒦 = S aℓι (P {β = α}{ρᵃ}ℓ ι 𝒦)} spK⊧pq .⊫-proof 𝑩 (𝑨 , (spA , BimgA))
    where
    spA : 𝑨 ∈ S aℓι (P {β = α}{ρᵃ}ℓ ι 𝒦)
    spA = ⨅A , (p⨅A , A≤⨅A)
    spK⊧pq : S aℓι (P ℓ ι 𝒦) ⊫ (p ≈̇ q)
-   spK⊧pq = S-id1{ℓ = aℓι}{p = p}{q} (P-id1{ℓ = ℓ} {𝒦 = 𝒦}{p = p}{q} σ)
+   spK⊧pq = S-id1{ℓ = aℓι} (P-id1{ℓ = ℓ} {𝒦 = 𝒦} σ)
 
  V-id2 : V ℓ ι 𝒦 ⊫ (p ≈̇ q) → 𝒦 ⊫ (p ≈̇ q)
- V-id2 Vpq 𝑨 kA = Vpq 𝑨 (V-expa ℓ ι kA)
+ V-id2 Vpq .⊫-proof 𝑨 kA = Vpq .⊫-proof 𝑨 (V-expa ℓ ι kA)
 
  Lift-id1 : ∀{β ρᵇ} → 𝒦 ⊫ (p ≈̇ q) → Level-closure{α}{ρᵃ}{β}{ρᵇ} ℓ 𝒦 ⊫ (p ≈̇ q)
- Lift-id1 pKq 𝑨 (𝑩 , kB , B≅A) ρ = Goal
+ Lift-id1 pKq .⊫-proof 𝑨 (𝑩 , kB , B≅A) ρ = Goal
   where
   open Environment 𝑨
   open Setoid (Domain 𝑨) using (_≈_)
   Goal : ⟦ p ⟧ ⟨$⟩ ρ ≈ ⟦ q ⟧ ⟨$⟩ ρ
-  Goal = ⊧-I-invar 𝑨 p q (pKq 𝑩 kB) B≅A ρ
+  Goal = ⊧-I-invar 𝑨 p q (pKq .⊫-proof 𝑩 kB) B≅A ρ
 ```
 
 
@@ -212,10 +212,10 @@ modeled by `𝒦`.   We formalize this observation as follows.
 
 ```agda
  classIds-⊆-VIds : 𝒦 ⊫ (p ≈̇ q)  → (p , q) ∈ Th (V ℓ ι 𝒦)
- classIds-⊆-VIds pKq 𝑨 = V-id1 pKq 𝑨
+ classIds-⊆-VIds pKq = V-id1 pKq
 
  VIds-⊆-classIds : (p , q) ∈ Th (V ℓ ι 𝒦) → 𝒦 ⊫ (p ≈̇ q)
- VIds-⊆-classIds Thpq 𝑨 kA = V-id2 Thpq 𝑨 kA
+ VIds-⊆-classIds Thpq = V-id2 Thpq
 ```
 
 
