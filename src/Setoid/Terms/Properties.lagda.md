@@ -25,7 +25,7 @@ open import Function.Bundles                       using () renaming ( Func to _
 open import Function.Base                          using ( _∘_ )
 open import Level                                  using ( Level )
 open import Relation.Binary                        using ( Setoid )
-open import Relation.Binary.PropositionalEquality  using (_≡_; setoid; cong; refl)
+open import Relation.Binary.PropositionalEquality  using ( setoid; cong; refl)
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
@@ -58,9 +58,8 @@ on the structure of the given term.
 ```agda
 module _ {𝑨 : Algebra α ρ}(h : X → 𝕌[ 𝑨 ]) where
   open Algebra 𝑨      using ( Interp )                   renaming ( Domain to A )
-  open Setoid A       using ( _≈_ ; reflexive ; trans )  renaming ( Carrier to ∣A∣ )
+  open Setoid A       using ( _≈_ ; reflexive )  renaming ()
   open Algebra (𝑻 X)  using ()                           renaming ( Domain to TX )
-  open Setoid TX      using ()                           renaming ( Carrier to ∣TX∣ )
 
   free-lift : 𝕌[ 𝑻 X ] → 𝕌[ 𝑨 ]
   free-lift (ℊ x) = h x
@@ -124,7 +123,7 @@ we can omit the `swelldef` hypothesis we needed previously to prove `free-unique
 ```agda
 module _ {𝑨 : Algebra α ρ}{gh hh : hom (𝑻 X) 𝑨} where
   open Algebra 𝑨      using ( Interp )  renaming ( Domain to A )
-  open Setoid A       using ( _≈_ ; trans ; sym )
+  open Setoid A       using ( _≈_ )
   open Algebra (𝑻 X)  using ()          renaming ( Domain to TX )
   open SetoidReasoning A
   open _≐_

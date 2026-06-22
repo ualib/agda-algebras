@@ -67,7 +67,7 @@ module _ {𝑨 : Algebra α ρᵃ} where
 
 module _ {X : Type χ} where
   open Algebra (𝑻 X)      using ( Interp )      renaming (Domain to TX )
-  open Setoid TX          using ( _≈_ ; refl )  renaming ( Carrier to ∣TX∣ )
+  open Setoid TX          using ( _≈_ ; refl )  renaming ()
   open Environment (𝑻 X)  using ( ⟦_⟧ ; ≐→Equal )
   open SetoidReasoning TX
 
@@ -104,10 +104,10 @@ homomorphism.
 
 ```agda
 module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}(hh : hom 𝑨 𝑩) where
-  open Algebra 𝑨      using () renaming (Domain to A ; Interp to Interp₁ )
-  open Setoid A       using () renaming ( _≈_ to _≈₁_ ; Carrier to ∣A∣ )
+  open Algebra 𝑨      using () renaming (Domain to A )
+  open Setoid A       using () renaming ( Carrier to ∣A∣ )
   open Algebra 𝑩      using () renaming (Domain to B ; Interp to Interp₂ )
-  open Setoid B       using ( _≈_ ; sym ; refl )
+  open Setoid B       using ( _≈_ ; refl )
   open Environment 𝑨  using () renaming ( ⟦_⟧ to ⟦_⟧₁ )
   open Environment 𝑩  using () renaming ( ⟦_⟧ to ⟦_⟧₂ )
   open SetoidReasoning B

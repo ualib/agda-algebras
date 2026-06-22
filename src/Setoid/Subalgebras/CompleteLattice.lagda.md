@@ -41,7 +41,7 @@ open import Data.Empty                   using  ( ⊥ )
 open import Data.Product                 using  ( _,_ ; _×_ ; proj₁ ; proj₂ ; Σ-syntax )
 open import Data.Sum.Base                using  ( inj₁ ; inj₂ )
 open import Data.Unit.Base               using  ( ⊤ ; tt )
-open import Level                        using  ( Level ; _⊔_ ; suc ; Lift ; lift ; lower )
+open import Level                        using  ( Level ; _⊔_ ; Lift ; lift )
 open import Relation.Binary              using  ( IsEquivalence ; IsPartialOrder )
 open import Relation.Binary.Definitions  using  ( Maximum ; Minimum )
 open import Relation.Binary.Lattice      using  ( Supremum ; Infimum ; IsLattice

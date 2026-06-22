@@ -408,7 +408,11 @@ def collect_statements(code_lines: list[str]) -> list[tuple[int, list[int], str]
         j = i
         while True:
             nxt = code_lines[j + 1] if j + 1 < n else None
-            if nxt is not None and (_paren_depth(text) > 0 or _is_clause_cont(nxt)):
+            # A statement never continues across a blank line; this also bounds
+            # the damage if some upstream edit ever leaves a paren unbalanced.
+            if nxt is not None and nxt.strip() != "" and (
+                _paren_depth(text) > 0 or _is_clause_cont(nxt)
+            ):
                 text = text + "\n" + nxt
                 j += 1
             else:
@@ -731,23 +735,30 @@ def item_local_name(item: str) -> Optional[str]:
     return parsed.local if parsed else None
 
 
-def locate_removal(text: str, target: str) -> Optional[tuple[int, int]]:
-    """The character span to delete from ``text`` to drop the item that introduces
-    ``target`` (the item plus one adjacent separator), or ``None`` if ``target`` is
-    the sole item of its clause (which calls for removing the whole statement)."""
-    for cs, ce in clause_regions(text):
-        inner = text[cs:ce]
-        segs = segment_spans(inner)
-        names = [item_local_name(inner[s:e]) for s, e in segs]
-        if target not in names:
-            continue
-        if len(segs) == 1:
-            return None
-        idx = names.index(target)
-        if idx > 0:  # eat the preceding "; item"
-            return cs + segs[idx - 1][1], cs + segs[idx][1]
-        return cs + segs[0][0], cs + segs[1][0]  # eat the trailing "item ;"
-    return None
+def remove_items(cleaned: str, original: str, unused: frozenset[str]) -> str:
+    """Rebuild each ``using`` / ``renaming`` clause of a statement, dropping items
+    whose in-scope name is in ``unused`` and keeping the survivors' original text
+    (so spacing and line breaks are preserved).  Offsets come from ``cleaned`` (the
+    comment-free text); the survivor text is sliced from ``original`` at the same
+    offsets, which line up because comment removal preserves length.  Clauses are
+    disjoint and edited right-to-left, and only a clause's interior is replaced, so
+    the parentheses always stay balanced — this is what makes the rewrite safe to
+    iterate.  Rebuilding from survivors (rather than deleting per name) also avoids
+    the overlapping-separator hazard when several adjacent items are removed."""
+    result = original
+    for cs, ce in sorted(clause_regions(cleaned), key=lambda r: r[0], reverse=True):
+        cleaned_inner = cleaned[cs:ce]
+        original_inner = original[cs:ce]
+        segs = segment_spans(cleaned_inner)
+        survivors = [
+            original_inner[s:e]
+            for s, e in segs
+            if item_local_name(cleaned_inner[s:e]) not in unused
+        ]
+        if len(survivors) == len(segs):
+            continue  # nothing removed from this clause
+        result = result[:cs] + ";".join(survivors) + result[ce:]
+    return result
 
 
 @dataclass(frozen=True)
@@ -763,11 +774,11 @@ def fix_file(path: Path, text: str) -> FixResult:
     """Compute the edited source for one file by deleting its unused imports.
 
     Whole-statement and qualified findings delete the statement's line span;
-    individual-name findings surgically delete the item from its ``using`` /
-    ``renaming`` list, preserving the rest of the line.  Statements that share a
-    line with another statement are left for manual handling.  The character
-    offsets from the cleaned text apply unchanged to the original source because
-    comment removal is length-preserving."""
+    individual-name findings rebuild each ``using`` / ``renaming`` list from its
+    surviving items (see :func:`remove_items`), preserving the rest of the line.
+    Statements that share a line with another statement are left for manual
+    handling.  The character offsets from the cleaned text apply unchanged to the
+    original source because comment removal is length-preserving."""
     scan = scan_file(path, text)
     orig_lines = text.split("\n")
     edits: dict[int, tuple[tuple[int, ...], list[str]]] = {}
@@ -783,14 +794,12 @@ def fix_file(path: Path, text: str) -> FixResult:
             edits[min(loc.span)] = (loc.span, [])
             removed_statements += 1
             continue
-        ranges = [locate_removal(loc.text, name) for name in finding.unused]
-        if any(r is None for r in ranges):
-            manual.append(f"{where}: could not locate {', '.join(finding.unused)}")
+        orig_joined = "\n".join(orig_lines[i] for i in loc.span)
+        new_joined = remove_items(loc.text, orig_joined, frozenset(finding.unused))
+        if new_joined == orig_joined:  # e.g. an unused `as N` alias — leave by hand
+            manual.append(f"{where}: could not remove {', '.join(finding.unused)} automatically")
             continue
-        joined = "\n".join(orig_lines[i] for i in loc.span)
-        for start, end in sorted(ranges, key=lambda r: r[0], reverse=True):
-            joined = joined[:start] + joined[end:]
-        edits[min(loc.span)] = (loc.span, joined.split("\n"))
+        edits[min(loc.span)] = (loc.span, new_joined.split("\n"))
         removed_names += len(finding.unused)
 
     if not edits:

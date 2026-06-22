@@ -25,13 +25,12 @@ open import Relation.Binary  using ( Setoid )
 
 open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
 
-import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from agda-algebras ------------------------------------------------
 open import Overture          using ( proj₁ ; proj₂ )
 open import Setoid.Functions  using ( IsInjective )
 
-open import Setoid.Algebras {𝑆 = 𝑆}               using ( Algebra ; _^_)
+open import Setoid.Algebras {𝑆 = 𝑆}               using ( Algebra )
 open import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}    using ( hom ; IsHom )
 open import Setoid.Homomorphisms.Kernels {𝑆 = 𝑆}  using ( kerquo ; πker )
 
@@ -44,7 +43,6 @@ private variable α ρᵃ β ρᵇ γ ρᶜ ι : Level
 
 ```agda
 open _⟶_ using ( cong ) renaming ( to to _⟨$⟩_ )
-open Algebra using ( Domain )
 
 module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}(hh : hom 𝑨 𝑩) where
  open Algebra 𝑩 using ( Interp ) renaming ( Domain to B )

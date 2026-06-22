@@ -155,7 +155,7 @@ module _
   where
   open Category 𝐂 using ( ≈-sym ; ≈-trans )
   open Functor L using () renaming ( F₀ to L₀ ; F₁ to L₁ )
-  open Functor R using ( F-resp-≈ ; identity ; homomorphism ) renaming ( F₀ to R₀ ; F₁ to R₁ )
+  open Functor R using ( F-resp-≈ ; identity ; homomorphism ) renaming ( F₁ to R₁ )
   open Adjunction adj
 
   adjunction→monad : Monad 𝐂

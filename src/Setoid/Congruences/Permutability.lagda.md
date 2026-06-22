@@ -45,7 +45,7 @@ open import Relation.Binary  using ( Setoid ; IsEquivalence )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Setoid.Algebras.Basic     {𝑆 = 𝑆}  using ( ov ; Algebra ; 𝕌[_] )
-open import Setoid.Congruences.Basic  {𝑆 = 𝑆}  using ( Con ; reflexive ; is-equivalence )
+open import Setoid.Congruences.Basic  {𝑆 = 𝑆}  using ( Con ; is-equivalence )
 
 private variable α ρ ℓ : Level
 ```
@@ -61,8 +61,6 @@ the carrier `𝕌[ 𝑨 ] : Type α`).
 
 ```agda
 module _ {𝑨 : Algebra α ρ} where
-  open Algebra 𝑨 using () renaming ( Domain to A )
-  open Setoid A  using ( _≈_ )
 
   -- (θ ∘ φ) x y  ≡  ∃ z. (x θ z) × (z φ y)
   _∘_ : Con 𝑨 ℓ → Con 𝑨 ℓ → BinRel 𝕌[ 𝑨 ] (α ⊔ ℓ)

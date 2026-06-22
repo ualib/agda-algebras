@@ -47,7 +47,7 @@ open import Data.Product                 using ( _,_ ; proj₁ ; proj₂ ; Σ-sy
 open import Level                        using ( Level ; _⊔_ )
 open import Relation.Binary              using ( Setoid ; IsEquivalence )
 open import Relation.Binary.Definitions  using ( Maximum ; Minimum )
-open import Relation.Binary.Lattice      using ( Supremum ; Infimum ; IsLattice
+open import Relation.Binary.Lattice      using ( Supremum ; IsLattice
                                                ; Lattice ; IsBoundedLattice
                                                ; BoundedLattice )
 
@@ -75,7 +75,7 @@ relation level is `L = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ ℓ₀`.  Because level j
 
 ```agda
 module _ (𝑨 : Algebra α ρ) (ℓ₀ : Level) where
-  open Setoid 𝔻[ 𝑨 ] using ( _≈_ ) renaming ( refl to reflA )
+  open Setoid 𝔻[ 𝑨 ] using ( _≈_ ) renaming ()
 
   L : Level
   L = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ ℓ₀

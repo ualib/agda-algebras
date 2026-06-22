@@ -35,7 +35,6 @@ open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 
 module Setoid.Categories.Reduct where
 
-open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ----------------------------
 open import Data.Product                   using ( _,_ ; proj₁ ; proj₂ )

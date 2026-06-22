@@ -22,7 +22,7 @@ open import Agda.Primitive using () renaming ( Set to Type )
 -- Imports from the Agda Standard Library ----------------------------------------------------
 open import Data.Product     using ( _,_ ; Σ-syntax )
                              renaming ( _×_ to _∧_ )
-open import Function         using ( Func ; _on_ ; _∘_ ; id )
+open import Function         using ( Func ; _∘_ )
 open import Level            using ( Level ; _⊔_ ; suc )
 open import Relation.Binary  using ( Setoid )
 open import Relation.Unary   using ( Pred ; _∈_ )
@@ -31,7 +31,7 @@ open import Relation.Binary.PropositionalEquality as ≡ using ()
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
 open import Overture                                    using  ( proj₁ ; proj₂
-                                                               ; ArityOf ; transport )
+                                                               ; ArityOf )
 open import Setoid.Algebras                    {𝑆 = 𝑆}  using  ( Algebra ; ov ; _^_
                                                                ; Lift-Algˡ ; Lift-Alg ; 𝕌[_] )
 open import Setoid.Functions
@@ -79,11 +79,10 @@ the image of given hom.
 
 ```agda
 module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
- open Algebra 𝑨  renaming (Domain to A )                      using (Interp)
- open Setoid A   renaming ( _≈_ to _≈₁_ ; Carrier to ∣A∣)     using ()
+ open Algebra 𝑨  renaming ()                      using (Interp)
  open Algebra 𝑩  renaming (Domain to B ; Interp to InterpB )  using ()
- open Setoid B   renaming ( _≈_ to _≈₂_ ; refl to refl₂ )     using ( reflexive )
-                 renaming ( sym to sym₂ ; trans to trans₂ ; Carrier to ∣B∣)
+ open Setoid B   renaming ( _≈_ to _≈₂_ )     using ()
+                 renaming ( trans to trans₂ )
  open Func       renaming ( to to _⟨$⟩_ )                       using ( cong )
  open IsHom
 
@@ -92,7 +91,7 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
   record { Domain = Ran (proj₁ h) ; Interp = record { to = f' ; cong = cong' } }
    where
    open Setoid(⟨ 𝑆 ⟩ (Ran (proj₁ h)))
-    using() renaming (Carrier to SRanh ; _≈_ to _≈₃_ ; refl to refl₃ )
+    using() renaming (Carrier to SRanh ; _≈_ to _≈₃_ )
 
    hhom :  ∀ {𝑓}(x : ArityOf 𝑆 𝑓 → (proj₁ h) range )
     →      ((proj₁ h) ⟨$⟩ (𝑓 ^ 𝑨) (((proj₁ h) preimage) ∘ x)) ≈₂ (𝑓 ^ 𝑩) (((proj₁ h) image) ∘ x)
@@ -138,7 +137,6 @@ Here are some tools that have been useful (e.g., in the road to the proof of Bir
 
 ```agda
 module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
- open Algebra 𝑨  using ()               renaming ( Domain to A )
  open Algebra 𝑩  using ()               renaming ( Domain to B )
  open Setoid B   using ( sym ; trans )  renaming ( _≈_ to _≈₂_ )
  open Func       using ( cong )         renaming ( to to _⟨$⟩_ )

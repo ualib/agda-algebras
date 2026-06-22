@@ -29,7 +29,7 @@ import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 open import Relation.Binary.PropositionalEquality using ( refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------------
-open import Overture                       using ( proj₁ ; proj₂ ; OperationSymbolsOf ; ArityOf ; Im_⊆_ )
+open import Overture                       using ( proj₁ ; proj₂ ; ArityOf ; Im_⊆_ )
 open import Overture.Terms        {𝑆 = 𝑆}  using ( Term ; ℊ ; node )
 open import Setoid.Algebras       {𝑆 = 𝑆}  using ( Algebra ; 𝕌[_] ; _^_ ; ov )
 open import Setoid.Terms          {𝑆 = 𝑆}  using ( module Environment )

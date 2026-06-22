@@ -111,7 +111,7 @@ open import Relation.Binary.PropositionalEquality using (refl) -- as ≡
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Overture.Signatures            using ( 𝓞 ; 𝓥 ; Signature )
-open import Overture.Signatures.Morphisms  using ( SigMorphism ; ι ; κ )
+open import Overture.Signatures.Morphisms  using ( SigMorphism ; κ )
 open import Overture.Terms                 using ( Term ; ℊ ; node )
 open import Overture.Terms.Translation     using ( _✶_ )
 open import Setoid.Algebras.Basic          using ( Algebra ; 𝔻[_] ; 𝕌[_] )

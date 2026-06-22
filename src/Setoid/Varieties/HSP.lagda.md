@@ -100,8 +100,8 @@ so belongs to `S (P 𝒦)`.
 
   AllEqual⊆ker𝔽 {p} {q} x = Goal
    where
-   open Algebra 𝔽[ X ]  using () renaming ( Domain to F ; Interp to InterpF )
-   open Setoid F        using () renaming ( _≈_  to _≈F≈_ ; refl to reflF )
+   open Algebra 𝔽[ X ]  using () renaming ( Domain to F )
+   open Setoid F        using () renaming ( _≈_  to _≈F≈_ )
    S𝒦⊫pq : S{β = α}{ρᵃ} ℓ 𝒦 ⊫ (p ≈̇ q)
    S𝒦⊫pq .⊫-proof 𝑨 sA ρ = x (𝑨 , sA , ρ)
    Goal : p ≈F≈ q
@@ -113,8 +113,8 @@ so belongs to `S (P 𝒦)`.
    h : ∀ i → hom (𝑻 X) (𝔄⁺ i)
    h i = lift-hom (proj₂ (proj₂ i))
 
-  open Algebra 𝔽[ X ]  using () renaming ( Domain to F ; Interp to InterpF )
-  open Setoid F        using () renaming (refl to reflF ; _≈_ to _≈F≈_ ; Carrier to ∣F∣)
+  open Algebra 𝔽[ X ]  using () renaming ( Domain to F )
+  open Setoid F        using () renaming ( _≈_ to _≈F≈_ )
 
 
   ker𝔽⊆kerℭ : fkerPred (proj₁ (hom𝔽[ X ])) ⊆ fkerPred (proj₁ homℭ)

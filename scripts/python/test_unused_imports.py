@@ -421,6 +421,38 @@ def test_fix_leaves_shared_line_for_manual() -> None:
     assert len(result.manual) == 1          # the shared-line finding is reported
 
 
+def test_fix_remove_two_adjacent_names() -> None:
+    # Removing adjacent items from one clause must not corrupt the separator.
+    text = block("open import M using ( a ; b ; c )", "foo = c")
+    assert fix(text) == block("open import M using ( c )", "foo = c")
+
+
+def test_fix_remove_all_using_keep_renaming() -> None:
+    # The sole using item is unused but a renaming target survives.
+    text = block("open import F using ( x ) renaming ( Func to _⟶_ )", "foo : A ⟶ B")
+    assert fix(text) == block("open import F using () renaming ( Func to _⟶_ )", "foo : A ⟶ B")
+
+
+def test_fix_iteration_does_not_collapse() -> None:
+    # Regression: a second --fix pass must stay stable, never swallowing code by
+    # leaving an unbalanced parenthesis (the Discrete.lagda.md collapse bug).
+    text = block(
+        "open import A using ( p ; q )",                       # all unused -> delete
+        "open import B using ( r ; s ) renaming ( T to U )",   # r,s unused, U used
+        "open import C using ( w )",                           # used
+        "thm : U",
+        "thm = w",
+    )
+    once = fix(text)
+    twice = fix(once)
+    assert twice == once                                       # fixpoint reached
+    assert ui.analyze_file(Path("T.lagda.md"), once).findings == ()
+    assert "open import C using ( w )" in once                 # surviving code intact
+    assert "thm = w" in once
+    assert "open import A" not in once                         # fully-unused removed
+    assert once.count("\n") >= text.count("\n") - 2           # no catastrophic collapse
+
+
 def test_fix_is_idempotent() -> None:
     text = block("open import M using ( a ; b ; c )", "foo = a")
     once = fix(text)

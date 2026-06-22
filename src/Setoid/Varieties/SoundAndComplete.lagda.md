@@ -22,7 +22,7 @@ open import Agda.Primitive   using () renaming ( Set to Type )
 
 -- imports from the Agda Standard Library ---------------------------------------
 open import Data.Product     using ( _,_ ; Σ-syntax ; _×_ )
-open import Function         using ( _∘_ ; flip ; id ) renaming ( Func to _⟶_ )
+open import Function         using ( _∘_ ; flip ) renaming ( Func to _⟶_ )
 open import Level            using ( Level ; _⊔_ )
 open import Relation.Binary  using ( Setoid ; IsEquivalence )
 open import Relation.Unary   using ( Pred ; _∈_ )

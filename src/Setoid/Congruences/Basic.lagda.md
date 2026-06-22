@@ -21,7 +21,7 @@ module Setoid.Congruences.Basic {𝑆 : Signature 𝓞 𝓥} where
 open import Agda.Primitive   using () renaming ( Set to Type )
 open import Data.Product     using ( _,_ ; Σ-syntax )
 open import Data.Unit.Base   using ( ⊤ ; tt )
-open import Function         using ( id ; Func )
+open import Function         using ( Func )
 open import Level            using ( Level ; _⊔_ ; Lift ; lift ; lower )
 open import Relation.Binary  using ( Setoid ; IsEquivalence )
                              renaming ( Rel to BinRel )
@@ -102,7 +102,6 @@ using this standard notation.
 
 ```agda
 open Algebra  using ( Domain ; Interp )
-open Setoid   using ( Carrier )
 open Func     using ( cong ) renaming ( to to _⟨$⟩_ )
 
 _╱_ : (𝑨 : Algebra α ρ) → Con 𝑨 ℓ → Algebra α ℓ

@@ -27,7 +27,7 @@ open  import Relation.Binary.PropositionalEquality as ≡ using ()
 -- Imports from the Agda Universal Algebra Library ------------------------------------------
 open  import Overture                            using ( proj₁ ; proj₂ ; kerRel ; kerRelOfEquiv )
 open  import Setoid.Functions                    using ( Image_∋_ )
-open  import Setoid.Algebras            {𝑆 = 𝑆}  using ( Algebra ; _^_ ; ov )
+open  import Setoid.Algebras            {𝑆 = 𝑆}  using ( Algebra ; _^_ )
 open  import Setoid.Congruences         {𝑆 = 𝑆}  using ( _∣≈_ ; Con ; mkcon ; _╱_ ; IsCongruence )
 open  import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}  using ( hom ; IsHom ; epi ; IsEpi ; epi→hom )
 open  import Setoid.Homomorphisms.Properties {𝑆 = 𝑆} using ( 𝒾𝒹 )
@@ -40,7 +40,7 @@ open _⟶_ using ( cong ) renaming ( to to _⟨$⟩_ )
 
 module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} (hh : hom 𝑨 𝑩) where
 
-  open Setoid (Domain 𝑨)  renaming ( _≈_ to _≈₁_ )  using ( reflexive )
+  open Setoid (Domain 𝑨)  renaming ()  using ( reflexive )
   open Algebra 𝑩          renaming (Domain to B )   using ( Interp )
   open Setoid B           renaming ( _≈_ to _≈₂_ )
                           using ( sym ; trans ; isEquivalence )

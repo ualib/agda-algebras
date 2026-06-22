@@ -29,7 +29,6 @@ module Overture.Relations where
 -- Imports from Agda primitives and the standard library.
 open import Agda.Primitive   using ()           renaming ( Set to Type )
 open import Data.Product     using ( _×_ ; _,_ ; Σ-syntax )
-open import Function         using ( _∘_ )
 open import Level            using ( Level ; Lift ; lift ; lower ; suc ; _⊔_ )
 open import Relation.Binary  using ( IsEquivalence ; _=[_]⇒_ )
                              renaming ( Rel to BinRel )
@@ -38,7 +37,6 @@ open import Relation.Unary   using ( Pred ; _∈_ )
 open import Relation.Binary.PropositionalEquality as ≡  using ( _≡_ )
 
 -- Imports from agda-algebras.
-open import Overture.Signatures  using ( 𝓞 ; 𝓥 )
 open import Overture.Operations  using ( Op )
 
 private variable

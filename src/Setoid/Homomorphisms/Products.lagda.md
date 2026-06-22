@@ -37,9 +37,11 @@ private variable α ρ β ρᵇ 𝓘 : Level
 
 Suppose we have an algebra `𝑨`, a type `I : Type 𝓘`, and a family
 `ℬ : I → Algebra β 𝑆` of algebras.  We sometimes refer to the inhabitants of `I`
-as *indices*, and call `ℬ` an *indexed family of algebras*.  If in addition we have a
-family `𝒽 : (i : I) → hom 𝑨 (ℬ i)` of homomorphisms, then we can construct a
-homomorphism from `𝑨` to the product `⨅ ℬ` in the natural way.
+as *indices*, and call `ℬ` an *indexed family of algebras*.
+
+If in addition we have a family `𝒽 : (i : I) → hom 𝑨 (ℬ i)` of homomorphisms, then
+we can construct a homomorphism from `𝑨` to the product `⨅ ℬ` in the natural way.
+
 
 ```agda
 module _ {I : Type 𝓘}{𝑨 : Algebra α ρ }(ℬ : I → Algebra β ρᵇ)  where

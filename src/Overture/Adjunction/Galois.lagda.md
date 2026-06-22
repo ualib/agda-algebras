@@ -21,8 +21,8 @@ open import Data.Product             using ( _,_ ; _×_ ; swap ; proj₁ )
 open import Function.Base            using ( _∘_ ; id )
 open import Level                    using ( _⊔_ ;  Level ; suc )
 open import Relation.Binary.Bundles  using ( Poset )
-open import Relation.Binary.Core     using ( REL ; Rel ; _⇒_ ; _Preserves_⟶_ )
-open import Relation.Unary           using ( _⊆_ ;  _∈_ ; Pred   )
+open import Relation.Binary.Core     using ( REL )
+open import Relation.Unary           using ( _⊆_ ; Pred   )
 
 open import Relation.Binary.Structures using (IsEquivalence)
 

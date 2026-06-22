@@ -93,7 +93,7 @@ open import Level            using ( _⊔_ ; Level ) renaming ( suc to lsuc )
 open import Relation.Binary  using ( Setoid )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Setoid.Relations.Continuous       using ( REL ; REL-syntax )
+open import Setoid.Relations.Continuous       using ( REL-syntax )
 open import Setoid.Algebras.Basic  {𝑆 = 𝑆}    using ( Algebra )
 ```
 

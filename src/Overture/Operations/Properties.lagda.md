@@ -34,7 +34,6 @@ checkers — absorption and distributivity — serve the finite-lattice examples
 module Overture.Operations.Properties where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
-open import Agda.Primitive                          using () renaming ( Set to Type )
 open import Data.Nat                                using ( ℕ )
 open import Data.Fin                                using ( Fin )
 open import Data.Fin.Properties                     using ( _≟_ ; all? )

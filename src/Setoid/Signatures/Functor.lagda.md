@@ -34,9 +34,8 @@ open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 module Setoid.Signatures.Functor where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
-open import Agda.Primitive                         using () renaming ( Set to Type )
 open import Data.Product                           using ( _,_ )
-open import Function                               using ( Func ; id ; _∘_ )
+open import Function                               using ( Func ; _∘_ )
 open import Function.Construct.Identity            using () renaming (function to identity)
 open import Function.Construct.Composition         using () renaming (function to _∘'_ )
 open import Level                                  using ( Level )

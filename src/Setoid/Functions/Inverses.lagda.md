@@ -17,7 +17,7 @@ module Setoid.Functions.Inverses where
 
 -- Imports from Agda and the Agda Standard Library --------------------
 open import Agda.Primitive    using ( _⊔_ ; Level ) renaming ( Set to Type )
-open import Function          using ( id ; _$_ )   renaming ( Func to _⟶_ )
+open import Function          using ( _$_ )   renaming ( Func to _⟶_ )
 open import Data.Product      using ( _,_ ; Σ-syntax )
                               renaming ( _×_ to _∧_)
 open import Relation.Unary    using ( Pred ; _∈_ )
