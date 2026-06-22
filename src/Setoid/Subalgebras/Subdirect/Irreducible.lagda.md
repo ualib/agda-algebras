@@ -1,24 +1,26 @@
 ---
 layout: default
-file: "src/Setoid/Subalgebras/Subdirect/SI.lagda.md"
-title: "Setoid.Subalgebras.Subdirect.SI module (The Agda Universal Algebra Library)"
+file: "src/Setoid/Subalgebras/Subdirect/Irreducible.lagda.md"
+title: "Setoid.Subalgebras.Subdirect.Irreducible module (The Agda Universal Algebra Library)"
 date: "2026-06-22"
 author: "the agda-algebras development team"
 ---
 
 ### The structural characterization of subdirect irreducibility
 
-This is the [Setoid.Subalgebras.Subdirect.SI][] module of the [Agda Universal Algebra Library][].
+This is the [Setoid.Subalgebras.Subdirect.Irreducible][] module of the
+[Agda Universal Algebra Library][].
 
 [Setoid.Congruences.Monolith][] *defines* subdirect irreducibility order-theoretically:
 `IsSubdirectlyIrreducible 𝑨`{.AgdaFunction} is `Nontrivial 𝑨`{.AgdaFunction} together
 with the existence of a **monolith** (a least nonzero congruence).  What makes the name
-apt is the **structural** characterization (Burris and Sankappanavar, *A Course in
-Universal Algebra*, Def. II.8.3 / Thm. II.8.4): `𝑨` is subdirectly irreducible iff it
+apt is the **structural** characterization: `𝑨` is subdirectly irreducible iff it
 has no *nontrivial subdirect decomposition* — in every subdirect embedding
-`𝑨 ↪ ⨅ 𝒜`, some coordinate projection `projᵢ ∘ h` is an isomorphism.  This module ties
-[Setoid.Congruences.Monolith][] to [Setoid.Subalgebras.Subdirect.Basic][], proving the
-constructive direction in full and recording the converse's cost.
+`𝑨 ↪ ⨅ 𝒜`, some coordinate projection `projᵢ ∘ h` is an isomorphism.[^1]
+
+This module ties [Setoid.Congruences.Monolith][] to
+[Setoid.Subalgebras.Subdirect.Basic][], proving the constructive direction in full
+and recording the converse's cost.
 
 The clean constructive route goes through the **kernels**.  A subdirect embedding
 `h : 𝑨 ↪ ⨅ 𝒜` is the same data as a *separating family* of congruences `θ` (with
@@ -34,39 +36,38 @@ congruence-lattice statement about separating families, where the monolith argum
 
 open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 
-module Setoid.Subalgebras.Subdirect.SI {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Subalgebras.Subdirect.Irreducible {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
-open import Agda.Primitive       using () renaming ( Set to Type )
-open import Data.Fin.Base        using ( Fin )
-open import Data.Fin.Properties  using ( ¬∀⟶∃¬ )
-open import Data.Nat.Base        using ( ℕ )
-open import Data.Product         using ( _,_ ; Σ-syntax ; ∃-syntax ; proj₁ ; proj₂ )
-open import Function             using ( id )
-open import Level                using ( Level ; _⊔_ )
-open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl )
-open import Relation.Nullary             using ( ¬_ ; Dec )
-open import Relation.Nullary.Decidable    using ( ¬? ; decidable-stable )
+open import Agda.Primitive                         using () renaming ( Set to Type )
+open import Data.Fin.Base                          using ( Fin )
+open import Data.Fin.Properties                    using ( ¬∀⟶∃¬ )
+open import Data.Nat.Base                          using ( ℕ )
+open import Data.Product                           using ( _,_ ; Σ-syntax ; ∃-syntax ; proj₁ ; proj₂ )
+open import Function                               using ( id )
+open import Level                                  using ( Level ; _⊔_ )
+open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl )
+open import Relation.Nullary                       using ( ¬_ ; Dec )
+open import Relation.Nullary.Decidable             using ( ¬? ; decidable-stable )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Setoid.Functions                    using  ( IsInjective ; IsSurjective )
-open import Setoid.Algebras              {𝑆 = 𝑆} using  ( Algebra ; ⨅ )
-open import Setoid.Congruences           {𝑆 = 𝑆} using  ( Con )
-open import Setoid.Homomorphisms         {𝑆 = 𝑆} using  ( hom ; kercon ; _≅_ ; Bijective→≅ )
-open import Setoid.Congruences.Monolith  {𝑆 = 𝑆}
-  using  ( HasMonolith ; Nonzero ; BelowDiagonal ; IsSubdirectlyIrreducible
-         ; mono-nonzero ; mono-least ; ⋂ )
+open import Setoid.Functions                       using  ( IsInjective ; IsSurjective )
+open import Setoid.Algebras              {𝑆 = 𝑆}   using  ( Algebra ; ⨅ )
+open import Setoid.Congruences           {𝑆 = 𝑆}   using  ( Con )
+open import Setoid.Homomorphisms         {𝑆 = 𝑆}   using  ( hom ; kercon ; _≅_ ; Bijective→≅ )
+open import Setoid.Congruences.Monolith  {𝑆 = 𝑆}   using  ( HasMonolith ; Nonzero ; BelowDiagonal
+                                                          ; IsSubdirectlyIrreducible
+                                                          ; mono-nonzero ; mono-least ; ⋂ )
 open import Setoid.Subalgebras.Subdirect.Basic {𝑆 = 𝑆}
-  using  ( coord ; IsSubdirectEmbedding ; SubdirectEmbedding ; Separates
-         ; embed-inj ; proj-onto )
+  using  ( coord ; IsSubdirectEmbedding ; SubdirectEmbedding ; Separates ; embed-inj ; proj-onto )
 
 private variable α ρ αᵃ ι : Level
 ```
 
-#### The kernel family of a homomorphism into a product, and the definitional bridges
+#### The kernel family of a homomorphism into a product
 
-Fix an algebra `𝑨`, a factor family `𝒜` whose relation level matches `𝑨`'s (so the
-kernels are `Con 𝑨 ρ`), and a homomorphism `h : 𝑨 → ⨅ 𝒜`.  The `i`-th **kernel** of
+Fix an algebra `𝑨`, a factor family `𝒜` whose relation level matches that of `𝑨` (so
+the kernels are `Con 𝑨 ρ`), and a homomorphism `h : 𝑨 → ⨅ 𝒜`.  The `i`-th **kernel** of
 `h` is the kernel congruence of the `i`-th coordinate map `coord 𝒜 h i = projᵢ ∘ h`.
 
 ```agda
@@ -85,11 +86,17 @@ unfold to `coordᵢ a ≈ coordᵢ b → a ≈ b`, since `BelowDiagonal (kercon 
 `IsInjective g`.
 
 ```agda
-  coord-inj→below : (i : I) → IsInjective (proj₁ (coord 𝒜 h i)) → BelowDiagonal 𝑨 (kerfam i)
-  coord-inj→below i = id
+  coord-inj→below : {i : I} → IsInjective (proj₁ (coord 𝒜 h i)) → BelowDiagonal 𝑨 (kerfam i)
+  coord-inj→below = id
 
-  below→coord-inj : (i : I) → BelowDiagonal 𝑨 (kerfam i) → IsInjective (proj₁ (coord 𝒜 h i))
-  below→coord-inj i = id
+  below→coord-inj : {i : I} → BelowDiagonal 𝑨 (kerfam i) → IsInjective (proj₁ (coord 𝒜 h i))
+  below→coord-inj = id
+
+  injective↔0kernel : {i : I} → IsInjective (proj₁ (coord 𝒜 h i)) ≡ BelowDiagonal 𝑨 (kerfam i)
+  injective↔0kernel = refl
+
+  injective⇔0kernel : (λ {i : I} → IsInjective (proj₁ (coord 𝒜 h i))) ≡ (λ {i : I} → BelowDiagonal 𝑨 (kerfam i))
+  injective⇔0kernel = refl
 ```
 
 Likewise, the injectivity of `h` itself is *definitionally* the assertion that the
@@ -102,17 +109,20 @@ to `∀ i, coordᵢ a ≈ coordᵢ b`, exactly the meet of the kernels.
 
   separates→embed : Separates kerfam → IsInjective (proj₁ h)
   separates→embed = id
+
+  embed↔separates : IsInjective (proj₁ h) ≡ Separates kerfam
+  embed↔separates = refl
+
 ```
 
-The third bridge is the only one with content: a coordinate map that is **surjective**
-(every coordinate of a subdirect embedding is) and **injective** is an isomorphism
-`𝑨 ≅ 𝒜 i`, via the generic `Bijective→≅`{.AgdaFunction} of
+The third bridge is the only one with content: a coordinate map that is surjective
+and injective is an isomorphism `𝑨 ≅ 𝒜 i`, via the generic `Bijective→≅`{.AgdaFunction} of
 [Setoid.Homomorphisms.Isomorphisms][].
 
 ```agda
-  coord-iso : (i : I) → IsSurjective (proj₁ (coord 𝒜 h i))
-                      → IsInjective (proj₁ (coord 𝒜 h i)) → 𝑨 ≅ 𝒜 i
-  coord-iso i surj inj = Bijective→≅ (coord 𝒜 h i) inj surj
+  coord-iso : {i : I}
+    → IsInjective (proj₁ (coord 𝒜 h i)) → IsSurjective (proj₁ (coord 𝒜 h i)) → 𝑨 ≅ 𝒜 i
+  coord-iso = Bijective→≅ (coord 𝒜 h _)
 ```
 
 #### The congruence-lattice forward direction
@@ -186,8 +196,7 @@ module _ {I : Type ι}{𝑨 : Algebra α ρ}{𝒜 : I → Algebra αᵃ ρ}
   -- index — see `si⇒iso-coord` below.)
   si⇒¬no-iso-coord : ¬ (∀ i → ¬ (𝑨 ≅ 𝒜 i))
   si⇒¬no-iso-coord no-iso =
-    si⇒¬all-proper (λ i below → no-iso i (coord-iso 𝒜 h i (proj-onto emb i)
-                                                          (below→coord-inj 𝒜 h i below)))
+    si⇒¬all-proper (λ i 0ker → no-iso i (coord-iso 𝒜 h (below→coord-inj 𝒜 h 0ker) (proj-onto emb i)))
 ```
 
 #### The finite witness: an explicit isomorphic coordinate
@@ -209,7 +218,7 @@ module _ {n : ℕ}{𝑨 : Algebra α ρ}{𝒜 : Fin n → Algebra αᵃ ρ}
     emb  = proj₂ sub
 
   si⇒iso-coord : IsoToFactor 𝑨 𝒜
-  si⇒iso-coord = i , coord-iso 𝒜 h i (proj-onto emb i) (below→coord-inj 𝒜 h i below)
+  si⇒iso-coord = i , coord-iso 𝒜 h (below→coord-inj 𝒜 h below) (proj-onto emb i)
     where
     -- the kernel family is not all-nonzero (the contrapositive forward direction)
     ¬all-nz : ¬ (∀ i → Nonzero 𝑨 (kerfam 𝒜 h i))
@@ -239,7 +248,7 @@ module _ {I : Type ι}{𝑨 : Algebra α ρ}{𝒜 : I → Algebra αᵃ ρ}(h : 
 
   iso-coord⟹¬all-proper :  (∃[ i ] IsInjective (proj₁ (coord 𝒜 h i)))
                         →  ¬ (∀ i → Nonzero 𝑨 (kerfam 𝒜 h i))
-  iso-coord⟹¬all-proper (i , inj) all-nz = all-nz i (coord-inj→below 𝒜 h i inj)
+  iso-coord⟹¬all-proper (i , inj) all-nz = all-nz i (coord-inj→below 𝒜 h inj)
 ```
 
 The full converse **structural ⟹ monolith** is *not* added, for the same predicativity
@@ -258,6 +267,8 @@ finite meet is again above `ρ`.  Stating the converse cleanly would need an imp
 limitation, as the forward direction is the one consumed downstream.
 
 --------------------------------------
+
+[^1]: See e.g. Burris and Sankappanavar, *A Course in Universal Algebra*, Def. II.8.3 / Thm. II.8.4.
 
 [M6-2 design note]: https://github.com/ualib/agda-algebras/blob/master/docs/notes/m6-2-subdirect.md
 

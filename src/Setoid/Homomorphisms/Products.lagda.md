@@ -9,7 +9,6 @@ author: "agda-algebras development team"
 
 This is the [Setoid.Homomorphisms.Products][] module of the [Agda Universal Algebra Library][].
 
-
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -18,17 +17,17 @@ open import Overture using (𝓞 ; 𝓥 ; Signature)
 module Setoid.Homomorphisms.Products {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library --------------------------
-open import Agda.Primitive   using () renaming ( Set to Type )
-open import Function         using () renaming ( Func to _⟶_ )
-open import Data.Product     using ( _,_ )
-open import Level            using ( Level )
-open import Relation.Binary  using ( Setoid )
-open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
+open import Agda.Primitive                         using () renaming ( Set to Type )
+open import Function                               using () renaming ( Func to _⟶_ )
+open import Data.Product                           using ( _,_ )
+open import Level                                  using ( Level )
+open import Relation.Binary                        using ( Setoid )
+open import Relation.Binary.PropositionalEquality  using ( _≡_ )
 
 -- Imports from the Agda Universal Algebras Library ----------------------
-open import Overture                             using ( proj₁ ; proj₂)
-open import Setoid.Algebras             {𝑆 = 𝑆}  using ( Algebra ; _^_ ; ⨅ ; 𝔻[_] )
-open import Setoid.Homomorphisms.Basic  {𝑆 = 𝑆}  using ( hom ; IsHom ; epi )
+open import Overture                               using ( proj₁ ; proj₂)
+open import Setoid.Algebras               {𝑆 = 𝑆}  using ( Algebra ; _^_ ; ⨅ ; 𝔻[_] )
+open import Setoid.Homomorphisms.Basic    {𝑆 = 𝑆}  using ( hom ; IsHom ; epi )
 
 open _⟶_ using ( cong )  renaming ( to to _⟨$⟩_ )
 open IsHom
@@ -36,14 +35,11 @@ open IsHom
 private variable α ρ β ρᵇ 𝓘 : Level
 ```
 
-
 Suppose we have an algebra `𝑨`, a type `I : Type 𝓘`, and a family
 `ℬ : I → Algebra β 𝑆` of algebras.  We sometimes refer to the inhabitants of `I`
-as *indices*, and call `ℬ` an *indexed family of algebras*.
-
-If in addition we have a family `𝒽 : (i : I) → hom 𝑨 (ℬ i)` of homomorphisms, then
-we can construct a homomorphism from `𝑨` to the product `⨅ ℬ` in the natural way.
-
+as *indices*, and call `ℬ` an *indexed family of algebras*.  If in addition we have a
+family `𝒽 : (i : I) → hom 𝑨 (ℬ i)` of homomorphisms, then we can construct a
+homomorphism from `𝑨` to the product `⨅ ℬ` in the natural way.
 
 ```agda
 module _ {I : Type 𝓘}{𝑨 : Algebra α ρ }(ℬ : I → Algebra β ρᵇ)  where
@@ -53,13 +49,12 @@ module _ {I : Type 𝓘}{𝑨 : Algebra α ρ }(ℬ : I → Algebra β ρᵇ)  w
   ⨅-hom-co 𝒽 = h , hhom
     where
     h : 𝔻[ 𝑨 ] ⟶ ⨅B
-    (h ⟨$⟩ a) i = (proj₁ (𝒽 i)) ⟨$⟩ a
-    cong h xy i = cong (proj₁ (𝒽 i)) xy
+    h ⟨$⟩ a = λ i → proj₁ (𝒽 i) ⟨$⟩ a
+    h .cong xy = λ i → cong (proj₁ (𝒽 i)) xy
 
     hhom : IsHom 𝑨 (⨅ ℬ) h
-    compatible hhom = λ i → compatible (proj₂ (𝒽 i))
+    hhom .compatible = λ i → compatible (proj₂ (𝒽 i))
 ```
-
 
 The family `𝒽` of homomorphisms inhabits the dependent type `Π i ꞉ I , hom 𝑨 (ℬ i)`.
 The syntax we use to represent this type is available to us because of the way `-Π`
@@ -76,7 +71,6 @@ a family of algebras. That is, if we are given `𝒜 : I → Algebra α 𝑆` an
 `𝒽 :  Π i ꞉ I , hom (𝒜 i)(ℬ i)` (a family of homomorphisms), then we can construct
 a homomorphism from `⨅ 𝒜` to `⨅ ℬ` in the following natural way.
 
-
 ```agda
 module _ {I : Type 𝓘}(𝒜 : I → Algebra α ρ) where
   open Algebra (⨅ 𝒜) using () renaming ( Domain to ⨅A )
@@ -87,14 +81,12 @@ module _ {I : Type 𝓘}(𝒜 : I → Algebra α ρ) where
     open Algebra (⨅ ℬ) using () renaming ( Domain to ⨅B )
 
     F : ⨅A ⟶ ⨅B
-    (F ⟨$⟩ x) i = (proj₁ (𝒽 i)) ⟨$⟩ x i
-    cong F xy i = cong (proj₁ (𝒽 i)) (xy i)
+    F ⟨$⟩ x = λ i → proj₁ (𝒽 i) ⟨$⟩ x i
+    F .cong xy = λ i → cong (proj₁ (𝒽 i)) (xy i)
 
     isHom : IsHom (⨅ 𝒜) (⨅ ℬ) F
-    compatible isHom i = compatible (proj₂ (𝒽 i))
+    isHom .compatible = λ i → compatible (proj₂ (𝒽 i))
 ```
-
-
 
 #### Projection out of products
 
@@ -109,10 +101,10 @@ The projection of a product algebra onto its `i`-th factor is a homomorphism.
 
     F : ⨅A ⟶ Ai
     F ⟨$⟩ x = x i
-    cong F xy = xy i
+    F .cong xy = xy i
 
     isHom : IsHom (⨅ 𝒜) (𝒜 i) F
-    compatible isHom {f} {a} = refli
+    isHom .compatible = refli
 ```
 
 We could prove a more general result involving projections onto multiple factors, but
