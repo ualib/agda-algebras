@@ -43,7 +43,7 @@ open import Agda.Primitive                         using () renaming ( Set to Ty
 open import Data.Fin.Base                          using ( Fin )
 open import Data.Fin.Properties                    using ( ¬∀⟶∃¬ )
 open import Data.Nat.Base                          using ( ℕ )
-open import Data.Product                           using ( _,_ ; Σ-syntax ; ∃-syntax ; proj₁ ; proj₂ )
+open import Data.Product                           using ( _,_ ; ∃-syntax ; proj₁ ; proj₂ )
 open import Function                               using ( id )
 open import Level                                  using ( Level ; _⊔_ )
 open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl )
@@ -59,7 +59,7 @@ open import Setoid.Congruences.Monolith  {𝑆 = 𝑆}   using  ( HasMonolith ; 
                                                           ; IsSubdirectlyIrreducible
                                                           ; mono-nonzero ; mono-least ; ⋂ )
 open import Setoid.Subalgebras.Subdirect.Basic {𝑆 = 𝑆}
-  using  ( coord ; IsSubdirectEmbedding ; SubdirectEmbedding ; Separates ; embed-inj ; proj-onto )
+  using  ( coord ; SubdirectEmbedding ; Separates ; embed-inj ; proj-onto )
 
 private variable α ρ αᵃ ι : Level
 ```

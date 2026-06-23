@@ -43,13 +43,12 @@ open import Setoid.Homomorphisms.Properties {𝑆 = 𝑆}
          ; FromLiftʳ ; ToFromLiftʳ ; FromToLiftʳ )
 
 open _⟶_      using ( cong ) renaming ( to to _⟨$⟩_ )
--- open Algebra  using ( Domain )
 
 private variable  α ρᵃ β ρᵇ γ ρᶜ ι : Level
 ```
 
 Recall, `f ~ g` means f and g are *extensionally* (or pointwise) equal; i.e.,
-`∀ x, f x ≡ g x`. We use this notion of equality of functions in the following
+`∀ x, f x ≡ g x`.  We use this notion of equality of functions in the following
 definition of *isomorphism*.
 
 We could define this using Sigma types, as in

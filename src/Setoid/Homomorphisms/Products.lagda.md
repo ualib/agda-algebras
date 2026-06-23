@@ -22,12 +22,11 @@ open import Function                               using () renaming ( Func to _
 open import Data.Product                           using ( _,_ )
 open import Level                                  using ( Level )
 open import Relation.Binary                        using ( Setoid )
-open import Relation.Binary.PropositionalEquality  using ( _≡_ )
 
 -- Imports from the Agda Universal Algebras Library ----------------------
 open import Overture                               using ( proj₁ ; proj₂)
-open import Setoid.Algebras               {𝑆 = 𝑆}  using ( Algebra ; _^_ ; ⨅ ; 𝔻[_] )
-open import Setoid.Homomorphisms.Basic    {𝑆 = 𝑆}  using ( hom ; IsHom ; epi )
+open import Setoid.Algebras               {𝑆 = 𝑆}  using ( Algebra ; ⨅ ; 𝔻[_] )
+open import Setoid.Homomorphisms.Basic    {𝑆 = 𝑆}  using ( hom ; IsHom )
 
 open _⟶_ using ( cong )  renaming ( to to _⟨$⟩_ )
 open IsHom
