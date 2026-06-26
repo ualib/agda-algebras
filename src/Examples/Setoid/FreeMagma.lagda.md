@@ -36,7 +36,8 @@ open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl ; cong�
 
 -- Imports from the Agda Universal Algebra Library -----------------------------
 open import Classical.Signatures.Magma             using ( Sig-Magma ; ∙-Op )
-open import Overture                               using ( proj₁ ; OperationSymbolsOf ; ArityOf )
+open import Overture                               using ( proj₁ ; ArityOf )
+open import Overture.Operations                    using ( Op )
 open import Overture.Terms        {𝑆 = Sig-Magma}  using ( Term ; ℊ ; node )
 open import Setoid.Algebras       {𝑆 = Sig-Magma}  using ( Algebra ; mkAlgebraₚ )
 open import Setoid.Homomorphisms  {𝑆 = Sig-Magma}  using ( hom )
@@ -96,11 +97,10 @@ Only `f`{.AgdaBound} and `cong-f`{.AgdaBound} remain of the longhand
 ℕ∸-magma = mkAlgebraₚ ℕ f cong-f
   where
   -- the single binary operation symbol, interpreted as truncated subtraction
-  f : (o : OperationSymbolsOf Sig-Magma) → (ArityOf Sig-Magma o → ℕ) → ℕ
+  f : ∀ o → Op (ArityOf Sig-Magma o) ℕ
   f ∙-Op args = args 0F ∸ args 1F
   -- ∸ respects pointwise equality of its two arguments (the only obligation left)
-  cong-f : (o : OperationSymbolsOf Sig-Magma){u v : ArityOf Sig-Magma o → ℕ}
-         → (∀ i → u i ≡ v i) → f o u ≡ f o v
+  cong-f : ∀ o → {u v : ArityOf Sig-Magma o → ℕ} → (∀ i → u i ≡ v i) → f o u ≡ f o v
   cong-f ∙-Op args≈ = cong₂ _∸_ (args≈ 0F) (args≈ 1F)
 ```
 
