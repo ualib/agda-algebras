@@ -94,8 +94,11 @@ We can show that the two means of construction result in the same algebra, up to
 open _≅_
 open IsHom
 ℕ+-monoid-≅ : ℕ+-monoid ≅ ℕ+-monoid'
-ℕ+-monoid-≅ = mkiso 𝒾𝒹 {!!} {!!} {!!}
+ℕ+-monoid-≅ = mkiso 𝒾𝒹 𝒾𝒹' (λ _ → refl) (λ _ → refl)
   where
+  -- Both algebras carry (ℕ, ≡) and interpret each operation symbol identically,
+  -- so the identity map is a homomorphism in each direction and the two round
+  -- trips hold on the nose.
   hmap : 𝔻[ ℕ+-monoid ] ⟶ 𝔻[ ℕ+-monoid' ]
   hmap ⟨$⟩ x = x
   hmap .≈cong refl = refl
@@ -103,6 +106,14 @@ open IsHom
   𝒾𝒹 .proj₁ = hmap
   𝒾𝒹 .Overture.proj₂ .compatible {∙-Op} = refl
   𝒾𝒹 .Overture.proj₂ .compatible {ε-Op} = refl
+
+  hmap' : 𝔻[ ℕ+-monoid' ] ⟶ 𝔻[ ℕ+-monoid ]
+  hmap' ⟨$⟩ x = x
+  hmap' .≈cong refl = refl
+  𝒾𝒹' : hom ℕ+-monoid' ℕ+-monoid
+  𝒾𝒹' .proj₁ = hmap'
+  𝒾𝒹' .Overture.proj₂ .compatible {∙-Op} = refl
+  𝒾𝒹' .Overture.proj₂ .compatible {ε-Op} = refl
 ```
 
 

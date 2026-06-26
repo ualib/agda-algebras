@@ -147,6 +147,46 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
 ≅fromInjective φ = ≅toInjective (≅-sym φ)
 ```
 
+
+#### Direct construction versus the smart constructor
+
+Building an algebra directly (as a `record` whose `Interp` field is written out by
+hand) and building one with the `mkAlgebra`{.AgdaFunction} smart constructor of
+[Setoid.Algebras.Basic][] produce *isomorphic* algebras, provided the two agree on
+their carrier and their operations.  The witnessing isomorphism is the identity map:
+the only content is that the operations match, so the homomorphism condition in each
+direction is exactly the pointwise hypothesis `ops≈` (read forwards, then backwards).
+
+Concretely, an algebra `𝑨`{.AgdaBound} is isomorphic to the algebra
+`mkAlgebra 𝔻[ 𝑨 ] f cong-f` built on `𝑨`{.AgdaBound}'s *own* domain from any
+operations `f`{.AgdaBound} that agree with `𝑨`{.AgdaBound}'s interpretation pointwise.
+The bespoke `cong-f`{.AgdaBound} demanded by the smart constructor plays no role in the
+isomorphism — only the operations do — so it is accepted but never inspected.
+
+```agda
+module _ {𝑨 : Algebra α ρᵃ} where
+ open Setoid (Domain 𝑨) using ( _≈_ ; refl ; sym )
+
+ ≅-mkAlgebra : (f : (o : OperationSymbolsOf 𝑆) → Op (ArityOf 𝑆 o) 𝕌[ 𝑨 ])
+               (cong-f : ∀ o {u v : ArityOf 𝑆 o → 𝕌[ 𝑨 ]} → (∀ i → u i ≈ v i) → f o u ≈ f o v)
+             → (∀ o a → (o ^ 𝑨) a ≈ f o a)
+             → 𝑨 ≅ mkAlgebra (Domain 𝑨) f cong-f
+ ≅-mkAlgebra f cong-f ops≈ =
+   mkiso  (idF , mkIsHom λ {o}{a} → ops≈ o a)
+          (idF , mkIsHom λ {o}{a} → sym (ops≈ o a))
+          (λ _ → refl) (λ _ → refl)
+   where
+   -- the identity map on 𝑨's carrier, as a setoid function
+   idF : Domain 𝑨 ⟶ Domain 𝑨
+   idF ⟨$⟩ x   = x
+   idF .cong x≈y = x≈y
+```
+
+Since the source `𝑨`{.AgdaBound} is arbitrary, it may itself be a smart-constructor
+algebra: instantiating `≅-mkAlgebra`{.AgdaFunction} at `𝑨 = mkAlgebra (Domain 𝑨) g cong-g`
+shows directly that two `mkAlgebra`{.AgdaFunction} algebras on the same domain with
+pointwise-equal operations are isomorphic, with no extra work.
+
 #### A bijective homomorphism is an isomorphism
 
 A homomorphism that is both injective and surjective is an isomorphism.  The witness
