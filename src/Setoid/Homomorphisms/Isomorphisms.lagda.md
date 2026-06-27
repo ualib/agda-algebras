@@ -31,7 +31,8 @@ open import Relation.Binary.PropositionalEquality as ≡ using ()
 open import Overture                            using  ( OperationSymbolsOf ; ArityOf )
 open import Overture.Operations                 using  ( Op )
 open import Setoid.Functions                    using  ( _⊙_ ; eq ; IsInjective
-                                                       ; IsSurjective )
+                                                       ; IsSurjective ; SurjInv
+                                                       ; SurjInvIsInverseʳ )
 open import Setoid.Algebras {𝑆 = 𝑆}             using  ( Algebra ; Lift-Alg ; _^_ ; 𝔻[_]
                                                        ; 𝕌[_] ; mkAlgebra ; Lift-Algˡ
                                                        ; Lift-Algʳ ; ⨅ )
@@ -191,6 +192,50 @@ Since the source `𝑨`{.AgdaBound} is arbitrary, it may itself be a smart-const
 algebra: instantiating `≅-mkAlgebra`{.AgdaFunction} at `𝑨 = mkAlgebra 𝔻[ 𝑨 ] g cong-g`
 shows directly that two `mkAlgebra`{.AgdaFunction} algebras on the same domain with
 pointwise-equal operations are isomorphic, with no extra work.
+
+#### A bijective homomorphism is an isomorphism
+
+A homomorphism that is both injective and surjective is an isomorphism.  The witness
+is the surjective right inverse `g = SurjInv h`, which is a *two-sided* inverse because
+`h` is injective; and `g` is again a homomorphism — to see `g (f b) ≈ f (g ∘ b)` it
+suffices, by injectivity of `h`, to compare the `h`-images, where `h ∘ g` cancels.
+This is the converse of `≅toInjective`/`toIsSurjective` and lets one promote a
+bijective `hom` to an `_≅_` without exhibiting the inverse homomorphism by hand.
+
+```agda
+module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
+  open Algebra using ( Interp )
+  open IsHom
+
+  Bijective→≅ :  (h : hom 𝑨 𝑩) → IsInjective (proj₁ h) → IsSurjective (proj₁ h) → 𝑨 ≅ 𝑩
+  Bijective→≅ h hM hE = mkiso h (g , gHom) (λ _ → invʳ) (λ _ → hM invʳ)
+    where
+    open Setoid 𝔻[ 𝑨 ]  using () renaming ( _≈_ to _≈₁_ )
+    open Setoid 𝔻[ 𝑩 ]  using ( sym ; trans ) renaming ( _≈_ to _≈₂_ )
+
+    hf : 𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]
+    hf = proj₁ h
+
+    -- the surjective right inverse of h, made two-sided by injectivity
+    ginv : 𝕌[ 𝑩 ] → 𝕌[ 𝑨 ]
+    ginv = SurjInv hf hE
+
+    invʳ : ∀ {b} → hf ⟨$⟩ (ginv b) ≈₂ b
+    invʳ = SurjInvIsInverseʳ hf hE
+
+    -- ginv preserves setoid equality: pull b₀ ≈ b₁ back through h and cancel h ∘ ginv
+    gcong : ∀ {b₀ b₁} → b₀ ≈₂ b₁ → ginv b₀ ≈₁ ginv b₁
+    gcong b₀≈b₁ = hM (trans invʳ (trans b₀≈b₁ (sym invʳ)))
+
+    g : 𝔻[ 𝑩 ] ⟶ 𝔻[ 𝑨 ]
+    g = record { to = ginv ; cong = gcong }
+
+    -- ginv is a homomorphism: compare h-images (h injective) and cancel h ∘ ginv
+    gHom : IsHom 𝑩 𝑨 g
+    compatible gHom {f}{b} =
+     hM (trans invʳ (sym (trans (compatible (proj₂ h))
+                                (cong (Interp 𝑩) (≡.refl , λ _ → invʳ)))))
+```
 
 Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic
 invariant*). As our focus is universal algebra, this is important and is what
