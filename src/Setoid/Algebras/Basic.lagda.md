@@ -114,7 +114,7 @@ _̂_ : (f : OperationSymbolsOf 𝑆)(𝑨 : Algebra α ρ) → Op (ArityOf 𝑆 
 f ̂ 𝑨 = λ a → (Interp 𝑨) ⟨$⟩ (f , a)
 {-# WARNING_ON_USAGE _̂_
 "The combining-caret notation `_̂_` is deprecated as of v3.0 and will be removed
-in v3.1.  Use the ASCII `_^_` defined immediately below.  See ADR-002 §7."
+in v3.1.  Use the ASCII `_^_` defined immediately above.  See ADR-002 §7."
 #-}
 ```
 

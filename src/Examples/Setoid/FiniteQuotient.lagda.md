@@ -31,7 +31,6 @@ module Examples.Setoid.FiniteQuotient where
 open import Agda.Primitive    using () renaming ( Set to Type )
 open import Data.Fin.Patterns using ( 0F ; 1F )
 open import Data.Nat          using ( ℕ ; _+_ ; _%_ )
-open import Data.Product      using ( _,_ ; Σ ; Σ-syntax )
 open import Data.Nat.DivMod   using ( %-distribˡ-+ )
 open import Function          using () renaming ( Func to _⟶_)
 open import Level             using ( 0ℓ )
@@ -43,7 +42,7 @@ open import Relation.Nullary  using ( ¬_ )
 -- Imports from the Agda Universal Algebra Library -----------------------------
 open import Classical.Signatures.Monoid          using ( Sig-Monoid ; ∙-Op ; ε-Op )
 open import Overture                             using ( ArityOf ; Op )
-open import Setoid.Algebras {𝑆 = Sig-Monoid}     using ( Algebra ; 𝔻[_] ; mkAlgebraₚ )
+open import Setoid.Algebras {𝑆 = Sig-Monoid}     using ( Algebra ; 𝔻[_] ; mkAlgebraₚ ; _,_ )
 open import Setoid.Congruences {𝑆 = Sig-Monoid}  using ( Con ; _∣≈_ ; _╱_ )
 open import Setoid.Homomorphisms.Isomorphisms    using (_≅_ ; ≅-mkAlgebra)
 open import Setoid.Signatures                    using ( ⟨_⟩ )
@@ -71,14 +70,13 @@ misleading "`∙-Op` is not a constructor of the datatype … `Σ`" error.
 ```
 
 Alternatively, we can use the `mkAlgebraₚ`{.AgdaFunction} smart constructor to make
-the difinition slightly less tedious.
+the definition slightly less tedious.
 
 First define interpretations of the operations and the congruence proof that the operations respect equality.
 
 ```agda
--- the operations of the monoid (ℕ, +, 0)
--- (shared by the smart-constructor
--- and the isomorphism proof below.
+-- the operations of the monoid (ℕ, +, 0), shared by the smart-constructor
+-- build below and by the isomorphism proof
 f : ∀ o → Op (ArityOf Sig-Monoid o) ℕ
 f ∙-Op args = args 0F + args 1F
 f ε-Op _    = 0
