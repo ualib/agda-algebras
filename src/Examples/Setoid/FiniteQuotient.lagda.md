@@ -42,12 +42,10 @@ open import Relation.Nullary  using ( ¬_ )
 
 -- Imports from the Agda Universal Algebra Library -----------------------------
 open import Classical.Signatures.Monoid          using ( Sig-Monoid ; ∙-Op ; ε-Op )
-open import Overture                             using ( proj₁ ; ArityOf )
-open import Overture.Operations                  using ( Op )
+open import Overture                             using ( ArityOf ; Op )
 open import Setoid.Algebras {𝑆 = Sig-Monoid}     using ( Algebra ; 𝔻[_] ; mkAlgebraₚ )
 open import Setoid.Congruences {𝑆 = Sig-Monoid}  using ( Con ; _∣≈_ ; _╱_ )
-open import Setoid.Homomorphisms.Basic           using (hom ; IsHom)
-open import Setoid.Homomorphisms.Isomorphisms    using (_≅_ ; mkiso)
+open import Setoid.Homomorphisms.Isomorphisms    using (_≅_ ; ≅-mkAlgebra)
 open import Setoid.Signatures                    using ( ⟨_⟩ )
 
 open _⟶_ renaming ( to to _⟨$⟩_ ; cong to ≈cong )
@@ -72,50 +70,35 @@ misleading "`∙-Op` is not a constructor of the datatype … `Σ`" error.
   interp .≈cong {ε-Op , _} {.ε-Op , _} (refl , _) = refl
 ```
 
-Alternatively, we can use the `mkAlgebraₚ`{.AgdaFunction} smart constructor to makes
+Alternatively, we can use the `mkAlgebraₚ`{.AgdaFunction} smart constructor to make
 the difinition slightly less tedious.
 
-```agda
-ℕ+-monoid' : Algebra 0ℓ 0ℓ
-ℕ+-monoid' = mkAlgebraₚ ℕ f cong-f
-  where
-  f : ∀ o → Op (ArityOf Sig-Monoid o) ℕ
-  f ∙-Op args = args 0F + args 1F
-  f ε-Op _ = 0
-
-  cong-f : ∀ o → {u v : ArityOf Sig-Monoid o → ℕ} → (∀ i → u i ≡ v i) → f o u ≡ f o v
-  cong-f ∙-Op ui≡vi  = cong₂ _+_ (ui≡vi 0F) (ui≡vi 1F)
-  cong-f ε-Op _ = refl
-```
-
-We can show that the two means of construction result in the same algebra, up to isomorphism.
+First define interpretations of the operations and the congruence proof that the operations respect equality.
 
 ```agda
-open _≅_
-open IsHom
-ℕ+-monoid-≅ : ℕ+-monoid ≅ ℕ+-monoid'
-ℕ+-monoid-≅ = mkiso 𝒾𝒹 𝒾𝒹' (λ _ → refl) (λ _ → refl)
-  where
-  -- Both algebras carry (ℕ, ≡) and interpret each operation symbol identically,
-  -- so the identity map is a homomorphism in each direction and the two round
-  -- trips hold on the nose.
-  hmap : 𝔻[ ℕ+-monoid ] ⟶ 𝔻[ ℕ+-monoid' ]
-  hmap ⟨$⟩ x = x
-  hmap .≈cong refl = refl
-  𝒾𝒹 : hom ℕ+-monoid ℕ+-monoid'
-  𝒾𝒹 .proj₁ = hmap
-  𝒾𝒹 .Overture.proj₂ .compatible {∙-Op} = refl
-  𝒾𝒹 .Overture.proj₂ .compatible {ε-Op} = refl
+-- the operations of the monoid (ℕ, +, 0)
+-- (shared by the smart-constructor
+-- and the isomorphism proof below.
+f : ∀ o → Op (ArityOf Sig-Monoid o) ℕ
+f ∙-Op args = args 0F + args 1F
+f ε-Op _    = 0
 
-  hmap' : 𝔻[ ℕ+-monoid' ] ⟶ 𝔻[ ℕ+-monoid ]
-  hmap' ⟨$⟩ x = x
-  hmap' .≈cong refl = refl
-  𝒾𝒹' : hom ℕ+-monoid' ℕ+-monoid
-  𝒾𝒹' .proj₁ = hmap'
-  𝒾𝒹' .Overture.proj₂ .compatible {∙-Op} = refl
-  𝒾𝒹' .Overture.proj₂ .compatible {ε-Op} = refl
+cong-f : ∀ o → {u v : ArityOf Sig-Monoid o → ℕ} → (∀ i → u i ≡ v i) → f o u ≡ f o v
+cong-f ∙-Op ui≡vi = cong₂ _+_ (ui≡vi 0F) (ui≡vi 1F)
+cong-f ε-Op _     = refl
 ```
 
+Constructing the algebra with `mkAlgebraₚ` results in an algebra that is isomorphic
+to the algebra `ℕ+-monoid` defined above.
+
+```agda
+ℕ+-monoid-≅ : ℕ+-monoid ≅ mkAlgebraₚ ℕ f cong-f
+ℕ+-monoid-≅ = ≅-mkAlgebra f cong-f λ { ∙-Op _ → refl ; ε-Op _ → refl }
+```
+
+Both algebras carry `(ℕ, ≡)` and interpret each operation symbol identically,
+so the identity map is a homomorphism in each direction and the two round
+trips hold on the nose.
 
 #### The parity congruence
 
