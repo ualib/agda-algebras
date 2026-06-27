@@ -18,83 +18,83 @@ open import Overture using (𝓞 ; 𝓥 ; Signature )
 module Setoid.Homomorphisms.Basic {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ------------------------------
-open import Agda.Primitive    using () renaming ( Set to Type )
-open import Data.Product      using ( _,_ ; Σ ; Σ-syntax )
-open import Function.Bundles  using () renaming ( Func to _⟶_ )
-open import Level             using ( Level ; _⊔_ )
-open import Relation.Binary   using ( Setoid )
+open import Agda.Primitive           using () renaming ( Set to Type )
+open import Data.Product             using ( _,_ ; Σ ; Σ-syntax )
+open import Function.Bundles         using () renaming ( Func to _⟶_ )
+open import Level                    using ( Level ; _⊔_ )
+open import Relation.Binary          using ( Setoid )
 
 -- Imports from the Agda Universal Algebra Library ---------------------------
-open import Overture          using ( proj₁ ; proj₂ ; OperationSymbolsOf )
-open import Setoid.Functions  using ( IsInjective ; IsSurjective )
-
-open import Setoid.Algebras {𝑆 = 𝑆} using ( Algebra ; _^_ )
+open import Overture                 using ( proj₁ ; proj₂ ; OperationSymbolsOf )
+open import Setoid.Functions         using ( IsInjective ; IsSurjective )
+open import Setoid.Algebras {𝑆 = 𝑆}  using ( Algebra ; _^_ ; 𝔻[_])
 
 private variable α β ρᵃ ρᵇ : Level
 
 module _ (𝑨 : Algebra α ρᵃ)(𝑩 : Algebra β ρᵇ) where
- open Algebra 𝑨  using() renaming (Domain to A )
- open Algebra 𝑩  using() renaming (Domain to B )
- open Setoid A   using() renaming ( _≈_ to _≈₁_ )
- open Setoid B   using() renaming ( _≈_ to _≈₂_ )
+  open _⟶_ {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝔻[ 𝑨 ]}{To = 𝔻[ 𝑩 ]} renaming (to to _⟨$⟩_ )
 
- open _⟶_ {a = α}{ρᵃ}{β}{ρᵇ}{From = A}{To = B} renaming (to to _⟨$⟩_ )
+  compatible-map-op : (𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]) → OperationSymbolsOf 𝑆 → Type (𝓥 ⊔ α ⊔ ρᵇ)
+  compatible-map-op h f =  ∀ {a} → h ⟨$⟩ (f ^ 𝑨) a ≈₂ (f ^ 𝑩) λ x → h ⟨$⟩ a x
+    where open Setoid 𝔻[ 𝑩 ] using() renaming ( _≈_ to _≈₂_ )
 
- compatible-map-op : (A ⟶ B) → OperationSymbolsOf 𝑆 → Type (𝓥 ⊔ α ⊔ ρᵇ)
- compatible-map-op h f =  ∀ {a} → h ⟨$⟩ (f ^ 𝑨) a ≈₂ (f ^ 𝑩) λ x → h ⟨$⟩ a x
+  compatible-map : (𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]) → Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵇ)
+  compatible-map h = ∀ {f} → compatible-map-op h f
 
- compatible-map : (A ⟶ B) → Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵇ)
- compatible-map h = ∀ {f} → compatible-map-op h f
+  -- The property of being a homomorphism.
+  record IsHom (h : 𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]) : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ ⊔ ρᵇ) where
+    constructor mkIsHom
+    field compatible : compatible-map h
 
- -- The property of being a homomorphism.
- record IsHom (h : A ⟶ B) : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ ⊔ ρᵇ) where
-  constructor mkIsHom
-  field compatible : compatible-map h
+  hom : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
+  hom = Σ (𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]) IsHom
 
- hom : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
- hom = Σ (A ⟶ B) IsHom
+  -- Smart constructor for a homomorphism: bundle a setoid map with its
+  -- compatibility proof, hiding the Σ / IsHom plumbing.
+  mkhom : (h : 𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]) → compatible-map h → hom
+  mkhom h c = h , mkIsHom c
 ```
 
 #### Monomorphisms and epimorphisms
 
 ```agda
- record IsMon (h : A ⟶ B) : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ) where
-  field
-   isHom : IsHom h
-   isInjective : IsInjective h
+  record IsMon (h : 𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]) : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ) where
+    field
+      isHom : IsHom h
+      isInjective : IsInjective h
 
-  HomReduct : hom
-  HomReduct = h , isHom
+    HomReduct : hom
+    HomReduct = h , isHom
 
- mon : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
- mon = Σ (A ⟶ B) IsMon
+  mon : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
+  mon = Σ (𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]) IsMon
 
- mon→hom : mon → hom
- mon→hom h = IsMon.HomReduct (proj₂ h)
+  mon→hom : mon → hom
+  mon→hom h = IsMon.HomReduct (proj₂ h)
 
- record IsEpi (h : A ⟶ B) : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ) where
-  field
-   isHom : IsHom h
-   isSurjective : IsSurjective h
+  record IsEpi (h : 𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]) : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ) where
+    field
+      isHom : IsHom h
+      isSurjective : IsSurjective h
 
-  HomReduct : hom
-  HomReduct = h , isHom
+    HomReduct : hom
+    HomReduct = h , isHom
 
- epi : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
- epi = Σ (A ⟶ B) IsEpi
+  epi : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
+  epi = Σ (𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]) IsEpi
 
- epi→hom : epi → hom
- epi→hom h = IsEpi.HomReduct (proj₂ h)
+  epi→hom : epi → hom
+  epi→hom h = IsEpi.HomReduct (proj₂ h)
 
 module _ (𝑨 : Algebra α ρᵃ)(𝑩 : Algebra β ρᵇ) where
- open IsEpi
- open IsMon
+  open IsEpi
+  open IsMon
 
- mon→intohom : mon 𝑨 𝑩 → Σ[ h ∈ hom 𝑨 𝑩 ] IsInjective (proj₁ h)
- mon→intohom (hh , hhM) = (hh , isHom hhM) , isInjective hhM
+  mon→intohom : mon 𝑨 𝑩 → Σ[ h ∈ hom 𝑨 𝑩 ] IsInjective (proj₁ h)
+  mon→intohom (hh , hhM) = (hh , isHom hhM) , isInjective hhM
 
- epi→ontohom : epi 𝑨 𝑩 → Σ[ h ∈ hom 𝑨 𝑩 ] IsSurjective (proj₁ h)
- epi→ontohom (hh , hhE) = (hh , isHom hhE) , isSurjective hhE
+  epi→ontohom : epi 𝑨 𝑩 → Σ[ h ∈ hom 𝑨 𝑩 ] IsSurjective (proj₁ h)
+  epi→ontohom (hh , hhE) = (hh , isHom hhE) , isSurjective hhE
 ```
 
 

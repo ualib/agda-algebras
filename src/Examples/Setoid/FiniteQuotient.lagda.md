@@ -12,11 +12,11 @@ This is the [Examples.Setoid.FiniteQuotient][] module of the [Agda Universal Alg
 
 The quotient of an algebra by a congruence is one of the central constructions of
 universal algebra; in the Setoid development it is the operation `_╱_`{.AgdaFunction}
-of [Setoid.Congruences][].  This module takes the quotient of the
-commutative monoid `(ℕ, +, 0)` modulo the *parity* congruence
-`a ∼ b ⟺ a % 2 ≡ b % 2`{.AgdaFunction}.  The result is a genuinely *finite*
-quotient: it has exactly two congruence classes, even and odd, and its induced
-operation is addition modulo `2` — i.e. the two-element group `ℤ/2ℤ`.
+of [Setoid.Congruences][].  This module takes the quotient of the commutative monoid
+`(ℕ, +, 0)` modulo the *parity* congruence `a ∼ b ⟺ a % 2 ≡ b % 2`{.AgdaFunction}.
+The result is a genuinely *finite* quotient: it has exactly two congruence classes,
+even and odd, and its induced operation is addition modulo `2` — i.e. the two-element
+group `ℤ/2ℤ`.
 
 (Incidentally, the monoid `(ℕ, +, 0)` that we use here is the same one that appears in
 [Examples.Classical.CommutativeMonoid][]; it is rebuilt here directly over
@@ -32,35 +32,71 @@ open import Agda.Primitive    using () renaming ( Set to Type )
 open import Data.Fin.Patterns using ( 0F ; 1F )
 open import Data.Nat          using ( ℕ ; _+_ ; _%_ )
 open import Data.Nat.DivMod   using ( %-distribˡ-+ )
-open import Data.Product      using ( _,_ )
-open import Function          using ( Func )
+open import Function          using () renaming ( Func to _⟶_)
 open import Level             using ( 0ℓ )
 open import Relation.Binary   using ( Setoid ; IsEquivalence )
-open import Relation.Binary.PropositionalEquality as ≡
-                              using ( _≡_ ; refl ; cong₂ ; sym ; trans )
+open import Relation.Binary.PropositionalEquality
+                              using ( _≡_ ; setoid ; refl ; cong₂ ; sym ; trans ; cong)
 open import Relation.Nullary  using ( ¬_ )
 
 -- Imports from the Agda Universal Algebra Library -----------------------------
 open import Classical.Signatures.Monoid          using ( Sig-Monoid ; ∙-Op ; ε-Op )
-open import Setoid.Algebras {𝑆 = Sig-Monoid}     using ( Algebra ; 𝔻[_] )
+open import Overture                             using ( ArityOf ; Op )
+open import Setoid.Algebras {𝑆 = Sig-Monoid}     using ( Algebra ; 𝔻[_] ; mkAlgebraₚ ; _,_ )
 open import Setoid.Congruences {𝑆 = Sig-Monoid}  using ( Con ; _∣≈_ ; _╱_ )
-open import Setoid.Signatures                    using  ( ⟨_⟩ )
+open import Setoid.Homomorphisms.Isomorphisms    using (_≅_ ; ≅-mkAlgebra)
+open import Setoid.Signatures                    using ( ⟨_⟩ )
 
-open Func renaming ( to to _⟨$⟩_ )
+open _⟶_ renaming ( to to _⟨$⟩_ ; cong to ≈cong )
 ```
 
 #### The monoid `(ℕ, +, 0)` over `Sig-Monoid` {#the-monoid}
 
+We author this algebra *by hand*, matching the `⟨ Sig-Monoid ⟩` carrier as `(o , args)` in
+the `Interp`{.AgdaField} field.  The pair constructor `_,_` now comes straight from the
+`Setoid.Algebras` barrel (re-exported via [Setoid.Algebras.Basic][]), so no separate
+`Data.Product` import is needed — and the `(∙-Op , args)` match no longer trips the
+misleading "`∙-Op` is not a constructor of the datatype … `Σ`" error.
+
 ```agda
 ℕ+-monoid : Algebra 0ℓ 0ℓ
-ℕ+-monoid = record { Domain = ≡.setoid ℕ ; Interp = interp }
+ℕ+-monoid = record { Domain = setoid ℕ ; Interp = interp }
   where
-  interp : Func (⟨ Sig-Monoid ⟩ (≡.setoid ℕ)) (≡.setoid ℕ)
+  interp : ⟨ Sig-Monoid ⟩ (setoid ℕ) ⟶ setoid ℕ
   interp ⟨$⟩ (∙-Op , args) = args 0F + args 1F
   interp ⟨$⟩ (ε-Op , _) = 0
-  cong interp {∙-Op , _} {.∙-Op , _} (refl , args≈) = cong₂ _+_ (args≈ 0F) (args≈ 1F)
-  cong interp {ε-Op , _} {.ε-Op , _} (refl , _) = refl
+  interp .≈cong {∙-Op , _} {.∙-Op , _} (refl , args≈) = cong₂ _+_ (args≈ 0F) (args≈ 1F)
+  interp .≈cong {ε-Op , _} {.ε-Op , _} (refl , _) = refl
 ```
+
+Alternatively, we can use the `mkAlgebraₚ`{.AgdaFunction} smart constructor to make
+the definition slightly less tedious.
+
+First define interpretations of the operations and the congruence proof that the operations respect equality.
+
+```agda
+-- the operations of the monoid (ℕ, +, 0), shared by the smart-constructor
+-- build below and by the isomorphism proof
+f : ∀ o → Op (ArityOf Sig-Monoid o) ℕ
+f ∙-Op args = args 0F + args 1F
+f ε-Op _    = 0
+
+cong-f : ∀ o → {u v : ArityOf Sig-Monoid o → ℕ} → (∀ i → u i ≡ v i) → f o u ≡ f o v
+cong-f ∙-Op ui≡vi = cong₂ _+_ (ui≡vi 0F) (ui≡vi 1F)
+cong-f ε-Op _     = refl
+```
+
+Constructing the algebra with `mkAlgebraₚ` results in an algebra that is isomorphic
+to the algebra `ℕ+-monoid` defined above.
+
+```agda
+ℕ+-monoid-≅ : ℕ+-monoid ≅ mkAlgebraₚ ℕ f cong-f
+ℕ+-monoid-≅ = ≅-mkAlgebra f cong-f λ { ∙-Op _ → refl ; ε-Op _ → refl }
+```
+
+Both algebras carry `(ℕ, ≡)` and interpret each operation symbol identically,
+so the identity map is a homomorphism in each direction and the two round
+trips hold on the nose.
 
 #### The parity congruence
 
@@ -85,7 +121,7 @@ compatibility with the nullary `0` is immediate.
 θ-compatible ε-Op _ = refl
 
 parity : Con ℕ+-monoid 0ℓ
-parity = θ , record  { reflexive       = ≡.cong (_% 2)
+parity = θ , record  { reflexive       = cong (_% 2)
                      ; is-equivalence  = θ-isEquiv
                      ; is-compatible   = θ-compatible }
 ```
