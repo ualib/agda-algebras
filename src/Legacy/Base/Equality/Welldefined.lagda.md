@@ -1,6 +1,6 @@
 ---
 layout: default
-title : "Base.Equality.Welldefined module (The Agda Universal Algebra Library)"
+title : "Legacy.Base.Equality.Welldefined module (The Agda Universal Algebra Library)"
 date : "2021-07-25"
 author: "agda-algebras development team"
 ---
@@ -262,11 +262,3 @@ module _ {A : Type α}{B : Type β} where
  CurryListA' f a [] = f [ a ]
  CurryListA' f a (x ∷ l) = f ([ a ] ++ (x ∷ l))
 ```
-
-
--------------------------------------
-
-<span style="float:left;">[↑ Equality](Base.Equality.html)</span>
-<span style="float:right;">[Base.Equality.Truncation →](Base.Equality.Truncation.html)</span>
-
-{% include UALib.Links.md %}

@@ -45,7 +45,7 @@ Each module in the library begins with a pragma line of the form
 #### Agda modules
 
 The `OPTIONS` pragma is usually followed by the start of a module.  For example,
-the [Base.Functions.Basic][] module begins with the following line, and then a
+the [Legacy.Base.Functions.Basic][] module begins with the following line, and then a
 list of imports of things used in the module.
 
 ```agda
@@ -192,8 +192,8 @@ difficult to convince Agda that a program or proof is correct.
 
 Here we describe a general `Lift` type that help us overcome the technical issue
 described in the previous subsection.  In the [Lifts of algebras
-section](Base.Algebras.Basic.html#lifts-of-algebras) of the
-[Base.Algebras.Basic][] module we will define a couple domain-specific lifting
+section](/Legacy/Base/Algebras/Basic/#lifts-of-algebras) of the
+[Legacy.Base.Algebras.Basic][] module we will define a couple domain-specific lifting
 types which have certain properties that make them useful for resolving universe
 level problems when working with algebra types.
 
@@ -239,7 +239,7 @@ The proofs are trivial. Nonetheless, we'll come across some holes these lemmas c
 We conclude this module with a definition that conveniently represents te assertion
 that two functions are (extensionally) the same in the sense that they produce
 the same output when given the same input.  (We will have more to say about
-this notion of equality in the [Base.Equality.Extensionality][] module.)
+this notion of equality in the [Legacy.Base.Equality.Extensionality][] module.)
 
 ```agda
 module _ {a : Level}{A : Type a}{b : Level}{B : A → Type b } where
@@ -287,12 +287,3 @@ infix 1 _⇔_
 The standard library's `_⇔_` is the bundled `Function.Bundles.Equivalence` record,
 carrying congruence proofs; here the lighter logical equivalence — a pair of
 functions — is all that simple `Type`-level statements require.)
-
-------------------------------
-
-<span style="float:left;">[← Overture.Preface](Overture.Preface.html)</span>
-<span style="float:right;">[Overture.Signatures →](Overture.Signatures.html)</span>
-
-{% include UALib.Links.md %}
-
-

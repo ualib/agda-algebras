@@ -72,7 +72,3 @@ Unfolding the distributivity builders (per [`Classical.Equations`][]):
 
 — i.e. `x ∧ (y ∨ z) ≈ (x ∧ y) ∨ (x ∧ z)` — and `∨-distribˡ` is its dual
 `x ∨ (y ∧ z) ≈ (x ∨ y) ∧ (x ∨ z)`.
-
---------------------------------------
-
-{% include UALib.Links.md %}

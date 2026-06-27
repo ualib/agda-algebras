@@ -249,10 +249,3 @@ because `I` is `ℓ₀`-small.
    ; ⨅-greatest       = ⨅-greatest
    }
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Setoid.Subalgebras.Subuniverses](Setoid.Subalgebras.Subuniverses.html)</span>
-<span style="float:right;">[Setoid.Subalgebras.Basic →](Setoid.Subalgebras.Basic.html)</span>
-
-{% include UALib.Links.md %}

@@ -183,10 +183,3 @@ module _ {A : Type a}{I : Type 𝓦}{f : Op I A}{R : BinRel A ρ} where
  |:→preserves : f |: R → f preserves R
  |:→preserves c = λ u v Ruv → c Ruv
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Overture.Operations](Overture.Operations.html)</span>
-<span style="float:right;">[Overture.Functions →](Overture.Functions.html)</span>
-
-{% include UALib.Links.md %}

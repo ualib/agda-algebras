@@ -28,11 +28,3 @@ open import Setoid.Terms.Translation         public
 (The two-signature modules [Setoid.Terms.Translation][] and
 [Setoid.Terms.Interpretation][] relate two signatures at once, so they are not
 `{𝑆}`-parameterized; they are nonetheless re-exported here for convenience.)
-
-
---------------------------------
-
-<span style="float:left;">[← Setoid.Homomorphisms.HomomorphicImages](Setoid.Homomorphisms.HomomorphicImages.html)</span>
-<span style="float:right;">[Setoid.Terms.Basic →](Setoid.Terms.Basic.html)</span>
-
-{% include UALib.Links.md %}

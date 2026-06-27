@@ -91,7 +91,3 @@ module _ {S : stdlib-Semilattice α ρ} where
   roundtrip-bcb-sl : (a b : A) → a ∙ b ≈ a ∙' b
   roundtrip-bcb-sl a b = refl
 ```
-
---------------------------------------
-
-{% include UALib.Links.md %}

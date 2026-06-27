@@ -339,10 +339,3 @@ eqsToGroup _·_ e i ·-assoc ·-idˡ ·-idʳ ·-invˡ ·-invʳ = opsToBareGroup 
   proof invˡ  ρ = ·-invˡ  (ρ 0F)
   proof invʳ  ρ = ·-invʳ  (ρ 0F)
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Classical.Structures.Monoid](Classical.Structures.Monoid.html)</span>
-<span style="float:right;">[Classical.Structures.AbelianGroup →](Classical.Structures.AbelianGroup.html)</span>
-
-{% include UALib.Links.md %}

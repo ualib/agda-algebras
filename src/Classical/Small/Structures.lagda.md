@@ -33,9 +33,3 @@ open import Classical.Small.Structures.Ring public
 open import Classical.Small.Structures.Semigroup public
 open import Classical.Small.Structures.Semilattice public
 ```
-
---------------------------------------
-
-<span style="float:left;">[↑ Classical.Small](Classical.Small.html)</span>
-
-{% include UALib.Links.md %}

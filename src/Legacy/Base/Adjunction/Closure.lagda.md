@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Adjunction.Closure module (The Agda Universal Algebra Library)"
+title : "Legacy.Base.Adjunction.Closure module (The Agda Universal Algebra Library)"
 date : "2021-08-30"
 author: "agda-algebras development team"
 ---
 
 ### <a id="closure-systems">Closure Systems and Operators</a>
 
-This is the [Base.Adjunction.Closure][] module of the [Agda Universal Algebra Library][].
+This is the [Legacy.Base.Adjunction.Closure][] module of the [Agda Universal Algebra Library][].
 
 
 ```agda
@@ -169,10 +169,3 @@ module _ {𝑨 : Poset ℓ ℓ₁ ℓ₂} where
 {-# WARNING_ON_USAGE clop→law⇐       "Use Overture.Adjunction.Closure.clop→law⇐ instead. Deprecated under #305; removal planned one minor cycle later." #-}
 {-# WARNING_ON_USAGE clop←law        "Use Overture.Adjunction.Closure.clop←law instead. Deprecated under #305; removal planned one minor cycle later." #-}
 ```
-
-----------------------------
-
-<span style="float:left;">[↑ Base.Adjunction](Base.Adjunction.html)</span>
-<span style="float:right;">[Base.Adjunction.Galois →](Base.Adjunction.Galois.html)</span>
-
-{% include UALib.Links.md %}

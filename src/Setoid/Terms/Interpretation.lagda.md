@@ -233,7 +233,3 @@ module _
   ✦-∘ (node f ts) = ≐-isTrans  (graft-cong (J ✦ I f) (✦-∘ ∘ ts))
                                (≐-isSym (✦-graft (I f) (λ i → I ✦ ts i)))
 ```
-
---------------------------------------
-
-{% include UALib.Links.md %}

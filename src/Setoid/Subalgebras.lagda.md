@@ -23,11 +23,3 @@ open import Setoid.Subalgebras.Properties {𝑆 = 𝑆} public
 open import Setoid.Subalgebras.Subuniverses {𝑆 = 𝑆} public
 open import Setoid.Subalgebras.Subdirect {𝑆 = 𝑆} public
 ```
-
-
----------------------------------
-
-<span style="float:left;">[← Setoid.Terms.Properties](Setoid.Terms.Properties.html)</span>
-<span style="float:right;">[Setoid.Subalgebras.Subuniverses →](Setoid.Subalgebras.Subuniverses.html)</span>
-
-{% include UALib.Links.md %}

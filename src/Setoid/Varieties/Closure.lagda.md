@@ -325,11 +325,3 @@ module _ {α ρᵃ : Level} where
       goal2 : Lift-Alg 𝑨 γ ρᶜ ≅ ⨅ (λ x → Lift-Alg (𝒜 x) γ ρᶜ)
       goal2 = ≅-trans (≅-sym Lift-≅) (≅-trans A≅⨅𝒜 (⨅≅⨅ℓρ{ℓ = γ}{ρ = ρᶜ}))
 ```
-
---------------------------------
-
-<span style="float:left;">[← Setoid.Varieties.SoundAndComplete](Setoid.Varieties.SoundAndComplete.html)</span>
-<span style="float:right;">[Setoid.Varieties.Properties →](Setoid.Varieties.Properties.html)</span>
-
-{% include UALib.Links.md %}
-

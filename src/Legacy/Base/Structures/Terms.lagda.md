@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Structures.Terms (The Agda Universal Algebra Library)"
+title : "Legacy.Base.Structures.Terms (The Agda Universal Algebra Library)"
 date : "2021-07-26"
 author: "agda-algebras development team"
 ---
 
 ### <a id="interpretation-of-terms-in-general-structures">Interpretation of Terms in General Structures</a>
 
-This is the [Base.Structures.Terms][] module of the [Agda Universal Algebra Library][].
+This is the [Legacy.Base.Structures.Terms][] module of the [Agda Universal Algebra Library][].
 
 When we interpret a term in a structure we call the resulting
 function a *term operation*. Given a term `p` and a structure `𝑨`,
@@ -53,11 +53,3 @@ _⟦_⟧ : (𝑨 : structure 𝐹 𝑅 {α} {ρ}) → Term X → (X → carrier 
 𝑨 ⟦ ℊ x ⟧ = λ a → a x
 𝑨 ⟦ node f t ⟧ = λ a → (f ᵒ 𝑨) (λ i → (𝑨 ⟦ t i ⟧ ) a)
 ```
-
-
---------------------------------
-
-<span style="float:left;">[← Base.Structures.Isos](Base.Structures.Isos.html)</span>
-<span style="float:right;">[Base.Structures.Substructures →](Base.Structures.Substructures.html)</span>
-
-{% include UALib.Links.md %}

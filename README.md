@@ -27,16 +27,16 @@ git clone https://github.com/ualib/agda-algebras.git
 cd agda-algebras
 nix develop          # pins Agda 2.8.0 + standard-library 2.3 automatically
 make check           # type-check the entire library
-make html            # (optional) build clickable HTML under ./html/
+make site            # (optional) build the documentation site under ./site
 ```
 
-The first `nix develop` downloads and builds the pinned Agda and standard library; subsequent entries into the shell are essentially instantaneous.  Non-Nix installation paths (Agda's PyPI package, prebuilt binaries, `cabal` from source) are documented in [`INSTALL.md`](INSTALL.md).
+The first `nix develop` downloads and builds the pinned Agda and standard library (and the MkDocs toolchain); subsequent entries into the shell are essentially instantaneous.  Non-Nix installation paths (Agda's PyPI package, prebuilt binaries, `cabal` from source) are documented in [`INSTALL.md`](INSTALL.md).
 
 ---
 
 ## Documentation
 
-+  Rendered clickable HTML of the library: [https://ualib.org](https://ualib.org).
++  Rendered documentation: [https://ualib.org](https://ualib.org).
 +  Installation guide: [`INSTALL.md`](INSTALL.md).
 +  Contributor's guide: [`CONTRIBUTING.md`](CONTRIBUTING.md).
 +  Style guide: [`docs/STYLE_GUIDE.md`](docs/STYLE_GUIDE.md).

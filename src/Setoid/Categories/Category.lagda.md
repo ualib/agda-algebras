@@ -94,7 +94,3 @@ record Category (o ℓ e : Level) : Type (lsuc (o ⊔ ℓ ⊔ e)) where
   ≈-trans : {A B : Obj} {f g h : Hom A B} → f ≈ g → g ≈ h → f ≈ h
   ≈-trans = IsEquivalence.trans ≈-equiv
 ```
-
---------------------------------------
-
-{% include UALib.Links.md %}

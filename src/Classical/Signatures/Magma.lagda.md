@@ -88,10 +88,3 @@ ar-Magma ∙-Op = Fin 2
 Sig-Magma : Signature 0ℓ 0ℓ
 Sig-Magma = Op-Magma , ar-Magma
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Classical.Signatures](Classical.Signatures.html)</span>
-<span style="float:right;">[Classical.Structures.Magma →](Classical.Structures.Magma.html)</span>
-
-{% include UALib.Links.md %}

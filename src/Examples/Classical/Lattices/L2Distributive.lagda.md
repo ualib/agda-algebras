@@ -91,7 +91,3 @@ roundtrip-∧-dl a b = refl
 roundtrip-∨-dl : ∀ (a b : Bool) → a ∙∨' b ≡ a ∨ b
 roundtrip-∨-dl a b = refl
 ```
-
---------------------------------------
-
-{% include UALib.Links.md %}

@@ -35,7 +35,3 @@ open Polymorphic.Semilattice-Op Bool-meet-semilattice using ( _∙_ )
 ∙-is-∧-sl : ∀ (a b : Bool) → a ∙ b ≡ a ∧ b
 ∙-is-∧-sl a b = refl
 ```
-
---------------------------------------
-
-{% include UALib.Links.md %}

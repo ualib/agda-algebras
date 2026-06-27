@@ -50,9 +50,3 @@ ar-Ring 1-Op = Fin 0
 Sig-Ring : Signature 0ℓ 0ℓ
 Sig-Ring = Op-Ring , ar-Ring
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Classical.Signatures.Group](Classical.Signatures.Group.html)</span>
-
-{% include UALib.Links.md %}

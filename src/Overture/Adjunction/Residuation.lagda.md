@@ -84,11 +84,3 @@ In a ring `R`, if `x y : R` and if `x y x = x`, then `y` is called a *weak inver
     gt : g b ≤ᴬ g (f (g b))
     gt = gf≥id (g b)
 ```
-
-
-------------------------------------------
-
-<span style="float:left;">[← Overture.Adjunction.Galois](Overture.Adjunction.Galois.html)</span>
-<span style="float:right;">[Overture.Adjunction](Overture.Adjunction.html)</span>
-
-{% include UALib.Links.md %}

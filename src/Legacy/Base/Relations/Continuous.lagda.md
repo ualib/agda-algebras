@@ -1,15 +1,15 @@
 ---
 layout: default
-title : "Base.Relations.Continuous module (The Agda Universal Algebra Library)"
+title : "Legacy.Base.Relations.Continuous module (The Agda Universal Algebra Library)"
 date : "2021-02-28"
 author: "[agda-algebras development team][]"
 ---
 
 ### <a id="continuous-relations">Continuous Relations</a>
 
-> **Deprecated**.  Canonical home is now [`Setoid.Relations.Continuous`](Setoid.Relations.Continuous.html), ported under #308 (M2-7d).  Importers will see `WARNING_ON_USAGE` warnings on `Rel`, `REL`, their syntactic-sugar variants, and the `eval-*`/`compatible-*` helpers; in most cases, migration is just replacing `Legacy.Base.Relations.Continuous` with `Setoid.Relations.Continuous`.  The replacement `Rel`/`REL` definitions still take bare carrier types as before; only the optional setoid-respect layer (for example, `Π-Respects-Rel`/`Π-Respects-REL`) requires passing an explicit `Setoid` such as `Relation.Binary.PropositionalEquality.setoid A` for a bare type `A`.  See [`src/Legacy/Base/DEPRECATED.md`](../../DEPRECATED.md).  Removal is planned for v3.1.
+> **Deprecated**.  Canonical home is now [`Setoid.Relations.Continuous`](/Setoid/Relations/Continuous/), ported under #308 (M2-7d).  Importers will see `WARNING_ON_USAGE` warnings on `Rel`, `REL`, their syntactic-sugar variants, and the `eval-*`/`compatible-*` helpers; in most cases, migration is just replacing `Legacy.Base.Relations.Continuous` with `Setoid.Relations.Continuous`.  The replacement `Rel`/`REL` definitions still take bare carrier types as before; only the optional setoid-respect layer (for example, `Π-Respects-Rel`/`Π-Respects-REL`) requires passing an explicit `Setoid` such as `Relation.Binary.PropositionalEquality.setoid A` for a bare type `A`.  See [`src/Legacy/Base/DEPRECATED.md`](../../DEPRECATED.md).  Removal is planned for v3.1.
 
-This is the [Base.Relations.Continuous][] module of the [Agda Universal Algebra Library][].
+This is the [Legacy.Base.Relations.Continuous][] module of the [Agda Universal Algebra Library][].
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -49,7 +49,7 @@ Concretely, given an arbitrary family `A : I → Type a` of types, we may have a
 
 We refer to such relations as *dependent continuous relations* (or *dependent relations* for short) because the definition of a type that represents them requires depedent types.
 
-The `REL` type that we define [below](Base.Relations.Continuous.html#dependent-relations) manifests this completely general notion of relation.
+The `REL` type that we define [below](/Legacy/Base/Relations/Continuous/#dependent-relations) manifests this completely general notion of relation.
 
 **Warning**! The type of binary relations in the standard library's `Relation.Binary` module is also called `Rel`.  Therefore, to use both the discrete binary relation from the standard library, and our continuous relation type, we recommend renaming the former when importing with a line like this
 
@@ -182,9 +182,6 @@ and determines whether the `I`-tuple `λ i → (𝑓 i) (𝑎 i)` belongs to `R`
 
 --------------------------------------
 
-<span style="float:left;">[← Base.Relations.Discrete](Base.Relations.Discrete.html)</span>
-<span style="float:right;">[Base.Relations.Properties →](Base.Relations.Properties.html)</span>
 
-{% include UALib.Links.md %}
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team

@@ -61,10 +61,3 @@ record CompleteLattice (c ℓ₁ ℓ₂ ι : Level) : Type (suc (c ⊔ ℓ₁ �
     ⨅-lower     : {I : Type ι} (f : I → Carrier) (i : I) → ⨅ f ≤ f i
     ⨅-greatest  : {I : Type ι} (f : I → Carrier) (x : Carrier) → (∀ i → x ≤ f i) → x ≤ ⨅ f
 ```
-
---------------------------------------
-
-<span style="float:left;">[↑ Order](Order.html)</span>
-<span style="float:right;">[Setoid.Congruences.CompleteLattice →](Setoid.Congruences.CompleteLattice.html)</span>
-
-{% include UALib.Links.md %}

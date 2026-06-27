@@ -114,5 +114,3 @@ postponed for follow-up work.
 [^1]: M. Abbott, T. Altenkirch, N. Ghani, *Containers: constructing strictly positive types*, Theoret. Comput. Sci. **342** (2005) 3–27.
 
 [^2]: This is the result that ADR-006 records.
-
-{% include UALib.Links.md %}

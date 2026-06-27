@@ -30,7 +30,3 @@ module Classical.Properties where
 
 open import Classical.Properties.Lattice public
 ```
-
---------------------------------------
-
-{% include UALib.Links.md %}

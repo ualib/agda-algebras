@@ -519,7 +519,3 @@ by the adjunction's unit, counit, and triangle identities, and the general theor
 assembles them.  (The term monad of [Setoid.Terms.Monad][] arises the same way
 mathematically — from the free-algebra adjunction over a signature — but its
 universe-level profile keeps it out of this record; see the note there.)
-
---------------------------------------
-
-{% include UALib.Links.md %}

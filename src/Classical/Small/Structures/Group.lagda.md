@@ -36,10 +36,3 @@ eqsToGroup : (A : Type 0ℓ) (_·_ : A → A → A) (e : A) (i : A → A)
   → Group
 eqsToGroup A = Polymorphic.eqsToGroup {A = A}
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Classical.Small.Structures.Monoid](Classical.Small.Structures.Monoid.html)</span>
-<span style="float:right;">[Classical.Small.Structures.AbelianGroup →](Classical.Small.Structures.AbelianGroup.html)</span>
-
-{% include UALib.Links.md %}

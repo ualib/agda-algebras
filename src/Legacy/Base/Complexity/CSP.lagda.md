@@ -1,15 +1,15 @@
 ---
 layout: default
-title : "Base.Complexity.CSP module (The Agda Universal Algebra Library)"
+title : "Legacy.Base.Complexity.CSP module (The Agda Universal Algebra Library)"
 date : "2021-07-14"
 author: "the agda-algebras development team"
 ---
 
 ### <a id="constraint-satisfaction-problems">Constraint Satisfaction Problems</a>
 
-> **Deprecated**.  Canonical home is now [`Setoid.Complexity.CSP`](Setoid.Complexity.CSP.html), ported under #307 (M2-7c).  Importers will see `WARNING_ON_USAGE` warnings on `Constraint` and `CSPInstance`; migrate by replacing `Legacy.Base.Complexity.CSP` with `Setoid.Complexity.CSP` (signature parameter is unchanged).  See [`src/Legacy/Base/DEPRECATED.md`](../../DEPRECATED.md).  Removal is planned for v3.1.
+> **Deprecated**.  Canonical home is now [`Setoid.Complexity.CSP`](/Setoid/Complexity/CSP/), ported under #307 (M2-7c).  Importers will see `WARNING_ON_USAGE` warnings on `Constraint` and `CSPInstance`; migrate by replacing `Legacy.Base.Complexity.CSP` with `Setoid.Complexity.CSP` (signature parameter is unchanged).  See [`src/Legacy/Base/DEPRECATED.md`](../../DEPRECATED.md).  Removal is planned for v3.1.
 
-This is the [Base.Complexity.CSP][] module of the [Agda Universal Algebra Library][].
+This is the [Legacy.Base.Complexity.CSP][] module of the [Agda Universal Algebra Library][].
 
 #### <a id="the-relational-formulation-of-csp">The relational formulation of CSP</a>
 
@@ -188,10 +188,3 @@ An instance of a constraint satisfaction problem is a triple 𝑃 = (𝑉, 𝐷,
 {-# WARNING_ON_USAGE Constraint   "Use Setoid.Complexity.CSP.Constraint instead. Deprecated under #307; removal planned one minor cycle later." #-}
 {-# WARNING_ON_USAGE CSPInstance  "Use Setoid.Complexity.CSP.CSPInstance instead. Deprecated under #307; removal planned one minor cycle later." #-}
 ```
-
---------------------------------
-
-<span>[← Base.Complexity.Basic](Base.Complexity.Basic.html)</span>
-<span style="float:right;">[Top ↑](index.html)</span>
-
-{% include UALib.Links.md %}

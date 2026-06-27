@@ -172,13 +172,3 @@ In the following sense, `Inv f` is also a (range-restricted) *left-inverse*.
  ⁻¹IsInverseˡ : ∀ {F a} → [ F ]⁻¹ (f∈range{F} a) ≈₁ a
  ⁻¹IsInverseˡ = refl₁
 ```
-
-
---------------------------------------
-
-<span style="float:left;">[← Setoid.Functions.Basic](Setoid.Functions.Basic.html)</span>
-<span style="float:right;">[Setoid.Functions.Injective →](Setoid.Functions.Injective.html)</span>
-
-{% include UALib.Links.md %}
-
-

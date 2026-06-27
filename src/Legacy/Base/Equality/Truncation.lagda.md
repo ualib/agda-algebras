@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Equality.Truncation module (The Agda Universal Algebra Library)"
+title : "Legacy.Base.Equality.Truncation module (The Agda Universal Algebra Library)"
 date : "2021-02-23"
 author: "agda-algebras development team"
 ---
 
 ### <a id="truncation">Truncation</a>
 
-This is the [Base.Equality.Truncation][] module of the [Agda Universal Algebra Library][].
+This is the [Legacy.Base.Equality.Truncation][] module of the [Agda Universal Algebra Library][].
 
 We start with a brief discussion of standard notions of *truncation*, *h-sets* (which we just call *sets*), and the *uniqueness of identity types* principle.
 We then prove that a monic function into a *set* is an embedding. The section concludes with a *uniqueness of identity proofs* principle for blocks of equivalence relations.
@@ -104,7 +104,7 @@ Now, perhaps we have two proofs, say, `r s : p ≡₁ q` that the proofs `p` and
 
 In [homotopy type theory](https://homotopytypetheory.org), a type `A` with an identity relation `≡₀` is called a *set* (or *0-groupoid*) if for every pair `x y : A` there is at most one proof of `x ≡₀ y`. In other words, the type `A`, along with it's equality type `≡₀`, form a *set* if for all `x y : A` there is at most one proof of `x ≡₀ y`.
 
-This notion is formalized in the [Type Topology][] library, using the `is-subsingleton` type that we saw earlier ([Base.Functions.Inverses][]), as follows.
+This notion is formalized in the [Type Topology][] library, using the `is-subsingleton` type that we saw earlier ([Legacy.Base.Functions.Inverses][]), as follows.
 
 
 ```agda
@@ -147,7 +147,7 @@ singleton-type {α}{A} x = Σ[ y ∈ A ] y ≡ x
 ```
 
 
-Thus, `is-embedding f` asserts that `f` is a function all of whose fibers are subsingletons. Observe that an embedding is not simply an injective map. However, if we assume that the codomain `B` has *unique identity proofs* (UIP), then we can prove that a monic function into `B` is an embedding.  We will do exactly that in the [Base.Relations.Truncation][] module when we take up the topic of *sets* and the UIP.
+Thus, `is-embedding f` asserts that `f` is a function all of whose fibers are subsingletons. Observe that an embedding is not simply an injective map. However, if we assume that the codomain `B` has *unique identity proofs* (UIP), then we can prove that a monic function into `B` is an embedding.  We will do exactly that in the [Legacy.Base.Relations.Truncation][] module when we take up the topic of *sets* and the UIP.
 
 Finding a proof that a function is an embedding isn't always easy, but one approach that is often fairly straightforward is to first prove that the function is invertible and then invoke the `invertible-is-embedding` theorem from the [Type Topology][] library.
 
@@ -170,7 +170,7 @@ We will use `is-embedding`, `is-set`, and `to-Σ-≡` in the next subsection to 
 
 #### Injective functions are set embeddings
 
-Before moving on to define [propositions](#general-propositions), we discharge an obligation we mentioned but left unfulfilled in the [embeddings](Base.Functions.Inverses.html#embeddings) section of the [Base.Functions.Inverses][] module.  Recall, we described and imported the `is-embedding` type, and we remarked that an embedding is not simply a monic function.  However, if we assume that the codomain is truncated so as to have unique identity proofs (i.e., is a set), then we can prove that any monic function into that codomain will be an embedding.  On the other hand, embeddings are always monic, so we will end up with an equivalence.
+Before moving on to define [propositions](#general-propositions), we discharge an obligation we mentioned but left unfulfilled in the [embeddings](/Legacy/Base/Functions/Inverses/#embeddings) section of the [Legacy.Base.Functions.Inverses][] module.  Recall, we described and imported the `is-embedding` type, and we remarked that an embedding is not simply a monic function.  However, if we assume that the codomain is truncated so as to have unique identity proofs (i.e., is a set), then we can prove that any monic function into that codomain will be an embedding.  On the other hand, embeddings are always monic, so we will end up with an equivalence.
 
 
 ```agda
@@ -202,7 +202,7 @@ In stating the previous result, we introduce a new convention to which we will t
 
 #### <a id="equivalence-class-truncation">Equivalence class truncation</a>
 
-Recall, `IsBlock` was defined in the [Base.Relations.Quotients][] module as follows:
+Recall, `IsBlock` was defined in the [Legacy.Base.Relations.Quotients][] module as follows:
 
     IsBlock : {A : Type α}(C : Pred A β){R : Rel A β} → Type(α ⊔ lsuc β)
     IsBlock {A} C {R} = Σ u ꞉ A , C ≡ [ u ] {R}
@@ -223,7 +223,7 @@ It might seem unreasonable to postulate that there is at most one inhabitant of 
 
 #### <a id="general-propositions">General propositions</a>
 
-This section defines more general truncated predicates which we call *continuous propositions* and *dependent propositions*. Recall, above (in the [Base.Relations.Continuous][] module) we defined types called `Rel` and `REL` to represent relations of arbitrary arity over arbitrary collections of sorts.
+This section defines more general truncated predicates which we call *continuous propositions* and *dependent propositions*. Recall, above (in the [Legacy.Base.Relations.Continuous][] module) we defined types called `Rel` and `REL` to represent relations of arbitrary arity over arbitrary collections of sorts.
 
 Naturally, we define the corresponding *truncated continuous relation type* and *truncated dependent relation type*, the inhabitants of which we will call *continuous propositions* and *dependent propositions*, respectively.
 
@@ -251,11 +251,3 @@ module _ {I : Type 𝓥} where
  RELPropExt : (I → Type α) → (ρ : Level) → Type (𝓥 ⊔ α ⊔ suc ρ)
  RELPropExt 𝒜 ρ = {P Q : RELProp 𝒜 ρ} → ∣ P ∣ ⊆ ∣ Q ∣ → ∣ Q ∣ ⊆ ∣ P ∣ → P ≡ Q
 ```
-
-
-----------------------------
-
-<span style="float:left;">[← Base.Equality.Welldefined](Base.Equality.Welldefined.html)</span>
-<span style="float:right;">[Base.Equality.Extensionality →](Base.Equality.Extensionality.html)</span>
-
-{% include UALib.Links.md %}

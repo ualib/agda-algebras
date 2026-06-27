@@ -114,10 +114,3 @@ module _ {M : stdlib-Monoid α ρ} where
   roundtrip-bcb-ε-mn : ε ≈ ε'
   roundtrip-bcb-ε-mn = refl
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Classical.Structures.Monoid](Classical.Structures.Monoid.html)</span>
-<span style="float:right;">[Classical.Small.Structures.Monoid →](Classical.Small.Structures.Monoid.html)</span>
-
-{% include UALib.Links.md %}

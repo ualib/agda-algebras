@@ -147,5 +147,3 @@ with multiplication `R₁ (counit (L₀ A))`; that classical theorem is `adjunct
 [^2]: The natural-transformation record this footnote once deferred to M4-5e now exists ([Setoid.Categories.NaturalTransformation][]), and `unitNT` / `counitNT` below provide the bundled views.  The componentwise fields remain the canonical form, both because they are what the free-expansion spike of M4-5d consumes and because componentwise data is what concrete instances can supply pointwise without funext.
 
 [ADR-006]: docs/adr/006-signature-morphism-category.md
-
-{% include UALib.Links.md %}

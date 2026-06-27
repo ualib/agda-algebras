@@ -38,10 +38,3 @@ A predicate `P : Pred (Algebra α ρᵃ) ℓ` is an *algebraic invariant* when, 
 AlgebraicInvariant : Pred (Algebra α ρᵃ) ℓ → Type _
 AlgebraicInvariant P = ∀ 𝑨 𝑩 → P 𝑨 → 𝑨 ≅ 𝑩 → P 𝑩
 ```
-
---------------------------------
-
-<span style="float:left;">[← Setoid.Varieties.Properties](Setoid.Varieties.Properties.html)</span>
-<span style="float:right;">[Setoid.Varieties.Preservation →](Setoid.Varieties.Preservation.html)</span>
-
-{% include UALib.Links.md %}

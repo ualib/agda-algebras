@@ -228,11 +228,3 @@ module _ {𝑨 : Algebra α ρᵃ} {𝑩 : Algebra β ρᵇ} where
  Lift-hom-snd : hom 𝑨 𝑩  → (ℓ r : Level) →  hom 𝑨 (Lift-Alg 𝑩 ℓ r)
  Lift-hom-snd φ _ _ = ⊙-hom φ ToLift
 ```
-
-
---------------------------------
-
-<span style="float:left;">[← Setoid.Homomorphisms.Basic](Setoid.Homomorphisms.Basic.html)</span>
-<span style="float:right;">[Setoid.Homomorphisms.Kernels →](Setoid.Homomorphisms.Kernels.html)</span>
-
-{% include UALib.Links.md %}

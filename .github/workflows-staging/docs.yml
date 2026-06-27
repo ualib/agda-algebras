@@ -1,0 +1,73 @@
+# =============================================================================
+#  docs.yml — build and deploy the MkDocs documentation site (ADR-007)
+#  ----------------------------------------------------------------------------
+#
+#  The site is built directly from the `.lagda.md` sources — no `agda --html`
+#  step — by `nix develop --command make site`, the same command a developer
+#  runs locally.  mkdocs-material and the plugins are pinned by flake.nix, so
+#  CI and local builds are identical.
+#
+#  On push to master the freshly built ./site is published to the `gh-pages`
+#  branch.  Pull requests build only (a broken site fails the PR), they do not
+#  deploy.
+#
+#  Cutover note: this workflow publishes to `gh-pages`, but it does NOT change
+#  where GitHub Pages serves from.  Pointing Pages at `gh-pages`, attaching the
+#  `ualib.org` custom domain (uncomment `cname:` below), and the registrar DNS
+#  change are deliberate manual steps for the maintainer (see PR #295).  Until
+#  then the currently-live site is untouched.
+# =============================================================================
+
+name: Docs
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: docs-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+permissions:
+  contents: write   # needed to push the built site to the gh-pages branch
+
+jobs:
+  build-deploy:
+    name: Build & deploy site
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+
+      - name: Set up Cachix
+        uses: cachix/cachix-action@v16
+        with:
+          name: formalverification
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+
+      - name: Build the site
+        run: |
+          set -euxo pipefail
+          nix develop --command make site
+
+      - name: Deploy to gh-pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site
+          publish_branch: gh-pages
+          # Attach the custom domain only at the ualib.org cutover:
+          # cname: ualib.org

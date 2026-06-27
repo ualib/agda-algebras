@@ -100,7 +100,3 @@ module _ {M : stdlib-CommutativeMonoid α ρ} where
   roundtrip-bcb-ε-cm : ε ≈ ε'
   roundtrip-bcb-ε-cm = refl
 ```
-
---------------------------------------
-
-{% include UALib.Links.md %}

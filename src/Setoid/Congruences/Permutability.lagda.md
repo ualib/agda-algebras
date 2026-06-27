@@ -120,10 +120,3 @@ module _ {𝑨 : Algebra α ρ} where
     → (θ φ : Con 𝑨 ℓ) → (θ ∘ φ) ⊆ (φ ∘ θ) × (φ ∘ θ) ⊆ (θ ∘ φ)
   permutable⇒commute cp θ φ = cp θ φ , cp φ θ
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Setoid.Congruences.Generation](Setoid.Congruences.Generation.html)</span>
-<span style="float:right;">[Setoid.Congruences.CompleteLattice →](Setoid.Congruences.CompleteLattice.html)</span>
-
-{% include UALib.Links.md %}

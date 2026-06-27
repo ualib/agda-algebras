@@ -22,11 +22,3 @@ open import Overture.Operations  public
 open import Overture.Relations   public
 open import Overture.Functions   public
 ```
-
-
---------------------------------------
-
-<span style="float:left;">[↑ Top](index.html)</span>
-<span style="float:right;">[Overture.Preface →](Overture.Preface.html)</span>
-
-{% include UALib.Links.md %}

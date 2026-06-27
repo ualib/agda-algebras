@@ -206,5 +206,3 @@ module _ {χ ι : Level}{Idx : Type ι}(E : Idx → Eq {χ = χ}){X : Type χ}
 [^1]: See the design note `docs/notes/m6-4-free-bridge.md` and the M6-3 design note
 `docs/notes/m6-3-maltsev-conditions.md`, § "The deferred theorems and their
 construction plans".
-
-{% include UALib.Links.md %}

@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Functions.Surjective module"
+title : "Legacy.Base.Functions.Surjective module"
 date : "2021-01-12"
 author: "the agda-algebras development team"
 ---
 
 ### <a id="surjective-functions">Surjective functions</a>
 
-This is the [Base.Functions.Surjective][] module of the [agda-algebras][] library.
+This is the [Legacy.Base.Functions.Surjective][] module of the [agda-algebras][] library.
 
 
 ```agda
@@ -176,13 +176,3 @@ module _  {I : Set ι}(_≟_ : Decidable{A = I} _≡_)
  {-# WARNING_ON_USAGE proj "Use Overture.Functions.proj instead. Deprecated under #303." #-}
  {-# WARNING_ON_USAGE projIsOnto "Use Overture.Functions.projIsOnto instead. Deprecated under #303." #-}
 ```
-
-
---------------------------------------
-
-<span style="float:left;">[← Base.Functions.Injective](Base.Functions.Injective.html)</span>
-<span style="float:right;">[Base.Functions.Transformers →](Base.Functions.Transformers.html)</span>
-
-{% include UALib.Links.md %}
-
-

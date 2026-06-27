@@ -96,9 +96,3 @@ roundtrip-e₁-cr = refl
 roundtrip-⊝-cr : ∀ (a : ℤ) → ⊝' a ≡ - a
 roundtrip-⊝-cr a = refl
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Examples.Classical.AbelianGroup](Examples.Classical.AbelianGroup.html)</span>
-
-{% include UALib.Links.md %}

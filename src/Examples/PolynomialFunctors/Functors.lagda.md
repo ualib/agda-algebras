@@ -217,9 +217,7 @@ l₃⟦2⟧≡some3 = refl
 
 [^1]: PR #306.
 
-<span style="float:left;">[← Examples.PolynomialFunctors](Examples.PolynomialFunctors.html)</span>
 
-{% include UALib.Links.md %}
 
 <!-- Some helpful excerpts from
      [Modular Type-Safety Proofs in Agda](https://doi.org/10.1145/2428116.2428120)

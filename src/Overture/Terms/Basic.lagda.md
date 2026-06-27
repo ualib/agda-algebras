@@ -100,8 +100,3 @@ foundation-specific `Algebra` type, which differs between the bare-types tree
 [^1]: This module is a Category-A relocation under #303 (M2-6).  See [`src/Legacy/Base/DEPRECATED.md`](../Legacy/Base/DEPRECATED.md) for the full inventory.
 
 [^2]: Hoisting `ov` to `Overture.Signatures` and removing the duplicates is a small candidate cleanup tracked separately from #303.
-
-<span style="float:left;">[← Overture.Operations](Overture.Operations.html)</span>
-<span style="float:right;">[Overture.Relations →](Overture.Relations.html)</span>
-
-{% include UALib.Links.md %}

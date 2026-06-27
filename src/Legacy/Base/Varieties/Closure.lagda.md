@@ -1,6 +1,6 @@
 ---
 layout: default
-title : "Base.Varieties.Closure  module (The Agda Universal Algebra Library)"
+title : "Legacy.Base.Varieties.Closure  module (The Agda Universal Algebra Library)"
 date : "2021-01-14"
 author: "agda-algebras development team"
 ---
@@ -385,11 +385,3 @@ module Vlift  {α : Level} {fe₀ : funext (ov α) α}
  VlA (visou{𝑨}{𝑩} x A≅B) = visow (vlift x) (Lift-Alg-iso A≅B)
  VlA (visow{𝑨}{𝑩} x A≅B) = visow (VlA x) (Lift-Alg-iso A≅B)
 ```
-
-
----------------------------------
-
-<span style="float:left;">[← Base.Varieties.EquationalLogic](Base.Varieties.EquationalLogic.html)</span>
-<span style="float:right;">[Base.Varieties.Properties →](Base.Varieties.Properties.html)</span>
-
-{% include UALib.Links.md %}

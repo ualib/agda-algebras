@@ -48,10 +48,3 @@ Th-Group idʳ   = RightIdentity ∙-Op ε-Op        refl refl      0F
 Th-Group invˡ  = LeftInverse   ∙-Op ⁻¹-Op ε-Op  refl refl refl 0F
 Th-Group invʳ  = RightInverse  ∙-Op ⁻¹-Op ε-Op  refl refl refl 0F
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Classical.Theories.Monoid](Classical.Theories.Monoid.html)</span>
-<span style="float:right;">[Classical.Theories.Ring →](Classical.Theories.Ring.html)</span>
-
-{% include UALib.Links.md %}

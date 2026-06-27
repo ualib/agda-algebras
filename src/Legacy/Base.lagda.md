@@ -1,6 +1,6 @@
 ---
 layout: default
-title : "Base module"
+title : "Legacy.Base module"
 date : "2021-12-12"
 author: "the agda-algebras development team"
 ---
@@ -32,12 +32,3 @@ open import Legacy.Base.Structures
 open import Legacy.Base.Categories
 open import Legacy.Base.Complexity
 ```
-
-
---------------------------------------
-
-<span style="float:left;">[↑ agda-algebras](index.html)</span>
-<span style="float:right;">[Base.Relations →](Base.Relations.html)</span>
-
-
-{% include UALib.Links.md %}

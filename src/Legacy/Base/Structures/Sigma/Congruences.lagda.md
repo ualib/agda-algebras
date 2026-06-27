@@ -1,6 +1,6 @@
 ---
 layout: default
-title : "Base.Structures.Sigma.Congruences module"
+title : "Legacy.Base.Structures.Sigma.Congruences module"
 date : "2021-05-12"
 author: "agda-algebras development team"
 ---
@@ -80,10 +80,3 @@ module _ {α ρ : Level} where
 
 𝟎[ 𝑨 ╱ θ ] wd = 0[ ∣ 𝑨 ╱ θ ∣ ]Equivalence , 0[ 𝑨 ╱ θ ]Compatible wd
 ```
-
---------------------------------
-
-<span style="float:left;">[← Base.Structures.Sigma.Products](Base.Structures.Sigma.Products.html)</span>
-<span style="float:right;">[Base.Structures.Sigma.Homs →](Base.Structures.Sigma.Homs.html)</span>
-
-{% include UALib.Links.md %}

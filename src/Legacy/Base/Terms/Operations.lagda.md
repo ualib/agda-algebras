@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Terms.Operations module (The Agda Universal Algebra Library)"
+title : "Legacy.Base.Terms.Operations module (The Agda Universal Algebra Library)"
 date : "2021-01-14"
 author: "agda-algebras development team"
 ---
 
 ### <a id="term-operations">Term Operations</a>
 
-This section presents the [Base.Terms.Operations][] module of the [Agda Universal Algebra Library][].
+This section presents the [Legacy.Base.Terms.Operations][] module of the [Agda Universal Algebra Library][].
 
 Here we define *term operations* which are simply terms interpreted in a
 particular algebra, and we prove some compatibility properties of term operations.
@@ -237,7 +237,7 @@ module _ {α β : Level}{X : Type α} where
 
 **WARNING!** The compatibility relation for terms `∣:` is typed as \|:, whereas
 the compatibility type for functions `|:` (defined in the
-[Base.Relations.Discrete][] module) is typed as `|:`.
+[Legacy.Base.Relations.Discrete][] module) is typed as `|:`.
 
 
 
@@ -301,11 +301,3 @@ subst-theorem wd p q σ 𝑨 Apq η =
  (𝑨 ⟦ q ⟧) (η ∘ σ)  ≡⟨ ≡.sym (subst-lemma wd q σ 𝑨 η) ⟩
  (𝑨 ⟦ q [ σ ] ⟧) η  ∎
 ```
-
-
-----------------------------------
-
-<span style="float:left;">[← Base.Terms.Properties](Base.Terms.Properties.html)</span>
-<span style="float:right;">[Base.Subalgebras →](Base.Subalgebras.html)</span>
-
-{% include UALib.Links.md %}

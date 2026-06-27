@@ -11,7 +11,8 @@
 #   make              Regenerate src/Everything.agda from the current tree.
 #   make check        Type-check the entire library (what CI runs).
 #   make test         Alias for `make check`.
-#   make html         Generate clickable HTML (in ./html/).
+#   make site         Build the MkDocs documentation site (in ./site/).
+#   make serve        Preview the docs site locally (http://127.0.0.1:8000).
 #   make profile      Type-check with Agda profiling enabled.
 #   make clean        Remove .agdai artifacts and the generated Everything.
 #
@@ -27,7 +28,7 @@
 #      where a path segment happens to contain the substring `agda`.
 # =============================================================================
 
-.PHONY: default all check test clean html profile project-plan unused-imports unused-imports-test Everything.agda
+.PHONY: default all check test clean site serve profile project-plan unused-imports unused-imports-test Everything.agda
 
 # -- Configuration -----------------------------------------------------------
 SRCDIR    := src
@@ -95,9 +96,20 @@ check test: Everything.agda EverythingLegacy.agda
 	$(AGDA) $(RTS_OPTS) $(AGDA_OPTS) $(SRCDIR)/Everything.agda
 	$(AGDA) $(RTS_OPTS) $(AGDA_OPTS) $(SRCDIR)/EverythingLegacy.agda
 
-html: Everything.agda
+# Build the documentation site (ADR-007).  MkDocs reads the `.lagda.md`
+# sources directly — no `agda --html` step — via scripts/python/mkdocs_gen_library.py.
+# Output goes to ./site (gitignored).  Run inside `nix develop` so mkdocs and
+# the Material theme + plugins pinned in flake.nix are on PATH.
+MKDOCS ?= mkdocs
+
+site:
 	@echo "target: $@"
-	$(AGDA) $(RTS_OPTS) --html --html-highlight=code $(SRCDIR)/Everything.agda
+	$(MKDOCS) build --strict --clean
+
+# Live-reloading local preview at http://127.0.0.1:8000 (Ctrl-C to stop).
+serve:
+	@echo "target: $@"
+	$(MKDOCS) serve
 
 profile: Everything.agda
 	@echo "target: $@"

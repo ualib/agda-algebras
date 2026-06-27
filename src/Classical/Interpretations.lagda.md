@@ -21,7 +21,3 @@ module Classical.Interpretations where
 
 open import Classical.Interpretations.Maltsev public
 ```
-
---------------------------------------
-
-{% include UALib.Links.md %}

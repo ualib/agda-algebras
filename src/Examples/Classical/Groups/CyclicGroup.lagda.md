@@ -68,10 +68,3 @@ roundtrip-ε-group = refl
 roundtrip-⁻¹-group : ∀ (a : ℤ) → a ⁻¹· ≡ - a
 roundtrip-⁻¹-group a = refl
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Examples.Classical.Monoid](Examples.Classical.Monoid.html)</span>
-<span style="float:right;">[Examples.Classical.Groups.AbelianGroup →](Examples.Classical.Groups.AbelianGroup.html)</span>
-
-{% include UALib.Links.md %}

@@ -72,10 +72,3 @@ Given setoids 𝐴 and 𝐵 (with carriers A and B, resp), the *kernel* of a fun
   0rel : {ℓ : Level} → BinRel A (ρᵃ ⊔ ℓ)
   0rel {ℓ} = λ x y → Lift ℓ (x ≈₁ y)
 ```
-
---------------------------------------
-
-<span style="float:left;">[↑ Setoid.Relations](Setoid.Relations.html)</span>
-<span style="float:right;">[Setoid.Relations.Quotients →](Setoid.Relations.Quotients.html)</span>
-
-{% include UALib.Links.md %}

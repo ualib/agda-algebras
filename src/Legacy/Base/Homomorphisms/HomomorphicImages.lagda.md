@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Homomorphisms.HomomorphicImages module (The Agda Universal Algebra Library)"
+title : "Legacy.Base.Homomorphisms.HomomorphicImages module (The Agda Universal Algebra Library)"
 date : "2021-01-14"
 author: "agda-algebras development team"
 ---
 
 ### <a id="homomorphic-images">Homomorphic Images</a>
 
-This is the [Base.Homomorphisms.HomomorphicImages][] module of the [Agda Universal Algebra Library][].
+This is the [Legacy.Base.Homomorphisms.HomomorphicImages][] module of the [Agda Universal Algebra Library][].
 
 
 ```agda
@@ -130,11 +130,3 @@ module _ {α β : Level} where
   Goal : (Lift-Alg 𝑩 ℓᵇ) IsHomImageOf _
   Goal = lφ , lφepic
 ```
-
-
---------------------------------------
-
-<span style="float:left;">[← Base.Homomorphisms.Isomorphisms](Base.Homomorphisms.Isomorphisms.html)</span>
-<span style="float:right;">[Base.Terms →](Base.Terms.html)</span>
-
-{% include UALib.Links.md %}

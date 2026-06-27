@@ -188,10 +188,3 @@ module _ {I : Type ι}{𝒜 : I → Algebra α ρᵃ}{ℬ : I → Algebra β ρ�
    hM : IsInjective (proj₁ h)
    hM = λ xy i → (proj₂ (B≤A i)) (xy i)
 ```
-
----------------------------------
-
-<span style="float:left;">[← Setoid.Subalgebras.Basic](Setoid.Subalgebras.Basic.html)</span>
-<span style="float:right;">[Setoid.Varieties →](Setoid.Varieties.html)</span>
-
-{% include UALib.Links.md %}

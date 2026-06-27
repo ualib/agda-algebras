@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Structures.Basic module (Agda Universal Algebra Library)"
+title : "Legacy.Base.Structures.Basic module (Agda Universal Algebra Library)"
 date : "2021-05-20"
 author: "agda-algebras development team"
 ---
 
 ### <a id="basic-definitions">Basic Definitions</a>
 
-This is the [Base.Structures.Basic][] module of the [Agda Universal Algebra Library][]. It is a submodule of the Structures module which presents general (relational-algebraic) structures as inhabitants of record types.  For a similar development using Sigma types see the Base.Structures.Sigma.Basic module.
+This is the [Legacy.Base.Structures.Basic][] module of the [Agda Universal Algebra Library][]. It is a submodule of the Structures module which presents general (relational-algebraic) structures as inhabitants of record types.  For a similar development using Sigma types see the Base.Structures.Sigma.Basic module.
 
 
 ```agda
@@ -114,11 +114,3 @@ module _ {𝐹 : signature 𝓞₀ 𝓥₀}{𝑅 : signature 𝓞₁ 𝓥₁} wh
 
  Lift-Struc ℓˡ ℓʳ 𝑨 = Lift-Strucʳ ℓʳ (Lift-Strucˡ ℓˡ 𝑨)
 ```
-
-
---------------------------------
-
-<span style="float:left;">[↑ Base.Structures](Base.Structures.html)</span>
-<span style="float:right;">[Base.Structures.Graphs →](Base.Structures.Graphs.html)</span>
-
-{% include UALib.Links.md %}

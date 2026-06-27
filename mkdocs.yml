@@ -1,0 +1,172 @@
+# =============================================================================
+# agda-algebras — MkDocs (Material) site configuration
+# -----------------------------------------------------------------------------
+# The rendering pipeline for ualib.org (ADR-007).  The site is built directly
+# from the `.lagda.md` sources — no `agda --html` step.  Inline Agda terms are
+# kramdown attribute spans (`Algebra`{.AgdaRecord}) coloured by
+# docs/stylesheets/custom.css; the module tree and navigation are mounted by
+# scripts/python/mkdocs_gen_library.py via mkdocs-gen-files + literate-nav.
+#
+#   Build : nix develop --command make site     ->  ./site
+#   Serve : nix develop --command make serve     (http://127.0.0.1:8000)
+# =============================================================================
+
+site_name: The Agda Universal Algebra Library
+site_url: https://ualib.org/
+site_description: >-
+  A formalization of universal algebra in dependent type theory — signatures,
+  algebras, homomorphisms, terms, subalgebras, varieties, and a
+  machine-checked proof of Birkhoff's HSP theorem — written in literate Agda.
+site_author: The agda-algebras development team
+copyright: >-
+  Copyright &copy; 2018&ndash;2026 the agda-algebras development team.
+  Documentation under CC BY-SA 4.0.
+
+repo_url: https://github.com/ualib/agda-algebras
+repo_name: ualib/agda-algebras
+# Sources live in src/ (not docs/); gen-files sets the per-page edit path to
+# the real `.lagda.md`, so this prefix + that path forms the GitHub edit URL.
+edit_uri: edit/master/
+
+docs_dir: docs
+
+# Build hook: rewrite repo-relative prose links (src/…, docs/adr/…, root meta
+# files) into site URLs.  Never touches fenced Agda code.
+hooks:
+  - scripts/python/mkdocs_hooks.py
+
+# `mkdocs serve` watches docs/ and mkdocs.yml by default; the library is mounted
+# from src/ by gen-files, so add it (and the generators) for live reload while
+# authoring modules or iterating on the pipeline.
+watch:
+  - src
+  - scripts/python/mkdocs_gen_library.py
+  - scripts/python/mkdocs_hooks.py
+
+# -- Theme --------------------------------------------------------------------
+theme:
+  name: material
+  language: en
+  icon:
+    logo: material/sigma            # Σ — a nod to signatures
+    repo: fontawesome/brands/github
+    edit: material/pencil-outline
+    view: material/file-eye-outline
+  features:
+    - navigation.tabs               # top-level sections as tabs
+    - navigation.tabs.sticky
+    - navigation.top                # back-to-top button
+    - navigation.indexes            # clickable section-overview pages
+    - navigation.tracking           # update the URL with the active anchor
+    - navigation.footer             # previous / next links
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.action.edit
+    - content.action.view
+    - content.tooltips
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  font:
+    text: Inter                     # code font (JuliaMono) is set in custom.css
+
+extra_css:
+  - stylesheets/custom.css
+
+# -- Plugins ------------------------------------------------------------------
+# Order matters: gen-files must populate the virtual library tree + SUMMARY.md
+# before literate-nav reads it and before section-index promotes barrels.
+plugins:
+  - search
+  - gen-files:
+      scripts:
+        - scripts/python/mkdocs_gen_library.py
+  - literate-nav:
+      nav_file: SUMMARY.md
+  - section-index
+  - macros:
+      # Non-default Jinja2 delimiters: Agda's `{{ }}` / `{ }` / `{% %}` / `{# #}`
+      # appear throughout the corpus, so the standard delimiters would corrupt
+      # code blocks.  These triples occur nowhere in src/ (verified).  Link
+      # includes are handled by pymdownx.snippets (below), not by macros.
+      j2_variable_start_string: "[[["
+      j2_variable_end_string: "]]]"
+      j2_block_start_string: "[[%"
+      j2_block_end_string: "%]]"
+      j2_comment_start_string: "[[#"
+      j2_comment_end_string: "#]]"
+      on_error_fail: false
+  - redirects:
+      # Legacy flat `Module.Submodule.html` URLs → new directory URLs are added
+      # at the ualib.org cutover (see PR #295 checklist).  Empty for now so the
+      # plugin is wired and ready without inventing redirects prematurely.
+      redirect_maps: {}
+
+# -- Markdown extensions ------------------------------------------------------
+markdown_extensions:
+  - attr_list                       # THE load-bearing one: `x`{.AgdaFunction}
+  - md_in_html
+  - def_list
+  - tables
+  - footnotes
+  - admonition
+  - toc:
+      permalink: true
+      permalink_title: Anchor link to this section
+  - pymdownx.highlight:
+      guess_lang: false             # ```agda blocks render as plain monospace
+      anchor_linenums: false
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.details
+  - pymdownx.tasklist:
+      custom_checkbox: true         # the roadmap's [ ] / [x] checklists
+  - pymdownx.emoji:                 # Material / Octicons icons (no corpus :word: collisions)
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.snippets:
+      base_path: [".", "docs"]
+      auto_append: ["_links.md"]    # shared reference-link library, every page
+      check_paths: true
+
+# -- Files in docs/ that are not site pages -----------------------------------
+exclude_docs: |
+  audits/
+  notes/
+  papers/
+  _links.md
+
+# -- Link validation ----------------------------------------------------------
+# Internal cross-references use ROOT-RELATIVE targets (/Module/Submodule/) from
+# docs/_links.md; these are intentional and resolve at the site root, so do not
+# warn about them.  Genuinely missing relative links remain warnings.
+validation:
+  links:
+    absolute_links: ignore
+    unrecognized_links: ignore
+  nav:
+    omitted_files: ignore
+
+# -- Site variables (available to macros as [[[ … ]]]) ------------------------
+extra:
+  agda_version: "2.8.0"
+  stdlib_version: "2.3"
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/ualib/agda-algebras
+      name: agda-algebras on GitHub

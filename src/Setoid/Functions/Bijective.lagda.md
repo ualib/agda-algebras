@@ -51,11 +51,3 @@ BijInv f (fM , fE) = record { to = finv ; cong = c }
  c : ∀ {b₀ b₁} → b₀ ≈₂ b₁ → (finv b₀) ≈₁ (finv b₁)
  c b₀≈b₁ = handler fE fE b₀≈b₁
 ```
-
-
-------------------------------------
-
-<span style="float:left;">[← Setoid.Functions.Surjective](Setoid.Functions.Surjective.html)</span>
-
-{% include UALib.Links.md %}
-

@@ -87,10 +87,3 @@ operations).  If we had `⊤ ≤ ⊥`, then since `⊥` is the *least* subuniver
 Sub𝟚-nontrivial : ¬ ( 1ˢ ≤ 0ˢ )
 Sub𝟚-nontrivial 1≤0 = lower (0ˢ-minimum ∅ˢ (1≤0 {true} (lift tt)))
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Setoid.Subalgebras.CompleteLattice](Setoid.Subalgebras.CompleteLattice.html)</span>
-<span style="float:right;">[Setoid.Homomorphisms →](Setoid.Homomorphisms.html)</span>
-
-{% include UALib.Links.md %}

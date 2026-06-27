@@ -125,11 +125,3 @@ ArityOf 𝑆 f = proj₂ 𝑆 f
 The bracket projections `∣_∣` / `∥_∥` are deprecated as of v3.0 (they carry a
 `WARNING_ON_USAGE` in [Overture.Basic][]); new code uses `OperationSymbolsOf` /
 `ArityOf` for signature components and `proj₁` / `proj₂` elsewhere.
-
-----------------------
-
-<span style="float:left;">[← Overture.Basic](Overture.Basic.html)</span>
-<span style="float:right;">[Overture.Operations →](Overture.Operations.html)</span>
-
-
-{% include UALib.Links.md %}

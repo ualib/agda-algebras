@@ -106,7 +106,3 @@ module _ {n : ℕ} (_·_ _∘_ : Fin n → Fin n → Fin n) where
   Distributesʳ? : Dec (∀ a b c → (b ∘ c) · a ≡ (b · a) ∘ (c · a))
   Distributesʳ? = all? (λ a → all? (λ b → all? (λ c → ((b ∘ c) · a) ≟ ((b · a) ∘ (c · a)))))
 ```
-
---------------------------------------
-
-{% include UALib.Links.md %}

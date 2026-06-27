@@ -192,5 +192,3 @@ compose directly with the satisfaction proofs the `Classical` theories carry.
 --------------------------------------
 
 [^1]: Goguen and Burstall's slogan is, "Truth is invariant under change of notation."
-
-{% include UALib.Links.md %}

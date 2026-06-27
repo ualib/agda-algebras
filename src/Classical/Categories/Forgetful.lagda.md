@@ -158,7 +158,3 @@ Per the issue's instruction, the bespoke proof in `Classical.Structures.Monoid` 
 section certifies that the general route re-proves it.  Adopting the general route
 inside `monoid→semigroup` itself is deliberately deferred — it would reverse the
 import order between `Classical.Structures.Monoid` and the categorical layer.
-
---------------------------------------
-
-{% include UALib.Links.md %}

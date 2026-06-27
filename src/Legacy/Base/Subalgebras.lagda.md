@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Subalgebras module (The Agda Universal Algebra Library)"
+title : "Legacy.Base.Subalgebras module (The Agda Universal Algebra Library)"
 date : "2021-01-14"
 author: "agda-algebras development team"
 ---
 
 ## <a id="subalgebra-types">Subalgebra Types</a>
 
-This is the [Base.Subalgebras][] module of the [Agda Universal Algebra Library][].
+This is the [Legacy.Base.Subalgebras][] module of the [Agda Universal Algebra Library][].
 
 
 ```agda
@@ -23,11 +23,3 @@ open import Legacy.Base.Subalgebras.Subuniverses  {𝑆 = 𝑆} public
 open import Legacy.Base.Subalgebras.Subalgebras   {𝑆 = 𝑆} public
 open import Legacy.Base.Subalgebras.Properties    {𝑆 = 𝑆} public
 ```
-
-
---------------------------------------
-
-<span style="float:left;">[← Base.Terms.Properties](Base.Terms.Properties.html)</span>
-<span style="float:right;">[Base.Subalgebras.Subuniverses →](Base.Subalgebras.Subuniverses.html)</span>
-
-{% include UALib.Links.md %}

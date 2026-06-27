@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Homomorphisms.Basic module (The Agda Universal Algebra Library)"
+title : "Legacy.Base.Homomorphisms.Basic module (The Agda Universal Algebra Library)"
 date : "2021-01-13"
 author: "agda-algebras development team"
 ---
 
 ### <a id="basic-definitions">Basic Definitions</a>
 
-This is the [Base.Homomorphisms.Basic] module of the [Agda Universal Algebra Library][].
+This is the [Legacy.Base.Homomorphisms.Basic] module of the [Agda Universal Algebra Library][].
 
 
 ```agda
@@ -161,11 +161,3 @@ mon→hom 𝑨 ϕ = ∣ ϕ ∣ , fst ∥ ϕ ∥
 epi→hom : {𝑨 : Algebra α}(𝑩 : Algebra β) → epi 𝑨 𝑩 → hom 𝑨 𝑩
 epi→hom _ ϕ = ∣ ϕ ∣ , fst ∥ ϕ ∥
 ```
-
-
----------------------------------
-
-<span style="float:left;">[↑ Base.Homomorphisms](Base.Homomorphisms.html)</span>
-<span style="float:right;">[Base.Homomorphisms.Properties →](Base.Homomorphisms.Properties.html)</span>
-
-{% include UALib.Links.md %}

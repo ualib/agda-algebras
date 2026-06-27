@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Structures.EquationalLogic"
+title : "Legacy.Base.Structures.EquationalLogic"
 date : "2021-07-23"
 author: "agda-algebras development team"
 ---
 
 ### <a id="equational-logic-for-general-structures">Equational Logic for General Structures</a>
 
-This is the [Base.Structures.EquationalLogic][] module of the [Agda Universal Algebra Library][].
+This is the [Legacy.Base.Structures.EquationalLogic][] module of the [Agda Universal Algebra Library][].
 
 
 ```agda
@@ -56,11 +56,3 @@ Mod ℰ = λ 𝑨 → ∀ p q → (p , q) ∈ ℰ → 𝑨 ⊧ p ≈ q
 fMod : {n : ℕ} → (Fin n → (Term X × Term X)) → Pred(structure 𝐹 𝑅 {α} {ρ}) _
 fMod ℰ = λ 𝑨 → ∀ i → 𝑨 ⊧ fst (ℰ i) ≈ snd (ℰ i)
 ```
-
-
---------------------------------
-
-<span style="float:left;">[← Base.Structures.Substructures](Base.Structures.Substructures.html)</span>
-<span style="float:right;">[Base.Structures.Sigma →](Base.Structures.Sigma.html)</span>
-
-{% include UALib.Links.md %}

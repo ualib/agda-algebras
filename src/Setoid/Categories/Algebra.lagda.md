@@ -80,7 +80,3 @@ Alg α ρ = record
                   Setoid.trans 𝔻[ 𝑪 ] (f≋g (proj₁ h ⟨$⟩ x)) (cong (proj₁ g) (h≋i x))
   }
 ```
-
---------------------------------------
-
-{% include UALib.Links.md %}

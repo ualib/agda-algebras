@@ -1,6 +1,6 @@
 ---
 layout: default
-title : "Base.Varieties.Invariants module (Agda Universal Algebra Library)"
+title : "Legacy.Base.Varieties.Invariants module (Agda Universal Algebra Library)"
 date : "2021-06-29"
 author: "the ualib/agda-algebras development team"
 ---
@@ -34,7 +34,3 @@ AlgebraicInvariant P = ∀ 𝑨 𝑩 → P 𝑨 → 𝑨 ≅ 𝑩 → P 𝑩
 
 {-# WARNING_ON_USAGE AlgebraicInvariant "Use Setoid.Varieties.Invariants.AlgebraicInvariant instead. Deprecated under #311; removal planned one minor cycle later." #-}
 ```
-
---------------------------------
-
-{% include UALib.Links.md %}

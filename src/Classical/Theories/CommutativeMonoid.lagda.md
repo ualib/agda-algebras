@@ -36,7 +36,3 @@ Th-CommutativeMonoid idˡ   = LeftIdentity  ∙-Op ε-Op refl refl 0F
 Th-CommutativeMonoid idʳ   = RightIdentity ∙-Op ε-Op refl refl 0F
 Th-CommutativeMonoid comm  = Commutative   ∙-Op      refl 0F 1F
 ```
-
---------------------------------------
-
-{% include UALib.Links.md %}

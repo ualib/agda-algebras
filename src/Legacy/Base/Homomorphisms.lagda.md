@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Homomorphisms module (The Agda Universal Algebra Library)"
+title : "Legacy.Base.Homomorphisms module (The Agda Universal Algebra Library)"
 date : "2021-01-12"
 author: "agda-algebras development team"
 ---
 
 ## <a id="homomorphism-types">Homomorphism Types</a>
 
-This chapter presents the [Base.Homomorphisms][] module of the [Agda Universal Algebra Library][].
+This chapter presents the [Legacy.Base.Homomorphisms][] module of the [Agda Universal Algebra Library][].
 
 
 ```agda
@@ -28,11 +28,3 @@ open import Legacy.Base.Homomorphisms.Factor             {𝑆 = 𝑆} public
 open import Legacy.Base.Homomorphisms.Isomorphisms       {𝑆 = 𝑆} public
 open import Legacy.Base.Homomorphisms.HomomorphicImages  {𝑆 = 𝑆} public
 ```
-
-
---------------------------------------
-
-<span style="float:left;">[← Base.Algebras.Congruences](Base.Algebras.Congruences.html)</span>
-<span style="float:right;">[Base.Homomorphisms.Basic →](Base.Homomorphisms.Basic.html)</span>
-
-{% include UALib.Links.md %}

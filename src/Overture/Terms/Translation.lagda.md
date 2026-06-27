@@ -100,6 +100,3 @@ reduct-invariance theorem leans on this directly.
 --------------------------------------
 
 [^1]: **Unicode tip**.  Type `\st` and select `✶` to get the star.
-
-
-{% include UALib.Links.md %}

@@ -107,7 +107,3 @@ horizontal composition of natural transformations are *not* defined yet; per the
 library's two-consumer rule they will be added when a second construction needs them
 (the [`Monad`][Setoid.Categories.Monad] laws below need only the components, which is
 also why the monad laws there are stated componentwise).
-
---------------------------------------
-
-{% include UALib.Links.md %}

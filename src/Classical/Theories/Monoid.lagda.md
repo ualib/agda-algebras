@@ -45,10 +45,3 @@ Th-Monoid assoc  = Associative    ∙-Op       refl 0F 1F 2F
 Th-Monoid idˡ    = LeftIdentity   ∙-Op ε-Op  refl refl 0F
 Th-Monoid idʳ    = RightIdentity  ∙-Op ε-Op  refl refl 0F
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Classical.Theories.Semigroup](Classical.Theories.Semigroup.html)</span>
-<span style="float:right;">[Classical.Theories.Group →](Classical.Theories.Group.html)</span>
-
-{% include UALib.Links.md %}

@@ -531,11 +531,3 @@ module _ {𝑨 : Algebra α ρᵃ} where
   ≅⨅-refl .to∼from = λ _ _ → refl
   ≅⨅-refl .from∼to = λ _ → refl
 ```
-
-
-------------------------------
-
-<span style="float:left;">[← Setoid.Homomorphisms.Factor](Setoid.Homomorphisms.Factor.html)</span>
-<span style="float:right;">[Setoid.Homomorphisms.HomomorphicImages →](Setoid.Homomorphisms.HomomorphicImages.html)</span>
-
-{% include UALib.Links.md %}

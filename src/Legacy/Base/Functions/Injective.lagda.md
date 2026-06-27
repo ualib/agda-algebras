@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Functions.Injective module"
+title : "Legacy.Base.Functions.Injective module"
 date : "2021-09-10"
 author: "the agda-algebras development team"
 ---
 
 ### <a id="injective-functions">Injective functions</a>
 
-This is the [Base.Functions.Injective][] module of the [agda-algebras][] library.
+This is the [Legacy.Base.Functions.Injective][] module of the [agda-algebras][] library.
 
 We say that a function `f : A → B` is *injective* (or *monic*) if it
 does not map two distinct elements of the domain to the same point in
@@ -52,13 +52,3 @@ The composition of injective functions is injective.
 
 ∘-injective fi gi = λ x → fi (gi x)
 ```
-
-
---------------------------------------
-
-<span style="float:left;">[← Base.Functions.FuncInverses](Base.Functions.FuncInverses.html)</span>
-<span style="float:right;">[Base.Functions.Surjective →](Base.Functions.Surjective.html)</span>
-
-{% include UALib.Links.md %}
-
-

@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Complexity.Basic module (The Agda Universal Algebra Library)"
+title : "Legacy.Base.Complexity.Basic module (The Agda Universal Algebra Library)"
 date : "2021-07-13"
 author: "agda-algebras development team"
 ---
 
 ### <a id="complexity-theory">Complexity Theory</a>
 
-> **Deprecated**.  Canonical home is now [`Setoid.Complexity.Basic`](Setoid.Complexity.Basic.html), ported under #307 (M2-7c).  This module has no Agda exports of its own, so no `WARNING_ON_USAGE` pragmas are attached; the deprecation lives at the documentation level.  See [`src/Legacy/Base/DEPRECATED.md`](../../DEPRECATED.md) for migration guidance.  Removal is planned for v3.1.
+> **Deprecated**.  Canonical home is now [`Setoid.Complexity.Basic`](/Setoid/Complexity/Basic/), ported under #307 (M2-7c).  This module has no Agda exports of its own, so no `WARNING_ON_USAGE` pragmas are attached; the deprecation lives at the documentation level.  See [`src/Legacy/Base/DEPRECATED.md`](../../DEPRECATED.md) for migration guidance.  Removal is planned for v3.1.
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -34,10 +34,3 @@ algorithm and numbers 𝑐, 𝑑 ∈ ℕ such that for each word 𝑥 ∈ 𝑊 t
 stops in at most (size 𝑥) 𝑐 + 𝑑 steps and computes 𝑓 𝑥.
 
 At first we will simplify by assuming 𝑇ₙ is `Fin n`.
-
---------------------------------
-
-<span style="float:left;">[↑ Complexity](Base.Complexity.html)</span>
-<span style="float:right;">[Base.Complexity.CSP →](Base.Complexity.CSP.html)</span>
-
-{% include UALib.Links.md %}

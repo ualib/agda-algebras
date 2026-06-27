@@ -278,6 +278,3 @@ join-ℊ = refl
 --------------------------------------
 
 [^1]: See `docs/notes/m4-5e-term-monad.md`; this level obstruction is a fact about predicativity that a cubical port will *not* dissolve, unlike the η-gap obstructions recorded elsewhere.)
-
-
-{% include UALib.Links.md %}

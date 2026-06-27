@@ -46,10 +46,3 @@ ar-Group ⁻¹-Op = Fin 1
 Sig-Group : Signature 0ℓ 0ℓ
 Sig-Group = Op-Group , ar-Group
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Classical.Signatures.Monoid](Classical.Signatures.Monoid.html)</span>
-<span style="float:right;">[Classical.Signatures.Ring →](Classical.Signatures.Ring.html)</span>
-
-{% include UALib.Links.md %}

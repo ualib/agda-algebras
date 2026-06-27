@@ -266,11 +266,3 @@ module _ {X : Type χ}{p q : Term X}{𝑨 : Algebra α ρᵃ}(φh : hom (𝑻 X)
   open Environment 𝑨      using () renaming ( ⟦_⟧ to ⟦_⟧₂ )
   open Environment (𝑻 X)  using ( ⟦_⟧ )
 ```
-
-
----------------------------------
-
-<span style="float:left;">[← Setoid.Varieties.Closure](Setoid.Varieties.Closure.html)</span>
-<span style="float:right;">[Setoid.Varieties.Invariants →](Setoid.Varieties.Invariants.html)</span>
-
-{% include UALib.Links.md %}

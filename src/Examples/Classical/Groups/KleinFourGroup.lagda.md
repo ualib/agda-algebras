@@ -122,9 +122,3 @@ roundtrip-ε = refl
 roundtrip-⁻¹ : ∀ (a : Fin 4) → a ⁻¹′ ≡ a
 roundtrip-⁻¹ a = refl
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Examples.Classical](Examples.Classical.html)</span>
-
-{% include UALib.Links.md %}

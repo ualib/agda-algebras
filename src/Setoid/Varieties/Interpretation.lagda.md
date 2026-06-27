@@ -303,5 +303,3 @@ implications, and re-fold the iterated reduct into the composite reduct with
 [^1]: O. C. García and W. Taylor, *The Lattice of Interpretability Types of Varieties*, Mem. Amer. Math. Soc. **50** (1984), no. 305.
 
 [^2]: Infinitary CSP over ω-categorical templates.
-
-{% include UALib.Links.md %}

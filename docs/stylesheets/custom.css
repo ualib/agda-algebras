@@ -1,0 +1,209 @@
+/* ==========================================================================
+   agda-algebras — custom styling for the MkDocs (Material) site
+   --------------------------------------------------------------------------
+   ADR-007 (rendering-pipeline modernization).  The site is built directly
+   from the `.lagda.md` sources with NO `agda --html` step: inline Agda terms
+   are written as kramdown attribute spans (`Algebra`{.AgdaRecord}), which
+   python-markdown's attr_list extension turns into class-tagged inline
+   <code> elements.  This stylesheet colours those classes — the precedent is
+   1Lab and formal-ledger-specifications — and tunes the prose, code blocks,
+   and landing page for legibility of Unicode-dense type theory.
+
+   Sections:
+     1. Typography (a Unicode-complete monospace for the math glyphs).
+     2. Agda token colours — light and dark, mirroring Agda's HTML palette.
+     3. Inline Agda terms (the attribute spans) in running prose.
+     4. Code blocks (plain, since token highlighting is class-based inline).
+     5. Landing-page hero + grid cards.
+   ========================================================================== */
+
+/* -- 1. Typography ---------------------------------------------------------
+   Agda source is saturated with mathematical Unicode — 𝓞, 𝑆, ⟨_⟩, →, ≈, ⨅,
+   ∀, ≋ — that most monospace fonts render with tofu or inconsistent metrics.
+   JuliaMono is purpose-built for exactly this glyph range and is the de-facto
+   choice across the Agda/Lean/Julia ecosystems.  We load it from a CDN with a
+   broad fallback stack so the page still reads well if the font is blocked. */
+@import url("https://cdn.jsdelivr.net/gh/cormullion/juliamono/webfonts/juliamono.css");
+
+:root {
+  --md-code-font: "JuliaMono", "JetBrains Mono", "Fira Code", "Cascadia Code",
+                  "DejaVu Sans Mono", "Menlo", "Consolas", monospace;
+  --md-text-font: "Inter", "Lato", -apple-system, BlinkMacSystemFont,
+                  "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Slightly larger line-height in code so stacked diacritics (𝒾, ≋, ⊑) and
+   subscripts never collide; tabular figures keep alignment honest. */
+.md-typeset code,
+.md-typeset pre > code {
+  font-variant-ligatures: none;
+  font-feature-settings: "ss20" 1; /* JuliaMono: dotted-zero / clearer glyphs */
+}
+
+/* -- 2. Agda token palette -------------------------------------------------
+   Mirrors Agda's canonical HTML colours (Function/Record/Datatype = blue,
+   InductiveConstructor = green, Field = magenta, Module = purple, Keyword =
+   orange, Symbol = grey), softened for screen reading and given a second,
+   lighter set for the dark scheme so every class keeps WCAG-AA contrast. */
+
+[data-md-color-scheme="default"] {
+  --agda-function:    #2056c7; /* functions, datatypes, records, postulates  */
+  --agda-datatype:    #2056c7;
+  --agda-record:      #2056c7;
+  --agda-postulate:   #2056c7;
+  --agda-primitive:   #2056c7;
+  --agda-macro:       #2056c7;
+  --agda-constructor: #1a7f37; /* (co)inductive constructors                 */
+  --agda-field:       #c0177e; /* record fields                              */
+  --agda-module:      #8b3fc7; /* module names                               */
+  --agda-keyword:     #b8590a; /* keywords / pragmas                         */
+  --agda-symbol:      #5a6270; /* symbols, parentheses, arrows               */
+  --agda-string:      #b2402a; /* string and char literals                   */
+  --agda-number:      #8b3fc7; /* numeric literals                           */
+  --agda-bound:       inherit; /* bound variables read as ordinary prose     */
+  --agda-argument:    #0a7d8c; /* arguments / parameters (project convention)*/
+  --agda-comment:     #8a93a2;
+}
+
+[data-md-color-scheme="slate"] {
+  --agda-function:    #74a8ff;
+  --agda-datatype:    #74a8ff;
+  --agda-record:      #74a8ff;
+  --agda-postulate:   #74a8ff;
+  --agda-primitive:   #74a8ff;
+  --agda-macro:       #74a8ff;
+  --agda-constructor: #5dd874;
+  --agda-field:       #ff85c8;
+  --agda-module:      #cd9bff;
+  --agda-keyword:     #ffa657;
+  --agda-symbol:      #aab3c0;
+  --agda-string:      #ff9e80;
+  --agda-number:      #cd9bff;
+  --agda-bound:       inherit;
+  --agda-argument:    #5fd4da;
+  --agda-comment:     #7d8694;
+}
+
+/* Apply the palette to both inline spans and (should they ever appear) tokens
+   inside code blocks.  Keyed on the class the attr_list span carries. */
+.md-typeset .AgdaFunction               { color: var(--agda-function);    }
+.md-typeset .AgdaDatatype               { color: var(--agda-datatype);    }
+.md-typeset .AgdaRecord                 { color: var(--agda-record);      }
+.md-typeset .AgdaPostulate              { color: var(--agda-postulate);   }
+.md-typeset .AgdaPrimitive              { color: var(--agda-primitive);   }
+.md-typeset .AgdaPrimitiveType          { color: var(--agda-primitive);   }
+.md-typeset .AgdaMacro                  { color: var(--agda-macro);       }
+.md-typeset .AgdaInductiveConstructor   { color: var(--agda-constructor); }
+.md-typeset .AgdaCoinductiveConstructor { color: var(--agda-constructor); }
+.md-typeset .AgdaField                  { color: var(--agda-field);       }
+.md-typeset .AgdaModule                 { color: var(--agda-module);      }
+.md-typeset .AgdaKeyword                { color: var(--agda-keyword);     }
+.md-typeset .AgdaPragma                 { color: var(--agda-keyword);     }
+.md-typeset .AgdaSymbol                 { color: var(--agda-symbol);      }
+.md-typeset .AgdaString                 { color: var(--agda-string);      }
+.md-typeset .AgdaNumber                 { color: var(--agda-number);      }
+.md-typeset .AgdaBound                  { color: var(--agda-bound);       }
+.md-typeset .AgdaArgument               { color: var(--agda-argument);    }
+.md-typeset .AgdaGeneralizable          { color: var(--agda-bound);       }
+.md-typeset .AgdaComment                { color: var(--agda-comment); font-style: italic; }
+
+/* -- 3. Inline Agda terms in prose -----------------------------------------
+   A reference like `Algebra`{.AgdaRecord} should read as a coloured
+   mathematical name woven into the sentence — not as a boxed code chip.  We
+   therefore strip Material's inline-code background and padding for spans that
+   carry an Agda class, leaving crisp coloured monospace.  Plain inline code
+   (no class) keeps the default chip so shell snippets still stand out. */
+.md-typeset code[class*="Agda"] {
+  background-color: transparent;
+  padding: 0;
+  box-shadow: none;
+  font-weight: 480;
+  white-space: pre-wrap;
+  word-break: keep-all;
+}
+
+/* A whisper of a highlight on hover helps when scanning a dense paragraph for
+   one identifier, without colouring the page in resting state. */
+.md-typeset code[class*="Agda"]:hover {
+  background-color: var(--md-code-bg-color);
+  border-radius: 0.15rem;
+}
+
+/* -- 4. Code blocks --------------------------------------------------------
+   Fenced ```agda blocks are rendered as plain monospace (architecture (b)
+   trades whole-token highlighting for the inline class spans above), so we
+   invest in typography instead: comfortable padding, a hairline frame, a
+   restful tint, and a left rule that quietly marks "this is formal text". */
+.md-typeset pre > code {
+  line-height: 1.55;
+}
+
+.md-typeset .highlight pre,
+.md-typeset pre.agda {
+  border-left: 3px solid var(--agda-function);
+}
+
+[data-md-color-scheme="default"] {
+  --md-code-bg-color:  #f7f8fa;
+  --md-code-fg-color:  #2b2f36;
+}
+
+/* Tame the link colour inside code so cross-references (Agda identifiers that
+   are also hyperlinks) keep their token colour rather than turning link-blue;
+   an underline on hover signals interactivity instead. */
+.md-typeset a code[class*="Agda"],
+.md-typeset code[class*="Agda"] a {
+  color: inherit;
+  text-decoration: none;
+}
+.md-typeset a:hover code[class*="Agda"] {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+/* -- 5. Landing page -------------------------------------------------------
+   A quiet hero and a grid of cards for the entry points.  Uses Material's
+   built-in `.grid.cards` where possible; the hero is bespoke. */
+.ualib-hero {
+  text-align: center;
+  padding: 2.4rem 0 1.2rem;
+}
+.ualib-hero h1 {
+  font-weight: 800;
+  font-size: 2.6rem;
+  line-height: 1.1;
+  margin: 0.2rem 0 0.6rem;
+  letter-spacing: -0.01em;
+}
+.ualib-hero .ualib-tagline {
+  font-size: 1.05rem;
+  color: var(--md-default-fg-color--light);
+  max-width: 42rem;
+  margin: 0 auto 1.4rem;
+}
+.ualib-hero .ualib-formula {
+  font-family: var(--md-code-font);
+  font-size: 1.5rem;
+  color: var(--agda-function);
+  margin: 0.8rem 0 1.4rem;
+}
+
+/* Buttons row under the hero. */
+.ualib-cta {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+/* Tighten Material's table rendering for the small reference tables that
+   appear throughout the library (signatures, operation arities, etc.). */
+.md-typeset table:not([class]) {
+  font-size: 0.74rem;
+}
+
+/* Give section-index (clickable parent nav items) a subtle "overview" cue. */
+.md-nav__item--section > .md-nav__link {
+  font-weight: 700;
+}

@@ -25,8 +25,5 @@ open import Overture.Adjunction.Residuation  public
 
 -------------------------------------
 
-<span style="float:left;">[← Overture.Functions](Overture.Functions.html)</span>
-<span style="float:right;">[Overture.Adjunction.Closure →](Overture.Adjunction.Closure.html)</span>
 
-{% include UALib.Links.md %}
 ```

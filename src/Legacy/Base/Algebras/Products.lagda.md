@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Algebras.Products module (Agda Universal Algebra Library)"
+title : "Legacy.Base.Algebras.Products module (Agda Universal Algebra Library)"
 date : "2021-01-12"
 author: "agda-algebras development team"
 ---
 
 ### <a id="products-of-algebras-and-product-algebras">Products of Algebras and Product Algebras</a>
 
-This is the [Base.Algebras.Products][] module of the [Agda Universal Algebra Library][].
+This is the [Legacy.Base.Algebras.Products][] module of the [Agda Universal Algebra Library][].
 
 
 ```agda
@@ -160,10 +160,3 @@ Finally, we define `class-product` which represents the product of all members o
 If `p : 𝑨 ∈ 𝒦`, we view the pair `(𝑨 , p) ∈ ℑ` as an *index* over the class, so we
 can think of `𝔄 (𝑨 , p)` (which is simply `𝑨`) as the projection of the product `⨅
 𝔄` onto the `(𝑨 , p)`-th component.
-
------------------------
-
-<span style="float:left;">[← Base.Algebras.Basic](Base.Algebras.Basic.html)</span>
-<span style="float:right;">[Base.Algebras.Congruences →](Base.Algebras.Congruences.html)</span>
-
-{% include UALib.Links.md %}

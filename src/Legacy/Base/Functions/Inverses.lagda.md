@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Functions.Inverses module"
+title : "Legacy.Base.Functions.Inverses module"
 date : "2021-01-12"
 author: "the agda-algebras development team"
 ---
 
 ### <a id="inverses">Inverses</a>
 
-This is the [Base.Functions.Inverses][] module of the [agda-algebras][] library.
+This is the [Legacy.Base.Functions.Inverses][] module of the [agda-algebras][] library.
 
 
 ```agda
@@ -118,13 +118,3 @@ In a certain sense, `Inv f` is also a (range-restricted) *left-inverse*.
  ⁻¹IsInverseˡ : ∀ {f a} → [ f ]⁻¹ (f∈range a) ≡ a
  ⁻¹IsInverseˡ = refl
 ```
-
-
---------------------------------------
-
-<span style="float:left;">[← Base.Functions.Preliminaries](Base.Functions.Preliminaries.html)</span>
-<span style="float:right;">[Base.Functions.Injective →](Base.Functions.Injective.html)</span>
-
-{% include UALib.Links.md %}
-
-

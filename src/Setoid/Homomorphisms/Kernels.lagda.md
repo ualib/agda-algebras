@@ -137,11 +137,3 @@ the one we need later.
   ker-in-con : {θ : Con 𝑨 ℓ} → ∀ {x}{y} → kercon (πhom θ) .proj₁ x y →  θ .proj₁ x y
   ker-in-con = id
 ```
-
-
---------------------------------
-
-<span style="float:left;">[← Setoid.Homomorphisms.Properties](Setoid.Homomorphisms.Properties.html)</span>
-<span style="float:right;">[Setoid.Homomorphisms.Products →](Setoid.Homomorphisms.Products.html)</span>
-
-{% include UALib.Links.md %}

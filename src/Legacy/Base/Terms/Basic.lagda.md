@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Terms.Basic module (The Agda Universal Algebra Library)"
+title : "Legacy.Base.Terms.Basic module (The Agda Universal Algebra Library)"
 date : "2021-01-14"
 author: "the agda-algebras development team"
 ---
 
 ### <a id="basic-definitions">Basic Definitions</a>
 
-This is the [Base.Terms.Basic][] module of the [Agda Universal Algebra Library][].
+This is the [Legacy.Base.Terms.Basic][] module of the [Agda Universal Algebra Library][].
 
 
 ```agda
@@ -101,11 +101,3 @@ In [Agda][] the term algebra can be defined as simply as one could hope.
 𝑻 : (X : Type χ ) → Algebra (ov χ)
 𝑻 X = Term X , node
 ```
-
-
-------------------------------
-
-<span style="float:left;">[↑ Base.Terms](Base.Terms.html)</span>
-<span style="float:right;">[Base.Terms.Properties →](Base.Terms.Properties.html)</span>
-
-{% include UALib.Links.md %}

@@ -44,7 +44,3 @@ ar-Lattice ∨-Op = Fin 2
 Sig-Lattice : Signature 0ℓ 0ℓ
 Sig-Lattice = Op-Lattice , ar-Lattice
 ```
-
---------------------------------------
-
-{% include UALib.Links.md %}

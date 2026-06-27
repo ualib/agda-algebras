@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Algebras.Congruences module (The Agda Universal Algebra Library)"
+title : "Legacy.Base.Algebras.Congruences module (The Agda Universal Algebra Library)"
 date : "2021-07-03"
 author: "agda-algebras development team"
 ---
 
 ### <a id="congruence-relations">Congruence Relations</a>
 
-This is the [Base.Algebras.Congruences][] module of the [Agda Universal Algebra Library][].
+This is the [Legacy.Base.Algebras.Congruences][] module of the [Agda Universal Algebra Library][].
 
 
 ```agda
@@ -166,11 +166,3 @@ open IsCongruence
 
 /-≡ θ refl = IsEquivalence.refl (is-equivalence ∥ θ ∥)
 ```
-
-
--------------------------------------------------
-
-<span style="float:left;">[← Base.Algebras.Products](Base.Algebras.Products.html)</span>
-<span style="float:right;">[Base.Homomorphisms →](Base.Homomorphisms.html)</span>
-
-{% include UALib.Links.md %}

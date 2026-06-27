@@ -19,6 +19,3 @@ open import Examples.FunctionTypeBijections
 open import Examples.PolynomialFunctors
 open import Examples.Structures
 ```
-
-
-{% include UALib.Links.md %}

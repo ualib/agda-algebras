@@ -104,7 +104,3 @@ eqsToCommutativeSemigroup A _·_ ·-assoc ·-comm = opsToMagma _·_ , proof
   proof assocᶜ ρ = ·-assoc (ρ 0F) (ρ 1F) (ρ 2F)
   proof comm   ρ = ·-comm  (ρ 0F) (ρ 1F)
 ```
-
---------------------------------------
-
-{% include UALib.Links.md %}

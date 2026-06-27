@@ -123,11 +123,3 @@ FirstHomCorollary : {𝑨 : Algebra α ρᵃ} {𝑩 : Algebra β ρᵇ} (hh : ho
   → (kerquo hh) IsSubalgebraOf 𝑩
 FirstHomCorollary hh = proj₁ (FirstHomTheorem hh) , proj₂ (proj₂ (FirstHomTheorem hh))
 ```
-
-
----------------------------------
-
-<span style="float:left;">[← Setoid.Subalgebras.Subuniverses](Setoid.Subalgebras.Subuniverses.html)</span>
-<span style="float:right;">[Setoid.Subalgebras.Properties →](Setoid.Subalgebras.Properties.html)</span>
-
-{% include UALib.Links.md %}

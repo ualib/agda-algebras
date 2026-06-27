@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Relations.Quotients module (The Agda Universal Algebra Library)"
+title : "Legacy.Base.Relations.Quotients module (The Agda Universal Algebra Library)"
 date : "2021-01-13"
 author: "the agda-algebras development team"
 ---
 
 ### <a id="quotients">Quotients</a>
 
-This is the [Base.Relations.Quotients][] module of the [Agda Universal Algebra Library][].
+This is the [Legacy.Base.Relations.Quotients][] module of the [Agda Universal Algebra Library][].
 
 
 ```agda
@@ -224,7 +224,7 @@ module _  {A : Type a}
 ```
 
 
-An example application of these is the `block-ext` type in the [Base.Relations.Extensionality] module.
+An example application of these is the `block-ext` type in the [Legacy.Base.Relations.Extensionality] module.
 
 Recall, from Base.Relations.Discrete, the zero (or "identity") relation is
 
@@ -257,13 +257,3 @@ This is obviously an equivalence relation, as we now confirm.
 ≡→⊆ : {A : Type a}{ρ : Level}(Q R : Pred A ρ) → Q ≡ R → Q ⊆ R
 ≡→⊆ Q .Q PE.refl {x} Qx = Qx
 ```
-
-
-
--------------------------------------
-
-<span style="float:left;">[← Base.Relations.Properties](Base.Relations.Properties.html)</span>
-<span style="float:right;">[Base.Equality →](Base.Equality.html)</span>
-
-{% include UALib.Links.md %}
-

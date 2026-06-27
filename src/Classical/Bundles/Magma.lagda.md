@@ -123,10 +123,3 @@ module _ {𝑴 : stdlib-Magma α ρ} where
   roundtrip-bcb-ma : (a b : M) → (a ∙ b) ≈ (a ∙' b)
   roundtrip-bcb-ma a b = refl
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Classical.Structures.Magma](Classical.Structures.Magma.html)</span>
-<span style="float:right;">[Classical.Small.Structures.Magma →](Classical.Small.Structures.Magma.html)</span>
-
-{% include UALib.Links.md %}

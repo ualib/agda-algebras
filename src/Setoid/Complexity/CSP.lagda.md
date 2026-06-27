@@ -181,10 +181,3 @@ An instance of a constraint satisfaction problem is a triple 𝑃 = (𝑉, 𝐷,
   isSolution : ((v : var) → Carrier (Domain (𝒜 v))) → Type (ι ⊔ ρʳ)  -- An assignment *solves* the instance
   isSolution f = ∀ i → (Constraint.satisfies (cs i)) f               -- if it satisfies all the constraints.
 ```
-
---------------------------------
-
-<span style="float:left;">[← Setoid.Complexity.Basic](Setoid.Complexity.Basic.html)</span>
-<span style="float:right;">[Top ↑](index.html)</span>
-
-{% include UALib.Links.md %}

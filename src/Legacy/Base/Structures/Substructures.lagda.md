@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Structures.Substructures module (Agda Universal Algebra Library)"
+title : "Legacy.Base.Structures.Substructures module (Agda Universal Algebra Library)"
 date : "2021-07-26"
 author: "agda-algebras development team"
 ---
 
 ### <a id="types-for-substructures-of-general-mathematical-structures">Types for Substructures of General Structures</a>
 
-This is the [Base.Structures.Substructures][] module of the [Agda Universal Algebra Library][].
+This is the [Legacy.Base.Structures.Substructures][] module of the [Agda Universal Algebra Library][].
 
 
 ```agda
@@ -309,11 +309,3 @@ Suppose `𝒦 : Pred (Algebra α 𝑆) γ` denotes a class of `𝑆`-algebras an
 
  SubstructuresOfClass 𝒦 {β}{ρᵇ} = Σ[ 𝑩 ∈ structure 𝐹 𝑅 {β}{ρᵇ} ] 𝑩 ≤c 𝒦
 ```
-
-
---------------------------------
-
-<span style="float:left;">[← Base.Structures.Terms](Base.Structures.Terms.html)</span>
-<span style="float:right;">[Base.Structures.EquationalLogic →](Base.Structures.EquationalLogic.html)</span>
-
-{% include UALib.Links.md %}

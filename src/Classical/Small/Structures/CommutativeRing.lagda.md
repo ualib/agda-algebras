@@ -40,9 +40,3 @@ eqsToCommutativeRing : (A : Type 0ℓ) (_+'_ : A → A → A) (0' : A) (-'_ : A 
   → CommutativeRing
 eqsToCommutativeRing = Polymorphic.eqsToCommutativeRing
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Classical.Small.Structures.Ring](Classical.Small.Structures.Ring.html)</span>
-
-{% include UALib.Links.md %}

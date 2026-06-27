@@ -65,8 +65,3 @@ nae3sat = record { carrier = 𝟚
                  ; rel = λ _ x → ((x 𝟛.𝟎) , (x 𝟛.𝟏) , (x 𝟛.𝟐)) ∈ NAE3SAT
                  }
 ```
-
-
---------------------------------------
-
-{% include UALib.Links.md %}

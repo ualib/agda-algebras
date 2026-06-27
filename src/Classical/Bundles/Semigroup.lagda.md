@@ -130,10 +130,3 @@ module _ {S : stdlib-Semigroup α ρ} where
   roundtrip-bcb-sg : (a b : A) → a ∙ b ≈ a ∙' b
   roundtrip-bcb-sg a b = refl
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Classical.Structures.Semigroup](Classical.Structures.Semigroup.html)</span>
-<span style="float:right;">[Classical.Small.Structures.Semigroup →](Classical.Small.Structures.Semigroup.html)</span>
-
-{% include UALib.Links.md %}

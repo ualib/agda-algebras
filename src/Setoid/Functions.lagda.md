@@ -21,11 +21,3 @@ open import Setoid.Functions.Injective   public
 open import Setoid.Functions.Inverses    public
 open import Setoid.Functions.Surjective  public
 ```
-
-
---------------------------------------
-
-<span style="float:left;">[← Preface](Preface.html)</span>
-<span style="float:right;">[Setoid.Functions.Basic →](Setoid.Functions.Basic.html)</span>
-
-{% include UALib.Links.md %}

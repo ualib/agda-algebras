@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Subalgebras.Subuniverses module (The Agda Universal Algebra Library)"
+title : "Legacy.Base.Subalgebras.Subuniverses module (The Agda Universal Algebra Library)"
 date : "2021-01-14"
 author: "agda-algebras development team"
 ---
 
 ### <a id="subuniverses">Subuniverses</a>
 
-This is the [Base.Subalgebras.Subuniverses][] module of the [Agda Universal Algebra Library][].
+This is the [Legacy.Base.Subalgebras.Subuniverses][] module of the [Agda Universal Algebra Library][].
 
 We start by defining a type that represents the important concept of *subuniverse*. Suppose `𝑨` is an algebra.  A subset `B ⊆ ∣ 𝑨 ∣` is said to be *closed under the operations of* `𝑨` if for each `𝑓 ∈ ∣ 𝑆 ∣` and all tuples `𝒃 : ∥ 𝑆 ∥ 𝑓 → 𝐵` the element `(𝑓 ̂ 𝑨) 𝒃` belongs to `B`. If a subset `B ⊆ 𝐴` is closed under the operations of `𝑨`, then we call B a *subuniverse* of `𝑨`.
 
@@ -283,10 +283,3 @@ In the induction step, the following typing judgments are assumed:
     ν   : Im a ⊆ Sg 𝑨 X
 
 and, under these assumptions, we proved `∣ g ∣ ((𝑓 ̂ 𝑨) a) ≡ ∣ h ∣ ((𝑓 ̂ 𝑨) a)`.
-
----------------------------------
-
-<span style="float:left;">[↑ Subalgebras](Base.Subalgebras.html)</span>
-<span style="float:right;">[Base.Subalgebras.Subalgebras →](Base.Subalgebras.Base.Subalgebras.html)</span>
-
-{% include UALib.Links.md %}

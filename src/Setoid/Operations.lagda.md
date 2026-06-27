@@ -22,10 +22,3 @@ module Setoid.Operations where
 
 open import Setoid.Operations.Properties  public
 ```
-
--------------------------------------
-
-<span style="float:left;">[↑ Setoid](Setoid.html)</span>
-<span style="float:right;">[Setoid.Operations.Properties →](Setoid.Operations.Properties.html)</span>
-
-{% include UALib.Links.md %}

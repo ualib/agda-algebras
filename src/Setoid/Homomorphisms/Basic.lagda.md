@@ -96,13 +96,3 @@ module _ (𝑨 : Algebra α ρᵃ)(𝑩 : Algebra β ρᵇ) where
   epi→ontohom : epi 𝑨 𝑩 → Σ[ h ∈ hom 𝑨 𝑩 ] IsSurjective (proj₁ h)
   epi→ontohom (hh , hhE) = (hh , isHom hhE) , isSurjective hhE
 ```
-
-
---------------------------------
-
-<span style="float:left;">[↑ Setoid.Homomorphisms](Setoid.Homomorphisms.html)</span>
-<span style="float:right;">[Setoid.Homomorphisms.Properties →](Setoid.Homomorphisms.Properties.html)</span>
-
-{% include UALib.Links.md %}
-
-

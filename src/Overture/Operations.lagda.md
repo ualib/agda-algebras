@@ -58,12 +58,3 @@ Occasionally we want to extract the arity of a given operation symbol.
 arity[_] : {I : Type 𝓥} {A : Type a } → Op I A → Type 𝓥
 arity[_] {I = I} f = I
 ```
-
------------
-
-<span style="float:left;">[← Overture.Signatures](Overture.Signatures.html)</span>
-<span style="float:right;">[Base →](Base.html)</span>
-
-
-{% include UALib.Links.md %}
-

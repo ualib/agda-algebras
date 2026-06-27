@@ -1,6 +1,6 @@
 ---
 layout: default
-title : "Base.Structures.Sigma.Isos module (The Agda Universal Algebra Library)"
+title : "Legacy.Base.Structures.Sigma.Isos module (The Agda Universal Algebra Library)"
 date : "2021-06-22"
 author: "agda-algebras development team"
 ---
@@ -177,10 +177,7 @@ module _  {ι : Level}{I : Type ι}
 
 --------------------------------
 
-<span style="float:left;">[← Base.Structures.Sigma.Homs](Base.Structures.Sigma.Homs.html)</span>
-<span style="float:right;">[Base.Categories →](Base.Categories.html)</span>
 
-{% include UALib.Links.md %}
 
 
 

@@ -33,10 +33,3 @@ open import Setoid.Varieties.Properties        {𝑆 = 𝑆}  public
 open import Setoid.Varieties.Reducts                    public
 open import Setoid.Varieties.SoundAndComplete  {𝑆 = 𝑆}  public
 ```
-
---------------------------------
-
-<span style="float:left;">[← Setoid.Subalgebras.Properties](Setoid.Subalgebras.Properties.html)</span>
-<span style="float:right;">[Setoid.Varieties.EquationalLogic →](Setoid.Varieties.EquationalLogic.html)</span>
-
-{% include UALib.Links.md %}

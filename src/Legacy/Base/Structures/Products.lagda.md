@@ -7,7 +7,7 @@ author: "agda-algebras development team"
 
 ### <a id="products-for-structures-as-records">Products for structures as records</a>
 
-This is the [Base.Structures.Products][] module of the [Agda Universal Algebra Library][].
+This is the [Legacy.Base.Structures.Products][] module of the [Agda Universal Algebra Library][].
 
 
 ```agda
@@ -57,11 +57,3 @@ module _ {𝒦 : Pred (structure 𝐹 𝑅 {α}{ρ}) ℓ} where
   class-product : structure 𝐹 𝑅
   class-product = ⨅ 𝔄
 ```
-
-
---------------------------------
-
-<span style="float:left;">[← Base.Structures.Graphs0](Base.Structures.Graphs0.html)</span>
-<span style="float:right;">[Base.Structures.Congruences →](Base.Structures.Congruences.html)</span>
-
-{% include UALib.Links.md %}

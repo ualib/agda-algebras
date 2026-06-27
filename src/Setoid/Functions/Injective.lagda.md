@@ -103,11 +103,3 @@ module _ {𝑨 : Setoid a α}{𝑩 : Setoid b β}{𝑪 : Setoid c γ} where
 id-is-injective : {𝑨 : Setoid a α} → IsInjective{𝑨 = 𝑨}{𝑨} 𝑖𝑑
 id-is-injective = id
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Setoid.Overture.Inverses](Setoid.Overture.Inverses.html)</span>
-<span style="float:right;">[Setoid.Overture.Surjective →](Setoid.Overture.Surjective.html)</span>
-
-{% include UALib.Links.md %}
-

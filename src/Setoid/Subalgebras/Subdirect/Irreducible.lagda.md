@@ -271,8 +271,3 @@ limitation, as the forward direction is the one consumed downstream.
 [^1]: See e.g. Burris and Sankappanavar, *A Course in Universal Algebra*, Def. II.8.3 / Thm. II.8.4.
 
 [M6-2 design note]: https://github.com/ualib/agda-algebras/blob/master/docs/notes/m6-2-subdirect.md
-
-<span style="float:left;">[← Setoid.Subalgebras.Subdirect.Finite](Setoid.Subalgebras.Subdirect.Finite.html)</span>
-<span style="float:right;">[Setoid.Subalgebras.Properties →](Setoid.Subalgebras.Properties.html)</span>
-
-{% include UALib.Links.md %}

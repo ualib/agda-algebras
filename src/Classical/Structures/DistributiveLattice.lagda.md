@@ -211,7 +211,3 @@ eqsToDistributiveLattice A _∧'_ _∨'_
   proof ∧-distribˡ ρ = ∧-distribˡ-≡ (ρ 0F) (ρ 1F) (ρ 2F)
   proof ∨-distribˡ ρ = ∨-distribˡ-≡ (ρ 0F) (ρ 1F) (ρ 2F)
 ```
-
---------------------------------------
-
-{% include UALib.Links.md %}

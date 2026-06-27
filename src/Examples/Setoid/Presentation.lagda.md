@@ -100,7 +100,3 @@ collapseˡ = trans (app λ { 0F → hyp 0F ; 1F → refl }) (hyp 0F)
 collapseʳ : (a · (a · a)) ≈ a
 collapseʳ = trans (app λ { 0F → refl ; 1F → hyp 0F }) (hyp 0F)
 ```
-
---------------------------------------
-
-{% include UALib.Links.md %}

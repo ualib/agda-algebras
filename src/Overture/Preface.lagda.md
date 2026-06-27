@@ -106,10 +106,3 @@ Citation information — both the v2.0.1 Zenodo archival entry and the BibTeX fo
 #### Contributions welcomed
 
 Improvements to `agda-algebras` — bug reports, design discussions, pull requests, documentation fixes — are welcome.  See [`CONTRIBUTING.md`](https://github.com/ualib/agda-algebras/blob/master/CONTRIBUTING.md) for the development workflow and the [GitHub issue tracker](https://github.com/ualib/agda-algebras/issues/new/choose) to report problems or propose changes.
-
-------------------------------------------------
-
-<span style="float:left;">[↑ Overture](Overture.html)</span>
-<span style="float:right;">[Overture.Basic →](Overture.Basic.html)</span>
-
-{% include UALib.Links.md %}

@@ -98,7 +98,3 @@ eqsToCommutativeMonoid A _·_ e ·-assoc ·-idˡ ·-idʳ ·-comm = opsToBareMono
   proof idʳᶜ   ρ = ·-idʳ   (ρ 0F)
   proof comm   ρ = ·-comm  (ρ 0F) (ρ 1F)
 ```
-
---------------------------------------
-
-{% include UALib.Links.md %}

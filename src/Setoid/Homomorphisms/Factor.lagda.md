@@ -147,12 +147,3 @@ If, in addition, `g` is surjective, then so will be the factor `φ`.
                  ; isSurjective = epic-factor gfunc hfunc φmap gE gφh
                  }
 ```
-
-
---------------------------------
-
-<span style="float:left;">[← Setoid.Homomorphisms.Noether](Setoid.Homomorphisms.Noether.html)</span>
-<span style="float:right;">[Setoid.Homomorphisms.Isomorphisms →](Setoid.Homomorphisms.Isomorphisms.html)</span>
-
-{% include UALib.Links.md %}
-

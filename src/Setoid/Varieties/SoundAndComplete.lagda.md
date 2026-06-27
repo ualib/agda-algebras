@@ -266,10 +266,3 @@ which asserts that every valid consequence is derivable.
      open Environment 𝔽[ Γ ]
      open SetoidReasoning (Domain 𝔽[ Γ ])
 ```
-
---------------------------------
-
-<span style="float:left;">[↑ Setoid.Varieties](Setoid.Varieties.html)</span>
-<span style="float:right;">[Setoid.Varieties.Closure →](Setoid.Varieties.Closure.html)</span>
-
-{% include UALib.Links.md %}

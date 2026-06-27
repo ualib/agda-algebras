@@ -130,9 +130,3 @@ eqsToCommutativeRing A _+'_ 0' -'_ _*'_ 1'
   proof distribˡᶜ ρ = distribˡ-≡ (ρ 0F) (ρ 1F) (ρ 2F)
   proof distribʳᶜ ρ = distribʳ-≡ (ρ 0F) (ρ 1F) (ρ 2F)
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Classical.Structures.Ring](Classical.Structures.Ring.html)</span>
-
-{% include UALib.Links.md %}

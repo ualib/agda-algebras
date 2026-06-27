@@ -196,11 +196,3 @@ module _ {α ρᵃ ℓ : Level} {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔
     𝔽-ModTh-epi-lift A∈ModThK =
       ⊙-epi (𝔽-ModTh-epi (λ {p q} → A∈ModThK{p = p}{q})) ToLift-epi
 ```
-
---------------------------------
-
-<span style="float:left;">[← Setoid.Varieties.Closure](Setoid.Varieties.Closure.html)</span>
-<span style="float:right;">[Setoid.Varieties.HSP](Setoid.Varieties.HSP.html)</span>
-
-{% include UALib.Links.md %}
-

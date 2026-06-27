@@ -99,9 +99,3 @@ two-dimensional table, so the finite Cayley-table case keeps the plain curried
 function type.  The decidable-law checkers in [`Overture.Operations.Properties`][]
 take the same bare `Fin n → Fin n → Fin n`, for the same reason: finiteness is what
 makes the laws decidable, independently of how an operation's arguments are packaged.
-
---------------------------------------
-
-<span style="float:left;">[← Overture.Operations](Overture.Operations.html)</span>
-
-{% include UALib.Links.md %}

@@ -30,10 +30,3 @@ open import Relation.Binary.Definitions public
          ; Irreflexive  ; Asymmetric
          ; Connex       ; Total )
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Setoid.Relations.Continuous](Setoid.Relations.Continuous.html)</span>
-<span style="float:right;">[Setoid.Algebras →](Setoid.Algebras.html)</span>
-
-{% include UALib.Links.md %}

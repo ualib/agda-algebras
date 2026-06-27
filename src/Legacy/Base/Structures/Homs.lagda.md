@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Structures.Homs"
+title : "Legacy.Base.Structures.Homs"
 date : "2021-06-22"
 author: "agda-algebras development team"
 ---
 
 ### <a id="homomorphisms-of-general-structures">Homomorphisms of General Structures</a>
 
-This is the [Base.Structures.Homs][] module of the [Agda Universal Algebra Library][].
+This is the [Legacy.Base.Structures.Homs][] module of the [Agda Universal Algebra Library][].
 
 
 ```agda
@@ -268,11 +268,3 @@ module _ {𝑨 : structure 𝐹 S∅ {α}{ℓ₀}} {𝑩 : structure 𝐹 S∅ {
  hom-alg : Type (sigl 𝐹 ⊔ α ⊔ β)
  hom-alg = Σ[ h ∈ ((carrier 𝑨) → (carrier 𝑩)) ] is-hom-op 𝑨 𝑩 h
 ```
-
-
---------------------------------
-
-<span style="float:left;">[← Base.Structures.Congruences](Base.Structures.Congruences.html)</span>
-<span style="float:right;">[Base.Structures.Isos →](Base.Structures.Isos.html)</span>
-
-{% include UALib.Links.md %}

@@ -137,7 +137,3 @@ function but a homomorphism `𝑻 (Fin 2) ⟶ ℕ∸-magma`, supplied by
 ηhom-is-free-lift : ∀ t → (proj₁ ηhom) ⟨$⟩ t ≡ ⟦ t ⟧η
 ηhom-is-free-lift _ = refl
 ```
-
---------------------------------------
-
-{% include UALib.Links.md %}

@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Algebras.Basic module (Agda Universal Algebra Library)"
+title : "Legacy.Base.Algebras.Basic module (Agda Universal Algebra Library)"
 date : "2021-04-23"
 author: "agda-algebras development team"
 ---
 
 ### <a id="basic-definitions">Basic definitions</a>
 
-This is the [Base.Algebras.Basic][] module of the [Agda Universal Algebra Library][].
+This is the [Legacy.Base.Algebras.Basic][] module of the [Agda Universal Algebra Library][].
 
 
 ```agda
@@ -58,7 +58,7 @@ from `𝑨` by simply removing some of the operations.
 
 Recall, we defined the type `Signature 𝓞 𝓥` above as the dependent pair type
 `Σ F ꞉ Type 𝓞 , (F → Type 𝓥)`, and the type `Op` of operation symbols is the
-function type `Op I A = (I → A) → A` (see [Base.Relations.Discrete][]).
+function type `Op I A = (I → A) → A` (see [Legacy.Base.Relations.Discrete][]).
 
 For a fixed signature `𝑆 : Signature 𝓞 𝓥` and universe level `α`, we define the
 *type of algebras in the signature* `𝑆` (or *type of* `𝑆`-*algebras*) *with domain
@@ -72,7 +72,7 @@ Algebra α =  Σ[ A ∈ Type α ]                 -- the domain
 
 It would be more precise to refer to inhabitants of this type as ∞-*algebras*
 because their domains can be of arbitrary type and need not be truncated at some
-level and, in particular, need to be a set. (See [Base.Equality.Truncation][].)
+level and, in particular, need to be a set. (See [Legacy.Base.Equality.Truncation][].)
 
 We might take this opportunity to define the type of 0-*algebras*, that is,
 algebras whose domains are sets, which is probably closer to what most of us think
@@ -159,7 +159,7 @@ Level-of-Carrier {α = α} _ = α
 #### <a id="lifts-of-algebras">Level lifting algebra types</a>
 
 Recall, in the [section on level lifting and
-lowering](Functions.Lifts.html#level-lifting-and-lowering), we described the
+lowering](/Functions/Lifts/#level-lifting-and-lowering), we described the
 difficulties one may encounter when working with a noncumulative universe
 hierarchy. We made a promise to provide some domain-specific level lifting and
 level lowering methods. Here we fulfill this promise by supplying a couple of
@@ -186,14 +186,14 @@ What makes the `Lift-Alg` type so useful for resolving type level errors involvi
 algebras is the nice properties it possesses.  Indeed, the [agda-algebras][]
 library contains formal proofs of the following facts.
 
-+  [`Lift-Alg` is a homomorphism](Base.Homomorphisms.Basic.html#exmples-of-homomorphisms)
-   (see [Base.Homomorphisms.Basic][])
-+  [`Lift-Alg` is an algebraic invariant](Base.Homomorphisms.Isomorphisms.html#lift-is-an-algebraic-invariant")
-   (see [Base.Homomorphisms.Isomorphisms][])
-+  [`Lift-Alg` of a subalgebra is a subalgebra](Base.Subalgebras.Subalgebras.html#lifts-of-subalgebras)
-   (see [Base.Subalgebras.Subalgebras][])
-+  [`Lift-Alg` preserves identities](Base.Varieties.EquationalLogic.html#lift-invariance))
-  (see [Base.Varieties.EquationalLogic][])
++  [`Lift-Alg` is a homomorphism](/Legacy/Base/Homomorphisms/Basic/#exmples-of-homomorphisms)
+   (see [Legacy.Base.Homomorphisms.Basic][])
++  [`Lift-Alg` is an algebraic invariant](/Legacy/Base/Homomorphisms/Isomorphisms/#lift-is-an-algebraic-invariant)
+   (see [Legacy.Base.Homomorphisms.Isomorphisms][])
++  [`Lift-Alg` of a subalgebra is a subalgebra](/Legacy/Base/Subalgebras/Subalgebras/#lifts-of-subalgebras)
+   (see [Legacy.Base.Subalgebras.Subalgebras][])
++  [`Lift-Alg` preserves identities](/Legacy/Base/Varieties/EquationalLogic/#lift-invariance))
+  (see [Legacy.Base.Varieties.EquationalLogic][])
 
 
 #### <a id="compatibility-of-binary-relations">Compatibility of binary relations</a>
@@ -202,7 +202,7 @@ We now define the function `compatible` so that, if `𝑨` denotes an algebra an
 a binary relation, then `compatible 𝑨 R` will represent the assertion that `R` is
 *compatible* with all basic operations of `𝑨`. The formal definition is immediate
 since all the work is done by the relation `|:`, which we defined above (see
-[Base.Relations.Discrete][]).
+[Legacy.Base.Relations.Discrete][]).
 
 ```agda
 compatible : (𝑨 : Algebra α) → BinRel ∣ 𝑨 ∣ ρ → Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ)
@@ -212,12 +212,12 @@ compatible-pred : (𝑨 : Algebra α) → Pred (∣ 𝑨 ∣ × ∣ 𝑨 ∣)ρ 
 compatible-pred  𝑨 P = ∀ 𝑓 → (𝑓 ̂ 𝑨) |:pred P
 ```
 
-Recall, the `|:` type was defined in [Base.Relations.Discrete][] module.
+Recall, the `|:` type was defined in [Legacy.Base.Relations.Discrete][] module.
 
 
 #### <a id="compatibility-of-continuous-relations">Compatibility of continuous relations</a>
 
-In the [Base.Relations.Continuous][] module, we defined a function called
+In the [Legacy.Base.Relations.Continuous][] module, we defined a function called
 `compatible-Rel` to represent the assertion that a given continuous relation is
 compatible with a given operation. With that, it is easy to define a function,
 which we call `compatible-Rel-alg`, representing compatibility of a continuous
@@ -234,10 +234,3 @@ module _ {I : Type 𝓥} where
  compatible-REL-alg : (𝒜 : I → Algebra α) → REL I (λ i → ∣ 𝒜  i ∣) {ρ} → Type _
  compatible-REL-alg 𝒜 R = ∀ ( 𝑓 : ∣ 𝑆 ∣ ) →  compatible-REL (λ i → 𝑓 ̂ (𝒜 i)) R
 ```
-
--------------------------------------
-
-<span style="float:left;">[↑ Base.Algebras](Base.Algebras.html)</span>
-<span style="float:right;">[Base.Algebras.Products →](Base.Algebras.Products.html)</span>
-
-{% include UALib.Links.md %}

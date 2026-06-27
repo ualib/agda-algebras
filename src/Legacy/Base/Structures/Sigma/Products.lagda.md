@@ -1,6 +1,6 @@
 ---
 layout: default
-title : "Base.Structures.Sigma.Products module"
+title : "Legacy.Base.Structures.Sigma.Products module"
 date : "2021-05-11"
 author: "agda-algebras development team"
 ---
@@ -51,10 +51,3 @@ module _ {α ρ τ : Level}{𝒦 : Pred (Structure 𝑅 𝐹 {α}{ρ}) τ} where
 
 
 If `p : 𝑨 ∈ 𝒦`, we view the pair `(𝑨 , p) ∈ ℑ` as an *index* over the class, so we can think of `𝔄 (𝑨 , p)` (which is simply `𝑨`) as the projection of the product `⨅ 𝔄` onto the `(𝑨 , p)`-th component.
-
---------------------------------
-
-<span style="float:left;">[← Base.Structures.Sigma.Basic](Base.Structures.Sigma.Basic.html)</span>
-<span style="float:right;">[Base.Structures.Sigma.Congruences →](Base.Structures.Sigma.Congruences.html)</span>
-
-{% include UALib.Links.md %}

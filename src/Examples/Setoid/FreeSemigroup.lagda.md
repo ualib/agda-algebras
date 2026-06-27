@@ -176,5 +176,3 @@ reassoc⁴ = trans (assoc▹ (a · b) c d) (assoc▹ a b (c · d))
 --------------------------------------
 
 [M4-10]: https://github.com/ualib/agda-algebras/issues/362
-
-{% include UALib.Links.md %}

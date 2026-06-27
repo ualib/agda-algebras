@@ -28,9 +28,3 @@ nothing to gain (and names to clash) from re-exporting them through a barrel.
 module Examples.Classical.Groups where
 
 ```
-
---------------------------------------
-
-<span style="float:left;">[↑ Examples.Classical](Examples.Classical.html)</span>
-
-{% include UALib.Links.md %}

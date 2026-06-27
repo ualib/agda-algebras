@@ -219,9 +219,3 @@ Lift-Alg 𝑨 ℓ₀ = Lift-Algʳ (Lift-Algˡ 𝑨 ℓ₀)
 --------------------------------
 
 [^1]: The `_^_` symbol is definitionally identical to `_̂_` and was introduced for grep-friendliness and to survive shell-pipeline tooling.  New `Classical/` code uses `_^_` exclusively; existing `Setoid/` code may continue to use `_̂_` until v3.1.  See ADR-002 §7 for the rationale and per-tree policy.
-
-
-<span style="float:left;">[↑ Setoid.Algebras](Setoid.Algebras.html)</span>
-<span style="float:right;">[Setoid.Algebras.Products →](Setoid.Algebras.Products.html)</span>
-
-{% include UALib.Links.md %}

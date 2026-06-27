@@ -50,7 +50,3 @@ Th-CommutativeRing ·-comm   = Commutative     ·-Op           refl           0F
 Th-CommutativeRing distribˡ = DistributesOverˡ ·-Op +-Op     refl refl      0F 1F 2F
 Th-CommutativeRing distribʳ = DistributesOverʳ ·-Op +-Op     refl refl      0F 1F 2F
 ```
-
---------------------------------------
-
-{% include UALib.Links.md %}

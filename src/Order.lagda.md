@@ -25,10 +25,3 @@ module Order where
 
 open import Order.CompleteLattice public
 ```
-
---------------------------------
-
-<span style="float:left;">[← Setoid.Congruences](Setoid.Congruences.html)</span>
-<span style="float:right;">[Order.CompleteLattice →](Order.CompleteLattice.html)</span>
-
-{% include UALib.Links.md %}

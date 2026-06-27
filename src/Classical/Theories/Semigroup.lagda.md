@@ -84,10 +84,3 @@ Th-Semigroup assoc = Associative ∙-Op refl 0F 1F 2F
 Unfolded, `Th-Semigroup assoc` is the pair `((ℊ 0F ∙ ℊ 1F) ∙ ℊ 2F , ℊ 0F ∙ (ℊ 1F ∙ ℊ 2F))`
 of `Sig-Magma`-terms over the variable carrier `Fin 3` — the left-associated and
 right-associated three-fold product, respectively.
-
---------------------------------------
-
-<span style="float:left;">[← Classical.Theories](Classical.Theories.html)</span>
-<span style="float:right;">[Classical.Structures.Semigroup →](Classical.Structures.Semigroup.html)</span>
-
-{% include UALib.Links.md %}

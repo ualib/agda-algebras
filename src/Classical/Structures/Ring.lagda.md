@@ -608,10 +608,3 @@ eqsToRing A _+'_ 0' -'_ _*'_ 1'
   proof distribˡ ρ = distribˡ-≡ (ρ 0F) (ρ 1F) (ρ 2F)
   proof distribʳ ρ = distribʳ-≡ (ρ 0F) (ρ 1F) (ρ 2F)
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Classical.Structures.AbelianGroup](Classical.Structures.AbelianGroup.html)</span>
-<span style="float:right;">[Classical.Structures.CommutativeRing →](Classical.Structures.CommutativeRing.html)</span>
-
-{% include UALib.Links.md %}

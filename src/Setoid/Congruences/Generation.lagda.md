@@ -162,10 +162,3 @@ The join is the least upper bound of its arguments: each argument is below it
   ∨-least : (θ φ : Con 𝑨 ℓ) (ψ : Con 𝑨 ℓ′) → θ ⊑ ψ → φ ⊑ ψ → (θ ∨ φ) ⊑ ψ
   ∨-least _ _ ψ θ⊑ψ φ⊑ψ = Cg-least ψ (λ {x y} → [ θ⊑ψ , φ⊑ψ ])
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Setoid.Congruences.Lattice](Setoid.Congruences.Lattice.html)</span>
-<span style="float:right;">[Setoid.Homomorphisms →](Setoid.Homomorphisms.html)</span>
-
-{% include UALib.Links.md %}

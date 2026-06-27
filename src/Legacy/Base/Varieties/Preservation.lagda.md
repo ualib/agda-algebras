@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Varieties.Preservation (The Agda Universal Algebra Library)"
+title : "Legacy.Base.Varieties.Preservation (The Agda Universal Algebra Library)"
 date : "2021-01-14"
 author: "agda-algebras development team"
 ---
 
 ### <a id="Equation preservation">Equation preservation</a>
 
-This is the [Base.Varieties.Preservation][] module of the [Agda Universal Algebra Library][]. In this module we show that identities are preserved by closure operators H, S, and P.  This will establish the easy direction of Birkhoff's HSP Theorem.
+This is the [Legacy.Base.Varieties.Preservation][] module of the [Agda Universal Algebra Library][]. In this module we show that identities are preserved by closure operators H, S, and P.  This will establish the easy direction of Birkhoff's HSP Theorem.
 
 
 ```agda
@@ -295,7 +295,7 @@ module _  {α : Level}  {fe₀ : funext (ov α) α}
 #### <a id="S-in-SP">⨅ S(𝒦) ∈ SP(𝒦)</a>
 
 Finally, we prove a result that plays an important role, e.g., in the formal proof
-of Birkhoff's Theorem. As we saw in [Base.Algebras.Products][], the (informal)
+of Birkhoff's Theorem. As we saw in [Legacy.Base.Algebras.Products][], the (informal)
 product `⨅ S(𝒦)` of all subalgebras of algebras in 𝒦 is implemented (formally)
 in the [agda-algebras](https://github.com/ualib/agda-algebras) library as
 `⨅ 𝔄 S(𝒦)`. Our goal is to prove that this product belongs to `SP(𝒦)`. We do so by
@@ -671,11 +671,3 @@ module _ (wd : SwellDef){X : Type 𝓧}{𝒦 : Pred (Algebra α)(ov α)} where
  V-id2 : (p q : Term X) → (V{β = β} 𝒦 ⊫ p ≈ q) → (𝒦 ⊫ p ≈ q)
  V-id2 p q Vpq {𝑨} KA = ⊧-lower-invar wd p q (Vpq (vbase KA))
 ```
-
-
-----------------------------
-
-<span style="float:left;">[← Base.Varieties.Properties](Base.Varieties.Properties.html)</span>
-<span style="float:right;">[Base.Varieties.FreeAlgebras →](Base.Varieties.FreeAlgebras.html)</span>
-
-{% include UALib.Links.md %}

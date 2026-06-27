@@ -1,7 +1,7 @@
 ---
 layout: default
 file: "src/Legacy/Base/Varieties/FreeAlgebras.lagda.md"
-title: "Base.Varieties.FreeAlgebras module (Agda Universal Algebra Library)"
+title: "Legacy.Base.Varieties.FreeAlgebras module (Agda Universal Algebra Library)"
 date: "2021-03-01"
 author: "the agda-algebras development team"
 ---
@@ -10,7 +10,7 @@ author: "the agda-algebras development team"
 
 > **Legacy notice**.  This module is part of the frozen `Legacy.Base/` tree.  The canonical statement and proof of Birkhoff's HSP theorem in agda-algebras now lives in [Setoid.Varieties.HSP](https://ualib.org/Setoid.Varieties.HSP.html), designated canonical under [issue #259](https://github.com/ualib/agda-algebras/issues/259) (M2-4).  The proof below is the original bare-types development from v2.x; it relies on function-extensionality, propositional-extensionality, and set-truncation postulates that the canonical `Setoid/` proof retires by construction.  It is preserved for v2.x downstream-user continuity and historical reference; new work does not land here.  See [ADR-001](https://github.com/ualib/agda-algebras/blob/master/docs/adr/001-setoid-as-canonical.md) for the rationale of the Setoid-as-canonical migration, and the self-contained pedagogical companion at [Demos.HSP](https://ualib.org/Demos.HSP.html) for the TYPES 2021 single-file rendition.
 
-This is the [Base.Varieties.FreeAlgebras][] module of the [Agda Universal Algebra Library][].
+This is the [Legacy.Base.Varieties.FreeAlgebras][] module of the [Agda Universal Algebra Library][].
 
 First we will define the relatively free algebra in a variety, which is the "freest" algebra among (universal for) those algebras that model all identities holding in the variety. Then we give a formal proof of Birkhoff's theorem which says that a variety is an equational class. In other terms, a class `𝒦` of algebras is closed under the operators `H`, `S`, and `P` if and only if `𝒦` is the class of algebras that satisfy some set of identities.
 
@@ -70,7 +70,7 @@ open Term ; open S ; open V
 
 #### <a id="the-free-algebra-in-theory">The free algebra in theory</a>
 
-Recall, we proved in the [Base.Terms.Basic][] module that the term algebra `𝑻 X` is absolutely free in the class of all `𝑆`-structures.
+Recall, we proved in the [Legacy.Base.Terms.Basic][] module that the term algebra `𝑻 X` is absolutely free in the class of all `𝑆`-structures.
 In this section, we formalize, for a given class `𝒦` of `𝑆`-algebras, the (relatively) free algebra in `S(P 𝒦)` over `X`.
 
 We use the next definition to take a free algebra *for* a class `𝒦` and produce the free algebra *in* `𝒦`.
@@ -151,7 +151,7 @@ We accomplish this goal by constructing an algebra `𝔽` with the following pro
 
 2. Every `𝑨 ∈ Mod X (Th (V 𝒦))` is a homomorphic image of `𝔽`.
 
-We denote by `ℭ` the product of all subalgebras of algebras in `𝒦`, and by `homℭ` the homomorphism from `𝑻 X` to `ℭ` defined as follows: `homℭ := ⨅-hom-co (𝑻 X) 𝔄 hom𝔄`. Here, `⨅-hom-co` (defined in the [Base.Homomorphisms.Properties][] module) takes the term algebra `𝑻 X`, a family `{𝔄 : I → Algebra α}` of `𝑆`-algebras, and a family `hom𝔄 : ∀ i → hom (𝑻 X) (𝔄 i)` of homomorphisms and constructs the natural homomorphism `homℭ` from `𝑻 X` to the product `ℭ := ⨅ 𝔄`.  The homomorphism `homℭ : hom (𝑻 X) (⨅ ℭ)` is "natural" in the sense that the `i`-th component of the image of `t : Term X` under `homℭ` is the image `∣ hom𝔄 i ∣ t` of `t` under the i-th homomorphism `hom𝔄 i`.
+We denote by `ℭ` the product of all subalgebras of algebras in `𝒦`, and by `homℭ` the homomorphism from `𝑻 X` to `ℭ` defined as follows: `homℭ := ⨅-hom-co (𝑻 X) 𝔄 hom𝔄`. Here, `⨅-hom-co` (defined in the [Legacy.Base.Homomorphisms.Properties][] module) takes the term algebra `𝑻 X`, a family `{𝔄 : I → Algebra α}` of `𝑆`-algebras, and a family `hom𝔄 : ∀ i → hom (𝑻 X) (𝔄 i)` of homomorphisms and constructs the natural homomorphism `homℭ` from `𝑻 X` to the product `ℭ := ⨅ 𝔄`.  The homomorphism `homℭ : hom (𝑻 X) (⨅ ℭ)` is "natural" in the sense that the `i`-th component of the image of `t : Term X` under `homℭ` is the image `∣ hom𝔄 i ∣ t` of `t` under the i-th homomorphism `hom𝔄 i`.
 
 
 #### <a id="F-in-classproduct">𝔽 ≤  ⨅ S(𝒦)</a>
@@ -397,7 +397,7 @@ that we formalize this inclusion as well, however trivial the proof.
 We have thus proved that every variety is an equational class.  Readers familiar
 with the classical formulation of the Birkhoff HSP theorem, as an "if and only
 if" result, might worry that we haven't completed the proof.  But recall that
-in the [Base.Varieties.Preservation][] module we proved the following identity
+in the [Legacy.Base.Varieties.Preservation][] module we proved the following identity
 preservation lemmas:
 
 * `𝒦 ⊫ p ≈ q → H 𝒦 ⊫ p ≈ q`
@@ -406,10 +406,3 @@ preservation lemmas:
 
 From these it follows that every equational class is a variety. Thus, our formal
 proof of Birkhoff's theorem is complete.
-
---------------------------------
-
-<span style="float:left;">[← Base.Varieties.Preservation](Base.Varieties.Preservation.html)</span>
-<span style="float:right;">[Base.Structures →](Base.Structures.html)</span>
-
-{% include UALib.Links.md %}
