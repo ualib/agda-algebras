@@ -102,7 +102,7 @@ _SCRIPT_DIR = Path(__file__).resolve().parent
 if str(_SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(_SCRIPT_DIR))
 
-from _utils import Result, PipelineError, ErrorType  # noqa: E402
+from _utils import Result, PipelineError  # noqa: E402
 from _utils.file_ops import read_text, write_text  # noqa: E402
 
 

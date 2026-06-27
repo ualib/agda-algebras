@@ -28,8 +28,8 @@ module Setoid.Subalgebras.Subdirect.Basic {𝑆 : Signature 𝓞 𝓥} where
 -- Imports from Agda and the Agda Standard Library ----------------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
 open import Data.Product     using ( _,_ ; Σ-syntax ; proj₁ ; proj₂ )
-open import Function         using ( id ) renaming ()
-open import Level            using ( Level ; _⊔_ ) renaming ()
+open import Function         using ( id )
+open import Level            using ( Level ; _⊔_ )
 open import Relation.Binary  using ( Setoid )
 open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl )
 

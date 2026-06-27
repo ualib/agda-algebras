@@ -66,8 +66,8 @@ module _ {𝑨 : Algebra α ρᵃ} where
   free-lift-interp η (node f t) = cong Interp (≡.refl , (free-lift-interp η) ∘ t)
 
 module _ {X : Type χ} where
-  open Algebra (𝑻 X)      using ( Interp )      renaming (Domain to TX )
-  open Setoid TX          using ( _≈_ ; refl )  renaming ()
+  open Algebra (𝑻 X)      using ( Interp ) renaming (Domain to TX )
+  open Setoid TX          using ( _≈_ ; refl )
   open Environment (𝑻 X)  using ( ⟦_⟧ ; ≐→Equal )
   open SetoidReasoning TX
 

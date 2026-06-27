@@ -75,8 +75,6 @@ relation level is `L = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ ℓ₀`.  Because level j
 
 ```agda
 module _ (𝑨 : Algebra α ρ) (ℓ₀ : Level) where
-  open Setoid 𝔻[ 𝑨 ] using ( _≈_ ) renaming ()
-
   L : Level
   L = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ ℓ₀
 
@@ -180,6 +178,7 @@ join the least upper bound of the family.
     ⋀ : Conᴸ
     ⋀ = (λ x y → (i : I) → proj₁ (f i) x y) , mkcon m-refl m-equiv m-comp
       where
+      open Setoid 𝔻[ 𝑨 ] using ( _≈_ )
       m-refl : ∀ {a₀ a₁} → a₀ ≈ a₁ → (i : I) → proj₁ (f i) a₀ a₁
       m-refl e i = reflexive (proj₂ (f i)) e
 

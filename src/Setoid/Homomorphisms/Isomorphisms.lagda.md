@@ -21,7 +21,7 @@ open import Agda.Primitive              using () renaming ( Set to Type )
 open import Data.Product                using ( _,_ ; proj₁ ; proj₂ )
 open import Data.Unit.Polymorphic.Base  using ()      renaming ( ⊤ to 𝟙 ; tt to ∗ )
 open import Data.Unit.Base              using ( ⊤ ; tt )
-open import Function                    using ( id )  renaming ( Func to _⟶_ )
+open import Function                    using ()  renaming ( Func to _⟶_ )
 open import Level                       using ( Level ; Lift ; lift ; lower ; _⊔_ )
 open import Relation.Binary             using ( Setoid ; Reflexive ; Sym ; Trans )
 
@@ -30,7 +30,7 @@ open import Relation.Binary.PropositionalEquality as ≡ using ()
 -- Imports from the Agda Universal Algebra Library -----------------------------------------
 open import Overture                            using  ( OperationSymbolsOf ; ArityOf )
 open import Overture.Operations                 using  ( Op )
-open import Setoid.Functions                    using  ( _⊙_ ; eq ; IsInjective
+open import Setoid.Functions                    using  ( eq ; IsInjective
                                                        ; IsSurjective ; SurjInv
                                                        ; SurjInvIsInverseʳ )
 open import Setoid.Algebras {𝑆 = 𝑆}             using  ( Algebra ; Lift-Alg ; _^_ ; 𝔻[_]
@@ -422,7 +422,6 @@ module _ {ι : Level}{I : Type ι}{𝒜 : I → Algebra α ρᵃ} where
 
 module _ {ℓᵃ : Level}{I : Type ℓᵃ}{𝒜 : I → Algebra α ρᵃ}where
   open IsHom
-  open Algebra  using (Domain)
   open Setoid   using (_≈_ )
 
   ⨅≅⨅lowerℓρ : ∀ {ℓ ρ} → ⨅ 𝒜 ≅ ⨅ λ i → Lift-Alg (𝒜 (lower{ℓ = α ⊔ ρᵃ} i)) ℓ ρ

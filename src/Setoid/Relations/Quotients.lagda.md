@@ -37,11 +37,11 @@ private variable α β ρᵃ ρᵇ ℓ : Level
 A prominent example of an equivalence relation is the kernel of any function.
 
 ```agda
-open _⟶_ using ( cong ) renaming ()
+open _⟶_ using ( cong )
 
 module _ {𝐴 : Setoid α ρᵃ}{𝐵 : Setoid β ρᵇ} where
  open Setoid 𝐴  using ( refl ) renaming (Carrier to A )
- open Setoid 𝐵  using ( sym ; trans ) renaming ()
+ open Setoid 𝐵  using ( sym ; trans )
 
  ker-IsEquivalence : (f : 𝐴 ⟶ 𝐵) → IsEquivalence (fker f)
  IsEquivalence.refl   (ker-IsEquivalence f) = cong f refl

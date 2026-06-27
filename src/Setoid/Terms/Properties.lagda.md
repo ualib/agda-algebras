@@ -57,9 +57,9 @@ on the structure of the given term.
 
 ```agda
 module _ {𝑨 : Algebra α ρ}(h : X → 𝕌[ 𝑨 ]) where
-  open Algebra 𝑨      using ( Interp )                   renaming ( Domain to A )
-  open Setoid A       using ( _≈_ ; reflexive )  renaming ()
-  open Algebra (𝑻 X)  using ()                           renaming ( Domain to TX )
+  open Algebra 𝑨      using ( Interp ) renaming ( Domain to A )
+  open Setoid A       using ( _≈_ ; reflexive )
+  open Algebra (𝑻 X)  using () renaming ( Domain to TX )
 
   free-lift : 𝕌[ 𝑻 X ] → 𝕌[ 𝑨 ]
   free-lift (ℊ x) = h x

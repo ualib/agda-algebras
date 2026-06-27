@@ -46,7 +46,7 @@ open  import Setoid.Terms          {𝑆 = 𝑆}
       using  ( 𝑻 ; module Environment ; comm-hom-term ; interp-prod ; term-agreement )
 open  import Setoid.Subalgebras    {𝑆 = 𝑆}  using  ( _≤_ ; SubalgebrasOfClass )
 open  import Setoid.Varieties.SoundAndComplete {𝑆 = 𝑆}
-      using ( _⊧_ ; _⊫_ ; ⊫-proof ; Eq ; _≈̇_ ; _⊢_▹_≈_ )
+      using ( _⊧_ ; _⊫_ ; ⊫-proof ; _≈̇_ ; _⊢_▹_≈_ )
 
 private variable α ρᵃ β ρᵇ χ ℓ : Level
 

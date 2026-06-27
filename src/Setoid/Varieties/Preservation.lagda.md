@@ -45,7 +45,7 @@ open  import Setoid.Varieties.Closure {𝑆 = 𝑆}
 open  import Setoid.Varieties.Properties {𝑆 = 𝑆}
       using ( ⊧-H-invar ; ⊧-S-invar ; ⊧-P-invar ; ⊧-I-invar )
 open  import Setoid.Varieties.SoundAndComplete {𝑆 = 𝑆}
-      using ( _⊧_ ; _⊨_ ; _⊫_ ; ⊫-proof ; Eq ; _≈̇_ ; lhs ; rhs ; _⊢_▹_≈_ ; Th)
+      using ( _⊧_ ; _⊫_ ; ⊫-proof ; _≈̇_ ; _⊢_▹_≈_ ; Th)
 
 open _⟶_      using () renaming ( to to _⟨$⟩_ )
 open Algebra  using ( Domain )

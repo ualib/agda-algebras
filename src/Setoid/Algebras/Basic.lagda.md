@@ -21,14 +21,14 @@ open import Agda.Primitive   using ( _⊔_ ; lsuc ) renaming ( Set to Type )
 open import Data.Product     using ( _,_ ; Σ-syntax ) public
 open import Function         using ( _∘_ ; _∘₂_ ; Func ; _$_ )
 open import Level            using ( Level )
-open import Relation.Binary  using ( Setoid ; IsEquivalence )
+open import Relation.Binary  using ( Setoid )
 
 open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ ; refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------
 open import Overture             using ( OperationSymbolsOf ; ArityOf )
 open import Overture.Operations  using ( Op )
-open import Setoid.Signatures    using ( EqArgs ; ⟨_⟩ )
+open import Setoid.Signatures    using ( ⟨_⟩ )
 
 private variable α ρ ι : Level
 

@@ -83,7 +83,7 @@ open import Setoid.Homomorphisms.Kernels  {𝑆 = 𝑆}  using ( kercon )
 open import Setoid.Varieties.SoundAndComplete {𝑆 = 𝑆}
   using ( Eq ; _≈̇_ ; _⊢_▹_≈_ ; module FreeAlgebra )
 
-open Func    using ( cong ) renaming ()
+open Func    using ( cong )
 open _⊢_▹_≈_ using ( sub ; refl )
 
 private variable

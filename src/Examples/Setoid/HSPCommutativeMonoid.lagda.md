@@ -48,7 +48,7 @@ open import Overture.Terms {𝑆 = Sig-Monoid}                     using  ( Term
 open import Setoid.Algebras {𝑆 = Sig-Monoid}                    using  ( Algebra )
 open import Setoid.Varieties.Closure {𝑆 = Sig-Monoid}           using  ( V ; V′ ; V-expa′ )
 open import Setoid.Varieties.Preservation {𝑆 = Sig-Monoid}      using  ( V-id1 )
-open import Setoid.Varieties.SoundAndComplete {𝑆 = Sig-Monoid}  using  ( _⊧_ ; _⊫_ ; ⊫-proof
+open import Setoid.Varieties.SoundAndComplete {𝑆 = Sig-Monoid}  using  ( _⊫_ ; ⊫-proof
                                                                        ; _≈̇_ ; Mod ; Th )
 open import Setoid.Varieties.HSP {𝑆 = Sig-Monoid}               using  ( Birkhoff
                                                                        ; Birkhoff-converse )
