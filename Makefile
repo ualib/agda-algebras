@@ -28,7 +28,7 @@
 #      where a path segment happens to contain the substring `agda`.
 # =============================================================================
 
-.PHONY: default all check test clean site serve profile project-plan unused-imports unused-imports-test Everything.agda
+.PHONY: default all check test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test Everything.agda
 
 # -- Configuration -----------------------------------------------------------
 SRCDIR    := src
@@ -97,19 +97,64 @@ check test: Everything.agda EverythingLegacy.agda
 	$(AGDA) $(RTS_OPTS) $(AGDA_OPTS) $(SRCDIR)/EverythingLegacy.agda
 
 # Build the documentation site (ADR-007).  MkDocs reads the `.lagda.md`
-# sources directly — no `agda --html` step — via scripts/python/mkdocs_gen_library.py.
-# Output goes to ./site (gitignored).  Run inside `nix develop` so mkdocs and
-# the Material theme + plugins pinned in flake.nix are on PATH.
-MKDOCS ?= mkdocs
+# sources directly via scripts/python/mkdocs_gen_library.py.  Output goes to
+# ./site (gitignored).  Run inside `nix develop` so mkdocs and the Material
+# theme + plugins pinned in flake.nix are on PATH.
+#
+#   make site        Fast build: code blocks are plain monospace unless
+#                    `make agda-md` has already produced highlighted output.
+#   make agda-md     agda --html --html-highlight=code -> .agda-html/md
+#                    (highlighted, hyperlinked code blocks for the site, #3a).
+#   make html        Classic clickable HTML (agda-categories style) -> ./html,
+#                    Everything.html as index; also published at /classic/ (#1).
+#   make site-full   html + agda-md + site: the fully-featured published site
+#                    (what CI builds and deploys).
+MKDOCS    ?= mkdocs
+AGDA_HTML := .agda-html
 
 site:
 	@echo "target: $@"
+	@test -d $(AGDA_HTML)/md || echo "  note: code blocks will be PLAIN — run 'make site-full' for agda --html highlighting + /classic/."
 	$(MKDOCS) build --strict --clean
 
 # Live-reloading local preview at http://127.0.0.1:8000 (Ctrl-C to stop).
+# Plain code blocks unless the agda --html output already exists; use
+# `make serve-full` for the fully-rendered preview (highlighting + /classic/).
 serve:
 	@echo "target: $@"
+	@test -d $(AGDA_HTML)/md && test -d html || echo "  note: code blocks PLAIN and /classic/ absent — run 'make serve-full' for the full preview."
 	$(MKDOCS) serve
+
+# Full local preview: build the agda --html outputs first, then live-serve.
+serve-full:
+	@echo "target: $@"
+	$(MAKE) html
+	$(MAKE) agda-md
+	$(MKDOCS) serve
+
+# Classic agda --html site: full-page HTML with token highlighting + per-token
+# hyperlinks, Everything.html as the index.  Standalone in ./html (gitignored);
+# gen-files also publishes it at /classic/ and points the highlighted code's
+# stdlib links there.  Type-checks (warm .agdai cache makes it quick).
+html: Everything.agda EverythingLegacy.agda
+	@echo "target: $@"
+	$(AGDA) $(RTS_OPTS) $(AGDA_OPTS) --html --html-dir=html $(SRCDIR)/Everything.agda
+	$(AGDA) $(RTS_OPTS) $(AGDA_OPTS) --html --html-dir=html $(SRCDIR)/EverythingLegacy.agda
+
+# Highlighted Markdown for embedding in the MkDocs pages (#3a).
+agda-md: Everything.agda EverythingLegacy.agda
+	@echo "target: $@"
+	rm -rf $(AGDA_HTML)/md
+	$(AGDA) $(RTS_OPTS) $(AGDA_OPTS) --html --html-highlight=code --html-dir=$(AGDA_HTML)/md $(SRCDIR)/Everything.agda
+	$(AGDA) $(RTS_OPTS) $(AGDA_OPTS) --html --html-highlight=code --html-dir=$(AGDA_HTML)/md $(SRCDIR)/EverythingLegacy.agda
+
+# The fully-featured published site.  Recursive make keeps the steps ordered
+# even under `make -j`.
+site-full:
+	@echo "target: $@"
+	$(MAKE) html
+	$(MAKE) agda-md
+	$(MAKE) site
 
 profile: Everything.agda
 	@echo "target: $@"
@@ -119,6 +164,7 @@ clean:
 	@echo "target: $@"
 	find . -name '*.agdai' -delete
 	rm -f $(SRCDIR)/Everything.agda $(SRCDIR)/EverythingLegacy.agda
+	rm -rf site html .agda-html .cache
 
 # Regenerate the issue listings in docs/GITHUB_PROJECT.md from current
 # GitHub state.  Hand-edited prose outside the BEGIN/END GENERATED markers

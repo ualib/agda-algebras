@@ -48,6 +48,7 @@ EXTRA = [
     "[agda-algebras-everything]: /agda-algebras/",
     "[UALib]: /",
     "[agda-categories]: https://github.com/agda/agda-categories",
+    "[Nix]: https://nixos.org/",
     "[UIP]: https://ncatlab.org/nlab/show/uniqueness+of+identity+proofs",
     "[Containers]: https://ncatlab.org/nlab/show/container",
     "[#308]: https://github.com/ualib/agda-algebras/issues/308",

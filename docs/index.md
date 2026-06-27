@@ -26,14 +26,112 @@ every commit.
 
 </div>
 
+<div class="ualib-stats">
+  <div class="ualib-stat"><span class="ualib-stat__num">283</span><span class="ualib-stat__label">literate modules</span></div>
+  <div class="ualib-stat"><span class="ualib-stat__num">38k</span><span class="ualib-stat__label">lines of Agda</span></div>
+  <div class="ualib-stat"><span class="ualib-stat__num">100%</span><span class="ualib-stat__label">machine-checked</span></div>
+  <div class="ualib-stat"><span class="ualib-stat__num">2.8.0</span><span class="ualib-stat__label">Agda · stdlib 2.3</span></div>
+</div>
+
+## Featured results
+
+Landmark theorems of universal algebra, each formalized and type-checked here —
+follow a face to the proof.
+
+<div class="ualib-figures">
+
+  <a class="ualib-figure" href="/Setoid/Varieties/HSP/">
+    <span class="ualib-portrait">GB</span>
+    <span class="ualib-figure__body">
+      <span class="ualib-figure__result">Birkhoff's HSP theorem</span>
+      <span class="ualib-figure__who">Garrett Birkhoff · 1911–1996</span>
+    </span>
+  </a>
+
+  <a class="ualib-figure" href="/Setoid/Subalgebras/Subdirect/Irreducible/">
+    <span class="ualib-portrait">GB</span>
+    <span class="ualib-figure__body">
+      <span class="ualib-figure__result">Subdirect representation</span>
+      <span class="ualib-figure__who">Garrett Birkhoff · 1911–1996</span>
+    </span>
+  </a>
+
+  <a class="ualib-figure" href="/Setoid/Varieties/MaltsevConditions/">
+    <span class="ualib-portrait">AM</span>
+    <span class="ualib-figure__body">
+      <span class="ualib-figure__result">Maltsev conditions</span>
+      <span class="ualib-figure__who">Anatoly Maltsev · 1909–1967</span>
+    </span>
+  </a>
+
+  <a class="ualib-figure" href="/Setoid/Homomorphisms/Noether/">
+    <span class="ualib-portrait">EN</span>
+    <span class="ualib-figure__body">
+      <span class="ualib-figure__result">Homomorphism theorems</span>
+      <span class="ualib-figure__who">Emmy Noether · 1882–1935</span>
+    </span>
+  </a>
+
+  <a class="ualib-figure" href="/Setoid/Congruences/Lattice/">
+    <span class="ualib-portrait">RD</span>
+    <span class="ualib-figure__body">
+      <span class="ualib-figure__result">Congruence lattices</span>
+      <span class="ualib-figure__who">Richard Dedekind · 1831–1916</span>
+    </span>
+  </a>
+
+</div>
+
+!!! note "On the portraits"
+
+    The medallions above are placeholders — the consistent ink/line-drawing
+    caricatures are in production.  A later "modern lineage" gallery will honour
+    the universal algebraists whose results the library formalizes.
+
+## What's formalized
+
+The classical-structures layer builds the algebraic hierarchy on the
+universal-algebra core.  Each row is a structure (follow it to its module); each
+column an equational axiom it satisfies.
+
+<div class="ualib-matrix-wrap" markdown>
+
+<table class="ualib-matrix">
+<thead>
+<tr>
+  <th>Structure</th><th>Assoc.</th><th>Comm.</th><th>Identity</th>
+  <th>Inverse</th><th>Idemp.</th><th>Absorp.</th><th>Distrib.</th>
+</tr>
+</thead>
+<tbody>
+<tr><th><a href="/Classical/Structures/Magma/">Magma</a></th><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><th><a href="/Classical/Structures/Semigroup/">Semigroup</a></th><td class="yes">✓</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><th><a href="/Classical/Structures/CommutativeSemigroup/">Comm. semigroup</a></th><td class="yes">✓</td><td class="yes">✓</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><th><a href="/Classical/Structures/Monoid/">Monoid</a></th><td class="yes">✓</td><td></td><td class="yes">✓</td><td></td><td></td><td></td><td></td></tr>
+<tr><th><a href="/Classical/Structures/CommutativeMonoid/">Comm. monoid</a></th><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td></td><td></td><td></td><td></td></tr>
+<tr><th><a href="/Classical/Structures/Group/">Group</a></th><td class="yes">✓</td><td></td><td class="yes">✓</td><td class="yes">✓</td><td></td><td></td><td></td></tr>
+<tr><th><a href="/Classical/Structures/AbelianGroup/">Abelian group</a></th><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td></td><td></td><td></td></tr>
+<tr><th><a href="/Classical/Structures/Semilattice/">Semilattice</a></th><td class="yes">✓</td><td class="yes">✓</td><td></td><td></td><td class="yes">✓</td><td></td><td></td></tr>
+<tr><th><a href="/Classical/Structures/Lattice/">Lattice</a></th><td class="yes">✓</td><td class="yes">✓</td><td></td><td></td><td></td><td class="yes">✓</td><td></td></tr>
+<tr><th><a href="/Classical/Structures/DistributiveLattice/">Distrib. lattice</a></th><td class="yes">✓</td><td class="yes">✓</td><td></td><td></td><td></td><td class="yes">✓</td><td class="yes">✓</td></tr>
+<tr><th><a href="/Classical/Structures/Ring/">Ring</a></th><td class="yes">✓</td><td class="yes-2">✓</td><td class="yes">✓</td><td class="yes-2">✓</td><td></td><td></td><td class="yes">✓</td></tr>
+<tr><th><a href="/Classical/Structures/CommutativeRing/">Comm. ring</a></th><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td></td><td></td><td class="yes">✓</td></tr>
+</tbody>
+</table>
+
+</div>
+
+<small>Rings carry two operations; <span style="color:var(--chalk-coral)">coral ✓</span> marks an axiom of the additive group, plain ✓ the shared/multiplicative axioms.</small>
+
+## Explore
+
 <div class="grid cards" markdown>
 
 -   :material-rocket-launch-outline:{ .lg .middle } &nbsp; **Quickstart**
 
     ---
 
-    From a clean checkout to a green build in three commands with the pinned
-    [Nix][] toolchain — Agda 2.8.0 and standard-library 2.3, reproducibly.
+    Clean checkout to green build in three commands with the pinned [Nix][] toolchain.
 
     [:octicons-arrow-right-24: Installation](install.md)
 
@@ -41,51 +139,25 @@ every commit.
 
     ---
 
-    `Setoid/`{.AgdaModule} is the canonical development tree: algebras as
-    setoids, with every definition stated up to the carrier's equivalence so
-    the eventual Cubical port is mechanical.
+    `Setoid/`{.AgdaModule} — algebras as setoids, every definition stated up to the carrier's equivalence.
 
     [:octicons-arrow-right-24: Setoid tree](/Setoid/)
 
--   :material-check-decagram-outline:{ .lg .middle } &nbsp; **Birkhoff's HSP theorem**
+-   :material-code-tags:{ .lg .middle } &nbsp; **Classic Agda HTML**
 
     ---
 
-    A class of algebras is a [variety][HSP Theorem] exactly when it is closed
-    under homomorphic images, subalgebras, and products — proved constructively,
-    in full.
+    Prefer the bare agda-html view?  The clickable, fully-highlighted source with `Everything` as index.
 
-    [:octicons-arrow-right-24: The HSP theorem](/Setoid/Varieties/HSP/)
-
--   :material-school-outline:{ .lg .middle } &nbsp; **A guided proof**
-
-    ---
-
-    [`Demos.HSP`][Demos.HSP] is a single self-contained module that walks
-    through the variety theorem end to end — the companion to the TYPES 2021
-    paper, ideal for teaching.
-
-    [:octicons-arrow-right-24: Read the demo](/Demos/HSP/)
+    [:octicons-arrow-right-24: Browse the source](/classic/Everything.html)
 
 -   :material-map-outline:{ .lg .middle } &nbsp; **Where it's going**
 
     ---
 
-    The 3.0 reconstruction is organized into milestones M1–M10 — the classical
-    structures layer, the Cubical track, complexity extensions, and corpus
-    artifacts for machine learning.
+    The 3.0 reconstruction in milestones M1–M10 — classical structures, the Cubical track, corpus artifacts.
 
     [:octicons-arrow-right-24: Roadmap](GITHUB_PROJECT.md)
-
--   :material-heart-outline:{ .lg .middle } &nbsp; **Get involved**
-
-    ---
-
-    Bug reports, design discussions, and pull requests are welcome.  The
-    contributor's guide explains which tree new work belongs in and the
-    house style.
-
-    [:octicons-arrow-right-24: Contributing](contributing.md)
 
 </div>
 
@@ -97,21 +169,19 @@ defines the core objects of the subject — [signatures][Overture.Signatures],
 [algebras][Setoid.Algebras.Basic], [homomorphisms][Setoid.Homomorphisms],
 [terms][Setoid.Terms], [subalgebras][Setoid.Subalgebras], and
 [varieties][Setoid.Varieties] — together with the equational logic that
-underlies them, and it carries each construction all the way to a fully
+underlies them, and carries each construction all the way to a fully
 constructive, machine-checked proof of [Birkhoff's HSP theorem][Setoid.Varieties.HSP].
 
 It is developed with two audiences in mind: as a working substrate for research
 in universal algebra, and as a high-quality, vetted training corpus of Agda
-proofs for machine learning on formal mathematics.  Every page you see here is
-rendered directly from a literate `.lagda.md`{.AgdaModule} source that the
-type-checker reads — prose and proof live in one file, and the proof you read
-is the proof that compiles.
+proofs for machine learning on formal mathematics.  Every page is rendered
+directly from a literate `.lagda.md`{.AgdaModule} source the type-checker reads —
+the proof you read is the proof that compiles.
 
 !!! note "Reading the code"
 
-    Inline names are colour-coded by their Agda role — a
-    `function`{.AgdaFunction}, a `Record`{.AgdaRecord}, a
-    `constructor`{.AgdaInductiveConstructor}, a `Datatype`{.AgdaDatatype}, a
-    bound `variable`{.AgdaBound}.  Use the search box (press <kbd>/</kbd>) to
-    jump to any module, and the **edit** pencil on any page to view its source
-    on GitHub.
+    In code blocks, every Agda token is coloured by its role and **links to its
+    definition** — click a `function`{.AgdaFunction}, a `Record`{.AgdaRecord}, a
+    `constructor`{.AgdaInductiveConstructor} to jump to where it is defined.
+    Press <kbd>/</kbd> to search any module; use the **edit** pencil to view a
+    page's source on GitHub.

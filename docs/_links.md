@@ -731,3 +731,4 @@
 [agda-algebras-everything]: /agda-algebras/
 [Containers]: https://ncatlab.org/nlab/show/container
 [ADR-007]: /adr/007-mkdocs-rendering-pipeline/
+[Nix]: https://nixos.org/

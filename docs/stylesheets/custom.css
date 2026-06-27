@@ -1,20 +1,25 @@
 /* ==========================================================================
    agda-algebras — custom styling for the MkDocs (Material) site
    --------------------------------------------------------------------------
-   ADR-007 (rendering-pipeline modernization).  The site is built directly
-   from the `.lagda.md` sources with NO `agda --html` step: inline Agda terms
-   are written as kramdown attribute spans (`Algebra`{.AgdaRecord}), which
-   python-markdown's attr_list extension turns into class-tagged inline
-   <code> elements.  This stylesheet colours those classes — the precedent is
-   1Lab and formal-ledger-specifications — and tunes the prose, code blocks,
-   and landing page for legibility of Unicode-dense type theory.
+   ADR-007 (rendering-pipeline modernization).  Two highlighting paths share
+   one palette: inline prose terms are kramdown attribute spans
+   (`Algebra`{.AgdaRecord}) classed by attr_list, and code blocks are
+   `agda --html` output (`<pre class="Agda">`, every token classed + linked).
+   The precedent is 1Lab and formal-ledger-specifications.  On top sits a
+   "chalkboard" visual identity (Direction A) for a scholarly, inviting feel.
 
    Sections:
-     1. Typography (a Unicode-complete monospace for the math glyphs).
-     2. Agda token colours — light and dark, mirroring Agda's HTML palette.
-     3. Inline Agda terms (the attribute spans) in running prose.
-     4. Code blocks (plain, since token highlighting is class-based inline).
-     5. Landing-page hero + grid cards.
+     1.  Typography (Unicode-complete monospace + Fraunces display serif).
+     2.  Agda token colours — light and dark, mirroring Agda's HTML palette.
+     3.  Inline Agda terms (the attribute spans) in running prose.
+     4.  Code blocks — plain fenced + agda --html highlighted/linked.
+     5.  Landing-page hero + grid cards (base).
+     6.  Chalkboard palette — Material colour-variable overrides per scheme.
+     7.  Display type (Fraunces headings).
+     8.  Hero as a chalkboard panel.
+     9.  "By the numbers" stat strip.
+     10. Featured-results gallery + ink-roundel portraits.
+     11. Structures × properties coverage matrix.
    ========================================================================== */
 
 /* -- 1. Typography ---------------------------------------------------------
@@ -24,6 +29,9 @@
    choice across the Agda/Lean/Julia ecosystems.  We load it from a CDN with a
    broad fallback stack so the page still reads well if the font is blocked. */
 @import url("https://cdn.jsdelivr.net/gh/cormullion/juliamono/webfonts/juliamono.css");
+/* Fraunces — a soft old-style serif for display headings (the "scholarly
+   artifact" voice of the chalkboard theme, §6). */
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&display=swap");
 
 :root {
   --md-code-font: "JuliaMono", "JetBrains Mono", "Fira Code", "Cascadia Code",
@@ -40,72 +48,60 @@
   font-feature-settings: "ss20" 1; /* JuliaMono: dotted-zero / clearer glyphs */
 }
 
-/* -- 2. Agda token palette -------------------------------------------------
-   Mirrors Agda's canonical HTML colours (Function/Record/Datatype = blue,
-   InductiveConstructor = green, Field = magenta, Module = purple, Keyword =
-   orange, Symbol = grey), softened for screen reading and given a second,
-   lighter set for the dark scheme so every class keeps WCAG-AA contrast. */
+/* -- 2. Agda token colours --------------------------------------------------
+   The formal-ledger-specifications palette: Agda's classic vivid HTML colours
+   in light mode, a low-saturation "zenburn"-style set in dark mode.  Each rule
+   colours BOTH the inline prose span (`.AgdaFunction`) and the agda --html
+   code-block token (`pre.Agda .Function`).  `--code-accent` is the scheme's
+   signature colour, reused by decorative rules (the code-block rule, etc.). */
 
 [data-md-color-scheme="default"] {
-  --agda-function:    #2056c7; /* functions, datatypes, records, postulates  */
-  --agda-datatype:    #2056c7;
-  --agda-record:      #2056c7;
-  --agda-postulate:   #2056c7;
-  --agda-primitive:   #2056c7;
-  --agda-macro:       #2056c7;
-  --agda-constructor: #1a7f37; /* (co)inductive constructors                 */
-  --agda-field:       #c0177e; /* record fields                              */
-  --agda-module:      #8b3fc7; /* module names                               */
-  --agda-keyword:     #b8590a; /* keywords / pragmas                         */
-  --agda-symbol:      #5a6270; /* symbols, parentheses, arrows               */
-  --agda-string:      #b2402a; /* string and char literals                   */
-  --agda-number:      #8b3fc7; /* numeric literals                           */
-  --agda-bound:       inherit; /* bound variables read as ordinary prose     */
-  --agda-argument:    #0a7d8c; /* arguments / parameters (project convention)*/
-  --agda-comment:     #8a93a2;
+  --code-accent: #0000cd;
+  .AgdaKeyword,                pre.Agda .Keyword                { color: #cd6600; }
+  .AgdaComment,                pre.Agda .Comment                { color: #b22222; font-style: italic; }
+  .AgdaString,                 pre.Agda .String                 { color: #b22222; }
+  .AgdaNumber,                 pre.Agda .Number                 { color: #a020f0; }
+  .AgdaSymbol,                 pre.Agda .Symbol                 { color: #404040; }
+  .AgdaArgument,               pre.Agda .Argument               { color: #404040; }
+  .AgdaMarkup,                 pre.Agda .Markup                 { color: #000000; }
+  .AgdaPrimitiveType,          pre.Agda .PrimitiveType          { color: #0000cd; }
+  .AgdaPrimitive,              pre.Agda .Primitive              { color: #0000cd; }
+  .AgdaBound,                  pre.Agda .Bound                  { color: inherit; }
+  .AgdaGeneralizable,          pre.Agda .Generalizable          { color: inherit; }
+  .AgdaInductiveConstructor,   pre.Agda .InductiveConstructor   { color: #008b00; }
+  .AgdaCoinductiveConstructor, pre.Agda .CoinductiveConstructor { color: #8b7500; }
+  .AgdaDatatype,               pre.Agda .Datatype               { color: #0000cd; }
+  .AgdaField,                  pre.Agda .Field                  { color: #ee1289; }
+  .AgdaFunction,               pre.Agda .Function               { color: #0000cd; }
+  .AgdaMacro,                  pre.Agda .Macro                  { color: #0000cd; }
+  .AgdaModule,                 pre.Agda .Module                 { color: #a020f0; }
+  .AgdaPostulate,              pre.Agda .Postulate              { color: #0000cd; }
+  .AgdaRecord,                 pre.Agda .Record                 { color: #0000cd; }
 }
 
 [data-md-color-scheme="slate"] {
-  --agda-function:    #74a8ff;
-  --agda-datatype:    #74a8ff;
-  --agda-record:      #74a8ff;
-  --agda-postulate:   #74a8ff;
-  --agda-primitive:   #74a8ff;
-  --agda-macro:       #74a8ff;
-  --agda-constructor: #5dd874;
-  --agda-field:       #ff85c8;
-  --agda-module:      #cd9bff;
-  --agda-keyword:     #ffa657;
-  --agda-symbol:      #aab3c0;
-  --agda-string:      #ff9e80;
-  --agda-number:      #cd9bff;
-  --agda-bound:       inherit;
-  --agda-argument:    #5fd4da;
-  --agda-comment:     #7d8694;
+  --code-accent: #add8e6;
+  .AgdaKeyword,                pre.Agda .Keyword                { color: #dcdccc; }
+  .AgdaComment,                pre.Agda .Comment                { color: #cc9393; font-style: italic; }
+  .AgdaString,                 pre.Agda .String                 { color: #dcdccc; }
+  .AgdaNumber,                 pre.Agda .Number                 { color: #dcdccc; }
+  .AgdaSymbol,                 pre.Agda .Symbol                 { color: #dcdccc; }
+  .AgdaArgument,               pre.Agda .Argument               { color: #ffffff; }
+  .AgdaMarkup,                 pre.Agda .Markup                 { color: #dcdccc; }
+  .AgdaPrimitiveType,          pre.Agda .PrimitiveType          { color: #add8e6; }
+  .AgdaPrimitive,              pre.Agda .Primitive              { color: #add8e6; }
+  .AgdaBound,                  pre.Agda .Bound                  { color: #dcdccc; }
+  .AgdaGeneralizable,          pre.Agda .Generalizable          { color: #dcdccc; }
+  .AgdaInductiveConstructor,   pre.Agda .InductiveConstructor   { color: #ffcfaf; }
+  .AgdaCoinductiveConstructor, pre.Agda .CoinductiveConstructor { color: #ffcfaf; }
+  .AgdaDatatype,               pre.Agda .Datatype               { color: #add8e6; }
+  .AgdaField,                  pre.Agda .Field                  { color: #ffcfaf; }
+  .AgdaFunction,               pre.Agda .Function               { color: #9fafaf; }
+  .AgdaMacro,                  pre.Agda .Macro                  { color: #9fafaf; }
+  .AgdaModule,                 pre.Agda .Module                 { color: #9fafaf; }
+  .AgdaPostulate,              pre.Agda .Postulate              { color: #9fafaf; }
+  .AgdaRecord,                 pre.Agda .Record                 { color: #add8e6; }
 }
-
-/* Apply the palette to both inline spans and (should they ever appear) tokens
-   inside code blocks.  Keyed on the class the attr_list span carries. */
-.md-typeset .AgdaFunction               { color: var(--agda-function);    }
-.md-typeset .AgdaDatatype               { color: var(--agda-datatype);    }
-.md-typeset .AgdaRecord                 { color: var(--agda-record);      }
-.md-typeset .AgdaPostulate              { color: var(--agda-postulate);   }
-.md-typeset .AgdaPrimitive              { color: var(--agda-primitive);   }
-.md-typeset .AgdaPrimitiveType          { color: var(--agda-primitive);   }
-.md-typeset .AgdaMacro                  { color: var(--agda-macro);       }
-.md-typeset .AgdaInductiveConstructor   { color: var(--agda-constructor); }
-.md-typeset .AgdaCoinductiveConstructor { color: var(--agda-constructor); }
-.md-typeset .AgdaField                  { color: var(--agda-field);       }
-.md-typeset .AgdaModule                 { color: var(--agda-module);      }
-.md-typeset .AgdaKeyword                { color: var(--agda-keyword);     }
-.md-typeset .AgdaPragma                 { color: var(--agda-keyword);     }
-.md-typeset .AgdaSymbol                 { color: var(--agda-symbol);      }
-.md-typeset .AgdaString                 { color: var(--agda-string);      }
-.md-typeset .AgdaNumber                 { color: var(--agda-number);      }
-.md-typeset .AgdaBound                  { color: var(--agda-bound);       }
-.md-typeset .AgdaArgument               { color: var(--agda-argument);    }
-.md-typeset .AgdaGeneralizable          { color: var(--agda-bound);       }
-.md-typeset .AgdaComment                { color: var(--agda-comment); font-style: italic; }
 
 /* -- 3. Inline Agda terms in prose -----------------------------------------
    A reference like `Algebra`{.AgdaRecord} should read as a coloured
@@ -130,27 +126,57 @@
 }
 
 /* -- 4. Code blocks --------------------------------------------------------
-   Fenced ```agda blocks are rendered as plain monospace (architecture (b)
-   trades whole-token highlighting for the inline class spans above), so we
-   invest in typography instead: comfortable padding, a hairline frame, a
-   restful tint, and a left rule that quietly marks "this is formal text". */
+   Two kinds of code blocks appear:
+     + plain fenced ```agda blocks (the fast `make site` path, no agda --html);
+     + agda-highlighted `<pre class="Agda">` blocks (the `make site-full` path,
+       #3a) — every token semantically classed and hyperlinked to its source.
+   The token COLOURS are shared with the inline spans (§2) via the same CSS
+   variables; agda --html uses the bare class names (`.Function`) scoped under
+   `.Agda`, whereas the prose spans carry the `Agda`-prefixed names. */
 .md-typeset pre > code {
   line-height: 1.55;
 }
 
-.md-typeset .highlight pre,
-.md-typeset pre.agda {
-  border-left: 3px solid var(--agda-function);
-}
-
 [data-md-color-scheme="default"] {
-  --md-code-bg-color:  #f7f8fa;
-  --md-code-fg-color:  #2b2f36;
+  --md-code-bg-color: #f2f5fb;   /* cool near-white — the classic blues pop   */
+  --md-code-fg-color: #2b2f36;
+}
+[data-md-color-scheme="slate"] {
+  --md-code-bg-color: #20242a;   /* neutral dark — the zenburn palette pops   */
+  --md-code-fg-color: #dcdccc;
 }
 
-/* Tame the link colour inside code so cross-references (Agda identifiers that
-   are also hyperlinks) keep their token colour rather than turning link-blue;
-   an underline on hover signals interactivity instead. */
+/* The agda --html block itself (no inner <code>; children are <a> tokens).
+   Token colours come from §2 (`pre.Agda .Function` …). */
+.md-typeset pre.Agda {
+  font-family: var(--md-code-font);
+  font-size: 0.78rem;
+  line-height: 1.6;
+  background-color: var(--md-code-bg-color);
+  color: var(--md-code-fg-color);
+  border-radius: 0.25rem;
+  border: 1px solid color-mix(in srgb, var(--code-accent) 20%, transparent);
+  border-left: 3px solid var(--code-accent);
+  padding: 0.8em 1em;
+  margin: 1em 0;
+  overflow-x: auto;
+  white-space: pre;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Tokens are hyperlinks: keep the token colour (not link-blue); underline only
+   on hover so the click affordance is discoverable but unobtrusive. */
+.md-typeset pre.Agda a {
+  color: inherit;
+  text-decoration: none;
+}
+.md-typeset pre.Agda a[href]:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+/* Same restraint for inline prose spans that are also links. */
 .md-typeset a code[class*="Agda"],
 .md-typeset code[class*="Agda"] a {
   color: inherit;
@@ -184,7 +210,7 @@
 .ualib-hero .ualib-formula {
   font-family: var(--md-code-font);
   font-size: 1.5rem;
-  color: var(--agda-function);
+  color: var(--code-accent);
   margin: 0.8rem 0 1.4rem;
 }
 
@@ -207,3 +233,307 @@
 .md-nav__item--section > .md-nav__link {
   font-weight: 700;
 }
+
+/* ==========================================================================
+   6. Chalkboard theme (Direction A) — "chalk on warm paper", with a
+      chalkboard-green header and accents.  We override Material's colour
+      variables in each scheme rather than adding a bespoke scheme, so the
+      light/dark toggle keeps working.
+   ========================================================================== */
+
+[data-md-color-scheme="default"] {
+  --md-default-bg-color:          #fbfaf6; /* warm chalk paper                */
+  --md-default-bg-color--light:   #f4f1e8;
+  --md-default-fg-color:          #232a26; /* dark ink                        */
+  --md-default-fg-color--light:   #56605a;
+  --md-default-fg-color--lighter: #7c857f;
+  --md-primary-fg-color:          #26332e; /* chalkboard slate-green (chrome) */
+  --md-primary-fg-color--dark:    #1b2520;
+  --md-primary-fg-color--light:   #38473f;
+  --md-primary-bg-color:          #f4f1e8; /* chalk text on the board         */
+  --md-accent-fg-color:           #b85c38; /* warm chalk coral (hover/accent) */
+  --md-typeset-a-color:           #2f6f5e; /* chalkboard-teal links           */
+  --md-code-bg-color:             #f2eee4; /* a code "card" on the desk       */
+  --md-code-fg-color:             #2b322c;
+  --md-footer-bg-color:           #1b2520;
+
+  --chalk-board:   #26332e;
+  --chalk-board-2: #2c3a34;
+  --chalk-ink:     #f4f1e8;
+  --chalk-ink-dim: #b9c3bb;
+  --chalk-rule:    #ddd6c6;
+  --chalk-coral:   #b85c38;
+  --chalk-teal:    #2f6f5e;
+}
+
+[data-md-color-scheme="slate"] {
+  --md-default-bg-color:          #1b231f; /* blackboard                      */
+  --md-default-bg-color--light:   #222b26;
+  --md-default-fg-color:          #e7e4d8; /* warm chalk                      */
+  --md-default-fg-color--light:   #b3b8ad;
+  --md-primary-fg-color:          #161d18;
+  --md-primary-bg-color:          #e7e4d8;
+  --md-accent-fg-color:           #e0815a;
+  --md-typeset-a-color:           #84c8b1;
+  --md-code-bg-color:             #232c27;
+  --md-code-fg-color:             #d8d4c6;
+  --md-footer-bg-color:           #11160f;
+
+  --chalk-board:   #11160f;
+  --chalk-board-2: #1c241e;
+  --chalk-ink:     #e7e4d8;
+  --chalk-ink-dim: #9aa39a;
+  --chalk-rule:    #36413a;
+  --chalk-coral:   #e0815a;
+  --chalk-teal:    #84c8b1;
+}
+
+/* ---- 7. Display type: Fraunces for headings, the scholarly voice -------- */
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.ualib-hero h1,
+.ualib-stat__num {
+  font-family: "Fraunces", Georgia, "Times New Roman", serif;
+  letter-spacing: -0.012em;
+}
+.md-typeset h1 { font-weight: 600; }
+.md-typeset h2 { font-weight: 600; }
+.md-typeset h3 { font-weight: 500; }
+
+/* ---- 8. Hero: a chalkboard panel laid on the paper desk ----------------- */
+.ualib-hero {
+  position: relative;
+  text-align: center;
+  margin: 0.4rem 0 2.2rem;
+  padding: 2.8rem 1.4rem 2.4rem;
+  border-radius: 0.5rem;
+  color: var(--chalk-ink);
+  background:
+    radial-gradient(1200px 240px at 50% -40%, rgba(255,255,255,0.05), transparent 70%),
+    linear-gradient(180deg, var(--chalk-board-2), var(--chalk-board));
+  box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset,
+              0 14px 40px -22px rgba(0,0,0,0.55);
+  border: 1px solid rgba(0,0,0,0.25);
+  overflow: hidden;
+}
+/* a faint chalk-dust wash + a wooden tray at the bottom edge */
+.ualib-hero::before {
+  content: ""; position: absolute; inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.05) 50%, transparent 51%),
+    radial-gradient(1px 1px at 70% 60%, rgba(255,255,255,0.04) 50%, transparent 51%),
+    radial-gradient(1px 1px at 45% 80%, rgba(255,255,255,0.04) 50%, transparent 51%);
+  background-size: 120px 120px, 160px 160px, 90px 90px;
+  pointer-events: none;
+}
+.ualib-hero::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 8px;
+  background: linear-gradient(180deg, #8a6a45, #6e5436);
+  box-shadow: 0 -1px 2px rgba(0,0,0,0.3);
+}
+.ualib-hero h1 {
+  color: var(--chalk-ink);
+  font-size: 2.7rem;
+  line-height: 1.08;
+  margin: 0.1rem 0 0.5rem;
+}
+.ualib-hero .ualib-tagline {
+  color: var(--chalk-ink-dim);
+  max-width: 44rem;
+  margin: 0 auto 1.2rem;
+  font-size: 1.04rem;
+}
+.ualib-hero .ualib-formula {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 2.0rem;
+  letter-spacing: 0.04em;
+  color: #fff;
+  text-shadow: 0 0 18px rgba(255,255,255,0.25);
+  margin: 0.6rem 0 1.4rem;
+}
+/* buttons read like chalk on the board */
+.ualib-hero .md-button {
+  color: var(--chalk-ink);
+  border-color: rgba(244,241,232,0.6);
+}
+.ualib-hero .md-button--primary {
+  background: var(--chalk-coral);
+  border-color: var(--chalk-coral);
+  color: #fff;
+}
+.ualib-hero .md-button:hover {
+  background: var(--chalk-ink);
+  border-color: var(--chalk-ink);
+  color: var(--chalk-board);
+}
+
+/* ---- 9. "By the numbers" stat strip ------------------------------------- */
+.ualib-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.6rem;
+  margin: 0 0 2.4rem;
+  text-align: center;
+}
+.ualib-stat {
+  padding: 0.8rem 0.4rem;
+  border: 1px solid var(--chalk-rule);
+  border-radius: 0.4rem;
+  background: var(--md-default-bg-color--light);
+}
+.ualib-stat__num {
+  display: block;
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: var(--chalk-teal);
+  line-height: 1.1;
+}
+.ualib-stat__label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--md-default-fg-color--light);
+}
+@media (max-width: 44em) { .ualib-stats { grid-template-columns: repeat(2, 1fr); } }
+
+/* ---- 10. Featured-results gallery: ink-roundel "portraits" --------------
+   The roundels are placeholders (a commemorative-medallion monogram) until
+   the consistent ink/line caricatures are produced; the layout is final. */
+.ualib-figures {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 1rem;
+  margin: 0.6rem 0 2rem;
+}
+.ualib-figure {
+  display: flex;
+  gap: 0.9rem;
+  align-items: center;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--chalk-rule);
+  border-radius: 0.5rem;
+  background: var(--md-default-bg-color--light);
+  transition: border-color 120ms ease, transform 120ms ease, box-shadow 120ms ease;
+}
+.ualib-figure:hover {
+  border-color: var(--chalk-teal);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px -20px rgba(0,0,0,0.5);
+}
+.ualib-portrait {
+  flex: 0 0 auto;
+  width: 74px; height: 74px;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  font-family: "Fraunces", serif;
+  font-weight: 600; font-size: 1.5rem;
+  color: var(--md-primary-fg-color);
+  background: radial-gradient(circle at 50% 36%, #fff, var(--md-code-bg-color));
+  border: 2px solid var(--md-primary-fg-color);
+  position: relative;
+}
+[data-md-color-scheme="slate"] .ualib-portrait {
+  color: var(--chalk-ink);
+  background: radial-gradient(circle at 50% 36%, #2c3a34, #1c241e);
+  border-color: var(--chalk-ink-dim);
+}
+/* Drop a real portrait in: replace the monogram text with
+   <img src="/assets/portraits/<name>.jpg" alt="…">.  The photo fills the
+   medallion (the engraving ring via ::after still frames it), the grayscale
+   easing to full colour on hover keeps the gallery cohesive. */
+.ualib-portrait:has(img) { background: none; overflow: hidden; }
+.ualib-portrait img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+  filter: grayscale(0.35) contrast(1.02);
+  transition: filter 160ms ease;
+}
+.ualib-figure:hover .ualib-portrait img { filter: grayscale(0); }
+.ualib-portrait::after { /* engraving-style inner ring */
+  content: ""; position: absolute; inset: 5px; border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--md-primary-fg-color) 35%, transparent);
+}
+[data-md-color-scheme="slate"] .ualib-portrait::after {
+  border-color: color-mix(in srgb, var(--chalk-ink) 30%, transparent);
+}
+.ualib-figure__body { min-width: 0; }
+.ualib-figure__result {
+  font-family: "Fraunces", serif; font-weight: 600;
+  font-size: 0.95rem; line-height: 1.15;
+  color: var(--md-default-fg-color);
+  transition: color 120ms ease;
+}
+.md-typeset a.ualib-figure { color: inherit; }
+.md-typeset a.ualib-figure:hover { text-decoration: none; }
+.md-typeset a.ualib-figure:hover .ualib-figure__result { color: var(--md-accent-fg-color); }
+.ualib-figure__who {
+  font-size: 0.74rem; color: var(--md-default-fg-color--light); margin-top: 0.15rem;
+}
+
+/* ---- 11. Structures × properties coverage matrix ------------------------ */
+.ualib-matrix-wrap { overflow-x: auto; margin: 0.6rem 0 1.4rem; }
+.md-typeset table.ualib-matrix {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.74rem;
+}
+.md-typeset .ualib-matrix th,
+.md-typeset .ualib-matrix td {
+  border: 1px solid var(--chalk-rule);
+  padding: 0.34rem 0.5rem;
+  text-align: center;
+  white-space: nowrap;
+}
+.md-typeset .ualib-matrix thead th {
+  background: var(--chalk-board);
+  color: var(--chalk-ink);
+  font-family: "Fraunces", serif; font-weight: 500;
+  position: sticky; top: 0;
+}
+.md-typeset .ualib-matrix tbody th {
+  text-align: left;
+  font-weight: 600;
+  background: var(--md-default-bg-color--light);
+}
+.md-typeset .ualib-matrix tbody th a { color: var(--md-default-fg-color); }
+.md-typeset .ualib-matrix tbody th a:hover { color: var(--md-accent-fg-color); }
+.md-typeset .ualib-matrix .yes { color: var(--chalk-teal); font-weight: 700; }
+.md-typeset .ualib-matrix .yes-2 { color: var(--chalk-coral); font-weight: 700; }
+.md-typeset .ualib-matrix tbody tr:hover td,
+.md-typeset .ualib-matrix tbody tr:hover th { background: color-mix(in srgb, var(--chalk-teal) 8%, transparent); }
+
+/* ---- 12. Module-dependency constellation -------------------------------- */
+#constellation {
+  position: relative;
+  height: 640px;
+  border-radius: 0.5rem;
+  background: radial-gradient(1100px 520px at 50% -10%, #1d2c25, #10150e 75%);
+  border: 1px solid #2a352e;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  margin: 0.6rem 0 0.8rem;
+  overflow: hidden;
+  touch-action: none;
+}
+.constellation-readout {
+  position: absolute; left: 14px; bottom: 14px;
+  pointer-events: none; opacity: 0; transition: opacity 120ms ease;
+  background: rgba(8, 12, 9, 0.74);
+  border: 1px solid #34423a; border-radius: 0.35rem;
+  padding: 0.45rem 0.7rem; max-width: 72%;
+}
+.constellation-readout b {
+  display: block; color: #eef2ee; font-size: 0.92rem; font-weight: 600;
+  font-family: var(--md-code-font);
+}
+.constellation-readout span { color: #9fb3a8; font-size: 0.72rem; }
+.constellation-legend {
+  display: flex; flex-wrap: wrap; gap: 0.4rem 1rem;
+  font-size: 0.74rem; margin: 0.5rem 0 0.3rem;
+  color: var(--md-default-fg-color--light);
+}
+.constellation-legend span { display: inline-flex; align-items: center; gap: 0.35rem; }
+.constellation-legend i { width: 0.7rem; height: 0.7rem; border-radius: 50%; display: inline-block; }
+.constellation-note { font-size: 0.78rem; color: var(--md-default-fg-color--light); margin-top: 0.4rem; }

@@ -47,8 +47,9 @@ watch:
 theme:
   name: material
   language: en
+  logo: assets/lambda.png           # the UALib ribbon-λ (home icon, top-left)
+  favicon: assets/lambda.png
   icon:
-    logo: material/sigma            # Σ — a nod to signatures
     repo: fontawesome/brands/github
     edit: material/pencil-outline
     view: material/file-eye-outline

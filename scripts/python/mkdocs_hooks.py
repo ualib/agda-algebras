@@ -15,9 +15,17 @@ is never altered.  External (http/mailto), root-relative (/…), and pure-anchor
 """
 from __future__ import annotations
 
+import logging
 import re
 
+log = logging.getLogger("mkdocs.plugins.ualib.render")
+
 REPO_BLOB = "https://github.com/ualib/agda-algebras/blob/master/"
+
+# Render-progress state (#2): the markdown→HTML loop is otherwise silent, so we
+# emit a line per page as MkDocs works through them.
+_total = 0
+_done = 0
 
 # Root-level repo files that have an on-site page …
 ON_SITE = {
@@ -70,13 +78,34 @@ def _retarget(target: str) -> str:
     return target
 
 
+def on_files(files, config):
+    """Count the documentation pages so the per-page log can show progress."""
+    global _total, _done
+    _total = sum(1 for f in files if getattr(f, "is_documentation_page", lambda: False)())
+    _done = 0
+    return files
+
+
 def on_page_markdown(markdown: str, *, page=None, config=None, files=None) -> str:
+    global _done
+    _done += 1
+    where = f"[{_done}/{_total}]" if _total else f"[{_done}]"
+
     out: list[str] = []
     in_code = False
+    rewrites = 0
     for line in markdown.split("\n"):
         if FENCE.match(line):
             in_code = not in_code
         elif not in_code:
-            line = LINK.sub(lambda m: m.group(1) + _retarget(m.group(2)) + m.group(3), line)
+            new = LINK.sub(lambda m: m.group(1) + _retarget(m.group(2)) + m.group(3), line)
+            if new != line:
+                rewrites += 1
+            line = new
         out.append(line)
+
+    src = getattr(getattr(page, "file", None), "src_uri", None) or getattr(page, "title", "?")
+    note = f"  🔗 {rewrites} link(s) retargeted" if rewrites else ""
+    log.info(f"  🖋  {where} rendering {src} … ✅{note}")
     return "\n".join(out)
+
