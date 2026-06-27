@@ -46,7 +46,7 @@ open  import Setoid.Terms          {𝑆 = 𝑆}
       using  ( 𝑻 ; module Environment ; comm-hom-term ; interp-prod ; term-agreement )
 open  import Setoid.Subalgebras    {𝑆 = 𝑆}  using  ( _≤_ ; SubalgebrasOfClass )
 open  import Setoid.Varieties.SoundAndComplete {𝑆 = 𝑆}
-      using ( _⊧_ ; _⊨_ ; _⊫_ ; ⊫-proof ; Eq ; _≈̇_ ; lhs ; rhs ; _⊢_▹_≈_ )
+      using ( _⊧_ ; _⊫_ ; ⊫-proof ; _≈̇_ ; _⊢_▹_≈_ )
 
 private variable α ρᵃ β ρᵇ χ ℓ : Level
 
@@ -65,7 +65,6 @@ The binary relation ⊧ would be practically useless if it were not an *algebrai
 module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}(𝑩 : Algebra β ρᵇ)(p q : Term X) where
  open Environment 𝑨      using () renaming ( ⟦_⟧   to ⟦_⟧₁ )
  open Environment 𝑩      using () renaming ( ⟦_⟧   to ⟦_⟧₂ )
- open Setoid (Domain 𝑨)  using () renaming ( _≈_   to _≈₁_ )
  open Setoid (Domain 𝑩)  using ( _≈_ ; sym ; trans )
  open SetoidReasoning (Domain 𝑩)
 

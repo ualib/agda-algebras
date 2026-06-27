@@ -34,7 +34,7 @@ module Classical.Interpretations.Maltsev where
 open import Data.Fin.Base     using ( Fin )
 open import Data.Fin.Patterns using ( 0F ; 1F ; 2F )
 open import Data.Product      using ( _,_ ; proj₁ ; proj₂ )
-open import Level             using ( Level ; 0ℓ )
+open import Level             using ( Level )
 open import Relation.Binary   using ( Setoid )
 
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning

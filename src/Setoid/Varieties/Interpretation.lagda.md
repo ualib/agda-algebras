@@ -74,14 +74,14 @@ module Setoid.Varieties.Interpretation where
 open import Agda.Primitive                 using () renaming ( Set to Type )
 open import Data.Product                   using ( _,_ ; _×_ ; Σ-syntax ; proj₁ ; proj₂ )
 open import Function                       using ( Func )
-open import Level                          using ( Level ; _⊔_ ; 0ℓ)
+open import Level                          using ( Level )
 open import Relation.Binary                using ( Setoid )
 
 open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Overture.Signatures            using  ( 𝓞 ; 𝓥 ; Signature
-                                                  ; OperationSymbolsOf ; ArityOf )
+                                                  ; OperationSymbolsOf )
 open import Overture.Signatures.Morphisms  using  ( SigMorphism )
 open import Overture.Terms                 using  ( Term ; ℊ ; node )
 open import Overture.Terms.Interpretation  using  ( Interpretation ; graft ; _✦_

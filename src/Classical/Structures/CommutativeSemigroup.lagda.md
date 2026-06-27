@@ -37,7 +37,7 @@ open import Relation.Binary.PropositionalEquality  using ( _≡_ )
 open import Classical.Signatures.Magma               using  ( Sig-Magma )
 open import Classical.Structures.Magma               using  ( opsToMagma )
 open import Classical.Structures.Semigroup           using  ( Semigroup ; module Semigroup-Op )
-open import Classical.Theories.Semigroup             using  ( Th-Semigroup ; assoc )
+open import Classical.Theories.Semigroup             using  ( assoc )
 open import Classical.Theories.CommutativeSemigroup  using  ( Eq-CommutativeSemigroup
                                                             ; Th-CommutativeSemigroup ; comm )
                                                      renaming ( assoc to assocᶜ )

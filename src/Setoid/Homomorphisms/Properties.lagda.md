@@ -27,7 +27,7 @@ open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------
 open import Overture          using ( proj₁ ; proj₂ )
-open import Setoid.Functions  using ( _⊙_ ; 𝑖𝑑 ; Image_∋_ ; eq ; ⊙-IsSurjective )
+open import Setoid.Functions  using ( _⊙_ ; 𝑖𝑑 ; eq ; ⊙-IsSurjective )
 
 open  import Setoid.Algebras {𝑆 = 𝑆}
       using ( Algebra ; _^_; Lift-Algˡ; Lift-Algʳ; Lift-Alg; 𝕌[_])
@@ -49,7 +49,6 @@ module _  {𝑨 : Algebra α ρᵃ} {𝑩 : Algebra β ρᵇ} {𝑪 : Algebra γ
   open Algebra 𝑩  renaming (Domain to B )   using ()
   open Algebra 𝑪  renaming (Domain to C )   using ()
   open Setoid A   renaming ( _≈_ to _≈₁_ )  using ()
-  open Setoid B   renaming ( _≈_ to _≈₂_ )  using ()
   open Setoid C   renaming ( _≈_ to _≈₃_ )  using ( trans )
 
   open IsHom
@@ -108,7 +107,7 @@ module _ {𝑨 : Algebra α ρᵃ}{ℓ : Level} where
 
  open Algebra  using ( Domain )
  open Setoid (Domain (Lift-Algˡ 𝑨 ℓ))  using () renaming ( _≈_ to _≈ˡ_ ; refl to reflˡ)
- open Setoid (Domain (Lift-Algʳ 𝑨 ℓ))  using () renaming ( _≈_ to _≈ʳ_ ; refl to reflʳ)
+ open Setoid (Domain (Lift-Algʳ 𝑨 ℓ))  using () renaming ( _≈_ to _≈ʳ_ )
 
  open Level
  ToLiftˡ : hom 𝑨 (Lift-Algˡ 𝑨 ℓ)
@@ -168,7 +167,6 @@ Next we formalize the fact that a homomorphism from `𝑨` to `𝑩` can be lift
 module _ {𝑨 : Algebra α ρᵃ} {𝑩 : Algebra β ρᵇ} where
  open Algebra            using ( Domain )
  open Setoid (Domain 𝑨)  using ( reflexive )  renaming ( _≈_ to _≈₁_ )
- open Setoid (Domain 𝑩)  using ()             renaming ( _≈_ to _≈₂_ )
  open Level
 
  Lift-homˡ : hom 𝑨 𝑩  → (ℓᵃ ℓᵇ : Level) →  hom (Lift-Algˡ 𝑨 ℓᵃ) (Lift-Algˡ 𝑩 ℓᵇ)

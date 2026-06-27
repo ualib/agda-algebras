@@ -18,7 +18,7 @@ module Overture.Adjunction.Residuation where
 open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library --------------------------------------
-open import Function.Base            using ( _on_ ; _∘_ )
+open import Function.Base            using ( _∘_ )
 open import Level                    using ( Level ; _⊔_ ; suc )
 open import Relation.Binary.Bundles  using ( Poset )
 open import Relation.Binary.Core     using ( _Preserves_⟶_ )

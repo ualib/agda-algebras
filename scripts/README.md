@@ -99,3 +99,101 @@ The two scripts cover disjoint phases of the project's life cycle: populate is t
 - Labels and milestones are idempotent — re-running skips existing ones.
 - Issue titles are prefixed with `[M0-1]`, `[M1-2]`, etc. for easy identification.
 
+---
+
+### `unused_imports`: flagging unused imports and open statements
+
+This script statically analyses the literate Agda corpus and reports names that
+a module brings into scope with an `import` / `open` statement but never uses.
+Pruning these keeps the dependency surface of each module honest and the corpus
+tidy.
+
+**Prerequisites**.
+
++  Python 3.10+ (uses structural `match`); no third-party packages.
+
+**Example Usage**.
+
++  Scan the canonical tree (skips the frozen `src/Legacy`), printing one line per
+   finding plus a summary:
+
+   ```zsh
+   python3 scripts/python/unused_imports.py            # defaults to src/
+   make unused-imports                                  # equivalent
+   ```
+
++  Scan a single subtree or file:
+
+   ```zsh
+   python3 scripts/python/unused_imports.py src/Setoid
+   python3 scripts/python/unused_imports.py src/Overture/Basic.lagda.md
+   ```
+
++  Machine-readable output, summary only, or also listing the whole-module opens
+   that cannot be analysed:
+
+   ```zsh
+   python3 scripts/python/unused_imports.py --json src
+   python3 scripts/python/unused_imports.py --summary src
+   python3 scripts/python/unused_imports.py --show-open-ended src
+   ```
+
+The exit status is `1` when anything is flagged and `0` otherwise, so the tool
+can gate CI; pass `--exit-zero` to suppress that, and `--include-legacy` to scan
+`src/Legacy` as well.
+
+**Summary tables**.
+
+The text report ends with two ranked tables — the files carrying the most unused
+names, and the `module → name` pairs unused in the most files — so the
+highest-impact cleanup targets (typically a boilerplate import block copied
+across many modules) are easy to spot.  Control the row count with `--top N`, or
+suppress the tables with `--no-tables`.
+
+**Removing them automatically**.
+
++  `--fix` deletes the unused imports in place: individual names are excised
+   surgically from their `using` / `renaming` list (preserving the surrounding
+   layout, including multi-line lists), and a statement whose names are all
+   unused is removed entirely.  A statement that shares a line with another
+   (`open A ; open B`) is left for manual handling and reported.
+
+   ```zsh
+   python3 scripts/python/unused_imports.py --fix src/Setoid
+   make check        # ALWAYS re-type-check afterwards
+   ```
+
++  The fixer removes exactly what the report flags, so the same caveats apply.
+   Because the analysis is textual it cannot see a name resolved only by
+   *instance search* or referenced only inside a `{-# … #-}` pragma; such a name
+   would be removed in error and only the type-checker will catch it.  Treat
+   `--fix` as a fast first pass to be reviewed with `git diff` and validated with
+   `make check`, never as a blind rewrite.
+
+**What it does and does not flag**.
+
++  It reports the *closed* forms whose in-scope names it can enumerate exactly:
+   `using (…)` lists (per name), `using () renaming (…)`, `as N` aliases, and
+   bare qualified `import M` / `import M as N`.
++  It never flags `public` re-exports, nor the open-ended forms (a whole-module
+   `open import M` with no `using`, `hiding (…)`, or a bare `renaming (…)`);
+   those bring in a set of names a textual tool cannot enumerate and are listed
+   only under `--show-open-ended`.
++  A mixfix name such as `_∙_` counts as used when its operator part appears at a
+   use site (`x ∙ y`); a `Foo-syntax` name counts as used when its `syntax`
+   notation `Foo[ … ]` appears; a `module X` brought into scope counts as used
+   when it is later re-opened with `open X …`.
+
+**Caveats**.
+
+The analysis is textual, and tuned to avoid false positives — every genuine use
+produces a token it counts, so it errs toward leaving a borderline import alone.
+Two residual cases can still be reported in error and should be verified with a
+type-check before removal: a name resolved only by *instance search*, and a name
+referenced only inside a `{-# … #-}` pragma (pragmas are stripped with comments).
+The analyzer ships with a test suite:
+
+```zsh
+python3 scripts/python/test_unused_imports.py          # or: make unused-imports-test
+```
+

@@ -74,7 +74,7 @@ open import Relation.Binary  using ()
                              renaming ( Rel to BinRel ; _⇒_ to _⊆_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture.Terms                {𝑆 = 𝑆}  using ( Term ; ℊ ; node )
+open import Overture.Terms                {𝑆 = 𝑆}  using ( Term ; ℊ )
 open import Setoid.Algebras.Basic         {𝑆 = 𝑆}  using ( Algebra ; 𝕌[_] ; 𝔻[_] )
 open import Setoid.Terms.Basic            {𝑆 = 𝑆}  using ( Sub ; _[_] )
 open import Setoid.Congruences.Generation {𝑆 = 𝑆}  using ( Gen ; Cg-least ; base )
@@ -83,7 +83,7 @@ open import Setoid.Homomorphisms.Kernels  {𝑆 = 𝑆}  using ( kercon )
 open import Setoid.Varieties.SoundAndComplete {𝑆 = 𝑆}
   using ( Eq ; _≈̇_ ; _⊢_▹_≈_ ; module FreeAlgebra )
 
-open Func    using ( cong ) renaming ( to to _⟨$⟩_ )
+open Func    using ( cong )
 open _⊢_▹_≈_ using ( sub ; refl )
 
 private variable

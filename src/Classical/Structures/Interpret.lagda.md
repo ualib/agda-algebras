@@ -42,7 +42,6 @@ open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 
 module Classical.Structures.Interpret {𝑆 : Signature 𝓞 𝓥} where
 
-open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library -----------------------------------------
 open import Function         using ( Func )

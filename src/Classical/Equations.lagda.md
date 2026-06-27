@@ -65,10 +65,9 @@ module Classical.Equations where
 -- Imports from Agda and the Agda Standard Library --------------------------------
 open import Agda.Primitive renaming ( Set to Type )  using ()
 open import Data.Fin.Base                            using ( Fin )
-open import Data.Fin.Patterns                        using ( 0F ; 1F )
 open import Data.Product                             using ( _×_ ; _,_ )
 open import Level                                    using ( Level ; 0ℓ)
-open import Relation.Binary.PropositionalEquality    using ( _≡_ ; refl ; sym ; subst )
+open import Relation.Binary.PropositionalEquality    using ( _≡_ ; sym ; subst )
 
 -- Imports from agda-algebras -----------------------------------------------------
 open import Classical.Operations  using ( pair )

@@ -38,7 +38,7 @@ open import Setoid.Homomorphisms     {𝑆 = 𝑆}  using  ( hom ; IsHom ; 𝒾�
                                                      ; mkiso ; ≅-sym ; ≅-refl ; ≅-trans
                                                      ; Lift-≅ˡ ; Lift-≅ ; Lift-≅ʳ)
 open import Setoid.Subalgebras.Basic {𝑆 = 𝑆}  using  ( _≤_ ; _≥_ ; _≤c_
-                                                     ; _IsSubalgebraOfClass_ )
+                                                     )
 private variable α ρᵃ β ρᵇ γ ρᶜ ι : Level
 ```
 

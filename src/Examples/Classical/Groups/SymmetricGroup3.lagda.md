@@ -56,8 +56,7 @@ open import Relation.Nullary.Negation.Core         using ( ¬_ ; contradiction )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Overture.Cayley                   using  ( Table ; ⟦_⟧ ; from-yes )
-open import Overture.Operations.Properties    using  ( Associative? ; Commutative?
-                                                     ; LeftIdentity? ; RightIdentity?
+open import Overture.Operations.Properties    using  ( Associative? ; LeftIdentity? ; RightIdentity?
                                                      ; LeftInverse? ; RightInverse? )
 open import Classical.Bundles.Group           using ( ⟨_⟩ᵍᵖ ; ⟪_⟫ᵍᵖ )
 open import Classical.Small.Structures.Group  using ( Group ; eqsToGroup )

@@ -18,12 +18,9 @@ module Setoid.Terms.Basic {𝑆 : Signature 𝓞 𝓥} where
 
 -- imports from Agda and the Agda Standard Library -------------------------------
 open import Agda.Primitive         using () renaming ( Set to Type )
-open import Data.Empty.Polymorphic using ( ⊥ )
 open import Data.Product           using ( _,_ )
-open import Data.Sum               using ( _⊎_ )
-                                   renaming ( inj₁ to inl ; inj₂ to inr )
 open import Function               using ( Func )
-open import Level                  using ( Level ; Lift ; _⊔_ )
+open import Level                  using ( Level ; _⊔_ )
 open import Relation.Binary        using ( Setoid ; IsEquivalence )
                                    using ( Reflexive ; Symmetric ; Transitive )
 

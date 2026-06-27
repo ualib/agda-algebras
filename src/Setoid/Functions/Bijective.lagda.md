@@ -20,7 +20,7 @@ open import Relation.Binary using ( Setoid )
 module Setoid.Functions.Bijective {α ρᵃ β ρᵇ}{𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
 
 -- Imports from Agda and the Agda Standard Library --------------------------
-open import Agda.Primitive    using ( _⊔_ ; Level )  renaming ( Set to Type )
+open import Agda.Primitive    using ( _⊔_ )  renaming ( Set to Type )
 open import Data.Product      using ( _,_ ; _×_ )
 open import Function.Bundles  using ()               renaming ( Func to _⟶_ )
 

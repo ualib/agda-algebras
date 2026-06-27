@@ -59,8 +59,8 @@ module _  {𝑨 : Algebra α ρᵃ} (𝑩 : Algebra β ρᵇ) {𝑪 : Algebra γ
 
  open Algebra 𝑩  using ()          renaming (Domain to B )
  open Algebra 𝑪  using ( Interp )  renaming (Domain to C )
- open Setoid B   using ()          renaming ( _≈_ to _≈₂_ ; sym to sym₂ ; trans to trans₂)
- open Setoid C   using ( trans )   renaming ( _≈_ to _≈₃_ ; sym to sym₃ ; refl to refl₃)
+ open Setoid B   using ()          renaming ( _≈_ to _≈₂_ ; sym to sym₂ )
+ open Setoid C   using ( trans )   renaming ( _≈_ to _≈₃_ ; sym to sym₃ )
  open _⟶_        using ( cong )    renaming ( to to _⟨$⟩_ )
 
 

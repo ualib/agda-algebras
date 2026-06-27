@@ -23,32 +23,31 @@ module Setoid.Varieties.Preservation {𝑆 : Signature 𝓞 𝓥} where
 open import Agda.Primitive         using ()       renaming ( Set to Type )
 open import Data.Product           using ( _,_ )
 open import Data.Unit.Polymorphic  using ( ⊤ )
-open import Function               using ( _∘_ )  renaming ( Func to _⟶_ )
+open import Function               using ()  renaming ( Func to _⟶_ )
 open import Level                  using ( Level ; _⊔_ )
 open import Relation.Binary        using ( Setoid )
 open import Relation.Unary         using ( Pred ; _⊆_ ; _∈_ )
 
 -- Imports from the Agda Universal Algebra Library -------------------------------
 open import Overture          using ( proj₁ ; proj₂ )
-open import Setoid.Functions  using ( IsSurjective ; SurjInv ; SurjInvIsInverseʳ )
 
 open import Overture.Terms   {𝑆 = 𝑆} using ( Term )
-open import Setoid.Algebras  {𝑆 = 𝑆} using ( Algebra ; ov ; 𝕌[_] ; Lift-Alg ; ⨅ )
+open import Setoid.Algebras  {𝑆 = 𝑆} using ( Algebra ; ov ; ⨅ )
 
 open  import Setoid.Homomorphisms {𝑆 = 𝑆}
       using ( ≅⨅⁺-refl ; ≅-refl ; IdHomImage ; ≅-sym )
 open  import Setoid.Terms {𝑆 = 𝑆}
-      using ( module Environment; comm-hom-term )
+      using ( module Environment)
 open  import Setoid.Subalgebras {𝑆 = 𝑆}
-      using ( _≤_ ; _≤c_ ; ⨅-≤ ; ≅-trans-≤ ; ≤-reflexive )
+      using ( _≤_ ; ⨅-≤ ; ≅-trans-≤ ; ≤-reflexive )
 open  import Setoid.Varieties.Closure {𝑆 = 𝑆}
       using ( H ; S ; P ; S-expa ; H-expa ; V ; P-expa ; V-expa ;Level-closure )
 open  import Setoid.Varieties.Properties {𝑆 = 𝑆}
       using ( ⊧-H-invar ; ⊧-S-invar ; ⊧-P-invar ; ⊧-I-invar )
 open  import Setoid.Varieties.SoundAndComplete {𝑆 = 𝑆}
-      using ( _⊧_ ; _⊨_ ; _⊫_ ; ⊫-proof ; Eq ; _≈̇_ ; lhs ; rhs ; _⊢_▹_≈_ ; Th)
+      using ( _⊧_ ; _⊫_ ; ⊫-proof ; _≈̇_ ; _⊢_▹_≈_ ; Th)
 
-open _⟶_      using ( cong ) renaming ( to to _⟨$⟩_ )
+open _⟶_      using () renaming ( to to _⟨$⟩_ )
 open Algebra  using ( Domain )
 ```
 

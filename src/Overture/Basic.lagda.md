@@ -54,15 +54,13 @@ module Overture.Basic where
 open import Agda.Primitive using () renaming ( Set to  Type )
 
 -- Imports from the Agda Standard Library -----------------------------------------------
-open import Data.Product      using ( _,_ ; ∃ ; Σ-syntax ; _×_ )
+open import Data.Product      using ( ∃ ; Σ-syntax ; _×_ )
 -- `proj₁` / `proj₂` are re-exported, so the umbrella `Overture` supplies the
 -- canonical projections that replace the deprecated `∣_∣` / `∥_∥` (ADR-002 §1).
 open import Data.Product      using ( proj₁ ; proj₂ ) public
 open import Function.Base     using ( _∘_ ; id )
 open import Level             using ( Level ; suc ; _⊔_ ; lift ; lower ; Lift ; 0ℓ )
-open import Relation.Binary   using ( Decidable )
-open import Relation.Binary   using ( IsEquivalence ; IsPartialOrder )
-open import Relation.Nullary  using ( Dec ; yes ; no ; Irrelevant )
+open import Relation.Binary   using ( IsEquivalence )
 
 open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; sym ; trans )
 

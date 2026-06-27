@@ -82,7 +82,7 @@ open import Classical.Theories.Monoid          using ( Th-Monoid ; assoc ; idˡ 
 open import Classical.Theories.Semigroup       using ( Th-Semigroup )
 open import Overture.Signatures                using ( ArityOf )
 open import Setoid.Algebras.Basic              using ( Algebra ; _^_ ; 𝔻[_] ; 𝕌[_] )
-open import Setoid.Homomorphisms.Basic         using ( hom ; IsHom )
+open import Setoid.Homomorphisms.Basic         using ( hom )
 open import Setoid.Homomorphisms.Properties    using ( ⊙-hom ; 𝒾𝒹 )
 open import Setoid.Categories.Adjunction       using ( Adjunction )
 open import Setoid.Categories.Category         using ( Category )
@@ -329,7 +329,7 @@ module _ (𝑺 : Semigroup α ρ) where
   adjoinUnit-id nothing  = tt
 
 module _ (𝑺 𝑻 𝑼 : Semigroup α ρ) (f : hom (proj₁ 𝑺) (proj₁ 𝑻)) (g : hom (proj₁ 𝑻) (proj₁ 𝑼)) where
-  open AdjoinUnit 𝑺 using () renaming ( A¹ to Aˢ; _≈¹_ to _≈ˢ_ )
+  open AdjoinUnit 𝑺 using () renaming ( A¹ to Aˢ)
   open AdjoinUnit 𝑼 using () renaming ( _≈¹_ to _≈ᵁ_ )
   open Setoid 𝔻[ proj₁ 𝑼 ] using () renaming ( refl to ≈ᵘ-refl )
 

@@ -2559,7 +2559,7 @@ Applying `V-expa` to a membership proof leaves `𝒦` (and `x`) as a higher-orde
 
 ---
 
-### Issue M4-9: `V-id1` forces explicit `{p}{q}` because `_⊫_`/`_⊧_` unfold eagerly during unification (#361)
+### Issue M4-9: `V-id1` forces explicit `{p}{q}` because `_⊫_`/`_⊧_` unfold eagerly during unification (#361, closed)
 
 **Labels**: `milestone-4-style`
 
@@ -2642,7 +2642,7 @@ fails: `sub` produces a goal in `[ σ ]`-form (`node ∙-Op (λ i → … [ σ ]
 
 ---
 
-### Issue M4-11: No generic smart-constructor for a concrete Setoid `Algebra`; add one (#363)
+### Issue M4-11: No generic smart-constructor for a concrete Setoid `Algebra`; add one (#363, closed)
 
 **Labels**: `milestone-4-style`
 
@@ -2686,7 +2686,7 @@ The Classical layer has structure-specific smart-constructors (`opsToMagma`, `eq
 
 ---
 
-### Issue M4-12: Re-export `_,_` from `Setoid.Algebras` to avoid a misleading Σ-constructor scope error (#364)
+### Issue M4-12: Re-export `_,_` from `Setoid.Algebras` to avoid a misleading Σ-constructor scope error (#364, closed)
 
 **Labels**: `milestone-4-style`
 
@@ -2811,7 +2811,7 @@ References: #338 (the M4-5 epic), #342 / #399 (the bundle-level spike this defer
 
 ---
 
-### Issue M4-15: Generalize finite op-law deciders to DecSetoid + exhaustive-search witness (#357)
+### Issue M4-15: Generalize finite op-law deciders to DecSetoid + exhaustive-search witness (#357, closed)
 
 **Labels**: `enhancement`, `milestone-4-style`
 
@@ -3381,7 +3381,7 @@ https://claude.ai/code/session_01B9q9aP34sakGdPgZVaXU2s
 
 ---
 
-### Issue M6-10: Subdirectly irreducible ⟺ no nontrivial subdirect decomposition (the structural characterization) (#421)
+### Issue M6-10: Subdirectly irreducible ⟺ no nontrivial subdirect decomposition (the structural characterization) (#421, closed)
 
 **Labels**: `enhancement`, `milestone-6-flrp`
 

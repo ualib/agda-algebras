@@ -83,7 +83,7 @@ module Demos.HSP {𝑆 : Signature 𝓞 𝓥} where
 open import Data.Unit.Polymorphic  using  ( ⊤ ; tt )
 open import Function               using  ( id ; _∘_ ; flip )
 open import Level                  using  ( Level ;  _⊔_ ; suc )
-open import Relation.Binary        using  ( Rel ; Setoid ; IsEquivalence
+open import Relation.Binary        using  ( Setoid ; IsEquivalence
                                           ; Reflexive ; Symmetric ; Transitive
                                           ; Sym ; Trans )
 open import Relation.Unary         using  ( Pred ; _⊆_ ; _∈_ )
@@ -604,7 +604,7 @@ the operations of lifting and lowering of a setoid algebra are homomorphisms.
 module _ {𝑨 : Algebra α ρᵃ}{ℓ : Level} where
  open Setoid 𝔻[ 𝑨 ] using ( reflexive ) renaming ( _≈_ to _≈₁_ ; refl to refl₁ )
  open Setoid 𝔻[ Lift-Algˡ 𝑨 ℓ ]  using () renaming ( _≈_ to _≈ˡ_ ; refl to reflˡ)
- open Setoid 𝔻[ Lift-Algʳ 𝑨 ℓ ]  using () renaming ( _≈_ to _≈ʳ_ ; refl to reflʳ)
+ open Setoid 𝔻[ Lift-Algʳ 𝑨 ℓ ]  using () renaming ( _≈_ to _≈ʳ_ )
  open Level
 
  ToLiftˡ : hom 𝑨 (Lift-Algˡ 𝑨 ℓ)

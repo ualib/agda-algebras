@@ -27,11 +27,6 @@ nothing to gain (and names to clash) from re-exporting them through a barrel.
 
 module Examples.Classical.Groups where
 
-import Examples.Classical.Groups.AbelianGroup
-import Examples.Classical.Groups.CyclicGroup
-import Examples.Classical.Groups.CyclicGroup3
-import Examples.Classical.Groups.KleinFourGroup
-import Examples.Classical.Groups.SymmetricGroup3
 ```
 
 --------------------------------------

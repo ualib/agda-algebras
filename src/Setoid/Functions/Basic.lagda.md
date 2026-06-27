@@ -16,7 +16,6 @@ This is the [Setoid.Functions.Basic][] module of the [Agda Universal Algebra Lib
 module Setoid.Functions.Basic where
 
 -- Imports from Agda and the Agda Standard Library -----------------------
-open import Agda.Primitive   using () renaming ( Set to Type )
 open import Function         using ( id ; _∘_ ) renaming ( Func to _⟶_ )
 open import Level            using ( Level ; Lift ; _⊔_ )
 open import Relation.Binary  using ( Setoid )

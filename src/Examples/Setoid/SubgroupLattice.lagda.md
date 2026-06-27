@@ -95,7 +95,7 @@ inverse is the identity map.
 
 ```agda
 open import Setoid.Subalgebras.Subuniverses {𝑆 = Sig-Group}
-  using ( Subuniverses ; Sg ; var ; app )
+  using ( Subuniverses ; var ; app )
 
 H₁ H₂ H₌ : Pred (Bool × Bool) 0ℓ
 H₁ x = proj₁ x ≡ false

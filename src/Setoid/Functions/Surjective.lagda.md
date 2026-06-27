@@ -31,7 +31,7 @@ open import Function.Construct.Composition renaming ( isSurjection to isOnto )
 import Function.Definitions as FD
 
 -- Imports from agda-algebras -----------------------------------------------
-open import Overture                   using ( proj₁ ; proj₂ ; ∃-syntax ; transport )
+open import Overture                   using ( proj₁ ; proj₂ )
 open import Setoid.Functions.Basic     using ( _⊙_ )
 open import Setoid.Functions.Inverses  using ( Img_∋_ ; Image_∋_ ; Inv ; InvIsInverseʳ )
 
@@ -116,7 +116,6 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ}{𝑪 : Setoid γ ρᶜ
 
  open Setoid 𝑨  using ()               renaming (Carrier to A; _≈_ to _≈₁_)
  open Setoid 𝑩  using ( trans ; sym )  renaming (Carrier to B; _≈_ to _≈₂_)
- open Setoid 𝑪  using ()               renaming (Carrier to C; _≈_ to _≈₃_)
  open Surjection  renaming (to to _⟨$⟩_)
  open _⟶_         renaming (to to _⟨$⟩_ )
  open FD

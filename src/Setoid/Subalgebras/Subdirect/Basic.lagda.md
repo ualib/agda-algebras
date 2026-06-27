@@ -27,9 +27,9 @@ module Setoid.Subalgebras.Subdirect.Basic {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
-open import Data.Product     using ( _×_ ; _,_ ; Σ-syntax ; proj₁ ; proj₂ )
-open import Function         using ( id ) renaming ( Func to _⟶_ )
-open import Level            using ( Level ; _⊔_ ) renaming ( suc to lsuc )
+open import Data.Product     using ( _,_ ; Σ-syntax ; proj₁ ; proj₂ )
+open import Function         using ( id )
+open import Level            using ( Level ; _⊔_ )
 open import Relation.Binary  using ( Setoid )
 open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl )
 
@@ -38,13 +38,11 @@ open import Setoid.Functions                         using  ( IsInjective ; IsSu
 
 open import Setoid.Algebras                 {𝑆 = 𝑆}  using  ( Algebra ; ⨅ ; 𝔻[_] )
 open import Setoid.Congruences              {𝑆 = 𝑆}  using  ( Con ; _╱_ )
-open import Setoid.Homomorphisms            {𝑆 = 𝑆}  using  ( hom ; IsHom ; epi ; IsEpi
+open import Setoid.Homomorphisms            {𝑆 = 𝑆}  using  ( hom ; IsEpi
                                                             ; 𝒾𝒹 ; ⊙-hom ; ⨅-hom-co
                                                             ; πhom ; πepi ; ⨅-proj )
 open import Setoid.Subalgebras.Basic        {𝑆 = 𝑆}  using  ( _≤_ )
-open import Setoid.Congruences.Monolith     {𝑆 = 𝑆}  using  ( IsSubdirectlyIrreducible )
 
-open _⟶_  using ( cong ) renaming ( to to _⟨$⟩_ )
 
 private variable α ρ β ρᵇ ℓ ι : Level
 ```

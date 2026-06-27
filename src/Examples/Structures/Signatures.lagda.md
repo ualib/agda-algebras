@@ -17,7 +17,7 @@ open import Data.Unit.Base                using () renaming ( ⊤ to 𝟙 ; tt t
 open import Level                         using () renaming ( 0ℓ to ℓ₀ )
 
 open import Overture                      using ( 𝟚 ; 𝟛 )
-open import Legacy.Base.Structures.Basic  using ( signature ; structure )
+open import Legacy.Base.Structures.Basic  using ( signature )
 ```
 
 

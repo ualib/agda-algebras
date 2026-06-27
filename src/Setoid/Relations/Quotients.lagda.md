@@ -16,7 +16,7 @@ module Setoid.Relations.Quotients where
 
 -- Imports from Agda and the Agda Standard Library  -------------------------------
 open import Agda.Primitive    using () renaming ( Set to Type )
-open import Data.Product      using ( _,_ ; Σ-syntax ) renaming ( _×_ to _∧_ )
+open import Data.Product      using ( Σ-syntax ) renaming ( _×_ to _∧_ )
 open import Function          using ( id ) renaming ( Func to _⟶_ )
 open import Level using ( Level ; _⊔_ ; suc )
 open import Relation.Binary   using ( IsEquivalence ) renaming ( Rel to BinRel )
@@ -37,11 +37,11 @@ private variable α β ρᵃ ρᵇ ℓ : Level
 A prominent example of an equivalence relation is the kernel of any function.
 
 ```agda
-open _⟶_ using ( cong ) renaming ( to to _⟨$⟩_ )
+open _⟶_ using ( cong )
 
 module _ {𝐴 : Setoid α ρᵃ}{𝐵 : Setoid β ρᵇ} where
  open Setoid 𝐴  using ( refl ) renaming (Carrier to A )
- open Setoid 𝐵  using ( sym ; trans ) renaming (Carrier to B )
+ open Setoid 𝐵  using ( sym ; trans )
 
  ker-IsEquivalence : (f : 𝐴 ⟶ 𝐵) → IsEquivalence (fker f)
  IsEquivalence.refl   (ker-IsEquivalence f) = cong f refl

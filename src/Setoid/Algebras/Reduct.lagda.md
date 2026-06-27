@@ -47,7 +47,6 @@ open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 module Setoid.Algebras.Reduct where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
-open import Agda.Primitive                        using () renaming ( Set to Type )
 open import Data.Product                          using ( _,_ )
 open import Function                              using ( _∘_ ; _∘₂_ ; Func )
 open import Level                                 using ( Level )

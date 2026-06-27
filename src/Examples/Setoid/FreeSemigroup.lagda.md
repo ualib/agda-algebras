@@ -45,7 +45,7 @@ open import Setoid.Varieties.SoundAndComplete {𝑆 = Sig-Magma}
 open import Setoid.Varieties.FreeSubstitution {𝑆 = Sig-Magma}
   using ( sub▹ )
 open _≐_      using ( gnl )
-open _⊢_▹_≈_  using ( hyp ; app ; sub ; refl ; sym ; trans )
+open _⊢_▹_≈_  using ( hyp ; app ; refl ; sym ; trans )
 ```
 
 #### The Associativity Theory

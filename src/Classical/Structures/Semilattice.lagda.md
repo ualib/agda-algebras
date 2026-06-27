@@ -39,8 +39,7 @@ open import Classical.Signatures.Magma                 using  ( Sig-Magma )
 open import Classical.Structures.Magma                 using  ( opsToMagma )
 open import Classical.Structures.CommutativeSemigroup  using  ( CommutativeSemigroup
                                                               ; module CommutativeSemigroup-Op )
-open import Classical.Theories.CommutativeSemigroup    using  ( Th-CommutativeSemigroup
-                                                              ; assoc ; comm )
+open import Classical.Theories.CommutativeSemigroup    using  ( assoc ; comm )
 open import Classical.Theories.Semilattice             using  ( Eq-Semilattice
                                                               ; Th-Semilattice ; idem )
                                                        renaming ( assoc to assocˢˡ
