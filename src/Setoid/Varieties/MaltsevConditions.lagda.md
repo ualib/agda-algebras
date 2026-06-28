@@ -65,9 +65,10 @@ open import Overture.Terms.Interpretation      using  ( Interpretation ; _✦_ )
 open import Setoid.Algebras.Basic              using  ( Algebra ; 𝔻[_] ; 𝕌[_] )
 open import Setoid.Congruences.Basic           using  ( Con ; reflexive
                                                       ; is-equivalence ; is-compatible )
-open import Setoid.Congruences.Generation      using  ( Cg ; Gen ; base ; rfl ; tran
-                                                      ; _∨_ ; _∪ᵣ_ ; ∨-upperˡ ; ∨-upperʳ
+open import Setoid.Congruences.Generation      using  ( Cg ; base ; _∨_ ; _∪ᵣ_ ; ∨-upperˡ ; ∨-upperʳ
                                                       ; ∨-least )
+open import Setoid.Congruences.ChainJoin       using  ( Chain ; nil ; cons ; JoinIsChain ; Finitary
+                                                      ; finitary⇒JoinIsChain )
 open import Setoid.Congruences.Lattice         using  ( _∧_ ; _⊆_ )
 open import Setoid.Congruences.Permutability   using  ( CongruencePermutable )
 open import Setoid.Congruences.Properties      using  ( CongruenceDistributive
@@ -424,40 +425,17 @@ HasJonssonTerms n α ρ ℰ = Th-Jonsson n ≼ ℰ
   where open Interpret α ρ
 ```
 
-#### Alternating chains in the congruence join
-
-The forward direction of Jónsson's theorem (Burris–Sankappanavar, Thm. II.12.6) runs
-the Jónsson terms along a **finite alternating walk** from `a` to `b` whose steps lie
-in `φ` or in `ψ`.  Classically such a walk witnesses `(a , b) ∈ φ ∨ ψ`; here the join
-`φ ∨ ψ` is the *inductively generated* congruence `Cg (φ ∪ ψ)`
-([Setoid.Congruences.Generation][]), whose closure under the basic operations (the
-`comp` constructor of `Gen`) makes it strictly larger than the walk relation for an
-**infinitary** signature.  So we isolate the walk relation as its own type `Chain`,
-prove the staircase against it in full generality, and connect it to the
-operation-closed join only where a finiteness hypothesis lets the two coincide.
-
-```agda
--- A `Chain 𝑩 R` from x to y is a finite walk x ≈ · R · R ⋯ R · ≈ y: the
--- reflexive–transitive closure of a relation R on the carrier of 𝑩.  We use it
--- with R = φ ∪ᵣ ψ, so each `cons` step is tagged (by the ⊎ in φ ∪ᵣ ψ) as a φ-step or
--- a ψ-step — exactly the information the staircase needs to land a step in θ∧φ or
--- θ∧ψ.  (The carrier algebra `𝑩` is an explicit parameter: it cannot be inferred from
--- a relation on `𝕌[ 𝑩 ]`, since the carrier projection is not injective.)
-data Chain {𝑆 : Signature 0ℓ 0ℓ}(𝑩 : Algebra {𝑆 = 𝑆} α ρ)
-           (R : 𝕌[ 𝑩 ] → 𝕌[ 𝑩 ] → Type ℓ) : 𝕌[ 𝑩 ] → 𝕌[ 𝑩 ] → Type (α ⊔ ρ ⊔ ℓ) where
-  nil  : {x y : 𝕌[ 𝑩 ]} → Setoid._≈_ 𝔻[ 𝑩 ] x y → Chain 𝑩 R x y
-  cons : {x y z : 𝕌[ 𝑩 ]} → R x y → Chain 𝑩 R y z → Chain 𝑩 R x z
-
--- A chain is below the generated congruence: each step is `base`, the empty chain is
--- `rfl`, concatenation is `tran`.  Hence `θ ∧ Chain 𝑩 (φ ∪ᵣ ψ) ⊆ θ ∧ (φ ∨ ψ)`, and the
--- staircase below (`chainDist`) is a genuine sub-statement of distributivity.
-Chain⊆Gen : {𝑆 : Signature 0ℓ 0ℓ}(𝑩 : Algebra {𝑆 = 𝑆} α ρ)(φ ψ : Con 𝑩 ℓ){x y : 𝕌[ 𝑩 ]}
-  → Chain 𝑩 (φ ∪ᵣ ψ) x y → Gen {𝑨 = 𝑩} (φ ∪ᵣ ψ) x y
-Chain⊆Gen 𝑩 φ ψ (nil x≈y)   = rfl x≈y
-Chain⊆Gen 𝑩 φ ψ (cons r c)  = tran (base r) (Chain⊆Gen 𝑩 φ ψ c)
-```
-
 #### Jónsson terms imply distributivity along chains
+
+The forward direction of Jónsson's theorem (Burris–Sankappanavar, Thm. II.12.6) runs the
+Jónsson terms along a **finite alternating walk** from `a` to `b` whose steps lie in `φ` or
+in `ψ`.  Classically such a walk witnesses `(a , b) ∈ φ ∨ ψ`; here the join `φ ∨ ψ` is the
+*inductively generated* congruence `Cg (φ ∪ ψ)`, whose `comp` closure makes it strictly
+larger than the walk relation for an **infinitary** signature.  So the walk relation is
+isolated as the type `Chain` ([Setoid.Congruences.ChainJoin][]), the staircase is proved
+against it in full generality, and the two are identified — `JoinIsChain`,
+`finitary⇒JoinIsChain`{.AgdaFunction} — exactly for the **finitary** signatures of ordinary
+universal algebra.
 
 Fix a model `𝑩` of a theory `ℰ` with `n+1` Jónsson terms.  The witnessing
 interpretation `Iⱼ`{.AgdaFunction} sends the `i`-th Jónsson symbol to a derived
@@ -593,8 +571,9 @@ the distributive inclusion `θ ∧ (φ ∨ ψ) ⊆ (θ∧φ) ∨ (θ∧ψ)` **al
 is the finiteness-free content of Jónsson's theorem (Burris–Sankappanavar, Thm. II.12.6);
 composing it with `Gen ⊆ Chain` (the collapse of the generated join `Cg(φ ∪ ψ)` to finite
 chains, valid for finitary signatures) upgrades it to the literal
-`CongruenceDistributive`{.AgdaFunction}.  By `Chain⊆Gen`{.AgdaFunction} it is a genuine
-sub-statement of that inclusion.
+`CongruenceDistributive`{.AgdaFunction}.  The converse identification
+`Chain⊆Gen`{.AgdaFunction} ([Setoid.Congruences.ChainJoin][]) shows the chain form is a
+genuine sub-statement of that inclusion.
 
 ```agda
 jonsson⇒chainDistributive :
@@ -609,20 +588,15 @@ jonsson⇒chainDistributive {ℰ = ℰ} (n , jt) 𝑩 B⊨ θ φ ψ a b aθb chn
 
 To land the staircase in the *literal* `CongruenceDistributive`{.AgdaFunction} (whose join
 is the generated congruence `Cg(φ ∪ ψ)`), the one extra ingredient is that membership in
-that join is witnessed by a finite chain.  We isolate it as the explicit hypothesis
-`JoinIsChain`{.AgdaFunction} rather than impose a finiteness assumption on the whole
-development: it holds for **finitary** signatures — where `Gen` adds nothing beyond the
-transitive closure of the union — and is exactly the point at which the elementary
-(term-by-term) argument meets the infinitary `comp` closure of `Gen`.
+that join is witnessed by a finite chain — the `JoinIsChain`{.AgdaFunction} hypothesis from
+[Setoid.Congruences.ChainJoin][].  For a **finitary** signature this is *automatic*
+(`finitary⇒JoinIsChain`{.AgdaFunction}, proved there by a coordinate-by-coordinate fold); we
+take it as a hypothesis here rather than bake a finiteness assumption into the whole
+development, and discharge it in the featured finitary theorem below.
 
 ```agda
--- The generated join Cg(φ ∪ ψ) is witnessed by finite alternating chains.
-JoinIsChain : {𝑆 : Signature 0ℓ 0ℓ}(𝑩 : Algebra {𝑆 = 𝑆} α ρ)(ℓ : Level) → Type _
-JoinIsChain 𝑩 ℓ =
-  (φ ψ : Con 𝑩 ℓ){x y : 𝕌[ 𝑩 ]} → Gen {𝑨 = 𝑩} (φ ∪ᵣ ψ) x y → Chain 𝑩 (φ ∪ᵣ ψ) x y
-
 -- Jónsson terms ⟹ congruence distributivity (the forward half of Jónsson's theorem),
--- modulo the finitary hypothesis JoinIsChain.  The forward inclusion is the staircase;
+-- modulo the hypothesis JoinIsChain.  The forward inclusion is the staircase;
 -- the reverse inclusion is the automatic semidistributive law of any lattice.
 jonsson⇒CongruenceDistributive :
   {𝑆 : Signature 0ℓ 0ℓ}{X : Type χ}{Idx : Type ι}
@@ -740,6 +714,17 @@ module _ {α ρ ℓ : Level}{𝑆 : Signature 0ℓ 0ℓ}{X : Type χ}{Idx : Type
     → CongruenceDistributiveVariety
   jonsson⇒CongruenceDistributiveVariety jh jic 𝑩 B⊨ =
     jonsson⇒CongruenceDistributive {ℓ = ℓ}{ℰ = ℰ} jh 𝑩 B⊨ (jic 𝑩)
+
+  -- ★ The finitary Jónsson theorem.  For a finitary signature the JoinIsChain hypothesis is
+  -- automatic (`finitary⇒JoinIsChain`), so a variety with Jónsson terms is
+  -- congruence-distributive outright — the term ⟹ CD direction of `Jonsson-Statement` with
+  -- no residual side condition.  The finiteness witness `fin` is `λ _ → _ , ↔-id _` for every
+  -- signature whose arities are `Fin`s, which is every signature of the library; supplying it
+  -- is therefore a one-liner, never a hoop (see `Examples.Setoid.FinitarySignatures`).
+  jonsson-finitary⇒CongruenceDistributiveVariety :
+    Finitary {𝑆 = 𝑆} → ( Σ[ n ∈ ℕ ] HasJonssonTerms n α ρ ℰ ) → CongruenceDistributiveVariety
+  jonsson-finitary⇒CongruenceDistributiveVariety fin jh =
+    jonsson⇒CongruenceDistributiveVariety jh (λ 𝑩 → finitary⇒JoinIsChain {ℓ = α ⊔ ρ ⊔ ℓ} fin)
 
   -- Day's theorem (forward DEFERRED): CM ⇔ existence of Day terms.  Unlike Jónsson, the
   -- forward staircase is *not* a mechanical mirror — see the note below the Day-terms
