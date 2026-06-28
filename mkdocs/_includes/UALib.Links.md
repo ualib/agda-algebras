@@ -126,6 +126,7 @@
 
 [Setoid.Congruences]: https://ualib.org/Setoid.Congruences.html
 [Setoid.Congruences.Basic]: https://ualib.org/Setoid.Congruences.Basic.html
+[Setoid.Congruences.ChainJoin]: https://ualib.org/Setoid.Congruences.ChainJoin.html
 [Setoid.Congruences.Lattice]: https://ualib.org/Setoid.Congruences.Lattice.html
 [Setoid.Congruences.Generation]: https://ualib.org/Setoid.Congruences.Generation.html
 [Setoid.Congruences.CompleteLattice]: https://ualib.org/Setoid.Congruences.CompleteLattice.html
@@ -185,6 +186,7 @@
 [Demos.HSP]: https://ualib.org/Demos.HSP.html
 [Demos.HSP-markdown]: https://ualib.org/Demos.HSP-markdown.html
 [Examples.Categories.Functors]: https://ualib.org/Examples.Categories.Functors.html
+[Examples.Setoid.FinitarySignatures]: https://ualib.org/Examples.Setoid.FinitarySignatures.html
 [Examples.Structures.Basic]: https://ualib.org/Examples.Structures.Basic.html
 [Examples.Structures.Signatures]: https://ualib.org/Examples.Structures.Signatures.html
 [Exercises.Complexity.FiniteCSP]: https://ualib.org/Exercises.Complexity.FiniteCSP.html
