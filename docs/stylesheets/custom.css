@@ -29,15 +29,56 @@
    choice across the Agda/Lean/Julia ecosystems.  We load it from a CDN with a
    broad fallback stack so the page still reads well if the font is blocked. */
 @import url("https://cdn.jsdelivr.net/gh/cormullion/juliamono/webfonts/juliamono.css");
-/* Fraunces — a soft old-style serif for display headings (the "scholarly
-   artifact" voice of the chalkboard theme, §6). */
-@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&display=swap");
+
+/* Display + body type are self-hosted from docs/assets/fonts/, so the site
+   needs no external font CDN: faster first paint, renders offline, and is
+   identical in CI screenshots.  Space Grotesk is a geometric grotesque —
+   modern, a touch technical, pairs naturally with monospace — for headings;
+   Inter carries body text.  Both are variable fonts (one file, all weights). */
+@font-face {
+  font-family: "Space Grotesk"; font-style: normal; font-display: swap;
+  font-weight: 300 700;
+  src: url("../assets/fonts/space-grotesk-latin-wght-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "InterVar"; font-style: normal; font-display: swap;
+  font-weight: 100 900;
+  src: url("../assets/fonts/inter-latin-wght-normal.woff2") format("woff2");
+}
+/* Two alternate display faces, also self-hosted, so retheming the headings is
+   a one-word change to --ualib-display (no new download): "Geist" (Vercel's
+   neo-grotesque, the cleanest) or "Sora" (geometric, rounder). */
+@font-face {
+  font-family: "Geist"; font-style: normal; font-display: swap; font-weight: 400;
+  src: url("../assets/fonts/geist-sans-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Geist"; font-style: normal; font-display: swap; font-weight: 500;
+  src: url("../assets/fonts/geist-sans-latin-500-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Geist"; font-style: normal; font-display: swap; font-weight: 600;
+  src: url("../assets/fonts/geist-sans-latin-600-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Geist"; font-style: normal; font-display: swap; font-weight: 700;
+  src: url("../assets/fonts/geist-sans-latin-700-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Sora"; font-style: normal; font-display: swap; font-weight: 300 700;
+  src: url("../assets/fonts/sora-latin-wght-normal.woff2") format("woff2");
+}
 
 :root {
   --md-code-font: "JuliaMono", "JetBrains Mono", "Fira Code", "Cascadia Code",
                   "DejaVu Sans Mono", "Menlo", "Consolas", monospace;
-  --md-text-font: "Inter", "Lato", -apple-system, BlinkMacSystemFont,
+  --md-text-font: "InterVar", "Inter", -apple-system, BlinkMacSystemFont,
                   "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  /* The single display/heading family.  Swap this one line to retheme every
+     heading, the hero title + formula, the stat numbers, the figure titles,
+     and the matrix header row.  Alternatives self-hosted alongside Space
+     Grotesk: "Geist", "Sora" (see docs/site-guide.md). */
+  --ualib-display: "Space Grotesk", "InterVar", "Segoe UI", system-ui, sans-serif;
 }
 
 /* Slightly larger line-height in code so stacked diacritics (𝒾, ≋, ⊑) and
@@ -235,66 +276,70 @@
 }
 
 /* ==========================================================================
-   6. Chalkboard theme (Direction A) — "chalk on warm paper", with a
-      chalkboard-green header and accents.  We override Material's colour
-      variables in each scheme rather than adding a bespoke scheme, so the
-      light/dark toggle keeps working.
+   6. Modern theme — "Aurora": an indigo→violet chrome with a vivid-orange
+      accent over cool, near-white (light) / deep-navy (dark) surfaces.  We
+      override Material's colour variables per scheme rather than adding a
+      bespoke scheme, so the light/dark toggle keeps working.  The `--ualib-*`
+      aliases drive the bespoke components (hero, stats, figures, matrix); the
+      hero gradient runs from `--ualib-board-2` (violet) to `--ualib-board`
+      (indigo).  Swap this whole block to retheme — two ready alternates,
+      "Cobalt" (blue-led) and "Ultraviolet" (violet-led), are in
+      docs/site-guide.md.  Code-block colours are owned by §4, not here.
    ========================================================================== */
 
 [data-md-color-scheme="default"] {
-  --md-default-bg-color:          #fbfaf6; /* warm chalk paper                */
-  --md-default-bg-color--light:   #f4f1e8;
-  --md-default-fg-color:          #232a26; /* dark ink                        */
-  --md-default-fg-color--light:   #56605a;
-  --md-default-fg-color--lighter: #7c857f;
-  --md-primary-fg-color:          #26332e; /* chalkboard slate-green (chrome) */
-  --md-primary-fg-color--dark:    #1b2520;
-  --md-primary-fg-color--light:   #38473f;
-  --md-primary-bg-color:          #f4f1e8; /* chalk text on the board         */
-  --md-accent-fg-color:           #b85c38; /* warm chalk coral (hover/accent) */
-  --md-typeset-a-color:           #2f6f5e; /* chalkboard-teal links           */
-  --md-code-bg-color:             #f2eee4; /* a code "card" on the desk       */
-  --md-code-fg-color:             #2b322c;
-  --md-footer-bg-color:           #1b2520;
+  --md-default-bg-color:          #fbfcff; /* cool paper-white                */
+  --md-default-bg-color--light:   #eef0fc; /* card / inset surface            */
+  --md-default-fg-color:          #181c2c; /* near-navy ink                   */
+  --md-default-fg-color--light:   #535d75;
+  --md-default-fg-color--lighter: #818bab;
+  --md-primary-fg-color:          #4f46e5; /* indigo-violet chrome (header)   */
+  --md-primary-fg-color--dark:    #4338ca;
+  --md-primary-fg-color--light:   #7c6cf0;
+  --md-primary-bg-color:          #f3f3ff; /* text on the chrome              */
+  --md-accent-fg-color:           #fb6a00; /* vivid orange (hover / accent)   */
+  --md-typeset-a-color:           #5b54e6; /* indigo-violet links             */
+  --md-footer-bg-color:           #20204a;
 
-  --chalk-board:   #26332e;
-  --chalk-board-2: #2c3a34;
-  --chalk-ink:     #f4f1e8;
-  --chalk-ink-dim: #b9c3bb;
-  --chalk-rule:    #ddd6c6;
-  --chalk-coral:   #b85c38;
-  --chalk-teal:    #2f6f5e;
+  --ualib-board:   #201f4d; /* indigo base of the hero gradient       */
+  --ualib-board-2: #4a2f86; /* violet top of the hero gradient        */
+  --ualib-ink:     #eef0ff; /* text on deep panels                    */
+  --ualib-ink-dim: #bcc0ec;
+  --ualib-rule:    #e2e4f6; /* hairline borders                       */
+  --ualib-coral:   #fb6a00; /* the orange accent                      */
+  --ualib-teal:    #5b54e6; /* the signature indigo (✓, stat numbers) */
 }
 
 [data-md-color-scheme="slate"] {
-  --md-default-bg-color:          #1b231f; /* blackboard                      */
-  --md-default-bg-color--light:   #222b26;
-  --md-default-fg-color:          #e7e4d8; /* warm chalk                      */
-  --md-default-fg-color--light:   #b3b8ad;
-  --md-primary-fg-color:          #161d18;
-  --md-primary-bg-color:          #e7e4d8;
-  --md-accent-fg-color:           #e0815a;
-  --md-typeset-a-color:           #84c8b1;
-  --md-code-bg-color:             #232c27;
-  --md-code-fg-color:             #d8d4c6;
-  --md-footer-bg-color:           #11160f;
+  --md-default-bg-color:          #0c0e1d; /* deep navy                       */
+  --md-default-bg-color--light:   #15172e; /* card / inset surface            */
+  --md-default-fg-color:          #e8eaf8;
+  --md-default-fg-color--light:   #a8aed0;
+  --md-default-fg-color--lighter: #7a82ac;
+  --md-primary-fg-color:          #0c0d1f; /* near-black navy chrome          */
+  --md-primary-fg-color--dark:    #08091a;
+  --md-primary-fg-color--light:   #2a2566;
+  --md-primary-bg-color:          #e8eaf8;
+  --md-accent-fg-color:           #ff7a1a; /* orange                          */
+  --md-typeset-a-color:           #8b88ff; /* light indigo-violet links       */
+  --md-footer-bg-color:           #08091a;
 
-  --chalk-board:   #11160f;
-  --chalk-board-2: #1c241e;
-  --chalk-ink:     #e7e4d8;
-  --chalk-ink-dim: #9aa39a;
-  --chalk-rule:    #36413a;
-  --chalk-coral:   #e0815a;
-  --chalk-teal:    #84c8b1;
+  --ualib-board:   #0d0e24;
+  --ualib-board-2: #2f1f6e; /* navy→violet hero in dark mode          */
+  --ualib-ink:     #e8eaf8;
+  --ualib-ink-dim: #9ea4cc;
+  --ualib-rule:    #262a4a;
+  --ualib-coral:   #ff7a1a;
+  --ualib-teal:    #8b88ff;
 }
 
-/* ---- 7. Display type: Fraunces for headings, the scholarly voice -------- */
+/* ---- 7. Display type: Space Grotesk headings (--ualib-display) ---------- */
 .md-typeset h1,
 .md-typeset h2,
 .md-typeset h3,
 .ualib-hero h1,
 .ualib-stat__num {
-  font-family: "Fraunces", Georgia, "Times New Roman", serif;
+  font-family: var(--ualib-display), Georgia, "Times New Roman", serif;
   letter-spacing: -0.012em;
 }
 .md-typeset h1 { font-weight: 600; }
@@ -308,10 +353,10 @@
   margin: 0.4rem 0 2.2rem;
   padding: 2.8rem 1.4rem 2.4rem;
   border-radius: 0.5rem;
-  color: var(--chalk-ink);
+  color: var(--ualib-ink);
   background:
     radial-gradient(1200px 240px at 50% -40%, rgba(255,255,255,0.05), transparent 70%),
-    linear-gradient(180deg, var(--chalk-board-2), var(--chalk-board));
+    linear-gradient(180deg, var(--ualib-board-2), var(--ualib-board));
   box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset,
               0 14px 40px -22px rgba(0,0,0,0.55);
   border: 1px solid rgba(0,0,0,0.25);
@@ -333,19 +378,19 @@
   box-shadow: 0 -1px 2px rgba(0,0,0,0.3);
 }
 .ualib-hero h1 {
-  color: var(--chalk-ink);
+  color: var(--ualib-ink);
   font-size: 2.7rem;
   line-height: 1.08;
   margin: 0.1rem 0 0.5rem;
 }
 .ualib-hero .ualib-tagline {
-  color: var(--chalk-ink-dim);
+  color: var(--ualib-ink-dim);
   max-width: 44rem;
   margin: 0 auto 1.2rem;
   font-size: 1.04rem;
 }
 .ualib-hero .ualib-formula {
-  font-family: "Fraunces", Georgia, serif;
+  font-family: var(--ualib-display), Georgia, serif;
   font-size: 2.0rem;
   letter-spacing: 0.04em;
   color: #fff;
@@ -354,18 +399,18 @@
 }
 /* buttons read like chalk on the board */
 .ualib-hero .md-button {
-  color: var(--chalk-ink);
+  color: var(--ualib-ink);
   border-color: rgba(244,241,232,0.6);
 }
 .ualib-hero .md-button--primary {
-  background: var(--chalk-coral);
-  border-color: var(--chalk-coral);
+  background: var(--ualib-coral);
+  border-color: var(--ualib-coral);
   color: #fff;
 }
 .ualib-hero .md-button:hover {
-  background: var(--chalk-ink);
-  border-color: var(--chalk-ink);
-  color: var(--chalk-board);
+  background: var(--ualib-ink);
+  border-color: var(--ualib-ink);
+  color: var(--ualib-board);
 }
 
 /* ---- 9. "By the numbers" stat strip ------------------------------------- */
@@ -378,7 +423,7 @@
 }
 .ualib-stat {
   padding: 0.8rem 0.4rem;
-  border: 1px solid var(--chalk-rule);
+  border: 1px solid var(--ualib-rule);
   border-radius: 0.4rem;
   background: var(--md-default-bg-color--light);
 }
@@ -386,7 +431,7 @@
   display: block;
   font-size: 1.7rem;
   font-weight: 700;
-  color: var(--chalk-teal);
+  color: var(--ualib-teal);
   line-height: 1.1;
 }
 .ualib-stat__label {
@@ -411,13 +456,13 @@
   gap: 0.9rem;
   align-items: center;
   padding: 0.9rem 1rem;
-  border: 1px solid var(--chalk-rule);
+  border: 1px solid var(--ualib-rule);
   border-radius: 0.5rem;
   background: var(--md-default-bg-color--light);
   transition: border-color 120ms ease, transform 120ms ease, box-shadow 120ms ease;
 }
 .ualib-figure:hover {
-  border-color: var(--chalk-teal);
+  border-color: var(--ualib-teal);
   transform: translateY(-2px);
   box-shadow: 0 10px 26px -20px rgba(0,0,0,0.5);
 }
@@ -426,7 +471,7 @@
   width: 74px; height: 74px;
   border-radius: 50%;
   display: grid; place-items: center;
-  font-family: "Fraunces", serif;
+  font-family: var(--ualib-display), serif;
   font-weight: 600; font-size: 1.5rem;
   color: var(--md-primary-fg-color);
   background: radial-gradient(circle at 50% 36%, #fff, var(--md-code-bg-color));
@@ -434,9 +479,9 @@
   position: relative;
 }
 [data-md-color-scheme="slate"] .ualib-portrait {
-  color: var(--chalk-ink);
+  color: var(--ualib-ink);
   background: radial-gradient(circle at 50% 36%, #2c3a34, #1c241e);
-  border-color: var(--chalk-ink-dim);
+  border-color: var(--ualib-ink-dim);
 }
 /* Drop a real portrait in: replace the monogram text with
    <img src="/assets/portraits/<name>.jpg" alt="…">.  The photo fills the
@@ -457,11 +502,11 @@
   border: 1px solid color-mix(in srgb, var(--md-primary-fg-color) 35%, transparent);
 }
 [data-md-color-scheme="slate"] .ualib-portrait::after {
-  border-color: color-mix(in srgb, var(--chalk-ink) 30%, transparent);
+  border-color: color-mix(in srgb, var(--ualib-ink) 30%, transparent);
 }
 .ualib-figure__body { min-width: 0; }
 .ualib-figure__result {
-  font-family: "Fraunces", serif; font-weight: 600;
+  font-family: var(--ualib-display), serif; font-weight: 600;
   font-size: 0.95rem; line-height: 1.15;
   color: var(--md-default-fg-color);
   transition: color 120ms ease;
@@ -482,15 +527,15 @@
 }
 .md-typeset .ualib-matrix th,
 .md-typeset .ualib-matrix td {
-  border: 1px solid var(--chalk-rule);
+  border: 1px solid var(--ualib-rule);
   padding: 0.34rem 0.5rem;
   text-align: center;
   white-space: nowrap;
 }
 .md-typeset .ualib-matrix thead th {
-  background: var(--chalk-board);
-  color: var(--chalk-ink);
-  font-family: "Fraunces", serif; font-weight: 500;
+  background: var(--ualib-board);
+  color: var(--ualib-ink);
+  font-family: var(--ualib-display), serif; font-weight: 500;
   position: sticky; top: 0;
 }
 .md-typeset .ualib-matrix tbody th {
@@ -500,10 +545,10 @@
 }
 .md-typeset .ualib-matrix tbody th a { color: var(--md-default-fg-color); }
 .md-typeset .ualib-matrix tbody th a:hover { color: var(--md-accent-fg-color); }
-.md-typeset .ualib-matrix .yes { color: var(--chalk-teal); font-weight: 700; }
-.md-typeset .ualib-matrix .yes-2 { color: var(--chalk-coral); font-weight: 700; }
+.md-typeset .ualib-matrix .yes { color: var(--ualib-teal); font-weight: 700; }
+.md-typeset .ualib-matrix .yes-2 { color: var(--ualib-coral); font-weight: 700; }
 .md-typeset .ualib-matrix tbody tr:hover td,
-.md-typeset .ualib-matrix tbody tr:hover th { background: color-mix(in srgb, var(--chalk-teal) 8%, transparent); }
+.md-typeset .ualib-matrix tbody tr:hover th { background: color-mix(in srgb, var(--ualib-teal) 8%, transparent); }
 
 /* ---- 12. Module-dependency constellation -------------------------------- */
 #constellation {
@@ -537,3 +582,94 @@
 .constellation-legend span { display: inline-flex; align-items: center; gap: 0.35rem; }
 .constellation-legend i { width: 0.7rem; height: 0.7rem; border-radius: 50%; display: inline-block; }
 .constellation-note { font-size: 0.78rem; color: var(--md-default-fg-color--light); margin-top: 0.4rem; }
+
+/* ==========================================================================
+   13. Modern overrides — retire the chalkboard skeuomorphism (wooden tray,
+       chalk dust, serif glow) for a sleek, "from the future" surface; blend
+       the admonition blocks into the card system; and style the copy button
+       that agda-copy.js adds to highlighted `<pre class="Agda">` blocks.
+       Appended last so these win over §§8–11 without rewriting them.
+   ========================================================================== */
+
+/* -- Hero: a deep-indigo glass panel, lit from above ---------------------- */
+.ualib-hero {
+  border-radius: 0.9rem;
+  background:
+    radial-gradient(820px 280px at 50% -25%,
+      color-mix(in srgb, var(--ualib-coral) 22%, transparent), transparent 70%),
+    radial-gradient(900px 360px at 50% 120%,
+      color-mix(in srgb, var(--md-primary-fg-color--light) 35%, transparent), transparent 72%),
+    linear-gradient(135deg, var(--ualib-board-2), var(--ualib-board));
+  border: 1px solid color-mix(in srgb, var(--ualib-ink) 12%, transparent);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06) inset,
+              0 30px 60px -34px rgba(8, 12, 36, 0.7);
+}
+.ualib-hero::before {            /* a single soft top sheen, not chalk dust  */
+  background: radial-gradient(60% 40% at 50% 0%,
+    rgba(255, 255, 255, 0.08), transparent 70%);
+  background-size: auto;
+}
+.ualib-hero::after {             /* an accent hairline, not a wooden tray    */
+  height: 2px;
+  background: linear-gradient(90deg, transparent,
+    var(--ualib-coral) 25%, var(--md-primary-fg-color--light) 75%, transparent);
+  box-shadow: none;
+}
+.ualib-hero h1 {
+  letter-spacing: -0.022em;
+  font-weight: 600;
+}
+.ualib-hero .ualib-formula {     /* the theorem, glowing in the accent       */
+  font-family: var(--md-code-font);
+  color: #fff;
+  text-shadow: 0 0 26px color-mix(in srgb, var(--ualib-coral) 55%, transparent);
+}
+
+/* -- Cards: one rounded radius across stats, figures, admonitions ---------- */
+.ualib-stat,
+.ualib-figure { border-radius: 0.7rem; }
+
+/* -- Admonitions: make a `!!! note` read as one of the site's cards, not a
+      boxy callout.  The `!important`s override Material's per-type rules (which
+      out-specify a plain `.admonition` selector); the accent is the signature
+      indigo (`--ualib-teal`), vivid in both light and dark. ----------------- */
+.md-typeset .admonition,
+.md-typeset details {
+  border: 1px solid var(--ualib-rule) !important;
+  border-left: 0.2rem solid var(--ualib-teal) !important;
+  border-radius: 0.7rem;
+  background: var(--md-default-bg-color--light) !important;
+  box-shadow: 0 10px 28px -22px rgba(8, 12, 36, 0.55);
+  font-size: 0.78rem;
+}
+.md-typeset .admonition-title,
+.md-typeset summary {
+  background: color-mix(in srgb, var(--ualib-teal) 10%, transparent) !important;
+  font-family: var(--ualib-display);
+  font-weight: 600;
+  letter-spacing: -0.004em;
+}
+.md-typeset .admonition-title::before,
+.md-typeset summary::before {
+  background-color: var(--ualib-teal) !important;
+}
+
+/* -- Copy button on highlighted Agda blocks (added by agda-copy.js) -------
+   Material's content.code.copy only reaches its own `.highlight` blocks; the
+   agda --html output is a bare `<pre class="Agda">`, so we add our own.  The
+   button is quiet until the block is hovered or keyboard-focused. */
+.ualib-agda-copy {
+  position: absolute; top: 0.4rem; right: 0.4rem;
+  width: 1.6em; height: 1.6em; padding: 0;
+  display: grid; place-items: center;
+  border: 1px solid var(--ualib-rule); border-radius: 0.35rem;
+  background: color-mix(in srgb, var(--md-code-bg-color) 78%, transparent);
+  color: var(--md-default-fg-color--light);
+  cursor: pointer; opacity: 0;
+  transition: opacity 140ms ease, color 140ms ease, border-color 140ms ease;
+}
+.md-typeset pre.Agda:hover .ualib-agda-copy,
+.ualib-agda-copy:focus-visible { opacity: 1; }
+.ualib-agda-copy:hover { color: var(--md-accent-fg-color); border-color: var(--md-accent-fg-color); }
+.ualib-agda-copy svg { width: 0.95em; height: 0.95em; }
+.ualib-agda-copy.ualib-copied { color: var(--ualib-teal); border-color: var(--ualib-teal); }

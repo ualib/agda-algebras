@@ -89,6 +89,11 @@ theme:
 extra_css:
   - stylesheets/custom.css
 
+extra_javascript:
+  # Adds a copy button to highlighted `<pre class="Agda">` blocks, which
+  # Material's content.code.copy feature does not reach (see the script).
+  - assets/js/agda-copy.js
+
 # -- Plugins ------------------------------------------------------------------
 # Order matters: gen-files must populate the virtual library tree + SUMMARY.md
 # before literate-nav reads it and before section-index promotes barrels.
