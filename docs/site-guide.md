@@ -1,14 +1,13 @@
 # Maintaining this site
 
 This page explains how the documentation site is built and how to change the
-settings you are most likely to want to change.  It is written so you can edit
-the site yourself without reverse-engineering the pipeline.
+settings that are most likely to need adjusting.
 
 ## How it works
 
 The site is a [MkDocs](https://www.mkdocs.org/) + [Material](https://squidfunk.github.io/mkdocs-material/)
 build, generated **directly from the literate `.lagda.md` sources** — there is no
-separate copy of the documentation to keep in sync.  The decision record is
+separate copy of the documentation.  The decision record is
 [ADR-007](adr/007-mkdocs-rendering-pipeline.md); the moving parts are:
 
 +  **`mkdocs.yml`** (repo root) — the site configuration: theme, colours toggle,
@@ -46,7 +45,7 @@ Run these inside `nix develop` (the MkDocs toolchain is pinned in `flake.nix`):
 
     `make serve` is fast but renders **plain** code blocks (and `/classic/` 404s),
     because the `agda --html` passes are skipped.  Use **`make serve-full`** to
-    preview exactly what gets deployed.  (`make serve` will remind you.)
+    preview exactly what gets deployed.
 
 ## Changing the settings
 

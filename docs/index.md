@@ -41,7 +41,8 @@ follow a face to the proof.
 <div class="ualib-figures">
 
   <a class="ualib-figure" href="/Setoid/Varieties/HSP/">
-    <span class="ualib-portrait">GB</span>
+    <span class="ualib-portrait">
+    <img src="/assets/portraits/Birkhoff_alt.jpeg" alt="Garrett Birkhoff"></span>
     <span class="ualib-figure__body">
       <span class="ualib-figure__result">Birkhoff's HSP theorem</span>
       <span class="ualib-figure__who">Garrett Birkhoff · 1911–1996</span>
@@ -49,7 +50,8 @@ follow a face to the proof.
   </a>
 
   <a class="ualib-figure" href="/Setoid/Subalgebras/Subdirect/Irreducible/">
-    <span class="ualib-portrait">GB</span>
+    <span class="ualib-portrait">
+    <img src="/assets/portraits/Birkhoff_alt.jpeg" alt="Garrett Birkhoff"></span>
     <span class="ualib-figure__body">
       <span class="ualib-figure__result">Subdirect representation</span>
       <span class="ualib-figure__who">Garrett Birkhoff · 1911–1996</span>
@@ -57,7 +59,8 @@ follow a face to the proof.
   </a>
 
   <a class="ualib-figure" href="/Setoid/Varieties/MaltsevConditions/">
-    <span class="ualib-portrait">AM</span>
+    <span class="ualib-portrait">
+    <img src="/assets/portraits/Malcev.jpeg" alt="Anatoly Maltsev"></span>
     <span class="ualib-figure__body">
       <span class="ualib-figure__result">Maltsev conditions</span>
       <span class="ualib-figure__who">Anatoly Maltsev · 1909–1967</span>
@@ -65,7 +68,8 @@ follow a face to the proof.
   </a>
 
   <a class="ualib-figure" href="/Setoid/Homomorphisms/Noether/">
-    <span class="ualib-portrait">EN</span>
+    <span class="ualib-portrait">
+    <img src="/assets/portraits/Noether.jpeg" alt="Emmy Noether"></span>
     <span class="ualib-figure__body">
       <span class="ualib-figure__result">Homomorphism theorems</span>
       <span class="ualib-figure__who">Emmy Noether · 1882–1935</span>
@@ -73,7 +77,8 @@ follow a face to the proof.
   </a>
 
   <a class="ualib-figure" href="/Setoid/Congruences/Lattice/">
-    <span class="ualib-portrait">RD</span>
+    <span class="ualib-portrait">
+    <img src="/assets/portraits/Dedekind.jpeg" alt="Richard Dedekind"></span>
     <span class="ualib-figure__body">
       <span class="ualib-figure__result">Congruence lattices</span>
       <span class="ualib-figure__who">Richard Dedekind · 1831–1916</span>
@@ -82,11 +87,6 @@ follow a face to the proof.
 
 </div>
 
-!!! note "On the portraits"
-
-    The medallions above are placeholders — the consistent ink/line-drawing
-    caricatures are in production.  A later "modern lineage" gallery will honour
-    the universal algebraists whose results the library formalizes.
 
 ## What's formalized
 

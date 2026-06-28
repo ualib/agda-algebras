@@ -150,7 +150,7 @@
    Token colours come from §2 (`pre.Agda .Function` …). */
 .md-typeset pre.Agda {
   font-family: var(--md-code-font);
-  font-size: 0.78rem;
+  font-size: 0.6rem;
   line-height: 1.6;
   background-color: var(--md-code-bg-color);
   color: var(--md-code-fg-color);
