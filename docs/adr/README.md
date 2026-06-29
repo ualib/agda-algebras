@@ -37,6 +37,7 @@ ADRs are **append-only**.  Once accepted, the body text is not edited except to 
 +  [ADR-004 — Markdown-literate Agda as the canonical literate format](004-lagda-md-canonical.md)
 +  [ADR-005 — Scope of the `𝓞` / `𝓥` universe-level variables](005-universe-level-variable-scope.md)
 +  [ADR-006 — Signature morphisms and the self-contained `Sig` category](006-signature-morphism-category.md)
++  [ADR-007 — MkDocs (Material) as the documentation rendering pipeline](007-mkdocs-rendering-pipeline.md)
 
 ## When to write an ADR
 

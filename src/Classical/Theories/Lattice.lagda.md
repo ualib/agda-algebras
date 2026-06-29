@@ -63,7 +63,3 @@ Unfolding the absorption builders (per [`Classical.Equations`][]):
 `x ∧ (x ∨ y) ≈ x` — and `Th-Lattice absorbʳ` is
 `(node ∨-Op (pair (node ∧-Op (pair (ℊ 0F) (ℊ 1F))) (ℊ 0F)) , ℊ 0F)` — i.e.
 `(x ∧ y) ∨ x ≈ x`.
-
---------------------------------------
-
-{% include UALib.Links.md %}

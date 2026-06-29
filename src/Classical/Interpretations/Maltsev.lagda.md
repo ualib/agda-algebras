@@ -148,7 +148,3 @@ red 𝑩 g = λ  { mxxy≈y → ⊧-interp 𝑩 I-grp {s = proj₁ (Th-Maltsev m
 maltsev-≼-group : HasMaltsevTerm {α = α} {ρ = ρ} Th-Group
 maltsev-≼-group = I-grp , red
 ```
-
---------------------------------------
-
-{% include UALib.Links.md %}

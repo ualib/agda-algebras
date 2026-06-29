@@ -38,7 +38,3 @@ Th-Semilattice assoc = Associative ∙-Op refl 0F 1F 2F
 Th-Semilattice comm  = Commutative ∙-Op refl 0F 1F
 Th-Semilattice idem  = Idempotent  ∙-Op refl 0F
 ```
-
---------------------------------------
-
-{% include UALib.Links.md %}

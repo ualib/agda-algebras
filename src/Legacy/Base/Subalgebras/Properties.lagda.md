@@ -1,6 +1,6 @@
 ---
 layout: default
-title : "Base.Subalgebras.Properties module (The Agda Universal Algebra Library)"
+title : "Legacy.Base.Subalgebras.Properties module (The Agda Universal Algebra Library)"
 date : "2021-07-18"
 author: "agda-algebras development team"
 ---
@@ -183,11 +183,3 @@ Lift-≤-Lift :  {𝑨 : Algebra α}(ℓᵃ : Level){𝑩 : Algebra β}(ℓᵇ :
 
 Lift-≤-Lift ℓᵃ {𝑩} ℓᵇ a<b = ≥-Lift (Lift-Alg 𝑩 ℓᵇ) (≤-Lift 𝑩 a<b)
 ```
-
-
----------------------------------
-
-<span style="float:left;">[← Base.Subalgebras.Subalgebras](Base.Subalgebras.Base.Subalgebras.html)</span>
-<span style="float:right;">[Base.Varieties →](Base.Varieties.html)</span>
-
-{% include UALib.Links.md %}

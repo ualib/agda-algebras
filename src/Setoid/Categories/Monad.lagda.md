@@ -192,7 +192,3 @@ hand once: the law asks for
 i.e. `R₁ (ε_{L A}) ∘ η_{R (L A)} ≈ id`, and that is *exactly* the `zag` field of the
 adjunction at the object `L₀ A` — the triangle identities of an adjunction are the
 unit laws of its monad; this is no accident and is the historical origin of both.
-
---------------------------------------
-
-{% include UALib.Links.md %}

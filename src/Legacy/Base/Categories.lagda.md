@@ -1,14 +1,14 @@
 ---
 layout: default
 file: "src/Legacy/Base/Categories.lagda.md"
-title: "Base.Categories module (The Agda Universal Algebra Library)"
+title: "Legacy.Base.Categories module (The Agda Universal Algebra Library)"
 date: "2021-08-31"
 author: "agda-algebras development team"
 ---
 
 ## <a id="categories">Categories</a>
 
-This is the [Base.Categories][] module of the [Agda Universal Algebra Library][].
+This is the [Legacy.Base.Categories][] module of the [Agda Universal Algebra Library][].
 
 This module is intended, not to replace or override anything in the [agda-categories][] library, but rather to collect some experiments in the use of category theory to re-express some of the basic concepts from universal algebra developed in other modules of the agda-algebra library.
 
@@ -22,10 +22,3 @@ module Legacy.Base.Categories where
 
 open import Legacy.Base.Categories.Functors  public
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Base.Adjunction.Galois](Base.Adjunction.Galois.html)</span>
-<span style="float:right;">[Base.Categories.Functors →](Base.Categories.Functors.html)</span>
-
-{% include UALib.Links.md %}

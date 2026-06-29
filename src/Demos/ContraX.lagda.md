@@ -54,4 +54,3 @@ contradiction h1 = ex falso
  ex : Image (proj₁ h) ∋ tt → ⊥
  ex (Image_∋_.eq a x) = a
 ```
-

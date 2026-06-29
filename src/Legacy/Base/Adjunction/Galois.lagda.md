@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Adjunction.Galois module (The Agda Universal Algebra Library)"
+title : "Legacy.Base.Adjunction.Galois module (The Agda Universal Algebra Library)"
 date : "2021-08-30"
 author: "agda-algebras development team"
 ---
 
 ### <a id="Galois connections">Galois Connections</a>
 
-This is the [Base.Adjunction.Galois][] module of the [Agda Universal Algebra Library][].
+This is the [Legacy.Base.Adjunction.Galois][] module of the [Agda Universal Algebra Library][].
 
 
 ```agda
@@ -163,11 +163,3 @@ module _ {ℓ : Level}{𝒜 : Type ℓ} {ℬ : Type ℓ} where
 {-# WARNING_ON_USAGE PosetOfSubsets "Use Overture.Adjunction.Galois.PosetOfSubsets instead. Deprecated under #305; removal planned one minor cycle later." #-}
 {-# WARNING_ON_USAGE Rel→Gal        "Use Overture.Adjunction.Galois.Rel→Gal instead. Deprecated under #305; removal planned one minor cycle later." #-}
 ```
-
---------------------
-
-<span style="float:left;">[← Base.Adjunction.Closure ](Base.Adjunction.Closure.html)</span>
-<span style="float:right;">[Base.Adjunction.Residuation →](Base.Adjunction.Residuation.html)</span>
-
-{% include UALib.Links.md %}
-

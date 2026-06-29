@@ -65,10 +65,3 @@ roundtrip-∙-mn xs ys = refl
 roundtrip-ε-mn : ε· ≡ []
 roundtrip-ε-mn = refl
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Examples.Classical.Semigroup](Examples.Classical.Semigroup.html)</span>
-<span style="float:right;">[Examples.Classical.CommutativeMonoid →](Examples.Classical.CommutativeMonoid.html)</span>
-
-{% include UALib.Links.md %}

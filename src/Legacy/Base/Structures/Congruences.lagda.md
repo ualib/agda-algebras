@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Structures.Congruences.Records module"
+title : "Legacy.Base.Structures.Congruences.Records module"
 date : "2021-05-28"
 author: "agda-algebras development team"
 ---
 
 ### <a id="congruences-of-general-structures">Congruences of general structures</a>
 
-This is the [Base.Structures.Congruences][] module of the [Agda Universal Algebra Library][].
+This is the [Legacy.Base.Structures.Congruences][] module of the [Agda Universal Algebra Library][].
 
 
 ```agda
@@ -101,11 +101,3 @@ _╱_ = quotient  -- (alias)
 
 𝟎[ 𝑨 ╱ θ ] wd = 0con[ 𝑨 ╱ θ ] wd
 ```
-
-
---------------------------------
-
-<span style="float:left;">[← Base.Structures.Products](Base.Structures.Products.html)</span>
-<span style="float:right;">[Base.Structures.Homs →](Base.Structures.Homs.html)</span>
-
-{% include UALib.Links.md %}

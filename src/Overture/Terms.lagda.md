@@ -18,7 +18,3 @@ open import Overture.Terms.Basic {𝑆 = 𝑆} public
 open import Overture.Terms.Interpretation public
 open import Overture.Terms.Translation public
 ```
-
---------------------------------
-
-{% include UALib.Links.md %}

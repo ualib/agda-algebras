@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Homomorphisms.Kernels module (The Agda Universal Algebra Library)"
+title : "Legacy.Base.Homomorphisms.Kernels module (The Agda Universal Algebra Library)"
 date : "2021-09-08"
 author: "agda-algebras development team"
 ---
 
 ### <a id="kernels-of-homomorphisms">Kernels of Homomorphisms</a>
 
-This is the [Base.Homomorphisms.Kernels] module of the [Agda Universal Algebra Library][].
+This is the [Legacy.Base.Homomorphisms.Kernels] module of the [Agda Universal Algebra Library][].
 
 
 ```agda
@@ -167,11 +167,3 @@ later.
 
  ker-in-con θ hyp = /-≡ θ hyp
 ```
-
-
----------------------------------
-
-<span style="float:left;">[← Base.Homomorphisms.Properties](Base.Homomorphisms.Properties.html)</span>
-<span style="float:right;">[Base.Homomorphisms.Products →](Base.Homomorphisms.Products.html)</span>
-
-{% include UALib.Links.md %}

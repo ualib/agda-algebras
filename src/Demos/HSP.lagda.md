@@ -1560,7 +1560,3 @@ As noted by Abel [@Abel:2021], Amato et al, in [@Amato:2021], have formalized m
 [^11]: Informally, this is done by assuming `X` has cardinality at least `max(| 𝕌[ 𝑨 ] |, ω)`. Later we will see how to construct an `X` with the required property in type theory.
 
 [^12]: `⟦ 𝑨 ⟧ t` denotes the interpretation of the term `t` in the algebra `𝑨`.
-
-
-{% include UALib.Links.md %}
-

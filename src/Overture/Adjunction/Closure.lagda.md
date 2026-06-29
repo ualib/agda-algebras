@@ -140,10 +140,3 @@ module _ {𝑨 : Poset ℓ ℓ₁ ℓ₂} where
     i : IdempotentFun c
     i x = antisym ((to ∘₂ hyp) _ _ refl) ((from ∘₂ hyp) _ _ refl)
 ```
-
-----------------------------
-
-<span style="float:left;">[← Overture.Adjunction](Overture.Adjunction.html)</span>
-<span style="float:right;">[Overture.Adjunction.Galois →](Overture.Adjunction.Galois.html)</span>
-
-{% include UALib.Links.md %}

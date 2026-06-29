@@ -68,6 +68,26 @@
       # agdaPackages.standard-library is built against pkgs.agda.
       mkAgdaEnv = pkgs: pkgs.agda.withPackages (p: [ p.standard-library ]);
 
+      # ---- MkDocs documentation toolchain ---------------------------------
+      # The rendering pipeline (ADR-007).  `make site` / `make serve` build
+      # the ualib.org site directly from the `.lagda.md` sources — no
+      # `agda --html` step — relying on kramdown attribute spans + custom CSS
+      # for inline Agda highlighting.  Pinning the whole MkDocs stack here (in
+      # one Python environment) makes `nix develop --command make site`
+      # reproduce CI's site build exactly, the same way the Agda env reproduces
+      # `make check`.  mkdocs-material transitively supplies pymdown-extensions
+      # (attr_list / snippets), but we list it explicitly to document intent.
+      mkDocsEnv = pkgs: pkgs.python3.withPackages (p: [
+        p.mkdocs                  # static-site generator
+        p.mkdocs-material         # Material theme
+        p.mkdocs-macros           # {{ vars }} / Jinja2 site variables
+        p.mkdocs-redirects        # legacy Module.Submodule.html → new URLs
+        p.mkdocs-gen-files        # mount src/**/*.lagda.md as site pages
+        p.mkdocs-literate-nav     # library nav from a generated SUMMARY.md
+        p.mkdocs-section-index    # clickable section-landing pages
+        p.pymdown-extensions      # attr_list companions + snippets auto_append
+      ]);
+
       # ---- Project-local AGDA_DIR + agda() wrapper ------------------------
       # Writes $ROOT/.agda/{libraries,defaults} and defines an agda() shell
       # function that bypasses the Nix wrapper's baked-in --library-file by
@@ -122,14 +142,18 @@ EOF
       devShells = forAllSystems ({ pkgs }:
         let
           agdaEnv = mkAgdaEnv pkgs;
+          docsEnv = mkDocsEnv pkgs;
           stdlibVer = pkgs.agdaPackages.standard-library.version;
           agdaVer = pkgs.agda.version;
+          mkdocsVer = pkgs.python3Packages.mkdocs.version;
+          materialVer = pkgs.python3Packages.mkdocs-material.version;
         in {
           default = pkgs.mkShell {
             name = "agda-algebras-dev";
 
             packages = [
               agdaEnv
+              docsEnv
               pkgs.gnumake
               pkgs.git
             ];
@@ -142,10 +166,11 @@ EOF
 
               echo ""
               echo "✅ agda-algebras dev shell"
-              echo "   Agda   : ${agdaVer}    ($(agda --version 2>/dev/null | head -n1))"
-              echo "   stdlib : ${stdlibVer}"
+              echo "   Agda     : ${agdaVer}    ($(agda --version 2>/dev/null | head -n1))"
+              echo "   stdlib   : ${stdlibVer}"
+              echo "   MkDocs   : ${mkdocsVer} + Material ${materialVer}  (make site / make serve)"
               echo "   AGDA_DIR : $AGDA_DIR"
-              echo "   repo   : $ROOT"
+              echo "   repo     : $ROOT"
               echo ""
 
               # Version-floor sanity checks. These are warnings, not errors —

@@ -319,8 +319,3 @@ examples.
 
 [^2]: which is why a future Escardó-style `Searchable`/`Exhaustible` carrier could
 supply it without change.
-
-
-<span style="float:left;">[↑ Setoid](Setoid.html)</span>
-
-{% include UALib.Links.md %}

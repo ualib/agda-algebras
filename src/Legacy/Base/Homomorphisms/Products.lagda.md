@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Homomorphisms.Products module (The Agda Universal Algebra Library)"
+title : "Legacy.Base.Homomorphisms.Products module (The Agda Universal Algebra Library)"
 date : "2021-09-08"
 author: "agda-algebras development team"
 ---
 
 ### <a id="products-of-homomorphisms">Products of Homomorphisms</a>
 
-This is the [Base.Homomorphisms.Products] module of the [Agda Universal Algebra Library][].
+This is the [Legacy.Base.Homomorphisms.Products] module of the [Agda Universal Algebra Library][].
 
 
 ```agda
@@ -90,10 +90,3 @@ onto one of its factors is a homomorphism.
 
 We could prove a more general result involving projections onto multiple factors,
 but so far the single-factor result has sufficed.
-
----------------------------------
-
-<span style="float:left;">[← Base.Homomorphisms.Kernels](Base.Homomorphisms.Kernels.html)</span>
-<span style="float:right;">[Base.Homomorphisms.Noether →](Base.Homomorphisms.Noether.html)</span>
-
-{% include UALib.Links.md %}

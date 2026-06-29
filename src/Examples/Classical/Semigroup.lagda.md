@@ -82,10 +82,3 @@ open Polymorphic.Semigroup-Op ⟪ ⟨ ℕ-semigroup ⟩ˢᵍ ⟫ˢᵍ using () r
 roundtrip-ℕ-sg : ∀ (a b : ℕ) → a · b ≡ a + b
 roundtrip-ℕ-sg a b = refl
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Examples.Classical.Magma](Examples.Classical.Magma.html)</span>
-<span style="float:right;">[Demos →](Demos.html)</span>
-
-{% include UALib.Links.md %}

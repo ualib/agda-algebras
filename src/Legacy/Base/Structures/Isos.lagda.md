@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Structures.Isos module (The Agda Universal Algebra Library)"
+title : "Legacy.Base.Structures.Isos module (The Agda Universal Algebra Library)"
 date : "2021-07-23"
 author: "agda-algebras development team"
 ---
 
 ### <a id="isomorphisms">Isomorphisms</a>
 
-This is the [Base.Structures.Isos][] module of the [Agda Universal Algebra Library][].
+This is the [Legacy.Base.Structures.Isos][] module of the [Agda Universal Algebra Library][].
 
 
 ```agda
@@ -108,7 +108,7 @@ module _ {𝑨 : structure 𝐹 𝑅 {α}{ρᵃ}} where
 
 #### <a id="lift-is-an-algebraic-invariant">Lift is an algebraic invariant</a>
 
-Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic invariant*). As our focus is universal algebra, this is important and is what makes the lift operation a workable solution to the technical problems that arise from the noncumulativity of the universe hierarchy discussed in the [Base.Overture][] module.
+Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic invariant*). As our focus is universal algebra, this is important and is what makes the lift operation a workable solution to the technical problems that arise from the noncumulativity of the universe hierarchy discussed in the [Legacy.Base.Overture][] module.
 
 
 ```agda
@@ -280,11 +280,3 @@ module _  {I : Type ι}
    Goal : Lift-Strucˡ γ (⨅ 𝒜) ≅ ⨅ ℬ
    Goal = ≅-trans (≅-sym Lift-≅ˡ) A≅B
 ```
-
-
---------------------------------
-
-<span style="float:left;">[← Base.Structures.Homs](Base.Structures.Homs.html)</span>
-<span style="float:right;">[Base.Structures.Terms →](Base.Structures.Terms.html)</span>
-
-{% include UALib.Links.md %}

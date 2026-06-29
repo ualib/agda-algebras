@@ -92,11 +92,3 @@ module _ {A : Type α}{R : Equivalence A{ℓ} } where
 ≡→⊆ : {A : Type α}{ρ : Level}(Q R : Pred A ρ) → Q ≡ R → Q ⊆ R
 ≡→⊆ Q .Q ≡.refl {x} Qx = Qx
 ```
-
--------------------------------------
-
-<span style="float:left;">[← Setoid.Relations.Discrete](Setoid.Relations.Discrete.html)</span>
-<span style="float:right;">[Setoid.Relations.Continuous →](Setoid.Relations.Continuous.html)</span>
-
-{% include UALib.Links.md %}
-

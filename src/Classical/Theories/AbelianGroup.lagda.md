@@ -40,7 +40,3 @@ Th-AbelianGroup invˡ  = LeftInverse   ∙-Op ⁻¹-Op ε-Op  refl refl refl 0F
 Th-AbelianGroup invʳ  = RightInverse  ∙-Op ⁻¹-Op ε-Op  refl refl refl 0F
 Th-AbelianGroup comm  = Commutative   ∙-Op             refl           0F 1F
 ```
-
---------------------------------------
-
-{% include UALib.Links.md %}

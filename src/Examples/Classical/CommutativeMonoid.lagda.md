@@ -44,7 +44,3 @@ open Polymorphic.CommutativeMonoid-Op ℕ-commutativeMonoid using ( _∙_ ; ε )
 ε-is-0-cmn : ε ≡ zero
 ε-is-0-cmn = refl
 ```
-
---------------------------------------
-
-{% include UALib.Links.md %}

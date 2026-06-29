@@ -70,9 +70,3 @@ roundtrip-ε-ag = refl
 roundtrip-⁻¹-ag : ∀ (a : ℤ) → a ⁻¹· ≡ - a
 roundtrip-⁻¹-ag a = refl
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Examples.Classical.Groups.CyclicGroup](Examples.Classical.Groups.CyclicGroup.html)</span>
-
-{% include UALib.Links.md %}

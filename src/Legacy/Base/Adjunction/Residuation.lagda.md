@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Adjunction.Residuation module (The Agda Universal Algebra Library)"
+title : "Legacy.Base.Adjunction.Residuation module (The Agda Universal Algebra Library)"
 date : "2021-07-12"
 author: "agda-algebras development team"
 ---
 
 ### <a id="residuation">Residuation</a>
 
-This is the [Base.Adjunction.Residuation][] module of the [Agda Universal Algebra Library][].
+This is the [Legacy.Base.Adjunction.Residuation][] module of the [Agda Universal Algebra Library][].
 
 
 ```agda
@@ -98,10 +98,3 @@ In a ring `R`, if `x y : R` and if `x y x = x`, then `y` is called a *weak inver
 {-# WARNING_ON_USAGE weak-inverse  "Use Overture.Adjunction.Residuation.weak-inverse instead. Deprecated under #305; removal planned one minor cycle later." #-}
 {-# WARNING_ON_USAGE weak-inverse' "Use Overture.Adjunction.Residuation.weak-inverse' instead. Deprecated under #305; removal planned one minor cycle later." #-}
 ```
-
-------------------------------------------
-
-<span style="float:left;">[← Base.Adjunction.Galois ](Base.Adjunction.Galois.html)</span>
-<span style="float:right;">[Base.Categories →](Base.Categories.html)</span>
-
-{% include UALib.Links.md %}

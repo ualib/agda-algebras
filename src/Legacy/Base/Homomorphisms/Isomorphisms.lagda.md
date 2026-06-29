@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Homomorphisms.Isomoprhisms module (The Agda Universal Algebra Library)"
+title : "Legacy.Base.Homomorphisms.Isomoprhisms module (The Agda Universal Algebra Library)"
 date : "2021-07-11"
 author: "agda-algebras development team"
 ---
 
 ### <a id="isomorphisms">Isomorphisms</a>
 
-This is the [Base.Homomorphisms.Isomorphisms][] module of the [Agda Universal Algebra Library][].
+This is the [Legacy.Base.Homomorphisms.Isomorphisms][] module of the [Agda Universal Algebra Library][].
 Here we formalize the informal notion of isomorphism between algebraic structures.
 
 
@@ -246,11 +246,3 @@ module _ {a b γ ι  : Level}{I : Type ι}{fizw : funext (ι ⊔ γ) b}{fiu : fu
    Goal : Lift-Alg (⨅ 𝒜) γ ≅ ⨅ ℬ
    Goal = ≅-trans (≅-sym Lift-≅) A≅B
 ```
-
-
---------------------------------------
-
-<span style="float:left;">[← Base.Homomorphisms.Factor](Base.Homomorphisms.Factor.html)</span>
-<span style="float:right;">[Base.Homomorphisms.HomomorphicImages →](Base.Homomorphisms.HomomorphicImages.html)</span>
-
-{% include UALib.Links.md %}

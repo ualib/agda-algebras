@@ -11,11 +11,11 @@ author: "the agda-algebras development team"
 
 +  [Operations][Overture.Operations]
 
-+  [Relations][Base.Relations]
++  [Relations][Legacy.Base.Relations]
 
-   +  [Discrete Relations][Base.Relations.Discrete]
+   +  [Discrete Relations][Legacy.Base.Relations.Discrete]
 
-   +  [Continuous Relations][Base.Relations.Continuous]
+   +  [Continuous Relations][Legacy.Base.Relations.Continuous]
 
 +  [Containers][]
 
@@ -28,7 +28,3 @@ author: "the agda-algebras development team"
 module Demos.GeneralOperationsAndRelations where
 ```
 -->
-
-
-
-{% include UALib.Links.md %}

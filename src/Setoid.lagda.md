@@ -8,7 +8,7 @@ author: "the agda-algebras development team"
 ## Setoid Types for General Algebra
 
 This module collects all submodule of that part of the library based on setoids,
-as opposed to "bare" types (see [Base.lagda][]).
+as opposed to "bare" types (see [Legacy.Base.lagda][]).
 
 
 ```agda
@@ -29,11 +29,3 @@ open import Setoid.Subalgebras public
 open import Setoid.Terms public
 open import Setoid.Varieties public
 ```
-
---------------------------------------
-
-<span style="float:left;">[↑ Top](index.html)</span>
-<span style="float:right;">[Setoid.Relations →](Setoid.Relations.html)</span>
-
-
-{% include UALib.Links.md %}

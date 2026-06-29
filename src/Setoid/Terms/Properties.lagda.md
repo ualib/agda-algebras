@@ -187,13 +187,3 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}(h : hom 𝑨 𝑩)(�
   free-unique {𝑨 = 𝑩} {gh = ⊙-hom (lift-hom η) h} {hh = lift-hom (λ x → proj₁ h ⟨$⟩ η x)}
    (λ _ → reflᵇ)
 ```
-
-
-------------------------------
-
-<span style="float:left;">[← Setoid.Terms.Basic](Setoid.Terms.Basic.html)</span>
-<span style="float:right;">[Setoid.Terms.Operations →](Setoid.Terms.Operations.html)</span>
-
-{% include UALib.Links.md %}
-
-

@@ -146,7 +146,3 @@ module _ {L : stdlib-DistributiveLattice α ρ} where
   roundtrip-bcb-∨-dl : (a b : A) → (a ∨ b) ≈ (a ∨' b)
   roundtrip-bcb-∨-dl a b = ≈refl
 ```
-
---------------------------------------
-
-{% include UALib.Links.md %}

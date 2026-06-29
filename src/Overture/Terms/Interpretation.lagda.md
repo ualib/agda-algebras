@@ -151,5 +151,3 @@ morphisms.
 [^1]: W. D. Neumann; O. C. García and W. Taylor, *The Lattice of Interpretability Types of Varieties*, Mem. Amer. Math. Soc. **50** (1984), no. 305.
 
 [^2]: **Unicode tip**.  Type `\st` and select `✦` to get the four-pointed star; it is the `_✶_` of [Overture.Terms.Translation][] "thickened", since `_✦_` generalizes `_✶_` from one application to an arbitrary derived term.
-
-{% include UALib.Links.md %}

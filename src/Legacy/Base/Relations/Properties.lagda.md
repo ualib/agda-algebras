@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Relations.Properties module (The Agda Universal Algebra Library)"
+title : "Legacy.Base.Relations.Properties module (The Agda Universal Algebra Library)"
 date : "2021-06-26"
 author: "the agda-algebras development team"
 ---
 
 ### <a id="properties-of-binary-predicates">Properties of binary predicates</a>
 
-This is the [Base.Relations.Properties][] module of the [Agda Universal Algebra Library][].
+This is the [Legacy.Base.Relations.Properties][] module of the [Agda Universal Algebra Library][].
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -102,10 +102,3 @@ Total P = Connex P P
 {-# WARNING_ON_USAGE Connex         "Use Setoid.Relations.Properties.Connex instead. Note: the canonical (stdlib) Connex is homogeneous (Rel A ℓ on both sides) where the legacy version is heterogeneous; if you need the heterogeneous form, define it locally. Deprecated under #309; removal planned one minor cycle later." #-}
 {-# WARNING_ON_USAGE Total          "Use Setoid.Relations.Properties.Total instead. Deprecated under #309; removal planned one minor cycle later." #-}
 ```
-
------------------------------------------------
-
-<span style="float:left;">[← Base.Relations.Continuous](Base.Relations.Continuous.html)</span>
-<span style="float:right;">[Base.Relations.Quotients →](Base.Relations.Quotients.html)</span>
-
-{% include UALib.Links.md %}

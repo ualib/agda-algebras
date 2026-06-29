@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Terms.Properties module (The Agda Universal Algebra Library)"
+title : "Legacy.Base.Terms.Properties module (The Agda Universal Algebra Library)"
 date : "2021-07-03"
 author: "agda-algebras development team"
 ---
 
 ### <a id="properties-of-terms-and-the-term-algebra">Properties of Terms and the Term Algebra</a>
 
-This is the [Base.Terms.Properties][] module of the [Agda Universal Algebra Library][].
+This is the [Legacy.Base.Terms.Properties][] module of the [Agda Universal Algebra Library][].
 
 
 
@@ -136,11 +136,4 @@ lift-of-epi-is-epi 𝑨 {h₀} hE y = Goal
 ```
 
 
-The `lift-hom` and `lift-of-epi-is-epi` types will be called to action when such epimorphisms are needed later (e.g., in the [Base.Varieties][] module).
-
-------------------------------
-
-<span style="float:left;">[← Base.Terms.Basic](Base.Terms.Basic.html)</span>
-<span style="float:right;">[Base.Terms.Operations →](Base.Terms.Operations.html)</span>
-
-{% include UALib.Links.md %}
+The `lift-hom` and `lift-of-epi-is-epi` types will be called to action when such epimorphisms are needed later (e.g., in the [Legacy.Base.Varieties][] module).

@@ -164,10 +164,3 @@ elements are related.
   𝟙-isEquiv : IsEquivalence (λ (_ _ : 𝕌[ 𝑨 ]) → Lift ℓ ⊤)
   𝟙-isEquiv = record { refl = lift tt ; sym = λ _ → lift tt ; trans = λ _ _ → lift tt }
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Setoid.Algebras.Products](Setoid.Algebras.Products.html)</span>
-<span style="float:right;">[Setoid.Homomorphisms →](Setoid.Homomorphisms.html)</span>
-
-{% include UALib.Links.md %}

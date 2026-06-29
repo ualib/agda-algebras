@@ -130,10 +130,3 @@ module _ {G : stdlib-Group α ρ} where
   roundtrip-bcb-⁻¹-group : (a : A) → (a ⁻¹) ≈ (a ⁻¹')
   roundtrip-bcb-⁻¹-group a = refl
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Classical.Structures.Group](Classical.Structures.Group.html)</span>
-<span style="float:right;">[Classical.Bundles.AbelianGroup →](Classical.Bundles.AbelianGroup.html)</span>
-
-{% include UALib.Links.md %}

@@ -176,10 +176,3 @@ module _ {R : stdlib-Ring α ρ} where
   roundtrip-bcb-1-ring : 1# ≈ 1#'
   roundtrip-bcb-1-ring = refl
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Classical.Structures.Ring](Classical.Structures.Ring.html)</span>
-<span style="float:right;">[Classical.Bundles.CommutativeRing →](Classical.Bundles.CommutativeRing.html)</span>
-
-{% include UALib.Links.md %}

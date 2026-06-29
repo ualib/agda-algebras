@@ -41,7 +41,3 @@ eqsToDistributiveLattice : (A : Type 0ℓ) (_∧'_ _∨'_ : A → A → A)
   → DistributiveLattice
 eqsToDistributiveLattice = Polymorphic.eqsToDistributiveLattice
 ```
-
---------------------------------------
-
-{% include UALib.Links.md %}

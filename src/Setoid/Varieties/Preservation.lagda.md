@@ -216,13 +216,3 @@ modeled by `𝒦`.   We formalize this observation as follows.
  VIds-⊆-classIds : (p , q) ∈ Th (V ℓ ι 𝒦) → 𝒦 ⊫ (p ≈̇ q)
  VIds-⊆-classIds Thpq = V-id2 Thpq
 ```
-
-
-----------------------------
-
-<span style="float:left;">[← Setoid.Varieties.Invariants](Setoid.Varieties.Invariants.html)</span>
-<span style="float:right;">[Setoid.Varieties.FreeAlgebras →](Setoid.Varieties.FreeAlgebras.html)</span>
-
-{% include UALib.Links.md %}
-
-

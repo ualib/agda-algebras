@@ -36,7 +36,3 @@ Th-CommutativeSemigroup : Eq-CommutativeSemigroup → Term (Fin 3) × Term (Fin 
 Th-CommutativeSemigroup assoc = Associative ∙-Op refl 0F 1F 2F
 Th-CommutativeSemigroup comm  = Commutative ∙-Op refl 0F 1F
 ```
-
---------------------------------------
-
-{% include UALib.Links.md %}

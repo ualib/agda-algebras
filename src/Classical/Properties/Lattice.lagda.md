@@ -217,7 +217,3 @@ module FiniteOrder {n : ℕ} (_∧_ : Fin n → Fin n → Fin n) where
     coatom? : (a : Fin n) → Dec (coatom a)
     coatom? a = ¬? (a ≟ ⊤) ×-dec all? (λ b → (a ≤? b) →-dec ((b ≟ a) ⊎-dec (b ≟ ⊤)))
 ```
-
---------------------------------------
-
-{% include UALib.Links.md %}

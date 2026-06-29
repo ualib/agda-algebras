@@ -66,9 +66,3 @@ Th-Ring ·-idʳ    = RightIdentity   ·-Op 1-Op      refl refl      0F
 Th-Ring distribˡ = DistributesOverˡ ·-Op +-Op     refl refl      0F 1F 2F
 Th-Ring distribʳ = DistributesOverʳ ·-Op +-Op     refl refl      0F 1F 2F
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Classical.Theories.Group](Classical.Theories.Group.html)</span>
-
-{% include UALib.Links.md %}

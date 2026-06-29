@@ -164,9 +164,3 @@ module _ {R : stdlib-CommutativeRing α ρ} where
   roundtrip-bcb-1-cr : 1# ≈ 1#'
   roundtrip-bcb-1-cr = refl
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Classical.Structures.CommutativeRing](Classical.Structures.CommutativeRing.html)</span>
-
-{% include UALib.Links.md %}

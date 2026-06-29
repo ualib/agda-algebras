@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Homomorphisms.Factor module (The Agda Universal Algebra Library)"
+title : "Legacy.Base.Homomorphisms.Factor module (The Agda Universal Algebra Library)"
 date : "2021-09-20"
 author: "agda-algebras development team"
 ---
 
 ### <a id="homomorphism-decomposition">Homomorphism decomposition</a>
 
-This is the [Base.Homomorphisms.Factor][] module of the [Agda Universal Algebra Library][] in which we prove the following theorem:
+This is the [Legacy.Base.Homomorphisms.Factor][] module of the [Agda Universal Algebra Library][] in which we prove the following theorem:
 
 If `τ : hom 𝑨 𝑩`, `ν : hom 𝑨 𝑪`, `ν` is surjective, and `ker ν ⊆ ker τ`, then there exists `φ : hom 𝑪 𝑩` such that `τ = φ ∘ ν` so the following diagram commutes:
 
@@ -115,11 +115,3 @@ If, in addition to the hypotheses of the last theorem, we assume `τ` is epic, t
    φE : IsSurjective φ
    φE = epic-factor ∣ τ ∣ ∣ ν ∣ φ ∥ φF ∥ τe
 ```
-
-
---------------------------------------
-
-<span style="float:left;">[← Base.Homomorphisms.Noether](Base.Homomorphisms.Noether.html)</span>
-<span style="float:right;">[Base.Homomorphisms.Isomorphisms →](Base.Homomorphisms.Isomorphisms.html)</span>
-
-{% include UALib.Links.md %}

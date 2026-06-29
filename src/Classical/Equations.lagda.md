@@ -230,8 +230,5 @@ per-need.
 
 --------------------------------------
 
-<span style="float:left;">[← Classical.Operations](Classical.Operations.html)</span>
-<span style="float:right;">[Classical.Signatures →](Classical.Signatures.html)</span>
 
-{% include UALib.Links.md %}
 ```

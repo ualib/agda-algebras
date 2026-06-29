@@ -41,10 +41,3 @@ eqsToRing : (A : Type 0ℓ) (_+'_ : A → A → A) (0' : A) (-'_ : A → A) (_*'
   → Ring
 eqsToRing = Polymorphic.eqsToRing
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Classical.Small.Structures.AbelianGroup](Classical.Small.Structures.AbelianGroup.html)</span>
-<span style="float:right;">[Classical.Small.Structures.CommutativeRing →](Classical.Small.Structures.CommutativeRing.html)</span>
-
-{% include UALib.Links.md %}

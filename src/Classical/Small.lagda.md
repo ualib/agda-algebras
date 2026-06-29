@@ -37,10 +37,3 @@ module Classical.Small where
 
 open import Classical.Small.Structures public
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Classical.Bundles](Classical.Bundles.html)</span>
-<span style="float:right;">[↑ Top](index.html)</span>
-
-{% include UALib.Links.md %}

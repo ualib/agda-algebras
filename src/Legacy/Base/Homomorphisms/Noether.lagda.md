@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Homomorphisms.Noether module (The Agda Universal Algebra Library)"
+title : "Legacy.Base.Homomorphisms.Noether module (The Agda Universal Algebra Library)"
 date : "2021-01-13"
 author: "agda-algebras development team"
 ---
 
 ### <a id="homomorphism-theorems">Homomorphism Theorems</a>
 
-This is the [Base.Homomorphisms.Noether][] module of the [Agda Universal Algebra Library][].
+This is the [Legacy.Base.Homomorphisms.Noether][] module of the [Agda Universal Algebra Library][].
 
 
 ```agda
@@ -68,7 +68,7 @@ and is unique.
 Our formal proof of this theorem will require function extensionality, proposition
 extensionality, and a couple of truncation assumptions.  The extensionality
 assumptions are postulated using `swelldef` and `pred-ext` which were defined
-in [Base.Equality.Welldefined][] and [Base.Equality.Extensionality][]. As for
+in [Legacy.Base.Equality.Welldefined][] and [Legacy.Base.Equality.Extensionality][]. As for
 truncation, to prove that `φ` is injective we require
 
 +   `buip`: *uniqueness of (block) identity proofs*; given two blocks of the kernel
@@ -188,7 +188,7 @@ module _ {fe : swelldef 𝓥 β}(𝑨 : Algebra α)(𝑩 : Algebra β)(h : hom �
 
 If, in addition, we postulate extensionality of functions defined on the domain
 `ker[ 𝑨 ⇒ 𝑩 ] h`, then we obtain the following variation of the last result.
-(See [Base.Equality.Truncation][] for a discussion of *truncation*, *sets*,
+(See [Legacy.Base.Equality.Truncation][] for a discussion of *truncation*, *sets*,
 and *uniqueness of identity proofs*.)
 
     fe-FirstHomUnique :  {fuww : funext (α ⊔ lsuc β) β}(f g : hom (ker[ 𝑨 ⇒ 𝑩 ] h ↾ fe) 𝑩)
@@ -211,11 +211,3 @@ The proof of `NoetherHomUnique` goes through for the special case of epimorphism
 
  FirstIsoUnique f g hfk hgk = FirstHomUnique (epi→hom 𝑩 f) (epi→hom 𝑩 g) hfk hgk
 ```
-
-
---------------------------------------
-
-<span style="float:left;">[← Base.Homomorphisms.Products](Base.Homomorphisms.Products.html)</span>
-<span style="float:right;">[Base.Homomorphisms.Factor →](Base.Homomorphisms.Factor.html)</span>
-
-{% include UALib.Links.md %}

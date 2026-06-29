@@ -112,7 +112,3 @@ module _
   HasMaltsevTerm ℰ = Th-Maltsev ≼ ℰ
     where open Interpret α ρ
 ```
-
---------------------------------------
-
-{% include UALib.Links.md %}

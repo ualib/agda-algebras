@@ -130,9 +130,3 @@ under the [Apache License 2.0][LICENSE], and the documentation under `docs/`
 (together with the prose embedded in literate Agda files) is released under
 [Creative Commons Attribution 4.0 International][LICENSE-docs].  See the
 project [`README.md`][README] for further detail and citation information.
-
-----
-
-<span style="float:right;">[Next Module (Overture) →](Overture.html)</span>
-
-{% include UALib.Links.md %}

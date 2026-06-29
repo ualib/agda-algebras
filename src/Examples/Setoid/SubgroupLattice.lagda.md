@@ -299,10 +299,3 @@ the meet `x ∧ (y ∨ z) = x ∧ 1ˢ = x` (a proper, nonzero subgroup), whereas
 
 What remains is **completeness**: that `0ˢ`, `1ˢ`, `𝑯₁`, `𝑯₂`, `𝑯₌` are *all* the
 subgroups — a finite case analysis over the four group elements.
-
---------------------------------------
-
-<span style="float:left;">[← Setoid.Subalgebras.CompleteLattice](Setoid.Subalgebras.CompleteLattice.html)</span>
-<span style="float:right;">[Setoid.Homomorphisms →](Setoid.Homomorphisms.html)</span>
-
-{% include UALib.Links.md %}

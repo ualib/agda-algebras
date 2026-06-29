@@ -19,10 +19,3 @@ open import Setoid.Relations.Quotients   public
 open import Setoid.Relations.Continuous  public
 open import Setoid.Relations.Properties  public
 ```
-
--------------------------------------
-
-<span style="float:left;">[↑ Setoid](Setoid.html)</span>
-<span style="float:right;">[Setoid.Relations.Discrete →](Setoid.Relations.Discrete.html)</span>
-
-{% include UALib.Links.md %}

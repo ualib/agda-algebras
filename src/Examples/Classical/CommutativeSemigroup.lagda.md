@@ -31,7 +31,3 @@ open Polymorphic.CommutativeSemigroup-Op ℕ-commutativeSemigroup using ( _∙_ 
 ∙-is-+-cs : ∀ (a b : ℕ) → a ∙ b ≡ a + b
 ∙-is-+-cs a b = refl
 ```
-
---------------------------------------
-
-{% include UALib.Links.md %}

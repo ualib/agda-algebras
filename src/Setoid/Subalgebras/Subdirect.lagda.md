@@ -22,10 +22,3 @@ open import Setoid.Subalgebras.Subdirect.BirkhoffSI {𝑆 = 𝑆} public
 open import Setoid.Subalgebras.Subdirect.Finite {𝑆 = 𝑆} public
 open import Setoid.Subalgebras.Subdirect.Irreducible {𝑆 = 𝑆} public
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Setoid.Subalgebras.Basic](Setoid.Subalgebras.Basic.html)</span>
-<span style="float:right;">[Setoid.Subalgebras.Properties →](Setoid.Subalgebras.Properties.html)</span>
-
-{% include UALib.Links.md %}

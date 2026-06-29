@@ -1,6 +1,6 @@
 ---
 layout: default
-title : "Base.Varieties.Properties module (The Agda Universal Algebra Library)"
+title : "Legacy.Base.Varieties.Properties module (The Agda Universal Algebra Library)"
 date : "2021-06-24"
 author: "agda-algebras development team"
 ---
@@ -293,11 +293,3 @@ module _ (wd : SwellDef){α χ : Level}{X : Type χ}{𝒦 : Pred (Algebra α)(ov
             (∣ φ a ∣ ∘ (𝑻 X ⟦ q ⟧)) ℊ  ≡⟨ (comm-hom-term (wd 𝓥 α) 𝑨 (φ a) q ℊ) ⟩
             (𝑨 ⟦ q ⟧)(∣ φ a ∣ ∘ ℊ)     ∎
 ```
-
-
----------------------------------
-
-<span style="float:left;">[← Base.Varieties.Closure](Base.Varieties.Closure.html)</span>
-<span style="float:right;">[Base.Varieties.Preservation →](Base.Varieties.Preservation.html)</span>
-
-{% include UALib.Links.md %}

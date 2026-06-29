@@ -35,10 +35,3 @@ eqsToMonoid : (A : Type 0ℓ) (_·_ : A → A → A) (e : A)
   → Monoid
 eqsToMonoid A = Polymorphic.eqsToMonoid {A = A}
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Classical.Small.Structures.Semigroup](Classical.Small.Structures.Semigroup.html)</span>
-<span style="float:right;">[Examples.Classical.Monoid →](Examples.Classical.Monoid.html)</span>
-
-{% include UALib.Links.md %}

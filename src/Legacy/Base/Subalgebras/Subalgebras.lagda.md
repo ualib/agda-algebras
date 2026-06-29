@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Subalgebras.Subalgebras module (The Agda Universal Algebra Library)"
+title : "Legacy.Base.Subalgebras.Subalgebras module (The Agda Universal Algebra Library)"
 date : "2021-01-14"
 author: "agda-algebras development team"
 ---
 
 ### <a id="subalgebras">Subalgebras</a>
 
-The [Base.Subalgebras.Subalgebras][] module of the [Agda Universal Algebra Library][] defines the `Subalgebra` type, representing the subalgebra of a given algebra, as well as the collection of all subalgebras of a given class of algebras.
+The [Legacy.Base.Subalgebras.Subalgebras][] module of the [Agda Universal Algebra Library][] defines the `Subalgebra` type, representing the subalgebra of a given algebra, as well as the collection of all subalgebras of a given class of algebras.
 
 
 ```agda
@@ -85,7 +85,7 @@ We take this opportunity to prove an important lemma that makes use of the
 are `𝑆`-algebras and `h : hom 𝑨 𝑩` a homomorphism from `𝑨` to `𝑩`, then
 the quotient `𝑨 ╱ ker h` is (isomorphic to) a subalgebra of `𝑩`.
 This is an easy corollary of the First Homomorphism Theorem proved in
-the [Base.Homomorphisms.Noether][] module.
+the [Legacy.Base.Homomorphisms.Noether][] module.
 
 
 ```agda
@@ -168,11 +168,3 @@ Using this type, we express the collection of all subalgebras of algebras in a c
  SubalgebraOfClass : Pred (Algebra α)(ov α) → Type (ov (α ⊔ β))
  SubalgebraOfClass 𝒦 = Σ[ 𝑩 ∈ Algebra β ] 𝑩 IsSubalgebraOfClass 𝒦
 ```
-
-
----------------------------------
-
-<span style="float:left;">[← Base.Subalgebras.Subuniverses](Base.Subalgebras.Subuniverses.html)</span>
-<span style="float:right;">[Base.Subalgebras.Properties →](Base.Subalgebras.Properties.html)</span>
-
-{% include UALib.Links.md %}

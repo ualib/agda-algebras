@@ -23,7 +23,3 @@ module Examples.PolynomialFunctors where
 
 open import Examples.PolynomialFunctors.Functors public
 ```
-
---------------------------------
-
-{% include UALib.Links.md %}

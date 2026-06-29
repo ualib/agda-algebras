@@ -187,9 +187,3 @@ roundtrip-∧ a b = refl
 roundtrip-∨ : ∀ (a b : Fin 3) → a ∙∨' b ≡ a ∨ b
 roundtrip-∨ a b = refl
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Examples.Classical](Examples.Classical.html)</span>
-
-{% include UALib.Links.md %}

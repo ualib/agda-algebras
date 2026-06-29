@@ -124,7 +124,3 @@ reduct-∘-ptw : {𝑆₁ 𝑆₂ 𝑆₃ : Signature 𝓞 𝓥}
   → (o ^ reduct (ψ ∘ₛ φ) 𝑨) args ≡ (o ^ reduct φ (reduct ψ 𝑨)) args
 reduct-∘-ptw _ = refl
 ```
-
---------------------------------------
-
-{% include UALib.Links.md %}

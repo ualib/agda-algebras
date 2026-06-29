@@ -195,11 +195,3 @@ module _ {𝑨 𝑨' : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
   HomImage-≅' : 𝑨 IsHomImageOf 𝑨' → 𝑨' ≅ 𝑩 → 𝑨 IsHomImageOf 𝑩
   HomImage-≅' φ A'≅B = (⊙-hom (from A'≅B) (proj₁ φ)) , ⊙-IsSurjective (fromIsSurjective A'≅B) (φ .proj₂)
 ```
-
-
---------------------------------------
-
-<span style="float:left;">[← Setoid.Homomorphisms.Isomorphisms](Setoid.Homomorphisms.Isomorphisms.html)</span>
-<span style="float:right;">[Setoid.Terms →](Setoid.Terms.html)</span>
-
-{% include UALib.Links.md %}

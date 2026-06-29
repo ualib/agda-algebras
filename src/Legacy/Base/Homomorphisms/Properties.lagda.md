@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Homomorphisms.Properties module (The Agda Universal Algebra Library)"
+title : "Legacy.Base.Homomorphisms.Properties module (The Agda Universal Algebra Library)"
 date : "2021-09-08"
 author: "agda-algebras development team"
 ---
 
 ### <a id="properties-of-homomorphisms">Properties of Homomorphisms</a>
 
-This is the [Base.Homomorphisms.Properties][] module of the [Agda Universal Algebra Library][].
+This is the [Legacy.Base.Homomorphisms.Properties][] module of the [Agda Universal Algebra Library][].
 
 
 ```agda
@@ -93,10 +93,3 @@ We should probably point out that while the lifting and lowering homomorphisms
 are important for our formal treatment of algebras in type theory, they never
 arise---in fact, they are not even definable---in classical universal algebra
 based on set theory.
-
----------------------------------
-
-<span style="float:left;">[← Base.Homomorphisms.Basic](Base.Homomorphisms.Basic.html)</span>
-<span style="float:right;">[Base.Homomorphisms.Kernels →](Base.Homomorphisms.Kernels.html)</span>
-
-{% include UALib.Links.md %}

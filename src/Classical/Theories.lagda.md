@@ -43,10 +43,3 @@ open import Classical.Theories.Ring public
 open import Classical.Theories.Semigroup public
 open import Classical.Theories.Semilattice public
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Classical.Signatures](Classical.Signatures.html)</span>
-<span style="float:right;">[Classical.Structures →](Classical.Structures.html)</span>
-
-{% include UALib.Links.md %}

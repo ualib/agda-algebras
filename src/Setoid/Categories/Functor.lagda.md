@@ -110,7 +110,3 @@ _∘F_ {𝐄 = 𝐄} G F = record
   module F = Functor F
   module G = Functor G
 ```
-
---------------------------------------
-
-{% include UALib.Links.md %}

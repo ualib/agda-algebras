@@ -232,10 +232,3 @@ module _ (𝑨 : Algebra α ρ) {ℓ : Level} where
                                ; isMeetSemilattice  = ∧-isMeetSemilattice
                                }
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Setoid.Congruences](Setoid.Congruences.html)</span>
-<span style="float:right;">[Setoid.Homomorphisms →](Setoid.Homomorphisms.html)</span>
-
-{% include UALib.Links.md %}

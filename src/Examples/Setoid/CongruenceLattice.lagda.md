@@ -102,10 +102,3 @@ Con𝟚-nontrivial : ¬ ( (1ᴬ 𝟚 0ℓ) ⊆ (0ᴬ 𝟚 0ℓ) )
 Con𝟚-nontrivial ⊤≤⊥ with 0ᴬ-minimum 𝟚 0ℓ Δ (⊤≤⊥ {true} {false} (lift _))
 ... | ()
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Setoid.Congruences.CompleteLattice](Setoid.Congruences.CompleteLattice.html)</span>
-<span style="float:right;">[Setoid.Homomorphisms →](Setoid.Homomorphisms.html)</span>
-
-{% include UALib.Links.md %}

@@ -47,10 +47,3 @@ open import Classical.Bundles.Ring public
 open import Classical.Bundles.Semigroup public
 open import Classical.Bundles.Semilattice public
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Classical.Structures](Classical.Structures.html)</span>
-<span style="float:right;">[Classical.Small →](Classical.Small.html)</span>
-
-{% include UALib.Links.md %}

@@ -18,7 +18,3 @@ module Classical.Categories where
 open import Classical.Categories.AdjoinUnit public
 open import Classical.Categories.Forgetful public
 ```
-
---------------------------------------
-
-{% include UALib.Links.md %}

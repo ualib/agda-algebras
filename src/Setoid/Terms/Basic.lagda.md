@@ -172,11 +172,3 @@ Interpretation of terms is iteration on the W-type. The standard library offers 
   substitution (ℊ x) σ ρ = ≈refl
   substitution (node f ts) σ ρ = cong InterpA (refl , λ i → substitution (ts i) σ ρ)
 ```
-
-
---------------------------------
-
-<span style="float:left;">[↑ Setoid.Terms](Setoid.Terms.html)</span>
-<span style="float:right;">[Setoid.Terms.Properties →](Setoid.Terms.Properties.html)</span>
-
-{% include UALib.Links.md %}

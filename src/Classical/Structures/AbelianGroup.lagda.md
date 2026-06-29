@@ -105,10 +105,3 @@ eqsToAbelianGroup _·_ e i ·-assoc ·-idˡ ·-idʳ ·-invˡ ·-invʳ ·-comm = 
   proof invʳᵃ  ρ = ·-invʳ  (ρ 0F)
   proof comm   ρ = ·-comm  (ρ 0F) (ρ 1F)
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Classical.Structures.Group](Classical.Structures.Group.html)</span>
-<span style="float:right;">[Classical.Structures.Ring →](Classical.Structures.Ring.html)</span>
-
-{% include UALib.Links.md %}

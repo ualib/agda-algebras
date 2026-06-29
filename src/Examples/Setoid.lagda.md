@@ -32,9 +32,3 @@ open import Examples.Setoid.Presentation
 open import Examples.Setoid.FiniteQuotient
 open import Examples.Setoid.HSPCommutativeMonoid
 ```
-
---------------------------------------
-
-<span style="float:left;">[↑ Examples](Examples.html)</span>
-
-{% include UALib.Links.md %}

@@ -175,7 +175,3 @@ module _ {A : Type a} {B : Type b} where
 ```
 
 The symmetric statement `A×A→B-to-Fin2A→B ∘ Fin2A→B-to-A×A→B ≡ id` fails for the same η-expansion reason: it would require `λ u → (λ {z → u z; (s z) → u (s z)}) ≡ u`, which Agda does not reduce.
-
---------------------------------------
-
-{% include UALib.Links.md %}

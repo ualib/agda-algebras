@@ -101,11 +101,3 @@ module _  {I : Type ι}                  -- index type
  ProjAlgIsOnto : ∀{i} → Σ[ h ∈ (𝕌[ ⨅ 𝒜 ] → 𝕌[ 𝒜 i ]) ] onto h
  ProjAlgIsOnto {i} = (proj _≟_ 𝒜I i) , projIsOnto _≟_ 𝒜I
 ```
-
-
---------------------------------
-
-<span style="float:left;">[← Setoid.Algebras.Basic](Setoid.Algebras.Basic.html)</span>
-<span style="float:right;">[Setoid.Congruences →](Setoid.Congruences.html)</span>
-
-{% include UALib.Links.md %}

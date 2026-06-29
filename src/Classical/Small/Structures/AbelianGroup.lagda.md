@@ -35,9 +35,3 @@ eqsToAbelianGroup : (A : Type 0ℓ) (_·_ : A → A → A) (e : A) (i : A → A)
   → AbelianGroup
 eqsToAbelianGroup A = Polymorphic.eqsToAbelianGroup {A = A}
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Classical.Small.Structures.Group](Classical.Small.Structures.Group.html)</span>
-
-{% include UALib.Links.md %}

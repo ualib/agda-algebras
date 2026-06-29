@@ -83,10 +83,3 @@ open import Classical.Theories         public
 
 open import Classical.Small
 ```
-
---------------------------------------
-
-<span style="float:left;">[↑ Top](index.html)</span>
-<span style="float:right;">[Classical.Signatures →](Classical.Signatures.html)</span>
-
-{% include UALib.Links.md %}

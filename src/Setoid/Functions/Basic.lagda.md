@@ -50,12 +50,3 @@ module _ {𝑨 : Setoid α ρᵃ} where
  liftFunc : {ℓ : Level} → 𝑨 ⟶ 𝑙𝑖𝑓𝑡 ℓ
  liftFunc = record { to = lift ; cong = id }
 ```
-
-
---------------------------------------
-
-<span style="float:left;">[↑ Setoid.Overture](Setoid.Overture.html)</span>
-<span style="float:right;">[Setoid.Overture.Inverses →](Setoid.Overture.Inverses.html)</span>
-
-{% include UALib.Links.md %}
-

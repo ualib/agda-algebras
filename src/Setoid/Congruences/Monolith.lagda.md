@@ -209,10 +209,3 @@ meet were below the diagonal, so would `μ` be, contradicting `Nonzero μ`.
     μ⊆Δ : BelowDiagonal μ
     μ⊆Δ p = θ∧φ⊆Δ (μ⊆θ p , μ⊆φ p)
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Setoid.Congruences.CompleteLattice](Setoid.Congruences.CompleteLattice.html)</span>
-<span style="float:right;">[Setoid.Homomorphisms →](Setoid.Homomorphisms.html)</span>
-
-{% include UALib.Links.md %}

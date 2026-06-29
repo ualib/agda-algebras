@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Functions.Transformers module"
+title : "Legacy.Base.Functions.Transformers module"
 date : "2021-07-26"
 author: "the agda-algebras development team"
 ---
 
 ### <a id="type-transformers">Type Transformers</a>
 
-This is the [Base.Functions.Transformers][] module of the [agda-algebras][] library.
+This is the [Legacy.Base.Functions.Transformers][] module of the [agda-algebras][] library.
 
 > **Deprecation notice (v3.0, #310)**.  This module has been relocated to [Examples.FunctionTypeBijections][].  The content here is retained for one minor-version cycle so v2.x consumers can migrate; it is scheduled for removal in v3.1.  Please update your imports to `open import Examples.FunctionTypeBijections`.
 
@@ -184,11 +184,3 @@ module _ {A : Type a} {B : Type b} where
 {-# WARNING_ON_USAGE CurryFin3 "CurryFin3 is deprecated as of agda-algebras v3.0.  Use Examples.FunctionTypeBijections.CurryFin3." #-}
 {-# WARNING_ON_USAGE UncurryFin3 "UncurryFin3 is deprecated as of agda-algebras v3.0.  Use Examples.FunctionTypeBijections.UncurryFin3." #-}
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Base.Functions.Inverses](Base.Functions.Inverses.html)</span>
-<span style="float:right;">[Base.Relations →](Base.Relations.html)</span>
-
-{% include UALib.Links.md %}
-

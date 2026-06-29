@@ -28,9 +28,3 @@ open import Examples.Classical.Lattices.L2Distributive
 open import Examples.Classical.Lattices.L3Heyting
 open import Examples.Classical.Lattices.L7
 ```
-
---------------------------------------
-
-<span style="float:left;">[↑ Examples.Classical](Examples.Classical.html)</span>
-
-{% include UALib.Links.md %}

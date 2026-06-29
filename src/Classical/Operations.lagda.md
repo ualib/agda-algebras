@@ -80,10 +80,3 @@ Uncurry₂ _·_ args = args 0F · args 1F
 ```
 
 Higher arities (`Curry₃` / `Uncurry₃` for ternary, etc.) are added as concrete structures require them.  Lattice's absorption law (in M3-7) may want `Curry₃`; deferred until then.
-
---------------------------------------
-
-<span style="float:left;">[← Classical](Classical.html)</span>
-<span style="float:right;">[Classical.Equations →](Classical.Equations.html)</span>
-
-{% include UALib.Links.md %}

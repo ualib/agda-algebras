@@ -83,10 +83,3 @@ open IsEquivalence using( refl ; sym ; trans )
 ⟨ 𝑆 ⟩ A .isEqv .sym (≡.refl , g) = ≡.refl , λ i → symS A (g i)
 ⟨ 𝑆 ⟩ A .isEqv .trans (≡.refl , g) (≡.refl , h) = ≡.refl , λ i → transS  A (g i) (h i)
 ```
-
---------------------------------
-
-<span style="float:left;">[↑ Setoid](Setoid.html)</span>
-<span style="float:right;">[Setoid.Subalgebras →](Setoid.Subalgebras.html)</span>
-
-{% include UALib.Links.md %}

@@ -155,9 +155,3 @@ roundtrip-ε = refl
 roundtrip-⁻¹ : ∀ (a : Fin 6) → a ⁻¹′ ≡ s3-inv a
 roundtrip-⁻¹ a = refl
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Examples.Classical](Examples.Classical.html)</span>
-
-{% include UALib.Links.md %}

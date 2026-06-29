@@ -49,10 +49,3 @@ is exactly the level-fixed `Magma` above.
 opsToMagma : (A : Type 0ℓ) → (A → A → A) → Magma
 opsToMagma A = Polymorphic.opsToMagma {A = A}
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Classical.Small](Classical.Small.html)</span>
-<span style="float:right;">[Examples.Classical.Magma →](Examples.Classical.Magma.html)</span>
-
-{% include UALib.Links.md %}

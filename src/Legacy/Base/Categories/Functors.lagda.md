@@ -1,14 +1,14 @@
 ---
 layout: default
 file: "src/Legacy/Base/Categories/Functors.lagda.md"
-title: "Base.Categories.Functors module (The Agda Universal Algebra Library)"
+title: "Legacy.Base.Categories.Functors module (The Agda Universal Algebra Library)"
 date: "2021-08-30"
 author: "agda-algebras development team"
 ---
 
 ### <a id="functors">Functors</a>
 
-This is the [Base.Categories.Functors][] module of the [Agda Universal Algebra Library][].
+This is the [Legacy.Base.Categories.Functors][] module of the [Agda Universal Algebra Library][].
 
 Recall, a *functor* `F` is a function that maps the objects and morphisms of one category `𝒞` to the objects and morphisms of a category `𝒟` in such a way that the following *functor laws* are satisfied:
 
@@ -148,10 +148,7 @@ _⟦_⟧ : {A : Type} → list A → ℕ → Option A
 
 --------------------------------
 
-<span style="float:left;">[↑ Base.Categories](Base.Categories.html)</span>
-<span style="float:right;">[Base.Complexity →](Base.Complexity.html)</span>
 
-{% include UALib.Links.md %}
 
 
 

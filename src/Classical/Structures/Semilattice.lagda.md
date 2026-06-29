@@ -109,7 +109,3 @@ eqsToSemilattice A _·_ ·-assoc ·-comm ·-idem = opsToMagma _·_ , proof
   proof commˢˡ  ρ = ·-comm  (ρ 0F) (ρ 1F)
   proof idem    ρ = ·-idem  (ρ 0F)
 ```
-
---------------------------------------
-
-{% include UALib.Links.md %}

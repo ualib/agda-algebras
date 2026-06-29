@@ -43,10 +43,3 @@ ar-Monoid ε-Op = Fin 0
 Sig-Monoid : Signature 0ℓ 0ℓ
 Sig-Monoid = Op-Monoid , ar-Monoid
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Classical.Signatures.Magma](Classical.Signatures.Magma.html)</span>
-<span style="float:right;">[Classical.Signatures.Group →](Classical.Signatures.Group.html)</span>
-
-{% include UALib.Links.md %}

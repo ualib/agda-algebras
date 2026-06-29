@@ -72,10 +72,3 @@ congruence-modular ones.
   CongruenceModular : Type (lsuc (Ł α ρ ℓ₀))
   CongruenceModular = (θ φ ψ : Con 𝑨 (Ł α ρ ℓ₀)) → θ ⊆ ψ → θ ∨ (φ ∧ ψ) ≑ (θ ∨ φ) ∧ ψ
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Setoid.Congruences.Permutability](Setoid.Congruences.Permutability.html)</span>
-<span style="float:right;">[Setoid.Varieties.MaltsevConditions →](Setoid.Varieties.MaltsevConditions.html)</span>
-
-{% include UALib.Links.md %}

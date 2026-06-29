@@ -1,6 +1,6 @@
 ---
 layout: default
-title : "Base.Structures.Sigma.Homs"
+title : "Legacy.Base.Structures.Sigma.Homs"
 date : "2021-06-22"
 author: "agda-algebras development team"
 ---
@@ -164,10 +164,7 @@ module _  {𝑅 𝐹 : Signature} {α ρᵃ β ρᵇ : Level}
 
 <br>
 
-[← Base.Structures.Sigma.Congruences](Base.Structures.Sigma.Congruences.html)
-<span style="float:right;">[Base.Structures.Sigma.Isos →](Base.Structures.Sigma.Isos.html)</span>
 
-{% include UALib.Links.md %}
 
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#the-agda-algebras-development-team
 
@@ -441,10 +438,3 @@ Later we will need a proof of the fact that projecting out of a product algebra 
 \end{code}
 
 We could prove a more general result involving projections onto multiple factors, but so far the single-factor result has sufficed.
-
---------------------------------
-
-<span style="float:left;">[← Base.Structures.Sigma.Congruences](Base.Structures.Sigma.Congruences.html)</span>
-<span style="float:right;">[Base.Structures.Sigma.Isos →](Base.Structures.Sigma.Isos.html)</span>
-
-{% include UALib.Links.md %}

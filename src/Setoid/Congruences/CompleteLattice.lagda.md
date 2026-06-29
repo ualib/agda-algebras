@@ -229,10 +229,3 @@ yields the complete lattice of congruences.
     ; ⨅-greatest       = λ f x h → ⋀-greatest f x h
     }
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Setoid.Congruences.Generation](Setoid.Congruences.Generation.html)</span>
-<span style="float:right;">[Setoid.Homomorphisms →](Setoid.Homomorphisms.html)</span>
-
-{% include UALib.Links.md %}

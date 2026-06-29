@@ -336,10 +336,3 @@ eqsToMonoid _·_ e ·-assoc ·-idˡ ·-idʳ = opsToBareMonoid _·_ e , proof
   proof idˡ ρ = ·-idˡ (ρ 0F)
   proof idʳ ρ = ·-idʳ (ρ 0F)
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Classical.Structures.Semigroup](Classical.Structures.Semigroup.html)</span>
-<span style="float:right;">[Classical.Structures.Group →](Classical.Structures.Group.html)</span>
-
-{% include UALib.Links.md %}

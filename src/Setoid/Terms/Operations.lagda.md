@@ -155,10 +155,3 @@ _[_]t : {X Y : Type χ } → Term Y → Substerm X Y → Term X
 (ℊ y) [ σ ]t = σ y
 (node f t) [ σ ]t = node f λ z → (t z) [ σ ]t
 ```
-
-----------------------------------
-
-<span style="float:left;">[← Setoid.Terms.Properties](Setoid.Terms.Properties.html)</span>
-<span style="float:right;">[Setoid.Subalgebras →](Setoid.Subalgebras.html)</span>
-
-{% include UALib.Links.md %}

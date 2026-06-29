@@ -134,9 +134,3 @@ open Polymorphic.Magma-Op ⟪ ⟨ cim-magma ⟩ᵐᵃ ⟫ᵐᵃ using () renamin
 roundtrip-cim-ma : ∀ (a b : Fin 4) → a ·′ b ≡ a · b
 roundtrip-cim-ma a b = refl
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Examples.Classical](Examples.Classical.html)</span>
-
-{% include UALib.Links.md %}

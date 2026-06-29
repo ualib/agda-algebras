@@ -110,10 +110,3 @@ The projection of a product algebra onto its `i`-th factor is a homomorphism.
 
 We could prove a more general result involving projections onto multiple factors, but
 so far the single-factor result has sufficed.
-
----------------------------------
-
-<span style="float:left;">[← Setoid.Homomorphisms.Kernels](Setoid.Homomorphisms.Kernels.html)</span>
-<span style="float:right;">[Setoid.Homomorphisms.Noether →](Setoid.Homomorphisms.Noether.html)</span>
-
-{% include UALib.Links.md %}

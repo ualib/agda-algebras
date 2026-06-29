@@ -186,7 +186,3 @@ module solution-2-2 where
 **Exercise 4**. Find a polynomial-time algorithm for CSP({0, 1}, C₀ᵃ, C₁ᵃ, G₁ᵃ, G₂ᵃ).
 
 **Exercise 5**. Find a polynomial-time algorithm for CSP(ℚ, <).
-
---------------------------------
-
-{% include UALib.Links.md %}

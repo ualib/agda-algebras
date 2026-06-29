@@ -135,7 +135,3 @@ module _ {L : stdlib-Lattice α ρ} where
   roundtrip-bcb-∨-la : (a b : A) → (a ∨ b) ≈ (a ∨' b)
   roundtrip-bcb-∨-la a b = refl
 ```
-
---------------------------------------
-
-{% include UALib.Links.md %}

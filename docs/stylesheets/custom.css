@@ -1,0 +1,732 @@
+/* ==========================================================================
+   agda-algebras — custom styling for the MkDocs (Material) site
+   --------------------------------------------------------------------------
+   ADR-007 (rendering-pipeline modernization).  Two highlighting paths share
+   one palette: inline prose terms are kramdown attribute spans
+   (`Algebra`{.AgdaRecord}) classed by attr_list, and code blocks are
+   `agda --html` output (`<pre class="Agda">`, every token classed + linked).
+   The precedent is 1Lab and formal-ledger-specifications.  On top sits a
+   "chalkboard" visual identity (Direction A) for a scholarly, inviting feel.
+
+   Sections:
+     1.  Typography (Unicode-complete monospace + Fraunces display serif).
+     2.  Agda token colours — light and dark, mirroring Agda's HTML palette.
+     3.  Inline Agda terms (the attribute spans) in running prose.
+     4.  Code blocks — plain fenced + agda --html highlighted/linked.
+     5.  Landing-page hero + grid cards (base).
+     6.  Chalkboard palette — Material colour-variable overrides per scheme.
+     7.  Display type (Fraunces headings).
+     8.  Hero as a chalkboard panel.
+     9.  "By the numbers" stat strip.
+     10. Featured-results gallery + ink-roundel portraits.
+     11. Structures × properties coverage matrix.
+   ========================================================================== */
+
+/* -- 1. Typography ---------------------------------------------------------
+   Agda source is saturated with mathematical Unicode — 𝓞, 𝑆, ⟨_⟩, →, ≈, ⨅,
+   ∀, ≋ — that most monospace fonts render with tofu or inconsistent metrics.
+   JuliaMono is purpose-built for exactly this glyph range and is the de-facto
+   choice across the Agda/Lean/Julia ecosystems.  We load it from a CDN with a
+   broad fallback stack so the page still reads well if the font is blocked. */
+@import url("https://cdn.jsdelivr.net/gh/cormullion/juliamono/webfonts/juliamono.css");
+
+/* Display + body type are self-hosted from docs/assets/fonts/, so the site
+   needs no external font CDN: faster first paint, renders offline, and is
+   identical in CI screenshots.  Space Grotesk is a geometric grotesque —
+   modern, a touch technical, pairs naturally with monospace — for headings;
+   Inter carries body text.  Both are variable fonts (one file, all weights). */
+@font-face {
+  font-family: "Space Grotesk"; font-style: normal; font-display: swap;
+  font-weight: 300 700;
+  src: url("../assets/fonts/space-grotesk-latin-wght-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "InterVar"; font-style: normal; font-display: swap;
+  font-weight: 100 900;
+  src: url("../assets/fonts/inter-latin-wght-normal.woff2") format("woff2");
+}
+/* Two alternate display faces, also self-hosted, so retheming the headings is
+   a one-word change to --ualib-display (no new download): "Geist" (Vercel's
+   neo-grotesque, the cleanest) or "Sora" (geometric, rounder). */
+@font-face {
+  font-family: "Geist"; font-style: normal; font-display: swap; font-weight: 400;
+  src: url("../assets/fonts/geist-sans-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Geist"; font-style: normal; font-display: swap; font-weight: 500;
+  src: url("../assets/fonts/geist-sans-latin-500-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Geist"; font-style: normal; font-display: swap; font-weight: 600;
+  src: url("../assets/fonts/geist-sans-latin-600-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Geist"; font-style: normal; font-display: swap; font-weight: 700;
+  src: url("../assets/fonts/geist-sans-latin-700-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Sora"; font-style: normal; font-display: swap; font-weight: 300 700;
+  src: url("../assets/fonts/sora-latin-wght-normal.woff2") format("woff2");
+}
+
+:root {
+  --md-code-font: "JuliaMono", "JetBrains Mono", "Fira Code", "Cascadia Code",
+                  "DejaVu Sans Mono", "Menlo", "Consolas", monospace;
+  --md-text-font: "InterVar", "Inter", -apple-system, BlinkMacSystemFont,
+                  "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  /* The single display/heading family.  Swap this one line to retheme every
+     heading, the hero title + formula, the stat numbers, the figure titles,
+     and the matrix header row.  Alternatives self-hosted alongside Space
+     Grotesk: "Geist", "Sora" (see docs/site-guide.md). */
+  --ualib-display: "Space Grotesk", "InterVar", "Segoe UI", system-ui, sans-serif;
+}
+
+/* Slightly larger line-height in code so stacked diacritics (𝒾, ≋, ⊑) and
+   subscripts never collide; tabular figures keep alignment honest. */
+.md-typeset code,
+.md-typeset pre > code {
+  font-variant-ligatures: none;
+  font-feature-settings: "ss20" 1; /* JuliaMono: dotted-zero / clearer glyphs */
+}
+
+/* -- 2. Agda token colours --------------------------------------------------
+   The formal-ledger-specifications palette: Agda's classic vivid HTML colours
+   in light mode, a low-saturation "zenburn"-style set in dark mode.  Each rule
+   colours BOTH the inline prose span (`.AgdaFunction`) and the agda --html
+   code-block token (`pre.Agda .Function`).  `--code-accent` is the scheme's
+   signature colour, reused by decorative rules (the code-block rule, etc.). */
+
+[data-md-color-scheme="default"] {
+  --code-accent: #0000cd;
+  .AgdaKeyword,                pre.Agda .Keyword                { color: #cd6600; }
+  .AgdaComment,                pre.Agda .Comment                { color: #b22222; font-style: italic; }
+  .AgdaString,                 pre.Agda .String                 { color: #b22222; }
+  .AgdaNumber,                 pre.Agda .Number                 { color: #a020f0; }
+  .AgdaSymbol,                 pre.Agda .Symbol                 { color: #404040; }
+  .AgdaArgument,               pre.Agda .Argument               { color: #404040; }
+  .AgdaMarkup,                 pre.Agda .Markup                 { color: #000000; }
+  .AgdaPrimitiveType,          pre.Agda .PrimitiveType          { color: #0000cd; }
+  .AgdaPrimitive,              pre.Agda .Primitive              { color: #0000cd; }
+  .AgdaBound,                  pre.Agda .Bound                  { color: inherit; }
+  .AgdaGeneralizable,          pre.Agda .Generalizable          { color: inherit; }
+  .AgdaInductiveConstructor,   pre.Agda .InductiveConstructor   { color: #008b00; }
+  .AgdaCoinductiveConstructor, pre.Agda .CoinductiveConstructor { color: #8b7500; }
+  .AgdaDatatype,               pre.Agda .Datatype               { color: #0000cd; }
+  .AgdaField,                  pre.Agda .Field                  { color: #ee1289; }
+  .AgdaFunction,               pre.Agda .Function               { color: #0000cd; }
+  .AgdaMacro,                  pre.Agda .Macro                  { color: #0000cd; }
+  .AgdaModule,                 pre.Agda .Module                 { color: #a020f0; }
+  .AgdaPostulate,              pre.Agda .Postulate              { color: #0000cd; }
+  .AgdaRecord,                 pre.Agda .Record                 { color: #0000cd; }
+}
+
+/* Dark mode: the bespoke "Aurora Deep" palette — cool indigo ground, with
+   orange keywords that echo the hero accent and indigo functions/modules that
+   match the site links, so code reads as part of the Aurora theme.  Two cooler
+   alternates ("Tokyo Night", "Nord") are written out in docs/site-guide.md;
+   swap this whole block (and §4's slate code background) to retheme. */
+[data-md-color-scheme="slate"] {
+  --code-accent: #8b88ff;
+  .AgdaKeyword,                pre.Agda .Keyword                { color: #ff8a3d; }
+  .AgdaComment,                pre.Agda .Comment                { color: #6b73a8; font-style: italic; }
+  .AgdaString,                 pre.Agda .String                 { color: #c3a0ff; }
+  .AgdaNumber,                 pre.Agda .Number                 { color: #ffb86c; }
+  .AgdaSymbol,                 pre.Agda .Symbol                 { color: #b8c0ff; }
+  .AgdaArgument,               pre.Agda .Argument               { color: #d7dcff; }
+  .AgdaMarkup,                 pre.Agda .Markup                 { color: #d7dcff; }
+  .AgdaPrimitiveType,          pre.Agda .PrimitiveType          { color: #6cc5ff; }
+  .AgdaPrimitive,              pre.Agda .Primitive              { color: #6cc5ff; }
+  .AgdaBound,                  pre.Agda .Bound                  { color: #d7dcff; }
+  .AgdaGeneralizable,          pre.Agda .Generalizable          { color: #d7dcff; }
+  .AgdaInductiveConstructor,   pre.Agda .InductiveConstructor   { color: #5eead4; }
+  .AgdaCoinductiveConstructor, pre.Agda .CoinductiveConstructor { color: #5eead4; }
+  .AgdaDatatype,               pre.Agda .Datatype               { color: #6cc5ff; }
+  .AgdaField,                  pre.Agda .Field                  { color: #ff9ed6; }
+  .AgdaFunction,               pre.Agda .Function               { color: #8b88ff; }
+  .AgdaMacro,                  pre.Agda .Macro                  { color: #8b88ff; }
+  .AgdaModule,                 pre.Agda .Module                 { color: #c3a0ff; }
+  .AgdaPostulate,              pre.Agda .Postulate              { color: #8b88ff; }
+  .AgdaRecord,                 pre.Agda .Record                 { color: #6cc5ff; }
+}
+
+/* -- 3. Inline Agda terms in prose -----------------------------------------
+   A reference like `Algebra`{.AgdaRecord} should read as a coloured
+   mathematical name woven into the sentence — not as a boxed code chip.  We
+   therefore strip Material's inline-code background and padding for spans that
+   carry an Agda class, leaving crisp coloured monospace.  Plain inline code
+   (no class) keeps the default chip so shell snippets still stand out. */
+.md-typeset code[class*="Agda"] {
+  background-color: transparent;
+  padding: 0;
+  box-shadow: none;
+  font-weight: 480;
+  white-space: pre-wrap;
+  word-break: keep-all;
+}
+
+/* A whisper of a highlight on hover helps when scanning a dense paragraph for
+   one identifier, without colouring the page in resting state. */
+.md-typeset code[class*="Agda"]:hover {
+  background-color: var(--md-code-bg-color);
+  border-radius: 0.15rem;
+}
+
+/* -- 4. Code blocks --------------------------------------------------------
+   Two kinds of code blocks appear:
+     + plain fenced ```agda blocks (the fast `make site` path, no agda --html);
+     + agda-highlighted `<pre class="Agda">` blocks (the `make site-full` path,
+       #3a) — every token semantically classed and hyperlinked to its source.
+   The token COLOURS are shared with the inline spans (§2) via the same CSS
+   variables; agda --html uses the bare class names (`.Function`) scoped under
+   `.Agda`, whereas the prose spans carry the `Agda`-prefixed names. */
+.md-typeset pre > code {
+  line-height: 1.55;
+}
+
+[data-md-color-scheme="default"] {
+  --md-code-bg-color: #f2f5fb;   /* cool near-white — the classic blues pop   */
+  --md-code-fg-color: #2b2f36;
+}
+[data-md-color-scheme="slate"] {
+  --md-code-bg-color: #0f1230;   /* deep indigo — the "Aurora Deep" palette   */
+  --md-code-fg-color: #d7dcff;
+}
+
+/* The agda --html block itself (no inner <code>; children are <a> tokens).
+   Token colours come from §2 (`pre.Agda .Function` …). */
+.md-typeset pre.Agda {
+  font-family: var(--md-code-font);
+  font-size: 0.6rem;
+  line-height: 1.6;
+  background-color: var(--md-code-bg-color);
+  color: var(--md-code-fg-color);
+  border-radius: 0.25rem;
+  border: 1px solid color-mix(in srgb, var(--code-accent) 20%, transparent);
+  border-left: 3px solid var(--code-accent);
+  padding: 0.8em 1em;
+  margin: 1em 0;
+  overflow-x: auto;
+  white-space: pre;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Tokens are hyperlinks: keep the token colour (not link-blue); underline only
+   on hover so the click affordance is discoverable but unobtrusive. */
+.md-typeset pre.Agda a {
+  color: inherit;
+  text-decoration: none;
+}
+.md-typeset pre.Agda a[href]:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+/* Same restraint for inline prose spans that are also links. */
+.md-typeset a code[class*="Agda"],
+.md-typeset code[class*="Agda"] a {
+  color: inherit;
+  text-decoration: none;
+}
+.md-typeset a:hover code[class*="Agda"] {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+/* -- 5. Landing page -------------------------------------------------------
+   A quiet hero and a grid of cards for the entry points.  Uses Material's
+   built-in `.grid.cards` where possible; the hero is bespoke. */
+.ualib-hero {
+  text-align: center;
+  padding: 2.4rem 0 1.2rem;
+}
+.ualib-hero h1 {
+  font-weight: 800;
+  font-size: 2.6rem;
+  line-height: 1.1;
+  margin: 0.2rem 0 0.6rem;
+  letter-spacing: -0.01em;
+}
+.ualib-hero .ualib-tagline {
+  font-size: 1.05rem;
+  color: var(--md-default-fg-color--light);
+  max-width: 42rem;
+  margin: 0 auto 1.4rem;
+}
+.ualib-hero .ualib-formula {
+  font-family: var(--md-code-font);
+  font-size: 1.5rem;
+  color: var(--code-accent);
+  margin: 0.8rem 0 1.4rem;
+}
+
+/* Buttons row under the hero. */
+.ualib-cta {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+/* Tighten Material's table rendering for the small reference tables that
+   appear throughout the library (signatures, operation arities, etc.). */
+.md-typeset table:not([class]) {
+  font-size: 0.74rem;
+}
+
+/* Give section-index (clickable parent nav items) a subtle "overview" cue. */
+.md-nav__item--section > .md-nav__link {
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   6. Modern theme — "Aurora": an indigo→violet chrome with a vivid-orange
+      accent over cool, near-white (light) / deep-navy (dark) surfaces.  We
+      override Material's colour variables per scheme rather than adding a
+      bespoke scheme, so the light/dark toggle keeps working.  The `--ualib-*`
+      aliases drive the bespoke components (hero, stats, figures, matrix); the
+      hero gradient runs from `--ualib-board-2` (violet) to `--ualib-board`
+      (indigo).  Swap this whole block to retheme — two ready alternates,
+      "Cobalt" (blue-led) and "Ultraviolet" (violet-led), are in
+      docs/site-guide.md.  Code-block colours are owned by §4, not here.
+   ========================================================================== */
+
+[data-md-color-scheme="default"] {
+  --md-default-bg-color:          #fbfcff; /* cool paper-white                */
+  --md-default-bg-color--light:   #eef0fc; /* card / inset surface            */
+  --md-default-fg-color:          #181c2c; /* near-navy ink                   */
+  --md-default-fg-color--light:   #535d75;
+  --md-default-fg-color--lighter: #818bab;
+  --md-primary-fg-color:          #4f46e5; /* indigo-violet chrome (header)   */
+  --md-primary-fg-color--dark:    #4338ca;
+  --md-primary-fg-color--light:   #7c6cf0;
+  --md-primary-bg-color:          #f3f3ff; /* text on the chrome              */
+  --md-accent-fg-color:           #fb6a00; /* vivid orange (hover / accent)   */
+  --md-typeset-a-color:           #5b54e6; /* indigo-violet links             */
+  --md-footer-bg-color:           #20204a;
+
+  --ualib-board:   #201f4d; /* indigo base of the hero gradient       */
+  --ualib-board-2: #4a2f86; /* violet top of the hero gradient        */
+  --ualib-ink:     #eef0ff; /* text on deep panels                    */
+  --ualib-ink-dim: #bcc0ec;
+  --ualib-rule:    #e2e4f6; /* hairline borders                       */
+  --ualib-coral:   #fb6a00; /* the orange accent                      */
+  --ualib-teal:    #5b54e6; /* the signature indigo (✓, stat numbers) */
+}
+
+[data-md-color-scheme="slate"] {
+  --md-default-bg-color:          #0c0e1d; /* deep navy                       */
+  --md-default-bg-color--light:   #15172e; /* card / inset surface            */
+  --md-default-fg-color:          #c3c8de; /* soft cool grey — easier on the  */
+  --md-default-fg-color--light:   #9197b6; /* eyes in a dim room than white   */
+  --md-default-fg-color--lighter: #6a7197;
+  --md-primary-fg-color:          #0c0d1f; /* near-black navy chrome          */
+  --md-primary-fg-color--dark:    #08091a;
+  --md-primary-fg-color--light:   #2a2566;
+  --md-primary-bg-color:          #e8eaf8;
+  --md-accent-fg-color:           #ff7a1a; /* orange                          */
+  --md-typeset-a-color:           #8b88ff; /* light indigo-violet links       */
+  --md-footer-bg-color:           #08091a;
+
+  --ualib-board:   #0d0e24;
+  --ualib-board-2: #2f1f6e; /* navy→violet hero in dark mode          */
+  --ualib-ink:     #e8eaf8;
+  --ualib-ink-dim: #9ea4cc;
+  --ualib-rule:    #262a4a;
+  --ualib-coral:   #ff7a1a;
+  --ualib-teal:    #8b88ff;
+}
+
+/* ---- 7. Display type: Space Grotesk headings (--ualib-display) ---------- */
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.ualib-hero h1,
+.ualib-stat__num {
+  font-family: var(--ualib-display), Georgia, "Times New Roman", serif;
+  letter-spacing: -0.012em;
+}
+.md-typeset h1 { font-weight: 600; }
+.md-typeset h2 { font-weight: 600; }
+.md-typeset h3 { font-weight: 500; }
+
+/* ---- 8. Hero: a chalkboard panel laid on the paper desk ----------------- */
+.ualib-hero {
+  position: relative;
+  text-align: center;
+  margin: 0.4rem 0 2.2rem;
+  padding: 2.8rem 1.4rem 2.4rem;
+  border-radius: 0.5rem;
+  color: var(--ualib-ink);
+  background:
+    radial-gradient(1200px 240px at 50% -40%, rgba(255,255,255,0.05), transparent 70%),
+    linear-gradient(180deg, var(--ualib-board-2), var(--ualib-board));
+  box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset,
+              0 14px 40px -22px rgba(0,0,0,0.55);
+  border: 1px solid rgba(0,0,0,0.25);
+  overflow: hidden;
+}
+/* a faint chalk-dust wash + a wooden tray at the bottom edge */
+.ualib-hero::before {
+  content: ""; position: absolute; inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.05) 50%, transparent 51%),
+    radial-gradient(1px 1px at 70% 60%, rgba(255,255,255,0.04) 50%, transparent 51%),
+    radial-gradient(1px 1px at 45% 80%, rgba(255,255,255,0.04) 50%, transparent 51%);
+  background-size: 120px 120px, 160px 160px, 90px 90px;
+  pointer-events: none;
+}
+.ualib-hero::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 8px;
+  background: linear-gradient(180deg, #8a6a45, #6e5436);
+  box-shadow: 0 -1px 2px rgba(0,0,0,0.3);
+}
+.ualib-hero h1 {
+  color: var(--ualib-ink);
+  font-size: 2.7rem;
+  line-height: 1.08;
+  margin: 0.1rem 0 0.5rem;
+}
+.ualib-hero .ualib-tagline {
+  color: var(--ualib-ink-dim);
+  max-width: 44rem;
+  margin: 0 auto 1.2rem;
+  font-size: 1.04rem;
+}
+.ualib-hero .ualib-formula {
+  font-family: var(--ualib-display), Georgia, serif;
+  font-size: 2.0rem;
+  letter-spacing: 0.04em;
+  color: #fff;
+  text-shadow: 0 0 18px rgba(255,255,255,0.25);
+  margin: 0.6rem 0 1.4rem;
+}
+/* buttons read like chalk on the board */
+.ualib-hero .md-button {
+  color: var(--ualib-ink);
+  border-color: rgba(244,241,232,0.6);
+}
+.ualib-hero .md-button--primary {
+  background: var(--ualib-coral);
+  border-color: var(--ualib-coral);
+  color: #fff;
+}
+.ualib-hero .md-button:hover {
+  background: var(--ualib-ink);
+  border-color: var(--ualib-ink);
+  color: var(--ualib-board);
+}
+
+/* ---- 9. "By the numbers" stat strip ------------------------------------- */
+.ualib-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.6rem;
+  margin: 0 0 2.4rem;
+  text-align: center;
+}
+.ualib-stat {
+  padding: 0.8rem 0.4rem;
+  border: 1px solid var(--ualib-rule);
+  border-radius: 0.4rem;
+  background: var(--md-default-bg-color--light);
+}
+.ualib-stat__num {
+  display: block;
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: var(--ualib-teal);
+  line-height: 1.1;
+}
+.ualib-stat__label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--md-default-fg-color--light);
+}
+@media (max-width: 44em) { .ualib-stats { grid-template-columns: repeat(2, 1fr); } }
+
+/* ---- 10. Featured-results gallery: ink-roundel "portraits" --------------
+   The roundels are placeholders (a commemorative-medallion monogram) until
+   the consistent ink/line caricatures are produced; the layout is final. */
+.ualib-figures {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 1rem;
+  margin: 0.6rem 0 2rem;
+}
+.ualib-figure {
+  display: flex;
+  gap: 0.9rem;
+  align-items: center;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--ualib-rule);
+  border-radius: 0.5rem;
+  background: var(--md-default-bg-color--light);
+  transition: border-color 120ms ease, transform 120ms ease, box-shadow 120ms ease;
+}
+.ualib-figure:hover {
+  border-color: var(--ualib-teal);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px -20px rgba(0,0,0,0.5);
+}
+.ualib-portrait {
+  flex: 0 0 auto;
+  width: 74px; height: 74px;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  font-family: var(--ualib-display), serif;
+  font-weight: 600; font-size: 1.5rem;
+  color: var(--md-primary-fg-color);
+  background: radial-gradient(circle at 50% 36%, #fff, var(--md-code-bg-color));
+  border: 2px solid var(--md-primary-fg-color);
+  position: relative;
+}
+[data-md-color-scheme="slate"] .ualib-portrait {
+  color: var(--ualib-ink);
+  background: radial-gradient(circle at 50% 36%, #2c3a34, #1c241e);
+  border-color: var(--ualib-ink-dim);
+}
+/* Drop a real portrait in: replace the monogram text with
+   <img src="/assets/portraits/<name>.jpg" alt="…">.  The photo fills the
+   medallion (the engraving ring via ::after still frames it), the grayscale
+   easing to full colour on hover keeps the gallery cohesive. */
+.ualib-portrait:has(img) { background: none; overflow: hidden; }
+.ualib-portrait img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+  filter: grayscale(0.35) contrast(1.02);
+  transition: filter 160ms ease;
+}
+.ualib-figure:hover .ualib-portrait img { filter: grayscale(0); }
+.ualib-portrait::after { /* engraving-style inner ring */
+  content: ""; position: absolute; inset: 5px; border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--md-primary-fg-color) 35%, transparent);
+}
+[data-md-color-scheme="slate"] .ualib-portrait::after {
+  border-color: color-mix(in srgb, var(--ualib-ink) 30%, transparent);
+}
+.ualib-figure__body { min-width: 0; }
+.ualib-figure__result {
+  display: block;                /* keep the result and the name on separate lines */
+  font-family: var(--ualib-display), serif; font-weight: 600;
+  font-size: 0.95rem; line-height: 1.15;
+  color: var(--md-default-fg-color);
+  transition: color 120ms ease;
+}
+.md-typeset a.ualib-figure { color: inherit; }
+.md-typeset a.ualib-figure:hover { text-decoration: none; }
+.md-typeset a.ualib-figure:hover .ualib-figure__result { color: var(--md-accent-fg-color); }
+.ualib-figure__who {
+  display: block;
+  font-size: 0.74rem; color: var(--md-default-fg-color--light); margin-top: 0.15rem;
+}
+
+/* ---- 11. Structures × properties coverage matrix ------------------------ */
+.ualib-matrix-wrap { overflow-x: auto; margin: 0.6rem 0 1.4rem; }
+.md-typeset table.ualib-matrix {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.74rem;
+}
+.md-typeset .ualib-matrix th,
+.md-typeset .ualib-matrix td {
+  border: 1px solid var(--ualib-rule);
+  padding: 0.34rem 0.5rem;
+  text-align: center;
+  white-space: nowrap;
+}
+.md-typeset .ualib-matrix thead th {
+  background: var(--ualib-board);
+  color: var(--ualib-ink);
+  font-family: var(--ualib-display), serif; font-weight: 500;
+  position: sticky; top: 0;
+}
+.md-typeset .ualib-matrix tbody th {
+  text-align: left;
+  font-weight: 600;
+  background: var(--md-default-bg-color--light);
+}
+.md-typeset .ualib-matrix tbody th a { color: var(--md-default-fg-color); }
+.md-typeset .ualib-matrix tbody th a:hover { color: var(--md-accent-fg-color); }
+.md-typeset .ualib-matrix .yes { color: var(--ualib-teal); font-weight: 700; }
+.md-typeset .ualib-matrix .yes-2 { color: var(--ualib-coral); font-weight: 700; }
+.md-typeset .ualib-matrix tbody tr:hover td,
+.md-typeset .ualib-matrix tbody tr:hover th { background: color-mix(in srgb, var(--ualib-teal) 8%, transparent); }
+
+/* ---- 12. Module-dependency constellation -------------------------------- */
+#constellation {
+  position: relative;
+  height: 640px;
+  border-radius: 0.5rem;
+  background: radial-gradient(1100px 520px at 50% -10%, #1d2c25, #10150e 75%);
+  border: 1px solid #2a352e;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  margin: 0.6rem 0 0.8rem;
+  overflow: hidden;
+  touch-action: none;
+}
+.constellation-readout {
+  position: absolute; left: 14px; bottom: 14px;
+  pointer-events: none; opacity: 0; transition: opacity 120ms ease;
+  background: rgba(8, 12, 9, 0.74);
+  border: 1px solid #34423a; border-radius: 0.35rem;
+  padding: 0.45rem 0.7rem; max-width: 72%;
+}
+.constellation-readout b {
+  display: block; color: #eef2ee; font-size: 0.92rem; font-weight: 600;
+  font-family: var(--md-code-font);
+}
+.constellation-readout span { color: #9fb3a8; font-size: 0.72rem; }
+.constellation-legend {
+  display: flex; flex-wrap: wrap; gap: 0.4rem 1rem;
+  font-size: 0.74rem; margin: 0.5rem 0 0.3rem;
+  color: var(--md-default-fg-color--light);
+}
+.constellation-legend span { display: inline-flex; align-items: center; gap: 0.35rem; }
+.constellation-legend i { width: 0.7rem; height: 0.7rem; border-radius: 50%; display: inline-block; }
+.constellation-note { font-size: 0.78rem; color: var(--md-default-fg-color--light); margin-top: 0.4rem; }
+
+/* ==========================================================================
+   13. Modern overrides — retire the chalkboard skeuomorphism (wooden tray,
+       chalk dust, serif glow) for a sleek, "from the future" surface; blend
+       the admonition blocks into the card system; and style the copy button
+       that agda-copy.js adds to highlighted `<pre class="Agda">` blocks.
+       Appended last so these win over §§8–11 without rewriting them.
+   ========================================================================== */
+
+/* -- Hero: a deep-indigo glass panel, lit from above ---------------------- */
+.ualib-hero {
+  border-radius: 0.9rem;
+  background:
+    radial-gradient(820px 280px at 50% -25%,
+      color-mix(in srgb, var(--ualib-coral) 22%, transparent), transparent 70%),
+    radial-gradient(900px 360px at 50% 120%,
+      color-mix(in srgb, var(--md-primary-fg-color--light) 35%, transparent), transparent 72%),
+    linear-gradient(135deg, var(--ualib-board-2), var(--ualib-board));
+  border: 1px solid color-mix(in srgb, var(--ualib-ink) 12%, transparent);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06) inset,
+              0 30px 60px -34px rgba(8, 12, 36, 0.7);
+}
+.ualib-hero::before {            /* a single soft top sheen, not chalk dust  */
+  background: radial-gradient(60% 40% at 50% 0%,
+    rgba(255, 255, 255, 0.08), transparent 70%);
+  background-size: auto;
+}
+.ualib-hero::after {             /* an accent hairline, not a wooden tray    */
+  height: 2px;
+  background: linear-gradient(90deg, transparent,
+    var(--ualib-coral) 25%, var(--md-primary-fg-color--light) 75%, transparent);
+  box-shadow: none;
+}
+.ualib-hero h1 {
+  letter-spacing: -0.022em;
+  font-weight: 600;
+}
+.ualib-hero .ualib-formula {     /* the theorem, glowing in the accent       */
+  font-family: var(--md-code-font);
+  color: #fff;
+  text-shadow: 0 0 26px color-mix(in srgb, var(--ualib-coral) 55%, transparent);
+}
+
+/* -- Cards: one rounded radius across stats, figures, admonitions ---------- */
+.ualib-stat,
+.ualib-figure { border-radius: 0.7rem; }
+
+/* -- Admonitions: make a `!!! note` read as one of the site's cards, not a
+      boxy callout.  The `!important`s override Material's per-type rules (which
+      out-specify a plain `.admonition` selector); the accent is the signature
+      indigo (`--ualib-teal`), vivid in both light and dark. ----------------- */
+.md-typeset .admonition,
+.md-typeset details {
+  border: 1px solid var(--ualib-rule) !important;
+  border-left: 0.2rem solid var(--ualib-teal) !important;
+  border-radius: 0.7rem;
+  background: var(--md-default-bg-color--light) !important;
+  box-shadow: 0 10px 28px -22px rgba(8, 12, 36, 0.55);
+  font-size: 0.78rem;
+}
+.md-typeset .admonition-title,
+.md-typeset summary {
+  background: color-mix(in srgb, var(--ualib-teal) 10%, transparent) !important;
+  font-family: var(--ualib-display);
+  font-weight: 600;
+  letter-spacing: -0.004em;
+}
+.md-typeset .admonition-title::before,
+.md-typeset summary::before {
+  background-color: var(--ualib-teal) !important;
+}
+
+/* -- Copy button on highlighted Agda blocks (added by agda-copy.js) -------
+   Material's content.code.copy only reaches its own `.highlight` blocks; the
+   agda --html output is a bare `<pre class="Agda">`, so we add our own.  The
+   button is quiet until the block is hovered or keyboard-focused. */
+.ualib-agda-copy {
+  position: absolute; top: 0.4rem; right: 0.4rem;
+  width: 1.6em; height: 1.6em; padding: 0;
+  display: grid; place-items: center;
+  border: 1px solid var(--ualib-rule); border-radius: 0.35rem;
+  background: color-mix(in srgb, var(--md-code-bg-color) 78%, transparent);
+  color: var(--md-default-fg-color--light);
+  cursor: pointer; opacity: 0;
+  transition: opacity 140ms ease, color 140ms ease, border-color 140ms ease;
+}
+.md-typeset pre.Agda:hover .ualib-agda-copy,
+.ualib-agda-copy:focus-visible { opacity: 1; }
+.ualib-agda-copy:hover { color: var(--md-accent-fg-color); border-color: var(--md-accent-fg-color); }
+.ualib-agda-copy svg { width: 0.95em; height: 0.95em; }
+.ualib-agda-copy.ualib-copied { color: var(--ualib-teal); border-color: var(--ualib-teal); }
+
+/* ==========================================================================
+   14. Featured-results carousel — one card in focus, auto-advancing every few
+       seconds, with clickable dots (docs/assets/js/carousel.js).  With JS off
+       it degrades to a horizontal row of cards; autoplay yields to
+       prefers-reduced-motion.
+   ========================================================================== */
+/* Cards-per-view scales with width: 1 on a phone, 2 on a tablet, 3 on a wide
+   monitor.  carousel.js reads `--per`, sizes the slide step from the measured
+   card width + gap, and clones the leading cards for a seamless wrap. */
+.ualib-carousel {
+  --per: 1; --gap: 1rem;
+  position: relative; max-width: 1120px; margin: 0.5rem auto 0;
+}
+@media (min-width: 720px)  { .ualib-carousel { --per: 2; } }
+@media (min-width: 1024px) { .ualib-carousel { --per: 3; } }
+.ualib-carousel__viewport { overflow: hidden; }
+.ualib-carousel__track {
+  display: flex; gap: var(--gap);
+  will-change: transform;       /* the transform + its transition are set by JS */
+}
+.md-typeset .ualib-carousel .ualib-figure {
+  flex: 0 0 calc((100% - (var(--per) - 1) * var(--gap)) / var(--per));
+  box-sizing: border-box;
+  margin: 0; min-height: 7.4rem; padding: 1.1rem 1.3rem;
+}
+.ualib-carousel .ualib-portrait { width: 76px; height: 76px; }
+.ualib-carousel .ualib-figure__result { font-size: 1.05rem; }
+.ualib-carousel .ualib-figure.is-clone { pointer-events: none; }
+
+/* Deliberately understated: tiny dots, a muted resting colour, and a small
+   accent mark for the current card (no scale jump, no large bright dot). */
+.ualib-carousel__dots {
+  display: flex; justify-content: center; gap: 0.42rem; margin-top: 0.9rem;
+}
+.ualib-carousel__dot {
+  width: 0.36rem; height: 0.36rem; padding: 0;
+  border: 0; border-radius: 50%;
+  background: color-mix(in srgb, var(--md-default-fg-color--light) 38%, transparent);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.ualib-carousel__dot:hover { background: var(--md-default-fg-color--light); }
+.ualib-carousel__dot.is-active { background: var(--ualib-coral); }
+.ualib-carousel__dot:focus-visible {
+  outline: 1px solid var(--ualib-teal); outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ualib-carousel__track { transition: none; }
+}

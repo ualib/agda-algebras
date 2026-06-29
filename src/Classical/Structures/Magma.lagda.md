@@ -172,10 +172,3 @@ module _ {α β ρᵃ ρᵇ : Level} {𝑨 : Magma α ρᵃ} {𝑩 : Magma β ρ
     ≈ᵇ-trans  (IsHom.compatible (proj₂ h) {∙-Op} {pair x y})
               (interp-cong 𝑩 ∙-Op (λ { 0F → ≈ᵇ-refl ; 1F → ≈ᵇ-refl }))
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Classical.Structures](Classical.Structures.html)</span>
-<span style="float:right;">[Classical.Bundles.Magma →](Classical.Bundles.Magma.html)</span>
-
-{% include UALib.Links.md %}

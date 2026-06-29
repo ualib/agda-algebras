@@ -228,10 +228,3 @@ In the induction step, the following typing judgments are assumed:
     gh   : hom 𝑨 𝑩
 
 and, under these assumptions, we proved `g ((f ^ 𝑨) a) ≈ h ((f ^ 𝑨) a)`.
-
----------------------------------
-
-<span style="float:left;">[↑ Setoid.Subalgebras](Setoid.Subalgebras.html)</span>
-<span style="float:right;">[Setoid.Subalgebras.Basic →](Setoid.Subalgebras.Basic.html)</span>
-
-{% include UALib.Links.md %}

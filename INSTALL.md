@@ -39,7 +39,8 @@ Inside the shell:
 
 ```bash
 make check   # type-check the entire library
-make html    # generate clickable HTML to ./html/
+make site    # build the documentation site to ./site
+make serve   # preview the documentation site at http://127.0.0.1:8000
 make clean   # remove build artifacts
 ```
 

@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Varieties.EquationalLogic module (The Agda Universal Algebra Library)"
+title : "Legacy.Base.Varieties.EquationalLogic module (The Agda Universal Algebra Library)"
 date : "2021-01-14"
 author: "agda-algebras development team"
 ---
 
 ### <a id="equational-logic">Equational Logic</a>
 
-This is the [Base.Varieties.EquationalLogic][] module of the [Agda Universal Algebra Library][] where the binary "models" relation `⊧`, relating algebras (or classes of algebras) to the identities that they satisfy, is defined.
+This is the [Legacy.Base.Varieties.EquationalLogic][] module of the [Agda Universal Algebra Library][] where the binary "models" relation `⊧`, relating algebras (or classes of algebras) to the identities that they satisfy, is defined.
 
 Let `𝑆` be a signature. By an *identity* or *equation* in `𝑆` we mean an ordered pair of terms, written `p ≈ q`, from the term algebra `𝑻 X`. If `𝑨` is an `𝑆`-algebra we say that `𝑨` *satisfies* `p ≈ q` provided `p ̇ 𝑨 ≡ q ̇ 𝑨` holds. In this situation, we write `𝑨 ⊧ p ≈ q` and say that `𝑨` *models* the identity `p ≈ q`. If `𝒦` is a class of `𝑆`-algebras, then we write `𝒦 ⊧ p ≈ q` iff, for every `𝑨 ∈ 𝒦`, `𝑨 ⊧ p ≈ q`.
 
@@ -115,12 +115,3 @@ Mod ℰ = λ 𝑨 → ∀ p q → (p , q) ∈ ℰ → 𝑨 ⊧ p ≈ q
 Modᵗ : {I : Type ι} → (I → Term X × Term X) → {α : Level} → Pred(Algebra α) _
 Modᵗ ℰ = λ 𝑨 → ∀ i → 𝑨 ⊧ (fst (ℰ i)) ≈ (snd (ℰ i))
 ```
-
-
--------------------------------------
-
-<span style="float:left;">[↑ Base.Varieties](Base.Varieties.html)</span>
-<span style="float:right;">[Base.Varieties.Closure →](Base.Varieties.Closure.html)</span>
-
-{% include UALib.Links.md %}
-

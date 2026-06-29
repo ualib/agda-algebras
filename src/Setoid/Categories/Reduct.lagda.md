@@ -70,7 +70,3 @@ module _ {α ρ : Level} {𝑆₁ 𝑆₂ : Signature 𝓞 𝓥} (φ : SigMorphi
       ; homomorphism  = λ {_} {_} {E} _ → Setoid.refl 𝔻[ reduct φ E ]
       }
 ```
-
---------------------------------------
-
-{% include UALib.Links.md %}

@@ -85,7 +85,3 @@ module _ {S : stdlib-CommutativeSemigroup α ρ} where
   roundtrip-bcb-cs : (a b : A) → (a ∙ b) ≈ (a ∙' b)
   roundtrip-bcb-cs a b = refl
 ```
-
---------------------------------------
-
-{% include UALib.Links.md %}

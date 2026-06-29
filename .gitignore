@@ -69,7 +69,13 @@ auto/
 source.zip
 
 # -- Generated documentation outputs -----------------------------------------------
-# Outputs of `agda --html` / `agda --latex` / LaTeX doc builds.
+# MkDocs site build (ADR-007) and its caches.
+site/
+.cache/
+# agda --html artifacts: highlighted Markdown embedded into the MkDocs site
+# (#3a) and the classic clickable-HTML site published at /classic/ (#1).
+.agda-html/
+# Outputs of the retired `agda --html` / `agda --latex` / LaTeX doc builds.
 html/
 html-old/
 latex/

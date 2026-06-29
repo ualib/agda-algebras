@@ -17,6 +17,3 @@ module Exercises where
 
 open import Exercises.Complexity
 ```
-
-
-{% include UALib.Links.md %}

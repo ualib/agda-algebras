@@ -161,13 +161,3 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ}{𝑪 : Setoid γ ρᶜ
    Goal : Image h ∋ y
    Goal = eq (g ⟨$⟩ (finv y)) η
 ```
-
-
-
---------------------------------------
-
-<span style="float:left;">[← Setoid.Functions.Injective](Setoid.Functions.Injective.html)</span>
-<span style="float:right;">[Setoid.Functions.Bijective →](Setoid.Functions.Bijective.html)</span>
-
-{% include UALib.Links.md %}
-

@@ -175,10 +175,3 @@ module _  {I : Type ι}(_≟_ : Decidable {A = I} _≡_)
  projIsOnto : ∀{j} → IsSurjective (proj j)
  projIsOnto {j} = Surjective→IsSurjective (proj j) proj-is-onto
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Overture.Relations](Overture.Relations.html)</span>
-<span style="float:right;">[Overture.Terms →](Overture.Terms.html)</span>
-
-{% include UALib.Links.md %}

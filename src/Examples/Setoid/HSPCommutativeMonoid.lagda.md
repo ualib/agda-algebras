@@ -144,7 +144,3 @@ Birkhoff-converse-ℕ' : {𝑨 : Algebra 0ℓ 0ℓ}
   → 𝑨 ∈ 𝕍 → 𝑨 ∈ Mod (Th 𝕍)
 Birkhoff-converse-ℕ' = Birkhoff-converse {𝒦 = 𝒦₀}
 ```
-
---------------------------------------
-
-{% include UALib.Links.md %}

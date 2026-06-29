@@ -17,8 +17,3 @@ open import Demos.GeneralOperationsAndRelations
 open import Demos.HSP
 open import Demos.ContraX
 ```
-
-
---------------------------------------
-
-{% include UALib.Links.md %}

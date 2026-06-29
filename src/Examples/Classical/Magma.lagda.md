@@ -65,10 +65,3 @@ open Polymorphic.Magma-Op ⟪ ⟨ ℕ-magma ⟩ᵐᵃ ⟫ᵐᵃ using () renamin
 roundtrip-ℕ-ma : ∀ (a b : ℕ) → a · b ≡ a + b
 roundtrip-ℕ-ma a b = refl
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Examples.Classical](Examples.Classical.html)</span>
-<span style="float:right;">[Demos →](Demos.html)</span>
-
-{% include UALib.Links.md %}

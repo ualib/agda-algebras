@@ -9,7 +9,7 @@ author: "agda-algebras development team"
 
 This is the [Setoid.Complexity.Basic][] module of the [Agda Universal Algebra Library][].
 
-This module is the canonical home for the content previously developed in `Legacy.Base.Complexity.Basic`, ported under #307 (M2-7c).  Its present scope is the prose definitions of words, algorithms, and polynomial-time computability that frame the CSP development in [`Setoid.Complexity.CSP`](Setoid.Complexity.CSP.html); concrete Agda content is intentionally deferred to #274 (M7-1, "Extend Complexity module beyond Basic and CSP"), which is the substantive sequel to this canonical-path migration.
+This module is the canonical home for the content previously developed in `Legacy.Base.Complexity.Basic`, ported under #307 (M2-7c).  Its present scope is the prose definitions of words, algorithms, and polynomial-time computability that frame the CSP development in [`Setoid.Complexity.CSP`](/Setoid/Complexity/CSP/); concrete Agda content is intentionally deferred to #274 (M7-1, "Extend Complexity module beyond Basic and CSP"), which is the substantive sequel to this canonical-path migration.
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -36,10 +36,3 @@ algorithm and numbers 𝑐, 𝑑 ∈ ℕ such that for each word 𝑥 ∈ 𝑊 t
 stops in at most (size 𝑥) 𝑐 + 𝑑 steps and computes 𝑓 𝑥.
 
 At first we will simplify by assuming 𝑇ₙ is `Fin n`.
-
---------------------------------
-
-<span style="float:left;">[↑ Setoid.Complexity](Setoid.Complexity.html)</span>
-<span style="float:right;">[Setoid.Complexity.CSP →](Setoid.Complexity.CSP.html)</span>
-
-{% include UALib.Links.md %}

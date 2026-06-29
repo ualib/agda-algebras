@@ -82,7 +82,3 @@ module _
             ; homomorphism  = homomorphism
             }
 ```
-
---------------------------------------
-
-{% include UALib.Links.md %}

@@ -1,15 +1,15 @@
 ---
 layout: default
-title : "Base.Structures.Graphs module"
+title : "Legacy.Base.Structures.Graphs module"
 date : "2021-06-22"
 author: "agda-algebras development team"
 ---
 
 ### <a id="graph-structures">Graph Structures</a>
 
-This is the [Base.Structures.Graphs][] module of the [Agda Universal Algebra Library][].
+This is the [Legacy.Base.Structures.Graphs][] module of the [Agda Universal Algebra Library][].
 
-N.B. This module differs from 0Graphs.lagda in that this module is universe polymorphic; i.e., we do not restrict universe levels (to, e.g., `ℓ₀`). This complicates some things; e.g., we must use lift and lower in some places (cf. [Base/Structures/Graphs0.lagda][]).
+N.B. This module differs from 0Graphs.lagda in that this module is universe polymorphic; i.e., we do not restrict universe levels (to, e.g., `ℓ₀`). This complicates some things; e.g., we must use lift and lower in some places (cf. [Legacy/Base/Structures/Graphs0.lagda][]).
 
 **Definition** (Graph of a structure). Let `𝑨` be an `(𝑅, 𝐹)`-structure (relations from `𝑅` and operations from `𝐹`). The *graph* of `𝑨` is the structure `Gr 𝑨` with the same domain as `𝑨` with relations from `𝑅` together with a (`k+1`)-ary relation symbol `G 𝑓` for each `𝑓 ∈ 𝐹` of arity `k`, which is interpreted in `Gr 𝑨` as all tuples `(t , y) ∈ Aᵏ⁺¹` such that `𝑓 t ≡ y`. (See also Definition 2 of https://arxiv.org/pdf/2010.04958v2.pdf)
 
@@ -138,10 +138,3 @@ record _⇛_⇚_ (𝑩 𝑨 𝑪 : structure 𝐹 𝑅) : Type ℓ₀ where
  --  →          ∀(𝑩 : structure 𝐹 𝑅) → Σ[ 𝑪 ∈ structure 𝐹 𝑅 ] (𝑪 ∈ fMod ℰ × (𝑩 ⇛ 𝑨 ⇚ 𝑪))
  -- LEMMAIII1 ℰ 𝑨⊧ℰ 𝑩 = {!!} , {!!}
 ```
-
---------------------------------
-
-<span style="float:left;">[← Base.Structures.Basic](Base.Structures.Basic.html)</span>
-<span style="float:right;">[Base.Structures.Graphs0 →](Base.Structures.Graphs0.html)</span>
-
-{% include UALib.Links.md %}

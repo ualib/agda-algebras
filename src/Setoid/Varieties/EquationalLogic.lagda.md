@@ -112,11 +112,3 @@ It is sometimes more convenient to have a "tupled" version of the previous defin
  Modᵗ : {I : Type ι} → (I → Term X × Term X) → {α : Level} → Pred(Algebra α ρᵃ) (χ ⊔ ρᵃ ⊔ ι ⊔ α)
  Modᵗ ℰ = λ 𝑨 → ∀ i → 𝑨 ⊧ proj₁ (ℰ i) ≈ proj₂ (ℰ i)
 ```
-
-
--------------------------------------
-
-<span style="float:left;">[↑ Setoid.Varieties](Setoid.Varieties.html)</span>
-<span style="float:right;">[Setoid.Varieties.SoundAndComplete →](Setoid.Varieties.SoundAndComplete.html)</span>
-
-{% include UALib.Links.md %}

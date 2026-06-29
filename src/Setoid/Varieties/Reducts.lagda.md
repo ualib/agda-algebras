@@ -347,5 +347,3 @@ variety by `reduct-⊧`, but is not a prevariety.
 [^1]: The closure operators `H`, `S`, and `P` are defined in the [Setoid.Varieties.Closure][] module.
 
 [^2]: This was indeed what GitHub Issue [#345](https://github.com/ualib/agda-algebras/issues/345) proposed, prompting this exploration of the reduct functor in a submodule of the `Varieties`{.AgdaModule} module.
-
-{% include UALib.Links.md %}

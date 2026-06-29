@@ -23,10 +23,3 @@ open import Setoid.Congruences.Monolith {𝑆 = 𝑆} public
 open import Setoid.Congruences.Properties {𝑆 = 𝑆} public
 open import Setoid.Congruences.Permutability {𝑆 = 𝑆} public
 ```
-
---------------------------------
-
-<span style="float:left;">[← Setoid.Relations.Quotients](Setoid.Relations.Quotients.html)</span>
-<span style="float:right;">[Setoid.Algebras.Basic →](Setoid.Algebras.Basic.html)</span>
-
-{% include UALib.Links.md %}

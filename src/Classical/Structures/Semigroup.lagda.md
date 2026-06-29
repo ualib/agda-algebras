@@ -237,10 +237,3 @@ eqsToSemigroup _·_ ·-assoc = opsToMagma _·_ , proof
   proof : opsToMagma _·_ ⊨ Th-Semigroup
   proof assoc ρ = ·-assoc (ρ 0F) (ρ 1F) (ρ 2F)
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Classical.Structures.Magma](Classical.Structures.Magma.html)</span>
-<span style="float:right;">[Classical.Structures.Monoid →](Classical.Structures.Monoid.html)</span>
-
-{% include UALib.Links.md %}

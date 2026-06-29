@@ -138,10 +138,3 @@ module _ {ℓ : Level}{𝒜 : Type ℓ} {ℬ : Type ℓ} where
                       ; GF≥id = λ _ → ←→≥id
                       ; FG≥id = λ _ → →←≥id }
 ```
-
---------------------
-
-<span style="float:left;">[← Overture.Adjunction.Closure](Overture.Adjunction.Closure.html)</span>
-<span style="float:right;">[Overture.Adjunction.Residuation →](Overture.Adjunction.Residuation.html)</span>
-
-{% include UALib.Links.md %}

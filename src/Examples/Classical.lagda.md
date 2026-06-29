@@ -33,9 +33,3 @@ open import Examples.Classical.Monoid public
 open import Examples.Classical.Semigroup public
 open import Examples.Classical.Semilattice public
 ```
-
---------------------------------------
-
-<span style="float:left;">[↑ Examples](Examples.html)</span>
-
-{% include UALib.Links.md %}

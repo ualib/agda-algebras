@@ -52,10 +52,3 @@ eqsToSemigroup  : (A : Type 0ℓ) (_·_ : A → A → A)
   → Semigroup
 eqsToSemigroup A = Polymorphic.eqsToSemigroup {A = A}
 ```
-
---------------------------------------
-
-<span style="float:left;">[← Classical.Small.Structures.Magma](Classical.Small.Structures.Magma.html)</span>
-<span style="float:right;">[Examples.Classical.Semigroup →](Examples.Classical.Semigroup.html)</span>
-
-{% include UALib.Links.md %}

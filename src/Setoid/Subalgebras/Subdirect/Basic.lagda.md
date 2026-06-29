@@ -135,11 +135,3 @@ Assembling injectivity and the surjective coordinate maps gives the subdirect em
   separating→SubdirectEmbedding : Separates → SubdirectEmbedding 𝑨╱
   separating→SubdirectEmbedding sep = natmap , separating→subdirect sep
 ```
-
-
---------------------------------------
-
-<span style="float:left;">[← Setoid.Subalgebras.Subdirect](Setoid.Subalgebras.Subdirect.html)</span>
-<span style="float:right;">[Setoid.Subalgebras.Subdirect.BirkhoffSI →](Setoid.Subalgebras.Subdirect.BirkhoffSI.html)</span>
-
-{% include UALib.Links.md %}

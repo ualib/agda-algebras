@@ -26,11 +26,3 @@ open import Setoid.Categories.Monad public
 open import Setoid.Categories.NaturalTransformation public
 open import Setoid.Categories.Reduct public
 ```
-
---------------------------------------
-
-<span style="float:left;">[↑ Top](index.html)</span>
-<span style="float:right;">[Setoid.Relations →](Setoid.Relations.html)</span>
-
-
-{% include UALib.Links.md %}

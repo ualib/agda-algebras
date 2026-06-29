@@ -1,13 +1,13 @@
 ---
 layout: default
-title : "Base.Relations.Discrete module (The Agda Universal Algebra Library)"
+title : "Legacy.Base.Relations.Discrete module (The Agda Universal Algebra Library)"
 date : "2021-02-28"
 author: "the agda-algebras development team"
 ---
 
 ### <a id="discrete-relations">Discrete Relations</a>
 
-This is the [Base.Relations.Discrete][] module of the [Agda Universal Algebra Library][].
+This is the [Legacy.Base.Relations.Discrete][] module of the [Agda Universal Algebra Library][].
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -32,7 +32,7 @@ private variable a b ρ 𝓥 : Level
 ```
 
 We begin with a definition that is useful for defining poitwise "equality" of functions
-with respect to a given "equality" relation (see also the definition of `_≈̇_` in the [Base.Adjunction.Residuation][] module).
+with respect to a given "equality" relation (see also the definition of `_≈̇_` in the [Legacy.Base.Adjunction.Residuation][] module).
 
 ```agda
 module _ {A : Type a} where
@@ -82,7 +82,7 @@ Sometimes it is useful to obtain the underlying type (`A`) over which the predic
 
 The binary relation types are called `Rel` and `REL` in the standard library, but we
 will call them `BinRel` and `BinREL` and reserve the names `Rel` and `REL` for the relation
-types we define below and in the [Base.Relations.Continuous][] module.
+types we define below and in the [Legacy.Base.Relations.Continuous][] module.
 
 We import the "heterogeneous" binary relation type from the standard library and renamed `BinREL`.
 
@@ -215,10 +215,3 @@ module _ {A : Type a}{I : Type 𝓥}{f : Op I A}{R : BinRel A ρ} where
 {-# WARNING_ON_USAGE _preserves_ "Use Overture.Relations._preserves_ instead. Deprecated under #303." #-}
 {-# WARNING_ON_USAGE _|:_ "Use Overture.Relations._|:_ instead. Deprecated under #303." #-}
 ```
-
---------------------------------------
-
-<span style="float:left;">[↑ Base.Relations](Base.Relations.html)</span>
-<span style="float:right;">[Base.Relations.Continuous →](Base.Relations.Continuous.html)</span>
-
-{% include UALib.Links.md %}

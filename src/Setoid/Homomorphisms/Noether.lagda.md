@@ -83,11 +83,3 @@ Now we prove that the homomorphism whose existence is guaranteed by `FirstHomThe
 
  FirstHomUnique fh gh hfk hgk a = trans (sym (hfk a)) (hgk a)
 ```
-
-
---------------------------------------
-
-<span style="float:left;">[← Setoid.Homomorphisms.Products](Setoid.Homomorphisms.Products.html)</span>
-<span style="float:right;">[Setoid.Homomorphisms.Factor →](Setoid.Homomorphisms.Factor.html)</span>
-
-{% include UALib.Links.md %}
