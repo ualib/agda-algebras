@@ -1,0 +1,104 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Overture.Terms.Basic</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Background">---
+layout: default
+title : &quot;Overture.Terms.Basic module (The Agda Universal Algebra Library)&quot;
+date : &quot;2026-06-18&quot;
+author: &quot;agda-algebras development team&quot;
+---
+
+## Terms over a signature {#terms}
+
+A `Term X` is a finite tree whose leaves are drawn from a type `X` of variable
+symbols and whose internal nodes are labelled by operation symbols of the signature
+`𝑆`.  Equivalently, `Term` is the W-type for the polynomial functor associated to
+`𝑆`, freely adjoined a copy of `X` at the leaves.
+
+This definition presupposes only the signature: no propositional equality on a
+carrier, no setoid equivalence, no path type.  It is therefore foundational rather
+than setoid-specific, which is why it lives in `Overture/` rather than under
+`Setoid/`, `Classical/`, or `Cubical/`.  The Setoid term algebra `𝑻 X` (which equips
+`Term X` with an inductive equivalence-of-terms relation `_≐_`) is built on top of
+this definition in `Setoid.Terms.Basic`; the planned Cubical analog will sit
+similarly.[^1]
+
+</a><a id="994" class="Markup">```agda
+</a><a id="1002" class="Symbol">{-#</a> <a id="1006" class="Keyword">OPTIONS</a> <a id="1014" class="Pragma">--cubical-compatible</a> <a id="1035" class="Pragma">--exact-split</a> <a id="1049" class="Pragma">--safe</a> <a id="1056" class="Symbol">#-}</a>
+
+<a id="1061" class="Keyword">open</a> <a id="1066" class="Keyword">import</a> <a id="1073" href="Overture.Signatures.html" class="Module">Overture.Signatures</a> <a id="1093" class="Keyword">using</a> <a id="1099" class="Symbol">(</a> <a id="1101" href="Overture.Signatures.html#643" class="Generalizable">𝓞</a> <a id="1103" class="Symbol">;</a> <a id="1105" href="Overture.Signatures.html#645" class="Generalizable">𝓥</a> <a id="1107" class="Symbol">;</a> <a id="1109" href="Overture.Signatures.html#3178" class="Function">Signature</a> <a id="1119" class="Symbol">;</a> <a id="1121" href="Overture.Signatures.html#4222" class="Function">OperationSymbolsOf</a> <a id="1140" class="Symbol">;</a> <a id="1142" href="Overture.Signatures.html#4298" class="Function">ArityOf</a> <a id="1150" class="Symbol">)</a>
+
+<a id="1153" class="Keyword">module</a> <a id="1160" href="Overture.Terms.Basic.html" class="Module">Overture.Terms.Basic</a> <a id="1181" class="Symbol">{</a><a id="1182" href="Overture.Terms.Basic.html#1182" class="Bound">𝑆</a> <a id="1184" class="Symbol">:</a> <a id="1186" href="Overture.Signatures.html#3178" class="Function">Signature</a> <a id="1196" href="Overture.Signatures.html#643" class="Generalizable">𝓞</a> <a id="1198" href="Overture.Signatures.html#645" class="Generalizable">𝓥</a><a id="1199" class="Symbol">}</a> <a id="1201" class="Keyword">where</a>
+<a id="1207" class="Comment">-- Imports from Agda primitives and the standard library.</a>
+<a id="1265" class="Keyword">open</a> <a id="1270" class="Keyword">import</a> <a id="1277" href="Agda.Primitive.html" class="Module">Agda.Primitive</a>  <a id="1293" class="Keyword">using</a> <a id="1299" class="Symbol">()</a> <a id="1302" class="Keyword">renaming</a> <a id="1311" class="Symbol">(</a> <a id="1313" href="Agda.Primitive.html#388" class="Primitive">Set</a> <a id="1317" class="Symbol">to</a> <a id="1320" class="Primitive">Type</a> <a id="1325" class="Symbol">)</a>
+<a id="1327" class="Keyword">open</a> <a id="1332" class="Keyword">import</a> <a id="1339" href="Level.html" class="Module">Level</a>           <a id="1355" class="Keyword">using</a> <a id="1361" class="Symbol">(</a> <a id="1363" href="Agda.Primitive.html#742" class="Postulate">Level</a> <a id="1369" class="Symbol">;</a> <a id="1371" href="Agda.Primitive.html#931" class="Primitive">suc</a> <a id="1375" class="Symbol">;</a> <a id="1377" href="Agda.Primitive.html#961" class="Primitive Operator">_⊔_</a> <a id="1381" class="Symbol">)</a>
+
+<a id="1384" class="Keyword">private</a> <a id="1392" class="Keyword">variable</a> <a id="1401" href="Overture.Terms.Basic.html#1401" class="Generalizable">χ</a> <a id="1403" class="Symbol">:</a> <a id="1405" href="Agda.Primitive.html#742" class="Postulate">Level</a>
+<a id="1411" class="Markup">```
+</a><a id="1415" class="Background">
+### The level shorthand `ov`
+
+Throughout the library we package the universe levels of operation symbols (`𝓞`),
+arities (`𝓥`), and a separate &quot;carrier-or-variable&quot; level (`χ`) into a single
+shorthand `ov χ = 𝓞 ⊔ 𝓥 ⊔ suc χ`.  The `suc` is unavoidable because `Term X` mixes
+leaves of type `X : Type χ` with operation symbols of type `Type 𝓞`, so the resulting
+tree type sits one universe up.
+
+This shorthand currently appears with the same definition in
+`Legacy.Base.Algebras.Basic` and `Setoid.Algebras.Basic`; the three definitions are
+definitionally equal.[^2]
+
+</a><a id="1980" class="Markup">```agda
+</a><a id="ov"></a><a id="1988" href="Overture.Terms.Basic.html#1988" class="Function">ov</a> <a id="1991" class="Symbol">:</a> <a id="1993" href="Agda.Primitive.html#742" class="Postulate">Level</a> <a id="1999" class="Symbol">→</a> <a id="2001" href="Agda.Primitive.html#742" class="Postulate">Level</a>
+<a id="2007" href="Overture.Terms.Basic.html#1988" class="Function">ov</a> <a id="2010" href="Overture.Terms.Basic.html#2010" class="Bound">χ</a> <a id="2012" class="Symbol">=</a> <a id="2014" href="Overture.Terms.Basic.html#1196" class="Bound">𝓞</a> <a id="2016" href="Agda.Primitive.html#961" class="Primitive Operator">⊔</a> <a id="2018" href="Overture.Terms.Basic.html#1198" class="Bound">𝓥</a> <a id="2020" href="Agda.Primitive.html#961" class="Primitive Operator">⊔</a> <a id="2022" href="Agda.Primitive.html#931" class="Primitive">suc</a> <a id="2026" href="Overture.Terms.Basic.html#2010" class="Bound">χ</a>
+<a id="2028" class="Markup">```
+</a><a id="2032" class="Background">
+### The type of terms
+
+Fix a signature `𝑆` and let `X` denote an arbitrary collection of variable symbols,
+assumed disjoint from the operation symbols of `𝑆`
+(i.e. `X ∩ OperationSymbolsOf 𝑆 = ∅`).
+
+By a *word* in the language of `𝑆`, we mean a nonempty finite sequence of members of
+`X ∪ OperationSymbolsOf 𝑆`; we denote concatenation of such sequences by simple
+juxtaposition.
+
+Let `S₀` denote the set of nullary operation symbols of `𝑆`.  We define the sets `𝑇ₙ`
+of *words* over `X ∪ OperationSymbolsOf 𝑆` by induction on `n`
+(cf. [Bergman (2012)][] Def. 4.19):
+
+`𝑇₀ := X ∪ S₀`  and  `𝑇ₙ₊₁ := 𝑇ₙ ∪ 𝒯ₙ`
+
+where `𝒯ₙ` is the collection of all `f t` such that `f : OperationSymbolsOf 𝑆` and `t
+: ArityOf 𝑆 f → 𝑇ₙ` (recall `ArityOf 𝑆 f` is the arity of `f`).  The collection of
+*terms* in the signature `𝑆` over `X` is then `Term X := ⋃ₙ 𝑇ₙ`.  By an 𝑆-*term* we
+mean a term in the language of `𝑆`.
+
+The definition of `Term X` is recursive, indicating that an inductive type suffices
+to represent the notion in type theory.  Such a representation is given by the
+inductive type below, which encodes each term as a tree with an operation symbol at
+each `node` and a variable symbol (the `generator`) at each leaf.
+
+</a><a id="3242" class="Markup">```agda
+</a><a id="3250" class="Keyword">data</a> <a id="Term"></a><a id="3255" href="Overture.Terms.Basic.html#3255" class="Datatype">Term</a> <a id="3260" class="Symbol">(</a><a id="3261" href="Overture.Terms.Basic.html#3261" class="Bound">X</a> <a id="3263" class="Symbol">:</a> <a id="3265" href="Overture.Terms.Basic.html#1320" class="Primitive">Type</a> <a id="3270" href="Overture.Terms.Basic.html#1401" class="Generalizable">χ</a><a id="3271" class="Symbol">)</a> <a id="3273" class="Symbol">:</a> <a id="3275" href="Overture.Terms.Basic.html#1320" class="Primitive">Type</a> <a id="3280" class="Symbol">(</a><a id="3281" href="Overture.Terms.Basic.html#1988" class="Function">ov</a> <a id="3284" href="Overture.Terms.Basic.html#3270" class="Bound">χ</a><a id="3285" class="Symbol">)</a> <a id="3287" class="Keyword">where</a>
+  <a id="Term.ℊ"></a><a id="3295" href="Overture.Terms.Basic.html#3295" class="InductiveConstructor">ℊ</a>     <a id="3301" class="Symbol">:</a> <a id="3303" href="Overture.Terms.Basic.html#3261" class="Bound">X</a> <a id="3305" class="Symbol">→</a> <a id="3307" href="Overture.Terms.Basic.html#3255" class="Datatype">Term</a> <a id="3312" href="Overture.Terms.Basic.html#3261" class="Bound">X</a>                                       <a id="3352" class="Comment">-- (ℊ for &quot;generator&quot;)</a>
+  <a id="Term.node"></a><a id="3377" href="Overture.Terms.Basic.html#3377" class="InductiveConstructor">node</a>  <a id="3383" class="Symbol">:</a> <a id="3385" class="Symbol">(</a><a id="3386" href="Overture.Terms.Basic.html#3386" class="Bound">f</a> <a id="3388" class="Symbol">:</a> <a id="3390" href="Overture.Signatures.html#4222" class="Function">OperationSymbolsOf</a> <a id="3409" href="Overture.Terms.Basic.html#1182" class="Bound">𝑆</a><a id="3410" class="Symbol">)(</a><a id="3412" href="Overture.Terms.Basic.html#3412" class="Bound">t</a> <a id="3414" class="Symbol">:</a> <a id="3416" href="Overture.Signatures.html#4298" class="Function">ArityOf</a> <a id="3424" href="Overture.Terms.Basic.html#1182" class="Bound">𝑆</a> <a id="3426" href="Overture.Terms.Basic.html#3386" class="Bound">f</a> <a id="3428" class="Symbol">→</a> <a id="3430" href="Overture.Terms.Basic.html#3255" class="Datatype">Term</a> <a id="3435" href="Overture.Terms.Basic.html#3261" class="Bound">X</a><a id="3436" class="Symbol">)</a> <a id="3438" class="Symbol">→</a> <a id="3440" href="Overture.Terms.Basic.html#3255" class="Datatype">Term</a> <a id="3445" href="Overture.Terms.Basic.html#3261" class="Bound">X</a>
+
+<a id="3448" class="Keyword">open</a> <a id="3453" href="Overture.Terms.Basic.html#3255" class="Module">Term</a> <a id="3458" class="Keyword">public</a>
+<a id="3465" class="Markup">```
+</a><a id="3469" class="Background">
+**Notation**.  The type `X` represents an arbitrary collection of variable symbols;
+`ov χ` is the universe-level shorthand defined above.
+
+The bare-types term algebra `𝑻 : (X : Type χ) → Algebra (ov χ)`, which equips `Term
+X` with `node` as its interpretation, is *not* relocated here: it depends on the
+foundation-specific `Algebra` type, which differs between the bare-types tree
+(`Legacy.Base.Algebras.Algebra`) and the canonical Setoid tree
+(`Setoid.Algebras.Basic.Algebra`).  The legacy `𝑻` continues to live in
+`Legacy.Base.Terms.Basic`; the Setoid term algebra continues to live in
+`Setoid.Terms.Basic`.
+
+--------------------------------------
+
+[^1]: This module is a Category-A relocation under #303 (M2-6).  See [`src/Legacy/Base/DEPRECATED.md`](../Legacy/Base/DEPRECATED.md) for the full inventory.
+
+[^2]: Hoisting `ov` to `Overture.Signatures` and removing the duplicates is a small candidate cleanup tracked separately from #303.
+</a></pre></body></html>

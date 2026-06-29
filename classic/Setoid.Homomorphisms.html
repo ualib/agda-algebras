@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Setoid.Homomorphisms</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Background">---
+layout: default
+title : &quot;Setoid.Homomorphisms module (The Agda Universal Algebra Library)&quot;
+date : &quot;2021-09-17&quot;
+author: &quot;agda-algebras development team&quot;
+---
+
+### Types for Homomorphism of Setoid Algebras
+
+This is the [Setoid.Homomorphisms][] module of the [Agda Universal Algebra Library][].
+
+
+</a><a id="298" class="Markup">```agda
+</a><a id="306" class="Symbol">{-#</a> <a id="310" class="Keyword">OPTIONS</a> <a id="318" class="Pragma">--cubical-compatible</a> <a id="339" class="Pragma">--exact-split</a> <a id="353" class="Pragma">--safe</a> <a id="360" class="Symbol">#-}</a>
+
+<a id="365" class="Keyword">open</a> <a id="370" class="Keyword">import</a> <a id="377" href="Overture.html" class="Module">Overture</a> <a id="386" class="Keyword">using</a> <a id="392" class="Symbol">(</a><a id="393" href="Overture.Signatures.html#643" class="Generalizable">𝓞</a> <a id="395" class="Symbol">;</a> <a id="397" href="Overture.Signatures.html#645" class="Generalizable">𝓥</a> <a id="399" class="Symbol">;</a> <a id="401" href="Overture.Signatures.html#3178" class="Function">Signature</a><a id="410" class="Symbol">)</a>
+
+<a id="413" class="Keyword">module</a> <a id="420" href="Setoid.Homomorphisms.html" class="Module">Setoid.Homomorphisms</a> <a id="441" class="Symbol">{</a><a id="442" href="Setoid.Homomorphisms.html#442" class="Bound">𝑆</a> <a id="444" class="Symbol">:</a> <a id="446" href="Overture.Signatures.html#3178" class="Function">Signature</a> <a id="456" href="Overture.Signatures.html#643" class="Generalizable">𝓞</a> <a id="458" href="Overture.Signatures.html#645" class="Generalizable">𝓥</a><a id="459" class="Symbol">}</a> <a id="461" class="Keyword">where</a>
+
+<a id="468" class="Keyword">open</a> <a id="473" class="Keyword">import</a> <a id="480" href="Setoid.Homomorphisms.Basic.html" class="Module">Setoid.Homomorphisms.Basic</a>              <a id="520" class="Symbol">{</a><a id="521" class="Argument">𝑆</a> <a id="523" class="Symbol">=</a> <a id="525" href="Setoid.Homomorphisms.html#442" class="Bound">𝑆</a><a id="526" class="Symbol">}</a> <a id="528" class="Keyword">public</a>
+<a id="535" class="Keyword">open</a> <a id="540" class="Keyword">import</a> <a id="547" href="Setoid.Homomorphisms.Properties.html" class="Module">Setoid.Homomorphisms.Properties</a>         <a id="587" class="Symbol">{</a><a id="588" class="Argument">𝑆</a> <a id="590" class="Symbol">=</a> <a id="592" href="Setoid.Homomorphisms.html#442" class="Bound">𝑆</a><a id="593" class="Symbol">}</a> <a id="595" class="Keyword">public</a>
+<a id="602" class="Keyword">open</a> <a id="607" class="Keyword">import</a> <a id="614" href="Setoid.Homomorphisms.Kernels.html" class="Module">Setoid.Homomorphisms.Kernels</a>            <a id="654" class="Symbol">{</a><a id="655" class="Argument">𝑆</a> <a id="657" class="Symbol">=</a> <a id="659" href="Setoid.Homomorphisms.html#442" class="Bound">𝑆</a><a id="660" class="Symbol">}</a> <a id="662" class="Keyword">public</a>
+<a id="669" class="Keyword">open</a> <a id="674" class="Keyword">import</a> <a id="681" href="Setoid.Homomorphisms.Products.html" class="Module">Setoid.Homomorphisms.Products</a>           <a id="721" class="Symbol">{</a><a id="722" class="Argument">𝑆</a> <a id="724" class="Symbol">=</a> <a id="726" href="Setoid.Homomorphisms.html#442" class="Bound">𝑆</a><a id="727" class="Symbol">}</a> <a id="729" class="Keyword">public</a>
+<a id="736" class="Keyword">open</a> <a id="741" class="Keyword">import</a> <a id="748" href="Setoid.Homomorphisms.Noether.html" class="Module">Setoid.Homomorphisms.Noether</a>            <a id="788" class="Symbol">{</a><a id="789" class="Argument">𝑆</a> <a id="791" class="Symbol">=</a> <a id="793" href="Setoid.Homomorphisms.html#442" class="Bound">𝑆</a><a id="794" class="Symbol">}</a> <a id="796" class="Keyword">public</a>
+<a id="803" class="Keyword">open</a> <a id="808" class="Keyword">import</a> <a id="815" href="Setoid.Homomorphisms.Factor.html" class="Module">Setoid.Homomorphisms.Factor</a>             <a id="855" class="Symbol">{</a><a id="856" class="Argument">𝑆</a> <a id="858" class="Symbol">=</a> <a id="860" href="Setoid.Homomorphisms.html#442" class="Bound">𝑆</a><a id="861" class="Symbol">}</a> <a id="863" class="Keyword">public</a>
+<a id="870" class="Keyword">open</a> <a id="875" class="Keyword">import</a> <a id="882" href="Setoid.Homomorphisms.Isomorphisms.html" class="Module">Setoid.Homomorphisms.Isomorphisms</a>       <a id="922" class="Symbol">{</a><a id="923" class="Argument">𝑆</a> <a id="925" class="Symbol">=</a> <a id="927" href="Setoid.Homomorphisms.html#442" class="Bound">𝑆</a><a id="928" class="Symbol">}</a> <a id="930" class="Keyword">public</a>
+<a id="937" class="Keyword">open</a> <a id="942" class="Keyword">import</a> <a id="949" href="Setoid.Homomorphisms.HomomorphicImages.html" class="Module">Setoid.Homomorphisms.HomomorphicImages</a>  <a id="989" class="Symbol">{</a><a id="990" class="Argument">𝑆</a> <a id="992" class="Symbol">=</a> <a id="994" href="Setoid.Homomorphisms.html#442" class="Bound">𝑆</a><a id="995" class="Symbol">}</a> <a id="997" class="Keyword">public</a>
+<a id="1004" class="Markup">```
+</a></pre></body></html>

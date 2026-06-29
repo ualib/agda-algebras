@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>EverythingLegacy</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--cubical-compatible</a> <a id="34" class="Pragma">--safe</a> <a id="41" class="Symbol">#-}</a>
+
+<a id="46" class="Comment">-- This file exists to gate CI on the Legacy/ tree.</a>
+<a id="98" class="Comment">-- It is NOT part of the canonical library and is NOT rendered to HTML.</a>
+<a id="170" class="Comment">-- See docs/adr/001-setoid-as-canonical.md and src/Legacy/Base/DEPRECATED.md.</a>
+
+<a id="249" class="Keyword">module</a> <a id="256" href="EverythingLegacy.html" class="Module">EverythingLegacy</a> <a id="273" class="Keyword">where</a>
+
+<a id="280" class="Keyword">import</a> <a id="287" href="Legacy.Base.html" class="Module">Legacy.Base</a>
+<a id="299" class="Keyword">import</a> <a id="306" href="Legacy.Base.Adjunction.html" class="Module">Legacy.Base.Adjunction</a>
+<a id="329" class="Keyword">import</a> <a id="336" href="Legacy.Base.Adjunction.Closure.html" class="Module">Legacy.Base.Adjunction.Closure</a>
+<a id="367" class="Keyword">import</a> <a id="374" href="Legacy.Base.Adjunction.Galois.html" class="Module">Legacy.Base.Adjunction.Galois</a>
+<a id="404" class="Keyword">import</a> <a id="411" href="Legacy.Base.Adjunction.Residuation.html" class="Module">Legacy.Base.Adjunction.Residuation</a>
+<a id="446" class="Keyword">import</a> <a id="453" href="Legacy.Base.Algebras.html" class="Module">Legacy.Base.Algebras</a>
+<a id="474" class="Keyword">import</a> <a id="481" href="Legacy.Base.Algebras.Basic.html" class="Module">Legacy.Base.Algebras.Basic</a>
+<a id="508" class="Keyword">import</a> <a id="515" href="Legacy.Base.Algebras.Congruences.html" class="Module">Legacy.Base.Algebras.Congruences</a>
+<a id="548" class="Keyword">import</a> <a id="555" href="Legacy.Base.Algebras.Products.html" class="Module">Legacy.Base.Algebras.Products</a>
+<a id="585" class="Keyword">import</a> <a id="592" href="Legacy.Base.Categories.html" class="Module">Legacy.Base.Categories</a>
+<a id="615" class="Keyword">import</a> <a id="622" href="Legacy.Base.Categories.Functors.html" class="Module">Legacy.Base.Categories.Functors</a>
+<a id="654" class="Keyword">import</a> <a id="661" href="Legacy.Base.Complexity.html" class="Module">Legacy.Base.Complexity</a>
+<a id="684" class="Keyword">import</a> <a id="691" href="Legacy.Base.Complexity.Basic.html" class="Module">Legacy.Base.Complexity.Basic</a>
+<a id="720" class="Keyword">import</a> <a id="727" href="Legacy.Base.Complexity.CSP.html" class="Module">Legacy.Base.Complexity.CSP</a>
+<a id="754" class="Keyword">import</a> <a id="761" href="Legacy.Base.Equality.html" class="Module">Legacy.Base.Equality</a>
+<a id="782" class="Keyword">import</a> <a id="789" href="Legacy.Base.Equality.Extensionality.html" class="Module">Legacy.Base.Equality.Extensionality</a>
+<a id="825" class="Keyword">import</a> <a id="832" href="Legacy.Base.Equality.Truncation.html" class="Module">Legacy.Base.Equality.Truncation</a>
+<a id="864" class="Keyword">import</a> <a id="871" href="Legacy.Base.Equality.Welldefined.html" class="Module">Legacy.Base.Equality.Welldefined</a>
+<a id="904" class="Keyword">import</a> <a id="911" href="Legacy.Base.Functions.html" class="Module">Legacy.Base.Functions</a>
+<a id="933" class="Keyword">import</a> <a id="940" href="Legacy.Base.Functions.Injective.html" class="Module">Legacy.Base.Functions.Injective</a>
+<a id="972" class="Keyword">import</a> <a id="979" href="Legacy.Base.Functions.Inverses.html" class="Module">Legacy.Base.Functions.Inverses</a>
+<a id="1010" class="Keyword">import</a> <a id="1017" href="Legacy.Base.Functions.Surjective.html" class="Module">Legacy.Base.Functions.Surjective</a>
+<a id="1050" class="Keyword">import</a> <a id="1057" href="Legacy.Base.Functions.Transformers.html" class="Module">Legacy.Base.Functions.Transformers</a>
+<a id="1092" class="Keyword">import</a> <a id="1099" href="Legacy.Base.Homomorphisms.html" class="Module">Legacy.Base.Homomorphisms</a>
+<a id="1125" class="Keyword">import</a> <a id="1132" href="Legacy.Base.Homomorphisms.Basic.html" class="Module">Legacy.Base.Homomorphisms.Basic</a>
+<a id="1164" class="Keyword">import</a> <a id="1171" href="Legacy.Base.Homomorphisms.Factor.html" class="Module">Legacy.Base.Homomorphisms.Factor</a>
+<a id="1204" class="Keyword">import</a> <a id="1211" href="Legacy.Base.Homomorphisms.HomomorphicImages.html" class="Module">Legacy.Base.Homomorphisms.HomomorphicImages</a>
+<a id="1255" class="Keyword">import</a> <a id="1262" href="Legacy.Base.Homomorphisms.Isomorphisms.html" class="Module">Legacy.Base.Homomorphisms.Isomorphisms</a>
+<a id="1301" class="Keyword">import</a> <a id="1308" href="Legacy.Base.Homomorphisms.Kernels.html" class="Module">Legacy.Base.Homomorphisms.Kernels</a>
+<a id="1342" class="Keyword">import</a> <a id="1349" href="Legacy.Base.Homomorphisms.Noether.html" class="Module">Legacy.Base.Homomorphisms.Noether</a>
+<a id="1383" class="Keyword">import</a> <a id="1390" href="Legacy.Base.Homomorphisms.Products.html" class="Module">Legacy.Base.Homomorphisms.Products</a>
+<a id="1425" class="Keyword">import</a> <a id="1432" href="Legacy.Base.Homomorphisms.Properties.html" class="Module">Legacy.Base.Homomorphisms.Properties</a>
+<a id="1469" class="Keyword">import</a> <a id="1476" href="Legacy.Base.Relations.html" class="Module">Legacy.Base.Relations</a>
+<a id="1498" class="Keyword">import</a> <a id="1505" href="Legacy.Base.Relations.Continuous.html" class="Module">Legacy.Base.Relations.Continuous</a>
+<a id="1538" class="Keyword">import</a> <a id="1545" href="Legacy.Base.Relations.Discrete.html" class="Module">Legacy.Base.Relations.Discrete</a>
+<a id="1576" class="Keyword">import</a> <a id="1583" href="Legacy.Base.Relations.Properties.html" class="Module">Legacy.Base.Relations.Properties</a>
+<a id="1616" class="Keyword">import</a> <a id="1623" href="Legacy.Base.Relations.Quotients.html" class="Module">Legacy.Base.Relations.Quotients</a>
+<a id="1655" class="Keyword">import</a> <a id="1662" href="Legacy.Base.Structures.html" class="Module">Legacy.Base.Structures</a>
+<a id="1685" class="Keyword">import</a> <a id="1692" href="Legacy.Base.Structures.Basic.html" class="Module">Legacy.Base.Structures.Basic</a>
+<a id="1721" class="Keyword">import</a> <a id="1728" href="Legacy.Base.Structures.Congruences.html" class="Module">Legacy.Base.Structures.Congruences</a>
+<a id="1763" class="Keyword">import</a> <a id="1770" href="Legacy.Base.Structures.EquationalLogic.html" class="Module">Legacy.Base.Structures.EquationalLogic</a>
+<a id="1809" class="Keyword">import</a> <a id="1816" href="Legacy.Base.Structures.Graphs.html" class="Module">Legacy.Base.Structures.Graphs</a>
+<a id="1846" class="Keyword">import</a> <a id="1853" href="Legacy.Base.Structures.Homs.html" class="Module">Legacy.Base.Structures.Homs</a>
+<a id="1881" class="Keyword">import</a> <a id="1888" href="Legacy.Base.Structures.Isos.html" class="Module">Legacy.Base.Structures.Isos</a>
+<a id="1916" class="Keyword">import</a> <a id="1923" href="Legacy.Base.Structures.Products.html" class="Module">Legacy.Base.Structures.Products</a>
+<a id="1955" class="Keyword">import</a> <a id="1962" href="Legacy.Base.Structures.Sigma.html" class="Module">Legacy.Base.Structures.Sigma</a>
+<a id="1991" class="Keyword">import</a> <a id="1998" href="Legacy.Base.Structures.Sigma.Basic.html" class="Module">Legacy.Base.Structures.Sigma.Basic</a>
+<a id="2033" class="Keyword">import</a> <a id="2040" href="Legacy.Base.Structures.Sigma.Congruences.html" class="Module">Legacy.Base.Structures.Sigma.Congruences</a>
+<a id="2081" class="Keyword">import</a> <a id="2088" href="Legacy.Base.Structures.Sigma.Homs.html" class="Module">Legacy.Base.Structures.Sigma.Homs</a>
+<a id="2122" class="Keyword">import</a> <a id="2129" href="Legacy.Base.Structures.Sigma.Isos.html" class="Module">Legacy.Base.Structures.Sigma.Isos</a>
+<a id="2163" class="Keyword">import</a> <a id="2170" href="Legacy.Base.Structures.Sigma.Products.html" class="Module">Legacy.Base.Structures.Sigma.Products</a>
+<a id="2208" class="Keyword">import</a> <a id="2215" href="Legacy.Base.Structures.Substructures.html" class="Module">Legacy.Base.Structures.Substructures</a>
+<a id="2252" class="Keyword">import</a> <a id="2259" href="Legacy.Base.Structures.Terms.html" class="Module">Legacy.Base.Structures.Terms</a>
+<a id="2288" class="Keyword">import</a> <a id="2295" href="Legacy.Base.Subalgebras.html" class="Module">Legacy.Base.Subalgebras</a>
+<a id="2319" class="Keyword">import</a> <a id="2326" href="Legacy.Base.Subalgebras.Properties.html" class="Module">Legacy.Base.Subalgebras.Properties</a>
+<a id="2361" class="Keyword">import</a> <a id="2368" href="Legacy.Base.Subalgebras.Subalgebras.html" class="Module">Legacy.Base.Subalgebras.Subalgebras</a>
+<a id="2404" class="Keyword">import</a> <a id="2411" href="Legacy.Base.Subalgebras.Subuniverses.html" class="Module">Legacy.Base.Subalgebras.Subuniverses</a>
+<a id="2448" class="Keyword">import</a> <a id="2455" href="Legacy.Base.Terms.html" class="Module">Legacy.Base.Terms</a>
+<a id="2473" class="Keyword">import</a> <a id="2480" href="Legacy.Base.Terms.Basic.html" class="Module">Legacy.Base.Terms.Basic</a>
+<a id="2504" class="Keyword">import</a> <a id="2511" href="Legacy.Base.Terms.Operations.html" class="Module">Legacy.Base.Terms.Operations</a>
+<a id="2540" class="Keyword">import</a> <a id="2547" href="Legacy.Base.Terms.Properties.html" class="Module">Legacy.Base.Terms.Properties</a>
+<a id="2576" class="Keyword">import</a> <a id="2583" href="Legacy.Base.Varieties.html" class="Module">Legacy.Base.Varieties</a>
+<a id="2605" class="Keyword">import</a> <a id="2612" href="Legacy.Base.Varieties.Closure.html" class="Module">Legacy.Base.Varieties.Closure</a>
+<a id="2642" class="Keyword">import</a> <a id="2649" href="Legacy.Base.Varieties.EquationalLogic.html" class="Module">Legacy.Base.Varieties.EquationalLogic</a>
+<a id="2687" class="Keyword">import</a> <a id="2694" href="Legacy.Base.Varieties.FreeAlgebras.html" class="Module">Legacy.Base.Varieties.FreeAlgebras</a>
+<a id="2729" class="Keyword">import</a> <a id="2736" href="Legacy.Base.Varieties.Invariants.html" class="Module">Legacy.Base.Varieties.Invariants</a>
+<a id="2769" class="Keyword">import</a> <a id="2776" href="Legacy.Base.Varieties.Preservation.html" class="Module">Legacy.Base.Varieties.Preservation</a>
+<a id="2811" class="Keyword">import</a> <a id="2818" href="Legacy.Base.Varieties.Properties.html" class="Module">Legacy.Base.Varieties.Properties</a>
+</pre></body></html>

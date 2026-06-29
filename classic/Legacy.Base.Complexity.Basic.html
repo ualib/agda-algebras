@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Legacy.Base.Complexity.Basic</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Background">---
+layout: default
+title : &quot;Legacy.Base.Complexity.Basic module (The Agda Universal Algebra Library)&quot;
+date : &quot;2021-07-13&quot;
+author: &quot;agda-algebras development team&quot;
+---
+
+### &lt;a id=&quot;complexity-theory&quot;&gt;Complexity Theory&lt;/a&gt;
+
+&gt; **Deprecated**.  Canonical home is now [`Setoid.Complexity.Basic`](/Setoid/Complexity/Basic/), ported under #307 (M2-7c).  This module has no Agda exports of its own, so no `WARNING_ON_USAGE` pragmas are attached; the deprecation lives at the documentation level.  See [`src/Legacy/Base/DEPRECATED.md`](../../DEPRECATED.md) for migration guidance.  Removal is planned for v3.1.
+
+</a><a id="604" class="Markup">```agda
+</a><a id="612" class="Symbol">{-#</a> <a id="616" class="Keyword">OPTIONS</a> <a id="624" class="Pragma">--cubical-compatible</a> <a id="645" class="Pragma">--exact-split</a> <a id="659" class="Pragma">--safe</a> <a id="666" class="Symbol">#-}</a>
+
+<a id="671" class="Keyword">module</a> <a id="678" href="Legacy.Base.Complexity.Basic.html" class="Module">Legacy.Base.Complexity.Basic</a> <a id="707" class="Keyword">where</a>
+<a id="713" class="Markup">```
+</a><a id="717" class="Background">
+#### &lt;a id=&quot;words&quot;&gt;Words&lt;/a&gt;
+
+Let 𝑇ₙ be a totally ordered set of size 𝑛.  Let 𝐴 be a set (the alphabet).
+We can model the set 𝑊ₙ, of *words* (strings of letters from 𝐴) of length 𝑛
+by the type 𝑇ₙ → 𝐴 of functions from 𝑇ₙ to 𝐴.
+
+The set of all (finite length) words is then
+
+\[ W = ⋃[n ∈ ℕ] Wₙ \]
+
+The *length* of a word 𝑥 is given by the function `size x`, which will be defined below.
+
+An *algorithm* is a computer program with infinite memory (i.e., a Turing machine).
+
+A function 𝑓 : 𝑊 → 𝑊 is *computable in polynomial time* if there exist an
+algorithm and numbers 𝑐, 𝑑 ∈ ℕ such that for each word 𝑥 ∈ 𝑊 the algorithm
+stops in at most (size 𝑥) 𝑐 + 𝑑 steps and computes 𝑓 𝑥.
+
+At first we will simplify by assuming 𝑇ₙ is `Fin n`.
+</a></pre></body></html>

@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Classical.Signatures.Lattice</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Background">---
+layout: default
+file: &quot;src/Classical/Signatures/Lattice.lagda.md&quot;
+title: &quot;Classical.Signatures.Lattice module&quot;
+date: &quot;2026-05-27&quot;
+author: &quot;the agda-algebras development team&quot;
+---
+
+### The signature of lattices
+
+This is the [Classical.Signatures.Lattice][] module of the [Agda Universal Algebra Library][].
+
+A lattice&#39;s signature has two binary operation symbols, `∧-Op` (meet) and `∨-Op`
+(join), both of arity `Fin 2`.  This is the first signature in the
+[`Classical/`][Classical] tree with *two distinct binary symbols* and the first
+that does not extend `Sig-Magma` or `Sig-Monoid` by a single symbol — it stands
+alone, parallel to them rather than over them.  The decision to carry both symbols
+in the signature, rather than treating one as the primitive and the other as
+derived, is recorded in
+[ADR-002 v2 §5, §9](../../docs/adr/002-classical-layer-design.md): each operation
+that participates in the variety&#39;s equations gets its own signature symbol.
+
+</a><a id="963" class="Markup">```agda
+</a><a id="971" class="Symbol">{-#</a> <a id="975" class="Keyword">OPTIONS</a> <a id="983" class="Pragma">--cubical-compatible</a> <a id="1004" class="Pragma">--exact-split</a> <a id="1018" class="Pragma">--safe</a> <a id="1025" class="Symbol">#-}</a>
+
+<a id="1030" class="Keyword">module</a> <a id="1037" href="Classical.Signatures.Lattice.html" class="Module">Classical.Signatures.Lattice</a> <a id="1066" class="Keyword">where</a>
+
+<a id="1073" class="Comment">-- Imports from Agda and the Agda Standard Library ----------------------------</a>
+<a id="1153" class="Keyword">open</a> <a id="1158" class="Keyword">import</a> <a id="1165" href="Agda.Primitive.html" class="Module">Agda.Primitive</a> <a id="1180" class="Keyword">using</a> <a id="1186" class="Symbol">()</a> <a id="1189" class="Keyword">renaming</a> <a id="1198" class="Symbol">(</a> <a id="1200" href="Agda.Primitive.html#388" class="Primitive">Set</a> <a id="1204" class="Symbol">to</a> <a id="1207" class="Primitive">Type</a> <a id="1212" class="Symbol">)</a>
+<a id="1214" class="Keyword">open</a> <a id="1219" class="Keyword">import</a> <a id="1226" href="Data.Fin.Base.html" class="Module">Data.Fin.Base</a>  <a id="1241" class="Keyword">using</a> <a id="1247" class="Symbol">(</a> <a id="1249" href="Data.Fin.Base.html#1132" class="Datatype">Fin</a> <a id="1253" class="Symbol">)</a>
+<a id="1255" class="Keyword">open</a> <a id="1260" class="Keyword">import</a> <a id="1267" href="Data.Product.html" class="Module">Data.Product</a>   <a id="1282" class="Keyword">using</a> <a id="1288" class="Symbol">(</a> <a id="1290" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">_,_</a> <a id="1294" class="Symbol">)</a>
+<a id="1296" class="Keyword">open</a> <a id="1301" class="Keyword">import</a> <a id="1308" href="Level.html" class="Module">Level</a>          <a id="1323" class="Keyword">using</a> <a id="1329" class="Symbol">(</a> <a id="1331" href="Level.html#521" class="Function">0ℓ</a> <a id="1334" class="Symbol">)</a>
+
+<a id="1337" class="Comment">-- Imports from the Agda Universal Algebra Library ----------------------------</a>
+<a id="1417" class="Keyword">open</a> <a id="1422" class="Keyword">import</a> <a id="1429" href="Overture.Signatures.html" class="Module">Overture.Signatures</a> <a id="1449" class="Keyword">using</a> <a id="1455" class="Symbol">(</a> <a id="1457" href="Overture.Signatures.html#3178" class="Function">Signature</a> <a id="1467" class="Symbol">)</a>
+
+<a id="1470" class="Keyword">data</a> <a id="Op-Lattice"></a><a id="1475" href="Classical.Signatures.Lattice.html#1475" class="Datatype">Op-Lattice</a> <a id="1486" class="Symbol">:</a> <a id="1488" href="Classical.Signatures.Lattice.html#1207" class="Primitive">Type</a> <a id="1493" class="Keyword">where</a>
+  <a id="Op-Lattice.∧-Op"></a><a id="1501" href="Classical.Signatures.Lattice.html#1501" class="InductiveConstructor">∧-Op</a> <a id="Op-Lattice.∨-Op"></a><a id="1506" href="Classical.Signatures.Lattice.html#1506" class="InductiveConstructor">∨-Op</a> <a id="1511" class="Symbol">:</a> <a id="1513" href="Classical.Signatures.Lattice.html#1475" class="Datatype">Op-Lattice</a>
+
+<a id="ar-Lattice"></a><a id="1525" href="Classical.Signatures.Lattice.html#1525" class="Function">ar-Lattice</a> <a id="1536" class="Symbol">:</a> <a id="1538" href="Classical.Signatures.Lattice.html#1475" class="Datatype">Op-Lattice</a> <a id="1549" class="Symbol">→</a> <a id="1551" href="Classical.Signatures.Lattice.html#1207" class="Primitive">Type</a>
+<a id="1556" href="Classical.Signatures.Lattice.html#1525" class="Function">ar-Lattice</a> <a id="1567" href="Classical.Signatures.Lattice.html#1501" class="InductiveConstructor">∧-Op</a> <a id="1572" class="Symbol">=</a> <a id="1574" href="Data.Fin.Base.html#1132" class="Datatype">Fin</a> <a id="1578" class="Number">2</a>
+<a id="1580" href="Classical.Signatures.Lattice.html#1525" class="Function">ar-Lattice</a> <a id="1591" href="Classical.Signatures.Lattice.html#1506" class="InductiveConstructor">∨-Op</a> <a id="1596" class="Symbol">=</a> <a id="1598" href="Data.Fin.Base.html#1132" class="Datatype">Fin</a> <a id="1602" class="Number">2</a>
+
+<a id="Sig-Lattice"></a><a id="1605" href="Classical.Signatures.Lattice.html#1605" class="Function">Sig-Lattice</a> <a id="1617" class="Symbol">:</a> <a id="1619" href="Overture.Signatures.html#3178" class="Function">Signature</a> <a id="1629" href="Level.html#521" class="Function">0ℓ</a> <a id="1632" href="Level.html#521" class="Function">0ℓ</a>
+<a id="1635" href="Classical.Signatures.Lattice.html#1605" class="Function">Sig-Lattice</a> <a id="1647" class="Symbol">=</a> <a id="1649" href="Classical.Signatures.Lattice.html#1475" class="Datatype">Op-Lattice</a> <a id="1660" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">,</a> <a id="1662" href="Classical.Signatures.Lattice.html#1525" class="Function">ar-Lattice</a>
+<a id="1673" class="Markup">```
+</a></pre></body></html>

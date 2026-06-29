@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Examples.Classical.Semigroup</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Background">---
+layout: default
+file: &quot;src/Examples/Classical/Semigroup.lagda.md&quot;
+title: &quot;Examples.Classical.Semigroup module&quot;
+date: &quot;2026-05-18&quot;
+author: &quot;the agda-algebras development team&quot;
+---
+
+### Worked example: `(ℕ, +)` as a semigroup {#examples-classical-semigroup}
+
+This is the [Examples.Classical.Semigroup][] module of the [Agda Universal Algebra Library][].
+
+The natural numbers under addition form the canonical first semigroup to exhibit,
+mirroring the magma example in [`Examples.Classical.Magma`][].  Beyond demonstrating
+that the M3-4 deliverable type-checks, this module is the home for all future
+semigroup-specific worked examples: alternative semigroups on `ℕ`, finite semigroups,
+the free semigroup over a generating set, semigroups that fail to be monoids, and so on.
+Subsequent additions should land here rather than alongside the core structure file.
+
+</a><a id="864" class="Markup">```agda
+</a><a id="872" class="Symbol">{-#</a> <a id="876" class="Keyword">OPTIONS</a> <a id="884" class="Pragma">--cubical-compatible</a> <a id="905" class="Pragma">--exact-split</a> <a id="919" class="Pragma">--safe</a> <a id="926" class="Symbol">#-}</a>
+
+<a id="931" class="Keyword">module</a> <a id="938" href="Examples.Classical.Semigroup.html" class="Module">Examples.Classical.Semigroup</a> <a id="967" class="Keyword">where</a>
+
+<a id="974" class="Comment">-- Imports from Agda and the Agda Standard Library ----------------------------</a>
+<a id="1054" class="Keyword">open</a> <a id="1059" class="Keyword">import</a> <a id="1066" href="Data.Nat.html" class="Module">Data.Nat</a>                               <a id="1105" class="Keyword">using</a> <a id="1111" class="Symbol">(</a> <a id="1113" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a> <a id="1115" class="Symbol">;</a> <a id="1117" href="Agda.Builtin.Nat.html#336" class="Primitive Operator">_+_</a> <a id="1121" class="Symbol">)</a>
+<a id="1123" class="Keyword">open</a> <a id="1128" class="Keyword">import</a> <a id="1135" href="Data.Nat.Properties.html" class="Module">Data.Nat.Properties</a>                    <a id="1174" class="Keyword">using</a> <a id="1180" class="Symbol">(</a> <a id="1182" href="Data.Nat.Properties.html#15623" class="Function">+-assoc</a> <a id="1190" class="Symbol">)</a>
+<a id="1192" class="Keyword">open</a> <a id="1197" class="Keyword">import</a> <a id="1204" href="Relation.Binary.PropositionalEquality.html" class="Module">Relation.Binary.PropositionalEquality</a>  <a id="1243" class="Keyword">using</a> <a id="1249" class="Symbol">(</a> <a id="1251" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">_≡_</a> <a id="1255" class="Symbol">;</a> <a id="1257" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a> <a id="1262" class="Symbol">)</a>
+
+<a id="1265" class="Comment">-- Imports from the Agda Universal Algebra Library ----------------------------</a>
+<a id="1345" class="Keyword">open</a> <a id="1350" class="Keyword">import</a> <a id="1357" href="Classical.Bundles.Semigroup.html" class="Module">Classical.Bundles.Semigroup</a>           <a id="1395" class="Keyword">using</a> <a id="1401" class="Symbol">(</a> <a id="1403" href="Classical.Bundles.Semigroup.html#3148" class="Function Operator">⟨_⟩ˢᵍ</a> <a id="1409" class="Symbol">;</a> <a id="1411" href="Classical.Bundles.Semigroup.html#3837" class="Function Operator">⟪_⟫ˢᵍ</a> <a id="1417" class="Symbol">)</a>
+<a id="1419" class="Keyword">open</a> <a id="1424" class="Keyword">import</a> <a id="1431" href="Classical.Small.Structures.Semigroup.html" class="Module">Classical.Small.Structures.Semigroup</a>  <a id="1469" class="Keyword">using</a> <a id="1475" class="Symbol">(</a> <a id="1477" href="Classical.Small.Structures.Semigroup.html#1482" class="Function">Semigroup</a> <a id="1487" class="Symbol">;</a> <a id="1489" href="Classical.Small.Structures.Semigroup.html#1830" class="Function">eqsToSemigroup</a> <a id="1504" class="Symbol">)</a>
+<a id="1506" class="Keyword">open</a> <a id="1511" class="Keyword">import</a> <a id="1518" href="Examples.Classical.Magma.html" class="Module">Examples.Classical.Magma</a>              <a id="1556" class="Keyword">using</a> <a id="1562" class="Symbol">(</a> <a id="1564" href="Examples.Classical.Magma.html#1484" class="Function">ℕ-magma</a> <a id="1572" class="Symbol">)</a>
+
+<a id="1575" class="Keyword">import</a> <a id="1582" href="Classical.Structures.Semigroup.html" class="Module">Classical.Structures.Semigroup</a> <a id="1613" class="Symbol">as</a> <a id="1616" class="Module">Polymorphic</a>
+<a id="1628" class="Markup">```
+</a><a id="1632" class="Background">
+#### The semigroup `(ℕ, +)` {#N-semigroup}
+
+We build `(ℕ, +)` directly from stdlib&#39;s `+-assoc`.  The `eqsToSemigroup` constructor
+demands an associativity proof of exactly the shape
+`∀ a b c → (a + b) + c ≡ a + (b + c)`, which is the type of `+-assoc` up to the
+definitional equality `Associative _+_ = ∀ x y z → (x + y) + z ≡ x + (y + z)`.
+
+</a><a id="1975" class="Markup">```agda
+</a><a id="ℕ-semigroup"></a><a id="1983" href="Examples.Classical.Semigroup.html#1983" class="Function">ℕ-semigroup</a> <a id="1995" class="Symbol">:</a> <a id="1997" href="Classical.Small.Structures.Semigroup.html#1482" class="Function">Semigroup</a>
+<a id="2007" href="Examples.Classical.Semigroup.html#1983" class="Function">ℕ-semigroup</a> <a id="2019" class="Symbol">=</a> <a id="2021" href="Classical.Small.Structures.Semigroup.html#1830" class="Function">eqsToSemigroup</a> <a id="2036" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a> <a id="2038" href="Agda.Builtin.Nat.html#336" class="Primitive Operator">_+_</a> <a id="2042" href="Data.Nat.Properties.html#15623" class="Function">+-assoc</a>
+
+<a id="2051" class="Keyword">open</a> <a id="2056" href="Classical.Structures.Semigroup.html#8875" class="Module">Polymorphic.Semigroup-Op</a> <a id="2081" href="Examples.Classical.Semigroup.html#1983" class="Function">ℕ-semigroup</a> <a id="2093" class="Keyword">using</a> <a id="2099" class="Symbol">(</a> <a id="2101" href="Classical.Structures.Magma.html#5503" class="Function Operator">_∙_</a> <a id="2105" class="Symbol">)</a>
+<a id="2107" class="Markup">```
+</a><a id="2111" class="Background">
+#### Acceptance checks
+
+`∙-Op` interpreted in `ℕ-semigroup` reduces definitionally to `_+_`: no opacity
+from the `eqsToSemigroup` construction, from the factoring through
+`opsToMagma`, or from the `Curry₂` wrapping in the inherited named accessor;
+discharged by `refl`.
+
+</a><a id="2383" class="Markup">```agda
+</a><a id="∙-is-+-sg"></a><a id="2391" href="Examples.Classical.Semigroup.html#2391" class="Function">∙-is-+-sg</a> <a id="2401" class="Symbol">:</a> <a id="2403" class="Symbol">∀</a> <a id="2405" class="Symbol">(</a><a id="2406" href="Examples.Classical.Semigroup.html#2406" class="Bound">a</a> <a id="2408" href="Examples.Classical.Semigroup.html#2408" class="Bound">b</a> <a id="2410" class="Symbol">:</a> <a id="2412" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a><a id="2413" class="Symbol">)</a> <a id="2415" class="Symbol">→</a> <a id="2417" href="Examples.Classical.Semigroup.html#2406" class="Bound">a</a> <a id="2419" href="Classical.Structures.Magma.html#5503" class="Function Operator">∙</a> <a id="2421" href="Examples.Classical.Semigroup.html#2408" class="Bound">b</a> <a id="2423" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="2425" href="Examples.Classical.Semigroup.html#2406" class="Bound">a</a> <a id="2427" href="Agda.Builtin.Nat.html#336" class="Primitive Operator">+</a> <a id="2429" href="Examples.Classical.Semigroup.html#2408" class="Bound">b</a>
+<a id="2431" href="Examples.Classical.Semigroup.html#2391" class="Function">∙-is-+-sg</a> <a id="2441" href="Examples.Classical.Semigroup.html#2441" class="Bound">a</a> <a id="2443" href="Examples.Classical.Semigroup.html#2443" class="Bound">b</a> <a id="2445" class="Symbol">=</a> <a id="2447" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+<a id="2452" class="Markup">```
+</a><a id="2456" class="Background">
+The forgetful image of `ℕ-semigroup` is the magma `ℕ-magma` *on the nose*.
+This holds because `eqsToSemigroup` is implemented as `opsToMagma _·_ , &lt;proof&gt;`,
+so `semigroup→magma (eqsToSemigroup ℕ _+_ +-assoc)` reduces to `opsToMagma ℕ _+_`,
+which is exactly the definition of `ℕ-magma`; discharged by `refl`.
+
+</a><a id="2766" class="Markup">```agda
+</a><a id="forgetful-agrees"></a><a id="2774" href="Examples.Classical.Semigroup.html#2774" class="Function">forgetful-agrees</a> <a id="2791" class="Symbol">:</a> <a id="2793" href="Classical.Structures.Semigroup.html#8068" class="Function">Polymorphic.semigroup→magma</a> <a id="2821" href="Examples.Classical.Semigroup.html#1983" class="Function">ℕ-semigroup</a> <a id="2833" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="2835" href="Examples.Classical.Magma.html#1484" class="Function">ℕ-magma</a>
+<a id="2843" href="Examples.Classical.Semigroup.html#2774" class="Function">forgetful-agrees</a> <a id="2860" class="Symbol">=</a> <a id="2862" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+<a id="2867" class="Markup">```
+</a><a id="2871" class="Background">
+The bundle bridge round-trips on `ℕ-semigroup` pointwise.  Both directions reduce
+by `pair a b 0F ⇉ a` and `pair a b 1F ⇉ b`, so propositional `refl` discharges the
+obligation at the curried form (per
+[ADR-002 v2](../../docs/adr/002-classical-layer-design.md) §6.
+
+</a><a id="3137" class="Markup">```agda
+</a><a id="3145" class="Keyword">open</a> <a id="3150" href="Classical.Structures.Semigroup.html#8875" class="Module">Polymorphic.Semigroup-Op</a> <a id="3175" href="Classical.Bundles.Semigroup.html#3837" class="Function Operator">⟪</a> <a id="3177" href="Classical.Bundles.Semigroup.html#3148" class="Function Operator">⟨</a> <a id="3179" href="Examples.Classical.Semigroup.html#1983" class="Function">ℕ-semigroup</a> <a id="3191" href="Classical.Bundles.Semigroup.html#3148" class="Function Operator">⟩ˢᵍ</a> <a id="3195" href="Classical.Bundles.Semigroup.html#3837" class="Function Operator">⟫ˢᵍ</a> <a id="3199" class="Keyword">using</a> <a id="3205" class="Symbol">()</a> <a id="3208" class="Keyword">renaming</a> <a id="3217" class="Symbol">(</a> <a id="3219" href="Classical.Structures.Magma.html#5503" class="Function Operator">_∙_</a> <a id="3223" class="Symbol">to</a> <a id="3226" class="Function Operator">_·_</a> <a id="3230" class="Symbol">)</a>
+
+<a id="roundtrip-ℕ-sg"></a><a id="3233" href="Examples.Classical.Semigroup.html#3233" class="Function">roundtrip-ℕ-sg</a> <a id="3248" class="Symbol">:</a> <a id="3250" class="Symbol">∀</a> <a id="3252" class="Symbol">(</a><a id="3253" href="Examples.Classical.Semigroup.html#3253" class="Bound">a</a> <a id="3255" href="Examples.Classical.Semigroup.html#3255" class="Bound">b</a> <a id="3257" class="Symbol">:</a> <a id="3259" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a><a id="3260" class="Symbol">)</a> <a id="3262" class="Symbol">→</a> <a id="3264" href="Examples.Classical.Semigroup.html#3253" class="Bound">a</a> <a id="3266" href="Examples.Classical.Semigroup.html#3226" class="Function Operator">·</a> <a id="3268" href="Examples.Classical.Semigroup.html#3255" class="Bound">b</a> <a id="3270" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="3272" href="Examples.Classical.Semigroup.html#3253" class="Bound">a</a> <a id="3274" href="Agda.Builtin.Nat.html#336" class="Primitive Operator">+</a> <a id="3276" href="Examples.Classical.Semigroup.html#3255" class="Bound">b</a>
+<a id="3278" href="Examples.Classical.Semigroup.html#3233" class="Function">roundtrip-ℕ-sg</a> <a id="3293" href="Examples.Classical.Semigroup.html#3293" class="Bound">a</a> <a id="3295" href="Examples.Classical.Semigroup.html#3295" class="Bound">b</a> <a id="3297" class="Symbol">=</a> <a id="3299" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+<a id="3304" class="Markup">```
+</a></pre></body></html>

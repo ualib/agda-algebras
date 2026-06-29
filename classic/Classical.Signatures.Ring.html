@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Classical.Signatures.Ring</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Background">---
+layout: default
+file: &quot;src/Classical/Signatures/Ring.lagda.md&quot;
+title: &quot;Classical.Signatures.Ring module&quot;
+date: &quot;2026-05-30&quot;
+author: &quot;the agda-algebras development team&quot;
+---
+
+### The signature of rings
+
+This is the [Classical.Signatures.Ring][] module of the [Agda Universal Algebra Library][].
+
+A ring&#39;s signature carries five operation symbols: the additive binary `+-Op`, the
+additive identity `0-Op` (nullary), the additive inverse `-Op` (unary), the
+multiplicative binary `·-Op`, and the multiplicative identity `1-Op` (nullary).  It
+is the first signature in the [`Classical/`][Classical] tree to carry *two* binary
+symbols *and* distinguished elements *and* a unary symbol — the additive triple
+`(+-Op, 0-Op, -Op)` is an abelian-group signature, the multiplicative pair
+`(·-Op, 1-Op)` is a monoid signature, and the two are tied together by the
+distributivity equations in `Th-Ring`.  Per
+[ADR-002 v2 §5, §9](../../docs/adr/002-classical-layer-design.md), every operation
+that participates in the variety&#39;s equations gets its own signature symbol; the
+constructor- and arity-naming conventions are those established by
+`Classical.Signatures.Magma` and its successors.
+
+</a><a id="1180" class="Markup">```agda
+</a><a id="1188" class="Symbol">{-#</a> <a id="1192" class="Keyword">OPTIONS</a> <a id="1200" class="Pragma">--cubical-compatible</a> <a id="1221" class="Pragma">--exact-split</a> <a id="1235" class="Pragma">--safe</a> <a id="1242" class="Symbol">#-}</a>
+
+<a id="1247" class="Keyword">module</a> <a id="1254" href="Classical.Signatures.Ring.html" class="Module">Classical.Signatures.Ring</a> <a id="1280" class="Keyword">where</a>
+
+<a id="1287" class="Comment">-- Imports from Agda and the Agda Standard Library ----------------------------</a>
+<a id="1367" class="Keyword">open</a> <a id="1372" class="Keyword">import</a> <a id="1379" href="Agda.Primitive.html" class="Module">Agda.Primitive</a> <a id="1394" class="Keyword">using</a> <a id="1400" class="Symbol">()</a> <a id="1403" class="Keyword">renaming</a> <a id="1412" class="Symbol">(</a> <a id="1414" href="Agda.Primitive.html#388" class="Primitive">Set</a> <a id="1418" class="Symbol">to</a> <a id="1421" class="Primitive">Type</a> <a id="1426" class="Symbol">)</a>
+<a id="1428" class="Keyword">open</a> <a id="1433" class="Keyword">import</a> <a id="1440" href="Data.Fin.Base.html" class="Module">Data.Fin.Base</a>  <a id="1455" class="Keyword">using</a> <a id="1461" class="Symbol">(</a> <a id="1463" href="Data.Fin.Base.html#1132" class="Datatype">Fin</a> <a id="1467" class="Symbol">)</a>
+<a id="1469" class="Keyword">open</a> <a id="1474" class="Keyword">import</a> <a id="1481" href="Data.Product.html" class="Module">Data.Product</a>   <a id="1496" class="Keyword">using</a> <a id="1502" class="Symbol">(</a> <a id="1504" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">_,_</a> <a id="1508" class="Symbol">)</a>
+<a id="1510" class="Keyword">open</a> <a id="1515" class="Keyword">import</a> <a id="1522" href="Level.html" class="Module">Level</a>          <a id="1537" class="Keyword">using</a> <a id="1543" class="Symbol">(</a> <a id="1545" href="Level.html#521" class="Function">0ℓ</a> <a id="1548" class="Symbol">)</a>
+
+<a id="1551" class="Comment">-- Imports from the Agda Universal Algebra Library ----------------------------</a>
+<a id="1631" class="Keyword">open</a> <a id="1636" class="Keyword">import</a> <a id="1643" href="Overture.Signatures.html" class="Module">Overture.Signatures</a> <a id="1663" class="Keyword">using</a> <a id="1669" class="Symbol">(</a> <a id="1671" href="Overture.Signatures.html#3178" class="Function">Signature</a> <a id="1681" class="Symbol">)</a>
+
+<a id="1684" class="Keyword">data</a> <a id="Op-Ring"></a><a id="1689" href="Classical.Signatures.Ring.html#1689" class="Datatype">Op-Ring</a> <a id="1697" class="Symbol">:</a> <a id="1699" href="Classical.Signatures.Ring.html#1421" class="Primitive">Type</a> <a id="1704" class="Keyword">where</a>
+  <a id="Op-Ring.+-Op"></a><a id="1712" href="Classical.Signatures.Ring.html#1712" class="InductiveConstructor">+-Op</a> <a id="Op-Ring.0-Op"></a><a id="1717" href="Classical.Signatures.Ring.html#1717" class="InductiveConstructor">0-Op</a> <a id="Op-Ring.-Op"></a><a id="1722" href="Classical.Signatures.Ring.html#1722" class="InductiveConstructor">-Op</a> <a id="Op-Ring.·-Op"></a><a id="1726" href="Classical.Signatures.Ring.html#1726" class="InductiveConstructor">·-Op</a> <a id="Op-Ring.1-Op"></a><a id="1731" href="Classical.Signatures.Ring.html#1731" class="InductiveConstructor">1-Op</a> <a id="1736" class="Symbol">:</a> <a id="1738" href="Classical.Signatures.Ring.html#1689" class="Datatype">Op-Ring</a>
+
+<a id="ar-Ring"></a><a id="1747" href="Classical.Signatures.Ring.html#1747" class="Function">ar-Ring</a> <a id="1755" class="Symbol">:</a> <a id="1757" href="Classical.Signatures.Ring.html#1689" class="Datatype">Op-Ring</a> <a id="1765" class="Symbol">→</a> <a id="1767" href="Classical.Signatures.Ring.html#1421" class="Primitive">Type</a>
+<a id="1772" href="Classical.Signatures.Ring.html#1747" class="Function">ar-Ring</a> <a id="1780" href="Classical.Signatures.Ring.html#1712" class="InductiveConstructor">+-Op</a> <a id="1785" class="Symbol">=</a> <a id="1787" href="Data.Fin.Base.html#1132" class="Datatype">Fin</a> <a id="1791" class="Number">2</a>
+<a id="1793" href="Classical.Signatures.Ring.html#1747" class="Function">ar-Ring</a> <a id="1801" href="Classical.Signatures.Ring.html#1717" class="InductiveConstructor">0-Op</a> <a id="1806" class="Symbol">=</a> <a id="1808" href="Data.Fin.Base.html#1132" class="Datatype">Fin</a> <a id="1812" class="Number">0</a>
+<a id="1814" href="Classical.Signatures.Ring.html#1747" class="Function">ar-Ring</a> <a id="1822" href="Classical.Signatures.Ring.html#1722" class="InductiveConstructor">-Op</a>  <a id="1827" class="Symbol">=</a> <a id="1829" href="Data.Fin.Base.html#1132" class="Datatype">Fin</a> <a id="1833" class="Number">1</a>
+<a id="1835" href="Classical.Signatures.Ring.html#1747" class="Function">ar-Ring</a> <a id="1843" href="Classical.Signatures.Ring.html#1726" class="InductiveConstructor">·-Op</a> <a id="1848" class="Symbol">=</a> <a id="1850" href="Data.Fin.Base.html#1132" class="Datatype">Fin</a> <a id="1854" class="Number">2</a>
+<a id="1856" href="Classical.Signatures.Ring.html#1747" class="Function">ar-Ring</a> <a id="1864" href="Classical.Signatures.Ring.html#1731" class="InductiveConstructor">1-Op</a> <a id="1869" class="Symbol">=</a> <a id="1871" href="Data.Fin.Base.html#1132" class="Datatype">Fin</a> <a id="1875" class="Number">0</a>
+
+<a id="Sig-Ring"></a><a id="1878" href="Classical.Signatures.Ring.html#1878" class="Function">Sig-Ring</a> <a id="1887" class="Symbol">:</a> <a id="1889" href="Overture.Signatures.html#3178" class="Function">Signature</a> <a id="1899" href="Level.html#521" class="Function">0ℓ</a> <a id="1902" href="Level.html#521" class="Function">0ℓ</a>
+<a id="1905" href="Classical.Signatures.Ring.html#1878" class="Function">Sig-Ring</a> <a id="1914" class="Symbol">=</a> <a id="1916" href="Classical.Signatures.Ring.html#1689" class="Datatype">Op-Ring</a> <a id="1924" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">,</a> <a id="1926" href="Classical.Signatures.Ring.html#1747" class="Function">ar-Ring</a>
+<a id="1934" class="Markup">```
+</a></pre></body></html>
