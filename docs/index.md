@@ -38,14 +38,25 @@ every commit.
 Landmark theorems of universal algebra, each formalized and type-checked here —
 follow a face to the proof.
 
-<div class="ualib-figures">
+<div class="ualib-carousel" data-autoplay="4000" aria-roledescription="carousel" aria-label="Featured results">
+<div class="ualib-carousel__viewport">
+<div class="ualib-carousel__track">
 
-  <a class="ualib-figure" href="/Setoid/Varieties/HSP/">
+  <a class="ualib-figure" href="/Setoid/Homomorphisms/Noether/">
     <span class="ualib-portrait">
-    <img src="/assets/portraits/Birkhoff_alt.jpeg" alt="Garrett Birkhoff"></span>
+    <img src="/assets/portraits/Noether.jpeg" alt="Emmy Noether"></span>
     <span class="ualib-figure__body">
-      <span class="ualib-figure__result">Birkhoff's HSP theorem</span>
-      <span class="ualib-figure__who">Garrett Birkhoff · 1911–1996</span>
+      <span class="ualib-figure__result">Homomorphism theorems</span>
+      <span class="ualib-figure__who">Emmy Noether · 1882–1935</span>
+    </span>
+  </a>
+
+  <a class="ualib-figure" href="/Setoid/Congruences/Lattice/">
+    <span class="ualib-portrait">
+    <img src="/assets/portraits/Dedekind.jpeg" alt="Richard Dedekind"></span>
+    <span class="ualib-figure__body">
+      <span class="ualib-figure__result">Congruence lattices</span>
+      <span class="ualib-figure__who">Richard Dedekind · 1831–1916</span>
     </span>
   </a>
 
@@ -67,24 +78,18 @@ follow a face to the proof.
     </span>
   </a>
 
-  <a class="ualib-figure" href="/Setoid/Homomorphisms/Noether/">
+  <a class="ualib-figure" href="/Setoid/Varieties/HSP/">
     <span class="ualib-portrait">
-    <img src="/assets/portraits/Noether.jpeg" alt="Emmy Noether"></span>
+    <img src="/assets/portraits/Birkhoff_alt.jpeg" alt="Garrett Birkhoff"></span>
     <span class="ualib-figure__body">
-      <span class="ualib-figure__result">Homomorphism theorems</span>
-      <span class="ualib-figure__who">Emmy Noether · 1882–1935</span>
+      <span class="ualib-figure__result">Birkhoff's HSP theorem</span>
+      <span class="ualib-figure__who">Garrett Birkhoff · 1911–1996</span>
     </span>
   </a>
 
-  <a class="ualib-figure" href="/Setoid/Congruences/Lattice/">
-    <span class="ualib-portrait">
-    <img src="/assets/portraits/Dedekind.jpeg" alt="Richard Dedekind"></span>
-    <span class="ualib-figure__body">
-      <span class="ualib-figure__result">Congruence lattices</span>
-      <span class="ualib-figure__who">Richard Dedekind · 1831–1916</span>
-    </span>
-  </a>
-
+</div>
+</div>
+<div class="ualib-carousel__dots"></div>
 </div>
 
 

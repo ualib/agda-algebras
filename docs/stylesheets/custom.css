@@ -120,28 +120,33 @@
   .AgdaRecord,                 pre.Agda .Record                 { color: #0000cd; }
 }
 
+/* Dark mode: the bespoke "Aurora Deep" palette — cool indigo ground, with
+   orange keywords that echo the hero accent and indigo functions/modules that
+   match the site links, so code reads as part of the Aurora theme.  Two cooler
+   alternates ("Tokyo Night", "Nord") are written out in docs/site-guide.md;
+   swap this whole block (and §4's slate code background) to retheme. */
 [data-md-color-scheme="slate"] {
-  --code-accent: #add8e6;
-  .AgdaKeyword,                pre.Agda .Keyword                { color: #dcdccc; }
-  .AgdaComment,                pre.Agda .Comment                { color: #cc9393; font-style: italic; }
-  .AgdaString,                 pre.Agda .String                 { color: #dcdccc; }
-  .AgdaNumber,                 pre.Agda .Number                 { color: #dcdccc; }
-  .AgdaSymbol,                 pre.Agda .Symbol                 { color: #dcdccc; }
-  .AgdaArgument,               pre.Agda .Argument               { color: #ffffff; }
-  .AgdaMarkup,                 pre.Agda .Markup                 { color: #dcdccc; }
-  .AgdaPrimitiveType,          pre.Agda .PrimitiveType          { color: #add8e6; }
-  .AgdaPrimitive,              pre.Agda .Primitive              { color: #add8e6; }
-  .AgdaBound,                  pre.Agda .Bound                  { color: #dcdccc; }
-  .AgdaGeneralizable,          pre.Agda .Generalizable          { color: #dcdccc; }
-  .AgdaInductiveConstructor,   pre.Agda .InductiveConstructor   { color: #ffcfaf; }
-  .AgdaCoinductiveConstructor, pre.Agda .CoinductiveConstructor { color: #ffcfaf; }
-  .AgdaDatatype,               pre.Agda .Datatype               { color: #add8e6; }
-  .AgdaField,                  pre.Agda .Field                  { color: #ffcfaf; }
-  .AgdaFunction,               pre.Agda .Function               { color: #9fafaf; }
-  .AgdaMacro,                  pre.Agda .Macro                  { color: #9fafaf; }
-  .AgdaModule,                 pre.Agda .Module                 { color: #9fafaf; }
-  .AgdaPostulate,              pre.Agda .Postulate              { color: #9fafaf; }
-  .AgdaRecord,                 pre.Agda .Record                 { color: #add8e6; }
+  --code-accent: #8b88ff;
+  .AgdaKeyword,                pre.Agda .Keyword                { color: #ff8a3d; }
+  .AgdaComment,                pre.Agda .Comment                { color: #6b73a8; font-style: italic; }
+  .AgdaString,                 pre.Agda .String                 { color: #c3a0ff; }
+  .AgdaNumber,                 pre.Agda .Number                 { color: #ffb86c; }
+  .AgdaSymbol,                 pre.Agda .Symbol                 { color: #b8c0ff; }
+  .AgdaArgument,               pre.Agda .Argument               { color: #d7dcff; }
+  .AgdaMarkup,                 pre.Agda .Markup                 { color: #d7dcff; }
+  .AgdaPrimitiveType,          pre.Agda .PrimitiveType          { color: #6cc5ff; }
+  .AgdaPrimitive,              pre.Agda .Primitive              { color: #6cc5ff; }
+  .AgdaBound,                  pre.Agda .Bound                  { color: #d7dcff; }
+  .AgdaGeneralizable,          pre.Agda .Generalizable          { color: #d7dcff; }
+  .AgdaInductiveConstructor,   pre.Agda .InductiveConstructor   { color: #5eead4; }
+  .AgdaCoinductiveConstructor, pre.Agda .CoinductiveConstructor { color: #5eead4; }
+  .AgdaDatatype,               pre.Agda .Datatype               { color: #6cc5ff; }
+  .AgdaField,                  pre.Agda .Field                  { color: #ff9ed6; }
+  .AgdaFunction,               pre.Agda .Function               { color: #8b88ff; }
+  .AgdaMacro,                  pre.Agda .Macro                  { color: #8b88ff; }
+  .AgdaModule,                 pre.Agda .Module                 { color: #c3a0ff; }
+  .AgdaPostulate,              pre.Agda .Postulate              { color: #8b88ff; }
+  .AgdaRecord,                 pre.Agda .Record                 { color: #6cc5ff; }
 }
 
 /* -- 3. Inline Agda terms in prose -----------------------------------------
@@ -183,8 +188,8 @@
   --md-code-fg-color: #2b2f36;
 }
 [data-md-color-scheme="slate"] {
-  --md-code-bg-color: #20242a;   /* neutral dark — the zenburn palette pops   */
-  --md-code-fg-color: #dcdccc;
+  --md-code-bg-color: #0f1230;   /* deep indigo — the "Aurora Deep" palette   */
+  --md-code-fg-color: #d7dcff;
 }
 
 /* The agda --html block itself (no inner <code>; children are <a> tokens).
@@ -313,9 +318,9 @@
 [data-md-color-scheme="slate"] {
   --md-default-bg-color:          #0c0e1d; /* deep navy                       */
   --md-default-bg-color--light:   #15172e; /* card / inset surface            */
-  --md-default-fg-color:          #e8eaf8;
-  --md-default-fg-color--light:   #a8aed0;
-  --md-default-fg-color--lighter: #7a82ac;
+  --md-default-fg-color:          #c3c8de; /* soft cool grey — easier on the  */
+  --md-default-fg-color--light:   #9197b6; /* eyes in a dim room than white   */
+  --md-default-fg-color--lighter: #6a7197;
   --md-primary-fg-color:          #0c0d1f; /* near-black navy chrome          */
   --md-primary-fg-color--dark:    #08091a;
   --md-primary-fg-color--light:   #2a2566;
@@ -506,6 +511,7 @@
 }
 .ualib-figure__body { min-width: 0; }
 .ualib-figure__result {
+  display: block;                /* keep the result and the name on separate lines */
   font-family: var(--ualib-display), serif; font-weight: 600;
   font-size: 0.95rem; line-height: 1.15;
   color: var(--md-default-fg-color);
@@ -515,6 +521,7 @@
 .md-typeset a.ualib-figure:hover { text-decoration: none; }
 .md-typeset a.ualib-figure:hover .ualib-figure__result { color: var(--md-accent-fg-color); }
 .ualib-figure__who {
+  display: block;
   font-size: 0.74rem; color: var(--md-default-fg-color--light); margin-top: 0.15rem;
 }
 
@@ -673,3 +680,53 @@
 .ualib-agda-copy:hover { color: var(--md-accent-fg-color); border-color: var(--md-accent-fg-color); }
 .ualib-agda-copy svg { width: 0.95em; height: 0.95em; }
 .ualib-agda-copy.ualib-copied { color: var(--ualib-teal); border-color: var(--ualib-teal); }
+
+/* ==========================================================================
+   14. Featured-results carousel — one card in focus, auto-advancing every few
+       seconds, with clickable dots (docs/assets/js/carousel.js).  With JS off
+       it degrades to a horizontal row of cards; autoplay yields to
+       prefers-reduced-motion.
+   ========================================================================== */
+/* Cards-per-view scales with width: 1 on a phone, 2 on a tablet, 3 on a wide
+   monitor.  carousel.js reads `--per`, sizes the slide step from the measured
+   card width + gap, and clones the leading cards for a seamless wrap. */
+.ualib-carousel {
+  --per: 1; --gap: 1rem;
+  position: relative; max-width: 1120px; margin: 0.5rem auto 0;
+}
+@media (min-width: 720px)  { .ualib-carousel { --per: 2; } }
+@media (min-width: 1024px) { .ualib-carousel { --per: 3; } }
+.ualib-carousel__viewport { overflow: hidden; }
+.ualib-carousel__track {
+  display: flex; gap: var(--gap);
+  will-change: transform;       /* the transform + its transition are set by JS */
+}
+.md-typeset .ualib-carousel .ualib-figure {
+  flex: 0 0 calc((100% - (var(--per) - 1) * var(--gap)) / var(--per));
+  box-sizing: border-box;
+  margin: 0; min-height: 7.4rem; padding: 1.1rem 1.3rem;
+}
+.ualib-carousel .ualib-portrait { width: 76px; height: 76px; }
+.ualib-carousel .ualib-figure__result { font-size: 1.05rem; }
+.ualib-carousel .ualib-figure.is-clone { pointer-events: none; }
+
+/* Deliberately understated: tiny dots, a muted resting colour, and a small
+   accent mark for the current card (no scale jump, no large bright dot). */
+.ualib-carousel__dots {
+  display: flex; justify-content: center; gap: 0.42rem; margin-top: 0.9rem;
+}
+.ualib-carousel__dot {
+  width: 0.36rem; height: 0.36rem; padding: 0;
+  border: 0; border-radius: 50%;
+  background: color-mix(in srgb, var(--md-default-fg-color--light) 38%, transparent);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.ualib-carousel__dot:hover { background: var(--md-default-fg-color--light); }
+.ualib-carousel__dot.is-active { background: var(--ualib-coral); }
+.ualib-carousel__dot:focus-visible {
+  outline: 1px solid var(--ualib-teal); outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ualib-carousel__track { transition: none; }
+}

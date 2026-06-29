@@ -69,20 +69,21 @@ theme:
     - content.action.view
     - content.tooltips
   palette:
-    - media: "(prefers-color-scheme: light)"
-      scheme: default
-      primary: indigo
-      accent: indigo
-      toggle:
-        icon: material/weather-night
-        name: Switch to dark mode
-    - media: "(prefers-color-scheme: dark)"
-      scheme: slate
+    # Dark "Aurora" is the default on first landing (no prefers-color-scheme
+    # media query, so it does not auto-follow the OS); the toggle switches to
+    # light and the choice persists in localStorage for return visits.
+    - scheme: slate
       primary: indigo
       accent: indigo
       toggle:
         icon: material/weather-sunny
         name: Switch to light mode
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
   font:
     text: Inter                     # code font (JuliaMono) is set in custom.css
 
@@ -93,6 +94,8 @@ extra_javascript:
   # Adds a copy button to highlighted `<pre class="Agda">` blocks, which
   # Material's content.code.copy feature does not reach (see the script).
   - assets/js/agda-copy.js
+  # Auto-advancing carousel for the landing's Featured-results cards.
+  - assets/js/carousel.js
 
 # -- Plugins ------------------------------------------------------------------
 # Order matters: gen-files must populate the virtual library tree + SUMMARY.md

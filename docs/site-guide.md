@@ -81,10 +81,62 @@ Two alternate palettes ship ready to drop in — replace **both** scheme blocks 
    #6d28d9`, `--ualib-board: #241a45` / `--ualib-board-2: #3a2570`, accent
    `#f97316`, links `#7c3aed`; dark purple-black surfaces `#120e1f`.
 
-The Agda **token** colours (code blocks and inline terms, the formal-ledger
-palette) are in `§2`; the code-block **backgrounds** are in `§4`.  These are
-independent of the chrome palette above, so swapping themes leaves the
-syntax-highlighting untouched.
+### The code-block palette
+
+The Agda **token** colours (used by both code blocks and inline prose terms) are
+in `§2` of `custom.css`, with one block per scheme; the code-block **background**
+is in `§4`.  These are independent of the chrome palette above, so changing one
+never disturbs the other.
+
++  **Light** is the classic-vivid (formal-ledger) palette — it already matches
+   Aurora's blue/purple/orange, so it is usually left alone.
++  **Dark** is the bespoke **Aurora Deep** palette: a deep-indigo ground with
+   orange keywords (echoing the hero accent) and indigo functions/modules
+   (matching the links), so code reads as part of the theme.
+
+To swap the dark palette, replace the `[data-md-color-scheme="slate"]` block in
+`§2` **and** the slate `--md-code-bg-color` in `§4`.  Two cooler alternates are
+ready to paste in (a user-facing in-page palette switcher would be possible but
+is intentionally not built — it competes with the light/dark toggle for little
+gain; a one-block edit here is the supported way to retheme):
+
+```css
+/* TOKYO NIGHT — cool navy, violet keywords, cyan types. */
+[data-md-color-scheme="slate"] { --md-code-bg-color: #1a1b2e; --code-accent: #7aa2f7;
+  .AgdaKeyword, pre.Agda .Keyword { color: #bb9af7; }
+  .AgdaComment, pre.Agda .Comment { color: #565f89; font-style: italic; }
+  .AgdaString, pre.Agda .String { color: #9ece6a; }
+  .AgdaNumber, pre.Agda .Number { color: #ff9e64; }
+  .AgdaSymbol, pre.Agda .Symbol { color: #89ddff; }
+  .AgdaArgument, pre.Agda .Argument, .AgdaMarkup, pre.Agda .Markup,
+  .AgdaBound, pre.Agda .Bound, .AgdaGeneralizable, pre.Agda .Generalizable { color: #c0caf5; }
+  .AgdaPrimitiveType, pre.Agda .PrimitiveType, .AgdaPrimitive, pre.Agda .Primitive,
+  .AgdaDatatype, pre.Agda .Datatype, .AgdaRecord, pre.Agda .Record { color: #2ac3de; }
+  .AgdaInductiveConstructor, pre.Agda .InductiveConstructor,
+  .AgdaCoinductiveConstructor, pre.Agda .CoinductiveConstructor { color: #ff9e64; }
+  .AgdaField, pre.Agda .Field { color: #73daca; }
+  .AgdaFunction, pre.Agda .Function, .AgdaMacro, pre.Agda .Macro,
+  .AgdaPostulate, pre.Agda .Postulate { color: #7aa2f7; }
+  .AgdaModule, pre.Agda .Module { color: #7dcfff; }
+}
+
+/* NORD — desaturated frost; the calmest. */
+[data-md-color-scheme="slate"] { --md-code-bg-color: #242a3d; --code-accent: #88c0d0;
+  .AgdaKeyword, pre.Agda .Keyword { color: #81a1c1; }
+  .AgdaComment, pre.Agda .Comment { color: #667089; font-style: italic; }
+  .AgdaString, pre.Agda .String { color: #a3be8c; }
+  .AgdaNumber, pre.Agda .Number, .AgdaField, pre.Agda .Field { color: #b48ead; }
+  .AgdaSymbol, pre.Agda .Symbol { color: #9aa6c4; }
+  .AgdaArgument, pre.Agda .Argument, .AgdaMarkup, pre.Agda .Markup,
+  .AgdaBound, pre.Agda .Bound, .AgdaGeneralizable, pre.Agda .Generalizable { color: #d8dee9; }
+  .AgdaPrimitiveType, pre.Agda .PrimitiveType, .AgdaPrimitive, pre.Agda .Primitive,
+  .AgdaDatatype, pre.Agda .Datatype, .AgdaRecord, pre.Agda .Record { color: #8fbcbb; }
+  .AgdaInductiveConstructor, pre.Agda .InductiveConstructor,
+  .AgdaCoinductiveConstructor, pre.Agda .CoinductiveConstructor { color: #d08770; }
+  .AgdaFunction, pre.Agda .Function, .AgdaMacro, pre.Agda .Macro,
+  .AgdaPostulate, pre.Agda .Postulate, .AgdaModule, pre.Agda .Module { color: #88c0d0; }
+}
+```
 
 ### Fonts
 
