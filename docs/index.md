@@ -11,7 +11,7 @@ hide:
 
 <p class="ualib-tagline" markdown>
 A constructive formalization of **universal algebra** in dependent type theory —
-from signatures, algebras, and homomorphisms to a fully machine-checked proof of
+from signatures, algebras, and homomorphisms to a machine-checked proof of
 **Birkhoff's variety theorem** — written in literate [Agda][] and type-checked on
 every commit.
 </p>
@@ -42,21 +42,21 @@ follow a face to the proof.
 <div class="ualib-carousel__viewport">
 <div class="ualib-carousel__track">
 
-  <a class="ualib-figure" href="/Setoid/Homomorphisms/Noether/">
-    <span class="ualib-portrait">
-    <img src="/assets/portraits/Noether.jpeg" alt="Emmy Noether"></span>
-    <span class="ualib-figure__body">
-      <span class="ualib-figure__result">Homomorphism theorems</span>
-      <span class="ualib-figure__who">Emmy Noether · 1882–1935</span>
-    </span>
-  </a>
-
   <a class="ualib-figure" href="/Setoid/Congruences/Lattice/">
     <span class="ualib-portrait">
     <img src="/assets/portraits/Dedekind.jpeg" alt="Richard Dedekind"></span>
     <span class="ualib-figure__body">
       <span class="ualib-figure__result">Congruence lattices</span>
       <span class="ualib-figure__who">Richard Dedekind · 1831–1916</span>
+    </span>
+  </a>
+
+  <a class="ualib-figure" href="/Setoid/Homomorphisms/Noether/">
+    <span class="ualib-portrait">
+    <img src="/assets/portraits/Noether.jpeg" alt="Emmy Noether"></span>
+    <span class="ualib-figure__body">
+      <span class="ualib-figure__result">Homomorphism theorems</span>
+      <span class="ualib-figure__who">Emmy Noether · 1882–1935</span>
     </span>
   </a>
 
