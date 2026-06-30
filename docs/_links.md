@@ -3,7 +3,7 @@
 <!-- pymdownx.snippets auto-appends this file to every page so reference-style -->
 <!-- links resolve site-wide without a per-page include directive.  Internal -->
 <!-- targets are ROOT-RELATIVE so cross-references work under `mkdocs serve` -->
-<!-- and at https://ualib.org/ alike.  The module sections are GENERATED from -->
+<!-- and at the deployed site alike.  The module sections are GENERATED from -->
 <!-- the src/ tree by scripts/python/gen_links.py; re-run it rather than -->
 <!-- editing those entries by hand. -->
 

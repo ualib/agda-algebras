@@ -8,7 +8,7 @@ module half of that file in sync with the tree by hand is error-prone (it had
 fallen ~130 entries behind), so this tool regenerates it:
 
   + one `[Dotted.Module]: /Slashed/Module/` per module under src/ (root-relative
-    so cross-references work under `mkdocs serve` and at ualib.org alike);
+    so cross-references work under `mkdocs serve` and at the deployed site alike);
   + one `[Slashed/Module.lagda]: <github>/src/Slashed/Module.lagda.md` per module
     for the "view the source" links some prose uses;
   + the external links (and a few fixed library-name / concept links) carried
@@ -35,7 +35,7 @@ HEADER = """\
 <!-- pymdownx.snippets auto-appends this file to every page so reference-style -->
 <!-- links resolve site-wide without a per-page include directive.  Internal -->
 <!-- targets are ROOT-RELATIVE so cross-references work under `mkdocs serve` -->
-<!-- and at https://ualib.org/ alike.  The module sections are GENERATED from -->
+<!-- and at the deployed site alike.  The module sections are GENERATED from -->
 <!-- the src/ tree by scripts/python/gen_links.py; re-run it rather than -->
 <!-- editing those entries by hand. -->
 """

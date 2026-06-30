@@ -7,7 +7,7 @@
 [![Agda 2.8.0](https://img.shields.io/badge/Agda-2.8.0-purple.svg)](https://github.com/agda/agda/releases/tag/v2.8.0)
 [![stdlib 2.3](https://img.shields.io/badge/stdlib-2.3-orange.svg)](https://github.com/agda/agda-stdlib/releases/tag/v2.3)
 
-A formalization of universal algebra in [Agda][], built on the [Agda standard library][].  The library defines algebras, homomorphisms, congruences, terms, varieties, and the equational logic that underlies them, with a fully constructive proof of [Birkhoff's HSP theorem](https://ualib.org/Setoid.Varieties.HSP.html#proof-of-the-hsp-theorem) at the centre.  It is being developed both as a working substrate for research in universal algebra and as a high-quality training corpus of Agda proofs for machine learning on formal mathematics.
+A formalization of universal algebra in [Agda][], built on the [Agda standard library][].  The library defines algebras, homomorphisms, congruences, terms, varieties, and the equational logic that underlies them, with a fully constructive proof of [Birkhoff's HSP theorem](https://agda-algebras.universalalgebra.org/Setoid/Varieties/HSP/#proof-of-the-hsp-theorem) at the centre.  It is being developed both as a working substrate for research in universal algebra and as a high-quality training corpus of Agda proofs for machine learning on formal mathematics.
 
 > **Status.** Version 3.0 is under active reconstruction on `master`.  The library currently targets Agda 2.8.0 and standard-library 2.3.  Expect breaking changes until 3.0 is released; see [`docs/GITHUB_PROJECT.md`](docs/GITHUB_PROJECT.md) for the milestone plan and [`CHANGELOG.md`](CHANGELOG.md) for what has landed so far.
 
@@ -36,7 +36,7 @@ The first `nix develop` downloads and builds the pinned Agda and standard librar
 
 ## Documentation
 
-+  Rendered documentation: [https://ualib.org](https://ualib.org).
++  Rendered documentation: [https://agda-algebras.universalalgebra.org](https://agda-algebras.universalalgebra.org) (the pre-3.0 site is archived at [ualib.org](https://ualib.org)).
 +  Installation guide: [`INSTALL.md`](INSTALL.md).
 +  Contributor's guide: [`CONTRIBUTING.md`](CONTRIBUTING.md).
 +  Style guide: [`docs/STYLE_GUIDE.md`](docs/STYLE_GUIDE.md).
@@ -129,7 +129,7 @@ The archival reference is the v2.0.1 Zenodo deposit, made for the TYPES 2021 sub
 
 While the 3.0 reconstruction is in development, please cite the GitHub repository directly and pin a commit hash for reproducibility.  A new Zenodo DOI will be minted at the v3.0 release.
 
-To cite the [formalization of Birkhoff's HSP theorem](https://ualib.org/Setoid.Varieties.HSP.html#proof-of-the-hsp-theorem):
+To cite the [formalization of Birkhoff's HSP theorem](https://agda-algebras.universalalgebra.org/Setoid/Varieties/HSP/#proof-of-the-hsp-theorem):
 
 ```bibtex
 @article{DeMeo:2021,
@@ -147,7 +147,7 @@ To cite the [formalization of Birkhoff's HSP theorem](https://ualib.org/Setoid.V
 }
 ```
 
-The current canonical setoid-based formalization of Birkhoff's theorem is in the [Setoid.Varieties.HSP][] module, with the proof anchor in the rendered HTML at [https://ualib.org/Setoid.Varieties.HSP.html#proof-of-the-hsp-theorem](https://ualib.org/Setoid.Varieties.HSP.html#proof-of-the-hsp-theorem).
+The current canonical setoid-based formalization of Birkhoff's theorem is in the [Setoid.Varieties.HSP][] module, with the proof anchor in the rendered site at [https://agda-algebras.universalalgebra.org/Setoid/Varieties/HSP/#proof-of-the-hsp-theorem](https://agda-algebras.universalalgebra.org/Setoid/Varieties/HSP/#proof-of-the-hsp-theorem).
 
 ---
 
