@@ -7,15 +7,21 @@
 #  runs locally.  mkdocs-material and the plugins are pinned by flake.nix, so
 #  CI and local builds are identical.
 #
-#  On push to master the freshly built ./site is published to the `gh-pages`
-#  branch.  Pull requests build only (a broken site fails the PR), they do not
+#  On push to master the freshly built ./site is cross-deployed to the
+#  `gh-pages` branch of the new-home repository `universalalgebra/agda-algebras`
+#  (served at https://agda-algebras.universalalgebra.org), using an SSH deploy
+#  key.  Pull requests build only (a broken site fails the PR), they do not
 #  deploy.
 #
-#  Cutover note: this workflow publishes to `gh-pages`, but it does NOT change
-#  where GitHub Pages serves from.  Pointing Pages at `gh-pages`, attaching the
-#  `ualib.org` custom domain (uncomment `cname:` below), and the registrar DNS
-#  change are deliberate manual steps for the maintainer (see PR #295).  Until
-#  then the currently-live site is untouched.
+#  Hosting (ADR-007, #430): the new MkDocs site is served from a subdomain of
+#  `universalalgebra.org`, while the legacy Jekyll site stays parked at
+#  `ualib.org` — this repository's own `gh-pages` branch.  This workflow no
+#  longer touches `ualib/agda-algebras`'s `gh-pages`, so the parked archive is
+#  left undisturbed.  Standing up the new home is a maintainer step: create the
+#  `universalalgebra/agda-algebras` repo, add the deploy key's public half to
+#  its Deploy keys (with write access) and the private half as the
+#  `UNIVERSALALGEBRA_DEPLOY_KEY` secret on this repo, then point DNS + Pages at
+#  the subdomain.
 # =============================================================================
 
 name: Docs
@@ -34,7 +40,7 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 permissions:
-  contents: write   # needed to push the built site to the gh-pages branch
+  contents: read   # the cross-deploy authenticates with UNIVERSALALGEBRA_DEPLOY_KEY (SSH), not GITHUB_TOKEN
 
 jobs:
   build-deploy:
@@ -73,12 +79,15 @@ jobs:
           set -euxo pipefail
           nix develop --command make site-full
 
-      - name: Deploy to gh-pages
+      - name: Cross-deploy to universalalgebra/agda-algebras gh-pages
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         uses: peaceiris/actions-gh-pages@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+	  # Authenticates over SSH to the external repo; the public half lives in
+	  # universalalgebra/agda-algebras → Settings → Deploy keys (write access).
+	  deploy_key: ${{ secrets.UNIVERSALALGEBRA_DEPLOY_KEY }}
+	  external_repository: universalalgebra/agda-algebras
           publish_dir: ./site
           publish_branch: gh-pages
-          # Attach the custom domain only at the ualib.org cutover:
-          # cname: ualib.org
+	  # Writes the custom-domain CNAME into the published site on every deploy.
+	  cname: agda-algebras.universalalgebra.org
