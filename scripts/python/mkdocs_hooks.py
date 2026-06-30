@@ -2,7 +2,7 @@
 
 `on_page_markdown` rewrites the *repo-relative* links that the prose uses for
 GitHub viewing into the site's URL scheme, so cross-references resolve both in
-`mkdocs serve` and at ualib.org:
+`mkdocs serve` and at the deployed site:
 
     ](src/Setoid/Varieties/HSP.lagda.md#…)  ->  ](/Setoid/Varieties/HSP/#…)
     ](docs/adr/001-setoid-as-canonical.md)  ->  ](/adr/001-setoid-as-canonical/)

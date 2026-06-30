@@ -70,7 +70,7 @@
 
       # ---- MkDocs documentation toolchain ---------------------------------
       # The rendering pipeline (ADR-007).  `make site` / `make serve` build
-      # the ualib.org site directly from the `.lagda.md` sources — no
+      # the documentation site directly from the `.lagda.md` sources — no
       # `agda --html` step — relying on kramdown attribute spans + custom CSS
       # for inline Agda highlighting.  Pinning the whole MkDocs stack here (in
       # one Python environment) makes `nix develop --command make site`

@@ -1,7 +1,8 @@
 # =============================================================================
 # agda-algebras — MkDocs (Material) site configuration
 # -----------------------------------------------------------------------------
-# The rendering pipeline for ualib.org (ADR-007).  The site is built directly
+# The rendering pipeline for agda-algebras.universalalgebra.org (ADR-007).  The
+# site is built directly
 # from the `.lagda.md` sources — no `agda --html` step.  Inline Agda terms are
 # kramdown attribute spans (`Algebra`{.AgdaRecord}) coloured by
 # docs/stylesheets/custom.css; the module tree and navigation are mounted by
@@ -12,7 +13,7 @@
 # =============================================================================
 
 site_name: The Agda Universal Algebra Library
-site_url: https://ualib.org/
+site_url: https://agda-algebras.universalalgebra.org/
 site_description: >-
   A formalization of universal algebra in dependent type theory — signatures,
   algebras, homomorphisms, terms, subalgebras, varieties, and a
@@ -122,7 +123,8 @@ plugins:
       on_error_fail: false
   - redirects:
       # Legacy flat `Module.Submodule.html` URLs → new directory URLs are added
-      # at the ualib.org cutover (see PR #295 checklist).  Empty for now so the
+      # at the cutover (see #430 checklist).  These resolve on the parked archive
+      # at ualib.org; the map here is for the new host.  Empty for now so the
       # plugin is wired and ready without inventing redirects prematurely.
       redirect_maps: {}
 
