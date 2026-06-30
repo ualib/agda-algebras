@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Overture.Operations</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Background">---
+layout: default
+title : &quot;Overture.Operations module (The Agda Universal Algebra Library)&quot;
+date : &quot;2022-06-17&quot;
+author: &quot;the agda-algebras development team&quot;
+---
+
+### Operations
+
+This is the [Overture.Operations][] module of the [Agda Universal Algebra Library][].
+
+For consistency and readability, we reserve two universe variables for special
+purposes.
+
+The first of these is `𝓞` which we used in the [Overture.Signatures][]
+as the universe of the type of *operation symbols* of a signature.
+
+The second is `𝓥` which we reserve for types representing *arities* of relations or
+operations.
+
+The type `Op` encodes the arity of an operation as an arbitrary type `I : Type 𝓥`,
+which gives us a very general way to represent an operation as a function type with
+domain `I → A` (the type of &quot;tuples&quot;) and codomain `A`.
+
+</a><a id="818" class="Markup">```agda
+</a><a id="826" class="Symbol">{-#</a> <a id="830" class="Keyword">OPTIONS</a> <a id="838" class="Pragma">--cubical-compatible</a> <a id="859" class="Pragma">--exact-split</a> <a id="873" class="Pragma">--safe</a> <a id="880" class="Symbol">#-}</a>
+
+<a id="885" class="Keyword">module</a> <a id="892" href="Overture.Operations.html" class="Module">Overture.Operations</a> <a id="912" class="Keyword">where</a>
+
+<a id="919" class="Comment">-- Imports from Agda and the Agda Standard Library -----------------------------</a>
+<a id="1000" class="Keyword">open</a> <a id="1005" class="Keyword">import</a> <a id="1012" href="Agda.Primitive.html" class="Module">Agda.Primitive</a>               <a id="1041" class="Keyword">using</a> <a id="1047" class="Symbol">()</a> <a id="1050" class="Keyword">renaming</a> <a id="1059" class="Symbol">(</a> <a id="1061" href="Agda.Primitive.html#388" class="Primitive">Set</a> <a id="1065" class="Symbol">to</a> <a id="1068" class="Primitive">Type</a> <a id="1073" class="Symbol">)</a>
+<a id="1075" class="Keyword">open</a> <a id="1080" class="Keyword">import</a> <a id="1087" href="Level.html" class="Module">Level</a>                        <a id="1116" class="Keyword">using</a> <a id="1122" class="Symbol">(</a> <a id="1124" href="Agda.Primitive.html#742" class="Postulate">Level</a> <a id="1130" class="Symbol">;</a> <a id="1132" href="Agda.Primitive.html#961" class="Primitive Operator">_⊔_</a> <a id="1136" class="Symbol">)</a>
+
+<a id="1139" class="Comment">-- Imports from the Agda Universal Algebra Library -----------------------------</a>
+<a id="1220" class="Keyword">open</a> <a id="1225" class="Keyword">import</a> <a id="1232" href="Overture.Signatures.html" class="Module">Overture.Signatures</a>          <a id="1261" class="Keyword">using</a> <a id="1267" class="Symbol">(</a> <a id="1269" href="Overture.Signatures.html#645" class="Generalizable">𝓥</a> <a id="1271" class="Symbol">)</a>
+
+<a id="1274" class="Keyword">private</a> <a id="1282" class="Keyword">variable</a> <a id="1291" href="Overture.Operations.html#1291" class="Generalizable">a</a> <a id="1293" href="Overture.Operations.html#1293" class="Generalizable">b</a> <a id="1295" href="Overture.Operations.html#1295" class="Generalizable">ρ</a> <a id="1297" class="Symbol">:</a> <a id="1299" href="Agda.Primitive.html#742" class="Postulate">Level</a>
+
+<a id="1306" class="Comment">-- The type of I-ary operations on A.  Arity first, carrier second, so that</a>
+<a id="1382" class="Comment">-- `Op (Fin 2)` partially applies as &quot;the type of binary operations&quot; on any given A.</a>
+<a id="Op"></a><a id="1467" href="Overture.Operations.html#1467" class="Function">Op</a> <a id="1470" class="Symbol">:</a> <a id="1472" href="Overture.Operations.html#1068" class="Primitive">Type</a> <a id="1477" href="Overture.Signatures.html#645" class="Generalizable">𝓥</a> <a id="1479" class="Symbol">→</a> <a id="1481" href="Overture.Operations.html#1068" class="Primitive">Type</a> <a id="1486" href="Overture.Operations.html#1291" class="Generalizable">a</a> <a id="1488" class="Symbol">→</a> <a id="1490" href="Overture.Operations.html#1068" class="Primitive">Type</a> <a id="1495" class="Symbol">(</a><a id="1496" href="Overture.Operations.html#1291" class="Generalizable">a</a> <a id="1498" href="Agda.Primitive.html#961" class="Primitive Operator">⊔</a> <a id="1500" href="Overture.Signatures.html#645" class="Generalizable">𝓥</a><a id="1501" class="Symbol">)</a>
+<a id="1503" href="Overture.Operations.html#1467" class="Function">Op</a> <a id="1506" href="Overture.Operations.html#1506" class="Bound">I</a> <a id="1508" href="Overture.Operations.html#1508" class="Bound">A</a> <a id="1510" class="Symbol">=</a> <a id="1512" class="Symbol">(</a><a id="1513" href="Overture.Operations.html#1506" class="Bound">I</a> <a id="1515" class="Symbol">→</a> <a id="1517" href="Overture.Operations.html#1508" class="Bound">A</a><a id="1518" class="Symbol">)</a> <a id="1520" class="Symbol">→</a> <a id="1522" href="Overture.Operations.html#1508" class="Bound">A</a>
+<a id="1524" class="Markup">```
+</a><a id="1528" class="Background">
+For example, the `I`-*ary projection operations* on `A` are represented as
+inhabitants of the type `Op I A` as follows.
+
+</a><a id="1650" class="Markup">```agda
+</a><a id="1658" class="Comment">-- Example (projections)</a>
+<a id="π"></a><a id="1683" href="Overture.Operations.html#1683" class="Function">π</a> <a id="1685" class="Symbol">:</a> <a id="1687" class="Symbol">{</a><a id="1688" href="Overture.Operations.html#1688" class="Bound">I</a> <a id="1690" class="Symbol">:</a> <a id="1692" href="Overture.Operations.html#1068" class="Primitive">Type</a> <a id="1697" href="Overture.Signatures.html#645" class="Generalizable">𝓥</a><a id="1698" class="Symbol">}</a> <a id="1700" class="Symbol">{</a><a id="1701" href="Overture.Operations.html#1701" class="Bound">A</a> <a id="1703" class="Symbol">:</a> <a id="1705" href="Overture.Operations.html#1068" class="Primitive">Type</a> <a id="1710" href="Overture.Operations.html#1291" class="Generalizable">a</a> <a id="1712" class="Symbol">}</a> <a id="1714" class="Symbol">→</a> <a id="1716" href="Overture.Operations.html#1688" class="Bound">I</a> <a id="1718" class="Symbol">→</a> <a id="1720" href="Overture.Operations.html#1467" class="Function">Op</a> <a id="1723" href="Overture.Operations.html#1688" class="Bound">I</a> <a id="1725" href="Overture.Operations.html#1701" class="Bound">A</a>
+<a id="1727" href="Overture.Operations.html#1683" class="Function">π</a> <a id="1729" href="Overture.Operations.html#1729" class="Bound">i</a> <a id="1731" class="Symbol">=</a> <a id="1733" class="Symbol">λ</a> <a id="1735" href="Overture.Operations.html#1735" class="Bound">x</a> <a id="1737" class="Symbol">→</a> <a id="1739" href="Overture.Operations.html#1735" class="Bound">x</a> <a id="1741" href="Overture.Operations.html#1729" class="Bound">i</a>
+<a id="1743" class="Markup">```
+</a><a id="1747" class="Background">
+Occasionally we want to extract the arity of a given operation symbol.
+
+</a><a id="1820" class="Markup">```agda
+</a><a id="1828" class="Comment">-- return the arity of a given operation symbol</a>
+<a id="arity[_]"></a><a id="1876" href="Overture.Operations.html#1876" class="Function Operator">arity[_]</a> <a id="1885" class="Symbol">:</a> <a id="1887" class="Symbol">{</a><a id="1888" href="Overture.Operations.html#1888" class="Bound">I</a> <a id="1890" class="Symbol">:</a> <a id="1892" href="Overture.Operations.html#1068" class="Primitive">Type</a> <a id="1897" href="Overture.Signatures.html#645" class="Generalizable">𝓥</a><a id="1898" class="Symbol">}</a> <a id="1900" class="Symbol">{</a><a id="1901" href="Overture.Operations.html#1901" class="Bound">A</a> <a id="1903" class="Symbol">:</a> <a id="1905" href="Overture.Operations.html#1068" class="Primitive">Type</a> <a id="1910" href="Overture.Operations.html#1291" class="Generalizable">a</a> <a id="1912" class="Symbol">}</a> <a id="1914" class="Symbol">→</a> <a id="1916" href="Overture.Operations.html#1467" class="Function">Op</a> <a id="1919" href="Overture.Operations.html#1888" class="Bound">I</a> <a id="1921" href="Overture.Operations.html#1901" class="Bound">A</a> <a id="1923" class="Symbol">→</a> <a id="1925" href="Overture.Operations.html#1068" class="Primitive">Type</a> <a id="1930" href="Overture.Signatures.html#645" class="Generalizable">𝓥</a>
+<a id="1932" href="Overture.Operations.html#1876" class="Function Operator">arity[_]</a> <a id="1941" class="Symbol">{</a><a id="1942" class="Argument">I</a> <a id="1944" class="Symbol">=</a> <a id="1946" href="Overture.Operations.html#1946" class="Bound">I</a><a id="1947" class="Symbol">}</a> <a id="1949" href="Overture.Operations.html#1949" class="Bound">f</a> <a id="1951" class="Symbol">=</a> <a id="1953" href="Overture.Operations.html#1946" class="Bound">I</a>
+<a id="1955" class="Markup">```
+</a></pre></body></html>

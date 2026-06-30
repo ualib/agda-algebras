@@ -1,0 +1,192 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Legacy.Base.Complexity.CSP</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Background">---
+layout: default
+title : &quot;Legacy.Base.Complexity.CSP module (The Agda Universal Algebra Library)&quot;
+date : &quot;2021-07-14&quot;
+author: &quot;the agda-algebras development team&quot;
+---
+
+### &lt;a id=&quot;constraint-satisfaction-problems&quot;&gt;Constraint Satisfaction Problems&lt;/a&gt;
+
+&gt; **Deprecated**.  Canonical home is now [`Setoid.Complexity.CSP`](/Setoid/Complexity/CSP/), ported under #307 (M2-7c).  Importers will see `WARNING_ON_USAGE` warnings on `Constraint` and `CSPInstance`; migrate by replacing `Legacy.Base.Complexity.CSP` with `Setoid.Complexity.CSP` (signature parameter is unchanged).  See [`src/Legacy/Base/DEPRECATED.md`](../../DEPRECATED.md).  Removal is planned for v3.1.
+
+This is the [Legacy.Base.Complexity.CSP][] module of the [Agda Universal Algebra Library][].
+
+#### &lt;a id=&quot;the-relational-formulation-of-csp&quot;&gt;The relational formulation of CSP&lt;/a&gt;
+
+Let 𝒜 = (𝐴 , 𝑅ᵃ) be a *relational structure* (or 𝑅-structure), that is, a pair consisting
+of a set 𝐴 along with a collection 𝑅ᵃ ⊆ ⋃ₙ 𝒫(𝐴ⁿ) of relations on 𝐴.
+
+We associate with 𝒜 a *constraint satisfaction problem* denoted by CSP(𝒜), which is the
+decision problem that is solved by finding an algorithm or program that does the following:
+
+Take as input
+
++ an *instance*, which is an 𝑅-structure ℬ = (𝐵 , 𝑅ᵇ) (in the same signature as 𝒜)
+
+Output
+
++ &quot;yes&quot; or &quot;no&quot; according as there is, or is not, a *solution*, which is a 𝑅-structure
+  homomorphism h : ℬ → 𝒜.
+
+If there is such an algorithm that takes at most a power of 𝑛 operations to process an
+input structure ℬ of size 𝑛 (i.e., 𝑛 bits of memory are required to encode ℬ), then
+we say that CSP(𝒜) is *tractable*.  Otherwise, CSP(𝒜) is *intractable*.
+
+Equivalently, if we define
+
+  CSP(𝒜) := \{ ℬ ∣ ℬ an 𝑅-structure and ∃ hom ℬ → 𝒜 \}
+
+then the CSP problem described above is simply the membership problem for the subset
+CSP(𝒜) of 𝑅 structures having homomorphisms into 𝒜.
+
+That is, our algorithm must take as input an 𝑅-structure (a relational structure in the
+signature of 𝒜) and decide whether or not it belongs to the set CSP(𝒜).
+
+#### &lt;a id=&quot;connection-to-algebraic-csp&quot;&gt;Connection to algebraic CSP&lt;/a&gt;
+
+Let A be a set, let Op(A) denote the set of all operations, Rel(A) the set of all
+relations, on A.
+
+Given R ⊆ Rel(A), define the set of operations on A that preserve all relations
+in R as follows:
+
+∣: ⃖ R  =  \{ f ∈ Op(𝐴) ∣ ∀ r ∈ R, f ∣: r \}.
+
+Recall, f ∣: r is our notation for `f Preserves r ⟶ r`, which means that r is a
+subuniverse of a power of the algebra (A , {f}).
+
+Equivalently, `f Preserves r ⟶ r means` the following: if f is 𝑚-ary and r is
+𝑛-ary, then for every size-𝑚 collection 𝑎𝑠 of 𝑛-tuples from r (that is, ∣ 𝑎𝑠 ∣ = 𝑚
+and ∀ a ∈ 𝑎𝑠, r a) we have r (f ∘ (zip 𝑎𝑠)).
+
+
+If 𝒜 = (A , R) is a relational structure, then the set ∣: ⃖R of operations on A that
+preserve all relations in R is called the set of *polymorphisms* of 𝒜.
+
+Conversely, starting with a collection F ⊆ Op(A) of operations on A, define
+the set of all relations preserved by the functions in F as follows:
+
+F ⃗ ∣:  =  \{ r ∈ Rel(A) ∣ ∀ f ∈ F, f ∣: r \}.
+
+It is easy to see that for all F ⊆ Op(A) and all R ⊆ Rel(A), we have
+
+  F ⊆  ∣: ⃖ (F ⃗ ∣:)    and    R ⊆ (∣: ⃖ R) ⃗ ∣:.
+
+Let 𝑨(R) denote the algebraic structure with domain A and operations ∣: ⃖ R.
+
+Then every r ∈ R is a subalgebra of a power of 𝑨(R).
+
+Clearly (∣: ⃖ R) ⃗ ∣: is the set 𝖲 (𝖯fin 𝑨(R)) of subalgebras of finite powers of 𝑨(R).
+
+The reason this Galois connection is useful is due to the following fact (observed by
+Peter Jeavons in the late 1990&#39;s):
+
+*Theorem*. Let 𝒜 = (A, R) be a finite relational structure.
+           If R&#39; ⊆ (∣: ⃖ R) ⃗ ∣: is finite, then CSP((A, Γ&#39;))
+           is reducible in poly-time to CSP(𝒜)
+
+In particular, the tractability of CSP(𝒜) depends only on its associated polymorphism
+algebra, 𝑨(R) := (A , ∣: ⃖ R).
+
+
+</a><a id="3794" class="Markup">```agda
+</a><a id="3802" class="Symbol">{-#</a> <a id="3806" class="Keyword">OPTIONS</a> <a id="3814" class="Pragma">--cubical-compatible</a> <a id="3835" class="Pragma">--exact-split</a> <a id="3849" class="Pragma">--safe</a> <a id="3856" class="Symbol">#-}</a>
+
+<a id="3861" class="Keyword">open</a> <a id="3866" class="Keyword">import</a> <a id="3873" href="Overture.html" class="Module">Overture</a> <a id="3882" class="Keyword">using</a> <a id="3888" class="Symbol">(</a> <a id="3890" href="Overture.Signatures.html#643" class="Generalizable">𝓞</a> <a id="3892" class="Symbol">;</a> <a id="3894" href="Overture.Signatures.html#645" class="Generalizable">𝓥</a> <a id="3896" class="Symbol">;</a> <a id="3898" href="Overture.Signatures.html#3178" class="Function">Signature</a> <a id="3908" class="Symbol">)</a>
+
+<a id="3911" class="Keyword">module</a> <a id="3918" href="Legacy.Base.Complexity.CSP.html" class="Module">Legacy.Base.Complexity.CSP</a> <a id="3945" class="Symbol">{</a><a id="3946" href="Legacy.Base.Complexity.CSP.html#3946" class="Bound">𝑆</a> <a id="3948" class="Symbol">:</a> <a id="3950" href="Overture.Signatures.html#3178" class="Function">Signature</a> <a id="3960" href="Overture.Signatures.html#643" class="Generalizable">𝓞</a> <a id="3962" href="Overture.Signatures.html#645" class="Generalizable">𝓥</a><a id="3963" class="Symbol">}</a> <a id="3965" class="Keyword">where</a>
+
+<a id="3972" class="Comment">-- Imports from Agda and the Agda Standard Library ------------------------------</a>
+<a id="4054" class="Keyword">open</a> <a id="4059" class="Keyword">import</a> <a id="4066" href="Agda.Primitive.html" class="Module">Agda.Primitive</a>   <a id="4083" class="Keyword">using</a> <a id="4089" class="Symbol">(</a> <a id="4091" href="Agda.Primitive.html#961" class="Primitive Operator">_⊔_</a> <a id="4095" class="Symbol">;</a> <a id="4097" href="Agda.Primitive.html#931" class="Primitive">lsuc</a> <a id="4102" class="Symbol">;</a> <a id="4104" href="Agda.Primitive.html#742" class="Postulate">Level</a><a id="4109" class="Symbol">)</a> <a id="4111" class="Keyword">renaming</a> <a id="4120" class="Symbol">(</a> <a id="4122" href="Agda.Primitive.html#388" class="Primitive">Set</a> <a id="4126" class="Symbol">to</a> <a id="4129" class="Primitive">Type</a> <a id="4134" class="Symbol">)</a>
+<a id="4136" class="Keyword">open</a> <a id="4141" class="Keyword">import</a> <a id="4148" href="Function.Base.html" class="Module">Function.Base</a>    <a id="4165" class="Keyword">using</a> <a id="4171" class="Symbol">(</a> <a id="4173" href="Function.Base.html#1134" class="Function Operator">_∘_</a> <a id="4177" class="Symbol">)</a>
+<a id="4179" class="Keyword">open</a> <a id="4184" class="Keyword">import</a> <a id="4191" href="Relation.Binary.html" class="Module">Relation.Binary</a>  <a id="4208" class="Keyword">using</a> <a id="4214" class="Symbol">(</a> <a id="4216" href="Relation.Binary.Bundles.html#1235" class="Record">Setoid</a> <a id="4223" class="Symbol">)</a>
+
+<a id="4226" class="Comment">-- Imports from the Agda Universal Algebra Library ------------------------------</a>
+<a id="4308" class="Keyword">open</a> <a id="4313" class="Keyword">import</a> <a id="4320" href="Legacy.Base.Relations.Continuous.html" class="Module">Legacy.Base.Relations.Continuous</a>       <a id="4359" class="Keyword">using</a> <a id="4365" class="Symbol">(</a> <a id="4367" href="Legacy.Base.Relations.Continuous.html#5550" class="Function">REL</a> <a id="4371" class="Symbol">;</a> <a id="4373" href="Legacy.Base.Relations.Continuous.html#5659" class="Function">REL-syntax</a> <a id="4384" class="Symbol">)</a>
+<a id="4386" class="Keyword">open</a> <a id="4391" class="Keyword">import</a> <a id="4398" href="Setoid.Algebras.Basic.html" class="Module">Setoid.Algebras.Basic</a>  <a id="4421" class="Symbol">{</a><a id="4422" class="Argument">𝑆</a> <a id="4424" class="Symbol">=</a> <a id="4426" href="Legacy.Base.Complexity.CSP.html#3946" class="Bound">𝑆</a><a id="4427" class="Symbol">}</a>  <a id="4430" class="Keyword">using</a> <a id="4436" class="Symbol">(</a> <a id="4438" href="Setoid.Algebras.Basic.html#2892" class="Record">Algebra</a> <a id="4446" class="Symbol">)</a>
+<a id="4448" class="Markup">```
+</a><a id="4452" class="Background">
+
+#### &lt;a id=&quot;constraints&quot;&gt;Constraints&lt;/a&gt;
+
+A constraint c consists of
+
+1. a scope function,  s : I → var, and
+
+2. a constraint relation, i.e., a predicate over the function type I → D
+
+        I ···&gt; var
+         .     .
+          .   .
+           ⌟ ⌞
+            D
+
+The *scope* of a constraint is an indexed subset of the set of variable symbols.
+We could define a type for this, e.g.,
+
+
+    Scope : Type ν → Type ι → _
+    Scope V I = I → V
+
+
+but we omit this definition because it&#39;s so simple; to reiterate,
+a scope of &quot;arity&quot; I on &quot;variables&quot; V is simply a map from I to V,
+where,
+
+* I denotes the &quot;number&quot; of variables involved in the scope
+* V denotes a collection (type) of &quot;variable symbols&quot;
+
+
+</a><a id="5155" class="Markup">```agda
+</a><a id="5163" class="Keyword">module</a>  <a id="5171" href="Legacy.Base.Complexity.CSP.html#5171" class="Module">_</a>              <a id="5186" class="Comment">-- levels for...</a>
+        <a id="5211" class="Symbol">{</a><a id="5212" href="Legacy.Base.Complexity.CSP.html#5212" class="Bound">ι</a> <a id="5214" class="Symbol">:</a> <a id="5216" href="Agda.Primitive.html#742" class="Postulate">Level</a><a id="5221" class="Symbol">}</a>    <a id="5226" class="Comment">-- ...arity (or argument index) types</a>
+        <a id="5272" class="Symbol">{</a><a id="5273" href="Legacy.Base.Complexity.CSP.html#5273" class="Bound">ν</a> <a id="5275" class="Symbol">:</a> <a id="5277" href="Agda.Primitive.html#742" class="Postulate">Level</a><a id="5282" class="Symbol">}</a>    <a id="5287" class="Comment">-- ...variable symbol types</a>
+        <a id="5323" class="Symbol">{</a><a id="5324" href="Legacy.Base.Complexity.CSP.html#5324" class="Bound">α</a> <a id="5326" href="Legacy.Base.Complexity.CSP.html#5326" class="Bound">ℓ</a> <a id="5328" class="Symbol">:</a> <a id="5330" href="Agda.Primitive.html#742" class="Postulate">Level</a><a id="5335" class="Symbol">}</a>  <a id="5338" class="Comment">-- ... domain types</a>
+ <a id="5359" class="Keyword">where</a>
+ <a id="5366" class="Keyword">open</a> <a id="5371" href="Relation.Binary.Bundles.html#1235" class="Module">Setoid</a>
+ <a id="5379" class="Keyword">record</a> <a id="5386" href="Legacy.Base.Complexity.CSP.html#5386" class="Record">Constraint</a> <a id="5397" class="Symbol">(</a><a id="5398" href="Legacy.Base.Complexity.CSP.html#5398" class="Bound">var</a> <a id="5402" class="Symbol">:</a> <a id="5404" href="Legacy.Base.Complexity.CSP.html#4129" class="Primitive">Type</a> <a id="5409" href="Legacy.Base.Complexity.CSP.html#5273" class="Bound">ν</a><a id="5410" class="Symbol">)</a> <a id="5412" class="Symbol">(</a><a id="5413" href="Legacy.Base.Complexity.CSP.html#5413" class="Bound">dom</a> <a id="5417" class="Symbol">:</a> <a id="5419" href="Legacy.Base.Complexity.CSP.html#5398" class="Bound">var</a> <a id="5423" class="Symbol">→</a> <a id="5425" href="Relation.Binary.Bundles.html#1235" class="Record">Setoid</a> <a id="5432" href="Legacy.Base.Complexity.CSP.html#5324" class="Bound">α</a> <a id="5434" href="Legacy.Base.Complexity.CSP.html#5326" class="Bound">ℓ</a><a id="5435" class="Symbol">)</a> <a id="5437" class="Symbol">:</a> <a id="5439" href="Legacy.Base.Complexity.CSP.html#4129" class="Primitive">Type</a> <a id="5444" class="Symbol">(</a><a id="5445" href="Legacy.Base.Complexity.CSP.html#5273" class="Bound">ν</a> <a id="5447" href="Agda.Primitive.html#961" class="Primitive Operator">⊔</a> <a id="5449" href="Legacy.Base.Complexity.CSP.html#5324" class="Bound">α</a> <a id="5451" href="Agda.Primitive.html#961" class="Primitive Operator">⊔</a> <a id="5453" href="Agda.Primitive.html#931" class="Primitive">lsuc</a> <a id="5458" href="Legacy.Base.Complexity.CSP.html#5212" class="Bound">ι</a><a id="5459" class="Symbol">)</a> <a id="5461" class="Keyword">where</a>
+  <a id="5469" class="Keyword">field</a>
+   <a id="5478" href="Legacy.Base.Complexity.CSP.html#5478" class="Field">arity</a>  <a id="5485" class="Symbol">:</a> <a id="5487" href="Legacy.Base.Complexity.CSP.html#4129" class="Primitive">Type</a> <a id="5492" href="Legacy.Base.Complexity.CSP.html#5212" class="Bound">ι</a>               <a id="5508" class="Comment">-- The &quot;number&quot; of variables involved in the constraint.</a>
+   <a id="5568" href="Legacy.Base.Complexity.CSP.html#5568" class="Field">scope</a>  <a id="5575" class="Symbol">:</a> <a id="5577" href="Legacy.Base.Complexity.CSP.html#5478" class="Field">arity</a> <a id="5583" class="Symbol">→</a> <a id="5585" href="Legacy.Base.Complexity.CSP.html#5398" class="Bound">var</a>          <a id="5598" class="Comment">-- Which variables are involved in the constraint.</a>
+   <a id="5652" href="Legacy.Base.Complexity.CSP.html#5652" class="Field">rel</a>    <a id="5659" class="Symbol">:</a> <a id="5661" href="Legacy.Base.Relations.Continuous.html#5659" class="Function">REL[</a> <a id="5666" href="Legacy.Base.Complexity.CSP.html#5666" class="Bound">i</a> <a id="5668" href="Legacy.Base.Relations.Continuous.html#5659" class="Function">∈</a> <a id="5670" href="Legacy.Base.Complexity.CSP.html#5478" class="Field">arity</a> <a id="5676" href="Legacy.Base.Relations.Continuous.html#5659" class="Function">]</a> <a id="5678" class="Symbol">(</a><a id="5679" href="Relation.Binary.Bundles.html#1298" class="Field">Carrier</a> <a id="5687" class="Symbol">(</a><a id="5688" href="Legacy.Base.Complexity.CSP.html#5413" class="Bound">dom</a> <a id="5692" class="Symbol">(</a><a id="5693" href="Legacy.Base.Complexity.CSP.html#5568" class="Field">scope</a> <a id="5699" href="Legacy.Base.Complexity.CSP.html#5666" class="Bound">i</a><a id="5700" class="Symbol">)))</a>   <a id="5706" class="Comment">-- The constraint relation.</a>
+
+  <a id="5737" href="Legacy.Base.Complexity.CSP.html#5737" class="Function">satisfies</a> <a id="5747" class="Symbol">:</a> <a id="5749" class="Symbol">(∀</a> <a id="5752" href="Legacy.Base.Complexity.CSP.html#5752" class="Bound">v</a> <a id="5754" class="Symbol">→</a> <a id="5756" href="Relation.Binary.Bundles.html#1298" class="Field">Carrier</a> <a id="5764" class="Symbol">(</a><a id="5765" href="Legacy.Base.Complexity.CSP.html#5413" class="Bound">dom</a> <a id="5769" href="Legacy.Base.Complexity.CSP.html#5752" class="Bound">v</a><a id="5770" class="Symbol">))</a> <a id="5773" class="Symbol">→</a> <a id="5775" href="Legacy.Base.Complexity.CSP.html#4129" class="Primitive">Type</a>  <a id="5781" class="Comment">-- An assignment 𝑓 : var → dom of values to variables</a>
+  <a id="5837" href="Legacy.Base.Complexity.CSP.html#5737" class="Function">satisfies</a> <a id="5847" href="Legacy.Base.Complexity.CSP.html#5847" class="Bound">f</a> <a id="5849" class="Symbol">=</a> <a id="5851" href="Legacy.Base.Complexity.CSP.html#5652" class="Field">rel</a> <a id="5855" class="Symbol">(</a><a id="5856" href="Legacy.Base.Complexity.CSP.html#5847" class="Bound">f</a> <a id="5858" href="Function.Base.html#1134" class="Function Operator">∘</a> <a id="5860" href="Legacy.Base.Complexity.CSP.html#5568" class="Field">scope</a><a id="5865" class="Symbol">)</a>      <a id="5872" class="Comment">-- *satisfies* the constraint 𝐶 = (σ , 𝑅) provided</a>
+                                    <a id="5959" class="Comment">-- 𝑓 ∘ σ ∈ 𝑅, where σ is the scope of the constraint.</a>
+<a id="6013" class="Markup">```
+</a><a id="6017" class="Background">
+#### &lt;a id=&quot;csp-templates-and-instances&quot;&gt;CSP templates and instances&lt;/a&gt;
+
+A CSP &quot;template&quot; restricts the relations that may occur in instances of the problem.
+A convenient way to specify a template is to give an indexed family
+𝒜 : var → Algebra α ρ of algebras (one for each variable symbol in var)
+and require that relations be subalgebras of the product ⨅ var 𝒜.
+
+To construct a CSP instance, then, we just have to give a family 𝒜 of algebras, specify
+the number (ar) of constraints, and for each i : ar, define a constraint as a relation
+over (some of) the members of 𝒜.
+
+An instance of a constraint satisfaction problem is a triple 𝑃 = (𝑉, 𝐷, 𝐶) where
+
+* 𝑉 denotes a set of &quot;variables&quot;
+* 𝐷 denotes a &quot;domain&quot;,
+* 𝐶 denotes an indexed collection of constraints.
+
+</a><a id="6783" class="Markup">```agda
+</a> <a id="6792" class="Keyword">open</a> <a id="6797" href="Setoid.Algebras.Basic.html#2892" class="Module">Algebra</a>
+ <a id="6806" class="Keyword">open</a> <a id="6811" href="Relation.Binary.Bundles.html#1235" class="Module">Setoid</a>
+ <a id="6819" class="Keyword">record</a> <a id="6826" href="Legacy.Base.Complexity.CSP.html#6826" class="Record">CSPInstance</a> <a id="6838" class="Symbol">(</a><a id="6839" href="Legacy.Base.Complexity.CSP.html#6839" class="Bound">var</a> <a id="6843" class="Symbol">:</a> <a id="6845" href="Legacy.Base.Complexity.CSP.html#4129" class="Primitive">Type</a> <a id="6850" href="Legacy.Base.Complexity.CSP.html#5273" class="Bound">ν</a><a id="6851" class="Symbol">)(</a><a id="6853" href="Legacy.Base.Complexity.CSP.html#6853" class="Bound">𝒜</a> <a id="6855" class="Symbol">:</a> <a id="6857" href="Legacy.Base.Complexity.CSP.html#6839" class="Bound">var</a> <a id="6861" class="Symbol">→</a> <a id="6863" href="Setoid.Algebras.Basic.html#2892" class="Record">Algebra</a> <a id="6871" href="Legacy.Base.Complexity.CSP.html#5324" class="Bound">α</a> <a id="6873" href="Legacy.Base.Complexity.CSP.html#5326" class="Bound">ℓ</a><a id="6874" class="Symbol">)</a> <a id="6876" class="Symbol">:</a> <a id="6878" href="Legacy.Base.Complexity.CSP.html#4129" class="Primitive">Type</a> <a id="6883" class="Symbol">(</a><a id="6884" href="Legacy.Base.Complexity.CSP.html#5273" class="Bound">ν</a> <a id="6886" href="Agda.Primitive.html#961" class="Primitive Operator">⊔</a> <a id="6888" href="Legacy.Base.Complexity.CSP.html#5324" class="Bound">α</a> <a id="6890" href="Agda.Primitive.html#961" class="Primitive Operator">⊔</a> <a id="6892" href="Agda.Primitive.html#931" class="Primitive">lsuc</a> <a id="6897" href="Legacy.Base.Complexity.CSP.html#5212" class="Bound">ι</a><a id="6898" class="Symbol">)</a> <a id="6900" class="Keyword">where</a>
+  <a id="6908" class="Keyword">field</a>
+   <a id="6917" href="Legacy.Base.Complexity.CSP.html#6917" class="Field">ar</a> <a id="6920" class="Symbol">:</a> <a id="6922" href="Legacy.Base.Complexity.CSP.html#4129" class="Primitive">Type</a> <a id="6927" href="Legacy.Base.Complexity.CSP.html#5212" class="Bound">ι</a>       <a id="6935" class="Comment">-- ar indexes the contraints in the instance</a>
+   <a id="6983" href="Legacy.Base.Complexity.CSP.html#6983" class="Field">cs</a> <a id="6986" class="Symbol">:</a> <a id="6988" class="Symbol">(</a><a id="6989" href="Legacy.Base.Complexity.CSP.html#6989" class="Bound">i</a> <a id="6991" class="Symbol">:</a> <a id="6993" href="Legacy.Base.Complexity.CSP.html#6917" class="Field">ar</a><a id="6995" class="Symbol">)</a> <a id="6997" class="Symbol">→</a> <a id="6999" href="Legacy.Base.Complexity.CSP.html#5386" class="Record">Constraint</a> <a id="7010" href="Legacy.Base.Complexity.CSP.html#6839" class="Bound">var</a> <a id="7014" class="Symbol">(λ</a> <a id="7017" href="Legacy.Base.Complexity.CSP.html#7017" class="Bound">v</a> <a id="7019" class="Symbol">→</a> <a id="7021" href="Setoid.Algebras.Basic.html#2952" class="Field">Domain</a> <a id="7028" class="Symbol">(</a><a id="7029" href="Legacy.Base.Complexity.CSP.html#6853" class="Bound">𝒜</a> <a id="7031" href="Legacy.Base.Complexity.CSP.html#7017" class="Bound">v</a><a id="7032" class="Symbol">))</a>
+
+  <a id="7038" href="Legacy.Base.Complexity.CSP.html#7038" class="Function">isSolution</a> <a id="7049" class="Symbol">:</a> <a id="7051" class="Symbol">(∀</a> <a id="7054" href="Legacy.Base.Complexity.CSP.html#7054" class="Bound">v</a> <a id="7056" class="Symbol">→</a> <a id="7058" href="Relation.Binary.Bundles.html#1298" class="Field">Carrier</a> <a id="7066" class="Symbol">(</a><a id="7067" href="Setoid.Algebras.Basic.html#2952" class="Field">Domain</a> <a id="7074" class="Symbol">(</a><a id="7075" href="Legacy.Base.Complexity.CSP.html#6853" class="Bound">𝒜</a> <a id="7077" href="Legacy.Base.Complexity.CSP.html#7054" class="Bound">v</a><a id="7078" class="Symbol">)))</a> <a id="7082" class="Symbol">→</a> <a id="7084" href="Legacy.Base.Complexity.CSP.html#4129" class="Primitive">Type</a> <a id="7089" class="Symbol">_</a>  <a id="7092" class="Comment">-- An assignment *solves* the instance</a>
+  <a id="7133" href="Legacy.Base.Complexity.CSP.html#7038" class="Function">isSolution</a> <a id="7144" href="Legacy.Base.Complexity.CSP.html#7144" class="Bound">f</a> <a id="7146" class="Symbol">=</a> <a id="7148" class="Symbol">∀</a> <a id="7150" href="Legacy.Base.Complexity.CSP.html#7150" class="Bound">i</a> <a id="7152" class="Symbol">→</a> <a id="7154" class="Symbol">(</a><a id="7155" href="Legacy.Base.Complexity.CSP.html#5737" class="Function">Constraint.satisfies</a> <a id="7176" class="Symbol">(</a><a id="7177" href="Legacy.Base.Complexity.CSP.html#6983" class="Field">cs</a> <a id="7180" href="Legacy.Base.Complexity.CSP.html#7150" class="Bound">i</a><a id="7181" class="Symbol">))</a> <a id="7184" href="Legacy.Base.Complexity.CSP.html#7144" class="Bound">f</a>  <a id="7187" class="Comment">-- if it satisfies all the constraints.</a>
+<a id="7227" class="Markup">```
+</a><a id="7231" class="Background">
+</a><a id="7232" class="Markup">```agda
+</a><a id="7240" class="Symbol">{-#</a> <a id="7244" class="Keyword">WARNING_ON_USAGE</a> <a id="7261" class="Pragma">Constraint</a>   <a id="7274" class="String">&quot;Use Setoid.Complexity.CSP.Constraint instead. Deprecated under #307; removal planned one minor cycle later.&quot;</a> <a id="7384" class="Symbol">#-}</a>
+<a id="7388" class="Symbol">{-#</a> <a id="7392" class="Keyword">WARNING_ON_USAGE</a> <a id="7409" class="Pragma">CSPInstance</a>  <a id="7422" class="String">&quot;Use Setoid.Complexity.CSP.CSPInstance instead. Deprecated under #307; removal planned one minor cycle later.&quot;</a> <a id="7533" class="Symbol">#-}</a>
+<a id="7537" class="Markup">```
+</a></pre></body></html>

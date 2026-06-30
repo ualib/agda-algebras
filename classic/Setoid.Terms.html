@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Setoid.Terms</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Background">---
+layout: default
+title : &quot;Setoid.Terms module (The Agda Universal Algebra Library)&quot;
+date : &quot;2021-09-18&quot;
+author: &quot;agda-algebras development team&quot;
+---
+
+### Terms on setoids
+
+This is the [Setoid.Terms][] module of the [Agda Universal Algebra Library][].
+
+
+</a><a id="257" class="Markup">```agda
+</a><a id="265" class="Symbol">{-#</a> <a id="269" class="Keyword">OPTIONS</a> <a id="277" class="Pragma">--cubical-compatible</a> <a id="298" class="Pragma">--exact-split</a> <a id="312" class="Pragma">--safe</a> <a id="319" class="Symbol">#-}</a>
+
+<a id="324" class="Keyword">open</a> <a id="329" class="Keyword">import</a> <a id="336" href="Overture.html" class="Module">Overture</a> <a id="345" class="Keyword">using</a> <a id="351" class="Symbol">(</a><a id="352" href="Overture.Signatures.html#643" class="Generalizable">𝓞</a> <a id="354" class="Symbol">;</a> <a id="356" href="Overture.Signatures.html#645" class="Generalizable">𝓥</a> <a id="358" class="Symbol">;</a> <a id="360" href="Overture.Signatures.html#3178" class="Function">Signature</a><a id="369" class="Symbol">)</a>
+
+<a id="372" class="Keyword">module</a> <a id="379" href="Setoid.Terms.html" class="Module">Setoid.Terms</a> <a id="392" class="Symbol">{</a><a id="393" href="Setoid.Terms.html#393" class="Bound">𝑆</a> <a id="395" class="Symbol">:</a> <a id="397" href="Overture.Signatures.html#3178" class="Function">Signature</a> <a id="407" href="Overture.Signatures.html#643" class="Generalizable">𝓞</a> <a id="409" href="Overture.Signatures.html#645" class="Generalizable">𝓥</a><a id="410" class="Symbol">}</a> <a id="412" class="Keyword">where</a>
+
+<a id="419" class="Keyword">open</a> <a id="424" class="Keyword">import</a> <a id="431" href="Setoid.Terms.Basic.html" class="Module">Setoid.Terms.Basic</a> <a id="450" class="Symbol">{</a><a id="451" class="Argument">𝑆</a> <a id="453" class="Symbol">=</a> <a id="455" href="Setoid.Terms.html#393" class="Bound">𝑆</a><a id="456" class="Symbol">}</a>       <a id="464" class="Keyword">public</a>
+<a id="471" class="Keyword">open</a> <a id="476" class="Keyword">import</a> <a id="483" href="Setoid.Terms.Interpretation.html" class="Module">Setoid.Terms.Interpretation</a>      <a id="516" class="Keyword">public</a>
+<a id="523" class="Keyword">open</a> <a id="528" class="Keyword">import</a> <a id="535" href="Setoid.Terms.Monad.html" class="Module">Setoid.Terms.Monad</a> <a id="554" class="Symbol">{</a><a id="555" class="Argument">𝑆</a> <a id="557" class="Symbol">=</a> <a id="559" href="Setoid.Terms.html#393" class="Bound">𝑆</a><a id="560" class="Symbol">}</a>       <a id="568" class="Keyword">public</a>
+<a id="575" class="Keyword">open</a> <a id="580" class="Keyword">import</a> <a id="587" href="Setoid.Terms.Operations.html" class="Module">Setoid.Terms.Operations</a> <a id="611" class="Symbol">{</a><a id="612" class="Argument">𝑆</a> <a id="614" class="Symbol">=</a> <a id="616" href="Setoid.Terms.html#393" class="Bound">𝑆</a><a id="617" class="Symbol">}</a>  <a id="620" class="Keyword">public</a>
+<a id="627" class="Keyword">open</a> <a id="632" class="Keyword">import</a> <a id="639" href="Setoid.Terms.Properties.html" class="Module">Setoid.Terms.Properties</a> <a id="663" class="Symbol">{</a><a id="664" class="Argument">𝑆</a> <a id="666" class="Symbol">=</a> <a id="668" href="Setoid.Terms.html#393" class="Bound">𝑆</a><a id="669" class="Symbol">}</a>  <a id="672" class="Keyword">public</a>
+<a id="679" class="Keyword">open</a> <a id="684" class="Keyword">import</a> <a id="691" href="Setoid.Terms.Translation.html" class="Module">Setoid.Terms.Translation</a>         <a id="724" class="Keyword">public</a>
+<a id="731" class="Markup">```
+</a><a id="735" class="Background">
+(The two-signature modules [Setoid.Terms.Translation][] and
+[Setoid.Terms.Interpretation][] relate two signatures at once, so they are not
+`{𝑆}`-parameterized; they are nonetheless re-exported here for convenience.)
+</a></pre></body></html>

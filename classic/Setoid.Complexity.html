@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Setoid.Complexity</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Background">---
+layout: default
+title : &quot;Setoid.Complexity module (Agda Universal Algebra Library)&quot;
+date : &quot;2026-05-09&quot;
+author: &quot;agda-algebras development team&quot;
+---
+
+## Types for Computational Complexity
+
+This is the [Setoid.Complexity][] module of the [Agda Universal Algebra Library][].
+
+This subtree collects the setoid-canonical formulation of computational complexity infrastructure used by the library: word and algorithm definitions ([`Setoid.Complexity.Basic`](/Setoid/Complexity/Basic/)) and the relational formulation of CSP, including the Galois connection to polymorphism clones ([`Setoid.Complexity.CSP`](/Setoid/Complexity/CSP/)).
+
+This module is the canonical home for the content previously developed in `Legacy.Base.Complexity.*`, ported under #307 (M2-7c).  See [`src/Legacy/Base/DEPRECATED.md`](../Legacy/Base/DEPRECATED.md) for the inventory and migration guidance.  Substantial extensions — polymorphism clones as a first-class type, the Jeavons Galois connection, Post&#39;s lattice, Bulatov–Zhuk — are tracked under #274 (M7-1) and build on this module.
+
+</a><a id="1063" class="Markup">```agda
+</a><a id="1071" class="Symbol">{-#</a> <a id="1075" class="Keyword">OPTIONS</a> <a id="1083" class="Pragma">--cubical-compatible</a> <a id="1104" class="Pragma">--exact-split</a> <a id="1118" class="Pragma">--safe</a> <a id="1125" class="Symbol">#-}</a>
+
+<a id="1130" class="Keyword">open</a> <a id="1135" class="Keyword">import</a> <a id="1142" href="Overture.html" class="Module">Overture</a> <a id="1151" class="Keyword">using</a> <a id="1157" class="Symbol">(</a> <a id="1159" href="Overture.Signatures.html#643" class="Generalizable">𝓞</a> <a id="1161" class="Symbol">;</a> <a id="1163" href="Overture.Signatures.html#645" class="Generalizable">𝓥</a> <a id="1165" class="Symbol">;</a> <a id="1167" href="Overture.Signatures.html#3178" class="Function">Signature</a> <a id="1177" class="Symbol">)</a>
+
+<a id="1180" class="Keyword">module</a> <a id="1187" href="Setoid.Complexity.html" class="Module">Setoid.Complexity</a> <a id="1205" class="Symbol">{</a><a id="1206" href="Setoid.Complexity.html#1206" class="Bound">𝑆</a> <a id="1208" class="Symbol">:</a> <a id="1210" href="Overture.Signatures.html#3178" class="Function">Signature</a> <a id="1220" href="Overture.Signatures.html#643" class="Generalizable">𝓞</a> <a id="1222" href="Overture.Signatures.html#645" class="Generalizable">𝓥</a><a id="1223" class="Symbol">}</a> <a id="1225" class="Keyword">where</a>
+
+<a id="1232" class="Keyword">open</a> <a id="1237" class="Keyword">import</a> <a id="1244" href="Setoid.Complexity.Basic.html" class="Module">Setoid.Complexity.Basic</a>               <a id="1282" class="Keyword">public</a>
+<a id="1289" class="Keyword">open</a> <a id="1294" class="Keyword">import</a> <a id="1301" href="Setoid.Complexity.CSP.html" class="Module">Setoid.Complexity.CSP</a>    <a id="1326" class="Symbol">{</a><a id="1327" class="Argument">𝑆</a> <a id="1329" class="Symbol">=</a> <a id="1331" href="Setoid.Complexity.html#1206" class="Bound">𝑆</a><a id="1332" class="Symbol">}</a>      <a id="1339" class="Keyword">public</a>
+<a id="1346" class="Markup">```
+</a></pre></body></html>

@@ -1,0 +1,129 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Overture.Signatures</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Background">---
+layout: default
+title : &quot;Overture.Signatures module (Agda Universal Algebra Library)&quot;
+date : &quot;2021-04-23&quot;
+author: &quot;agda-algebras development team&quot;
+---
+
+
+### Signatures
+
+This is the [Overture.Signatures][] module of the [Agda Universal Algebra Library][].
+
+</a><a id="261" class="Markup">```agda
+</a><a id="269" class="Symbol">{-#</a> <a id="273" class="Keyword">OPTIONS</a> <a id="281" class="Pragma">--cubical-compatible</a> <a id="302" class="Pragma">--exact-split</a> <a id="316" class="Pragma">--safe</a> <a id="323" class="Symbol">#-}</a>
+
+<a id="328" class="Keyword">module</a> <a id="335" href="Overture.Signatures.html" class="Module">Overture.Signatures</a> <a id="355" class="Keyword">where</a>
+
+<a id="362" class="Comment">-- Imports from the Agda (Builtin) and the Agda Standard Library -----------------------</a>
+<a id="451" class="Keyword">open</a> <a id="456" class="Keyword">import</a> <a id="463" href="Agda.Primitive.html" class="Module">Agda.Primitive</a>  <a id="479" class="Keyword">using</a> <a id="485" class="Symbol">()</a> <a id="488" class="Keyword">renaming</a> <a id="497" class="Symbol">(</a> <a id="499" href="Agda.Primitive.html#388" class="Primitive">Set</a> <a id="503" class="Symbol">to</a>  <a id="507" class="Primitive">Type</a> <a id="512" class="Symbol">)</a>
+<a id="514" class="Keyword">open</a> <a id="519" class="Keyword">import</a> <a id="526" href="Data.Product.html" class="Module">Data.Product</a>    <a id="542" class="Keyword">using</a> <a id="548" class="Symbol">(</a> <a id="550" href="Data.Product.Base.html#1244" class="Function">Σ-syntax</a> <a id="559" class="Symbol">;</a> <a id="561" href="Data.Product.Base.html#636" class="Field">proj₁</a> <a id="567" class="Symbol">;</a> <a id="569" href="Data.Product.Base.html#650" class="Field">proj₂</a> <a id="575" class="Symbol">)</a>
+<a id="577" class="Keyword">open</a> <a id="582" class="Keyword">import</a> <a id="589" href="Level.html" class="Module">Level</a>           <a id="605" class="Keyword">using</a> <a id="611" class="Symbol">(</a> <a id="613" href="Agda.Primitive.html#742" class="Postulate">Level</a> <a id="619" class="Symbol">;</a> <a id="621" href="Agda.Primitive.html#931" class="Primitive">suc</a> <a id="625" class="Symbol">;</a> <a id="627" href="Agda.Primitive.html#961" class="Primitive Operator">_⊔_</a> <a id="631" class="Symbol">)</a>
+
+<a id="634" class="Keyword">variable</a> <a id="643" href="Overture.Signatures.html#643" class="Generalizable">𝓞</a> <a id="645" href="Overture.Signatures.html#645" class="Generalizable">𝓥</a> <a id="647" class="Symbol">:</a> <a id="649" href="Agda.Primitive.html#742" class="Postulate">Level</a>
+<a id="655" class="Markup">```
+</a><a id="659" class="Background">
+The variables `𝓞` and `𝓥` are not private since, throughout the [agda-algebras][] library,
+`𝓞` denotes the universe level of *operation symbol* types, while `𝓥` denotes the universe
+level of *arity* types.
+
+#### Theoretical background
+
+In [model theory](https://en.wikipedia.org/wiki/Model_theory), the *signature*
+`𝑆 = (𝐶, 𝐹, 𝑅, ρ)` of a structure consists of three (possibly empty) sets `𝐶`, `𝐹`,
+and `𝑅`---called *constant symbols*, *function symbols*, and *relation symbols*,
+respectively---along with a function `ρ : 𝐶 + 𝐹 + 𝑅 → 𝑁` that assigns an
+*arity* to each symbol.
+
+Often (but not always) `𝑁 = ℕ`, the natural numbers.
+
+As our focus here is universal algebra, we are more concerned with the restricted
+notion of an *algebraic signature* (or *signature* for algebraic structures), by
+which we mean a pair `𝑆 = (𝐹, ρ)` consisting of a collection `𝐹` of *operation
+symbols* and an *arity function* `ρ : 𝐹 → 𝑁` that maps each operation symbol to
+its arity; here, 𝑁 denotes the *arity type*.
+
+Heuristically, the arity `ρ 𝑓` of an operation symbol `𝑓 ∈ 𝐹` may be thought of as
+the &quot;number of arguments&quot; that `𝑓` takes as &quot;input&quot;.
+
+If the arity of `𝑓` is `n`, then we call `𝑓` an `n`-*ary* operation symbol.  In
+case `n` is 0 (or 1 or 2 or 3, respectively) we call the function *nullary* (or
+*unary* or *binary* or *ternary*, respectively).
+
+If `A` is a set and `𝑓` is a (`ρ 𝑓`)-ary operation on `A`, we often indicate this
+by writing `𝑓 : A`&lt;sup&gt;ρ 𝑓&lt;/sup&gt; `→ A`. On the other hand, the arguments of such
+an operation form a (`ρ 𝑓`)-tuple, say, `(a 0, a 1, …, a (ρf-1))`, which may be
+viewed as the graph of the function `a : ρ𝑓 → A`.
+
+When the codomain of `ρ` is `ℕ`, we may view `ρ 𝑓` as the finite set `{0, 1, …, ρ𝑓 - 1}`.
+
+Thus, by identifying the `ρ𝑓`-th power `A`&lt;sup&gt;ρ 𝑓&lt;/sup&gt; with the type `ρ 𝑓 → A` of
+functions from `{0, 1, …, ρ𝑓 - 1}` to `A`, we identify the type
+`A`&lt;sup&gt;ρ f&lt;/sup&gt; `→ A` with the function type `(ρ𝑓 → A) → A`.
+
+**Example**.
+
+Suppose `𝑔 : (m → A) → A` is an `m`-ary operation on `A`.
+
+Let `a : m → A` be an `m`-tuple on `A`.
+
+Then `𝑔 a` may be viewed as `𝑔 (a 0, a 1, …, a (m-1))`, which has type `A`.
+
+Suppose further that `𝑓 : (ρ𝑓 → B) → B` is a `ρ𝑓`-ary operation on `B`.
+
+Let `a : ρ𝑓 → A` be a `ρ𝑓`-tuple on `A`, and let `h : A → B` be a function.
+
+Then the following typing judgments obtain:
+
+`h ∘ a : ρ𝑓 → B` and `𝑓 (h ∘ a) : B`.
+
+
+#### The signature type
+
+In the [agda-algebras][] library we represent the *signature* of an algebraic
+structure using the following type.
+
+</a><a id="3170" class="Markup">```agda
+</a><a id="Signature"></a><a id="3178" href="Overture.Signatures.html#3178" class="Function">Signature</a> <a id="3188" class="Symbol">:</a> <a id="3190" class="Symbol">(</a><a id="3191" href="Overture.Signatures.html#3191" class="Bound">𝓞</a> <a id="3193" href="Overture.Signatures.html#3193" class="Bound">𝓥</a> <a id="3195" class="Symbol">:</a> <a id="3197" href="Agda.Primitive.html#742" class="Postulate">Level</a><a id="3202" class="Symbol">)</a> <a id="3204" class="Symbol">→</a> <a id="3206" href="Overture.Signatures.html#507" class="Primitive">Type</a> <a id="3211" class="Symbol">(</a><a id="3212" href="Agda.Primitive.html#931" class="Primitive">suc</a> <a id="3216" class="Symbol">(</a><a id="3217" href="Overture.Signatures.html#3191" class="Bound">𝓞</a> <a id="3219" href="Agda.Primitive.html#961" class="Primitive Operator">⊔</a> <a id="3221" href="Overture.Signatures.html#3193" class="Bound">𝓥</a><a id="3222" class="Symbol">))</a>
+<a id="3225" href="Overture.Signatures.html#3178" class="Function">Signature</a> <a id="3235" href="Overture.Signatures.html#3235" class="Bound">𝓞</a> <a id="3237" href="Overture.Signatures.html#3237" class="Bound">𝓥</a> <a id="3239" class="Symbol">=</a> <a id="3241" href="Data.Product.Base.html#1244" class="Function">Σ[</a> <a id="3244" href="Overture.Signatures.html#3244" class="Bound">F</a> <a id="3246" href="Data.Product.Base.html#1244" class="Function">∈</a> <a id="3248" href="Overture.Signatures.html#507" class="Primitive">Type</a> <a id="3253" href="Overture.Signatures.html#3235" class="Bound">𝓞</a> <a id="3255" href="Data.Product.Base.html#1244" class="Function">]</a> <a id="3257" class="Symbol">(</a><a id="3258" href="Overture.Signatures.html#3244" class="Bound">F</a> <a id="3260" class="Symbol">→</a> <a id="3262" href="Overture.Signatures.html#507" class="Primitive">Type</a> <a id="3267" href="Overture.Signatures.html#3237" class="Bound">𝓥</a><a id="3268" class="Symbol">)</a>
+<a id="3270" class="Markup">```
+</a><a id="3274" class="Background">
+Occasionally it is useful to obtain the universe level of a given signature.
+
+</a><a id="3353" class="Markup">```agda
+</a><a id="Level-of-Signature"></a><a id="3361" href="Overture.Signatures.html#3361" class="Function">Level-of-Signature</a> <a id="3380" class="Symbol">:</a> <a id="3382" class="Symbol">{</a><a id="3383" href="Overture.Signatures.html#3383" class="Bound">𝓞</a> <a id="3385" href="Overture.Signatures.html#3385" class="Bound">𝓥</a> <a id="3387" class="Symbol">:</a> <a id="3389" href="Agda.Primitive.html#742" class="Postulate">Level</a><a id="3394" class="Symbol">}</a> <a id="3396" class="Symbol">→</a> <a id="3398" href="Overture.Signatures.html#3178" class="Function">Signature</a> <a id="3408" href="Overture.Signatures.html#3383" class="Bound">𝓞</a> <a id="3410" href="Overture.Signatures.html#3385" class="Bound">𝓥</a> <a id="3412" class="Symbol">→</a> <a id="3414" href="Agda.Primitive.html#742" class="Postulate">Level</a>
+<a id="3420" href="Overture.Signatures.html#3361" class="Function">Level-of-Signature</a> <a id="3439" class="Symbol">{</a><a id="3440" href="Overture.Signatures.html#3440" class="Bound">𝓞</a><a id="3441" class="Symbol">}{</a><a id="3443" href="Overture.Signatures.html#3443" class="Bound">𝓥</a><a id="3444" class="Symbol">}</a> <a id="3446" class="Symbol">_</a> <a id="3448" class="Symbol">=</a> <a id="3450" href="Agda.Primitive.html#931" class="Primitive">suc</a> <a id="3454" class="Symbol">(</a><a id="3455" href="Overture.Signatures.html#3440" class="Bound">𝓞</a> <a id="3457" href="Agda.Primitive.html#961" class="Primitive Operator">⊔</a> <a id="3459" href="Overture.Signatures.html#3443" class="Bound">𝓥</a><a id="3460" class="Symbol">)</a>
+<a id="3462" class="Markup">```
+</a><a id="3466" class="Background">
+A signature is a Σ-type, so its two components are recovered by the standard
+projections `proj₁` and `proj₂` (from `Data.Product`, re-exported by
+[Overture.Basic][]).
+
+Consequently, if `𝑆 : Signature 𝓞 𝓥` is a signature, then
+
+* `proj₁ 𝑆` denotes the set of operation symbols, and
+* `proj₂ 𝑆` denotes the arity function.
+
+If `𝑓 : proj₁ 𝑆` is an operation symbol in the signature `𝑆`, then `proj₂ 𝑆 𝑓`
+is the arity of `𝑓`.
+
+#### Self-documenting projections
+
+Bare `proj₁` / `proj₂` read opaquely at signature use sites.  The following
+long-form aliases are definitionally identical to the projections and are the
+canonical way to name a signature&#39;s components throughout the library.  See
+[ADR-002][] §1 for the rationale and the per-tree policy.
+
+</a><a id="4214" class="Markup">```agda
+</a><a id="OperationSymbolsOf"></a><a id="4222" href="Overture.Signatures.html#4222" class="Function">OperationSymbolsOf</a> <a id="4241" class="Symbol">:</a> <a id="4243" href="Overture.Signatures.html#3178" class="Function">Signature</a> <a id="4253" href="Overture.Signatures.html#643" class="Generalizable">𝓞</a> <a id="4255" href="Overture.Signatures.html#645" class="Generalizable">𝓥</a> <a id="4257" class="Symbol">→</a> <a id="4259" href="Overture.Signatures.html#507" class="Primitive">Type</a> <a id="4264" href="Overture.Signatures.html#643" class="Generalizable">𝓞</a>
+<a id="4266" href="Overture.Signatures.html#4222" class="Function">OperationSymbolsOf</a> <a id="4285" href="Overture.Signatures.html#4285" class="Bound">𝑆</a> <a id="4287" class="Symbol">=</a> <a id="4289" href="Data.Product.Base.html#636" class="Field">proj₁</a> <a id="4295" href="Overture.Signatures.html#4285" class="Bound">𝑆</a>
+
+<a id="ArityOf"></a><a id="4298" href="Overture.Signatures.html#4298" class="Function">ArityOf</a> <a id="4306" class="Symbol">:</a> <a id="4308" class="Symbol">(</a><a id="4309" href="Overture.Signatures.html#4309" class="Bound">𝑆</a> <a id="4311" class="Symbol">:</a> <a id="4313" href="Overture.Signatures.html#3178" class="Function">Signature</a> <a id="4323" href="Overture.Signatures.html#643" class="Generalizable">𝓞</a> <a id="4325" href="Overture.Signatures.html#645" class="Generalizable">𝓥</a><a id="4326" class="Symbol">)</a> <a id="4328" class="Symbol">→</a> <a id="4330" href="Overture.Signatures.html#4222" class="Function">OperationSymbolsOf</a> <a id="4349" href="Overture.Signatures.html#4309" class="Bound">𝑆</a> <a id="4351" class="Symbol">→</a> <a id="4353" href="Overture.Signatures.html#507" class="Primitive">Type</a> <a id="4358" href="Overture.Signatures.html#645" class="Generalizable">𝓥</a>
+<a id="4360" href="Overture.Signatures.html#4298" class="Function">ArityOf</a> <a id="4368" href="Overture.Signatures.html#4368" class="Bound">𝑆</a> <a id="4370" href="Overture.Signatures.html#4370" class="Bound">f</a> <a id="4372" class="Symbol">=</a> <a id="4374" href="Data.Product.Base.html#650" class="Field">proj₂</a> <a id="4380" href="Overture.Signatures.html#4368" class="Bound">𝑆</a> <a id="4382" href="Overture.Signatures.html#4370" class="Bound">f</a>
+<a id="4384" class="Markup">```
+</a><a id="4388" class="Background">
+The bracket projections `∣_∣` / `∥_∥` are deprecated as of v3.0 (they carry a
+`WARNING_ON_USAGE` in [Overture.Basic][]); new code uses `OperationSymbolsOf` /
+`ArityOf` for signature components and `proj₁` / `proj₂` elsewhere.
+</a></pre></body></html>

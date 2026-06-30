@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Examples.Classical.CommutativeSemigroup</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Background">---
+layout: default
+file: &quot;src/Examples/Classical/CommutativeSemigroup.lagda.md&quot;
+title: &quot;Examples.Classical.CommutativeSemigroup module&quot;
+date: &quot;2026-05-24&quot;
+author: &quot;the agda-algebras development team&quot;
+---
+
+### Worked Example: `(ℕ, +, 0)` as a commutative semigroup
+
+This is the [Examples.Classical.CommutativeSemigroup][] module of the [Agda Universal Algebra Library][].
+
+</a><a id="374" class="Markup">```agda
+</a><a id="382" class="Symbol">{-#</a> <a id="386" class="Keyword">OPTIONS</a> <a id="394" class="Pragma">--cubical-compatible</a> <a id="415" class="Pragma">--exact-split</a> <a id="429" class="Pragma">--safe</a> <a id="436" class="Symbol">#-}</a>
+<a id="440" class="Keyword">module</a> <a id="447" href="Examples.Classical.CommutativeSemigroup.html" class="Module">Examples.Classical.CommutativeSemigroup</a> <a id="487" class="Keyword">where</a>
+
+<a id="494" class="Keyword">open</a> <a id="499" class="Keyword">import</a> <a id="506" href="Data.Nat.html" class="Module">Data.Nat</a>                               <a id="545" class="Keyword">using</a> <a id="551" class="Symbol">(</a> <a id="553" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a> <a id="555" class="Symbol">;</a> <a id="557" href="Agda.Builtin.Nat.html#336" class="Primitive Operator">_+_</a> <a id="561" class="Symbol">)</a>
+<a id="563" class="Keyword">open</a> <a id="568" class="Keyword">import</a> <a id="575" href="Data.Nat.Properties.html" class="Module">Data.Nat.Properties</a>                    <a id="614" class="Keyword">using</a> <a id="620" class="Symbol">(</a> <a id="622" href="Data.Nat.Properties.html#15623" class="Function">+-assoc</a> <a id="630" class="Symbol">;</a> <a id="632" href="Data.Nat.Properties.html#15956" class="Function">+-comm</a> <a id="639" class="Symbol">)</a>
+<a id="641" class="Keyword">open</a> <a id="646" class="Keyword">import</a> <a id="653" href="Relation.Binary.PropositionalEquality.html" class="Module">Relation.Binary.PropositionalEquality</a>  <a id="692" class="Keyword">using</a> <a id="698" class="Symbol">(</a> <a id="700" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">_≡_</a> <a id="704" class="Symbol">;</a> <a id="706" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a> <a id="711" class="Symbol">)</a>
+
+<a id="714" class="Keyword">open</a> <a id="719" class="Keyword">import</a> <a id="726" href="Classical.Small.Structures.CommutativeSemigroup.html" class="Module">Classical.Small.Structures.CommutativeSemigroup</a>
+  <a id="776" class="Keyword">using</a> <a id="782" class="Symbol">(</a> <a id="784" href="Classical.Small.Structures.CommutativeSemigroup.html#928" class="Function">CommutativeSemigroup</a> <a id="805" class="Symbol">;</a> <a id="807" href="Classical.Small.Structures.CommutativeSemigroup.html#1028" class="Function">eqsToCommutativeSemigroup</a> <a id="833" class="Symbol">)</a>
+
+<a id="836" class="Keyword">import</a> <a id="843" href="Classical.Structures.CommutativeSemigroup.html" class="Module">Classical.Structures.CommutativeSemigroup</a> <a id="885" class="Symbol">as</a> <a id="888" class="Module">Polymorphic</a>
+
+<a id="ℕ-commutativeSemigroup"></a><a id="901" href="Examples.Classical.CommutativeSemigroup.html#901" class="Function">ℕ-commutativeSemigroup</a> <a id="924" class="Symbol">:</a> <a id="926" href="Classical.Small.Structures.CommutativeSemigroup.html#928" class="Function">CommutativeSemigroup</a>
+<a id="947" href="Examples.Classical.CommutativeSemigroup.html#901" class="Function">ℕ-commutativeSemigroup</a> <a id="970" class="Symbol">=</a> <a id="972" href="Classical.Small.Structures.CommutativeSemigroup.html#1028" class="Function">eqsToCommutativeSemigroup</a> <a id="998" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a> <a id="1000" href="Agda.Builtin.Nat.html#336" class="Primitive Operator">_+_</a> <a id="1004" href="Data.Nat.Properties.html#15623" class="Function">+-assoc</a> <a id="1012" href="Data.Nat.Properties.html#15956" class="Function">+-comm</a>
+
+<a id="1020" class="Keyword">open</a> <a id="1025" href="Classical.Structures.CommutativeSemigroup.html#3424" class="Module">Polymorphic.CommutativeSemigroup-Op</a> <a id="1061" href="Examples.Classical.CommutativeSemigroup.html#901" class="Function">ℕ-commutativeSemigroup</a> <a id="1084" class="Keyword">using</a> <a id="1090" class="Symbol">(</a> <a id="1092" href="Classical.Structures.Magma.html#5503" class="Function Operator">_∙_</a> <a id="1096" class="Symbol">)</a>
+
+<a id="∙-is-+-cs"></a><a id="1099" href="Examples.Classical.CommutativeSemigroup.html#1099" class="Function">∙-is-+-cs</a> <a id="1109" class="Symbol">:</a> <a id="1111" class="Symbol">∀</a> <a id="1113" class="Symbol">(</a><a id="1114" href="Examples.Classical.CommutativeSemigroup.html#1114" class="Bound">a</a> <a id="1116" href="Examples.Classical.CommutativeSemigroup.html#1116" class="Bound">b</a> <a id="1118" class="Symbol">:</a> <a id="1120" href="Agda.Builtin.Nat.html#203" class="Datatype">ℕ</a><a id="1121" class="Symbol">)</a> <a id="1123" class="Symbol">→</a> <a id="1125" href="Examples.Classical.CommutativeSemigroup.html#1114" class="Bound">a</a> <a id="1127" href="Classical.Structures.Magma.html#5503" class="Function Operator">∙</a> <a id="1129" href="Examples.Classical.CommutativeSemigroup.html#1116" class="Bound">b</a> <a id="1131" href="Agda.Builtin.Equality.html#150" class="Datatype Operator">≡</a> <a id="1133" href="Examples.Classical.CommutativeSemigroup.html#1114" class="Bound">a</a> <a id="1135" href="Agda.Builtin.Nat.html#336" class="Primitive Operator">+</a> <a id="1137" href="Examples.Classical.CommutativeSemigroup.html#1116" class="Bound">b</a>
+<a id="1139" href="Examples.Classical.CommutativeSemigroup.html#1099" class="Function">∙-is-+-cs</a> <a id="1149" href="Examples.Classical.CommutativeSemigroup.html#1149" class="Bound">a</a> <a id="1151" href="Examples.Classical.CommutativeSemigroup.html#1151" class="Bound">b</a> <a id="1153" class="Symbol">=</a> <a id="1155" href="Agda.Builtin.Equality.html#207" class="InductiveConstructor">refl</a>
+<a id="1160" class="Markup">```
+</a></pre></body></html>

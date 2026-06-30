@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Setoid.Varieties</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Background">---
+layout: default
+title : &quot;Setoid.Varieties module (Agda Universal Algebra Library)&quot;
+date : &quot;2021-07-26&quot;
+author: &quot;agda-algebras development team&quot;
+---
+
+### Equations and Varieties for Setoids
+
+This is the [Setoid.Varieties][] module of the [Agda Universal Algebra Library][].
+
+
+</a><a id="280" class="Markup">```agda
+</a><a id="288" class="Symbol">{-#</a> <a id="292" class="Keyword">OPTIONS</a> <a id="300" class="Pragma">--cubical-compatible</a> <a id="321" class="Pragma">--exact-split</a> <a id="335" class="Pragma">--safe</a> <a id="342" class="Symbol">#-}</a>
+
+<a id="347" class="Keyword">open</a> <a id="352" class="Keyword">import</a> <a id="359" href="Overture.html" class="Module">Overture</a> <a id="368" class="Keyword">using</a> <a id="374" class="Symbol">(</a><a id="375" href="Overture.Signatures.html#643" class="Generalizable">𝓞</a> <a id="377" class="Symbol">;</a> <a id="379" href="Overture.Signatures.html#645" class="Generalizable">𝓥</a> <a id="381" class="Symbol">;</a> <a id="383" href="Overture.Signatures.html#3178" class="Function">Signature</a><a id="392" class="Symbol">)</a>
+
+<a id="395" class="Keyword">module</a> <a id="402" href="Setoid.Varieties.html" class="Module">Setoid.Varieties</a> <a id="419" class="Symbol">{</a><a id="420" href="Setoid.Varieties.html#420" class="Bound">𝑆</a> <a id="422" class="Symbol">:</a> <a id="424" href="Overture.Signatures.html#3178" class="Function">Signature</a> <a id="434" href="Overture.Signatures.html#643" class="Generalizable">𝓞</a> <a id="436" href="Overture.Signatures.html#645" class="Generalizable">𝓥</a><a id="437" class="Symbol">}</a> <a id="439" class="Keyword">where</a>
+
+<a id="446" class="Keyword">open</a> <a id="451" class="Keyword">import</a> <a id="458" href="Setoid.Varieties.Closure.html" class="Module">Setoid.Varieties.Closure</a>           <a id="493" class="Symbol">{</a><a id="494" class="Argument">𝑆</a> <a id="496" class="Symbol">=</a> <a id="498" href="Setoid.Varieties.html#420" class="Bound">𝑆</a><a id="499" class="Symbol">}</a>  <a id="502" class="Keyword">public</a>
+<a id="509" class="Keyword">open</a> <a id="514" class="Keyword">import</a> <a id="521" href="Setoid.Varieties.EquationalLogic.html" class="Module">Setoid.Varieties.EquationalLogic</a>   <a id="556" class="Symbol">{</a><a id="557" class="Argument">𝑆</a> <a id="559" class="Symbol">=</a> <a id="561" href="Setoid.Varieties.html#420" class="Bound">𝑆</a><a id="562" class="Symbol">}</a>  <a id="565" class="Keyword">public</a>
+<a id="572" class="Keyword">open</a> <a id="577" class="Keyword">import</a> <a id="584" href="Setoid.Varieties.FreeAlgebras.html" class="Module">Setoid.Varieties.FreeAlgebras</a>      <a id="619" class="Symbol">{</a><a id="620" class="Argument">𝑆</a> <a id="622" class="Symbol">=</a> <a id="624" href="Setoid.Varieties.html#420" class="Bound">𝑆</a><a id="625" class="Symbol">}</a>  <a id="628" class="Keyword">public</a>
+<a id="635" class="Keyword">open</a> <a id="640" class="Keyword">import</a> <a id="647" href="Setoid.Varieties.FreeBridge.html" class="Module">Setoid.Varieties.FreeBridge</a>        <a id="682" class="Symbol">{</a><a id="683" class="Argument">𝑆</a> <a id="685" class="Symbol">=</a> <a id="687" href="Setoid.Varieties.html#420" class="Bound">𝑆</a><a id="688" class="Symbol">}</a>  <a id="691" class="Keyword">public</a>
+<a id="698" class="Keyword">open</a> <a id="703" class="Keyword">import</a> <a id="710" href="Setoid.Varieties.FreeSubstitution.html" class="Module">Setoid.Varieties.FreeSubstitution</a>  <a id="745" class="Symbol">{</a><a id="746" class="Argument">𝑆</a> <a id="748" class="Symbol">=</a> <a id="750" href="Setoid.Varieties.html#420" class="Bound">𝑆</a><a id="751" class="Symbol">}</a>  <a id="754" class="Keyword">public</a>
+<a id="761" class="Keyword">open</a> <a id="766" class="Keyword">import</a> <a id="773" href="Setoid.Varieties.HSP.html" class="Module">Setoid.Varieties.HSP</a>               <a id="808" class="Symbol">{</a><a id="809" class="Argument">𝑆</a> <a id="811" class="Symbol">=</a> <a id="813" href="Setoid.Varieties.html#420" class="Bound">𝑆</a><a id="814" class="Symbol">}</a>  <a id="817" class="Keyword">public</a>
+<a id="824" class="Keyword">open</a> <a id="829" class="Keyword">import</a> <a id="836" href="Setoid.Varieties.Interpretation.html" class="Module">Setoid.Varieties.Interpretation</a>             <a id="880" class="Keyword">public</a>
+<a id="887" class="Keyword">open</a> <a id="892" class="Keyword">import</a> <a id="899" href="Setoid.Varieties.Invariance.html" class="Module">Setoid.Varieties.Invariance</a>                 <a id="943" class="Keyword">public</a>
+<a id="950" class="Keyword">open</a> <a id="955" class="Keyword">import</a> <a id="962" href="Setoid.Varieties.Invariants.html" class="Module">Setoid.Varieties.Invariants</a>        <a id="997" class="Symbol">{</a><a id="998" class="Argument">𝑆</a> <a id="1000" class="Symbol">=</a> <a id="1002" href="Setoid.Varieties.html#420" class="Bound">𝑆</a><a id="1003" class="Symbol">}</a>  <a id="1006" class="Keyword">public</a>
+<a id="1013" class="Keyword">open</a> <a id="1018" class="Keyword">import</a> <a id="1025" href="Setoid.Varieties.Maltsev.html" class="Module">Setoid.Varieties.Maltsev</a>                    <a id="1069" class="Keyword">public</a>
+<a id="1076" class="Keyword">open</a> <a id="1081" class="Keyword">import</a> <a id="1088" href="Setoid.Varieties.MaltsevConditions.html" class="Module">Setoid.Varieties.MaltsevConditions</a>          <a id="1132" class="Keyword">public</a>
+<a id="1139" class="Keyword">open</a> <a id="1144" class="Keyword">import</a> <a id="1151" href="Setoid.Varieties.Preservation.html" class="Module">Setoid.Varieties.Preservation</a>      <a id="1186" class="Symbol">{</a><a id="1187" class="Argument">𝑆</a> <a id="1189" class="Symbol">=</a> <a id="1191" href="Setoid.Varieties.html#420" class="Bound">𝑆</a><a id="1192" class="Symbol">}</a>  <a id="1195" class="Keyword">public</a>
+<a id="1202" class="Keyword">open</a> <a id="1207" class="Keyword">import</a> <a id="1214" href="Setoid.Varieties.Properties.html" class="Module">Setoid.Varieties.Properties</a>        <a id="1249" class="Symbol">{</a><a id="1250" class="Argument">𝑆</a> <a id="1252" class="Symbol">=</a> <a id="1254" href="Setoid.Varieties.html#420" class="Bound">𝑆</a><a id="1255" class="Symbol">}</a>  <a id="1258" class="Keyword">public</a>
+<a id="1265" class="Keyword">open</a> <a id="1270" class="Keyword">import</a> <a id="1277" href="Setoid.Varieties.Reducts.html" class="Module">Setoid.Varieties.Reducts</a>                    <a id="1321" class="Keyword">public</a>
+<a id="1328" class="Keyword">open</a> <a id="1333" class="Keyword">import</a> <a id="1340" href="Setoid.Varieties.SoundAndComplete.html" class="Module">Setoid.Varieties.SoundAndComplete</a>  <a id="1375" class="Symbol">{</a><a id="1376" class="Argument">𝑆</a> <a id="1378" class="Symbol">=</a> <a id="1380" href="Setoid.Varieties.html#420" class="Bound">𝑆</a><a id="1381" class="Symbol">}</a>  <a id="1384" class="Keyword">public</a>
+<a id="1391" class="Markup">```
+</a></pre></body></html>

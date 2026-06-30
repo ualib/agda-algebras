@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Legacy.Base</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Background">---
+layout: default
+title : &quot;Legacy.Base module&quot;
+date : &quot;2021-12-12&quot;
+author: &quot;the agda-algebras development team&quot;
+---
+
+## &lt;a id=&quot;the-base-module-of-the-agda-universal-algebra-library&quot;&gt;The Base Module of the Agda Universal Algebra Library&lt;/a&gt;
+
+This module collects all submodules the library that use &quot;bare&quot; types, as opposed to similar versions of these submodules based on Setoids (see the [Setoid][] module).
+
+(We have also started developing in parallel the `cubical-agda-algebras` library, based on Cubical Agda.)
+
+
+</a><a id="521" class="Markup">```agda
+</a>
+
+<a id="531" class="Symbol">{-#</a> <a id="535" class="Keyword">OPTIONS</a> <a id="543" class="Pragma">--cubical-compatible</a> <a id="564" class="Pragma">--exact-split</a> <a id="578" class="Pragma">--safe</a> <a id="585" class="Symbol">#-}</a>
+
+<a id="590" class="Keyword">module</a> <a id="597" href="Legacy.Base.html" class="Module">Legacy.Base</a> <a id="609" class="Keyword">where</a>
+
+<a id="616" class="Keyword">open</a> <a id="621" class="Keyword">import</a> <a id="628" href="Legacy.Base.Relations.html" class="Module">Legacy.Base.Relations</a>
+<a id="650" class="Keyword">open</a> <a id="655" class="Keyword">import</a> <a id="662" href="Legacy.Base.Functions.html" class="Module">Legacy.Base.Functions</a>
+<a id="684" class="Keyword">open</a> <a id="689" class="Keyword">import</a> <a id="696" href="Legacy.Base.Equality.html" class="Module">Legacy.Base.Equality</a>
+<a id="717" class="Keyword">open</a> <a id="722" class="Keyword">import</a> <a id="729" href="Legacy.Base.Adjunction.html" class="Module">Legacy.Base.Adjunction</a>
+<a id="752" class="Keyword">open</a> <a id="757" class="Keyword">import</a> <a id="764" href="Legacy.Base.Algebras.html" class="Module">Legacy.Base.Algebras</a>
+<a id="785" class="Keyword">open</a> <a id="790" class="Keyword">import</a> <a id="797" href="Legacy.Base.Homomorphisms.html" class="Module">Legacy.Base.Homomorphisms</a>
+<a id="823" class="Keyword">open</a> <a id="828" class="Keyword">import</a> <a id="835" href="Legacy.Base.Terms.html" class="Module">Legacy.Base.Terms</a>
+<a id="853" class="Keyword">open</a> <a id="858" class="Keyword">import</a> <a id="865" href="Legacy.Base.Subalgebras.html" class="Module">Legacy.Base.Subalgebras</a>
+<a id="889" class="Keyword">open</a> <a id="894" class="Keyword">import</a> <a id="901" href="Legacy.Base.Varieties.html" class="Module">Legacy.Base.Varieties</a>
+<a id="923" class="Keyword">open</a> <a id="928" class="Keyword">import</a> <a id="935" href="Legacy.Base.Structures.html" class="Module">Legacy.Base.Structures</a>
+<a id="958" class="Keyword">open</a> <a id="963" class="Keyword">import</a> <a id="970" href="Legacy.Base.Categories.html" class="Module">Legacy.Base.Categories</a>
+<a id="993" class="Keyword">open</a> <a id="998" class="Keyword">import</a> <a id="1005" href="Legacy.Base.Complexity.html" class="Module">Legacy.Base.Complexity</a>
+<a id="1028" class="Markup">```
+</a></pre></body></html>

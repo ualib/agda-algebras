@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Classical</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Background">---
+layout: default
+file: &quot;src/Classical.lagda.md&quot;
+title: &quot;Classical module&quot;
+date: &quot;2026-05-15&quot;
+author: &quot;the agda-algebras development team&quot;
+---
+
+## Classical algebraic structures
+
+This is the [Classical][] module of the [Agda Universal Algebra Library][].
+
+The `Classical/` tree formalizes specific algebraic theories — semigroups, monoids,
+groups, lattices, rings, and so on — over the universal-algebra foundation laid down
+in [`Setoid/`][Setoid] (see [ADR-001][ADR-001]).  The word *classical* names the
+long-standing tradition of concrete algebraic structures, as distinct from the
+universal-algebraic treatment of algebras-over-a-signature; it carries no commitment
+to classical logic, which the library does not assume.  The design of this tree is
+recorded in [ADR-002][ADR-002].
+
+### Quintuple-per-structure organization
+
+Each concrete structure `X` ships as a quintuple of files, organized into five parallel subtrees:
+
++  [`Classical/Signatures`][Classical.Signatures] — the signature `𝑆ₓ` whose operations `X` interprets.
+
++  [`Classical/Theories`][Classical.Theories] — the set of defining equations `Eₓ`
+   that pick `X` out of the class of `𝑆ₓ`-algebras.
+
++  [`Classical/Structures`][Classical.Structures] — the Σ-typed core
+   `X α ρ = Σ[ 𝑨 ∈ Algebra 𝑆ₓ α ρ ] 𝑨 ⊨ Eₓ`, the canonical form for library-internal use.
+
++  [`Classical/Bundles`][Classical.Bundles] — a parallel record-typed bundle view
+   matching the shape of `Algebra.Bundles.X` in the Agda standard library, with
+   bidirectional conversion to and from the Σ-typed core.
+
++  [`Classical/Small`][Classical.Small] — a level-fixed veneer specialized to the
+   `ℓ₀`–`ℓ₀` case, for downstream consumers (finite-template CSP, FLRP intuition,
+   tutorial contexts) that do not need polymorphism.
+
+The five subtrees above are the *constituent* files of each structure.  A sixth
+parallel subtree — [`Classical/Properties`][Classical.Properties] — collects
+*derived* results: theorems about a fixed inhabitant of one of the structures (the
+order-theoretic view of a lattice, uniqueness of inverses in a group, `0 · x ≈ 0` in
+a ring) rather than part of the structure&#39;s definition.  Properties is sparser than
+the quintuple subtrees; it accretes per structure as concrete derived results land.
+
+The first axis — Signatures, Theories, Structures, Bundles, Small (plus Properties
+for derived results) — is orthogonal to the second axis, which is the specific
+structure under consideration.
+
+
+### Cubical portability discipline
+
+Equations in the Σ-typed core are stated purely in terms of the `Algebra.Domain`
+setoid equivalence — never in terms of propositional equality or any other
+setoid-specific feature.  This discipline makes the eventual port to cubical Agda
+([ADR-003][ADR-003]) substitutional rather than rewriting: replacing the setoid
+equivalence by the path type and rerunning the type-checker should be sufficient for
+most of the tree.
+
+### Scaffold status
+
+This file is the umbrella for the `Classical/` tree.  The five quintuple subtree
+aggregators below re-export concrete structures as they land under milestone M3,
+and the `Properties` aggregator was added in M3-7 for per-structure
+derived-results modules.
+
+
+</a><a id="3195" class="Markup">```agda
+</a><a id="3203" class="Symbol">{-#</a> <a id="3207" class="Keyword">OPTIONS</a> <a id="3215" class="Pragma">--cubical-compatible</a> <a id="3236" class="Pragma">--exact-split</a> <a id="3250" class="Pragma">--safe</a> <a id="3257" class="Symbol">#-}</a>
+
+<a id="3262" class="Keyword">module</a> <a id="3269" href="Classical.html" class="Module">Classical</a> <a id="3279" class="Keyword">where</a>
+
+<a id="3286" class="Keyword">open</a> <a id="3291" class="Keyword">import</a> <a id="3298" href="Classical.Bundles.html" class="Module">Classical.Bundles</a>          <a id="3325" class="Keyword">public</a>
+<a id="3332" class="Keyword">open</a> <a id="3337" class="Keyword">import</a> <a id="3344" href="Classical.Equations.html" class="Module">Classical.Equations</a>        <a id="3371" class="Keyword">public</a>
+<a id="3378" class="Keyword">open</a> <a id="3383" class="Keyword">import</a> <a id="3390" href="Classical.Interpretations.html" class="Module">Classical.Interpretations</a>  <a id="3417" class="Keyword">public</a>
+<a id="3424" class="Keyword">open</a> <a id="3429" class="Keyword">import</a> <a id="3436" href="Classical.Operations.html" class="Module">Classical.Operations</a>       <a id="3463" class="Keyword">public</a>
+<a id="3470" class="Keyword">open</a> <a id="3475" class="Keyword">import</a> <a id="3482" href="Classical.Properties.html" class="Module">Classical.Properties</a>       <a id="3509" class="Keyword">public</a>
+<a id="3516" class="Keyword">open</a> <a id="3521" class="Keyword">import</a> <a id="3528" href="Classical.Signatures.html" class="Module">Classical.Signatures</a>       <a id="3555" class="Keyword">public</a>
+<a id="3562" class="Keyword">open</a> <a id="3567" class="Keyword">import</a> <a id="3574" href="Classical.Structures.html" class="Module">Classical.Structures</a>       <a id="3601" class="Keyword">public</a>
+<a id="3608" class="Keyword">open</a> <a id="3613" class="Keyword">import</a> <a id="3620" href="Classical.Theories.html" class="Module">Classical.Theories</a>         <a id="3647" class="Keyword">public</a>
+
+<a id="3655" class="Keyword">open</a> <a id="3660" class="Keyword">import</a> <a id="3667" href="Classical.Small.html" class="Module">Classical.Small</a>
+<a id="3683" class="Markup">```
+</a></pre></body></html>

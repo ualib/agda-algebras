@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Classical.Signatures.Group</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Background">---
+layout: default
+file: &quot;src/Classical/Signatures/Group.lagda.md&quot;
+title: &quot;Classical.Signatures.Group module&quot;
+date: &quot;2026-05-30&quot;
+author: &quot;the agda-algebras development team&quot;
+---
+
+### The signature of groups
+
+This is the [Classical.Signatures.Group][] module of the [Agda Universal Algebra Library][].
+
+A group&#39;s signature expands the monoid signature by a single *unary* operation
+symbol `⁻¹-Op` denoting the inverse.  It is the first signature in the
+[`Classical/`][Classical] tree to carry an operation of every arity below three —
+binary `∙-Op`, nullary `ε-Op`, unary `⁻¹-Op` — and so the first whose forgetful
+projection to its predecessor (`group→monoid`) drops a *unary* symbol rather than a
+nullary one.  Distinguished elements and inverses alike are operation symbols of the
+signature per [ADR-002 v2 §9](../../docs/adr/002-classical-layer-design.md); `⁻¹-Op`
+has arity `Fin 1`.  The constructor- and arity-naming conventions are those
+established by `Classical.Signatures.Magma` and extended by
+`Classical.Signatures.Monoid`.
+
+</a><a id="1038" class="Markup">```agda
+</a><a id="1046" class="Symbol">{-#</a> <a id="1050" class="Keyword">OPTIONS</a> <a id="1058" class="Pragma">--cubical-compatible</a> <a id="1079" class="Pragma">--exact-split</a> <a id="1093" class="Pragma">--safe</a> <a id="1100" class="Symbol">#-}</a>
+
+<a id="1105" class="Keyword">module</a> <a id="1112" href="Classical.Signatures.Group.html" class="Module">Classical.Signatures.Group</a> <a id="1139" class="Keyword">where</a>
+
+<a id="1146" class="Comment">-- Imports from Agda and the Agda Standard Library ----------------------------</a>
+<a id="1226" class="Keyword">open</a> <a id="1231" class="Keyword">import</a> <a id="1238" href="Agda.Primitive.html" class="Module">Agda.Primitive</a> <a id="1253" class="Keyword">using</a> <a id="1259" class="Symbol">()</a> <a id="1262" class="Keyword">renaming</a> <a id="1271" class="Symbol">(</a> <a id="1273" href="Agda.Primitive.html#388" class="Primitive">Set</a> <a id="1277" class="Symbol">to</a> <a id="1280" class="Primitive">Type</a> <a id="1285" class="Symbol">)</a>
+<a id="1287" class="Keyword">open</a> <a id="1292" class="Keyword">import</a> <a id="1299" href="Data.Fin.Base.html" class="Module">Data.Fin.Base</a>  <a id="1314" class="Keyword">using</a> <a id="1320" class="Symbol">(</a> <a id="1322" href="Data.Fin.Base.html#1132" class="Datatype">Fin</a> <a id="1326" class="Symbol">)</a>
+<a id="1328" class="Keyword">open</a> <a id="1333" class="Keyword">import</a> <a id="1340" href="Data.Product.html" class="Module">Data.Product</a>   <a id="1355" class="Keyword">using</a> <a id="1361" class="Symbol">(</a> <a id="1363" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">_,_</a> <a id="1367" class="Symbol">)</a>
+<a id="1369" class="Keyword">open</a> <a id="1374" class="Keyword">import</a> <a id="1381" href="Level.html" class="Module">Level</a>          <a id="1396" class="Keyword">using</a> <a id="1402" class="Symbol">(</a> <a id="1404" href="Level.html#521" class="Function">0ℓ</a> <a id="1407" class="Symbol">)</a>
+
+<a id="1410" class="Comment">-- Imports from the Agda Universal Algebra Library ----------------------------</a>
+<a id="1490" class="Keyword">open</a> <a id="1495" class="Keyword">import</a> <a id="1502" href="Overture.Signatures.html" class="Module">Overture.Signatures</a> <a id="1522" class="Keyword">using</a> <a id="1528" class="Symbol">(</a> <a id="1530" href="Overture.Signatures.html#3178" class="Function">Signature</a> <a id="1540" class="Symbol">)</a>
+
+<a id="1543" class="Keyword">data</a> <a id="Op-Group"></a><a id="1548" href="Classical.Signatures.Group.html#1548" class="Datatype">Op-Group</a> <a id="1557" class="Symbol">:</a> <a id="1559" href="Classical.Signatures.Group.html#1280" class="Primitive">Type</a> <a id="1564" class="Keyword">where</a>
+  <a id="Op-Group.∙-Op"></a><a id="1572" href="Classical.Signatures.Group.html#1572" class="InductiveConstructor">∙-Op</a> <a id="Op-Group.ε-Op"></a><a id="1577" href="Classical.Signatures.Group.html#1577" class="InductiveConstructor">ε-Op</a> <a id="Op-Group.⁻¹-Op"></a><a id="1582" href="Classical.Signatures.Group.html#1582" class="InductiveConstructor">⁻¹-Op</a> <a id="1588" class="Symbol">:</a> <a id="1590" href="Classical.Signatures.Group.html#1548" class="Datatype">Op-Group</a>
+
+<a id="ar-Group"></a><a id="1600" href="Classical.Signatures.Group.html#1600" class="Function">ar-Group</a> <a id="1609" class="Symbol">:</a> <a id="1611" href="Classical.Signatures.Group.html#1548" class="Datatype">Op-Group</a> <a id="1620" class="Symbol">→</a> <a id="1622" href="Classical.Signatures.Group.html#1280" class="Primitive">Type</a>
+<a id="1627" href="Classical.Signatures.Group.html#1600" class="Function">ar-Group</a> <a id="1636" href="Classical.Signatures.Group.html#1572" class="InductiveConstructor">∙-Op</a>  <a id="1642" class="Symbol">=</a> <a id="1644" href="Data.Fin.Base.html#1132" class="Datatype">Fin</a> <a id="1648" class="Number">2</a>
+<a id="1650" href="Classical.Signatures.Group.html#1600" class="Function">ar-Group</a> <a id="1659" href="Classical.Signatures.Group.html#1577" class="InductiveConstructor">ε-Op</a>  <a id="1665" class="Symbol">=</a> <a id="1667" href="Data.Fin.Base.html#1132" class="Datatype">Fin</a> <a id="1671" class="Number">0</a>
+<a id="1673" href="Classical.Signatures.Group.html#1600" class="Function">ar-Group</a> <a id="1682" href="Classical.Signatures.Group.html#1582" class="InductiveConstructor">⁻¹-Op</a> <a id="1688" class="Symbol">=</a> <a id="1690" href="Data.Fin.Base.html#1132" class="Datatype">Fin</a> <a id="1694" class="Number">1</a>
+
+<a id="Sig-Group"></a><a id="1697" href="Classical.Signatures.Group.html#1697" class="Function">Sig-Group</a> <a id="1707" class="Symbol">:</a> <a id="1709" href="Overture.Signatures.html#3178" class="Function">Signature</a> <a id="1719" href="Level.html#521" class="Function">0ℓ</a> <a id="1722" href="Level.html#521" class="Function">0ℓ</a>
+<a id="1725" href="Classical.Signatures.Group.html#1697" class="Function">Sig-Group</a> <a id="1735" class="Symbol">=</a> <a id="1737" href="Classical.Signatures.Group.html#1548" class="Datatype">Op-Group</a> <a id="1746" href="Agda.Builtin.Sigma.html#235" class="InductiveConstructor Operator">,</a> <a id="1748" href="Classical.Signatures.Group.html#1600" class="Function">ar-Group</a>
+<a id="1757" class="Markup">```
+</a></pre></body></html>

@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Classical.Operations</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Background">---
+layout: default
+file: &quot;src/Classical/Operations.lagda.md&quot;
+title: &quot;Classical.Operations module&quot;
+date: &quot;2026-05-17&quot;
+author: &quot;the agda-algebras development team&quot;
+---
+
+### Operations on classical structures — curry/uncurry between tuple-indexed and curried form
+
+This is the [Classical.Operations][] module of the [Agda Universal Algebra Library][].
+
+The foundational layer of `agda-algebras` represents an `I`-ary operation on a carrier `A` as a function `(I → A) → A`.  This tuple-indexed form is non-negotiable in the universal-algebra meta-theory: variety closure operators, the term algebra as a W-type, Birkhoff&#39;s HSP theorem, and the equational-logic substrate (`Modᵗ`) all recurse on arity and require operations in this form.
+
+The user-facing layer of `Classical/` — every accessor that consumers of a classical structure actually read at use sites — exposes operations in *curried* form: a binary operation as `A → A → A`, a nullary operation as `A`, a unary operation as `A → A`.  This is the form working algebraists write (`x ∙ y`, not `pair x y 0F · pair x y 1F`) and the form that supports straightforward partial application, sectioning, and infix syntax.
+
+This module provides the bridge: per-arity `Curry`/`Uncurry` helpers that translate between the two forms.  They are written once here and reused by every per-structure file across the `Classical/` tree.  The Fin n η-failure under `--cubical-compatible` is contained inside `Uncurry₂` / `Curry₂` and similar — per-structure files never write `pair`-style argument wrappers inline; the wrapping is the responsibility of this module alone.
+
+See [ADR-002 v2 §1](../../docs/adr/002-classical-layer-design.md) for the design rationale.
+
+</a><a id="1706" class="Markup">```agda
+</a><a id="1714" class="Symbol">{-#</a> <a id="1718" class="Keyword">OPTIONS</a> <a id="1726" class="Pragma">--cubical-compatible</a> <a id="1747" class="Pragma">--exact-split</a> <a id="1761" class="Pragma">--safe</a> <a id="1768" class="Symbol">#-}</a>
+
+<a id="1773" class="Keyword">module</a> <a id="1780" href="Classical.Operations.html" class="Module">Classical.Operations</a> <a id="1801" class="Keyword">where</a>
+
+<a id="1808" class="Comment">-- Imports from Agda and the Agda Standard Library ----------------------</a>
+<a id="1882" class="Keyword">open</a> <a id="1887" class="Keyword">import</a> <a id="1894" href="Agda.Primitive.html" class="Module">Agda.Primitive</a>    <a id="1912" class="Keyword">using</a> <a id="1918" class="Symbol">()</a>             <a id="1933" class="Keyword">renaming</a> <a id="1942" class="Symbol">(</a> <a id="1944" href="Agda.Primitive.html#388" class="Primitive">Set</a> <a id="1948" class="Symbol">to</a> <a id="1951" class="Primitive">Type</a> <a id="1956" class="Symbol">)</a>
+<a id="1958" class="Keyword">open</a> <a id="1963" class="Keyword">import</a> <a id="1970" href="Data.Fin.Base.html" class="Module">Data.Fin.Base</a>     <a id="1988" class="Keyword">using</a> <a id="1994" class="Symbol">(</a> <a id="1996" href="Data.Fin.Base.html#1132" class="Datatype">Fin</a> <a id="2000" class="Symbol">)</a>
+<a id="2002" class="Keyword">open</a> <a id="2007" class="Keyword">import</a> <a id="2014" href="Data.Fin.Patterns.html" class="Module">Data.Fin.Patterns</a> <a id="2032" class="Keyword">using</a> <a id="2038" class="Symbol">(</a> <a id="2040" href="Data.Fin.Patterns.html#422" class="InductiveConstructor">0F</a> <a id="2043" class="Symbol">;</a> <a id="2045" href="Data.Fin.Patterns.html#440" class="InductiveConstructor">1F</a> <a id="2048" class="Symbol">)</a>
+<a id="2050" class="Keyword">open</a> <a id="2055" class="Keyword">import</a> <a id="2062" href="Level.html" class="Module">Level</a>             <a id="2080" class="Keyword">using</a> <a id="2086" class="Symbol">(</a> <a id="2088" href="Agda.Primitive.html#742" class="Postulate">Level</a> <a id="2094" class="Symbol">)</a>
+
+<a id="2097" class="Comment">-- Imports from the Agda Universal Algebra Library ----------------------</a>
+<a id="2171" class="Keyword">open</a> <a id="2176" class="Keyword">import</a> <a id="2183" href="Overture.Operations.html" class="Module">Overture.Operations</a> <a id="2203" class="Keyword">using</a> <a id="2209" class="Symbol">(</a> <a id="2211" href="Overture.Operations.html#1467" class="Function">Op</a> <a id="2214" class="Symbol">)</a> <a id="2216" class="Keyword">public</a>
+
+<a id="2224" class="Keyword">private</a> <a id="2232" class="Keyword">variable</a>
+  <a id="2243" href="Classical.Operations.html#2243" class="Generalizable">α</a> <a id="2245" class="Symbol">:</a> <a id="2247" href="Agda.Primitive.html#742" class="Postulate">Level</a>
+  <a id="2255" href="Classical.Operations.html#2255" class="Generalizable">A</a> <a id="2257" class="Symbol">:</a> <a id="2259" href="Classical.Operations.html#1951" class="Primitive">Type</a> <a id="2264" href="Classical.Operations.html#2243" class="Generalizable">α</a>
+<a id="2266" class="Markup">```
+</a><a id="2270" class="Background">
+#### Operation types
+
+The type `Op I A` of `I`-ary operations on `A`, in tuple-indexed form, is the single canonical `Op`{.AgdaFunction} from [Overture.Operations][] (arity first, carrier second: `Op (Fin 2)` partially applies as &quot;binary operation,&quot; independent of any carrier).  It is re-exported here (see the import above), so the `Curry`/`Uncurry`/`pair` family below — and any `Classical/` consumer that imports `Op` from this module — are unaffected by the consolidation.  This module previously declared its own identical arity-first `Op`; that duplicate is now the re-export, leaving exactly one `Op` declaration library-wide.
+
+#### Two-element argument tuple
+
+The canonical `Fin 2 → A` constructed from two elements.  Used internally by `Uncurry₂` and as the bridge target in bundle conversion functions.  Made public for the rare per-structure use case (e.g., expressing a tuple-indexed `(∙-Op ^ 𝑨) (pair a b)` directly when the curried form is inconvenient).
+
+</a><a id="3242" class="Markup">```agda
+</a><a id="pair"></a><a id="3250" href="Classical.Operations.html#3250" class="Function">pair</a> <a id="3255" class="Symbol">:</a> <a id="3257" href="Classical.Operations.html#2255" class="Generalizable">A</a> <a id="3259" class="Symbol">→</a> <a id="3261" href="Classical.Operations.html#2255" class="Generalizable">A</a> <a id="3263" class="Symbol">→</a> <a id="3265" href="Data.Fin.Base.html#1132" class="Datatype">Fin</a> <a id="3269" class="Number">2</a> <a id="3271" class="Symbol">→</a> <a id="3273" href="Classical.Operations.html#2255" class="Generalizable">A</a>
+<a id="3275" href="Classical.Operations.html#3250" class="Function">pair</a> <a id="3280" href="Classical.Operations.html#3280" class="Bound">a</a> <a id="3282" href="Classical.Operations.html#3282" class="Bound">b</a> <a id="3284" href="Data.Fin.Patterns.html#422" class="InductiveConstructor">0F</a> <a id="3287" class="Symbol">=</a> <a id="3289" href="Classical.Operations.html#3280" class="Bound">a</a>
+<a id="3291" href="Classical.Operations.html#3250" class="Function">pair</a> <a id="3296" href="Classical.Operations.html#3296" class="Bound">a</a> <a id="3298" href="Classical.Operations.html#3298" class="Bound">b</a> <a id="3300" href="Data.Fin.Patterns.html#440" class="InductiveConstructor">1F</a> <a id="3303" class="Symbol">=</a> <a id="3305" href="Classical.Operations.html#3298" class="Bound">b</a>
+<a id="3307" class="Markup">```
+</a><a id="3311" class="Background">
+#### Curry and Uncurry, per arity
+
+The translation between tuple-indexed and curried operations.  Each pair is a two-line definition; the obligation that they form a definitional inverse on the curried side (`Curry₂ (Uncurry₂ f) ≡ f` as functions `A → A → A → A`) holds by `refl`.  The reverse direction (`Uncurry₂ (Curry₂ f) ≡ f` as `(Fin 2 → A) → A`) holds *pointwise* but not definitionally as functions, because the lack of η on `Fin 2`-pattern lambdas under `--cubical-compatible` prevents the lambda repackaging from collapsing.  This asymmetry is contained here and surfaced as the pointwise round-trip statement in per-structure bundle bridges (per [ADR-002 v2 §6](docs/adr/002-classical-layer-design.md)).
+
+</a><a id="4028" class="Markup">```agda
+</a><a id="4036" class="Comment">-- Nullary</a>
+<a id="Curry₀"></a><a id="4047" href="Classical.Operations.html#4047" class="Function">Curry₀</a> <a id="4054" class="Symbol">:</a> <a id="4056" href="Overture.Operations.html#1467" class="Function">Op</a> <a id="4059" class="Symbol">(</a><a id="4060" href="Data.Fin.Base.html#1132" class="Datatype">Fin</a> <a id="4064" class="Number">0</a><a id="4065" class="Symbol">)</a> <a id="4067" href="Classical.Operations.html#2255" class="Generalizable">A</a> <a id="4069" class="Symbol">→</a> <a id="4071" href="Classical.Operations.html#2255" class="Generalizable">A</a>
+<a id="4073" href="Classical.Operations.html#4047" class="Function">Curry₀</a> <a id="4080" href="Classical.Operations.html#4080" class="Bound">f</a> <a id="4082" class="Symbol">=</a> <a id="4084" href="Classical.Operations.html#4080" class="Bound">f</a> <a id="4086" class="Symbol">λ</a> <a id="4088" class="Symbol">()</a>
+
+<a id="Uncurry₀"></a><a id="4092" href="Classical.Operations.html#4092" class="Function">Uncurry₀</a> <a id="4101" class="Symbol">:</a> <a id="4103" href="Classical.Operations.html#2255" class="Generalizable">A</a> <a id="4105" class="Symbol">→</a> <a id="4107" href="Overture.Operations.html#1467" class="Function">Op</a> <a id="4110" class="Symbol">(</a><a id="4111" href="Data.Fin.Base.html#1132" class="Datatype">Fin</a> <a id="4115" class="Number">0</a><a id="4116" class="Symbol">)</a> <a id="4118" href="Classical.Operations.html#2255" class="Generalizable">A</a>
+<a id="4120" href="Classical.Operations.html#4092" class="Function">Uncurry₀</a> <a id="4129" href="Classical.Operations.html#4129" class="Bound">a</a> <a id="4131" class="Symbol">_</a> <a id="4133" class="Symbol">=</a> <a id="4135" href="Classical.Operations.html#4129" class="Bound">a</a>
+
+<a id="4138" class="Comment">-- Unary.  Note: Fin 1 has a single inhabitant 0F, and `Curry₁ f a` ignores</a>
+<a id="4214" class="Comment">-- the index argument because there is only one possible value.</a>
+<a id="Curry₁"></a><a id="4278" href="Classical.Operations.html#4278" class="Function">Curry₁</a> <a id="4285" class="Symbol">:</a> <a id="4287" href="Overture.Operations.html#1467" class="Function">Op</a> <a id="4290" class="Symbol">(</a><a id="4291" href="Data.Fin.Base.html#1132" class="Datatype">Fin</a> <a id="4295" class="Number">1</a><a id="4296" class="Symbol">)</a> <a id="4298" href="Classical.Operations.html#2255" class="Generalizable">A</a> <a id="4300" class="Symbol">→</a> <a id="4302" class="Symbol">(</a><a id="4303" href="Classical.Operations.html#2255" class="Generalizable">A</a> <a id="4305" class="Symbol">→</a> <a id="4307" href="Classical.Operations.html#2255" class="Generalizable">A</a><a id="4308" class="Symbol">)</a>
+<a id="4310" href="Classical.Operations.html#4278" class="Function">Curry₁</a> <a id="4317" href="Classical.Operations.html#4317" class="Bound">f</a> <a id="4319" href="Classical.Operations.html#4319" class="Bound">a</a> <a id="4321" class="Symbol">=</a> <a id="4323" href="Classical.Operations.html#4317" class="Bound">f</a> <a id="4325" class="Symbol">λ</a> <a id="4327" href="Classical.Operations.html#4327" class="Bound">_</a> <a id="4329" class="Symbol">→</a> <a id="4331" href="Classical.Operations.html#4319" class="Bound">a</a>
+
+<a id="Uncurry₁"></a><a id="4334" href="Classical.Operations.html#4334" class="Function">Uncurry₁</a> <a id="4343" class="Symbol">:</a> <a id="4345" class="Symbol">(</a><a id="4346" href="Classical.Operations.html#2255" class="Generalizable">A</a> <a id="4348" class="Symbol">→</a> <a id="4350" href="Classical.Operations.html#2255" class="Generalizable">A</a><a id="4351" class="Symbol">)</a> <a id="4353" class="Symbol">→</a> <a id="4355" href="Overture.Operations.html#1467" class="Function">Op</a> <a id="4358" class="Symbol">(</a><a id="4359" href="Data.Fin.Base.html#1132" class="Datatype">Fin</a> <a id="4363" class="Number">1</a><a id="4364" class="Symbol">)</a> <a id="4366" href="Classical.Operations.html#2255" class="Generalizable">A</a>
+<a id="4368" href="Classical.Operations.html#4334" class="Function">Uncurry₁</a> <a id="4377" href="Classical.Operations.html#4377" class="Bound">f</a> <a id="4379" href="Classical.Operations.html#4379" class="Bound">args</a> <a id="4384" class="Symbol">=</a> <a id="4386" href="Classical.Operations.html#4377" class="Bound">f</a> <a id="4388" class="Symbol">(</a><a id="4389" href="Classical.Operations.html#4379" class="Bound">args</a> <a id="4394" href="Data.Fin.Patterns.html#422" class="InductiveConstructor">0F</a><a id="4396" class="Symbol">)</a>
+
+<a id="4399" class="Comment">-- Binary</a>
+<a id="Curry₂"></a><a id="4409" href="Classical.Operations.html#4409" class="Function">Curry₂</a> <a id="4416" class="Symbol">:</a> <a id="4418" href="Overture.Operations.html#1467" class="Function">Op</a> <a id="4421" class="Symbol">(</a><a id="4422" href="Data.Fin.Base.html#1132" class="Datatype">Fin</a> <a id="4426" class="Number">2</a><a id="4427" class="Symbol">)</a> <a id="4429" href="Classical.Operations.html#2255" class="Generalizable">A</a> <a id="4431" class="Symbol">→</a> <a id="4433" class="Symbol">(</a><a id="4434" href="Classical.Operations.html#2255" class="Generalizable">A</a> <a id="4436" class="Symbol">→</a> <a id="4438" href="Classical.Operations.html#2255" class="Generalizable">A</a> <a id="4440" class="Symbol">→</a> <a id="4442" href="Classical.Operations.html#2255" class="Generalizable">A</a><a id="4443" class="Symbol">)</a>
+<a id="4445" href="Classical.Operations.html#4409" class="Function">Curry₂</a> <a id="4452" href="Classical.Operations.html#4452" class="Bound">f</a> <a id="4454" href="Classical.Operations.html#4454" class="Bound">a</a> <a id="4456" href="Classical.Operations.html#4456" class="Bound">b</a> <a id="4458" class="Symbol">=</a> <a id="4460" href="Classical.Operations.html#4452" class="Bound">f</a> <a id="4462" class="Symbol">(</a><a id="4463" href="Classical.Operations.html#3250" class="Function">pair</a> <a id="4468" href="Classical.Operations.html#4454" class="Bound">a</a> <a id="4470" href="Classical.Operations.html#4456" class="Bound">b</a><a id="4471" class="Symbol">)</a>
+
+<a id="Uncurry₂"></a><a id="4474" href="Classical.Operations.html#4474" class="Function">Uncurry₂</a> <a id="4483" class="Symbol">:</a> <a id="4485" class="Symbol">(</a><a id="4486" href="Classical.Operations.html#2255" class="Generalizable">A</a> <a id="4488" class="Symbol">→</a> <a id="4490" href="Classical.Operations.html#2255" class="Generalizable">A</a> <a id="4492" class="Symbol">→</a> <a id="4494" href="Classical.Operations.html#2255" class="Generalizable">A</a><a id="4495" class="Symbol">)</a> <a id="4497" class="Symbol">→</a> <a id="4499" href="Overture.Operations.html#1467" class="Function">Op</a> <a id="4502" class="Symbol">(</a><a id="4503" href="Data.Fin.Base.html#1132" class="Datatype">Fin</a> <a id="4507" class="Number">2</a><a id="4508" class="Symbol">)</a> <a id="4510" href="Classical.Operations.html#2255" class="Generalizable">A</a>
+<a id="4512" href="Classical.Operations.html#4474" class="Function">Uncurry₂</a> <a id="4521" href="Classical.Operations.html#4521" class="Bound Operator">_·_</a> <a id="4525" href="Classical.Operations.html#4525" class="Bound">args</a> <a id="4530" class="Symbol">=</a> <a id="4532" href="Classical.Operations.html#4525" class="Bound">args</a> <a id="4537" href="Data.Fin.Patterns.html#422" class="InductiveConstructor">0F</a> <a id="4540" href="Classical.Operations.html#4521" class="Bound Operator">·</a> <a id="4542" href="Classical.Operations.html#4525" class="Bound">args</a> <a id="4547" href="Data.Fin.Patterns.html#440" class="InductiveConstructor">1F</a>
+<a id="4550" class="Markup">```
+</a><a id="4554" class="Background">
+Higher arities (`Curry₃` / `Uncurry₃` for ternary, etc.) are added as concrete structures require them.  Lattice&#39;s absorption law (in M3-7) may want `Curry₃`; deferred until then.
+</a></pre></body></html>
