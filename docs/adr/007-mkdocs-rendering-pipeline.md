@@ -6,6 +6,10 @@
 
 Accepted — 2026-06-27 (M10-1, #295).
 
+Amended — 2026-06-30 (M10-4, #430): the hosting decision changed.  The new
+MkDocs site is **relocated** to `agda-algebras.universalalgebra.org`, and the
+legacy site is **parked** at `ualib.org`; see the revised Decision 1 and 7.
+
 > **Numbering note.**  Issue #295 proposed this ADR as `005-mkdocs-rendering-pipeline.md`.  By the time it was written, `005` (universe-level variable scope) and `006` (signature-morphism category) had already been merged, so it takes the next free number, `007`.  Numbers are assigned in merge order (see [the ADR README](README.md)); the renumber is purely mechanical.
 
 ## Context
@@ -22,9 +26,9 @@ Once the sources are Markdown-literate, a static-site generator that reads Markd
 
 ## Decision
 
-**Render ualib.org with MkDocs + Material, consumed directly from the `.lagda.md` sources, pinned in the Nix flake.**  Concretely:
+**Render the documentation site with MkDocs + Material, consumed directly from the `.lagda.md` sources, pinned in the Nix flake.**  Concretely:
 
-1.  **Keep `ualib.org`.**  It is the established public URL; preserving it avoids breaking every external reference to the library.  Alternative domains (`formalverification.org`, `agda-algebras.org`) are explicitly out of scope.
+1.  **Park the legacy site at `ualib.org`; serve the new site at `agda-algebras.universalalgebra.org`.**  *(Amended for #430; the original decision was simply "keep `ualib.org`".)*  The established `ualib.org` URL is preserved **as an archive of the pre-3.0 site** — so every external `Module.Submodule.html` link keeps resolving — while the new MkDocs site is published to a subdomain of the existing `universalalgebra.org`.  A **subdomain** (rather than a `universalalgebra.org/agda-algebras` subdirectory) is required: the rendered pages use root-absolute internal links (`/Setoid/…`, `/classic/…`, `/assets/…`) that a subdirectory base path would break, whereas a subdomain serves at the host root and needs only a one-line `site_url` plus a DNS `CNAME`.
 
 2.  **Highlight code blocks with `agda --html` for the published site; keep a no-agda fast path for iteration.**  Two complementary mechanisms run over the *same* `.lagda.md` sources:
 
@@ -39,11 +43,11 @@ Once the sources are Markdown-literate, a static-site generator that reads Markd
 
 4.  **Mount the library with `mkdocs-gen-files` + `mkdocs-literate-nav` + `mkdocs-section-index`.**  This is the one place the plugin set goes beyond issue #295's baseline (`material`, `search`, `macros`, `redirects`), and it is what makes architecture (b) realisable cleanly.  `scripts/python/mkdocs_gen_library.py` walks `src/**/*.lagda.md` and, for each module, writes a *virtual* page at its hierarchical path with the `.lagda` infix stripped (so URLs are `/Setoid/Algebras/Basic/`, not `…/Basic.lagda/`), drops the Jekyll front matter, and prepends a clean `# Dotted.Module` title (the corpus leads with `####` sub-headings, so pages would otherwise render untitled).  It also emits `SUMMARY.md`, the literate-nav file that becomes the whole navigation; each barrel module is the clickable section-index page for its subtree.  The sources themselves are never modified — only the rendered copy is shaped — and `mkdocs serve` regenerates on edit, which a copy-into-place build step would not.
 
-5.  **Replace the Jekyll link include with `pymdownx.snippets` `auto_append` (issue #295's "reference-link include scheme").**  The shared link library moves to `docs/_links.md` and is appended to every page automatically; the per-module `{% include UALib.Links.md %}` directive is removed from every source.  Internal targets are *root-relative* (`/Setoid/Algebras/Basic/`) so cross-references resolve identically under `mkdocs serve` and at `ualib.org`.  The module half of `docs/_links.md` is generated from the tree by `scripts/python/gen_links.py` (it had fallen ~130 entries behind by hand).  `mkdocs-macros-plugin` is still configured — per the issue's plugin set — but it is *not* used for the link include; appending one file to every page is exactly `auto_append`'s job and carries no templating risk.  Because Agda's `{{ }}`, `{ }`, `{% %}`, and `{# %}` occur throughout the corpus, macros is given collision-free Jinja2 delimiters — doubled-square-bracket variants, configured in `mkdocs.yml`, that occur nowhere in `src/` — and reserved for site variables.
+5.  **Replace the Jekyll link include with `pymdownx.snippets` `auto_append` (issue #295's "reference-link include scheme").**  The shared link library moves to `docs/_links.md` and is appended to every page automatically; the per-module `{% include UALib.Links.md %}` directive is removed from every source.  Internal targets are *root-relative* (`/Setoid/Algebras/Basic/`) so cross-references resolve identically under `mkdocs serve` and at the deployed host (this is why the new site is served at a host *root*, not a `…/agda-algebras` subdirectory — Decision 1).  The module half of `docs/_links.md` is generated from the tree by `scripts/python/gen_links.py` (it had fallen ~130 entries behind by hand).  `mkdocs-macros-plugin` is still configured — per the issue's plugin set — but it is *not* used for the link include; appending one file to every page is exactly `auto_append`'s job and carries no templating risk.  Because Agda's `{{ }}`, `{ }`, `{% %}`, and `{# %}` occur throughout the corpus, macros is given collision-free Jinja2 delimiters — doubled-square-bracket variants, configured in `mkdocs.yml`, that occur nowhere in `src/` — and reserved for site variables.
 
 6.  **Rewrite repo-relative prose links with a build hook.**  Prose links written for GitHub viewing (`](src/X.lagda.md)`, `](docs/adr/…)`, `](CONTRIBUTING.md)`) are rewritten to site URLs by `scripts/python/mkdocs_hooks.py` (`on_page_markdown`), which is careful to skip fenced code so Agda is never touched.
 
-7.  **Pin the toolchain in the flake; drive it from the Makefile; deploy from CI.**  `flake.nix` gains a Python environment with `mkdocs-material` and the plugins, so a contributor reproduces CI exactly, the same way `make check` reproduces the type-check.  `make site` is the fast preview build (to `./site`); `make serve` previews locally; `make site-full` (`make html` + `make agda-md` + `make site`) is the fully-featured build CI publishes.  `.github/workflows/docs.yml` runs `make site-full` and deploys to the `gh-pages` branch on every push to `master`.
+7.  **Pin the toolchain in the flake; drive it from the Makefile; deploy from CI.**  `flake.nix` gains a Python environment with `mkdocs-material` and the plugins, so a contributor reproduces CI exactly, the same way `make check` reproduces the type-check.  `make site` is the fast preview build (to `./site`); `make serve` previews locally; `make site-full` (`make html` + `make agda-md` + `make site`) is the fully-featured build CI publishes.  `.github/workflows/docs.yml` runs `make site-full` and **cross-deploys** the built `./site` to the `gh-pages` branch of the new-home repository in the `universalalgebra` org (via `peaceiris/actions-gh-pages` with `external_repository` + a deploy key, `cname: agda-algebras.universalalgebra.org`) on every push to `master`.  `ualib/agda-algebras` stays the single canonical source; its *own* `gh-pages` branch holds the parked legacy site and is no longer a deploy target.  *(Amended for #430; the original deployed to this repository's own `gh-pages`.)*
 
 ## Consequences
 
@@ -52,7 +56,7 @@ Once the sources are Markdown-literate, a static-site generator that reads Markd
 +  **Cross-references resolve everywhere.**  Reference-style links resolve site-wide via the auto-appended `docs/_links.md`; repo-relative inline links are rewritten by the hook; and in the published site every code-block token links to its definition (library → the rendered page, stdlib → `/classic/`).  A handful of pre-existing prose references to modules that do not exist (typos predating this work) remain unresolved and are left for a content-cleanup pass.
 +  **Full token highlighting in the published site.**  `agda --html` gives whole-token semantic colour and per-token hyperlinks in code blocks, alongside the inline prose spans.  The cost is a type-check the project already runs; the fast no-agda path keeps prose/theme iteration instant.  (Type-on-hover tooltips, 1Lab-style, are a tracked follow-up that builds on this same output.)
 +  **The URL scheme changes shape.**  `/Module/Submodule/` replaces `Module.Submodule.html`.  `mkdocs-redirects` absorbs the legacy URLs at the cutover; until then the live site is untouched.
-+  **The cutover is a documented manual step.**  Pointing GitHub Pages at `gh-pages`, attaching the `ualib.org` custom domain, and the registrar DNS change are deferred to the maintainer and listed as a checklist on the migration PR.  Nothing in this ADR disturbs the currently-live site.
++  **The cutover is a documented manual step (tracked in #430).**  Standing up the new home — the `universalalgebra`-org repo, the cross-repo deploy key, and the `agda-algebras.universalalgebra.org` DNS `CNAME` + custom-domain — and parking the legacy site at `ualib.org` (restoring its pre-merge `gh-pages` content + CNAME) are deferred to the maintainer and tracked in **#430**, along with populating `mkdocs-redirects`.
 +  **Authoring is unchanged.**  Contributors keep writing `.lagda.md`; the front matter and the `{% include %}` footer they used to copy are no longer needed (the include is gone; the title and nav are generated).
 
 ## Alternatives considered
@@ -66,6 +70,7 @@ Once the sources are Markdown-literate, a static-site generator that reads Markd
 ## References
 
 +  Issue #295 — [M10-1] doc rendering-pipeline modernization (mkdocs).
++  Issue #430 — [M10-4] retire/park the legacy `ualib.org` site; relocate the new site to `agda-algebras.universalalgebra.org`.
 +  [ADR-004](004-lagda-md-canonical.md) — Markdown-literate Agda as the canonical literate format (the migration this pipeline completes).
 +  [1Lab](https://1lab.dev) and [formal-ledger-specifications](https://omelkonian.github.io/formal-ledger/) — the kramdown-attribute-span + custom-CSS precedents.
 +  [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/), [mkdocs-gen-files](https://oprypin.github.io/mkdocs-gen-files/), [mkdocs-literate-nav](https://oprypin.github.io/mkdocs-literate-nav/), [pymdownx.snippets](https://facelessuser.github.io/pymdown-extensions/extensions/snippets/).

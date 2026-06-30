@@ -3226,16 +3226,27 @@ This is separated from #373 because it is a sizeable undertaking on its own:
 
 ## Description
 
-Prove the "terms ⟹ lattice property" halves of Jónsson's and Day's theorems: a variety with Jónsson terms is congruence-distributive, and a variety with Day terms is congruence-modular.  These inhabit the *first* projections of `Jonsson-Statement` and `Day-Statement` in `Setoid.Varieties.MaltsevConditions`.
+Prove the "terms ⟹ lattice property" halves of Jónsson's and Day's theorems: a variety with Jónsson terms is congruence-distributive, and a variety with Day terms is congruence-modular.  These are the **second** projections of `Jonsson-Statement` and `Day-Statement` in `Setoid.Varieties.MaltsevConditions`: with `P ⇔ Q = (P → Q) × (Q → P)` and `Jonsson-Statement = CongruenceDistributiveVariety ⇔ (Σ n, HasJonssonTerms n)`, the term ⟹ CD direction is `proj₂` (`Q → P`), not the first projection.  (The original text said "first projections"; corrected here.)
 
-These halves need **no** free-algebra machinery (so they are independent of [M6-4] (#410)): they are universally quantified over the variety and use the chain terms available on every algebra via the interpretation, plus `term-compatible` and an induction over the join `_∨_ = Cg(∪)`.  They are the lowest-friction next deliverables and reuse the M6-3 infrastructure directly.
+These halves are independent of [M6-4] (#410): they use the chain terms available on every algebra via the interpretation, plus `term-compatible` and an induction over the join.
 
-## Tasks
+## Status (PR #428)
 
-+  Generalize the curried-term extraction (`eval-m` / `satM` from M6-3) from one ternary symbol to the `Fin (n+1)` chain — the ternary Jónsson terms `dᵢ` and the quaternary Day terms `mᵢ` — yielding the curried operations and their parity-split identities on every model of the theory.
-+  **Jónsson terms ⟹ CD**: the "staircase" induction over the `Gen (φ ∪ ψ)` derivation, proving the non-trivial inclusion `θ ∧ (φ ∨ ψ) ⊆ (θ ∧ φ) ∨ (θ ∧ ψ)` (the reverse inclusion is automatic in any lattice).
-+  **Day terms ⟹ CM**: the analogous staircase for the modular law `θ ≤ ψ → (θ ∨ φ) ∧ ψ ⊆ θ ∨ (φ ∧ ψ)`.
-+  Inhabit the forward projections of `Jonsson-Statement` and `Day-Statement`.
+**Forward Jónsson: DONE — including the featured finitary theorem, unconditionally.**
+
++  Generalized the curried-term extraction from one ternary symbol to the `Fin (n+1)` Jónsson chain (`d𝑩` / `eval-d` / `d-fst` / `d-lst` / `d-mid` / `d-compat`).
++  The two-part staircase: the horizontal lemma (induction on the chain) and the vertical induction over the rungs (`Data.Fin.Induction.<-weakInduction`, whose `inject₁ i → suc i` step lines up with the parity-split fork `d-fork i`).
++  `jonsson⇒chainDistributive` — the forward inclusion `θ ∧ (φ ∨ ψ) ⊆ (θ∧φ) ∨ (θ∧ψ)` **along every chain**, fully general (no finiteness).
++  `jonsson⇒CongruenceDistributive` / `jonsson⇒CongruenceDistributiveVariety` — the literal `CongruenceDistributive` / `CongruenceDistributiveVariety` (the `proj₂` direction of `Jonsson-Statement`), modulo the one isolated hypothesis `JoinIsChain`.
++  **`jonsson-finitary⇒CongruenceDistributiveVariety` — the featured theorem**: a variety over a finitary signature with Jónsson terms is congruence-distributive, with **no residual side condition**.  This is the form a working algebraist applies; universal algebra in practice means finitary algebras.
+
+**The Gen-vs-chain obstruction: named once, then discharged for finitary signatures.**  The library's join is `Cg(φ ∪ ψ) = Gen(φ ∪ ψ)`, the inductively-generated congruence whose `comp` constructor closes it under the basic operations (necessary and correct for *infinitary* signatures, whose arities are arbitrary types).  The Jónsson-term "sandwich" relation `dᵢ(a,u,b) γ dᵢ(a,v,b)` is provably **not** closed under `comp`, so a direct `Gen`-induction cannot carry the staircase, and for an infinitary signature the join strictly exceeds the finite-chain closure.  The forward theorem is therefore proved against `Chain` in full generality, the lone missing step `Gen(φ ∪ ψ) ⊆ Chain` is isolated as the explicit hypothesis `JoinIsChain`, and that hypothesis is then **discharged** for finitary signatures in the new module `Setoid.Congruences.ChainJoin` (`finitary⇒JoinIsChain`): `Chain 𝑩 (φ ∪ᵣ ψ)` is shown to be a congruence (operation-closed via the one-coordinate-at-a-time fold `chain-op` over a finite-arity enumeration `Finitary 𝑆`), hence contains the generated join by `Cg-least`.  The `Examples.Setoid.FinitarySignatures` module shows the `Finitary` witness is a hoop-free one-liner (`λ _ → _ , ↔-id _`).
+
+**Forward Day: DEFERRED INDEFINITELY — not a mechanical mirror.**  Day's `mᵢ(x,y,y,x) ≈ x` pinning requires the two middle arguments *equal*, so only `mᵢ(a,c,c,b)` is ψ-pinnable; the even-fork column `mᵢ(a,a,b,b)` is not, and connecting it would demand a single-slot `a ↔ b` move that is not a `θ∨(φ∧ψ)`-step.  Jónsson's clean two-column staircase has no analogue; Day's theorem needs the genuinely 2-dimensional / `A²` construction of Day 1969.  Beyond the structural asymmetry, the forward Day proof is technical and is carried out in neither *Algebras, Lattices, Varieties* (McKenzie–McNulty–Taylor) nor Bergman's *Universal Algebra* (which states the result but explicitly declines to prove it), and no module in the library consumes it.  It is therefore held off indefinitely; the module prose and `docs/notes/m6-6-forward-jonsson-day.md` record the right construction so a successor picks it up only when a concrete need arises.
+
+## Remaining tasks
+
++  **Day terms ⟹ CM** (deferred indefinitely): the 2-dimensional staircase for the modular law `θ ≤ ψ → (θ ∨ φ) ∧ ψ ⊆ θ ∨ (φ ∧ ψ)` (Day 1969; Burris–Sankappanavar II.12.4).  The curried extraction mirrors Jónsson; the staircase does not.  This is the only open item on this issue and may be split into a dedicated follow-up.
 
 ## Dependencies
 
@@ -3243,11 +3254,12 @@ These halves need **no** free-algebra machinery (so they are independent of [M6-
 
 ## Acceptance criteria
 
-+  Both forward implications type-check under `--safe`; one direction of each of Jónsson's and Day's theorems is done.
++  Forward Jónsson type-checks under `--safe`; the term ⟹ CD direction of Jónsson's theorem is done, and the **finitary** version is unconditional.  ✅ (PR #428; `make check` passes.)
++  Forward Day remains the only open item, deferred indefinitely — this issue stays open for it (or is split into a follow-up).
 
 ## Notes
 
-+  Difficulty: moderate.  The mechanical cost is generalizing the extraction to `n+1` parity-split identities; the mathematical content is the chain induction over the inductively-generated join.
++  Difficulty: the Jónsson half is moderate as expected; the realized work also surfaced two findings — the `Gen`-vs-chain (infinitary `comp`) obstruction, now discharged for finitary signatures, and that Day is **not** a mechanical mirror of Jónsson.  Both are recorded in `docs/notes/m6-6-forward-jonsson-day.md`.
 
 ## References
 
@@ -3688,7 +3700,7 @@ graph TD
 
 <!-- BEGIN GENERATED: milestone-10 -->
 
-### Issue M10-1: doc rendering-pipeline modernization (mkdocs) (#295)
+### Issue M10-1: doc rendering-pipeline modernization (mkdocs) (#295, closed)
 
 **Labels**: `documentation`, `breaking-change`, `milestone-10-polish`
 
@@ -3823,6 +3835,46 @@ GitHub's "Transfer ownership" feature (Settings → General → Danger zone → 
 
 ---
 
+### Issue M10-3: Type-on-hover tooltips for Agda tokens (1Lab-style), with a toggle (#429)
+
+**Labels**: `documentation`, `milestone-10-polish`
+
+## Context
+
+M10-1 (#295, PR #427) brought full `agda --html` token highlighting with **per-token hyperlinks to definitions** into the MkDocs site, plus the classic clickable-HTML site at `/classic/`.  Tokens are now classed and linked; the natural next step — deferred from the #295 review — is **type-on-hover tooltips**, like [1lab.dev](https://1lab.dev/) (and, less polished, the [Leios formal spec](https://leios.cardano-scaling.org/formal-spec/Leios.Linear.html)): hover a token, see a small popover with its definition, without leaving the page.
+
+## Goal
+
++  Hovering any highlighted Agda token shows a popover containing its **type signature** (and, where available, its definition snippet / docstring).
++  A **"Tooltips on/off"** toggle in the page header, persisted across pages (e.g. `localStorage`), so readers who find them distracting can switch them off.
++  Light + dark styling consistent with the site theme.
+
+## Approach (proposed)
+
+This builds directly on the `make agda-md` output already produced for #3a — no new Agda dependency:
+
++  The `agda --html --html-highlight=code` output already contains **every definition's type signature** as highlighted code, anchored by char-offset id (the same ids the hyperlinks target).  A small build step (a `gen-files` pass or a hook) extracts `{anchor → type-signature HTML}` into a JSON index emitted into the site.
++  A small script under `docs/javascripts/` attaches a popover on hover over any linked token, looking up the target anchor in the index (cross-page lookups resolve because the index is global).
++  A header button toggles a `localStorage` flag that shows/hides the popovers (a Material header/`announce` override or a tiny custom element).
+
+## Scope
+
++  **MVP (this issue).**  Signature-on-hover from the existing `agda --html` output + the toggle.  No new tooling beyond a JSON-index build step and a small JS/CSS bundle.
++  **Stretch (separate issue if pursued).**  Fully *normalised* types / docstrings as 1Lab renders them — this needs the Agda API (a Shake/Haskell-style extractor), a materially larger effort.
+
+## Non-goals
+
++  Re-deriving the highlighting or hyperlinks (done in #295 / PR #427).
++  Agda-API type extraction (the stretch goal above).
+
+## References
+
++  #295 — M10-1 rendering-pipeline modernization; PR #427 — its implementation.
++  [ADR-007](https://github.com/ualib/agda-algebras/blob/master/docs/adr/007-mkdocs-rendering-pipeline.md) — the rendering pipeline this extends.
++  [1lab.dev](https://1lab.dev/) — the reference implementation of type-on-hover.
+
+---
+
 ### Issue M10-3: Distribute agda-algebras through nixpkgs as an Agda library (#299)
 
 **Labels**: `nix`, `milestone-10-polish`, `agda-community`
@@ -3856,6 +3908,154 @@ The repo's `flake.nix` provides a *development* environment — `nix develop` gi
 
 +  Replacing the existing development flake.  The development flake (`nix develop`) is a different artifact and stays in place.
 +  Distributing through any package manager other than nix.  Agda libraries don't have a strong tradition of cross-package-manager distribution; the agda-stdlib is the closest thing to a canonical distribution channel and it's nixpkgs-anchored.
+
+---
+
+### Issue M10-4: Retire and park the legacy ualib.org site; cut over to the MkDocs site (#430)
+
+**Labels**: `documentation`, `milestone-10-polish`
+
+## Context
+
+PR #427 (closing #295) builds the new MkDocs (Material) site from the `.lagda.md` sources and deploys it to the `gh-pages` branch on every push to `master`.
+
+By deliberate decision in ADR-007 (`docs/adr/007-mkdocs-rendering-pipeline.md`), the *cutover* — pointing GitHub Pages at `gh-pages`, attaching the ~~`ualib.org`~~ `universalalgebra.org/agda-algebras` custom domain, and the registrar DNS change — was left as a manual maintainer step so that merging the PR does not disturb the currently-live site.
+
+This issue tracks that cutover **and** the parking + deprecation of the existing (Jekyll-rendered) ualib.org content.
+
+## Goal
+
+`ualib.org` ~~serves the new site~~ continues to serve the old, deprecated site; the old site is preserved ("parked") and carries a prominent banner marking it deprecated and linking forward to the new site; legacy `Module.Submodule.html` URLs redirect to the new directory URLs.
+
+`universalalgebra.org/agda-algebras` serves the new site.
+
+## Plan
+
+### Park the old site
+
++  [X] Decide where to park the current live content.
+
+    **Decision**: keep it parked at its original and current location `ualib.org`.
+
++  [ ] Add a prominent **deprecation banner** to the top of the old landing page (ideally every old page): a dated notice that the site is deprecated, with a link to the new site at `universalalgebra.org/agda-algebras`.  A sticky `<div>` with a contrasting background is enough.
+
+### Cut over to the new site
+
++  [ ] Point **GitHub Pages** at the `gh-pages` branch (Settings → Pages → Deploy from a branch → `gh-pages` / root).
++  [ ] Attach the **custom domain**: uncomment `cname: universalalgebra.org/agda-algebras` in `.github/workflows/docs.yml`, and confirm the `CNAME` file lands in the published site.
++  [ ] Update **registrar DNS**: point the `universalalgebra.org/agda-algebras` apex at GitHub Pages' IPs (and/or a `www` `CNAME` to `ualib.github.io`), per GitHub's custom-domain docs.
++  [ ] Populate the **`mkdocs-redirects`** map (currently empty in `mkdocs.yml`) with the legacy flat `Module.Submodule.html` → new `/Module/Submodule/` URLs, so external links survive.
+
+### Verify
+
++  [ ] Spot-check at least 10 pages on the live `universalalgebra.org/agda-algebras` against the parked archive: content, search, inline cross-links, the `/classic/` agda-html mirror, and the module constellation.
++  [ ] Confirm HTTPS (GitHub-provisioned certificate) is active on the apex and `www`.
++  [ ] Confirm a sample of legacy `….html` URLs redirect to their new locations.
+
+## Acceptance criteria
+
++  [ ] `https://universalalgebra.org/agda-algebras` serves the new MkDocs site over HTTPS.
++  [ ] The old site is parked at its original URL (`ualib.org`) and shows a dated deprecation banner linking to the new site.
++  [ ] Legacy `Module.Submodule.html` URLs resolve (directly or via redirect).
++  [ ] No regression in the currently-live content during the transition: the old site stays reachable until the new one is verified.
+
+## Related
+
++  PR #427 — the new MkDocs pipeline (closes #295).
++  ADR-007 (`docs/adr/007-mkdocs-rendering-pipeline.md`) — records the deferred-cutover decision and the checklist this issue executes.
++  #295 — M10-1 rendering-pipeline modernization.
+
+## Notes
+
++  This is the last remaining item from ADR-007's deferred-cutover checklist.  It is intentionally an *ops* issue (Pages config + DNS + a banner), not a code change, so it can land independently once PR #427 is merged.
++  The "park + banner" step is what makes the transition safe: nothing about the old content is destroyed, and visitors to stale links are routed forward.
+
+---
+
+### Issue M10-5: Improve how module imports are presented on the documentation pages (#431)
+
+**Labels**: `documentation`, `milestone-10-polish`
+
+## Context
+
+Every rendered module page opens with the module's full **import block** (`open import …`), plus the `OPTIONS` pragma and the module header, shown verbatim with no framing — no comment or heading telling the reader "these are the module's imports."  To anyone who knows Agda this is obvious, but for a *documentation* reader (as opposed to someone reading source) it is noise up front: it pushes the actual content down the page and reads as undocumented boilerplate.
+
+This issue is to weigh ways to make the import/scaffolding blocks **less obtrusive for the casual reader without losing them** for readers who want the full source (which is always available in the `/classic/` agda-html mirror and on GitHub).
+
+## Options to consider
+
++  **(a) Always hide the scaffolding on doc pages.**  Strip or collapse the leading import/OPTIONS/module blocks during `mkdocs_gen_library.py` (or hide them with CSS), keeping them only in `/classic/` and the GitHub source.  Most aggressive; least reversible for a reader who *does* want to see them inline.
++  **(b) Collapsible admonition.**  Wrap the imports in a `pymdownx.details` block (`??? note "Module imports"`), collapsed by default.  Pure-Markdown, no JS — but needs each import block marked.  Could be **automated in gen-files** (wrap the leading `<pre class="Agda">` blocks up to the module header in a `<details>`) so the 283 source files are not touched.
++  **(c) A "Show / hide Agda" toggle, à la formal-ledger-specifications.**  A small JS control at the top of each page that flips "Show more Agda" / "Show less Agda", hiding/showing the scaffolding (and optionally *all* code) globally, with the choice persisted in `localStorage` like the theme toggle.  Least lossy (reader opts in) and most flexible (can hide more than imports).
+
+## Things to work out
+
++  **Reliable identification of the "scaffolding" blocks.**  In the agda-html output these are the leading `<pre class="Agda">` blocks containing the `OPTIONS` pragma, the `module … where` header, and the `open import` / `import` lines (and arguably the `private variable` declarations).  A heuristic in gen-files or in JS can tag them.
++  **Granularity.**  Just the imports, or all scaffolding (pragma + module line + private variables)?  formal-ledger's toggle hides more than imports.
++  **Scope of the preference.**  Per-page state vs. a global, persisted preference.
++  **Interaction with existing features.**  The copy button (`agda-copy.js`) and the token highlighting must keep working on whatever remains visible.
++  **Nothing is lost.**  `/classic/` and the GitHub source always show everything, so any of these is safe.
+
+## Leaning
+
+Option **(c)** seems the best fit — it is the least lossy and the most flexible, and it matches a pattern the team already maintains on the formal-ledger site (so there is prior art to adapt).  Option **(b)**, automated in gen-files, is the simplest to ship without per-file edits and could be a good first step.  Option **(a)** is a fallback if a toggle proves more trouble than it is worth.
+
+## Acceptance (to be refined after discussion)
+
++  A casual reader's first screenful of a module page is content/prose, not a wall of imports.
++  Readers who want the full source can still reach it inline (toggle) or via `/classic/` and GitHub.
++  Highlighting and the copy button continue to work.
+
+## Related
+
++  PR #427 — the MkDocs rendering pipeline.
++  ADR-007 (`docs/adr/007-mkdocs-rendering-pipeline.md`).
++  formal-ledger-specifications — the "Show more/less Agda" toggle this borrows from.
+
+---
+
+### Issue M10-6: Explore definition-level dependency graphs for the documentation site (#432)
+
+**Labels**: `documentation`, `milestone-10-polish`
+
+## Context (exploratory)
+
+The site has a module-level **constellation** (the import graph, as a d3 force-directed graph; see `docs/constellation.md`).  A finer-grained, **definition/lemma-level** dependency view — "what does Birkhoff's HSP theorem *actually* rest on?" — would be valuable for a proof-engineering audience in a way the module graph is not.
+
+This is deliberately an **open-ended, exploratory issue**: the aim is to investigate, prototype, and discuss approaches, with loosely defined targets.  No fixed deliverable is committed up front.
+
+## Candidate tooling
+
++  [omelkonian/agda-dependencies](https://github.com/omelkonian/agda-dependencies) (`agda-deps`) — a Haskell/cabal tool that emits a Graphviz (DOT) dependency graph between Agda definitions.  Its cabal bounds require **`Agda >= 2.8`**, which matches our pinned 2.8.0; it also pulls in `graphviz` and `fgl`.
++  **Derive it ourselves** from data we already produce.  The `agda --html` pass already emits per-token hyperlinks (each identifier links to its defining site); a definition-level dependency graph might be extractable from that cross-reference data without adding a second Haskell toolchain.  Worth comparing against `agda-deps`.
++  Agda's own `--dependency-graph` (module-level only — already covered by the constellation, noted for completeness).
+
+## Questions and approaches to explore
+
++  **Build integration.**  If we use `agda-deps`: add it to the Nix flake (`callCabal2nix`, or a flake input), ideally reusing nixpkgs' Agda 2.8 Haskell library so we don't rebuild Agda-the-library from source; add the `graphviz` binary.  How much does this add to CI wall-clock, and what caches it?
++  **Granularity and legibility.**  A definition-level graph over 283 modules / 38k lines is a hairball as a single global picture.  More legible units to try: per-theorem (an "anatomy of a proof" — e.g. the dependency cone of Birkhoff's HSP), per-module, or an interactive/filterable graph.
++  **Presentation.**  Static SVG embedded on a page?  An interactive graph (like the constellation, fed from `agda-deps`' DOT/JSON)?  A dedicated "anatomy of a proof" page for a few flagship results, rather than a global tab?
++  **Relationship to the constellation.**  These are complementary — the module *forest* vs. the definition *trees* inside one proof.  Keep both?  Share a visual language?
++  **Maintenance cost.**  A second pinned Haskell toolchain next to Agda is a real ongoing cost; the "derive from agda-html" route may avoid it.
+
+## Suggested first spike
+
+Wire `agda-deps` (or the agda-html-derived approach) into the dev environment, run it over **one** module/theorem (Birkhoff's HSP), render the result to SVG, and eyeball whether it is illuminating at that scope.  Decide next steps from there.
+
+## Loose targets / acceptance
+
++  A working prototype graph for at least one flagship result.
++  A short written recommendation: whether/how to integrate (global tab vs. per-page vs. a curated "anatomy of a proof" page), the build and CI cost, and the maintenance tradeoff — enough to decide whether this becomes a real feature.
+
+## Non-goals (for now)
+
++  A global, all-library definition graph (the hairball).
++  Committing to a specific UI before the spike.
+
+## Related
+
++  The module constellation (`docs/constellation.md`), PR #427, ADR-007.
++  [omelkonian/agda-dependencies](https://github.com/omelkonian/agda-dependencies).
 
 <!-- END GENERATED: milestone-10 -->
 
