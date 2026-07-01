@@ -47,7 +47,7 @@ open import Data.Product     using ( _,_ ; proj₁ ; proj₂ )
 open import Data.Sum.Base    using ( _⊎_ ; inj₁ ; inj₂ ; [_,_] )
 open import Level            using ( Level ; _⊔_ )
 open import Relation.Binary  using ( Setoid ; IsEquivalence )
-                             renaming ( Rel to BinRel ; _⇒_ to _⊆_)
+                             renaming ( Rel to BinaryRel ; _⇒_ to _⊆_)
 -- Imports from the Agda Universal Algebras Library ------------------------------
 open import Overture                           using  ( OperationSymbolsOf ; ArityOf )
 open import Setoid.Algebras.Basic     {𝑆 = 𝑆}  using  ( Algebra ; 𝕌[_] ; 𝔻[_] ; _^_ )
@@ -62,17 +62,17 @@ Fix an algebra `𝑨` and a binary relation `R` on its carrier.  `Gen R` is the
 smallest relation containing `R` that is reflexive over `_≈_`, symmetric,
 transitive, and compatible with every basic operation.  The closure quantifies over
 the operation symbols (`𝓞`), their arities (`𝓥`), and the carrier (`α`, `ρ`), so it
-inhabits `BinRel 𝕌[ 𝑨 ] (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ ℓ)`; we name that level `𝒈 ℓ`.
+inhabits `BinaryRel 𝕌[ 𝑨 ] (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ ℓ)`; we name that level `𝒈 ℓ`.
 
 ```agda
 module _ {𝑨 : Algebra α ρ} where
-  open Setoid 𝔻[ 𝑨 ] using ( _≈_ ) renaming ( refl to reflA )
+  open Setoid 𝔻[ 𝑨 ] using ( _≈_ ) renaming ( refl to ≈refl )
 
   -- The level at which the generated congruence lives.
   𝒈 : Level → Level
   𝒈 ℓ = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ ℓ
 
-  data Gen (R : BinRel 𝕌[ 𝑨 ] ℓ) : BinRel 𝕌[ 𝑨 ] (𝒈 ℓ) where
+  data Gen (R : BinaryRel 𝕌[ 𝑨 ] ℓ) : BinaryRel 𝕌[ 𝑨 ] (𝒈 ℓ) where
     base : R ⊆ Gen R
     rfl         : {x y : 𝕌[ 𝑨 ]} → x ≈ y → Gen R x y
     symmetric   : {x y : 𝕌[ 𝑨 ]} → Gen R x y → Gen R y x
@@ -80,12 +80,12 @@ module _ {𝑨 : Algebra α ρ} where
     compatible  : (f : OperationSymbolsOf 𝑆) {u v : ArityOf 𝑆 f → 𝕌[ 𝑨 ]}
       → (∀ i → Gen R (u i) (v i)) → Gen R ((f ^ 𝑨) u) ((f ^ 𝑨) v)
 
-  Cg : (R : BinRel 𝕌[ 𝑨 ] ℓ) → Con 𝑨 (𝒈 ℓ)
+  Cg : (R : BinaryRel 𝕌[ 𝑨 ] ℓ) → Con 𝑨 (𝒈 ℓ)
   Cg R = Gen R , mkcon rfl g-isEquivalence compatible
     where
     open IsEquivalence using (refl ; sym ; trans )
     g-isEquivalence : IsEquivalence (Gen R)
-    g-isEquivalence .refl  = rfl reflA
+    g-isEquivalence .refl  = rfl ≈refl
     g-isEquivalence .sym   = symmetric
     g-isEquivalence .trans = transitive
 ```
@@ -99,10 +99,10 @@ turning each closure rule into the corresponding congruence law of `ψ`.  Note `
 live at any relation level `ℓ′`, so this is a genuinely heterogeneous statement.
 
 ```agda
-  Cg-incl : (R : BinRel 𝕌[ 𝑨 ] ℓ) → R ⊆ Gen R
+  Cg-incl : (R : BinaryRel 𝕌[ 𝑨 ] ℓ) → R ⊆ Gen R
   Cg-incl R = base
 
-  Cg-least : {R : BinRel 𝕌[ 𝑨 ] ℓ} (ψ : Con 𝑨 ℓ′) → R ⊆ proj₁ ψ → Gen R ⊆ proj₁ ψ
+  Cg-least : {R : BinaryRel 𝕌[ 𝑨 ] ℓ} (ψ : Con 𝑨 ℓ′) → R ⊆ proj₁ ψ → Gen R ⊆ proj₁ ψ
   Cg-least ψ R⊆ψ (base r) = R⊆ψ r
   Cg-least (_ , ψcon) R⊆ψ (rfl e) = reflexive ψcon e
   Cg-least ψ R⊆ψ (symmetric p) =
@@ -116,7 +116,7 @@ Monotonicity follows immediately: if `R` is contained in `S` then `Cg R` is
 contained in `Cg S` (take `ψ = Cg S`, which contains `S` hence `R`).
 
 ```agda
-  Cg-mono : {R : BinRel 𝕌[ 𝑨 ] ℓ} {S : BinRel 𝕌[ 𝑨 ] ℓ′} → R ⊆ S → Gen R ⊆ Gen S
+  Cg-mono : {R : BinaryRel 𝕌[ 𝑨 ] ℓ} {S : BinaryRel 𝕌[ 𝑨 ] ℓ′} → R ⊆ S → Gen R ⊆ Gen S
   Cg-mono {S = S} R⊆S = Cg-least (Cg S) (λ r → base (R⊆S r))
 ```
 
@@ -136,7 +136,7 @@ join sits at the higher level `𝒈 ℓ`.
   infix 4 _⊑_
 
   -- The union of the underlying relations of two congruences.
-  _∪ᵣ_ : Con 𝑨 ℓ → Con 𝑨 ℓ → BinRel 𝕌[ 𝑨 ] ℓ
+  _∪ᵣ_ : Con 𝑨 ℓ → Con 𝑨 ℓ → BinaryRel 𝕌[ 𝑨 ] ℓ
   (θ ∪ᵣ φ) x y = proj₁ θ x y ⊎ proj₁ φ x y
   infixr 6 _∪ᵣ_
 

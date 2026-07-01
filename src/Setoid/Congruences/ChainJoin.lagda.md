@@ -53,10 +53,6 @@ open import Level                           using ( Level ; _⊔_ ) renaming ( s
 open import Relation.Nullary.Decidable      using ( yes ; no )
 open import Relation.Binary                 using ( Setoid ; IsEquivalence )
 
-open import Data.Vec.Functional             using  ( updateAt )
-open import Data.Vec.Functional.Properties  using  ( updateAt-updates ; updateAt-minimal
-                                                   ; updateAt-updateAt )
-
 open import Relation.Binary.PropositionalEquality
   using ( _≡_ ; _≢_ ; refl ; sym ; trans ; cong ; subst )
 

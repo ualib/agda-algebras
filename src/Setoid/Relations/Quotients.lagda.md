@@ -19,7 +19,7 @@ open import Agda.Primitive    using () renaming ( Set to Type )
 open import Data.Product      using ( Σ-syntax ) renaming ( _×_ to _∧_ )
 open import Function          using ( id ) renaming ( Func to _⟶_ )
 open import Level using ( Level ; _⊔_ ; suc )
-open import Relation.Binary   using ( IsEquivalence ) renaming ( Rel to BinRel )
+open import Relation.Binary   using ( IsEquivalence ) renaming ( Rel to BinaryRel )
 open import Relation.Unary    using ( Pred ; _∈_ ; _⊆_ )
 open import Relation.Binary   using ( Setoid )
 open import Relation.Binary.PropositionalEquality as ≡
@@ -49,7 +49,7 @@ module _ {𝐴 : Setoid α ρᵃ}{𝐵 : Setoid β ρᵇ} where
  IsEquivalence.trans  (ker-IsEquivalence f) = trans
 
 record IsBlock  {A : Type α}{ρ : Level}
-                (P : Pred A ρ){R : BinRel A ρ} : Type(α ⊔ suc ρ) where
+                (P : Pred A ρ){R : BinaryRel A ρ} : Type(α ⊔ suc ρ) where
  constructor mkblk
  field
   a : A
