@@ -38,10 +38,10 @@ module Setoid.Congruences.Permutability {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
-open import Data.Product     using ( _×_ ; _,_ ; Σ-syntax ; proj₁ ; proj₂ )
+open import Data.Product     using ( _×_ ; _,_ ; ∃-syntax ; proj₁ ; proj₂ )
 open import Level            using ( Level ; _⊔_ )
 open import Relation.Binary  using ( Setoid ; IsEquivalence )
-                             renaming ( Rel to BinRel ; _⇒_ to _⊆_ )
+                             renaming ( Rel to BinaryRel ; _⇒_ to _⊆_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Setoid.Algebras.Basic     {𝑆 = 𝑆}  using ( ov ; Algebra ; 𝕌[_] )
@@ -55,16 +55,14 @@ private variable α ρ ℓ : Level
 For congruences `θ φ : Con 𝑨 ℓ` we write `θ ∘ φ` for the composition of their
 underlying relations: `(θ ∘ φ) x y` is inhabited by a witness `z` together with
 proofs `x θ z` and `z φ y`.  The composition is a *bare* binary relation, not a
-congruence — it need not be transitive — so its codomain is `BinRel`, and the
+congruence — it need not be transitive — so its codomain is `BinaryRel`, and the
 existential bumps the relation level from `ℓ` to `α ⊔ ℓ` (the witness ranges over
 the carrier `𝕌[ 𝑨 ] : Type α`).
 
 ```agda
 module _ {𝑨 : Algebra α ρ} where
-
-  -- (θ ∘ φ) x y  ≡  ∃ z. (x θ z) × (z φ y)
-  _∘_ : Con 𝑨 ℓ → Con 𝑨 ℓ → BinRel 𝕌[ 𝑨 ] (α ⊔ ℓ)
-  (θ ∘ φ) x y = Σ[ z ∈ 𝕌[ 𝑨 ] ] (proj₁ θ x z × proj₁ φ z y)
+  _∘_ : Con 𝑨 ℓ → Con 𝑨 ℓ → BinaryRel 𝕌[ 𝑨 ] (α ⊔ ℓ)
+  ((_θ_ , _) ∘ (_φ_ , _)) x y = ∃[ z ] x θ z × z φ y
   infixr 7 _∘_
 ```
 
@@ -74,13 +72,15 @@ ordinary sense).  Inserting the relevant reflexive step on the right (resp. left
 embeds `θ` (resp. `φ`) into the composite.
 
 ```agda
+  open IsEquivalence using (refl)
+
   -- θ ⊆ θ ∘ φ
   ∘-inˡ : (θ φ : Con 𝑨 ℓ){x y : 𝕌[ 𝑨 ]} → proj₁ θ x y → (θ ∘ φ) x y
-  ∘-inˡ θ φ {x}{y} xθy = y , xθy , IsEquivalence.refl (is-equivalence (proj₂ φ))
+  ∘-inˡ _ (_ , isCongφ) {x}{y} xθy = y , xθy , isCongφ .is-equivalence .refl
 
   -- φ ⊆ θ ∘ φ
   ∘-inʳ : (θ φ : Con 𝑨 ℓ){x y : 𝕌[ 𝑨 ]} → proj₁ φ x y → (θ ∘ φ) x y
-  ∘-inʳ θ φ {x}{y} xφy = x , IsEquivalence.refl (is-equivalence (proj₂ θ)) , xφy
+  ∘-inʳ (_ , isCongθ) _ {x} xφy = x , isCongθ .is-equivalence .refl , xφy
 ```
 
 #### Permutability

@@ -9,7 +9,6 @@ author: "agda-algebras development team"
 
 This is the [Setoid.Homomorphisms.Kernels][] module of the [Agda Universal Algebra Library][].
 
-
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -18,19 +17,19 @@ open import Overture using (𝓞 ; 𝓥 ; Signature)
 module Setoid.Homomorphisms.Kernels {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ------------------------------------------
-open  import Data.Product      using ( _,_ )
-open  import Function          using ( _∘_ ; id ) renaming ( Func to _⟶_ )
-open  import Level             using ( Level )
-open  import Relation.Binary   using ( Setoid )
-open  import Relation.Binary.PropositionalEquality as ≡ using ()
+open  import Data.Product                           using ( _,_ ;  proj₁ ; proj₂ )
+open  import Function   renaming ( Func to _⟶_ )    using ( _∘_ ; id )
+open  import Level                                  using ( Level )
+open  import Relation.Binary                        using ( Setoid )
+open  import Relation.Binary.PropositionalEquality  using (refl)
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------
-open  import Overture                            using ( proj₁ ; proj₂ ; kerRel ; kerRelOfEquiv )
-open  import Setoid.Functions                    using ( Image_∋_ )
-open  import Setoid.Algebras            {𝑆 = 𝑆}  using ( Algebra ; _^_ ; 𝔻[_] )
-open  import Setoid.Congruences         {𝑆 = 𝑆}  using ( _∣≈_ ; Con ; mkcon ; _╱_ ; IsCongruence )
-open  import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}  using ( hom ; IsHom ; epi ; IsEpi ; epi→hom )
-open  import Setoid.Homomorphisms.Properties {𝑆 = 𝑆} using ( 𝒾𝒹 )
+open  import Overture                                  using  ( kerRel ; kerRelOfEquiv )
+open  import Setoid.Functions                          using  ( Image_∋_ )
+open  import Setoid.Algebras                  {𝑆 = 𝑆}  using  ( Algebra ; _^_ ; 𝔻[_] )
+open  import Setoid.Congruences               {𝑆 = 𝑆}  using  ( _∣≈_ ; Con ; mkcon ; _╱_ ; IsCongruence )
+open  import Setoid.Homomorphisms.Basic       {𝑆 = 𝑆}  using  ( hom ; IsHom ; epi ; IsEpi ; epi→hom )
+open  import Setoid.Homomorphisms.Properties  {𝑆 = 𝑆}  using  ( 𝒾𝒹 )
 
 private variable  α β ρᵃ ρᵇ ℓ : Level
 
@@ -51,7 +50,7 @@ That is, if each `(u i, v i)` belongs to the kernel, then so does the pair `((f 
   HomKerComp f {u}{v} kuv = Goal
     where
     fhuv : (f ^ 𝑩)(h ∘ u) ≈ (f ^ 𝑩)(h ∘ v)
-    fhuv = cong Interp (≡.refl , kuv)
+    fhuv = cong Interp (refl , kuv)
 
     lem1 : h ((f ^ 𝑨) u) ≈ (f ^ 𝑩)(h ∘ u)
     lem1 = IsHom.compatible hhom
@@ -94,16 +93,17 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} (h : hom 𝑨 𝑩) 
   πepi θ = p , pepi
     where
 
-    open Setoid 𝔻[ 𝑨 ╱ θ ]    using ( sym ; refl )
+    open Setoid 𝔻[ 𝑨 ╱ θ ]    using () renaming ( sym to ≈sym ; refl to ≈refl )
     open IsHom {𝑨 = (𝑨 ╱ θ)}  using ( compatible )
     open IsEpi
 
     p : 𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑨 ╱ θ ]
-    p = record { to = id ; cong = reflexive (proj₂ θ) }
+    p ⟨$⟩ x = x
+    p .cong = reflexive (θ .proj₂)
 
     pepi : IsEpi 𝑨 (𝑨 ╱ θ) p
-    pepi .isHom .compatible = sym (compatible (proj₂ 𝒾𝒹))
-    pepi .isSurjective {y} = Image_∋_.eq y refl
+    pepi .isHom .compatible = ≈sym (𝒾𝒹 .proj₂ .compatible)
+    pepi .isSurjective {y} = Image_∋_.eq y ≈refl
 ```
 
 In may happen that we don't care about the surjectivity of `πepi`, in which
@@ -132,8 +132,6 @@ Of the two containments, this is the easier one to prove; luckily it is also
 the one we need later.
 
 ```agda
-  open IsCongruence
-
   ker-in-con : {θ : Con 𝑨 ℓ} → ∀ {x}{y} → kercon (πhom θ) .proj₁ x y →  θ .proj₁ x y
   ker-in-con = id
 ```

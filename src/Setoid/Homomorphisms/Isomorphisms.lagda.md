@@ -25,7 +25,7 @@ open import Function                    using ()  renaming ( Func to _⟶_ )
 open import Level                       using ( Level ; Lift ; lift ; lower ; _⊔_ )
 open import Relation.Binary             using ( Setoid ; Reflexive ; Sym ; Trans )
 
-open import Relation.Binary.PropositionalEquality as ≡ using ()
+open import Relation.Binary.PropositionalEquality using (refl)
 
 -- Imports from the Agda Universal Algebra Library -----------------------------------------
 open import Overture                            using  ( OperationSymbolsOf ; ArityOf )
@@ -105,8 +105,7 @@ and forth between them which compose to the identity map.
 open _≅_
 
 ≅-refl : Reflexive (_≅_ {α}{ρᵃ})
-≅-refl {α}{ρᵃ}{𝑨} = mkiso 𝒾𝒹 𝒾𝒹 (λ _ → refl) λ _ → refl
-  where open Setoid 𝔻[ 𝑨 ] using ( refl )
+≅-refl {α}{ρᵃ}{𝑨} = mkiso 𝒾𝒹 𝒾𝒹 (λ _ → Setoid.refl 𝔻[ 𝑨 ]) (λ _ → Setoid.refl 𝔻[ 𝑨 ])
 
 ≅-sym : Sym (_≅_{β}{ρᵇ}) (_≅_{α}{ρᵃ})
 ≅-sym φ = mkiso (from φ) (to φ) (from∼to φ) (to∼from φ)
@@ -170,7 +169,7 @@ isomorphism — only the operations do — so it is accepted but never inspected
 
 ```agda
 module _ {𝑨 : Algebra α ρᵃ} where
-  open Setoid 𝔻[ 𝑨 ] using ( _≈_ ; refl ; sym )
+  open Setoid 𝔻[ 𝑨 ] using ( _≈_ ; sym ) renaming (refl to ≈refl)
 
   ≅-mkAlgebra : (f : (o : OperationSymbolsOf 𝑆) → Op (ArityOf 𝑆 o) 𝕌[ 𝑨 ])
     (cong-f : ∀ o {u v : ArityOf 𝑆 o → 𝕌[ 𝑨 ]} → (∀ i → u i ≈ v i) → f o u ≈ f o v)
@@ -179,7 +178,7 @@ module _ {𝑨 : Algebra α ρᵃ} where
   ≅-mkAlgebra f cong-f ops≈ =
     mkiso  (idF , mkIsHom λ {o}{a} → ops≈ o a)
            (idF , mkIsHom λ {o}{a} → sym (ops≈ o a))
-           (λ _ → refl) (λ _ → refl)
+           (λ _ → ≈refl) (λ _ → ≈refl)
     where
     -- the identity map on 𝑨's carrier, as a setoid function
     idF : 𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑨 ]
@@ -207,33 +206,31 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
   open IsHom
 
   Bijective→≅ :  (h : hom 𝑨 𝑩) → IsInjective (proj₁ h) → IsSurjective (proj₁ h) → 𝑨 ≅ 𝑩
-  Bijective→≅ h hM hE = mkiso h (g , gHom) (λ _ → invʳ) (λ _ → hM invʳ)
+  Bijective→≅ (h , hHom) hM hE = mkiso (h , hHom) (g , gHom) (λ _ → invʳ) (λ _ → hM invʳ)
     where
     open Setoid 𝔻[ 𝑨 ]  using () renaming ( _≈_ to _≈₁_ )
     open Setoid 𝔻[ 𝑩 ]  using ( sym ; trans ) renaming ( _≈_ to _≈₂_ )
 
-    hf : 𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]
-    hf = proj₁ h
-
     -- the surjective right inverse of h, made two-sided by injectivity
     ginv : 𝕌[ 𝑩 ] → 𝕌[ 𝑨 ]
-    ginv = SurjInv hf hE
+    ginv = SurjInv h hE
 
-    invʳ : ∀ {b} → hf ⟨$⟩ (ginv b) ≈₂ b
-    invʳ = SurjInvIsInverseʳ hf hE
+    invʳ : ∀ {b} → h ⟨$⟩ (ginv b) ≈₂ b
+    invʳ = SurjInvIsInverseʳ h hE
 
     -- ginv preserves setoid equality: pull b₀ ≈ b₁ back through h and cancel h ∘ ginv
     gcong : ∀ {b₀ b₁} → b₀ ≈₂ b₁ → ginv b₀ ≈₁ ginv b₁
     gcong b₀≈b₁ = hM (trans invʳ (trans b₀≈b₁ (sym invʳ)))
 
     g : 𝔻[ 𝑩 ] ⟶ 𝔻[ 𝑨 ]
-    g = record { to = ginv ; cong = gcong }
+    g ⟨$⟩ x = ginv x
+    g .cong = gcong
 
     -- ginv is a homomorphism: compare h-images (h injective) and cancel h ∘ ginv
     gHom : IsHom 𝑩 𝑨 g
-    compatible gHom {f}{b} =
-     hM (trans invʳ (sym (trans (compatible (proj₂ h))
-                                (cong (Interp 𝑩) (≡.refl , λ _ → invʳ)))))
+    gHom .compatible {f}{b} =
+     hM (trans invʳ (sym (trans (compatible hHom)
+                                (cong (Interp 𝑩) (refl , λ _ → invʳ)))))
 ```
 
 Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic
@@ -243,7 +240,7 @@ from the noncumulativity of Agda's universe hierarchy.
 
 ```agda
 module _ {𝑨 : Algebra α ρᵃ}{ℓ : Level} where
-  Lift-≅ˡ : 𝑨 ≅ (Lift-Algˡ 𝑨 ℓ)
+  Lift-≅ˡ : 𝑨 ≅ Lift-Algˡ 𝑨 ℓ
   Lift-≅ˡ = mkiso ToLiftˡ FromLiftˡ (ToFromLiftˡ{𝑨 = 𝑨}) (FromToLiftˡ{𝑨 = 𝑨}{ℓ})
 
   Lift-≅ʳ : 𝑨 ≅ (Lift-Algʳ 𝑨 ℓ)
@@ -379,12 +376,12 @@ module _ {𝓘 : Level}{I : Type 𝓘} {𝒜 : I → Algebra α ρᵃ} where
      ψhom : IsHom ⨅ℓ𝒜 (⨅ 𝒜) ψ
      ψhom .compatible = λ i → Setoid.refl 𝔻[ 𝒜 i ]
 
-     open Setoid
+     open Setoid renaming (refl to ≈refl)
      φ∼ψ : ∀ b i → 𝔻[ Lift-Alg (𝒜 (lower i)) ℓ ℓ ] ._≈_ ((φ ⟨$⟩ (ψ ⟨$⟩ b)) i) (b i)
-     φ∼ψ _ = λ i → lift (Setoid.reflexive 𝔻[ 𝒜 (lower i) ] ≡.refl)
+     φ∼ψ _ = λ i → lift (Setoid.reflexive 𝔻[ 𝒜 (lower i) ] refl)
 
      ψ∼φ : ∀ a i → 𝔻[ 𝒜 i ] ._≈_ ((ψ ⟨$⟩ (φ ⟨$⟩ a)) i) (a i)
-     ψ∼φ _ = λ i → Setoid.reflexive 𝔻[ 𝒜  i ] ≡.refl
+     ψ∼φ _ = λ i → Setoid.reflexive 𝔻[ 𝒜  i ] refl
 
 module _ {ι : Level}{I : Type ι}{𝒜 : I → Algebra α ρᵃ} where
 
@@ -414,11 +411,11 @@ module _ {ι : Level}{I : Type ι}{𝒜 : I → Algebra α ρᵃ} where
 
      open Setoid 𝔻[ ⨅ (λ i → Lift-Alg (𝒜 i) ℓ ρ) ]  using () renaming ( _≈_ to _≈₂_ )
      φ∼ψ : ∀ b → φ .proj₁ ⟨$⟩ (ψ .proj₁ ⟨$⟩ b) ≈₂ b
-     φ∼ψ _ = λ i → Setoid.reflexive 𝔻[ Lift-Alg (𝒜 i) ℓ ρ ] ≡.refl
+     φ∼ψ _ = λ i → Setoid.reflexive 𝔻[ Lift-Alg (𝒜 i) ℓ ρ ] refl
 
      open Setoid 𝔻[ ⨅ 𝒜 ] using (reflexive) renaming ( _≈_ to _≈₁_ )
      ψ∼φ : ∀ a → ψ .proj₁ ⟨$⟩ (φ .proj₁ ⟨$⟩ a) ≈₁ a
-     ψ∼φ _ = reflexive ≡.refl
+     ψ∼φ _ = reflexive refl
 
 module _ {ℓᵃ : Level}{I : Type ℓᵃ}{𝒜 : I → Algebra α ρᵃ}where
   open IsHom
@@ -450,11 +447,11 @@ module _ {ℓᵃ : Level}{I : Type ℓᵃ}{𝒜 : I → Algebra α ρᵃ}where
     ψ = ψfunc , ψhom
 
     φ∼ψ : ∀ b → ⨅lA ._≈_ (φ .proj₁ ⟨$⟩ (ψ .proj₁ ⟨$⟩ b)) b
-    φ∼ψ _ = λ i → Setoid.reflexive 𝔻[ Lift-Alg (𝒜 (lower i)) ℓ ρ ] ≡.refl
+    φ∼ψ _ = λ i → Setoid.reflexive 𝔻[ Lift-Alg (𝒜 (lower i)) ℓ ρ ] refl
 
     open Setoid 𝔻[ ⨅ 𝒜 ] using(reflexive ) renaming ( _≈_ to _≈₁_ )
     ψ∼φ : ∀ a → ψ .proj₁ ⟨$⟩ (φ .proj₁ ⟨$⟩ a) ≈₁ a
-    ψ∼φ _ = reflexive ≡.refl
+    ψ∼φ _ = reflexive refl
 
   ℓ⨅≅⨅ℓ : ∀ {ℓ} → Lift-Alg (⨅ 𝒜) ℓ ℓ ≅ ⨅ λ i → Lift-Alg (𝒜 (lower{ℓ = ℓ} i)) ℓ ℓ
   ℓ⨅≅⨅ℓ {ℓ} = mkiso (φ , φhom) (ψ , ψhom) φ∼ψ ψ∼φ -- φ∼ψ ψ∼φ
@@ -479,10 +476,10 @@ module _ {ℓᵃ : Level}{I : Type ℓᵃ}{𝒜 : I → Algebra α ρᵃ}where
     ψhom .compatible .lower = λ i → Setoid.refl 𝔻[ 𝒜 i ]
 
     φ∼ψ : ∀ b → 𝔻[ ⨅ℓ𝒜 ] ._≈_ (φ ⟨$⟩ (ψ ⟨$⟩ b)) b
-    φ∼ψ _ i .lower = Setoid.reflexive 𝔻[ 𝒜 (lower i) ] ≡.refl
+    φ∼ψ _ i .lower = Setoid.reflexive 𝔻[ 𝒜 (lower i) ] refl
 
     ψ∼φ : ∀ a → 𝔻[ ℓ⨅𝒜 ] ._≈_ (ψ ⟨$⟩ (φ ⟨$⟩ a)) a
-    ψ∼φ _ .lower = λ i → Setoid.reflexive 𝔻[ 𝒜  i ] ≡.refl
+    ψ∼φ _ .lower = λ i → Setoid.reflexive 𝔻[ 𝒜  i ] refl
 
 module _ {ι : Level}{𝑨 : Algebra α ρᵃ} where
   private
@@ -494,17 +491,17 @@ module _ {ι : Level}{𝑨 : Algebra α ρᵃ} where
     from𝟙 .cong xy = xy ∗
 
     open IsHom
-    open Setoid 𝔻[ 𝑨 ] using ( refl )
+    open Setoid 𝔻[ 𝑨 ] using () renaming ( refl to ≈refl )
     to𝟙IsHom : IsHom 𝑨 (⨅ (λ _ → 𝑨)) to𝟙
-    to𝟙IsHom .compatible = λ _ → refl
+    to𝟙IsHom .compatible = λ _ → ≈refl
     from𝟙IsHom : IsHom (⨅ (λ _ → 𝑨)) 𝑨 from𝟙
-    from𝟙IsHom .compatible = refl
+    from𝟙IsHom .compatible = ≈refl
 
   ≅⨅⁺-refl : 𝑨 ≅ ⨅ (λ (i : 𝟙) → 𝑨)
   ≅⨅⁺-refl .to = to𝟙 , to𝟙IsHom
   ≅⨅⁺-refl .from = from𝟙 , from𝟙IsHom
-  ≅⨅⁺-refl .to∼from = λ _ _ → refl
-  ≅⨅⁺-refl .from∼to = λ _ → refl
+  ≅⨅⁺-refl .to∼from = λ _ _ → ≈refl
+  ≅⨅⁺-refl .from∼to = λ _ → ≈refl
 
 module _ {𝑨 : Algebra α ρᵃ} where
   private
@@ -516,18 +513,18 @@ module _ {𝑨 : Algebra α ρᵃ} where
     from⊤ ⟨$⟩ x = x tt
     from⊤ .cong xy = xy tt
 
-    open Setoid 𝔻[ 𝑨 ] using ( refl )
     open IsHom
+    open Setoid 𝔻[ 𝑨 ] using () renaming ( refl to ≈refl )
 
     to⊤IsHom : IsHom 𝑨 (⨅ λ _ → 𝑨) to⊤
-    to⊤IsHom .compatible = λ _ → refl
+    to⊤IsHom .compatible = λ _ → ≈refl
 
     from⊤IsHom : IsHom (⨅ λ _ → 𝑨) 𝑨 from⊤
-    from⊤IsHom .compatible = refl
+    from⊤IsHom .compatible = ≈refl
 
   ≅⨅-refl : 𝑨 ≅ ⨅ (λ (i : ⊤) → 𝑨)
   ≅⨅-refl .to = to⊤ , to⊤IsHom
   ≅⨅-refl .from = from⊤ , from⊤IsHom
-  ≅⨅-refl .to∼from = λ _ _ → refl
-  ≅⨅-refl .from∼to = λ _ → refl
+  ≅⨅-refl .to∼from = λ _ _ → ≈refl
+  ≅⨅-refl .from∼to = λ _ → ≈refl
 ```

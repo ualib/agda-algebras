@@ -73,6 +73,7 @@ derived-results modules.
 module Classical where
 
 open import Classical.Bundles          public
+open import Classical.Categories       public
 open import Classical.Equations        public
 open import Classical.Interpretations  public
 open import Classical.Operations       public
