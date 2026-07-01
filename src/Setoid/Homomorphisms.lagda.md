@@ -9,7 +9,6 @@ author: "agda-algebras development team"
 
 This is the [Setoid.Homomorphisms][] module of the [Agda Universal Algebra Library][].
 
-
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
