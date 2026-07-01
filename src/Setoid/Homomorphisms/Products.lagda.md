@@ -41,17 +41,16 @@ we can construct a homomorphism from `𝑨` to the product `⨅ ℬ` in the natu
 
 ```agda
 module _ {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra {𝑆 = 𝑆} α ρ } {I : Type 𝓘} (ℬ : I → Algebra β ρᵇ)  where
-  open Algebra (⨅ ℬ) using () renaming ( Domain to ⨅B )
 
   ⨅-hom-co : (∀(i : I) → hom 𝑨 (ℬ i)) → hom 𝑨 (⨅ ℬ)
   ⨅-hom-co 𝒽 = h , hhom
     where
-    h : 𝔻[ 𝑨 ] ⟶ ⨅B
-    h ⟨$⟩ a = λ i → proj₁ (𝒽 i) ⟨$⟩ a
-    h .cong xy = λ i → cong (proj₁ (𝒽 i)) xy
+    h : 𝔻[ 𝑨 ] ⟶ 𝔻[ ⨅ ℬ ]
+    h ⟨$⟩ a = λ i → 𝒽 i .proj₁ ⟨$⟩ a
+    h .cong xy = λ i → 𝒽 i .proj₁ .cong xy
 
     hhom : IsHom 𝑨 (⨅ ℬ) h
-    hhom .compatible = λ i → compatible (proj₂ (𝒽 i))
+    hhom .compatible = λ i → 𝒽 i .proj₂ .compatible
 ```
 
 The family `𝒽` of homomorphisms inhabits the dependent type `Π i ꞉ I , hom 𝑨 (ℬ i)`.
@@ -71,19 +70,16 @@ a homomorphism from `⨅ 𝒜` to `⨅ ℬ` in the following natural way.
 
 ```agda
 module _  {𝑆 : Signature 𝓞 𝓥} {I : Type 𝓘} (𝒜 : I → Algebra {𝑆 = 𝑆} α ρ) where
-  open Algebra (⨅ 𝒜) using () renaming ( Domain to ⨅A )
-
   ⨅-hom : (ℬ : I → Algebra β ρᵇ) → (∀ (i : I) → hom (𝒜 i) (ℬ i)) → hom (⨅ 𝒜)(⨅ ℬ)
   ⨅-hom ℬ 𝒽 = F , isHom
     where
-    open Algebra (⨅ ℬ) using () renaming ( Domain to ⨅B )
 
-    F : ⨅A ⟶ ⨅B
-    F ⟨$⟩ x = λ i → proj₁ (𝒽 i) ⟨$⟩ x i
-    F .cong xy = λ i → cong (proj₁ (𝒽 i)) (xy i)
+    F : 𝔻[ ⨅ 𝒜 ] ⟶ 𝔻[ ⨅ ℬ ]
+    F ⟨$⟩ x = λ i → 𝒽 i .proj₁ ⟨$⟩ x i
+    F .cong xy = λ i → 𝒽 i .proj₁ .cong (xy i)
 
     isHom : IsHom (⨅ 𝒜) (⨅ ℬ) F
-    isHom .compatible = λ i → compatible (proj₂ (𝒽 i))
+    isHom .compatible = λ i → 𝒽 i .proj₂ .compatible
 ```
 
 #### Projection out of products
@@ -94,15 +90,12 @@ The projection of a product algebra onto its `i`-th factor is a homomorphism.
   ⨅-proj : (i : I) → hom (⨅ 𝒜) (𝒜 i)
   ⨅-proj i = F , isHom
     where
-    open Algebra (𝒜 i)  using () renaming ( Domain to Ai )
-    open Setoid Ai using () renaming ( refl to refli )
-
-    F : ⨅A ⟶ Ai
+    F : 𝔻[ ⨅ 𝒜 ] ⟶ 𝔻[ 𝒜 i ]
     F ⟨$⟩ x = x i
     F .cong xy = xy i
 
     isHom : IsHom (⨅ 𝒜) (𝒜 i) F
-    isHom .compatible = refli
+    isHom .compatible = Setoid.refl 𝔻[ 𝒜 i ]
 ```
 
 We could prove a more general result involving projections onto multiple factors, but
