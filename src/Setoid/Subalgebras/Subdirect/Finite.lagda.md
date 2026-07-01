@@ -61,38 +61,45 @@ open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 module Setoid.Subalgebras.Subdirect.Finite {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
-open import Agda.Primitive                      using  ( lsuc ) renaming ( Set to Type )
-open import Data.Empty                          using  ( ⊥-elim )
-open import Data.Fin.Base                       using  ( Fin ; zero )
-open import Data.Fin.Properties                 using  ( all? ; ¬∀⟶∃¬ )
-open import Data.List.Base                      using  ( List ; [] ; _∷_ ; filter ; length
-                                                       ; allFin ; cartesianProduct )
-open import Data.List.Extrema.Nat               using  ( argmax ; f[xs]≤f[argmax] ; argmax-sel )
-open import Data.List.Membership.Propositional  using  ( _∈_ )
-open import Data.List.Membership.Propositional.Properties using ( ∈-filter⁺ ; ∈-filter⁻ ; ∈-cartesianProduct⁺ ; ∈-allFin )
-open import Data.List.Relation.Unary.All        using  ( lookup )
-open import Data.List.Relation.Unary.Any        using  ( here ; there )
-open import Data.Nat.Base                       using  ( ℕ ; _≤_ ; _<_ ; z≤n ; s≤s )
-open import Data.Nat.Properties                 using  ( m≤n⇒m≤1+n ; n<1+n ; <-trans ; ≤-<-trans ; n≮n )
-open import Data.Product                        using  ( _×_ ; _,_ ; Σ-syntax ; proj₁ ; proj₂ )
-open import Data.Sum.Base                       using  ( inj₁ ; inj₂ )
-open import Data.Unit.Base                      using  ( ⊤ ; tt )
-open import Function                            using  ( Func ; _∘_ )
-open import Level                               using  ( Level ; _⊔_ ; 0ℓ ; Lift ; lift ; lower )
-open import Relation.Binary                     using  ( Setoid ; IsEquivalence ) renaming (Rel to BinRel)
-open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; subst ; sym )
-open import Relation.Nullary                    using  ( ¬_ ; Dec ; yes ; no )
-open import Relation.Nullary.Decidable          using  ( _→-dec_ ; ¬? )
+open import Agda.Primitive                         using  ( lsuc ) renaming ( Set to Type )
+open import Data.Empty                             using  ( ⊥-elim )
+open import Data.Fin.Base                          using  ( Fin ; zero )
+open import Data.Fin.Properties                    using  ( all? ; ¬∀⟶∃¬ )
+open import Data.List.Base                         using  ( List ; [] ; _∷_ ; filter ; length
+                                                          ; allFin ; cartesianProduct )
+open import Data.List.Extrema.Nat                  using  ( argmax ; f[xs]≤f[argmax] ; argmax-sel )
+open import Data.List.Membership.Propositional     using  ( _∈_ )
+open import Data.List.Membership.Propositional.Properties
+                                                   using  ( ∈-filter⁺ ; ∈-filter⁻
+                                                          ; ∈-cartesianProduct⁺ ; ∈-allFin )
+open import Data.List.Relation.Unary.All           using  ( lookup )
+open import Data.List.Relation.Unary.Any           using  ( here ; there )
+open import Data.Nat.Base                          using  ( ℕ ; _≤_ ; _<_ ; z≤n ; s≤s )
+open import Data.Nat.Properties                    using  ( m≤n⇒m≤1+n ; n<1+n ; <-trans
+                                                          ; ≤-<-trans ; n≮n )
+open import Data.Product                           using  ( _×_ ; _,_ ; Σ-syntax ; proj₁ ; proj₂ )
+open import Data.Sum.Base                          using  ( inj₁ ; inj₂ )
+open import Data.Unit.Base                         using  ( ⊤ ; tt )
+open import Function                               using  ( Func ; _∘_ )
+open import Level                                  using  ( Level ; _⊔_ ; 0ℓ ; Lift ; lift ; lower )
+open import Relation.Binary                        using  ( Setoid ; IsEquivalence )
+                                                   renaming (Rel to BinaryRel)
+open import Relation.Binary.PropositionalEquality  using  ( _≡_ ; refl ; subst ; sym )
+open import Relation.Nullary                       using  ( ¬_ ; Dec ; yes ; no )
+open import Relation.Nullary.Decidable             using  ( _→-dec_ ; ¬? )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Setoid.Algebras.Basic      {𝑆 = 𝑆}  using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
-open import Setoid.Congruences.Basic   {𝑆 = 𝑆}  using  ( Con ; mkcon ; reflexive
-                                                       ; is-equivalence ; is-compatible ; _╱_ ; 𝟘[_] )
-open import Setoid.Congruences.Lattice {𝑆 = 𝑆}  using  ( _⊆_ ; _≑_ ; ⊆-trans )
-open import Setoid.Congruences.Generation {𝑆 = 𝑆} using  ( Cg ; Cg-least ; base )
-open import Setoid.Congruences.Monolith {𝑆 = 𝑆} using  ( IsSubdirectlyIrreducible ; mono-nonzero ; mono-least ; Nonzero )
+open import Setoid.Algebras.Basic               {𝑆 = 𝑆}  using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Congruences.Basic            {𝑆 = 𝑆}  using  ( Con ; mkcon ; reflexive
+                                                                ; is-equivalence ; is-compatible
+                                                                ; _╱_ ; 𝟘[_] )
+open import Setoid.Congruences.Generation       {𝑆 = 𝑆}  using  ( Cg ; Cg-least ; base )
+open import Setoid.Congruences.Lattice          {𝑆 = 𝑆}  using  ( _⊆_ ; _≑_ ; ⊆-trans )
+open import Setoid.Congruences.Monolith         {𝑆 = 𝑆}  using  ( IsSubdirectlyIrreducible
+                                                                ; mono-nonzero ; mono-least
+                                                                ; Nonzero )
 
-open import Setoid.Subalgebras.Subdirect.Basic {𝑆 = 𝑆} using ( Separates )
+open import Setoid.Subalgebras.Subdirect.Basic  {𝑆 = 𝑆}  using ( Separates )
 open import Setoid.Subalgebras.Subdirect.BirkhoffSI {𝑆 = 𝑆}
   using (SubdirectSIRep; SubdirectlyRepresentable ; SIRep→Representable )
 
@@ -162,7 +169,7 @@ clv α ρ = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ
 DecCon : (𝑨 : Algebra α ρ)(ℓ : Level) → Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ lsuc ℓ)
 DecCon 𝑨 ℓ = Σ[ θ ∈ Con 𝑨 ℓ ] (∀ x y → Dec (proj₁ θ x y))
 
-ConRel : {𝑨 : Algebra α ρ}{ℓ : Level} → DecCon 𝑨 ℓ → BinRel 𝕌[ 𝑨 ] ℓ
+ConRel : {𝑨 : Algebra α ρ}{ℓ : Level} → DecCon 𝑨 ℓ → BinaryRel 𝕌[ 𝑨 ] ℓ
 ConRel (θ , _) = proj₁ θ
 ```
 

@@ -68,22 +68,22 @@ module Setoid.Varieties.FreeBridge {𝑆 : Signature 𝓞 𝓥} where
 -- Imports from Agda and the Agda Standard Library ----------------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
 open import Data.Product     using ( _,_ ; _×_ ; proj₁ ; proj₂ )
-open import Function         using ( Func )
+open import Function         using () renaming ( Func to _⟶_ )
+
 open import Level            using ( Level )
 open import Relation.Binary  using ()
-                             renaming ( Rel to BinRel ; _⇒_ to _⊆_ )
+                             renaming ( Rel to BinaryRel ; _⇒_ to _⊆_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture.Terms                {𝑆 = 𝑆}  using ( Term ; ℊ )
-open import Setoid.Algebras.Basic         {𝑆 = 𝑆}  using ( Algebra ; 𝕌[_] ; 𝔻[_] )
-open import Setoid.Terms.Basic            {𝑆 = 𝑆}  using ( Sub ; _[_] )
-open import Setoid.Congruences.Generation {𝑆 = 𝑆}  using ( Gen ; Cg-least ; base )
-open import Setoid.Homomorphisms.Basic    {𝑆 = 𝑆}  using ( hom ; mkIsHom )
-open import Setoid.Homomorphisms.Kernels  {𝑆 = 𝑆}  using ( kercon )
-open import Setoid.Varieties.SoundAndComplete {𝑆 = 𝑆}
-  using ( Eq ; _≈̇_ ; _⊢_▹_≈_ ; module FreeAlgebra )
-
-open Func    using ( cong )
+open import Overture.Terms                     {𝑆 = 𝑆}  using  ( Term ; ℊ )
+open import Setoid.Algebras.Basic              {𝑆 = 𝑆}  using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Terms.Basic                 {𝑆 = 𝑆}  using  ( Sub ; _[_] )
+open import Setoid.Congruences.Generation      {𝑆 = 𝑆}  using  ( Gen ; Cg-least ; base )
+open import Setoid.Homomorphisms.Basic         {𝑆 = 𝑆}  using  ( hom ; mkIsHom )
+open import Setoid.Homomorphisms.Kernels       {𝑆 = 𝑆}  using  ( kercon )
+open import Setoid.Varieties.SoundAndComplete  {𝑆 = 𝑆}  using  ( Eq ; _≈̇_ ; _⊢_▹_≈_
+                                                               ; module FreeAlgebra )
+open _⟶_ renaming (to to _⟨$⟩_ ; cong to ≈cong )
 open _⊢_▹_≈_ using ( sub ; refl )
 
 private variable
@@ -100,7 +100,7 @@ the *principal* congruence collapsing the one pair.
 ```agda
 module _ {𝑨 : Algebra α ρ} where
 
-  data ❴_,_❵ (a b : 𝕌[ 𝑨 ]) : BinRel 𝕌[ 𝑨 ] α where
+  data ❴_,_❵ (a b : 𝕌[ 𝑨 ]) : BinaryRel 𝕌[ 𝑨 ] α where
     pᵣ : ❴ a , b ❵ a b
 ```
 
@@ -113,10 +113,10 @@ kernel.  This is exactly `Cg-least`{.AgdaFunction} applied to the kernel congrue
 such, `Cg R`.
 
 ```agda
-module _ {𝑨 : Algebra α ρ}{𝑩 : Algebra β ρᵇ}(h : hom 𝑨 𝑩) where
+Cg⊆ker : {𝑨 : Algebra α ρ} {𝑩 : Algebra β ρᵇ} (h : hom 𝑨 𝑩) {R : BinaryRel 𝕌[ 𝑨 ] ℓ}
+  → R ⊆ proj₁ (kercon h) → Gen R ⊆ proj₁ (kercon h)
 
-  Cg⊆ker : {R : BinRel 𝕌[ 𝑨 ] ℓ} → R ⊆ proj₁ (kercon h) → Gen R ⊆ proj₁ (kercon h)
-  Cg⊆ker R⊆k = Cg-least (kercon h) R⊆k
+Cg⊆ker h R⊆k = Cg-least (kercon h) R⊆k
 ```
 
 #### The impedance shim between the two theory shapes
@@ -132,7 +132,7 @@ one is directly a proof of the other.
 ```agda
 toEq : {χ ι : Level}{Idx : Type ι}{X : Type χ}
   → (Idx → Term X × Term X) → (Idx → Eq {χ = χ})
-toEq ℰ i = proj₁ (ℰ i) ≈̇ proj₂ (ℰ i)
+toEq ℰ i = ℰ i .proj₁ ≈̇  ℰ i .proj₂
 ```
 
 #### The substitution-induced homomorphism, and the principal-pair bridge
@@ -151,8 +151,9 @@ module _ {χ ι : Level}{Idx : Type ι}(E : Idx → Eq {χ = χ}) where
   subhom : {X Y : Type χ}(σ : Sub Y X) → hom 𝔽[ X ] 𝔽[ Y ]
   subhom {X = X}{Y = Y} σ = subfunc , mkIsHom (λ {f}{a} → refl)
     where
-    subfunc : Func 𝔻[ 𝔽[ X ] ] 𝔻[ 𝔽[ Y ] ]
-    subfunc = record { to = _[ σ ] ; cong = λ {p}{q} pq → sub pq σ }
+    subfunc : 𝔻[ 𝔽[ X ] ] ⟶ 𝔻[ 𝔽[ Y ] ]
+    subfunc ⟨$⟩ x = x [ σ ]
+    subfunc .≈cong = λ pq → sub pq σ 
 ```
 
 The special case of a plain variable renaming `ρ : X → Y` is `subhom (ℊ ∘ ρ)`.

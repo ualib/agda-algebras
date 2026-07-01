@@ -21,7 +21,7 @@ open import Function                     using () renaming ( Func to _⟶_ )
 open import Level                        using ( Level ;  _⊔_ ; Lift )
 open import Relation.Binary              using ( IsEquivalence ; Setoid )
 open import Relation.Binary.Core         using ()
-                                         renaming ( Rel to BinRel )
+                                         renaming ( Rel to BinaryRel )
 open import Relation.Unary               using ( _∈_; Pred )
 
 -- Imports from agda-algebras -------------------------------------------------------------------
@@ -38,7 +38,7 @@ module _ {𝐴 : Setoid α ρᵃ}{𝐵 : Setoid β ρᵇ} where
   open Setoid 𝐴  using () renaming ( Carrier to A ; _≈_ to _≈₁_ )
   open Setoid 𝐵  using () renaming ( Carrier to B ; _≈_ to _≈₂_ )
 
-  function-equality : BinRel (𝐴 ⟶ 𝐵) (α ⊔ ρᵇ)
+  function-equality : BinaryRel (𝐴 ⟶ 𝐵) (α ⊔ ρᵇ)
   function-equality f g = ∀ x → f ⟨$⟩ x ≈₂ g ⟨$⟩ x
 ```
 
@@ -57,7 +57,7 @@ Given setoids 𝐴 and 𝐵 (with carriers A and B, resp), the *kernel* of a fun
 𝐴 ⟶ 𝐵` is defined informally by `{(x , y) ∈ A × A : f ⟨$⟩ x ≈₂ f ⟨$⟩ y}`.
 
 ```agda
-  fker : (𝐴 ⟶ 𝐵) → BinRel A ρᵇ
+  fker : (𝐴 ⟶ 𝐵) → BinaryRel A ρᵇ
   fker g x y = g ⟨$⟩ x ≈₂ g ⟨$⟩ y
 
   fkerPred : (𝐴 ⟶ 𝐵) → Pred (A × A) ρᵇ
@@ -65,10 +65,10 @@ Given setoids 𝐴 and 𝐵 (with carriers A and B, resp), the *kernel* of a fun
 
   open IsEquivalence
 
-  fkerlift : (𝐴 ⟶ 𝐵) → (ℓ : Level) → BinRel A (ℓ ⊔ ρᵇ)
+  fkerlift : (𝐴 ⟶ 𝐵) → (ℓ : Level) → BinaryRel A (ℓ ⊔ ρᵇ)
   fkerlift g ℓ x y = Lift ℓ (g ⟨$⟩ x ≈₂ g ⟨$⟩ y)
 
   -- The *identity relation* (equivalently, the kernel of a 1-to-1 function)
-  0rel : {ℓ : Level} → BinRel A (ρᵃ ⊔ ℓ)
+  0rel : {ℓ : Level} → BinaryRel A (ρᵃ ⊔ ℓ)
   0rel {ℓ} = λ x y → Lift ℓ (x ≈₁ y)
 ```

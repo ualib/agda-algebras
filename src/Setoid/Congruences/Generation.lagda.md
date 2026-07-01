@@ -47,12 +47,13 @@ open import Data.Product     using ( _,_ ; proj₁ ; proj₂ )
 open import Data.Sum.Base    using ( _⊎_ ; inj₁ ; inj₂ ; [_,_] )
 open import Level            using ( Level ; _⊔_ )
 open import Relation.Binary  using ( Setoid ; IsEquivalence )
-                             renaming ( Rel to BinRel ; _⇒_ to _⊆_)
+                             renaming ( Rel to BinaryRel ; _⇒_ to _⊆_)
 -- Imports from the Agda Universal Algebras Library ------------------------------
-open import Overture using ( proj₁ ; proj₂ ; OperationSymbolsOf ; ArityOf )
-open import Setoid.Algebras.Basic {𝑆 = 𝑆} using ( Algebra ; 𝕌[_] ; _^_ )
-open import Setoid.Congruences.Basic {𝑆 = 𝑆}
-  using  ( Con ; mkcon ; _∣≈_ ; reflexive ; is-equivalence ; is-compatible )
+open import Overture                           using  ( OperationSymbolsOf ; ArityOf )
+open import Setoid.Algebras.Basic     {𝑆 = 𝑆}  using  ( Algebra ; 𝕌[_] ; _^_ ; 𝔻[_] )
+open import Setoid.Congruences.Basic  {𝑆 = 𝑆}  using  ( Con ; mkcon ; _∣≈_ ; reflexive
+                                                      ; is-equivalence ; is-compatible )
+open IsEquivalence using ( refl ; sym ; trans )
 
 private variable α ρ ℓ ℓ′ : Level
 ```
@@ -63,18 +64,17 @@ Fix an algebra `𝑨` and a binary relation `R` on its carrier.  `Gen R` is the
 smallest relation containing `R` that is reflexive over `_≈_`, symmetric,
 transitive, and compatible with every basic operation.  The closure quantifies over
 the operation symbols (`𝓞`), their arities (`𝓥`), and the carrier (`α`, `ρ`), so it
-inhabits `BinRel 𝕌[ 𝑨 ] (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ ℓ)`; we name that level `𝒈 ℓ`.
+inhabits `BinaryRel 𝕌[ 𝑨 ] (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ ℓ)`; we name that level `𝒈 ℓ`.
 
 ```agda
 module _ {𝑨 : Algebra α ρ} where
-  open Algebra 𝑨 using () renaming ( Domain to 𝐀 )
-  open Setoid 𝐀 using ( _≈_ ) renaming ( refl to reflA )
+  open Setoid 𝔻[ 𝑨 ] using ( _≈_ ) renaming ( refl to ≈refl )
 
   -- The level at which the generated congruence lives.
   𝒈 : Level → Level
   𝒈 ℓ = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ ℓ
 
-  data Gen (R : BinRel 𝕌[ 𝑨 ] ℓ) : BinRel 𝕌[ 𝑨 ] (𝒈 ℓ) where
+  data Gen (R : BinaryRel 𝕌[ 𝑨 ] ℓ) : BinaryRel 𝕌[ 𝑨 ] (𝒈 ℓ) where
     base : R ⊆ Gen R
     rfl  : {x y : 𝕌[ 𝑨 ]} → x ≈ y → Gen R x y
     symm : {x y : 𝕌[ 𝑨 ]} → Gen R x y → Gen R y x
@@ -82,11 +82,14 @@ module _ {𝑨 : Algebra α ρ} where
     comp : (f : OperationSymbolsOf 𝑆) {u v : ArityOf 𝑆 f → 𝕌[ 𝑨 ]}
       → (∀ i → Gen R (u i) (v i)) → Gen R ((f ^ 𝑨) u) ((f ^ 𝑨) v)
 
-  Cg : (R : BinRel 𝕌[ 𝑨 ] ℓ) → Con 𝑨 (𝒈 ℓ)
+  Cg : (R : BinaryRel 𝕌[ 𝑨 ] ℓ) → Con 𝑨 (𝒈 ℓ)
   Cg R = Gen R , mkcon rfl g-isEquivalence g-compatible
     where
     g-isEquivalence : IsEquivalence (Gen R)
-    g-isEquivalence = record { refl = rfl reflA ; sym = symm ; trans = tran }
+    g-isEquivalence .refl   = rfl ≈refl
+    g-isEquivalence .sym    = symm
+    g-isEquivalence .trans  = tran
+
 
     g-compatible : 𝑨 ∣≈ Gen R
     g-compatible f h = comp f h
@@ -102,24 +105,22 @@ turning each closure rule into the corresponding congruence law of `ψ`
 level `ℓ′`, so this is a genuinely heterogeneous statement.
 
 ```agda
-  Cg-incl : (R : BinRel 𝕌[ 𝑨 ] ℓ) → R ⊆ Gen R
+  Cg-incl : (R : BinaryRel 𝕌[ 𝑨 ] ℓ) → R ⊆ Gen R
   Cg-incl R = base
 
-  Cg-least : {R : BinRel 𝕌[ 𝑨 ] ℓ} (ψ : Con 𝑨 ℓ′) → R ⊆ proj₁ ψ → Gen R ⊆ proj₁ ψ
+  Cg-least : {R : BinaryRel 𝕌[ 𝑨 ] ℓ} (ψ : Con 𝑨 ℓ′) → R ⊆ proj₁ ψ → Gen R ⊆ proj₁ ψ
   Cg-least ψ R⊆ψ (base r) = R⊆ψ r
-  Cg-least ψ R⊆ψ (rfl e) = reflexive (proj₂ ψ) e
-  Cg-least ψ R⊆ψ (symm p) =
-    IsEquivalence.sym (is-equivalence (proj₂ ψ)) (Cg-least ψ R⊆ψ p)
-  Cg-least ψ R⊆ψ (tran p q) =
-    IsEquivalence.trans (is-equivalence (proj₂ ψ)) (Cg-least ψ R⊆ψ p) (Cg-least ψ R⊆ψ q)
-  Cg-least ψ R⊆ψ (comp f h) = is-compatible (proj₂ ψ) f (λ i → Cg-least ψ R⊆ψ (h i))
+  Cg-least ψ R⊆ψ (rfl e)     = ψ .proj₂ .reflexive e
+  Cg-least ψ R⊆ψ (symm p)    = ψ .proj₂ .is-equivalence .sym (Cg-least ψ R⊆ψ p)
+  Cg-least ψ R⊆ψ (tran p q)  = ψ .proj₂ .is-equivalence .trans (Cg-least ψ R⊆ψ p) (Cg-least ψ R⊆ψ q)
+  Cg-least ψ R⊆ψ (comp f h)  = ψ .proj₂ .is-compatible f (λ i → Cg-least ψ R⊆ψ (h i))
 ```
 
 Monotonicity follows immediately: if `R` is contained in `S` then `Cg R` is
 contained in `Cg S` (take `ψ = Cg S`, which contains `S` hence `R`).
 
 ```agda
-  Cg-mono : {R : BinRel 𝕌[ 𝑨 ] ℓ} {S : BinRel 𝕌[ 𝑨 ] ℓ′} → R ⊆ S → Gen R ⊆ Gen S
+  Cg-mono : {R : BinaryRel 𝕌[ 𝑨 ] ℓ} {S : BinaryRel 𝕌[ 𝑨 ] ℓ′} → R ⊆ S → Gen R ⊆ Gen S
   Cg-mono {S = S} R⊆S = Cg-least (Cg S) (λ r → base (R⊆S r))
 ```
 
@@ -139,7 +140,7 @@ join sits at the higher level `𝒈 ℓ`.
   infix 4 _⊑_
 
   -- The union of the underlying relations of two congruences.
-  _∪ᵣ_ : Con 𝑨 ℓ → Con 𝑨 ℓ → BinRel 𝕌[ 𝑨 ] ℓ
+  _∪ᵣ_ : Con 𝑨 ℓ → Con 𝑨 ℓ → BinaryRel 𝕌[ 𝑨 ] ℓ
   (θ ∪ᵣ φ) x y = proj₁ θ x y ⊎ proj₁ φ x y
   infixr 6 _∪ᵣ_
 

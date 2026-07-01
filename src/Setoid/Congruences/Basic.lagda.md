@@ -9,7 +9,6 @@ author: "agda-algebras development team"
 
 This is the [Setoid.Congruences.Basic][] module of the [Agda Universal Algebra Library][].
 
-
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -19,19 +18,20 @@ module Setoid.Congruences.Basic {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from the Agda Standard Library ---------------------------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
-open import Data.Product     using ( _,_ ; Σ-syntax )
+open import Data.Product     using ( _,_ ; Σ-syntax ; proj₁ ; proj₂ )
 open import Data.Unit.Base   using ( ⊤ ; tt )
 open import Function         using ( Func )
 open import Level            using ( Level ; _⊔_ ; Lift ; lift ; lower )
 open import Relation.Binary  using ( Setoid ; IsEquivalence )
-                             renaming ( Rel to BinRel )
+                             renaming ( Rel to BinaryRel )
 
-open import Relation.Binary.PropositionalEquality using ( refl )
+open import Relation.Binary.PropositionalEquality
+                             using ( refl )
 
 -- Imports from the Agda Universal Algebras Library ------------------------------
-open import Overture          using ( proj₁  ; proj₂ ; _|:_ ; Equivalence )
-open import Setoid.Relations  using ( ⟪_⟫ ; _/_ ; ⟪_∼_⟫-elim )
-open import Setoid.Algebras.Basic {𝑆 = 𝑆} using ( ov ; Algebra ; 𝔻[_] ; 𝕌[_] ; _^_ )
+open import Overture                       using ( _|:_ ; Equivalence )
+open import Setoid.Relations               using ( ⟪_⟫ ; _/_ ; ⟪_∼_⟫-elim )
+open import Setoid.Algebras.Basic {𝑆 = 𝑆}  using ( ov ; Algebra ; 𝔻[_] ; 𝕌[_] ; _^_ )
 
 private variable α ρ ℓ : Level
 ```
@@ -44,7 +44,7 @@ since all the work is done by the relation `|:`, which we defined above (see
 
 ```agda
 -- Algebra compatibility with binary relation
-_∣≈_ : (𝑨 : Algebra α ρ) → BinRel 𝕌[ 𝑨 ] ℓ → Type _
+_∣≈_ : (𝑨 : Algebra α ρ) → BinaryRel 𝕌[ 𝑨 ] ℓ → Type _
 𝑨 ∣≈ R = ∀ 𝑓 → (𝑓 ^ 𝑨) |: R
 ```
 
@@ -65,7 +65,7 @@ the underlying setoid equality (and not just with respect to _≡_).)
 ```agda
 module _ (𝑨 : Algebra α ρ) where
   open Setoid 𝔻[ 𝑨 ] using ( _≈_ )
-  record IsCongruence (θ : BinRel 𝕌[ 𝑨 ] ℓ) : Type (𝓞 ⊔ 𝓥 ⊔ ρ ⊔ ℓ ⊔ α)  where
+  record IsCongruence (θ : BinaryRel 𝕌[ 𝑨 ] ℓ) : Type (𝓞 ⊔ 𝓥 ⊔ ρ ⊔ ℓ ⊔ α)  where
     constructor mkcon
     field
       reflexive : ∀ {a₀ a₁} → a₀ ≈ a₁ → θ a₀ a₁
@@ -78,7 +78,7 @@ module _ (𝑨 : Algebra α ρ) where
   open IsCongruence public
 
   Con : (ℓ : Level) → Type (α ⊔ ρ ⊔ ov ℓ)
-  Con ℓ = Σ[ θ ∈ BinRel 𝕌[ 𝑨 ] ℓ ] IsCongruence θ
+  Con ℓ = Σ[ θ ∈ BinaryRel 𝕌[ 𝑨 ] ℓ ] IsCongruence θ
 ```
 
 Each of these types captures what it means to be a congruence and they are
@@ -86,7 +86,7 @@ equivalent in the sense that each implies the other. One implication is the
 "uncurry" operation and the other is the second projection.
 
 ```agda
-IsCongruence→Con : {𝑨 : Algebra α ρ}(θ : BinRel 𝕌[ 𝑨 ] ℓ) → IsCongruence 𝑨 θ → Con 𝑨 ℓ
+IsCongruence→Con : {𝑨 : Algebra α ρ}(θ : BinaryRel 𝕌[ 𝑨 ] ℓ) → IsCongruence 𝑨 θ → Con 𝑨 ℓ
 IsCongruence→Con θ p = θ , p
 
 Con→IsCongruence : {𝑨 : Algebra α ρ}((θ , _) : Con 𝑨 ℓ) → IsCongruence 𝑨 θ
