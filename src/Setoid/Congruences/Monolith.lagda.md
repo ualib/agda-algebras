@@ -33,11 +33,11 @@ open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 module Setoid.Congruences.Monolith {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
-open import Agda.Primitive   using () renaming ( Set to Type )
-open import Data.Product     using ( _×_ ; _,_ ; Σ-syntax ; ∃-syntax ; proj₁ ; proj₂ )
-open import Level            using ( Level ; _⊔_ )
-open import Relation.Binary  using ( Setoid ; IsEquivalence ; _⇒_ )
-open import Relation.Nullary using ( ¬_ )
+open import Agda.Primitive    using () renaming ( Set to Type )
+open import Data.Product      using ( _×_ ; _,_ ; Σ-syntax ; ∃-syntax ; proj₁ ; proj₂ )
+open import Level             using ( Level ; _⊔_ )
+open import Relation.Binary   using ( Setoid ; IsEquivalence ; _⇒_ )
+open import Relation.Nullary  using ( ¬_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Setoid.Algebras.Basic       {𝑆 = 𝑆}  using  ( ov ; Algebra ; 𝕌[_] ; 𝔻[_] )
@@ -102,12 +102,10 @@ of a family of congruences.  This is the same intersection that
     m-refl e i = reflexive (proj₂ (θ i)) e
 
     open IsEquivalence
-    m-equiv : IsEquivalence (λ x y → (i : I) → proj₁ (θ i) x y)
-    m-equiv = record
-      { refl   = λ i      → is-equivalence (proj₂ (θ i)) .refl
-      ; sym    = λ p i    → is-equivalence (proj₂ (θ i)) .sym    (p i)
-      ; trans  = λ p q i  → is-equivalence (proj₂ (θ i)) .trans  (p i) (q i)
-      }
+    m-equiv : IsEquivalence (λ x y → (i : I) → θ i .proj₁ x y)
+    m-equiv .refl   = λ i → (θ i) .proj₂ .is-equivalence .refl
+    m-equiv .sym    = λ p i → (θ i) .proj₂ .is-equivalence .sym (p i)
+    m-equiv .trans  = λ p q i  → (θ i) .proj₂ .is-equivalence .trans (p i) (q i)
 
     m-comp : 𝑨 ∣≈ (λ x y → (i : I) → proj₁ (θ i) x y)
     m-comp f h i = is-compatible (proj₂ (θ i)) f (λ k → h k i)
