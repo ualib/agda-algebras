@@ -55,7 +55,7 @@ is a `graft`{.AgdaFunction}) and once via `_[_]`{.AgdaFunction} lines the two up
 [Setoid.Terms.Interpretation][].
 
 The first client of this bridge is the converse of Maltsev's theorem
-([Setoid.Varieties.MaltsevConditions][]); the Jónsson and Day converses are designed to
+([Setoid.Varieties.Maltsev.Permutability][]); the Jónsson and Day converses are designed to
 reuse the same machinery.
 
 ```agda

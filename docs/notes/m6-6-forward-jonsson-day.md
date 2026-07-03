@@ -24,8 +24,9 @@ Jónsson's.  Both asymmetries are explained below.
 
 The chain machinery and its finitary collapse live in a new module
 `Setoid.Congruences.ChainJoin`; the staircase, the forward theorems, and the featured
-finitary corollary live in `Setoid.Varieties.MaltsevConditions`; a one-screen worked
-example lives in `Examples.Setoid.FinitarySignatures`.
+finitary corollary live in `Setoid.Varieties.Maltsev.Distributivity` (part of the
+`Setoid.Varieties.Maltsev` subtree); a one-screen worked example lives in
+`Examples.Setoid.FinitarySignatures`.
 
 +  `Chain 𝑩 R` (in `Setoid.Congruences.ChainJoin`) — the **finite alternating chain**
    relation: the reflexive–transitive closure `x ≈ · R · R ⋯ R · ≈ y` of a relation `R`
@@ -201,7 +202,7 @@ forward-Day-deferred.  The issue text has been updated to reflect this.
 +  Whole library (what CI runs): `nix develop --command make check`.
 +  The changed modules:
    `nix develop --command agda src/Setoid/Congruences/ChainJoin.lagda.md`,
-   `nix develop --command agda src/Setoid/Varieties/MaltsevConditions.lagda.md`,
+   `nix develop --command agda src/Setoid/Varieties/Maltsev/Distributivity.lagda.md`,
    `nix develop --command agda src/Examples/Setoid/FinitarySignatures.lagda.md`.
 
 [M6-6]: https://github.com/ualib/agda-algebras/issues/412

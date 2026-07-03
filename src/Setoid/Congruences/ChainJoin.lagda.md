@@ -25,7 +25,7 @@ least-upper-bound property `Cg-least` the generated join is *contained in* it
 relation for finitary algebras.
 
 The downstream client is the forward direction of Jónsson's theorem
-([Setoid.Varieties.MaltsevConditions][]), whose staircase is proved against `Chain` in
+([Setoid.Varieties.Maltsev.Distributivity][]), whose staircase is proved against `Chain` in
 full generality; `finitary⇒JoinIsChain` is what upgrades it from the chain statement to
 the literal `CongruenceDistributive` for the finitary algebras of ordinary universal
 algebra.
@@ -322,7 +322,7 @@ and translate the result back across the bijection.
 Packaging the two inclusions: for a finitary signature, membership in the generated join
 `Cg(θ ∪ φ)` is *witnessed by a finite chain*.  This is exactly the `JoinIsChain` hypothesis
 that the forward direction of Jónsson's theorem
-([Setoid.Varieties.MaltsevConditions][]) needs in order to land in the literal
+([Setoid.Varieties.Maltsev.Distributivity][]) needs in order to land in the literal
 `CongruenceDistributive`.
 
 ```agda
@@ -333,5 +333,4 @@ JoinIsChain 𝑩 ℓ =
 
 finitary⇒JoinIsChain : {𝑩 : Algebra α ρ} → Finitary → JoinIsChain 𝑩 ℓ
 finitary⇒JoinIsChain fin θ φ = finitary⇒Gen⊆Chain θ φ fin
-```
 ```

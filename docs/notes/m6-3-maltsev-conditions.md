@@ -32,7 +32,7 @@ together with the converse of Maltsev's theorem, are stated as the goals that re
    the join `_∨_` lands back at the level of the meet `_∧_` so the lattice equations
    `θ ∧ (φ ∨ ψ) ≅ (θ ∧ φ) ∨ (θ ∧ ψ)` and the modular law type-check.
 
-+  `Setoid.Varieties.MaltsevConditions` — the bridge from term-existence to the
++  `Setoid.Varieties.Maltsev` — the bridge from term-existence to the
    lattice property, and the scaffolding for CD/CM:
    +  `term-compatible` — *a congruence is compatible with every term operation*
       (structural induction: leaf is the hypothesis, node is `is-compatible`).  This
@@ -145,7 +145,7 @@ recorded so a successor can pick it up.
 
 **Update (M6-4 / M6-5, #410 / #411).**  Now *proved*: the bridge is
 `Setoid.Varieties.FreeBridge` and the converse is `CP⇒maltsev` in
-`Setoid.Varieties.MaltsevConditions` (next to its statement); see the design note
+`Setoid.Varieties.Maltsev.Permutability` (next to its statement); see the design note
 [`m6-4-free-bridge.md`](m6-4-free-bridge.md).  The plan below is the recipe they execute.
 
 *A congruence-permutable variety has a Maltsev term.*  Construction (Burris–Sankappanavar
@@ -230,7 +230,7 @@ the milestone note asks reviewers to flag.
 
 +  Whole library (what CI runs): `nix develop --command make check`.
 +  The new modules, one at a time: `nix develop --command agda src/Setoid/Congruences/Permutability.lagda.md`
-   (then `Setoid/Congruences/Properties`, `Setoid/Varieties/MaltsevConditions`).
+   (then `Setoid/Congruences/Properties`, `Setoid/Varieties/Maltsev`).
 
 [M6-3]: https://github.com/ualib/agda-algebras/issues/273
 [`GITHUB_PROJECT.md`]: ../GITHUB_PROJECT.md

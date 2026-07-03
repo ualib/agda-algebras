@@ -11,9 +11,9 @@ author: "the agda-algebras development team"
 This is the [Setoid.Varieties.Maltsev.Distributivity][] module of the [Agda Universal Algebra Library][].
 
 This module records the encoding of congruence distributivity (CD) — the Jónsson identities, as
-theory a interpretation `Th-Jonsson n ≼ ℰ` — and states Jónsson's theorem.
+a theory interpretation `Th-Jonsson n ≼ ℰ` — and states Jónsson's theorem.
 
-#### Distributivity and modularity of the congruence lattice
+#### Distributivity of the congruence lattice
 
 CD is a property of the congruence *lattice*, defined in
 [Setoid.Congruences.Properties][] as `CongruenceDistributive` (at the absorbing relation
@@ -305,17 +305,16 @@ jonsson⇒CongruenceDistributive {ℰ = ℰ} jh 𝑩 B⊨ jic θ φ ψ = fwd , b
 ```
 
 
-#### The conditions as properties of a variety, and the deferred theorems
+#### The condition as a property of a variety
 
 Fix a theory `ℰ` and the level pair `(α , ρ)` at which models are tested.
 A *congruence-distributive variety* is one in which all models are
-congruence-distributive, and similarly for CM.  The Jónsson and Day characterizations of
-CD and CM varieties are the iff statements `Jonsson-Statement`{.AgdaFunction} and
-`Day-Statement`{.AgdaFunction}.  The **forward** (term ⟹ lattice-property) half of Jónsson
-is now proved — `jonsson⇒CongruenceDistributiveVariety`{.AgdaFunction} below — leaving the
-reverse half (CD ⟹ terms, #413) and both halves of Day.  The Day forward direction is
-deferred for a substantive reason recorded above and in the design note, not mere lack of
-effort.
+congruence-distributive.  Jónsson's characterization of CD varieties is the iff statement
+`Jonsson-Statement`{.AgdaFunction}.  The **forward** (term ⟹ lattice-property) half is now
+proved — `jonsson⇒CongruenceDistributiveVariety`{.AgdaFunction} below — leaving the reverse
+half (CD ⟹ terms, #413).  The companion modularity development — the Day terms and the
+`Day-Statement`, whose forward direction is deferred for a substantive reason — lives in
+[Setoid.Varieties.Maltsev.Modularity][] and the design note.
 
 ```agda
 module _ {α ρ ℓ : Level}{𝑆 : Signature 0ℓ 0ℓ}{X : Type χ}{Idx : Type ι}

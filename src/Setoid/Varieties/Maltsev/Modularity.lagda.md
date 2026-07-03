@@ -10,14 +10,14 @@ author: "the agda-algebras development team"
 
 This is the [Setoid.Varieties.Maltsev.Modularity][] module of the [Agda Universal Algebra Library][].
 
-This module records the encoding congruence modularity (CM) — the Day identities, as
+This module records the encoding of congruence modularity (CM) — the Day identities, as
 a theory interpretation `Th-Day n ≼ ℰ` — and states Day's theorem.
 
 #### Modularity of the congruence lattice
 
-CM is a properties of the congruence *lattice*, defined in
+CM is a property of the congruence *lattice*, defined in
 [Setoid.Congruences.Properties][] as `CongruenceModular` (at the absorbing relation
-level, so that meet and join are operations on a single type).  We it here to
+level, so that meet and join are operations on a single type).  We use it here to
 phrase the Day variety condition below.
 
 ```agda
@@ -36,19 +36,15 @@ open import Data.Nat.Base                      using  ( ℕ ; suc )
 open import Data.Product                       using  ( _×_ ; _,_ ; Σ-syntax )
 open import Level                              using  ( Level ; 0ℓ ; _⊔_ )
                                                renaming ( suc to lsuc )
-open import Relation.Binary                    using  ( Setoid )
 
 -- -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Overture.Basic                     using  ( _⇔_ )
 open import Overture.Signatures                using  ( Signature )
 open import Overture.Terms                     using  ( Term ; ℊ ; node )
-open import Setoid.Algebras.Basic              using  ( Algebra ; 𝔻[_] ; 𝕌[_] )
+open import Setoid.Algebras.Basic              using  ( Algebra )
 open import Setoid.Congruences.Properties      using  ( CongruenceModular )
-open import Setoid.Terms.Basic                 using  ( _[_] )
 open import Setoid.Varieties.Interpretation    using  ( _⊨ₑ_ ; module Interpret )
 open import Setoid.Varieties.Maltsev.Basic     using  ( even? )
-
-open import Function using ( Func )
 
 private variable α ρ χ ι ℓ : Level
 ```
@@ -119,10 +115,11 @@ here; Day's theorem needs the genuinely different (2-dimensional / `A²`) constr
 
 Fix a theory `ℰ` and the level pair `(α , ρ)` at which models are tested.
 A *congruence-modular variety* is one in which all models are
-congruence-modular (CM).  The Day characterizations of CM varieties is the iff statement
-`Day-Statement`{.AgdaFunction}.  The **forward** (term ⟹ CM) half —
-`day⇒CongruenceModularity`{.AgdaFunction} below — and the reverse (CM ⟹ terms) are deferred
-for a substantive reason recorded above and in the design note, not mere lack of effort.
+congruence-modular (CM).  Day's characterization of CM varieties is the iff statement
+`Day-Statement`{.AgdaFunction}.  Both directions — the **forward** (term ⟹ CM) and the
+reverse (CM ⟹ terms) — are deferred for a substantive reason recorded above and in the
+design note, not mere lack of effort; only the statement `Day-Statement`{.AgdaFunction} is
+recorded below.
 
 ```agda
 module _ {α ρ ℓ : Level}{𝑆 : Signature 0ℓ 0ℓ}{X : Type χ}{Idx : Type ι}

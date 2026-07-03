@@ -46,6 +46,7 @@
 [Setoid.Complexity.CSP]: /Setoid/Complexity/CSP/
 [Setoid.Congruences]: /Setoid/Congruences/
 [Setoid.Congruences.Basic]: /Setoid/Congruences/Basic/
+[Setoid.Congruences.ChainJoin]: /Setoid/Congruences/ChainJoin/
 [Setoid.Congruences.CompleteLattice]: /Setoid/Congruences/CompleteLattice/
 [Setoid.Congruences.Generation]: /Setoid/Congruences/Generation/
 [Setoid.Congruences.Lattice]: /Setoid/Congruences/Lattice/
@@ -104,7 +105,10 @@
 [Setoid.Varieties.Invariance]: /Setoid/Varieties/Invariance/
 [Setoid.Varieties.Invariants]: /Setoid/Varieties/Invariants/
 [Setoid.Varieties.Maltsev]: /Setoid/Varieties/Maltsev/
-[Setoid.Varieties.MaltsevConditions]: /Setoid/Varieties/MaltsevConditions/
+[Setoid.Varieties.Maltsev.Basic]: /Setoid/Varieties/Maltsev/Basic/
+[Setoid.Varieties.Maltsev.Distributivity]: /Setoid/Varieties/Maltsev/Distributivity/
+[Setoid.Varieties.Maltsev.Modularity]: /Setoid/Varieties/Maltsev/Modularity/
+[Setoid.Varieties.Maltsev.Permutability]: /Setoid/Varieties/Maltsev/Permutability/
 [Setoid.Varieties.Preservation]: /Setoid/Varieties/Preservation/
 [Setoid.Varieties.Properties]: /Setoid/Varieties/Properties/
 [Setoid.Varieties.Reducts]: /Setoid/Varieties/Reducts/
@@ -209,6 +213,7 @@
 [Examples.PolynomialFunctors.Functors]: /Examples/PolynomialFunctors/Functors/
 [Examples.Setoid]: /Examples/Setoid/
 [Examples.Setoid.CongruenceLattice]: /Examples/Setoid/CongruenceLattice/
+[Examples.Setoid.FinitarySignatures]: /Examples/Setoid/FinitarySignatures/
 [Examples.Setoid.FiniteQuotient]: /Examples/Setoid/FiniteQuotient/
 [Examples.Setoid.FreeMagma]: /Examples/Setoid/FreeMagma/
 [Examples.Setoid.FreeSemigroup]: /Examples/Setoid/FreeSemigroup/
@@ -339,6 +344,7 @@
 [Setoid/Complexity/CSP.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Complexity/CSP.lagda.md
 [Setoid/Congruences.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences.lagda.md
 [Setoid/Congruences/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/Basic.lagda.md
+[Setoid/Congruences/ChainJoin.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/ChainJoin.lagda.md
 [Setoid/Congruences/CompleteLattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/CompleteLattice.lagda.md
 [Setoid/Congruences/Generation.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/Generation.lagda.md
 [Setoid/Congruences/Lattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/Lattice.lagda.md
@@ -397,7 +403,10 @@
 [Setoid/Varieties/Invariance.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Varieties/Invariance.lagda.md
 [Setoid/Varieties/Invariants.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Varieties/Invariants.lagda.md
 [Setoid/Varieties/Maltsev.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Varieties/Maltsev.lagda.md
-[Setoid/Varieties/MaltsevConditions.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Varieties/MaltsevConditions.lagda.md
+[Setoid/Varieties/Maltsev/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Varieties/Maltsev/Basic.lagda.md
+[Setoid/Varieties/Maltsev/Distributivity.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Varieties/Maltsev/Distributivity.lagda.md
+[Setoid/Varieties/Maltsev/Modularity.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Varieties/Maltsev/Modularity.lagda.md
+[Setoid/Varieties/Maltsev/Permutability.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Varieties/Maltsev/Permutability.lagda.md
 [Setoid/Varieties/Preservation.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Varieties/Preservation.lagda.md
 [Setoid/Varieties/Properties.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Varieties/Properties.lagda.md
 [Setoid/Varieties/Reducts.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Varieties/Reducts.lagda.md
@@ -502,6 +511,7 @@
 [Examples/PolynomialFunctors/Functors.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/PolynomialFunctors/Functors.lagda.md
 [Examples/Setoid.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Setoid.lagda.md
 [Examples/Setoid/CongruenceLattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Setoid/CongruenceLattice.lagda.md
+[Examples/Setoid/FinitarySignatures.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Setoid/FinitarySignatures.lagda.md
 [Examples/Setoid/FiniteQuotient.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Setoid/FiniteQuotient.lagda.md
 [Examples/Setoid/FreeMagma.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Setoid/FreeMagma.lagda.md
 [Examples/Setoid/FreeSemigroup.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Setoid/FreeSemigroup.lagda.md

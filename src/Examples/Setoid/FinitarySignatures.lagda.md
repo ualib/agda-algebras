@@ -11,7 +11,7 @@ author: "the agda-algebras development team"
 This is the [Examples.Setoid.FinitarySignatures][] module of the [Agda Universal Algebra Library][].
 
 The finitary Jónsson theorem `jonsson-finitary⇒CongruenceDistributiveVariety`
-([Setoid.Varieties.MaltsevConditions][]) asks for a witness `Finitary 𝑆`
+([Setoid.Varieties.Maltsev.Distributivity][]) asks for a witness `Finitary 𝑆`
 ([Setoid.Congruences.ChainJoin][]) that every operation symbol of `𝑆` has a finite arity.
 This module shows that supplying that witness is never a hoop: for the finitary signatures
 of ordinary universal algebra it is the identity bijection `↔-id`, written once (per the

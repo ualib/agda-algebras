@@ -6,7 +6,7 @@ date: "2026-06-19"
 author: "the agda-algebras development team"
 ---
 
-### Maltsev conditions: permutability, distributivity, modularity
+### Maltsev conditions: permutability
 
 This is the [Setoid.Varieties.Maltsev.Permutability][] module of the [Agda Universal Algebra Library][].
 
