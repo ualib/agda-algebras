@@ -27,7 +27,6 @@ open import Setoid.Varieties.Interpretation             public
 open import Setoid.Varieties.Invariance                 public
 open import Setoid.Varieties.Invariants        {𝑆 = 𝑆}  public
 open import Setoid.Varieties.Maltsev                    public
-open import Setoid.Varieties.MaltsevConditions          public
 open import Setoid.Varieties.Preservation      {𝑆 = 𝑆}  public
 open import Setoid.Varieties.Properties        {𝑆 = 𝑆}  public
 open import Setoid.Varieties.Reducts                    public
