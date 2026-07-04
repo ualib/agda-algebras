@@ -74,11 +74,13 @@ bridge:
       at odd `i`, exactly the parity of the normalized chain's `i`-th step.
 +  As in M6-5, the collapsing substitutions are chosen to be the `I ✦_` position maps, so
    every bridge output is definitionally the interpreted identity modulo one `graft≐[]`
-   step, and every collapse condition is `refl`.  Two local helpers make the five
-   identity families uniform one-liners: `graft-bridge` (align `graft`, the `_✦_` node
-   action, with `_[ σ ]`, the bridge's hom, on both sides of a derivable equation) and
-   `discharge` (soundness + the satisfaction condition `⊧-interp`, with the equation
-   sides passed explicitly since they are not recoverable from the interpreted terms).
+   step, and every collapse condition is `refl`.  Local helpers make the five identity
+   families uniform one-liners: `graft-bridgeˡ` / `graft-bridge` (align `graft`, the
+   `_✦_` node action, with `_[ σ ]`, the bridge's hom, on the chain-element sides of a
+   derivable equation — a *generator* side needs no shim, the two actions agreeing
+   definitionally there) and `discharge` (soundness + the satisfaction condition
+   `⊧-interp`, with the equation sides passed explicitly since they are not recoverable
+   from the interpreted terms).
 
 ## Findings
 
@@ -109,7 +111,6 @@ bridge:
    at `θ` with `proj₁` twice, since both step relations are meets with `θ` on the left.
    This keeps the normalization reusable for the eventual Day converse, whose chain
    lives in different congruences.
-
 +  **The extracted chain must be `abstract`, or conversion drowns.**  The witness `pc`
    is built by running the whole extraction pipeline (`chain→parity` over
    `finitary⇒JoinIsChain` over the distributivity instance), and the proof of `red`

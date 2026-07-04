@@ -387,10 +387,11 @@ chain", so we package it once, as data.
 A `ParityChain 𝑩 P Q x z`{.AgdaRecord} is a chain from `x` to `z` presented as an
 *indexed family* `elt : Fin (suc len) → 𝕌[ 𝑩 ]`{.AgdaField} — the shape in which the
 elements will become the interpretation of the `len + 1` Jónsson symbols — whose head is
-*exactly* `x` (propositional equality, so the head can be rewritten silently), whose
-last element is `≈`-tied to `z` (in the free algebra the setoid equality is
-derivability, which is all the endpoint identity needs), and whose `i`-th step lies in
-`P` for even `i` and in `Q` for odd `i`.
+*exactly* `x` (propositional equality, which `Setoid.reflexive`{.AgdaFunction} upgrades
+to the setoid equality whenever that is what a consumer needs), whose last element is
+`≈`-tied to `z` (in the free algebra the setoid equality is derivability, which is all
+the endpoint identity needs), and whose `i`-th step lies in `P` for even `i` and in `Q`
+for odd `i`.
 
 ```agda
 record ParityChain {𝑆 : Signature 𝓞 𝓥}(𝑩 : Algebra {𝑆 = 𝑆} α ρ)
@@ -441,8 +442,8 @@ module _ {𝑆 : Signature 𝓞 𝓥}{𝑩 : Algebra {𝑆 = 𝑆} α ρ}{P Q : 
 
 One derived fact, for consumers: if both step relations lie below a congruence `μ`,
 then every element of a parity chain is `μ`-related to the head — the head trivially,
-and each rung by one more `μ`-step.  The climb is `<-weakInduction`, whose
-`inject₁ i → fsuc i` step is exactly the shape of the `step`{.AgdaField} field.
+and each rung by one more `μ`-step.  The climb is `<-weakInduction`{.AgdaFunction},
+whose `inject₁ i → fsuc i` step is exactly the shape of the `step`{.AgdaField} field.
 
 ```agda
   head-linked : {x z : 𝕌[ 𝑩 ]}(c : ParityChain 𝑩 P Q x z)(μ : Con 𝑩 ℓ′)
@@ -477,11 +478,9 @@ then matches.  Both passes are structural in the chain.
 ```agda
 module _ {𝑆 : Signature 𝓞 𝓥}{𝑩 : Algebra {𝑆 = 𝑆} α ρ}(μ ν : Con 𝑩 ℓ) where
   private
-    μ-refl : (u : 𝕌[ 𝑩 ]) → proj₁ μ u u
-    μ-refl u = IsEquivalence.refl (is-equivalence (proj₂ μ))
-
-    ν-refl : (u : 𝕌[ 𝑩 ]) → proj₁ ν u u
-    ν-refl u = IsEquivalence.refl (is-equivalence (proj₂ ν))
+    -- the trivial padding step: every congruence is reflexive
+    con-refl : (κ : Con 𝑩 ℓ){u : 𝕌[ 𝑩 ]} → proj₁ κ u u
+    con-refl κ = IsEquivalence.refl (is-equivalence (proj₂ κ))
 
   chain→parity   : {x z : 𝕌[ 𝑩 ]}
     → Chain 𝑩 (μ ∪ᵣ ν) x z → ParityChain 𝑩 (proj₁ μ) (proj₁ ν) x z
@@ -490,10 +489,10 @@ module _ {𝑆 : Signature 𝓞 𝓥}{𝑩 : Algebra {𝑆 = 𝑆} α ρ}(μ ν 
 
   chain→parity (nil x≈z)          = pnil x≈z
   chain→parity (cons (inj₁ p) c)  = pcons p (chain→parityᵒ c)
-  chain→parity (cons (inj₂ q) c)  = pcons (μ-refl _) (pcons q (chain→parity c))
+  chain→parity (cons (inj₂ q) c)  = pcons (con-refl μ) (pcons q (chain→parity c))
 
   chain→parityᵒ (nil x≈z)          = pnil x≈z
-  chain→parityᵒ (cons (inj₁ p) c)  = pcons (ν-refl _) (pcons p (chain→parityᵒ c))
+  chain→parityᵒ (cons (inj₁ p) c)  = pcons (con-refl ν) (pcons p (chain→parityᵒ c))
   chain→parityᵒ (cons (inj₂ q) c)  = pcons q (chain→parity c)
 ```
 
@@ -522,9 +521,10 @@ of [Setoid.Varieties.FreeBridge][], exactly as the converse of Maltsev's theorem
    `Σ[ n ∈ ℕ ]` in `Jonsson-Statement`{.AgdaFunction}; this extraction is exactly where
    it comes from.
 
-+  Each Jónsson identity is a principal-congruence membership pushed through a
-   collapsing substitution (the bridge `cg-pair→⊢`{.AgdaFunction}).  The endpoint
-   identities are the chain's endpoints (`d₀` is *exactly* `x`; `dₙ` is derivably `z`).
++  Each Jónsson identity is an endpoint fact about the chain, or a principal-congruence
+   membership pushed through a collapsing substitution (the bridge
+   `cg-pair→⊢`{.AgdaFunction}).  The endpoint identities are the chain's endpoints
+   (`d₀` is *exactly* `x`; `dₙ` is derivably `z`).
    The middle family `dᵢ(x,y,x) ≈ x` collapses `z ↦ x` — the `θ`-pair — using that
    every chain element is `θ`-tied to `x` (`head-linked`{.AgdaFunction}: both step
    relations have a `θ`-component, so the walk never leaves the `θ`-class of `x`).
@@ -639,24 +639,28 @@ module _ {𝑆 : Signature 0ℓ 0ℓ}{X : Type 0ℓ}{Idx : Type ι}
     t₀≈x = Setoid.reflexive 𝔻[ 𝔽 ] t-fst
 
     -- align the interpretation's node action (`graft`) with the bridge's substitution
-    -- hom (`_[ σ ]`) on both sides of a derivable equation between chain elements
+    -- hom (`_[ σ ]`).  The shim `graft≐[]` is needed only on chain-element sides: on a
+    -- *generator* v, `graft (ℊ v) σ` and `(ℊ v) [ σ ]` are both literally `σ v`.  So
+    -- the endpoint and middle families (generator right-hand sides) use the one-sided
+    -- form, and only the forks (chain elements on both sides) need the two-sided one
+    graft-bridgeˡ : (w : 𝕌[ 𝔽 ]){v : 𝕌[ 𝔽 ]}(σ : Sub {𝑆 = 𝑆} (Fin 3) (Fin 3))
+      → E ⊢ Fin 3 ▹ (w [ σ ]) ≈ v → E ⊢ Fin 3 ▹ graft w σ ≈ v
+    graft-bridgeˡ w σ d = trans (≐→⊢ (graft≐[] w σ)) d
+
     graft-bridge : (w w′ : 𝕌[ 𝔽 ])(σ : Sub {𝑆 = 𝑆} (Fin 3) (Fin 3))
       → E ⊢ Fin 3 ▹ (w [ σ ]) ≈ (w′ [ σ ]) → E ⊢ Fin 3 ▹ graft w σ ≈ graft w′ σ
-    graft-bridge w w′ σ d =
-      trans (≐→⊢ (graft≐[] w σ)) (trans d (sym (≐→⊢ (graft≐[] w′ σ))))
+    graft-bridge w w′ σ d = trans (graft-bridgeˡ w σ d) (sym (≐→⊢ (graft≐[] w′ σ)))
 
     -- the five identity families of Th-Jonsson, one derivation each: an endpoint fact
-    -- or a collapsed principal-congruence membership, pushed through graft-bridge
-    -- (on a generator w′, `graft w′ σ` is literally `σ`'s value, so each right-hand
-    -- side below is definitionally the interpreted term the signature displays)
+    -- or a collapsed principal-congruence membership, pushed through the graft bridge
     deriv-fst : E ⊢ Fin 3 ▹ (I ✦ dxyz zero) ≈ (I ✦ xJ)
-    deriv-fst = graft-bridge (t zero) x σxyz (sub t₀≈x σxyz)
+    deriv-fst = graft-bridgeˡ (t zero) σxyz (sub t₀≈x σxyz)
 
     deriv-lst : E ⊢ Fin 3 ▹ (I ✦ dxyz (fromℕ n)) ≈ (I ✦ zJ)
-    deriv-lst = graft-bridge (t (fromℕ n)) z σxyz (sub t-lst σxyz)
+    deriv-lst = graft-bridgeˡ (t (fromℕ n)) σxyz (sub t-lst σxyz)
 
     deriv-mid : (i : Fin (suc n)) → E ⊢ Fin 3 ▹ (I ✦ dxyx i) ≈ (I ✦ xJ)
-    deriv-mid i = graft-bridge (t i) x σxyx (sym (cg-pair→⊢ E σxyx x z refl (xθt i)))
+    deriv-mid i = graft-bridgeˡ (t i) σxyx (sym (cg-pair→⊢ E σxyx x z refl (xθt i)))
 
     deriv-fork-φ : (i : Fin n) → proj₁ φ (t (inject₁ i)) (t (fsuc i))
       → E ⊢ Fin 3 ▹ (I ✦ dxxz (inject₁ i)) ≈ (I ✦ dxxz (fsuc i))

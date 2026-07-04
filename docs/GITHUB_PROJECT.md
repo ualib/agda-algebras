@@ -3309,7 +3309,7 @@ https://claude.ai/code/session_01MvPrLTCxKjFgsnTMK8j2qZ
 
 ## Description
 
-Complete Jónsson's and Day's theorems with the hard "lattice property ⟹ terms" directions: a congruence-distributive variety has Jónsson terms, and a congruence-modular variety has Day terms.  These inhabit the *second* projections of `Jonsson-Statement` and `Day-Statement` in `Setoid.Varieties.MaltsevConditions`, turning both into complete iffs.
+Complete Jónsson's and Day's theorems with the hard "lattice property ⟹ terms" directions: a congruence-distributive variety has Jónsson terms, and a congruence-modular variety has Day terms.  These inhabit the converse projections of `Jonsson-Statement` and `Day-Statement` (with the orientation fixed in #412, the CD ⟹ terms direction is the *first* projection; following the #428 split the statements live in `Setoid.Varieties.Maltsev.{Distributivity,Modularity}`), turning both into complete iffs.  **Status: converse Jónsson landed (PR #438, `CD⇒jonsson` / `jonsson-theorem`); converse Day remains open.**
 
 This is the research-grade end of the M6-3 track.  Beyond the [M6-4] (#410) bridge, it requires extracting the **chain length `n`** and the terms `dᵢ` / `mᵢ` from the inductive derivation witnessing a join membership — the source of the `Σ[ n ∈ ℕ ]` in the statements, and the part with no off-the-shelf analogue in the library.
 
