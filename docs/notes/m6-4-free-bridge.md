@@ -18,7 +18,7 @@ M6-5 inhabits the statement, completing the iff for congruence permutability.
 +  `Setoid.Varieties.FreeBridge` — the reusable bridge (M6-4), four self-contained
    pieces (below).
 
-+  `Setoid.Varieties.MaltsevConditions` — `CP⇒maltsev` (M6-5), inhabiting
++  `Setoid.Varieties.Maltsev.Permutability` — `CP⇒maltsev` (M6-5), inhabiting
    `CP⇒maltsev-Statement` in the same module (the converse lives next to its
    statement and the forward `maltsev⇒CP`).  Congruence permutability is now
    characterized by the Maltsev term — a complete iff.
@@ -182,7 +182,7 @@ congruence-lattice *representation*, only properties of congruence lattices.
 +  Whole library (what CI runs): `nix develop --command make check`.
 +  The new / changed modules, one at a time:
    `nix develop --command agda src/Setoid/Varieties/FreeBridge.lagda.md`
-   (then `Setoid/Varieties/MaltsevConditions`, which now contains the converse).
+   (then `Setoid/Varieties/Maltsev/Permutability`, which now contains the converse).
 
 [M6-4]: https://github.com/ualib/agda-algebras/issues/410
 [M6-5]: https://github.com/ualib/agda-algebras/issues/411

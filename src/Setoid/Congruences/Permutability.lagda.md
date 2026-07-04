@@ -23,8 +23,8 @@ reverse inclusion is the same statement with `θ` and `φ` swapped, the assertio
 *every* pair of congruences permute is the assertion that composition is commutative
 on `Con 𝑨`.
 An algebra (or a variety) with this property is called **congruence-permutable**, and
-this the property that the classical *Maltsev condition* characterizes by a single
-ternary term ([Setoid.Varieties.Maltsev][], [Setoid.Varieties.MaltsevConditions][]).
+this is the property that the classical *Maltsev condition* characterizes by a single
+ternary term ([Setoid.Varieties.Maltsev][]).
 
 This module is pure congruence theory: it depends only on the congruence record of
 [Setoid.Congruences.Basic][], not on terms, interpretations, or the lattice bundles.

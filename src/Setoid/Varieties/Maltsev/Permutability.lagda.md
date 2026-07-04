@@ -1,83 +1,57 @@
 ---
 layout: default
-file: "src/Setoid/Varieties/MaltsevConditions.lagda.md"
-title: "Setoid.Varieties.MaltsevConditions module"
+file: "src/Setoid/Varieties/Maltsev/Permutability.lagda.md"
+title: "Setoid.Varieties.Maltsev.Permutability module (The Agda Universal Algebra Library)"
 date: "2026-06-19"
 author: "the agda-algebras development team"
 ---
 
-### Maltsev conditions: permutability, distributivity, modularity
+### Maltsev conditions: permutability
 
-This is the [Setoid.Varieties.MaltsevConditions][] module of the [Agda Universal Algebra Library][].
+This is the [Setoid.Varieties.Maltsev.Permutability][] module of the [Agda Universal Algebra Library][].
 
-A **Maltsev condition** is a property of a variety equivalent to the existence of
-terms satisfying prescribed identities.  The three most basic concern the shape of
-the congruence lattices of the algebras in the variety:
+[Setoid.Varieties.Maltsev.Basic][] fixed the *term-existence* side of CP as a theory
+interpretation: `HasMaltsevTerm ℰ = Th-Maltsev ≼ ℰ`.[^1]
 
-+  **congruence permutability** (CP) — composition of congruences is commutative;
-+  **congruence distributivity** (CD) — every congruence lattice is distributive;
-+  **congruence modularity** (CM) — every congruence lattice is modular.
-
-[Setoid.Varieties.Maltsev][] fixed the *term-existence* side of CP as a theory
-interpretation: `HasMaltsevTerm ℰ = Th-Maltsev ≼ ℰ`.  This module connects that to
-the *lattice* side built in [Setoid.Congruences.Permutability][], proving the
-concrete (and required) direction of **Maltsev's theorem**:[^maltsev]
+The present module connects that to the *lattice* side (built in
+[Setoid.Congruences.Permutability][]) and proves the concrete direction of
+**Maltsev's theorem**:[^maltsev]
 
 >  a variety with a Maltsev term is congruence-permutable.
-
-It then records the encodings of CD and CM — the Jónsson and Day identities, again as
-theory interpretations `Th-Jonsson n ≼ ℰ` and `Th-Day n ≼ ℰ` — and states Jónsson's
-and Day's theorems, and the converse of Maltsev's theorem, as the goals that remain.[^1]
-
-The design choice — encoding each condition as `Th-X ≼ ℰ` rather than as a record
-bundling a term with its identities, or an inductive scheme of identities — is
-discussed in that note; in short, the interpretation encoding *is* the "term plus its
-identities", packaged so that the whole interpretability apparatus
-([Setoid.Varieties.Interpretation][]) applies uniformly to every condition.
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-module Setoid.Varieties.MaltsevConditions where
+module Setoid.Varieties.Maltsev.Permutability where
 
 open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ----------------------------
-open import Data.Bool.Base                     using  ( Bool ; true ; not
-                                                      ; if_then_else_ )
-open import Data.Fin.Base                      using  ( Fin ; toℕ ; fromℕ ; inject₁ )
-                                               renaming ( zero to fzero ; suc to fsuc )
-open import Data.Fin.Patterns                  using  ( 0F ; 1F ; 2F ; 3F )
-open import Data.Nat.Base                      using  ( ℕ ; zero ; suc )
-open import Data.Product                       using  ( _×_ ; _,_ ; Σ-syntax
-                                                      ; proj₁ ; proj₂ )
-open import Level                              using  ( Level ; 0ℓ ; _⊔_ )
-                                               renaming ( suc to lsuc )
-open import Relation.Binary                    using  ( Setoid ; IsEquivalence )
+open import Data.Fin.Base      using  ( Fin )
+open import Data.Fin.Patterns  using  ( 0F ; 1F ; 2F )
+open import Data.Product       using  ( _×_ ; _,_ ; Σ-syntax ; proj₁ ; proj₂ )
+open import Level              using  ( Level ; 0ℓ ; _⊔_ ) renaming ( suc to lsuc )
+open import Relation.Binary    using  ( Setoid ; IsEquivalence )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture.Basic                     using  ( _⇔_ )
-open import Overture.Signatures                using  ( 𝓞 ; 𝓥 ; Signature )
-open import Overture.Terms                     using  ( Term ; ℊ ; node )
+open import Overture.Signatures                using  ( Signature )
+open import Overture.Terms                     using  ( Term ; ℊ )
 open import Overture.Terms.Interpretation      using  ( Interpretation ; _✦_ )
 open import Setoid.Algebras.Basic              using  ( Algebra ; 𝔻[_] ; 𝕌[_] )
-open import Setoid.Congruences.Basic           using  ( Con ; reflexive
-                                                      ; is-equivalence ; is-compatible )
+open import Setoid.Congruences.Basic           using  ( Con ; reflexive ; is-equivalence )
 open import Setoid.Congruences.Generation      using  ( Cg ; base )
 open import Setoid.Congruences.Permutability   using  ( CongruencePermutable )
-open import Setoid.Congruences.Properties      using  ( CongruenceDistributive
-                                                      ; CongruenceModular )
 open import Setoid.Terms.Basic                 using  ( Sub ; _[_] ; module Environment )
 open import Setoid.Terms.Interpretation        using  ( graft≐[] )
-open import Setoid.Varieties.EquationalLogic
+open import Setoid.Varieties.EquationalLogic   using  ( _⊧_≈_ )
 open import Setoid.Varieties.FreeBridge        using  ( ❴_,_❵ ; pᵣ ; cg-pair→⊢ ; toEq )
 open import Setoid.Varieties.FreeSubstitution  using  ( ≐→⊢ )
-open import Setoid.Varieties.Interpretation    using  ( reductᴵ ; _⊨ₑ_ ; ⊧-interp
-                                                      ; module Interpret )
-open import Setoid.Varieties.Maltsev           using  ( Sig-Maltsev ; m-Op ; m ; tri
+open import Setoid.Varieties.Interpretation    using  ( reductᴵ ; _⊨ₑ_ ; ⊧-interp )
+open import Setoid.Varieties.Maltsev.Basic     using  ( Sig-Maltsev ; m-Op ; m ; tri
                                                       ; mxxy≈y ; mxyy≈x ; Th-Maltsev
-                                                      ; HasMaltsevTerm )
-open import Setoid.Varieties.SoundAndComplete  using  ( Eq ; _⊢_▹_≈_ ; module FreeAlgebra
+                                                      ; HasMaltsevTerm ; term-compatible )
+open import Setoid.Varieties.SoundAndComplete  using  ( Eq ; _⊢_▹_≈_
+                                                      ; module FreeAlgebra
                                                       ; module Soundness )
 
 -- the generators of the Maltsev signature (the source signature of the interpretation)
@@ -88,29 +62,6 @@ open Func using ( cong ) renaming ( to to _⟨$⟩_ )
 open _⊢_▹_≈_ using ( refl ; sym ; trans )
 
 private variable α ρ χ ι ℓ : Level
-```
-
-#### Congruences are compatible with term operations
-
-The Maltsev argument needs that the chosen Maltsev *term operation* respects every
-congruence.  This is an instance of a fundamental fact, which we prove once in full
-generality: Given an algebra `𝑩` and a term `t` in the signature of `𝑩`, every
-congruence `ψ` of `𝑩` is compatible with the evaluation of `t` — if two environments
-are pointwise `ψ`-related at the leaves, the values of `t` are `ψ`-related.  The
-proof is the obvious structural induction.
-
-```agda
-module _
-  {𝑆 : Signature 𝓞 𝓥}
-  {𝑩 : Algebra {𝑆 = 𝑆} α ρ}
-  where
-  open Environment 𝑩 using ( ⟦_⟧ )
-
-  term-compatible : {V : Type χ}(ψ : Con 𝑩 ℓ)(t : Term V){η η′ : V → 𝕌[ 𝑩 ]}
-    → (∀ v → proj₁ ψ (η v) (η′ v)) → proj₁ ψ (⟦ t ⟧ ⟨$⟩ η) (⟦ t ⟧ ⟨$⟩ η′)
-  term-compatible ψ (ℊ v) h = h v
-  term-compatible ψ (node f ts) h =
-    is-compatible (proj₂ ψ) f (λ i → term-compatible ψ (ts i) h)
 ```
 
 #### Maltsev's theorem: a Maltsev term implies congruences permute
@@ -355,154 +306,9 @@ module _ {𝑆 : Signature 0ℓ 0ℓ}{X : Type 0ℓ}{Idx : Type ι}
                (Soundness.sound E 𝑩 B⊨ deriv-xyy)
 ```
 
-
-#### Distributivity and modularity of the congruence lattice
-
-CD and CM are properties of the congruence *lattice*, defined in
-[Setoid.Congruences.Properties][] as `CongruenceDistributive` and
-`CongruenceModular` (at the absorbing relation level, so that meet and join are
-operations on a single type).  We use them here to phrase the Jónsson and Day variety
-conditions below.
-
-#### Jónsson terms (congruence distributivity)
-
-Where a single ternary term characterizes CP, a *chain* of ternary terms
-`d₀ , … , dₙ` — the **Jónsson terms** — characterizes CD.[^jonsson]
-They are encoded exactly as the Maltsev term was: a signature `Sig-Jonsson n` of
-`n+1` ternary symbols, and a theory `Th-Jonsson n` of the Jónsson identities
-(Burris–Sankappanavar, Def. 12.5),
-
-    d₀(x,y,z) ≈ x,    dₙ(x,y,z) ≈ z,    dᵢ(x,y,x) ≈ x   (all i),
-    dᵢ(x,x,z) ≈ dᵢ₊₁(x,x,z)   (i even),  dᵢ(x,y,y) ≈ dᵢ₊₁(x,y,y)   (i odd).
-
-`HasJonssonTerms n ℰ = Th-Jonsson n ≼ ℰ` — `ℰ` admits `n+1` Jónsson terms iff the
-Jónsson theory interprets into it, the same `Th-X ≼ ℰ` shape as `HasMaltsevTerm`.
-
-```agda
--- parity of a natural number, to split the Jónsson/Day "fork" identities by index
-even? : ℕ → Bool
-even? zero = true
-even? (suc m) = not (even? m)
-
-module _ (n : ℕ) where
-
-  -- n+1 ternary operation symbols.
-  Sig-Jonsson : Signature 0ℓ 0ℓ
-  Sig-Jonsson = Fin (suc n) , (λ _ → Fin 3)
-
-  private
-    -- the i-th Jónsson term applied to three arguments
-    d : Fin (suc n) → (a b c : Term (Fin 3)) → Term (Fin 3)
-    d i a b c = node i (tri a b c)
-
-    x y z : Term {𝑆 = Sig-Jonsson} (Fin 3)
-    x = ℊ 0F ; y = ℊ 1F ; z = ℊ 2F
-
-  -- the index of the Jónsson identities: endpoints, the "x,y,x" family, and the forks
-  data Eq-Jonsson : Type where
-    dxyz≈x  : Eq-Jonsson                 -- d₀(x,y,z) ≈ x
-    dxyz≈z  : Eq-Jonsson                 -- dₙ(x,y,z) ≈ z
-    dxyx≈x  : Fin (suc n) → Eq-Jonsson   -- dᵢ(x,y,x) ≈ x
-    d-fork  : Fin n → Eq-Jonsson         -- consecutive dᵢ, dᵢ₊₁ agree (parity-dependent)
-
-  Th-Jonsson : Eq-Jonsson → Term {𝑆 = Sig-Jonsson} (Fin 3) × Term {𝑆 = Sig-Jonsson} (Fin 3)
-  Th-Jonsson dxyz≈x      = d fzero x y z , x
-  Th-Jonsson (dxyx≈x i)  = d i x y x , x
-  Th-Jonsson dxyz≈z      = d (fromℕ n) x y z , z
-  Th-Jonsson (d-fork i) = if even? (toℕ i)
-    then ( d (inject₁ i) x x z , d (fsuc i) x x z )   -- i even: agree on (x,x,z)
-    else ( d (inject₁ i) x y y , d (fsuc i) x y y )   -- i odd:  agree on (x,y,y)
-
-HasJonssonTerms : (n : ℕ) (α ρ : Level) {𝑆 : Signature 0ℓ 0ℓ} {X : Type χ} {Idx : Type ι}
-  → (Idx → Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X) → Type (lsuc (α ⊔ ρ) ⊔ χ ⊔ ι)
-HasJonssonTerms n α ρ ℰ = Th-Jonsson n ≼ ℰ
-  where open Interpret α ρ
-```
-
-#### Day terms (congruence modularity)
-
-Congruence modularity is characterized by a chain of *quaternary* terms `m₀ , … , mₙ`,
-the **Day terms**[^day] (Day 1969; Burris–Sankappanavar, Thm. 12.4), with identities
-
-    m₀(x,y,z,u) ≈ x,   mₙ(x,y,z,u) ≈ u,   mᵢ(x,y,y,x) ≈ x   (all i),
-    mᵢ(x,x,u,u) ≈ mᵢ₊₁(x,x,u,u)  (i even),  mᵢ(x,y,y,u) ≈ mᵢ₊₁(x,y,y,u)  (i odd).
-
-```agda
--- the canonical 4-element tuple over the variable carrier Fin 4
-quad : {ℓ : Level}{A : Type ℓ} → A → A → A → A → Fin 4 → A
-quad a b c d 0F = a
-quad a b c d 1F = b
-quad a b c d 2F = c
-quad a b c d 3F = d
-
-module _ (n : ℕ) where
-
-  -- n+1 quaternary operation symbols.
-  Sig-Day : Signature 0ℓ 0ℓ
-  Sig-Day = Fin (suc n) , (λ _ → Fin 4)
-
-  private
-    d : Fin (suc n) → (a b c d : Term (Fin 4)) → Term (Fin 4)
-    d i a b c d = node i (quad a b c d)
-
-    x y z u : Term {𝑆 = Sig-Day} (Fin 4)
-    x = ℊ 0F ; y = ℊ 1F ; z = ℊ 2F ; u = ℊ 3F
-
-  data Eq-Day : Type where
-    mxyzu≈x  : Eq-Day                 -- m₀(x,y,z,u) ≈ x
-    mxyyx≈x  : Fin (suc n) → Eq-Day   -- mᵢ(x,y,y,x) ≈ x
-    mxyzu≈u  : Eq-Day                 -- mₙ(x,y,z,u) ≈ u
-    m-fork   : Fin n → Eq-Day         -- consecutive mᵢ, mᵢ₊₁ agree (parity-dependent)
-
-  Th-Day : Eq-Day → Term (Fin 4) × Term (Fin 4)
-  Th-Day mxyzu≈x      = d fzero x y z u , x
-  Th-Day mxyzu≈u      = d (fromℕ n) x y z u , u
-  Th-Day (mxyyx≈x i)  = d i x y y x , x
-  Th-Day (m-fork i)   = if even? (toℕ i)
-    then ( d (inject₁ i) x x u u , d (fsuc i) x x u u )   -- i even: agree on (x,x,u,u)
-    else ( d (inject₁ i) x y y u , d (fsuc i) x y y u )   -- i odd:  agree on (x,y,y,u)
-
-HasDayTerms : (n : ℕ)(α ρ : Level){𝑆 : Signature 0ℓ 0ℓ}{X : Type χ}{Idx : Type ι}
-  → (Idx → Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X) → Type (lsuc (α ⊔ ρ) ⊔ χ ⊔ ι)
-HasDayTerms n α ρ ℰ = Th-Day n ≼ ℰ
-  where open Interpret α ρ
-```
-
-#### The conditions as properties of a variety, and the deferred theorems
-
-Fix a theory `ℰ` and the level pair `(α , ρ)` at which models are tested.
-A *congruence-distributive variety* is one in which all models are
-congruence-distributive, and similarly for CM.  The Jónsson and Day characterizations
-of CD and CM varieties are stated here as the goals that remain (their constructions
-are sketched in the design note); each is a `Type`.
-
-```agda
-module _ {α ρ ℓ : Level}{𝑆 : Signature 0ℓ 0ℓ}{X : Type χ}{Idx : Type ι}
-         (ℰ : Idx → Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X) where
-
-  -- "Every model is congruence-distributive / -modular."
-  CongruenceDistributiveVariety : Type (χ ⊔ ι ⊔ lsuc (α ⊔ ρ ⊔ ℓ))
-  CongruenceDistributiveVariety = (𝑩 : Algebra α ρ) → 𝑩 ⊨ₑ ℰ → CongruenceDistributive 𝑩 ℓ
-
-  CongruenceModularVariety : Type (χ ⊔ ι ⊔ lsuc (α ⊔ ρ ⊔ ℓ))
-  CongruenceModularVariety = (𝑩 : Algebra α ρ) → 𝑩 ⊨ₑ ℰ → CongruenceModular 𝑩 ℓ
-
-  -- Jónsson's theorem (DEFERRED): CD ⇔ existence of Jónsson terms.
-  Jonsson-Statement : Type (χ ⊔ ι ⊔ lsuc (α ⊔ ρ ⊔ ℓ))
-  Jonsson-Statement = CongruenceDistributiveVariety ⇔ ( Σ[ n ∈ ℕ ] HasJonssonTerms n α ρ ℰ )
-
-  -- Day's theorem (DEFERRED): CM ⇔ existence of Day terms.
-  Day-Statement : Type (χ ⊔ ι ⊔ lsuc (α ⊔ ρ ⊔ ℓ))
-  Day-Statement = CongruenceModularVariety ⇔ ( Σ[ n ∈ ℕ ] HasDayTerms n α ρ ℰ )
-```
-
 ---
 
-[^1]: See the design note `docs/notes/m6-3-maltsev-conditions.md` for the construction plans.
-
-[^day]: A. Day, *A characterization of modularity for congruence lattices of algebras*, Canad. Math. Bull. **12** (1969), 167–173.  [doi:10.4153/CMB-1969-016-6](https://doi.org/10.4153/CMB-1969-016-6).
-
-[^jonsson]: B. Jónsson, *Algebras whose congruence lattices are distributive*, Math. Scand. **21** (1967), 110–121.  [doi:10.7146/math.scand.a-10850](https://doi.org/10.7146/math.scand.a-10850) (open access; mirror at [EUDML](https://eudml.org/doc/166010)).
+[^1]: The design choice — encoding each condition as `Th-X ≼ ℰ` rather than as a record bundling a term with its identities, or an inductive scheme of identities — is discussed in the design note `docs/notes/m6-3-maltsev-conditions.md`; in short, the interpretation encoding *is* the "term plus its identities", packaged so that the whole interpretability apparatus ([Setoid.Varieties.Interpretation][]) applies uniformly to every condition.
 
 [^maltsev]: A. I. Mal'cev, *On the general theory of algebraic systems* (Russian), Mat. Sb. (N.S.) **35(77)** (1954), 3–20; Engl. transl., *Amer. Math. Soc. Transl.* (2) **27** (1963), 125–142.  Original at [Math-Net.Ru](http://www.mathnet.ru/sm5264); translation in [*Eighteen Papers on Algebra* (AMS)](https://pubs.ams.org/ebooks/trans2/027/).
 

@@ -69,7 +69,7 @@ follow a face to the proof.
     </span>
   </a>
 
-  <a class="ualib-figure" href="/Setoid/Varieties/MaltsevConditions/">
+  <a class="ualib-figure" href="/Setoid/Varieties/Maltsev/">
     <span class="ualib-portrait">
     <img src="/assets/portraits/Malcev.jpeg" alt="Anatoly Maltsev"></span>
     <span class="ualib-figure__body">

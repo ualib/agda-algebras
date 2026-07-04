@@ -2113,27 +2113,7 @@ Part of the M4-1 umbrella (#267).
 
 ---
 
-### Issue M4-2: Docstring pass for all user-facing definitions (#268)
-
-**Labels**: `documentation`, `milestone-4-style`, `help-wanted`
-
-## Description
-
-Every record, type family, and top-level function in the public API should have a prose comment block explaining what it is, when to use it, and cross-references to related definitions.  Long-tail task; pursue in small per-module PRs.
-
-## Tasks
-
-- [ ] Walk every public module in `Setoid/` and add missing docstrings.
-- [ ] Walk every public module in `Classical/` and add missing docstrings.
-- [ ] Enforce via a linter or review checklist.
-
-## Acceptance criteria
-
-- [ ] `grep`-based audit finds zero public definitions without a preceding comment block.
-
----
-
-### Issue M4-2a: Remove HTML <a id> heading anchors (rely on kramdown auto-slugs) (#387, closed)
+### Issue M4-2: Remove HTML <a id> heading anchors (rely on kramdown auto-slugs) (#387, closed)
 
 **Labels**: 
 
@@ -2164,6 +2144,26 @@ This guarantees no cross-reference breaks while removing the HTML wrappers.
 +  [ ] `make check` passes.
 
 Part of Milestone 4 (style and naming uniformity sweep); see also the umbrella #267 and the audit #370.
+
+---
+
+### Issue M4-2: Docstring pass for all user-facing definitions (#268)
+
+**Labels**: `documentation`, `milestone-4-style`, `help-wanted`
+
+## Description
+
+Every record, type family, and top-level function in the public API should have a prose comment block explaining what it is, when to use it, and cross-references to related definitions.  Long-tail task; pursue in small per-module PRs.
+
+## Tasks
+
+- [ ] Walk every public module in `Setoid/` and add missing docstrings.
+- [ ] Walk every public module in `Classical/` and add missing docstrings.
+- [ ] Enforce via a linter or review checklist.
+
+## Acceptance criteria
+
+- [ ] `grep`-based audit finds zero public definitions without a preceding comment block.
 
 ---
 
@@ -2886,6 +2886,35 @@ Note: the moved modules are inherently two-signature, so they do not fit the sin
 
 +  `nix develop --command make check` passes (whole library).
 
+---
+
+### Issue M4-17: style improvements and general clean up of Setoid modules (#434)
+
+**Labels**: `milestone-4-style`
+
+# Description
+
+Apply new style conventions uniformly across the Setoid tree.
+
++ clean up syntax/code-style, e.g., using dot patterns, fewer parens, etc.;
++ change from one- to two- space indentation convention;
++ maybe add more prose describing what the theorems say/mean.
++ remove unused imports (rerun "remove unused imports" script)
+
+## Acceptance Criteria
+
++ [ ] no violations of style conventions laid out in the STYLE_GUIDE doc
++ [ ] any style conventions followed uniformly across modules are documented in STYLE_GUIDE
++ [ ] any changes in style conventions are reflected in (updates to) the STYLE_GUIDE
+
+---
+
+### Issue M4-18: Move Demos under Examples (#436)
+
+**Labels**: `milestone-4-style`
+
+_(no description on GitHub)_
+
 <!-- END GENERATED: milestone-4 -->
 
 ---
@@ -3226,7 +3255,7 @@ This is separated from #373 because it is a sizeable undertaking on its own:
 
 ## Description
 
-Prove the "terms ⟹ lattice property" halves of Jónsson's and Day's theorems: a variety with Jónsson terms is congruence-distributive, and a variety with Day terms is congruence-modular.  These are the **second** projections of `Jonsson-Statement` and `Day-Statement` in `Setoid.Varieties.MaltsevConditions`: with `P ⇔ Q = (P → Q) × (Q → P)` and `Jonsson-Statement = CongruenceDistributiveVariety ⇔ (Σ n, HasJonssonTerms n)`, the term ⟹ CD direction is `proj₂` (`Q → P`), not the first projection.  (The original text said "first projections"; corrected here.)
+Prove the "terms ⟹ lattice property" halves of Jónsson's and Day's theorems: a variety with Jónsson terms is congruence-distributive, and a variety with Day terms is congruence-modular.  These are the **second** projections of `Jonsson-Statement` and `Day-Statement` in the `Setoid.Varieties.Maltsev` subtree (`Jonsson-Statement` in `Maltsev.Distributivity`, `Day-Statement` in `Maltsev.Modularity`): with `P ⇔ Q = (P → Q) × (Q → P)` and `Jonsson-Statement = CongruenceDistributiveVariety ⇔ (Σ n, HasJonssonTerms n)`, the term ⟹ CD direction is `proj₂` (`Q → P`), not the first projection.  (The original text said "first projections"; corrected here.)
 
 These halves are independent of [M6-4] (#410): they use the chain terms available on every algebra via the interpretation, plus `term-compatible` and an induction over the join.
 
@@ -3234,6 +3263,7 @@ These halves are independent of [M6-4] (#410): they use the chain terms availabl
 
 **Forward Jónsson: DONE — including the featured finitary theorem, unconditionally.**
 
++  The former monolithic `MaltsevConditions` module was split into `Setoid.Varieties.Maltsev.{Basic,Permutability,Distributivity,Modularity}` (re-exported by the `Setoid.Varieties.Maltsev` umbrella); the Jónsson development lives in `Maltsev.Distributivity`.
 +  Generalized the curried-term extraction from one ternary symbol to the `Fin (n+1)` Jónsson chain (`d𝑩` / `eval-d` / `d-fst` / `d-lst` / `d-mid` / `d-compat`).
 +  The two-part staircase: the horizontal lemma (induction on the chain) and the vertical induction over the rungs (`Data.Fin.Induction.<-weakInduction`, whose `inject₁ i → suc i` step lines up with the parity-split fork `d-fork i`).
 +  `jonsson⇒chainDistributive` — the forward inclusion `θ ∧ (φ ∨ ψ) ⊆ (θ∧φ) ∨ (θ∧ψ)` **along every chain**, fully general (no finiteness).
@@ -3242,7 +3272,7 @@ These halves are independent of [M6-4] (#410): they use the chain terms availabl
 
 **The Gen-vs-chain obstruction: named once, then discharged for finitary signatures.**  The library's join is `Cg(φ ∪ ψ) = Gen(φ ∪ ψ)`, the inductively-generated congruence whose `comp` constructor closes it under the basic operations (necessary and correct for *infinitary* signatures, whose arities are arbitrary types).  The Jónsson-term "sandwich" relation `dᵢ(a,u,b) γ dᵢ(a,v,b)` is provably **not** closed under `comp`, so a direct `Gen`-induction cannot carry the staircase, and for an infinitary signature the join strictly exceeds the finite-chain closure.  The forward theorem is therefore proved against `Chain` in full generality, the lone missing step `Gen(φ ∪ ψ) ⊆ Chain` is isolated as the explicit hypothesis `JoinIsChain`, and that hypothesis is then **discharged** for finitary signatures in the new module `Setoid.Congruences.ChainJoin` (`finitary⇒JoinIsChain`): `Chain 𝑩 (φ ∪ᵣ ψ)` is shown to be a congruence (operation-closed via the one-coordinate-at-a-time fold `chain-op` over a finite-arity enumeration `Finitary 𝑆`), hence contains the generated join by `Cg-least`.  The `Examples.Setoid.FinitarySignatures` module shows the `Finitary` witness is a hoop-free one-liner (`λ _ → _ , ↔-id _`).
 
-**Forward Day: DEFERRED INDEFINITELY — not a mechanical mirror.**  Day's `mᵢ(x,y,y,x) ≈ x` pinning requires the two middle arguments *equal*, so only `mᵢ(a,c,c,b)` is ψ-pinnable; the even-fork column `mᵢ(a,a,b,b)` is not, and connecting it would demand a single-slot `a ↔ b` move that is not a `θ∨(φ∧ψ)`-step.  Jónsson's clean two-column staircase has no analogue; Day's theorem needs the genuinely 2-dimensional / `A²` construction of Day 1969.  Beyond the structural asymmetry, the forward Day proof is technical and is carried out in neither *Algebras, Lattices, Varieties* (McKenzie–McNulty–Taylor) nor Bergman's *Universal Algebra* (which states the result but explicitly declines to prove it), and no module in the library consumes it.  It is therefore held off indefinitely; the module prose and `docs/notes/m6-6-forward-jonsson-day.md` record the right construction so a successor picks it up only when a concrete need arises.
+**Forward Day: DEFERRED INDEFINITELY — not a mechanical mirror.**  Day's `mᵢ(x,y,y,x) ≈ x` pinning requires the two middle arguments *equal*, so only `mᵢ(a,c,c,b)` is ψ-pinnable; the even-fork column `mᵢ(a,a,b,b)` is not, and connecting it would demand a single-slot `a ↔ b` move that is not a `θ∨(φ∧ψ)`-step.  Jónsson's clean two-column staircase has no analogue; Day's theorem needs the genuinely 2-dimensional / `A²` construction of Day 1969.  Beyond the structural asymmetry, the forward Day proof is technical and is carried out in neither *Algebras, Lattices, Varieties* (McKenzie–McNulty–Taylor) nor Bergman's *Universal Algebra* (which states the result but explicitly declines to prove it), and no module in the library consumes it.  It is therefore held off indefinitely; the module prose (`Setoid.Varieties.Maltsev.Modularity`) and `docs/notes/m6-6-forward-jonsson-day.md` record the right construction so a successor picks it up only when a concrete need arises.
 
 ## Remaining tasks
 

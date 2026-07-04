@@ -14,7 +14,7 @@ This is the [Setoid.Congruences.Properties][] module of the [Agda Universal Alge
 algebra.  This module names two properties that lattice may have — being
 **distributive** and being **modular** — which the Maltsev conditions of congruence
 distributivity (Jónsson) and congruence modularity (Day) characterize by the
-existence of terms ([Setoid.Varieties.MaltsevConditions][]).
+existence of terms ([Setoid.Varieties.Maltsev][]).
 
 As in [Setoid.Congruences.CompleteLattice][], the lattice equations are stated at the
 **absorbing** relation level `𝐋 ℓ₀ = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ ℓ₀`.  At this level the join
