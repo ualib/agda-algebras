@@ -52,7 +52,7 @@ open import Relation.Binary.PropositionalEquality
 open import Overture.Basic                    using  ( _⇔_ )
 open import Overture.Signatures               using  ( 𝓞 ; 𝓥 ; Signature )
 open import Overture.Terms                    using  ( Term ; ℊ ; node )
-open import Overture.Terms.Interpretation     using  ( Interpretation ; _✦_ )
+open import Overture.Terms.Interpretation     using  ( Interpretation ; graft ; _✦_ )
 open import Setoid.Algebras.Basic             using  ( Algebra ; 𝔻[_] ; 𝕌[_] )
 open import Setoid.Congruences.Basic          using  ( Con ; reflexive ; is-equivalence )
 open import Setoid.Congruences.Generation     using  ( Cg ; base ; tran ; _∨_ ; _∪ᵣ_
@@ -63,6 +63,7 @@ open import Setoid.Congruences.Lattice        using  ( _∧_ ; _⊆_ )
 open import Setoid.Congruences.Properties     using  ( CongruenceDistributive )
 open import Setoid.Terms.Basic                using  ( Sub ; _[_] ; module Environment )
 open import Setoid.Terms.Interpretation       using  ( graft≐[] )
+open import Setoid.Varieties.EquationalLogic  using  ( _⊧_≈_ )
 open import Setoid.Varieties.FreeBridge       using  ( ❴_,_❵ ; pᵣ ; cg-pair→⊢ ; toEq )
 open import Setoid.Varieties.FreeSubstitution using  ( ≐→⊢ )
 open import Setoid.Varieties.Interpretation   using  ( reductᴵ ; _⊨ₑ_ ; ⊧-interp
@@ -76,7 +77,7 @@ open import Function using ( Func )
 open Func using ( cong ) renaming ( to to _⟨$⟩_ )
 open _⊢_▹_≈_ using ( sub ; refl ; sym ; trans )
 
-private variable α ρ χ ι ℓ : Level
+private variable α ρ χ ι ℓ ℓ′ : Level
 ```
 
 #### Jónsson terms (congruence distributivity)
@@ -438,6 +439,32 @@ module _ {𝑆 : Signature 𝓞 𝓥}{𝑩 : Algebra {𝑆 = 𝑆} α ρ}{P Q : 
     ... | false  | s = s
 ```
 
+One derived fact, for consumers: if both step relations lie below a congruence `μ`,
+then every element of a parity chain is `μ`-related to the head — the head trivially,
+and each rung by one more `μ`-step.  The climb is `<-weakInduction`, whose
+`inject₁ i → fsuc i` step is exactly the shape of the `step`{.AgdaField} field.
+
+```agda
+  head-linked : {x z : 𝕌[ 𝑩 ]}(c : ParityChain 𝑩 P Q x z)(μ : Con 𝑩 ℓ′)
+    → ({u v : 𝕌[ 𝑩 ]} → P u v → proj₁ μ u v)
+    → ({u v : 𝕌[ 𝑩 ]} → Q u v → proj₁ μ u v)
+    → (i : Fin (suc (ParityChain.len c))) → proj₁ μ x (ParityChain.elt c i)
+  head-linked {x = x} c μ P⊆μ Q⊆μ =
+    <-weakInduction (λ i → proj₁ μ x (elt i)) base-link step-link
+    where
+    open ParityChain c
+    open IsEquivalence (is-equivalence (proj₂ μ)) using ()
+      renaming ( refl to μ-refl ; trans to μ-trans )
+
+    base-link : proj₁ μ x (elt zero)
+    base-link = subst (proj₁ μ x) (≡sym elt-fst) μ-refl
+
+    step-link : (i : Fin len) → proj₁ μ x (elt (inject₁ i)) → proj₁ μ x (elt (fsuc i))
+    step-link i prev with even? (toℕ i) | step i
+    ... | true   | s = μ-trans prev (P⊆μ s)
+    ... | false  | s = μ-trans prev (Q⊆μ s)
+```
+
 Normalization.  Given two congruences `μ`, `ν` and a `Chain`{.AgdaDatatype} whose steps
 are tagged `μ`-or-`ν` in arbitrary order, produce a parity chain whose even steps are
 `μ`-steps and whose odd steps are `ν`-steps.  The two mutually recursive passes track
@@ -499,10 +526,11 @@ of [Setoid.Varieties.FreeBridge][], exactly as the converse of Maltsev's theorem
    collapsing substitution (the bridge `cg-pair→⊢`{.AgdaFunction}).  The endpoint
    identities are the chain's endpoints (`d₀` is *exactly* `x`; `dₙ` is derivably `z`).
    The middle family `dᵢ(x,y,x) ≈ x` collapses `z ↦ x` — the `θ`-pair — using that
-   every chain element is `θ`-tied to `x` (both step relations have a `θ`-component, so
-   the walk never leaves the `θ`-class of `x`).  The fork at `i` collapses `y ↦ x` (the
-   `φ`-pair) when `i` is even and `z ↦ y` (the `ψ`-pair) when `i` is odd — precisely the
-   parity of the normalized chain's `i`-th step.
+   every chain element is `θ`-tied to `x` (`head-linked`{.AgdaFunction}: both step
+   relations have a `θ`-component, so the walk never leaves the `θ`-class of `x`).
+   The fork at `i` collapses `y ↦ x` (the `φ`-pair) when `i` is even and `z ↦ y` (the
+   `ψ`-pair) when `i` is odd — precisely the parity of the normalized chain's `i`-th
+   step.
 
 +  As in the Maltsev converse, the collapsing substitutions are chosen to be exactly the
    position maps `I ✦_`{.AgdaFunction} uses on a Jónsson application, so each bridge
@@ -557,17 +585,20 @@ module _ {𝑆 : Signature 0ℓ 0ℓ}{X : Type 0ℓ}{Idx : Type ι}
     xθz = base pᵣ
 
     xφ∨ψz : proj₁ (φ ∨ ψ) x z
-    xφ∨ψz = tran (base (inj₁ (base pᵣ))) (base (inj₂ (base pᵣ)))
+    xφ∨ψz = tran (∨-upperˡ φ ψ (base pᵣ)) (∨-upperʳ φ ψ (base pᵣ))
 
     -- distributivity moves the pair into (θ ∧ φ) ∨ (θ ∧ ψ)
     xγz : proj₁ ((θ ∧ φ) ∨ (θ ∧ ψ)) x z
     xγz = proj₁ (𝔽cd θ φ ψ) (xθz , xφ∨ψz)
 
     -- the finite chain (the signature is finitary), parity-normalized:
-    -- (θ∧φ)-steps at even positions, (θ∧ψ)-steps at odd positions
-    pc : ParityChain 𝔽 (proj₁ (θ ∧ φ)) (proj₁ (θ ∧ ψ)) x z
-    pc = chain→parity (θ ∧ φ) (θ ∧ ψ)
-           (finitary⇒JoinIsChain {𝑩 = 𝔽} fin (θ ∧ φ) (θ ∧ ψ) xγz)
+    -- (θ∧φ)-steps at even positions, (θ∧ψ)-steps at odd positions.  The proof never
+    -- computes this chain — it only reads its fields — so it is `abstract`, which
+    -- keeps the extraction pipeline from being unfolded during type-checking
+    abstract
+      pc : ParityChain 𝔽 (proj₁ (θ ∧ φ)) (proj₁ (θ ∧ ψ)) x z
+      pc = chain→parity (θ ∧ φ) (θ ∧ ψ)
+             (finitary⇒JoinIsChain {𝑩 = 𝔽} fin (θ ∧ φ) (θ ∧ ψ) xγz)
 
     open ParityChain pc renaming
       ( len to n ; elt to t ; elt-fst to t-fst ; elt-lst to t-lst ; step to t-step )
@@ -581,75 +612,81 @@ module _ {𝑆 : Signature 0ℓ 0ℓ}{X : Type 0ℓ}{Idx : Type ι}
     xJ yJ zJ : Term {𝑆 = Sig-Jonsson n} (Fin 3)
     xJ = ℊ 0F ; yJ = ℊ 1F ; zJ = ℊ 2F
 
-    -- the collapsing substitutions: exactly the position maps `I ✦_` uses on a
-    -- Jónsson application, so `graft (t i) σ` is definitionally `I ✦ dᵢ(_,_,_)`
+    -- the four Jónsson application families appearing in Th-Jonsson, as Sig-Jonsson
+    -- terms: dxyz i is dᵢ(x,y,z), dxyx i is dᵢ(x,y,x), and so on
+    dxyz dxyx dxxz dxyy : Fin (suc n) → Term {𝑆 = Sig-Jonsson n} (Fin 3)
+    dxyz i = node i (tri xJ yJ zJ)
+    dxyx i = node i (tri xJ yJ xJ)
+    dxxz i = node i (tri xJ xJ zJ)
+    dxyy i = node i (tri xJ yJ yJ)
+
+    -- the matching collapsing substitutions: exactly the position maps `I ✦_` uses on
+    -- the corresponding application, so `graft (t i) σ` is definitionally `I ✦ d· i`
     σxyz σxyx σxxz σxyy : Sub {𝑆 = 𝑆} (Fin 3) (Fin 3)
     σxyz j = I ✦ tri xJ yJ zJ j    -- the identity positions (no collapse)
     σxyx j = I ✦ tri xJ yJ xJ j    -- z ↦ x : collapses the θ-pair (x , z)
     σxxz j = I ✦ tri xJ xJ zJ j    -- y ↦ x : collapses the φ-pair (x , y)
     σxyy j = I ✦ tri xJ yJ yJ j    -- z ↦ y : collapses the ψ-pair (y , z)
 
-    open IsEquivalence (is-equivalence (proj₂ θ)) using ()
-      renaming ( refl to θ-refl ; trans to θ-trans )
-
-    -- every chain element is θ-tied to x: the head is x, and both step relations
-    -- carry a θ-component, so the walk never leaves the θ-class of x
+    -- every chain element is θ-tied to x: both step relations carry a θ-component,
+    -- so the walk never leaves the θ-class of the head
     xθt : (i : Fin (suc n)) → proj₁ θ x (t i)
-    xθt = <-weakInduction (λ i → proj₁ θ x (t i)) tie₀ tie₊
-      where
-      tie₀ : proj₁ θ x (t zero)
-      tie₀ = subst (proj₁ θ x) (≡sym t-fst) θ-refl
+    xθt = head-linked pc θ proj₁ proj₁
 
-      tie₊ : (i : Fin n) → proj₁ θ x (t (inject₁ i)) → proj₁ θ x (t (fsuc i))
-      tie₊ i prev with even? (toℕ i) | t-step i
-      ... | true   | s = θ-trans prev (proj₁ s)
-      ... | false  | s = θ-trans prev (proj₁ s)
+    -- the chain head, as a derivable equation: the setoid equality of 𝔽 *is*
+    -- derivability, and the head is even a propositional equality (t-fst)
+    t₀≈x : E ⊢ Fin 3 ▹ t zero ≈ x
+    t₀≈x = Setoid.reflexive 𝔻[ 𝔽 ] t-fst
 
-    -- the bridge at the θ-pair: collapsing z ↦ x turns "x θ tᵢ" into a derivable
-    -- equation; x[σxyx] and z[σxyx] are both literally ℊ 0F, so the collapse is refl
-    bridge-mid : (i : Fin (suc n)) → E ⊢ Fin 3 ▹ (x [ σxyx ]) ≈ (t i [ σxyx ])
-    bridge-mid i = cg-pair→⊢ E σxyx x z refl (xθt i)
+    -- align the interpretation's node action (`graft`) with the bridge's substitution
+    -- hom (`_[ σ ]`) on both sides of a derivable equation between chain elements
+    graft-bridge : (w w′ : 𝕌[ 𝔽 ])(σ : Sub {𝑆 = 𝑆} (Fin 3) (Fin 3))
+      → E ⊢ Fin 3 ▹ (w [ σ ]) ≈ (w′ [ σ ]) → E ⊢ Fin 3 ▹ graft w σ ≈ graft w′ σ
+    graft-bridge w w′ σ d =
+      trans (≐→⊢ (graft≐[] w σ)) (trans d (sym (≐→⊢ (graft≐[] w′ σ))))
 
-    -- every model of ℰ satisfies the interpreted Jónsson identities
+    -- the five identity families of Th-Jonsson, one derivation each: an endpoint fact
+    -- or a collapsed principal-congruence membership, pushed through graft-bridge
+    -- (on a generator w′, `graft w′ σ` is literally `σ`'s value, so each right-hand
+    -- side below is definitionally the interpreted term the signature displays)
+    deriv-fst : E ⊢ Fin 3 ▹ (I ✦ dxyz zero) ≈ (I ✦ xJ)
+    deriv-fst = graft-bridge (t zero) x σxyz (sub t₀≈x σxyz)
+
+    deriv-lst : E ⊢ Fin 3 ▹ (I ✦ dxyz (fromℕ n)) ≈ (I ✦ zJ)
+    deriv-lst = graft-bridge (t (fromℕ n)) z σxyz (sub t-lst σxyz)
+
+    deriv-mid : (i : Fin (suc n)) → E ⊢ Fin 3 ▹ (I ✦ dxyx i) ≈ (I ✦ xJ)
+    deriv-mid i = graft-bridge (t i) x σxyx (sym (cg-pair→⊢ E σxyx x z refl (xθt i)))
+
+    deriv-fork-φ : (i : Fin n) → proj₁ φ (t (inject₁ i)) (t (fsuc i))
+      → E ⊢ Fin 3 ▹ (I ✦ dxxz (inject₁ i)) ≈ (I ✦ dxxz (fsuc i))
+    deriv-fork-φ i st =
+      graft-bridge (t (inject₁ i)) (t (fsuc i)) σxxz (cg-pair→⊢ E σxxz x y refl st)
+
+    deriv-fork-ψ : (i : Fin n) → proj₁ ψ (t (inject₁ i)) (t (fsuc i))
+      → E ⊢ Fin 3 ▹ (I ✦ dxyy (inject₁ i)) ≈ (I ✦ dxyy (fsuc i))
+    deriv-fork-ψ i st =
+      graft-bridge (t (inject₁ i)) (t (fsuc i)) σxyy (cg-pair→⊢ E σxyy y z refl st)
+
+    -- discharge one interpreted identity in an arbitrary model, by soundness and the
+    -- satisfaction condition; the equation sides p, q are passed explicitly, since
+    -- they are not recoverable from the interpreted terms I ✦ p, I ✦ q
+    discharge : (𝑩 : Algebra (lsuc 0ℓ) (ι ⊔ lsuc 0ℓ)) → 𝑩 ⊨ₑ ℰ
+      → (p q : Term {𝑆 = Sig-Jonsson n} (Fin 3))
+      → E ⊢ Fin 3 ▹ (I ✦ p) ≈ (I ✦ q) → reductᴵ 𝑩 I ⊧ p ≈ q
+    discharge 𝑩 B⊨ p q d = ⊧-interp 𝑩 I {s = p} {t = q} (Soundness.sound E 𝑩 B⊨ d)
+
+    -- every model of ℰ satisfies the interpreted Jónsson identities; the fork clause
+    -- splits on the parity of i, matching the parity-normalized step of the chain
     red : (𝑩 : Algebra (lsuc 0ℓ) (ι ⊔ lsuc 0ℓ)) → 𝑩 ⊨ₑ ℰ → reductᴵ 𝑩 I ⊨ₑ Th-Jonsson n
-
-    -- d₀(x,y,z) ≈ x : the chain starts exactly at x (t-fst)
-    red 𝑩 B⊨ dxyz≈x =
-      ⊧-interp 𝑩 I {s = node zero (tri xJ yJ zJ)} {t = xJ}
-        (Soundness.sound E 𝑩 B⊨
-          (trans (≐→⊢ (graft≐[] (t zero) σxyz))
-                 (subst (λ u → E ⊢ Fin 3 ▹ (u [ σxyz ]) ≈ (ℊ 0F)) (≡sym t-fst) refl)))
-
-    -- dₙ(x,y,z) ≈ z : the chain ends derivably at z (t-lst); the setoid equality of 𝔽
-    -- *is* derivability, so t-lst feeds the substitution rule `sub` directly
-    red 𝑩 B⊨ dxyz≈z =
-      ⊧-interp 𝑩 I {s = node (fromℕ n) (tri xJ yJ zJ)} {t = zJ}
-        (Soundness.sound E 𝑩 B⊨
-          (trans (≐→⊢ (graft≐[] (t (fromℕ n)) σxyz)) (sub t-lst σxyz)))
-
-    -- dᵢ(x,y,x) ≈ x : collapse the θ-pair (x , z); every chain element is θ-tied to x
-    red 𝑩 B⊨ (dxyx≈x i) =
-      ⊧-interp 𝑩 I {s = node i (tri xJ yJ xJ)} {t = xJ}
-        (Soundness.sound E 𝑩 B⊨
-          (trans (≐→⊢ (graft≐[] (t i) σxyx)) (sym (bridge-mid i))))
-
-    -- the forks: the i-th step of the parity chain is a (θ∧φ)-step when i is even and
-    -- a (θ∧ψ)-step when i is odd — exactly the parity split of Th-Jonsson's forks
+    red 𝑩 B⊨ dxyz≈x      = discharge 𝑩 B⊨ (dxyz zero) xJ deriv-fst
+    red 𝑩 B⊨ dxyz≈z      = discharge 𝑩 B⊨ (dxyz (fromℕ n)) zJ deriv-lst
+    red 𝑩 B⊨ (dxyx≈x i)  = discharge 𝑩 B⊨ (dxyx i) xJ (deriv-mid i)
     red 𝑩 B⊨ (d-fork i) with even? (toℕ i) | t-step i
-    ... | true  | s =
-      ⊧-interp 𝑩 I {s = node (inject₁ i) (tri xJ xJ zJ)}
-                   {t = node (fsuc i) (tri xJ xJ zJ)}
-        (Soundness.sound E 𝑩 B⊨
-          (trans (≐→⊢ (graft≐[] (t (inject₁ i)) σxxz))
-            (trans (cg-pair→⊢ E σxxz x y refl (proj₂ s))
-                   (sym (≐→⊢ (graft≐[] (t (fsuc i)) σxxz))))))
-    ... | false | s =
-      ⊧-interp 𝑩 I {s = node (inject₁ i) (tri xJ yJ yJ)}
-                   {t = node (fsuc i) (tri xJ yJ yJ)}
-        (Soundness.sound E 𝑩 B⊨
-          (trans (≐→⊢ (graft≐[] (t (inject₁ i)) σxyy))
-            (trans (cg-pair→⊢ E σxyy y z refl (proj₂ s))
-                   (sym (≐→⊢ (graft≐[] (t (fsuc i)) σxyy))))))
+    ... | true   | s =
+      discharge 𝑩 B⊨ (dxxz (inject₁ i)) (dxxz (fsuc i)) (deriv-fork-φ i (proj₂ s))
+    ... | false  | s =
+      discharge 𝑩 B⊨ (dxyy (inject₁ i)) (dxyy (fsuc i)) (deriv-fork-ψ i (proj₂ s))
 ```
 
 #### Jónsson's theorem, the complete iff

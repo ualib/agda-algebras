@@ -31,6 +31,11 @@ statement" placement as `CP⇒maltsev` in `Maltsev.Permutability`.
    is consed directly; a mismatched step is preceded by a trivial step of the expected
    relation (congruence reflexivity), which flips the expectation so the real step then
    matches.  Both passes are structural in the chain.
++  `head-linked` — the one derived fact consumers need: if both step relations lie below
+   a congruence `μ`, every element of a parity chain is `μ`-related to the head.  The
+   climb is `<-weakInduction`, whose `inject₁ i → fsuc i` step is exactly the shape of
+   the `step` field; packaging it with the parity machinery keeps the main proof free of
+   any induction.
 +  `CD⇒jonsson` — the converse theorem: for a **finitary** signature, a
    congruence-distributive variety has `n + 1` Jónsson terms, i.e. the `proj₁` direction
    of `Jonsson-Statement`, at the levels of the free algebra
@@ -63,14 +68,17 @@ bridge:
    +  `dₙ(x,y,z) ≈ z` — the chain tail is derivably `z`, and the setoid equality of `𝔽`
       *is* derivability, so the `sub` rule finishes;
    +  `dᵢ(x,y,x) ≈ x` — collapse `z ↦ x` (the `θ`-pair); every chain element is θ-tied
-      to `x` because both step relations carry a θ-component (`xθt`, a
-      `<-weakInduction`);
+      to `x` because both step relations carry a θ-component (`head-linked`, applied at
+      `μ = θ` with `proj₁` twice);
    +  the forks — collapse `y ↦ x` (the `φ`-pair) at even `i` and `z ↦ y` (the `ψ`-pair)
       at odd `i`, exactly the parity of the normalized chain's `i`-th step.
 +  As in M6-5, the collapsing substitutions are chosen to be the `I ✦_` position maps, so
    every bridge output is definitionally the interpreted identity modulo one `graft≐[]`
-   step, and every collapse condition is `refl`; `⊧-interp` + `sound` discharge
-   satisfaction in an arbitrary model.
+   step, and every collapse condition is `refl`.  Two local helpers make the five
+   identity families uniform one-liners: `graft-bridge` (align `graft`, the `_✦_` node
+   action, with `_[ σ ]`, the bridge's hom, on both sides of a derivable equation) and
+   `discharge` (soundness + the satisfaction condition `⊧-interp`, with the equation
+   sides passed explicitly since they are not recoverable from the interpreted terms).
 
 ## Findings
 
@@ -81,11 +89,12 @@ bridge:
    definitionally `not (even? k)` (the M6-3 `even?` was defined by `not`-recursion,
    which pays off here), so the shifted step field transports by a two-case Boolean
    split with no numeric lemmas.
-+  **The exact head / derivable tail asymmetry is forced and sufficient.**  `pcons`
++  **The exact head / derivable tail asymmetry is forced and harmless.**  `pcons`
    cannot maintain a `≈`-head without demanding that `P` respect `≈` (a generic
    `BinRel` does not), but the head of every cons *is* the new element, so `elt-fst` can
-   be propositional equality — and the two endpoint identities need exactly this pair of
-   strengths: `d₀` is rewritten silently, `dₙ` goes through the `sub` inference rule.
+   be propositional equality.  Consumers lose nothing: `Setoid.reflexive` upgrades the
+   head to a setoid equation (`t₀≈x`), which in the free algebra is a *derivation*, so
+   both endpoint identities feed the `sub` inference rule uniformly.
 +  **The crux was already paid for.**  The "extract `n` and the terms from the join
    membership" step that #413 flags as the part with no off-the-shelf analogue is
    `finitary⇒JoinIsChain` (M6-6) plus the parity normalization above; nothing else in
@@ -95,9 +104,21 @@ bridge:
    witness.
 +  **`θ`-tying is a rung induction, not part of the chain.**  The fact that every chain
    element is θ-related to `x` is *not* stored in `ParityChain` (which is generic in two
-   raw relations); it is recovered afterwards by `<-weakInduction`, since both step
-   relations are meets with `θ` on the left.  This keeps the normalization reusable for
-   the eventual Day converse, whose chain lives in different congruences.
+   raw relations); it is recovered afterwards by the generic `head-linked` — any
+   congruence above both step relations links the head to every element — instantiated
+   at `θ` with `proj₁` twice, since both step relations are meets with `θ` on the left.
+   This keeps the normalization reusable for the eventual Day converse, whose chain
+   lives in different congruences.
+
++  **The extracted chain must be `abstract`, or conversion drowns.**  The witness `pc`
+   is built by running the whole extraction pipeline (`chain→parity` over
+   `finitary⇒JoinIsChain` over the distributivity instance), and the proof of `red`
+   mentions its fields inside every goal.  With `pc` transparent, the `with`-abstraction
+   and conversion checks in `red` normalize those fields into the full (stuck) pipeline
+   term over and over, and the module takes ~90 s to check; marking `pc` `abstract` —
+   honest, since the proof only ever reads the chain's *interface* — collapses this to
+   ~9 s.  Reverse Day will hit the identical issue; make its chain abstract from the
+   start.
 
 ## Track hygiene
 
