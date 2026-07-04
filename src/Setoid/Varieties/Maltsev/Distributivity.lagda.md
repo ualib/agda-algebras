@@ -29,35 +29,33 @@ module Setoid.Varieties.Maltsev.Distributivity where
 open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ----------------------------
-open import Data.Bool.Base                     using  ( true ; false ; if_then_else_ )
-open import Data.Fin.Base                      using  ( Fin ; toℕ ; fromℕ ; inject₁ )
-                                               renaming ( zero to fzero ; suc to fsuc )
-open import Data.Fin.Induction                 using  ( <-weakInduction )
-open import Data.Fin.Patterns                  using  ( 0F ; 1F ; 2F )
-open import Data.Nat.Base                      using  ( ℕ ; suc )
-open import Data.Product                       using  ( _×_ ; _,_ ; Σ-syntax ; proj₁ ; proj₂ )
-open import Data.Sum.Base                      using  ( inj₁ ; inj₂ )
-open import Level                              using  ( Level ; 0ℓ ; _⊔_ )
-                                               renaming ( suc to lsuc )
-open import Relation.Binary                    using  ( Setoid ; IsEquivalence )
+open import Data.Bool.Base       using  ( true ; false ; if_then_else_ )
+open import Data.Fin.Base        using  ( Fin ; toℕ ; fromℕ ; inject₁ ; zero )
+                                 renaming ( suc to fsuc )
+open import Data.Fin.Induction   using  ( <-weakInduction )
+open import Data.Fin.Patterns    using  ( 0F ; 1F ; 2F )
+open import Data.Nat.Base        using  ( ℕ ; suc )
+open import Data.Product         using  ( _×_ ; _,_ ; Σ-syntax ; proj₁ ; proj₂ )
+open import Data.Sum.Base        using  ( inj₁ ; inj₂ )
+open import Level                using  ( Level ; 0ℓ ; _⊔_ ) renaming ( suc to lsuc )
+open import Relation.Binary      using  ( Setoid ; IsEquivalence )
 
 -- -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture.Basic                          using  ( _⇔_ )
-open import Overture.Signatures                     using  ( Signature )
-open import Overture.Terms                          using  ( Term ; ℊ ; node )
-open import Overture.Terms.Interpretation           using  ( Interpretation )
-open import Setoid.Algebras.Basic                   using  ( Algebra ; 𝔻[_] ; 𝕌[_] )
-open import Setoid.Congruences.Basic                using  ( Con ; reflexive ; is-equivalence )
-open import Setoid.Congruences.Generation           using  ( _∨_ ; _∪ᵣ_ ; ∨-upperˡ
-                                                           ; ∨-upperʳ ; ∨-least )
-open import Setoid.Congruences.ChainJoin            using  ( Chain ; nil ; cons ; JoinIsChain
-                                                           ; Finitary ; finitary⇒JoinIsChain )
-open import Setoid.Congruences.Lattice              using  ( _∧_ ; _⊆_ )
-open import Setoid.Congruences.Properties           using  ( CongruenceDistributive )
-open import Setoid.Terms.Basic                      using  ( _[_] ; module Environment )
-open import Setoid.Varieties.Interpretation         using  ( reductᴵ ; _⊨ₑ_ ; module Interpret )
-open import Setoid.Varieties.Maltsev.Basic          using  ( tri ; even?)
-open import Setoid.Varieties.Maltsev.Permutability  using ( term-compatible )
+open import Overture.Basic                   using  ( _⇔_ )
+open import Overture.Signatures              using  ( Signature )
+open import Overture.Terms                   using  ( Term ; ℊ ; node )
+open import Overture.Terms.Interpretation    using  ( Interpretation )
+open import Setoid.Algebras.Basic            using  ( Algebra ; 𝔻[_] ; 𝕌[_] )
+open import Setoid.Congruences.Basic         using  ( Con ; reflexive ; is-equivalence )
+open import Setoid.Congruences.Generation    using  ( _∨_ ; _∪ᵣ_ ; ∨-upperˡ
+                                                    ; ∨-upperʳ ; ∨-least )
+open import Setoid.Congruences.ChainJoin     using  ( Chain ; nil ; cons ; JoinIsChain
+                                                    ; Finitary ; finitary⇒JoinIsChain )
+open import Setoid.Congruences.Lattice       using  ( _∧_ ; _⊆_ )
+open import Setoid.Congruences.Properties    using  ( CongruenceDistributive )
+open import Setoid.Terms.Basic               using  ( _[_] ; module Environment )
+open import Setoid.Varieties.Interpretation  using  ( reductᴵ ; _⊨ₑ_ ; module Interpret )
+open import Setoid.Varieties.Maltsev.Basic   using  ( tri ; even? ; term-compatible )
 
 open import Function using ( Func )
 open Func using ( cong ) renaming ( to to _⟨$⟩_ )
@@ -102,7 +100,7 @@ module _ (n : ℕ) where
     d-fork  : Fin n → Eq-Jonsson         -- consecutive dᵢ, dᵢ₊₁ agree (parity-dependent)
 
   Th-Jonsson : Eq-Jonsson → Term {𝑆 = Sig-Jonsson} (Fin 3) × Term {𝑆 = Sig-Jonsson} (Fin 3)
-  Th-Jonsson dxyz≈x      = d fzero x y z , x
+  Th-Jonsson dxyz≈x      = d zero x y z , x
   Th-Jonsson (dxyx≈x i)  = d i x y x , x
   Th-Jonsson dxyz≈z      = d (fromℕ n) x y z , z
   Th-Jonsson (d-fork i) = if even? (toℕ i)
@@ -164,8 +162,8 @@ module _
   eval-d i i₀ i₁ i₂ η = cong ⟦ Iⱼ i ⟧ λ { 0F → ≈refl ; 1F → ≈refl ; 2F → ≈refl }
 
   -- the two endpoint identities and the "x,y,x" family, curried, from satⱼ
-  d-fst : (a b c : 𝕌[ 𝑩 ]) → d𝑩 fzero a b c ≈ a
-  d-fst a b c = ≈trans (≈sym (eval-d fzero 0F 1F 2F (tri a b c))) (satⱼ dxyz≈x (tri a b c))
+  d-fst : (a b c : 𝕌[ 𝑩 ]) → d𝑩 zero a b c ≈ a
+  d-fst a b c = ≈trans (≈sym (eval-d zero 0F 1F 2F (tri a b c))) (satⱼ dxyz≈x (tri a b c))
 
   d-lst : (a b c : 𝕌[ 𝑩 ]) → d𝑩 (fromℕ n) a b c ≈ c
   d-lst a b c = ≈trans (≈sym (eval-d (fromℕ n) 0F 1F 2F (tri a b c))) (satⱼ dxyz≈z (tri a b c))
@@ -230,7 +228,7 @@ climbs the rungs `i = 0 … n`: the fork identities glue consecutive rungs and t
       hz : (i : Fin (suc n)) → proj₁ γ (d𝑩 i a a b) (d𝑩 i a b b)
       hz i = horiz a b chn i
 
-      base-rung : Rung fzero
+      base-rung : Rung zero
       base-rung =   reflexive (proj₂ γ) (≈sym (d-fst a a b))
                   , reflexive (proj₂ γ) (≈sym (d-fst a b b))
 

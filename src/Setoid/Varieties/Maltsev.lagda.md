@@ -9,14 +9,13 @@ author: "agda-algebras development team"
 
 This is the [Setoid.Varieties.Maltsev][] module of the [Agda Universal Algebra Library][].
 
-
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Setoid.Varieties.Maltsev where
 
-open import Setoid.Varieties.Maltsev.Basic          public
-open import Setoid.Varieties.Maltsev.Permutability  public
-open import Setoid.Varieties.Maltsev.Distributivity public
-open import Setoid.Varieties.Maltsev.Modularity     public
+open import Setoid.Varieties.Maltsev.Basic           public
+open import Setoid.Varieties.Maltsev.Permutability   public
+open import Setoid.Varieties.Maltsev.Distributivity  public
+open import Setoid.Varieties.Maltsev.Modularity      public
 ```

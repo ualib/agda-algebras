@@ -10,26 +10,14 @@ author: "the agda-algebras development team"
 
 This is the [Setoid.Varieties.Maltsev.Permutability][] module of the [Agda Universal Algebra Library][].
 
-A **Maltsev condition** is a property of a variety equivalent to the existence of
-terms satisfying prescribed identities.  The three most basic concern the shape of
-the congruence lattices of the algebras in the variety:
+[Setoid.Varieties.Maltsev.Basic][] fixed the *term-existence* side of CP as a theory
+interpretation: `HasMaltsevTerm ℰ = Th-Maltsev ≼ ℰ`.[^1]
 
-+  **congruence permutability** (CP) — composition of congruences is commutative;
-+  **congruence distributivity** (CD) — every congruence lattice is distributive;
-+  **congruence modularity** (CM) — every congruence lattice is modular.
-
-[Setoid.Varieties.Maltsev][] fixed the *term-existence* side of CP as a theory
-interpretation: `HasMaltsevTerm ℰ = Th-Maltsev ≼ ℰ`.  This module connects that to
-the *lattice* side built in [Setoid.Congruences.Permutability][], proving the
-concrete (and required) direction of **Maltsev's theorem**:[^maltsev]
+The present module connects that to the *lattice* side (built in
+[Setoid.Congruences.Permutability][]) and proves the concrete direction of
+**Maltsev's theorem**:[^maltsev]
 
 >  a variety with a Maltsev term is congruence-permutable.
-
-The design choice — encoding each condition as `Th-X ≼ ℰ` rather than as a record
-bundling a term with its identities, or an inductive scheme of identities — is discussed
-in the design note `docs/notes/m6-3-maltsev-conditions.md`; in short, the interpretation
-encoding *is* the "term plus its identities", packaged so that the whole interpretability
-apparatus ([Setoid.Varieties.Interpretation][]) applies uniformly to every condition.
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -39,33 +27,31 @@ module Setoid.Varieties.Maltsev.Permutability where
 open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ----------------------------
-open import Data.Fin.Base                      using  ( Fin )
-open import Data.Fin.Patterns                  using  ( 0F ; 1F ; 2F )
-open import Data.Product                       using  ( _×_ ; _,_ ; Σ-syntax
-                                                      ; proj₁ ; proj₂ )
-open import Level                              using  ( Level ; 0ℓ ; _⊔_ )
-                                               renaming ( suc to lsuc )
-open import Relation.Binary                    using  ( Setoid ; IsEquivalence )
+open import Data.Fin.Base      using  ( Fin )
+open import Data.Fin.Patterns  using  ( 0F ; 1F ; 2F )
+open import Data.Product       using  ( _×_ ; _,_ ; Σ-syntax ; proj₁ ; proj₂ )
+open import Level              using  ( Level ; 0ℓ ; _⊔_ ) renaming ( suc to lsuc )
+open import Relation.Binary    using  ( Setoid ; IsEquivalence )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture.Signatures                using  ( 𝓞 ; 𝓥 ; Signature )
-open import Overture.Terms                     using  ( Term ; ℊ ; node )
+open import Overture.Signatures                using  ( Signature )
+open import Overture.Terms                     using  ( Term ; ℊ )
 open import Overture.Terms.Interpretation      using  ( Interpretation ; _✦_ )
 open import Setoid.Algebras.Basic              using  ( Algebra ; 𝔻[_] ; 𝕌[_] )
-open import Setoid.Congruences.Basic           using  ( Con ; reflexive
-                                                      ; is-equivalence ; is-compatible )
+open import Setoid.Congruences.Basic           using  ( Con ; reflexive ; is-equivalence )
 open import Setoid.Congruences.Generation      using  ( Cg ; base )
 open import Setoid.Congruences.Permutability   using  ( CongruencePermutable )
 open import Setoid.Terms.Basic                 using  ( Sub ; _[_] ; module Environment )
 open import Setoid.Terms.Interpretation        using  ( graft≐[] )
-open import Setoid.Varieties.EquationalLogic   using  (_⊧_≈_)
+open import Setoid.Varieties.EquationalLogic   using  ( _⊧_≈_ )
 open import Setoid.Varieties.FreeBridge        using  ( ❴_,_❵ ; pᵣ ; cg-pair→⊢ ; toEq )
 open import Setoid.Varieties.FreeSubstitution  using  ( ≐→⊢ )
 open import Setoid.Varieties.Interpretation    using  ( reductᴵ ; _⊨ₑ_ ; ⊧-interp )
 open import Setoid.Varieties.Maltsev.Basic     using  ( Sig-Maltsev ; m-Op ; m ; tri
                                                       ; mxxy≈y ; mxyy≈x ; Th-Maltsev
-                                                      ; HasMaltsevTerm )
-open import Setoid.Varieties.SoundAndComplete  using  ( Eq ; _⊢_▹_≈_ ; module FreeAlgebra
+                                                      ; HasMaltsevTerm ; term-compatible )
+open import Setoid.Varieties.SoundAndComplete  using  ( Eq ; _⊢_▹_≈_
+                                                      ; module FreeAlgebra
                                                       ; module Soundness )
 
 -- the generators of the Maltsev signature (the source signature of the interpretation)
@@ -76,29 +62,6 @@ open Func using ( cong ) renaming ( to to _⟨$⟩_ )
 open _⊢_▹_≈_ using ( refl ; sym ; trans )
 
 private variable α ρ χ ι ℓ : Level
-```
-
-#### Congruences are compatible with term operations
-
-The Maltsev argument needs that the chosen Maltsev *term operation* respects every
-congruence.  This is an instance of a fundamental fact, which we prove once in full
-generality: Given an algebra `𝑩` and a term `t` in the signature of `𝑩`, every
-congruence `ψ` of `𝑩` is compatible with the evaluation of `t` — if two environments
-are pointwise `ψ`-related at the leaves, the values of `t` are `ψ`-related.  The
-proof is the obvious structural induction.
-
-```agda
-module _
-  {𝑆 : Signature 𝓞 𝓥}
-  {𝑩 : Algebra {𝑆 = 𝑆} α ρ}
-  where
-  open Environment 𝑩 using ( ⟦_⟧ )
-
-  term-compatible : {V : Type χ}(ψ : Con 𝑩 ℓ)(t : Term V){η η′ : V → 𝕌[ 𝑩 ]}
-    → (∀ v → proj₁ ψ (η v) (η′ v)) → proj₁ ψ (⟦ t ⟧ ⟨$⟩ η) (⟦ t ⟧ ⟨$⟩ η′)
-  term-compatible ψ (ℊ v) h = h v
-  term-compatible ψ (node f ts) h =
-    is-compatible (proj₂ ψ) f (λ i → term-compatible ψ (ts i) h)
 ```
 
 #### Maltsev's theorem: a Maltsev term implies congruences permute
@@ -344,6 +307,8 @@ module _ {𝑆 : Signature 0ℓ 0ℓ}{X : Type 0ℓ}{Idx : Type ι}
 ```
 
 ---
+
+[^1]: The design choice — encoding each condition as `Th-X ≼ ℰ` rather than as a record bundling a term with its identities, or an inductive scheme of identities — is discussed in the design note `docs/notes/m6-3-maltsev-conditions.md`; in short, the interpretation encoding *is* the "term plus its identities", packaged so that the whole interpretability apparatus ([Setoid.Varieties.Interpretation][]) applies uniformly to every condition.
 
 [^maltsev]: A. I. Mal'cev, *On the general theory of algebraic systems* (Russian), Mat. Sb. (N.S.) **35(77)** (1954), 3–20; Engl. transl., *Amer. Math. Soc. Transl.* (2) **27** (1963), 125–142.  Original at [Math-Net.Ru](http://www.mathnet.ru/sm5264); translation in [*Eighteen Papers on Algebra* (AMS)](https://pubs.ams.org/ebooks/trans2/027/).
 
