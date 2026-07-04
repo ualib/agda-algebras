@@ -3065,7 +3065,7 @@ Design discussion: how to encode Maltsev conditions uniformly?  Options include 
 
 - [x] `HasMaltsevTerm : Variety → Term → Type` — landed as the interpretation predicate `HasMaltsevTerm ℰ = Th-Maltsev ≼ ℰ` (`Setoid.Varieties.Maltsev`).
 - [x] Specific Maltsev terms: Jónsson terms (CD), Day terms (CM), Maltsev operation (CP) — `Th-Maltsev`, `Th-Jonsson n`, `Th-Day n`, with `HasMaltsevTerm` / `HasJonssonTerms n` / `HasDayTerms n` (`Setoid.Varieties.{Maltsev,MaltsevConditions}`).
-- [ ] Jónsson's theorem: a variety is CD iff Jónsson terms exist — stated (`Jonsson-Statement`); proof tracked in #412 (forward) and #413 (converse).
+- [x] Jónsson's theorem: a variety is CD iff Jónsson terms exist — complete iff for finitary signatures, `jonsson-theorem` in `Setoid.Varieties.Maltsev.Distributivity`: forward `jonsson-finitary⇒CongruenceDistributiveVariety` (M6-6, #412), converse `CD⇒jonsson` (M6-7, #413; design note `docs/notes/m6-7-reverse-jonsson.md`).
 - [x] CP iff a Maltsev term exists — forward direction `MaltsevTerm⇒CP` / `maltsev⇒CP` (M6-3, #409); converse `CP⇒maltsev` (`Setoid.Varieties.MaltsevConditions`, M6-5, #411) inhabiting `CP⇒maltsev-Statement`, built on the free-algebra bridge (`Setoid.Varieties.FreeBridge`, M6-4, #410).
 - [ ] Day's theorem for CM — stated (`Day-Statement`); proof tracked in #412 (forward) and #413 (converse).
 
@@ -3085,7 +3085,7 @@ The CP track landed in PR #409:
 
 The chosen encoding is the interpretation `Th-X ≼ ℰ` (preferred over the issue's options (a) record and (b) inductive scheme; see the note).
 
-Deferred proofs are tracked in successor issues: #410 ([M6-4] free-algebra `Cg`↔derivability bridge — **landed**, `Setoid.Varieties.FreeBridge`), #411 ([M6-5] CP converse — **landed**, `CP⇒maltsev` in `Setoid.Varieties.MaltsevConditions`), #412 ([M6-6] forward Jónsson/Day), #413 ([M6-7] converse Jónsson/Day).  See the design note `docs/notes/m6-4-free-bridge.md` for #410 / #411.
+Deferred proofs are tracked in successor issues: #410 ([M6-4] free-algebra `Cg`↔derivability bridge — **landed**, `Setoid.Varieties.FreeBridge`), #411 ([M6-5] CP converse — **landed**, `CP⇒maltsev` in `Setoid.Varieties.MaltsevConditions`), #412 ([M6-6] forward Jónsson — **landed**; forward Day deferred indefinitely), #413 ([M6-7] converse Jónsson — **landed**, `CD⇒jonsson` / `jonsson-theorem` in `Setoid.Varieties.Maltsev.Distributivity`; converse Day remains).  See the design notes `docs/notes/m6-4-free-bridge.md` (#410 / #411), `docs/notes/m6-6-forward-jonsson-day.md` (#412), and `docs/notes/m6-7-reverse-jonsson.md` (#413).
 
 ---
 
