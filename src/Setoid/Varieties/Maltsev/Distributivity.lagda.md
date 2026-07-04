@@ -40,7 +40,7 @@ open import Data.Sum.Base        using  ( inj₁ ; inj₂ )
 open import Level                using  ( Level ; 0ℓ ; _⊔_ ) renaming ( suc to lsuc )
 open import Relation.Binary      using  ( Setoid ; IsEquivalence )
 
--- -- Imports from the Agda Universal Algebra Library ----------------------------
+-- Imports from the Agda Universal Algebra Library ----------------------------
 open import Overture.Basic                   using  ( _⇔_ )
 open import Overture.Signatures              using  ( Signature )
 open import Overture.Terms                   using  ( Term ; ℊ ; node )
