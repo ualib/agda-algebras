@@ -211,7 +211,7 @@ which was designed to be reused here.
 +  As in the Maltsev and Jónsson converses, the collapsing substitutions are chosen to
    be exactly the position maps `I ✦_`{.AgdaFunction} uses on a Day application, so each
    bridge output is *definitionally* the interpreted identity, modulo the one term-level
-   shim `graft≐[]`{.AgdaFunction}; `⊧-interp`{.AgdaFunction} and `sound`{.AgdaFunction}ness
+   shim `graft≐[]`{.AgdaFunction}; `⊧-interp`{.AgdaFunction} and `Soundness.sound`{.AgdaFunction}
    then discharge the satisfaction obligation in an arbitrary model.
 
 Because the free algebra is built on the variable type `Fin 4 : Type 0ℓ`, and the free
