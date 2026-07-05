@@ -17,11 +17,12 @@ open import Overture using (𝓞 ; 𝓥 ; Signature)
 module Setoid.Homomorphisms.Properties  where
 
 -- Imports from Agda and the Agda Standard Library ------------------------------------------
-open import Data.Product                            using ( _,_ ; proj₁ ; proj₂ )
-open import Function      renaming ( Func to _⟶_ )  using ( id ; _$_ ; _∘_ )
-open import Level                                   using ( Level ; _⊔_ )
-open import Relation.Binary                         using ( Setoid )
-open import Relation.Binary.PropositionalEquality   using ( _≡_ ; refl)
+open import Data.Product                           using ( _,_ ; proj₁ ; proj₂ )
+open import Function  renaming ( Func to _⟶_ )     using ( id ; _$_ ; _∘_ )
+open import Level                                  using ( Level ; _⊔_ )
+open import Relation.Binary                        using ( Setoid )
+                                                   renaming ( Rel to BinaryRel ; _⇒_ to _⊆_)
+open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl)
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------
 open import Setoid.Algebras                using  ( Algebra ; _^_; Lift-Algˡ ; Lift-Algʳ
@@ -84,7 +85,7 @@ kernel.  This is exactly `Cg-least`{.AgdaFunction} applied to the kernel congrue
 such, `Cg R`.
 ```agda
 Cg⊆ker : {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ} {𝑩 : Algebra β ρᵇ}
-  (h : hom 𝑨 𝑩) {R : BinaryRelation 𝕌[ 𝑨 ] ℓ}
+  (h : hom 𝑨 𝑩) {R : BinaryRel 𝕌[ 𝑨 ] ℓ}
   → R ⊆ proj₁ (kercon h) → Gen R ⊆ proj₁ (kercon h)
 
 Cg⊆ker h R⊆k = Cg-least (kercon h) R⊆k
@@ -97,7 +98,8 @@ We prove that the operations of lifting and lowering of a setoid algebra are hom
 
 ```agda
 module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{ℓ : Level} where
-  open Level using ( lift ; lower )
+  open Level                       using ( lift ; lower )
+  open IsHom                       using (compatible)
   open Setoid 𝔻[ 𝑨 ]              using () renaming ( _≈_ to _≈₁_ ; refl to refl₁ )
   open Setoid 𝔻[ Lift-Algˡ 𝑨 ℓ ]  using () renaming ( _≈_ to _≈ˡ_ ; refl to reflˡ)
   open Setoid 𝔻[ Lift-Algʳ 𝑨 ℓ ]  using () renaming ( _≈_ to _≈ʳ_ )

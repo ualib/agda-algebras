@@ -130,7 +130,7 @@ so belongs to `S (P 𝒦)`.
    Goal = trans (sym (fl p)) (trans subgoal (fl q))
 
   hom𝔽ℭ : hom 𝔽[ X ] ℭ
-  hom𝔽ℭ = (proj₁ (HomFactor ℭ homℭ hom𝔽[ X ] ker𝔽⊆kerℭ hom𝔽[ X ]-is-epic))
+  hom𝔽ℭ = (proj₁ (HomFactor homℭ hom𝔽[ X ] ker𝔽⊆kerℭ hom𝔽[ X ]-is-epic))
 
   open Environment ℭ
 

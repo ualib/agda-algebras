@@ -27,7 +27,7 @@ import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 open import Overture                    using  ( kernelRel ; 𝓞 ; 𝓥 ; Signature)
 open import Setoid.Functions            using  ( Image_∋_ ; IsSurjective ; SurjInv
                                                ; SurjInvIsInverseʳ ; epic-factor )
-open import Setoid.Algebras    {𝑆 = 𝑆}  using  ( Algebra ; 𝕌[_] ; _^_ ; 𝔻[_] )
+open import Setoid.Algebras             using  ( Algebra ; 𝕌[_] ; _^_ ; 𝔻[_] )
 open import Setoid.Homomorphisms.Basic  using  ( hom ; IsHom ; compatible-map
                                                ; epi ; IsEpi)
 
@@ -48,7 +48,7 @@ If `g : hom 𝑨 𝑩`, `h : hom 𝑨 𝑪`, `h` is surjective, and `ker h ⊆ k
 We will prove this in case h is both surjective and injective.
 
 ```agda
-module _  {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ} (𝑩 : Algebra β ρᵇ) {𝑪 : Algebra γ ρᶜ}
+module _  {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ} {𝑩 : Algebra β ρᵇ} {𝑪 : Algebra γ ρᶜ}
           (gh : hom 𝑨 𝑩)(hh : hom 𝑨 𝑪) where
 
   open Algebra 𝑪 using ( Interp )

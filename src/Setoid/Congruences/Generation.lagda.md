@@ -168,7 +168,7 @@ the *principal* congruence collapsing the one pair.
 
 ```agda
 module principal (𝑨 : Algebra α ρ) where
-  data ❴_,_❵ (a b : 𝕌[ 𝑨 ]) : BinRel 𝕌[ 𝑨 ] α where
+  data ❴_,_❵ (a b : 𝕌[ 𝑨 ]) : BinaryRel 𝕌[ 𝑨 ] α where
     pᵣ : ❴ a , b ❵ a b
   open ❴_,_❵
 ```
