@@ -98,8 +98,8 @@ them by a one-line structural induction, at the inductive equality `_≐_`; `≐
 
 `recover` / `recover-gen` / `recover-swap`: for two variables `u , v` and a substitution
 that merges them, every pair in `Cg ❴ ℊ u , ℊ v ❵` is recovered as a derivable equation
-after the merge — in particular the generators themselves and (by `symm`) the swapped
-pair.  This exercises the bridge end-to-end on `base`/`symm` memberships.
+after the merge — in particular the generators themselves and (by `symmetric`) the swapped
+pair.  This exercises the bridge end-to-end on `base`/`symmetric` memberships.
 
 ## The converse of Maltsev (M6-5)
 

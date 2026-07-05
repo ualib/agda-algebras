@@ -11,7 +11,7 @@ author: "the agda-algebras development team"
 This is the [Setoid.Congruences.ChainJoin][] module of the [Agda Universal Algebra Library][].
 
 [Setoid.Congruences.Generation][] builds the join `θ ∨ φ = Cg(θ ∪ φ)` as the
-*inductively generated* congruence `Gen(θ ∪ φ)`, whose `comp` constructor closes the
+*inductively generated* congruence `Gen(θ ∪ φ)`, whose `compatible` constructor closes the
 relation under the basic operations.  That closure is needed for **infinitary**
 signatures.  For a **finitary** signature — every operation symbol has a finite arity,
 the universal-algebraist's standing assumption — the join collapses to something far more
@@ -128,7 +128,7 @@ module _ {𝑩 : Algebra α ρ}{R : 𝕌[ 𝑩 ] → 𝕌[ 𝑩 ] → Type ℓ} 
 
 #### A chain is below the generated congruence
 
-Each step is `base`, the empty walk is `rfl`, concatenation is `tran`.
+Each step is `base`, the empty walk is `rfl`, concatenation is `transitive`.
 
 ```agda
 Chain⊆Gen : (𝑩 : Algebra α ρ)(θ φ : Con 𝑩 ℓ){x y : 𝕌[ 𝑩 ]}

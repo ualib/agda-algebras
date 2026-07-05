@@ -16,7 +16,8 @@ identities, as a theory interpretation `Th-Jonsson n ≼ ℰ` — and proves
 
 1.  Jónsson terms ⟹ CD: the staircase, with the finitary collapse of the join;
 2.  CD ⟹ Jónsson terms: the converse, which extracts the chain of Jónsson terms from
-    a congruence of the free algebra `𝔽[ Fin 3 ]`).
+    a congruence of the free algebra `𝔽[ Fin 3 ]`.
+
 For a finitary signature the two halves assemble into the complete iff
 `jonsson-theorem`{.AgdaFunction}.[^jonsson]
 
@@ -94,7 +95,7 @@ They are encoded exactly as the Maltsev term was: a signature `Sig-Jonsson n` of
     dᵢ(x,x,z) ≈ dᵢ₊₁(x,x,z)   (i even),  dᵢ(x,y,y) ≈ dᵢ₊₁(x,y,y)   (i odd).
 
 The definition `HasJonssonTerms n ℰ = Th-Jonsson n ≼ ℰ` expresses that `ℰ` admits
-`n+1` Jónsson terms iff the Jónsson theory interprets into it."
+`n+1` Jónsson terms iff the Jónsson theory interprets into it.
 
 ```agda
 module _ (n : ℕ) where
@@ -138,7 +139,7 @@ The forward direction of Jónsson's theorem runs the Jónsson terms along a
 **finite alternating walk** from `a` to `b` whose steps lie in `φ` or in `ψ`.[^2]
 
 Classically such a walk witnesses `(a , b) ∈ φ ∨ ψ`; here the join `φ ∨ ψ` is the
-*inductively generated* congruence `Cg (φ ∪ ψ)`, whose `comp` closure makes it strictly
+*inductively generated* congruence `Cg (φ ∪ ψ)`, whose `compatible` closure makes it strictly
 larger than the walk relation for an **infinitary** signature.  So the walk relation is
 isolated as the type `Chain` ([Setoid.Congruences.ChainJoin][]), the staircase is proved
 against it in full generality, and the two are identified — `JoinIsChain`,

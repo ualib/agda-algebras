@@ -34,7 +34,7 @@ finitary corollary live in `Setoid.Varieties.Maltsev.Distributivity` (part of th
    `⊎` of `_∪ᵣ_`) as a φ-step or a ψ-step.  The carrier algebra is an *explicit*
    parameter, since it cannot be inferred from a relation on `𝕌[ 𝑩 ]` (the carrier
    projection is not injective).  `Chain⊆Gen` records that a chain is below the generated
-   join `Cg(φ ∪ ψ)` (`base`/`rfl`/`tran`).
+   join `Cg(φ ∪ ψ)` (`base`/`rfl`/`transitive`).
 
 +  The **generalized curried extraction**, the verbatim `Fin (n+1)` analogue of the
    Maltsev `m𝑩` / `eval-m` / `satM` block: `d𝑩 i a b c = ⟦ Iⱼ i ⟧ ⟨$⟩ tri a b c`, the
@@ -78,7 +78,7 @@ staircase, but phrased so each part is a small induction.
    (`d-mid`) and `a θ b` push the third argument from `b` to `a` (`dpin`).  Each single
    chain step then contributes its φ- or ψ-component (`d-compat` in the middle argument),
    landing the step in `θ∧φ` or `θ∧ψ`, hence in `γ` (`∨-upperˡ` / `∨-upperʳ`).  There is
-   **no** `comp` case, because a chain is built only from `nil`/`cons`.
+   **no** `compatible` case, because a chain is built only from `nil`/`cons`.
 
 +  **Vertical** (`rungs`, `Data.Fin.Induction.<-weakInduction`).  The rung predicate
    `Rung i = (a γ dᵢ(a,a,b)) × (a γ dᵢ(a,b,b))` climbs `i = 0 … n`.  The base is the
@@ -94,13 +94,13 @@ which is precisely how the fork `d-fork i : Fin n` connects rung `inject₁ i` t
 ## The Gen-vs-chain obstruction
 
 The library's join is `_∨_ = Cg(φ ∪ ψ) = Gen(φ ∪ ψ)`, the *inductively generated*
-congruence (`Setoid.Congruences.Generation`).  Its `comp` constructor closes the
+congruence (`Setoid.Congruences.Generation`).  Its `compatible` constructor closes the
 relation under the basic operations, which is necessary and correct for **infinitary**
 signatures (arities in this library are arbitrary types).  This is exactly where the
 elementary term argument cannot reach the literal lattice statement:
 
 +  The horizontal relation `dᵢ(a,u,b) γ dᵢ(a,v,b)` (`u`, `v` the join-variable) is
-   **provably not closed under `comp`**.  When an operation `f` is applied to the
+   **provably not closed under `compatible`**.  When an operation `f` is applied to the
    join-variable, `dᵢ(a, f(s⃗), b)` does not decompose into the `dᵢ(a, sₗ, b)`: the
    join-variable sits in a fixed argument slot of a fixed term, and operations applied
    there do not distribute out.  So a direct induction over `Gen` cannot carry the
@@ -175,7 +175,7 @@ concrete need.
 +  **The obstruction is a feature, named once — then discharged.**  Rather than silently
    assume finitary arities, the development proves the general chain statement and surfaces
    `JoinIsChain` as the lone finitary lever — keeping the theorem honest about exactly what
-   the infinitary `comp` costs — and then pays that cost explicitly for finitary signatures
+   the infinitary `compatible` costs — and then pays that cost explicitly for finitary signatures
    in `Setoid.Congruences.ChainJoin` (`finitary⇒JoinIsChain`).  The general chain theorem
    and the unconditional finitary theorem coexist: nothing is assumed that is not either
    proved or quantified away.

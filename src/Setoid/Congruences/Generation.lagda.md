@@ -19,7 +19,7 @@ relation `R` on the carrier of `𝑨` there is a least congruence `Cg R` contain
 We build `Cg R` as the inductively-defined closure `Gen R` of `R` under the
 congruence-forming rules: it contains `R` (`base`), it contains the setoid equality
 `_≈_` (`rfl`), and it is closed under symmetry, transitivity, and the basic
-operations (`symm`, `tran`, `comp`).  The following two facts make this *the*
+operations (`symmetric`, `transitive`, `compatible`).  The following two facts make this *the*
 generated congruence and constitute the **Congruence Generation Theorem**:
 
 +  `Cg R` is a congruence containing `R` (so it is *an* upper bound of `R`); and
