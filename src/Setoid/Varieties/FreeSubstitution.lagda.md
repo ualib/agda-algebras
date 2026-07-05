@@ -59,9 +59,10 @@ The kit also has a *semantic* face, used by the converse Maltsev conditions:
    relatively free algebra `𝔽[_]`{.AgdaFunction}
    ([Setoid.Varieties.SoundAndComplete][]) as a homomorphism, whose congruence is
    precisely the `sub`{.AgdaInductiveConstructor} rule;
-+  `cg-pair→⊢`{.AgdaFunction} — the free-algebra congruence/derivability bridge: a
-   membership in a principal congruence `Cg ❴ a , b ❵` of `𝔽[ Δ ]` becomes a derivable
-   equation after any substitution that collapses the generating pair.
++  `cg-pair→⊢`{.AgdaFunction} / `cg-pairs→⊢`{.AgdaFunction} — the free-algebra
+   congruence/derivability bridge: a membership in a principal congruence
+   `Cg ❴ a , b ❵` of `𝔽[ Δ ]` — or in the join of two principal congruences — becomes
+   a derivable equation after any substitution that collapses the generating pair(s).
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -73,6 +74,7 @@ module Setoid.Varieties.FreeSubstitution {𝑆 : Signature 𝓞 𝓥} where
 -- Imports from Agda and the Agda Standard Library ----------------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
 open import Data.Product     using ( _,_ ; proj₁ )
+open import Data.Sum.Base    using ( inj₁ ; inj₂ )
 open import Function         using ( Func )
 open import Level            using ( Level )
 open import Relation.Binary  using () renaming ( _⇒_ to _⊆_ )
@@ -82,7 +84,8 @@ import Relation.Binary.PropositionalEquality as ≡
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Overture.Terms                      {𝑆 = 𝑆} using ( Term ; ℊ )
 open import Setoid.Algebras.Basic               {𝑆 = 𝑆} using ( 𝔻[_] )
-open import Setoid.Congruences.Generation       {𝑆 = 𝑆} using ( Gen ; base ; symmetric
+open import Setoid.Congruences.Generation       {𝑆 = 𝑆} using ( Gen ; Cg ; base
+                                                               ; symmetric ; _∨_ ; _∪ᵣ_
                                                                ; module principal )
 open import Setoid.Homomorphisms.Basic                   using ( hom ; mkIsHom )
 open import Setoid.Homomorphisms.Kernels                 using ( kercon )
@@ -175,6 +178,28 @@ the free algebra ([Setoid.Varieties.Maltsev.Permutability][],
     where
     incl : ❴ a , b ❵ ⊆ proj₁ (kercon (subhom σ))
     incl pᵣ = coll
+```
+
+The converse of Day's theorem ([Setoid.Varieties.Maltsev.Modularity][]) needs the same
+bridge for the **join of two principal congruences**: two of the congruences in Day's
+construction collapse *two* generator pairs at once, so their collapsing substitutions
+must kill both.  Given a substitution `σ` that collapses the pair `(a , b)` *and* the
+pair `(c , d)`, every pair in `Cg ❴ a , b ❵ ∨ Cg ❴ c , d ❵` becomes derivably equal
+after `σ`.  The proof is the same `Cg⊆ker`{.AgdaFunction} instance: the union of the
+two generating congruences is included in the kernel componentwise, each component by
+`cg-pair→⊢`{.AgdaFunction}.
+
+```agda
+  cg-pairs→⊢ : (σ : Sub Γ Δ)(a b c d : Term Δ)
+    → E ⊢ Γ ▹ a [ σ ] ≈ b [ σ ]
+    → E ⊢ Γ ▹ c [ σ ] ≈ d [ σ ]
+    → {s t : Term Δ} → proj₁ (Cg ❴ a , b ❵ ∨ Cg ❴ c , d ❵) s t
+    → E ⊢ Γ ▹ s [ σ ] ≈ t [ σ ]
+  cg-pairs→⊢ σ a b c d coll-ab coll-cd = Cg⊆ker (subhom σ) incl
+    where
+    incl : (Cg ❴ a , b ❵ ∪ᵣ Cg ❴ c , d ❵) ⊆ proj₁ (kercon (subhom σ))
+    incl (inj₁ p) = cg-pair→⊢ σ a b coll-ab p
+    incl (inj₂ q) = cg-pair→⊢ σ c d coll-cd q
 ```
 
 #### Smoke test: recovering a derivable identity from a principal congruence
