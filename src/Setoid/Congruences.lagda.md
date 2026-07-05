@@ -16,7 +16,7 @@ open import Overture using (𝓞 ; 𝓥 ; Signature)
 module Setoid.Congruences {𝑆 : Signature 𝓞 𝓥} where
 
 open import Setoid.Congruences.Basic {𝑆 = 𝑆} public
-open import Setoid.Congruences.ChainJoin {𝑆 = 𝑆}  public
+open import Setoid.Congruences.ChainJoin   public
 open import Setoid.Congruences.CompleteLattice {𝑆 = 𝑆} public
 open import Setoid.Congruences.Generation {𝑆 = 𝑆} public
 open import Setoid.Congruences.Lattice {𝑆 = 𝑆} public

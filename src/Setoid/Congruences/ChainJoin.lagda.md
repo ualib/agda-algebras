@@ -35,40 +35,38 @@ algebra.
 
 open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 
-module Setoid.Congruences.ChainJoin {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Congruences.ChainJoin where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
-open import Agda.Primitive            using () renaming ( Set to Type )
-open import Data.Bool.Base            using ( Bool ; true ; false ; T ; if_then_else_ )
-open import Data.Empty                using ( ⊥-elim )
-open import Data.Fin.Base             using ( Fin ; toℕ ; fromℕ< )
-open import Data.Fin.Properties       using ( _≟_ ; toℕ<n ; toℕ-fromℕ< ; toℕ-injective )
-open import Data.Nat.Base             using ( ℕ ; zero ; suc ; _<_ ; _<ᵇ_ ; _≤_ )
-open import Data.Nat.Properties       using ( <⇒<ᵇ ; ≤-refl ; ≤-trans ; n<1+n ; n≤1+n )
-open import Data.Product              using ( Σ-syntax ; _,_ ; proj₁ ; proj₂ )
-open import Data.Sum.Base             using ( inj₁ ; inj₂ ; [_,_] )
-open import Function.Base             using ( _∘_ ; const )
-open import Function.Bundles          using ( _↔_ ; Inverse )
-open import Level                     using ( Level ; _⊔_ )
-open import Relation.Nullary.Decidable using ( yes ; no )
-open import Relation.Binary           using ( Setoid ; IsEquivalence )
+open import Agda.Primitive                  using () renaming ( Set to Type )
+open import Data.Bool.Base                  using ( Bool ; true ; false ; T ; if_then_else_ )
+open import Data.Empty                      using ( ⊥-elim )
+open import Data.Fin.Base                   using ( Fin ; toℕ ; fromℕ< )
+open import Data.Fin.Properties             using ( _≟_ ; toℕ<n ; toℕ-fromℕ< ; toℕ-injective )
+open import Data.Nat.Base                   using ( ℕ ; zero ; suc ; _<_ ; _<ᵇ_ ; _≤_ )
+open import Data.Nat.Properties             using ( <⇒<ᵇ ; ≤-refl ; ≤-trans ; n<1+n ; n≤1+n )
+open import Data.Product                    using ( Σ-syntax ; _,_ ; proj₁ ; proj₂ )
+open import Data.Sum.Base                   using ( inj₁ ; inj₂ ; [_,_] )
+open import Function.Base                   using ( _∘_ ; const )
+open import Function.Bundles                using ( _↔_ ; Inverse )
+open import Level                           using ( Level ; _⊔_ ) renaming ( suc to lsuc)
+open import Relation.Nullary.Decidable      using ( yes ; no )
+open import Relation.Binary                 using ( Setoid ; IsEquivalence )
 
-open import Data.Vec.Functional             using ( updateAt )
-open import Data.Vec.Functional.Properties   using ( updateAt-updates ; updateAt-minimal
+open import Data.Vec.Functional             using  ( updateAt )
+open import Data.Vec.Functional.Properties  using  ( updateAt-updates ; updateAt-minimal
                                                    ; updateAt-updateAt )
 
 open import Relation.Binary.PropositionalEquality
   using ( _≡_ ; _≢_ ; refl ; sym ; trans ; cong ; subst )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture                   using ( proj₁ ; proj₂ ; OperationSymbolsOf ; ArityOf )
-open import Setoid.Algebras.Basic {𝑆 = 𝑆}
-                                       using ( Algebra ; 𝔻[_] ; 𝕌[_] ; _^_ )
-open import Setoid.Congruences.Basic {𝑆 = 𝑆}
-                                       using ( Con ; mkcon ; _∣≈_ ; reflexive
-                                             ; is-equivalence ; is-compatible )
-open import Setoid.Congruences.Generation {𝑆 = 𝑆}
-                                       using ( Gen ; rfl ; transitive ; base ; Cg-least ; _∪ᵣ_ )
+open import Overture                       using  ( OperationSymbolsOf ; ArityOf )
+open import Setoid.Algebras.Basic          using  ( Algebra ; 𝔻[_] ; 𝕌[_] ; _^_ )
+open import Setoid.Congruences.Basic       using  ( Con ; mkcon ; _∣≈_ ; reflexive
+                                                  ; is-equivalence ; is-compatible )
+open import Setoid.Congruences.Generation  using  ( Gen ; rfl ; transitive ; base
+                                                  ; Cg-least ; _∪ᵣ_ )
 
 open import Function using ( Func )
 open Func renaming ( cong to ≈cong ; to to _⟨$⟩_ )
@@ -86,8 +84,8 @@ The carrier algebra `𝑩` is an *explicit* parameter, since it cannot be inferr
 relation on `𝕌[ 𝑩 ]` (the carrier projection is not injective).
 
 ```agda
-data Chain (𝑩 : Algebra α ρ)(R : 𝕌[ 𝑩 ] → 𝕌[ 𝑩 ] → Type ℓ)
-           : 𝕌[ 𝑩 ] → 𝕌[ 𝑩 ] → Type (α ⊔ ρ ⊔ ℓ) where
+data Chain {𝑆 : Signature 𝓞 𝓥} (𝑩 : Algebra {𝑆 = 𝑆} α ρ)(R : 𝕌[ 𝑩 ] → 𝕌[ 𝑩 ] → Type ℓ)
+  : 𝕌[ 𝑩 ] → 𝕌[ 𝑩 ] → Type (α ⊔ ρ ⊔ ℓ) where
   nil  : {x y : 𝕌[ 𝑩 ]} → Setoid._≈_ 𝔻[ 𝑩 ] x y → Chain 𝑩 R x y
   cons : {x y z : 𝕌[ 𝑩 ]} → R x y → Chain 𝑩 R y z → Chain 𝑩 R x z
 ```
@@ -98,7 +96,7 @@ both supplied for `θ ∪ᵣ φ` from the two congruences (`R-resp` / `R-sym` be
 inductions generic in those two facts.
 
 ```agda
-module _ {𝑩 : Algebra α ρ}{R : 𝕌[ 𝑩 ] → 𝕌[ 𝑩 ] → Type ℓ} where
+module _ {𝑆 : Signature 𝓞 𝓥} {𝑩 : Algebra {𝑆 = 𝑆} α ρ} {R : 𝕌[ 𝑩 ] → 𝕌[ 𝑩 ] → Type ℓ} where
   open Setoid 𝔻[ 𝑩 ] using ( _≈_ ) renaming ( refl to ≈refl ; sym to ≈sym ; trans to ≈trans )
 
   -- A chain absorbs a trailing setoid-equality step.
@@ -131,7 +129,7 @@ module _ {𝑩 : Algebra α ρ}{R : 𝕌[ 𝑩 ] → 𝕌[ 𝑩 ] → Type ℓ} 
 Each step is `base`, the empty walk is `rfl`, concatenation is `transitive`.
 
 ```agda
-Chain⊆Gen : (𝑩 : Algebra α ρ)(θ φ : Con 𝑩 ℓ){x y : 𝕌[ 𝑩 ]}
+Chain⊆Gen : {𝑆 : Signature 𝓞 𝓥} (𝑩 : Algebra {𝑆 = 𝑆} α ρ) (θ φ : Con 𝑩 ℓ) {x y : 𝕌[ 𝑩 ]}
   → Chain 𝑩 (θ ∪ᵣ φ) x y → Gen {𝑨 = 𝑩} (θ ∪ᵣ φ) x y
 Chain⊆Gen 𝑩 θ φ (nil x≈y)   = rfl x≈y
 Chain⊆Gen 𝑩 θ φ (cons r c)  = transitive (base r) (Chain⊆Gen 𝑩 θ φ c)
@@ -146,8 +144,8 @@ concrete `Fin k`, so the witness is the identity bijection `↔-id` at every sym
 `λ _ → _ , ↔-id`.
 
 ```agda
-Finitary : Type (𝓞 ⊔ 𝓥)
-Finitary = (f : OperationSymbolsOf 𝑆) → Σ[ k ∈ ℕ ] (ArityOf 𝑆 f ↔ Fin k)
+Finitary : (𝑆 : Signature 𝓞 𝓥) → Type (𝓞 ⊔ 𝓥)
+Finitary 𝑆 = (f : OperationSymbolsOf 𝑆) → Σ[ k ∈ ℕ ] (ArityOf 𝑆 f ↔ Fin k)
 ```
 
 #### Operations preserve the chain relation, one coordinate at a time
@@ -177,7 +175,9 @@ private
   <ᵇ-step-≠ (suc a) zero    _   = refl
   <ᵇ-step-≠ (suc a) (suc m) a≢m = <ᵇ-step-≠ a m (λ a≡m → a≢m (cong suc a≡m))
 
-module _ {𝑩 : Algebra α ρ}(θ φ : Con 𝑩 ℓ) where
+module _
+  {𝑆 : Signature 𝓞 𝓥}
+  {𝑩 : Algebra {𝑆 = 𝑆} α ρ}(θ φ : Con 𝑩 ℓ) where
   open Setoid 𝔻[ 𝑩 ] using ( _≈_ )
     renaming ( refl to ≈refl ; sym to ≈sym ; trans to ≈trans ; reflexive to ≡→≈ )
   private
@@ -283,7 +283,7 @@ operation: present the operation as a `Fin k`-ary `op` through the arity bijecti
 and translate the result back across the bijection.
 
 ```agda
-  chain-compatible : Finitary → 𝑩 ∣≈ Chain 𝑩 R
+  chain-compatible : Finitary 𝑆 → 𝑩 ∣≈ Chain 𝑩 R
   chain-compatible fin f {u}{v} H = chain-≈ˡ R-resp (≈sym opu) (chain-≈ʳ folded opv)
     where
     k    = proj₁ (fin f)
@@ -306,7 +306,7 @@ and translate the result back across the bijection.
     opv = ≈cong (Interp 𝑩) (refl , λ x → ≡→≈ (cong v (Inverse.strictlyInverseʳ ev x)))
 
   -- Hence, for a finitary signature, the chain relation is a congruence.
-  Chain-Con : Finitary → Con 𝑩 (α ⊔ ρ ⊔ ℓ)
+  Chain-Con : Finitary 𝑆 → Con 𝑩 (α ⊔ ρ ⊔ ℓ)
   Chain-Con fin = Chain 𝑩 R , mkcon nil chain-isEquiv (chain-compatible fin)
     where
     chain-isEquiv : IsEquivalence (Chain 𝑩 R)
@@ -315,7 +315,7 @@ and translate the result back across the bijection.
                            ; trans = chain-trans R-resp }
 
   -- The least-upper-bound property then contains the generated join in the chain relation.
-  finitary⇒Gen⊆Chain : Finitary → {x y : 𝕌[ 𝑩 ]} → Gen {𝑨 = 𝑩} R x y → Chain 𝑩 R x y
+  finitary⇒Gen⊆Chain : Finitary 𝑆 → {x y : 𝕌[ 𝑩 ]} → Gen {𝑨 = 𝑩} R x y → Chain 𝑩 R x y
   finitary⇒Gen⊆Chain fin = Cg-least (Chain-Con fin) (λ r → cons r (nil ≈refl))
 ```
 
@@ -327,10 +327,11 @@ that the forward direction of Jónsson's theorem
 
 ```agda
 -- The generated join Cg(θ ∪ φ) is witnessed by finite alternating chains, for all θ, φ.
-JoinIsChain : (𝑩 : Algebra α ρ)(ℓ : Level) → Type _
-JoinIsChain 𝑩 ℓ =
-  (θ φ : Con 𝑩 ℓ){x y : 𝕌[ 𝑩 ]} → Gen {𝑨 = 𝑩} (θ ∪ᵣ φ) x y → Chain 𝑩 (θ ∪ᵣ φ) x y
+JoinIsChain : {𝑆 : Signature 𝓞 𝓥} (𝑨 : Algebra {𝑆 = 𝑆} α ρ)(ℓ : Level) → Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ lsuc ℓ)
+JoinIsChain 𝑨 ℓ =
+  (θ φ : Con 𝑨 ℓ){x y : 𝕌[ 𝑨 ]} → Gen {𝑨 = 𝑨} (θ ∪ᵣ φ) x y → Chain 𝑨 (θ ∪ᵣ φ) x y
 
-finitary⇒JoinIsChain : {𝑩 : Algebra α ρ} → Finitary → JoinIsChain 𝑩 ℓ
+finitary⇒JoinIsChain : {𝑆 : Signature 𝓞 𝓥}{𝑩 : Algebra {𝑆 = 𝑆} α ρ}
+  → Finitary 𝑆 → JoinIsChain 𝑩 ℓ
 finitary⇒JoinIsChain fin θ φ = finitary⇒Gen⊆Chain θ φ fin
 ```

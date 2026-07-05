@@ -323,7 +323,6 @@ jonsson⇒CongruenceDistributive {ℰ = ℰ} jh 𝑩 B⊨ jic θ φ ψ = fwd , b
           (λ (xθy , xψy) → xθy , ∨-upperʳ φ ψ xψy)
 ```
 
-
 #### The condition as a property of a variety
 
 Fix a theory `ℰ` and the level pair `(α , ρ)` at which models are tested.
@@ -370,7 +369,7 @@ module _ {α ρ ℓ : Level}{𝑆 : Signature 0ℓ 0ℓ}{X : Type χ}{Idx : Type
   -- signature whose arities are `Fin`s, which is every signature of the library; supplying it
   -- is therefore a one-liner, never a hoop (see `Examples.Setoid.FinitarySignatures`).
   jonsson-finitary⇒CongruenceDistributiveVariety :
-    Finitary {𝑆 = 𝑆} → ( Σ[ n ∈ ℕ ] HasJonssonTerms n α ρ ℰ ) → CongruenceDistributiveVariety
+    Finitary 𝑆 → ( Σ[ n ∈ ℕ ] HasJonssonTerms n α ρ ℰ ) → CongruenceDistributiveVariety
   jonsson-finitary⇒CongruenceDistributiveVariety fin jh =
     jonsson⇒CongruenceDistributiveVariety jh (λ 𝑩 → finitary⇒JoinIsChain {ℓ = α ⊔ ρ ⊔ ℓ} fin)
 ```
@@ -557,7 +556,7 @@ module _ {𝑆 : Signature 0ℓ 0ℓ}{X : Type 0ℓ}{Idx : Type ι}
 
   -- The converse (hard) half of Jónsson's theorem: a congruence-distributive variety
   -- over a finitary signature has a chain of Jónsson terms.
-  CD⇒jonsson : Finitary {𝑆 = 𝑆}
+  CD⇒jonsson : Finitary 𝑆
     → CongruenceDistributiveVariety {α = lsuc 0ℓ}{ρ = ι ⊔ lsuc 0ℓ}{ℓ = 0ℓ} ℰ
     → Σ[ n ∈ ℕ ] HasJonssonTerms n (lsuc 0ℓ) (ι ⊔ lsuc 0ℓ) ℰ
   CD⇒jonsson fin cdv = n , I , red
@@ -709,7 +708,7 @@ one-liner for every `Fin`-arity signature; see `Examples.Setoid.FinitarySignatur
 
 ```agda
   -- ★ Jónsson's theorem (Burris–Sankappanavar, Thm. II.12.6), as a complete iff.
-  jonsson-theorem : Finitary {𝑆 = 𝑆}
+  jonsson-theorem : Finitary 𝑆
     → Jonsson-Statement {α = lsuc 0ℓ}{ρ = ι ⊔ lsuc 0ℓ}{ℓ = 0ℓ} ℰ
   jonsson-theorem fin =
     CD⇒jonsson fin , jonsson-finitary⇒CongruenceDistributiveVariety {ℓ = 0ℓ} ℰ fin

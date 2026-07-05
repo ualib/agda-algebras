@@ -42,7 +42,7 @@ literally `λ f → _ , ↔-id _`: no case split, no proof obligation.
 ```agda
 module _ {𝓞 : Level}{Op : Type 𝓞}(ar : Op → ℕ) where
 
-  finitary-Fin-arity : Finitary {𝑆 = Op , (λ f → Fin (ar f))}
+  finitary-Fin-arity : Finitary (Op , (λ f → Fin (ar f)))
   finitary-Fin-arity f = ar f , ↔-id _
 ```
 
@@ -53,7 +53,7 @@ their arity function by pattern matching on the operation symbol — e.g. `ar-Ma
 There the witness names the identity bijection once per symbol, still a trivial one-liner.
 
 ```agda
-finitary-Sig-Maltsev : Finitary {𝑆 = Sig-Maltsev}
+finitary-Sig-Maltsev : Finitary Sig-Maltsev
 finitary-Sig-Maltsev m-Op = _ , ↔-id _
 ```
 
