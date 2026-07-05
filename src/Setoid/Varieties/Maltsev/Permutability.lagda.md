@@ -39,12 +39,12 @@ open import Overture.Terms                     using  ( Term ; ℊ )
 open import Overture.Terms.Interpretation      using  ( Interpretation ; _✦_ )
 open import Setoid.Algebras.Basic              using  ( Algebra ; 𝔻[_] ; 𝕌[_] )
 open import Setoid.Congruences.Basic           using  ( Con ; reflexive ; is-equivalence )
-open import Setoid.Congruences.Generation      using  ( Cg ; base )
+open import Setoid.Congruences.Generation      using  ( Cg ; base ; module principal )
 open import Setoid.Congruences.Permutability   using  ( CongruencePermutable )
 open import Setoid.Terms.Basic                 using  ( Sub ; _[_] ; module Environment )
 open import Setoid.Terms.Interpretation        using  ( graft≐[] )
 open import Setoid.Varieties.EquationalLogic   using  ( _⊧_≈_ )
-open import Setoid.Varieties.FreeBridge        using  ( ❴_,_❵ ; pᵣ ; cg-pair→⊢ ; toEq )
+open import Setoid.Varieties.FreeBridge        using  ( cg-pair→⊢ ; toEq )
 open import Setoid.Varieties.FreeSubstitution  using  ( ≐→⊢ )
 open import Setoid.Varieties.Interpretation    using  ( reductᴵ ; _⊨ₑ_ ; ⊧-interp )
 open import Setoid.Varieties.Maltsev.Basic     using  ( Sig-Maltsev ; m-Op ; m ; tri
@@ -244,6 +244,7 @@ module _ {𝑆 : Signature 0ℓ 0ℓ}{X : Type 0ℓ}{Idx : Type ι}
     𝔽cp : CongruencePermutable 𝔽 (ι ⊔ lsuc 0ℓ)
     𝔽cp = cpv 𝔽 satisfies
 
+    open principal 𝔽[ Fin 3 ]
     -- the two principal congruences
     θ φ : Con 𝔽 (ι ⊔ lsuc 0ℓ)
     θ = Cg ❴ x , y ❵

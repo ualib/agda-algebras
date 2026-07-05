@@ -68,7 +68,7 @@ open import Setoid.Congruences.Basic {𝑆 = 𝑆}
                                        using ( Con ; mkcon ; _∣≈_ ; reflexive
                                              ; is-equivalence ; is-compatible )
 open import Setoid.Congruences.Generation {𝑆 = 𝑆}
-                                       using ( Gen ; rfl ; tran ; base ; Cg-least ; _∪ᵣ_ )
+                                       using ( Gen ; rfl ; transitive ; base ; Cg-least ; _∪ᵣ_ )
 
 open import Function using ( Func )
 open Func renaming ( cong to ≈cong ; to to _⟨$⟩_ )
@@ -134,7 +134,7 @@ Each step is `base`, the empty walk is `rfl`, concatenation is `tran`.
 Chain⊆Gen : (𝑩 : Algebra α ρ)(θ φ : Con 𝑩 ℓ){x y : 𝕌[ 𝑩 ]}
   → Chain 𝑩 (θ ∪ᵣ φ) x y → Gen {𝑨 = 𝑩} (θ ∪ᵣ φ) x y
 Chain⊆Gen 𝑩 θ φ (nil x≈y)   = rfl x≈y
-Chain⊆Gen 𝑩 θ φ (cons r c)  = tran (base r) (Chain⊆Gen 𝑩 θ φ c)
+Chain⊆Gen 𝑩 θ φ (cons r c)  = transitive (base r) (Chain⊆Gen 𝑩 θ φ c)
 ```
 
 #### Finitary signatures

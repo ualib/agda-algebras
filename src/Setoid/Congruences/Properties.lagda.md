@@ -72,3 +72,4 @@ congruence-modular ones.
   CongruenceModular : Type (lsuc (Ł α ρ ℓ₀))
   CongruenceModular = (θ φ ψ : Con 𝑨 (Ł α ρ ℓ₀)) → θ ⊆ ψ → θ ∨ (φ ∧ ψ) ≑ (θ ∨ φ) ∧ ψ
 ```
+

@@ -50,9 +50,9 @@ open import Relation.Binary  using ( Setoid ; IsEquivalence )
                              renaming ( Rel to BinRel ; _⇒_ to _⊆_)
 -- Imports from the Agda Universal Algebras Library ------------------------------
 open import Overture using ( proj₁ ; proj₂ ; OperationSymbolsOf ; ArityOf )
-open import Setoid.Algebras.Basic {𝑆 = 𝑆} using ( Algebra ; 𝕌[_] ; _^_ )
+open import Setoid.Algebras.Basic {𝑆 = 𝑆} using ( Algebra ; 𝕌[_] ; 𝔻[_] ; _^_ )
 open import Setoid.Congruences.Basic {𝑆 = 𝑆}
-  using  ( Con ; mkcon ; _∣≈_ ; reflexive ; is-equivalence ; is-compatible )
+  using  ( Con ; mkcon ; _∣≈_ ; is-equivalence ; is-compatible ; reflexive )
 
 private variable α ρ ℓ ℓ′ : Level
 ```
@@ -67,8 +67,7 @@ inhabits `BinRel 𝕌[ 𝑨 ] (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ ℓ)`; we name th
 
 ```agda
 module _ {𝑨 : Algebra α ρ} where
-  open Algebra 𝑨 using () renaming ( Domain to 𝐀 )
-  open Setoid 𝐀 using ( _≈_ ) renaming ( refl to reflA )
+  open Setoid 𝔻[ 𝑨 ] using ( _≈_ ) renaming ( refl to reflA )
 
   -- The level at which the generated congruence lives.
   𝒈 : Level → Level
@@ -76,20 +75,20 @@ module _ {𝑨 : Algebra α ρ} where
 
   data Gen (R : BinRel 𝕌[ 𝑨 ] ℓ) : BinRel 𝕌[ 𝑨 ] (𝒈 ℓ) where
     base : R ⊆ Gen R
-    rfl  : {x y : 𝕌[ 𝑨 ]} → x ≈ y → Gen R x y
-    symm : {x y : 𝕌[ 𝑨 ]} → Gen R x y → Gen R y x
-    tran : {x y z : 𝕌[ 𝑨 ]} → Gen R x y → Gen R y z → Gen R x z
-    comp : (f : OperationSymbolsOf 𝑆) {u v : ArityOf 𝑆 f → 𝕌[ 𝑨 ]}
+    rfl         : {x y : 𝕌[ 𝑨 ]} → x ≈ y → Gen R x y
+    symmetric   : {x y : 𝕌[ 𝑨 ]} → Gen R x y → Gen R y x
+    transitive  : {x y z : 𝕌[ 𝑨 ]} → Gen R x y → Gen R y z → Gen R x z
+    compatible  : (f : OperationSymbolsOf 𝑆) {u v : ArityOf 𝑆 f → 𝕌[ 𝑨 ]}
       → (∀ i → Gen R (u i) (v i)) → Gen R ((f ^ 𝑨) u) ((f ^ 𝑨) v)
 
   Cg : (R : BinRel 𝕌[ 𝑨 ] ℓ) → Con 𝑨 (𝒈 ℓ)
-  Cg R = Gen R , mkcon rfl g-isEquivalence g-compatible
+  Cg R = Gen R , mkcon rfl g-isEquivalence compatible
     where
+    open IsEquivalence using (refl ; sym ; trans )
     g-isEquivalence : IsEquivalence (Gen R)
-    g-isEquivalence = record { refl = rfl reflA ; sym = symm ; trans = tran }
-
-    g-compatible : 𝑨 ∣≈ Gen R
-    g-compatible f h = comp f h
+    g-isEquivalence .refl  = rfl reflA
+    g-isEquivalence .sym   = symmetric
+    g-isEquivalence .trans = transitive
 ```
 
 #### The Congruence Generation Theorem
@@ -97,9 +96,8 @@ module _ {𝑨 : Algebra α ρ} where
 `R` is contained in `Cg R` (the `base` constructor), and `Cg R` is the *least*
 congruence with that property: any congruence `ψ` containing `R` already contains
 `Gen R`.  The latter is proved by induction on the derivation of `Gen R x y`,
-turning each closure rule into the corresponding congruence law of `ψ`
-(`reflexive`, `sym`, `trans`, `is-compatible`).  Note `ψ` may live at any relation
-level `ℓ′`, so this is a genuinely heterogeneous statement.
+turning each closure rule into the corresponding congruence law of `ψ`.  Note `ψ` may
+live at any relation level `ℓ′`, so this is a genuinely heterogeneous statement.
 
 ```agda
   Cg-incl : (R : BinRel 𝕌[ 𝑨 ] ℓ) → R ⊆ Gen R
@@ -107,12 +105,12 @@ level `ℓ′`, so this is a genuinely heterogeneous statement.
 
   Cg-least : {R : BinRel 𝕌[ 𝑨 ] ℓ} (ψ : Con 𝑨 ℓ′) → R ⊆ proj₁ ψ → Gen R ⊆ proj₁ ψ
   Cg-least ψ R⊆ψ (base r) = R⊆ψ r
-  Cg-least ψ R⊆ψ (rfl e) = reflexive (proj₂ ψ) e
-  Cg-least ψ R⊆ψ (symm p) =
-    IsEquivalence.sym (is-equivalence (proj₂ ψ)) (Cg-least ψ R⊆ψ p)
-  Cg-least ψ R⊆ψ (tran p q) =
+  Cg-least (_ , ψcon) R⊆ψ (rfl e) = reflexive ψcon e
+  Cg-least ψ R⊆ψ (symmetric p) =
+    IsEquivalence.sym (is-equivalence (ψ .proj₂)) (Cg-least ψ R⊆ψ p)
+  Cg-least ψ R⊆ψ (transitive p q) =
     IsEquivalence.trans (is-equivalence (proj₂ ψ)) (Cg-least ψ R⊆ψ p) (Cg-least ψ R⊆ψ q)
-  Cg-least ψ R⊆ψ (comp f h) = is-compatible (proj₂ ψ) f (λ i → Cg-least ψ R⊆ψ (h i))
+  Cg-least ψ R⊆ψ (compatible f h) = is-compatible (proj₂ ψ) f (λ i → Cg-least ψ R⊆ψ (h i))
 ```
 
 Monotonicity follows immediately: if `R` is contained in `S` then `Cg R` is
@@ -161,4 +159,17 @@ The join is the least upper bound of its arguments: each argument is below it
 
   ∨-least : (θ φ : Con 𝑨 ℓ) (ψ : Con 𝑨 ℓ′) → θ ⊑ ψ → φ ⊑ ψ → (θ ∨ φ) ⊑ ψ
   ∨-least _ _ ψ θ⊑ψ φ⊑ψ = Cg-least ψ (λ {x y} → [ θ⊑ψ , φ⊑ψ ])
+```
+
+#### The principal (single-pair) relation
+
+For two carrier elements `a`, `b` of an algebra, `❴ a , b ❵`{.AgdaFunction} is the
+relation that relates exactly `a` to `b`.  Its generated congruence `Cg ❴ a , b ❵` is
+the *principal* congruence collapsing the one pair.
+
+```agda
+module principal (𝑨 : Algebra α ρ) where
+  data ❴_,_❵ (a b : 𝕌[ 𝑨 ]) : BinRel 𝕌[ 𝑨 ] α where
+    pᵣ : ❴ a , b ❵ a b
+  open ❴_,_❵
 ```

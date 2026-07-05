@@ -12,21 +12,19 @@ This is the [Setoid.Homomorphisms.Products][] module of the [Agda Universal Alge
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature)
-
-module Setoid.Homomorphisms.Products {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Homomorphisms.Products where
 
 -- Imports from Agda and the Agda Standard Library --------------------------
-open import Agda.Primitive                         using () renaming ( Set to Type )
-open import Function                               using () renaming ( Func to _⟶_ )
-open import Data.Product                           using ( _,_ )
-open import Level                                  using ( Level )
-open import Relation.Binary                        using ( Setoid )
+open import Agda.Primitive              using () renaming ( Set to Type )
+open import Function                    using () renaming ( Func to _⟶_ )
+open import Data.Product                using ( _,_ )
+open import Level                       using ( Level )
+open import Relation.Binary             using ( Setoid )
 
 -- Imports from the Agda Universal Algebras Library ----------------------
-open import Overture                               using ( proj₁ ; proj₂)
-open import Setoid.Algebras               {𝑆 = 𝑆}  using ( Algebra ; ⨅ ; 𝔻[_] )
-open import Setoid.Homomorphisms.Basic    {𝑆 = 𝑆}  using ( hom ; IsHom )
+open import Overture                    using ( proj₁ ; proj₂ ; 𝓞 ; 𝓥 ; Signature)
+open import Setoid.Algebras             using ( Algebra ; ⨅ ; 𝔻[_] )
+open import Setoid.Homomorphisms.Basic  using ( hom ; IsHom )
 
 open _⟶_ using ( cong )  renaming ( to to _⟨$⟩_ )
 open IsHom
@@ -41,9 +39,8 @@ as *indices*, and call `ℬ` an *indexed family of algebras*.
 If in addition we have a family `𝒽 : (i : I) → hom 𝑨 (ℬ i)` of homomorphisms, then
 we can construct a homomorphism from `𝑨` to the product `⨅ ℬ` in the natural way.
 
-
 ```agda
-module _ {I : Type 𝓘}{𝑨 : Algebra α ρ }(ℬ : I → Algebra β ρᵇ)  where
+module _ {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra {𝑆 = 𝑆} α ρ } {I : Type 𝓘} (ℬ : I → Algebra β ρᵇ)  where
   open Algebra (⨅ ℬ) using () renaming ( Domain to ⨅B )
 
   ⨅-hom-co : (∀(i : I) → hom 𝑨 (ℬ i)) → hom 𝑨 (⨅ ℬ)
@@ -73,7 +70,7 @@ a family of algebras. That is, if we are given `𝒜 : I → Algebra α 𝑆` an
 a homomorphism from `⨅ 𝒜` to `⨅ ℬ` in the following natural way.
 
 ```agda
-module _ {I : Type 𝓘}(𝒜 : I → Algebra α ρ) where
+module _  {𝑆 : Signature 𝓞 𝓥} {I : Type 𝓘} (𝒜 : I → Algebra {𝑆 = 𝑆} α ρ) where
   open Algebra (⨅ 𝒜) using () renaming ( Domain to ⨅A )
 
   ⨅-hom : (ℬ : I → Algebra β ρᵇ) → (∀ (i : I) → hom (𝒜 i) (ℬ i)) → hom (⨅ 𝒜)(⨅ ℬ)

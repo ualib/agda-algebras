@@ -6,16 +6,19 @@ date: "2026-06-19"
 author: "the agda-algebras development team"
 ---
 
-### Maltsev conditions: congruence distributivity
+### Jónsson's Theorem
 
 This is the [Setoid.Varieties.Maltsev.Distributivity][] module of the [Agda Universal Algebra Library][].
 
-This module records the encoding of congruence distributivity (CD) — the Jónsson identities, as
-a theory interpretation `Th-Jonsson n ≼ ℰ` — and proves **Jónsson's theorem** in both
-directions: terms ⟹ CD (the staircase, with the finitary collapse of the join), and
-CD ⟹ terms (the converse, which extracts the chain of Jónsson terms from a congruence
-of the free algebra `𝔽[ Fin 3 ]`).  For a finitary signature the two halves assemble
-into the complete iff `jonsson-theorem`{.AgdaFunction}.
+This module records the encoding of congruence distributivity (CD) — the Jónsson
+identities, as a theory interpretation `Th-Jonsson n ≼ ℰ` — and proves
+**Jónsson's theorem**:
+
+1.  Jónsson terms ⟹ CD: the staircase, with the finitary collapse of the join;
+2.  CD ⟹ Jónsson terms: the converse, which extracts the chain of Jónsson terms from
+    a congruence of the free algebra `𝔽[ Fin 3 ]`).
+For a finitary signature the two halves assemble into the complete iff
+`jonsson-theorem`{.AgdaFunction}.[^jonsson]
 
 #### Distributivity of the congruence lattice
 
@@ -23,7 +26,6 @@ CD is a property of the congruence *lattice*, defined in
 [Setoid.Congruences.Properties][] as `CongruenceDistributive` (at the absorbing relation
 level, so that meet and join are operations on a single type).  We use it here to phrase
 the Jónsson variety condition below.
-
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -49,30 +51,30 @@ open import Relation.Binary.PropositionalEquality
   using ( _≡_ ; subst ) renaming ( refl to ≡refl ; sym to ≡sym )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture.Basic                    using  ( _⇔_ )
-open import Overture.Signatures               using  ( 𝓞 ; 𝓥 ; Signature )
-open import Overture.Terms                    using  ( Term ; ℊ ; node )
-open import Overture.Terms.Interpretation     using  ( Interpretation ; graft ; _✦_ )
-open import Setoid.Algebras.Basic             using  ( Algebra ; 𝔻[_] ; 𝕌[_] )
-open import Setoid.Congruences.Basic          using  ( Con ; reflexive ; is-equivalence )
-open import Setoid.Congruences.Generation     using  ( Cg ; base ; tran ; _∨_ ; _∪ᵣ_
-                                                     ; ∨-upperˡ ; ∨-upperʳ ; ∨-least )
-open import Setoid.Congruences.ChainJoin      using  ( Chain ; nil ; cons ; JoinIsChain
-                                                     ; Finitary ; finitary⇒JoinIsChain )
-open import Setoid.Congruences.Lattice        using  ( _∧_ ; _⊆_ )
-open import Setoid.Congruences.Properties     using  ( CongruenceDistributive )
-open import Setoid.Terms.Basic                using  ( Sub ; _[_] ; module Environment )
-open import Setoid.Terms.Interpretation       using  ( graft≐[] )
-open import Setoid.Varieties.EquationalLogic  using  ( _⊧_≈_ )
-open import Setoid.Varieties.FreeBridge       using  ( ❴_,_❵ ; pᵣ ; cg-pair→⊢ ; toEq )
-open import Setoid.Varieties.FreeSubstitution using  ( ≐→⊢ )
-open import Setoid.Varieties.Interpretation   using  ( reductᴵ ; _⊨ₑ_ ; ⊧-interp
-                                                     ; module Interpret )
-open import Setoid.Varieties.Maltsev.Basic    using  ( tri ; even? ; term-compatible )
-open import Setoid.Varieties.SoundAndComplete using  ( Eq ; _⊢_▹_≈_
-                                                     ; module FreeAlgebra
-                                                     ; module Soundness )
-
+open import Overture.Basic                     using  ( _⇔_ )
+open import Overture.Signatures                using  ( 𝓞 ; 𝓥 ; Signature )
+open import Overture.Terms                     using  ( Term ; ℊ ; node )
+open import Overture.Terms.Interpretation      using  ( Interpretation ; graft ; _✦_ )
+open import Setoid.Algebras.Basic              using  ( Algebra ; 𝔻[_] ; 𝕌[_] )
+open import Setoid.Congruences.Basic           using  ( Con ; reflexive ; is-equivalence )
+open import Setoid.Congruences.Generation      using  ( Cg ; base ; transitive ; _∨_ ; _∪ᵣ_
+                                                      ; ∨-upperˡ ; ∨-upperʳ ; ∨-least
+                                                      ; module principal )
+open import Setoid.Congruences.ChainJoin       using  ( Chain ; nil ; cons ; JoinIsChain
+                                                      ; Finitary ; finitary⇒JoinIsChain )
+open import Setoid.Congruences.Lattice         using  ( _∧_ ; _⊆_ )
+open import Setoid.Congruences.Properties      using  ( CongruenceDistributive )
+open import Setoid.Terms.Basic                 using  ( Sub ; _[_] ; module Environment )
+open import Setoid.Terms.Interpretation        using  ( graft≐[] )
+open import Setoid.Varieties.EquationalLogic   using  ( _⊧_≈_ )
+open import Setoid.Varieties.FreeBridge        using  ( cg-pair→⊢ ; toEq )
+open import Setoid.Varieties.FreeSubstitution  using  ( ≐→⊢ )
+open import Setoid.Varieties.Interpretation    using  ( reductᴵ ; _⊨ₑ_ ; ⊧-interp
+                                                      ; module Interpret )
+open import Setoid.Varieties.Maltsev.Basic     using  ( tri ; even? ; term-compatible )
+open import Setoid.Varieties.SoundAndComplete  using  ( Eq ; _⊢_▹_≈_
+                                                      ; module FreeAlgebra
+                                                      ; module Soundness )
 open import Function using ( Func )
 open Func using ( cong ) renaming ( to to _⟨$⟩_ )
 open _⊢_▹_≈_ using ( sub ; refl ; sym ; trans )
@@ -80,19 +82,20 @@ open _⊢_▹_≈_ using ( sub ; refl ; sym ; trans )
 private variable α ρ χ ι ℓ ℓ′ : Level
 ```
 
-#### Jónsson terms (congruence distributivity)
+#### Jónsson terms
 
-Where a single ternary term characterizes CP, a *chain* of ternary terms
-`d₀ , … , dₙ` — the **Jónsson terms** — characterizes CD.[^jonsson]
+Where a single ternary term characterizes congruence-permutability (CP), a *chain* of
+ternary terms `d₀ , … , dₙ` — the **Jónsson terms** — characterizes
+congruence-distributivity (CD).
+
 They are encoded exactly as the Maltsev term was: a signature `Sig-Jonsson n` of
-`n+1` ternary symbols, and a theory `Th-Jonsson n` of the Jónsson identities
-(Burris–Sankappanavar, Def. 12.5),
+`n+1` ternary symbols, and a theory `Th-Jonsson n` of the Jónsson identities:[^1]
 
     d₀(x,y,z) ≈ x,    dₙ(x,y,z) ≈ z,    dᵢ(x,y,x) ≈ x   (all i),
     dᵢ(x,x,z) ≈ dᵢ₊₁(x,x,z)   (i even),  dᵢ(x,y,y) ≈ dᵢ₊₁(x,y,y)   (i odd).
 
-`HasJonssonTerms n ℰ = Th-Jonsson n ≼ ℰ` — `ℰ` admits `n+1` Jónsson terms iff the
-Jónsson theory interprets into it, the same `Th-X ≼ ℰ` shape as `HasMaltsevTerm`.
+The definition `HasJonssonTerms n ℰ = Th-Jonsson n ≼ ℰ` expresses that `ℰ` admits
+`n+1` Jónsson terms iff the Jónsson theory interprets into it."
 
 ```agda
 module _ (n : ℕ) where
@@ -132,9 +135,10 @@ HasJonssonTerms n α ρ ℰ = Th-Jonsson n ≼ ℰ
 
 #### Jónsson terms imply distributivity along chains
 
-The forward direction of Jónsson's theorem (Burris–Sankappanavar, Thm. II.12.6) runs the
-Jónsson terms along a **finite alternating walk** from `a` to `b` whose steps lie in `φ` or
-in `ψ`.  Classically such a walk witnesses `(a , b) ∈ φ ∨ ψ`; here the join `φ ∨ ψ` is the
+The forward direction of Jónsson's theorem runs the Jónsson terms along a
+**finite alternating walk** from `a` to `b` whose steps lie in `φ` or in `ψ`.[^2]
+
+Classically such a walk witnesses `(a , b) ∈ φ ∨ ψ`; here the join `φ ∨ ψ` is the
 *inductively generated* congruence `Cg (φ ∪ ψ)`, whose `comp` closure makes it strictly
 larger than the walk relation for an **infinitary** signature.  So the walk relation is
 isolated as the type `Chain` ([Setoid.Congruences.ChainJoin][]), the staircase is proved
@@ -574,6 +578,7 @@ module _ {𝑆 : Signature 0ℓ 0ℓ}{X : Type 0ℓ}{Idx : Type ι}
     𝔽cd : CongruenceDistributive 𝔽 0ℓ
     𝔽cd = cdv 𝔽 satisfies
 
+    open principal 𝔽[ Fin 3 ]
     -- the three principal congruences of the construction
     θ φ ψ : Con 𝔽 (ι ⊔ lsuc 0ℓ)
     θ = Cg ❴ x , z ❵
@@ -585,7 +590,7 @@ module _ {𝑆 : Signature 0ℓ 0ℓ}{X : Type 0ℓ}{Idx : Type ι}
     xθz = base pᵣ
 
     xφ∨ψz : proj₁ (φ ∨ ψ) x z
-    xφ∨ψz = tran (∨-upperˡ φ ψ (base pᵣ)) (∨-upperʳ φ ψ (base pᵣ))
+    xφ∨ψz = transitive (∨-upperˡ φ ψ (base pᵣ)) (∨-upperʳ φ ψ (base pᵣ))
 
     -- distributivity moves the pair into (θ ∧ φ) ∨ (θ ∧ ψ)
     xγz : proj₁ ((θ ∧ φ) ∨ (θ ∧ ψ)) x z
@@ -715,3 +720,6 @@ one-liner for every `Fin`-arity signature; see `Examples.Setoid.FinitarySignatur
 
 [^bs]: S. Burris and H. P. Sankappanavar, *A Course in Universal Algebra*, Graduate Texts in Mathematics 78, Springer (1981), Thm. II.12.6.  [Free online edition](https://www.math.uwaterloo.ca/~snburris/htdocs/ualg.html).
 
+[^1]: Burris–Sankappanavar, **Def. 12.5**.
+
+[^2]: Burris–Sankappanavar, **Thm. II.12.6**.

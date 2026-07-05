@@ -30,18 +30,19 @@ open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 
 module Setoid.Categories.Algebra {𝑆 : Signature 𝓞 𝓥} where
 
--- Imports from Agda and the Agda Standard Library ----------------------------
-open import Agda.Primitive   using ( _⊔_ ; lsuc ) renaming ( Set to Type )
+open import Agda.Primitive using () renaming ( Set to Type )
+
+-- Imports from the Agda Standard Library -----------------------------------
 open import Data.Product     using ( proj₁ )
 open import Function         using ( Func )
-open import Level            using ( Level )
+open import Level            using ( Level ; _⊔_ ) renaming ( suc to lsuc )
 open import Relation.Binary  using ( Setoid ; IsEquivalence )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Setoid.Algebras.Basic {𝑆 = 𝑆}            using ( Algebra ; 𝕌[_] ; 𝔻[_] )
-open import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}       using ( hom )
-open import Setoid.Homomorphisms.Properties {𝑆 = 𝑆}  using ( ⊙-hom ; 𝒾𝒹 )
-open import Setoid.Categories.Category               using ( Category )
+open import Setoid.Algebras.Basic {𝑆 = 𝑆}    using ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Homomorphisms.Basic       using ( hom ; 𝒾𝒹 )
+open import Setoid.Homomorphisms.Properties  using ( ⊙-hom )
+open import Setoid.Categories.Category       using ( Category )
 
 open Func using (cong) renaming ( to to _⟨$⟩_ )
 

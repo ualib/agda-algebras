@@ -13,12 +13,10 @@ This is the [Setoid.Homomorphisms.Factor][] module of the [Agda Universal Algebr
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature)
-
-module Setoid.Homomorphisms.Factor {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Homomorphisms.Factor where
 
 -- Imports from Agda and the Agda Standard Library -------------------------------------------------
-open import Data.Product     using ( _,_ ; Σ-syntax )
+open import Data.Product     using ( _,_ ; proj₁ ; proj₂ ; Σ-syntax )
 open import Function         using ( _∘_ ; _$_ )       renaming ( Func to _⟶_ )
 open import Level            using ( Level )
 open import Relation.Binary  using ( Setoid )
@@ -28,16 +26,15 @@ open import Relation.Binary.PropositionalEquality  as ≡           using ()
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------------
-open import Overture         using ( proj₁ ; proj₂ ; kernelRel )
+open import Overture         using ( kernelRel ; 𝓞 ; 𝓥 ; Signature)
 open import Setoid.Functions using ( Image_∋_ ; IsSurjective ; SurjInv )
                              using ( SurjInvIsInverseʳ ; epic-factor )
 
-open import Setoid.Algebras {𝑆 = 𝑆}             using ( Algebra ; 𝕌[_] ; _^_ )
-open import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}  using ( hom ; IsHom ; compatible-map ; epi ; IsEpi)
+open import Setoid.Algebras          using ( Algebra ; 𝕌[_] ; _^_ )
+open import Setoid.Homomorphisms.Basic  using ( hom ; IsHom ; compatible-map ; epi ; IsEpi)
 
 private variable α ρᵃ β ρᵇ γ ρᶜ : Level
 ```
-
 
 If `g : hom 𝑨 𝑩`, `h : hom 𝑨 𝑪`, `h` is surjective, and `ker h ⊆ ker g`, then there exists `φ : hom 𝑪 𝑩` such that `g = φ ∘ h` so the following diagram commutes:
 
@@ -52,9 +49,8 @@ If `g : hom 𝑨 𝑩`, `h : hom 𝑨 𝑪`, `h` is surjective, and `ker h ⊆ k
 
 We will prove this in case h is both surjective and injective.
 
-
 ```agda
-module _  {𝑨 : Algebra α ρᵃ} (𝑩 : Algebra β ρᵇ) {𝑪 : Algebra γ ρᶜ}
+module _  {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ} (𝑩 : Algebra β ρᵇ) {𝑪 : Algebra γ ρᶜ}
           (gh : hom 𝑨 𝑩)(hh : hom 𝑨 𝑪) where
 
  open Algebra 𝑩  using ()          renaming (Domain to B )

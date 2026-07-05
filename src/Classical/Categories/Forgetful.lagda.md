@@ -58,7 +58,7 @@ open import Overture.Terms.Translation              using  ( _✶_ )
 open import Setoid.Algebras.Basic {𝑆 = Sig-Monoid}  using  ( Algebra ; 𝔻[_] )
 open import Setoid.Categories.Algebra               using  ( Alg )
 open import Setoid.Categories.Functor               using  ( Functor )
-open import Setoid.Homomorphisms.Basic {𝑆 = Sig-Monoid} using ( hom )
+open import Setoid.Homomorphisms.Basic              using ( hom )
 open import Setoid.Terms.Basic                      using  ( _≐_ ; module Environment )
 open import Setoid.Varieties.EquationalLogic        using  ( _⊧_≈_ )
 

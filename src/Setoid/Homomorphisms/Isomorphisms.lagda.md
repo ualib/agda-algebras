@@ -28,21 +28,22 @@ open import Relation.Binary             using ( Setoid ; Reflexive ; Sym ; Trans
 open import Relation.Binary.PropositionalEquality as ≡ using ()
 
 -- Imports from the Agda Universal Algebra Library -----------------------------------------
-open import Overture                            using  ( OperationSymbolsOf ; ArityOf )
-open import Overture.Operations                 using  ( Op )
-open import Setoid.Functions                    using  ( eq ; IsInjective
-                                                       ; IsSurjective ; SurjInv
-                                                       ; SurjInvIsInverseʳ )
-open import Setoid.Algebras {𝑆 = 𝑆}             using  ( Algebra ; Lift-Alg ; _^_ ; 𝔻[_]
-                                                       ; 𝕌[_] ; mkAlgebra ; Lift-Algˡ
-                                                       ; Lift-Algʳ ; ⨅ )
+open import Overture                         using  ( OperationSymbolsOf ; ArityOf )
+open import Overture.Operations              using  ( Op )
+open import Setoid.Functions                 using  ( eq ; IsInjective
+                                                    ; IsSurjective ; SurjInv
+                                                    ; SurjInvIsInverseʳ )
+open import Setoid.Algebras {𝑆 = 𝑆}          using  ( Algebra ; Lift-Alg ; _^_ ; 𝔻[_]
+                                                    ; 𝕌[_] ; mkAlgebra ; Lift-Algˡ
+                                                    ; Lift-Algʳ ; ⨅ )
 
-open import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}  using  ( hom ; IsHom ; mkIsHom )
-open import Setoid.Homomorphisms.Properties {𝑆 = 𝑆}
-  using  ( 𝒾𝒹 ; ⊙-hom ; ToLiftˡ ; FromLiftˡ ; ToFromLiftˡ ; FromToLiftˡ ; ToLiftʳ
-         ; FromLiftʳ ; ToFromLiftʳ ; FromToLiftʳ )
+open import Setoid.Homomorphisms.Basic       using  ( hom ; IsHom ; 𝒾𝒹 ; mkIsHom )
+open import Setoid.Homomorphisms.Properties  using  ( ⊙-hom ; ToLiftˡ ; FromLiftˡ
+                                                    ; ToFromLiftˡ ; FromToLiftˡ
+                                                    ; ToLiftʳ ; FromLiftʳ
+                                                    ; ToFromLiftʳ ; FromToLiftʳ )
 
-open _⟶_      using ( cong ) renaming ( to to _⟨$⟩_ )
+open _⟶_ using ( cong ) renaming ( to to _⟨$⟩_ )
 
 private variable  α ρᵃ β ρᵇ γ ρᶜ ι : Level
 ```
