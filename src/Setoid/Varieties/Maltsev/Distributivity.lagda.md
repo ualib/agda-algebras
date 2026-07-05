@@ -67,12 +67,11 @@ open import Setoid.Congruences.Properties      using  ( CongruenceDistributive )
 open import Setoid.Terms.Basic                 using  ( Sub ; _[_] ; module Environment )
 open import Setoid.Terms.Interpretation        using  ( graft≐[] )
 open import Setoid.Varieties.EquationalLogic   using  ( _⊧_≈_ )
-open import Setoid.Varieties.FreeBridge        using  ( cg-pair→⊢ ; toEq )
-open import Setoid.Varieties.FreeSubstitution  using  ( ≐→⊢ )
+open import Setoid.Varieties.FreeSubstitution  using  ( ≐→⊢ ; cg-pair→⊢ )
 open import Setoid.Varieties.Interpretation    using  ( reductᴵ ; _⊨ₑ_ ; ⊧-interp
                                                       ; module Interpret )
 open import Setoid.Varieties.Maltsev.Basic     using  ( tri ; even? ; term-compatible )
-open import Setoid.Varieties.SoundAndComplete  using  ( Eq ; _⊢_▹_≈_
+open import Setoid.Varieties.SoundAndComplete  using  ( Eq ; toEq ; _⊢_▹_≈_
                                                       ; module FreeAlgebra
                                                       ; module Soundness )
 open import Function using ( Func )
@@ -504,8 +503,9 @@ module _ {𝑆 : Signature 𝓞 𝓥}{𝑩 : Algebra {𝑆 = 𝑆} α ρ}(μ ν 
 
 The construction is the classical one (Burris–Sankappanavar, Thm. II.12.6, the
 (1) ⟹ (2) direction[^bs]), run through the free-algebra congruence/derivability bridge
-of [Setoid.Varieties.FreeBridge][], exactly as the converse of Maltsev's theorem
-(`CP⇒maltsev`{.AgdaFunction}, [Setoid.Varieties.Maltsev.Permutability][]) is.
+`cg-pair→⊢`{.AgdaFunction} ([Setoid.Varieties.FreeSubstitution][]), exactly as the
+converse of Maltsev's theorem (`CP⇒maltsev`{.AgdaFunction},
+[Setoid.Varieties.Maltsev.Permutability][]) is.
 
 +  Work in `𝔽 = 𝔽[ Fin 3 ]`{.AgdaFunction}, the relatively free algebra on three
    generators `x , y , z`.  It is a model of the theory (`satisfies`{.AgdaFunction}),

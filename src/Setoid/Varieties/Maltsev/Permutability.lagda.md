@@ -44,13 +44,12 @@ open import Setoid.Congruences.Permutability   using  ( CongruencePermutable )
 open import Setoid.Terms.Basic                 using  ( Sub ; _[_] ; module Environment )
 open import Setoid.Terms.Interpretation        using  ( graft≐[] )
 open import Setoid.Varieties.EquationalLogic   using  ( _⊧_≈_ )
-open import Setoid.Varieties.FreeBridge        using  ( cg-pair→⊢ ; toEq )
-open import Setoid.Varieties.FreeSubstitution  using  ( ≐→⊢ )
+open import Setoid.Varieties.FreeSubstitution  using  ( ≐→⊢ ; cg-pair→⊢ )
 open import Setoid.Varieties.Interpretation    using  ( reductᴵ ; _⊨ₑ_ ; ⊧-interp )
 open import Setoid.Varieties.Maltsev.Basic     using  ( Sig-Maltsev ; m-Op ; m ; tri
                                                       ; mxxy≈y ; mxyy≈x ; Th-Maltsev
                                                       ; HasMaltsevTerm ; term-compatible )
-open import Setoid.Varieties.SoundAndComplete  using  ( Eq ; _⊢_▹_≈_
+open import Setoid.Varieties.SoundAndComplete  using  ( Eq ; toEq ; _⊢_▹_≈_
                                                       ; module FreeAlgebra
                                                       ; module Soundness )
 
@@ -180,7 +179,8 @@ type is inhabited, thereby proving the statement and completing the characteriza
 a congruence-permutable variety has a Maltsev term.[^maltsev2]
 
 The construction is the classical one (Burris–Sankappanavar, Thm. II.12.2), run through
-the free-algebra congruence/derivability bridge of [Setoid.Varieties.FreeBridge][].
+the free-algebra congruence/derivability bridge `cg-pair→⊢`{.AgdaFunction}
+([Setoid.Varieties.FreeSubstitution][]).
 
 +  Work in `𝔽[ Fin 3 ]`{.AgdaFunction}, the relatively free algebra on three generators
    `x , y , z`.  It is a model of the theory (`satisfies`{.AgdaFunction}), hence

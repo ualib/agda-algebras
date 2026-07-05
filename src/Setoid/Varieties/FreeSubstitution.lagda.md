@@ -53,6 +53,16 @@ The worked four-fold reassociation that motivated the substitution kit is in
 [Examples.Setoid.FreeSemigroup][], built from one application of `sub▹` (a generic
 `assoc▹` that instantiates associativity at arbitrary subterms) plus the congruence rule.
 
+The kit also has a *semantic* face, used by the converse Maltsev conditions:
+
++  `subhom`{.AgdaFunction} / `renhom`{.AgdaFunction} — a substitution acts on the
+   relatively free algebra `𝔽[_]`{.AgdaFunction}
+   ([Setoid.Varieties.SoundAndComplete][]) as a homomorphism, whose congruence is
+   precisely the `sub`{.AgdaInductiveConstructor} rule;
++  `cg-pair→⊢`{.AgdaFunction} — the free-algebra congruence/derivability bridge: a
+   membership in a principal congruence `Cg ❴ a , b ❵` of `𝔽[ Δ ]` becomes a derivable
+   equation after any substitution that collapses the generating pair.
+
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -61,15 +71,25 @@ open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 module Setoid.Varieties.FreeSubstitution {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
-open import Agda.Primitive  using () renaming ( Set to Type )
-open import Level           using ( Level )
+open import Agda.Primitive   using () renaming ( Set to Type )
+open import Data.Product     using ( _,_ ; proj₁ )
+open import Function         using ( Func )
+open import Level            using ( Level )
+open import Relation.Binary  using () renaming ( _⇒_ to _⊆_ )
 
 import Relation.Binary.PropositionalEquality as ≡
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture.Terms                      {𝑆 = 𝑆} using ( Term )
+open import Overture.Terms                      {𝑆 = 𝑆} using ( Term ; ℊ )
+open import Setoid.Algebras.Basic               {𝑆 = 𝑆} using ( 𝔻[_] )
+open import Setoid.Congruences.Generation       {𝑆 = 𝑆} using ( Gen ; base ; symmetric
+                                                               ; module principal )
+open import Setoid.Homomorphisms.Basic                   using ( hom ; mkIsHom )
+open import Setoid.Homomorphisms.Kernels                 using ( kercon )
+open import Setoid.Homomorphisms.Properties              using ( Cg⊆ker )
 open import Setoid.Terms.Basic                  {𝑆 = 𝑆} using ( _≐_ ; Sub ; _[_] )
-open import Setoid.Varieties.SoundAndComplete   {𝑆 = 𝑆} using ( Eq ; _⊢_▹_≈_ )
+open import Setoid.Varieties.SoundAndComplete   {𝑆 = 𝑆} using ( Eq ; _⊢_▹_≈_
+                                                               ; module FreeAlgebra )
 
 open _≐_         using ( rfl ; gnl )
 open _⊢_▹_≈_     using ( app ; sub ; refl ; trans )
@@ -105,6 +125,85 @@ the `_≐_` arguments are the mechanical "rebuild" bridges, and `sub▹` hides t
 sub▹ : {E : I → Eq} {p q : Term Δ} (d : E ⊢ Δ ▹ p ≈ q) (σ : Sub Γ Δ)
        {l r : Term Γ} → l ≐ p [ σ ] → q [ σ ] ≐ r → E ⊢ Γ ▹ l ≈ r
 sub▹ d σ l≐pσ qσ≐r = trans (≐→⊢ l≐pσ) (trans (sub d σ) (≐→⊢ qσ≐r))
+```
+
+#### The substitution-induced homomorphism
+
+Fix a theory `E : I → Eq`.  A substitution `σ : Sub Γ Δ` (each `Δ`-variable to a
+`Γ`-term) induces the homomorphism `subhom σ : 𝔽[ Δ ] → 𝔽[ Γ ]`{.AgdaFunction} on the
+relatively free algebra whose underlying map is `_[ σ ]`{.AgdaFunction}.  It respects
+derivable equality by the `sub`{.AgdaInductiveConstructor} rule, and the homomorphism
+square holds by `refl`{.AgdaInductiveConstructor} because `(node f ts) [ σ ]` is
+`node f (λ i → ts i [ σ ])` on the nose.
+
+```agda
+module _ {Γ Δ : Type χ} {I : Type ι} (E : I → Eq) where
+  open FreeAlgebra E using ( 𝔽[_] )
+
+  subhom : (σ : Sub Γ Δ) → hom 𝔽[ Δ ] 𝔽[ Γ ]
+  subhom σ = subfunc , mkIsHom (λ {f}{a} → refl)
+    where
+    subfunc : Func 𝔻[ 𝔽[ Δ ] ] 𝔻[ 𝔽[ Γ ] ]
+    subfunc = record { to = _[ σ ] ; cong = λ {p}{q} pq → sub pq σ }
+```
+
+The special case of a plain variable renaming `r : Δ → Γ` is `subhom (ℊ ∘ r)`.
+
+```agda
+  renhom : (r : Δ → Γ) → hom 𝔽[ Δ ] 𝔽[ Γ ]
+  renhom r = subhom (λ v → ℊ (r v))
+```
+
+#### The principal-pair bridge
+
+Combining the substitution homomorphism with `Cg⊆ker`{.AgdaFunction}
+([Setoid.Homomorphisms.Properties][]) yields the **free-algebra
+congruence/derivability bridge**: given a substitution `σ` that collapses the pair
+`(a , b)` — i.e. `E ⊢ Γ ▹ a [ σ ] ≈ b [ σ ]` is derivable — every pair `(s , t)` in
+the principal congruence `Cg ❴ a , b ❵` of `𝔽[ Δ ]` becomes derivably equal after `σ`.
+This is how the converse Maltsev conditions read term identities off congruences of
+the free algebra ([Setoid.Varieties.Maltsev.Permutability][],
+[Setoid.Varieties.Maltsev.Distributivity][]).
+
+```agda
+  open principal 𝔽[ Δ ]
+
+  cg-pair→⊢ : (σ : Sub Γ Δ)(a b : Term Δ)
+    → E ⊢ Γ ▹ a [ σ ] ≈ b [ σ ]
+    → {s t : Term Δ} → Gen ❴ a , b ❵ s t → E ⊢ Γ ▹ s [ σ ] ≈ t [ σ ]
+  cg-pair→⊢ σ a b coll = Cg⊆ker (subhom σ) incl
+    where
+    incl : ❴ a , b ❵ ⊆ proj₁ (kercon (subhom σ))
+    incl pᵣ = coll
+```
+
+#### Smoke test: recovering a derivable identity from a principal congruence
+
+A small end-to-end consumer.  Fix two variables `u`, `v`, a substitution `σ` that
+*merges* them (`σ u`, `σ v` are derivably equal), and the principal congruence
+`Cg ❴ ℊ u , ℊ v ❵`.  Then every pair in that congruence is recovered as a derivable
+equation after `σ`; in particular the generators themselves, and (by symmetry) the
+swapped pair.
+
+```agda
+module _
+  {Γ : Type χ}
+  {I : Type ι}
+  (E : I → Eq)
+  (σ : Sub Γ Γ)  (u v : Γ)
+  (merge : E ⊢ Γ ▹ σ u ≈ σ v)
+  where
+  open FreeAlgebra E using ( 𝔽[_] )
+  open principal 𝔽[ Γ ]
+
+  recover : {s t : Term Γ} → Gen ❴ ℊ u , ℊ v ❵ s t → E ⊢ Γ ▹ s [ σ ] ≈ t [ σ ]
+  recover = cg-pair→⊢ E σ (ℊ u) (ℊ v) merge
+
+  recover-gen : E ⊢ Γ ▹ σ u ≈ σ v
+  recover-gen = recover (base pᵣ)
+
+  recover-swap : E ⊢ Γ ▹ σ v ≈ σ u
+  recover-swap = recover (symmetric (base pᵣ))
 ```
 
 --------------------------------------
