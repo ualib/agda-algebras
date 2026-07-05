@@ -9,7 +9,6 @@ author: "agda-algebras development team"
 
 This is the [Setoid.Homomorphisms.Properties][] module of the [Agda Universal Algebra Library][].
 
-
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -18,22 +17,22 @@ open import Overture using (𝓞 ; 𝓥 ; Signature)
 module Setoid.Homomorphisms.Properties  where
 
 -- Imports from Agda and the Agda Standard Library ------------------------------------------
-open import Data.Product     using ( _,_ )
+open import Data.Product     using ( _,_ ; proj₁ ; proj₂ )
 open import Function         using ( id ; _$_ ) renaming ( Func to _⟶_ )
 open import Level            using ( Level )
 open import Relation.Binary  using ( Setoid )
                              renaming ( Rel to BinaryRelation ; _⇒_ to _⊆_ )
 
-open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
+open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------
-open import Overture          using ( proj₁ ; proj₂ )
-open import Setoid.Functions  using ( _⊙_ ; 𝑖𝑑 ; eq ; ⊙-IsSurjective )
-open import Setoid.Algebras using ( Algebra ; _^_; Lift-Algˡ; Lift-Algʳ; Lift-Alg; 𝕌[_] ; 𝔻[_] )
-open import Setoid.Congruences.Generation using ( Gen ; Cg-least ) -- ; base ; symmetric)
+open import Setoid.Algebras                using  ( Algebra ; _^_; Lift-Algˡ ; Lift-Algʳ
+                                                  ; Lift-Alg; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Congruences.Generation  using  ( Gen ; Cg-least ) -- ; base ; symmetric)
+open import Setoid.Functions               using  ( _⊙_ ; eq ; ⊙-IsSurjective )
+open import Setoid.Homomorphisms.Basic     using  ( hom ; IsHom ; epi ; IsEpi )
+open import Setoid.Homomorphisms.Kernels   using  ( kercon )
 
-open import Setoid.Homomorphisms.Basic using ( hom ; IsHom ; epi ; IsEpi ; compatible-map )
-open import Setoid.Homomorphisms.Kernels using ( kercon )
 open _⟶_ using ( cong ) renaming ( to to _⟨$⟩_ )
 
 private variable
@@ -41,9 +40,7 @@ private variable
   𝑆 : Signature 𝓞 𝓥
 ```
 
-
 ##### Composition of homs
-
 
 ```agda
 module _
@@ -103,16 +100,14 @@ We prove that the operations of lifting and lowering of a setoid algebra are hom
 
 ```agda
 module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{ℓ : Level} where
- open Setoid 𝔻[ 𝑨 ] using ( reflexive ) renaming ( _≈_ to _≈₁_ ; refl to refl₁ )
-
- open Algebra  using ( Domain )
- open Setoid (Domain (Lift-Algˡ 𝑨 ℓ))  using () renaming ( _≈_ to _≈ˡ_ ; refl to reflˡ)
- open Setoid (Domain (Lift-Algʳ 𝑨 ℓ))  using () renaming ( _≈_ to _≈ʳ_ )
+ open Setoid 𝔻[ 𝑨 ]              using ( reflexive ) renaming ( _≈_ to _≈₁_ ; refl to refl₁ )
+ open Setoid 𝔻[ Lift-Algˡ 𝑨 ℓ ]  using () renaming ( _≈_ to _≈ˡ_ ; refl to reflˡ)
+ open Setoid 𝔻[ Lift-Algʳ 𝑨 ℓ ]  using () renaming ( _≈_ to _≈ʳ_ )
 
  open Level
  ToLiftˡ : hom 𝑨 (Lift-Algˡ 𝑨 ℓ)
  ToLiftˡ =  record { to = lift ; cong = id } ,
-            record { compatible = reflexive ≡.refl }
+            record { compatible = reflexive refl }
 
  FromLiftˡ : hom (Lift-Algˡ 𝑨 ℓ) 𝑨
  FromLiftˡ = record { to = lower ; cong = id } , record { compatible = reflˡ }
@@ -125,7 +120,7 @@ module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{ℓ : Level} where
 
  ToLiftʳ : hom 𝑨 (Lift-Algʳ 𝑨 ℓ)
  ToLiftʳ =  record { to = id ; cong = lift } ,
-            record { compatible = lift (reflexive ≡.refl) }
+            record { compatible = lift (reflexive refl) }
 
  FromLiftʳ : hom (Lift-Algʳ 𝑨 ℓ) 𝑨
  FromLiftʳ =  record { to = id ; cong = lower } , record { compatible = reflˡ }
@@ -138,9 +133,8 @@ module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{ℓ : Level} where
 
 module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{ℓ r : Level} where
  open Level
- open Algebra                            using ( Domain )
- open Setoid  (Domain 𝑨)                 using (refl)
- open Setoid  (Domain (Lift-Alg 𝑨 ℓ r))  using ( _≈_ )
+ open Setoid  𝔻[ 𝑨 ]               using () renaming (refl to ≈refl)
+ open Setoid  𝔻[ Lift-Alg 𝑨 ℓ r ]  using ( _≈_ )
 
  ToLift : hom 𝑨 (Lift-Alg 𝑨 ℓ r)
  ToLift = ⊙-hom ToLiftˡ ToLiftʳ
@@ -149,7 +143,7 @@ module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{ℓ r : Level} where
  FromLift = ⊙-hom FromLiftʳ FromLiftˡ
 
  ToFromLift : ∀ b → ((proj₁ ToLift) ⟨$⟩ ((proj₁ FromLift) ⟨$⟩ b)) ≈ b
- ToFromLift b = lift refl
+ ToFromLift b = lift ≈refl
 
 
  ToLift-epi : epi 𝑨 (Lift-Alg 𝑨 ℓ r)

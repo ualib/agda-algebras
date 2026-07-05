@@ -50,7 +50,7 @@ open import Data.Bool.Base     using ( Bool ; true ; not )
 open import Data.Fin.Base      using ( Fin )
 open import Data.Fin.Patterns  using ( 0F ; 1F ; 2F )
 open import Data.Nat.Base      using ( ℕ ; zero ; suc )
-open import Data.Product       using ( _×_ ; _,_ ; proj₁ ; proj₂ )
+open import Data.Product       using ( _×_ ; _,_ ; proj₂ )
 open import Level              using ( Level ; 0ℓ ; _⊔_ ) renaming ( suc to lsuc )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------

@@ -36,7 +36,7 @@ module Setoid.Categories.Reduct where
 -- Imports from the Agda Standard Library ----------------------------
 open import Data.Product                   using ( _,_ ; proj₁ ; proj₂ )
 open import Function                       using ( Func ; _∘_ ; id)
-open import Level                          using ( Level ; _⊔_) renaming (suc to lsuc)
+open import Level                          using ( Level )
 open import Relation.Binary                using ( Setoid )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
@@ -45,7 +45,6 @@ open import Overture.Signatures.Morphisms  using ( SigMorphism ; ι ; κ )
 open import Setoid.Algebras.Basic          using ( 𝔻[_] )
 open import Setoid.Algebras.Reduct         using ( reduct )
 open import Setoid.Categories.Algebra      using ( Alg)
-open import Setoid.Categories.Category     using ( Category )
 open import Setoid.Categories.Functor      using ( Functor )
 open import Setoid.Homomorphisms.Basic     using ( IsHom ; mkIsHom)
 
@@ -54,13 +53,15 @@ open Func renaming ( to to _⟨$⟩_ )
 private variable
   α ρ : Level
 
+open IsHom
+
 reductF : {𝑆₁ 𝑆₂ : Signature 𝓞 𝓥} (φ : SigMorphism 𝑆₁ 𝑆₂)
   → Functor (Alg {𝑆 = 𝑆₂} α ρ) (Alg {𝑆 = 𝑆₁} α ρ)
 reductF φ =
   record
     { F₀            = reduct φ
-    ; F₁            = λ f → proj₁ f
-                           , mkIsHom (λ{o a} → IsHom.compatible (proj₂ f) {ι φ o} {a ∘ κ φ o})
+    ; F₁            = λ f →  proj₁ f
+                             , mkIsHom λ{o a} → compatible (proj₂ f) {ι φ o} {a ∘ κ φ o}
     ; F-resp-≈      = id
     ; identity      = λ {𝑨} _ → Setoid.refl 𝔻[ reduct φ 𝑨 ]
     ; homomorphism  = λ {_} {_} {E} _ → Setoid.refl 𝔻[ reduct φ E ]

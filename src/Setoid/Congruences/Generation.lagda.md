@@ -49,11 +49,10 @@ open import Level            using ( Level ; _⊔_ )
 open import Relation.Binary  using ( Setoid ; IsEquivalence )
                              renaming ( Rel to BinRel ; _⇒_ to _⊆_)
 -- Imports from the Agda Universal Algebras Library ------------------------------
-open import Overture using ( proj₁ ; proj₂ ; OperationSymbolsOf ; ArityOf )
-open import Setoid.Algebras.Basic {𝑆 = 𝑆} using ( Algebra ; 𝕌[_] ; 𝔻[_] ; _^_ )
-open import Setoid.Congruences.Basic {𝑆 = 𝑆}
-  using  ( Con ; mkcon ; _∣≈_ ; is-equivalence ; is-compatible ; reflexive )
-
+open import Overture                           using  ( OperationSymbolsOf ; ArityOf )
+open import Setoid.Algebras.Basic     {𝑆 = 𝑆}  using  ( Algebra ; 𝕌[_] ; 𝔻[_] ; _^_ )
+open import Setoid.Congruences.Basic  {𝑆 = 𝑆}  using  ( Con ; mkcon ; is-equivalence
+                                                      ; is-compatible ; reflexive )
 private variable α ρ ℓ ℓ′ : Level
 ```
 
