@@ -13,31 +13,27 @@ This is the [Setoid.Homomorphisms.Kernels][] module of the [Agda Universal Algeb
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature)
-
-module Setoid.Homomorphisms.Kernels {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Homomorphisms.Kernels where
 
 -- Imports from Agda and the Agda Standard Library ------------------------------------------
-open  import Data.Product      using ( _,_ )
+open  import Data.Product      using ( _,_ ; proj₁ ; proj₂ )
 open  import Function          using ( _∘_ ; id ) renaming ( Func to _⟶_ )
 open  import Level             using ( Level )
 open  import Relation.Binary   using ( Setoid )
 open  import Relation.Binary.PropositionalEquality as ≡ using ()
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------
-open  import Overture                            using ( proj₁ ; proj₂ ; kerRel ; kerRelOfEquiv )
-open  import Setoid.Functions                    using ( Image_∋_ )
-open  import Setoid.Algebras            {𝑆 = 𝑆}  using ( Algebra ; _^_ ; 𝔻[_] )
-open  import Setoid.Congruences         {𝑆 = 𝑆}  using ( _∣≈_ ; Con ; mkcon ; _╱_ ; IsCongruence )
-open  import Setoid.Homomorphisms.Basic {𝑆 = 𝑆}  using ( hom ; IsHom ; epi ; IsEpi ; epi→hom )
-open  import Setoid.Homomorphisms.Properties {𝑆 = 𝑆} using ( 𝒾𝒹 )
+open  import Overture                    using ( kerRel ; kerRelOfEquiv ; 𝓞 ; 𝓥 ; Signature)
+open  import Setoid.Functions            using ( Image_∋_ )
+open  import Setoid.Algebras             using ( Algebra ; _^_ ; 𝔻[_] )
+open  import Setoid.Congruences          using ( _∣≈_ ; Con ; mkcon ; _╱_ ; IsCongruence )
+open  import Setoid.Homomorphisms.Basic  using ( hom ; IsHom ; epi ; IsEpi ; epi→hom ; 𝒾𝒹 )
 
 private variable  α β ρᵃ ρᵇ ℓ : Level
 
-
 open _⟶_ using ( cong ) renaming ( to to _⟨$⟩_ )
 
-module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} ((hmap , hhom) : hom 𝑨 𝑩) where
+module _ {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{𝑩 : Algebra β ρᵇ} ((hmap , hhom) : hom 𝑨 𝑩) where
   open Algebra 𝑩   using ( Interp ) renaming ( Domain to B )
   open Setoid B    using ( _≈_ ; sym ; trans ; isEquivalence )
   private h = _⟨$⟩_ hmap
@@ -77,7 +73,7 @@ Now that we have a congruence, we can construct the quotient relative to the ker
   kerquo : Algebra α ρᵇ
   kerquo = 𝑨 ╱ kercon
 
-ker[_⇒_]_ :  (𝑨 : Algebra α ρᵃ) (𝑩 : Algebra β ρᵇ) → hom 𝑨 𝑩 → Algebra _ _
+ker[_⇒_]_ :  {𝑆 : Signature 𝓞 𝓥} (𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ) (𝑩 : Algebra β ρᵇ) → hom 𝑨 𝑩 → Algebra _ _
 ker[ 𝑨 ⇒ 𝑩 ] h = kerquo h
 ```
 
@@ -87,7 +83,7 @@ ker[ 𝑨 ⇒ 𝑩 ] h = kerquo h
 Given an algebra `𝑨` and a congruence `θ`, the *canonical projection* is a map from `𝑨` onto `𝑨 ╱ θ` that is constructed, and proved epimorphic, as follows.
 
 ```agda
-module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} (h : hom 𝑨 𝑩) where
+module _ {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{𝑩 : Algebra β ρᵇ} (h : hom 𝑨 𝑩) where
   open IsCongruence
 
   πepi : (θ : Con 𝑨 ℓ) → epi 𝑨 (𝑨 ╱ θ)

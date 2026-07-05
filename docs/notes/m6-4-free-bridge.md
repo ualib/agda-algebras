@@ -13,6 +13,16 @@ The deliverable of M6-3 was bounded: the forward Maltsev theorem (`MaltsevTerm�
 uninhabited `Type`.  M6-4 builds the reusable infrastructure the converse needs, and
 M6-5 inhabits the statement, completing the iff for congruence permutability.
 
+**Layout update (M6-7 cleanup).**  The interim module `Setoid.Varieties.FreeBridge`
+that originally packaged the bridge has since been dissolved, its pieces moved to their
+canonical homes: the principal (single-pair) relation `❴_,_❵` to
+`Setoid.Congruences.Generation` (`module principal`), the bridge lemma `Cg⊆ker` to
+`Setoid.Homomorphisms.Properties`, the impedance shim `toEq` to
+`Setoid.Varieties.SoundAndComplete` (next to the `Eq` record it targets), and the
+substitution-induced homomorphism `subhom` / `renhom` with the principal-pair bridge
+`cg-pair→⊢` (and the `recover` smoke test) to `Setoid.Varieties.FreeSubstitution`.
+The mathematics below is unchanged; only the module names differ.
+
 ## What landed
 
 +  `Setoid.Varieties.FreeBridge` — the reusable bridge (M6-4), four self-contained
@@ -88,8 +98,8 @@ them by a one-line structural induction, at the inductive equality `_≐_`; `≐
 
 `recover` / `recover-gen` / `recover-swap`: for two variables `u , v` and a substitution
 that merges them, every pair in `Cg ❴ ℊ u , ℊ v ❵` is recovered as a derivable equation
-after the merge — in particular the generators themselves and (by `symm`) the swapped
-pair.  This exercises the bridge end-to-end on `base`/`symm` memberships.
+after the merge — in particular the generators themselves and (by `symmetric`) the swapped
+pair.  This exercises the bridge end-to-end on `base`/`symmetric` memberships.
 
 ## The converse of Maltsev (M6-5)
 
@@ -180,9 +190,9 @@ congruence-lattice *representation*, only properties of congruence lattices.
 ## Build / check
 
 +  Whole library (what CI runs): `nix develop --command make check`.
-+  The new / changed modules, one at a time:
-   `nix develop --command agda src/Setoid/Varieties/FreeBridge.lagda.md`
-   (then `Setoid/Varieties/Maltsev/Permutability`, which now contains the converse).
++  The changed modules, one at a time:
+   `nix develop --command agda src/Setoid/Varieties/FreeSubstitution.lagda.md`
+   (then `Setoid/Varieties/Maltsev/Permutability`, which contains the converse).
 
 [M6-4]: https://github.com/ualib/agda-algebras/issues/410
 [M6-5]: https://github.com/ualib/agda-algebras/issues/411

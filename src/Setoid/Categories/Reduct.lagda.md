@@ -31,42 +31,39 @@ algebra, not classical, and depends on nothing in `Classical/`.)
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using ( 𝓞 ; 𝓥 ; Signature )
-
 module Setoid.Categories.Reduct where
-
 
 -- Imports from the Agda Standard Library ----------------------------
 open import Data.Product                   using ( _,_ ; proj₁ ; proj₂ )
 open import Function                       using ( Func ; _∘_ ; id)
-open import Level                          using ( Level ; _⊔_) renaming (suc to lsuc)
+open import Level                          using ( Level )
 open import Relation.Binary                using ( Setoid )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Setoid.Algebras.Reduct         using ( reduct )
+open import Overture                       using ( 𝓞 ; 𝓥 ; Signature )
 open import Overture.Signatures.Morphisms  using ( SigMorphism ; ι ; κ )
-open import Setoid.Algebras.Basic          using (𝔻[_])
-open import Setoid.Categories.Algebra      using (Alg)
-open import Setoid.Categories.Category     using (Category)
+open import Setoid.Algebras.Basic          using ( 𝔻[_] )
+open import Setoid.Algebras.Reduct         using ( reduct )
+open import Setoid.Categories.Algebra      using ( Alg)
 open import Setoid.Categories.Functor      using ( Functor )
-open import Setoid.Homomorphisms.Basic     using (IsHom; mkIsHom)
+open import Setoid.Homomorphisms.Basic     using ( IsHom ; mkIsHom)
 
 open Func renaming ( to to _⟨$⟩_ )
 
-module _ {α ρ : Level} {𝑆₁ 𝑆₂ : Signature 𝓞 𝓥} (φ : SigMorphism 𝑆₁ 𝑆₂) where
-  𝓐₁ 𝓐₂ : Category (𝓞 ⊔ 𝓥 ⊔ lsuc (α ⊔ ρ)) (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ) (α ⊔ ρ)
-  𝓐₁ = Alg {𝑆 = 𝑆₁} α ρ
-  𝓐₂ = Alg {𝑆 = 𝑆₂} α ρ
-  open IsHom {𝑆 = 𝑆₂} renaming ( compatible to comp₂ )
+private variable
+  α ρ : Level
 
-  reductF : Functor 𝓐₂ 𝓐₁
-  reductF =
-    record
-      { F₀            = reduct φ
-      ; F₁            = λ f → proj₁ f
-                             , mkIsHom (λ{o a} → comp₂ (proj₂ f) {ι φ o} {a ∘ κ φ o})
-      ; F-resp-≈      = id
-      ; identity      = λ {𝑨} _ → Setoid.refl 𝔻[ reduct φ 𝑨 ]
-      ; homomorphism  = λ {_} {_} {E} _ → Setoid.refl 𝔻[ reduct φ E ]
-      }
+open IsHom
+
+reductF : {𝑆₁ 𝑆₂ : Signature 𝓞 𝓥} (φ : SigMorphism 𝑆₁ 𝑆₂)
+  → Functor (Alg {𝑆 = 𝑆₂} α ρ) (Alg {𝑆 = 𝑆₁} α ρ)
+reductF φ =
+  record
+    { F₀            = reduct φ
+    ; F₁            = λ f →  proj₁ f
+                             , mkIsHom λ{o a} → compatible (proj₂ f) {ι φ o} {a ∘ κ φ o}
+    ; F-resp-≈      = id
+    ; identity      = λ {𝑨} _ → Setoid.refl 𝔻[ reduct φ 𝑨 ]
+    ; homomorphism  = λ {_} {_} {E} _ → Setoid.refl 𝔻[ reduct φ E ]
+    }
 ```

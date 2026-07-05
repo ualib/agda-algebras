@@ -59,6 +59,17 @@ record Eq : Type (ov χ) where
 infix 6 _≈̇_
 open Eq public
 
+-- The "impedance shim" between the library's two theory shapes.  The interpretability
+-- machinery (Setoid.Varieties.Interpretation) records a theory as an indexed family of
+-- *pairs of terms* (Idx → Term X × Term X); the derivation calculus _⊢_▹_≈_ and the
+-- free algebra 𝔽[_] below consume an indexed family of *equations* (I → Eq).  toEq
+-- converts the former to the latter.  No companion is needed for satisfaction: 𝑨 ⊨ₑ ℰ
+-- there and 𝑨 ⊨ toEq ℰ below coincide definitionally (both unfold to pointwise
+-- equality of the two interpreted terms under all environments).
+toEq : {χ ι : Level}{Idx : Type ι}{X : Type χ}
+  → (Idx → Term X × Term X) → (Idx → Eq {χ = χ})
+toEq ℰ i = proj₁ (ℰ i) ≈̇ proj₂ (ℰ i)
+
 -- Equation p ≈̇ q holding in algebra M. (type \~~\^. to get ≈̇; type \models to get ⊧)
 _⊧_ : (𝑨 : Algebra α ρᵃ)(term-identity : Eq{χ}) → Type _
 𝑨 ⊧ (p ≈̇ q) = Equal p q where open Environment 𝑨

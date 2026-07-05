@@ -11,7 +11,7 @@ author: "the agda-algebras development team"
 This is the [Setoid.Congruences.ChainJoin][] module of the [Agda Universal Algebra Library][].
 
 [Setoid.Congruences.Generation][] builds the join `θ ∨ φ = Cg(θ ∪ φ)` as the
-*inductively generated* congruence `Gen(θ ∪ φ)`, whose `comp` constructor closes the
+*inductively generated* congruence `Gen(θ ∪ φ)`, whose `compatible` constructor closes the
 relation under the basic operations.  That closure is needed for **infinitary**
 signatures.  For a **finitary** signature — every operation symbol has a finite arity,
 the universal-algebraist's standing assumption — the join collapses to something far more
@@ -68,7 +68,7 @@ open import Setoid.Congruences.Basic {𝑆 = 𝑆}
                                        using ( Con ; mkcon ; _∣≈_ ; reflexive
                                              ; is-equivalence ; is-compatible )
 open import Setoid.Congruences.Generation {𝑆 = 𝑆}
-                                       using ( Gen ; rfl ; tran ; base ; Cg-least ; _∪ᵣ_ )
+                                       using ( Gen ; rfl ; transitive ; base ; Cg-least ; _∪ᵣ_ )
 
 open import Function using ( Func )
 open Func renaming ( cong to ≈cong ; to to _⟨$⟩_ )
@@ -128,13 +128,13 @@ module _ {𝑩 : Algebra α ρ}{R : 𝕌[ 𝑩 ] → 𝕌[ 𝑩 ] → Type ℓ} 
 
 #### A chain is below the generated congruence
 
-Each step is `base`, the empty walk is `rfl`, concatenation is `tran`.
+Each step is `base`, the empty walk is `rfl`, concatenation is `transitive`.
 
 ```agda
 Chain⊆Gen : (𝑩 : Algebra α ρ)(θ φ : Con 𝑩 ℓ){x y : 𝕌[ 𝑩 ]}
   → Chain 𝑩 (θ ∪ᵣ φ) x y → Gen {𝑨 = 𝑩} (θ ∪ᵣ φ) x y
 Chain⊆Gen 𝑩 θ φ (nil x≈y)   = rfl x≈y
-Chain⊆Gen 𝑩 θ φ (cons r c)  = tran (base r) (Chain⊆Gen 𝑩 θ φ c)
+Chain⊆Gen 𝑩 θ φ (cons r c)  = transitive (base r) (Chain⊆Gen 𝑩 θ φ c)
 ```
 
 #### Finitary signatures

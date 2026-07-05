@@ -19,7 +19,7 @@ module Setoid.Congruences.Basic {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from the Agda Standard Library ---------------------------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
-open import Data.Product     using ( _,_ ; Σ-syntax )
+open import Data.Product     using ( _,_ ; Σ-syntax ; proj₁ ; proj₂ )
 open import Data.Unit.Base   using ( ⊤ ; tt )
 open import Function         using ( Func )
 open import Level            using ( Level ; _⊔_ ; Lift ; lift ; lower )
@@ -29,9 +29,9 @@ open import Relation.Binary  using ( Setoid ; IsEquivalence )
 open import Relation.Binary.PropositionalEquality using ( refl )
 
 -- Imports from the Agda Universal Algebras Library ------------------------------
-open import Overture          using ( proj₁  ; proj₂ ; _|:_ ; Equivalence )
-open import Setoid.Relations  using ( ⟪_⟫ ; _/_ ; ⟪_∼_⟫-elim )
-open import Setoid.Algebras.Basic {𝑆 = 𝑆} using ( ov ; Algebra ; 𝔻[_] ; 𝕌[_] ; _^_ )
+open import Overture                       using ( _|:_ ; Equivalence )
+open import Setoid.Relations               using ( ⟪_⟫ ; _/_ ; ⟪_∼_⟫-elim )
+open import Setoid.Algebras.Basic {𝑆 = 𝑆}  using ( ov ; Algebra ; 𝔻[_] ; 𝕌[_] ; _^_ )
 
 private variable α ρ ℓ : Level
 ```

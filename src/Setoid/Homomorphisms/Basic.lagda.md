@@ -13,25 +13,26 @@ This is the [Setoid.Homomorphisms.Basic][] module of the [Agda Universal Algebra
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature )
-
-module Setoid.Homomorphisms.Basic {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Homomorphisms.Basic  where
 
 -- Imports from Agda and the Agda Standard Library ------------------------------
 open import Agda.Primitive           using () renaming ( Set to Type )
-open import Data.Product             using ( _,_ ; Σ ; Σ-syntax )
+open import Data.Product             using ( _,_ ; Σ ; Σ-syntax ; proj₁ ; proj₂ )
 open import Function.Bundles         using () renaming ( Func to _⟶_ )
 open import Level                    using ( Level ; _⊔_ )
 open import Relation.Binary          using ( Setoid )
+open import Relation.Binary.PropositionalEquality using ( refl )
 
 -- Imports from the Agda Universal Algebra Library ---------------------------
-open import Overture                 using ( proj₁ ; proj₂ ; OperationSymbolsOf )
-open import Setoid.Functions         using ( IsInjective ; IsSurjective )
-open import Setoid.Algebras {𝑆 = 𝑆}  using ( Algebra ; _^_ ; 𝔻[_])
+open import Overture                 using ( OperationSymbolsOf ; 𝓞 ; 𝓥 ; Signature )
+open import Setoid.Functions         using ( IsInjective ; IsSurjective ; 𝑖𝑑 )
+open import Setoid.Algebras          using ( Algebra ; _^_ ; 𝔻[_])
 
-private variable α β ρᵃ ρᵇ : Level
+private variable
+  α β ρᵃ ρᵇ : Level
 
-module _ (𝑨 : Algebra α ρᵃ)(𝑩 : Algebra β ρᵇ) where
+
+module _ {𝑆 : Signature 𝓞 𝓥} (𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ)(𝑩 : Algebra β ρᵇ) where
   open _⟶_ {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝔻[ 𝑨 ]}{To = 𝔻[ 𝑩 ]} renaming (to to _⟨$⟩_ )
 
   compatible-map-op : (𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]) → OperationSymbolsOf 𝑆 → Type (𝓥 ⊔ α ⊔ ρᵇ)
@@ -86,7 +87,7 @@ module _ (𝑨 : Algebra α ρᵃ)(𝑩 : Algebra β ρᵇ) where
   epi→hom : epi → hom
   epi→hom h = IsEpi.HomReduct (proj₂ h)
 
-module _ (𝑨 : Algebra α ρᵃ)(𝑩 : Algebra β ρᵇ) where
+module _ {𝑆 : Signature 𝓞 𝓥} (𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ)(𝑩 : Algebra β ρᵇ) where
   open IsEpi
   open IsMon
 
@@ -95,4 +96,14 @@ module _ (𝑨 : Algebra α ρᵃ)(𝑩 : Algebra β ρᵇ) where
 
   epi→ontohom : epi 𝑨 𝑩 → Σ[ h ∈ hom 𝑨 𝑩 ] IsSurjective (proj₁ h)
   epi→ontohom (hh , hhE) = (hh , isHom hhE) , isSurjective hhE
+```
+
+Finally, we define the identity homomorphism for setoid algebras.
+
+```agda
+module _ {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ} where
+  open Setoid 𝔻[ 𝑨 ]   using ( reflexive )
+
+  𝒾𝒹 :  hom 𝑨 𝑨
+  𝒾𝒹 = 𝑖𝑑 , mkIsHom (reflexive refl)
 ```

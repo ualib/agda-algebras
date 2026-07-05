@@ -36,9 +36,9 @@ open import Setoid.Algebras                    {𝑆 = 𝑆}  using  ( Algebra ;
                                                                ; Lift-Algˡ ; Lift-Alg ; 𝕌[_] )
 open import Setoid.Functions
 open import Setoid.Signatures                           using  ( ⟨_⟩ )
-open import Setoid.Homomorphisms.Basic         {𝑆 = 𝑆}  using  ( hom ; IsHom )
+open import Setoid.Homomorphisms.Basic            using  ( hom ; IsHom ; 𝒾𝒹 )
 open import Setoid.Homomorphisms.Isomorphisms  {𝑆 = 𝑆}  using  ( _≅_ ; Lift-≅ )
-open  import Setoid.Homomorphisms.Properties   {𝑆 = 𝑆}  using  ( Lift-homˡ ; ToLiftˡ ; 𝒾𝒹
+open  import Setoid.Homomorphisms.Properties  using  ( Lift-homˡ ; ToLiftˡ
                                                                ; lift-hom-lemma ; ⊙-hom )
 
 open Algebra

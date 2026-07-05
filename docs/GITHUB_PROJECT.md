@@ -3065,8 +3065,8 @@ Design discussion: how to encode Maltsev conditions uniformly?  Options include 
 
 - [x] `HasMaltsevTerm : Variety → Term → Type` — landed as the interpretation predicate `HasMaltsevTerm ℰ = Th-Maltsev ≼ ℰ` (`Setoid.Varieties.Maltsev`).
 - [x] Specific Maltsev terms: Jónsson terms (CD), Day terms (CM), Maltsev operation (CP) — `Th-Maltsev`, `Th-Jonsson n`, `Th-Day n`, with `HasMaltsevTerm` / `HasJonssonTerms n` / `HasDayTerms n` (`Setoid.Varieties.{Maltsev,MaltsevConditions}`).
-- [ ] Jónsson's theorem: a variety is CD iff Jónsson terms exist — stated (`Jonsson-Statement`); proof tracked in #412 (forward) and #413 (converse).
-- [x] CP iff a Maltsev term exists — forward direction `MaltsevTerm⇒CP` / `maltsev⇒CP` (M6-3, #409); converse `CP⇒maltsev` (`Setoid.Varieties.MaltsevConditions`, M6-5, #411) inhabiting `CP⇒maltsev-Statement`, built on the free-algebra bridge (`Setoid.Varieties.FreeBridge`, M6-4, #410).
+- [x] Jónsson's theorem: a variety is CD iff Jónsson terms exist — complete iff for finitary signatures, `jonsson-theorem` in `Setoid.Varieties.Maltsev.Distributivity`: forward `jonsson-finitary⇒CongruenceDistributiveVariety` (M6-6, #412), converse `CD⇒jonsson` (M6-7, #413; design note `docs/notes/m6-7-reverse-jonsson.md`).
+- [x] CP iff a Maltsev term exists — forward direction `MaltsevTerm⇒CP` / `maltsev⇒CP` (M6-3, #409); converse `CP⇒maltsev` (`Setoid.Varieties.Maltsev.Permutability`, M6-5, #411) inhabiting `CP⇒maltsev-Statement`, built on the free-algebra bridge `cg-pair→⊢` (M6-4, #410; now in `Setoid.Varieties.FreeSubstitution`).
 - [ ] Day's theorem for CM — stated (`Day-Statement`); proof tracked in #412 (forward) and #413 (converse).
 
 ## Acceptance criteria
@@ -3085,7 +3085,7 @@ The CP track landed in PR #409:
 
 The chosen encoding is the interpretation `Th-X ≼ ℰ` (preferred over the issue's options (a) record and (b) inductive scheme; see the note).
 
-Deferred proofs are tracked in successor issues: #410 ([M6-4] free-algebra `Cg`↔derivability bridge — **landed**, `Setoid.Varieties.FreeBridge`), #411 ([M6-5] CP converse — **landed**, `CP⇒maltsev` in `Setoid.Varieties.MaltsevConditions`), #412 ([M6-6] forward Jónsson/Day), #413 ([M6-7] converse Jónsson/Day).  See the design note `docs/notes/m6-4-free-bridge.md` for #410 / #411.
+Deferred proofs are tracked in successor issues: #410 ([M6-4] free-algebra `Cg`↔derivability bridge — **landed**; after the M6-7 cleanup its pieces live in `Setoid.Congruences.Generation` (`module principal`), `Setoid.Homomorphisms.Properties` (`Cg⊆ker`), `Setoid.Varieties.SoundAndComplete` (`toEq`), and `Setoid.Varieties.FreeSubstitution` (`subhom` / `cg-pair→⊢`)), #411 ([M6-5] CP converse — **landed**, `CP⇒maltsev` in `Setoid.Varieties.Maltsev.Permutability`), #412 ([M6-6] forward Jónsson — **landed**; forward Day deferred indefinitely), #413 ([M6-7] converse Jónsson — **landed**, `CD⇒jonsson` / `jonsson-theorem` in `Setoid.Varieties.Maltsev.Distributivity`; converse Day remains).  See the design notes `docs/notes/m6-4-free-bridge.md` (#410 / #411), `docs/notes/m6-6-forward-jonsson-day.md` (#412), and `docs/notes/m6-7-reverse-jonsson.md` (#413).
 
 ---
 
@@ -3127,7 +3127,7 @@ It is the single biggest lever identified in the M6-3 design note: built once, i
 
 ## Status — landed
 
-`Setoid.Varieties.FreeBridge` supplies the bridge: `subhom` / `renhom` (the substitution-induced hom out of `𝔽[ X ]`, a homomorphism by `refl`), the re-exported `kercon` (kernel as a `Con`), and `Cg⊆ker` / `cg-pair→⊢` (the bridge lemma, one line via `Cg-least`), plus the `toEq` shim (the two satisfaction predicates `_⊨ₑ_` / `_⊨_` coincide definitionally, so no conversion function is needed).  The term-level companion `graft≐[]` (identifying `_✦_`'s `graft` with `_[_]`) lives with the other laws of `graft` in `Setoid.Terms.Interpretation`.  Smoke test: `recover` / `recover-gen` / `recover-swap`.  Design note: `docs/notes/m6-4-free-bridge.md`.
+`Setoid.Varieties.FreeBridge` supplied the bridge: `subhom` / `renhom` (the substitution-induced hom out of `𝔽[ X ]`, a homomorphism by `refl`), the re-exported `kercon` (kernel as a `Con`), and `Cg⊆ker` / `cg-pair→⊢` (the bridge lemma, one line via `Cg-least`), plus the `toEq` shim (the two satisfaction predicates `_⊨ₑ_` / `_⊨_` coincide definitionally, so no conversion function is needed).  The term-level companion `graft≐[]` (identifying `_✦_`'s `graft` with `_[_]`) lives with the other laws of `graft` in `Setoid.Terms.Interpretation`.  Smoke test: `recover` / `recover-gen` / `recover-swap`.  Design note: `docs/notes/m6-4-free-bridge.md`.  **Layout update (M6-7 cleanup):** `Setoid.Varieties.FreeBridge` has since been dissolved — `❴_,_❵` now lives in `Setoid.Congruences.Generation` (`module principal`), `Cg⊆ker` in `Setoid.Homomorphisms.Properties`, `toEq` in `Setoid.Varieties.SoundAndComplete`, and `subhom` / `renhom` / `cg-pair→⊢` (with the smoke test) in `Setoid.Varieties.FreeSubstitution`.
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
@@ -3309,7 +3309,7 @@ https://claude.ai/code/session_01MvPrLTCxKjFgsnTMK8j2qZ
 
 ## Description
 
-Complete Jónsson's and Day's theorems with the hard "lattice property ⟹ terms" directions: a congruence-distributive variety has Jónsson terms, and a congruence-modular variety has Day terms.  These inhabit the *second* projections of `Jonsson-Statement` and `Day-Statement` in `Setoid.Varieties.MaltsevConditions`, turning both into complete iffs.
+Complete Jónsson's and Day's theorems with the hard "lattice property ⟹ terms" directions: a congruence-distributive variety has Jónsson terms, and a congruence-modular variety has Day terms.  These inhabit the converse projections of `Jonsson-Statement` and `Day-Statement` (with the orientation fixed in #412, the CD ⟹ terms direction is the *first* projection; following the #428 split the statements live in `Setoid.Varieties.Maltsev.{Distributivity,Modularity}`), turning both into complete iffs.  **Status: converse Jónsson landed (PR #438, `CD⇒jonsson` / `jonsson-theorem`); converse Day remains open.**
 
 This is the research-grade end of the M6-3 track.  Beyond the [M6-4] (#410) bridge, it requires extracting the **chain length `n`** and the terms `dᵢ` / `mᵢ` from the inductive derivation witnessing a join membership — the source of the `Σ[ n ∈ ℕ ]` in the statements, and the part with no off-the-shelf analogue in the library.
 

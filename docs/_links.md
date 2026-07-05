@@ -98,7 +98,6 @@
 [Setoid.Varieties.Closure]: /Setoid/Varieties/Closure/
 [Setoid.Varieties.EquationalLogic]: /Setoid/Varieties/EquationalLogic/
 [Setoid.Varieties.FreeAlgebras]: /Setoid/Varieties/FreeAlgebras/
-[Setoid.Varieties.FreeBridge]: /Setoid/Varieties/FreeBridge/
 [Setoid.Varieties.FreeSubstitution]: /Setoid/Varieties/FreeSubstitution/
 [Setoid.Varieties.HSP]: /Setoid/Varieties/HSP/
 [Setoid.Varieties.Interpretation]: /Setoid/Varieties/Interpretation/
@@ -396,7 +395,6 @@
 [Setoid/Varieties/Closure.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Varieties/Closure.lagda.md
 [Setoid/Varieties/EquationalLogic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Varieties/EquationalLogic.lagda.md
 [Setoid/Varieties/FreeAlgebras.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Varieties/FreeAlgebras.lagda.md
-[Setoid/Varieties/FreeBridge.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Varieties/FreeBridge.lagda.md
 [Setoid/Varieties/FreeSubstitution.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Varieties/FreeSubstitution.lagda.md
 [Setoid/Varieties/HSP.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Varieties/HSP.lagda.md
 [Setoid/Varieties/Interpretation.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Varieties/Interpretation.lagda.md
