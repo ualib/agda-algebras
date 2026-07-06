@@ -81,9 +81,7 @@ algebra, 𝑨(R) := (A , ∣: ⃖ R).
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using ( 𝓞 ; 𝓥 ; Signature )
-
-module Setoid.Complexity.CSP {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Complexity.CSP where
 
 open import Agda.Primitive using () renaming ( Set to Type )
 
@@ -93,8 +91,9 @@ open import Level            using ( _⊔_ ; Level ) renaming ( suc to lsuc )
 open import Relation.Binary  using ( Setoid )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Setoid.Relations.Continuous       using ( REL-syntax )
-open import Setoid.Algebras.Basic  {𝑆 = 𝑆}    using ( Algebra )
+open import Overture                     using ( 𝓞 ; 𝓥 ; Signature )
+open import Setoid.Relations.Continuous  using ( REL-syntax )
+open import Setoid.Algebras.Basic        using ( Algebra ; 𝔻[_] ; 𝕌[_] )
 ```
 
 #### Constraints
@@ -123,24 +122,25 @@ I on "variables" V is simply a map from I to V, where,
 * V denotes a collection (type) of "variable symbols"
 
 ```agda
-module  _              -- levels for...
-        {ι : Level}    -- ...arity (or argument index) types
-        {ν : Level}    -- ...variable symbol types
-        {α ρ : Level}  -- ...domain carrier and equivalence levels
-        {ρʳ : Level}   -- ...constraint relation level
- where
- open Setoid
+module  _        -- levels for...
+  {ι : Level}    -- ...arity (or argument index) types
+  {ν : Level}    -- ...variable symbol types
+  {α ρ : Level}  -- ...domain carrier and equivalence levels
+  {ρʳ : Level}   -- ...constraint relation level
+  where
+  open Setoid using (Carrier)
 
- record Constraint (var : Type ν) (dom : var → Setoid α ρ)
-                   : Type (ν ⊔ α ⊔ lsuc ι ⊔ lsuc ρʳ) where
-  field
-   arity  : Type ι               -- The "number" of variables involved in the constraint.
-   scope  : arity → var          -- Which variables are involved in the constraint.
-   rel    : REL[ i ∈ arity ] (Carrier (dom (scope i))) -- The constraint relation.
+  record Constraint (var : Type ν) (dom : var → Setoid α ρ)
+                    : Type (ν ⊔ α ⊔ lsuc (ι ⊔ ρʳ)) where
+    field
+      arity  : Type ι               -- the cardinality of the set of constraint variables;
+      scope  : arity → var          -- which variables are involved in the constraint;
+      rel    : REL[ i ∈ arity ] dom (scope i) .Carrier -- the constraint relation.
 
-  satisfies : ((v : var) → Carrier (dom v)) → Type ρʳ  -- An assignment, 𝑓 : var → dom, of values to variables
-  satisfies f = rel (f ∘ scope)                        -- *satisfies* the constraint 𝐶 = (σ , 𝑅) provided
-                                                       -- 𝑓 ∘ σ ∈ 𝑅, where σ is the scope of the constraint.
+    satisfies : (∀ v → dom v .Carrier) → Type ρʳ  -- An assignment, 𝑓 : var → dom, of values to variables
+    satisfies f = rel (f ∘ scope)                 -- *satisfies* the constraint 𝐶 = (σ , 𝑅) provided
+                                                  -- 𝑓 ∘ σ ∈ 𝑅, where σ is the scope of the constraint.
+  open Constraint
 ```
 
 **Note on `ρʳ`**.  The constraint-relation level `ρʳ` is fixed at the module level
@@ -170,14 +170,12 @@ An instance of a constraint satisfaction problem is a triple 𝑃 = (𝑉, 𝐷,
 * 𝐶 denotes an indexed collection of constraints.
 
 ```agda
- open Algebra
+  record CSPInstance (var : Type ν) {𝑆 : Signature 𝓞 𝓥} (𝒜 : var → Algebra {𝑆 = 𝑆} α ρ)
+    : Type (α ⊔ ν ⊔ lsuc (ι ⊔ ρʳ)) where
+    field
+      ar : Type ι   -- index on the constraints in the instance
+      cs : (i : ar) → Constraint var λ v → 𝔻[ 𝒜 v ]
 
- record CSPInstance (var : Type ν)(𝒜 : var → Algebra α ρ)
-                    : Type (ν ⊔ α ⊔ lsuc ι ⊔ lsuc ρʳ) where
-  field
-   ar : Type ι       -- ar indexes the constraints in the instance
-   cs : (i : ar) → Constraint var (λ v → Domain (𝒜 v))
-
-  isSolution : ((v : var) → Carrier (Domain (𝒜 v))) → Type (ι ⊔ ρʳ)  -- An assignment *solves* the instance
-  isSolution f = ∀ i → (Constraint.satisfies (cs i)) f               -- if it satisfies all the constraints.
+    isSolution : (∀ v → 𝕌[ 𝒜 v ]) → Type (ι ⊔ ρʳ)  -- An assignment *solves* the instance
+    isSolution f = ∀ i → satisfies (cs i) f         -- if it satisfies all the constraints.
 ```

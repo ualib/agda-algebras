@@ -23,13 +23,12 @@ similarly.[^1]
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture.Signatures using ( 𝓞 ; 𝓥 ; Signature ; OperationSymbolsOf ; ArityOf )
+open import Overture.Signatures using ( 𝓞 ; 𝓥 ; Signature )
 
 module Overture.Terms.Basic {𝑆 : Signature 𝓞 𝓥} where
--- Imports from Agda primitives and the standard library.
-open import Agda.Primitive  using () renaming ( Set to Type )
-open import Level           using ( Level ; suc ; _⊔_ )
-
+open import Agda.Primitive       using () renaming ( Set to Type )
+open import Level                using ( Level ; suc ; _⊔_ )
+open import Overture.Signatures  using ( OperationSymbolsOf ; ArityOf )
 private variable χ : Level
 ```
 
@@ -78,7 +77,7 @@ each `node` and a variable symbol (the `generator`) at each leaf.
 
 ```agda
 data Term (X : Type χ) : Type (ov χ) where
-  ℊ     : X → Term X                                       -- (ℊ for "generator")
+  ℊ     : X → Term X                            -- ℊ is for "generator"
   node  : (f : OperationSymbolsOf 𝑆)(t : ArityOf 𝑆 f → Term X) → Term X
 
 open Term public

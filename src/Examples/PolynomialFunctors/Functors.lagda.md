@@ -66,10 +66,10 @@ infixl 6 _⊕_
 infixr 7 _⊗_
 
 data Functor₀ : Type (lsuc ℓ₀) where
- Id : Functor₀
- Const : Type → Functor₀
- _⊕_ : Functor₀ → Functor₀ → Functor₀
- _⊗_ : Functor₀ → Functor₀ → Functor₀
+  Id : Functor₀
+  Const : Type → Functor₀
+  _⊕_ : Functor₀ → Functor₀ → Functor₀
+  _⊗_ : Functor₀ → Functor₀ → Functor₀
 
 [_]₀ : Functor₀ → Type → Type
 [ Id ]₀ B = B
@@ -78,10 +78,10 @@ data Functor₀ : Type (lsuc ℓ₀) where
 [ F ⊗ G ]₀ B = [ F ]₀ B × [ G ]₀ B
 
 data Functor {ℓ : Level} : Type (lsuc ℓ) where
- Id : Functor
- Const : Type ℓ → Functor
- _⊕_ : Functor{ℓ} → Functor{ℓ} → Functor
- _⊗_ : Functor{ℓ} → Functor{ℓ} → Functor
+  Id : Functor
+  Const : Type ℓ → Functor
+  _⊕_ : Functor{ℓ} → Functor{ℓ} → Functor
+  _⊗_ : Functor{ℓ} → Functor{ℓ} → Functor
 
 [_]_ : Functor → Type α → Type α
 [ Id ] B = B
@@ -95,7 +95,7 @@ following datatype declaration.
 
 ```agda
 data μ_ (F : Functor) : Type where
- inn : [ F ] (μ F) → μ F
+  inn : [ F ] (μ F) → μ F
 ```
 
 An important example is the polymorphic list datatype.  The standard way to define
@@ -103,8 +103,8 @@ this in Agda is as follows:
 
 ```agda
 data list (A : Type) : Type ℓ₀ where
- [] : list A
- _∷_ : A → list A → list A
+  [] : list A
+  _∷_ : A → list A → list A
 ```
 
 We could instead define a `List` datatype by applying `μ` to a polynomial functor `L`
@@ -125,8 +125,8 @@ define the `Option` type.
 
 ```agda
 data Option (A : Type) : Type where
- some : A → Option A
- none : Option A
+  some : A → Option A
+  none : Option A
 
 _[_] : {A : Type} → List A → ℕ → Option A
 inn (inl x) [ n ] = none

@@ -15,7 +15,9 @@ This is the [Examples][] module of the [Agda Universal Algebra Library][].
 
 module Examples where
 
+open import Examples.Classical
 open import Examples.FunctionTypeBijections
 open import Examples.PolynomialFunctors
+open import Examples.Setoid
 open import Examples.Structures
 ```

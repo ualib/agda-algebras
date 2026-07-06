@@ -34,7 +34,7 @@ open import Agda.Primitive   using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ---------------------------------------
 open import Level            using ( Level ; _⊔_ ; suc )
-open import Relation.Binary  using ( IsPartialOrder ) renaming ( Rel to BinRel )
+open import Relation.Binary  using ( IsPartialOrder ) renaming ( Rel to BinaryRel )
 ```
 
 `CompleteLattice c ℓ₁ ℓ₂ ι` is a carrier at level `c` with an equality at level `ℓ₁`
@@ -45,8 +45,8 @@ upper bound `⨆` and a greatest lower bound `⨅`.
 record CompleteLattice (c ℓ₁ ℓ₂ ι : Level) : Type (suc (c ⊔ ℓ₁ ⊔ ℓ₂ ⊔ ι)) where
   field
     Carrier         : Type c
-    _≈_             : BinRel Carrier ℓ₁
-    _≤_             : BinRel Carrier ℓ₂
+    _≈_             : BinaryRel Carrier ℓ₁
+    _≤_             : BinaryRel Carrier ℓ₂
     isPartialOrder  : IsPartialOrder _≈_ _≤_
 
     -- Infinitary supremum and infimum of an ι-indexed family.

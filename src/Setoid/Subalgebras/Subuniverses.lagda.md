@@ -36,8 +36,8 @@ open import Setoid.Terms          {𝑆 = 𝑆}  using ( module Environment )
 open import Setoid.Homomorphisms  {𝑆 = 𝑆}  using ( hom ; IsHom )
 
 private variable
- α β γ ρᵃ ρᵇ ρᶜ ℓ χ : Level
- X : Type χ
+  α β γ ρᵃ ρᵇ ρᶜ ℓ χ : Level
+  X : Type χ
 ```
 
 
@@ -49,22 +49,22 @@ predicate on predicates on `𝕌[ 𝑨 ]`.
 
 ```agda
 module _ (𝑨 : Algebra α ρᵃ) where
- private A = 𝕌[ 𝑨 ] -- the forgetful functor
+  private A = 𝕌[ 𝑨 ] -- the forgetful functor
 
- Subuniverses : Pred (Pred A ℓ) (𝓞 ⊔ 𝓥 ⊔ α ⊔ ℓ )
- Subuniverses B = ∀ f a → Im a ⊆ B → (f ^ 𝑨) a ∈ B
+  Subuniverses : Pred (Pred A ℓ) (𝓞 ⊔ 𝓥 ⊔ α ⊔ ℓ )
+  Subuniverses B = ∀ f a → Im a ⊆ B → (f ^ 𝑨) a ∈ B
 
- -- Subuniverses as a record type
- record Subuniverse : Type(ov (α ⊔ ℓ)) where
-  constructor mksub
-  field
-   sset  : Pred A ℓ
-   isSub : sset ∈ Subuniverses
+  -- Subuniverses as a record type
+  record Subuniverse : Type(ov (α ⊔ ℓ)) where
+    constructor mksub
+    field
+      sset  : Pred A ℓ
+      isSub : sset ∈ Subuniverses
 
- -- Subuniverse Generation
- data Sg (G : Pred A ℓ) : Pred A (𝓞 ⊔ 𝓥 ⊔ α ⊔ ℓ) where
-  var : ∀ {v} → v ∈ G → v ∈ Sg G
-  app : ∀ f a → Im a ⊆ Sg G → (f ^ 𝑨) a ∈ Sg G
+    -- Subuniverse Generation
+  data Sg (G : Pred A ℓ) : Pred A (𝓞 ⊔ 𝓥 ⊔ α ⊔ ℓ) where
+    var : ∀ {v} → v ∈ G → v ∈ Sg G
+    app : ∀ f a → Im a ⊆ Sg G → (f ^ 𝑨) a ∈ Sg G
 ```
 
 
@@ -77,8 +77,8 @@ inductive type `Sg` is trivial, as we see here.
 
 
 ```agda
- sgIsSub : {G : Pred A ℓ} → Sg G ∈ Subuniverses
- sgIsSub = app
+  sgIsSub : {G : Pred A ℓ} → Sg G ∈ Subuniverses
+  sgIsSub = app
 ```
 
 
@@ -86,17 +86,17 @@ Next we prove by structural induction that `Sg X` is the smallest subuniverse of
 
 
 ```agda
- sgIsSmallest :  {G : Pred A ℓ}(B : Pred A ρᵇ)
-  →              B ∈ Subuniverses  →  G ⊆ B  →  Sg G ⊆ B
+  sgIsSmallest :  {G : Pred A ℓ}(B : Pred A ρᵇ)
+   →              B ∈ Subuniverses  →  G ⊆ B  →  Sg G ⊆ B
 
- sgIsSmallest _ _ G⊆B (var Gx) = G⊆B Gx
- sgIsSmallest B B≤A G⊆B {.((f ^ 𝑨) a)} (app f a SgGa) = Goal
-  where
-  IH : Im a ⊆ B
-  IH i = sgIsSmallest B B≤A G⊆B (SgGa i)
+  sgIsSmallest _ _ G⊆B (var Gx) = G⊆B Gx
+  sgIsSmallest B B≤A G⊆B {.((f ^ 𝑨) a)} (app f a SgGa) = Goal
+    where
+    IH : Im a ⊆ B
+    IH i = sgIsSmallest B B≤A G⊆B (SgGa i)
 
-  Goal : (f ^ 𝑨) a ∈ B
-  Goal = B≤A f a IH
+    Goal : (f ^ 𝑨) a ∈ B
+    Goal = B≤A f a IH
 ```
 
 
@@ -105,12 +105,12 @@ When the element of `Sg G` is constructed as `app f a SgGa`, we may assume (the 
 
 ```agda
 module _ {𝑨 : Algebra α ρᵃ} where
- private A = 𝕌[ 𝑨 ]
+  private A = 𝕌[ 𝑨 ]
 
- ⋂s :  {ι : Level}(I : Type ι){ρ : Level}{𝒜 : I → Pred A ρ}
-  →    (∀ i → 𝒜 i ∈ Subuniverses 𝑨) → ⋂ I 𝒜 ∈ Subuniverses 𝑨
+  ⋂s :  {ι : Level}(I : Type ι){ρ : Level}{𝒜 : I → Pred A ρ}
+   →    (∀ i → 𝒜 i ∈ Subuniverses 𝑨) → ⋂ I 𝒜 ∈ Subuniverses 𝑨
 
- ⋂s I σ f a ν = λ i → σ i f a (λ x → ν x i)
+  ⋂s I σ f a ν = λ i → σ i f a (λ x → ν x i)
 ```
 
 
@@ -128,21 +128,21 @@ Agda fills in the proof term `λ i → σ i f a (λ x → ν x i)` automatically
 
 ```agda
 module _ {𝑨 : Algebra α ρᵃ} where
- private A = 𝕌[ 𝑨 ]
- open Setoid using ( Carrier )
- open Environment 𝑨
- open Func renaming ( to to _⟨$⟩_ )
+  private A = 𝕌[ 𝑨 ]
+  open Setoid using ( Carrier )
+  open Environment 𝑨
+  open Func renaming ( to to _⟨$⟩_ )
 
- -- subuniverses are closed under the action of term operations
- sub-term-closed :  (B : Pred A ℓ)
-  →                 (B ∈ Subuniverses 𝑨)
-  →                 (t : Term X)
-  →                 (b : Carrier (Env X))
-  →                 (∀ x → b x ∈ B) → ⟦ t ⟧ ⟨$⟩ b ∈ B
+  -- subuniverses are closed under the action of term operations
+  sub-term-closed :  (B : Pred A ℓ)
+   →                 (B ∈ Subuniverses 𝑨)
+   →                 (t : Term X)
+   →                 (b : Carrier (Env X))
+   →                 (∀ x → b x ∈ B) → ⟦ t ⟧ ⟨$⟩ b ∈ B
 
- sub-term-closed _ _ (ℊ x) b Bb = Bb x
- sub-term-closed B B≤A (node f t)b ν =
-  B≤A f  (λ z → ⟦ t z ⟧ ⟨$⟩ b) λ x → sub-term-closed B B≤A (t x) b ν
+  sub-term-closed _ _ (ℊ x) b Bb = Bb x
+  sub-term-closed B B≤A (node f t)b ν =
+   B≤A f  (λ z → ⟦ t z ⟧ ⟨$⟩ b) λ x → sub-term-closed B B≤A (t x) b ν
 ```
 
 
@@ -163,20 +163,20 @@ Alternatively, we could express the preceeding fact using an inductive type repr
 
 
 ```agda
- data TermImage (B : Pred A ρᵃ) : Pred A (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ) where
-  var : ∀ {b : A} → b ∈ B → b ∈ TermImage B
-  app : ∀ f ts →  ((i : ArityOf 𝑆 f) → ts i ∈ TermImage B)  → (f ^ 𝑨) ts ∈ TermImage B
+  data TermImage (B : Pred A ρᵃ) : Pred A (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ) where
+    var : ∀ {b : A} → b ∈ B → b ∈ TermImage B
+    app : ∀ f ts →  ((i : ArityOf 𝑆 f) → ts i ∈ TermImage B)  → (f ^ 𝑨) ts ∈ TermImage B
 
- -- `TermImage B` is a subuniverse of 𝑨 that contains B.
- TermImageIsSub : {B : Pred A ρᵃ} → TermImage B ∈ Subuniverses 𝑨
- TermImageIsSub = app
+   -- `TermImage B` is a subuniverse of 𝑨 that contains B.
+  TermImageIsSub : {B : Pred A ρᵃ} → TermImage B ∈ Subuniverses 𝑨
+  TermImageIsSub = app
 
- B-onlyif-TermImageB : {B : Pred A ρᵃ} → B ⊆ TermImage B
- B-onlyif-TermImageB Ba = var Ba
+  B-onlyif-TermImageB : {B : Pred A ρᵃ} → B ⊆ TermImage B
+  B-onlyif-TermImageB Ba = var Ba
 
- -- Since `Sg B` is the smallest subuniverse containing B, we obtain the following inclusion.
- SgB-onlyif-TermImageB : (B : Pred A ρᵃ) → Sg 𝑨 B ⊆ TermImage B
- SgB-onlyif-TermImageB B = sgIsSmallest 𝑨 (TermImage B) TermImageIsSub B-onlyif-TermImageB
+  -- Since `Sg B` is the smallest subuniverse containing B, we obtain the following inclusion.
+  SgB-onlyif-TermImageB : (B : Pred A ρᵃ) → Sg 𝑨 B ⊆ TermImage B
+  SgB-onlyif-TermImageB B = sgIsSmallest 𝑨 (TermImage B) TermImageIsSub B-onlyif-TermImageB
 ```
 
 
@@ -186,34 +186,34 @@ we call `hom-unique`.
 
 
 ```agda
- module _ {𝑩 : Algebra β ρᵇ} (gh hh : hom 𝑨 𝑩) where
-  open Algebra 𝑩  using ( Interp )  renaming ( Domain to B )
-  open Setoid B   using ( _≈_ ; sym )
-  open Func       using ( cong )    renaming ( to to _⟨$⟩_ )
-  open SetoidReasoning B
+  module _ {𝑩 : Algebra β ρᵇ} (gh hh : hom 𝑨 𝑩) where
+    open Algebra 𝑩  using ( Interp )  renaming ( Domain to B )
+    open Setoid B   using ( _≈_ ; sym )
+    open Func       using ( cong )    renaming ( to to _⟨$⟩_ )
+    open SetoidReasoning B
 
-  private
-   g = _⟨$⟩_ (proj₁ gh)
-   h = _⟨$⟩_ (proj₁ hh)
+    private
+      g = _⟨$⟩_ (proj₁ gh)
+      h = _⟨$⟩_ (proj₁ hh)
 
-  open IsHom
-  open Environment 𝑩
+    open IsHom
+    open Environment 𝑩
 
-  hom-unique :  (G : Pred A ℓ) → ((x : A) → (x ∈ G → g x ≈ h x))
-   →            (a : A) → (a ∈ Sg 𝑨 G → g a ≈ h a)
+    hom-unique :  (G : Pred A ℓ) → ((x : A) → (x ∈ G → g x ≈ h x))
+     →            (a : A) → (a ∈ Sg 𝑨 G → g a ≈ h a)
 
-  hom-unique G σ a (var Ga) = σ a Ga
-  hom-unique G σ .((f ^ 𝑨) a) (app f a SgGa) = Goal
-   where
-   IH : ∀ i → h (a i) ≈ g (a i)
-   IH i = sym (hom-unique G σ (a i) (SgGa i))
+    hom-unique G σ a (var Ga) = σ a Ga
+    hom-unique G σ .((f ^ 𝑨) a) (app f a SgGa) = Goal
+      where
+      IH : ∀ i → h (a i) ≈ g (a i)
+      IH i = sym (hom-unique G σ (a i) (SgGa i))
 
-   Goal : g ((f ^ 𝑨) a) ≈ h ((f ^ 𝑨) a)
-   Goal =  begin
-           g ((f ^ 𝑨) a)    ≈⟨ compatible (proj₂ gh) ⟩
-           (f ^ 𝑩)(g ∘ a )  ≈˘⟨ cong Interp (refl , IH) ⟩
-           (f ^ 𝑩)(h ∘ a)   ≈˘⟨ compatible (proj₂ hh) ⟩
-           h ((f ^ 𝑨) a )   ∎
+      Goal : g ((f ^ 𝑨) a) ≈ h ((f ^ 𝑨) a)
+      Goal =  begin
+              g ((f ^ 𝑨) a)    ≈⟨ compatible (proj₂ gh) ⟩
+              (f ^ 𝑩)(g ∘ a )  ≈˘⟨ cong Interp (refl , IH) ⟩
+              (f ^ 𝑩)(h ∘ a)   ≈˘⟨ compatible (proj₂ hh) ⟩
+              h ((f ^ 𝑨) a )   ∎
 ```
 
 

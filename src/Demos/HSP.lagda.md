@@ -603,7 +603,7 @@ the operations of lifting and lowering of a setoid algebra are homomorphisms.
 
 module _ {𝑨 : Algebra α ρᵃ}{ℓ : Level} where
  open Setoid 𝔻[ 𝑨 ] using ( reflexive ) renaming ( _≈_ to _≈₁_ ; refl to refl₁ )
- open Setoid 𝔻[ Lift-Algˡ 𝑨 ℓ ]  using () renaming ( _≈_ to _≈ˡ_ ; refl to reflˡ)
+ open Setoid 𝔻[ Lift-Algˡ 𝑨 ℓ ]  using () renaming ( _≈_ to _≈ˡ_ )
  open Setoid 𝔻[ Lift-Algʳ 𝑨 ℓ ]  using () renaming ( _≈_ to _≈ʳ_ )
  open Level
 
@@ -611,7 +611,7 @@ module _ {𝑨 : Algebra α ρᵃ}{ℓ : Level} where
  ToLiftˡ = record { to = lift ; cong = id } , mkhom (reflexive ≡.refl)
 
  FromLiftˡ : hom (Lift-Algˡ 𝑨 ℓ) 𝑨
- FromLiftˡ = record { to = lower ; cong = id } , mkhom reflˡ
+ FromLiftˡ = record { to = lower ; cong = id } , mkhom refl₁
 
  ToFromLiftˡ : ∀ b →  ∣ ToLiftˡ ∣ ⟨$⟩ (∣ FromLiftˡ ∣ ⟨$⟩ b) ≈ˡ b
  ToFromLiftˡ b = refl₁
@@ -623,7 +623,7 @@ module _ {𝑨 : Algebra α ρᵃ}{ℓ : Level} where
  ToLiftʳ = record { to = id ; cong = lift } , mkhom (lift (reflexive ≡.refl))
 
  FromLiftʳ : hom (Lift-Algʳ 𝑨 ℓ) 𝑨
- FromLiftʳ = record { to = id ; cong = lower } , mkhom reflˡ
+ FromLiftʳ = record { to = id ; cong = lower } , mkhom refl₁
 
  ToFromLiftʳ : ∀ b → ∣ ToLiftʳ ∣ ⟨$⟩ (∣ FromLiftʳ ∣ ⟨$⟩ b) ≈ʳ b
  ToFromLiftʳ b = lift refl₁

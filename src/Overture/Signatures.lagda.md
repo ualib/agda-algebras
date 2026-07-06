@@ -18,7 +18,7 @@ module Overture.Signatures where
 -- Imports from the Agda (Builtin) and the Agda Standard Library -----------------------
 open import Agda.Primitive  using () renaming ( Set to  Type )
 open import Data.Product    using ( Σ-syntax ; proj₁ ; proj₂ )
-open import Level           using ( Level ; suc ; _⊔_ )
+open import Level           using ( Level ; _⊔_ ) renaming ( suc to lsuc )
 
 variable 𝓞 𝓥 : Level
 ```
@@ -84,7 +84,7 @@ In the [agda-algebras][] library we represent the *signature* of an algebraic
 structure using the following type.
 
 ```agda
-Signature : (𝓞 𝓥 : Level) → Type (suc (𝓞 ⊔ 𝓥))
+Signature : (𝓞 𝓥 : Level) → Type (lsuc (𝓞 ⊔ 𝓥))
 Signature 𝓞 𝓥 = Σ[ F ∈ Type 𝓞 ] (F → Type 𝓥)
 ```
 
@@ -92,7 +92,7 @@ Occasionally it is useful to obtain the universe level of a given signature.
 
 ```agda
 Level-of-Signature : {𝓞 𝓥 : Level} → Signature 𝓞 𝓥 → Level
-Level-of-Signature {𝓞}{𝓥} _ = suc (𝓞 ⊔ 𝓥)
+Level-of-Signature {𝓞}{𝓥} _ = lsuc (𝓞 ⊔ 𝓥)
 ```
 
 A signature is a Σ-type, so its two components are recovered by the standard

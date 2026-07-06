@@ -30,12 +30,12 @@ open import Data.Product             using ( _×_ ; _,_ ; proj₁ ; proj₂ ; sw
 open import Data.Unit.Base           using ( tt )
 open import Level                    using ( Level ; _⊔_ ; lift ; lower )
 open import Relation.Binary          using ( Setoid ; IsEquivalence ; IsPartialOrder ; _⇒_ )
-                                     renaming ( Rel to BinRel )
+                                     renaming ( Rel to BinaryRel )
 open import Relation.Binary.Bundles  using ( Poset )
 open import Relation.Binary.Lattice  using ( Infimum ; IsMeetSemilattice ; MeetSemilattice )
 
 -- Imports from the Agda Universal Algebras Library ------------------------------
-open import Setoid.Algebras.Basic     {𝑆 = 𝑆}  using  ( ov ; Algebra ; 𝕌[_] )
+open import Setoid.Algebras.Basic     {𝑆 = 𝑆}  using  ( ov ; Algebra ; 𝕌[_] ; 𝔻[_] )
 open import Setoid.Congruences.Basic  {𝑆 = 𝑆}  using  ( Con ; mkcon ; _∣≈_ ; reflexive
                                                       ; is-equivalence ; is-compatible
                                                       ; 𝟘[_] ; 𝟙[_] )
@@ -51,8 +51,8 @@ relations, and it remains a partial order here — `_⊆_` is antisymmetric
 **with respect to `_≑_`**, the equivalence of *mutual set containment*.  The only
 subtlety is which equality counts as **equal congruences**.
 
-The underlying relation of a congruence inhabits the `BinRel` type
-(`BinRel A ℓ = A → A → Type ℓ`), so mutual containment yields back-and-forth maps
+The underlying relation of a congruence inhabits the `BinaryRel` type
+(`BinaryRel A ℓ = A → A → Type ℓ`), so mutual containment yields back-and-forth maps
 between the proof-types `proj₁ θ x y` and `proj₁ φ x y` rather than a proof that the
 packaged congruences are *propositionally* equal.
 
@@ -65,9 +65,6 @@ extensionality.
 
 ```agda
 module _ {𝑨 : Algebra α ρ} where
-  open Algebra 𝑨 using () renaming ( Domain to A )
-  open Setoid A using () renaming ( _≈_ to _≈ᴬ_ )
-
   -- θ ⊆ φ : the relation of θ is contained in the relation of φ.
   _⊆_ : Con 𝑨 ℓ → Con 𝑨 ℓ → Type (α ⊔ ℓ)
   θ ⊆ φ = proj₁ θ ⇒ proj₁ φ
@@ -158,7 +155,7 @@ the underlying relation first, then bundle the `IsCongruence` proof.
 
 ```agda
   -- The underlying relation of the meet: pointwise conjunction.
-  meetRel : Con 𝑨 ℓ → Con 𝑨 ℓ → BinRel 𝕌[ 𝑨 ] ℓ
+  meetRel : Con 𝑨 ℓ → Con 𝑨 ℓ → BinaryRel 𝕌[ 𝑨 ] ℓ
   meetRel θ φ x y = proj₁ θ x y × proj₁ φ x y
 
   _∧_ : Con 𝑨 ℓ → Con 𝑨 ℓ → Con 𝑨 ℓ
@@ -169,17 +166,17 @@ the underlying relation first, then bundle the `IsCongruence` proof.
     θe = is-equivalence θc
     φe = is-equivalence φc
 
+    open Setoid 𝔻[ 𝑨 ] using ( _≈_ )
     -- The meet contains the setoid equality because θ and φ both do.
-    m-reflexive : ∀ {a₀ a₁} → a₀ ≈ᴬ a₁ → meetRel θ φ a₀ a₁
+    m-reflexive : ∀ {a₀ a₁} → a₀ ≈ a₁ → meetRel θ φ a₀ a₁
     m-reflexive e = reflexive θc e , reflexive φc e
 
+    open IsEquivalence using (refl ; sym ; trans )
     -- The meet is an equivalence relation, proved componentwise.
     m-isEquivalence : IsEquivalence (meetRel θ φ)
-    m-isEquivalence = record
-     { refl   = IsEquivalence.refl θe , IsEquivalence.refl φe
-     ; sym    = λ (p , q) → IsEquivalence.sym θe p , IsEquivalence.sym φe q
-     ; trans  = λ (p , q) (p′ , q′) → IsEquivalence.trans θe p p′ , IsEquivalence.trans φe q q′
-     }
+    m-isEquivalence .refl = θe .refl , φe .refl
+    m-isEquivalence .sym = λ (p , q) → θe .sym p , φe .sym q
+    m-isEquivalence .trans = λ (p , q) (p′ , q′) → θe .trans p p′ , φe .trans q q′
 
     -- The meet is compatible with every basic operation, componentwise.
     m-compatible : 𝑨 ∣≈ meetRel θ φ
@@ -207,8 +204,11 @@ them, and it is above any common lower bound.  These three facts are exactly the
   ∧-infimum : Infimum (_⊆_ {ℓ}) _∧_
   ∧-infimum θ φ = proj₁ , proj₂ , λ ψ ψ⊆θ ψ⊆φ p → ψ⊆θ p , ψ⊆φ p
 
+  open IsMeetSemilattice
+
   ∧-isMeetSemilattice : IsMeetSemilattice (_≑_ {ℓ}) _⊆_ _∧_
-  ∧-isMeetSemilattice {ℓ} = record { isPartialOrder = ⊆-isPartialOrder {ℓ} ; infimum = ∧-infimum {ℓ} }
+  ∧-isMeetSemilattice .isPartialOrder = ⊆-isPartialOrder
+  ∧-isMeetSemilattice .infimum = ∧-infimum
 ```
 
 #### The poset and meet-semilattice of congruences
@@ -220,15 +220,15 @@ the bounds `⊥`/`⊤`, are built in the subsequent steps of #271.)
 
 ```agda
 module _ (𝑨 : Algebra α ρ) {ℓ : Level} where
- Con-Poset : Poset (α ⊔ ρ ⊔ ov ℓ) (α ⊔ ℓ) (α ⊔ ℓ)
- Con-Poset = record  { Carrier = Con 𝑨 ℓ ; _≈_ = _≑_ ; _≤_ = _⊆_
-                     ; isPartialOrder  = ⊆-isPartialOrder }
+  Con-Poset : Poset (α ⊔ ρ ⊔ ov ℓ) (α ⊔ ℓ) (α ⊔ ℓ)
+  Con-Poset = record  { Carrier = Con 𝑨 ℓ ; _≈_ = _≑_ ; _≤_ = _⊆_
+                      ; isPartialOrder  = ⊆-isPartialOrder }
 
- Con-MeetSemilattice : MeetSemilattice (α ⊔ ρ ⊔ ov ℓ) (α ⊔ ℓ) (α ⊔ ℓ)
- Con-MeetSemilattice = record  { Carrier = Con 𝑨 ℓ
-                               ; _≈_ = _≑_
-                               ; _≤_ = _⊆_
-                               ; _∧_ = _∧_
-                               ; isMeetSemilattice  = ∧-isMeetSemilattice
-                               }
+  Con-MeetSemilattice : MeetSemilattice (α ⊔ ρ ⊔ ov ℓ) (α ⊔ ℓ) (α ⊔ ℓ)
+  Con-MeetSemilattice = record  { Carrier = Con 𝑨 ℓ
+                                ; _≈_ = _≑_
+                                ; _≤_ = _⊆_
+                                ; _∧_ = _∧_
+                                ; isMeetSemilattice  = ∧-isMeetSemilattice
+                                }
 ```

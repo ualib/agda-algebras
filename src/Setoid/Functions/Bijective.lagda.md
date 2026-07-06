@@ -39,15 +39,15 @@ IsBijective f = IsInjective f × IsSurjective f
 
 BijInv : (f : 𝑨 ⟶ 𝑩) → IsBijective f → 𝑩 ⟶ 𝑨
 BijInv f (fM , fE) = record { to = finv ; cong = c }
- where
- finv : B → A
- finv b = Inv f fE
+  where
+  finv : B → A
+  finv b = Inv f fE
 
- handler :  ∀ {b₀ b₁}(i₀ : Image f ∋ b₀)(i₁ : Image f ∋ b₁)
-  →         b₀ ≈₂ b₁ → (Inv f i₀) ≈₁ (Inv f i₁)
+  handler :  ∀ {b₀ b₁}(i₀ : Image f ∋ b₀)(i₁ : Image f ∋ b₁)
+   →         b₀ ≈₂ b₁ → (Inv f i₀) ≈₁ (Inv f i₁)
 
- handler (eq a x) (eq a₁ x₁) b₀≈b₁ = fM (trans (sym x) (trans b₀≈b₁ x₁))
+  handler (eq a x) (eq a₁ x₁) b₀≈b₁ = fM (trans (sym x) (trans b₀≈b₁ x₁))
 
- c : ∀ {b₀ b₁} → b₀ ≈₂ b₁ → (finv b₀) ≈₁ (finv b₁)
- c b₀≈b₁ = handler fE fE b₀≈b₁
+  c : ∀ {b₀ b₁} → b₀ ≈₂ b₁ → (finv b₀) ≈₁ (finv b₁)
+  c b₀≈b₁ = handler fE fE b₀≈b₁
 ```

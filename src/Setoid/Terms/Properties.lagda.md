@@ -41,8 +41,8 @@ open Term
 open _⟶_ using ( ) renaming ( to to _⟨$⟩_ ; cong to ≈cong )
 
 private variable
- α ρᵃ β ρᵇ ρ χ : Level
- X : Type χ
+  α ρᵃ β ρᵇ ρ χ : Level
+  X : Type χ
 ```
 
 The term algebra `𝑻 X` is *absolutely free* (or *universal*, or *initial*) for
@@ -178,12 +178,12 @@ signature varies along a morphism, is `reduct-interp` in
 
 ```agda
 module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}(h : hom 𝑨 𝑩)(η : X → 𝕌[ 𝑨 ]) where
- open Setoid 𝔻[ 𝑩 ] using () renaming ( _≈_ to _≈ᵇ_ ; refl to reflᵇ )
+  open Setoid 𝔻[ 𝑩 ] using () renaming ( _≈_ to _≈ᵇ_ ; refl to reflᵇ )
 
- free-lift-natural : (t : Term X)
-  →                  proj₁ h ⟨$⟩ free-lift{𝑨 = 𝑨} η t ≈ᵇ free-lift{𝑨 = 𝑩} (λ x → proj₁ h ⟨$⟩ η x) t
+  free-lift-natural : (t : Term X)
+   →                  proj₁ h ⟨$⟩ free-lift{𝑨 = 𝑨} η t ≈ᵇ free-lift{𝑨 = 𝑩} (λ x → proj₁ h ⟨$⟩ η x) t
 
- free-lift-natural =
-  free-unique {𝑨 = 𝑩} {gh = ⊙-hom (lift-hom η) h} {hh = lift-hom (λ x → proj₁ h ⟨$⟩ η x)}
-   (λ _ → reflᵇ)
+  free-lift-natural =
+   free-unique {𝑨 = 𝑩} {gh = ⊙-hom (lift-hom η) h} {hh = lift-hom (λ x → proj₁ h ⟨$⟩ η x)}
+    (λ _ → reflᵇ)
 ```

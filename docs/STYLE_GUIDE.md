@@ -237,7 +237,7 @@ Within each block, alphabetize by module name; e.g.,
 open import Agda.Primitive   using () renaming ( Set to Type )
 open import Data.Product     using ( _,_ ; _×_ ; Σ-syntax )
 open import Level            using ( Level ; _⊔_ ; suc )
-open import Relation.Binary  using ( IsEquivalence ) renaming ( Rel to BinRel )
+open import Relation.Binary  using ( IsEquivalence ) renaming ( Rel to BinaryRel )
 open import Relation.Unary   using ( _∈_ ; Pred )
 
 -- Imports from the agda-algebras library.
@@ -248,7 +248,7 @@ open import Base.Relations   using ( _|:_ ; _|:pred_ ; Rel ; compatible-Rel )
 
 ### Prefer `renaming` for clarity, not obfuscation
 
-`renaming` is appropriate when a stdlib name clashes with a local one, or when a stdlib name is awkward (`Set` → `Type` is our project-wide convention; `Rel` → `BinRel` disambiguates stdlib's `Relation.Binary.Rel` from our own `Base.Relations.Rel`).  Other `renaming` for cosmetic and stylistic preference is strongly discouraged.
+`renaming` is appropriate when a stdlib name clashes with a local one, or when a stdlib name is awkward (`Set` → `Type` is our project-wide convention; `Rel` → `BinaryRel` disambiguates stdlib's `Relation.Binary.Rel` from our own `Base.Relations.Rel`, and is the preferred rename throughout the canonical tree).  Other `renaming` for cosmetic and stylistic preference is strongly discouraged.
 
 ---
 

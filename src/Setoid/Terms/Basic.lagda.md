@@ -35,8 +35,8 @@ open Func renaming ( to to _⟨$⟩_ )
 open Term
 
 private variable
- χ α ℓ : Level
- X Y : Type χ
+  χ α ℓ : Level
+  X Y : Type χ
 ```
 
 #### Equality of terms
@@ -50,29 +50,29 @@ as a Algebra whose carrier is the setoid of terms.
 ```agda
 module _ {X : Type χ } where
 
- -- Equality of terms as an inductive datatype
- data _≐_ : Term X → Term X → Type (ov χ) where
-  rfl :  {x y : X} → x ≡ y → ℊ x ≐ ℊ y
-  gnl :  {f : OperationSymbolsOf 𝑆}{s t : ArityOf 𝑆 f → Term X}
-         → (∀ i → s i ≐ t i) → node f s ≐ node f t
+  -- Equality of terms as an inductive datatype
+  data _≐_ : Term X → Term X → Type (ov χ) where
+    rfl :  {x y : X} → x ≡ y → ℊ x ≐ ℊ y
+    gnl :  {f : OperationSymbolsOf 𝑆}{s t : ArityOf 𝑆 f → Term X}
+           → (∀ i → s i ≐ t i) → node f s ≐ node f t
 
- infix 4 _≐_
+  infix 4 _≐_
 
- -- Equality of terms is an equivalence relation
- ≐-isRefl : Reflexive _≐_
- ≐-isRefl {ℊ _} = rfl refl
- ≐-isRefl {node _ _} = gnl λ _ → ≐-isRefl
+  -- Equality of terms is an equivalence relation
+  ≐-isRefl : Reflexive _≐_
+  ≐-isRefl {ℊ _} = rfl refl
+  ≐-isRefl {node _ _} = gnl λ _ → ≐-isRefl
 
- ≐-isSym : Symmetric _≐_
- ≐-isSym (rfl x) = rfl (sym x)
- ≐-isSym (gnl x) = gnl λ i → ≐-isSym (x i)
+  ≐-isSym : Symmetric _≐_
+  ≐-isSym (rfl x) = rfl (sym x)
+  ≐-isSym (gnl x) = gnl λ i → ≐-isSym (x i)
 
- ≐-isTrans : Transitive _≐_
- ≐-isTrans (rfl x) (rfl y) = rfl (trans x y)
- ≐-isTrans (gnl x) (gnl y) = gnl λ i → ≐-isTrans (x i) (y i)
+  ≐-isTrans : Transitive _≐_
+  ≐-isTrans (rfl x) (rfl y) = rfl (trans x y)
+  ≐-isTrans (gnl x) (gnl y) = gnl λ i → ≐-isTrans (x i) (y i)
 
- ≐-isEquiv : IsEquivalence _≐_
- ≐-isEquiv = record { refl = ≐-isRefl ; sym = ≐-isSym ; trans = ≐-isTrans }
+  ≐-isEquiv : IsEquivalence _≐_
+  ≐-isEquiv = record { refl = ≐-isRefl ; sym = ≐-isSym ; trans = ≐-isTrans }
 
 TermSetoid : (X : Type χ) → Setoid (ov χ) (ov χ)
 TermSetoid X = record { Carrier = Term X ; _≈_ = _≐_ ; isEquivalence = ≐-isEquiv }

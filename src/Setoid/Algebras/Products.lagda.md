@@ -44,14 +44,14 @@ open Algebra
 ⨅ : {I : Type ι }(𝒜 : I → Algebra α ρ) → Algebra (α ⊔ ι) (ρ ⊔ ι)
 
 Domain (⨅ {I} 𝒜) =
- record  { Carrier = ∀ i → 𝕌[ 𝒜 i ]
-         ; _≈_ = λ a b → ∀ i → 𝔻[ 𝒜 i ] ._≈_ (a i) (b i)
-         ; isEquivalence =
-            record  { refl   = λ i      → reflE   (isEqv 𝔻[ 𝒜 i ])
-                    ; sym    = λ x i    → symE    (isEqv 𝔻[ 𝒜 i ])(x i)
-                    ; trans  = λ x y i  → transE  (isEqv 𝔻[ 𝒜 i ])(x i)(y i)
-                    }
-         }
+  record  { Carrier = ∀ i → 𝕌[ 𝒜 i ]
+          ; _≈_ = λ a b → ∀ i → 𝔻[ 𝒜 i ] ._≈_ (a i) (b i)
+          ; isEquivalence =
+             record  { refl   = λ i      → reflE   (isEqv 𝔻[ 𝒜 i ])
+                     ; sym    = λ x i    → symE    (isEqv 𝔻[ 𝒜 i ])(x i)
+                     ; trans  = λ x y i  → transE  (isEqv 𝔻[ 𝒜 i ])(x i)(y i)
+                     }
+          }
 
 Interp (⨅ {I} 𝒜) ⟨$⟩ (f , a) = λ i → (f ^ 𝒜 i) (flip a i)
 cong (Interp (⨅ {I} 𝒜)) (refl , f=g ) = λ i → cong  (Interp (𝒜 i)) (refl , flip f=g i )
@@ -64,14 +64,14 @@ cong (Interp (⨅ {I} 𝒜)) (refl , f=g ) = λ i → cong  (Interp (𝒜 i)) (r
 ```agda
 module _ {𝒦 : Pred (Algebra α ρ) (ov α)} where
 
- ℑ : Type (ov (α ⊔ ρ))
- ℑ = Σ[ 𝑨 ∈ (Algebra α ρ) ] 𝑨 ∈ 𝒦
+  ℑ : Type (ov (α ⊔ ρ))
+  ℑ = Σ[ 𝑨 ∈ (Algebra α ρ) ] 𝑨 ∈ 𝒦
 
- 𝔄 : ℑ → Algebra α ρ
- 𝔄 i = (proj₁ i)
+  𝔄 : ℑ → Algebra α ρ
+  𝔄 i = (proj₁ i)
 
- class-product : Algebra (ov (α ⊔ ρ)) _
- class-product = ⨅ 𝔄
+  class-product : Algebra (ov (α ⊔ ρ)) _
+  class-product = ⨅ 𝔄
 ```
 
 
@@ -93,11 +93,11 @@ projection of a product of algebras over such an index type is surjective.
 
 ```agda
 module _  {I : Type ι}                  -- index type
-          {_≟_ : Decidable{A = I} _≡_}  -- with decidable equality
-          {𝒜 : I → Algebra α ρ}         -- indexed collection of algebras
-          {𝒜I : ∀ i → 𝕌[ 𝒜 i ] }        -- each of which is nonempty
-          where
+           {_≟_ : Decidable{A = I} _≡_}  -- with decidable equality
+           {𝒜 : I → Algebra α ρ}         -- indexed collection of algebras
+           {𝒜I : ∀ i → 𝕌[ 𝒜 i ] }        -- each of which is nonempty
+           where
 
- ProjAlgIsOnto : ∀{i} → Σ[ h ∈ (𝕌[ ⨅ 𝒜 ] → 𝕌[ 𝒜 i ]) ] onto h
- ProjAlgIsOnto {i} = (proj _≟_ 𝒜I i) , projIsOnto _≟_ 𝒜I
+  ProjAlgIsOnto : ∀{i} → Σ[ h ∈ (𝕌[ ⨅ 𝒜 ] → 𝕌[ 𝒜 i ]) ] onto h
+  ProjAlgIsOnto {i} = (proj _≟_ 𝒜I i) , projIsOnto _≟_ 𝒜I
 ```

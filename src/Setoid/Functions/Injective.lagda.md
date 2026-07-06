@@ -86,19 +86,19 @@ module _
 
 module _ {𝑨 : Setoid a α}{𝑩 : Setoid b β}{𝑪 : Setoid c γ} where
 
- ⊙-injective :  (f : 𝑨 ⟶ 𝑩)(g : 𝑩 ⟶ 𝑪)
-  →             IsInjective f → IsInjective g
-  →             IsInjective (g ⟨⊙⟩ f)
+  ⊙-injective :  (f : 𝑨 ⟶ 𝑩)(g : 𝑩 ⟶ 𝑪)
+   →             IsInjective f → IsInjective g
+   →             IsInjective (g ⟨⊙⟩ f)
 
- ⊙-injective _ _ finj ginj = finj ∘ ginj
+  ⊙-injective _ _ finj ginj = finj ∘ ginj
 
- ⊙-injection : Injection 𝑨 𝑩 → Injection 𝑩 𝑪 → Injection 𝑨 𝑪
- ⊙-injection fi gi = record
-  { to = to gi ∘ to fi
-  ; cong = cong gi ∘ cong fi
-  ; injective = ⊙-injective (function fi) (function gi) (injective fi) (injective gi)
-  }
-  where open Injection
+  ⊙-injection : Injection 𝑨 𝑩 → Injection 𝑩 𝑪 → Injection 𝑨 𝑪
+  ⊙-injection fi gi = record
+   { to = to gi ∘ to fi
+   ; cong = cong gi ∘ cong fi
+   ; injective = ⊙-injective (function fi) (function gi) (injective fi) (injective gi)
+   }
+   where open Injection
 
 id-is-injective : {𝑨 : Setoid a α} → IsInjective{𝑨 = 𝑨}{𝑨} 𝑖𝑑
 id-is-injective = id
