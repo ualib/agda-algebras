@@ -3067,7 +3067,7 @@ Design discussion: how to encode Maltsev conditions uniformly?  Options include 
 - [x] Specific Maltsev terms: Jónsson terms (CD), Day terms (CM), Maltsev operation (CP) — `Th-Maltsev`, `Th-Jonsson n`, `Th-Day n`, with `HasMaltsevTerm` / `HasJonssonTerms n` / `HasDayTerms n` (`Setoid.Varieties.{Maltsev,MaltsevConditions}`).
 - [x] Jónsson's theorem: a variety is CD iff Jónsson terms exist — complete iff for finitary signatures, `jonsson-theorem` in `Setoid.Varieties.Maltsev.Distributivity`: forward `jonsson-finitary⇒CongruenceDistributiveVariety` (M6-6, #412), converse `CD⇒jonsson` (M6-7, #413; design note `docs/notes/m6-7-reverse-jonsson.md`).
 - [x] CP iff a Maltsev term exists — forward direction `MaltsevTerm⇒CP` / `maltsev⇒CP` (M6-3, #409); converse `CP⇒maltsev` (`Setoid.Varieties.Maltsev.Permutability`, M6-5, #411) inhabiting `CP⇒maltsev-Statement`, built on the free-algebra bridge `cg-pair→⊢` (M6-4, #410; now in `Setoid.Varieties.FreeSubstitution`).
-- [ ] Day's theorem for CM — stated (`Day-Statement`); proof tracked in #412 (forward) and #413 (converse).
+- [ ] Day's theorem for CM — stated (`Day-Statement`); the converse `CM⇒day` landed (M6-7, #413; design note `docs/notes/m6-7-reverse-day.md`); the forward direction is deferred indefinitely on #412, so only the full iff remains open.
 
 ## Acceptance criteria
 
@@ -3085,7 +3085,7 @@ The CP track landed in PR #409:
 
 The chosen encoding is the interpretation `Th-X ≼ ℰ` (preferred over the issue's options (a) record and (b) inductive scheme; see the note).
 
-Deferred proofs are tracked in successor issues: #410 ([M6-4] free-algebra `Cg`↔derivability bridge — **landed**; after the M6-7 cleanup its pieces live in `Setoid.Congruences.Generation` (`module principal`), `Setoid.Homomorphisms.Properties` (`Cg⊆ker`), `Setoid.Varieties.SoundAndComplete` (`toEq`), and `Setoid.Varieties.FreeSubstitution` (`subhom` / `cg-pair→⊢`)), #411 ([M6-5] CP converse — **landed**, `CP⇒maltsev` in `Setoid.Varieties.Maltsev.Permutability`), #412 ([M6-6] forward Jónsson — **landed**; forward Day deferred indefinitely), #413 ([M6-7] converse Jónsson — **landed**, `CD⇒jonsson` / `jonsson-theorem` in `Setoid.Varieties.Maltsev.Distributivity`; converse Day remains).  See the design notes `docs/notes/m6-4-free-bridge.md` (#410 / #411), `docs/notes/m6-6-forward-jonsson-day.md` (#412), and `docs/notes/m6-7-reverse-jonsson.md` (#413).
+Deferred proofs are tracked in successor issues: #410 ([M6-4] free-algebra `Cg`↔derivability bridge — **landed**; after the M6-7 cleanup its pieces live in `Setoid.Congruences.Generation` (`module principal`), `Setoid.Homomorphisms.Properties` (`Cg⊆ker`), `Setoid.Varieties.SoundAndComplete` (`toEq`), and `Setoid.Varieties.FreeSubstitution` (`subhom` / `cg-pair→⊢` / `cg-pairs→⊢`)), #411 ([M6-5] CP converse — **landed**, `CP⇒maltsev` in `Setoid.Varieties.Maltsev.Permutability`), #412 ([M6-6] forward Jónsson — **landed**; forward Day deferred indefinitely), #413 ([M6-7] converse Jónsson and converse Day — **both landed**: `CD⇒jonsson` / `jonsson-theorem` in `Setoid.Varieties.Maltsev.Distributivity`, `CM⇒day` in `Setoid.Varieties.Maltsev.Modularity`).  See the design notes `docs/notes/m6-4-free-bridge.md` (#410 / #411), `docs/notes/m6-6-forward-jonsson-day.md` (#412), and `docs/notes/m6-7-reverse-jonsson.md` / `docs/notes/m6-7-reverse-day.md` (#413).
 
 ---
 
@@ -3309,7 +3309,7 @@ https://claude.ai/code/session_01MvPrLTCxKjFgsnTMK8j2qZ
 
 ## Description
 
-Complete Jónsson's and Day's theorems with the hard "lattice property ⟹ terms" directions: a congruence-distributive variety has Jónsson terms, and a congruence-modular variety has Day terms.  These inhabit the converse projections of `Jonsson-Statement` and `Day-Statement` (with the orientation fixed in #412, the CD ⟹ terms direction is the *first* projection; following the #428 split the statements live in `Setoid.Varieties.Maltsev.{Distributivity,Modularity}`), turning both into complete iffs.  **Status: converse Jónsson landed (PR #438, `CD⇒jonsson` / `jonsson-theorem`); converse Day remains open.**
+Complete Jónsson's and Day's theorems with the hard "lattice property ⟹ terms" directions: a congruence-distributive variety has Jónsson terms, and a congruence-modular variety has Day terms.  These inhabit the converse projections of `Jonsson-Statement` and `Day-Statement` (with the orientation fixed in #412, the CD ⟹ terms direction is the *first* projection; following the #428 split the statements live in `Setoid.Varieties.Maltsev.{Distributivity,Modularity}`), turning both into complete iffs.  **Status: converse Jónsson landed (PR #438, `CD⇒jonsson` / `jonsson-theorem`); converse Day landed (`CM⇒day` in `Setoid.Varieties.Maltsev.Modularity`, with the two-pair bridge `cg-pairs→⊢` added to `Setoid.Varieties.FreeSubstitution`; design note `docs/notes/m6-7-reverse-day.md`).  Day's full iff awaits only the forward half, deferred indefinitely on #412.**
 
 This is the research-grade end of the M6-3 track.  Beyond the [M6-4] (#410) bridge, it requires extracting the **chain length `n`** and the terms `dᵢ` / `mᵢ` from the inductive derivation witnessing a join membership — the source of the `Σ[ n ∈ ℕ ]` in the statements, and the part with no off-the-shelf analogue in the library.
 
@@ -3323,9 +3323,9 @@ Construction (Burris–Sankappanavar, Thms. 12.6 and 12.4), sketched in `docs/no
 
 ## Tasks
 
-+  CD ⟹ Jónsson terms: extract the ternary chain `d₀ … dₙ` and inhabit the converse projection of `Jonsson-Statement`.
-+  CM ⟹ Day terms: extract the quaternary chain `m₀ … mₙ` and inhabit the converse projection of `Day-Statement`.
-+  Confirm the extracted identities match the parity convention of `Th-Jonsson` / `Th-Day` (cross-check the even/odd argument patterns when the proof is in hand).
++  CD ⟹ Jónsson terms: extract the ternary chain `d₀ … dₙ` and inhabit the converse projection of `Jonsson-Statement`.  ✅ PR #438 (`CD⇒jonsson`, `jonsson-theorem`).
++  CM ⟹ Day terms: extract the quaternary chain `m₀ … mₙ` and inhabit the converse projection of `Day-Statement`.  ✅ (`CM⇒day`, `Setoid.Varieties.Maltsev.Modularity`).
++  Confirm the extracted identities match the parity convention of `Th-Jonsson` / `Th-Day` (cross-check the even/odd argument patterns when the proof is in hand).  ✅ both: Jónsson's even/odd forks collapse the φ-/ψ-pair; Day's even forks collapse the two φ-pairs and its odd forks the θ-pair, matching the off-phase normalization `chain→parityᵒ`.
 
 ## Dependencies
 
@@ -3334,11 +3334,11 @@ Construction (Burris–Sankappanavar, Thms. 12.6 and 12.4), sketched in `docs/no
 
 ## Acceptance criteria
 
-+  Both converse implications type-check under `--safe`; Jónsson's and Day's theorems are complete iffs.
++  Both converse implications type-check under `--safe`; Jónsson's and Day's theorems are complete iffs.  ✅ both converses type-check under `--safe`, and Jónsson's theorem is a complete iff (`jonsson-theorem`); Day's full iff is re-scoped to the forward half, deferred indefinitely on #412.
 
 ## Notes
 
-+  Difficulty: hard.  The derivation-length / chain extraction from an inductively-generated congruence is the crux; budget accordingly and consider landing CD ⟹ Jónsson first, with CM ⟹ Day mirroring it.
++  Difficulty: hard.  The derivation-length / chain extraction from an inductively-generated congruence is the crux; budget accordingly and consider landing CD ⟹ Jónsson first, with CM ⟹ Day mirroring it.  (Realized as planned, in that order.)
 
 ## References
 

@@ -380,9 +380,9 @@ module _ {𝓘 : Level}{I : Type 𝓘} {𝒜 : I → Algebra α ρᵃ} where
      ψhom : IsHom ⨅ℓ𝒜 (⨅ 𝒜) ψ
      ψhom .compatible = λ i → Setoid.refl 𝔻[ 𝒜 i ]
 
-     open Setoid
+     open Setoid using (reflexive; _≈_)
      φ∼ψ : ∀ b i → 𝔻[ Lift-Alg (𝒜 (lower i)) ℓ ℓ ] ._≈_ ((φ ⟨$⟩ (ψ ⟨$⟩ b)) i) (b i)
-     φ∼ψ _ = λ i → lift (Setoid.reflexive 𝔻[ 𝒜 (lower i) ] ≡.refl)
+     φ∼ψ _ = λ i → lift (reflexive 𝔻[ 𝒜 (lower i) ] ≡.refl)
 
      ψ∼φ : ∀ a i → 𝔻[ 𝒜 i ] ._≈_ ((ψ ⟨$⟩ (φ ⟨$⟩ a)) i) (a i)
      ψ∼φ _ = λ i → Setoid.reflexive 𝔻[ 𝒜  i ] ≡.refl
@@ -413,8 +413,8 @@ module _ {ι : Level}{I : Type ι}{𝒜 : I → Algebra α ρᵃ} where
      ψ : hom (⨅ λ i → Lift-Alg (𝒜 i) ℓ ρ) (⨅ 𝒜)
      ψ = ψfunc , ψhom
 
-     open Setoid 𝔻[ ⨅ (λ i → Lift-Alg (𝒜 i) ℓ ρ) ]  using () renaming ( _≈_ to _≈₂_ )
-     φ∼ψ : ∀ b → φ .proj₁ ⟨$⟩ (ψ .proj₁ ⟨$⟩ b) ≈₂ b
+     open Setoid 𝔻[ ⨅ (λ i → Lift-Alg (𝒜 i) ℓ ρ) ]  using (_≈_)
+     φ∼ψ : ∀ b → φ .proj₁ ⟨$⟩ (ψ .proj₁ ⟨$⟩ b) ≈ b
      φ∼ψ _ = λ i → Setoid.reflexive 𝔻[ Lift-Alg (𝒜 i) ℓ ρ ] ≡.refl
 
      open Setoid 𝔻[ ⨅ 𝒜 ] using (reflexive) renaming ( _≈_ to _≈₁_ )
@@ -423,7 +423,6 @@ module _ {ι : Level}{I : Type ι}{𝒜 : I → Algebra α ρᵃ} where
 
 module _ {ℓᵃ : Level}{I : Type ℓᵃ}{𝒜 : I → Algebra α ρᵃ}where
   open IsHom
-  open Setoid   using (_≈_ )
 
   ⨅≅⨅lowerℓρ : ∀ {ℓ ρ} → ⨅ 𝒜 ≅ ⨅ λ i → Lift-Alg (𝒜 (lower{ℓ = α ⊔ ρᵃ} i)) ℓ ρ
   ⨅≅⨅lowerℓρ {ℓ}{ρ} = mkiso φ ψ φ∼ψ ψ∼φ
@@ -450,20 +449,21 @@ module _ {ℓᵃ : Level}{I : Type ℓᵃ}{𝒜 : I → Algebra α ρᵃ}where
     ψ : hom (⨅ λ i → Lift-Alg (𝒜 (lower i)) ℓ ρ) (⨅ 𝒜)
     ψ = ψfunc , ψhom
 
-    φ∼ψ : ∀ b → ⨅lA ._≈_ (φ .proj₁ ⟨$⟩ (ψ .proj₁ ⟨$⟩ b)) b
+    open Setoid ⨅lA using () renaming (_≈_ to _≈ₗ_)
+    φ∼ψ : ∀ b → φ .proj₁ ⟨$⟩ (ψ .proj₁ ⟨$⟩ b) ≈ₗ b
     φ∼ψ _ = λ i → Setoid.reflexive 𝔻[ Lift-Alg (𝒜 (lower i)) ℓ ρ ] ≡.refl
 
-    open Setoid 𝔻[ ⨅ 𝒜 ] using(reflexive ) renaming ( _≈_ to _≈₁_ )
+    open Setoid 𝔻[ ⨅ 𝒜 ] using (reflexive ) renaming ( _≈_ to _≈₁_ )
     ψ∼φ : ∀ a → ψ .proj₁ ⟨$⟩ (φ .proj₁ ⟨$⟩ a) ≈₁ a
     ψ∼φ _ = reflexive ≡.refl
 
   ℓ⨅≅⨅ℓ : ∀ {ℓ} → Lift-Alg (⨅ 𝒜) ℓ ℓ ≅ ⨅ λ i → Lift-Alg (𝒜 (lower{ℓ = ℓ} i)) ℓ ℓ
-  ℓ⨅≅⨅ℓ {ℓ} = mkiso (φ , φhom) (ψ , ψhom) φ∼ψ ψ∼φ -- φ∼ψ ψ∼φ
+  ℓ⨅≅⨅ℓ {ℓ} = mkiso (φ , φhom) (ψ , ψhom) φ∼ψ ψ∼φ
     where
-    ℓ⨅𝒜 : Algebra _ _
+    ℓ⨅𝒜 : Algebra (α ⊔ ℓᵃ ⊔ ℓ) (ρᵃ ⊔ ℓᵃ ⊔ ℓ)
     ℓ⨅𝒜 = Lift-Alg (⨅ 𝒜) ℓ ℓ
-    ⨅ℓ𝒜 : Algebra _ _
-    ⨅ℓ𝒜 = ⨅ (λ i → Lift-Alg (𝒜 (lower{ℓ = ℓ} i)) ℓ ℓ)
+    ⨅ℓ𝒜 : Algebra (α ⊔ ℓ ⊔ ℓᵃ) (ρᵃ ⊔ ℓ ⊔ ℓᵃ)
+    ⨅ℓ𝒜 = ⨅ (λ i → Lift-Alg (𝒜 (lower i)) ℓ ℓ)
 
     φ : 𝔻[ ℓ⨅𝒜 ] ⟶ 𝔻[ ⨅ℓ𝒜 ]
     φ ⟨$⟩ x    = λ i → lift ((lower x)(lower i))
@@ -479,10 +479,12 @@ module _ {ℓᵃ : Level}{I : Type ℓᵃ}{𝒜 : I → Algebra α ρᵃ}where
     ψhom : IsHom ⨅ℓ𝒜 ℓ⨅𝒜 ψ
     ψhom .compatible .lower = λ i → Setoid.refl 𝔻[ 𝒜 i ]
 
-    φ∼ψ : ∀ b → 𝔻[ ⨅ℓ𝒜 ] ._≈_ (φ ⟨$⟩ (ψ ⟨$⟩ b)) b
+    open Setoid 𝔻[ ⨅ℓ𝒜 ] using (_≈_)
+    φ∼ψ : ∀ b → φ ⟨$⟩ (ψ ⟨$⟩ b) ≈ b
     φ∼ψ _ i .lower = Setoid.reflexive 𝔻[ 𝒜 (lower i) ] ≡.refl
 
-    ψ∼φ : ∀ a → 𝔻[ ℓ⨅𝒜 ] ._≈_ (ψ ⟨$⟩ (φ ⟨$⟩ a)) a
+    open Setoid 𝔻[ ℓ⨅𝒜 ] using () renaming (_≈_ to _≈′_)
+    ψ∼φ : ∀ a → ψ ⟨$⟩ (φ ⟨$⟩ a) ≈′ a
     ψ∼φ _ .lower = λ i → Setoid.reflexive 𝔻[ 𝒜  i ] ≡.refl
 
 module _ {ι : Level}{𝑨 : Algebra α ρᵃ} where

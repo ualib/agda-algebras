@@ -8,8 +8,10 @@ M6-4/M6-5 note [`m6-4-free-bridge.md`](m6-4-free-bridge.md), whose free-algebra
 congruence/derivability bridge this proof consumes wholesale, and with the M6-6 note
 [`m6-6-forward-jonsson-day.md`](m6-6-forward-jonsson-day.md), whose chain machinery
 (`Setoid.Congruences.ChainJoin`) supplies the crux extraction.  The converse of Day's
-theorem (CM ⟹ Day terms) is the remaining half of #413 and is *not* attempted here, per
-the plan of record ("land reverse Jónsson before attempting reverse Day").
+theorem (CM ⟹ Day terms) was the remaining half of #413 and was deliberately *not*
+attempted here, per the plan of record ("land reverse Jónsson before attempting reverse
+Day"); it has since landed as the planned mirror of this module — see the companion note
+[`m6-7-reverse-day.md`](m6-7-reverse-day.md).
 
 ## What landed
 
@@ -110,7 +112,8 @@ bridge:
    congruence above both step relations links the head to every element — instantiated
    at `θ` with `proj₁` twice, since both step relations are meets with `θ` on the left.
    This keeps the normalization reusable for the eventual Day converse, whose chain
-   lives in different congruences.
+   lives in different congruences.  (It did: `CM⇒day` consumes `head-linked` at `μ = ψ`
+   with `proj₂` and `θ ⊆ ψ`.)
 +  **The extracted chain must be `abstract`, or conversion drowns.**  The witness `pc`
    is built by running the whole extraction pipeline (`chain→parity` over
    `finitary⇒JoinIsChain` over the distributivity instance), and the proof of `red`
@@ -119,7 +122,7 @@ bridge:
    term over and over, and the module takes ~90 s to check; marking `pc` `abstract` —
    honest, since the proof only ever reads the chain's *interface* — collapses this to
    ~9 s.  Reverse Day will hit the identical issue; make its chain abstract from the
-   start.
+   start.  (It is — the Day chain was born abstract, and the module checks in ~6 s.)
 
 ## Track hygiene
 
@@ -130,12 +133,12 @@ representation.
 
 ## Remaining work on #413
 
-+  CM ⟹ Day terms (reverse Day).  The free-algebra setup mirrors this module over
-   `𝔽[ Fin 4 ]` (generators `x , y , z , u`; B–S II.12.4), and the `ParityChain`
-   machinery is designed to be reusable for its fork parity; the modular-law membership
-   and the pinning identities differ.  Unlike *forward* Day (deferred indefinitely,
-   see the M6-6 note), reverse Day is carried out in Burris–Sankappanavar and is
-   expected to be a mechanical mirror of this module.
++  ~~CM ⟹ Day terms (reverse Day).~~  **Done** — `CM⇒day` in
+   `Setoid.Varieties.Maltsev.Modularity`, mirroring this module over `𝔽[ Fin 4 ]`
+   exactly as predicted (the `ParityChain` machinery is consumed unchanged, via its
+   off-phase pass `chain→parityᵒ`); see the companion note
+   [`m6-7-reverse-day.md`](m6-7-reverse-day.md).  This completes #413; the only open
+   Day item is the *forward* direction, deferred indefinitely on #412 (M6-6 note).
 
 ## Build / check
 
