@@ -51,8 +51,8 @@ relations, and it remains a partial order here — `_⊆_` is antisymmetric
 **with respect to `_≑_`**, the equivalence of *mutual set containment*.  The only
 subtlety is which equality counts as **equal congruences**.
 
-The underlying relation of a congruence inhabits the `BinRel` type
-(`BinRel A ℓ = A → A → Type ℓ`), so mutual containment yields back-and-forth maps
+The underlying relation of a congruence inhabits the `BinaryRel` type
+(`BinaryRel A ℓ = A → A → Type ℓ`), so mutual containment yields back-and-forth maps
 between the proof-types `proj₁ θ x y` and `proj₁ φ x y` rather than a proof that the
 packaged congruences are *propositionally* equal.
 

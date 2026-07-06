@@ -78,6 +78,24 @@ follow a face to the proof.
     </span>
   </a>
 
+  <a class="ualib-figure" href="/Setoid/Varieties/Maltsev/Distributivity/">
+    <span class="ualib-portrait">
+    <img src="/assets/portraits/BjarniJonsson.png" alt="Bjarni Jónsson"></span>
+    <span class="ualib-figure__body">
+      <span class="ualib-figure__result">Jónsson's Theorem</span>
+      <span class="ualib-figure__who">Bjarni Jónsson · 1920–2016</span>
+    </span>
+  </a>
+
+  <a class="ualib-figure" href="/Setoid/Varieties/Maltsev/Modularity/">
+    <span class="ualib-portrait">
+    <img src="/assets/portraits/AlanDay.jpeg" alt="Alan Day"></span>
+    <span class="ualib-figure__body">
+      <span class="ualib-figure__result">Day's Theorem</span>
+      <span class="ualib-figure__who">Alan Day · 1941–1990</span>
+    </span>
+  </a>
+
   <a class="ualib-figure" href="/Setoid/Varieties/HSP/">
     <span class="ualib-portrait">
     <img src="/assets/portraits/Birkhoff_alt.jpeg" alt="Garrett Birkhoff"></span>

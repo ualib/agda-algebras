@@ -23,7 +23,7 @@ open import Function                 using ( _∘₂_ )
 open import Function.Bundles         using ( _↔_ ; Inverse)
 open import Level                    using ( _⊔_ ; Level ) renaming ( suc to lsuc )
 open import Relation.Binary.Bundles  using ( Poset )
-open import Relation.Binary.Core     using ( Rel ; _Preserves_⟶_ )
+open import Relation.Binary.Core     using ( Rel ; _Preserves_⟶_ ; _=[_]⇒_)
 open import Relation.Unary           using ( Pred ; _∈_ ; ⋂ )
 
 import Relation.Binary.Reasoning.PartialOrder as ≤-Reasoning
@@ -91,28 +91,32 @@ record ClOp {ℓ ℓ₁ ℓ₂ : Level}(𝑨 : Poset ℓ ℓ₁ ℓ₂) : Type  
 #### Basic properties of closure operators
 
 ```agda
-module _ {𝑨 : Poset ℓ ℓ₁ ℓ₂}(𝑪 : ClOp 𝑨) where
-  open Poset 𝑨 renaming (Carrier to A) using (_≤_)
-  open ≤-Reasoning 𝑨
-  open ClOp 𝑪
+module _ {𝑨 : Poset ℓ ℓ₁ ℓ₂} where
+  open Poset 𝑨 renaming (Carrier to A) using (_≈_; _≤_; refl; trans; antisym)
+  open Algebra.Definitions (_≈_) using (IdempotentFun)
+  open Inverse using (from; to)
+
+  module _ {𝑪 : ClOp 𝑨} where
+    open ClOp 𝑪
+    open ≤-Reasoning 𝑨
 ```
 
 **Theorem 1**. If `𝑨 = (A , ≦)` is a poset and `C` is a closure operator on `A`, then
 
-    ∀ (x y : A) → (x ≦ C y ↔ C x ≦ C y).
+    ∀ (x y : A) → x ≦ C y ↔ C x ≦ C y.
 
 ```agda
-  clop→law⇒ : (x y : A) → x ≤ (C y) → (C x) ≤ (C y)
-  clop→law⇒ x y x≤cy = begin
-    C x      ≤⟨ isOrderPreserving x≤cy ⟩
-    C (C y)  ≈⟨ isIdempotent y ⟩
-    C y      ∎
+    clop→law⇒ : ∀ x y  →  x ≤ C y  →  C x ≤ C y
+    clop→law⇒ x y x≤cy = begin
+      C x      ≤⟨ isOrderPreserving x≤cy ⟩
+      C (C y)  ≈⟨ isIdempotent y ⟩
+      C y      ∎
 
-  clop→law⇐ : (x y : A) → C x ≤ C y → x ≤ C y
-  clop→law⇐ x y cx≤cy = begin
-    x    ≤⟨ isExtensive ⟩
-    C x  ≤⟨ cx≤cy ⟩
-    C y  ∎
+    clop→law⇐ : ∀ x y  →  C x ≤ C y  →  x ≤ C y
+    clop→law⇐ x y cx≤cy = begin
+      x    ≤⟨ isExtensive ⟩
+      C x  ≤⟨ cx≤cy ⟩
+      C y  ∎
 ```
 
 The converse of Theorem 1 also holds.  That is,
@@ -121,22 +125,20 @@ The converse of Theorem 1 also holds.  That is,
 `∀ (x y : A) → (x ≤ C y ↔ C x ≤ C y)`, then `C` is a closure operator on `A`.
 
 ```agda
-module _ {𝑨 : Poset ℓ ℓ₁ ℓ₂} where
-  open Poset 𝑨 renaming (Carrier to A) using (_≈_; _≤_; refl; trans; antisym)
-  open Algebra.Definitions (_≈_)
-  open Inverse using (from; to)
-
-  clop←law :  (c : A → A) → ((x y : A) → (x ≤ c y ↔ c x ≤ c y))
-    → Extensive _≤_ c × c Preserves _≤_ ⟶ _≤_ × IdempotentFun c
+  clop←law :  (c : A → A) → (∀ x y → x ≤ c y ↔ c x ≤ c y)
+    → Extensive _≤_ c  × c Preserves _≤_ ⟶ _≤_  × IdempotentFun c
 
   clop←law c hyp  = e , (o , i)
     where
+    -- c is extensive: x ≤ c x
     e : Extensive _≤_ c
     e = (from ∘₂ hyp) _ _ refl
 
+    -- c is order preserving:  x ≤ y → c x ≤ c y
     o : c Preserves _≤_ ⟶ _≤_
     o u = (to ∘₂ hyp) _ _ (trans u e)
 
+    -- c is idempotent:  c (c x) = c x
     i : IdempotentFun c
     i x = antisym ((to ∘₂ hyp) _ _ refl) ((from ∘₂ hyp) _ _ refl)
 ```

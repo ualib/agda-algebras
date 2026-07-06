@@ -14,7 +14,7 @@ author: "the agda-algebras development team"
 open import Overture.Signatures using ( 𝓞 ; 𝓥 ; Signature )
 module Overture.Terms {𝑆 : Signature 𝓞 𝓥} where
 
-open import Overture.Terms.Basic {𝑆 = 𝑆} public
-open import Overture.Terms.Interpretation public
-open import Overture.Terms.Translation public
+open import Overture.Terms.Basic  {𝑆 = 𝑆}  public
+open import Overture.Terms.Interpretation  public
+open import Overture.Terms.Translation     public
 ```

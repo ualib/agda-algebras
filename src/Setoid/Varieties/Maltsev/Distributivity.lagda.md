@@ -46,7 +46,7 @@ open import Data.Product         using  ( _×_ ; _,_ ; Σ-syntax ; proj₁ ; pro
 open import Data.Sum.Base        using  ( inj₁ ; inj₂ )
 open import Level                using  ( Level ; 0ℓ ; _⊔_ ) renaming ( suc to lsuc )
 open import Relation.Binary      using  ( Setoid ; IsEquivalence )
-                                 renaming ( Rel to BinRel )
+                                 renaming ( Rel to BinaryRel )
 
 open import Relation.Binary.PropositionalEquality
   using ( _≡_ ; subst ) renaming ( refl to ≡refl ; sym to ≡sym )
@@ -397,8 +397,11 @@ the endpoint identity needs), and whose `i`-th step lies in `P` for even `i` and
 for odd `i`.
 
 ```agda
-record ParityChain {𝑆 : Signature 𝓞 𝓥}(𝑩 : Algebra {𝑆 = 𝑆} α ρ)
-                   (P Q : BinRel 𝕌[ 𝑩 ] ℓ)(x z : 𝕌[ 𝑩 ]) : Type (α ⊔ ρ ⊔ ℓ) where
+record ParityChain
+  {𝑆    : Signature 𝓞 𝓥}
+  (𝑩    : Algebra {𝑆 = 𝑆} α ρ)
+  (P Q  : BinaryRel 𝕌[ 𝑩 ] ℓ)
+  (x z  : 𝕌[ 𝑩 ]) : Type (α ⊔ ρ ⊔ ℓ) where
   field
     len      : ℕ
     elt      : Fin (suc len) → 𝕌[ 𝑩 ]
@@ -417,7 +420,7 @@ arithmetic is silent: `even? (suc k)`{.AgdaFunction} is definitionally
 two-case Boolean split, with no numeric lemmas.
 
 ```agda
-module _ {𝑆 : Signature 𝓞 𝓥}{𝑩 : Algebra {𝑆 = 𝑆} α ρ}{P Q : BinRel 𝕌[ 𝑩 ] ℓ} where
+module _ {𝑆 : Signature 𝓞 𝓥}{𝑩 : Algebra {𝑆 = 𝑆} α ρ}{P Q : BinaryRel 𝕌[ 𝑩 ] ℓ} where
 
   -- the singleton chain (no steps)
   pnil : {x z : 𝕌[ 𝑩 ]} → Setoid._≈_ 𝔻[ 𝑩 ] x z → ParityChain 𝑩 P Q x z
