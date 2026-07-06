@@ -23,7 +23,7 @@ Our first attempt to formalize Birkhoff's theorem suffered from two flaws.[^2] F
 assumed function extensionality in [MLTT][]; consequently, it was unclear whether the
 formalization was fully constructive. Second, an inconsistency could be contrived by taking the
 type `X`, representing an arbitrary collection of variable symbols, to be the two element type
-(see §[7](#sec:discuss){reference-type="ref" reference="sec:discuss"} for details). To resolve
+(see §[7](#discussion){reference-type="ref" reference="sec:discuss"} for details). To resolve
 these issues, we developed a new formalization of the HSP theorem based on *setoids* and
 rewrote much of the [agda-algebras][] library to support this approach. This enabled us to
 avoid function extensionality altogether. Moreover, the type `X` of variable symbols was
@@ -278,7 +278,7 @@ This section is organized into the following subsections:
 a general type of *signatures* of algebraic structures;
 §[3.2](#algebras){reference-type="ref" reference="algebras"} does the
 same for structures and their products;
-§[3.3](#homomorphisms){reference-type="ref" reference="homomorphisms"}
+§[3.3](#structure-preserving-maps-and-isomorphism){reference-type="ref" reference="homomorphisms"}
 defines *homomorphisms*, *monomorphisms*, and *epimorphisms*, presents
 types that codify these concepts, and formally verifies some of their
 basic properties; §[3.5](#subalgebras){reference-type="ref"
@@ -795,7 +795,7 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
 
 
 
-##### <a id="sec:lift-al">Lift-Alg is an algebraic invariant</a>
+##### <a id="sec:lift-alg">Lift-Alg is an algebraic invariant</a>
  <!-- {#sec:lift-alg} -->
 
 The `Lift-Alg` operation neatly resolves the technical problem of universe
