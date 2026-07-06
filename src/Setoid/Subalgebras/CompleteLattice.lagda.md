@@ -168,11 +168,11 @@ The top subuniverse `1ˢ` is the whole carrier, trivially closed under the opera
 
 ```agda
   private
-   0R : Pred A L
-   0R _ = Lift L ⊥
+    0R : Pred A L
+    0R _ = Lift L ⊥
 
-   1R : Pred A L
-   1R _ = Lift L ⊤
+    1R : Pred A L
+    1R _ = Lift L ⊤
 
   0ˢ : Subᴸ
   0ˢ = Sg 𝑨 0R , sgIsSub 𝑨

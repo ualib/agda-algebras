@@ -43,19 +43,19 @@ open _⟶_     renaming ( to to _⟨$⟩_ )
 open Term
 
 private variable
- χ α ρᵃ ι ℓ : Level
- X Γ Δ : Type χ
- f : OperationSymbolsOf 𝑆
- I : Type ι
+  χ α ρᵃ ι ℓ : Level
+  X Γ Δ : Type χ
+  f : OperationSymbolsOf 𝑆
+  I : Type ι
 
 -- Equations
 -- An equation is a pair (s , t) of terms in the same context.
 record Eq : Type (ov χ) where
- constructor _≈̇_
- field
-  {cxt}  : Type χ
-  lhs    : Term cxt
-  rhs    : Term cxt
+  constructor _≈̇_
+  field
+    {cxt}  : Type χ
+    lhs    : Term cxt
+    rhs    : Term cxt
 infix 6 _≈̇_
 open Eq public
 
@@ -84,8 +84,8 @@ _⊧_ : (𝑨 : Algebra α ρᵃ)(term-identity : Eq{χ}) → Type _
 -- interpreter.  (See issue #361.  Note _⊧_ and Equal still reduce
 -- definitionally, so the proofs that compute with them are unaffected.)
 record _⊫_ (𝒦 : Pred (Algebra α ρᵃ) ℓ)(eq : Eq{χ}) : Type (ℓ ⊔ χ ⊔ ov(α ⊔ ρᵃ)) where
- constructor ⊫-intro
- field ⊫-proof : ∀ (𝑨 : Algebra α ρᵃ) → 𝒦 𝑨 → 𝑨 ⊧ eq          -- (type \||= to get ⊫)
+  constructor ⊫-intro
+  field ⊫-proof : ∀ (𝑨 : Algebra α ρᵃ) → 𝒦 𝑨 → 𝑨 ⊧ eq          -- (type \||= to get ⊫)
 open _⊫_ public
 infix 5 _⊫_
 
@@ -273,7 +273,7 @@ which asserts that every valid consequence is derivable.
       ⟦ q ⟧ ⟨$⟩ σ₀   ≈⟨ evaluation q σ₀ ⟩
       q [ σ₀ ]       ≈⟨ identity q ⟩
       q              ∎
-     where
-     open Environment 𝔽[ Γ ]
-     open SetoidReasoning (Domain 𝔽[ Γ ])
+      where
+      open Environment 𝔽[ Γ ]
+      open SetoidReasoning (Domain 𝔽[ Γ ])
 ```

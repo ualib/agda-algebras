@@ -79,25 +79,25 @@ constantly-1 map) is such a homomorphism.  Let's prove this formally.
 ```agda
 module solution-2-1 where
 
- -- The (purely) relational structure with
- -- + 2-element domain,
- -- + one binary relation Rᵃ := \{(0,0), (1, 1)\}
+  -- The (purely) relational structure with
+  -- + 2-element domain,
+  -- + one binary relation Rᵃ := \{(0,0), (1, 1)\}
 
- data Rᵃ : Pred (𝟚 × 𝟚) ℓ₀ where
-  r1 : (𝟚.𝟎 , 𝟚.𝟎 ) ∈ Rᵃ
-  r2 : (𝟚.𝟏 , 𝟚.𝟏 ) ∈ Rᵃ
+  data Rᵃ : Pred (𝟚 × 𝟚) ℓ₀ where
+   r1 : (𝟚.𝟎 , 𝟚.𝟎 ) ∈ Rᵃ
+   r2 : (𝟚.𝟏 , 𝟚.𝟏 ) ∈ Rᵃ
 
- 𝑨 : structure S∅    -- (no operation symbols)
-               S001  -- (one binary relation symbol)
+  𝑨 : structure S∅    -- (no operation symbols)
+                S001  -- (one binary relation symbol)
 
- 𝑨 = record { carrier = 𝟚
-            ; op = λ ()
-            ; rel = λ _ x → ((x 𝟚.𝟎) , (x 𝟚.𝟏)) ∈ Rᵃ
-            }
+  𝑨 = record { carrier = 𝟚
+             ; op = λ ()
+             ; rel = λ _ x → ((x 𝟚.𝟎) , (x 𝟚.𝟏)) ∈ Rᵃ
+             }
 
- -- Claim: Given an arbitrary 𝑩 in the signatures Sig∅ Sig001, we can construct a homomorphism from 𝑩 to 𝑨.
- claim : (𝑩 : structure {ℓ₀}{ℓ₀}{ℓ₀}{ℓ₀} S∅ S001 {ℓ₀}{ℓ₀}) → hom 𝑩 𝑨
- claim 𝑩 = (λ x → 𝟚.𝟎) , (λ _ _ _ → r1) , λ ()
+  -- Claim: Given an arbitrary 𝑩 in the signatures Sig∅ Sig001, we can construct a homomorphism from 𝑩 to 𝑨.
+  claim : (𝑩 : structure {ℓ₀}{ℓ₀}{ℓ₀}{ℓ₀} S∅ S001 {ℓ₀}{ℓ₀}) → hom 𝑩 𝑨
+  claim 𝑩 = (λ x → 𝟚.𝟎) , (λ _ _ _ → r1) , λ ()
 ```
 
 In general, whenever the template structure 𝑨 has a one-element subuniverse, say, \{ a \},
@@ -125,44 +125,44 @@ to check each pair (x, y) ∈ Rᵇ and make sure that the following two implicat
 ```agda
 module solution-2-2 where
 
- -- The (purely) relational structure with
- -- + 2-element domain,
- -- + one binary relation: Rᵃ := { (0,0), (1, 1) }
- -- + two unary relations: C₀ᵃ := { 0 } , C₁ᵃ := { 1 }
+  -- The (purely) relational structure with
+  -- + 2-element domain,
+  -- + one binary relation: Rᵃ := { (0,0), (1, 1) }
+  -- + two unary relations: C₀ᵃ := { 0 } , C₁ᵃ := { 1 }
 
- data Rᵃ : Pred (𝟚 × 𝟚) ℓ₀ where
-  r1 : (𝟚.𝟎 , 𝟚.𝟎 ) ∈ Rᵃ
-  r2 : (𝟚.𝟏 , 𝟚.𝟏 ) ∈ Rᵃ
+  data Rᵃ : Pred (𝟚 × 𝟚) ℓ₀ where
+   r1 : (𝟚.𝟎 , 𝟚.𝟎 ) ∈ Rᵃ
+   r2 : (𝟚.𝟏 , 𝟚.𝟏 ) ∈ Rᵃ
 
- data C₀ᵃ : Pred 𝟚 ℓ₀ where
-  c₀ : 𝟚.𝟎 ∈ C₀ᵃ
+  data C₀ᵃ : Pred 𝟚 ℓ₀ where
+   c₀ : 𝟚.𝟎 ∈ C₀ᵃ
 
- data C₁ᵃ : Pred 𝟚 ℓ₀ where
-  c₁ : 𝟚.𝟏 ∈ C₁ᵃ
+  data C₁ᵃ : Pred 𝟚 ℓ₀ where
+   c₁ : 𝟚.𝟏 ∈ C₁ᵃ
 
- 𝑨 : structure S∅    -- (no operations)
-               S021  -- (two unary relations and one binary relation)
+  𝑨 : structure S∅    -- (no operations)
+                S021  -- (two unary relations and one binary relation)
 
- 𝑨 = record { carrier = 𝟚
-            ; op = λ ()
-            ; rel = rels
-            }
-            where
-            rels : (r : 𝟛) → Rel 𝟚 (arity S021 r)
-            rels 𝟛.𝟎 x = ((x 𝟚.𝟎) , (x 𝟚.𝟏)) ∈ Rᵃ
-            rels 𝟛.𝟏 x = x 𝟎 ∈ C₀ᵃ
-            rels 𝟛.𝟐 x = x 𝟎 ∈ C₁ᵃ
+  𝑨 = record { carrier = 𝟚
+             ; op = λ ()
+             ; rel = rels
+             }
+             where
+             rels : (r : 𝟛) → Rel 𝟚 (arity S021 r)
+             rels 𝟛.𝟎 x = ((x 𝟚.𝟎) , (x 𝟚.𝟏)) ∈ Rᵃ
+             rels 𝟛.𝟏 x = x 𝟎 ∈ C₀ᵃ
+             rels 𝟛.𝟐 x = x 𝟎 ∈ C₁ᵃ
 
- -- Claim: Given an arbitrary 𝑩 in the signatures S∅ S021, we can construct a homomorphism from 𝑩 to 𝑨.
- -- claim :  (𝑩 : structure S∅ S021 {ℓ₀}{ℓ₀})
- --  →       (∀ (x : 𝟚 → carrier 𝑩)
- --           → (rel 𝑩) 𝟛.𝟎 x  -- if ((x 𝟚.𝟎) , (x 𝟚.𝟏)) ∈ Rᵇ, then...
- --           → ((rel 𝑩) 𝟛.𝟏 (λ _ → (x 𝟚.𝟎)) → ¬ (rel 𝑩) 𝟛.𝟐 (λ _ → (x 𝟚.𝟏)))
- --             × ((rel 𝑩) 𝟛.𝟏 (λ _ → (x 𝟚.𝟏)) → ¬ (rel 𝑩) 𝟛.𝟐 (λ _ → (x 𝟚.𝟎)))
- --          --  × (x 𝟚.𝟎 ∈ C₁ᵇ → x 𝟚.𝟏 ∉ C₀ᵇ))
- --          )
- --  →       hom 𝑩 𝑨
- -- claim 𝑩 x = {!!}
+  -- Claim: Given an arbitrary 𝑩 in the signatures S∅ S021, we can construct a homomorphism from 𝑩 to 𝑨.
+  -- claim :  (𝑩 : structure S∅ S021 {ℓ₀}{ℓ₀})
+  --  →       (∀ (x : 𝟚 → carrier 𝑩)
+  --           → (rel 𝑩) 𝟛.𝟎 x  -- if ((x 𝟚.𝟎) , (x 𝟚.𝟏)) ∈ Rᵇ, then...
+  --           → ((rel 𝑩) 𝟛.𝟏 (λ _ → (x 𝟚.𝟎)) → ¬ (rel 𝑩) 𝟛.𝟐 (λ _ → (x 𝟚.𝟏)))
+  --             × ((rel 𝑩) 𝟛.𝟏 (λ _ → (x 𝟚.𝟏)) → ¬ (rel 𝑩) 𝟛.𝟐 (λ _ → (x 𝟚.𝟎)))
+  --          --  × (x 𝟚.𝟎 ∈ C₁ᵇ → x 𝟚.𝟏 ∉ C₀ᵇ))
+  --          )
+  --  →       hom 𝑩 𝑨
+  -- claim 𝑩 x = {!!}
 ```
 
 (The remainder are "todo.")

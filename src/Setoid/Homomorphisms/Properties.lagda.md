@@ -101,7 +101,7 @@ module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{ℓ : Level} where
   open Level                       using ( lift ; lower )
   open IsHom                       using (compatible)
   open Setoid 𝔻[ 𝑨 ]              using () renaming ( _≈_ to _≈₁_ ; refl to refl₁ )
-  open Setoid 𝔻[ Lift-Algˡ 𝑨 ℓ ]  using () renaming ( _≈_ to _≈ˡ_ ; refl to reflˡ)
+  open Setoid 𝔻[ Lift-Algˡ 𝑨 ℓ ]  using () renaming ( _≈_ to _≈ˡ_ )
   open Setoid 𝔻[ Lift-Algʳ 𝑨 ℓ ]  using () renaming ( _≈_ to _≈ʳ_ )
 
   ToLiftˡ : hom 𝑨 (Lift-Algˡ 𝑨 ℓ)
@@ -112,7 +112,7 @@ module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{ℓ : Level} where
   FromLiftˡ : hom (Lift-Algˡ 𝑨 ℓ) 𝑨
   FromLiftˡ .proj₁ ⟨$⟩ x = lower x
   FromLiftˡ .proj₁ .cong = id
-  FromLiftˡ .proj₂ .compatible = reflˡ
+  FromLiftˡ .proj₂ .compatible = refl₁
 
   ToFromLiftˡ : ∀ b →  ToLiftˡ .proj₁ ⟨$⟩ (FromLiftˡ .proj₁ ⟨$⟩ b) ≈ˡ b
   ToFromLiftˡ _ = refl₁
@@ -128,7 +128,7 @@ module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{ℓ : Level} where
   FromLiftʳ : hom (Lift-Algʳ 𝑨 ℓ) 𝑨
   FromLiftʳ .proj₁ ⟨$⟩ x = x
   FromLiftʳ .proj₁ .cong = lower
-  FromLiftʳ .proj₂ .compatible = reflˡ
+  FromLiftʳ .proj₂ .compatible = refl₁
 
   ToFromLiftʳ : ∀ b → ToLiftʳ .proj₁ ⟨$⟩ (FromLiftʳ .proj₁ ⟨$⟩ b) ≈ʳ b
   ToFromLiftʳ _ = lift refl₁

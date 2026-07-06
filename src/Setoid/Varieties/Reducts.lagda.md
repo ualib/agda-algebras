@@ -190,17 +190,17 @@ product setoid's reflexivity.
                       ( idmap-from  , mkIsHom (λ {o}{a} → Setoid.refl 𝔻[ R⨅ ]) )
                       (λ b → Setoid.refl 𝔻[ ⨅R ])
                       (λ a → Setoid.refl 𝔻[ R⨅ ])
-     where
-     R⨅ : Algebra {𝑆 = 𝑆₁} (α ⊔ ι) (ρ ⊔ ι)
-     R⨅ = reduct φ (⨅ 𝒜)
-     ⨅R : Algebra {𝑆 = 𝑆₁} (α ⊔ ι) (ρ ⊔ ι)
-     ⨅R = ⨅ (λ i → reduct φ (𝒜 i))
-     -- `R⨅` and `⨅R` have definitionally equal domains, so the identity map is a
-     -- homomorphism in both directions; its compatibility and the round-trips are refl.
-     idmap-to : Func 𝔻[ R⨅ ] 𝔻[ ⨅R ]
-     idmap-to = record { to = λ x → x ; cong = λ x≈y → x≈y }
-     idmap-from : Func 𝔻[ ⨅R ] 𝔻[ R⨅ ]
-     idmap-from = record { to = λ x → x ; cong = λ x≈y → x≈y }
+      where
+      R⨅ : Algebra {𝑆 = 𝑆₁} (α ⊔ ι) (ρ ⊔ ι)
+      R⨅ = reduct φ (⨅ 𝒜)
+      ⨅R : Algebra {𝑆 = 𝑆₁} (α ⊔ ι) (ρ ⊔ ι)
+      ⨅R = ⨅ (λ i → reduct φ (𝒜 i))
+      -- `R⨅` and `⨅R` have definitionally equal domains, so the identity map is a
+      -- homomorphism in both directions; its compatibility and the round-trips are refl.
+      idmap-to : Func 𝔻[ R⨅ ] 𝔻[ ⨅R ]
+      idmap-to = record { to = λ x → x ; cong = λ x≈y → x≈y }
+      idmap-from : Func 𝔻[ ⨅R ] 𝔻[ R⨅ ]
+      idmap-from = record { to = λ x → x ; cong = λ x≈y → x≈y }
 ```
 
 #### The reduct image and closure under `P`

@@ -58,11 +58,11 @@ Extensive _≤_ C = ∀{x} → x ≤ C x
 
 module _ {χ ρ ℓ : Level}{X : Type χ} where
 
- IntersectClosed : Pred (Pred X ℓ) ρ → Type (χ ⊔ ρ ⊔ lsuc ℓ)
- IntersectClosed C = ∀ {I : Type ℓ}{c : I → Pred X ℓ} → (∀ i → (c i) ∈ C) → ⋂ I c ∈ C
+  IntersectClosed : Pred (Pred X ℓ) ρ → Type (χ ⊔ ρ ⊔ lsuc ℓ)
+  IntersectClosed C = ∀ {I : Type ℓ}{c : I → Pred X ℓ} → (∀ i → (c i) ∈ C) → ⋂ I c ∈ C
 
- ClosureSystem : Type _
- ClosureSystem = Σ[ C ∈ Pred (Pred X ℓ) ρ ] IntersectClosed C
+  ClosureSystem : Type _
+  ClosureSystem = Σ[ C ∈ Pred (Pred X ℓ) ρ ] IntersectClosed C
 ```
 
 #### Closure Operators
@@ -77,15 +77,15 @@ on `𝑷` if it is
 Thus, a closure operator is an extensive, idempotent poset endomorphism.
 
 ```agda
--- ClOp, the inhabitants of which denote closure operators.
+ -- ClOp, the inhabitants of which denote closure operators.
 record ClOp {ℓ ℓ₁ ℓ₂ : Level}(𝑨 : Poset ℓ ℓ₁ ℓ₂) : Type  (ℓ ⊔ ℓ₂ ⊔ ℓ₁) where
- open Poset 𝑨 using (Carrier; _≈_; _≤_)
- open Algebra.Definitions (_≈_)
- field
-  C                  : Carrier → Carrier
-  isExtensive        : Extensive _≤_ C
-  isOrderPreserving  : C Preserves _≤_ ⟶ _≤_
-  isIdempotent       : IdempotentFun C
+  open Poset 𝑨 using (Carrier; _≈_; _≤_)
+  open Algebra.Definitions (_≈_)
+  field
+    C                  : Carrier → Carrier
+    isExtensive        : Extensive _≤_ C
+    isOrderPreserving  : C Preserves _≤_ ⟶ _≤_
+    isIdempotent       : IdempotentFun C
 ```
 
 #### Basic properties of closure operators

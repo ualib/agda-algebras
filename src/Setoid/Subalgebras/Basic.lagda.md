@@ -36,11 +36,11 @@ open import Setoid.Homomorphisms {𝑆 = 𝑆}
 private variable α ρᵃ β ρᵇ ℓ : Level
 
 _≥_   -- alias for supalgebra (aka overalgebra)
- _IsSupalgebraOf_ : Algebra α ρᵃ → Algebra β ρᵇ → Type _
+  _IsSupalgebraOf_ : Algebra α ρᵃ → Algebra β ρᵇ → Type _
 𝑨 IsSupalgebraOf 𝑩 = Σ[ h ∈ hom 𝑩 𝑨 ] IsInjective (proj₁ h)
 
 _≤_   -- alias for subalgebra relation
- _IsSubalgebraOf_ : Algebra α ρᵃ → Algebra β ρᵇ → Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
+  _IsSubalgebraOf_ : Algebra α ρᵃ → Algebra β ρᵇ → Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ)
 𝑨 IsSubalgebraOf 𝑩 = Σ[ h ∈ hom 𝑨 𝑩 ] IsInjective (proj₁ h)
 
 -- Syntactic sugar for sup/sub-algebra relations.
@@ -51,10 +51,10 @@ mon→≤ : {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} → mon 𝑨 𝑩
 mon→≤ {𝑨 = 𝑨}{𝑩} x = mon→intohom 𝑨 𝑩 x
 
 record SubalgebraOf : Type (ov (α ⊔ β ⊔ ρᵃ ⊔ ρᵇ)) where
- field
-  algebra : Algebra α ρᵃ
-  subalgebra : Algebra β ρᵇ
-  issubalgebra : subalgebra ≤ algebra
+  field
+    algebra : Algebra α ρᵃ
+    subalgebra : Algebra β ρᵇ
+    issubalgebra : subalgebra ≤ algebra
 
 Subalgebra : Algebra α ρᵃ → {β ρᵇ : Level} → Type _
 Subalgebra 𝑨 {β}{ρᵇ} = Σ[ 𝑩 ∈ (Algebra β ρᵇ) ] 𝑩 ≤ 𝑨
@@ -83,7 +83,7 @@ assertion as `𝑩 IsSubalgebraOfClass 𝒦`.
 
 ```agda
 _≤c_
- _IsSubalgebraOfClass_ : Algebra β ρᵇ → Pred (Algebra α ρᵃ) ℓ → Type _
+  _IsSubalgebraOfClass_ : Algebra β ρᵇ → Pred (Algebra α ρᵃ) ℓ → Type _
 𝑩 IsSubalgebraOfClass 𝒦 = Σ[ 𝑨 ∈ Algebra _ _ ] ((𝑨 ∈ 𝒦) ∧ (𝑩 ≤ 𝑨))
 
 𝑩 ≤c 𝒦 = 𝑩 IsSubalgebraOfClass 𝒦  -- (alias)

@@ -132,14 +132,14 @@ module  _        -- levels for...
 
   record Constraint (var : Type ν) (dom : var → Setoid α ρ)
                     : Type (ν ⊔ α ⊔ lsuc (ι ⊔ ρʳ)) where
-   field
-     arity  : Type ι               -- the cardinality of the set of constraint variables;
-     scope  : arity → var          -- which variables are involved in the constraint;
-     rel    : REL[ i ∈ arity ] dom (scope i) .Carrier -- the constraint relation.
+    field
+      arity  : Type ι               -- the cardinality of the set of constraint variables;
+      scope  : arity → var          -- which variables are involved in the constraint;
+      rel    : REL[ i ∈ arity ] dom (scope i) .Carrier -- the constraint relation.
 
-   satisfies : (∀ v → dom v .Carrier) → Type ρʳ  -- An assignment, 𝑓 : var → dom, of values to variables
-   satisfies f = rel (f ∘ scope)                 -- *satisfies* the constraint 𝐶 = (σ , 𝑅) provided
-                                                 -- 𝑓 ∘ σ ∈ 𝑅, where σ is the scope of the constraint.
+    satisfies : (∀ v → dom v .Carrier) → Type ρʳ  -- An assignment, 𝑓 : var → dom, of values to variables
+    satisfies f = rel (f ∘ scope)                 -- *satisfies* the constraint 𝐶 = (σ , 𝑅) provided
+                                                  -- 𝑓 ∘ σ ∈ 𝑅, where σ is the scope of the constraint.
   open Constraint
 ```
 

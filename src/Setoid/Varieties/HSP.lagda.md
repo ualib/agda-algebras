@@ -91,27 +91,27 @@ so belongs to `S (P 𝒦)`.
 ```agda
   skEqual : (i : ℑ⁺) → ∀{p q} → Type ρᵃ
   skEqual i {p}{q} = ⟦ p ⟧ ⟨$⟩ proj₂ (proj₂ i) ≈ ⟦ q ⟧ ⟨$⟩ proj₂ (proj₂ i)
-   where
-   open Setoid (Domain (𝔄⁺ i)) using ( _≈_ )
-   open Environment (𝔄⁺ i) using ( ⟦_⟧ )
+    where
+    open Setoid (Domain (𝔄⁺ i)) using ( _≈_ )
+    open Environment (𝔄⁺ i) using ( ⟦_⟧ )
 
   AllEqual⊆ker𝔽 :  ∀ {p q}
    →               (∀ i → skEqual i {p}{q}) → (p , q) ∈ fkerPred (proj₁ (hom𝔽[ X ]))
 
   AllEqual⊆ker𝔽 {p} {q} x = Goal
-   where
-   open Algebra 𝔽[ X ]  using () renaming ( Domain to F )
-   open Setoid F        using () renaming ( _≈_  to _≈F≈_ )
-   S𝒦⊫pq : S{β = α}{ρᵃ} ℓ 𝒦 ⊫ (p ≈̇ q)
-   S𝒦⊫pq .⊫-proof 𝑨 sA ρ = x (𝑨 , sA , ρ)
-   Goal : p ≈F≈ q
-   Goal = 𝒦⊫→ℰ⊢ (S-id2{ℓ = ℓ} S𝒦⊫pq)
+    where
+    open Algebra 𝔽[ X ]  using () renaming ( Domain to F )
+    open Setoid F        using () renaming ( _≈_  to _≈F≈_ )
+    S𝒦⊫pq : S{β = α}{ρᵃ} ℓ 𝒦 ⊫ (p ≈̇ q)
+    S𝒦⊫pq .⊫-proof 𝑨 sA ρ = x (𝑨 , sA , ρ)
+    Goal : p ≈F≈ q
+    Goal = 𝒦⊫→ℰ⊢ (S-id2{ℓ = ℓ} S𝒦⊫pq)
 
   homℭ : hom (𝑻 X) ℭ
   homℭ = ⨅-hom-co 𝔄⁺ h
-   where
-   h : ∀ i → hom (𝑻 X) (𝔄⁺ i)
-   h i = lift-hom (proj₂ (proj₂ i))
+    where
+    h : ∀ i → hom (𝑻 X) (𝔄⁺ i)
+    h i = lift-hom (proj₂ (proj₂ i))
 
   open Algebra 𝔽[ X ]  using () renaming ( Domain to F )
   open Setoid F        using () renaming ( _≈_ to _≈F≈_ )
@@ -119,15 +119,15 @@ so belongs to `S (P 𝒦)`.
 
   ker𝔽⊆kerℭ : fkerPred (proj₁ (hom𝔽[ X ])) ⊆ fkerPred (proj₁ homℭ)
   ker𝔽⊆kerℭ {p , q} pKq (𝑨 , sA , ρ) = Goal
-   where
-   open Setoid (Domain 𝑨)  using ( _≈_ ; sym ; trans )
-   open Environment 𝑨      using ( ⟦_⟧ )
-   fl : ∀ t → ⟦ t ⟧ ⟨$⟩ ρ ≈ free-lift ρ t
-   fl t = free-lift-interp {𝑨 = 𝑨} ρ t
-   subgoal : ⟦ p ⟧ ⟨$⟩ ρ ≈ ⟦ q ⟧ ⟨$⟩ ρ
-   subgoal = ker𝔽⊆Equal{𝑨 = 𝑨}{sA} pKq ρ
-   Goal : (free-lift{𝑨 = 𝑨} ρ p) ≈ (free-lift{𝑨 = 𝑨} ρ q)
-   Goal = trans (sym (fl p)) (trans subgoal (fl q))
+    where
+    open Setoid (Domain 𝑨)  using ( _≈_ ; sym ; trans )
+    open Environment 𝑨      using ( ⟦_⟧ )
+    fl : ∀ t → ⟦ t ⟧ ⟨$⟩ ρ ≈ free-lift ρ t
+    fl t = free-lift-interp {𝑨 = 𝑨} ρ t
+    subgoal : ⟦ p ⟧ ⟨$⟩ ρ ≈ ⟦ q ⟧ ⟨$⟩ ρ
+    subgoal = ker𝔽⊆Equal{𝑨 = 𝑨}{sA} pKq ρ
+    Goal : (free-lift{𝑨 = 𝑨} ρ p) ≈ (free-lift{𝑨 = 𝑨} ρ q)
+    Goal = trans (sym (fl p)) (trans subgoal (fl q))
 
   hom𝔽ℭ : hom 𝔽[ X ] ℭ
   hom𝔽ℭ = (proj₁ (HomFactor homℭ hom𝔽[ X ] ker𝔽⊆kerℭ hom𝔽[ X ]-is-epic))
@@ -136,27 +136,27 @@ so belongs to `S (P 𝒦)`.
 
   kerℭ⊆ker𝔽 : ∀{p q} → (p , q) ∈ fkerPred (proj₁ homℭ) → (p , q) ∈ fkerPred (proj₁ (hom𝔽[ X ]))
   kerℭ⊆ker𝔽 {p}{q} pKq = E⊢pq
-   where
-   pqEqual : ∀ i → skEqual i {p}{q}
-   pqEqual i = goal
     where
-    open Environment (𝔄⁺ i)      using () renaming ( ⟦_⟧ to ⟦_⟧ᵢ )
-    open Setoid (Domain (𝔄⁺ i))  using ( _≈_ ; sym ; trans )
-    goal : ⟦ p ⟧ᵢ ⟨$⟩ proj₂ (proj₂ i) ≈ ⟦ q ⟧ᵢ ⟨$⟩ proj₂ (proj₂ i)
-    goal = trans  (free-lift-interp{𝑨 = (proj₁ i)}(proj₂ (proj₂ i)) p)
-                  (trans (pKq i)(sym (free-lift-interp{𝑨 = (proj₁ i)} (proj₂ (proj₂ i)) q)))
-   E⊢pq : ℰ ⊢ X ▹ p ≈ q
-   E⊢pq = AllEqual⊆ker𝔽 pqEqual
+    pqEqual : ∀ i → skEqual i {p}{q}
+    pqEqual i = goal
+      where
+      open Environment (𝔄⁺ i)      using () renaming ( ⟦_⟧ to ⟦_⟧ᵢ )
+      open Setoid (Domain (𝔄⁺ i))  using ( _≈_ ; sym ; trans )
+      goal : ⟦ p ⟧ᵢ ⟨$⟩ proj₂ (proj₂ i) ≈ ⟦ q ⟧ᵢ ⟨$⟩ proj₂ (proj₂ i)
+      goal = trans  (free-lift-interp{𝑨 = (proj₁ i)}(proj₂ (proj₂ i)) p)
+                    (trans (pKq i)(sym (free-lift-interp{𝑨 = (proj₁ i)} (proj₂ (proj₂ i)) q)))
+    E⊢pq : ℰ ⊢ X ▹ p ≈ q
+    E⊢pq = AllEqual⊆ker𝔽 pqEqual
 
 
   mon𝔽ℭ : mon 𝔽[ X ] ℭ
   mon𝔽ℭ = (proj₁ hom𝔽ℭ) , isMon
-   where
-   open IsMon
-   open IsHom
-   isMon : IsMon 𝔽[ X ] ℭ (proj₁ hom𝔽ℭ)
-   isHom isMon = (proj₂ hom𝔽ℭ)
-   isInjective isMon {p} {q} φpq = kerℭ⊆ker𝔽 φpq
+    where
+    open IsMon
+    open IsHom
+    isMon : IsMon 𝔽[ X ] ℭ (proj₁ hom𝔽ℭ)
+    isHom isMon = (proj₂ hom𝔽ℭ)
+    isInjective isMon {p} {q} φpq = kerℭ⊆ker𝔽 φpq
 ```
 
 Now that we have proved the existence of a monomorphism from `𝔽[ X ]` to `ℭ` we are in a position
@@ -169,15 +169,15 @@ that `𝔽[ X ]` is a subalgebra of the *lift* of `ℭ`, denoted `ℓℭ`.
 
   SP𝔽 : 𝔽[ X ] ∈ S ι (P ℓ ι 𝒦)
   SP𝔽 = S-idem SSP𝔽
-   where
-   PSℭ : ℭ ∈ P (α ⊔ ρᵃ ⊔ ℓ) ι (S ℓ 𝒦)
-   PSℭ = ℑ⁺ , (𝔄⁺ , ((λ i → proj₁ (proj₂ i)) , ≅-refl))
+    where
+    PSℭ : ℭ ∈ P (α ⊔ ρᵃ ⊔ ℓ) ι (S ℓ 𝒦)
+    PSℭ = ℑ⁺ , (𝔄⁺ , ((λ i → proj₁ (proj₂ i)) , ≅-refl))
 
-   SPℭ : ℭ ∈ S ι (P ℓ ι 𝒦)
-   SPℭ = PS⊆SP {ℓ = ℓ} PSℭ
+    SPℭ : ℭ ∈ S ι (P ℓ ι 𝒦)
+    SPℭ = PS⊆SP {ℓ = ℓ} PSℭ
 
-   SSP𝔽 : 𝔽[ X ] ∈ S ι (S ι (P ℓ ι 𝒦))
-   SSP𝔽 = ℭ , (SPℭ , 𝔽≤ℭ)
+    SSP𝔽 : 𝔽[ X ] ∈ S ι (S ι (P ℓ ι 𝒦))
+    SSP𝔽 = ℭ , (SPℭ , 𝔽≤ℭ)
 ```
 
 
@@ -211,19 +211,19 @@ module _ {α ρᵃ ℓ : Level}{𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ 
 
   Birkhoff : {𝑨 : Algebra a a} → 𝑨 ∈ Mod (Th (V ℓ ι 𝒦)) → 𝑨 ∈ V ℓ ι 𝒦
   Birkhoff {𝑨 = 𝑨} ModThA = V-≅-lc {α} {ρᵃ} {ℓ} 𝒦 𝑨 VlA
-   where
-   open Setoid (Domain 𝑨) using () renaming ( Carrier to ∣A∣ )
-   sp𝔽A : 𝔽[ ∣A∣ ] ∈ S{ι} ι (P ℓ ι 𝒦)
-   sp𝔽A = SP𝔽{ℓ = ℓ} 𝒦
+    where
+    open Setoid (Domain 𝑨) using () renaming ( Carrier to ∣A∣ )
+    sp𝔽A : 𝔽[ ∣A∣ ] ∈ S{ι} ι (P ℓ ι 𝒦)
+    sp𝔽A = SP𝔽{ℓ = ℓ} 𝒦
 
-   epi𝔽lA : epi 𝔽[ ∣A∣ ] (Lift-Alg 𝑨 ι ι)
-   epi𝔽lA = 𝔽-ModTh-epi-lift{ℓ = ℓ} (λ {p q} → ModThA{p = p}{q})
+    epi𝔽lA : epi 𝔽[ ∣A∣ ] (Lift-Alg 𝑨 ι ι)
+    epi𝔽lA = 𝔽-ModTh-epi-lift{ℓ = ℓ} (λ {p q} → ModThA{p = p}{q})
 
-   lAimg𝔽A : Lift-Alg 𝑨 ι ι IsHomImageOf 𝔽[ ∣A∣ ]
-   lAimg𝔽A = epi→ontohom 𝔽[ ∣A∣ ] (Lift-Alg 𝑨 ι ι) epi𝔽lA
+    lAimg𝔽A : Lift-Alg 𝑨 ι ι IsHomImageOf 𝔽[ ∣A∣ ]
+    lAimg𝔽A = epi→ontohom 𝔽[ ∣A∣ ] (Lift-Alg 𝑨 ι ι) epi𝔽lA
 
-   VlA : Lift-Alg 𝑨 ι ι ∈ V ℓ ι 𝒦
-   VlA = 𝔽[ ∣A∣ ] , sp𝔽A , lAimg𝔽A
+    VlA : Lift-Alg 𝑨 ι ι ∈ V ℓ ι 𝒦
+    VlA = 𝔽[ ∣A∣ ] , sp𝔽A , lAimg𝔽A
 ```
 
 The converse inclusion, `V 𝒦 ⊆ Mod (Th (V 𝒦))`, is a simple consequence of the

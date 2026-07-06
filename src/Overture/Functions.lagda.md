@@ -76,18 +76,18 @@ way.
 ```agda
 module _ {A : Type a}{B : Type b} where
 
- data Image_∋_ (f : A → B) : B → Type (a ⊔ b) where
-  eq : {b : B} → ∀ a → b ≡ f a → Image f ∋ b
+  data Image_∋_ (f : A → B) : B → Type (a ⊔ b) where
+    eq : {b : B} → ∀ a → b ≡ f a → Image f ∋ b
 ```
 
 Given an inhabitant of `Image f ∋ b`, we recover the underlying preimage by pattern matching on `eq`.  This is the `Inv` function, a *range-restricted* inverse: it is defined exactly on those `b : B` that are demonstrably in the image of `f`.
 
 ```agda
- Inv : (f : A → B){b : B} → Image f ∋ b → A
- Inv _ (eq a _) = a
+  Inv : (f : A → B){b : B} → Image f ∋ b → A
+  Inv _ (eq a _) = a
 
- InvIsInverseʳ : {f : A → B}{b : B}(q : Image f ∋ b) → f (Inv f q) ≡ b
- InvIsInverseʳ (eq _ p) = sym p
+  InvIsInverseʳ : {f : A → B}{b : B}(q : Image f ∋ b) → f (Inv f q) ≡ b
+  InvIsInverseʳ (eq _ p) = sym p
 ```
 
 #### Surjectivity of raw functions
@@ -97,33 +97,33 @@ A raw function `f : A → B` is *surjective* when every `b : B` is in the image 
 ```agda
 module _ {A : Type a}{B : Type b} where
 
- IsSurjective : (A → B) → Type (a ⊔ b)
- IsSurjective f = ∀ y → Image f ∋ y
+  IsSurjective : (A → B) → Type (a ⊔ b)
+  IsSurjective f = ∀ y → Image f ∋ y
 
- IsSurjective→Surjective :  (f : A → B) → IsSurjective f
-  →                         Surjective _≡_ _≡_ f
- IsSurjective→Surjective f fE y = goal
-  where
-  imgfy→A : Image f ∋ y → Σ[ x ∈ A ] f x ≡ y
-  imgfy→A (eq x p) = x , sym p
-  goal : Σ[ x ∈ A ] ({z : A} → z ≡ x → f z ≡ y)
-  goal = proj₁ (imgfy→A $ fE y)
-       , λ z≡fst → trans (cong f z≡fst) $ proj₂ (imgfy→A $ fE y)
+  IsSurjective→Surjective :  (f : A → B) → IsSurjective f
+   →                         Surjective _≡_ _≡_ f
+  IsSurjective→Surjective f fE y = goal
+    where
+    imgfy→A : Image f ∋ y → Σ[ x ∈ A ] f x ≡ y
+    imgfy→A (eq x p) = x , sym p
+    goal : Σ[ x ∈ A ] ({z : A} → z ≡ x → f z ≡ y)
+    goal = proj₁ (imgfy→A $ fE y)
+         , λ z≡fst → trans (cong f z≡fst) $ proj₂ (imgfy→A $ fE y)
 
- Surjective→IsSurjective :  (f : A → B) → Surjective {A = A} _≡_ _≡_ f
-  →                         IsSurjective f
- Surjective→IsSurjective f fE y = eq (proj₁ $ fE y) (sym $ proj₂ (fE y) refl)
+  Surjective→IsSurjective :  (f : A → B) → Surjective {A = A} _≡_ _≡_ f
+   →                         IsSurjective f
+  Surjective→IsSurjective f fE y = eq (proj₁ $ fE y) (sym $ proj₂ (fE y) refl)
 ```
 
 A right-inverse of a surjective `f` is obtained by composing `Inv` with the surjectivity proof.  The right-inverse property is then immediate from `InvIsInverseʳ` above.
 
 ```agda
- SurjInv : (f : A → B) → IsSurjective f → B → A
- SurjInv f fE = Inv f ∘ fE
+  SurjInv : (f : A → B) → IsSurjective f → B → A
+  SurjInv f fE = Inv f ∘ fE
 
- SurjInvIsInverseʳ :  (f : A → B)(fE : IsSurjective f)
-  →                   ∀ b → f ((SurjInv f fE) b) ≡ b
- SurjInvIsInverseʳ f fE b = InvIsInverseʳ (fE b)
+  SurjInvIsInverseʳ :  (f : A → B)(fE : IsSurjective f)
+   →                   ∀ b → f ((SurjInv f fE) b) ≡ b
+  SurjInvIsInverseʳ f fE b = InvIsInverseʳ (fE b)
 ```
 
 The composition law for surjective functions: if `f` factors through `g` via `h`, and `f` is surjective, then so is `h`.  This is consumed in `Setoid.Homomorphisms.Factor` to lift surjectivity through the homomorphism factorization diagram.
@@ -131,37 +131,37 @@ The composition law for surjective functions: if `f` factors through `g` via `h`
 ```agda
 module _ {A : Type a}{B : Type b}{C : Type c} where
 
- epic-factor :  (f : A → B)(g : A → C)(h : C → B)
-  →             f ≈ h ∘ g → IsSurjective f → IsSurjective h
- epic-factor f g h compId fe y = goal
-  where
-   finv : B → A
-   finv = SurjInv f fe
+  epic-factor :  (f : A → B)(g : A → C)(h : C → B)
+   →             f ≈ h ∘ g → IsSurjective f → IsSurjective h
+  epic-factor f g h compId fe y = goal
+    where
+     finv : B → A
+     finv = SurjInv f fe
 
-   ζ : y ≡ f (finv y)
-   ζ = sym (SurjInvIsInverseʳ f fe y)
+     ζ : y ≡ f (finv y)
+     ζ = sym (SurjInvIsInverseʳ f fe y)
 
-   η : y ≡ (h ∘ g) (finv y)
-   η = ζ ∙ compId (finv y)
+     η : y ≡ (h ∘ g) (finv y)
+     η = ζ ∙ compId (finv y)
 
-   goal : Image h ∋ y
-   goal = eq (g (finv y)) η
+     goal : Image h ∋ y
+     goal = eq (g (finv y)) η
 
- epic-factor-intensional :  (f : A → B)(g : A → C)(h : C → B)
-  →                         f ≡ h ∘ g → IsSurjective f → IsSurjective h
- epic-factor-intensional f g h compId fe y = goal
-  where
-   finv : B → A
-   finv = SurjInv f fe
+  epic-factor-intensional :  (f : A → B)(g : A → C)(h : C → B)
+   →                         f ≡ h ∘ g → IsSurjective f → IsSurjective h
+  epic-factor-intensional f g h compId fe y = goal
+    where
+     finv : B → A
+     finv = SurjInv f fe
 
-   ζ : f (finv y) ≡ y
-   ζ = SurjInvIsInverseʳ f fe y
+     ζ : f (finv y) ≡ y
+     ζ = SurjInvIsInverseʳ f fe y
 
-   η : (h ∘ g) (finv y) ≡ y
-   η = (cong-app (sym compId) (finv y)) ∙ ζ
+     η : (h ∘ g) (finv y) ≡ y
+     η = (cong-app (sym compId) (finv y)) ∙ ζ
 
-   goal : Image h ∋ y
-   goal = eq (g (finv y)) (sym η)
+     goal : Image h ∋ y
+     goal = eq (g (finv y)) (sym η)
 ```
 
 #### Coordinate projection out of a dependent product
@@ -193,12 +193,12 @@ module _
 
   proj-is-onto : ∀{j} → Surjective {A = ∀ i → B i} _≡_ _≡_ (proj j)
   proj-is-onto {j} b = bs , λ x → trans (cong (λ u → proj j u) x) pf
-   where
-   bs : (i : I) → B i
-   bs i = update bs₀ (j , b) i (i ≟ j)
+    where
+    bs : (i : I) → B i
+    bs i = update bs₀ (j , b) i (i ≟ j)
 
-   pf : proj j bs ≡ b
-   pf = update-id (j ≟ j)
+    pf : proj j bs ≡ b
+    pf = update-id (j ≟ j)
 
   projIsOnto : ∀{j} → IsSurjective (proj j)
   projIsOnto {j} = Surjective→IsSurjective (proj j) proj-is-onto

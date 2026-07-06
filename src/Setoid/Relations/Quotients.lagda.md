@@ -40,20 +40,20 @@ A prominent example of an equivalence relation is the kernel of any function.
 open _⟶_ using ( cong )
 
 module _ {𝐴 : Setoid α ρᵃ}{𝐵 : Setoid β ρᵇ} where
- open Setoid 𝐴  using ( refl ) renaming (Carrier to A )
- open Setoid 𝐵  using ( sym ; trans )
+  open Setoid 𝐴  using ( refl ) renaming (Carrier to A )
+  open Setoid 𝐵  using ( sym ; trans )
 
- ker-IsEquivalence : (f : 𝐴 ⟶ 𝐵) → IsEquivalence (fker f)
- IsEquivalence.refl   (ker-IsEquivalence f) = cong f refl
- IsEquivalence.sym    (ker-IsEquivalence f) = sym
- IsEquivalence.trans  (ker-IsEquivalence f) = trans
+  ker-IsEquivalence : (f : 𝐴 ⟶ 𝐵) → IsEquivalence (fker f)
+  IsEquivalence.refl   (ker-IsEquivalence f) = cong f refl
+  IsEquivalence.sym    (ker-IsEquivalence f) = sym
+  IsEquivalence.trans  (ker-IsEquivalence f) = trans
 
 record IsBlock  {A : Type α}{ρ : Level}
                 (P : Pred A ρ){R : BinaryRel A ρ} : Type(α ⊔ suc ρ) where
- constructor mkblk
- field
-  a : A
-  P≈[a] : ∀ x → (x ∈ P → [ a ]{ρ} R x) ∧ ([ a ]{ρ} R x → x ∈ P)
+  constructor mkblk
+  field
+    a : A
+    P≈[a] : ∀ x → (x ∈ P → [ a ]{ρ} R x) ∧ ([ a ]{ρ} R x → x ∈ P)
 
 open IsBlock
 ```
@@ -81,13 +81,13 @@ open Setoid
 
 module _ {A : Type α}{R : Equivalence A{ℓ} } where
 
- open Setoid (A / R) using () renaming ( _≈_ to _≈₁_ )
+  open Setoid (A / R) using () renaming ( _≈_ to _≈₁_ )
 
- ⟪_∼_⟫-intro : (u v : A) → (proj₁ R) u v → ⟪ u ⟫{R} ≈₁ ⟪ v ⟫{R}
- ⟪ u ∼ v ⟫-intro = id
+  ⟪_∼_⟫-intro : (u v : A) → (proj₁ R) u v → ⟪ u ⟫{R} ≈₁ ⟪ v ⟫{R}
+  ⟪ u ∼ v ⟫-intro = id
 
- ⟪_∼_⟫-elim : (u v : A) → ⟪ u ⟫{R} ≈₁ ⟪ v ⟫{R} → (proj₁ R) u v
- ⟪ u ∼ v ⟫-elim = id
+  ⟪_∼_⟫-elim : (u v : A) → ⟪ u ⟫{R} ≈₁ ⟪ v ⟫{R} → (proj₁ R) u v
+  ⟪ u ∼ v ⟫-elim = id
 
 ≡→⊆ : {A : Type α}{ρ : Level}(Q R : Pred A ρ) → Q ≡ R → Q ⊆ R
 ≡→⊆ Q .Q ≡.refl {x} Qx = Qx
