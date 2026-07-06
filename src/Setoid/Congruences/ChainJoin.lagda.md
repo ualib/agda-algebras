@@ -38,23 +38,31 @@ open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 module Setoid.Congruences.ChainJoin where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
-open import Agda.Primitive                  using () renaming ( Set to Type )
-open import Data.Bool.Base                  using ( Bool ; true ; false ; T ; if_then_else_ )
-open import Data.Empty                      using ( ⊥-elim )
-open import Data.Fin.Base                   using ( Fin ; toℕ ; fromℕ< )
-open import Data.Fin.Properties             using ( _≟_ ; toℕ<n ; toℕ-fromℕ< ; toℕ-injective )
-open import Data.Nat.Base                   using ( ℕ ; zero ; suc ; _<_ ; _<ᵇ_ ; _≤_ )
-open import Data.Nat.Properties             using ( <⇒<ᵇ ; ≤-refl ; ≤-trans ; n<1+n ; n≤1+n )
-open import Data.Product                    using ( Σ-syntax ; _,_ ; proj₁ ; proj₂ )
-open import Data.Sum.Base                   using ( inj₁ ; inj₂ ; [_,_] )
-open import Function.Base                   using ( _∘_ ; const )
-open import Function.Bundles                using ( _↔_ ; Inverse )
-open import Level                           using ( Level ; _⊔_ ) renaming ( suc to lsuc)
-open import Relation.Nullary.Decidable      using ( yes ; no )
-open import Relation.Binary                 using ( Setoid ; IsEquivalence )
-
-open import Relation.Binary.PropositionalEquality
-  using ( _≡_ ; _≢_ ; refl ; sym ; trans ; cong ; subst )
+open import Agda.Primitive                         using  () renaming ( Set to Type )
+open import Data.Bool.Base                         using  ( Bool ; true ; false ; T
+                                                          ; if_then_else_ )
+open import Data.Empty                             using  ( ⊥-elim )
+open import Data.Fin.Base                          using  ( Fin ; toℕ ; fromℕ< )
+open import Data.Fin.Properties                    using  ( _≟_ ; toℕ<n ; toℕ-fromℕ<
+                                                          ; toℕ-injective )
+open import Data.Nat.Base                          using  ( ℕ ; zero ; suc ; _<_
+                                                          ; _<ᵇ_ ; _≤_ )
+open import Data.Nat.Properties                    using  ( <⇒<ᵇ ; ≤-refl ; ≤-trans
+                                                          ; n<1+n ; n≤1+n )
+open import Data.Product                           using  ( Σ-syntax ; _,_ ; proj₁
+                                                          ; proj₂ )
+open import Data.Sum.Base                          using  ( inj₁ ; inj₂ ; [_,_] )
+open import Data.Vec.Functional                    using  ( updateAt )
+open import Data.Vec.Functional.Properties         using  ( updateAt-updates
+                                                          ; updateAt-minimal
+                                                          ; updateAt-updateAt )
+open import Function.Base                          using  ( _∘_ ; const )
+open import Function.Bundles                       using  ( _↔_ ; Inverse )
+open import Level         renaming ( suc to lsuc)  using  ( Level ; _⊔_ )
+open import Relation.Binary                        using  ( Setoid ; IsEquivalence )
+open import Relation.Binary.PropositionalEquality  using  ( _≡_ ; _≢_ ; refl ; sym
+                                                          ; trans ; cong ; subst )
+open import Relation.Nullary.Decidable             using  ( yes ; no )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Overture                       using  ( OperationSymbolsOf ; ArityOf )

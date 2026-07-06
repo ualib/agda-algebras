@@ -87,24 +87,24 @@ alternative notations for projections out of pairs as follows.
 ```agda
 module _ {A : Type a}{B : A → Type b} where
 
- ∣_∣ : Σ[ x ∈ A ] B x → A
- ∣_∣ = proj₁
+  ∣_∣ : Σ[ x ∈ A ] B x → A
+  ∣_∣ = proj₁
 
- ∥_∥ : (z : Σ[ a ∈ A ] B a) → B (proj₁ z)
- ∥_∥ = proj₂
+  ∥_∥ : (z : Σ[ a ∈ A ] B a) → B (proj₁ z)
+  ∥_∥ = proj₂
 
- infix  40 ∣_∣
+  infix  40 ∣_∣
 
- {-# WARNING_ON_USAGE ∣_∣
- "The bracket projection `∣_∣` is deprecated (v3.0); it is being replaced
-  library-wide by `proj₁` (from `Data.Product`), with `OperationSymbolsOf` for
-  signature components.  See ADR-002 §1.  Retained so `Legacy/` keeps compiling."
- #-}
- {-# WARNING_ON_USAGE ∥_∥
- "The bracket projection `∥_∥` is deprecated (v3.0); it is being replaced
-  library-wide by `proj₂` (from `Data.Product`), with `ArityOf` for signature
-  components.  See ADR-002 §1.  Retained so `Legacy/` keeps compiling."
- #-}
+  {-# WARNING_ON_USAGE ∣_∣
+  "The bracket projection `∣_∣` is deprecated (v3.0); it is being replaced
+   library-wide by `proj₁` (from `Data.Product`), with `OperationSymbolsOf` for
+   signature components.  See ADR-002 §1.  Retained so `Legacy/` keeps compiling."
+  #-}
+  {-# WARNING_ON_USAGE ∥_∥
+  "The bracket projection `∥_∥` is deprecated (v3.0); it is being replaced
+   library-wide by `proj₂` (from `Data.Product`), with `ArityOf` for signature
+   components.  See ADR-002 §1.  Retained so `Legacy/` keeps compiling."
+  #-}
 ```
 
 Here we put the definitions inside an *anonymous module*, which starts with the
@@ -214,7 +214,8 @@ one finds in the `Level` module of the [Agda Standard Library][].
 
     record Lift {𝓦 a : Level} (A : Set a) : Set (a ⊔ 𝓦) where
       constructor lift
-      field lower : A
+      field
+        lower : A
 
 The point of having a ramified hierarchy of universes is to avoid Russell's
 paradox, and this would be subverted if we were to lower the universe of a type
@@ -242,25 +243,25 @@ the same output when given the same input.  (We will have more to say about
 this notion of equality in the [Legacy.Base.Equality.Extensionality][] module.)
 
 ```agda
-module _ {a : Level}{A : Type a}{b : Level}{B : A → Type b } where
+module _ {A : Type a} {B : A → Type b } where
 
- _≈_ :  (f g : (a : A) → B a) → Type (a ⊔ b)
- f ≈ g = ∀ x → f x ≡ g x
+  _≈_ : Π B → Π B → Type (a ⊔ b)
+  f ≈ g = ∀ x → f x ≡ g x
 
- infix 8 _≈_
+  infix 8 _≈_
 
- ≈IsEquivalence : IsEquivalence _≈_
- IsEquivalence.refl   ≈IsEquivalence          = λ _ → refl
- IsEquivalence.sym    ≈IsEquivalence f≈g      = λ x → sym (f≈g x)
- IsEquivalence.trans  ≈IsEquivalence f≈g g≈h  = λ x → trans (f≈g x) (g≈h x)
+  ≈IsEquivalence : IsEquivalence _≈_
+  IsEquivalence.refl   ≈IsEquivalence          = λ _ → refl
+  IsEquivalence.sym    ≈IsEquivalence f≈g      = sym ∘ f≈g
+  IsEquivalence.trans  ≈IsEquivalence f≈g g≈h  = λ x → trans (f≈g x) (g≈h x)
 ```
 
 The following is convenient for proving two pairs of a product type are equal
 using the fact that their respective components are equal.
 
 ```agda
-≡-by-parts :  {A : Type a}{B : Type b}{u v : A × B}
- →            proj₁ u ≡ proj₁ v → proj₂ u ≡ proj₂ v → u ≡ v
+≡-by-parts : {A : Type a} {B : Type b} {u v : A × B}
+  → proj₁ u ≡ proj₁ v → proj₂ u ≡ proj₂ v → u ≡ v
 
 ≡-by-parts refl refl = refl
 ```

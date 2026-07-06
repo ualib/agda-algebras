@@ -420,7 +420,6 @@ module _ {ι : Level}{I : Type ι}{𝒜 : I → Algebra α ρᵃ} where
 
 module _ {ℓᵃ : Level}{I : Type ℓᵃ}{𝒜 : I → Algebra α ρᵃ}where
   open IsHom
-  open Setoid   using (_≈_ )
 
   ⨅≅⨅lowerℓρ : ∀ {ℓ ρ} → ⨅ 𝒜 ≅ ⨅ λ i → Lift-Alg (𝒜 (lower{ℓ = α ⊔ ρᵃ} i)) ℓ ρ
   ⨅≅⨅lowerℓρ {ℓ}{ρ} = mkiso φ ψ φ∼ψ ψ∼φ

@@ -26,12 +26,11 @@ source position `κ φ f j`, and the translated subterm at `j` is the translatio
 `ts (κ φ f j)`:
 
 ```text
-   𝑆₁-term:        node f ts          with subterms   ts i ,        i : ArityOf 𝑆₁ f
-                      │
-                      │  φ ✶_
-                      ↓
-   𝑆₂-term:   node (ι φ f) ts′        with subterms   ts′ j = φ ✶ ts (κ φ f j) ,
-                                                                j : ArityOf 𝑆₂ (ι φ f)
+   𝑆₁-term:  node f ts          with subterms    ts i , i : ArityOf 𝑆₁ f
+                  │
+                  │  φ ✶_
+                  ↓
+   𝑆₂-term:  node (ι φ f) ts′   with subterms    ts′ j = φ ✶ ts (κ φ f j) , j : ArityOf 𝑆₂ (ι φ f)
 ```
 
 In the typical case of a signature *inclusion* — `ι` injective, each `κ φ f` the
@@ -61,11 +60,8 @@ relabelling by substitution into the chosen derived term.
 
 module Overture.Terms.Translation where
 
--- Imports from Agda and the Agda Standard Library ----------------------------
 open import Agda.Primitive                 using () renaming ( Set to Type )
 open import Level                          using ( Level )
-
--- Imports from the Agda Universal Algebra Library ----------------------------
 open import Overture.Signatures            using ( 𝓞 ; 𝓥 ; Signature )
 open import Overture.Signatures.Morphisms  using ( SigMorphism ; ι ; κ )
 
