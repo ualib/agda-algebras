@@ -14,6 +14,7 @@ This subtree collects worked theory interpretations ([Setoid.Varieties.Interpret
 into specific classical structures.  The inaugural instance is the Maltsev condition for
 groups.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -21,3 +22,4 @@ module Classical.Interpretations where
 
 open import Classical.Interpretations.Maltsev public
 ```
+-->

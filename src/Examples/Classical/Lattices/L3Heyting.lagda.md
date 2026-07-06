@@ -30,6 +30,7 @@ the Heyting identities — is discharged by *decision* over the finite carrier
 [finite-group examples][Examples.Classical.CyclicGroup3].  A wrong table would make
 the corresponding decision compute to `no`, and the example would fail to compile.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 module Examples.Classical.Lattices.L3Heyting where
@@ -52,6 +53,7 @@ open import Classical.Properties.Lattice                    using ( module Finit
 open import Classical.Small.Structures.DistributiveLattice  using ( DistributiveLattice ; eqsToDistributiveLattice )
 import Classical.Structures.DistributiveLattice as Polymorphic
 ```
+-->
 
 #### The Cayley tables {#tables}
 

@@ -12,6 +12,7 @@ category theory that are useful for formalizing universal algebra in other modul
 the library.
 
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -26,3 +27,4 @@ open import Setoid.Categories.Monad public
 open import Setoid.Categories.NaturalTransformation public
 open import Setoid.Categories.Reduct public
 ```
+-->

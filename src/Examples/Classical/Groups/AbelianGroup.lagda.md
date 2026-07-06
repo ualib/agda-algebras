@@ -14,6 +14,7 @@ The integers under addition are the canonical abelian group — the same carrier
 operations as the [`CyclicGroup`][Examples.Classical.Groups.CyclicGroup] example, now additionally
 witnessing commutativity via stdlib's `+-comm`.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -31,6 +32,7 @@ open import Classical.Small.Structures.AbelianGroup  using ( AbelianGroup ; eqsT
 
 import Classical.Structures.AbelianGroup as Polymorphic
 ```
+-->
 
 #### The abelian group `(ℤ, +, 0, -)` {#integer-abeliangroup}
 

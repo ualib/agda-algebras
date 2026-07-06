@@ -22,6 +22,7 @@ group `ℤ/2ℤ`.
 [Examples.Classical.CommutativeMonoid][]; it is rebuilt here directly over
 `Sig-Monoid`{.AgdaFunction}.)
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -49,6 +50,7 @@ open import Setoid.Signatures                    using ( ⟨_⟩ )
 
 open _⟶_ renaming ( to to _⟨$⟩_ ; cong to ≈cong )
 ```
+-->
 
 #### The monoid `(ℕ, +, 0)` over `Sig-Monoid` {#the-monoid}
 

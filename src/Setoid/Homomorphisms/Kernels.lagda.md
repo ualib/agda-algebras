@@ -9,6 +9,7 @@ author: "agda-algebras development team"
 
 This is the [Setoid.Homomorphisms.Kernels][] module of the [Agda Universal Algebra Library][].
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -31,7 +32,10 @@ open  import Setoid.Homomorphisms.Basic  using ( hom ; IsHom ; epi ; IsEpi ; epi
 private variable  α β ρᵃ ρᵇ ℓ : Level
 
 open _⟶_ using ( cong ) renaming ( to to _⟨$⟩_ )
+```
+-->
 
+```agda
 module _ {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{𝑩 : Algebra β ρᵇ} ((hmap , hhom) : hom 𝑨 𝑩) where
   open Algebra 𝑩   using ( Interp ) renaming ( Domain to B )
   open Setoid B    using ( _≈_ ; sym ; trans ; isEquivalence )

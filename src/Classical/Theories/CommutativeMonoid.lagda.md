@@ -12,6 +12,7 @@ This is the [Classical.Theories.CommutativeMonoid][] module of the [Agda Univers
 
 Adds commutativity to the monoid theory over the same `Sig-Monoid` signature.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -26,7 +27,10 @@ open import Relation.Binary.PropositionalEquality  using ( refl )
 open import Classical.Signatures.Monoid            using ( Sig-Monoid ; ∙-Op ; ε-Op )
 open import Classical.Equations                    using ( Associative ; LeftIdentity ; RightIdentity ; Commutative )
 open import Overture.Terms {𝑆 = Sig-Monoid}        using ( Term )
+```
+-->
 
+```agda
 data Eq-CommutativeMonoid : Type where
   assoc idˡ idʳ comm : Eq-CommutativeMonoid
 

@@ -10,6 +10,7 @@ author: "the agda-algebras development team"
 
 This is the [Setoid.Subalgebras.Subdirect][] module of the [Agda Universal Algebra Library][].
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -22,3 +23,4 @@ open import Setoid.Subalgebras.Subdirect.BirkhoffSI {𝑆 = 𝑆} public
 open import Setoid.Subalgebras.Subdirect.Finite {𝑆 = 𝑆} public
 open import Setoid.Subalgebras.Subdirect.Irreducible {𝑆 = 𝑆} public
 ```
+-->

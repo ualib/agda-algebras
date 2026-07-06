@@ -39,6 +39,7 @@ with `reductBy` retaining the two-argument form as a thin wrapper.  Packaging
 makes `reduct` a (contravariant) functor — `reduct-id` and `reduct-∘` below state
 identity- and composition-preservation, both holding by `refl`.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -63,6 +64,7 @@ private variable
   α ρ : Level
   𝑆 𝑆₁ 𝑆₂ 𝑆₃ : Signature 𝓞 𝓥
 ```
+-->
 
 #### The reduct of an algebra along a signature morphism
 

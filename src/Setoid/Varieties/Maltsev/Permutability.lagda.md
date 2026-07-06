@@ -19,6 +19,7 @@ The present module connects that to the *lattice* side (built in
 
 >  a variety with a Maltsev term is congruence-permutable.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -62,6 +63,7 @@ open _⊢_▹_≈_ using ( refl ; sym ; trans )
 
 private variable α ρ χ ι ℓ : Level
 ```
+-->
 
 #### Maltsev's theorem: a Maltsev term implies congruences permute
 

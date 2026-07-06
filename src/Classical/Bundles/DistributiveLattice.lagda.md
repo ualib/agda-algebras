@@ -26,6 +26,7 @@ back as the two left distributivity equations and reuses the Lattice-bridge
 derivations (idempotency from absorption, the `absorbʳ` form by one `∨-comm` step)
 for the eight shared equations.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -55,7 +56,10 @@ open import Setoid.Algebras.Basic {𝑆 = Sig-Lattice}   using  ( Algebra ; 𝕌
 open import Setoid.Signatures                         using  ( ⟨_⟩ )
 
 private variable α ρ : Level
+```
+-->
 
+```agda
 ⟨_⟩ᵈˡ : DistributiveLattice α ρ → stdlib-DistributiveLattice α ρ
 ⟨ 𝑫 ⟩ᵈˡ = record
   { Carrier = 𝕌[ proj₁ 𝑫 ]

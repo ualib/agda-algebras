@@ -55,6 +55,7 @@ definition: a *theory interpretation* sends operation symbols to derived operati
 (terms) rather than to symbols, and its action on terms replaces the `node` clause's
 relabelling by substitution into the chosen derived term.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -71,6 +72,7 @@ private variable
   χ : Level
   X : Type χ
 ```
+-->
 
 #### The translation
 

@@ -10,6 +10,7 @@ author: "agda-algebras development team"
 This is the [Setoid.Varieties][] module of the [Agda Universal Algebra Library][].
 
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -31,3 +32,4 @@ open import Setoid.Varieties.Properties        {𝑆 = 𝑆}  public
 open import Setoid.Varieties.Reducts                    public
 open import Setoid.Varieties.SoundAndComplete  {𝑆 = 𝑆}  public
 ```
+-->

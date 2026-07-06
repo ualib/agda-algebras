@@ -29,6 +29,7 @@ over `Sig-Ring`'s additive symbols; the multiplicative `rg-·-*` lemmas are the
 the two cross-operation laws, whose terms nest `·-Op` and `+-Op` and so bridge through
 two single-symbol `interp-cong` compositions, exactly as Lattice's absorption laws do.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -77,6 +78,7 @@ open import Setoid.Varieties.EquationalLogic {𝑆 = Sig-Ring} using ( _⊧_≈_
 
 private variable α ρ : Level
 ```
+-->
 
 #### The local satisfaction predicate
 

@@ -47,6 +47,7 @@ of a theory interpretation — that it carries one theory's laws into another's 
 satisfaction and lives in [Setoid.Varieties.Interpretation][], the analogue of
 [Setoid.Varieties.Invariance][] for `reduct`.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -69,6 +70,7 @@ private variable
   Y : Type ξ
   𝑆 𝑆₁ 𝑆₂ 𝑆₃ : Signature 𝓞 𝓥
 ```
+-->
 
 #### Interpretations
 

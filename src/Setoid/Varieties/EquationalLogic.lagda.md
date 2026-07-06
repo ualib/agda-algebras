@@ -13,6 +13,7 @@ Let 𝑆 be a signature. By an *identity* or *equation* in 𝑆 we mean an order
 
 Because a class of structures has a different type than a single structure, we must use a slightly different syntax to avoid overloading the relations ⊧ and ≈. As a reasonable alternative to what we would normally express informally as 𝒦 ⊧ 𝑝 ≈ 𝑞, we have settled on 𝒦 ⊫ p ≈ q to denote this relation.  To reiterate, if 𝒦 is a class of 𝑆-algebras, we write 𝒦 ⊫ 𝑝 ≈ 𝑞 if every 𝑨 ∈ 𝒦 satisfies 𝑨 ⊧ 𝑝 ≈ 𝑞.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -35,6 +36,7 @@ open import Setoid.Terms     {𝑆 = 𝑆} using ( module Environment )
 
 private variable χ α ρᵃ ℓ ι : Level
 ```
+-->
 
 
 #### The models relation

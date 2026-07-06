@@ -19,6 +19,7 @@ the predecessor's `assoc` and `comm` equations.  `Semilattice-Op` inherits `_∙
 `∙-cong`, `interp-node`, `assoc-law`, and `comm-law` through the reindex, and adds
 the curried `idem-law`.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -50,6 +51,7 @@ open import Setoid.Varieties.EquationalLogic {𝑆 = Sig-Magma} using ( _⊧_≈
 
 private variable α ρ : Level
 ```
+-->
 
 #### Satisfaction predicate and the type
 

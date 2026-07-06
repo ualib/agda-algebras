@@ -9,6 +9,7 @@ author: "agda-algebras development team"
 
 This is the [Setoid.Terms.Basic][] module of the [Agda Universal Algebra Library][].
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -38,6 +39,7 @@ private variable
   χ α ℓ : Level
   X Y : Type χ
 ```
+-->
 
 #### Equality of terms
 

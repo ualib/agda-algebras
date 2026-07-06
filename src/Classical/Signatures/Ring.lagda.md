@@ -23,6 +23,7 @@ that participates in the variety's equations gets its own signature symbol; the
 constructor- and arity-naming conventions are those established by
 `Classical.Signatures.Magma` and its successors.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -36,7 +37,10 @@ open import Level          using ( 0ℓ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Overture.Signatures using ( Signature )
+```
+-->
 
+```agda
 data Op-Ring : Type where
   +-Op 0-Op -Op ·-Op 1-Op : Op-Ring
 

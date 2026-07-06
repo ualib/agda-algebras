@@ -17,6 +17,7 @@ We prove some closure and invariance properties of the relation `⊧`.  In parti
 
 
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -53,6 +54,7 @@ private variable α ρᵃ β ρᵇ χ ℓ : Level
 open Func     using ( cong ) renaming ( to to _⟨$⟩_ )
 open Algebra  using ( Domain )
 ```
+-->
 
 
 

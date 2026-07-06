@@ -20,6 +20,7 @@ one each, so the variable carrier is uniformly `Fin 3` (per [ADR-002 v2
 identity-bearing structures as `Classical.Theories.Semigroup` does for the
 associativity-only ones.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -36,7 +37,10 @@ open import Relation.Binary.PropositionalEquality  using ( refl )
 open import Classical.Signatures.Monoid            using ( Sig-Monoid ; ∙-Op ; ε-Op )
 open import Classical.Equations                    using ( Associative ; LeftIdentity ; RightIdentity )
 open import Overture.Terms {𝑆 = Sig-Monoid}        using ( Term )
+```
+-->
 
+```agda
 data Eq-Monoid : Type where
   assoc idˡ idʳ : Eq-Monoid
 

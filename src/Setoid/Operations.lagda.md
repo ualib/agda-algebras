@@ -15,6 +15,7 @@ It collects the setoid-level companions to the operation utilities of
 law-checkers of [Overture.Operations.Properties][] to an arbitrary decidable setoid
 equipped with an exhaustive-search witness for its carrier.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -22,3 +23,4 @@ module Setoid.Operations where
 
 open import Setoid.Operations.Properties  public
 ```
+-->

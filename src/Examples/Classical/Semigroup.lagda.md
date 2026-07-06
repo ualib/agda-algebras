@@ -17,6 +17,7 @@ semigroup-specific worked examples: alternative semigroups on `ℕ`, finite semi
 the free semigroup over a generating set, semigroups that fail to be monoids, and so on.
 Subsequent additions should land here rather than alongside the core structure file.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -34,6 +35,7 @@ open import Examples.Classical.Magma              using ( ℕ-magma )
 
 import Classical.Structures.Semigroup as Polymorphic
 ```
+-->
 
 #### The semigroup `(ℕ, +)` {#N-semigroup}
 

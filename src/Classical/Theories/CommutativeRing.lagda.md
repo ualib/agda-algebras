@@ -14,6 +14,7 @@ Adds multiplicative commutativity to the ring theory over the same `Sig-Ring`
 signature, exactly as `Th-CommutativeMonoid` adds it to `Th-Monoid` and
 `Th-AbelianGroup` adds it to `Th-Group`.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -30,7 +31,10 @@ open import Classical.Equations                    using ( Associative ; LeftIde
                                                          ; LeftInverse ; RightInverse ; Commutative
                                                          ; DistributesOverˡ ; DistributesOverʳ )
 open import Overture.Terms {𝑆 = Sig-Ring}          using ( Term )
+```
+-->
 
+```agda
 data Eq-CommutativeRing : Type where
   +-assoc +-idˡ +-idʳ +-invˡ +-invʳ +-comm : Eq-CommutativeRing
   ·-assoc ·-idˡ ·-idʳ ·-comm               : Eq-CommutativeRing

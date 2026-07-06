@@ -26,6 +26,7 @@ position function, so the laws reduce to `∘`-associativity and `id`-cancellati
 The weaker, *pointwise* equality (the shape that later, algebra-level laws will take
 with `≈`) follows immediately.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -52,6 +53,7 @@ open import Setoid.Signatures using ( ⟨_⟩ )
 private variable
   α ρ αᵇ ρᵇ αᶜ ρᶜ : Level
 ```
+-->
 
 #### `⟨ 𝑆 ⟩` is functorial in the carrier
 

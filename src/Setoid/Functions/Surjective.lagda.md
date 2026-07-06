@@ -12,6 +12,7 @@ This is the [Setoid.Functions.Surjective][] module of the [agda-algebras][] libr
 A *surjective function* from a setoid `𝑨 = (A, ≈₀)` to a setoid `𝑩 = (B, ≈₁)` is a function `f : 𝑨 ⟶ 𝑩` such that for all `b : B` there exists `a : A` such that `(f ⟨$⟩ a) ≈₁ b`.  In other words, the range and codomain of `f` agree.
 
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -40,7 +41,10 @@ private variable
   α ρᵃ β ρᵇ γ ρᶜ : Level
 
 open Image_∋_
+```
+-->
 
+```agda
 module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
 
   open Setoid 𝑨  renaming (Carrier to A; _≈_ to _≈₁_; isEquivalence to isEqA ) using ()

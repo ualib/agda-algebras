@@ -29,6 +29,7 @@ The addition table (rows indexed by the left summand, columns by the right; entr
 | 1 | 1 | 2 | 0 |
 | 2 | 2 | 0 | 1 |
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -50,6 +51,7 @@ open import Classical.Small.Structures.Group  using  ( Group ; eqsToGroup )
 
 import Classical.Structures.Group as Polymorphic
 ```
+-->
 
 #### The Cayley table, the operation, and the inverse map
 

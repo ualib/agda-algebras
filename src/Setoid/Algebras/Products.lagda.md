@@ -10,6 +10,7 @@ author: "agda-algebras development team"
 This is the [Setoid.Algebras.Products][] module of the [Agda Universal Algebra Library][].
 
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -40,7 +41,10 @@ open import Setoid.Algebras.Basic {𝑆 = 𝑆}  using ( Algebra ; _^_ ; ov ; �
 private variable α ρ ι : Level
 
 open Algebra
+```
+-->
 
+```agda
 ⨅ : {I : Type ι }(𝒜 : I → Algebra α ρ) → Algebra (α ⊔ ι) (ρ ⊔ ι)
 
 Domain (⨅ {I} 𝒜) =

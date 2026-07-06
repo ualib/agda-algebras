@@ -16,6 +16,7 @@ A)` and the standard inductive definition.  The content was relocated here under
 from `Legacy.Base.Categories.*`; nothing in the canonical `Setoid/`, `Classical/`, or
 planned `Cubical/` development depends on it.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -23,3 +24,4 @@ module Examples.PolynomialFunctors where
 
 open import Examples.PolynomialFunctors.Functors public
 ```
+-->

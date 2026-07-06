@@ -14,6 +14,7 @@ Booleans under conjunction form the canonical small semilattice — idempotent,
 commutative, associative.  Built directly from stdlib's `∧-assoc`, `∧-comm`,
 `∧-idem` in `Data.Bool.Properties`.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 module Examples.Classical.Semilattice where
@@ -26,7 +27,10 @@ open import Classical.Small.Structures.Semilattice
   using ( Semilattice ; eqsToSemilattice )
 
 import Classical.Structures.Semilattice as Polymorphic
+```
+-->
 
+```agda
 Bool-meet-semilattice : Semilattice
 Bool-meet-semilattice = eqsToSemilattice Bool _∧_ ∧-assoc ∧-comm ∧-idem
 

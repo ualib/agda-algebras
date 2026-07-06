@@ -53,6 +53,7 @@ constructive and computes.  Classically every finite algebra furnishes these dat
 record is precisely the constructive witness that makes the search go through under
 `--safe`.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -108,6 +109,7 @@ open Func    using ( cong ) renaming ( to to _⟨$⟩_ )
 
 private variable α ρ : Level
 ```
+-->
 
 #### Two generic list lemmas
 

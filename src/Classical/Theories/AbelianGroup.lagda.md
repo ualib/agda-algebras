@@ -13,6 +13,7 @@ This is the [Classical.Theories.AbelianGroup][] module of the [Agda Universal Al
 Adds commutativity to the group theory over the same `Sig-Group` signature, exactly
 as `Th-CommutativeMonoid` adds it to `Th-Monoid`.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -28,7 +29,10 @@ open import Classical.Signatures.Group             using ( Sig-Group ; ∙-Op ; 
 open import Classical.Equations                    using ( Associative ; LeftIdentity ; RightIdentity
                                                          ; LeftInverse ; RightInverse ; Commutative )
 open import Overture.Terms {𝑆 = Sig-Group}         using ( Term )
+```
+-->
 
+```agda
 data Eq-AbelianGroup : Type where
   assoc idˡ idʳ invˡ invʳ comm : Eq-AbelianGroup
 

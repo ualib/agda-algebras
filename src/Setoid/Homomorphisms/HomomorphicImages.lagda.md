@@ -10,6 +10,7 @@ author: "agda-algebras development team"
 This is the [Setoid.Homomorphisms.HomomorphicImages][] module of the [Agda Universal Algebra Library][].
 
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -45,6 +46,7 @@ open Algebra
 
 private variable α ρᵃ β ρᵇ : Level
 ```
+-->
 
 
 We begin with what seems, for our purposes, the most useful way to represent the

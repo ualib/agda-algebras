@@ -11,6 +11,7 @@ This module collects all submodule of that part of the library based on setoids,
 as opposed to "bare" types (see [Legacy.Base.lagda][]).
 
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -29,3 +30,4 @@ open import Setoid.Subalgebras    public
 open import Setoid.Terms          public
 open import Setoid.Varieties      public
 ```
+-->

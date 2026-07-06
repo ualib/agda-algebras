@@ -40,6 +40,7 @@ The formal development here in the `agda-algebras` library goes beyond the class
 group-theoretic theorem, expressing Noether's abstraction at the even more general
 level envisioned by Birkhoff.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -62,6 +63,7 @@ open import Setoid.Homomorphisms.Kernels  using ( kerquo ; πker )
 
 private variable α ρᵃ β ρᵇ γ ρᶜ ι : Level
 ```
+-->
 
 
 #### The first homomorphism theorem for setoid algebras

@@ -78,6 +78,7 @@ If R' ⊆ (∣: ⃖ R) ⃗ ∣: is finite, then CSP((A, R')) is reducible in pol
 In particular, the tractability of CSP(𝒜) depends only on its associated polymorphism
 algebra, 𝑨(R) := (A , ∣: ⃖ R).
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -95,6 +96,7 @@ open import Overture                     using ( 𝓞 ; 𝓥 ; Signature )
 open import Setoid.Relations.Continuous  using ( REL-syntax )
 open import Setoid.Algebras.Basic        using ( Algebra ; 𝔻[_] ; 𝕌[_] )
 ```
+-->
 
 #### Constraints
 

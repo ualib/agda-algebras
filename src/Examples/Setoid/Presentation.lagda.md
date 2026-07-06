@@ -24,6 +24,7 @@ generator*.  Idempotence forces every nonempty product of `a` to
 collapse to `a`; we derive two instances of that collapse from the
 single defining relation.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -45,6 +46,7 @@ open import Relation.Binary using ( Setoid )
 
 open _⊢_▹_≈_ using ( hyp ; app ; refl ; trans )
 ```
+-->
 
 #### The presentation `⟨ a ∣ a · a ≈ a ⟩` {#the-presentation}
 

@@ -29,6 +29,7 @@ This file is the umbrella for the subtree.  Round-trip and acceptance-check lemm
 names carry a per-structure suffix (`-ma`, `-sg`, `-mn`, `-gr`, …), precisely so the
 umbrellas can `public`-export every structure's witnesses without collision.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -47,3 +48,4 @@ open import Classical.Bundles.Ring public
 open import Classical.Bundles.Semigroup public
 open import Classical.Bundles.Semilattice public
 ```
+-->

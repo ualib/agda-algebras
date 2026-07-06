@@ -13,6 +13,7 @@ A property `P` of (setoid) algebras is called an **algebraic invariant** when it
 
 The canonical example available in this library is the modelling relation `𝑨 ⊧ (p ≈̇ q)`.  Its algebraic invariance is the content of [`Setoid.Varieties.Properties.⊧-I-invar`][], which states precisely that `λ 𝑨 → 𝑨 ⊧ (p ≈̇ q)` satisfies the `AlgebraicInvariant` predicate defined below.  More generally, each closure operator `H`, `S`, `P`, `V` of the variety theory is built from operations that respect `_≅_`, so class membership `_∈ H 𝒦`, `_∈ S 𝒦`, `_∈ P 𝒦`, and `_∈ V 𝒦` is itself an algebraic invariant.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -31,6 +32,7 @@ open import Setoid.Homomorphisms  {𝑆 = 𝑆}  using ( _≅_ )
 
 private variable α ρᵃ ℓ : Level
 ```
+-->
 
 A predicate `P : Pred (Algebra α ρᵃ) ℓ` is an *algebraic invariant* when, given any two algebras `𝑨` and `𝑩` at the same universe levels and an isomorphism `𝑨 ≅ 𝑩`, the property `P 𝑨` entails `P 𝑩`.  The same-level restriction is forced by Agda's `Pred` type and matches the legacy `Base.Varieties.Invariants` definition; a level-heterogeneous variant could be obtained by parametrizing over a level-indexed family of predicates, but no current consumer requires it.
 

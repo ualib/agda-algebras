@@ -13,6 +13,7 @@ This subtree collects the order-theoretic adjunction infrastructure used across 
 
 This module is a Category-A relocation under #305 (M2-7a).  See [`src/Legacy/Base/DEPRECATED.md`](../Legacy/Base/DEPRECATED.md) for the inventory and migration guidance.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -22,6 +23,7 @@ open import Overture.Adjunction.Closure      public
 open import Overture.Adjunction.Galois       public
 open import Overture.Adjunction.Residuation  public
 ```
+-->
 
 -------------------------------------
 

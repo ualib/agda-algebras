@@ -18,6 +18,7 @@ lattice is an *ordered* structure (a poset with meets and joins), whereas the
 subalgebra lattice ([Setoid.Subalgebras.CompleteLattice][]) are the motivating
 instances.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -25,3 +26,4 @@ module Order where
 
 open import Order.CompleteLattice public
 ```
+-->

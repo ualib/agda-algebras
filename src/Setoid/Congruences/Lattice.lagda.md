@@ -17,6 +17,7 @@ relational intersection `θ ∩ φ`.  The intersection of two congruences is aga
 congruence, and it is the greatest lower bound of the two arguments.  Thus we have a
 partially ordered set which, with the meet operation, forms a semilattice.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -41,6 +42,7 @@ open import Setoid.Congruences.Basic  {𝑆 = 𝑆}  using  ( Con ; mkcon ; _∣
                                                       ; 𝟘[_] ; 𝟙[_] )
 private variable α ρ ℓ : Level
 ```
+-->
 
 #### The containment order on congruences
 

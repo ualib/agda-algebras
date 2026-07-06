@@ -27,6 +27,7 @@ and `f ∘ (g ∘ h)`, and record η lifts those field equalities to the morphis
 does **not** arise here, because the laws compose abstract position maps rather than
 normalizing `Fin`-pattern lambdas.  See ADR-006 for the decision and its rationale.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -47,6 +48,7 @@ open import Overture.Signatures
 private variable
   𝑆 𝑆₁ 𝑆₂ 𝑆₃ 𝑆₄ : Signature 𝓞 𝓥
 ```
+-->
 
 #### Signature morphisms
 

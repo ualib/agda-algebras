@@ -17,6 +17,7 @@ theory-reindex (`proj₁` on the underlying algebra), and `CommutativeRing-Op` i
 the additive `(_+_, 0R, -_)`, the multiplicative `(_·_, 1R)`, and all eleven ring laws
 through it, adding `·-comm-law`.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -46,6 +47,7 @@ open import Setoid.Varieties.EquationalLogic {𝑆 = Sig-Ring} using ( _⊧_≈_
 
 private variable α ρ : Level
 ```
+-->
 
 #### Satisfaction predicate and the `CommutativeRing` type
 

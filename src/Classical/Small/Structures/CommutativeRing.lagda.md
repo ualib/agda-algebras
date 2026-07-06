@@ -13,6 +13,7 @@ This is the [Classical.Small.Structures.CommutativeRing][] module of the [Agda U
 Specializes [`Classical.Structures.CommutativeRing`][] to the `0ℓ`–`0ℓ` case,
 mirroring the veneers of `Ring`, `CommutativeMonoid`, `AbelianGroup`, etc.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -23,7 +24,10 @@ open import Level                                   using ( 0ℓ ; suc )
 open import Relation.Binary.PropositionalEquality   using ( _≡_ )
 
 import Classical.Structures.CommutativeRing as Polymorphic
+```
+-->
 
+```agda
 CommutativeRing : Type (suc 0ℓ)
 CommutativeRing = Polymorphic.CommutativeRing 0ℓ 0ℓ
 

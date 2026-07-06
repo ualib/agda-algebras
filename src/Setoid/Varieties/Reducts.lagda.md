@@ -65,6 +65,7 @@ satisfaction (`⊧-reduct`): every reduct of a `𝒱`-algebra satisfies the `φ`
 `𝒱`'s equational theory, so `reduct φ (𝒱)` is *contained in* a variety of `𝑆₁`-algebras even
 though it need not equal one.  That containment is `reduct-⊧` below.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -110,6 +111,7 @@ import Setoid.Varieties.EquationalLogic as EqLogic
 private variable
   α ρ β ρᵇ γ ρᶜ ℓ ι χ : Level
 ```
+-->
 
 #### Reduct preserves homomorphisms
 

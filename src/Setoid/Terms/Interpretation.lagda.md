@@ -48,6 +48,7 @@ larger *clone category* of interpretations rather than the signature category `S
    acts exactly as `φ ✶_`, confirming that interpretations strictly generalize signature
    morphisms.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -79,6 +80,7 @@ private variable
   V : Type ζ
   𝑆 𝑆₁ 𝑆₂ 𝑆₃ : Signature 𝓞 𝓥
 ```
+-->
 
 ##### Laws of `graft`
 

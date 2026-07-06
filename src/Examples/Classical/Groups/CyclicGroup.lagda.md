@@ -14,6 +14,7 @@ The integers under addition form the canonical group — indeed the infinite cyc
 group; built directly from stdlib's
 `+-assoc`, `+-identityˡ`, `+-identityʳ`, `+-inverseˡ`, `+-inverseʳ`.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -31,6 +32,7 @@ open import Classical.Small.Structures.Group  using ( Group ; eqsToGroup )
 
 import Classical.Structures.Group as Polymorphic
 ```
+-->
 
 #### The group `(ℤ, +, 0, -)` {#integer-group}
 

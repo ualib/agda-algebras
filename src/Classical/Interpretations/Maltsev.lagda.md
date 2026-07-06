@@ -25,6 +25,7 @@ and `x ∙ (y ⁻¹ ∙ y) = x`.  The interpretation `I-grp` sends `m-Op` to tha
 term, and the satisfaction condition (`⊧-interp`) reduces the obligation
 `HasMaltsevTerm Th-Group` to the two curried group identities.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -58,6 +59,7 @@ open Func renaming ( to to _⟨$⟩_ )
 
 private variable α ρ : Level
 ```
+-->
 
 #### The interpretation into the group theory
 

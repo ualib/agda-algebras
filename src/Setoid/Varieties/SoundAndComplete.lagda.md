@@ -11,6 +11,7 @@ This is the [Setoid.Varieties.SoundAndComplete][] module of the [Agda Universal 
 
 This module is based on [Andreas Abel's Agda formalization of Birkhoff's completeness theorem](http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf).
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -47,7 +48,10 @@ private variable
   X Γ Δ : Type χ
   f : OperationSymbolsOf 𝑆
   I : Type ι
+```
+-->
 
+```agda
 -- Equations
 -- An equation is a pair (s , t) of terms in the same context.
 record Eq : Type (ov χ) where

@@ -25,6 +25,7 @@ throughout with congruences at the algebra's own relation level `ρ`, so the dia
 Birkhoff's subdirect representation theorem — is built on top of this in
 [Setoid.Subalgebras.Subdirect][]; nothing here assumes it.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -47,6 +48,7 @@ open import Setoid.Congruences.Lattice  {𝑆 = 𝑆}  using  ( _⊆_ ; _≑_ ; 
 
 private variable α ρ ℓ : Level
 ```
+-->
 
 #### Nontriviality and the diagonal
 

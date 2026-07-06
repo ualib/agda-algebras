@@ -82,6 +82,7 @@ Two instances anchor the abstraction in this library:
    `docs/notes/m4-5e-term-monad.md` for why this is a fact about predicativity, not a
    defect of the formalization.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -97,6 +98,7 @@ open import Setoid.Categories.Adjunction             using ( Adjunction )
 
 private variable o ℓ e o′ ℓ′ e′ : Level
 ```
+-->
 
 #### The record
 

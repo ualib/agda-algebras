@@ -9,6 +9,7 @@ author: "the agda-algebras development team"
 
 This is the [Setoid.Relations.Quotients][] module of the [Agda Universal Algebra Library][].
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -31,6 +32,7 @@ open import Setoid.Relations.Discrete  using ( fker )
 
 private variable α β ρᵃ ρᵇ ℓ : Level
 ```
+-->
 
 #### Kernels
 

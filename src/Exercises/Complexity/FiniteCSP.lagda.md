@@ -15,6 +15,7 @@ University in Prague. They were formalized in dependent type theory by the
 [agda-algebras development team][].
 
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -40,6 +41,7 @@ open import Legacy.Base.Structures.Homs     using ( hom )
 open signature
 open structure
 ```
+-->
 
 Some exercises below refer to the following relations on 𝟚 := \{0, 1\} (where i, j ∈ 𝟚):
 

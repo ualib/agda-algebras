@@ -13,6 +13,7 @@ This subtree collects the setoid-canonical formulation of computational complexi
 
 This module is the canonical home for the content previously developed in `Legacy.Base.Complexity.*`, ported under #307 (M2-7c).  See [`src/Legacy/Base/DEPRECATED.md`](../Legacy/Base/DEPRECATED.md) for the inventory and migration guidance.  Substantial extensions — polymorphism clones as a first-class type, the Jeavons Galois connection, Post's lattice, Bulatov–Zhuk — are tracked under #274 (M7-1) and build on this module.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -21,3 +22,4 @@ module Setoid.Complexity where
 open import Setoid.Complexity.Basic  public
 open import Setoid.Complexity.CSP    public
 ```
+-->

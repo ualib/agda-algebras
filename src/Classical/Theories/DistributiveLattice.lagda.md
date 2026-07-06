@@ -24,6 +24,7 @@ and mirrors the standard library's `IsDistributiveLattice`, which likewise recor
 `∨-distrib-∧` and `∧-distrib-∨` side by side rather than deriving one from the
 other.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -42,7 +43,10 @@ open import Classical.Equations               using  ( Associative ; Commutative
                                                      ; Idempotent ; AbsorbsLeft
                                                      ; AbsorbsRight ; DistributesOverˡ )
 open import Overture.Terms {𝑆 = Sig-Lattice}  using  ( Term )
+```
+-->
 
+```agda
 data Eq-DistributiveLattice : Type where
   ∧-assoc ∧-comm ∧-idem : Eq-DistributiveLattice
   ∨-assoc ∨-comm ∨-idem : Eq-DistributiveLattice

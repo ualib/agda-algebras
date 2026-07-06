@@ -16,6 +16,7 @@ the universe level of both the carrier and the equivalence is `0ℓ` (i.e., Set-
 carriers with propositional or set-truncated equivalence), mirroring the veneers of
 `Lattice`, `CommutativeMonoid`, etc.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 module Classical.Small.Structures.DistributiveLattice where
@@ -23,7 +24,10 @@ open import Agda.Primitive                          using () renaming ( Set to T
 open import Level                                   using ( 0ℓ ; suc )
 open import Relation.Binary.PropositionalEquality   using ( _≡_ )
 import Classical.Structures.DistributiveLattice as Polymorphic
+```
+-->
 
+```agda
 DistributiveLattice : Type (suc 0ℓ)
 DistributiveLattice = Polymorphic.DistributiveLattice 0ℓ 0ℓ
 

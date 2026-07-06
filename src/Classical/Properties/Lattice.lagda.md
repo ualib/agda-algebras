@@ -29,6 +29,7 @@ by-concern parallel of `Classical/Structures/`, `Classical/Bundles/`, etc., for
 definition.  Future inhabitants include, for example, uniqueness of inverses in
 Group and `0 · x ≈ 0` in Ring.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -56,6 +57,7 @@ open import Setoid.Algebras.Basic {𝑆 = Sig-Lattice}  using ( 𝔻[_] ; 𝕌[_
 
 private variable α ρ : Level
 ```
+-->
 
 #### The `Lattice-Order` module {#lattice-order}
 

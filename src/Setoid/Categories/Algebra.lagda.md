@@ -23,6 +23,7 @@ definitionally equal — `⊙-hom` is function composition, `𝒾𝒹` the ident
 `∘-resp-≈` is the one law with content, combining the codomain's `trans` with a hom's
 `cong`.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -48,6 +49,7 @@ open Func using (cong) renaming ( to to _⟨$⟩_ )
 
 private variable α ρ : Level
 ```
+-->
 
 #### Pointwise equality of homomorphisms
 

@@ -18,6 +18,7 @@ Each submodule is the home of one concrete lattice.
 + `L3Heyting` is the three-element chain as a Heyting algebra.
 + `L7` is the seven-element lattice of interest in the Finite Lattice Representation Problem ([FLRP][]).
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -28,3 +29,4 @@ open import Examples.Classical.Lattices.L2Distributive
 open import Examples.Classical.Lattices.L3Heyting
 open import Examples.Classical.Lattices.L7
 ```
+-->

@@ -15,6 +15,7 @@ This phenomenon is directly relevant to the universal-algebra core, where n-ary 
 
 The content was relocated here under #310 from `Legacy.Base.Functions.Transformers`; nothing in the canonical `Setoid/`, `Classical/`, or planned `Cubical/` development of the library depends on it.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -35,6 +36,7 @@ open import Overture using ( _≈_ )
 
 private variable a b : Level
 ```
+-->
 
 #### Bijections of nondependent function types
 

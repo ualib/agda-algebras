@@ -26,6 +26,7 @@ This file is the barrel module for the subtree; it currently re-exports
 under milestone M3, each paired with a corresponding
 `Classical/Signatures/X.lagda.md` and consumed by `Classical/Structures/X.lagda.md`.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -43,3 +44,4 @@ open import Classical.Theories.Ring public
 open import Classical.Theories.Semigroup public
 open import Classical.Theories.Semilattice public
 ```
+-->

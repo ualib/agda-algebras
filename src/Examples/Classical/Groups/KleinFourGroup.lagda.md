@@ -29,6 +29,7 @@ The operation table (entry `a , b` is `a xor b`):
 | 2 | 2 | 3 | 0 | 1 |
 | 3 | 3 | 2 | 1 | 0 |
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -49,6 +50,7 @@ open import Classical.Bundles.Group           using  ( ⟨_⟩ᵍᵖ ; ⟪_⟫�
 open import Classical.Small.Structures.Group  using  ( Group ; eqsToGroup )
 import Classical.Structures.Group as Polymorphic
 ```
+-->
 
 #### The Cayley table, the operation, and the inverse map
 

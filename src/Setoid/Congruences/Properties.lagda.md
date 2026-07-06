@@ -21,6 +21,7 @@ As in [Setoid.Congruences.CompleteLattice][], the lattice equations are stated a
 `_∨_` (whose codomain otherwise bumps the level to `𝒈 ℓ`) lands back at the level of
 the meet `_∧_`, so both are operations on `Con 𝑨 (𝐋 ℓ₀)` and the equations type-check.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -38,6 +39,7 @@ open import Setoid.Congruences.Basic       {𝑆 = 𝑆} using ( Con )
 open import Setoid.Congruences.Lattice     {𝑆 = 𝑆} using ( _⊆_ ; _≑_ ; _∧_ )
 open import Setoid.Congruences.Generation  {𝑆 = 𝑆} using ( _∨_ )
 ```
+-->
 
 #### The absorbing relation level
 

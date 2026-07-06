@@ -10,6 +10,7 @@ author: "the agda-algebras development team"
 
 This is the [Examples.Classical.CommutativeMonoid][] module of the [Agda Universal Algebra Library][].
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -27,6 +28,7 @@ open import Classical.Small.Structures.CommutativeMonoid
 
 import Classical.Structures.CommutativeMonoid as Polymorphic
 ```
+-->
 
 We construct `(ℕ, +, 0)` from stdlib's `+-assoc`, `+-identityˡ`, `+-identityʳ`,
 `+-comm`.

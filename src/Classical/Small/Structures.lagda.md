@@ -15,6 +15,7 @@ This is the parallel-to-[`Classical.Structures`][] aggregator inside the
 veneer in `Classical/Small/Structures/X.lagda.md` as those land under milestone
 M3.  See [ADR-002][] for the design rationale.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -33,3 +34,4 @@ open import Classical.Small.Structures.Ring public
 open import Classical.Small.Structures.Semigroup public
 open import Classical.Small.Structures.Semilattice public
 ```
+-->

@@ -28,6 +28,7 @@ construction.  (Both were relocated from `Classical/` by
 [ADR-006](../../docs/adr/006-signature-morphism-category.md), M4-16: reduct is universal
 algebra, not classical, and depends on nothing in `Classical/`.)
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -54,7 +55,10 @@ private variable
   α ρ : Level
 
 open IsHom
+```
+-->
 
+```agda
 reductF : {𝑆₁ 𝑆₂ : Signature 𝓞 𝓥} (φ : SigMorphism 𝑆₁ 𝑆₂)
   → Functor (Alg {𝑆 = 𝑆₂} α ρ) (Alg {𝑆 = 𝑆₁} α ρ)
 reductF φ =

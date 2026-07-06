@@ -8,6 +8,7 @@ author: "the agda-algebras development team"
 
 ## Terms
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -18,3 +19,4 @@ open import Overture.Terms.Basic  {𝑆 = 𝑆}  public
 open import Overture.Terms.Interpretation  public
 open import Overture.Terms.Translation     public
 ```
+-->

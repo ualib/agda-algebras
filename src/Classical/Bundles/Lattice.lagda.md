@@ -23,6 +23,7 @@ step.  The reverse direction (`⟪_⟫ˡᵃ`) needs `∧-idem`, `∨-idem`, and 
 `x ∨ (x ∧ y) ≈ x` and `x ∧ (x ∨ y) ≈ x`); the idempotencies are the standard
 two-step derivation from absorption, the absorbʳ form is one ∨-comm step.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -48,7 +49,10 @@ open import Setoid.Algebras.Basic {𝑆 = Sig-Lattice}  using  ( Algebra ; 𝕌[
 open import Setoid.Signatures                        using  ( ⟨_⟩ )
 
 private variable α ρ : Level
+```
+-->
 
+```agda
 ⟨_⟩ˡᵃ : Lattice α ρ → stdlib-Lattice α ρ
 ⟨ 𝑳 ⟩ˡᵃ = record
   { Carrier = 𝕌[ proj₁ 𝑳 ]

@@ -8,6 +8,7 @@ author: "agda-algebras development team"
 #### Free setoid algebras
 
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -46,6 +47,7 @@ open import Setoid.Varieties.SoundAndComplete  {𝑆 = 𝑆}  using  ( Eq ; _⊫
 open _⟶_      using ( cong ) renaming ( to to _⟨$⟩_ )
 open Algebra  using ( Domain )
 ```
+-->
 
 In the code below, `X` will play the role of an arbitrary collection of variables; it
 would suffice to take `X` to be the cardinality of the largest algebra in 𝒦, but

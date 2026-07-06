@@ -9,6 +9,7 @@ author: "agda-algebras development team"
 
 This is the [Setoid.Subalgebras.Properties][] module of the [Agda Universal Algebra Library][].
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -41,6 +42,7 @@ open import Setoid.Subalgebras.Basic {𝑆 = 𝑆}  using  ( _≤_ ; _≥_ ; _�
                                                      )
 private variable α ρᵃ β ρᵇ γ ρᶜ ι : Level
 ```
+-->
 
 The subalgebra relation is a *preorder*, i.e., a reflexive, transitive binary relation.
 

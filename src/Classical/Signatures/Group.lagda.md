@@ -21,6 +21,7 @@ has arity `Fin 1`.  The constructor- and arity-naming conventions are those
 established by `Classical.Signatures.Magma` and extended by
 `Classical.Signatures.Monoid`.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -34,7 +35,10 @@ open import Level          using ( 0ℓ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Overture.Signatures using ( Signature )
+```
+-->
 
+```agda
 data Op-Group : Type where
   ∙-Op ε-Op ⁻¹-Op : Op-Group
 

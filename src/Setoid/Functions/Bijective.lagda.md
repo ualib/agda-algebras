@@ -12,6 +12,7 @@ This is the [Setoid.Functions.Bijective][] module of the [agda-algebras][] libra
 A *bijective function* from a setoid `𝑨 = (A, ≈₀)` to a setoid `𝑩 = (B, ≈₁)` is a function `f : 𝑨 ⟶ 𝑩` that is both injective and surjective. (See the definitions in [Setoid.Functions.Injective][] and [Setoid.Functions.Surjective][].
 
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -33,7 +34,10 @@ open Image_∋_
 
 open Setoid 𝑨  using ()               renaming (Carrier to A; _≈_ to _≈₁_)
 open Setoid 𝑩  using ( sym ; trans )  renaming (Carrier to B; _≈_ to _≈₂_)
+```
+-->
 
+```agda
 IsBijective : (𝑨 ⟶ 𝑩) → Type (α ⊔ β ⊔ ρᵃ ⊔ ρᵇ)
 IsBijective f = IsInjective f × IsSurjective f
 

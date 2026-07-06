@@ -19,6 +19,7 @@ generators and demonstrates the universal property — every assignment of the
 generators into a concrete magma extends uniquely to a homomorphism, computed by
 `free-lift`{.AgdaFunction}.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -45,6 +46,7 @@ open import Setoid.Terms          {𝑆 = Sig-Magma}  using ( 𝑻 ; free-lift ;
 
 open Func renaming ( to to _⟨$⟩_ )
 ```
+-->
 
 #### Building terms over the magma signature
 

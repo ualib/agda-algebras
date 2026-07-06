@@ -36,6 +36,7 @@ body `_∙_ = Curry₂ (∙-Op ^ _)`, and the `opsTo<family>` constructor patter
 Semigroup, Monoid, Group, Lattice, and Ring all follow this template.
 (Deviations require an ADR.)
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -62,6 +63,7 @@ open import Setoid.Signatures                       using ( ⟨_⟩ )
 
 private variable α ρ : Level
 ```
+-->
 
 #### The type of magmas
 

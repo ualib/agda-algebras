@@ -18,6 +18,7 @@ is restricted to the predecessor's equations), so the predecessor's `<Weaker>-Op
 accessors inherit through it unchanged.  `CommutativeSemigroup-Op` adds only the new
 curried `comm-law`.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -47,6 +48,7 @@ open import Setoid.Varieties.EquationalLogic {𝑆 = Sig-Magma} using ( _⊧_≈
 
 private variable α ρ : Level
 ```
+-->
 
 #### Satisfaction predicate and the type
 

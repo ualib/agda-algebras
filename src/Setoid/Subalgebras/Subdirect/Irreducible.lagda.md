@@ -31,6 +31,7 @@ fact a *definitional* identity here, so the embedding-level statement reduces to
 congruence-lattice statement about separating families, where the monolith argument
 (`monolith⇒cmi`{.AgdaFunction} of [Setoid.Congruences.Monolith][]) applies.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -63,6 +64,7 @@ open import Setoid.Subalgebras.Subdirect.Basic {𝑆 = 𝑆}
 
 private variable α ρ αᵃ ι : Level
 ```
+-->
 
 #### The kernel family of a homomorphism into a product
 

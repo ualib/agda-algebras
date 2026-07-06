@@ -16,6 +16,7 @@ extension of Group, structurally identical to the way `CommutativeMonoid` extend
 algebra), and `AbelianGroup-Op` inherits `_∙_`, `ε`, `_⁻¹`, and all five group laws
 through it, adding `comm-law`.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -42,6 +43,7 @@ open import Setoid.Varieties.EquationalLogic {𝑆 = Sig-Group} using ( _⊧_≈
 
 private variable α ρ : Level
 ```
+-->
 
 #### Satisfaction predicate and the `AbelianGroup` type
 

@@ -28,6 +28,7 @@ The single-operation checkers — associativity, commutativity, idempotency, and
 identity/inverse laws — serve the finite-group and -magma examples; the two-operation
 checkers — absorption and distributivity — serve the finite-lattice examples.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -40,6 +41,7 @@ open import Data.Fin.Properties                     using ( _≟_ ; all? )
 open import Relation.Binary.PropositionalEquality   using ( _≡_ )
 open import Relation.Nullary.Decidable.Core         using ( Dec )
 ```
+-->
 
 #### Laws of a single operation
 

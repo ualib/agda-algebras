@@ -33,6 +33,7 @@ over the operations and the carrier, `Gen R` lands at level `𝓞 ⊔ 𝓥 ⊔ �
 where that level is absorbed — is the remaining step of the congruence-lattice work
 and is deferred to a follow-up.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -55,6 +56,7 @@ open import Setoid.Congruences.Basic  {𝑆 = 𝑆}  using  ( Con ; mkcon ; is-e
                                                       ; is-compatible ; reflexive )
 private variable α ρ ℓ ℓ′ : Level
 ```
+-->
 
 #### Inductive Generation of a Congruence
 

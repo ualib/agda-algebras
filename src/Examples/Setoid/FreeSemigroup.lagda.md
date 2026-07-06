@@ -24,6 +24,7 @@ semigroup, exhibits that identification as an equality in the free semigroup, an
 gives a small *term-rewriting* derivation that normalises associativity redexes
 inside a larger term via congruence.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -47,6 +48,7 @@ open import Setoid.Varieties.FreeSubstitution {𝑆 = Sig-Magma}
 open _≐_      using ( gnl )
 open _⊢_▹_≈_  using ( hyp ; app ; refl ; sym ; trans )
 ```
+-->
 
 #### The Associativity Theory
 

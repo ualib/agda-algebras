@@ -14,6 +14,7 @@ Mirror of the Ring bridge with the added `*-comm` field; over `Sig-Ring`.  This 
 bridge whose round-trip on `ℤ` is exercised in
 [`Examples.Classical.CommutativeRing`][].
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -39,6 +40,7 @@ open import Setoid.Signatures                     using ( ⟨_⟩ )
 
 private variable α ρ : Level
 ```
+-->
 
 #### Core to stdlib bundle
 

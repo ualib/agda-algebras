@@ -14,6 +14,7 @@ A commutative semigroup adds commutativity to the semigroup theory, over the sam
 `Sig-Magma` signature (no new symbols).  `Th-CommutativeSemigroup` therefore has two
 equations, both composed from the generic builders of [`Classical.Equations`][].
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -28,7 +29,10 @@ open import Relation.Binary.PropositionalEquality  using ( refl )
 open import Classical.Signatures.Magma             using ( Sig-Magma ; ∙-Op )
 open import Classical.Equations                    using ( Associative ; Commutative )
 open import Overture.Terms {𝑆 = Sig-Magma}         using ( Term )
+```
+-->
 
+```agda
 data Eq-CommutativeSemigroup : Type where
   assoc comm : Eq-CommutativeSemigroup
 

@@ -95,6 +95,7 @@ universal algebra, and its object map [`reduct`][Setoid.Algebras.Reduct] is itse
 [ADR-006](../../docs/adr/006-signature-morphism-category.md), M4-16).  It opens the
 two-signature `Setoid/Varieties/` area that M4-5g (reduct classes of varieties) extends.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -127,6 +128,7 @@ private variable
   α ρ χ : Level
   X : Type χ
 ```
+-->
 
 #### Naturality of the fold along a signature morphism
 

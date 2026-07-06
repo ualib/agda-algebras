@@ -30,6 +30,7 @@ re-derives that obligation from the general *reduct-invariance of satisfaction*
 theorem of [Setoid.Varieties.Invariance][], and thus demonstrates that the bespoke
 per-structure pivots are instances of one lemma.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -67,6 +68,7 @@ open Functor using (F₁)
 
 private variable α ρ : Level
 ```
+-->
 
 The inclusion `Sig-Magma ↪ Sig-Monoid`, as a signature morphism:
 

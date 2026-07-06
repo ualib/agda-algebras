@@ -10,6 +10,7 @@ author: "agda-algebras development team"
 This is the [Setoid.Subalgebras.Basic][] module of the [Agda Universal Algebra Library][].
 
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -34,7 +35,10 @@ open import Setoid.Homomorphisms {𝑆 = 𝑆}
   using ( hom ; mon ; mon→intohom ; kerquo ; FirstHomTheorem )
 
 private variable α ρᵃ β ρᵇ ℓ : Level
+```
+-->
 
+```agda
 _≥_   -- alias for supalgebra (aka overalgebra)
   _IsSupalgebraOf_ : Algebra α ρᵃ → Algebra β ρᵇ → Type _
 𝑨 IsSupalgebraOf 𝑩 = Σ[ h ∈ hom 𝑩 𝑨 ] IsInjective (proj₁ h)

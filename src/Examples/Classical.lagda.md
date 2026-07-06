@@ -19,6 +19,7 @@ a semigroup that is not a monoid).  The pattern of pairing one canonical first
 example with each structure issue is established in M3-3 ([`Examples.Classical.Magma`][])
 and continues issue-by-issue under milestone M3.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -33,3 +34,4 @@ open import Examples.Classical.Monoid public
 open import Examples.Classical.Semigroup public
 open import Examples.Classical.Semilattice public
 ```
+-->

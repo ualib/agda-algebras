@@ -29,6 +29,7 @@ ternary term ([Setoid.Varieties.Maltsev][]).
 This module is pure congruence theory: it depends only on the congruence record of
 [Setoid.Congruences.Basic][], not on terms, interpretations, or the lattice bundles.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -49,6 +50,7 @@ open import Setoid.Congruences.Basic  {𝑆 = 𝑆}  using ( Con ; is-equivalenc
 
 private variable α ρ ℓ : Level
 ```
+-->
 
 #### Relation composition of congruences
 

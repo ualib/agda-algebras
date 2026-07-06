@@ -18,6 +18,7 @@ tables, free magmas over a generating set, magmas that fail to be semigroups,
 and so on.  Subsequent additions should land here rather than alongside the
 core structure file.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -33,6 +34,7 @@ open import Classical.Small.Structures.Magma  using ( Magma ; opsToMagma )
 
 import Classical.Structures.Magma as Polymorphic
 ```
+-->
 
 #### The magma `(ℕ, +)` {#N-magma}
 
