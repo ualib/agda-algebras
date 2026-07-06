@@ -759,6 +759,34 @@ body.reveal-agda-source .md-typeset div.hidden-source {
   display: block;
 }
 
+/* A block revealed locally via its inline `▸ hidden code (n lines)` note
+   (agda-toggle.js), independently of the global toggle. */
+.md-typeset pre.Agda.hidden-source.revealed,
+.md-typeset div.hidden-source.revealed {
+  display: block;
+}
+
+/* The inline note itself: quiet and small, sitting where the hidden block
+   would be, so a page never looks silently truncated.  Redundant while the
+   global toggle already reveals everything, so hide it then. */
+.md-typeset .ualib-hidden-note {
+  display: block;
+  margin: 0.6em 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--md-default-fg-color--light);
+  font-family: var(--md-code-font);
+  font-size: 0.6rem;
+  cursor: pointer;
+}
+.md-typeset .ualib-hidden-note:hover {
+  color: var(--md-accent-fg-color);
+}
+body.reveal-agda-source .md-typeset .ualib-hidden-note {
+  display: none;
+}
+
 /* The header control agda-toggle.js injects after the site title: a quiet
    pill that inherits the header's foreground so it reads correctly on the
    indigo header in both schemes. */

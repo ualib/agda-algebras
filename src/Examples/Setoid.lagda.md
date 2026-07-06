@@ -18,7 +18,6 @@ Birkhoff's HSP theorem specialized to a concrete algebra.  They are the
 cross-structure and "richer" examples requested in
 [issue #266](https://github.com/ualib/agda-algebras/issues/266).
 
-<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -33,4 +32,3 @@ open import Examples.Setoid.Presentation
 open import Examples.Setoid.FiniteQuotient
 open import Examples.Setoid.HSPCommutativeMonoid
 ```
--->

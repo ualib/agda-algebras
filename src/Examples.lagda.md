@@ -10,7 +10,6 @@ author: "the agda-algebras development team"
 This is the [Examples][] module of the [Agda Universal Algebra Library][].
 
 
-<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -22,4 +21,3 @@ open import Examples.PolynomialFunctors
 open import Examples.Setoid
 open import Examples.Structures
 ```
--->

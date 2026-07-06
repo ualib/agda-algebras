@@ -30,7 +30,6 @@ This file is the umbrella for the subtree, the submodules of which include
 fixed-universe-level veneers; these are paired with polymorphic cores in
 `Classical/Structures/`.
 
-<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -38,4 +37,3 @@ module Classical.Small where
 
 open import Classical.Small.Structures public
 ```
--->

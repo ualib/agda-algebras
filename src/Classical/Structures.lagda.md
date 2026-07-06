@@ -34,7 +34,6 @@ parallel [`Classical/Bundles/`][Classical.Bundles] subtree.
 This file is the umbrella for the subtree.  The concrete `Magma` and `Semigroup`
 submodules are the initial, pattern-setting structures.
 
-<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -54,4 +53,3 @@ open import Classical.Structures.Ring public
 open import Classical.Structures.Semigroup public
 open import Classical.Structures.Semilattice public
 ```
--->

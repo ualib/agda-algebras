@@ -10,7 +10,6 @@ author: "the agda-algebras development team"
 This is the [Overture][] module of the [Agda Universal Algebra Library][].
 
 
-<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -26,4 +25,3 @@ open import Overture.Terms       public
 open import Overture.Adjunction  public
 open import Overture.Cayley      public
 ```
--->

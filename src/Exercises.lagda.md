@@ -10,7 +10,6 @@ author: "the agda-algebras development team"
 This is the [Exercises][] module of the [Agda Universal Algebra Library][].
 
 
-<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -18,4 +17,3 @@ module Exercises where
 
 open import Exercises.Complexity
 ```
--->

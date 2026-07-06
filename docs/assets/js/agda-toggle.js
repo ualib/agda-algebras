@@ -54,6 +54,35 @@
     if (btn) setLabel(btn, revealed);
   }
 
+  /* A per-block affordance: a small disclosure note in front of every hidden
+     block, so a reader on any single page can tell there is hidden code and
+     reveal just that block, without hunting for the header control.  The
+     notes disappear while the global toggle has everything revealed. */
+  function decorateHiddenBlocks() {
+    document.querySelectorAll(".md-typeset .hidden-source").forEach(function (el) {
+      if (el.dataset.noteReady) return;
+      el.dataset.noteReady = "1";
+
+      var lines = el.textContent.replace(/^\n+|\n+$/g, "").split("\n").length;
+      var note = document.createElement("button");
+      note.type = "button";
+      note.className = "ualib-hidden-note";
+      note.title = "Reveal this block (the header's Show more Agda reveals all of them)";
+
+      function setNote(open) {
+        note.textContent =
+          (open ? "▾" : "▸") + " hidden code (" + lines +
+          (lines === 1 ? " line)" : " lines)");
+      }
+      setNote(el.classList.contains("revealed"));
+
+      note.addEventListener("click", function () {
+        setNote(el.classList.toggle("revealed"));
+      });
+      el.parentNode.insertBefore(note, el);
+    });
+  }
+
   function install() {
     var revealed = document.body.classList.contains("reveal-agda-source");
 
@@ -72,6 +101,7 @@
       btn.addEventListener("click", toggle);
     }
     setLabel(btn, revealed);
+    decorateHiddenBlocks();
   }
 
   /* Apply the persisted state as soon as the script evaluates (Material

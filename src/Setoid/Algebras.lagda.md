@@ -8,7 +8,6 @@ author: "agda-algebras development team"
 ### Setoid Representation of Algebras
 
 
-<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -20,4 +19,3 @@ open import Setoid.Algebras.Basic {𝑆 = 𝑆} public
 open import Setoid.Algebras.Products {𝑆 = 𝑆} public
 open import Setoid.Algebras.Reduct public
 ```
--->

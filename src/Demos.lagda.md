@@ -8,7 +8,6 @@ author: "the agda-algebras development team"
 ## Demos of the Agda Algebras Library
 
 
-<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -18,4 +17,3 @@ open import Demos.GeneralOperationsAndRelations
 open import Demos.HSP
 open import Demos.ContraX
 ```
--->

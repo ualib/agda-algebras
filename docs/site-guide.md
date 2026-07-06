@@ -49,9 +49,16 @@ open import Level using ( Level )
 -->
 ~~~
 
-Agda still type-checks the block (fenced `agda` code inside an HTML comment is still code), GitHub's Markdown renderer collapses it, and on the site it becomes a toggleable `hidden-source` block, revealed by the header's "Show more Agda" control.  When the scaffolding shares its fence with real definitions, split the fence and wrap only the scaffolding part.  New modules should follow the same convention.
+Agda still type-checks the block (fenced `agda` code inside an HTML comment is still code), GitHub's Markdown renderer collapses it, and on the site it becomes a toggleable `hidden-source` block, revealed either by the header's "Show more Agda" control (all blocks, persisted) or by the small `▸ hidden code (n lines)` note that agda-toggle.js places in front of each hidden block (that block only).  When the scaffolding shares its fence with real definitions, split the fence and wrap only the scaffolding part.  New modules should follow the same convention.
 
-Two pedagogical modules are deliberate exceptions, because their scaffolding is the subject of the surrounding prose and must stay visible: `Overture.Basic` (which explains the `OPTIONS` pragma, modules, and imports) and `Demos.HSP` (the TYPES 2021 paper, which discusses its imports in the text).  Leave those as they are.
+The wrapper must be an HTML comment rather than any indenting construct: Agda requires its code at column 0, so a block can never be indented into a `??? note` admonition or a Markdown-nested `<details>` — indenting the fence breaks type-checking.  The comment wrapper adds no indentation, which is exactly why issue #431 settled on this mechanism.
+
+Two kinds of module are deliberate exceptions:
+
++  **Pedagogical modules** whose scaffolding is the subject of the surrounding prose stay fully unwrapped: `Overture.Basic` (which explains the `OPTIONS` pragma, modules, and imports) and `Demos.HSP` (the TYPES 2021 paper, which discusses its imports in the text).
++  **Barrel modules** stay unwrapped too: a barrel's annotated `open import … public` list is the page's content, and hiding its only block would leave a blank page that reads as unfinished.
+
+As a tripwire against accidentally wrapping a barrel, the build logs a `⚠ <Module>: every code block on this page is hidden` line for any page that would render code-free.  Three prose-first pages hide their lone `OPTIONS`/module block by design and are exempt from that check: `Overture.Preface`, `Demos.GeneralOperationsAndRelations`, and `Setoid.Complexity.Basic` (`PROSE_ONLY_MODULES` in `mkdocs_gen_library.py`).
 
 ### Build commands
 

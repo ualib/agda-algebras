@@ -18,7 +18,6 @@ Differences from the legacy module:
 +  The legacy module defined its properties for `Pred (A × A) ℓ` (a predicate on the product type); this module uses the stdlib `Rel A ℓ` (the curried form).  The two are interconvertible via `Data.Product.curry` / `Data.Product.uncurry`; the curried form is preferred because the rest of the canonical tree already uses it.
 +  The legacy module bundled its own `curry` / `uncurry` definitions; stdlib's `Data.Product.curry` / `Data.Product.uncurry` cover the same ground and are not re-exported here.  Consumers who need the bridge should import from `Data.Product` directly.
 
-<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -31,4 +30,3 @@ open import Relation.Binary.Definitions public
          ; Irreflexive  ; Asymmetric
          ; Connex       ; Total )
 ```
--->

@@ -10,7 +10,6 @@ author: "agda-algebras development team"
 This is the [Setoid.Terms][] module of the [Agda Universal Algebra Library][].
 
 
-<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -25,7 +24,6 @@ open import Setoid.Terms.Operations  {𝑆 = 𝑆}  public
 open import Setoid.Terms.Properties  {𝑆 = 𝑆}  public
 open import Setoid.Terms.Translation          public
 ```
--->
 
 (The two-signature modules [Setoid.Terms.Translation][] and
 [Setoid.Terms.Interpretation][] relate two signatures at once, so they are not

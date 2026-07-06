@@ -10,7 +10,6 @@ author: "the agda-algebras development team"
 This is the [Setoid.Functions][] module of the [Agda Universal Algebra Library][].
 
 
-<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -22,4 +21,3 @@ open import Setoid.Functions.Injective   public
 open import Setoid.Functions.Inverses    public
 open import Setoid.Functions.Surjective  public
 ```
--->

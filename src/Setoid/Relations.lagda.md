@@ -9,7 +9,6 @@ author: "the agda-algebras development team"
 
 This is the [Setoid.Relations][] module of the [Agda Universal Algebra Library][].
 
-<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -20,4 +19,3 @@ open import Setoid.Relations.Quotients   public
 open import Setoid.Relations.Continuous  public
 open import Setoid.Relations.Properties  public
 ```
--->

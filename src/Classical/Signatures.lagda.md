@@ -20,7 +20,6 @@ views for stdlib interop — is recorded in [ADR-002][ADR-002].
 
 This file is the umbrella for the subtree.
 
-<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -32,4 +31,3 @@ open import Classical.Signatures.Magma public
 open import Classical.Signatures.Monoid public
 open import Classical.Signatures.Ring public
 ```
--->

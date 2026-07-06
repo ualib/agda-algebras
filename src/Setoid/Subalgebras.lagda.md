@@ -10,7 +10,6 @@ author: "agda-algebras development team"
 This is the [Setoid.Subalgebras][] module of the [Agda Universal Algebra Library][].
 
 
-<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -24,4 +23,3 @@ open import Setoid.Subalgebras.Properties {𝑆 = 𝑆} public
 open import Setoid.Subalgebras.Subuniverses {𝑆 = 𝑆} public
 open import Setoid.Subalgebras.Subdirect {𝑆 = 𝑆} public
 ```
--->

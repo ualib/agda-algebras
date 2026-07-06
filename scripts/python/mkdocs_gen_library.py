@@ -65,6 +65,19 @@ AGDA_HREF_RE = re.compile(r'href="([A-Za-z0-9._]+)\.html(#\d+)?"')
 # after `make agda-md`) or plain fenced (the fast path).
 HIDDEN_PRE_RE = re.compile(r'<!--\s*(<pre class="Agda">.*?</pre>)\s*-->', re.DOTALL)
 HIDDEN_FENCE_RE = re.compile(r'<!--\s*(```agda\r?\n.*?\r?\n```)\s*-->', re.DOTALL)
+# Every code block on a mounted page, for the all-code-hidden tripwire below.
+ANY_PRE_RE = re.compile(r'<pre class="Agda[" ]')
+ANY_FENCE_RE = re.compile(r"^```agda[ \t]*$", re.MULTILINE)
+
+# Prose-first modules whose lone OPTIONS/module block is hidden by design;
+# they are exempt from the all-code-hidden tripwire.  Barrel modules do NOT
+# belong here — a barrel's annotated import list is its content, so barrels
+# are left unwrapped in the source (see site-guide.md).
+PROSE_ONLY_MODULES = {
+    "Demos.GeneralOperationsAndRelations",
+    "Overture.Preface",
+    "Setoid.Complexity.Basic",
+}
 
 
 # --------------------------------------------------------------------------
@@ -120,6 +133,17 @@ def reveal_hidden_agda(body: str) -> str:
         lambda m: f'<div class="hidden-source" markdown="1">\n\n{m.group(1)}\n\n</div>',
         body)
     return body
+
+
+def all_code_hidden(body: str) -> bool:
+    """Would this page render with hidden blocks but no visible code at all?
+
+    A tripwire against accidentally wrapping a barrel module (whose import
+    list is its content): such a page looks blank/unfinished by default.
+    """
+    hidden = body.count("hidden-source")
+    total = len(ANY_PRE_RE.findall(body)) + len(ANY_FENCE_RE.findall(body))
+    return hidden > 0 and total == hidden
 
 
 # --------------------------------------------------------------------------
@@ -195,6 +219,10 @@ for src_path in modules:
         n_plain += 1
         mark = "◻ plain"
     body = reveal_hidden_agda(body)
+    if dotted not in PROSE_ONLY_MODULES and all_code_hidden(body):
+        log.info(f"  ⚠ {dotted}: every code block on this page is hidden — "
+                 "it renders blank by default; barrels should be left unwrapped "
+                 "(see site-guide.md § Hiding a module's import scaffolding)")
 
     with mkdocs_gen_files.open(dest, "w") as fh:
         fh.write(body)

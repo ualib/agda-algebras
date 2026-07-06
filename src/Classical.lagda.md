@@ -67,7 +67,6 @@ and the `Properties` aggregator was added in M3-7 for per-structure
 derived-results modules.
 
 
-<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -84,4 +83,3 @@ open import Classical.Small
 open import Classical.Structures       public
 open import Classical.Theories         public
 ```
--->

@@ -10,7 +10,6 @@ author: "the agda-algebras development team"
 This is the [Examples.Structures][] module of the [Agda Universal Algebra Library][].
 
 
-<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -19,4 +18,3 @@ module Examples.Structures where
 open import Examples.Structures.Signatures  public
 open import Examples.Structures.Basic       public
 ```
--->

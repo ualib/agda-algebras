@@ -10,7 +10,6 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Categories][] module of the [Agda Universal Algebra Library][].
 
-<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -19,4 +18,3 @@ module Classical.Categories where
 open import Classical.Categories.AdjoinUnit public
 open import Classical.Categories.Forgetful public
 ```
--->

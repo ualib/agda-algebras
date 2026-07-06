@@ -22,10 +22,8 @@ nothing to gain (and names to clash) from re-exporting them through a barrel.
 + `KleinFourGroup` is the Klein four-group `V₄`.
 + `SymmetricGroup3` is the symmetric group `S₃`, the smallest non-abelian group.
 
-<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Examples.Classical.Groups where
 ```
--->

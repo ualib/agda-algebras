@@ -8,7 +8,6 @@ author: "agda-algebras development team"
 ### Congruences
 
 
-<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -25,4 +24,3 @@ open import Setoid.Congruences.Monolith         {𝑆 = 𝑆} public
 open import Setoid.Congruences.Properties       {𝑆 = 𝑆} public
 open import Setoid.Congruences.Permutability    {𝑆 = 𝑆} public
 ```
--->
