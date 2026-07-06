@@ -79,6 +79,26 @@ Run these inside `nix develop` (the MkDocs toolchain is pinned in `flake.nix`):
     because the `agda --html` passes are skipped.  Use **`make serve-full`** to
     preview exactly what gets deployed.
 
+### Recovering a stuck Pages deployment
+
+Publishing is a two-repository chain: the Docs workflow here builds `./site` and pushes it to the `gh-pages` branch of [`universalalgebra/agda-algebras`](https://github.com/universalalgebra/agda-algebras), and GitHub's auto-generated `pages-build-deployment` workflow in *that* repository publishes the branch to the live site.  The last hop occasionally fails with a transient `Deployment failed, try again later`, and a failed run can wedge in `queued` when re-run.  Recovery steps, in escalating order:
+
++  **Check for a platform incident** at [githubstatus.com](https://www.githubstatus.com/); this error is almost always GitHub-side, and waiting often suffices.
++  **Re-run the failed `pages-build-deployment` run** from the Actions tab of `universalalgebra/agda-algebras`.
++  **Re-run the Docs workflow here** (Actions → Docs → Run workflow).  Note this re-triggers publication only when the rebuilt site differs from what is already on `gh-pages` — the publish action skips the push when nothing changed, so an unchanged same-day rebuild is a no-op.
++  **Force a fresh deployment with an empty commit**, which always re-triggers the publisher:
+
+    ```console
+    git clone --branch gh-pages --depth 1 git@github.com:universalalgebra/agda-algebras.git ua-pages
+    cd ua-pages
+    git commit --allow-empty -m "retrigger Pages deployment"
+    git push
+    ```
+
+Merging any content change to `master` also re-pushes `gh-pages` and re-triggers publication as a side effect.  When checking what is actually live, remember the Pages CDN caches responses for up to ten minutes and your browser caches the HTML and CSS on top of that — hard-refresh, or probe a file headers-only with `curl -sI https://agda-algebras.universalalgebra.org/assets/js/agda-copy.js`.
+
+Resist the temptation to add a deployment workflow to the `gh-pages` branch itself: that branch is disposable build output which the publish action overwrites, and keeping such a file alive would require `keep_files: true`, which never deletes anything and so leaks renamed or removed pages onto the live site forever.
+
 ## Changing the settings
 
 ### Colours and the theme
