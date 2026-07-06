@@ -53,6 +53,7 @@ between translations), [`Adjunction`][Setoid.Categories.Adjunction] (free ⊣
 forgetful pairs), and [`Monad`][Setoid.Categories.Monad] (formal-expression
 structure, e.g. terms-with-substitution).
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -63,7 +64,10 @@ open import Level           using ( Level )
 open import Relation.Binary using ( IsEquivalence )
 
 private variable o ℓ e : Level
+```
+-->
 
+```agda
 record Category (o ℓ e : Level) : Type (lsuc (o ⊔ ℓ ⊔ e)) where
   infixr 9 _∘_
   infix 4 _≈_

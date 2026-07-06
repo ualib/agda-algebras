@@ -9,6 +9,7 @@ author: "the agda-algebras development team"
 
 This is the [Setoid.Relations.Discrete][] module of the [Agda Universal Algebra Library][].
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -28,6 +29,7 @@ open import Relation.Unary               using ( _∈_; Pred )
 
 private variable α β ρᵃ ρᵇ ℓ : Level
 ```
+-->
 
 Here is a function that is useful for defining pointwise equality of functions wrt a
 given equality.

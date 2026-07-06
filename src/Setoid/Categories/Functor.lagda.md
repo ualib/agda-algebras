@@ -46,6 +46,7 @@ the composite of two translations is a translation — and they are needed the m
 construction must *name* a composite functor, as the [`Monad`][Setoid.Categories.Monad]
 record does when it types its unit `Id ⟹ T` and multiplication `T ∘ T ⟹ T`.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -59,7 +60,10 @@ open import Setoid.Categories.Category using ( Category )
 
 private variable
   o ℓ e o′ ℓ′ e′ o″ ℓ″ e″ : Level
+```
+-->
 
+```agda
 record Functor (𝐂 : Category o ℓ e) (𝐃 : Category o′ ℓ′ e′) : Type (o ⊔ ℓ ⊔ e ⊔ o′ ⊔ ℓ′ ⊔ e′) where
   open Category 𝐂 renaming (Obj to 𝐂₀; Hom to 𝐂[_,_]; _≈_ to _≈ᵈᵒᵐ_; id to idᵈᵒᵐ; _∘_ to _∘ᵈᵒᵐ_)
   open Category 𝐃 renaming (Obj to 𝐃₀; Hom to 𝐃[_,_]; _≈_ to _≈ᶜᵒᵈ_; id to idᶜᵒᵈ; _∘_ to _∘ᶜᵒᵈ_)

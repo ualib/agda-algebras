@@ -15,6 +15,7 @@ commutativity and associativity, over the same `Sig-Magma` signature (no new sym
 `Th-Semilattice` therefore has three equations, all composed from the generic builders
 of [`Classical.Equations`][].
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -29,7 +30,10 @@ open import Relation.Binary.PropositionalEquality  using ( refl )
 open import Classical.Signatures.Magma             using ( Sig-Magma ; ∙-Op )
 open import Classical.Equations                    using ( Associative ; Commutative ; Idempotent )
 open import Overture.Terms {𝑆 = Sig-Magma}         using ( Term )
+```
+-->
 
+```agda
 data Eq-Semilattice : Type where
   assoc comm idem : Eq-Semilattice
 

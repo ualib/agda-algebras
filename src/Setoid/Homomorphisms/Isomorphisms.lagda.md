@@ -9,6 +9,7 @@ author: "agda-algebras development team"
 
 This is the [Setoid.Homomorphisms.Factor][] module of the [Agda Universal Algebra Library][].
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -47,6 +48,7 @@ open _⟶_ using ( cong ) renaming ( to to _⟨$⟩_ )
 
 private variable  α ρᵃ β ρᵇ γ ρᶜ ι : Level
 ```
+-->
 
 Recall, `f ~ g` means f and g are *extensionally* (or pointwise) equal; i.e.,
 `∀ x, f x ≡ g x`.  We use this notion of equality of functions in the following

@@ -12,6 +12,7 @@ This is the [Classical.Bundles.AbelianGroup][] module of the [Agda Universal Alg
 
 Mirror of the Group bridge with the added `comm` field; over `Sig-Group`.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -39,7 +40,10 @@ open import Setoid.Algebras.Basic {𝑆 = Sig-Group}  using  ( Algebra ; 𝕌[_]
 open import Setoid.Signatures                      using  ( ⟨_⟩ )
 
 private variable α ρ : Level
+```
+-->
 
+```agda
 ⟨_⟩ᵃᵍ : AbelianGroup α ρ → stdlib-AbelianGroup α ρ
 ⟨ 𝑨𝑩 ⟩ᵃᵍ = record
   { Carrier = 𝕌[ proj₁ 𝑨𝑩 ]

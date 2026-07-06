@@ -20,6 +20,7 @@ unary `⁻¹-Op`, and the nullary `ε-Op` respectively.  The variable carrier is
 `Fin 3` as for `Th-Monoid` (per [ADR-002 v2 §2](../../docs/adr/002-classical-layer-design.md));
 the identity and inverse equations use `0F` and ignore `1F`, `2F`.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -37,7 +38,10 @@ open import Classical.Signatures.Group             using ( Sig-Group ; ∙-Op ; 
 open import Classical.Equations                    using ( Associative ; LeftIdentity ; RightIdentity
                                                          ; LeftInverse ; RightInverse )
 open import Overture.Terms {𝑆 = Sig-Group}         using ( Term )
+```
+-->
 
+```agda
 data Eq-Group : Type where
   assoc idˡ idʳ invˡ invʳ : Eq-Group
 

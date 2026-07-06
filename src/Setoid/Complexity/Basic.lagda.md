@@ -11,11 +11,13 @@ This is the [Setoid.Complexity.Basic][] module of the [Agda Universal Algebra Li
 
 This module is the canonical home for the content previously developed in `Legacy.Base.Complexity.Basic`, ported under #307 (M2-7c).  Its present scope is the prose definitions of words, algorithms, and polynomial-time computability that frame the CSP development in [`Setoid.Complexity.CSP`](/Setoid/Complexity/CSP/); concrete Agda content is intentionally deferred to #274 (M7-1, "Extend Complexity module beyond Basic and CSP"), which is the substantive sequel to this canonical-path migration.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Setoid.Complexity.Basic where
 ```
+-->
 
 #### Words
 

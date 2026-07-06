@@ -20,6 +20,7 @@ derived, is recorded in
 [ADR-002 v2 §5, §9](../../docs/adr/002-classical-layer-design.md): each operation
 that participates in the variety's equations gets its own signature symbol.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -33,7 +34,10 @@ open import Level          using ( 0ℓ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Overture.Signatures using ( Signature )
+```
+-->
 
+```agda
 data Op-Lattice : Type where
   ∧-Op ∨-Op : Op-Lattice
 

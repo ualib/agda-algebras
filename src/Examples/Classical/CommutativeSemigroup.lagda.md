@@ -10,6 +10,7 @@ author: "the agda-algebras development team"
 
 This is the [Examples.Classical.CommutativeSemigroup][] module of the [Agda Universal Algebra Library][].
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 module Examples.Classical.CommutativeSemigroup where
@@ -22,7 +23,10 @@ open import Classical.Small.Structures.CommutativeSemigroup
   using ( CommutativeSemigroup ; eqsToCommutativeSemigroup )
 
 import Classical.Structures.CommutativeSemigroup as Polymorphic
+```
+-->
 
+```agda
 ℕ-commutativeSemigroup : CommutativeSemigroup
 ℕ-commutativeSemigroup = eqsToCommutativeSemigroup ℕ _+_ +-assoc +-comm
 

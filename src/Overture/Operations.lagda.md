@@ -22,6 +22,7 @@ The type `Op` encodes the arity of an operation as an arbitrary type `I : Type �
 which gives us a very general way to represent an operation as a function type with
 domain `I → A` (the type of "tuples") and codomain `A`.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -35,7 +36,10 @@ open import Level                        using ( Level ; _⊔_ )
 open import Overture.Signatures          using ( 𝓥 )
 
 private variable a b ρ : Level
+```
+-->
 
+```agda
 -- The type of I-ary operations on A.  Arity first, carrier second, so that
 -- `Op (Fin 2)` partially applies as "the type of binary operations" on any given A.
 Op : Type 𝓥 → Type a → Type (a ⊔ 𝓥)

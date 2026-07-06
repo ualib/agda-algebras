@@ -26,6 +26,7 @@ nothing new to the bridge's obstruction analysis, only to its content, and that
 content (the curried associativity law) is supplied ready-made by
 `Semigroup-Op.assoc-law`, so the bridge itself stays a thin record-shuffle.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -52,6 +53,7 @@ open import Setoid.Signatures                      using  ( ⟨_⟩ )
 
 private variable α ρ : Level
 ```
+-->
 
 #### Core to stdlib bundle
 

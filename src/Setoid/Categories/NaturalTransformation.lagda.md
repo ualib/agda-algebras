@@ -62,6 +62,7 @@ hom-equality field `_≈_`, so categories with pointwise hom-setoids (the algebr
 categories [`Alg`][Setoid.Categories.Algebra]) prove naturality pointwise, with no
 function extensionality.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -75,6 +76,7 @@ open import Setoid.Categories.Functor  using ( Functor )
 
 private variable o ℓ e o′ ℓ′ e′ : Level
 ```
+-->
 
 #### The record
 

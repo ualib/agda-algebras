@@ -11,6 +11,7 @@ This is the [Setoid.Functions.Injective][] module of the [agda-algebras][] libra
 
 We say that a function `f : A → B` from one setoid (A , ≈₀) to another (B , ≈₁) is *injective* (or *monic*) provided the following implications hold:  ∀ a₀ a₁ if f ⟨$⟩ a₀ ≈₁ f ⟨$⟩ a₁, then a₀ ≈₀ a₁.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -33,6 +34,7 @@ open import Setoid.Functions.Inverses  using ( Image_∋_ ; Inv )
 
 private variable a b c α β γ ℓ₁ ℓ₂ ℓ₃ : Level
 ```
+-->
 
 A function `f : A ⟶ B` from one setoid `(A , ≈₀)` to another
 `(B , ≈₁)` is called *injective* provided `∀ a₀ a₁`, if `f ⟨$⟩ a₀ ≈₁ f ⟨$⟩

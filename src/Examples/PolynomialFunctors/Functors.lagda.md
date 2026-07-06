@@ -42,6 +42,7 @@ objects are as follows: `∀ A B` (objects), `∀ F G` (functors),
 * `(F + G) A = F A + G A`
 * `(F × G) A = F A × G A`
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -61,7 +62,10 @@ open import Level                                  using ( Level )
 open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl ; _≢_ )
 
 private variable α β : Level
+```
+-->
 
+```agda
 infixl 6 _⊕_
 infixr 7 _⊗_
 

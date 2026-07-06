@@ -64,6 +64,7 @@ The kit also has a *semantic* face, used by the converse Maltsev conditions:
    `Cg ❴ a , b ❵` of `𝔽[ Δ ]` — or in the join of two principal congruences — becomes
    a derivable equation after any substitution that collapses the generating pair(s).
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -102,6 +103,7 @@ private variable
   Γ Δ : Type χ
   I   : Type ι
 ```
+-->
 
 #### Derivable equality refines term equality
 

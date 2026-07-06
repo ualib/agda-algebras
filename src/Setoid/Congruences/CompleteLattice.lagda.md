@@ -34,6 +34,7 @@ of [Order.CompleteLattice][].
 The family index `I` is required to live at the base level `ℓ₀`, so the lattice is
 complete with respect to `ℓ₀`-small families — the usual predicative reading.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -65,6 +66,7 @@ open import Setoid.Congruences.Generation    {𝑆 = 𝑆}  using  ( Cg ; Cg-lea
                                                              ; ∨-upperʳ ; ∨-least )
 private variable α ρ ℓ₀ : Level
 ```
+-->
 
 #### The congruence lattice at the absorbing level `L`
 

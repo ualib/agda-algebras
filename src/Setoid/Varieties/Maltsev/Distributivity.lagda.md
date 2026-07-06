@@ -28,6 +28,7 @@ CD is a property of the congruence *lattice*, defined in
 level, so that meet and join are operations on a single type).  We use it here to phrase
 the Jónsson variety condition below.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -81,6 +82,7 @@ open _⊢_▹_≈_ using ( sub ; refl ; sym ; trans )
 
 private variable α ρ χ ι ℓ ℓ′ : Level
 ```
+-->
 
 #### Jónsson terms
 

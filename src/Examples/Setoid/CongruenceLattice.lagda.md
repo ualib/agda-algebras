@@ -20,6 +20,7 @@ two-element chain `⊥ < ⊤`, where `⊥` is the diagonal (`≡`) and `⊤` is 
 We instantiate the `Lattice`, `BoundedLattice`, and `CompleteLattice` bundles for
 `𝟚`, and verify the lattice is genuinely nontrivial by proving `⊤ ⋬ ⊥`.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -40,6 +41,7 @@ open import Overture using ( Signature )
 
 open Func renaming ( to to _⟨$⟩_ )
 ```
+-->
 
 #### The empty signature and the two-element algebra `𝟚` {#the-algebra}
 

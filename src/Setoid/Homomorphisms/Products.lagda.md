@@ -9,6 +9,7 @@ author: "agda-algebras development team"
 
 This is the [Setoid.Homomorphisms.Products][] module of the [Agda Universal Algebra Library][].
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -31,6 +32,7 @@ open IsHom
 
 private variable α ρ β ρᵇ 𝓘 : Level
 ```
+-->
 
 Suppose we have an algebra `𝑨`, a type `I : Type 𝓘`, and a family
 `ℬ : I → Algebra β 𝑆` of algebras.  We sometimes refer to the inhabitants of `I`

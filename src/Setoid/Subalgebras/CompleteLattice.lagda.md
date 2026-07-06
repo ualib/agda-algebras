@@ -27,6 +27,7 @@ from `ℓ` to `𝓞 ⊔ 𝓥 ⊔ α ⊔ ℓ`, so we evaluate the lattice at the 
 families) stays at `L`.  (Unlike congruences there is no `ρ`, since a subuniverse is
 a predicate on the carrier and does not mention the setoid equality.)
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -57,6 +58,7 @@ open import Setoid.Subalgebras.Subuniverses {𝑆 = 𝑆}
 
 private variable α ρᵃ : Level
 ```
+-->
 
 #### The subuniverse lattice at the absorbing level `L`
 

@@ -13,6 +13,7 @@ This is the [Classical.Small.Structures.AbelianGroup][] module of the [Agda Univ
 Specializes [`Classical.Structures.AbelianGroup`][] to the `0ℓ`–`0ℓ` case, mirroring
 the veneers of `Monoid`, `CommutativeMonoid`, `Group`, etc.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -23,7 +24,10 @@ open import Level                                   using ( 0ℓ ; suc )
 open import Relation.Binary.PropositionalEquality   using ( _≡_ )
 
 import Classical.Structures.AbelianGroup as Polymorphic
+```
+-->
 
+```agda
 AbelianGroup : Type (suc 0ℓ)
 AbelianGroup = Polymorphic.AbelianGroup 0ℓ 0ℓ
 

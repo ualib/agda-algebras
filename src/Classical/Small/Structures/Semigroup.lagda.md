@@ -18,6 +18,7 @@ finite-template CSP, finite cases relevant to [FLRP][] intuition, and tutorial c
 in [`Examples/`][Examples] and [`Demos/`][Demos] live in this small case, and pulling
 the level-fixed specialization out keeps the polymorphic core unencumbered.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -32,6 +33,7 @@ open import Relation.Binary.PropositionalEquality  using ( _≡_ )
 -- Imports from the Agda Universal Algebra Library ----------------------------
 import Classical.Structures.Semigroup as Polymorphic
 ```
+-->
 
 #### The Level-fixed Semigroup Type
 

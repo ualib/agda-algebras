@@ -10,6 +10,7 @@ author: "the agda-algebras development team"
 This is the [Setoid.Functions.Inverses][] module of the [agda-algebras][] library.
 
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -27,7 +28,10 @@ open import Relation.Binary   using ( Setoid ; _Preserves_⟶_ )
 open import Overture using ( proj₁ ; proj₂ ; ∃-syntax )
 
 private variable α ρᵃ β ρᵇ : Level
+```
+-->
 
+```agda
 module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
 
   open Setoid 𝑨 using()  renaming ( Carrier to A ; _≈_ to _≈₁_ )

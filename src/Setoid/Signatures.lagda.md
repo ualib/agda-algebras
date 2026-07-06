@@ -33,6 +33,7 @@ The setoid-algebra approach was inspired by Andreas Abel's formalization of
 Birkhoff's completeness theorem; see:
 http://www.cse.chalmers.se/~abela/agda/MultiSortedAlgebra.pdf.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -55,6 +56,7 @@ open Setoid
  using ( _≈_ ; Carrier )
  renaming ( refl to reflS ; sym to symS ; trans to transS ; isEquivalence to isEqv )
 ```
+-->
 
 `EqArgs` is the equality on the argument tuples of a pair of operation symbols.
 Given a proof `f ≡ g` that the two symbols agree, two tuples are `EqArgs`-related

@@ -9,6 +9,7 @@ author: "the agda-algebras development team"
 
 This is the [Overture.Adjunction.Closure][] module of the [Agda Universal Algebra Library][].
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -32,6 +33,7 @@ private variable
  α ρ ℓ ℓ₁ ℓ₂ : Level
  a : Type α
 ```
+-->
 
 #### Closure Systems
 

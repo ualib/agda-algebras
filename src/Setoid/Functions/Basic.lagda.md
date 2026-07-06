@@ -10,6 +10,7 @@ author: "the agda-algebras development team"
 This is the [Setoid.Functions.Basic][] module of the [Agda Universal Algebra Library][].
 
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -21,7 +22,10 @@ open import Level            using ( Level ; Lift ; _⊔_ )
 open import Relation.Binary  using ( Setoid )
 
 private variable α ρᵃ β ρᵇ γ ρᶜ : Level
+```
+-->
 
+```agda
 𝑖𝑑 : {A : Setoid α ρᵃ} → A ⟶ A
 𝑖𝑑 {A} = record { to = id ; cong = id }
 

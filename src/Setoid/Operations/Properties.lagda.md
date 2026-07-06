@@ -50,6 +50,7 @@ carriers (e.g. `ℕ∞`, the one-point compactification of `ℕ`) admit a total 
 functional.  Supplying those carriers' search functionals is planned work;[^1]
 this module only fixes the interface they would implement.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -72,6 +73,7 @@ open import Data.Fin.Properties  using (≡-decSetoid) renaming (all? to FinAll?
 -- Imports from the Agda Universal Algebra Library -----------------------------
 import Overture.Operations.Properties as Concrete
 ```
+-->
 
 #### The exhaustive-search interface
 

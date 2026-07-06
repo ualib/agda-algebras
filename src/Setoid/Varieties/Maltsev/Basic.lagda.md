@@ -38,6 +38,7 @@ A *worked* example — that `x ∙ (y ⁻¹ ∙ z)` is a Maltsev term for the va
 of groups — is structure-specific (it consumes the group operations and laws), so it
 lives one layer up, in [Classical.Interpretations.Maltsev][].
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -66,6 +67,7 @@ open Func using () renaming ( to to _⟨$⟩_ )
 
 private variable α ρ χ ℓ : Level
 ```
+-->
 
 #### The Maltsev signature and theory
 

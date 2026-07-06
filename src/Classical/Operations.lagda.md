@@ -18,6 +18,7 @@ This module provides the bridge: per-arity `Curry`/`Uncurry` helpers that transl
 
 See [ADR-002 v2 §1](../../docs/adr/002-classical-layer-design.md) for the design rationale.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -36,6 +37,7 @@ private variable
   α : Level
   A : Type α
 ```
+-->
 
 #### Operation types
 

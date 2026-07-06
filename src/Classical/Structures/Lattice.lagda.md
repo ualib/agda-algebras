@@ -53,6 +53,7 @@ two-binary-symbols-with-eight-equations case beyond the
    `Classical.Structures.Interpret` is needed; the existing `interp-cong`
    composes through the nesting.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -98,6 +99,7 @@ open import Setoid.Varieties.EquationalLogic {𝑆 = Sig-Lattice} using ( _⊧_�
 
 private variable α ρ : Level
 ```
+-->
 
 #### The local satisfaction predicate
 

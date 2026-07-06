@@ -23,6 +23,7 @@ omits it for that reason); the presentation is uniform with `Th-Semilattice` and
 makes the bridge to `Algebra.Lattice.Bundles.Lattice`'s record cheaper in one
 direction without preventing the derivation in the other.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -40,7 +41,10 @@ open import Classical.Signatures.Lattice           using ( Sig-Lattice ; ∧-Op 
 open import Classical.Equations                    using ( Associative ; Commutative ; Idempotent
                                                          ; AbsorbsLeft ; AbsorbsRight )
 open import Overture.Terms {𝑆 = Sig-Lattice}       using ( Term )
+```
+-->
 
+```agda
 data Eq-Lattice : Type where
   ∧-assoc ∧-comm ∧-idem : Eq-Lattice
   ∨-assoc ∨-comm ∨-idem : Eq-Lattice

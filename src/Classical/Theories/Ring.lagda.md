@@ -29,6 +29,7 @@ multiplicative sub-theory is exactly `Th-Monoid` re-spelled over its multiplicat
 symbols, which is what makes the two forgetful reducts of
 `Classical.Structures.Ring` discharge cleanly.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -47,7 +48,10 @@ open import Classical.Equations                    using ( Associative ; LeftIde
                                                          ; LeftInverse ; RightInverse ; Commutative
                                                          ; DistributesOverˡ ; DistributesOverʳ )
 open import Overture.Terms {𝑆 = Sig-Ring}          using ( Term )
+```
+-->
 
+```agda
 data Eq-Ring : Type where
   +-assoc +-idˡ +-idʳ +-invˡ +-invʳ +-comm : Eq-Ring
   ·-assoc ·-idˡ ·-idʳ                      : Eq-Ring

@@ -22,6 +22,7 @@ new ones are the *left* distributivity laws, supplied directly by stdlib's
 `∧-distribˡ-∨` (`x ∧ (y ∨ z) ≡ (x ∧ y) ∨ (x ∧ z)`) and `∨-distribˡ-∧`
 (`x ∨ (y ∧ z) ≡ (x ∨ y) ∧ (x ∨ z)`).
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 module Examples.Classical.Lattices.L2Distributive where
@@ -39,6 +40,7 @@ open import Classical.Small.Structures.DistributiveLattice
   using ( DistributiveLattice ; eqsToDistributiveLattice )
 import Classical.Structures.DistributiveLattice as Polymorphic
 ```
+-->
 
 #### Deriving the second absorption equation {#absorbR}
 

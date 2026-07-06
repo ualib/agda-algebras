@@ -36,6 +36,7 @@ The contents fall into three clusters.
    surjection — a bare-types claim about raw functions, even though it sits inside the
    Setoid tree.[^2]
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -60,6 +61,7 @@ open import Overture.Basic  using ( _≈_ ; _∙_ ; transport )
 
 private variable a b c ι : Level
 ```
+-->
 
 #### The image of a raw function
 

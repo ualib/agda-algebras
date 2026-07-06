@@ -137,6 +137,7 @@ evaluation interacts with this monad structure.  It works as follows:
    [Setoid.Terms.Operations][] say the fold is natural in the algebra;
 +  [Setoid.Varieties.Invariance][] adds naturality in the *signature*.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -161,6 +162,7 @@ private variable
   χ : Level
   W X Y : Type χ
 ```
+-->
 
 #### Composition of substitutions
 

@@ -19,6 +19,7 @@ Monoid bridge, the round-trip is stated *pointwise* per
 Monoid bridge are the unary `_⁻¹` field, the `⁻¹-Op` clause of the reverse
 interpretation, and the `inverse`/`⁻¹-cong` fields of `isGroup`.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -43,6 +44,7 @@ open import Setoid.Signatures                      using  ( ⟨_⟩ )
 
 private variable α ρ : Level
 ```
+-->
 
 #### Core to stdlib bundle
 

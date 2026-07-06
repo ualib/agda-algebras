@@ -45,6 +45,7 @@ reduces to `no`{.AgdaInductiveConstructor} and the `from-yes`{.AgdaFunction} ter
 fails to type-check; in this way, the operation's properties can be checked by the
 Agda type checker.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -59,6 +60,7 @@ open import Data.Vec.Base                    using ( Vec ; lookup )
 -- Re-exported so downstream examples can discharge laws with a single name.
 open import Relation.Nullary.Decidable.Core  using ( from-yes ) public
 ```
+-->
 
 #### The table representation
 

@@ -41,6 +41,7 @@ by `from-yes`{.AgdaFunction}.  Associativity here is a decision over all `6³ = 
 triples — exactly the case where a hand-written proof would be unreasonable and the
 `Overture.Cayley`{.AgdaModule} approach pays off.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -62,6 +63,7 @@ open import Classical.Bundles.Group           using ( ⟨_⟩ᵍᵖ ; ⟪_⟫ᵍ
 open import Classical.Small.Structures.Group  using ( Group ; eqsToGroup )
 import Classical.Structures.Group as Polymorphic
 ```
+-->
 
 #### The Cayley table, the operation, and the inverse map
 

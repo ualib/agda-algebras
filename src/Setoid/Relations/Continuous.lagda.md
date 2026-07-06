@@ -19,6 +19,7 @@ A *continuous relation* of arity `I` over a type `A` is a predicate on `I`-tuple
 
 A note on `compatible-REL`. The legacy `Legacy.Base.Relations.Continuous.compatible-REL` reads `compatible-REL 𝑓 R = Π[ t ∈ … ] eval-REL R t`, which is unconditional in `t` and never references `𝑓` — a bug, since it makes the predicate independent of the operations.  The intended definition, mirroring the structure of the (correct) single-sorted `compatible-Rel`, is `∀ t → eval-REL R t → R (λ i → 𝑓 i (t i))`.  The canonical port below uses the corrected definition.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -37,6 +38,7 @@ open import Overture          using ( Op ; arity[_] )
 
 private variable α ρᵃ ρ ι : Level
 ```
+-->
 
 #### The Π-setoid construction
 

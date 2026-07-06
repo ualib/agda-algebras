@@ -17,6 +17,7 @@ the eleven curried laws arrive ready-made from `Ring-Op`, so the core-to-bundle
 direction is a (deeply nested) record-shuffle and the reverse direction is one
 `Func` plus the eleven equation clauses.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -44,6 +45,7 @@ open import Setoid.Signatures                     using  ( ⟨_⟩ )
 
 private variable α ρ : Level
 ```
+-->
 
 #### Core to stdlib bundle
 

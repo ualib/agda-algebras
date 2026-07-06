@@ -17,6 +17,7 @@ This module shows that supplying that witness is never a hoop: for the finitary 
 of ordinary universal algebra it is the identity bijection `↔-id`, written once (per the
 signature's shape).
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -32,6 +33,7 @@ open import Level                           using ( Level )
 open import Setoid.Congruences.ChainJoin    using ( Finitary )
 open import Setoid.Varieties.Maltsev        using ( Sig-Maltsev ; m-Op )
 ```
+-->
 
 #### The recommended shape: arities as `Fin (ar f)`
 

@@ -10,6 +10,7 @@ author: "agda-algebras development team"
 This is the [Setoid.Subalgebras.Subuniverses][] module of the [Agda Universal Algebra Library][].
 
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -39,6 +40,7 @@ private variable
   α β γ ρᵃ ρᵇ ρᶜ ℓ χ : Level
   X : Type χ
 ```
+-->
 
 
 We first show how to represent in [Agda][] the collection of subuniverses of an

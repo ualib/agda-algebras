@@ -6,6 +6,7 @@ author: "agda-algebras development team"
 ---
 
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -19,6 +20,7 @@ open import Level                         using () renaming ( 0ℓ to ℓ₀ )
 open import Overture                      using ( 𝟚 ; 𝟛 )
 open import Legacy.Base.Structures.Basic  using ( signature )
 ```
+-->
 
 
 #### Examples of finite signatures

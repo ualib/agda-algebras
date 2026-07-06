@@ -12,6 +12,7 @@ This is the [Classical.Bundles.CommutativeSemigroup][] module of the [Agda Unive
 
 Mirror of the Semigroup bridge with the added `comm` field; over `Sig-Magma`.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -37,7 +38,10 @@ open import Setoid.Algebras.Basic {𝑆 = Sig-Magma}      using  ( Algebra ; �
 open import Setoid.Signatures                          using ( ⟨_⟩ )
 
 private variable α ρ : Level
+```
+-->
 
+```agda
 ⟨_⟩ᶜˢᵍ : CommutativeSemigroup α ρ → stdlib-CommutativeSemigroup α ρ
 ⟨ 𝑪 ⟩ᶜˢᵍ = record
   { Carrier = 𝕌[ proj₁ 𝑪 ]

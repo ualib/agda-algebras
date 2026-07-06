@@ -18,6 +18,7 @@ representation theorem*: every algebra is a subdirect product of subdirectly irr
 algebras.
 
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -46,6 +47,7 @@ open import Setoid.Subalgebras.Basic        {𝑆 = 𝑆}  using  ( _≤_ )
 
 private variable α ρ β ρᵇ ℓ ι : Level
 ```
+-->
 
 #### Subdirect products and subdirect embeddings
 

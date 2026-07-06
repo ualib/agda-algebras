@@ -13,6 +13,7 @@ Two other presentations of Birkhoff's theorem live in the source tree, and both 
 
 #### The HSP Theorem
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -49,7 +50,10 @@ open _⟶_          using () renaming ( to to _⟨$⟩_ )
 open Setoid       using ( Carrier )
 open Algebra      using ( Domain )
 open Environment  using ( Env )
+```
+-->
 
+```agda
 module _
   {α ρᵃ ℓ : Level}
   (𝒦 : Pred (Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ))

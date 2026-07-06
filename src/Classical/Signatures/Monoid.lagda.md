@@ -19,6 +19,7 @@ signature per [ADR-002 v2 §9](../../docs/adr/002-classical-layer-design.md);
 `ε-Op` has arity `Fin 0`.  The constructor- and arity-naming conventions are those
 established by `Classical.Signatures.Magma`.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -32,7 +33,10 @@ open import Level          using ( 0ℓ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Overture.Signatures using ( Signature )
+```
+-->
 
+```agda
 data Op-Monoid : Type where
   ∙-Op ε-Op : Op-Monoid
 

@@ -74,6 +74,7 @@ Every law is stated against the owning category's hom-equality `_≈_`, so an
 instance whose hom-equality is pointwise (the algebra categories of
 [Setoid.Categories.Algebra][]) proves the triangles pointwise, with no funext.[^2]
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -87,7 +88,10 @@ open import Setoid.Categories.Functor                using ( Functor ; idF ; _�
 open import Setoid.Categories.NaturalTransformation  using ( NaturalTransformation )
 
 private variable o ℓ e o′ ℓ′ e′ : Level
+```
+-->
 
+```agda
 record Adjunction
   {𝐂 : Category o ℓ e} {𝐃 : Category o′ ℓ′ e′}
   (L : Functor 𝐂 𝐃) (R : Functor 𝐃 𝐂) : Type (o ⊔ ℓ ⊔ e ⊔ o′ ⊔ ℓ′ ⊔ e′) where

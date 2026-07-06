@@ -25,6 +25,7 @@ see instead the `Classical.*.Lattice` modules (the two presentations are equival
 a standard theorem).  Every supremum/infimum is required to exist only for `ι`-small
 index types, the customary predicative reading of "complete."
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -36,6 +37,7 @@ open import Agda.Primitive   using () renaming ( Set to Type )
 open import Level            using ( Level ; _⊔_ ; suc )
 open import Relation.Binary  using ( IsPartialOrder ) renaming ( Rel to BinaryRel )
 ```
+-->
 
 `CompleteLattice c ℓ₁ ℓ₂ ι` is a carrier at level `c` with an equality at level `ℓ₁`
 and a partial order at level `ℓ₂`, such that every `ι`-indexed family has a least

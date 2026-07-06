@@ -10,6 +10,7 @@ author: "agda-algebras development team"
 This is the [Setoid.Terms.Properties][] module of the [Agda Universal Algebra Library][].
 
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -44,6 +45,7 @@ private variable
   α ρᵃ β ρᵇ ρ χ : Level
   X : Type χ
 ```
+-->
 
 The term algebra `𝑻 X` is *absolutely free* (or *universal*, or *initial*) for
 algebras in the signature `𝑆`. That is, for every 𝑆-algebra `𝑨`, the following hold.

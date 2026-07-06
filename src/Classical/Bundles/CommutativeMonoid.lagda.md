@@ -12,6 +12,7 @@ This is the [Classical.Bundles.CommutativeMonoid][] module of the [Agda Universa
 
 Mirror of the Monoid bridge with the added `comm` field; over `Sig-Monoid`.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -37,7 +38,10 @@ open import Setoid.Algebras.Basic {𝑆 = Sig-Monoid}     using  ( Algebra ; �
 open import Setoid.Signatures                          using  ( ⟨_⟩ )
 
 private variable α ρ : Level
+```
+-->
 
+```agda
 ⟨_⟩ᶜᵐᵒ : CommutativeMonoid α ρ → stdlib-CommutativeMonoid α ρ
 ⟨ 𝑪 ⟩ᶜᵐᵒ = record
   { Carrier = 𝕌[ proj₁ 𝑪 ]

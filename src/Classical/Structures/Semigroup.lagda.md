@@ -79,6 +79,7 @@ Specifically, the conventions documented and embodied here are as follows.
    (for Monoid, Group, Lattice, Ring) follow the same shape, each factoring
    through their immediate predecessor's concrete constructor family.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -113,6 +114,7 @@ open Algebra using ( Interp )
 
 private variable α ρ : Level
 ```
+-->
 
 #### The local satisfaction predicate
 

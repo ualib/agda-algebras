@@ -25,6 +25,7 @@ setoid equivalence, per
 discharged by `Setoid.refl` because `pair a b 0F` and `pair a b 1F` reduce
 definitionally to `a` and `b` respectively.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -50,6 +51,7 @@ open Algebra using (Interp)
 
 private variable α ρ : Level
 ```
+-->
 
 #### Core to stdlib bundle
 

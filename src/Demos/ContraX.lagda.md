@@ -8,6 +8,7 @@ author: "the agda-algebras development team"
 ### Inconsistency in first formalization attempt
 
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -28,7 +29,10 @@ open import Setoid.Algebras {𝑆 = 𝑆}  using ( Algebra ; 𝔻[_] )
 open import Setoid.Functions         using (IsSurjective ; Image_∋_)
 
 open Algebra
+```
+-->
 
+```agda
 _↠_ : Set → Algebra 0ℓ 0ℓ → _
 X ↠ 𝑨 = Σ[ h ∈ (setoid X ⟶ 𝔻[ 𝑨 ])] IsSurjective h
 

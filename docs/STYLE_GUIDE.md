@@ -21,7 +21,7 @@ A note on forward references.  This document describes the 3.0 target.  Several 
 +  [Naming](#naming)
 +  [Notation and symbol table](#notation-and-symbol-table)
 +  [Universe levels](#universe-levels)
-+  [Record vs Σ](#record-vs-%CE%A3)
++  [Record vs Σ](#record-vs)
 +  [Proof style](#proof-style)
 +  [Comments and documentation](#comments-and-documentation)
 +  [Deprecation policy](#deprecation-policy)

@@ -57,6 +57,7 @@ pattern matching on operation-symbol constructors (`ar-X ∙-Op = Fin 2`); avoid
 indirect definitions (table lookups, conditionals) that would leave the arity opaque
 to the type checker.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -76,6 +77,7 @@ open import Overture.Signatures   using ( Signature ; OperationSymbolsOf ; Arity
 private variable
   𝓞 χ : Level
 ```
+-->
 
 The equation-builder API is parameterized over a fixed signature `𝑆`.  Each builder
 takes operation symbols from `𝑆` together with evidence that the symbols' arities

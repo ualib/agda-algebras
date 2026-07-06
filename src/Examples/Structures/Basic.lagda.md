@@ -8,6 +8,7 @@ author: "agda-algebras development team"
 ### Examples of Structures
 
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -20,7 +21,10 @@ open import Relation.Unary                  using ( Pred ; _∈_ )
 open import Overture                        using ( 𝟚 ; 𝟛 )
 open import Legacy.Base.Structures          using ( structure )
 open import Examples.Structures.Signatures  using ( S001 ; S∅ ; S0001 )
+```
+-->
 
+```agda
 -- An example of a (purely) algebraic structure is a 3-element meet semilattice.
 
 SL : structure  S001   -- (one binary operation symbol)

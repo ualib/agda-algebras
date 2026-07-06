@@ -26,5 +26,4 @@ nothing to gain (and names to clash) from re-exporting them through a barrel.
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Examples.Classical.Groups where
-
 ```

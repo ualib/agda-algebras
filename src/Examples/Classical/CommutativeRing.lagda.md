@@ -19,6 +19,7 @@ worked example `ℤ-commutativeRing` type-checks, and the bridge to stdlib's
 The ring's curried accessors are opened under fresh names (`_⊕_`, `_⊗_`, `⊝_`,
 `e₀`, `e₁`) so they do not clash with `Data.Integer`'s own `_+_`, `_*_`, `-_`.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -39,6 +40,7 @@ open import Classical.Small.Structures.CommutativeRing
 
 import Classical.Structures.CommutativeRing as Polymorphic
 ```
+-->
 
 #### The commutative ring `(ℤ, +, *, 0, 1, -)` {#integer-commutativering}
 

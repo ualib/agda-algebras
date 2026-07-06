@@ -18,6 +18,7 @@ Semigroup bridge, the round-trip is stated *pointwise* per
 direction is a thin record-shuffle.  The only addition over the Semigroup bridge is
 the nullary `ε` field and the `ε-Op` clause of the reverse interpretation.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -42,6 +43,7 @@ open import Setoid.Signatures                       using ( ⟨_⟩ )
 
 private variable α ρ : Level
 ```
+-->
 
 #### Core to stdlib bundle
 

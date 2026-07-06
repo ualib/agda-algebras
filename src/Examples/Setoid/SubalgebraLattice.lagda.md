@@ -21,6 +21,7 @@ We instantiate the `Lattice`, `BoundedLattice`, and `CompleteLattice` bundles fo
 and verify the lattice is nontrivial by proving `⊤ ⋬ ⊥` (the full subuniverse is not
 contained in the empty one).
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -42,6 +43,7 @@ open import Overture using ( Signature )
 
 open Func renaming ( to to _⟨$⟩_ )
 ```
+-->
 
 #### The empty signature and the two-element algebra `𝟚` {#the-algebra}
 

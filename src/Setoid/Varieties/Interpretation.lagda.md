@@ -65,6 +65,7 @@ relation.[^2]
 
 A worked Maltsev-term instance is in [Classical.Interpretations.Maltsev][].
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -101,6 +102,7 @@ private variable
   𝑆 𝑆₁ 𝑆₂ 𝑆₃ : Signature 𝓞 𝓥
   χ₁ χ₂ χ₃ ι₁ ι₂ ι₃ : Level
 ```
+-->
 
 #### Two single-algebra lemmas
 

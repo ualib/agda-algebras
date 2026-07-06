@@ -30,6 +30,35 @@ separate copy of the documentation.  The decision record is
 +  **`docs/assets/js/agda-copy.js`** — adds a copy button to the highlighted
    `<pre class="Agda">` blocks (Material's own copy button only covers its
    `.highlight` blocks, which the `agda --html` output is not).
++  **`docs/assets/js/agda-toggle.js`** — the header's "Show more Agda" control ([#431](https://github.com/ualib/agda-algebras/issues/431)).  Module sources wrap their leading OPTIONS/module/import scaffolding in `<!-- … -->` comments; `mkdocs_gen_library.py` re-surfaces those blocks tagged `hidden-source`, and this control shows or re-hides them all at once, with the choice persisted in `localStorage` like the palette toggle.
+
+### Hiding a module's import scaffolding
+
+Every module's leading scaffolding block — the `OPTIONS` pragma, the `module … where` header, the imports, and the `private variable` declarations — is wrapped in an HTML comment in the `.lagda.md` source:
+
+~~~markdown
+<!--
+```agda
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+
+module Setoid.Homomorphisms.Noether where
+
+open import Level using ( Level )
+-- … the rest of the imports …
+```
+-->
+~~~
+
+Agda still type-checks the block (fenced `agda` code inside an HTML comment is still code), GitHub's Markdown renderer collapses it, and on the site it becomes a toggleable `hidden-source` block, revealed either by the header's "Show more Agda" control (all blocks, persisted) or by the small `▸ hidden code (n lines)` note that agda-toggle.js places in front of each hidden block (that block only).  When the scaffolding shares its fence with real definitions, split the fence and wrap only the scaffolding part.  New modules should follow the same convention.
+
+The wrapper must be an HTML comment rather than any indenting construct: Agda requires its code at column 0, so a block can never be indented into a `??? note` admonition or a Markdown-nested `<details>` — indenting the fence breaks type-checking.  The comment wrapper adds no indentation, which is exactly why issue #431 settled on this mechanism.
+
+Two kinds of module are deliberate exceptions:
+
++  **Pedagogical modules** whose scaffolding is the subject of the surrounding prose stay fully unwrapped: `Overture.Basic` (which explains the `OPTIONS` pragma, modules, and imports) and `Demos.HSP` (the TYPES 2021 paper, which discusses its imports in the text).
++  **Barrel modules** stay unwrapped too: a barrel's annotated `open import … public` list is the page's content, and hiding its only block would leave a blank page that reads as unfinished.
+
+As a tripwire against accidentally wrapping a barrel, the build logs a `⚠ <Module>: every code block on this page is hidden` line for any page that would render code-free.  Three prose-first pages hide their lone `OPTIONS`/module block by design and are exempt from that check: `Overture.Preface`, `Demos.GeneralOperationsAndRelations`, and `Setoid.Complexity.Basic` (`PROSE_ONLY_MODULES` in `mkdocs_gen_library.py`).
 
 ### Build commands
 

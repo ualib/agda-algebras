@@ -35,6 +35,7 @@ only at a concrete signature.  Stating the binary case generically would force a
 without-K unifier.  Hence: the *congruence* is shared here; the *family* is named
 per signature.  See [ADR-002 v2 §1, §5](../../docs/adr/002-classical-layer-design.md).
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -59,6 +60,7 @@ open Algebra using ( Interp )
 
 private variable α ρ : Level
 ```
+-->
 
 `interp-cong 𝑨 f u≈v` says: applying the `𝑨`-interpretation of `f` to two
 argument-tuples that agree pointwise yields setoid-equal results.  The proof is

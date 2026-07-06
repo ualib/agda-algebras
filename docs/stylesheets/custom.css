@@ -730,3 +730,103 @@
 @media (prefers-reduced-motion: reduce) {
   .ualib-carousel__track { transition: none; }
 }
+
+/* ==========================================================================
+   15. "Show more Agda" toggle (#431, M10-5) — module sources wrap their
+       leading OPTIONS/module/import scaffolding in HTML comments, and
+       mkdocs_gen_library.py re-surfaces those blocks tagged `hidden-source`:
+       `<pre class="Agda">` on the highlighted path, a fenced block inside a
+       `<div>` on the plain path.  They stay hidden until
+       docs/assets/js/agda-toggle.js flips `reveal-agda-source` on <body> — a
+       global choice persisted in localStorage, like the palette toggle.
+   ========================================================================== */
+.md-typeset pre.Agda.hidden-source,
+.md-typeset div.hidden-source {
+  display: none;
+}
+body.reveal-agda-source .md-typeset pre.Agda.hidden-source,
+body.reveal-agda-source .md-typeset div.hidden-source {
+  display: block;
+}
+
+/* Click-to-definition must keep working while the scaffolding is hidden:
+   agda --html links every token to its defining occurrence, and the binders
+   introduced by `private variable` (and header renamings) live inside the
+   hidden block.  When the URL fragment targets an anchor in a hidden block,
+   reveal that block so the browser can scroll to it. */
+.md-typeset pre.Agda.hidden-source:has(:target),
+.md-typeset div.hidden-source:has(:target) {
+  display: block;
+}
+
+/* A block revealed locally via its inline `▸ hidden code (n lines)` note
+   (agda-toggle.js), independently of the global toggle. */
+.md-typeset pre.Agda.hidden-source.revealed,
+.md-typeset div.hidden-source.revealed {
+  display: block;
+}
+
+/* The inline note itself: quiet and small, sitting where the hidden block
+   would be, so a page never looks silently truncated.  Redundant while the
+   global toggle already reveals everything, so hide it then. */
+.md-typeset .ualib-hidden-note {
+  display: block;
+  margin: 0.6em 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--md-default-fg-color--light);
+  font-family: var(--md-code-font);
+  font-size: 0.6rem;
+  cursor: pointer;
+}
+.md-typeset .ualib-hidden-note:hover {
+  color: var(--md-accent-fg-color);
+}
+body.reveal-agda-source .md-typeset .ualib-hidden-note {
+  display: none;
+}
+
+/* The header control agda-toggle.js injects after the site title: a quiet
+   pill that inherits the header's foreground so it reads correctly on the
+   indigo header in both schemes. */
+#toggle-agda-source {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  flex-shrink: 0;
+  padding: 0.25em 0.9em;
+  border: 1px solid color-mix(in srgb, currentColor 35%, transparent);
+  border-radius: 9999px;
+  background: color-mix(in srgb, currentColor 10%, transparent);
+  color: inherit;
+  font-family: var(--ualib-display);
+  font-size: 0.62rem;
+  font-weight: 500;
+  line-height: 1.25;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 140ms ease, border-color 140ms ease;
+}
+#toggle-agda-source:hover {
+  background: color-mix(in srgb, currentColor 18%, transparent);
+  border-color: color-mix(in srgb, currentColor 60%, transparent);
+}
+#toggle-agda-source:focus-visible {
+  outline: 1px solid currentColor;
+  outline-offset: 2px;
+}
+.agda-logo-icon {
+  width: 1.15em;
+  height: 1.15em;
+}
+
+/* On narrow headers (hamburger + title + palette + search) an unshrinkable
+   pill would crush the page title, so drop it below the same breakpoint at
+   which Material hides its repo-source chrome.  Phones keep the default
+   (scaffolding hidden), which is the right reading mode there anyway. */
+@media screen and (max-width: 59.9844em) {
+  #toggle-agda-source {
+    display: none;
+  }
+}

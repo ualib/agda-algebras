@@ -15,6 +15,7 @@ extension of Monoid: `commutativeMonoid→monoid` is a pure theory-reindex, and
 `CommutativeMonoid-Op` inherits `_∙_`, `ε`, and all three monoid laws through it,
 adding `comm-law`.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -40,6 +41,7 @@ open import Setoid.Varieties.EquationalLogic {𝑆 = Sig-Monoid} using ( _⊧_�
 
 private variable α ρ : Level
 ```
+-->
 
 #### Satisfaction predicate and the `CommutativeMonoid` type
 

@@ -10,13 +10,13 @@ author: "agda-algebras development team"
 We prove some closure and invariance properties of the relation `⊧`.  In particular,
 we prove the following facts (which we use later in our proof of Birkhoff's HSP Theorem).
 
-*  [Algebraic invariance](#algebraic-invariance). `⊧` is an *algebraic invariant*
+*  [Algebraic invariance](#algebraic-invariance-of-models). `⊧` is an *algebraic invariant*
    (stable under isomorphism).
 
 *  [Subalgebraic invariance](#subalgebraic-invariance). Identities modeled by a
    class of algebras are also modeled by all subalgebras of algebras in the class.
 
-*  [Product invariance](#product-invariance). Identities modeled by a class of
+*  [Product invariance](#product-invariance-of-models). Identities modeled by a class of
    algebras are also modeled by all products of algebras in the class.
 
 

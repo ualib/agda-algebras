@@ -15,6 +15,7 @@ Bridges `Classical.Structures.Semilattice` to stdlib's `Algebra.Lattice.Bundles.
 `_∙_`, neither meet nor join); the bridge is over `Sig-Magma` with the same
 operation.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -38,7 +39,10 @@ open import Setoid.Algebras.Basic {𝑆 = Sig-Magma}  using ( Algebra ; 𝕌[_] 
 open import Setoid.Signatures                      using  ( ⟨_⟩ )
 
 private variable α ρ : Level
+```
+-->
 
+```agda
 ⟨_⟩ˢˡ : Semilattice α ρ → stdlib-Semilattice α ρ
 ⟨ 𝑺 ⟩ˢˡ = record
   { Carrier = 𝕌[ proj₁ 𝑺 ]

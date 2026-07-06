@@ -9,6 +9,7 @@ author: "agda-algebras development team"
 
 This is the [Setoid.Algebras.Basic][] module of the [Agda Universal Algebra Library][].
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -31,7 +32,10 @@ open import Overture.Operations  using ( Op )
 open import Setoid.Signatures    using ( ⟨_⟩ )
 
 private variable α ρ ι : Level
+```
+-->
 
+```agda
 ov : Level → Level
 ov α = 𝓞 ⊔ 𝓥 ⊔ lsuc α
 ```

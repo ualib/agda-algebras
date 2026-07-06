@@ -16,6 +16,7 @@ commutative, in contrast to the `(ℕ, +, 0)` commutative monoid of
 [`Examples.Classical.CommutativeMonoid`][].  Built directly from stdlib's `++-assoc`,
 `++-identityˡ`, `++-identityʳ`.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -33,6 +34,7 @@ open import Classical.Small.Structures.Monoid  using ( Monoid ; eqsToMonoid )
 
 import Classical.Structures.Monoid as Polymorphic
 ```
+-->
 
 #### The monoid `(List ℕ, ++, [])` {#list-monoid}
 

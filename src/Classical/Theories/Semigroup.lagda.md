@@ -39,6 +39,7 @@ those magmas whose binary operation is associative — there is no `Sig-Semigrou
 The variable carrier `Fin 3` and the magma signature `Sig-Magma` together fully
 parameterize the equation builder `Associative` from `Classical.Equations`.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -56,6 +57,7 @@ open import Classical.Signatures.Magma             using ( Sig-Magma ; ∙-Op )
 open import Classical.Equations                    using ( Associative )
 open import Overture.Terms {𝑆 = Sig-Magma}         using ( Term )
 ```
+-->
 
 #### The index of equations
 

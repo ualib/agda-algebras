@@ -10,6 +10,7 @@ author: "agda-algebras development team"
 
 This is the [Overture.Signatures][] module of the [Agda Universal Algebra Library][].
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -19,7 +20,10 @@ module Overture.Signatures where
 open import Agda.Primitive  using () renaming ( Set to  Type )
 open import Data.Product    using ( Σ-syntax ; proj₁ ; proj₂ )
 open import Level           using ( Level ; _⊔_ ) renaming ( suc to lsuc )
+```
+-->
 
+```agda
 variable 𝓞 𝓥 : Level
 ```
 

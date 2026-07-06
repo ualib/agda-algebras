@@ -12,6 +12,7 @@ that the classes \af H `𝒦`{.AgdaBound}, \af S `𝒦`{.AgdaBound}, \af P `𝒦
 same identities.
 
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -49,6 +50,7 @@ open import Setoid.Varieties.SoundAndComplete  {𝑆 = 𝑆}  using  ( _⊧_ ; _
 open _⟶_      using () renaming ( to to _⟨$⟩_ )
 open Algebra  using ( Domain )
 ```
+-->
 
 #### Closure properties
 

@@ -56,6 +56,7 @@ symbol-to-symbol `ι` by a symbol-to-derived-term assignment, and `✶-sub` is t
 that makes interpretations compose — substitute first or interpret first, same
 result.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -81,6 +82,7 @@ private variable
   χ : Level
   X Y : Type χ
 ```
+-->
 
 ##### Congruence: translation is a setoid function
 

@@ -10,6 +10,7 @@ author: "agda-algebras development team"
 This is the [Setoid.Homomorphisms.Basic][] module of the [Agda Universal Algebra Library][].
 
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -30,8 +31,10 @@ open import Setoid.Algebras          using ( Algebra ; _^_ ; 𝔻[_])
 
 private variable
   α β ρᵃ ρᵇ : Level
+```
+-->
 
-
+```agda
 module _ {𝑆 : Signature 𝓞 𝓥} (𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ)(𝑩 : Algebra β ρᵇ) where
   open _⟶_ {a = α}{ρᵃ}{β}{ρᵇ}{From = 𝔻[ 𝑨 ]}{To = 𝔻[ 𝑩 ]} renaming (to to _⟨$⟩_ )
 

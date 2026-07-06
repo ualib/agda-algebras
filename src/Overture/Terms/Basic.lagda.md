@@ -20,6 +20,7 @@ than setoid-specific, which is why it lives in `Overture/` rather than under
 this definition in `Setoid.Terms.Basic`; the planned Cubical analog will sit
 similarly.[^1]
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -31,6 +32,7 @@ open import Level                using ( Level ; suc ; _⊔_ )
 open import Overture.Signatures  using ( OperationSymbolsOf ; ArityOf )
 private variable χ : Level
 ```
+-->
 
 ### The level shorthand `ov`
 

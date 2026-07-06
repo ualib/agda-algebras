@@ -30,6 +30,7 @@ the right argument (`0`–`3` abbreviate `0F`–`3F`):
 The table is symmetric (hence the operation is commutative) and its diagonal is
 the identity (hence the operation is idempotent).
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -51,6 +52,7 @@ open import Classical.Small.Structures.Magma        using  ( Magma ; opsToMagma 
 
 import Classical.Structures.Magma as Polymorphic
 ```
+-->
 
 #### The Cayley table and its operation
 

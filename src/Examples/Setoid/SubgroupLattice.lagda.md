@@ -32,6 +32,7 @@ three atoms are pairwise incomparable and proper, any two meet at `{e}`, and any
 join to the whole group.  The one piece left for future work is to prove that these
 five are the only subgroups.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -58,6 +59,7 @@ open import Setoid.Signatures                      using  ( ⟨_⟩ )
 
 open Func renaming ( to to _⟨$⟩_ )
 ```
+-->
 
 #### The Klein four-group `V₄`
 

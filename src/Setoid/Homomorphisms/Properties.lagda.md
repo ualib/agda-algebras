@@ -9,6 +9,7 @@ author: "agda-algebras development team"
 
 This is the [Setoid.Homomorphisms.Properties][] module of the [Agda Universal Algebra Library][].
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -38,6 +39,7 @@ private variable
   α β γ ρᵃ ρᵇ ρᶜ ℓ : Level
   𝑆 : Signature 𝓞 𝓥
 ```
+-->
 
 ##### Composition of homs
 

@@ -25,6 +25,7 @@ satisfaction is a *property* of the objects, not structure on the morphisms.
 to the one on `Q`, acting as `F` on morphisms.  The functor laws are inherited
 verbatim, since the hom-equalities are.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -38,6 +39,7 @@ open import Setoid.Categories.Functor   using ( Functor )
 
 private variable o ℓ e o′ ℓ′ e′ p q : Level
 ```
+-->
 
 #### The full subcategory
 

@@ -13,6 +13,7 @@ Fix a signature 𝑆, let 𝒦 be a class of 𝑆-algebras, and define
 +  `S 𝒦` = algebras isomorphic to a subalgebra of a member of `𝒦`;
 +  `P 𝒦` = algebras isomorphic to a product of members of `𝒦`.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -36,7 +37,10 @@ open import Setoid.Algebras {𝑆 = 𝑆} using ( Algebra ; ov ; Lift-Alg ; ⨅ 
 open import Setoid.Homomorphisms {𝑆 = 𝑆}
 open import Setoid.Subalgebras {𝑆 = 𝑆}
 open _⟶_ renaming ( to to _⟨$⟩_ )
+```
+-->
 
+```agda
 module _ {α ρᵃ β ρᵇ : Level} where
 
   private

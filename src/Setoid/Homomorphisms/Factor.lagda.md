@@ -9,6 +9,7 @@ author: "agda-algebras development team"
 
 This is the [Setoid.Homomorphisms.Factor][] module of the [Agda Universal Algebra Library][].
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -33,6 +34,7 @@ open import Setoid.Homomorphisms.Basic  using  ( hom ; IsHom ; compatible-map
 
 private variable α ρᵃ β ρᵇ γ ρᶜ : Level
 ```
+-->
 
 If `g : hom 𝑨 𝑩`, `h : hom 𝑨 𝑪`, `h` is surjective, and `ker h ⊆ ker g`, then there exists `φ : hom 𝑪 𝑩` such that `g = φ ∘ h` so the following diagram commutes:
 

@@ -9,6 +9,7 @@ author: "agda-algebras development team"
 
 This is the [Setoid.Congruences.Basic][] module of the [Agda Universal Algebra Library][].
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -35,6 +36,7 @@ open import Setoid.Algebras.Basic {𝑆 = 𝑆}  using ( ov ; Algebra ; 𝔻[_] 
 
 private variable α ρ ℓ : Level
 ```
+-->
 
 We now define the predicate `_∣≈_` so that, if `𝑨` denotes an algebra and `R` a
 binary relation, then `𝑨 ∣≈ R` will represent the assertion that `R` is

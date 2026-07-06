@@ -30,6 +30,7 @@ full generality; `finitary⇒JoinIsChain` is what upgrades it from the chain sta
 the literal `CongruenceDistributive` for the finitary algebras of ordinary universal
 algebra.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -78,6 +79,7 @@ open Algebra using ( Interp )
 
 private variable α ρ ℓ : Level
 ```
+-->
 
 #### The alternating-chain relation
 

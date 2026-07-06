@@ -19,6 +19,7 @@ fixed-type-universe-level specialization out keeps the polymorphic core unencumb
 while giving downstream consumers a flat import without universe polymorphism in the
 foreground.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -31,6 +32,7 @@ open import Level           using ( 0ℓ ; suc )
 -- Imports from the Agda Universal Algebra Library ----------------------------
 import Classical.Structures.Magma as Polymorphic
 ```
+-->
 
 #### The level-fixed Magma Type
 

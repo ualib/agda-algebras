@@ -33,6 +33,7 @@ a postulate-free, `--safe` formalization.  In the present module, we take that
 existence as an explicit module parameter (`SubdirectSIRep`), so the theorem is
 proved *relative to* a precisely-stated assumption and nothing is postulated.[^1]
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -54,7 +55,10 @@ open import Setoid.Subalgebras.Subdirect.Basic  {𝑆 = 𝑆}
   using ( SubdirectEmbedding ; Separates ; separating→SubdirectEmbedding )
 
 private variable α ρ ℓ ι : Level
+```
+-->
 
+```agda
 SubdirectlyRepresentable : (𝑨 : Algebra α ρ) (ℓ ι : Level) → Type (𝓞 ⊔ 𝓥  ⊔ ρ ⊔ lsuc (α ⊔ ℓ ⊔ ι))
 SubdirectlyRepresentable {α}{ρ} 𝑨 ℓ ι =
   Σ[ I ∈ Type ι ] Σ[ 𝒜 ∈ (I → Algebra α ℓ) ]

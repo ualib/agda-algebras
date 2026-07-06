@@ -21,8 +21,10 @@ Run by ``mkdocs-gen-files`` during ``mkdocs build`` / ``mkdocs serve``.  It
 
   3.  emits ``SUMMARY.md``, the literate-nav file that becomes the navigation.
 
-In every mode the Jekyll front matter is dropped and a ``# Dotted.Module`` title
-is prepended.  The real sources are never modified.
+In every mode the Jekyll front matter is dropped, a ``# Dotted.Module`` title is
+prepended, and import blocks that the sources hide in ``<!-- … -->`` comments
+are re-surfaced as toggleable ``hidden-source`` blocks (#431, M10-5).  The real
+sources are never modified.
 """
 
 from __future__ import annotations
@@ -58,6 +60,24 @@ LIQUID_LINE_RE = re.compile(r"^[ \t]*\{%.*?%\}[ \t]*\r?\n?", re.MULTILINE)
 FIRST_H1_RE = re.compile(r"^# \S", re.MULTILINE)
 # An agda --html hyperlink: href="Module.Dotted.html" with an optional #offset.
 AGDA_HREF_RE = re.compile(r'href="([A-Za-z0-9._]+)\.html(#\d+)?"')
+# A scaffolding block hidden in the source (#431, M10-5): an HTML comment whose
+# whole payload is one Agda code block — highlighted (`<pre class="Agda">`,
+# after `make agda-md`) or plain fenced (the fast path).
+HIDDEN_PRE_RE = re.compile(r'<!--\s*(<pre class="Agda">.*?</pre>)\s*-->', re.DOTALL)
+HIDDEN_FENCE_RE = re.compile(r'<!--\s*(```agda\r?\n.*?\r?\n```)\s*-->', re.DOTALL)
+# Every code block on a mounted page, for the all-code-hidden tripwire below.
+ANY_PRE_RE = re.compile(r'<pre class="Agda[" ]')
+ANY_FENCE_RE = re.compile(r"^```agda[ \t]*$", re.MULTILINE)
+
+# Prose-first modules whose lone OPTIONS/module block is hidden by design;
+# they are exempt from the all-code-hidden tripwire.  Barrel modules do NOT
+# belong here — a barrel's annotated import list is its content, so barrels
+# are left unwrapped in the source (see site-guide.md).
+PROSE_ONLY_MODULES = {
+    "Demos.GeneralOperationsAndRelations",
+    "Overture.Preface",
+    "Setoid.Complexity.Basic",
+}
 
 
 # --------------------------------------------------------------------------
@@ -91,6 +111,39 @@ def normalise(source: str, title: str) -> str:
     if not FIRST_H1_RE.search(body):
         body = f"# {title}\n\n{body}"
     return body
+
+
+def reveal_hidden_agda(body: str) -> str:
+    """Re-surface the import blocks hidden in HTML comments (#431, M10-5).
+
+    Module sources wrap their leading import/OPTIONS scaffolding in
+    ``<!-- … -->`` so GitHub and other plain-Markdown renderers collapse it.
+    On the site the block becomes *toggleable* instead of lost: the comment is
+    unwrapped and the block tagged ``hidden-source`` — hidden by
+    docs/stylesheets/custom.css until the reader flips the header's
+    "Show more Agda" control (docs/assets/js/agda-toggle.js).
+    """
+    body = HIDDEN_PRE_RE.sub(
+        lambda m: m.group(1).replace(
+            '<pre class="Agda">', '<pre class="Agda hidden-source">', 1),
+        body)
+    # Plain mode keeps the fence so pymdownx renders it normally; md_in_html
+    # (markdown="1") lets the wrapping <div> carry the hidden-source class.
+    body = HIDDEN_FENCE_RE.sub(
+        lambda m: f'<div class="hidden-source" markdown="1">\n\n{m.group(1)}\n\n</div>',
+        body)
+    return body
+
+
+def all_code_hidden(body: str) -> bool:
+    """Would this page render with hidden blocks but no visible code at all?
+
+    A tripwire against accidentally wrapping a barrel module (whose import
+    list is its content): such a page looks blank/unfinished by default.
+    """
+    hidden = body.count("hidden-source")
+    total = len(ANY_PRE_RE.findall(body)) + len(ANY_FENCE_RE.findall(body))
+    return hidden > 0 and total == hidden
 
 
 # --------------------------------------------------------------------------
@@ -165,6 +218,11 @@ for src_path in modules:
         body = normalise(src_path.read_text(encoding="utf-8"), dotted)
         n_plain += 1
         mark = "◻ plain"
+    body = reveal_hidden_agda(body)
+    if dotted not in PROSE_ONLY_MODULES and all_code_hidden(body):
+        log.info(f"  ⚠ {dotted}: every code block on this page is hidden — "
+                 "it renders blank by default; barrels should be left unwrapped "
+                 "(see site-guide.md § Hiding a module's import scaffolding)")
 
     with mkdocs_gen_files.open(dest, "w") as fh:
         fh.write(body)

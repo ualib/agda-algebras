@@ -43,6 +43,7 @@ extending or reusing as appropriate.
    [ADR-002 v2 §7](../../docs/adr/002-classical-layer-design.md); the long form
    survives grep, copy/paste, and rendering across plain-text channels.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -57,6 +58,7 @@ open import Level          using ( 0ℓ )
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Overture.Signatures using ( Signature )
 ```
+-->
 
 #### The operation-symbol type
 

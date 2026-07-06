@@ -45,6 +45,7 @@ Ring, etc.); the conventions it adds to the Semigroup template are as follows.
    reduct-preserves-satisfaction term machinery is needed; see
    [ADR-002 v2](../../docs/adr/002-classical-layer-design.md) §5, §9.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -85,6 +86,7 @@ open import Setoid.Varieties.EquationalLogic {𝑆 = Sig-Monoid} using ( _⊧_�
 
 private variable α ρ : Level
 ```
+-->
 
 #### The local satisfaction predicate
 

@@ -43,6 +43,7 @@ The forgetful functor is [`reductF`][Setoid.Categories.Reduct] restricted along
 This module lives in `Classical.Categories` because its objects are the `Classical`
 bundles and its right adjoint's object map is `reduct`.
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -96,6 +97,7 @@ open Algebra using ( Domain ; Interp )
 
 private variable α ρ : Level
 ```
+-->
 
 #### The categories of semigroups and monoids
 

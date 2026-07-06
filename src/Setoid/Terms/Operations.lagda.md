@@ -12,6 +12,7 @@ This section presents the [Setoid.Terms.Operations][] module of the [Agda Univer
 Here we define *term operations* which are simply terms interpreted in a particular algebra, and we prove some compatibility properties of term operations.
 
 
+<!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
@@ -47,6 +48,7 @@ private variable
   α ρᵃ β ρᵇ ρ χ ι : Level
   X : Type χ
 ```
+-->
 
 
 It turns out that the intepretation of a term is the same as the `free-lift`
