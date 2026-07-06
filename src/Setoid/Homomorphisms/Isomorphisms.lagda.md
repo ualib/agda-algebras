@@ -129,26 +129,26 @@ open _≅_
   ν a = trans₁ (cong (from ab .proj₁) (from∼to bc (to ab .proj₁ ⟨$⟩ a))) (from∼to ab a)
 
 module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
- -- The "to" map of an isomorphism is injective.
- ≅toInjective : (φ : 𝑨 ≅ 𝑩) → IsInjective (proj₁ (to φ))
- ≅toInjective (mkiso (f , _) (g , _) _ g∼f){a₀}{a₁} fafb = Goal
-   where
-   open Setoid 𝔻[ 𝑨 ] using ( _≈_ ; sym ; trans )
-   lem1 : a₀ ≈ g ⟨$⟩ (f ⟨$⟩ a₀)
-   lem1 = sym (g∼f a₀)
+  -- The "to" map of an isomorphism is injective.
+  ≅toInjective : (φ : 𝑨 ≅ 𝑩) → IsInjective (proj₁ (to φ))
+  ≅toInjective (mkiso (f , _) (g , _) _ g∼f){a}{b} fafb = Goal
+    where
+    open Setoid 𝔻[ 𝑨 ] using ( _≈_ ; sym ; trans )
+    lem1 : a ≈ g ⟨$⟩ (f ⟨$⟩ a)
+    lem1 = sym (g∼f a)
 
-   lem2 : g ⟨$⟩ (f ⟨$⟩ a₀) ≈ g ⟨$⟩ (f ⟨$⟩ a₁)
-   lem2 = cong g fafb
+    lem2 : g ⟨$⟩ (f ⟨$⟩ a) ≈ g ⟨$⟩ (f ⟨$⟩ b)
+    lem2 = cong g fafb
 
-   lem3 : g ⟨$⟩ (f ⟨$⟩ a₁) ≈ a₁
-   lem3 = g∼f a₁
+    lem3 : g ⟨$⟩ (f ⟨$⟩ b) ≈ b
+    lem3 = g∼f b
 
-   Goal : a₀ ≈ a₁
-   Goal = trans lem1 (trans lem2 lem3)
+    Goal : a ≈ b
+    Goal = trans lem1 (trans lem2 lem3)
 
  -- The "from" map of an isomorphism is injective.
 ≅fromInjective : {𝑨 : Algebra α ρᵃ} {𝑩 : Algebra β ρᵇ} (φ : 𝑨 ≅ 𝑩)
-  → IsInjective (proj₁ (from φ))
+  → IsInjective (from φ .proj₁)
 ≅fromInjective φ = ≅toInjective (≅-sym φ)
 ```
 
@@ -183,7 +183,7 @@ module _ {𝑨 : Algebra α ρᵃ} where
     where
     -- the identity map on 𝑨's carrier, as a setoid function
     idF : 𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑨 ]
-    idF ⟨$⟩ x   = x
+    idF ⟨$⟩ x = x
     idF .cong x≈y = x≈y
 ```
 
@@ -251,7 +251,6 @@ Lift-≅ : {𝑨 : Algebra α ρᵃ}{ℓ ρ : Level} → 𝑨 ≅ (Lift-Alg 𝑨
 Lift-≅ = ≅-trans Lift-≅ˡ Lift-≅ʳ
 
 module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}{ℓᵃ ℓᵇ : Level} where
-
   Lift-Alg-isoˡ : 𝑨 ≅ 𝑩 → Lift-Algˡ 𝑨 ℓᵃ ≅ Lift-Algˡ 𝑩 ℓᵇ
   Lift-Alg-isoˡ A≅B = ≅-trans (≅-trans (≅-sym Lift-≅ˡ ) A≅B) Lift-≅ˡ
 
@@ -270,7 +269,6 @@ The lift is also associative, up to isomorphism at least.
 
 ```agda
 module _ {𝑨 : Algebra α ρᵃ}{ℓ₁ ℓ₂ : Level} where
-
   Lift-assocˡ : Lift-Algˡ 𝑨 (ℓ₁ ⊔ ℓ₂) ≅  Lift-Algˡ (Lift-Algˡ 𝑨 ℓ₁) ℓ₂
   Lift-assocˡ = ≅-trans (≅-trans (≅-sym Lift-≅ˡ) Lift-≅ˡ) Lift-≅ˡ
 
@@ -356,67 +354,67 @@ module _
 
 module _ {𝓘 : Level}{I : Type 𝓘} {𝒜 : I → Algebra α ρᵃ} where
 
-   ⨅≅⨅ℓ : ∀ {ℓ} → ⨅ 𝒜 ≅ ⨅ (λ i → Lift-Alg (𝒜 (lower{ℓ = ℓ} i)) ℓ ℓ)
-   ⨅≅⨅ℓ {ℓ} = mkiso (φ , φhom) (ψ , ψhom) φ∼ψ ψ∼φ
-     where
-     ⨅ℓ𝒜 : Algebra _ _
-     ⨅ℓ𝒜 = ⨅ (λ i → Lift-Alg (𝒜 (lower{ℓ = ℓ} i)) ℓ ℓ)
+  ⨅≅⨅ℓ : ∀ {ℓ} → ⨅ 𝒜 ≅ ⨅ (λ i → Lift-Alg (𝒜 (lower{ℓ = ℓ} i)) ℓ ℓ)
+  ⨅≅⨅ℓ {ℓ} = mkiso (φ , φhom) (ψ , ψhom) φ∼ψ ψ∼φ
+    where
+    ⨅ℓ𝒜 : Algebra _ _
+    ⨅ℓ𝒜 = ⨅ (λ i → Lift-Alg (𝒜 (lower{ℓ = ℓ} i)) ℓ ℓ)
 
-     φ : 𝔻[ ⨅ 𝒜 ] ⟶ 𝔻[ ⨅ℓ𝒜 ]
-     φ ⟨$⟩ x    = λ i → lift (x (lower i))
-     φ .cong x  = λ i → lift (x (lower i))
+    φ : 𝔻[ ⨅ 𝒜 ] ⟶ 𝔻[ ⨅ℓ𝒜 ]
+    φ ⟨$⟩ x    = λ i → lift (x (lower i))
+    φ .cong x  = λ i → lift (x (lower i))
 
-     open IsHom
-     φhom : IsHom (⨅ 𝒜) ⨅ℓ𝒜  φ
-     φhom .compatible = λ i → lift (Setoid.refl 𝔻[ 𝒜 (lower i) ])
+    open IsHom
+    φhom : IsHom (⨅ 𝒜) ⨅ℓ𝒜  φ
+    φhom .compatible = λ i → lift (Setoid.refl 𝔻[ 𝒜 (lower i) ])
 
-     ψ : 𝔻[ ⨅ℓ𝒜 ] ⟶ 𝔻[ ⨅ 𝒜 ]
-     ψ ⟨$⟩ x    = λ i → lower (x (lift i))
-     ψ .cong x  = λ i → lower (x (lift i))
+    ψ : 𝔻[ ⨅ℓ𝒜 ] ⟶ 𝔻[ ⨅ 𝒜 ]
+    ψ ⟨$⟩ x    = λ i → lower (x (lift i))
+    ψ .cong x  = λ i → lower (x (lift i))
 
-     ψhom : IsHom ⨅ℓ𝒜 (⨅ 𝒜) ψ
-     ψhom .compatible = λ i → Setoid.refl 𝔻[ 𝒜 i ]
+    ψhom : IsHom ⨅ℓ𝒜 (⨅ 𝒜) ψ
+    ψhom .compatible = λ i → Setoid.refl 𝔻[ 𝒜 i ]
 
-     open Setoid renaming (refl to ≈refl)
-     φ∼ψ : ∀ b i → 𝔻[ Lift-Alg (𝒜 (lower i)) ℓ ℓ ] ._≈_ ((φ ⟨$⟩ (ψ ⟨$⟩ b)) i) (b i)
-     φ∼ψ _ = λ i → lift (Setoid.reflexive 𝔻[ 𝒜 (lower i) ] refl)
+    open Setoid renaming (refl to ≈refl)
+    φ∼ψ : ∀ b i → 𝔻[ Lift-Alg (𝒜 (lower i)) ℓ ℓ ] ._≈_ ((φ ⟨$⟩ (ψ ⟨$⟩ b)) i) (b i)
+    φ∼ψ _ = λ i → lift (Setoid.reflexive 𝔻[ 𝒜 (lower i) ] refl)
 
-     ψ∼φ : ∀ a i → 𝔻[ 𝒜 i ] ._≈_ ((ψ ⟨$⟩ (φ ⟨$⟩ a)) i) (a i)
-     ψ∼φ _ = λ i → Setoid.reflexive 𝔻[ 𝒜  i ] refl
+    ψ∼φ : ∀ a i → 𝔻[ 𝒜 i ] ._≈_ ((ψ ⟨$⟩ (φ ⟨$⟩ a)) i) (a i)
+    ψ∼φ _ = λ i → Setoid.reflexive 𝔻[ 𝒜  i ] refl
 
 module _ {ι : Level}{I : Type ι}{𝒜 : I → Algebra α ρᵃ} where
 
-   ⨅≅⨅ℓρ : ∀ {ℓ ρ} → ⨅ 𝒜 ≅ ⨅ (λ i → Lift-Alg (𝒜 i) ℓ ρ)
-   ⨅≅⨅ℓρ {ℓ}{ρ} = mkiso φ ψ φ∼ψ ψ∼φ
-     where
-     φfunc : 𝔻[ ⨅ 𝒜 ] ⟶ 𝔻[ ⨅ (λ i → Lift-Alg (𝒜 i) ℓ ρ) ]
-     φfunc ⟨$⟩ x    = λ i → lift (x i)
-     φfunc .cong x  = λ i → lift (x i)
+  ⨅≅⨅ℓρ : ∀ {ℓ ρ} → ⨅ 𝒜 ≅ ⨅ (λ i → Lift-Alg (𝒜 i) ℓ ρ)
+  ⨅≅⨅ℓρ {ℓ}{ρ} = mkiso φ ψ φ∼ψ ψ∼φ
+    where
+    φfunc : 𝔻[ ⨅ 𝒜 ] ⟶ 𝔻[ ⨅ (λ i → Lift-Alg (𝒜 i) ℓ ρ) ]
+    φfunc ⟨$⟩ x    = λ i → lift (x i)
+    φfunc .cong x  = λ i → lift (x i)
 
-     open IsHom
-     φhom : IsHom (⨅ 𝒜) (⨅ λ i → Lift-Alg (𝒜 i) ℓ ρ) φfunc
-     φhom .compatible i = Setoid.refl 𝔻[ Lift-Alg (𝒜 i) ℓ ρ ]
+    open IsHom
+    φhom : IsHom (⨅ 𝒜) (⨅ λ i → Lift-Alg (𝒜 i) ℓ ρ) φfunc
+    φhom .compatible i = Setoid.refl 𝔻[ Lift-Alg (𝒜 i) ℓ ρ ]
 
-     φ : hom (⨅ 𝒜) (⨅ λ i → Lift-Alg (𝒜 i) ℓ ρ)
-     φ = φfunc , φhom
+    φ : hom (⨅ 𝒜) (⨅ λ i → Lift-Alg (𝒜 i) ℓ ρ)
+    φ = φfunc , φhom
 
-     ψfunc : 𝔻[ ⨅ (λ i → Lift-Alg (𝒜 i) ℓ ρ) ] ⟶ 𝔻[ ⨅ 𝒜 ]
-     ψfunc ⟨$⟩ x    = λ i → lower (x i)
-     ψfunc .cong x  = λ i → lower (x i)
+    ψfunc : 𝔻[ ⨅ (λ i → Lift-Alg (𝒜 i) ℓ ρ) ] ⟶ 𝔻[ ⨅ 𝒜 ]
+    ψfunc ⟨$⟩ x    = λ i → lower (x i)
+    ψfunc .cong x  = λ i → lower (x i)
 
-     ψhom : IsHom (⨅ λ i → Lift-Alg (𝒜 i) ℓ ρ) (⨅ 𝒜) ψfunc
-     ψhom .compatible = λ i → Setoid.refl 𝔻[ 𝒜 i ]
+    ψhom : IsHom (⨅ λ i → Lift-Alg (𝒜 i) ℓ ρ) (⨅ 𝒜) ψfunc
+    ψhom .compatible = λ i → Setoid.refl 𝔻[ 𝒜 i ]
 
-     ψ : hom (⨅ λ i → Lift-Alg (𝒜 i) ℓ ρ) (⨅ 𝒜)
-     ψ = ψfunc , ψhom
+    ψ : hom (⨅ λ i → Lift-Alg (𝒜 i) ℓ ρ) (⨅ 𝒜)
+    ψ = ψfunc , ψhom
 
-     open Setoid 𝔻[ ⨅ (λ i → Lift-Alg (𝒜 i) ℓ ρ) ]  using () renaming ( _≈_ to _≈₂_ )
-     φ∼ψ : ∀ b → φ .proj₁ ⟨$⟩ (ψ .proj₁ ⟨$⟩ b) ≈₂ b
-     φ∼ψ _ = λ i → Setoid.reflexive 𝔻[ Lift-Alg (𝒜 i) ℓ ρ ] refl
+    open Setoid 𝔻[ ⨅ (λ i → Lift-Alg (𝒜 i) ℓ ρ) ]  using () renaming ( _≈_ to _≈₂_ )
+    φ∼ψ : ∀ b → φ .proj₁ ⟨$⟩ (ψ .proj₁ ⟨$⟩ b) ≈₂ b
+    φ∼ψ _ = λ i → Setoid.reflexive 𝔻[ Lift-Alg (𝒜 i) ℓ ρ ] refl
 
-     open Setoid 𝔻[ ⨅ 𝒜 ] using (reflexive) renaming ( _≈_ to _≈₁_ )
-     ψ∼φ : ∀ a → ψ .proj₁ ⟨$⟩ (φ .proj₁ ⟨$⟩ a) ≈₁ a
-     ψ∼φ _ = reflexive refl
+    open Setoid 𝔻[ ⨅ 𝒜 ] using (reflexive) renaming ( _≈_ to _≈₁_ )
+    ψ∼φ : ∀ a → ψ .proj₁ ⟨$⟩ (φ .proj₁ ⟨$⟩ a) ≈₁ a
+    ψ∼φ _ = reflexive refl
 
 module _ {ℓᵃ : Level}{I : Type ℓᵃ}{𝒜 : I → Algebra α ρᵃ}where
   open IsHom
