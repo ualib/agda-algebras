@@ -263,6 +263,18 @@ The climb is `<-weakInduction`{.AgdaFunction} on the rung predicate
    `b → d` back — and crosses home by the hypothesis at the next rung;
 +  the final **endpoint identity** `mₙ(a, a, c, c) ≈ c` closes the walk.
 
+The walk it produces, spelled out for the first few rungs (`≈` from the identities,
+`μ` from the hypothesis, the pair `b μ d`, and their composites):
+
+    a ≈ m₀(a,a,c,c)          -- m-fst
+      ≈ m₁(a,a,c,c)          -- even fork at 0
+      μ m₁(a,b,d,c)          -- hypothesis at 1
+      μ m₂(a,b,d,c)          -- odd fork at 1 (b μ d moves slot three there and back)
+      μ m₂(a,a,c,c)          -- hypothesis at 2
+      ≈ m₃(a,a,c,c)          -- even fork at 2
+      ⋮
+        mₙ(a,a,c,c) ≈ c      -- m-lst
+
 Nothing here mentions `θ`, `φ`, `ψ`, or chains; the lemma is a fact about a single
 congruence.
 
@@ -337,10 +349,11 @@ There `m-collect`{.AgdaFunction} is applied at `μ = δ` with the θ-pair `(t₁
 and its rung hypotheses come from the induction hypothesis at the pair
 `(mᵢ(a,t₁,t₂,c) , mᵢ(a,a,c,c))`:
 
-+  **the ψ-tie** (`rail-s`{.AgdaFunction}, `rail-r`{.AgdaFunction}): each column is
-   ψ-tied to `a` from the pinning `m-mid`{.AgdaFunction} by single-slot ψ-moves — for
-   `mᵢ(a,t₁,t₁,a)` the slot-three move `t₁ → t₂` is `θ ⊆ ψ` and the slot-four move
-   `a → c` is the ambient `a ψ c`; for `mᵢ(a,a,a,a)` both moved slots are `a ψ c`;
++  **the ψ-tie** (`m-rail`{.AgdaFunction}): `mᵢ(a, b, c, d)` is ψ-tied to `a` whenever
+   the outer pair `(a, d)` and the inner pair `(b, c)` are each ψ-related — the pinning
+   `m-mid`{.AgdaFunction}, reached by ψ-moves in the third and fourth slots.  Both
+   columns qualify: for `mᵢ(a, t₁, t₂, c)` the inner move is `θ ⊆ ψ` at `t₁ θ t₂` and
+   the outer is the ambient `a ψ c`; for `mᵢ(a, a, c, c)` both are `a ψ c`;
 
 +  **the crossing chain**: its first step moves slots two and three *simultaneously*
    (`t₁ → a` by the opening φ-step reversed, `t₂ → t₃` by the closing one) — the fusion
@@ -392,16 +405,13 @@ and its rung hypotheses come from the induction hypothesis at the pair
     m-push-countφ i (cons (inj₁ _) C) = m-push-countφ i C
     m-push-countφ i (cons (inj₂ _) C) = ≡cong suc (m-push-countφ i C)
 
-    -- the ψ-rails: both ladder columns are ψ-tied to the near endpoint
-    rail-r : (i : Fin (suc n)) {a c : 𝕌[ 𝑩 ]} → proj₁ ψ a c → proj₁ ψ (m𝑩 i a a c c) a
-    rail-r i {a} aψc = ψ-trans  (m-compat ψ i ψ-refl ψ-refl (ψ-sym aψc) (ψ-sym aψc))
+    -- the ψ-rail: mᵢ(a, b, c, d) is ψ-tied to a whenever the outer pair (a, d) and
+    -- the inner pair (b, c) are each ψ-related — the pinning mᵢ(a, b, b, a) ≈ a,
+    -- reached by ψ-moves in the third and fourth slots.  Both ladder columns qualify
+    m-rail : (i : Fin (suc n)){a b c d : 𝕌[ 𝑩 ]}
+      → proj₁ ψ a d → proj₁ ψ b c → proj₁ ψ (m𝑩 i a b c d) a
+    m-rail i aψd bψc = ψ-trans  (m-compat ψ i ψ-refl ψ-refl (ψ-sym bψc) (ψ-sym aψd))
                                 (reflexive (proj₂ ψ) (m-mid i))
-
-    rail-s : (i : Fin (suc n)){a t₁ t₂ c : 𝕌[ 𝑩 ]}
-      → proj₁ ψ a c → proj₁ θ t₁ t₂ → proj₁ ψ (m𝑩 i a t₁ t₂ c) a
-    rail-s i {a}{t₁} aψc t₁θt₂ =
-      ψ-trans (m-compat ψ i ψ-refl ψ-refl (ψ-sym (θ⊆ψ t₁θt₂)) (ψ-sym aψc))
-              (reflexive (proj₂ ψ) (m-mid i))
 
     -- one round of the induction: the outer hypothesis `ih` covers chains with at
     -- most K φ-steps; the inner recursion is structural in the chain
@@ -441,7 +451,7 @@ and its rung hypotheses come from the induction hypothesis at the pair
         sδr i = ih sψr crossing le′
           where
           sψr : proj₁ ψ (m𝑩 i x t₁ t₂ y) (m𝑩 i x x y y)
-          sψr = ψ-trans (rail-s i pψ t₁θt₂) (ψ-sym (rail-r i pψ))
+          sψr = ψ-trans (m-rail i pψ (θ⊆ψ t₁θt₂)) (ψ-sym (m-rail i pψ pψ))
           crossing : Chain 𝑩 (θ ∪ᵣ φ) (m𝑩 i x t₁ t₂ y) (m𝑩 i x x y y)
           crossing = cons (inj₂ (m-compat φ i φ-refl (φ-sym xφt₁) t₂φt₃ φ-refl))
                           (m-push i C)
@@ -458,7 +468,6 @@ and its rung hypotheses come from the induction hypothesis at the pair
       absorb-θ pψ (cons (inj₁ s) C) le = δ-trans  (∨-upperˡ θ (φ ∧ ψ) s)
                                                   (absorb-θ (ψ-trans (ψ-sym (θ⊆ψ s)) pψ) C le)
       absorb-θ pψ (cons (inj₂ s) C) le = onφ pψ s C le
-
 
     -- the outer induction on the φ-count; at zero the chain collapses into θ
     chainModAt : (K : ℕ){a c : 𝕌[ 𝑩 ]} → proj₁ ψ a c
@@ -501,9 +510,7 @@ lattice direction: both joinands sit below `θ ∨ φ` and, using `θ ⊆ ψ`, b
   -- Day terms ⟹ congruence modularity (the forward half of Day's theorem), modulo
   -- the hypothesis JoinIsChain.  The substantive inclusion is the chain ladder; the
   -- reverse inclusion holds in any lattice.
-  day⇒CongruenceModular :
-    -- (𝑩 : Algebra {𝑆 = 𝑆} α ρ) → 𝑩 ⊨ₑ ℰ
-    JoinIsChain 𝑩 (α ⊔ ρ ⊔ ℓ) → CongruenceModular 𝑩 ℓ
+  day⇒CongruenceModular : JoinIsChain 𝑩 (α ⊔ ρ ⊔ ℓ) → CongruenceModular 𝑩 ℓ
   day⇒CongruenceModular jic θ φ ψ θ⊆ψ = fwd , bwd
     where
     fwd : θ ∨ (φ ∧ ψ) ⊆ (θ ∨ φ) ∧ ψ
