@@ -50,18 +50,18 @@ open _⟶_ using () renaming ( to to _⟨$⟩_ )
 
 module _  {X : Type χ} where
 
- open Setoid   using ( Carrier )
- open Algebra  using ( Domain )
+  open Setoid   using ( Carrier )
+  open Algebra  using ( Domain )
 
- _⊧_≈_ : Algebra α ρᵃ → Term X → Term X → Type _
- 𝑨 ⊧ p ≈ q = ∀ (ρ : Carrier (Env X)) → ⟦ p ⟧ ⟨$⟩ ρ ≈ ⟦ q ⟧ ⟨$⟩ ρ
-  where
-  open Setoid ( Domain 𝑨 )  using ( _≈_ )
-  open Environment 𝑨        using ( Env ; ⟦_⟧ )
- infix 10 _⊧_≈_
+  _⊧_≈_ : Algebra α ρᵃ → Term X → Term X → Type _
+  𝑨 ⊧ p ≈ q = ∀ (ρ : Carrier (Env X)) → ⟦ p ⟧ ⟨$⟩ ρ ≈ ⟦ q ⟧ ⟨$⟩ ρ
+   where
+   open Setoid ( Domain 𝑨 )  using ( _≈_ )
+   open Environment 𝑨        using ( Env ; ⟦_⟧ )
+  infix 10 _⊧_≈_
 
- _⊫_≈_ : Pred(Algebra α ρᵃ) ℓ → Term X → Term X → Type (χ ⊔ ℓ ⊔ ov(α ⊔ ρᵃ))
- 𝒦 ⊫ p ≈ q = {𝑨 : Algebra _ _} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
+  _⊫_≈_ : Pred(Algebra α ρᵃ) ℓ → Term X → Term X → Type (χ ⊔ ℓ ⊔ ov(α ⊔ ρᵃ))
+  𝒦 ⊫ p ≈ q = {𝑨 : Algebra _ _} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
 ```
 
 (**Unicode tip**. Type \models to get `⊧` ; type \||= to get `⊫`.)
@@ -78,11 +78,11 @@ If 𝒦 denotes a class of structures, then `Th 𝒦` represents the set of iden
 modeled by the members of 𝒦.
 
 ```agda
- Th' : Pred (Algebra α ρᵃ) ℓ → Pred(Term X × Term X) (χ ⊔ ℓ ⊔ ov(α ⊔ ρᵃ))
- Th' 𝒦 = λ (p , q) → 𝒦 ⊫ p ≈ q
+  Th' : Pred (Algebra α ρᵃ) ℓ → Pred(Term X × Term X) (χ ⊔ ℓ ⊔ ov(α ⊔ ρᵃ))
+  Th' 𝒦 = λ (p , q) → 𝒦 ⊫ p ≈ q
 
 Th'' :  {χ α : Level}{X : Type χ} → Pred (Algebra α α) (ov α)
- →      Pred(Term X × Term X) (χ ⊔ ov α)
+  →      Pred(Term X × Term X) (χ ⊔ ov α)
 Th'' 𝒦 = λ (p , q) → 𝒦 ⊫ p ≈ q
 ```
 
@@ -91,24 +91,24 @@ essentially by taking `Th 𝒦` itself to be the index set, as shown below.
 
 ```agda
 module _ {X : Type χ}{𝒦 : Pred (Algebra α ρᵃ) (ov α)} where
- ℐ : Type (ov(α ⊔ ρᵃ ⊔ χ))
- ℐ = Σ[ (p , q) ∈ (Term X × Term X) ] 𝒦 ⊫ p ≈ q
+  ℐ : Type (ov(α ⊔ ρᵃ ⊔ χ))
+  ℐ = Σ[ (p , q) ∈ (Term X × Term X) ] 𝒦 ⊫ p ≈ q
 
- ℰ : ℐ → Term X × Term X
- ℰ ((p , q) , _) = (p , q)
+  ℰ : ℐ → Term X × Term X
+  ℰ ((p , q) , _) = (p , q)
 ```
 
 If `ℰ` denotes a set of identities, then `Mod ℰ` is the class of structures
 satisfying the identities in `ℰ`.
 
 ```agda
- Mod' : Pred(Term X × Term X) (ov α) → Pred(Algebra α ρᵃ) (ρᵃ ⊔ ov(α ⊔ χ))
- Mod' ℰ = λ 𝑨 → ∀ p q → (p , q) ∈ ℰ → 𝑨 ⊧ p ≈ q
+  Mod' : Pred(Term X × Term X) (ov α) → Pred(Algebra α ρᵃ) (ρᵃ ⊔ ov(α ⊔ χ))
+  Mod' ℰ = λ 𝑨 → ∀ p q → (p , q) ∈ ℰ → 𝑨 ⊧ p ≈ q
 ```
 
 It is sometimes more convenient to have a "tupled" version of the previous definition, which we denote by `Modᵗ` and define as follows.
 
 ```agda
- Modᵗ : {I : Type ι} → (I → Term X × Term X) → {α : Level} → Pred(Algebra α ρᵃ) (χ ⊔ ρᵃ ⊔ ι ⊔ α)
- Modᵗ ℰ = λ 𝑨 → ∀ i → 𝑨 ⊧ proj₁ (ℰ i) ≈ proj₂ (ℰ i)
+  Modᵗ : {I : Type ι} → (I → Term X × Term X) → {α : Level} → Pred(Algebra α ρᵃ) (χ ⊔ ρᵃ ⊔ ι ⊔ α)
+  Modᵗ ℰ = λ 𝑨 → ∀ i → 𝑨 ⊧ proj₁ (ℰ i) ≈ proj₂ (ℰ i)
 ```

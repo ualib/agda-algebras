@@ -74,14 +74,14 @@ x ⊕ y = proj₁ x xor proj₁ y , proj₂ x xor proj₂ y
 
 V₄ : Algebra 0ℓ 0ℓ
 V₄ = record { Domain = setoid (Bool × Bool) ; Interp = interp }
- where
- interp : Func (⟨ Sig-Group ⟩ (setoid (Bool × Bool))) (setoid (Bool × Bool))
- interp ⟨$⟩ (∙-Op , args) = args 0F ⊕ args 1F
- interp ⟨$⟩ (ε-Op , _)  = false , false
- interp ⟨$⟩ (⁻¹-Op , args) = args 0F
- cong interp {∙-Op , _} {.∙-Op , _} (refl , a≈) = cong₂ _⊕_ (a≈ 0F) (a≈ 1F)
- cong interp {ε-Op , _} {.ε-Op , _} (refl , _) = refl
- cong interp {⁻¹-Op , _} {.⁻¹-Op , _} (refl , a≈) = a≈ 0F
+  where
+  interp : Func (⟨ Sig-Group ⟩ (setoid (Bool × Bool))) (setoid (Bool × Bool))
+  interp ⟨$⟩ (∙-Op , args) = args 0F ⊕ args 1F
+  interp ⟨$⟩ (ε-Op , _)  = false , false
+  interp ⟨$⟩ (⁻¹-Op , args) = args 0F
+  cong interp {∙-Op , _} {.∙-Op , _} (refl , a≈) = cong₂ _⊕_ (a≈ 0F) (a≈ 1F)
+  cong interp {ε-Op , _} {.ε-Op , _} (refl , _) = refl
+  cong interp {⁻¹-Op , _} {.⁻¹-Op , _} (refl , a≈) = a≈ 0F
 ```
 
 #### The three order-two subgroups {#the-subgroups}

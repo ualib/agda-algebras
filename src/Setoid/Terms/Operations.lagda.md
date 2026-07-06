@@ -44,8 +44,8 @@ open Term
 open _⟶_ using ( cong ) renaming ( to to _⟨$⟩_ )
 
 private variable
- α ρᵃ β ρᵇ ρ χ ι : Level
- X : Type χ
+  α ρᵃ β ρᵇ ρ χ ι : Level
+  X : Type χ
 ```
 
 
@@ -85,15 +85,15 @@ module _ {X : Type χ} where
 
 ```agda
 module _ {X : Type χ }{I : Type ι}(𝒜 : I → Algebra α ρᵃ) where
- open Algebra (⨅ 𝒜)      using (Interp)  renaming ( Domain to ⨅A )
- open Setoid ⨅A          using ( _≈_ ; refl )
- open Environment (⨅ 𝒜)  using ()        renaming ( ⟦_⟧ to ⟦_⟧₁ )
- open Environment        using ( ⟦_⟧ ; ≐→Equal )
+  open Algebra (⨅ 𝒜)      using (Interp)  renaming ( Domain to ⨅A )
+  open Setoid ⨅A          using ( _≈_ ; refl )
+  open Environment (⨅ 𝒜)  using ()        renaming ( ⟦_⟧ to ⟦_⟧₁ )
+  open Environment        using ( ⟦_⟧ ; ≐→Equal )
 
- interp-prod : (p : Term X)
-   → ∀ ρ → ⟦ p ⟧₁ ⟨$⟩ ρ ≈ λ i → (⟦ 𝒜 i ⟧ p) ⟨$⟩ λ x → (ρ x) i
- interp-prod (ℊ x) = λ ρ i → ≐→Equal (𝒜 i) (ℊ x) (ℊ x) ≐-isRefl λ x' → (ρ x) i
- interp-prod (node f t) = λ ρ i → cong Interp (≡.refl , (λ j k → interp-prod (t j) ρ k)) i
+  interp-prod : (p : Term X)
+    → ∀ ρ → ⟦ p ⟧₁ ⟨$⟩ ρ ≈ λ i → (⟦ 𝒜 i ⟧ p) ⟨$⟩ λ x → (ρ x) i
+  interp-prod (ℊ x) = λ ρ i → ≐→Equal (𝒜 i) (ℊ x) (ℊ x) ≐-isRefl λ x' → (ρ x) i
+  interp-prod (node f t) = λ ρ i → cong Interp (≡.refl , (λ j k → interp-prod (t j) ρ k)) i
 ```
 
 #### Compatibility of terms

@@ -164,27 +164,27 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
 
 ```agda
 module _ {I : Type ι}{𝒜 : I → Algebra α ρᵃ}{ℬ : I → Algebra β ρᵇ} where
- open IsHom
+  open IsHom
 
- ⨅-≤ : (∀ i → ℬ i ≤ 𝒜 i) → ⨅ ℬ ≤ ⨅ 𝒜
- ⨅-≤ B≤A = h , hM
-   where
-   h : hom (⨅ ℬ) (⨅ 𝒜)
-   h = hfunc , hhom
-     where
-     homAt : ∀ i → hom (ℬ i) (𝒜 i)
-     homAt = λ i → proj₁ (B≤A i)
+  ⨅-≤ : (∀ i → ℬ i ≤ 𝒜 i) → ⨅ ℬ ≤ ⨅ 𝒜
+  ⨅-≤ B≤A = h , hM
+    where
+    h : hom (⨅ ℬ) (⨅ 𝒜)
+    h = hfunc , hhom
+      where
+      homAt : ∀ i → hom (ℬ i) (𝒜 i)
+      homAt = λ i → proj₁ (B≤A i)
 
-     hmapAt : ∀ i → 𝔻[ ℬ i ] ⟶ 𝔻[ 𝒜 i ]
-     hmapAt = proj₁ ∘ homAt
+      hmapAt : ∀ i → 𝔻[ ℬ i ] ⟶ 𝔻[ 𝒜 i ]
+      hmapAt = proj₁ ∘ homAt
 
-     hfunc : 𝔻[ ⨅ ℬ ] ⟶ 𝔻[ ⨅ 𝒜 ]
-     hfunc ⟨$⟩ x = λ i → (hmapAt i) ⟨$⟩ (x i)
-     hfunc .cong = λ xy i → cong (hmapAt i) (xy i)
+      hfunc : 𝔻[ ⨅ ℬ ] ⟶ 𝔻[ ⨅ 𝒜 ]
+      hfunc ⟨$⟩ x = λ i → (hmapAt i) ⟨$⟩ (x i)
+      hfunc .cong = λ xy i → cong (hmapAt i) (xy i)
 
-     hhom : IsHom (⨅ ℬ) (⨅ 𝒜) hfunc
-     hhom .compatible = λ i → compatible (proj₂ (homAt i))
+      hhom : IsHom (⨅ ℬ) (⨅ 𝒜) hfunc
+      hhom .compatible = λ i → compatible (proj₂ (homAt i))
 
-   hM : IsInjective (proj₁ h)
-   hM = λ xy i → (proj₂ (B≤A i)) (xy i)
+    hM : IsInjective (proj₁ h)
+    hM = λ xy i → (proj₂ (B≤A i)) (xy i)
 ```

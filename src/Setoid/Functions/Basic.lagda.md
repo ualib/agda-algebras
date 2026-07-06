@@ -28,25 +28,25 @@ private variable α ρᵃ β ρᵇ γ ρᶜ : Level
 open _⟶_ renaming ( to to _⟨$⟩_ )
 
 _⊙_ :  {A : Setoid α ρᵃ}{B : Setoid β ρᵇ}{C : Setoid γ ρᶜ}
- →     B ⟶ C → A ⟶ B → A ⟶ C
+  →     B ⟶ C → A ⟶ B → A ⟶ C
 f ⊙ g = record { to = (_⟨$⟩_ f) ∘ (_⟨$⟩_ g); cong = (cong f) ∘ (cong g) }
 
 module _ {𝑨 : Setoid α ρᵃ} where
- open Lift ; open Level ; open Setoid using (_≈_)
- open Setoid 𝑨 using ( sym ; trans ) renaming (Carrier to A ; _≈_ to _≈ₐ_ ; refl to reflₐ)
+  open Lift ; open Level ; open Setoid using (_≈_)
+  open Setoid 𝑨 using ( sym ; trans ) renaming (Carrier to A ; _≈_ to _≈ₐ_ ; refl to reflₐ)
 
- 𝑙𝑖𝑓𝑡 : ∀ ℓ → Setoid (α ⊔ ℓ) ρᵃ
- 𝑙𝑖𝑓𝑡 ℓ = record  { Carrier = Lift ℓ A
-                ; _≈_ = λ x y → (lower x) ≈ₐ (lower y)
-                ; isEquivalence = record { refl = reflₐ ; sym = sym ; trans = trans }
-                }
+  𝑙𝑖𝑓𝑡 : ∀ ℓ → Setoid (α ⊔ ℓ) ρᵃ
+  𝑙𝑖𝑓𝑡 ℓ = record  { Carrier = Lift ℓ A
+                 ; _≈_ = λ x y → (lower x) ≈ₐ (lower y)
+                 ; isEquivalence = record { refl = reflₐ ; sym = sym ; trans = trans }
+                 }
 
- lift∼lower : (a : Lift β A) → (_≈_ (𝑙𝑖𝑓𝑡 β)) (lift (lower a)) a
- lift∼lower a = reflₐ
+  lift∼lower : (a : Lift β A) → (_≈_ (𝑙𝑖𝑓𝑡 β)) (lift (lower a)) a
+  lift∼lower a = reflₐ
 
- lower∼lift : ∀ a → (lower {α}{β}) (lift a) ≈ₐ a
- lower∼lift _ = reflₐ
+  lower∼lift : ∀ a → (lower {α}{β}) (lift a) ≈ₐ a
+  lower∼lift _ = reflₐ
 
- liftFunc : {ℓ : Level} → 𝑨 ⟶ 𝑙𝑖𝑓𝑡 ℓ
- liftFunc = record { to = lift ; cong = id }
+  liftFunc : {ℓ : Level} → 𝑨 ⟶ 𝑙𝑖𝑓𝑡 ℓ
+  liftFunc = record { to = lift ; cong = id }
 ```
