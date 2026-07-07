@@ -23,7 +23,7 @@ construction of Day 1969 in Freese–McKenzie's streamlined form, recorded below
 section "Why Day is not a mirror — and the ladder that works".  With
 the converse halves (M6-5, M6-7), all three classical Maltsev-condition theorems are now
 proved in both directions: CP (`maltsev⇒CP` / `CP⇒maltsev`), CD (`jonsson-theorem`), and
-CM (`day-theorem`).
+CM (`Day-theorem`).
 
 ## What landed
 
@@ -73,10 +73,10 @@ finitary corollary live in `Setoid.Varieties.Maltsev.Distributivity` (part of th
 
 +  The **forward Day theorem** (landed later, closing #412): the quaternary extraction
    (`m𝑩` / `eval-m` / `m-fst` / `m-lst` / `m-mid` / `m-compat`), the collector `m-collect`
-   (FM Lemma 2.3), the finiteness-free `day⇒chainModular`, the `JoinIsChain`-conditional
-   `day⇒CongruenceModular`, the unconditional finitary
-   `day-finitary⇒CongruenceModularVariety`, and — assembled with the M6-7 converse
-   `CM⇒day` — the complete iff `day-theorem`, all in
+   (FM Lemma 2.3), the finiteness-free `Day⇒chainModular`, the `JoinIsChain`-conditional
+   `Day⇒CongruenceModular`, the unconditional finitary
+   `Day⇒CM`, and — assembled with the M6-7 converse
+   `CM⇒Day` — the complete iff `Day-theorem`, all in
    `Setoid.Varieties.Maltsev.Modularity`.  The construction is *not* the Jónsson
    staircase; see "Why Day is not a mirror — and the ladder that works" below.
 
@@ -165,7 +165,7 @@ absent from *Algebras, Lattices, Varieties* (McKenzie–McNulty–Taylor), and B
 landed (#412) with the construction of Day 1969 in the streamlined form of
 Freese–McKenzie's *Commutator Theory for Congruence Modular Varieties*, Thm. 2.2 and
 Lemma 2.3.  The construction that works, as formalized in
-`Setoid.Varieties.Maltsev.Modularity` (`day⇒chainModular`), has two parts:
+`Setoid.Varieties.Maltsev.Modularity` (`Day⇒chainModular`), has two parts:
 
 +  **The collector (FM Lemma 2.3).**  For *any* congruence `μ` and any pair `b μ d`: if
    the two ladder columns `mᵢ(a,a,c,c)` and `mᵢ(a,b,d,c)` are μ-related at every rung,
@@ -195,7 +195,7 @@ Lemma 2.3.  The construction that works, as formalized in
    FM's presentation it appears silently, as the absorption `Rₖ ∘ β = Rₖ` in the proof
    of (4′) → (1).
 
-The `Gen`-vs-chain treatment is then identical to Jónsson's: `day⇒chainModular` is
+The `Gen`-vs-chain treatment is then identical to Jónsson's: `Day⇒chainModular` is
 finiteness-free, `JoinIsChain` upgrades it to the literal `CongruenceModular` (applied
 once, to the hypothesis join; the reverse inclusion of the `≑` holds in any lattice),
 and `finitary⇒JoinIsChain` discharges the hypothesis for finitary signatures.  This
@@ -232,7 +232,7 @@ track-hygiene paragraph), so Day's theorem is the bridge of most downstream inte
    Day induction terminates because one simultaneous two-slot `m-compat` move eats *two*
    φ-steps of the original chain while contributing only *one* to the crossing chain; no
    single-slot bookkeeping exhibits a decrease.  Structuring the Agda proof as an outer
-   ℕ-induction on `countφ` with the induction hypothesis passed as an explicit argument to
+   ℕ-induction on `countϕ` with the induction hypothesis passed as an explicit argument to
    the inner structural recursion (`chainModStep K (chainModAt K)`) keeps the termination
    checker entirely out of the mathematics.
 
