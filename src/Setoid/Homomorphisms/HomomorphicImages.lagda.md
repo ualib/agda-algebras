@@ -1,4 +1,4 @@
----
+n---
 layout: default
 title : "Setoid.Homomorphisms.HomomorphicImages module (The Agda Universal Algebra Library)"
 date : "2021-09-14"
@@ -8,7 +8,6 @@ author: "agda-algebras development team"
 #### Homomorphic images of setoid algebras
 
 This is the [Setoid.Homomorphisms.HomomorphicImages][] module of the [Agda Universal Algebra Library][].
-
 
 <!--
 ```agda
@@ -28,18 +27,18 @@ open import Level            using ( Level ; _⊔_ ; suc )
 open import Relation.Binary  using ( Setoid )
 open import Relation.Unary   using ( Pred ; _∈_ )
 
-open import Relation.Binary.PropositionalEquality as ≡ using ()
+open import Relation.Binary.PropositionalEquality using (refl)
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
 open import Overture                                    using  ( proj₁ ; proj₂
                                                                ; ArityOf )
 open import Setoid.Algebras                    {𝑆 = 𝑆}  using  ( Algebra ; ov ; _^_ ; 𝔻[_]
                                                                ; Lift-Algˡ ; Lift-Alg ; 𝕌[_] )
-open import Setoid.Functions
+open import Setoid.Functions using (IsSurjective; Image_∋_ ; Ran ; range ; preimage ; image ; preimage≈image; Inv ; lift∼lower; InvIsInverseʳ; ⊙-IsSurjective)
 open import Setoid.Signatures                           using  ( ⟨_⟩ )
-open import Setoid.Homomorphisms.Basic            using  ( hom ; IsHom ; 𝒾𝒹 )
+open import Setoid.Homomorphisms.Basic                  using  ( hom ; IsHom ; 𝒾𝒹 )
 open import Setoid.Homomorphisms.Isomorphisms  {𝑆 = 𝑆}  using  ( _≅_ ; Lift-≅ )
-open  import Setoid.Homomorphisms.Properties  using  ( Lift-homˡ ; ToLiftˡ
+open  import Setoid.Homomorphisms.Properties            using  ( Lift-homˡ ; ToLiftˡ
                                                                ; lift-hom-lemma ; ⊙-hom )
 
 open Algebra
@@ -48,23 +47,20 @@ private variable α ρᵃ β ρᵇ : Level
 ```
 -->
 
-
 We begin with what seems, for our purposes, the most useful way to represent the
 class of *homomorphic images* of an algebra in dependent type theory.
-
 
 ```agda
 open IsHom
 
 _IsHomImageOf_ : (𝑩 : Algebra β ρᵇ)(𝑨 : Algebra α ρᵃ) → Type _
-𝑩 IsHomImageOf 𝑨 = Σ[ φ ∈ hom 𝑨 𝑩 ] IsSurjective (proj₁ φ)
+𝑩 IsHomImageOf 𝑨 = Σ[ (φ , _ ) ∈ hom 𝑨 𝑩 ] IsSurjective φ
 
 HomImages : Algebra α ρᵃ → Type (α ⊔ ρᵃ ⊔ ov (β ⊔ ρᵇ))
-HomImages {β = β}{ρᵇ = ρᵇ} 𝑨 = Σ[ 𝑩 ∈ Algebra β ρᵇ ] 𝑩 IsHomImageOf 𝑨
+HomImages {β = β}{ρᵇ} 𝑨 = Σ[ 𝑩 ∈ Algebra β ρᵇ ] 𝑩 IsHomImageOf 𝑨
 
 IdHomImage : {𝑨 : Algebra α ρᵃ} → 𝑨 IsHomImageOf 𝑨
-IdHomImage {α = α}{𝑨 = 𝑨} = 𝒾𝒹 , λ {y} → Image_∋_.eq y refl
-  where open Setoid (Domain 𝑨) using ( refl )
+IdHomImage {𝑨 = 𝑨} = 𝒾𝒹 , λ {y} → Image_∋_.eq y (Setoid.refl 𝔻[ 𝑨 ])
 ```
 
 
@@ -86,32 +82,31 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
   open Func       using ( cong ) renaming ( to to _⟨$⟩_ )
 
   HomImageOf[_] : hom 𝑨 𝑩 → Algebra (α ⊔ β ⊔ ρᵇ) ρᵇ
-  HomImageOf[ h ] =
-    record { Domain = Ran (h .proj₁) ; Interp = record { to = f' ; cong = cong' } }
+  HomImageOf[ (h , hh) ] =
+    record { Domain = Ran h ; Interp = record { to = f' ; cong = cong' } }
       where
-      open Setoid(⟨ 𝑆 ⟩ (Ran (proj₁ h)))
-       using() renaming (Carrier to SRanh ; _≈_ to _≈₃_ )
+      open Setoid(⟨ 𝑆 ⟩ (Ran h))
+        using() renaming (Carrier to SRanh ; _≈_ to _≈₃_ )
+      hhom :  ∀ {𝑓}(x : ArityOf 𝑆 𝑓 → range h)
+        → h ⟨$⟩ (𝑓 ^ 𝑨) (preimage h ∘ x) ≈₂ (𝑓 ^ 𝑩) (image h ∘ x)
 
-      hhom :  ∀ {𝑓}(x : ArityOf 𝑆 𝑓 → h .proj₁ range )
-        → h .proj₁ ⟨$⟩ (𝑓 ^ 𝑨) (h .proj₁ preimage ∘ x) ≈₂ (𝑓 ^ 𝑩) (h .proj₁ image ∘ x)
+      hhom {𝑓} x = trans₂ (hh .compatible) (cong InterpB (refl , preimage≈image h ∘ x))
 
-      hhom {𝑓} x = trans₂ (h .proj₂ .compatible) (cong InterpB (≡.refl , h .proj₁ preimage≈image ∘ x))
+      f' : SRanh → range h
+      f' (𝑓 , x) =  (𝑓 ^ 𝑩)(image h ∘ x)       -- b : the image in ∣B∣
+                    , (𝑓 ^ 𝑨)(preimage h ∘ x)  -- a : the preimage in ∣A∣
+                    , hhom x                   -- p : proof that h ⟨$⟩ a ≈₂ b
 
-      f' : SRanh → h .proj₁ range
-      f' (𝑓 , x) =  (𝑓 ^ 𝑩)(h .proj₁ image ∘ x)       -- b : the image in ∣B∣
-                    , (𝑓 ^ 𝑨)(h .proj₁ preimage ∘ x)  -- a : the preimage in ∣A∣
-                    , hhom x                          -- p : proof that (proj₁ h ⟨$⟩ a) ≈₂ b
-
-      cong' : ∀ {x y} → x ≈₃ y → (h .proj₁ image) (f' x) ≈₂ (h .proj₁ image) (f' y)
-      cong' {(𝑓 , u)} {(.𝑓 , v)} (≡.refl , EqA) = Goal
+      cong' : ∀ {x y} → x ≈₃ y → (image h) (f' x) ≈₂ (image h) (f' y)
+      cong' {(𝑓 , u)} {(.𝑓 , v)} (refl , EqA) = Goal
         where
         -- Alternative formulation of the goal:
-        goal : (𝑓 ^ 𝑩)(λ i → (h .proj₁ image)(u i)) ≈₂ (𝑓 ^ 𝑩)(λ i → (h .proj₁ image) (v i))
-        goal = cong InterpB (≡.refl , EqA )
+        goal : (𝑓 ^ 𝑩)(λ i → (image h)(u i)) ≈₂ (𝑓 ^ 𝑩)(λ i → (image h) (v i))
+        goal = cong InterpB (refl , EqA )
 
-        Goal : (h .proj₁ image) (f' (𝑓 , u)) ≈₂ (h .proj₁ image) (f' (𝑓 , v))
+        Goal : (image h) (f' (𝑓 , u)) ≈₂ (image h) (f' (𝑓 , v))
         Goal = goal
-        -- Note: `EqA : ∀ i → ((proj₁ h) image) (u i) ≈₂ ((proj₁ h) image) (v i)`
+        -- Note: `EqA : ∀ i → (image h) (u i) ≈₂ (image h) (v i)`
 ```
 
 
@@ -128,11 +123,11 @@ HomImageOfClass : Pred (Algebra α ρᵃ) (suc α) → Type (ov (α ⊔ ρᵃ))
 HomImageOfClass 𝒦 = Σ[ 𝑩 ∈ Algebra _ _ ] IsHomImageOfClass {𝒦 = 𝒦} 𝑩
 ```
 
-
 #### Lifting tools
 
-Here are some tools that have been useful (e.g., in the road to the proof of Birkhoff's HSP theorem). The first states and proves the simple fact that the lift of an epimorphism is an epimorphism.
-
+Here are some tools that have been useful (e.g., in the road to the proof of
+Birkhoff's HSP theorem). The first states and proves the simple fact that the lift of
+an epimorphism is an epimorphism.
 
 ```agda
 module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where

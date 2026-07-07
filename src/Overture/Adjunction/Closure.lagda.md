@@ -24,7 +24,7 @@ open import Function                 using ( _∘₂_ )
 open import Function.Bundles         using ( _↔_ ; Inverse)
 open import Level                    using ( _⊔_ ; Level ) renaming ( suc to lsuc )
 open import Relation.Binary.Bundles  using ( Poset )
-open import Relation.Binary.Core     using ( Rel ; _Preserves_⟶_ ; _=[_]⇒_)
+open import Relation.Binary.Core     using ( Rel ; _Preserves_⟶_ )
 open import Relation.Unary           using ( Pred ; _∈_ ; ⋂ )
 
 import Relation.Binary.Reasoning.PartialOrder as ≤-Reasoning

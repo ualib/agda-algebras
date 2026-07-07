@@ -73,24 +73,24 @@ the second is for functions on setoids.
   -- Alternative representation of the range of a Func as a setoid
 
   -- the carrier
-  _range : (𝑨 ⟶ 𝑩) → Type (α ⊔ β ⊔ ρᵇ)
-  F range = Σ[ b ∈ B ] ∃[ a ∈ A ](F ⟨$⟩ a) ≈₂ b
+  range : (𝑨 ⟶ 𝑩) → Type (α ⊔ β ⊔ ρᵇ)
+  range F = Σ[ b ∈ B ] ∃[ a ∈ A ](F ⟨$⟩ a) ≈₂ b
 
-  _image : (F : 𝑨 ⟶ 𝑩) → F range → B
-  (F image) (b , (_ , _)) = b
+  image : (F : 𝑨 ⟶ 𝑩) → range F → B
+  image F (b , (_ , _)) = b
 
-  _preimage : (F : 𝑨 ⟶ 𝑩) → F range → A
-  (F preimage) (_ , (a , _)) = a
+  preimage : (F : 𝑨 ⟶ 𝑩) → range F → A
+  preimage F (_ , (a , _)) = a
 
-  f∈range : ∀ {F} → A → F range
+  f∈range : ∀ {F} → A → range F
   f∈range {F} a = (F ⟨$⟩ a) , (a , refl₂)
 
-  ⌜_⌝ : (F : 𝑨 ⟶ 𝑩) → A → F range
+  ⌜_⌝ : (F : 𝑨 ⟶ 𝑩) → A → range F
   ⌜ F ⌝ a = f∈range{F} a
 
   Ran : (𝑨 ⟶ 𝑩) → Setoid (α ⊔ β ⊔ ρᵇ) ρᵇ
-  Ran F = record  { Carrier = F range
-                  ; _≈_ = λ x y → ((F image) x) ≈₂ ((F image) y)
+  Ran F = record  { Carrier = range F
+                  ; _≈_ = λ x y → (image F) x ≈₂ (image F) y
                   ; isEquivalence = record  { refl = refl₂
                                             ; sym = sym₂
                                             ; trans = trans₂
@@ -98,9 +98,9 @@ the second is for functions on setoids.
                   }
 
   RRan : (𝑨 ⟶ 𝑩) → Setoid (α ⊔ β ⊔ ρᵇ) (ρᵃ ⊔ ρᵇ)
-  RRan F = record  { Carrier = F range
-                   ; _≈_ = λ x y →  (F preimage) x ≈₁ (F preimage) y
-                                    ∧ (F image) x ≈₂ (F image) y
+  RRan F = record  { Carrier = range F
+                   ; _≈_ = λ x y →  (preimage F) x ≈₁ (preimage F) y
+                                    ∧ (image F) x ≈₂ (image F) y
 
                    ; isEquivalence =
                       record  { refl = refl₁ , refl₂
@@ -109,8 +109,8 @@ the second is for functions on setoids.
                               }
                    }
 
-  _preimage≈image : ∀ F r → F ⟨$⟩ (F preimage) r ≈₂ (F image) r
-  (F preimage≈image) (_ , (_ , p)) = p
+  preimage≈image : ∀ F r → F ⟨$⟩ (preimage F) r ≈₂ (image F) r
+  preimage≈image F (_ , (_ , p)) = p
 
 
   Dom : (𝑨 ⟶ 𝑩) → Setoid α ρᵇ
@@ -128,23 +128,23 @@ An inhabitant of `Image f ∋ b` is a dependent pair `(a , p)`, where `a : A` an
 
 
 ```agda
-  inv : (f : A → B){b : B} → Img f ∋ b → A
+  inv : (f : A → B) {b : B} → Img f ∋ b → A
   inv _ (eq a _) = a
 
-  Inv : (F : 𝑨 ⟶ 𝑩){b : B} → Image F ∋ b → A
+  Inv : (F : 𝑨 ⟶ 𝑩) {b : B} → Image F ∋ b → A
   Inv _ (eq a _) = a
 
-  Inv' : (F : 𝑨 ⟶ 𝑩){b : B} → b ∈ IsInRange F → A
+  Inv' : (F : 𝑨 ⟶ 𝑩) {b : B} → b ∈ IsInRange F → A
   Inv' _ (a , _) = a
 
-  [_]⁻¹ : (F : 𝑨 ⟶ 𝑩) → F range → A
-  [ F ]⁻¹ = F preimage
+  [_]⁻¹ : (F : 𝑨 ⟶ 𝑩) → range F → A
+  [ F ]⁻¹ = preimage F
 
   ⟦_⟧⁻¹ : (F : 𝑨 ⟶ 𝑩) → Ran F ⟶ Dom F
   ⟦ F ⟧⁻¹ = record
-    { to = F preimage
-    ; cong = λ {x}{y} ix≈iy → trans₂  ((F preimage≈image) x)
-                                      (trans₂ ix≈iy $ sym₂ $ (F preimage≈image) y)
+    { to = preimage F
+    ; cong = λ {x}{y} ix≈iy → trans₂  (preimage≈image F x)
+                                      (trans₂ ix≈iy $ sym₂ $ preimage≈image F y)
     }
 ```
 
@@ -153,13 +153,13 @@ We can prove that `Inv f` is the range-restricted right-inverse of `f`, as follo
 
 
 ```agda
-  invIsInvʳ : {f : A → B}{b : B}(q : Img f ∋ b) → (f (inv f q)) ≈₂ b
+  invIsInvʳ : {f : A → B} {b : B} (q : Img f ∋ b) → f (inv f q) ≈₂ b
   invIsInvʳ (eq _ p) = sym₂ p
 
-  InvIsInverseʳ : {F : 𝑨 ⟶ 𝑩}{b : B}(q : Image F ∋ b) → (F ⟨$⟩ (Inv F q)) ≈₂ b
+  InvIsInverseʳ : {F : 𝑨 ⟶ 𝑩} {b : B} (q : Image F ∋ b) → F ⟨$⟩ (Inv F q) ≈₂ b
   InvIsInverseʳ (eq _ p) = sym₂ p
 
-  ⁻¹IsInverseʳ : {F : 𝑨 ⟶ 𝑩}{bap : F range} → (F ⟨$⟩ ([ F ]⁻¹ bap )) ≈₂ (proj₁ bap)
+  ⁻¹IsInverseʳ : {F : 𝑨 ⟶ 𝑩} {bap : range F} → F ⟨$⟩ ([ F ]⁻¹ bap ) ≈₂ bap .proj₁
   ⁻¹IsInverseʳ {bap = (_ , (_ , p))} = p
 ```
 

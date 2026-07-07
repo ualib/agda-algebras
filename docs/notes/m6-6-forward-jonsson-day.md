@@ -9,16 +9,21 @@ theorems (terms ⟹ lattice property).  Read it with the M6-3 design note
 `Day-Statement`, and with the congruence-lattice modules
 `Setoid.Congruences.{Lattice,Generation,Properties}`.
 
-The deliverable turned out to be **asymmetric**, for two reasons that are mathematical,
-not incidental.  The forward Jónsson direction is *proved*, in full generality at the
-level of finite alternating chains and — for the **finitary** signatures of ordinary
-universal algebra — at the level of the library's actual congruence join, with no residual
-hypothesis.  The one place the elementary term argument met the library's infinitary
-foundations was isolated as the hypothesis `JoinIsChain` and then **discharged** for
-finitary signatures (`finitary⇒JoinIsChain`), so the featured theorem
+The deliverable landed in two stages, for reasons that are mathematical, not incidental.
+The forward Jónsson direction was proved first, in full generality at the level of finite
+alternating chains and — for the **finitary** signatures of ordinary universal algebra —
+at the level of the library's actual congruence join, with no residual hypothesis.  The
+one place the elementary term argument met the library's infinitary foundations was
+isolated as the hypothesis `JoinIsChain` and then **discharged** for finitary signatures
+(`finitary⇒JoinIsChain`), so the featured theorem
 `jonsson-finitary⇒CongruenceDistributiveVariety` is unconditional.  The forward Day
-direction is *deferred*, because its staircase is genuinely not a mechanical mirror of
-Jónsson's.  Both asymmetries are explained below.
+direction was initially *deferred*, because its staircase is genuinely not a mechanical
+mirror of Jónsson's; it has since been **proved** (#412, completing M6-6) with the
+construction of Day 1969 in Freese–McKenzie's streamlined form, recorded below in the
+section "Why Day is not a mirror — and the ladder that works".  With
+the converse halves (M6-5, M6-7), all three classical Maltsev-condition theorems are now
+proved in both directions: CP (`maltsev⇒CP` / `CP⇒maltsev`), CD (`jonsson-theorem`), and
+CM (`Day-theorem`).
 
 ## What landed
 
@@ -65,6 +70,15 @@ finitary corollary live in `Setoid.Varieties.Maltsev.Distributivity` (part of th
    This is the term ⟹ CD direction of `Jonsson-Statement` with no residual side condition —
    the form a working algebraist applies.  `Examples.Setoid.FinitarySignatures` shows the
    `Finitary` witness is a hoop-free one-liner (`λ _ → _ , ↔-id _`).
+
++  The **forward Day theorem** (landed later, closing #412): the quaternary extraction
+   (`m𝑩` / `eval-m` / `m-fst` / `m-lst` / `m-mid` / `m-compat`), the collector `m-collect`
+   (FM Lemma 2.3), the finiteness-free `Day⇒chainModular`, the `JoinIsChain`-conditional
+   `Day⇒CongruenceModular`, the unconditional finitary
+   `Day⇒CM`, and — assembled with the M6-7 converse
+   `CM⇒Day` — the complete iff `Day-theorem`, all in
+   `Setoid.Varieties.Maltsev.Modularity`.  The construction is *not* the Jónsson
+   staircase; see "Why Day is not a mirror — and the ladder that works" below.
 
 ## The staircase (forward Jónsson)
 
@@ -128,7 +142,7 @@ This is the M6-6 analogue of the M6-3/M6-5 finding "the satisfaction condition k
 paying off": the *one* place the forward theorem meets the foundations is named and
 isolated, not smeared across the proof.
 
-## Why Day is deferred (and is not a mirror)
+## Why Day is not a mirror — and the ladder that works
 
 The M6-3 note and the issue frame Day as the "mirror" of Jónsson with quaternary terms.
 The curried extraction *is* a verbatim mirror (over `quad` in place of `tri`).  The
@@ -145,21 +159,48 @@ staircase is **not**, for a structural reason:
    bridged by one horizontal) has no analogue: the even- and odd-fork columns live in
    incompatible "pinnability classes".
 
-Day (1969) resolves this with a genuinely two-dimensional construction (a ladder in
-`A²` between the diagonal and the relation), which is the natural next concrete target.
-It is recorded here so a successor picks up the *right* construction rather than rediscover
-that the mirror fails.  This matters because congruence **modularity** is the FLRP-facing
-condition (the M6-3 note's track-hygiene paragraph), so Day's theorem is the bridge of most
-downstream interest.
+The forward Day proof was initially deferred on the strength of this obstruction — it is
+absent from *Algebras, Lattices, Varieties* (McKenzie–McNulty–Taylor), and Bergman's
+*Universal Algebra* states the result but explicitly declines to prove it — and then
+landed (#412) with the construction of Day 1969 in the streamlined form of
+Freese–McKenzie's *Commutator Theory for Congruence Modular Varieties*, Thm. 2.2 and
+Lemma 2.3.  The construction that works, as formalized in
+`Setoid.Varieties.Maltsev.Modularity` (`Day⇒chainModular`), has two parts:
 
-Beyond the structural asymmetry, the deferral is now a deliberate, possibly-indefinite
-hold.  The forward Day proof is technical and is not carried out in the standard graduate
-texts: it is absent from *Algebras, Lattices, Varieties* (McKenzie–McNulty–Taylor), and
-Bergman's *Universal Algebra* states the result but explicitly declines to prove it ("since
-we won't use it anywhere ...").  With no canonical short proof to formalize and no
-downstream consumer in the library demanding it, adding the two-dimensional ladder argument
-now would be speculative.  The forward Jónsson theorem is the deliverable; Day waits for a
-concrete need.
++  **The collector (FM Lemma 2.3).**  For *any* congruence `μ` and any pair `b μ d`: if
+   the two ladder columns `mᵢ(a,a,c,c)` and `mᵢ(a,b,d,c)` are μ-related at every rung,
+   then `a μ c` (`m-collect`).  The climb alternates by fork parity: even forks advance
+   the first column directly (the `(x,x,u,u)` identity at `(a,c)`); odd forks cross to
+   the second column by the rung hypothesis, advance it — move slot three `d → b` by
+   `b μ d`, apply the `(x,y,y,u)` fork, move back — and cross home at the next rung.
+   The unpinnable even-fork column is thereby *never pinned*; it is handled by the
+   hypothesis pair, which is the two-dimensional aspect of Day's construction (the pair
+   `(b, d)` walks `A²` between the diagonal and the relation).
+
++  **The chain induction, measured by φ-count.**  The modular inclusion
+   `(θ ∨ φ) ∧ ψ ⊆ θ ∨ (φ ∧ ψ)` (for `θ ⊆ ψ`) is proved along every θ/φ-chain by an
+   outer induction on the number of φ-steps with an inner structural recursion that
+   normalizes the head of the chain by transitivity-merging (θ-steps absorb; consecutive
+   φ-steps merge).  At the first genuine alternation `a φ t₁ θ t₂ φ t₃ ⋯ c` the
+   collector is applied at `μ = δ = θ ∨ (φ ∧ ψ)` with the θ-pair `(t₁ , t₂) ∈ δ`, and
+   its rung hypotheses are the **induction hypothesis** at the pair
+   `(mᵢ(a,t₁,t₂,c) , mᵢ(a,a,c,c))`: both columns are ψ-railed to `a` by the pinning
+   plus single-slot ψ-moves (using `a ψ c` and `θ ⊆ ψ`) — which supplies the ψ-tie the
+   induction statement demands — and they are connected by a chain whose first step
+   moves slots two and three *simultaneously* (`t₁ → a` by the opening φ-step reversed,
+   `t₂ → t₃` by the closing one) and whose tail is the remaining chain pushed through
+   slot three coordinatewise (`m-push`).  The simultaneous move **fuses two φ-steps of
+   the original chain into one**, so the crossing chain has strictly fewer φ-steps and
+   the induction is well-founded.  This fusion is the step with no Jónsson analogue; in
+   FM's presentation it appears silently, as the absorption `Rₖ ∘ β = Rₖ` in the proof
+   of (4′) → (1).
+
+The `Gen`-vs-chain treatment is then identical to Jónsson's: `Day⇒chainModular` is
+finiteness-free, `JoinIsChain` upgrades it to the literal `CongruenceModular` (applied
+once, to the hypothesis join; the reverse inclusion of the `≑` holds in any lattice),
+and `finitary⇒JoinIsChain` discharges the hypothesis for finitary signatures.  This
+matters because congruence **modularity** is the FLRP-facing condition (the M6-3 note's
+track-hygiene paragraph), so Day's theorem is the bridge of most downstream interest.
 
 ## Findings
 
@@ -187,6 +228,14 @@ concrete need.
    "universal algebra means finitary algebra" reading made convenient, demonstrated in
    `Examples.Setoid.FinitarySignatures`.
 
++  **The right measure for Day is the φ-count, and the decrease is a fusion.**  The forward
+   Day induction terminates because one simultaneous two-slot `m-compat` move eats *two*
+   φ-steps of the original chain while contributing only *one* to the crossing chain; no
+   single-slot bookkeeping exhibits a decrease.  Structuring the Agda proof as an outer
+   ℕ-induction on `countφ` with the induction hypothesis passed as an explicit argument to
+   the inner structural recursion (`chainModStep K (chainModAt K)`) keeps the termination
+   checker entirely out of the mathematics.
+
 ## Issue-text reconciliation
 
 The issue says the forward halves "inhabit the *first* projections" of the statements; with
@@ -194,8 +243,9 @@ the actual orientation `P ⇔ Q = (P → Q) × (Q → P)` and
 `Jonsson-Statement = CongruenceDistributiveVariety ⇔ (Σ n, HasJonssonTerms)`, the term ⟹
 CD direction is the **second** projection.  The issue also rates the work "moderate" and
 treats Day as a mechanical mirror; the Gen-vs-chain obstruction and the Day pinning
-asymmetry above are the reasons the realized scope is forward-Jónsson-complete and
-forward-Day-deferred.  The issue text has been updated to reflect this.
+asymmetry above are the reasons the work landed in two stages — forward Jónsson first,
+forward Day later, by the genuinely different ladder recorded above.  The issue text has
+been updated at each stage to reflect this.
 
 ## Build / check
 
@@ -203,6 +253,7 @@ forward-Day-deferred.  The issue text has been updated to reflect this.
 +  The changed modules:
    `nix develop --command agda src/Setoid/Congruences/ChainJoin.lagda.md`,
    `nix develop --command agda src/Setoid/Varieties/Maltsev/Distributivity.lagda.md`,
+   `nix develop --command agda src/Setoid/Varieties/Maltsev/Modularity.lagda.md`,
    `nix develop --command agda src/Examples/Setoid/FinitarySignatures.lagda.md`.
 
 [M6-6]: https://github.com/ualib/agda-algebras/issues/412
