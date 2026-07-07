@@ -76,12 +76,12 @@ open import Setoid.Varieties.FreeSubstitution  using  ( ≐→⊢ ; cg-pair→�
 open import Setoid.Varieties.Interpretation    using  ( reductᴵ ; _⊨ₑ_ ; ⊧-interp
                                                       ; module Interpret )
 open import Setoid.Varieties.Maltsev.Basic     using  ( even? ; term-compatible )
+
 open import Setoid.Varieties.Maltsev.Distributivity
-                                               using  ( ParityChain ; chain→parityᵒ
-                                                      ; head-linked )
-open import Setoid.Varieties.SoundAndComplete  using  ( Eq ; toEq ; _⊢_▹_≈_
-                                                      ; module FreeAlgebra
-                                                      ; module Soundness )
+  using ( ParityChain ; chain→parityᵒ ; head-linked )
+open import Setoid.Varieties.SoundAndComplete
+  using ( Eq ; toEq ; _⊢_▹_≈_ ; module FreeAlgebra ; module Soundness )
+
 open import Function using ( Func )
 open Func using ( cong ) renaming ( to to _⟨$⟩_ )
 open _⊢_▹_≈_ using ( sub ; refl ; sym ; trans )

@@ -19,11 +19,11 @@ module Setoid.Homomorphisms.Properties  where
 
 -- Imports from Agda and the Agda Standard Library ------------------------------------------
 open import Data.Product                           using ( _,_ ; proj₁ ; proj₂ )
-open import Function  renaming ( Func to _⟶_ )     using ( id ; _$_ ; _∘_ )
+open import Function     renaming ( Func to _⟶_ )  using ( id ; _$_ ; _∘_ )
 open import Level                                  using ( Level ; _⊔_ )
 open import Relation.Binary                        using ( Setoid )
                                                    renaming ( Rel to BinaryRel ; _⇒_ to _⊆_)
-open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl)
+open import Relation.Binary.PropositionalEquality  using ( refl)
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------
 open import Setoid.Algebras                using  ( Algebra ; _^_; Lift-Algˡ ; Lift-Algʳ
@@ -206,14 +206,12 @@ module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ} {𝑩 : Algebra β ρᵇ} where
     Goal : IsHom lA lB ϕ
     Goal = ⊙-is-hom lABh (ToLiftʳ .proj₂)
 
-  module _ (h : hom 𝑨 𝑩)(a : 𝕌[ 𝑨 ])(ℓᵃ ℓᵇ : Level) where
+  module _ (h : hom 𝑨 𝑩) (a : 𝕌[ 𝑨 ]) (ℓᵃ ℓᵇ : Level) where
     open Setoid 𝔻[ Lift-Algˡ 𝑩 ℓᵇ ] using ( _≈_ )
-
     lift-hom-lemma : lift (h .proj₁ ⟨$⟩ a) ≈ (Lift-homˡ h ℓᵃ ℓᵇ) .proj₁ ⟨$⟩ lift a
     lift-hom-lemma = Setoid.refl 𝔻[ 𝑩 ]
 
 module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ} {𝑩 : Algebra β ρᵇ} where
-
   Lift-hom : hom 𝑨 𝑩  → (ℓᵃ rᵃ ℓᵇ rᵇ : Level) → hom (Lift-Alg 𝑨 ℓᵃ rᵃ) (Lift-Alg 𝑩 ℓᵇ rᵇ)
   Lift-hom φ ℓᵃ rᵃ ℓᵇ rᵇ = Lift-homʳ (Lift-homˡ φ ℓᵃ ℓᵇ) rᵃ rᵇ
 
