@@ -14,7 +14,7 @@ This module records the Maltsev term condition for **congruence modularity** (CM
 identities*, as a theory interpretation `Th-Day n ≼ ℰ` — and proves **Day's theorem**:
 
 1.  Day terms ⟹ CM: the two-column ladder of Freese–McKenzie's Lemma 2.3,[^fm] run
-    along finite alternating chains by induction on the number of `ϕ`-steps, with the
+    along finite alternating chains by induction on the number of `φ`-steps, with the
     finitary collapse of the join;
 2.  CM ⟹ Day terms: the converse, which extracts the chain of Day terms from a
     congruence of the free algebra `𝔽[ Fin 4 ]`.
@@ -152,12 +152,13 @@ HasDayTerms n {α} {ρ} ℰ = Th-Day {n} ≼ ℰ
 #### Day terms imply modularity along chains
 
 The forward direction of Day's theorem runs the Day terms along a
-**finite alternating walk** from `a` to `b` whose steps lie in `θ` or in `ϕ`.
-As in the Jónsson development, the walk relation is the type `Chain`
-([Setoid.Congruences.ChainJoin][]), the theorem is proved against it in full
-generality, and the identification with the library's generated join `Cg(θ ∪ ϕ)` —
-`JoinIsChain`, `finitary⇒JoinIsChain`{.AgdaFunction} — is paid exactly once, for the
-**finitary** signatures, which is the usual setting in "ordinary" universal algebra.
+**finite alternating walk** from `a` to `b` whose steps lie in `ϑ` or in `φ`, the
+relations of two congruences `Θ`, `Φ`.  As in the Jónsson development, the walk
+relation is the type `Chain` ([Setoid.Congruences.ChainJoin][]), the theorem is proved
+against it in full generality, and the identification with the library's generated
+join `Cg(Θ ∪ Φ)` — `JoinIsChain`, `finitary⇒JoinIsChain`{.AgdaFunction} — is paid
+exactly once, for the **finitary** signatures, which is the usual setting in
+"ordinary" universal algebra.
 
 The *argument* along the chain, however, is **not** the Jónsson staircase.  Jónsson's
 θ-pinning holds at every element `dᵢ(a, u, b)` because `dᵢ(x, y, x) ≈ x` leaves the middle
@@ -174,16 +175,16 @@ form of Freese–McKenzie:[^fm]
    the second (`mᵢ(x, y, y, u) ≈ mᵢ₊₁(x, y, y, u)` at `(a, b, c)`, reachable because `b μ d`
    moves the third slot).
 
-+  **An induction on the number of `ϕ`-steps** in the chain, which manufactures the
-   collector's hypotheses at the join `Δ = θ ∨ (ϕ ∧ ψ)`.  θ-steps absorb for free.  At
-   the first genuine alternation `a ϕ t₁ θ t₂ ϕ t₃ ⋯ c` the collector is applied with
-   the θ-pair `(t₁ , t₂) ∈ Δ`, and its rung hypothesis is the induction hypothesis at
-   the pair `(mᵢ(a, t₁, t₂, c) , mᵢ(a, a, c, c))`: the two flanking ϕ-steps `a ϕ t₁` and
-   `t₂ ϕ t₃` **fuse into a single simultaneous move** in the second and third slots of
++  **An induction on the number of `φ`-steps** in the chain, which manufactures the
+   collector's hypotheses at the join `Δ = Θ ∨ (Φ ∧ Ψ)`.  ϑ-steps absorb for free.  At
+   the first genuine alternation `a φ t₁ ϑ t₂ φ t₃ ⋯ c` the collector is applied with
+   the ϑ-pair `(t₁ , t₂) ∈ Δ`, and its rung hypothesis is the induction hypothesis at
+   the pair `(mᵢ(a, t₁, t₂, c) , mᵢ(a, a, c, c))`: the two flanking φ-steps `a φ t₁` and
+   `t₂ φ t₃` **fuse into a single simultaneous move** in the second and third slots of
    `mᵢ`, the remaining chain pushes through the third slot coordinatewise
-   (`m-compat`{.AgdaFunction}), and the fused chain has *strictly fewer* ϕ-steps.  Both
+   (`m-compat`{.AgdaFunction}), and the fused chain has *strictly fewer* φ-steps.  Both
    elements of the pair are `ψ`-tied to `a` by the pinning identity (using `a ψ c` and
-   `θ ⊆ ψ`), which is what lets the induction hypothesis — whose statement demands a
+   `Θ ⊆ Ψ`), which is what lets the induction hypothesis — whose statement demands a
    `ψ`-tie — apply to them.
 
 The fusion step is precisely where modularity differs from distributivity: it has no
@@ -274,7 +275,7 @@ The walk it produces, spelled out for the first few rungs (`≈` from the identi
       ⋮
         mₙ(a, a, c, c) ≈ c      -- m-lst
 
-Nothing here mentions `θ`, `ϕ`, `ψ`, or chains; the lemma is a fact about a single
+Nothing here mentions `Θ`, `Φ`, `Ψ`, or chains; the lemma is a fact about a single
 congruence.
 
 ```agda
@@ -323,7 +324,7 @@ congruence.
 
 Fix congruences `Θ, Φ, Ψ` with `Θ ⊆ Ψ` and write `Δ = Θ ∨ (Φ ∧ Ψ)` for the join of
 the modular law's conclusion.  Throughout this block, capital letters denote the
-*packaged* congruences and the corresponding lowercase letters `θ, ϕ, ψ, δ` their
+*packaged* congruences and the corresponding lowercase letters `ϑ, φ, ψ, δ` their
 underlying relations — private infix aliases for the `proj₁` projections, so that the
 statements below read as mathematics (`x ψ y`, `a δ c`) rather than as projections.
 Two joins are in play and they must be kept straight: the *hypothesis* join `Θ ∨ Φ`
@@ -331,39 +332,39 @@ is what gets decomposed — that is why the theorem consumes a `Chain` — while
 *conclusion* join `Δ` is only ever introduced (`∨-upperˡ/ʳ` and the transitivity of
 `δ`), never eliminated.
 
-The induction is on the number of ϕ-steps in the chain (`countϕ`{.AgdaFunction}),
+The induction is on the number of φ-steps in the chain (`countφ`{.AgdaFunction}),
 with an inner structural recursion that normalizes the head of the chain:
 
-+  `absorb-θ`{.AgdaFunction} absorbs θ-steps (a θ-step lands in `δ` outright, and `θ ⊆ ψ`
++  `absorb-ϑ`{.AgdaFunction} absorbs ϑ-steps (a ϑ-step lands in `δ` outright, and `Θ ⊆ Ψ`
    re-ties the new head to the far end);
-+  `onϕ`{.AgdaFunction} holds one open ϕ-step and merges any ϕ-steps that follow it
-   (ϕ is transitive, so merging only lowers the count);
-+  `onϕθ`{.AgdaFunction} holds an open `ϕ`-then-`θ` head and merges subsequent
-   θ-steps likewise.
++  `onφ`{.AgdaFunction} holds one open φ-step and merges any φ-steps that follow it
+   (φ is transitive, so merging only lowers the count);
++  `onφϑ`{.AgdaFunction} holds an open `φ`-then-`ϑ` head and merges subsequent
+   ϑ-steps likewise.
 
 The bases are degenerate chains:
 
-+  a pure-θ chain collapses into `θ` (`θ-collapse`{.AgdaFunction});
-+  a lone ϕ-step meets the `ψ`-tie in `ϕ ∧ ψ`;
-+  a `ϕ`-then-`θ` chain splits as `(ϕ ∧ ψ) ∘ θ`.
++  a pure-ϑ chain collapses into `ϑ` (`ϑ-collapse`{.AgdaFunction});
++  a lone φ-step meets the `ψ`-tie in `φ ∧ ψ`;
++  a `φ`-then-`ϑ` chain splits as `(φ ∧ ψ) ∘ ϑ`.
 
-The genuine case is a head `a ϕ t₁ θ t₂ ϕ t₃` followed by the rest of the chain.
-There `m-collect`{.AgdaFunction} is applied at `μ = Δ` with the θ-pair `(t₁ , t₂)`,
+The genuine case is a head `a φ t₁ ϑ t₂ φ t₃` followed by the rest of the chain.
+There `m-collect`{.AgdaFunction} is applied at `μ = Δ` with the ϑ-pair `(t₁ , t₂)`,
 and its rung hypotheses come from the induction hypothesis at the pair
 `(mᵢ(a, t₁, t₂, c) , mᵢ(a, a, c, c))`:
 
 +  **the ψ-tie** (`m-rail`{.AgdaFunction}): `mᵢ(a, b, c, d)` is ψ-tied to `a` whenever
    the outer pair `(a, d)` and the inner pair `(b, c)` are each ψ-related — the pinning
    `m-mid`{.AgdaFunction}, reached by ψ-moves in the third and fourth slots.  Both
-   columns qualify: for `mᵢ(a, t₁, t₂, c)` the inner move is `θ ⊆ ψ` at `t₁ θ t₂` and
+   columns qualify: for `mᵢ(a, t₁, t₂, c)` the inner move is `Θ ⊆ Ψ` at `t₁ ϑ t₂` and
    the outer is the ambient `a ψ c`; for `mᵢ(a, a, c, c)` both are `a ψ c`;
 
 +  **the crossing chain**: its first step moves slots two and three *simultaneously*
-   (`t₁ → a` by the opening ϕ-step reversed, `t₂ → t₃` by the closing one) — the fusion
-   of two ϕ-steps of the original chain into one — and the remaining chain pushes
+   (`t₁ → a` by the opening φ-step reversed, `t₂ → t₃` by the closing one) — the fusion
+   of two φ-steps of the original chain into one — and the remaining chain pushes
    through slot three by `m-push`{.AgdaFunction}, preserving step tags
-   (`m-push-countϕ`{.AgdaFunction}).  The fused chain therefore has strictly fewer
-   ϕ-steps, and the outer induction applies.
+   (`m-push-countφ`{.AgdaFunction}).  The fused chain therefore has strictly fewer
+   φ-steps, and the outer induction applies.
 
 ```agda
   module _ (Θ Φ Ψ : Con 𝑩 ℓ)(Θ⊆Ψ : Θ ⊆ Ψ) where
@@ -375,50 +376,50 @@ and its rung hypotheses come from the induction hypothesis at the pair
       Δ : Con 𝑩 (α ⊔ ρ ⊔ ℓ)
       Δ = Θ ∨ (Φ ∧ Ψ)
 
-      _θ_ _ϕ_ _ψ_ : BinaryRel 𝕌[ 𝑩 ] ℓ
-      _θ_ = Θ .proj₁
-      _ϕ_ = Φ .proj₁
+      _ϑ_ _φ_ _ψ_ : BinaryRel 𝕌[ 𝑩 ] ℓ
+      _ϑ_ = Θ .proj₁
+      _φ_ = Φ .proj₁
       _ψ_ = Ψ .proj₁
 
       _δ_ : BinaryRel 𝕌[ 𝑩 ] (α ⊔ ρ ⊔ ℓ)
       _δ_ = Δ .proj₁
 
-    open IsEquivalence (is-equivalence (proj₂ Θ)) using () renaming  ( refl  to θ-refl
-                                                                     ; trans to θ-trans )
-    open IsEquivalence (is-equivalence (proj₂ Φ)) using () renaming  ( refl  to ϕ-refl
-                                                                     ; sym   to ϕ-sym
-                                                                     ; trans to ϕ-trans )
+    open IsEquivalence (is-equivalence (proj₂ Θ)) using () renaming  ( refl  to ϑ-refl
+                                                                     ; trans to ϑ-trans )
+    open IsEquivalence (is-equivalence (proj₂ Φ)) using () renaming  ( refl  to φ-refl
+                                                                     ; sym   to φ-sym
+                                                                     ; trans to φ-trans )
     open IsEquivalence (is-equivalence (proj₂ Ψ)) using () renaming  ( refl  to ψ-refl
                                                                      ; sym   to ψ-sym
                                                                      ; trans to ψ-trans )
     open IsEquivalence (is-equivalence (proj₂ Δ)) using () renaming  ( sym   to δ-sym
                                                                      ; trans to δ-trans )
 
-    -- the induction measure: the number of ϕ-steps in a chain
-    countϕ : {x y : 𝕌[ 𝑩 ]} → Chain 𝑩 (Θ ∪ᵣ Φ) x y → ℕ
-    countϕ (nil _)           = 0
-    countϕ (cons (inj₁ _) C) = countϕ C
-    countϕ (cons (inj₂ _) C) = suc (countϕ C)
+    -- the induction measure: the number of φ-steps in a chain
+    countφ : {x y : 𝕌[ 𝑩 ]} → Chain 𝑩 (Θ ∪ᵣ Φ) x y → ℕ
+    countφ (nil _)           = 0
+    countφ (cons (inj₁ _) C) = countφ C
+    countφ (cons (inj₂ _) C) = suc (countφ C)
 
-    -- a chain with no ϕ-steps collapses into θ
-    θ-collapse : {x y : 𝕌[ 𝑩 ]}(C : Chain 𝑩 (Θ ∪ᵣ Φ) x y) → countϕ C ≤ 0 → x θ y
-    θ-collapse (nil x≈y)         _  = reflexive (proj₂ Θ) x≈y
-    θ-collapse (cons (inj₁ s) C) le = θ-trans s (θ-collapse C le)
-    θ-collapse (cons (inj₂ _) C) ()
+    -- a chain with no φ-steps collapses into ϑ
+    ϑ-collapse : {x y : 𝕌[ 𝑩 ]}(C : Chain 𝑩 (Θ ∪ᵣ Φ) x y) → countφ C ≤ 0 → x ϑ y
+    ϑ-collapse (nil x≈y)         _  = reflexive (proj₂ Θ) x≈y
+    ϑ-collapse (cons (inj₁ s) C) le = ϑ-trans s (ϑ-collapse C le)
+    ϑ-collapse (cons (inj₂ _) C) ()
 
     -- push a chain through the third slot of m𝑩 i, coordinatewise and tag-preserving
     m-push : (i : Fin (suc n)) {a c u v : 𝕌[ 𝑩 ]}
       → Chain 𝑩 (Θ ∪ᵣ Φ) u v → Chain 𝑩 (Θ ∪ᵣ Φ) (m𝑩 i a a u c) (m𝑩 i a a v c)
     m-push i (nil u≈v) = nil (cong ⟦ Iₘ i ⟧ λ  { 0F → ≈refl ; 1F → ≈refl ; 2F → u≈v ; 3F → ≈refl })
-    m-push i (cons (inj₁ s) C) = cons (inj₁ (m-compat Θ i θ-refl θ-refl s θ-refl)) (m-push i C)
-    m-push i (cons (inj₂ s) C) = cons (inj₂ (m-compat Φ i ϕ-refl ϕ-refl s ϕ-refl)) (m-push i C)
+    m-push i (cons (inj₁ s) C) = cons (inj₁ (m-compat Θ i ϑ-refl ϑ-refl s ϑ-refl)) (m-push i C)
+    m-push i (cons (inj₂ s) C) = cons (inj₂ (m-compat Φ i φ-refl φ-refl s φ-refl)) (m-push i C)
 
-    -- the push preserves the ϕ-count
-    m-push-countϕ : (i : Fin (suc n)) {a c u v : 𝕌[ 𝑩 ]}
-      → (C : Chain 𝑩 (Θ ∪ᵣ Φ) u v) → countϕ (m-push i {a} {c} C) ≡ countϕ C
-    m-push-countϕ i (nil _)           = ≡refl
-    m-push-countϕ i (cons (inj₁ _) C) = m-push-countϕ i C
-    m-push-countϕ i (cons (inj₂ _) C) = ≡cong suc (m-push-countϕ i C)
+    -- the push preserves the φ-count
+    m-push-countφ : (i : Fin (suc n)) {a c u v : 𝕌[ 𝑩 ]}
+      → (C : Chain 𝑩 (Θ ∪ᵣ Φ) u v) → countφ (m-push i {a} {c} C) ≡ countφ C
+    m-push-countφ i (nil _)           = ≡refl
+    m-push-countφ i (cons (inj₁ _) C) = m-push-countφ i C
+    m-push-countφ i (cons (inj₂ _) C) = ≡cong suc (m-push-countφ i C)
 
     -- the ψ-rail: mᵢ(a, b, c, d) is ψ-tied to a whenever the outer pair (a, d) and
     -- the inner pair (b, c) are each ψ-related — the pinning mᵢ(a, b, b, a) ≈ a,
@@ -429,70 +430,70 @@ and its rung hypotheses come from the induction hypothesis at the pair
                                 (reflexive (proj₂ Ψ) (m-mid i))
 
     -- one round of the induction: the outer hypothesis `ih` covers chains with at
-    -- most K ϕ-steps; the inner recursion is structural in the chain
+    -- most K φ-steps; the inner recursion is structural in the chain
     chainModStep : (K : ℕ)
       → ( {x y : 𝕌[ 𝑩 ]} → x ψ y → (C : Chain 𝑩 (Θ ∪ᵣ Φ) x y)
-          → countϕ C ≤ K → x δ y )
+          → countφ C ≤ K → x δ y )
       → {a c : 𝕌[ 𝑩 ]} → a ψ c → (C : Chain 𝑩 (Θ ∪ᵣ Φ) a c)
-      → countϕ C ≤ suc K → a δ c
-    chainModStep K ih = absorb-θ
+      → countφ C ≤ suc K → a δ c
+    chainModStep K ih = absorb-ϑ
       where
-      onϕ  : {x w y : 𝕌[ 𝑩 ]} → x ψ y →  x ϕ w
-        → (C : Chain 𝑩 (Θ ∪ᵣ Φ) w y) → suc (countϕ C) ≤ suc K → x δ y
-      onϕθ : {x t₁ t₂ y : 𝕌[ 𝑩 ]} → x ψ y → x ϕ t₁ → t₁ θ t₂
-        → (C : Chain 𝑩 (Θ ∪ᵣ Φ) t₂ y) → suc (countϕ C) ≤ suc K → x δ y
+      onφ  : {x w y : 𝕌[ 𝑩 ]} → x ψ y →  x φ w
+        → (C : Chain 𝑩 (Θ ∪ᵣ Φ) w y) → suc (countφ C) ≤ suc K → x δ y
+      onφϑ : {x t₁ t₂ y : 𝕌[ 𝑩 ]} → x ψ y → x φ t₁ → t₁ ϑ t₂
+        → (C : Chain 𝑩 (Θ ∪ᵣ Φ) t₂ y) → suc (countφ C) ≤ suc K → x δ y
 
-      -- one open ϕ-step: merge following ϕ-steps; a lone ϕ-step meets the ψ-tie
-      onϕ pψ xϕw (nil w≈y) _ = ∨-upperʳ Θ (Φ ∧ Ψ) (ϕ-trans xϕw (reflexive (proj₂ Φ) w≈y) , pψ)
-      onϕ pψ xϕw (cons (inj₂ s) C) le = onϕ pψ (ϕ-trans xϕw s) C (≤-trans (n≤1+n _) le)
-      onϕ pψ xϕw (cons (inj₁ s) C) le = onϕθ pψ xϕw s C le
+      -- one open φ-step: merge following φ-steps; a lone φ-step meets the ψ-tie
+      onφ pψ xφw (nil w≈y) _ = ∨-upperʳ Θ (Φ ∧ Ψ) (φ-trans xφw (reflexive (proj₂ Φ) w≈y) , pψ)
+      onφ pψ xφw (cons (inj₂ s) C) le = onφ pψ (φ-trans xφw s) C (≤-trans (n≤1+n _) le)
+      onφ pψ xφw (cons (inj₁ s) C) le = onφϑ pψ xφw s C le
 
-      -- an open ϕ-then-θ head: merge following θ-steps; a ϕ∘θ chain splits as
-      -- (ϕ ∧ ψ) ∘ θ; a further ϕ-step is the collector case
-      onϕθ pψ xϕt₁ t₁θt₂ (nil t₂≈y) _ =
-        δ-trans  (∨-upperʳ Θ (Φ ∧ Ψ) (xϕt₁ , ψ-trans pψ (ψ-sym (Θ⊆Ψ t₁θy))))
-                 (∨-upperˡ Θ (Φ ∧ Ψ) t₁θy)
+      -- an open φ-then-ϑ head: merge following ϑ-steps; a φ∘ϑ chain splits as
+      -- (φ ∧ ψ) ∘ ϑ; a further φ-step is the collector case
+      onφϑ pψ xφt₁ t₁ϑt₂ (nil t₂≈y) _ =
+        δ-trans  (∨-upperʳ Θ (Φ ∧ Ψ) (xφt₁ , ψ-trans pψ (ψ-sym (Θ⊆Ψ t₁ϑy))))
+                 (∨-upperˡ Θ (Φ ∧ Ψ) t₁ϑy)
           where
-          t₁θy : _ θ _
-          t₁θy = θ-trans t₁θt₂ (reflexive (proj₂ Θ) t₂≈y)
-      onϕθ pψ xϕt₁ t₁θt₂ (cons (inj₁ s) C)  le = onϕθ pψ xϕt₁ (θ-trans t₁θt₂ s) C le
-      onϕθ {x}{t₁}{t₂}{y} pψ xϕt₁ t₁θt₂ (cons (inj₂ t₂ϕt₃) C) le =
-        m-collect Δ (∨-upperˡ Θ (Φ ∧ Ψ) t₁θt₂) hyps
+          t₁ϑy : _ ϑ _
+          t₁ϑy = ϑ-trans t₁ϑt₂ (reflexive (proj₂ Θ) t₂≈y)
+      onφϑ pψ xφt₁ t₁ϑt₂ (cons (inj₁ s) C)  le = onφϑ pψ xφt₁ (ϑ-trans t₁ϑt₂ s) C le
+      onφϑ {x}{t₁}{t₂}{y} pψ xφt₁ t₁ϑt₂ (cons (inj₂ t₂φt₃) C) le =
+        m-collect Δ (∨-upperˡ Θ (Φ ∧ Ψ) t₁ϑt₂) hyps
         where
         -- the induction hypothesis, at the ψ-railed pair of ladder columns; the
-        -- crossing chain fuses the two flanking ϕ-steps into its first step and
+        -- crossing chain fuses the two flanking φ-steps into its first step and
         -- pushes the remaining chain through the third slot
         sδr : (i : Fin (suc n)) → (m𝑩 i x t₁ t₂ y) δ (m𝑩 i x x y y)
         sδr i = ih sψr crossing le′
           where
           sψr : (m𝑩 i x t₁ t₂ y) ψ (m𝑩 i x x y y)
-          sψr = ψ-trans (m-rail i pψ (Θ⊆Ψ t₁θt₂)) (ψ-sym (m-rail i pψ pψ))
+          sψr = ψ-trans (m-rail i pψ (Θ⊆Ψ t₁ϑt₂)) (ψ-sym (m-rail i pψ pψ))
           crossing : Chain 𝑩 (Θ ∪ᵣ Φ) (m𝑩 i x t₁ t₂ y) (m𝑩 i x x y y)
-          crossing = cons (inj₂ (m-compat Φ i ϕ-refl (ϕ-sym xϕt₁) t₂ϕt₃ ϕ-refl))
+          crossing = cons (inj₂ (m-compat Φ i φ-refl (φ-sym xφt₁) t₂φt₃ φ-refl))
                           (m-push i C)
-          le′ : countϕ crossing ≤ K
-          le′ = ≤-trans (≤-reflexive (≡cong suc (m-push-countϕ i C))) (s≤s⁻¹ le)
+          le′ : countφ crossing ≤ K
+          le′ = ≤-trans (≤-reflexive (≡cong suc (m-push-countφ i C))) (s≤s⁻¹ le)
 
         hyps : (i : Fin (suc n)) → (m𝑩 i x x y y) δ (m𝑩 i x t₁ t₂ y)
         hyps i = δ-sym (sδr i)
 
-      -- absorb θ-steps; a θ-step is a δ-step, and Θ ⊆ Ψ re-ties the head
-      absorb-θ : {x y : 𝕌[ 𝑩 ]} → x ψ y
-        → (C : Chain 𝑩 (Θ ∪ᵣ Φ) x y) → countϕ C ≤ suc K → x δ y
-      absorb-θ pψ (nil x≈y) _  = reflexive (proj₂ Δ) x≈y
-      absorb-θ pψ (cons (inj₁ s) C) le = δ-trans  (∨-upperˡ Θ (Φ ∧ Ψ) s)
-                                                  (absorb-θ (ψ-trans (ψ-sym (Θ⊆Ψ s)) pψ) C le)
-      absorb-θ pψ (cons (inj₂ s) C) le = onϕ pψ s C le
+      -- absorb ϑ-steps; a ϑ-step is a δ-step, and Θ ⊆ Ψ re-ties the head
+      absorb-ϑ : {x y : 𝕌[ 𝑩 ]} → x ψ y
+        → (C : Chain 𝑩 (Θ ∪ᵣ Φ) x y) → countφ C ≤ suc K → x δ y
+      absorb-ϑ pψ (nil x≈y) _  = reflexive (proj₂ Δ) x≈y
+      absorb-ϑ pψ (cons (inj₁ s) C) le = δ-trans  (∨-upperˡ Θ (Φ ∧ Ψ) s)
+                                                  (absorb-ϑ (ψ-trans (ψ-sym (Θ⊆Ψ s)) pψ) C le)
+      absorb-ϑ pψ (cons (inj₂ s) C) le = onφ pψ s C le
 
-    -- the outer induction on the ϕ-count; at zero the chain collapses into θ
+    -- the outer induction on the φ-count; at zero the chain collapses into ϑ
     chainModAt : (K : ℕ){a c : 𝕌[ 𝑩 ]} → a ψ c
-      → (C : Chain 𝑩 (Θ ∪ᵣ Φ) a c) → countϕ C ≤ K → a δ c
-    chainModAt zero    pψ C le = ∨-upperˡ Θ (Φ ∧ Ψ) (θ-collapse C le)
+      → (C : Chain 𝑩 (Θ ∪ᵣ Φ) a c) → countφ C ≤ K → a δ c
+    chainModAt zero    pψ C le = ∨-upperˡ Θ (Φ ∧ Ψ) (ϑ-collapse C le)
     chainModAt (suc K) pψ C le = chainModStep K (chainModAt K) pψ C le
 
     -- the chain-level modular law: ψ-tied chain endpoints are δ-related
     chainMod : {a c : 𝕌[ 𝑩 ]} → a ψ c → Chain 𝑩 (Θ ∪ᵣ Φ) a c → a δ c
-    chainMod pψ C = chainModAt (countϕ C) pψ C ≤-refl
+    chainMod pψ C = chainModAt (countφ C) pψ C ≤-refl
 ```
 
 Packaging the ladder as a forward statement: a variety with Day terms satisfies the

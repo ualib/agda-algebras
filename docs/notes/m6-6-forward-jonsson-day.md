@@ -232,7 +232,7 @@ track-hygiene paragraph), so Day's theorem is the bridge of most downstream inte
    Day induction terminates because one simultaneous two-slot `m-compat` move eats *two*
    φ-steps of the original chain while contributing only *one* to the crossing chain; no
    single-slot bookkeeping exhibits a decrease.  Structuring the Agda proof as an outer
-   ℕ-induction on `countϕ` with the induction hypothesis passed as an explicit argument to
+   ℕ-induction on `countφ` with the induction hypothesis passed as an explicit argument to
    the inner structural recursion (`chainModStep K (chainModAt K)`) keeps the termination
    checker entirely out of the mathematics.
 
