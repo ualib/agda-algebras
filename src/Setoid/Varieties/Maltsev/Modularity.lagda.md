@@ -14,7 +14,7 @@ This module records the Maltsev term condition for **congruence modularity** (CM
 identities*, as a theory interpretation `Th-Day n ≼ ℰ` — and proves **Day's theorem**:
 
 1.  Day terms ⟹ CM: the two-column ladder of Freese–McKenzie's Lemma 2.3,[^fm] run
-    along finite alternating chains by induction on the number of `φ`-steps, with the
+    along finite alternating chains by induction on the number of `ϕ`-steps, with the
     finitary collapse of the join;
 2.  CM ⟹ Day terms: the converse, which extracts the chain of Day terms from a
     congruence of the free algebra `𝔽[ Fin 4 ]`.
@@ -45,13 +45,13 @@ open import Data.Fin.Patterns                  using  ( 0F ; 1F ; 2F ; 3F )
 open import Data.Nat.Base                      using  ( ℕ ; zero ; suc ; _≤_ ; s≤s⁻¹ )
 open import Data.Nat.Properties                using  ( ≤-refl ; ≤-reflexive ; ≤-trans
                                                       ; n≤1+n )
-open import Data.Product                       using  ( _×_ ; _,_ ; Σ-syntax
+open import Data.Product                       using  ( _×_ ; _,_ ; Σ-syntax ; ∃-syntax
                                                       ; proj₁ ; proj₂ )
 open import Data.Sum.Base                      using  ( inj₁ ; inj₂ )
 open import Level                              using  ( Level ; 0ℓ ; _⊔_ )
                                                renaming ( suc to lsuc )
 open import Relation.Binary                    using  ( Setoid ; IsEquivalence )
-
+                                               renaming (Rel to BinaryRel )
 open import Relation.Binary.PropositionalEquality
   using ( _≡_ ) renaming ( refl to ≡refl ; cong to ≡cong )
 
@@ -152,10 +152,10 @@ HasDayTerms n {α} {ρ} ℰ = Th-Day {n} ≼ ℰ
 #### Day terms imply modularity along chains
 
 The forward direction of Day's theorem runs the Day terms along a
-**finite alternating walk** from `a` to `b` whose steps lie in `θ` or in `φ`.
+**finite alternating walk** from `a` to `b` whose steps lie in `θ` or in `ϕ`.
 As in the Jónsson development, the walk relation is the type `Chain`
 ([Setoid.Congruences.ChainJoin][]), the theorem is proved against it in full
-generality, and the identification with the library's generated join `Cg(θ ∪ φ)` —
+generality, and the identification with the library's generated join `Cg(θ ∪ ϕ)` —
 `JoinIsChain`, `finitary⇒JoinIsChain`{.AgdaFunction} — is paid exactly once, for the
 **finitary** signatures, which is the usual setting in "ordinary" universal algebra.
 
@@ -174,14 +174,14 @@ form of Freese–McKenzie:[^fm]
    the second (`mᵢ(x, y, y, u) ≈ mᵢ₊₁(x, y, y, u)` at `(a, b, c)`, reachable because `b μ d`
    moves the third slot).
 
-+  **An induction on the number of `φ`-steps** in the chain, which manufactures the
-   collector's hypotheses at the join `δ = θ ∨ (φ ∧ ψ)`.  θ-steps absorb for free.  At
-   the first genuine alternation `a φ t₁ θ t₂ φ t₃ ⋯ c` the collector is applied with
++  **An induction on the number of `ϕ`-steps** in the chain, which manufactures the
+   collector's hypotheses at the join `δ = θ ∨ (ϕ ∧ ψ)`.  θ-steps absorb for free.  At
+   the first genuine alternation `a ϕ t₁ θ t₂ ϕ t₃ ⋯ c` the collector is applied with
    the θ-pair `(t₁ , t₂) ∈ δ`, and its rung hypothesis is the induction hypothesis at
-   the pair `(mᵢ(a,t₁,t₂,c) , mᵢ(a,a,c,c))`: the two flanking φ-steps `a φ t₁` and
-   `t₂ φ t₃` **fuse into a single simultaneous move** in the second and third slots of
+   the pair `(mᵢ(a, t₁, t₂, c) , mᵢ(a, a, c, c))`: the two flanking ϕ-steps `a ϕ t₁` and
+   `t₂ ϕ t₃` **fuse into a single simultaneous move** in the second and third slots of
    `mᵢ`, the remaining chain pushes through the third slot coordinatewise
-   (`m-compat`{.AgdaFunction}), and the fused chain has *strictly fewer* φ-steps.  Both
+   (`m-compat`{.AgdaFunction}), and the fused chain has *strictly fewer* ϕ-steps.  Both
    elements of the pair are `ψ`-tied to `a` by the pinning identity (using `a ψ c` and
    `θ ⊆ ψ`), which is what lets the induction hypothesis — whose statement demands a
    `ψ`-tie — apply to them.
@@ -239,9 +239,8 @@ module _
   m-mid i {a} {b} = ≈trans (≈sym (eval-m i (quad a b b a))) (satₘ (mxyyx≈x i) (quad a b b a))
 
   -- m𝑩 i is a term operation, hence compatible with every congruence
-  m-compat : (μ : Con 𝑩 ℓ)(i : Fin (suc n)){a a′ b b′ c c′ d d′ : 𝕌[ 𝑩 ]}
-    → proj₁ μ a a′ → proj₁ μ b b′ → proj₁ μ c c′ → proj₁ μ d d′
-    → proj₁ μ (m𝑩 i a b c d) (m𝑩 i a′ b′ c′ d′)
+  m-compat : ((μ , _) : Con 𝑩 ℓ) (i : Fin (suc n)) {a a′ b b′ c c′ d d′ : 𝕌[ 𝑩 ]}
+    → μ a a′ → μ b b′ → μ c c′ → μ d d′ → μ (m𝑩 i a b c d) (m𝑩 i a′ b′ c′ d′)
   m-compat μ i pa pb pc pd = term-compatible μ (Iₘ i) λ  { 0F → pa ; 1F → pb
                                                          ; 2F → pc ; 3F → pd }
 ```
@@ -266,39 +265,39 @@ The climb is `<-weakInduction`{.AgdaFunction} on the rung predicate
 The walk it produces, spelled out for the first few rungs (`≈` from the identities,
 `μ` from the hypothesis, the pair `b μ d`, and their composites):
 
-    a ≈ m₀(a,a,c,c)          -- m-fst
-      ≈ m₁(a,a,c,c)          -- even fork at 0
-      μ m₁(a,b,d,c)          -- hypothesis at 1
-      μ m₂(a,b,d,c)          -- odd fork at 1 (b μ d moves slot three there and back)
-      μ m₂(a,a,c,c)          -- hypothesis at 2
-      ≈ m₃(a,a,c,c)          -- even fork at 2
+    a ≈ m₀(a, a, c, c)          -- m-fst
+      ≈ m₁(a, a, c, c)          -- even fork at 0
+      μ m₁(a, b, d, c)          -- hypothesis at 1
+      μ m₂(a, b, d, c)          -- odd fork at 1 (b μ d moves slot three there and back)
+      μ m₂(a, a, c, c)          -- hypothesis at 2
+      ≈ m₃(a, a, c, c)          -- even fork at 2
       ⋮
-        mₙ(a,a,c,c) ≈ c      -- m-lst
+        mₙ(a, a, c, c) ≈ c      -- m-lst
 
-Nothing here mentions `θ`, `φ`, `ψ`, or chains; the lemma is a fact about a single
+Nothing here mentions `θ`, `ϕ`, `ψ`, or chains; the lemma is a fact about a single
 congruence.
 
 ```agda
-  m-collect : (μ : Con 𝑩 ℓ){a c b d : 𝕌[ 𝑩 ]} → proj₁ μ b d
-    → ((i : Fin (suc n)) → proj₁ μ (m𝑩 i a a c c) (m𝑩 i a b d c))
-    → proj₁ μ a c
-  m-collect {ℓ = ℓ} μ {a} {c} {b} {d} bμd hyp =
-    μ-trans (rungs (fromℕ n)) (reflexive (proj₂ μ) m-lst)
+  m-collect : ((μ , _) : Con 𝑩 ℓ){a c b d : 𝕌[ 𝑩 ]} → μ b d
+    → ((i : Fin (suc n)) → μ (m𝑩 i a a c c) (m𝑩 i a b d c))
+    → μ a c
+  m-collect {ℓ = ℓ} (μ , μcon) {a} {c} {b} {d} bμd hyp =
+    μ-trans (rungs (fromℕ n)) (reflexive μcon m-lst)
     where
-    open IsEquivalence (is-equivalence (proj₂ μ)) using ()
+    open IsEquivalence (is-equivalence μcon) using ()
       renaming ( refl to μ-refl ; sym to μ-sym ; trans to μ-trans )
 
     -- the rung predicate: a is μ-below the first ladder column
     Rung : Fin (suc n) → Type ℓ
-    Rung i = proj₁ μ a (m𝑩 i a a c c)
+    Rung i = μ a (m𝑩 i a a c c)
 
     base-rung : Rung fzero
-    base-rung = reflexive (proj₂ μ) (≈sym m-fst)
+    base-rung = reflexive μcon (≈sym m-fst)
 
     -- climb one rung; the fork identity (parity-split) glues to the next index
     step-rung : (i : Fin n) → Rung (inject₁ i) → Rung (fsuc i)
     step-rung i aμu with even? (toℕ i) | satₘ (m-fork i)
-    ... | true  | fk = μ-trans aμu (reflexive (proj₂ μ) feq)
+    ... | true  | fk = μ-trans aμu (reflexive μcon feq)
       where
       feq : m𝑩 (inject₁ i) a a c c ≈ m𝑩 (fsuc i) a a c c
       feq = ≈trans (≈sym (eval-m (inject₁ i) (quad a a c c)))
@@ -310,11 +309,11 @@ congruence.
       feq = ≈trans (≈sym (eval-m (inject₁ i) (quad a b b c)))
                    (≈trans (fk (quad a b b c)) (eval-m (fsuc i) (quad a b b c)))
       -- advance the second column: move slot three d → b, fork, move back
-      odd-step : proj₁ μ (m𝑩 (inject₁ i) a b d c) (m𝑩 (fsuc i) a b d c)
+      odd-step : μ (m𝑩 (inject₁ i) a b d c) (m𝑩 (fsuc i) a b d c)
       odd-step =
-        μ-trans (m-compat μ (inject₁ i) μ-refl μ-refl (μ-sym bμd) μ-refl)
-        (μ-trans (reflexive (proj₂ μ) feq)
-                 (m-compat μ (fsuc i) μ-refl μ-refl bμd μ-refl))
+        μ-trans (m-compat (μ , μcon) (inject₁ i) μ-refl μ-refl (μ-sym bμd) μ-refl)
+        (μ-trans (reflexive μcon feq)
+                 (m-compat (μ , μcon) (fsuc i) μ-refl μ-refl bμd μ-refl))
 
     rungs : (i : Fin (suc n)) → Rung i
     rungs = <-weakInduction Rung base-rung step-rung
@@ -322,32 +321,32 @@ congruence.
 
 ##### The chain induction
 
-Fix congruences `θ, φ, ψ` with `θ ⊆ ψ` and write `δ = θ ∨ (φ ∧ ψ)` for the join of
+Fix congruences `θ, ϕ, ψ` with `θ ⊆ ψ` and write `δ = θ ∨ (ϕ ∧ ψ)` for the join of
 the modular law's conclusion.  Two joins are in play and they must be kept straight:
-the *hypothesis* join `θ ∨ φ` is what gets decomposed — that is why the theorem
+the *hypothesis* join `θ ∨ ϕ` is what gets decomposed — that is why the theorem
 consumes a `Chain` — while the *conclusion* join `δ` is only ever introduced
 (`∨-upperˡ/ʳ` and the transitivity of the join congruence), never eliminated.
 
-The induction is on the number of φ-steps in the chain (`countφ`{.AgdaFunction}),
+The induction is on the number of ϕ-steps in the chain (`countϕ`{.AgdaFunction}),
 with an inner structural recursion that normalizes the head of the chain:
 
 +  `absorb-θ`{.AgdaFunction} absorbs θ-steps (a θ-step lands in `δ` outright, and `θ ⊆ ψ`
    re-ties the new head to the far end);
-+  `onφ`{.AgdaFunction} holds one open φ-step and merges any φ-steps that follow it
-   (φ is transitive, so merging only lowers the count);
-+  `onφθ`{.AgdaFunction} holds an open `φ`-then-`θ` head and merges subsequent
++  `onϕ`{.AgdaFunction} holds one open ϕ-step and merges any ϕ-steps that follow it
+   (ϕ is transitive, so merging only lowers the count);
++  `onϕθ`{.AgdaFunction} holds an open `ϕ`-then-`θ` head and merges subsequent
    θ-steps likewise.
 
 The bases are degenerate chains:
 
 +  a pure-θ chain collapses into `θ` (`θ-collapse`{.AgdaFunction});
-+  a lone φ-step meets the `ψ`-tie in `φ ∧ ψ`;
-+  a `φ`-then-`θ` chain splits as `(φ ∧ ψ) ∘ θ`.
++  a lone ϕ-step meets the `ψ`-tie in `ϕ ∧ ψ`;
++  a `ϕ`-then-`θ` chain splits as `(ϕ ∧ ψ) ∘ θ`.
 
-The genuine case is a head `a φ t₁ θ t₂ φ t₃` followed by the rest of the chain.
+The genuine case is a head `a ϕ t₁ θ t₂ ϕ t₃` followed by the rest of the chain.
 There `m-collect`{.AgdaFunction} is applied at `μ = δ` with the θ-pair `(t₁ , t₂)`,
 and its rung hypotheses come from the induction hypothesis at the pair
-`(mᵢ(a,t₁,t₂,c) , mᵢ(a,a,c,c))`:
+`(mᵢ(a, t₁, t₂, c) , mᵢ(a, a, c, c))`:
 
 +  **the ψ-tie** (`m-rail`{.AgdaFunction}): `mᵢ(a, b, c, d)` is ψ-tied to `a` whenever
    the outer pair `(a, d)` and the inner pair `(b, c)` are each ψ-related — the pinning
@@ -356,170 +355,180 @@ and its rung hypotheses come from the induction hypothesis at the pair
    the outer is the ambient `a ψ c`; for `mᵢ(a, a, c, c)` both are `a ψ c`;
 
 +  **the crossing chain**: its first step moves slots two and three *simultaneously*
-   (`t₁ → a` by the opening φ-step reversed, `t₂ → t₃` by the closing one) — the fusion
-   of two φ-steps of the original chain into one — and the remaining chain pushes
+   (`t₁ → a` by the opening ϕ-step reversed, `t₂ → t₃` by the closing one) — the fusion
+   of two ϕ-steps of the original chain into one — and the remaining chain pushes
    through slot three by `m-push`{.AgdaFunction}, preserving step tags
-   (`m-push-countφ`{.AgdaFunction}).  The fused chain therefore has strictly fewer
-   φ-steps, and the outer induction applies.
+   (`m-push-countϕ`{.AgdaFunction}).  The fused chain therefore has strictly fewer
+   ϕ-steps, and the outer induction applies.
 
 ```agda
-  module _ (θ φ ψ : Con 𝑩 ℓ)(θ⊆ψ : θ ⊆ ψ) where
+  module _ (θ ϕ Ψ : Con 𝑩 ℓ)(θ⊆ψ : θ ⊆ Ψ) where
     -- the conclusion join, at the absorbing level 𝒈 ℓ = α ⊔ ρ ⊔ ℓ (since 𝓞 = 𝓥 = 0ℓ)
-    δ : Con 𝑩 (α ⊔ ρ ⊔ ℓ)
-    δ = θ ∨ (φ ∧ ψ)
+    private
+      _ϑ_ _φ_ _ψ_ : BinaryRel 𝕌[ 𝑩 ] ℓ
+      _ϑ_ = θ .proj₁
+      _φ_ = ϕ .proj₁
+      _ψ_ = Ψ .proj₁
+
+    Δ : Con 𝑩 (α ⊔ ρ ⊔ ℓ)
+    Δ = θ ∨ (ϕ ∧ Ψ)
+
+    private
+      _δ_ : BinaryRel 𝕌[ 𝑩 ] (α ⊔ ρ ⊔ ℓ)
+      _δ_ = Δ .proj₁
 
     open IsEquivalence (is-equivalence (proj₂ θ)) using () renaming  ( refl  to θ-refl
                                                                      ; trans to θ-trans )
-    open IsEquivalence (is-equivalence (proj₂ φ)) using () renaming  ( refl  to φ-refl
-                                                                     ; sym   to φ-sym
-                                                                     ; trans to φ-trans )
-    open IsEquivalence (is-equivalence (proj₂ ψ)) using () renaming  ( refl  to ψ-refl
+    open IsEquivalence (is-equivalence (proj₂ ϕ)) using () renaming  ( refl  to ϕ-refl
+                                                                     ; sym   to ϕ-sym
+                                                                     ; trans to ϕ-trans )
+    open IsEquivalence (is-equivalence (proj₂ Ψ)) using () renaming  ( refl  to ψ-refl
                                                                      ; sym   to ψ-sym
                                                                      ; trans to ψ-trans )
-    open IsEquivalence (is-equivalence (proj₂ δ)) using () renaming  ( sym   to δ-sym
-                                                                     ; trans to δ-trans )
+    open IsEquivalence (is-equivalence (proj₂ Δ)) using () renaming  ( sym   to Δ-sym
+                                                                     ; trans to Δ-trans )
 
-    -- the induction measure: the number of φ-steps in a chain
-    countφ : {x y : 𝕌[ 𝑩 ]} → Chain 𝑩 (θ ∪ᵣ φ) x y → ℕ
-    countφ (nil _)           = 0
-    countφ (cons (inj₁ _) C) = countφ C
-    countφ (cons (inj₂ _) C) = suc (countφ C)
+    -- the induction measure: the number of ϕ-steps in a chain
+    countϕ : {x y : 𝕌[ 𝑩 ]} → Chain 𝑩 (θ ∪ᵣ ϕ) x y → ℕ
+    countϕ (nil _)           = 0
+    countϕ (cons (inj₁ _) C) = countϕ C
+    countϕ (cons (inj₂ _) C) = suc (countϕ C)
 
-    -- a chain with no φ-steps collapses into θ
-    θ-collapse : {x y : 𝕌[ 𝑩 ]}(C : Chain 𝑩 (θ ∪ᵣ φ) x y) → countφ C ≤ 0 → proj₁ θ x y
+    -- a chain with no ϕ-steps collapses into θ
+    θ-collapse : {x y : 𝕌[ 𝑩 ]}(C : Chain 𝑩 (θ ∪ᵣ ϕ) x y) → countϕ C ≤ 0 → x ϑ y
     θ-collapse (nil x≈y)         _  = reflexive (proj₂ θ) x≈y
     θ-collapse (cons (inj₁ s) C) le = θ-trans s (θ-collapse C le)
     θ-collapse (cons (inj₂ _) C) ()
 
     -- push a chain through the third slot of m𝑩 i, coordinatewise and tag-preserving
     m-push : (i : Fin (suc n)) {a c u v : 𝕌[ 𝑩 ]}
-      → Chain 𝑩 (θ ∪ᵣ φ) u v → Chain 𝑩 (θ ∪ᵣ φ) (m𝑩 i a a u c) (m𝑩 i a a v c)
+      → Chain 𝑩 (θ ∪ᵣ ϕ) u v → Chain 𝑩 (θ ∪ᵣ ϕ) (m𝑩 i a a u c) (m𝑩 i a a v c)
     m-push i (nil u≈v) = nil (cong ⟦ Iₘ i ⟧ λ  { 0F → ≈refl ; 1F → ≈refl ; 2F → u≈v ; 3F → ≈refl })
     m-push i (cons (inj₁ s) C) = cons (inj₁ (m-compat θ i θ-refl θ-refl s θ-refl)) (m-push i C)
-    m-push i (cons (inj₂ s) C) = cons (inj₂ (m-compat φ i φ-refl φ-refl s φ-refl)) (m-push i C)
+    m-push i (cons (inj₂ s) C) = cons (inj₂ (m-compat ϕ i ϕ-refl ϕ-refl s ϕ-refl)) (m-push i C)
 
-    -- the push preserves the φ-count
-    m-push-countφ : (i : Fin (suc n)) {a c u v : 𝕌[ 𝑩 ]}
-      → (C : Chain 𝑩 (θ ∪ᵣ φ) u v) → countφ (m-push i {a} {c} C) ≡ countφ C
-    m-push-countφ i (nil _)           = ≡refl
-    m-push-countφ i (cons (inj₁ _) C) = m-push-countφ i C
-    m-push-countφ i (cons (inj₂ _) C) = ≡cong suc (m-push-countφ i C)
+    -- the push preserves the ϕ-count
+    m-push-countϕ : (i : Fin (suc n)) {a c u v : 𝕌[ 𝑩 ]}
+      → (C : Chain 𝑩 (θ ∪ᵣ ϕ) u v) → countϕ (m-push i {a} {c} C) ≡ countϕ C
+    m-push-countϕ i (nil _)           = ≡refl
+    m-push-countϕ i (cons (inj₁ _) C) = m-push-countϕ i C
+    m-push-countϕ i (cons (inj₂ _) C) = ≡cong suc (m-push-countϕ i C)
 
     -- the ψ-rail: mᵢ(a, b, c, d) is ψ-tied to a whenever the outer pair (a, d) and
     -- the inner pair (b, c) are each ψ-related — the pinning mᵢ(a, b, b, a) ≈ a,
     -- reached by ψ-moves in the third and fourth slots.  Both ladder columns qualify
     m-rail : (i : Fin (suc n)){a b c d : 𝕌[ 𝑩 ]}
-      → proj₁ ψ a d → proj₁ ψ b c → proj₁ ψ (m𝑩 i a b c d) a
-    m-rail i aψd bψc = ψ-trans  (m-compat ψ i ψ-refl ψ-refl (ψ-sym bψc) (ψ-sym aψd))
-                                (reflexive (proj₂ ψ) (m-mid i))
+      → a ψ d → b ψ c → (m𝑩 i a b c d) ψ a
+    m-rail i aψd bψc = ψ-trans  (m-compat Ψ i ψ-refl ψ-refl (ψ-sym bψc) (ψ-sym aψd))
+                                (reflexive (proj₂ Ψ) (m-mid i))
 
     -- one round of the induction: the outer hypothesis `ih` covers chains with at
-    -- most K φ-steps; the inner recursion is structural in the chain
+    -- most K ϕ-steps; the inner recursion is structural in the chain
     chainModStep : (K : ℕ)
-      → ( {x y : 𝕌[ 𝑩 ]} → proj₁ ψ x y → (C : Chain 𝑩 (θ ∪ᵣ φ) x y)
-          → countφ C ≤ K → proj₁ δ x y )
-      → {a c : 𝕌[ 𝑩 ]} → proj₁ ψ a c → (C : Chain 𝑩 (θ ∪ᵣ φ) a c)
-      → countφ C ≤ suc K → proj₁ δ a c
+      → ( {x y : 𝕌[ 𝑩 ]} → x ψ y → (C : Chain 𝑩 (θ ∪ᵣ ϕ) x y)
+          → countϕ C ≤ K → x δ y )
+      → {a c : 𝕌[ 𝑩 ]} → a ψ c → (C : Chain 𝑩 (θ ∪ᵣ ϕ) a c)
+      → countϕ C ≤ suc K → a δ c
     chainModStep K ih = absorb-θ
       where
-      onφ  : {x w y : 𝕌[ 𝑩 ]} → proj₁ ψ x y → proj₁ φ x w
-        → (C : Chain 𝑩 (θ ∪ᵣ φ) w y) → suc (countφ C) ≤ suc K → proj₁ δ x y
-      onφθ : {x t₁ t₂ y : 𝕌[ 𝑩 ]} → proj₁ ψ x y → proj₁ φ x t₁ → proj₁ θ t₁ t₂
-        → (C : Chain 𝑩 (θ ∪ᵣ φ) t₂ y) → suc (countφ C) ≤ suc K → proj₁ δ x y
+      onϕ  : {x w y : 𝕌[ 𝑩 ]} → x ψ y →  x φ w
+        → (C : Chain 𝑩 (θ ∪ᵣ ϕ) w y) → suc (countϕ C) ≤ suc K → x δ y
+      onϕθ : {x t₁ t₂ y : 𝕌[ 𝑩 ]} → x ψ y → x φ t₁ → t₁ ϑ t₂
+        → (C : Chain 𝑩 (θ ∪ᵣ ϕ) t₂ y) → suc (countϕ C) ≤ suc K → x δ y
 
-      -- one open φ-step: merge following φ-steps; a lone φ-step meets the ψ-tie
-      onφ pψ xφw (nil w≈y) _ = ∨-upperʳ θ (φ ∧ ψ) (φ-trans xφw (reflexive (proj₂ φ) w≈y) , pψ)
-      onφ pψ xφw (cons (inj₂ s) C) le = onφ pψ (φ-trans xφw s) C (≤-trans (n≤1+n _) le)
-      onφ pψ xφw (cons (inj₁ s) C) le = onφθ pψ xφw s C le
+      -- one open ϕ-step: merge following ϕ-steps; a lone ϕ-step meets the ψ-tie
+      onϕ pψ xϕw (nil w≈y) _ = ∨-upperʳ θ (ϕ ∧ Ψ) (ϕ-trans xϕw (reflexive (proj₂ ϕ) w≈y) , pψ)
+      onϕ pψ xϕw (cons (inj₂ s) C) le = onϕ pψ (ϕ-trans xϕw s) C (≤-trans (n≤1+n _) le)
+      onϕ pψ xϕw (cons (inj₁ s) C) le = onϕθ pψ xϕw s C le
 
-      -- an open φ-then-θ head: merge following θ-steps; a φ∘θ chain splits as
-      -- (φ ∧ ψ) ∘ θ; a further φ-step is the collector case
-      onφθ pψ xφt₁ t₁θt₂ (nil t₂≈y) _ =
-        δ-trans  (∨-upperʳ θ (φ ∧ ψ) (xφt₁ , ψ-trans pψ (ψ-sym (θ⊆ψ t₁θy))))
-                 (∨-upperˡ θ (φ ∧ ψ) t₁θy)
+      -- an open ϕ-then-θ head: merge following θ-steps; a ϕ∘θ chain splits as
+      -- (ϕ ∧ ψ) ∘ θ; a further ϕ-step is the collector case
+      onϕθ pψ xϕt₁ t₁θt₂ (nil t₂≈y) _ =
+        Δ-trans  (∨-upperʳ θ (ϕ ∧ Ψ) (xϕt₁ , ψ-trans pψ (ψ-sym (θ⊆ψ t₁θy))))
+                 (∨-upperˡ θ (ϕ ∧ Ψ) t₁θy)
           where
-          t₁θy : proj₁ θ _ _
+          t₁θy : _ ϑ _
           t₁θy = θ-trans t₁θt₂ (reflexive (proj₂ θ) t₂≈y)
-      onφθ pψ xφt₁ t₁θt₂ (cons (inj₁ s) C)  le = onφθ pψ xφt₁ (θ-trans t₁θt₂ s) C le
-      onφθ {x}{t₁}{t₂}{y} pψ xφt₁ t₁θt₂ (cons (inj₂ t₂φt₃) C) le =
-        m-collect δ (∨-upperˡ θ (φ ∧ ψ) t₁θt₂) hyps
+      onϕθ pψ xϕt₁ t₁θt₂ (cons (inj₁ s) C)  le = onϕθ pψ xϕt₁ (θ-trans t₁θt₂ s) C le
+      onϕθ {x}{t₁}{t₂}{y} pψ xϕt₁ t₁θt₂ (cons (inj₂ t₂ϕt₃) C) le =
+        m-collect Δ (∨-upperˡ θ (ϕ ∧ Ψ) t₁θt₂) hyps
         where
         -- the induction hypothesis, at the ψ-railed pair of ladder columns; the
-        -- crossing chain fuses the two flanking φ-steps into its first step and
+        -- crossing chain fuses the two flanking ϕ-steps into its first step and
         -- pushes the remaining chain through the third slot
-        sδr : (i : Fin (suc n)) → proj₁ δ (m𝑩 i x t₁ t₂ y) (m𝑩 i x x y y)
+        sδr : (i : Fin (suc n)) → (m𝑩 i x t₁ t₂ y) δ (m𝑩 i x x y y)
         sδr i = ih sψr crossing le′
           where
-          sψr : proj₁ ψ (m𝑩 i x t₁ t₂ y) (m𝑩 i x x y y)
+          sψr : (m𝑩 i x t₁ t₂ y) ψ (m𝑩 i x x y y)
           sψr = ψ-trans (m-rail i pψ (θ⊆ψ t₁θt₂)) (ψ-sym (m-rail i pψ pψ))
-          crossing : Chain 𝑩 (θ ∪ᵣ φ) (m𝑩 i x t₁ t₂ y) (m𝑩 i x x y y)
-          crossing = cons (inj₂ (m-compat φ i φ-refl (φ-sym xφt₁) t₂φt₃ φ-refl))
+          crossing : Chain 𝑩 (θ ∪ᵣ ϕ) (m𝑩 i x t₁ t₂ y) (m𝑩 i x x y y)
+          crossing = cons (inj₂ (m-compat ϕ i ϕ-refl (ϕ-sym xϕt₁) t₂ϕt₃ ϕ-refl))
                           (m-push i C)
-          le′ : countφ crossing ≤ K
-          le′ = ≤-trans (≤-reflexive (≡cong suc (m-push-countφ i C))) (s≤s⁻¹ le)
+          le′ : countϕ crossing ≤ K
+          le′ = ≤-trans (≤-reflexive (≡cong suc (m-push-countϕ i C))) (s≤s⁻¹ le)
 
-        hyps : (i : Fin (suc n)) → proj₁ δ (m𝑩 i x x y y) (m𝑩 i x t₁ t₂ y)
-        hyps i = δ-sym (sδr i)
+        hyps : (i : Fin (suc n)) → (m𝑩 i x x y y) δ (m𝑩 i x t₁ t₂ y)
+        hyps i = Δ-sym (sδr i)
 
       -- absorb θ-steps; a θ-step is a δ-step, and θ ⊆ ψ re-ties the head
-      absorb-θ : {x y : 𝕌[ 𝑩 ]} → proj₁ ψ x y
-        → (C : Chain 𝑩 (θ ∪ᵣ φ) x y) → countφ C ≤ suc K → proj₁ δ x y
-      absorb-θ pψ (nil x≈y) _  = reflexive (proj₂ δ) x≈y
-      absorb-θ pψ (cons (inj₁ s) C) le = δ-trans  (∨-upperˡ θ (φ ∧ ψ) s)
+      absorb-θ : {x y : 𝕌[ 𝑩 ]} → x ψ y
+        → (C : Chain 𝑩 (θ ∪ᵣ ϕ) x y) → countϕ C ≤ suc K → x δ y
+      absorb-θ pψ (nil x≈y) _  = reflexive (proj₂ Δ) x≈y
+      absorb-θ pψ (cons (inj₁ s) C) le = Δ-trans  (∨-upperˡ θ (ϕ ∧ Ψ) s)
                                                   (absorb-θ (ψ-trans (ψ-sym (θ⊆ψ s)) pψ) C le)
-      absorb-θ pψ (cons (inj₂ s) C) le = onφ pψ s C le
+      absorb-θ pψ (cons (inj₂ s) C) le = onϕ pψ s C le
 
-    -- the outer induction on the φ-count; at zero the chain collapses into θ
-    chainModAt : (K : ℕ){a c : 𝕌[ 𝑩 ]} → proj₁ ψ a c
-      → (C : Chain 𝑩 (θ ∪ᵣ φ) a c) → countφ C ≤ K → proj₁ δ a c
-    chainModAt zero    pψ C le = ∨-upperˡ θ (φ ∧ ψ) (θ-collapse C le)
+    -- the outer induction on the ϕ-count; at zero the chain collapses into θ
+    chainModAt : (K : ℕ){a c : 𝕌[ 𝑩 ]} → a ψ c
+      → (C : Chain 𝑩 (θ ∪ᵣ ϕ) a c) → countϕ C ≤ K → a δ c
+    chainModAt zero    pψ C le = ∨-upperˡ θ (ϕ ∧ Ψ) (θ-collapse C le)
     chainModAt (suc K) pψ C le = chainModStep K (chainModAt K) pψ C le
 
-    -- the chain-level modular law: ψ-tied chain endpoints are δ-related
-    chainMod : {a c : 𝕌[ 𝑩 ]} → proj₁ ψ a c → Chain 𝑩 (θ ∪ᵣ φ) a c → proj₁ δ a c
-    chainMod pψ C = chainModAt (countφ C) pψ C ≤-refl
+    -- the chain-level modular law: ψ-tied chain endpoints are Δ-related
+    chainMod : {a c : 𝕌[ 𝑩 ]} → a ψ c → Chain 𝑩 (θ ∪ᵣ ϕ) a c → a δ c
+    chainMod pψ C = chainModAt (countϕ C) pψ C ≤-refl
 ```
 
 Packaging the ladder as a forward statement: a variety with Day terms satisfies the
-modular inclusion `(θ ∨ φ) ∧ ψ ⊆ θ ∨ (φ ∧ ψ)` (for `θ ⊆ ψ`) **along every θ/φ-chain**.
+modular inclusion `(θ ∨ ϕ) ∧ ψ ⊆ θ ∨ (ϕ ∧ ψ)` (for `θ ⊆ ψ`) **along every θ/ϕ-chain**.
 This is the finiteness-free content of Day's theorem; composing it with `Gen ⊆ Chain`
-(the collapse of the generated join `Cg(θ ∪ φ)` to finite chains, valid for finitary
+(the collapse of the generated join `Cg(θ ∪ ϕ)` to finite chains, valid for finitary
 signatures) upgrades it to the literal `CongruenceModular`{.AgdaFunction} type.
 
 ```agda
 module _
   {𝑆 : Signature 0ℓ 0ℓ}{X : Type χ}{Idx : Type ι}
   {ℰ : Idx → Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X}
-  ( (n , dt) : Σ[ n ∈ ℕ ] HasDayTerms n {α} {ρ} ℰ )
+  ( (n , dt) : Σ[ n ∈ ℕ ] HasDayTerms n ℰ )
   {𝑩 : Algebra {𝑆 = 𝑆} α ρ}
   (B⊨ : 𝑩 ⊨ₑ ℰ)
   where
 
-  day⇒chainModular : (θ φ ψ : Con 𝑩 ℓ) → θ ⊆ ψ → {a b : 𝕌[ 𝑩 ]}
-    → proj₁ ψ a b → Chain 𝑩 (θ ∪ᵣ φ) a b → proj₁ (θ ∨ (φ ∧ ψ)) a b
-  day⇒chainModular = chainMod {ℰ = ℰ}{n = n} dt 𝑩 B⊨
+  Day⇒chainModular : (θ ϕ ψ : Con 𝑩 ℓ) → θ ⊆ ψ → {a b : 𝕌[ 𝑩 ]}
+    → proj₁ ψ a b → Chain 𝑩 (θ ∪ᵣ ϕ) a b → proj₁ (θ ∨ (ϕ ∧ ψ)) a b
+  Day⇒chainModular = chainMod {ℰ = ℰ}{n = n} dt 𝑩 B⊨
 ```
 
 To land the ladder in the *literal* `CongruenceModular`{.AgdaFunction} type (whose
-join is the generated congruence `Cg(θ ∪ φ)`), the one extra ingredient is
+join is the generated congruence `Cg(θ ∪ ϕ)`), the one extra ingredient is
 `JoinIsChain` ([Setoid.Congruences.ChainJoin][]), applied once, to the hypothesis
-join.  The other inclusion of the `≑` — `θ ∨ (φ ∧ ψ) ⊆ (θ ∨ φ) ∧ ψ` — is the trivial
-lattice direction: both joinands sit below `θ ∨ φ` and, using `θ ⊆ ψ`, below `ψ`.
+join.  The other inclusion of the `≑` — `θ ∨ (ϕ ∧ ψ) ⊆ (θ ∨ ϕ) ∧ ψ` — is the trivial
+lattice direction: both joinands sit below `θ ∨ ϕ` and, using `θ ⊆ ψ`, below `ψ`.
 
 ```agda
   -- Day terms ⟹ congruence modularity (the forward half of Day's theorem), modulo
   -- the hypothesis JoinIsChain.  The substantive inclusion is the chain ladder; the
   -- reverse inclusion holds in any lattice.
-  day⇒CongruenceModular : JoinIsChain 𝑩 (α ⊔ ρ ⊔ ℓ) → CongruenceModular 𝑩 ℓ
-  day⇒CongruenceModular jic θ φ ψ θ⊆ψ = fwd , bwd
+  Day⇒CongruenceModular : JoinIsChain 𝑩 (α ⊔ ρ ⊔ ℓ) → CongruenceModular 𝑩 ℓ
+  Day⇒CongruenceModular jic θ ϕ ψ θ⊆ψ = fwd , bwd
     where
-    fwd : θ ∨ (φ ∧ ψ) ⊆ (θ ∨ φ) ∧ ψ
-    fwd = ∨-least θ (φ ∧ ψ) ((θ ∨ φ) ∧ ψ)
-            (λ xθy → ∨-upperˡ θ φ xθy , θ⊆ψ xθy)
-            (λ (xφy , xψy) → ∨-upperʳ θ φ xφy , xψy)
+    fwd : θ ∨ (ϕ ∧ ψ) ⊆ (θ ∨ ϕ) ∧ ψ
+    fwd = ∨-least θ (ϕ ∧ ψ) ((θ ∨ ϕ) ∧ ψ)
+            (λ xθy → ∨-upperˡ θ ϕ xθy , θ⊆ψ xθy)
+            (λ (xϕy , xψy) → ∨-upperʳ θ ϕ xϕy , xψy)
 
-    bwd : (θ ∨ φ) ∧ ψ ⊆ θ ∨ (φ ∧ ψ)
-    bwd (x∨y , xψy) = day⇒chainModular θ φ ψ θ⊆ψ xψy (jic θ φ x∨y)
+    bwd : (θ ∨ ϕ) ∧ ψ ⊆ θ ∨ (ϕ ∧ ψ)
+    bwd (x∨y , xψy) = Day⇒chainModular θ ϕ ψ θ⊆ψ xψy (jic θ ϕ x∨y)
 ```
 
 #### The Maltsev condition as a property of a variety
@@ -546,25 +555,21 @@ module _
   -- Every model is congruence-modular.
   CongruenceModularVariety : Type (χ ⊔ ι ⊔ lsuc (α ⊔ ρ ⊔ ℓ))
   CongruenceModularVariety = (𝑩 : Algebra α ρ) → 𝑩 ⊨ₑ ℰ → CongruenceModular 𝑩 ℓ
-
   -- Day's theorem: CM ⇔ existence of Day terms.  Both halves are PROVED: the
-  -- forward (term ⟹ CM) half is `day⇒CongruenceModularVariety` below (and,
-  -- finiteness-free, `day⇒chainModular`); the reverse (CM ⟹ terms) half is
-  -- `CM⇒day` at the end of this module.  `day-theorem` assembles the iff for
+  -- forward (term ⟹ CM) half is `Day⇒CongruenceModularVariety` below (and,
+  -- finiteness-free, `Day⇒chainModular`); the reverse (CM ⟹ terms) half is
+  -- `CM⇒Day` at the end of this module.  `day-theorem` assembles the iff for
   -- finitary signatures.
   Day-Statement : Type (χ ⊔ ι ⊔ lsuc (α ⊔ ρ ⊔ ℓ))
-  Day-Statement = CongruenceModularVariety ⇔ Σ[ n ∈ ℕ ] HasDayTerms n {α} {ρ}ℰ
+  Day-Statement = CongruenceModularVariety ⇔ ∃[ n ] HasDayTerms n {α} {ρ} ℰ
 
   -- Forward Day at the variety level: with Day terms — and `JoinIsChain`, the
-  -- finitary collapse of the generated join `Cg(θ ∪ φ)` to finite chains — every
+  -- finitary collapse of the generated join `Cg(θ ∪ ϕ)` to finite chains — every
   -- model is congruence-modular.  This is the proj₂ (term ⟹ CM) direction of
   -- `Day-Statement`, modulo `JoinIsChain`.
-  day⇒CongruenceModularVariety :
-    ( Σ[ n ∈ ℕ ] HasDayTerms n {α} {ρ} ℰ )
-    → ( (𝑩 : Algebra α ρ) → JoinIsChain 𝑩 (α ⊔ ρ ⊔ ℓ) )
-    → CongruenceModularVariety
-  day⇒CongruenceModularVariety dh jic 𝑩 B⊨ =
-    day⇒CongruenceModular {ℰ = ℰ} dh B⊨ {ℓ = ℓ} (jic 𝑩)
+  Day+finjoin⇒CM : ∃[ n ] HasDayTerms n ℰ
+    → ( ∀ 𝑩 → JoinIsChain 𝑩 (α ⊔ ρ ⊔ ℓ) ) → CongruenceModularVariety
+  Day+finjoin⇒CM dh jic 𝑩 B⊨ = Day⇒CongruenceModular {ℰ = ℰ} dh B⊨ {ℓ = ℓ} (jic 𝑩)
 
   -- ★ The finitary forward Day theorem.  For a finitary signature the JoinIsChain
   -- hypothesis is automatic (`finitary⇒JoinIsChain`), so a variety with Day terms is
@@ -572,10 +577,8 @@ module _
   -- residual side condition.  As everywhere in this development, the finiteness
   -- witness `fin` is `λ _ → _ , ↔-id _` for every `Fin`-arity signature (see
   -- `Examples.Setoid.FinitarySignatures`).
-  day-finitary⇒CongruenceModularVariety :
-    Finitary 𝑆 → ( Σ[ n ∈ ℕ ] HasDayTerms n ℰ ) → CongruenceModularVariety
-  day-finitary⇒CongruenceModularVariety fin dh =
-    day⇒CongruenceModularVariety dh (λ _ → finitary⇒JoinIsChain fin)
+  Day⇒CM : Finitary 𝑆 → ∃[ n ] HasDayTerms n ℰ → CongruenceModularVariety
+  Day⇒CM fin dh = Day+finjoin⇒CM dh (λ _ → finitary⇒JoinIsChain fin)
 ```
 
 #### The converse of Day's theorem: CM ⟹ Day terms
@@ -591,20 +594,20 @@ which was designed to be reused here.
    generators `x , y , z , u`.  It is a model of the theory (`satisfies`{.AgdaFunction}),
    hence congruence-modular by hypothesis.
 
-+  Take `θ = Cg ❴ y , z ❵`{.AgdaFunction}, `φ = Cg ❴ x , y ❵ ∨ Cg ❴ z , u ❵`{.AgdaFunction},
++  Take `θ = Cg ❴ y , z ❵`{.AgdaFunction}, `ϕ = Cg ❴ x , y ❵ ∨ Cg ❴ z , u ❵`{.AgdaFunction},
    and `ψ = Cg ❴ x , u ❵ ∨ Cg ❴ y , z ❵`{.AgdaFunction}.  Where the Jónsson converse takes
    three *principal* congruences, two of Day's are **joins of two principal congruences**
    — each must be collapsed by a substitution identifying *two* generator pairs at once,
    which is what the two-pair bridge `cg-pairs→⊢`{.AgdaFunction} is for — and `θ ⊆ ψ`,
    exactly the side condition of the modular law.  The pair `(x , u)` lies in `ψ` (a
-   generator pair) and in `θ ∨ φ` (the walk `x φ y θ z φ u`), so the modular law
-   `θ ∨ (φ ∧ ψ) ≑ (θ ∨ φ) ∧ ψ`, read right to left, moves it into `θ ∨ (φ ∧ ψ)`.
+   generator pair) and in `θ ∨ ϕ` (the walk `x ϕ y θ z ϕ u`), so the modular law
+   `θ ∨ (ϕ ∧ ψ) ≑ (θ ∨ ϕ) ∧ ψ`, read right to left, moves it into `θ ∨ (ϕ ∧ ψ)`.
 
 +  For a **finitary** signature that join membership is witnessed by a finite
    alternating chain (`finitary⇒JoinIsChain`{.AgdaFunction}), which the *off-phase*
-   normalization `chain→parityᵒ`{.AgdaFunction} aligns: `(φ ∧ ψ)`-steps at even
+   normalization `chain→parityᵒ`{.AgdaFunction} aligns: `(ϕ ∧ ψ)`-steps at even
    positions, `θ`-steps at odd ones.  (The join presents its `θ`-steps in the first
-   tag, but the even forks of `Th-Day`{.AgdaFunction} are the `φ`-collapses, so the
+   tag, but the even forks of `Th-Day`{.AgdaFunction} are the `ϕ`-collapses, so the
    phase is swapped relative to the Jónsson converse — hence the `ᵒ` pass.)  Its
    `n + 1` elements are quaternary *terms* — the carrier of `𝔽` *is* `Term (Fin 4)` —
    and they are the Day terms `m₀ , … , mₙ`, packaged as the interpretation `I i = tᵢ`.
@@ -612,13 +615,13 @@ which was designed to be reused here.
 
 +  Each Day identity is an endpoint fact about the chain, or a congruence membership
    pushed through a collapsing substitution (`cg-pair→⊢`{.AgdaFunction} for the
-   principal `θ`, `cg-pairs→⊢`{.AgdaFunction} for the two-pair joins `φ` and `ψ`).  The endpoint
+   principal `θ`, `cg-pairs→⊢`{.AgdaFunction} for the two-pair joins `ϕ` and `ψ`).  The endpoint
    identities are the chain's endpoints (`m₀` is *exactly* `x`; `mₙ` is derivably `u`).
-   The middle family `mᵢ(x,y,y,x) ≈ x` collapses `z ↦ y , u ↦ x` — the two `ψ`-pairs —
+   The middle family `mᵢ(x, y, y, x) ≈ x` collapses `z ↦ y , u ↦ x` — the two `ψ`-pairs —
    using that every chain element is `ψ`-tied to `x` (`head-linked`{.AgdaFunction}:
    both step relations lie below `ψ`, the meet by its second component and `θ` by
    `θ ⊆ ψ`, so the walk never leaves the `ψ`-class of `x`).  The fork at `i` collapses
-   `y ↦ x , z ↦ u` (the two `φ`-pairs) when `i` is even and `z ↦ y` (the `θ`-pair)
+   `y ↦ x , z ↦ u` (the two `ϕ`-pairs) when `i` is even and `z ↦ y` (the `θ`-pair)
    when `i` is odd — precisely the parity of the normalized chain's `i`-th step.
 
 +  As in the Maltsev and Jónsson converses, the collapsing substitutions are chosen to
@@ -657,8 +660,8 @@ module _
 
   -- The converse half of Day's theorem: a congruence-modular variety
   -- over a finitary signature has a chain of Day terms.
-  CM⇒day : Finitary 𝑆 → CongruenceModularVariety 0ℓ ℰ → Σ[ n ∈ ℕ ] HasDayTerms n ℰ
-  CM⇒day fin cmv = n , I , red
+  CM⇒Day : Finitary 𝑆 → CongruenceModularVariety 0ℓ ℰ → ∃[ n ] HasDayTerms n ℰ
+  CM⇒Day fin cmv = n , I , red
     where
 
     -- 𝔽 is a model, hence congruence-modular by hypothesis
@@ -667,35 +670,35 @@ module _
 
     open principal 𝔽[ Fin 4 ]
     -- the three congruences of Day's construction; θ ⊆ ψ is the modular side condition
-    θ φ ψ : Con 𝔽 (ι ⊔ lsuc 0ℓ)
+    θ ϕ ψ : Con 𝔽 (ι ⊔ lsuc 0ℓ)
     θ = Cg ❴ y , z ❵
-    φ = Cg ❴ x , y ❵ ∨ Cg ❴ z , u ❵
+    ϕ = Cg ❴ x , y ❵ ∨ Cg ❴ z , u ❵
     ψ = Cg ❴ x , u ❵ ∨ Cg ❴ y , z ❵
 
     θ⊆ψ : θ ⊆ ψ
     θ⊆ψ = ∨-upperʳ (Cg ❴ x , u ❵) (Cg ❴ y , z ❵)
 
-    -- (x , u) lies in (θ ∨ φ) ∧ ψ: the ψ-pair is a generator, and θ ∨ φ walks
-    -- x φ y θ z φ u (the two outer steps through φ's two principal components)
+    -- (x , u) lies in (θ ∨ ϕ) ∧ ψ: the ψ-pair is a generator, and θ ∨ ϕ walks
+    -- x ϕ y θ z ϕ u (the two outer steps through ϕ's two principal components)
     xψu : ψ .proj₁ x u
     xψu = ∨-upperˡ (Cg ❴ x , u ❵) (Cg ❴ y , z ❵) (base pᵣ)
 
-    xθ∨φu : (θ ∨ φ) .proj₁ x u
-    xθ∨φu = transitive (∨-upperʳ θ φ (∨-upperˡ (Cg ❴ x , y ❵) (Cg ❴ z , u ❵) (base pᵣ)))
-                       ( transitive (∨-upperˡ θ φ (base pᵣ))
-                                    (∨-upperʳ θ φ (∨-upperʳ (Cg ❴ x , y ❵) (Cg ❴ z , u ❵) (base pᵣ))) )
+    xθ∨ϕu : (θ ∨ ϕ) .proj₁ x u
+    xθ∨ϕu = transitive (∨-upperʳ θ ϕ (∨-upperˡ (Cg ❴ x , y ❵) (Cg ❴ z , u ❵) (base pᵣ)))
+                       ( transitive (∨-upperˡ θ ϕ (base pᵣ))
+                                    (∨-upperʳ θ ϕ (∨-upperʳ (Cg ❴ x , y ❵) (Cg ❴ z , u ❵) (base pᵣ))) )
 
-    -- the modular law (right to left) moves the pair into θ ∨ (φ ∧ ψ)
-    xδu : (θ ∨ (φ ∧ ψ)) .proj₁ x u
-    xδu = (𝔽cm θ φ ψ θ⊆ψ) .proj₂ (xθ∨φu , xψu)
+    -- the modular law (right to left) moves the pair into θ ∨ (ϕ ∧ ψ)
+    xδu : (θ ∨ (ϕ ∧ ψ)) .proj₁ x u
+    xδu = (𝔽cm θ ϕ ψ θ⊆ψ) .proj₂ (xθ∨ϕu , xψu)
 
     -- the finite chain (the signature is finitary), parity-normalized *off-phase*:
-    -- (φ∧ψ)-steps at even positions, θ-steps at odd positions.  The proof never
+    -- (ϕ∧ψ)-steps at even positions, θ-steps at odd positions.  The proof never
     -- computes this chain — it only reads its fields — so it is `abstract`, which
     -- keeps the extraction pipeline from being unfolded during type-checking
     abstract
-      pc : ParityChain 𝔽 ((φ ∧ ψ) .proj₁) (θ .proj₁) x u
-      pc = chain→parityᵒ θ (φ ∧ ψ) (finitary⇒JoinIsChain fin θ (φ ∧ ψ) xδu)
+      pc : ParityChain 𝔽 ((ϕ ∧ ψ) .proj₁) (θ .proj₁) x u
+      pc = chain→parityᵒ θ (ϕ ∧ ψ) (finitary⇒JoinIsChain fin θ (ϕ ∧ ψ) xδu)
 
     open ParityChain pc renaming
       ( len to n ; elt to t ; elt-fst to t-fst ; elt-lst to t-lst ; step to t-step )
@@ -722,7 +725,7 @@ module _
     σxyzu σxyyx σxxuu σxyyu : Sub {𝑆 = 𝑆} (Fin 4) (Fin 4)
     σxyzu j = I ✦ quad xD yD zD uD j    -- the identity positions (no collapse)
     σxyyx j = I ✦ quad xD yD yD xD j    -- z ↦ y , u ↦ x : collapses ψ's pairs (x,u), (y,z)
-    σxxuu j = I ✦ quad xD xD uD uD j    -- y ↦ x , z ↦ u : collapses φ's pairs (x,y), (z,u)
+    σxxuu j = I ✦ quad xD xD uD uD j    -- y ↦ x , z ↦ u : collapses ϕ's pairs (x,y), (z,u)
     σxyyu j = I ✦ quad xD yD yD uD j    -- z ↦ y         : collapses the θ-pair (y,z)
 
     -- every chain element is ψ-tied to x: both step relations lie below ψ — the meet
@@ -760,9 +763,9 @@ module _
     deriv-mid i = graft-bridgeˡ (t i) σxyyx
                     (sym (cg-pairs→⊢ E σxyyx x u y z refl refl (xψt i)))
 
-    deriv-fork-φ : (i : Fin n) → proj₁ φ (t (inject₁ i)) (t (fsuc i))
+    deriv-fork-ϕ : (i : Fin n) → proj₁ ϕ (t (inject₁ i)) (t (fsuc i))
       → E ⊢ Fin 4 ▹ (I ✦ mxxuu (inject₁ i)) ≈ (I ✦ mxxuu (fsuc i))
-    deriv-fork-φ i st = graft-bridge (t (inject₁ i)) (t (fsuc i)) σxxuu
+    deriv-fork-ϕ i st = graft-bridge (t (inject₁ i)) (t (fsuc i)) σxxuu
                           (cg-pairs→⊢ E σxxuu x y z u refl refl st)
 
     deriv-fork-θ : (i : Fin n) → proj₁ θ (t (inject₁ i)) (t (fsuc i))
@@ -785,7 +788,7 @@ module _
     red 𝑩 B⊨ (mxyyx≈x i) = discharge 𝑩 B⊨ (mxyyx i) xD (deriv-mid i)
     red 𝑩 B⊨ mxyzu≈u     = discharge 𝑩 B⊨ (mxyzu (fromℕ n)) uD deriv-lst
     red 𝑩 B⊨ (m-fork i) with even? (toℕ i) | t-step i
-    ... | true  | s = discharge 𝑩 B⊨ (mxxuu (inject₁ i)) (mxxuu (fsuc i)) (deriv-fork-φ i (proj₁ s))
+    ... | true  | s = discharge 𝑩 B⊨ (mxxuu (inject₁ i)) (mxxuu (fsuc i)) (deriv-fork-ϕ i (proj₁ s))
     ... | false | s = discharge 𝑩 B⊨ (mxyyu (inject₁ i)) (mxyyu (fsuc i)) (deriv-fork-θ i s)
 ```
 
@@ -799,8 +802,8 @@ Maltsev-condition characterizations (Maltsev, Jónsson, Day) as complete iffs.
 
 ```agda
   -- ★ Day's theorem (Day 1969; Freese–McKenzie, Thm. 2.2), as a complete iff.
-  day-theorem : Finitary 𝑆 → Day-Statement 0ℓ ℰ
-  day-theorem fin = CM⇒day fin , day-finitary⇒CongruenceModularVariety 0ℓ ℰ fin
+  Day-theorem : Finitary 𝑆 → Day-Statement 0ℓ ℰ
+  Day-theorem fin = CM⇒Day fin , Day⇒CM 0ℓ ℰ fin
 ```
 
 ---
