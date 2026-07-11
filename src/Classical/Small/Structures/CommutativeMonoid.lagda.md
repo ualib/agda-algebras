@@ -10,7 +10,7 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Small.Structures.CommutativeMonoid][] module of the [Agda Universal Algebra Library][].
 
-Specializes [`Classical.Structures.CommutativeMonoid`][] to the `0ℓ`–`0ℓ` case, mirroring the veneers of
+Specializes [`Classical.Structures.CommutativeMonoid`][Classical.Structures.CommutativeMonoid] to the `0ℓ`–`0ℓ` case, mirroring the veneers of
 `Magma`, `Semigroup`, `Monoid`, etc.
 
 <!--

@@ -11,7 +11,7 @@ author: "the agda-algebras development team"
 This is the [Examples.Classical.Semigroup][] module of the [Agda Universal Algebra Library][].
 
 The natural numbers under addition form the canonical first semigroup to exhibit,
-mirroring the magma example in [`Examples.Classical.Magma`][].  Beyond demonstrating
+mirroring the magma example in [`Examples.Classical.Magma`][Examples.Classical.Magma].  Beyond demonstrating
 that the M3-4 deliverable type-checks, this module is the home for all future
 semigroup-specific worked examples: alternative semigroups on `ℕ`, finite semigroups,
 the free semigroup over a generating set, semigroups that fail to be monoids, and so on.

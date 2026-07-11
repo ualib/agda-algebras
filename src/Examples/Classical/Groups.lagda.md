@@ -10,7 +10,7 @@ author: "the agda-algebras development team"
 
 This is the [Examples.Classical.Groups][] module of the [Agda Universal Algebra Library][].
 
-Index of the worked group examples under [`Examples/Classical/Groups/`][].  This
+Index of the worked group examples under `Examples/Classical/Groups/`.  This
 module merely `import`s each submodule, so that the whole family type-checks at once
 from a single entry point; it deliberately does *not* `open` or re-export their
 contents.  The finite examples each introduce a local operation `_·_` and their own

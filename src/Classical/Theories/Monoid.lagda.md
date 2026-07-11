@@ -11,7 +11,7 @@ author: "the agda-algebras development team"
 This is the [Classical.Theories.Monoid][] module of the [Agda Universal Algebra Library][].
 
 `Th-Monoid` has three equations: associativity, left identity, and right
-identity, composed from the generic builders of [`Classical.Equations`][] applied
+identity, composed from the generic builders of [`Classical.Equations`][Classical.Equations] applied
 to `Sig-Monoid`'s symbols.  Associativity needs three variables, the identity laws
 one each, so the variable carrier is uniformly `Fin 3` (per [ADR-002 v2
 §2](../../docs/adr/002-classical-layer-design.md)); the identity equations use

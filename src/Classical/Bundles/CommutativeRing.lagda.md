@@ -12,7 +12,7 @@ This is the [Classical.Bundles.CommutativeRing][] module of the [Agda Universal 
 
 Mirror of the Ring bridge with the added `*-comm` field; over `Sig-Ring`.  This is the
 bridge whose round-trip on `ℤ` is exercised in
-[`Examples.Classical.CommutativeRing`][].
+[`Examples.Classical.CommutativeRing`][Examples.Classical.CommutativeRing].
 
 <!--
 ```agda

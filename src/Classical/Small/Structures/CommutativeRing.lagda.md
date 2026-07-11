@@ -10,7 +10,7 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Small.Structures.CommutativeRing][] module of the [Agda Universal Algebra Library][].
 
-Specializes [`Classical.Structures.CommutativeRing`][] to the `0ℓ`–`0ℓ` case,
+Specializes [`Classical.Structures.CommutativeRing`][Classical.Structures.CommutativeRing] to the `0ℓ`–`0ℓ` case,
 mirroring the veneers of `Ring`, `CommutativeMonoid`, `AbelianGroup`, etc.
 
 <!--

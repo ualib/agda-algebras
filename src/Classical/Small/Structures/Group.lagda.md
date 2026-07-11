@@ -10,7 +10,7 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Small.Structures.Group][] module of the [Agda Universal Algebra Library][].
 
-Specializes [`Classical.Structures.Group`][] to the common case where the universe
+Specializes [`Classical.Structures.Group`][Classical.Structures.Group] to the common case where the universe
 level of both the carrier and the equivalence is `0ℓ` (i.e., Set-valued carriers with
 propositional or set-truncated equivalence), mirroring the analogous veneers for
 `Magma`, `Semigroup`, `Monoid`, etc.

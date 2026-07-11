@@ -78,7 +78,7 @@ Table n = Vec (Vec (Fin n) n) n
 
 The decidable equational-law checkers for finite operations — `Associative?`,
 `Commutative?`, `Idempotent?`, the identity/inverse laws, and the two-operation
-absorption and distributivity laws — live in [`Overture.Operations.Properties`][].
+absorption and distributivity laws — live in [`Overture.Operations.Properties`][Overture.Operations.Properties].
 They take an arbitrary finite operation `Fin n → Fin n → Fin n` and do not touch the
 table representation, so they are not specific to Cayley tables; finiteness is simply
 what makes the laws decidable.  Together with the `Table`/`⟦_⟧` machinery here and
@@ -98,6 +98,6 @@ b` is the row-`a`, column-`b` entry) and the `Classical`{.AgdaModule} builders
 Routing `⟦_⟧`{.AgdaFunction} through the tuple-indexed `Op (Fin 2) (Fin n)` would
 only insert `Curry₂`/`Uncurry₂` adapters at every call site and obscure the
 two-dimensional table, so the finite Cayley-table case keeps the plain curried
-function type.  The decidable-law checkers in [`Overture.Operations.Properties`][]
+function type.  The decidable-law checkers in [`Overture.Operations.Properties`][Overture.Operations.Properties]
 take the same bare `Fin n → Fin n → Fin n`, for the same reason: finiteness is what
 makes the laws decidable, independently of how an operation's arguments are packaged.

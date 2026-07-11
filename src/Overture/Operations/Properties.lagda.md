@@ -13,14 +13,14 @@ Decision procedures for the standard equational laws of a binary operation over 
 *finite* carrier.  Each law `∀ a … → … ≡ …` is decidable because the carrier `Fin n`
 is finitely searchable (`Data.Fin.Properties.all?`) and has decidable equality
 (`_≟_`); the checkers below expose that decision so that a caller can extract the
-proof with `from-yes` (re-exported from [`Overture.Cayley`][]) whenever the operation
+proof with `from-yes` (re-exported from [`Overture.Cayley`][Overture.Cayley]) whenever the operation
 satisfies the law.
 
 These are the *evaluated* analogues of the syntactic equation builders in
-[`Classical.Equations`][], and the finite, decidable counterparts of the law
+[`Classical.Equations`][Classical.Equations], and the finite, decidable counterparts of the law
 predicates in the standard library's `Algebra.Definitions`.  They are stated for an
 arbitrary finite operation `Fin n → Fin n → Fin n`: a Cayley table (via
-[`Overture.Cayley`][]) is one way to present such an operation, but the checkers do
+[`Overture.Cayley`][Overture.Cayley]) is one way to present such an operation, but the checkers do
 not depend on that representation, which is why they live here rather than in the
 `Cayley` module.
 

@@ -10,7 +10,7 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Bundles.DistributiveLattice][] module of the [Agda Universal Algebra Library][].
 
-Bridges [`Classical.Structures.DistributiveLattice`][] to the standard library's
+Bridges [`Classical.Structures.DistributiveLattice`][Classical.Structures.DistributiveLattice] to the standard library's
 `Algebra.Lattice.Bundles.DistributiveLattice`.  Like the
 [Lattice bridge][Classical.Bundles.Lattice], its stdlib target lives in
 `Algebra.Lattice.Bundles`.

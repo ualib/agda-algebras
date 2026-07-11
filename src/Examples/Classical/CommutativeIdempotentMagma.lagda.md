@@ -11,7 +11,7 @@ author: "the agda-algebras development team"
 This is the [Examples.Classical.CommutativeIdempotentMagma][] module of the [Agda Universal Algebra Library][].
 
 This is the first finite worked example built from a *Cayley table* (see
-[`Overture.Cayley`][]).  We fix a four-element carrier `Fin 4` and a binary operation
+[`Overture.Cayley`][Overture.Cayley]).  We fix a four-element carrier `Fin 4` and a binary operation
 given outright by its multiplication table, then read off its algebraic shape: the
 operation is *commutative* and *idempotent*, so `(Fin 4, _·_)` is a magma with a
 commutative idempotent operation.  It is deliberately *not* associative, which makes
@@ -83,7 +83,7 @@ open Polymorphic.Magma-Op cim-magma using ( _∙_ )
 
 Both laws are decidable over the finite carrier, so each is discharged by
 `from-yes`{.AgdaFunction} applied to the corresponding decision from
-[`Overture.Cayley`][].  No case dump is written by hand; if the table
+[`Overture.Cayley`][Overture.Cayley].  No case dump is written by hand; if the table
 violated a law the decision would reduce to `no`{.AgdaInductiveConstructor} and
 the term would fail to type-check.
 

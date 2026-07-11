@@ -102,13 +102,13 @@ hierarchy.
 The function `_∙_` interprets the syntactic operation symbol `∙-Op` in the algebra
 `𝑴` and then curries the resulting `(Fin 2 → 𝕌[ 𝑴 ]) → 𝕌[ 𝑴 ]` into the
 user-facing `𝕌[ 𝑴 ] → 𝕌[ 𝑴 ] → 𝕌[ 𝑴 ]`.  The arity-tuple-vs-curried bridging is
-delegated to `Curry₂` from [`Classical.Operations`][]; the per-structure file never
+delegated to `Curry₂` from [`Classical.Operations`][Classical.Operations]; the per-structure file never
 constructs `pair`-style argument tuples inline.  This is what
 [ADR-002](../../docs/adr/002-classical-layer-design.md) §1 requires: the `Fin n`
 η-bridge is contained inside one module library-wide.
 
 When two magmas appear in the same expression — for example, both sides of a
-round-trip lemma in [`Classical.Bundles.Magma`][] — the standard Agda idiom is
+round-trip lemma in [`Classical.Bundles.Magma`][Classical.Bundles.Magma] — the standard Agda idiom is
 
     open Magma-Op 𝑴
     open Magma-Op 𝑵 renaming (_∙_ to _∙'_)
@@ -147,7 +147,7 @@ opsToMagma {A = A} _·_ = record { Domain = ≡.setoid A ; Interp = interp }
 
 A magma morphism is, by [ADR-002][] §5, definitionally a homomorphism of the
 underlying `Sig-Magma`-algebras.  No per-structure morphism record is introduced; we
-inherit [`Setoid.Homomorphisms`][] wholesale, instantiated at `𝑆 = Sig-Magma`.  This
+inherit [`Setoid.Homomorphisms`][Setoid.Homomorphisms] wholesale, instantiated at `𝑆 = Sig-Magma`.  This
 is uniformly the policy across the classical hierarchy: each structure inherits
 homomorphisms, isomorphisms, and substructure machinery from `Setoid/`
 instantiated at its own signature.  Per-structure morphism *invariants* — for

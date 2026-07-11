@@ -13,7 +13,7 @@ This is the [Classical.Theories.Lattice][] module of the [Agda Universal Algebra
 `Th-Lattice` has eight equations: associativity, commutativity, and idempotency for
 each of the two binary operations `∧-Op` and `∨-Op`, plus the two absorption laws
 relating them.  All equations are composed from the generic builders of
-[`Classical.Equations`][] applied to `Sig-Lattice`'s symbols.  The constructor
+[`Classical.Equations`][Classical.Equations] applied to `Sig-Lattice`'s symbols.  The constructor
 names hyphenate the operation as a prefix (`∧-assoc`, `∨-comm`, …) so that the
 underlying operation is visible at every use site of the equational logic.
 
@@ -61,7 +61,7 @@ Th-Lattice absorbˡ = AbsorbsLeft  ∧-Op ∨-Op refl refl 0F 1F
 Th-Lattice absorbʳ = AbsorbsRight ∧-Op ∨-Op refl refl 0F 1F
 ```
 
-Unfolding the absorption builders (per [`Classical.Equations`][]):
+Unfolding the absorption builders (per [`Classical.Equations`][Classical.Equations]):
 `Th-Lattice absorbˡ` is the pair
 `(node ∧-Op (pair (ℊ 0F) (node ∨-Op (pair (ℊ 0F) (ℊ 1F)))) , ℊ 0F)` — i.e.
 `x ∧ (x ∨ y) ≈ x` — and `Th-Lattice absorbʳ` is

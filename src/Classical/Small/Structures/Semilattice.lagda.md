@@ -10,7 +10,7 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Small.Structures.Semilattice][] module of the [Agda Universal Algebra Library][].
 
-Specializes [`Classical.Structures.Semilattice`][] to the `0ℓ`–`0ℓ` case, mirroring
+Specializes [`Classical.Structures.Semilattice`][Classical.Structures.Semilattice] to the `0ℓ`–`0ℓ` case, mirroring
 the veneers of `Magma`, `Semigroup`, `CommutativeSemigroup`, etc.
 
 <!--

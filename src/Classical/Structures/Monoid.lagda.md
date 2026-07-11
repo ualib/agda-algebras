@@ -256,7 +256,7 @@ through `mn-assoc 𝑴` in the middle.
 
 #### Homomorphism invariants
 
-Per the policy stated in [`Classical.Structures.Magma`][], morphism invariants are
+Per the policy stated in [`Classical.Structures.Magma`][Classical.Structures.Magma], morphism invariants are
 theorems about the inherited `Sig-Monoid`-homomorphisms, not new record fields.  The
 inaugural instance is the one that prose names explicitly: *homomorphisms preserve
 the identity element*.  The proof needs only the homomorphism's compatibility at
@@ -308,10 +308,10 @@ opsToBareMonoid {A = A} _·_ e = expand-ε e
 That `expand-ε` is a *section* of the reduct — reducting the expansion recovers the
 original magma, carrier and interpretation on the nose — is a definitional fact,
 recorded here in the strict operation-level form of
-[`Setoid.Algebras.Reduct`][]'s functoriality laws.  This is the formal half of
+[`Setoid.Algebras.Reduct`][Setoid.Algebras.Reduct]'s functoriality laws.  This is the formal half of
 the section-versus-adjoint contrast of M4-5d: `expand-ε` *chooses* an existing
 element to interpret `ε-Op` (so the carrier is unchanged and the reduct round-trips),
-whereas the free expansion `adjoinUnit` of [`Classical.Categories.AdjoinUnit`][]
+whereas the free expansion `adjoinUnit` of [`Classical.Categories.AdjoinUnit`][Classical.Categories.AdjoinUnit]
 *adjoins* a fresh element (enlarging the carrier) and is universal.
 
 ```agda

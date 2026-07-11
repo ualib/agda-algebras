@@ -10,9 +10,9 @@ author: "the agda-algebras development team"
 
 This is the [Examples.Setoid][] module of the [Agda Universal Algebra Library][].
 
-Whereas [`Examples/Classical/`][] pairs one worked instance with each *concrete
+Whereas [`Examples/Classical/`][Examples.Classical] pairs one worked instance with each *concrete
 structure* (magma, semigroup, monoid, …), the modules collected here exercise the
-generic [`Setoid/`][] universal-algebra machinery directly: free algebras over a
+generic [`Setoid/`][Setoid] universal-algebra machinery directly: free algebras over a
 signature, relatively free algebras / presentations, quotients by a congruence, and
 Birkhoff's HSP theorem specialized to a concrete algebra.  They are the
 cross-structure and "richer" examples requested in

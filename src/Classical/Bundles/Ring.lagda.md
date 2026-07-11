@@ -10,7 +10,7 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Bundles.Ring][] module of the [Agda Universal Algebra Library][].
 
-The bidirectional bridge between the Σ-typed core of [`Classical.Structures.Ring`][]
+The bidirectional bridge between the Σ-typed core of [`Classical.Structures.Ring`][Classical.Structures.Ring]
 and the record-typed `Algebra.Bundles.Ring` in the standard library.  The round-trip
 is stated *pointwise* per [ADR-002 v2 §6](../../docs/adr/002-classical-layer-design.md);
 the eleven curried laws arrive ready-made from `Ring-Op`, so the core-to-bundle

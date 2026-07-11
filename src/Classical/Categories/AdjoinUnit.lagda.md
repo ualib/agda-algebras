@@ -22,7 +22,7 @@ expansion is `Maybe 𝕌[ 𝑺 ]`, with `nothing` the freshly adjoined unit (int
 `ε-Op`) and `just` the inclusion of the old elements.  The extended operation makes
 `nothing` neutral on both sides and multiplies old elements in `𝑺`, so the monoid
 unit laws hold by computation and associativity reduces to that of the semigroup.
-This is the sharp contrast with `expand-ε` ([`Classical.Structures.Monoid`][]), which
+This is the sharp contrast with `expand-ε` ([`Classical.Structures.Monoid`][Classical.Structures.Monoid]), which
 interprets `ε-Op` as a *chosen element of the existing carrier* — a section of the
 reduct (`opsToBareMonoid-section`), not its left adjoint.
 
@@ -34,7 +34,7 @@ the term-algebra quotient and is deferred.)
 
 The categorical scaffolding is the minimal self-contained vocabulary we need here:
 the categories of semigroups and monoids are *full subcategories*
-([`Setoid.Categories.FullSubcategory`][]) of the algebra categories
+([`Setoid.Categories.FullSubcategory`][Setoid.Categories.FullSubcategory]) of the algebra categories
 ([`Alg`][Setoid.Categories.Algebra]) of their signatures.  A homomorphism of
 theory-satisfying algebras is just a homomorphism of the underlying algebras.
 The forgetful functor is [`reductF`][Setoid.Categories.Reduct] restricted along
