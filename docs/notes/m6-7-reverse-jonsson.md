@@ -112,7 +112,7 @@ bridge:
    congruence above both step relations links the head to every element — instantiated
    at `θ` with `proj₁` twice, since both step relations are meets with `θ` on the left.
    This keeps the normalization reusable for the eventual Day converse, whose chain
-   lives in different congruences.  (It did: `CM⇒day` consumes `head-linked` at `μ = ψ`
+   lives in different congruences.  (It did: `CM⇒Day` consumes `head-linked` at `μ = ψ`
    with `proj₂` and `θ ⊆ ψ`.)
 +  **The extracted chain must be `abstract`, or conversion drowns.**  The witness `pc`
    is built by running the whole extraction pipeline (`chain→parity` over
@@ -133,12 +133,14 @@ representation.
 
 ## Remaining work on #413
 
-+  ~~CM ⟹ Day terms (reverse Day).~~  **Done** — `CM⇒day` in
++  ~~CM ⟹ Day terms (reverse Day).~~  **Done** — `CM⇒Day` in
    `Setoid.Varieties.Maltsev.Modularity`, mirroring this module over `𝔽[ Fin 4 ]`
    exactly as predicted (the `ParityChain` machinery is consumed unchanged, via its
    off-phase pass `chain→parityᵒ`); see the companion note
-   [`m6-7-reverse-day.md`](m6-7-reverse-day.md).  This completes #413; the only open
-   Day item is the *forward* direction, deferred indefinitely on #412 (M6-6 note).
+   [`m6-7-reverse-day.md`](m6-7-reverse-day.md).  This completes #413.  The remaining
+   Day item, the *forward* direction, was deferred on #412 and has since landed there
+   too (PR #442, the M6-6 note's "ladder that works"), so `Day-theorem` is a complete
+   iff alongside `jonsson-theorem`.
 
 ## Build / check
 
