@@ -11,7 +11,7 @@ author: "the agda-algebras development team"
 This is the [Classical.Bundles.Semigroup][] module of the [Agda Universal Algebra Library][].
 
 This module supplies the bidirectional bridge between the Σ-typed core of
-[`Classical.Structures.Semigroup`][] and the record-typed `Algebra.Bundles.Semigroup`
+[`Classical.Structures.Semigroup`][Classical.Structures.Semigroup] and the record-typed `Algebra.Bundles.Semigroup`
 in the Agda standard library.  Both representations carry the same mathematical
 content; the bridge exists so that downstream code typed against
 `Algebra.Bundles.Semigroup` is reusable against the canonical agda-algebras
@@ -64,7 +64,7 @@ Going from the canonical Σ-typed core to the stdlib record reads off the domain
 so this direction is pure field-plumbing with no proof content of its own.  All of
 the Fin 2 η-bridging between term-interpretation form and curried form is discharged
 once, upstream, inside `Semigroup-Op.interp-node` (see
-[`Classical.Structures.Semigroup`][]); the bundle bridge never touches it.
+[`Classical.Structures.Semigroup`][Classical.Structures.Semigroup]); the bundle bridge never touches it.
 
 ```agda
 ⟨_⟩ˢᵍ : Semigroup α ρ → stdlib-Semigroup α ρ

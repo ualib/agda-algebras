@@ -12,7 +12,7 @@ This is the [Classical.Theories.Group][] module of the [Agda Universal Algebra L
 
 `Th-Group` has five equations: the three monoid equations — associativity, left
 identity, right identity — composed from the same builders `Th-Monoid` uses, plus the
-two inverse laws `LeftInverse` and `RightInverse` from [`Classical.Equations`][]
+two inverse laws `LeftInverse` and `RightInverse` from [`Classical.Equations`][Classical.Equations]
 applied to `Sig-Group`'s symbols.  The inverse laws are the first equations in the
 [`Classical/`][Classical] tree to mention a *unary* operation symbol (`⁻¹-Op`); their
 arity-conformance evidence is the triple `refl refl refl` for the binary `∙-Op`, the

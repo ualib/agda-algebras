@@ -64,7 +64,7 @@ open import Overture.Signatures using ( Signature )
 
 A magma has a single binary operation symbol.  The constructor is named `∙-Op`
 following the `<symbol>-Op` convention; the bare `∙` is reserved for the curried
-user-facing accessor introduced in [`Classical.Structures.Magma`][].
+user-facing accessor introduced in [`Classical.Structures.Magma`][Classical.Structures.Magma].
 
 ```agda
 data Op-Magma : Type where

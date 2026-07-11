@@ -27,7 +27,7 @@ Both the lattice operations and the implication are given by Cayley tables, and
 every law — the ten distributive-lattice equations, the residuation adjunction, and
 the Heyting identities — is discharged by *decision* over the finite carrier
 (`from-yes` applied to an `all?`/`_≟_` decision), exactly as in the
-[finite-group examples][Examples.Classical.CyclicGroup3].  A wrong table would make
+[finite-group examples][Examples.Classical.Groups.CyclicGroup3].  A wrong table would make
 the corresponding decision compute to `no`, and the example would fail to compile.
 
 <!--

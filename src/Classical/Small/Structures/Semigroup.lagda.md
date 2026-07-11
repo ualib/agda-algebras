@@ -10,11 +10,11 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Small.Structures.Semigroup][] module of the [Agda Universal Algebra Library][].
 
-This module specializes [`Classical.Structures.Semigroup`][] to the common case where
+This module specializes [`Classical.Structures.Semigroup`][Classical.Structures.Semigroup] to the common case where
 the universe level of both the carrier and the equivalence is `0ℓ` (i.e., Set-valued
 carriers with propositional or set-truncated equivalence).  The motivation matches
-the corresponding magma veneer in [`Classical.Small.Structures.Magma`][]:
-finite-template CSP, finite cases relevant to [FLRP][] intuition, and tutorial contexts
+the corresponding magma veneer in [`Classical.Small.Structures.Magma`][Classical.Small.Structures.Magma]:
+finite-template CSP, finite cases relevant to FLRP intuition, and tutorial contexts
 in [`Examples/`][Examples] and [`Demos/`][Demos] live in this small case, and pulling
 the level-fixed specialization out keeps the polymorphic core unencumbered.
 

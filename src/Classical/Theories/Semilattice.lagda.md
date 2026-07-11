@@ -13,7 +13,7 @@ This is the [Classical.Theories.Semilattice][] module of the [Agda Universal Alg
 A semilattice is an idempotent commutative semigroup: its theory adds idempotency to
 commutativity and associativity, over the same `Sig-Magma` signature (no new symbols).
 `Th-Semilattice` therefore has three equations, all composed from the generic builders
-of [`Classical.Equations`][].
+of [`Classical.Equations`][Classical.Equations].
 
 <!--
 ```agda

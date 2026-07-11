@@ -10,7 +10,7 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Small.Structures.CommutativeSemigroup][] module of the [Agda Universal Algebra Library][].
 
-Specializes [`Classical.Structures.CommutativeSemigroup`][] to the `0ℓ`–`0ℓ` case, mirroring the veneers of
+Specializes [`Classical.Structures.CommutativeSemigroup`][Classical.Structures.CommutativeSemigroup] to the `0ℓ`–`0ℓ` case, mirroring the veneers of
 `Magma`, `Semigroup`, etc.
 
 <!--

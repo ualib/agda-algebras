@@ -13,7 +13,7 @@ This is the [Examples.Classical.Monoid][] module of the [Agda Universal Algebra 
 Lists under concatenation form the canonical monoid, and a deliberately
 *non-commutative* one — so the corpus carries a witness that a monoid need not be
 commutative, in contrast to the `(ℕ, +, 0)` commutative monoid of
-[`Examples.Classical.CommutativeMonoid`][].  Built directly from stdlib's `++-assoc`,
+[`Examples.Classical.CommutativeMonoid`][Examples.Classical.CommutativeMonoid].  Built directly from stdlib's `++-assoc`,
 `++-identityˡ`, `++-identityʳ`.
 
 <!--

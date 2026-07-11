@@ -12,7 +12,7 @@ This is the [Classical.Theories.CommutativeSemigroup][] module of the [Agda Univ
 
 A commutative semigroup adds commutativity to the semigroup theory, over the same
 `Sig-Magma` signature (no new symbols).  `Th-CommutativeSemigroup` therefore has two
-equations, both composed from the generic builders of [`Classical.Equations`][].
+equations, both composed from the generic builders of [`Classical.Equations`][Classical.Equations].
 
 <!--
 ```agda

@@ -12,11 +12,11 @@ This is the [Examples.Classical][] module of the [Agda Universal Algebra Library
 
 Worked examples of concrete classical structures live in this subtree, paired
 with the per-structure modules under [`Classical/`][Classical].  Each
-[`Examples/Classical/X.lagda.md`][] module is the home of worked examples of
+`Examples/Classical/X.lagda.md` module is the home of worked examples of
 structure `X`: canonical first instances, alternative constructions, finite
 small cases, examples of failure modes (e.g., a magma that is not a semigroup,
 a semigroup that is not a monoid).  The pattern of pairing one canonical first
-example with each structure issue is established in M3-3 ([`Examples.Classical.Magma`][])
+example with each structure issue is established in M3-3 ([`Examples.Classical.Magma`][Examples.Classical.Magma])
 and continues issue-by-issue under milestone M3.
 
 ```agda

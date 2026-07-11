@@ -10,8 +10,8 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Small.Structures][] module of the [Agda Universal Algebra Library][].
 
-This is the parallel-to-[`Classical.Structures`][] aggregator inside the
-[`Classical.Small`][] subtree.  It re-exports each per-structure level-fixed
+This is the parallel-to-[`Classical.Structures`][Classical.Structures] aggregator inside the
+[`Classical.Small`][Classical.Small] subtree.  It re-exports each per-structure level-fixed
 veneer in `Classical/Small/Structures/X.lagda.md` as those land under milestone
 M3.  See [ADR-002][] for the design rationale.
 

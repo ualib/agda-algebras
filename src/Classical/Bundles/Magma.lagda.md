@@ -11,7 +11,7 @@ author: "the agda-algebras development team"
 This is the [Classical.Bundles.Magma][] module of the [Agda Universal Algebra Library][].
 
 This module supplies the bidirectional bridge between the Σ-typed core of
-[`Classical.Structures.Magma`][] and the record-typed `Algebra.Bundles.Magma`
+[`Classical.Structures.Magma`][Classical.Structures.Magma] and the record-typed `Algebra.Bundles.Magma`
 in the Agda standard library.  Both representations carry the same mathematical
 content; the bridge exists so that downstream code typed against
 `Algebra.Bundles.Magma` is reusable against the canonical agda-algebras
@@ -57,7 +57,7 @@ private variable α ρ : Level
 
 Going from the canonical Σ-typed core to the stdlib record reads off the
 domain's `Carrier` and `_≈_`, exposes the operation in curried form via
-[`Classical.Structures.Magma`][]'s `_∙_`, and constructs the `IsMagma` witness
+[`Classical.Structures.Magma`][Classical.Structures.Magma]'s `_∙_`, and constructs the `IsMagma` witness
 from the algebra's `Interp.cong` by unpacking the Fin 2 pattern.
 
 ```agda

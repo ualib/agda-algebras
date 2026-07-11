@@ -18,13 +18,13 @@ relevant signature inclusion, reusing the per-structure inclusion data (`X-incl`
 The inaugural instance is `monoid→semigroupF`.  Since a semigroup is an algebra over
 `Sig-Magma` (Semigroup reuses the magma signature), the forgetful from monoids is `reductF`
 of the inclusion `Sig-Magma ↪ Sig-Monoid` — packaged from the existing `∙-incl` / `∙-κ` of
-[`Classical.Structures.Monoid`][].  Its action on a monoid homomorphism keeps the underlying
+[`Classical.Structures.Monoid`][Classical.Structures.Monoid].  Its action on a monoid homomorphism keeps the underlying
 setoid map on the nose, as `monoid→semigroupF-keeps-map` records by `refl`.
 
 A forgetful functor between *theory-satisfying* structures owes a second debt beyond
 the morphism action — namely, the theory obligation.  `monoid→semigroup` must show
 that the magma reduct of a monoid satisfies `Th-Semigroup`, and we've already paid that
-debt by hand (the curried-law pivot `thm` inside [`Classical.Structures.Monoid`][],
+debt by hand (the curried-law pivot `thm` inside [`Classical.Structures.Monoid`][Classical.Structures.Monoid],
 built on per-signature `interp-node` bridges).  The last section of this module
 re-derives that obligation from the general *reduct-invariance of satisfaction*
 theorem of [Setoid.Varieties.Invariance][], and thus demonstrates that the bespoke

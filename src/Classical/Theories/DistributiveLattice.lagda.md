@@ -66,7 +66,7 @@ Th-DistributiveLattice ∧-distribˡ  = DistributesOverˡ  ∧-Op ∨-Op refl re
 Th-DistributiveLattice ∨-distribˡ  = DistributesOverˡ  ∨-Op ∧-Op refl refl 0F 1F 2F
 ```
 
-Unfolding the distributivity builders (per [`Classical.Equations`][]):
+Unfolding the distributivity builders (per [`Classical.Equations`][Classical.Equations]):
 `Th-DistributiveLattice ∧-distribˡ` is the pair
 
     (node ∧-Op (pair (ℊ 0F)

@@ -11,7 +11,7 @@ author: "the agda-algebras development team"
 This is the [Classical.Theories.Ring][] module of the [Agda Universal Algebra Library][].
 
 `Th-Ring` has eleven equations, composed from the generic builders of
-[`Classical.Equations`][] applied to `Sig-Ring`'s symbols, in three groups:
+[`Classical.Equations`][Classical.Equations] applied to `Sig-Ring`'s symbols, in three groups:
 
 +  the **abelian-group** equations on the additive triple `(+-Op, 0-Op, -Op)` —
    associativity, left/right identity, left/right inverse, and commutativity (six);

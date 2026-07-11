@@ -10,7 +10,7 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Small.Structures.Lattice][] module of the [Agda Universal Algebra Library][].
 
-Specializes [`Classical.Structures.Lattice`][] to the common case where the universe
+Specializes [`Classical.Structures.Lattice`][Classical.Structures.Lattice] to the common case where the universe
 level of both the carrier and the equivalence is `0ℓ` (i.e., Set-valued carriers with
 propositional or set-truncated equivalence), mirroring the veneers of `Magma`,
 `Semigroup`, `Monoid`, etc.

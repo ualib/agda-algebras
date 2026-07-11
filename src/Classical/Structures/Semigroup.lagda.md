@@ -25,7 +25,7 @@ Specifically, the conventions documented and embodied here are as follows.
 +  **Theory representation**.  Each equation-bearing structure `X` has a
    `Classical/Theories/X.lagda.md` file housing a singleton-or-larger index enum
    `Eq-X` and a theory function `Th-X : Eq-X → Term (Fin n) × Term (Fin n)` composed
-   from generic equation builders in [`Classical.Equations`][].  The Σ-typed core
+   from generic equation builders in [`Classical.Equations`][Classical.Equations].  The Σ-typed core
    `X α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ Th-X` lives in `Classical/Structures/X.lagda.md`
    over `open Setoid.Algebras {𝑆 = Sig-X}`.
 +  **`_⊨_` alias**.  Each structure file defines a local `_⊨_` with the codomain
@@ -121,7 +121,7 @@ private variable α ρ : Level
 `𝑨 ⊨ ℰ` says that the algebra `𝑨` satisfies every equation in the theory `ℰ` — that
 is, for every equation `(p , q) = ℰ i`, the formulas `p` and `q` evaluate to setoid-equal
 elements under every environment.  This is `Modᵗ ℰ 𝑨` from
-[`Setoid.Varieties.EquationalLogic`][], unfolded once to bring the codomain
+[`Setoid.Varieties.EquationalLogic`][Setoid.Varieties.EquationalLogic], unfolded once to bring the codomain
 type-shape into view at the use site.
 
 ```agda

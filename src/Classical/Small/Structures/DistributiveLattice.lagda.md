@@ -11,7 +11,7 @@ author: "the agda-algebras development team"
 This is the [Classical.Small.Structures.DistributiveLattice][] module of the
 [Agda Universal Algebra Library][].
 
-Specializes [`Classical.Structures.DistributiveLattice`][] to the common case where
+Specializes [`Classical.Structures.DistributiveLattice`][Classical.Structures.DistributiveLattice] to the common case where
 the universe level of both the carrier and the equivalence is `0ℓ` (i.e., Set-valued
 carriers with propositional or set-truncated equivalence), mirroring the veneers of
 `Lattice`, `CommutativeMonoid`, etc.

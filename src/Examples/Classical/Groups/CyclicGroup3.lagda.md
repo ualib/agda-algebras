@@ -12,7 +12,7 @@ This is the [Examples.Classical.Groups.CyclicGroup3][] module of the [Agda Unive
 
 The integers modulo `3` under addition form the smallest non-trivial cyclic group.
 We build it on the carrier `Fin 3` from its addition table, using the Cayley-table
-machinery of [`Overture.Cayley`][]: the group axioms are decidable over the finite
+machinery of [`Overture.Cayley`][Overture.Cayley]: the group axioms are decidable over the finite
 carrier, so associativity, the identity laws, and the inverse laws are each
 discharged by `from-yes`{.AgdaFunction} applied to the corresponding decision.  This
 is the first example to exercise the `Associative?`{.AgdaFunction},

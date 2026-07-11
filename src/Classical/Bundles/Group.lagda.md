@@ -10,7 +10,7 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Bundles.Group][] module of the [Agda Universal Algebra Library][].
 
-The bidirectional bridge between the Σ-typed core of [`Classical.Structures.Group`][]
+The bidirectional bridge between the Σ-typed core of [`Classical.Structures.Group`][Classical.Structures.Group]
 and the record-typed `Algebra.Bundles.Group` in the standard library.  As with the
 Monoid bridge, the round-trip is stated *pointwise* per
 [ADR-002 v2 §6](../../docs/adr/002-classical-layer-design.md); the curried laws

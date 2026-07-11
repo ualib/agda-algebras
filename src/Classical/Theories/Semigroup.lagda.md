@@ -25,7 +25,7 @@ The shape established here is:
    the index to `⊤`; the named constructor pays for itself in error-message
    readability and in symmetry with multi-equation theories landing later.
 +  A *theory function* `Th-<Structure> : Eq-<Structure> → Term (Fin n) × Term (Fin n)`
-   composed from the generic equation builders of [`Classical.Equations`][] (M3-2)
+   composed from the generic equation builders of [`Classical.Equations`][Classical.Equations] (M3-2)
    applied to the operation symbols of `Sig-<Structure>`.  The codomain is spelled
    in its long form rather than abbreviated to `_`, per the meta-resolution-pitfall
    note in [ADR-002 v2 §4](../../docs/adr/002-classical-layer-design.md).
@@ -73,7 +73,7 @@ data Eq-Semigroup : Type where
 
 `Th-Semigroup` sends the sole equation constructor `assoc` to the associativity
 term-pair built by the generic `Associative` builder from
-[`Classical.Equations`][].  The arity-conformance evidence `refl` typechecks
+[`Classical.Equations`][Classical.Equations].  The arity-conformance evidence `refl` typechecks
 because `ar-Magma ∙-Op` reduces definitionally to `Fin 2` — this is what the
 `Classical/Signatures/Magma` arity-function-by-direct-pattern-matching convention
 buys us.
