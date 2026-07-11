@@ -54,6 +54,7 @@ open import Relation.Unary using ( Pred ; _∈_ )
 open import Classical.Signatures.Group           using ( Sig-Group )
 open import Classical.Structures.Group           using ( Group ; module Group-Op )
 open import Classical.Structures.Group.Subgroups using ( IsSubgroup ; sub-ε-closed )
+open import Order.Interval                       using ( module IntervalLattice )
 
 open import Setoid.Algebras.Basic {𝑆 = Sig-Group}           using ( Algebra ; 𝕌[_] )
 open import Setoid.Subalgebras.CompleteLattice {𝑆 = Sig-Group} using ( module Sublattice )
@@ -121,4 +122,17 @@ infinitary meet are the (pointwise) intersections of the underlying predicates.
     { respects       = λ x≈y x∈ i → IsSubgroup.respects (sg i) x≈y (x∈ i)
     ; isSubuniverse  = proj₂ (⨅ 𝒜)
     }
+```
+
+#### Upper intervals
+
+An upper interval `[B, C]` in the subgroup lattice — the subgroups sandwiched
+between `B` and `C` — is a bounded lattice, by the generic interval construction of
+[Order.Interval][] applied to the lattice bundle `Sub-Lattice`{.AgdaFunction}.
+Opening `SubInterval B C B≤C` provides the interval carrier, its order, and the
+`Lattice`/`BoundedLattice` bundles; the FLRP-side intervals `[H, G]` of the
+Pálfy–Pudlák correspondence are the instances with `C` the full subgroup.
+
+```agda
+  module SubInterval (B C : Subᴸ) (B≤C : B ≤ C) = IntervalLattice Sub-Lattice B C B≤C
 ```

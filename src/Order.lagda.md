@@ -11,7 +11,7 @@ This is the [Order][] module of the [Agda Universal Algebra Library][].
 
 This top-level `Order/` tree collects the *order-theoretic* structures used across the
 universal-algebra development — currently the complete lattice (`Order.CompleteLattice`),
-which the standard library lacks.  It is deliberately separate from `Classical/`: here a
+which the standard library lacks, and intervals in lattices (`Order.Interval`).  It is deliberately separate from `Classical/`: here a
 lattice is an *ordered* structure (a poset with meets and joins), whereas the
 `Classical.*.Lattice` modules formalize lattices *as equational algebras* over
 `Sig-Lattice`.  The congruence lattice ([Setoid.Congruences.CompleteLattice][]) and the
@@ -24,4 +24,5 @@ instances.
 module Order where
 
 open import Order.CompleteLattice public
+open import Order.Interval public
 ```
