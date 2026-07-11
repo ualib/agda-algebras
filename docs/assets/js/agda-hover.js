@@ -6,10 +6,12 @@
    script pairs the two: hovering a linked token fetches the target page once,
    locates that definition anchor, and shows a small popover with a snippet of
    the definition — its type signature, plus the `data`/`record … where` header
-   it belongs to when the anchor is a constructor or field.
+   it belongs to when the anchor is a constructor or field.  The snippet keeps
+   Agda's own syntax highlighting: it is cloned from the target page's tokens,
+   so the existing `pre.Agda .Function` (etc.) colours apply in both schemes.
 
    Adapted from the tooltip first written for the formal-ledger-specifications
-   site, with three changes for agda-algebras:
+   site, with these changes for agda-algebras:
 
      + Links here use the rewritten MkDocs scheme, not the classic Agda output's
        flat `Module.html#id` siblings: `/Setoid/Algebras/Basic/#id` for library
@@ -17,6 +19,9 @@
        `rewrite_agda_hrefs` in scripts/python/mkdocs_gen_library.py).  Both forms
        are parsed through the URL API and fetched as-is; a reference whose
        definition is on the current page is read from the live DOM instead.
+     + Hovering a token *at its own definition site* shows nothing — Agda links
+       a definition to itself, so the popover would just echo what the reader is
+       already looking at.
      + Wiring goes through Material's `document$` (like agda-copy.js and
        agda-toggle.js) and uses a single set of delegated listeners on
        `document`, so the cost is constant no matter how many thousands of
@@ -31,6 +36,7 @@
   var HOVER_SELECTOR = 'pre.Agda a[href]';   // linked tokens in Agda blocks
   var HOVER_DELAY_MS = 120;                   // debounce before a tip appears
   var HIDE_DELAY_MS  = 60;                    // grace period before it hides
+  var SNIPPET_LINES  = 14;                    // max lines shown from a definition
   var TOGGLE_KEY = 'agda-tooltips';           // localStorage: "off" disables
   var MAX_CACHED_PAGES = 16;                  // parsed target pages kept in RAM
 
@@ -53,7 +59,7 @@
 
   // Caches: fetch each target page once, extract each snippet once.
   var pageCache = new Map();     // page URL (no hash) -> Promise<Document|null>
-  var snippetCache = new Map();  // full href -> snippet string
+  var snippetCache = new Map();  // full href -> highlighted-HTML string
 
   var tooltipEl = null;
   var hideTimer = null;
@@ -101,28 +107,34 @@
     try { return decodeURIComponent(name); } catch (e) { return name; }
   }
 
-  function inferTokenInfo(a) {
-    var classes = (a.getAttribute('class') || '').split(/\s+/).filter(Boolean);
-    var kind = classes.find(function (c) { return KIND_CLASSES.has(c); }) || '';
-    var isOperator = classes.indexOf('Operator') !== -1;
-    var url = new URL(a.getAttribute('href') || '', window.location.href);
-    var moduleName = moduleNameFromUrl(url);
-    return {
-      href: url.href,
-      pageUrl: url.origin + url.pathname,
-      basename: a.textContent.trim() || moduleName,
-      kind: kind ? displayKind(kind) + (isOperator ? ' operator' : '') : '',
-      moduleName: moduleName,
-      anchor: url.hash ? url.hash.slice(1) : '',
-    };
-  }
-
   // Is this the page the reader is already on?  Then skip the fetch and read
   // the definition straight from the live DOM (same-page references are common
   // in Agda, where a proof cites lemmas defined just above it).
   function isCurrentPage(pageUrl) {
     var norm = function (s) { return s.replace(/index\.html$/, '').replace(/\/$/, ''); };
     return norm(pageUrl) === norm(window.location.origin + window.location.pathname);
+  }
+
+  function inferTokenInfo(a) {
+    var classes = (a.getAttribute('class') || '').split(/\s+/).filter(Boolean);
+    var kind = classes.find(function (c) { return KIND_CLASSES.has(c); }) || '';
+    var isOperator = classes.indexOf('Operator') !== -1;
+    var url = new URL(a.getAttribute('href') || '', window.location.href);
+    var pageUrl = url.origin + url.pathname;
+    var anchor = url.hash ? url.hash.slice(1) : '';
+    var moduleName = moduleNameFromUrl(url);
+    return {
+      href: url.href,
+      pageUrl: pageUrl,
+      basename: a.textContent.trim() || moduleName,
+      kind: kind ? displayKind(kind) + (isOperator ? ' operator' : '') : '',
+      moduleName: moduleName,
+      anchor: anchor,
+      // True when the hovered token *is* its own definition: Agda gives the
+      // defining occurrence both `id="N"` and `href="…#N"` on its own page, so
+      // the popover would only echo what the reader is already looking at.
+      selfDef: !!a.id && a.id === anchor && isCurrentPage(pageUrl),
+    };
   }
 
   // -- Fetching + snippet extraction ---------------------------------------
@@ -161,7 +173,7 @@
     if (cached !== undefined) return Promise.resolve(cached);
 
     return resolveDocument(info.pageUrl).then(function (dom) {
-      var snippet = '';
+      var html = '';
       if (dom) {
         // Find the definition anchor, then its closest Agda <pre> (works for
         // both mkdocs-wrapped library pages and raw classic Agda pages; blocks
@@ -169,16 +181,19 @@
         var target = dom.getElementById(info.anchor);
         var pre = target ? target.closest('pre.Agda') : null;
         if (pre) {
-          var index = charIndexWithin(pre, target);
-          var text = pre.textContent || '';
-          snippet = extractDefinitionBlock(text, index, {
-            maxLines: 14,    // max lines shown from the defining paragraph
-            maxChars: 1200,  // hard cap to keep tooltips snappy
-          }).block.trim();
+          var ex = extractDefinitionBlock(pre.textContent || '',
+            charIndexWithin(pre, target), { maxLines: SNIPPET_LINES });
+          try {
+            html = buildSnippetHTML(pre, ex);           // keep Agda's colours
+          } catch (e) {
+            html = ex.block                             // plain, escaped fallback
+              ? '<pre class="Agda agda-tip-snippet">' + sanitize(ex.block) + '</pre>'
+              : '';
+          }
         }
       }
-      snippetCache.set(info.href, snippet);
-      return snippet;
+      snippetCache.set(info.href, html);
+      return html;
     });
   }
 
@@ -196,7 +211,8 @@
     }
   }
 
-  /* Heuristically extract a "definition block" around `anchorIndex`:
+  /* Heuristically extract a "definition block" around `anchorIndex`, returning
+     the structural pieces the highlighter needs:
        - split the <pre> text into lines and find the one holding anchorIndex;
        - take the blank-line-delimited paragraph around it — in Agda a
          definition (signature + clauses, or a data/record declaration) is
@@ -204,8 +220,9 @@
        - if the anchor line is indented (a field, constructor, or a where-block
          definition), climb to each enclosing header line (nearest line above
          with strictly smaller indentation), so e.g. a record field is shown
-         with its `record … where` header, an `⋯` line marking elided lines;
-       - enforce maxLines/maxChars, appending `…` when truncated. */
+         with its `record … where` header;
+       - cap at maxLines.  Returns per-line offsets so buildSnippetHTML can clone
+         the matching highlighted spans, plus a plain-text `block` fallback. */
   function extractDefinitionBlock(text, anchorIndex, opts) {
     opts = opts || {};
     var maxLines = opts.maxLines || 14;
@@ -252,17 +269,18 @@
       for (var k = start - 1; k >= 0 && ind > 0; k--) {
         var l = lines[k];
         if (isBlank(l)) continue;
-        if (indent(l) < ind) { headers.unshift({ i: k, l: l }); ind = indent(l); }
+        if (indent(l) < ind) { headers.unshift(k); ind = indent(l); }
       }
     }
 
-    // 4) Compose: headers (with `⋯` marking elided lines) + the paragraph.
+    // Plain-text composition (fallback + cache-miss display): headers (with `⋯`
+    // marking elided lines) + the paragraph, capped.
     var parts = [];
     var prev = -1;
     for (var h = 0; h < headers.length; h++) {
-      if (prev >= 0 && headers[h].i > prev + 1) parts.push('⋯');
-      parts.push(headers[h].l);
-      prev = headers[h].i;
+      if (prev >= 0 && headers[h] > prev + 1) parts.push('⋯');
+      parts.push(lines[headers[h]]);
+      prev = headers[h];
     }
     if (prev >= 0 && start > prev + 1) parts.push('⋯');
     for (var s = start; s <= end; s++) parts.push(lines[s]);
@@ -273,7 +291,71 @@
       var cut = block.lastIndexOf('\n', maxChars);
       block = block.slice(0, cut > 0 ? cut : maxChars) + '\n…';
     }
-    return { block: block, start: start, end: end, iAnchor: iAnchor };
+
+    return {
+      block: block,
+      headerLines: headers,
+      paraStart: start,
+      paraEnd: end,
+      truncatedBelow: truncatedBelow,
+      starts: starts,
+      lines: lines,
+    };
+  }
+
+  // Locate the [textNode, offset] pair for character `offset` within `root`, by
+  // walking its text nodes (whose concatenation is `root.textContent`, the same
+  // string extractDefinitionBlock indexed).
+  function locate(root, offset) {
+    var doc = root.ownerDocument || document;
+    var walker = doc.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+    var acc = 0, node = null, last = null;
+    while ((node = walker.nextNode())) {
+      var len = node.nodeValue.length;
+      if (offset <= acc + len) return [node, Math.max(0, offset - acc)];
+      acc += len;
+      last = node;
+    }
+    return last ? [last, last.nodeValue.length] : [root, 0];
+  }
+
+  function rangeForCharSpan(root, from, to) {
+    var doc = root.ownerDocument || document;
+    var r = doc.createRange();
+    var s = locate(root, from), e = locate(root, to);
+    r.setStart(s[0], s[1]);
+    r.setEnd(e[0], e[1]);
+    return r;
+  }
+
+  // Build the snippet as highlighted HTML by cloning the matching token spans
+  // out of the target <pre> (so the `.Function`/`.Keyword`/… classes ride
+  // along) and stitching them with `⋯`/`…` markers, mirroring `block`.  Line
+  // boundaries fall in the whitespace between tokens, so cloned ranges always
+  // contain whole `<a>` tokens.
+  function buildSnippetHTML(pre, ex) {
+    var host = document.createElement('pre');
+    host.className = 'Agda agda-tip-snippet';
+    var spanFor = function (fromLine, toLine) {
+      var from = ex.starts[fromLine];
+      var to = ex.starts[toLine] + ex.lines[toLine].length;
+      host.appendChild(rangeForCharSpan(pre, from, to).cloneContents());
+    };
+    var text = function (t) { host.appendChild(document.createTextNode(t)); };
+
+    var prev = -1;
+    for (var i = 0; i < ex.headerLines.length; i++) {
+      var h = ex.headerLines[i];
+      if (prev >= 0 && h > prev + 1) text('⋯\n');
+      spanFor(h, h);
+      text('\n');
+      prev = h;
+    }
+    if (prev >= 0 && ex.paraStart > prev + 1) text('⋯\n');
+    spanFor(ex.paraStart, ex.paraEnd);
+    if (ex.truncatedBelow) text('\n…');
+
+    return host.outerHTML;
   }
 
   // -- Tooltip element + placement -----------------------------------------
@@ -310,14 +392,14 @@
     tooltipEl.style.left = left + 'px';
   }
 
-  function renderTooltipContent(info, snippet, loading) {
+  function renderTooltipContent(info, snippetHTML, loading) {
     var header = '<div class="agda-tip-head">' +
       (info.kind ? '<span class="agda-kind">' + sanitize(info.kind) + '</span>' : '') +
       '<code class="agda-name">' + sanitize(info.basename) + '</code>' +
       '<span class="agda-module">· ' + sanitize(info.moduleName) + '</span>' +
       '</div>';
-    var body = snippet
-      ? '<pre class="agda-tip-snippet"><code>' + sanitize(snippet) + '</code></pre>'
+    var body = snippetHTML
+      ? snippetHTML
       : loading
         ? '<div class="agda-tip-empty agda-tip-loading">Loading preview…</div>'
         : '<div class="agda-tip-empty">No preview available.</div>';
@@ -345,13 +427,15 @@
     showTimer = setTimeout(function () {
       if (activeAnchor !== a || !tooltipsEnabled) return;
       var info = inferTokenInfo(a);
+      // A token at its own definition site would only echo itself — skip it.
+      if (info.selfDef) { activeAnchor = null; hideTooltip(); return; }
       var cached = snippetCache.get(info.href);
       if (cached === undefined) {
         // Show a fast skeleton immediately, then fill in the fetched snippet.
         showTooltip(a, renderTooltipContent(info, '', true));
-        fetchSnippet(info).then(function (snippet) {
+        fetchSnippet(info).then(function (html) {
           if (activeAnchor !== a || !tooltipsEnabled) return;   // pointer moved on
-          showTooltip(a, renderTooltipContent(info, snippet, false));
+          showTooltip(a, renderTooltipContent(info, html, false));
         });
       } else {
         showTooltip(a, renderTooltipContent(info, cached, false));

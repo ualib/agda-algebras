@@ -845,15 +845,16 @@ body.reveal-agda-source .md-typeset .ualib-hidden-note {
   --agda-tip-code:   0.70rem;             /* compact code                     */
   --agda-tip-width:  min(34rem, 90vw);    /* max popover width                */
   --agda-tip-ch:     68ch;                /* max code line width              */
-  --agda-tip-bg:     var(--md-default-bg-color);
-  --agda-tip-fg:     var(--md-default-fg-color);
-  --agda-tip-border: color-mix(in srgb, var(--md-default-fg-color) 16%, transparent);
-  --agda-tip-codebg: var(--md-code-bg-color);
   --agda-tip-shadow: 0 6px 16px rgba(0, 0, 0, 0.14), 0 2px 6px rgba(0, 0, 0, 0.10);
 }
 [data-md-color-scheme="slate"] {
   --agda-tip-shadow: 0 6px 16px rgba(0, 0, 0, 0.35), 0 2px 6px rgba(0, 0, 0, 0.28);
 }
+/* The colour tokens (`--md-default-bg-color`, `--md-code-bg-color`, …) are set
+   on <body> by the palette — `data-md-color-scheme` lives there, not on :root —
+   so the popover reads them *directly* in the rules below.  Resolving them into
+   an `--agda-tip-*` alias at :root would freeze the light-scheme values and the
+   tooltip would stay pale in dark mode. */
 
 /* -- The popover ---------------------------------------------------------- */
 /* Page-absolute (agda-hover.js folds in the scroll offset); purely
@@ -862,9 +863,9 @@ body.reveal-agda-source .md-typeset .ualib-hidden-note {
   position: absolute;
   z-index: 2000;
   max-width: var(--agda-tip-width);
-  background: var(--agda-tip-bg);
-  color: var(--agda-tip-fg);
-  border: 1px solid var(--agda-tip-border);
+  background: var(--md-default-bg-color);
+  color: var(--md-default-fg-color);
+  border: 1px solid color-mix(in srgb, var(--md-default-fg-color) 16%, transparent);
   border-radius: 0.4rem;
   box-shadow: var(--agda-tip-shadow);
   opacity: 1;
@@ -907,14 +908,17 @@ body.reveal-agda-source .md-typeset .ualib-hidden-note {
 }
 
 /* -- The definition snippet ----------------------------------------------- */
-/* The tooltip lives on <body>, outside `.md-typeset`, so Material's code
-   styling does not reach it — reset the browser defaults ourselves and keep
-   Agda's spacing with `white-space: pre`. */
+/* The snippet is cloned from the target page's tokens and carries `class="Agda"`
+   too, so the token-colour rules (`[data-md-color-scheme] pre.Agda .Function`, …)
+   reach it and the preview keeps Agda's highlighting.  The code-block *layout*
+   rules are scoped to `.md-typeset pre.Agda`, which the tooltip is outside of,
+   so only the compact styling here applies; `white-space: pre` keeps Agda's
+   spacing. */
 .agda-tip-snippet {
   margin: 0.12rem 0 0 0;
   padding: 0.32rem 0.42rem;
   border-radius: 0.3rem;
-  background: var(--agda-tip-codebg);
+  background: var(--md-code-bg-color);
   font-family: var(--md-code-font);
   font-size: var(--agda-tip-code);
   line-height: 1.5;
@@ -923,12 +927,13 @@ body.reveal-agda-source .md-typeset .ualib-hidden-note {
   overflow-x: auto;    /* long types scroll rather than wrap or clip */
   overflow-y: hidden;
 }
-.agda-tip-snippet code {
-  font-family: inherit;
-  background: none;
-  padding: 0;
+/* Cloned tokens are <a> elements; keep their kind colour (the token rules win on
+   specificity) but drop the link chrome — the site's `pre.Agda a` reset is
+   `.md-typeset`-scoped and does not reach here. */
+.agda-tip-snippet a {
   color: inherit;
-  white-space: inherit;
+  text-decoration: none;
+  cursor: inherit;
 }
 .agda-tip-empty {
   margin: 0.14rem 0 0 0;
