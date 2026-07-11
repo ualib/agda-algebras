@@ -830,3 +830,156 @@ body.reveal-agda-source .md-typeset .ualib-hidden-note {
     display: none;
   }
 }
+
+/* ==========================================================================
+   16. Type-on-hover tooltips (#429, M10-3) — docs/assets/js/agda-hover.js pairs
+       each linked Agda token with the `<a id="offset">` at its definition and,
+       on hover, shows a small popover with a snippet of that definition.  A
+       "Tooltips on/off" pill (a sibling of the Show-more-Agda control) lets a
+       reader switch them off; the choice persists in localStorage.  Colours
+       ride the theme tokens so the popover matches the page in both schemes,
+       and the snippet reuses the code surface.
+   ========================================================================== */
+:root {
+  --agda-tip-font:   0.72rem;             /* compact body text                */
+  --agda-tip-code:   0.70rem;             /* compact code                     */
+  --agda-tip-width:  min(34rem, 90vw);    /* max popover width                */
+  --agda-tip-ch:     68ch;                /* max code line width              */
+  --agda-tip-bg:     var(--md-default-bg-color);
+  --agda-tip-fg:     var(--md-default-fg-color);
+  --agda-tip-border: color-mix(in srgb, var(--md-default-fg-color) 16%, transparent);
+  --agda-tip-codebg: var(--md-code-bg-color);
+  --agda-tip-shadow: 0 6px 16px rgba(0, 0, 0, 0.14), 0 2px 6px rgba(0, 0, 0, 0.10);
+}
+[data-md-color-scheme="slate"] {
+  --agda-tip-shadow: 0 6px 16px rgba(0, 0, 0, 0.35), 0 2px 6px rgba(0, 0, 0, 0.28);
+}
+
+/* -- The popover ---------------------------------------------------------- */
+/* Page-absolute (agda-hover.js folds in the scroll offset); purely
+   informational, so it never takes pointer or focus. */
+.agda-tooltip {
+  position: absolute;
+  z-index: 2000;
+  max-width: var(--agda-tip-width);
+  background: var(--agda-tip-bg);
+  color: var(--agda-tip-fg);
+  border: 1px solid var(--agda-tip-border);
+  border-radius: 0.4rem;
+  box-shadow: var(--agda-tip-shadow);
+  opacity: 1;
+  pointer-events: none;
+}
+.agda-tooltip.hidden {
+  opacity: 0;
+  visibility: hidden;   /* also drop it from hit-testing + the a11y tree */
+}
+.agda-tooltip .agda-tooltip-inner {
+  padding: 0.4rem 0.5rem;
+  font-size: var(--agda-tip-font);
+  line-height: 1.4;
+}
+
+/* -- Header line: kind · name · module ------------------------------------ */
+.agda-tip-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.34rem;
+  margin-bottom: 0.16rem;
+  font-weight: 600;
+}
+.agda-kind {
+  font-size: calc(var(--agda-tip-font) - 0.06rem);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.72;
+}
+.agda-name {
+  font-family: var(--md-code-font);
+  font-size: calc(var(--agda-tip-font) - 0.01rem);
+  font-weight: 700;
+  color: inherit;
+}
+.agda-module {
+  margin-left: auto;
+  font-size: calc(var(--agda-tip-font) - 0.08rem);
+  opacity: 0.6;
+}
+
+/* -- The definition snippet ----------------------------------------------- */
+/* The tooltip lives on <body>, outside `.md-typeset`, so Material's code
+   styling does not reach it — reset the browser defaults ourselves and keep
+   Agda's spacing with `white-space: pre`. */
+.agda-tip-snippet {
+  margin: 0.12rem 0 0 0;
+  padding: 0.32rem 0.42rem;
+  border-radius: 0.3rem;
+  background: var(--agda-tip-codebg);
+  font-family: var(--md-code-font);
+  font-size: var(--agda-tip-code);
+  line-height: 1.5;
+  white-space: pre;
+  max-width: var(--agda-tip-ch);
+  overflow-x: auto;    /* long types scroll rather than wrap or clip */
+  overflow-y: hidden;
+}
+.agda-tip-snippet code {
+  font-family: inherit;
+  background: none;
+  padding: 0;
+  color: inherit;
+  white-space: inherit;
+}
+.agda-tip-empty {
+  margin: 0.14rem 0 0 0;
+  font-size: calc(var(--agda-tip-font) - 0.04rem);
+  opacity: 0.85;
+}
+.agda-tip-loading {
+  font-style: italic;
+  opacity: 0.6;
+}
+
+/* -- The header on/off pill (mirrors #toggle-agda-source) ------------------ */
+#toggle-agda-tooltips {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  flex-shrink: 0;
+  padding: 0.25em 0.9em;
+  border: 1px solid color-mix(in srgb, currentColor 35%, transparent);
+  border-radius: 9999px;
+  background: color-mix(in srgb, currentColor 10%, transparent);
+  color: inherit;
+  font-family: var(--ualib-display);
+  font-size: 0.62rem;
+  font-weight: 500;
+  line-height: 1.25;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 140ms ease, border-color 140ms ease, opacity 140ms ease;
+}
+#toggle-agda-tooltips:hover {
+  background: color-mix(in srgb, currentColor 18%, transparent);
+  border-color: color-mix(in srgb, currentColor 60%, transparent);
+}
+#toggle-agda-tooltips:focus-visible {
+  outline: 1px solid currentColor;
+  outline-offset: 2px;
+}
+/* When tooltips are off, dim the pill so the state reads at a glance. */
+#toggle-agda-tooltips[aria-pressed="false"] {
+  opacity: 0.6;
+}
+.agda-tip-icon {
+  width: 1.05em;
+  height: 1.05em;
+}
+
+/* Like the Show-more-Agda pill, drop it on narrow headers where an
+   unshrinkable pill would crush the page title. */
+@media screen and (max-width: 59.9844em) {
+  #toggle-agda-tooltips {
+    display: none;
+  }
+}
