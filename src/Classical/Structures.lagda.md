@@ -46,6 +46,8 @@ open import Classical.Structures.CommutativeRing public
 open import Classical.Structures.DistributiveLattice public
 open import Classical.Structures.Group public
 open import Classical.Structures.Group.Conjugation public
+open import Classical.Structures.Group.Cosets public
+open import Classical.Structures.Group.GSet public
 open import Classical.Structures.Group.NormalCore public
 open import Classical.Structures.Group.Subgroups public
 open import Classical.Structures.Group.SubgroupLattice public
