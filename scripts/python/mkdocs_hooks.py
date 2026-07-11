@@ -15,8 +15,10 @@ is never altered.  External (http/mailto), root-relative (/…), and pure-anchor
 """
 from __future__ import annotations
 
+import hashlib
 import logging
 import re
+from pathlib import Path
 
 log = logging.getLogger("mkdocs.plugins.ualib.render")
 
@@ -76,6 +78,48 @@ def _retarget(target: str) -> str:
     if re.search(r"\.[A-Za-z0-9]+$", base) and not base.endswith(".md"):
         return f"{REPO_BLOB}{base}{anchor}"
     return target
+
+
+def _cache_bust(entry, docs_dir: Path):
+    """Append a short content hash to a local asset reference so a changed file
+    gets a fresh URL.  ``entry`` is a ``str`` (extra_css) or an
+    ``ExtraScriptValue`` carrying a ``.path`` (extra_javascript).  Absolute URLs
+    (CDN links) and already-queried refs pass through untouched.
+    """
+    has_path = hasattr(entry, "path")
+    ref = entry.path if has_path else entry
+    if "://" in ref or "?" in ref:
+        return entry
+    try:
+        digest = hashlib.md5((docs_dir / ref).read_bytes()).hexdigest()[:8]
+    except OSError:
+        return entry                       # not a local file we can hash
+    busted = f"{ref}?h={digest}"
+    if has_path:
+        entry.path = busted
+        return entry
+    return busted
+
+
+def on_config(config):
+    """Cache-bust the site's own CSS/JS (#429).
+
+    The deployed assets carry a multi-hour ``max-age``, so when custom.css or a
+    ``docs/assets/js/*.js`` file changes, a returning visitor can render a stale
+    mix — e.g. an updated script against a cached older stylesheet — until the
+    cache expires.  Appending an 8-char content hash to each local extra_css /
+    extra_javascript URL gives a changed file a fresh URL, which the short-lived
+    HTML (``max-age`` 600) picks up within minutes, so the CSS/JS a page loads
+    always match the page.  The copied file keeps its plain name; the query
+    string is ignored by the server.
+    """
+    docs_dir = Path(config["docs_dir"])
+    config["extra_css"] = [_cache_bust(e, docs_dir) for e in config["extra_css"]]
+    config["extra_javascript"] = [_cache_bust(e, docs_dir) for e in config["extra_javascript"]]
+    n = sum(1 for e in config["extra_css"] + config["extra_javascript"]
+            if "?h=" in (getattr(e, "path", None) or str(e)))
+    log.info(f"🔖  cache-busted {n} local asset URL(s)")
+    return config
 
 
 def on_files(files, config):

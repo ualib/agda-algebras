@@ -97,6 +97,8 @@ Publishing is a two-repository chain: the Docs workflow here builds `./site` and
 
 Merging any content change to `master` also re-pushes `gh-pages` and re-triggers publication as a side effect.  When checking what is actually live, remember the Pages CDN caches responses for up to ten minutes and your browser caches the HTML and CSS on top of that — hard-refresh, or probe a file headers-only with `curl -sI https://agda-algebras.universalalgebra.org/assets/js/agda-copy.js`.
 
+The site's own CSS/JS are **content-hashed** so that a returning visitor never renders fresh HTML against a stale-cached stylesheet or script (the assets carry a multi-hour `max-age`, far longer than the HTML's ten minutes).  `on_config` in [`scripts/python/mkdocs_hooks.py`](../../scripts/python/mkdocs_hooks.py) appends an eight-character hash of each `extra_css` / `extra_javascript` file to its URL (`custom.css?h=…`); a changed asset therefore gets a fresh URL, which the short-lived HTML picks up within minutes (#429).  The copied file keeps its plain name — only the reference carries the query — so the headers-only probe above is unaffected.
+
 Resist the temptation to add a deployment workflow to the `gh-pages` branch itself: that branch is disposable build output which the publish action overwrites, and keeping such a file alive would require `keep_files: true`, which never deletes anything and so leaks renamed or removed pages onto the live site forever.
 
 ## Changing the settings

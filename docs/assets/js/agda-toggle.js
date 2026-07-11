@@ -68,7 +68,7 @@
       var note = document.createElement("button");
       note.type = "button";
       note.className = "ualib-hidden-note";
-      note.title = "Reveal this block (the header's Show more Agda reveals all of them)";
+      note.title = "Reveal this block (the header's Show all Agda reveals all of them)";
 
       function setNote(open) {
         note.textContent =
