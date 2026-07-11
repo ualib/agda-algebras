@@ -98,6 +98,10 @@ extra_javascript:
   # Header "Show more Agda" control: reveals the import/scaffolding blocks
   # that gen-files re-surfaces as `hidden-source` (#431, M10-5).
   - assets/js/agda-toggle.js
+  # Type-on-hover tooltips: a popover with a token's definition snippet, plus a
+  # header on/off toggle (#429, M10-3).  Pairs each linked token with the
+  # `<a id="offset">` at its definition in the agda --html output.
+  - assets/js/agda-hover.js
   # Auto-advancing carousel for the landing's Featured-results cards.
   - assets/js/carousel.js
 

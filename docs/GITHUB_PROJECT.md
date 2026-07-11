@@ -3311,7 +3311,7 @@ https://claude.ai/code/session_011crz6XaiE4uecELazSkJFY
 
 ---
 
-### Issue M6-7: Converse Jónsson/Day: CD ⟹ Jónsson terms and CM ⟹ Day terms (#413)
+### Issue M6-7: Converse Jónsson/Day: CD ⟹ Jónsson terms and CM ⟹ Day terms (#413, closed)
 
 **Labels**: `enhancement`, `milestone-6-flrp`, `research-exploratory`
 
@@ -3901,7 +3901,7 @@ GitHub's "Transfer ownership" feature (Settings → General → Danger zone → 
 
 ## Context
 
-M10-1 (#295, PR #427) brought full `agda --html` token highlighting with **per-token hyperlinks to definitions** into the MkDocs site, plus the classic clickable-HTML site at `/classic/`.  Tokens are now classed and linked; the natural next step — deferred from the #295 review — is **type-on-hover tooltips**, like [1lab.dev](https://1lab.dev/) (and, less polished, the [Leios formal spec](https://leios.cardano-scaling.org/formal-spec/Leios.Linear.html)): hover a token, see a small popover with its definition, without leaving the page.
+M10-1 (#295, PR #427) brought full `agda --html` token highlighting with **per-token hyperlinks to definitions** into the MkDocs site, plus the classic clickable-HTML site at `/classic/`.  Tokens are now classed and linked; the natural next step — deferred from the #295 review — is **type-on-hover tooltips** (like [1lab.dev](https://1lab.dev/), and the less polished [Ledger formal spec](https://intersectmbo.github.io/formal-ledger-specifications/site/) and [Leios formal spec](https://leios.cardano-scaling.org/formal-spec/Leios.Linear.html)): hover a token, see a small popover with its definition, without leaving the page.
 
 ## Goal
 
