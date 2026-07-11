@@ -2888,7 +2888,7 @@ Note: the moved modules are inherently two-signature, so they do not fit the sin
 
 ---
 
-### Issue M4-17: style improvements and general clean up of Setoid modules (#434)
+### Issue M4-17: style improvements and general clean up of Setoid modules (#434, closed)
 
 **Labels**: `milestone-4-style`
 
@@ -3064,14 +3064,14 @@ Design discussion: how to encode Maltsev conditions uniformly?  Options include 
 ## Tasks
 
 - [x] `HasMaltsevTerm : Variety → Term → Type` — landed as the interpretation predicate `HasMaltsevTerm ℰ = Th-Maltsev ≼ ℰ` (`Setoid.Varieties.Maltsev`).
-- [x] Specific Maltsev terms: Jónsson terms (CD), Day terms (CM), Maltsev operation (CP) — `Th-Maltsev`, `Th-Jonsson n`, `Th-Day n`, with `HasMaltsevTerm` / `HasJonssonTerms n` / `HasDayTerms n` (`Setoid.Varieties.{Maltsev,MaltsevConditions}`).
-- [x] Jónsson's theorem: a variety is CD iff Jónsson terms exist — complete iff for finitary signatures, `jonsson-theorem` in `Setoid.Varieties.Maltsev.Distributivity`: forward `jonsson-finitary⇒CongruenceDistributiveVariety` (M6-6, #412), converse `CD⇒jonsson` (M6-7, #413; design note `docs/notes/m6-7-reverse-jonsson.md`).
-- [x] CP iff a Maltsev term exists — forward direction `MaltsevTerm⇒CP` / `maltsev⇒CP` (M6-3, #409); converse `CP⇒maltsev` (`Setoid.Varieties.Maltsev.Permutability`, M6-5, #411) inhabiting `CP⇒maltsev-Statement`, built on the free-algebra bridge `cg-pair→⊢` (M6-4, #410; now in `Setoid.Varieties.FreeSubstitution`).
-- [ ] Day's theorem for CM — stated (`Day-Statement`); the converse `CM⇒day` landed (M6-7, #413; design note `docs/notes/m6-7-reverse-day.md`); the forward direction is deferred indefinitely on #412, so only the full iff remains open.
+- [x] Specific Maltsev terms: Jónsson terms (CD), Day terms (CM), Maltsev operation (CP) — `Th-Maltsev`, `Th-Jonsson n`, `Th-Day n`, with `HasMaltsevTerm` / `HasJonssonTerms n` / `HasDayTerms n` (`Setoid.Varieties.Maltsev`).
+- [x] Jónsson's theorem: a variety is CD iff Jónsson terms exist — stated (`Jonsson-Statement`); proof tracked in #412 (forward) and #413 (converse).
+- [x] CP iff a Maltsev term exists — forward direction `MaltsevTerm⇒CP` / `maltsev⇒CP` (M6-3, #409); converse `CP⇒maltsev` (`Setoid.Varieties.Maltsev.Permutability`, M6-5, #411) inhabiting `CP⇒maltsev-Statement`, built on the free-algebra bridge (`Setoid.Varieties.FreeSubstitution`, M6-4, #410).
+- [x] Day's theorem for CM — stated (`Day-Statement`); proof tracked in #412 (forward) and #413 (converse).
 
 ## Acceptance criteria
 
-- [x] At least CP's Maltsev-term characterization is proved — `MaltsevTerm⇒CP` / `maltsev⇒CP` in `Setoid.Varieties.MaltsevConditions` (the concrete "term ⟹ permutable" direction).
+- [x] At least CP's Maltsev-term characterization is proved — `MaltsevTerm⇒CP` / `maltsev⇒CP` in `Setoid.Varieties.Maltsev.Permutability` (the concrete "term ⟹ permutable" direction).
 - [x] Jónsson's theorem and Day's theorem are either proved or have a clear stub indicating what remains — both stated as checked, uninhabited `Type`s, with construction plans in `docs/notes/m6-3-maltsev-conditions.md`.
 
 ## Status — first pass (PR #409)
@@ -3080,12 +3080,12 @@ The CP track landed in PR #409:
 
 +  `Setoid.Congruences.Permutability` — relation composition `θ ∘ φ`, the `Permutes` predicate (`θ ∘ φ ⊆ φ ∘ θ`), and `CongruencePermutable`.
 +  `Setoid.Congruences.Properties` — `CongruenceDistributive` and `CongruenceModular`.
-+  `Setoid.Varieties.MaltsevConditions` — `term-compatible`; the forward Maltsev theorem `MaltsevTerm⇒CP` / `maltsev⇒CP`; the Jónsson and Day term theories; and the deferred theorems (`CP⇒maltsev-Statement`, `Jonsson-Statement`, `Day-Statement`) as checked `Type` statements.
++  `Setoid.Varieties.Maltsev.{Basic,Permutability,Distributivity,Modularity}` (split from the original `MaltsevConditions` module in #428, re-exported by `Setoid.Varieties.Maltsev`) — `term-compatible`; the forward Maltsev theorem `MaltsevTerm⇒CP` / `maltsev⇒CP`; the Jónsson and Day term theories; and the deferred theorems (`CP⇒maltsev-Statement`, `Jonsson-Statement`, `Day-Statement`) as checked `Type` statements.
 +  Design note: `docs/notes/m6-3-maltsev-conditions.md`.
 
 The chosen encoding is the interpretation `Th-X ≼ ℰ` (preferred over the issue's options (a) record and (b) inductive scheme; see the note).
 
-Deferred proofs are tracked in successor issues: #410 ([M6-4] free-algebra `Cg`↔derivability bridge — **landed**; after the M6-7 cleanup its pieces live in `Setoid.Congruences.Generation` (`module principal`), `Setoid.Homomorphisms.Properties` (`Cg⊆ker`), `Setoid.Varieties.SoundAndComplete` (`toEq`), and `Setoid.Varieties.FreeSubstitution` (`subhom` / `cg-pair→⊢` / `cg-pairs→⊢`)), #411 ([M6-5] CP converse — **landed**, `CP⇒maltsev` in `Setoid.Varieties.Maltsev.Permutability`), #412 ([M6-6] forward Jónsson — **landed**; forward Day deferred indefinitely), #413 ([M6-7] converse Jónsson and converse Day — **both landed**: `CD⇒jonsson` / `jonsson-theorem` in `Setoid.Varieties.Maltsev.Distributivity`, `CM⇒day` in `Setoid.Varieties.Maltsev.Modularity`).  See the design notes `docs/notes/m6-4-free-bridge.md` (#410 / #411), `docs/notes/m6-6-forward-jonsson-day.md` (#412), and `docs/notes/m6-7-reverse-jonsson.md` / `docs/notes/m6-7-reverse-day.md` (#413).
+Deferred proofs are tracked in successor issues: #410 ([M6-4] free-algebra `Cg`↔derivability bridge — **landed**, `Setoid.Varieties.FreeSubstitution`), #411 ([M6-5] CP converse — **landed**, `CP⇒maltsev` in `Setoid.Varieties.Maltsev.Permutability`), #412 ([M6-6] forward Jónsson/Day — **landed**), #413 ([M6-7] converse Jónsson/Day — **landed**).  See the design note `docs/notes/m6-4-free-bridge.md` for #410 / #411.
 
 ---
 
@@ -3127,7 +3127,7 @@ It is the single biggest lever identified in the M6-3 design note: built once, i
 
 ## Status — landed
 
-`Setoid.Varieties.FreeBridge` supplied the bridge: `subhom` / `renhom` (the substitution-induced hom out of `𝔽[ X ]`, a homomorphism by `refl`), the re-exported `kercon` (kernel as a `Con`), and `Cg⊆ker` / `cg-pair→⊢` (the bridge lemma, one line via `Cg-least`), plus the `toEq` shim (the two satisfaction predicates `_⊨ₑ_` / `_⊨_` coincide definitionally, so no conversion function is needed).  The term-level companion `graft≐[]` (identifying `_✦_`'s `graft` with `_[_]`) lives with the other laws of `graft` in `Setoid.Terms.Interpretation`.  Smoke test: `recover` / `recover-gen` / `recover-swap`.  Design note: `docs/notes/m6-4-free-bridge.md`.  **Layout update (M6-7 cleanup):** `Setoid.Varieties.FreeBridge` has since been dissolved — `❴_,_❵` now lives in `Setoid.Congruences.Generation` (`module principal`), `Cg⊆ker` in `Setoid.Homomorphisms.Properties`, `toEq` in `Setoid.Varieties.SoundAndComplete`, and `subhom` / `renhom` / `cg-pair→⊢` (with the smoke test) in `Setoid.Varieties.FreeSubstitution`.
+The bridge originally landed as `Setoid.Varieties.FreeBridge`, dissolved in the #428 cleanup; its API now lives in `Setoid.Varieties.FreeSubstitution`: `subhom` / `renhom` (the substitution-induced hom out of `𝔽[ X ]`, a homomorphism by `refl`), `cg-pair→⊢` / `cg-pairs→⊢` (the bridge lemma, one line via `Cg-least`), and the smoke test `recover` / `recover-gen` / `recover-swap`.  Its dependencies were distributed to `Setoid.Homomorphisms.Properties` (`Cg⊆ker`, and the re-exported kernel-as-`Con` `kercon`), `Setoid.Congruences.Generation` (the principal relation `❴_,_❵`), and `Setoid.Varieties.SoundAndComplete` (the `toEq` shim — the two satisfaction predicates `_⊨ₑ_` / `_⊨_` coincide definitionally, so no conversion function is needed).  The term-level companion `graft≐[]` (identifying `_✦_`'s `graft` with `_[_]`) lives with the other laws of `graft` in `Setoid.Terms.Interpretation`.  Design note: `docs/notes/m6-4-free-bridge.md`.
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
@@ -3181,7 +3181,7 @@ So assembling the lattice is a "step-3"-style task, closely parallel to the cong
 
 ## Description
 
-Complete the **congruence-permutability** characterization by proving the converse of Maltsev's theorem: a congruence-permutable variety has a Maltsev term.  Concretely, inhabit `CP⇒maltsev-Statement` in `Setoid.Varieties.MaltsevConditions`.  M6-3 (#273, PR #409) proved the forward direction (`MaltsevTerm⇒CP`); together they give the iff.
+Complete the **congruence-permutability** characterization by proving the converse of Maltsev's theorem: a congruence-permutable variety has a Maltsev term.  Concretely, inhabit `CP⇒maltsev-Statement` in `Setoid.Varieties.Maltsev.Permutability`.  M6-3 (#273, PR #409) proved the forward direction (`MaltsevTerm⇒CP`); together they give the iff.
 
 ## Background
 
@@ -3215,7 +3215,7 @@ Note: #273's text says "the free algebra on two generators"; the standard constr
 
 ## Status — landed
 
-`CP⇒maltsev` (in `Setoid.Varieties.MaltsevConditions`) inhabits `CP⇒maltsev-Statement` at the levels of `𝔽[ Fin 3 ]`, for theories with variables `X : Type 0ℓ` (forced by the single-level free-algebra interface; no restriction for finitary theories).  The collapsing substitutions are chosen to coincide with the `_✦_` position maps, so the bridge output is definitionally the interpreted Maltsev identity up to one `graft≐[]` step.  With `maltsev⇒CP`, congruence permutability is now a complete iff.  Design note: `docs/notes/m6-4-free-bridge.md`.
+`CP⇒maltsev` (in `Setoid.Varieties.Maltsev.Permutability`) inhabits `CP⇒maltsev-Statement` at the levels of `𝔽[ Fin 3 ]`, for theories with variables `X : Type 0ℓ` (forced by the single-level free-algebra interface; no restriction for finitary theories).  The collapsing substitutions are chosen to coincide with the `_✦_` position maps, so the bridge output is definitionally the interpreted Maltsev identity up to one `graft≐[]` step.  With `maltsev⇒CP`, congruence permutability is now a complete iff.  Design note: `docs/notes/m6-4-free-bridge.md`.
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
@@ -3249,7 +3249,7 @@ This is separated from #373 because it is a sizeable undertaking on its own:
 
 ---
 
-### Issue M6-6: Forward Jónsson/Day: Jónsson terms ⟹ CD and Day terms ⟹ CM (#412)
+### Issue M6-6: Forward Jónsson/Day: Jónsson terms ⟹ CD and Day terms ⟹ CM (#412, closed)
 
 **Labels**: `enhancement`, `milestone-6-flrp`
 
@@ -3259,7 +3259,7 @@ Prove the "terms ⟹ lattice property" halves of Jónsson's and Day's theorems: 
 
 These halves are independent of [M6-4] (#410): they use the chain terms available on every algebra via the interpretation, plus `term-compatible` and an induction over the join.
 
-## Status (PR #428)
+## Status: COMPLETE (forward Jónsson in PR #428; forward Day in PR #442)
 
 **Forward Jónsson: DONE — including the featured finitary theorem, unconditionally.**
 
@@ -3270,13 +3270,20 @@ These halves are independent of [M6-4] (#410): they use the chain terms availabl
 +  `jonsson⇒CongruenceDistributive` / `jonsson⇒CongruenceDistributiveVariety` — the literal `CongruenceDistributive` / `CongruenceDistributiveVariety` (the `proj₂` direction of `Jonsson-Statement`), modulo the one isolated hypothesis `JoinIsChain`.
 +  **`jonsson-finitary⇒CongruenceDistributiveVariety` — the featured theorem**: a variety over a finitary signature with Jónsson terms is congruence-distributive, with **no residual side condition**.  This is the form a working algebraist applies; universal algebra in practice means finitary algebras.
 
-**The Gen-vs-chain obstruction: named once, then discharged for finitary signatures.**  The library's join is `Cg(φ ∪ ψ) = Gen(φ ∪ ψ)`, the inductively-generated congruence whose `comp` constructor closes it under the basic operations (necessary and correct for *infinitary* signatures, whose arities are arbitrary types).  The Jónsson-term "sandwich" relation `dᵢ(a,u,b) γ dᵢ(a,v,b)` is provably **not** closed under `comp`, so a direct `Gen`-induction cannot carry the staircase, and for an infinitary signature the join strictly exceeds the finite-chain closure.  The forward theorem is therefore proved against `Chain` in full generality, the lone missing step `Gen(φ ∪ ψ) ⊆ Chain` is isolated as the explicit hypothesis `JoinIsChain`, and that hypothesis is then **discharged** for finitary signatures in the new module `Setoid.Congruences.ChainJoin` (`finitary⇒JoinIsChain`): `Chain 𝑩 (φ ∪ᵣ ψ)` is shown to be a congruence (operation-closed via the one-coordinate-at-a-time fold `chain-op` over a finite-arity enumeration `Finitary 𝑆`), hence contains the generated join by `Cg-least`.  The `Examples.Setoid.FinitarySignatures` module shows the `Finitary` witness is a hoop-free one-liner (`λ _ → _ , ↔-id _`).
+**The Gen-vs-chain obstruction: named once, then discharged for finitary signatures.**  The library's join is `Cg(φ ∪ ψ) = Gen(φ ∪ ψ)`, the inductively-generated congruence whose `comp` constructor closes it under the basic operations (necessary and correct for *infinitary* signatures, whose arities are arbitrary types).  The Jónsson-term "sandwich" relation `dᵢ(a,u,b) γ dᵢ(a,v,b)` is provably **not** closed under `comp`, so a direct `Gen`-induction cannot carry the staircase, and for an infinitary signature the join strictly exceeds the finite-chain closure.  The forward theorem is therefore proved against `Chain` in full generality, the lone missing step `Gen(φ ∪ ψ) ⊆ Chain` is isolated as the explicit hypothesis `JoinIsChain`, and that hypothesis is then **discharged** for finitary signatures in the module `Setoid.Congruences.ChainJoin` (`finitary⇒JoinIsChain`): `Chain 𝑩 (φ ∪ᵣ ψ)` is shown to be a congruence (operation-closed via the one-coordinate-at-a-time fold `chain-op` over a finite-arity enumeration `Finitary 𝑆`), hence contains the generated join by `Cg-least`.  The `Examples.Setoid.FinitarySignatures` module shows the `Finitary` witness is a hoop-free one-liner (`λ _ → _ , ↔-id _`).
 
-**Forward Day: DEFERRED INDEFINITELY — not a mechanical mirror.**  Day's `mᵢ(x,y,y,x) ≈ x` pinning requires the two middle arguments *equal*, so only `mᵢ(a,c,c,b)` is ψ-pinnable; the even-fork column `mᵢ(a,a,b,b)` is not, and connecting it would demand a single-slot `a ↔ b` move that is not a `θ∨(φ∧ψ)`-step.  Jónsson's clean two-column staircase has no analogue; Day's theorem needs the genuinely 2-dimensional / `A²` construction of Day 1969.  Beyond the structural asymmetry, the forward Day proof is technical and is carried out in neither *Algebras, Lattices, Varieties* (McKenzie–McNulty–Taylor) nor Bergman's *Universal Algebra* (which states the result but explicitly declines to prove it), and no module in the library consumes it.  It is therefore held off indefinitely; the module prose (`Setoid.Varieties.Maltsev.Modularity`) and `docs/notes/m6-6-forward-jonsson-day.md` record the right construction so a successor picks it up only when a concrete need arises.
+**Forward Day: DONE (PR #442) — by a genuinely different ladder, not a mirror.**  As predicted, Day's `mᵢ(x,y,y,x) ≈ x` pinning requires the two middle arguments *equal*, so the even-fork column `mᵢ(a,a,b,b)` is not ψ-pinnable and the Jónsson two-column staircase does not transfer.  The construction that landed is Day 1969 in the streamlined form of Freese–McKenzie (*Commutator Theory for Congruence Modular Varieties*, Thm 2.2 and Lemma 2.3), inlined into a single chain-level induction in `Setoid.Varieties.Maltsev.Modularity`:
+
++  `m-collect` (FM Lemma 2.3), for an *arbitrary* congruence `μ`: given `b μ d`, rung-wise `μ`-relations between the ladder columns `mᵢ(a,a,c,c)` and `mᵢ(a,b,d,c)` collect into `a μ c`.  The unpinnable even-fork column is never pinned — it is carried by the hypothesis pair, which is the two-dimensional aspect of Day's construction.
++  `Day⇒chainModular` — the modular inclusion `(θ ∨ ϕ) ∧ ψ ⊆ θ ∨ (ϕ ∧ ψ)` (for `θ ⊆ ψ`) **along every θ/ϕ-chain**, fully general (no finiteness): an outer induction on the number of ϕ-steps whose decrease comes from **fusing the two flanking ϕ-steps** of the head `a ϕ t₁ θ t₂ ϕ t₃ ⋯` into a single two-slot `m-compat` move, with the remaining chain pushed through the third slot of `mᵢ` (`m-push`) and the induction hypothesis applied to the ψ-railed pair `(mᵢ(a,t₁,t₂,c), mᵢ(a,a,c,c))`.
++  `Day⇒CongruenceModular` (modulo `JoinIsChain`, applied once, to the hypothesis join), `Day+finjoin⇒CM`, and the unconditional finitary **`Day⇒CM`**.
++  **`Day-theorem` — the complete iff**, assembled with the M6-7 converse `CM⇒Day` (#413, PR #440), which now takes its `Finitary` witness as an explicit argument, mirroring `CD⇒jonsson`.
+
+With this, all three classical Maltsev-condition theorems (Maltsev/CP, Jónsson/CD, Day/CM) are proved in both directions.
 
 ## Remaining tasks
 
-+  **Day terms ⟹ CM** (deferred indefinitely): the 2-dimensional staircase for the modular law `θ ≤ ψ → (θ ∨ φ) ∧ ψ ⊆ θ ∨ (φ ∧ ψ)` (Day 1969; Burris–Sankappanavar II.12.4).  The curried extraction mirrors Jónsson; the staircase does not.  This is the only open item on this issue and may be split into a dedicated follow-up.
+None — this issue is complete once PR #442 merges.
 
 ## Dependencies
 
@@ -3285,21 +3292,22 @@ These halves are independent of [M6-4] (#410): they use the chain terms availabl
 ## Acceptance criteria
 
 +  Forward Jónsson type-checks under `--safe`; the term ⟹ CD direction of Jónsson's theorem is done, and the **finitary** version is unconditional.  ✅ (PR #428; `make check` passes.)
-+  Forward Day remains the only open item, deferred indefinitely — this issue stays open for it (or is split into a follow-up).
++  Forward Day type-checks under `--safe`; the term ⟹ CM direction of Day's theorem is done, the **finitary** version is unconditional, and `Day-theorem` assembles the complete iff.  ✅ (PR #442; `make check` passes.)
 
 ## Notes
 
-+  Difficulty: the Jónsson half is moderate as expected; the realized work also surfaced two findings — the `Gen`-vs-chain (infinitary `comp`) obstruction, now discharged for finitary signatures, and that Day is **not** a mechanical mirror of Jónsson.  Both are recorded in `docs/notes/m6-6-forward-jonsson-day.md`.
++  Difficulty: the Jónsson half was moderate as expected; the realized work surfaced two findings — the `Gen`-vs-chain (infinitary `comp`) obstruction, discharged for finitary signatures, and that Day is **not** a mechanical mirror of Jónsson.  The Day half then required the genuinely two-dimensional FM Lemma 2.3 ladder, with a ϕ-count measure whose decrease is a two-steps-into-one fusion.  All of this is recorded in `docs/notes/m6-6-forward-jonsson-day.md` ("Why Day is not a mirror — and the ladder that works").
 
 ## References
 
 +  B. Jónsson, *Algebras whose congruence lattices are distributive*, Math. Scand. **21** (1967), 110–121.  [doi:10.7146/math.scand.a-10850](https://doi.org/10.7146/math.scand.a-10850) (open access).
 +  A. Day, *A characterization of modularity for congruence lattices of algebras*, Canad. Math. Bull. **12** (1969), 167–173.  [doi:10.4153/CMB-1969-016-6](https://doi.org/10.4153/CMB-1969-016-6).
++  R. Freese and R. McKenzie, *Commutator Theory for Congruence Modular Varieties*, LMS Lecture Note Series 125, Cambridge University Press (1987), Thm 2.2 and Lemma 2.3.  [Free online edition](https://math.hawaii.edu/~ralph/Commutator/).
 +  Burris and Sankappanavar, *A Course in Universal Algebra*, Thms. II.12.6 (Jónsson) and II.12.4 (Day).
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
-https://claude.ai/code/session_01MvPrLTCxKjFgsnTMK8j2qZ
+https://claude.ai/code/session_011crz6XaiE4uecELazSkJFY
 
 ---
 
@@ -3309,7 +3317,7 @@ https://claude.ai/code/session_01MvPrLTCxKjFgsnTMK8j2qZ
 
 ## Description
 
-Complete Jónsson's and Day's theorems with the hard "lattice property ⟹ terms" directions: a congruence-distributive variety has Jónsson terms, and a congruence-modular variety has Day terms.  These inhabit the converse projections of `Jonsson-Statement` and `Day-Statement` (with the orientation fixed in #412, the CD ⟹ terms direction is the *first* projection; following the #428 split the statements live in `Setoid.Varieties.Maltsev.{Distributivity,Modularity}`), turning both into complete iffs.  **Status: converse Jónsson landed (PR #438, `CD⇒jonsson` / `jonsson-theorem`); converse Day landed (`CM⇒day` in `Setoid.Varieties.Maltsev.Modularity`, with the two-pair bridge `cg-pairs→⊢` added to `Setoid.Varieties.FreeSubstitution`; design note `docs/notes/m6-7-reverse-day.md`).  Day's full iff awaits only the forward half, deferred indefinitely on #412.**
+Complete Jónsson's and Day's theorems with the hard "lattice property ⟹ terms" directions: a congruence-distributive variety has Jónsson terms, and a congruence-modular variety has Day terms.  These inhabit the converse projections of `Jonsson-Statement` and `Day-Statement` (with the orientation `P ⇔ Q = (P → Q) × (Q → P)` fixed in #412, the CD ⟹ terms direction is the *first* projection; the original text said "second"), turning both into complete iffs.  Following the #428 module split, the statements live in `Setoid.Varieties.Maltsev.{Distributivity,Modularity}`.
 
 This is the research-grade end of the M6-3 track.  Beyond the [M6-4] (#410) bridge, it requires extracting the **chain length `n`** and the terms `dᵢ` / `mᵢ` from the inductive derivation witnessing a join membership — the source of the `Σ[ n ∈ ℕ ]` in the statements, and the part with no off-the-shelf analogue in the library.
 
@@ -3321,11 +3329,31 @@ Construction (Burris–Sankappanavar, Thms. 12.6 and 12.4), sketched in `docs/no
 +  Extract `n : ℕ` and the parity-correct chain of terms from the `Gen` derivation witnessing the relevant join membership.
 +  Package the chain as an interpretation and discharge via `⊧-interp` + soundness (through the [M6-4] bridge).
 
+## Status (PRs #438, #440): COMPLETE
+
+**Converse Jónsson: DONE — and Jónsson's theorem is a complete iff for finitary signatures.**  `CD⇒jonsson` inhabits the CD ⟹ terms direction of `Jonsson-Statement`, and `jonsson-theorem` assembles both halves, all in `Setoid.Varieties.Maltsev.Distributivity`, next to the statement and the M6-6 forward half.
+
++  **The crux, realized.**  The chain-length extraction is `finitary⇒JoinIsChain` (M6-6, `Setoid.Congruences.ChainJoin`) applied in `𝔽[ Fin 3 ]` to the membership `(x , z) ∈ (θ∧φ) ∨ (θ∧ψ)` that distributivity produces from `θ = Cg ❴x,z❵`, `φ = Cg ❴x,y❵`, `ψ = Cg ❴y,z❵`; the chain length is the `Σ[ n ∈ ℕ ]`, and the chain elements — terms, since the carrier of `𝔽[ Fin 3 ]` *is* `Term (Fin 3)` — are the Jónsson terms `d₀ … dₙ`.
++  **The one genuinely new piece is parity normalization** (`ParityChain` / `chain→parity`): the chain's steps arrive in arbitrary tag order, while `Th-Jonsson`'s forks demand `(θ∧φ)`-steps at even and `(θ∧ψ)`-steps at odd positions.  Mismatches are padded with congruence-reflexivity steps; `pcons` swaps the two relations in its tail, so `even? (suc k) = not (even? k)` keeps the parity bookkeeping definitional (no numeric lemmas).
++  **Parity cross-check (third task, Jónsson half): confirmed.**  Even forks collapse `y ↦ x` (the φ-pair), odd forks collapse `z ↦ y` (the ψ-pair) — exactly the normalized chain's even/odd step relations, matching `Th-Jonsson`'s `even?` split.
++  Everything else is the `CP⇒maltsev` pattern (M6-4/M6-5): the bridge `cg-pair→⊢` per identity family, collapsing substitutions chosen to be the `I ✦` position maps (so every collapse condition is `refl` and only `graft≐[]` shims remain), and `⊧-interp` + `sound` to discharge satisfaction in an arbitrary model; the θ-tie of every chain element to `x` is a `<-weakInduction` over the rungs.
++  The `Finitary` hypothesis is inherited from the M6-6 chain collapse, so both directions of `jonsson-theorem` carry the same one-liner witness; the levels are those of the free-algebra construction (`𝔽[ Fin 3 ] : Algebra (lsuc 0ℓ) (ι ⊔ lsuc 0ℓ)`, variable type `X : Type 0ℓ`), the same instantiation as `CP⇒maltsev`.
++  Design note: `docs/notes/m6-7-reverse-jonsson.md`; roadmap updated in `docs/GITHUB_PROJECT.md`.
+
+**Converse Day: DONE (PR #440) — this completes the issue.**  `CM⇒Day` (born `CM⇒day`; renamed, and given an explicit `Finitary 𝑆` argument mirroring `CD⇒jonsson`, in PR #442) inhabits the CM ⟹ terms direction of `Day-Statement` in `Setoid.Varieties.Maltsev.Modularity`, the planned mechanical mirror of `CD⇒jonsson` over `𝔽[ Fin 4 ]` (Burris–Sankappanavar II.12.4).
+
++  The congruences are `θ = Cg ❴y,z❵`, `φ = Cg ❴x,y❵ ∨ Cg ❴z,u❵`, `ψ = Cg ❴x,u❵ ∨ Cg ❴y,z❵`, with `θ ⊆ ψ` the modular side condition; `(x , u)` lies in `(θ ∨ φ) ∧ ψ`, and the modular law read right to left moves it into `θ ∨ (φ ∧ ψ)`, whence `finitary⇒JoinIsChain` extracts the Day chain.
++  Day's `φ` and `ψ` are joins of *two* principal congruences, so their collapsing substitutions must kill two generator pairs at once: the two-pair bridge `cg-pairs→⊢` (added to `Setoid.Varieties.FreeSubstitution`, next to `cg-pair→⊢`) is the one new piece of machinery — a single `⊎`-split over the same `Cg⊆ker` argument.
++  **Parity cross-check (third task, Day half): confirmed.**  The modular join carries its θ-steps in the first `∪ᵣ` tag while `Th-Day`'s even forks are the φ-collapses, so the normalization is the *off-phase* pass `chain→parityᵒ`: even forks collapse `y ↦ x , z ↦ u` (the two φ-pairs), odd forks `z ↦ y` (the θ-pair), and the middle family `mᵢ(x,y,y,x) ≈ x` collapses `z ↦ y , u ↦ x` via the ψ-tie (`head-linked` at `ψ`).
++  Design note: `docs/notes/m6-7-reverse-day.md`; roadmap updated in `docs/GITHUB_PROJECT.md`.
+
+Day's *forward* half (terms ⟹ CM) was tracked separately on #412 and has since **landed** (PR #442, closing #412): `Day-theorem` assembles the complete iff, so Day's theorem now stands as an iff alongside `jonsson-theorem`, and no Day item remains open anywhere.
+
 ## Tasks
 
-+  CD ⟹ Jónsson terms: extract the ternary chain `d₀ … dₙ` and inhabit the converse projection of `Jonsson-Statement`.  ✅ PR #438 (`CD⇒jonsson`, `jonsson-theorem`).
-+  CM ⟹ Day terms: extract the quaternary chain `m₀ … mₙ` and inhabit the converse projection of `Day-Statement`.  ✅ (`CM⇒day`, `Setoid.Varieties.Maltsev.Modularity`).
-+  Confirm the extracted identities match the parity convention of `Th-Jonsson` / `Th-Day` (cross-check the even/odd argument patterns when the proof is in hand).  ✅ both: Jónsson's even/odd forks collapse the φ-/ψ-pair; Day's even forks collapse the two φ-pairs and its odd forks the θ-pair, matching the off-phase normalization `chain→parityᵒ`.
++  ~CD ⟹ Jónsson terms: extract the ternary chain `d₀ … dₙ` and inhabit the converse projection of `Jonsson-Statement`.~  ✅ PR #438 (`CD⇒jonsson`, `jonsson-theorem`).
++  ~CM ⟹ Day terms: extract the quaternary chain `m₀ … mₙ` and inhabit the converse projection of `Day-Statement`.~  ✅ PR #440 (`CM⇒Day`, `Setoid.Varieties.Maltsev.Modularity`; renamed from `CM⇒day` in PR #442).
++  ~Confirm the extracted identities match the parity convention of `Th-Jonsson` / `Th-Day` (cross-check the even/odd argument patterns when the proof is in hand).~  ✅ both halves (PR #438, PR #440; details in the Status section above).
 
 ## Dependencies
 
@@ -3334,20 +3362,22 @@ Construction (Burris–Sankappanavar, Thms. 12.6 and 12.4), sketched in `docs/no
 
 ## Acceptance criteria
 
-+  Both converse implications type-check under `--safe`; Jónsson's and Day's theorems are complete iffs.  ✅ both converses type-check under `--safe`, and Jónsson's theorem is a complete iff (`jonsson-theorem`); Day's full iff is re-scoped to the forward half, deferred indefinitely on #412.
++  Both converse implications type-check under `--safe`; Jónsson's and Day's theorems are complete iffs.  ✅ in full: Jónsson converse PR #438 with the complete iff `jonsson-theorem`; Day converse PR #440; and the once re-scoped clause — Day's full iff — discharged by PR #442 on #412, which landed the forward half and assembled `Day-theorem`.
 
 ## Notes
 
-+  Difficulty: hard.  The derivation-length / chain extraction from an inductively-generated congruence is the crux; budget accordingly and consider landing CD ⟹ Jónsson first, with CM ⟹ Day mirroring it.  (Realized as planned, in that order.)
++  Difficulty: hard.  The derivation-length / chain extraction from an inductively-generated congruence is the crux; budget accordingly and consider landing CD ⟹ Jónsson first, with CM ⟹ Day mirroring it.  (Realized as planned: reverse Jónsson landed first; the crux decomposed into the M6-6 `finitary⇒JoinIsChain` plus the new parity normalization, and reverse Day was the predicted mechanical mirror.)
++  Close-out: PR #446 reconciles the two M6-7 design notes with the post-#442 state (the `CM⇒Day` rename and the landed forward half) and closes this issue on merge.
 
 ## References
 
 +  B. Jónsson, *Algebras whose congruence lattices are distributive*, Math. Scand. **21** (1967), 110–121.  [doi:10.7146/math.scand.a-10850](https://doi.org/10.7146/math.scand.a-10850).
 +  A. Day, *A characterization of modularity for congruence lattices of algebras*, Canad. Math. Bull. **12** (1969), 167–173.  [doi:10.4153/CMB-1969-016-6](https://doi.org/10.4153/CMB-1969-016-6).
++  S. Burris and H. P. Sankappanavar, *A Course in Universal Algebra*, Thms. II.12.6 (Jónsson) and II.12.4 (Day).
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
-https://claude.ai/code/session_01MvPrLTCxKjFgsnTMK8j2qZ
+https://claude.ai/code/session_011crz6XaiE4uecELazSkJFY
 
 ---
 
@@ -3941,7 +3971,7 @@ The repo's `flake.nix` provides a *development* environment — `nix develop` gi
 
 ---
 
-### Issue M10-4: Retire and park the legacy ualib.org site; cut over to the MkDocs site (#430)
+### Issue M10-4: Retire and park the legacy ualib.org site; cut over to the MkDocs site (#430, closed)
 
 **Labels**: `documentation`, `milestone-10-polish`
 
@@ -3949,7 +3979,7 @@ The repo's `flake.nix` provides a *development* environment — `nix develop` gi
 
 PR #427 (closing #295) builds the new MkDocs (Material) site from the `.lagda.md` sources and deploys it to the `gh-pages` branch on every push to `master`.
 
-By deliberate decision in ADR-007 (`docs/adr/007-mkdocs-rendering-pipeline.md`), the *cutover* — pointing GitHub Pages at `gh-pages`, attaching the ~~`ualib.org`~~ `universalalgebra.org/agda-algebras` custom domain, and the registrar DNS change — was left as a manual maintainer step so that merging the PR does not disturb the currently-live site.
+By deliberate decision in ADR-007 (`docs/adr/007-mkdocs-rendering-pipeline.md`), the *cutover* — pointing GitHub Pages at `gh-pages`, attaching the ~~`ualib.org`~~ `agda-algebras.universalalgebra.org` custom domain, and the registrar DNS change — was left as a manual maintainer step so that merging the PR does not disturb the currently-live site.
 
 This issue tracks that cutover **and** the parking + deprecation of the existing (Jekyll-rendered) ualib.org content.
 
@@ -3957,7 +3987,7 @@ This issue tracks that cutover **and** the parking + deprecation of the existing
 
 `ualib.org` ~~serves the new site~~ continues to serve the old, deprecated site; the old site is preserved ("parked") and carries a prominent banner marking it deprecated and linking forward to the new site; legacy `Module.Submodule.html` URLs redirect to the new directory URLs.
 
-`universalalgebra.org/agda-algebras` serves the new site.
+`agda-algebras.universalalgebra.org` serves the new site.
 
 ## Plan
 
@@ -3967,27 +3997,29 @@ This issue tracks that cutover **and** the parking + deprecation of the existing
 
     **Decision**: keep it parked at its original and current location `ualib.org`.
 
-+  [ ] Add a prominent **deprecation banner** to the top of the old landing page (ideally every old page): a dated notice that the site is deprecated, with a link to the new site at `universalalgebra.org/agda-algebras`.  A sticky `<div>` with a contrasting background is enough.
++  [X] Add a prominent **deprecation banner** to the top of the old landing page (ideally every old page): a dated notice that the site is deprecated, with a link to the new site at `agda-algebras.universalalgebra.org`.  A sticky `<div>` with a contrasting background is enough.
+
+    **Done in `d921a44`** (on `gh-pages`): a dated, full-bleed banner on the landing page, all 147 Jekyll content pages (via a new `_includes/deprecation-banner.html` referenced from both page layouts), and the 198 root-level `agda --html` code fragments (a self-contained inline-styled bar, since those files have no `<body>`).
 
 ### Cut over to the new site
 
-+  [ ] Point **GitHub Pages** at the `gh-pages` branch (Settings → Pages → Deploy from a branch → `gh-pages` / root).
-+  [ ] Attach the **custom domain**: uncomment `cname: universalalgebra.org/agda-algebras` in `.github/workflows/docs.yml`, and confirm the `CNAME` file lands in the published site.
-+  [ ] Update **registrar DNS**: point the `universalalgebra.org/agda-algebras` apex at GitHub Pages' IPs (and/or a `www` `CNAME` to `ualib.github.io`), per GitHub's custom-domain docs.
-+  [ ] Populate the **`mkdocs-redirects`** map (currently empty in `mkdocs.yml`) with the legacy flat `Module.Submodule.html` → new `/Module/Submodule/` URLs, so external links survive.
++  [X] Point **GitHub Pages** at the `gh-pages` branch (Settings → Pages → Deploy from a branch → `gh-pages` / root).  Done on the new-home repo `universalalgebra/agda-algebras`.
++  [X] Attach the **custom domain**: set `cname: agda-algebras.universalalgebra.org` in `.github/workflows/docs.yml` (written into the `CNAME` on every deploy).
++  [X] Update **registrar DNS**: point `agda-algebras.universalalgebra.org` at GitHub Pages, per GitHub's custom-domain docs.
++  [X] ~~Populate the **`mkdocs-redirects`** map (currently empty in `mkdocs.yml`) with the legacy flat `Module.Submodule.html` → new `/Module/Submodule/` URLs, so external links survive.~~  **Dropped — satisfied by parking**: legacy URLs resolve to their *original content* at `ualib.org`, and the old `Base.*` tree has no equivalent on the new `Setoid.*`-centric site, so a redirect map would send those URLs to 404s.
 
 ### Verify
 
-+  [ ] Spot-check at least 10 pages on the live `universalalgebra.org/agda-algebras` against the parked archive: content, search, inline cross-links, the `/classic/` agda-html mirror, and the module constellation.
-+  [ ] Confirm HTTPS (GitHub-provisioned certificate) is active on the apex and `www`.
-+  [ ] Confirm a sample of legacy `….html` URLs redirect to their new locations.
++  [X] Spot-check at least 10 pages on the live `agda-algebras.universalalgebra.org` against the parked archive: content, search, inline cross-links, the `/classic/` agda-html mirror, and the module constellation.
++  [X] Confirm HTTPS (GitHub-provisioned certificate) is active on the apex and `www`.
++  [X] Confirm a sample of legacy `….html` URLs resolve — **directly** now (parked at `ualib.org`), rather than via a redirect.
 
 ## Acceptance criteria
 
-+  [ ] `https://universalalgebra.org/agda-algebras` serves the new MkDocs site over HTTPS.
-+  [ ] The old site is parked at its original URL (`ualib.org`) and shows a dated deprecation banner linking to the new site.
-+  [ ] Legacy `Module.Submodule.html` URLs resolve (directly or via redirect).
-+  [ ] No regression in the currently-live content during the transition: the old site stays reachable until the new one is verified.
++  [X] `https://agda-algebras.universalalgebra.org` serves the new MkDocs site over HTTPS.
++  [X] The old site is parked at its original URL (`ualib.org`) and shows a dated deprecation banner linking to the new site.
++  [X] Legacy `Module.Submodule.html` URLs resolve (directly or via redirect).
++  [X] No regression in the currently-live content during the transition: the old site stays reachable until the new one is verified.
 
 ## Related
 
@@ -4002,7 +4034,7 @@ This issue tracks that cutover **and** the parking + deprecation of the existing
 
 ---
 
-### Issue M10-5: Improve how module imports are presented on the documentation pages (#431)
+### Issue M10-5: Improve how module imports are presented on the documentation pages (#431, closed)
 
 **Labels**: `documentation`, `milestone-10-polish`
 

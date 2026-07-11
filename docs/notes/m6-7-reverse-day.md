@@ -10,13 +10,16 @@ planned mechanical mirror of the reverse-Jónsson proof
 free bridge ([`m6-4-free-bridge.md`](m6-4-free-bridge.md)) with one upgrade
 (`cg-pairs→⊢`, below).  The *forward* Day
 direction (Day terms ⟹ CM) is **not** part of this work: it needs the genuinely
-two-dimensional staircase of Day 1969 and stays deferred on #412, per the M6-6 note
+two-dimensional ladder of Day 1969 and was tracked separately on #412, where it has
+since **landed** (PR #442), assembling the complete iff `Day-theorem`; see the M6-6 note
 ([`m6-6-forward-jonsson-day.md`](m6-6-forward-jonsson-day.md)).
 
 ## What landed
 
-+  `CM⇒day` (`Setoid.Varieties.Maltsev.Modularity`, next to `Day-Statement` — the same
-   "converse lives next to its statement" placement as `CD⇒jonsson` and `CP⇒maltsev`):
++  `CM⇒Day` (`Setoid.Varieties.Maltsev.Modularity`, next to `Day-Statement` — the same
+   "converse lives next to its statement" placement as `CD⇒jonsson` and `CP⇒maltsev`;
+   born `CM⇒day`, renamed and given an explicit `Finitary 𝑆` argument in PR #442,
+   mirroring `CD⇒jonsson` so `Day-theorem` assembles from a single witness):
    for a **finitary** signature, a congruence-modular variety has `n + 1` Day terms,
    i.e. the `proj₁` direction of `Day-Statement`, at the levels of the free algebra
    `𝔽[ Fin 4 ] : Algebra (lsuc 0ℓ) (ι ⊔ lsuc 0ℓ)` (the same instantiation as
@@ -94,10 +97,11 @@ area, and this note keeps to the Maltsev-condition side of the boundary.
 
 ## Remaining work on #413
 
-None — this completes the issue.  The only open Day item is the *forward* direction
-(Day terms ⟹ CM), tracked on #412 and deferred indefinitely for the structural reason
-recorded in the M6-6 note; when it lands, `Day-Statement` assembles into a complete iff
-exactly as `jonsson-theorem` did.
+None — this completes the issue.  The one Day item that remained elsewhere, the
+*forward* direction (Day terms ⟹ CM), was initially deferred on #412 for the structural
+reason recorded in the M6-6 note and has since **landed** there (PR #442, the M6-6
+note's "ladder that works"): `Day-Statement` is now assembled into the complete iff
+`Day-theorem`, exactly as `jonsson-theorem` was.
 
 ## Build / check
 
