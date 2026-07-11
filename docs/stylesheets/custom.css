@@ -787,46 +787,84 @@ body.reveal-agda-source .md-typeset .ualib-hidden-note {
   display: none;
 }
 
-/* The header control agda-toggle.js injects after the site title: a quiet
-   pill that inherits the header's foreground so it reads correctly on the
-   indigo header in both schemes. */
-#toggle-agda-source {
+/* -- Shared header switch (agda-toggle.js "Show all Agda", agda-hover.js
+      "Tooltips") -----------------------------------------------------------
+   A sliding toggle: a static label + icon, then a track whose thumb slides
+   right and turns lime when the feature is on.  `role="switch"` + aria-checked
+   carry the state (the label is the accessible name).  `currentColor` is the
+   header foreground, so the muted "off" track reads on the indigo/navy chrome
+   in both schemes; only the lit colour is a bespoke token. */
+:root { --ualib-switch-on: #84cc16; }                          /* vivid lime  */
+[data-md-color-scheme="slate"] { --ualib-switch-on: #a3e635; } /* brighter    */
+
+.ualib-switch {
   display: inline-flex;
   align-items: center;
-  gap: 0.4em;
+  gap: 0.5em;
   flex-shrink: 0;
-  padding: 0.25em 0.9em;
-  border: 1px solid color-mix(in srgb, currentColor 35%, transparent);
-  border-radius: 9999px;
-  background: color-mix(in srgb, currentColor 10%, transparent);
+  padding: 0.2em 0.4em;
+  border: 0;
+  background: none;
   color: inherit;
   font-family: var(--ualib-display);
-  font-size: 0.62rem;
+  font-size: 0.66rem;
   font-weight: 500;
-  line-height: 1.25;
+  line-height: 1.2;
   white-space: nowrap;
   cursor: pointer;
-  transition: background 140ms ease, border-color 140ms ease;
 }
-#toggle-agda-source:hover {
-  background: color-mix(in srgb, currentColor 18%, transparent);
-  border-color: color-mix(in srgb, currentColor 60%, transparent);
+.ualib-switch__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
 }
-#toggle-agda-source:focus-visible {
+.ualib-switch__track {
+  position: relative;
+  flex-shrink: 0;
+  width: 1.85em;
+  height: 1.02em;
+  border-radius: 999px;
+  background: color-mix(in srgb, currentColor 24%, transparent);
+  transition: background 160ms ease;
+}
+.ualib-switch__thumb {
+  position: absolute;
+  top: 50%;
+  left: 0.13em;
+  width: 0.76em;
+  height: 0.76em;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  transform: translateY(-50%);
+  transition: transform 160ms ease;
+}
+.ualib-switch[aria-checked="true"] .ualib-switch__track {
+  background: var(--ualib-switch-on);
+}
+.ualib-switch[aria-checked="true"] .ualib-switch__thumb {
+  transform: translate(0.83em, -50%);
+}
+.ualib-switch:hover .ualib-switch__track {
+  background: color-mix(in srgb, currentColor 36%, transparent);
+}
+.ualib-switch[aria-checked="true"]:hover .ualib-switch__track {
+  background: color-mix(in srgb, var(--ualib-switch-on) 84%, #ffffff);
+}
+.ualib-switch:focus-visible {
   outline: 1px solid currentColor;
-  outline-offset: 2px;
+  outline-offset: 3px;
+  border-radius: 4px;
 }
-.agda-logo-icon {
-  width: 1.15em;
-  height: 1.15em;
-}
+.agda-logo-icon { width: 1.15em; height: 1.15em; }
+.agda-tip-icon  { width: 1.05em; height: 1.05em; }
 
 /* On narrow headers (hamburger + title + palette + search) an unshrinkable
-   pill would crush the page title, so drop it below the same breakpoint at
-   which Material hides its repo-source chrome.  Phones keep the default
-   (scaffolding hidden), which is the right reading mode there anyway. */
+   control would crush the page title, so drop both switches below the same
+   breakpoint at which Material hides its repo-source chrome.  Phones keep the
+   defaults, which is the right reading mode there anyway. */
 @media screen and (max-width: 59.9844em) {
-  #toggle-agda-source {
+  .ualib-switch {
     display: none;
   }
 }
@@ -835,10 +873,10 @@ body.reveal-agda-source .md-typeset .ualib-hidden-note {
    16. Type-on-hover tooltips (#429, M10-3) — docs/assets/js/agda-hover.js pairs
        each linked Agda token with the `<a id="offset">` at its definition and,
        on hover, shows a small popover with a snippet of that definition.  A
-       "Tooltips on/off" pill (a sibling of the Show-more-Agda control) lets a
-       reader switch them off; the choice persists in localStorage.  Colours
-       ride the theme tokens so the popover matches the page in both schemes,
-       and the snippet reuses the code surface.
+       "Tooltips" switch (a sibling of the Show-all-Agda control) lets a reader
+       switch them off; the choice persists in localStorage.  Colours ride the
+       theme tokens so the popover matches the page in both schemes, and the
+       snippet reuses the code surface.
    ========================================================================== */
 :root {
   --agda-tip-font:   0.72rem;             /* compact body text                */
@@ -945,46 +983,5 @@ body.reveal-agda-source .md-typeset .ualib-hidden-note {
   opacity: 0.6;
 }
 
-/* -- The header on/off pill (mirrors #toggle-agda-source) ------------------ */
-#toggle-agda-tooltips {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4em;
-  flex-shrink: 0;
-  padding: 0.25em 0.9em;
-  border: 1px solid color-mix(in srgb, currentColor 35%, transparent);
-  border-radius: 9999px;
-  background: color-mix(in srgb, currentColor 10%, transparent);
-  color: inherit;
-  font-family: var(--ualib-display);
-  font-size: 0.62rem;
-  font-weight: 500;
-  line-height: 1.25;
-  white-space: nowrap;
-  cursor: pointer;
-  transition: background 140ms ease, border-color 140ms ease, opacity 140ms ease;
-}
-#toggle-agda-tooltips:hover {
-  background: color-mix(in srgb, currentColor 18%, transparent);
-  border-color: color-mix(in srgb, currentColor 60%, transparent);
-}
-#toggle-agda-tooltips:focus-visible {
-  outline: 1px solid currentColor;
-  outline-offset: 2px;
-}
-/* When tooltips are off, dim the pill so the state reads at a glance. */
-#toggle-agda-tooltips[aria-pressed="false"] {
-  opacity: 0.6;
-}
-.agda-tip-icon {
-  width: 1.05em;
-  height: 1.05em;
-}
-
-/* Like the Show-more-Agda pill, drop it on narrow headers where an
-   unshrinkable pill would crush the page title. */
-@media screen and (max-width: 59.9844em) {
-  #toggle-agda-tooltips {
-    display: none;
-  }
-}
+/* The header "Tooltips" control is the shared `.ualib-switch` (styled with the
+   Show-all-Agda control in §15); agda-hover.js only sets its aria-checked. */

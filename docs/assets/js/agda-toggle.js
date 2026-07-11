@@ -1,12 +1,12 @@
-/* "Show more Agda" toggle for the hidden scaffolding blocks (#431, M10-5).
+/* "Show all Agda" switch for the hidden scaffolding blocks (#431, M10-5).
    Module sources wrap their leading OPTIONS/module/import scaffolding in
    HTML comments; mkdocs_gen_library.py re-surfaces those blocks with the
    `hidden-source` class, which docs/stylesheets/custom.css hides.  This
-   script injects a pill-shaped button into the Material header that flips
+   script injects a sliding switch into the Material header that flips
    the `reveal-agda-source` class on <body>, showing or re-hiding every
    `hidden-source` block at once; the choice persists across pages and
-   visits via localStorage, like the palette toggle.  Adapted from the same
-   feature on the formal-ledger-specifications site. */
+   visits via localStorage, like the palette toggle.  The switch component
+   (`.ualib-switch`) is shared with the Tooltips control (agda-hover.js). */
 (function () {
   var STORAGE_KEY = "reveal-agda-source";
 
@@ -37,10 +37,11 @@
     ' 301.2c-7.6 7.7-8.7 10.2-5.5 13.1 2.9 2.6 5.5 2 9.5-2.1 3.8-3.8 3.8-4' +
     ' 3.5-11.1l-.3-7.2z"/></svg>';
 
-  /* The flipping visible text IS the accessible name (no aria-label, which
-     would override it and break say-what-you-see voice control). */
-  function setLabel(btn, revealed) {
-    btn.innerHTML = (revealed ? "Show less Agda " : "Show more Agda ") + AGDA_ICON;
+  /* The label is static ("Show all Agda"); the sliding track shows the state.
+     `role="switch"` + aria-checked carry it — not aria-label, which would
+     override the accessible name and break say-what-you-see voice control. */
+  function setState(btn, revealed) {
+    btn.setAttribute("aria-checked", String(revealed));
   }
 
   function toggle() {
@@ -51,7 +52,7 @@
       /* storage unavailable (private mode): the toggle still works per page */
     }
     var btn = document.getElementById("toggle-agda-source");
-    if (btn) setLabel(btn, revealed);
+    if (btn) setState(btn, revealed);
   }
 
   /* A per-block affordance: a small disclosure note in front of every hidden
@@ -91,7 +92,13 @@
       btn = document.createElement("button");
       btn.id = "toggle-agda-source";
       btn.type = "button";
+      btn.className = "ualib-switch";
+      btn.setAttribute("role", "switch");
       btn.title = "Show or hide the module-import blocks that each page hides by default";
+      // Static label (the switch shows the state): Agda mark + "Show all Agda".
+      btn.innerHTML =
+        '<span class="ualib-switch__label">' + AGDA_ICON + '<span>Show all Agda</span></span>' +
+        '<span class="ualib-switch__track"><span class="ualib-switch__thumb"></span></span>';
       var title = document.querySelector(".md-header__inner > .md-header__title");
       if (title && title.parentNode) {
         title.parentNode.insertBefore(btn, title.nextSibling);
@@ -100,7 +107,7 @@
       }
       btn.addEventListener("click", toggle);
     }
-    setLabel(btn, revealed);
+    setState(btn, revealed);
     decorateHiddenBlocks();
   }
 

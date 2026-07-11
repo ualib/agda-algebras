@@ -19,15 +19,15 @@
        `rewrite_agda_hrefs` in scripts/python/mkdocs_gen_library.py).  Both forms
        are parsed through the URL API and fetched as-is; a reference whose
        definition is on the current page is read from the live DOM instead.
-     + Hovering a token *at its own definition site* shows nothing — Agda links
-       a definition to itself, so the popover would just echo what the reader is
-       already looking at.
+     + Hovering a token *inside its own definition* shows nothing — the signature
+       line, a defining clause (`f x = …`), or a recursive call would only echo
+       the block the reader is already looking at.
      + Wiring goes through Material's `document$` (like agda-copy.js and
        agda-toggle.js) and uses a single set of delegated listeners on
        `document`, so the cost is constant no matter how many thousands of
        tokens a page carries — and it survives Material's page swaps.
-     + It adds the "Tooltips on/off" header control the milestone calls for,
-       persisted in localStorage next to the palette and Show-more-Agda choices.
+     + It adds the "Tooltips" header switch the milestone calls for, persisted in
+       localStorage next to the palette and Show-all-Agda choices.
 
    Fetches are same-origin and read-only; the page and snippet caches are
    bounded; nothing is ever written to the target pages. */
@@ -48,8 +48,8 @@
     'Postulate', 'Primitive', 'Record',
   ]);
 
-  // A small tooltip/callout glyph, inlined so the header button needs no extra
-  // request; the stroke follows the button's text colour via currentColor.
+  // A small tooltip/callout glyph, inlined so the header switch needs no extra
+  // request; the stroke follows the switch's text colour via currentColor.
   var TIP_ICON =
     '<svg class="agda-tip-icon" aria-hidden="true" viewBox="0 0 24 24"' +
     ' fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"' +
@@ -70,7 +70,7 @@
   var listenersReady = false;    // delegated listeners installed once
 
   // Hover tooltips are meaningless where the primary input can't hover, so on
-  // touch-only devices we install neither the listeners nor the toggle.
+  // touch-only devices we install neither the listeners nor the switch.
   var HOVER_NONE = !!(window.matchMedia && window.matchMedia('(hover: none)').matches);
 
   // On/off state.  Default on; readers who find the tips distracting turn them
@@ -120,21 +120,66 @@
     var kind = classes.find(function (c) { return KIND_CLASSES.has(c); }) || '';
     var isOperator = classes.indexOf('Operator') !== -1;
     var url = new URL(a.getAttribute('href') || '', window.location.href);
-    var pageUrl = url.origin + url.pathname;
-    var anchor = url.hash ? url.hash.slice(1) : '';
     var moduleName = moduleNameFromUrl(url);
     return {
       href: url.href,
-      pageUrl: pageUrl,
+      pageUrl: url.origin + url.pathname,
       basename: a.textContent.trim() || moduleName,
       kind: kind ? displayKind(kind) + (isOperator ? ' operator' : '') : '',
       moduleName: moduleName,
-      anchor: anchor,
-      // True when the hovered token *is* its own definition: Agda gives the
-      // defining occurrence both `id="N"` and `href="…#N"` on its own page, so
-      // the popover would only echo what the reader is already looking at.
-      selfDef: !!a.id && a.id === anchor && isCurrentPage(pageUrl),
+      anchor: url.hash ? url.hash.slice(1) : '',
     };
+  }
+
+  // -- Line geometry (shared by extraction + self-definition test) ---------
+
+  // Split `text` into lines and record each line's starting char offset, so a
+  // char index (from a DOM Range) maps to a line and back.  The concatenation
+  // of the lines with '\n' is exactly `pre.textContent`, which both the Range
+  // offsets and these arrays are measured against.
+  function splitLines(text) {
+    var lines = text.split(/\r?\n/);
+    var starts = new Array(lines.length);
+    var acc = 0;
+    for (var i = 0; i < lines.length; i++) { starts[i] = acc; acc += lines[i].length + 1; }
+    return { lines: lines, starts: starts };
+  }
+
+  function isBlankLine(l) { return /^\s*$/.test(l); }
+
+  function lineAt(sl, idx) {
+    if (idx < 0) return 0;
+    for (var i = 0; i < sl.lines.length; i++) {
+      if (idx < sl.starts[i] + sl.lines[i].length + 1) return i;
+    }
+    return sl.lines.length - 1;
+  }
+
+  // The blank-line-delimited paragraph (an Agda definition: signature + clauses,
+  // or a data/record declaration) that contains `line`.
+  function paragraphAround(lines, line) {
+    var start = line, end = line;
+    while (start > 0 && !isBlankLine(lines[start - 1])) start--;
+    while (end + 1 < lines.length && !isBlankLine(lines[end + 1])) end++;
+    return [start, end];
+  }
+
+  // True when the hovered token lies inside the very definition paragraph the
+  // tooltip would show — its signature line, a defining clause (`f x = …`), or a
+  // recursive call — so the popover would only echo what the reader is already
+  // looking at.  Only fires when the definition is on the current page and in
+  // the same Agda block as the token.
+  function withinOwnDefinition(a, info) {
+    if (!info.anchor || !isCurrentPage(info.pageUrl)) return false;
+    var defEl = document.getElementById(info.anchor);
+    if (!defEl) return false;
+    var pre = a.closest('pre.Agda');
+    if (!pre || pre !== defEl.closest('pre.Agda')) return false;
+    var sl = splitLines(pre.textContent || '');
+    var defLine = lineAt(sl, charIndexWithin(pre, defEl));
+    var hovLine = lineAt(sl, charIndexWithin(pre, a));
+    var range = paragraphAround(sl.lines, defLine);
+    return hovLine >= range[0] && hovLine <= range[1];
   }
 
   // -- Fetching + snippet extraction ---------------------------------------
@@ -213,10 +258,7 @@
 
   /* Heuristically extract a "definition block" around `anchorIndex`, returning
      the structural pieces the highlighter needs:
-       - split the <pre> text into lines and find the one holding anchorIndex;
-       - take the blank-line-delimited paragraph around it — in Agda a
-         definition (signature + clauses, or a data/record declaration) is
-         usually one such paragraph;
+       - take the blank-line-delimited paragraph around the anchor line;
        - if the anchor line is indented (a field, constructor, or a where-block
          definition), climb to each enclosing header line (nearest line above
          with strictly smaller indentation), so e.g. a record field is shown
@@ -228,29 +270,14 @@
     var maxLines = opts.maxLines || 14;
     var maxChars = opts.maxChars || 1200;
 
-    var lines = text.split(/\r?\n/);
-    var starts = new Array(lines.length);
-    var acc = 0;
-    for (var i = 0; i < lines.length; i++) {
-      starts[i] = acc;
-      acc += lines[i].length + 1;   // +1 for the newline
-    }
-
-    // Find the anchor line (or fall back to the first line).
-    var iAnchor = 0;
-    if (anchorIndex >= 0) {
-      for (var j = 0; j < lines.length; j++) {
-        if (anchorIndex < starts[j] + lines[j].length + 1) { iAnchor = j; break; }
-      }
-    }
-
+    var sl = splitLines(text);
+    var lines = sl.lines, starts = sl.starts;
+    var iAnchor = anchorIndex >= 0 ? lineAt(sl, anchorIndex) : 0;
     var indent = function (l) { var m = l.match(/^\s*/); return m ? m[0].length : 0; };
-    var isBlank = function (l) { return /^\s*$/.test(l); };
 
     // 1) Paragraph containing the anchor line.
-    var start = iAnchor, end = iAnchor;
-    while (start > 0 && !isBlank(lines[start - 1])) start--;
-    while (end + 1 < lines.length && !isBlank(lines[end + 1])) end++;
+    var para = paragraphAround(lines, iAnchor);
+    var start = para[0], end = para[1];
 
     // 2) Cap the paragraph, keeping the lines from `start` (the signature comes
     //    first); make sure the anchor line stays included.
@@ -268,13 +295,13 @@
     if (ind > 0 && anchorIndex >= 0) {
       for (var k = start - 1; k >= 0 && ind > 0; k--) {
         var l = lines[k];
-        if (isBlank(l)) continue;
+        if (isBlankLine(l)) continue;
         if (indent(l) < ind) { headers.unshift(k); ind = indent(l); }
       }
     }
 
-    // Plain-text composition (fallback + cache-miss display): headers (with `⋯`
-    // marking elided lines) + the paragraph, capped.
+    // Plain-text composition (fallback display): headers (with `⋯` marking
+    // elided lines) + the paragraph, capped.
     var parts = [];
     var prev = -1;
     for (var h = 0; h < headers.length; h++) {
@@ -427,8 +454,8 @@
     showTimer = setTimeout(function () {
       if (activeAnchor !== a || !tooltipsEnabled) return;
       var info = inferTokenInfo(a);
-      // A token at its own definition site would only echo itself — skip it.
-      if (info.selfDef) { activeAnchor = null; hideTooltip(); return; }
+      // Inside its own definition the popover would only echo the block — skip.
+      if (withinOwnDefinition(a, info)) { activeAnchor = null; hideTooltip(); return; }
       var cached = snippetCache.get(info.href);
       if (cached === undefined) {
         // Show a fast skeleton immediately, then fill in the fetched snippet.
@@ -484,36 +511,36 @@
     document.addEventListener('focusout', onOut, { passive: true });
   }
 
-  // -- Header on/off control -----------------------------------------------
+  // -- Header on/off switch ------------------------------------------------
 
-  function buttonLabel(on) {
-    return (on ? 'Tooltips on ' : 'Tooltips off ') + TIP_ICON;
-  }
-
-  function updateButton() {
+  function updateSwitch() {
     var btn = document.getElementById('toggle-agda-tooltips');
-    if (!btn) return;
-    btn.innerHTML = buttonLabel(tooltipsEnabled);
-    btn.setAttribute('aria-pressed', String(tooltipsEnabled));
+    if (btn) btn.setAttribute('aria-checked', String(tooltipsEnabled));
   }
 
   function setEnabled(on) {
     tooltipsEnabled = on;
     try { localStorage.setItem(TOGGLE_KEY, on ? 'on' : 'off'); }
-    catch (e) { /* storage unavailable: the toggle still works per page */ }
+    catch (e) { /* storage unavailable: the switch still works per page */ }
     if (!on) { clearTimeout(showTimer); activeAnchor = null; hideTooltip(); }
-    updateButton();
+    updateSwitch();
   }
 
-  function installButton() {
+  function installSwitch() {
     if (HOVER_NONE) return;
     var btn = document.getElementById('toggle-agda-tooltips');
     if (!btn) {
       btn = document.createElement('button');
       btn.id = 'toggle-agda-tooltips';
       btn.type = 'button';
+      btn.className = 'ualib-switch';
+      btn.setAttribute('role', 'switch');
       btn.title = 'Turn Agda type-on-hover tooltips on or off';
-      // Sit just after the Show-more-Agda pill when present, else after the
+      // Static label (the switch shows the state): bubble icon + "Tooltips".
+      btn.innerHTML =
+        '<span class="ualib-switch__label">' + TIP_ICON + '<span>Tooltips</span></span>' +
+        '<span class="ualib-switch__track"><span class="ualib-switch__thumb"></span></span>';
+      // Sit just after the Show-all-Agda switch when present, else after the
       // site title (mirroring agda-toggle.js).
       var source = document.getElementById('toggle-agda-source');
       var title = document.querySelector('.md-header__inner > .md-header__title');
@@ -526,12 +553,12 @@
       }
       btn.addEventListener('click', function () { setEnabled(!tooltipsEnabled); });
     }
-    updateButton();
+    updateSwitch();
   }
 
   function install() {
     if (HOVER_NONE) return;
-    installButton();
+    installSwitch();
     installListeners();
   }
 
