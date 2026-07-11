@@ -39,7 +39,7 @@ Two consequences worth making explicit.  First, FLRP research modules should be 
 
 ## 3. State of the art — July 2026 snapshot
 
-### Known representable classes and closure properties**
+### Known representable classes and closure properties
 
 +  Every finite distributive lattice is the congruence lattice of a finite lattice (Dilworth; first published proof Grätzer–Schmidt [1962]).
 
