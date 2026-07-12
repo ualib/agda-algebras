@@ -599,11 +599,25 @@ symbol is then an enumerated one by surjectivity of the symbol enumeration.
                        , ≈trans (idx-≈ ((f ^ 𝑨) v)) (≈sym fs≈fv) ))
 
   -- ... hence with every operation symbol, by surjectivity of the enumeration.
+  --
+  -- The passage from an enumerated symbol to an arbitrary one transports along
+  -- opEnum-sur by an explicit subst with the named motive OpCompat, not by a
+  -- with-abstraction on opEnum-sur f: `with` normalizes the goal to find the
+  -- occurrences it must abstract, and this goal mentions `closure`, whose
+  -- unfolding (an iterated step on a symbolic matrix) is enormous — large
+  -- enough to exhaust the CI heap budget.  The subst keeps every conversion
+  -- check syntactic.
+  private
+    OpCompat : OperationSymbolsOf 𝑆 → Type (𝓥 ⊔ α)
+    OpCompat g = {u v : ArityOf 𝑆 g → 𝕌[ 𝑨 ]}
+      →  (∀ a → T (closure (idx (u a)) (idx (v a))))
+      →  T (closure (idx ((g ^ 𝑨) u)) (idx ((g ^ 𝑨) v)))
+
   closure-op : (f : OperationSymbolsOf 𝑆) {u v : ArityOf 𝑆 f → 𝕌[ 𝑨 ]}
     →  (∀ a → T (closure (idx (u a)) (idx (v a))))
     →  T (closure (idx ((f ^ 𝑨) u)) (idx ((f ^ 𝑨) v)))
-  closure-op f {u} {v} h with opEnum-sur f
-  ... | fi , refl = closure-op-enum fi h
+  closure-op f =
+    subst OpCompat (proj₂ (opEnum-sur f)) (closure-op-enum (proj₁ (opEnum-sur f)))
 ```
 
 #### The decoded relation is a congruence
