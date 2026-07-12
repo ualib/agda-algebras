@@ -260,7 +260,7 @@ predicativity reason recorded in the [M6-2 design note][].  The natural construc
 takes `μ = ⋀ {θ : θ nonzero}`, the meet of *all* nonzero congruences: if `0ᴬ` is completely
 meet-irreducible then this family (whose every member is nonzero, so it has no zero
 member) cannot separate, so `μ` is nonzero; and `μ` is below every nonzero congruence,
-hence a monolith.  But that family is indexed by `∃[ θ ] Nonzero θ`, which lives one
+hence a monolith.  But that family is indexed by `Σ[ θ ∈ Con 𝑨 ρ ] Nonzero θ`, which lives one
 universe up, so the resulting meet is a `Con 𝑨 ℓ′` with `ℓ′ > ρ` — not a monolith
 *at level `ρ`*, the level `IsMonolith`{.AgdaRecord} fixes.
 

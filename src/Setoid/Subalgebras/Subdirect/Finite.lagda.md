@@ -42,7 +42,7 @@ through two independent interfaces.
 1.  `FiniteAlgebra`{.AgdaRecord}, from [Setoid.Algebras.Finite][]: decidable `≈` and
     a finite surjective enumeration of the carrier, used here to count the pairs a
     congruence relates;
-+  `FiniteCongruences`{.AgdaRecord}, from [Setoid.Congruences.Finite][]: a finite
+2.  `FiniteCongruences`{.AgdaRecord}, from [Setoid.Congruences.Finite][]: a finite
     list of *decidable* congruences (`DecCon`{.AgdaFunction}), complete up to `≑` —
     the searchable congruence lattice.
 

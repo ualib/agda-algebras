@@ -116,6 +116,6 @@ open Setoid
 --------------------------------------
 
 [^1]:  The finiteness witness of the congruence lattice of 𝟏 is
-       `𝟏-FiniteCongruences`{.AgdaRecord} in [Setoid.Congruences.Finite][] which,
-       together with the witness `𝟏-FiniteAlgebra`{.AgdaRecord}, is consumed by
+       `𝟏-FiniteCongruences`{.AgdaFunction} in [Setoid.Congruences.Finite][] which,
+       together with the witness `𝟏-FiniteAlgebra`{.AgdaFunction}, is consumed by
        Birkhoff's theorem for finite algebras in [Setoid.Subalgebras.Subdirect.Finite][].
