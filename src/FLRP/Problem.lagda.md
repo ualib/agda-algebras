@@ -15,12 +15,11 @@ lattice isomorphic to the congruence lattice `Con 𝑨`{.AgdaFunction} of some
 *finite* algebra `𝑨`{.AgdaBound}?
 
 By Grätzer–Schmidt every algebraic lattice is the congruence lattice of an *infinite*
-algebra, so the finiteness of the algebra is the entire content of the question,
+algebra, so the finiteness of the algebra is the crucial content of the question,
 which has been open since the 1960s.
 
-This module opens the library's FLRP research tree (see
-`docs/notes/flrp-research-roadmap.md`, § 6–7, work package WP-1) by making the
-problem itself a first-class, type-checked object.
+This module opens the library's FLRP research tree[^1] by making the problem itself a
+first-class, type-checked object.
 
 +  `Representable`{.AgdaRecord} `𝑳`: the data of a finite algebra whose congruence
    lattice is order-isomorphic to the lattice `𝑳`{.AgdaBound};
@@ -29,7 +28,7 @@ problem itself a first-class, type-checked object.
    representable", as a type that the library *states but does not assert*;
 
 +  a first worked instance (the one-element chain), and (in place of the two-element
-   instance) a machine-checked *constructivity no-go theorem* explaining why no
+   instance) a machine-checked *constructivity "no-go" theorem* explaining why no
    nontrivial instance can be produced under this library's `--safe`, postulate-free
    discipline.
 
@@ -58,7 +57,7 @@ open import Level                using ( Level ; 0ℓ ; _⊔_ ; lift ; lower )
                                  renaming ( suc to lsuc )
 open import Relation.Binary      using ( Setoid ) renaming ( Rel to BinaryRel )
 open import Relation.Binary.PropositionalEquality
-                                 using ( _≡_ ; refl ; sym ; trans ; subst )
+                                 using ( _≡_ ; refl ; sym ; trans ; subst ; module ≡-Reasoning)
 open import Relation.Nullary     using ( ¬_ ; yes ; no )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
@@ -154,9 +153,9 @@ sides are lattices and order isomorphisms transport meets and joins, this is exa
 module _
   {𝑆 : Signature 0ℓ 0ℓ}
   where
-  open CongruenceOrder  {𝑆 = 𝑆}   using ( _⊆_ ; _≑_ )
+  open CongruenceOrder {𝑆 = 𝑆} using ( _⊆_ ; _≑_ )
   ConIso : Algebra 0ℓ 0ℓ → Lattice → Type (lsuc 0ℓ)
-  ConIso 𝑨 𝑳 = OrderIso  (_≑_ {𝑨 = 𝑨} ) _⊆_ (Setoid._≈_ 𝔻[ proj₁ 𝑳 ]) (Lattice-Order._≤_ 𝑳)
+  ConIso 𝑨 𝑳 = OrderIso  (_≑_ {𝑨 = 𝑨}) _⊆_ (Setoid._≈_ 𝔻[ proj₁ 𝑳 ]) (Lattice-Order._≤_ 𝑳)
 ```
 
 #### Finite lattices
@@ -223,10 +222,10 @@ order isomorphism.  Two design choices deserve comment.
    free of classical content.  The congruence-side interface
    (`FiniteCongruences`{.AgdaRecord} of [Setoid.Congruences.Finite][], whose
    completeness field is precisely the classical content of "finite" for
-   congruence-lattice purposes) is deliberately *not* required here:
+   congruence-lattice purposes) is deliberately *not* required here;
    `Representable`{.AgdaRecord} carries an explicit isomorphism instead, and
    complete congruence enumerations enter only with the decidable-layer
-   reformulation of ADR-008 — where they are also exactly the shape of datum
+   reformulation of ADR-008.  There they are also exactly the shape of datum
    an external search emits, lining up with the certificate discipline of the
    `FLRP.Certificates` work package.
 
@@ -244,9 +243,13 @@ record Representable (𝑳 : Lattice) : Type (lsuc 0ℓ) where
 The Finite Lattice Representation Problem, as the type
 `FLRP-Statement`{.AgdaFunction}: every finite lattice is representable.
 
-> The library merely defines this type; it does not assert that the type is inhabited.
+```agda
+FLRP-Statement : Type (lsuc 0ℓ)
+FLRP-Statement = (𝑳 : FiniteLattice) → Representable (toLattice 𝑳)
+```
 
-Indeed, no definition below (or anywhere in the library) inhabits
+Note that we have merely definee a type, without providing an inhabitant.
+Indeed, no definition below (or anywhere in the library for that matter) inhabits
 `FLRP-Statement`{.AgdaFunction} or its negation; whether the classical reading of the
 statement is true is exactly the open problem, and the research program tracked in
 `docs/notes/flrp-research-roadmap.md` is an attempt to decide it.
@@ -254,32 +257,31 @@ statement is true is exactly the open problem, and the research program tracked 
 Two glosses keep the formal statement honest.
 
 +  **The constructive reading is strictly stronger than the classical one**.
-   The "no-go" theorem at the end of this module shows that any inhabitant of
-   `Representable (toLattice chain₂)`{.AgdaRecord} — the *two-element chain*
-   — already yields weak excluded middle for level-zero types.  So
-   `FLRP-Statement`{.AgdaFunction} is not merely unproved but *unprovable*
-   under `--safe` without classical axioms, independently of the fate of the
-   FLRP; it is the faithful formal statement whose classical truth is open,
-   not a statement the program expects to inhabit directly.  A future negative
-   solution would likewise be formalized against classical assumptions
-   registered explicitly (the planned `FLRP.Assumptions` module), not against
-   this type alone.
-+  **The distinguished open instance is `L7`**.  The seven-element lattice
-   `L7-lattice`{.AgdaFunction} of [Examples.Classical.Lattices.L7][] is, to our
-   knowledge, the smallest lattice for which no representation as the
-   congruence lattice of a finite algebra is known; every lattice with at most
-   seven elements except (possibly) `L7` is representable.  Since
-   `L7-lattice`{.AgdaFunction} is a `Lattice`{.AgdaFunction} in exactly the
-   sense used here, `Representable L7-lattice`{.AgdaRecord} is a well-formed
-   type as-is.  We deliberately do not import the example module (examples
-   consume the library, not conversely); a `FiniteLattice`{.AgdaRecord}
-   presentation of `L7` will accompany the certificate tooling of a later work
-   package.
 
-```agda
-FLRP-Statement : Type (lsuc 0ℓ)
-FLRP-Statement = (𝑳 : FiniteLattice) → Representable (toLattice 𝑳)
-```
+   The no-go theorem at the end of this module shows that any inhabitant of
+   `Representable (toLattice chain₂)`{.AgdaRecord} — the *two-element chain*
+   — already yields **weak excluded middle** for level-zero types.
+
+   So `FLRP-Statement`{.AgdaFunction} is not merely unproved but *unprovable* in Agda
+   `--safe` mode without classical axioms, independently of the fate of the FLRP; it
+   is the faithful formal statement whose classical truth is open, not a statement
+   the program expects to inhabit directly.
+
+   A future negative solution would likewise be formalized against classical
+   assumptions registered explicitly (the planned `FLRP.Assumptions` module), not
+   against this type alone.
+
++  **The distinguished open instance is `L7`**.
+
+   The seven-element lattice `L7-lattice`{.AgdaFunction} of
+   [Examples.Classical.Lattices.L7][] is, to our knowledge, the smallest lattice for
+   which no representation as the congruence lattice of a finite algebra is known;
+   every lattice with at most seven elements except possibly `L7` is representable.
+
+   Since `L7-lattice`{.AgdaFunction} is a `Lattice`{.AgdaFunction} in exactly the
+   sense used here, `Representable L7-lattice`{.AgdaRecord} is a well-formed type
+   as-is.[^2]
+
 
 #### The empty signature and the one-element algebra
 
@@ -360,11 +362,11 @@ chain₁-Representable = record
   ; finite   = 𝟏-FiniteAlgebra
   ; con-iso  = record
       { to         = λ _ → 0F
-      ; from       = λ _ → 𝟘∅[ 𝟏 ] {0ℓ}
+      ; from       = λ _ → 𝟘∅[ 𝟏 ]
       ; to-mono    = λ _ → refl
       ; from-mono  = λ _ p → p
       ; to∘from    = 0F≡
-      ; from∘to    = λ θ → 𝟘∅-min {𝑨 = 𝟏} {ℓ = 0ℓ} θ , (λ _ → lift tt)
+      ; from∘to    = λ θ → 𝟘∅-min θ , (λ _ → lift tt)
       }
   }
 open Representable
@@ -457,14 +459,14 @@ module _ {𝑆 : Signature 0ℓ 0ℓ} where
   open CongruenceGeneration  {𝑆 = 𝑆}  using ( Cg ; Cg-least ; base )
 
   module _ (𝑨 : Algebra 0ℓ 0ℓ) (iso : ConIso 𝑨 chain₂-lattice) where
-    open OrderIso iso
-    open Setoid 𝔻[ 𝑨 ] using ( _≈_ )
+    open OrderIso       iso
+    open Setoid         𝔻[ 𝑨 ]         using ( _≈_ )
+    open Lattice-Order  chain₂-lattice  using ( ≤-antisym )
 
     private
       -- The diagonal and total congruences of 𝑨, at level 0ℓ.
       Δ ∇ : Con 𝑨 0ℓ
-      Δ = 𝟘[ 𝑨 ] {0ℓ}
-      ∇ = 𝟙[ 𝑨 ] {0ℓ}
+      Δ = 𝟘[ 𝑨 ] ; ∇ = 𝟙[ 𝑨 ]
 
       -- The switch congruence of P: total if P holds, diagonal if P fails.
       θ[_] : Type 0ℓ → Con 𝑨 0ℓ
@@ -473,7 +475,6 @@ module _ {𝑆 : Signature 0ℓ 0ℓ} where
       -- ≑-equal congruences land on the same chain element.
       to-cong : (θ φ : Con 𝑨 0ℓ) → θ ≑ φ → to θ ≡ to φ
       to-cong θ φ (θ⊆φ , φ⊆θ) = ≤-antisym (to-mono θ⊆φ) (to-mono φ⊆θ)
-        where open Lattice-Order chain₂-lattice using ( ≤-antisym )
 
       -- The images of Δ and ∇ are distinct: otherwise 𝑨 would be trivial,
       -- Con 𝑨 would collapse, and 0F ≡ 1F would follow via the round trips.
@@ -487,14 +488,16 @@ module _ {𝑆 : Signature 0ℓ 0ℓ} where
                          (proj₂ (from∘to ∇) (lift tt))))
 
         collapse : (θ φ : Con 𝑨 0ℓ) → θ ≑ φ
-        collapse θ φ =  (λ {x} {y} _ → reflexive (proj₂ φ) (all-≈ x y))
-                     ,  (λ {x} {y} _ → reflexive (proj₂ θ) (all-≈ x y))
+        collapse (_ , θcon) (_ , φcon) = (λ {x} {y} _ → reflexive φcon (all-≈ x y))
+                                       , (λ {x} {y} _ → reflexive θcon (all-≈ x y))
 
         0F≡1F : 0F ≡ 1F
-        0F≡1F = trans  (sym (to∘from 0F))
-                       (trans  (to-cong  (from 0F) (from 1F)
-                                         (collapse (from 0F) (from 1F)))
-                               (to∘from 1F))
+        0F≡1F = begin
+          0F            ≡˘⟨ to∘from 0F ⟩
+          to (from 0F)  ≡⟨ to-cong  (from 0F) (from 1F) (collapse (from 0F) (from 1F)) ⟩
+          to (from 1F)  ≡⟨ to∘from 1F ⟩
+          1F            ∎
+          where open ≡-Reasoning
 
         absurd01 : 0F ≡ 1F → ⊥
         absurd01 ()
@@ -507,6 +510,7 @@ module _ {𝑆 : Signature 0ℓ 0ℓ} where
       where
       ξ : P → to θ[ P ] ≡ to ∇
       ξ = λ p → to-cong θ[ P ] ∇ ((λ _ → lift tt) , λ _ → base p)
+
       ¬P : ¬ P
       ¬P = λ p → ne (ξ p)
 
@@ -514,8 +518,10 @@ module _ {𝑆 : Signature 0ℓ 0ℓ} where
       where
       ξ : ¬ P → to Δ ≡ to θ[ P ]
       ξ = λ ¬p → to-cong Δ θ[ P ] ( 𝟘-min θ[ P ] , Cg-least Δ λ p → ⊥-elim (¬p p) )
+
       γ : ¬ P → to Δ ≡ to ∇
       γ = λ ¬p → trans (ξ ¬p) e
+
       ¬¬P : ¬ ¬ P
       ¬¬P = no-collapse ∘ γ
 ```
@@ -538,19 +544,19 @@ recording, since they shape the work packages that follow.
 +  **The obstruction is in `Con`, not in `FiniteAlgebra`**.
 
    The theorem never touches the finiteness witness; the non-constructive taboo
-   flows from the order isomorphism alone, because `Con 𝑨` contains indicator 
-   congruences for arbitrary propositions.  Baking decidability into the algebra 
+   flows from the order isomorphism alone, because `Con 𝑨` contains indicator
+   congruences for arbitrary propositions.  Baking decidability into the algebra
    cannot help.
 
    Indeed, the carrier-level `FiniteAlgebra`{.AgdaRecord} interface of
    [Setoid.Algebras.Finite][] is constructively innocent, and the classical
    strength sits precisely in the congruence-side `FiniteCongruences`{.AgdaRecord}
    of [Setoid.Congruences.Finite][] — over the empty signature, its
-   `complete`{.AgdaFunction} field applied to an indicator congruence on a 
-   two-element carrier would decide arbitrary propositions outright, so 
-   `FiniteCongruences 𝟚` is as unprovable as excluded middle (LEM).[^1]
+   `complete`{.AgdaFunction} field applied to an indicator congruence on a
+   two-element carrier would decide arbitrary propositions outright, so
+   `FiniteCongruences 𝟚` is as unprovable as excluded middle (LEM).[^3]
 
-   This is the promised sharpening of that module's warning that the complete 
+   This is the promised sharpening of that module's warning that the complete
    congruence list is "exactly the classical content" of finiteness.
 
 +  **`Representable` is constructively inhabited by the one-element lattice alone**.
@@ -561,7 +567,7 @@ recording, since they shape the work packages that follow.
    LEM-hard.
 
    As such, positive results in this tree will be *relative* to
- 
+
    +  a classical postulate, or
    +  hypotheses registered in the planned `FLRP.Assumptions` module,
 
@@ -571,7 +577,7 @@ recording, since they shape the work packages that follow.
 
    For a concrete finite algebra given by tables, the poset of *decidable*
    congruences (`DecCon`{.AgdaFunction} of [Setoid.Congruences.Finite][], up to
-   `_≑_`{.AgdaFunction}) is itself finite data: a decidable congruence on `Fin n` 
+   `_≑_`{.AgdaFunction}) is itself finite data: a decidable congruence on `Fin n`
    can be tabulated, and completeness of a candidate list *of decidable congruences*
    is decidable.
 
@@ -579,12 +585,19 @@ recording, since they shape the work packages that follow.
    isomorphism against the decidable-congruence poset — classically the same
    lattice, constructively checkable — and this reformulation, not
    `Representable`{.AgdaRecord} itself, is the correct target for the
-   certificate pipeline.  Stating that reformulation and proving its classical 
+   certificate pipeline.  Stating that reformulation and proving its classical
    equivalence to `Representable`{.AgdaRecord} is left as the natural sequel to this
    module.
 
 ---
 
-[^1]: Recall, the classical **law of the excluded middle** (lem) asserts that 
+[^1]: see `docs/notes/flrp-research-roadmap.md`, § 6-7, work package WP-1.
+
+
+[^2]: We deliberately do not import the example module (examples consume the library,
+      not conversely); a `FiniteLattice`{.AgdaRecord} presentation of `L7` will
+      accompany the certificate tooling of a later work package.
+
+[^3]: Recall, the classical **law of the excluded middle** (lem) asserts that
       every proposition either holds or not (`∀ P → P ∨ ¬ P`), the quintessential
       non-constructive axiom which, here, does not abide.
