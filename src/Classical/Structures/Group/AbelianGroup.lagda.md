@@ -1,14 +1,14 @@
 ---
 layout: default
-file: "src/Classical/Structures/AbelianGroup.lagda.md"
-title: "Classical.Structures.AbelianGroup module"
+file: "src/Classical/Structures/Group/AbelianGroup.lagda.md"
+title: "Classical.Structures.Group.AbelianGroup module"
 date: "2026-05-30"
 author: "the agda-algebras development team"
 ---
 
 ### Abelian Groups {#classical-structures-abeliangroup}
 
-This is the [Classical.Structures.AbelianGroup][] module of the [Agda Universal Algebra Library][].
+This is the [Classical.Structures.Group.AbelianGroup][] module of the [Agda Universal Algebra Library][].
 
 `Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ Th-AbelianGroup` over `Sig-Group`.  An equation-only
 extension of Group, structurally identical to the way `CommutativeMonoid` extends
@@ -20,10 +20,11 @@ through it, adding `comm-law`.
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-module Classical.Structures.AbelianGroup where
+module Classical.Structures.Group.AbelianGroup where
 
-open import Agda.Primitive                          using () renaming ( Set to Type )
+open import Agda.Primitive                         using () renaming ( Set to Type )
 
+-- Imports from the Agda Standard Library ---------------------------------------
 open import Data.Fin.Base                          using ( Fin )
 open import Data.Fin.Patterns                      using ( 0F ; 1F ; 2F )
 open import Data.Product                           using ( Σ-syntax ; _×_ ; _,_ ; proj₁ ; proj₂ )
@@ -31,8 +32,9 @@ open import Level                                  using ( Level ; _⊔_ ; suc )
 open import Relation.Binary                        using ( Setoid )
 open import Relation.Binary.PropositionalEquality  using ( _≡_ )
 
+-- Imports from the Agda Universal Algebra Library ------------------------------
 open import Classical.Signatures.Group             using ( Sig-Group )
-open import Classical.Structures.Group             using ( Group ; module Group-Op ; opsToBareGroup )
+open import Classical.Structures.Group.Basic       using ( Group ; module Group-Op ; opsToBareGroup )
 open import Classical.Theories.Group               using ( assoc ; idˡ ; idʳ ; invˡ ; invʳ )
 open import Classical.Theories.AbelianGroup        using ( Eq-AbelianGroup ; Th-AbelianGroup ; comm )
                                                    renaming ( assoc to assocᵃ ; idˡ to idˡᵃ ; idʳ to idʳᵃ

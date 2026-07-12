@@ -12,21 +12,17 @@ This is the [Classical.Structures.Group.GSet][] module of the [Agda Universal Al
 
 The transitive action of a group `G` on the coset space `G/H` is packaged here as an
 ordinary **unary algebra**: the signature is [`Sig-Unary`][Classical.Signatures.Unary]
-applied to the carrier of `G` — one operation symbol per group element, each of
-arity one — and the algebra's domain is the quotient setoid
-`cosetSetoid`{.AgdaFunction} of [Classical.Structures.Group.Cosets][].  The symbol
-`g` acts by left translation, `x ↦ g ∙ x`, which respects the coset equality by
-`∼-congˡ`{.AgdaFunction}.
+applied to the carrier of `G` — one operation symbol per group element, each of arity
+one — and the algebra's domain is the quotient setoid `cosetSetoid`{.AgdaFunction} of
+[Classical.Structures.Group.Cosets][].  The symbol `g` acts by left translation, `x ↦
+g ∙ x`, which respects the coset equality by `∼-congˡ`{.AgdaFunction}.
 
 This encoding is chosen so that the library's congruence machinery applies to the
 G-set *verbatim*: `cosetAlgebra`{.AgdaFunction} is an `Algebra`{.AgdaRecord} over an
 ordinary signature, so `Con cosetAlgebra` means exactly what it means for any
-algebra (the module ends with a private demonstration).  It is the object of the
-Pálfy–Pudlák bridge — work package WP-3 of the FLRP program proves
-`Con (G ↷ G/H) ≅ [H, G]` about precisely this algebra (see
-`docs/notes/flrp-research-roadmap.md` § 7).
+algebra (the module ends with a private demonstration).[^1]
 
-Note on the symbol set: operation symbols form a *type* with propositional
+**Note on the symbol set**.  Operation symbols form a *type* with propositional
 equality, so two setoid-equal but distinct carrier elements give two symbols; they
 act identically on `G/H` (by `∼-congˡ` and `≈⇒∼`), and a signature is raw syntax,
 so this is harmless.
@@ -55,12 +51,12 @@ open import Relation.Unary    using ( Pred )
 import Algebra.Properties.Group as GroupProperties
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Classical.Bundles.Group              using ( ⟨_⟩ᵍᵖ )
-open import Classical.Signatures.Group           using ( Sig-Group )
-open import Classical.Signatures.Unary           using ( Sig-Unary )
-open import Classical.Structures.Group           using ( Group ; module Group-Op )
-open import Classical.Structures.Group.Subgroups using ( IsSubgroup )
-open import Classical.Structures.Group.Cosets    using ( module Coset )
+open import Classical.Bundles.Group               using ( ⟨_⟩ᵍᵖ )
+open import Classical.Signatures.Group            using ( Sig-Group )
+open import Classical.Signatures.Unary            using ( Sig-Unary )
+open import Classical.Structures.Group.Basic      using ( Group ; module Group-Op )
+open import Classical.Structures.Group.Subgroups  using ( IsSubgroup )
+open import Classical.Structures.Group.Cosets     using ( module Coset )
 
 import Setoid.Algebras.Basic    as SetoidAlgebras
 import Setoid.Congruences.Basic as SetoidCongruences
@@ -72,21 +68,21 @@ open SetoidAlgebras {𝑆 = Sig-Group} using ( 𝕌[_] )
 #### The coset algebra
 
 ```agda
-module CosetAction {α ρ : Level} (𝑮 : Group α ρ) {ℓ : Level}
-  (H : Pred 𝕌[ proj₁ 𝑮 ] ℓ) (H-isSubgroup : IsSubgroup 𝑮 H)
+module CosetAction {α ρ : Level} (𝒢 : Group α ρ) {ℓ : Level}
+  (H : Pred 𝕌[ proj₁ 𝒢 ] ℓ) (H-isSubgroup : IsSubgroup 𝒢 H)
   where
 
   private
-    𝑨 = proj₁ 𝑮
-    A = 𝕌[ 𝑨 ]
+    𝑮 = proj₁ 𝒢
+    G = 𝕌[ 𝑮 ]
 
-  open Group-Op 𝑮 using ( _∙_ ; ε ; _⁻¹ ; assoc-law ; idˡ-law )
-  open Coset 𝑮 H H-isSubgroup using ( _∼_ ; ∼-congˡ ; ≈⇒∼ ; cosetSetoid )
-  open GroupProperties (⟨ 𝑮 ⟩ᵍᵖ) using ( //-rightDividesˡ )
+  open Group-Op 𝒢 using ( _∙_ ; ε ; _⁻¹ ; assoc-law ; idˡ-law )
+  open Coset 𝒢 H H-isSubgroup using ( _∼_ ; ∼-congˡ ; ≈⇒∼ ; cosetSetoid )
+  open GroupProperties ⟨ 𝒢 ⟩ᵍᵖ using ( //-rightDividesˡ )
 
   -- The algebra G ↷ G/H over the unary signature on the carrier of G:
   -- the symbol g acts on the coset of x by left translation, g ∙ x.
-  open SetoidAlgebras {𝑆 = Sig-Unary A} using ( Algebra ; mkAlgebra )
+  open SetoidAlgebras {𝑆 = Sig-Unary G} using ( Algebra ; mkAlgebra )
 
   cosetAlgebra : Algebra α ℓ
   cosetAlgebra = mkAlgebra cosetSetoid (λ g a → g ∙ a 0F) (λ g u∼v → ∼-congˡ g (u∼v 0F))
@@ -96,15 +92,15 @@ module CosetAction {α ρ : Level} (𝑮 : Group α ρ) {ℓ : Level}
 
 ```agda
   -- The identity element acts as the identity on cosets.
-  act-identity : (x : A) → (ε ∙ x) ∼ x
+  act-identity : (x : G) → (ε ∙ x) ∼ x
   act-identity x = ≈⇒∼ (idˡ-law x)
 
   -- Acting by g ∙ h is acting by h, then by g.
-  act-compatible : (g h x : A) → ((g ∙ h) ∙ x) ∼ (g ∙ (h ∙ x))
+  act-compatible : (g h x : G) → ((g ∙ h) ∙ x) ∼ (g ∙ (h ∙ x))
   act-compatible g h x = ≈⇒∼ (assoc-law g h x)
 
   -- The action is transitive: y ∙ x ⁻¹ carries the coset of x to the coset of y.
-  act-transitive : (x y : A) → Σ[ g ∈ A ] ((g ∙ x) ∼ y)
+  act-transitive : (x y : G) → Σ[ g ∈ G ] ((g ∙ x) ∼ y)
   act-transitive x y = y ∙ x ⁻¹ , ≈⇒∼ (//-rightDividesˡ x y)
 ```
 
@@ -117,8 +113,14 @@ this type is isomorphic (as a lattice) to the interval `[H, G]` in `Sub(G)`.
 
 ```agda
   private
-    open SetoidCongruences {𝑆 = Sig-Unary A} using ( Con )
+    open SetoidCongruences {𝑆 = Sig-Unary G} using ( Con )
 
     _ : Type (α ⊔ suc ℓ)
     _ = Con cosetAlgebra ℓ
 ```
+
+---
+
+[^1]:  It is the object of the Pálfy–Pudlák bridge — work package WP-3 of the FLRP
+       program proves `Con (G ↷ G/H) ≅ [H, G]` about precisely this algebra (see
+       `docs/notes/flrp-research-roadmap.md` § 7).

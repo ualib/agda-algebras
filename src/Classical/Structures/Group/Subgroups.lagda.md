@@ -58,13 +58,13 @@ open import Relation.Unary                using ( Pred ; _∈_ )
 import Algebra.Properties.Group as GroupProperties
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Classical.Bundles.Group          using ( ⟨_⟩ᵍᵖ )
-open import Classical.Operations             using ( pair )
-open import Classical.Signatures.Group       using ( Sig-Group ; ∙-Op ; ε-Op ; ⁻¹-Op )
-open import Classical.Structures.Group       using ( Group ; module Group-Op )
-open import Classical.Structures.Interpret   using ( interp-cong )
+open import Classical.Bundles.Group           using ( ⟨_⟩ᵍᵖ )
+open import Classical.Operations              using ( pair )
+open import Classical.Signatures.Group        using ( Sig-Group ; ∙-Op ; ε-Op ; ⁻¹-Op )
+open import Classical.Structures.Group.Basic  using ( Group ; module Group-Op )
+open import Classical.Structures.Interpret    using ( interp-cong )
 
-open import Setoid.Algebras.Basic {𝑆 = Sig-Group}          using ( Algebra ; 𝕌[_] ; 𝔻[_] ; _^_ )
+open import Setoid.Algebras.Basic {𝑆 = Sig-Group}  using ( Algebra ; 𝕌[_] ; 𝔻[_] ; _^_ )
 open import Setoid.Subalgebras.Subuniverses {𝑆 = Sig-Group} using ( Subuniverses )
 
 private variable α ρ ℓ : Level
@@ -89,7 +89,7 @@ module _ (𝑮 : Group α ρ) where
   open Setoid 𝔻[ 𝑨 ]  using ( _≈_ )
                       renaming ( refl to ≈refl ; sym to ≈sym ; trans to ≈trans )
   open Group-Op 𝑮     using ( _∙_ ; ε ; _⁻¹ ; ∙-cong ; ⁻¹-cong ; idˡ-law )
-  open GroupProperties (⟨ 𝑮 ⟩ᵍᵖ) using ( ε⁻¹≈ε )
+  open GroupProperties ⟨ 𝑮 ⟩ᵍᵖ using ( ε⁻¹≈ε )
 
   -- The binary operation on an arbitrary 2-tuple is the curried ∙ of its components.
   interp-tuple-∙ : (a : Fin 2 → A) → (∙-Op ^ 𝑨) a ≈ a 0F ∙ a 1F
@@ -112,7 +112,7 @@ curried accessors of `Group-Op`{.AgdaModule} are defined by applying the interpr
 symbol to a canonical tuple.
 
 ```agda
-  module _ {B : Pred A ℓ} (B-sub : B ∈ Subuniverses 𝑨) where
+  module _ (B : Pred A ℓ) (B-sub : B ∈ Subuniverses 𝑨) where
 
     -- A subuniverse is closed under the curried group multiplication.
     sub-∙-closed : ∀ {x y} → x ∈ B → y ∈ B → x ∙ y ∈ B
@@ -146,13 +146,13 @@ curried closure properties, so `open IsSubgroup H-isSubgroup` puts
       isSubuniverse  : B ∈ Subuniverses 𝑨
 
     ∙-closed : ∀ {x y} → x ∈ B → y ∈ B → x ∙ y ∈ B
-    ∙-closed = sub-∙-closed {B = B} isSubuniverse
+    ∙-closed = sub-∙-closed B isSubuniverse
 
     ε-closed : ε ∈ B
-    ε-closed = sub-ε-closed {B = B} isSubuniverse
+    ε-closed = sub-ε-closed B isSubuniverse
 
     ⁻¹-closed : ∀ {x} → x ∈ B → x ⁻¹ ∈ B
-    ⁻¹-closed = sub-⁻¹-closed {B = B} isSubuniverse
+    ⁻¹-closed = sub-⁻¹-closed B isSubuniverse
 ```
 
 Conversely, an equality-respecting predicate that is closed under the three curried

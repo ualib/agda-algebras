@@ -30,7 +30,7 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl )
 open import Classical.Bundles.AbelianGroup           using ( ⟨_⟩ᵃᵍ ; ⟪_⟫ᵃᵍ )
 open import Classical.Small.Structures.AbelianGroup  using ( AbelianGroup ; eqsToAbelianGroup )
 
-import Classical.Structures.AbelianGroup as Polymorphic
+import Classical.Structures.Group.AbelianGroup as Polymorphic
 ```
 -->
 

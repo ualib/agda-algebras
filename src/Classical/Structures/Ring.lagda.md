@@ -13,7 +13,7 @@ This is the [Classical.Structures.Ring][] module of the [Agda Universal Algebra 
 A **ring** inhabits the Σ-typed structure `Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ Th-Ring` over
 `Sig-Ring`.  Ring is the first structure in the [`Classical/`][Classical] tree with
 *two* forgetful reducts that land in *different* structures: the additive triple
-`(+-Op, 0-Op, -Op)` reducts to an [`AbelianGroup`][Classical.Structures.AbelianGroup]
+`(+-Op, 0-Op, -Op)` reducts to an [`AbelianGroup`][Classical.Structures.Group.AbelianGroup]
 (`ring→abelianGroup`), and the multiplicative pair `(·-Op, 1-Op)` reducts to a
 [`Monoid`][Classical.Structures.Monoid] (`ring→monoid`).  Both are container-morphism
 reducts with identity position maps, discharging their target theory on the reduct by
@@ -58,8 +58,8 @@ open import Classical.Signatures.Monoid             using ( Sig-Monoid ; Op-Mono
                                                     renaming ( ∙-Op to ∙-Opᵐ ; ε-Op to ε-Opᵐ )
 open import Classical.Signatures.Ring               using ( Sig-Ring ; Op-Ring ; +-Op ; 0-Op ; -Op ; ·-Op ; 1-Op )
 open import Classical.Structures.Interpret          using ( interp-cong )
-open import Setoid.Algebras.Reduct             using ( reductBy )
-open import Classical.Structures.AbelianGroup       using ( AbelianGroup ; _⊨ᵃᵍ_ )
+open import Setoid.Algebras.Reduct                  using ( reductBy )
+open import Classical.Structures.Group.AbelianGroup using ( AbelianGroup ; _⊨ᵃᵍ_ )
 open import Classical.Structures.Monoid             using ( Monoid ; _⊨ᵐᵒ_ )
 open import Classical.Theories.Ring                 using ( Eq-Ring ; Th-Ring
                                                           ; +-assoc ; +-idˡ ; +-idʳ ; +-invˡ ; +-invʳ ; +-comm

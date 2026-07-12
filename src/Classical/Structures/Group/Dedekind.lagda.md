@@ -17,16 +17,12 @@ subgroups of a group with `H ≤ K`, then
 
 Both statements are proved here, as the mutual inclusions `dedekindˡ`{.AgdaFunction}
 and `dedekindʳ`{.AgdaFunction} over the complex product `_∙ᶜ_`{.AgdaFunction} of
-[Classical.Structures.Group.Complexes][].  The hypotheses are minimal: only `K`
-needs to be a subgroup — `H` and `C` are arbitrary subsets with `H ⊆ K` — which is
-exactly the generality the interval arguments need.  The heart of both proofs is
-the observation that if `x ≈ h ∙ c` with `h , x ∈ K`, then `c ≈ h ⁻¹ ∙ x` lies in
-`K` as well.
+[Classical.Structures.Group.Complexes][].
 
-In the FLRP program (`docs/papers/flrp/ieprops/`, § 3.2) Dedekind's rule drives the
-antichain lemma for permuting complements and, through it, the parachute theorems;
-those corollaries are the first RP-1 targets and will build directly on this
-module.
+The hypotheses are minimal: only `K` needs to be a subgroup — `H` and `C` are
+arbitrary subsets with `H ⊆ K` — which is exactly the generality the interval
+arguments need.  The heart of both proofs is the observation that if `x ≈ h ∙ c` with
+`h , x ∈ K`, then `c ≈ h ⁻¹ ∙ x` lies in `K` as well.[^1]
 
 <!--
 ```agda
@@ -44,13 +40,13 @@ import Algebra.Properties.Group as GroupProperties
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Classical.Bundles.Group              using ( ⟨_⟩ᵍᵖ )
-open import Classical.Signatures.Group           using ( Sig-Group )
-open import Classical.Structures.Group           using ( Group ; module Group-Op )
-open import Classical.Structures.Group.Subgroups using ( IsSubgroup )
-open import Classical.Structures.Group.Complexes using ( module Complex )
+open import Classical.Bundles.Group                using ( ⟨_⟩ᵍᵖ )
+open import Classical.Signatures.Group             using ( Sig-Group )
+open import Classical.Structures.Group.Basic       using ( Group ; module Group-Op )
+open import Classical.Structures.Group.Subgroups   using ( IsSubgroup )
+open import Classical.Structures.Group.Complexes   using ( module Complex )
 
-open import Setoid.Algebras.Basic {𝑆 = Sig-Group} using ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Algebras.Basic {𝑆 = Sig-Group}  using ( Algebra ; 𝕌[_] ; 𝔻[_] )
 
 private variable ℓʰ ℓᶜ ℓᵏ : Level
 ```
@@ -59,22 +55,21 @@ private variable ℓʰ ℓᶜ ℓᵏ : Level
 #### The rule
 
 ```agda
-module _ {α ρ : Level} (𝑮 : Group α ρ) where
+module _ {α ρ : Level} (𝒢 : Group α ρ) where
   private
-    𝑨 = proj₁ 𝑮
-    A = 𝕌[ 𝑨 ]
+    𝑮 = proj₁ 𝒢
+    G = 𝕌[ 𝑮 ]
 
-  open Setoid 𝔻[ 𝑨 ]  using ( _≈_ ) renaming ( refl to ≈refl ; sym to ≈sym )
-  open SetoidReasoning 𝔻[ 𝑨 ]
-  open Group-Op 𝑮 using ( _∙_ ; _⁻¹ ; ∙-cong )
-  open GroupProperties (⟨ 𝑮 ⟩ᵍᵖ) using ( \\-leftDividesʳ ; //-rightDividesʳ )
-  open Complex 𝑮 using ( _∙ᶜ_ )
+  open Setoid 𝔻[ 𝑮 ]  using ( _≈_ ) renaming ( refl to ≈refl ; sym to ≈sym )
+  open SetoidReasoning 𝔻[ 𝑮 ]
+  open Group-Op 𝒢 using ( _∙_ ; _⁻¹ ; ∙-cong )
+  open GroupProperties ⟨ 𝒢 ⟩ᵍᵖ using ( \\-leftDividesʳ ; //-rightDividesʳ )
+  open Complex 𝒢 using ( _∙ᶜ_ )
 
   -- Dedekind's rule, left version: for H ⊆ K with K a subgroup,
   -- H (C ∩ K) = H C ∩ K.
-  dedekindˡ : {H : Pred A ℓʰ} {C : Pred A ℓᶜ} {K : Pred A ℓᵏ}
-    →  IsSubgroup 𝑮 K  →  H ⊆ K
-    →  (H ∙ᶜ (C ∩ K)) ≐ ((H ∙ᶜ C) ∩ K)
+  dedekindˡ : {H : Pred G ℓʰ} {C : Pred G ℓᶜ} {K : Pred G ℓᵏ}
+    →  IsSubgroup 𝒢 K  →  H ⊆ K →  H ∙ᶜ (C ∩ K) ≐ (H ∙ᶜ C) ∩ K
   dedekindˡ {H = H} {C} {K} K-isSubgroup H⊆K = below , above
     where
     open IsSubgroup K-isSubgroup
@@ -100,11 +95,11 @@ module _ {α ρ : Level} (𝑮 : Group α ρ) where
       c∈K : c ∈ K
       c∈K = K-respects cofactor (∙-closed (⁻¹-closed (H⊆K h∈H)) x∈K)
 
-  -- Dedekind's rule, right version: for H ⊆ K with K a subgroup,
-  -- (C ∩ K) H = C H ∩ K.
-  dedekindʳ : {H : Pred A ℓʰ} {C : Pred A ℓᶜ} {K : Pred A ℓᵏ}
-    →  IsSubgroup 𝑮 K  →  H ⊆ K
-    →  ((C ∩ K) ∙ᶜ H) ≐ ((C ∙ᶜ H) ∩ K)
+  -- Dedekind's rule (right version):
+  --   for H ⊆ K with K a subgroup, (C ∩ K) H = C H ∩ K.
+  dedekindʳ : {H : Pred G ℓʰ} {C : Pred G ℓᶜ} {K : Pred G ℓᵏ}
+    →  IsSubgroup 𝒢 K  →  H ⊆ K
+    →  (C ∩ K) ∙ᶜ H ≐ (C ∙ᶜ H) ∩ K
   dedekindʳ {H = H} {C} {K} K-isSubgroup H⊆K = below , above
     where
     open IsSubgroup K-isSubgroup
@@ -127,3 +122,10 @@ module _ {α ρ : Level} (𝑮 : Group α ρ) where
       c∈K : c ∈ K
       c∈K = K-respects cofactor (∙-closed x∈K (⁻¹-closed (H⊆K h∈H)))
 ```
+
+---
+
+[^1]: In the FLRP program (`docs/papers/flrp/ieprops/`, § 3.2) Dedekind's rule drives the
+      antichain lemma for permuting complements and, through it, the parachute theorems;
+      those corollaries are the first RP-1 targets and will build directly on this
+      module.

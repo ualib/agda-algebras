@@ -11,10 +11,12 @@ author: "the agda-algebras development team"
 This is the [Classical.Structures.Group.NormalCore][] module of the [Agda Universal Algebra Library][].
 
 For a subgroup `H` of a group `𝑮`, the **normal core** `Core_G(H)` is the largest
-normal subgroup of `𝑮` contained in `H`; classically it is the intersection
-`⋂ { g H g⁻¹ ∣ g ∈ G }` of all conjugates of `H`.  We define it *constructively as
-that intersection*, using the infinitary meet `⨅`{.AgdaFunction} of the subuniverse
-lattice of [Setoid.Subalgebras.CompleteLattice][] over the family of conjugates from
+normal subgroup of `𝑮` contained in `H`.
+
+Classically the normal core is the intersection `⋂ { g H g⁻¹ ∣ g ∈ G }` of all
+conjugates of `H`.  We define it *constructively as that intersection*, using the
+infinitary meet `⨅`{.AgdaFunction} of the subuniverse lattice of
+[Setoid.Subalgebras.CompleteLattice][] over the family of conjugates from
 [Classical.Structures.Group.Conjugation][] — so the definition is an instance of the
 complete-lattice machinery rather than an ad-hoc predicate.
 
@@ -29,9 +31,7 @@ particular that the core is contained in `H` (`core-⊆`{.AgdaFunction}), is an
 equality-respecting subgroup (`core-isSubgroup`{.AgdaFunction}), is normal
 (`core-normal`{.AgdaFunction}), and contains every normal subgroup contained in `H`
 (`core-greatest`{.AgdaFunction}) — together: the core is the *greatest* normal
-subgroup below `H`.  This is the normalization step behind the core-free reduction
-`[H, G] ≅ [H/N, G/N]` of the FLRP program (see
-`docs/notes/flrp-research-roadmap.md` § 4).
+subgroup below `H`.[^1]
 
 <!--
 ```agda
@@ -52,11 +52,10 @@ import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
 open import Classical.Signatures.Group             using ( Sig-Group )
-open import Classical.Structures.Group             using ( Group ; module Group-Op )
-open import Classical.Structures.Group.Subgroups   using ( IsSubgroup )
-open import Classical.Structures.Group.Conjugation using ( module Conj )
-
-open import Setoid.Algebras.Basic {𝑆 = Sig-Group}              using ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Classical.Structures.Group.Basic        using ( Group ; module Group-Op )
+open import Classical.Structures.Group.Subgroups    using ( IsSubgroup )
+open import Classical.Structures.Group.Conjugation  using ( module Conj )
+open import Setoid.Algebras.Basic  {𝑆 = Sig-Group}  using ( Algebra ; 𝕌[_] ; 𝔻[_] )
 open import Setoid.Subalgebras.CompleteLattice {𝑆 = Sig-Group} using ( module Sublattice )
 ```
 -->
@@ -82,13 +81,9 @@ module Core {α ρ : Level} (𝑮 : Group α ρ) {ℓ : Level}
   open SetoidReasoning 𝔻[ 𝑨 ]
   open Group-Op 𝑮 using ( _∙_ ; ε ; _⁻¹ )
   open Conj 𝑮
-    using ( conj ; conj-cong ; conj-action-∙ ; conj-action-ε ; conj-conj⁻¹
-          ; conjugate ; conjugate-respects ; conjugate-isSubuniverse ; IsNormal )
   open Sublattice 𝑨 (α ⊔ ρ ⊔ ℓ) using ( Subᴸ ; ⨅ )
-
-  private
-    H-respects : H Respects _≈_
-    H-respects = IsSubgroup.respects H-isSubgroup
+  open IsSubgroup H-isSubgroup using () renaming  (respects to H-respects
+                                                  ; isSubuniverse to H-isSubuniverse)
 
   -- The index of the meet: the carrier, lifted to the lattice's index level.
   Index : Type (α ⊔ ρ ⊔ ℓ)
@@ -96,8 +91,7 @@ module Core {α ρ : Level} (𝑮 : Group α ρ) {ℓ : Level}
 
   -- The family of all conjugates of H, as elements of the subuniverse lattice.
   conjugates : Index → Subᴸ
-  conjugates i =  conjugate (lower i) H
-               ,  conjugate-isSubuniverse (lower i) {B = H} (IsSubgroup.isSubuniverse H-isSubgroup)
+  conjugates i =  [ H ]^ (lower i) , conjugate-isSubuniverse (lower i) H H-isSubuniverse
 
   -- The normal core: the complete-lattice meet (intersection) of all conjugates of H.
   core : Subᴸ
@@ -165,3 +159,9 @@ convenient one in proofs.
     →  IsNormal N → N ⊆ H → N ⊆ proj₁ core
   core-greatest N-normal N⊆H x∈N = conj-mem-core (λ g → N⊆H (N-normal g x∈N))
 ```
+
+
+---
+[^1]:   This is the normalization step behind the core-free reduction
+        `[H, G] ≅ [H/N, G/N]` of the FLRP program (see
+        `docs/notes/flrp-research-roadmap.md` § 4).

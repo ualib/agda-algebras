@@ -13,10 +13,12 @@ This is the [Classical.Structures.Group.Cosets][] module of the [Agda Universal 
 For a subgroup `H` of a group `𝑮`, two elements lie in the same **left coset**
 exactly when `x ⁻¹ ∙ y ∈ H`.  In the setoid discipline the coset space `G/H` is not
 a new carrier of equivalence classes but the *same* carrier with a coarser setoid
-equality: the relation `_∼_` just described.  This module proves `_∼_` is an
-equivalence relation — each axiom is one subgroup closure property plus one line of
-group arithmetic — and packages the quotient setoid `cosetSetoid`{.AgdaFunction}
-via the `_/_`{.AgdaFunction} construction of [Setoid.Relations.Quotients][].
+equality: the relation `_∼_` just described.
+
+This module proves `_∼_` is an equivalence relation — each axiom is one subgroup
+closure property plus one line of group arithmetic — and packages the quotient setoid
+`cosetSetoid`{.AgdaFunction} via the `_/_`{.AgdaFunction} construction of
+[Setoid.Relations.Quotients][].
 
 Two further lemmas prepare the ground for the coset action of
 [Classical.Structures.Group.GSet][]: the original setoid equality refines the coset
@@ -42,40 +44,41 @@ import Algebra.Properties.Group as GroupProperties
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Overture                             using ( Equivalence )
-open import Classical.Bundles.Group              using ( ⟨_⟩ᵍᵖ )
-open import Classical.Signatures.Group           using ( Sig-Group )
-open import Classical.Structures.Group           using ( Group ; module Group-Op )
-open import Classical.Structures.Group.Subgroups using ( IsSubgroup )
-open import Setoid.Relations.Quotients           using ( _/_ )
+open import Overture                               using ( Equivalence )
+open import Classical.Bundles.Group                using ( ⟨_⟩ᵍᵖ )
+open import Classical.Signatures.Group             using ( Sig-Group )
+open import Classical.Structures.Group.Basic       using ( Group ; module Group-Op )
+open import Classical.Structures.Group.Subgroups   using ( IsSubgroup )
+open import Setoid.Relations.Quotients             using ( _/_ )
 
-open import Setoid.Algebras.Basic {𝑆 = Sig-Group} using ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Algebras.Basic {𝑆 = Sig-Group}  using ( Algebra ; 𝕌[_] ; 𝔻[_] )
 ```
 -->
 
 #### The coset relation
 
 ```agda
-module Coset {α ρ : Level} (𝑮 : Group α ρ) {ℓ : Level}
-  (H : Pred 𝕌[ proj₁ 𝑮 ] ℓ) (H-isSubgroup : IsSubgroup 𝑮 H)
+module Coset {α ρ : Level} (𝒢 : Group α ρ) {ℓ : Level}
+  (H : Pred 𝕌[ proj₁ 𝒢 ] ℓ) (H-isSubgroup : IsSubgroup 𝒢 H)
   where
 
   private
-    𝑨 = proj₁ 𝑮
-    A = 𝕌[ 𝑨 ]
+    𝑮 = proj₁ 𝒢
+    G = 𝕌[ 𝑮 ]
 
-  open Setoid 𝔻[ 𝑨 ]  using ( _≈_ )
-                      renaming ( refl to ≈refl ; sym to ≈sym ; trans to ≈trans )
-  open SetoidReasoning 𝔻[ 𝑨 ]
-  open Group-Op 𝑮 using ( _∙_ ; ε ; _⁻¹ ; ∙-cong ; ⁻¹-cong ; assoc-law ; invˡ-law )
-  open GroupProperties (⟨ 𝑮 ⟩ᵍᵖ)
-    using ( ⁻¹-involutive ; ⁻¹-anti-homo-∙ ; \\-leftDividesˡ ; \\-leftDividesʳ )
-  open IsSubgroup H-isSubgroup using ( respects ; ∙-closed ; ε-closed ; ⁻¹-closed )
+  open Setoid 𝔻[ 𝑮 ]            using ( _≈_ )
+                                renaming ( refl to ≈refl ; sym to ≈sym ; trans to ≈trans )
+  open SetoidReasoning 𝔻[ 𝑮 ]
+  open Group-Op 𝒢               using  ( _∙_ ; ε ; _⁻¹ ; ∙-cong ; ⁻¹-cong
+                                       ; assoc-law ; invˡ-law )
+  open GroupProperties ⟨ 𝒢 ⟩ᵍᵖ  using  ( ⁻¹-involutive ; ⁻¹-anti-homo-∙
+                                       ; \\-leftDividesˡ ; \\-leftDividesʳ )
+  open IsSubgroup H-isSubgroup  using  ( respects ; ∙-closed ; ε-closed ; ⁻¹-closed )
 
   infix 4 _∼_
 
   -- x and y lie in the same left coset of H when x ⁻¹ ∙ y ∈ H.
-  _∼_ : A → A → Type ℓ
+  _∼_ : G → G → Type ℓ
   x ∼ y = x ⁻¹ ∙ y ∈ H
 ```
 
@@ -110,7 +113,7 @@ products, since `(x ⁻¹ ∙ y) ∙ (y ⁻¹ ∙ z) ≈ x ⁻¹ ∙ z`.
   ∼-isEquivalence : IsEquivalence _∼_
   ∼-isEquivalence = record { refl = ∼-refl ; sym = ∼-sym ; trans = ∼-trans }
 
-  ∼-equivalence : Equivalence A {ℓ}
+  ∼-equivalence : Equivalence G {ℓ}
   ∼-equivalence = _∼_ , ∼-isEquivalence
 ```
 
@@ -138,10 +141,10 @@ products, since `(x ⁻¹ ∙ y) ∙ (y ⁻¹ ∙ z) ≈ x ⁻¹ ∙ z`.
 
 #### The quotient setoid `G/H`
 
-The coset space is the carrier of `𝑮` under the coset equality, assembled by the
+The coset space is the carrier of `𝒢` under the coset equality, assembled by the
 quotient construction of [Setoid.Relations.Quotients][].
 
 ```agda
   cosetSetoid : Setoid α ℓ
-  cosetSetoid = A / ∼-equivalence
+  cosetSetoid = G / ∼-equivalence
 ```

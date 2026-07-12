@@ -14,13 +14,11 @@ This is the [Classical.Signatures.Unary][] module of the [Agda Universal Algebra
 given type `Ops`, every symbol of arity one.  Unlike the fixed finite signatures of
 this subtree (`Sig-Magma`, `Sig-Group`, …), the symbol set is a *parameter*: the
 motivating instance takes `Ops` to be the carrier of a group `G`, which turns a
-G-set into an ordinary unary algebra with one basic operation per group element —
-the encoding used by Pálfy and Pudlák in the congruence-lattice/subgroup-interval
-correspondence, and realized in this library by
-[Classical.Structures.Group.GSet][].  Because a `Sig-Unary`-algebra is an
-`Algebra`{.AgdaRecord} like any other, the whole congruence machinery
-(`Con`{.AgdaFunction}, quotients, homomorphism theorems) applies to G-sets with no
-special cases.
+G-set into an ordinary unary algebra with one basic operation per group element.
+
+Because a `Sig-Unary`-algebra is an `Algebra`{.AgdaRecord} like any other, the whole
+congruence machinery (`Con`{.AgdaFunction}, quotients, homomorphism theorems) applies
+to G-sets with no special cases.
 
 The arity of every symbol is `Fin 1`, matching the convention of the unary symbol
 `⁻¹-Op` in [`Sig-Group`][Classical.Signatures.Group].
