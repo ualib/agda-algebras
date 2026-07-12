@@ -8,10 +8,9 @@ author: "the agda-algebras development team"
 
 ### Finite Birkhoff: a constructive subdirect SI-representation
 
-This is the [Setoid.Subalgebras.Subdirect.Finite][] module of the
-[Agda Universal Algebra Library][].
+This is the [Setoid.Subalgebras.Subdirect.Finite][] module of the [Agda Universal Algebra Library][].
 
-[Setoid.Subalgebras.Subdirect.BirkhoffSI][] proved the **choice-free core** of
+[Setoid.Subalgebras.Subdirect.BirkhoffSI][] proved the *choice-free core* of
 Birkhoff's subdirect representation theorem and stated the general theorem
 `Birkhoff-subdirect` *relative to* the choice principle `SubdirectSIRep 𝑨` — the
 existence, for every algebra, of a separating family of congruences whose quotients
@@ -19,7 +18,7 @@ are subdirectly irreducible.
 
 Producing that family for an arbitrary algebra is a Zorn's-lemma step (a congruence
 maximal among those excluding a given pair), which is incompatible with a
-postulate-free `--safe` formalization in constructive type theory.
+postulate-free formalization in constructive type theory.
 
 This module discharges that parameter for a class of *finite* algebras: it constructs
 `SubdirectSIRep 𝑨` outright, with no choice and no postulate, and feeds it to the
@@ -27,31 +26,30 @@ choice-free reduction `SIRep→Representable`.[^1]
 
 #### What "finite" must mean here
 
-The classical proof selects, for each pair `a ≢ b`, a congruence **maximal** among
+The classical proof selects, for each pair `a ≢ b`, a congruence *maximal* among
 those not relating `a` and `b`; such a congruence is completely meet-irreducible, so
 its quotient is subdirectly irreducible.  To find that maximal congruence by a
 *search* we must enumerate the congruence lattice, and to recognise subdirect
 irreducibility (whose monolith condition quantifies over all congruences of the
-quotient) the enumeration must be complete — every congruence must equal, up to
-mutual containment `≑`, a listed one.
+quotient) the enumeration must be complete — every congruence must equal a listed
+one, up to mutual containment (denote here `≑`).
 
-Crucially, *carrier-finiteness along with decidable setoid equality* do not, by
-themselves, admit such an enumeration constructively.  A congruence is a
-`Type`-valued relation `𝕌[ 𝑨 ] → 𝕌[ 𝑨 ] → Type ℓ`; an arbitrary such relation
-on a finite carrier need not be decidable: e.g. on a bare set of two elements, the
-relation that collapses the two points *iff* `P` holds is a congruence for any
-proposition `P`, and it is `≑`-equal to a decidable congruence only iff `P` is
-decidable.  So a complete enumeration of congruences-up-to-`≑` is strictly stronger
-than decidable equality on a finite set; it is exactly the classical content of
-"finite algebra" for congruence-lattice purposes.
+Crucially, carrier-finiteness along with decidable setoid equality do not, by
+themselves, admit such an enumeration constructively (see
+[Setoid.Congruences.Finite][] for the counterexample), so the finiteness data comes
+through two independent interfaces.
 
-We therefore take that content as the finiteness interface: a `FiniteAlgebra` bundles
-decidable `≈`, a finite enumeration of the carrier, and a finite list of *decidable*
-congruences that is complete up to `≑`.  Everything downstream is then fully
-constructive and computes.  Classically every finite algebra furnishes these data, so
-`finite-Birkhoff` is Birkhoff's theorem for finite algebras; the `FiniteAlgebra`
-record is precisely the constructive witness that makes the search go through under
-`--safe`.
+1.  `FiniteAlgebra`{.AgdaRecord}, from [Setoid.Algebras.Finite][]: decidable `≈` and
+    a finite surjective enumeration of the carrier, used here to count the pairs a
+    congruence relates;
+2.  `FiniteCongruences`{.AgdaRecord}, from [Setoid.Congruences.Finite][]: a finite
+    list of *decidable* congruences (`DecCon`{.AgdaFunction}), complete up to `≑` —
+    the searchable congruence lattice.
+
+Everything downstream is then fully constructive and computes.  Classically every
+finite algebra furnishes both witnesses, so `finite-Birkhoff` is Birkhoff's theorem
+for finite algebras; the two records are precisely the constructive data that make
+the search go through under `--safe` Agda.
 
 <!--
 ```agda
@@ -62,9 +60,9 @@ open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 module Setoid.Subalgebras.Subdirect.Finite {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
-open import Agda.Primitive                         using  ( lsuc ) renaming ( Set to Type )
+open import Agda.Primitive                         using  () renaming ( Set to Type )
 open import Data.Empty                             using  ( ⊥-elim )
-open import Data.Fin.Base                          using  ( Fin ; zero )
+open import Data.Fin.Base                          using  ( Fin )
 open import Data.Fin.Properties                    using  ( all? ; ¬∀⟶∃¬ )
 open import Data.List.Base                         using  ( List ; [] ; _∷_ ; filter ; length
                                                           ; allFin ; cartesianProduct )
@@ -80,22 +78,24 @@ open import Data.Nat.Properties                    using  ( m≤n⇒m≤1+n ; n<
                                                           ; ≤-<-trans ; n≮n )
 open import Data.Product                           using  ( _×_ ; _,_ ; Σ-syntax ; proj₁ ; proj₂ )
 open import Data.Sum.Base                          using  ( inj₁ ; inj₂ )
-open import Data.Unit.Base                         using  ( ⊤ ; tt )
-open import Function                               using  ( Func ; _∘_ )
-open import Level                                  using  ( Level ; _⊔_ ; 0ℓ ; Lift ; lift ; lower )
+open import Level                                  using  ( Level ; _⊔_ ; 0ℓ ; lower )
 open import Relation.Binary                        using  ( Setoid ; IsEquivalence )
-                                                   renaming (Rel to BinaryRel)
 open import Relation.Binary.PropositionalEquality  using  ( _≡_ ; refl ; subst ; sym )
 open import Relation.Nullary                       using  ( ¬_ ; Dec ; yes ; no )
 open import Relation.Nullary.Decidable             using  ( _→-dec_ ; ¬? )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Setoid.Algebras.Basic               {𝑆 = 𝑆}  using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Algebras.Finite              {𝑆 = 𝑆}  using  ( FiniteAlgebra ; 𝟏
+                                                                ; 𝟏-FiniteAlgebra )
 open import Setoid.Congruences.Basic            {𝑆 = 𝑆}  using  ( Con ; mkcon ; reflexive
                                                                 ; is-equivalence ; is-compatible
                                                                 ; _╱_ ; 𝟘[_] )
+open import Setoid.Congruences.Finite           {𝑆 = 𝑆}  using  ( clv ; DecCon ; ConRel
+                                                                ; FiniteCongruences
+                                                                ; 𝟏-FiniteCongruences )
 open import Setoid.Congruences.Generation       {𝑆 = 𝑆}  using  ( Cg ; Cg-least ; base )
-open import Setoid.Congruences.Lattice          {𝑆 = 𝑆}  using  ( _⊆_ ; _≑_ ; ⊆-trans )
+open import Setoid.Congruences.Lattice          {𝑆 = 𝑆}  using  ( _⊆_ ; ⊆-trans )
 open import Setoid.Congruences.Monolith         {𝑆 = 𝑆}  using  ( IsSubdirectlyIrreducible
                                                                 ; mono-nonzero ; mono-least
                                                                 ; Nonzero )
@@ -103,9 +103,6 @@ open import Setoid.Congruences.Monolith         {𝑆 = 𝑆}  using  ( IsSubdir
 open import Setoid.Subalgebras.Subdirect.Basic  {𝑆 = 𝑆}  using ( Separates )
 open import Setoid.Subalgebras.Subdirect.BirkhoffSI {𝑆 = 𝑆}
   using (SubdirectSIRep; SubdirectlyRepresentable ; SIRep→Representable )
-
-open Algebra using ( Domain ; Interp )
-open Func    using ( cong ) renaming ( to to _⟨$⟩_ )
 
 private variable α ρ : Level
 ```
@@ -155,62 +152,18 @@ private
   ¬→-split (no ¬p) ¬pq = ⊥-elim (¬pq (λ p → ⊥-elim (¬p p)))
 ```
 
-#### Decidable congruences and the finiteness interface
-
-A **decidable congruence** is a congruence whose membership relation is decidable.
-The working congruence level is the absorbing level `clv α ρ = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ`, at
-which the generated (principal) congruences used for the monolith stay put — the
-same level discipline as [Setoid.Congruences.CompleteLattice][].
-
-```agda
--- The absorbing congruence level at which everything below is carried out.
-clv : (α ρ : Level) → Level
-clv α ρ = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ
-
--- A congruence together with a decision procedure for its membership.
-DecCon : (𝑨 : Algebra α ρ)(ℓ : Level) → Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ lsuc ℓ)
-DecCon 𝑨 ℓ = Σ[ θ ∈ Con 𝑨 ℓ ] (∀ x y → Dec (proj₁ θ x y))
-
-ConRel : {𝑨 : Algebra α ρ}{ℓ : Level} → DecCon 𝑨 ℓ → BinaryRel 𝕌[ 𝑨 ] ℓ
-ConRel (θ , _) = proj₁ θ
-```
-
-The finiteness interface bundles: decidable `≈`; a surjective enumeration of the
-carrier (used to *count* related pairs); and a finite, complete list of decidable
-congruences (the searchable congruence lattice).  See the module header for why
-the last field cannot be derived from the first two.
-
-```agda
-record FiniteAlgebra (𝑨 : Algebra α ρ) : Type (lsuc (clv α ρ)) where
-  open Setoid 𝔻[ 𝑨 ] using ( _≈_ )
-  field
-    _≟_       : (x y : 𝕌[ 𝑨 ]) → Dec (x ≈ y)
-    card      : ℕ
-    enum      : Fin card → 𝕌[ 𝑨 ]
-    enum-sur  : (x : 𝕌[ 𝑨 ]) → Σ[ i ∈ Fin card ] (enum i ≈ x)
-    cons      : List (DecCon 𝑨 (clv α ρ))
-    complete  : (φ : Con 𝑨 (clv α ρ)) → Σ[ d ∈ DecCon 𝑨 (clv α ρ) ] (d ∈ cons) × (φ ≑ proj₁ d)
-
-  witness : (φ : Con 𝑨 (clv α ρ)) → DecCon 𝑨 (clv α ρ)
-  witness = proj₁ ∘ complete
-
-  witness∈ : (φ : Con 𝑨 (clv α ρ)) → witness φ ∈ cons
-  witness∈ = proj₁ ∘ proj₂ ∘ complete
-
-  witness≑ : (φ : Con 𝑨 (clv α ρ)) → φ ≑ proj₁ (witness φ)
-  witness≑ = proj₂ ∘ proj₂ ∘ complete
-
-
-```
-
 #### The construction
 
-Fix a finite algebra.  We abbreviate the working level as `ℓ`, and `pairs` is the
-list of all index pairs of the carrier enumeration.
+Fix an algebra `𝑨` equipped with both finiteness witnesses.  We abbreviate the
+working congruence level as `ℓ = clv α ρ` — the absorbing level of
+[Setoid.Congruences.Finite][], at which the generated (principal) congruences used
+for the monolith stay put — and `pairs` is the list of all index pairs of the
+carrier enumeration.
 
 ```agda
-module _ {𝑨 : Algebra α ρ} (𝑭 : FiniteAlgebra 𝑨) where
+module _ {𝑨 : Algebra α ρ} (𝑭 : FiniteAlgebra 𝑨) (𝑪 : FiniteCongruences 𝑨) where
   open FiniteAlgebra 𝑭
+  open FiniteCongruences 𝑪
   open Setoid 𝔻[ 𝑨 ] using ( _≈_ ) renaming ( sym to ≈sym )
 
   ℓ : Level
@@ -447,47 +400,23 @@ subdirect product of subdirectly irreducible algebras.
   finite-Birkhoff = SIRep→Representable finiteSubdirectSIRep
 ```
 
-#### Non-vacuity: the interface is inhabited
+#### Non-vacuity: the theorem fires
 
-The `FiniteAlgebra` record is genuine, computational data — not a disguised choice
-principle — so it must be exhibited, not merely assumed.  The one-element algebra
-over any signature satisfies it: its carrier is `⊤`, decidable equality is trivial,
-and its only congruence (up to `≑`) is the diagonal, so the complete list is a
-singleton.  This confirms `finite-Birkhoff` fires (here on a degenerate input: the
-family of distinct pairs is empty, so the trivial algebra is the subdirect product
-of the empty family).  A genuinely subdirectly irreducible worked example — one
-that exercises the maximal-congruence search — is the natural next addition.
+The finiteness interfaces are genuine, computational data — not disguised choice
+principles — so they must be exhibited, not merely assumed.  The one-element
+algebra `𝟏`{.AgdaFunction} satisfies both: its bare witness
+`𝟏-FiniteAlgebra`{.AgdaFunction} is exhibited in [Setoid.Algebras.Finite][], and
+its congruence-side witness `𝟏-FiniteCongruences`{.AgdaFunction} (a singleton
+complete list) in [Setoid.Congruences.Finite][].  Feeding them to `finite-Birkhoff`
+confirms the theorem fires (here on a degenerate input: the family of distinct
+pairs is empty, so the trivial algebra is the subdirect product of the empty
+family).  A genuinely subdirectly irreducible worked example — one that exercises
+the maximal-congruence search — is the natural next addition.
 
 ```agda
--- The one-element algebra over the signature 𝑆.
-𝟏 : Algebra 0ℓ 0ℓ
-𝟏 .Domain = record  { Carrier        = ⊤
-                    ; _≈_            = λ _ _ → ⊤
-                    ; isEquivalence  = record { refl = tt ; sym = λ _ → tt ; trans = λ _ _ → tt } }
-𝟏 .Interp ⟨$⟩ _    = tt
-𝟏 .Interp .cong _ = tt
-
--- Its sole decidable congruence: the all-relation (= the diagonal on a point).
-𝟏-Δ : DecCon 𝟏 (clv 0ℓ 0ℓ)
-𝟏-Δ = ((λ _ _ → Lift (clv 0ℓ 0ℓ) ⊤)
-      , mkcon  (λ _ → lift tt)
-               (record { refl = lift tt ; sym = λ _ → lift tt ; trans = λ _ _ → lift tt })
-               (λ _ _ → lift tt))
-      , (λ _ _ → yes (lift tt))
-
-𝟏-FiniteAlgebra : FiniteAlgebra 𝟏
-𝟏-FiniteAlgebra = record
-  { _≟_       = λ _ _ → yes tt
-  ; card      = 1
-  ; enum      = λ _ → tt
-  ; enum-sur  = λ _ → zero , tt
-  ; cons      = 𝟏-Δ ∷ []
-  ; complete  = λ φ → 𝟏-Δ , here refl , (λ _ → lift tt) , (λ _ → reflexive (proj₂ φ) tt)
-  }
-
 -- The theorem applied: the one-element algebra is subdirectly representable.
 𝟏-SubdirectlyRepresentable : SubdirectlyRepresentable 𝟏 (clv 0ℓ 0ℓ) 0ℓ
-𝟏-SubdirectlyRepresentable = finite-Birkhoff 𝟏-FiniteAlgebra
+𝟏-SubdirectlyRepresentable = finite-Birkhoff 𝟏-FiniteAlgebra 𝟏-FiniteCongruences
 ```
 
 --------------------------------------

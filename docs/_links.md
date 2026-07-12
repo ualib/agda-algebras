@@ -30,6 +30,7 @@
 [Setoid]: /Setoid/
 [Setoid.Algebras]: /Setoid/Algebras/
 [Setoid.Algebras.Basic]: /Setoid/Algebras/Basic/
+[Setoid.Algebras.Finite]: /Setoid/Algebras/Finite/
 [Setoid.Algebras.Products]: /Setoid/Algebras/Products/
 [Setoid.Algebras.Reduct]: /Setoid/Algebras/Reduct/
 [Setoid.Categories]: /Setoid/Categories/
@@ -48,6 +49,7 @@
 [Setoid.Congruences.Basic]: /Setoid/Congruences/Basic/
 [Setoid.Congruences.ChainJoin]: /Setoid/Congruences/ChainJoin/
 [Setoid.Congruences.CompleteLattice]: /Setoid/Congruences/CompleteLattice/
+[Setoid.Congruences.Finite]: /Setoid/Congruences/Finite/
 [Setoid.Congruences.Generation]: /Setoid/Congruences/Generation/
 [Setoid.Congruences.Lattice]: /Setoid/Congruences/Lattice/
 [Setoid.Congruences.Monolith]: /Setoid/Congruences/Monolith/
@@ -327,6 +329,7 @@
 [Setoid.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid.lagda.md
 [Setoid/Algebras.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Algebras.lagda.md
 [Setoid/Algebras/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Algebras/Basic.lagda.md
+[Setoid/Algebras/Finite.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Algebras/Finite.lagda.md
 [Setoid/Algebras/Products.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Algebras/Products.lagda.md
 [Setoid/Algebras/Reduct.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Algebras/Reduct.lagda.md
 [Setoid/Categories.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Categories.lagda.md
@@ -345,6 +348,7 @@
 [Setoid/Congruences/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/Basic.lagda.md
 [Setoid/Congruences/ChainJoin.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/ChainJoin.lagda.md
 [Setoid/Congruences/CompleteLattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/CompleteLattice.lagda.md
+[Setoid/Congruences/Finite.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/Finite.lagda.md
 [Setoid/Congruences/Generation.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/Generation.lagda.md
 [Setoid/Congruences/Lattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/Lattice.lagda.md
 [Setoid/Congruences/Monolith.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/Monolith.lagda.md
