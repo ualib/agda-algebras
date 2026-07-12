@@ -6,31 +6,35 @@ date: "2026-07-11"
 author: "the agda-algebras development team"
 ---
 
-### The Finite Lattice Representation Problem — statement and first instances
+### The Finite Lattice Representation Problem: statement and first instances
 
 This is the [FLRP.Problem][] module of the [Agda Universal Algebra Library][].
 
 The **Finite Lattice Representation Problem** (FLRP) asks: is every finite
 lattice isomorphic to the congruence lattice `Con 𝑨`{.AgdaFunction} of some
-*finite* algebra `𝑨`{.AgdaBound}?  By Grätzer–Schmidt every algebraic lattice is
-the congruence lattice of an *infinite* algebra, so the finiteness of the
-algebra is the entire content of the question, which has been open since the
-1960s.  This module opens the library's FLRP research tree (see
+*finite* algebra `𝑨`{.AgdaBound}?
+
+By Grätzer–Schmidt every algebraic lattice is the congruence lattice of an *infinite*
+algebra, so the finiteness of the algebra is the entire content of the question,
+which has been open since the 1960s.
+
+This module opens the library's FLRP research tree (see
 `docs/notes/flrp-research-roadmap.md`, § 6–7, work package WP-1) by making the
-problem itself a first-class, type-checked object:
+problem itself a first-class, type-checked object.
 
-+  `Representable`{.AgdaRecord} `𝑳` — the data of a finite algebra whose
-   congruence lattice is order-isomorphic to the lattice `𝑳`{.AgdaBound};
-+  `FLRP-Statement`{.AgdaFunction} — the formal statement "every finite lattice
-   is representable", as a type that the library *states but does not assert*;
-+  a first worked instance (the one-element chain), and — in place of the
-   two-element instance — a machine-checked *constructivity no-go theorem*
-   explaining why no nontrivial instance can be produced under this library's
-   `--safe`, postulate-free discipline.
++  `Representable`{.AgdaRecord} `𝑳`: the data of a finite algebra whose congruence
+   lattice is order-isomorphic to the lattice `𝑳`{.AgdaBound};
 
-A standing warning from `CLAUDE.md` applies: the FLRP is a research track of
-its own and must not be conflated with the algebraic-complexity / finite-CSP
-work elsewhere in the library.
++  `FLRP-Statement`{.AgdaFunction}: the formal statement "every finite lattice is
+   representable", as a type that the library *states but does not assert*;
+
++  a first worked instance (the one-element chain), and (in place of the two-element
+   instance) a machine-checked *constructivity no-go theorem* explaining why no
+   nontrivial instance can be produced under this library's `--safe`, postulate-free
+   discipline.
+
+A standing warning applies: the FLRP is a research track of its own and should not be
+conflated with the algebraic-complexity / finite-CSP work elsewhere in the library.
 
 <!--
 ```agda
@@ -49,6 +53,7 @@ open import Data.Product         using ( _,_ ; proj₁ ; proj₂ )
 open import Data.Sum.Base        using ( _⊎_ ; inj₁ ; inj₂ )
 open import Data.Unit.Base       using ( tt )
 open import Data.Vec.Base        using ( _∷_ ; [] )
+open import Function             using (_∘_)
 open import Level                using ( Level ; 0ℓ ; _⊔_ ; lift ; lower )
                                  renaming ( suc to lsuc )
 open import Relation.Binary      using ( Setoid ) renaming ( Rel to BinaryRel )
@@ -65,10 +70,8 @@ open import Overture.Operations.Properties      using ( Associative? ; Commutati
 open import Classical.Signatures.Lattice        using ( Sig-Lattice )
 open import Classical.Small.Structures.Lattice  using ( Lattice ; eqsToLattice )
 open import Classical.Properties.Lattice        using ( module Lattice-Order )
-open import Setoid.Algebras.Basic {𝑆 = Sig-Lattice}
-                                                using () renaming ( 𝔻[_] to 𝔻ˡ[_] )
+open import Setoid.Algebras.Basic as SetoidAlgebras using (Algebra ; 𝔻[_])
 
-import Setoid.Algebras.Basic                as SetoidAlgebras
 import Setoid.Congruences.Basic             as SetoidCongruences
 import Setoid.Congruences.Lattice           as CongruenceOrder
 import Setoid.Congruences.Generation        as CongruenceGeneration
@@ -78,31 +81,35 @@ import Setoid.Subalgebras.Subdirect.Finite  as SubdirectFinite
 
 #### Order isomorphisms
 
-Both sides of a representation are *ordered* objects: the congruence lattice of
-an algebra is the poset `(Con 𝑨 , ≑ , ⊆)` of [Setoid.Congruences.Lattice][],
-and a classical lattice carries its meet order from
-[Classical.Properties.Lattice][].  The right notion of "the same lattice" for
-two such posets is an **order isomorphism**: a pair of monotone maps that are
-mutually inverse up to the respective equivalences.  Because both maps are
-monotone and the round trips are the identity up to `≈`, an order isomorphism
-transports every existing infimum and supremum, so isomorphic posets carry the
-same lattice (indeed, complete-lattice) structure; this is why no separate
-preservation clauses for meet and join are needed.
+Both sides of a representation are *ordered* objects: the congruence lattice of an
+algebra is the poset `(Con 𝑨 , ≑ , ⊆)` of [Setoid.Congruences.Lattice][], and a
+classical lattice carries its meet order from [Classical.Properties.Lattice][].
 
-`OrderIso`{.AgdaRecord} states this for raw relations, so it applies uniformly
-to setoid-valued and propositional orders.  It is kept here, next to its first
-use; once the group-theoretic side of the program needs it (work package WP-3,
+The right notion of "the same lattice" for two such posets is an **order isomorphism**:
+a pair of monotone maps that are mutually inverse up to the respective equivalences.
+
+Because both maps are monotone and the round trips are the identity up to `≈`, an
+order isomorphism transports every existing infimum and supremum, so isomorphic
+posets carry the same lattice (indeed, complete-lattice) structure; this is why no
+separate preservation clauses for meet and join are needed.
+
+`OrderIso`{.AgdaRecord} states this for raw relations, so it applies uniformly to
+setoid-valued and propositional orders.  It is kept here, next to its first use; once
+the group-theoretic side of the program needs it (work package WP-3,
 `Con (G ↷ G/H) ≅ [H , G]`), it should migrate to the `Order/` tree beside
-[Order.CompleteLattice][].  (The standard library's
-`IsOrderIsomorphism`{.AgdaRecord} packages one map with surjectivity instead of
-an explicit inverse; the two presentations are interconvertible, and the
-inverse-pair form is the convenient one for transporting structure.)
+[Order.CompleteLattice][].
+
+(The standard library's `IsOrderIsomorphism`{.AgdaRecord} packages one map with
+surjectivity instead of an explicit inverse; the two presentations are
+interconvertible, and the inverse-pair form is the convenient one for transporting
+structure.)
 
 ```agda
-record OrderIso  {a b ℓ₁ ℓ₂ m₁ m₂ : Level} {A : Type a} {B : Type b}
-                 (_≈₁_ : BinaryRel A ℓ₁) (_≤₁_ : BinaryRel A ℓ₂)
-                 (_≈₂_ : BinaryRel B m₁) (_≤₂_ : BinaryRel B m₂)
-                 : Type (a ⊔ b ⊔ ℓ₁ ⊔ ℓ₂ ⊔ m₁ ⊔ m₂) where
+record OrderIso
+  {a b ℓ₁ ℓ₂ m₁ m₂ : Level}
+  {A : Type a} {B : Type b}
+  (_≈₁_ : BinaryRel A ℓ₁) (_≤₁_ : BinaryRel A ℓ₂)
+  (_≈₂_ : BinaryRel B m₁) (_≤₂_ : BinaryRel B m₂) : Type (a ⊔ b ⊔ ℓ₁ ⊔ ℓ₂ ⊔ m₁ ⊔ m₂) where
   field
     to         : A → B
     from       : B → A
@@ -115,56 +122,54 @@ record OrderIso  {a b ℓ₁ ℓ₂ m₁ m₂ : Level} {A : Type a} {B : Type b}
 #### Congruence lattices versus classical lattices
 
 A representation compares two differently-presented ordered structures, and the
-comparison is deliberately arranged so that *no bridging construction is
-needed* on either side.
+comparison is deliberately arranged so that *no bridging construction is needed* on
+either side.
 
-+  **The algebra side.**  For an algebra `𝑨`{.AgdaBound} over a signature
-   `𝑆 : Signature 0ℓ 0ℓ`, the congruences `Con 𝑨`{.AgdaFunction} at relation
-   level `0ℓ` form a poset under containment `_⊆_`{.AgdaFunction} with
-   equivalence `_≑_`{.AgdaFunction} (mutual containment) — this is
-   `Con-Poset`{.AgdaFunction} of [Setoid.Congruences.Lattice][], and
++  **The algebra side**.  For an algebra `𝑨` over a signature `𝑆 : Signature 0ℓ 0ℓ`,
+   the congruences `Con 𝑨` at relation level `0ℓ` form a poset under containment
+   `_⊆_` with equivalence `_≑_` (mutual containment).
+
+   This is `Con-Poset`{.AgdaFunction} of [Setoid.Congruences.Lattice][], and
    [Setoid.Congruences.CompleteLattice][] upgrades it to a complete lattice.
+
    With all levels at `0ℓ` the absorbing congruence level is again `0ℓ`, so a
    single relation level suffices throughout.
-+  **The lattice side.**  The input lattice is a
-   `Lattice`{.AgdaFunction} of [Classical.Small.Structures.Lattice][] — an
-   equational algebra over `Sig-Lattice`{.AgdaFunction}, the Cayley-table style
-   presentation used by the worked examples such as
-   [Examples.Classical.Lattices.L7][].  Its meet partial order
-   `x ≤ y := x ∧ y ≈ x`, together with proofs that this is a genuine partial
-   order whose meet and join are the greatest lower and least upper bounds, is
-   already provided by `Lattice-Order`{.AgdaRecord} of
+
++  **The lattice side**.  The input lattice is a `Lattice`{.AgdaFunction} of
+   [Classical.Small.Structures.Lattice][], an equational algebra over
+   `Sig-Lattice`{.AgdaFunction}, the Cayley-table style presentation used by the
+   worked examples such as [Examples.Classical.Lattices.L7][].
+
+   Its meet partial order `x ≤ y := x ∧ y ≈ x`, together with proofs that this is a
+   genuine partial order whose meet and join are the greatest lower and least upper
+   bounds, is already provided by `Lattice-Order`{.AgdaRecord} of
    [Classical.Properties.Lattice][].
 
-`ConIso 𝑨 𝑳`{.AgdaFunction} says the congruence poset of `𝑨`{.AgdaBound} is
-order-isomorphic to the meet order of `𝑳`{.AgdaBound}.  Since both sides are
-lattices and order isomorphisms transport meets and joins, this is exactly
+`ConIso`{.AgdaFunction} `𝑨`{.AgdaBound} `𝑳`{.AgdaBound} says the congruence poset of
+`𝑨`{.AgdaBound} is order-isomorphic to the meet order of `𝑳`{.AgdaBound}.  Since both
+sides are lattices and order isomorphisms transport meets and joins, this is exactly
 "`Con 𝑨` and `𝑳` are isomorphic lattices", stated without redundant clauses.
 
 ```agda
-module _ {𝑆 : Signature 0ℓ 0ℓ} where
-  open SetoidAlgebras   {𝑆 = 𝑆}  using ( Algebra )
-  open CongruenceOrder  {𝑆 = 𝑆}  using ( _⊆_ ; _≑_ )
-
-  -- Con 𝑨 (at level 0ℓ, ordered by ⊆ up to ≑) is order-isomorphic to the
-  -- meet order of the classical lattice 𝑳.
+module _
+  {𝑆 : Signature 0ℓ 0ℓ}
+  where
+  open CongruenceOrder  {𝑆 = 𝑆}   using ( _⊆_ ; _≑_ )
   ConIso : Algebra 0ℓ 0ℓ → Lattice → Type (lsuc 0ℓ)
-  ConIso 𝑨 𝑳 = OrderIso  (_≑_ {𝑨 = 𝑨} {0ℓ}) (_⊆_ {𝑨 = 𝑨} {0ℓ})
-                         (Setoid._≈_ 𝔻ˡ[ proj₁ 𝑳 ]) (Lattice-Order._≤_ 𝑳)
+  ConIso 𝑨 𝑳 = OrderIso  (_≑_ {𝑨 = 𝑨} ) _⊆_ (Setoid._≈_ 𝔻[ proj₁ 𝑳 ]) (Lattice-Order._≤_ 𝑳)
 ```
 
 #### Finite lattices
 
-The FLRP quantifies over *finite* lattices, so the formal statement needs a
-finite presentation to range over.  A `FiniteLattice`{.AgdaRecord} is a lattice
-given by finite data in the style of the library's Cayley-table examples: a
-carrier `Fin (suc size)` (lattices are nonempty, hence the successor), two
-binary operations, and the eight lattice equations, each a decidable statement
-over the finite carrier that concrete instances discharge with
-`from-yes`{.AgdaFunction}.  Every finite lattice is isomorphic to one presented
-this way (enumerate the carrier), so quantifying over
-`FiniteLattice`{.AgdaRecord} is quantifying over finite lattices up to
-isomorphism — which is all the FLRP asks.
+The FLRP quantifies over *finite* lattices, so the formal statement needs a finite
+presentation to range over.  A `FiniteLattice`{.AgdaRecord} is a lattice given by
+finite data in the style of the library's Cayley-table examples: a carrier
+`Fin (suc size)` (lattices are nonempty, hence the successor), two binary operations,
+and the eight lattice equations, each a decidable statement over the finite carrier
+that concrete instances discharge with `from-yes`{.AgdaFunction}.  Every finite
+lattice is isomorphic to one presented this way (enumerate the carrier), so
+quantifying over `FiniteLattice`{.AgdaRecord} is quantifying over finite lattices up
+to isomorphism, which is all the FLRP asks.
 
 ```agda
 record FiniteLattice : Type 0ℓ where
@@ -175,7 +180,7 @@ record FiniteLattice : Type 0ℓ where
   Carrier : Type 0ℓ
   Carrier = Fin (suc size)
 
-  infixr 7 _∧_
+  infixr 6 _∧_
   infixr 6 _∨_
 
   field
@@ -196,10 +201,8 @@ below enters the `Representable`{.AgdaRecord} predicate.
 
 ```agda
 toLattice : FiniteLattice → Lattice
-toLattice 𝑳 = eqsToLattice  Carrier _∧_ _∨_
-                            ∧-assoc ∧-comm ∧-idem
-                            ∨-assoc ∨-comm ∨-idem
-                            absorbˡ absorbʳ
+toLattice 𝑳 = eqsToLattice Carrier _∧_ _∨_
+                ∧-assoc ∧-comm ∧-idem ∨-assoc ∨-comm ∨-idem absorbˡ absorbʳ
   where open FiniteLattice 𝑳
 ```
 
@@ -210,11 +213,11 @@ finite algebra whose congruence lattice is isomorphic to `𝑳`{.AgdaBound}": a
 signature, an algebra over it, a witness that the algebra is finite, and the
 order isomorphism.  Two design choices deserve comment.
 
-+  **Levels.**  Signature, algebra, and congruences all live at level `0ℓ`.  A
++  **Levels**.  Signature, algebra, and congruences all live at level `0ℓ`.  A
    finite algebra needs no more room than that, and fixing the levels keeps the
    existential quantification over signatures first-order (Agda cannot
    quantify existentially over universe levels).
-+  **Finiteness.**  "Finite algebra" is the `FiniteAlgebra`{.AgdaRecord}
++  **Finiteness**.  "Finite algebra" is the `FiniteAlgebra`{.AgdaRecord}
    interface of [Setoid.Subalgebras.Subdirect.Finite][]: decidable setoid
    equality, a finite surjective enumeration of the carrier, and a finite list
    of *decidable* congruences that is complete up to `_≑_`{.AgdaFunction}.  As
@@ -228,26 +231,28 @@ order isomorphism.  Two design choices deserve comment.
 record Representable (𝑳 : Lattice) : Type (lsuc 0ℓ) where
   field
     sig      : Signature 0ℓ 0ℓ
-    alg      : SetoidAlgebras.Algebra {𝑆 = sig} 0ℓ 0ℓ
+    alg      : Algebra {𝑆 = sig} 0ℓ 0ℓ
     finite   : SubdirectFinite.FiniteAlgebra {𝑆 = sig} alg
     con-iso  : ConIso {𝑆 = sig} alg 𝑳
 ```
 
 #### The FLRP statement
 
-The Finite Lattice Representation Problem, as a type: every finite lattice is
-representable.  **The library states this type; it does not assert it.**  No
-definition below (or anywhere in the library) inhabits
-`FLRP-Statement`{.AgdaFunction} or its negation; whether the *classical*
-reading of this statement is true is exactly the open problem, and the
-research program tracked in `docs/notes/flrp-research-roadmap.md` is an attempt
-to decide it.
+The Finite Lattice Representation Problem, as the type
+`FLRP-Statement`{.AgdaFunction}: every finite lattice is representable.
+
+> The library merely defines this type; it does not assert that the type is inhabited.
+
+Indeed, no definition below (or anywhere in the library) inhabits
+`FLRP-Statement`{.AgdaFunction} or its negation; whether the classical reading of the
+statement is true is exactly the open problem, and the research program tracked in
+`docs/notes/flrp-research-roadmap.md` is an attempt to decide it.
 
 Two glosses keep the formal statement honest.
 
-+  **The constructive reading is strictly stronger than the classical one.**
-   The no-go theorem at the end of this module shows that any inhabitant of
-   `Representable (toLattice chain₂)`{.AgdaRecord} — the *two-element chain*!
++  **The constructive reading is strictly stronger than the classical one**.
+   The "no-go" theorem at the end of this module shows that any inhabitant of
+   `Representable (toLattice chain₂)`{.AgdaRecord} — the *two-element chain*
    — already yields weak excluded middle for level-zero types.  So
    `FLRP-Statement`{.AgdaFunction} is not merely unproved but *unprovable*
    under `--safe` without classical axioms, independently of the fate of the
@@ -256,11 +261,11 @@ Two glosses keep the formal statement honest.
    solution would likewise be formalized against classical assumptions
    registered explicitly (the planned `FLRP.Assumptions` module), not against
    this type alone.
-+  **The distinguished open instance is `L7`.**  The seven-element lattice
++  **The distinguished open instance is `L7`**.  The seven-element lattice
    `L7-lattice`{.AgdaFunction} of [Examples.Classical.Lattices.L7][] is, to our
    knowledge, the smallest lattice for which no representation as the
    congruence lattice of a finite algebra is known; every lattice with at most
-   seven elements except possibly `L7` is representable.  Since
+   seven elements except (possibly) `L7` is representable.  Since
    `L7-lattice`{.AgdaFunction} is a `Lattice`{.AgdaFunction} in exactly the
    sense used here, `Representable L7-lattice`{.AgdaRecord} is a well-formed
    type as-is.  We deliberately do not import the example module (examples
@@ -359,6 +364,7 @@ chain₁-Representable = record
       ; from∘to    = λ θ → 𝟘∅-min {𝑨 = 𝟏} {ℓ = 0ℓ} θ , (λ _ → lift tt)
       }
   }
+open Representable
 ```
 
 #### The two-element chain
@@ -406,30 +412,29 @@ theorem, proved next.
 
 A congruence in this library is a `Type`-valued relation, so `Con 𝑨` contains,
 for *every* proposition `P`, the **switch congruence**
-`θ[ P ] = Cg (λ _ _ → P)`{.AgdaFunction} — the congruence generated by the
+`θ[ P ] = Cg (λ _ _ → P)` — the congruence generated by the
 relation that relates everything exactly when `P` holds.  If `P` holds,
-`θ[ P ]` is the total congruence; if `¬ P`, it collapses to the diagonal.  An
-order isomorphism `to : Con 𝑨 → Fin 2` would therefore act as an oracle: where
-`to θ[ P ]` lands in the two-element chain *decides* `P` — up to the double
-negation inherent in reading membership of a generated congruence — and no
-such oracle is definable in safe Agda.
+`θ[ P ]` is the total congruence; if `¬ P`, it collapses to the diagonal.
+An order isomorphism `to : Con 𝑨 → Fin 2` would therefore act as an oracle:
+where `to θ[ P ]` lands in the two-element chain *decides* `P` — up to the double
+negation inherent in reading membership of a generated congruence — and no such
+oracle is definable in `--safe` Agda.
 
 Concretely, `chain₂-ConIso→WLEM`{.AgdaFunction} extracts from any
-`ConIso 𝑨 chain₂-lattice`{.AgdaFunction} (over *any* signature and *any*
-algebra) **weak excluded middle** for level-zero types, the well-known
-constructive taboo `∀ P → ¬ P ⊎ ¬ ¬ P`.
+`ConIso 𝑨 chain₂-lattice`{.AgdaFunction} (over *any* signature and *any* algebra)
+**weak excluded middle** for level-zero types, which is the *non-constructive*
+formula,
 
 ```agda
 WLEM₀ : Type (lsuc 0ℓ)
-WLEM₀ = (P : Type 0ℓ) → ¬ P ⊎ ¬ ¬ P
+WLEM₀ = ∀ P → ¬ P ⊎ ¬ ¬ P
 ```
 
 The proof needs three small facts, each with a one-line justification.
 
-+  `to-cong`: `≑`-equal congruences have equal images, because both images lie
-   below one another in the chain and the meet order of a lattice is
-   antisymmetric (`≤-antisym`{.AgdaFunction} of
-   [Classical.Properties.Lattice][]).
++  `to-cong`{.AgdaFunction}: `≑`-equal congruences have equal images, because both
+   images lie below one another in the chain and the meet order of a lattice is
+   antisymmetric (`≤-antisym`{.AgdaFunction} of [Classical.Properties.Lattice][]).
 +  `no-collapse`: `to` cannot identify the diagonal `Δ` and the total
    congruence `∇`.  If it did, the round trip would force `Δ ≑ ∇`, making the
    setoid equality of `𝑨`{.AgdaBound} total; then *all* congruences are
@@ -444,7 +449,6 @@ The proof needs three small facts, each with a one-line justification.
 
 ```agda
 module _ {𝑆 : Signature 0ℓ 0ℓ} where
-  open SetoidAlgebras        {𝑆 = 𝑆}  using ( Algebra ; 𝔻[_] )
   open SetoidCongruences     {𝑆 = 𝑆}  using ( Con ; 𝟘[_] ; 𝟙[_] ; reflexive )
   open CongruenceOrder       {𝑆 = 𝑆}  using ( _⊆_ ; _≑_ ; 𝟘-min )
   open CongruenceGeneration  {𝑆 = 𝑆}  using ( Cg ; Cg-least ; base )
@@ -496,23 +500,28 @@ module _ {𝑆 : Signature 0ℓ 0ℓ} where
     -- type P, between ¬ P and ¬ ¬ P: weak excluded middle.
     chain₂-ConIso→WLEM : WLEM₀
     chain₂-ConIso→WLEM P with to θ[ P ] ≟ to ∇
-    ... | yes e   =
-          inj₂ λ ¬p → no-collapse
-            (trans  (to-cong Δ θ[ P ]
-                      ( 𝟘-min {𝑨 = 𝑨} {ℓ = 0ℓ} θ[ P ]
-                      , Cg-least {𝑨 = 𝑨} Δ (λ p → ⊥-elim (¬p p))))
-                    e)
-    ... | no  ne  =
-          inj₁ λ p → ne
-            (to-cong θ[ P ] ∇ ((λ _ → lift tt) , (λ _ → base p)))
+    ... | no ne = inj₁ ¬P
+      where
+      ξ : P → to θ[ P ] ≡ to ∇
+      ξ = λ p → to-cong θ[ P ] ∇ ((λ _ → lift tt) , λ _ → base p)
+      ¬P : ¬ P
+      ¬P = λ p → ne (ξ p)
+
+    ... | yes e = inj₂ ¬¬P
+      where
+      ξ : ¬ P → to Δ ≡ to θ[ P ]
+      ξ = λ ¬p → to-cong Δ θ[ P ] ( 𝟘-min θ[ P ] , Cg-least Δ λ p → ⊥-elim (¬p p) )
+      γ : ¬ P → to Δ ≡ to ∇
+      γ = λ ¬p → trans (ξ ¬p) e
+      ¬¬P : ¬ ¬ P
+      ¬¬P = no-collapse ∘ γ
 ```
 
 The corollary about representability just forgets the finiteness witness.
 
 ```agda
 chain₂-Representable→WLEM : Representable chain₂-lattice → WLEM₀
-chain₂-Representable→WLEM r =
-  chain₂-ConIso→WLEM (Representable.alg r) (Representable.con-iso r)
+chain₂-Representable→WLEM r = chain₂-ConIso→WLEM (r .alg) (r .con-iso)
 ```
 
 #### What the no-go theorem means, and where the program goes next
