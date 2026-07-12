@@ -64,6 +64,11 @@ auto/
 # nix-direnv cache (only relevant if a contributor uses direnv).
 .direnv/
 
+# -- Local agent tooling state -----------------------------------------------------
+# Transient git worktrees created by Claude Code background agents; each contains a
+# full nested checkout and must never be committed.
+/.claude/worktrees/
+
 # -- Release / packaging -----------------------------------------------------------
 *.tar.gz
 source.zip
