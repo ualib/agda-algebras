@@ -185,7 +185,8 @@ decomposition, i.e. every subdirect embedding `𝑨 ↪ ⨅ 𝒜` has an isomorp
    *structural ⟹ monolith* is not added: the natural witness `μ = ⋀ {θ : Nonzero θ}` is
    indexed by `Σ[ θ ∈ Con 𝑨 ρ ] Nonzero θ`, a universe up, so the meet is a `Con 𝑨 ℓ′` with
    `ℓ′ > ρ` — not a monolith *at level `ρ`*; and the finite escape fails too, since the
-   constructive complete congruence lists (`FiniteAlgebra.cons`, [M6-8][]) live at the
+   constructive complete congruence lists (`FiniteCongruences.cons`, [M6-8][], relocated
+   to `Setoid.Congruences.Finite` by #464) live at the
    absorbing level `clv α ρ ⊒ ρ`.  This is the same predicativity wall as the
    `cmi ⟹ monolith` direction above (and [M6-9][]); recorded, not forced.
 
