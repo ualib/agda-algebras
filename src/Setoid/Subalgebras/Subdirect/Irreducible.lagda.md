@@ -203,31 +203,31 @@ module _ {I : Type ι}{𝑨 : Algebra α ρ}{𝒜 : I → Algebra αᵃ ρ}
 
 #### The finite witness: an explicit isomorphic coordinate
 
-For a **finite** index `Fin n`, with a decision for each coordinate of "is this kernel
-the diagonal?" (equivalently, "is this coordinate map injective?"), the contrapositive
-yields an *explicit* isomorphic coordinate: `𝑨` is isomorphic to one of its subdirect
-factors.  This is the witness-extracting form of the characterization, in the spirit of
-the finite Birkhoff theorem of [Setoid.Subalgebras.Subdirect.Finite][] (#419); the
-decision data is exactly what a `FiniteAlgebra`{.AgdaRecord} supplies (decidable `≈`
-and a finite carrier make `BelowDiagonal`, a `Π` over carrier pairs, decidable).
+For a *finite* index `Fin n`, with a decision for each coordinate of "is this kernel
+the diagonal?" (equivalently, "is this coordinate map injective?"), the
+contrapositive yields an *explicit* isomorphic coordinate: `𝑨` is isomorphic to one
+of its subdirect factors.  This is the witness-extracting form of the
+characterization, in the spirit of the finite Birkhoff theorem of
+[Setoid.Subalgebras.Subdirect.Finite][]; the decision data is exactly what a
+`FiniteAlgebra`{.AgdaRecord} supplies (decidable `≈` and a finite carrier make
+`BelowDiagonal`, a `Π` over carrier pairs, decidable).
 
 ```agda
-module _ {n : ℕ}{𝑨 : Algebra α ρ}{𝒜 : Fin n → Algebra αᵃ ρ}
-         (si : IsSubdirectlyIrreducible 𝑨)(sub : SubdirectEmbedding {𝑩 = 𝑨} 𝒜)
-         (dec : (i : Fin n) → Dec (BelowDiagonal 𝑨 (kerfam 𝒜 (proj₁ sub) i))) where
-  private
-    h    = proj₁ sub
-    emb  = proj₂ sub
+module _
+  {n : ℕ} {𝑨 : Algebra α ρ} {𝒜 : Fin n → Algebra αᵃ ρ}
+  ((_ , si)         : IsSubdirectlyIrreducible 𝑨)
+  ((h , emb)  : SubdirectEmbedding {𝑩 = 𝑨} 𝒜)
+  (dec        : (i : Fin n) → Dec (BelowDiagonal 𝑨 (kerfam 𝒜 h i))) where
 
   si⇒iso-coord : IsoToFactor 𝑨 𝒜
   si⇒iso-coord = i , coord-iso 𝒜 h (below→coord-inj 𝒜 h below) (proj-onto emb i)
     where
     -- the kernel family is not all-nonzero (the contrapositive forward direction)
-    ¬all-nz : ¬ (∀ i → Nonzero 𝑨 (kerfam 𝒜 h i))
-    ¬all-nz = monolith⇒¬all-nonzero (proj₂ si) (kerfam 𝒜 h) (embed→separates 𝒜 h (embed-inj emb))
+    ¬all-nz : ¬ ∀ i → Nonzero 𝑨 (kerfam 𝒜 h i)
+    ¬all-nz = monolith⇒¬all-nonzero si (kerfam 𝒜 h) (embed→separates 𝒜 h (embed-inj emb))
 
     -- finite + decidable ⟹ some coordinate's kernel is (¬¬, hence) below the diagonal
-    ex : ∃[ i ] (¬ Nonzero 𝑨 (kerfam 𝒜 h i))
+    ex : ∃[ i ] ¬ Nonzero 𝑨 (kerfam 𝒜 h i)
     ex = ¬∀⟶∃¬ n (λ i → Nonzero 𝑨 (kerfam 𝒜 h i)) (λ i → ¬? (dec i)) ¬all-nz
 
     i : Fin n
@@ -237,36 +237,41 @@ module _ {n : ℕ}{𝑨 : Algebra α ρ}{𝒜 : Fin n → Algebra αᵃ ρ}
     below = decidable-stable (dec i) (proj₂ ex)
 ```
 
-#### The converse bridge, and the converse's cost
+#### The converse bridge and its cost
 
 The *converse* of the family-level forward direction needs no monolith and is
-choice-free: if some coordinate map is injective — an isomorphism, given surjectivity —
-then the kernel family is not all-nonzero.  So at the family level "some `θ i ≑ 0ᴬ`" and
+choice-free: if some coordinate map is injective — and thus an isomorphism — then the
+kernel family is not all-nonzero.  So at the family level "some `θ i ≑ 0ᴬ`" and
 "not all `θ i` nonzero" coincide; together with the forward direction, the subdirect
 decompositions of an SI algebra are exactly those with an isomorphic coordinate.
 
 ```agda
-module _ {I : Type ι}{𝑨 : Algebra α ρ}{𝒜 : I → Algebra αᵃ ρ}(h : hom 𝑨 (⨅ 𝒜)) where
+module _
+  {I : Type ι} {𝑨 : Algebra α ρ} {𝒜 : I → Algebra αᵃ ρ}
+  (h : hom 𝑨 (⨅ 𝒜)) where
 
-  iso-coord⟹¬all-proper :  (∃[ i ] IsInjective (proj₁ (coord 𝒜 h i)))
-                        →  ¬ (∀ i → Nonzero 𝑨 (kerfam 𝒜 h i))
+  iso-coord⟹¬all-proper :
+    ∃[ i ] IsInjective (proj₁ (coord 𝒜 h i)) →  ¬ (∀ i → Nonzero 𝑨 (kerfam 𝒜 h i))
   iso-coord⟹¬all-proper (i , inj) all-nz = all-nz i (coord-inj→below 𝒜 h inj)
 ```
 
-The full converse **structural ⟹ monolith** is *not* added, for the same predicativity
-reason recorded in the [M6-2 design note][].  The natural construction takes
-`μ = ⋀ {θ : θ nonzero}`, the meet of *all* nonzero congruences: if `0ᴬ` is completely
+The full converse **structural ⟹ monolith** is *not* added, for the same
+predicativity reason recorded in the [M6-2 design note][].  The natural construction
+takes `μ = ⋀ {θ : θ nonzero}`, the meet of *all* nonzero congruences: if `0ᴬ` is completely
 meet-irreducible then this family (whose every member is nonzero, so it has no zero
 member) cannot separate, so `μ` is nonzero; and `μ` is below every nonzero congruence,
-hence a monolith.  But that family is indexed by `Σ[ θ ∈ Con 𝑨 ρ ] Nonzero θ`, which
-lives one universe up, so the resulting meet is a `Con 𝑨 ℓ′` with `ℓ′ > ρ` — not a
-monolith *at level `ρ`*, the level `IsMonolith`{.AgdaRecord} fixes.  Restricting to a
-finite, complete list of congruences does not escape the wall either: the complete
-congruence enumerations available constructively (the `cons`{.AgdaField} field of
-`FiniteAlgebra`{.AgdaRecord}, #419) live at the absorbing level `clv α ρ ⊒ ρ`, so the
-finite meet is again above `ρ`.  Stating the converse cleanly would need an impredicative
-(or universe-resized) meet, or a level-generic `IsMonolith`; we record it here as a known
-limitation, as the forward direction is the one consumed downstream.
+hence a monolith.  But that family is indexed by `Σ[ θ ∈ Con 𝑨 ρ ] Nonzero θ`, which lives one
+universe up, so the resulting meet is a `Con 𝑨 ℓ′` with `ℓ′ > ρ` — not a monolith
+*at level `ρ`*, the level `IsMonolith`{.AgdaRecord} fixes.
+
+Restricting to a finite, complete list of congruences does not escape the wall
+either: the complete congruence enumerations available constructively (the
+`cons`{.AgdaField} field of `FiniteCongruences`{.AgdaRecord} in
+[Setoid.Congruences.Finite][]) live at the absorbing level `clv α ρ ⊒ ρ`, so the
+finite meet is again above `ρ`.  Stating the converse cleanly would need an
+impredicative (or universe-resized) meet, or a level-generic `IsMonolith`; we record
+it here as a known limitation, as the forward direction is the one consumed
+downstream.
 
 --------------------------------------
 

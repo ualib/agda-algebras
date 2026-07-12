@@ -3135,46 +3135,6 @@ https://claude.ai/code/session_01MvPrLTCxKjFgsnTMK8j2qZ
 
 ---
 
-### Issue M6-4: Sub(A) as a complete lattice (next Setoid.Algebras.Lattices instance) (#373, closed)
-
-**Labels**: `milestone-6-flrp`
-
-## Description
-
-With the congruence lattice now in place ([#271][], modules `Setoid.Algebras.Congruences.{Lattice,Generation,CompleteLattice}` plus the general `Setoid.Algebras.Lattices.CompleteLattice` record), the natural companion is the **subalgebra lattice**: the subuniverses of a setoid algebra `𝑨`, ordered by inclusion, form a complete lattice `Sub 𝑨`.  This is the second motivating instance of the `CompleteLattice` record and is foundational for the FLRP (every finite lattice question is, after all, about lattices of the form `Con 𝑨` / `Sub 𝑨`).
-
-Most of the hard work already exists in `Setoid.Subalgebras.Subuniverses`:
-
-+  `Subuniverses 𝑨` — the predicate "is a subuniverse" (closed under the basic operations);
-+  `Sg 𝑨 G` — the inductively generated subuniverse, with `sgIsSub` (it is a subuniverse) and `sgIsSmallest` (the generation theorem / universal property);
-+  `⋂s` — an arbitrary intersection of subuniverses is a subuniverse (the infinitary meet).
-
-So assembling the lattice is a "step-3"-style task, closely parallel to the congruence-lattice assembly.
-
-## Tasks
-
-+  [ ] Define `Sub 𝑨` (the type of subuniverses, as a Σ of a predicate with its subuniverse proof) and the inclusion order `_≤_` (= `_⊆_`).
-+  [ ] Meet `B ∧ C = B ∩ C`, join `B ∨ C = Sg(B ∪ C)`.
-+  [ ] `Sub-Lattice : (𝑨 : Algebra α ρ)(ℓ₀ : Level) → Lattice _ _ _`, at the absorbing level `L = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ℓ₀` (where `Sg` stays at `L`).
-+  [ ] Bounds: bottom `Sg ∅` (smallest subuniverse) and top `U` (the whole carrier); `Sub-BoundedLattice`.
-+  [ ] Infinitary meet `⋂` (via `⋂s`) and join `Sg(⋃ …)`; `Sub-CompleteLattice` instantiating the `CompleteLattice` record.
-+  [ ] A small worked example.
-
-## Acceptance criteria
-
-+  [ ] `Sub-Lattice 𝑨` / `Sub-CompleteLattice 𝑨` type-check and satisfy the (complete-)lattice axioms.
-+  [ ] Bounds proved as `⊥`/`⊤`.
-+  [ ] At least one small worked example.
-
-## Notes
-
-+  Placement, mirroring the congruence case (`Setoid.Algebras.Congruences.CompleteLattice`): the instance goes in `Setoid.Subalgebras.CompleteLattice`, instantiating the general record in `Setoid.Algebras.Lattices.CompleteLattice`.
-+  A richer worked example — the **subgroup lattice of a concrete finite group** — is appealing but a sizeable undertaking (defining the group over a signature, classifying its subgroups); it is tracked as a separate follow-up so this PR can stay focused.
-
-[#271]: https://github.com/ualib/agda-algebras/issues/271
-
----
-
 ### Issue M6-5: Converse of Maltsev's theorem: congruence-permutable ⟹ Maltsev term (#411, closed)
 
 **Labels**: `milestone-6-flrp`
@@ -3220,32 +3180,6 @@ Note: #273's text says "the free algebra on two generators"; the standard constr
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
 https://claude.ai/code/session_01MvPrLTCxKjFgsnTMK8j2qZ
-
----
-
-### Issue M6-5: Worked example: the subgroup lattice of a concrete finite group (#374, closed)
-
-**Labels**: `milestone-6-flrp`
-
-## Description
-
-Follow-up to the subalgebra-lattice infrastructure (#373).  Once `Sub 𝑨` is available as a complete lattice, a compelling worked example is the **subgroup lattice of a concrete finite group** — e.g. `ℤ/4ℤ` (the 3-element chain `0 < ⟨2⟩ < ℤ/4ℤ`), the Klein four-group `V₄` (the diamond `M₃`-minus, i.e. `2³`-style with three order-2 subgroups), or `S₃` (the well-known six-subgroup lattice).
-
-This is separated from #373 because it is a sizeable undertaking on its own:
-
-+  realize the group concretely as a setoid algebra over a group signature (the `Classical/` tree has group machinery to draw on);
-+  identify the subuniverses (= subgroups, since the signature includes inverse and identity);
-+  classify them and exhibit the lattice order, ideally matching a known finite lattice.
-
-## Acceptance criteria
-
-+  [ ] A concrete finite group built as a `Setoid` algebra.
-+  [ ] Its subgroups exhibited as elements of `Sub 𝑨`, with the lattice order between them.
-+  [ ] Prose identifying the resulting lattice (chain / diamond / `S₃` lattice).
-
-## Notes
-
-+  Subuniverses of a group algebra are exactly its subgroups precisely because the signature carries the unary inverse and the nullary identity, so closure under the operations forces the subgroup axioms — worth stating explicitly in the example.
 
 ---
 
@@ -3484,6 +3418,310 @@ https://claude.ai/code/session_01B9q9aP34sakGdPgZVaXU2s
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
 https://claude.ai/code/session_01B9q9aP34sakGdPgZVaXU2s
+
+---
+
+### Issue M6-11: Sub(A) as a complete lattice (next Setoid.Algebras.Lattices instance) (#373, closed)
+
+**Labels**: `milestone-6-flrp`
+
+## Description
+
+With the congruence lattice now in place ([#271][], modules `Setoid.Algebras.Congruences.{Lattice,Generation,CompleteLattice}` plus the general `Setoid.Algebras.Lattices.CompleteLattice` record), the natural companion is the **subalgebra lattice**: the subuniverses of a setoid algebra `𝑨`, ordered by inclusion, form a complete lattice `Sub 𝑨`.  This is the second motivating instance of the `CompleteLattice` record and is foundational for the FLRP (every finite lattice question is, after all, about lattices of the form `Con 𝑨` / `Sub 𝑨`).
+
+Most of the hard work already exists in `Setoid.Subalgebras.Subuniverses`:
+
++  `Subuniverses 𝑨` — the predicate "is a subuniverse" (closed under the basic operations);
++  `Sg 𝑨 G` — the inductively generated subuniverse, with `sgIsSub` (it is a subuniverse) and `sgIsSmallest` (the generation theorem / universal property);
++  `⋂s` — an arbitrary intersection of subuniverses is a subuniverse (the infinitary meet).
+
+So assembling the lattice is a "step-3"-style task, closely parallel to the congruence-lattice assembly.
+
+## Tasks
+
++  [ ] Define `Sub 𝑨` (the type of subuniverses, as a Σ of a predicate with its subuniverse proof) and the inclusion order `_≤_` (= `_⊆_`).
++  [ ] Meet `B ∧ C = B ∩ C`, join `B ∨ C = Sg(B ∪ C)`.
++  [ ] `Sub-Lattice : (𝑨 : Algebra α ρ)(ℓ₀ : Level) → Lattice _ _ _`, at the absorbing level `L = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ℓ₀` (where `Sg` stays at `L`).
++  [ ] Bounds: bottom `Sg ∅` (smallest subuniverse) and top `U` (the whole carrier); `Sub-BoundedLattice`.
++  [ ] Infinitary meet `⋂` (via `⋂s`) and join `Sg(⋃ …)`; `Sub-CompleteLattice` instantiating the `CompleteLattice` record.
++  [ ] A small worked example.
+
+## Acceptance criteria
+
++  [ ] `Sub-Lattice 𝑨` / `Sub-CompleteLattice 𝑨` type-check and satisfy the (complete-)lattice axioms.
++  [ ] Bounds proved as `⊥`/`⊤`.
++  [ ] At least one small worked example.
+
+## Notes
+
++  Placement, mirroring the congruence case (`Setoid.Algebras.Congruences.CompleteLattice`): the instance goes in `Setoid.Subalgebras.CompleteLattice`, instantiating the general record in `Setoid.Algebras.Lattices.CompleteLattice`.
++  A richer worked example — the **subgroup lattice of a concrete finite group** — is appealing but a sizeable undertaking (defining the group over a signature, classifying its subgroups); it is tracked as a separate follow-up so this PR can stay focused.
+
+[#271]: https://github.com/ualib/agda-algebras/issues/271
+
+---
+
+### Issue M6-12: Worked example: the subgroup lattice of a concrete finite group (#374, closed)
+
+**Labels**: `milestone-6-flrp`
+
+## Description
+
+Follow-up to the subalgebra-lattice infrastructure (#373).  Once `Sub 𝑨` is available as a complete lattice, a compelling worked example is the **subgroup lattice of a concrete finite group** — e.g. `ℤ/4ℤ` (the 3-element chain `0 < ⟨2⟩ < ℤ/4ℤ`), the Klein four-group `V₄` (the diamond `M₃`-minus, i.e. `2³`-style with three order-2 subgroups), or `S₃` (the well-known six-subgroup lattice).
+
+This is separated from #373 because it is a sizeable undertaking on its own:
+
++  realize the group concretely as a setoid algebra over a group signature (the `Classical/` tree has group machinery to draw on);
++  identify the subuniverses (= subgroups, since the signature includes inverse and identity);
++  classify them and exhibit the lattice order, ideally matching a known finite lattice.
+
+## Acceptance criteria
+
++  [ ] A concrete finite group built as a `Setoid` algebra.
++  [ ] Its subgroups exhibited as elements of `Sub 𝑨`, with the lattice order between them.
++  [ ] Prose identifying the resulting lattice (chain / diamond / `S₃` lattice).
+
+## Notes
+
++  Subuniverses of a group algebra are exactly its subgroups precisely because the signature carries the unary inverse and the nullary identity, so closure under the operations forces the subgroup axioms — worth stating explicitly in the example.
+
+---
+
+### Issue M6-13: FLRP research program — tracking issue (#451)
+
+**Labels**: `research-exploratory`, `flrp-research`
+
+## Description
+
+Umbrella issue for the research program on the Finite Lattice Representation Problem.  The roadmap is `docs/notes/flrp-research-roadmap.md` (added in #450), and the interval-enforceable-properties note it builds on is vendored at `docs/papers/flrp/ieprops/` (arXiv:1205.1927, v4).
+
+The program is organized as six PR-sized work packages (WP-1…WP-6) building the formal infrastructure, and four research phases (RP-1…RP-4) pursuing the interval-enforceable-properties attack described in roadmap § 4.  The critical path to RP-1 is WP-1 → WP-2 → WP-3 → WP-4.
+
+This program is a separate research track from the M7 algebraic-complexity / CSP work and from the M6 infrastructure milestone; do not conflate them (see `CLAUDE.md`).
+
+## Structure
+
++  WP-1…WP-6 — infrastructure and formalization steps, each intended to land as one focused PR; tracked as sub-issues.
++  RP-1…RP-4 — open-ended research phases with the success/kill criteria of roadmap § 4; tracked as sub-issues and reviewed quarterly.
+
+## Acceptance criteria
+
+- [ ] All WP sub-issues are closed.
+- [ ] Each RP phase has either produced results or hit its documented kill criterion.
+
+---
+
+### Issue M6-13a: FLRP WP-1: FLRP.Problem — formal statement and representability predicate (#452)
+
+**Labels**: `research-exploratory`, `flrp-research`
+
+## Description
+
+Create the new top-level tree `src/FLRP/` (barrel plus first submodule `FLRP.Problem`) containing the formal core of the problem: a `Representable` predicate — "there exists a finite algebra whose congruence lattice is isomorphic to `L`" — and the FLRP statement as a type, together with at least one worked instance.  Design guidance: roadmap §§ 6–7 (`docs/notes/flrp-research-roadmap.md`).  Reuse the `FiniteAlgebra` interface from `Setoid.Subalgebras.Subdirect.Finite` and the congruence lattice from `Setoid.Congruences.CompleteLattice`.
+
+Part of #451.
+
+## Tasks
+
+- [ ] `src/FLRP.lagda.md` barrel and `src/FLRP/Problem.lagda.md`, scaffolded per house conventions.
+- [ ] `Representable L` for a finite lattice `L`; choose and document the lattice-presentation and isomorphism notions, preferring existing library or stdlib infrastructure.
+- [ ] The FLRP statement as a type, with prose making clear that it is stated, not asserted.
+- [ ] One worked instance wired to existing examples (e.g. the two-element chain as `Con` of a two-element algebra with no operations), with `L7` referenced in prose as the distinguished open instance.
+
+## Acceptance criteria
+
+- [ ] New modules type-check under `--cubical-compatible --exact-split --safe`.
+- [ ] Every public definition has an explicit type signature and a prose comment.
+- [ ] Changes to existing modules are limited to what promotion of `FiniteAlgebra` (if needed) strictly requires.
+
+---
+
+### Issue M6-13b: FLRP WP-2: group-action infrastructure — subgroups, core, cosets, G-sets, Sub(G), intervals (#453)
+
+**Labels**: `research-exploratory`, `flrp-research`
+
+## Description
+
+Reusable group-theoretic infrastructure needed by the Pálfy–Pudlák bridge (WP-3) and the enforceability framework (WP-4): subgroups as subalgebras with `Sub(G)` as a complete lattice (generalizing the Klein-four worked example `Examples.Setoid.SubgroupLattice`), conjugation/normality and the normal core `Core_G(H)`, cosets with the transitive coset G-set as a unary algebra, and upper intervals `[H, G]` as bounded lattices.  Per roadmap § 6 this lands in the `Classical/` and `Setoid/` trees, not in `FLRP/`, so the library gains value independently of the research program.
+
+Part of #451.
+
+## Tasks
+
+- [ ] Subgroups of a `Group` as subuniverses/subalgebras; `Sub(G)` via `Setoid.Subalgebras.CompleteLattice`.
+- [ ] Conjugation, normal subgroups, and `Core_G(H)` (largest normal subgroup of `G` below `H`).
+- [ ] Cosets `G/H` and the coset G-set as a unary algebra (one operation per group element).
+- [ ] Upper intervals `[H, G]` in `Sub(G)` as bounded lattices.
+- [ ] Dedekind's rule `A ≤ B → A(C ∩ B) = AC ∩ B` at least stated (its proof may land here or in RP-1).
+
+## Acceptance criteria
+
+- [ ] New modules type-check under the standard pragma; changes are additive.
+- [ ] The Klein-four subgroup-lattice example still type-checks.
+
+Scope note: this is the largest WP; splitting into WP-2a (subgroups/core) and WP-2b (cosets/G-sets/intervals) at PR time is acceptable and expected if the diff grows.
+
+---
+
+### Issue M6-13c: FLRP WP-3: Pálfy–Pudlák bridge, easy direction — Con(G ↷ G/H) ≅ [H, G] (#454)
+
+**Labels**: `research-exploratory`, `flrp-research`
+
+## Description
+
+The first substantive FLRP theorem in the library: the congruence lattice of the transitive G-set on the cosets `G/H` is isomorphic to the upper interval `[H, G]` in `Sub(G)`.  Classical references: McKenzie–McNulty–Taylor (Lemma 4.20) and Dixon–Mortimer (Theorem 1.5A); see roadmap § 2 and the introduction of the vendored note `docs/papers/flrp/ieprops/`.  Corollary, wired into `FLRP.Problem`: every group-representable lattice is representable as the congruence lattice of a finite algebra.
+
+Depends on WP-1 and WP-2.  Part of #451.
+
+## Tasks
+
+- [ ] Congruences of the coset G-set correspond to intermediate subgroups (both directions as separate named lemmas).
+- [ ] The order/lattice isomorphism `Con(G ↷ G/H) ≅ [H, G]`, assembled from small lemmas.
+- [ ] Corollary: group representable implies representable, in `FLRP.Problem` terms.
+
+## Acceptance criteria
+
+- [ ] Type-checks under `--safe`; each direction of the correspondence is its own lemma; every public definition carries prose.
+
+---
+
+### Issue M6-13d: FLRP WP-4: FLRP.Enforceable — IE, cf-IE, min-IE, and the no-go lemmas (#455)
+
+**Labels**: `research-exploratory`, `flrp-research`
+
+## Description
+
+Formalize § 2 of the vendored note (`docs/papers/flrp/ieprops/`): the definitions of *interval enforceable* (IE), *core-free interval enforceable* (cf-IE), *min-IE*, and *group representable*, with the vacuity subtlety handled by tracking group representability of the enforcing lattice explicitly.  Then the first structural results of its § 3: Lemma 3.1 (if the complementary class is closed under homomorphic images, cf-IE upgrades to IE), the fattening remark (`[H × K, G × K] ≅ [H, G]`, so solvability is not IE), and Lemma 3.2 (a property and its negation cannot both be IE via group-representable lattices).  This machine-checks why the program lives at the core-free level (roadmap § 4).
+
+Depends on WP-2 (WP-3 is helpful but not required).  Part of #451.
+
+## Tasks
+
+- [ ] `FLRP/Enforceable.lagda.md` with the four definitions and representability tracking.
+- [ ] Fattening lemma `[H × K, G × K] ≅ [H, G]` (needs direct products of groups).
+- [ ] Lemma 3.1 and Lemma 3.2, with names traceable to the note.
+- [ ] Statement (hypotheses named, proof deferred to RP-1) of the parachute meta-theorem.
+
+## Acceptance criteria
+
+- [ ] Type-checks under `--safe`; no postulates; deferred results appear only as explicit hypotheses.
+
+---
+
+### Issue M6-13e: FLRP WP-5: closure toolkit — products, ordinal sums, Kurzweil–Netter duality (#456)
+
+**Labels**: `research-exploratory`, `flrp-research`
+
+## Description
+
+Formalize closure of the class of representable lattices under finite direct products and ordinal sums, and establish the `FLRP.Assumptions` registry pattern by recording duality (Kurzweil 1985, Netter 1986) as its first entry — a precise statement with citation, imported as an explicit hypothesis, keeping `--safe`.  Stretch goal: reprove Netter's duality construction formally; the content is finite and combinatorial, plausibly tractable, and Netter's proof may never have been published, so a formal reproof is independently valuable (roadmap § 7).
+
+Depends on WP-1.  Part of #451.
+
+## Tasks
+
+- [ ] Product closure of `Representable`.
+- [ ] Ordinal-sum closure of `Representable`.
+- [ ] `FLRP/Assumptions.lagda.md` with the duality entry (statement, source, citation discipline documented).
+- [ ] Stretch: formal proof of duality closure via the Kurzweil–Netter construction.
+
+## Acceptance criteria
+
+- [ ] Type-checks under `--safe`; the assumptions registry documents every imported statement with its citation.
+
+---
+
+### Issue M6-13f: FLRP WP-6: certificate pipeline — schema, Agda checker, GAP/SAT emitters (#457)
+
+**Labels**: `research-exploratory`, `flrp-research`
+
+## Description
+
+External searches (GAP, UACalc, SAT/model finders) must never be trusted directly: they emit finite certificate data — operation tables plus a lattice-isomorphism witness — which Agda re-checks by decision over the finite carrier, in exactly the style of `Examples.Classical.Lattices.L7`.  Build the certificate schema, the generic Agda checker, at least one emitter script, and a pilot re-verification of one thesis-era small-lattice representation end-to-end.  Search scripts and raw logs live outside `src/` (roadmap § 6; they move to a companion repo if they grow).
+
+Depends on WP-1.  Part of #451.
+
+## Tasks
+
+- [ ] Certificate schema (finite algebra tables, target lattice, isomorphism witness).
+- [ ] Generic checker: given a certificate, decide `Con(𝑨) ≅ L` over the finite carrier.
+- [ ] One emitter (GAP or SAT side) producing the schema.
+- [ ] Pilot: re-verify one small-lattice representation from the thesis era.
+
+## Acceptance criteria
+
+- [ ] A certificate produced by an external tool round-trips to a type-checked Agda proof with no manual editing beyond file placement.
+
+---
+
+### Issue M6-13g: FLRP RP-1: formalize the IE framework end-to-end (parachute theorems) (#458)
+
+**Labels**: `research-exploratory`, `flrp-research`
+
+## Description
+
+Research phase continuing from WP-4 through § 3 of the vendored note (`docs/papers/flrp/ieprops/`): Dedekind's rule and the antichain corollary (Corollary 3.5), the parachute construction `𝒫(L₁, …, Lₙ)`, Theorem 3.6 ((B) ⟺ (C)), Lemma 3.7 (a core-free parachute representation forces `G` subdirectly irreducible, nonsolvable, with `NH = G` and `C_G(N) = 1` for all nontrivial `N ⊴ G`), and Corollary 3.8 (cf-IE properties are closed under finite conjunction).  The phase is capped by the machine-checked strategy meta-theorem: finitely many cf-IE classes with empty intersection imply the corresponding parachute is not group representable, hence — with Pálfy–Pudlák imported as an explicit hypothesis — the FLRP has a negative answer.  The wreath Lemma 3.3 (requires wreath products and the double Kurzweil construction) either closes this phase or moves to RP-4.
+
+Depends on WP-2 and WP-4.  Part of #451; roadmap § 4.
+
+## Exit criterion
+
+- [ ] The strategy meta-theorem type-checks under `--safe` with an explicit, auditable assumption registry.
+- [ ] A short design note in `docs/notes/` records the formalization decisions and any divergences from the note's paper proofs.
+
+---
+
+### Issue M6-13h: FLRP RP-2: the enforcement catalog (#459)
+
+**Labels**: `research-exploratory`, `flrp-research`
+
+## Description
+
+Build the machine-readable catalog of "interval shape forces group structure" theorems, each recast as a precise (cf-/min-)IE statement with an Agda statement — assumption-parameterized wherever the proof stays on paper.  Seed entries, per roadmap § 4: the note's classes `𝒢₀` (nonsolvable; IE), `𝒢₁` (neither alternating nor symmetric; IE), `𝒢₂` (subdirectly irreducible), `𝒢₃` (no nontrivial abelian normal subgroup), `𝒢₄` (`C_G(M) = 1` for all nontrivial normal `M`) — the last three cf-IE via parachutes.  External entries: Pálfy's solvable-exclusion lattices; Köhler/Feit `M₇` and Pálfy's minimality analysis of Feit's examples (min-IE); Baddeley–Lucchini reductions; Börner; Aschbacher's `D∆`/signalizer theorems specialized to parachutes (whose interiors are disconnected); Lucchini–Moscatiello–Palcoux–Spiga Boolean overgroup lattices.
+
+Depends on WP-4; grows alongside RP-1.  Part of #451.
+
+## Exit criterion
+
+- [ ] A catalog module plus survey note exists, with at least the note's five classes and two external entries formalized as statements.
+- [ ] Each entry records its source, its enforcing lattice(s), and whether the proof is formalized or imported as a hypothesis.
+
+---
+
+### Issue M6-13i: FLRP RP-3: hunt for an empty intersection of cf-IE classes (#460)
+
+**Labels**: `research-exploratory`, `flrp-research`
+
+## Description
+
+The kill shot, per Theorem 3.6 of the vendored note: exhibit finitely many cf-IE classes whose intersection is empty, and the FLRP has a negative answer (a property and its negation is the special case `n = 2`).  The wreath no-go (Lemma 3.3) constrains the hunt: every cf-IE-by-group-representable class contains wreath products `S ≀ Ū` for every finite nonabelian simple `S`, so every member of a candidate family is wreath-rich, and the joint tension must come from finer invariants — the structure of the unique minimal normal subgroup forced by Lemma 3.7, its centralizer and complement behavior, and the permutation action on it.
+
+Method discipline: use computation as cheap falsification.  Before investing in a non-representability proof for a candidate parachute, search for representations of it over the small-groups and primitive-groups libraries (Hulpke's intermediate-subgroup algorithms), and attempt UA-side representations of small candidates directly; certificates flow through the WP-6 pipeline.
+
+Depends on RP-1 and RP-2.  Part of #451; success/kill criteria in roadmap § 4.
+
+## Exit criterion
+
+- [ ] Success: a finite lattice with a machine-checked non-representability proof (modulo the explicit assumption registry).
+- [ ] Kill: two consecutive quarterly reviews with no viable candidate family, documented in the tracking issue.
+
+---
+
+### Issue M6-13j: FLRP RP-4: dead-end branch — can a property and its negation both be cf-IE? (#461)
+
+**Labels**: `research-exploratory`, `flrp-research`
+
+## Description
+
+Prove or refute the implicit conjecture of the vendored note: a group property and its negation cannot both be core-free interval enforceable by group-representable lattices.  The wreath no-go (Lemma 3.3, via the double Kurzweil construction) is the prototype tool and already excludes the classes omitting wreath products `S ≀ Ū` (solvable, alternating/symmetric, almost simple); the phase extends it toward a structure theory of the cf-IE class, and more generally characterizes what an empty-intersection family (RP-3) would have to look like.
+
+Either outcome is valuable.  A proof is the honorable dead end for the `n = 2` case and independently a publishable structure theorem about intervals in subgroup lattices; a refutation is a concrete path toward a negative FLRP answer.  A sobering asymmetry to keep in view: the existence of empty-intersection families cannot be ruled out without proving statement (B) itself, so the realistic aim is structure theorems constraining the families we can actually construct.
+
+Depends on RP-1 (wreath products, Kurzweil construction).  Part of #451; roadmap § 4.
+
+## Exit criterion
+
+- [ ] A theorem (formalized, or paper-proved with a formal statement) settling the `n = 2` conjecture in either direction, or a documented reduction of it to named open questions.
 
 <!-- END GENERATED: milestone-6 -->
 
@@ -3895,7 +4133,7 @@ GitHub's "Transfer ownership" feature (Settings → General → Danger zone → 
 
 ---
 
-### Issue M10-3: Type-on-hover tooltips for Agda tokens (1Lab-style), with a toggle (#429)
+### Issue M10-3: Type-on-hover tooltips for Agda tokens (1Lab-style), with a toggle (#429, closed)
 
 **Labels**: `documentation`, `milestone-10-polish`
 

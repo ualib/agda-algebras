@@ -105,11 +105,33 @@ the index — distinct pairs — at `α ⊔ ρ`, so `finiteSubdirectSIRep` has t
 +  A genuinely subdirectly irreducible **worked example** over a concrete signature
    (a small algebra whose congruence lattice is enumerated by hand), exercising the
    maximal-congruence search rather than the degenerate `𝟏` witness.
-+  A **builder** producing `FiniteAlgebra` from more primitive data for tractable
-   classes — e.g. a carrier `≃ Fin n` whose every congruence is *given* with a
-   decision procedure — packaging the `complete` field once and for all.
++  A **builder** producing the finiteness witnesses from more primitive data for
+   tractable classes — e.g. a carrier `≃ Fin n` whose every congruence is *given*
+   with a decision procedure — packaging the `complete` field once and for all.
 +  Connecting finite subdirect representation to the FLRP setting (M6's target),
    where finiteness is exactly the hypothesis.
+
+## Update: the interface was split and relocated (#464)
+
+The `FiniteAlgebra` record described above originally lived in
+`Setoid.Subalgebras.Subdirect.Finite` and bundled the carrier-level and the
+congruence-level finiteness data in one record.  Issue #464 split it into two
+records at canonical locations, anticipating reuse in the FLRP work:
+
++  `FiniteAlgebra 𝑨` (`Setoid.Algebras.Finite`) — the *bare* interface: decidable
+   `≈`, `card`, `enum`, `enum-sur`.
++  `FiniteCongruences 𝑨` (`Setoid.Congruences.Finite`) — the congruence-side
+   interface: `clv`, `DecCon`, and the `cons`/`complete` enumeration with its
+   `witness*` helpers; the module also proves `≈-dec` (a `FiniteCongruences`
+   witness decides setoid equality, via the diagonal's listed representative).
+
+The two are logically independent (an infinite, constructively simple algebra with
+decidable equality inhabits the second but not the first), and
+`Setoid.Subalgebras.Subdirect.Finite` now takes both as module parameters:
+`finite-Birkhoff 𝑭 𝑪`.  The `𝟏` non-vacuity witnesses moved with their records
+(`𝟏` / `𝟏-FiniteAlgebra` to `Setoid.Algebras.Finite`, `𝟏-Δ` /
+`𝟏-FiniteCongruences` to `Setoid.Congruences.Finite`), while the theorem
+application `𝟏-SubdirectlyRepresentable` stays with the theorem.
 
 [M6-8]: https://github.com/ualib/agda-algebras/issues/419
 [M6-2]: https://github.com/ualib/agda-algebras/issues/272

@@ -1,0 +1,155 @@
+\def\cprime{$'$} \def\cprime{$'$}
+  \def\ocirc#1{\ifmmode\setbox0=\hbox{$#1$}\dimen0=\ht0 \advance\dimen0
+  by1pt\rlap{\hbox to\wd0{\hss\raise\dimen0
+  \hbox{\hskip.2em$\scriptscriptstyle\circ$}\hss}}#1\else {\accent"17 #1}\fi}
+\begin{thebibliography}{10}
+
+\bibitem{Aschbacher:2009}
+Michael Aschbacher and John Shareshian.
+\newblock Restrictions on the structure of subgroup lattices of finite
+  alternating and symmetric groups.
+\newblock {\em J. Algebra}, 322(7):2449--2463, 2009.
+\newblock URL: \url{http://dx.doi.org/10.1016/j.jalgebra.2009.05.042}.
+
+\bibitem{Lucchini:1997}
+Robert Baddeley and Andrea Lucchini.
+\newblock On representing finite lattices as intervals in subgroup lattices of
+  finite groups.
+\newblock {\em J. Algebra}, 196(1):1--100, 1997.
+\newblock URL: \url{http://dx.doi.org/10.1006/jabr.1997.7069}.
+
+\bibitem{BBE:2006}
+Adolfo Ballester-Bolinches and Luis~M. Ezquerro.
+\newblock {\em Classes of finite groups}, volume 584 of {\em Mathematics and
+  Its Applications (Springer)}.
+\newblock Springer, Dordrecht, 2006.
+
+\bibitem{Basile:2001}
+Alberto Basile.
+\newblock {\em Second maximal subgroups of the finite alternating and symmetric
+  groups.}
+\newblock PhD thesis, Australian National University, Canberra, April 2001.
+
+\bibitem{Berman:1970}
+Joel Berman.
+\newblock {\em Congruence lattices of finite universal algebras}.
+\newblock PhD thesis, University of Washington, 1970.
+\newblock URL: \url{http://db.tt/mXUVTzSr}.
+
+\bibitem{Borner:1999}
+Ferdinand B{\"o}rner.
+\newblock A remark on the finite lattice representation problem.
+\newblock In {\em Contributions to general algebra, 11 ({O}lomouc/{V}elk\'e
+  {K}arlovice, 1998)}, pages 5--38, Klagenfurt, 1999. Heyn.
+
+\bibitem{Dedekind:1877}
+Richard Dedekind.
+\newblock {\"U}ber die {A}nzahl der {I}deal-classen in den verschiedenen
+  {O}rdnungen eines endlichen {K}\"orpers.
+\newblock In {\em {F}estschrift zur {S}aecularfeier des {G}eburtstages von
+  {C}.~{F}.~{G}auss}, pages 1--55. {V}ieweg, {B}raunschweig, 1877.
+\newblock see {G}es. {W}erke, {B}and {I}, 1930, 105--157.
+
+\bibitem{DeMeo:thesis}
+William DeMeo.
+\newblock {\em Congruence lattices of finite algebras}.
+\newblock PhD thesis, {U}niversity of {H}awai'i at {M}\={a}noa, Honolulu, HI,
+  May 2012.
+\newblock \href {http://arxiv.org/abs/1204.4305} {\path{arXiv:1204.4305}}.
+
+\bibitem{Dixon:1996}
+John~D. Dixon and Brian Mortimer.
+\newblock {\em Permutation groups}, volume 163 of {\em Graduate Texts in
+  Mathematics}.
+\newblock Springer-Verlag, New York, 1996.
+
+\bibitem{Doerk:1992}
+Klaus Doerk and Trevor Hawkes.
+\newblock {\em Finite soluble groups}, volume~4 of {\em de Gruyter Expositions
+  in Mathematics}.
+\newblock Walter de Gruyter \& Co., Berlin, 1992.
+
+\bibitem{Kohler:1983}
+Peter K{\"o}hler.
+\newblock {$M_{7}$} as an interval in a subgroup lattice.
+\newblock {\em Algebra Universalis}, 17(3):263--266, 1983.
+\newblock URL: \url{http://dx.doi.org/10.1007/BF01194535}.
+
+\bibitem{Kurzweil:1985}
+Hans Kurzweil.
+\newblock Endliche {G}ruppen mit vielen {U}ntergruppen.
+\newblock {\em J. Reine Angew. Math.}, 356:140--160, 1985.
+\newblock URL: \url{http://dx.doi.org/10.1515/crll.1985.356.140}.
+
+\bibitem{Lucchini:1994a}
+Andrea Lucchini.
+\newblock Intervals in subgroup lattices of finite groups.
+\newblock {\em Comm. Algebra}, 22(2):529--549, 1994.
+\newblock \href {http://dx.doi.org/10.1080/00927879408824862}
+  {\path{doi:10.1080/00927879408824862}}.
+
+\bibitem{alvi:1987}
+Ralph~N. McKenzie, George~F. McNulty, and Walter~F. Taylor.
+\newblock {\em Algebras, lattices, varieties. {V}ol. {I}}.
+\newblock Wadsworth \& Brooks/Cole, Monterey, CA, 1987.
+
+\bibitem{Palfy:1988}
+P{\'e}ter~P{\'a}l P{\'a}lfy.
+\newblock On {F}eit's examples of intervals in subgroup lattices.
+\newblock {\em J. Algebra}, 116(2):471--479, 1988.
+\newblock \href {http://dx.doi.org/10.1016/0021-8693(88)90230-X}
+  {\path{doi:10.1016/0021-8693(88)90230-X}}.
+
+\bibitem{Palfy:1995}
+P{\'e}ter~P{\'a}l P{\'a}lfy.
+\newblock Intervals in subgroup lattices of finite groups.
+\newblock In {\em Groups '93 {G}alway/{S}t.\ {A}ndrews, {V}ol.\ 2}, volume 212
+  of {\em London Math. Soc. Lecture Note Ser.}, pages 482--494. Cambridge Univ.
+  Press, Cambridge, 1995.
+\newblock \href {http://dx.doi.org/10.1017/CBO9780511629297.014}
+  {\path{doi:10.1017/CBO9780511629297.014}}.
+
+\bibitem{Palfy:2001}
+P{\'e}ter~P{\'a}l P{\'a}lfy.
+\newblock Groups and lattices.
+\newblock In {\em Groups {S}t. {A}ndrews 2001 in {O}xford. {V}ol. {II}}, volume
+  305 of {\em London Math. Soc. Lecture Note Ser.}, pages 428--454, Cambridge,
+  2003. Cambridge Univ. Press.
+\newblock \href {http://dx.doi.org/10.1017/CBO9780511542787.014}
+  {\path{doi:10.1017/CBO9780511542787.014}}.
+
+\bibitem{Palfy:1980}
+P{\'e}ter~P{\'a}l P{\'a}lfy and Pavel Pudl{\'a}k.
+\newblock Congruence lattices of finite algebras and intervals in subgroup
+  lattices of finite groups.
+\newblock {\em Algebra Universalis}, 11(1):22--27, 1980.
+\newblock \href {http://dx.doi.org/10.1007/BF02483080}
+  {\path{doi:10.1007/BF02483080}}.
+
+\bibitem{Robinson:1996}
+Derek J.~S. Robinson.
+\newblock {\em A course in the theory of groups}, volume~80 of {\em Graduate
+  Texts in Mathematics}.
+\newblock Springer-Verlag, New York, second edition, 1996.
+
+\bibitem{Rose:1978}
+John~S. Rose.
+\newblock {\em A course on group theory}.
+\newblock Dover Publications Inc., New York, 1994.
+\newblock Reprint of the 1978 original [Cambridge University Press; MR0498810
+  (58 \#16847)].
+
+\bibitem{Rottlaender:1928}
+Ada Rottlaender.
+\newblock Nachweis der {E}xistenz nicht-isomorpher {G}ruppen von gleicher
+  {S}ituation der {U}ntergruppen.
+\newblock {\em Math. Z.}, 28(1):641--653, 1928.
+\newblock URL: \url{http://dx.doi.org/10.1007/BF01181188}.
+
+\bibitem{Schmidt:1994}
+Roland Schmidt.
+\newblock {\em Subgroup lattices of groups}, volume~14 of {\em de Gruyter
+  Expositions in Mathematics}.
+\newblock Walter de Gruyter \& Co., Berlin, 1994.
+
+\end{thebibliography}
