@@ -133,6 +133,14 @@ decidable equality inhabits the second but not the first), and
 `𝟏-FiniteCongruences` to `Setoid.Congruences.Finite`), while the theorem
 application `𝟏-SubdirectlyRepresentable` stays with the theorem.
 
+## Update (WP-7 A1): finite Birkhoff uses the classical bridge essentially
+
+Work package WP-7 (issue #466), which builds the decidable congruence layer of ADR-008, includes audit A1: does `finite-Birkhoff` survive on the constructive Layer-D data (bare `FiniteAlgebra` plus the new `FiniteCongruencesᵈ` of `Setoid.Congruences.Finite.Decidable`, whose completeness quantifies only over `DecCon`), or does it genuinely need the Layer-S→Layer-D bridge — the `complete` field of `FiniteCongruences`, which quantifies over all semantic `Con`?
+
+The verdict is that it **needs the bridge**; `completeᵈ` does not suffice.  The dependence is located precisely in the monolith condition.  `finite-Birkhoff 𝑭 𝑪 = SIRep→Representable (finiteSubdirectSIRep 𝑭 𝑪)`, and each quotient's subdirect irreducibility (`SI-Q`) supplies `HasMonolith`, whose field `mono-least : (ψ : Con Q ℓ) → Nonzero ψ → μ ⊆ ψ` universally quantifies over *every* congruence `ψ` of the quotient `Q`.  In the proof `μ-least`, that arbitrary `ψ` is carried to a base-algebra congruence `φ = Q→A ψ : Con 𝑨 ℓ` and the step `ψab with complete φ` applies `complete` to it.  Since `φ` is a bare semantic congruence with no decision procedure, `completeᵈ` — which accepts only a `DecCon` — cannot be applied, and there is no constructive way to equip an arbitrary `ψ`/`φ` with one; that is exactly the classical content the WP-1 no-go theorem pins to `complete`.
+
+So `finite-Birkhoff` is a genuine Layer-S theorem about the full congruence lattice and is exactly the kind of result ADR-008 expects to import the bridge (L4) explicitly.  The FLRP program's working representability moves to `Representableᵈ` at Layer D, which the L3/L5 machinery reaches with no axiom; `finite-Birkhoff` remains the semantic companion.  The full A1 finding, alongside audit A2 (the WP-2 group modules are Layer-D ready with no change), is recorded in `docs/notes/flrp-wp7-audits.md`.
+
 [M6-8]: https://github.com/ualib/agda-algebras/issues/419
 [M6-2]: https://github.com/ualib/agda-algebras/issues/272
 [`m6-2-subdirect.md`]: ./m6-2-subdirect.md
