@@ -2,7 +2,7 @@
 
 # FLRP design note: the two-layer congruence discipline for finite algebras
 
-This note records the design discussion triggered by the constructivity no-go theorem `chain₂-ConIso→WLEM` of `FLRP.Problem` (PR #462, work package WP-1, issue #452) and proposes the architecture that the FLRP program should adopt in response.  Companion documents: the roadmap `docs/notes/flrp-research-roadmap.md` (§§ 6–7), the finite-Birkhoff note `docs/notes/m6-8-finite-birkhoff.md`, and the module `Setoid.Subalgebras.Subdirect.Finite`.  Status: **proposal, for review discussion on PR #462**; nothing below is implemented except where explicitly noted.
+This note records the design discussion triggered by the constructivity no-go theorem `chain₂-ConIso→WLEM` of `FLRP.Problem` (PR #462, work package WP-1, issue #452) and proposes the architecture that the FLRP program should adopt in response.  Companion documents: the roadmap `docs/notes/flrp-research-roadmap.md` (§§ 6–7), the finite-Birkhoff note `docs/notes/m6-8-finite-birkhoff.md`, and the module `Setoid.Subalgebras.Subdirect.Finite`.  Status: **ratified 2026-07-12** — the § 6 decision points are resolved below and the decision is promoted to ADR-008 (`docs/adr/008-two-layer-congruence-discipline.md`); implementation is tracked by work package WP-7.
 
 ## 1. The trigger, and the question it raises
 
@@ -26,12 +26,12 @@ The deeper fact: constructively, `Con 𝟚` *is not* the two-element lattice —
 
 ### 2.3 The review's principles, relocated
 
-+  **Reconstructibility**.  For a decidable congruence `d` on a finite algebra, the list of its related pairs is finite data, and `proj₁ d ≑ Cg ⟨related pairs⟩` holds constructively (`base` gives one inclusion, `Cg-least` the other).  Conversely, `Cg` of a finite pair list on a *tabulated* algebra (§ 3) has decidable membership.  So "reconstructible from its generating pairs" is not a constraint one can impose on `Con`; it is precisely the characterization of the decidable layer.
++  **Reconstructibility**.  For a decidable congruence `d` on a finite algebra, the list of its related pairs is finite data, and `proj₁ d ≑ Cg ⟨related pairs⟩` holds constructively (`base` gives one inclusion, `Cg-least` the other).  Conversely, `Cg` of a finite pair list on a *finite finitary* algebra (§ 3) has decidable membership.  So "reconstructible from its generating pairs" is not a constraint one can impose on `Con`; it is precisely the characterization of the decidable layer.
 +  **Computing `Δ` and `∇`**.  On the decidable layer, `Δ` is the unique list entry relating no distinct enumerated pair, found by running `_∈?_`; the corresponding identification under any isomorphism is a computation, exactly as the review demands.
 
 ## 3. The design
 
-Terminology: a **tabulated signature** has finitely many operation symbols, each of finite arity; a **tabulated algebra** is an algebra over a tabulated signature together with the `FiniteAlgebra` carrier data (decidable `≈`, finite surjective enumeration).  `Sig-Lattice` is tabulated; `Sig-Unary A` is tabulated whenever `A` is the carrier of a tabulated group, so the WP-2 coset algebras and the WP-3 bridge fall inside this scope.
+Terminology (standard, with the constructive readings pinned down).  A **finite finitary signature** has a finite type of operation symbols, each of finite arity; a **finite finitary algebra** is an algebra over a finite finitary signature with a finite carrier.  Constructively, "finite carrier" needs one clarification.  For a *bijective* enumeration (Bishop-finiteness, `Fin n ≃ carrier`) decidable equality is derivable — `x ≈ y` exactly when the indices agree — so carrier-finiteness in that sense does imply decidable equality.  For a merely *surjective* enumeration it does not: glue two points along a proposition `P` (`x ≈ y iff x ≡ y ∨ P`); the identity map still enumerates the carrier, yet deciding `0 ≈ 1` decides `P`.  The library's `FiniteAlgebra` carrier data — a surjective enumeration *plus* an explicit `_≟_` field — is chosen because surjective enumerations pass to quotients for free: `G/H` is the same carrier under a coarser equality, so the WP-2 coset algebras stay finite finitary with no choice of coset representatives; and the two fields together are equivalent to Bishop-finiteness (deduplicate the enumeration using `_≟_`).  `Sig-Lattice` is finite finitary; `Sig-Unary A` is finite finitary whenever `A` is the carrier of a finite group, so the WP-2 coset algebras and the WP-3 bridge fall inside this scope.  One caution keeps § 2.2 in view: finiteness of the carrier decides equality of *elements*, never membership in arbitrary *predicates or relations* over them — the switch congruence lives one level up, which is why the decidable layer is a discipline and not a corollary of finiteness.
 
 The proposal is a **two-layer discipline**:
 
@@ -40,31 +40,31 @@ The proposal is a **two-layer discipline**:
 
 The lemma stack (statements the implementation must realize; names indicative):
 
-+  **L1 (presentation decidability)**.  On a tabulated algebra, membership in `Cg R` is decidable for every finite pair list `R`: the congruence closure of `R ∪ Δ` under symmetry, transitivity, and the finitely many finite-arity operations stabilizes on a finite carrier.  Hence `Cg R` upgrades to a `DecCon`.
-+  **L2 (reconstruction)**.  On a finite algebra, every `DecCon` is `≑` to `Cg` of its related-pairs list; combined with L1, the finitely presented congruences and the decidable congruences coincide up to `≑` on tabulated algebras.
-+  **L3 (constructive completeness for the decidable layer)**.  On a tabulated algebra one can enumerate all Bool-valued binary tables on `Fin card`, filter the compatible equivalences, and prove the resulting list complete for `DecCon` up to `≑` — with no classical axiom.  This yields a fully constructive interface `FiniteAlgebraᵈ` (decidable `≈`, enumeration, and a `DecCon`-complete list), of which the current `FiniteAlgebra` is the strengthening by the classical field.  Feasibility note: the enumeration is exponential and exists for the sake of the completeness *proof*; in practice the list is supplied by certificates (WP-6), not by running the enumeration.
++  **L1 (presentation decidability)**.  On a finite finitary algebra, membership in `Cg R` is decidable for every finite pair list `R`: the congruence closure of `R ∪ Δ` under symmetry, transitivity, and the finitely many finite-arity operations stabilizes on a finite carrier.  Hence `Cg R` upgrades to a `DecCon`.
++  **L2 (reconstruction)**.  On a finite algebra, every `DecCon` is `≑` to `Cg` of its related-pairs list; combined with L1, the finitely presented congruences and the decidable congruences coincide up to `≑` on finite finitary algebras.
++  **L3 (constructive completeness for the decidable layer)**.  On a finite finitary algebra one can enumerate all Bool-valued binary tables on `Fin card`, filter the compatible equivalences, and prove the resulting list complete for `DecCon` up to `≑` — with no classical axiom.  This yields a fully constructive interface `FiniteAlgebraᵈ` (decidable `≈`, enumeration, and a `DecCon`-complete list), of which the current `FiniteAlgebra` is the strengthening by the classical field.  Feasibility note: the enumeration is exponential and exists for the sake of the completeness *proof*; in practice the list is supplied by certificates (WP-6), not by running the enumeration.
 +  **L4 (the single classical bridge)**.  The current `complete` field — every semantic congruence is `≑` to a decidable one — becomes the *one* registered classical assumption of the program (planned `FLRP.Assumptions`), stated once and imported explicitly by any result that genuinely needs to pass from Layer S to Layer D.  Its strength (between WLEM and LEM, § 2.1) is documented at the registration site.
-+  **L5 (`Representableᵈ`)**.  The poset of `DecCon`s up to `≑` on a tabulated algebra is a finite lattice with decidable order; `Representableᵈ 𝑳` asserts an order isomorphism from it to `𝑳`, and `FLRP-Statementᵈ` quantifies as before.  Deliverables: the constructive instance for `chain₂` (a decidable congruence on `𝟚` decides its own value at the distinct pair, so the obstruction of § 1 vanishes); and, under L4, the equivalence `Representable 𝑳 ↔ Representableᵈ 𝑳`.
++  **L5 (`Representableᵈ`)**.  The poset of `DecCon`s up to `≑` on a finite finitary algebra is a finite lattice with decidable order; `Representableᵈ 𝑳` asserts an order isomorphism from it to `𝑳`, and `FLRP-Statementᵈ` quantifies as before.  Deliverables: the constructive instance for `chain₂` (a decidable congruence on `𝟚` decides its own value at the distinct pair, so the obstruction of § 1 vanishes); and, under L4, the equivalence `Representable 𝑳 ↔ Representableᵈ 𝑳`.
 
-Interpretation: `Representableᵈ` becomes the program's working notion, and it is arguably the *more faithful* formalization of the informal FLRP — the "finite algebra" of Pálfy–Pudlák and of every UACalc computation is the tabulated object with concretely presented congruences.  `Representable` (Layer S) remains the stated semantic form, the two connected by L4 exactly once.
+Interpretation: `Representableᵈ` becomes the program's working notion, and it is arguably the *more faithful* formalization of the informal FLRP — the "finite algebra" of Pálfy–Pudlák and of every UACalc computation is the finite finitary object with concretely presented congruences.  `Representable` (Layer S) remains the stated semantic form, the two connected by L4 exactly once.
 
 ## 4. Audit tasks
 
 +  **A1**.  Determine which downstream consumers of `FiniteAlgebra` use `complete` essentially — in particular whether `finiteSubdirectSIRep` and finite Birkhoff (M6-8) survive on `FiniteAlgebraᵈ` alone or genuinely need the bridge; either answer is informative and belongs in the m6-8 note as an addendum.
-+  **A2**.  Check that the WP-2 group modules need no change: for tabulated groups, subgroup membership, normality, cores, cosets, and intervals in `Sub(G)` are decidable, so the WP-3 bridge should be stated at Layer D from the start.
-+  **A3**.  Fix the packaging of "tabulated signature/algebra" (new records versus fields on `FiniteAlgebraᵈ`), respecting the one-canonical-form rule.
++  **A2**.  Check that the WP-2 group modules need no change: for finite groups carrying the standard finiteness data, subgroup membership, normality, cores, cosets, and intervals in `Sub(G)` are decidable, so the WP-3 bridge should be stated at Layer D from the start.
++  **A3**.  Fix the Agda packaging of finite finitary signatures/algebras (a `FiniteSignature` record versus fields on `FiniteAlgebraᵈ`), respecting the one-canonical-form rule; the *terminology* is now fixed (finite finitary, § 6), only the packaging remains open.
 
 ## 5. Impact on the work packages
 
 +  **WP-1 (#452, PR #462)**.  No change required; the module already frames `Representable` as the semantic statement and names the decidable reformulation as its sequel.  This note supersedes that one-line pointer with a concrete design.
-+  **WP-3 (#454)**.  State `Con (G ↷ G/H) ≅ [H, G]` at Layer D (tabulated groups); the Layer S version follows under L4 if ever needed.
++  **WP-3 (#454)**.  State `Con (G ↷ G/H) ≅ [H, G]` at Layer D (finite groups with the standard finiteness data); the Layer S version follows under L4 if ever needed.
 +  **WP-4 (#455) and RP-1 (#458)**.  Unaffected in substance: the enforceability framework lives on the group side, where tabulated data keeps everything decidable.
 +  **WP-6 (#457)**.  Certificates target `Representableᵈ`, as WP-1 already flagged; L1–L3 are the checker's mathematical core.
 +  **New work package (proposed WP-7)**.  Implement L1–L5 and the audits A1–A3; PR-sized slices: (i) L1+L2, (ii) L3 + `FiniteAlgebraᵈ`, (iii) L4 registration + L5 with the `chain₂` instance.
 
-## 6. Decision points for reviewers
+## 6. Decision points — resolved 2026-07-12
 
-+  Whether `Representable` keeps its name with `Representableᵈ` alongside (proposed), or the pair is renamed (`Representableˢ`/`Representableᵈ`) at the cost of touching PR #462.
-+  Whether the `FiniteAlgebra` refactor (L3/L4) lands before or after WP-3; the proposal is before, since WP-3 should be stated at Layer D and A1 may simplify m6-8's trusted base.
-+  Naming and packaging for tabulated signatures/algebras (A3).
-+  Whether this note should be promoted to an ADR ("two-layer congruence discipline") once ratified, given it constrains all future finite-algebra work, not only the FLRP tree.
++  **Naming**: `Representable` keeps its name, with `Representableᵈ` alongside.  Ratified as proposed.
++  **Ordering**: the `FiniteAlgebra` refactor (L3/L4) lands before WP-3.  Ratified as proposed.
++  **Terminology**: the standard name **finite finitary algebra** replaces the draft's "tabulated algebra" throughout (reviewer's amendment, adopted in § 3); the constructive content — surjective enumeration plus decidable equality, jointly equivalent to Bishop-finiteness, chosen for quotient-compatibility — is recorded in § 3, and only the Agda packaging remains open (audit A3).
++  **ADR**: promoted to `docs/adr/008-two-layer-congruence-discipline.md`, since the discipline constrains all future finite-algebra work, not only the FLRP tree.  Ratified.
