@@ -37,7 +37,7 @@ open Func renaming ( to to _⟨$⟩_ )
 
 -- Imports from the Agda Universal Algebra Library --------------------------------
 open import Classical.Signatures.Group             using ( Sig-Group ; ∙-Op ; ε-Op ; ⁻¹-Op )
-open import Classical.Structures.Group             using ( Group ; module Group-Op )
+open import Classical.Structures.Group.Basic       using ( Group ; module Group-Op )
 open import Classical.Theories.Group               using ( assoc ; idˡ ; idʳ ; invˡ ; invʳ )
 open import Setoid.Algebras.Basic {𝑆 = Sig-Group}  using ( Algebra ; 𝕌[_] ; 𝔻[_] )
 open import Setoid.Signatures                      using  ( ⟨_⟩ )

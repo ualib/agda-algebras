@@ -26,4 +26,10 @@ nothing to gain (and names to clash) from re-exporting them through a barrel.
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
 module Examples.Classical.Groups where
+
+open import Examples.Classical.Groups.AbelianGroup
+open import Examples.Classical.Groups.CyclicGroup
+open import Examples.Classical.Groups.CyclicGroup3
+open import Examples.Classical.Groups.KleinFourGroup
+open import Examples.Classical.Groups.SymmetricGroup3
 ```

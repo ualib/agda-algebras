@@ -10,8 +10,8 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Small.Structures.AbelianGroup][] module of the [Agda Universal Algebra Library][].
 
-Specializes [`Classical.Structures.AbelianGroup`][Classical.Structures.AbelianGroup] to the `0ℓ`–`0ℓ` case, mirroring
-the veneers of `Monoid`, `CommutativeMonoid`, `Group`, etc.
+Specializes [`Classical.Structures.Group.AbelianGroup`][] to the `0ℓ`–`0ℓ` case,
+mirroring the veneers of `Monoid`, `CommutativeMonoid`, `Group`, etc.
 
 <!--
 ```agda
@@ -23,7 +23,7 @@ open import Agda.Primitive                          using () renaming ( Set to T
 open import Level                                   using ( 0ℓ ; suc )
 open import Relation.Binary.PropositionalEquality   using ( _≡_ )
 
-import Classical.Structures.AbelianGroup as Polymorphic
+import Classical.Structures.Group.AbelianGroup as Polymorphic
 ```
 -->
 

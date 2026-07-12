@@ -30,7 +30,8 @@ import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 open import Relation.Binary.PropositionalEquality using ( refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------------
-open import Overture                       using ( proj₁ ; proj₂ ; ArityOf ; Im_⊆_ )
+open import Overture                       using ( proj₁ ; proj₂ ; ArityOf ; Im_⊆_
+                                                 ; OperationSymbolsOf )
 open import Overture.Terms        {𝑆 = 𝑆}  using ( Term ; ℊ ; node )
 open import Setoid.Algebras       {𝑆 = 𝑆}  using ( Algebra ; 𝕌[_] ; _^_ ; ov )
 open import Setoid.Terms          {𝑆 = 𝑆}  using ( module Environment )
@@ -54,7 +55,8 @@ module _ (𝑨 : Algebra α ρᵃ) where
   private A = 𝕌[ 𝑨 ] -- the forgetful functor
 
   Subuniverses : Pred (Pred A ℓ) (𝓞 ⊔ 𝓥 ⊔ α ⊔ ℓ )
-  Subuniverses B = ∀ f a → Im a ⊆ B → (f ^ 𝑨) a ∈ B
+  Subuniverses B =
+    (f : OperationSymbolsOf 𝑆) (a : ArityOf 𝑆 f → A) → Im a ⊆ B → (f ^ 𝑨) a ∈ B
 
   -- Subuniverses as a record type
   record Subuniverse : Type(ov (α ⊔ ℓ)) where
