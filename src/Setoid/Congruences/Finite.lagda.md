@@ -10,42 +10,49 @@ author: "the agda-algebras development team"
 
 This is the [Setoid.Congruences.Finite][] module of the [Agda Universal Algebra Library][].
 
-[Setoid.Algebras.Finite][] defines the *bare* finiteness interface for a setoid
-algebra: decidable `≈` and a finite surjective enumeration of the carrier.  This
-module supplies the *congruence-side* finiteness interface: **decidable
-congruences** (`DecCon`{.AgdaFunction}) and the record
-`FiniteCongruences`{.AgdaRecord} `𝑨`, which packages a finite list of decidable
-congruences of `𝑨` that is *complete* — every congruence of `𝑨` equals, up to
-mutual containment `≑`, a listed one.  This is the searchable congruence lattice
-that finite-algebra theorems run their algorithms over; its first consumer is the
-finite Birkhoff theorem of [Setoid.Subalgebras.Subdirect.Finite][] (#419, whence
-these definitions were relocated by #464).
+[Setoid.Algebras.Finite][] defines the finiteness interface for a setoid algebra:
+decidable `≈` and a finite surjective enumeration of the carrier.  This module
+supplies the finiteness interface for congruences, that is, **decidable
+congruences** (`DecCon`{.AgdaFunction}) and the record type
+`FiniteCongruences`{.AgdaRecord} `𝑨`.
+
+`FiniteCongruences`{.AgdaRecord} `𝑨` packages a finite list `cons` of decidable
+congruences of `𝑨` along with a proof that this list is *complete* in the sense that
+every congruence of `𝑨` is, up to mutual containment `≑`, one of those in `cons`.
+
+This provides a searchable congruence lattice that finite-algebra theorems run their
+algorithms over; its first consumer is the finite Birkhoff theorem of
+[Setoid.Subalgebras.Subdirect.Finite][].
 
 #### Why carrier finiteness does not suffice
 
 Crucially, the data packaged here is *strictly stronger* than a
 `FiniteAlgebra`{.AgdaRecord} witness, which is why the two interfaces are separate
 records.  Carrier-finiteness along with decidable setoid equality do not, by
-themselves, admit a complete congruence enumeration constructively.  A congruence
-is a `Type`-valued relation `𝕌[ 𝑨 ] → 𝕌[ 𝑨 ] → Type ℓ`, and an arbitrary such
-relation on a finite carrier need not be decidable: e.g. on a bare set of two
-elements, the relation that collapses the two points *iff* `P` holds is a
+themselves, admit a complete congruence enumeration constructively.
+
+Indeed, a congruence is a `Type`-valued relation `𝕌[ 𝑨 ] → 𝕌[ 𝑨 ] → Type ℓ`, and an
+arbitrary such relation on a finite carrier need not be decidable; e.g., on a bare
+set of two elements, the relation that collapses the two points *iff* `P` holds is a
 congruence for any proposition `P`, and it is `≑`-equal to a decidable congruence
-only iff `P` is decidable.  So a complete enumeration of congruences-up-to-`≑` is
-strictly stronger than decidable equality on a finite set; it is exactly the
-classical content of "finite algebra" for congruence-lattice purposes.  Classically
-every finite algebra furnishes these data; constructively they must be supplied,
-and this record is the interface through which they are.
+only iff `P` is decidable.
+
+Thus, a complete enumeration of congruences-up-to-`≑` is strictly stronger than
+decidable equality on a finite set; it is exactly the classical content of "finite
+algebra" for congruence-lattice purposes.  Classically every finite algebra furnishes
+these data; constructively they must be supplied, and this record is the interface
+through which they are.
 
 The two interfaces are logically independent in the other direction as well: an
 infinite algebra can perfectly well have a finitely enumerable congruence lattice
 (consider an algebra that is constructively simple, with decidable equality — its
 complete list is the diagonal and the total congruence), so
-`FiniteCongruences`{.AgdaRecord} does not presuppose a finite carrier.  There is,
-however, one overlap, recorded as `≈-dec`{.AgdaFunction} below: completeness forces
-the *diagonal's* listed representative to decide setoid equality, so the
-`_≟_`{.AgdaField} field of `FiniteAlgebra`{.AgdaRecord} is derivable from a
-`FiniteCongruences`{.AgdaRecord} witness.
+`FiniteCongruences`{.AgdaRecord} does not presuppose a finite carrier.
+
+There is, however, one overlap, recorded as `≈-dec`{.AgdaFunction} below:
+completeness forces the listed representative of the *diagonal* to decide setoid
+equality, so the `_≟_`{.AgdaField} field of `FiniteAlgebra`{.AgdaRecord} is derivable
+from a `FiniteCongruences`{.AgdaRecord} witness.
 
 <!--
 ```agda
@@ -55,21 +62,23 @@ open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 
 module Setoid.Congruences.Finite {𝑆 : Signature 𝓞 𝓥} where
 
--- Imports from Agda and the Agda Standard Library ----------------------------
-open import Agda.Primitive                      using  ( lsuc ) renaming ( Set to Type )
-open import Data.List.Base                      using  ( List ; [] ; _∷_ )
-open import Data.List.Membership.Propositional  using  ( _∈_ )
-open import Data.List.Relation.Unary.Any        using  ( here )
-open import Data.Product                        using  ( _×_ ; _,_ ; Σ-syntax
-                                                       ; proj₁ ; proj₂ )
-open import Data.Unit.Base                      using  ( ⊤ ; tt )
-open import Function                            using  ( _∘_ )
-open import Level                               using  ( Level ; _⊔_ ; 0ℓ
-                                                       ; Lift ; lift ; lower )
-open import Relation.Binary                     using  ( Setoid )
-                                                renaming ( Rel to BinaryRel )
+open import Agda.Primitive  using  () renaming ( Set to Type )
+
+-- Imports from the Agda Standard Library ----------------------------------------------
+open import Data.List.Base                         using  ( List ; [] ; _∷_ )
+open import Data.List.Membership.Propositional     using  ( _∈_ )
+open import Data.List.Relation.Unary.Any           using  ( here )
+open import Data.Product                           using  ( _×_ ; _,_ ; Σ-syntax
+                                                          ; proj₁ ; proj₂ )
+open import Data.Unit.Base                         using  ( ⊤ ; tt )
+open import Function                               using  ( _∘_ )
+open import Level                                  using  ( Level ; _⊔_ ; 0ℓ
+                                                          ; Lift ; lift ; lower )
+                                                   renaming ( suc to lsuc )
+open import Relation.Binary                        using  ( Setoid )
+                                                   renaming ( Rel to BinaryRel )
 open import Relation.Binary.PropositionalEquality  using  ( refl )
-open import Relation.Nullary                    using  ( Dec ; yes ; no )
+open import Relation.Nullary                       using  ( Dec ; yes ; no )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Setoid.Algebras.Basic     {𝑆 = 𝑆}  using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
@@ -86,7 +95,7 @@ private variable α ρ : Level
 A **decidable congruence** is a congruence whose membership relation is decidable.
 The working congruence level is the absorbing level `clv α ρ = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ`, at
 which the generated (principal) congruences used downstream (e.g. for the monolith
-in the finite Birkhoff construction) stay put — the same level discipline as
+in the finite Birkhoff construction) stay put — the same level discipline as in
 [Setoid.Congruences.CompleteLattice][].
 
 ```agda
@@ -95,12 +104,12 @@ clv : (α ρ : Level) → Level
 clv α ρ = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ
 
 -- A congruence together with a decision procedure for its membership.
-DecCon : (𝑨 : Algebra α ρ)(ℓ : Level) → Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ lsuc ℓ)
-DecCon 𝑨 ℓ = Σ[ θ ∈ Con 𝑨 ℓ ] (∀ x y → Dec (proj₁ θ x y))
+DecCon : (𝑨 : Algebra α ρ)(ℓ : Level) → Type (clv α ρ ⊔ lsuc ℓ)
+DecCon 𝑨 ℓ = Σ[ (_θ_ , _) ∈ Con 𝑨 ℓ ] ∀ x y → Dec (x θ y)
 
 -- The underlying relation of a decidable congruence.
 ConRel : {𝑨 : Algebra α ρ}{ℓ : Level} → DecCon 𝑨 ℓ → BinaryRel 𝕌[ 𝑨 ] ℓ
-ConRel (θ , _) = proj₁ θ
+ConRel ((θ , _) , _) = θ
 ```
 
 #### The congruence-side finiteness interface
@@ -127,6 +136,7 @@ record FiniteCongruences (𝑨 : Algebra α ρ) : Type (lsuc (clv α ρ)) where
 
   witness≑ : (φ : Con 𝑨 (clv α ρ)) → φ ≑ proj₁ (witness φ)
   witness≑ = proj₂ ∘ proj₂ ∘ complete
+
 ```
 
 As promised, a `FiniteCongruences`{.AgdaRecord} witness decides setoid equality:
@@ -167,11 +177,11 @@ also the diagonal — so its complete list is a singleton.
       , (λ _ _ → yes (lift tt))
 
 -- The congruence lattice of 𝟏 is finitely enumerable.
+open FiniteCongruences
 𝟏-FiniteCongruences : FiniteCongruences 𝟏
-𝟏-FiniteCongruences = record
-  { cons      = 𝟏-Δ ∷ []
-  ; complete  = λ φ → 𝟏-Δ , here refl , (λ _ → lift tt) , (λ _ → reflexive (proj₂ φ) tt)
-  }
+𝟏-FiniteCongruences .cons = 𝟏-Δ ∷ []
+𝟏-FiniteCongruences .complete ( _ , φcon ) =
+  𝟏-Δ , here refl , (λ _ → lift tt) , λ x → reflexive φcon tt
 ```
 
 --------------------------------------

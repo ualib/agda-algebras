@@ -8,10 +8,9 @@ author: "the agda-algebras development team"
 
 ### Finite Birkhoff: a constructive subdirect SI-representation
 
-This is the [Setoid.Subalgebras.Subdirect.Finite][] module of the
-[Agda Universal Algebra Library][].
+This is the [Setoid.Subalgebras.Subdirect.Finite][] module of the [Agda Universal Algebra Library][].
 
-[Setoid.Subalgebras.Subdirect.BirkhoffSI][] proved the **choice-free core** of
+[Setoid.Subalgebras.Subdirect.BirkhoffSI][] proved the *choice-free core* of
 Birkhoff's subdirect representation theorem and stated the general theorem
 `Birkhoff-subdirect` *relative to* the choice principle `SubdirectSIRep 𝑨` — the
 existence, for every algebra, of a separating family of congruences whose quotients
@@ -19,7 +18,7 @@ are subdirectly irreducible.
 
 Producing that family for an arbitrary algebra is a Zorn's-lemma step (a congruence
 maximal among those excluding a given pair), which is incompatible with a
-postulate-free `--safe` formalization in constructive type theory.
+postulate-free formalization in constructive type theory.
 
 This module discharges that parameter for a class of *finite* algebras: it constructs
 `SubdirectSIRep 𝑨` outright, with no choice and no postulate, and feeds it to the
@@ -27,31 +26,30 @@ choice-free reduction `SIRep→Representable`.[^1]
 
 #### What "finite" must mean here
 
-The classical proof selects, for each pair `a ≢ b`, a congruence **maximal** among
+The classical proof selects, for each pair `a ≢ b`, a congruence *maximal* among
 those not relating `a` and `b`; such a congruence is completely meet-irreducible, so
 its quotient is subdirectly irreducible.  To find that maximal congruence by a
 *search* we must enumerate the congruence lattice, and to recognise subdirect
 irreducibility (whose monolith condition quantifies over all congruences of the
-quotient) the enumeration must be complete — every congruence must equal, up to
-mutual containment `≑`, a listed one.
+quotient) the enumeration must be complete — every congruence must equal a listed
+one, up to mutual containment (denote here `≑`).
 
 Crucially, carrier-finiteness along with decidable setoid equality do not, by
 themselves, admit such an enumeration constructively (see
 [Setoid.Congruences.Finite][] for the counterexample), so the finiteness data comes
-through two independent interfaces (#464):
+through two independent interfaces.
 
-+  `FiniteAlgebra`{.AgdaRecord}, from [Setoid.Algebras.Finite][] — the *bare*
-   interface: decidable `≈` and a finite surjective enumeration of the carrier,
-   used here to count the pairs a congruence relates;
-+  `FiniteCongruences`{.AgdaRecord}, from [Setoid.Congruences.Finite][] — the
-   congruence-side interface: a finite list of *decidable* congruences
-   (`DecCon`{.AgdaFunction}), complete up to `≑` — the searchable congruence
-   lattice.
+1.  `FiniteAlgebra`{.AgdaRecord}, from [Setoid.Algebras.Finite][]: decidable `≈` and
+    a finite surjective enumeration of the carrier, used here to count the pairs a
+    congruence relates;
++  `FiniteCongruences`{.AgdaRecord}, from [Setoid.Congruences.Finite][]: a finite
+    list of *decidable* congruences (`DecCon`{.AgdaFunction}), complete up to `≑` —
+    the searchable congruence lattice.
 
 Everything downstream is then fully constructive and computes.  Classically every
 finite algebra furnishes both witnesses, so `finite-Birkhoff` is Birkhoff's theorem
 for finite algebras; the two records are precisely the constructive data that make
-the search go through under `--safe`.
+the search go through under `--safe` Agda.
 
 <!--
 ```agda
