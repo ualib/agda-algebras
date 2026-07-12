@@ -75,7 +75,7 @@ open import Setoid.Algebras.Basic as SetoidAlgebras using (Algebra ; 𝔻[_])
 import Setoid.Congruences.Basic             as SetoidCongruences
 import Setoid.Congruences.Lattice           as CongruenceOrder
 import Setoid.Congruences.Generation        as CongruenceGeneration
-import Setoid.Subalgebras.Subdirect.Finite  as SubdirectFinite
+import Setoid.Algebras.Finite               as FiniteAlgebras
 ```
 -->
 
@@ -217,22 +217,25 @@ order isomorphism.  Two design choices deserve comment.
    finite algebra needs no more room than that, and fixing the levels keeps the
    existential quantification over signatures first-order (Agda cannot
    quantify existentially over universe levels).
-+  **Finiteness**.  "Finite algebra" is the `FiniteAlgebra`{.AgdaRecord}
-   interface of [Setoid.Subalgebras.Subdirect.Finite][]: decidable setoid
-   equality, a finite surjective enumeration of the carrier, and a finite list
-   of *decidable* congruences that is complete up to `_≑_`{.AgdaFunction}.  As
-   that module explains, the complete congruence list is precisely the
-   classical content of "finite" for congruence-lattice purposes — it cannot
-   be derived from carrier-finiteness alone.  It is also exactly the shape of
-   datum an external search emits, so this choice lines up with the
-   certificate discipline planned for the `FLRP.Certificates` work package.
++  **Finiteness**.  "Finite algebra" is the bare `FiniteAlgebra`{.AgdaRecord}
+   interface of [Setoid.Algebras.Finite][]: decidable setoid equality and a
+   finite surjective enumeration of the carrier — carrier-level data only,
+   free of classical content.  The congruence-side interface
+   (`FiniteCongruences`{.AgdaRecord} of [Setoid.Congruences.Finite][], whose
+   completeness field is precisely the classical content of "finite" for
+   congruence-lattice purposes) is deliberately *not* required here:
+   `Representable`{.AgdaRecord} carries an explicit isomorphism instead, and
+   complete congruence enumerations enter only with the decidable-layer
+   reformulation of ADR-008 — where they are also exactly the shape of datum
+   an external search emits, lining up with the certificate discipline of the
+   `FLRP.Certificates` work package.
 
 ```agda
 record Representable (𝑳 : Lattice) : Type (lsuc 0ℓ) where
   field
     sig      : Signature 0ℓ 0ℓ
     alg      : Algebra {𝑆 = sig} 0ℓ 0ℓ
-    finite   : SubdirectFinite.FiniteAlgebra {𝑆 = sig} alg
+    finite   : FiniteAlgebras.FiniteAlgebra {𝑆 = sig} alg
     con-iso  : ConIso {𝑆 = sig} alg 𝑳
 ```
 
@@ -292,14 +295,14 @@ and the empty one is the smallest.)
 ```
 
 The representing algebra is the one-element algebra `𝟏`{.AgdaFunction} of
-[Setoid.Subalgebras.Subdirect.Finite][], instantiated at `𝑆∅`{.AgdaFunction},
+[Setoid.Algebras.Finite][], instantiated at `𝑆∅`{.AgdaFunction},
 together with its ready-made finiteness witness
 `𝟏-FiniteAlgebra`{.AgdaFunction}.  We also fix the diagonal congruence and its
 minimality at this signature, renamed with a `∅` mark to keep them apart from
 the same names used at other signatures below.
 
 ```agda
-open SubdirectFinite    {𝑆 = 𝑆∅}  using ( 𝟏 ; 𝟏-FiniteAlgebra )
+open FiniteAlgebras     {𝑆 = 𝑆∅}  using ( 𝟏 ; 𝟏-FiniteAlgebra )
 open SetoidCongruences  {𝑆 = 𝑆∅}  using () renaming ( 𝟘[_] to 𝟘∅[_] )
 open CongruenceOrder    {𝑆 = 𝑆∅}  using () renaming ( 𝟘-min to 𝟘∅-min )
 ```
@@ -535,15 +538,17 @@ recording, since they shape the work packages that follow.
 +  **The obstruction is in `Con`, not in `FiniteAlgebra`.**  The theorem never
    touches the finiteness witness; the taboo flows from the order isomorphism
    alone, because `Con 𝑨` contains switch congruences for arbitrary
-   propositions.  Baking decidability into the algebra (the
-   `FiniteAlgebra`{.AgdaRecord} interface) cannot help, and indeed the
-   interface is itself classically loaded: over the empty signature, its
-   `complete`{.AgdaFunction} field applied to a switch congruence on a
-   two-element carrier would decide arbitrary propositions outright, so
-   `FiniteAlgebra 𝟚` is exactly as unprovable as excluded middle.  This is the
-   promised sharpening of the warning in
-   [Setoid.Subalgebras.Subdirect.Finite][] that the complete congruence list
-   is "exactly the classical content" of finiteness.
+   propositions.  Baking decidability into the algebra cannot help: the
+   carrier-level `FiniteAlgebra`{.AgdaRecord} interface of
+   [Setoid.Algebras.Finite][] is constructively innocent, and the classical
+   strength sits precisely in the congruence-side
+   `FiniteCongruences`{.AgdaRecord} of [Setoid.Congruences.Finite][] — over
+   the empty signature, its `complete`{.AgdaFunction} field applied to a
+   switch congruence on a two-element carrier would decide arbitrary
+   propositions outright, so `FiniteCongruences 𝟚` is exactly as unprovable
+   as excluded middle.  This is the promised sharpening of that module's
+   warning that the complete congruence list is "exactly the classical
+   content" of finiteness.
 +  **`Representable` is constructively inhabited only by the one-element
    lattice.**  Every lattice with two provably distinct elements admits an
    order embedding of `chain₂`, and the argument above then applies verbatim,
@@ -554,7 +559,7 @@ recording, since they shape the work packages that follow.
 +  **Certificates must target the decidable-congruence poset.**  For a
    concrete finite algebra given by tables, the poset of *decidable*
    congruences (`DecCon`{.AgdaFunction} of
-   [Setoid.Subalgebras.Subdirect.Finite][], up to `_≑_`{.AgdaFunction}) is
+   [Setoid.Congruences.Finite][], up to `_≑_`{.AgdaFunction}) is
    itself finite data: a decidable congruence on `Fin n` can be tabulated, and
    completeness of a candidate list *of decidable congruences* is decidable.
    An Agda-checked certificate that `Con 𝑨 ≅ 𝑳` should therefore assert the
