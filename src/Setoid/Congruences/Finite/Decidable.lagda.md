@@ -121,7 +121,7 @@ open import Setoid.Algebras.Basic          {𝑆 = 𝑆}  using  ( Algebra ; �
 open import Setoid.Algebras.Finite                   using  ( FiniteAlgebra )
 open import Setoid.Congruences.Basic       {𝑆 = 𝑆}  using  ( Con )
 open import Setoid.Congruences.Finite      {𝑆 = 𝑆}  using  ( clv ; DecCon ; ConRel )
-open import Setoid.Congruences.Generation  {𝑆 = 𝑆}  using  ( Cg ; Gen ; base ; Cg-least )
+open import Setoid.Congruences.Generation           using  ( Cg ; Gen ; base ; Cg-least )
 open import Setoid.Congruences.Lattice     {𝑆 = 𝑆}  using  ( _≑_ )
 open import Setoid.Congruences.Presented   {𝑆 = 𝑆}  using  ( fromPairs ; con-resp-≈ )
 open import Setoid.Congruences.Presented.Decidable  using  ( Cg-DecCon ; does-in ; does-out )
