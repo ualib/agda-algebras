@@ -83,17 +83,16 @@ open import Relation.Binary  using () renaming ( _⇒_ to _⊆_ )
 import Relation.Binary.PropositionalEquality as ≡
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture.Terms                      {𝑆 = 𝑆} using ( Term ; ℊ )
-open import Setoid.Algebras.Basic               {𝑆 = 𝑆} using ( 𝔻[_] )
-open import Setoid.Congruences.Generation       {𝑆 = 𝑆} using ( Gen ; Cg ; base
-                                                               ; symmetric ; _∨_ ; _∪ᵣ_
-                                                               ; module principal )
-open import Setoid.Homomorphisms.Basic                   using ( hom ; mkIsHom )
-open import Setoid.Homomorphisms.Kernels                 using ( kercon )
-open import Setoid.Homomorphisms.Properties              using ( Cg⊆ker )
-open import Setoid.Terms.Basic                  {𝑆 = 𝑆} using ( _≐_ ; Sub ; _[_] )
-open import Setoid.Varieties.SoundAndComplete   {𝑆 = 𝑆} using ( Eq ; _⊢_▹_≈_
-                                                               ; module FreeAlgebra )
+open import Overture.Terms          {𝑆 = 𝑆}  using  ( Term ; ℊ )
+open import Setoid.Algebras.Basic   {𝑆 = 𝑆}  using  ( 𝔻[_] )
+open import Setoid.Congruences.Generation    using  ( Gen ; Cg ; base ; symmetric
+                                                    ; _∨_ ; _∪ᵣ_ ; module principal )
+open import Setoid.Homomorphisms.Basic       using ( hom ; mkIsHom )
+open import Setoid.Homomorphisms.Kernels     using ( kercon )
+open import Setoid.Homomorphisms.Properties  using ( Cg⊆ker )
+open import Setoid.Terms.Basic      {𝑆 = 𝑆}  using ( _≐_ ; Sub ; _[_] )
+open import Setoid.Varieties.SoundAndComplete {𝑆 = 𝑆}
+  using ( Eq ; _⊢_▹_≈_ ; module FreeAlgebra )
 
 open _≐_         using ( rfl ; gnl )
 open _⊢_▹_≈_     using ( app ; sub ; refl ; trans )
@@ -149,7 +148,7 @@ module _ {Γ Δ : Type χ} {I : Type ι} (E : I → Eq) where
   subhom σ = subfunc , mkIsHom (λ {f}{a} → refl)
     where
     subfunc : Func 𝔻[ 𝔽[ Δ ] ] 𝔻[ 𝔽[ Γ ] ]
-    subfunc = record { to = _[ σ ] ; cong = λ {p}{q} pq → sub pq σ }
+    subfunc = record { to = _[ σ ] ; cong = λ pq → sub pq σ }
 ```
 
 The special case of a plain variable renaming `r : Δ → Γ` is `subhom (ℊ ∘ r)`.

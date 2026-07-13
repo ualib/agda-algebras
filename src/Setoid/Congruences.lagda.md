@@ -19,11 +19,11 @@ open import Setoid.Congruences.Basic            {𝑆 = 𝑆} public
 open import Setoid.Congruences.ChainJoin                public
 open import Setoid.Congruences.CompleteLattice  {𝑆 = 𝑆} public
 open import Setoid.Congruences.Finite           {𝑆 = 𝑆} public
-open import Setoid.Congruences.Generation       {𝑆 = 𝑆} public
+open import Setoid.Congruences.Generation               public
 open import Setoid.Congruences.Lattice          {𝑆 = 𝑆} public
 open import Setoid.Congruences.Monolith         {𝑆 = 𝑆} public
 open import Setoid.Congruences.Presented        {𝑆 = 𝑆} public
-open import Setoid.Congruences.Presented.Decidable       public
+open import Setoid.Congruences.Presented.Decidable      public
 open import Setoid.Congruences.Properties       {𝑆 = 𝑆} public
 open import Setoid.Congruences.Permutability    {𝑆 = 𝑆} public
 ```

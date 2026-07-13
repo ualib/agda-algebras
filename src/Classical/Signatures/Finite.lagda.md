@@ -13,9 +13,8 @@ This is the [Classical.Signatures.Finite][] module of the [Agda Universal Algebr
 The record `FiniteSignature`{.AgdaRecord} of [Setoid.Signatures.Finite][] packages
 what it means for a signature to be *finite finitary*: a finite surjective
 enumeration of its operation symbols, plus the `Finitary`{.AgdaFunction} witness
-that every arity is finite.  This module supplies the two canonical sanity-check
-instances, placed here — rather than beside the record — because concrete
-signatures live in the `Classical/` tree and the `Setoid/` tree does not import it.
+that every arity is finite.  This module supplies the following canonical sanity-check
+instances:[^1]
 
 +  `Sig-Lattice`{.AgdaFunction} ([Classical.Signatures.Lattice][]): two binary
    operation symbols; both halves of the witness are finite case splits.
@@ -24,19 +23,23 @@ signatures live in the `Classical/` tree and the `Setoid/` tree does not import 
 
 #### A caveat on enumerations up to `≈` versus up to `≡`
 
-The symbol type of a signature is a *bare* type, so
-`opEnum-sur`{.AgdaField} demands surjectivity up to propositional equality `_≡_`.
-The carrier enumeration of a `FiniteAlgebra`{.AgdaRecord}
-([Setoid.Algebras.Finite][]) is surjective only up to the carrier's setoid
-equality `_≈_`, which is *not* enough here: on a quotient carrier the enumeration
-hits every element up to the coarser `≈` while missing raw elements up to `≡`.
+The symbol type of a signature is a bare type, so `opEnum-sur`{.AgdaField} demands
+surjectivity up to propositional equality `_≡_`.  The carrier enumeration of a
+`FiniteAlgebra`{.AgdaRecord} ([Setoid.Algebras.Finite][]) is surjective only up to
+the carrier's setoid equality `_≈_`, which is *not* enough here.  Indeed, on a
+quotient carrier the enumeration hits every element up to the coarser `≈` while
+missing raw elements up to `≡`.
+
 Consequently `Sig-Unary-FiniteSignature`{.AgdaFunction} below asks for an honest
 `_≡_`-surjective enumeration of the bare type `A` rather than for a
 `FiniteAlgebra`{.AgdaRecord} witness.  In the intended applications this costs
-nothing: for a concrete finite group the raw carrier is typically `Fin n` or a
-finite data type, where `≈` *is* `≡`; and the raw carrier of a quotient `G/H` is
-that of `G` itself, so the same bare enumeration serves all coset algebras of `G`
-with no choice of coset representatives.
+nothing; in points of fact,
+
++  for a concrete finite group the raw carrier is typically `Fin n` or a finite data
+   type, where `≈` *is* `≡`;
++  the raw carrier of a quotient `G/H` is that of `G` itself, so the same bare
+   enumeration serves all coset algebras of `G` with no choice of coset
+   representatives.
 
 <!--
 ```agda
@@ -72,9 +75,9 @@ lists the two symbols.
 
 ```agda
 -- Each lattice operation symbol has finite arity (namely 2).
-finitary-Sig-Lattice : Finitary Sig-Lattice
-finitary-Sig-Lattice ∧-Op = 2 , ↔-id _
-finitary-Sig-Lattice ∨-Op = 2 , ↔-id _
+Sig-Lattice-Finitary : Finitary Sig-Lattice
+Sig-Lattice-Finitary ∧-Op = 2 , ↔-id _
+Sig-Lattice-Finitary ∨-Op = 2 , ↔-id _
 
 -- The lattice signature is finite finitary.
 Sig-Lattice-FiniteSignature : FiniteSignature Sig-Lattice
@@ -83,7 +86,7 @@ Sig-Lattice-FiniteSignature .opEnum zero         = ∧-Op
 Sig-Lattice-FiniteSignature .opEnum (suc zero)   = ∨-Op
 Sig-Lattice-FiniteSignature .opEnum-sur ∧-Op     = zero , refl
 Sig-Lattice-FiniteSignature .opEnum-sur ∨-Op     = suc zero , refl
-Sig-Lattice-FiniteSignature .finitary            = finitary-Sig-Lattice
+Sig-Lattice-FiniteSignature .finitary            = Sig-Lattice-Finitary
 ```
 
 #### The unary signature over an enumerated symbol type
@@ -105,3 +108,6 @@ module _ {ℓ : Level}{A : Type ℓ}
 ```
 
 --------------------------------------
+
+[^1]: We place these instances here, rather than beside the record, because concrete
+      signatures live in the `Classical/` tree and the `Setoid/` tree does not import it.

@@ -11,15 +11,14 @@ author: "the agda-algebras development team"
 This is the [Setoid.Congruences.Presented][] module of the [Agda Universal Algebra Library][].
 
 A congruence in this library is a `Type`-valued relation, and on that semantic
-layer even a two-element carrier has classically-loaded congruences (the switch
-congruences of the WP-1 no-go theorem).  The two-layer discipline of ADR-008
-(`docs/adr/008-two-layer-congruence-discipline.md`) therefore builds a *decidable*
-layer, whose defining property is **reconstructibility from generating pairs**:
-a decidable congruence on a finite carrier is determined by the finite list of
-enumerated pairs it relates.  This module proves that property — lemma L2 of the
-design note `docs/notes/flrp-two-layer-congruences.md` § 3.
+layer even a two-element carrier has classically-loaded congruences.[^1]
 
-Concretely, for an algebra `𝑨` with the bare carrier-finiteness data of
+We adopt a two-layer congruence discipline that builds a *decidable* layer, whose
+defining property is **reconstructibility from generating pairs**:
+a decidable congruence on a finite carrier is determined by the finite list of
+enumerated pairs it relates; this module proves that property.[^2]
+
+Concretely, for an algebra `𝑨` with the carrier-finiteness data of
 [Setoid.Algebras.Finite][] and a decidable congruence `d : DecCon 𝑨 ℓ`
 ([Setoid.Congruences.Finite][]) we define
 
@@ -30,24 +29,16 @@ Concretely, for an algebra `𝑨` with the bare carrier-finiteness data of
    enumerated elements, obtained by filtering all pairs of enumerated elements
    through `d`'s decision procedure;
 
-and prove the **reconstruction theorem**: `proj₁ d ≑ Cg (fromPairs (relatedPairs d))`,
-i.e. `d` is, up to mutual containment, the congruence *generated* (in the sense of
-[Setoid.Congruences.Generation][]) by its own related-pairs list.  One inclusion
-is the `base`{.AgdaInductiveConstructor} rule of `Cg`{.AgdaFunction} applied to
-completeness of the list; the other is `Cg-least`{.AgdaFunction} applied to
-soundness of the list.
+We prove the following **reconstruction theorem**:
 
-Two scope remarks.  First, only **carrier** finiteness is used — in fact only the
-`card`{.AgdaField}/`enum`{.AgdaField}/`enum-sur`{.AgdaField} fields; not even the
-`_≟_`{.AgdaField} field is needed, since `d` carries its own decision procedure.
-In particular no `FiniteSignature`{.AgdaRecord} hypothesis appears: signature
-finiteness enters only for the *converse* direction of the layer-D programme —
-that `Cg`{.AgdaFunction} of a finite pair list is again decidable (lemma L1) —
-which is the business of [Setoid.Congruences.Presented.Decidable][].  Second, the
-containments hold for a `DecCon`{.AgdaFunction} at *any* relation level and are
-stated heterogeneously via `_⊑_`{.AgdaFunction}; at the working congruence level
-`clv α ρ` of [Setoid.Congruences.Finite][] the two sides live at the same level
-and combine into an honest `_≑_`{.AgdaFunction}.
+    proj₁ d ≑ Cg (fromPairs (relatedPairs d))
+
+That is, `d` is, up to mutual containment, the congruence *generated* by its own
+related-pairs list.
+
+One inclusion is the `base`{.AgdaInductiveConstructor} rule of `Cg`{.AgdaFunction}
+applied to completeness of the list; the other is `Cg-least`{.AgdaFunction} applied
+to soundness of the list.[^3]
 
 <!--
 ```agda
@@ -61,33 +52,30 @@ open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library -----------------------------------
 open import Data.Fin.Base                       using  ( Fin )
-open import Data.List.Base                      using  ( List ; allFin
-                                                       ; cartesianProduct
-                                                       ; filter ; map )
+open import Data.List.Base                      using  ( List ; allFin ; filter
+                                                       ; map ; cartesianProduct )
 open import Data.List.Membership.Propositional  using  ( _∈_ ; lose )
 open import Data.List.Membership.Propositional.Properties
-                                                using  ( ∈-allFin ; ∈-filter⁺
-                                                       ; ∈-cartesianProduct⁺
-                                                       ; ∈-map⁺ )
+                                                using  ( ∈-allFin ; ∈-filter⁺ ; ∈-map⁺
+                                                       ; ∈-cartesianProduct⁺ )
 open import Data.List.Relation.Unary.All        using  ( All ; lookupAny )
-open import Data.List.Relation.Unary.All.Properties  using  ( all-filter )
-open import Data.List.Relation.Unary.Any as Any using  ( Any ; any? )
-open import Data.Product                        using  ( _×_ ; _,_
-                                                       ; proj₁ ; proj₂ )
+open import Data.List.Relation.Unary.All.Properties
+                                                using  ( all-filter )
+open import Data.List.Relation.Unary.Any        using  ( Any ; any? )
+open import Data.Product                        using  ( _×_ ; _,_ ; proj₁ ; proj₂ )
 open import Level                               using  ( Level ; _⊔_ )
 open import Relation.Binary                     using  ( Setoid ; IsEquivalence )
                                                 renaming ( Rel to BinaryRel )
 open import Relation.Nullary.Decidable          using  ( Dec ; _×-dec_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Setoid.Algebras.Basic        {𝑆 = 𝑆}  using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
-open import Setoid.Algebras.Finite       {𝑆 = 𝑆}  using  ( FiniteAlgebra )
-open import Setoid.Congruences.Basic     {𝑆 = 𝑆}  using  ( Con ; reflexive
-                                                         ; is-equivalence )
-open import Setoid.Congruences.Finite    {𝑆 = 𝑆}  using  ( clv ; DecCon ; ConRel )
-open import Setoid.Congruences.Generation {𝑆 = 𝑆} using  ( Cg ; base ; Cg-least
-                                                         ; _⊑_ )
-open import Setoid.Congruences.Lattice   {𝑆 = 𝑆}  using  ( _≑_ )
+open import Setoid.Algebras.Basic         {𝑆 = 𝑆}  using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Algebras.Finite                 using  ( FiniteAlgebra )
+open import Setoid.Congruences.Basic      {𝑆 = 𝑆}  using  ( Con ; reflexive
+                                                          ; is-equivalence )
+open import Setoid.Congruences.Finite     {𝑆 = 𝑆}  using  ( clv ; DecCon ; ConRel )
+open import Setoid.Congruences.Generation          using  ( Cg ; base ; Cg-least ; _⊑_ )
+open import Setoid.Congruences.Lattice    {𝑆 = 𝑆}  using  ( _≑_ )
 
 private variable α ρ ℓ : Level
 ```
@@ -107,22 +95,23 @@ module _ {𝑨 : Algebra α ρ} where
 
   -- The relation presented by a pair list: componentwise ≈-membership.
   fromPairs : List (𝕌[ 𝑨 ] × 𝕌[ 𝑨 ]) → BinaryRel 𝕌[ 𝑨 ] (α ⊔ ρ)
-  fromPairs ps x y = Any (λ p → (x ≈ proj₁ p) × (y ≈ proj₂ p)) ps
+  fromPairs ps x y = Any (λ p → x ≈ proj₁ p × y ≈ proj₂ p) ps
 
   -- The presented relation is decidable whenever ≈ is.
   fromPairs? : (∀ x y → Dec (x ≈ y)) → (ps : List (𝕌[ 𝑨 ] × 𝕌[ 𝑨 ]))
-    →         ∀ x y → Dec (fromPairs ps x y)
-  fromPairs? _≟_ ps x y = any? (λ p → (x ≟ proj₁ p) ×-dec (y ≟ proj₂ p)) ps
+    → ∀ x y → Dec (fromPairs ps x y)
+  fromPairs? _≟_ ps x y = any? (λ p → x ≟ proj₁ p ×-dec y ≟ proj₂ p) ps
 ```
 
 A small helper used repeatedly below: a congruence relates `≈`-equal replacements
-of related elements.  This is just reflexivity-over-`≈` composed with the
-equivalence laws, but naming it keeps the proofs legible.
+of related elements.  This is just reflexivity-over-`≈` composed with the equivalence
+laws, but naming it keeps the proofs legible.
 
 ```agda
   -- From a θ b infer x θ y for any x ≈ a and y ≈ b.
-  con-resp-≈ : (θ : Con 𝑨 ℓ){x y a b : 𝕌[ 𝑨 ]}
-    →          x ≈ a → y ≈ b → proj₁ θ a b → proj₁ θ x y
+  con-resp-≈ : ((_θ_ , _) : Con 𝑨 ℓ) {x y a b : 𝕌[ 𝑨 ]}
+    → x ≈ a → y ≈ b → a θ b → x θ y
+
   con-resp-≈ (_ , θcon) x≈a y≈b aθb =
     θtrans (reflexive θcon x≈a) (θtrans aθb (θsym (reflexive θcon y≈b)))
     where
@@ -227,3 +216,23 @@ the generation closure absorbs the operation, arity, and carrier levels.
 ```
 
 --------------------------------------
+
+[^1]: Recall the oracle congruences and the "no-go" theorem of [FLRP.Problem][].
+
+[^2]: See [ADR-008][] and Lemma L2 of `docs/notes/flrp-two-layer-congruences.md` § 3.
+
+[^3]: Two scope remarks.
+
+      1.  Only **carrier** finiteness is used — in fact only the
+          `card`{.AgdaField}/`enum`{.AgdaField}/`enum-sur`{.AgdaField} fields;
+          not even the `_≟_`{.AgdaField} field is needed, since `d` carries its own
+          decision procedure.  In particular no `FiniteSignature`{.AgdaRecord}
+          hypothesis appears: signature finiteness enters only for the *converse*
+          direction of the layer-D programme — that `Cg`{.AgdaFunction} of a finite
+          pair list is again decidable (Lemma L1) — which is the business of
+          [Setoid.Congruences.Presented.Decidable][].
+
+      2.  The containments hold for a `DecCon`{.AgdaFunction} at *any*
+          relation level and are stated heterogeneously via `_⊑_`{.AgdaFunction}; at
+          the working congruence level `clv α ρ` of [Setoid.Congruences.Finite][] the
+          two sides live at the same level and combine into an honest `_≑_`{.AgdaFunction}.
