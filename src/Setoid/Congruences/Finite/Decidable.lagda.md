@@ -118,7 +118,7 @@ open import Relation.Nullary.Decidable  using  ( Dec ; does ; T? )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Setoid.Algebras.Basic          {𝑆 = 𝑆}  using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
-open import Setoid.Algebras.Finite         {𝑆 = 𝑆}  using  ( FiniteAlgebra )
+open import Setoid.Algebras.Finite                   using  ( FiniteAlgebra )
 open import Setoid.Congruences.Basic       {𝑆 = 𝑆}  using  ( Con )
 open import Setoid.Congruences.Finite      {𝑆 = 𝑆}  using  ( clv ; DecCon ; ConRel )
 open import Setoid.Congruences.Generation  {𝑆 = 𝑆}  using  ( Cg ; Gen ; base ; Cg-least )
