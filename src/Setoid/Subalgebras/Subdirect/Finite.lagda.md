@@ -60,45 +60,44 @@ open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 module Setoid.Subalgebras.Subdirect.Finite {𝑆 : Signature 𝓞 𝓥} where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
-open import Agda.Primitive                         using  () renaming ( Set to Type )
-open import Data.Empty                             using  ( ⊥-elim )
-open import Data.Fin.Base                          using  ( Fin )
-open import Data.Fin.Properties                    using  ( all? ; ¬∀⟶∃¬ )
-open import Data.List.Base                         using  ( List ; [] ; _∷_ ; filter ; length
-                                                          ; allFin ; cartesianProduct )
-open import Data.List.Extrema.Nat                  using  ( argmax ; f[xs]≤f[argmax] ; argmax-sel )
+open import Agda.Primitive                 using  () renaming ( Set to Type )
+open import Data.Empty                     using  ( ⊥-elim )
+open import Data.Fin.Base                  using  ( Fin )
+open import Data.Fin.Properties            using  ( all? ; ¬∀⟶∃¬ )
+open import Data.List.Base                 using  ( List ; [] ; _∷_ ; filter ; length
+                                                  ; allFin ; cartesianProduct )
+open import Data.List.Extrema.Nat          using  ( argmax ; f[xs]≤f[argmax] ; argmax-sel )
+open import Data.List.Relation.Unary.All   using  ( lookup )
+open import Data.List.Relation.Unary.Any   using  ( here ; there )
+open import Data.Nat.Base                  using  ( ℕ ; _≤_ ; _<_ ; z≤n ; s≤s )
+open import Data.Nat.Properties            using  ( m≤n⇒m≤1+n ; n<1+n ; <-trans
+                                                  ; ≤-<-trans ; n≮n )
+open import Data.Product                   using  ( _×_ ; _,_ ; Σ-syntax ; proj₁ ; proj₂ )
+open import Data.Sum.Base                  using  ( inj₁ ; inj₂ )
+open import Level                          using  ( Level ; _⊔_ ; 0ℓ ; lower )
+open import Relation.Binary                using  ( Setoid ; IsEquivalence )
+open import Relation.Nullary               using  ( ¬_ ; Dec ; yes ; no )
+open import Relation.Nullary.Decidable     using  ( _→-dec_ ; ¬? )
+
 open import Data.List.Membership.Propositional     using  ( _∈_ )
-open import Data.List.Membership.Propositional.Properties
-                                                   using  ( ∈-filter⁺ ; ∈-filter⁻
-                                                          ; ∈-cartesianProduct⁺ ; ∈-allFin )
-open import Data.List.Relation.Unary.All           using  ( lookup )
-open import Data.List.Relation.Unary.Any           using  ( here ; there )
-open import Data.Nat.Base                          using  ( ℕ ; _≤_ ; _<_ ; z≤n ; s≤s )
-open import Data.Nat.Properties                    using  ( m≤n⇒m≤1+n ; n<1+n ; <-trans
-                                                          ; ≤-<-trans ; n≮n )
-open import Data.Product                           using  ( _×_ ; _,_ ; Σ-syntax ; proj₁ ; proj₂ )
-open import Data.Sum.Base                          using  ( inj₁ ; inj₂ )
-open import Level                                  using  ( Level ; _⊔_ ; 0ℓ ; lower )
-open import Relation.Binary                        using  ( Setoid ; IsEquivalence )
 open import Relation.Binary.PropositionalEquality  using  ( _≡_ ; refl ; subst ; sym )
-open import Relation.Nullary                       using  ( ¬_ ; Dec ; yes ; no )
-open import Relation.Nullary.Decidable             using  ( _→-dec_ ; ¬? )
+
+open import Data.List.Membership.Propositional.Properties
+  using ( ∈-filter⁺ ; ∈-filter⁻ ; ∈-cartesianProduct⁺ ; ∈-allFin )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Setoid.Algebras.Basic               {𝑆 = 𝑆}  using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
-open import Setoid.Algebras.Finite              {𝑆 = 𝑆}  using  ( FiniteAlgebra ; 𝟏
-                                                                ; 𝟏-FiniteAlgebra )
-open import Setoid.Congruences.Basic            {𝑆 = 𝑆}  using  ( Con ; mkcon ; reflexive
-                                                                ; is-equivalence ; is-compatible
-                                                                ; _╱_ ; 𝟘[_] )
-open import Setoid.Congruences.Finite           {𝑆 = 𝑆}  using  ( clv ; DecCon ; ConRel
-                                                                ; FiniteCongruences
-                                                                ; 𝟏-FiniteCongruences )
-open import Setoid.Congruences.Generation       {𝑆 = 𝑆}  using  ( Cg ; Cg-least ; base )
-open import Setoid.Congruences.Lattice          {𝑆 = 𝑆}  using  ( _⊆_ ; ⊆-trans )
-open import Setoid.Congruences.Monolith         {𝑆 = 𝑆}  using  ( IsSubdirectlyIrreducible
-                                                                ; mono-nonzero ; mono-least
-                                                                ; Nonzero )
+open import Setoid.Algebras.Basic        {𝑆 = 𝑆}  using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Algebras.Finite                 using  ( FiniteAlgebra ; 𝟏
+                                                         ; 𝟏-FiniteAlgebra )
+open import Setoid.Congruences.Basic     {𝑆 = 𝑆}  using  ( Con ; mkcon ; is-equivalence ; _╱_
+                                                         ; reflexive ; is-compatible ; 𝟘[_] )
+open import Setoid.Congruences.Finite    {𝑆 = 𝑆}  using  ( clv ; ConRel ; 𝟏-FiniteCongruences
+                                                         ; FiniteCongruences ; DecCon )
+
+open import Setoid.Congruences.Generation         using  ( Cg ; Cg-least ; base )
+open import Setoid.Congruences.Lattice   {𝑆 = 𝑆}  using  ( _⊆_ ; ⊆-trans )
+open import Setoid.Congruences.Monolith  {𝑆 = 𝑆}  using  ( IsSubdirectlyIrreducible ; Nonzero
+                                                         ; mono-nonzero ; mono-least )
 
 open import Setoid.Subalgebras.Subdirect.Basic  {𝑆 = 𝑆}  using ( Separates )
 open import Setoid.Subalgebras.Subdirect.BirkhoffSI {𝑆 = 𝑆}

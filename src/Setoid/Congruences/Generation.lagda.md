@@ -37,9 +37,7 @@ and is deferred to a follow-up.
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature)
-
-module Setoid.Congruences.Generation {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Congruences.Generation where
 
 open import Agda.Primitive using () renaming ( Set to Type )
 
@@ -49,11 +47,13 @@ open import Data.Sum.Base    using ( _⊎_ ; inj₁ ; inj₂ ; [_,_] )
 open import Level            using ( Level ; _⊔_ )
 open import Relation.Binary  using ( Setoid ; IsEquivalence )
                              renaming ( Rel to BinaryRel ; _⇒_ to _⊆_)
+
 -- Imports from the Agda Universal Algebras Library ------------------------------
-open import Overture                           using  ( OperationSymbolsOf ; ArityOf )
-open import Setoid.Algebras.Basic     {𝑆 = 𝑆}  using  ( Algebra ; 𝕌[_] ; 𝔻[_] ; _^_ )
-open import Setoid.Congruences.Basic  {𝑆 = 𝑆}  using  ( Con ; mkcon ; is-equivalence
-                                                      ; is-compatible ; reflexive )
+open import Overture                  using  (𝓞 ; 𝓥 ; OperationSymbolsOf
+                                             ; ArityOf ; Signature )
+open import Setoid.Algebras.Basic     using  ( Algebra ; 𝕌[_] ; 𝔻[_] ; _^_ )
+open import Setoid.Congruences.Basic  using  ( Con ; mkcon ; is-equivalence
+                                             ; is-compatible ; reflexive )
 private variable α ρ ℓ ℓ′ : Level
 ```
 -->
@@ -64,17 +64,13 @@ Fix an algebra `𝑨` and a binary relation `R` on its carrier.  `Gen R` is the
 smallest relation containing `R` that is reflexive over `_≈_`, symmetric,
 transitive, and compatible with every basic operation.  The closure quantifies over
 the operation symbols (`𝓞`), their arities (`𝓥`), and the carrier (`α`, `ρ`), so it
-inhabits `BinaryRel 𝕌[ 𝑨 ] (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ ℓ)`; we name that level `𝒈 ℓ`.
+inhabits `BinaryRel 𝕌[ 𝑨 ] (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ ℓ)`, one level above its input `R`.
 
 ```agda
-module _ {𝑨 : Algebra α ρ} where
+module _ {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra α ρ} where
   open Setoid 𝔻[ 𝑨 ] using ( _≈_ ) renaming ( refl to ≈refl )
 
-  -- The level at which the generated congruence lives.
-  𝒈 : Level → Level
-  𝒈 ℓ = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ ℓ
-
-  data Gen (R : BinaryRel 𝕌[ 𝑨 ] ℓ) : BinaryRel 𝕌[ 𝑨 ] (𝒈 ℓ) where
+  data Gen (R : BinaryRel 𝕌[ 𝑨 ] ℓ) : BinaryRel 𝕌[ 𝑨 ] (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ ℓ) where
     base : R ⊆ Gen R
     rfl         : {x y : 𝕌[ 𝑨 ]} → x ≈ y → Gen R x y
     symmetric   : {x y : 𝕌[ 𝑨 ]} → Gen R x y → Gen R y x
@@ -82,7 +78,7 @@ module _ {𝑨 : Algebra α ρ} where
     compatible  : (f : OperationSymbolsOf 𝑆) {u v : ArityOf 𝑆 f → 𝕌[ 𝑨 ]}
       → (∀ i → Gen R (u i) (v i)) → Gen R ((f ^ 𝑨) u) ((f ^ 𝑨) v)
 
-  Cg : (R : BinaryRel 𝕌[ 𝑨 ] ℓ) → Con 𝑨 (𝒈 ℓ)
+  Cg : (R : BinaryRel 𝕌[ 𝑨 ] ℓ) → Con 𝑨 (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ ℓ)
   Cg R = Gen R , mkcon rfl g-isEquivalence compatible
     where
     open IsEquivalence using (refl ; sym ; trans )
@@ -129,7 +125,7 @@ not be transitive, so we take the join to be the congruence it generates,
 `θ ∨ φ = Cg(θ ∪ φ)`.  We record the order facts using a heterogeneous containment
 `_⊑_` (which coincides definitionally with the homogeneous `_≤_` of
 [Setoid.Congruences.Lattice][] when the two levels agree), because the
-join sits at the higher level `𝒈 ℓ`.
+join sits at the higher level `𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ ℓ`.
 
 ```agda
   -- Heterogeneous containment of congruences.
@@ -142,7 +138,7 @@ join sits at the higher level `𝒈 ℓ`.
   (θ ∪ᵣ φ) x y = proj₁ θ x y ⊎ proj₁ φ x y
   infixr 6 _∪ᵣ_
 
-  _∨_ : Con 𝑨 ℓ → Con 𝑨 ℓ → Con 𝑨 (𝒈 ℓ)
+  _∨_ : Con 𝑨 ℓ → Con 𝑨 ℓ → Con 𝑨 (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ ℓ)
   θ ∨ φ = Cg (θ ∪ᵣ φ)
   infixr 6 _∨_
 ```
@@ -169,7 +165,7 @@ relation that relates exactly `a` to `b`.  Its generated congruence `Cg ❴ a , 
 the *principal* congruence collapsing the one pair.
 
 ```agda
-module principal (𝑨 : Algebra α ρ) where
+module principal {𝑆 : Signature 𝓞 𝓥} (𝑨 : Algebra {𝑆 = 𝑆} α ρ) where
   data ❴_,_❵ (a b : 𝕌[ 𝑨 ]) : BinaryRel 𝕌[ 𝑨 ] α where
     pᵣ : ❴ a , b ❵ a b
   open ❴_,_❵

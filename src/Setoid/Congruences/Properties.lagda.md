@@ -34,10 +34,10 @@ open import Agda.Primitive  using () renaming ( Set to Type )
 open import Level           using ( Level ; _⊔_ ) renaming (suc to lsuc)
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Setoid.Algebras.Basic          {𝑆 = 𝑆} using ( Algebra )
-open import Setoid.Congruences.Basic       {𝑆 = 𝑆} using ( Con )
-open import Setoid.Congruences.Lattice     {𝑆 = 𝑆} using ( _⊆_ ; _≑_ ; _∧_ )
-open import Setoid.Congruences.Generation  {𝑆 = 𝑆} using ( _∨_ )
+open import Setoid.Algebras.Basic          {𝑆 = 𝑆}  using ( Algebra )
+open import Setoid.Congruences.Basic       {𝑆 = 𝑆}  using ( Con )
+open import Setoid.Congruences.Lattice     {𝑆 = 𝑆}  using ( _⊆_ ; _≑_ ; _∧_ )
+open import Setoid.Congruences.Generation           using ( _∨_ )
 ```
 -->
 

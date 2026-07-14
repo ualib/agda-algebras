@@ -82,7 +82,7 @@ open import Relation.Nullary                       using  ( Dec ; yes ; no )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Setoid.Algebras.Basic     {𝑆 = 𝑆}  using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
-open import Setoid.Algebras.Finite    {𝑆 = 𝑆}  using  ( 𝟏 )
+open import Setoid.Algebras.Finite             using  ( 𝟏 )
 open import Setoid.Congruences.Basic  {𝑆 = 𝑆}  using  ( Con ; mkcon ; reflexive ; 𝟘[_] )
 open import Setoid.Congruences.Lattice {𝑆 = 𝑆} using  ( _≑_ )
 

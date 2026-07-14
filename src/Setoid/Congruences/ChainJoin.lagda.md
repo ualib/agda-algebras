@@ -50,7 +50,7 @@ open import Data.Nat.Base                          using  ( ℕ ; zero ; suc ; _
                                                           ; _<ᵇ_ ; _≤_ )
 open import Data.Nat.Properties                    using  ( <⇒<ᵇ ; ≤-refl ; ≤-trans
                                                           ; n<1+n ; n≤1+n )
-open import Data.Product                           using  ( Σ-syntax ; _,_ ; proj₁
+open import Data.Product                           using  ( ∃-syntax ; _,_ ; proj₁
                                                           ; proj₂ )
 open import Data.Sum.Base                          using  ( inj₁ ; inj₂ ; [_,_] )
 open import Data.Vec.Functional                    using  ( updateAt )
@@ -151,7 +151,7 @@ concrete `Fin k`, so the witness is the identity bijection `↔-id` at every sym
 
 ```agda
 Finitary : (𝑆 : Signature 𝓞 𝓥) → Type (𝓞 ⊔ 𝓥)
-Finitary 𝑆 = (f : OperationSymbolsOf 𝑆) → Σ[ k ∈ ℕ ] (ArityOf 𝑆 f ↔ Fin k)
+Finitary 𝑆 = (f : OperationSymbolsOf 𝑆) → ∃[ k ] ArityOf 𝑆 f ↔ Fin k
 ```
 
 #### Operations preserve the chain relation, one coordinate at a time
