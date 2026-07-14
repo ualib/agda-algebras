@@ -27,7 +27,7 @@ GH = "https://github.com/ualib/agda-algebras/blob/master/src/"
 
 # Conceptual ordering of the top-level groups; others sort after, alphabetically.
 TOP_ORDER = ["Overture", "Setoid", "Classical", "Order",
-             "Examples", "Exercises", "Demos", "Legacy", "agda-algebras"]
+             "Examples", "Exercises", "Legacy", "agda-algebras"]
 
 HEADER = """\
 <!-- File: docs/_links.md -->

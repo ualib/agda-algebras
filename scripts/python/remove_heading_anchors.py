@@ -114,7 +114,7 @@ def main(argv: list[str]) -> int:
     for target in targets:
         for path in sorted(p for p in target.rglob('*.lagda.md')
                            if 'Legacy/' not in str(p)
-                           and not str(p).replace('\\', '/').endswith('Demos/HSP.lagda.md')):
+                           and not str(p).replace('\\', '/').endswith('Examples/Demos/HSP.lagda.md')):
             for r in process_file(path, referenced, apply):
                 if 'unhandled' in r:
                     unhandled += 1

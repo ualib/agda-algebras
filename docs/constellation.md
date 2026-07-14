@@ -18,7 +18,6 @@ module.
   <span><i style="background:#b48ce0"></i>Order</span>
   <span><i style="background:#84c97f"></i>Examples</span>
   <span><i style="background:#e88bbf"></i>Exercises</span>
-  <span><i style="background:#6db3e0"></i>Demos</span>
   <span><i style="background:#8c968f"></i>Legacy</span>
 </div>
 

@@ -19,8 +19,8 @@ downstream consumers that do not need universe polymorphism.
 The intended audience is the family of downstream developments where most concrete
 instances live at `Set` rather than at a polymorphic `Set α` / `Set ρ` family: the
 finite-template constraint-satisfaction work in M7, the finite cases that motivate
-FLRP intuition in M6, and the tutorial-pedagogical contexts in `Examples/` and
-`Demos/`.  The polymorphism in the core is necessary for the substantive theorems but
+FLRP intuition in M6, and the tutorial-pedagogical contexts in `Examples/` (including
+`Examples/Demos/`).  The polymorphism in the core is necessary for the substantive theorems but
 is a distraction at use sites for the small case; pulling the level-fixed
 specialization into its own subtree keeps the polymorphic core unencumbered while
 giving small-case users a flat import.  The design rationale is recorded in

@@ -10,7 +10,7 @@
   var GROUP_COLORS = {
     Overture: "#e0a458", Setoid: "#46c7b8", Classical: "#e0815a",
     Order: "#b48ce0", Examples: "#84c97f", Exercises: "#e88bbf",
-    Demos: "#6db3e0", Legacy: "#8c968f",
+    Legacy: "#8c968f",
   };
   var color = function (g) { return GROUP_COLORS[g] || "#cfd8d2"; };
 

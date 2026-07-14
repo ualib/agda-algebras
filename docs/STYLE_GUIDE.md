@@ -262,7 +262,7 @@ Agda's standard library names predicates `IsSemigroup`, `IsMonoid`, `IsHomomorph
 
 1.  **Stdlib compatibility**.  Our bundle bridges to `Algebra.Bundles` interoperate naturally when our types share stdlib's idiom.
 2.  **Disambiguation**.  `IsHom` (the property) is structurally a different kind of object from `hom` (the Σ of the function and the property), and the typographic difference makes that clear.
-3.  **Established in canonical code**.  `Setoid/Homomorphisms/Basic.lagda.md`, `Demos/HSP.lagda.md`, and the `Setoid/Varieties/` tree already use this form.
+3.  **Established in canonical code**.  `Setoid/Homomorphisms/Basic.lagda.md`, `Examples/Demos/HSP.lagda.md`, and the `Setoid/Varieties/` tree already use this form.
 
 **Deprecated synonyms** (existing in `Base/` and some early `Setoid/`-ish code):
 
@@ -304,7 +304,7 @@ Don't decorate names to indicate implementation/type choices; avoid suffixes lik
 
 The mechanical sweep replacing `∣_∣` / `∥_∥` with the standard `proj₁` / `proj₂` across the live trees is M4-1 (#367).  The vertical-bars convention was an `agda-algebras` idiom carried over from earlier `TypeTopology`-style developments; the bars read *less* clearly for mathematicians who reserve them for absolute value and norm, and the stdlib names bridge more cleanly to `Data.Product`.  Signature components use the self-documenting `OperationSymbolsOf` / `ArityOf` (definitionally `proj₁` / `proj₂` of the signature); see [ADR-002][] §1.
 
-**Scope note**.  Once #367 lands, the live trees (`Overture/`, `Setoid/`, `Classical/`, `Demos/ContraX`, `Examples/`) are on `proj₁` / `proj₂`, and the bracket definitions remain in `Overture.Basic` under a `WARNING_ON_USAGE` so `Legacy/` keeps compiling.  The `∣` glyph legitimately survives outside `Legacy/` in the `_∣≈_` / `_∥≈_` operators, the `∣_∣=∣_∣` / `∣_∣≈∣_∣` bijection operators (`Examples.FunctionTypeBijections`), the `∣A∣`-style Carrier-alias identifiers, and CSP math prose; and the self-contained `Demos/HSP` keeps its own bracket notation.
+**Scope note**.  Once #367 lands, the live trees (`Overture/`, `Setoid/`, `Classical/`, `Examples/Demos/ContraX`, `Examples/`) are on `proj₁` / `proj₂`, and the bracket definitions remain in `Overture.Basic` under a `WARNING_ON_USAGE` so `Legacy/` keeps compiling.  The `∣` glyph legitimately survives outside `Legacy/` in the `_∣≈_` / `_∥≈_` operators, the `∣_∣=∣_∣` / `∣_∣≈∣_∣` bijection operators (`Examples.FunctionTypeBijections`), the `∣A∣`-style Carrier-alias identifiers, and CSP math prose; and the self-contained `Examples/Demos/HSP` keeps its own bracket notation.
 
 
 ### Operations
@@ -590,7 +590,7 @@ See [Module structure and organization](#module-structure-and-organization) abov
 
 ### Literate-Agda files
 
-Every module under `src/` is a literate-Agda file (`.lagda.md`); see [File format](#file-format) above.  The in-source-comment rules above apply to the Agda content inside fenced ```` ```agda ```` blocks; the surrounding Markdown prose can be more expansive and is the primary vehicle for tutorial-style documentation.  Tutorial-style chapters that historically lived under `docs/lagda/` are now ordinary modules under `src/` (typically under `Demos/` or `Overture/`).
+Every module under `src/` is a literate-Agda file (`.lagda.md`); see [File format](#file-format) above.  The in-source-comment rules above apply to the Agda content inside fenced ```` ```agda ```` blocks; the surrounding Markdown prose can be more expansive and is the primary vehicle for tutorial-style documentation.  Tutorial-style chapters that historically lived under `docs/lagda/` are now ordinary modules under `src/` (typically under `Examples/Demos/` or `Overture/`).
 
 ### Prose belongs in Markdown
 

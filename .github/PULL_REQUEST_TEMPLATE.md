@@ -31,7 +31,7 @@ Closes #
 - [ ] `make check` passes locally under `nix develop`.
 - [ ] New public definitions have prose comment blocks.
 - [ ] Commits are coherent and have explanatory messages.
-- [ ] If this PR touches `src/`, it targets a supported area such as `Classical/`, `Cubical/`, `Demos/`, `Examples/`, `Exercises/`, `Overture/`, or `Setoid/`.
+- [ ] If this PR touches `src/`, it targets a supported area such as `Classical/`, `Cubical/`, `Examples/`, `Exercises/`, `Overture/`, or `Setoid/`.
 - [ ] If this PR introduces new notation, it doesn't conflict with notation already used elsewhere in the library.
 
 ## Notes for reviewers

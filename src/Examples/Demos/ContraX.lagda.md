@@ -1,6 +1,6 @@
 ---
 layout: default
-title : "Demos.HSP module"
+title : "Examples.Demos.ContraX module"
 date : "2022-04-27"
 author: "the agda-algebras development team"
 ---
@@ -14,7 +14,7 @@ author: "the agda-algebras development team"
 
 open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 
-module Demos.ContraX {𝑆 : Signature 𝓞 𝓥} where
+module Examples.Demos.ContraX {𝑆 : Signature 𝓞 𝓥} where
 open import  Data.Unit.Polymorphic                  using ( ⊤ ; tt )
 open import  Data.Empty.Polymorphic                 using ( ⊥ )
 open import  Level                                  using ( 0ℓ )

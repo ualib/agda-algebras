@@ -1,6 +1,6 @@
 ---
 layout: default
-title : "Demos module"
+title : "Examples.Demos module"
 date : "2022-04-27"
 author: "the agda-algebras development team"
 ---
@@ -11,9 +11,9 @@ author: "the agda-algebras development team"
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-module Demos where
+module Examples.Demos where
 
-open import Demos.GeneralOperationsAndRelations
-open import Demos.HSP
-open import Demos.ContraX
+open import Examples.Demos.GeneralOperationsAndRelations
+open import Examples.Demos.HSP
+open import Examples.Demos.ContraX
 ```
