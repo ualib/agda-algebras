@@ -767,8 +767,9 @@ passage.
 
 [^2]: The module is deliberately built from many small named lemmas; the feasibility
       remark of [ADR-008][] applies here as well — the computation exists to discharge the
-      decidability *theorem*, and no claim of practical efficiency is made for iterating a
-      `card ² × card ²`-entry search.
+      decidability *theorem*, and no claim of practical efficiency is made for running up
+      to `card ²` iterations of a sweep over the `card × card` matrix, each entry of which
+      additionally searches the operation symbols and their arity tuples.
 
 [^3]: The standard library's `toWitness`{.AgdaFunction} and
       `fromWitness`{.AgdaFunction} state these through `isYes`{.AgdaFunction}, which

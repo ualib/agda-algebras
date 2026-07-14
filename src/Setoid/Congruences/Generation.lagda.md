@@ -64,7 +64,7 @@ Fix an algebra `𝑨` and a binary relation `R` on its carrier.  `Gen R` is the
 smallest relation containing `R` that is reflexive over `_≈_`, symmetric,
 transitive, and compatible with every basic operation.  The closure quantifies over
 the operation symbols (`𝓞`), their arities (`𝓥`), and the carrier (`α`, `ρ`), so it
-inhabits `BinaryRel 𝕌[ 𝑨 ] (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ ℓ)`; we name that level `𝒈 ℓ`.
+inhabits `BinaryRel 𝕌[ 𝑨 ] (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ ℓ)`, one level above its input `R`.
 
 ```agda
 module _ {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra α ρ} where
@@ -125,7 +125,7 @@ not be transitive, so we take the join to be the congruence it generates,
 `θ ∨ φ = Cg(θ ∪ φ)`.  We record the order facts using a heterogeneous containment
 `_⊑_` (which coincides definitionally with the homogeneous `_≤_` of
 [Setoid.Congruences.Lattice][] when the two levels agree), because the
-join sits at the higher level `𝒈 ℓ`.
+join sits at the higher level `𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ ℓ`.
 
 ```agda
   -- Heterogeneous containment of congruences.
