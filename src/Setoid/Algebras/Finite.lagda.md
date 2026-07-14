@@ -41,10 +41,8 @@ independent interface is `FiniteCongruences`{.AgdaRecord}, defined in
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using ( 𝓞 ; 𝓥 ; Signature )
-
--- module Setoid.Algebras.Finite {𝑆 : Signature 𝓞 𝓥} where
 module Setoid.Algebras.Finite  where
+
 open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library -----------------------------------
@@ -58,15 +56,14 @@ open import Relation.Binary   using ( Setoid )
 open import Relation.Nullary  using ( Dec ; yes )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
+open import Overture               using ( 𝓞 ; 𝓥 ; Signature )
 open import Setoid.Algebras.Basic  using ( Algebra ; 𝕌[_] ; 𝔻[_] )
 
 open Algebra  using ( Domain ; Interp )
 open Func     using ( cong ) renaming ( to to _⟨$⟩_ )
 open Relation.Binary.IsEquivalence
 
-
-private variable
-  α ρ : Level
+private variable α ρ : Level
 ```
 -->
 

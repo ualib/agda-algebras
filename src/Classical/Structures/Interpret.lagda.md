@@ -39,19 +39,17 @@ per signature.  See [ADR-002 v2 §1, §5](../../docs/adr/002-classical-layer-des
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using ( 𝓞 ; 𝓥 ; Signature )
-
-module Classical.Structures.Interpret {𝑆 : Signature 𝓞 𝓥} where
-
+module Classical.Structures.Interpret where
 
 -- Imports from the Agda Standard Library -----------------------------------------
-open import Function         using ( Func )
-open import Level            using ( Level )
-open import Data.Product     using ( _,_ )
-open import Relation.Binary  using ( Setoid )
-import Relation.Binary.PropositionalEquality as ≡
+open import Function                               using ( Func )
+open import Level                                  using ( Level )
+open import Data.Product                           using ( _,_ )
+open import Relation.Binary                        using ( Setoid )
+open import Relation.Binary.PropositionalEquality  using ( refl )
 
 -- Imports from the Agda Universal Algebra Library --------------------------------
+open import Overture                using ( 𝓞 ; 𝓥 ; Signature )
 open import Overture.Signatures     using ( OperationSymbolsOf ; ArityOf )
 open import Setoid.Algebras.Basic   using ( Algebra ; 𝔻[_] ; 𝕌[_] ; _^_ )
 
@@ -69,10 +67,10 @@ the operation-symbol component (same symbol) paired with the pointwise argument
 witness.
 
 ```agda
-module _ (𝑨 : Algebra α ρ) where
+module _ {𝑆 : Signature 𝓞 𝓥} (𝑨 : Algebra α ρ) where
   open Setoid 𝔻[ 𝑨 ] using ( _≈_ )
 
   interp-cong : (f : OperationSymbolsOf 𝑆) {u v : ArityOf 𝑆 f → 𝕌[ 𝑨 ]}
               → (∀ i → u i ≈ v i) → (f ^ 𝑨) u ≈ (f ^ 𝑨) v
-  interp-cong f u≈v = cong (Interp 𝑨) (≡.refl , u≈v)
+  interp-cong f u≈v = cong (Interp 𝑨) (refl , u≈v)
 ```

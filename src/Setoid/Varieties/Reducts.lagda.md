@@ -69,8 +69,6 @@ though it need not equal one.  That containment is `reduct-⊧` below.
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using ( 𝓞 ; 𝓥 ; Signature )
-
 module Setoid.Varieties.Reducts where
 
 open import Agda.Primitive using () renaming ( Set to Type )
@@ -86,15 +84,15 @@ open import Relation.Unary                 using ( Pred ; _∈_ ; _⊆_ )
 open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Setoid.Algebras.Reduct             using  ( reduct )
-open import Setoid.Categories.Reduct             using  ( reductF )
-open import Setoid.Varieties.Invariance          using  ( ⊧-reduct )
+open import Overture                                using ( 𝓞 ; 𝓥 ; Signature )
 open import Overture.Signatures.Morphisms           using  ( SigMorphism )
                                                     renaming ( ι to ι-op ; κ to κ-ar )
 open import Overture.Terms                          using  ( Term )
 open import Overture.Terms.Translation              using  ( _✶_ )
 open import Setoid.Algebras.Basic                   using  ( Algebra ; 𝔻[_] )
 open import Setoid.Algebras.Products                using  ( ⨅ )
+open import Setoid.Algebras.Reduct                  using  ( reduct )
+open import Setoid.Categories.Reduct                using  ( reductF )
 open import Setoid.Homomorphisms.Basic              using  ( hom ; IsHom ; mkIsHom )
 open import Setoid.Homomorphisms.Isomorphisms       using  ( _≅_ ; mkiso ; ≅-refl
                                                            ; ≅-sym ; ≅-trans ; ⨅≅ )
@@ -102,6 +100,7 @@ open import Setoid.Homomorphisms.HomomorphicImages  using  ( _IsHomImageOf_ )
 open import Setoid.Subalgebras.Basic                using  ( _≤_ )
 open import Setoid.Categories.Functor               using  ( Functor )
 open import Setoid.Varieties.Closure                using  ( P )
+open import Setoid.Varieties.Invariance             using  ( ⊧-reduct )
 
 open IsHom using ( compatible )
 open _≅_ using ( to ; from ; to∼from ; from∼to )

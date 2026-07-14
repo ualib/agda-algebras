@@ -69,12 +69,11 @@ open import Overture.Operations.Properties      using ( Associative? ; Commutati
 open import Classical.Signatures.Lattice        using ( Sig-Lattice )
 open import Classical.Small.Structures.Lattice  using ( Lattice ; eqsToLattice )
 open import Classical.Properties.Lattice        using ( module Lattice-Order )
-open import Setoid.Algebras.Basic as SetoidAlgebras using (Algebra ; 𝔻[_])
+open import Setoid.Algebras.Basic               using (Algebra ; 𝔻[_])
 open import Setoid.Algebras.Finite              using (FiniteAlgebra ; 𝟏 ; 𝟏-FiniteAlgebra )
+open import Setoid.Congruences.Basic            using ( Con ; 𝟘[_] ; 𝟙[_] ; reflexive )
 open import Setoid.Congruences.Generation       using ( Cg ; Cg-least ; base )
-
-import Setoid.Congruences.Basic             as SetoidCongruences
-import Setoid.Congruences.Lattice           as CongruenceOrder
+open import Setoid.Congruences.Lattice          using ( _⊆_ ; _≑_ ; 𝟘-min)
 ```
 -->
 
@@ -150,12 +149,8 @@ sides are lattices and order isomorphisms transport meets and joins, this is exa
 "`Con 𝑨` and `𝑳` are isomorphic lattices", stated without redundant clauses.
 
 ```agda
-module _
-  {𝑆 : Signature 0ℓ 0ℓ}
-  where
-  open CongruenceOrder {𝑆 = 𝑆} using ( _⊆_ ; _≑_ )
-  ConIso : Algebra 0ℓ 0ℓ → Lattice → Type (lsuc 0ℓ)
-  ConIso 𝑨 𝑳 = OrderIso  (_≑_ {𝑨 = 𝑨}) _⊆_ (Setoid._≈_ 𝔻[ proj₁ 𝑳 ]) (Lattice-Order._≤_ 𝑳)
+ConIso : {𝑆 : Signature 0ℓ 0ℓ} → Algebra {𝑆 = 𝑆} 0ℓ 0ℓ → Lattice → Type (lsuc 0ℓ)
+ConIso 𝑨 𝑳 = OrderIso (_≑_ {𝑨 = 𝑨}) _⊆_ (Setoid._≈_ 𝔻[ proj₁ 𝑳 ]) (Lattice-Order._≤_ 𝑳)
 ```
 
 #### Finite lattices
@@ -298,16 +293,7 @@ and the empty one is the smallest.)
 
 The representing algebra is the one-element algebra `𝟏`{.AgdaFunction} of
 [Setoid.Algebras.Finite][], instantiated at `𝑆∅`{.AgdaFunction},
-together with its ready-made finiteness witness
-`𝟏-FiniteAlgebra`{.AgdaFunction}.  We also fix the diagonal congruence and its
-minimality at this signature, renamed with a `∅` mark to keep them apart from
-the same names used at other signatures below.
-
-```agda
--- open FiniteAlgebras     {𝑆 = 𝑆∅}  using ( 𝟏 ; 𝟏-FiniteAlgebra )
-open SetoidCongruences  {𝑆 = 𝑆∅}  using () renaming ( 𝟘[_] to 𝟘∅[_] )
-open CongruenceOrder    {𝑆 = 𝑆∅}  using () renaming ( 𝟘-min to 𝟘∅-min )
-```
+together with its ready-made finiteness witness `𝟏-FiniteAlgebra`{.AgdaFunction}.
 
 #### Instance: the one-element chain is representable
 
@@ -362,11 +348,11 @@ chain₁-Representable = record
   ; finite   = 𝟏-FiniteAlgebra
   ; con-iso  = record
       { to         = λ _ → 0F
-      ; from       = λ _ → 𝟘∅[ 𝟏 ]
+      ; from       = λ _ → 𝟘[ 𝟏 ]
       ; to-mono    = λ _ → refl
       ; from-mono  = λ _ p → p
       ; to∘from    = 0F≡
-      ; from∘to    = λ θ → 𝟘∅-min θ , (λ _ → lift tt)
+      ; from∘to    = λ θ → 𝟘-min θ , (λ _ → lift tt)
       }
   }
 open Representable
@@ -387,20 +373,20 @@ _∧₂_ _∨₂_ : Fin 2 → Fin 2 → Fin 2
 _∧₂_ = ⟦ ∧₂-table ⟧
 _∨₂_ = ⟦ ∨₂-table ⟧
 
+open FiniteLattice
+
 chain₂ : FiniteLattice
-chain₂ = record
-  { size     = 1
-  ; _∧_      = _∧₂_
-  ; _∨_      = _∨₂_
-  ; ∧-assoc  = from-yes (Associative? _∧₂_)
-  ; ∧-comm   = from-yes (Commutative? _∧₂_)
-  ; ∧-idem   = from-yes (Idempotent? _∧₂_)
-  ; ∨-assoc  = from-yes (Associative? _∨₂_)
-  ; ∨-comm   = from-yes (Commutative? _∨₂_)
-  ; ∨-idem   = from-yes (Idempotent? _∨₂_)
-  ; absorbˡ  = from-yes (Absorbsˡ? _∧₂_ _∨₂_)
-  ; absorbʳ  = from-yes (Absorbsʳ? _∧₂_ _∨₂_)
-  }
+chain₂ .size     = 1
+chain₂ ._∧_      = _∧₂_
+chain₂ ._∨_      = _∨₂_
+chain₂ .∧-assoc  = from-yes (Associative? _∧₂_)
+chain₂ .∧-comm   = from-yes (Commutative? _∧₂_)
+chain₂ .∧-idem   = from-yes (Idempotent? _∧₂_)
+chain₂ .∨-assoc  = from-yes (Associative? _∨₂_)
+chain₂ .∨-comm   = from-yes (Commutative? _∨₂_)
+chain₂ .∨-idem   = from-yes (Idempotent? _∨₂_)
+chain₂ .absorbˡ  = from-yes (Absorbsˡ? _∧₂_ _∨₂_)
+chain₂ .absorbʳ  = from-yes (Absorbsʳ? _∧₂_ _∨₂_)
 
 chain₂-lattice : Lattice
 chain₂-lattice = toLattice chain₂
@@ -455,10 +441,9 @@ The proof needs three small facts, each with a one-line justification.
 
 ```agda
 module _ {𝑆 : Signature 0ℓ 0ℓ} where
-  open SetoidCongruences     {𝑆 = 𝑆}  using ( Con ; 𝟘[_] ; 𝟙[_] ; reflexive )
-  open CongruenceOrder       {𝑆 = 𝑆}  using ( _⊆_ ; _≑_ ; 𝟘-min )
+  -- open CongruenceOrder       {𝑆 = 𝑆}  using ( _⊆_ ; _≑_ ; 𝟘-min )
 
-  module _ (𝑨 : Algebra 0ℓ 0ℓ) (iso : ConIso 𝑨 chain₂-lattice) where
+  module _ (𝑨 : Algebra {𝑆 = 𝑆} 0ℓ 0ℓ) (iso : ConIso 𝑨 chain₂-lattice) where
     open OrderIso       iso
     open Setoid         𝔻[ 𝑨 ]         using ( _≈_ )
     open Lattice-Order  chain₂-lattice  using ( ≤-antisym )

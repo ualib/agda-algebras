@@ -10,7 +10,7 @@ author: "the agda-algebras development team"
 
 This is the [Setoid.Congruences.Presented.Decidable][] module of the [Agda Universal Algebra Library][].
 
-[Setoid.Congruences.Presented][] proved the reconstruction half of the decidable
+[Setoid.Congruences.Presented.Basic][] proved the reconstruction half of the decidable
 layer: every decidable congruence on a finite carrier is `≑` to `Cg` of its
 related-pairs list.  This module proves the converse half, which is
 
@@ -70,7 +70,7 @@ Soundness and completeness together give the decision procedure
 `Cg-dec`{.AgdaFunction}: to decide `Gen (fromPairs ps) x y`, test one bit of the
 closure matrix.  `Cg-DecCon`{.AgdaFunction} packages the result as a
 `DecCon`{.AgdaFunction} at the working congruence level `clv α ρ` of
-[Setoid.Congruences.Finite][].[^2]
+[Setoid.Congruences.Finite.Basic][].[^2]
 
 <!--
 ```agda
@@ -101,35 +101,31 @@ open import Function              using  ( _∘_ ; Func )
 open import Level                 using  ( Level ; 0ℓ ; _⊔_ )
 open import Relation.Binary       using  ( Setoid ; IsEquivalence )
                                   renaming ( Rel to BinaryRel )
+
 open import Relation.Nullary            using  ( ¬_ ; ofʸ ; ofⁿ )
-open import Relation.Nullary.Decidable  using  ( Dec ; yes ; no ; _because_
-                                               ; does ; map′ ; T?
-                                               ; _⊎-dec_ ; _×-dec_ )
+open import Relation.Nullary.Decidable  using  ( Dec ; yes ; no ; _because_ ; does ; map′
+                                               ; T? ; _⊎-dec_ ; _×-dec_ )
 
-
-open import Data.List.Membership.Propositional using ( _∈_ ; lose )
+open import Relation.Binary.PropositionalEquality  using  ( _≡_ ; refl ; sym ; cong
+                                                          ; _≢_ ; trans ; subst ; subst₂ )
+open import Data.List.Membership.Propositional     using  ( _∈_ ; lose )
+open import Data.List.Relation.Unary.Any           using  ( Any ; here ; satisfied )
+  renaming ( any? to anyL? ; map to mapAny )
 
 open import Data.List.Membership.Propositional.Properties
   using ( ∈-allFin ; ∈-map⁺ ; ∈-concat⁺′ )
 
-open import Data.List.Relation.Unary.Any  using ( Any ; here ; satisfied )
-                                          renaming ( any? to anyL? ; map to mapAny )
-
-open import Relation.Binary.PropositionalEquality
-  using ( _≡_ ; _≢_ ; refl ; sym ; trans ; cong ; subst ; subst₂ )
-
-
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture                       using  ( 𝓞 ; 𝓥 ; Signature ; ArityOf
-                                                  ; OperationSymbolsOf )
-open import Setoid.Algebras.Basic          using  ( Algebra ; 𝕌[_] ; 𝔻[_] ; _^_ )
-open import Setoid.Algebras.Finite         using  ( FiniteAlgebra )
-open import Setoid.Congruences.Basic       using  ( Con ; mkcon ; _∣≈_ )
-open import Setoid.Congruences.Finite      using  ( clv ; DecCon )
-open import Setoid.Congruences.Generation  using  ( Gen ; Cg ; base ; rfl ; symmetric
-                                                  ; transitive ; compatible ; Cg-least )
-open import Setoid.Congruences.Presented   using  ( fromPairs ; fromPairs? )
-open import Setoid.Signatures.Finite       using  ( FiniteSignature )
+open import Overture                            using  ( 𝓞 ; 𝓥 ; Signature ; ArityOf
+                                                       ; OperationSymbolsOf )
+open import Setoid.Algebras.Basic               using  ( Algebra ; 𝕌[_] ; 𝔻[_] ; _^_ )
+open import Setoid.Algebras.Finite              using  ( FiniteAlgebra )
+open import Setoid.Congruences.Basic            using  ( Con ; mkcon ; _∣≈_ )
+open import Setoid.Congruences.Finite.Basic     using  ( clv ; DecCon )
+open import Setoid.Congruences.Generation       using  ( Gen ; Cg ; base ; rfl ; symmetric
+                                                       ; transitive ; compatible ; Cg-least )
+open import Setoid.Congruences.Presented.Basic  using  ( fromPairs ; fromPairs? )
+open import Setoid.Signatures.Finite            using  ( FiniteSignature )
 
 private variable α ρ : Level
 ```
@@ -746,7 +742,7 @@ congruence generation theorem the whole generated congruence is.
 To decide membership in `Cg (fromPairs ps)`, test one bit of the closure matrix;
 soundness and completeness translate the verdict both ways.  The upgrade to a
 `DecCon`{.AgdaFunction} then lands at the working congruence level, where
-[Setoid.Congruences.Presented][]'s reconstruction theorem provides the converse
+[Setoid.Congruences.Presented.Basic][]'s reconstruction theorem provides the converse
 passage.
 
 ```agda

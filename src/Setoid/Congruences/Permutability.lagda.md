@@ -46,7 +46,7 @@ open import Relation.Binary  using ( Setoid ; IsEquivalence )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Setoid.Algebras.Basic     {𝑆 = 𝑆}  using ( ov ; Algebra ; 𝕌[_] )
-open import Setoid.Congruences.Basic  {𝑆 = 𝑆}  using ( Con ; is-equivalence )
+open import Setoid.Congruences.Basic           using ( Con ; is-equivalence )
 
 private variable α ρ ℓ : Level
 ```

@@ -43,8 +43,6 @@ identity- and composition-preservation, both holding by `refl`.
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using ( 𝓞 ; 𝓥 ; Signature )
-
 module Setoid.Algebras.Reduct where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
@@ -56,6 +54,7 @@ open import Relation.Binary.PropositionalEquality using (_≡_; refl)
 open Func renaming ( to to _⟨$⟩_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
+open import Overture                       using  ( 𝓞 ; 𝓥 ; Signature )
 open import Overture.Signatures            using  ( OperationSymbolsOf ; ArityOf )
 open import Overture.Signatures.Morphisms  using  ( SigMorphism ; mkSigMorphism
                                                   ; ι ; κ ; id-morphism ; _∘ₛ_ )

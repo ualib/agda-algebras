@@ -57,11 +57,8 @@ open import Classical.Signatures.Unary            using ( Sig-Unary )
 open import Classical.Structures.Group.Basic      using ( Group ; module Group-Op )
 open import Classical.Structures.Group.Subgroups  using ( IsSubgroup )
 open import Classical.Structures.Group.Cosets     using ( module Coset )
-
-import Setoid.Algebras.Basic    as SetoidAlgebras
-import Setoid.Congruences.Basic as SetoidCongruences
-
-open SetoidAlgebras {𝑆 = Sig-Group} using ( 𝕌[_] )
+open import Setoid.Congruences.Basic              using ( Con )
+open import Setoid.Algebras.Basic                 using ( 𝕌[_]; Algebra ; mkAlgebra)
 ```
 -->
 
@@ -82,9 +79,8 @@ module CosetAction {α ρ : Level} (𝒢 : Group α ρ) {ℓ : Level}
 
   -- The algebra G ↷ G/H over the unary signature on the carrier of G:
   -- the symbol g acts on the coset of x by left translation, g ∙ x.
-  open SetoidAlgebras {𝑆 = Sig-Unary G} using ( Algebra ; mkAlgebra )
 
-  cosetAlgebra : Algebra α ℓ
+  cosetAlgebra : Algebra {𝑆 = Sig-Unary G} α ℓ
   cosetAlgebra = mkAlgebra cosetSetoid (λ g a → g ∙ a 0F) (λ g u∼v → ∼-congˡ g (u∼v 0F))
 ```
 
@@ -96,11 +92,11 @@ module CosetAction {α ρ : Level} (𝒢 : Group α ρ) {ℓ : Level}
   act-identity x = ≈⇒∼ (idˡ-law x)
 
   -- Acting by g ∙ h is acting by h, then by g.
-  act-compatible : (g h x : G) → ((g ∙ h) ∙ x) ∼ (g ∙ (h ∙ x))
+  act-compatible : (g h x : G) → (g ∙ h) ∙ x ∼ g ∙ (h ∙ x)
   act-compatible g h x = ≈⇒∼ (assoc-law g h x)
 
   -- The action is transitive: y ∙ x ⁻¹ carries the coset of x to the coset of y.
-  act-transitive : (x y : G) → Σ[ g ∈ G ] ((g ∙ x) ∼ y)
+  act-transitive : (x y : G) → Σ[ g ∈ G ] (g ∙ x) ∼ y
   act-transitive x y = y ∙ x ⁻¹ , ≈⇒∼ (//-rightDividesˡ x y)
 ```
 
@@ -113,8 +109,6 @@ this type is isomorphic (as a lattice) to the interval `[H, G]` in `Sub(G)`.
 
 ```agda
   private
-    open SetoidCongruences {𝑆 = Sig-Unary G} using ( Con )
-
     _ : Type (α ⊔ suc ℓ)
     _ = Con cosetAlgebra ℓ
 ```

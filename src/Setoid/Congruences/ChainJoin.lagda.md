@@ -34,8 +34,6 @@ algebra.
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using ( 𝓞 ; 𝓥 ; Signature )
-
 module Setoid.Congruences.ChainJoin where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
@@ -66,7 +64,8 @@ open import Relation.Binary.PropositionalEquality  using  ( _≡_ ; _≢_ ; refl
 open import Relation.Nullary.Decidable             using  ( yes ; no )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture                       using  ( OperationSymbolsOf ; ArityOf )
+open import Overture                       using  ( OperationSymbolsOf ; ArityOf
+                                                  ; 𝓞 ; 𝓥 ; Signature )
 open import Setoid.Algebras.Basic          using  ( Algebra ; 𝔻[_] ; 𝕌[_] ; _^_ )
 open import Setoid.Congruences.Basic       using  ( Con ; mkcon ; _∣≈_ ; reflexive
                                                   ; is-equivalence ; is-compatible )

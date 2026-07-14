@@ -13,16 +13,14 @@ This is the [Setoid.Congruences.Basic][] module of the [Agda Universal Algebra L
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature)
-
-module Setoid.Congruences.Basic {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Congruences.Basic where
 
 -- Imports from the Agda Standard Library ---------------------------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
 open import Data.Product     using ( _,_ ; Σ-syntax ; proj₁ ; proj₂ )
 open import Data.Unit.Base   using ( ⊤ ; tt )
 open import Function         using ( Func )
-open import Level            using ( Level ; _⊔_ ; Lift ; lift ; lower )
+open import Level            using ( Level ; _⊔_ ; Lift ; lift ; lower ) renaming (suc to lsuc)
 open import Relation.Binary  using ( Setoid ; IsEquivalence )
                              renaming ( Rel to BinaryRel )
 
@@ -30,9 +28,9 @@ open import Relation.Binary.PropositionalEquality
                              using ( refl )
 
 -- Imports from the Agda Universal Algebras Library ------------------------------
-open import Overture                       using ( _|:_ ; Equivalence )
-open import Setoid.Relations               using ( ⟪_⟫ ; _/_ ; ⟪_∼_⟫-elim )
-open import Setoid.Algebras.Basic {𝑆 = 𝑆}  using ( ov ; Algebra ; 𝔻[_] ; 𝕌[_] ; _^_ )
+open import Overture                using ( _|:_ ; Equivalence ; 𝓞 ; 𝓥 ; Signature)
+open import Setoid.Relations        using ( ⟪_⟫ ; _/_ ; ⟪_∼_⟫-elim )
+open import Setoid.Algebras.Basic   using ( ov ; Algebra ; 𝔻[_] ; 𝕌[_] ; _^_ )
 
 private variable α ρ ℓ : Level
 ```
@@ -45,9 +43,10 @@ since all the work is done by the relation `|:`, which we defined above (see
 [Setoid.Relations.Discrete][]).
 
 ```agda
--- Algebra compatibility with binary relation
-_∣≈_ : (𝑨 : Algebra α ρ) → BinaryRel 𝕌[ 𝑨 ] ℓ → Type _
-𝑨 ∣≈ R = ∀ 𝑓 → (𝑓 ^ 𝑨) |: R
+module _ {𝑆 : Signature 𝓞 𝓥} where
+  -- Algebra compatibility with binary relation
+  _∣≈_ : (𝑨 : Algebra {𝑆 = 𝑆} α ρ) → BinaryRel 𝕌[ 𝑨 ] ℓ → Type _
+  𝑨 ∣≈ R = ∀ 𝑓 → (𝑓 ^ 𝑨) |: R
 ```
 
 A *congruence relation* of an algebra `𝑨` is defined to be an equivalence relation
@@ -65,7 +64,7 @@ probably redefine equivalence relation on setoids to be reflexive with respect t
 the underlying setoid equality (and not just with respect to _≡_).)
 
 ```agda
-module _ (𝑨 : Algebra α ρ) where
+module _ {𝑆 : Signature 𝓞 𝓥} (𝑨 : Algebra {𝑆 = 𝑆} α ρ) where
   open Setoid 𝔻[ 𝑨 ] using ( _≈_ )
   record IsCongruence (θ : BinaryRel 𝕌[ 𝑨 ] ℓ) : Type (𝓞 ⊔ 𝓥 ⊔ ρ ⊔ ℓ ⊔ α)  where
     constructor mkcon
@@ -79,7 +78,7 @@ module _ (𝑨 : Algebra α ρ) where
 
   open IsCongruence public
 
-  Con : (ℓ : Level) → Type (α ⊔ ρ ⊔ ov ℓ)
+  Con : (ℓ : Level) → Type (α ⊔ ρ ⊔ ov {𝑆 = 𝑆} ℓ)
   Con ℓ = Σ[ θ ∈ BinaryRel 𝕌[ 𝑨 ] ℓ ] IsCongruence θ
 ```
 
@@ -88,11 +87,12 @@ equivalent in the sense that each implies the other. One implication is the
 "uncurry" operation and the other is the second projection.
 
 ```agda
-IsCongruence→Con : {𝑨 : Algebra α ρ}(θ : BinaryRel 𝕌[ 𝑨 ] ℓ) → IsCongruence 𝑨 θ → Con 𝑨 ℓ
-IsCongruence→Con θ p = θ , p
+module _ {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra {𝑆 = 𝑆} α ρ} where
+  IsCongruence→Con : (θ : BinaryRel 𝕌[ 𝑨 ] ℓ) → IsCongruence 𝑨 θ → Con 𝑨 ℓ
+  IsCongruence→Con θ p = θ , p
 
-Con→IsCongruence : {𝑨 : Algebra α ρ}((θ , _) : Con 𝑨 ℓ) → IsCongruence 𝑨 θ
-Con→IsCongruence (_ , p) = p
+  Con→IsCongruence : ((θ , _) : Con 𝑨 ℓ) → IsCongruence 𝑨 θ
+  Con→IsCongruence (_ , p) = p
 ```
 
 #### Quotient algebras
@@ -103,24 +103,25 @@ is typically denoted by `𝑨 / θ` and Agda allows us to define and express quo
 using this standard notation.
 
 ```agda
-open Algebra  using ( Domain ; Interp )
-open Func     using ( cong ) renaming ( to to _⟨$⟩_ )
+module _ {𝑆 : Signature 𝓞 𝓥}  where
+  open Algebra  using ( Domain ; Interp )
+  open Func     using ( cong ) renaming ( to to _⟨$⟩_ )
 
-_╱_ : (𝑨 : Algebra α ρ) → Con 𝑨 ℓ → Algebra α ℓ
-Domain (𝑨 ╱ θ) = 𝕌[ 𝑨 ] / (Eqv (proj₂ θ))
-Interp (𝑨 ╱ θ) ⟨$⟩ (f , a) = (f ^ 𝑨) a
-Interp (𝑨 ╱ θ) .cong {f , u} {.f , v} (refl , a) = is-compatible (proj₂ θ) f a
+  _╱_ : (𝑨 : Algebra {𝑆 = 𝑆} α ρ) → Con 𝑨 ℓ → Algebra α ℓ
+  (𝑨 ╱ θ) .Domain = 𝕌[ 𝑨 ] / (Eqv (proj₂ θ))
+  (𝑨 ╱ θ) .Interp ⟨$⟩ (f , a) = (f ^ 𝑨) a
+  (𝑨 ╱ θ) .Interp .cong {f , u} {.f , v} (refl , a) = is-compatible (proj₂ θ) f a
 
-module _ (𝑨 : Algebra α ρ) where
-  open Setoid 𝔻[ 𝑨 ]   using ( _≈_ )
+  module _ (𝑨 : Algebra α ρ) where
+    open Setoid 𝔻[ 𝑨 ] using ( _≈_ )
 
-  _/∙_ : 𝕌[ 𝑨 ] → (θ : Con 𝑨 ℓ) → 𝕌[ 𝑨 ╱ θ ]
-  a /∙ θ = a
+    _/∙_ : 𝕌[ 𝑨 ] → (θ : Con 𝑨 ℓ) → 𝕌[ 𝑨 ╱ θ ]
+    a /∙ θ = a
 
-  /-≡ : (θ : Con 𝑨 ℓ){u v : 𝕌[ 𝑨 ]}
-    → ⟪ u ⟫{Eqv (proj₂ θ)} ≈ ⟪ v ⟫{Eqv (proj₂ θ)} → (proj₁ θ) u v
+    /-≡ : ((_θ_ , θcon) : Con 𝑨 ℓ){u v : 𝕌[ 𝑨 ]}
+      → ⟪ u ⟫{Eqv θcon} ≈ ⟪ v ⟫{Eqv θcon} → u θ v
 
-  /-≡ θ uv = reflexive (Con→IsCongruence θ) uv
+    /-≡ θ uv = reflexive (Con→IsCongruence θ) uv
 ```
 
 #### The least and greatest congruences
@@ -146,23 +147,26 @@ belongs here.  For the total congruence compatibility is trivial, since every tw
 elements are related.
 
 ```agda
--- The least (diagonal) congruence of 𝑨: relates exactly the ≈-equal pairs.
-𝟘[_] : (𝑨 : Algebra α ρ){ℓ : Level} → Con 𝑨 (ρ ⊔ ℓ)
-𝟘[ 𝑨 ] {ℓ} = (λ x y → Lift ℓ (x ≈ y)) , mkcon (λ e → lift e) 𝟘-isEquiv 𝟘-compatible
-  where
-  open Setoid 𝔻[ 𝑨 ] using ( _≈_ ) renaming ( refl to ≈refl ; sym to ≈sym ; trans to ≈trans )
-  𝟘-isEquiv : IsEquivalence (λ x y → Lift ℓ (x ≈ y))
-  𝟘-isEquiv = record  { refl   = lift ≈refl
-                      ; sym    = λ p → lift (≈sym (lower p))
-                      ; trans  = λ p q → lift (≈trans (lower p) (lower q)) }
-  -- compatibility is precisely that the operations respect ≈ (the cong of Interp)
-  𝟘-compatible : 𝑨 ∣≈ (λ x y → Lift ℓ (x ≈ y))
-  𝟘-compatible f h = lift (cong (Interp 𝑨) (refl , λ i → lower (h i)))
+  -- The least (diagonal) congruence of 𝑨: relates exactly the ≈-equal pairs.
+  𝟘[_] : (𝑨 : Algebra {𝑆 = 𝑆} α ρ){ℓ : Level} → Con 𝑨 (ρ ⊔ ℓ)
+  𝟘[ 𝑨 ] {ℓ} = (λ x y → Lift ℓ (x ≈ y)) , mkcon (λ e → lift e) 𝟘-isEquiv 𝟘-compatible
+    where
+    open Setoid 𝔻[ 𝑨 ]  using ( _≈_ )
+                         renaming ( refl to ≈refl ; sym to ≈sym ; trans to ≈trans )
 
--- The greatest (total) congruence of 𝑨: relates every pair.
-𝟙[_] : (𝑨 : Algebra α ρ){ℓ : Level} → Con 𝑨 ℓ
-𝟙[ 𝑨 ] {ℓ} = (λ _ _ → Lift ℓ ⊤) , mkcon (λ _ → lift tt) 𝟙-isEquiv (λ _ _ → lift tt)
-  where
-  𝟙-isEquiv : IsEquivalence (λ (_ _ : 𝕌[ 𝑨 ]) → Lift ℓ ⊤)
-  𝟙-isEquiv = record { refl = lift tt ; sym = λ _ → lift tt ; trans = λ _ _ → lift tt }
+    𝟘-isEquiv : IsEquivalence (λ x y → Lift ℓ (x ≈ y))
+    𝟘-isEquiv = record  { refl   = lift ≈refl
+                        ; sym    = λ p → lift (≈sym (lower p))
+                        ; trans  = λ p q → lift (≈trans (lower p) (lower q)) }
+
+    -- compatibility is precisely that the operations respect ≈ (the cong of Interp)
+    𝟘-compatible : 𝑨 ∣≈ λ x y → Lift ℓ (x ≈ y)
+    𝟘-compatible f h = lift (𝑨 .Interp .cong (refl , λ i → lower (h i)))
+
+  -- The greatest (total) congruence of 𝑨: relates every pair.
+  𝟙[_] : (𝑨 : Algebra {𝑆 = 𝑆} α ρ){ℓ : Level} → Con 𝑨 ℓ
+  𝟙[ 𝑨 ] {ℓ} = (λ _ _ → Lift ℓ ⊤) , mkcon (λ _ → lift tt) 𝟙-isEquiv (λ _ _ → lift tt)
+    where
+    𝟙-isEquiv : IsEquivalence (λ (_ _ : 𝕌[ 𝑨 ]) → Lift ℓ ⊤)
+    𝟙-isEquiv = record { refl = lift tt ; sym = λ _ → lift tt ; trans = λ _ _ → lift tt }
 ```
