@@ -76,7 +76,7 @@ The relatively free algebra (relative to `Th 𝒦`) is called `M` and is derived
 ```agda
  -- ℐ indexes the collection of equations modeled by 𝒦
   ℐ : Type ι
-  ℐ = Σ[ eq ∈ Eq{χ} ] 𝒦 ⊫ ((lhs eq) ≈̇ (rhs eq))
+  ℐ = Σ[ eq ∈ Eq {χ = χ} ] 𝒦 ⊫ ((lhs eq) ≈̇ (rhs eq))
 
   ℰ : ℐ → Eq
   ℰ (eqv , p) = eqv
