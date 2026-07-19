@@ -73,7 +73,7 @@ the kernels are `Con 𝑨 ρ`), and a homomorphism `h : 𝑨 → ⨅ 𝒜`.  The
 `h` is the kernel congruence of the `i`-th coordinate map `coord 𝒜 h i = projᵢ ∘ h`.
 
 ```agda
-module _ {I : Type ι}{𝑨 : Algebra {𝑆 = 𝑆} α ρ}(𝒜 : I → Algebra {𝑆 = 𝑆} αᵃ ρ)(h : hom 𝑨 (⨅ 𝒜)) where
+module _ {𝑆 : Signature 𝓞 𝓥}{I : Type ι}{𝑨 : Algebra {𝑆 = 𝑆} α ρ}(𝒜 : I → Algebra {𝑆 = 𝑆} αᵃ ρ)(h : hom 𝑨 (⨅ 𝒜)) where
 
   -- The kernel of the i-th coordinate map: the congruence on 𝑨 whose quotient is the
   -- image of 𝑨 under projᵢ ∘ h.
@@ -247,7 +247,7 @@ decompositions of an SI algebra are exactly those with an isomorphic coordinate.
 
 ```agda
 module _
-  {I : Type ι} {𝑨 : Algebra {𝑆 = 𝑆} α ρ} {𝒜 : I → Algebra {𝑆 = 𝑆} αᵃ ρ}
+  {𝑆 : Signature 𝓞 𝓥}{I : Type ι} {𝑨 : Algebra {𝑆 = 𝑆} α ρ} {𝒜 : I → Algebra {𝑆 = 𝑆} αᵃ ρ}
   (h : hom 𝑨 (⨅ 𝒜)) where
 
   iso-coord⟹¬all-proper :
