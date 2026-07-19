@@ -1,4 +1,4 @@
-n---
+---
 layout: default
 file: "src/FLRP/Enforceable.lagda.md"
 title: "FLRP.Enforceable module (The Agda Universal Algebra Library)"
@@ -23,7 +23,7 @@ The note's program is to combine interval-enforceable properties into a
 contradiction, which, by Pálfy–Pudlák, would answer the Finite Lattice Representation
 Problem negatively.
 
-#### Summary of the <span class="AgdaModule">FLRP.Enforceable</span> module
+#### Summary of the `FLRP.Enforceable`{.AgdaModule} module
 
 The module contents, keyed to the note, are as follows:
 
@@ -54,7 +54,7 @@ Two disciplines from the roadmap govern the definitions.
    groups and predicates, and Agda cannot quantify existentially over universe
    levels, so the levels must be pinned; `0ℓ` suffices for every finite (indeed
    every set-sized) instance.  Group *properties* appear only in universally
-   quantified positions, so they keep a polymorphic level `ℓP`.[^2]
+   quantified positions, so they keep a polymorphic level `ℓP`.
 
 <!--
 ```agda
@@ -116,7 +116,7 @@ sub*set* of the carrier, i.e. an `≈`-saturated predicate, and bare subuniverse
 distinguish `≈`-equal elements.  The distinction is not cosmetic — over a carrier
 with a redundant representative the bare interval `[H × K , G × K]` can be strictly
 larger than `[H , G]`, so the fattening isomorphism below is *false* at the bare
-level.[^3]
+level.[^2]
 
 We therefore take as interval elements the bare interval elements
 *paired with a proof that the predicate respects `≈`* — exactly the
@@ -267,7 +267,7 @@ record GroupRepresentable (𝑳 : Lattice) : Type (lsuc 0ℓ) where
 
 A *group property* here is any predicate on groups (at a polymorphic level, per the
 level discipline above; isomorphism-invariance is not required, and none of the
-results below use it).
+results below use it).[^3]
 
 ```agda
 GroupProperty : (ℓP : Level) → Type (lsuc 0ℓ ⊔ lsuc ℓP)
