@@ -14,9 +14,9 @@ This is the [Setoid.Terms.Properties][] module of the [Agda Universal Algebra Li
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature)
+open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
 
-module Setoid.Terms.Properties {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Terms.Properties where
 
 open import Agda.Primitive   using () renaming ( Set to Type )
 
@@ -31,12 +31,12 @@ import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Overture                       using ( proj₁ ; proj₂ )
-open import Overture.Terms        {𝑆 = 𝑆}  using  ( Term )
-open import Setoid.Algebras       {𝑆 = 𝑆}  using  ( Algebra ; 𝕌[_] ; 𝔻[_] ; _^_ )
+open import Overture.Terms  using  ( Term )
+open import Setoid.Algebras  using  ( Algebra ; 𝕌[_] ; 𝔻[_] ; _^_ )
 open import Setoid.Functions               using  ( Img_∋_ ; eq ; isSurj ; IsSurjective
                                                   ; isSurj→IsSurjective )
-open import Setoid.Homomorphisms  {𝑆 = 𝑆}  using  ( hom ; compatible-map ; IsHom ; ⊙-hom )
-open import Setoid.Terms.Basic    {𝑆 = 𝑆}  using  ( 𝑻 ; _≐_  ; ≐-isRefl )
+open import Setoid.Homomorphisms  using  ( hom ; compatible-map ; IsHom ; ⊙-hom )
+open import Setoid.Terms.Basic  using  ( 𝑻 ; _≐_  ; ≐-isRefl )
 
 open Term
 open _⟶_ using ( ) renaming ( to to _⟨$⟩_ ; cong to ≈cong )
@@ -58,12 +58,12 @@ We now prove this in [Agda][], starting with the fact that every map from `X` to
 on the structure of the given term.
 
 ```agda
-module _ {𝑨 : Algebra α ρ}(h : X → 𝕌[ 𝑨 ]) where
+module _ {𝑆 : Signature 𝓞 𝓥}{𝑨 : Algebra {𝑆 = 𝑆} α ρ}(h : X → 𝕌[ 𝑨 ]) where
   open Algebra 𝑨      using ( Interp ) renaming ( Domain to A )
   open Setoid A       using ( _≈_ ; reflexive )
-  open Algebra (𝑻 X)  using () renaming ( Domain to TX )
+  open Algebra (𝑻 {𝑆 = 𝑆} X)  using () renaming ( Domain to TX )
 
-  free-lift : 𝕌[ 𝑻 X ] → 𝕌[ 𝑨 ]
+  free-lift : 𝕌[ 𝑻 {𝑆 = 𝑆} X ] → 𝕌[ 𝑨 ]
   free-lift (ℊ x) = h x
   free-lift (node f t) = (f ^ 𝑨) (λ i → free-lift (t i))
 
@@ -123,10 +123,10 @@ we can omit the `swelldef` hypothesis we needed previously to prove `free-unique
 
 
 ```agda
-module _ {𝑨 : Algebra α ρ}{gh hh : hom (𝑻 X) 𝑨} where
+module _ {𝑆 : Signature 𝓞 𝓥}{𝑨 : Algebra {𝑆 = 𝑆} α ρ}{gh hh : hom (𝑻 X) 𝑨} where
   open Algebra 𝑨      using ( Interp )  renaming ( Domain to A )
   open Setoid A       using ( _≈_ )
-  open Algebra (𝑻 X)  using ()          renaming ( Domain to TX )
+  open Algebra (𝑻 {𝑆 = 𝑆} X)  using ()          renaming ( Domain to TX )
   open SetoidReasoning A
   open _≐_
   open IsHom
@@ -135,7 +135,7 @@ module _ {𝑨 : Algebra α ρ}{gh hh : hom (𝑻 X) 𝑨} where
     g h : TX ⟶ A
     g = proj₁ gh
     h = proj₁ hh
-  free-unique : (∀ x → g ⟨$⟩ (ℊ x) ≈ h ⟨$⟩ (ℊ x)) → ∀ (t : Term X) →  g ⟨$⟩ t ≈ h ⟨$⟩ t
+  free-unique : (∀ x → g ⟨$⟩ (ℊ x) ≈ h ⟨$⟩ (ℊ x)) → ∀ (t : Term {𝑆 = 𝑆} X) →  g ⟨$⟩ t ≈ h ⟨$⟩ t
   free-unique p (ℊ x) = p x
   free-unique p (node f t) = begin
     g ⟨$⟩ (node f t)              ≈⟨ compatible (proj₂ gh) ⟩
@@ -179,10 +179,10 @@ signature varies along a morphism, is `reduct-interp` in
 [Setoid.Varieties.Invariance][].)
 
 ```agda
-module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}(h : hom 𝑨 𝑩)(η : X → 𝕌[ 𝑨 ]) where
+module _ {𝑆 : Signature 𝓞 𝓥}{𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ}(h : hom 𝑨 𝑩)(η : X → 𝕌[ 𝑨 ]) where
   open Setoid 𝔻[ 𝑩 ] using () renaming ( _≈_ to _≈ᵇ_ ; refl to reflᵇ )
 
-  free-lift-natural : (t : Term X)
+  free-lift-natural : (t : Term {𝑆 = 𝑆} X)
    →                  proj₁ h ⟨$⟩ free-lift{𝑨 = 𝑨} η t ≈ᵇ free-lift{𝑨 = 𝑩} (λ x → proj₁ h ⟨$⟩ η x) t
 
   free-lift-natural =

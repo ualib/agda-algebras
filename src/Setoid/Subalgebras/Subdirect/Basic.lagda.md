@@ -22,9 +22,9 @@ algebras.
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using ( 𝓞 ; 𝓥 ; Signature )
+open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 
-module Setoid.Subalgebras.Subdirect.Basic {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Subalgebras.Subdirect.Basic where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
@@ -37,12 +37,12 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl )
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Setoid.Functions                         using  ( IsInjective ; IsSurjective )
 
-open import Setoid.Algebras                 {𝑆 = 𝑆}  using  ( Algebra ; ⨅ ; 𝔻[_] )
-open import Setoid.Congruences              {𝑆 = 𝑆}  using  ( Con ; _╱_ )
-open import Setoid.Homomorphisms            {𝑆 = 𝑆}  using  ( hom ; IsEpi
+open import Setoid.Algebras  using  ( Algebra ; ⨅ ; 𝔻[_] )
+open import Setoid.Congruences  using  ( Con ; _╱_ )
+open import Setoid.Homomorphisms  using  ( hom ; IsEpi
                                                             ; 𝒾𝒹 ; ⊙-hom ; ⨅-hom-co
                                                             ; πhom ; πepi ; ⨅-proj )
-open import Setoid.Subalgebras.Basic        {𝑆 = 𝑆}  using  ( _≤_ )
+open import Setoid.Subalgebras.Basic  using  ( _≤_ )
 
 
 private variable α ρ β ρᵇ ℓ ι : Level
@@ -57,7 +57,7 @@ The homomorphism `h : 𝑩 → ⨅ 𝒜` is a **subdirect embedding** when it is
 every coordinate map is surjective.
 
 ```agda
-module _ {I : Type ι}{𝑩 : Algebra β ρᵇ}(𝒜 : I → Algebra α ρ) where
+module _ {I : Type ι}{𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ}(𝒜 : I → Algebra {𝑆 = 𝑆} α ρ) where
 
   -- The i-th coordinate map projᵢ ∘ h of a hom into the product.
   coord : hom 𝑩 (⨅ 𝒜) → (i : I) → hom 𝑩 (𝒜 i)
@@ -86,9 +86,9 @@ Now the constructive heart.  Fix an algebra `𝑨` and a family of congruences
 into their product, assembled from the canonical quotient projections `πhom (θ i)`.
 
 ```agda
-module _ {I : Type ι}{𝑨 : Algebra α ρ}(θ : I → Con 𝑨 ℓ) where
+module _ {I : Type ι}{𝑨 : Algebra {𝑆 = 𝑆} α ρ}(θ : I → Con 𝑨 ℓ) where
   -- the family of quotient algebras and the natural map into their product
-  𝑨╱ : I → Algebra α ℓ
+  𝑨╱ : I → Algebra {𝑆 = 𝑆} α ℓ
   𝑨╱ i = 𝑨 ╱ θ i
 
   natmap : hom 𝑨 (⨅ 𝑨╱)

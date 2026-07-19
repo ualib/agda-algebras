@@ -41,7 +41,7 @@ open import Classical.Theories.AbelianGroup        using ( Eq-AbelianGroup ; Th-
                                                             ; invˡ to invˡᵃ ; invʳ to invʳᵃ )
 open import Overture.Terms                         using ( Term ; ℊ )
 open import Setoid.Algebras.Basic                  using ( Algebra ; 𝔻[_] ; 𝕌[_] )
-open import Setoid.Varieties.EquationalLogic {𝑆 = Sig-Group} using ( _⊧_≈_ )
+open import Setoid.Varieties.EquationalLogic using ( _⊧_≈_ )
 
 private variable α ρ : Level
 ```
@@ -51,11 +51,11 @@ private variable α ρ : Level
 
 ```agda
 infix 4 _⊨ᵃᵍ_
-_⊨ᵃᵍ_ : (𝑨 : Algebra α ρ) (ℰ : Eq-AbelianGroup → Term (Fin 3) × Term (Fin 3)) → Type (α ⊔ ρ)
+_⊨ᵃᵍ_ : (𝑨 : Algebra {𝑆 = Sig-Group} α ρ) (ℰ : Eq-AbelianGroup → Term (Fin 3) × Term (Fin 3)) → Type (α ⊔ ρ)
 𝑨 ⊨ᵃᵍ ℰ = ∀ i → 𝑨 ⊧ proj₁ (ℰ i) ≈ proj₂ (ℰ i)
 
 AbelianGroup : (α ρ : Level) → Type (suc α ⊔ suc ρ)
-AbelianGroup α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ᵃᵍ Th-AbelianGroup
+AbelianGroup α ρ = Σ[ 𝑨 ∈ Algebra {𝑆 = Sig-Group} α ρ ] 𝑨 ⊨ᵃᵍ Th-AbelianGroup
 ```
 
 #### The forgetful projection to groups

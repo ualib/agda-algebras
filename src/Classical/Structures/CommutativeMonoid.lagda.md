@@ -36,8 +36,8 @@ open import Classical.Theories.Monoid              using ( assoc ; idˡ ; idʳ )
 open import Classical.Theories.CommutativeMonoid   using ( Eq-CommutativeMonoid ; Th-CommutativeMonoid ; comm )
                                                    renaming ( assoc to assocᶜ ; idˡ to idˡᶜ ; idʳ to idʳᶜ )
 open import Overture.Terms {𝑆 = Sig-Monoid}        using (Term ; ℊ )
-open import Setoid.Algebras.Basic {𝑆 = Sig-Monoid} using ( Algebra ; 𝔻[_] ; 𝕌[_] )
-open import Setoid.Varieties.EquationalLogic {𝑆 = Sig-Monoid} using ( _⊧_≈_ )
+open import Setoid.Algebras.Basic using ( Algebra ; 𝔻[_] ; 𝕌[_] )
+open import Setoid.Varieties.EquationalLogic using ( _⊧_≈_ )
 
 private variable α ρ : Level
 ```
@@ -47,11 +47,11 @@ private variable α ρ : Level
 
 ```agda
 infix 4 _⊨ᶜᵐᵒ_
-_⊨ᶜᵐᵒ_ : (𝑨 : Algebra α ρ) (ℰ : Eq-CommutativeMonoid → Term (Fin 3) × Term (Fin 3)) → Type (α ⊔ ρ)
+_⊨ᶜᵐᵒ_ : (𝑨 : Algebra {𝑆 = Sig-Monoid} α ρ) (ℰ : Eq-CommutativeMonoid → Term (Fin 3) × Term (Fin 3)) → Type (α ⊔ ρ)
 𝑨 ⊨ᶜᵐᵒ ℰ = ∀ i → 𝑨 ⊧ proj₁ (ℰ i) ≈ proj₂ (ℰ i)
 
 CommutativeMonoid : (α ρ : Level) → Type (suc α ⊔ suc ρ)
-CommutativeMonoid α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ᶜᵐᵒ Th-CommutativeMonoid
+CommutativeMonoid α ρ = Σ[ 𝑨 ∈ Algebra {𝑆 = Sig-Monoid} α ρ ] 𝑨 ⊨ᶜᵐᵒ Th-CommutativeMonoid
 ```
 
 #### The forgetful projection to monoids

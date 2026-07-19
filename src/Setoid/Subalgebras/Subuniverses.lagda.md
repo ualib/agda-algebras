@@ -14,9 +14,9 @@ This is the [Setoid.Subalgebras.Subuniverses][] module of the [Agda Universal Al
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature)
+open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
 
-module Setoid.Subalgebras.Subuniverses {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Subalgebras.Subuniverses where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
@@ -32,10 +32,10 @@ open import Relation.Binary.PropositionalEquality using ( refl )
 -- Imports from the Agda Universal Algebra Library ----------------------------------
 open import Overture                       using ( proj₁ ; proj₂ ; ArityOf ; Im_⊆_
                                                  ; OperationSymbolsOf )
-open import Overture.Terms        {𝑆 = 𝑆}  using ( Term ; ℊ ; node )
-open import Setoid.Algebras       {𝑆 = 𝑆}  using ( Algebra ; 𝕌[_] ; _^_ ; ov )
-open import Setoid.Terms          {𝑆 = 𝑆}  using ( module Environment )
-open import Setoid.Homomorphisms  {𝑆 = 𝑆}  using ( hom ; IsHom )
+open import Overture.Terms  using ( Term ; ℊ ; node )
+open import Setoid.Algebras  using ( Algebra ; 𝕌[_] ; _^_ ; ov )
+open import Setoid.Terms  using ( module Environment )
+open import Setoid.Homomorphisms  using ( hom ; IsHom )
 
 private variable
   α β γ ρᵃ ρᵇ ρᶜ ℓ χ : Level
@@ -51,7 +51,7 @@ predicate on predicates on `𝕌[ 𝑨 ]`.
 
 
 ```agda
-module _ (𝑨 : Algebra α ρᵃ) where
+module _ (𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ) where
   private A = 𝕌[ 𝑨 ] -- the forgetful functor
 
   Subuniverses : Pred (Pred A ℓ) (𝓞 ⊔ 𝓥 ⊔ α ⊔ ℓ )
@@ -59,7 +59,7 @@ module _ (𝑨 : Algebra α ρᵃ) where
     (f : OperationSymbolsOf 𝑆) (a : ArityOf 𝑆 f → A) → Im a ⊆ B → (f ^ 𝑨) a ∈ B
 
   -- Subuniverses as a record type
-  record Subuniverse : Type(ov (α ⊔ ℓ)) where
+  record Subuniverse : Type(ov {𝑆 = 𝑆} (α ⊔ ℓ)) where
     constructor mksub
     field
       sset  : Pred A ℓ
@@ -108,7 +108,7 @@ When the element of `Sg G` is constructed as `app f a SgGa`, we may assume (the 
 
 
 ```agda
-module _ {𝑨 : Algebra α ρᵃ} where
+module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ} where
   private A = 𝕌[ 𝑨 ]
 
   ⋂s :  {ι : Level}(I : Type ι){ρ : Level}{𝒜 : I → Pred A ρ}
@@ -131,7 +131,7 @@ Agda fills in the proof term `λ i → σ i f a (λ x → ν x i)` automatically
 
 
 ```agda
-module _ {𝑨 : Algebra α ρᵃ} where
+module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ} where
   private A = 𝕌[ 𝑨 ]
   open Setoid using ( Carrier )
   open Environment 𝑨
@@ -140,7 +140,7 @@ module _ {𝑨 : Algebra α ρᵃ} where
   -- subuniverses are closed under the action of term operations
   sub-term-closed :  (B : Pred A ℓ)
    →                 (B ∈ Subuniverses 𝑨)
-   →                 (t : Term X)
+   →                 (t : Term {𝑆 = 𝑆} X)
    →                 (b : Carrier (Env X))
    →                 (∀ x → b x ∈ B) → ⟦ t ⟧ ⟨$⟩ b ∈ B
 
@@ -190,7 +190,7 @@ we call `hom-unique`.
 
 
 ```agda
-  module _ {𝑩 : Algebra β ρᵇ} (gh hh : hom 𝑨 𝑩) where
+  module _ {𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ} (gh hh : hom 𝑨 𝑩) where
     open Algebra 𝑩  using ( Interp )  renaming ( Domain to B )
     open Setoid B   using ( _≈_ ; sym )
     open Func       using ( cong )    renaming ( to to _⟨$⟩_ )

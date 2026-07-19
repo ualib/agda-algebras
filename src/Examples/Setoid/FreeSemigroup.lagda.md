@@ -39,11 +39,11 @@ open import Relation.Binary                     using ( Setoid )
 -- Imports from the Agda Universal Algebra Library -----------------------------
 open import Classical.Signatures.Magma          using ( Sig-Magma ; ∙-Op )
 open import Overture.Terms {𝑆 = Sig-Magma}      using ( Term ; ℊ ; node )
-open import Setoid.Algebras {𝑆 = Sig-Magma}     using ( 𝔻[_] )
-open import Setoid.Terms.Basic {𝑆 = Sig-Magma}  using ( _≐_ ; ≐-isRefl ; Sub ; _[_] )
-open import Setoid.Varieties.SoundAndComplete {𝑆 = Sig-Magma}
+open import Setoid.Algebras     using ( 𝔻[_] )
+open import Setoid.Terms.Basic  using ( _≐_ ; ≐-isRefl ; Sub ; _[_] )
+open import Setoid.Varieties.SoundAndComplete
   using ( Eq ; _≈̇_ ; _⊨_ ; _⊢_▹_≈_ ; module FreeAlgebra )
-open import Setoid.Varieties.FreeSubstitution {𝑆 = Sig-Magma}
+open import Setoid.Varieties.FreeSubstitution
   using ( sub▹ )
 open _≐_      using ( gnl )
 open _⊢_▹_≈_  using ( hyp ; app ; refl ; sym ; trans )

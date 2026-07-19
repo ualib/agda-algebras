@@ -38,7 +38,7 @@ open Func renaming ( to to _⟨$⟩_ )
 open import Classical.Signatures.Monoid             using ( Sig-Monoid ; ∙-Op ; ε-Op )
 open import Classical.Structures.Monoid             using ( Monoid ; module Monoid-Op )
 open import Classical.Theories.Monoid               using ( assoc ; idˡ ; idʳ )
-open import Setoid.Algebras.Basic {𝑆 = Sig-Monoid}  using ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Algebras.Basic  using ( Algebra ; 𝕌[_] ; 𝔻[_] )
 open import Setoid.Signatures                       using ( ⟨_⟩ )
 
 private variable α ρ : Level
@@ -82,7 +82,7 @@ private variable α ρ : Level
                                                            ; identityˡ to M-idˡ
                                                            ; identityʳ to M-idʳ )
 
-  𝑨 : Algebra _ _
+  𝑨 : Algebra {𝑆 = Sig-Monoid} _ _
   𝑨 = record { Domain = setoid ; Interp = interp }
     where
     interp : Func (⟨ Sig-Monoid ⟩ setoid) setoid

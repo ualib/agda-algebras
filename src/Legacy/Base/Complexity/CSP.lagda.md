@@ -103,7 +103,7 @@ open import Relation.Binary  using ( Setoid )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
 open import Legacy.Base.Relations.Continuous       using ( REL ; REL-syntax )
-open import Setoid.Algebras.Basic  {𝑆 = 𝑆}  using ( Algebra )
+open import Setoid.Algebras.Basic  using ( Algebra )
 ```
 
 

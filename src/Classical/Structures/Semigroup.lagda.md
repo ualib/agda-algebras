@@ -106,9 +106,9 @@ open import Classical.Signatures.Magma             using ( Sig-Magma ; ∙-Op )
 open import Classical.Structures.Magma             using ( Magma ; opsToMagma ; module Magma-Op )
 open import Classical.Theories.Semigroup           using ( Eq-Semigroup ; Th-Semigroup ; assoc )
 open import Overture.Terms {𝑆 = Sig-Magma}         using ( Term ; ℊ ; node )
-open import Setoid.Algebras.Basic {𝑆 = Sig-Magma}  using ( Algebra ; 𝔻[_] ; 𝕌[_] )
-open import Setoid.Terms {𝑆 = Sig-Magma}           using ( module Environment )
-open import Setoid.Varieties.EquationalLogic {𝑆 = Sig-Magma} using ( _⊧_≈_ )
+open import Setoid.Algebras.Basic  using ( Algebra ; 𝔻[_] ; 𝕌[_] )
+open import Setoid.Terms           using ( module Environment )
+open import Setoid.Varieties.EquationalLogic using ( _⊧_≈_ )
 
 open Algebra using ( Interp )
 
@@ -126,7 +126,7 @@ type-shape into view at the use site.
 
 ```agda
 infix 4 _⊨_
-_⊨_ : (𝑨 : Algebra α ρ) (ℰ : Eq-Semigroup → Term (Fin 3) × Term (Fin 3)) → Type (α ⊔ ρ)
+_⊨_ : (𝑨 : Algebra {𝑆 = Sig-Magma} α ρ) (ℰ : Eq-Semigroup → Term (Fin 3) × Term (Fin 3)) → Type (α ⊔ ρ)
 𝑨 ⊨ ℰ = ∀ i → 𝑨 ⊧ proj₁ (ℰ i) ≈ proj₂ (ℰ i)
 ```
 
@@ -134,7 +134,7 @@ _⊨_ : (𝑨 : Algebra α ρ) (ℰ : Eq-Semigroup → Term (Fin 3) × Term (Fin
 
 ```agda
 Semigroup : (α ρ : Level) → Type (suc α ⊔ suc ρ)
-Semigroup α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ Th-Semigroup
+Semigroup α ρ = Σ[ 𝑨 ∈ Algebra {𝑆 = Sig-Magma} α ρ ] 𝑨 ⊨ Th-Semigroup
 ```
 
 #### The forgetful projection to magmas

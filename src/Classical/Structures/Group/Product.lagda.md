@@ -78,10 +78,10 @@ open import Overture.Signatures               using ( OperationSymbolsOf ; Arity
 open import Overture.Operations               using ( Op )
 open import Overture.Terms                    using ( Term ; ℊ ; node )
 
-open import Setoid.Algebras.Basic {𝑆 = Sig-Group}
+open import Setoid.Algebras.Basic
                                               using ( Algebra ; 𝕌[_] ; 𝔻[_] ; _^_
                                                     ; mkAlgebra )
-open import Setoid.Subalgebras.Subuniverses {𝑆 = Sig-Group} using ( Subuniverses )
+open import Setoid.Subalgebras.Subuniverses using ( Subuniverses )
 open import Setoid.Terms                      using ( module Environment )
 
 open Func renaming ( to to _⟨$⟩_ )
@@ -158,7 +158,7 @@ congruence proof is the pair of the component congruences, via the shared
 `interp-cong`{.AgdaFunction} primitive.
 
 ```agda
-  𝑮×𝑲 : Algebra (α ⊔ β) (ρ ⊔ σ)
+  𝑮×𝑲 : Algebra {𝑆 = Sig-Group} (α ⊔ β) (ρ ⊔ σ)
   𝑮×𝑲 = mkAlgebra G×K interp interp-congruence
     where
     interp : (o : OperationSymbolsOf Sig-Group) → Op (ArityOf Sig-Group o) (G × K)

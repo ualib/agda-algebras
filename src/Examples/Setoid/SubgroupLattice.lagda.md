@@ -54,7 +54,7 @@ open import Relation.Unary                         using ( Pred ; _∈_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
 open import Classical.Signatures.Group             using ( Sig-Group ; ∙-Op ; ε-Op ; ⁻¹-Op )
-open import Setoid.Algebras {𝑆 = Sig-Group}        using ( Algebra )
+open import Setoid.Algebras        using ( Algebra )
 open import Setoid.Signatures                      using  ( ⟨_⟩ )
 
 open Func renaming ( to to _⟨$⟩_ )
@@ -96,7 +96,7 @@ hence a subuniverse: closure under `∙` is `xor` respecting the condition (via
 inverse is the identity map.
 
 ```agda
-open import Setoid.Subalgebras.Subuniverses {𝑆 = Sig-Group}
+open import Setoid.Subalgebras.Subuniverses
   using ( Subuniverses ; var ; app )
 
 H₁ H₂ H₌ : Pred (Bool × Bool) 0ℓ
@@ -127,7 +127,7 @@ to bring the order, operations, bounds, and bundles into scope specialized to `V
 so we write `𝑯₁ ≤ 𝑯₂`, `𝑯₁ ∧ 𝑯₂`, `0ˢ`, etc. directly.  All three bundles type-check.
 
 ```agda
-open import Setoid.Subalgebras.CompleteLattice {𝑆 = Sig-Group}
+open import Setoid.Subalgebras.CompleteLattice
   using ( module Sublattice )
 open Sublattice V₄ 0ℓ
 

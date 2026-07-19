@@ -31,9 +31,9 @@ a predicate on the carrier and does not mention the setoid equality.)
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature)
+open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
 
-module Setoid.Subalgebras.CompleteLattice {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Subalgebras.CompleteLattice where
 
 open import Agda.Primitive               using () renaming ( Set to Type )
 
@@ -51,9 +51,9 @@ open import Relation.Binary.Lattice      using  ( Supremum ; Infimum ; IsLattice
 open import Relation.Unary               using  ( Pred ; _∈_ ; _⊆_ ; _∩_ ; _∪_ ; ⋂ ; ⋃ )
 
 -- Imports from the Agda Universal Algebras Library ------------------------------
-open import Setoid.Algebras.Basic {𝑆 = 𝑆}             using  ( ov ; Algebra ; 𝕌[_] )
+open import Setoid.Algebras.Basic             using  ( ov ; Algebra ; 𝕌[_] )
 open import Order.CompleteLattice  using  ( CompleteLattice )
-open import Setoid.Subalgebras.Subuniverses {𝑆 = 𝑆}
+open import Setoid.Subalgebras.Subuniverses
   using ( Subuniverses ; Sg ; var ; sgIsSub ; sgIsSmallest ; ⋂s )
 
 private variable α ρᵃ : Level
@@ -69,14 +69,14 @@ makes available `_≤_`, `_∧_`, `_∨_`, the bounds, and the bundles specializ
 One can then write `B ≤ C`, instead of `_≤_ 𝑨 ℓ₀ B C`.
 
 ```agda
-module Sublattice (𝑨 : Algebra α ρᵃ) (ℓ₀ : Level) where
+module Sublattice {𝓞 𝓥 : Level}{𝑆 : Signature 𝓞 𝓥}(𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ) (ℓ₀ : Level) where
   private A = 𝕌[ 𝑨 ]
 
   L : Level
   L = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ℓ₀
 
   -- A subuniverse, as its underlying predicate together with a proof of closure.
-  Subᴸ : Type (α ⊔ ov L)
+  Subᴸ : Type (α ⊔ ov {𝑆 = 𝑆} L)
   Subᴸ = Σ[ B ∈ Pred A L ] B ∈ Subuniverses 𝑨
 ```
 
@@ -152,7 +152,7 @@ componentwise), and the join is the subuniverse *generated* by the union.
                           ; infimum         = ∧-infimum
                           }
 
-  Sub-Lattice : Lattice (α ⊔ ov L) (α ⊔ L) (α ⊔ L)
+  Sub-Lattice : Lattice (α ⊔ ov {𝑆 = 𝑆} L) (α ⊔ L) (α ⊔ L)
   Sub-Lattice = record  { Carrier    = Subᴸ
                         ; _≈_        = _≈_
                         ; _≤_        = _≤_
@@ -194,7 +194,7 @@ The top subuniverse `1ˢ` is the whole carrier, trivially closed under the opera
                                  ; minimum    = 0ˢ-minimum
                                  }
 
-  Sub-BoundedLattice : BoundedLattice (α ⊔ ov L) (α ⊔ L) (α ⊔ L)
+  Sub-BoundedLattice : BoundedLattice (α ⊔ ov {𝑆 = 𝑆} L) (α ⊔ L) (α ⊔ L)
   Sub-BoundedLattice = record  { Carrier           = Subᴸ
                                ; _≈_               = _≈_
                                ; _≤_               = _≤_
@@ -237,7 +237,7 @@ because `I` is `ℓ₀`-small.
 #### The complete lattice
 
 ```agda
-  Sub-CompleteLattice : CompleteLattice (α ⊔ ov L) (α ⊔ L) (α ⊔ L) ℓ₀
+  Sub-CompleteLattice : CompleteLattice (α ⊔ ov {𝑆 = 𝑆} L) (α ⊔ L) (α ⊔ L) ℓ₀
   Sub-CompleteLattice = record
    { Carrier          = Subᴸ
    ; _≈_              = _≈_

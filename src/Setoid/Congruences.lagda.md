@@ -11,16 +11,16 @@ author: "agda-algebras development team"
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature)
+open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
 
-module Setoid.Congruences {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Congruences where
 
 open import Setoid.Congruences.Basic                    public
-open import Setoid.Congruences.Permutability    {𝑆 = 𝑆} public
-open import Setoid.Congruences.Lattice          {𝑆 = 𝑆} public
-open import Setoid.Congruences.CompleteLattice  {𝑆 = 𝑆} public
-open import Setoid.Congruences.Monolith         {𝑆 = 𝑆} public
-open import Setoid.Congruences.Properties       {𝑆 = 𝑆} public
+open import Setoid.Congruences.Permutability public
+open import Setoid.Congruences.Lattice public
+open import Setoid.Congruences.CompleteLattice public
+open import Setoid.Congruences.Monolith public
+open import Setoid.Congruences.Properties public
 open import Setoid.Congruences.ChainJoin                public
 open import Setoid.Congruences.Generation               public
 open import Setoid.Congruences.Finite                   public

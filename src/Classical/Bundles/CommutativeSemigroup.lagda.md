@@ -34,7 +34,7 @@ open import Classical.Signatures.Magma                 using  ( ∙-Op ; Sig-Mag
 open import Classical.Structures.CommutativeSemigroup  using  ( CommutativeSemigroup
                                                               ; module CommutativeSemigroup-Op )
 open import Classical.Theories.CommutativeSemigroup    using  ( assoc ; comm )
-open import Setoid.Algebras.Basic {𝑆 = Sig-Magma}      using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Algebras.Basic      using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
 open import Setoid.Signatures                          using ( ⟨_⟩ )
 
 private variable α ρ : Level
@@ -67,7 +67,7 @@ private variable α ρ : Level
       using ( setoid ; ∙-cong )
       renaming ( _∙_ to _·_ ; assoc to S-assoc ; comm to S-comm )
 
-  𝑨 : Algebra _ _
+  𝑨 : Algebra {𝑆 = Sig-Magma} _ _
   𝑨 = record { Domain = setoid ; Interp = interp }
     where
     interp : Func (⟨ Sig-Magma ⟩ setoid) setoid

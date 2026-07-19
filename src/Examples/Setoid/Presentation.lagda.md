@@ -38,8 +38,8 @@ open import Data.Fin.Patterns                    using ( 0F ; 1F )
 -- Imports from the Agda Universal Algebra Library -----------------------------
 open import Classical.Signatures.Magma           using ( Sig-Magma ; ∙-Op )
 open import Overture.Terms       {𝑆 = Sig-Magma} using ( Term ; ℊ ; node )
-open import Setoid.Algebras      {𝑆 = Sig-Magma} using ( 𝔻[_] )
-open import Setoid.Varieties.SoundAndComplete {𝑆 = Sig-Magma}
+open import Setoid.Algebras using ( 𝔻[_] )
+open import Setoid.Varieties.SoundAndComplete
   using ( Eq ; _≈̇_ ; _⊨_ ; _⊢_▹_≈_ ; module FreeAlgebra )
 
 open import Relation.Binary using ( Setoid )

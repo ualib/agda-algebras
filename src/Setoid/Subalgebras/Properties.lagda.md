@@ -13,9 +13,9 @@ This is the [Setoid.Subalgebras.Properties][] module of the [Agda Universal Alge
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature)
+open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
 
-module Setoid.Subalgebras.Properties {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Subalgebras.Properties where
 
 open import Agda.Primitive using () renaming ( Set to Type )
 
@@ -32,13 +32,13 @@ import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 -- Imports from the Agda Universal Algebra Library ----------------------------------
 open import Overture                          using  ( proj₁ ; proj₂ )
 open import Setoid.Functions                  using  ( id-is-injective ; IsInjective ; ⊙-injective )
-open import Setoid.Algebras          {𝑆 = 𝑆}  using  ( Algebra ; Lift-Algˡ ; Lift-Algʳ
+open import Setoid.Algebras  using  ( Algebra ; Lift-Algˡ ; Lift-Algʳ
                                                      ; Lift-Alg ; ov ; ⨅ ; 𝔻[_] )
-open import Setoid.Homomorphisms     {𝑆 = 𝑆}  using  ( hom ; IsHom ; 𝒾𝒹 ; ⊙-hom ; _≅_
+open import Setoid.Homomorphisms  using  ( hom ; IsHom ; 𝒾𝒹 ; ⊙-hom ; _≅_
                                                      ; ≅toInjective ; ≅fromInjective
                                                      ; mkiso ; ≅-sym ; ≅-refl ; ≅-trans
                                                      ; Lift-≅ˡ ; Lift-≅ ; Lift-≅ʳ)
-open import Setoid.Subalgebras.Basic {𝑆 = 𝑆}  using  ( _≤_ ; _≥_ ; _≤c_
+open import Setoid.Subalgebras.Basic  using  ( _≤_ ; _≥_ ; _≤c_
                                                      )
 private variable α ρᵃ β ρᵇ γ ρᶜ ι : Level
 ```
@@ -49,22 +49,22 @@ The subalgebra relation is a *preorder*, i.e., a reflexive, transitive binary re
 ```agda
 open _≅_
 
-≅→≤ : {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} → 𝑨 ≅ 𝑩 → 𝑨 ≤ 𝑩
+≅→≤ : {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ} → 𝑨 ≅ 𝑩 → 𝑨 ≤ 𝑩
 ≅→≤ φ = (to φ) , ≅toInjective φ
 
-≅→≥ : {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} → 𝑨 ≅ 𝑩 → 𝑨 ≥ 𝑩
+≅→≥ : {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ} → 𝑨 ≅ 𝑩 → 𝑨 ≥ 𝑩
 ≅→≥ φ = (from φ) , ≅fromInjective φ
 
-≤-refl : {𝑨 𝑩 : Algebra α ρᵃ} → 𝑨 ≅ 𝑩 → 𝑨 ≤ 𝑩
+≤-refl : {𝑨 𝑩 : Algebra {𝑆 = 𝑆} α ρᵃ} → 𝑨 ≅ 𝑩 → 𝑨 ≤ 𝑩
 ≤-refl = ≅→≤
 
-≥-refl : {𝑨 𝑩 : Algebra α ρᵃ} → 𝑨 ≅ 𝑩 → 𝑨 ≥ 𝑩
+≥-refl : {𝑨 𝑩 : Algebra {𝑆 = 𝑆} α ρᵃ} → 𝑨 ≅ 𝑩 → 𝑨 ≥ 𝑩
 ≥-refl = ≅→≤ ∘ ≅-sym
 
-≤-reflexive : {𝑨 : Algebra α ρᵃ} → 𝑨 ≤ 𝑨
+≤-reflexive : {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ} → 𝑨 ≤ 𝑨
 ≤-reflexive {𝑨 = 𝑨} = 𝒾𝒹 , id-is-injective {𝑨 = 𝔻[ 𝑨 ]}
 
-module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}{𝑪 : Algebra γ ρᶜ} where
+module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ}{𝑪 : Algebra {𝑆 = 𝑆} γ ρᶜ} where
   ≤-trans : 𝑨 ≤ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
   ≤-trans ( f , finj ) ( g , ginj ) = (⊙-hom f g) , ⊙-injective (proj₁ f) (proj₁ g) finj ginj
 
@@ -76,17 +76,17 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}{𝑪 : Algebra γ ρ
   ≅-trans-≤ A≅B (h , hinj) =
     ⊙-hom (to A≅B) h , ⊙-injective (proj₁ (to A≅B)) (proj₁ h) (≅toInjective A≅B) hinj
 
-module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}{𝑪 : Algebra γ ρᶜ} where
+module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ}{𝑪 : Algebra {𝑆 = 𝑆} γ ρᶜ} where
   ≥-trans : 𝑨 ≥ 𝑩 → 𝑩 ≥ 𝑪 → 𝑨 ≥ 𝑪
   ≥-trans A≥B B≥C = ≤-trans B≥C A≥B
 
-≤→≤c→≤c : {𝑨 : Algebra α α}{𝑩 : Algebra α α}{𝒦 : Pred(Algebra α α) (ov α)}
+≤→≤c→≤c : {𝑨 : Algebra {𝑆 = 𝑆} α α}{𝑩 : Algebra {𝑆 = 𝑆} α α}{𝒦 : Pred(Algebra {𝑆 = 𝑆} α α) (ov {𝑆 = 𝑆} α)}
   → 𝑨 ≤ 𝑩 → 𝑩 ≤c 𝒦 → 𝑨 ≤c 𝒦
 ≤→≤c→≤c A≤B sB = (proj₁ sB) , (proj₁ (proj₂ sB) , ≤-trans A≤B (proj₂ (proj₂ sB)))
 
-module _ {α ρᵃ ρ : Level} where
+module _ {𝓞 𝓥 : Level}{𝑆 : Signature 𝓞 𝓥}{α ρᵃ ρ : Level} where
 
-  open RelStructs {a = ov (α ⊔ ρᵃ)} {ℓ = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ} (_≅_ {α}{ρᵃ})
+  open RelStructs {a = ov {𝑆 = 𝑆} (α ⊔ ρᵃ)} {ℓ = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ} (_≅_ {α}{ρᵃ})
   open IsPreorder
 
   ≤-preorder : IsPreorder _≤_
@@ -94,7 +94,7 @@ module _ {α ρᵃ ρ : Level} where
   reflexive      ≤-preorder = ≤-refl
   trans          ≤-preorder A≤B B≤C = ≤-trans A≤B B≤C
 
-module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}{𝑪 : Algebra γ ρᶜ} where
+module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ}{𝑪 : Algebra {𝑆 = 𝑆} γ ρᶜ} where
   A≥B×B≅C→A≥C : 𝑨 ≥ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≥ 𝑪
   A≥B×B≅C→A≥C A≥B B≅C  = ≥-trans A≥B (≅→≥ B≅C)
 
@@ -109,7 +109,7 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}{𝑪 : Algebra γ ρ
 
 open _⟶_ using ( cong ) renaming ( to to _⟨$⟩_ )
 
-iso→injective : (𝑨 : Algebra α ρᵃ) {𝑩 : Algebra β ρᵇ}
+iso→injective : (𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ) {𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ}
   (φ : 𝑨 ≅ 𝑩) → IsInjective (proj₁ (to φ))
 iso→injective 𝑨 (mkiso f g f∼g g∼f) {x} {y} fxfy =
   begin
@@ -119,7 +119,7 @@ iso→injective 𝑨 (mkiso f g f∼g g∼f) {x} {y} fxfy =
   y                            ∎
   where open SetoidReasoning 𝔻[ 𝑨 ]
 
-≤-mono : {𝑩 : Algebra β ρᵇ}{𝒦 𝒦' : Pred (Algebra α ρᵃ) γ}
+≤-mono : {𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ}{𝒦 𝒦' : Pred (Algebra {𝑆 = 𝑆} α ρᵃ) γ}
   → 𝒦 ⊆ 𝒦' → 𝑩 ≤c 𝒦 → 𝑩 ≤c 𝒦'
 ≤-mono KK' (𝑨 , (KA , B≤A)) = 𝑨 , ((KK' KA) , B≤A)
 ```
@@ -127,11 +127,11 @@ iso→injective 𝑨 (mkiso f g f∼g g∼f) {x} {y} fxfy =
 #### Lifts of subalgebras of setoid algebras
 
 ```agda
-Lift-is-sub : {𝒦 : Pred (Algebra α ρᵃ)(ov α)} {𝑩 : Algebra β ρᵇ} {ℓ : Level}
+Lift-is-sub : {𝒦 : Pred (Algebra {𝑆 = 𝑆} α ρᵃ)(ov {𝑆 = 𝑆} α)} {𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ} {ℓ : Level}
   → 𝑩 ≤c 𝒦 → (Lift-Algˡ 𝑩 ℓ) ≤c 𝒦
 Lift-is-sub (𝑨 , (KA , B≤A)) = 𝑨 , (KA , A≥B×B≅C→A≥C B≤A Lift-≅ˡ)
 
-module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
+module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ} where
   ≤-Liftˡ : {ℓ : Level} → 𝑨 ≤ 𝑩 → 𝑨 ≤ Lift-Algˡ 𝑩 ℓ
   ≤-Liftˡ A≤B = A≤B×B≅C→A≤C A≤B Lift-≅ˡ
 
@@ -150,7 +150,7 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
   ≥-Lift : {ℓ ρ : Level} → 𝑨 ≥ 𝑩 → 𝑨 ≥ Lift-Alg 𝑩 ℓ ρ
   ≥-Lift A≥B = A≥B×B≅C→A≥C A≥B Lift-≅
 
-module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
+module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ} where
   Lift-≤-Liftˡ : {ℓᵃ ℓᵇ : Level} → 𝑨 ≤ 𝑩 → Lift-Algˡ 𝑨 ℓᵃ ≤ Lift-Algˡ 𝑩 ℓᵇ
   Lift-≤-Liftˡ A≤B = ≥-Liftˡ (≤-Liftˡ A≤B)
 
@@ -165,7 +165,7 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
 #### Products of subalgebras
 
 ```agda
-module _ {I : Type ι}{𝒜 : I → Algebra α ρᵃ}{ℬ : I → Algebra β ρᵇ} where
+module _ {I : Type ι}{𝒜 : I → Algebra {𝑆 = 𝑆} α ρᵃ}{ℬ : I → Algebra {𝑆 = 𝑆} β ρᵇ} where
   open IsHom
 
   ⨅-≤ : (∀ i → ℬ i ≤ 𝒜 i) → ⨅ ℬ ≤ ⨅ 𝒜

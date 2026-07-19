@@ -51,8 +51,8 @@ The empty signature has no operation symbols (`⊥`), hence no arities.
 𝑆₀ : Signature 0ℓ 0ℓ
 𝑆₀ = ⊥ , λ ()
 
-open import Setoid.Algebras {𝑆 = 𝑆₀}     using ( Algebra )
-open import Setoid.Congruences {𝑆 = 𝑆₀}  using ( Con ; mkcon )
+open import Setoid.Algebras     using ( Algebra )
+open import Setoid.Congruences  using ( Con ; mkcon )
 open import Setoid.Signatures            using ( ⟨_⟩ )
 
 -- The two-element algebra: carrier Bool with ≡, and no operations to interpret.
@@ -83,8 +83,8 @@ With the base level `ℓ₀ = 0ℓ` the absorbing level `L` is `0ℓ`, so the co
 lattice of `𝟚` is the chain on `Con 𝟚 {0ℓ}`.  All three bundles type-check.
 
 ```agda
-open import Setoid.Congruences.Lattice {𝑆 = 𝑆₀} using ( _⊆_ )
-open import Setoid.Congruences.CompleteLattice {𝑆 = 𝑆₀}
+open import Setoid.Congruences.Lattice using ( _⊆_ )
+open import Setoid.Congruences.CompleteLattice
   using ( Con-Lattice ; Con-BoundedLattice ; Con-CompleteLattice ; 1ᴬ ; 0ᴬ ; 0ᴬ-minimum )
 
 Con𝟚-Lattice          = Con-Lattice         𝟚 0ℓ

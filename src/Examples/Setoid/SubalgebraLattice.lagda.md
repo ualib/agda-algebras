@@ -51,7 +51,7 @@ open Func renaming ( to to _⟨$⟩_ )
 𝑆₀ : Signature 0ℓ 0ℓ
 𝑆₀ = ⊥ , λ ()
 
-open import Setoid.Algebras {𝑆 = 𝑆₀}  using ( Algebra )
+open import Setoid.Algebras  using ( Algebra )
 open import Setoid.Signatures         using ( ⟨_⟩ )
 
 -- The two-element algebra: carrier Bool with ≡, and no operations to interpret.
@@ -71,7 +71,7 @@ bounds, and bundles into scope specialized to `𝟚` — so we may write `B ≤ 
 than `_≤_ 𝟚 0ℓ B C`.  All three bundles type-check.
 
 ```agda
-open import Setoid.Subalgebras.CompleteLattice {𝑆 = 𝑆₀} using ( module Sublattice )
+open import Setoid.Subalgebras.CompleteLattice using ( module Sublattice )
 open Sublattice 𝟚 0ℓ
 ```
 

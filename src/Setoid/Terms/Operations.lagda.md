@@ -16,9 +16,9 @@ Here we define *term operations* which are simply terms interpreted in a particu
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature)
+open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
 
-module Setoid.Terms.Operations {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Terms.Operations where
 
 -- Imports from Agda and the Agda Standard Library ---------------------
 open import Agda.Primitive    using ()  renaming ( Set to Type )
@@ -34,11 +34,11 @@ import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from Agda Universal Algebra Library -----------------------------------
 open  import Overture                         using ( proj₁ ; proj₂ ; OperationSymbolsOf ; ArityOf )
-open  import Overture.Terms           {𝑆 = 𝑆} using ( Term )
-open  import Setoid.Algebras          {𝑆 = 𝑆} using ( Algebra ; _^_ ; ov ; ⨅ )
-open  import Setoid.Homomorphisms     {𝑆 = 𝑆} using ( hom ; IsHom )
-open  import Setoid.Terms.Properties  {𝑆 = 𝑆} using ( free-lift )
-open  import Setoid.Terms.Basic       {𝑆 = 𝑆}
+open  import Overture.Terms using ( Term )
+open  import Setoid.Algebras using ( Algebra ; _^_ ; ov ; ⨅ )
+open  import Setoid.Homomorphisms using ( hom ; IsHom )
+open  import Setoid.Terms.Properties using ( free-lift )
+open  import Setoid.Terms.Basic
       using ( module Environment ; 𝑻 ; _≐_ ; ≐-isRefl )
 
 open Term
@@ -56,12 +56,12 @@ It turns out that the intepretation of a term is the same as the `free-lift`
 
 
 ```agda
-module _ {𝑨 : Algebra α ρᵃ} where
+module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ} where
   open Algebra 𝑨      using ( Interp )      renaming (Domain to A )
   open Setoid A       using ( _≈_ ; refl )  renaming ( Carrier to ∣A∣ )
   open Environment 𝑨  using ( ⟦_⟧ )
 
-  free-lift-interp :  (η : X → ∣A∣)(p : Term X)
+  free-lift-interp :  (η : X → ∣A∣)(p : Term {𝑆 = 𝑆} X)
     → ⟦ p ⟧ ⟨$⟩ η ≈ (free-lift{𝑨 = 𝑨} η) p
 
   free-lift-interp η (ℊ x) = refl
@@ -73,12 +73,12 @@ module _ {X : Type χ} where
   open Environment (𝑻 X)  using ( ⟦_⟧ ; ≐→Equal )
   open SetoidReasoning TX
 
-  term-interp :  (f : OperationSymbolsOf 𝑆){s t : ArityOf 𝑆 f → Term X} → (∀ i → s i ≐ t i)
+  term-interp :  (f : OperationSymbolsOf 𝑆){s t : ArityOf 𝑆 f → Term {𝑆 = 𝑆} X} → (∀ i → s i ≐ t i)
    → ∀ η → ⟦ node f s ⟧ ⟨$⟩ η ≈ ⟦ node f t ⟧ ⟨$⟩ η
 
   term-interp f {s}{t} st η = cong Interp (≡.refl , λ i → ≐→Equal (s i) (t i) (st i) η )
 
-  term-agreement : (p : Term X) → p ≈ ⟦ p ⟧ ⟨$⟩ ℊ
+  term-agreement : (p : Term {𝑆 = 𝑆} X) → p ≈ ⟦ p ⟧ ⟨$⟩ ℊ
   term-agreement (ℊ x) = refl
   term-agreement (node f t) = cong Interp (≡.refl , (λ i → term-agreement (t i)))
 ```
@@ -86,13 +86,13 @@ module _ {X : Type χ} where
 #### Interpretation of terms in product algebras
 
 ```agda
-module _ {X : Type χ }{I : Type ι}(𝒜 : I → Algebra α ρᵃ) where
+module _ {X : Type χ }{I : Type ι}(𝒜 : I → Algebra {𝑆 = 𝑆} α ρᵃ) where
   open Algebra (⨅ 𝒜)      using (Interp)  renaming ( Domain to ⨅A )
   open Setoid ⨅A          using ( _≈_ ; refl )
   open Environment (⨅ 𝒜)  using ()        renaming ( ⟦_⟧ to ⟦_⟧₁ )
   open Environment        using ( ⟦_⟧ ; ≐→Equal )
 
-  interp-prod : (p : Term X)
+  interp-prod : (p : Term {𝑆 = 𝑆} X)
     → ∀ ρ → ⟦ p ⟧₁ ⟨$⟩ ρ ≈ λ i → (⟦ 𝒜 i ⟧ p) ⟨$⟩ λ x → (ρ x) i
   interp-prod (ℊ x) = λ ρ i → ≐→Equal (𝒜 i) (ℊ x) (ℊ x) ≐-isRefl λ x' → (ρ x) i
   interp-prod (node f t) = λ ρ i → cong Interp (≡.refl , (λ j k → interp-prod (t j) ρ k)) i
@@ -105,7 +105,7 @@ used very often in the sequel, asserts that every term commutes with every
 homomorphism.
 
 ```agda
-module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}(hh : hom 𝑨 𝑩) where
+module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ}(hh : hom 𝑨 𝑩) where
   open Algebra 𝑨      using () renaming (Domain to A )
   open Setoid A       using () renaming ( Carrier to ∣A∣ )
   open Algebra 𝑩      using () renaming (Domain to B ; Interp to Interp₂ )
@@ -120,7 +120,7 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}(hh : hom 𝑨 𝑩) 
     h = proj₁ hh
 
   comm-hom-term :
-    (t : Term X) (a : X → ∣A∣) → h ⟨$⟩ (⟦ t ⟧₁ ⟨$⟩ a) ≈ ⟦ t ⟧₂ ⟨$⟩ λ i → h ⟨$⟩ a i
+    (t : Term {𝑆 = 𝑆} X) (a : X → ∣A∣) → h ⟨$⟩ (⟦ t ⟧₁ ⟨$⟩ a) ≈ ⟦ t ⟧₂ ⟨$⟩ λ i → h ⟨$⟩ a i
 
   comm-hom-term (ℊ x) a = refl
   comm-hom-term (node f t) a = goal
@@ -139,7 +139,7 @@ A substitution from `Y` to `X` is simply a function from `Y` to `X`, and the
 application of a substitution is represented as follows.
 
 ```agda
-_[_]s : {χ : Level}{X Y : Type χ} → Term Y → (Y → X) → Term X
+_[_]s : {χ : Level}{X Y : Type χ} → Term {𝑆 = 𝑆} Y → (Y → X) → Term {𝑆 = 𝑆} X
 (ℊ y) [ σ ]s = ℊ (σ y)
 (node f t)  [ σ ]s = node f λ i → t i [ σ ]s
 ```
@@ -149,11 +149,11 @@ not with an element of `X`, but with a term from `Term X`.
 
 ```agda
 -- Substerm X Y, an inhabitant of which replaces each variable symbol in Y with a term from Term X.
-Substerm : (X Y : Type χ) → Type (ov χ)
-Substerm X Y = (y : Y) → Term X
+Substerm : (X Y : Type χ) → Type (ov {𝑆 = 𝑆} χ)
+Substerm X Y = (y : Y) → Term {𝑆 = 𝑆} X
 
 -- Application of a Substerm.
-_[_]t : {X Y : Type χ } → Term Y → Substerm X Y → Term X
+_[_]t : {X Y : Type χ } → Term {𝑆 = 𝑆} Y → Substerm X Y → Term {𝑆 = 𝑆} X
 (ℊ y) [ σ ]t = σ y
 (node f t) [ σ ]t = node f λ z → (t z) [ σ ]t
 ```

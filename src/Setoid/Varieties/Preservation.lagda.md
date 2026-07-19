@@ -16,9 +16,9 @@ same identities.
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature)
+open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
 
-module Setoid.Varieties.Preservation {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Varieties.Preservation where
 
 open import Agda.Primitive using () renaming ( Set to Type )
 
@@ -33,19 +33,19 @@ open import Relation.Unary         using ( Pred ; _⊆_ ; _∈_ )
 -- Imports from the Agda Universal Algebra Library -------------------------------
 open import Overture                                    using  ( proj₁ ; proj₂ )
 
-open import Overture.Terms                     {𝑆 = 𝑆}  using  ( Term )
-open import Setoid.Algebras                    {𝑆 = 𝑆}  using  ( Algebra ; ov ; ⨅ )
-open import Setoid.Homomorphisms               {𝑆 = 𝑆}  using  ( ≅⨅⁺-refl ; ≅-refl
+open import Overture.Terms  using  ( Term )
+open import Setoid.Algebras  using  ( Algebra ; ov ; ⨅ )
+open import Setoid.Homomorphisms  using  ( ≅⨅⁺-refl ; ≅-refl
                                                                ; IdHomImage ; ≅-sym )
-open import Setoid.Subalgebras                 {𝑆 = 𝑆}  using  ( _≤_ ; ⨅-≤ ; ≅-trans-≤
+open import Setoid.Subalgebras  using  ( _≤_ ; ⨅-≤ ; ≅-trans-≤
                                                                ; ≤-reflexive )
-open import Setoid.Terms                       {𝑆 = 𝑆}  using  ( module Environment)
-open import Setoid.Varieties.Closure           {𝑆 = 𝑆}  using  ( H ; S ; P ; S-expa
+open import Setoid.Terms  using  ( module Environment)
+open import Setoid.Varieties.Closure  using  ( H ; S ; P ; S-expa
                                                                ; H-expa ; V ; P-expa
                                                                ; V-expa ;Level-closure )
-open import Setoid.Varieties.Properties        {𝑆 = 𝑆}  using  ( ⊧-H-invar ; ⊧-S-invar
+open import Setoid.Varieties.Properties  using  ( ⊧-H-invar ; ⊧-S-invar
                                                                ; ⊧-P-invar ; ⊧-I-invar )
-open import Setoid.Varieties.SoundAndComplete  {𝑆 = 𝑆}  using  ( _⊧_ ; _⊫_ ; ⊫-proof
+open import Setoid.Varieties.SoundAndComplete  using  ( _⊧_ ; _⊫_ ; ⊫-proof
                                                                ; _≈̇_ ; _⊢_▹_≈_ ; Th)
 open _⟶_      using () renaming ( to to _⟨$⟩_ )
 open Algebra  using ( Domain )
@@ -58,10 +58,10 @@ The types defined above represent operators with useful closure properties. We n
 prove a handful of such properties that we need later.
 
 ```agda
-module _  {α ρᵃ ℓ : Level}{𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
+module _  {α ρᵃ ℓ : Level}{𝒦 : Pred(Algebra {𝑆 = 𝑆} α ρᵃ) (α ⊔ ρᵃ ⊔ ov {𝑆 = 𝑆} ℓ)} where
   private
     a = α ⊔ ρᵃ
-    oaℓ = ov (a ⊔ ℓ)
+    oaℓ = ov {𝑆 = 𝑆} (a ⊔ ℓ)
 
   S⊆SP : ∀{ι} → S ℓ 𝒦 ⊆ S {β = α}{ρᵃ} (a ⊔ ℓ ⊔ ι) (P {β = α}{ρᵃ} ℓ ι 𝒦)
   S⊆SP {ι} (𝑨 , (kA , B≤A )) = 𝑨 , (pA , B≤A)
@@ -90,7 +90,7 @@ in a class 𝒦 is a subalgebra of a product of algebras in 𝒦.
   PS⊆SP : P (a ⊔ ℓ) oaℓ (S{β = α}{ρᵃ} ℓ 𝒦) ⊆ S oaℓ (P ℓ oaℓ 𝒦)
   PS⊆SP {𝑩} (I , ( 𝒜 , sA , B≅⨅A )) = Goal
     where
-    ℬ : I → Algebra α ρᵃ
+    ℬ : I → Algebra {𝑆 = 𝑆} α ρᵃ
     ℬ i = sA i .proj₁
 
     kB : (i : I) → ℬ i ∈ 𝒦
@@ -108,9 +108,9 @@ First we prove that the closure operator H is compatible with identities that ho
 
 ```agda
 module _   {α ρᵃ ℓ χ : Level}
-            {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)}
+            {𝒦 : Pred(Algebra {𝑆 = 𝑆} α ρᵃ) (α ⊔ ρᵃ ⊔ ov {𝑆 = 𝑆} ℓ)}
             {X : Type χ}
-            {p q : Term X}
+            {p q : Term {𝑆 = 𝑆} X}
             where
 
   H-id1 : 𝒦 ⊫ (p ≈̇ q) → H {β = α}{ρᵃ}ℓ 𝒦 ⊫ (p ≈̇ q)
@@ -156,9 +156,9 @@ Finally, we prove the analogous preservation lemmas for the closure operator `V`
 ```agda
 module _
   {α ρᵃ ℓ ι χ : Level}
-  {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)}
+  {𝒦 : Pred(Algebra {𝑆 = 𝑆} α ρᵃ) (α ⊔ ρᵃ ⊔ ov {𝑆 = 𝑆} ℓ)}
   {X : Type χ}
-  {p q : Term X}
+  {p q : Term {𝑆 = 𝑆} X}
   where
 
   private aℓι = α ⊔ ρᵃ ⊔ ℓ ⊔ ι

@@ -46,12 +46,12 @@ open import Relation.Unary        using ( Pred ; _∈_ )
 open import Examples.Classical.CommutativeMonoid                using  ( ℕ-commutativeMonoid )
 open import Classical.Signatures.Monoid                         using  ( Sig-Monoid ; ∙-Op )
 open import Overture.Terms {𝑆 = Sig-Monoid}                     using  ( Term ; ℊ ; node )
-open import Setoid.Algebras {𝑆 = Sig-Monoid}                    using  ( Algebra )
-open import Setoid.Varieties.Closure {𝑆 = Sig-Monoid}           using  ( V ; V′ ; V-expa′ )
-open import Setoid.Varieties.Preservation {𝑆 = Sig-Monoid}      using  ( V-id1 )
-open import Setoid.Varieties.SoundAndComplete {𝑆 = Sig-Monoid}  using  ( _⊫_ ; ⊫-proof
+open import Setoid.Algebras                    using  ( Algebra )
+open import Setoid.Varieties.Closure           using  ( V ; V′ ; V-expa′ )
+open import Setoid.Varieties.Preservation      using  ( V-id1 )
+open import Setoid.Varieties.SoundAndComplete  using  ( _⊫_ ; ⊫-proof
                                                                        ; _≈̇_ ; Mod ; Th )
-open import Setoid.Varieties.HSP {𝑆 = Sig-Monoid}               using  ( Birkhoff
+open import Setoid.Varieties.HSP               using  ( Birkhoff
                                                                        ; Birkhoff-converse )
 ```
 -->

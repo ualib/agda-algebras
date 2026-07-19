@@ -25,18 +25,18 @@ the meet `_∧_`, so both are operations on `Con 𝑨 (𝐋 ℓ₀)` and the equ
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using ( 𝓞 ; 𝓥 ; Signature )
+open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 
-module Setoid.Congruences.Properties {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Congruences.Properties where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
 open import Agda.Primitive  using () renaming ( Set to Type )
 open import Level           using ( Level ; _⊔_ ) renaming (suc to lsuc)
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Setoid.Algebras.Basic          {𝑆 = 𝑆}  using ( Algebra )
+open import Setoid.Algebras.Basic  using ( Algebra )
 open import Setoid.Congruences.Basic                using ( Con )
-open import Setoid.Congruences.Lattice     {𝑆 = 𝑆}  using ( _⊆_ ; _≑_ ; _∧_ )
+open import Setoid.Congruences.Lattice  using ( _⊆_ ; _≑_ ; _∧_ )
 open import Setoid.Congruences.Generation           using ( _∨_ )
 ```
 -->
@@ -45,8 +45,8 @@ open import Setoid.Congruences.Generation           using ( _∨_ )
 
 ```agda
 -- The relation level at which both meet and join are operations on Con 𝑨.
-Ł : Level → Level → Level → Level
-Ł α ρ ℓ₀ = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ ℓ₀
+Ł : {𝓞 𝓥 : Level}{𝑆 : Signature 𝓞 𝓥} → Level → Level → Level → Level
+Ł {𝓞 = 𝓞}{𝓥 = 𝓥} α ρ ℓ₀ = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ ℓ₀
 ```
 
 #### Congruence distributivity
@@ -58,9 +58,9 @@ forward containment `θ ∧ (φ ∨ ψ) ⊆ (θ ∧ φ) ∨ (θ ∧ ψ)`, but we
 symmetric `≑` result for uniformity.)
 
 ```agda
-module _ {α ρ : Level} (𝑨 : Algebra α ρ)(ℓ₀ : Level) where
-  CongruenceDistributive : Type (lsuc (Ł α ρ ℓ₀))
-  CongruenceDistributive = (θ φ ψ : Con 𝑨 (Ł α ρ ℓ₀)) → θ ∧ (φ ∨ ψ) ≑ (θ ∧ φ) ∨ (θ ∧ ψ)
+module _ {α ρ : Level}{𝑆 : Signature 𝓞 𝓥}(𝑨 : Algebra {𝑆 = 𝑆} α ρ)(ℓ₀ : Level) where
+  CongruenceDistributive : Type (lsuc (Ł {𝑆 = 𝑆} α ρ ℓ₀))
+  CongruenceDistributive = (θ φ ψ : Con 𝑨 (Ł {𝑆 = 𝑆} α ρ ℓ₀)) → θ ∧ (φ ∨ ψ) ≑ (θ ∧ φ) ∨ (θ ∧ ψ)
 ```
 
 #### Congruence modularity
@@ -71,7 +71,7 @@ implies modularity, so the congruence-distributive algebras form a subclass of t
 congruence-modular ones.
 
 ```agda
-  CongruenceModular : Type (lsuc (Ł α ρ ℓ₀))
-  CongruenceModular = (θ φ ψ : Con 𝑨 (Ł α ρ ℓ₀)) → θ ⊆ ψ → θ ∨ (φ ∧ ψ) ≑ (θ ∨ φ) ∧ ψ
+  CongruenceModular : Type (lsuc (Ł {𝑆 = 𝑆} α ρ ℓ₀))
+  CongruenceModular = (θ φ ψ : Con 𝑨 (Ł {𝑆 = 𝑆} α ρ ℓ₀)) → θ ⊆ ψ → θ ∨ (φ ∧ ψ) ≑ (θ ∨ φ) ∧ ψ
 ```
 

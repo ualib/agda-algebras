@@ -25,7 +25,7 @@ open import  Function    renaming (Func to _⟶_ )    using ()
 
 
 open import Overture                 using ( proj₁ ; proj₂ )
-open import Setoid.Algebras {𝑆 = 𝑆}  using ( Algebra ; 𝔻[_] )
+open import Setoid.Algebras  using ( Algebra ; 𝔻[_] )
 open import Setoid.Functions         using (IsSurjective ; Image_∋_)
 
 open Algebra
@@ -43,7 +43,7 @@ myA = record  { Carrier = ⊤
                                         ; sym = λ _ → tt
                                         ; trans = λ _ _ → tt } }
 
-myAlg : Algebra _ _
+myAlg : Algebra {𝑆 = 𝑆} _ _
 myAlg = record { Domain = myA ; Interp = _ }
 
 contradiction : (∀ X 𝑨 → X ↠ 𝑨) → ⊥

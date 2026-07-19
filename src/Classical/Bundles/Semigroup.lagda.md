@@ -48,7 +48,7 @@ open import Classical.Structures.Semigroup         using  ( Semigroup ; semigrou
                                                           ; module Semigroup-Op )
 open import Classical.Theories.Semigroup           using  ( assoc )
 
-open import Setoid.Algebras.Basic {𝑆 = Sig-Magma}  using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Algebras.Basic  using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
 open import Setoid.Signatures                      using  ( ⟨_⟩ )
 
 private variable α ρ : Level
@@ -98,7 +98,7 @@ field by an environment-application of the same three-variable shape.
       using ( setoid ; ∙-cong )
       renaming ( _∙_ to _·_ ; assoc to S-assoc )
 
-  𝑨 : Algebra _ _
+  𝑨 : Algebra {𝑆 = Sig-Magma} _ _
   𝑨 = record { Domain = setoid ; Interp = interp }
     where
     interp : Func (⟨ Sig-Magma ⟩ setoid) setoid

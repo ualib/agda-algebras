@@ -17,9 +17,9 @@ Because a class of structures has a different type than a single structure, we m
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature)
+open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
 
-module Setoid.Varieties.EquationalLogic {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Varieties.EquationalLogic where
 
 -- Imports from Agda and the Agda Standard Library -------------------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
@@ -30,9 +30,9 @@ open import Relation.Binary  using ( Setoid )
 open import Relation.Unary   using ( Pred ; _∈_ )
 
 -- Imports from the Agda Universal Algebra Library -------------------------------
-open import Setoid.Algebras  {𝑆 = 𝑆} using ( Algebra ; ov )
-open import Overture.Terms   {𝑆 = 𝑆} using ( Term )
-open import Setoid.Terms     {𝑆 = 𝑆} using ( module Environment )
+open import Setoid.Algebras using ( Algebra ; ov )
+open import Overture.Terms using ( Term )
+open import Setoid.Terms using ( module Environment )
 
 private variable χ α ρᵃ ℓ ι : Level
 ```
@@ -55,15 +55,15 @@ module _  {X : Type χ} where
   open Setoid   using ( Carrier )
   open Algebra  using ( Domain )
 
-  _⊧_≈_ : Algebra α ρᵃ → Term X → Term X → Type _
+  _⊧_≈_ : Algebra {𝑆 = 𝑆} α ρᵃ → Term {𝑆 = 𝑆} X → Term {𝑆 = 𝑆} X → Type _
   𝑨 ⊧ p ≈ q = ∀ (ρ : Carrier (Env X)) → ⟦ p ⟧ ⟨$⟩ ρ ≈ ⟦ q ⟧ ⟨$⟩ ρ
     where
     open Setoid ( Domain 𝑨 )  using ( _≈_ )
     open Environment 𝑨        using ( Env ; ⟦_⟧ )
   infix 10 _⊧_≈_
 
-  _⊫_≈_ : Pred(Algebra α ρᵃ) ℓ → Term X → Term X → Type (χ ⊔ ℓ ⊔ ov(α ⊔ ρᵃ))
-  𝒦 ⊫ p ≈ q = {𝑨 : Algebra _ _} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
+  _⊫_≈_ : Pred(Algebra {𝑆 = 𝑆} α ρᵃ) ℓ → Term {𝑆 = 𝑆} X → Term {𝑆 = 𝑆} X → Type (χ ⊔ ℓ ⊔ ov(α ⊔ ρᵃ))
+  𝒦 ⊫ p ≈ q = {𝑨 : Algebra {𝑆 = 𝑆} _ _} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
 ```
 
 (**Unicode tip**. Type \models to get `⊧` ; type \||= to get `⊫`.)
@@ -80,11 +80,11 @@ If 𝒦 denotes a class of structures, then `Th 𝒦` represents the set of iden
 modeled by the members of 𝒦.
 
 ```agda
-  Th' : Pred (Algebra α ρᵃ) ℓ → Pred(Term X × Term X) (χ ⊔ ℓ ⊔ ov(α ⊔ ρᵃ))
+  Th' : Pred (Algebra {𝑆 = 𝑆} α ρᵃ) ℓ → Pred(Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X) (χ ⊔ ℓ ⊔ ov(α ⊔ ρᵃ))
   Th' 𝒦 = λ (p , q) → 𝒦 ⊫ p ≈ q
 
-Th'' :  {χ α : Level}{X : Type χ} → Pred (Algebra α α) (ov α)
-  →      Pred(Term X × Term X) (χ ⊔ ov α)
+Th'' :  {χ α : Level}{X : Type χ} → Pred (Algebra {𝑆 = 𝑆} α α) (ov {𝑆 = 𝑆} α)
+  →      Pred(Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X) (χ ⊔ ov {𝑆 = 𝑆} α)
 Th'' 𝒦 = λ (p , q) → 𝒦 ⊫ p ≈ q
 ```
 
@@ -92,11 +92,11 @@ Perhaps we want to represent Th 𝒦 as an indexed collection.  We do so
 essentially by taking `Th 𝒦` itself to be the index set, as shown below.
 
 ```agda
-module _ {X : Type χ}{𝒦 : Pred (Algebra α ρᵃ) (ov α)} where
+module _ {X : Type χ}{𝒦 : Pred (Algebra {𝑆 = 𝑆} α ρᵃ) (ov {𝑆 = 𝑆} α)} where
   ℐ : Type (ov(α ⊔ ρᵃ ⊔ χ))
-  ℐ = Σ[ (p , q) ∈ (Term X × Term X) ] 𝒦 ⊫ p ≈ q
+  ℐ = Σ[ (p , q) ∈ (Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X) ] 𝒦 ⊫ p ≈ q
 
-  ℰ : ℐ → Term X × Term X
+  ℰ : ℐ → Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X
   ℰ ((p , q) , _) = (p , q)
 ```
 
@@ -104,13 +104,13 @@ If `ℰ` denotes a set of identities, then `Mod ℰ` is the class of structures
 satisfying the identities in `ℰ`.
 
 ```agda
-  Mod' : Pred(Term X × Term X) (ov α) → Pred(Algebra α ρᵃ) (ρᵃ ⊔ ov(α ⊔ χ))
+  Mod' : Pred(Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X) (ov {𝑆 = 𝑆} α) → Pred(Algebra {𝑆 = 𝑆} α ρᵃ) (ρᵃ ⊔ ov(α ⊔ χ))
   Mod' ℰ = λ 𝑨 → ∀ p q → (p , q) ∈ ℰ → 𝑨 ⊧ p ≈ q
 ```
 
 It is sometimes more convenient to have a "tupled" version of the previous definition, which we denote by `Modᵗ` and define as follows.
 
 ```agda
-  Modᵗ : {I : Type ι} → (I → Term X × Term X) → {α : Level} → Pred(Algebra α ρᵃ) (χ ⊔ ρᵃ ⊔ ι ⊔ α)
+  Modᵗ : {I : Type ι} → (I → Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X) → {α : Level} → Pred(Algebra {𝑆 = 𝑆} α ρᵃ) (χ ⊔ ρᵃ ⊔ ι ⊔ α)
   Modᵗ ℰ = λ 𝑨 → ∀ i → 𝑨 ⊧ proj₁ (ℰ i) ≈ proj₂ (ℰ i)
 ```

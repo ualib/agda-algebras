@@ -57,7 +57,7 @@ open Func renaming ( to to _⟨$⟩_ )
 open import Classical.Operations                    using ( Curry₂ ; pair )
 open import Classical.Signatures.Magma              using ( ∙-Op ; Sig-Magma )
 open import Classical.Structures.Interpret          using ( interp-cong )
-open import Setoid.Algebras.Basic {𝑆 = Sig-Magma}   using ( Algebra ; _^_ ; 𝔻[_] ; 𝕌[_] )
+open import Setoid.Algebras.Basic   using ( Algebra ; _^_ ; 𝔻[_] ; 𝕌[_] )
 open import Setoid.Homomorphisms.Basic              using ( hom ; IsHom )
 open import Setoid.Signatures                       using ( ⟨_⟩ )
 
@@ -74,12 +74,12 @@ no Σ-wrapping; the alias makes use sites read `Magma α ρ` rather than
 
 ```agda
 Magma : (α ρ : Level) → Type (suc α ⊔ suc ρ)
-Magma α ρ = Algebra α ρ
+Magma α ρ = Algebra {𝑆 = Sig-Magma} α ρ
 ```
 
-(If it's not obvious why `Algebra α ρ` yields a magma here, note that the
-`Setoid.Algebras.Basic` module is imported above with the signature parameter set to
-`𝑆 = Sig-Magma`.)
+(The signature is pinned explicitly at `𝑆 = Sig-Magma`: per [ADR-009][] the generic
+`Setoid.Algebras.Basic` module generalizes over `𝑆`, and the `Classical/` layer fixes
+the concrete signature at the point of use.)
 
 
 #### The `Magma-Op` module: named accessors for a fixed magma

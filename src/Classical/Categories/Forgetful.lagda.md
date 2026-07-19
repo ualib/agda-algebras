@@ -56,7 +56,7 @@ open import Classical.Theories.Semigroup            using  ( Th-Semigroup )
 open import Setoid.Varieties.Invariance          using  ( ⊧-reduct )
 open import Overture.Signatures.Morphisms           using  ( SigMorphism ; mkSigMorphism )
 open import Overture.Terms.Translation              using  ( _✶_ )
-open import Setoid.Algebras.Basic {𝑆 = Sig-Monoid}  using  ( Algebra ; 𝔻[_] )
+open import Setoid.Algebras.Basic  using  ( Algebra ; 𝔻[_] )
 open import Setoid.Categories.Algebra               using  ( Alg )
 open import Setoid.Categories.Functor               using  ( Functor )
 open import Setoid.Homomorphisms.Basic              using ( hom )
@@ -87,7 +87,7 @@ monoid→semigroupF = reductF magma↪monoid
 Its morphism action keeps the underlying setoid map of a monoid homomorphism unchanged:
 
 ```agda
-monoid→semigroupF-keeps-map : {𝑴 𝑵 : Algebra α ρ} (f : hom 𝑴 𝑵)
+monoid→semigroupF-keeps-map : {𝑴 𝑵 : Algebra {𝑆 = Sig-Monoid} α ρ} (f : hom 𝑴 𝑵)
   → proj₁ (F₁ monoid→semigroupF f) ≡ proj₁ f
 monoid→semigroupF-keeps-map _ = refl
 ```

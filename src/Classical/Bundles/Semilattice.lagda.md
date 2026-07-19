@@ -35,7 +35,7 @@ open Func renaming ( to to _⟨$⟩_ )
 open import Classical.Signatures.Magma             using  ( ∙-Op ; Sig-Magma )
 open import Classical.Structures.Semilattice       using  ( Semilattice ; module Semilattice-Op )
 open import Classical.Theories.Semilattice         using  ( assoc ; comm ; idem )
-open import Setoid.Algebras.Basic {𝑆 = Sig-Magma}  using ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Algebras.Basic  using ( Algebra ; 𝕌[_] ; 𝔻[_] )
 open import Setoid.Signatures                      using  ( ⟨_⟩ )
 
 private variable α ρ : Level
@@ -73,7 +73,7 @@ private variable α ρ : Level
                                                                 ; comm   to S-comm
                                                                 ; idem   to S-idem )
 
-  𝑨 : Algebra _ _
+  𝑨 : Algebra {𝑆 = Sig-Magma} _ _
   𝑨 = record { Domain = setoid ; Interp = interp }
     where
     interp : Func (⟨ Sig-Magma ⟩ setoid) setoid

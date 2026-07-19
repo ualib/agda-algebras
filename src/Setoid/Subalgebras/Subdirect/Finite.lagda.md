@@ -55,9 +55,9 @@ the search go through under `--safe` Agda.
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using ( 𝓞 ; 𝓥 ; Signature )
+open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 
-module Setoid.Subalgebras.Subdirect.Finite {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Subalgebras.Subdirect.Finite where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
 open import Agda.Primitive                 using  () renaming ( Set to Type )
@@ -86,7 +86,7 @@ open import Data.List.Membership.Propositional.Properties
   using ( ∈-filter⁺ ; ∈-filter⁻ ; ∈-cartesianProduct⁺ ; ∈-allFin )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Setoid.Algebras.Basic        {𝑆 = 𝑆}  using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Algebras.Basic  using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
 open import Setoid.Algebras.Finite                using  ( FiniteAlgebra ; 𝟏
                                                          ; 𝟏-FiniteAlgebra )
 open import Setoid.Congruences.Basic              using  ( Con ; mkcon ; is-equivalence ; _╱_
@@ -95,12 +95,12 @@ open import Setoid.Congruences.Finite             using  ( ConRel ; 𝟏-FiniteC
                                                          ; FiniteCongruences ; DecCon )
 
 open import Setoid.Congruences.Generation         using  ( Cg ; Cg-least ; base )
-open import Setoid.Congruences.Lattice   {𝑆 = 𝑆}  using  ( _⊆_ ; ⊆-trans )
-open import Setoid.Congruences.Monolith  {𝑆 = 𝑆}  using  ( IsSubdirectlyIrreducible ; Nonzero
+open import Setoid.Congruences.Lattice  using  ( _⊆_ ; ⊆-trans )
+open import Setoid.Congruences.Monolith  using  ( IsSubdirectlyIrreducible ; Nonzero
                                                          ; mono-nonzero ; mono-least )
 
-open import Setoid.Subalgebras.Subdirect.Basic  {𝑆 = 𝑆}  using ( Separates )
-open import Setoid.Subalgebras.Subdirect.BirkhoffSI {𝑆 = 𝑆}
+open import Setoid.Subalgebras.Subdirect.Basic  using ( Separates )
+open import Setoid.Subalgebras.Subdirect.BirkhoffSI
   using (SubdirectSIRep; SubdirectlyRepresentable ; SIRep→Representable )
 
 private variable α ρ : Level
@@ -160,7 +160,7 @@ for the monolith stay put — and `pairs` is the list of all index pairs of the
 carrier enumeration.
 
 ```agda
-module _ {𝑨 : Algebra α ρ} (𝑭 : FiniteAlgebra 𝑨) (𝑪 : FiniteCongruences 𝑨) where
+module _ {𝓞 𝓥 : Level}{𝑆 : Signature 𝓞 𝓥}{𝑨 : Algebra {𝑆 = 𝑆} α ρ} (𝑭 : FiniteAlgebra 𝑨) (𝑪 : FiniteCongruences 𝑨) where
   open FiniteAlgebra 𝑭
   open FiniteCongruences 𝑪
   open Setoid 𝔻[ 𝑨 ] using ( _≈_ ) renaming ( sym to ≈sym )
@@ -315,7 +315,7 @@ the underlying relation, equivalence proof, and compatibility carry over verbati
 quotient equality `Θ` is exactly the containment `Θ ⊆ ·`.  `Q→A` records this.
 
 ```agda
-    Q : Algebra α ℓ
+    Q : Algebra {𝑆 = 𝑆} α ℓ
     Q = 𝑨 ╱ Θ
 
     Q→A : Con Q ℓ → Con 𝑨 ℓ
@@ -414,7 +414,7 @@ the maximal-congruence search — is the natural next addition.
 
 ```agda
 -- The theorem applied: the one-element algebra is subdirectly representable.
-𝟏-SubdirectlyRepresentable : SubdirectlyRepresentable 𝟏 (𝓞 ⊔ 𝓥) 0ℓ
+𝟏-SubdirectlyRepresentable : {𝓞 𝓥 : Level}{𝑆 : Signature 𝓞 𝓥} → SubdirectlyRepresentable (𝟏 {𝑆 = 𝑆}) (𝓞 ⊔ 𝓥) 0ℓ
 𝟏-SubdirectlyRepresentable = finite-Birkhoff 𝟏-FiniteAlgebra 𝟏-FiniteCongruences
 ```
 

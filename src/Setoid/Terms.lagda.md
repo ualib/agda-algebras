@@ -13,15 +13,15 @@ This is the [Setoid.Terms][] module of the [Agda Universal Algebra Library][].
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature)
+open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
 
-module Setoid.Terms {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Terms where
 
-open import Setoid.Terms.Basic       {𝑆 = 𝑆}  public
+open import Setoid.Terms.Basic  public
 open import Setoid.Terms.Interpretation       public
-open import Setoid.Terms.Monad       {𝑆 = 𝑆}  public
-open import Setoid.Terms.Operations  {𝑆 = 𝑆}  public
-open import Setoid.Terms.Properties  {𝑆 = 𝑆}  public
+open import Setoid.Terms.Monad  public
+open import Setoid.Terms.Operations  public
+open import Setoid.Terms.Properties  public
 open import Setoid.Terms.Translation          public
 ```
 

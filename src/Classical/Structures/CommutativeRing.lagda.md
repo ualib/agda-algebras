@@ -42,8 +42,8 @@ open import Classical.Theories.CommutativeRing     using ( Eq-CommutativeRing ; 
                                                             ; ·-assoc to ·-assocᶜ ; ·-idˡ to ·-idˡᶜ ; ·-idʳ to ·-idʳᶜ
                                                             ; distribˡ to distribˡᶜ ; distribʳ to distribʳᶜ )
 open import Overture.Terms {𝑆 = Sig-Ring}          using ( Term ; ℊ )
-open import Setoid.Algebras.Basic {𝑆 = Sig-Ring}   using ( Algebra ; 𝔻[_] ; 𝕌[_] )
-open import Setoid.Varieties.EquationalLogic {𝑆 = Sig-Ring} using ( _⊧_≈_ )
+open import Setoid.Algebras.Basic   using ( Algebra ; 𝔻[_] ; 𝕌[_] )
+open import Setoid.Varieties.EquationalLogic using ( _⊧_≈_ )
 
 private variable α ρ : Level
 ```
@@ -53,11 +53,11 @@ private variable α ρ : Level
 
 ```agda
 infix 4 _⊨ᶜʳᵍ_
-_⊨ᶜʳᵍ_ : (𝑨 : Algebra α ρ) (ℰ : Eq-CommutativeRing → Term (Fin 3) × Term (Fin 3)) → Type (α ⊔ ρ)
+_⊨ᶜʳᵍ_ : (𝑨 : Algebra {𝑆 = Sig-Ring} α ρ) (ℰ : Eq-CommutativeRing → Term (Fin 3) × Term (Fin 3)) → Type (α ⊔ ρ)
 𝑨 ⊨ᶜʳᵍ ℰ = ∀ i → 𝑨 ⊧ proj₁ (ℰ i) ≈ proj₂ (ℰ i)
 
 CommutativeRing : (α ρ : Level) → Type (suc α ⊔ suc ρ)
-CommutativeRing α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ᶜʳᵍ Th-CommutativeRing
+CommutativeRing α ρ = Σ[ 𝑨 ∈ Algebra {𝑆 = Sig-Ring} α ρ ] 𝑨 ⊨ᶜʳᵍ Th-CommutativeRing
 ```
 
 #### The forgetful projection to rings
