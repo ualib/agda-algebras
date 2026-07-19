@@ -60,7 +60,7 @@ private variable α ρ ℓ ι : Level
 
 ```agda
 SubdirectlyRepresentable : {𝑆 : Signature 𝓞 𝓥}(𝑨 : Algebra {𝑆 = 𝑆} α ρ) (ℓ ι : Level) → Type (𝓞 ⊔ 𝓥  ⊔ ρ ⊔ lsuc (α ⊔ ℓ ⊔ ι))
-SubdirectlyRepresentable {α}{ρ} 𝑨 ℓ ι =
+SubdirectlyRepresentable {α = α}{𝑆 = 𝑆} 𝑨 ℓ ι =
   Σ[ I ∈ Type ι ] Σ[ 𝒜 ∈ (I → Algebra {𝑆 = 𝑆} α ℓ) ]
     ((∀ i → IsSubdirectlyIrreducible (𝒜 i)) × SubdirectEmbedding {𝑩 = 𝑨} 𝒜)
 ```
