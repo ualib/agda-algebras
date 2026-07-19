@@ -43,16 +43,15 @@ module Classical.Structures.Group.GSet where
 open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ---------------------------------------
-open import Data.Fin.Patterns using ( 0F )
-open import Data.Product      using ( _,_ ; Σ-syntax ; proj₁ ; proj₂ )
-open import Level             using ( Level ; _⊔_ ; suc )
-open import Relation.Unary    using ( Pred )
+open import Data.Fin.Patterns  using ( 0F )
+open import Data.Product       using ( _,_ ; Σ-syntax ; proj₁ )
+open import Level              using ( Level ; _⊔_ ; suc )
+open import Relation.Unary     using ( Pred )
 
 import Algebra.Properties.Group as GroupProperties
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
 open import Classical.Bundles.Group               using ( ⟨_⟩ᵍᵖ )
-open import Classical.Signatures.Group            using ( Sig-Group )
 open import Classical.Signatures.Unary            using ( Sig-Unary )
 open import Classical.Structures.Group.Basic      using ( Group ; module Group-Op )
 open import Classical.Structures.Group.Subgroups  using ( IsSubgroup )
@@ -73,9 +72,9 @@ module CosetAction {α ρ : Level} (𝒢 : Group α ρ) {ℓ : Level}
     𝑮 = proj₁ 𝒢
     G = 𝕌[ 𝑮 ]
 
-  open Group-Op 𝒢 using ( _∙_ ; ε ; _⁻¹ ; assoc-law ; idˡ-law )
-  open Coset 𝒢 H H-isSubgroup using ( _∼_ ; ∼-congˡ ; ≈⇒∼ ; cosetSetoid )
-  open GroupProperties ⟨ 𝒢 ⟩ᵍᵖ using ( //-rightDividesˡ )
+  open Group-Op 𝒢               using ( _∙_ ; ε ; _⁻¹ ; assoc-law ; idˡ-law )
+  open Coset 𝒢 H H-isSubgroup   using ( _∼_ ; ∼-congˡ ; ≈⇒∼ ; cosetSetoid )
+  open GroupProperties ⟨ 𝒢 ⟩ᵍᵖ  using ( //-rightDividesˡ )
 
   -- The algebra G ↷ G/H over the unary signature on the carrier of G:
   -- the symbol g acts on the coset of x by left translation, g ∙ x.

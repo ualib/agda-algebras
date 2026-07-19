@@ -3511,7 +3511,7 @@ This program is a separate research track from the M7 algebraic-complexity / CSP
 
 ---
 
-### Issue M6-13a: FLRP WP-1: FLRP.Problem — formal statement and representability predicate (#452)
+### Issue M6-13a: FLRP WP-1: FLRP.Problem — formal statement and representability predicate (#452, closed)
 
 **Labels**: `research-exploratory`, `flrp-research`
 
@@ -3536,7 +3536,7 @@ Part of #451.
 
 ---
 
-### Issue M6-13b: FLRP WP-2: group-action infrastructure — subgroups, core, cosets, G-sets, Sub(G), intervals (#453)
+### Issue M6-13b: FLRP WP-2: group-action infrastructure — subgroups, core, cosets, G-sets, Sub(G), intervals (#453, closed)
 
 **Labels**: `research-exploratory`, `flrp-research`
 
@@ -3573,15 +3573,19 @@ The first substantive FLRP theorem in the library: the congruence lattice of the
 
 Depends on WP-1 and WP-2.  Part of #451.
 
+## Scope update — 2026-07-12 (ADR-008)
+
+Per the ratified two-layer congruence discipline (`docs/adr/008-two-layer-congruence-discipline.md`; design note `docs/notes/flrp-two-layer-congruences.md` on #462), this theorem is to be stated at **Layer D**: for a finite group `G` carrying the standard finiteness data (surjective enumeration plus decidable equality) and a decidable subgroup `H`, the isomorphism is between the `DecCon` poset of the coset algebra and the interval `[H, G]` in `Sub(G)`, both of which are finite lattices with decidable order.  The Layer S version follows from the registered classical bridge if ever needed.  Consequently this issue now also depends on WP-7 (#466), which lands first per the ratified ordering; the corollary targets `Representableᵈ`.
+
 ## Tasks
 
-- [ ] Congruences of the coset G-set correspond to intermediate subgroups (both directions as separate named lemmas).
-- [ ] The order/lattice isomorphism `Con(G ↷ G/H) ≅ [H, G]`, assembled from small lemmas.
-- [ ] Corollary: group representable implies representable, in `FLRP.Problem` terms.
+- [ ] Congruences of the coset G-set correspond to intermediate subgroups (both directions as separate named lemmas), at Layer D.
+- [ ] The order/lattice isomorphism `Con (G ↷ G/H) ≅ [H, G]`, assembled from small lemmas.
+- [ ] Corollary: group representable implies `Representableᵈ`, in `FLRP.Problem`/`FLRP.ProblemDec` terms.
 
 ## Acceptance criteria
 
-- [ ] Type-checks under `--safe`; each direction of the correspondence is its own lemma; every public definition carries prose.
+- [ ] Type-checks under `--safe` with no classical assumptions; each direction of the correspondence is its own lemma; every public definition carries prose.
 
 ---
 
@@ -3637,20 +3641,32 @@ Depends on WP-1.  Part of #451.
 
 ## Description
 
-External searches (GAP, UACalc, SAT/model finders) must never be trusted directly: they emit finite certificate data — operation tables plus a lattice-isomorphism witness — which Agda re-checks by decision over the finite carrier, in exactly the style of `Examples.Classical.Lattices.L7`.  Build the certificate schema, the generic Agda checker, at least one emitter script, and a pilot re-verification of one thesis-era small-lattice representation end-to-end.  Search scripts and raw logs live outside `src/` (roadmap § 6; they move to a companion repo if they grow).
+External searches (GAP, UACalc, SAT/model finders) must never be trusted directly: they emit finite certificate data which Agda re-checks, in the style of `Examples.Classical.Lattices.L7`.  Build the certificate schema, the generic Agda checker, at least one emitter, and a pilot re-verification of one thesis-era small-lattice representation end-to-end.  Search scripts and raw logs live outside `src/` (roadmap § 6; they move to a companion repo if they grow).
 
 Depends on WP-1.  Part of #451.
 
+## Design — fixed 2026-07-13 (Freese traces)
+
+Full design: `docs/notes/flrp-wp6-freese-certificates.md`.  Guiding principle: **the checker never searches** — all fixpoint iteration happens in the external engine, and Agda verifies a linear-size witness.
+
++  **Per-congruence certificate** for `θ ≑ Cg(fromPairs P)`: the claimed partition as a parent vector in Freese *normal form*, plus the **Freese trace** — the justified merge list of the `Cg` worklist algorithm of R. Freese, *Computing congruences efficiently* (https://math.hawaii.edu/~ralph/Preprints/cg2.pdf), which is literally a `Gen`-derivation skeleton (seeds ↦ `base`, translate applications ↦ operation compatibility).
++  **Checker obligations**, each linear and search-free: C1 trace soundness (every merge derivable); C2 claimed ⊆ generated (forest edges covered by the trace); C3 generated ⊆ claimed (contains `P`; compatibility checked on the `≤ n − 1` forest edges only, extended by symmetry/transitivity through roots).
++  **Whole-lattice certificates** (`FiniteCongruencesᵈ` instances, `Representableᵈ` targets): the congruence list plus, for every carrier pair, a pointer to its principal congruence with trace; order/meet/join verified definitionally by root lookups.  The union-find join and **root-pair-hashing meet** of R. Freese, *Partition algorithms* (https://math.hawaii.edu/~ralph/Notes/Partitions/partitions.pdf, Algorithm 4) are the *engine-side* devices for producing these tables; `cg2` supersedes that note for generation only, so the 3-pager remains the lattice-structure reference.
++  **Engine**: UACalc instrumented to emit its merge trace, or a ~100-line reimplementation of the `cg2` worklist algorithm in the scripts layer.
++  **Non-goal (parked)**: a verified in-Agda union-find.  The Layer-D abstraction boundary (`Cg-dec` is `Dec`-valued with an `abstract` implementation, #467) makes a fast decider a drop-in later if a concrete consumer ever needs in-Agda computation at scale.
++  Background: Tarjan, *Efficiency of a good but not linear set union algorithm*, J. ACM 22 (1975) — the `O(m·α(m,n))` union-find analysis both notes rest on.
+
 ## Tasks
 
-- [ ] Certificate schema (finite algebra tables, target lattice, isomorphism witness).
-- [ ] Generic checker: given a certificate, decide `Con(𝑨) ≅ L` over the finite carrier.
-- [ ] One emitter (GAP or SAT side) producing the schema.
-- [ ] Pilot: re-verify one small-lattice representation from the thesis era.
+- [ ] Certificate schema: normal-form parent vectors + Freese traces (per-congruence), plus the whole-lattice pointer structure (design note § 4).
+- [ ] Generic checker discharging obligations C1–C3 and the whole-lattice verifications, with no fixpoint iteration or search.
+- [ ] One emitter producing traces (instrumented UACalc or standalone `cg2` reimplementation).
+- [ ] Pilot: re-verify one small-lattice representation from the thesis era end-to-end through the pipeline.
 
 ## Acceptance criteria
 
 - [ ] A certificate produced by an external tool round-trips to a type-checked Agda proof with no manual editing beyond file placement.
+- [ ] Checking cost is linear in trace + table size (no `Cg-dec` execution in the checking path).
 
 ---
 
@@ -3722,6 +3738,32 @@ Depends on RP-1 (wreath products, Kurzweil construction).  Part of #451; roadmap
 ## Exit criterion
 
 - [ ] A theorem (formalized, or paper-proved with a formal statement) settling the `n = 2` conjecture in either direction, or a documented reduction of it to named open questions.
+
+---
+
+### Issue M6-13k: FLRP WP-7: the decidable layer — presented congruences, FiniteAlgebraᵈ, Representableᵈ (#466)
+
+**Labels**: `flrp-research`
+
+## Description
+
+Implement Layer D of the two-layer congruence discipline ratified in ADR-008 (`docs/adr/008-two-layer-congruence-discipline.md`; design note `docs/notes/flrp-two-layer-congruences.md`, PR #462): finitely presented congruences with decidable membership on finite finitary algebras, the reconstruction theorem, a constructive completeness theorem yielding `FiniteCongruencesᵈ`, the single registered classical bridge, and `Representableᵈ` as the FLRP program's working notion.  Per the ratified ordering this lands before WP-3 (#454), which will be stated at Layer D.
+
+Interface update: #465 has since split the old interface into the bare carrier record `FiniteAlgebra` (`Setoid.Algebras.Finite`, no classical content) and the congruence-side `FiniteCongruences` (`Setoid.Congruences.Finite`, home of `DecCon` and the classical `complete` field), so Layer D's constructive completeness record is the congruence-side counterpart, working name `FiniteCongruencesᵈ`.
+
+Part of #451.
+
+## Tasks (three PR-sized slices)
+
+- [ ] Slice (i) — L1 + L2: `Cg` of a finite pair list on a finite finitary algebra has decidable membership (congruence-closure computation), and every `DecCon` is `≑` to `Cg` of its related-pairs list; includes fixing the Agda packaging of finite finitary signatures (audit A3).
+- [ ] Slice (ii) — L3 + audits: constructive completeness for `DecCon` via enumeration of Bool-valued tables; the `FiniteCongruencesᵈ` interface; audit A1 (which m6-8 consumers, in particular finite Birkhoff, survive on `FiniteAlgebra` + `FiniteCongruencesᵈ` alone) and audit A2 (WP-2 group modules are Layer-D ready).
+- [ ] Slice (iii) — L4 + L5: the `FLRP.Assumptions` registry with the classical bridge (`complete` of `FiniteCongruences`) as its first entry, strength documented (between WLEM and LEM at the working level); the `DecCon` poset as a finite lattice with decidable order; `Representableᵈ` and `FLRP-Statementᵈ`; the constructive `chain₂` instance; and, under the bridge, `Representable 𝑳 ↔ Representableᵈ 𝑳`.
+
+## Acceptance criteria
+
+- [ ] All new modules type-check under `--cubical-compatible --exact-split --safe`; no postulates; the bridge appears only as an explicit hypothesis.
+- [ ] `Representableᵈ (toLattice chain₂)` is inhabited with no classical assumptions.
+- [ ] The m6-8 note gains an addendum recording the A1 audit outcome.
 
 <!-- END GENERATED: milestone-6 -->
 

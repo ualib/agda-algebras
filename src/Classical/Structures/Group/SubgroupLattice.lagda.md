@@ -51,12 +51,11 @@ open import Level           using ( Level )
 open import Relation.Unary  using ( Pred ; _∈_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Classical.Signatures.Group            using ( Sig-Group )
 open import Classical.Structures.Group.Basic      using ( Group ; module Group-Op )
 open import Classical.Structures.Group.Subgroups  using ( IsSubgroup ; sub-ε-closed )
 open import Order.Interval                        using ( module IntervalLattice )
-open import Setoid.Algebras.Basic {𝑆 = Sig-Group} using ( Algebra ; 𝕌[_] )
-open import Setoid.Subalgebras.CompleteLattice {𝑆 = Sig-Group} using ( module Sublattice )
+open import Setoid.Algebras.Basic                 using ( 𝕌[_] )
+open import Setoid.Subalgebras.CompleteLattice    using ( module Sublattice )
 ```
 -->
 

@@ -39,8 +39,8 @@ open import Classical.Theories.Group               using ( assoc ; idˡ ; idʳ ;
 open import Classical.Theories.AbelianGroup        using ( Eq-AbelianGroup ; Th-AbelianGroup ; comm )
                                                    renaming ( assoc to assocᵃ ; idˡ to idˡᵃ ; idʳ to idʳᵃ
                                                             ; invˡ to invˡᵃ ; invʳ to invʳᵃ )
-open import Overture.Terms {𝑆 = Sig-Group}         using ( Term ; ℊ )
-open import Setoid.Algebras.Basic {𝑆 = Sig-Group}  using ( Algebra ; 𝔻[_] ; 𝕌[_] )
+open import Overture.Terms                         using ( Term ; ℊ )
+open import Setoid.Algebras.Basic                  using ( Algebra ; 𝔻[_] ; 𝕌[_] )
 open import Setoid.Varieties.EquationalLogic {𝑆 = Sig-Group} using ( _⊧_≈_ )
 
 private variable α ρ : Level

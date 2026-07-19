@@ -35,23 +35,21 @@ module Classical.Structures.Group.Cosets where
 open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ---------------------------------------
-open import Data.Product    using ( _,_ ; proj₁ ; proj₂ )
-open import Level           using ( Level )
-open import Relation.Binary using ( Setoid ; IsEquivalence )
-open import Relation.Unary  using ( Pred ; _∈_ )
+open import Data.Product     using ( _,_ ; proj₁ )
+open import Level            using ( Level )
+open import Relation.Binary  using ( Setoid ; IsEquivalence )
+open import Relation.Unary   using ( Pred ; _∈_ )
 
 import Algebra.Properties.Group as GroupProperties
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Overture                               using ( Equivalence )
-open import Classical.Bundles.Group                using ( ⟨_⟩ᵍᵖ )
-open import Classical.Signatures.Group             using ( Sig-Group )
-open import Classical.Structures.Group.Basic       using ( Group ; module Group-Op )
-open import Classical.Structures.Group.Subgroups   using ( IsSubgroup )
-open import Setoid.Relations.Quotients             using ( _/_ )
-
-open import Setoid.Algebras.Basic {𝑆 = Sig-Group}  using ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Overture                              using ( Equivalence )
+open import Classical.Bundles.Group               using ( ⟨_⟩ᵍᵖ )
+open import Classical.Structures.Group.Basic      using ( Group ; module Group-Op )
+open import Classical.Structures.Group.Subgroups  using ( IsSubgroup )
+open import Setoid.Algebras.Basic                 using ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Relations.Quotients            using ( _/_ )
 ```
 -->
 

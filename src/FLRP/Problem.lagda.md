@@ -66,7 +66,6 @@ open import Overture.Cayley                     using ( Table ; ⟦_⟧ ; from-y
 open import Overture.Operations.Properties      using ( Associative? ; Commutative?
                                                       ; Idempotent? ; Absorbsˡ?
                                                       ; Absorbsʳ? )
-open import Classical.Signatures.Lattice        using ( Sig-Lattice )
 open import Classical.Small.Structures.Lattice  using ( Lattice ; eqsToLattice )
 open import Classical.Properties.Lattice        using ( module Lattice-Order )
 open import Setoid.Algebras.Basic               using (Algebra ; 𝔻[_])

@@ -267,7 +267,7 @@ universe up, so the resulting meet is a `Con 𝑨 ℓ′` with `ℓ′ > ρ` —
 Restricting to a finite, complete list of congruences does not escape the wall
 either: the complete congruence enumerations available constructively (the
 `cons`{.AgdaField} field of `FiniteCongruences`{.AgdaRecord} in
-[Setoid.Congruences.Finite][]) live at the absorbing level `clv α ρ ⊒ ρ`, so the
+[Setoid.Congruences.Finite][]) live at the absorbing level `𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊒ ρ`, so the
 finite meet is again above `ρ`.  Stating the converse cleanly would need an
 impredicative (or universe-resized) meet, or a level-generic `IsMonolith`; we record
 it here as a known limitation, as the forward direction is the one consumed

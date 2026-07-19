@@ -71,8 +71,7 @@ open import Data.Product                           using  ( _×_ ; _,_ ; Σ-synt
                                                           ; proj₁ ; proj₂ )
 open import Data.Unit.Base                         using  ( ⊤ ; tt )
 open import Function                               using  ( _∘_ )
-open import Level                                  using  ( Level ; _⊔_ ; 0ℓ
-                                                          ; Lift ; lift ; lower )
+open import Level                                  using  ( Level ; _⊔_ ; Lift ; lift ; lower )
                                                    renaming ( suc to lsuc )
 open import Relation.Binary                        using  ( Setoid )
                                                    renaming ( Rel to BinaryRel )
@@ -80,10 +79,10 @@ open import Relation.Binary.PropositionalEquality  using  ( refl )
 open import Relation.Nullary                       using  ( Dec ; yes ; no )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Setoid.Algebras.Basic       {𝑆 = 𝑆}  using ( Algebra ; 𝕌[_] ; 𝔻[_] )
-open import Setoid.Algebras.Finite               using ( 𝟏 )
-open import Setoid.Congruences.Basic             using ( Con ; mkcon ; reflexive ; 𝟘[_] )
-open import Setoid.Congruences.Lattice  {𝑆 = 𝑆}  using ( _≑_ )
+open import Setoid.Algebras.Basic {𝑆 = 𝑆}  using ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Algebras.Finite         using ( 𝟏 )
+open import Setoid.Congruences.Basic       using ( Con ; mkcon ; reflexive ; 𝟘[_] )
+open import Setoid.Congruences.Lattice     using ( _≑_ )
 
 private variable α ρ : Level
 ```
@@ -92,18 +91,14 @@ private variable α ρ : Level
 #### Decidable congruences and the working level
 
 A **decidable congruence** is a congruence whose membership relation is decidable.
-The working congruence level is the absorbing level `clv α ρ = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ`, at
+The working congruence level is the absorbing level `𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ`, at
 which the generated (principal) congruences used downstream (e.g. for the monolith
 in the finite Birkhoff construction) stay put — the same level discipline as in
 [Setoid.Congruences.CompleteLattice][].
 
 ```agda
--- The absorbing congruence level at which the enumeration below is carried out.
-clv : (α ρ : Level) → Level
-clv α ρ = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ
-
 -- A congruence together with a decision procedure for its membership.
-DecCon : (𝑨 : Algebra α ρ)(ℓ : Level) → Type (clv α ρ ⊔ lsuc ℓ)
+DecCon : (𝑨 : Algebra α ρ)(ℓ : Level) → Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ lsuc ℓ)
 DecCon 𝑨 ℓ = Σ[ (_θ_ , _) ∈ Con 𝑨 ℓ ] ∀ x y → Dec (x θ y)
 
 -- The underlying relation of a decidable congruence.
@@ -149,7 +144,7 @@ module _ {𝑨 : Algebra α ρ} (𝑪 : FiniteCongruences 𝑨) where
   private
     -- The diagonal congruence at the working level.
     Δ : Con 𝑨 (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ)
-    Δ = 𝟘[ 𝑨 ] {clv α ρ}
+    Δ = 𝟘[ 𝑨 ] {𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ}
 
   -- Setoid equality is decidable whenever the congruence lattice is
   -- finitely enumerable: ask the diagonal's listed representative.
@@ -167,8 +162,8 @@ also the diagonal — so its complete list is a singleton.
 
 ```agda
 -- The sole decidable congruence of 𝟏: the all-relation (= the diagonal on a point).
-𝟏-Δ : DecCon 𝟏 (clv 0ℓ 0ℓ)
-𝟏-Δ = ((λ _ _ → Lift (clv 0ℓ 0ℓ) ⊤)
+𝟏-Δ : DecCon 𝟏 (𝓞 ⊔ 𝓥)
+𝟏-Δ = ((λ _ _ → Lift (𝓞 ⊔ 𝓥) ⊤)
       , mkcon  (λ _ → lift tt)
                (record { refl = lift tt ; sym = λ _ → lift tt ; trans = λ _ _ → lift tt })
                (λ _ _ → lift tt))

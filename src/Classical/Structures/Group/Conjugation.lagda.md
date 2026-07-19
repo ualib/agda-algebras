@@ -44,7 +44,7 @@ open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ---------------------------------------
 open import Data.Fin.Patterns             using  ( 0F ; 1F )
-open import Data.Product                  using  ( _,_ ; _×_ ; Σ-syntax ; ∃-syntax
+open import Data.Product                  using  ( _,_ ; _×_ ; ∃-syntax
                                                  ; proj₁ ; proj₂ )
 open import Function                      using  ( Func )
 open import Level                         using  ( Level ; _⊔_ ; lift )
@@ -56,15 +56,13 @@ import Algebra.Properties.Group as GroupProperties
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Classical.Bundles.Group                           using  ( ⟨_⟩ᵍᵖ )
-open import Classical.Signatures.Group                        using  ( Sig-Group ; ∙-Op
-                                                                     ; ε-Op ; ⁻¹-Op )
-open import Classical.Structures.Group.Basic                  using  ( Group ; module Group-Op )
+open import Classical.Bundles.Group           using  ( ⟨_⟩ᵍᵖ )
+open import Classical.Signatures.Group        using  ( ∙-Op ; ε-Op ; ⁻¹-Op )
+open import Classical.Structures.Group.Basic  using  ( Group ; module Group-Op )
 open import Classical.Structures.Group.Subgroups
-open import Setoid.Algebras.Basic            {𝑆 = Sig-Group}  using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
-                                                               renaming (_^_ to _̂_ )
-open import Setoid.Subalgebras.Subuniverses  {𝑆 = Sig-Group}  using  ( Subuniverses )
-open Algebra using (Interp )
+open import Setoid.Algebras.Basic             using ( Algebra ; 𝕌[_] ; 𝔻[_] )
+                                              renaming ( _^_ to _̂_ )
+open import Setoid.Subalgebras.Subuniverses   using ( Subuniverses )
 
 open Func renaming ( to to _⟨$⟩_ ; cong to ≈cong )
 
