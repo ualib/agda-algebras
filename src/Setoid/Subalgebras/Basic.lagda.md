@@ -51,7 +51,7 @@ _≤_   -- alias for subalgebra relation
 𝑨 ≥ 𝑩 = 𝑨 IsSupalgebraOf 𝑩
 𝑨 ≤ 𝑩 = 𝑨 IsSubalgebraOf 𝑩
 
-mon→≤ : {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ} → mon 𝑨 𝑩 → 𝑨 ≤ 𝑩
+mon→≤ : {𝑆 : Signature 𝓞 𝓥}{𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ} → mon 𝑨 𝑩 → 𝑨 ≤ 𝑩
 mon→≤ {𝑨 = 𝑨}{𝑩} x = mon→intohom 𝑨 𝑩 x
 
 record SubalgebraOf : Type (ov {𝑆 = 𝑆} (α ⊔ β ⊔ ρᵃ ⊔ ρᵇ)) where
@@ -61,17 +61,17 @@ record SubalgebraOf : Type (ov {𝑆 = 𝑆} (α ⊔ β ⊔ ρᵃ ⊔ ρᵇ)) wh
     issubalgebra : subalgebra ≤ algebra
 
 Subalgebra : Algebra {𝑆 = 𝑆} α ρᵃ → {β ρᵇ : Level} → Type _
-Subalgebra 𝑨 {β}{ρᵇ} = Σ[ 𝑩 ∈ (Algebra {𝑆 = 𝑆} β ρᵇ) ] 𝑩 ≤ 𝑨
+Subalgebra 𝑨 {β}{ρᵇ} = Σ[ 𝑩 ∈ (Algebra β ρᵇ) ] 𝑩 ≤ 𝑨
 
 {- usage note: for 𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ, an inhabitant of `Subalgebra 𝑨` is a pair
    `(𝑩 , p) : Subalgebra 𝑨`  providing
    - `𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ` and
    - `p : 𝑩 ≤ 𝑨`, a proof that 𝑩 is a subalgebra of 𝐴. -}
 
-IsSubalgebraREL : {α ρᵃ β ρᵇ : Level} → REL (Algebra {𝑆 = 𝑆} α ρᵃ)(Algebra {𝑆 = 𝑆} β ρᵇ) ℓ → Type _
-IsSubalgebraREL {α}{ρᵃ}{β}{ρᵇ} R = ∀ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ} → 𝑨 ≤ 𝑩
+IsSubalgebraREL : {𝑆 : Signature 𝓞 𝓥}{α ρᵃ β ρᵇ : Level} → REL (Algebra {𝑆 = 𝑆} α ρᵃ)(Algebra {𝑆 = 𝑆} β ρᵇ) ℓ → Type _
+IsSubalgebraREL {𝑆 = 𝑆}{α = α}{ρᵃ}{β}{ρᵇ} R = ∀ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ} → 𝑨 ≤ 𝑩
 
-record SubalgebraREL (R : REL (Algebra {𝑆 = 𝑆} β ρᵇ)(Algebra {𝑆 = 𝑆} α ρᵃ) ℓ) : Type (ov {𝑆 = 𝑆} (α ⊔ β ⊔ ρᵇ ⊔ ℓ)) where
+record SubalgebraREL (R : REL (Algebra {𝑆 = 𝑆} β ρᵇ)(Algebra {𝑆 = 𝑆} α ρᵃ) ℓ) : Type (ov {𝑆 = 𝑆} (α ⊔ β ⊔ ρᵃ ⊔ ρᵇ ⊔ ℓ)) where
   field
     isSubalgebraREL : IsSubalgebraREL R
 ```
@@ -123,7 +123,7 @@ is (isomorphic to) a subalgebra of `𝑩`.
 
 
 ```agda
-FirstHomCorollary : {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ} {𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ} (hh : hom 𝑨 𝑩)
+FirstHomCorollary : {𝑆 : Signature 𝓞 𝓥}{𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ} {𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ} (hh : hom 𝑨 𝑩)
   → (kerquo hh) IsSubalgebraOf 𝑩
 FirstHomCorollary hh = proj₁ (FirstHomTheorem hh) , proj₂ (proj₂ (FirstHomTheorem hh))
 ```
