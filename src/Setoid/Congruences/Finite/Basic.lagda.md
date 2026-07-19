@@ -10,7 +10,7 @@ author: "the agda-algebras development team"
 
 This is the [Setoid.Congruences.Finite.Basic][] module of the [Agda Universal Algebra Library][].
 
-While [Setoid.Algebras.Finite.Basic][] defines the finiteness interface for a setoid algebra
+While [Setoid.Algebras.Finite][] defines the finiteness interface for a setoid algebra
 (decidable `≈` and a finite surjective enumeration of the carrier), this module
 supplies the finiteness interface for congruences, that is, **decidable congruences**
 (`DecCon`{.AgdaFunction}) and the record type `FiniteCongruences`{.AgdaRecord} `𝑨`.
